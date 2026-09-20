@@ -74,7 +74,9 @@ class QuoteTests(unittest.TestCase):
         calls = []
 
         def fetch(path, key, **params):
-            calls.append(params.get('cursor'))
+            calls.append((path, params.get('event_id'), params.get('cursor')))
+            if path == '/events':
+                return {'data': [{'id': 'ev1', 'home_team': 'LAC Chargers', 'away_team': 'LV Raiders', 'event_start_time': '2026-09-20T20:05:00Z'}]}
             return {'data': [r for _, r in self.rows()], 'pagination': {'has_more': False}}
 
         with tempfile.TemporaryDirectory() as folder:
@@ -86,6 +88,10 @@ class QuoteTests(unittest.TestCase):
             sharp_odds.boxscores.append(root / 'nfl-2026.jsonl', [earlier])
             n = sharp_odds.capture({'games': self.slate}, NOW, 'secret', fetch=fetch, sleep=lambda s: None, root=root, log=lambda *a: None)
             self.assertEqual(n, 1)
+            self.assertIn(('/odds', 'ev1', None), calls, 'props are requested one game at a time by event id')
+            status = json.loads((root / 'sharp-status.json').read_text(encoding='utf-8'))
+            self.assertEqual(status['leagues']['NFL']['eventsMatched'], 1)
+            self.assertNotIn('secret', json.dumps(status))
             stored = [json.loads(l) for l in (root / 'nfl-2026.jsonl').read_text(encoding='utf-8').splitlines()]
             books = stored[-1]['books']
             self.assertEqual(sorted(books), ['betmgm', 'draftkings', 'fanduel'], 'BetMGM from the other feed rides along')

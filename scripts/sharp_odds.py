@@ -43,7 +43,8 @@ LEAGUES = {'NFL': 'nfl', 'CFB': 'ncaaf'}
 BOOKS = ('draftkings', 'fanduel')
 WINDOW = timedelta(days=2)
 PAGE = 200
-MAX_PAGES = 20                       # a run's ceiling on requests: twenty pages of two hundred rows
+MAX_PAGES = 8                        # pages per game
+RUN_REQUESTS = 60                    # requests per run, about five minutes at the free tier's pace
 GAP = 5.2                            # seconds between requests: under twelve a minute
 FRESH = timedelta(hours=12)          # other books' quotes older than this are not merged forward
 
@@ -126,17 +127,22 @@ def fetch(path, key, opener=urllib.request.urlopen, sleep=time.sleep, **params):
             sleep(min(max(wait, 1.0), 60.0))
 
 
-def pages(league, key, fetch=fetch, sleep=time.sleep, log=print):
-    """Every pre-match player-prop row for a league from the two books, following the cursor."""
+def pages(league, key, fetch=fetch, sleep=time.sleep, log=print, budget=None, event_id=None):
+    """Pre-match player-prop rows from the two books, one game at a time when event_id is given.
+
+    budget is a one-item list of requests left for the run, shared across games.
+    """
     cursor, count = None, 0
-    while count < MAX_PAGES:
+    while count < MAX_PAGES and (budget is None or budget[0] > 0):
         try:
             payload = fetch('/odds', key, league=league, market='props', sportsbook=','.join(BOOKS), is_live='false',
-                            limit=PAGE, cursor=cursor)
+                            event_id=event_id, limit=PAGE, cursor=cursor)
         except Exception as error:      # the key never reaches the log
             log(f'sharp: request failed for {league} ({type(error).__name__})')
             return
         count += 1
+        if budget is not None:
+            budget[0] -= 1
         for row in payload.get('data') or []:
             yield row
         pagination = payload.get('pagination') or {}
@@ -144,6 +150,16 @@ def pages(league, key, fetch=fetch, sleep=time.sleep, log=print):
         if not pagination.get('has_more') or not cursor:
             return
         sleep(GAP)
+
+
+def events(league, key, fetch=fetch, log=print):
+    """SharpAPI's upcoming events for a league: id, teams and start time."""
+    try:
+        payload = fetch('/events', key, league=league, limit=PAGE)
+    except Exception as error:
+        log(f'sharp: event list failed for {league} ({type(error).__name__})')
+        return []
+    return payload.get('data') or []
 
 
 def quotes_from(rows):
@@ -204,20 +220,35 @@ def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=prin
         for line in boxscores.read_store(path):
             latest[line['gameId']] = line
     written = 0
+    budget = [RUN_REQUESTS]
+    status = {'at': boxscores.stamp(now), 'leagues': {}}
     for league, code in LEAGUES.items():
         mine = [g for g in games if g['league'] == league]
         if not mine:
             continue
-        matched, types, unmatched = [], {}, set()
-        for row in pages(code, key, fetch=fetch, sleep=sleep, log=log):
-            types[row.get('market_type')] = types.get(row.get('market_type'), 0) + 1
-            game = find_game(row, mine)
-            if game:
+        listing = events(code, key, fetch=fetch, log=log)
+        budget[0] -= 1
+        # Each slate game to its SharpAPI event, so one filtered request covers one game.
+        ids = {}
+        for event in listing:
+            game = find_game({'home_team': event.get('home_team'), 'away_team': event.get('away_team'),
+                              'event_start_time': event.get('event_start_time') or event.get('start_time') or event.get('commence_time')}, mine)
+            if game and game['id'] not in ids and event.get('id'):
+                ids[game['id']] = event['id']
+        matched, types, books_seen = [], {}, {}
+        for game in mine:
+            if game['id'] not in ids or budget[0] <= 0:
+                continue
+            for row in pages(code, key, fetch=fetch, sleep=sleep, log=log, budget=budget, event_id=ids[game['id']]):
+                types[row.get('market_type')] = types.get(row.get('market_type'), 0) + 1
+                books_seen[row.get('sportsbook')] = books_seen.get(row.get('sportsbook'), 0) + 1
                 matched.append((game, row))
-            else:
-                unmatched.add(f"{row.get('away_team')} at {row.get('home_team')}")
+            sleep(GAP)
+        status['leagues'][league] = {'games': len(mine), 'eventsMatched': len(ids), 'rows': len(matched),
+                                     'books': books_seen, 'marketTypes': dict(sorted(types.items(), key=lambda kv: -kv[1])[:40]),
+                                     'requestsLeft': budget[0]}
         if probe:
-            log(f'sharp {league}: {len(matched)} rows matched, {len(unmatched)} games not on the slate; market types: '
+            log(f'sharp {league}: {len(ids)} of {len(mine)} games found, {len(matched)} rows, books {books_seen}; market types: '
                 + ', '.join(f'{k} x{v}' for k, v in sorted(types.items(), key=lambda kv: -kv[1])[:30]))
             continue
         by_game = quotes_from(matched)
@@ -236,9 +267,10 @@ def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=prin
             latest[game['id']] = record
             written += 1
         counted = sum(len(p) for b in by_game.values() for m in b.values() for p in m.values())
-        log(f'sharp {league}: {len(by_game)} games priced, {counted} player lines, {written} records changed'
-            + (f'; not on the slate: {len(unmatched)}' if unmatched else ''))
-        sleep(GAP)
+        log(f'sharp {league}: {len(by_game)} of {len(mine)} games priced, {counted} player lines, {written} records changed, '
+            f'books {books_seen}')
+    if not probe:
+        boxscores.write_json(root / 'sharp-status.json', status)   # what the feed carried, readable without the runner's log
     return written
 
 
