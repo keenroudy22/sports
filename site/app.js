@@ -129,7 +129,9 @@
     const todayLabel = dayLabel(new Date().toISOString());
     const soonest = rows.slice().sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0];
     const day = rows.some(l => dayLabel(l.kickoff) === todayLabel) ? todayLabel : dayLabel(soonest.kickoff);
-    return { rows: rows.filter(l => dayLabel(l.kickoff) === day).sort(C.byGrade).slice(0, 6), day: day === todayLabel ? null : day };
+    const onDay = rows.filter(l => dayLabel(l.kickoff) === day).sort(C.byGrade);
+    return { rows: onDay.slice(0, 6), games: onDay.filter(l => !l.athleteId).slice(0, 4), players: onDay.filter(l => l.athleteId).slice(0, 4),
+      day: day === todayLabel ? null : day };
   };
 
   /* Where the market has moved from its opening number, biggest first, and whether it moved toward our number. */
@@ -182,9 +184,12 @@
       first ? `${now.length} games on this slate · ${forecasts} with our number${(first.market || {}).book ? ` · market lines from ${esc(first.market.book)}` : ''}` : 'Nothing kicks off in the next eight days in this league.')}
       <div class="two-col"><div>
         ${live.length ? section('Our picks', `<div class="card"><div class="rows">${live.map(pickRow).join('')}</div></div>`, '<a href="#record">Record →</a>') : ''}
-        ${best.rows.length ? section(best.day ? `Best on the board · ${esc(best.day)}` : 'Best on the board today',
-          `<p class="row-meta" style="margin:0 0 8px">${live.length ? 'Beyond our picks, the' : 'No researched pick is up yet, so here are the'} lines our number likes most, priced at the best book. Leans, not picks: tap + to build a ticket.</p><div class="card"><div class="rows">${best.rows.map(lineRow).join('')}</div></div>`,
-          '<a href="#board">Game lines →</a> <a href="#board/props">Player props →</a>') : ''}
+        ${best.games.length ? section(best.day ? `Game lines we like · ${esc(best.day)}` : 'Game lines we like today',
+          `<p class="row-meta" style="margin:0 0 8px">The spreads and totals our number likes most, priced at the best book. Leans, not picks: tap + to build a ticket.</p><div class="card"><div class="rows">${best.games.map(lineRow).join('')}</div></div>`,
+          '<a href="#board">All game lines →</a>') : ''}
+        ${best.players.length ? section(best.day ? `Player props we like · ${esc(best.day)}` : 'Player props we like today',
+          `<p class="row-meta" style="margin:0 0 8px">Our projection against the book's number, on players whose role is settled. Raw chances, not yet calibrated.</p><div class="card"><div class="rows">${best.players.map(lineRow).join('')}</div></div>`,
+          '<a href="#board/props">All player props →</a>') : ''}
         ${moves.length ? section('Line moves since open', `<p class="row-meta" style="margin:0 0 8px">Where the market has moved from its opening number. Green moved toward our number, amber away from it.</p><div class="card"><div class="rows">${moves.map(moveRow).join('')}</div></div>`) : ''}
         ${playing.length ? section(`In play now${playing.length > 6 ? ` (${playing.length})` : ''}`, `<div class="card">${playing.slice(0, 6).map(gameRow).join('')}</div>`, '<a href="#games">All games →</a>') : ''}
         ${settledRecently.length ? section('Last game day', `<p class="row-meta" style="margin:0 0 8px">${recent.wins}–${recent.losses}${recent.pushes ? `–${recent.pushes}` : ''}${recent.units == null ? '' : `, ${signed(recent.units, 2)}u at the recorded stakes`}.</p><div class="card"><div class="rows">${settledRecently.map(pickRow).join('')}</div></div>`, '<a href="#record">Record →</a>') : ''}
@@ -741,7 +746,7 @@
     return `${head(props ? 'Player props' : 'The board', intro)}
       <div class="toolbar">${seg('boardMode', [['games', 'Game lines'], ['props', 'Player props']], state.boardMode)}${seg('boardDay', [['today', 'Today'], ['week', 'This week']], state.boardDay)}${seg('boardSort', [['best', 'Best first'], ['time', 'By kickoff']], state.boardSort)}${seg('boardScope', [['open', 'Open'], ['settled', 'Closed']], state.boardScope)}</div>
       ${props ? `<div class="toolbar">${seg('propMarket', PROP_MARKETS, state.propMarket)}</div>` : ''}
-      ${ourPicks.length && !props ? section('Our picks', `<div class="card"><div class="rows">${ourPicks.map(pickRow).join('')}</div></div>`, '<a href="#record">Record →</a>') : ''}
+      ${(() => { const mine = ourPicks.filter(p => props ? Boolean(p.athleteId) : !p.athleteId); return mine.length ? section(props ? 'Our player picks' : 'Our game picks', `<div class="card"><div class="rows">${mine.map(pickRow).join('')}</div></div>`, '<a href="#record">Record →</a>') : ''; })()}
       ${dayNote ? `<p class="row-meta" style="margin:0 0 8px">${esc(dayNote)}</p>` : ''}
       <details class="explainer"><summary>How to read this board</summary>
       <p class="row-meta" style="margin:8px 0 10px">Every line shows how often our number says that side wins, next to what the price needs to break even. Those chances are already pulled toward 50% by our record against the closing line, so an early-season lean is small by design. <b class="grade-word grade-strong">Model likes it</b> is 5 points clear or better; <b class="grade-word grade-lean">Slight lean</b> is 2 to 5, or a thin sample. Player lines come from DraftKings through ESPN with no price attached, so they show our projection against the number instead of an edge. This is where to look, not what to bet.</p></details>
