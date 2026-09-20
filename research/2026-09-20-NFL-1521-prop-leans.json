@@ -1,0 +1,112 @@
+{
+ "league": "NFL",
+ "targetWeek": 2,
+ "publishedAt": "2026-09-20T19:21:08Z",
+ "summary": "Sunday 2:45 PM ET run, published at 3:21 ET. Nothing settled: the 1 PM games are still in play. Nothing closed: Raiders at Chargers under 43.5 is -110 and Seahawks at Cardinals over 41 is 41.5 at -105, both inside the rules. Three prop leans for the 4:05 games, the first under the settled-role rule, all at FanDuel: Courtland Sutton OVER 3.5 receptions -102; Bo Nix OVER 17.5 rushing yards -113; Oronde Gadsden OVER 12.5 receiving yards -113. Passed on Omarion Hampton and Michael Mayer unders: Austin Ekeler and Brock Bowers are out, which sends their work the other way. Passed on Tre Tucker over 14.5 receiving yards at +235: that number was an alternate the feed had flagged as the main line, fixed this run. The late inactives otherwise matched Friday's report.",
+ "props": [
+  {
+   "id": "NFL-2026-W2-sutton-over-3-5-rec-fd",
+   "title": "Courtland Sutton OVER 3.5 receptions",
+   "status": "active",
+   "favorite": false,
+   "modelLean": true,
+   "position": "WR",
+   "athleteId": "3128429",
+   "market": "rec",
+   "line": 3.5,
+   "direction": "over",
+   "gameIds": [
+    "NFL-401872940"
+   ],
+   "book": "FanDuel",
+   "odds": -102,
+   "quotedAt": "2026-09-20T19:01:46Z",
+   "quoteType": "capture",
+   "quoteNote": "FanDuel's main number and price from the 3:01 PM ET SharpAPI capture, the best number on the board for this side.",
+   "expiresAt": "2026-09-20T20:05:00Z",
+   "projection": 6.0,
+   "modelVersion": "v2.0",
+   "snapshotAt": "2026-09-20T19:01:43Z",
+   "edge": "v2 receptions 6.0 (80% range 2.2 to 9.7). Chance of over 3.5: 80.7% (uncalibrated: no graded history against a line yet), against 50.5% break-even at -102: +30.2 points, +0.598u per unit.",
+   "cutoff": "OVER 3.5 at -102 or better. Closed to new entries at 4+, or at -117 or worse at 3.5.",
+   "confidence": 2,
+   "why": "Prop lean, published on our number alone: our projection is 6.0 against 3.5, and the over reads 80.7% on the raw curve, which has no graded history against a line yet, so the true chance is lower than that. Denver is without WR Marvin Mims Jr. on the inactive list, which sends targets to its first receiver. The role is settled by last season, not by this season's one game. Published so player lines start earning the record the calibration needs.",
+   "risk": "The chance is uncalibrated and one game into the season; a role can change in a week. A first-week projection has missed by a full game's worth before. Confidence 2 of 10.",
+   "sources": [
+    "https://www.espn.com/nfl/game/_/gameId/401872940",
+    "https://api.sharpapi.io/api/v1/odds",
+    "https://www.nfl.com/news/nfl-week-2-inactives-players-ruled-out-sunday-14-games-2026"
+   ]
+  },
+  {
+   "id": "NFL-2026-W2-nix-over-17-5-rush-fd",
+   "title": "Bo Nix OVER 17.5 rushing yards",
+   "status": "active",
+   "favorite": false,
+   "modelLean": true,
+   "position": "QB",
+   "athleteId": "4426338",
+   "market": "rushYds",
+   "line": 17.5,
+   "direction": "over",
+   "gameIds": [
+    "NFL-401872940"
+   ],
+   "book": "FanDuel",
+   "odds": -113,
+   "quotedAt": "2026-09-20T19:01:46Z",
+   "quoteType": "capture",
+   "quoteNote": "FanDuel's main number and price from the 3:01 PM ET SharpAPI capture, the best number on the board for this side.",
+   "expiresAt": "2026-09-20T20:05:00Z",
+   "projection": 42.7,
+   "modelVersion": "v2.0",
+   "snapshotAt": "2026-09-20T19:01:43Z",
+   "edge": "v2 rushing yards 42.7 (80% range 7.5 to 77.8). Chance of over 17.5: 82.1% (uncalibrated: no graded history against a line yet), against 53.1% break-even at -113: +29.1 points, +0.548u per unit.",
+   "cutoff": "OVER 17.5 at -113 or better. Closed to new entries at 18+, or at -128 or worse at 17.5.",
+   "confidence": 2,
+   "why": "Prop lean, published on our number alone: our projection is 42.7 against 17.5, and the over reads 82.1% on the raw curve, which has no graded history against a line yet, so the true chance is lower than that. Nix ran for more than this in most of his games last season, which is the history the projection rests on. The role is settled by last season, not by this season's one game. Published so player lines start earning the record the calibration needs.",
+   "risk": "The chance is uncalibrated and one game into the season; a role can change in a week. A first-week projection has missed by a full game's worth before. Confidence 2 of 10.",
+   "sources": [
+    "https://www.espn.com/nfl/game/_/gameId/401872940",
+    "https://api.sharpapi.io/api/v1/odds",
+    "https://www.nfl.com/news/nfl-week-2-inactives-players-ruled-out-sunday-14-games-2026"
+   ]
+  },
+  {
+   "id": "NFL-2026-W2-gadsden-over-12-5-recyds-fd",
+   "title": "Oronde Gadsden OVER 12.5 receiving yards",
+   "status": "active",
+   "favorite": false,
+   "modelLean": true,
+   "position": "TE",
+   "athleteId": "4595342",
+   "market": "recYds",
+   "line": 12.5,
+   "direction": "over",
+   "gameIds": [
+    "NFL-401872941"
+   ],
+   "book": "FanDuel",
+   "odds": -113,
+   "quotedAt": "2026-09-20T19:01:46Z",
+   "quoteType": "capture",
+   "quoteNote": "FanDuel's main number and price from the 3:01 PM ET SharpAPI capture, the best number on the board for this side.",
+   "expiresAt": "2026-09-20T20:05:00Z",
+   "projection": 29.0,
+   "modelVersion": "v2.0",
+   "snapshotAt": "2026-09-20T19:01:43Z",
+   "edge": "v2 receiving yards 29.0 (80% range 0 to 58.9). Chance of over 12.5: 76.0% (uncalibrated: no graded history against a line yet), against 53.1% break-even at -113: +23.0 points, +0.433u per unit.",
+   "cutoff": "OVER 12.5 at -113 or better. Closed to new entries at 13+, or at -128 or worse at 12.5.",
+   "confidence": 2,
+   "why": "Prop lean, published on our number alone: our projection is 29.0 against 12.5, and the over reads 76.0% on the raw curve, which has no graded history against a line yet, so the true chance is lower than that. FanDuel's 12.5 is a point under DraftKings' 13.5 at a similar price, so this takes the lower number. The role is settled by last season, not by this season's one game. Published so player lines start earning the record the calibration needs.",
+   "risk": "The chance is uncalibrated and one game into the season; a role can change in a week. A first-week projection has missed by a full game's worth before. Confidence 2 of 10.",
+   "sources": [
+    "https://www.espn.com/nfl/game/_/gameId/401872941",
+    "https://api.sharpapi.io/api/v1/odds",
+    "https://www.nfl.com/news/nfl-week-2-inactives-players-ruled-out-sunday-14-games-2026"
+   ]
+  }
+ ],
+ "takeaways": [],
+ "gameWatch": []
+}

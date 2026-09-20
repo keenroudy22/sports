@@ -174,29 +174,39 @@ def quotes_from(rows):
                 or not isinstance(point, (int, float)) or not isinstance(price, (int, float)):
             continue
         players = out.setdefault(game['id'], {}).setdefault(book, {}).setdefault(key, {})
-        entry = players.setdefault(name, {})
-        if row.get('is_alternate_line') or (row.get('is_main_line') is False):
-            alternates = entry.setdefault('alternates', {})
-            alt = alternates.setdefault(f'{point:g}', {'line': point})
-            alt[side] = int(price)
-        else:
-            if 'line' in entry and entry['line'] != point:
-                continue                                # two main numbers for one player: keep the first
-            entry['line'] = point
-            entry[side] = int(price)
+        ladder = players.setdefault(name, {})
+        rung = ladder.setdefault(f'{point:g}', {'line': point, 'flagged': False})
+        rung[side] = int(price)
+        if not (row.get('is_alternate_line') or row.get('is_main_line') is False):
+            rung['flagged'] = True
+    # The main number is the rung priced on both sides closest to even money; the feed's own flag
+    # has marked a +235 alternate as main, so the flag only decides when no rung has two sides.
     for game_books in out.values():
         for book_key, book in list(game_books.items()):
             for market_key_, market in list(book.items()):
-                for name, entry in list(market.items()):
-                    if 'alternates' in entry:
-                        entry['alternates'] = sorted(entry['alternates'].values(), key=lambda a: a['line'])
-                    if 'line' not in entry:              # alternates only: the main number is missing
+                for name, ladder in list(market.items()):
+                    rungs = sorted(ladder.values(), key=lambda r: r['line'])
+                    two_sided = [r for r in rungs if 'over' in r and 'under' in r]
+                    main = (min(two_sided, key=lambda r: abs(pricing_cents(r['over']) - pricing_cents(r['under']))) if two_sided
+                            else next((r for r in rungs if r['flagged']), None))
+                    if main is None:
                         del market[name]
+                        continue
+                    entry = {k: v for k, v in main.items() if k in ('line', 'over', 'under')}
+                    alternates = [{k: v for k, v in r.items() if k in ('line', 'over', 'under')} for r in rungs if r is not main]
+                    if alternates:
+                        entry['alternates'] = alternates
+                    market[name] = entry
                 if not market:
                     del book[market_key_]
             if not book:
                 del game_books[book_key]
     return out
+
+
+def pricing_cents(odds):
+    """American odds on one scale so -105 and +105 are ten cents apart."""
+    return odds + 100 if odds < 0 else odds - 100
 
 
 def merge(previous, fresh_books, now):
@@ -230,11 +240,16 @@ def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=prin
         budget[0] -= 1
         # Each slate game to its SharpAPI event, so one filtered request covers one game.
         ids = {}
+        unmatched_events = []
         for event in listing:
-            game = find_game({'home_team': event.get('home_team'), 'away_team': event.get('away_team'),
-                              'event_start_time': event.get('event_start_time') or event.get('start_time') or event.get('commence_time')}, mine)
+            home = event.get('home_team') or (event.get('home') or {}).get('name') if isinstance(event.get('home'), dict) else event.get('home_team') or event.get('home')
+            away = event.get('away_team') or (event.get('away') or {}).get('name') if isinstance(event.get('away'), dict) else event.get('away_team') or event.get('away')
+            start = event.get('event_start_time') or event.get('start_time') or event.get('commence_time') or event.get('starts_at')
+            game = find_game({'home_team': home, 'away_team': away, 'event_start_time': start}, mine)
             if game and game['id'] not in ids and event.get('id'):
                 ids[game['id']] = event['id']
+            elif not game and len(unmatched_events) < 12:
+                unmatched_events.append({'home': home, 'away': away, 'start': start, 'keys': sorted(event.keys())[:12]})
         matched, types, books_seen = [], {}, {}
         for game in mine:
             if game['id'] not in ids or budget[0] <= 0:
@@ -244,7 +259,9 @@ def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=prin
                 books_seen[row.get('sportsbook')] = books_seen.get(row.get('sportsbook'), 0) + 1
                 matched.append((game, row))
             sleep(GAP)
-        status['leagues'][league] = {'games': len(mine), 'eventsMatched': len(ids), 'rows': len(matched),
+        status['leagues'][league] = {'games': len(mine), 'eventsListed': len(listing), 'eventsMatched': len(ids), 'rows': len(matched),
+                                     'slateGames': [f"{g['away']['name']} at {g['home']['name']} {g['kickoff']}" for g in mine],
+                                     'unmatchedEvents': unmatched_events,
                                      'books': books_seen, 'marketTypes': dict(sorted(types.items(), key=lambda kv: -kv[1])[:40]),
                                      'requestsLeft': budget[0]}
         if probe:

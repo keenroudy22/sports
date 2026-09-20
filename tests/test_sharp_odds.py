@@ -58,8 +58,18 @@ class QuoteTests(unittest.TestCase):
         dk = quotes['NFL-1']['draftkings']['rushYds']['Ashton Jeanty']
         self.assertEqual((dk['line'], dk['over'], dk['under']), (66.5, -115, -105))
         self.assertEqual(dk['alternates'], [{'line': 80.5, 'over': 180}])
-        self.assertEqual(quotes['NFL-1']['fanduel']['rushYds']['Ashton Jeanty'], {'line': 65.5, 'over': -112})
+        self.assertEqual(quotes['NFL-1']['fanduel']['rushYds']['Ashton Jeanty'], {'line': 65.5, 'over': -112}, 'a one-sided flagged main stands')
         self.assertNotIn('rec', quotes['NFL-1']['fanduel'], 'an alternate with no main number is not a quote')
+
+    def test_the_main_number_is_the_two_sided_rung_nearest_even_money_whatever_the_flag_says(self):
+        g = self.slate[0]
+        rows = [(g, row('draftkings', 'player_receiving_yards', 'Tre Tucker', 'over', 14.5, 235)),
+                (g, row('draftkings', 'player_receiving_yards', 'Tre Tucker', 'over', 35.5, -110, is_alternate_line=True)),
+                (g, row('draftkings', 'player_receiving_yards', 'Tre Tucker', 'under', 35.5, -114, is_alternate_line=True)),
+                (g, row('draftkings', 'player_receiving_yards', 'Tre Tucker', 'over', 49.5, 300, is_alternate_line=True))]
+        q = sharp_odds.quotes_from(rows)['NFL-1']['draftkings']['recYds']['Tre Tucker']
+        self.assertEqual((q['line'], q['over'], q['under']), (35.5, -110, -114))
+        self.assertEqual([a['line'] for a in q['alternates']], [14.5, 49.5])
 
     def test_the_slate_game_is_found_from_either_orientation(self):
         g = self.slate[0]
