@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-20T13:35:00Z",
+  "updatedAt": "2026-09-20T13:55:42Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -237,6 +237,15 @@
           "name": "Atlanta Falcons",
           "players": [
             {
+              "id": "4037626",
+              "name": "Divine Deablo",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Illness",
+              "reportedAt": "2026-09-20T13:42Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4037626/divine-deablo"
+            },
+            {
               "id": "4360423",
               "name": "Michael Penix Jr.",
               "position": "QB",
@@ -451,15 +460,6 @@
               "injury": "Ankle",
               "reportedAt": "2026-09-12T20:59Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685590/cameron-williams"
-            },
-            {
-              "id": "4427090",
-              "name": "Brandon Dorlus",
-              "position": "DT",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-11T17:59Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4427090/brandon-dorlus"
             }
           ]
         },
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-20T13:00Z",
+              "reportedAt": "2026-09-20T13:42Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -6447,6 +6447,15 @@
           "name": "Seattle Seahawks",
           "players": [
             {
+              "id": "3912547",
+              "name": "Sam Darnold",
+              "position": "QB",
+              "status": "Out",
+              "injury": "Lower Body",
+              "reportedAt": "2026-09-20T13:30Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3912547/sam-darnold"
+            },
+            {
               "id": "4429211",
               "name": "Anthony Bradford",
               "position": "G",
@@ -6517,15 +6526,6 @@
               "injury": null,
               "reportedAt": "2026-09-16T23:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4432734/jalen-milroe"
-            },
-            {
-              "id": "3912547",
-              "name": "Sam Darnold",
-              "position": "QB",
-              "status": "Out",
-              "injury": "Lower Body",
-              "reportedAt": "2026-09-16T19:25Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3912547/sam-darnold"
             },
             {
               "id": "3924327",
@@ -7767,8 +7767,8 @@
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-20T13:35:00Z",
-      "lastAttemptAt": "2026-09-20T13:35:00Z",
+      "checkedAt": "2026-09-20T13:55:42Z",
+      "lastAttemptAt": "2026-09-20T13:55:42Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-20T13:35:00Z",
-      "lastAttemptAt": "2026-09-20T13:35:00Z",
+      "checkedAt": "2026-09-20T13:55:42Z",
+      "lastAttemptAt": "2026-09-20T13:55:42Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
