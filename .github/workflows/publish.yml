@@ -16,6 +16,9 @@ on:
       timezone: America/New_York
     - cron: '17 5 * * *'
       timezone: America/New_York
+    # Saturdays and Sundays, hourly through the games, so scores and finals do not sit stale
+    - cron: '23 13-23 * * 0,6'
+      timezone: America/New_York
 permissions:
   contents: write
   pages: write

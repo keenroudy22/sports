@@ -75,16 +75,20 @@
     return `<span class="leans">${lean.side ? chip(`Lean ${lean.side.team} · ${lean.side.points.toFixed(1)} pts${pct(lean.side.chance)}`, lean.side.chance) : ''}${lean.total ? chip(`Lean ${lean.total.direction} · ${lean.total.points.toFixed(1)} pts${pct(lean.total.chance)}`, lean.total.chance) : ''}</span>`;
   };
 
+  /* Once a game kicks off the real score is the headline number and the forecast moves to the small line. */
   const gameRow = game => {
     const m = game.market || {}, v2 = game.v2, v1 = game.v1;
     const final = game.completed;
-    const score = v2 ? `${fixed(v2.away, 0)}–${fixed(v2.home, 0)}` : v1 ? `${v1.away}–${v1.home}` : DASH;
+    const started = final || game.state === 'in';
+    const scores = started && game.away.score != null && game.home.score != null;
+    const forecast = v2 ? `${fixed(v2.away, 0)}–${fixed(v2.home, 0)}` : v1 ? `${v1.away}–${v1.home}` : DASH;
+    const model = v2 ? 'v2 ' + esc(C.modelSpread(game.home.abbr, game.away.abbr, v2.margin)) : v1 ? 'v1 only' : 'no forecast';
     return `<a class="game-row" href="#game/${esc(game.id)}">
-      <span class="game-teams">${teamRow(game.away, final ? game.away.score : null)}${teamRow(game.home, final ? game.home.score : null)}</span>
-      <span class="game-mid">${esc(whenShort(game.kickoff))}${final ? ' · <b>Final</b>' : ''}<br>
-        Market <b>${m.spread != null ? esc(C.spreadText(game.home.abbr, m.spread)) : DASH}</b> · <b>${m.total != null ? 'O/U ' + esc(m.total) : 'no total'}</b></span>
-      <span class="game-model"><span class="num">${score}</span><div class="row-meta">${v2 ? 'v2 ' + esc(C.modelSpread(game.home.abbr, game.away.abbr, v2.margin)) : v1 ? 'v1 only' : 'no forecast'}</div></span>
-      ${!final && hasLean(game) ? `<span class="game-leans">${leanChips(game)}</span>` : ''}
+      <span class="game-teams">${teamRow(game.away, scores ? game.away.score : null)}${teamRow(game.home, scores ? game.home.score : null)}</span>
+      <span class="game-mid">${esc(whenShort(game.kickoff))}${final ? ' · <b>Final</b>' : started ? ' · <b class="live">In play</b>' : ''}${started && m.spread == null && m.total == null ? '' : `<br>
+        Market <b>${m.spread != null ? esc(C.spreadText(game.home.abbr, m.spread)) : DASH}</b> · <b>${m.total != null ? 'O/U ' + esc(m.total) : 'no total'}</b>`}</span>
+      <span class="game-model"><span class="num">${scores ? `${game.away.score}–${game.home.score}` : forecast}</span><div class="row-meta">${scores ? (v2 || v1 ? `v2 had ${esc(forecast)}` : 'no forecast') : model}</div></span>
+      ${!started && hasLean(game) ? `<span class="game-leans">${leanChips(game)}</span>` : ''}
     </a>`;
   };
 
@@ -116,6 +120,7 @@
     const data = await get('app/today.json');
     const games = data.games.filter(inLeague);
     const now = slate(games);
+    const playing = games.filter(g => !g.completed && g.state === 'in');
     const first = now[0];
     const gaps = now.filter(g => g.v2 && g.lean && !g.fcs).sort((a, b) => disagreement(b) - disagreement(a)).slice(0, 8);
     const picks = data.picks.filter(inLeague);
@@ -127,6 +132,7 @@
     return `${head(title,
       first ? `${now.length} games on this slate · ${forecasts} with a v2 forecast · market lines from ${esc((first.market || {}).book || 'the book')}` : 'Nothing kicks off in the next eight days in this league.')}
       <div class="two-col"><div>
+        ${playing.length ? section(`In play now${playing.length > 6 ? ` (${playing.length})` : ''}`, `<div class="card">${playing.slice(0, 6).map(gameRow).join('')}</div>`, '<a href="#games">All games →</a>') : ''}
         ${section('Where the model and the market disagree', gaps.length ? `<p class="row-meta" style="margin:0 0 8px">A lean is how many points v2 sits from the current line, on which side, and its calibrated chance of beating that line. Green needs 57%+ on a solid sample; most early-season leans are worth about 52%. Not a pick.</p><div class="card">${gaps.map(gameRow).join('')}</div>`
           : empty('No model calls yet', 'The model publishes after the hosted refresh runs. Every game still shows the market number.'), '<a href="#games">All games →</a>')}
         ${section('Our picks', live.length ? `<div class="card"><div class="rows">${live.map(pickRow).join('')}</div></div>`
@@ -175,8 +181,9 @@
   async function viewGames() {
     const data = await get('app/today.json');
     let games = data.games.filter(inLeague);
+    /* Upcoming keeps games that have kicked off but are not final, or they would show up nowhere. */
     games = state.gamesScope === 'final' ? games.filter(g => g.completed).sort((a, b) => b.kickoff.localeCompare(a.kickoff))
-      : upcoming(games);
+      : games.filter(g => !g.completed).sort((a, b) => a.kickoff.localeCompare(b.kickoff));
     const gq = state.gamesQuery.trim().toLowerCase();
     if (gq) games = games.filter(g => [g.home.abbr, g.home.name, g.away.abbr, g.away.name].some(v => String(v || '').toLowerCase().includes(gq)));
     const groups = new Map();
