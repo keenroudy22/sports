@@ -584,6 +584,7 @@ def board_picks(first, latest, by_id, identities):
         recent = latest.get(key, {})
         game = by_id.get((pick.get('gameIds') or [None])[0]) or {}
         rows.append({'id': key, 'league': pick.get('league'), 'kind': pick.get('kind'), 'title': pick.get('title'),
+                     'riskUnits': pick.get('riskUnits'),
                      'player': pick.get('player'), 'athleteId': pick.get('athleteId'), 'position': pick.get('position'),
                      'gameId': (pick.get('gameIds') or [None])[0], 'line': pick.get('line'),
                      'direction': pick.get('direction'), 'book': pick.get('book'), 'odds': pick.get('odds'),
@@ -665,7 +666,7 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now):
                         thin = appearances[str(athlete)] < 3
                         grade = {'chance': round(chance, 3), 'raw': round(chance, 3), 'calibrated': False,
                                  'push': round(push, 3), 'needs': None, 'edge': round(100 * (chance - 0.5), 1),
-                                 'projection': round(mean, 1), 'thin': thin,
+                                 'projection': round(mean, 1), 'thin': thin, 'games': appearances[str(athlete)],
                                  'tier': 'lean' if chance >= 0.6 and not thin else 'pass', 'model': snapshot['model'],
                                  'snapshotAt': snapshot['publishedAt']}
                 name = names.get(athlete, f'Athlete {athlete}')

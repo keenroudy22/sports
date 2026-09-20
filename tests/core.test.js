@@ -193,3 +193,28 @@ test('old links land on the matching new pages', () => {
   for (const [hash, expected] of Object.entries(cases)) assert.deepEqual(C.parseRoute(hash), expected, hash);
   assert.equal(C.shardOf('4430878', 32), 4430878 % 32);
 });
+
+test('parlays stay out of the straight-pick units and carry their own stake', () => {
+  const picks = [
+    { kind: 'gamePicks', odds: -110, result: 'win' },
+    { kind: 'gamePicks', odds: -110, result: 'loss' },
+    { kind: 'parlays', parlayType: 'longshot', odds: 360, result: 'win', riskUnits: 0.25 },
+  ];
+  const r = C.recordOf(picks, 2);
+  assert.deepEqual([r.wins, r.losses], [1, 1], 'the parlay win is not in the straight record');
+  assert.ok(Math.abs(r.units + 0.0909) < 0.001, 'units come from the two straight picks alone');
+  assert.equal(r.parlays.staked, 0.25);
+  assert.ok(Math.abs(r.parlays.units - 0.9) < 1e-9, '+360 on a quarter unit returns 0.9u');
+  assert.ok(Math.abs(C.summaryOf(picks, 2).units - 0.809) < 0.001, 'summaryOf counts everything given to it');
+  assert.equal(C.stakeOf({}), 1, 'a pick with no recorded stake is one unit');
+});
+
+// app.js runs in the browser, so nothing here loads it. Parsing it catches a broken
+// edit before it reaches the page, where the only symptom is a stuck "Loading" screen.
+test('app.js parses', () => {
+  const vm = require('node:vm');
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const source = fs.readFileSync(path.join(__dirname, '..', 'site', 'app.js'), 'utf8');
+  assert.doesNotThrow(() => new vm.Script(source), 'site/app.js has a syntax error');
+});

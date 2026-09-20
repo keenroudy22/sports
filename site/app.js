@@ -53,6 +53,10 @@
   const TABS = [['today', 'Today'], ['board', 'Board'], ['games', 'Games'], ['stats', 'Stats'], ['record', 'Record'], ['more', 'More']];
   const TAB_FOR = { game: 'games', player: 'stats', team: 'stats', model: 'more', ticket: 'board', research: 'more', scores: 'more' };
 
+  /* The two model generations, in plain words. The data keeps its own version names. */
+  const MODEL_NAME = { 'v2.0': 'Our model', v1: 'First model', 'v1 replay': 'First model replay' };
+  const modelName = m => MODEL_NAME[m] || m;
+
   const empty = (title, text, action = '') => `<div class="empty"><h3>${esc(title)}</h3><p>${esc(text)}</p>${action}</div>`;
   const head = (title, text, back = '') => `<div class="page-head">${back}<h1${back ? ' style="margin-top:8px"' : ''}>${esc(title)}</h1>${text ? `<p>${text}</p>` : ''}</div>`;
   const section = (title, body, link = '') => `<div class="section"><div class="section-head"><p class="eyebrow">${esc(title)}</p>${link}</div>${body}</div>`;
@@ -66,7 +70,7 @@
   const hasLean = game => { const lean = C.leanText(game); return Boolean(game.fcs || (lean && (lean.side || lean.total))); };
   /* Same colors as the board: green only on a solid sample, amber for a thin one or a small gap. */
   const leanChips = (game, strong = 3) => {
-    if (game.fcs) return '<span class="row-meta">FBS vs FCS: v2 is not reliable here</span>';
+    if (game.fcs) return '<span class="row-meta">FBS vs FCS: our number is not reliable here</span>';
     const lean = C.leanText(game);
     if (!lean || (!lean.side && !lean.total)) return '<span class="row-meta">no model call</span>';
     const thin = Boolean((game.v2 || {}).sparse);
@@ -82,12 +86,12 @@
     const started = final || game.state === 'in';
     const scores = started && game.away.score != null && game.home.score != null;
     const forecast = v2 ? `${fixed(v2.away, 0)}–${fixed(v2.home, 0)}` : v1 ? `${v1.away}–${v1.home}` : DASH;
-    const model = v2 ? 'v2 ' + esc(C.modelSpread(game.home.abbr, game.away.abbr, v2.margin)) : v1 ? 'v1 only' : 'no forecast';
+    const model = v2 ? 'Our line ' + esc(C.modelSpread(game.home.abbr, game.away.abbr, v2.margin)) : v1 ? 'first model only' : 'no number yet';
     return `<a class="game-row" href="#game/${esc(game.id)}">
       <span class="game-teams">${teamRow(game.away, scores ? game.away.score : null)}${teamRow(game.home, scores ? game.home.score : null)}</span>
       <span class="game-mid">${esc(whenShort(game.kickoff))}${final ? ' · <b>Final</b>' : started ? ' · <b class="live">In play</b>' : ''}${started && m.spread == null && m.total == null ? '' : `<br>
         Market <b>${m.spread != null ? esc(C.spreadText(game.home.abbr, m.spread)) : DASH}</b> · <b>${m.total != null ? 'O/U ' + esc(m.total) : 'no total'}</b>`}</span>
-      <span class="game-model"><span class="num">${scores ? `${game.away.score}–${game.home.score}` : forecast}</span><div class="row-meta">${scores ? (v2 || v1 ? `v2 had ${esc(forecast)}` : 'no forecast') : model}</div></span>
+      <span class="game-model"><span class="num">${scores ? `${game.away.score}–${game.home.score}` : forecast}</span><div class="row-meta">${scores ? (v2 || v1 ? `we had ${esc(forecast)}` : 'no number') : model}</div></span>
       ${!started && hasLean(game) ? `<span class="game-leans">${leanChips(game)}</span>` : ''}
     </a>`;
   };
@@ -130,15 +134,15 @@
     const todayLabel = dayLabel(new Date().toISOString());
     const title = !first ? 'No games scheduled' : dayLabel(first.kickoff) === todayLabel ? todayLabel : `Next slate: ${dayLabel(first.kickoff)}`;
     return `${head(title,
-      first ? `${now.length} games on this slate · ${forecasts} with a v2 forecast · market lines from ${esc((first.market || {}).book || 'the book')}` : 'Nothing kicks off in the next eight days in this league.')}
+      first ? `${now.length} games on this slate · ${forecasts} with our number${(first.market || {}).book ? ` · market lines from ${esc(first.market.book)}` : ''}` : 'Nothing kicks off in the next eight days in this league.')}
       <div class="two-col"><div>
         ${playing.length ? section(`In play now${playing.length > 6 ? ` (${playing.length})` : ''}`, `<div class="card">${playing.slice(0, 6).map(gameRow).join('')}</div>`, '<a href="#games">All games →</a>') : ''}
-        ${section('Where the model and the market disagree', gaps.length ? `<p class="row-meta" style="margin:0 0 8px">A lean is how many points v2 sits from the current line, on which side, and its calibrated chance of beating that line. Green needs 57%+ on a solid sample; most early-season leans are worth about 52%. Not a pick.</p><div class="card">${gaps.map(gameRow).join('')}</div>`
+        ${section('Where the model and the market disagree', gaps.length ? `<p class="row-meta" style="margin:0 0 8px">A lean is how far our number sits from the line, which side that favours, and how often that side should win. Green needs 57% or better on a solid sample; most early-season leans are worth about 52%. A lean is not a pick.</p><div class="card">${gaps.map(gameRow).join('')}</div>`
           : empty('No model calls yet', 'The model publishes after the hosted refresh runs. Every game still shows the market number.'), '<a href="#games">All games →</a>')}
         ${section('Our picks', live.length ? `<div class="card"><div class="rows">${live.map(pickRow).join('')}</div></div>`
           : empty('No picks waiting to settle', 'Nothing has cleared the bar for this slate. Fewer picks, or none, is part of the process.', '<a class="btn" href="#board">Open the board</a>'), '<a href="#record">Record →</a>')}
       </div><div>
-        ${section('The record', recordCard(C.recordOf(picks), true), '<a href="#record">Details →</a>')}
+        ${section(state.league === 'ALL' ? 'The record' : `The record · ${esc(leagueName(dataLeague()))}`, recordCard(C.recordOf(picks), true), '<a href="#record">Details →</a>')}
         ${section('How the model is doing', modelCard(data.model), '<a href="#model">Scoreboard →</a>')}
         ${section('Data freshness', freshnessCard(data))}
       </div></div>`;
@@ -156,13 +160,14 @@
         ${stat('ROI', r.roi == null ? DASH : signed(r.roi, 1) + '%', r.roi != null ? 'priced picks only' : r.priced ? `shows at ${r.roiMinimum} priced · ${r.priced} so far` : 'needs recorded prices')}
       </div>
       ${r.unpriced ? `<p class="row-meta" style="margin:12px 0 0">${plural(r.unpriced, 'pick')} ${r.unpriced === 1 ? 'has' : 'have'} no recorded price, so ${r.unpriced === 1 ? 'it counts' : 'they count'} in the record but not in units or ROI.</p>` : ''}
+      ${r.parlays ? `<p class="row-meta" style="margin:8px 0 0">Parlays are kept out of the numbers above and tracked at their own stake: ${r.parlays.wins}–${r.parlays.losses}${r.parlays.units == null ? '' : `, ${signed(r.parlays.units, 2)}u on ${r.parlays.staked}u risked`}.</p>` : ''}
     </div>`;
   };
 
   const modelCard = model => {
     const rows = ((model || {}).live || []).filter(inLeague);
     const back = ((model || {}).backtest || []).filter(inLeague).filter(r => r.model !== 'v1 replay' && r.season === 2025);
-    const line = r => `<div class="row" style="cursor:default"><span class="row-main"><span class="row-top"><span class="row-name">${esc(leagueName(r.league))} ${esc(r.model)}</span><span class="row-meta">${esc(r.season)}${r.backtest ? ' backtest' : ' live'}</span></span>
+    const line = r => `<div class="row" style="cursor:default"><span class="row-main"><span class="row-top"><span class="row-name">${esc(leagueName(r.league))} ${esc(modelName(r.model))}</span><span class="row-meta">${esc(r.season)}${r.backtest ? ' backtest' : ' live'}</span></span>
       <span class="row-market">Average miss ${fixed(r.summary.marginMiss)} vs the close’s ${fixed(r.summary.closeMarginMiss)} · against the close ${r.summary.side[0]}–${r.summary.side[1]}</span>
       <span class="row-meta">${r.summary.games} graded games</span></span></div>`;
     return `<div class="card"><div class="rows">${rows.map(line).join('') || '<div class="row" style="cursor:default"><span class="row-main"><span class="row-name">No live grades yet</span><span class="row-meta" style="display:block">Forecasts are graded once their games finish.</span></span></div>'}
@@ -215,11 +220,11 @@
     const win = v2 ? (v2.winProb >= 0.5 ? `${card.home.abbr} ${Math.round(100 * v2.winProb)}%` : `${card.away.abbr} ${Math.round(100 * (1 - v2.winProb))}%`) : DASH;
     let html = `${head(title, `${status}${card.neutral ? ' · neutral site' : ''} · ${esc(leagueName(league))}`, back)}
       <div class="stats">
-        ${stat('Model score', v2 ? `${fixed(v2.away, 0)}–${fixed(v2.home, 0)}` : DASH, v2 ? `${esc(card.away.abbr)} ${fixed(v2.away)}, ${esc(card.home.abbr)} ${fixed(v2.home)} · ${esc(v2.model)}` : 'no v2 forecast yet')}
-        ${stat('Win chance', win, v2 ? 'model estimate' : '')}
-        ${stat('Model spread', v2 ? esc(C.modelSpread(card.home.abbr, card.away.abbr, v2.margin)) : DASH, v2 && v2.range ? `80%: ${signed(v2.range.margin[0])} to ${signed(v2.range.margin[1])} (home)` : '')}
+        ${stat('Our score', v2 ? `${fixed(v2.away, 0)}–${fixed(v2.home, 0)}` : DASH, v2 ? `${esc(card.away.abbr)} ${fixed(v2.away)}, ${esc(card.home.abbr)} ${fixed(v2.home)}` : 'no number yet')}
+        ${stat('Win chance', win, v2 ? 'our estimate' : '')}
+        ${stat('Our spread', v2 ? esc(C.modelSpread(card.home.abbr, card.away.abbr, v2.margin)) : DASH, v2 && v2.range ? `80%: ${signed(v2.range.margin[0])} to ${signed(v2.range.margin[1])} (home)` : '')}
         ${stat('Market spread', m.spread != null ? esc(C.spreadText(card.home.abbr, m.spread)) : DASH, m.spreadOpen != null && m.spreadOpen !== m.spread ? `opened ${esc(C.spreadText(card.home.abbr, m.spreadOpen))}` : esc(m.book || ''))}
-        ${stat('Model total', v2 ? fixed(v2.total) : DASH, v2 && v2.range ? `80%: ${fixed(v2.range.total[0])} to ${fixed(v2.range.total[1])}` : '')}
+        ${stat('Our total', v2 ? fixed(v2.total) : DASH, v2 && v2.range ? `80%: ${fixed(v2.range.total[0])} to ${fixed(v2.range.total[1])}` : '')}
         ${stat('Market total', m.total != null ? esc(m.total) : DASH, m.totalOpen != null && m.totalOpen !== m.total ? `opened ${esc(m.totalOpen)}` : esc(m.book || ''))}
       </div>
       ${card.lean && !card.completed ? `<div style="margin-top:10px">${leanChips(card)}</div>` : ''}
@@ -334,16 +339,18 @@
   const lineText = v => v === 0 ? 'PK' : `${v > 0 ? '+' : ''}${Math.round(v * 10) / 10}`;
   const lineRow = row => {
     const inTicket = state.ticket.some(t => t.id === row.id);
-    const g = C.gradeOf(row.grade, row.gradeNote);
+    const g = C.gradeOf(row.grade, row.gradeNote, row);
     const open = row.state === 'open';
+    const graded = open || Boolean(row.athleteId);   /* player lines have no price but do have a read */
+    const books = row.books || [];
     return `<div class="row${open ? '' : ' row-closed'}" style="cursor:default">
-      <span class="row-rail" style="background:${open && RAIL[g.tier] || 'var(--line)'}"></span>
+      <span class="row-rail" style="background:${graded && RAIL[g.tier] || 'var(--line)'}"></span>
       <span class="row-main"><span class="row-top"><span class="row-name">${esc(row.player || row.title || 'Line')}</span>${row.position ? `<span class="row-meta">${esc(row.position)}</span>` : ''}
         ${!open ? `<span class="pill pill-${esc(row.state)}">${esc({ stale: 'Recheck price', closed: 'Closed', unpriced: 'No price', reference: 'Unverified price' }[row.state] || row.state)}</span>` : ''}
         ${row.move && typeof row.line === 'number' ? `<span class="move">opened ${esc(lineText(row.line - row.move))}</span>` : ''}</span>
         ${row.player ? `<span class="row-market">${esc([row.direction, row.line, row.market].filter(v => v != null && v !== '').join(' '))}</span>` : ''}
-        ${open ? `<span class="grade grade-${g.tier}"><b>${esc(g.word)}</b>${g.detail ? `<span>${esc(g.detail)}</span>` : ''}</span>` : ''}
-        ${(row.books || []).length > 1 ? `<span class="row-meta">${row.books.map(q => `${esc(q.book)} ${row.market === 'total points' ? esc(q.line) : esc(C.spreadText('', q.line).trim())} ${odds(q.odds)}`).join(' · ')}</span>` : ''}
+        ${graded ? `<span class="grade grade-${g.tier}"><b>${esc(g.word)}</b>${g.detail ? `<span>${esc(g.detail)}</span>` : ''}</span>` : ''}
+        ${books.length > 1 ? `<span class="row-meta">${books.slice(0, 3).map(q => `${esc(q.book)} ${row.market === 'total points' ? esc(q.line) : esc(C.spreadText('', q.line).trim())} ${odds(q.odds)}`).join(' · ')}${books.length > 3 ? ` · +${books.length - 3} more` : ''}</span>` : ''}
         <span class="row-meta">${esc(whenShort(row.kickoff))}${row.observedAt ? ' · seen ' + esc(ago(row.observedAt)) : ''}</span></span>
       <span class="row-price"><span class="row-odds num">${odds(row.odds)}</span><span class="row-book">${esc(row.book || 'No book')}${(row.books || []).length > 1 ? ` · best of ${row.books.length}` : ''}</span></span>
       ${row.state === 'open' && row.odds != null ? `<button class="add" type="button" data-add="${esc(row.id)}" aria-pressed="${inTicket}" aria-label="${inTicket ? 'Remove from ticket' : 'Add to ticket'}">${inTicket ? '✓' : '+'}</button>` : ''}
@@ -535,17 +542,17 @@
     const rec = r => `${r[0]}–${r[1]}${r[2] ? '–' + r[2] : ''}`;
     const rate = r => r[0] + r[1] ? Math.round(100 * r[0] / (r[0] + r[1])) + '%' : DASH;
     const table = (rows, caption) => `<div class="table-wrap"><table class="data"><caption>${caption}</caption><thead><tr><th>Model</th><th>Games</th><th>Vs close</th><th>Margin miss</th><th>Close miss</th><th>Totals</th><th>Total miss</th><th>Closer</th><th>Line moved our way</th><th>80% held</th></tr></thead><tbody>
-      ${rows.map(r => { const s = r.summary; return `<tr><td>${esc(leagueName(r.league))} ${esc(r.model)}<span class="sub">${esc(r.season)}</span></td><td>${s.games}</td><td>${rec(s.side)}<span class="sub">${rate(s.side)}</span></td>
+      ${rows.map(r => { const s = r.summary; return `<tr><td>${esc(leagueName(r.league))} ${esc(modelName(r.model))}<span class="sub">${esc(r.season)}</span></td><td>${s.games}</td><td>${rec(s.side)}<span class="sub">${rate(s.side)}</span></td>
         <td>${fixed(s.marginMiss)}</td><td>${fixed(s.closeMarginMiss)}</td><td>${rec(s.ou)}<span class="sub">${rate(s.ou)}</span></td><td>${fixed(s.totalMiss)}<span class="sub">close ${fixed(s.closeTotalMiss)}</span></td>
         <td>${rate(s.closerMargin)}</td><td>${rate(s.movedToward)}</td><td>${s.within80 != null ? Math.round(100 * s.within80) + '%' : DASH}</td></tr>`; }).join('')}</tbody></table></div>`;
-    const weeks = rows => rows.map(r => `<details class="card" style="padding:0 12px;margin-top:8px"><summary style="padding:12px 0;cursor:pointer;font-size:13px;font-weight:600">${esc(leagueName(r.league))} ${esc(r.model)} ${esc(r.season)} by week</summary>
+    const weeks = rows => rows.map(r => `<details class="card" style="padding:0 12px;margin-top:8px"><summary style="padding:12px 0;cursor:pointer;font-size:13px;font-weight:600">${esc(leagueName(r.league))} ${esc(modelName(r.model))} ${esc(r.season)} by week</summary>
       <div class="table-wrap" style="margin-bottom:12px"><table class="data"><thead><tr><th>Week</th><th>Games</th><th>Vs close</th><th>Margin miss</th><th>Close miss</th><th>Totals</th></tr></thead><tbody>
       ${r.weeks.map(w => `<tr><td>${esc(w.week === 'post' ? 'Postseason' : 'Week ' + w.week)}</td><td>${w.games}</td><td>${rec(w.side)}</td><td>${fixed(w.marginMiss)}</td><td>${fixed(w.closeMarginMiss)}</td><td>${rec(w.ou)}</td></tr>`).join('')}</tbody></table></div></details>`).join('');
     const props = (board.props || {}).markets || [];
     const picks = (board.picks || {}).rows || [];
     return `${head('The scoreboard', 'Every forecast published before kickoff, graded against the closing line and the final score. The point is to see how well the model actually does, not to sell it.')}
       <div class="notice"><strong>How to read this.</strong> “Vs close” takes the side the model preferred against the closing spread; 52.4% breaks even at -110. “Miss” is the average distance from the final margin or total, next to the closing line’s own miss. “Line moved our way” counts games where the market moved from its open toward the model, a faster signal than wins and losses.</div>
-      ${section('Live record', live.length ? table(live, 'Published before kickoff') + weeks(live) : empty('Nothing graded yet', 'Live grades start when the first v2 forecasts reach kickoff.'))}
+      ${section('Live record', live.length ? table(live, 'Published before kickoff') + weeks(live) : empty('Nothing graded yet', 'Live grades start when the first numbers reach kickoff.'))}
       ${section('Backtests', back.length ? table(back, 'Retrospective walk-forward, never published') + weeks(back) : empty('No backtests', ''))}
       ${section('Player projections vs DraftKings lines', props.length ? `<div class="table-wrap"><table class="data"><thead><tr><th>Market</th><th>Graded</th><th>Record</th><th>Closer than line</th><th>Projection miss</th><th>Line miss</th></tr></thead><tbody>
         ${props.map(p => `<tr><td>${esc(C.LABEL[p.market] || p.market)}</td><td>${p.graded}</td><td>${rec(p.record)}</td><td>${rate(p.closerThanLine)}</td><td>${fixed(p.projectionMiss)}</td><td>${fixed(p.lineMiss)}</td></tr>`).join('')}</tbody></table></div>`
@@ -569,15 +576,16 @@
     const r = C.recordOf(picks);
     const scoped = state.recordScope === 'favorites' ? data.picks.filter(p => p.favorite) : data.picks;
     const leagues = [['NFL', 'NFL'], ['CFB', 'College']].map(([id, name]) => [name, C.recordOf(scoped.filter(p => p.league === id))]);
-    const types = [...new Set(picks.map(C.category))].map(name => [name, C.recordOf(picks.filter(p => C.category(p) === name))]);
+    const types = [...new Set(picks.map(C.category))].map(name => [name, C.summaryOf(picks.filter(p => C.category(p) === name))]);
     const typeRow = ([name, t]) => `<tr><th scope="row">${esc(name)}</th><td class="num">${t.wins}–${t.losses}–${t.pushes}</td><td class="num">${t.units == null ? DASH : signed(t.units, 2) + 'u'}</td><td class="num">${t.priced}</td></tr>`;
-    return `${head('The record', 'Every published pick at one unit, win or lose. Original prices are frozen; later moves are logged, never re-priced.')}
+    return `${head('The record', `Every straight pick at one unit, win or lose, ${state.league === 'ALL' ? 'across both sports' : `with ${esc(leagueName(dataLeague()))} selected above`}. Original prices are frozen; later moves are logged, never re-priced. The table below always covers both sports.`)}
       <div class="toolbar">${seg('recordScope', [['all', `All picks (${league.length})`], ['favorites', `Favorites (${league.filter(p => p.favorite).length})`]], state.recordScope)}</div>
       ${recordCard(r, false)}
       ${section('By sport', `<div class="table-wrap"><table class="data"><thead><tr><th>Sport</th><th>W–L–P</th><th>Net units</th><th>Priced</th><th>Pending</th></tr></thead><tbody>${leagues.map(([name, t]) =>
         `<tr><th scope="row">${esc(name)}</th><td class="num">${t.wins}–${t.losses}–${t.pushes}</td><td class="num">${t.units == null ? DASH : signed(t.units, 2) + 'u'}</td><td class="num">${t.priced}</td><td class="num">${t.pending}</td></tr>`).join('')}</tbody></table></div>`)}
       ${types.length > 1 ? section('By type', `<div class="table-wrap"><table class="data"><thead><tr><th>Type</th><th>W–L–P</th><th>Net units</th><th>Priced</th></tr></thead><tbody>${types.map(typeRow).join('')}</tbody></table></div>`) : ''}
       <input class="search" type="search" data-input="recordQuery" placeholder="Search settled picks by player, team or market" value="${esc(state.recordQuery)}" aria-label="Search settled picks">
+      <p class="row-meta" style="margin:0 0 8px">CLV is closing line value: our number against the last one before kickoff. Positive means we beat the close, which shows up before wins and losses do.</p>
       ${section('Every settled pick', settled.length ? `<div class="card"><div class="rows">${settled.map(p => {
         const c = clv.get(p.id);
         return pickRow({ ...p, actual: [p.actual, c && c.clv != null ? `CLV ${signed(c.clv)}` : null].filter(Boolean).join(' · ') });
@@ -591,7 +599,8 @@
     const all = data.lines.filter(inLeague);
     const query = state.boardQuery.trim().toLowerCase();
     let shown = all.filter(l => state.boardScope === 'open' ? ['open', 'reference', 'unpriced'].includes(l.state)
-      : state.boardScope === 'settled' ? l.state === 'closed' : true);
+      : state.boardScope === 'players' ? Boolean(l.athleteId)
+        : state.boardScope === 'settled' ? l.state === 'closed' : true);
     if (query) shown = shown.filter(l => `${l.player || ''} ${l.title || ''} ${l.market || ''}`.toLowerCase().includes(query));
     /* Today first. With nothing left today, the next day that has lines stands in, and the header says so. */
     const todayLabel = dayLabel(new Date().toISOString());
@@ -609,9 +618,10 @@
     const open = all.filter(l => l.state === 'open'), props = all.filter(l => l.state === 'unpriced' && l.athleteId);
     const liked = all.filter(l => (l.grade || {}).tier === 'strong').length, leans = all.filter(l => (l.grade || {}).tier === 'lean').length;
     return `${head('The board', `${open.length} priced lines and ${props.length} player lines. The model likes ${liked} and leans slightly on ${leans}. These are lines we saw, not picks; only our picks are selections.`)}
-      <div class="toolbar">${seg('boardDay', [['today', 'Today'], ['week', 'This week']], state.boardDay)}${seg('boardScope', [['open', 'Open'], ['all', 'Everything'], ['settled', 'Closed']], state.boardScope)}${seg('boardSort', [['best', 'Best first'], ['time', 'By kickoff']], state.boardSort)}</div>
+      <div class="toolbar">${seg('boardDay', [['today', 'Today'], ['week', 'This week']], state.boardDay)}${seg('boardScope', [['open', 'Open'], ['players', 'Players'], ['all', 'Everything'], ['settled', 'Closed']], state.boardScope)}${seg('boardSort', [['best', 'Best first'], ['time', 'By kickoff']], state.boardSort)}</div>
       ${dayNote ? `<p class="row-meta" style="margin:0 0 8px">${esc(dayNote)}</p>` : ''}
-      <p class="row-meta" style="margin:0 0 10px">Each line shows v2's chance of winning it next to what its price needs. The chance is already shrunk by v2's 2024-25 record against the closing line, which it has not beaten: spreads carry little information, totals a bit more. <b class="grade-word grade-strong">Model likes it</b> is 5+ points clear; <b class="grade-word grade-lean">Slight lean</b> is 2 to 5, a thin early-season sample, or a player line where v2 leans 60%+ on three or more games this season. Player lines are DraftKings' main numbers via ESPN, with no price and no calibration yet. This is where to look, not what to bet.</p>
+      <details class="explainer"><summary>How to read this board</summary>
+      <p class="row-meta" style="margin:8px 0 10px">Every line shows how often our number says that side wins, next to what the price needs to break even. Those chances are already pulled toward 50% by our record against the closing line, so an early-season lean is small by design. <b class="grade-word grade-strong">Model likes it</b> is 5 points clear or better; <b class="grade-word grade-lean">Slight lean</b> is 2 to 5, or a thin sample. Player lines come from DraftKings through ESPN with no price attached, so they show our projection against the number instead of an edge. This is where to look, not what to bet.</p></details>
       <input class="search" type="search" data-input="boardQuery" placeholder="Player, team or market" value="${esc(state.boardQuery)}" aria-label="Search lines">
       <div id="board-rows">${shown.length ? `<div class="card"><div class="rows">${shown.slice(0, 250).map(lineRow).join('')}</div></div>` : empty('Nothing matches', 'Try another search or scope.')}</div>
       <p class="row-meta" style="margin-top:10px">Tap + to add a priced, current line to your ticket. Tickets stay on this device and never enter the record.</p>`;
@@ -693,7 +703,7 @@
     const count = state.ticket.length;
     const link = (href, label, note) => `<a href="${href}"><span>${label}</span><small>${note}</small></a>`;
     return `${head('More', '')}
-      <div class="card menu">${link('#model', 'Model scoreboard', 'v2 graded against the closing line')}${link('#ticket', 'Your ticket', count ? `${count} line${count === 1 ? '' : 's'}` : 'Parlay builder')}
+      <div class="card menu">${link('#model', 'The scoreboard', 'Our numbers graded against the closing line')}${link('#ticket', 'Your ticket', count ? `${count} line${count === 1 ? '' : 's'}` : 'Parlay builder')}
       ${link('#research', 'Research desk', 'Injuries and analyst notes')}${link('#stats/defense', 'Defense vs position', 'Rankings')}${link('#scores/NBA', 'NBA scores', 'Schedules and scores')}${link('#scores/MLB', 'MLB scores', 'Schedules and scores')}</div>
       <div class="section card" style="padding:14px"><p class="prose" style="margin:0"><b>About.</b> KeenRoudy Sports is a stats engine graded against the betting market. The model publishes score and player projections before kickoff, every forecast is kept, and the scoreboard grades them against the closing line. Stats come from ESPN’s public feeds and nflverse. For entertainment only; nothing here is betting advice.</p></div>`;
   }
@@ -701,9 +711,10 @@
   /* ---------- pick details ---------- */
 
   async function openPick(id) {
-    const data = await get('app/today.json');
+    const [data, board] = await Promise.all([get('app/today.json'), maybe('scoreboard.json')]);
     const p = data.picks.find(x => x.id === id);
     if (!p) return;
+    const clv = (((board || {}).picks || {}).rows || []).find(r => r.id === id);
     const dialog = $('#detail');
     const hostOf = (url, i) => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch (e) { return 'Source ' + (i + 1); } };
     /* Reports are hand-written JSON: a field may be text, a list or an object. Show whichever it is as text. */
@@ -716,6 +727,7 @@
       <h3 style="margin:7px 0 0;font-size:17px">${esc(p.title)}</h3><p class="row-meta" style="margin:4px 0 0">${esc(when(p.kickoff || p.publishedAt))}</p></div><button class="close" type="button" data-close aria-label="Close">×</button></div>
       <div class="detail-body"><div class="kv"><div><span>Price</span><strong>${esc(p.book || 'No book')} ${odds(p.odds)}</strong></div><div><span>Our number</span><strong>${p.projection ?? DASH}</strong></div><div><span>Confidence</span><strong>${p.confidence != null ? p.confidence + '/10' : DASH}</strong></div><div><span>Quoted</span><strong style="font-size:12px">${esc(ago(p.quotedAt))}</strong></div></div>
       ${closed ? `<div class="notice" style="margin-top:12px"><strong>Closed to new entries.</strong> ${esc(prose(p.entryNote) || (p.status === 'withdrawn' ? 'Withdrawn before kickoff.' : started ? 'The game has started.' : 'The quote has expired.'))} The original is still graded at its published price.</div>` : ''}
+      ${clv && clv.clv != null ? `<div class="notice" style="margin-top:12px"><strong>Closing line value ${signed(clv.clv)}.</strong> We posted ${clv.postedLine ?? DASH} and the last number before kickoff was ${clv.closeLine ?? DASH}. ${clv.clv > 0 ? 'We got the better number, which is the part we control.' : clv.clv < 0 ? 'The market moved to a better number after we posted.' : 'We matched the close.'}</div>` : ''}
       ${(p.legs || []).length ? `<h4>Legs</h4><ul style="margin:0;padding-left:18px">${p.legs.map(l => `<li>${esc(leg(l))}</li>`).join('')}</ul>` : ''}${p.correlation ? `<h4>How the legs relate</h4><p>${esc(prose(p.correlation))}</p>` : ''}
       ${p.cutoff ? `<h4>Worst number we would take</h4><p>${esc(prose(p.cutoff))}</p>` : ''}${p.why ? `<h4>Why</h4><p>${esc(prose(p.why))}</p>` : ''}${p.risk ? `<h4>What could go wrong</h4><p>${esc(prose(p.risk))}</p>` : ''}${p.edge ? `<h4>Edge estimate</h4><p>${esc(prose(p.edge))}</p>` : ''}
       ${p.actual ? `<h4>Result</h4><p>${esc(prose(p.actual))}</p>` : ''}${p.settlementReason ? `<p>${esc(prose(p.settlementReason))}</p>` : ''}

@@ -109,7 +109,7 @@ def why(model, forecast, home, away, league):
              f"defense {margin_ratings['away']['def']:+.1f}."]
     weight = model.params['margin'].get('eloWeight', 0)
     if weight:
-        parts.append(f"Margin blends {weight:.0%} of the v1 Elo margin.")
+        parts.append(f"Margin blends {weight:.0%} of the older Elo baseline.")
     if forecast['sparse']:
         parts.append('At least one team has fewer than three games this season; treat with extra caution.')
     parts.append('No injury, weather or market input in the score. Injuries only remove ruled-out players from '

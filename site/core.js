@@ -205,10 +205,13 @@
 
   /* ---------- the record ---------- */
 
+  /* A pick is staked at one unit unless it recorded its own size. Parlays never carry a full unit. */
+  const stakeOf = pick => { const r = Number(pick.riskUnits); return Number.isFinite(r) && r > 0 ? r : 1; };
   const unitsFor = pick => {
     if (!pick.odds || !['win', 'loss', 'push'].includes(pick.result)) return null;
-    if (pick.result === 'win') return pick.odds > 0 ? pick.odds / 100 : 100 / Math.abs(pick.odds);
-    return pick.result === 'loss' ? -1 : 0;
+    const stake = stakeOf(pick);
+    if (pick.result === 'win') return stake * (pick.odds > 0 ? pick.odds / 100 : 100 / Math.abs(pick.odds));
+    return pick.result === 'loss' ? -stake : 0;
   };
   /* Units and ROI use recorded original prices only; a result without one stays in the win-loss
      record and out of returns. No price is ever assumed. ROI waits for ten priced picks. */
@@ -229,9 +232,18 @@
 
   /* A board line's model grade: the word leads, the numbers say why. */
   const GRADE_WORD = { strong: 'Model likes it', lean: 'Slight lean', pass: 'No edge' };
-  const gradeOf = (g, note = '') => {
+  const gradeOf = (g, note = '', row = null) => {
     if (!g) return { tier: 'none', word: 'No model read', detail: note || '' };
     const pct = x => `${Math.round(100 * x)}%`;
+    /* A player line carries no price, so there is no edge to state: show the projection against
+       the number, which side that favours, and how little history it rests on. */
+    if (g.needs == null && g.projection != null) {
+      const side = (row || {}).direction ? ` ${(row || {}).direction}` : '';
+      const parts = [`our number ${g.projection} against ${(row || {}).line ?? 'the line'}`, `${pct(g.chance)}${side}`];
+      if (g.games != null) parts.push(`${g.games} game${g.games === 1 ? '' : 's'} this season`);
+      return { tier: g.tier, word: g.tier === 'lean' ? 'Slight lean' : g.thin ? 'Too early to lean' : 'Close to the line',
+        detail: parts.join(' · ') };
+    }
     const parts = [`${pct(g.chance)} to win${g.push >= 0.01 ? `, ${pct(g.push)} push` : ''}`,
       g.needs == null ? 'no price yet' : `needs ${pct(g.needs)}`];
     if (g.thin) parts.push('thin sample');
@@ -246,16 +258,24 @@
   const category = p => p.kind === 'gamePicks' ? (p.marketType === 'total' ? 'Totals' : 'Spreads')
     : p.kind === 'props' ? 'Straights' : p.kind === 'riskyProps' ? 'Risky lines'
       : p.parlayType === 'longshot' ? 'Longshots' : 'Parlays';
-  const recordOf = (picks, minimum = 10) => {
+  const summarizePicks = (picks, minimum) => {
     const settled = picks.filter(p => ['win', 'loss', 'push', 'void'].includes(p.result));
     const priced = picks.filter(p => unitsFor(p) != null);
     const units = priced.reduce((sum, p) => sum + unitsFor(p), 0);
+    const staked = priced.reduce((sum, p) => sum + stakeOf(p), 0);
     const wins = settled.filter(p => p.result === 'win').length, losses = settled.filter(p => p.result === 'loss').length;
     return { wins, losses, pushes: settled.filter(p => p.result === 'push').length, voids: settled.filter(p => p.result === 'void').length,
       pending: picks.filter(p => !p.result).length, hitRate: wins + losses ? 100 * wins / (wins + losses) : null,
       priced: priced.length, pricedWins: priced.filter(p => p.result === 'win').length, pricedLosses: priced.filter(p => p.result === 'loss').length,
-      unpriced: settled.filter(p => p.result !== 'void').length - priced.length,
-      units: priced.length ? units : null, roi: priced.length >= minimum ? 100 * units / priced.length : null, roiMinimum: minimum };
+      unpriced: settled.filter(p => p.result !== 'void').length - priced.length, staked,
+      units: priced.length ? units : null, roi: priced.length >= minimum && staked > 0 ? 100 * units / staked : null, roiMinimum: minimum };
+  };
+  /* Parlays are staked at their own size, never a full unit, so they are summarized apart and never
+     folded into the straight-pick units. ROI is profit against what was actually risked. */
+  const recordOf = (picks, minimum = 10) => {
+    const parlays = picks.filter(p => p.kind === 'parlays');
+    return { ...summarizePicks(picks.filter(p => p.kind !== 'parlays'), minimum),
+      parlays: parlays.length ? summarizePicks(parlays, minimum) : null };
   };
 
   /* ---------- routes ---------- */
@@ -285,5 +305,5 @@
   return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone,
     column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET,
     rankDefenses, rankOf, rankTone, decimal, american, eligible, summarizeTicket, ticketText,
-    unitsFor, recordOf, pickState, isOpen, isLongshot, gradeOf, byGrade, category, parseRoute, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, summaryOf: summarizePicks, pickState, isOpen, isLongshot, gradeOf, byGrade, category, parseRoute, shardOf, BASE };
 });

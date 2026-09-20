@@ -165,6 +165,8 @@ main { padding: 0 var(--gutter) 28px; max-width: 1240px; margin: 0 auto; }
 .grade-lean b, b.grade-lean { background: rgba(255, 180, 61, .16); color: var(--amber); }
 .grade-pass b, .grade-none b { background: var(--raised); color: var(--dim); }
 .live { color: var(--mint) }
+.explainer { margin: 0 0 10px }
+.explainer summary { cursor: pointer; color: var(--muted); font-size: 13px; padding: 2px 0 }
 .row-closed { opacity: .6; }
 .pill-unpriced { background: var(--raised); color: var(--dim); }
 .pill-reference { background: rgba(111, 194, 240, .14); color: var(--sky); }
