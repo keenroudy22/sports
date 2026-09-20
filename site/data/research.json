@@ -6133,5 +6133,102 @@
       "Ohio at South Alabama over 48.5 and James Madison at San Diego State over 45.5 stay passes from the midday run: Ohio's top two quarterbacks are hurt and the total has already fallen from 53.5 to 48.5, and v2's James Madison number leans on an 87-3 win over FCS Wagner."
     ],
     "gameWatch": []
+  },
+  {
+    "league": "CFB",
+    "targetWeek": 3,
+    "publishedAt": "2026-09-20T04:05:24Z",
+    "summary": "11:30 PM ET run, published at 12:05 ET. Both week 3 picks are settled from ESPN box scores: Texas A&M -16.5 at -118 lost, Kentucky winning outright 31-21, and Duke -10 at -105 won, 35-7. The day is 1-1 and -0.05 units at the published prices. Nothing was closed: neither line moved before kickoff. No new picks; the NFL card waits for Sunday morning, when inactives are out. Week 3 is not complete, with eight college games still in play at midnight, so the weekly review waits for the first run after they finish. The Odds API captured all 29 NFL games at midnight, 486 credits left this month.",
+    "gamePicks": [
+      {
+        "id": "CFB-2026-W3-tamu-minus-16-5-vs-uk-dk",
+        "title": "Texas A&M -16.5 vs Kentucky",
+        "status": "settled",
+        "favorite": true,
+        "marketType": "spread",
+        "line": -16.5,
+        "direction": "home",
+        "gameIds": [
+          "CFB-401856694"
+        ],
+        "book": "DraftKings",
+        "odds": -118,
+        "quotedAt": "2026-09-19T12:11:17Z",
+        "quoteType": "feed",
+        "quoteNote": "DraftKings' line and price as relayed by ESPN's odds feed at that time; not re-read at the DraftKings app. Check the price before following.",
+        "expiresAt": "2026-09-19T15:30:00Z",
+        "projection": 28.6,
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-19T12:11:24Z",
+        "edge": "v2 home margin 28.6 (80% range 7.7 to 49.5). Chance of home -16.5: 77.1%, against 54.1% break-even at -118: +22.9 points, +0.424u per unit. Normal approximation from the stored v2 range; not calibrated at this line.",
+        "cutoff": "HOME -16.5 at -118 or better. Closed to new entries on no key number, or at -133 or worse at -16.5.",
+        "confidence": 6,
+        "why": "Settled from the ESPN box score. Kentucky, down the five players on Friday's SEC availability report, won by 10 in College Station. The pick needed Texas A&M by 17.",
+        "risk": "The published risk is what happened: 16.5 was a lot of points, A&M's two games leaned on a 50-0 over Missouri State, and v2's 28.6-point margin was the largest FBS gap on the slate. A thin model number next to an opponent's injury list is not an edge.",
+        "sources": [
+          "https://sportsbook.draftkings.com/event/34634030",
+          "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401856694/competitions/401856694/odds",
+          "https://www.kbtx.com/2026/09/19/two-texas-am-players-downgraded-doubtful-friday-availability-report/",
+          "https://www.espn.com/college-football/boxscore/_/gameId/401856674",
+          "https://www.espn.com/college-football/boxscore/_/gameId/401856683",
+          "https://www.espn.com/college-football/boxscore/_/gameId/401856668",
+          "https://www.espn.com/college-football/boxscore/_/gameId/401856659"
+        ],
+        "jurisdictionVerified": true,
+        "availabilityNote": "Indiana permits wagers on college sides and totals and DraftKings operates there; this is a full-game side on the DraftKings board.",
+        "result": "loss",
+        "actual": "Kentucky 31, Texas A&M 21. A&M lost outright, so -16.5 missed by 26.5 points.",
+        "actualValue": -10,
+        "settledAt": "2026-09-20T04:05:24Z",
+        "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401856694"
+      },
+      {
+        "id": "CFB-2026-W3-duke-minus-10-vs-stan-dk",
+        "title": "Duke -10 vs Stanford",
+        "status": "settled",
+        "favorite": true,
+        "marketType": "spread",
+        "line": -10.0,
+        "direction": "home",
+        "gameIds": [
+          "CFB-401858231"
+        ],
+        "book": "DraftKings",
+        "odds": -105,
+        "quotedAt": "2026-09-19T12:11:17Z",
+        "quoteType": "feed",
+        "quoteNote": "DraftKings' line and price as relayed by ESPN's odds feed at that time; not re-read at the DraftKings app. Check the price before following.",
+        "expiresAt": "2026-09-19T15:30:00Z",
+        "projection": 19.1,
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-19T12:11:24Z",
+        "edge": "v2 home margin 19.1 (80% range -1.8 to 40). Chance of home -10: 70.1%, push 2.1%, against 51.2% break-even at -105: +18.9 points, +0.389u per unit. Normal approximation from the stored v2 range; not calibrated at this line.",
+        "cutoff": "HOME -10 at -105 or better. Closed to new entries on no key number, or at -120 or worse at -10.",
+        "confidence": 6,
+        "why": "Settled from the ESPN box score. Stanford, with twelve players out including four cornerbacks, scored 7 and Duke covered -10 comfortably.",
+        "risk": "Duke's three missing offensive linemen never mattered against a depleted Stanford front. One game on two-game samples settles a ticket, not a method.",
+        "sources": [
+          "https://sportsbook.draftkings.com/event/34634033",
+          "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401858231/competitions/401858231/odds",
+          "https://sports.yahoo.com/articles/stanford-duke-initial-injury-report-031226951.html",
+          "https://www.espn.com/college-football/boxscore/_/gameId/401858206",
+          "https://www.espn.com/college-football/boxscore/_/gameId/401858217",
+          "https://www.espn.com/college-football/boxscore/_/gameId/401858209",
+          "https://www.espn.com/college-football/boxscore/_/gameId/401858201"
+        ],
+        "jurisdictionVerified": true,
+        "availabilityNote": "Indiana permits wagers on college sides and totals and DraftKings operates there; this is a full-game side on the DraftKings board.",
+        "result": "win",
+        "actual": "Duke 35, Stanford 7. Duke by 28 covers -10 with 18 points to spare.",
+        "actualValue": 28,
+        "settledAt": "2026-09-20T04:05:24Z",
+        "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401858231"
+      }
+    ],
+    "takeaways": [
+      "How the day's documented passes finished, from ESPN box scores: Louisiana Tech at Baylor went over 49.5 (55 points), Ohio at South Alabama went over 48.5 (77), FIU covered +6.5 losing 16-10, and LSU at Ole Miss stayed under 58.5 (56). West Virginia and Virginia went over 53.5 (65), the one pass that was right. Four of the five model leans we passed on would have won. Five games is noise, not evidence, and the reasons for passing were sourced (backup quarterbacks, hurt quarterbacks, no reason beyond the model). It is worth watching whether passing on totals after the market has moved on news is costing more than it saves.",
+      "Both picks were published at 8:45 AM with quotes that expired at 11:30 AM, and neither line moved all day: Texas A&M held at -16.5 -118 and Duke at -10 -105 at DraftKings through the 12:25 PM and 6:03 PM captures."
+    ],
+    "gameWatch": []
   }
 ]
