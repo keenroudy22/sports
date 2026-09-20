@@ -162,6 +162,7 @@
 
   async function viewToday() {
     const [data, board] = await Promise.all([get('app/today.json'), maybe('app/lines.json')]);
+    markPicks(data.picks.filter(inLeague).filter(p => !p.result && !p.historicalImport));
     const moves = lineMoves(slate(data.games.filter(inLeague)));   /* this slate only, not look-ahead lines */
     const settledRecently = lastGameDay(data.picks.filter(inLeague));
     const recent = C.summaryOf(settledRecently);
@@ -387,15 +388,23 @@
 
   const RAIL = { strong: 'var(--green)', lean: 'var(--amber)' };
   const lineText = v => v === 0 ? 'PK' : `${v > 0 ? '+' : ''}${Math.round(v * 10) / 10}`;
+  /* Our open picks, keyed the way board rows are keyed, so the board can mark them. */
+  let pickKeys = new Map();
+  const pickKey = p => p.athleteId ? `prop-${p.gameId}-${p.athleteId}-${String(p.marketType || p.market || '').replace(/\s+/g, '')}`
+    : p.marketType === 'total' ? `game-${p.gameId}-${p.direction}` : p.marketType === 'spread' ? `game-${p.gameId}-${p.direction}` : null;
+  const rowKey = row => row.athleteId ? `prop-${row.gameId}-${row.athleteId}-${String(row.market || '').replace(/\s+/g, '')}` : row.id;
+  const markPicks = picks => { pickKeys = new Map(); for (const p of picks) { if (!p.result && C.isOpen(p)) { const k = pickKey(p); if (k) pickKeys.set(k, p); } } };
+
   const lineRow = row => {
     const inTicket = state.ticket.some(t => t.id === row.id);
+    const ours = pickKeys.get(rowKey(row)) || pickKeys.get(row.id);
     const g = C.gradeOf(row.grade, row.gradeNote, row);
     const open = row.state === 'open';
     const graded = open || Boolean(row.athleteId);   /* player lines have no price but do have a read */
     const books = row.books || [];
     return `<div class="row${open ? '' : ' row-closed'}" style="cursor:default">
       <span class="row-rail" style="background:${graded && RAIL[g.tier] || 'var(--line)'}"></span>
-      <span class="row-main"><span class="row-top"><span class="row-name">${esc(row.player || row.title || 'Line')}</span>${row.position ? `<span class="row-meta">${esc(row.position)}</span>` : ''}
+      <span class="row-main"><span class="row-top"><span class="row-name">${esc(row.player || row.title || 'Line')}</span>${row.position ? `<span class="row-meta">${esc(row.position)}</span>` : ''}${ours ? `<span class="pill pill-ours">${ours.modelLean ? 'Our model lean' : 'Our pick'}</span>` : ''}
         ${!open ? `<span class="pill pill-${esc(row.state)}">${esc({ stale: 'Recheck price', closed: 'Closed', unpriced: 'No price', reference: 'Unverified price' }[row.state] || row.state)}</span>` : ''}
         ${row.move && typeof row.line === 'number' ? `<span class="move">opened ${esc(lineText(row.line - row.move))}</span>` : ''}</span>
         ${row.player ? `<span class="row-market">${esc([row.direction, row.line, row.market].filter(v => v != null && v !== '').join(' '))}</span>` : ''}
@@ -670,7 +679,10 @@
 
   async function viewBoard(route) {
     if (route && route.tab && route.tab !== state.boardMode) state.boardMode = route.tab;
-    const data = await get('app/lines.json');
+    const [data, today] = await Promise.all([get('app/lines.json'), maybe('app/today.json')]);
+    const ourPicks = ((today || {}).picks || []).filter(inLeague).filter(p => !p.result && !p.historicalImport)
+      .sort((a, b) => (C.isOpen(b) - C.isOpen(a)) || String(a.kickoff).localeCompare(String(b.kickoff)));
+    markPicks(ourPicks);
     const all = data.lines.filter(inLeague);
     const props = state.boardMode === 'props';
     const query = state.boardQuery.trim().toLowerCase();
@@ -708,6 +720,7 @@
     return `${head(props ? 'Player props' : 'The board', intro)}
       <div class="toolbar">${seg('boardMode', [['games', 'Game lines'], ['props', 'Player props']], state.boardMode)}${seg('boardDay', [['today', 'Today'], ['week', 'This week']], state.boardDay)}${seg('boardSort', [['best', 'Best first'], ['time', 'By kickoff']], state.boardSort)}${seg('boardScope', [['open', 'Open'], ['settled', 'Closed']], state.boardScope)}</div>
       ${props ? `<div class="toolbar">${seg('propMarket', PROP_MARKETS, state.propMarket)}</div>` : ''}
+      ${ourPicks.length && !props ? section('Our picks', `<div class="card"><div class="rows">${ourPicks.map(pickRow).join('')}</div></div>`, '<a href="#record">Record →</a>') : ''}
       ${dayNote ? `<p class="row-meta" style="margin:0 0 8px">${esc(dayNote)}</p>` : ''}
       <details class="explainer"><summary>How to read this board</summary>
       <p class="row-meta" style="margin:8px 0 10px">Every line shows how often our number says that side wins, next to what the price needs to break even. Those chances are already pulled toward 50% by our record against the closing line, so an early-season lean is small by design. <b class="grade-word grade-strong">Model likes it</b> is 5 points clear or better; <b class="grade-word grade-lean">Slight lean</b> is 2 to 5, or a thin sample. Player lines come from DraftKings through ESPN with no price attached, so they show our projection against the number instead of an edge. This is where to look, not what to bet.</p></details>

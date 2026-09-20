@@ -92,6 +92,10 @@ jobs:
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: python scripts/prop_odds.py
+      - name: Price DraftKings and FanDuel props for the whole slate (SharpAPI, rate limited)
+        env:
+          SHARP_API: ${{ secrets.SHARP_API }}
+        run: python scripts/sharp_odds.py
       - name: Grade forecasts and picks against the close
         run: python scripts/scoreboard.py
       - name: Compile sourced line catalog
