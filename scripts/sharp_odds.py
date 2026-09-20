@@ -249,7 +249,8 @@ def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=prin
             if game and game['id'] not in ids and event.get('id'):
                 ids[game['id']] = event['id']
             elif not game and len(unmatched_events) < 12:
-                unmatched_events.append({'home': home, 'away': away, 'start': start, 'keys': sorted(event.keys())[:12]})
+                unmatched_events.append({'home': home, 'away': away, 'start': start, 'type': event.get('event_type'),
+                                         'external': event.get('external_ids'), 'sample': {k: event.get(k) for k in ('home_team', 'away_team', 'markets') if k in event}})
         matched, types, books_seen = [], {}, {}
         for game in mine:
             if game['id'] not in ids or budget[0] <= 0:
