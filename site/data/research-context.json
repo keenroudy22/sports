@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-20T11:24:09Z",
+  "updatedAt": "2026-09-20T11:33:54Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -237,6 +237,15 @@
           "name": "Atlanta Falcons",
           "players": [
             {
+              "id": "4360423",
+              "name": "Michael Penix Jr.",
+              "position": "QB",
+              "status": "Out",
+              "injury": "Knee - ACL",
+              "reportedAt": "2026-09-20T11:13Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4360423/michael-penix-jr"
+            },
+            {
               "id": "3672833",
               "name": "Chris Lindstrom",
               "position": "G",
@@ -307,15 +316,6 @@
               "injury": "Oblique",
               "reportedAt": "2026-09-18T17:41Z",
               "source": "https://www.espn.com/nfl/player/_/id/4241479/tua-tagovailoa"
-            },
-            {
-              "id": "4360423",
-              "name": "Michael Penix Jr.",
-              "position": "QB",
-              "status": "Out",
-              "injury": "Knee - ACL",
-              "reportedAt": "2026-09-18T17:36Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4360423/michael-penix-jr"
             },
             {
               "id": "3126352",
@@ -7767,8 +7767,8 @@
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-20T11:24:09Z",
-      "lastAttemptAt": "2026-09-20T11:24:09Z",
+      "checkedAt": "2026-09-20T11:33:54Z",
+      "lastAttemptAt": "2026-09-20T11:33:54Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-20T11:24:09Z",
-      "lastAttemptAt": "2026-09-20T11:24:09Z",
+      "checkedAt": "2026-09-20T11:33:54Z",
+      "lastAttemptAt": "2026-09-20T11:33:54Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
