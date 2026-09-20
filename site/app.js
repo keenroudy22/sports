@@ -16,7 +16,7 @@
 
   const state = {
     league: saved.get('league', 'NFL'),
-    gamesScope: 'upcoming', gamesQuery: '', boardDay: 'today', boardScope: 'open', boardSort: 'best', boardQuery: '', playerQuery: '', recordQuery: '',
+    gamesScope: 'upcoming', gamesQuery: '', boardDay: 'today', boardScope: 'open', boardSort: 'best', boardQuery: '', boardMode: 'games', propMarket: 'all', playerQuery: '', recordQuery: '',
     stat: null, defensePos: 'WR', defenseStat: 'recYds', defenseScope: 'season', defenseOrder: 'soft',
     logSeason: 'all', scoresLeague: 'MLB', scoresDate: null, recordScope: 'all',
     ticket: saved.get('ticket', []), stake: saved.get('stake', { amount: 1, mode: 'units', unit: 10 }),
@@ -152,7 +152,7 @@
         ${live.length ? section('Our picks', `<div class="card"><div class="rows">${live.map(pickRow).join('')}</div></div>`, '<a href="#record">Record →</a>') : ''}
         ${best.rows.length ? section(best.day ? `Best on the board · ${esc(best.day)}` : 'Best on the board today',
           `<p class="row-meta" style="margin:0 0 8px">${live.length ? 'Beyond our picks, the' : 'No researched pick is up yet, so here are the'} lines our number likes most, priced at the best book. Leans, not picks: tap + to build a ticket.</p><div class="card"><div class="rows">${best.rows.map(lineRow).join('')}</div></div>`,
-          '<a href="#board">Full board →</a>') : ''}
+          '<a href="#board">Game lines →</a> <a href="#board/props">Player props →</a>') : ''}
         ${playing.length ? section(`In play now${playing.length > 6 ? ` (${playing.length})` : ''}`, `<div class="card">${playing.slice(0, 6).map(gameRow).join('')}</div>`, '<a href="#games">All games →</a>') : ''}
         ${section('Where the model and the market disagree', gaps.length ? `<p class="row-meta" style="margin:0 0 8px">A lean is how far our number sits from the line, which side that favours, and how often that side should win. Green needs 57% or better on a solid sample; most early-season leans are worth about 52%. A lean is not a pick.</p><div class="card">${gaps.map(gameRow).join('')}</div>`
           : empty('No model calls yet', 'The model publishes after the hosted refresh runs. Every game still shows the market number.'), '<a href="#games">All games →</a>')}
@@ -170,7 +170,7 @@
     const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
     return `<div class="card" style="padding:16px"><div style="text-align:center">
       <div class="num" style="font-size:${compact ? 42 : 56}px;line-height:1">${r.wins}<span class="faint">–</span>${r.losses}<span class="faint">–</span>${r.pushes}</div>
-      <div class="row-meta" style="margin-top:7px;font-size:13px">${graded ? r.hitRate.toFixed(1) + '% hit rate' : 'nothing settled'} · ${r.pending} pending</div></div>
+      <div class="row-meta" style="margin-top:7px;font-size:13px">${graded ? r.hitRate.toFixed(1) + '% hit rate' : 'nothing settled'} · ${r.pending} pending${r.streak && r.streak.length > 1 ? ` · ${r.streak.length} straight ${r.streak.result === 'win' ? 'wins' : 'losses'}` : ''}</div></div>
       <div class="stats" style="margin-top:12px">
         ${stat('Net units', r.units == null ? DASH : signed(r.units, 2) + 'u', r.priced ? `${plural(r.priced, 'priced pick')}, ${r.pricedWins}–${r.pricedLosses}` : 'no recorded prices yet', r.units > 0 ? 'up' : r.units < 0 ? 'down' : '')}
         ${stat('ROI', r.roi == null ? DASH : signed(r.roi, 1) + '%', r.roi != null ? 'priced picks only' : r.priced ? `shows at ${r.roiMinimum} priced · ${r.priced} so far` : 'needs recorded prices')}
@@ -632,13 +632,18 @@
 
   /* ---------- board and tickets ---------- */
 
-  async function viewBoard() {
+  const PROP_MARKETS = [['all', 'All props'], ['receiving yards', 'Rec yards'], ['receptions', 'Receptions'], ['rushing yards', 'Rush yards'],
+    ['carries', 'Carries'], ['passing yards', 'Pass yards']];
+
+  async function viewBoard(route) {
+    if (route && route.tab && route.tab !== state.boardMode) state.boardMode = route.tab;
     const data = await get('app/lines.json');
     const all = data.lines.filter(inLeague);
+    const props = state.boardMode === 'props';
     const query = state.boardQuery.trim().toLowerCase();
-    let shown = all.filter(l => state.boardScope === 'open' ? ['open', 'reference', 'unpriced'].includes(l.state)
-      : state.boardScope === 'players' ? Boolean(l.athleteId)
-        : state.boardScope === 'settled' ? l.state === 'closed' : true);
+    let shown = all.filter(l => props ? Boolean(l.athleteId) : !l.athleteId)
+      .filter(l => state.boardScope === 'settled' ? l.state === 'closed' : ['open', 'reference', 'unpriced'].includes(l.state));
+    if (props && state.propMarket !== 'all') shown = shown.filter(l => l.market === state.propMarket);
     if (query) shown = shown.filter(l => `${l.player || ''} ${l.title || ''} ${l.market || ''}`.toLowerCase().includes(query));
     /* Today first. With nothing left today, the next day that has lines stands in, and the header says so. */
     const todayLabel = dayLabel(new Date().toISOString());
@@ -653,15 +658,28 @@
     const rank = { open: 0, reference: 1, stale: 2, unpriced: 3, closed: 4 };
     const byKickoff = (a, b) => String(a.kickoff).localeCompare(String(b.kickoff)) || String(a.player || a.title).localeCompare(String(b.player || b.title));
     shown.sort((a, b) => (rank[a.state] - rank[b.state]) || (state.boardSort === 'best' ? C.byGrade(a, b) : 0) || byKickoff(a, b));
-    const open = all.filter(l => l.state === 'open'), props = all.filter(l => l.state === 'unpriced' && l.athleteId);
-    const liked = all.filter(l => (l.grade || {}).tier === 'strong').length, leans = all.filter(l => (l.grade || {}).tier === 'lean').length;
-    return `${head('The board', `${open.length} priced lines and ${props.length} player lines. The model likes ${liked} and leans slightly on ${leans}. These are lines we saw, not picks; only our picks are selections.`)}
-      <div class="toolbar">${seg('boardDay', [['today', 'Today'], ['week', 'This week']], state.boardDay)}${seg('boardScope', [['open', 'Open'], ['players', 'Players'], ['all', 'Everything'], ['settled', 'Closed']], state.boardScope)}${seg('boardSort', [['best', 'Best first'], ['time', 'By kickoff']], state.boardSort)}</div>
+    const liked = shown.filter(l => (l.grade || {}).tier === 'strong').length, leans = shown.filter(l => (l.grade || {}).tier === 'lean').length;
+    const priced = shown.filter(l => l.state === 'open').length;
+    const intro = props
+      ? `${shown.length} player lines${priced ? `, ${priced} with a price` : ''}. Our number leans on ${leans}${liked ? ` and likes ${liked}` : ''}. Each one shows our projection against the book's number.`
+      : `${shown.length} game lines, each priced at the best of every book we follow. The model likes ${liked} and leans slightly on ${leans}. These are lines we saw, not picks; only our picks are selections.`;
+    /* By kickoff, lines group under their game so a slate reads top to bottom. */
+    const groups = state.boardSort === 'time' ? [...shown.reduce((m, l) => { const k = l.gameId || 'other'; if (!m.has(k)) m.set(k, []); m.get(k).push(l); return m; }, new Map())] : null;
+    /* A group's name comes from any row that spells out the matchup; a spread row only names one side. */
+    const gameHead = rows => { const named = rows.map(r => String(r.title || '')).find(t => t.includes(' @ '));
+      const name = named ? named.split(/ (over|under) /)[0] : rows.map(r => String(r.title || '').split(' ')[0]).filter((v, i, a) => a.indexOf(v) === i).join(' vs ');
+      return `<p class="eyebrow" style="margin:12px 2px 6px">${esc(name)} · ${esc(whenShort(rows[0].kickoff))}</p>`; };
+    const body = !shown.length ? empty('Nothing here yet', props ? 'Player lines land once the book posts them and a price is captured.' : 'Try another search or day.')
+      : groups ? groups.map(([, rows]) => `${gameHead(rows)}<div class="card"><div class="rows">${rows.map(lineRow).join('')}</div></div>`).join('')
+        : `<div class="card"><div class="rows">${shown.slice(0, 250).map(lineRow).join('')}</div></div>`;
+    return `${head(props ? 'Player props' : 'The board', intro)}
+      <div class="toolbar">${seg('boardMode', [['games', 'Game lines'], ['props', 'Player props']], state.boardMode)}${seg('boardDay', [['today', 'Today'], ['week', 'This week']], state.boardDay)}${seg('boardSort', [['best', 'Best first'], ['time', 'By kickoff']], state.boardSort)}${seg('boardScope', [['open', 'Open'], ['settled', 'Closed']], state.boardScope)}</div>
+      ${props ? `<div class="toolbar">${seg('propMarket', PROP_MARKETS, state.propMarket)}</div>` : ''}
       ${dayNote ? `<p class="row-meta" style="margin:0 0 8px">${esc(dayNote)}</p>` : ''}
       <details class="explainer"><summary>How to read this board</summary>
       <p class="row-meta" style="margin:8px 0 10px">Every line shows how often our number says that side wins, next to what the price needs to break even. Those chances are already pulled toward 50% by our record against the closing line, so an early-season lean is small by design. <b class="grade-word grade-strong">Model likes it</b> is 5 points clear or better; <b class="grade-word grade-lean">Slight lean</b> is 2 to 5, or a thin sample. Player lines come from DraftKings through ESPN with no price attached, so they show our projection against the number instead of an edge. This is where to look, not what to bet.</p></details>
       <input class="search" type="search" data-input="boardQuery" placeholder="Player, team or market" value="${esc(state.boardQuery)}" aria-label="Search lines">
-      <div id="board-rows">${shown.length ? `<div class="card"><div class="rows">${shown.slice(0, 250).map(lineRow).join('')}</div></div>` : empty('Nothing matches', 'Try another search or scope.')}</div>
+      <div id="board-rows">${body}</div>
       <p class="row-meta" style="margin-top:10px">Tap + to add a priced, current line to your ticket. Tickets stay on this device and never enter the record.</p>`;
   }
 
@@ -778,6 +796,10 @@
 
   const VIEWS = { today: viewToday, games: viewGames, game: viewGame, stats: viewStats, player: viewPlayer, team: viewTeam,
     model: viewModel, record: viewRecord, board: viewBoard, ticket: viewTicket, research: viewResearch, scores: viewScores, more: viewMore };
+  document.addEventListener('click', event => {
+    const button = event.target.closest('[data-set^="boardMode:"]');
+    if (button) { const mode = button.dataset.set.split(':')[1]; state.boardMode = mode; location.hash = mode === 'props' ? '#board/props' : '#board'; }
+  });
 
   function chrome(route) {
     const active = TAB_FOR[route.view] || route.view;

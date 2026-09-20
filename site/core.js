@@ -266,7 +266,13 @@
     const units = priced.reduce((sum, p) => sum + unitsFor(p), 0);
     const staked = priced.reduce((sum, p) => sum + stakeOf(p), 0);
     const wins = settled.filter(p => p.result === 'win').length, losses = settled.filter(p => p.result === 'loss').length;
-    return { wins, losses, pushes: settled.filter(p => p.result === 'push').length, voids: settled.filter(p => p.result === 'void').length,
+    const graded = settled.filter(p => p.result === 'win' || p.result === 'loss')
+      .sort((a, b) => String(a.settledAt || a.kickoff || '').localeCompare(String(b.settledAt || b.kickoff || '')));
+    let streak = null;
+    for (let i = graded.length - 1; i >= 0 && (!streak || graded[i].result === streak.result); i--) {
+      streak = { result: graded[i].result, length: (streak ? streak.length : 0) + 1 };
+    }
+    return { wins, losses, pushes: settled.filter(p => p.result === 'push').length, voids: settled.filter(p => p.result === 'void').length, streak,
       pending: picks.filter(p => !p.result).length, hitRate: wins + losses ? 100 * wins / (wins + losses) : null,
       priced: priced.length, pricedWins: priced.filter(p => p.result === 'win').length, pricedLosses: priced.filter(p => p.result === 'loss').length,
       unpriced: settled.filter(p => p.result !== 'void').length - priced.length, staked,
@@ -309,6 +315,7 @@
     if (view === 'team') return { view: 'team', league: (rest[0] || 'NFL').toUpperCase(), id: rest[1] };
     if (view === 'game') return { view: 'game', id: rest.join('/') };
     if (view === 'stats') return { view: 'stats', tab: rest[0] || 'players' };
+    if (view === 'board') return { view: 'board', tab: rest[0] === 'props' ? 'props' : 'games' };
     if (view === 'defense') return { view: 'stats', tab: 'defense' };
     /* Bare #scores was the old football board; only #scores/<league> is the other-sports page. */
     if (view === 'scores' && rest[0]) return { view: 'scores', league: rest[0].toUpperCase() };
