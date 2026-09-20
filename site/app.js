@@ -666,11 +666,32 @@
       ${types.length > 1 ? section('By market', `<div class="table-wrap"><table class="data"><thead><tr><th>Type</th><th>W–L–P</th><th>Net units</th><th>Priced</th></tr></thead><tbody>${types.map(typeRow).join('')}</tbody></table></div>`) : ''}
       <input class="search" type="search" data-input="recordQuery" placeholder="Search settled picks by player, team or market" value="${esc(state.recordQuery)}" aria-label="Search settled picks">
       <p class="row-meta" style="margin:0 0 8px">CLV is closing line value: our number against the last one before kickoff. Positive means we beat the close, which shows up before wins and losses do.</p>
-      ${section('Every settled pick', settled.length ? `<div class="card"><div class="rows">${settled.map(p => {
-        const c = clv.get(p.id);
-        return pickRow({ ...p, actual: [p.actual, c && c.clv != null ? `CLV ${signed(c.clv)}` : null].filter(Boolean).join(' · ') });
-      }).join('')}</div></div>` : empty('Nothing settled yet', ''))}`;
+      ${section('Every settled pick', settled.length ? settledWeeks(settled, clv, Boolean(rq), weekLabel) : empty('Nothing settled yet', ''))}`;
   }
+
+  /* One settled pick on one line: the result, what happened in a few words, and what it returned. Tap for the full card. */
+  const settledRow = (p, c) => {
+    const u = C.unitsFor(p);
+    const state_ = C.pickState(p);
+    const what = [p.actual ? String(typeof p.actual === 'string' ? p.actual : JSON.stringify(p.actual)).split(/[.;]\s/)[0] : '', c && c.clv != null ? `CLV ${signed(c.clv)}` : ''].filter(Boolean).join(' · ');
+    return `<button class="row" type="button" data-pick="${esc(p.id)}">
+      <span class="row-rail" style="background:${p.result === 'win' ? 'var(--green)' : p.result === 'loss' ? 'var(--rose)' : 'var(--line)'}"></span>
+      <span class="row-main"><span class="row-top"><span class="row-name">${esc(p.title || p.player)}</span><span class="pill pill-${state_.tone}">${esc(state_.word)}</span>${p.modelLean ? '<span class="pill pill-reference">Model lean</span>' : ''}${C.isLongshot(p) ? '<span class="pill pill-stale">Longshot</span>' : ''}${p.historicalImport ? '<span class="pill pill-reference">Imported</span>' : ''}</span>
+        <span class="row-meta clamp">${esc(whenShort(p.kickoff || p.publishedAt))}${what ? ' · ' + esc(what) : ''}</span></span>
+      <span class="row-price"><span class="row-odds num ${u > 0 ? 'up' : u < 0 ? 'down' : ''}">${u == null ? (p.odds == null ? '' : odds(p.odds)) : signed(u, 2) + 'u'}</span><span class="row-book">${p.odds == null ? 'no price recorded' : `${esc(p.book || '')} ${odds(p.odds)}`}</span></span>
+    </button>`;
+  };
+  /* Settled picks by week, newest first: this week open, the rest folded with their line, so the list never sprawls. */
+  const settledWeeks = (settled, clv, searching, weekLabel) => {
+    const byWeek = new Map();
+    for (const p of settled) { const w = C.weekOf(p.kickoff || p.settledAt || p.publishedAt) || '0000-00-00'; if (!byWeek.has(w)) byWeek.set(w, []); byWeek.get(w).push(p); }
+    return [...byWeek].sort((a, b) => b[0].localeCompare(a[0])).map(([w, rows], i) => {
+      const t = C.summaryOf(rows);
+      const label = w === '0000-00-00' ? 'Undated' : weekLabel(w);
+      return `<details class="card week"${i === 0 || searching ? ' open' : ''}><summary><span>${esc(label)}</span><span class="row-meta">${t.wins}–${t.losses}${t.pushes ? `–${t.pushes}` : ''} · ${t.units == null ? 'no priced picks' : signed(t.units, 2) + 'u'} · ${rows.length} pick${rows.length === 1 ? '' : 's'}</span></summary>
+        <div class="rows">${rows.map(p => settledRow(p, clv.get(p.id))).join('')}</div></details>`;
+    }).join('');
+  };
 
   /* ---------- board and tickets ---------- */
 

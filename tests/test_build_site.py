@@ -166,6 +166,21 @@ class PropRowTests(unittest.TestCase):
         self.assertEqual(row['grade']['tier'], 'lean')
         self.assertEqual(row['observedAt'], '2026-09-19T12:40:00Z', 'the row is as fresh as the price on it')
 
+    def test_a_role_settled_last_season_is_not_thin_on_one_game(self):
+        game = {'id': 'NFL-1', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-09-20T17:00:00Z',
+                'home': {'id': '1', 'abbreviation': 'ATL'}, 'away': {'id': '2', 'abbreviation': 'CAR'}}
+        snapshot = {'gameId': 'NFL-1', 'league': 'NFL', 'model': 'v2.0', 'publishedAt': '2026-09-19T12:00:00Z',
+                    'players': {'home': {'players': [{'id': '10', 'pos': 'WR', 'recYds': [70.0, 40.5, 99.5]}]}, 'away': None}}
+        capture = {'retrievedAt': '2026-09-19T12:05:00Z', 'source': 'https://example.test/props', 'lines': {'10': {'recYds': [55.5, 55.5]}}}
+        now = datetime(2026, 9, 19, 13, tzinfo=timezone.utc)
+        veteran = build_site.prop_rows({'NFL-1': [capture]}, {'NFL-1': game}, {'NFL-1': [snapshot]}, {'10': 'Player Ten'}, {'10': 1}, {}, now,
+                                       None, {('10', '1')})
+        self.assertEqual(veteran[0]['grade']['tier'], 'lean', 'sixteen games in this role last season settle it')
+        self.assertFalse(veteran[0]['grade']['thin'])
+        moved = build_site.prop_rows({'NFL-1': [capture]}, {'NFL-1': game}, {'NFL-1': [snapshot]}, {'10': 'Player Ten'}, {'10': 1}, {}, now,
+                                     None, {('10', '9')})
+        self.assertTrue(moved[0]['grade']['thin'], 'the same player on a new team is a new role')
+
     def test_a_thin_sample_prop_stays_grey(self):
         game = {'id': 'NFL-1', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-09-20T17:00:00Z',
                 'home': {'id': '1', 'abbreviation': 'ATL'}, 'away': {'id': '2', 'abbreviation': 'CAR'}}

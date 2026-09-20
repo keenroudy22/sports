@@ -547,10 +547,17 @@ def build(now=None):
                               for p in data.get('players', []) if str(p.get('status', '')).lower() != 'active']
     # Grade every open line before anything is written, so the board and the game pages agree.
     appearances = defaultdict(int)
+    last_season = defaultdict(int)     # (player, team) -> games the season before this one
     for game in records:
-        if game['season'] == league_data[game['league']]['current']:
-            for player in game['players']:
+        current = league_data[game['league']]['current']
+        for player in game['players']:
+            if game['season'] == current:
                 appearances[player['id']] += 1
+            elif game['season'] == current - 1 and player.get('team') is not None:
+                last_season[(player['id'], str(player['team']))] += 1
+    # A role is thin when this season has under three games AND last season did not settle it either:
+    # a player with eight or more games for the same team last year is not a one-game guess.
+    established = {key for key, n in last_season.items() if n >= ESTABLISHED_GAMES}
     cfb = league_data['CFB']
     fbs = model_v2.fbs_teams([g for g in cfb['records'] if g['season'] >= cfb['current'] - 1])
     for line in lines:
@@ -563,7 +570,7 @@ def build(now=None):
         line['grade'] = None if fcs else grade_line(line, snapshot, thin)
         line['gradeNote'] = 'FBS vs FCS: v2 is not reliable here' if fcs and line.get('state') == 'open' else None
     prop_prices = {gid: rows[-1] for gid, rows in load_store('prop-odds').items()}
-    lines += prop_rows(captures, by_id, forecasts, names, appearances, identities, now, prop_prices)
+    lines += prop_rows(captures, by_id, forecasts, names, appearances, identities, now, prop_prices, established)
     for game in sorted(window, key=lambda g: (g['kickoff'], g['id'])):
         snaps_for = pregame(forecasts.get(game['id'], []), game['kickoff'])
         card = game_card(game, forecasts_v1, snaps_for[-1] if snaps_for else None, names, identities)
@@ -686,7 +693,15 @@ def price_quotes(record, market, name):
     return out
 
 
-def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, prices=None):
+ESTABLISHED_GAMES = 8
+
+
+def settled_role(athlete, team, appearances, established):
+    """Three games this season, or the same job for the same team last season."""
+    return appearances[str(athlete)] >= 3 or (str(athlete), str(team)) in (established or set())
+
+
+def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, prices=None, established=None):
     """DraftKings' main player lines for upcoming NFL games as board rows, with v2's lean at each.
 
     ESPN relays the lines without prices, so the rows carry no odds and cannot join a ticket. They
@@ -716,7 +731,7 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, p
                         over, push, under = pricing.chances(mean, sd, main)
                         lean = 'over' if over >= under else 'under'
                         chance = max(over, under)
-                        thin = appearances[str(athlete)] < 3
+                        thin = not settled_role(athlete, game[side]['id'] if side else None, appearances, established)
                         grade = {'chance': round(chance, 3), 'raw': round(chance, 3), 'calibrated': False,
                                  'push': round(push, 3), 'needs': None, 'edge': round(100 * (chance - 0.5), 1),
                                  'projection': round(mean, 1), 'thin': thin, 'games': appearances[str(athlete)],
@@ -749,13 +764,14 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, p
                     if snapshot and player and pricing.PROJECTED[key] in player:
                         try:
                             p = pricing.price(snapshot, key, lean, float(line), int(odds), athlete)
+                            settled = settled_role(athlete, game[side]['id'] if side else None, appearances, established)
                             row['grade'] = {'chance': p['chance'], 'raw': p['rawChance'], 'calibrated': p['calibrated'],
                                             'push': p['push'], 'needs': p['breakEven'], 'edge': p['edgePoints'],
-                                            'projection': p['projection'], 'thin': appearances[str(athlete)] < 3,
+                                            'projection': p['projection'], 'thin': not settled,
                                             'games': appearances[str(athlete)],
                                             # Player projections have no graded history, so a prop never reads stronger
-                                            # than a lean, and a thin sample never reads as one at all.
-                                            'tier': 'lean' if p['chance'] >= 0.6 and appearances[str(athlete)] >= 3 else 'pass',
+                                            # than a lean, and an unsettled role never reads as one at all.
+                                            'tier': 'lean' if p['chance'] >= 0.6 and settled else 'pass',
                                             'model': p['model'], 'snapshotAt': p['snapshotAt']}
                         except ValueError:
                             pass
