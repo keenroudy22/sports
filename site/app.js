@@ -176,7 +176,8 @@
         ${stat('ROI', r.roi == null ? DASH : signed(r.roi, 1) + '%', r.roi != null ? 'priced picks only' : r.priced ? `shows at ${r.roiMinimum} priced · ${r.priced} so far` : 'needs recorded prices')}
       </div>
       ${r.unpriced ? `<p class="row-meta" style="margin:12px 0 0">${plural(r.unpriced, 'pick')} ${r.unpriced === 1 ? 'has' : 'have'} no recorded price, so ${r.unpriced === 1 ? 'it counts' : 'they count'} in the record but not in units or ROI.</p>` : ''}
-      ${r.parlays ? `<p class="row-meta" style="margin:8px 0 0">Parlays are kept out of the numbers above and tracked at their own stake: ${r.parlays.wins}–${r.parlays.losses}${r.parlays.units == null ? '' : `, ${signed(r.parlays.units, 2)}u on ${r.parlays.staked}u risked`}.</p>` : ''}
+      ${r.model && (r.model.wins + r.model.losses + r.model.pushes + r.model.pending) ? `<p class="row-meta" style="margin:12px 0 0">Researched ${r.researched.wins}–${r.researched.losses}${r.researched.units == null ? '' : ` (${signed(r.researched.units, 2)}u)`} · Model leans ${r.model.wins}–${r.model.losses}${r.model.units == null ? '' : ` (${signed(r.model.units, 2)}u)`}${r.model.pending ? `, ${r.model.pending} pending` : ''}</p>` : ''}
+      ${r.parlays ? `<p class="row-meta" style="margin:8px 0 0">Longshots are kept out of the numbers above and tracked at their own stake: ${r.parlays.wins}–${r.parlays.losses}${r.parlays.units == null ? '' : `, ${signed(r.parlays.units, 2)}u on ${r.parlays.staked}u risked`}.</p>` : ''}
     </div>`;
   };
 
@@ -595,21 +596,32 @@
     const [data, board] = await Promise.all([get('app/today.json'), maybe('scoreboard.json')]);
     const clv = new Map((((board || {}).picks || {}).rows || []).map(r => [r.id, r]));
     const league = data.picks.filter(inLeague);
-    const picks = state.recordScope === 'favorites' ? league.filter(p => p.favorite) : league;
+    const picks = state.recordScope === 'all' ? league : league.filter(p => C.kindOf(p) === state.recordScope);
     const rq = state.recordQuery.trim().toLowerCase();
     const matches = p => !rq || [p.title, p.player, p.kind, p.result, p.book].some(v => String(v || '').toLowerCase().includes(rq));
     const settled = picks.filter(p => p.result && matches(p)).sort((a, b) => String(b.settledAt || b.publishedAt).localeCompare(String(a.settledAt || a.publishedAt)));
-    const r = C.recordOf(picks);
-    const scoped = state.recordScope === 'favorites' ? data.picks.filter(p => p.favorite) : data.picks;
+    const r = state.recordScope === 'longshot' ? { ...C.summaryOf(picks), parlays: null, model: null, researched: null } : C.recordOf(picks);
+    const scoped = state.recordScope === 'all' ? data.picks : data.picks.filter(p => C.kindOf(p) === state.recordScope);
+    const kinds = ['researched', 'model', 'longshot'].map(k => [C.KIND_WORD[k], C.summaryOf(league.filter(p => C.kindOf(p) === k))]);
+    const weeks = [...new Set(picks.map(p => C.weekOf(p.kickoff || p.publishedAt)).filter(Boolean))].sort().reverse()
+      .map(w => [w, C.summaryOf(picks.filter(p => C.weekOf(p.kickoff || p.publishedAt) === w))]);
+    const weekLabel = w => { const d = new Date(w + 'T12:00:00'); const e = new Date(d); e.setDate(d.getDate() + 6);
+      return `${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} to ${e.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`; };
     const leagues = [['NFL', 'NFL'], ['CFB', 'College']].map(([id, name]) => [name, C.recordOf(scoped.filter(p => p.league === id))]);
     const types = [...new Set(picks.map(C.category))].map(name => [name, C.summaryOf(picks.filter(p => C.category(p) === name))]);
     const typeRow = ([name, t]) => `<tr><th scope="row">${esc(name)}</th><td class="num">${t.wins}–${t.losses}–${t.pushes}</td><td class="num">${t.units == null ? DASH : signed(t.units, 2) + 'u'}</td><td class="num">${t.priced}</td></tr>`;
     return `${head('The record', `Every straight pick at one unit, win or lose, ${state.league === 'ALL' ? 'across both sports' : `with ${esc(leagueName(dataLeague()))} selected above`}. Original prices are frozen; later moves are logged, never re-priced. The table below always covers both sports.`)}
-      <div class="toolbar">${seg('recordScope', [['all', `All picks (${league.length})`], ['favorites', `Favorites (${league.filter(p => p.favorite).length})`]], state.recordScope)}</div>
+      <div class="toolbar">${seg('recordScope', [['all', `All (${league.length})`], ['researched', `Researched (${league.filter(p => C.kindOf(p) === 'researched').length})`],
+        ['model', `Model leans (${league.filter(p => C.kindOf(p) === 'model').length})`], ['longshot', `Longshots (${league.filter(p => C.kindOf(p) === 'longshot').length})`]], state.recordScope)}</div>
       ${recordCard(r, false)}
       ${section('By sport', `<div class="table-wrap"><table class="data"><thead><tr><th>Sport</th><th>W–L–P</th><th>Net units</th><th>Priced</th><th>Pending</th></tr></thead><tbody>${leagues.map(([name, t]) =>
         `<tr><th scope="row">${esc(name)}</th><td class="num">${t.wins}–${t.losses}–${t.pushes}</td><td class="num">${t.units == null ? DASH : signed(t.units, 2) + 'u'}</td><td class="num">${t.priced}</td><td class="num">${t.pending}</td></tr>`).join('')}</tbody></table></div>`)}
-      ${types.length > 1 ? section('By type', `<div class="table-wrap"><table class="data"><thead><tr><th>Type</th><th>W–L–P</th><th>Net units</th><th>Priced</th></tr></thead><tbody>${types.map(typeRow).join('')}</tbody></table></div>`) : ''}
+      ${section('By kind', `<div class="table-wrap"><table class="data"><thead><tr><th>Kind</th><th>W–L–P</th><th>Net units</th><th>Priced</th><th>Pending</th></tr></thead><tbody>${kinds.map(([name, t]) =>
+        `<tr><th scope="row">${esc(name)}</th><td class="num">${t.wins}–${t.losses}–${t.pushes}</td><td class="num">${t.units == null ? DASH : signed(t.units, 2) + 'u'}</td><td class="num">${t.priced}</td><td class="num">${t.pending}</td></tr>`).join('')}</tbody></table></div>
+        <p class="row-meta" style="margin:8px 2px 0">Researched picks carry a sourced reason. Model leans are totals published on our number alone, so the model earns a record of its own across the season. Longshots ride a quarter unit.</p>`)}
+      ${weeks.length ? section('By week', `<div class="table-wrap"><table class="data"><thead><tr><th>Week</th><th>W–L–P</th><th>Net units</th><th>Priced</th><th>Pending</th></tr></thead><tbody>${weeks.map(([w, t]) =>
+        `<tr><th scope="row">${esc(weekLabel(w))}</th><td class="num">${t.wins}–${t.losses}–${t.pushes}</td><td class="num">${t.units == null ? DASH : signed(t.units, 2) + 'u'}</td><td class="num">${t.priced}</td><td class="num">${t.pending}</td></tr>`).join('')}</tbody></table></div>`) : ''}
+      ${types.length > 1 ? section('By market', `<div class="table-wrap"><table class="data"><thead><tr><th>Type</th><th>W–L–P</th><th>Net units</th><th>Priced</th></tr></thead><tbody>${types.map(typeRow).join('')}</tbody></table></div>`) : ''}
       <input class="search" type="search" data-input="recordQuery" placeholder="Search settled picks by player, team or market" value="${esc(state.recordQuery)}" aria-label="Search settled picks">
       <p class="row-meta" style="margin:0 0 8px">CLV is closing line value: our number against the last one before kickoff. Positive means we beat the close, which shows up before wins and losses do.</p>
       ${section('Every settled pick', settled.length ? `<div class="card"><div class="rows">${settled.map(p => {
@@ -751,7 +763,7 @@
     const started = p.kickoff && Date.parse(p.kickoff) <= Date.now();
     dialog.innerHTML = `<div class="detail-inner"><div class="detail-head"><div><div class="row-top">${p.result ? `<span class="pill pill-${p.result === 'win' ? 'win' : p.result === 'loss' ? 'loss' : 'closed'}">${esc(p.result)}</span>` : '<span class="pill pill-ours">Our pick</span>'}</div>
       <h3 style="margin:7px 0 0;font-size:17px">${esc(p.title)}</h3><p class="row-meta" style="margin:4px 0 0">${esc(when(p.kickoff || p.publishedAt))}</p></div><button class="close" type="button" data-close aria-label="Close">×</button></div>
-      <div class="detail-body"><div class="kv"><div><span>Price</span><strong>${esc(p.book || 'No book')} ${odds(p.odds)}</strong></div><div><span>Our number</span><strong>${p.projection ?? DASH}</strong></div><div><span>Confidence</span><strong>${p.confidence != null ? p.confidence + '/10' : DASH}</strong></div><div><span>Quoted</span><strong style="font-size:12px">${esc(ago(p.quotedAt))}</strong></div></div>
+      <div class="detail-body"><div class="kv"><div><span>Price</span><strong>${esc(p.book || 'No book')} ${odds(p.odds)}</strong></div><div><span>Our number</span><strong>${p.projection ?? DASH}</strong></div><div><span>Confidence</span><strong>${p.confidence != null ? p.confidence + '/10' : DASH}</strong></div>${p.riskUnits != null && p.riskUnits !== 1 ? `<div><span>Stake</span><strong>${esc(p.riskUnits)}u</strong></div>` : ''}<div><span>Quoted</span><strong style="font-size:12px">${esc(ago(p.quotedAt))}</strong></div></div>
       ${closed ? `<div class="notice" style="margin-top:12px"><strong>Closed to new entries.</strong> ${esc(prose(p.entryNote) || (p.status === 'withdrawn' ? 'Withdrawn before kickoff.' : started ? 'The game has started.' : 'The quote has expired.'))} The original is still graded at its published price.</div>` : ''}
       ${clv && clv.clv != null ? `<div class="notice" style="margin-top:12px"><strong>Closing line value ${signed(clv.clv)}.</strong> We posted ${clv.postedLine ?? DASH} and the last number before kickoff was ${clv.closeLine ?? DASH}. ${clv.clv > 0 ? 'We got the better number, which is the part we control.' : clv.clv < 0 ? 'The market moved to a better number after we posted.' : 'We matched the close.'}</div>` : ''}
       ${(p.legs || []).length ? `<h4>Legs</h4><ul style="margin:0;padding-left:18px">${p.legs.map(l => `<li>${esc(leg(l))}</li>`).join('')}</ul>` : ''}${p.correlation ? `<h4>How the legs relate</h4><p>${esc(prose(p.correlation))}</p>` : ''}

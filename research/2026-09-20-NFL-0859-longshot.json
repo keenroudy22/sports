@@ -1,0 +1,106 @@
+{
+ "league": "NFL",
+ "targetWeek": 2,
+ "publishedAt": "2026-09-20T12:59:51Z",
+ "summary": "Longshot published at 8:59 ET, the first under the new rule: one parlay a game day, assembled from the board at one book, a quarter unit, tracked apart. Five totals at BetMGM for +2527: LV @ LAC under 43.5; WSH @ DAL under 51; PHI @ TEN over 39.5; CAR @ ATL over 43.5; SEA @ ARI over 41. Nothing settled, nothing closed.",
+ "parlays": [
+  {
+   "id": "NFL-2026-W2-longshot-0920-mgm",
+   "title": "Sunday five-leg totals longshot, +2527",
+   "status": "active",
+   "favorite": false,
+   "modelLean": false,
+   "parlayType": "longshot",
+   "riskTier": "high",
+   "riskUnits": 0.25,
+   "marketWindow": "Full game",
+   "book": "BetMGM",
+   "odds": 2527,
+   "quotedAt": "2026-09-20T12:37:30Z",
+   "quoteType": "capture",
+   "quoteNote": "Each leg's price is BetMGM's from the latest capture; the combined price is the book's parlay arithmetic, decimal 26.265.",
+   "expiresAt": "2026-09-20T15:45:00Z",
+   "gameIds": [
+    "NFL-401872941",
+    "NFL-401872944",
+    "NFL-401872939",
+    "NFL-401872933",
+    "NFL-401872943"
+   ],
+   "legs": [
+    {
+     "title": "LV @ LAC under 43.5",
+     "gameId": "NFL-401872941",
+     "market": "total points",
+     "side": "under",
+     "line": 43.5,
+     "odds": -108,
+     "chance": 0.543,
+     "marketWindow": "Full game",
+     "kickoff": "2026-09-20T20:05Z"
+    },
+    {
+     "title": "WSH @ DAL under 51",
+     "gameId": "NFL-401872944",
+     "market": "total points",
+     "side": "under",
+     "line": 51.0,
+     "odds": -110,
+     "chance": 0.532,
+     "marketWindow": "Full game",
+     "kickoff": "2026-09-20T20:25Z"
+    },
+    {
+     "title": "PHI @ TEN over 39.5",
+     "gameId": "NFL-401872939",
+     "market": "total points",
+     "side": "over",
+     "line": 39.5,
+     "odds": -108,
+     "chance": 0.531,
+     "marketWindow": "Full game",
+     "kickoff": "2026-09-20T17:00Z"
+    },
+    {
+     "title": "CAR @ ATL over 43.5",
+     "gameId": "NFL-401872933",
+     "market": "total points",
+     "side": "over",
+     "line": 43.5,
+     "odds": -108,
+     "chance": 0.529,
+     "marketWindow": "Full game",
+     "kickoff": "2026-09-20T17:00Z"
+    },
+    {
+     "title": "SEA @ ARI over 41",
+     "gameId": "NFL-401872943",
+     "market": "total points",
+     "side": "over",
+     "line": 41.0,
+     "odds": -108,
+     "chance": 0.529,
+     "marketWindow": "Full game",
+     "kickoff": "2026-09-20T20:25Z"
+    }
+   ],
+   "confidence": 2,
+   "projection": null,
+   "edge": "Our chance 4.3%, the product of the legs' calibrated chances (54.3, 53.2, 53.1, 52.9, 52.9%), against 3.8% break-even at +2527: +0.127u per unit staked, on a quarter unit. The miss rate is about 96%.",
+   "cutoff": "All 5 legs at BetMGM at these numbers (43.5, 51, 39.5, 43.5, 41), +2527 or better combined. Pass if any leg's number moves off or the combined price falls under +2000.",
+   "why": "The day's longshot, built from the board: one leg per game, the five totals our number likes most, every leg at BetMGM at the number it was graded at. Cleveland at Tampa Bay over 41.5 was left off for the storm forecast. Nothing here is researched beyond the model; the ticket exists to be tracked at a quarter unit, apart from the straight picks.",
+   "risk": "Five thin-sample totals from one game of history each; on the market's own view each leg misses about half the time. The first leg overlaps today's model lean on the Raiders and Chargers under, so a miss there costs twice.",
+   "correlation": "Five different games, so the legs are independent on our view and the price is the book's product of the legs. One leg is also today's model lean straight pick.",
+   "sources": [
+    "https://www.espn.com/nfl/game/_/gameId/401872941",
+    "https://www.espn.com/nfl/game/_/gameId/401872944",
+    "https://www.espn.com/nfl/game/_/gameId/401872939",
+    "https://www.espn.com/nfl/game/_/gameId/401872933",
+    "https://www.espn.com/nfl/game/_/gameId/401872943",
+    "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds"
+   ]
+  }
+ ],
+ "takeaways": [],
+ "gameWatch": []
+}

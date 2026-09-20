@@ -274,10 +274,25 @@
   };
   /* Parlays are staked at their own size, never a full unit, so they are summarized apart and never
      folded into the straight-pick units. ROI is profit against what was actually risked. */
+  /* Three kinds of pick, tracked apart: researched picks, the model's own leans, and longshot parlays. */
+  const kindOf = p => p.kind === 'parlays' ? 'longshot' : p.modelLean ? 'model' : 'researched';
+  const KIND_WORD = { researched: 'Researched', model: 'Model leans', longshot: 'Longshots' };
   const recordOf = (picks, minimum = 10) => {
     const parlays = picks.filter(p => p.kind === 'parlays');
-    return { ...summarizePicks(picks.filter(p => p.kind !== 'parlays'), minimum),
-      parlays: parlays.length ? summarizePicks(parlays, minimum) : null };
+    const straight = picks.filter(p => p.kind !== 'parlays');
+    return { ...summarizePicks(straight, minimum),
+      parlays: parlays.length ? summarizePicks(parlays, minimum) : null,
+      researched: summarizePicks(straight.filter(p => !p.modelLean), minimum),
+      model: summarizePicks(straight.filter(p => p.modelLean), minimum) };
+  };
+  /* Football weeks run Thursday to Monday, so a week starts on Tuesday, Eastern. */
+  const weekOf = iso => {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return null;
+    const eastern = new Date(d.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+    const back = (eastern.getDay() + 5) % 7;   // days since Tuesday
+    eastern.setDate(eastern.getDate() - back);
+    return `${eastern.getFullYear()}-${String(eastern.getMonth() + 1).padStart(2, '0')}-${String(eastern.getDate()).padStart(2, '0')}`;
   };
 
   /* ---------- routes ---------- */
@@ -307,5 +322,5 @@
   return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone,
     column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET,
     rankDefenses, rankOf, rankTone, decimal, american, eligible, summarizeTicket, ticketText,
-    unitsFor, stakeOf, recordOf, summaryOf: summarizePicks, pickState, isOpen, isLongshot, gradeOf, byGrade, category, parseRoute, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, byGrade, category, parseRoute, shardOf, BASE };
 });

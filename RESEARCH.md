@@ -70,7 +70,7 @@ Some kinds need more:
 
 - **Props:** `projection`, `position`, `athleteId`, `market` (`recYds`, `rec`, `rushYds`, `car`, `passYds`, `cmp`, `att`), `line` and `direction` (`over` or `under`).
 - **Game picks:** `marketType` (`spread` or `total`), `line` (the number for the side picked, so an away +3.5 pick has line 3.5) and `direction` (`home`, `away`, `over` or `under`). Exactly one game.
-- **Parlays:** `legs` (two or more, each with its own market window) and `correlation`, explaining how the legs depend on each other.
+- **Parlays:** `legs` (two or more, each with its own market window), `correlation`, explaining how the legs depend on each other, and `riskUnits`, the stake, a quarter unit unless recorded otherwise; the record keeps parlays apart from the straight picks.
 - **College:** `jurisdictionVerified: true`, only after checking that the market is offered in Indiana.
 
 ```json
