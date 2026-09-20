@@ -1,13 +1,39 @@
 {
- "at": "2026-09-20T18:12:40Z",
+ "at": "2026-09-20T19:01:46Z",
  "leagues": {
   "NFL": {
-   "books": {},
-   "eventsMatched": 0,
+   "books": {
+    "draftkings": 283,
+    "fanduel": 600
+   },
+   "eventsMatched": 2,
    "games": 7,
-   "marketTypes": {},
-   "requestsLeft": 59,
-   "rows": 0
+   "marketTypes": {
+    "player_assists": 18,
+    "player_extra_points_made": 4,
+    "player_fantasy_score": 10,
+    "player_field_goals_made": 4,
+    "player_interceptions": 4,
+    "player_kicking_points": 4,
+    "player_longest_passing_completion": 4,
+    "player_longest_reception": 20,
+    "player_longest_rush": 4,
+    "player_passing_+_rushing_yards": 2,
+    "player_passing_attempts": 4,
+    "player_passing_completions": 4,
+    "player_passing_touchdowns": 23,
+    "player_passing_yards": 101,
+    "player_receiving_yards": 282,
+    "player_receptions": 162,
+    "player_rushing_+_receiving_yards": 10,
+    "player_rushing_attempts": 6,
+    "player_rushing_yards": 156,
+    "player_sacks": 25,
+    "player_tackles": 18,
+    "player_tackles_+_assists": 18
+   },
+   "requestsLeft": 54,
+   "rows": 883
   }
  }
 }
