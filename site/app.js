@@ -103,7 +103,7 @@
       <span class="row-main"><span class="row-top"><span class="row-name">${esc(pick.title || pick.player)}</span>
         ${pick.favorite ? '<span class="pill pill-ours">Favorite</span>' : ''}${pick.modelLean ? '<span class="pill pill-reference">Model lean</span>' : ''}${C.isLongshot(pick) ? '<span class="pill pill-stale">Longshot</span>' : ''}${pick.historicalImport ? '<span class="pill pill-reference">Imported</span>' : ''}
         <span class="pill pill-${C.pickState(pick).tone}">${esc(C.pickState(pick).word)}</span></span>
-        <span class="row-market">${pick.actual ? esc(pick.actual) : pick.projection != null ? 'Our number ' + esc(pick.projection) : esc(pick.kind || '')}</span>
+        <span class="row-market">${pick.actual ? esc(pick.actual) : (pick.legs || []).length ? `${pick.legs.length} legs${pick.riskUnits != null && pick.riskUnits !== 1 ? ` · ${esc(pick.riskUnits)}u` : ''}` : pick.projection != null ? 'Our number ' + esc(pick.projection) : ''}</span>
         <span class="row-meta">${esc(whenShort(pick.kickoff || pick.publishedAt))}${pick.confidence != null ? ` · confidence ${esc(pick.confidence)}/10` : ''}${pick.quotedAt ? ' · quoted ' + esc(ago(pick.quotedAt)) : ''}</span></span>
       ${pick.odds == null && pick.historicalImport ? '<span class="row-price"><span class="row-book">price not recorded</span></span>'
         : `<span class="row-price"><span class="row-odds num">${odds(pick.odds)}</span><span class="row-book">${esc(pick.book || 'No book')}</span></span>`}
@@ -132,8 +132,39 @@
     return { rows: rows.filter(l => dayLabel(l.kickoff) === day).sort(C.byGrade).slice(0, 6), day: day === todayLabel ? null : day };
   };
 
+  /* Where the market has moved from its opening number, biggest first, and whether it moved toward our number. */
+  const lineMoves = games => {
+    const now = Date.now();
+    const out = [];
+    for (const g of games) {
+      if (g.completed || g.state !== 'pre' || Date.parse(g.kickoff) <= now) continue;
+      const m = g.market || {}, lean = g.lean || {};
+      if (m.spread != null && m.spreadOpen != null && Math.abs(m.spread - m.spreadOpen) >= 1) {
+        const towardAway = m.spread > m.spreadOpen;
+        out.push({ game: g, size: Math.abs(m.spread - m.spreadOpen), agrees: lean.side ? (lean.side === 'away') === towardAway : null,
+          text: `${g.home.abbr} ${C.spreadText('', m.spreadOpen).trim()} → ${C.spreadText('', m.spread).trim()}`, note: `toward ${towardAway ? g.away.abbr : g.home.abbr}` });
+      }
+      if (m.total != null && m.totalOpen != null && Math.abs(m.total - m.totalOpen) >= 1) {
+        const down = m.total < m.totalOpen;
+        out.push({ game: g, size: Math.abs(m.total - m.totalOpen), agrees: lean.total != null && lean.total !== 0 ? (lean.total < 0) === down : null,
+          text: `Total ${m.totalOpen} → ${m.total}`, note: down ? `down ${(m.totalOpen - m.total).toFixed(1).replace(/\.0$/, '')}` : `up ${(m.total - m.totalOpen).toFixed(1).replace(/\.0$/, '')}` });
+      }
+    }
+    return out.sort((a, b) => b.size - a.size).slice(0, 6);
+  };
+  const moveRow = mv => `<div class="row" style="cursor:default"><span class="row-rail" style="background:${mv.agrees === true ? 'var(--green)' : mv.agrees === false ? 'var(--amber)' : 'var(--line)'}"></span>
+      <span class="row-main"><span class="row-top"><span class="row-name"><a href="#game/${esc(mv.game.id)}">${esc(mv.game.away.abbr)} @ ${esc(mv.game.home.abbr)}</a></span></span>
+        <span class="row-market">${esc(mv.text)} · ${esc(mv.note)}</span>
+        <span class="row-meta">${esc(whenShort(mv.game.kickoff))}${mv.agrees === true ? ' · moved toward our number' : mv.agrees === false ? ' · moved away from our number' : ''}</span></span></div>`;
+  /* Picks settled in the last day and a half, newest first: the morning-after scorecard. */
+  const lastGameDay = picks => picks.filter(p => p.result && p.settledAt && !p.historicalImport && Date.now() - Date.parse(p.settledAt) < 40 * 3600 * 1000)
+    .sort((a, b) => String(b.settledAt).localeCompare(String(a.settledAt)));
+
   async function viewToday() {
     const [data, board] = await Promise.all([get('app/today.json'), maybe('app/lines.json')]);
+    const moves = lineMoves(slate(data.games.filter(inLeague)));   /* this slate only, not look-ahead lines */
+    const settledRecently = lastGameDay(data.picks.filter(inLeague));
+    const recent = C.summaryOf(settledRecently);
     const games = data.games.filter(inLeague);
     const best = bestOnBoard(board);
     const now = slate(games);
@@ -153,7 +184,9 @@
         ${best.rows.length ? section(best.day ? `Best on the board · ${esc(best.day)}` : 'Best on the board today',
           `<p class="row-meta" style="margin:0 0 8px">${live.length ? 'Beyond our picks, the' : 'No researched pick is up yet, so here are the'} lines our number likes most, priced at the best book. Leans, not picks: tap + to build a ticket.</p><div class="card"><div class="rows">${best.rows.map(lineRow).join('')}</div></div>`,
           '<a href="#board">Game lines →</a> <a href="#board/props">Player props →</a>') : ''}
+        ${moves.length ? section('Line moves since open', `<p class="row-meta" style="margin:0 0 8px">Where the market has moved from its opening number. Green moved toward our number, amber away from it.</p><div class="card"><div class="rows">${moves.map(moveRow).join('')}</div></div>`) : ''}
         ${playing.length ? section(`In play now${playing.length > 6 ? ` (${playing.length})` : ''}`, `<div class="card">${playing.slice(0, 6).map(gameRow).join('')}</div>`, '<a href="#games">All games →</a>') : ''}
+        ${settledRecently.length ? section('Last game day', `<p class="row-meta" style="margin:0 0 8px">${recent.wins}–${recent.losses}${recent.pushes ? `–${recent.pushes}` : ''}${recent.units == null ? '' : `, ${signed(recent.units, 2)}u at the recorded stakes`}.</p><div class="card"><div class="rows">${settledRecently.map(pickRow).join('')}</div></div>`, '<a href="#record">Record →</a>') : ''}
         ${section('Where the model and the market disagree', gaps.length ? `<p class="row-meta" style="margin:0 0 8px">A lean is how far our number sits from the line, which side that favours, and how often that side should win. Green needs 57% or better on a solid sample; most early-season leans are worth about 52%. A lean is not a pick.</p><div class="card">${gaps.map(gameRow).join('')}</div>`
           : empty('No model calls yet', 'The model publishes after the hosted refresh runs. Every game still shows the market number.'), '<a href="#games">All games →</a>')}
         ${!live.length && !best.rows.length ? section('Our picks', empty('Nothing on the card yet', 'Picks and board reads appear once lines are priced for the next slate.', '<a class="btn" href="#board">Open the board</a>'), '<a href="#record">Record →</a>') : ''}
