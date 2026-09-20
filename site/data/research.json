@@ -6230,5 +6230,32 @@
       "Both picks were published at 8:45 AM with quotes that expired at 11:30 AM, and neither line moved all day: Texas A&M held at -16.5 -118 and Duke at -10 -105 at DraftKings through the 12:25 PM and 6:03 PM captures."
     ],
     "gameWatch": []
+  },
+  {
+    "league": "NFL",
+    "targetWeek": 2,
+    "publishedAt": "2026-09-20T11:21:09Z",
+    "summary": "6:45 AM ET run, published at 7:21 ET. Nothing to settle: yesterday's two college picks were settled at midnight and no pick is open. No college games today. The Sunday board carries two leans, both small and both passed: the Raiders and Chargers under, where the market already holds the injury news, and the Browns and Buccaneers over, where the forecast argues the other way. No prop qualifies: this is week 2, every player has one game this season against a three-game floor, and the feed carries player lines without prices. The hosted run captured all 29 NFL games at 4:50 AM, so this run's capture skipped inside its 3.5-hour gap; 486 credits left this month.",
+    "takeaways": [
+      "Las Vegas at the Chargers under 43.5: pass. The under's argument is real and sourced, Brock Bowers doubtful with a knee and Ladd McConkey questionable with a rib on Friday's final report, but two defensive backs are out as well, Elijah Molden with a hamstring and Darien Porter with a foot, and the market is not moving: 43.5 at BetMGM, BetRivers, DraftKings, ESPN BET and FanDuel across all five captures from Saturday 12:53 UTC to Sunday 08:50 UTC, every one of them after that report (https://www.raiders.com/news/las-vegas-raiders-los-angeles-chargers-nfl-week-2-injury-report-2026-season). The market has the news, v2 does not have any of it, and the gap is the model's. v2 total 40.2 (80% range 23.8 to 56.6). Chance of under 43.5: 54.3% (v2's raw 60.2% shrunk by its 2024-25 record against the close), against 51.9% break-even at -108: +2.4 points, +0.046u per unit.",
+      "Cleveland at Tampa Bay over 41.5: pass, and the reason runs against the model. The National Weather Service has Tampa at a 60% chance of precipitation today with scattered showers and thunderstorms between 2 and 4 PM and showers likely after 4 PM, which covers most of a 1 PM kickoff (https://forecast.weather.gov/MapClick.php?lat=27.9759&lon=-82.5033, issued 2:31 AM EDT). Rain argues under. The total has held at 41.5 at all five books since Saturday midday. v2 total 43.6 (80% range 27.2 to 60). Chance of over 41.5: 52.7% (v2's raw 56.5% shrunk by its 2024-25 record against the close), against 50.5% break-even at -102: +2.2 points, +0.044u per unit."
+    ],
+    "gameWatch": [
+      {
+        "id": "NFL-2026-W2-lv-lac-under-43-5-watch",
+        "gameId": "NFL-401872941",
+        "title": "Las Vegas at the Chargers under 43.5",
+        "why": "Brock Bowers is doubtful with a knee, Ladd McConkey questionable with a rib, Elijah Molden and Trey Pipkins III out for the Chargers and Darien Porter out for the Raiders (Raiders injury report, Sept 18). The total has not moved off 43.5 at any of five books since Saturday midday, so the market is holding that news. Not a pick on the model alone. v2 total 40.2 (80% range 23.8 to 56.6). Chance of under 43.5: 54.3% (v2's raw 60.2% shrunk by its 2024-25 record against the close), against 51.9% break-even at -108: +2.4 points, +0.046u per unit.",
+        "needs": "Bowers ruled out on the 2:35 PM inactive list with the total still 43.5 or higher. That list lands between the 11:45 AM and 5:30 PM runs, so a 4:05 PM game can only be priced if a run is awake for it.",
+        "sources": [
+          "https://www.raiders.com/news/las-vegas-raiders-los-angeles-chargers-nfl-week-2-injury-report-2026-season",
+          "https://www.espn.com/nfl/game/_/gameId/401872941"
+        ],
+        "projection": 40.2,
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-19T22:09:35Z",
+        "nextReviewAt": "2026-09-20T15:45:00Z"
+      }
+    ]
   }
 ]
