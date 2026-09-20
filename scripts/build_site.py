@@ -20,6 +20,7 @@ the hosted workflow rebuilds it before each deploy.
 Usage: python scripts/build_site.py
 """
 import json
+import re
 import shutil
 import sys
 from collections import defaultdict
@@ -561,7 +562,8 @@ def build(now=None):
         # v2 compresses FBS-FCS blowouts badly enough that any chance it gives there would mislead.
         line['grade'] = None if fcs else grade_line(line, snapshot, thin)
         line['gradeNote'] = 'FBS vs FCS: v2 is not reliable here' if fcs and line.get('state') == 'open' else None
-    lines += prop_rows(captures, by_id, forecasts, names, appearances, identities, now)
+    prop_prices = {gid: rows[-1] for gid, rows in load_store('prop-odds').items()}
+    lines += prop_rows(captures, by_id, forecasts, names, appearances, identities, now, prop_prices)
     for game in sorted(window, key=lambda g: (g['kickoff'], g['id'])):
         snaps_for = pregame(forecasts.get(game['id'], []), game['kickoff'])
         card = game_card(game, forecasts_v1, snaps_for[-1] if snaps_for else None, names, identities)
@@ -663,7 +665,28 @@ def grade_line(line, snapshot, thin):
             'model': p['model'], 'snapshotAt': p['snapshotAt']}
 
 
-def prop_rows(captures, by_id, forecasts, names, appearances, identities, now):
+def person(name):
+    """A player's name, flattened enough to match one book feed against another."""
+    text = re.sub(r"[^a-z ]", ' ', str(name or '').lower())
+    words = [w for w in text.split() if w not in ('jr', 'sr', 'ii', 'iii', 'iv', 'v')]
+    return ' '.join(words)
+
+
+def price_quotes(record, market, name):
+    """Every book's quote for one player's market in a capture: [(book, line, over, under)]."""
+    if not record:
+        return []
+    want = person(name)
+    out = []
+    for book, entry in (record.get('books') or {}).items():
+        players = (entry.get('markets') or {}).get(market) or {}
+        match = next((q for who, q in players.items() if person(who) == want), None)
+        if match and isinstance(match.get('line'), (int, float)):
+            out.append((book, match['line'], match.get('over'), match.get('under')))
+    return out
+
+
+def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, prices=None):
     """DraftKings' main player lines for upcoming NFL games as board rows, with v2's lean at each.
 
     ESPN relays the lines without prices, so the rows carry no odds and cannot join a ticket. They
@@ -678,6 +701,7 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now):
         if not game or game.get('state') != 'pre' or features.when(game['kickoff']) <= now:
             continue
         capture = caps[-1]
+        priced = (prices or {}).get(gid)
         snapshot = (pregame(forecasts.get(gid, []), game['kickoff']) or [None])[-1]
         for athlete, markets in capture['lines'].items():
             side, player = pricing.player_line(snapshot, athlete) if snapshot else (None, None)
@@ -700,15 +724,42 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now):
                                  'snapshotAt': snapshot['publishedAt']}
                 name = names.get(athlete, f'Athlete {athlete}')
                 team = game[side]['abbreviation'] if side else None
-                rows.append({'id': f'prop-{gid}-{athlete}-{key}', 'league': game['league'], 'gameId': gid,
-                             'player': name, 'athleteId': str(athlete), 'position': player['pos'] if player else None,
-                             'market': pricing.WORDS[key], 'direction': lean, 'line': main, 'odds': None,
-                             'book': 'DraftKings', 'state': 'unpriced', 'kickoff': game['kickoff'],
-                             'observedAt': capture['retrievedAt'], 'source': capture['source'],
-                             'title': f'{name} {lean} {main:g} {pricing.WORDS[key]}', 'gameMarket': False,
-                             'color': color(game['league'], team, identities), 'grade': grade,
-                             'gradeNote': None if grade else 'no v2 projection for this player',
-                             'opened': opening})
+                # A price turns a read into a line that can be graded against what it needs.
+                quotes = price_quotes(priced, key, name)
+                row = {'id': f'prop-{gid}-{athlete}-{key}', 'league': game['league'], 'gameId': gid,
+                       'player': name, 'athleteId': str(athlete), 'position': player['pos'] if player else None,
+                       'market': pricing.WORDS[key], 'direction': lean, 'line': main, 'odds': None,
+                       'book': 'DraftKings', 'state': 'unpriced', 'kickoff': game['kickoff'],
+                       'observedAt': capture['retrievedAt'], 'source': capture['source'],
+                       'title': f'{name} {lean} {main:g} {pricing.WORDS[key]}', 'gameMarket': False,
+                       'color': color(game['league'], team, identities), 'grade': grade,
+                       'gradeNote': None if grade else 'no v2 projection for this player',
+                       'opened': opening}
+                side_quotes = [(book, line, over if lean == 'over' else under)
+                               for book, line, over, under in quotes if (over if lean == 'over' else under) is not None]
+                if side_quotes:
+                    # Best number first, then best price: the over wants the lowest line, the under the highest.
+                    book, line, odds = sorted(side_quotes, key=lambda q: (q[1] if lean == 'over' else -q[1],
+                                                                          -pricing.cents(q[2])))[0]
+                    row.update({'line': line, 'odds': odds, 'book': BOOK_NAMES.get(book, book), 'state': 'open',
+                                'observedAt': priced['retrievedAt'], 'source': priced['source'],
+                                'title': f'{name} {lean} {line:g} {pricing.WORDS[key]}',
+                                'books': [{'book': BOOK_NAMES.get(b, b), 'line': l, 'odds': o}
+                                          for b, l, o in sorted(side_quotes)]})
+                    if snapshot and player and pricing.PROJECTED[key] in player:
+                        try:
+                            p = pricing.price(snapshot, key, lean, float(line), int(odds), athlete)
+                            row['grade'] = {'chance': p['chance'], 'raw': p['rawChance'], 'calibrated': p['calibrated'],
+                                            'push': p['push'], 'needs': p['breakEven'], 'edge': p['edgePoints'],
+                                            'projection': p['projection'], 'thin': appearances[str(athlete)] < 3,
+                                            'games': appearances[str(athlete)],
+                                            # Player projections have no graded history, so a prop never reads stronger
+                                            # than a lean, and a thin sample never reads as one at all.
+                                            'tier': 'lean' if p['chance'] >= 0.6 and appearances[str(athlete)] >= 3 else 'pass',
+                                            'model': p['model'], 'snapshotAt': p['snapshotAt']}
+                        except ValueError:
+                            pass
+                rows.append(row)
     return rows
 
 

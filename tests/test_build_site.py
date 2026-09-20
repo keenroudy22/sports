@@ -144,6 +144,28 @@ class PropRowTests(unittest.TestCase):
         self.assertIsNone(other['grade'])
         self.assertEqual(other['gradeNote'], 'no v2 projection for this player')
 
+    def test_a_priced_player_line_takes_the_best_book_and_is_graded_against_it(self):
+        game = {'id': 'NFL-1', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-09-20T17:00:00Z',
+                'home': {'id': '1', 'abbreviation': 'ATL'}, 'away': {'id': '2', 'abbreviation': 'CAR'}}
+        snapshot = {'gameId': 'NFL-1', 'league': 'NFL', 'model': 'v2.0', 'publishedAt': '2026-09-19T12:00:00Z',
+                    'players': {'home': {'players': [{'id': '10', 'pos': 'WR', 'recYds': [70.0, 40.5, 99.5]}]}, 'away': None}}
+        capture = {'retrievedAt': '2026-09-19T12:05:00Z', 'source': 'https://example.test/props',
+                   'lines': {'10': {'recYds': [55.5, 57.5]}}}
+        prices = {'NFL-1': {'retrievedAt': '2026-09-19T12:40:00Z', 'source': 'https://example.test/odds', 'books': {
+            'draftkings': {'markets': {'recYds': {'Player Ten Jr.': {'line': 55.5, 'over': -115, 'under': -105}}}},
+            'fanduel': {'markets': {'recYds': {'Player Ten': {'line': 54.5, 'over': -118, 'under': -104}}}}}}}
+        rows = build_site.prop_rows({'NFL-1': [capture]}, {'NFL-1': game}, {'NFL-1': [snapshot]}, {'10': 'Player Ten'},
+                                    {'10': 3}, {}, datetime(2026, 9, 19, 13, tzinfo=timezone.utc), prices)
+        row = rows[0]
+        self.assertEqual((row['state'], row['book'], row['line'], row['odds']), ('open', 'FanDuel', 54.5, -118),
+                         'the over takes the lowest number on offer')
+        self.assertEqual(row['title'], 'Player Ten over 54.5 receiving yards')
+        self.assertEqual(len(row['books']), 2, 'a suffix does not hide the same player at another book')
+        self.assertEqual(row['grade']['needs'], round(118 / 218, 3), 'a price means the chance has something to beat')
+        self.assertGreater(row['grade']['edge'], 0)
+        self.assertEqual(row['grade']['tier'], 'lean')
+        self.assertEqual(row['observedAt'], '2026-09-19T12:40:00Z', 'the row is as fresh as the price on it')
+
     def test_a_thin_sample_prop_stays_grey(self):
         game = {'id': 'NFL-1', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-09-20T17:00:00Z',
                 'home': {'id': '1', 'abbreviation': 'ATL'}, 'away': {'id': '2', 'abbreviation': 'CAR'}}
