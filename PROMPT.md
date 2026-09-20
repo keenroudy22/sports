@@ -1,12 +1,13 @@
 # Scheduled research prompt
 
-Paste everything below the line into the scheduled research task. It runs five times a day, Eastern time, and each run has a job:
+Paste everything below the line into the scheduled research task. It runs five times a day, Eastern time, with a sixth on Sundays, and each run has a job:
 
 | Run | Job |
 |---|---|
 | 6:45 | Settle overnight finals. First look at the day's early games: noon college kickoffs, 9:30 NFL London games. The hosted data refresh at 6:37 has just published lines and v2. |
 | 8:30 | Friday and Saturday availability reports. Afternoon games. |
 | 11:45 | NFL inactives are out at 11:30 for 1 PM games. Afternoon and evening games; close any pick whose line moved. |
+| 14:45 Sundays | NFL inactives for the late window are out at 2:35. Price or pass the 4:05 and 4:25 games, which no other run can reach in time. |
 | 17:30 | Final card for evening games. |
 | 23:30 | Settle the day. Weekly review once the week's games are all final. |
 
