@@ -1,9 +1,9 @@
 {
- "at": "2026-09-20T22:32:36Z",
+ "at": "2026-09-20T23:17:14Z",
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 503,
+    "draftkings": 525,
     "fanduel": 603
    },
    "eventsListed": 200,
@@ -16,25 +16,25 @@
     "player_field_goals_made": 4,
     "player_interceptions": 16,
     "player_kicking_points": 4,
-    "player_longest_passing_completion": 6,
-    "player_longest_reception": 24,
+    "player_longest_passing_completion": 8,
+    "player_longest_reception": 28,
     "player_longest_rush": 12,
     "player_passing_+_rushing_yards": 6,
     "player_passing_attempts": 8,
     "player_passing_completions": 8,
     "player_passing_touchdowns": 26,
     "player_passing_yards": 154,
-    "player_receiving_yards": 358,
+    "player_receiving_yards": 363,
     "player_receptions": 182,
-    "player_rushing_+_receiving_yards": 16,
+    "player_rushing_+_receiving_yards": 18,
     "player_rushing_attempts": 14,
-    "player_rushing_yards": 167,
+    "player_rushing_yards": 176,
     "player_sacks": 31,
     "player_tackles": 12,
     "player_tackles_+_assists": 12
    },
    "requestsLeft": 52,
-   "rows": 1106,
+   "rows": 1128,
    "slateGames": [
     "Indianapolis Colts at Kansas City Chiefs 2026-09-21T00:20Z",
     "New York Giants at Los Angeles Rams 2026-09-22T00:15Z"
@@ -43,23 +43,7 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNFL1HFT-26SEP20JACDEN-JACTIE"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "outright"
-      ]
-     },
-     "start": "2026-09-20T21:43:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "kalshi": "KXNFL1HFT-26SEP20LVLAC-TIELV"
+      "kalshi": "KXNFL1HFT-26SEP20LVLAC-LVTIE"
      },
      "home": null,
      "sample": {
@@ -75,7 +59,7 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNFL1HFT-26SEP20SEAARI-TIETIE"
+      "kalshi": "KXNFL1HFT-26SEP20SEAARI-TIEARI"
      },
      "home": null,
      "sample": {
@@ -89,20 +73,84 @@
      "type": "outright"
     },
     {
-     "away": null,
+     "away": "Miami Dolphins",
      "external": {
-      "kalshi": "KXNFLRECYDS-26SEP20CLETB-TBCGODWIN14-20"
+      "bet365 us": "201540160"
      },
-     "home": null,
+     "home": "San Francisco 49ers",
      "sample": {
-      "away_team": "",
-      "home_team": "",
+      "away_team": "Miami Dolphins",
+      "home_team": "San Francisco 49ers",
       "markets": [
-       "player_receiving_yards"
+       "point_spread"
       ]
      },
-     "start": "2026-09-20T22:27:00Z",
-     "type": "unknown"
+     "start": "2026-09-20T22:24:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Jacksonville Jaguars",
+     "external": {
+      "bet365 us": "201540130"
+     },
+     "home": "Denver Broncos",
+     "sample": {
+      "away_team": "Jacksonville Jaguars",
+      "home_team": "Denver Broncos",
+      "markets": [
+       "point_spread"
+      ]
+     },
+     "start": "2026-09-20T22:24:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Seattle Seahawks",
+     "external": {
+      "bet365 us": "201540172"
+     },
+     "home": "ARI Cardinals",
+     "sample": {
+      "away_team": "Seattle Seahawks",
+      "home_team": "ARI Cardinals",
+      "markets": [
+       "point_spread"
+      ]
+     },
+     "start": "2026-09-20T22:24:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Las Vegas Raiders",
+     "external": {
+      "bet365 us": "201540154"
+     },
+     "home": "Los Angeles Chargers",
+     "sample": {
+      "away_team": "Las Vegas Raiders",
+      "home_team": "Los Angeles Chargers",
+      "markets": [
+       "point_spread"
+      ]
+     },
+     "start": "2026-09-20T22:24:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Washington Commanders",
+     "external": {
+      "bet365 us": "201540190"
+     },
+     "home": "Dallas Cowboys",
+     "sample": {
+      "away_team": "Washington Commanders",
+      "home_team": "Dallas Cowboys",
+      "markets": [
+       "point_spread"
+      ]
+     },
+     "start": "2026-09-20T22:24:00Z",
+     "type": "fixture"
     },
     {
      "away": null,
@@ -123,7 +171,7 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNFLMOSTRECYDS-26SEP20CLETB-CLEDBOSTON12"
+      "kalshi": "KXNFLPASSINT-26SEP20LVLAC-LVKCOUSINS8-1"
      },
      "home": null,
      "sample": {
@@ -133,24 +181,8 @@
        "outright"
       ]
      },
-     "start": "2026-09-20T22:29:00Z",
+     "start": "2026-09-20T23:09:00Z",
      "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "kalshi": "KXNFLRSHYDS-26SEP20CLETB-TBBMAYFIELD6-20"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "player_rushing_yards"
-      ]
-     },
-     "start": "2026-09-20T22:30:00Z",
-     "type": "unknown"
     },
     {
      "away": null,
@@ -188,38 +220,6 @@
      "away": null,
      "external": {
       "kalshi": "KXNFL1HSPREAD-26SEP20INDKC-IND11"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-21T00:20:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "kalshi": "KXNFL1QSPREAD-26SEP20INDKC-IND11"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-21T00:20:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "kalshi": "KXNFL2HSPREAD-26SEP20INDKC-IND11"
      },
      "home": null,
      "sample": {
