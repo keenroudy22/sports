@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-20T04:08:21Z",
+  "updatedAt": "2026-09-20T05:00:09Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-20T03:01Z",
+              "reportedAt": "2026-09-20T04:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -7326,6 +7326,15 @@
               "source": "https://www.espn.com/nfl/player/_/id/4605488/tanoa-togiai"
             },
             {
+              "id": "4428343",
+              "name": "Ricky Barber",
+              "position": "DT",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-14T15:24Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4428343/ricky-barber"
+            },
+            {
               "id": "2976212",
               "name": "Stefon Diggs",
               "position": "WR",
@@ -7351,28 +7360,11 @@
               "injury": null,
               "reportedAt": "2026-09-14T01:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/4697815/rachaad-white"
-            },
-            {
-              "id": "4575131",
-              "name": "Jacory Croskey-Merritt",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-14T00:53Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4575131/jacory-croskey-merritt"
             }
           ]
         }
       },
       "changes": [
-        {
-          "teamId": "24",
-          "name": "Elijah Molden",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-09-18T23:21:26Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4243328/elijah-molden"
-        },
         {
           "teamId": "24",
           "name": "Teair Tart",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-09-20T04:08:21Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-09-20T05:00:09Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-20T04:08:21Z",
-      "lastAttemptAt": "2026-09-20T04:08:21Z",
+      "checkedAt": "2026-09-20T05:00:09Z",
+      "lastAttemptAt": "2026-09-20T05:00:09Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-20T04:08:21Z",
-      "lastAttemptAt": "2026-09-20T04:08:21Z",
+      "checkedAt": "2026-09-20T05:00:09Z",
+      "lastAttemptAt": "2026-09-20T05:00:09Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
