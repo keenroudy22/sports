@@ -1,39 +1,279 @@
 {
- "at": "2026-09-20T19:01:46Z",
+ "at": "2026-09-20T19:24:08Z",
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 283,
-    "fanduel": 600
+    "draftkings": 557,
+    "fanduel": 305
    },
+   "eventsListed": 200,
    "eventsMatched": 2,
    "games": 7,
    "marketTypes": {
-    "player_assists": 18,
-    "player_extra_points_made": 4,
-    "player_fantasy_score": 10,
-    "player_field_goals_made": 4,
-    "player_interceptions": 4,
-    "player_kicking_points": 4,
-    "player_longest_passing_completion": 4,
-    "player_longest_reception": 20,
-    "player_longest_rush": 4,
-    "player_passing_+_rushing_yards": 2,
-    "player_passing_attempts": 4,
-    "player_passing_completions": 4,
-    "player_passing_touchdowns": 23,
-    "player_passing_yards": 101,
-    "player_receiving_yards": 282,
-    "player_receptions": 162,
-    "player_rushing_+_receiving_yards": 10,
-    "player_rushing_attempts": 6,
-    "player_rushing_yards": 156,
-    "player_sacks": 25,
-    "player_tackles": 18,
-    "player_tackles_+_assists": 18
+    "player_assists": 34,
+    "player_extra_points_made": 8,
+    "player_fantasy_score": 18,
+    "player_field_goals_made": 8,
+    "player_interceptions": 8,
+    "player_kicking_points": 8,
+    "player_longest_passing_completion": 8,
+    "player_longest_reception": 32,
+    "player_longest_rush": 10,
+    "player_passing_+_rushing_yards": 6,
+    "player_passing_attempts": 8,
+    "player_passing_completions": 8,
+    "player_passing_touchdowns": 18,
+    "player_passing_yards": 136,
+    "player_receiving_yards": 210,
+    "player_receptions": 104,
+    "player_rushing_+_receiving_yards": 4,
+    "player_rushing_attempts": 14,
+    "player_rushing_yards": 124,
+    "player_sacks": 28,
+    "player_tackles": 34,
+    "player_tackles_+_assists": 34
    },
-   "requestsLeft": 54,
-   "rows": 883
+   "requestsLeft": 53,
+   "rows": 862,
+   "slateGames": [
+    "Jacksonville Jaguars at Denver Broncos 2026-09-20T20:05Z",
+    "Las Vegas Raiders at Los Angeles Chargers 2026-09-20T20:05Z",
+    "Washington Commanders at Dallas Cowboys 2026-09-20T20:25Z",
+    "Seattle Seahawks at Arizona Cardinals 2026-09-20T20:25Z",
+    "Miami Dolphins at San Francisco 49ers 2026-09-20T20:25Z",
+    "Indianapolis Colts at Kansas City Chiefs 2026-09-21T00:20Z",
+    "New York Giants at Los Angeles Rams 2026-09-22T00:15Z"
+   ],
+   "unmatchedEvents": [
+    {
+     "away": null,
+     "home": null,
+     "keys": [
+      "away_team",
+      "book_count",
+      "books",
+      "event_type",
+      "external_ids",
+      "home_team",
+      "id",
+      "is_live",
+      "league",
+      "market_count",
+      "markets",
+      "sport"
+     ],
+     "start": "2026-09-20T17:58:00Z"
+    },
+    {
+     "away": null,
+     "home": null,
+     "keys": [
+      "away_team",
+      "book_count",
+      "books",
+      "event_type",
+      "external_ids",
+      "home_team",
+      "id",
+      "is_live",
+      "league",
+      "market_count",
+      "markets",
+      "sport"
+     ],
+     "start": "2026-09-20T18:17:00Z"
+    },
+    {
+     "away": null,
+     "home": null,
+     "keys": [
+      "away_team",
+      "book_count",
+      "books",
+      "event_type",
+      "external_ids",
+      "home_team",
+      "id",
+      "is_live",
+      "league",
+      "market_count",
+      "markets",
+      "sport"
+     ],
+     "start": "2026-09-20T18:38:00Z"
+    },
+    {
+     "away": null,
+     "home": null,
+     "keys": [
+      "away_team",
+      "book_count",
+      "books",
+      "event_type",
+      "external_ids",
+      "home_team",
+      "id",
+      "is_live",
+      "league",
+      "market_count",
+      "markets",
+      "sport"
+     ],
+     "start": "2026-09-20T18:43:00Z"
+    },
+    {
+     "away": null,
+     "home": null,
+     "keys": [
+      "away_team",
+      "book_count",
+      "books",
+      "event_type",
+      "external_ids",
+      "home_team",
+      "id",
+      "is_live",
+      "league",
+      "market_count",
+      "markets",
+      "sport"
+     ],
+     "start": "2026-09-20T18:52:00Z"
+    },
+    {
+     "away": null,
+     "home": null,
+     "keys": [
+      "away_team",
+      "book_count",
+      "books",
+      "event_type",
+      "external_ids",
+      "home_team",
+      "id",
+      "is_live",
+      "league",
+      "market_count",
+      "markets",
+      "sport"
+     ],
+     "start": "2026-09-20T18:55:00Z"
+    },
+    {
+     "away": null,
+     "home": null,
+     "keys": [
+      "away_team",
+      "book_count",
+      "books",
+      "event_type",
+      "external_ids",
+      "home_team",
+      "id",
+      "is_live",
+      "league",
+      "market_count",
+      "markets",
+      "sport"
+     ],
+     "start": "2026-09-20T19:02:00Z"
+    },
+    {
+     "away": null,
+     "home": null,
+     "keys": [
+      "away_team",
+      "book_count",
+      "books",
+      "event_type",
+      "external_ids",
+      "home_team",
+      "id",
+      "is_live",
+      "league",
+      "market_count",
+      "markets",
+      "sport"
+     ],
+     "start": "2026-09-20T19:15:00Z"
+    },
+    {
+     "away": null,
+     "home": null,
+     "keys": [
+      "away_team",
+      "book_count",
+      "books",
+      "event_type",
+      "external_ids",
+      "home_team",
+      "id",
+      "is_live",
+      "league",
+      "market_count",
+      "markets",
+      "sport"
+     ],
+     "start": "2026-09-20T20:05:00Z"
+    },
+    {
+     "away": null,
+     "home": null,
+     "keys": [
+      "away_team",
+      "book_count",
+      "books",
+      "event_type",
+      "external_ids",
+      "home_team",
+      "id",
+      "is_live",
+      "league",
+      "market_count",
+      "markets",
+      "sport"
+     ],
+     "start": "2026-09-20T20:05:00Z"
+    },
+    {
+     "away": null,
+     "home": null,
+     "keys": [
+      "away_team",
+      "book_count",
+      "books",
+      "event_type",
+      "external_ids",
+      "home_team",
+      "id",
+      "is_live",
+      "league",
+      "market_count",
+      "markets",
+      "sport"
+     ],
+     "start": "2026-09-20T20:05:00Z"
+    },
+    {
+     "away": null,
+     "home": null,
+     "keys": [
+      "away_team",
+      "book_count",
+      "books",
+      "event_type",
+      "external_ids",
+      "home_team",
+      "id",
+      "is_live",
+      "league",
+      "market_count",
+      "markets",
+      "sport"
+     ],
+     "start": "2026-09-20T20:05:00Z"
+    }
+   ]
   }
  }
 }

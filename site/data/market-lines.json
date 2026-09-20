@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-09-20T19:02:13Z",
+  "updatedAt": "2026-09-20T19:24:43Z",
   "status": "ok",
   "coverage": "Observed NFL/CFB player markets from saved research and dated public references. Not an exhaustive sportsbook menu. Rebuilding does not refresh quote times or create recommendations.",
   "freshnessPolicy": "Direct observed prices expire after at most 60 minutes or a sooner supplied expiry; all article/comparison prices require independent sportsbook recheck.",
   "counts": {
-    "lines": 117,
+    "lines": 120,
     "current": 0,
-    "references": 0
+    "references": 3
   },
   "lines": [
     {
@@ -6075,6 +6075,195 @@
       ],
       "observationCount": 1,
       "originalRecommendations": []
+    },
+    {
+      "league": "NFL",
+      "gameId": "NFL-401872940",
+      "player": "Bo Nix",
+      "athleteId": "4426338",
+      "position": "QB",
+      "reportId": "NFL-2026-W2-nix-over-17-5-rush-fd",
+      "identityVerified": true,
+      "direction": "OVER",
+      "line": 17.5,
+      "market": "rushing yards",
+      "book": "FanDuel",
+      "odds": -113,
+      "observedAt": "2026-09-20T19:01:46Z",
+      "expiresAt": "2026-09-20T20:05:00Z",
+      "source": "https://www.espn.com/nfl/game/_/gameId/401872940",
+      "marketWindow": "Full game",
+      "cutoff": "OVER 17.5 at -113 or better. Closed to new entries at 18+, or at -128 or worse at 17.5.",
+      "quoteType": "source reference",
+      "checkedAt": "2026-09-20T19:01:46Z",
+      "kickoff": "2026-09-20T20:05Z",
+      "status": "reference",
+      "quoteStatus": "reference",
+      "reason": "Public article or comparison quote; verify the exact market in your sportsbook.",
+      "builderEligible": false,
+      "title": "Bo Nix OVER 17.5 rushing yards",
+      "id": "line-ad514bcbe45f026ae472",
+      "observations": [
+        {
+          "line": 17.5,
+          "odds": -113,
+          "observedAt": "2026-09-20T19:01:46Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401872940",
+          "quoteType": "source reference",
+          "sourceDate": null,
+          "sourcePart": null,
+          "sourceTimeNote": null
+        }
+      ],
+      "observationCount": 1,
+      "originalRecommendations": [
+        {
+          "league": "NFL",
+          "gameId": "NFL-401872940",
+          "player": "Bo Nix",
+          "athleteId": "4426338",
+          "position": "QB",
+          "reportId": "NFL-2026-W2-nix-over-17-5-rush-fd",
+          "identityVerified": true,
+          "direction": "OVER",
+          "line": 17.5,
+          "market": "rushing yards",
+          "book": "FanDuel",
+          "odds": -113,
+          "observedAt": "2026-09-20T19:01:46Z",
+          "expiresAt": "2026-09-20T20:05:00Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401872940",
+          "marketWindow": "Full game",
+          "cutoff": "OVER 17.5 at -113 or better. Closed to new entries at 18+, or at -128 or worse at 17.5.",
+          "quoteType": "source reference"
+        }
+      ]
+    },
+    {
+      "league": "NFL",
+      "gameId": "NFL-401872940",
+      "player": "Courtland Sutton",
+      "athleteId": "3128429",
+      "position": "WR",
+      "reportId": "NFL-2026-W2-sutton-over-3-5-rec-fd",
+      "identityVerified": true,
+      "direction": "OVER",
+      "line": 3.5,
+      "market": "receptions",
+      "book": "FanDuel",
+      "odds": -102,
+      "observedAt": "2026-09-20T19:01:46Z",
+      "expiresAt": "2026-09-20T20:05:00Z",
+      "source": "https://www.espn.com/nfl/game/_/gameId/401872940",
+      "marketWindow": "Full game",
+      "cutoff": "OVER 3.5 at -102 or better. Closed to new entries at 4+, or at -117 or worse at 3.5.",
+      "quoteType": "source reference",
+      "checkedAt": "2026-09-20T19:01:46Z",
+      "kickoff": "2026-09-20T20:05Z",
+      "status": "reference",
+      "quoteStatus": "reference",
+      "reason": "Public article or comparison quote; verify the exact market in your sportsbook.",
+      "builderEligible": false,
+      "title": "Courtland Sutton OVER 3.5 receptions",
+      "id": "line-27f4e7a2307db11d0314",
+      "observations": [
+        {
+          "line": 3.5,
+          "odds": -102,
+          "observedAt": "2026-09-20T19:01:46Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401872940",
+          "quoteType": "source reference",
+          "sourceDate": null,
+          "sourcePart": null,
+          "sourceTimeNote": null
+        }
+      ],
+      "observationCount": 1,
+      "originalRecommendations": [
+        {
+          "league": "NFL",
+          "gameId": "NFL-401872940",
+          "player": "Courtland Sutton",
+          "athleteId": "3128429",
+          "position": "WR",
+          "reportId": "NFL-2026-W2-sutton-over-3-5-rec-fd",
+          "identityVerified": true,
+          "direction": "OVER",
+          "line": 3.5,
+          "market": "receptions",
+          "book": "FanDuel",
+          "odds": -102,
+          "observedAt": "2026-09-20T19:01:46Z",
+          "expiresAt": "2026-09-20T20:05:00Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401872940",
+          "marketWindow": "Full game",
+          "cutoff": "OVER 3.5 at -102 or better. Closed to new entries at 4+, or at -117 or worse at 3.5.",
+          "quoteType": "source reference"
+        }
+      ]
+    },
+    {
+      "league": "NFL",
+      "gameId": "NFL-401872941",
+      "player": "Oronde Gadsden",
+      "athleteId": "4595342",
+      "position": "TE",
+      "reportId": "NFL-2026-W2-gadsden-over-12-5-recyds-fd",
+      "identityVerified": true,
+      "direction": "OVER",
+      "line": 12.5,
+      "market": "receiving yards",
+      "book": "FanDuel",
+      "odds": -113,
+      "observedAt": "2026-09-20T19:01:46Z",
+      "expiresAt": "2026-09-20T20:05:00Z",
+      "source": "https://www.espn.com/nfl/game/_/gameId/401872941",
+      "marketWindow": "Full game",
+      "cutoff": "OVER 12.5 at -113 or better. Closed to new entries at 13+, or at -128 or worse at 12.5.",
+      "quoteType": "source reference",
+      "checkedAt": "2026-09-20T19:01:46Z",
+      "kickoff": "2026-09-20T20:05Z",
+      "status": "reference",
+      "quoteStatus": "reference",
+      "reason": "Public article or comparison quote; verify the exact market in your sportsbook.",
+      "builderEligible": false,
+      "title": "Oronde Gadsden OVER 12.5 receiving yards",
+      "id": "line-43fe4c42d10da11ec866",
+      "observations": [
+        {
+          "line": 12.5,
+          "odds": -113,
+          "observedAt": "2026-09-20T19:01:46Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401872941",
+          "quoteType": "source reference",
+          "sourceDate": null,
+          "sourcePart": null,
+          "sourceTimeNote": null
+        }
+      ],
+      "observationCount": 1,
+      "originalRecommendations": [
+        {
+          "league": "NFL",
+          "gameId": "NFL-401872941",
+          "player": "Oronde Gadsden",
+          "athleteId": "4595342",
+          "position": "TE",
+          "reportId": "NFL-2026-W2-gadsden-over-12-5-recyds-fd",
+          "identityVerified": true,
+          "direction": "OVER",
+          "line": 12.5,
+          "market": "receiving yards",
+          "book": "FanDuel",
+          "odds": -113,
+          "observedAt": "2026-09-20T19:01:46Z",
+          "expiresAt": "2026-09-20T20:05:00Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401872941",
+          "marketWindow": "Full game",
+          "cutoff": "OVER 12.5 at -113 or better. Closed to new entries at 13+, or at -128 or worse at 12.5.",
+          "quoteType": "source reference"
+        }
+      ]
     }
   ]
 }
