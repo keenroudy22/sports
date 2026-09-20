@@ -101,11 +101,12 @@
     return `<button class="row" type="button" data-pick="${esc(pick.id)}">
       <span class="row-rail" style="background:${pick.result ? tone : esc(pick.color || 'var(--mint)')}"></span>
       <span class="row-main"><span class="row-top"><span class="row-name">${esc(pick.title || pick.player)}</span>
-        ${pick.favorite ? '<span class="pill pill-ours">Favorite</span>' : ''}${C.isLongshot(pick) ? '<span class="pill pill-stale">Longshot</span>' : ''}${pick.historicalImport ? '<span class="pill pill-reference">Imported</span>' : ''}
+        ${pick.favorite ? '<span class="pill pill-ours">Favorite</span>' : ''}${pick.modelLean ? '<span class="pill pill-reference">Model lean</span>' : ''}${C.isLongshot(pick) ? '<span class="pill pill-stale">Longshot</span>' : ''}${pick.historicalImport ? '<span class="pill pill-reference">Imported</span>' : ''}
         <span class="pill pill-${C.pickState(pick).tone}">${esc(C.pickState(pick).word)}</span></span>
         <span class="row-market">${pick.actual ? esc(pick.actual) : pick.projection != null ? 'Our number ' + esc(pick.projection) : esc(pick.kind || '')}</span>
         <span class="row-meta">${esc(whenShort(pick.kickoff || pick.publishedAt))}${pick.confidence != null ? ` · confidence ${esc(pick.confidence)}/10` : ''}${pick.quotedAt ? ' · quoted ' + esc(ago(pick.quotedAt)) : ''}</span></span>
-      <span class="row-price"><span class="row-odds num">${odds(pick.odds)}</span><span class="row-book">${esc(pick.book || 'No book')}</span></span>
+      ${pick.odds == null && pick.historicalImport ? '<span class="row-price"><span class="row-book">price not recorded</span></span>'
+        : `<span class="row-price"><span class="row-odds num">${odds(pick.odds)}</span><span class="row-book">${esc(pick.book || 'No book')}</span></span>`}
     </button>`;
   };
 
@@ -120,9 +121,21 @@
   };
   const disagreement = g => Math.max(Math.abs((g.lean || {}).spread || 0), Math.abs((g.lean || {}).total || 0));
 
+  /* The board's best priced reads for the day, or the next day with lines: the Today page's opener. */
+  const bestOnBoard = board => {
+    const rows = ((board || {}).lines || []).filter(inLeague)
+      .filter(l => l.state === 'open' && l.grade && l.grade.tier !== 'none' && Date.parse(l.kickoff) > Date.now());
+    if (!rows.length) return { rows: [], day: null };
+    const todayLabel = dayLabel(new Date().toISOString());
+    const soonest = rows.slice().sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0];
+    const day = rows.some(l => dayLabel(l.kickoff) === todayLabel) ? todayLabel : dayLabel(soonest.kickoff);
+    return { rows: rows.filter(l => dayLabel(l.kickoff) === day).sort(C.byGrade).slice(0, 6), day: day === todayLabel ? null : day };
+  };
+
   async function viewToday() {
-    const data = await get('app/today.json');
+    const [data, board] = await Promise.all([get('app/today.json'), maybe('app/lines.json')]);
     const games = data.games.filter(inLeague);
+    const best = bestOnBoard(board);
     const now = slate(games);
     const playing = games.filter(g => !g.completed && g.state === 'in');
     const first = now[0];
@@ -136,11 +149,14 @@
     return `${head(title,
       first ? `${now.length} games on this slate · ${forecasts} with our number${(first.market || {}).book ? ` · market lines from ${esc(first.market.book)}` : ''}` : 'Nothing kicks off in the next eight days in this league.')}
       <div class="two-col"><div>
+        ${live.length ? section('Our picks', `<div class="card"><div class="rows">${live.map(pickRow).join('')}</div></div>`, '<a href="#record">Record →</a>') : ''}
+        ${best.rows.length ? section(best.day ? `Best on the board · ${esc(best.day)}` : 'Best on the board today',
+          `<p class="row-meta" style="margin:0 0 8px">${live.length ? 'Beyond our picks, the' : 'No researched pick is up yet, so here are the'} lines our number likes most, priced at the best book. Leans, not picks: tap + to build a ticket.</p><div class="card"><div class="rows">${best.rows.map(lineRow).join('')}</div></div>`,
+          '<a href="#board">Full board →</a>') : ''}
         ${playing.length ? section(`In play now${playing.length > 6 ? ` (${playing.length})` : ''}`, `<div class="card">${playing.slice(0, 6).map(gameRow).join('')}</div>`, '<a href="#games">All games →</a>') : ''}
         ${section('Where the model and the market disagree', gaps.length ? `<p class="row-meta" style="margin:0 0 8px">A lean is how far our number sits from the line, which side that favours, and how often that side should win. Green needs 57% or better on a solid sample; most early-season leans are worth about 52%. A lean is not a pick.</p><div class="card">${gaps.map(gameRow).join('')}</div>`
           : empty('No model calls yet', 'The model publishes after the hosted refresh runs. Every game still shows the market number.'), '<a href="#games">All games →</a>')}
-        ${section('Our picks', live.length ? `<div class="card"><div class="rows">${live.map(pickRow).join('')}</div></div>`
-          : empty('No picks waiting to settle', 'Nothing has cleared the bar for this slate. Fewer picks, or none, is part of the process.', '<a class="btn" href="#board">Open the board</a>'), '<a href="#record">Record →</a>')}
+        ${!live.length && !best.rows.length ? section('Our picks', empty('Nothing on the card yet', 'Picks and board reads appear once lines are priced for the next slate.', '<a class="btn" href="#board">Open the board</a>'), '<a href="#record">Record →</a>') : ''}
       </div><div>
         ${section(state.league === 'ALL' ? 'The record' : `The record · ${esc(leagueName(dataLeague()))}`, recordCard(C.recordOf(picks), true), '<a href="#record">Details →</a>')}
         ${section('How the model is doing', modelCard(data.model), '<a href="#model">Scoreboard →</a>')}
@@ -350,8 +366,7 @@
         ${row.move && typeof row.line === 'number' ? `<span class="move">opened ${esc(lineText(row.line - row.move))}</span>` : ''}</span>
         ${row.player ? `<span class="row-market">${esc([row.direction, row.line, row.market].filter(v => v != null && v !== '').join(' '))}</span>` : ''}
         ${graded ? `<span class="grade grade-${g.tier}"><b>${esc(g.word)}</b>${g.detail ? `<span>${esc(g.detail)}</span>` : ''}</span>` : ''}
-        ${books.length > 1 ? `<span class="row-meta">${books.slice(0, 3).map(q => `${esc(q.book)} ${row.market === 'total points' ? esc(q.line) : esc(C.spreadText('', q.line).trim())} ${odds(q.odds)}`).join(' · ')}${books.length > 3 ? ` · +${books.length - 3} more` : ''}</span>` : ''}
-        <span class="row-meta">${esc(whenShort(row.kickoff))}${row.observedAt ? ' · seen ' + esc(ago(row.observedAt)) : ''}</span></span>
+        <span class="row-meta">${esc(whenShort(row.kickoff))}${row.observedAt ? ' · seen ' + esc(ago(row.observedAt)) : ''}${books.length > 1 ? ' · ' + books.slice(0, 3).map(q => `${esc(q.book)} ${row.market === 'total points' || row.player ? esc(q.line) : esc(C.spreadText('', q.line).trim())} ${odds(q.odds)}`).join(' · ') + (books.length > 3 ? ` · +${books.length - 3} more` : '') : ''}</span></span>
       <span class="row-price"><span class="row-odds num">${odds(row.odds)}</span><span class="row-book">${esc(row.book || 'No book')}${(row.books || []).length > 1 ? ` · best of ${row.books.length}` : ''}</span></span>
       ${row.state === 'open' && row.odds != null ? `<button class="add" type="button" data-add="${esc(row.id)}" aria-pressed="${inTicket}" aria-label="${inTicket ? 'Remove from ticket' : 'Add to ticket'}">${inTicket ? '✓' : '+'}</button>` : ''}
     </div>`;

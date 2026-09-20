@@ -1,0 +1,42 @@
+{
+ "league": "NFL",
+ "targetWeek": 2,
+ "publishedAt": "2026-09-20T12:44:10Z",
+ "summary": "Model lean published at 8:44 ET, the first under the new rule: a total where our calibrated number clears the price by 2 points or more with nothing sourced against it. Raiders at Chargers under 43.5 at BetMGM -108, confidence 3, not a favorite. Cleveland at Tampa Bay over 41.5 also clears the bar on the number but the forecast has storms over the second half, so it stays a pass. Nothing settled, nothing closed.",
+ "gamePicks": [
+  {
+   "id": "NFL-2026-W2-lv-lac-under-43-5-mgm",
+   "title": "Raiders at Chargers under 43.5",
+   "status": "active",
+   "favorite": false,
+   "modelLean": true,
+   "marketType": "total",
+   "line": 43.5,
+   "direction": "under",
+   "gameIds": [
+    "NFL-401872941"
+   ],
+   "book": "BetMGM",
+   "odds": -108,
+   "quotedAt": "2026-09-20T08:50:19Z",
+   "quoteType": "capture",
+   "quoteNote": "BetMGM's price from the 4:50 AM ET capture across five books; DraftKings, FanDuel and ESPN BET had -110 and BetRivers -109 at the same number.",
+   "expiresAt": "2026-09-20T15:45:00Z",
+   "projection": 40.2,
+   "modelVersion": "v2.0",
+   "snapshotAt": "2026-09-19T22:09:35Z",
+   "edge": "v2 total 40.2 (80% range 23.8 to 56.6). Chance of under 43.5: 54.3% (v2's raw 60.2% shrunk by its 2024-25 record against the close), against 51.9% break-even at -108: +2.4 points, +0.046u per unit.",
+   "cutoff": "UNDER 43.5 at -108 or better. Closed to new entries at 42 or lower, or at -123 or worse at 43.5.",
+   "confidence": 3,
+   "why": "Model lean, published on our number alone. Our total is 40.2 against 43.5 and the under reads 54.3% after calibration, 2.4 points over what -108 needs. Brock Bowers is doubtful with a knee and Ladd McConkey questionable with a rib, which leans the same way, but the total has held 43.5 at every book through five captures since Saturday and two defensive backs are out, so none of that is a sourced edge beyond the model. Published so the model's totals build a live record of their own.",
+   "risk": "One game of history for both teams; a thin model number is the model's most common error, and a market that has not moved knows things the model does not. Indoors at SoFi Stadium, so weather is no help either way. A quarter-unit of conviction, not a favorite.",
+   "sources": [
+    "https://www.raiders.com/news/las-vegas-raiders-los-angeles-chargers-nfl-week-2-injury-report-2026-season",
+    "https://www.espn.com/nfl/game/_/gameId/401872941",
+    "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds"
+   ]
+  }
+ ],
+ "takeaways": [],
+ "gameWatch": []
+}

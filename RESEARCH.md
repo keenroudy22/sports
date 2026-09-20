@@ -63,6 +63,7 @@ Every pick has `id`, `title`, `why`, `risk`, HTTPS `sources` and `status` (`acti
 - `gameIds` from `site/data/slate.json`;
 - `cutoff`;
 - `confidence` 1 to 10 (research confidence, not a probability);
+- `modelLean: true` on a total published on the model's number alone (confidence 3, never a favorite), so the record can grade the model apart from the researched picks;
 - `edge`.
 
 Some kinds need more:
