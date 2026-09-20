@@ -248,7 +248,9 @@
       g.needs == null ? 'no price yet' : `needs ${pct(g.needs)}`];
     if (g.thin) parts.push('thin sample');
     if (g.calibrated === false) parts.push('uncalibrated');
-    return { tier: g.tier, word: GRADE_WORD[g.tier] || GRADE_WORD.pass, detail: parts.join(' · ') };
+    /* A thin sample with a real gap is not "no edge": it is a read we will not trust on one or two games. */
+    const word = g.tier === 'pass' && g.thin && g.edge != null && g.edge >= 2 ? 'Too early to lean' : GRADE_WORD[g.tier] || GRADE_WORD.pass;
+    return { tier: g.tier, word, detail: parts.join(' · ') };
   };
   const TIER_ORDER = { strong: 0, lean: 1, pass: 2, none: 3 };
   /* Best first: tier, then a solid sample before a thin one, then the size of the edge. */

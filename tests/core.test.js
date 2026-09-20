@@ -209,6 +209,15 @@ test('parlays stay out of the straight-pick units and carry their own stake', ()
   assert.equal(C.stakeOf({}), 1, 'a pick with no recorded stake is one unit');
 });
 
+test('a priced line on a thin sample says too early, not no edge', () => {
+  const thin = C.gradeOf({ tier: 'pass', chance: 0.81, needs: 0.44, edge: 37, thin: true, calibrated: false });
+  assert.equal(thin.word, 'Too early to lean');
+  const flat = C.gradeOf({ tier: 'pass', chance: 0.5, needs: 0.52, edge: -2, thin: true });
+  assert.equal(flat.word, 'No edge');
+  const solid = C.gradeOf({ tier: 'lean', chance: 0.62, needs: 0.52, edge: 10, thin: false });
+  assert.equal(solid.word, 'Slight lean');
+});
+
 // app.js runs in the browser, so nothing here loads it. Parsing it catches a broken
 // edit before it reaches the page, where the only symptom is a stuck "Loading" screen.
 test('app.js parses', () => {
