@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-20T14:20:59Z",
+  "updatedAt": "2026-09-20T15:23:45Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -467,6 +467,15 @@
           "name": "Baltimore Ravens",
           "players": [
             {
+              "id": "3052743",
+              "name": "Trey Hendrickson",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Finger",
+              "reportedAt": "2026-09-20T14:36Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3052743/trey-hendrickson"
+            },
+            {
               "id": "4575483",
               "name": "T.J. Tampa",
               "position": "CB",
@@ -483,15 +492,6 @@
               "injury": "Hamstring",
               "reportedAt": "2026-09-19T20:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4429615/zay-flowers"
-            },
-            {
-              "id": "3052743",
-              "name": "Trey Hendrickson",
-              "position": "LB",
-              "status": "Questionable",
-              "injury": "Finger",
-              "reportedAt": "2026-09-19T03:44Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3052743/trey-hendrickson"
             },
             {
               "id": "4035479",
@@ -697,6 +697,15 @@
           "name": "Buffalo Bills",
           "players": [
             {
+              "id": "4039303",
+              "name": "Ed Oliver",
+              "position": "DT",
+              "status": "Out",
+              "injury": "Hip",
+              "reportedAt": "2026-09-20T14:13Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4039303/ed-oliver"
+            },
+            {
               "id": "3915416",
               "name": "DJ Moore",
               "position": "WR",
@@ -857,15 +866,6 @@
               "injury": "Knee",
               "reportedAt": "2026-09-17T23:09Z",
               "source": "https://www.espn.com/nfl/player/_/id/4684527/tj-sanders"
-            },
-            {
-              "id": "4039303",
-              "name": "Ed Oliver",
-              "position": "DT",
-              "status": "Out",
-              "injury": "Hip",
-              "reportedAt": "2026-09-17T23:03Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4039303/ed-oliver"
             },
             {
               "id": "3915411",
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-20T14:00Z",
+              "reportedAt": "2026-09-20T15:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -3462,7 +3462,7 @@
               "position": "DT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-09-19T00:09Z",
+              "reportedAt": "2026-09-20T14:40Z",
               "source": "https://www.espn.com/nfl/player/_/id/3044859/chris-jones"
             },
             {
@@ -4607,6 +4607,15 @@
           "name": "Minnesota Vikings",
           "players": [
             {
+              "id": "3917315",
+              "name": "Kyler Murray",
+              "position": "QB",
+              "status": "Out",
+              "injury": "Concussion",
+              "reportedAt": "2026-09-20T14:23Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3917315/kyler-murray"
+            },
+            {
               "id": "16772",
               "name": "Kyle Van Noy",
               "position": "LB",
@@ -4659,15 +4668,6 @@
               "injury": "Personal",
               "reportedAt": "2026-09-18T18:55Z",
               "source": "https://www.espn.com/nfl/player/_/id/3886598/jauan-jennings"
-            },
-            {
-              "id": "3917315",
-              "name": "Kyler Murray",
-              "position": "QB",
-              "status": "Out",
-              "injury": "Concussion",
-              "reportedAt": "2026-09-18T18:49Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3917315/kyler-murray"
             },
             {
               "id": "3728281",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "24",
-          "name": "Teair Tart",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-09-18T23:21:26Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4374269/teair-tart"
-        },
-        {
-          "teamId": "24",
           "name": "Dalvin Tomlinson",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Injured Reserve",
           "observedAt": "2026-09-20T05:00:09Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-09-20T15:23:45Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-20T14:20:59Z",
-      "lastAttemptAt": "2026-09-20T14:20:59Z",
+      "checkedAt": "2026-09-20T15:23:45Z",
+      "lastAttemptAt": "2026-09-20T15:23:45Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-20T14:20:59Z",
-      "lastAttemptAt": "2026-09-20T14:20:59Z",
+      "checkedAt": "2026-09-20T15:23:45Z",
+      "lastAttemptAt": "2026-09-20T15:23:45Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
