@@ -376,9 +376,20 @@
       <div id="player-results">${playerResults(index, league)}</div>`;
   }
 
+  const LEADER_LABELS = { passYds: 'Passing yards', rushYds: 'Rushing yards', recYds: 'Receiving yards', rec: 'Receptions' };
+  /* With no search typed, the page shows who is leading rather than an empty box. */
+  const leaderBoards = (index, league) => {
+    const boards = index.leaders || {};
+    const keys = Object.keys(LEADER_LABELS).filter(k => (boards[k] || []).length);
+    if (!keys.length) return '';
+    return `<div class="two-col">${keys.map(k => section(`${LEADER_LABELS[k]}${index.season ? ` · ${esc(index.season)}` : ''}`,
+      `<div class="card results">${boards[k].map((p, i) => `<a href="#player/${league}/${esc(p[0])}"><span><b>${i + 1}. ${esc(p[1])}</b> <small>${esc(p[2] || '')}</small></span><small class="num">${fixed(p[3], 0)}<span class="faint"> · ${p[4]} game${p[4] === 1 ? '' : 's'}</span></small></a>`).join('')}</div>`)).join('')}</div>`;
+  };
+
   const playerResults = (index, league) => {
     const query = state.playerQuery.trim().toLowerCase();
-    if (query.length < 2) return empty('Search for a player', 'Type at least two letters of a name. Every player with a stat line in the last two seasons is here, with every game stored since 2023.');
+    if (query.length < 2) return leaderBoards(index, league)
+      || empty('Search for a player', 'Type at least two letters of a name. Every player with a stat line in the last two seasons is here, with every game stored since 2023.');
     const words = query.split(/\s+/);
     const found = index.players.filter(p => words.every(w => String(p[1]).toLowerCase().includes(w)))
       .sort((a, b) => String(b[5]).localeCompare(String(a[5])) || b[6] - a[6]).slice(0, 40);

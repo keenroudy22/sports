@@ -188,8 +188,11 @@ class TableTests(unittest.TestCase):
                    game('2', datetime(2025, 9, 14, 17, tzinfo=timezone.utc), 'B', 'A', 20, 13, players=[self.wr('10', 'A', 3, 30)]),
                    game('3', datetime(2025, 9, 21, 17, tzinfo=timezone.utc), 'A', 'C', 21, 20, neutral=True,
                         players=[self.wr('10', 'A', 8, 101)])]
-        index, shards = build_site.build_players('NFL', records, {'3': {'10': (61, 0.92)}}, {('NFL', 'A'): {'abbr': 'AAA'}})
+        index, shards, leaders, season = build_site.build_players('NFL', records, {'3': {'10': (61, 0.92)}}, {('NFL', 'A'): {'abbr': 'AAA'}})
         self.assertEqual(index, [['10', 'Player 10', 'WR', 'A', 'AAA', '2025-09-21', 3]])
+        self.assertEqual(season, 2025)
+        self.assertEqual(leaders['recYds'], [['10', 'Player 10', 'AAA', 201.0, 3]], 'the season leader board adds the stored games')
+        self.assertEqual(leaders['passYds'], [], 'a stat nobody recorded has no leaders')
         rows = shards[10 % build_site.SHARDS['NFL']]['10']['rows']
         keys = list(build_site.LOG_KEYS)
         self.assertEqual([r[:8] for r in rows], [['1', '2025-09-07', 2025, 1, 2, 'A', 'B', 1],

@@ -378,6 +378,34 @@ def leaders(record, names):
 
 # ------------------------------------------------------------------ players and teams
 
+LEADER_KEYS = ('passYds', 'rushYds', 'recYds', 'rec')
+
+
+def season_leaders(logs, index, season):
+    """This season's top eight in a few headline stats, so the players page can be browsed.
+
+    Regular season only, and only what the box-score store already holds.
+    """
+    totals, games = defaultdict(lambda: defaultdict(float)), defaultdict(int)
+    for pid, rows in logs.items():
+        for r in rows:
+            if r['season'] != season or r.get('seasonType') != 2:
+                continue
+            games[pid] += 1
+            for key in LEADER_KEYS:
+                value = r['stats'].get(key)
+                if isinstance(value, (int, float)):
+                    totals[pid][key] += value
+    meta = {row[0]: row for row in index}
+    out = {}
+    for key in LEADER_KEYS:
+        ranked = sorted((pid for pid in totals if totals[pid].get(key) and pid in meta),
+                        key=lambda pid: -totals[pid][key])[:8]
+        out[key] = [[pid, meta[pid][1], meta[pid][4] or meta[pid][2] or '', round(totals[pid][key], 1), games[pid]]
+                    for pid in ranked]
+    return out
+
+
 def build_players(league, records, snaps, teams_meta):
     logs = features.player_logs(records)
     index, shards = [], defaultdict(dict)
@@ -400,7 +428,7 @@ def build_players(league, records, snaps, teams_meta):
         index.append([pid, name, pos, team, teams_meta.get((league, team), {}).get('abbr'), day(last['kickoff']), len(rows)])
         shards[int(pid) % SHARDS[league]][pid] = {'name': name, 'pos': pos, 'rows': table}
     index.sort(key=lambda row: (row[1] or '', row[0]))
-    return index, shards
+    return index, shards, season_leaders(logs, index, latest_season), latest_season
 
 
 def build_teams(league, records, team_logs, defense_logs, teams_meta, identities, current):
@@ -556,8 +584,9 @@ def build(now=None):
     write(OUT / 'lines.json', {'generatedAt': stamp(now), 'lines': lines})
     for league in ('NFL', 'CFB'):
         info = league_data[league]
-        index, shards = build_players(league, info['records'], snaps if league == 'NFL' else {}, teams_meta)
-        write(OUT / 'players' / f'{league}.json', {'keys': list(LOG_KEYS), 'shards': SHARDS[league], 'players': index})
+        index, shards, leaders, leader_season = build_players(league, info['records'], snaps if league == 'NFL' else {}, teams_meta)
+        write(OUT / 'players' / f'{league}.json', {'keys': list(LOG_KEYS), 'shards': SHARDS[league], 'players': index,
+                                                   'leaders': leaders, 'season': leader_season})
         for shard, players in shards.items():
             write(OUT / 'players' / league / f'{shard}.json', {'keys': list(LOG_KEYS), 'players': players})
         directory, files = build_teams(league, info['records'], info['team_logs'], info['defense_logs'], teams_meta,
