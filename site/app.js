@@ -123,8 +123,9 @@
 
   /* The board's best priced reads for the day, or the next day with lines: the Today page's opener. */
   const bestOnBoard = board => {
+    /* Only lines our number actually leans on; a list called "we like" never shows a no-edge row. */
     const rows = ((board || {}).lines || []).filter(inLeague)
-      .filter(l => l.state === 'open' && l.grade && l.grade.tier !== 'none' && Date.parse(l.kickoff) > Date.now());
+      .filter(l => l.state === 'open' && l.grade && ['lean', 'strong'].includes(l.grade.tier) && Date.parse(l.kickoff) > Date.now());
     if (!rows.length) return { rows: [], day: null };
     const todayLabel = dayLabel(new Date().toISOString());
     const soonest = rows.slice().sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0];
