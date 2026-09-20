@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-20T12:37:21Z",
+  "updatedAt": "2026-09-20T12:46:27Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1617,6 +1617,15 @@
           "name": "Cleveland Browns",
           "players": [
             {
+              "id": "4432762",
+              "name": "Shedeur Sanders",
+              "position": "QB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-20T12:31Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4432762/shedeur-sanders"
+            },
+            {
               "id": "4242516",
               "name": "Noah Igbinoghene",
               "position": "CB",
@@ -1831,15 +1840,6 @@
               "injury": "Back",
               "reportedAt": "2026-09-08T20:42Z",
               "source": "https://www.espn.com/nfl/player/_/id/4427238/dillon-gabriel"
-            },
-            {
-              "id": "4240548",
-              "name": "Kendrick Green",
-              "position": "G",
-              "status": "Injured Reserve",
-              "injury": "Undisclosed",
-              "reportedAt": "2026-09-08T20:42Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4240548/kendrick-green"
             }
           ]
         },
@@ -7767,8 +7767,8 @@
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-20T12:37:21Z",
-      "lastAttemptAt": "2026-09-20T12:37:21Z",
+      "checkedAt": "2026-09-20T12:46:27Z",
+      "lastAttemptAt": "2026-09-20T12:46:27Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-20T12:37:21Z",
-      "lastAttemptAt": "2026-09-20T12:37:21Z",
+      "checkedAt": "2026-09-20T12:46:27Z",
+      "lastAttemptAt": "2026-09-20T12:46:27Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
