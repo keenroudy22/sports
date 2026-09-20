@@ -1,10 +1,10 @@
 {
- "at": "2026-09-20T21:11:40Z",
+ "at": "2026-09-20T22:07:07Z",
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 516,
-    "fanduel": 602
+    "draftkings": 515,
+    "fanduel": 561
    },
    "eventsListed": 200,
    "eventsMatched": 2,
@@ -24,249 +24,219 @@
     "player_passing_completions": 8,
     "player_passing_touchdowns": 26,
     "player_passing_yards": 154,
-    "player_receiving_yards": 358,
+    "player_receiving_yards": 357,
     "player_receptions": 178,
     "player_rushing_+_receiving_yards": 18,
     "player_rushing_attempts": 14,
-    "player_rushing_yards": 176,
-    "player_sacks": 30,
+    "player_rushing_yards": 145,
+    "player_sacks": 20,
     "player_tackles": 12,
     "player_tackles_+_assists": 12
    },
-   "requestsLeft": 52,
-   "rows": 1118,
+   "requestsLeft": 53,
+   "rows": 1076,
    "slateGames": [
     "Indianapolis Colts at Kansas City Chiefs 2026-09-21T00:20Z",
     "New York Giants at Los Angeles Rams 2026-09-22T00:15Z"
    ],
    "unmatchedEvents": [
     {
-     "away": "Denver Broncos",
-     "home": "Jacksonville Jaguars",
-     "keys": [
-      "away_team",
-      "book_count",
-      "books",
-      "event_type",
-      "external_ids",
-      "home_team",
-      "id",
-      "is_live",
-      "league",
-      "market_count",
-      "markets",
-      "sport"
-     ],
-     "start": "2026-09-20T20:00:00Z"
+     "away": "Arizona Cardinals",
+     "external": {
+      "onexbet": "754728095"
+     },
+     "home": "Seattle Seahawks",
+     "sample": {
+      "away_team": "Arizona Cardinals",
+      "home_team": "Seattle Seahawks",
+      "markets": [
+       "point_spread",
+       "team_total",
+       "total_points"
+      ]
+     },
+     "start": "2026-09-20T20:15:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Dallas Cowboys",
+     "external": {
+      "onexbet": "754727678"
+     },
+     "home": "Washington Commanders",
+     "sample": {
+      "away_team": "Dallas Cowboys",
+      "home_team": "Washington Commanders",
+      "markets": [
+       "point_spread",
+       "team_total",
+       "total_points"
+      ]
+     },
+     "start": "2026-09-20T20:15:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "San Francisco 49ers",
+     "external": {
+      "onexbet": "754728276"
+     },
+     "home": "Miami Dolphins",
+     "sample": {
+      "away_team": "San Francisco 49ers",
+      "home_team": "Miami Dolphins",
+      "markets": [
+       "point_spread",
+       "team_total",
+       "total_points"
+      ]
+     },
+     "start": "2026-09-20T20:15:00Z",
+     "type": "fixture"
     },
     {
      "away": null,
+     "external": {
+      "kalshi": "KXNFL1HSPREAD-26SEP20SEAARI-SEA5"
+     },
      "home": null,
-     "keys": [
-      "away_team",
-      "book_count",
-      "books",
-      "event_type",
-      "external_ids",
-      "home_team",
-      "id",
-      "is_live",
-      "league",
-      "market_count",
-      "markets",
-      "sport"
-     ],
-     "start": "2026-09-20T20:05:00Z"
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-20T20:25:00Z",
+     "type": "outright"
     },
     {
      "away": null,
+     "external": {
+      "kalshi": "KXNFL1HSPREAD-26SEP20WASDAL-DAL17"
+     },
      "home": null,
-     "keys": [
-      "away_team",
-      "book_count",
-      "books",
-      "event_type",
-      "external_ids",
-      "home_team",
-      "id",
-      "is_live",
-      "league",
-      "market_count",
-      "markets",
-      "sport"
-     ],
-     "start": "2026-09-20T20:05:00Z"
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-20T20:25:00Z",
+     "type": "outright"
     },
     {
      "away": null,
+     "external": {
+      "kalshi": "KXNFL2HSPREAD-26SEP20MIASF-SF11"
+     },
      "home": null,
-     "keys": [
-      "away_team",
-      "book_count",
-      "books",
-      "event_type",
-      "external_ids",
-      "home_team",
-      "id",
-      "is_live",
-      "league",
-      "market_count",
-      "markets",
-      "sport"
-     ],
-     "start": "2026-09-20T20:05:00Z"
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-20T20:25:00Z",
+     "type": "outright"
     },
     {
      "away": null,
+     "external": {
+      "kalshi": "KXNFL2HSPREAD-26SEP20SEAARI-ARI11"
+     },
      "home": null,
-     "keys": [
-      "away_team",
-      "book_count",
-      "books",
-      "event_type",
-      "external_ids",
-      "home_team",
-      "id",
-      "is_live",
-      "league",
-      "market_count",
-      "markets",
-      "sport"
-     ],
-     "start": "2026-09-20T20:05:00Z"
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-20T20:25:00Z",
+     "type": "outright"
     },
     {
      "away": null,
+     "external": {
+      "kalshi": "KXNFL2HSPREAD-26SEP20WASDAL-WAS8"
+     },
      "home": null,
-     "keys": [
-      "away_team",
-      "book_count",
-      "books",
-      "event_type",
-      "external_ids",
-      "home_team",
-      "id",
-      "is_live",
-      "league",
-      "market_count",
-      "markets",
-      "sport"
-     ],
-     "start": "2026-09-20T20:05:00Z"
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-20T20:25:00Z",
+     "type": "outright"
     },
     {
      "away": null,
+     "external": {
+      "kalshi": "KXNFL2QSPREAD-26SEP20SEAARI-SEA8"
+     },
      "home": null,
-     "keys": [
-      "away_team",
-      "book_count",
-      "books",
-      "event_type",
-      "external_ids",
-      "home_team",
-      "id",
-      "is_live",
-      "league",
-      "market_count",
-      "markets",
-      "sport"
-     ],
-     "start": "2026-09-20T20:05:00Z"
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-20T20:25:00Z",
+     "type": "outright"
     },
     {
      "away": null,
+     "external": {
+      "kalshi": "KXNFL2QSPREAD-26SEP20WASDAL-WAS11"
+     },
      "home": null,
-     "keys": [
-      "away_team",
-      "book_count",
-      "books",
-      "event_type",
-      "external_ids",
-      "home_team",
-      "id",
-      "is_live",
-      "league",
-      "market_count",
-      "markets",
-      "sport"
-     ],
-     "start": "2026-09-20T20:05:00Z"
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-20T20:25:00Z",
+     "type": "outright"
     },
     {
      "away": null,
+     "external": {
+      "kalshi": "KXNFL3QSPREAD-26SEP20MIASF-MIA4"
+     },
      "home": null,
-     "keys": [
-      "away_team",
-      "book_count",
-      "books",
-      "event_type",
-      "external_ids",
-      "home_team",
-      "id",
-      "is_live",
-      "league",
-      "market_count",
-      "markets",
-      "sport"
-     ],
-     "start": "2026-09-20T20:05:00Z"
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-20T20:25:00Z",
+     "type": "outright"
     },
     {
      "away": null,
+     "external": {
+      "kalshi": "KXNFL3QSPREAD-26SEP20SEAARI-SEA7"
+     },
      "home": null,
-     "keys": [
-      "away_team",
-      "book_count",
-      "books",
-      "event_type",
-      "external_ids",
-      "home_team",
-      "id",
-      "is_live",
-      "league",
-      "market_count",
-      "markets",
-      "sport"
-     ],
-     "start": "2026-09-20T20:05:00Z"
-    },
-    {
-     "away": null,
-     "home": null,
-     "keys": [
-      "away_team",
-      "book_count",
-      "books",
-      "event_type",
-      "external_ids",
-      "home_team",
-      "id",
-      "is_live",
-      "league",
-      "market_count",
-      "markets",
-      "sport"
-     ],
-     "start": "2026-09-20T20:05:00Z"
-    },
-    {
-     "away": null,
-     "home": null,
-     "keys": [
-      "away_team",
-      "book_count",
-      "books",
-      "event_type",
-      "external_ids",
-      "home_team",
-      "id",
-      "is_live",
-      "league",
-      "market_count",
-      "markets",
-      "sport"
-     ],
-     "start": "2026-09-20T20:05:00Z"
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-20T20:25:00Z",
+     "type": "outright"
     }
    ]
   }

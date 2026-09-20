@@ -6630,5 +6630,190 @@
     ],
     "takeaways": [],
     "gameWatch": []
+  },
+  {
+    "league": "NFL",
+    "targetWeek": 2,
+    "publishedAt": "2026-09-20T22:04:15Z",
+    "summary": "5:30 PM ET run, published at 6:04 ET. Settled from ESPN box scores: Eagles at Titans over 39.5 at BetMGM -108 won (44 points); Panthers at Falcons over 43.5 at ESPN BET -105 lost (37 points), which also loses the five-leg longshot on its first leg, a quarter unit. Model leans are 1-1 with three totals and three props still in play. Nothing closed. Browns at Buccaneers is in a weather delay, the storm the morning run passed on. No evening pick yet: Colts at Chiefs is priced but nothing on it clears the bar.",
+    "gamePicks": [
+      {
+        "id": "NFL-2026-W2-car-atl-over-43-5-espn",
+        "title": "Panthers at Falcons over 43.5",
+        "status": "settled",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 43.5,
+        "direction": "over",
+        "gameIds": [
+          "NFL-401872933"
+        ],
+        "book": "ESPN BET",
+        "odds": -105,
+        "quotedAt": "2026-09-20T12:37:30Z",
+        "quoteType": "capture",
+        "quoteNote": "ESPN BET's price from the 8:37 AM ET capture across five books, the best number and price on the board for this side.",
+        "expiresAt": "2026-09-20T15:45:00Z",
+        "projection": 45.8,
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-19T12:11:24Z",
+        "edge": "v2 total 45.8 (80% range 29.4 to 62.1). Chance of over 43.5: 52.9% (v2's raw 57.0% shrunk by its 2024-25 record against the close), against 51.2% break-even at -105: +1.7 points, +0.033u per unit.",
+        "cutoff": "OVER 43.5 at -105 or better. Closed to new entries at 45+, or at -120 or worse at 43.5.",
+        "confidence": 2,
+        "why": "Settled from the ESPN box score. Carolina scored 34 and Atlanta, starting Cooper Rush, managed 3; the game fell six and a half points short of the total.",
+        "risk": "The published risk held: one game of history for both teams, and a market that knew more than the model.",
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401872933",
+          "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds"
+        ],
+        "result": "loss",
+        "actual": "Panthers 34, Falcons 3. 37 points, under 43.5.",
+        "actualValue": 37,
+        "settledAt": "2026-09-20T22:04:15Z",
+        "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401872933"
+      },
+      {
+        "id": "NFL-2026-W2-phi-ten-over-39-5-mgm",
+        "title": "Eagles at Titans over 39.5",
+        "status": "settled",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 39.5,
+        "direction": "over",
+        "gameIds": [
+          "NFL-401872939"
+        ],
+        "book": "BetMGM",
+        "odds": -108,
+        "quotedAt": "2026-09-20T12:37:30Z",
+        "quoteType": "capture",
+        "quoteNote": "BetMGM's price from the 8:37 AM ET capture across five books, the best number and price on the board for this side.",
+        "expiresAt": "2026-09-20T15:45:00Z",
+        "projection": 41.9,
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-19T12:11:24Z",
+        "edge": "v2 total 41.9 (80% range 25.5 to 58.2). Chance of over 39.5: 53.1% (v2's raw 57.3% shrunk by its 2024-25 record against the close), against 51.9% break-even at -108: +1.1 points, +0.022u per unit.",
+        "cutoff": "OVER 39.5 at -108 or better. Closed to new entries at 41+, or at -123 or worse at 39.5.",
+        "confidence": 2,
+        "why": "Settled from the ESPN box score. The total had dropped from 42.5 to 39.5 against our 41.9; the game landed at 44.",
+        "risk": "One result on a thin sample; the model earns its record over a season, not an afternoon.",
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401872939",
+          "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds"
+        ],
+        "result": "win",
+        "actual": "Eagles 24, Titans 20. 44 points, over 39.5.",
+        "actualValue": 44,
+        "settledAt": "2026-09-20T22:04:15Z",
+        "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401872939"
+      }
+    ],
+    "parlays": [
+      {
+        "id": "NFL-2026-W2-longshot-0920-mgm",
+        "title": "Sunday five-leg totals longshot, +2527",
+        "status": "settled",
+        "favorite": false,
+        "modelLean": false,
+        "parlayType": "longshot",
+        "riskTier": "high",
+        "riskUnits": 0.25,
+        "marketWindow": "Full game",
+        "book": "BetMGM",
+        "odds": 2527,
+        "quotedAt": "2026-09-20T12:37:30Z",
+        "quoteType": "capture",
+        "quoteNote": "Each leg's price is BetMGM's from the latest capture; the combined price is the book's parlay arithmetic, decimal 26.265.",
+        "expiresAt": "2026-09-20T15:45:00Z",
+        "gameIds": [
+          "NFL-401872941",
+          "NFL-401872944",
+          "NFL-401872939",
+          "NFL-401872933",
+          "NFL-401872943"
+        ],
+        "legs": [
+          {
+            "title": "LV @ LAC under 43.5",
+            "gameId": "NFL-401872941",
+            "market": "total points",
+            "side": "under",
+            "line": 43.5,
+            "odds": -108,
+            "chance": 0.543,
+            "marketWindow": "Full game",
+            "kickoff": "2026-09-20T20:05Z"
+          },
+          {
+            "title": "WSH @ DAL under 51",
+            "gameId": "NFL-401872944",
+            "market": "total points",
+            "side": "under",
+            "line": 51.0,
+            "odds": -110,
+            "chance": 0.532,
+            "marketWindow": "Full game",
+            "kickoff": "2026-09-20T20:25Z"
+          },
+          {
+            "title": "PHI @ TEN over 39.5",
+            "gameId": "NFL-401872939",
+            "market": "total points",
+            "side": "over",
+            "line": 39.5,
+            "odds": -108,
+            "chance": 0.531,
+            "marketWindow": "Full game",
+            "kickoff": "2026-09-20T17:00Z"
+          },
+          {
+            "title": "CAR @ ATL over 43.5",
+            "gameId": "NFL-401872933",
+            "market": "total points",
+            "side": "over",
+            "line": 43.5,
+            "odds": -108,
+            "chance": 0.529,
+            "marketWindow": "Full game",
+            "kickoff": "2026-09-20T17:00Z"
+          },
+          {
+            "title": "SEA @ ARI over 41",
+            "gameId": "NFL-401872943",
+            "market": "total points",
+            "side": "over",
+            "line": 41.0,
+            "odds": -108,
+            "chance": 0.529,
+            "marketWindow": "Full game",
+            "kickoff": "2026-09-20T20:25Z"
+          }
+        ],
+        "confidence": 2,
+        "projection": null,
+        "edge": "Our chance 4.3%, the product of the legs' calibrated chances (54.3, 53.2, 53.1, 52.9, 52.9%), against 3.8% break-even at +2527: +0.127u per unit staked, on a quarter unit. The miss rate is about 96%.",
+        "cutoff": "All 5 legs at BetMGM at these numbers (43.5, 51, 39.5, 43.5, 41), +2527 or better combined. Pass if any leg's number moves off or the combined price falls under +2000.",
+        "why": "Settled from the ESPN box score of the leg that lost; a parlay with a lost leg is lost whatever the other legs do.",
+        "risk": "A five-leg ticket at 4% on our own numbers; this is the expected outcome and the stake was a quarter unit.",
+        "correlation": "Five different games, so the legs are independent on our view and the price is the book's product of the legs. One leg is also today's model lean straight pick.",
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401872941",
+          "https://www.espn.com/nfl/game/_/gameId/401872944",
+          "https://www.espn.com/nfl/game/_/gameId/401872939",
+          "https://www.espn.com/nfl/game/_/gameId/401872933",
+          "https://www.espn.com/nfl/game/_/gameId/401872943",
+          "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds"
+        ],
+        "result": "loss",
+        "actual": "Lost on the first leg: Panthers at Falcons finished 34-3, 37 points, under 43.5. The other four legs were still in play when it settled.",
+        "actualValue": null,
+        "settledAt": "2026-09-20T22:04:15Z",
+        "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401872933"
+      }
+    ],
+    "takeaways": [],
+    "gameWatch": []
   }
 ]
