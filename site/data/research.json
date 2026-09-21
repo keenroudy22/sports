@@ -7265,5 +7265,117 @@
     ],
     "takeaways": [],
     "gameWatch": []
+  },
+  {
+    "league": "NFL",
+    "targetWeek": 2,
+    "publishedAt": "2026-09-21T11:19:56Z",
+    "summary": "6:45 AM ET run, published at 7:19 ET. Nothing to settle, nothing to close; every pick from Sunday was graded overnight. One game on the board, Giants at Rams tonight, and its game lines carry no lean: the spread is a coin flip after calibration and the total is 1.2 points the wrong way. Three prop leans, all at DraftKings: Terrance Ferguson UNDER 32.5 receiving yards -110; Theo Johnson OVER 8.5 receiving yards -111; Devin Singletary OVER 15.5 rushing yards -116. No college until Thursday.",
+    "takeaways": [
+      "Jaxson Dart under 34.5 completions showed a 99.5% read this morning and was not published: DraftKings' completions line came through above his own 31.5 attempts line, which the game cannot produce. The parser now takes the rung below the attempts line as the number, or drops the market, and the research rule says to check a line against the player's other markets before believing it. A number the model loves that the book cannot have meant is a data error every time.",
+      "Two lines were also passed for price rather than for the read: Terrance Ferguson under 2.5 receptions at -151 and Davante Adams under 5.5 at -158. The prop rule now caps a lean at -200 and at one per player, so the same player's yards and receptions cannot both ride."
+    ],
+    "props": [
+      {
+        "id": "NFL-2026-W2-ferguson-under-32-5-recyds-dk",
+        "title": "Terrance Ferguson UNDER 32.5 receiving yards",
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "position": "TE",
+        "athleteId": "4570037",
+        "market": "recYds",
+        "line": 32.5,
+        "direction": "under",
+        "gameIds": [
+          "NFL-401872947"
+        ],
+        "book": "DraftKings",
+        "odds": -110,
+        "quotedAt": "2026-09-21T09:19:23Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's main number and price from the 5:19 AM ET capture; DraftKings is the only book with this game's player lines so far.",
+        "expiresAt": "2026-09-22T00:15:00Z",
+        "projection": 16.3,
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-20T23:54:03Z",
+        "edge": "v2 receiving yards 16.3 (80% range 0 to 39.1). Chance of under 32.5: 81.9% (uncalibrated: no graded history against a line yet), against 52.4% break-even at -110: +29.5 points, +0.563u per unit.",
+        "cutoff": "UNDER 32.5 at -110 or better. Closed to new entries at 32 or lower, or at -125 or worse at 32.5.",
+        "confidence": 2,
+        "why": "Prop lean on our number alone: our projection is 16.3 against 32.5 and the under reads 81.9% on the raw curve, which has no graded history against a line yet, so the true chance is lower than that. Our number is 16.3 yards against a 32.5 line, and the Rams' tight end room splits targets with Colby Parkinson. The role is settled by last season rather than by this season's single game. Inactives post at 6:45 PM; a player who does not play is voided under the book's rule.",
+        "risk": "Uncalibrated chance one game into the season, and yesterday six of these went 2-4. A tight end line turns on one target. Confidence 2 of 10.",
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401872947",
+          "https://api.sharpapi.io/api/v1/odds"
+        ]
+      },
+      {
+        "id": "NFL-2026-W2-theo-johnson-over-8-5-recyds-dk",
+        "title": "Theo Johnson OVER 8.5 receiving yards",
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "position": "TE",
+        "athleteId": "4429148",
+        "market": "recYds",
+        "line": 8.5,
+        "direction": "over",
+        "gameIds": [
+          "NFL-401872947"
+        ],
+        "book": "DraftKings",
+        "odds": -111,
+        "quotedAt": "2026-09-21T09:19:23Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's main number and price from the 5:19 AM ET capture; DraftKings is the only book with this game's player lines so far.",
+        "expiresAt": "2026-09-22T00:15:00Z",
+        "projection": 26.5,
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-20T23:54:03Z",
+        "edge": "v2 receiving yards 26.5 (80% range 0 to 55). Chance of over 8.5: 79.1% (uncalibrated: no graded history against a line yet), against 52.6% break-even at -111: +26.5 points, +0.503u per unit.",
+        "cutoff": "OVER 8.5 at -111 or better. Closed to new entries at 9+, or at -126 or worse at 8.5.",
+        "confidence": 2,
+        "why": "Prop lean on our number alone: our projection is 26.5 against 8.5 and the over reads 79.1% on the raw curve, which has no graded history against a line yet, so the true chance is lower than that. Our number is 26.5 yards against an 8.5 line; the Giants' tight end has been a steady short-area target. The role is settled by last season rather than by this season's single game. Inactives post at 6:45 PM; a player who does not play is voided under the book's rule.",
+        "risk": "Uncalibrated chance one game into the season, and yesterday six of these went 2-4. A tight end line turns on one target. Confidence 2 of 10.",
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401872947",
+          "https://api.sharpapi.io/api/v1/odds"
+        ]
+      },
+      {
+        "id": "NFL-2026-W2-singletary-over-15-5-rush-dk",
+        "title": "Devin Singletary OVER 15.5 rushing yards",
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "position": "RB",
+        "athleteId": "4040761",
+        "market": "rushYds",
+        "line": 15.5,
+        "direction": "over",
+        "gameIds": [
+          "NFL-401872947"
+        ],
+        "book": "DraftKings",
+        "odds": -116,
+        "quotedAt": "2026-09-21T09:19:23Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's main number and price from the 5:19 AM ET capture; DraftKings is the only book with this game's player lines so far.",
+        "expiresAt": "2026-09-22T00:15:00Z",
+        "projection": 27.2,
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-20T23:54:03Z",
+        "edge": "v2 rushing yards 27.2 (80% range 0.3 to 54.2). Chance of over 15.5: 71.1% (uncalibrated: no graded history against a line yet), against 53.7% break-even at -116: +17.4 points, +0.323u per unit.",
+        "cutoff": "OVER 15.5 at -116 or better. Closed to new entries at 16+, or at -131 or worse at 15.5.",
+        "confidence": 2,
+        "why": "Prop lean on our number alone: our projection is 27.2 against 15.5 and the over reads 71.1% on the raw curve, which has no graded history against a line yet, so the true chance is lower than that. Our number is 27.2 yards against 15.5, the most modest gap of tonight's reads, which is the kind that held up yesterday. The role is settled by last season rather than by this season's single game. Inactives post at 6:45 PM; a player who does not play is voided under the book's rule.",
+        "risk": "Uncalibrated chance one game into the season, and yesterday six of these went 2-4. A tight end line turns on one target. Confidence 2 of 10.",
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401872947",
+          "https://api.sharpapi.io/api/v1/odds"
+        ]
+      }
+    ],
+    "gameWatch": []
   }
 ]
