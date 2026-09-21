@@ -7459,5 +7459,32 @@
         "nextReviewAt": "2026-09-21T22:50:00Z"
       }
     ]
+  },
+  {
+    "league": "NFL",
+    "targetWeek": 2,
+    "publishedAt": "2026-09-21T16:19:12Z",
+    "summary": "11:45 AM ET run, published at 12:19 ET. Nothing settled; Giants at Rams tonight is the last game of week 2. Nothing closed, and one move worth explaining: Terrance Ferguson's receiving line went from 32.5 to 34.5 at both books. Our pick is the under, and a higher number is an easier under, so the rule that closes a pick to new entries has not fired: it closes at 32 or lower. The pick is graded at 32.5 as posted. Nothing new published. No NFL inactives today; tonight's come at 6:45 PM and the new night-game run takes them.",
+    "takeaways": [
+      "All three of this morning's prop leans now have a better number available than the one we published, because FanDuel posted this game's player lines after we went out on DraftKings alone: Ferguson under 32.5 against 34.5 on offer, Theo Johnson over 8.5 against 7.5, Devin Singletary over 15.5 against 14.5. Three for three the wrong way. Publishing while one book holds a game means no shopping and no second opinion on the number, and this is the cost of it in one night. The rule added to the prompt: when a single book has posted a game's props, say so in the quote note and wait for the next run unless kickoff is inside three hours.",
+      "Puka Nacua did not practise Friday or Saturday and is reported to be trending toward sitting, with the Rams treating it as a pre-game decision. Our projections already cut a questionable player to 75%; if he is ruled out at 6:45 he comes out entirely and the targets he leaves behind are part of why the market moved Ferguson's line up two yards. Our under is on the wrong side of that news, which is worth saying while the pick is still live rather than after it settles."
+    ],
+    "gameWatch": [
+      {
+        "id": "NFL-2026-W2-rams-target-share-watch",
+        "gameId": "NFL-401872947",
+        "title": "Rams receiving volume with Puka Nacua a pre-game decision",
+        "why": "Nacua sat out Friday and Saturday practice and is reported as trending toward missing, with the decision coming at the inactive list. The market has already moved Terrance Ferguson's receiving line from 32.5 to 34.5 at both books, which is the shape of targets moving toward the tight ends. Our published under 32.5 sits on the other side of it and is graded as posted.",
+        "needs": "The 6:45 PM inactive list, which the night-game run reads. If Nacua is out, the model removes him rather than cutting him to 75%.",
+        "sources": [
+          "https://sports.yahoo.com/nfl/article/puka-nacua-injury-update-rams-star-wideout-expected-to-be-a-game-time-decision-due-to-hip-and-groin-injuries-153146819.html",
+          "https://www.espn.com/nfl/game/_/gameId/401872947"
+        ],
+        "projection": 16.3,
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-21T11:58:42Z",
+        "nextReviewAt": "2026-09-21T22:50:00Z"
+      }
+    ]
   }
 ]

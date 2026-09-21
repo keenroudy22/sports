@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-21T15:53:39Z",
+  "updatedAt": "2026-09-21T16:20:59Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1157,12 +1157,21 @@
           "name": "Chicago Bears",
           "players": [
             {
+              "id": "4431611",
+              "name": "Caleb Williams",
+              "position": "QB",
+              "status": "Questionable",
+              "injury": "Hamstring",
+              "reportedAt": "2026-09-21T16:01Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4431611/caleb-williams"
+            },
+            {
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-21T15:42Z",
+              "reportedAt": "2026-09-21T16:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1218,15 +1227,6 @@
               "injury": null,
               "reportedAt": "2026-09-20T22:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4434153/tyson-bagent"
-            },
-            {
-              "id": "4431611",
-              "name": "Caleb Williams",
-              "position": "QB",
-              "status": "Questionable",
-              "injury": "Hamstring",
-              "reportedAt": "2026-09-20T20:54Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4431611/caleb-williams"
             },
             {
               "id": "4426374",
@@ -4837,15 +4837,6 @@
           "name": "New England Patriots",
           "players": [
             {
-              "id": "4046545",
-              "name": "Mike Onwenu",
-              "position": "G",
-              "status": "Out",
-              "injury": "Ankle",
-              "reportedAt": "2026-09-21T15:42Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4046545/mike-onwenu"
-            },
-            {
               "id": "3046439",
               "name": "Hunter Henry",
               "position": "TE",
@@ -4862,6 +4853,15 @@
               "injury": null,
               "reportedAt": "2026-09-21T00:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/4569923/andy-borregales"
+            },
+            {
+              "id": "4046545",
+              "name": "Mike Onwenu",
+              "position": "G",
+              "status": "Out",
+              "injury": "Ankle",
+              "reportedAt": "2026-09-20T22:43Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4046545/mike-onwenu"
             },
             {
               "id": "4361432",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "25",
-          "name": "Enrique Cruz Jr.",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-09-20T19:23:59Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4691556/enrique-cruz-jr"
-        },
-        {
-          "teamId": "25",
           "name": "Tatum Bethune",
           "from": "Active",
           "to": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Doubtful",
           "observedAt": "2026-09-21T15:53:39Z",
           "source": "https://www.espn.com/nfl/player/_/id/4685260/kelvin-banks-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-09-21T16:20:59Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-21T15:53:39Z",
-      "lastAttemptAt": "2026-09-21T15:53:39Z",
+      "checkedAt": "2026-09-21T16:20:59Z",
+      "lastAttemptAt": "2026-09-21T16:20:59Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-21T15:53:39Z",
-      "lastAttemptAt": "2026-09-21T15:53:39Z",
+      "checkedAt": "2026-09-21T16:20:59Z",
+      "lastAttemptAt": "2026-09-21T16:20:59Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
