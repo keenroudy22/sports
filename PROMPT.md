@@ -51,7 +51,7 @@ Work in the repository clone. Read `RESEARCH.md` on your first run and whenever 
 8. **Publish.** Write one new report file for the run, in the format in `RESEARCH.md`. A full game day carries, in this order of priority: researched picks (favorites), model leans on totals, prop leans on settled roles, and one longshot. Zero of any of them is fine.
    - Decide `favorite` now; it can never change.
    - Set `expiresAt` to the next scheduled run or kickoff, whichever comes first.
-   - At most five core props, three risky props and three parlays. Zero is fine.
+   - At most five core props, three risky props and three parlays, counting new picks only; a settlement revision can carry as many as the day settled. Zero is fine.
    - On a game day, one longshot parlay, and only one: check the day's reports in `research/` first. `python scripts/parlay.py` assembles it from the board, one leg per game, every leg at one book at the number its read was graded at, and prints the book's combined price. Publish it with `parlayType: "longshot"`, `riskUnits: 0.25`, `favorite: false`, the legs, and a `correlation` note saying the games are independent. It rides a quarter unit, is tracked apart from the straight picks, and never goes to X.
 9. **Weekly review.** On the first run after a week's games are all final, add `weeklyReview` notes. Cover v2 against the close by league, projections against the line, and what the picks got right and wrong. Take the numbers from `site/data/scoreboard.json`, not from memory.
 10. **Validate.** Run `python scripts/refresh.py`, then `python -m unittest discover -s tests`. If anything fails, fix your report. If `tests/test_integrity.py` fails, you changed the record: undo it. Never regenerate a ledger to make a test pass.

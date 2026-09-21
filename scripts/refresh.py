@@ -190,9 +190,12 @@ def validate_report(report, games):
     published = datetime.fromisoformat(report['publishedAt'].replace('Z', '+00:00'))
     assert published.tzinfo is not None
     assert published <= datetime.now(timezone.utc) + timedelta(minutes=5), 'Future publication date'
-    assert report.get('historicalImport') is True or len(report.get('props', [])) <= 5
-    assert len(report.get('riskyProps', [])) <= 3
-    assert len(report.get('parlays', [])) <= 3
+    # The caps limit what a run recommends, so they count new active picks; a revision that
+    # settles or closes something already on the record is not a new recommendation.
+    fresh = lambda key: [p for p in report.get(key, []) if p.get('status') == 'active']
+    assert report.get('historicalImport') is True or len(fresh('props')) <= 5
+    assert len(fresh('riskyProps')) <= 3
+    assert len(fresh('parlays')) <= 3
     assert isinstance(report.get('takeaways', []), list)
     assert isinstance(report.get('weeklyReview', []), list)
     if report.get('targetWeek') is not None:

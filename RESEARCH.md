@@ -50,7 +50,7 @@ One file per run: `research/YYYY-MM-DD-<LEAGUE>-<HHMM>-<slug>.json`, dated and t
 | `league` | `NFL` or `CFB` |
 | `publishedAt` | actual publication time, ISO UTC, never backdated |
 | `summary` | a few sentences on the run |
-| `props` | up to five core player props |
+| `props` | up to five core player props per run, counting new active picks only; settlement revisions are not capped |
 | `riskyProps` | up to three higher-variance props, tracked separately |
 | `gamePicks` | spread and total picks |
 | `parlays` | up to three, each at the book's actual combined price |

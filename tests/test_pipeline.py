@@ -47,7 +47,14 @@ class PipelineTests(unittest.TestCase):
 
     def test_overfilled_card_rejected(self):
         with self.assertRaises(AssertionError):
-            validate_report(dict(league='NFL',publishedAt='2026-09-14T12:00:00Z',props=[{}]*6), {})
+            validate_report(dict(league='NFL',publishedAt='2026-09-14T12:00:00Z',props=[dict(status='active')]*6), {})
+
+    def test_a_settlement_may_settle_more_props_than_a_card_may_recommend(self):
+        settled = dict(id='x', title='t', why='w', risk='r', sources=['https://example.com'], status='settled', result='win',
+                       actual='6 receptions', settledAt='2026-09-21T04:00:00Z', odds=-110,
+                       resultSource='https://www.espn.com/nfl/boxscore/_/gameId/1')
+        r = dict(league='NFL', publishedAt='2026-09-21T04:05:00Z', props=[dict(settled, id=f'x{i}') for i in range(6)])
+        self.assertIs(validate_report(r, {}), r, 'the cap counts new picks, not revisions')
 
     def test_late_analyst_score_rejected(self):
         g=self.game(); g['kickoff']='2026-09-13T20:00:00Z'
