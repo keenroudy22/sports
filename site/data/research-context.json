@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-21T13:07:44Z",
+  "updatedAt": "2026-09-21T14:25:06Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-21T12:00Z",
+              "reportedAt": "2026-09-21T14:15Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5757,6 +5757,15 @@
           "name": "Philadelphia Eagles",
           "players": [
             {
+              "id": "3121023",
+              "name": "Dallas Goedert",
+              "position": "TE",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-09-21T13:28Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3121023/dallas-goedert"
+            },
+            {
               "id": "4428850",
               "name": "Dontayvion Wicks",
               "position": "WR",
@@ -5791,15 +5800,6 @@
               "injury": null,
               "reportedAt": "2026-09-20T23:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/4040715/jalen-hurts"
-            },
-            {
-              "id": "3121023",
-              "name": "Dallas Goedert",
-              "position": "TE",
-              "status": "Questionable",
-              "injury": "Knee",
-              "reportedAt": "2026-09-20T17:57Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3121023/dallas-goedert"
             },
             {
               "id": "3929630",
@@ -6217,6 +6217,15 @@
           "name": "San Francisco 49ers",
           "players": [
             {
+              "id": "4693371",
+              "name": "James Thompson Jr.",
+              "position": "DT",
+              "status": "Doubtful",
+              "injury": "Ankle",
+              "reportedAt": "2026-09-21T14:05Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4693371/james-thompson-jr"
+            },
+            {
               "id": "3126486",
               "name": "Deebo Samuel Sr.",
               "position": "WR",
@@ -6269,15 +6278,6 @@
               "injury": "Hip",
               "reportedAt": "2026-09-20T23:40Z",
               "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans"
-            },
-            {
-              "id": "4693371",
-              "name": "James Thompson Jr.",
-              "position": "DT",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-09-20T22:21Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4693371/james-thompson-jr"
             },
             {
               "id": "4035686",
@@ -6474,6 +6474,15 @@
               "source": "https://www.espn.com/nfl/player/_/id/3912547/sam-darnold"
             },
             {
+              "id": "4685512",
+              "name": "Jadarian Price",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Chest",
+              "reportedAt": "2026-09-21T00:03Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4685512/jadarian-price"
+            },
+            {
               "id": "4430878",
               "name": "Jaxon Smith-Njigba",
               "position": "WR",
@@ -6481,15 +6490,6 @@
               "injury": null,
               "reportedAt": "2026-09-20T23:58Z",
               "source": "https://www.espn.com/nfl/player/_/id/4430878/jaxon-smith-njigba"
-            },
-            {
-              "id": "4685512",
-              "name": "Jadarian Price",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Chest",
-              "reportedAt": "2026-09-20T23:01Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4685512/jadarian-price"
             },
             {
               "id": "4259651",
@@ -7137,6 +7137,15 @@
           "name": "Washington Commanders",
           "players": [
             {
+              "id": "4262199",
+              "name": "Sam Cosmi",
+              "position": "G",
+              "status": "Questionable",
+              "injury": "Concussion",
+              "reportedAt": "2026-09-21T14:15Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4262199/sam-cosmi"
+            },
+            {
               "id": "2576980",
               "name": "Marcus Mariota",
               "position": "QB",
@@ -7351,36 +7360,11 @@
               "injury": null,
               "reportedAt": "2026-09-17T00:56Z",
               "source": "https://www.espn.com/nfl/player/_/id/4572460/tyler-owens"
-            },
-            {
-              "id": "4568617",
-              "name": "Jordan Magee",
-              "position": "LB",
-              "status": "Injured Reserve",
-              "injury": "Hamstring",
-              "reportedAt": "2026-09-17T00:24Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4568617/jordan-magee"
             }
           ]
         }
       },
       "changes": [
-        {
-          "teamId": "25",
-          "name": "Kaelon Black",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-09-20T19:23:59Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4696044/kaelon-black"
-        },
-        {
-          "teamId": "25",
-          "name": "Kurtis Rourke",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-09-20T19:23:59Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4430431/kurtis-rourke"
-        },
         {
           "teamId": "25",
           "name": "Jordan Watkins",
@@ -7764,11 +7748,27 @@
           "to": "Injured Reserve",
           "observedAt": "2026-09-21T06:31:52Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-09-21T14:25:06Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "25",
+          "name": "James Thompson Jr.",
+          "from": "Questionable",
+          "to": "Doubtful",
+          "observedAt": "2026-09-21T14:25:06Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4693371/james-thompson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-21T13:07:44Z",
-      "lastAttemptAt": "2026-09-21T13:07:44Z",
+      "checkedAt": "2026-09-21T14:25:06Z",
+      "lastAttemptAt": "2026-09-21T14:25:06Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-21T13:07:44Z",
-      "lastAttemptAt": "2026-09-21T13:07:44Z",
+      "checkedAt": "2026-09-21T14:25:06Z",
+      "lastAttemptAt": "2026-09-21T14:25:06Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
