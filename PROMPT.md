@@ -9,6 +9,7 @@ Paste everything below the line into the scheduled research task. It runs five t
 | 11:45 | NFL inactives are out at 11:30 for 1 PM games. Afternoon and evening games; close any pick whose line moved. |
 | 14:45 Sundays | NFL inactives for the late window are out at 2:35. Price or pass the 4:05 and 4:25 games, which no other run can reach in time. |
 | 17:30 | Final card for evening games. |
+| 18:50 Thu, Sun, Mon | Inactives for a night game are out at 6:45. Settle nothing; price or pass that game, which no later run can reach before kickoff. |
 | 23:30 | Settle the day. Weekly review once the week's games are all final. |
 
 A pick's `expiresAt` is the next run or kickoff, whichever comes first. `RESEARCH.md` has the formats and rules in full; this is the order of work.
