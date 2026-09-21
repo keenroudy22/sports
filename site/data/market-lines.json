@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-21T12:00:14Z",
+  "updatedAt": "2026-09-21T12:08:25Z",
   "status": "ok",
   "coverage": "Observed NFL/CFB player markets from saved research and dated public references. Not an exhaustive sportsbook menu. Rebuilding does not refresh quote times or create recommendations.",
   "freshnessPolicy": "Direct observed prices expire after at most 60 minutes or a sooner supplied expiry; all article/comparison prices require independent sportsbook recheck.",
@@ -6343,7 +6343,7 @@
       "odds": -113,
       "observedAt": "2026-09-20T21:11:40Z",
       "expiresAt": "2026-09-21T00:20:00Z",
-      "source": "https://www.espn.com/nfl/game/_/gameId/401872945",
+      "source": "https://api.sharpapi.io/api/v1/odds",
       "marketWindow": "Full game",
       "cutoff": "OVER 41.5 at -113 or better. Closed to new entries at 42+, or at -128 or worse at 41.5.",
       "quoteType": "source reference",
@@ -6365,9 +6365,19 @@
           "sourceDate": null,
           "sourcePart": null,
           "sourceTimeNote": null
+        },
+        {
+          "line": 41.5,
+          "odds": -113,
+          "observedAt": "2026-09-20T21:11:40Z",
+          "source": "https://api.sharpapi.io/api/v1/odds",
+          "quoteType": "source reference",
+          "sourceDate": null,
+          "sourcePart": null,
+          "sourceTimeNote": null
         }
       ],
-      "observationCount": 1,
+      "observationCount": 2,
       "originalRecommendations": [
         {
           "league": "NFL",
