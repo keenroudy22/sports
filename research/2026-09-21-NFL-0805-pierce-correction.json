@@ -1,0 +1,55 @@
+{
+ "league": "NFL",
+ "targetWeek": 2,
+ "publishedAt": "2026-09-21T12:05:47Z",
+ "summary": "Correction published at 8:05 ET to this morning's settlement of Alec Pierce over 41.5 receiving yards. The pick stays a loss, because DraftKings grades a prop on what the player did once he takes the field and voids only when he does not play at all. What the first settlement missed is that he left late in the first quarter with a heel injury and did not return, which makes the bet eligible for DraftKings' Early Exit credit: the stake comes back as credit while the wager itself still loses. The record now carries both, and marks the pick so early exits can be counted rather than argued about.",
+ "takeaways": [
+  "Rule for the record from here: a player prop is voided only when the book's own rule voids it, which means the player did not play. A player who takes the field and leaves hurt is a graded loss, and where the book runs an early-exit programme the stake coming back is recorded next to that loss, not instead of it. Units keep the graded truth and the credit is counted on its own line."
+ ],
+ "props": [
+  {
+   "id": "NFL-2026-W2-pierce-over-41-5-recyds-dk",
+   "title": "Alec Pierce OVER 41.5 receiving yards",
+   "status": "settled",
+   "favorite": false,
+   "modelLean": true,
+   "position": "WR",
+   "athleteId": "4360078",
+   "market": "recYds",
+   "line": 41.5,
+   "direction": "over",
+   "gameIds": [
+    "NFL-401872945"
+   ],
+   "book": "DraftKings",
+   "odds": -113,
+   "quotedAt": "2026-09-20T21:11:40Z",
+   "quoteType": "capture",
+   "quoteNote": "DraftKings's main number and price from the 5:11 PM ET SharpAPI capture, the best number on the board for this side; the other book had FanDuel 44.5 -113.",
+   "expiresAt": "2026-09-21T00:20:00Z",
+   "projection": 61.4,
+   "modelVersion": "v2.0",
+   "snapshotAt": "2026-09-20T21:11:37Z",
+   "edge": "v2 receiving yards 61.4 (80% range 13.5 to 109.3). Chance of over 41.5: 70.3% (uncalibrated: no graded history against a line yet), against 53.1% break-even at -113: +17.2 points, +0.325u per unit.",
+   "cutoff": "OVER 41.5 at -113 or better. Closed to new entries at 42+, or at -128 or worse at 41.5.",
+   "confidence": 2,
+   "why": "Correction to the settlement published at 12:05 AM, which recorded the loss without the injury. Pierce left late in the first quarter with a heel injury on his only target and did not return, so the 41.5-yard line was unreachable from the moment he exited.",
+   "risk": "A one-game role read on a deep threat, which is the model at its least reliable.",
+   "sources": [
+    "https://api.sharpapi.io/api/v1/odds",
+    "https://dknetwork.draftkings.com/2025/10/23/draftkings-sportsbook-expands-nfl-early-exit-to-live-player-props/",
+    "https://www.cbssports.com/nfl/news/colts-alec-pierce-injurychiefs/",
+    "https://www.espn.com/nfl/game/_/gameId/401872945",
+    "https://www.nbcsports.com/fantasy/football/player-news/2026-09-20/colts-release-week-2-inactives-for-snf-vs-chiefs"
+   ],
+   "result": "loss",
+   "actual": "Alec Pierce caught 1 pass for 11 yards and left late in the first quarter with a heel injury, ruled out and did not return. Under 41.5 receiving yards.",
+   "actualValue": 11,
+   "settledAt": "2026-09-21T04:05:56Z",
+   "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401872945",
+   "earlyExit": true,
+   "settlementReason": "The result stands as a loss: DraftKings settles a player prop on what the player did once he takes the field, and a void applies only when he does not play at all. Separately, DraftKings' Early Exit program credits the stake back on a pre-game full-game player prop when the player exits in the first half and does not return, which this was; the credit is a promotion, not a settlement, so the record keeps the graded loss and notes the credit."
+  }
+ ],
+ "gameWatch": []
+}

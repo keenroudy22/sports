@@ -278,6 +278,7 @@
       pending: picks.filter(p => !p.result).length, hitRate: wins + losses ? 100 * wins / (wins + losses) : null,
       priced: priced.length, pricedWins: priced.filter(p => p.result === 'win').length, pricedLosses: priced.filter(p => p.result === 'loss').length,
       unpriced: settled.filter(p => p.result !== 'void').length - priced.length, staked,
+      earlyExits: picks.filter(p => p.earlyExit).length,
       units: priced.length ? units : null, roi: priced.length >= minimum && staked > 0 ? 100 * units / staked : null, roiMinimum: minimum };
   };
   /* Parlays are staked at their own size, never a full unit, so they are summarized apart and never

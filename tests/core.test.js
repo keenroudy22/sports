@@ -218,6 +218,17 @@ test('a priced line on a thin sample says too early, not no edge', () => {
   assert.equal(solid.word, 'Slight lean');
 });
 
+test('an early exit credit is counted beside the loss, never instead of it', () => {
+  const picks = [
+    { kind: 'props', odds: -113, result: 'loss', earlyExit: true },
+    { kind: 'props', odds: -110, result: 'win' },
+  ];
+  const r = C.recordOf(picks, 2);
+  assert.equal(r.earlyExits, 1);
+  assert.deepEqual([r.wins, r.losses], [1, 1], 'the credited pick still lost');
+  assert.ok(r.units < 0, 'units keep the graded result');
+});
+
 // app.js runs in the browser, so nothing here loads it. Parsing it catches a broken
 // edit before it reaches the page, where the only symptom is a stuck "Loading" screen.
 test('app.js parses', () => {

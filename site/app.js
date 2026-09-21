@@ -101,7 +101,7 @@
     return `<button class="row" type="button" data-pick="${esc(pick.id)}">
       <span class="row-rail" style="background:${pick.result ? tone : esc(pick.color || 'var(--mint)')}"></span>
       <span class="row-main"><span class="row-top"><span class="row-name">${esc(pick.title || pick.player)}</span>
-        ${pick.favorite ? '<span class="pill pill-ours">Favorite</span>' : ''}${pick.modelLean ? '<span class="pill pill-reference">Model lean</span>' : ''}${C.isLongshot(pick) ? '<span class="pill pill-stale">Longshot</span>' : ''}${pick.historicalImport ? '<span class="pill pill-reference">Imported</span>' : ''}
+        ${pick.favorite ? '<span class="pill pill-ours">Favorite</span>' : ''}${pick.modelLean ? '<span class="pill pill-reference">Model lean</span>' : ''}${pick.earlyExit ? '<span class="pill pill-closed">Early exit credit</span>' : ''}${C.isLongshot(pick) ? '<span class="pill pill-stale">Longshot</span>' : ''}${pick.historicalImport ? '<span class="pill pill-reference">Imported</span>' : ''}
         <span class="pill pill-${C.pickState(pick).tone}">${esc(C.pickState(pick).word)}</span></span>
         <span class="row-market">${pick.actual ? esc(pick.actual) : (pick.legs || []).length ? `${pick.legs.length} legs${pick.riskUnits != null && pick.riskUnits !== 1 ? ` · ${esc(pick.riskUnits)}u` : ''}` : pick.projection != null ? 'Our number ' + esc(pick.projection) : ''}</span>
         <span class="row-meta">${esc(whenShort(pick.kickoff || pick.publishedAt))}${pick.confidence != null ? ` · confidence ${esc(pick.confidence)}/10` : ''}${pick.quotedAt ? ' · quoted ' + esc(ago(pick.quotedAt)) : ''}</span></span>
@@ -217,6 +217,7 @@
       </div>
       ${r.unpriced ? `<p class="row-meta" style="margin:12px 0 0">${plural(r.unpriced, 'pick')} ${r.unpriced === 1 ? 'has' : 'have'} no recorded price, so ${r.unpriced === 1 ? 'it counts' : 'they count'} in the record but not in units or ROI.</p>` : ''}
       ${r.model && (r.model.wins + r.model.losses + r.model.pushes + r.model.pending) ? `<p class="row-meta" style="margin:12px 0 0">Researched ${r.researched.wins}–${r.researched.losses}${r.researched.units == null ? '' : ` (${signed(r.researched.units, 2)}u)`} · Model leans ${r.model.wins}–${r.model.losses}${r.model.units == null ? '' : ` (${signed(r.model.units, 2)}u)`}${r.model.pending ? `, ${r.model.pending} pending` : ''}</p>` : ''}
+      ${r.earlyExits ? `<p class="row-meta" style="margin:8px 0 0">${plural(r.earlyExits, 'pick')} lost with the player hurt inside the first half, where the book credits the stake back. The loss is what the record counts; the credit is not units we won.</p>` : ''}
       ${r.parlays ? `<p class="row-meta" style="margin:8px 0 0">Longshots are kept out of the numbers above and tracked at their own stake: ${r.parlays.wins}–${r.parlays.losses}${r.parlays.units == null ? '' : `, ${signed(r.parlays.units, 2)}u on ${r.parlays.staked}u risked`}.</p>` : ''}
     </div>`;
   };
@@ -682,7 +683,7 @@
     const what = [p.actual ? String(typeof p.actual === 'string' ? p.actual : JSON.stringify(p.actual)).split(/[.;]\s/)[0] : '', c && c.clv != null ? `CLV ${signed(c.clv)}` : ''].filter(Boolean).join(' · ');
     return `<button class="row" type="button" data-pick="${esc(p.id)}">
       <span class="row-rail" style="background:${p.result === 'win' ? 'var(--green)' : p.result === 'loss' ? 'var(--rose)' : 'var(--line)'}"></span>
-      <span class="row-main"><span class="row-top"><span class="row-name">${esc(p.title || p.player)}</span><span class="pill pill-${state_.tone}">${esc(state_.word)}</span>${p.modelLean ? '<span class="pill pill-reference">Model lean</span>' : ''}${C.isLongshot(p) ? '<span class="pill pill-stale">Longshot</span>' : ''}${p.historicalImport ? '<span class="pill pill-reference">Imported</span>' : ''}</span>
+      <span class="row-main"><span class="row-top"><span class="row-name">${esc(p.title || p.player)}</span><span class="pill pill-${state_.tone}">${esc(state_.word)}</span>${p.modelLean ? '<span class="pill pill-reference">Model lean</span>' : ''}${p.earlyExit ? '<span class="pill pill-closed">Early exit credit</span>' : ''}${C.isLongshot(p) ? '<span class="pill pill-stale">Longshot</span>' : ''}${p.historicalImport ? '<span class="pill pill-reference">Imported</span>' : ''}</span>
         <span class="row-meta clamp">${esc(whenShort(p.kickoff || p.publishedAt))}${what ? ' · ' + esc(what) : ''}</span></span>
       <span class="row-price"><span class="row-odds num ${u > 0 ? 'up' : u < 0 ? 'down' : ''}">${u == null ? (p.odds == null ? '' : odds(p.odds)) : signed(u, 2) + 'u'}</span><span class="row-book">${p.odds == null ? 'no price recorded' : `${esc(p.book || '')} ${odds(p.odds)}`}</span></span>
     </button>`;

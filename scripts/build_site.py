@@ -628,6 +628,7 @@ def board_picks(first, latest, by_id, identities):
         game = by_id.get((pick.get('gameIds') or [None])[0]) or {}
         rows.append({'id': key, 'league': pick.get('league'), 'kind': pick.get('kind'), 'title': pick.get('title'),
                      'riskUnits': pick.get('riskUnits'), 'modelLean': pick.get('modelLean') is True,
+                     'earlyExit': recent.get('earlyExit') is True,
                      'player': pick.get('player'), 'athleteId': pick.get('athleteId'), 'position': pick.get('position'),
                      'gameId': (pick.get('gameIds') or [None])[0], 'line': pick.get('line'),
                      'direction': pick.get('direction'), 'book': pick.get('book'), 'odds': pick.get('odds'),
