@@ -34,6 +34,7 @@ import features
 import model_v2
 import odds_api
 import pricing
+import sharp_odds
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -570,6 +571,10 @@ def build(now=None):
         line['grade'] = None if fcs else grade_line(line, snapshot, thin)
         line['gradeNote'] = 'FBS vs FCS: v2 is not reliable here' if fcs and line.get('state') == 'open' else None
     prop_prices = {gid: rows[-1] for gid, rows in load_store('prop-odds').items()}
+    # A stored capture can hold a line the game cannot produce; clean it before it reaches the board.
+    for record in prop_prices.values():
+        for book in (record.get('books') or {}).values():
+            sharp_odds.drop_impossible(book.get('markets') or {})
     lines += prop_rows(captures, by_id, forecasts, names, appearances, identities, now, prop_prices, established)
     for game in sorted(window, key=lambda g: (g['kickoff'], g['id'])):
         snaps_for = pregame(forecasts.get(game['id'], []), game['kickoff'])
@@ -679,8 +684,13 @@ def person(name):
     return ' '.join(words)
 
 
-def price_quotes(record, market, name):
-    """Every book's quote for one player's market in a capture: [(book, line, over, under)]."""
+def price_quotes(record, market, name, anchor=None):
+    """Every book's quote for one player's market: [(book, line, over, under)].
+
+    ESPN's feed carries the book's main number, so when a book's ladder holds that same
+    number it is the rung we price, whatever the odds feed flagged as its main line. One
+    feed said a quarterback's main completions line was 34.5 with 19.5 as the alternate.
+    """
     if not record:
         return []
     want = person(name)
@@ -688,8 +698,13 @@ def price_quotes(record, market, name):
     for book, entry in (record.get('books') or {}).items():
         players = (entry.get('markets') or {}).get(market) or {}
         match = next((q for who, q in players.items() if person(who) == want), None)
-        if match and isinstance(match.get('line'), (int, float)):
-            out.append((book, match['line'], match.get('over'), match.get('under')))
+        if not match or not isinstance(match.get('line'), (int, float)):
+            continue
+        if anchor is not None and match['line'] != anchor:
+            rung = next((a for a in match.get('alternates') or [] if a.get('line') == anchor), None)
+            if rung:
+                match = rung
+        out.append((book, match['line'], match.get('over'), match.get('under')))
     return out
 
 
@@ -732,15 +747,18 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, p
                         lean = 'over' if over >= under else 'under'
                         chance = max(over, under)
                         thin = not settled_role(athlete, game[side]['id'] if side else None, appearances, established)
+                        limited = bool(player.get('limited'))
                         grade = {'chance': round(chance, 3), 'raw': round(chance, 3), 'calibrated': False,
                                  'push': round(push, 3), 'needs': None, 'edge': round(100 * (chance - 0.5), 1),
                                  'projection': round(mean, 1), 'thin': thin, 'games': appearances[str(athlete)],
-                                 'tier': 'lean' if chance >= 0.6 and not thin else 'pass', 'model': snapshot['model'],
-                                 'snapshotAt': snapshot['publishedAt']}
+                                 'limited': limited,
+                                 # A questionable player is a coin flip on snaps before it is a read on volume.
+                                 'tier': 'lean' if chance >= 0.6 and not thin and not limited else 'pass',
+                                 'model': snapshot['model'], 'snapshotAt': snapshot['publishedAt']}
                 name = names.get(athlete, f'Athlete {athlete}')
                 team = game[side]['abbreviation'] if side else None
                 # A price turns a read into a line that can be graded against what it needs.
-                quotes = price_quotes(priced, key, name)
+                quotes = price_quotes(priced, key, name, main)
                 row = {'id': f'prop-{gid}-{athlete}-{key}', 'league': game['league'], 'gameId': gid,
                        'player': name, 'athleteId': str(athlete), 'position': player['pos'] if player else None,
                        'market': pricing.WORDS[key], 'direction': lean, 'line': main, 'odds': None,
@@ -765,13 +783,14 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, p
                         try:
                             p = pricing.price(snapshot, key, lean, float(line), int(odds), athlete)
                             settled = settled_role(athlete, game[side]['id'] if side else None, appearances, established)
+                            limited = bool(player.get('limited'))
                             row['grade'] = {'chance': p['chance'], 'raw': p['rawChance'], 'calibrated': p['calibrated'],
                                             'push': p['push'], 'needs': p['breakEven'], 'edge': p['edgePoints'],
-                                            'projection': p['projection'], 'thin': not settled,
+                                            'projection': p['projection'], 'thin': not settled, 'limited': limited,
                                             'games': appearances[str(athlete)],
                                             # Player projections have no graded history, so a prop never reads stronger
                                             # than a lean, and an unsettled role never reads as one at all.
-                                            'tier': 'lean' if p['chance'] >= 0.6 and settled else 'pass',
+                                            'tier': 'lean' if p['chance'] >= 0.6 and settled and not limited else 'pass',
                                             'model': p['model'], 'snapshotAt': p['snapshotAt']}
                         except ValueError:
                             pass

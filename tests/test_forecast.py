@@ -28,7 +28,9 @@ class InjuryTests(unittest.TestCase):
         context = {'leagues': {'NFL': {'teams': {'1': {'players': [
             entry('a', 'Out', 1), entry('b', 'Injured Reserve', 10), entry('c', 'Questionable', 1),
             entry('d', 'Doubtful', 2), entry('e', 'Out', 400), {'id': 'f', 'status': 'Out', 'reportedAt': 'garbage'}]}}}}}
-        self.assertEqual(forecast.injuries(context, 'NFL', NOW), {'1': {'a': 'Out', 'b': 'Injured Reserve', 'd': 'Doubtful'}})
+        ruled, limited = forecast.injuries(context, 'NFL', NOW)['1']
+        self.assertEqual(ruled, {'a': 'Out', 'b': 'Injured Reserve', 'd': 'Doubtful'})
+        self.assertEqual(limited, {'c': 'Questionable'}, 'questionable is not removed, it is cut back')
         self.assertEqual(forecast.injuries({}, 'CFB', NOW), {})
 
 
@@ -75,6 +77,19 @@ class PublishTests(unittest.TestCase):
         self.assertEqual(second['supersedes'], first['publishedAt'])
         self.assertEqual(second['inputs']['ruledOut']['home'], ['A-w1'])
         self.assertNotIn('A-w1', {p['id'] for p in second['players']['home']['players']})
+
+    def test_a_questionable_player_keeps_a_smaller_share_and_is_marked(self):
+        self.publish()
+        questionable = {'leagues': {'NFL': {'teams': {'A': {'players': [
+            {'id': 'A-w1', 'status': 'Questionable', 'reportedAt': fakegames.stamp(NOW)}]}}}}}
+        self.assertEqual(self.publish(context=questionable, now=NOW + timedelta(hours=4)), {'nfl-2025.jsonl': 1})
+        first, second = self.lines()
+        self.assertEqual(second['inputs']['limited']['home'], ['A-w1'])
+        before = next(p for p in first['players']['home']['players'] if p['id'] == 'A-w1')
+        after = next(p for p in second['players']['home']['players'] if p['id'] == 'A-w1')
+        self.assertTrue(after.get('limited'), 'the projection says the player is limited')
+        if before.get('targets') and after.get('targets'):
+            self.assertLess(after['targets'][0], before['targets'][0], 'a limited player projects for less volume')
 
     def test_small_moves_are_not_material_but_real_ones_are(self):
         self.publish()

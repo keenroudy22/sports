@@ -34,25 +34,31 @@ HORIZON = timedelta(days=8)
 BUFFER = timedelta(minutes=60)       # no new forecast inside an hour of kickoff
 INJURY_FRESH = timedelta(days=21)    # older injury entries are ignored
 RULED_OUT = {'out', 'injured reserve', 'doubtful', 'suspension'}
+LIMITED = {'questionable', 'game-time decision'}
 MATERIAL = {'points': 0.5, 'share': 0.10, 'floor': 0.5}  # what counts as a changed forecast
 PLAYERS_PER_TEAM = {'NFL': 14, 'CFB': 8}
 
 
 def injuries(context, league, now):
-    """team ID -> {athlete ID: status} for recent Out/IR/Doubtful entries."""
+    """team ID -> ({athlete: status} ruled out, {athlete: status} limited), from recent entries."""
     teams = ((context or {}).get('leagues', {}).get(league) or {}).get('teams') or {}
     out = {}
     for team, data in teams.items():
-        ruled = {}
+        ruled, limited = {}, {}
         for player in data.get('players', []):
             reported = player.get('reportedAt')
             try:
                 fresh = reported and now - features.when(reported) <= INJURY_FRESH
             except ValueError:
                 fresh = False
-            if fresh and str(player.get('status', '')).lower() in RULED_OUT and player.get('id'):
+            status = str(player.get('status', '')).lower()
+            if not fresh or not player.get('id'):
+                continue
+            if status in RULED_OUT:
                 ruled[str(player['id'])] = player['status']
-        out[str(team)] = ruled
+            elif status in LIMITED:
+                limited[str(player['id'])] = player['status']
+        out[str(team)] = (ruled, limited)
     return out
 
 
@@ -63,6 +69,8 @@ def compact(side):
     players = []
     for player in side['players']:
         line = {'id': player['id'], 'pos': player['pos']}
+        if player.get('limited'):
+            line['limited'] = True      # questionable on the report when this was published
         for stat in projections.STATS:
             if stat in player:
                 value = player[stat]
@@ -87,7 +95,7 @@ def material(record, previous):
     if abs(record['margin'] - previous['margin']) >= MATERIAL['points'] or \
             abs(record['total'] - previous['total']) >= MATERIAL['points']:
         return True
-    if record['inputs']['ruledOut'] != previous['inputs']['ruledOut']:
+    if (record['inputs']['ruledOut'], record['inputs'].get('limited')) != (previous['inputs']['ruledOut'], previous['inputs'].get('limited')):
         return True
     now, before = volumes(record), volumes(previous)
     if now.keys() != before.keys():
@@ -112,8 +120,8 @@ def why(model, forecast, home, away, league):
         parts.append(f"Margin blends {weight:.0%} of the older Elo baseline.")
     if forecast['sparse']:
         parts.append('At least one team has fewer than three games this season; treat with extra caution.')
-    parts.append('No injury, weather or market input in the score. Injuries only remove ruled-out players from '
-                 'player volume.')
+    parts.append('No injury, weather or market input in the score. On player volume the injury report removes '
+                 f'players ruled out and cuts a questionable player to {projections.LIMITED_SHARE:.0%} of their share.')
     return ' '.join(parts)
 
 
@@ -123,9 +131,10 @@ def snapshot(league, game, model, history, slope, priors, ruled_out, now):
     sides = {}
     for side, rival, margin in (('home', away, forecast['margin']), ('away', home, -forecast['margin'])):
         team = game[side]['id']
-        unavailable = set(ruled_out.get(team, {}))
+        out_here, limited_here = ruled_out.get(team, ({}, {}))
+        unavailable, limited = set(out_here), set(limited_here)
         projected = projections.project_team(history, league, team, rival, now, game['season'], margin, slope,
-                                             priors, unavailable)
+                                             priors, unavailable, limited)
         if projected:
             projected['players'] = projected['players'][:PLAYERS_PER_TEAM[league]]
         sides[side] = compact(projected)
@@ -151,7 +160,8 @@ def snapshot(league, game, model, history, slope, priors, ruled_out, now):
                                'away': {'margin': model.margin.team(away), 'total': model.total.team(away)},
                                'homeField': round(model.margin.beta[1], 2)},
                    'passSlope': round(slope, 5),
-                   'ruledOut': {side: sorted(ruled_out.get(game[side]['id'], {})) for side in ('home', 'away')},
+                   'ruledOut': {side: sorted(ruled_out.get(game[side]['id'], ({}, {}))[0]) for side in ('home', 'away')},
+                   'limited': {side: sorted(ruled_out.get(game[side]['id'], ({}, {}))[1]) for side in ('home', 'away')},
                    'injuryCoverage': 'ESPN injury report' if league == 'NFL' else 'college injury reports are not covered'},
         'why': why(model, forecast, home, away, league),
     }

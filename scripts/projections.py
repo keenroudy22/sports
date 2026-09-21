@@ -177,7 +177,15 @@ def spread(league, stat, mean):
     return {'mean': round(mean, 1), 'low': round(max(0.0, mean - Z80 * sd), 1), 'high': round(mean + Z80 * sd, 1)}
 
 
-def project_team(history, league, team, rival, cutoff, season, margin, slope, league_priors, unavailable=()):
+# A player the report calls questionable is not a healthy player: some sit, and those who play
+# often leave early or take fewer snaps. Their share is scaled and the rest goes to teammates,
+# the same way a ruled-out player's does. The factor is a judgment, not a fitted number: we hold
+# no history of injury reports to fit it, so it is set where it changes a read without inventing
+# an edge, and every forecast says how many players it touched.
+LIMITED_SHARE = 0.75
+
+
+def project_team(history, league, team, rival, cutoff, season, margin, slope, league_priors, unavailable=(), limited=()):
     """Team volume and player projections for one side of one game."""
     games = history.team_games(team, cutoff, WINDOW)
     # Recent games across seasons: early in a season one game must not set a role.
@@ -240,6 +248,11 @@ def project_team(history, league, team, rival, cutoff, season, margin, slope, le
         if shrunk:
             for s in shares.values():
                 s[stat] *= min(raw[stat], 1.0) / shrunk
+    # A limited player keeps part of their share before anything is redistributed.
+    for pid in limited:
+        if pid in shares and pid not in unavailable:
+            for stat in ('targets', 'car', 'att'):
+                shares[pid][stat] *= LIMITED_SHARE
     # Players ruled out give their share to everyone else in proportion; a
     # team's shares never add up to more than all of its volume.
     active = {pid: s for pid, s in shares.items() if pid not in unavailable}
@@ -260,6 +273,8 @@ def project_team(history, league, team, rival, cutoff, season, margin, slope, le
         eff = efficiency(history, pid, cutoff, league, prior)
         projection = {'id': pid, 'name': info['name'], 'pos': info['pos'],
                       'share': {k: round(v, 3) for k, v in share.items() if v}}
+        if pid in limited:
+            projection['limited'] = True
         targets = share['targets'] * volume['targets']
         carries = share['car'] * volume['carries']
         attempts = share['att'] * volume['att']

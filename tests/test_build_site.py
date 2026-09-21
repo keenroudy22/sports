@@ -181,6 +181,31 @@ class PropRowTests(unittest.TestCase):
                                      None, {('10', '9')})
         self.assertTrue(moved[0]['grade']['thin'], 'the same player on a new team is a new role')
 
+    def test_a_price_is_taken_at_the_number_the_feed_shows(self):
+        record = {'retrievedAt': '2026-09-21T09:00:00Z', 'source': 'https://example.test/odds', 'books': {
+            'draftkings': {'markets': {'cmp': {'Jaxson Dart': {'line': 34.5, 'over': -114, 'under': -113,
+                                                              'alternates': [{'line': 19.5, 'over': -125, 'under': -102}]}}}}}}
+        self.assertEqual(build_site.price_quotes(record, 'cmp', 'Jaxson Dart', 19.5), [('draftkings', 19.5, -125, -102)],
+                         "the rung matching the feed's number is the one priced")
+        self.assertEqual(build_site.price_quotes(record, 'cmp', 'Jaxson Dart', 24.5), [('draftkings', 34.5, -114, -113)],
+                         'with no matching rung the book keeps its own number')
+        self.assertEqual(build_site.price_quotes(record, 'cmp', 'Nobody', 19.5), [])
+
+    def test_a_questionable_player_never_reads_as_a_lean(self):
+        game = {'id': 'NFL-1', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-09-20T17:00:00Z',
+                'home': {'id': '1', 'abbreviation': 'ATL'}, 'away': {'id': '2', 'abbreviation': 'CAR'}}
+        player = {'id': '10', 'pos': 'WR', 'recYds': [70.0, 40.5, 99.5], 'limited': True}
+        snapshot = {'gameId': 'NFL-1', 'league': 'NFL', 'model': 'v2.0', 'publishedAt': '2026-09-19T12:00:00Z',
+                    'players': {'home': {'players': [player]}, 'away': None}}
+        capture = {'retrievedAt': '2026-09-19T12:05:00Z', 'source': 'https://example.test/props', 'lines': {'10': {'recYds': [55.5, 55.5]}}}
+        now = datetime(2026, 9, 19, 13, tzinfo=timezone.utc)
+        row = build_site.prop_rows({'NFL-1': [capture]}, {'NFL-1': game}, {'NFL-1': [snapshot]}, {'10': 'Player Ten'}, {'10': 5}, {}, now)[0]
+        self.assertTrue(row['grade']['limited'])
+        self.assertEqual(row['grade']['tier'], 'pass', 'five games of role does not outrank a questionable tag')
+        healthy = dict(snapshot, players={'home': {'players': [{k: v for k, v in player.items() if k != 'limited'}]}, 'away': None})
+        ok = build_site.prop_rows({'NFL-1': [capture]}, {'NFL-1': game}, {'NFL-1': [healthy]}, {'10': 'Player Ten'}, {'10': 5}, {}, now)[0]
+        self.assertEqual(ok['grade']['tier'], 'lean')
+
     def test_a_thin_sample_prop_stays_grey(self):
         game = {'id': 'NFL-1', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-09-20T17:00:00Z',
                 'home': {'id': '1', 'abbreviation': 'ATL'}, 'away': {'id': '2', 'abbreviation': 'CAR'}}

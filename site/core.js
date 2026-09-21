@@ -240,13 +240,15 @@
     if (g.needs == null && g.projection != null) {
       const side = (row || {}).direction ? ` ${(row || {}).direction}` : '';
       const parts = [`our number ${g.projection} against ${(row || {}).line ?? 'the line'}`, `${pct(g.chance)}${side}`];
+      if (g.limited) parts.push('questionable on the report');
       if (g.games != null) parts.push(`${g.games} game${g.games === 1 ? '' : 's'} this season`);
-      return { tier: g.tier, word: g.tier === 'lean' ? 'Slight lean' : g.thin ? 'Too early to lean' : 'Close to the line',
+      return { tier: g.tier, word: g.tier === 'lean' ? 'Slight lean' : g.limited ? 'Questionable' : g.thin ? 'Too early to lean' : 'Close to the line',
         detail: parts.join(' · ') };
     }
     const parts = [`${pct(g.chance)} to win${g.push >= 0.01 ? `, ${pct(g.push)} push` : ''}`,
       g.needs == null ? 'no price yet' : `needs ${pct(g.needs)}`];
     if (g.thin) parts.push('thin sample');
+    if (g.limited) parts.push('questionable on the report');
     if (g.calibrated === false) parts.push('uncalibrated');
     /* A thin sample with a real gap is not "no edge": it is a read we will not trust on one or two games. */
     const word = g.tier === 'pass' && g.thin && g.edge != null && g.edge >= 2 ? 'Too early to lean' : GRADE_WORD[g.tier] || GRADE_WORD.pass;
