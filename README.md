@@ -80,7 +80,7 @@ python scripts/features.py                     coverage and agreement with offic
 
 ## Publishing research
 
-`PROMPT.md` is the scheduled research run (8:30, 11:30, 17:30 and 23:30 Eastern) and `RESEARCH.md` holds the rules it follows. A run settles finished picks, closes picks whose line has moved past the entry rules, screens where v2 and the market disagree, researches and prices a few candidates, and publishes a dated JSON report to `research/`. Every number in a pick comes from `scripts/desk.py` or a linked source:
+`PROMPT.md` is the scheduled research run (6:45, 8:30, 11:45, 17:30 and 23:30 Eastern, plus 14:45 on Sundays and 18:50 before a night game) and `RESEARCH.md` holds the rules it follows. A run may publish four kinds of pick: a researched pick with a sourced reason, a model lean on a total, a prop lean on a settled role, and one longshot parlay a game day at a quarter unit. A run settles finished picks, closes picks whose line has moved past the entry rules, screens where v2 and the market disagree, researches and prices a few candidates, and publishes a dated JSON report to `research/`. Every number in a pick comes from `scripts/desk.py` or a linked source:
 
 ```
 python scripts/desk.py slate NFL                                  where v2 and the market differ most
