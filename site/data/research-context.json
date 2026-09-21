@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-21T16:20:59Z",
+  "updatedAt": "2026-09-21T16:34:56Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1157,6 +1157,15 @@
           "name": "Chicago Bears",
           "players": [
             {
+              "id": "4361748",
+              "name": "Anthony Johnson Jr.",
+              "position": "S",
+              "status": "Injured Reserve",
+              "injury": "Undisclosed",
+              "reportedAt": "2026-09-21T16:11Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+            },
+            {
               "id": "4431611",
               "name": "Caleb Williams",
               "position": "QB",
@@ -1164,15 +1173,6 @@
               "injury": "Hamstring",
               "reportedAt": "2026-09-21T16:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431611/caleb-williams"
-            },
-            {
-              "id": "4361748",
-              "name": "Anthony Johnson Jr.",
-              "position": "S",
-              "status": "Injured Reserve",
-              "injury": "Undisclosed",
-              "reportedAt": "2026-09-21T16:00Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
               "id": "4723086",
@@ -2307,6 +2307,15 @@
           "name": "Detroit Lions",
           "players": [
             {
+              "id": "3123938",
+              "name": "Avonte Maddox",
+              "position": "CB",
+              "status": "Out",
+              "injury": "Foot",
+              "reportedAt": "2026-09-21T16:11Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3123938/avonte-maddox"
+            },
+            {
               "id": "4372099",
               "name": "Aidan Hutchinson",
               "position": "DE",
@@ -2413,15 +2422,6 @@
               "injury": null,
               "reportedAt": "2026-09-18T04:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/4374302/amon-ra-st-brown"
-            },
-            {
-              "id": "3123938",
-              "name": "Avonte Maddox",
-              "position": "CB",
-              "status": "Questionable",
-              "injury": "Foot",
-              "reportedAt": "2026-09-18T04:01Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3123938/avonte-maddox"
             },
             {
               "id": "4429795",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "25",
-          "name": "Tatum Bethune",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-09-20T19:23:59Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4426698/tatum-bethune"
-        },
-        {
-          "teamId": "25",
           "name": "Eddy Pineiro",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Injured Reserve",
           "observedAt": "2026-09-21T16:20:59Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "8",
+          "name": "Avonte Maddox",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-09-21T16:34:56Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3123938/avonte-maddox"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-21T16:20:59Z",
-      "lastAttemptAt": "2026-09-21T16:20:59Z",
+      "checkedAt": "2026-09-21T16:34:56Z",
+      "lastAttemptAt": "2026-09-21T16:34:56Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-21T16:20:59Z",
-      "lastAttemptAt": "2026-09-21T16:20:59Z",
+      "checkedAt": "2026-09-21T16:34:56Z",
+      "lastAttemptAt": "2026-09-21T16:34:56Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
