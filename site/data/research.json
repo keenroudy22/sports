@@ -7546,5 +7546,91 @@
       "https://api.sharpapi.io/api/v1/odds (key withheld)",
       "https://api.the-odds-api.com/v4 (key withheld)"
     ]
+  },
+  {
+    "league": "NFL",
+    "targetWeek": 2,
+    "publishedAt": "2026-09-21T23:29:00Z",
+    "summary": "6:50 PM ET night-game run, published at 7:29 ET. Giants at Rams, 8:15 PM. Puka Nacua is inactive with a hip, confirmed on the inactive list at 6:50 PM, and Giants tight end Thomas Fidone is out as well. Nothing settled. One pick closed to new entries: Theo Johnson's receiving line went from 8.5 to 9.5 at every book carrying it, past the 9 or higher cutoff we published this morning, so the over is closed and graded as posted at 8.5 and minus 111. Nothing new published, and the reason matters more than the result: our forecast for this game is frozen at 11:58 AM, an hour before kickoff by design, and that snapshot still has Nacua playing at 75% of his share. Every player number we hold on this game was computed with a receiver in it who is not dressing. We will not price a card off it.",
+    "takeaways": [
+      "Nacua out is the news, and our own numbers cannot absorb it. The forecast takes no new snapshot inside an hour of kickoff, which is a rule worth keeping, so the last one for this game is 11:58 AM and it cuts Nacua to 75% rather than removing him: 7.9 targets and 71.7 receiving yards that will in fact be shared among Davante Adams, Colby Parkinson, Tyler Higbee, Terrance Ferguson and the backs. Every Rams pass catcher on our board is therefore under projected by an unknown amount, and the only honest response is to publish nothing on this game rather than estimate the redistribution by hand.",
+      "Our published Ferguson under is on the wrong side of it, as flagged at 12:19 and again at 6:10. The market has him at 34.5 at BetMGM, BetRivers, DraftKings and ESPN BET and 33.5 at FanDuel, against our 32.5. A higher number is an easier under so no cutoff fires, and the pick is graded as posted. It is a two yard worse number than the close and the pick was made with one book on the screen.",
+      "Theo Johnson is the one that went our way, and it is the same news that did it. Thomas Fidone is out for the Giants, which thins the tight end room behind Isaiah Likely, and the market moved Johnson's receiving line from 8.5 this morning to 9.5 at four books. For an over a lower number is the better one, so our 8.5 beats the close by a yard: the first positive closing line value of the three. The same move closes it to new entries under its own rule.",
+      "Devin Singletary is the worst of the three and it is not close. His rushing line was 15.5 when we took the over at 5:19 AM and it is 9.5 at ESPN BET, 10.5 at DraftKings, 11.5 at FanDuel and 12.5 at BetRivers now, with Najee Harris active off the same inactive list. That is four to six yards of market move against a pick we made on one book's number before any of the other four had posted. The cutoff closes at 16 or higher so it stays open and graded at 15.5, which is the correct outcome and an expensive one. Three picks, three one book quotes, and the shopping rule added at lunchtime today would have caught all three."
+    ],
+    "props": [
+      {
+        "id": "NFL-2026-W2-theo-johnson-over-8-5-recyds-dk",
+        "title": "Theo Johnson OVER 8.5 receiving yards",
+        "status": "expired",
+        "favorite": false,
+        "modelLean": true,
+        "position": "TE",
+        "athleteId": "4429148",
+        "market": "recYds",
+        "line": 8.5,
+        "direction": "over",
+        "gameIds": [
+          "NFL-401872947"
+        ],
+        "book": "DraftKings",
+        "odds": -111,
+        "quotedAt": "2026-09-21T09:19:23Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's main number and price from the 5:19 AM ET capture; DraftKings is the only book with this game's player lines so far.",
+        "expiresAt": "2026-09-22T00:15:00Z",
+        "entryNote": "Closed to new entries at 7:22 PM ET: the receiving line is 9.5 at BetMGM at -110, DraftKings at -107, ESPN BET at -120 and FanDuel at -113, and no book still offers 8.5. The published cutoff closes this pick at 9 or higher. It stays in the record at 8.5 and -111 and is graded as posted. The move is in our favour: for an over a lower number is the better one, so 8.5 beats the 9.5 close by a yard.",
+        "projection": 26.5,
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-20T23:54:03Z",
+        "edge": "v2 receiving yards 26.5 (80% range 0 to 55). Chance of over 8.5: 79.1% (uncalibrated: no graded history against a line yet), against 52.6% break-even at -111: +26.5 points, +0.503u per unit.",
+        "cutoff": "OVER 8.5 at -111 or better. Closed to new entries at 9+, or at -126 or worse at 8.5.",
+        "confidence": 2,
+        "why": "Prop lean on our number alone: our projection is 26.5 against 8.5 and the over reads 79.1% on the raw curve, which has no graded history against a line yet, so the true chance is lower than that. Our number is 26.5 yards against an 8.5 line; the Giants' tight end has been a steady short-area target. The role is settled by last season rather than by this season's single game. Inactives post at 6:45 PM; a player who does not play is voided under the book's rule.",
+        "risk": "Uncalibrated chance one game into the season, and yesterday six of these went 2-4. A tight end line turns on one target. Confidence 2 of 10.",
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401872947",
+          "https://api.sharpapi.io/api/v1/odds"
+        ]
+      }
+    ],
+    "riskyProps": [],
+    "gamePicks": [],
+    "parlays": [],
+    "gameWatch": [
+      {
+        "id": "NFL-2026-W2-rams-target-share-watch",
+        "gameId": "NFL-401872947",
+        "title": "Rams receiving volume with Puka Nacua inactive",
+        "why": "Nacua is inactive with a hip injury, confirmed on the 6:45 PM inactive list and reported by ESPN at 6:56 PM. Jordan Whittington and CJ Daniels are inactive as well, so the Rams are down three receivers. Our last forecast for this game was published at 11:58 AM and cuts Nacua to 75% of his share rather than removing him, because the model publishes no new snapshot inside an hour of kickoff. His 7.9 projected targets and 71.7 projected receiving yards will be shared among players our board therefore under projects. No pick was priced off those numbers tonight.",
+        "needs": "The box score. This is the first clean test of what the projection does when a top target is removed after the snapshot closes, and it is a case for scaling a player's share by his current snap share rather than by last season's role.",
+        "sources": [
+          "https://www.espn.com/nfl/story/_/id/50001094/rams-wr-puka-nacua-hip-inactive-mnf-vs-giants",
+          "https://www.espn.com/nfl/game/_/gameId/401872947"
+        ],
+        "publishedAt": "2026-09-21T23:29:00Z",
+        "nextReviewAt": "2026-09-22T03:30:00Z"
+      }
+    ],
+    "screened": [
+      {
+        "gameId": "NFL-401872947",
+        "market": "player props",
+        "what": "The whole Rams passing game with Nacua out: Davante Adams, Colby Parkinson, Tyler Higbee, Terrance Ferguson",
+        "passed": "Our forecast for this game is frozen at 11:58 AM with Nacua in it at 75% of his share. Every one of these players is under projected by an amount we cannot compute without estimating the redistribution ourselves, which the rules forbid. The night window's cap of three prop leans was also spent this morning."
+      },
+      {
+        "gameId": "NFL-401872947",
+        "market": "total points",
+        "what": "NYG at LAR 47.5",
+        "passed": "Same stale snapshot, and the total graded as a pass at 6:10 PM before the news. A team losing its leading receiver after our last snapshot is a reason to stand down on the total, not a reason to take the under on a number we did not recompute."
+      }
+    ],
+    "sources": [
+      "https://www.espn.com/nfl/story/_/id/50001094/rams-wr-puka-nacua-hip-inactive-mnf-vs-giants",
+      "https://www.espn.com/nfl/game/_/gameId/401872947",
+      "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872947",
+      "https://api.the-odds-api.com/v4 (key withheld)"
+    ]
   }
 ]
