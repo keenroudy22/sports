@@ -1,9 +1,9 @@
 {
- "at": "2026-09-21T00:28:25Z",
+ "at": "2026-09-21T01:13:59Z",
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 225,
+    "draftkings": 226,
     "fanduel": 259
    },
    "eventsListed": 200,
@@ -19,7 +19,7 @@
     "player_passing_attempts": 4,
     "player_passing_completions": 4,
     "player_passing_touchdowns": 13,
-    "player_passing_yards": 79,
+    "player_passing_yards": 80,
     "player_receiving_yards": 153,
     "player_receptions": 77,
     "player_rushing_+_receiving_yards": 6,
@@ -28,7 +28,7 @@
     "player_sacks": 10
    },
    "requestsLeft": 56,
-   "rows": 484,
+   "rows": 485,
    "slateGames": [
     "New York Giants at Los Angeles Rams 2026-09-22T00:15Z"
    ],
@@ -37,6 +37,38 @@
      "away": null,
      "external": {
       "polymarket": "4713884"
+     },
+     "home": null,
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-20T23:59:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "polymarket": "4713886"
+     },
+     "home": null,
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-20T23:59:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "polymarket": "4713888"
      },
      "home": null,
      "sample": {
@@ -102,22 +134,6 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNFL1QSPREAD-26SEP20INDKC-IND11"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-21T00:20:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
       "kalshi": "KXNFL2HSPREAD-26SEP20INDKC-IND8"
      },
      "home": null,
@@ -134,7 +150,7 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNFL2QSPREAD-26SEP20INDKC-IND4"
+      "kalshi": "KXNFL2QSPREAD-26SEP20INDKC-IND8"
      },
      "home": null,
      "sample": {
@@ -198,7 +214,7 @@
     {
      "away": null,
      "external": {
-      "polymarket": "4646264"
+      "polymarket": "3516965"
      },
      "home": null,
      "sample": {
@@ -210,159 +226,6 @@
      },
      "start": "2026-09-21T00:20:00Z",
      "type": "outright"
-    },
-    {
-     "away": "Indianapolis Colts",
-     "external": {
-      "ballybet": "1028811657",
-      "bet365 us": "201540196",
-      "betano": "bn-88301678",
-      "betfair": "202609217572D919",
-      "betmgm": "6:43382",
-      "betonline": "491117889",
-      "betparx": "1028811657",
-      "betrivers": "1028811657",
-      "betway": "17225286",
-      "bovada": "27951218",
-      "bwin": "6:43382",
-      "caesars": "2e374652-a974-492a-9da5-0fbfab3df72b",
-      "circa": "204501",
-      "coral": "cor-46150581",
-      "draftkings": "34118260",
-      "fanatics": "5326925",
-      "fanatics_markets": "5637858",
-      "fanduel": "36048252",
-      "fliff": "400014_c_p_302_inplay",
-      "galera": "20612077",
-      "gemini": "NFL-2609210020-IND-KC-TT",
-      "goldrush": "30840827",
-      "hardrock": "1406580987651031455",
-      "kalshi": "KXNFLTD-26SEP20INDKC-INDTWARREN84-3",
-      "ladbrokes": "21d766b3-423d-4ce4-8590-bdbc36cdb83c",
-      "ladbrokes_uk": "lduk-258512144",
-      "matchbook": "mb-33306877354500023",
-      "novig": "01a07c6a-a85a-77b1-a56f-d462da60e302",
-      "paddypower": "36048252",
-      "pinnacle": "1636268500",
-      "prophetx": "1700008775",
-      "rebet": "sr:match:71515804",
-      "robinhood": "79d83213-3ca0-4d52-8c5f-b628c1c9cb41",
-      "saba": "133301293",
-      "sbobet": "10558482",
-      "smarkets": "45166637",
-      "sportzino": "sz-16535421",
-      "stake": "710db31f-482e-43d4-95d1-d513ec47a7b6",
-      "sx_bet": "L19431682",
-      "thescorebet": "StandardEvent:2aabb672-fd2a-4b31-9ee4-c25dd6dd5cff",
-      "thrillzz": "88859291",
-      "underdog": "underdog_178910",
-      "unibet": "59fc667c48aa387e94a2f086cdced801",
-      "unibet_ca": "1028811657"
-     },
-     "home": "Kansas City Chiefs",
-     "sample": {
-      "away_team": "Indianapolis Colts",
-      "home_team": "Kansas City Chiefs",
-      "markets": [
-       "1st_half_both_teams_to_score",
-       "1st_half_draw_no_bet",
-       "1st_half_moneyline",
-       "1st_half_moneyline_3-way",
-       "1st_half_point_spread",
-       "1st_half_team_total",
-       "1st_half_team_total_touchdowns",
-       "1st_half_total_field_goals",
-       "1st_half_total_points",
-       "1st_half_total_points_odd_even",
-       "1st_half_total_touchdowns",
-       "1st_quarter_both_teams_to_score",
-       "1st_quarter_moneyline",
-       "1st_quarter_moneyline_3-way",
-       "1st_quarter_point_spread",
-       "1st_quarter_team_total",
-       "1st_quarter_team_total_touchdowns",
-       "1st_quarter_total_points",
-       "1st_quarter_total_points_odd_even",
-       "1st_quarter_total_touchdowns",
-       "2nd_half_correct_score",
-       "2nd_half_draw_no_bet",
-       "2nd_half_moneyline",
-       "2nd_half_moneyline_3-way",
-       "2nd_half_point_spread",
-       "2nd_half_team_total",
-       "2nd_half_team_total_touchdowns",
-       "2nd_half_total_points",
-       "2nd_half_total_points_odd_even",
-       "2nd_half_total_touchdowns",
-       "2nd_quarter_moneyline",
-       "2nd_quarter_moneyline_3-way",
-       "2nd_quarter_point_spread",
-       "2nd_quarter_team_total",
-       "2nd_quarter_total_points",
-       "2nd_quarter_total_points_odd_even",
-       "3rd_quarter_moneyline",
-       "3rd_quarter_moneyline_3-way",
-       "3rd_quarter_point_spread",
-       "3rd_quarter_team_total",
-       "3rd_quarter_total_points",
-       "4th_quarter_moneyline",
-       "4th_quarter_moneyline_3-way",
-       "4th_quarter_point_spread",
-       "4th_quarter_team_total",
-       "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
-       "both_teams_to_score",
-       "correct_score",
-       "double_chance",
-       "double_result",
-       "draw_no_bet",
-       "first_touchdown_scorer",
-       "game_prop",
-       "halftime_fulltime",
-       "highest_scoring_half",
-       "highest_scoring_quarter_will_have_how_many_points",
-       "last_touchdown_scorer",
-       "match_result_total_goals",
-       "moneyline",
-       "most_points_player",
-       "outright",
-       "player_interceptions",
-       "player_kicking_points",
-       "player_passing_+_rushing_yards",
-       "player_passing_attempts",
-       "player_passing_completions",
-       "player_passing_touchdowns",
-       "player_passing_yards",
-       "player_points",
-       "player_prop",
-       "player_receiving_yards",
-       "player_receptions",
-       "player_rushing_+_receiving_yards",
-       "player_rushing_attempts",
-       "player_rushing_yards",
-       "player_sacks",
-       "player_tackles_+_assists",
-       "player_touchdowns",
-       "point_spread",
-       "race_to_10_points",
-       "race_to_15_points",
-       "race_to_5_points",
-       "team_total",
-       "team_total_field_goals",
-       "team_total_points_odd_even",
-       "team_total_touchdowns",
-       "to_qualify",
-       "total_field_goals",
-       "total_points",
-       "total_points_odd_even",
-       "total_tackles",
-       "total_touchdowns",
-       "will_there_be_overtime",
-       "winning_margin"
-      ]
-     },
-     "start": "2026-09-21T00:20:00Z",
-     "type": "fixture"
     }
    ]
   }
