@@ -1,0 +1,60 @@
+{
+ "league": "NFL",
+ "targetWeek": 2,
+ "publishedAt": "2026-09-21T22:10:00Z",
+ "summary": "5:30 PM ET run, published at 6:10 ET. Giants at Rams, 8:15 PM, is the only game on the board and the last of week 2. Nothing settled, nothing closed, nothing new published. The night window's three prop leans went out this morning, so the cap is spent on this game; the only game lines available grade as passes; and a longshot needs a leg per game across several games, which a one game card cannot give. Puka Nacua is still listed questionable and the inactive list at 6:45 decides him, which the 6:50 run takes.",
+ "takeaways": [
+  "The one book problem from this morning is fixed for this game, and the fix shows exactly what it cost us. A per event capture at 3:57 PM and the hosted SharpAPI run at 4:34 PM together put five books on tonight's player lines: BetMGM, BetRivers, DraftKings, ESPN BET and FanDuel. Against that market, every one of this morning's three DraftKings only picks is holding the worst number on the board. Terrance Ferguson under 32.5 against 35.5 on offer at BetMGM, three yards. Theo Johnson over 8.5 against 7.5 at BetRivers, one yard. Devin Singletary over 15.5 against 14.5 at three books, one yard. All three are graded at what we published, which is the point of the rule, and all three would have been better picks two hours later.",
+  "Nothing on tonight's game qualifies on its own merits either. The best game line is the under 47.5, which our number gives 51.0% against the 52.4% a minus 110 price needs, so it is a negative edge and a pass. The spread is further off. That is the whole card: one game, and our number does not have anything to say about its total.",
+  "A timing gap worth naming before it bites. Inactives land at 6:45, the night run fires at 6:50, but the next price refresh after that is the hosted run at 7:47, and the local per event capture is inside its three hour gap until 6:57. So at 6:50 the freshest prices on the board will be from 4:34, taken before the Nacua ruling, and the market will move hard on it. The night run should recapture after 6:57 rather than price anything off a pre inactive number."
+ ],
+ "gameWatch": [
+  {
+   "id": "NFL-2026-W2-rams-target-share-watch",
+   "gameId": "NFL-401872947",
+   "title": "Rams receiving volume with Puka Nacua a pre-game decision",
+   "why": "Nacua is still listed questionable on the report as of yesterday afternoon and the Rams are treating him as a pre-game decision. Jordan Whittington is doubtful, which is a second receiver off the same depth chart. The market has moved Terrance Ferguson's receiving line from 32.5 this morning to 33.5 at DraftKings and 35.5 at BetMGM, which is the shape of targets moving toward the tight ends. Our published under 32.5 sits on the other side of it and is graded as posted.",
+   "needs": "The 6:45 inactive list, which the night run reads. If Nacua is out, the model removes him rather than cutting him to 75% of his share, and the run should recapture prices after 6:57 before pricing or passing anything.",
+   "sources": [
+    "https://www.espn.com/nfl/game/_/gameId/401872947"
+   ],
+   "publishedAt": "2026-09-21T22:10:00Z",
+   "nextReviewAt": "2026-09-22T00:00:00Z"
+  }
+ ],
+ "screened": [
+  {
+   "gameId": "NFL-401872947",
+   "market": "total points",
+   "what": "NYG at LAR under 47.5, DraftKings -110",
+   "passed": "Our number gives the under 51.0% against the 52.4% the price needs: a negative edge of 1.3 points. A model lean needs the calibrated chance to clear break-even by a point or more."
+  },
+  {
+   "gameId": "NFL-401872947",
+   "market": "point spread",
+   "what": "LAR -6.5, BetMGM -112",
+   "passed": "Our margin sits on the line, 50.0% against 52.8% needed. Spreads carry almost no information in our record against the close, which is why the calibration shrinks them nearly to a coin flip."
+  },
+  {
+   "gameId": "NFL-401872947",
+   "market": "player props",
+   "what": "The rest of tonight's player board, including reads of 80% and better on Davante Adams receptions and Xavier Smith receptions",
+   "passed": "The night kickoff window's cap of three prop leans was spent this morning on Ferguson, Theo Johnson and Singletary. One game cannot carry more than that, and every remaining name is either on the injury report or sets its role on a single game this season."
+  },
+  {
+   "gameId": null,
+   "market": "longshot parlay",
+   "what": "No longshot built today",
+   "passed": "A longshot takes one leg per game across three to five games. Monday has one game, so there is nothing to build from."
+  }
+ ],
+ "props": [],
+ "riskyProps": [],
+ "gamePicks": [],
+ "parlays": [],
+ "sources": [
+  "https://www.espn.com/nfl/game/_/gameId/401872947",
+  "https://api.sharpapi.io/api/v1/odds (key withheld)",
+  "https://api.the-odds-api.com/v4 (key withheld)"
+ ]
+}
