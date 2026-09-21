@@ -151,6 +151,31 @@
   };
   /* Projection stats and the prop market key each lines up with. */
   const PROJECTION_MARKET = { receptions: 'rec', recYds: 'recYds', carries: 'car', rushYds: 'rushYds', att: 'att', cmp: 'cmp', passYds: 'passYds' };
+  /* The defense table groups positions four ways; a fullback's carries count against the run defense. */
+  const POS_GROUP = { QB: 'QB', RB: 'RB', FB: 'RB', WR: 'WR', TE: 'TE' };
+  /* The stat behind a market's words, most specific phrase first so "rushing attempts" never reads as pass attempts. */
+  const MARKET_PHRASES = [['receiving yards', 'recYds'], ['rushing yards', 'rushYds'], ['passing yards', 'passYds'], ['pass yards', 'passYds'],
+    ['rushing attempts', 'car'], ['rush attempts', 'car'], ['carries', 'car'], ['receptions', 'rec'], ['completions', 'cmp'],
+    ['pass attempts', 'att'], ['passing attempts', 'att']];
+  const marketKey = row => {
+    if (!row) return null;
+    if (row.stat) return row.stat;
+    const text = String(row.market || row.title || '').toLowerCase();
+    const hit = MARKET_PHRASES.find(([phrase]) => text.includes(phrase));
+    return hit ? hit[1] : null;
+  };
+  /* Where a player sits among teammates at his position, by the projected volume behind a market:
+     targets for a receiving line, carries for a rushing line, attempts for a passing line. */
+  const VOLUME_FOR = { recYds: 'targets', rec: 'targets', rushYds: 'carries', car: 'carries', passYds: 'att', att: 'att', cmp: 'att' };
+  const roleOf = (players, athleteId, pos, key) => {
+    const stat = VOLUME_FOR[key];
+    if (!stat || !pos) return null;
+    const group = (players || []).filter(p => POS_GROUP[p.pos] === pos && p[stat] && p[stat][0] > 0)
+      .sort((a, b) => b[stat][0] - a[stat][0]);
+    const i = group.findIndex(p => String(p.id) === String(athleteId));
+    if (i < 0) return null;
+    return { rank: i + 1, of: group.length, stat, volume: group[i][stat][0] };
+  };
 
   /* ---------- defense ranks ---------- */
 
@@ -333,7 +358,7 @@
   const shardOf = (id, shards) => Number(id) % shards;
 
   return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone,
-    column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET,
+    column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, eligible, summarizeTicket, ticketText,
     unitsFor, stakeOf, recordOf, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, byGrade, category, parseRoute, shardOf, BASE };
 });

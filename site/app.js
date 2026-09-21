@@ -409,14 +409,14 @@
     const open = row.state === 'open';
     const graded = open || Boolean(row.athleteId);   /* player lines have no price but do have a read */
     const books = row.books || [];
-    return `<div class="row${open ? '' : ' row-closed'}" style="cursor:default">
+    return `<div class="row${open ? '' : ' row-closed'}${row.athleteId ? ' row-prop' : ''}"${row.athleteId ? ` data-prop="${esc(row.id)}" role="button" tabindex="0"` : ' style="cursor:default"'}>
       <span class="row-rail" style="background:${graded && RAIL[g.tier] || 'var(--line)'}"></span>
       <span class="row-main"><span class="row-top"><span class="row-name">${esc(row.player || row.title || 'Line')}</span>${row.position ? `<span class="row-meta">${esc(row.position)}</span>` : ''}${ours ? `<span class="pill pill-ours">${ours.modelLean ? 'Our model lean' : 'Our pick'}</span>` : ''}
         ${!open ? `<span class="pill pill-${esc(row.state)}">${esc({ stale: 'Recheck price', closed: 'Closed', unpriced: 'No price', reference: 'Unverified price' }[row.state] || row.state)}</span>` : ''}
         ${row.move && typeof row.line === 'number' ? `<span class="move">opened ${esc(lineText(row.line - row.move))}</span>` : ''}</span>
         ${row.player ? `<span class="row-market">${esc([row.direction, row.line, row.market].filter(v => v != null && v !== '').join(' '))}</span>` : ''}
         ${graded ? `<span class="grade grade-${g.tier}"><b>${esc(g.word)}</b>${g.detail ? `<span>${esc(g.detail)}</span>` : ''}</span>` : ''}
-        <span class="row-meta">${esc(whenShort(row.kickoff))}${row.observedAt ? ' · seen ' + esc(ago(row.observedAt)) : ''}${books.length > 1 ? ' · ' + books.slice(0, 3).map(q => `${esc(q.book)} ${row.market === 'total points' || row.player ? esc(q.line) : esc(C.spreadText('', q.line).trim())} ${odds(q.odds)}`).join(' · ') + (books.length > 3 ? ` · +${books.length - 3} more` : '') : ''}</span></span>
+        <span class="row-meta">${esc(whenShort(row.kickoff))}${row.observedAt ? ' · seen ' + esc(ago(row.observedAt)) : ''}${books.length > 1 ? ' · ' + books.slice(0, 3).map(q => `${esc(q.book)} ${row.market === 'total points' || row.player ? esc(q.line) : esc(C.spreadText('', q.line).trim())} ${odds(q.odds)}`).join(' · ') + (books.length > 3 ? ` · +${books.length - 3} more` : '') : ''}${row.athleteId ? '<span class="more"> · last 10 and matchup ›</span>' : ''}</span></span>
       <span class="row-price"><span class="row-odds num">${odds(row.odds)}</span><span class="row-book">${esc(row.book || 'No book')}${(row.books || []).length > 1 ? ` · best of ${row.books.length}` : ''}</span></span>
       ${row.state === 'open' && row.odds != null ? `<button class="add" type="button" data-add="${esc(row.id)}" aria-pressed="${inTicket}" aria-label="${inTicket ? 'Remove from ticket' : 'Add to ticket'}">${inTicket ? '✓' : '+'}</button>` : ''}
     </div>`;
@@ -521,19 +521,26 @@
     const [teams, next] = await Promise.all([get(`app/teams/${league}.json`), nextGameFor(entry[3], league)]);
     const team = teams.teams[entry[3]] || {};
     const abbr = id => (teams.teams[id] || {}).abbr || id;
-    let projection = null, line = null;
+    let projection = null, line = null, lineLabel = 'DraftKings line';
     if (next && next.detail && next.detail.forecast) {
       const block = next.detail.forecast.players[next.side] || {};
       projection = (block.players || []).find(p => String(p.id) === String(route.id)) || null;
       const captured = ((next.detail.props || {}).lines || {})[route.id];
       if (captured && captured[key]) line = captured[key][0];
     }
+    /* The board's priced line beats the feed's unpriced one when both exist. */
+    const board = next ? await maybe('app/lines.json') : null;
+    const priced = ((board || {}).lines || []).find(r => String(r.athleteId) === String(route.id) && r.state === 'open' && C.marketKey(r) === key);
+    if (priced && typeof priced.line === 'number') { line = priced.line; lineLabel = `${priced.book} line`; }
     const win = C.windows(rows, keys, key);
     const recent = [...rows].sort((a, b) => String(b[1]).localeCompare(String(a[1]))).slice(0, 20).reverse();
     const values = recent.map(r => C.cell(r, keys, key));
     const opponent = next ? (next.side === 'home' ? next.game.away.id : next.game.home.id) : null;
     const vsNext = next ? C.splits(rows, keys, key, opponent).vs : null;
     const split = C.splits(rows, keys, key);
+    const group = C.POS_GROUP[pos];
+    const allow = next && group ? C.rankOf((teams.defense || {}).rows || {}, opponent, group, key) : null;
+    const allowTone = allow ? C.rankTone(allow.rank, allow.of) : 'neutral';
     const tile = (label, s) => stat(label, s ? fixed(s.avg) : DASH, s ? `n ${s.n} · median ${fixed(s.median)} · ${fixed(s.min, 0)} to ${fixed(s.max, 0)}` : 'no games');
     const projKey = { rec: 'receptions', car: 'carries' }[key] || key;
     const over = w => { if (line == null) return ''; const h = C.hits(values.slice(-w), line); return `${h.over} of ${h.n} over in the last ${h.n}`; };
@@ -543,7 +550,8 @@
       <div class="tiles">${tile('Last 5', win.last5)}${tile('Last 10', win.last10)}${tile('Last 20', win.last20)}${tile('This season', win.season)}</div>
       ${next ? section(`Next: ${next.side === 'home' ? 'vs' : '@'} ${abbr(opponent)} · ${whenShort(next.game.kickoff)}`,
         `<div class="stats">${stat('Projection', projection && projection[projKey] ? fixed(projection[projKey][0]) : DASH, projection && projection[projKey] ? `80%: ${projection[projKey][1]} to ${projection[projKey][2]}` : 'none for this stat')}
-          ${stat('DraftKings line', line != null ? esc(line) : DASH, line != null ? over(10) : 'none captured')}
+          ${stat(lineLabel, line != null ? esc(line) : DASH, line != null ? over(10) : 'none captured')}
+          ${stat(`${esc(abbr(opponent))} vs ${esc(group || pos || '')}s`, allow ? fixed(allow.value) : DASH, allow ? `${esc(C.LABEL[key] || key)} a game · ${ordinal(allow.rank)} of ${allow.of}, 1st allows the least` : 'not tracked by position', allowTone === 'soft' ? 'up' : allowTone === 'tough' ? 'down' : '')}
           ${stat('Vs this opponent', vsNext && vsNext.summary ? fixed(vsNext.summary.avg) : DASH, vsNext && vsNext.summary ? `${vsNext.summary.n} meeting${vsNext.summary.n === 1 ? '' : 's'} since 2023` : 'no meetings stored')}</div>`,
         `<a href="#game/${esc(next.game.id)}">Game page →</a>`) : ''}
       ${section(`Last ${values.length} games · ${C.LABEL[key] || key}`, chart(recent, values, line, abbr))}
@@ -862,8 +870,114 @@
       ${p.cutoff ? `<h4>Worst number we would take</h4><p>${esc(prose(p.cutoff))}</p>` : ''}${p.why ? `<h4>Why</h4><p>${esc(prose(p.why))}</p>` : ''}${p.risk ? `<h4>What could go wrong</h4><p>${esc(prose(p.risk))}</p>` : ''}${p.edge ? `<h4>Edge estimate</h4><p>${esc(prose(p.edge))}</p>` : ''}
       ${p.actual ? `<h4>Result</h4><p>${esc(prose(p.actual))}</p>` : ''}${p.settlementReason ? `<p>${esc(prose(p.settlementReason))}</p>` : ''}
       ${(p.sources || []).length ? `<h4>Sources</h4><div class="sources">${p.sources.filter(s => /^https:/.test(s)).map((s, i) => `<a href="${esc(s)}" target="_blank" rel="noopener noreferrer">${esc(hostOf(s, i))} ↗</a>`).join('')}</div>` : ''}
-      <p class="row-meta" style="margin-top:14px">Recorded at one unit. The original price is kept for grading even after the line moves.</p></div></div>`;
+      ${p.athleteId ? '<div data-context><p class="row-meta">Loading the last ten games and the matchup…</p></div>' : ''}
+      <p class="row-meta" style="margin-top:14px">${p.riskUnits != null && p.riskUnits !== 1 ? `Recorded at ${esc(p.riskUnits)} units.` : 'Recorded at one unit.'} The original price is kept for grading even after the line moves.</p></div></div>`;
     dialog.showModal();
+    if (p.athleteId) {
+      const html = await propContext(p);
+      const box = dialog.querySelector('[data-context]');
+      if (box) box.innerHTML = html;
+    }
+  }
+
+  /* ---------- a player line in context ---------- */
+
+  const ordinal = n => n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3rd' : `${n}th`;
+  const newestFirst = rows => [...rows].sort((a, b) => String(b[1]).localeCompare(String(a[1])));
+
+  /* Everything a person wants beside a player line: the last ten games against the number, where the
+     player sits on his team, and what this defense has given up to the position. Built on demand from
+     the same shards the player pages use, so the card never shows a number the site cannot show elsewhere.
+     For a game already played it shows only what was known before kickoff. */
+  async function propContext(row) {
+    const league = row.league === 'CFB' || String(row.gameId || '').startsWith('CFB') ? 'CFB' : 'NFL';
+    const key = C.marketKey(row);
+    const direction = String(row.direction || '').toLowerCase() === 'under' ? 'under' : 'over';
+    const [index, teams, game] = await Promise.all([maybe(`app/players/${league}.json`), maybe(`app/teams/${league}.json`),
+      row.gameId ? maybe(`app/games/${row.gameId}.json`) : null]);
+    if (!index || !teams) return '<p class="row-meta">Player history is unavailable right now.</p>';
+    const shard = await maybe(`app/players/${league}/${C.shardOf(row.athleteId, index.shards)}.json`);
+    const data = shard && shard.players[row.athleteId];
+    const keys = shard ? shard.keys : [];
+    const kickoffDay = row.kickoff ? String(row.kickoff).slice(0, 10) : null;
+    const rows = data ? data.rows.filter(r => !kickoffDay || String(r[1]) < kickoffDay) : [];
+    const abbr = id => (teams.teams[id] || {}).abbr || id;
+    const latest = newestFirst(rows)[0];
+    const teamId = latest ? String(latest[5]) : null;
+    const pos = C.POS_GROUP[row.position] || C.POS_GROUP[data ? data.pos : ''] || null;
+    const side = game && game.home && teamId === String(game.home.id) ? 'home' : game && game.away && teamId === String(game.away.id) ? 'away' : null;
+    const opp = side ? String(game[side === 'home' ? 'away' : 'home'].id) : null;
+    const line = typeof row.line === 'number' ? row.line : null;
+    const label = (C.LABEL[key] || row.market || 'this stat').toLowerCase();
+
+    /* the last ten */
+    const recent = newestFirst(rows).slice(0, 10).reverse();
+    const values = recent.map(r => C.cell(r, keys, key));
+    const win = key && rows.length ? C.windows(rows, keys, key) : {};
+    const hitWords = h => h && h.n ? `${direction === 'under' ? h.under : h.over} of ${h.n} ${direction}` : null;
+    const h10 = line != null ? C.hits(values, line) : null, h5 = line != null ? C.hits(values.slice(-5), line) : null;
+    const formLine = [hitWords(h10) ? `${hitWords(h10)} ${line}` : null, hitWords(h5) ? `${hitWords(h5)} in the last 5` : null,
+      win.last10 ? `last 10 average ${fixed(win.last10.avg)}` : null, win.season ? `this season ${fixed(win.season.avg)}` : null].filter(Boolean).join(' · ');
+
+    /* the role */
+    const block = side && game.forecast ? (game.forecast.players[side] || {}) : {};
+    const role = C.roleOf(block.players || [], row.athleteId, pos, key);
+    const me = (block.players || []).find(p => String(p.id) === String(row.athleteId));
+    const season = index.season;
+    const thisSeason = rows.filter(r => r[2] === season).length;
+    const lastSeason = teamId ? rows.filter(r => r[2] === season - 1 && String(r[5]) === teamId).length : 0;
+    const snap = latest ? C.cell(latest, keys, 'snapPct') : null;
+    const roleBits = [pos ? `${pos}${teamId ? ' · ' + abbr(teamId) : ''}` : null,
+      role ? `${ordinal(role.rank)} of ${role.of} ${pos}s by projected ${(C.LABEL[role.stat] || role.stat).toLowerCase()} (${fixed(role.volume)})` : null,
+      `${thisSeason} game${thisSeason === 1 ? '' : 's'} this season${lastSeason ? `, ${lastSeason} for ${abbr(teamId)} last season` : ''}`,
+      snap != null ? `${Math.round(100 * snap)}% of snaps last game` : null,
+      (row.grade && row.grade.limited) || (me && me.limited) ? 'questionable on the report' : null].filter(Boolean);
+
+    /* the defense */
+    const dRows = (teams.defense || {}).rows || {};
+    const rank = opp && pos && key ? C.rankOf(dRows, opp, pos, key) : null;
+    const last5 = opp && pos && key ? ((((teams.defense || {}).last5 || {})[opp] || {})[pos] || {})[key] : null;
+    const prior = opp && pos && key ? C.rankOf(((teams.defense || {}).prior || {}).rows || {}, opp, pos, key) : null;
+    const tone = rank ? C.rankTone(rank.rank, rank.of) : 'neutral';
+    const oppFile = opp ? await maybe(`app/teams/${league}/${opp}.json`) : null;
+    const allowed = oppFile ? (oppFile.defense || []).filter(d => d.season === (teams.defense || {}).season && (!kickoffDay || d.date < kickoffDay)) : [];
+    const homeOf = new Map((oppFile ? oppFile.games || [] : []).map(g => [g.gameId, g.home]));
+    const dRecent = allowed.map(d => [d.gameId, d.date, d.season, d.week, 2, opp, d.opp, homeOf.get(d.gameId) === false ? 0 : homeOf.get(d.gameId) == null ? -1 : 1]);
+    const dValues = allowed.map(d => pos && d.allowed[pos] && d.allowed[pos][key] != null ? d.allowed[pos][key] : null);
+    const vs = opp && key && rows.length ? C.splits(rows, keys, key, opp).vs : null;
+    const rankWord = tone === 'soft' ? 'among the most generous' : tone === 'tough' ? 'among the stingiest' : 'middle of the pack';
+
+    return `<h4>Last ${values.length || 10} games · ${esc(C.LABEL[key] || row.market || '')}</h4>
+      ${values.length ? chart(recent, values, line, abbr) : empty('No games stored yet', kickoffDay ? 'Nothing recorded for this player before this game.' : 'The first stat line appears after a game.')}
+      ${formLine ? `<p>${esc(formLine)}. History, not a probability.</p>` : ''}
+      <h4>Role</h4><p>${esc(roleBits.join(' · '))}.</p>
+      ${opp ? `<h4>What ${esc(abbr(opp))} allows ${esc(pos || '')}s</h4>
+        ${rank ? `<p>${esc(abbr(opp))} allow <b>${fixed(rank.value)}</b> ${esc(label)} a game to ${esc(pos)}s this season, <span class="${tone === 'soft' ? 'up' : tone === 'tough' ? 'down' : ''}">${ordinal(rank.rank)} of ${rank.of}</span> where 1st allows the least: ${rankWord}${last5 != null && ((dRows[opp] || {}).g || 0) > 5 ? `. ${fixed(last5)} a game over their last 5` : ''}${prior ? `. Last season ${fixed(prior.value)} a game, ${ordinal(prior.rank)} of ${prior.of}` : ''}.</p>` : `<p>The defense table does not track ${esc(label)} by position.</p>`}
+        ${dValues.some(v => v != null) ? chart(dRecent, dValues, null, abbr) + `<p class="row-meta">Every ${esc(pos)} on the opposing side combined, game by game this season.</p>` : ''}
+        ${vs && vs.summary ? `<p>${esc(data.name)} against ${esc(abbr(opp))}: ${fixed(vs.summary.avg)} ${esc(label)} a game over ${vs.summary.n} stored meeting${vs.summary.n === 1 ? '' : 's'}.</p>` : ''}` : ''}
+      <p class="row-meta" style="margin-top:12px"><a href="#player/${league}/${esc(row.athleteId)}">Player page →</a>${row.gameId ? ` · <a href="#game/${esc(row.gameId)}">Game page →</a>` : ''}</p>`;
+  }
+
+  /* One player line from the board: the price and our read, then the last ten games, the role and the matchup. */
+  async function openProp(id) {
+    const data = await get('app/lines.json');
+    const row = (data.lines || []).find(l => l.id === id);
+    if (!row) return;
+    const g = C.gradeOf(row.grade, row.gradeNote, row);
+    const ours = pickKeys.get(rowKey(row)) || pickKeys.get(row.id);
+    const books = row.books || [];
+    const pct = v => v == null ? DASH : Math.round(100 * v) + '%';
+    const dialog = $('#detail');
+    dialog.innerHTML = `<div class="detail-inner"><div class="detail-head"><div><div class="row-top">${row.state === 'open' ? `<span class="pill pill-${['lean', 'strong'].includes(g.tier) ? 'ours' : 'reference'}">${esc(g.word)}</span>` : `<span class="pill pill-${esc(row.state)}">${esc({ stale: 'Recheck price', closed: 'Closed', unpriced: 'No price', reference: 'Unverified price' }[row.state] || row.state)}</span>`}${ours ? `<span class="pill pill-ours">${ours.modelLean ? 'Our model lean' : 'Our pick'}</span>` : ''}</div>
+      <h3 style="margin:7px 0 0;font-size:17px">${esc(row.title)}</h3><p class="row-meta" style="margin:4px 0 0">${esc(when(row.kickoff))}${row.position ? ' · ' + esc(row.position) : ''}</p></div><button class="close" type="button" data-close aria-label="Close">×</button></div>
+      <div class="detail-body"><div class="kv"><div><span>Price</span><strong>${esc(row.book || 'No book')} ${odds(row.odds)}</strong></div><div><span>Our number</span><strong>${row.grade && row.grade.projection != null ? esc(row.grade.projection) : DASH}</strong></div><div><span>Chance</span><strong>${pct(row.grade && row.grade.chance)}</strong></div><div><span>Needs</span><strong>${pct(row.grade && row.grade.needs)}</strong></div></div>
+      ${g.detail ? `<p style="margin-top:10px">${esc(g.detail)}.</p>` : ''}
+      ${books.length > 1 ? `<p class="row-meta">${books.map(q => `${esc(q.book)} ${esc(q.line)} ${odds(q.odds)}`).join(' · ')}</p>` : ''}
+      <div data-context><p class="row-meta">Loading the last ten games and the matchup…</p></div></div></div>`;
+    dialog.showModal();
+    const html = await propContext(row);
+    const box = dialog.querySelector('[data-context]');
+    if (box) box.innerHTML = html;
   }
 
   /* ---------- shell ---------- */
@@ -953,8 +1067,15 @@
     if (target.closest('[data-clear-ticket]')) { state.ticket = []; saveTicket(); render(); return; }
     if (target.closest('[data-retry]')) { cache.clear(); render(); return; }
     if (target.closest('[data-close]')) { $('#detail').close(); return; }
+    const prop = target.closest('[data-prop]');
+    if (prop) { openProp(prop.dataset.prop); return; }
     const pick = target.closest('[data-pick]');
     if (pick) openPick(pick.dataset.pick);
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    const prop = event.target && event.target.closest ? event.target.closest('[data-prop]') : null;
+    if (prop && event.target === prop) { event.preventDefault(); openProp(prop.dataset.prop); }
   });
 
   document.addEventListener('change', event => {

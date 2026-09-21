@@ -67,6 +67,25 @@ test('splits separate home, away and neutral and list head-to-head meetings', ()
   assert.deepEqual(C.hits([50, 80, 20, 60.5], 60.5), { over: 1, under: 2, push: 1, n: 4 });
 });
 
+test('a market’s words map to the stat behind it, and a row that names its stat wins', () => {
+  assert.equal(C.marketKey({ market: 'receiving yards' }), 'recYds');
+  assert.equal(C.marketKey({ market: 'rushing attempts' }), 'car');
+  assert.equal(C.marketKey({ market: 'pass attempts' }), 'att');
+  assert.equal(C.marketKey({ title: 'Terrance Ferguson under 32.5 receiving yards' }), 'recYds');
+  assert.equal(C.marketKey({ market: 'longest reception' }), null);
+  assert.equal(C.marketKey({ market: 'receiving yards', stat: 'rec' }), 'rec');
+  assert.equal(C.marketKey(null), null);
+});
+
+test('a role ranks a player among teammates at his position by the volume behind the market', () => {
+  const players = [{ id: '1', pos: 'TE', targets: [5.1, 2, 8] }, { id: '2', pos: 'TE', targets: [2.3, 0, 5] },
+    { id: '3', pos: 'WR', targets: [9, 5, 13] }, { id: '4', pos: 'TE' }];
+  assert.deepEqual(C.roleOf(players, '2', 'TE', 'recYds'), { rank: 2, of: 2, stat: 'targets', volume: 2.3 });
+  assert.equal(C.roleOf(players, '3', 'TE', 'recYds'), null, 'a receiver is not ranked among tight ends');
+  assert.equal(C.roleOf(players, '1', 'TE', 'recLong'), null, 'no volume stat stands behind a longest-play line');
+  assert.equal(C.POS_GROUP.FB, 'RB');
+});
+
 test('defense ranks put the stingiest first, share ranks on ties and ignore missing rows', () => {
   const rows = { A: { g: 2, WR: { recYds: 150 } }, B: { g: 2, WR: { recYds: 100 } }, C: { g: 2, WR: { recYds: 150 } }, D: { g: 2, TE: { recYds: 40 } } };
   const ranked = C.rankDefenses(rows, 'WR', 'recYds');

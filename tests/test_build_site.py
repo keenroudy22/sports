@@ -206,6 +206,17 @@ class PropRowTests(unittest.TestCase):
         ok = build_site.prop_rows({'NFL-1': [capture]}, {'NFL-1': game}, {'NFL-1': [healthy]}, {'10': 'Player Ten'}, {'10': 5}, {}, now)[0]
         self.assertEqual(ok['grade']['tier'], 'lean')
 
+    def test_a_prop_row_names_the_stat_behind_its_market(self):
+        game = {'id': 'NFL-1', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-09-20T17:00:00Z',
+                'home': {'id': '1', 'abbreviation': 'ATL'}, 'away': {'id': '2', 'abbreviation': 'CAR'}}
+        snapshot = {'gameId': 'NFL-1', 'league': 'NFL', 'model': 'v2.0', 'publishedAt': '2026-09-19T12:00:00Z',
+                    'players': {'home': {'players': [{'id': '10', 'pos': 'WR', 'recYds': [70.0, 40.5, 99.5]}]}, 'away': None}}
+        capture = {'retrievedAt': '2026-09-19T12:05:00Z', 'source': 'https://example.test/props', 'lines': {'10': {'recYds': [55.5, 55.5]}}}
+        now = datetime(2026, 9, 19, 13, tzinfo=timezone.utc)
+        rows = build_site.prop_rows({'NFL-1': [capture]}, {'NFL-1': game}, {'NFL-1': [snapshot]}, {'10': 'Player Ten'}, {'10': 3}, {}, now)
+        self.assertEqual(rows[0]['stat'], 'recYds', 'the site reads the stat off the row, never off the words')
+        self.assertEqual(rows[0]['market'], 'receiving yards')
+
     def test_a_thin_sample_prop_stays_grey(self):
         game = {'id': 'NFL-1', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-09-20T17:00:00Z',
                 'home': {'id': '1', 'abbreviation': 'ATL'}, 'away': {'id': '2', 'abbreviation': 'CAR'}}

@@ -768,7 +768,7 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, p
                        'title': f'{name} {lean} {main:g} {pricing.WORDS[key]}', 'gameMarket': False,
                        'color': color(game['league'], team, identities), 'grade': grade,
                        'gradeNote': None if grade else 'no v2 projection for this player',
-                       'opened': opening}
+                       'opened': opening, 'stat': key}
                 side_quotes = [(book, line, over if lean == 'over' else under)
                                for book, line, over, under in quotes if (over if lean == 'over' else under) is not None]
                 if side_quotes:
