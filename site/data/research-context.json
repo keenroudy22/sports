@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-21T16:34:56Z",
+  "updatedAt": "2026-09-21T17:21:33Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,16 +1162,16 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-21T16:11Z",
+              "reportedAt": "2026-09-21T17:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
               "id": "4431611",
               "name": "Caleb Williams",
               "position": "QB",
-              "status": "Questionable",
+              "status": "Doubtful",
               "injury": "Hamstring",
-              "reportedAt": "2026-09-21T16:01Z",
+              "reportedAt": "2026-09-21T16:34Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431611/caleb-williams"
             },
             {
@@ -2082,7 +2082,7 @@
               "position": "RB",
               "status": "Questionable",
               "injury": "Hamstring",
-              "reportedAt": "2026-09-21T15:08Z",
+              "reportedAt": "2026-09-21T17:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4241985/jk-dobbins"
             },
             {
@@ -3917,6 +3917,15 @@
           "name": "Los Angeles Chargers",
           "players": [
             {
+              "id": "4241263",
+              "name": "Charlie Kolar",
+              "position": "TE",
+              "status": "Questionable",
+              "injury": "Forearm",
+              "reportedAt": "2026-09-21T16:27Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4241263/charlie-kolar"
+            },
+            {
               "id": "4362081",
               "name": "Cameron Dicker",
               "position": "PK",
@@ -3978,15 +3987,6 @@
               "injury": "Leg",
               "reportedAt": "2026-09-20T23:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4040842/kayode-awosika"
-            },
-            {
-              "id": "4241263",
-              "name": "Charlie Kolar",
-              "position": "TE",
-              "status": "Questionable",
-              "injury": "Forearm",
-              "reportedAt": "2026-09-20T22:53Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4241263/charlie-kolar"
             },
             {
               "id": "2979860",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "25",
-          "name": "Eddy Pineiro",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-09-20T19:23:59Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4034949/eddy-pineiro"
-        },
-        {
           "teamId": "26",
           "name": "Nick Emmanwori",
           "from": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-09-21T16:34:56Z",
           "source": "https://www.espn.com/nfl/player/_/id/3123938/avonte-maddox"
+        },
+        {
+          "teamId": "3",
+          "name": "Caleb Williams",
+          "from": "Questionable",
+          "to": "Doubtful",
+          "observedAt": "2026-09-21T17:21:33Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4431611/caleb-williams"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-21T16:34:56Z",
-      "lastAttemptAt": "2026-09-21T16:34:56Z",
+      "checkedAt": "2026-09-21T17:21:33Z",
+      "lastAttemptAt": "2026-09-21T17:21:33Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-21T16:34:56Z",
-      "lastAttemptAt": "2026-09-21T16:34:56Z",
+      "checkedAt": "2026-09-21T17:21:33Z",
+      "lastAttemptAt": "2026-09-21T17:21:33Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
