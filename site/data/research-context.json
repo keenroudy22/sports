@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-21T05:05:32Z",
+  "updatedAt": "2026-09-21T06:31:52Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-21T04:01Z",
+              "reportedAt": "2026-09-21T06:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -3457,6 +3457,33 @@
           "name": "Kansas City Chiefs",
           "players": [
             {
+              "id": "4683062",
+              "name": "Xavier Worthy",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-21T05:07Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4683062/xavier-worthy"
+            },
+            {
+              "id": "15847",
+              "name": "Travis Kelce",
+              "position": "TE",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-21T05:02Z",
+              "source": "https://www.espn.com/nfl/player/_/id/15847/travis-kelce"
+            },
+            {
+              "id": "4428331",
+              "name": "Rashee Rice",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-21T04:59Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4428331/rashee-rice"
+            },
+            {
               "id": "3139477",
               "name": "Patrick Mahomes",
               "position": "QB",
@@ -3581,33 +3608,6 @@
               "injury": null,
               "reportedAt": "2026-09-15T19:18Z",
               "source": "https://www.espn.com/nfl/player/_/id/4832955/emmett-johnson"
-            },
-            {
-              "id": "4683062",
-              "name": "Xavier Worthy",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-15T04:32Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4683062/xavier-worthy"
-            },
-            {
-              "id": "15847",
-              "name": "Travis Kelce",
-              "position": "TE",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-15T04:26Z",
-              "source": "https://www.espn.com/nfl/player/_/id/15847/travis-kelce"
-            },
-            {
-              "id": "4428331",
-              "name": "Rashee Rice",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-15T03:44Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4428331/rashee-rice"
             },
             {
               "id": "4684432",
@@ -6474,15 +6474,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/3912547/sam-darnold"
             },
             {
-              "id": "4685512",
-              "name": "Jadarian Price",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Chest",
-              "reportedAt": "2026-09-21T00:03Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4685512/jadarian-price"
-            },
-            {
               "id": "4430878",
               "name": "Jaxon Smith-Njigba",
               "position": "WR",
@@ -6490,6 +6481,15 @@
               "injury": null,
               "reportedAt": "2026-09-20T23:58Z",
               "source": "https://www.espn.com/nfl/player/_/id/4430878/jaxon-smith-njigba"
+            },
+            {
+              "id": "4685512",
+              "name": "Jadarian Price",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Chest",
+              "reportedAt": "2026-09-20T23:01Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4685512/jadarian-price"
             },
             {
               "id": "4259651",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "17",
-          "name": "Craig Woodson",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-09-20T19:23:59Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4428930/craig-woodson"
-        },
-        {
           "teamId": "25",
           "name": "Kaelon Black",
           "from": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-09-21T05:05:32Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-09-21T06:31:52Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-21T05:05:32Z",
-      "lastAttemptAt": "2026-09-21T05:05:32Z",
+      "checkedAt": "2026-09-21T06:31:52Z",
+      "lastAttemptAt": "2026-09-21T06:31:52Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-21T05:05:32Z",
-      "lastAttemptAt": "2026-09-21T05:05:32Z",
+      "checkedAt": "2026-09-21T06:31:52Z",
+      "lastAttemptAt": "2026-09-21T06:31:52Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
