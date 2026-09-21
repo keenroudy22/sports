@@ -71,6 +71,19 @@ class QuoteTests(unittest.TestCase):
         self.assertEqual((q['line'], q['over'], q['under']), (35.5, -110, -114))
         self.assertEqual([a['line'] for a in q['alternates']], [14.5, 49.5])
 
+    def test_a_completions_line_above_the_attempts_line_is_not_a_quote(self):
+        g = self.slate[0]
+        rows = [(g, row('draftkings', 'player_pass_attempts', 'Jaxson Dart', 'over', 31.5, -104)),
+                (g, row('draftkings', 'player_pass_attempts', 'Jaxson Dart', 'under', 31.5, -122)),
+                (g, row('draftkings', 'player_pass_completions', 'Jaxson Dart', 'over', 34.5, -114)),
+                (g, row('draftkings', 'player_pass_completions', 'Jaxson Dart', 'under', 34.5, -113)),
+                (g, row('draftkings', 'player_pass_completions', 'Jaxson Dart', 'over', 19.5, -120, is_alternate_line=True))]
+        book = sharp_odds.quotes_from(rows)['NFL-1']['draftkings']
+        self.assertEqual(book['cmp']['Jaxson Dart']['line'], 19.5, 'the rung below attempts becomes the number')
+        self.assertIn(34.5, [a['line'] for a in book['cmp']['Jaxson Dart']['alternates']])
+        without = [r for r in rows if r[1].get('line') != 19.5]
+        self.assertNotIn('cmp', sharp_odds.quotes_from(without)['NFL-1']['draftkings'], 'no plausible rung means no completions quote')
+
     def test_the_slate_game_is_found_from_either_orientation(self):
         g = self.slate[0]
         self.assertIs(sharp_odds.find_game(row('draftkings', 'x', 'p', 'over', 1, -110), self.slate), g)

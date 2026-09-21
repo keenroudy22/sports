@@ -199,9 +199,33 @@ def quotes_from(rows):
                     market[name] = entry
                 if not market:
                     del book[market_key_]
+            drop_impossible(book)
             if not book:
                 del game_books[book_key]
     return out
+
+
+def drop_impossible(book):
+    """Remove a player's quote that cannot be true next to another market at the same book.
+
+    A completions line above the same player's attempts line is a mislabeled row, and the model
+    reads it as a free 99% under. When the ladder holds a rung below attempts, that rung is the
+    main number instead; otherwise the market goes.
+    """
+    cmp_, att = book.get('cmp') or {}, book.get('att') or {}
+    for name, quote in list(cmp_.items()):
+        limit = (att.get(name) or {}).get('line')
+        if limit is None or quote.get('line', 0) < limit:
+            continue
+        below = [a for a in quote.get('alternates') or [] if a['line'] < limit]
+        if below:
+            best = max(below, key=lambda a: a['line'])
+            others = [a for a in quote.get('alternates') if a is not best] + [{k: v for k, v in quote.items() if k in ('line', 'over', 'under')}]
+            cmp_[name] = {**best, 'alternates': sorted(others, key=lambda a: a['line'])}
+        else:
+            del cmp_[name]
+    if not cmp_:
+        book.pop('cmp', None)
 
 
 def pricing_cents(odds):
