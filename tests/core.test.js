@@ -218,15 +218,15 @@ test('a priced line on a thin sample says too early, not no edge', () => {
   assert.equal(solid.word, 'Slight lean');
 });
 
-test('an early exit credit is counted beside the loss, never instead of it', () => {
-  const picks = [
-    { kind: 'props', odds: -113, result: 'loss', earlyExit: true },
-    { kind: 'props', odds: -110, result: 'win' },
-  ];
+test('an early exit credit is a loss on the record and zero in units', () => {
+  const credited = { kind: 'props', odds: -113, result: 'loss', earlyExit: true };
+  const picks = [credited, { kind: 'props', odds: -110, result: 'win' }];
   const r = C.recordOf(picks, 2);
   assert.equal(r.earlyExits, 1);
   assert.deepEqual([r.wins, r.losses], [1, 1], 'the credited pick still lost');
-  assert.ok(r.units < 0, 'units keep the graded result');
+  assert.equal(C.unitsFor(credited), 0, 'the stake came back');
+  assert.ok(Math.abs(r.units - 0.909) < 0.001, 'only the winner moves the units');
+  assert.equal(C.unitsFor({ ...credited, earlyExit: false }), -1, 'without the credit it is a full unit');
 });
 
 // app.js runs in the browser, so nothing here loads it. Parsing it catches a broken

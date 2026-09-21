@@ -211,6 +211,9 @@
     if (!pick.odds || !['win', 'loss', 'push'].includes(pick.result)) return null;
     const stake = stakeOf(pick);
     if (pick.result === 'win') return stake * (pick.odds > 0 ? pick.odds / 100 : 100 / Math.abs(pick.odds));
+    /* The book credited the stake back after a first-half injury, so the money came home: zero units,
+       the same as a push, while the win-loss line keeps the loss the model earned. */
+    if (pick.result === 'loss' && pick.earlyExit) return 0;
     return pick.result === 'loss' ? -stake : 0;
   };
   /* Units and ROI use recorded original prices only; a result without one stays in the win-loss
