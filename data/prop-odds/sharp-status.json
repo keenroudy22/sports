@@ -1,208 +1,209 @@
 {
- "at": "2026-09-22T00:10:43Z",
+ "at": "2026-09-22T23:37:27Z",
  "leagues": {
-  "NFL": {
+  "CFB": {
    "books": {},
    "eventsListed": 200,
-   "eventsMatched": 1,
+   "eventsMatched": 0,
    "games": 1,
    "marketTypes": {},
-   "requestsLeft": 58,
+   "requestsLeft": 59,
    "rows": 0,
    "slateGames": [
-    "New York Giants at Los Angeles Rams 2026-09-22T00:15Z"
+    "Liberty Flames at Coastal Carolina Chanticleers 2026-09-24T23:30Z"
    ],
    "unmatchedEvents": [
     {
-     "away": null,
+     "away": "Air Force",
      "external": {
-      "kalshi": "KXNFL1HSPREAD-26SEP21NYGLAR-NYG11"
+      "bet365 us": "201605347"
      },
-     "home": null,
+     "home": "Nevada",
      "sample": {
-      "away_team": "",
-      "home_team": "",
+      "away_team": "Air Force",
+      "home_team": "Nevada",
       "markets": [
-       "binary"
+       "both_teams_to_score"
       ]
      },
-     "start": "2026-09-22T00:15:00Z",
+     "start": "2026-09-22T22:50:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Colorado State",
+     "external": {
+      "bet365 us": "201605347"
+     },
+     "home": "Texas San Antonio",
+     "sample": {
+      "away_team": "Colorado State",
+      "home_team": "Texas San Antonio",
+      "markets": [
+       "both_teams_to_score",
+       "winning_margin"
+      ]
+     },
+     "start": "2026-09-22T22:50:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7631589"
+     },
+     "home": "Alabama Crimson Tide",
+     "sample": {
+      "away_team": "",
+      "home_team": "Alabama Crimson Tide",
+      "markets": [
+       "tournament_winner"
+      ]
+     },
+     "start": "2026-09-24T23:29:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "kalshi": "KXNFL1QSPREAD-26SEP21NYGLAR-NYG11"
+      "saba": "o7631591"
      },
-     "home": null,
+     "home": "Arizona Wildcats",
      "sample": {
       "away_team": "",
-      "home_team": "",
+      "home_team": "Arizona Wildcats",
       "markets": [
-       "binary"
+       "tournament_winner"
       ]
      },
-     "start": "2026-09-22T00:15:00Z",
+     "start": "2026-09-24T23:29:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "kalshi": "KXNFL2HSPREAD-26SEP21NYGLAR-NYG11"
+      "saba": "o7631592"
      },
-     "home": null,
+     "home": "Auburn Tigers",
      "sample": {
       "away_team": "",
-      "home_team": "",
+      "home_team": "Auburn Tigers",
       "markets": [
-       "binary"
+       "tournament_winner"
       ]
      },
-     "start": "2026-09-22T00:15:00Z",
+     "start": "2026-09-24T23:29:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "kalshi": "KXNFL2QSPREAD-26SEP21NYGLAR-NYG11"
+      "saba": "o7631594"
      },
-     "home": null,
+     "home": "Boise State Broncos",
      "sample": {
       "away_team": "",
-      "home_team": "",
+      "home_team": "Boise State Broncos",
       "markets": [
-       "binary"
+       "tournament_winner"
       ]
      },
-     "start": "2026-09-22T00:15:00Z",
+     "start": "2026-09-24T23:29:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "kalshi": "KXNFL3QSPREAD-26SEP21NYGLAR-NYG11"
+      "saba": "o7631595"
      },
-     "home": null,
+     "home": "BYU Cougars",
      "sample": {
       "away_team": "",
-      "home_team": "",
+      "home_team": "BYU Cougars",
       "markets": [
-       "binary"
+       "tournament_winner"
       ]
      },
-     "start": "2026-09-22T00:15:00Z",
+     "start": "2026-09-24T23:29:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "kalshi": "KXNFL4QSPREAD-26SEP21NYGLAR-NYG11"
+      "saba": "o7631596"
      },
-     "home": null,
+     "home": "Clemson Tigers",
      "sample": {
       "away_team": "",
-      "home_team": "",
+      "home_team": "Clemson Tigers",
       "markets": [
-       "binary"
+       "tournament_winner"
       ]
      },
-     "start": "2026-09-22T00:15:00Z",
+     "start": "2026-09-24T23:29:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "kalshi": "KXNFLSPREAD-26SEP21NYGLAR-NYG15"
+      "saba": "o7631598"
      },
-     "home": null,
+     "home": "Florida Gators",
      "sample": {
       "away_team": "",
-      "home_team": "",
+      "home_team": "Florida Gators",
       "markets": [
-       "binary"
+       "tournament_winner"
       ]
      },
-     "start": "2026-09-22T00:15:00Z",
+     "start": "2026-09-24T23:29:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "polymarket": "3516931"
+      "saba": "o7631599"
      },
-     "home": null,
+     "home": "Florida State Seminoles",
      "sample": {
       "away_team": "",
-      "home_team": "",
+      "home_team": "Florida State Seminoles",
       "markets": [
-       "binary"
+       "tournament_winner"
       ]
      },
-     "start": "2026-09-22T00:15:00Z",
+     "start": "2026-09-24T23:29:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "polymarket": "3516934"
+      "saba": "o7631600"
      },
-     "home": null,
+     "home": "Georgia Bulldogs",
      "sample": {
       "away_team": "",
-      "home_team": "",
+      "home_team": "Georgia Bulldogs",
       "markets": [
-       "binary"
+       "tournament_winner"
       ]
      },
-     "start": "2026-09-22T00:15:00Z",
+     "start": "2026-09-24T23:29:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "polymarket": "3516937"
+      "saba": "o7631601"
      },
-     "home": null,
+     "home": "Georgia Tech Yellow Jackets",
      "sample": {
       "away_team": "",
-      "home_team": "",
+      "home_team": "Georgia Tech Yellow Jackets",
       "markets": [
-       "binary"
+       "tournament_winner"
       ]
      },
-     "start": "2026-09-22T00:15:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "polymarket": "3516939"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-22T00:15:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "polymarket": "3516941"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-22T00:15:00Z",
+     "start": "2026-09-24T23:29:00Z",
      "type": "outright"
     }
    ]
