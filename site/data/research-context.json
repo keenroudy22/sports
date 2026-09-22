@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-22T08:49:31Z",
+  "updatedAt": "2026-09-22T11:22:48Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-22T08:01Z",
+              "reportedAt": "2026-09-22T11:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1597,7 +1597,7 @@
               "id": "4240434",
               "name": "Ja'Sir Taylor",
               "position": "CB",
-              "status": "Injured Reserve",
+              "status": "IR",
               "injury": "Undisclosed",
               "reportedAt": "2026-08-31T22:51Z",
               "source": "https://www.espn.com/nfl/player/_/id/4240434/jasir-taylor"
@@ -3216,7 +3216,7 @@
               "id": "4249030",
               "name": "D.J. Montgomery",
               "position": "WR",
-              "status": "Injured Reserve",
+              "status": "IR",
               "injury": "Abdomen",
               "reportedAt": "2026-08-31T17:16Z",
               "source": "https://www.espn.com/nfl/player/_/id/4249030/dj-montgomery"
@@ -3477,7 +3477,7 @@
             {
               "id": "3055899",
               "name": "Harrison Butker",
-              "position": "PK",
+              "position": "K",
               "status": "Active",
               "injury": null,
               "reportedAt": "2026-09-21T23:43Z",
@@ -3676,7 +3676,7 @@
               "id": "4431142",
               "name": "Jimmy Holiday",
               "position": "WR",
-              "status": "Injured Reserve",
+              "status": "IR",
               "injury": "Undisclosed",
               "reportedAt": "2026-08-31T17:40Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431142/jimmy-holiday"
@@ -3707,7 +3707,7 @@
             {
               "id": "4249087",
               "name": "Matt Gay",
-              "position": "PK",
+              "position": "K",
               "status": "Active",
               "injury": null,
               "reportedAt": "2026-09-22T00:04Z",
@@ -4267,7 +4267,7 @@
               "id": "4426515",
               "name": "Puka Nacua",
               "position": "WR",
-              "status": "Out",
+              "status": "Inactive",
               "injury": "Hip",
               "reportedAt": "2026-09-21T22:50Z",
               "source": "https://www.espn.com/nfl/player/_/id/4426515/puka-nacua"
@@ -4397,7 +4397,7 @@
             {
               "id": "4243371",
               "name": "Riley Patterson",
-              "position": "PK",
+              "position": "K",
               "status": "Active",
               "injury": null,
               "reportedAt": "2026-09-22T00:08Z",
@@ -4799,7 +4799,7 @@
               "id": "4360569",
               "name": "Jordan Mason",
               "position": "RB",
-              "status": "Injured Reserve",
+              "status": "IR",
               "injury": "Thumb",
               "reportedAt": "2026-09-16T18:55Z",
               "source": "https://www.espn.com/nfl/player/_/id/4360569/jordan-mason"
@@ -5426,7 +5426,7 @@
               "id": "4590292",
               "name": "Thomas Fidone II",
               "position": "TE",
-              "status": "Out",
+              "status": "Inactive",
               "injury": "Coach's Decision",
               "reportedAt": "2026-09-21T22:59Z",
               "source": "https://www.espn.com/nfl/player/_/id/4590292/thomas-fidone-ii"
@@ -7366,54 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "28",
-          "name": "Luke McCaffrey",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-09-21T19:57:29Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4426948/luke-mccaffrey"
-        },
-        {
-          "teamId": "22",
-          "name": "Will Johnson",
-          "from": "Questionable",
-          "to": "Doubtful",
-          "observedAt": "2026-09-21T22:07:50Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4685408/will-johnson"
-        },
-        {
-          "teamId": "1",
-          "name": "Brian Robinson Jr.",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-09-21T22:07:50Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4241474/brian-robinson-jr"
-        },
-        {
-          "teamId": "1",
-          "name": "Nick Muse",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-09-21T22:07:50Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4249624/nick-muse"
-        },
-        {
-          "teamId": "1",
-          "name": "Michael Penix Jr.",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-09-21T22:07:50Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4360423/michael-penix-jr"
-        },
-        {
-          "teamId": "29",
-          "name": "Jonathon Brooks",
-          "from": "Questionable",
-          "to": "Doubtful",
-          "observedAt": "2026-09-21T22:07:50Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4678008/jonathon-brooks"
-        },
-        {
           "teamId": "3",
           "name": "Anthony Johnson Jr.",
           "from": "Injured Reserve",
@@ -7764,11 +7716,59 @@
           "to": "Out",
           "observedAt": "2026-09-22T08:49:31Z",
           "source": "https://www.espn.com/nfl/player/_/id/4590292/thomas-fidone-ii"
+        },
+        {
+          "teamId": "4",
+          "name": "Ja'Sir Taylor",
+          "from": "Injured Reserve",
+          "to": "IR",
+          "observedAt": "2026-09-22T11:22:48Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4240434/jasir-taylor"
+        },
+        {
+          "teamId": "11",
+          "name": "D.J. Montgomery",
+          "from": "Injured Reserve",
+          "to": "IR",
+          "observedAt": "2026-09-22T11:22:48Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4249030/dj-montgomery"
+        },
+        {
+          "teamId": "12",
+          "name": "Jimmy Holiday",
+          "from": "Injured Reserve",
+          "to": "IR",
+          "observedAt": "2026-09-22T11:22:48Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4431142/jimmy-holiday"
+        },
+        {
+          "teamId": "14",
+          "name": "Puka Nacua",
+          "from": "Out",
+          "to": "Inactive",
+          "observedAt": "2026-09-22T11:22:48Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4426515/puka-nacua"
+        },
+        {
+          "teamId": "16",
+          "name": "Jordan Mason",
+          "from": "Injured Reserve",
+          "to": "IR",
+          "observedAt": "2026-09-22T11:22:48Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4360569/jordan-mason"
+        },
+        {
+          "teamId": "19",
+          "name": "Thomas Fidone II",
+          "from": "Out",
+          "to": "Inactive",
+          "observedAt": "2026-09-22T11:22:48Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4590292/thomas-fidone-ii"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-22T08:49:31Z",
-      "lastAttemptAt": "2026-09-22T08:49:31Z",
+      "checkedAt": "2026-09-22T11:22:48Z",
+      "lastAttemptAt": "2026-09-22T11:22:48Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-22T08:49:31Z",
-      "lastAttemptAt": "2026-09-22T08:49:31Z",
+      "checkedAt": "2026-09-22T11:22:48Z",
+      "lastAttemptAt": "2026-09-22T11:22:48Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
