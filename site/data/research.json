@@ -7825,5 +7825,47 @@
         "Hold the one-book rule that was added at lunchtime on Monday. All three of that morning's picks were quoted off DraftKings alone before the other four books posted, and all three ended up holding a worse number than the market's."
       ]
     }
+  },
+  {
+    "league": "NFL",
+    "targetWeek": 3,
+    "publishedAt": "2026-09-22T11:19:00Z",
+    "summary": "6:45 AM ET run, published at 7:19 ET. Nothing to settle, nothing open to close, nothing to publish. Week 2 ended last night and the next kickoff is Liberty at Coastal Carolina on Thursday evening, with Falcons at Packers on Thursday night and the college slate on Saturday. Both captures correctly skipped because no game is inside two days, which means every price on the board this morning is a single DraftKings number relayed through ESPN's feed with no second book to shop against. That is the exact condition that cost us three picks on Monday, and with kickoff four days away there is no reason to accept it.",
+    "takeaways": [
+      "The board has six totals grading as leans and the best of them is Iowa at Michigan over 38.5, where our number is 47.1 against a 38.5 line and the calibrated chance is 57.3% against the 52.8% a -112 price needs. On the arithmetic alone that clears the model lean bar by 4.4 points. It is still a pass this morning, because the only price behind it is DraftKings relayed through ESPN and the multi-book store was last captured on Friday for college and Sunday lunchtime for the NFL. The Odds API starts capturing a game once it is inside two days, so Saturday's college games come into range on Thursday and Sunday's NFL games on Friday. Waiting costs nothing and buys a shopped number.",
+      "This is the one-book rule doing its job before the fact rather than after it. On Monday all three prop leans went out on DraftKings alone before the other four books posted, and all three finished holding a worse number than the market: Ferguson two yards, Singletary five, with only Theo Johnson a yard to the good. The same condition is on the board right now for every game line, and the difference is that this time nothing kicks off for four days.",
+      "Open items for the record. Nothing is live, the record is fully settled through week 2, and the week 2 review published at 12:06 AM carries the finding that matters: across 538 graded player markets the book's line is closer than our projection in six of seven, with receiving yards the worst at 66 of 158. No prop lean should go out in that market until the projection beats the close there, and that rule change is not yet made."
+    ],
+    "props": [],
+    "riskyProps": [],
+    "gamePicks": [],
+    "parlays": [],
+    "screened": [
+      {
+        "gameId": "CFB-401858463",
+        "market": "total points",
+        "what": "Iowa at Michigan over 38.5, DraftKings -112 relayed through ESPN's feed",
+        "passed": "Clears the model lean bar by 4.4 points on the calibrated chance, 57.3% against 52.8% needed. Held back because the only price available is one relayed book with nothing to shop against, and the game is not until Saturday afternoon. Revisit from Thursday, when the multi-book capture opens on it."
+      },
+      {
+        "gameId": "NFL-401872960",
+        "market": "total points",
+        "what": "Ravens at Cowboys under 52.5, DraftKings -108 relayed through ESPN's feed",
+        "passed": "Our number is 48.5 against 52.5 and the chance is 55.2% against 51.9% needed, so it clears by 3.2 points. Same reason to wait: one relayed price, no second book, Sunday afternoon kickoff, and every NFL team is still under three games this season."
+      },
+      {
+        "gameId": "NFL-401872955",
+        "market": "total points",
+        "what": "Seahawks at Commanders over 40.5, DraftKings -102 relayed through ESPN's feed",
+        "passed": "Clears by 4.2 points at 54.7% against 50.5% needed, and it is the one I would most want to be wrong about holding back. The stored market history says why: the total opened at 46.5, sat at 41.5 from Thursday through Sunday, touched 39.5 on Monday afternoon and is 40.5 now, while the spread has gone from Washington -2.5 on Sunday night to -7.0 this morning. A four and a half point spread move in two days is the market repricing a quarterback, with Jayden Daniels awaiting a timeline and Marcus Mariota set to start. Our number does not carry a quarterback change; the injury report only moves player volume. One relayed price, a market in motion on news we do not model, and five days to kickoff all say wait.",
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401872955"
+        ]
+      }
+    ],
+    "sources": [
+      "https://www.espn.com/nfl/scoreboard",
+      "https://www.espn.com/college-football/scoreboard"
+    ]
   }
 ]
