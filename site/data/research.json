@@ -7886,5 +7886,52 @@
       "https://www.espn.com/nfl/injuries",
       "https://www.espn.com/nfl/scoreboard"
     ]
+  },
+  {
+    "league": "NFL",
+    "targetWeek": 3,
+    "publishedAt": "2026-09-22T22:06:00Z",
+    "summary": "5:30 PM ET run, published at 6:06 ET. Nothing settled, nothing open to close, nothing published. The first real week 3 injury reports landed at 4:56 PM and they change one of the three totals we have been holding. Seahawks at Commanders now has both quarterbacks on the report: Jayden Daniels doubtful for Washington and Sam Darnold questionable for Seattle. That one moves from held to passed. The other two stay held on the same ground as this morning, a single relayed price with no second book, until the multi-book capture opens Thursday for college and Friday for the NFL.",
+    "takeaways": [
+      "Seahawks at Commanders is now a pass rather than a wait, and it is worth being precise about why. Our number likes the over 40.5 at 54.7% against the 50.5% a -102 price needs. But that number is built by the margin and total model, which knows nothing about who plays quarterback: the injury report only moves player volume, never a team's scoring rate. Jayden Daniels is doubtful, which our projections treat as removed, and Sam Darnold is questionable. A total computed on both starters is not a read on a game neither may start. The market has already taken the total from an opening 46.5 down to 40.5 and moved the spread from Washington -3.5 to -7.0, and it is pricing something our model cannot see.",
+      "That is a straightforward statement of a limitation rather than a one-off. The model carries injuries into player volume only. Any game where a starting quarterback is in doubt is a game where our team total is computed on the wrong inputs, and we have no flag on the board that says so. Worth a rule: no model lean on a total when either starting quarterback is doubtful or worse on the current report.",
+      "Ravens at Cowboys reads clean by comparison. The total has not moved off its 52.5 open, the spread has gone 2.5 to 3.0, and neither quarterback is listed. Ten players are on the two reports, all of them questionable or worse in other positions, with Zay Flowers the only one who would move a total much. It stays held for the price reason alone and is the strongest of the three going into Friday.",
+      "Iowa at Michigan is unchanged at 57.3% against 52.8% needed. College injury reports are not covered by the feed at all, so the only thing that will change this one before Saturday is a real price from a second book."
+    ],
+    "props": [],
+    "riskyProps": [],
+    "gamePicks": [],
+    "parlays": [],
+    "screened": [
+      {
+        "gameId": "NFL-401872955",
+        "market": "total points",
+        "what": "Seahawks at Commanders over 40.5, DraftKings -102 relayed through ESPN's feed",
+        "passed": "Passed, not held. Jayden Daniels is doubtful and Sam Darnold is questionable, so both starting quarterbacks are on the week 3 report filed at 4:56 PM. Our total of 44.1 comes from the margin and total model, which does not carry a quarterback change; the injury report only scales player volume. The market has moved the total from an opening 46.5 to 40.5 and the spread from 3.5 to 7.0 on news our number cannot represent. Zach Charbonnet is also out for Seattle.",
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401872955"
+        ]
+      },
+      {
+        "gameId": "NFL-401872960",
+        "market": "total points",
+        "what": "Ravens at Cowboys under 52.5, DraftKings -108 relayed through ESPN's feed",
+        "passed": "Still held rather than passed. Our number is 48.5 against 52.5, a 55.2% chance against the 51.9% the price needs, and the market has not moved the total off its open. Neither quarterback is on the report. The only thing missing is a second book, and the capture opens on this game Friday.",
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401872960"
+        ]
+      },
+      {
+        "gameId": "CFB-401858463",
+        "market": "total points",
+        "what": "Iowa at Michigan over 38.5, DraftKings -112 relayed through ESPN's feed",
+        "passed": "Still held. Clears by 4.4 points and nothing has changed since this morning. College injury reports are not in the feed, so there is no availability read to make here either way; the multi-book capture opens Thursday."
+      }
+    ],
+    "sources": [
+      "https://www.espn.com/nfl/injuries",
+      "https://www.espn.com/nfl/game/_/gameId/401872955",
+      "https://www.espn.com/nfl/game/_/gameId/401872960"
+    ]
   }
 ]
