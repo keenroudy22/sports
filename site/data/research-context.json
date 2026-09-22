@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-22T13:06:18Z",
+  "updatedAt": "2026-09-22T14:02:19Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,7 +1160,7 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "IR",
               "injury": "Undisclosed",
               "reportedAt": "2026-09-22T13:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
@@ -1588,7 +1588,7 @@
               "id": "4689117",
               "name": "Brian Parker II",
               "position": "OT",
-              "status": "Injured Reserve",
+              "status": "IR",
               "injury": "Undisclosed",
               "reportedAt": "2026-09-08T20:42Z",
               "source": "https://www.espn.com/nfl/player/_/id/4689117/brian-parker-ii"
@@ -2665,7 +2665,7 @@
             {
               "id": "4869461",
               "name": "Trey Smack",
-              "position": "PK",
+              "position": "K",
               "status": "Active",
               "injury": null,
               "reportedAt": "2026-09-21T00:04Z",
@@ -2959,7 +2959,7 @@
               "id": "4870893",
               "name": "Kayden McDonald",
               "position": "DT",
-              "status": "Injured Reserve",
+              "status": "IR",
               "injury": "Ankle",
               "reportedAt": "2026-09-12T00:15Z",
               "source": "https://www.espn.com/nfl/player/_/id/4870893/kayden-mcdonald"
@@ -3017,7 +3017,7 @@
             {
               "id": "4571557",
               "name": "Spencer Shrader",
-              "position": "PK",
+              "position": "K",
               "status": "Active",
               "injury": null,
               "reportedAt": "2026-09-21T23:45Z",
@@ -4118,7 +4118,7 @@
               "id": "4430870",
               "name": "KeAndre Lambert-Smith",
               "position": "WR",
-              "status": "Injured Reserve",
+              "status": "IR",
               "injury": "Hamstring",
               "reportedAt": "2026-09-15T23:20Z",
               "source": "https://www.espn.com/nfl/player/_/id/4430870/keandre-lambert-smith"
@@ -4231,7 +4231,7 @@
               "id": "4569382",
               "name": "Jordan Whittington",
               "position": "WR",
-              "status": "Out",
+              "status": "Inactive",
               "injury": "Quadriceps",
               "reportedAt": "2026-09-21T22:59Z",
               "source": "https://www.espn.com/nfl/player/_/id/4569382/jordan-whittington"
@@ -4799,7 +4799,7 @@
               "id": "4360569",
               "name": "Jordan Mason",
               "position": "RB",
-              "status": "Injured Reserve",
+              "status": "IR",
               "injury": "Thumb",
               "reportedAt": "2026-09-16T18:55Z",
               "source": "https://www.espn.com/nfl/player/_/id/4360569/jordan-mason"
@@ -5372,7 +5372,7 @@
               "id": "4371961",
               "name": "Micah McFadden",
               "position": "LB",
-              "status": "Out",
+              "status": "Inactive",
               "injury": "Neck",
               "reportedAt": "2026-09-21T23:17Z",
               "source": "https://www.espn.com/nfl/player/_/id/4371961/micah-mcfadden"
@@ -5976,7 +5976,7 @@
               "id": "4431574",
               "name": "Eli Stowers",
               "position": "TE",
-              "status": "Injured Reserve",
+              "status": "IR",
               "injury": "Hamstring",
               "reportedAt": "2026-09-12T20:06Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431574/eli-stowers"
@@ -6237,7 +6237,7 @@
             {
               "id": "4034949",
               "name": "Eddy Pineiro",
-              "position": "PK",
+              "position": "K",
               "status": "Active",
               "injury": null,
               "reportedAt": "2026-09-22T00:15Z",
@@ -6427,7 +6427,7 @@
               "id": "4259147",
               "name": "Jake Tonges",
               "position": "TE",
-              "status": "Injured Reserve",
+              "status": "IR",
               "injury": "Knee - MCL",
               "reportedAt": "2026-09-16T20:04Z",
               "source": "https://www.espn.com/nfl/player/_/id/4259147/jake-tonges"
@@ -6539,7 +6539,7 @@
             {
               "id": "2473037",
               "name": "Jason Myers",
-              "position": "PK",
+              "position": "K",
               "status": "Active",
               "injury": null,
               "reportedAt": "2026-09-21T15:27Z",
@@ -7366,78 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "12",
-          "name": "Cooper McDonald",
-          "from": "Injured Reserve",
-          "to": "IR",
-          "observedAt": "2026-09-22T05:07:24Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4567826/cooper-mcdonald"
-        },
-        {
-          "teamId": "12",
-          "name": "Jimmy Holiday",
-          "from": "IR",
-          "to": "Injured Reserve",
-          "observedAt": "2026-09-22T05:07:24Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4431142/jimmy-holiday"
-        },
-        {
-          "teamId": "14",
-          "name": "Puka Nacua",
-          "from": "Out",
-          "to": "Inactive",
-          "observedAt": "2026-09-22T05:07:24Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4426515/puka-nacua"
-        },
-        {
-          "teamId": "15",
-          "name": "Kyle Louis",
-          "from": "IR",
-          "to": "Injured Reserve",
-          "observedAt": "2026-09-22T05:07:24Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4880273/kyle-louis"
-        },
-        {
-          "teamId": "19",
-          "name": "Deonte Banks",
-          "from": "Inactive",
-          "to": "Out",
-          "observedAt": "2026-09-22T05:07:24Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4428328/deonte-banks"
-        },
-        {
-          "teamId": "19",
-          "name": "Thomas Fidone II",
-          "from": "Out",
-          "to": "Inactive",
-          "observedAt": "2026-09-22T05:07:24Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4590292/thomas-fidone-ii"
-        },
-        {
-          "teamId": "7",
-          "name": "Frank Crum",
-          "from": "IR",
-          "to": "Injured Reserve",
-          "observedAt": "2026-09-22T08:49:31Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4361691/frank-crum"
-        },
-        {
-          "teamId": "12",
-          "name": "Cooper McDonald",
-          "from": "IR",
-          "to": "Injured Reserve",
-          "observedAt": "2026-09-22T08:49:31Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4567826/cooper-mcdonald"
-        },
-        {
-          "teamId": "14",
-          "name": "Puka Nacua",
-          "from": "Inactive",
-          "to": "Out",
-          "observedAt": "2026-09-22T08:49:31Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4426515/puka-nacua"
-        },
-        {
           "teamId": "19",
           "name": "Thomas Fidone II",
           "from": "Inactive",
@@ -7764,11 +7692,83 @@
           "to": "Injured Reserve",
           "observedAt": "2026-09-22T13:06:18Z",
           "source": "https://www.espn.com/nfl/player/_/id/4723820/omar-cooper-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "IR",
+          "observedAt": "2026-09-22T14:02:19Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "4",
+          "name": "Brian Parker II",
+          "from": "Injured Reserve",
+          "to": "IR",
+          "observedAt": "2026-09-22T14:02:19Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4689117/brian-parker-ii"
+        },
+        {
+          "teamId": "34",
+          "name": "Kayden McDonald",
+          "from": "Injured Reserve",
+          "to": "IR",
+          "observedAt": "2026-09-22T14:02:19Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4870893/kayden-mcdonald"
+        },
+        {
+          "teamId": "24",
+          "name": "KeAndre Lambert-Smith",
+          "from": "Injured Reserve",
+          "to": "IR",
+          "observedAt": "2026-09-22T14:02:19Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4430870/keandre-lambert-smith"
+        },
+        {
+          "teamId": "14",
+          "name": "Jordan Whittington",
+          "from": "Out",
+          "to": "Inactive",
+          "observedAt": "2026-09-22T14:02:19Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4569382/jordan-whittington"
+        },
+        {
+          "teamId": "16",
+          "name": "Jordan Mason",
+          "from": "Injured Reserve",
+          "to": "IR",
+          "observedAt": "2026-09-22T14:02:19Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4360569/jordan-mason"
+        },
+        {
+          "teamId": "19",
+          "name": "Micah McFadden",
+          "from": "Out",
+          "to": "Inactive",
+          "observedAt": "2026-09-22T14:02:19Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4371961/micah-mcfadden"
+        },
+        {
+          "teamId": "21",
+          "name": "Eli Stowers",
+          "from": "Injured Reserve",
+          "to": "IR",
+          "observedAt": "2026-09-22T14:02:19Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4431574/eli-stowers"
+        },
+        {
+          "teamId": "25",
+          "name": "Jake Tonges",
+          "from": "Injured Reserve",
+          "to": "IR",
+          "observedAt": "2026-09-22T14:02:19Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4259147/jake-tonges"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-22T13:06:18Z",
-      "lastAttemptAt": "2026-09-22T13:06:18Z",
+      "checkedAt": "2026-09-22T14:02:19Z",
+      "lastAttemptAt": "2026-09-22T14:02:19Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-22T13:06:18Z",
-      "lastAttemptAt": "2026-09-22T13:06:18Z",
+      "checkedAt": "2026-09-22T14:02:19Z",
+      "lastAttemptAt": "2026-09-22T14:02:19Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
