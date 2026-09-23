@@ -1,4 +1,5 @@
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -14,8 +15,12 @@ def rec(game, at, total):
     return json.dumps({'gameId': game, 'retrievedAt': at, 'total': total}, sort_keys=True)
 
 
+ENV = {**os.environ, 'GIT_AUTHOR_NAME': 't', 'GIT_AUTHOR_EMAIL': 't@t', 'GIT_COMMITTER_NAME': 't', 'GIT_COMMITTER_EMAIL': 't@t',
+       'GIT_CONFIG_GLOBAL': '/dev/null', 'GIT_CONFIG_NOSYSTEM': '1'}     # the runner has no global identity; neither does this
+
+
 def git(cwd, *args):
-    return subprocess.run(['git', *args], cwd=cwd, capture_output=True, text=True, check=True)
+    return subprocess.run(['git', *args], cwd=cwd, capture_output=True, text=True, check=True, env=ENV)
 
 
 def commit(cwd, message):
@@ -80,12 +85,12 @@ class RebaseTests(unittest.TestCase):
                     {'leagues': {'NFL': {'count': 2, 'day': '2026-09-26'}}, 'usage': {'at': '2026-09-26T12:38:00Z', 'remaining': 439, 'used': 61}})
         commit(self.root, 'hosted capture')
         git(self.root, 'checkout', '-q', 'desk')
-        stopped = subprocess.run(['git', 'rebase', 'main'], cwd=self.root, capture_output=True, text=True)
+        stopped = subprocess.run(['git', 'rebase', 'main'], cwd=self.root, capture_output=True, text=True, env=ENV)
         self.assertNotEqual(stopped.returncode, 0, 'the rebase must stop on the store')
         resolved, left = ms.resolve(self.root, log=lambda *_: None)
         self.assertEqual(left, [])
         self.assertEqual(sorted(resolved), ['data/odds/ledger.json', 'data/odds/nfl-2026.jsonl', 'data/odds/status.json'])
-        subprocess.run(['git', '-c', 'core.editor=true', 'rebase', '--continue'], cwd=self.root, capture_output=True, text=True, check=True)
+        subprocess.run(['git', '-c', 'core.editor=true', 'rebase', '--continue'], cwd=self.root, capture_output=True, text=True, check=True, env=ENV)
         records = boxscores.read_store(self.store() / 'nfl-2026.jsonl')
         self.assertEqual([r['total'] for r in records], [44, 44.5, 45], 'both captures, in retrieval order')
         self.assertEqual(boxscores.verify(self.store()), [], 'the ledger matches the merged file')
@@ -103,7 +108,7 @@ class RebaseTests(unittest.TestCase):
         (self.root / 'note.txt').write_text('hosted\n')
         commit(self.root, 'hosted note')
         git(self.root, 'checkout', '-q', 'desk')
-        subprocess.run(['git', 'rebase', 'main'], cwd=self.root, capture_output=True, text=True)
+        subprocess.run(['git', 'rebase', 'main'], cwd=self.root, capture_output=True, text=True, env=ENV)
         resolved, left = ms.resolve(self.root, log=lambda *_: None)
         self.assertEqual((resolved, left), ([], ['note.txt']))
         git(self.root, 'rebase', '--abort')

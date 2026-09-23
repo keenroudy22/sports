@@ -154,16 +154,16 @@ class GitTests(unittest.TestCase):
         self.addCleanup(side.cleanup)
         origin = Path(side.name) / 'origin.git'
         hosted = Path(side.name) / 'hosted'
-        subprocess.run(['git', 'init', '-q', '--bare', str(origin)], check=True, capture_output=True)
+        subprocess.run(['git', 'init', '-q', '--bare', '-b', 'main', str(origin)], check=True, capture_output=True)
         self.sh('remote', 'add', 'origin', str(origin))
         self.sh('push', '-q', '-u', 'origin', 'main')
-        subprocess.run(['git', 'clone', '-q', str(origin), str(hosted)], check=True, capture_output=True, env=self.env)
+        subprocess.run(['git', 'clone', '-q', '-b', 'main', str(origin), str(hosted)], check=True, capture_output=True, env=self.env)
         store = hosted / 'data' / 'odds'
         with (store / 'nfl.jsonl').open('a') as f:
             f.write('{"gameId": "g", "retrievedAt": "2026-09-27T12:38:00Z", "total": 45}\n')
         boxscores.write_json(store / 'ledger.json', boxscores.ledger(store))
         subprocess.run(['git', '-c', 'user.name=bot', '-c', 'user.email=b@b', 'commit', '-q', '-am', 'hosted capture'], cwd=hosted, check=True, capture_output=True, env=self.env)
-        subprocess.run(['git', 'add', 'data/odds/ledger.json'], cwd=hosted, check=True, capture_output=True)
+        subprocess.run(['git', 'add', 'data/odds/ledger.json'], cwd=hosted, check=True, capture_output=True, env=self.env)
         subprocess.run(['git', '-c', 'user.name=bot', '-c', 'user.email=b@b', 'commit', '-q', '-m', 'hosted ledger'], cwd=hosted, check=True, capture_output=True, env=self.env)
         subprocess.run(['git', 'push', '-q'], cwd=hosted, check=True, capture_output=True, env=self.env)
         mine = self.repo / 'data' / 'odds'
