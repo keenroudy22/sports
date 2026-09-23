@@ -123,7 +123,27 @@ def sync(runner=git):
     dirty = [l for l in runner('status', '--porcelain').stdout.splitlines() if not l.startswith('??')]
     if dirty:
         raise RunError(f'tracked files are modified before the run: {dirty[:5]}')
-    runner('pull', '--rebase', '--quiet')
+    rebase_onto_remote(runner)
+
+
+def rebase_onto_remote(runner=git, cwd=ROOT, attempts=6):
+    """Fetch and rebase onto origin/main. When both writers captured prices in the same window the rebase
+    stops on the store files; scripts/merge_store.py keeps every record from both sides and recomputes the
+    ledger, and the rebase goes on. A conflict anywhere else aborts the rebase and stops the run."""
+    import merge_store
+    runner('fetch', '--quiet', 'origin', 'main', cwd=cwd)
+    result = runner('rebase', '--quiet', 'origin/main', cwd=cwd, check=False)
+    for _ in range(attempts):
+        if not result.returncode:
+            return
+        resolved, left = merge_store.resolve(cwd=cwd, log=log)
+        if left or not resolved:
+            runner('rebase', '--abort', cwd=cwd, check=False)
+            detail = f'outside the stores: {left[:5]}' if left else (result.stderr or result.stdout).strip()[:300]
+            raise RunError(f'rebase onto origin/main conflicted {detail}; the local commits stay for a person')
+        result = runner('-c', 'core.editor=true', 'rebase', '--continue', cwd=cwd, check=False)
+    runner('rebase', '--abort', cwd=cwd, check=False)
+    raise RunError('rebase onto origin/main did not finish')
 
 
 def capture(python=sys.executable):
@@ -805,14 +825,13 @@ def commit_push(now, slot, counts, push=True, runner=git, cwd=ROOT):
         runner('commit', '--quiet', '-m', message, cwd=cwd)
     if not push or not (captures or research):
         return {'committed': bool(captures or research), 'pushed': False}
-    result = runner('push', '--quiet', cwd=cwd, check=False)
-    if result.returncode:
-        rebase = runner('pull', '--rebase', '--quiet', cwd=cwd, check=False)
-        if rebase.returncode:
-            runner('rebase', '--abort', cwd=cwd, check=False)
-            raise RunError('push rejected and the rebase conflicted; the commits stay local for the next run')
-        runner('push', '--quiet', cwd=cwd)
-    return {'committed': True, 'pushed': True}
+    for attempt in range(3):
+        result = runner('push', '--quiet', cwd=cwd, check=False)
+        if not result.returncode:
+            return {'committed': True, 'pushed': True}
+        log(f'push rejected (attempt {attempt + 1}); rebasing onto origin/main')
+        rebase_onto_remote(runner, cwd=cwd)
+    raise RunError('push rejected three times; the commits stay local and the next run rebases them')
 
 
 # ------------------------------------------------------------------ the run

@@ -64,6 +64,12 @@ says how): next `settle,close,lean,prop,longshot`, then everything once the rese
 Every commit the desk makes is authored and pushed as `keenroudy22` through the sports-only `gh` login;
 the heartbeat checks that identity every morning and alerts if it changes.
 
+Two writers push to the repository: this desk and the hosted workflow. A rejected push is rebased and
+retried on both sides. When both captured prices in the same window the rebase stops on `data/odds` or
+`data/prop-odds`; `scripts/merge_store.py` keeps every record from both sides in retrieval order, recomputes
+the store's ledger the way every capture script writes it, and merges the day's budget counts taking the
+stricter side. A conflict anywhere else aborts the rebase and stops the run for a person. Nothing is ever forced.
+
 ## The local model
 
 Ollama serves the model at `http://localhost:11434`; `KEENROUDY_LLM_MODEL` in the env file names the

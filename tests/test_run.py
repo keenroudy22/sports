@@ -146,6 +146,42 @@ class GitTests(unittest.TestCase):
         self.assertEqual(log[1], 'Odds capture 2026-09-27 12:19 ET')
         self.assertEqual(self.sh('status', '--porcelain').stdout, '')
 
+    def test_push_rejected_by_the_other_writer_is_rebased_and_the_store_merged(self):
+        """The hosted workflow and the desk both appended to the odds store; the desk's push is rejected,
+        rebased, the store merged with every record kept, and pushed. Nothing is forced."""
+        import boxscores
+        side = tempfile.TemporaryDirectory()
+        self.addCleanup(side.cleanup)
+        origin = Path(side.name) / 'origin.git'
+        hosted = Path(side.name) / 'hosted'
+        subprocess.run(['git', 'init', '-q', '--bare', str(origin)], check=True, capture_output=True)
+        self.sh('remote', 'add', 'origin', str(origin))
+        self.sh('push', '-q', '-u', 'origin', 'main')
+        subprocess.run(['git', 'clone', '-q', str(origin), str(hosted)], check=True, capture_output=True, env=self.env)
+        store = hosted / 'data' / 'odds'
+        with (store / 'nfl.jsonl').open('a') as f:
+            f.write('{"gameId": "g", "retrievedAt": "2026-09-27T12:38:00Z", "total": 45}\n')
+        boxscores.write_json(store / 'ledger.json', boxscores.ledger(store))
+        subprocess.run(['git', '-c', 'user.name=bot', '-c', 'user.email=b@b', 'commit', '-q', '-am', 'hosted capture'], cwd=hosted, check=True, capture_output=True, env=self.env)
+        subprocess.run(['git', 'add', 'data/odds/ledger.json'], cwd=hosted, check=True, capture_output=True)
+        subprocess.run(['git', '-c', 'user.name=bot', '-c', 'user.email=b@b', 'commit', '-q', '-m', 'hosted ledger'], cwd=hosted, check=True, capture_output=True, env=self.env)
+        subprocess.run(['git', 'push', '-q'], cwd=hosted, check=True, capture_output=True, env=self.env)
+        mine = self.repo / 'data' / 'odds'
+        with (mine / 'nfl.jsonl').open('a') as f:
+            f.write('{"gameId": "g", "retrievedAt": "2026-09-27T12:35:00Z", "total": 44.5}\n')
+        boxscores.write_json(mine / 'ledger.json', boxscores.ledger(mine))
+        (self.repo / 'research' / '2026-09-27-NFL-0830-run.json').write_text('{"league": "NFL"}')
+        now = datetime(2026, 9, 27, 12, 30, tzinfo=timezone.utc)
+        result = run.commit_push(now, run.slot_for(now), {'published': 1, 'settled': 0, 'closed': 0}, push=True, runner=self.runner, cwd=self.repo)
+        self.assertEqual(result, {'committed': True, 'pushed': True})
+        self.assertEqual(self.sh('rev-parse', 'HEAD').stdout, self.sh('rev-parse', 'origin/main').stdout, 'pushed, on top of the hosted commits')
+        log = self.sh('log', '--format=%s').stdout.splitlines()
+        self.assertEqual(log[:4], ['Research 2026-09-27 08:30 ET: 1 published, 0 settled, 0 closed', 'Odds capture 2026-09-27 08:30 ET', 'hosted ledger', 'hosted capture'])
+        records = boxscores.read_store(mine / 'nfl.jsonl')
+        self.assertEqual([r.get('total') for r in records], [None, 45, 44.5], 'both captures kept; the base line has no retrievedAt so the order is by side')
+        self.assertEqual(boxscores.verify(mine), [], 'the ledger was recomputed over the merged file')
+        self.assertEqual(self.sh('status', '--porcelain').stdout, '')
+
     def test_sync_refuses_a_dirty_tree(self):
         (self.repo / 'research' / 'old.json').write_text('{"changed": true}')
         with self.assertRaises(run.RunError):
