@@ -1011,6 +1011,7 @@
       const html = await (VIEWS[route.view] || viewToday)(route);
       if (mine !== token) return;
       view.innerHTML = html;
+      if (route.pick) openPick(route.pick);
     } catch (error) {
       if (mine !== token) return;
       view.innerHTML = `<div class="empty" style="margin-top:32px"><h3>Could not load this page</h3><p>${esc(error.message)}</p><button class="btn" type="button" data-retry>Try again</button></div>`;
@@ -1066,7 +1067,12 @@
     }
     if (target.closest('[data-clear-ticket]')) { state.ticket = []; saveTicket(); render(); return; }
     if (target.closest('[data-retry]')) { cache.clear(); render(); return; }
-    if (target.closest('[data-close]')) { $('#detail').close(); return; }
+    if (target.closest('[data-close]')) {
+      $('#detail').close();
+      /* Closing a shared pick's card leaves the reader on Today, not on a link that would reopen it. */
+      if (/^#\/?pick\//.test(location.hash)) history.replaceState(null, '', '#today');
+      return;
+    }
     const prop = target.closest('[data-prop]');
     if (prop) { openProp(prop.dataset.prop); return; }
     const pick = target.closest('[data-pick]');

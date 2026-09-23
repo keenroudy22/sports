@@ -345,6 +345,8 @@
     if (view === 'player') return { view: 'player', league: (rest[0] || 'NFL').toUpperCase(), id: rest[1] };
     if (view === 'team') return { view: 'team', league: (rest[0] || 'NFL').toUpperCase(), id: rest[1] };
     if (view === 'game') return { view: 'game', id: rest.join('/') };
+    /* A shareable pick: the Today page with that pick's card open, so a post can link to the receipt. */
+    if (view === 'pick' && rest.length) return { view: 'today', pick: rest.join('/') };
     if (view === 'stats') return { view: 'stats', tab: rest[0] || 'players' };
     if (view === 'board') return { view: 'board', tab: rest[0] === 'props' ? 'props' : 'games' };
     if (view === 'defense') return { view: 'stats', tab: 'defense' };

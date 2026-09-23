@@ -208,6 +208,8 @@ test('old links land on the matching new pages', () => {
     '#player/NFL/4430878': { view: 'player', league: 'NFL', id: '4430878' }, '#player/cfb/5': { view: 'player', league: 'CFB', id: '5' },
     '#sport/MLB': { view: 'scores', league: 'MLB' }, '#stats/defense': { view: 'stats', tab: 'defense' },
     '#team/CFB/2390': { view: 'team', league: 'CFB', id: '2390' }, '#nonsense': { view: 'today' },
+    '#pick/CFB-2026-W3-duke-minus-10-vs-stan-dk': { view: 'today', pick: 'CFB-2026-W3-duke-minus-10-vs-stan-dk' },
+    '#pick': { view: 'today' },
   };
   for (const [hash, expected] of Object.entries(cases)) assert.deepEqual(C.parseRoute(hash), expected, hash);
   assert.equal(C.shardOf('4430878', 32), 4430878 % 32);
