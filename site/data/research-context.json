@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-23T12:54:59Z",
+  "updatedAt": "2026-09-23T13:03:24Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -927,6 +927,15 @@
           "name": "Carolina Panthers",
           "players": [
             {
+              "id": "4678008",
+              "name": "Jonathon Brooks",
+              "position": "RB",
+              "status": "Out",
+              "injury": "Abdomen",
+              "reportedAt": "2026-09-23T12:54Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4678008/jonathon-brooks"
+            },
+            {
               "id": "4430034",
               "name": "Xavier Legette",
               "position": "WR",
@@ -979,15 +988,6 @@
               "injury": "Back",
               "reportedAt": "2026-09-22T20:56Z",
               "source": "https://www.espn.com/nfl/player/_/id/4372518/bobby-brown-iii"
-            },
-            {
-              "id": "4678008",
-              "name": "Jonathon Brooks",
-              "position": "RB",
-              "status": "Doubtful",
-              "injury": "Groin",
-              "reportedAt": "2026-09-21T20:47Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4678008/jonathon-brooks"
             },
             {
               "id": "4428993",
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-23T12:00Z",
+              "reportedAt": "2026-09-23T12:54Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "24",
-          "name": "KeAndre Lambert-Smith",
-          "from": "IR",
-          "to": "Injured Reserve",
-          "observedAt": "2026-09-22T22:03:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4430870/keandre-lambert-smith"
-        },
-        {
           "teamId": "14",
           "name": "Jordan Whittington",
           "from": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Injured Reserve",
           "observedAt": "2026-09-23T00:54:07Z",
           "source": "https://www.espn.com/nfl/player/_/id/4429105/arian-smith"
+        },
+        {
+          "teamId": "29",
+          "name": "Jonathon Brooks",
+          "from": "Doubtful",
+          "to": "Out",
+          "observedAt": "2026-09-23T13:03:24Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4678008/jonathon-brooks"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-23T12:54:59Z",
-      "lastAttemptAt": "2026-09-23T12:54:59Z",
+      "checkedAt": "2026-09-23T13:03:24Z",
+      "lastAttemptAt": "2026-09-23T13:03:24Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-23T12:54:59Z",
-      "lastAttemptAt": "2026-09-23T12:54:59Z",
+      "checkedAt": "2026-09-23T13:03:24Z",
+      "lastAttemptAt": "2026-09-23T13:03:24Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }

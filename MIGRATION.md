@@ -68,6 +68,11 @@ In force today:
 - **Rank quotes by expected value, not by number.** The board picks the best number then the best
   price at it. On 2026-09-23 that surfaced BetRivers 53 at -113 worth 2.1 points when ESPN BET 52.5
   at -105 was worth 4.0. Rank by the desk's `evPerUnit`.
+- **Check a pick's move against the book it was taken at.** `scripts/desk.py` prices an open game
+  pick from the relayed ESPN feed, which carries DraftKings only, while a prop is checked against the
+  multi-book capture. On 2026-09-23 that reported our ESPN BET pick at DraftKings's price. It can
+  report a close that has not happened, and it can miss one that has. Check the pick's own book from
+  the capture, and fall back to the feed only when that book has no current quote.
 - **Cutoffs and expiry.** A pick closes to new entries when the line passes its published cutoff.
   Never re-price, never extend an expiry, never void a pick because the line moved.
 - **Never publish on a started game.** Check kickoff against the clock at publish time.
