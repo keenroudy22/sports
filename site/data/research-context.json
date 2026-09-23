@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-23T13:07:12Z",
+  "updatedAt": "2026-09-23T14:10:14Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -930,9 +930,9 @@
               "id": "4678008",
               "name": "Jonathon Brooks",
               "position": "RB",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Abdomen",
-              "reportedAt": "2026-09-23T12:54Z",
+              "reportedAt": "2026-09-23T13:48Z",
               "source": "https://www.espn.com/nfl/player/_/id/4678008/jonathon-brooks"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-23T12:54Z",
+              "reportedAt": "2026-09-23T13:43Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "14",
-          "name": "Jordan Whittington",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-09-22T22:03:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4569382/jordan-whittington"
-        },
-        {
-          "teamId": "14",
           "name": "Kamren Kinchens",
           "from": "Inactive",
           "to": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-09-23T13:03:24Z",
           "source": "https://www.espn.com/nfl/player/_/id/4678008/jonathon-brooks"
+        },
+        {
+          "teamId": "29",
+          "name": "Jonathon Brooks",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-09-23T14:10:14Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4678008/jonathon-brooks"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-23T13:07:12Z",
-      "lastAttemptAt": "2026-09-23T13:07:12Z",
+      "checkedAt": "2026-09-23T14:10:14Z",
+      "lastAttemptAt": "2026-09-23T14:10:14Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-23T13:07:12Z",
-      "lastAttemptAt": "2026-09-23T13:07:12Z",
+      "checkedAt": "2026-09-23T14:10:14Z",
+      "lastAttemptAt": "2026-09-23T14:10:14Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
