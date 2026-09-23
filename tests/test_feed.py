@@ -35,13 +35,23 @@ class FeedTests(unittest.TestCase):
         items = feed.pick_items(first, latest, GAMES, NOW)
         self.assertEqual(sorted(i['guid'] for i in items), ['early', 'fav', 'lean', 'ticket'])
         ticket = next(i for i in items if i['guid'] == 'ticket')
-        self.assertTrue(ticket['title'].startswith('Fun ticket, quarter unit'))
+        self.assertTrue(ticket['title'].startswith('Fun parlay: '), ticket['title'])
         lean = next(i for i in items if i['guid'] == 'lean')
-        self.assertTrue(lean['title'].startswith('Model lean, our number alone: '))
+        self.assertTrue(lean['title'].startswith('Team prop: '), lean['title'])
         self.assertIn('#pick/lean', lean['link'])
-        self.assertIn('Our number 48 vs the 44.5', lean['text'])
+        self.assertIn('Our number: 48', lean['text'])
         early = next(i for i in items if i['guid'] == 'early')
         self.assertEqual(early['pubDate'].isoformat(), '2026-09-29T13:00:00+00:00', 'dated when its window opened, not when it was published')
+
+    def test_every_open_play_gets_a_card_before_its_window(self):
+        tomorrow = dict(GAMES, **{'g-next': {'id': 'g-next', 'league': 'NFL', 'kickoff': '2026-10-01T00:15Z', 'home': {'short': 'Lions'}, 'away': {'short': 'Bills'}}})
+        first = {'next': pick('next', gameIds=['g-next']), 'today': pick('today'), 'kicked': pick('kicked', gameIds=['g-done']),
+                 'closed': pick('closed'), 'old': pick('old', historicalImport=True)}
+        latest = {k: dict(v) for k, v in first.items()}
+        latest['closed']['entryNote'] = 'closed'
+        early = datetime(2026, 9, 29, 11, 0, tzinfo=timezone.utc)        # 7:00 AM ET: no window is open yet
+        self.assertEqual(feed.pick_items(first, latest, tomorrow, early), [])
+        self.assertEqual(sorted(i['guid'] for i in feed.card_items(first, latest, tomorrow, early)), ['next', 'today'])
 
     def test_the_posting_window_is_game_day_from_nine_until_45_minutes_out(self):
         kickoff = '2026-09-30T00:15Z'                                                     # Tuesday 8:15 PM ET
@@ -83,7 +93,7 @@ class FeedTests(unittest.TestCase):
         self.assertEqual(item.find('guid').text, 'lean')
         self.assertEqual(item.find('enclosure').get('url'), 'https://keenroudy.com/sports/data/cards/lean.png')
         self.assertEqual(item.find('enclosure').get('type'), 'image/png')
-        self.assertIn('Model lean', item.find('description').text)
+        self.assertIn('TEAM PROP', item.find('description').text)
         self.assertTrue(item.find('pubDate').text.endswith('+0000') or 'GMT' in item.find('pubDate').text or True)
 
 

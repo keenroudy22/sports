@@ -1,18 +1,14 @@
-"""The plays as an RSS feed, so a relay with its own X access can post them to @keenkooks. Stdlib only.
+"""The plays as an RSS feed: the public record of what goes to @keenkooks, and a source for any relay. Stdlib only.
 
-X meters posting through its API, so the desk does not post there itself. Instead the site publishes
-site/data/feed.xml: one item per post the desk would make, in the same words scripts/x_post.py drafts
-(a favorite or a lean with its label, price, our number against the line and the receipt link), plus a
-game-day recap once the day is settled and the model scoreboard on Tuesday mornings. Each pick item
-carries its card as an image enclosure, rendered by the machine's browser into site/data/cards/ when
-one is available (GitHub's runners have Chrome; the Mac has Chrome). Neither the feed nor the cards
-are committed; the hosted workflow builds and deploys them with the rest of the page payloads.
+The site publishes site/data/feed.xml: one item per play the desk posts, in the same words
+scripts/x_post.py drafts (the kind of play, the play at its price, our number, one plain reason). X gets
+plays only: player props, team props and the day's fun parlay. Every open play gets its card as soon as
+it is published, rendered by the machine's browser into site/data/cards/ (GitHub's runners have Chrome;
+the Mac has Chrome), so the desk can attach it the moment it schedules the post. Neither the feed nor the
+cards are committed; the hosted workflow builds and deploys them with the rest of the page payloads.
 
-A relay posts new items once, when it first sees them. So a play appears in the feed only inside its
-posting window: on the day of its game, Eastern, from 9:00 AM until 45 minutes before kickoff, and only
-while it is still open. Not so early that the line is a day old, not so late that the game is on. A
-recap appears once the day is settled and the scoreboard on Tuesday mornings. Nothing stale can be
-posted from it.
+A play appears in the feed only inside its posting window: on the day of its game, Eastern, from 9:00 AM
+until 45 minutes before kickoff, and only while it is still open. Nothing stale can be posted from it.
 
   python scripts/feed.py [--out site/data/feed.xml] [--no-cards]
 """
@@ -38,11 +34,11 @@ WINDOW_OPENS = (9, 0)                # Eastern: no plays before 9:00 AM on game 
 LEAD = timedelta(minutes=45)         # and none inside 45 minutes of kickoff
 RECAP_DAYS = 3
 TITLE = 'KeenRoudy Sports plays'
-ABOUT = 'Model leans, prop leans and researched picks from keenroudy.com/sports, graded in public. Entertainment only.'
+ABOUT = 'Player props, team props and fun parlays from keenroudy.com/sports, graded in public. Entertainment only.'
 
 
 def postable(pick):
-    """Favorites, model leans, prop leans and the day's longshot; each is labeled for what it is."""
+    """Player props, team props and the day's fun parlay: favorites, model leans, prop leans and the longshot."""
     return pick.get('favorite') is True or bool(pick.get('modelLean')) or bool(pick.get('legs')) or pick.get('parlayType') == 'longshot'
 
 
@@ -92,6 +88,23 @@ def pick_items(first, latest, games, now, player_team=None):
         items.append({'guid': key, 'title': x_post.kind_label(merged) + ': ' + str(merged.get('title')),
                       'text': text, 'link': f'{SITE}#pick/{key}', 'pubDate': max(gates.when(published), opened),
                       'pick': merged, 'game': game, 'side': player_side(merged, game, player_team)})
+    return items
+
+
+def card_items(first, latest, games, now, player_team=None):
+    """Every open, postable play whose first game has not started: the plays that may still need a card."""
+    items = []
+    for key, pick in first.items():
+        merged = dict(pick, **latest.get(key, {}))
+        if pick.get('historicalImport') or not postable(merged) or merged.get('result') or merged.get('entryNote'):
+            continue
+        if (merged.get('status') or 'active') != 'active':
+            continue
+        starts = sorted(games[g]['kickoff'] for g in (pick.get('gameIds') or []) if g in games)
+        game = games.get((pick.get('gameIds') or [None])[0])
+        if not game or not starts or gates.when(starts[0]) <= now:
+            continue
+        items.append({'guid': key, 'pick': merged, 'game': game, 'side': player_side(merged, game, player_team)})
     return items
 
 
@@ -170,12 +183,11 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
     now = now or datetime.now(timezone.utc)
     stores = gates.Stores()
     ctx = stores.as_of(now)
-    scoreboard = build_site.read(ROOT / 'site' / 'data' / 'scoreboard.json', {})
-    items = pick_items(ctx.first, ctx.latest, ctx.games, now, ctx.player_team) + recap_items(ctx.first, ctx.latest, ctx.games, now)
-    weekly = scoreboard_item(scoreboard, now)
-    if weekly:
-        items.append(weekly)
-    cards = render_cards(items, cards_folder, log) if with_cards else {}
+    # X gets plays only (the owner's call, 2026-09-23), so the feed that mirrors it does too.
+    items = pick_items(ctx.first, ctx.latest, ctx.games, now, ctx.player_team)
+    # A card for every open play as soon as it is published, not only inside its posting window: the desk
+    # schedules the post the moment the card is live, and never posts without one.
+    cards = render_cards(card_items(ctx.first, ctx.latest, ctx.games, now, ctx.player_team), cards_folder, log) if with_cards else {}
     Path(out).parent.mkdir(parents=True, exist_ok=True)
     Path(out).write_text(rss(items, cards, now), encoding='utf-8')
     log(f'{len(items)} items in the feed ({sum(1 for i in items if "pick" in i)} plays, {len(cards)} cards) -> {out}')

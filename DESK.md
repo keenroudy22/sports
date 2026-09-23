@@ -13,7 +13,8 @@ rules in words. When this file and the validator disagree, the validator wins.
 | `scripts/gates.py` | The publishing rules, one function per rule. A candidate passes every gate or it is not published. `python scripts/gates.py CANDIDATE.json` evaluates one. |
 | `scripts/replay_gates.py` | Every published pick back through the gates as of its publication, with what would have been refused and why. |
 | `scripts/llm.py`, `scripts/llm_tasks.py` | The local model (Ollama, on this machine) and the two guards on its prose: the house style and the numbers guard. The model polishes templated `why` and `risk`, drafts posts and weighs the facts against a candidate. It never adds a number. |
-| `scripts/x_post.py` | Drafting and posting researched favorites to X, behind a review gate, with `data/x-posted.json` as the posted log. |
+| `scripts/x_post.py` | The post text: one shape for every play (player prop, team prop, fun parlay), with `data/x-posted.json` as the posted log. |
+| `scripts/buffer_post.py` | Scheduling those posts to @keenkooks through Buffer's free plan, three hours before kickoff, each with its card. |
 
 Nothing here edits an existing file in `research/`, `market-observations/` or a ledger. A quiet run
 writes nothing.
@@ -81,37 +82,54 @@ With Ollama down the run publishes on templates and holds on a quarterback rule 
 
 ## X
 
-Favorites, model leans, prop leans and the day's longshot all go to X, each labeled for what it is (a lean
-says "our number alone", the longshot "fun ticket, quarter unit"). Every post is drafted by
-`scripts/x_post.py` in the kitchen's voice from the pick's own fields (the label, the line at its price, one
-or two sentences of the pick's reasoning with the most specific first, our number against the line, the
-receipt link `https://keenroudy.com/sports/#pick/<id>` and the league tag), and every pick gets a card (`scripts/pick_card.py`) in the colours of the side the
-play is on, rendered by a headless Chrome and never committed.
+X gets plays only (the owner's call after the first post, a stats line, went out on 2026-09-23 and was
+deleted): **player props**, **team props** (sides and totals) and the day's **fun parlay**. Favorites, model
+leans, prop leans and the longshot all qualify; recaps and scoreboards stay on the site. Every post has the
+same shape, drafted by `scripts/x_post.py` from the pick's own fields:
 
-X meters posting through its API, so the desk does not post there itself. It posts through **Buffer**
-(`scripts/buffer_post.py`): Buffer's free plan connects an X account to Buffer's own developer access and
-gives 3,000 API requests a month, an exact `dueAt` per post, a public image URL per post and a `deletePost`.
-At each run the desk schedules the day's plays into their posting window (game day, Eastern, from 9:00 AM,
-eight minutes apart, never inside 45 minutes of kickoff), the recap for 8:00 the next morning once every
-pick of the day is settled, and the scoreboard for Tuesday at 9:00. Every post is logged in
-`data/x-posted.json` (kind `buffer:*`) so nothing goes out twice; once its time has passed the run records the X
-link it went out under, or the failure (which fails the run, so the heartbeat alerts). A play that closes before
-its time is cancelled, and the channel's own daily limit is respected. Cards come from `site/data/cards/`, which the
-hosted workflow deploys; a card that is not deployed yet means a text-only post, never a failure.
+```
+🍳 PLAYER PROP                    (TEAM PROP, FUN PARLAY; "· FAVORITE" on a researched pick)
+Player Seven over 4.5 receptions
+-115 at DraftKings
 
-One-time setup (the owner): a free Buffer account with @keenkooks connected as an X channel, then
-Settings → API → create a key and paste it as `BUFFER_TOKEN` in `~/.config/keenroudy/env`.
+Our number: 5.8
+He has caught 6 in each of his last 2 games.
+
+#NFL
+```
+
+The reason is one sentence of the pick's own `why`, short and free of the desk's arithmetic words; when
+every sentence is arithmetic the post stands on the play and the number. A parlay lists its legs and says
+"Quarter unit. Just for fun." There is no link (X shows fewer people a post that leaves the site); the card
+carries keenroudy.com/sports. Every post carries its card (`scripts/pick_card.py`): the kitchen, the same
+label as the post, in the colours of the side the play is on; a parlay's card lists the legs and serves the
+price on the plate.
+
+X meters posting through its API, so the desk posts through **Buffer** (`scripts/buffer_post.py`, free plan:
+Buffer's own X access, 3,000 API requests a month, an exact `dueAt` per post, an image by public URL,
+`deletePost`). The timing is the same every game day: each play posts **three hours before its kickoff**
+(a parlay's first leg), never before 9:00 AM ET; plays sharing a kickoff go player props first, then team
+props, then the parlay, ten minutes apart; a play published later than its time goes out at once unless
+kickoff is inside 45 minutes. Buffer takes an image only by URL, so a post is scheduled only once its card is
+live on the site: the hosted workflow renders a card for every open play as soon as it is published, the run
+schedules after its own push and waits up to 15 minutes for that deploy, and a play whose card is still not
+live waits for the next run. Nothing goes out bare.
+
+Every post is logged in `data/x-posted.json` (kind `buffer:*`, committed on its own as "Posts <date> <time>
+ET") so nothing goes out twice; once its time has passed the run records the X link it went out under, or the
+failure (which fails the run, so the heartbeat alerts). A play that closes before its time is cancelled, and
+the channel's own daily limit (50) is respected, with ours at eight.
+
+One-time setup, done 2026-09-23: a free Buffer account with @keenkooks connected, and a personal API key
+(account:read, posts:read, posts:write; expires 2027-09-23) as `BUFFER_TOKEN` in `~/.config/keenroudy/env`.
 `run.sh py scripts/buffer_post.py channels` shows the connected channels; `plan` shows what the next run would
-schedule; `schedule --confirm [--soon 20]` schedules exactly that by hand, with a lead for a look at Buffer's
-queue first; `post PICK_ID --confirm` schedules one pick. The channel's own daily limit is 50 posts.
+schedule; `schedule --confirm [--soon 20]` schedules exactly that by hand; `post PICK_ID --confirm` schedules
+one pick; `reconcile` records what became of past posts. Buffer's queue (keenkooks, Queue) shows every
+scheduled post and can delete one before it goes.
 
-The same posts are also published as an RSS feed, `https://keenroudy.com/sports/data/feed.xml`
-(`scripts/feed.py`), for any other relay and as a public record of what went out.
-
-`x_post.py` can still post through the API (`post PICK_ID --confirm --card`) when credits exist, and
-`data/x-posted.json` logs whatever it posts. The run writes every draft and card to
-`~/.config/keenroudy/x-drafts/` as well, for a person to post by hand or for Claude to post through the
-owner's browser when asked.
+The same plays are published as an RSS feed, `https://keenroudy.com/sports/data/feed.xml` (`scripts/feed.py`),
+as a public record. `x_post.py` can still post through X's API (`post PICK_ID --confirm --card`) when credits
+exist, and writes review drafts to `~/.config/keenroudy/x-drafts/`.
 
 ## Weather
 

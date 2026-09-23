@@ -12,11 +12,11 @@ a desk that posts a handful of plays a day at set times.
   python scripts/buffer_post.py post PICK_ID [--at ISO]   schedule one pick's post (needs --confirm)
   python scripts/buffer_post.py reconcile          record the X link, or the error, for every post whose time passed
 
-The run (scripts/run.py) schedules each play once inside its posting window (game day, 9:00 AM ET
-until 45 minutes before kickoff, spaced eight minutes apart), the recap for the next morning and the
-scoreboard for Tuesday morning, and logs every post in data/x-posted.json so nothing goes out twice.
-A play that closes to new entries before its time is cancelled. The token lives in the environment
-(BUFFER_TOKEN) and never in a log.
+X gets plays only: player props, team props and the day's fun parlay, the same shape every time and always
+with the card. The run (scripts/run.py) schedules each play once, three hours before its kickoff and never
+before 9:00 AM ET on game day, ten minutes apart, and logs every post in data/x-posted.json so nothing goes
+out twice. A play whose card is not live yet waits; a play that closes to new entries before its time is
+cancelled. The token lives in the environment (BUFFER_TOKEN) and never in a log.
 """
 import argparse
 import json
@@ -30,16 +30,17 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import feed
 import gates
+import pick_card
 import x_post
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
 API = 'https://api.buffer.com'
 CARDS = x_post.SITE + 'data/cards/'
-SPACING = timedelta(minutes=8)       # between plays scheduled into the same window
+LEAD_TIME = timedelta(hours=3)       # every play posts three hours before its kickoff (not before 9:00 AM ET)
+SPACING = timedelta(minutes=10)      # between two posts
 SOON = timedelta(minutes=2)          # a post scheduled "now" goes out this far ahead
-RECAP_AT = (8, 0)                    # Eastern, the morning after a game day
-SCOREBOARD_AT = (9, 0)               # Eastern, Tuesdays
+ORDER = {'player': 0, 'team': 1, 'parlay': 2}     # inside one kickoff: player props, then team props, then the parlay
 MAX_PER_DAY = 8                      # our own ceiling; Buffer's channel limit is queried as well
 
 
@@ -191,18 +192,20 @@ def window_open(day):
     return datetime(day.year, day.month, day.day, feed.WINDOW_OPENS[0], feed.WINDOW_OPENS[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)
 
 
-def plan(first, latest, games, now, log_book, scoreboard=None, player_team=None, soon=None):
+def plan(first, latest, games, now, log_book, player_team=None, soon=None):
     """The posts the run should schedule now: [(key, kind, text, due_at, card_key)].
 
-    Plays: open, postable, game today (Eastern), not yet in the log; due at the later of now plus two
-    minutes and the window's open, spaced eight minutes apart, never inside 45 minutes of kickoff.
-    Recap: once every pick of a day is settled, due the next morning at 8:00 ET. Scoreboard: Tuesdays 9:00 ET.
+    X gets plays only: player props, team props and the day's fun parlay, the same shape every time and
+    always with the card. Each play is due three hours before its kickoff (a parlay's first leg), never
+    before 9:00 AM ET on game day; plays sharing a kickoff go player props first, then team props, then the
+    parlay, ten minutes apart. A play published later than its time goes out now, unless kickoff is inside
+    45 minutes. Posted, closed, settled and historical plays are left out.
     `soon` replaces the two-minute lead, for a person who wants time to look at the queue first.
     """
-    SOON_ = soon if soon is not None else SOON
+    soon = soon if soon is not None else SOON
     posted = {p['id'] for p in log_book.get('posts', [])}
     today = eastern_date(now)
-    out = []
+    opens = window_open(today)
     plays = []
     for key, pick in first.items():
         merged = dict(pick, **latest.get(key, {}))
@@ -217,46 +220,34 @@ def plan(first, latest, games, now, log_book, scoreboard=None, player_team=None,
         text = x_post.draft(merged, game)
         if x_post.guard(text, merged):
             continue
-        plays.append((gates.when(starts[0]), key, text, merged, game))
+        kickoff = gates.when(starts[0])
+        plays.append((max(kickoff - LEAD_TIME, opens), ORDER[pick_card.play_kind(merged)], kickoff, key, text))
     plays.sort()
-    slot = max(now + SOON_, window_open(today))
-    scheduled = 0
-    for kickoff, key, text, merged, game in plays:
-        if scheduled >= MAX_PER_DAY:
+    out, last = [], None
+    for target, _, kickoff, key, text in plays:
+        if len(out) >= MAX_PER_DAY:
             break
-        due = slot
-        last = kickoff - feed.LEAD
-        if due > last:
-            continue                    # this one's window has passed; the next play may still fit
+        due = max(target, now + soon)
+        if last is not None:
+            due = max(due, last + SPACING)
+        if due > kickoff - feed.LEAD:
+            continue                    # this one's window has passed; a later kickoff may still fit
         out.append((key, 'play', text, due, key))
-        slot = due + SPACING
-        scheduled += 1
-    for back in (1, 0):
-        day = today - timedelta(days=back)
-        key = f'recap:day:{day.isoformat()}'
-        if key in posted:
-            continue
-        items = feed.recap_items(first, latest, games, now)
-        match = next((i for i in items if i['guid'] == key), None)
-        if match:
-            morning = datetime(day.year, day.month, day.day, RECAP_AT[0], RECAP_AT[1], tzinfo=gates.EASTERN) + timedelta(days=1)
-            due = max(morning.astimezone(timezone.utc), now + SOON_)
-            out.append((key, 'recap', match['text'], due, None))
-    weekly = feed.scoreboard_item(scoreboard or {}, now) if scoreboard else None
-    if weekly and weekly['guid'] not in posted:
-        local = now.astimezone(gates.EASTERN)
-        due = max(local.replace(hour=SCOREBOARD_AT[0], minute=SCOREBOARD_AT[1], second=0, microsecond=0).astimezone(timezone.utc), now + SOON_)
-        out.append((weekly['guid'], 'scoreboard', weekly['text'], due, None))
+        last = due
     return out
 
 
 def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=None, log=print):
-    """Create the planned posts in Buffer and record each in the log. Returns the log."""
+    """Create the planned posts in Buffer and record each in the log; a play whose card is not live yet is left
+    for the next run, never posted bare. Returns the log."""
     for guid, kind, text, due, card_key in plans:
         image = None
         if card_key:
             url = f'{CARDS}{card_key}.png'
             image = url if reachable(url, opener) else None
+            if not image:
+                log(f'buffer: {guid} waits: its card is not live yet (every post carries its card)')
+                continue
         try:
             post_id = create_post(text, channel_id, due, image, key=key, send=send)
         except BufferError as error:
@@ -343,9 +334,7 @@ def main(argv=None):
         ctx = stores.as_of(now)
         log_book = x_post.load_log()
         if args.command in ('plan', 'schedule'):
-            import build_site
-            scoreboard = build_site.read(ROOT / 'site' / 'data' / 'scoreboard.json', {})
-            plans = plan(ctx.first, ctx.latest, ctx.games, now, log_book, scoreboard, ctx.player_team, soon=soon)
+            plans = plan(ctx.first, ctx.latest, ctx.games, now, log_book, ctx.player_team, soon=soon)
             for guid, kind, text, due, card in plans:
                 print(f"{due.astimezone(gates.EASTERN):%a %-I:%M %p} ET  {kind:<10} {guid}" + (f"  card {CARDS}{card}.png" if card else ''))
                 print('    ' + text.replace('\n', ' / '))

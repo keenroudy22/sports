@@ -130,6 +130,22 @@ def badge(x, y, r, uri, ring):
             f'<circle cx="{x}" cy="{y}" r="{r}" fill="none" stroke="{ring}" stroke-width="4"/>')
 
 
+KINDS = {'player': 'PLAYER PROP', 'team': 'TEAM PROP', 'parlay': 'FUN PARLAY'}
+
+
+def play_kind(pick):
+    """What goes to X, in the owner's words: player props, team props (sides and totals) and fun parlays."""
+    if pick.get('legs') or pick.get('parlayType'):
+        return 'parlay'
+    return 'player' if pick.get('athleteId') or pick.get('market') else 'team'
+
+
+def kicker(pick):
+    """The label every card and every post leads with; a researched favorite says so."""
+    label = KINDS[play_kind(pick)]
+    return f'{label} · FAVORITE' if pick.get('favorite') is True and play_kind(pick) != 'parlay' else label
+
+
 def svg(pick, game=None, record=None, when=None, player_side=None, identities=None, avatar=None):
     """The card. Every number on it is a field of the pick or the record handed in."""
     avatar = avatar_uri() if avatar is None else avatar
@@ -140,11 +156,15 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
     ink = INK if light else CREAM
     soft = shade(INK, 1.35) if light else shade(CREAM, 0.82)
     accent = alternate if abs(luminance(alternate) - luminance(primary)) > 0.25 else (INK if light else CREAM)
-    title = fit(pick.get('title') or '', 34)
+    title = pick.get('title') or ''
     price = f"{int(pick['odds']):+d}" if isinstance(pick.get('odds'), (int, float)) else ''
     book = pick.get('book') or ''
     projection, line = pick.get('projection'), pick.get('line')
-    kicker = 'FAVORITE' if pick.get('favorite') else 'PROP LEAN' if pick.get('modelLean') and pick.get('athleteId') else 'MODEL LEAN' if pick.get('modelLean') else 'PICK'
+    label = kicker(pick)
+    parlay = play_kind(pick) == 'parlay'
+    legs = [str(l.get('title') or '') for l in (pick.get('legs') or []) if l.get('title')]
+    if parlay:
+        title = f"{len(pick.get('legs') or [])}-leg parlay"
     matchup = ''
     if game:
         away, home = game.get('away') or {}, game.get('home') or {}
@@ -153,7 +173,10 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
             try:
                 moment = datetime.fromisoformat(str(game['kickoff']).replace('Z', '+00:00'))
                 from zoneinfo import ZoneInfo
-                matchup += f" · {moment.astimezone(ZoneInfo('America/New_York')):%a %-I:%M %p} ET"
+                local = moment.astimezone(ZoneInfo('America/New_York'))
+                matchup += f" · {local:%a %-I:%M %p} ET"
+                if parlay:          # a ticket spans games: say how many and which day, not one game's name
+                    matchup = f"{len(set(pick.get('gameIds') or [])) or len(legs)} games · {local:%a %b %-d}"
             except ValueError:
                 pass
     number_line = ''
@@ -164,9 +187,17 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
         record_line = f"Record {record.get('wins', 0)}-{record.get('losses', 0)}" + (f"-{record['pushes']}" if record.get('pushes') else '')
         if record.get('units') is not None:
             record_line += f" · {record['units']:+.2f}u"
-    stamp = (when or datetime.now(timezone.utc)).strftime('%b %-d, %Y')
-    confidence = f"Confidence {pick['confidence']} of 10" if pick.get('confidence') else ''
-    title_size = 66 if len(title) <= 24 else 56 if len(title) <= 30 else 48
+    game_day = None
+    if game and game.get('kickoff'):
+        try:
+            from zoneinfo import ZoneInfo
+            game_day = datetime.fromisoformat(str(game['kickoff']).replace('Z', '+00:00')).astimezone(ZoneInfo('America/New_York'))
+        except ValueError:
+            game_day = None
+    stamp = (when or game_day or datetime.now(timezone.utc)).strftime('%b %-d, %Y')     # the game's day: a card is rendered early
+    confidence = f"Confidence {pick['confidence']} of 10" if pick.get('confidence') and not parlay else ''
+    lines = title_lines(title)
+    title_size = 66 if len(lines) == 1 and len(title) <= 24 else 56 if len(lines) == 1 else 50
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">',
         '<defs>',
@@ -179,19 +210,51 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
         f'<rect x="36" y="36" width="{WIDTH - 72}" height="{HEIGHT - 72}" rx="30" fill="none" stroke="{accent}" stroke-opacity="0.55" stroke-width="3"/>',
         badge(114, 104, 40, avatar, accent) if avatar else PAN.format(x=72, y=72, s=0.62, c=accent),
         f'<text x="{176 if avatar else 152}" y="118" fill="{ink}" font-size="34" font-weight="800" letter-spacing="5">KOOK’N</text>',
-        f'<text x="{WIDTH - 80}" y="116" fill="{soft}" font-size="26" font-weight="700" letter-spacing="3" text-anchor="end">{esc(kicker)}</text>',
+        f'<text x="{WIDTH - 80}" y="116" fill="{soft}" font-size="26" font-weight="700" letter-spacing="3" text-anchor="end">{esc(label)}</text>',
         f'<text x="80" y="212" fill="{soft}" font-size="32">{esc(matchup)}</text>',
         f'<text x="80" y="262" fill="{accent}" font-size="24" font-weight="700" letter-spacing="4">TODAY’S PLATE</text>',
-        f'<text x="80" y="{262 + title_size + 4}" fill="{ink}" font-size="{title_size}" font-weight="800">{esc(title)}</text>',
+        *[f'<text x="80" y="{262 + (title_size + 6) * (i + 1) - 2}" fill="{ink}" font-size="{title_size}" font-weight="800">{esc(text)}</text>'
+          for i, text in enumerate(lines)],
+        *(parlay_body(legs, price, book, ink, soft, accent, title_size) if parlay else [
         f'<text x="80" y="418" fill="{soft}" font-size="26" letter-spacing="1">Served at</text>',
         f'<text x="80" y="470" fill="{ink}" font-size="50" font-weight="800">{esc(price)}<tspan fill="{soft}" font-size="34" font-weight="600" dx="18">{esc(book)}</tspan></text>',
         f'<text x="80" y="524" fill="{ink}" font-size="30">{esc(number_line)}</text>',
-        f'<text x="80" y="562" fill="{soft}" font-size="25">{esc(confidence)}</text>',
+        f'<text x="80" y="562" fill="{soft}" font-size="25">{esc(confidence)}</text>']),
         f'<text x="80" y="{HEIGHT - 62}" fill="{ink}" font-size="26" font-weight="700">Graded in public, win or lose. <tspan fill="{soft}" font-weight="400">keenroudy.com/sports</tspan></text>',
         f'<text x="{WIDTH - 80}" y="{HEIGHT - 62}" fill="{soft}" font-size="22" text-anchor="end">{esc(record_line or stamp)}</text>',
         f'<text x="{WIDTH - 80}" y="{HEIGHT - 98}" fill="{soft}" font-size="19" text-anchor="end">Entertainment only. Not advice.</text>',
         '</svg>']
     return '\n'.join(parts)
+
+
+def title_lines(title, width=26, limit=30):
+    """The play on one line, or on two when it is long: a player's name above the line he is on
+    ("Courtland Sutton" / "OVER 3.5 receptions"), else split at the word nearest the middle."""
+    if len(title) <= limit:
+        return [title]
+    words = title.split()
+    cut = next((i for i, w in enumerate(words) if w.lower() in ('over', 'under') and i > 0), None)
+    if cut is None:
+        best, cut = None, 1
+        for i in range(1, len(words)):
+            gap = abs(len(' '.join(words[:i])) - len(' '.join(words[i:])))
+            if best is None or gap < best:
+                best, cut = gap, i
+    return [fit(' '.join(words[:cut]), width + 6), fit(' '.join(words[cut:]), width + 6)]
+
+
+def parlay_body(legs, price, book, ink, soft, accent, title_size):
+    """A parlay's legs down the left, one per line, and its price served on the plate."""
+    top = 262 + title_size + 4 + 52
+    shown = legs[:5]
+    rows = [f'<text x="80" y="{top + 40 * i}" fill="{ink}" font-size="27">• {esc(fit(leg, 44))}</text>' for i, leg in enumerate(shown)]
+    if len(legs) > len(shown):
+        rows.append(f'<text x="80" y="{top + 40 * len(shown)}" fill="{soft}" font-size="24">and {len(legs) - len(shown)} more</text>')
+    cx = WIDTH - 250
+    rows += [f'<text x="{cx}" y="{HEIGHT // 2 + 20}" fill="{ink}" font-size="92" font-weight="800" text-anchor="middle">{esc(price)}</text>',
+             f'<text x="{cx}" y="{HEIGHT // 2 + 68}" fill="{soft}" font-size="30" font-weight="600" text-anchor="middle">{esc(book)}</text>',
+             f'<text x="{cx}" y="{HEIGHT // 2 + 118}" fill="{accent}" font-size="22" font-weight="700" letter-spacing="3" text-anchor="middle">QUARTER UNIT · FOR FUN</text>']
+    return rows
 
 
 def render(svg_text, out, chrome=None, timeout=45):

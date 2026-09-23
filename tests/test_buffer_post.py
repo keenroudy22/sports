@@ -99,18 +99,40 @@ class ClientTests(unittest.TestCase):
         self.assertIn('$org: OrganizationId!', fake.calls[-1]['query'])
 
 
+def et(moment):
+    return moment.astimezone(bp.gates.EASTERN).strftime('%H:%M')
+
+
+PROP = dict(athleteId='7', market='rec', marketType=None, title='Player Seven over 4.5 receptions', line=4.5, projection=5.8, odds=-115,
+            why='Prop lean on our number alone. He has caught 6 in each of his last 2 games.')
+TICKET = dict(legs=[{'title': 'Iowa at Michigan over 38.5'}, {'title': 'Oklahoma at Georgia under 44.5'}], parlayType='longshot',
+              modelLean=False, title='2-leg longshot at DraftKings', odds=650, book='DraftKings', projection=None, line=None, riskUnits=0.25,
+              why='Longshot from the board: 2 legs at DraftKings. A fun ticket at a quarter unit.')
+
+
 class PlanTests(unittest.TestCase):
-    def test_plays_are_spaced_from_the_window_open_and_skip_the_ones_whose_window_passed(self):
-        first = {'a': pick('a'), 'b': pick('b', 'late', title='Oklahoma at Georgia under 44.5', direction='under'),
-                 'c': pick('c', 'tomorrow'), 'd': pick('d', 'noon', title='Iowa at Michigan under 38.5', direction='under')}
+    def test_each_play_posts_three_hours_before_its_kickoff_players_then_teams_then_the_parlay(self):
+        first = {'a': pick('a'), 'd': pick('d', title='Iowa at Michigan under 38.5', direction='under'),
+                 'p': pick('p', **PROP), 'x': pick('x', gameIds=['noon', 'late'], **TICKET),
+                 'b': pick('b', 'late', title='Oklahoma at Georgia under 44.5', direction='under'), 'c': pick('c', 'tomorrow')}
         latest = {k: dict(v) for k, v in first.items()}
         plans = bp.plan(first, latest, GAMES, NOW, {'posts': []})
-        kinds = [(p[0], p[3].astimezone(bp.gates.EASTERN).strftime('%H:%M')) for p in plans]
-        self.assertEqual(kinds, [('a', '09:00'), ('d', '09:08'), ('b', '09:16')], 'today only, kickoff order, eight minutes apart from 9:00')
-        late_now = datetime(2026, 9, 26, 15, 30, tzinfo=timezone.utc)       # 11:30 AM ET: noon games are inside 45 minutes
-        plans = bp.plan(first, latest, GAMES, late_now, {'posts': []})
-        self.assertEqual([p[0] for p in plans], ['b'], 'the noon plays are too late; the evening one posts now')
-        self.assertEqual(plans[0][3], late_now + bp.SOON)
+        self.assertEqual([(p[0], et(p[3])) for p in plans],
+                         [('p', '09:00'), ('a', '09:10'), ('d', '09:20'), ('x', '09:30'), ('b', '16:30')],
+                         'noon kickoff: 9:00 on, player prop first, parlay last; the 7:30 PM game at 4:30 PM; tomorrow waits')
+        self.assertTrue(all(p[1] == 'play' and p[4] == p[0] for p in plans), 'plays only, each with its card')
+        self.assertTrue(plans[0][2].startswith('🍳 PLAYER PROP'))
+        self.assertTrue(plans[3][2].startswith('🍳 FUN PARLAY'))
+
+    def test_a_late_play_goes_out_now_and_a_passed_window_is_skipped(self):
+        first = {'a': pick('a'), 'b': pick('b', 'late', title='Oklahoma at Georgia under 44.5', direction='under')}
+        latest = {k: dict(v) for k, v in first.items()}
+        late_now = datetime(2026, 9, 26, 15, 30, tzinfo=timezone.utc)       # 11:30 AM ET: the noon game is inside 45 minutes
+        self.assertEqual([p[0] for p in bp.plan(first, latest, GAMES, late_now, {'posts': []})], ['b'])
+        evening = datetime(2026, 9, 26, 21, 0, tzinfo=timezone.utc)         # 5:00 PM ET, after the 4:30 PM slot
+        plans = bp.plan(first, latest, GAMES, evening, {'posts': []})
+        self.assertEqual([(p[0], p[3]) for p in plans], [('b', evening + bp.SOON)])
+        self.assertEqual(bp.plan(first, latest, GAMES, evening, {'posts': []}, soon=timedelta(minutes=20))[0][3], evening + timedelta(minutes=20))
 
     def test_posted_closed_and_settled_plays_are_left_out(self):
         first = {'a': pick('a'), 'b': pick('b', 'late'), 'c': pick('c', 'late', title='x')}
@@ -118,36 +140,31 @@ class PlanTests(unittest.TestCase):
         plans = bp.plan(first, latest, GAMES, NOW, {'posts': [{'id': 'a'}]})
         self.assertEqual(plans, [])
 
-    def test_recap_and_scoreboard_get_their_mornings(self):
+    def test_x_gets_plays_only(self):
         yesterday = {'id': 'y', 'league': 'NFL', 'kickoff': '2026-09-25T00:15Z', 'home': {'short': 'A'}, 'away': {'short': 'B'}}
         games = dict(GAMES, y=yesterday)
         first = {'p': pick('p', 'y', publishedAt='2026-09-24T12:00:00Z')}
         latest = {'p': dict(first['p'], result='win', settledAt='2026-09-25T04:00:00Z')}
-        scoreboard = {'live': [{'league': 'NFL', 'model': 'v2.0', 'season': 2026, 'summary': {'side': [8, 7, 0], 'ou': [6, 9, 0], 'closerTotal': [5, 10], 'games': 15, 'totalMiss': 10.7, 'closeTotalMiss': 10.23}}]}
-        tuesday = datetime(2026, 9, 29, 12, 40, tzinfo=timezone.utc)      # Tuesday 8:40 ET
-        plans = bp.plan(first, latest, games, tuesday, {'posts': []}, scoreboard)
-        kinds = {p[1]: p[3].astimezone(bp.gates.EASTERN).strftime('%a %H:%M') for p in plans}
-        self.assertEqual(kinds.get('scoreboard'), 'Tue 09:00')
-        night = datetime(2026, 9, 25, 4, 30, tzinfo=timezone.utc)        # 12:30 AM ET Friday: Thursday night's game just settled
-        plans = bp.plan(first, latest, games, night, {'posts': []})
-        recap = next(p for p in plans if p[1] == 'recap')
-        self.assertEqual(recap[0], 'recap:day:2026-09-24')
-        self.assertEqual(recap[3].astimezone(bp.gates.EASTERN).strftime('%a %H:%M'), 'Fri 08:00', 'the recap waits for the morning')
+        for now in (datetime(2026, 9, 29, 12, 40, tzinfo=timezone.utc), datetime(2026, 9, 25, 4, 30, tzinfo=timezone.utc)):
+            self.assertEqual(bp.plan(first, latest, games, now, {'posts': []}), [], 'no recap, no scoreboard')
 
 
 class ScheduleTests(unittest.TestCase):
-    def test_schedule_logs_each_post_and_attaches_the_card_only_when_it_is_deployed(self):
+    def test_schedule_never_posts_a_play_without_its_card(self):
         fake = FakeBuffer()
         plans = [('a', 'play', 'text a', NOW + timedelta(hours=1), 'a'), ('b', 'play', 'text b', NOW + timedelta(hours=2), 'b')]
-        log_book = bp.schedule(plans, 'ch-x', {'posts': []}, NOW, key='t', send=fake, opener=lambda url: url.endswith('/a.png'), log=lambda *_: None)
-        self.assertEqual([p['id'] for p in log_book['posts']], ['a', 'b'])
+        seen = []
+        log_book = bp.schedule(plans, 'ch-x', {'posts': []}, NOW, key='t', send=fake, opener=lambda url: url.endswith('/a.png'), log=seen.append)
+        self.assertEqual([p['id'] for p in log_book['posts']], ['a'], 'b waits for its card')
         self.assertTrue(log_book['posts'][0]['card'])
-        self.assertFalse(log_book['posts'][1]['card'])
         self.assertEqual(log_book['posts'][0]['kind'], 'buffer:play')
         inputs = [c['variables']['input'] for c in fake.calls if 'createPost' in c['query']]
+        self.assertEqual(len(inputs), 1)
         self.assertEqual(inputs[0]['assets'], [{'image': {'url': 'https://keenroudy.com/sports/data/cards/a.png'}}])
-        self.assertEqual(inputs[1]['assets'], [], 'Buffer requires the list even when the post is text only')
-        self.assertFalse(inputs[1]['needsApproval'])
+        self.assertFalse(inputs[0]['needsApproval'])
+        self.assertTrue(any('b waits' in line for line in seen))
+        text_only = bp.schedule([('r', 'recap', 'text r', NOW + timedelta(hours=1), None)], 'ch-x', {'posts': []}, NOW, key='t', send=FakeBuffer(), log=lambda *_: None)
+        self.assertEqual([p['id'] for p in text_only['posts']], ['r'], 'a post with no card key at all (by hand) still goes')
 
     def test_reconcile_records_the_x_link_or_the_error_once(self):
         fake = FakeBuffer()

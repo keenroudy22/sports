@@ -27,8 +27,24 @@ class CardTests(unittest.TestCase):
         nasty = pick_card.svg(dict(PICK, title='A&M <script> under 40', book='B&B'))
         self.assertIn('A&amp;M &lt;script&gt; under 40', nasty)
         self.assertNotIn('<script>', nasty)
-        self.assertIn('MODEL LEAN', pick_card.svg(dict(PICK, favorite=False, modelLean=True)))
-        self.assertIn('PROP LEAN', pick_card.svg(dict(PICK, favorite=False, modelLean=True, athleteId='1')))
+        self.assertIn('TEAM PROP · FAVORITE', text)
+        self.assertIn('>TEAM PROP<', pick_card.svg(dict(PICK, favorite=False, modelLean=True)))
+        self.assertIn('>PLAYER PROP<', pick_card.svg(dict(PICK, favorite=False, modelLean=True, athleteId='1')))
+
+    def test_a_parlay_card_lists_its_legs_and_serves_the_price_on_the_plate(self):
+        ticket = {'title': '3-leg longshot at DraftKings', 'parlayType': 'longshot', 'odds': 650, 'book': 'DraftKings', 'confidence': 1,
+                  'legs': [{'title': 'Bills at Lions over 44.5'}, {'title': 'Jets +3'}, {'title': 'Player Seven over 4.5 receptions'}]}
+        text = pick_card.svg(ticket, GAME)
+        for needle in ('FUN PARLAY', '3-leg parlay', '• Bills at Lions over 44.5', '• Jets +3', '• Player Seven over 4.5 receptions',
+                       '+650', 'DraftKings', 'QUARTER UNIT · FOR FUN', 'KOOK’N'):
+            self.assertIn(needle, text, needle)
+        self.assertNotIn('Confidence', text)
+        self.assertNotIn('Served at', text)
+        many = pick_card.svg(dict(ticket, legs=[{'title': f'Leg {i}'} for i in range(7)]), GAME)
+        self.assertIn('and 2 more', many)
+        self.assertEqual(pick_card.play_kind(ticket), 'parlay')
+        self.assertEqual(pick_card.play_kind({'market': 'rec'}), 'player')
+        self.assertEqual(pick_card.play_kind({'marketType': 'spread'}), 'team')
 
     def test_the_side_the_play_is_on_picks_the_palette(self):
         spread_away = pick_card.svg({'title': 'Iowa +7', 'marketType': 'spread', 'direction': 'away', 'odds': -110, 'book': 'DK'}, GAME)
@@ -56,9 +72,20 @@ class CardTests(unittest.TestCase):
         self.assertIn('stroke-linecap="round"', without, 'the pan stands in')
         self.assertIsNone(pick_card.avatar_uri(Path('/nonexistent/kookn.jpg')))
 
-    def test_long_titles_are_trimmed(self):
-        text = pick_card.svg(dict(PICK, title='A very long pick title that would never fit on one line of a card'))
+    def test_long_titles_wrap_to_two_lines_and_only_then_trim(self):
+        self.assertEqual(pick_card.title_lines('Courtland Sutton OVER 3.5 receptions'), ['Courtland Sutton', 'OVER 3.5 receptions'])
+        self.assertEqual(pick_card.title_lines('Iowa at Michigan OVER 38.5'), ['Iowa at Michigan OVER 38.5'])
+        text = pick_card.svg(dict(PICK, title='Courtland Sutton OVER 3.5 receptions'))
+        self.assertIn('>Courtland Sutton<', text)
+        self.assertIn('>OVER 3.5 receptions<', text)
+        self.assertNotIn('…', text)
+        text = pick_card.svg(dict(PICK, title='A very long pick title that would never fit on one line of a card, not even on two of them'))
         self.assertIn('…', text)
+        ticket = pick_card.svg({'title': 't', 'parlayType': 'longshot', 'odds': 650, 'book': 'DK', 'gameIds': ['a', 'b'],
+                                'legs': [{'title': 'x over 1'}, {'title': 'y under 2'}]}, GAME)
+        self.assertIn('2 games · Sat Sep 26', ticket, 'a ticket names its game count and day, not one game')
+        self.assertIn('Sep 26, 2026', ticket, "the corner carries the game's day, not the render day")
+        self.assertNotIn('Iowa at Michigan', ticket)
 
     @unittest.skipUnless(os.environ.get('KEENROUDY_CARD_LIVE') == '1' and pick_card.chrome_path(), 'needs a browser and KEENROUDY_CARD_LIVE=1')
     def test_render_makes_a_png_with_the_browser(self):

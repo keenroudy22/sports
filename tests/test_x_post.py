@@ -40,20 +40,49 @@ class OAuthTests(unittest.TestCase):
         self.assertNotIn('k', str(caught.exception).split(':')[1].replace('X_ACCESS_TOKEN', '').replace('X_ACCESS_SECRET', ''))
 
 
+PROP = {'id': 'NFL-2026-W4-p7-over-4-5-rec-dk', 'title': 'Player Seven over 4.5 receptions', 'status': 'active', 'favorite': False,
+        'modelLean': True, 'athleteId': '7', 'market': 'rec', 'line': 4.5, 'direction': 'over', 'gameIds': ['CFB-1'],
+        'book': 'DraftKings', 'odds': -115, 'projection': 5.8, 'confidence': 3,
+        'why': 'Prop lean on our number alone: the over reads 64.1% on the raw curve. He has caught 6 in each of his last 2 games.'}
+
+
 class DraftTests(unittest.TestCase):
-    def test_draft_is_short_has_no_dashes_and_uses_only_the_picks_numbers(self):
-        text = x_post.draft(PICK, GAME)
-        self.assertLessEqual(x_post.tweet_length(text), 280)
-        self.assertIn('Favorite: Iowa at Michigan under 38.5\n-105 at FanDuel', text)
-        self.assertIn('#CFB', text)
-        self.assertIn('🍳', text)
-        lean = x_post.draft(dict(PICK, favorite=False, modelLean=True, projection=31.2), GAME)
-        self.assertIn('Model lean, our number alone: Iowa at Michigan under 38.5', lean)
-        self.assertIn('Our number 31.2 vs the 38.5. Graded in public, win or lose.', lean)
-        self.assertEqual(x_post.guard(lean, dict(PICK, projection=31.2)), [], lean)
-        self.assertIn('https://keenroudy.com/sports/#pick/CFB-2026-W5-iowa-michigan-under-38-5-fd', text)
-        self.assertNotIn('Researched pick.', text)
-        self.assertEqual(x_post.guard(text, PICK), [], text)
+    def test_every_post_has_the_same_shape(self):
+        team = x_post.draft(dict(PICK, favorite=False, modelLean=True, projection=31.2), GAME)
+        self.assertTrue(team.startswith('🍳 TEAM PROP\nIowa at Michigan under 38.5\n-105 at FanDuel\n\nOur number: 31.2\n'), team)
+        self.assertTrue(team.endswith('\n\n#CFB'), team)
+        prop = x_post.draft(PROP, {'league': 'NFL'})
+        self.assertEqual(prop, '🍳 PLAYER PROP\nPlayer Seven over 4.5 receptions\n-115 at DraftKings\n\n'
+                               'Our number: 5.8\nHe has caught 6 in each of his last 2 games.\n\n#NFL')
+        favorite = x_post.draft(PICK, GAME)
+        self.assertTrue(favorite.startswith('🍳 TEAM PROP · FAVORITE\n'), favorite)
+        for text, pick in ((team, dict(PICK, projection=31.2)), (prop, PROP), (favorite, PICK)):
+            self.assertLessEqual(x_post.tweet_length(text), 280)
+            self.assertNotIn('http', text, 'no link: the card carries the site')
+            self.assertEqual(x_post.guard(text, pick), [], text)
+
+    def test_names_keep_their_suffix_and_a_clean_clause_can_stand_alone(self):
+        pick = {'why': 'Prop lean, published on our number alone: our projection is 6.0 against 3.5, so the true chance is lower than that. '
+                       'Denver is without WR Marvin Mims Jr. on the inactive list, which sends targets to its first receiver. '
+                       'The role is settled by last season, not by this season\'s one game. '
+                       'Our number is 16.3 yards against a 32.5 line, and the Rams\' tight end room splits targets with Colby Parkinson.'}
+        self.assertIn('Denver is without WR Marvin Mims Jr. on the inactive list, which sends targets to its first receiver.', x_post.sentences(pick['why']))
+        denver = {'why': pick['why'].split('Our number is 16.3')[0]}
+        self.assertEqual(x_post.reason_for(denver), 'Denver is without WR Marvin Mims Jr. on the inactive list, which sends targets to its first receiver.')
+        rams = {'why': pick['why'].split('Denver')[0] + "Our number is 16.3 yards against a 32.5 line, and the Rams' tight end room splits targets with Colby Parkinson."}
+        self.assertEqual(x_post.reason_for(rams), "The Rams' tight end room splits targets with Colby Parkinson.")
+        self.assertIsNone(x_post.reason_for({'why': 'Duke is 2-0 on the year and v2 has the home margin at 19.1 against a 10-point line.'}),
+                          'a model name keeps a sentence off X')
+        self.assertIsNone(x_post.reason_for({'why': 'Our number likes the over here, and is the kind that held up yesterday.'}), 'no half sentences')
+
+    def test_the_reason_is_one_plain_sentence_or_none(self):
+        self.assertEqual(x_post.reason_for(PICK), 'Wind is forecast at 18 mph in Ann Arbor.', 'the most specific short sentence')
+        arithmetic = dict(PICK, why='Model lean, published on our number alone. The over reads 55.3% after the raw 62.7% is shrunk. '
+                                    'Our total gap of 7.8 points is at the 95th percentile.')
+        self.assertIsNone(x_post.reason_for(arithmetic), 'no stat talk in the timeline')
+        text = x_post.draft(dict(arithmetic, projection=31.2), GAME)
+        self.assertNotIn('percentile', text)
+        self.assertIn('Our number: 31.2\n\n#CFB', text)
 
     def test_url_counts_as_twenty_three(self):
         self.assertEqual(x_post.tweet_length('hi https://keenroudy.com/sports/#pick/a-very-long-identifier-indeed'), 3 + 23)
@@ -62,10 +91,6 @@ class DraftTests(unittest.TestCase):
         long = dict(PICK, why=' '.join(['A long reason that goes on for a while and says a great deal about nothing much at all.'] * 6))
         text = x_post.draft(long, GAME)
         self.assertLessEqual(x_post.tweet_length(text), 280)
-
-    def test_opener_is_stable_per_pick(self):
-        self.assertEqual(x_post.opener_for('a'), x_post.opener_for('a'))
-        self.assertIn(x_post.opener_for('a'), x_post.OPENERS)
 
 
 class RefusalTests(unittest.TestCase):
@@ -224,7 +249,9 @@ class ReasonTests(unittest.TestCase):
                        'The market: The total opened 50.5 and is 44.5 at DraftKings, 6 toward the under. '
                        'Our total gap of 7.8 points is at the 95th percentile; gaps this large went 112-58 against the close in 3602 graded games.'}
         reasons = x_post.reasons_for(pick)
-        self.assertTrue(reasons[0].startswith('Our total gap of 7.8 points'), reasons)
+        self.assertEqual(reasons[0], 'The total opened 50.5 and is 44.5 at DraftKings, 6 toward the under.', 'the move, its lead-in cut off')
+        self.assertTrue(reasons[1].startswith('Our total gap of 7.8 points'), reasons)
+        self.assertEqual(x_post.reason_for(pick), reasons[0], 'the percentile sentence is arithmetic and stays off X')
         self.assertFalse(any(r.lower().startswith(('model lean', 'nothing sourced', 'the market:')) for r in reasons))
 
     def test_a_longshot_draft_lists_its_legs(self):
@@ -232,7 +259,7 @@ class ReasonTests(unittest.TestCase):
                   'parlayType': 'longshot', 'riskUnits': 0.25, 'book': 'DraftKings', 'odds': 650,
                   'why': 'Longshot from the board: 3 legs at DraftKings, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.'}
         text = x_post.draft(ticket, {'league': 'NFL'})
-        self.assertIn('Fun ticket, quarter unit: 3 legs at DraftKings, +650', text)
-        self.assertIn('• Jets +3', text)
+        self.assertEqual(text, '🍳 FUN PARLAY\n3 legs, +650 at DraftKings\n• Bills at Lions over 44.5\n• Jets +3\n• Player Seven over 4.5 receptions'
+                               '\n\nQuarter unit. Just for fun.\n\n#NFL')
         self.assertLessEqual(x_post.tweet_length(text), 280)
         self.assertEqual(x_post.guard(text, ticket), [], text)

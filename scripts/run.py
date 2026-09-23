@@ -22,6 +22,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 import traceback
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
@@ -825,10 +826,17 @@ def commit_push(now, slot, counts, push=True, runner=git, cwd=ROOT):
         runner('commit', '--quiet', '-m', message, cwd=cwd)
     if not push or not (captures or research):
         return {'committed': bool(captures or research), 'pushed': False}
+    push_with_retry(runner, cwd)
+    return {'committed': True, 'pushed': True}
+
+
+def push_with_retry(runner=git, cwd=ROOT):
+    """Push; on rejection rebase onto origin/main (merging the price stores if both sides captured) and try
+    again, three times. Never forced."""
     for attempt in range(3):
         result = runner('push', '--quiet', cwd=cwd, check=False)
         if not result.returncode:
-            return {'committed': True, 'pushed': True}
+            return
         log(f'push rejected (attempt {attempt + 1}); rebasing onto origin/main')
         rebase_onto_remote(runner, cwd=cwd)
     raise RunError('push rejected three times; the commits stay local and the next run rebases them')
@@ -1007,12 +1015,14 @@ def _run(args, now, slot, kinds, status):
             status['checks'].append('tests green')
     drafts(slot, now, ctx, games, settled, status)
     if not args.dry_run:
-        buffer_posts(now, ctx, games, closed, status)
-    if not args.dry_run:
         git_result = commit_push(now, slot, {'published': len(published), 'settled': len(settled), 'closed': len(closed)},
                                  push=not args.no_push)
         status['git'] = git_result
         log('git:', git_result)
+        # Posts are scheduled after the push: the push deploys the cards of anything just published, and a
+        # post never goes out without its card.
+        buffer_posts(now, ctx, games, closed, status, deploying=bool(git_result.get('pushed')))
+        status['git']['posts'] = commit_log(now, push=not args.no_push)
     status.update(outcome='ok', finishedAt=stamp(datetime.now(timezone.utc)))
     write_status(status)
     log(f"done: {len(settled)} settled, {len(closed)} closed, {len(published)} published, {len(screened)} screened")
@@ -1076,8 +1086,15 @@ def drafts(slot, now, ctx, games, settled, status):
 
 # ------------------------------------------------------------------ posting through Buffer
 
-def buffer_posts(now, ctx, games, closed, status):
-    """Schedule today's posts through Buffer (scripts/buffer_post.py) and cancel any whose pick closed. Off without a token."""
+CARD_WAIT = 15 * 60          # seconds to wait for a push's deploy to put the new cards live
+CARD_POLL = 30
+
+
+def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sleep, clock=time.monotonic):
+    """Schedule today's plays through Buffer (scripts/buffer_post.py), record what became of past posts and
+    cancel any whose pick closed. Off without a token. When this run just pushed, the deploy that carries the
+    new cards takes a few minutes, so the run waits for them (up to 15 minutes) before scheduling; a play whose
+    card is still not live waits for the next run."""
     import buffer_post
     import x_post
     if not os.environ.get('BUFFER_TOKEN', '').strip():
@@ -1091,8 +1108,18 @@ def buffer_posts(now, ctx, games, closed, status):
         closed_ids = {revision['id'] for _, _, revision in closed}
         if closed_ids:
             buffer_post.cancel_closed(closed_ids, log_book, now, log=log)
-        scoreboard = load_json(ROOT / 'site' / 'data' / 'scoreboard.json', {})
-        plans = buffer_post.plan(ctx.first, ctx.latest, games, now, log_book, scoreboard, ctx.player_team)
+        plans = buffer_post.plan(ctx.first, ctx.latest, games, now, log_book, ctx.player_team)
+        if plans and deploying:
+            waiting = [card for *_, card in plans if card]
+            started = clock()
+            while waiting and clock() - started < CARD_WAIT:
+                waiting = [card for card in waiting if not buffer_post.reachable(f'{buffer_post.CARDS}{card}.png')]
+                if waiting:
+                    sleep(CARD_POLL)
+            if waiting:
+                log(f'buffer: {len(waiting)} card(s) still not live after the wait; those plays wait for the next run')
+            later = datetime.now(timezone.utc)
+            plans = buffer_post.plan(ctx.first, ctx.latest, games, max(now, later), log_book, ctx.player_team)
         limit = buffer_post.daily_limit(channel['id'], eastern_date(now).isoformat())
         if limit and limit.get('remaining') is not None and limit['remaining'] < len(plans):
             log(f"buffer: the channel can take {limit['remaining']} more posts today; scheduling that many")
@@ -1104,6 +1131,18 @@ def buffer_posts(now, ctx, games, closed, status):
         log(f'buffer: {error}')
         status['errors'].append(f'buffer: {error}')
     x_post.save_log(log_book)
+
+
+def commit_log(now, push=True, runner=git, cwd=ROOT):
+    """Commit the posted log on its own, after the posts are scheduled, and push it."""
+    if not runner('status', '--porcelain', '--', 'data/x-posted.json', cwd=cwd).stdout.strip():
+        return {'committed': False, 'pushed': False}
+    runner('add', '--', 'data/x-posted.json', cwd=cwd)
+    runner('commit', '--quiet', '-m', f"Posts {eastern_date(now).isoformat()} {now.astimezone(EASTERN):%H:%M} ET", cwd=cwd)
+    if not push:
+        return {'committed': True, 'pushed': False}
+    push_with_retry(runner, cwd)
+    return {'committed': True, 'pushed': True}
 
 
 # ------------------------------------------------------------------ status and heartbeat

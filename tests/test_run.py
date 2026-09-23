@@ -182,10 +182,69 @@ class GitTests(unittest.TestCase):
         self.assertEqual(boxscores.verify(mine), [], 'the ledger was recomputed over the merged file')
         self.assertEqual(self.sh('status', '--porcelain').stdout, '')
 
+    def test_commit_log_commits_the_posted_log_alone(self):
+        (self.repo / 'data' / 'x-posted.json').write_text('{"posts": []}\n')
+        self.sh('add', '.')
+        self.sh('commit', '-q', '-m', 'log')
+        now = datetime(2026, 9, 27, 12, 40, tzinfo=timezone.utc)
+        self.assertEqual(run.commit_log(now, push=False, runner=self.runner, cwd=self.repo), {'committed': False, 'pushed': False})
+        (self.repo / 'data' / 'x-posted.json').write_text('{"posts": [{"id": "a"}]}\n')
+        (self.repo / 'research' / 'old.json').write_text('{"not": "this"}')
+        self.assertEqual(run.commit_log(now, push=False, runner=self.runner, cwd=self.repo), {'committed': True, 'pushed': False})
+        self.assertEqual(self.sh('log', '-1', '--format=%s').stdout.strip(), 'Posts 2026-09-27 08:40 ET')
+        self.assertEqual(self.sh('show', '--name-only', '--format=', 'HEAD').stdout.split(), ['data/x-posted.json'])
+
     def test_sync_refuses_a_dirty_tree(self):
         (self.repo / 'research' / 'old.json').write_text('{"changed": true}')
         with self.assertRaises(run.RunError):
             run.sync(runner=self.runner)
+
+
+class BufferPostsTests(unittest.TestCase):
+    """After a push the run waits for the new cards to go live, then plans again and schedules."""
+
+    def test_waits_for_the_deployed_cards_then_schedules(self):
+        import buffer_post
+        import x_post
+        from unittest import mock
+        now = datetime(2026, 9, 27, 12, 40, tzinfo=timezone.utc)
+        ctx = type('Ctx', (), {'first': {}, 'latest': {}, 'player_team': {}})()
+        plans = [('a', 'play', 'text', now, 'a')]
+        answers = iter([False, False, True])
+        slept, calls = [], []
+        status = {'errors': [], 'x': {}}
+        with mock.patch.dict(os.environ, {'BUFFER_TOKEN': 't'}), \
+                mock.patch.object(x_post, 'load_log', return_value={'posts': []}), mock.patch.object(x_post, 'save_log'), \
+                mock.patch.object(buffer_post, 'x_channel', return_value={'id': 'ch'}), \
+                mock.patch.object(buffer_post, 'reconcile', return_value=[]), \
+                mock.patch.object(buffer_post, 'plan', side_effect=lambda *a, **k: calls.append(a[3]) or plans), \
+                mock.patch.object(buffer_post, 'daily_limit', return_value={'remaining': 50}), \
+                mock.patch.object(buffer_post, 'reachable', side_effect=lambda url: next(answers)), \
+                mock.patch.object(buffer_post, 'schedule') as schedule:
+            run.buffer_posts(now, ctx, {}, [], status, deploying=True, sleep=slept.append, clock=lambda: 0)
+        self.assertEqual(len(slept), 2, 'polled until the card answered')
+        self.assertEqual(len(calls), 2, 'planned again after the wait, so due times are not in the past')
+        schedule.assert_called_once()
+        self.assertEqual(schedule.call_args[0][0], plans)
+        self.assertEqual(status['errors'], [])
+
+    def test_no_wait_without_a_deploy(self):
+        import buffer_post
+        import x_post
+        from unittest import mock
+        now = datetime(2026, 9, 27, 12, 40, tzinfo=timezone.utc)
+        ctx = type('Ctx', (), {'first': {}, 'latest': {}, 'player_team': {}})()
+        with mock.patch.dict(os.environ, {'BUFFER_TOKEN': 't'}), \
+                mock.patch.object(x_post, 'load_log', return_value={'posts': []}), mock.patch.object(x_post, 'save_log'), \
+                mock.patch.object(buffer_post, 'x_channel', return_value={'id': 'ch'}), \
+                mock.patch.object(buffer_post, 'reconcile', return_value=[]), \
+                mock.patch.object(buffer_post, 'plan', return_value=[('a', 'play', 't', now, 'a')]), \
+                mock.patch.object(buffer_post, 'daily_limit', return_value=None), \
+                mock.patch.object(buffer_post, 'reachable') as reachable, \
+                mock.patch.object(buffer_post, 'schedule') as schedule:
+            run.buffer_posts(now, ctx, {}, [], {'errors': [], 'x': {}}, deploying=False, sleep=lambda s: self.fail('slept'))
+        reachable.assert_not_called()
+        schedule.assert_called_once()
 
 
 if __name__ == '__main__':

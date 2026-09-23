@@ -30,6 +30,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_site
 import gates
 import llm
+import pick_card
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -40,10 +41,14 @@ SITE = 'https://keenroudy.com/sports/'
 LIMIT = 280
 URL_LENGTH = 23           # X counts every link as 23 characters
 CRED_KEYS = {'consumer_key': 'X_API_KEY', 'consumer_secret': 'X_API_SECRET', 'token': 'X_ACCESS_TOKEN', 'token_secret': 'X_ACCESS_SECRET'}
-OPENERS = ("Kitchen's open 🍳", "Plate's up 🍳", "Fresh out of the kitchen 🍳", "One plate tonight 🍳", "Serving one 🍳")
-LABELS = {'favorite': 'Favorite', 'modelLean': 'Model lean, our number alone', 'propLean': 'Prop lean, our number alone',
-          'longshot': 'Fun ticket, quarter unit'}
-LEAD_INS = ('model lean', 'prop lean', 'researched pick', 'longshot from', 'nothing sourced', 'the market:')
+LEAD_INS = ('model lean', 'prop lean', 'researched pick', 'longshot from', 'nothing sourced', 'the market:', 'the day',
+            'published', 'this rests', 'settled from', 'graded', 'active on the', 'inactives post', 'the role is settled')
+# The post says what the play is and one plain reason; the arithmetic lives on the site, not in the timeline.
+JARGON = ('calibrat', 'percentile', 'raw', 'shrunk', 'break-even', 'break even', 'graded', 'closing line', 'the close',
+          'model', 'our number', 'projection', 'curve', 'expected value', 'per unit', 'backtest', 'voided', "book's rule", 'chance', 'than that')
+REASON_MAX = 150
+DANGLING = {'is', 'are', 'was', 'were', 'has', 'have', 'had', 'will', 'would', 'can', 'could', 'does', 'do', 'did',
+            'which', 'that', 'it', 'this', 'these', 'those', 'so', 'but', 'and', 'or'}
 TAGS = {'NFL': '#NFL', 'CFB': '#CFB'}
 
 
@@ -204,56 +209,117 @@ def tweet_length(text):
     return len(text) - sum(len(w) - URL_LENGTH for w in words if w.startswith(('http://', 'https://')))
 
 
+ABBREVIATIONS = ('Jr.', 'Sr.', 'St.', 'vs.', 'Mr.', 'Dr.', 'No.', 'Mt.', 'Ft.', 'Jan.', 'Feb.', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec.')
+
+
 def sentences(text):
-    return [s.strip() for s in llm.re.split(r'(?<=[.!?])\s+', text or '') if s.strip()]
-
-
-def opener_for(key):
-    return OPENERS[int(hashlib.sha256(key.encode()).hexdigest(), 16) % len(OPENERS)]
+    """Sentences, without breaking on a name's suffix or an initial ("Marvin Mims Jr.", "A.J. Brown")."""
+    out = []
+    for part in llm.re.split(r'(?<=[.!?])\s+', text or ''):
+        part = part.strip()
+        if not part:
+            continue
+        if out and (out[-1].endswith(ABBREVIATIONS) or llm.re.search(r'\b[A-Z]\.$', out[-1])):
+            out[-1] = f'{out[-1]} {part}'
+        else:
+            out.append(part)
+    return out
 
 
 def kind_label(pick):
-    if pick.get('legs') or pick.get('parlayType'):
-        return LABELS['longshot']
-    if pick.get('favorite') is True:
-        return LABELS['favorite']
-    return LABELS['propLean'] if pick.get('athleteId') else LABELS['modelLean']
+    """The feed's item title prefix: the same label the card and the post lead with."""
+    return pick_card.kicker(pick).capitalize().replace('· favorite', '· Favorite')
+
+
+def specificity(sentence):
+    """How much a sentence names: numbers, and capitalised words after its first (players, teams, places)."""
+    numbers = len(llm.re.findall(r'\d+(?:[.-]\d+)?', sentence))
+    names = len(llm.re.findall(r'(?<=\s)[A-Z][A-Za-z.\']+', sentence))
+    return numbers + names
 
 
 def reasons_for(pick):
-    """The pick's own reasoning, most specific first: sentences with a number ahead of sentences without, shorter first."""
-    said = [s for s in sentences(pick.get('why')) if not s.lower().startswith(LEAD_INS)]
-    return sorted(said, key=lambda s: (not any(c.isdigit() for c in s), len(s)))
+    """The pick's own reasoning, most specific first. A sentence that opens with one of the desk's lead-ins keeps
+    what follows its colon ("The market: the total opened 50.5" keeps the move) and is dropped otherwise."""
+    said = []
+    for sentence in sentences(pick.get('why')):
+        low = sentence.lower()
+        if low.startswith(LEAD_INS):
+            if ':' not in sentence:
+                continue
+            sentence = sentence.split(':', 1)[1].strip()
+            if not sentence:
+                continue
+            sentence = sentence[0].upper() + sentence[1:]
+        said.append(sentence)
+    return sorted(said, key=lambda s: (-specificity(s), len(s)))
 
 
-def draft(pick, game=None, opener=None):
-    """The post text, in the kitchen's voice: an opener, what kind of play it is, the line at its price, one or two
-    sentences of the pick's own reasoning, our number against the line, the receipt link and the league tag.
+def plain(sentence):
+    """Short, none of the desk's arithmetic words, and within the house style (no dashes, no model names)."""
+    low = sentence.lower()
+    return len(sentence) <= REASON_MAX and not any(word in low for word in JARGON) and not x_style(sentence)
 
-    Every number comes from the pick. A lean says it is a lean, a ticket says it is for fun; the record is the brand.
+
+def reason_for(pick):
+    """One plain sentence from the pick's own reasoning: short, free of the desk's arithmetic words, the most
+    specific first. A long sentence may give one clean clause ("Saturday in Ann Arbor is forecast sunny and 68
+    with no wind called out, so ..." gives the forecast). None when every sentence is arithmetic; the post then
+    stands on the play and the number."""
+    for sentence in reasons_for(pick):
+        if plain(sentence):
+            return sentence
+        for clause in llm.re.split(r',\s+(?:so|which|while|but|and)\s+|;\s+|:\s+', sentence):
+            clause = clause.strip().rstrip(',.;: ')
+            if len(clause) < 30 or clause == sentence.rstrip('.'):
+                continue
+            if clause.split()[0].lower() in DANGLING:
+                continue                # "is the kind that held up" is half a sentence
+            clause = clause[0].upper() + clause[1:] + '.'
+            if plain(clause):
+                return clause
+    return None
+
+
+def draft(pick, game=None):
+    """The post, the same shape every time:
+
+        🍳 PLAYER PROP | TEAM PROP | FUN PARLAY   (· FAVORITE for a researched pick)
+        the play
+        price at book
+
+        Our number: n
+        one plain reason from the pick
+
+        #league
+
+    A parlay lists its legs and says it is a quarter unit for fun. No link and no stat line: the card carries the
+    site, and the arithmetic is on the pick's page. Every number comes from the pick.
     """
-    link = f"{SITE}#pick/{pick['id']}"
-    if pick.get('legs'):
-        legs = [str(l.get('title') or '') for l in pick['legs'] if l.get('title')]
-        head = f"{kind_label(pick)}: {len(pick['legs'])} legs at {pick.get('book')}, {int(pick['odds']):+d}\n" + '\n'.join(f'• {leg}' for leg in legs)
-    else:
-        head = f"{kind_label(pick)}: {pick.get('title')}\n{int(pick['odds']):+d} at {pick.get('book')}"
-    reasons = reasons_for(pick)
-    number = ''
-    if isinstance(pick.get('projection'), (int, float)) and isinstance(pick.get('line'), (int, float)):
-        number = f"Our number {float(pick['projection']):g} vs the {float(pick['line']):g}. Graded in public, win or lose."
     league = (game or {}).get('league') or str(pick.get('id', '')).split('-')[0]
-    tail = f"{link} {TAGS.get(league, '')}".strip()
-    for count in (2, 1, 0):
-        body = ' '.join(reasons[:count])
-        text = '\n\n'.join(part for part in ((opener or opener_for(pick['id'])), head, body, number, tail) if part)
-        if tweet_length(text) <= LIMIT:
-            return text
-    for parts in (((opener or opener_for(pick['id'])), head, number, tail), ((opener or opener_for(pick['id'])), head, tail)):
-        text = '\n\n'.join(p for p in parts if p)
-        if tweet_length(text) <= LIMIT:
-            return text
-    return '\n\n'.join((head, link))
+    tag = TAGS.get(league, '')
+    head = f"🍳 {pick_card.kicker(pick)}"
+    price = f"{int(pick['odds']):+d} at {pick.get('book')}"
+    if pick_card.play_kind(pick) == 'parlay':
+        legs = [str(l.get('title') or '') for l in pick.get('legs') or [] if l.get('title')]
+        top = '\n'.join([head, f"{len(pick.get('legs') or [])} legs, {price}", *[f'• {leg}' for leg in legs]])
+        options = ([top, 'Quarter unit. Just for fun.', tag], [top, tag], [head, f"{len(pick.get('legs') or [])} legs, {price}", tag])
+    else:
+        top = '\n'.join([head, str(pick.get('title') or ''), price])
+        number = ''
+        if isinstance(pick.get('projection'), (int, float)) and isinstance(pick.get('line'), (int, float)):
+            number = f"Our number: {pricing_fmt(pick['projection'])}"
+        reason = reason_for(pick)
+        options = ([top, '\n'.join(x for x in (number, reason) if x), tag], [top, number, tag], [top, tag])
+    for parts in options:
+        text = '\n\n'.join(part for part in parts if part)
+        if tweet_length(text) <= LIMIT and not guard(text, pick):
+            return text                 # a reason that trips a guard costs the reason, never the post
+    return top[:LIMIT]
+
+
+def pricing_fmt(value):
+    return f'{float(value):g}'
 
 
 def x_style(text):
