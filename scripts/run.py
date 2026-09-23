@@ -884,6 +884,7 @@ def _run(args, now, slot, kinds, status):
         if not args.dry_run:
             run_tests()
             status['checks'].append('tests green')
+    drafts(slot, now, ctx, games, settled, status)
     if not args.dry_run:
         git_result = commit_push(now, slot, {'published': len(published), 'settled': len(settled), 'closed': len(closed)},
                                  push=not args.no_push)
@@ -895,6 +896,50 @@ def _run(args, now, slot, kinds, status):
     for s in screened:
         log(f"  screened {s['title']}: {s['rule']}: {s['reason']}")
     return 0
+
+
+# ------------------------------------------------------------------ X drafts (review gate: files, never posts)
+
+def drafts(slot, now, ctx, games, settled, status):
+    """Write the posts a person may approve: a game-day recap after the last run, the model scoreboard on Tuesdays,
+    and a draft for every open favorite. Nothing here posts; scripts/x_post.py post --confirm does."""
+    import x_post
+    folder = CONF / 'x-drafts'
+    folder.mkdir(parents=True, exist_ok=True)
+    log_book = x_post.load_log()
+    posted = {p['id'] for p in log_book['posts']}
+    local = now.astimezone(EASTERN)
+    written = []
+    if slot.hour == 23 and settled:
+        day = eastern_date(now).isoformat()
+        if f'recap:day:{day}' not in posted:
+            first = dict(ctx.first)
+            latest = dict(ctx.latest)
+            for league, kind, revision in settled:          # today's settlements count before they are committed
+                latest[revision['id']] = dict(latest.get(revision['id'], {}), **revision)
+            text = x_post.recap(day, first, latest, games, now)
+            if text:
+                (folder / f'recap-{day}.txt').write_text(text + '\n', encoding='utf-8')
+                written.append(f'recap-{day}')
+    if slot.hour == 8 and local.weekday() == 1:              # Tuesday: the week's games are final
+        day = eastern_date(now).isoformat()
+        if f'scoreboard:week:{day}' not in posted:
+            text = x_post.scoreboard_text(load_json(ROOT / 'site' / 'data' / 'scoreboard.json', {}))
+            if text:
+                (folder / f'scoreboard-{day}.txt').write_text(text + '\n', encoding='utf-8')
+                written.append(f'scoreboard-{day}')
+    for key, pick in ctx.first.items():
+        merged = dict(pick, **ctx.latest.get(key, {}))
+        if merged.get('favorite') is not True or merged.get('result') or key in posted:
+            continue
+        try:
+            text, _, _ = x_post.do_draft(key, now, ctx.first, ctx.latest, games, out=folder)
+            written.append(key)
+        except x_post.Refused:
+            continue
+    status['x']['drafted'] = len(written)
+    if written:
+        log('x drafts written:', ', '.join(written), f'(in {folder})')
 
 
 # ------------------------------------------------------------------ status and heartbeat

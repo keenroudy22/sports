@@ -147,3 +147,20 @@ class RecapTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class ScoreboardPostTests(unittest.TestCase):
+    def test_the_weekly_post_reads_only_the_scoreboard(self):
+        scoreboard = {'live': [
+            {'league': 'CFB', 'model': 'v2.0', 'season': 2026, 'summary': {'side': [36, 34, 1], 'ou': [41, 30, 0], 'closerTotal': [40, 31], 'games': 71, 'totalMiss': 13.01, 'closeTotalMiss': 13.25}},
+            {'league': 'NFL', 'model': 'v2.0', 'season': 2026, 'summary': {'side': [8, 7, 0], 'ou': [6, 9, 0], 'closerTotal': [5, 10], 'games': 15, 'totalMiss': 10.7, 'closeTotalMiss': 10.23}},
+            {'league': 'NFL', 'model': 'v1', 'season': 2026, 'summary': {'side': [1, 1, 0], 'ou': [1, 1, 0], 'closerTotal': [1, 1], 'totalMiss': 1, 'closeTotalMiss': 1}}]}
+        text = x_post.scoreboard_text(scoreboard)
+        self.assertIn('College: sides 36-34-1, totals 41-30.', text)
+        self.assertIn('NFL: sides 8-7, totals 6-9.', text)
+        self.assertIn('5 of 15 totals', text)
+        self.assertLessEqual(x_post.tweet_length(text), 280)
+        import llm
+        self.assertEqual(llm.check_style(text.replace(x_post.SITE, '')), [])
+        self.assertTrue(llm.numbers_ok(text, scoreboard)[0])
+        self.assertIsNone(x_post.scoreboard_text({'live': []}))

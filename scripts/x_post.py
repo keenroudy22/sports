@@ -258,6 +258,29 @@ def recap(day, first, latest, games, now):
     return text
 
 
+def scoreboard_text(scoreboard, model='v2.0'):
+    """The weekly model post: our number against the closing line, season to date, from scoreboard.json only."""
+    rows = [g for g in (scoreboard or {}).get('live') or [] if g.get('model') == model]
+    if not rows:
+        return None
+    lines = ['Our number vs the closing line, season to date.']
+    for row in sorted(rows, key=lambda g: g['league']):
+        s = row.get('summary') or {}
+        side, ou = s.get('side') or [0, 0, 0], s.get('ou') or [0, 0, 0]
+        closer = s.get('closerTotal') or [0, 0]
+        name = 'NFL' if row['league'] == 'NFL' else 'College'
+        record = lambda r: f"{r[0]}-{r[1]}" + (f"-{r[2]}" if len(r) > 2 and r[2] else '')
+        graded = s.get('games') if s.get('games') is not None else closer[0] + closer[1]    # a number the scoreboard itself holds
+        lines.append(f"{name}: sides {record(side)}, totals {record(ou)}. Closer on {closer[0]} of {graded} totals, "
+                     f"miss {s.get('totalMiss')} vs {s.get('closeTotalMiss')}.")
+    lines.append('The close is the yardstick. When it wins, it says so here.')
+    text = '\n'.join(lines) + f'\n\n{SITE}#model'
+    if tweet_length(text) > LIMIT:
+        lines = lines[:-1]
+        text = '\n'.join(lines) + f'\n\n{SITE}#model'
+    return text
+
+
 # ------------------------------------------------------------------ command line
 
 def load_picks(now):
@@ -290,7 +313,7 @@ def do_draft(pick_id, now, first, latest, games, out=None):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.split('\n')[0])
-    parser.add_argument('command', choices=('draft', 'post', 'recap', 'auto'))
+    parser.add_argument('command', choices=('draft', 'post', 'recap', 'scoreboard', 'auto'))
     parser.add_argument('pick_id', nargs='?')
     parser.add_argument('--confirm', action='store_true', help='actually post')
     parser.add_argument('--day', help='Eastern date for a recap')
@@ -314,21 +337,24 @@ def main(argv=None):
                 tweet_id = post_tweet(text, credentials())
                 save_log(record(log, pick['id'], text, tweet_id, 'pick', now))
                 print(f'\nposted: {tweet_id}; logged in {LOG.relative_to(ROOT)}')
-        elif args.command == 'recap':
+        elif args.command in ('recap', 'scoreboard'):
             day = args.day or eastern_date(now).isoformat()
-            text = recap(day, first, latest, games, now)
+            if args.command == 'recap':
+                text, key = recap(day, first, latest, games, now), f'recap:day:{day}'
+            else:
+                scoreboard = json.loads((ROOT / 'site' / 'data' / 'scoreboard.json').read_text(encoding='utf-8'))
+                text, key = scoreboard_text(scoreboard), f'scoreboard:week:{day}'
             if not text:
-                print(f'nothing settled on {day}')
+                print(f"nothing to post for {args.command} on {day}")
                 return 0
             print(f'\n{text}\n\n{tweet_length(text)} characters')
-            key = f'recap:day:{day}'
             log = load_log()
             if key in {p['id'] for p in log['posts']}:
                 print('\nalready posted')
                 return 0
             if args.confirm:
                 tweet_id = post_tweet(text, credentials())
-                save_log(record(log, key, text, tweet_id, 'recap', now))
+                save_log(record(log, key, text, tweet_id, args.command, now))
                 print(f'\nposted: {tweet_id}')
             else:
                 print('\nnot posted: add --confirm to post this text')
