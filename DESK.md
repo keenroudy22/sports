@@ -56,9 +56,12 @@ python scripts/x_post.py draft PICK_ID                  write a post draft; post
 python scripts/x_post.py recap --day 2026-09-27         a game day's results as a post
 ```
 
-The schedule runs in dry-run mode until the sports GitHub login exists and publishing is turned on
-by editing the job's `ProgramArguments` and reloading it (the plist says how). Live publishing is meant
-to be turned on one kind at a time with `--publish-kinds`.
+The schedule went live on 2026-09-23 with `--publish-kinds settle,close` (settlements and closes only).
+Publishing widens one kind at a time by editing the job's `ProgramArguments` and reloading it (the plist
+says how): next `settle,close,lean,prop,longshot`, then everything once the researcher is on.
+
+Every commit the desk makes is authored and pushed as `keenroudy22` through the sports-only `gh` login;
+the heartbeat checks that identity every morning and alerts if it changes.
 
 ## The local model
 
