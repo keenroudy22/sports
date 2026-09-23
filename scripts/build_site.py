@@ -31,6 +31,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import boxscores
 import features
+import market_read
 import model_v2
 import odds_api
 import pricing
@@ -264,7 +265,7 @@ def calibrated(league, market, raw):
     return round(0.5 + k * (raw - 0.5), 3) if k is not None else round(raw, 3)
 
 
-def game_card(game, forecasts_v1, snapshot, names, identities):
+def game_card(game, forecasts_v1, snapshot, names, identities, market_block=None):
     league = game['league']
 
     def side(key):
@@ -280,7 +281,9 @@ def game_card(game, forecasts_v1, snapshot, names, identities):
             'completed': bool(game.get('completed')), 'status': game.get('status'), 'neutral': bool(game.get('neutral')),
             'home': side('home'), 'away': side('away'), 'market': mkt,
             'v1': {'home': v1['home'], 'away': v1['away'], 'publishedAt': v1['publishedAt']} if v1 else None,
-            'v2': v2, 'lean': lean(v2, mkt, league, snapshot.get('sd') if snapshot else None)}
+            'v2': v2, 'lean': lean(v2, mkt, league, snapshot.get('sd') if snapshot else None),
+            # The market as evidence beside our number, never inside it (scripts/market_read.py).
+            'marketRead': market_block}
 
 
 def recent_form(team, league, logs, before, count=5):
@@ -577,9 +580,12 @@ def build(now=None):
         for book in (record.get('books') or {}).values():
             sharp_odds.drop_impossible(book.get('markets') or {})
     lines += prop_rows(captures, by_id, forecasts, names, appearances, identities, now, prop_prices, established)
+    gap_rows = market_read.load_rows()
     for game in sorted(window, key=lambda g: (g['kickoff'], g['id'])):
         snaps_for = pregame(forecasts.get(game['id'], []), game['kickoff'])
-        card = game_card(game, forecasts_v1, snaps_for[-1] if snaps_for else None, names, identities)
+        latest_snap = snaps_for[-1] if snaps_for else None
+        block = market_read.read(game, latest_snap, books.get(game['id']), gap_rows) if game.get('state') == 'pre' else None
+        card = game_card(game, forecasts_v1, latest_snap, names, identities, block)
         card['fcs'] = game['league'] == 'CFB' and not {str(game['home']['id']), str(game['away']['id'])} <= fbs
         cards.append(card)
         info = league_data[game['league']]

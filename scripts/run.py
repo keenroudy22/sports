@@ -35,6 +35,7 @@ import features
 import gates
 import llm
 import llm_tasks
+import market_read
 import parlay
 import pricing
 import refresh
@@ -473,13 +474,25 @@ def evidence(candidate, ctx, context_file):
                           'entities': [player.get('name')], 'team': team, 'position': player.get('position'),
                           'status': player.get('status'), 'source': player.get('source') or game.get('source'),
                           'retrievedAt': player.get('reportedAt') or checked or stamp(ctx.now), 'verified': True})
-    m = build_site.market(game) or {}
-    if m.get('total') is not None and m.get('totalOpen') is not None and game.get('marketRetrievedAt'):
-        move = round(m['total'] - m['totalOpen'], 1)
-        facts.append({'id': f"market-{game['id']}-total", 'kind': 'market', 'direction': 'neutral',
-                      'claim': f"The total opened {pricing.fmt(m['totalOpen'])} and is {pricing.fmt(m['total'])} at {m.get('book')} ({move:+g})",
-                      'entities': [], 'source': game.get('source'), 'retrievedAt': game['marketRetrievedAt'], 'verified': True})
+    # The market read (scripts/market_read.py): the move since open, book disagreement, and where our gap
+    # sits among the model's gaps. Evidence beside the number, never inside it.
+    block = market_read.read(game, ctx.snapshot(game['id']), ctx.odds.get(game['id']), gap_rows())
+    words = market_read.sentences(block)
+    if words:
+        facts.append({'id': f"market-{game['id']}", 'kind': 'market', 'direction': 'neutral', 'claim': words, 'entities': [],
+                      'source': game.get('source'), 'retrievedAt': game.get('marketRetrievedAt') or stamp(ctx.now),
+                      'verified': True, 'read': block})
     return facts
+
+
+_GAP_ROWS = []
+
+
+def gap_rows():
+    """The model's walk-forward gaps, loaded once per process."""
+    if not _GAP_ROWS:
+        _GAP_ROWS.extend(market_read.load_rows())
+    return _GAP_ROWS
 
 
 def hold_reason(candidate, facts):
@@ -588,10 +601,12 @@ def write_prose(candidate, ctx, records):
                              f"{'' if games_played >= 3 else ', the role settled by last season'}. A player who does not take the field is "
                              f"voided under the book's rule; one who leaves hurt is graded. Confidence {candidate['confidence']} of 10.")
     else:
+        market_words = next((f['claim'] for f in candidate.get('_evidence') or [] if f.get('kind') == 'market'), '')
         candidate['why'] = (f"Model lean, published on our number alone. Our total is {p['projection']:g} against {pricing.fmt(line)}: the "
                             f"{side} reads {100 * p['chance']:.1f}% after the raw {100 * p['rawChance']:.1f}% is shrunk by the model's "
                             f"record against the close, {p['edgePoints']:+.1f} points clear of the {100 * p['breakEven']:.1f}% that "
-                            f"{odds:+d} needs. Nothing sourced argues against it; the number is the reason.")
+                            f"{odds:+d} needs. Nothing sourced argues against it; the number is the reason."
+                            + (f" The market: {market_words}" if market_words else ''))
         candidate['risk'] = (f"It rests on the model alone, and the closing line beats our number on average, so a gap this size is more "
                              f"often our error than the market's. {sparse}Confidence {candidate['confidence']} of 10.")
     return candidate
