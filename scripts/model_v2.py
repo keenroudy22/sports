@@ -39,6 +39,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import continuity
 import features
+import starters
 from refresh import Model as Elo
 
 VERSION = 'v2.0'
@@ -110,8 +111,8 @@ def observations(records, pace):
     for game in records:
         for side, other in (('home', 'away'), ('away', 'home')):
             team = game[side]['id']
-            rows.append({'kickoff': features.when(game['kickoff']), 'season': game['season'], 'team': team,
-                         'opp': game[other]['id'], 'home': side == 'home' and not game['neutral'],
+            rows.append({'eventId': game['eventId'], 'kickoff': features.when(game['kickoff']), 'season': game['season'],
+                         'team': team, 'opp': game[other]['id'], 'home': side == 'home' and not game['neutral'],
                          'points': game[side]['score'], 'efficiency': efficiency(game['teams'].get(team, {}), pace)})
     return rows
 
@@ -324,6 +325,39 @@ class Model:
             self.total = fit(rows, cutoff, season, self.params['total'], self.fcs, total_target,
                              warm.total if warm else None, self.offseason, self.roster)
         self.elo = elo_as_of(league, past, season) if self.params['margin'].get('eloWeight') else None
+        # Team-level effects fitted from the same past games, in points scored and allowed. Each is
+        # off unless the parameters ask for it; a forecast records which ones moved it.
+        self.effects = {}
+        shrink = (self.params.get('qbOut') or {}).get('shrink')
+        if shrink is not None and self.margin is not None:
+            self.effects['qbOut'] = self.qb_effects(rows, past, shrink)
+
+    def qb_effects(self, rows, past, shrink):
+        """Points scored and allowed when the usual starting quarterback did not play, as residuals.
+
+        From the stored games before the cutoff, the mean margin-fit residual of a team's points in
+        games its usual starter (known from earlier games only) did not throw in, and of the points
+        scored against such a team. Each mean is shrunk toward zero by `shrink` pseudo-games. The
+        extra spread of those residuals over all residuals widens the forecast's uncertainty.
+        """
+        flags = starters.qb_out_flags(past)
+        residuals, scored, allowed = [], [], []
+        for row in rows:
+            residual = row['points'] - self.margin.points(row['team'], row['opp'], row['home'])
+            residuals.append(residual)
+            if flags.get((row['eventId'], row['team']), {}).get('out'):
+                scored.append(residual)
+            if flags.get((row['eventId'], row['opp']), {}).get('out'):
+                allowed.append(residual)
+
+        def shrunk(values):
+            return sum(values) / (len(values) + shrink) if values else 0.0
+
+        spread_all = statistics.pstdev(residuals) if len(residuals) > 1 else 0.0
+        spread_out = statistics.pstdev(scored) if len(scored) > 4 else spread_all
+        return {'for': round(shrunk(scored), 2), 'against': round(shrunk(allowed), 2),
+                'n': {'for': len(scored), 'against': len(allowed)}, 'shrink': shrink,
+                'sdExtra': round(max(0.0, spread_out - spread_all), 2)}
 
     def elo_margin(self, home, away, neutral):
         ratings = self.elo.ratings
@@ -342,10 +376,23 @@ class Model:
                 margin = (1 - weight) * margin + weight * self.elo_margin(home, away, neutral)
         if self.total:
             total = self.total.points(home, away, at_home) + self.total.points(away, home, False)
+        sd_margin, sd_total, adjustments = p['sdMargin'], p['sdTotal'], {}
+        qb, effect = (game or {}).get('qbOut') or {}, self.effects.get('qbOut')
+        if effect and (qb.get('home') or qb.get('away')):
+            home_pts, away_pts = (total + margin) / 2, (total - margin) / 2
+            if qb.get('home'):
+                home_pts, away_pts = home_pts + effect['for'], away_pts + effect['against']
+            if qb.get('away'):
+                away_pts, home_pts = away_pts + effect['for'], home_pts + effect['against']
+            margin, total = home_pts - away_pts, home_pts + away_pts
+            sd_margin = math.sqrt(sd_margin ** 2 + effect['sdExtra'] ** 2)
+            sd_total = math.sqrt(sd_total ** 2 + effect['sdExtra'] ** 2)
+            adjustments['qbOut'] = {'home': bool(qb.get('home')), 'away': bool(qb.get('away')),
+                                    'points': {'for': effect['for'], 'against': effect['against']}, 'sdExtra': effect['sdExtra']}
         return {'margin': margin, 'total': total, 'home': (total + margin) / 2, 'away': (total - margin) / 2,
-                'sdMargin': p['sdMargin'], 'sdTotal': p['sdTotal'],
-                'homeWinProb': 0.5 * (1 + math.erf(margin / (p['sdMargin'] * math.sqrt(2)))),
-                'sparse': min(self.counts.get(home, 0), self.counts.get(away, 0)) < 3, 'adjustments': {}}
+                'sdMargin': round(sd_margin, 2), 'sdTotal': round(sd_total, 2),
+                'homeWinProb': 0.5 * (1 + math.erf(margin / (sd_margin * math.sqrt(2)))),
+                'sparse': min(self.counts.get(home, 0), self.counts.get(away, 0)) < 3, 'adjustments': adjustments}
 
 
 # ------------------------------------------------------------------ backtest
@@ -362,12 +409,16 @@ def backtest(league, season, params=None, records=None, from_week=None, targets=
     records = records if records is not None else features.load(leagues=(league,))
     games = [g for g in records if g['season'] == season
              and (from_week is None or g['seasonType'] == 3 or (g['week'] or 0) >= from_week)]
+    # The quarterback flag for a backtest is read after the fact (the usual starter did not throw), a
+    # stand-in for the injury report the live forecast reads; the fit itself never sees the game.
+    flags = starters.qb_out_flags(records) if (params or PARAMS[league]).get('qbOut') else {}
     out, model, current = [], None, None
     for game in games:
         refit = week_start(features.when(game['kickoff']))
         if refit != current:
             model, current = Model(league, records, refit, season, params, warm=model, targets=targets), refit
-        forecast = model.predict(game['home']['id'], game['away']['id'], game['neutral'])
+        qb = {side: flags.get((game['eventId'], game[side]['id']), {}).get('out', False) for side in ('home', 'away')}
+        forecast = model.predict(game['home']['id'], game['away']['id'], game['neutral'], game={'qbOut': qb} if flags else None)
         lines = features.market_lines(game)
         out.append({'eventId': game['eventId'], 'week': game['week'], 'seasonType': game['seasonType'],
                     'kickoff': game['kickoff'], 'margin': game['home']['score'] - game['away']['score'],

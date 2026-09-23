@@ -196,3 +196,46 @@ class TuneKnobTests(unittest.TestCase):
         model = model_v2.Model('NFL', games, after(games), 2025, EXACT)
         self.assertEqual(model.predict('A', 'B')['adjustments'], {})
         self.assertEqual(model.context, {})
+
+
+class QuarterbackOutTests(unittest.TestCase):
+    def games(self):
+        """Eight 2025 weeks. Team A's starter A1 throws in weeks 1 to 6; A2 in 7 and 8, when A scores 10 fewer."""
+        games = fakegames.season(STRENGTH, weeks=8)
+        for game in games:
+            for side in ('home', 'away'):
+                team = game[side]['id']
+                pid = 'A2' if team == 'A' and game['week'] >= 7 else f'{team}-qb'
+                game['players'].append({'id': pid if team != 'A' or game['week'] >= 7 else 'A1', 'team': team, 'pos': 'QB', 'att': 30})
+                if team == 'A' and game['week'] >= 7:
+                    game[side]['score'] -= 10
+                    game['teams'][team]['points'] -= 10
+        return games
+
+    def test_the_effect_is_fitted_from_games_the_usual_starter_missed_and_moves_a_flagged_forecast(self):
+        games = self.games()
+        cutoff = after(games)
+        plain = model_v2.Model('NFL', games, cutoff, 2025, EXACT)
+        self.assertEqual(plain.effects, {}, 'v2.0 parameters fit no quarterback effect')
+        params = {**EXACT, 'qbOut': {'shrink': 0}}
+        model = model_v2.Model('NFL', games, cutoff, 2025, params)
+        effect = model.effects['qbOut']
+        self.assertEqual(effect['n']['for'], 2)
+        self.assertLess(effect['for'], -3.0, 'A scored well under its rating without its starter')
+        base = model.predict('A', 'C')
+        self.assertEqual(base['adjustments'], {})
+        flagged = model.predict('A', 'C', game={'qbOut': {'home': True, 'away': False}})
+        self.assertAlmostEqual(flagged['margin'], base['margin'] + effect['for'] - effect['against'], places=6)
+        self.assertGreaterEqual(flagged['sdMargin'], base['sdMargin'])
+        self.assertTrue(flagged['adjustments']['qbOut']['home'])
+        shrunk = model_v2.Model('NFL', games, cutoff, 2025, {**EXACT, 'qbOut': {'shrink': 50}}).effects['qbOut']
+        self.assertGreater(shrunk['for'], effect['for'], 'shrinkage pulls the effect toward zero')
+
+    def test_the_backtest_flags_games_from_earlier_games_only(self):
+        rows = model_v2.backtest('NFL', 2025, {**EXACT, 'qbOut': {'shrink': 0}}, self.games())
+        by_week = {}
+        for row in rows:
+            by_week.setdefault(row['week'], []).append(row)
+        self.assertTrue(all(r['forecast']['adjustments'] == {} for r in by_week[6]))
+        week7 = [r for r in by_week[7] if r['forecast']['adjustments']]
+        self.assertEqual(len(week7), 1, 'the one game A played without A1 is flagged')

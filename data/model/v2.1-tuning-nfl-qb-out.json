@@ -1,0 +1,192 @@
+{
+ "league": "NFL",
+ "version": "v2.0",
+ "knob": "qbOut.shrink",
+ "grid": [
+  null,
+  50,
+  20,
+  10,
+  5
+ ],
+ "off": null,
+ "tuneSeason": 2024,
+ "holdoutSeason": 2025,
+ "trials": [
+  {
+   "value": null,
+   "miss": {
+    "margin": 10.2,
+    "total": 9.81
+   },
+   "sum": 20.009999999999998
+  },
+  {
+   "value": 50,
+   "miss": {
+    "margin": 10.14,
+    "total": 9.83
+   },
+   "sum": 19.97
+  },
+  {
+   "value": 20,
+   "miss": {
+    "margin": 10.13,
+    "total": 9.85
+   },
+   "sum": 19.98
+  },
+  {
+   "value": 10,
+   "miss": {
+    "margin": 10.13,
+    "total": 9.85
+   },
+   "sum": 19.98
+  },
+  {
+   "value": 5,
+   "miss": {
+    "margin": 10.12,
+    "total": 9.86
+   },
+   "sum": 19.979999999999997
+  }
+ ],
+ "chosen": 50,
+ "base": {
+  "margin": {
+   "halfLife": 180,
+   "ridge": 10.0,
+   "priorWeight": 0.6,
+   "eloWeight": 0.5
+  },
+  "total": {
+   "halfLife": 45,
+   "ridge": 3.0,
+   "priorWeight": 0.3,
+   "blend": 0.3
+  },
+  "sdMargin": 13.21,
+  "sdTotal": 12.79,
+  "pace": 65.0
+ },
+ "tuned": {
+  "margin": {
+   "halfLife": 180,
+   "ridge": 10.0,
+   "priorWeight": 0.6,
+   "eloWeight": 0.5
+  },
+  "total": {
+   "halfLife": 45,
+   "ridge": 3.0,
+   "priorWeight": 0.3,
+   "blend": 0.3
+  },
+  "sdMargin": 13.21,
+  "sdTotal": 12.79,
+  "pace": 65.0,
+  "qbOut": {
+   "shrink": 50
+  }
+ },
+ "holdout": {
+  "base": {
+   "games": 285,
+   "priced": 280,
+   "marginMiss": 10.21,
+   "closeMarginMiss": 9.71,
+   "totalMiss": 10.6,
+   "closeTotalMiss": 10.49,
+   "sideVsClose": [
+    132,
+    148
+   ],
+   "totalVsClose": [
+    148,
+    132
+   ],
+   "within80": {
+    "margin": 0.82,
+    "total": 0.78
+   },
+   "residualSd": {
+    "margin": 12.85,
+    "total": 13.35
+   }
+  },
+  "tuned": {
+   "games": 285,
+   "priced": 280,
+   "marginMiss": 10.19,
+   "closeMarginMiss": 9.71,
+   "totalMiss": 10.67,
+   "closeTotalMiss": 10.49,
+   "sideVsClose": [
+    129,
+    151
+   ],
+   "totalVsClose": [
+    150,
+    130
+   ],
+   "within80": {
+    "margin": 0.82,
+    "total": 0.78
+   },
+   "residualSd": {
+    "margin": 12.81,
+    "total": 13.42
+   }
+  },
+  "compare": {
+   "margin": {
+    "n": 282,
+    "meanDelta": -0.014,
+    "interval90": [
+     -0.119,
+     0.091
+    ],
+    "earlyWeeks": {
+     "n": 64,
+     "meanDelta": 0.062
+    },
+    "laterWeeks": {
+     "n": 218,
+     "meanDelta": -0.037
+    },
+    "verdict": "NOISE"
+   },
+   "total": {
+    "n": 283,
+    "meanDelta": 0.071,
+    "interval90": [
+     -0.043,
+     0.19
+    ],
+    "earlyWeeks": {
+     "n": 64,
+     "meanDelta": 0.223
+    },
+    "laterWeeks": {
+     "n": 219,
+     "meanDelta": 0.027
+    },
+    "verdict": "LOSES"
+   }
+  },
+  "ships": {
+   "margin": false,
+   "total": false
+  }
+ },
+ "looks": [
+  {
+   "at": "2026-09-23T14:26:53+00:00",
+   "knob": "qbOut.shrink",
+   "season": 2025
+  }
+ ]
+}
