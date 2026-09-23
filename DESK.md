@@ -82,6 +82,17 @@ the model's season-to-date record against the closing line on Tuesday mornings (
 and a draft plus a branded card image (`scripts/pick_card.py`, rendered by the machine's headless Chrome,
 never committed) for every open favorite. `x_post.py post PICK_ID --confirm --card` attaches the card.
 
+## Weather
+
+`scripts/venues.py` keeps `data/venues.json`: for every venue the store or slate names, ESPN's roof
+flag and city and a point from Open-Meteo's free geocoder; anything it cannot place is listed in
+`data/venues-review.json` for a person. `scripts/weather.py` reads the National Weather Service hourly
+forecast at that point for the hour of kickoff (wind, gusts, chance of precipitation, temperature) for
+outdoor games inside six and a half days, and appends it to `data/weather/` when it changes, so the record
+shows what was known and when. The run turns it into a fact: wind of 15 mph or more, a 60% chance of
+precipitation or 25 degrees argues against an over and for an under; otherwise it is context. The score
+model does not carry weather; this is evidence for the judgment, not a term in the number.
+
 ## The market read and the web researcher
 
 `scripts/market_read.py` puts the market beside our number, never inside it: the move since open, which

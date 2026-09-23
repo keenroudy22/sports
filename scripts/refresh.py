@@ -123,6 +123,10 @@ def normalize(event, league):
         game[side] = dict(id=t['id'], name=t['displayName'], short=t.get('shortDisplayName', t['displayName']),
                           abbreviation=t.get('abbreviation', t['displayName']),
                           score=int(score) if score is not None and status['state'] != 'pre' else None)
+    venue = c.get('venue') or {}
+    if venue.get('id'):
+        # Where the game is played, so the weather layer knows which point to ask about and whether there is a roof.
+        game['venue'] = {'id': str(venue['id']), 'name': venue.get('fullName') or venue.get('name'), 'indoor': venue.get('indoor')}
     odds = c.get('odds', [])
     if odds:
         odds = odds[0]

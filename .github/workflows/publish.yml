@@ -84,6 +84,10 @@ jobs:
         run: python scripts/forecast.py
       - name: Late snapshot for games inside the hour whose inactives changed (priced from, not graded)
         run: python scripts/forecast.py --late
+      - name: Venue table (roof and a point) for any venue the store or slate names that the table lacks
+        run: python scripts/venues.py
+      - name: Kickoff forecasts for upcoming outdoor games (National Weather Service)
+        run: python scripts/weather.py
       - name: Capture DraftKings NFL prop lines from ESPN
         run: python scripts/prop_lines.py
       - name: Capture spreads and totals across books (The Odds API, budgeted)
@@ -109,7 +113,7 @@ jobs:
           python scripts/integrity.py
           git config user.name 'football-forecast[bot]'
           git config user.email 'football-forecast[bot]@users.noreply.github.com'
-          git add site/data tests/integrity-ledger.json data/boxscores data/nflverse data/forecasts data/props data/odds data/prop-odds data/model
+          git add site/data tests/integrity-ledger.json data/boxscores data/nflverse data/forecasts data/props data/odds data/prop-odds data/model data/venues.json data/venues-review.json data/weather
           if ! git diff --cached --quiet; then
             git commit -m 'Refresh schedules, finals and pregame forecasts'
             git push

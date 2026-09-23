@@ -475,6 +475,11 @@ def evidence(candidate, ctx, context_file):
                           'entities': [player.get('name')], 'team': team, 'position': player.get('position'),
                           'status': player.get('status'), 'source': player.get('source') or game.get('source'),
                           'retrievedAt': player.get('reportedAt') or checked or stamp(ctx.now), 'verified': True})
+    # The forecast at kickoff for an outdoor game (scripts/weather.py): from the stored line the hosted
+    # workflow appended, else a live read. Wind, rain or cold argue against an over and for an under.
+    fact = weather_fact(game, candidate, ctx)
+    if fact:
+        facts.append(fact)
     # The market read (scripts/market_read.py): the move since open, book disagreement, and where our gap
     # sits among the model's gaps. Evidence beside the number, never inside it.
     block = market_read.read(game, ctx.snapshot(game['id']), ctx.odds.get(game['id']), gap_rows())
@@ -484,6 +489,38 @@ def evidence(candidate, ctx, context_file):
                       'source': game.get('source'), 'retrievedAt': game.get('marketRetrievedAt') or stamp(ctx.now),
                       'verified': True, 'read': block})
     return facts
+
+
+_WEATHER = {}
+
+
+def prime_weather(records):
+    """Load the venue table, each home team's usual venue and the stored forecasts once per run."""
+    import venues
+    import weather
+    _WEATHER.clear()
+    _WEATHER.update(table=venues.load(), usual=venues.usual_venues(records), stored=weather.stored())
+
+
+def weather_fact(game, candidate, ctx):
+    """The weather fact for a game, from the store first, then a live read; None indoors, unknown or far out."""
+    import venues
+    import weather
+    if not _WEATHER:
+        prime_weather(features.load())
+    venue = venues.venue_for(game, _WEATHER['table'], _WEATHER['usual'])
+    if not venue or venue.get('indoor') is not False or venue.get('lat') is None:
+        return None
+    side = gates.side_of(candidate) if gates.market_key(candidate) == 'total' else None
+    line = _WEATHER['stored'].get(game['id'])
+    forecast = line.get('forecast') if line else None
+    if not forecast:
+        try:
+            forecast = weather.forecast_for(venue['lat'], venue['lon'], gates.when(game['kickoff']), now=ctx.now)
+        except Exception as error:      # the NWS is a courtesy, never a dependency
+            log(f"weather for {game['id']} unavailable ({type(error).__name__})")
+            return None
+    return weather.fact_for(game, venue, forecast, ctx.now, side)
 
 
 _GAP_ROWS = []
@@ -837,6 +874,7 @@ def _run(args, now, slot, kinds, status):
     stores = gates.Stores(records=records)
     ctx = stores.as_of(now)
     ctx.games = games
+    prime_weather(records)
     raw_first = raw_first_publications(stores.reports)
     context_file = stores.context_file
     settled, closed, published, screened, unclear = [], [], [], [], []
