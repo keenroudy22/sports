@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-23T19:20:39Z",
+  "updatedAt": "2026-09-23T19:37:51Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-23T19:11Z",
+              "reportedAt": "2026-09-23T19:23Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -3917,6 +3917,15 @@
           "name": "Los Angeles Chargers",
           "players": [
             {
+              "id": "4685553",
+              "name": "Brenen Thompson",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Hip",
+              "reportedAt": "2026-09-23T19:20Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4685553/brenen-thompson"
+            },
+            {
               "id": "4040842",
               "name": "Kayode Awosika",
               "position": "G",
@@ -3942,15 +3951,6 @@
               "injury": null,
               "reportedAt": "2026-09-23T04:15Z",
               "source": "https://www.espn.com/nfl/player/_/id/4430968/kimani-vidal"
-            },
-            {
-              "id": "4685553",
-              "name": "Brenen Thompson",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-23T03:54Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4685553/brenen-thompson"
             },
             {
               "id": "4241597",
@@ -4607,6 +4607,15 @@
           "name": "Minnesota Vikings",
           "players": [
             {
+              "id": "4046716",
+              "name": "Naquan Jones",
+              "position": "DT",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-23T19:23Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4046716/naquan-jones"
+            },
+            {
               "id": "3042519",
               "name": "Aaron Jones Sr.",
               "position": "RB",
@@ -4821,15 +4830,6 @@
               "injury": null,
               "reportedAt": "2026-09-18T23:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/3133487/andrew-van-ginkel"
-            },
-            {
-              "id": "4360569",
-              "name": "Jordan Mason",
-              "position": "RB",
-              "status": "Injured Reserve",
-              "injury": "Thumb",
-              "reportedAt": "2026-09-16T18:55Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4360569/jordan-mason"
             }
           ]
         },
@@ -6217,6 +6217,15 @@
           "name": "San Francisco 49ers",
           "players": [
             {
+              "id": "4686308",
+              "name": "C.J. West",
+              "position": "DT",
+              "status": "Injured Reserve",
+              "injury": "Undisclosed",
+              "reportedAt": "2026-09-23T19:23Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4686308/cj-west"
+            },
+            {
               "id": "4241464",
               "name": "Mac Jones",
               "position": "QB",
@@ -6431,15 +6440,6 @@
               "injury": "Ankle",
               "reportedAt": "2026-09-19T21:14Z",
               "source": "https://www.espn.com/nfl/player/_/id/4710714/dezhaun-stribling"
-            },
-            {
-              "id": "4243493",
-              "name": "Keion White",
-              "position": "DE",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-18T22:28Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4243493/keion-white"
             }
           ]
         },
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "19",
-          "name": "Deonte Banks",
-          "from": "Inactive",
-          "to": "Questionable",
-          "observedAt": "2026-09-22T22:03:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4428328/deonte-banks"
-        },
-        {
           "teamId": "20",
           "name": "Kene Nwangwu",
           "from": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Injured Reserve",
           "observedAt": "2026-09-23T19:20:39Z",
           "source": "https://www.espn.com/nfl/player/_/id/4429211/anthony-bradford"
+        },
+        {
+          "teamId": "24",
+          "name": "Brenen Thompson",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-09-23T19:37:51Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4685553/brenen-thompson"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-23T19:20:39Z",
-      "lastAttemptAt": "2026-09-23T19:20:39Z",
+      "checkedAt": "2026-09-23T19:37:51Z",
+      "lastAttemptAt": "2026-09-23T19:37:51Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-23T19:20:39Z",
-      "lastAttemptAt": "2026-09-23T19:20:39Z",
+      "checkedAt": "2026-09-23T19:37:51Z",
+      "lastAttemptAt": "2026-09-23T19:37:51Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
