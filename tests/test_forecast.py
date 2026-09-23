@@ -98,6 +98,7 @@ class PublishTests(unittest.TestCase):
         self.assertFalse(forecast.material(nudged, base))
         self.assertTrue(forecast.material({**base, 'margin': base['margin'] + 0.6}, base))
         self.assertTrue(forecast.material({**base, 'model': 'v2.1'}, base))
+        self.assertTrue(forecast.material({**base, 'projectionModel': 'v9.9'}, base), 'a new projection version republishes')
         self.assertTrue(forecast.material({**base, 'kickoff': '2099-01-01T00:00Z'}, base), 'a moved kickoff republishes')
 
     def test_the_committed_forecast_store_is_append_only(self):

@@ -30,7 +30,9 @@ import boxscores
 import features
 import model_v2
 
-VERSION = 'v2.0'
+# v2.1: a questionable player's lost share now reaches teammates (it was dropped), and the pass-rate
+# slope ignores the 2023 closes that hold a price where the line belongs.
+VERSION = 'v2.1'
 WINDOW = 8               # team games that define current roles
 TEAM_HALF_LIFE = 4.0     # games
 PRIOR_SEASON_WEIGHT = 1.0  # extra discount on last season's games in a team's recent window (1.0 = none)
@@ -125,13 +127,13 @@ def pass_slope(history, cutoff, league):
     """Change in dropback rate per point of expected margin, from past closes."""
     xs, ys, rates = [], [], defaultdict(list)
     for game in history.records[:history.before(cutoff)]:
-        close = (game.get('market') or {}).get('close') or {}
+        spread = features.market_lines(game)['closeSpread']   # a price stored as a line reads as no line
         for side in ('home', 'away'):
             line = team_line(game, game[side]['id'], league)
             if line['plays'] and line['dropbacks'] is not None:
                 rates[game[side]['id']].append(line['dropbacks'] / line['plays'])
-                if close.get('spread') is not None:
-                    expected = -close['spread'] if side == 'home' else close['spread']
+                if spread is not None:
+                    expected = -spread if side == 'home' else spread
                     xs.append((game[side]['id'], expected, line['dropbacks'] / line['plays']))
     for team, expected, rate in xs:
         ys.append((expected, rate - statistics.mean(rates[team])))
@@ -248,22 +250,26 @@ def project_team(history, league, team, rival, cutoff, season, margin, slope, le
         if shrunk:
             for s in shares.values():
                 s[stat] *= min(raw[stat], 1.0) / shrunk
-    # A limited player keeps part of their share before anything is redistributed.
+    # The team's covered volume before anyone is removed or cut; the redistribution restores it.
+    full = {stat: sum(s[stat] for s in shares.values()) for stat in ('targets', 'car', 'att')}
+    # A limited player keeps part of their share; the rest goes to healthy teammates below.
     for pid in limited:
         if pid in shares and pid not in unavailable:
             for stat in ('targets', 'car', 'att'):
                 shares[pid][stat] *= LIMITED_SHARE
-    # Players ruled out give their share to everyone else in proportion; a
-    # team's shares never add up to more than all of its volume.
+    # Players ruled out and the cut from limited players go to the healthy players in proportion
+    # to their own shares; a team's shares never add up to more than all of its volume.
     active = {pid: s for pid, s in shares.items() if pid not in unavailable}
+    healthy = {pid: s for pid, s in active.items() if pid not in limited} or active
     for stat in ('targets', 'car', 'att'):
-        before = sum(s[stat] for s in shares.values())
-        after = sum(s[stat] for s in active.values())
-        scale = before / after if after else 0.0
-        if after and sum(s[stat] * scale for s in active.values()) > 1:
-            scale = 1.0 / after
-        for s in active.values():
-            s[stat] *= scale
+        target = min(full[stat], 1.0)
+        held = sum(s[stat] for s in active.values())
+        pool = sum(s[stat] for s in healthy.values())
+        if not pool:
+            continue
+        scale = 1.0 + (target - held) / pool
+        for s in healthy.values():
+            s[stat] *= max(scale, 0.0)
     players = []
     for pid, share in shares.items():
         if pid in unavailable:

@@ -129,3 +129,70 @@ class ScoreTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class CloseSanityTests(unittest.TestCase):
+    def test_backtest_reads_a_price_stored_as_a_line_as_no_close(self):
+        games = fakegames.season(STRENGTH, weeks=8)
+        games[-1]['market'] = {'close': {'spread': -115, 'total': -110}}
+        games[-2]['market'] = {'close': {'spread': -3.5, 'total': 44.5}}
+        rows = {r['eventId']: r for r in model_v2.backtest('NFL', 2025, EXACT, games)}
+        self.assertIsNone(rows[games[-1]['eventId']]['closeMargin'])
+        self.assertIsNone(rows[games[-1]['eventId']]['closeTotal'])
+        self.assertEqual(rows[games[-2]['eventId']]['closeMargin'], 3.5)
+        self.assertEqual(rows[games[-2]['eventId']]['closeTotal'], 44.5)
+
+
+class CompareTests(unittest.TestCase):
+    def rows(self, offset):
+        games = fakegames.season(STRENGTH, weeks=8)
+        for game in games:
+            game['market'] = {'close': {'spread': -3.0, 'total': 40.0}}
+        rows = model_v2.backtest('NFL', 2025, EXACT, games)
+        for row in rows:
+            row['forecast'] = dict(row['forecast'], margin=row['margin'] + offset, total=row['total'] + offset)
+        return rows
+
+    def test_identical_forecasts_are_noise_and_a_uniform_gain_wins(self):
+        same = model_v2.compare(self.rows(2.0), self.rows(2.0), 'margin')
+        self.assertEqual(same['verdict'], 'NOISE')
+        self.assertEqual(same['meanDelta'], 0.0)
+        better = model_v2.compare(self.rows(3.0), self.rows(1.0), 'margin')
+        self.assertEqual(better['verdict'], 'WINS')
+        self.assertAlmostEqual(better['meanDelta'], -2.0, places=3)
+        self.assertTrue(model_v2.ships(better))
+        worse = model_v2.compare(self.rows(1.0), self.rows(3.0), 'total')
+        self.assertEqual(worse['verdict'], 'LOSES')
+        self.assertFalse(model_v2.ships(worse))
+        self.assertTrue(model_v2.ships({'verdict': 'NOISE', 'meanDelta': -0.12}))
+        self.assertFalse(model_v2.ships({'verdict': 'NOISE', 'meanDelta': -0.05}))
+
+    def test_rows_without_a_close_are_left_out(self):
+        rows = self.rows(1.0)
+        for row in rows:
+            row['closeMargin'] = None
+        self.assertEqual(model_v2.compare(rows, rows, 'margin')['verdict'], 'NO DATA')
+
+
+class TuneKnobTests(unittest.TestCase):
+    def test_tune_knob_sweeps_one_parameter_and_holds_the_rest(self):
+        games = fakegames.season(STRENGTH, weeks=8)
+        for game in games:
+            game['market'] = {'close': {'spread': -3.0, 'total': 40.0}}
+        loose = {**EXACT, 'margin': {**EXACT['margin'], 'ridge': 50.0}}
+        result = model_v2.tune_knob('NFL', ('margin', 'ridge'), (50.0, 0.01), base=loose, tune_season=2025, holdout=2025,
+                                    records=games, log=lambda *_: None)
+        self.assertEqual(result['knob'], 'margin.ridge')
+        self.assertEqual(result['chosen'], 0.01, 'the exact data rewards the lightest penalty')
+        self.assertEqual(result['tuned']['margin']['ridge'], 0.01)
+        self.assertEqual(result['tuned']['total'], EXACT['total'], 'the other target is untouched')
+        self.assertEqual(result['holdout']['compare']['margin']['verdict'], 'WINS')
+        self.assertTrue(result['holdout']['ships']['margin'])
+        self.assertEqual(len(result['looks']), 1)
+        self.assertEqual(model_v2.set_path({}, ('a', 'b'), 1), {'a': {'b': 1}})
+
+    def test_predict_without_context_carries_no_adjustments(self):
+        games = fakegames.season(STRENGTH, weeks=8)
+        model = model_v2.Model('NFL', games, after(games), 2025, EXACT)
+        self.assertEqual(model.predict('A', 'B')['adjustments'], {})
+        self.assertEqual(model.context, {})

@@ -16,6 +16,16 @@ def game(home_points=27, away_points=20, spread=-3.0, total=44.5, open_spread=-2
 
 
 class GradingTests(unittest.TestCase):
+    def test_a_price_stored_as_a_line_is_no_line(self):
+        # Some 2023 records hold the provider's price where the line belongs. That is not a 115-point favourite.
+        row = sb.grade(game(spread=-115, total=-110, open_spread=-110), margin=5.0, total=41.0)
+        self.assertIsNone(row['closeMargin'])
+        self.assertIsNone(row['closeTotal'])
+        self.assertIsNone(row['side'])
+        self.assertIsNone(row['ou'])
+        self.assertNotIn('closerMargin', row)
+        self.assertNotIn('movedToward', row)
+
     def test_a_forecast_takes_the_side_it_disagrees_with_the_close_on(self):
         row = sb.grade(game(), margin=5.0, total=41.0)
         self.assertEqual((row['closeMargin'], row['side'], row['ou']), (3.0, 'W', 'L'))

@@ -40,6 +40,26 @@ def when(value):
     return datetime.fromisoformat(str(value).replace('Z', '+00:00'))
 
 
+SPREAD_MAX, TOTAL_RANGE = 60.0, (20.0, 100.0)
+
+
+def market_lines(game):
+    """The stored open and close as numbers a football game can have; None where the store holds something else.
+
+    Some 2023 records carry the provider's price where the line belongs (a spread of -115, a total
+    of -110). Those are odds, not lines, and every reader treats them as missing rather than as a
+    50-point favourite. The store itself is never edited.
+    """
+    market = game.get('market') or {}
+    out = {}
+    for phase in ('open', 'close'):
+        block = market.get(phase) or {}
+        spread, total = block.get('spread'), block.get('total')
+        out[f'{phase}Spread'] = spread if isinstance(spread, (int, float)) and abs(spread) <= SPREAD_MAX else None
+        out[f'{phase}Total'] = total if isinstance(total, (int, float)) and TOTAL_RANGE[0] <= total <= TOTAL_RANGE[1] else None
+    return out
+
+
 def load(leagues=('NFL', 'CFB'), seasons=None, root=boxscores.STORE):
     """Current version of every stored game, oldest kickoff first."""
     games = {}

@@ -84,20 +84,20 @@ def against(forecast, line, actual):
 
 def grade(game, margin, total, sd=None, home_prob=None):
     """Grade one forecast (home margin and total) against the close and the result."""
-    market = game.get('market') or {}
-    close, opening = market.get('close') or {}, market.get('open') or {}
-    close_margin = -close['spread'] if close.get('spread') is not None else None
-    open_margin = -opening['spread'] if opening.get('spread') is not None else None
+    lines = features.market_lines(game)     # a price stored as a line reads as no line
+    close_margin = -lines['closeSpread'] if lines['closeSpread'] is not None else None
+    open_margin = -lines['openSpread'] if lines['openSpread'] is not None else None
+    close_total = lines['closeTotal']
     actual_margin = game['home']['score'] - game['away']['score']
     actual_total = game['home']['score'] + game['away']['score']
     row = {'margin': round(margin, 1) if margin is not None else None,
            'total': round(total, 1) if total is not None else None,
-           'closeMargin': close_margin, 'closeTotal': close.get('total'),
+           'closeMargin': close_margin, 'closeTotal': close_total,
            'actualMargin': actual_margin, 'actualTotal': actual_total,
            'side': against(margin, close_margin, actual_margin),
-           'ou': against(total, close.get('total'), actual_total)}
+           'ou': against(total, close_total, actual_total)}
     for key, value, line, actual in (('Margin', margin, close_margin, actual_margin),
-                                     ('Total', total, close.get('total'), actual_total)):
+                                     ('Total', total, close_total, actual_total)):
         if value is not None and line is not None:
             model_miss, close_miss = abs(value - actual), abs(line - actual)
             row[f'closer{key}'] = None if model_miss == close_miss else model_miss < close_miss

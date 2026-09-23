@@ -128,3 +128,25 @@ class ProjectionTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class ShareRedistributionTests(unittest.TestCase):
+    def test_a_questionable_players_lost_share_reaches_healthy_teammates(self):
+        games = league()
+        result = pj.project_team(pj.History(games), 'NFL', 'A', 'B', cutoff(games), 2025, 0.0, 0.0, PRIORS, set(), {'A-w1'})
+        players = {p['id']: p for p in result['players']}
+        self.assertTrue(players['A-w1'].get('limited'))
+        # w1 had 9 of 22 targets; three quarters of that stays, and the rest is split among w2, rb and te by their own shares.
+        self.assertAlmostEqual(players['A-w1']['targets']['mean'], 9 * pj.LIMITED_SHARE, delta=0.2)
+        self.assertAlmostEqual(players['A-w2']['targets']['mean'], 6 + 9 * (1 - pj.LIMITED_SHARE) * 6 / 13, delta=0.25)
+        covered = sum(p.get('targets', {}).get('mean', 0) for p in players.values())
+        self.assertAlmostEqual(covered, 22, delta=0.3, msg='the cut is redistributed, not dropped')
+
+    def test_pass_slope_ignores_a_price_stored_as_a_line(self):
+        games = league()
+        for game in games:
+            game['market'] = {'close': {'spread': -115, 'total': -110}}
+        self.assertEqual(pj.pass_slope(pj.History(games), cutoff(games), 'NFL'), 0.0)
+        for i, game in enumerate(games):
+            game['market'] = {'close': {'spread': -3.5 if i % 2 else 3.5, 'total': 44.5}}
+        self.assertIsInstance(pj.pass_slope(pj.History(games), cutoff(games), 'NFL'), float)

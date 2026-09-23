@@ -149,3 +149,12 @@ class StoreTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class MarketLineTests(unittest.TestCase):
+    def test_market_lines_drop_a_price_stored_where_the_line_belongs(self):
+        clean = game('1', '2025-09-07T17:00Z', market={'open': {'spread': -2.5, 'total': 44.5}, 'close': {'spread': -3.0, 'total': 45.5}})
+        self.assertEqual(ft.market_lines(clean), {'openSpread': -2.5, 'openTotal': 44.5, 'closeSpread': -3.0, 'closeTotal': 45.5})
+        odds = game('2', '2025-09-07T17:00Z', market={'open': {'spread': -2.5, 'total': 44.5}, 'close': {'spread': -115, 'total': -110}})
+        self.assertEqual(ft.market_lines(odds), {'openSpread': -2.5, 'openTotal': 44.5, 'closeSpread': None, 'closeTotal': None})
+        self.assertEqual(ft.market_lines(game('3', '2025-09-07T17:00Z')), {'openSpread': None, 'openTotal': None, 'closeSpread': None, 'closeTotal': None})

@@ -28,10 +28,12 @@ import argparse
 import hashlib
 import json
 import math
+import random
 import statistics
 import sys
 from collections import defaultdict
-from datetime import timedelta
+from copy import deepcopy
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -267,9 +269,12 @@ def elo_as_of(league, past, season):
 class Model:
     """Both rating sets as of one cutoff, from games that kicked off before it."""
 
-    def __init__(self, league, records, cutoff, season, params=None, warm=None, targets=('margin', 'total')):
+    def __init__(self, league, records, cutoff, season, params=None, warm=None, targets=('margin', 'total'), context=None):
         self.league, self.cutoff, self.season = league, cutoff, season
         self.params = params or PARAMS[league]
+        # Inputs beyond the box scores (snap counts, venues, weather, injuries) arrive here. Every term
+        # that reads them is off when the context is empty, so a model built without one is v2.0 exactly.
+        self.context = context or {}
         past = [g for g in records if features.when(g['kickoff']) < cutoff]
         self.games, self.through = len(past), past[-1]['kickoff'] if past else None
         self.inputs = hashlib.sha256(json.dumps([(g['eventId'], g['hash']) for g in past]).encode()).hexdigest()[:16]
@@ -302,7 +307,9 @@ class Model:
         margin = ratings.get(home, 0.0) - ratings.get(away, 0.0) + (0.0 if neutral else self.elo.home)
         return max(-42.0, min(42.0, margin))
 
-    def predict(self, home, away, neutral=False):
+    def predict(self, home, away, neutral=False, game=None):
+        """The forecast for one game. `game` carries per-game inputs (venue, weather, quarterback status) for
+        the terms that read them; with none, the answer is the ratings alone and `adjustments` is empty."""
         at_home, p = not neutral, self.params
         margin = total = 0.0
         if self.margin:
@@ -315,7 +322,7 @@ class Model:
         return {'margin': margin, 'total': total, 'home': (total + margin) / 2, 'away': (total - margin) / 2,
                 'sdMargin': p['sdMargin'], 'sdTotal': p['sdTotal'],
                 'homeWinProb': 0.5 * (1 + math.erf(margin / (p['sdMargin'] * math.sqrt(2)))),
-                'sparse': min(self.counts.get(home, 0), self.counts.get(away, 0)) < 3}
+                'sparse': min(self.counts.get(home, 0), self.counts.get(away, 0)) < 3, 'adjustments': {}}
 
 
 # ------------------------------------------------------------------ backtest
@@ -338,12 +345,12 @@ def backtest(league, season, params=None, records=None, from_week=None, targets=
         if refit != current:
             model, current = Model(league, records, refit, season, params, warm=model, targets=targets), refit
         forecast = model.predict(game['home']['id'], game['away']['id'], game['neutral'])
-        close = (game.get('market') or {}).get('close') or {}
+        lines = features.market_lines(game)
         out.append({'eventId': game['eventId'], 'week': game['week'], 'seasonType': game['seasonType'],
                     'kickoff': game['kickoff'], 'margin': game['home']['score'] - game['away']['score'],
                     'total': game['home']['score'] + game['away']['score'], 'forecast': forecast,
-                    'closeMargin': -close['spread'] if close.get('spread') is not None else None,
-                    'closeTotal': close.get('total')})
+                    'closeMargin': -lines['closeSpread'] if lines['closeSpread'] is not None else None,
+                    'closeTotal': lines['closeTotal']})
     return out
 
 
@@ -370,6 +377,97 @@ def score(rows):
                          'total': mean(abs(e) <= Z80 * r['forecast']['sdTotal'] for e, r in zip(total_errors, rows))},
             'residualSd': {'margin': round(statistics.pstdev(margin_errors), 2),
                            'total': round(statistics.pstdev(total_errors), 2)} if len(rows) > 1 else None}
+
+
+def compare(rows_old, rows_new, target, draws=1000, seed=7, early_weeks=4):
+    """Did a change help, on the same priced games? Paired per-game |miss| difference, new minus old.
+
+    A negative mean is an improvement. The 90% interval is a seeded bootstrap of that mean. The verdict is
+    WINS when the whole interval is below zero, LOSES when it is above zero or the mean is worse, and NOISE
+    otherwise. Weeks 1 to `early_weeks` are shown apart because the prior-season terms matter most there.
+    """
+    close = f"close{target.capitalize()}"
+    old_by = {r['eventId']: r for r in rows_old}
+    pairs = []
+    for new in rows_new:
+        old = old_by.get(new['eventId'])
+        if not old or new[close] is None or old[close] is None:
+            continue
+        pairs.append((new.get('week') or 0, new.get('seasonType'),
+                      abs(new['forecast'][target] - new[target]) - abs(old['forecast'][target] - old[target])))
+    diffs = [d for _, _, d in pairs]
+    if not diffs:
+        return {'n': 0, 'verdict': 'NO DATA'}
+    mean = statistics.mean(diffs)
+    rng = random.Random(seed)
+    boots = sorted(statistics.mean(rng.choices(diffs, k=len(diffs))) for _ in range(draws))
+    low, high = boots[int(0.05 * draws)], boots[min(int(0.95 * draws), draws - 1)]
+    early = [d for w, st, d in pairs if st == 2 and w <= early_weeks]
+    later = [d for w, st, d in pairs if not (st == 2 and w <= early_weeks)]
+    verdict = 'WINS' if high < 0 else 'LOSES' if low > 0 or mean > 0 else 'NOISE'
+    return {'n': len(diffs), 'meanDelta': round(mean, 3), 'interval90': [round(low, 3), round(high, 3)],
+            'earlyWeeks': {'n': len(early), 'meanDelta': round(statistics.mean(early), 3)} if early else None,
+            'laterWeeks': {'n': len(later), 'meanDelta': round(statistics.mean(later), 3)} if later else None,
+            'verdict': verdict}
+
+
+def ships(comparison, min_gain=0.10):
+    """The ship rule: a clear win, or a gain of at least min_gain points that the bootstrap calls noise."""
+    return comparison.get('verdict') == 'WINS' or (comparison.get('verdict') == 'NOISE' and comparison['meanDelta'] <= -min_gain)
+
+
+def set_path(params, path, value):
+    node = params
+    for key in path[:-1]:
+        node = node.setdefault(key, {})
+    node[path[-1]] = value
+    return params
+
+
+def tune_knob(league, path, grid, base=None, tune_season=2024, holdout=2025, records=None, off=None, log=print):
+    """Sweep one parameter on the tuning season with everything else held at `base`; score the holdout once.
+
+    path is a tuple such as ('margin', 'continuity'); grid the values to try; `off` the value that means
+    the knob is not there (ties go to it, and the holdout comparison is against `base`, which has it off).
+    Returns everything a tuning file needs, including a `looks` entry: the holdout season is consulted once
+    per feature, and the file should say how often it has been looked at.
+    """
+    records = records if records is not None else features.load(leagues=(league,))
+    base = deepcopy(base or PARAMS[league])
+    off = grid[0] if off is None else off
+    targets = (path[0],) if path[0] in ('margin', 'total') else ('margin', 'total')
+    trials = []
+    for value in grid:
+        params = set_path(deepcopy(base), path, value)
+        result = score(backtest(league, tune_season, params, records, targets=targets))
+        miss = {t: result[f'{t}Miss'] for t in targets}
+        trials.append({'value': value, 'miss': miss, 'sum': sum(miss.values())})
+        log(f"{league} {'.'.join(path)}={value}: {miss}")
+    chosen = min(trials, key=lambda t: (t['sum'], 0 if t['value'] == off else 1))['value']
+    tuned = set_path(deepcopy(base), path, chosen)
+    old_rows = backtest(league, holdout, base, records)
+    new_rows = backtest(league, holdout, tuned, records)
+    comparison = {t: compare(old_rows, new_rows, t) for t in ('margin', 'total')}
+    return {'league': league, 'version': VERSION, 'knob': '.'.join(path), 'grid': list(grid), 'off': off,
+            'tuneSeason': tune_season, 'holdoutSeason': holdout, 'trials': trials, 'chosen': chosen,
+            'base': base, 'tuned': tuned,
+            'holdout': {'base': score(old_rows), 'tuned': score(new_rows), 'compare': comparison,
+                        'ships': {t: ships(comparison[t]) for t in targets}},
+            'looks': [{'at': datetime.now(timezone.utc).isoformat(timespec='seconds'), 'knob': '.'.join(path),
+                       'season': holdout}]}
+
+
+def write_tuning(path, result):
+    """Write a tuning file, carrying forward the holdout looks an earlier file recorded."""
+    path = Path(path)
+    if path.exists():
+        try:
+            earlier = json.loads(path.read_text(encoding='utf-8')).get('looks') or []
+        except ValueError:
+            earlier = []
+        result = dict(result, looks=earlier + result.get('looks', []))
+    path.write_text(json.dumps(result, indent=1) + '\n', encoding='utf-8', newline='\n')
+    return result
 
 
 GRID = {'halfLife': (45, 90, 180), 'ridge': (1.0, 3.0, 10.0), 'priorWeight': (0.3, 0.6, 1.0),
@@ -413,16 +511,40 @@ def main(argv=None):
     run.add_argument('league')
     run.add_argument('season', type=int)
     run.add_argument('--from-week', type=int)
-    grid = sub.add_parser('tune')
+    grid = sub.add_parser('tune', help='the full grid, or one knob with --knob and --grid')
     grid.add_argument('league')
     grid.add_argument('--out')
+    grid.add_argument('--knob', help='one nested parameter, such as margin.continuity')
+    grid.add_argument('--grid', help='comma-separated values for --knob; the first means off')
+    grid.add_argument('--tune-season', type=int, default=2024)
+    grid.add_argument('--holdout', type=int, default=2025)
+    diff = sub.add_parser('compare', help='candidate parameters against the current ones on one season')
+    diff.add_argument('league')
+    diff.add_argument('season', type=int)
+    diff.add_argument('--params', required=True, help='JSON file holding the candidate PARAMS[league] block')
     args = parser.parse_args(argv)
+    league = args.league.upper()
     if args.command == 'backtest':
-        print(json.dumps(score(backtest(args.league.upper(), args.season, from_week=args.from_week)), indent=1))
+        print(json.dumps(score(backtest(league, args.season, from_week=args.from_week)), indent=1))
         return
-    result = tune(args.league.upper(), log=lambda *_: None)
+    if args.command == 'compare':
+        candidate = json.loads(Path(args.params).read_text(encoding='utf-8'))
+        records = features.load(leagues=(league,))
+        old_rows, new_rows = backtest(league, args.season, None, records), backtest(league, args.season, candidate, records)
+        out = {'current': score(old_rows), 'candidate': score(new_rows),
+               'compare': {t: compare(old_rows, new_rows, t) for t in ('margin', 'total')}}
+        out['ships'] = {t: ships(out['compare'][t]) for t in ('margin', 'total')}
+        print(json.dumps(out, indent=1))
+        return
+    if args.knob:
+        values = [float(v) if v.lower() not in ('none', 'off') else None for v in args.grid.split(',')]
+        values = [int(v) if isinstance(v, float) and v.is_integer() and 'e' not in str(v) else v for v in values]
+        result = tune_knob(league, tuple(args.knob.split('.')), values, tune_season=args.tune_season,
+                           holdout=args.holdout, log=lambda *_: None)
+    else:
+        result = tune(league, log=lambda *_: None)
     if args.out:
-        Path(args.out).write_text(json.dumps(result, indent=1) + '\n', encoding='utf-8', newline='\n')
+        result = write_tuning(args.out, result)
     print(json.dumps({k: v for k, v in result.items() if k != 'trials'}, indent=1))
 
 

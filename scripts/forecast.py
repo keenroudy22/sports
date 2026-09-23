@@ -90,7 +90,8 @@ def volumes(record):
 
 def material(record, previous):
     """Would a reader see a different forecast? Rounding noise does not count."""
-    if previous is None or previous['model'] != record['model'] or previous.get('kickoff') != record['kickoff']:
+    if previous is None or previous['model'] != record['model'] or previous.get('kickoff') != record['kickoff'] \
+            or previous.get('projectionModel') != record.get('projectionModel'):
         return True
     if abs(record['margin'] - previous['margin']) >= MATERIAL['points'] or \
             abs(record['total'] - previous['total']) >= MATERIAL['points']:
