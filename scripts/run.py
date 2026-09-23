@@ -988,6 +988,8 @@ def _run(args, now, slot, kinds, status):
             status['checks'].append('tests green')
     drafts(slot, now, ctx, games, settled, status)
     if not args.dry_run:
+        buffer_posts(now, ctx, games, closed, status)
+    if not args.dry_run:
         git_result = commit_push(now, slot, {'published': len(published), 'settled': len(settled), 'closed': len(closed)},
                                  push=not args.no_push)
         status['git'] = git_result
@@ -1051,6 +1053,36 @@ def drafts(slot, now, ctx, games, settled, status):
     status['x']['drafted'] = len(written)
     if written:
         log('x drafts written:', ', '.join(written), f'(in {folder})')
+
+
+# ------------------------------------------------------------------ posting through Buffer
+
+def buffer_posts(now, ctx, games, closed, status):
+    """Schedule today's posts through Buffer (scripts/buffer_post.py) and cancel any whose pick closed. Off without a token."""
+    import buffer_post
+    import x_post
+    if not os.environ.get('BUFFER_TOKEN', '').strip():
+        log('buffer: no BUFFER_TOKEN; posts stay as drafts')
+        return
+    log_book = x_post.load_log()
+    try:
+        channel = buffer_post.x_channel(wanted='keenkooks')
+        closed_ids = {revision['id'] for _, _, revision in closed}
+        if closed_ids:
+            buffer_post.cancel_closed(closed_ids, log_book, now, log=log)
+        scoreboard = load_json(ROOT / 'site' / 'data' / 'scoreboard.json', {})
+        plans = buffer_post.plan(ctx.first, ctx.latest, games, now, log_book, scoreboard, ctx.player_team)
+        limit = buffer_post.daily_limit(channel['id'], eastern_date(now).isoformat())
+        if limit and limit.get('remaining') is not None and limit['remaining'] < len(plans):
+            log(f"buffer: the channel can take {limit['remaining']} more posts today; scheduling that many")
+            plans = plans[:max(0, limit['remaining'])]
+        before = len(log_book.get('posts', []))
+        buffer_post.schedule(plans, channel['id'], log_book, now, log=log)
+        status['x']['posted'] = len(log_book.get('posts', [])) - before
+    except (buffer_post.BufferError, buffer_post.MissingToken) as error:
+        log(f'buffer: {error}')
+        status['errors'].append(f'buffer: {error}')
+    x_post.save_log(log_book)
 
 
 # ------------------------------------------------------------------ status and heartbeat

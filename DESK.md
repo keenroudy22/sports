@@ -81,18 +81,23 @@ or two sentences of the pick's reasoning with the most specific first, our numbe
 receipt link `https://keenroudy.com/sports/#pick/<id>` and the league tag), and every pick gets a card (`scripts/pick_card.py`) in the colours of the side the
 play is on, rendered by a headless Chrome and never committed.
 
-X meters posting through its API, so the desk does not post there itself. It publishes the posts as an
-RSS feed instead, `https://keenroudy.com/sports/data/feed.xml` (`scripts/feed.py`, built and deployed by the
-hosted workflow with the page payloads), and a relay service with its own X access posts each new item to
-@keenkooks. The feed only ever holds live plays inside their posting window: on the day of the game,
-Eastern, from 9:00 AM until 45 minutes before kickoff, and only while the pick is open. A game day's recap
-appears once every pick of the day is settled; the model's season-to-date record against the close appears
-Tuesday mornings. Each pick item carries its card as the image enclosure.
+X meters posting through its API, so the desk does not post there itself. It posts through **Buffer**
+(`scripts/buffer_post.py`): Buffer's free plan connects an X account to Buffer's own developer access and
+gives 3,000 API requests a month, an exact `dueAt` per post, a public image URL per post and a `deletePost`.
+At each run the desk schedules the day's plays into their posting window (game day, Eastern, from 9:00 AM,
+eight minutes apart, never inside 45 minutes of kickoff), the recap for 8:00 the next morning once every
+pick of the day is settled, and the scoreboard for Tuesday at 9:00. Every post is logged in
+`data/x-posted.json` (kind `buffer:*`) so nothing goes out twice, a play that closes before its time is
+cancelled, and the channel's own daily limit is respected. Cards come from `site/data/cards/`, which the
+hosted workflow deploys; a card that is not deployed yet means a text-only post, never a failure.
 
-Connecting a relay (one time, the owner): sign up for a free RSS-to-X service (dlvr.it or IFTTT, for
-example; free tiers change, so check that X is included), connect @keenkooks, add the feed URL, and set the
-post format to the item title plus the item link with the image attached. Test with one item before
-leaving it on.
+One-time setup (the owner): a free Buffer account with @keenkooks connected as an X channel, then
+Settings → API → create a key and paste it as `BUFFER_TOKEN` in `~/.config/keenroudy/env`.
+`python scripts/buffer_post.py channels` shows the connected channels; `plan` shows what the next run would
+schedule; `post PICK_ID --confirm` schedules one by hand.
+
+The same posts are also published as an RSS feed, `https://keenroudy.com/sports/data/feed.xml`
+(`scripts/feed.py`), for any other relay and as a public record of what went out.
 
 `x_post.py` can still post through the API (`post PICK_ID --confirm --card`) when credits exist, and
 `data/x-posted.json` logs whatever it posts. The run writes every draft and card to
