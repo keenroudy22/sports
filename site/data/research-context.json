@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-23T19:47:45Z",
+  "updatedAt": "2026-09-23T19:54:29Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -927,6 +927,15 @@
           "name": "Carolina Panthers",
           "players": [
             {
+              "id": "4695883",
+              "name": "Jalen Coker",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-09-23T19:42Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4695883/jalen-coker"
+            },
+            {
               "id": "4678008",
               "name": "Jonathon Brooks",
               "position": "RB",
@@ -966,8 +975,8 @@
               "id": "4243256",
               "name": "Devin Lloyd",
               "position": "LB",
-              "status": "Active",
-              "injury": null,
+              "status": "Questionable",
+              "injury": "Calf",
               "reportedAt": "2026-09-23T01:31Z",
               "source": "https://www.espn.com/nfl/player/_/id/4243256/devin-lloyd"
             },
@@ -1033,15 +1042,6 @@
               "injury": null,
               "reportedAt": "2026-09-21T18:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4697636/chau-smith-wade"
-            },
-            {
-              "id": "4695883",
-              "name": "Jalen Coker",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-21T17:57Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4695883/jalen-coker"
             },
             {
               "id": "2576925",
@@ -3917,6 +3917,15 @@
           "name": "Los Angeles Chargers",
           "players": [
             {
+              "id": "3123076",
+              "name": "David Njoku",
+              "position": "TE",
+              "status": "Injured Reserve",
+              "injury": "Lower Leg",
+              "reportedAt": "2026-09-23T19:36Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3123076/david-njoku"
+            },
+            {
               "id": "4685553",
               "name": "Brenen Thompson",
               "position": "WR",
@@ -4032,15 +4041,6 @@
               "injury": null,
               "reportedAt": "2026-09-21T22:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4595342/oronde-gadsden"
-            },
-            {
-              "id": "3123076",
-              "name": "David Njoku",
-              "position": "TE",
-              "status": "Out",
-              "injury": "Lower Leg",
-              "reportedAt": "2026-09-21T21:46Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3123076/david-njoku"
             },
             {
               "id": "4682789",
@@ -7367,30 +7367,6 @@
       "changes": [
         {
           "teamId": "20",
-          "name": "Kene Nwangwu",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-09-22T22:03:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4035537/kene-nwangwu"
-        },
-        {
-          "teamId": "20",
-          "name": "Joseph Ossai",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-09-22T22:03:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4362094/joseph-ossai"
-        },
-        {
-          "teamId": "20",
-          "name": "Minkah Fitzpatrick",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-09-22T22:03:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3925345/minkah-fitzpatrick"
-        },
-        {
-          "teamId": "20",
           "name": "Marcelino McCrary-Ball",
           "from": "Questionable",
           "to": "Out",
@@ -7764,11 +7740,35 @@
           "to": "Questionable",
           "observedAt": "2026-09-23T19:37:51Z",
           "source": "https://www.espn.com/nfl/player/_/id/4685553/brenen-thompson"
+        },
+        {
+          "teamId": "29",
+          "name": "Jalen Coker",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-09-23T19:54:29Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4695883/jalen-coker"
+        },
+        {
+          "teamId": "29",
+          "name": "Devin Lloyd",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-09-23T19:54:29Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4243256/devin-lloyd"
+        },
+        {
+          "teamId": "24",
+          "name": "David Njoku",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-09-23T19:54:29Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3123076/david-njoku"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-23T19:47:45Z",
-      "lastAttemptAt": "2026-09-23T19:47:45Z",
+      "checkedAt": "2026-09-23T19:54:29Z",
+      "lastAttemptAt": "2026-09-23T19:54:29Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-23T19:47:45Z",
-      "lastAttemptAt": "2026-09-23T19:47:45Z",
+      "checkedAt": "2026-09-23T19:54:29Z",
+      "lastAttemptAt": "2026-09-23T19:54:29Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
