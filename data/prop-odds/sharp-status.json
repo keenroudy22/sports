@@ -1,52 +1,32 @@
 {
- "at": "2026-09-23T20:50:35Z",
+ "at": "2026-09-23T20:54:29Z",
  "leagues": {
   "CFB": {
-   "books": {},
+   "books": {
+    "draftkings": 270,
+    "fanduel": 160
+   },
    "eventsListed": 200,
-   "eventsMatched": 0,
+   "eventsMatched": 1,
    "games": 2,
-   "marketTypes": {},
-   "requestsLeft": 58,
-   "rows": 0,
+   "marketTypes": {
+    "player_longest_passing_completion": 2,
+    "player_longest_reception": 7,
+    "player_longest_rush": 5,
+    "player_passing_+_rushing_yards": 44,
+    "player_passing_touchdowns": 16,
+    "player_passing_yards": 66,
+    "player_receiving_yards": 154,
+    "player_rushing_attempts": 5,
+    "player_rushing_yards": 131
+   },
+   "requestsLeft": 55,
+   "rows": 430,
    "slateGames": [
     "Liberty Flames at Coastal Carolina Chanticleers 2026-09-24T23:30Z",
     "Army Black Knights at Temple Owls 2026-09-25T20:00Z"
    ],
    "unmatchedEvents": [
-    {
-     "away": "Air Force",
-     "external": {
-      "bet365 us": "201605347"
-     },
-     "home": "Nevada",
-     "sample": {
-      "away_team": "Air Force",
-      "home_team": "Nevada",
-      "markets": [
-       "both_teams_to_score"
-      ]
-     },
-     "start": "2026-09-23T18:52:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Colorado State",
-     "external": {
-      "bet365 us": "201605347"
-     },
-     "home": "Texas San Antonio",
-     "sample": {
-      "away_team": "Colorado State",
-      "home_team": "Texas San Antonio",
-      "markets": [
-       "both_teams_to_score",
-       "winning_margin"
-      ]
-     },
-     "start": "2026-09-23T18:52:00Z",
-     "type": "fixture"
-    },
     {
      "away": null,
      "external": {
@@ -206,6 +186,38 @@
      },
      "start": "2026-09-24T23:29:00Z",
      "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7631602"
+     },
+     "home": "Houston Cougars",
+     "sample": {
+      "away_team": "",
+      "home_team": "Houston Cougars",
+      "markets": [
+       "tournament_winner"
+      ]
+     },
+     "start": "2026-09-24T23:29:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7631603"
+     },
+     "home": "Indiana Hoosiers",
+     "sample": {
+      "away_team": "",
+      "home_team": "Indiana Hoosiers",
+      "markets": [
+       "tournament_winner"
+      ]
+     },
+     "start": "2026-09-24T23:29:00Z",
+     "type": "outright"
     }
    ]
   },
@@ -221,38 +233,6 @@
     "Atlanta Falcons at Green Bay Packers 2026-09-25T00:15Z"
    ],
    "unmatchedEvents": [
-    {
-     "away": "Cincinnati Bengals",
-     "external": {
-      "bet365 us": "201319557"
-     },
-     "home": "Pittsburgh Steelers",
-     "sample": {
-      "away_team": "Cincinnati Bengals",
-      "home_team": "Pittsburgh Steelers",
-      "markets": [
-       "moneyline"
-      ]
-     },
-     "start": "2026-09-23T18:52:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Baltimore Ravens",
-     "external": {
-      "bet365 us": "201319558"
-     },
-     "home": "Dallas Cowboys",
-     "sample": {
-      "away_team": "Baltimore Ravens",
-      "home_team": "Dallas Cowboys",
-      "markets": [
-       "anytime_touchdown_scorer"
-      ]
-     },
-     "start": "2026-09-23T18:52:00Z",
-     "type": "fixture"
-    },
     {
      "away": null,
      "external": {
@@ -427,6 +407,42 @@
      "sample": {
       "away_team": "",
       "home_team": "Cleveland Browns",
+      "markets": [
+       "championship_winner",
+       "conference_winner",
+       "outright"
+      ]
+     },
+     "start": "2026-09-25T00:14:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "betonline": "futures_663211392",
+      "saba": "o7623367"
+     },
+     "home": "Bryce Young",
+     "sample": {
+      "away_team": "",
+      "home_team": "Bryce Young",
+      "markets": [
+       "mvp"
+      ]
+     },
+     "start": "2026-09-25T00:14:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "betonline": "futures_663143173",
+      "saba": "o7623422"
+     },
+     "home": "Tampa Bay Buccaneers",
+     "sample": {
+      "away_team": "",
+      "home_team": "Tampa Bay Buccaneers",
       "markets": [
        "championship_winner",
        "conference_winner",

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-23T20:49:41Z",
+  "updatedAt": "2026-09-23T20:53:32Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -3227,11 +3227,29 @@
           "name": "Jacksonville Jaguars",
           "players": [
             {
+              "id": "4035791",
+              "name": "Cole Van Lanen",
+              "position": "OT",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-09-23T20:44Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4035791/cole-van-lanen"
+            },
+            {
+              "id": "4242391",
+              "name": "Robert Hainsey",
+              "position": "C",
+              "status": "Questionable",
+              "injury": "Elbow",
+              "reportedAt": "2026-09-23T20:43Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4242391/robert-hainsey"
+            },
+            {
               "id": "3916433",
               "name": "Jakobi Meyers",
               "position": "WR",
-              "status": "Active",
-              "injury": null,
+              "status": "Questionable",
+              "injury": "Thumb",
               "reportedAt": "2026-09-23T20:34Z",
               "source": "https://www.espn.com/nfl/player/_/id/3916433/jakobi-meyers"
             },
@@ -3416,15 +3434,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4889929/quinn-ewers"
             },
             {
-              "id": "4035791",
-              "name": "Cole Van Lanen",
-              "position": "OT",
-              "status": "Active",
-              "injury": "Knee",
-              "reportedAt": "2026-09-19T01:49Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4035791/cole-van-lanen"
-            },
-            {
               "id": "4875266",
               "name": "B.J. Green II",
               "position": "DE",
@@ -3441,15 +3450,6 @@
               "injury": null,
               "reportedAt": "2026-09-16T01:40Z",
               "source": "https://www.espn.com/nfl/player/_/id/4240610/ventrell-miller"
-            },
-            {
-              "id": "4686248",
-              "name": "Nate Boerkircher",
-              "position": "TE",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-15T00:45Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4686248/nate-boerkircher"
             }
           ]
         },
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "9",
-          "name": "Jayden Reed",
-          "from": "Questionable",
-          "to": "Doubtful",
-          "observedAt": "2026-09-22T23:37:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4362249/jayden-reed"
-        },
-        {
-          "teamId": "20",
-          "name": "Mason Taylor",
-          "from": "Questionable",
-          "to": "Doubtful",
-          "observedAt": "2026-09-22T23:37:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4808766/mason-taylor"
-        },
-        {
           "teamId": "20",
           "name": "Marcelino McCrary-Ball",
           "from": "Out",
@@ -7764,11 +7748,27 @@
           "to": "Questionable",
           "observedAt": "2026-09-23T20:49:41Z",
           "source": "https://www.espn.com/nfl/player/_/id/4239996/travis-etienne-jr"
+        },
+        {
+          "teamId": "30",
+          "name": "Cole Van Lanen",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-09-23T20:53:32Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4035791/cole-van-lanen"
+        },
+        {
+          "teamId": "30",
+          "name": "Jakobi Meyers",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-09-23T20:53:32Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3916433/jakobi-meyers"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-23T20:49:41Z",
-      "lastAttemptAt": "2026-09-23T20:49:41Z",
+      "checkedAt": "2026-09-23T20:53:32Z",
+      "lastAttemptAt": "2026-09-23T20:53:32Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-23T20:49:41Z",
-      "lastAttemptAt": "2026-09-23T20:49:41Z",
+      "checkedAt": "2026-09-23T20:53:32Z",
+      "lastAttemptAt": "2026-09-23T20:53:32Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
