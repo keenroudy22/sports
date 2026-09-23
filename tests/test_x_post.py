@@ -49,11 +49,11 @@ PROP = {'id': 'NFL-2026-W4-p7-over-4-5-rec-dk', 'title': 'Player Seven over 4.5 
 class DraftTests(unittest.TestCase):
     def test_every_post_has_the_same_shape(self):
         team = x_post.draft(dict(PICK, favorite=False, modelLean=True, projection=31.2), GAME)
-        self.assertTrue(team.startswith('🍳 TEAM PROP\nIowa at Michigan under 38.5\n-105 at FanDuel\n\nOur number: 31.2\n'), team)
-        self.assertTrue(team.endswith('\n\n#CFB'), team)
+        self.assertTrue(team.startswith('🍳 TEAM PROP\nIowa at Michigan under 38.5\n-105 at FanDuel · 1 unit\n\nOur number 31.2 vs the 38.5\n'), team)
+        self.assertTrue(team.endswith('\n\n@Playbook #CFB'), team)
         prop = x_post.draft(PROP, {'league': 'NFL'})
-        self.assertEqual(prop, '🍳 PLAYER PROP\nPlayer Seven over 4.5 receptions\n-115 at DraftKings\n\n'
-                               'Our number: 5.8\nHe has caught 6 in each of his last 2 games.\n\n#NFL')
+        self.assertEqual(prop, '🍳 PLAYER PROP\nPlayer Seven over 4.5 receptions\n-115 at DraftKings · 1 unit\n\n'
+                               'Our number 5.8 vs the 4.5\nHe has caught 6 in each of his last 2 games.\n\n@Playbook #NFL')
         favorite = x_post.draft(PICK, GAME)
         self.assertTrue(favorite.startswith('🍳 TEAM PROP · FAVORITE\n'), favorite)
         for text, pick in ((team, dict(PICK, projection=31.2)), (prop, PROP), (favorite, PICK)):
@@ -82,7 +82,7 @@ class DraftTests(unittest.TestCase):
         self.assertIsNone(x_post.reason_for(arithmetic), 'no stat talk in the timeline')
         text = x_post.draft(dict(arithmetic, projection=31.2), GAME)
         self.assertNotIn('percentile', text)
-        self.assertIn('Our number: 31.2\n\n#CFB', text)
+        self.assertIn('Our number 31.2 vs the 38.5\n\n@Playbook #CFB', text)
 
     def test_url_counts_as_twenty_three(self):
         self.assertEqual(x_post.tweet_length('hi https://keenroudy.com/sports/#pick/a-very-long-identifier-indeed'), 3 + 23)
@@ -259,7 +259,7 @@ class ReasonTests(unittest.TestCase):
                   'parlayType': 'longshot', 'riskUnits': 0.25, 'book': 'DraftKings', 'odds': 650,
                   'why': 'Longshot from the board: 3 legs at DraftKings, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.'}
         text = x_post.draft(ticket, {'league': 'NFL'})
-        self.assertEqual(text, '🍳 FUN PARLAY\n3 legs, +650 at DraftKings\n• Bills at Lions over 44.5\n• Jets +3\n• Player Seven over 4.5 receptions'
-                               '\n\nQuarter unit. Just for fun.\n\n#NFL')
+        self.assertEqual(text, '🍳 FUN PARLAY\n3 legs · +650 at DraftKings · ¼ unit\n• Bills at Lions over 44.5\n• Jets +3\n• Player Seven over 4.5 receptions'
+                               '\n\nJust for fun.\n\n@Playbook #NFL')
         self.assertLessEqual(x_post.tweet_length(text), 280)
         self.assertEqual(x_post.guard(text, ticket), [], text)

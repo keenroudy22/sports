@@ -19,7 +19,7 @@ class CardTests(unittest.TestCase):
         text = pick_card.svg(PICK, GAME, {'wins': 3, 'losses': 1, 'units': 1.98})
         for needle in ('Iowa at Michigan under 38.5', '-105', 'FanDuel', 'Our number 31.2 vs the 38.5', 'FAVORITE', 'KOOK’N',
                        'TODAY’S PLATE', 'Served at', 'Iowa at Michigan', 'Sat 3:30 PM ET', 'Record 3-1', '+1.98u',
-                       'Confidence 6 of 10', 'keenroudy.com/sports', 'Graded in public'):
+                       'keenroudy.com/sports', 'Graded in public', 'Entertainment only. Not advice.', '· 1 unit'):
             self.assertIn(needle, text, needle)
         self.assertIn('#00274c', text, "a total wears the home team's colour")
         self.assertIn('#ffcb05', text, 'with its alternate as the accent')
@@ -32,13 +32,12 @@ class CardTests(unittest.TestCase):
         self.assertIn('>PLAYER PROP<', pick_card.svg(dict(PICK, favorite=False, modelLean=True, athleteId='1')))
 
     def test_a_parlay_card_lists_its_legs_in_the_same_frame(self):
-        ticket = {'title': '3-leg longshot at DraftKings', 'parlayType': 'longshot', 'odds': 650, 'book': 'DraftKings', 'confidence': 1,
+        ticket = {'title': '3-leg longshot at DraftKings', 'parlayType': 'longshot', 'odds': 650, 'book': 'DraftKings', 'confidence': 1, 'riskUnits': 0.25,
                   'legs': [{'title': 'Bills at Lions over 44.5'}, {'title': 'Jets +3'}, {'title': 'Player Seven over 4.5 receptions'}]}
         text = pick_card.svg(ticket, GAME)
         for needle in ('FUN PARLAY', '3-leg parlay', '• Bills at Lions over 44.5', '• Jets +3', '• Player Seven over 4.5 receptions',
-                       '+650', 'DraftKings', '· quarter unit', 'Served at', 'KOOK’N'):
+                       '+650', 'DraftKings', '· ¼ unit', 'Served at', 'KOOK’N'):
             self.assertIn(needle, text, needle)
-        self.assertNotIn('Confidence', text)
         many = pick_card.svg(dict(ticket, legs=[{'title': f'Leg {i}'} for i in range(7)]), GAME)
         self.assertIn('and 3 more', many, 'five legs fit; past that, four and a count')
         self.assertEqual(pick_card.play_kind(ticket), 'parlay')
@@ -88,7 +87,9 @@ class CardTests(unittest.TestCase):
         ticket = pick_card.svg({'title': 't', 'parlayType': 'longshot', 'odds': 650, 'book': 'DK', 'gameIds': ['a', 'b'],
                                 'legs': [{'title': 'x over 1'}, {'title': 'y under 2'}]}, GAME)
         self.assertIn('2 games · Sat Sep 26', ticket, 'a ticket names its game count and day, not one game')
-        self.assertIn('Sep 26, 2026', ticket, "the corner carries the game's day, not the render day")
+        plain = pick_card.svg(PICK, GAME)
+        self.assertNotIn('Confidence', plain, 'no confidence score on a card')
+        self.assertNotIn('2026', plain, 'no date in the corner: the game line says the day')
         self.assertNotIn('Iowa at Michigan', ticket)
 
     @unittest.skipUnless(os.environ.get('KEENROUDY_CARD_LIVE') == '1' and pick_card.chrome_path(), 'needs a browser and KEENROUDY_CARD_LIVE=1')

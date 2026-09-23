@@ -281,36 +281,39 @@ def reason_for(pick):
     return None
 
 
+PLAYBOOK = '@Playbook'     # the betslip bot (Action Network): tagged on a bet, it replies with the slip pre-loaded
+
+
 def draft(pick, game=None):
     """The post, the same shape every time:
 
         🍳 PLAYER PROP | TEAM PROP | FUN PARLAY   (· FAVORITE for a researched pick)
         the play
-        price at book
+        price at book · units
 
-        Our number: n
+        Our number n vs the line
         one plain reason from the pick
 
-        #league
+        @Playbook #league
 
-    A parlay lists its legs and says it is a quarter unit for fun. No link and no stat line: the card carries the
-    site, and the arithmetic is on the pick's page. Every number comes from the pick.
+    A parlay lists its legs and says it is just for fun. No link and no stat line: the card carries the site,
+    and @Playbook answers with the betslip. Every number comes from the pick; the units are the site's own
+    count (one for a straight play, the ticket's riskUnits for a parlay).
     """
     league = (game or {}).get('league') or str(pick.get('id', '')).split('-')[0]
-    tag = TAGS.get(league, '')
+    tail = ' '.join(x for x in (PLAYBOOK, TAGS.get(league, '')) if x)
     head = f"🍳 {pick_card.kicker(pick)}"
-    price = f"{int(pick['odds']):+d} at {pick.get('book')}"
+    price = f"{int(pick['odds']):+d} at {pick.get('book')} · {pick_card.units_label(pick)}"
     if pick_card.play_kind(pick) == 'parlay':
         legs = [str(l.get('title') or '') for l in pick.get('legs') or [] if l.get('title')]
-        top = '\n'.join([head, f"{len(pick.get('legs') or [])} legs, {price}", *[f'• {leg}' for leg in legs]])
-        options = ([top, 'Quarter unit. Just for fun.', tag], [top, tag], [head, f"{len(pick.get('legs') or [])} legs, {price}", tag])
+        count = f"{len(pick.get('legs') or [])} legs · {price}"
+        top = '\n'.join([head, count, *[f'• {leg}' for leg in legs]])
+        options = ([top, 'Just for fun.', tail], [top, tail], [head, count, tail])
     else:
         top = '\n'.join([head, str(pick.get('title') or ''), price])
-        number = ''
-        if isinstance(pick.get('projection'), (int, float)) and isinstance(pick.get('line'), (int, float)):
-            number = f"Our number: {pricing_fmt(pick['projection'])}"
+        number = pick_card.number_line(pick)
         reason = reason_for(pick)
-        options = ([top, '\n'.join(x for x in (number, reason) if x), tag], [top, number, tag], [top, tag])
+        options = ([top, '\n'.join(x for x in (number, reason) if x), tail], [top, number, tail], [top, tail])
     for parts in options:
         text = '\n\n'.join(part for part in parts if part)
         if tweet_length(text) <= LIMIT and not guard(text, pick):
@@ -330,6 +333,7 @@ def x_style(text):
 def guard(text, pick):
     problems = x_style(text.replace(SITE, ''))
     extra = [{'legCount': len(pick['legs'])}] if pick.get('legs') else []      # "3 legs" is a count of the pick's own legs
+    extra.append({'stake': pick_card.stake(pick)})                              # "1 unit" is the stake the record counts
     ok, strays = llm.numbers_ok(text, pick, extra)
     if not ok:
         problems.append(f"numbers not in the pick: {', '.join(strays)}")

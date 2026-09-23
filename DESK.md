@@ -90,18 +90,20 @@ same shape, drafted by `scripts/x_post.py` from the pick's own fields:
 ```
 🍳 PLAYER PROP                    (TEAM PROP, FUN PARLAY; "· FAVORITE" on a researched pick)
 Player Seven over 4.5 receptions
--115 at DraftKings
+-115 at DraftKings · 1 unit
 
-Our number: 5.8
+Our number 5.8 vs the 4.5
 He has caught 6 in each of his last 2 games.
 
-#NFL
+@Playbook #NFL
 ```
 
 The reason is one sentence of the pick's own `why`, short and free of the desk's arithmetic words; when
-every sentence is arithmetic the post stands on the play and the number. A parlay lists its legs and says
-"Quarter unit. Just for fun." There is no link (X shows fewer people a post that leaves the site); the card
-carries keenroudy.com/sports. Every post carries its card (`scripts/pick_card.py`), one frame for every kind:
+every sentence is arithmetic the post stands on the play and the number. The units are the site's own count
+(one for a straight play, the ticket's quarter for a parlay). A parlay lists its legs and says "Just for fun."
+Every post tags @Playbook, Action Network's betslip bot, which replies with the bet pre-loaded. There is no link
+(X shows fewer people a post that leaves the site); the card carries keenroudy.com/sports and no confidence
+score or date. Every post carries its card (`scripts/pick_card.py`), one frame for every kind:
 the KOOK'N wordmark and pan, the same label as the post, the play, "Served at" its price, and the chef on the
 plate (`site/kookn-chef.png`, the profile picture's chef cut out with macOS subject lifting), in the colours of
 the side the play is on. Only the colours and the words change. A parlay lists its legs where a single play's

@@ -144,6 +144,33 @@ def plate(cx, cy, uri, light):
     return parts
 
 
+FRACTIONS = {0.25: '¼', 0.5: '½', 0.75: '¾'}
+
+
+def stake(pick):
+    """Units at risk, as the site's record counts them (site/core.js stakeOf): riskUnits, else one."""
+    try:
+        risk = float(pick.get('riskUnits'))
+    except (TypeError, ValueError):
+        return 1.0
+    return risk if risk > 0 else 1.0
+
+
+def units_label(pick):
+    amount = stake(pick)
+    if amount in FRACTIONS:
+        return f'{FRACTIONS[amount]} unit'
+    return f'{amount:g} unit' + ('' if amount == 1 else 's')
+
+
+def number_line(pick):
+    """Our number against the line, the same words on the card and in the post."""
+    projection, line = pick.get('projection'), pick.get('line')
+    if isinstance(projection, (int, float)) and isinstance(line, (int, float)):
+        return f"Our number {pricing.fmt(float(projection))} vs the {pricing.fmt(float(line))}"
+    return ''
+
+
 KINDS = {'player': 'PLAYER PROP', 'team': 'TEAM PROP', 'parlay': 'FUN PARLAY'}
 
 
@@ -173,7 +200,6 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
     title = pick.get('title') or ''
     price = f"{int(pick['odds']):+d}" if isinstance(pick.get('odds'), (int, float)) else ''
     book = pick.get('book') or ''
-    projection, line = pick.get('projection'), pick.get('line')
     label = kicker(pick)
     parlay = play_kind(pick) == 'parlay'
     legs = [str(l.get('title') or '') for l in (pick.get('legs') or []) if l.get('title')]
@@ -193,23 +219,13 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
                     matchup = f"{len(set(pick.get('gameIds') or [])) or len(legs)} games · {local:%a %b %-d}"
             except ValueError:
                 pass
-    number_line = ''
-    if isinstance(projection, (int, float)) and isinstance(line, (int, float)):
-        number_line = f"Our number {pricing.fmt(float(projection))} vs the {pricing.fmt(float(line))}"
+    ours = number_line(pick)
+    units = units_label(pick)
     record_line = ''
     if record:
         record_line = f"Record {record.get('wins', 0)}-{record.get('losses', 0)}" + (f"-{record['pushes']}" if record.get('pushes') else '')
         if record.get('units') is not None:
             record_line += f" · {record['units']:+.2f}u"
-    game_day = None
-    if game and game.get('kickoff'):
-        try:
-            from zoneinfo import ZoneInfo
-            game_day = datetime.fromisoformat(str(game['kickoff']).replace('Z', '+00:00')).astimezone(ZoneInfo('America/New_York'))
-        except ValueError:
-            game_day = None
-    stamp = (when or game_day or datetime.now(timezone.utc)).strftime('%b %-d, %Y')     # the game's day: a card is rendered early
-    confidence = f"Confidence {pick['confidence']} of 10" if pick.get('confidence') and not parlay else ''
     lines = title_lines(title)
     title_size = 66 if len(lines) == 1 and len(title) <= 24 else 56 if len(lines) == 1 else 50
     parts = [
@@ -228,14 +244,14 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
         f'<text x="80" y="262" fill="{accent}" font-size="24" font-weight="700" letter-spacing="4">TODAY’S PLATE</text>',
         *[f'<text x="80" y="{262 + (title_size + 6) * (i + 1) - 2}" fill="{ink}" font-size="{title_size}" font-weight="800">{esc(text)}</text>'
           for i, text in enumerate(lines)],
-        *(parlay_body(legs, price, book, ink, soft, accent, title_size) if parlay else [
+        *(parlay_body(legs, price, book, units, ink, soft, accent, title_size) if parlay else [
         f'<text x="80" y="418" fill="{soft}" font-size="26" letter-spacing="1">Served at</text>',
-        f'<text x="80" y="470" fill="{ink}" font-size="50" font-weight="800">{esc(price)}<tspan fill="{soft}" font-size="34" font-weight="600" dx="18">{esc(book)}</tspan></text>',
-        f'<text x="80" y="524" fill="{ink}" font-size="30">{esc(number_line)}</text>',
-        f'<text x="80" y="562" fill="{soft}" font-size="25">{esc(confidence)}</text>']),
+        f'<text x="80" y="470" fill="{ink}" font-size="50" font-weight="800">{esc(price)}<tspan fill="{soft}" font-size="34" font-weight="600" dx="18">{esc(book)}</tspan>'
+        f'<tspan fill="{soft}" font-size="26" font-weight="400" dx="14">· {esc(units)}</tspan></text>',
+        f'<text x="80" y="530" fill="{ink}" font-size="32">{esc(ours)}</text>']),
         f'<text x="80" y="{HEIGHT - 62}" fill="{ink}" font-size="26" font-weight="700">Graded in public, win or lose. <tspan fill="{soft}" font-weight="400">keenroudy.com/sports</tspan></text>',
-        f'<text x="{WIDTH - 80}" y="{HEIGHT - 62}" fill="{soft}" font-size="22" text-anchor="end">{esc(record_line or stamp)}</text>',
-        f'<text x="{WIDTH - 80}" y="{HEIGHT - 98}" fill="{soft}" font-size="19" text-anchor="end">Entertainment only. Not advice.</text>',
+        f'<text x="{WIDTH - 80}" y="{HEIGHT - 62}" fill="{soft}" font-size="19" text-anchor="end">Entertainment only. Not advice.</text>',
+        f'<text x="{WIDTH - 80}" y="{HEIGHT - 94}" fill="{soft}" font-size="22" text-anchor="end">{esc(record_line)}</text>' if record_line else '',
         '</svg>']
     return '\n'.join(parts)
 
@@ -256,7 +272,7 @@ def title_lines(title, width=26, limit=30):
     return [fit(' '.join(words[:cut]), width + 6), fit(' '.join(words[cut:]), width + 6)]
 
 
-def parlay_body(legs, price, book, ink, soft, accent, title_size):
+def parlay_body(legs, price, book, units, ink, soft, accent, title_size):
     """A parlay in the same frame as every other card: its legs where a single play's numbers go, and its
     price on the "Served at" line."""
     top = 262 + title_size + 4 + 44
@@ -266,7 +282,7 @@ def parlay_body(legs, price, book, ink, soft, accent, title_size):
         rows.append(f'<text x="80" y="{top + 34 * len(shown)}" fill="{soft}" font-size="24">and {len(legs) - len(shown)} more</text>')
     rows.append(f'<text x="80" y="562" fill="{soft}" font-size="26" letter-spacing="1">Served at <tspan fill="{ink}" font-size="44" '
                 f'font-weight="800" letter-spacing="0" dx="8">{esc(price)}</tspan><tspan fill="{soft}" font-size="30" font-weight="600" '
-                f'letter-spacing="0" dx="14">{esc(book)}</tspan><tspan fill="{soft}" font-size="22" letter-spacing="0" dx="14">· quarter unit</tspan></text>')
+                f'letter-spacing="0" dx="14">{esc(book)}</tspan><tspan fill="{soft}" font-size="26" letter-spacing="0" dx="14">· {esc(units)}</tspan></text>')
     return rows
 
 
