@@ -82,10 +82,11 @@ With Ollama down the run publishes on templates and holds on a quarterback rule 
 
 ## X
 
-X gets plays only (the owner's call after the first post, a stats line, went out on 2026-09-23 and was
-deleted): **player props**, **team props** (sides and totals) and the day's **fun parlay**. Favorites, model
-leans, prop leans and the longshot all qualify; recaps and scoreboards stay on the site. Every post has the
-same shape, drafted by `scripts/x_post.py` from the pick's own fields:
+X gets plays and their receipts (the owner's call after the first post, a stats line, went out on 2026-09-23
+and was deleted): **player props**, **team props** (sides and totals) and the day's **fun parlay**, and the
+morning after, the **receipt** for those plays. Favorites, model leans, prop leans and the longshot all qualify;
+the model scoreboard stays on the site. Every play post has the same shape, drafted by `scripts/x_post.py` from
+the pick's own fields:
 
 ```
 🍳 PLAYER PROP                    (TEAM PROP, FUN PARLAY; "· FAVORITE" on a researched pick)
@@ -118,6 +119,14 @@ kickoff is inside 45 minutes. Buffer takes an image only by URL, so a post is sc
 live on the site: the hosted workflow renders a card for every open play as soon as it is published, the run
 schedules after its own push and waits up to 15 minutes for that deploy, and a play whose card is still not
 live waits for the next run. Nothing goes out bare.
+
+**Receipts** (`scripts/receipts.py`) make it a post every day of the season. At 9:00 AM ET the morning after a
+game day, once every play that went out on X that day is settled, the receipt lists each with ✅ ❌ ➖, the day's
+record and units (site/core.js arithmetic), "Graded in public, win or lose." On Wednesday at 9:00 AM the week's
+receipt sums the seven days before it by kind. Losing days post too. Only plays that actually went out count
+(`buffer:play` with a `sentAt`, not cancelled or deleted), and a receipt not ready by 8:00 PM the next day is
+skipped. Its card is the same frame in the kitchen's own colours (`pick_card.receipt_svg`), with W, L or P
+beside each play and the chef on the plate.
 
 Every post is logged in `data/x-posted.json` (kind `buffer:*`, committed on its own as "Posts <date> <time>
 ET") so nothing goes out twice; once its time has passed the run records the X link it went out under, or the

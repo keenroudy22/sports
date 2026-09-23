@@ -256,6 +256,51 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
     return '\n'.join(parts)
 
 
+HOUSE = ('#2a1c14', '#3d2a1d', '#f28c28')      # the kitchen's own colours, for a card that is not on one team
+RESULT_MARKS = {'win': ('W', '#6fdc8c'), 'loss': ('L', '#ff7a6b'), 'push': ('P', None), 'void': ('P', None)}
+
+
+def receipt_svg(receipt, avatar=None):
+    """A receipt in the same frame as a play: the kitchen's colours, the record as the title, each play with
+    its result where a play's numbers go, and the chef on the plate."""
+    chef = avatar_uri(CHEF) if avatar is None else avatar
+    primary, other, accent = HOUSE
+    ink, soft = CREAM, shade(CREAM, 0.82)
+    rows = receipt.get('rows') or []
+    shown = rows if len(rows) <= 6 else rows[:5]
+    top = 262 + 66 + 4 + 44
+    body = []
+    for i, (result, text) in enumerate(shown):
+        y = top + 36 * i
+        if result is None:
+            body.append(f'<text x="80" y="{y + 6}" fill="{ink}" font-size="30">{esc(fit(text, 36))}</text>')
+            continue
+        mark, colour = RESULT_MARKS.get(result, ('?', None))
+        body.append(f'<text x="80" y="{y}" fill="{colour or soft}" font-size="26" font-weight="800">{mark}</text>')
+        body.append(f'<text x="116" y="{y}" fill="{ink}" font-size="26">{esc(fit(text, 38))}</text>')
+    if len(rows) > len(shown):
+        body.append(f'<text x="80" y="{top + 36 * len(shown)}" fill="{soft}" font-size="24">and {len(rows) - len(shown)} more on the site</text>')
+    parts = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">',
+        '<defs>',
+        f'<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{primary}"/><stop offset="0.72" stop-color="{shade(primary, 0.8)}"/><stop offset="1" stop-color="{other}"/></linearGradient>',
+        '</defs>',
+        f'<rect width="{WIDTH}" height="{HEIGHT}" fill="url(#bg)"/>',
+        *plate(WIDTH - 250, HEIGHT // 2 + 20, chef, False),
+        f'<rect x="36" y="36" width="{WIDTH - 72}" height="{HEIGHT - 72}" rx="30" fill="none" stroke="{accent}" stroke-opacity="0.55" stroke-width="3"/>',
+        PAN.format(x=72, y=78, s=0.5, c=accent),
+        f'<text x="140" y="116" fill="{ink}" font-size="34" font-weight="800" letter-spacing="5">KOOK’N</text>',
+        f'<text x="{WIDTH - 80}" y="116" fill="{soft}" font-size="26" font-weight="700" letter-spacing="3" text-anchor="end">RECEIPTS</text>',
+        f'<text x="80" y="212" fill="{soft}" font-size="32">{esc(receipt.get("when") or "")}</text>',
+        f'<text x="80" y="262" fill="{accent}" font-size="24" font-weight="700" letter-spacing="4">{esc(receipt.get("label") or "")}</text>',
+        f'<text x="80" y="{262 + 66 + 4}" fill="{ink}" font-size="66" font-weight="800">{esc(receipt.get("title") or "")}</text>',
+        *body,
+        f'<text x="80" y="{HEIGHT - 62}" fill="{ink}" font-size="26" font-weight="700">Graded in public, win or lose. <tspan fill="{soft}" font-weight="400">keenroudy.com/sports</tspan></text>',
+        f'<text x="{WIDTH - 80}" y="{HEIGHT - 62}" fill="{soft}" font-size="19" text-anchor="end">Entertainment only. Not advice.</text>',
+        '</svg>']
+    return '\n'.join(parts)
+
+
 def title_lines(title, width=26, limit=30):
     """The play on one line, or on two when it is long: a player's name above the line he is on
     ("Courtland Sutton" / "OVER 3.5 receptions"), else split at the word nearest the middle."""

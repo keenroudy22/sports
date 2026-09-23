@@ -31,6 +31,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import feed
 import gates
 import pick_card
+import receipts
 import x_post
 from sports_refresh import eastern_date
 
@@ -195,8 +196,9 @@ def window_open(day):
 def plan(first, latest, games, now, log_book, player_team=None, soon=None):
     """The posts the run should schedule now: [(key, kind, text, due_at, card_key)].
 
-    X gets plays only: player props, team props and the day's fun parlay, the same shape every time and
-    always with the card. Each play is due three hours before its kickoff (a parlay's first leg), never
+    X gets plays and their receipts: player props, team props and the day's fun parlay, the same shape every
+    time and always with the card, and the morning after, the receipt (scripts/receipts.py) at 9:00 AM ET,
+    ahead of that morning's plays; on Wednesday the week's receipt too. Each play is due three hours before its kickoff (a parlay's first leg), never
     before 9:00 AM ET on game day; plays sharing a kickoff go player props first, then team props, then the
     parlay, ten minutes apart. A play published later than its time goes out now, unless kickoff is inside
     45 minutes. Posted, closed, settled and historical plays are left out.
@@ -221,18 +223,21 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None):
         if x_post.guard(text, merged):
             continue
         kickoff = gates.when(starts[0])
-        plays.append((max(kickoff - LEAD_TIME, opens), ORDER[pick_card.play_kind(merged)], kickoff, key, text))
+        plays.append((max(kickoff - LEAD_TIME, opens), ORDER[pick_card.play_kind(merged)], kickoff - feed.LEAD, key, text, 'play', key))
+    for receipt in receipts.ready(first, latest, games, log_book, now):
+        if receipt['key'] not in posted and not receipts.guard(receipt):
+            plays.append((receipt['due'], -1, receipt['stale'], receipt['key'], receipt['text'], 'receipt', receipt['card']))
     plays.sort()
     out, last = [], None
-    for target, _, kickoff, key, text in plays:
+    for target, _, deadline, key, text, kind, card in plays:
         if len(out) >= MAX_PER_DAY:
             break
         due = max(target, now + soon)
         if last is not None:
             due = max(due, last + SPACING)
-        if due > kickoff - feed.LEAD:
-            continue                    # this one's window has passed; a later kickoff may still fit
-        out.append((key, 'play', text, due, key))
+        if due > deadline:
+            continue                    # this one's window has passed; a later one may still fit
+        out.append((key, kind, text, due, card))
         last = due
     return out
 

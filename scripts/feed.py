@@ -149,12 +149,15 @@ def render_cards(items, folder=CARDS, log=print):
         return {}
     out = {}
     for item in items:
-        if 'pick' not in item:
+        if 'pick' not in item and 'receipt' not in item:
             continue
         path = Path(folder) / f"{item['guid']}.png"
         try:
             if not path.exists():
-                pick_card.render(pick_card.svg(item['pick'], item['game'], player_side=item.get('side')), path)
+                if 'receipt' in item:
+                    pick_card.render(pick_card.receipt_svg(item['receipt']), path)
+                else:
+                    pick_card.render(pick_card.svg(item['pick'], item['game'], player_side=item.get('side')), path)
             out[item['guid']] = path
         except Exception as error:
             log(f"card for {item['guid']} not rendered: {error}")
@@ -187,7 +190,9 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
     items = pick_items(ctx.first, ctx.latest, ctx.games, now, ctx.player_team)
     # A card for every open play as soon as it is published, not only inside its posting window: the desk
     # schedules the post the moment the card is live, and never posts without one.
-    cards = render_cards(card_items(ctx.first, ctx.latest, ctx.games, now, ctx.player_team), cards_folder, log) if with_cards else {}
+    import receipts
+    ready = [{'guid': r['card'], 'receipt': r} for r in receipts.ready(ctx.first, ctx.latest, ctx.games, x_post.load_log(), now)]
+    cards = render_cards(card_items(ctx.first, ctx.latest, ctx.games, now, ctx.player_team) + ready, cards_folder, log) if with_cards else {}
     Path(out).parent.mkdir(parents=True, exist_ok=True)
     Path(out).write_text(rss(items, cards, now), encoding='utf-8')
     log(f'{len(items)} items in the feed ({sum(1 for i in items if "pick" in i)} plays, {len(cards)} cards) -> {out}')
