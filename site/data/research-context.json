@@ -1,11 +1,20 @@
 {
-  "updatedAt": "2026-09-23T16:59:31Z",
+  "updatedAt": "2026-09-23T17:19:52Z",
   "leagues": {
     "NFL": {
       "teams": {
         "22": {
           "name": "Arizona Cardinals",
           "players": [
+            {
+              "id": "4685408",
+              "name": "Will Johnson",
+              "position": "CB",
+              "status": "Injured Reserve",
+              "injury": "Neck",
+              "reportedAt": "2026-09-23T17:08Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4685408/will-johnson"
+            },
             {
               "id": "4040983",
               "name": "Mack Wilson Sr.",
@@ -68,15 +77,6 @@
               "injury": "Toe",
               "reportedAt": "2026-09-21T23:20Z",
               "source": "https://www.espn.com/nfl/player/_/id/4698113/max-melton"
-            },
-            {
-              "id": "4685408",
-              "name": "Will Johnson",
-              "position": "CB",
-              "status": "Out",
-              "injury": "Neck",
-              "reportedAt": "2026-09-21T23:17Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4685408/will-johnson"
             },
             {
               "id": "4429782",
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-23T16:56Z",
+              "reportedAt": "2026-09-23T17:08Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5987,6 +5987,15 @@
           "name": "Pittsburgh Steelers",
           "players": [
             {
+              "id": "4569987",
+              "name": "Jaylen Warren",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Undisclosed",
+              "reportedAt": "2026-09-23T17:01Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4569987/jaylen-warren"
+            },
+            {
               "id": "4035687",
               "name": "Michael Pittman Jr.",
               "position": "WR",
@@ -6138,15 +6147,6 @@
               "injury": null,
               "reportedAt": "2026-09-20T21:30Z",
               "source": "https://www.espn.com/nfl/player/_/id/8439/aaron-rodgers"
-            },
-            {
-              "id": "4569987",
-              "name": "Jaylen Warren",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-20T21:24Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4569987/jaylen-warren"
             },
             {
               "id": "4427170",
@@ -7366,30 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "17",
-          "name": "Carlton Davis III",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-09-22T22:03:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3916923/carlton-davis-iii"
-        },
-        {
-          "teamId": "17",
-          "name": "Mike Onwenu",
-          "from": "Out",
-          "to": "Injured Reserve",
-          "observedAt": "2026-09-22T22:03:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4046545/mike-onwenu"
-        },
-        {
-          "teamId": "18",
-          "name": "Isaiah Stalbird",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-09-22T22:03:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4361194/isaiah-stalbird"
-        },
-        {
           "teamId": "18",
           "name": "Christen Miller",
           "from": "Out",
@@ -7764,11 +7740,35 @@
           "to": "Out",
           "observedAt": "2026-09-23T16:59:31Z",
           "source": "https://www.espn.com/nfl/player/_/id/4426348/jayden-daniels"
+        },
+        {
+          "teamId": "22",
+          "name": "Will Johnson",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-09-23T17:19:52Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4685408/will-johnson"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-09-23T17:19:52Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "23",
+          "name": "Jaylen Warren",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-09-23T17:19:52Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4569987/jaylen-warren"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-23T16:59:31Z",
-      "lastAttemptAt": "2026-09-23T16:59:31Z",
+      "checkedAt": "2026-09-23T17:19:52Z",
+      "lastAttemptAt": "2026-09-23T17:19:52Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-23T16:59:31Z",
-      "lastAttemptAt": "2026-09-23T16:59:31Z",
+      "checkedAt": "2026-09-23T17:19:52Z",
+      "lastAttemptAt": "2026-09-23T17:19:52Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
