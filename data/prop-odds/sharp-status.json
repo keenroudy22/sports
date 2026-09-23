@@ -1,14 +1,25 @@
 {
- "at": "2026-09-23T00:54:11Z",
+ "at": "2026-09-23T04:07:59Z",
  "leagues": {
   "CFB": {
-   "books": {},
+   "books": {
+    "draftkings": 219
+   },
    "eventsListed": 200,
-   "eventsMatched": 0,
+   "eventsMatched": 1,
    "games": 1,
-   "marketTypes": {},
-   "requestsLeft": 55,
-   "rows": 0,
+   "marketTypes": {
+    "player_longest_passing_completion": 2,
+    "player_longest_reception": 7,
+    "player_longest_rush": 5,
+    "player_passing_+_rushing_yards": 44,
+    "player_passing_touchdowns": 6,
+    "player_passing_yards": 38,
+    "player_receiving_yards": 56,
+    "player_rushing_yards": 61
+   },
+   "requestsLeft": 53,
+   "rows": 219,
    "slateGames": [
     "Liberty Flames at Coastal Carolina Chanticleers 2026-09-24T23:30Z"
    ],
@@ -209,7 +220,7 @@
   },
   "NFL": {
    "books": {
-    "draftkings": 120,
+    "draftkings": 122,
     "fanduel": 292
    },
    "eventsListed": 200,
@@ -220,7 +231,7 @@
     "player_field_goals_made": 4,
     "player_interceptions": 4,
     "player_kicking_points": 4,
-    "player_longest_passing_completion": 2,
+    "player_longest_passing_completion": 4,
     "player_longest_reception": 14,
     "player_longest_rush": 12,
     "player_passing_+_rushing_yards": 4,
@@ -235,7 +246,7 @@
     "player_rushing_yards": 93
    },
    "requestsLeft": 56,
-   "rows": 412,
+   "rows": 414,
    "slateGames": [
     "Atlanta Falcons at Green Bay Packers 2026-09-25T00:15Z"
    ],
@@ -323,7 +334,7 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNFL2HSPREAD-26SEP24ATLGB-ATL5"
+      "kalshi": "KXNFL2HSPREAD-26SEP24ATLGB-ATL11"
      },
      "home": null,
      "sample": {
