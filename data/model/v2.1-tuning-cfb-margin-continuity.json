@@ -1,0 +1,176 @@
+{
+ "league": "CFB",
+ "version": "v2.0",
+ "knob": "margin.continuity",
+ "grid": [
+  0,
+  0.5,
+  1,
+  2
+ ],
+ "off": 0,
+ "tuneSeason": 2024,
+ "holdoutSeason": 2025,
+ "trials": [
+  {
+   "value": 0,
+   "miss": {
+    "margin": 12.95
+   },
+   "sum": 12.95
+  },
+  {
+   "value": 0.5,
+   "miss": {
+    "margin": 12.95
+   },
+   "sum": 12.95
+  },
+  {
+   "value": 1,
+   "miss": {
+    "margin": 12.95
+   },
+   "sum": 12.95
+  },
+  {
+   "value": 2,
+   "miss": {
+    "margin": 12.96
+   },
+   "sum": 12.96
+  }
+ ],
+ "chosen": 0,
+ "base": {
+  "margin": {
+   "halfLife": 90,
+   "ridge": 1.0,
+   "priorWeight": 0.3,
+   "eloWeight": 0.0
+  },
+  "total": {
+   "halfLife": 90,
+   "ridge": 10.0,
+   "priorWeight": 0.6,
+   "blend": 1.0
+  },
+  "sdMargin": 16.31,
+  "sdTotal": 16.18,
+  "pace": 70.0
+ },
+ "tuned": {
+  "margin": {
+   "halfLife": 90,
+   "ridge": 1.0,
+   "priorWeight": 0.3,
+   "eloWeight": 0.0,
+   "continuity": 0
+  },
+  "total": {
+   "halfLife": 90,
+   "ridge": 10.0,
+   "priorWeight": 0.6,
+   "blend": 1.0
+  },
+  "sdMargin": 16.31,
+  "sdTotal": 16.18,
+  "pace": 70.0
+ },
+ "holdout": {
+  "base": {
+   "games": 934,
+   "priced": 914,
+   "marginMiss": 12.48,
+   "closeMarginMiss": 11.91,
+   "totalMiss": 12.66,
+   "closeTotalMiss": 12.47,
+   "sideVsClose": [
+    470,
+    441
+   ],
+   "totalVsClose": [
+    483,
+    431
+   ],
+   "within80": {
+    "margin": 0.81,
+    "total": 0.8
+   },
+   "residualSd": {
+    "margin": 15.87,
+    "total": 15.69
+   }
+  },
+  "tuned": {
+   "games": 934,
+   "priced": 914,
+   "marginMiss": 12.48,
+   "closeMarginMiss": 11.91,
+   "totalMiss": 12.66,
+   "closeTotalMiss": 12.47,
+   "sideVsClose": [
+    470,
+    441
+   ],
+   "totalVsClose": [
+    483,
+    431
+   ],
+   "within80": {
+    "margin": 0.81,
+    "total": 0.8
+   },
+   "residualSd": {
+    "margin": 15.87,
+    "total": 15.69
+   }
+  },
+  "compare": {
+   "margin": {
+    "n": 921,
+    "meanDelta": 0.0,
+    "interval90": [
+     0.0,
+     0.0
+    ],
+    "earlyWeeks": {
+     "n": 300,
+     "meanDelta": 0.0
+    },
+    "laterWeeks": {
+     "n": 621,
+     "meanDelta": 0.0
+    },
+    "verdict": "NOISE"
+   },
+   "total": {
+    "n": 925,
+    "meanDelta": 0.0,
+    "interval90": [
+     0.0,
+     0.0
+    ],
+    "earlyWeeks": {
+     "n": 308,
+     "meanDelta": 0.0
+    },
+    "laterWeeks": {
+     "n": 617,
+     "meanDelta": 0.0
+    },
+    "verdict": "NOISE"
+   }
+  },
+  "ships": {
+   "margin": false
+  }
+ },
+ "looks": [
+  {
+   "at": "2026-09-23T14:20:10+00:00",
+   "knob": "margin.continuity",
+   "season": 2025
+  }
+ ]
+}

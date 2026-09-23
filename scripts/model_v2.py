@@ -37,6 +37,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import continuity
 import features
 from refresh import Model as Elo
 
@@ -224,12 +225,28 @@ class Ratings:
         return start
 
 
-def fit(rows, cutoff, season, params, fcs, target, warm=None, offseason=None):
+def carry_for(row, params, roster, league_mean):
+    """Last season's weight for one offense row: priorWeight, bent by how much of both teams is still here.
+
+    carry = priorWeight * exp(continuity * (c - mean)), with c the average of the offense's returning
+    usage and the defense's (a side that is not measured reads as the league mean). A team that kept
+    its people keeps more of last season; a rebuilt one keeps less. continuity = 0 is v2.0 exactly.
+    """
+    gamma = params.get('continuity', 0.0)
+    if not gamma or league_mean is None or row['season'] >= params.get('_season', row['season'] + 1):
+        return params['priorWeight']
+    sides = [(roster.get(row['team']) or {}).get('off'), (roster.get(row['opp']) or {}).get('def')]
+    known = [league_mean if value is None else value for value in sides]
+    return params['priorWeight'] * math.exp(gamma * (statistics.mean(known) - league_mean))
+
+
+def fit(rows, cutoff, season, params, fcs, target, warm=None, offseason=None, roster=None):
     """Ratings from observation rows, all before the cutoff. target(row) is the response.
 
     Age is counted in football days: the offseason between a game's season and
     the cutoff's season is skipped, so carryover from last season is set by
-    priorWeight rather than by how long the summer was.
+    priorWeight rather than by how long the summer was. roster is the continuity
+    table (scripts/continuity.py) when the parameters ask for it.
     """
     index = {}
     for row in rows:
@@ -238,9 +255,12 @@ def fit(rows, cutoff, season, params, fcs, target, warm=None, offseason=None):
                 index[key] = 4 + len(index)
     penalty = [0.0] * 4 + [params['ridge']] * len(index)
     targets, weights, active = [], [], []
+    mean_c = continuity.league_mean(roster) if roster and params.get('continuity') else None
+    bent = {**params, '_season': season}
     for row in rows:
         age = (cutoff - row['kickoff']).total_seconds() / 86400 - (offseason or {}).get(row['season'], 0.0)
-        weight = 0.5 ** (max(age, 0.0) / params['halfLife']) * params['priorWeight'] ** (season - row['season'])
+        carry = carry_for(row, bent, roster or {}, mean_c) if row['season'] < season else params['priorWeight']
+        weight = 0.5 ** (max(age, 0.0) / params['halfLife']) * carry ** (season - row['season'])
         columns = [0, index['off', row['team']], index['def', row['opp']]]
         if row['home']:
             columns.append(1)
@@ -286,6 +306,9 @@ class Model:
         fbs = fbs_teams(past) if league == 'CFB' else None
         self.fcs = (lambda team: team not in fbs) if fbs is not None else (lambda team: False)
         self.implied = implied_points(rows)
+        # Per-team continuity is measured only when a target asks for it, so v2.0 parameters never read it.
+        wants = any(self.params[t].get('continuity') for t in ('margin', 'total'))
+        self.roster = continuity.continuity(past, season, cutoff) if wants else {}
         blend = self.params['total']['blend'] if self.implied else 1.0
 
         def total_target(row):
@@ -296,10 +319,10 @@ class Model:
         self.margin = self.total = None
         if 'margin' in targets:
             self.margin = fit(rows, cutoff, season, self.params['margin'], self.fcs, lambda row: row['points'],
-                              warm.margin if warm else None, self.offseason)
+                              warm.margin if warm else None, self.offseason, self.roster)
         if 'total' in targets:
             self.total = fit(rows, cutoff, season, self.params['total'], self.fcs, total_target,
-                             warm.total if warm else None, self.offseason)
+                             warm.total if warm else None, self.offseason, self.roster)
         self.elo = elo_as_of(league, past, season) if self.params['margin'].get('eloWeight') else None
 
     def elo_margin(self, home, away, neutral):
