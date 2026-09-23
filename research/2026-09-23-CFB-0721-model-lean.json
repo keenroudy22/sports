@@ -1,0 +1,85 @@
+{
+ "league": "CFB",
+ "targetWeek": 5,
+ "publishedAt": "2026-09-23T11:21:00Z",
+ "summary": "6:45 AM ET run, published at 7:21 ET. Nothing to settle and nothing open to close; no game kicked yesterday and the next is Liberty at Coastal Carolina tomorrow evening. One model lean published: Iowa at Michigan over 38.5 at ESPN BET -105, which is the one candidate that survived a full week of waiting for a shopped price and then survived the research. Ravens at Cowboys and Titans at Giants both cleared the arithmetic and both are passed on sourced reasons. Eighteen totals on the board grade as leans with a real multi-book market behind them; one is worth publishing.",
+ "takeaways": [
+  "Waiting for the second book paid twice on this one. On Tuesday the relayed DraftKings quote showed an edge of 4.4 points. Overnight the capture opened and BetMGM's 38.5 at -110 made it 4.9. This morning ESPN BET posted 38.5 at -105 and it is 6.0, the best number and the best price of five books, against FanDuel at 39.5 and BetRivers at 39. A point and a half of edge came from shopping rather than from the model.",
+  "Ravens at Cowboys is passed and it is the harder call of the two. The arithmetic is good at ESPN BET under 52.5 at -105, a 4.0 point edge, and it is worth noting the board would have handed us the worse quote: its best-book rule takes the number before the price and picked BetRivers 53 at -113, which prices out at 2.1 points and a lower expected value. The reason for passing is the Dallas secondary. Malik Hooker is doubtful, Cobie Durant and P.J. Locke are out, and three defensive backs down against Baltimore is a sourced argument for the over, which is the side we would be fading. The rule says nothing sourced arguing against it, and that is something.",
+  "Titans at Giants is the third pass and it repeats last night's lesson exactly. Jaxson Dart has gone from questionable to doubtful with the knee, Malik Nabers is questionable, and the market has taken the total from an opening 45.5 to 39.5. Our number likes the over 39.5 by 4.0 points, but our total is built by a model that does not carry a quarterback change, so it is reading a game with Dart in it. That is now three totals this week passed for the same reason, which is the clearest argument yet for the rule: no model lean on a total when a starting quarterback is doubtful or worse.",
+  "James Madison at Old Dominion cleared at 4.3 points and is held rather than passed. Norfolk's Saturday forecast is sunny and 73 but says breezy with no wind speed attached three days out, and wind is the one weather input that moves a total and that our model does not carry. Worth a second look on Friday when the number firms up."
+ ],
+ "gamePicks": [
+  {
+   "id": "CFB-2026-W5-iowa-michigan-over-38-5-espnbet",
+   "title": "Iowa at Michigan OVER 38.5",
+   "status": "active",
+   "favorite": false,
+   "modelLean": true,
+   "jurisdictionVerified": true,
+   "marketType": "total",
+   "line": 38.5,
+   "direction": "over",
+   "gameIds": [
+    "CFB-401858463"
+   ],
+   "book": "ESPN BET",
+   "odds": -105,
+   "quotedAt": "2026-09-23T08:51:11Z",
+   "quoteType": "capture",
+   "quoteNote": "Best of five books in the 4:51 AM ET capture: ESPN BET 38.5 at -105, BetMGM 38.5 at -110, DraftKings 38.5 at -112, BetRivers 39 at -109, FanDuel 39.5 at -105. Best number and best price of the five.",
+   "expiresAt": "2026-09-26T19:30:00Z",
+   "projection": 47.1,
+   "modelVersion": "v2.0",
+   "snapshotAt": "2026-09-21T11:58:42Z",
+   "edge": "v2 total 47.1 (80% range 26.3 to 67.8). Chance of over 38.5: 57.3% (v2's raw 70.2% shrunk by its 2024-25 record against the close), against 51.2% break-even at -105: +6.0 points, +0.118u per unit.",
+   "cutoff": "OVER 38.5 at -105 or better. Closed to new entries at 40+, or at -120 or worse at 38.5.",
+   "confidence": 3,
+   "why": "Model lean on our number alone. Our total is 47.1 against a 38.5 line and the calibrated chance of the over is 57.3%, which is the raw 70.2% shrunk by the model's 2024-25 record against the closing line, against the 51.2% a -105 price needs. Nothing sourced argues the other way: Saturday in Ann Arbor is forecast sunny and 68 with no wind called out, so the one weather input that moves a total and that our model does not carry is not in play, and college injury reports are not in the feed for either side. This rests on our number and nothing else.",
+   "risk": "The gap is 8.6 points and our own guidance says a large gap is more often the model's mistake than the market's. Our 80% range on this game is 26.3 to 67.8, which is 41 points wide and says plainly how little the number knows. Iowa's low scoring identity is exactly the kind of team style a ratings model handles badly, and the market has already moved the total down from an opening 39.5, which is away from our side. Confidence 3 of 10.",
+   "sources": [
+    "https://www.espn.com/college-football/game/_/gameId/401858463",
+    "https://forecast.weather.gov/MapClick.php?lat=42.2658&lon=-83.7487",
+    "https://api.the-odds-api.com/v4"
+   ]
+  }
+ ],
+ "props": [],
+ "riskyProps": [],
+ "parlays": [],
+ "screened": [
+  {
+   "gameId": "NFL-401872960",
+   "market": "total points",
+   "what": "Ravens at Cowboys under 52.5, ESPN BET -105, a 4.0 point edge",
+   "passed": "Malik Hooker doubtful, Cobie Durant out and P.J. Locke out leaves Dallas without three defensive backs against Baltimore. That is a sourced argument for the over, which is the side we would be fading.",
+   "sources": [
+    "https://www.espn.com/nfl/game/_/gameId/401872960"
+   ]
+  },
+  {
+   "gameId": "NFL-401872956",
+   "market": "total points",
+   "what": "Titans at Giants over 39.5, FanDuel -105, a 4.0 point edge",
+   "passed": "Jaxson Dart is doubtful with a knee injury and the market has moved the total from an opening 45.5 to 39.5. Our total does not carry a quarterback change, so the number is reading a game with Dart playing.",
+   "sources": [
+    "https://www.espn.com/nfl/game/_/gameId/401872956"
+   ]
+  },
+  {
+   "gameId": "CFB-401869961",
+   "market": "total points",
+   "what": "James Madison at Old Dominion over 44.5, ESPN BET -110, a 4.3 point edge",
+   "passed": "Held rather than passed. Norfolk's Saturday forecast says sunny and 73 but breezy, with no wind speed attached three days out. Wind is the weather input that moves a total and our model does not carry it. Revisit Friday.",
+   "sources": [
+    "https://forecast.weather.gov/MapClick.php?lat=36.8857&lon=-76.3052"
+   ]
+  }
+ ],
+ "sources": [
+  "https://www.espn.com/college-football/game/_/gameId/401858463",
+  "https://forecast.weather.gov/MapClick.php?lat=42.2658&lon=-83.7487",
+  "https://www.espn.com/nfl/injuries",
+  "https://api.the-odds-api.com/v4 (key withheld)"
+ ]
+}
