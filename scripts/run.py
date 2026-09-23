@@ -1032,7 +1032,8 @@ def drafts(slot, now, ctx, games, settled, status):
                 written.append(f'scoreboard-{day}')
     for key, pick in ctx.first.items():
         merged = dict(pick, **ctx.latest.get(key, {}))
-        if merged.get('favorite') is not True or merged.get('result') or key in posted:
+        postable = merged.get('favorite') is True or (merged.get('modelLean') and not merged.get('legs'))
+        if not postable or merged.get('result') or key in posted:
             continue
         try:
             text, pick_now, game = x_post.do_draft(key, now, ctx.first, ctx.latest, games, out=folder)
@@ -1042,7 +1043,9 @@ def drafts(slot, now, ctx, games, settled, status):
         try:                                                  # the card is a nicety; a missing browser never stops a run
             import pick_card
             if pick_card.chrome_path():
-                pick_card.render(pick_card.svg(pick_now, game), folder / f'{key}.png')
+                team = ctx.player_team.get(str(pick_now.get('athleteId') or ''))
+                side = 'home' if team == str(game['home']['id']) else 'away' if team == str(game['away']['id']) else None
+                pick_card.render(pick_card.svg(pick_now, game, player_side=side), folder / f'{key}.png')
         except Exception as error:
             log(f'card for {key} not rendered: {error}')
     status['x']['drafted'] = len(written)

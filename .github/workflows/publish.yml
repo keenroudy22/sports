@@ -19,6 +19,9 @@ on:
     # Saturdays and Sundays, hourly through the games, so scores and finals do not sit stale
     - cron: '23 13-23 * * 0,6'
       timezone: America/New_York
+    # Weekend mornings, so the plays feed opens its 9:00 window before the noon kickoffs
+    - cron: '7 9,10 * * 0,6'
+      timezone: America/New_York
 permissions:
   contents: write
   pages: write
@@ -108,6 +111,8 @@ jobs:
         run: python scripts/market_lines.py
       - name: Build the page payloads (site/data/app, not committed)
         run: python scripts/build_site.py
+      - name: Build the plays feed and its cards (site/data/feed.xml and cards, not committed)
+        run: python scripts/feed.py
       - name: Preserve the public record
         run: |
           python scripts/integrity.py

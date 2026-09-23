@@ -1,8 +1,13 @@
-"""A branded card for one pick, as SVG from the pick's own fields; a PNG when a browser is on the machine.
+"""A card for one play in the kitchen's colours: the team we lean on, as SVG from the pick's own fields.
 
 The repo stays standard library: the SVG is plain text written here. Turning it into the PNG that X
-will show is done by the machine's own browser in headless mode (Chrome on the Mac Studio), which is a
-system tool, not a Python package, and never runs in the hosted workflow. The PNG is never committed.
+will show is done by a headless browser on the machine (Chrome on the Mac Studio or a GitHub runner),
+which is a system tool, not a Python package. The PNG is never committed.
+
+The card wears the colours of the side the play is on: the team a spread backs, the player's team for a
+prop, the home team for a total with the away team's colour at the edge. Colours come from the slate
+(ESPN's team colours) with the site's own table as the fallback. The theme is the kitchen: KOOK'N, the
+pan, a plate served at a book.
 
   python scripts/pick_card.py PICK_ID [--out FILE.png] [--svg]
 """
@@ -21,9 +26,11 @@ import pricing
 
 ROOT = Path(__file__).resolve().parents[1]
 WIDTH, HEIGHT = 1200, 675
-GREEN, DEEP, CREAM, GOLD = '#0f5132', '#0a3622', '#f4f1e8', '#e9c46a'
+NEUTRAL = '#2b3440'
+CREAM, INK = '#f6f1e6', '#141414'
 CHROME_CANDIDATES = ('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-                     '/Applications/Chromium.app/Contents/MacOS/Chromium', 'google-chrome', 'chromium')
+                     '/Applications/Chromium.app/Contents/MacOS/Chromium', 'google-chrome', 'google-chrome-stable',
+                     'chromium', 'chromium-browser')
 
 
 def chrome_path():
@@ -31,8 +38,11 @@ def chrome_path():
     if override:
         return override
     for candidate in CHROME_CANDIDATES:
-        if Path(candidate).exists() or shutil.which(candidate):
-            return candidate if Path(candidate).exists() else shutil.which(candidate)
+        if Path(candidate).exists():
+            return candidate
+        found = shutil.which(candidate)
+        if found:
+            return found
     return None
 
 
@@ -45,14 +55,96 @@ def fit(text, limit):
     return text if len(text) <= limit else text[:limit - 1].rstrip() + '…'
 
 
-def svg(pick, game=None, record=None, when=None):
+# ------------------------------------------------------------------ colour
+
+def hex_rgb(value):
+    value = str(value or '').lstrip('#')
+    if len(value) == 3:
+        value = ''.join(c * 2 for c in value)
+    try:
+        return tuple(int(value[i:i + 2], 16) for i in (0, 2, 4))
+    except ValueError:
+        return hex_rgb(NEUTRAL)
+
+
+def luminance(value):
+    r, g, b = (c / 255 for c in hex_rgb(value))
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def shade(value, factor):
+    """The colour scaled toward black (factor < 1) or white (factor > 1)."""
+    r, g, b = hex_rgb(value)
+    if factor <= 1:
+        r, g, b = (int(c * factor) for c in (r, g, b))
+    else:
+        r, g, b = (int(c + (255 - c) * (factor - 1)) for c in (r, g, b))
+    return '#{:02x}{:02x}{:02x}'.format(*(max(0, min(255, c)) for c in (r, g, b)))
+
+
+def team_colors(game, side, identities=None):
+    """(primary, alternate) for one side of a game: the slate's colours, else the site's table, else neutral."""
+    team = (game or {}).get(side) or {}
+    primary = team.get('color')
+    if not primary:
+        try:
+            import build_site
+            primary = build_site.color((game or {}).get('league'), team.get('abbreviation'), identities or {})
+        except Exception:
+            primary = None
+    primary = primary if primary and primary.lower() not in ('#64748b',) else NEUTRAL
+    return primary, team.get('alternateColor') or shade(primary, 0.55)
+
+
+def side_for(pick, game, player_side=None):
+    """Which side the play is on: the spread's team, the player's team, or the home team for a total."""
+    if pick.get('athleteId'):
+        return player_side or 'home'
+    direction = str(pick.get('direction') or '').lower()
+    if pick.get('marketType') == 'spread' and direction in ('home', 'away'):
+        return direction
+    return 'home'
+
+
+# ------------------------------------------------------------------ the card
+
+PAN = ('<g transform="translate({x},{y}) scale({s})" fill="none" stroke="{c}" stroke-width="7" stroke-linecap="round">'
+       '<circle cx="34" cy="34" r="26"/><path d="M60 34 H108"/><circle cx="34" cy="34" r="12" stroke-width="4" stroke-opacity="0.6"/></g>')
+AVATAR = ROOT / 'site' / 'kookn.jpg'     # the @keenkooks profile picture, the kitchen's face
+
+
+def avatar_uri(path=AVATAR):
+    """The avatar as a data URI, so the SVG renders anywhere; None when the file is not there."""
+    import base64
+    path = Path(path)
+    if not path.exists():
+        return None
+    mime = 'image/png' if path.suffix.lower() == '.png' else 'image/jpeg'
+    return f'data:{mime};base64,' + base64.b64encode(path.read_bytes()).decode('ascii')
+
+
+def badge(x, y, r, uri, ring):
+    """A round badge holding the avatar, with a ring in the accent colour."""
+    return (f'<defs><clipPath id="badge"><circle cx="{x}" cy="{y}" r="{r}"/></clipPath></defs>'
+            f'<image href="{uri}" x="{x - r}" y="{y - r}" width="{2 * r}" height="{2 * r}" clip-path="url(#badge)" preserveAspectRatio="xMidYMid slice"/>'
+            f'<circle cx="{x}" cy="{y}" r="{r}" fill="none" stroke="{ring}" stroke-width="4"/>')
+
+
+def svg(pick, game=None, record=None, when=None, player_side=None, identities=None, avatar=None):
     """The card. Every number on it is a field of the pick or the record handed in."""
+    avatar = avatar_uri() if avatar is None else avatar
+    side = side_for(pick, game, player_side)
+    primary, alternate = team_colors(game, side, identities)
+    other, _ = team_colors(game, 'away' if side == 'home' else 'home', identities)
+    light = luminance(primary) > 0.55
+    ink = INK if light else CREAM
+    soft = shade(INK, 1.35) if light else shade(CREAM, 0.82)
+    accent = alternate if abs(luminance(alternate) - luminance(primary)) > 0.25 else (INK if light else CREAM)
     title = fit(pick.get('title') or '', 34)
     price = f"{int(pick['odds']):+d}" if isinstance(pick.get('odds'), (int, float)) else ''
     book = pick.get('book') or ''
-    projection = pick.get('projection')
-    line = pick.get('line')
-    kicker = 'FAVORITE' if pick.get('favorite') else 'MODEL LEAN' if pick.get('modelLean') else 'PICK'
+    projection, line = pick.get('projection'), pick.get('line')
+    kicker = 'FAVORITE' if pick.get('favorite') else 'PROP LEAN' if pick.get('modelLean') and pick.get('athleteId') else 'MODEL LEAN' if pick.get('modelLean') else 'PICK'
     matchup = ''
     if game:
         away, home = game.get('away') or {}, game.get('home') or {}
@@ -66,31 +158,38 @@ def svg(pick, game=None, record=None, when=None):
                 pass
     number_line = ''
     if isinstance(projection, (int, float)) and isinstance(line, (int, float)):
-        number_line = f"Our number {pricing.fmt(float(projection))} · line {pricing.fmt(float(line))}"
+        number_line = f"Our number {pricing.fmt(float(projection))} vs the {pricing.fmt(float(line))}"
     record_line = ''
     if record:
         record_line = f"Record {record.get('wins', 0)}-{record.get('losses', 0)}" + (f"-{record['pushes']}" if record.get('pushes') else '')
         if record.get('units') is not None:
             record_line += f" · {record['units']:+.2f}u"
-    stamp = (when or datetime.now(timezone.utc)).strftime('%Y-%m-%d')
+    stamp = (when or datetime.now(timezone.utc)).strftime('%b %-d, %Y')
     confidence = f"Confidence {pick['confidence']} of 10" if pick.get('confidence') else ''
+    title_size = 66 if len(title) <= 24 else 56 if len(title) <= 30 else 48
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">',
-        '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">',
-        f'<stop offset="0" stop-color="{GREEN}"/><stop offset="1" stop-color="{DEEP}"/></linearGradient></defs>',
-        f'<rect width="{WIDTH}" height="{HEIGHT}" fill="url(#g)"/>',
-        f'<rect x="40" y="40" width="{WIDTH - 80}" height="{HEIGHT - 80}" rx="28" fill="none" stroke="{GOLD}" stroke-opacity="0.55" stroke-width="3"/>',
-        f'<text x="80" y="118" fill="{GOLD}" font-size="30" font-weight="700" letter-spacing="6">KEENROUDY SPORTS</text>',
-        f'<text x="{WIDTH - 80}" y="118" fill="{CREAM}" fill-opacity="0.8" font-size="26" text-anchor="end">{esc(kicker)}</text>',
-        f'<text x="80" y="220" fill="{CREAM}" fill-opacity="0.85" font-size="34">{esc(matchup)}</text>',
-        f'<text x="80" y="320" fill="{CREAM}" font-size="{64 if len(title) <= 26 else 52}" font-weight="700">{esc(title)}</text>',
-        f'<text x="80" y="400" fill="{GOLD}" font-size="54" font-weight="700">{esc(price)}</text>',
-        f'<text x="{80 + 60 * max(len(price), 3)}" y="400" fill="{CREAM}" fill-opacity="0.9" font-size="36">{esc(book)}</text>',
-        f'<text x="80" y="470" fill="{CREAM}" fill-opacity="0.9" font-size="32">{esc(number_line)}</text>',
-        f'<text x="80" y="520" fill="{CREAM}" fill-opacity="0.75" font-size="28">{esc(confidence)}</text>',
-        f'<text x="80" y="{HEIGHT - 80}" fill="{CREAM}" fill-opacity="0.9" font-size="28">keenroudy.com/sports</text>',
-        f'<text x="{WIDTH - 80}" y="{HEIGHT - 80}" fill="{CREAM}" fill-opacity="0.7" font-size="24" text-anchor="end">{esc(record_line or stamp)}</text>',
-        f'<text x="{WIDTH - 80}" y="{HEIGHT - 120}" fill="{CREAM}" fill-opacity="0.55" font-size="20" text-anchor="end">Entertainment only. Not advice.</text>',
+        '<defs>',
+        f'<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{primary}"/><stop offset="0.72" stop-color="{shade(primary, 0.8)}"/><stop offset="1" stop-color="{other}"/></linearGradient>',
+        '</defs>',
+        f'<rect width="{WIDTH}" height="{HEIGHT}" fill="url(#bg)"/>',
+        # a plate: the pale disc the play is served on
+        f'<circle cx="{WIDTH - 250}" cy="{HEIGHT // 2 + 20}" r="215" fill="{CREAM}" fill-opacity="{0.10 if not light else 0.35}"/>',
+        f'<circle cx="{WIDTH - 250}" cy="{HEIGHT // 2 + 20}" r="180" fill="none" stroke="{CREAM}" stroke-opacity="{0.18 if not light else 0.5}" stroke-width="3"/>',
+        f'<rect x="36" y="36" width="{WIDTH - 72}" height="{HEIGHT - 72}" rx="30" fill="none" stroke="{accent}" stroke-opacity="0.55" stroke-width="3"/>',
+        badge(114, 104, 40, avatar, accent) if avatar else PAN.format(x=72, y=72, s=0.62, c=accent),
+        f'<text x="{176 if avatar else 152}" y="118" fill="{ink}" font-size="34" font-weight="800" letter-spacing="5">KOOK’N</text>',
+        f'<text x="{WIDTH - 80}" y="116" fill="{soft}" font-size="26" font-weight="700" letter-spacing="3" text-anchor="end">{esc(kicker)}</text>',
+        f'<text x="80" y="212" fill="{soft}" font-size="32">{esc(matchup)}</text>',
+        f'<text x="80" y="262" fill="{accent}" font-size="24" font-weight="700" letter-spacing="4">TODAY’S PLATE</text>',
+        f'<text x="80" y="{262 + title_size + 4}" fill="{ink}" font-size="{title_size}" font-weight="800">{esc(title)}</text>',
+        f'<text x="80" y="418" fill="{soft}" font-size="26" letter-spacing="1">Served at</text>',
+        f'<text x="80" y="470" fill="{ink}" font-size="50" font-weight="800">{esc(price)}<tspan fill="{soft}" font-size="34" font-weight="600" dx="18">{esc(book)}</tspan></text>',
+        f'<text x="80" y="524" fill="{ink}" font-size="30">{esc(number_line)}</text>',
+        f'<text x="80" y="562" fill="{soft}" font-size="25">{esc(confidence)}</text>',
+        f'<text x="80" y="{HEIGHT - 62}" fill="{ink}" font-size="26" font-weight="700">Graded in public, win or lose. <tspan fill="{soft}" font-weight="400">keenroudy.com/sports</tspan></text>',
+        f'<text x="{WIDTH - 80}" y="{HEIGHT - 62}" fill="{soft}" font-size="22" text-anchor="end">{esc(record_line or stamp)}</text>',
+        f'<text x="{WIDTH - 80}" y="{HEIGHT - 98}" fill="{soft}" font-size="19" text-anchor="end">Entertainment only. Not advice.</text>',
         '</svg>']
     return '\n'.join(parts)
 
@@ -111,7 +210,7 @@ def render(svg_text, out, chrome=None, timeout=45):
         out.unlink()
     with tempfile.TemporaryDirectory() as folder:
         page = Path(folder) / 'card.html'
-        page.write_text(f'<!doctype html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;background:{DEEP}}}'
+        page.write_text(f'<!doctype html><html><head><meta charset="utf-8"><style>html,body{{margin:0;padding:0;background:{NEUTRAL}}}'
                         f'svg{{display:block}}</style></head><body>{svg_text}</body></html>', encoding='utf-8')
         process = subprocess.Popen([chrome, '--headless', '--disable-gpu', '--no-sandbox', '--hide-scrollbars',
                                     '--disable-extensions', '--no-first-run', '--virtual-time-budget=2000',
@@ -154,7 +253,11 @@ def main(argv=None):
     if not pick:
         sys.exit(f'{args.pick_id} is not in research/')
     game = ctx.games.get((pick.get('gameIds') or [None])[0])
-    text = svg(pick, game)
+    player_side = None
+    if pick.get('athleteId') and game:
+        team = ctx.player_team.get(str(pick['athleteId']))
+        player_side = 'home' if team == str(game['home']['id']) else 'away' if team == str(game['away']['id']) else None
+    text = svg(pick, game, player_side=player_side)
     if args.svg:
         print(text)
         return 0

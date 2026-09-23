@@ -8,20 +8,53 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import pick_card
 
 PICK = {'id': 'CFB-2026-W5-iowa-michigan-under-38-5-fd', 'title': 'Iowa at Michigan under 38.5', 'favorite': True,
-        'book': 'FanDuel', 'odds': -105, 'projection': 31.2, 'line': 38.5, 'confidence': 6}
-GAME = {'kickoff': '2026-09-26T19:30Z', 'home': {'short': 'Michigan'}, 'away': {'short': 'Iowa'}}
+        'marketType': 'total', 'direction': 'under', 'book': 'FanDuel', 'odds': -105, 'projection': 31.2, 'line': 38.5, 'confidence': 6}
+GAME = {'league': 'CFB', 'kickoff': '2026-09-26T19:30Z',
+        'home': {'id': '130', 'short': 'Michigan', 'abbreviation': 'MICH', 'color': '#00274c', 'alternateColor': '#ffcb05'},
+        'away': {'id': '2294', 'short': 'Iowa', 'abbreviation': 'IOWA', 'color': '#231f20', 'alternateColor': '#fcd116'}}
 
 
 class CardTests(unittest.TestCase):
-    def test_the_svg_carries_the_picks_fields_and_escapes_markup(self):
+    def test_the_svg_carries_the_picks_fields_the_kitchen_and_the_teams_colours(self):
         text = pick_card.svg(PICK, GAME, {'wins': 3, 'losses': 1, 'units': 1.98})
-        for needle in ('Iowa at Michigan under 38.5', '-105', 'FanDuel', 'Our number 31.2', 'line 38.5', 'FAVORITE',
-                       'Iowa at Michigan', 'Sat 3:30 PM ET', 'Record 3-1', '+1.98u', 'Confidence 6 of 10', 'keenroudy.com/sports'):
+        for needle in ('Iowa at Michigan under 38.5', '-105', 'FanDuel', 'Our number 31.2 vs the 38.5', 'FAVORITE', 'KOOK’N',
+                       'TODAY’S PLATE', 'Served at', 'Iowa at Michigan', 'Sat 3:30 PM ET', 'Record 3-1', '+1.98u',
+                       'Confidence 6 of 10', 'keenroudy.com/sports', 'Graded in public'):
             self.assertIn(needle, text, needle)
+        self.assertIn('#00274c', text, "a total wears the home team's colour")
+        self.assertIn('#ffcb05', text, 'with its alternate as the accent')
+        self.assertIn('#231f20', text, "and the away team's colour at the edge")
         nasty = pick_card.svg(dict(PICK, title='A&M <script> under 40', book='B&B'))
         self.assertIn('A&amp;M &lt;script&gt; under 40', nasty)
         self.assertNotIn('<script>', nasty)
         self.assertIn('MODEL LEAN', pick_card.svg(dict(PICK, favorite=False, modelLean=True)))
+        self.assertIn('PROP LEAN', pick_card.svg(dict(PICK, favorite=False, modelLean=True, athleteId='1')))
+
+    def test_the_side_the_play_is_on_picks_the_palette(self):
+        spread_away = pick_card.svg({'title': 'Iowa +7', 'marketType': 'spread', 'direction': 'away', 'odds': -110, 'book': 'DK'}, GAME)
+        self.assertLess(spread_away.index('#231f20'), spread_away.index('#00274c'), "the away spread leads with Iowa's colour")
+        prop_home = pick_card.svg({'title': 'X over 4.5 receptions', 'athleteId': '9', 'odds': -110, 'book': 'DK'}, GAME, player_side='home')
+        self.assertLess(prop_home.index('#00274c'), prop_home.index('#231f20'))
+        self.assertEqual(pick_card.side_for({'athleteId': '9'}, GAME, 'away'), 'away')
+        self.assertEqual(pick_card.side_for({'marketType': 'total', 'direction': 'over'}, GAME), 'home')
+
+    def test_colours_fall_back_and_text_flips_on_a_light_team(self):
+        primary, alternate = pick_card.team_colors({'league': 'CFB', 'home': {'abbreviation': 'ZZZ'}}, 'home', {})
+        self.assertEqual(primary, pick_card.NEUTRAL)
+        self.assertNotEqual(alternate, primary)
+        light = pick_card.svg(dict(PICK), {'league': 'NFL', 'kickoff': GAME['kickoff'], 'home': {'short': 'Team', 'color': '#f5f5dc'}, 'away': {'short': 'Other', 'color': '#111111'}})
+        self.assertIn(f'fill="{pick_card.INK}"', light, 'dark ink on a light background')
+        self.assertGreater(pick_card.luminance('#ffffff'), pick_card.luminance('#000000'))
+        self.assertEqual(pick_card.shade('#808080', 0.5), '#404040')
+
+    def test_the_avatar_badge_rides_when_the_picture_exists_and_the_pan_otherwise(self):
+        with_avatar = pick_card.svg(PICK, GAME, avatar='data:image/jpeg;base64,AAAA')
+        self.assertIn('<image href="data:image/jpeg;base64,AAAA"', with_avatar)
+        self.assertIn('clip-path="url(#badge)"', with_avatar)
+        without = pick_card.svg(PICK, GAME, avatar='')
+        self.assertNotIn('<image', without)
+        self.assertIn('stroke-linecap="round"', without, 'the pan stands in')
+        self.assertIsNone(pick_card.avatar_uri(Path('/nonexistent/kookn.jpg')))
 
     def test_long_titles_are_trimmed(self):
         text = pick_card.svg(dict(PICK, title='A very long pick title that would never fit on one line of a card'))

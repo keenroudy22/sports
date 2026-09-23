@@ -44,7 +44,13 @@ class DraftTests(unittest.TestCase):
     def test_draft_is_short_has_no_dashes_and_uses_only_the_picks_numbers(self):
         text = x_post.draft(PICK, GAME)
         self.assertLessEqual(x_post.tweet_length(text), 280)
-        self.assertIn('Iowa at Michigan under 38.5 (-105, FanDuel)', text)
+        self.assertIn('Favorite: Iowa at Michigan under 38.5\n-105 at FanDuel', text)
+        self.assertIn('#CFB', text)
+        self.assertIn('🍳', text)
+        lean = x_post.draft(dict(PICK, favorite=False, modelLean=True, projection=31.2), GAME)
+        self.assertIn('Model lean, our number alone: Iowa at Michigan under 38.5', lean)
+        self.assertIn('Our number 31.2 vs the 38.5. Graded in public, win or lose.', lean)
+        self.assertEqual(x_post.guard(lean, dict(PICK, projection=31.2)), [], lean)
         self.assertIn('https://keenroudy.com/sports/#pick/CFB-2026-W5-iowa-michigan-under-38-5-fd', text)
         self.assertNotIn('Researched pick.', text)
         self.assertEqual(x_post.guard(text, PICK), [], text)
@@ -68,7 +74,8 @@ class RefusalTests(unittest.TestCase):
 
     def test_refusals(self):
         self.assertIsNone(x_post.refuse(PICK, GAME, self.log, NOW))
-        for bad, why in ((dict(PICK, favorite=False), 'not a favorite'),
+        for bad, why in ((dict(PICK, favorite=False, modelLean=False), 'only favorites, model leans and prop leans'),
+                         (dict(PICK, legs=[{}], parlayType='longshot'), 'longshot'),
                          (dict(PICK, status='settled', result='win'), 'not open'),
                          (dict(PICK, entryNote='closed'), 'closed'),
                          (dict(PICK, expiresAt='2026-09-26T14:00:00Z'), 'expired'),

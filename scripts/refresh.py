@@ -123,6 +123,11 @@ def normalize(event, league):
         game[side] = dict(id=t['id'], name=t['displayName'], short=t.get('shortDisplayName', t['displayName']),
                           abbreviation=t.get('abbreviation', t['displayName']),
                           score=int(score) if score is not None and status['state'] != 'pre' else None)
+        if t.get('color'):
+            # The team's colours, so a card about a play can wear them.
+            game[side]['color'] = '#' + str(t['color']).lstrip('#')
+            if t.get('alternateColor'):
+                game[side]['alternateColor'] = '#' + str(t['alternateColor']).lstrip('#')
     venue = c.get('venue') or {}
     if venue.get('id'):
         # Where the game is played, so the weather layer knows which point to ask about and whether there is a roof.

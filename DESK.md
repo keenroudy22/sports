@@ -74,16 +74,29 @@ With Ollama down the run publishes on templates and holds on a quarterback rule 
 
 ## X
 
-Only researched favorites go to X. Drafts land in `~/.config/keenroudy/x-drafts/` and post only with
-`--confirm`; the autonomous path needs both `KEENROUDY_X_AUTONOMOUS=1` and `--i-understand` and stays
-off until the owner asks. Every post is logged in `data/x-posted.json` with its id and a hash of its text,
-and X's own duplicate refusal is the backstop. A post links to `https://keenroudy.com/sports/#pick/<id>`,
-which opens that pick's card with its reasoning.
+Favorites, model leans and prop leans go to X, each labeled for what it is; longshots do not. Every
+post is drafted by `scripts/x_post.py` in the kitchen's voice from the pick's own fields (the label, the
+line at its price, our number against the line, the receipt link `https://keenroudy.com/sports/#pick/<id>`
+and the league tag), and every pick gets a card (`scripts/pick_card.py`) in the colours of the side the
+play is on, rendered by a headless Chrome and never committed.
 
-The run also writes, for review: the game day's results recap after the 23:30 run (`x_post.py recap`),
-the model's season-to-date record against the closing line on Tuesday mornings (`x_post.py scoreboard`),
-and a draft plus a branded card image (`scripts/pick_card.py`, rendered by the machine's headless Chrome,
-never committed) for every open favorite. `x_post.py post PICK_ID --confirm --card` attaches the card.
+X meters posting through its API, so the desk does not post there itself. It publishes the posts as an
+RSS feed instead, `https://keenroudy.com/sports/data/feed.xml` (`scripts/feed.py`, built and deployed by the
+hosted workflow with the page payloads), and a relay service with its own X access posts each new item to
+@keenkooks. The feed only ever holds live plays inside their posting window: on the day of the game,
+Eastern, from 9:00 AM until 45 minutes before kickoff, and only while the pick is open. A game day's recap
+appears once every pick of the day is settled; the model's season-to-date record against the close appears
+Tuesday mornings. Each pick item carries its card as the image enclosure.
+
+Connecting a relay (one time, the owner): sign up for a free RSS-to-X service (dlvr.it or IFTTT, for
+example; free tiers change, so check that X is included), connect @keenkooks, add the feed URL, and set the
+post format to the item title plus the item link with the image attached. Test with one item before
+leaving it on.
+
+`x_post.py` can still post through the API (`post PICK_ID --confirm --card`) when credits exist, and
+`data/x-posted.json` logs whatever it posts. The run writes every draft and card to
+`~/.config/keenroudy/x-drafts/` as well, for a person to post by hand or for Claude to post through the
+owner's browser when asked.
 
 ## Weather
 
