@@ -57,10 +57,21 @@ def enabled(env=None):
     return (env if env is not None else os.environ).get('KEENROUDY_RESEARCHER', '').strip().lower() == 'claude'
 
 
-def prompt_for(game, market, side):
+def prompt_for(game, market, side, policy=None):
+    """The prompt, plus what learning has found about sources: sites whose facts kept checking out come first,
+    sites whose facts kept failing the check are left out."""
     away, home = game.get('away') or {}, game.get('home') or {}
-    return PROMPT.format(away=away.get('name') or away.get('abbreviation'), home=home.get('name') or home.get('abbreviation'),
+    text = PROMPT.format(away=away.get('name') or away.get('abbreviation'), home=home.get('name') or home.get('abbreviation'),
                          league=game.get('league'), kickoff=game.get('kickoff'), market=market, side=side)
+    if policy is None:
+        import learning
+        policy = learning.load_policy()
+    learned = policy.get('researcher') or {}
+    if learned.get('preferDomains'):
+        text += '\n\nSites whose facts have checked out for us before, worth trying first: ' + ', '.join(learned['preferDomains']) + '.'
+    if learned.get('avoidDomains'):
+        text += '\nSites whose facts have not checked out for us; do not use them: ' + ', '.join(learned['avoidDomains']) + '.'
+    return text
 
 
 def run_claude(prompt, runner=subprocess.run, timeout=420, max_turns=8):

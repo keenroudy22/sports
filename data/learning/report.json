@@ -1,0 +1,284 @@
+{
+ "at": "2026-09-23T21:06:27Z",
+ "calibration": [
+  {
+   "current": null,
+   "heldOut": {
+    "k": -151.01,
+    "raw": -163.46
+   },
+   "hitRate": 0.524,
+   "kAll": 0.13,
+   "kTrain": 0.27,
+   "meanRaw": 0.622,
+   "n": 538,
+   "segment": "NFL/prop"
+  }
+ ],
+ "candidates": 20,
+ "changes": [
+  {
+   "at": "2026-09-23T21:06:27Z",
+   "evidence": {
+    "current": null,
+    "heldOut": {
+     "k": -151.01,
+     "raw": -163.46
+    },
+    "hitRate": 0.524,
+    "kAll": 0.13,
+    "kTrain": 0.27,
+    "meanRaw": 0.622,
+    "n": 538,
+    "segment": "NFL/prop"
+   },
+   "from": null,
+   "knob": "calibration",
+   "segment": "NFL/prop",
+   "to": 0.13,
+   "why": "calibrated chances predicted the later record better than the raw ones"
+  }
+ ],
+ "gates": {},
+ "graded": 17,
+ "judge": {
+  "published": {
+   "clv": {
+    "high": 0.667,
+    "low": -0.833,
+    "mean": -0.067,
+    "n": 15
+   },
+   "graded": 17,
+   "record": {
+    "loss": 10,
+    "push": 0,
+    "units": -3.39,
+    "win": 7
+   }
+  }
+ },
+ "model": {
+  "CFB v1": {
+   "closeTotalMiss": 12.91,
+   "closerTotal": [
+    42,
+    33
+   ],
+   "games": 75,
+   "ourTotalMiss": 13.07
+  },
+  "CFB v2.0": {
+   "closeTotalMiss": 13.25,
+   "closerTotal": [
+    40,
+    31
+   ],
+   "games": 71,
+   "ourTotalMiss": 13.01
+  },
+  "NFL v1": {
+   "closeTotalMiss": 10.15,
+   "closerTotal": [
+    6,
+    11
+   ],
+   "games": 17,
+   "ourTotalMiss": 11.29
+  },
+  "NFL v2.0": {
+   "closeTotalMiss": 10.23,
+   "closerTotal": [
+    5,
+    10
+   ],
+   "games": 15,
+   "ourTotalMiss": 10.7
+  }
+ },
+ "posts": {},
+ "researcher": {},
+ "segments": [
+  {
+   "minEdge": 1.0,
+   "nearMisses": {
+    "clv": null,
+    "graded": 0,
+    "record": {
+     "loss": 0,
+     "push": 0,
+     "units": 0.0,
+     "win": 0
+    }
+   },
+   "paused": false,
+   "published": {
+    "clv": {
+     "high": 0.0,
+     "low": -0.5,
+     "mean": -0.25,
+     "n": 2
+    },
+    "graded": 2,
+    "record": {
+     "loss": 1,
+     "push": 0,
+     "units": -0.05,
+     "win": 1
+    }
+   },
+   "segment": "CFB/spread",
+   "since": null
+  },
+  {
+   "minEdge": 1.0,
+   "nearMisses": {
+    "clv": null,
+    "graded": 0,
+    "record": {
+     "loss": 0,
+     "push": 0,
+     "units": 0.0,
+     "win": 0
+    }
+   },
+   "paused": false,
+   "published": {
+    "clv": null,
+    "graded": 0,
+    "record": {
+     "loss": 0,
+     "push": 0,
+     "units": 0.0,
+     "win": 0
+    }
+   },
+   "segment": "CFB/total",
+   "since": null
+  },
+  {
+   "minEdge": 5.0,
+   "nearMisses": {
+    "clv": null,
+    "graded": 0,
+    "record": {
+     "loss": 0,
+     "push": 0,
+     "units": 0.0,
+     "win": 0
+    }
+   },
+   "paused": false,
+   "published": {
+    "clv": {
+     "high": 0.0,
+     "low": 0.0,
+     "mean": 0.0,
+     "n": 1
+    },
+    "graded": 2,
+    "record": {
+     "loss": 1,
+     "push": 0,
+     "units": 0.16,
+     "win": 1
+    }
+   },
+   "segment": "NFL/prop:rec",
+   "since": null
+  },
+  {
+   "minEdge": 5.0,
+   "nearMisses": {
+    "clv": null,
+    "graded": 0,
+    "record": {
+     "loss": 0,
+     "push": 0,
+     "units": 0.0,
+     "win": 0
+    }
+   },
+   "paused": false,
+   "published": {
+    "clv": {
+     "high": 2.2,
+     "low": -0.6,
+     "mean": 0.8,
+     "n": 5
+    },
+    "graded": 6,
+    "record": {
+     "loss": 3,
+     "push": 0,
+     "units": -0.35,
+     "win": 3
+    }
+   },
+   "segment": "NFL/prop:recYds",
+   "since": null
+  },
+  {
+   "minEdge": 5.0,
+   "nearMisses": {
+    "clv": null,
+    "graded": 0,
+    "record": {
+     "loss": 0,
+     "push": 0,
+     "units": 0.0,
+     "win": 0
+    }
+   },
+   "paused": false,
+   "published": {
+    "clv": {
+     "high": 1.0,
+     "low": -3.333,
+     "mean": -1.333,
+     "n": 3
+    },
+    "graded": 3,
+    "record": {
+     "loss": 3,
+     "push": 0,
+     "units": -3.0,
+     "win": 0
+    }
+   },
+   "segment": "NFL/prop:rushYds",
+   "since": null
+  },
+  {
+   "minEdge": 1.0,
+   "nearMisses": {
+    "clv": null,
+    "graded": 0,
+    "record": {
+     "loss": 0,
+     "push": 0,
+     "units": 0.0,
+     "win": 0
+    }
+   },
+   "paused": false,
+   "published": {
+    "clv": {
+     "high": 0.0,
+     "low": -0.375,
+     "mean": -0.125,
+     "n": 4
+    },
+    "graded": 4,
+    "record": {
+     "loss": 2,
+     "push": 0,
+     "units": -0.15,
+     "win": 2
+    }
+   },
+   "segment": "NFL/total",
+   "since": null
+  }
+ ]
+}

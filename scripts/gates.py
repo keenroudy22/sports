@@ -34,6 +34,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_site
 import features
 import integrity
+import learning
 import pricing
 from desk import current as current_snapshot
 from sports_refresh import eastern_date
@@ -89,6 +90,7 @@ class Context:
     player_team: dict = field(default_factory=dict)    # athleteId -> teamId in the latest stored game
     starters: dict = field(default_factory=dict)       # teamId -> usual starting quarterback's athleteId
     flags: dict = field(default_factory=lambda: dict(FLAGS))
+    policy: dict = field(default_factory=learning.default_policy)   # learned thresholds; the defaults are the written rules
 
     def snapshot(self, game_id):
         game = self.games.get(game_id)
@@ -424,8 +426,9 @@ def lean_edge(candidate, ctx):
         return Decision(False, 'lean_edge', 'v2 has no number for this line')
     if not desk.get('calibrated'):
         return Decision(False, 'lean_edge', 'the chance is uncalibrated; a model lean needs a calibrated chance')
-    if desk['edgePoints'] < LEAN_EDGE:
-        return Decision(False, 'lean_edge', f"{desk['edgePoints']:+.1f} points against break-even; needs {LEAN_EDGE:+.1f}")
+    need = max(LEAN_EDGE, learning.threshold(ctx.policy, 'lean.minEdge', learning.segment_of(candidate)))
+    if desk['edgePoints'] < need:
+        return Decision(False, 'lean_edge', f"{desk['edgePoints']:+.1f} points against break-even; needs {need:+.1f}")
     return Decision(True, 'lean_edge', f"{desk['edgePoints']:+.1f} points clear of break-even", {'edgePoints': desk['edgePoints']})
 
 
@@ -485,11 +488,44 @@ def prop_raw_edge(candidate, ctx):
     desk = desk_for(candidate, ctx)
     if not desk:
         return Decision(False, 'prop_raw_edge', 'v2 has no projection for this player and market')
-    if desk['rawChance'] < PROP_RAW:
-        return Decision(False, 'prop_raw_edge', f"raw chance {100 * desk['rawChance']:.1f}% is under {100 * PROP_RAW:.0f}%")
-    if desk['edgePoints'] < PROP_EDGE:
-        return Decision(False, 'prop_raw_edge', f"{desk['edgePoints']:+.1f} points against the price; needs {PROP_EDGE:+.0f}")
+    segment = learning.segment_of(candidate)
+    raw_need = max(PROP_RAW, learning.threshold(ctx.policy, 'prop.minRaw', segment))
+    edge_need = max(PROP_EDGE, learning.threshold(ctx.policy, 'prop.minEdge', segment))
+    if desk['rawChance'] < raw_need:
+        return Decision(False, 'prop_raw_edge', f"raw chance {100 * desk['rawChance']:.1f}% is under {100 * raw_need:.0f}%")
+    if desk['edgePoints'] < edge_need:
+        return Decision(False, 'prop_raw_edge', f"{desk['edgePoints']:+.1f} points against the price; needs {edge_need:+.0f}")
     return Decision(True, 'prop_raw_edge', f"raw {100 * desk['rawChance']:.1f}%, {desk['edgePoints']:+.1f} points")
+
+
+def learned_pause(candidate, ctx):
+    """A segment learning paused: its plays kept losing to the closing line even at the strictest setting."""
+    segment = learning.segment_of(candidate)
+    if learning.paused(ctx.policy, segment):
+        since = ((ctx.policy.get('segments') or {}).get(segment) or {}).get('since')
+        return Decision(False, 'learned_pause', f'{segment} is paused by learning since {since}: its plays kept losing to the close')
+    return Decision(True, 'learned_pause', f'{segment} is open')
+
+
+def prop_calibrated_value(candidate, ctx):
+    """Once learning has calibrated the raw player chances against the graded record, a prop must clear its
+    price on the calibrated chance too. Before that, the written raw-chance rule stands alone."""
+    league = candidate.get('league') or str(candidate.get('id', '')).split('-')[0]
+    cal = ((ctx.policy.get('calibration') or {}).get(f'{league}/prop') or {})
+    k = cal.get('k')
+    if k is None:
+        return Decision(True, 'prop_calibrated_value', 'no learned calibration for player chances yet')
+    desk = desk_for(candidate, ctx)
+    if not desk:
+        return Decision(False, 'prop_calibrated_value', 'v2 has no projection for this player and market')
+    chance = 0.5 + k * (desk['rawChance'] - 0.5)
+    edge = 100 * (chance - desk['breakEven'])
+    need = learning.threshold(ctx.policy, 'prop.minCalibratedEdge', learning.segment_of(candidate))
+    if edge < need:
+        return Decision(False, 'prop_calibrated_value',
+                        f"calibrated {100 * chance:.1f}% (raw {100 * desk['rawChance']:.1f}% shrunk by k {k:g}, learned from "
+                        f"{cal.get('n')} graded projections) is {edge:+.1f} points against the price; needs {need:+.0f}")
+    return Decision(True, 'prop_calibrated_value', f'calibrated {100 * chance:.1f}%, {edge:+.1f} points', {'calibratedChance': round(chance, 3)})
 
 
 def prop_settled_role(candidate, ctx):
@@ -609,9 +645,9 @@ def revision_frozen(candidate, ctx):
 COMMON = (not_started, expiry_ok, price_present, data_sanity, sources_https, not_duplicate, cfb_jurisdiction)
 SHOP = (one_book, best_quote_by_ev)
 RULES = {
-    'modelLean': COMMON + SHOP + (lean_is_total, lean_edge, lean_confidence, lean_daily_cap, lean_nothing_against, qb_available),
-    'propLean': COMMON + SHOP + (prop_raw_edge, prop_settled_role, prop_price_floor, prop_window_cap, prop_one_per_player,
-                                 prop_not_in_longshot, prop_injury_clear, prop_market_not_trailing, lean_nothing_against),
+    'modelLean': COMMON + SHOP + (lean_is_total, lean_edge, learned_pause, lean_confidence, lean_daily_cap, lean_nothing_against, qb_available),
+    'propLean': COMMON + SHOP + (prop_raw_edge, prop_calibrated_value, learned_pause, prop_settled_role, prop_price_floor, prop_window_cap,
+                                 prop_one_per_player, prop_not_in_longshot, prop_injury_clear, prop_market_not_trailing, lean_nothing_against),
     'favorite': COMMON + SHOP + (favorite_needs_reason, lean_nothing_against, qb_available, prop_injury_clear),
     'researched': COMMON + SHOP + (lean_nothing_against, qb_available, prop_injury_clear),
     'longshot': (not_started, expiry_ok, price_present, sources_https, longshot_one_per_day),
@@ -641,6 +677,7 @@ class Stores:
     """Everything on disk the gates read, loaded once; context() slices it as of any instant."""
 
     def __init__(self, root=ROOT, records=None):
+        self.root = Path(root)
         data = root / 'site' / 'data'
         self.slate = build_site.read(data / 'slate.json', {'games': []})
         self.reports = [json.loads(p.read_text(encoding='utf-8')) for p in sorted((root / 'research').glob('*.json'))]
@@ -713,7 +750,7 @@ def context(now, stores, flags=None):
                    snapshots=stores.snapshots, injuries=injuries_by_team(stores.context_file),
                    scoreboard=stores.scoreboard, first=first, latest=latest, appearances=appearances,
                    established=established, names=names, player_team=player_team, starters=starters,
-                   flags=dict(FLAGS, **(flags or {})))
+                   flags=dict(FLAGS, **(flags or {})), policy=learning.load_policy(stores.root / 'data' / 'learning' / 'policy.json'))
 
 
 def main(argv=None):

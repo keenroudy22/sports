@@ -50,7 +50,7 @@ EASTERN = gates.EASTERN
 SLOT_TOLERANCE = timedelta(minutes=40)     # a run that fires this far from a slot still belongs to it
 PUBLISH_MARGIN = timedelta(minutes=5)      # nothing is published on a game this close to kickoff
 KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'favorite')
-WHITELIST = ('research/', 'data/odds/', 'data/prop-odds/', 'data/x-posted.json')
+WHITELIST = ('research/', 'data/odds/', 'data/prop-odds/', 'data/x-posted.json', 'data/learning/')
 BOOK_SLUG = {'DraftKings': 'dk', 'FanDuel': 'fd', 'BetMGM': 'mgm', 'Caesars': 'czr', 'BetRivers': 'br',
              'ESPN BET': 'espnbet', 'Fanatics': 'fan'}
 VOLUME = {'recYds': 'targets', 'rec': 'targets', 'rushYds': 'carries', 'car': 'carries',
@@ -584,6 +584,7 @@ def judge(candidate, facts, use_llm, status=None):
     """
     if use_llm:
         verdict = llm_tasks.judge_against(candidate, facts)
+        candidate['_verdict'] = verdict
         if verdict is not None:
             if status is not None:
                 status['llm']['judged'] += 1
@@ -595,6 +596,71 @@ def judge(candidate, facts, use_llm, status=None):
         if status is not None:
             status['llm']['unavailable'] = status['llm'].get('unavailable', 0) + 1
     return hold_reason(candidate, facts)
+
+
+def decision_record(candidate, league, decision, rules, reason, now, ctx):
+    """One line of the learning record: what was considered, on what numbers, and what the desk decided."""
+    import learning
+    import pick_card
+    from urllib.parse import urlparse
+    desk = candidate.get('_desk') or {}
+    game = ctx.games.get((candidate.get('gameIds') or [None])[0]) or {}
+    facts = candidate.get('_evidence') or []
+    verdict = candidate.get('_verdict') or {}
+    row = dict(candidate, league=league)
+    return {'id': candidate.get('id'), 'league': league, 'season': game.get('season') or now.year,
+            'segment': learning.segment_of(row), 'kind': pick_card.play_kind(row), 'title': candidate.get('title'),
+            'marketType': candidate.get('marketType'), 'market': candidate.get('market'), 'athleteId': candidate.get('athleteId'),
+            'direction': candidate.get('direction'), 'line': candidate.get('line'), 'odds': candidate.get('odds'),
+            'book': candidate.get('book'), 'gameIds': candidate.get('gameIds'), 'kickoff': game.get('kickoff'),
+            'legs': len(candidate['legs']) if candidate.get('legs') else None,
+            'projection': desk.get('projection'), 'chance': desk.get('chance'), 'rawChance': desk.get('rawChance'),
+            'breakEven': desk.get('breakEven'), 'edgePoints': desk.get('edgePoints'), 'evPerUnit': desk.get('evPerUnit'),
+            'confidence': candidate.get('confidence'), 'favorite': candidate.get('favorite') is True,
+            'decision': decision, 'rules': list(rules), 'reason': reason, 'decidedAt': stamp(now),
+            'facts': {'for': sum(1 for f in facts if f.get('direction') == 'for'),
+                      'against': sum(1 for f in facts if f.get('direction') == 'against'),
+                      'kinds': sorted({str(f.get('kind')) for f in facts if f.get('kind')})},
+            'judge': {'against': verdict.get('argues_against'), 'confidence': verdict.get('confidence'),
+                      'facts': len(verdict.get('fact_ids') or [])} if verdict else None,
+            'research': [{'domain': urlparse(str(f.get('source') or '')).netloc.lower().removeprefix('www.'),
+                          'verified': bool(f.get('verified')), 'kind': f.get('kind'), 'direction': f.get('direction')}
+                         for f in candidate.get('_research') or []]}
+
+
+def remember(decided, now, slot, status):
+    """Write this run's decisions to the learning record (only what changed since the last time each candidate
+    was decided), grade whatever has finished, and on Tuesday morning run the week's learning. Learning never
+    fails a run: its errors are reported and the run goes on."""
+    import learn
+    import learning
+    try:
+        fresh = {}
+        for row in decided:
+            if not row.get('id'):
+                continue
+            season = row['season']
+            if season not in fresh:
+                last = {}
+                for old in learning.read('candidates', season):
+                    last[old['id']] = (old['decision'], tuple(old.get('rules') or []))
+                fresh[season] = (last, [])
+            last, out = fresh[season]
+            key = (row['decision'], tuple(row['rules']))
+            if last.get(row['id']) != key:
+                last[row['id']] = key
+                out.append(row)
+        recorded = sum(learning.append('candidates', season, out) for season, (_, out) in fresh.items())
+        graded = learn.grade_pending(now)
+        status['learning'] = {'recorded': recorded, 'graded': graded}
+        log(f'learning: {recorded} decisions recorded, {graded} candidates graded')
+        if slot.weekday() == 1 and slot.hour == 8:
+            report = learn.weekly(now)
+            status['learning']['changes'] = len(report['changes'])
+            log(f"learning: weekly step, {len(report['changes'])} changes; see data/learning/REPORT.md")
+    except Exception as error:          # the record is worth keeping, never worth a failed run
+        status['errors'].append(f'learning: {type(error).__name__}: {error}')
+        log(f'learning: {type(error).__name__}: {error}')
 
 
 RESEARCH_LIMIT = 6          # candidates the web researcher is asked about per run, strongest first
@@ -923,6 +989,7 @@ def _run(args, now, slot, kinds, status):
     lines = load_json(build_site.OUT / 'lines.json', {'lines': []})['lines']
     wanted = candidates(lines, games, now)
     log(f'{len(wanted)} candidates on the board')
+    decided = []          # every decision this run made, for the learning record
     research_on = researcher.enabled() and slot.hour in (8, 17) and 'favorite' in kinds
     status['research'] = {'on': research_on, 'asked': 0, 'verified': 0, 'dropped': 0}
     for candidate in wanted:
@@ -936,6 +1003,7 @@ def _run(args, now, slot, kinds, status):
         if research_on and status['research']['asked'] < RESEARCH_LIMIT:
             game = ctx.games[candidate['gameIds'][0]]
             kept, dropped = researcher.research(game, gates.market_key(candidate), gates.side_of(candidate), now=now)
+            candidate['_research'] = [dict(f, verified=True) for f in kept] + [dict(f, verified=False) for f in dropped]
             status['research']['asked'] += 1
             status['research']['verified'] += len(kept)
             status['research']['dropped'] += len(dropped)
@@ -947,6 +1015,7 @@ def _run(args, now, slot, kinds, status):
         if hold:
             screened.append({'league': league, 'gameId': candidate['gameIds'][0], 'title': candidate['title'],
                              'rule': 'held', 'reason': hold})
+            decided.append(decision_record(candidate, league, 'held', ['held'], hold, now, ctx))
             continue
         if research_on and promote(candidate, facts, use_llm, status):
             log(f"favorite: {candidate['title']} ({candidate.get('_supportNote')})")
@@ -963,12 +1032,14 @@ def _run(args, now, slot, kinds, status):
             first = gates.refusals(decisions)[0]
             screened.append({'league': league, 'gameId': candidate['gameIds'][0], 'title': candidate['title'],
                              'rule': first.rule, 'reason': first.reason})
+            decided.append(decision_record(candidate, league, 'refused', [d.rule for d in gates.refusals(decisions)], first.reason, now, ctx))
             continue
         # Admitted picks join the day's count so the caps hold within one run.
         kind = 'props' if candidate.get('athleteId') else 'gamePicks'
         ctx.first[candidate['id']] = dict(candidate, league=league, publishedAt=stamp(now), kind=kind)
         ctx.latest[candidate['id']] = dict(candidate)
         published.append((league, kind, candidate))
+        decided.append(decision_record(candidate, league, 'published', [], None, now, ctx))
     if 'longshot' in kinds:
         for league in ('NFL', 'CFB'):
             ticket, reason = longshot_candidate(lines, games, now, league)
@@ -980,7 +1051,10 @@ def _run(args, now, slot, kinds, status):
             if ok:
                 ctx.first[ticket['id']] = dict(ticket, league=league, publishedAt=stamp(now), kind='parlays')
                 published.append((league, 'parlays', ticket))
+                decided.append(decision_record(ticket, league, 'published', [], None, now, ctx))
                 break
+            decided.append(decision_record(ticket, league, 'refused', [d.rule for d in gates.refusals(decisions)],
+                                           gates.refusals(decisions)[0].reason, now, ctx))
             screened.append({'league': league, 'gameId': ticket['gameIds'][0], 'title': ticket['title'],
                              'rule': gates.refusals(decisions)[0].rule, 'reason': gates.refusals(decisions)[0].reason})
 
@@ -1015,6 +1089,7 @@ def _run(args, now, slot, kinds, status):
             status['checks'].append('tests green')
     drafts(slot, now, ctx, games, settled, status)
     if not args.dry_run:
+        remember(decided, now, slot, status)
         git_result = commit_push(now, slot, {'published': len(published), 'settled': len(settled), 'closed': len(closed)},
                                  push=not args.no_push)
         status['git'] = git_result
@@ -1105,6 +1180,7 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         channel = buffer_post.x_channel(wanted='keenkooks')
         for entry in buffer_post.reconcile(log_book, now, log=log):
             status['errors'].append(f"buffer: {entry['id']} failed to post: {entry['error']}")
+        buffer_post.collect_metrics(log_book, now, log=log)
         closed_ids = {revision['id'] for _, _, revision in closed}
         if closed_ids:
             buffer_post.cancel_closed(closed_ids, log_book, now, log=log)

@@ -205,6 +205,8 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None):
     `soon` replaces the two-minute lead, for a person who wants time to look at the queue first.
     """
     soon = soon if soon is not None else SOON
+    import learning
+    weights = learning.load_policy().get('reasonWeights')
     posted = {p['id'] for p in log_book.get('posts', [])}
     today = eastern_date(now)
     opens = window_open(today)
@@ -219,7 +221,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None):
         if not starts or eastern_date(gates.when(starts[0])) != today:
             continue
         game = games.get((merged.get('gameIds') or [None])[0])
-        text = x_post.draft(merged, game)
+        text = x_post.draft(merged, game, weights)
         if x_post.guard(text, merged):
             continue
         kickoff = gates.when(starts[0])
@@ -258,8 +260,11 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         except BufferError as error:
             log(f'buffer: {guid} not scheduled: {error}')
             continue
-        log_book.setdefault('posts', []).append({'id': guid, 'postedAt': gates.stamp(now), 'dueAt': gates.stamp(due), 'bufferPostId': post_id,
-                                                 'textHash': x_post.text_hash(text), 'kind': f'buffer:{kind}', 'card': bool(image)})
+        entry = {'id': guid, 'postedAt': gates.stamp(now), 'dueAt': gates.stamp(due), 'bufferPostId': post_id,
+                 'textHash': x_post.text_hash(text), 'kind': f'buffer:{kind}', 'card': bool(image)}
+        if kind == 'play':
+            entry['reasonKind'] = x_post.reason_kind(x_post.reason_in(text))      # what learning compares engagement by
+        log_book.setdefault('posts', []).append(entry)
         log(f"buffer: {guid} scheduled for {due.astimezone(gates.EASTERN):%a %-I:%M %p} ET" + (' with card' if image else ''))
     return log_book
 
@@ -279,6 +284,31 @@ def cancel_closed(closed_ids, log_book, now, key=None, send=http_send, log=print
 
 
 STATUS = 'query($id: PostId!) { post(input: {id: $id}) { id status sentAt externalLink error { message } } }'
+METRICS = 'query($id: PostId!) { post(input: {id: $id}) { id metricsUpdatedAt metrics { type value } } }'
+SETTLE_METRICS = timedelta(hours=48)     # engagement is read once, two days after a post went out
+
+
+def collect_metrics(log_book, now, key=None, send=http_send, log=print):
+    """Read each sent post's engagement once, two days after it went out, into the log for learning. Needs the
+    key's insights:read permission; without it this says so once and leaves everything as it was."""
+    read = 0
+    for entry in log_book.get('posts', []):
+        if not entry.get('bufferPostId') or not entry.get('sentAt') or entry.get('metricsAt') or entry.get('deletedAt'):
+            continue
+        if gates.when(entry['sentAt']) > now - SETTLE_METRICS:
+            continue
+        try:
+            post = graphql(METRICS, {'id': entry['bufferPostId']}, key=key, send=send).get('post') or {}
+        except BufferError as error:
+            if 'insights' in str(error).lower() or 'scope' in str(error).lower():
+                log('buffer: engagement not read: the key lacks the insights:read permission')
+                return read
+            log(f"buffer: engagement for {entry['id']} not read: {error}")
+            continue
+        entry['metrics'] = {m['type']: m['value'] for m in post.get('metrics') or [] if isinstance(m.get('value'), (int, float))}
+        entry['metricsAt'] = gates.stamp(now)
+        read += 1
+    return read
 
 
 def reconcile(log_book, now, key=None, send=http_send, log=print):

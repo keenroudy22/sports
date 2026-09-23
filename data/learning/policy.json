@@ -1,0 +1,80 @@
+{
+ "calibration": {
+  "NFL/prop": {
+   "at": "2026-09-23T21:06:27Z",
+   "heldOut": {
+    "k": -151.01,
+    "raw": -163.46
+   },
+   "k": 0.13,
+   "n": 538
+  }
+ },
+ "history": [
+  {
+   "at": "2026-09-23T21:06:27Z",
+   "evidence": {
+    "current": null,
+    "heldOut": {
+     "k": -151.01,
+     "raw": -163.46
+    },
+    "hitRate": 0.524,
+    "kAll": 0.13,
+    "kTrain": 0.27,
+    "meanRaw": 0.622,
+    "n": 538,
+    "segment": "NFL/prop"
+   },
+   "from": null,
+   "knob": "calibration",
+   "segment": "NFL/prop",
+   "to": 0.13,
+   "why": "calibrated chances predicted the later record better than the raw ones"
+  }
+ ],
+ "knobs": {
+  "lean.minEdge": {
+   "about": "Points a model lean must clear break-even by (calibrated chance, in points).",
+   "cap": 3.0,
+   "floor": 1.0,
+   "step": 0.5,
+   "value": 1.0
+  },
+  "prop.minCalibratedEdge": {
+   "about": "Points a prop's learned, calibrated chance must clear its price by.",
+   "cap": 5.0,
+   "floor": 0.0,
+   "step": 1.0,
+   "value": 0.0
+  },
+  "prop.minEdge": {
+   "about": "Points a prop lean's raw chance must clear its price by.",
+   "cap": 12.0,
+   "floor": 5.0,
+   "step": 1.0,
+   "value": 5.0
+  },
+  "prop.minRaw": {
+   "about": "The raw chance a prop lean must reach.",
+   "cap": 0.7,
+   "floor": 0.6,
+   "step": 0.02,
+   "value": 0.6
+  }
+ },
+ "reasonWeights": {
+  "injury": 1.0,
+  "market": 1.0,
+  "other": 1.0,
+  "role": 1.0,
+  "stats": 1.0,
+  "weather": 1.0
+ },
+ "researcher": {
+  "avoidDomains": [],
+  "preferDomains": []
+ },
+ "segments": {},
+ "version": 1
+}

@@ -10,6 +10,7 @@ rules in words. When this file and the validator disagree, the validator wins.
 | Script | Job |
 |---|---|
 | `scripts/run.py` | One scheduled run: sync, capture prices, settle finals, close picks whose line moved, build the board, price the candidates our number likes, gather sourced facts, hold what the facts argue against, run every candidate through the gates, write one report per league, validate, commit the whitelisted paths and push. |
+| `scripts/learning.py`, `scripts/learn.py` | The desk learning from its own record: every candidate recorded and graded, the weekly step that adjusts what it may (see Learning below). |
 | `scripts/gates.py` | The publishing rules, one function per rule. A candidate passes every gate or it is not published. `python scripts/gates.py CANDIDATE.json` evaluates one. |
 | `scripts/replay_gates.py` | Every published pick back through the gates as of its publication, with what would have been refused and why. |
 | `scripts/llm.py`, `scripts/llm_tasks.py` | The local model (Ollama, on this machine) and the two guards on its prose: the house style and the numbers guard. The model polishes templated `why` and `risk`, drafts posts and weighs the facts against a candidate. It never adds a number. |
@@ -166,3 +167,39 @@ large against the close. A model lean's `why` ends with it; game cards carry it 
 line (headless, web search and fetch only) for sourced facts about the strongest candidates, fetches every
 source URL itself and keeps a fact only when each named person is on the page. Verified facts feed the
 gates' `favorite_needs_reason` rule; nothing unverified is argued from.
+
+## Learning
+
+The desk keeps a record of every decision and grades it, so every part can be measured and the parts that may
+be adjusted are adjusted by rule, not by feel (`scripts/learning.py`, `scripts/learn.py`, all under `data/learning/`).
+
+- **The record.** Every run writes each candidate it priced to `candidates-<season>.jsonl`: the numbers it was
+  decided on (projection, raw and calibrated chance, edge, price, book), what the facts and the judge said, what
+  the researcher found and whether it checked out, and the decision (published, refused with every failing rule,
+  or held). Only a changed decision is written again. Every run then grades whatever has finished into
+  `graded-<season>.jsonl`: the result from the stored box score and the **closing line value**, how far the market
+  moved toward our side by kickoff. Both files are append-only with a ledger, like every other store. The
+  season's picks published before the record existed were put on it once (`learn.py backfill`).
+- **The weekly step** runs at the Tuesday 8:30 AM slot, after Monday night is graded (`learn.py weekly`):
+  - *Segments* (league and market: NFL totals, NFL receiving yards, ...), judged only on what each published
+    since its last change. With 30 graded plays losing to the close (the 90% interval of closing line value below
+    zero), its minimum edge rises one step; still losing at the strictest setting, it pauses (`learned_pause`).
+    With 30 beating the close and 20 near misses (refused only by an edge rule) beating it too, it eases one step
+    back. The floors are the written rules in `PROMPT.md`: learning makes the desk pickier, never looser than
+    the rules, and a paused segment reopens only when what it refused kept beating the close.
+  - *Player chances.* Raw prop chances are calibrated against every graded projection (each projected player
+    against the last DraftKings line and the box score). A calibration ships only when it predicts the later part
+    of the record better than the raw chances and better than the one in use; after that a prop must also clear
+    its price on the calibrated chance (`prop_calibrated_value`). First run, 2026-09-23: 538 projections, the
+    favoured side came in 52.4% against a raw 62.2%, k 0.13 shipped.
+  - *Measured and reported*: what each rule refused and how it did, the judge's holds against what was published,
+    the number against the close. The written rules for these stay as written; the report says what they cost.
+  - *The researcher* is told which sites' facts keep checking out (preferred) and which keep failing (avoided).
+  - *Posts*: each play post records the kind of reason it gave (injury, weather, market, role, stats). Two days
+    after a post goes out its engagement is read from Buffer (needs the key's `insights:read` permission), and
+    the reason ranking leans toward the kinds people engage with, within 0.8 to 1.25. The look, the timing and
+    the format never change on their own.
+- Every change is a line in `policy.json`'s history with its evidence, and the week's findings are in
+  `data/learning/REPORT.md`. A learning error is reported and never fails a run. Changes to the model itself
+  still ship only by the holdout rule (README).
+

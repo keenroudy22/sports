@@ -261,12 +261,43 @@ def plain(sentence):
     return len(sentence) <= REASON_MAX and not any(word in low for word in JARGON) and not x_style(sentence)
 
 
-def reason_for(pick):
+REASON_WORDS = (      # weather first: "no wind called out" is about the weather, not an injury
+    ('weather', ('wind', 'rain', 'snow', 'forecast', 'degrees', 'mph', 'weather', 'storm', 'cold')),
+    ('injury', (' out', 'doubtful', 'questionable', 'injur', 'inactive', 'without', 'listed', 'ruled', 'return')),
+    ('market', ('opened', 'moved', 'books', 'on the board', 'price', 'draftkings', 'fanduel', 'betmgm', 'espn bet',
+                'caesars', 'betrivers', 'number', 'market')),
+    ('role', ('role', 'targets', 'snaps', 'starter', 'share', 'touches', 'carries', 'receiver', 'tight end', 'backfield')),
+    ('stats', ('last', 'average', 'allowed', 'per game', 'a game', 'season', 'held', 'scored')),
+)
+
+
+def reason_kind(sentence):
+    """What a reason is about, for learning which kinds of reasons people engage with."""
+    low = f' {str(sentence or "").lower()} '
+    for kind, words in REASON_WORDS:
+        if any(word in low for word in words):
+            return kind
+    return 'other' if sentence else 'none'
+
+
+def reason_in(text):
+    """The reason sentence of a drafted play post: the line after its number line, when there is one."""
+    lines = str(text or '').split('\n')
+    for i, line in enumerate(lines[:-1]):
+        if line.startswith('Our number') and lines[i + 1].strip() and not lines[i + 1].startswith(('@', '#')):
+            return lines[i + 1]
+    return None
+
+
+def reason_for(pick, weights=None):
     """One plain sentence from the pick's own reasoning: short, free of the desk's arithmetic words, the most
     specific first. A long sentence may give one clean clause ("Saturday in Ann Arbor is forecast sunny and 68
     with no wind called out, so ..." gives the forecast). None when every sentence is arithmetic; the post then
     stands on the play and the number."""
-    for sentence in reasons_for(pick):
+    ranked = reasons_for(pick)
+    if weights:
+        ranked = sorted(ranked, key=lambda s: (-(specificity(s) + 1) * float(weights.get(reason_kind(s), 1.0)), len(s)))
+    for sentence in ranked:
         if plain(sentence):
             return sentence
         for clause in llm.re.split(r',\s+(?:so|which|while|but|and)\s+|;\s+|:\s+', sentence):
@@ -284,7 +315,7 @@ def reason_for(pick):
 PLAYBOOK = '@Playbook'     # the betslip bot (Action Network): tagged on a bet, it replies with the slip pre-loaded
 
 
-def draft(pick, game=None):
+def draft(pick, game=None, weights=None):
     """The post, the same shape every time:
 
         🍳 PLAYER PROP | TEAM PROP | FUN PARLAY   (· FAVORITE for a researched pick)
@@ -312,7 +343,7 @@ def draft(pick, game=None):
     else:
         top = '\n'.join([head, str(pick.get('title') or ''), price])
         number = pick_card.number_line(pick)
-        reason = reason_for(pick)
+        reason = reason_for(pick, weights)
         options = ([top, '\n'.join(x for x in (number, reason) if x), tail], [top, number, tail], [top, tail])
     for parts in options:
         text = '\n\n'.join(part for part in parts if part)
