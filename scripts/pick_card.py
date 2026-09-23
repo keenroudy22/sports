@@ -111,6 +111,7 @@ def side_for(pick, game, player_side=None):
 PAN = ('<g transform="translate({x},{y}) scale({s})" fill="none" stroke="{c}" stroke-width="7" stroke-linecap="round">'
        '<circle cx="34" cy="34" r="26"/><path d="M60 34 H108"/><circle cx="34" cy="34" r="12" stroke-width="4" stroke-opacity="0.6"/></g>')
 AVATAR = ROOT / 'site' / 'kookn.jpg'     # the @keenkooks profile picture, the kitchen's face
+CHEF = ROOT / 'site' / 'kookn-chef.png'  # the same chef cut out of that picture (macOS subject lifting), served on the plate
 
 
 def avatar_uri(path=AVATAR):
@@ -128,6 +129,19 @@ def badge(x, y, r, uri, ring):
     return (f'<defs><clipPath id="badge"><circle cx="{x}" cy="{y}" r="{r}"/></clipPath></defs>'
             f'<image href="{uri}" x="{x - r}" y="{y - r}" width="{2 * r}" height="{2 * r}" clip-path="url(#badge)" preserveAspectRatio="xMidYMid slice"/>'
             f'<circle cx="{x}" cy="{y}" r="{r}" fill="none" stroke="{ring}" stroke-width="4"/>')
+
+
+def plate(cx, cy, uri, light):
+    """The plate every card serves on, with the chef in it: the cutout scaled past the rim so the edges of the
+    source picture (the hat's top, the shoulders) fall outside, and the rim drawn over it."""
+    r, size = 178, 380
+    parts = [f'<circle cx="{cx}" cy="{cy}" r="215" fill="{CREAM}" fill-opacity="{0.10 if not light else 0.35}"/>',
+             f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="{CREAM}" fill-opacity="{0.16 if not light else 0.45}"/>']
+    if uri:
+        parts += [f'<defs><clipPath id="plate"><circle cx="{cx}" cy="{cy}" r="{r}"/></clipPath></defs>',
+                  f'<image href="{uri}" x="{cx - 195}" y="{cy - r - 22}" width="{size}" height="{size}" clip-path="url(#plate)"/>']
+    parts.append(f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="{CREAM}" stroke-opacity="{0.35 if not light else 0.6}" stroke-width="4"/>')
+    return parts
 
 
 KINDS = {'player': 'PLAYER PROP', 'team': 'TEAM PROP', 'parlay': 'FUN PARLAY'}
@@ -148,7 +162,7 @@ def kicker(pick):
 
 def svg(pick, game=None, record=None, when=None, player_side=None, identities=None, avatar=None):
     """The card. Every number on it is a field of the pick or the record handed in."""
-    avatar = avatar_uri() if avatar is None else avatar
+    chef = avatar_uri(CHEF) if avatar is None else avatar
     side = side_for(pick, game, player_side)
     primary, alternate = team_colors(game, side, identities)
     other, _ = team_colors(game, 'away' if side == 'home' else 'home', identities)
@@ -204,12 +218,11 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
         f'<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{primary}"/><stop offset="0.72" stop-color="{shade(primary, 0.8)}"/><stop offset="1" stop-color="{other}"/></linearGradient>',
         '</defs>',
         f'<rect width="{WIDTH}" height="{HEIGHT}" fill="url(#bg)"/>',
-        # a plate: the pale disc the play is served on
-        f'<circle cx="{WIDTH - 250}" cy="{HEIGHT // 2 + 20}" r="215" fill="{CREAM}" fill-opacity="{0.10 if not light else 0.35}"/>',
-        f'<circle cx="{WIDTH - 250}" cy="{HEIGHT // 2 + 20}" r="180" fill="none" stroke="{CREAM}" stroke-opacity="{0.18 if not light else 0.5}" stroke-width="3"/>',
+        # the plate the play is served on, the chef in it: the same on every card
+        *plate(WIDTH - 250, HEIGHT // 2 + 20, chef, light),
         f'<rect x="36" y="36" width="{WIDTH - 72}" height="{HEIGHT - 72}" rx="30" fill="none" stroke="{accent}" stroke-opacity="0.55" stroke-width="3"/>',
-        badge(114, 104, 40, avatar, accent) if avatar else PAN.format(x=72, y=72, s=0.62, c=accent),
-        f'<text x="{176 if avatar else 152}" y="118" fill="{ink}" font-size="34" font-weight="800" letter-spacing="5">KOOK’N</text>',
+        PAN.format(x=72, y=78, s=0.5, c=accent),
+        f'<text x="140" y="116" fill="{ink}" font-size="34" font-weight="800" letter-spacing="5">KOOK’N</text>',
         f'<text x="{WIDTH - 80}" y="116" fill="{soft}" font-size="26" font-weight="700" letter-spacing="3" text-anchor="end">{esc(label)}</text>',
         f'<text x="80" y="212" fill="{soft}" font-size="32">{esc(matchup)}</text>',
         f'<text x="80" y="262" fill="{accent}" font-size="24" font-weight="700" letter-spacing="4">TODAY’S PLATE</text>',
@@ -244,16 +257,16 @@ def title_lines(title, width=26, limit=30):
 
 
 def parlay_body(legs, price, book, ink, soft, accent, title_size):
-    """A parlay's legs down the left, one per line, and its price served on the plate."""
-    top = 262 + title_size + 4 + 52
-    shown = legs[:5]
-    rows = [f'<text x="80" y="{top + 40 * i}" fill="{ink}" font-size="27">• {esc(fit(leg, 44))}</text>' for i, leg in enumerate(shown)]
+    """A parlay in the same frame as every other card: its legs where a single play's numbers go, and its
+    price on the "Served at" line."""
+    top = 262 + title_size + 4 + 44
+    shown = legs if len(legs) <= 5 else legs[:4]
+    rows = [f'<text x="80" y="{top + 34 * i}" fill="{ink}" font-size="26">• {esc(fit(leg, 40))}</text>' for i, leg in enumerate(shown)]
     if len(legs) > len(shown):
-        rows.append(f'<text x="80" y="{top + 40 * len(shown)}" fill="{soft}" font-size="24">and {len(legs) - len(shown)} more</text>')
-    cx = WIDTH - 250
-    rows += [f'<text x="{cx}" y="{HEIGHT // 2 + 20}" fill="{ink}" font-size="92" font-weight="800" text-anchor="middle">{esc(price)}</text>',
-             f'<text x="{cx}" y="{HEIGHT // 2 + 68}" fill="{soft}" font-size="30" font-weight="600" text-anchor="middle">{esc(book)}</text>',
-             f'<text x="{cx}" y="{HEIGHT // 2 + 118}" fill="{accent}" font-size="22" font-weight="700" letter-spacing="3" text-anchor="middle">QUARTER UNIT · FOR FUN</text>']
+        rows.append(f'<text x="80" y="{top + 34 * len(shown)}" fill="{soft}" font-size="24">and {len(legs) - len(shown)} more</text>')
+    rows.append(f'<text x="80" y="562" fill="{soft}" font-size="26" letter-spacing="1">Served at <tspan fill="{ink}" font-size="44" '
+                f'font-weight="800" letter-spacing="0" dx="8">{esc(price)}</tspan><tspan fill="{soft}" font-size="30" font-weight="600" '
+                f'letter-spacing="0" dx="14">{esc(book)}</tspan><tspan fill="{soft}" font-size="22" letter-spacing="0" dx="14">· quarter unit</tspan></text>')
     return rows
 
 

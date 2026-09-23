@@ -101,9 +101,11 @@ He has caught 6 in each of his last 2 games.
 The reason is one sentence of the pick's own `why`, short and free of the desk's arithmetic words; when
 every sentence is arithmetic the post stands on the play and the number. A parlay lists its legs and says
 "Quarter unit. Just for fun." There is no link (X shows fewer people a post that leaves the site); the card
-carries keenroudy.com/sports. Every post carries its card (`scripts/pick_card.py`): the kitchen, the same
-label as the post, in the colours of the side the play is on; a parlay's card lists the legs and serves the
-price on the plate.
+carries keenroudy.com/sports. Every post carries its card (`scripts/pick_card.py`), one frame for every kind:
+the KOOK'N wordmark and pan, the same label as the post, the play, "Served at" its price, and the chef on the
+plate (`site/kookn-chef.png`, the profile picture's chef cut out with macOS subject lifting), in the colours of
+the side the play is on. Only the colours and the words change. A parlay lists its legs where a single play's
+numbers go.
 
 X meters posting through its API, so the desk posts through **Buffer** (`scripts/buffer_post.py`, free plan:
 Buffer's own X access, 3,000 API requests a month, an exact `dueAt` per post, an image by public URL,

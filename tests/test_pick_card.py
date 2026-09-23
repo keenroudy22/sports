@@ -31,17 +31,16 @@ class CardTests(unittest.TestCase):
         self.assertIn('>TEAM PROP<', pick_card.svg(dict(PICK, favorite=False, modelLean=True)))
         self.assertIn('>PLAYER PROP<', pick_card.svg(dict(PICK, favorite=False, modelLean=True, athleteId='1')))
 
-    def test_a_parlay_card_lists_its_legs_and_serves_the_price_on_the_plate(self):
+    def test_a_parlay_card_lists_its_legs_in_the_same_frame(self):
         ticket = {'title': '3-leg longshot at DraftKings', 'parlayType': 'longshot', 'odds': 650, 'book': 'DraftKings', 'confidence': 1,
                   'legs': [{'title': 'Bills at Lions over 44.5'}, {'title': 'Jets +3'}, {'title': 'Player Seven over 4.5 receptions'}]}
         text = pick_card.svg(ticket, GAME)
         for needle in ('FUN PARLAY', '3-leg parlay', '• Bills at Lions over 44.5', '• Jets +3', '• Player Seven over 4.5 receptions',
-                       '+650', 'DraftKings', 'QUARTER UNIT · FOR FUN', 'KOOK’N'):
+                       '+650', 'DraftKings', '· quarter unit', 'Served at', 'KOOK’N'):
             self.assertIn(needle, text, needle)
         self.assertNotIn('Confidence', text)
-        self.assertNotIn('Served at', text)
         many = pick_card.svg(dict(ticket, legs=[{'title': f'Leg {i}'} for i in range(7)]), GAME)
-        self.assertIn('and 2 more', many)
+        self.assertIn('and 3 more', many, 'five legs fit; past that, four and a count')
         self.assertEqual(pick_card.play_kind(ticket), 'parlay')
         self.assertEqual(pick_card.play_kind({'market': 'rec'}), 'player')
         self.assertEqual(pick_card.play_kind({'marketType': 'spread'}), 'team')
@@ -63,14 +62,19 @@ class CardTests(unittest.TestCase):
         self.assertGreater(pick_card.luminance('#ffffff'), pick_card.luminance('#000000'))
         self.assertEqual(pick_card.shade('#808080', 0.5), '#404040')
 
-    def test_the_avatar_badge_rides_when_the_picture_exists_and_the_pan_otherwise(self):
-        with_avatar = pick_card.svg(PICK, GAME, avatar='data:image/jpeg;base64,AAAA')
-        self.assertIn('<image href="data:image/jpeg;base64,AAAA"', with_avatar)
-        self.assertIn('clip-path="url(#badge)"', with_avatar)
-        without = pick_card.svg(PICK, GAME, avatar='')
-        self.assertNotIn('<image', without)
-        self.assertIn('stroke-linecap="round"', without, 'the pan stands in')
+    def test_every_card_serves_the_chef_on_the_plate_and_the_pan_in_the_corner(self):
+        ticket = {'title': 't', 'parlayType': 'longshot', 'odds': 650, 'book': 'DK', 'legs': [{'title': 'x over 1'}, {'title': 'y under 2'}]}
+        prop = dict(PICK, favorite=False, modelLean=True, athleteId='1')
+        for pick in (PICK, prop, ticket):
+            card = pick_card.svg(pick, GAME, avatar='data:image/png;base64,AAAA')
+            self.assertEqual(card.count('<image href="data:image/png;base64,AAAA"'), 1, 'one chef, on the plate')
+            self.assertIn('clip-path="url(#plate)"', card)
+            self.assertIn('stroke-linecap="round"', card, 'the pan marks the corner')
+            self.assertIn('Served at', card, 'every kind prices on the same line')
+        self.assertNotIn('<image', pick_card.svg(PICK, GAME, avatar=''), 'no picture, an empty plate')
         self.assertIsNone(pick_card.avatar_uri(Path('/nonexistent/kookn.jpg')))
+        self.assertTrue(pick_card.CHEF.exists(), 'the cutout ships with the site')
+        self.assertTrue(pick_card.avatar_uri(pick_card.CHEF).startswith('data:image/png;base64,'))
 
     def test_long_titles_wrap_to_two_lines_and_only_then_trim(self):
         self.assertEqual(pick_card.title_lines('Courtland Sutton OVER 3.5 receptions'), ['Courtland Sutton', 'OVER 3.5 receptions'])
