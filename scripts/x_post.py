@@ -41,7 +41,9 @@ LIMIT = 280
 URL_LENGTH = 23           # X counts every link as 23 characters
 CRED_KEYS = {'consumer_key': 'X_API_KEY', 'consumer_secret': 'X_API_SECRET', 'token': 'X_ACCESS_TOKEN', 'token_secret': 'X_ACCESS_SECRET'}
 OPENERS = ("Kitchen's open 🍳", "Plate's up 🍳", "Fresh out of the kitchen 🍳", "One plate tonight 🍳", "Serving one 🍳")
-LABELS = {'favorite': 'Favorite', 'modelLean': 'Model lean, our number alone', 'propLean': 'Prop lean, our number alone'}
+LABELS = {'favorite': 'Favorite', 'modelLean': 'Model lean, our number alone', 'propLean': 'Prop lean, our number alone',
+          'longshot': 'Fun ticket, quarter unit'}
+LEAD_INS = ('model lean', 'prop lean', 'researched pick', 'longshot from', 'nothing sourced', 'the market:')
 TAGS = {'NFL': '#NFL', 'CFB': '#CFB'}
 
 
@@ -211,21 +213,32 @@ def opener_for(key):
 
 
 def kind_label(pick):
+    if pick.get('legs') or pick.get('parlayType'):
+        return LABELS['longshot']
     if pick.get('favorite') is True:
         return LABELS['favorite']
     return LABELS['propLean'] if pick.get('athleteId') else LABELS['modelLean']
 
 
+def reasons_for(pick):
+    """The pick's own reasoning, most specific first: sentences with a number ahead of sentences without, shorter first."""
+    said = [s for s in sentences(pick.get('why')) if not s.lower().startswith(LEAD_INS)]
+    return sorted(said, key=lambda s: (not any(c.isdigit() for c in s), len(s)))
+
+
 def draft(pick, game=None, opener=None):
     """The post text, in the kitchen's voice: an opener, what kind of play it is, the line at its price, one or two
-    sentences from the pick's own why, our number against the line, the receipt link and the league tag.
+    sentences of the pick's own reasoning, our number against the line, the receipt link and the league tag.
 
-    Every number comes from the pick. A lean says it is a lean; the record is the brand.
+    Every number comes from the pick. A lean says it is a lean, a ticket says it is for fun; the record is the brand.
     """
     link = f"{SITE}#pick/{pick['id']}"
-    head = f"{kind_label(pick)}: {pick.get('title')}\n{int(pick['odds']):+d} at {pick.get('book')}"
-    lead_ins = ('model lean', 'prop lean', 'researched pick', 'longshot')
-    reasons = [s for s in sentences(pick.get('why')) if not s.lower().startswith(lead_ins) and not s.lower().startswith('the market:')]
+    if pick.get('legs'):
+        legs = [str(l.get('title') or '') for l in pick['legs'] if l.get('title')]
+        head = f"{kind_label(pick)}: {len(pick['legs'])} legs at {pick.get('book')}, {int(pick['odds']):+d}\n" + '\n'.join(f'• {leg}' for leg in legs)
+    else:
+        head = f"{kind_label(pick)}: {pick.get('title')}\n{int(pick['odds']):+d} at {pick.get('book')}"
+    reasons = reasons_for(pick)
     number = ''
     if isinstance(pick.get('projection'), (int, float)) and isinstance(pick.get('line'), (int, float)):
         number = f"Our number {float(pick['projection']):g} vs the {float(pick['line']):g}. Graded in public, win or lose."
@@ -250,7 +263,8 @@ def x_style(text):
 
 def guard(text, pick):
     problems = x_style(text.replace(SITE, ''))
-    ok, strays = llm.numbers_ok(text, pick)
+    extra = [{'legCount': len(pick['legs'])}] if pick.get('legs') else []      # "3 legs" is a count of the pick's own legs
+    ok, strays = llm.numbers_ok(text, pick, extra)
     if not ok:
         problems.append(f"numbers not in the pick: {', '.join(strays)}")
     if tweet_length(text) > LIMIT:
@@ -260,10 +274,8 @@ def guard(text, pick):
 
 def refuse(pick, game, log, now, text=None):
     """The reason this pick must not be posted now, or None."""
-    if pick.get('legs') or pick.get('parlayType'):
-        raise Refused('a longshot never goes to X')
-    if pick.get('favorite') is not True and not pick.get('modelLean'):
-        raise Refused('only favorites, model leans and prop leans go to X')
+    if pick.get('favorite') is not True and not pick.get('modelLean') and not (pick.get('legs') or pick.get('parlayType')):
+        raise Refused('only favorites, model leans, prop leans and the longshot go to X')
     if pick.get('result') or pick.get('status') not in (None, 'active'):
         raise Refused(f"the pick is {pick.get('status') or 'settled'}, not open")
     if pick.get('entryNote'):
@@ -465,7 +477,7 @@ def main(argv=None):
             posted = 0
             for key, pick in first.items():
                 merged = dict(pick, **latest.get(key, {}))
-                if (merged.get('favorite') is not True and not merged.get('modelLean')) or merged.get('legs') \
+                if (merged.get('favorite') is not True and not merged.get('modelLean') and not merged.get('legs')) \
                         or merged.get('result') or key in {p['id'] for p in log['posts']}:
                     continue
                 try:

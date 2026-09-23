@@ -1032,7 +1032,7 @@ def drafts(slot, now, ctx, games, settled, status):
                 written.append(f'scoreboard-{day}')
     for key, pick in ctx.first.items():
         merged = dict(pick, **ctx.latest.get(key, {}))
-        postable = merged.get('favorite') is True or (merged.get('modelLean') and not merged.get('legs'))
+        postable = merged.get('favorite') is True or merged.get('modelLean') or merged.get('legs')
         if not postable or merged.get('result') or key in posted:
             continue
         try:

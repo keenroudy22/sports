@@ -42,7 +42,8 @@ ABOUT = 'Model leans, prop leans and researched picks from keenroudy.com/sports,
 
 
 def postable(pick):
-    return (pick.get('favorite') is True or bool(pick.get('modelLean'))) and not pick.get('legs') and not pick.get('parlayType')
+    """Favorites, model leans, prop leans and the day's longshot; each is labeled for what it is."""
+    return pick.get('favorite') is True or bool(pick.get('modelLean')) or bool(pick.get('legs')) or pick.get('parlayType') == 'longshot'
 
 
 def in_window(kickoff, now):
@@ -76,8 +77,10 @@ def pick_items(first, latest, games, now, player_team=None):
         if (merged.get('status') or 'active') != 'active':
             continue
         published = pick.get('publishedAt')
+        # A ticket spans several games; its window follows the first kickoff.
+        starts = sorted(games[g]['kickoff'] for g in (pick.get('gameIds') or []) if g in games)
         game = games.get((pick.get('gameIds') or [None])[0])
-        if not published or not game or not in_window(game['kickoff'], now):
+        if not published or not game or not starts or not in_window(starts[0], now):
             continue
         if merged.get('expiresAt') and gates.when(merged['expiresAt']) <= now - timedelta(hours=12):
             continue        # a quote that expired half a day ago is not this morning's play

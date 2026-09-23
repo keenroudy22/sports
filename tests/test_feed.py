@@ -28,12 +28,14 @@ class FeedTests(unittest.TestCase):
                  'fav': pick('fav', favorite=True, modelLean=False, title='Bills at Lions under 44.5', direction='under'),
                  'early': pick('early', publishedAt='2026-09-26T12:00:00Z'),      # published days ago: still a play today
                  'closed': pick('closed'),
-                 'ticket': pick('ticket', legs=[{}], parlayType='longshot', modelLean=False),
+                 'ticket': pick('ticket', legs=[{'title': 'Bills at Lions over 44.5'}, {'title': 'Jets +3'}], parlayType='longshot', modelLean=False, riskUnits=0.25, title='3-leg longshot at DraftKings', odds=650, why='Longshot from the board: 3 legs at DraftKings. A fun ticket at a quarter unit.'),
                  'kicked': pick('kicked', gameIds=['g-done'])}
         latest = {k: dict(v) for k, v in first.items()}
         latest['closed']['entryNote'] = 'closed'
         items = feed.pick_items(first, latest, GAMES, NOW)
-        self.assertEqual(sorted(i['guid'] for i in items), ['early', 'fav', 'lean'])
+        self.assertEqual(sorted(i['guid'] for i in items), ['early', 'fav', 'lean', 'ticket'])
+        ticket = next(i for i in items if i['guid'] == 'ticket')
+        self.assertTrue(ticket['title'].startswith('Fun ticket, quarter unit'))
         lean = next(i for i in items if i['guid'] == 'lean')
         self.assertTrue(lean['title'].startswith('Model lean, our number alone: '))
         self.assertIn('#pick/lean', lean['link'])

@@ -74,8 +74,8 @@ class RefusalTests(unittest.TestCase):
 
     def test_refusals(self):
         self.assertIsNone(x_post.refuse(PICK, GAME, self.log, NOW))
-        for bad, why in ((dict(PICK, favorite=False, modelLean=False), 'only favorites, model leans and prop leans'),
-                         (dict(PICK, legs=[{}], parlayType='longshot'), 'longshot'),
+        self.assertIsNone(x_post.refuse(dict(PICK, favorite=False, legs=[{'title': 'A'}], parlayType='longshot'), GAME, self.log, NOW), 'the longshot may post')
+        for bad, why in ((dict(PICK, favorite=False, modelLean=False), 'only favorites, model leans, prop leans and the longshot'),
                          (dict(PICK, status='settled', result='win'), 'not open'),
                          (dict(PICK, entryNote='closed'), 'closed'),
                          (dict(PICK, expiresAt='2026-09-26T14:00:00Z'), 'expired'),
@@ -216,3 +216,23 @@ class MediaTests(unittest.TestCase):
         self.assertIn(b'name="segment_index"\r\n\r\n0\r\n', body)
         self.assertIn(b'filename="card.png"\r\nContent-Type: image/png\r\n\r\nPNGDATA\r\n', body)
         self.assertTrue(body.endswith(f'--{boundary}--\r\n'.encode()))
+
+
+class ReasonTests(unittest.TestCase):
+    def test_reasons_put_specific_sentences_first_and_drop_lead_ins(self):
+        pick = {'why': 'Model lean, published on our number alone. Nothing sourced argues against it; the number is the reason. '
+                       'The market: The total opened 50.5 and is 44.5 at DraftKings, 6 toward the under. '
+                       'Our total gap of 7.8 points is at the 95th percentile; gaps this large went 112-58 against the close in 3602 graded games.'}
+        reasons = x_post.reasons_for(pick)
+        self.assertTrue(reasons[0].startswith('Our total gap of 7.8 points'), reasons)
+        self.assertFalse(any(r.lower().startswith(('model lean', 'nothing sourced', 'the market:')) for r in reasons))
+
+    def test_a_longshot_draft_lists_its_legs(self):
+        ticket = {'id': 'NFL-2026-W4-longshot-0927-dk', 'title': '3-leg longshot at DraftKings', 'legs': [{'title': 'Bills at Lions over 44.5'}, {'title': 'Jets +3'}, {'title': 'Player Seven over 4.5 receptions'}],
+                  'parlayType': 'longshot', 'riskUnits': 0.25, 'book': 'DraftKings', 'odds': 650,
+                  'why': 'Longshot from the board: 3 legs at DraftKings, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.'}
+        text = x_post.draft(ticket, {'league': 'NFL'})
+        self.assertIn('Fun ticket, quarter unit: 3 legs at DraftKings, +650', text)
+        self.assertIn('• Jets +3', text)
+        self.assertLessEqual(x_post.tweet_length(text), 280)
+        self.assertEqual(x_post.guard(text, ticket), [], text)

@@ -74,10 +74,11 @@ With Ollama down the run publishes on templates and holds on a quarterback rule 
 
 ## X
 
-Favorites, model leans and prop leans go to X, each labeled for what it is; longshots do not. Every
-post is drafted by `scripts/x_post.py` in the kitchen's voice from the pick's own fields (the label, the
-line at its price, our number against the line, the receipt link `https://keenroudy.com/sports/#pick/<id>`
-and the league tag), and every pick gets a card (`scripts/pick_card.py`) in the colours of the side the
+Favorites, model leans, prop leans and the day's longshot all go to X, each labeled for what it is (a lean
+says "our number alone", the longshot "fun ticket, quarter unit"). Every post is drafted by
+`scripts/x_post.py` in the kitchen's voice from the pick's own fields (the label, the line at its price, one
+or two sentences of the pick's reasoning with the most specific first, our number against the line, the
+receipt link `https://keenroudy.com/sports/#pick/<id>` and the league tag), and every pick gets a card (`scripts/pick_card.py`) in the colours of the side the
 play is on, rendered by a headless Chrome and never committed.
 
 X meters posting through its API, so the desk does not post there itself. It publishes the posts as an
