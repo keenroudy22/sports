@@ -1,6 +1,6 @@
 # KeenRoudy Sports
 
-Public site: https://keenroudy.com/sports/ · Source repository: `keenroudy22/sports`.
+Public site: https://keenroudy.com/sports/ · Source repository: `keenroudy22/sports`. The research runs are automated; see `DESK.md`.
 
 NFL and FBS football forecasts, researched player props, and a public record of what was actually published before kickoff.
 
