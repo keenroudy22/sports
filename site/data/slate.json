@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-23T15:10:16Z",
+  "updatedAt": "2026-09-23T16:37:17Z",
   "sources": [
     {
       "league": "NFL",
@@ -8,7 +8,7 @@
         "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=2&limit=1000",
         "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=3&limit=1000"
       ],
-      "retrievedAt": "2026-09-23T15:10:16Z",
+      "retrievedAt": "2026-09-23T16:37:17Z",
       "trainingCoverage": "season feed",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -30,7 +30,7 @@
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2026&seasontype=2&week=4&limit=1000&groups=37",
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2026&seasontype=2&week=4&limit=1000&groups=151"
       ],
-      "retrievedAt": "2026-09-23T15:10:16Z",
+      "retrievedAt": "2026-09-23T16:37:17Z",
       "trainingCoverage": "limited weekly provider sample",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -6175,14 +6175,18 @@
         "name": "Buffalo Bills",
         "short": "Bills",
         "abbreviation": "BUF",
-        "score": 41
+        "score": 41,
+        "color": "#00338d",
+        "alternateColor": "#d50a0a"
       },
       "away": {
         "id": "8",
         "name": "Detroit Lions",
         "short": "Lions",
         "abbreviation": "DET",
-        "score": 31
+        "score": 31,
+        "color": "#0076b6",
+        "alternateColor": "#bbbbbb"
       },
       "venue": {
         "id": "11938",
@@ -44560,14 +44564,18 @@
         "name": "Atlanta Falcons",
         "short": "Falcons",
         "abbreviation": "ATL",
-        "score": 3
+        "score": 3,
+        "color": "#a71930",
+        "alternateColor": "#000000"
       },
       "away": {
         "id": "29",
         "name": "Carolina Panthers",
         "short": "Panthers",
         "abbreviation": "CAR",
-        "score": 34
+        "score": 34,
+        "color": "#0085ca",
+        "alternateColor": "#000000"
       },
       "venue": {
         "id": "5348",
@@ -45095,14 +45103,18 @@
         "name": "Chicago Bears",
         "short": "Bears",
         "abbreviation": "CHI",
-        "score": 3
+        "score": 3,
+        "color": "#0b1c3a",
+        "alternateColor": "#e64100"
       },
       "away": {
         "id": "16",
         "name": "Minnesota Vikings",
         "short": "Vikings",
         "abbreviation": "MIN",
-        "score": 9
+        "score": 9,
+        "color": "#4f2683",
+        "alternateColor": "#ffc62f"
       },
       "venue": {
         "id": "3933",
@@ -45630,14 +45642,18 @@
         "name": "Tennessee Titans",
         "short": "Titans",
         "abbreviation": "TEN",
-        "score": 20
+        "score": 20,
+        "color": "#4495d2",
+        "alternateColor": "#001532"
       },
       "away": {
         "id": "21",
         "name": "Philadelphia Eagles",
         "short": "Eagles",
         "abbreviation": "PHI",
-        "score": 24
+        "score": 24,
+        "color": "#06424d",
+        "alternateColor": "#000000"
       },
       "venue": {
         "id": "3810",
@@ -46165,14 +46181,18 @@
         "name": "New England Patriots",
         "short": "Patriots",
         "abbreviation": "NE",
-        "score": 20
+        "score": 20,
+        "color": "#002a5c",
+        "alternateColor": "#c60c30"
       },
       "away": {
         "id": "23",
         "name": "Pittsburgh Steelers",
         "short": "Steelers",
         "abbreviation": "PIT",
-        "score": 3
+        "score": 3,
+        "color": "#000000",
+        "alternateColor": "#ffb612"
       },
       "venue": {
         "id": "3738",
@@ -46700,14 +46720,18 @@
         "name": "New York Jets",
         "short": "Jets",
         "abbreviation": "NYJ",
-        "score": 17
+        "score": 17,
+        "color": "#115740",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "9",
         "name": "Green Bay Packers",
         "short": "Packers",
         "abbreviation": "GB",
-        "score": 20
+        "score": 20,
+        "color": "#204e32",
+        "alternateColor": "#ffb612"
       },
       "venue": {
         "id": "3839",
@@ -47235,14 +47259,18 @@
         "name": "Tampa Bay Buccaneers",
         "short": "Buccaneers",
         "abbreviation": "TB",
-        "score": 19
+        "score": 19,
+        "color": "#bd1c36",
+        "alternateColor": "#3e3a35"
       },
       "away": {
         "id": "5",
         "name": "Cleveland Browns",
         "short": "Browns",
         "abbreviation": "CLE",
-        "score": 23
+        "score": 23,
+        "color": "#472a08",
+        "alternateColor": "#ff3c00"
       },
       "venue": {
         "id": "3886",
@@ -47770,14 +47798,18 @@
         "name": "Baltimore Ravens",
         "short": "Ravens",
         "abbreviation": "BAL",
-        "score": 17
+        "score": 17,
+        "color": "#29126f",
+        "alternateColor": "#000000"
       },
       "away": {
         "id": "18",
         "name": "New Orleans Saints",
         "short": "Saints",
         "abbreviation": "NO",
-        "score": 24
+        "score": 24,
+        "color": "#d3bc8d",
+        "alternateColor": "#000000"
       },
       "venue": {
         "id": "3814",
@@ -48305,14 +48337,18 @@
         "name": "Houston Texans",
         "short": "Texans",
         "abbreviation": "HOU",
-        "score": 6
+        "score": 6,
+        "color": "#021018",
+        "alternateColor": "#eb0028"
       },
       "away": {
         "id": "4",
         "name": "Cincinnati Bengals",
         "short": "Bengals",
         "abbreviation": "CIN",
-        "score": 20
+        "score": 20,
+        "color": "#fb4f14",
+        "alternateColor": "#000000"
       },
       "venue": {
         "id": "3891",
@@ -48840,14 +48876,18 @@
         "name": "Denver Broncos",
         "short": "Broncos",
         "abbreviation": "DEN",
-        "score": 20
+        "score": 20,
+        "color": "#0a2343",
+        "alternateColor": "#fc4c02"
       },
       "away": {
         "id": "30",
         "name": "Jacksonville Jaguars",
         "short": "Jaguars",
         "abbreviation": "JAX",
-        "score": 13
+        "score": 13,
+        "color": "#007487",
+        "alternateColor": "#d7a22a"
       },
       "venue": {
         "id": "3937",
@@ -49375,14 +49415,18 @@
         "name": "Los Angeles Chargers",
         "short": "Chargers",
         "abbreviation": "LAC",
-        "score": 14
+        "score": 14,
+        "color": "#0080c6",
+        "alternateColor": "#ffc20e"
       },
       "away": {
         "id": "13",
         "name": "Las Vegas Raiders",
         "short": "Raiders",
         "abbreviation": "LV",
-        "score": 26
+        "score": 26,
+        "color": "#000000",
+        "alternateColor": "#a5acaf"
       },
       "venue": {
         "id": "7065",
@@ -49910,14 +49954,18 @@
         "name": "Dallas Cowboys",
         "short": "Cowboys",
         "abbreviation": "DAL",
-        "score": 37
+        "score": 37,
+        "color": "#002a5c",
+        "alternateColor": "#b0b7bc"
       },
       "away": {
         "id": "28",
         "name": "Washington Commanders",
         "short": "Commanders",
         "abbreviation": "WSH",
-        "score": 20
+        "score": 20,
+        "color": "#5a1414",
+        "alternateColor": "#ffb612"
       },
       "venue": {
         "id": "3687",
@@ -50445,14 +50493,18 @@
         "name": "Arizona Cardinals",
         "short": "Cardinals",
         "abbreviation": "ARI",
-        "score": 7
+        "score": 7,
+        "color": "#a40227",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "26",
         "name": "Seattle Seahawks",
         "short": "Seahawks",
         "abbreviation": "SEA",
-        "score": 31
+        "score": 31,
+        "color": "#002a5c",
+        "alternateColor": "#69be28"
       },
       "venue": {
         "id": "3970",
@@ -50980,14 +51032,18 @@
         "name": "San Francisco 49ers",
         "short": "49ers",
         "abbreviation": "SF",
-        "score": 35
+        "score": 35,
+        "color": "#aa0000",
+        "alternateColor": "#b3995d"
       },
       "away": {
         "id": "15",
         "name": "Miami Dolphins",
         "short": "Dolphins",
         "abbreviation": "MIA",
-        "score": 13
+        "score": 13,
+        "color": "#008e97",
+        "alternateColor": "#fc4c02"
       },
       "venue": {
         "id": "4738",
@@ -51515,14 +51571,18 @@
         "name": "Kansas City Chiefs",
         "short": "Chiefs",
         "abbreviation": "KC",
-        "score": 33
+        "score": 33,
+        "color": "#e31837",
+        "alternateColor": "#ffb612"
       },
       "away": {
         "id": "11",
         "name": "Indianapolis Colts",
         "short": "Colts",
         "abbreviation": "IND",
-        "score": 30
+        "score": 30,
+        "color": "#003b75",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3622",
@@ -52050,14 +52110,18 @@
         "name": "Los Angeles Rams",
         "short": "Rams",
         "abbreviation": "LAR",
-        "score": 28
+        "score": 28,
+        "color": "#003594",
+        "alternateColor": "#ffd100"
       },
       "away": {
         "id": "19",
         "name": "New York Giants",
         "short": "Giants",
         "abbreviation": "NYG",
-        "score": 6
+        "score": 6,
+        "color": "#003c7f",
+        "alternateColor": "#c9243f"
       },
       "venue": {
         "id": "7065",
@@ -52585,14 +52649,18 @@
         "name": "Coastal Carolina Chanticleers",
         "short": "Coastal",
         "abbreviation": "CCU",
-        "score": null
+        "score": null,
+        "color": "#006f71",
+        "alternateColor": "#a27752"
       },
       "away": {
         "id": "2335",
         "name": "Liberty Flames",
         "short": "Liberty",
         "abbreviation": "LIB",
-        "score": null
+        "score": null,
+        "color": "#0a254e",
+        "alternateColor": "#b72025"
       },
       "venue": {
         "id": "3654",
@@ -52600,7 +52668,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+2.5",
         "spreadOdds": "-108",
         "spreadOpen": "-1.5",
@@ -52970,9 +53038,19 @@
           "underOdds": "-115",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+2.5",
+          "spreadOdds": "-108",
+          "total": 50.5,
+          "overOdds": "-105",
+          "underOdds": "-115",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "NFL-401872948",
@@ -52992,14 +53070,18 @@
         "name": "Green Bay Packers",
         "short": "Packers",
         "abbreviation": "GB",
-        "score": null
+        "score": null,
+        "color": "#204e32",
+        "alternateColor": "#ffb612"
       },
       "away": {
         "id": "1",
         "name": "Atlanta Falcons",
         "short": "Falcons",
         "abbreviation": "ATL",
-        "score": null
+        "score": null,
+        "color": "#a71930",
+        "alternateColor": "#000000"
       },
       "venue": {
         "id": "3798",
@@ -53007,27 +53089,17 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-5.5",
-        "spreadOdds": "-108",
+        "spreadOdds": "-105",
         "spreadOpen": "-7.5",
-        "total": 43.5,
+        "total": 42.5,
         "totalOpen": "o46.5",
-        "overOdds": "-102",
-        "underOdds": "-118",
+        "overOdds": "-118",
+        "underOdds": "-102",
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118180"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "-6.5",
-          "spreadOdds": "-115",
-          "total": 46.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-19T13:09:16Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "-6.5",
@@ -53517,9 +53589,19 @@
           "underOdds": "-118",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-5.5",
+          "spreadOdds": "-105",
+          "total": 42.5,
+          "overOdds": "-118",
+          "underOdds": "-102",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401862779",
@@ -53539,14 +53621,18 @@
         "name": "Temple Owls",
         "short": "Temple",
         "abbreviation": "TEM",
-        "score": null
+        "score": null,
+        "color": "#a41e35",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "349",
         "name": "Army Black Knights",
         "short": "Army",
         "abbreviation": "ARMY",
-        "score": null
+        "score": null,
+        "color": "#000000",
+        "alternateColor": "#d3bc8d"
       },
       "venue": {
         "id": "3806",
@@ -53554,7 +53640,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+3",
         "spreadOdds": "-110",
         "spreadOpen": "+3",
@@ -53904,9 +53990,19 @@
           "underOdds": "-115",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+3",
+          "spreadOdds": "-110",
+          "total": 48.5,
+          "overOdds": "-105",
+          "underOdds": "-115",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858468",
@@ -53926,14 +54022,18 @@
         "name": "Rutgers Scarlet Knights",
         "short": "Rutgers",
         "abbreviation": "RUTG",
-        "score": null
+        "score": null,
+        "color": "#ce0e2d",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "47",
         "name": "Howard Bison",
         "short": "Howard",
         "abbreviation": "HOW",
-        "score": null
+        "score": null,
+        "color": "#003a63",
+        "alternateColor": "#e51937"
       },
       "venue": {
         "id": "6577",
@@ -53941,7 +54041,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-41.5",
         "spreadOdds": "-120",
         "spreadOpen": "-41.5",
@@ -53981,9 +54081,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-41.5",
+          "spreadOdds": "-120",
+          "total": 55.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401862778",
@@ -54003,14 +54113,18 @@
         "name": "UAB Blazers",
         "short": "UAB",
         "abbreviation": "UAB",
-        "score": null
+        "score": null,
+        "color": "#1a5632",
+        "alternateColor": "#fdb913"
       },
       "away": {
         "id": "2426",
         "name": "Navy Midshipmen",
         "short": "Navy",
         "abbreviation": "NAVY",
-        "score": null
+        "score": null,
+        "color": "#00225b",
+        "alternateColor": "#b5a67c"
       },
       "venue": {
         "id": "7221",
@@ -54018,7 +54132,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+7",
         "spreadOdds": "-110",
         "spreadOpen": "+11.5",
@@ -54388,9 +54502,19 @@
           "underOdds": "-112",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+7",
+          "spreadOdds": "-110",
+          "total": 51.5,
+          "overOdds": "-108",
+          "underOdds": "-112",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858461",
@@ -54410,14 +54534,18 @@
         "name": "Indiana Hoosiers",
         "short": "Indiana",
         "abbreviation": "IU",
-        "score": null
+        "score": null,
+        "color": "#970310",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "77",
         "name": "Northwestern Wildcats",
         "short": "Northwestern",
         "abbreviation": "NU",
-        "score": null
+        "score": null,
+        "color": "#492f92",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3830",
@@ -54425,14 +54553,14 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-21",
-        "spreadOdds": "-108",
+        "spreadOdds": "-110",
         "spreadOpen": "-23.5",
         "total": 49.5,
         "totalOpen": "o47.5",
-        "overOdds": "-108",
-        "underOdds": "-112",
+        "overOdds": "-112",
+        "underOdds": "-108",
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34674731"
       },
       "marketHistory": [
@@ -54845,9 +54973,19 @@
           "underOdds": "-112",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-21",
+          "spreadOdds": "-110",
+          "total": 49.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858234",
@@ -54867,14 +55005,18 @@
         "name": "California Golden Bears",
         "short": "California",
         "abbreviation": "CAL",
-        "score": null
+        "score": null,
+        "color": "#041e42",
+        "alternateColor": "#ffc72c"
       },
       "away": {
         "id": "228",
         "name": "Clemson Tigers",
         "short": "Clemson",
         "abbreviation": "CLEM",
-        "score": null
+        "score": null,
+        "color": "#f56600",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3831",
@@ -54882,9 +55024,9 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+1.5",
-        "spreadOdds": "-118",
+        "spreadOdds": "-115",
         "spreadOpen": "+1.5",
         "total": 50.5,
         "totalOpen": "o47.5",
@@ -55222,9 +55364,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+1.5",
+          "spreadOdds": "-115",
+          "total": 50.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858465",
@@ -55244,14 +55396,18 @@
         "name": "Ohio State Buckeyes",
         "short": "Ohio State",
         "abbreviation": "OSU",
-        "score": null
+        "score": null,
+        "color": "#ba0c2f",
+        "alternateColor": "#a8adb4"
       },
       "away": {
         "id": "356",
         "name": "Illinois Fighting Illini",
         "short": "Illinois",
         "abbreviation": "ILL",
-        "score": null
+        "score": null,
+        "color": "#ff5f05",
+        "alternateColor": "#13294b"
       },
       "venue": {
         "id": "3861",
@@ -55259,7 +55415,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-26.5",
         "spreadOdds": "-115",
         "spreadOpen": "-27.5",
@@ -55270,16 +55426,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34674734"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "-27.5",
-          "spreadOdds": "-110",
-          "total": 54.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-18T23:21:11Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "-27.5",
@@ -55769,9 +55915,19 @@
           "underOdds": "-105",
           "retrievedAt": "2026-09-23T15:10:16Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-26.5",
+          "spreadOdds": "-115",
+          "total": 53.5,
+          "overOdds": "-115",
+          "underOdds": "-105",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401856805",
@@ -55791,14 +55947,18 @@
         "name": "Texas Tech Red Raiders",
         "short": "Texas Tech",
         "abbreviation": "TTU",
-        "score": null
+        "score": null,
+        "color": "#da291c",
+        "alternateColor": "#000000"
       },
       "away": {
         "id": "2534",
         "name": "Sam Houston Bearkats",
         "short": "Sam Houston",
         "abbreviation": "SHSU",
-        "score": null
+        "score": null,
+        "color": "#f56423",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3784",
@@ -55806,7 +55966,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-34.5",
         "spreadOdds": "-108",
         "spreadOpen": "-37.5",
@@ -56136,9 +56296,19 @@
           "underOdds": "-112",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-34.5",
+          "spreadOdds": "-108",
+          "total": 55.5,
+          "overOdds": "-108",
+          "underOdds": "-112",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401860893",
@@ -56158,14 +56328,18 @@
         "name": "Toledo Rockets",
         "short": "Toledo",
         "abbreviation": "TOL",
-        "score": null
+        "score": null,
+        "color": "#0b2240",
+        "alternateColor": "#ffcd00"
       },
       "away": {
         "id": "21",
         "name": "San Diego State Aztecs",
         "short": "San Diego St",
         "abbreviation": "SDSU",
-        "score": null
+        "score": null,
+        "color": "#a6192e",
+        "alternateColor": "#000000"
       },
       "venue": {
         "id": "3739",
@@ -56173,7 +56347,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-3",
         "spreadOdds": "-110",
         "spreadOpen": "+1.5",
@@ -56543,9 +56717,19 @@
           "underOdds": "-105",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-3",
+          "spreadOdds": "-110",
+          "total": 51.5,
+          "overOdds": "-115",
+          "underOdds": "-105",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401856813",
@@ -56565,14 +56749,18 @@
         "name": "Baylor Bears",
         "short": "Baylor",
         "abbreviation": "BAY",
-        "score": null
+        "score": null,
+        "color": "#154734",
+        "alternateColor": "#ffb81c"
       },
       "away": {
         "id": "38",
         "name": "Colorado Buffaloes",
         "short": "Colorado",
         "abbreviation": "COLO",
-        "score": null
+        "score": null,
+        "color": "#cfb87c",
+        "alternateColor": "#000000"
       },
       "venue": {
         "id": "4727",
@@ -56580,7 +56768,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-10",
         "spreadOdds": "-112",
         "spreadOpen": "-8.5",
@@ -56940,9 +57128,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-10",
+          "spreadOdds": "-112",
+          "total": 55.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401860896",
@@ -56962,14 +57160,18 @@
         "name": "UTSA Roadrunners",
         "short": "UTSA",
         "abbreviation": "UTSA",
-        "score": null
+        "score": null,
+        "color": "#0c2340",
+        "alternateColor": "#f15a22"
       },
       "away": {
         "id": "36",
         "name": "Colorado State Rams",
         "short": "Colorado St",
         "abbreviation": "CSU",
-        "score": null
+        "score": null,
+        "color": "#004c23",
+        "alternateColor": "#c8c372"
       },
       "venue": {
         "id": "3604",
@@ -56977,7 +57179,7 @@
         "indoor": true
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-13.5",
         "spreadOdds": "-108",
         "spreadOpen": "-11.5",
@@ -57307,9 +57509,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-13.5",
+          "spreadOdds": "-108",
+          "total": 58.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401864512",
@@ -57329,14 +57541,18 @@
         "name": "Akron Zips",
         "short": "Akron",
         "abbreviation": "AKR",
-        "score": null
+        "score": null,
+        "color": "#041e42",
+        "alternateColor": "#c5b783"
       },
       "away": {
         "id": "2439",
         "name": "UNLV Rebels",
         "short": "UNLV",
         "abbreviation": "UNLV",
-        "score": null
+        "score": null,
+        "color": "#cf0a2c",
+        "alternateColor": "#cac8c8"
       },
       "venue": {
         "id": "3768",
@@ -57344,7 +57560,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+13.5",
         "spreadOdds": "-108",
         "spreadOpen": "+14",
@@ -57674,9 +57890,19 @@
           "underOdds": "-115",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+13.5",
+          "spreadOdds": "-108",
+          "total": 52.5,
+          "overOdds": "-105",
+          "underOdds": "-115",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401866425",
@@ -57696,14 +57922,18 @@
         "name": "Kent State Golden Flashes",
         "short": "Kent State",
         "abbreviation": "KENT",
-        "score": null
+        "score": null,
+        "color": "#002664",
+        "alternateColor": "#eaab00"
       },
       "away": {
         "id": "2050",
         "name": "Ball State Cardinals",
         "short": "Ball State",
         "abbreviation": "BALL",
-        "score": null
+        "score": null,
+        "color": "#ba0c2f",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3696",
@@ -57711,7 +57941,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-3.5",
         "spreadOdds": "-105",
         "spreadOpen": "-4.5",
@@ -58091,9 +58321,19 @@
           "underOdds": "-118",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-3.5",
+          "spreadOdds": "-105",
+          "total": 51.5,
+          "overOdds": "-102",
+          "underOdds": "-118",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858243",
@@ -58113,14 +58353,18 @@
         "name": "Louisville Cardinals",
         "short": "Louisville",
         "abbreviation": "LOU",
-        "score": null
+        "score": null,
+        "color": "#c9001f",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "154",
         "name": "Wake Forest Demon Deacons",
         "short": "Wake Forest",
         "abbreviation": "WAKE",
-        "score": null
+        "score": null,
+        "color": "#ceb888",
+        "alternateColor": "#2c2a29"
       },
       "venue": {
         "id": "3873",
@@ -58128,7 +58372,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-12.5",
         "spreadOdds": "-110",
         "spreadOpen": "-13.5",
@@ -58508,9 +58752,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-12.5",
+          "spreadOdds": "-110",
+          "total": 58.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858242",
@@ -58530,14 +58784,18 @@
         "name": "Boston College Eagles",
         "short": "Boston College",
         "abbreviation": "BC",
-        "score": null
+        "score": null,
+        "color": "#8c2232",
+        "alternateColor": "#dbcca6"
       },
       "away": {
         "id": "259",
         "name": "Virginia Tech Hokies",
         "short": "Virginia Tech",
         "abbreviation": "VT",
-        "score": null
+        "score": null,
+        "color": "#6a2c3e",
+        "alternateColor": "#cf4520"
       },
       "venue": {
         "id": "3615",
@@ -58545,7 +58803,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+14",
         "spreadOdds": "-115",
         "spreadOpen": "+14",
@@ -58925,9 +59183,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+14",
+          "spreadOdds": "-115",
+          "total": 48.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401856704",
@@ -58947,14 +59215,18 @@
         "name": "Tennessee Volunteers",
         "short": "Tennessee",
         "abbreviation": "TENN",
-        "score": null
+        "score": null,
+        "color": "#ff8200",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "251",
         "name": "Texas Longhorns",
         "short": "Texas",
         "abbreviation": "TEX",
-        "score": null
+        "score": null,
+        "color": "#af5c37",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3853",
@@ -58962,7 +59234,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+4.5",
         "spreadOdds": "-108",
         "spreadOpen": "+7",
@@ -58973,16 +59245,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34226055"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "+4.5",
-          "spreadOdds": "-108",
-          "total": 56.5,
-          "overOdds": "-108",
-          "underOdds": "-112",
-          "retrievedAt": "2026-09-18T11:50:14Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "+4.5",
@@ -59472,9 +59734,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+4.5",
+          "spreadOdds": "-108",
+          "total": 55.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858236",
@@ -59494,14 +59766,18 @@
         "name": "Pittsburgh Panthers",
         "short": "Pitt",
         "abbreviation": "PITT",
-        "score": null
+        "score": null,
+        "color": "#003594",
+        "alternateColor": "#ffb81c"
       },
       "away": {
         "id": "2083",
         "name": "Bucknell Bison",
         "short": "Bucknell",
         "abbreviation": "BUCK",
-        "score": null
+        "score": null,
+        "color": "#000060",
+        "alternateColor": "#00316e"
       },
       "venue": {
         "id": "3752",
@@ -59509,7 +59785,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-52.5",
         "spreadOdds": "-110",
         "spreadOpen": "-53.5",
@@ -59559,9 +59835,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:51:20Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-52.5",
+          "spreadOdds": "-110",
+          "total": 61.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401864576",
@@ -59581,14 +59867,18 @@
         "name": "Kentucky Wildcats",
         "short": "Kentucky",
         "abbreviation": "UK",
-        "score": null
+        "score": null,
+        "color": "#0033a0",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "6",
         "name": "South Alabama Jaguars",
         "short": "South Alabama",
         "abbreviation": "USA",
-        "score": null
+        "score": null,
+        "color": "#00205b",
+        "alternateColor": "#bf0d3e"
       },
       "venue": {
         "id": "3683",
@@ -59596,7 +59886,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-20.5",
         "spreadOdds": "-110",
         "spreadOpen": "-19.5",
@@ -59926,9 +60216,19 @@
           "underOdds": "-105",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-20.5",
+          "spreadOdds": "-110",
+          "total": 54.5,
+          "overOdds": "-115",
+          "underOdds": "-105",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401866427",
@@ -59948,14 +60248,17 @@
         "name": "Eastern Michigan Eagles",
         "short": "E Michigan",
         "abbreviation": "EMU",
-        "score": null
+        "score": null,
+        "color": "#006938",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "2815",
         "name": "Lindenwood Lions",
         "short": "Lindenwood",
         "abbreviation": "LIN",
-        "score": null
+        "score": null,
+        "color": "#000000"
       },
       "venue": {
         "id": "3912",
@@ -59963,7 +60266,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-25.5",
         "spreadOdds": "-110",
         "spreadOpen": "-25.5",
@@ -59993,9 +60296,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-25.5",
+          "spreadOdds": "-110",
+          "total": 50.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858462",
@@ -60015,14 +60328,18 @@
         "name": "Maryland Terrapins",
         "short": "Maryland",
         "abbreviation": "MD",
-        "score": null
+        "score": null,
+        "color": "#ce1126",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "26",
         "name": "UCLA Bruins",
         "short": "UCLA",
         "abbreviation": "UCLA",
-        "score": null
+        "score": null,
+        "color": "#2774ae",
+        "alternateColor": "#f2a900"
       },
       "venue": {
         "id": "3665",
@@ -60030,7 +60347,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+1.5",
         "spreadOdds": "-110",
         "spreadOpen": "+1.5",
@@ -60041,16 +60358,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34674741"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "+1.5",
-          "spreadOdds": "-112",
-          "total": 51.5,
-          "overOdds": "-112",
-          "underOdds": "OFF",
-          "retrievedAt": "2026-09-18T23:21:11Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "+1.5",
@@ -60540,9 +60847,19 @@
           "underOdds": "-105",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+1.5",
+          "spreadOdds": "-110",
+          "total": 56.5,
+          "overOdds": "-115",
+          "underOdds": "-105",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858467",
@@ -60562,14 +60879,18 @@
         "name": "Purdue Boilermakers",
         "short": "Purdue",
         "abbreviation": "PUR",
-        "score": null
+        "score": null,
+        "color": "#ceb888",
+        "alternateColor": "#000000"
       },
       "away": {
         "id": "87",
         "name": "Notre Dame Fighting Irish",
         "short": "Notre Dame",
         "abbreviation": "ND",
-        "score": null
+        "score": null,
+        "color": "#062340",
+        "alternateColor": "#c99700"
       },
       "venue": {
         "id": "3907",
@@ -60577,7 +60898,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+27.5",
         "spreadOdds": "-102",
         "spreadOpen": "+27.5",
@@ -60967,9 +61288,19 @@
           "underOdds": "-115",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+27.5",
+          "spreadOdds": "-102",
+          "total": 58.5,
+          "overOdds": "-105",
+          "underOdds": "-115",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401864511",
@@ -60989,14 +61320,18 @@
         "name": "Georgia State Panthers",
         "short": "Georgia St",
         "abbreviation": "GAST",
-        "score": null
+        "score": null,
+        "color": "#0039a6",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "2459",
         "name": "Northern Illinois Huskies",
         "short": "N Illinois",
         "abbreviation": "NIU",
-        "score": null
+        "score": null,
+        "color": "#c8102e",
+        "alternateColor": "#000000"
       },
       "venue": {
         "id": "4246",
@@ -61004,7 +61339,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-10.5",
         "spreadOdds": "-108",
         "spreadOpen": "-8.5",
@@ -61364,9 +61699,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-10.5",
+          "spreadOdds": "-108",
+          "total": 55.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858237",
@@ -61386,14 +61731,18 @@
         "name": "Florida State Seminoles",
         "short": "Florida St",
         "abbreviation": "FSU",
-        "score": null
+        "score": null,
+        "color": "#782f40",
+        "alternateColor": "#ceb888"
       },
       "away": {
         "id": "2110",
         "name": "Central Arkansas Bears",
         "short": "C Arkansas",
         "abbreviation": "CARK",
-        "score": null
+        "score": null,
+        "color": "#a7a9ac",
+        "alternateColor": "#8e959a"
       },
       "venue": {
         "id": "3697",
@@ -61401,9 +61750,9 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
-        "spread": "-42.5",
-        "spreadOdds": "-110",
+        "provider": "DraftKings",
+        "spread": "-44.5",
+        "spreadOdds": "-105",
         "spreadOpen": "-42.5",
         "total": 59.5,
         "totalOpen": "o59.5",
@@ -61431,9 +61780,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-44.5",
+          "spreadOdds": "-105",
+          "total": 59.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401864510",
@@ -61453,14 +61812,18 @@
         "name": "Wyoming Cowboys",
         "short": "Wyoming",
         "abbreviation": "WYO",
-        "score": null
+        "score": null,
+        "color": "#492f24",
+        "alternateColor": "#ffc425"
       },
       "away": {
         "id": "62",
         "name": "Hawai'i Rainbow Warriors",
         "short": "Hawai'i",
         "abbreviation": "HAW",
-        "score": null
+        "score": null,
+        "color": "#005737",
+        "alternateColor": "#000000"
       },
       "venue": {
         "id": "3984",
@@ -61468,7 +61831,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+3",
         "spreadOdds": "-108",
         "spreadOpen": "+5.5",
@@ -61848,9 +62211,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+3",
+          "spreadOdds": "-108",
+          "total": 44.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401860897",
@@ -61870,14 +62243,18 @@
         "name": "Western Michigan Broncos",
         "short": "W Michigan",
         "abbreviation": "WMU",
-        "score": null
+        "score": null,
+        "color": "#532e1f",
+        "alternateColor": "#f1c500"
       },
       "away": {
         "id": "68",
         "name": "Boise State Broncos",
         "short": "Boise St",
         "abbreviation": "BOIS",
-        "score": null
+        "score": null,
+        "color": "#0033a0",
+        "alternateColor": "#d64309"
       },
       "venue": {
         "id": "3980",
@@ -61885,7 +62262,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+7",
         "spreadOdds": "-108",
         "spreadOpen": "+7.5",
@@ -61896,16 +62273,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34674744"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "+7.5",
-          "spreadOdds": "-108",
-          "total": 47.5,
-          "overOdds": "-112",
-          "underOdds": "-108",
-          "retrievedAt": "2026-09-18T14:37:44Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "+7.5",
@@ -62395,9 +62762,19 @@
           "underOdds": "-112",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+7",
+          "spreadOdds": "-108",
+          "total": 50.5,
+          "overOdds": "-108",
+          "underOdds": "-112",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401856816",
@@ -62417,14 +62794,18 @@
         "name": "Iowa State Cyclones",
         "short": "Iowa State",
         "abbreviation": "ISU",
-        "score": null
+        "score": null,
+        "color": "#ae192d",
+        "alternateColor": "#ffc72a"
       },
       "away": {
         "id": "254",
         "name": "Utah Utes",
         "short": "Utah",
         "abbreviation": "UTAH",
-        "score": null
+        "score": null,
+        "color": "#be0000",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3772",
@@ -62432,7 +62813,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+8.5",
         "spreadOdds": "-115",
         "spreadOpen": "+11.5",
@@ -62862,9 +63243,19 @@
           "underOdds": "-115",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+8.5",
+          "spreadOdds": "-115",
+          "total": 48.5,
+          "overOdds": "-105",
+          "underOdds": "-115",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858463",
@@ -62884,14 +63275,18 @@
         "name": "Michigan Wolverines",
         "short": "Michigan",
         "abbreviation": "MICH",
-        "score": null
+        "score": null,
+        "color": "#00274c",
+        "alternateColor": "#ffcb05"
       },
       "away": {
         "id": "2294",
         "name": "Iowa Hawkeyes",
         "short": "Iowa",
         "abbreviation": "IOWA",
-        "score": null
+        "score": null,
+        "color": "#231f20",
+        "alternateColor": "#fcd116"
       },
       "venue": {
         "id": "3558",
@@ -62899,7 +63294,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-5.5",
         "spreadOdds": "-110",
         "spreadOpen": "-4.5",
@@ -62910,16 +63305,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34674737"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "-4.5",
-          "spreadOdds": "-110",
-          "total": 39.5,
-          "overOdds": "-112",
-          "underOdds": "-108",
-          "retrievedAt": "2026-09-18T13:10:01Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "-4.5",
@@ -63409,9 +63794,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-5.5",
+          "spreadOdds": "-110",
+          "total": 38.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401856815",
@@ -63431,14 +63826,18 @@
         "name": "UCF Knights",
         "short": "UCF",
         "abbreviation": "UCF",
-        "score": null
+        "score": null,
+        "color": "#000000",
+        "alternateColor": "#b4a169"
       },
       "away": {
         "id": "2628",
         "name": "TCU Horned Frogs",
         "short": "TCU",
         "abbreviation": "TCU",
-        "score": null
+        "score": null,
+        "color": "#4d1979",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3652",
@@ -63446,7 +63845,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+3",
         "spreadOdds": "-108",
         "spreadOpen": "+3",
@@ -63786,9 +64185,19 @@
           "underOdds": "-112",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+3",
+          "spreadOdds": "-108",
+          "total": 48.5,
+          "overOdds": "-108",
+          "underOdds": "-112",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401856700",
@@ -63808,14 +64217,18 @@
         "name": "Georgia Bulldogs",
         "short": "Georgia",
         "abbreviation": "UGA",
-        "score": null
+        "score": null,
+        "color": "#ba0c2f",
+        "alternateColor": "#2c2a29"
       },
       "away": {
         "id": "201",
         "name": "Oklahoma Sooners",
         "short": "Oklahoma",
         "abbreviation": "OU",
-        "score": null
+        "score": null,
+        "color": "#990000",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3917",
@@ -63823,7 +64236,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-14",
         "spreadOdds": "-110",
         "spreadOpen": "-10",
@@ -63834,16 +64247,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34226053"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "-13.5",
-          "spreadOdds": "-108",
-          "total": 47.5,
-          "overOdds": "-108",
-          "underOdds": "-112",
-          "retrievedAt": "2026-09-18T19:14:23Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "-13.5",
@@ -64333,9 +64736,19 @@
           "underOdds": "-105",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-14",
+          "spreadOdds": "-110",
+          "total": 44.5,
+          "overOdds": "-115",
+          "underOdds": "-105",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401856699",
@@ -64355,14 +64768,18 @@
         "name": "Florida Gators",
         "short": "Florida",
         "abbreviation": "FLA",
-        "score": null
+        "score": null,
+        "color": "#0021a5",
+        "alternateColor": "#fa4616"
       },
       "away": {
         "id": "145",
         "name": "Ole Miss Rebels",
         "short": "Ole Miss",
         "abbreviation": "MISS",
-        "score": null
+        "score": null,
+        "color": "#13294b",
+        "alternateColor": "#cf142b"
       },
       "venue": {
         "id": "3634",
@@ -64370,7 +64787,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-3.5",
         "spreadOdds": "+100",
         "spreadOpen": "-1.5",
@@ -64381,16 +64798,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34674761"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "+1.5",
-          "spreadOdds": "-115",
-          "total": 58.5,
-          "overOdds": "-102",
-          "underOdds": "-118",
-          "retrievedAt": "2026-09-20T04:07:16Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "+1.5",
@@ -64880,9 +65287,19 @@
           "underOdds": "-105",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-3.5",
+          "spreadOdds": "+100",
+          "total": 58.5,
+          "overOdds": "-115",
+          "underOdds": "-105",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401861970",
@@ -64902,14 +65319,18 @@
         "name": "Miami (OH) RedHawks",
         "short": "Miami OH",
         "abbreviation": "M-OH",
-        "score": null
+        "score": null,
+        "color": "#c41230",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "41",
         "name": "UConn Huskies",
         "short": "UConn",
         "abbreviation": "CONN",
-        "score": null
+        "score": null,
+        "color": "#0c2340",
+        "alternateColor": "#a2aaad"
       },
       "venue": {
         "id": "3996",
@@ -64917,7 +65338,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-3.5",
         "spreadOdds": "-108",
         "spreadOpen": "-3",
@@ -65257,9 +65678,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-3.5",
+          "spreadOdds": "-108",
+          "total": 51.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858244",
@@ -65279,14 +65710,18 @@
         "name": "Duke Blue Devils",
         "short": "Duke",
         "abbreviation": "DUKE",
-        "score": null
+        "score": null,
+        "color": "#00539b",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "2729",
         "name": "William & Mary Tribe",
         "short": "William & Mary",
         "abbreviation": "W&M",
-        "score": null
+        "score": null,
+        "color": "#115740",
+        "alternateColor": "#f0b323"
       },
       "venue": {
         "id": "3982",
@@ -65294,14 +65729,14 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-43.5",
         "spreadOdds": "-110",
         "spreadOpen": "-43.5",
-        "total": 60.5,
+        "total": 61.5,
         "totalOpen": "o60.5",
-        "overOdds": "-110",
-        "underOdds": "-110",
+        "overOdds": "-120",
+        "underOdds": "+100",
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34674762"
       },
       "marketHistory": [
@@ -65334,9 +65769,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-43.5",
+          "spreadOdds": "-110",
+          "total": 61.5,
+          "overOdds": "-120",
+          "underOdds": "+100",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401864579",
@@ -65356,14 +65801,18 @@
         "name": "New Mexico State Aggies",
         "short": "New Mexico St",
         "abbreviation": "NMSU",
-        "score": null
+        "score": null,
+        "color": "#7e141b",
+        "alternateColor": "#231f20"
       },
       "away": {
         "id": "167",
         "name": "New Mexico Lobos",
         "short": "New Mexico",
         "abbreviation": "UNM",
-        "score": null
+        "score": null,
+        "color": "#ba0c2f",
+        "alternateColor": "#a7a8aa"
       },
       "venue": {
         "id": "3601",
@@ -65371,7 +65820,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+11.5",
         "spreadOdds": "-110",
         "spreadOpen": "+12.5",
@@ -65711,9 +66160,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+11.5",
+          "spreadOdds": "-110",
+          "total": 48.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401866426",
@@ -65733,14 +66192,18 @@
         "name": "Buffalo Bulls",
         "short": "Buffalo",
         "abbreviation": "BUFF",
-        "score": null
+        "score": null,
+        "color": "#005bbb",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "2523",
         "name": "Robert Morris Colonials",
         "short": "Robert Morris",
         "abbreviation": "RMU",
-        "score": null
+        "score": null,
+        "color": "#00214D",
+        "alternateColor": "#a21d2b"
       },
       "venue": {
         "id": "3965",
@@ -65748,7 +66211,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-28.5",
         "spreadOdds": "-110",
         "spreadOpen": "-28.5",
@@ -65768,9 +66231,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-28.5",
+          "spreadOdds": "-110",
+          "total": 44.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401866428",
@@ -65790,14 +66263,17 @@
         "name": "Ohio Bobcats",
         "short": "Ohio",
         "abbreviation": "OHIO",
-        "score": null
+        "score": null,
+        "color": "#154734",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "284",
         "name": "Stonehill Skyhawks",
         "short": "Stonehill",
         "abbreviation": "STO",
-        "score": null
+        "score": null,
+        "color": "#000000"
       },
       "venue": {
         "id": "3876",
@@ -65805,7 +66281,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-34.5",
         "spreadOdds": "-110",
         "spreadOpen": "-34.5",
@@ -65835,9 +66311,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-34.5",
+          "spreadOdds": "-110",
+          "total": 50.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401868188",
@@ -65857,14 +66343,18 @@
         "name": "Marshall Thundering Herd",
         "short": "Marshall",
         "abbreviation": "MRSH",
-        "score": null
+        "score": null,
+        "color": "#00b140",
+        "alternateColor": "#000000"
       },
       "away": {
         "id": "2241",
         "name": "Gardner-Webb Runnin' Bulldogs",
         "short": "Gardner-Webb",
         "abbreviation": "GWEB",
-        "score": null
+        "score": null,
+        "color": "#c12535",
+        "alternateColor": "#909090"
       },
       "venue": {
         "id": "3775",
@@ -65872,7 +66362,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-23.5",
         "spreadOdds": "-110",
         "spreadOpen": "-23.5",
@@ -65892,9 +66382,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-23.5",
+          "spreadOdds": "-110",
+          "total": 50.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401856806",
@@ -65914,14 +66414,18 @@
         "name": "Georgia Southern Eagles",
         "short": "GA Southern",
         "abbreviation": "GASO",
-        "score": null
+        "score": null,
+        "color": "#041e42",
+        "alternateColor": "#a3aaae"
       },
       "away": {
         "id": "248",
         "name": "Houston Cougars",
         "short": "Houston",
         "abbreviation": "HOU",
-        "score": null
+        "score": null,
+        "color": "#c8102e",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3608",
@@ -65929,7 +66433,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+18.5",
         "spreadOdds": "-110",
         "spreadOpen": "+19.5",
@@ -66259,9 +66763,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+18.5",
+          "spreadOdds": "-110",
+          "total": 56.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401862781",
@@ -66281,14 +66795,18 @@
         "name": "East Carolina Pirates",
         "short": "East Carolina",
         "abbreviation": "ECU",
-        "score": null
+        "score": null,
+        "color": "#582c83",
+        "alternateColor": "#ffc72c"
       },
       "away": {
         "id": "2428",
         "name": "North Carolina Central Eagles",
         "short": "NC Central",
         "abbreviation": "NCCU",
-        "score": null
+        "score": null,
+        "color": "#880023",
+        "alternateColor": "#c2c3c0"
       },
       "venue": {
         "id": "3699",
@@ -66296,7 +66814,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-34.5",
         "spreadOdds": "-110",
         "spreadOpen": "-34.5",
@@ -66326,9 +66844,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-34.5",
+          "spreadOdds": "-110",
+          "total": 54.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401856698",
@@ -66348,14 +66876,18 @@
         "name": "Auburn Tigers",
         "short": "Auburn",
         "abbreviation": "AUB",
-        "score": null
+        "score": null,
+        "color": "#002b5c",
+        "alternateColor": "#f26522"
       },
       "away": {
         "id": "238",
         "name": "Vanderbilt Commodores",
         "short": "Vanderbilt",
         "abbreviation": "VAN",
-        "score": null
+        "score": null,
+        "color": "#000000",
+        "alternateColor": "#cfae70"
       },
       "venue": {
         "id": "3785",
@@ -66363,7 +66895,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-9.5",
         "spreadOdds": "-110",
         "spreadOpen": "-8.5",
@@ -66374,16 +66906,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34674769"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "-8.5",
-          "spreadOdds": "-110",
-          "total": 50.5,
-          "overOdds": "-112",
-          "underOdds": "-108",
-          "retrievedAt": "2026-09-18T14:37:44Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "-8.5",
@@ -66873,9 +67395,19 @@
           "underOdds": "-105",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-9.5",
+          "spreadOdds": "-110",
+          "total": 54.5,
+          "overOdds": "-115",
+          "underOdds": "-105",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858466",
@@ -66895,14 +67427,18 @@
         "name": "Penn State Nittany Lions",
         "short": "Penn State",
         "abbreviation": "PSU",
-        "score": null
+        "score": null,
+        "color": "#061440",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "275",
         "name": "Wisconsin Badgers",
         "short": "Wisconsin",
         "abbreviation": "WIS",
-        "score": null
+        "score": null,
+        "color": "#a00000",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3632",
@@ -66910,7 +67446,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-10",
         "spreadOdds": "-108",
         "spreadOpen": "-11.5",
@@ -66921,16 +67457,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34674735"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "-11.5",
-          "spreadOdds": "-105",
-          "total": 42.5,
-          "overOdds": "-112",
-          "underOdds": "-108",
-          "retrievedAt": "2026-09-19T12:58:33Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "-11.5",
@@ -67420,9 +67946,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-10",
+          "spreadOdds": "-108",
+          "total": 44.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858464",
@@ -67442,14 +67978,18 @@
         "name": "Michigan State Spartans",
         "short": "Michigan St",
         "abbreviation": "MSU",
-        "score": null
+        "score": null,
+        "color": "#173f35",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "158",
         "name": "Nebraska Cornhuskers",
         "short": "Nebraska",
         "abbreviation": "NEB",
-        "score": null
+        "score": null,
+        "color": "#e31937",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3936",
@@ -67457,7 +67997,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+5.5",
         "spreadOdds": "-108",
         "spreadOpen": "+5.5",
@@ -67468,16 +68008,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34674742"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "+5.5",
-          "spreadOdds": "-110",
-          "total": 52.5,
-          "overOdds": "-112",
-          "underOdds": "-108",
-          "retrievedAt": "2026-09-18T11:58:28Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "+5.5",
@@ -67967,9 +68497,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+5.5",
+          "spreadOdds": "-108",
+          "total": 48.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401862785",
@@ -67989,14 +68529,18 @@
         "name": "Bowling Green Falcons",
         "short": "Bowling Green",
         "abbreviation": "BGSU",
-        "score": null
+        "score": null,
+        "color": "#fd5000",
+        "alternateColor": "#4f2c1d"
       },
       "away": {
         "id": "58",
         "name": "South Florida Bulls",
         "short": "South Florida",
         "abbreviation": "USF",
-        "score": null
+        "score": null,
+        "color": "#006747",
+        "alternateColor": "#cfc493"
       },
       "venue": {
         "id": "3700",
@@ -68004,7 +68548,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+17.5",
         "spreadOdds": "-110",
         "spreadOpen": "+15.5",
@@ -68304,9 +68848,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+17.5",
+          "spreadOdds": "-110",
+          "total": 48.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401869961",
@@ -68326,14 +68880,18 @@
         "name": "Old Dominion Monarchs",
         "short": "Old Dominion",
         "abbreviation": "ODU",
-        "score": null
+        "score": null,
+        "color": "#003768",
+        "alternateColor": "#a1d2f1"
       },
       "away": {
         "id": "256",
         "name": "James Madison Dukes",
         "short": "James Madison",
         "abbreviation": "JMU",
-        "score": null
+        "score": null,
+        "color": "#450084",
+        "alternateColor": "#cbb677"
       },
       "venue": {
         "id": "3918",
@@ -68341,7 +68899,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+6",
         "spreadOdds": "-112",
         "spreadOpen": "+4.5",
@@ -68701,9 +69259,19 @@
           "underOdds": "-105",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+6",
+          "spreadOdds": "-112",
+          "total": 44.5,
+          "overOdds": "-115",
+          "underOdds": "-105",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858239",
@@ -68723,14 +69291,18 @@
         "name": "Virginia Cavaliers",
         "short": "Virginia",
         "abbreviation": "UVA",
-        "score": null
+        "score": null,
+        "color": "#232d4b",
+        "alternateColor": "#f84c1e"
       },
       "away": {
         "id": "48",
         "name": "Delaware Blue Hens",
         "short": "Delaware",
         "abbreviation": "DEL",
-        "score": null
+        "score": null,
+        "color": "#00539f",
+        "alternateColor": "#ffd200"
       },
       "venue": {
         "id": "3923",
@@ -68738,7 +69310,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-19.5",
         "spreadOdds": "-110",
         "spreadOpen": "-20.5",
@@ -69068,9 +69640,19 @@
           "underOdds": "-112",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-19.5",
+          "spreadOdds": "-110",
+          "total": 52.5,
+          "overOdds": "-108",
+          "underOdds": "-112",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401860892",
@@ -69090,14 +69672,18 @@
         "name": "Texas State Bobcats",
         "short": "Texas St",
         "abbreviation": "TXST",
-        "score": null
+        "score": null,
+        "color": "#501214",
+        "alternateColor": "#6a5638"
       },
       "away": {
         "id": "2916",
         "name": "Incarnate Word Cardinals",
         "short": "Incarnate Word",
         "abbreviation": "UIW",
-        "score": null
+        "score": null,
+        "color": "#000000",
+        "alternateColor": "#080808"
       },
       "venue": {
         "id": "3644",
@@ -69105,7 +69691,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-29.5",
         "spreadOdds": "-110",
         "spreadOpen": "-29.5",
@@ -69145,9 +69731,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-29.5",
+          "spreadOdds": "-110",
+          "total": 63.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401867909",
@@ -69167,7 +69763,9 @@
         "name": "Florida International Panthers",
         "short": "FIU",
         "abbreviation": "FIU",
-        "score": null
+        "score": null,
+        "color": "#091f3f",
+        "alternateColor": "#c3993f"
       },
       "away": {
         "id": "2341",
@@ -69182,7 +69780,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-35.5",
         "spreadOdds": "-110",
         "spreadOpen": "-35.5",
@@ -69202,9 +69800,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-35.5",
+          "spreadOdds": "-110",
+          "total": 50.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401862780",
@@ -69224,14 +69832,18 @@
         "name": "Charlotte 49ers",
         "short": "Charlotte",
         "abbreviation": "CLT",
-        "score": null
+        "score": null,
+        "color": "#005035",
+        "alternateColor": "#a49665"
       },
       "away": {
         "id": "309",
         "name": "Louisiana Ragin' Cajuns",
         "short": "Louisiana",
         "abbreviation": "UL",
-        "score": null
+        "score": null,
+        "color": "#ce181e",
+        "alternateColor": "#000000"
       },
       "venue": {
         "id": "4418",
@@ -69239,7 +69851,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+10",
         "spreadOdds": "-108",
         "spreadOpen": "+14.5",
@@ -69589,9 +70201,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+10",
+          "spreadOdds": "-108",
+          "total": 48.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858238",
@@ -69611,14 +70233,18 @@
         "name": "Miami Hurricanes",
         "short": "Miami",
         "abbreviation": "MIA",
-        "score": null
+        "score": null,
+        "color": "#f47423",
+        "alternateColor": "#035131"
       },
       "away": {
         "id": "2117",
         "name": "Central Michigan Chippewas",
         "short": "C Michigan",
         "abbreviation": "CMU",
-        "score": null
+        "score": null,
+        "color": "#4c0027",
+        "alternateColor": "#fbab18"
       },
       "venue": {
         "id": "3948",
@@ -69626,7 +70252,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-41.5",
         "spreadOdds": "-110",
         "spreadOpen": "-42.5",
@@ -70036,9 +70662,19 @@
           "underOdds": "-105",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-41.5",
+          "spreadOdds": "-110",
+          "total": 53.5,
+          "overOdds": "-115",
+          "underOdds": "-105",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401856881",
@@ -70058,14 +70694,18 @@
         "name": "West Virginia Mountaineers",
         "short": "West Virginia",
         "abbreviation": "WVU",
-        "score": null
+        "score": null,
+        "color": "#eaaa00",
+        "alternateColor": "#002855"
       },
       "away": {
         "id": "197",
         "name": "Oklahoma State Cowboys",
         "short": "Oklahoma St",
         "abbreviation": "OKST",
-        "score": null
+        "score": null,
+        "color": "#fe5c00",
+        "alternateColor": "#000000"
       },
       "venue": {
         "id": "3842",
@@ -70073,7 +70713,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-1.5",
         "spreadOdds": "-112",
         "spreadOpen": "+2.5",
@@ -70084,16 +70724,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34674740"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "+2.5",
-          "spreadOdds": "-110",
-          "total": 57.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-18T23:21:11Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "+2.5",
@@ -70583,9 +71213,19 @@
           "underOdds": "-112",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-1.5",
+          "spreadOdds": "-112",
+          "total": 60.5,
+          "overOdds": "-108",
+          "underOdds": "-112",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401862784",
@@ -70605,14 +71245,18 @@
         "name": "Tulane Green Wave",
         "short": "Tulane",
         "abbreviation": "TULN",
-        "score": null
+        "score": null,
+        "color": "#006747",
+        "alternateColor": "#418fde"
       },
       "away": {
         "id": "2572",
         "name": "Southern Miss Golden Eagles",
         "short": "Southern Miss",
         "abbreviation": "USM",
-        "score": null
+        "score": null,
+        "color": "#ffc72c",
+        "alternateColor": "#231f20"
       },
       "venue": {
         "id": "4729",
@@ -70620,7 +71264,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-18.5",
         "spreadOdds": "-108",
         "spreadOpen": "-17.5",
@@ -70970,9 +71614,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-18.5",
+          "spreadOdds": "-108",
+          "total": 52.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401856814",
@@ -70992,14 +71646,18 @@
         "name": "Cincinnati Bearcats",
         "short": "Cincinnati",
         "abbreviation": "CIN",
-        "score": null
+        "score": null,
+        "color": "#000000",
+        "alternateColor": "#e00122"
       },
       "away": {
         "id": "2306",
         "name": "Kansas State Wildcats",
         "short": "Kansas St",
         "abbreviation": "KSU",
-        "score": null
+        "score": null,
+        "color": "#330a57",
+        "alternateColor": "#e2e3e4"
       },
       "venue": {
         "id": "3854",
@@ -71007,7 +71665,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+6.5",
         "spreadOdds": "-110",
         "spreadOpen": "+6",
@@ -71317,9 +71975,19 @@
           "underOdds": "-115",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+6.5",
+          "spreadOdds": "-110",
+          "total": 55.5,
+          "overOdds": "-105",
+          "underOdds": "-115",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401856696",
@@ -71339,14 +72007,18 @@
         "name": "Alabama Crimson Tide",
         "short": "Alabama",
         "abbreviation": "ALA",
-        "score": null
+        "score": null,
+        "color": "#9e1b32",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "2579",
         "name": "South Carolina Gamecocks",
         "short": "South Carolina",
         "abbreviation": "SC",
-        "score": null
+        "score": null,
+        "color": "#73000a",
+        "alternateColor": "#000000"
       },
       "venue": {
         "id": "3657",
@@ -71354,7 +72026,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-12.5",
         "spreadOdds": "-110",
         "spreadOpen": "-11.5",
@@ -71365,16 +72037,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34674779"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "-11.5",
-          "spreadOdds": "-108",
-          "total": 46.5,
-          "overOdds": "-115",
-          "underOdds": "-105",
-          "retrievedAt": "2026-09-18T14:37:44Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "-11.5",
@@ -71864,9 +72526,19 @@
           "underOdds": "-105",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-12.5",
+          "spreadOdds": "-110",
+          "total": 53.5,
+          "overOdds": "-115",
+          "underOdds": "-105",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401869931",
@@ -71886,14 +72558,18 @@
         "name": "Arkansas State Red Wolves",
         "short": "Arkansas St",
         "abbreviation": "ARST",
-        "score": null
+        "score": null,
+        "color": "#cc092f",
+        "alternateColor": "#000000"
       },
       "away": {
         "id": "338",
         "name": "Kennesaw State Owls",
         "short": "Kennesaw St",
         "abbreviation": "KENN",
-        "score": null
+        "score": null,
+        "color": "#fdbb30",
+        "alternateColor": "#0b1315"
       },
       "venue": {
         "id": "3625",
@@ -71901,7 +72577,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-6.5",
         "spreadOdds": "-108",
         "spreadOpen": "-5.5",
@@ -72261,9 +72937,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-6.5",
+          "spreadOdds": "-108",
+          "total": 52.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401870745",
@@ -72283,14 +72969,17 @@
         "name": "Western Kentucky Hilltoppers",
         "short": "Western KY",
         "abbreviation": "WKU",
-        "score": null
+        "score": null,
+        "color": "#e13a3e",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "2385",
         "name": "Mercyhurst Lakers",
         "short": "Mercyhurst",
         "abbreviation": "MERC",
-        "score": null
+        "score": null,
+        "color": "#000000"
       },
       "venue": {
         "id": "3796",
@@ -72298,7 +72987,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-38.5",
         "spreadOdds": "-110",
         "spreadOpen": "-38.5",
@@ -72318,9 +73007,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-38.5",
+          "spreadOdds": "-110",
+          "total": 56.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401871048",
@@ -72340,14 +73039,18 @@
         "name": "Jacksonville State Gamecocks",
         "short": "Jax State",
         "abbreviation": "JXST",
-        "score": null
+        "score": null,
+        "color": "#cc0000",
+        "alternateColor": "#000000"
       },
       "away": {
         "id": "2393",
         "name": "Middle Tennessee Blue Raiders",
         "short": "MTSU",
         "abbreviation": "MTSU",
-        "score": null
+        "score": null,
+        "color": "#036eb7",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3662",
@@ -72355,7 +73058,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-7",
         "spreadOdds": "-112",
         "spreadOpen": "-9.5",
@@ -72675,9 +73378,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-7",
+          "spreadOdds": "-112",
+          "total": 51.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858469",
@@ -72697,14 +73410,18 @@
         "name": "USC Trojans",
         "short": "USC",
         "abbreviation": "USC",
-        "score": null
+        "score": null,
+        "color": "#9d2235",
+        "alternateColor": "#ffc72c"
       },
       "away": {
         "id": "2483",
         "name": "Oregon Ducks",
         "short": "Oregon",
         "abbreviation": "ORE",
-        "score": null
+        "score": null,
+        "color": "#00934b",
+        "alternateColor": "#fff41b"
       },
       "venue": {
         "id": "477",
@@ -72712,7 +73429,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+3",
         "spreadOdds": "-108",
         "spreadOpen": "+5.5",
@@ -72723,16 +73440,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34226058"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "-2.5",
-          "spreadOdds": "-105",
-          "total": 62.5,
-          "overOdds": "-112",
-          "underOdds": "-108",
-          "retrievedAt": "2026-09-18T19:14:23Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "-2.5",
@@ -73222,9 +73929,19 @@
           "underOdds": "-112",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+3",
+          "spreadOdds": "-108",
+          "total": 62.5,
+          "overOdds": "-108",
+          "underOdds": "-112",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401856702",
@@ -73244,14 +73961,18 @@
         "name": "LSU Tigers",
         "short": "LSU",
         "abbreviation": "LSU",
-        "score": null
+        "score": null,
+        "color": "#461d76",
+        "alternateColor": "#fdd023"
       },
       "away": {
         "id": "245",
         "name": "Texas A&M Aggies",
         "short": "Texas A&M",
         "abbreviation": "TA&M",
-        "score": null
+        "score": null,
+        "color": "#500000",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3958",
@@ -73259,7 +73980,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-8.5",
         "spreadOdds": "-110",
         "spreadOpen": "-3",
@@ -73270,16 +73991,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34226054"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "-5.5",
-          "spreadOdds": "-112",
-          "total": 54.5,
-          "overOdds": "-115",
-          "underOdds": "-105",
-          "retrievedAt": "2026-09-18T11:58:28Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "-5.5",
@@ -73769,9 +74480,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-8.5",
+          "spreadOdds": "-110",
+          "total": 51.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401864572",
@@ -73791,14 +74512,18 @@
         "name": "NC State Wolfpack",
         "short": "NC State",
         "abbreviation": "NCSU",
-        "score": null
+        "score": null,
+        "color": "#cc0000",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "2026",
         "name": "App State Mountaineers",
         "short": "App State",
         "abbreviation": "APP",
-        "score": null
+        "score": null,
+        "color": "#000000",
+        "alternateColor": "#ffcd00"
       },
       "venue": {
         "id": "3670",
@@ -73806,7 +74531,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-14",
         "spreadOdds": "-110",
         "spreadOpen": "-14",
@@ -74136,9 +74861,19 @@
           "underOdds": "-118",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-14",
+          "spreadOdds": "-110",
+          "total": 55.5,
+          "overOdds": "-102",
+          "underOdds": "-118",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401856804",
@@ -74158,14 +74893,18 @@
         "name": "Washington State Cougars",
         "short": "Washington St",
         "abbreviation": "WSU",
-        "score": null
+        "score": null,
+        "color": "#a60f2d",
+        "alternateColor": "#4d4d4d"
       },
       "away": {
         "id": "12",
         "name": "Arizona Wildcats",
         "short": "Arizona",
         "abbreviation": "ARIZ",
-        "score": null
+        "score": null,
+        "color": "#cc0033",
+        "alternateColor": "#003366"
       },
       "venue": {
         "id": "3820",
@@ -74173,7 +74912,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+10",
         "spreadOdds": "-105",
         "spreadOpen": "+13.5",
@@ -74513,9 +75252,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+10",
+          "spreadOdds": "-105",
+          "total": 48.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401860894",
@@ -74535,14 +75284,18 @@
         "name": "Utah State Aggies",
         "short": "Utah State",
         "abbreviation": "USU",
-        "score": null
+        "score": null,
+        "color": "#0f2439",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "2653",
         "name": "Troy Trojans",
         "short": "Troy",
         "abbreviation": "TROY",
-        "score": null
+        "score": null,
+        "color": "#862633",
+        "alternateColor": "#b1b1b1"
       },
       "venue": {
         "id": "3905",
@@ -74550,7 +75303,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-3",
         "spreadOdds": "-112",
         "spreadOpen": "-2.5",
@@ -74910,9 +75663,19 @@
           "underOdds": "-105",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-3",
+          "spreadOdds": "-112",
+          "total": 47.5,
+          "overOdds": "-115",
+          "underOdds": "-105",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401862783",
@@ -74932,14 +75695,17 @@
         "name": "North Texas Mean Green",
         "short": "North Texas",
         "abbreviation": "UNT",
-        "score": null
+        "score": null,
+        "color": "#068f33",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "2277",
         "name": "Houston Christian Huskies",
         "short": "Hou Christian",
         "abbreviation": "HCU",
-        "score": null
+        "score": null,
+        "color": "#00539c"
       },
       "venue": {
         "id": "3825",
@@ -74947,7 +75713,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-37.5",
         "spreadOdds": "-110",
         "spreadOpen": "-37.5",
@@ -74967,9 +75733,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-37.5",
+          "spreadOdds": "-110",
+          "total": 58.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401856703",
@@ -74989,14 +75765,18 @@
         "name": "Mississippi State Bulldogs",
         "short": "Mississippi St",
         "abbreviation": "MSST",
-        "score": null
+        "score": null,
+        "color": "#5d1725",
+        "alternateColor": "#c1c6c8"
       },
       "away": {
         "id": "142",
         "name": "Missouri Tigers",
         "short": "Missouri",
         "abbreviation": "MIZ",
-        "score": null
+        "score": null,
+        "color": "#f1b82d",
+        "alternateColor": "#000000"
       },
       "venue": {
         "id": "3693",
@@ -75004,7 +75784,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-6.5",
         "spreadOdds": "-108",
         "spreadOpen": "-1.5",
@@ -75015,16 +75795,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34674790"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "-1.5",
-          "spreadOdds": "-105",
-          "total": 56.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-18T14:37:44Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "-1.5",
@@ -75514,9 +76284,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-6.5",
+          "spreadOdds": "-108",
+          "total": 58.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401862782",
@@ -75536,14 +76316,18 @@
         "name": "UL Monroe Warhawks",
         "short": "UL Monroe",
         "abbreviation": "ULM",
-        "score": null
+        "score": null,
+        "color": "#840029",
+        "alternateColor": "#fdb913"
       },
       "away": {
         "id": "2226",
         "name": "Florida Atlantic Owls",
         "short": "FAU",
         "abbreviation": "FAU",
-        "score": null
+        "score": null,
+        "color": "#003366",
+        "alternateColor": "#cc0000"
       },
       "venue": {
         "id": "3817",
@@ -75551,7 +76335,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+13.5",
         "spreadOdds": "-110",
         "spreadOpen": "+13.5",
@@ -75871,9 +76655,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+13.5",
+          "spreadOdds": "-110",
+          "total": 57.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401856697",
@@ -75893,14 +76687,18 @@
         "name": "Arkansas Razorbacks",
         "short": "Arkansas",
         "abbreviation": "ARK",
-        "score": null
+        "score": null,
+        "color": "#a32136",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "202",
         "name": "Tulsa Golden Hurricane",
         "short": "Tulsa",
         "abbreviation": "TLSA",
-        "score": null
+        "score": null,
+        "color": "#003595",
+        "alternateColor": "#d0b787"
       },
       "venue": {
         "id": "3887",
@@ -75908,7 +76706,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-7",
         "spreadOdds": "-110",
         "spreadOpen": "-8.5",
@@ -76248,9 +77046,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-7",
+          "spreadOdds": "-110",
+          "total": 50.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401866429",
@@ -76270,14 +77078,18 @@
         "name": "Sacramento State Hornets",
         "short": "Sacramento St",
         "abbreviation": "SAC",
-        "score": null
+        "score": null,
+        "color": "#00573C",
+        "alternateColor": "#cdb97d"
       },
       "away": {
         "id": "113",
         "name": "Massachusetts Minutemen",
         "short": "UMass",
         "abbreviation": "MASS",
-        "score": null
+        "score": null,
+        "color": "#881c1c",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3757",
@@ -76285,7 +77097,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+4.5",
         "spreadOdds": "-115",
         "spreadOpen": "+6",
@@ -76625,9 +77437,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+4.5",
+          "spreadOdds": "-115",
+          "total": 48.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858241",
@@ -76647,14 +77469,18 @@
         "name": "SMU Mustangs",
         "short": "SMU",
         "abbreviation": "SMU",
-        "score": null
+        "score": null,
+        "color": "#a80000",
+        "alternateColor": "#0033a1"
       },
       "away": {
         "id": "2623",
         "name": "Missouri State Bears",
         "short": "Missouri St",
         "abbreviation": "MOST",
-        "score": null
+        "score": null,
+        "color": "#5e0009",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3735",
@@ -76662,7 +77488,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-34.5",
         "spreadOdds": "-110",
         "spreadOpen": "-34.5",
@@ -76982,9 +77808,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-34.5",
+          "spreadOdds": "-110",
+          "total": 59.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401860895",
@@ -77004,14 +77840,18 @@
         "name": "UTEP Miners",
         "short": "UTEP",
         "abbreviation": "UTEP",
-        "score": null
+        "score": null,
+        "color": "#ff8200",
+        "alternateColor": "#041e42"
       },
       "away": {
         "id": "204",
         "name": "Oregon State Beavers",
         "short": "Oregon St",
         "abbreviation": "ORST",
-        "score": null
+        "score": null,
+        "color": "#dc4405",
+        "alternateColor": "#000000"
       },
       "venue": {
         "id": "3946",
@@ -77019,7 +77859,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+10.5",
         "spreadOdds": "-112",
         "spreadOpen": "+12.5",
@@ -77389,9 +78229,19 @@
           "underOdds": "-112",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+10.5",
+          "spreadOdds": "-112",
+          "total": 55.5,
+          "overOdds": "-108",
+          "underOdds": "-112",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401860891",
@@ -77411,14 +78261,18 @@
         "name": "Fresno State Bulldogs",
         "short": "Fresno St",
         "abbreviation": "FRES",
-        "score": null
+        "score": null,
+        "color": "#b1102b",
+        "alternateColor": "#13284c"
       },
       "away": {
         "id": "242",
         "name": "Rice Owls",
         "short": "Rice",
         "abbreviation": "RICE",
-        "score": null
+        "score": null,
+        "color": "#00205b",
+        "alternateColor": "#c1c6c8"
       },
       "venue": {
         "id": "3660",
@@ -77426,7 +78280,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-13.5",
         "spreadOdds": "-115",
         "spreadOpen": "-13.5",
@@ -77766,9 +78620,19 @@
           "underOdds": "-115",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-13.5",
+          "spreadOdds": "-115",
+          "total": 44.5,
+          "overOdds": "-105",
+          "underOdds": "-115",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401864509",
@@ -77788,14 +78652,18 @@
         "name": "Nevada Wolf Pack",
         "short": "Nevada",
         "abbreviation": "NEV",
-        "score": null
+        "score": null,
+        "color": "#041e42",
+        "alternateColor": "#8a8d8f"
       },
       "away": {
         "id": "2005",
         "name": "Air Force Falcons",
         "short": "Air Force",
         "abbreviation": "AFA",
-        "score": null
+        "score": null,
+        "color": "#003594",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3816",
@@ -77803,7 +78671,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+5.5",
         "spreadOdds": "-112",
         "spreadOpen": "+4.5",
@@ -78153,9 +79021,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+5.5",
+          "spreadOdds": "-112",
+          "total": 49.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858240",
@@ -78175,14 +79053,18 @@
         "name": "Stanford Cardinal",
         "short": "Stanford",
         "abbreviation": "STAN",
-        "score": null
+        "score": null,
+        "color": "#8c1515",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "59",
         "name": "Georgia Tech Yellow Jackets",
         "short": "Georgia Tech",
         "abbreviation": "GT",
-        "score": null
+        "score": null,
+        "color": "#b3a369",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3940",
@@ -78190,7 +79072,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+3.5",
         "spreadOdds": "-118",
         "spreadOpen": "+4.5",
@@ -78510,9 +79392,19 @@
           "underOdds": "-115",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+3.5",
+          "spreadOdds": "-118",
+          "total": 48.5,
+          "overOdds": "-105",
+          "underOdds": "-115",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "CFB-401858470",
@@ -78532,14 +79424,18 @@
         "name": "Washington Huskies",
         "short": "Washington",
         "abbreviation": "WASH",
-        "score": null
+        "score": null,
+        "color": "#33006f",
+        "alternateColor": "#e8d3a2"
       },
       "away": {
         "id": "135",
         "name": "Minnesota Golden Gophers",
         "short": "Minnesota",
         "abbreviation": "MINN",
-        "score": null
+        "score": null,
+        "color": "#5e0a2f",
+        "alternateColor": "#fab41c"
       },
       "venue": {
         "id": "3765",
@@ -78547,7 +79443,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-10",
         "spreadOdds": "-108",
         "spreadOpen": "-9.5",
@@ -78937,9 +79833,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-10",
+          "spreadOdds": "-108",
+          "total": 45.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "NFL-401872953",
@@ -78959,14 +79865,18 @@
         "name": "Buffalo Bills",
         "short": "Bills",
         "abbreviation": "BUF",
-        "score": null
+        "score": null,
+        "color": "#00338d",
+        "alternateColor": "#d50a0a"
       },
       "away": {
         "id": "24",
         "name": "Los Angeles Chargers",
         "short": "Chargers",
         "abbreviation": "LAC",
-        "score": null
+        "score": null,
+        "color": "#0080c6",
+        "alternateColor": "#ffc20e"
       },
       "venue": {
         "id": "11938",
@@ -78974,7 +79884,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-7",
         "spreadOdds": "-115",
         "spreadOpen": "-2.5",
@@ -78985,16 +79895,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118212"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "-4.5",
-          "spreadOdds": "-110",
-          "total": 49.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-18T11:58:28Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "-4.5",
@@ -79484,9 +80384,19 @@
           "underOdds": "-115",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-7",
+          "spreadOdds": "-115",
+          "total": 50.5,
+          "overOdds": "-105",
+          "underOdds": "-115",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "NFL-401872949",
@@ -79506,14 +80416,18 @@
         "name": "Cleveland Browns",
         "short": "Browns",
         "abbreviation": "CLE",
-        "score": null
+        "score": null,
+        "color": "#472a08",
+        "alternateColor": "#ff3c00"
       },
       "away": {
         "id": "29",
         "name": "Carolina Panthers",
         "short": "Panthers",
         "abbreviation": "CAR",
-        "score": null
+        "score": null,
+        "color": "#0085ca",
+        "alternateColor": "#000000"
       },
       "venue": {
         "id": "3679",
@@ -79521,7 +80435,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+2.5",
         "spreadOdds": "+100",
         "spreadOpen": "+1.5",
@@ -79532,16 +80446,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118105"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "+2.5",
-          "spreadOdds": "-105",
-          "total": 40.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-18T11:58:28Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "+2.5",
@@ -80031,9 +80935,19 @@
           "underOdds": "-112",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+2.5",
+          "spreadOdds": "+100",
+          "total": 42.5,
+          "overOdds": "-108",
+          "underOdds": "-112",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "NFL-401872954",
@@ -80053,14 +80967,18 @@
         "name": "Detroit Lions",
         "short": "Lions",
         "abbreviation": "DET",
-        "score": null
+        "score": null,
+        "color": "#0076b6",
+        "alternateColor": "#bbbbbb"
       },
       "away": {
         "id": "20",
         "name": "New York Jets",
         "short": "Jets",
         "abbreviation": "NYJ",
-        "score": null
+        "score": null,
+        "color": "#115740",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "3727",
@@ -80068,7 +80986,7 @@
         "indoor": true
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-6.5",
         "spreadOdds": "-110",
         "spreadOpen": "-9.5",
@@ -80079,16 +80997,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118222"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "-7",
-          "spreadOdds": "-110",
-          "total": 48.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-18T13:10:01Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "-7",
@@ -80578,9 +81486,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-6.5",
+          "spreadOdds": "-110",
+          "total": 47.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "NFL-401872951",
@@ -80600,14 +81518,18 @@
         "name": "Indianapolis Colts",
         "short": "Colts",
         "abbreviation": "IND",
-        "score": null
+        "score": null,
+        "color": "#003b75",
+        "alternateColor": "#ffffff"
       },
       "away": {
         "id": "34",
         "name": "Houston Texans",
         "short": "Texans",
         "abbreviation": "HOU",
-        "score": null
+        "score": null,
+        "color": "#021018",
+        "alternateColor": "#eb0028"
       },
       "venue": {
         "id": "3812",
@@ -80615,7 +81537,7 @@
         "indoor": true
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+3",
         "spreadOdds": "-118",
         "spreadOpen": "+1.5",
@@ -80626,16 +81548,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118261"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "+2.5",
-          "spreadOdds": "-110",
-          "total": 45.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-18T13:10:01Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "+2.5",
@@ -81125,9 +82037,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+3",
+          "spreadOdds": "-118",
+          "total": 42.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "NFL-401872952",
@@ -81147,14 +82069,18 @@
         "name": "Miami Dolphins",
         "short": "Dolphins",
         "abbreviation": "MIA",
-        "score": null
+        "score": null,
+        "color": "#008e97",
+        "alternateColor": "#fc4c02"
       },
       "away": {
         "id": "12",
         "name": "Kansas City Chiefs",
         "short": "Chiefs",
         "abbreviation": "KC",
-        "score": null
+        "score": null,
+        "color": "#e31837",
+        "alternateColor": "#ffb612"
       },
       "venue": {
         "id": "3948",
@@ -81162,7 +82088,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+11.5",
         "spreadOdds": "-112",
         "spreadOpen": "+7",
@@ -81173,16 +82099,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118189"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "+8.5",
-          "spreadOdds": "-110",
-          "total": 44.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-18T13:10:01Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "+8.5",
@@ -81672,9 +82588,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+11.5",
+          "spreadOdds": "-112",
+          "total": 46.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "NFL-401872956",
@@ -81694,14 +82620,18 @@
         "name": "New York Giants",
         "short": "Giants",
         "abbreviation": "NYG",
-        "score": null
+        "score": null,
+        "color": "#003c7f",
+        "alternateColor": "#c9243f"
       },
       "away": {
         "id": "10",
         "name": "Tennessee Titans",
         "short": "Titans",
         "abbreviation": "TEN",
-        "score": null
+        "score": null,
+        "color": "#4495d2",
+        "alternateColor": "#001532"
       },
       "venue": {
         "id": "3839",
@@ -81709,9 +82639,9 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-2.5",
-        "spreadOdds": "-120",
+        "spreadOdds": "-118",
         "spreadOpen": "-3",
         "total": 39.5,
         "totalOpen": "o45.5",
@@ -81720,16 +82650,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118112"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "-5.5",
-          "spreadOdds": "-110",
-          "total": 43.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-18T18:17:12Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "-5.5",
@@ -82219,9 +83139,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-2.5",
+          "spreadOdds": "-118",
+          "total": 39.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "NFL-401872950",
@@ -82241,14 +83171,18 @@
         "name": "Pittsburgh Steelers",
         "short": "Steelers",
         "abbreviation": "PIT",
-        "score": null
+        "score": null,
+        "color": "#000000",
+        "alternateColor": "#ffb612"
       },
       "away": {
         "id": "4",
         "name": "Cincinnati Bengals",
         "short": "Bengals",
         "abbreviation": "CIN",
-        "score": null
+        "score": null,
+        "color": "#fb4f14",
+        "alternateColor": "#000000"
       },
       "venue": {
         "id": "3752",
@@ -82256,7 +83190,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+3.5",
         "spreadOdds": "-105",
         "spreadOpen": "+1.5",
@@ -82267,16 +83201,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118057"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "+2.5",
-          "spreadOdds": "-110",
-          "total": 45.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-18T11:50:14Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "+2.5",
@@ -82766,9 +83690,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+3.5",
+          "spreadOdds": "-105",
+          "total": 42.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "NFL-401872955",
@@ -82788,14 +83722,18 @@
         "name": "Washington Commanders",
         "short": "Commanders",
         "abbreviation": "WSH",
-        "score": null
+        "score": null,
+        "color": "#5a1414",
+        "alternateColor": "#ffb612"
       },
       "away": {
         "id": "26",
         "name": "Seattle Seahawks",
         "short": "Seahawks",
         "abbreviation": "SEA",
-        "score": null
+        "score": null,
+        "color": "#002a5c",
+        "alternateColor": "#69be28"
       },
       "venue": {
         "id": "3719",
@@ -82803,7 +83741,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+7",
         "spreadOdds": "-112",
         "spreadOpen": "+3.5",
@@ -82814,16 +83752,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118053"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "+2.5",
-          "spreadOdds": "-110",
-          "total": 41.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-18T14:37:44Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "+2.5",
@@ -83313,9 +84241,19 @@
           "underOdds": "-118",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+7",
+          "spreadOdds": "-112",
+          "total": 40.5,
+          "overOdds": "-102",
+          "underOdds": "-118",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "NFL-401872957",
@@ -83335,14 +84273,18 @@
         "name": "Jacksonville Jaguars",
         "short": "Jaguars",
         "abbreviation": "JAX",
-        "score": null
+        "score": null,
+        "color": "#007487",
+        "alternateColor": "#d7a22a"
       },
       "away": {
         "id": "17",
         "name": "New England Patriots",
         "short": "Patriots",
         "abbreviation": "NE",
-        "score": null
+        "score": null,
+        "color": "#002a5c",
+        "alternateColor": "#c60c30"
       },
       "venue": {
         "id": "3712",
@@ -83350,9 +84292,9 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-3",
-        "spreadOdds": "-108",
+        "spreadOdds": "-105",
         "spreadOpen": "-1.5",
         "total": 45.5,
         "totalOpen": "o45.5",
@@ -83760,9 +84702,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-3",
+          "spreadOdds": "-105",
+          "total": 45.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "NFL-401872958",
@@ -83782,14 +84734,18 @@
         "name": "San Francisco 49ers",
         "short": "49ers",
         "abbreviation": "SF",
-        "score": null
+        "score": null,
+        "color": "#aa0000",
+        "alternateColor": "#b3995d"
       },
       "away": {
         "id": "22",
         "name": "Arizona Cardinals",
         "short": "Cardinals",
         "abbreviation": "ARI",
-        "score": null
+        "score": null,
+        "color": "#a40227",
+        "alternateColor": "#ffffff"
       },
       "venue": {
         "id": "4738",
@@ -83797,7 +84753,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-8.5",
         "spreadOdds": "-105",
         "spreadOpen": "-11.5",
@@ -83808,16 +84764,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118047"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "-8.5",
-          "spreadOdds": "-110",
-          "total": 47.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-18T00:45:25Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "-8.5",
@@ -84307,9 +85253,19 @@
           "underOdds": "-105",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-8.5",
+          "spreadOdds": "-105",
+          "total": 47.5,
+          "overOdds": "-115",
+          "underOdds": "-105",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "NFL-401872959",
@@ -84329,14 +85285,18 @@
         "name": "Tampa Bay Buccaneers",
         "short": "Buccaneers",
         "abbreviation": "TB",
-        "score": null
+        "score": null,
+        "color": "#bd1c36",
+        "alternateColor": "#3e3a35"
       },
       "away": {
         "id": "16",
         "name": "Minnesota Vikings",
         "short": "Vikings",
         "abbreviation": "MIN",
-        "score": null
+        "score": null,
+        "color": "#4f2683",
+        "alternateColor": "#ffc62f"
       },
       "venue": {
         "id": "3886",
@@ -84344,7 +85304,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+1.5",
         "spreadOdds": "-110",
         "spreadOpen": "-1.5",
@@ -84355,16 +85315,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118145"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "-1.5",
-          "spreadOdds": "-110",
-          "total": 45.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-18T11:58:28Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "-1.5",
@@ -84854,9 +85804,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+1.5",
+          "spreadOdds": "-110",
+          "total": 42.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "NFL-401872960",
@@ -84876,14 +85836,18 @@
         "name": "Dallas Cowboys",
         "short": "Cowboys",
         "abbreviation": "DAL",
-        "score": null
+        "score": null,
+        "color": "#002a5c",
+        "alternateColor": "#b0b7bc"
       },
       "away": {
         "id": "33",
         "name": "Baltimore Ravens",
         "short": "Ravens",
         "abbreviation": "BAL",
-        "score": null
+        "score": null,
+        "color": "#29126f",
+        "alternateColor": "#000000"
       },
       "venue": {
         "id": "11931",
@@ -84891,7 +85855,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+3.5",
         "spreadOdds": "-115",
         "spreadOpen": "+2.5",
@@ -84902,16 +85866,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118119"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "+3",
-          "spreadOdds": "-110",
-          "total": 52.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-18T19:14:23Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "+3",
@@ -85401,9 +86355,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+3.5",
+          "spreadOdds": "-115",
+          "total": 52.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "NFL-401872961",
@@ -85423,14 +86387,18 @@
         "name": "New Orleans Saints",
         "short": "Saints",
         "abbreviation": "NO",
-        "score": null
+        "score": null,
+        "color": "#d3bc8d",
+        "alternateColor": "#000000"
       },
       "away": {
         "id": "13",
         "name": "Las Vegas Raiders",
         "short": "Raiders",
         "abbreviation": "LV",
-        "score": null
+        "score": null,
+        "color": "#000000",
+        "alternateColor": "#a5acaf"
       },
       "venue": {
         "id": "3493",
@@ -85438,7 +86406,7 @@
         "indoor": true
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "-3",
         "spreadOdds": "-122",
         "spreadOpen": "-3",
@@ -85449,16 +86417,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118012"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "-3",
-          "spreadOdds": "-110",
-          "total": 45.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-18T19:14:23Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "-3",
@@ -85948,9 +86906,19 @@
           "underOdds": "-118",
           "retrievedAt": "2026-09-23T15:10:16Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "-3",
+          "spreadOdds": "-122",
+          "total": 44.5,
+          "overOdds": "-102",
+          "underOdds": "-118",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "NFL-401872962",
@@ -85970,14 +86938,18 @@
         "name": "Denver Broncos",
         "short": "Broncos",
         "abbreviation": "DEN",
-        "score": null
+        "score": null,
+        "color": "#0a2343",
+        "alternateColor": "#fc4c02"
       },
       "away": {
         "id": "14",
         "name": "Los Angeles Rams",
         "short": "Rams",
         "abbreviation": "LAR",
-        "score": null
+        "score": null,
+        "color": "#003594",
+        "alternateColor": "#ffd100"
       },
       "venue": {
         "id": "3937",
@@ -85985,7 +86957,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+2.5",
         "spreadOdds": "-105",
         "spreadOpen": "+2.5",
@@ -85996,16 +86968,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118276"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "+2.5",
-          "spreadOdds": "-110",
-          "total": 46.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-18T18:17:12Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "+2.5",
@@ -86495,9 +87457,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+2.5",
+          "spreadOdds": "-105",
+          "total": 45.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     },
     {
       "id": "NFL-401872963",
@@ -86517,14 +87489,18 @@
         "name": "Chicago Bears",
         "short": "Bears",
         "abbreviation": "CHI",
-        "score": null
+        "score": null,
+        "color": "#0b1c3a",
+        "alternateColor": "#e64100"
       },
       "away": {
         "id": "21",
         "name": "Philadelphia Eagles",
         "short": "Eagles",
         "abbreviation": "PHI",
-        "score": null
+        "score": null,
+        "color": "#06424d",
+        "alternateColor": "#000000"
       },
       "venue": {
         "id": "3933",
@@ -86532,7 +87508,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "Draft Kings",
+        "provider": "DraftKings",
         "spread": "+4.5",
         "spreadOdds": "-105",
         "spreadOpen": "-1.5",
@@ -86543,16 +87519,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118030"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "-1.5",
-          "spreadOdds": "-105",
-          "total": 47.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-19T12:58:33Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "-1.5",
@@ -87042,9 +88008,19 @@
           "underOdds": "-115",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "DraftKings",
+          "spread": "+4.5",
+          "spreadOdds": "-105",
+          "total": 41.5,
+          "overOdds": "-105",
+          "underOdds": "-115",
+          "retrievedAt": "2026-09-23T16:37:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T15:10:16Z"
+      "marketRetrievedAt": "2026-09-23T16:37:17Z"
     }
   ]
 }

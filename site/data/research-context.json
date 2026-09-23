@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-23T15:10:39Z",
+  "updatedAt": "2026-09-23T16:37:31Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-23T14:00Z",
+              "reportedAt": "2026-09-23T16:17Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2997,6 +2997,15 @@
           "name": "Indianapolis Colts",
           "players": [
             {
+              "id": "4360078",
+              "name": "Alec Pierce",
+              "position": "WR",
+              "status": "Out",
+              "injury": "Heel",
+              "reportedAt": "2026-09-23T15:37Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4360078/alec-pierce"
+            },
+            {
               "id": "3051889",
               "name": "Laquon Treadwell",
               "position": "WR",
@@ -3058,15 +3067,6 @@
               "injury": null,
               "reportedAt": "2026-09-22T01:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/3916945/darius-slayton"
-            },
-            {
-              "id": "4360078",
-              "name": "Alec Pierce",
-              "position": "WR",
-              "status": "Doubtful",
-              "injury": "Heel",
-              "reportedAt": "2026-09-22T01:03Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4360078/alec-pierce"
             },
             {
               "id": "4571557",
@@ -5297,6 +5297,15 @@
           "name": "New York Giants",
           "players": [
             {
+              "id": "4689114",
+              "name": "Jaxson Dart",
+              "position": "QB",
+              "status": "Out",
+              "injury": "Knee - Meniscus",
+              "reportedAt": "2026-09-23T16:04Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4689114/jaxson-dart"
+            },
+            {
               "id": "3929950",
               "name": "Tremaine Edmunds",
               "position": "LB",
@@ -5430,15 +5439,6 @@
               "injury": null,
               "reportedAt": "2026-09-22T19:08Z",
               "source": "https://www.espn.com/nfl/player/_/id/2969939/jameis-winston"
-            },
-            {
-              "id": "4689114",
-              "name": "Jaxson Dart",
-              "position": "QB",
-              "status": "Doubtful",
-              "injury": "Knee - MCL",
-              "reportedAt": "2026-09-22T18:50Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4689114/jaxson-dart"
             },
             {
               "id": "4682648",
@@ -5594,7 +5594,7 @@
               "name": "Arian Smith",
               "position": "WR",
               "status": "Injured Reserve",
-              "injury": "Knee",
+              "injury": "Knee - ACL",
               "reportedAt": "2026-09-22T23:48Z",
               "source": "https://www.espn.com/nfl/player/_/id/4429105/arian-smith"
             },
@@ -5987,6 +5987,15 @@
           "name": "Pittsburgh Steelers",
           "players": [
             {
+              "id": "4035687",
+              "name": "Michael Pittman Jr.",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Foot",
+              "reportedAt": "2026-09-23T15:50Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4035687/michael-pittman-jr"
+            },
+            {
               "id": "4242207",
               "name": "Patrick Queen",
               "position": "LB",
@@ -6003,15 +6012,6 @@
               "injury": "Toe",
               "reportedAt": "2026-09-22T21:43Z",
               "source": "https://www.espn.com/nfl/player/_/id/4038815/rico-dowdle"
-            },
-            {
-              "id": "4035687",
-              "name": "Michael Pittman Jr.",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Foot",
-              "reportedAt": "2026-09-22T20:56Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4035687/michael-pittman-jr"
             },
             {
               "id": "4430802",
@@ -7367,30 +7367,6 @@
       "changes": [
         {
           "teamId": "14",
-          "name": "Kamren Kinchens",
-          "from": "Inactive",
-          "to": "Questionable",
-          "observedAt": "2026-09-22T22:03:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4596363/kamren-kinchens"
-        },
-        {
-          "teamId": "14",
-          "name": "Bill Murray",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-09-22T22:03:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3912189/bill-murray"
-        },
-        {
-          "teamId": "14",
-          "name": "Ty Simpson",
-          "from": "Inactive",
-          "to": "Active",
-          "observedAt": "2026-09-22T22:03:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4685522/ty-simpson"
-        },
-        {
-          "teamId": "14",
           "name": "CJ Daniels",
           "from": "Inactive",
           "to": "Active",
@@ -7764,11 +7740,35 @@
           "to": "Injured Reserve",
           "observedAt": "2026-09-23T14:10:14Z",
           "source": "https://www.espn.com/nfl/player/_/id/4678008/jonathon-brooks"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-09-23T16:37:31Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "11",
+          "name": "Alec Pierce",
+          "from": "Doubtful",
+          "to": "Out",
+          "observedAt": "2026-09-23T16:37:31Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4360078/alec-pierce"
+        },
+        {
+          "teamId": "19",
+          "name": "Jaxson Dart",
+          "from": "Doubtful",
+          "to": "Out",
+          "observedAt": "2026-09-23T16:37:31Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4689114/jaxson-dart"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-23T15:10:39Z",
-      "lastAttemptAt": "2026-09-23T15:10:39Z",
+      "checkedAt": "2026-09-23T16:37:31Z",
+      "lastAttemptAt": "2026-09-23T16:37:31Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-23T15:10:39Z",
-      "lastAttemptAt": "2026-09-23T15:10:39Z",
+      "checkedAt": "2026-09-23T16:37:31Z",
+      "lastAttemptAt": "2026-09-23T16:37:31Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
