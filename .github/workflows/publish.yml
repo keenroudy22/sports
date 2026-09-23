@@ -82,6 +82,8 @@ jobs:
         run: python scripts/nflverse.py
       - name: Publish model v2 forecasts and player projections
         run: python scripts/forecast.py
+      - name: Late snapshot for games inside the hour whose inactives changed (priced from, not graded)
+        run: python scripts/forecast.py --late
       - name: Capture DraftKings NFL prop lines from ESPN
         run: python scripts/prop_lines.py
       - name: Capture spreads and totals across books (The Odds API, budgeted)

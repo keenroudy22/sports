@@ -107,3 +107,24 @@ class PublishTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class LateSnapshotTests(PublishTests):
+    def late(self, context=None, now=NOW):
+        return forecast.publish(now, self.root, self.slate, context or {}, {'NFL': GAMES}, {}, log=lambda *_: None, late=True)
+
+    def test_a_late_snapshot_covers_the_hour_and_needs_a_changed_injury_list(self):
+        self.assertEqual(self.late(), {'nfl-2025.jsonl': 1}, 'the game 30 minutes out gets its first late snapshot')
+        first = self.lines()[-1]
+        self.assertEqual(first['gameId'], 'NFL-802')
+        self.assertTrue(first.get('late'))
+        self.assertEqual(self.late(now=NOW + timedelta(minutes=5)), {}, 'same injuries: rating drift earns no late line')
+        out = {'leagues': {'NFL': {'teams': {'C': {'players': [
+            {'id': 'C-w1', 'status': 'Out', 'reportedAt': fakegames.stamp(NOW)}]}}}}}
+        self.assertEqual(self.late(context=out, now=NOW + timedelta(minutes=10)), {'nfl-2025.jsonl': 1})
+        second = self.lines()[-1]
+        self.assertTrue(second.get('late'))
+        self.assertEqual(second['inputs']['ruledOut']['home'], ['C-w1'])
+        self.assertEqual(second['supersedes'], first['publishedAt'])
+        self.assertEqual(self.publish(), {'nfl-2025.jsonl': 1}, 'the regular publish still leaves the hour alone')
+        self.assertEqual(self.lines()[-1]['gameId'], 'NFL-801')

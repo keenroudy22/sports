@@ -108,3 +108,17 @@ class PropLineTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class SnapshotSelectionTests(unittest.TestCase):
+    def test_the_grade_uses_the_last_regular_snapshot_and_skips_late_ones(self):
+        games = {'NFL-1': dict(game(), id='NFL-1')}
+
+        def snap(at, **over):
+            return {'gameId': 'NFL-1', 'model': 'v2.0', 'publishedAt': at, 'margin': 4.0, 'total': 44.0,
+                    'sd': {'margin': 13.0, 'total': 12.0}, 'homeWinProb': 0.6, **over}
+        rows, final = sb.v2_rows(games, [snap('2026-09-13T10:00Z'), snap('2026-09-13T15:30Z', margin=6.0),
+                                         snap('2026-09-13T16:30Z', margin=9.0, late=True), snap('2026-09-13T17:30Z', margin=1.0)])
+        self.assertEqual(final['NFL-1']['margin'], 6.0, 'the late line and the post-kickoff line are not the graded forecast')
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]['margin'], 6.0)

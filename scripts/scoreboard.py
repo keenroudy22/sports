@@ -173,14 +173,22 @@ def v1_rows(games):
     return rows
 
 
-def v2_rows(games):
-    """The last snapshot published before kickoff, per game."""
+def stored_snapshots(root=None):
+    for path in sorted((root or ROOT / 'data' / 'forecasts').glob('*.jsonl')):
+        yield from boxscores.read_store(path)
+
+
+def v2_rows(games, snapshots=None):
+    """The last regular snapshot published before kickoff, per game.
+
+    A snapshot marked late (published inside the hour, after inactives) is for pricing a pick and never
+    for the record against the close, so the grade stays a forecast the market could not have seen.
+    """
     final = {}
-    for path in sorted((ROOT / 'data' / 'forecasts').glob('*.jsonl')):
-        for snapshot in boxscores.read_store(path):
-            game = games.get(snapshot['gameId'])
-            if game and before(snapshot['publishedAt'], game['kickoff']):
-                final[snapshot['gameId']] = snapshot
+    for snapshot in (snapshots if snapshots is not None else stored_snapshots()):
+        game = games.get(snapshot['gameId'])
+        if game and not snapshot.get('late') and before(snapshot['publishedAt'], game['kickoff']):
+            final[snapshot['gameId']] = snapshot
     rows = []
     for gid, snapshot in final.items():
         row = row_for(games[gid], snapshot['model'], snapshot['publishedAt'],

@@ -335,7 +335,8 @@ def game_detail(card, game, record, snapshots, captures, lines, picks, names, te
                               'sd': final['sd'], 'inputs': {k: final['inputs'][k] for k in
                                                             ('games', 'through', 'ratings', 'ruledOut', 'injuryCoverage')},
                               'players': people,
-                              'history': [{'at': s['publishedAt'], 'margin': rnd(s['margin']), 'total': rnd(s['total'])}
+                              'history': [{'at': s['publishedAt'], 'margin': rnd(s['margin']), 'total': rnd(s['total']),
+                                           **({'late': True} if s.get('late') else {})}
                                           for s in snapshots]}
     capture = captures[-1] if captures else None
     if capture:

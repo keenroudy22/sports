@@ -14,7 +14,9 @@ and a hash of their event IDs and contents), the model version (its fixed
 parameters live in scripts/model_v2.py), both teams' ratings and which players
 the injury report removed. Nothing here reads a market price.
 
-Usage: python scripts/forecast.py
+Usage: python scripts/forecast.py           every upcoming game outside the hour before kickoff
+       python scripts/forecast.py --late    games inside that hour whose injury list changed; the snapshot is
+                                            marked late, priced from, and left out of the model's grading
 """
 import json
 import sys
@@ -178,7 +180,32 @@ def upcoming(slate, league, now):
             yield game
 
 
-def publish(now=None, root=STORE, slate=None, context=None, records=None, snaps=None, log=print):
+def late_upcoming(slate, league, now):
+    """Games inside the hour before kickoff: the window the regular publish leaves alone."""
+    for game in slate.get('games', []):
+        if game.get('league') != league or game.get('state') != 'pre' or not game.get('timeValid', True):
+            continue
+        kickoff = features.when(game['kickoff'])
+        if now < kickoff < now + BUFFER:
+            yield game
+
+
+def late_material(record, previous):
+    """A late snapshot is published only when the injury report changed who is out or limited.
+
+    Inactives land 90 minutes before kickoff, after the last regular snapshot. Rating drift alone
+    never earns a late line; the scoreboard grades the last regular snapshot, so a late one is for
+    pricing a pick, not for the record against the close.
+    """
+    if previous is None:
+        return True
+    return (record['inputs']['ruledOut'], record['inputs'].get('limited')) != \
+        (previous['inputs']['ruledOut'], previous['inputs'].get('limited'))
+
+
+def publish(now=None, root=STORE, slate=None, context=None, records=None, snaps=None, log=print, late=False):
+    """Append a snapshot for every upcoming game whose forecast changed; with late=True, only for games
+    inside the hour whose injury list changed, marked `late: true` and left out of the model's grading."""
     now = now or datetime.now(timezone.utc)
     slate = slate if slate is not None else json.loads((ROOT / 'site' / 'data' / 'slate.json').read_text(encoding='utf-8'))
     if context is None:
@@ -190,7 +217,7 @@ def publish(now=None, root=STORE, slate=None, context=None, records=None, snaps=
             existing[line['gameId']] = line
     written = {}
     for league in ('NFL', 'CFB'):
-        games = list(upcoming(slate, league, now))
+        games = list((late_upcoming if late else upcoming)(slate, league, now))
         if not games:
             continue
         stored = records[league] if records else features.load(leagues=(league,))
@@ -205,7 +232,11 @@ def publish(now=None, root=STORE, slate=None, context=None, records=None, snaps=
         for game in games:
             record = snapshot(league, game, model, history, slope, priors, ruled_out, now)
             previous = existing.get(record['gameId'])
-            if not material(record, previous):
+            if late:
+                record['late'] = True
+                if not late_material(record, previous):
+                    continue
+            elif not material(record, previous):
                 continue
             if previous:
                 record['supersedes'] = previous['publishedAt']
@@ -218,14 +249,15 @@ def publish(now=None, root=STORE, slate=None, context=None, records=None, snaps=
     return written
 
 
-def main():
+def main(argv=None):
+    late = '--late' in (argv if argv is not None else sys.argv[1:])
     problems = boxscores.verify(STORE)
     if problems:
         sys.exit('Refusing to append to a forecast store whose recorded lines changed:\n  ' + '\n  '.join(problems))
     STORE.mkdir(parents=True, exist_ok=True)
-    written = publish()
+    written = publish(late=late)
     boxscores.write_json(STORE / 'ledger.json', boxscores.ledger(STORE))
-    print(f'Published {sum(written.values())} forecast snapshots {written or ""}')
+    print(f"Published {sum(written.values())} {'late ' if late else ''}forecast snapshots {written or ''}")
 
 
 if __name__ == '__main__':
