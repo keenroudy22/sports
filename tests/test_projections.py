@@ -150,3 +150,42 @@ class ShareRedistributionTests(unittest.TestCase):
         for i, game in enumerate(games):
             game['market'] = {'close': {'spread': -3.5 if i % 2 else 3.5, 'total': 44.5}}
         self.assertIsInstance(pj.pass_slope(pj.History(games), cutoff(games), 'NFL'), float)
+
+
+class SnapRoleTests(unittest.TestCase):
+    def snaps_for(self, games, pct_by_game):
+        """pct_by_game: {eventId: {pid: pct}} for team A's receivers; everyone else full-time."""
+        snaps = {}
+        for game in games:
+            line = {p['id']: 1.0 for p in game['players']}
+            line.update(pct_by_game.get(game['eventId'], {}))
+            snaps[game['eventId']] = line
+        return snaps
+
+    def test_a_receiver_whose_snaps_fell_projects_fewer_targets_and_the_team_total_holds(self):
+        games = league()
+        recent = sorted((g for g in games if 'A' in (g['home']['id'], g['away']['id'])), key=lambda g: g['kickoff'])[-2:]
+        falling = {g['eventId']: {'A-w1': 0.45, 'A-w2': 1.0} for g in recent}
+        steady = pj.project_team(pj.History(games, self.snaps_for(games, {})), 'NFL', 'A', 'B', cutoff(games), 2025, 0.0, 0.0, PRIORS)
+        off = pj.project_team(pj.History(games, self.snaps_for(games, falling)), 'NFL', 'A', 'B', cutoff(games), 2025, 0.0, 0.0, PRIORS)
+        self.assertEqual([p.get('targets') for p in off['players']], [p.get('targets') for p in steady['players']],
+                         'the factor is off by default: it did not earn its place on 2024 or 2025')
+        previous = pj.SNAP_ROLE['power']
+        pj.SNAP_ROLE['power'] = 1.0
+        try:
+            bent = pj.project_team(pj.History(games, self.snaps_for(games, falling)), 'NFL', 'A', 'B', cutoff(games), 2025, 0.0, 0.0, PRIORS)
+        finally:
+            pj.SNAP_ROLE['power'] = previous
+        before = {p['id']: p for p in steady['players']}
+        after = {p['id']: p for p in bent['players']}
+        self.assertLess(after['A-w1']['targets']['mean'], before['A-w1']['targets']['mean'])
+        self.assertGreater(after['A-w2']['targets']['mean'], before['A-w2']['targets']['mean'])
+        self.assertLess(after['A-w1']['snapRole'], 1.0)
+        self.assertAlmostEqual(sum(p.get('targets', {}).get('mean', 0) for p in after.values()),
+                               sum(p.get('targets', {}).get('mean', 0) for p in before.values()), delta=0.05)
+
+    def test_no_snaps_means_no_role_factor(self):
+        games = league()
+        plain = pj.project_team(pj.History(games), 'CFB', 'A', 'B', cutoff(games), 2025, 0.0, 0.0, PRIORS)
+        self.assertTrue(all('snapRole' not in p for p in plain['players']))
+        self.assertIsNone(pj.snap_role({}, 'A-w1', games))

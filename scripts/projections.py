@@ -250,6 +250,23 @@ def project_team(history, league, team, rival, cutoff, season, margin, slope, le
         if shrunk:
             for s in shares.values():
                 s[stat] *= min(raw[stat], 1.0) / shrunk
+    # Recent snap share bends targets and carries toward the job the player holds now; the team's
+    # covered volume is unchanged, so what one player loses his teammates gain.
+    roles = {}
+    if history.snaps and SNAP_ROLE['power']:
+        for pid in shares:
+            role = snap_role(history.snaps, pid, games)
+            if role is not None:
+                roles[pid] = role
+        for stat in ('targets', 'car'):
+            total_before = sum(s[stat] for s in shares.values())
+            for pid, s in shares.items():
+                if pid in roles:
+                    s[stat] *= roles[pid] ** SNAP_ROLE['power']
+            total_after = sum(s[stat] for s in shares.values())
+            if total_after:
+                for s in shares.values():
+                    s[stat] *= total_before / total_after
     # The team's covered volume before anyone is removed or cut; the redistribution restores it.
     full = {stat: sum(s[stat] for s in shares.values()) for stat in ('targets', 'car', 'att')}
     # A limited player keeps part of their share; the rest goes to healthy teammates below.
@@ -279,6 +296,8 @@ def project_team(history, league, team, rival, cutoff, season, margin, slope, le
         eff = efficiency(history, pid, cutoff, league, prior)
         projection = {'id': pid, 'name': info['name'], 'pos': info['pos'],
                       'share': {k: round(v, 3) for k, v in share.items() if v}}
+        if pid in roles:
+            projection['snapRole'] = round(roles[pid], 3)
         if pid in limited:
             projection['limited'] = True
         targets = share['targets'] * volume['targets']
@@ -352,12 +371,39 @@ def efficiency(history, pid, cutoff, league, prior):
 
 
 def load_snaps():
-    """eventId -> set of ESPN athlete IDs with offensive snaps (NFL only)."""
+    """eventId -> {ESPN athlete ID: share of the team's offensive snaps} (NFL only)."""
     out = {}
     for path in sorted((boxscores.ROOT / 'data' / 'nflverse').glob('nfl-*.jsonl')):
         for event, line in boxscores.latest(boxscores.read_store(path)).items():
-            out[event] = {p['id'] for p in line['players'] if p.get('id')}
+            out[event] = {p['id']: (p.get('pct') if isinstance(p.get('pct'), (int, float)) else 1.0)
+                          for p in line['players'] if p.get('id')}
     return out
+
+
+# A player's share of the team's volume comes from the games in the window, but the job can change
+# inside it: a tight end at 46% of snaps behind a returning starter is not the player who ran 80% a
+# month ago. The role factor is his recent snap share over his snap share across the games the share
+# was built from. Tested on 2024 and 2025 (2026-09-23, data/model/v2.1-tuning-nfl-snap-role.json): at
+# power 1.0 every miss rose on both seasons; at 0.5 carries improved a hair and receiving yards worsened.
+# The window's own half-life already tracks a changing role about as well. Off by default; NFL only.
+SNAP_ROLE = {'recent': 2, 'power': 0.0}
+
+
+def snap_role(snaps, pid, games):
+    """Recent snap share over the window's snap share for one player, over games he appeared in; None without snaps."""
+    seen = []
+    for game in games:                         # newest first
+        line = snaps.get(game['eventId'])
+        if line is None:
+            continue
+        pct = line.get(pid)
+        if pct:
+            seen.append(pct)
+    if len(seen) < 2:
+        return None
+    recent = statistics.mean(seen[:SNAP_ROLE['recent']])
+    window = statistics.mean(seen)
+    return recent / window if window else None
 
 
 # ------------------------------------------------------------------ backtest
@@ -464,7 +510,10 @@ def main(argv=None):
     parser.add_argument('league')
     parser.add_argument('season', type=int)
     parser.add_argument('--known-out', action='store_true', help='treat players who did not play as ruled out')
+    parser.add_argument('--snap-power', type=float, help=f"override SNAP_ROLE power (default {SNAP_ROLE['power']}; 0 is off)")
     args = parser.parse_args(argv)
+    if args.snap_power is not None:
+        SNAP_ROLE['power'] = args.snap_power
     rows = backtest(args.league.upper(), args.season, known_out=args.known_out)
     print(json.dumps(summarize(rows) if args.command == 'backtest' else calibrate(rows), indent=1))
 

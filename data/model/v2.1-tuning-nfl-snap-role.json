@@ -1,0 +1,29 @@
+{
+ "league": "NFL",
+ "projectionModel": "v2.1",
+ "knob": "projections.SNAP_ROLE.power",
+ "what": "A player's target and carry shares bent by his recent snap share (last 2 games) over his snap share across the window's games; the team's covered volume held constant.",
+ "grid": [0.0, 0.5, 1.0, 1.5],
+ "tuneSeason": 2024,
+ "holdoutSeason": 2025,
+ "metric": "python scripts/projections.py backtest NFL SEASON --snap-power P: mean absolute miss (80% range coverage) by stat",
+ "tuning2024": {
+  "0.0": {"targets": [1.84, 0.792], "receptions": [1.44, 0.816], "recYds": [18.38, 0.814], "carries": [2.98, 0.791], "rushYds": [17.61, 0.772]},
+  "0.5": {"targets": [1.84, 0.796], "receptions": [1.44, 0.816], "recYds": [18.46, 0.817], "carries": [2.94, 0.797], "rushYds": [17.50, 0.775]},
+  "1.0": {"targets": [1.86, 0.787], "receptions": [1.46, 0.813], "recYds": [18.67, 0.819], "carries": [2.99, 0.788], "rushYds": [17.71, 0.769]},
+  "1.5": {"targets": [1.91, 0.777], "receptions": [1.49, 0.805], "recYds": [19.02, 0.812], "carries": [3.08, 0.776], "rushYds": [18.03, 0.765]}
+ },
+ "holdout2025": {
+  "0.0": {"targets": [1.78, 0.800], "receptions": [1.38, 0.824], "recYds": [18.19, 0.818], "carries": [2.83, 0.804], "rushYds": [16.58, 0.806]},
+  "0.5": {"targets": [1.78, 0.807], "receptions": [1.38, 0.824], "recYds": [18.25, 0.818], "carries": [2.83, 0.807], "rushYds": [16.65, 0.805]},
+  "1.0": {"targets": [1.80, 0.804], "receptions": [1.39, 0.826], "recYds": [18.47, 0.816], "carries": [2.88, 0.806], "rushYds": [16.89, 0.797]},
+  "1.5": {"targets": [1.85, 0.798], "receptions": [1.42, 0.820], "recYds": [18.81, 0.808], "carries": [2.97, 0.799], "rushYds": [17.26, 0.788]}
+ },
+ "holdout2025KnownOut": {
+  "0.0": {"targets": [1.78, 0.831], "receptions": [1.40, 0.849], "recYds": [18.56, 0.842], "carries": [2.70, 0.844], "rushYds": [16.59, 0.833]},
+  "1.0": {"targets": [1.81, 0.828], "receptions": [1.42, 0.844], "recYds": [18.88, 0.839], "carries": [2.77, 0.838], "rushYds": [16.92, 0.824]}
+ },
+ "chosen": 0.0,
+ "verdict": "LOSES: at 1.0 every miss rose on both seasons; at 0.5 carries and rushing yards improved by 0.04 and 0.11 on 2024 while receiving yards worsened by 0.08 (2024) and 0.06 (2025). The rule is that no stat may worsen and the 80% coverage stays in 0.78 to 0.84, so the factor stays off. The window's 4-game half-life already follows a changing role.",
+ "looks": [{"at": "2026-09-23T15:30:00+00:00", "knob": "projections.SNAP_ROLE.power", "season": 2025}]
+}
