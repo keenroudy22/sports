@@ -1,14 +1,27 @@
 {
- "at": "2026-09-23T21:08:50Z",
+ "at": "2026-09-23T21:35:45Z",
  "leagues": {
   "CFB": {
-   "books": {},
+   "books": {
+    "draftkings": 266,
+    "fanduel": 160
+   },
    "eventsListed": 200,
-   "eventsMatched": 0,
+   "eventsMatched": 1,
    "games": 2,
-   "marketTypes": {},
-   "requestsLeft": 56,
-   "rows": 0,
+   "marketTypes": {
+    "player_longest_passing_completion": 2,
+    "player_longest_reception": 7,
+    "player_longest_rush": 5,
+    "player_passing_+_rushing_yards": 43,
+    "player_passing_touchdowns": 15,
+    "player_passing_yards": 65,
+    "player_receiving_yards": 154,
+    "player_rushing_attempts": 5,
+    "player_rushing_yards": 130
+   },
+   "requestsLeft": 52,
+   "rows": 426,
    "slateGames": [
     "Liberty Flames at Coastal Carolina Chanticleers 2026-09-24T23:30Z",
     "Army Black Knights at Temple Owls 2026-09-25T20:00Z"
@@ -211,29 +224,30 @@
   },
   "NFL": {
    "books": {
-    "draftkings": 36,
+    "draftkings": 106,
     "fanduel": 339
    },
    "eventsListed": 200,
    "eventsMatched": 1,
    "games": 1,
    "marketTypes": {
-    "player_interceptions": 2,
-    "player_longest_passing_completion": 2,
-    "player_longest_reception": 4,
+    "player_interceptions": 4,
+    "player_longest_passing_completion": 4,
+    "player_longest_reception": 10,
     "player_longest_rush": 2,
-    "player_passing_attempts": 2,
-    "player_passing_completions": 2,
-    "player_passing_touchdowns": 11,
-    "player_passing_yards": 24,
-    "player_receiving_yards": 142,
-    "player_receptions": 93,
+    "player_passing_+_rushing_yards": 2,
+    "player_passing_attempts": 4,
+    "player_passing_completions": 4,
+    "player_passing_touchdowns": 13,
+    "player_passing_yards": 26,
+    "player_receiving_yards": 160,
+    "player_receptions": 111,
     "player_rushing_+_receiving_yards": 8,
-    "player_rushing_attempts": 2,
-    "player_rushing_yards": 81
+    "player_rushing_attempts": 4,
+    "player_rushing_yards": 93
    },
-   "requestsLeft": 57,
-   "rows": 375,
+   "requestsLeft": 56,
+   "rows": 445,
    "slateGames": [
     "Atlanta Falcons at Green Bay Packers 2026-09-25T00:15Z"
    ],

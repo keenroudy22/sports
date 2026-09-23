@@ -8058,5 +8058,76 @@
       "https://www.espn.com/nfl/injuries",
       "https://api.the-odds-api.com/v4 (key withheld)"
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-09-23T21:30:04Z",
+    "targetWeek": 4,
+    "summary": "5:30 PM ET run, published at 5:30 PM ET. Nothing to settle. Nothing to close. Published 2: C Michigan at Miami under 54 -109 at BetRivers; Navy at UAB over 51.5 -105 at FanDuel. Screened and passed on 10: Iowa at Michigan over 38.5 (held); James Madison at Old Dominion over 45.5 (held); South Florida at Bowling Green over 48.5 (held); Oklahoma St at West Virginia under 59.5 (held); Utah at Iowa State over 48.5 (held); UConn at Miami OH over 51.5 (held); Georgia Tech at Stanford over 48.5 (held); Missouri St at SMU under 60.5 (held); and 2 more. odds_api.py: CFB: skipped (3 captures already today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 54.0,
+        "direction": "under",
+        "gameIds": [
+          "CFB-401858238"
+        ],
+        "book": "BetRivers",
+        "odds": -109,
+        "projection": 48.5,
+        "edge": "v2 total 48.5 (80% range 27.8 to 69.2). Chance of under 54: 54.4% (v2's raw 62.1% shrunk by its 2024-25 record against the close), push 2.3%, against 52.2% break-even at -109: +2.2 points, +0.066u per unit.",
+        "cutoff": "UNDER 54 at -109 or better. Closed to new entries at 52.5 or lower, or at -124 or worse at 54.",
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-23T14:15:47Z",
+        "quotedAt": "2026-09-23T12:44:31Z",
+        "quoteType": "capture",
+        "quoteNote": "BetRivers's number and price from the 8:44 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-09-24T03:30:00Z",
+        "title": "C Michigan at Miami under 54",
+        "id": "CFB-2026-W4-cmu-mia-under-54-br",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401858238"
+        ],
+        "why": "This is a model lean based only on our number. Our total is 48.5 against 54. The under has a 54.4% chance after the raw 62.1% is adjusted for the model's record against the close. This is 2.2 points better than the 52.2% needed to break even at -109. No outside information argues against it. The number is the reason. The market shows the spread opened at -42.5 and is now -41.5 at DraftKings, a 1-point move toward the away. The total opened at 54.5 and is now 53.5 at DraftKings, a 1-point move toward the under. Five books offer totals between 53.5 and 54. The middle is 53.5. Our spread gap of 3.4 points is at the 48th percentile of the model's gaps. Gaps this large went 923-921 against the close in 3584 graded games. Our total gap of 5 points is at the 78th percentile of the model's gaps. Gaps this large went 444-363 against the close in 3602 graded games.",
+        "risk": "It rests on the model alone. The closing line beats our number on average. A gap this size is more often our error than the market's. Confidence 3 of 10.",
+        "jurisdictionVerified": true
+      },
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 51.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401862778"
+        ],
+        "book": "FanDuel",
+        "odds": -105,
+        "projection": 55.2,
+        "edge": "v2 total 55.2 (80% range 34.5 to 75.9). Chance of over 51.5: 53.3% (v2's raw 59.0% shrunk by its 2024-25 record against the close), against 51.2% break-even at -105: +2.0 points, +0.040u per unit.",
+        "cutoff": "OVER 51.5 at -105 or better. Closed to new entries at 53+, or at -120 or worse at 51.5.",
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-23T14:15:47Z",
+        "quotedAt": "2026-09-23T12:44:31Z",
+        "quoteType": "capture",
+        "quoteNote": "FanDuel's number and price from the 8:44 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-09-24T03:30:00Z",
+        "title": "Navy at UAB over 51.5",
+        "id": "CFB-2026-W4-navy-uab-over-51-5-fd",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401862778"
+        ],
+        "why": "This is a model lean based on our number. Our total is 55.2 against 51.5. The over has a 53.3% chance after the raw 59.0% is adjusted for the model's record against the close. This is 2.0 points above the 51.2% needed to break even at -105. No outside information argues against it. The number is the reason. The spread opened at +11.5 and is now +7 at DraftKings, a 4.5 point move toward the home. The total opened at 53.5 and is now 51.5 at DraftKings, a 2 point move toward the under. Five books show the spread between 6.5 and 7. The middle is 6.5. Our spread gap of 3.2 points is at the 47th percentile of the model's gaps. Gaps this large went 952-944 against the close in 3584 graded games. Our total gap of 3.7 points is at the 64th percentile of the model's gaps. Gaps this large went 716-583 against the close in 3602 graded games.",
+        "risk": "It rests on the model alone. The closing line beats our number on average. A gap this size is more often our error than the market's. A team with under three games this season thins the read. Confidence 3 of 10.",
+        "jurisdictionVerified": true
+      }
+    ]
   }
 ]
