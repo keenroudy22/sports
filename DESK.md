@@ -48,6 +48,7 @@ any other automation on the machine.
 
 ```
 bash ~/.config/keenroudy/run.sh doctor                  versions, identities, which keys are set
+bash ~/.config/keenroudy/run.sh py scripts/X.py ...     any repo script with the sports environment loaded
 bash ~/.config/keenroudy/run.sh run --dry-run           a run that writes its reports to pending/ and touches no git
 bash ~/.config/keenroudy/run.sh run --publish-kinds settle,close     a live run limited to revisions
 bash ~/.config/keenroudy/run.sh status                  the last run's status.json
@@ -93,8 +94,9 @@ hosted workflow deploys; a card that is not deployed yet means a text-only post,
 
 One-time setup (the owner): a free Buffer account with @keenkooks connected as an X channel, then
 Settings → API → create a key and paste it as `BUFFER_TOKEN` in `~/.config/keenroudy/env`.
-`python scripts/buffer_post.py channels` shows the connected channels; `plan` shows what the next run would
-schedule; `post PICK_ID --confirm` schedules one by hand.
+`run.sh py scripts/buffer_post.py channels` shows the connected channels; `plan` shows what the next run would
+schedule; `schedule --confirm [--soon 20]` schedules exactly that by hand, with a lead for a look at Buffer's
+queue first; `post PICK_ID --confirm` schedules one pick. The channel's own daily limit is 50 posts.
 
 The same posts are also published as an RSS feed, `https://keenroudy.com/sports/data/feed.xml`
 (`scripts/feed.py`), for any other relay and as a public record of what went out.

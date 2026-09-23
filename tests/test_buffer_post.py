@@ -39,14 +39,14 @@ class FakeBuffer:
             return 200, json.dumps({'data': {'channels': [{'id': 'ch-ig', 'service': 'instagram', 'name': 'kookn', 'displayName': 'kookn'},
                                                           {'id': 'ch-x', 'service': 'twitter', 'name': 'keenkooks', 'displayName': "kook’n"}]}}).encode()
         if 'dailyPostingLimits' in q:
-            return 200, json.dumps({'data': {'dailyPostingLimits': [{'channelId': 'ch-x', 'limit': 10, 'count': 1, 'remaining': 9}]}}).encode()
+            return 200, json.dumps({'data': {'dailyPostingLimits': [{'channelId': 'ch-x', 'limit': 10, 'scheduled': 1, 'sent': 0, 'isAtLimit': False}]}}).encode()
         if 'createPost' in q:
             if self.fail_create:
                 return 200, json.dumps({'data': {'createPost': {'message': 'Daily posting limit reached'}}}).encode()
             self.next_id += 1
             return 200, json.dumps({'data': {'createPost': {'post': {'id': f'bp{self.next_id}', 'dueAt': body['variables']['input']['dueAt'], 'text': 'x'}}}}).encode()
         if 'deletePost' in q:
-            return 200, json.dumps({'data': {'deletePost': {'post': {'id': body['variables']['id']}}}}).encode()
+            return 200, json.dumps({'data': {'deletePost': {'id': body['variables']['id']}}}).encode()
         return 500, b'unknown'
 
 
@@ -77,6 +77,17 @@ class ClientTests(unittest.TestCase):
             bp.graphql('query { x }', key='t', send=lambda *a: (200, json.dumps({'errors': [{'message': 'bad token'}]}).encode()))
         with self.assertRaises(bp.MissingToken):
             bp.token({})
+
+    def test_daily_limit_uses_buffer_types_and_derives_what_is_left(self):
+        fake = FakeBuffer()
+        row = bp.daily_limit('ch-x', '2026-09-26', key='t', send=fake)
+        self.assertEqual((row['count'], row['remaining']), (1, 9))
+        sent = fake.calls[-1]
+        self.assertIn('[ChannelId!]!', sent['query'])
+        self.assertIn('$date: DateTime', sent['query'])
+        self.assertEqual(sent['variables']['date'], '2026-09-26T12:00:00.000Z', 'a bare date becomes an instant inside that day')
+        bp.channels(key='t', send=fake)
+        self.assertIn('$org: OrganizationId!', fake.calls[-1]['query'])
 
 
 class PlanTests(unittest.TestCase):
@@ -125,8 +136,9 @@ class ScheduleTests(unittest.TestCase):
         self.assertFalse(log_book['posts'][1]['card'])
         self.assertEqual(log_book['posts'][0]['kind'], 'buffer:play')
         inputs = [c['variables']['input'] for c in fake.calls if 'createPost' in c['query']]
-        self.assertIn('assets', inputs[0])
-        self.assertNotIn('assets', inputs[1])
+        self.assertEqual(inputs[0]['assets'], [{'image': {'url': 'https://keenroudy.com/sports/data/cards/a.png'}}])
+        self.assertEqual(inputs[1]['assets'], [], 'Buffer requires the list even when the post is text only')
+        self.assertFalse(inputs[1]['needsApproval'])
 
     def test_cancel_closed_deletes_only_future_scheduled_posts(self):
         fake = FakeBuffer()

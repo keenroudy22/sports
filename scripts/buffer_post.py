@@ -8,6 +8,7 @@ a desk that posts a handful of plays a day at set times.
   python scripts/buffer_post.py channels          list the connected channels (find @keenkooks)
   python scripts/buffer_post.py limits             today's posting limit for the X channel
   python scripts/buffer_post.py plan               what the run would schedule right now, without posting
+  python scripts/buffer_post.py schedule [--soon MIN]     schedule exactly that, by hand (needs --confirm)
   python scripts/buffer_post.py post PICK_ID [--at ISO]   schedule one pick's post (needs --confirm)
 
 The run (scripts/run.py) schedules each play once inside its posting window (game day, 9:00 AM ET
@@ -90,7 +91,7 @@ def organization_id(key=None, send=http_send):
 
 def channels(key=None, send=http_send, org=None):
     org = org or organization_id(key, send)
-    data = graphql('query($org: String!) { channels(input: {organizationId: $org}) { id name displayName service avatar isQueuePaused } }',
+    data = graphql('query($org: OrganizationId!) { channels(input: {organizationId: $org}) { id name displayName service avatar isQueuePaused } }',
                    {'org': org}, key=key, send=send)
     return data.get('channels') or []
 
@@ -114,10 +115,20 @@ def x_channel(key=None, send=http_send, wanted=None, channel_id=None):
 
 
 def daily_limit(channel_id, day, key=None, send=http_send):
-    data = graphql('query($ids: [String!]!, $date: String!) { dailyPostingLimits(input: {channelIds: $ids, date: $date}) { channelId limit count remaining } }',
-                   {'ids': [channel_id], 'date': day}, key=key, send=send)
+    """Buffer's own posting limit for the channel on that day (a date or an ISO instant).
+
+    Buffer answers with what is scheduled and sent; `count` and `remaining` are derived so callers can
+    ask how many more posts the day can take (None when the channel has no limit)."""
+    when = day if 'T' in str(day) else f'{day}T12:00:00.000Z'
+    data = graphql('query($ids: [ChannelId!]!, $date: DateTime) { dailyPostingLimits(input: {channelIds: $ids, date: $date}) { channelId limit scheduled sent isAtLimit } }',
+                   {'ids': [channel_id], 'date': when}, key=key, send=send)
     rows = data.get('dailyPostingLimits') or []
-    return rows[0] if rows else None
+    if not rows:
+        return None
+    row = dict(rows[0])
+    row['count'] = int(row.get('scheduled') or 0) + int(row.get('sent') or 0)
+    row['remaining'] = max(0, int(row['limit']) - row['count']) if row.get('limit') is not None else None
+    return row
 
 
 CREATE = '''mutation($input: CreatePostInput!) {
@@ -127,9 +138,9 @@ CREATE = '''mutation($input: CreatePostInput!) {
   }
 }'''
 
-DELETE = '''mutation($id: String!) {
+DELETE = '''mutation($id: PostId!) {
   deletePost(input: {id: $id}) {
-    ... on PostActionSuccess { post { id } }
+    ... on DeletePostSuccess { id }
     ... on MutationError { message }
   }
 }'''
@@ -141,9 +152,8 @@ def stamp(moment):
 
 def create_post(text, channel_id, due_at, image_url=None, key=None, send=http_send):
     """Schedule one post for an exact time. Returns Buffer's post id."""
-    payload = {'text': text, 'channelId': channel_id, 'schedulingType': 'automatic', 'mode': 'customScheduled', 'dueAt': stamp(due_at)}
-    if image_url:
-        payload['assets'] = [{'image': {'url': image_url}}]
+    payload = {'text': text, 'channelId': channel_id, 'schedulingType': 'automatic', 'mode': 'customScheduled', 'dueAt': stamp(due_at),
+               'needsApproval': False, 'tagIds': [], 'assets': [{'image': {'url': image_url}}] if image_url else []}
     data = graphql(CREATE, {'input': payload}, key=key, send=send)
     result = data.get('createPost') or {}
     if result.get('message'):
@@ -180,13 +190,15 @@ def window_open(day):
     return datetime(day.year, day.month, day.day, feed.WINDOW_OPENS[0], feed.WINDOW_OPENS[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)
 
 
-def plan(first, latest, games, now, log_book, scoreboard=None, player_team=None):
+def plan(first, latest, games, now, log_book, scoreboard=None, player_team=None, soon=None):
     """The posts the run should schedule now: [(key, kind, text, due_at, card_key)].
 
     Plays: open, postable, game today (Eastern), not yet in the log; due at the later of now plus two
     minutes and the window's open, spaced eight minutes apart, never inside 45 minutes of kickoff.
     Recap: once every pick of a day is settled, due the next morning at 8:00 ET. Scoreboard: Tuesdays 9:00 ET.
+    `soon` replaces the two-minute lead, for a person who wants time to look at the queue first.
     """
+    SOON_ = soon if soon is not None else SOON
     posted = {p['id'] for p in log_book.get('posts', [])}
     today = eastern_date(now)
     out = []
@@ -206,7 +218,7 @@ def plan(first, latest, games, now, log_book, scoreboard=None, player_team=None)
             continue
         plays.append((gates.when(starts[0]), key, text, merged, game))
     plays.sort()
-    slot = max(now + SOON, window_open(today))
+    slot = max(now + SOON_, window_open(today))
     scheduled = 0
     for kickoff, key, text, merged, game in plays:
         if scheduled >= MAX_PER_DAY:
@@ -227,12 +239,12 @@ def plan(first, latest, games, now, log_book, scoreboard=None, player_team=None)
         match = next((i for i in items if i['guid'] == key), None)
         if match:
             morning = datetime(day.year, day.month, day.day, RECAP_AT[0], RECAP_AT[1], tzinfo=gates.EASTERN) + timedelta(days=1)
-            due = max(morning.astimezone(timezone.utc), now + SOON)
+            due = max(morning.astimezone(timezone.utc), now + SOON_)
             out.append((key, 'recap', match['text'], due, None))
     weekly = feed.scoreboard_item(scoreboard or {}, now) if scoreboard else None
     if weekly and weekly['guid'] not in posted:
         local = now.astimezone(gates.EASTERN)
-        due = max(local.replace(hour=SCOREBOARD_AT[0], minute=SCOREBOARD_AT[1], second=0, microsecond=0).astimezone(timezone.utc), now + SOON)
+        due = max(local.replace(hour=SCOREBOARD_AT[0], minute=SCOREBOARD_AT[1], second=0, microsecond=0).astimezone(timezone.utc), now + SOON_)
         out.append((weekly['guid'], 'scoreboard', weekly['text'], due, None))
     return out
 
@@ -273,11 +285,13 @@ def cancel_closed(closed_ids, log_book, now, key=None, send=http_send, log=print
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.split('\n')[0])
-    parser.add_argument('command', choices=('channels', 'limits', 'plan', 'post'))
+    parser.add_argument('command', choices=('channels', 'limits', 'plan', 'schedule', 'post'))
     parser.add_argument('pick_id', nargs='?')
     parser.add_argument('--at', help='UTC instant for the post; default now plus two minutes')
+    parser.add_argument('--soon', type=int, help='minutes of lead for anything the plan would post right away (default 2)')
     parser.add_argument('--confirm', action='store_true')
     args = parser.parse_args(argv)
+    soon = timedelta(minutes=args.soon) if args.soon else None
     now = datetime.now(timezone.utc)
     try:
         if args.command == 'channels':
@@ -291,14 +305,28 @@ def main(argv=None):
         stores = gates.Stores()
         ctx = stores.as_of(now)
         log_book = x_post.load_log()
-        if args.command == 'plan':
+        if args.command in ('plan', 'schedule'):
             import build_site
             scoreboard = build_site.read(ROOT / 'site' / 'data' / 'scoreboard.json', {})
-            plans = plan(ctx.first, ctx.latest, ctx.games, now, log_book, scoreboard)
+            plans = plan(ctx.first, ctx.latest, ctx.games, now, log_book, scoreboard, ctx.player_team, soon=soon)
             for guid, kind, text, due, card in plans:
                 print(f"{due.astimezone(gates.EASTERN):%a %-I:%M %p} ET  {kind:<10} {guid}" + (f"  card {CARDS}{card}.png" if card else ''))
-                print('    ' + text.replace('\n', ' / ')[:200])
-            print(f'{len(plans)} posts would be scheduled')
+                print('    ' + text.replace('\n', ' / '))
+            if args.command == 'plan' or not plans:
+                print(f'{len(plans)} posts would be scheduled')
+                return 0
+            if not args.confirm:
+                print(f'\n{len(plans)} not scheduled: add --confirm')
+                return 0
+            channel = x_channel(wanted='keenkooks')
+            limit = daily_limit(channel['id'], eastern_date(now).isoformat())
+            if limit and limit.get('remaining') is not None and limit['remaining'] < len(plans):
+                print(f"the channel can take {limit['remaining']} more posts today; scheduling that many")
+                plans = plans[:max(0, limit['remaining'])]
+            before = len(log_book.get('posts', []))
+            schedule(plans, channel['id'], log_book, now)
+            x_post.save_log(log_book)
+            print(f"{len(log_book.get('posts', [])) - before} scheduled and logged in data/x-posted.json")
             return 0
         pick = ctx.first.get(args.pick_id)
         if not pick:
