@@ -33,6 +33,8 @@ import build_site
 import desk
 import features
 import gates
+import llm
+import llm_tasks
 import parlay
 import pricing
 import refresh
@@ -502,6 +504,37 @@ def hold_reason(candidate, facts):
     return None
 
 
+def judge(candidate, facts, use_llm, status=None):
+    """Why the run holds a candidate, or None. The model weighs the facts when it is up; a rule of thumb when not.
+
+    The model's word counts only when it points at a fact. Unsure means hold: a lean the facts might
+    turn is not worth publishing on the number alone.
+    """
+    if use_llm:
+        verdict = llm_tasks.judge_against(candidate, facts)
+        if verdict is not None:
+            if status is not None:
+                status['llm']['judged'] += 1
+            if verdict['argues_against'] and verdict['fact_ids']:
+                return f"the evidence argues against it: {verdict['note']}"
+            if verdict['confidence'] == 'low':
+                return f"the judge is unsure: {verdict['note']}"
+            return None
+        if status is not None:
+            status['llm']['unavailable'] = status['llm'].get('unavailable', 0) + 1
+    return hold_reason(candidate, facts)
+
+
+def polish(candidate, facts, status):
+    """The model's rewrite of the templated why and risk, through both guards; the template stands otherwise."""
+    for key, task in (('why', llm_tasks.why_for), ('risk', llm_tasks.risk_for)):
+        text, note = task(candidate, facts)
+        candidate[key] = text
+        status['llm']['polished' if note == 'polished' else 'kept'] += 1
+        if note != 'polished':
+            log(f"  {key} template kept for {candidate.get('title')}: {note}")
+
+
 # ------------------------------------------------------------------ step 8: prose
 
 def prop_reasoning(candidate, ctx, records, snapshot):
@@ -740,6 +773,9 @@ def _run(args, now, slot, kinds, status):
     raw_first = raw_first_publications(stores.reports)
     context_file = stores.context_file
     settled, closed, published, screened, unclear = [], [], [], [], []
+    use_llm = not args.no_llm and llm.available()
+    status['llm'] = {'used': use_llm, 'model': llm.model_name() if use_llm else None, 'polished': 0, 'kept': 0, 'judged': 0}
+    log('local model:', f"{llm.model_name()} at {llm.base_url()}" if use_llm else 'off' if args.no_llm else 'not reachable; templates only')
 
     if 'settle' in kinds:
         settled, unclear = settle(ctx, raw_first, games, records, now)
@@ -764,7 +800,7 @@ def _run(args, now, slot, kinds, status):
         candidate['_team'] = ctx.player_team.get(candidate.get('athleteId', ''))
         facts = evidence(candidate, ctx, context_file)
         candidate['_evidence'] = facts
-        hold = hold_reason(candidate, facts) if args.no_llm or True else None   # the LLM judge arrives with scripts/llm_tasks.py
+        hold = judge(candidate, facts, use_llm, status)
         league = candidate['_league']
         if hold:
             screened.append({'league': league, 'gameId': candidate['gameIds'][0], 'title': candidate['title'],
@@ -772,6 +808,8 @@ def _run(args, now, slot, kinds, status):
             continue
         write_prose(candidate, ctx, records)
         ok, decisions = gates.admit(dict(candidate, league=league), ctx)
+        if ok and use_llm:
+            polish(candidate, facts, status)
         for decision in decisions:
             if decision.rule == 'one_book' and decision.data.get('quoteNoteRequired'):
                 candidate['quoteNote'] += f" {candidate['book']} is the only book with this market; kickoff is inside three hours."
