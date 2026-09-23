@@ -53,6 +53,7 @@ class NumbersGuardTests(unittest.TestCase):
 
     def test_signs_and_percent_do_not_matter(self):
         self.assertTrue(llm.numbers_ok('at +110 or -110, 55.3 percent', PICK)[0])
+        self.assertTrue(llm.numbers_ok('Iowa under 38.5 (-105, FanDuel)', {'line': 38.5, 'odds': -105})[0])
 
 
 @unittest.skipUnless(os.environ.get('KEENROUDY_LLM_LIVE') == '1', 'set KEENROUDY_LLM_LIVE=1 to run against Ollama')

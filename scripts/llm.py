@@ -174,7 +174,7 @@ def allowed_numbers(pick, extra=()):
         elif isinstance(value, bool) or value is None:
             return
         elif isinstance(value, (int, float)):
-            found.add(f'{float(value):g}')
+            found.add(f'{abs(float(value)):g}')      # signs do not matter: -105 in a field allows "-105" or "105"
         elif isinstance(value, str):
             found.update(numbers_in(value))
 
