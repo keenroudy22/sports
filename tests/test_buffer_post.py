@@ -47,6 +47,15 @@ class FakeBuffer:
             return 200, json.dumps({'data': {'createPost': {'post': {'id': f'bp{self.next_id}', 'dueAt': body['variables']['input']['dueAt'], 'text': 'x'}}}}).encode()
         if 'deletePost' in q:
             return 200, json.dumps({'data': {'deletePost': {'id': body['variables']['id']}}}).encode()
+        if 'post(input' in q:
+            pid = body['variables']['id']
+            if pid == 'bp-sent':
+                post = {'id': pid, 'status': 'sent', 'sentAt': '2026-09-26T11:00:09.000Z', 'externalLink': 'https://twitter.com/keenkooks/status/123', 'error': None}
+            elif pid == 'bp-err':
+                post = {'id': pid, 'status': 'error', 'sentAt': None, 'externalLink': None, 'error': {'message': 'X refused the post'}}
+            else:
+                post = {'id': pid, 'status': 'scheduled', 'sentAt': None, 'externalLink': None, 'error': None}
+            return 200, json.dumps({'data': {'post': post}}).encode()
         return 500, b'unknown'
 
 
@@ -139,6 +148,27 @@ class ScheduleTests(unittest.TestCase):
         self.assertEqual(inputs[0]['assets'], [{'image': {'url': 'https://keenroudy.com/sports/data/cards/a.png'}}])
         self.assertEqual(inputs[1]['assets'], [], 'Buffer requires the list even when the post is text only')
         self.assertFalse(inputs[1]['needsApproval'])
+
+    def test_reconcile_records_the_x_link_or_the_error_once(self):
+        fake = FakeBuffer()
+        log_book = {'posts': [{'id': 'a', 'bufferPostId': 'bp-sent', 'dueAt': '2026-09-26T11:00:00Z'},
+                              {'id': 'b', 'bufferPostId': 'bp-err', 'dueAt': '2026-09-26T11:00:00Z'},
+                              {'id': 'c', 'bufferPostId': 'bp-later', 'dueAt': '2026-09-26T14:00:00Z'},
+                              {'id': 'd', 'bufferPostId': 'bp-gone', 'dueAt': '2026-09-26T11:00:00Z', 'cancelledAt': '2026-09-26T10:00:00Z'},
+                              {'id': 'e', 'bufferPostId': 'bp-pending', 'dueAt': '2026-09-26T11:30:00Z'}]}
+        failed = bp.reconcile(log_book, NOW, key='t', send=fake, log=lambda *_: None)
+        a, b, c, d, e = log_book['posts']
+        self.assertEqual((a['tweetId'], a['link'], a['sentAt']), ('123', 'https://twitter.com/keenkooks/status/123', '2026-09-26T11:00:09.000Z'))
+        self.assertEqual(b['error'], 'X refused the post')
+        self.assertEqual([f['id'] for f in failed], ['b'])
+        self.assertNotIn('sentAt', c)
+        self.assertNotIn('sentAt', d)
+        self.assertNotIn('sentAt', e, 'still scheduled: asked again next run')
+        asked = [call['variables']['id'] for call in fake.calls if 'post(input' in call['query']]
+        self.assertEqual(asked, ['bp-sent', 'bp-err', 'bp-pending'], 'future and cancelled posts are not asked about')
+        bp.reconcile(log_book, NOW, key='t', send=fake, log=lambda *_: None)
+        asked = [call['variables']['id'] for call in fake.calls if 'post(input' in call['query']]
+        self.assertEqual(asked[3:], ['bp-pending'], 'sent and failed entries are settled and not asked again')
 
     def test_cancel_closed_deletes_only_future_scheduled_posts(self):
         fake = FakeBuffer()

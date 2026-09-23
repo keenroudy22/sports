@@ -1067,6 +1067,8 @@ def buffer_posts(now, ctx, games, closed, status):
     log_book = x_post.load_log()
     try:
         channel = buffer_post.x_channel(wanted='keenkooks')
+        for entry in buffer_post.reconcile(log_book, now, log=log):
+            status['errors'].append(f"buffer: {entry['id']} failed to post: {entry['error']}")
         closed_ids = {revision['id'] for _, _, revision in closed}
         if closed_ids:
             buffer_post.cancel_closed(closed_ids, log_book, now, log=log)

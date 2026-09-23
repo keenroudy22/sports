@@ -10,6 +10,7 @@ a desk that posts a handful of plays a day at set times.
   python scripts/buffer_post.py plan               what the run would schedule right now, without posting
   python scripts/buffer_post.py schedule [--soon MIN]     schedule exactly that, by hand (needs --confirm)
   python scripts/buffer_post.py post PICK_ID [--at ISO]   schedule one pick's post (needs --confirm)
+  python scripts/buffer_post.py reconcile          record the X link, or the error, for every post whose time passed
 
 The run (scripts/run.py) schedules each play once inside its posting window (game day, 9:00 AM ET
 until 45 minutes before kickoff, spaced eight minutes apart), the recap for the next morning and the
@@ -281,11 +282,42 @@ def cancel_closed(closed_ids, log_book, now, key=None, send=http_send, log=print
     return log_book
 
 
+STATUS = 'query($id: PostId!) { post(input: {id: $id}) { id status sentAt externalLink error { message } } }'
+
+
+def reconcile(log_book, now, key=None, send=http_send, log=print):
+    """Ask Buffer what became of each post whose time has passed, once: the X link when it went out, the
+    message when it failed. Returns the entries that failed, for the run to raise."""
+    failed = []
+    for entry in log_book.get('posts', []):
+        if not entry.get('bufferPostId') or entry.get('cancelledAt') or entry.get('sentAt') or entry.get('error'):
+            continue
+        if not entry.get('dueAt') or gates.when(entry['dueAt']) > now:
+            continue
+        try:
+            post = graphql(STATUS, {'id': entry['bufferPostId']}, key=key, send=send).get('post') or {}
+        except BufferError as error:
+            log(f"buffer: could not check {entry['id']}: {error}")
+            continue
+        status = post.get('status')
+        if status == 'sent':
+            link = post.get('externalLink') or ''
+            entry['sentAt'] = post.get('sentAt') or gates.stamp(now)
+            entry['link'] = link or None
+            entry['tweetId'] = link.rstrip('/').rsplit('/', 1)[-1] if '/status/' in link else None
+            log(f"buffer: {entry['id']} went out: {link or 'no link returned'}")
+        elif status == 'error':
+            entry['error'] = ((post.get('error') or {}).get('message')) or 'Buffer reports an error without a message'
+            failed.append(entry)
+            log(f"buffer: {entry['id']} FAILED to post: {entry['error']}")
+    return failed
+
+
 # ------------------------------------------------------------------ command line
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.split('\n')[0])
-    parser.add_argument('command', choices=('channels', 'limits', 'plan', 'schedule', 'post'))
+    parser.add_argument('command', choices=('channels', 'limits', 'plan', 'schedule', 'post', 'reconcile'))
     parser.add_argument('pick_id', nargs='?')
     parser.add_argument('--at', help='UTC instant for the post; default now plus two minutes')
     parser.add_argument('--soon', type=int, help='minutes of lead for anything the plan would post right away (default 2)')
@@ -302,6 +334,11 @@ def main(argv=None):
             channel = x_channel(wanted='keenkooks')
             print(json.dumps(daily_limit(channel['id'], eastern_date(now).isoformat()), indent=1))
             return 0
+        if args.command == 'reconcile':
+            log_book = x_post.load_log()
+            failed = reconcile(log_book, now)
+            x_post.save_log(log_book)
+            return 1 if failed else 0
         stores = gates.Stores()
         ctx = stores.as_of(now)
         log_book = x_post.load_log()

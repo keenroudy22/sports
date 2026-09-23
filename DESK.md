@@ -88,8 +88,9 @@ gives 3,000 API requests a month, an exact `dueAt` per post, a public image URL 
 At each run the desk schedules the day's plays into their posting window (game day, Eastern, from 9:00 AM,
 eight minutes apart, never inside 45 minutes of kickoff), the recap for 8:00 the next morning once every
 pick of the day is settled, and the scoreboard for Tuesday at 9:00. Every post is logged in
-`data/x-posted.json` (kind `buffer:*`) so nothing goes out twice, a play that closes before its time is
-cancelled, and the channel's own daily limit is respected. Cards come from `site/data/cards/`, which the
+`data/x-posted.json` (kind `buffer:*`) so nothing goes out twice; once its time has passed the run records the X
+link it went out under, or the failure (which fails the run, so the heartbeat alerts). A play that closes before
+its time is cancelled, and the channel's own daily limit is respected. Cards come from `site/data/cards/`, which the
 hosted workflow deploys; a card that is not deployed yet means a text-only post, never a failure.
 
 One-time setup (the owner): a free Buffer account with @keenkooks connected as an X channel, then
