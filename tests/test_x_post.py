@@ -164,3 +164,48 @@ class ScoreboardPostTests(unittest.TestCase):
         self.assertEqual(llm.check_style(text.replace(x_post.SITE, '')), [])
         self.assertTrue(llm.numbers_ok(text, scoreboard)[0])
         self.assertIsNone(x_post.scoreboard_text({'live': []}))
+
+
+class MediaTests(unittest.TestCase):
+    CREDS = {'consumer_key': 'a', 'consumer_secret': 'b', 'token': 'c', 'token_secret': 'd'}
+
+    def test_v2_chunked_upload_in_three_calls(self):
+        calls = []
+
+        def send_raw(url, body, headers):
+            calls.append((url, headers.get('Content-Type', '').split(';')[0], len(body)))
+            self.assertIn('oauth_signature=', headers['Authorization'])
+            if url.endswith('/initialize'):
+                return 202, json.dumps({'data': {'id': '777'}}).encode()
+            if url.endswith('/append'):
+                return 204, b''
+            return 201, json.dumps({'data': {'id': '777', 'processing_info': None}}).encode()
+        self.assertEqual(x_post.upload_media(b'\x89PNG' + b'0' * 100, self.CREDS, send_raw), '777')
+        self.assertEqual([c[0].rsplit('/', 1)[-1] for c in calls], ['initialize', 'append', 'finalize'])
+        self.assertEqual(calls[1][1], 'multipart/form-data')
+
+    def test_falls_back_to_v1_when_v2_refuses_and_gives_up_when_both_do(self):
+        def send_raw(url, body, headers):
+            if 'api.x.com' in url:
+                return 403, b'{"detail":"no"}'
+            return 200, json.dumps({'media_id_string': '888'}).encode()
+        self.assertEqual(x_post.upload_media(b'png', self.CREDS, send_raw), '888')
+        with self.assertRaises(x_post.Refused):
+            x_post.upload_media(b'png', self.CREDS, lambda *a: (403, b'no'))
+
+    def test_a_post_can_carry_media_ids(self):
+        sent = {}
+
+        def send(url, body, headers):
+            sent.update(body)
+            return 201, json.dumps({'data': {'id': '1'}}).encode()
+        x_post.post_tweet('hello', self.CREDS, send, media_ids=['777'])
+        self.assertEqual(sent['media'], {'media_ids': ['777']})
+
+    def test_multipart_body_is_well_formed(self):
+        content_type, body = x_post.multipart({'segment_index': '0'}, {'media': ('card.png', b'PNGDATA', 'image/png')})
+        boundary = content_type.split('boundary=')[1]
+        self.assertTrue(body.startswith(f'--{boundary}\r\n'.encode()))
+        self.assertIn(b'name="segment_index"\r\n\r\n0\r\n', body)
+        self.assertIn(b'filename="card.png"\r\nContent-Type: image/png\r\n\r\nPNGDATA\r\n', body)
+        self.assertTrue(body.endswith(f'--{boundary}--\r\n'.encode()))

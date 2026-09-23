@@ -39,6 +39,7 @@ import market_read
 import parlay
 import pricing
 import refresh
+import researcher
 import scoreboard
 from sports_refresh import eastern_date
 
@@ -538,6 +539,43 @@ def judge(candidate, facts, use_llm, status=None):
     return hold_reason(candidate, facts)
 
 
+RESEARCH_LIMIT = 6          # candidates the web researcher is asked about per run, strongest first
+FAVORITE_EDGE = 2.0         # a game-line favorite needs the calibrated chance this many points clear of break-even
+
+
+def promote(candidate, facts, use_llm, status=None):
+    """Should this candidate be a researched favorite? Only with a verified, sourced reason and the model's yes.
+
+    The arithmetic must clear on its own; at least one verified fact must argue for the pick and name two
+    people or a weather flag; nothing may argue against; and the model must say, pointing at facts, that the
+    reason holds. Without the model there is no judgment, so there is no favorite.
+    """
+    desk = candidate.get('_desk') or {}
+    supporting = [f for f in facts if f.get('direction') == 'for' and f.get('verified') and f.get('kind') in ('injury', 'role', 'weather', 'stats')]
+    if not supporting or any(f.get('direction') == 'against' for f in facts):
+        return False
+    if candidate.get('athleteId'):
+        arithmetic = desk.get('rawChance', 0) >= gates.PROP_RAW and desk.get('edgePoints', 0) >= gates.PROP_EDGE
+    else:
+        arithmetic = bool(desk.get('calibrated')) and desk.get('edgePoints', 0) >= FAVORITE_EDGE
+    named = {e for f in supporting if f['kind'] in ('injury', 'role') for e in f.get('entities') or []}
+    weather = any(f['kind'] == 'weather' for f in supporting)
+    if not arithmetic or not (len(named) >= 2 or weather):
+        return False
+    if not use_llm:
+        return False
+    verdict = llm_tasks.judge_for(candidate, facts)
+    if status is not None:
+        status['llm']['judged'] += 1
+    if not verdict or not verdict['supports'] or verdict['confidence'] != 'high' or not verdict['fact_ids']:
+        return False
+    candidate['favorite'], candidate['modelLean'] = True, False
+    candidate['confidence'] = min(6, 4 + (1 if len(named) >= 3 else 0) + (1 if desk.get('edgePoints', 0) >= 3 else 0))
+    candidate['_support'] = [f for f in supporting if f['id'] in verdict['fact_ids']] or supporting
+    candidate['_supportNote'] = verdict['note']
+    return True
+
+
 def polish(candidate, facts, status):
     """The model's rewrite of the templated why and risk, through both guards; the template stands otherwise."""
     for key, task in (('why', llm_tasks.why_for), ('risk', llm_tasks.risk_for)):
@@ -592,6 +630,20 @@ def write_prose(candidate, ctx, records):
         candidate['risk'] = 'Most longshots lose. The legs are treated as independent; any one miss sinks the ticket. Confidence 1 of 10.'
         return candidate
     sparse = 'A team with under three games this season thins the read. ' if snapshot and snapshot.get('sparse') else ''
+    if candidate.get('favorite'):
+        claims = ' '.join(f['claim'].rstrip('.') + '.' for f in candidate.get('_support') or [])
+        chance = f"{100 * p['chance']:.1f}%" if p.get('calibrated') else f"{100 * p['rawChance']:.1f}% on the raw curve"
+        candidate['why'] = (f"Researched pick. {claims} Our number is {p['projection']:g} against {pricing.fmt(line)}, {chance} for the "
+                            f"{side}, {p['edgePoints']:+.1f} points clear of the {100 * p['breakEven']:.1f}% that {odds:+d} needs. "
+                            f"The sourced reason and the number point the same way.")
+        candidate['risk'] = (f"A report can change before kickoff, and a listed player can dress. {sparse}The number still rests on a model the "
+                             f"closing line beats on average. Confidence {candidate['confidence']} of 10.")
+        sources = list(candidate.get('sources') or [])
+        for fact in candidate.get('_support') or []:
+            if fact.get('source') and fact['source'] not in sources:
+                sources.append(fact['source'])
+        candidate['sources'] = sources
+        return candidate
     if candidate.get('athleteId'):
         candidate['why'] = (f"Prop lean on our number alone: our projection is {p['projection']:g} against {pricing.fmt(line)} and the "
                             f"{side} reads {100 * p['rawChance']:.1f}% on the raw curve, which has no graded history against a line yet, "
@@ -806,6 +858,8 @@ def _run(args, now, slot, kinds, status):
     lines = load_json(build_site.OUT / 'lines.json', {'lines': []})['lines']
     wanted = candidates(lines, games, now)
     log(f'{len(wanted)} candidates on the board')
+    research_on = researcher.enabled() and slot.hour in (8, 17) and 'favorite' in kinds
+    status['research'] = {'on': research_on, 'asked': 0, 'verified': 0, 'dropped': 0}
     for candidate in wanted:
         want = 'prop' if candidate.get('athleteId') else 'lean'
         if want not in kinds:
@@ -814,6 +868,14 @@ def _run(args, now, slot, kinds, status):
             continue
         candidate['_team'] = ctx.player_team.get(candidate.get('athleteId', ''))
         facts = evidence(candidate, ctx, context_file)
+        if research_on and status['research']['asked'] < RESEARCH_LIMIT:
+            game = ctx.games[candidate['gameIds'][0]]
+            kept, dropped = researcher.research(game, gates.market_key(candidate), gates.side_of(candidate), now=now)
+            status['research']['asked'] += 1
+            status['research']['verified'] += len(kept)
+            status['research']['dropped'] += len(dropped)
+            facts += kept
+            log(f"researched {candidate['title']}: {len(kept)} verified facts, {len(dropped)} dropped")
         candidate['_evidence'] = facts
         hold = judge(candidate, facts, use_llm, status)
         league = candidate['_league']
@@ -821,6 +883,8 @@ def _run(args, now, slot, kinds, status):
             screened.append({'league': league, 'gameId': candidate['gameIds'][0], 'title': candidate['title'],
                              'rule': 'held', 'reason': hold})
             continue
+        if research_on and promote(candidate, facts, use_llm, status):
+            log(f"favorite: {candidate['title']} ({candidate.get('_supportNote')})")
         write_prose(candidate, ctx, records)
         ok, decisions = gates.admit(dict(candidate, league=league), ctx)
         if ok and use_llm:
@@ -933,10 +997,16 @@ def drafts(slot, now, ctx, games, settled, status):
         if merged.get('favorite') is not True or merged.get('result') or key in posted:
             continue
         try:
-            text, _, _ = x_post.do_draft(key, now, ctx.first, ctx.latest, games, out=folder)
+            text, pick_now, game = x_post.do_draft(key, now, ctx.first, ctx.latest, games, out=folder)
             written.append(key)
         except x_post.Refused:
             continue
+        try:                                                  # the card is a nicety; a missing browser never stops a run
+            import pick_card
+            if pick_card.chrome_path():
+                pick_card.render(pick_card.svg(pick_now, game), folder / f'{key}.png')
+        except Exception as error:
+            log(f'card for {key} not rendered: {error}')
     status['x']['drafted'] = len(written)
     if written:
         log('x drafts written:', ', '.join(written), f'(in {folder})')

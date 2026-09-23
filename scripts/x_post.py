@@ -97,15 +97,79 @@ def http_send(url, body, headers):
         return error.code, error.read()
 
 
-def post_tweet(text, creds, send=http_send):
+def post_tweet(text, creds, send=http_send, media_ids=None):
     """The new post's id, or Refused when X turns it down (a duplicate is a 403)."""
-    status, raw = send(API, {'text': text}, {'Authorization': oauth_header('POST', API, creds)})
+    body = {'text': text}
+    if media_ids:
+        body['media'] = {'media_ids': [str(m) for m in media_ids]}
+    status, raw = send(API, body, {'Authorization': oauth_header('POST', API, creds)})
     if status == 201:
         return json.loads(raw)['data']['id']
     detail = raw.decode('utf-8', 'replace')[:300] if isinstance(raw, bytes) else str(raw)[:300]
     if status == 403 and 'duplicate' in detail.lower():
         raise Refused('X refused a duplicate post')
     raise Refused(f'X returned HTTP {status}: {detail}')
+
+
+# ------------------------------------------------------------------ media
+
+MEDIA_V2 = 'https://api.x.com/2/media/upload'
+MEDIA_V1 = 'https://upload.twitter.com/1.1/media/upload.json'
+
+
+def multipart(fields, files):
+    """(content type, body) for a multipart form; files is {name: (filename, bytes, mime)}."""
+    boundary = '----keenroudy' + secrets.token_hex(12)
+    parts = []
+    for name, value in fields.items():
+        parts.append(f'--{boundary}\r\nContent-Disposition: form-data; name="{name}"\r\n\r\n{value}\r\n'.encode())
+    for name, (filename, data, mime) in files.items():
+        parts.append(f'--{boundary}\r\nContent-Disposition: form-data; name="{name}"; filename="{filename}"\r\n'
+                     f'Content-Type: {mime}\r\n\r\n'.encode() + data + b'\r\n')
+    parts.append(f'--{boundary}--\r\n'.encode())
+    return f'multipart/form-data; boundary={boundary}', b''.join(parts)
+
+
+def http_send_raw(url, body, headers):
+    """POST raw bytes (multipart or JSON already encoded) and return (status, bytes)."""
+    request = urllib.request.Request(url, data=body, headers=headers, method='POST')
+    try:
+        with urllib.request.urlopen(request, timeout=60) as response:
+            return response.status, response.read()
+    except urllib.error.HTTPError as error:
+        return error.code, error.read()
+
+
+def upload_media(png, creds, send_raw=http_send_raw):
+    """Upload one PNG and return its media id, over the v2 chunked flow with the v1.1 endpoint as the fallback.
+
+    A multipart body adds nothing to the OAuth signature, so the header signs the URL and the OAuth
+    parameters alone. Refused when neither endpoint takes the image.
+    """
+    def call(url, body, content_type):
+        headers = {'Authorization': oauth_header('POST', url, creds), 'Content-Type': content_type}
+        return send_raw(url, body, headers)
+
+    init_url = f'{MEDIA_V2}/initialize'
+    status, raw = call(init_url, json.dumps({'media_type': 'image/png', 'total_bytes': len(png), 'media_category': 'tweet_image'}).encode(),
+                       'application/json')
+    if status in (200, 201, 202):
+        payload = json.loads(raw)
+        media_id = str((payload.get('data') or payload).get('id') or (payload.get('data') or payload).get('media_id'))
+        content_type, body = multipart({'segment_index': '0'}, {'media': ('card.png', png, 'image/png')})
+        status, raw = call(f'{MEDIA_V2}/{media_id}/append', body, content_type)
+        if status in (200, 201, 204):
+            status, raw = call(f'{MEDIA_V2}/{media_id}/finalize', b'{}', 'application/json')
+            if status in (200, 201):
+                return media_id
+    v2_detail = raw.decode('utf-8', 'replace')[:200] if isinstance(raw, bytes) else str(raw)[:200]
+    content_type, body = multipart({'media_category': 'tweet_image'}, {'media': ('card.png', png, 'image/png')})
+    status, raw = call(MEDIA_V1, body, content_type)
+    if status in (200, 201):
+        payload = json.loads(raw)
+        return str(payload.get('media_id_string') or payload.get('media_id'))
+    v1_detail = raw.decode('utf-8', 'replace')[:200] if isinstance(raw, bytes) else str(raw)[:200]
+    raise Refused(f'media upload refused: v2 said {v2_detail!r}; v1.1 said HTTP {status} {v1_detail!r}')
 
 
 # ------------------------------------------------------------------ the posted log
@@ -318,6 +382,7 @@ def main(argv=None):
     parser.add_argument('--confirm', action='store_true', help='actually post')
     parser.add_argument('--day', help='Eastern date for a recap')
     parser.add_argument('--i-understand', action='store_true', help='required for auto, with KEENROUDY_X_AUTONOMOUS=1')
+    parser.add_argument('--card', action='store_true', help='render the pick card (scripts/pick_card.py) and attach it')
     args = parser.parse_args(argv)
     now = datetime.now(timezone.utc)
     print(env_report())
@@ -328,13 +393,20 @@ def main(argv=None):
                 sys.exit('a pick id is required')
             text, pick, game = do_draft(args.pick_id, now, first, latest, games)
             print(f'\n{text}\n\n{tweet_length(text)} characters')
+            card = None
+            if args.card:
+                import pick_card
+                card = pick_card.render(pick_card.svg(pick, game), CONF / 'x-drafts' / f"{pick['id']}.png")
+                print(f'card: {card}')
             if args.command == 'post':
                 if not args.confirm:
                     print('\nnot posted: add --confirm to post this text')
                     return 0
                 log = load_log()
                 refuse(pick, game, log, now, text)
-                tweet_id = post_tweet(text, credentials())
+                creds = credentials()
+                media = [upload_media(card.read_bytes(), creds)] if card else None
+                tweet_id = post_tweet(text, creds, media_ids=media)
                 save_log(record(log, pick['id'], text, tweet_id, 'pick', now))
                 print(f'\nposted: {tweet_id}; logged in {LOG.relative_to(ROOT)}')
         elif args.command in ('recap', 'scoreboard'):

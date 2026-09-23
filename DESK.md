@@ -76,3 +76,20 @@ Only researched favorites go to X. Drafts land in `~/.config/keenroudy/x-drafts/
 off until the owner asks. Every post is logged in `data/x-posted.json` with its id and a hash of its text,
 and X's own duplicate refusal is the backstop. A post links to `https://keenroudy.com/sports/#pick/<id>`,
 which opens that pick's card with its reasoning.
+
+The run also writes, for review: the game day's results recap after the 23:30 run (`x_post.py recap`),
+the model's season-to-date record against the closing line on Tuesday mornings (`x_post.py scoreboard`),
+and a draft plus a branded card image (`scripts/pick_card.py`, rendered by the machine's headless Chrome,
+never committed) for every open favorite. `x_post.py post PICK_ID --confirm --card` attaches the card.
+
+## The market read and the web researcher
+
+`scripts/market_read.py` puts the market beside our number, never inside it: the move since open, which
+books disagree, and where our gap sits among the model's historical gaps with the record of gaps that
+large against the close. A model lean's `why` ends with it; game cards carry it as `marketRead`.
+
+`scripts/researcher.py` is the only part of the desk that reads the web. Off unless the env file sets
+`KEENROUDY_RESEARCHER=claude`; then, at the 8:30 and 17:30 runs on game days, it asks the `claude` command
+line (headless, web search and fetch only) for sourced facts about the strongest candidates, fetches every
+source URL itself and keeps a fact only when each named person is on the page. Verified facts feed the
+gates' `favorite_needs_reason` rule; nothing unverified is argued from.

@@ -54,6 +54,25 @@ Facts (each has an id):
 Does any fact argue against this pick? Answer in JSON with argues_against, confidence (high, medium or low), fact_ids
 (the ids of the facts you relied on, empty if none) and a one-sentence note in plain words with no numbers."""
 
+SUPPORT_SCHEMA = {'type': 'object',
+                  'properties': {'supports': {'type': 'boolean'},
+                                 'confidence': {'type': 'string', 'enum': ['high', 'medium', 'low']},
+                                 'fact_ids': {'type': 'array', 'items': {'type': 'string'}},
+                                 'note': {'type': 'string'}},
+                  'required': ['supports', 'confidence', 'fact_ids', 'note']}
+
+SUPPORT_USER = """Pick:
+{pick}
+
+Verified facts (each has an id):
+{facts}
+
+A researched pick needs a sourced reason the price is wrong in the pick's direction: starters out on the side
+that hurts the other team's case, a role change that moves volume, weather that moves a total. Do these facts,
+taken together, give that reason? Answer in JSON with supports, confidence (high only when the facts plainly
+point the pick's way and nothing here cuts against it), fact_ids (the ids you relied on) and a one-sentence
+note in plain words with no numbers."""
+
 X_SYSTEM = llm.STYLE_SYSTEM + """
 You also write like the owner of a small sports account: casual, terse, a friend at the kitchen table. Under 240
 characters. No hashtags, no emoji, no dashes, no hype. Never add a number that is not in the material."""
@@ -138,6 +157,25 @@ def judge_against(candidate, facts, send=None):
         confidence = 'low'
     return {'argues_against': verdict['argues_against'], 'confidence': confidence, 'fact_ids': ids,
             'note': str(verdict.get('note') or '')[:300]}
+
+
+def judge_for(candidate, facts, send=None):
+    """{'supports', 'confidence', 'fact_ids', 'note'} or None. Same discipline as judge_against: a yes with no fact is low."""
+    shown = {k: v for k, v in candidate.items() if not k.startswith('_') and k not in ('why', 'risk', 'sources')}
+    facts_text = '\n'.join(f"- {f.get('id')}: [{f.get('direction')}] {f.get('claim')} (source: {f.get('source')})" for f in facts) or '- none'
+    try:
+        verdict = llm.draft_json(JUDGE_SYSTEM, SUPPORT_USER.format(pick=json.dumps(shown, ensure_ascii=False, default=str),
+                                                                   facts=facts_text), SUPPORT_SCHEMA, send=send)
+    except llm.LLMUnavailable:
+        return None
+    if not isinstance(verdict, dict) or not isinstance(verdict.get('supports'), bool):
+        return None
+    known = {f.get('id') for f in facts}
+    ids = [i for i in (verdict.get('fact_ids') or []) if i in known]
+    confidence = verdict.get('confidence') if verdict.get('confidence') in ('high', 'medium', 'low') else 'low'
+    if verdict['supports'] and not ids:
+        confidence = 'low'
+    return {'supports': verdict['supports'], 'confidence': confidence, 'fact_ids': ids, 'note': str(verdict.get('note') or '')[:300]}
 
 
 # ------------------------------------------------------------------ command line
