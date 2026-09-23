@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-23T14:42:07Z",
+  "updatedAt": "2026-09-23T14:51:20Z",
   "sources": [
     {
       "league": "NFL",
@@ -8,7 +8,7 @@
         "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=2&limit=1000",
         "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=3&limit=1000"
       ],
-      "retrievedAt": "2026-09-23T14:42:07Z",
+      "retrievedAt": "2026-09-23T14:51:20Z",
       "trainingCoverage": "season feed",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -30,7 +30,7 @@
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2026&seasontype=2&week=4&limit=1000&groups=37",
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2026&seasontype=2&week=4&limit=1000&groups=151"
       ],
-      "retrievedAt": "2026-09-23T14:42:07Z",
+      "retrievedAt": "2026-09-23T14:51:20Z",
       "trainingCoverage": "limited weekly provider sample",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -6183,6 +6183,11 @@
         "short": "Lions",
         "abbreviation": "DET",
         "score": 31
+      },
+      "venue": {
+        "id": "11938",
+        "name": "Highmark Stadium",
+        "indoor": false
       },
       "marketHistory": [
         {
@@ -44564,6 +44569,11 @@
         "abbreviation": "CAR",
         "score": 34
       },
+      "venue": {
+        "id": "5348",
+        "name": "Mercedes-Benz Stadium",
+        "indoor": true
+      },
       "marketHistory": [
         {
           "provider": "DraftKings",
@@ -45093,6 +45103,11 @@
         "short": "Vikings",
         "abbreviation": "MIN",
         "score": 9
+      },
+      "venue": {
+        "id": "3933",
+        "name": "Soldier Field",
+        "indoor": false
       },
       "marketHistory": [
         {
@@ -45624,6 +45639,11 @@
         "abbreviation": "PHI",
         "score": 24
       },
+      "venue": {
+        "id": "3810",
+        "name": "Nissan Stadium",
+        "indoor": false
+      },
       "marketHistory": [
         {
           "provider": "DraftKings",
@@ -46153,6 +46173,11 @@
         "short": "Steelers",
         "abbreviation": "PIT",
         "score": 3
+      },
+      "venue": {
+        "id": "3738",
+        "name": "Gillette Stadium",
+        "indoor": false
       },
       "marketHistory": [
         {
@@ -46684,6 +46709,11 @@
         "abbreviation": "GB",
         "score": 20
       },
+      "venue": {
+        "id": "3839",
+        "name": "MetLife Stadium",
+        "indoor": false
+      },
       "marketHistory": [
         {
           "provider": "DraftKings",
@@ -47213,6 +47243,11 @@
         "short": "Browns",
         "abbreviation": "CLE",
         "score": 23
+      },
+      "venue": {
+        "id": "3886",
+        "name": "Raymond James Stadium",
+        "indoor": false
       },
       "marketHistory": [
         {
@@ -47744,6 +47779,11 @@
         "abbreviation": "NO",
         "score": 24
       },
+      "venue": {
+        "id": "3814",
+        "name": "M&T Bank Stadium",
+        "indoor": false
+      },
       "marketHistory": [
         {
           "provider": "DraftKings",
@@ -48273,6 +48313,11 @@
         "short": "Bengals",
         "abbreviation": "CIN",
         "score": 20
+      },
+      "venue": {
+        "id": "3891",
+        "name": "Reliant Stadium",
+        "indoor": true
       },
       "marketHistory": [
         {
@@ -48804,6 +48849,11 @@
         "abbreviation": "JAX",
         "score": 13
       },
+      "venue": {
+        "id": "3937",
+        "name": "Empower Field at Mile High",
+        "indoor": false
+      },
       "marketHistory": [
         {
           "provider": "Draft Kings",
@@ -49333,6 +49383,11 @@
         "short": "Raiders",
         "abbreviation": "LV",
         "score": 26
+      },
+      "venue": {
+        "id": "7065",
+        "name": "SoFi Stadium",
+        "indoor": false
       },
       "marketHistory": [
         {
@@ -49864,6 +49919,11 @@
         "abbreviation": "WSH",
         "score": 20
       },
+      "venue": {
+        "id": "3687",
+        "name": "AT&T Stadium",
+        "indoor": true
+      },
       "marketHistory": [
         {
           "provider": "DraftKings",
@@ -50393,6 +50453,11 @@
         "short": "Seahawks",
         "abbreviation": "SEA",
         "score": 31
+      },
+      "venue": {
+        "id": "3970",
+        "name": "State Farm Stadium",
+        "indoor": true
       },
       "marketHistory": [
         {
@@ -50924,6 +50989,11 @@
         "abbreviation": "MIA",
         "score": 13
       },
+      "venue": {
+        "id": "4738",
+        "name": "Levi's Stadium",
+        "indoor": false
+      },
       "marketHistory": [
         {
           "provider": "Draft Kings",
@@ -51453,6 +51523,11 @@
         "short": "Colts",
         "abbreviation": "IND",
         "score": 30
+      },
+      "venue": {
+        "id": "3622",
+        "name": "Arrowhead Stadium",
+        "indoor": false
       },
       "marketHistory": [
         {
@@ -51984,6 +52059,11 @@
         "abbreviation": "NYG",
         "score": 6
       },
+      "venue": {
+        "id": "7065",
+        "name": "SoFi Stadium",
+        "indoor": false
+      },
       "marketHistory": [
         {
           "provider": "DraftKings",
@@ -52514,6 +52594,11 @@
         "abbreviation": "LIB",
         "score": null
       },
+      "venue": {
+        "id": "3654",
+        "name": "Brooks Stadium (SC)",
+        "indoor": false
+      },
       "market": {
         "provider": "Draft Kings",
         "spread": "+2.5",
@@ -52887,7 +52972,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "NFL-401872948",
@@ -52915,6 +53000,11 @@
         "short": "Falcons",
         "abbreviation": "ATL",
         "score": null
+      },
+      "venue": {
+        "id": "3798",
+        "name": "Lambeau Field",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -53429,7 +53519,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401862779",
@@ -53457,6 +53547,11 @@
         "short": "Army",
         "abbreviation": "ARMY",
         "score": null
+      },
+      "venue": {
+        "id": "3806",
+        "name": "Lincoln Financial Field",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -53811,7 +53906,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858468",
@@ -53839,6 +53934,11 @@
         "short": "Howard",
         "abbreviation": "HOW",
         "score": null
+      },
+      "venue": {
+        "id": "6577",
+        "name": "SHI Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -53883,7 +53983,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401862778",
@@ -53911,6 +54011,11 @@
         "short": "Navy",
         "abbreviation": "NAVY",
         "score": null
+      },
+      "venue": {
+        "id": "7221",
+        "name": "Protective Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -54285,7 +54390,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858461",
@@ -54313,6 +54418,11 @@
         "short": "Northwestern",
         "abbreviation": "NU",
         "score": null
+      },
+      "venue": {
+        "id": "3830",
+        "name": "Memorial Stadium (Bloomington, IN)",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -54737,7 +54847,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858234",
@@ -54765,6 +54875,11 @@
         "short": "Clemson",
         "abbreviation": "CLEM",
         "score": null
+      },
+      "venue": {
+        "id": "3831",
+        "name": "California Memorial Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -55109,7 +55224,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858465",
@@ -55137,6 +55252,11 @@
         "short": "Illinois",
         "abbreviation": "ILL",
         "score": null
+      },
+      "venue": {
+        "id": "3861",
+        "name": "Ohio Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -55641,7 +55761,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401856805",
@@ -55669,6 +55789,11 @@
         "short": "Sam Houston",
         "abbreviation": "SHSU",
         "score": null
+      },
+      "venue": {
+        "id": "3784",
+        "name": "Galaxy Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -56003,7 +56128,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401860893",
@@ -56031,6 +56156,11 @@
         "short": "San Diego St",
         "abbreviation": "SDSU",
         "score": null
+      },
+      "venue": {
+        "id": "3739",
+        "name": "Glass Bowl",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -56405,7 +56535,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401856813",
@@ -56433,6 +56563,11 @@
         "short": "Colorado",
         "abbreviation": "COLO",
         "score": null
+      },
+      "venue": {
+        "id": "4727",
+        "name": "McLane Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -56797,7 +56932,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401860896",
@@ -56825,6 +56960,11 @@
         "short": "Colorado St",
         "abbreviation": "CSU",
         "score": null
+      },
+      "venue": {
+        "id": "3604",
+        "name": "Alamodome",
+        "indoor": true
       },
       "market": {
         "provider": "Draft Kings",
@@ -57159,7 +57299,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401864512",
@@ -57187,6 +57327,11 @@
         "short": "UNLV",
         "abbreviation": "UNLV",
         "score": null
+      },
+      "venue": {
+        "id": "3768",
+        "name": "InfoCision Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -57521,7 +57666,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401866425",
@@ -57549,6 +57694,11 @@
         "short": "Ball State",
         "abbreviation": "BALL",
         "score": null
+      },
+      "venue": {
+        "id": "3696",
+        "name": "Zoeller Field at Dix Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -57933,7 +58083,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858243",
@@ -57961,6 +58111,11 @@
         "short": "Wake Forest",
         "abbreviation": "WAKE",
         "score": null
+      },
+      "venue": {
+        "id": "3873",
+        "name": "L&N Federal Credit Union Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -58345,7 +58500,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858242",
@@ -58373,6 +58528,11 @@
         "short": "Virginia Tech",
         "abbreviation": "VT",
         "score": null
+      },
+      "venue": {
+        "id": "3615",
+        "name": "Alumni Stadium (Chestnut Hill, MA)",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -58757,7 +58917,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401856704",
@@ -58785,6 +58945,11 @@
         "short": "Texas",
         "abbreviation": "TEX",
         "score": null
+      },
+      "venue": {
+        "id": "3853",
+        "name": "Neyland Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -59299,7 +59464,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858236",
@@ -59328,9 +59493,14 @@
         "abbreviation": "BUCK",
         "score": null
       },
+      "venue": {
+        "id": "3752",
+        "name": "Acrisure Stadium",
+        "indoor": false
+      },
       "market": {
         "provider": "Draft Kings",
-        "spread": "-53.5",
+        "spread": "-52.5",
         "spreadOdds": "-110",
         "spreadOpen": "-53.5",
         "total": 61.5,
@@ -59369,9 +59539,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-23T14:42:07Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "-52.5",
+          "spreadOdds": "-110",
+          "total": 61.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-23T14:51:20Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401864576",
@@ -59399,6 +59579,11 @@
         "short": "South Alabama",
         "abbreviation": "USA",
         "score": null
+      },
+      "venue": {
+        "id": "3683",
+        "name": "Kroger Field",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -59733,7 +59918,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401866427",
@@ -59761,6 +59946,11 @@
         "short": "Lindenwood",
         "abbreviation": "LIN",
         "score": null
+      },
+      "venue": {
+        "id": "3912",
+        "name": "Rynearson Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -59795,7 +59985,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858462",
@@ -59823,6 +60013,11 @@
         "short": "UCLA",
         "abbreviation": "UCLA",
         "score": null
+      },
+      "venue": {
+        "id": "3665",
+        "name": "SECU Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -60337,7 +60532,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858467",
@@ -60365,6 +60560,11 @@
         "short": "Notre Dame",
         "abbreviation": "ND",
         "score": null
+      },
+      "venue": {
+        "id": "3907",
+        "name": "Ross-Ade Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -60759,7 +60959,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401864511",
@@ -60787,6 +60987,11 @@
         "short": "N Illinois",
         "abbreviation": "NIU",
         "score": null
+      },
+      "venue": {
+        "id": "4246",
+        "name": "Center Parc Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -61151,7 +61356,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858237",
@@ -61179,6 +61384,11 @@
         "short": "C Arkansas",
         "abbreviation": "CARK",
         "score": null
+      },
+      "venue": {
+        "id": "3697",
+        "name": "Doak Campbell Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -61213,7 +61423,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401864510",
@@ -61241,6 +61451,11 @@
         "short": "Hawai'i",
         "abbreviation": "HAW",
         "score": null
+      },
+      "venue": {
+        "id": "3984",
+        "name": "War Memorial Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -61625,7 +61840,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401860897",
@@ -61653,6 +61868,11 @@
         "short": "Boise St",
         "abbreviation": "BOIS",
         "score": null
+      },
+      "venue": {
+        "id": "3980",
+        "name": "Waldo Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -62167,7 +62387,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401856816",
@@ -62195,6 +62415,11 @@
         "short": "Utah",
         "abbreviation": "UTAH",
         "score": null
+      },
+      "venue": {
+        "id": "3772",
+        "name": "Jack Trice Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -62629,7 +62854,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858463",
@@ -62657,6 +62882,11 @@
         "short": "Iowa",
         "abbreviation": "IOWA",
         "score": null
+      },
+      "venue": {
+        "id": "3558",
+        "name": "Michigan Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -63171,7 +63401,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401856815",
@@ -63199,6 +63429,11 @@
         "short": "TCU",
         "abbreviation": "TCU",
         "score": null
+      },
+      "venue": {
+        "id": "3652",
+        "name": "Acrisure Bounce House",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -63543,7 +63778,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401856700",
@@ -63571,6 +63806,11 @@
         "short": "Oklahoma",
         "abbreviation": "OU",
         "score": null
+      },
+      "venue": {
+        "id": "3917",
+        "name": "Sanford Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -64085,7 +64325,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401856699",
@@ -64113,6 +64353,11 @@
         "short": "Ole Miss",
         "abbreviation": "MISS",
         "score": null
+      },
+      "venue": {
+        "id": "3634",
+        "name": "Ben Hill Griffin Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -64627,7 +64872,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401861970",
@@ -64655,6 +64900,11 @@
         "short": "UConn",
         "abbreviation": "CONN",
         "score": null
+      },
+      "venue": {
+        "id": "3996",
+        "name": "Yager Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -64999,7 +65249,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858244",
@@ -65027,6 +65277,11 @@
         "short": "William & Mary",
         "abbreviation": "W&M",
         "score": null
+      },
+      "venue": {
+        "id": "3982",
+        "name": "Wallace Wade Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -65071,7 +65326,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401864579",
@@ -65099,6 +65354,11 @@
         "short": "New Mexico",
         "abbreviation": "UNM",
         "score": null
+      },
+      "venue": {
+        "id": "3601",
+        "name": "Aggie Memorial Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -65443,7 +65703,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401866426",
@@ -65472,6 +65732,11 @@
         "abbreviation": "RMU",
         "score": null
       },
+      "venue": {
+        "id": "3965",
+        "name": "Broadview Stadium",
+        "indoor": false
+      },
       "market": {
         "provider": "Draft Kings",
         "spread": "-28.5",
@@ -65495,7 +65760,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401866428",
@@ -65523,6 +65788,11 @@
         "short": "Stonehill",
         "abbreviation": "STO",
         "score": null
+      },
+      "venue": {
+        "id": "3876",
+        "name": "Peden Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -65557,7 +65827,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401868188",
@@ -65586,6 +65856,11 @@
         "abbreviation": "GWEB",
         "score": null
       },
+      "venue": {
+        "id": "3775",
+        "name": "Joan C. Edwards Stadium",
+        "indoor": false
+      },
       "market": {
         "provider": "Draft Kings",
         "spread": "-23.5",
@@ -65609,7 +65884,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401856806",
@@ -65637,6 +65912,11 @@
         "short": "Houston",
         "abbreviation": "HOU",
         "score": null
+      },
+      "venue": {
+        "id": "3608",
+        "name": "Allen E. Paulson Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -65971,7 +66251,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401862781",
@@ -65999,6 +66279,11 @@
         "short": "NC Central",
         "abbreviation": "NCCU",
         "score": null
+      },
+      "venue": {
+        "id": "3699",
+        "name": "Dowdy-Ficklen Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -66033,7 +66318,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401856698",
@@ -66061,6 +66346,11 @@
         "short": "Vanderbilt",
         "abbreviation": "VAN",
         "score": null
+      },
+      "venue": {
+        "id": "3785",
+        "name": "Jordan-Hare Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -66575,7 +66865,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858466",
@@ -66603,6 +66893,11 @@
         "short": "Wisconsin",
         "abbreviation": "WIS",
         "score": null
+      },
+      "venue": {
+        "id": "3632",
+        "name": "Beaver Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -67117,7 +67412,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858464",
@@ -67145,6 +67440,11 @@
         "short": "Nebraska",
         "abbreviation": "NEB",
         "score": null
+      },
+      "venue": {
+        "id": "3936",
+        "name": "Spartan Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -67659,7 +67959,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401862785",
@@ -67687,6 +67987,11 @@
         "short": "South Florida",
         "abbreviation": "USF",
         "score": null
+      },
+      "venue": {
+        "id": "3700",
+        "name": "Doyt L. Perry Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -67991,7 +68296,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401869961",
@@ -68019,6 +68324,11 @@
         "short": "James Madison",
         "abbreviation": "JMU",
         "score": null
+      },
+      "venue": {
+        "id": "3918",
+        "name": "S.B. Ballard Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -68383,7 +68693,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858239",
@@ -68411,6 +68721,11 @@
         "short": "Delaware",
         "abbreviation": "DEL",
         "score": null
+      },
+      "venue": {
+        "id": "3923",
+        "name": "Scott Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -68745,7 +69060,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401860892",
@@ -68773,6 +69088,11 @@
         "short": "Incarnate Word",
         "abbreviation": "UIW",
         "score": null
+      },
+      "venue": {
+        "id": "3644",
+        "name": "UFCU Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -68817,7 +69137,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401867909",
@@ -68846,6 +69166,11 @@
         "abbreviation": "LIU",
         "score": null
       },
+      "venue": {
+        "id": "2031",
+        "name": "Pitbull Stadium",
+        "indoor": false
+      },
       "market": {
         "provider": "Draft Kings",
         "spread": "-35.5",
@@ -68869,7 +69194,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401862780",
@@ -68897,6 +69222,11 @@
         "short": "Louisiana",
         "abbreviation": "UL",
         "score": null
+      },
+      "venue": {
+        "id": "4418",
+        "name": "Jerry Richardson Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -69251,7 +69581,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858238",
@@ -69279,6 +69609,11 @@
         "short": "C Michigan",
         "abbreviation": "CMU",
         "score": null
+      },
+      "venue": {
+        "id": "3948",
+        "name": "Hard Rock Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -69693,7 +70028,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401856881",
@@ -69721,6 +70056,11 @@
         "short": "Oklahoma St",
         "abbreviation": "OKST",
         "score": null
+      },
+      "venue": {
+        "id": "3842",
+        "name": "Milan Puskar Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -70235,7 +70575,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401862784",
@@ -70263,6 +70603,11 @@
         "short": "Southern Miss",
         "abbreviation": "USM",
         "score": null
+      },
+      "venue": {
+        "id": "4729",
+        "name": "Yulman Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -70617,7 +70962,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401856814",
@@ -70645,6 +70990,11 @@
         "short": "Kansas St",
         "abbreviation": "KSU",
         "score": null
+      },
+      "venue": {
+        "id": "3854",
+        "name": "Nippert Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -70959,7 +71309,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401856696",
@@ -70987,6 +71337,11 @@
         "short": "South Carolina",
         "abbreviation": "SC",
         "score": null
+      },
+      "venue": {
+        "id": "3657",
+        "name": "Bryant-Denny Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -71501,7 +71856,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401869931",
@@ -71529,6 +71884,11 @@
         "short": "Kennesaw St",
         "abbreviation": "KENN",
         "score": null
+      },
+      "venue": {
+        "id": "3625",
+        "name": "Centennial Bank Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -71893,7 +72253,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401870745",
@@ -71922,6 +72282,11 @@
         "abbreviation": "MERC",
         "score": null
       },
+      "venue": {
+        "id": "3796",
+        "name": "Houchens Industries-L.T. Smith Stadium",
+        "indoor": false
+      },
       "market": {
         "provider": "Draft Kings",
         "spread": "-38.5",
@@ -71945,7 +72310,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401871048",
@@ -71973,6 +72338,11 @@
         "short": "MTSU",
         "abbreviation": "MTSU",
         "score": null
+      },
+      "venue": {
+        "id": "3662",
+        "name": "AmFirst Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -72297,7 +72667,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858469",
@@ -72325,6 +72695,11 @@
         "short": "Oregon",
         "abbreviation": "ORE",
         "score": null
+      },
+      "venue": {
+        "id": "477",
+        "name": "Los Angeles Memorial Coliseum",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -72839,7 +73214,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401856702",
@@ -72867,6 +73242,11 @@
         "short": "Texas A&M",
         "abbreviation": "TA&M",
         "score": null
+      },
+      "venue": {
+        "id": "3958",
+        "name": "Tiger Stadium (LA)",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -73381,7 +73761,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401864572",
@@ -73409,6 +73789,11 @@
         "short": "App State",
         "abbreviation": "APP",
         "score": null
+      },
+      "venue": {
+        "id": "3670",
+        "name": "Carter-Finley Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -73743,7 +74128,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401856804",
@@ -73771,6 +74156,11 @@
         "short": "Arizona",
         "abbreviation": "ARIZ",
         "score": null
+      },
+      "venue": {
+        "id": "3820",
+        "name": "Martin Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -74115,7 +74505,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401860894",
@@ -74143,6 +74533,11 @@
         "short": "Troy",
         "abbreviation": "TROY",
         "score": null
+      },
+      "venue": {
+        "id": "3905",
+        "name": "Maverik Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -74507,7 +74902,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401862783",
@@ -74536,6 +74931,11 @@
         "abbreviation": "HCU",
         "score": null
       },
+      "venue": {
+        "id": "3825",
+        "name": "DATCU Stadium",
+        "indoor": false
+      },
       "market": {
         "provider": "Draft Kings",
         "spread": "-37.5",
@@ -74559,7 +74959,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401856703",
@@ -74587,6 +74987,11 @@
         "short": "Missouri",
         "abbreviation": "MIZ",
         "score": null
+      },
+      "venue": {
+        "id": "3693",
+        "name": "Davis Wade Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -75101,7 +75506,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401862782",
@@ -75129,6 +75534,11 @@
         "short": "FAU",
         "abbreviation": "FAU",
         "score": null
+      },
+      "venue": {
+        "id": "3817",
+        "name": "Malone Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -75453,7 +75863,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401856697",
@@ -75481,6 +75891,11 @@
         "short": "Tulsa",
         "abbreviation": "TLSA",
         "score": null
+      },
+      "venue": {
+        "id": "3887",
+        "name": "Donald W. Reynolds Razorback Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -75825,7 +76240,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401866429",
@@ -75853,6 +76268,11 @@
         "short": "UMass",
         "abbreviation": "MASS",
         "score": null
+      },
+      "venue": {
+        "id": "3757",
+        "name": "Hornet Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -76197,7 +76617,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858241",
@@ -76225,6 +76645,11 @@
         "short": "Missouri St",
         "abbreviation": "MOST",
         "score": null
+      },
+      "venue": {
+        "id": "3735",
+        "name": "Gerald J. Ford Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -76549,7 +76974,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401860895",
@@ -76577,6 +77002,11 @@
         "short": "Oregon St",
         "abbreviation": "ORST",
         "score": null
+      },
+      "venue": {
+        "id": "3946",
+        "name": "Sun Bowl",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -76951,7 +77381,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401860891",
@@ -76979,6 +77409,11 @@
         "short": "Rice",
         "abbreviation": "RICE",
         "score": null
+      },
+      "venue": {
+        "id": "3660",
+        "name": "Valley Children's Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -77323,7 +77758,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401864509",
@@ -77351,6 +77786,11 @@
         "short": "Air Force",
         "abbreviation": "AFA",
         "score": null
+      },
+      "venue": {
+        "id": "3816",
+        "name": "Mackay Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -77705,7 +78145,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858240",
@@ -77733,6 +78173,11 @@
         "short": "Georgia Tech",
         "abbreviation": "GT",
         "score": null
+      },
+      "venue": {
+        "id": "3940",
+        "name": "Stanford Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -78057,7 +78502,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "CFB-401858470",
@@ -78085,6 +78530,11 @@
         "short": "Minnesota",
         "abbreviation": "MINN",
         "score": null
+      },
+      "venue": {
+        "id": "3765",
+        "name": "Husky Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -78479,7 +78929,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "NFL-401872953",
@@ -78507,6 +78957,11 @@
         "short": "Chargers",
         "abbreviation": "LAC",
         "score": null
+      },
+      "venue": {
+        "id": "11938",
+        "name": "Highmark Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -79021,7 +79476,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "NFL-401872949",
@@ -79049,6 +79504,11 @@
         "short": "Panthers",
         "abbreviation": "CAR",
         "score": null
+      },
+      "venue": {
+        "id": "3679",
+        "name": "Huntington Bank Field",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -79563,7 +80023,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "NFL-401872954",
@@ -79591,6 +80051,11 @@
         "short": "Jets",
         "abbreviation": "NYJ",
         "score": null
+      },
+      "venue": {
+        "id": "3727",
+        "name": "Ford Field",
+        "indoor": true
       },
       "market": {
         "provider": "Draft Kings",
@@ -80105,7 +80570,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "NFL-401872951",
@@ -80133,6 +80598,11 @@
         "short": "Texans",
         "abbreviation": "HOU",
         "score": null
+      },
+      "venue": {
+        "id": "3812",
+        "name": "Lucas Oil Stadium",
+        "indoor": true
       },
       "market": {
         "provider": "Draft Kings",
@@ -80647,7 +81117,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "NFL-401872952",
@@ -80675,6 +81145,11 @@
         "short": "Chiefs",
         "abbreviation": "KC",
         "score": null
+      },
+      "venue": {
+        "id": "3948",
+        "name": "Hard Rock Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -81189,7 +81664,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "NFL-401872956",
@@ -81217,6 +81692,11 @@
         "short": "Titans",
         "abbreviation": "TEN",
         "score": null
+      },
+      "venue": {
+        "id": "3839",
+        "name": "MetLife Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -81731,7 +82211,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "NFL-401872950",
@@ -81759,6 +82239,11 @@
         "short": "Bengals",
         "abbreviation": "CIN",
         "score": null
+      },
+      "venue": {
+        "id": "3752",
+        "name": "Acrisure Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -82273,7 +82758,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "NFL-401872955",
@@ -82301,6 +82786,11 @@
         "short": "Seahawks",
         "abbreviation": "SEA",
         "score": null
+      },
+      "venue": {
+        "id": "3719",
+        "name": "Northwest Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -82815,7 +83305,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "NFL-401872957",
@@ -82843,6 +83333,11 @@
         "short": "Patriots",
         "abbreviation": "NE",
         "score": null
+      },
+      "venue": {
+        "id": "3712",
+        "name": "EverBank Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -83257,7 +83752,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "NFL-401872958",
@@ -83285,6 +83780,11 @@
         "short": "Cardinals",
         "abbreviation": "ARI",
         "score": null
+      },
+      "venue": {
+        "id": "4738",
+        "name": "Levi's Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -83799,7 +84299,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "NFL-401872959",
@@ -83827,6 +84327,11 @@
         "short": "Vikings",
         "abbreviation": "MIN",
         "score": null
+      },
+      "venue": {
+        "id": "3886",
+        "name": "Raymond James Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -84341,7 +84846,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "NFL-401872960",
@@ -84369,6 +84874,11 @@
         "short": "Ravens",
         "abbreviation": "BAL",
         "score": null
+      },
+      "venue": {
+        "id": "11931",
+        "name": "Maracan\u00e3 Stadium",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -84883,7 +85393,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "NFL-401872961",
@@ -84911,6 +85421,11 @@
         "short": "Raiders",
         "abbreviation": "LV",
         "score": null
+      },
+      "venue": {
+        "id": "3493",
+        "name": "Caesars Superdome",
+        "indoor": true
       },
       "market": {
         "provider": "Draft Kings",
@@ -85425,7 +85940,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "NFL-401872962",
@@ -85453,6 +85968,11 @@
         "short": "Rams",
         "abbreviation": "LAR",
         "score": null
+      },
+      "venue": {
+        "id": "3937",
+        "name": "Empower Field at Mile High",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -85967,7 +86487,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     },
     {
       "id": "NFL-401872963",
@@ -85995,6 +86515,11 @@
         "short": "Eagles",
         "abbreviation": "PHI",
         "score": null
+      },
+      "venue": {
+        "id": "3933",
+        "name": "Soldier Field",
+        "indoor": false
       },
       "market": {
         "provider": "Draft Kings",
@@ -86509,7 +87034,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-23T14:42:07Z"
+      "marketRetrievedAt": "2026-09-23T14:51:20Z"
     }
   ]
 }
