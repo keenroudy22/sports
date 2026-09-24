@@ -1,0 +1,1117 @@
+{
+ "league": "MLS",
+ "version": "soccer-v1",
+ "store": {
+  "file": "data/soccer/mls.jsonl",
+  "lines": 4832,
+  "sha256": "c3eb7f7a0789785fadd9f54ce5c527a9bf43e8f3cbe82cdc1226ec5dbbf61c63"
+ },
+ "objective": "mean log loss of 1X2 plus over/under 2.5 (1X2 alone where the file has no totals)",
+ "tuneSeason": "2024",
+ "holdoutSeason": "2025",
+ "history": [
+  "2016",
+  "2017",
+  "2018",
+  "2019",
+  "2020",
+  "2021",
+  "2022",
+  "2023"
+ ],
+ "grid": {
+  "halfLife": [
+   45,
+   90,
+   180,
+   365,
+   730
+  ],
+  "ridge": [
+   0.3,
+   1.0,
+   3.0,
+   10.0,
+   30.0,
+   100.0,
+   300.0
+  ],
+  "shotsBlend": [
+   1.0,
+   0.75,
+   0.5,
+   0.25
+  ],
+  "rho": [
+   0.0,
+   "fit"
+  ],
+  "seasonCarry": [
+   1.0,
+   0.7,
+   0.5,
+   0.3
+  ]
+ },
+ "trials": [
+  {
+   "params": {
+    "halfLife": 45,
+    "ridge": 0.3,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.07553
+  },
+  {
+   "params": {
+    "halfLife": 45,
+    "ridge": 1.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06717
+  },
+  {
+   "params": {
+    "halfLife": 45,
+    "ridge": 3.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05578
+  },
+  {
+   "params": {
+    "halfLife": 45,
+    "ridge": 10.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.04802
+  },
+  {
+   "params": {
+    "halfLife": 45,
+    "ridge": 30.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05235
+  },
+  {
+   "params": {
+    "halfLife": 45,
+    "ridge": 100.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06153
+  },
+  {
+   "params": {
+    "halfLife": 45,
+    "ridge": 300.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06649
+  },
+  {
+   "params": {
+    "halfLife": 90,
+    "ridge": 0.3,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05882
+  },
+  {
+   "params": {
+    "halfLife": 90,
+    "ridge": 1.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05673
+  },
+  {
+   "params": {
+    "halfLife": 90,
+    "ridge": 3.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05272
+  },
+  {
+   "params": {
+    "halfLife": 90,
+    "ridge": 10.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.04819
+  },
+  {
+   "params": {
+    "halfLife": 90,
+    "ridge": 30.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05044
+  },
+  {
+   "params": {
+    "halfLife": 90,
+    "ridge": 100.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05939
+  },
+  {
+   "params": {
+    "halfLife": 90,
+    "ridge": 300.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06564
+  },
+  {
+   "params": {
+    "halfLife": 180,
+    "ridge": 0.3,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05572
+  },
+  {
+   "params": {
+    "halfLife": 180,
+    "ridge": 1.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05526
+  },
+  {
+   "params": {
+    "halfLife": 180,
+    "ridge": 3.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05422
+  },
+  {
+   "params": {
+    "halfLife": 180,
+    "ridge": 10.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05245
+  },
+  {
+   "params": {
+    "halfLife": 180,
+    "ridge": 30.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05292
+  },
+  {
+   "params": {
+    "halfLife": 180,
+    "ridge": 100.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05914
+  },
+  {
+   "params": {
+    "halfLife": 180,
+    "ridge": 300.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06563
+  },
+  {
+   "params": {
+    "halfLife": 365,
+    "ridge": 0.3,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06073
+  },
+  {
+   "params": {
+    "halfLife": 365,
+    "ridge": 1.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.0606
+  },
+  {
+   "params": {
+    "halfLife": 365,
+    "ridge": 3.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06027
+  },
+  {
+   "params": {
+    "halfLife": 365,
+    "ridge": 10.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05945
+  },
+  {
+   "params": {
+    "halfLife": 365,
+    "ridge": 30.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05883
+  },
+  {
+   "params": {
+    "halfLife": 365,
+    "ridge": 100.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06107
+  },
+  {
+   "params": {
+    "halfLife": 365,
+    "ridge": 300.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06585
+  },
+  {
+   "params": {
+    "halfLife": 730,
+    "ridge": 0.3,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06749
+  },
+  {
+   "params": {
+    "halfLife": 730,
+    "ridge": 1.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.0674
+  },
+  {
+   "params": {
+    "halfLife": 730,
+    "ridge": 3.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06717
+  },
+  {
+   "params": {
+    "halfLife": 730,
+    "ridge": 10.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06647
+  },
+  {
+   "params": {
+    "halfLife": 730,
+    "ridge": 30.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06525
+  },
+  {
+   "params": {
+    "halfLife": 730,
+    "ridge": 100.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06456
+  },
+  {
+   "params": {
+    "halfLife": 730,
+    "ridge": 300.0,
+    "rho": "fit",
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06657
+  },
+  {
+   "params": {
+    "halfLife": 45,
+    "ridge": 10.0,
+    "rho": 0.0,
+    "seasonCarry": 1.0,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.04739
+  },
+  {
+   "params": {
+    "halfLife": 45,
+    "ridge": 10.0,
+    "rho": 0.0,
+    "seasonCarry": 0.7,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.04733
+  },
+  {
+   "params": {
+    "halfLife": 45,
+    "ridge": 10.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.04732
+  },
+  {
+   "params": {
+    "halfLife": 45,
+    "ridge": 10.0,
+    "rho": 0.0,
+    "seasonCarry": 0.3,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.04733
+  },
+  {
+   "params": {
+    "halfLife": 45,
+    "ridge": 0.3,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.07573
+  },
+  {
+   "params": {
+    "halfLife": 45,
+    "ridge": 1.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06584
+  },
+  {
+   "params": {
+    "halfLife": 45,
+    "ridge": 3.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05419
+  },
+  {
+   "params": {
+    "halfLife": 45,
+    "ridge": 30.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05223
+  },
+  {
+   "params": {
+    "halfLife": 45,
+    "ridge": 100.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06144
+  },
+  {
+   "params": {
+    "halfLife": 45,
+    "ridge": 300.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06633
+  },
+  {
+   "params": {
+    "halfLife": 90,
+    "ridge": 0.3,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05911
+  },
+  {
+   "params": {
+    "halfLife": 90,
+    "ridge": 1.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05597
+  },
+  {
+   "params": {
+    "halfLife": 90,
+    "ridge": 3.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05067
+  },
+  {
+   "params": {
+    "halfLife": 90,
+    "ridge": 10.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.04589
+  },
+  {
+   "params": {
+    "halfLife": 90,
+    "ridge": 30.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.04912
+  },
+  {
+   "params": {
+    "halfLife": 90,
+    "ridge": 100.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05856
+  },
+  {
+   "params": {
+    "halfLife": 90,
+    "ridge": 300.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06474
+  },
+  {
+   "params": {
+    "halfLife": 180,
+    "ridge": 0.3,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05279
+  },
+  {
+   "params": {
+    "halfLife": 180,
+    "ridge": 1.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05173
+  },
+  {
+   "params": {
+    "halfLife": 180,
+    "ridge": 3.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.0496
+  },
+  {
+   "params": {
+    "halfLife": 180,
+    "ridge": 10.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.04696
+  },
+  {
+   "params": {
+    "halfLife": 180,
+    "ridge": 30.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.04882
+  },
+  {
+   "params": {
+    "halfLife": 180,
+    "ridge": 100.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05716
+  },
+  {
+   "params": {
+    "halfLife": 180,
+    "ridge": 300.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06402
+  },
+  {
+   "params": {
+    "halfLife": 365,
+    "ridge": 0.3,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05274
+  },
+  {
+   "params": {
+    "halfLife": 365,
+    "ridge": 1.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05231
+  },
+  {
+   "params": {
+    "halfLife": 365,
+    "ridge": 3.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05135
+  },
+  {
+   "params": {
+    "halfLife": 365,
+    "ridge": 10.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.04983
+  },
+  {
+   "params": {
+    "halfLife": 365,
+    "ridge": 30.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05065
+  },
+  {
+   "params": {
+    "halfLife": 365,
+    "ridge": 100.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05714
+  },
+  {
+   "params": {
+    "halfLife": 365,
+    "ridge": 300.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06391
+  },
+  {
+   "params": {
+    "halfLife": 730,
+    "ridge": 0.3,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05456
+  },
+  {
+   "params": {
+    "halfLife": 730,
+    "ridge": 1.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05431
+  },
+  {
+   "params": {
+    "halfLife": 730,
+    "ridge": 3.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05372
+  },
+  {
+   "params": {
+    "halfLife": 730,
+    "ridge": 10.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05261
+  },
+  {
+   "params": {
+    "halfLife": 730,
+    "ridge": 30.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05279
+  },
+  {
+   "params": {
+    "halfLife": 730,
+    "ridge": 100.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.05766
+  },
+  {
+   "params": {
+    "halfLife": 730,
+    "ridge": 300.0,
+    "rho": 0.0,
+    "seasonCarry": 0.5,
+    "newcomerPool": 3,
+    "shotsBlend": 1.0
+   },
+   "objective": 1.06397
+  }
+ ],
+ "chosen": {
+  "halfLife": 90,
+  "ridge": 10.0,
+  "rho": 0.0,
+  "seasonCarry": 0.5,
+  "newcomerPool": 3,
+  "shotsBlend": 1.0
+ },
+ "tuning": {
+  "matches": 522,
+  "accuracy": {
+   "1x2": {
+    "n": 522,
+    "logLoss": {
+     "ours": 1.04589,
+     "close": 1.02956,
+     "calibrated": 1.02954
+    },
+    "brier": {
+     "ours": 0.62917,
+     "close": 0.61885,
+     "calibrated": 0.61879
+    },
+    "oursMinusClose": {
+     "mean": 0.01634,
+     "interval90": [
+      0.00353,
+      0.02964
+     ]
+    }
+   }
+  },
+  "leans": {
+   "1x2": {
+    "close": {
+     "2": {
+      "bets": 469,
+      "meanEdge": 7.31,
+      "primary": {
+       "n": 469,
+       "won": 139,
+       "lost": 330,
+       "pushed": 0,
+       "units": -32.69,
+       "roi": -6.97,
+       "meanOdds": 3.75,
+       "roiInterval90": [
+        -18.92,
+        5.07
+       ]
+      },
+      "average": {
+       "n": 469,
+       "won": 139,
+       "lost": 330,
+       "pushed": 0,
+       "units": -49.22,
+       "roi": -10.49,
+       "meanOdds": 3.604,
+       "roiInterval90": [
+        -21.97,
+        0.93
+       ]
+      }
+     },
+     "4": {
+      "bets": 360,
+      "meanEdge": 8.6,
+      "primary": {
+       "n": 360,
+       "won": 100,
+       "lost": 260,
+       "pushed": 0,
+       "units": -36.76,
+       "roi": -10.21,
+       "meanOdds": 3.841,
+       "roiInterval90": [
+        -23.62,
+        3.38
+       ]
+      },
+      "average": {
+       "n": 360,
+       "won": 100,
+       "lost": 260,
+       "pushed": 0,
+       "units": -49.52,
+       "roi": -13.76,
+       "meanOdds": 3.688,
+       "roiInterval90": [
+        -26.29,
+        -0.88
+       ]
+      }
+     },
+     "6": {
+      "bets": 250,
+      "meanEdge": 10.19,
+      "primary": {
+       "n": 250,
+       "won": 73,
+       "lost": 177,
+       "pushed": 0,
+       "units": -10.48,
+       "roi": -4.19,
+       "meanOdds": 3.829,
+       "roiInterval90": [
+        -21.04,
+        12.49
+       ]
+      },
+      "average": {
+       "n": 250,
+       "won": 73,
+       "lost": 177,
+       "pushed": 0,
+       "units": -20.39,
+       "roi": -8.16,
+       "meanOdds": 3.674,
+       "roiInterval90": [
+        -24.14,
+        7.7
+       ]
+      }
+     }
+    }
+   },
+   "dnb": {
+    "close": {
+     "2": {
+      "bets": 445,
+      "meanEdge": 8.96,
+      "primary": {
+       "n": 445,
+       "won": 130,
+       "lost": 201,
+       "pushed": 114,
+       "units": -17.4,
+       "roi": -3.91,
+       "meanOdds": 2.902,
+       "roiInterval90": [
+        -12.38,
+        4.6
+       ]
+      },
+      "average": {
+       "n": 445,
+       "won": 130,
+       "lost": 201,
+       "pushed": 114,
+       "units": -31.23,
+       "roi": -7.02,
+       "meanOdds": 2.771,
+       "roiInterval90": [
+        -15.11,
+        1.12
+       ]
+      }
+     },
+     "4": {
+      "bets": 363,
+      "meanEdge": 10.29,
+      "primary": {
+       "n": 363,
+       "won": 93,
+       "lost": 173,
+       "pushed": 97,
+       "units": -35.24,
+       "roi": -9.71,
+       "meanOdds": 2.987,
+       "roiInterval90": [
+        -19.08,
+        0.43
+       ]
+      },
+      "average": {
+       "n": 363,
+       "won": 93,
+       "lost": 173,
+       "pushed": 97,
+       "units": -45.91,
+       "roi": -12.65,
+       "meanOdds": 2.849,
+       "roiInterval90": [
+        -21.43,
+        -3.15
+       ]
+      }
+     },
+     "6": {
+      "bets": 289,
+      "meanEdge": 11.65,
+      "primary": {
+       "n": 289,
+       "won": 72,
+       "lost": 138,
+       "pushed": 79,
+       "units": -26.06,
+       "roi": -9.02,
+       "meanOdds": 3.069,
+       "roiInterval90": [
+        -20.19,
+        2.82
+       ]
+      },
+      "average": {
+       "n": 289,
+       "won": 72,
+       "lost": 138,
+       "pushed": 79,
+       "units": -34.93,
+       "roi": -12.09,
+       "meanOdds": 2.925,
+       "roiInterval90": [
+        -22.64,
+        -1.03
+       ]
+      }
+     }
+    }
+   }
+  }
+ },
+ "calibration": {
+  "1x2": {
+   "k": 0.03,
+   "n": 522,
+   "gain": 0.008
+  },
+  "dnb": {
+   "k": 0.03,
+   "n": 392,
+   "gain": 0.009
+  },
+  "total": null,
+  "ah": null
+ },
+ "thresholds": {
+  "1x2": {
+   "close": "6",
+   "open": null
+  },
+  "dnb": {
+   "close": "2",
+   "open": null
+  },
+  "total": {
+   "close": null,
+   "open": null
+  },
+  "ah": {
+   "close": null,
+   "open": null
+  }
+ },
+ "looks": []
+}
