@@ -51,7 +51,7 @@ any other automation on the machine.
 ```
 bash ~/.config/keenroudy/run.sh doctor                  versions, identities, which keys are set
 bash ~/.config/keenroudy/run.sh py scripts/X.py ...     any repo script with the sports environment loaded
-bash ~/.config/keenroudy/run.sh run --dry-run           a run that writes its reports to pending/ and touches no git
+bash ~/.config/keenroudy/run.sh run --dry-run           a rehearsal: reports and status go to pending/; no git, no Buffer, the live status and post log untouched
 bash ~/.config/keenroudy/run.sh run --publish-kinds settle,close     a live run limited to revisions
 bash ~/.config/keenroudy/run.sh status                  the last run's status.json
 python scripts/replay_gates.py --since 2026-09-14       what the gates would have refused
@@ -63,7 +63,8 @@ The schedule went live on 2026-09-23 with `--publish-kinds settle,close` (settle
 Publishing widens one kind at a time by editing the job's `ProgramArguments` and reloading it (the plist
 says how): next `settle,close,lean,prop,longshot`, then everything once the researcher is on.
 
-**Phone alerts** go through ntfy (free): a stopped or crashed run, a post that did not go out, a stopped last look,
+**Phone alerts** go through ntfy (free): a stopped or crashed run, a post that did not go out, a post held back because
+its text failed the post check, a stopped last look,
 and anything the 7:15 heartbeat finds are pushed to the private topic in `KEENROUDY_NTFY_TOPIC`, which the ntfy app
 on the owner's phone subscribes to. The same alert is not repeated inside six hours; nothing secret is ever sent.
 
@@ -106,7 +107,8 @@ So, in this order, every run:
 scheduled to post to X in the next 15 to 150 minutes gets the injury report read live from ESPN, the latest line,
 the researcher's news and the judge once more. A play that no longer stands is taken off the Buffer queue and
 closed to new entries on the site with a dated note saying why (the record keeps it and grades it as posted); a
-play that stands is marked checked in the posted log. A college play whose check comes back without who is
+play that stands is marked checked in the posted log; if its number moved, the post is scheduled again with a
+"Now:" line (the new post is created first and the old one deleted after, so a failure never loses the play). A college play whose check comes back without who is
 playing is tried again the next half hour, and inside 45 minutes of its post it is withheld from X (the pick
 stays on the site and is graded). Quiet when nothing is due.
 
@@ -176,14 +178,16 @@ live waits for the next run. Nothing goes out bare.
 | 9:00 AM the morning after a game day | **Receipts** for every play that went out, with ✅ ❌ ➖ and the day's units |
 | 9:00 AM Wednesday | **The week's receipts** by kind |
 | Three hours before each kickoff | **The plays** |
-| 6:00 PM on a day with nothing else | **The book**: the season record of every play that went out on X, graded through yesterday (card `site/img/kitchen-book.png`) |
+| 6:00 PM on a day with nothing else | **The book**: the season record of every play that went out on X (the two posted by hand on 2026-09-19 included), graded through yesterday; with one kind of play only the season line (card `site/img/kitchen-book.png`) |
 
 **Receipts** (`scripts/receipts.py`) make it a post every day of the season. At 9:00 AM ET the morning after a
 game day, once every play that went out on X that day is settled, the receipt lists each with ✅ ❌ ➖, the day's
 record and units (site/core.js arithmetic), "Graded in public, win or lose." On Wednesday at 9:00 AM the week's
 receipt sums the seven days before it by kind. Losing days post too. Only plays that actually went out count
-(`buffer:play` with a `sentAt`, not cancelled or deleted), and a receipt not ready by 8:00 PM the next day is
-skipped. Its card is the same frame in the kitchen's own colours (`pick_card.receipt_svg`), with W, L or P
+(`buffer:play` with a `sentAt`, or one posted by hand before the desk posted; never one cancelled or deleted), and a
+receipt not ready by 8:00 PM the next day is skipped. Plays are named as their posts named them (schools by name).
+A line break ends a sentence for the style check, so a long list is short lines, not one long sentence; a post that
+fails its check anyway is named in the run log and on the phone, never dropped silently. Its card is the same frame in the kitchen's own colours (`pick_card.receipt_svg`), with W, L or P
 beside each play and the chef on the plate.
 
 Every post is logged in `data/x-posted.json` (kind `buffer:*`, committed on its own as "Posts <date> <time>
@@ -191,8 +195,9 @@ ET") so nothing goes out twice; once its time has passed the run records the X l
 failure (which fails the run, so the heartbeat alerts). A play that closes before its time is cancelled, and
 the channel's own daily limit (50) is respected, with ours at eight.
 
-One-time setup, done 2026-09-23: a free Buffer account with @keenkooks connected, and a personal API key
-(account:read, posts:read, posts:write; expires 2027-09-23) as `BUFFER_TOKEN` in `~/.config/keenroudy/env`.
+One-time setup, done 2026-09-23: a free Buffer account with @keenkooks connected, and a personal API key as
+`BUFFER_TOKEN` in `~/.config/keenroudy/env` (the free plan allows one key; replaced 2026-09-24 by one that also reads
+engagement: account:read, posts:read, posts:write, insights:read; expires 2027-09-24).
 `run.sh py scripts/buffer_post.py channels` shows the connected channels; `plan` shows what the next run would
 schedule; `schedule --confirm [--soon 20]` schedules exactly that by hand; `post PICK_ID --confirm` schedules
 one pick; `reconcile` records what became of past posts. Buffer's queue (keenkooks, Queue) shows every
