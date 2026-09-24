@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-24T00:51:24Z",
+  "updatedAt": "2026-09-24T05:00:36Z",
   "timeZone": "America/Indianapolis",
   "leagues": {
     "NBA": {
@@ -13,28 +13,28 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-09-24T00:51:24Z",
+      "lastAttemptAt": "2026-09-24T05:00:36Z",
       "requestedWindow": {
-        "from": "2026-09-23",
-        "through": "2026-09-25",
+        "from": "2026-09-24",
+        "through": "2026-09-26",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-09-24T00:51:24Z",
-      "lastSuccessfulAt": "2026-09-24T00:51:24Z",
+      "checkedAt": "2026-09-24T05:00:36Z",
+      "lastSuccessfulAt": "2026-09-24T05:00:36Z",
       "error": null,
       "window": {
-        "from": "2026-09-23",
-        "through": "2026-09-25",
+        "from": "2026-09-24",
+        "through": "2026-09-26",
         "timeZone": "America/Indianapolis"
       },
       "source": {
         "name": "ESPN",
-        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20260923&limit=100",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20260924&limit=100",
         "urls": [
-          "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20260923&limit=100",
           "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20260924&limit=100",
-          "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20260925&limit=100"
+          "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20260925&limit=100",
+          "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20260926&limit=100"
         ]
       },
       "games": []
@@ -49,671 +49,31 @@
         "picks": false
       },
       "coverageNote": "Schedules and scores only. Researched picks and forecasts are not yet available.",
-      "lastAttemptAt": "2026-09-24T00:51:24Z",
+      "lastAttemptAt": "2026-09-24T05:00:36Z",
       "requestedWindow": {
-        "from": "2026-09-23",
-        "through": "2026-09-25",
+        "from": "2026-09-24",
+        "through": "2026-09-26",
         "timeZone": "America/Indianapolis"
       },
       "status": "ok",
-      "checkedAt": "2026-09-24T00:51:24Z",
-      "lastSuccessfulAt": "2026-09-24T00:51:24Z",
+      "checkedAt": "2026-09-24T05:00:36Z",
+      "lastSuccessfulAt": "2026-09-24T05:00:36Z",
       "error": null,
       "window": {
-        "from": "2026-09-23",
-        "through": "2026-09-25",
+        "from": "2026-09-24",
+        "through": "2026-09-26",
         "timeZone": "America/Indianapolis"
       },
       "source": {
         "name": "ESPN",
-        "url": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260923&limit=100",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260924&limit=100",
         "urls": [
-          "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260923&limit=100",
           "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260924&limit=100",
-          "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260925&limit=100"
+          "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260925&limit=100",
+          "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260926&limit=100"
         ]
       },
       "games": [
-        {
-          "id": "MLB-401817051",
-          "providerId": "401817051",
-          "league": "MLB",
-          "sport": "baseball",
-          "season": 2026,
-          "seasonType": "regular-season",
-          "date": "2026-09-23",
-          "kickoff": "2026-09-23T17:10:00Z",
-          "timeConfirmed": true,
-          "status": "final",
-          "statusDetail": "Final",
-          "period": 9,
-          "clock": "0:00",
-          "teams": {
-            "home": {
-              "id": "6",
-              "name": "Detroit Tigers",
-              "shortName": "Tigers",
-              "abbreviation": "DET",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/det.png"
-            },
-            "away": {
-              "id": "20",
-              "name": "Washington Nationals",
-              "shortName": "Nationals",
-              "abbreviation": "WSH",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/wsh.png"
-            }
-          },
-          "scores": {
-            "home": 2,
-            "away": 4
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/mlb/game/_/gameId/401817051/nationals-tigers"
-          },
-          "updatedAt": "2026-09-24T00:51:24Z"
-        },
-        {
-          "id": "MLB-401923610",
-          "providerId": "401923610",
-          "league": "MLB",
-          "sport": "baseball",
-          "season": 2026,
-          "seasonType": "regular-season",
-          "date": "2026-09-23",
-          "kickoff": "2026-09-23T17:35:00Z",
-          "timeConfirmed": true,
-          "status": "final",
-          "statusDetail": "Final",
-          "period": 9,
-          "clock": "0:00",
-          "teams": {
-            "home": {
-              "id": "1",
-              "name": "Baltimore Orioles",
-              "shortName": "Orioles",
-              "abbreviation": "BAL",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/bal.png"
-            },
-            "away": {
-              "id": "14",
-              "name": "Toronto Blue Jays",
-              "shortName": "Blue Jays",
-              "abbreviation": "TOR",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/tor.png"
-            }
-          },
-          "scores": {
-            "home": 4,
-            "away": 2
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/mlb/game/_/gameId/401923610/blue-jays-orioles"
-          },
-          "updatedAt": "2026-09-24T00:51:24Z"
-        },
-        {
-          "id": "MLB-401817058",
-          "providerId": "401817058",
-          "league": "MLB",
-          "sport": "baseball",
-          "season": 2026,
-          "seasonType": "regular-season",
-          "date": "2026-09-23",
-          "kickoff": "2026-09-23T19:45:00Z",
-          "timeConfirmed": true,
-          "status": "final",
-          "statusDetail": "Final",
-          "period": 9,
-          "clock": "0:00",
-          "teams": {
-            "home": {
-              "id": "26",
-              "name": "San Francisco Giants",
-              "shortName": "Giants",
-              "abbreviation": "SF",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/sf.png"
-            },
-            "away": {
-              "id": "9",
-              "name": "Minnesota Twins",
-              "shortName": "Twins",
-              "abbreviation": "MIN",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/min.png"
-            }
-          },
-          "scores": {
-            "home": 2,
-            "away": 4
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/mlb/game/_/gameId/401817058/twins-giants"
-          },
-          "updatedAt": "2026-09-24T00:51:24Z"
-        },
-        {
-          "id": "MLB-401817050",
-          "providerId": "401817050",
-          "league": "MLB",
-          "sport": "baseball",
-          "season": 2026,
-          "seasonType": "regular-season",
-          "date": "2026-09-23",
-          "kickoff": "2026-09-23T22:35:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "Top 9th",
-          "period": 9,
-          "clock": "0:00",
-          "teams": {
-            "home": {
-              "id": "1",
-              "name": "Baltimore Orioles",
-              "shortName": "Orioles",
-              "abbreviation": "BAL",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/bal.png"
-            },
-            "away": {
-              "id": "14",
-              "name": "Toronto Blue Jays",
-              "shortName": "Blue Jays",
-              "abbreviation": "TOR",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/tor.png"
-            }
-          },
-          "scores": {
-            "home": 4,
-            "away": 0
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260923&limit=100"
-          },
-          "updatedAt": "2026-09-24T00:51:24Z"
-        },
-        {
-          "id": "MLB-401817047",
-          "providerId": "401817047",
-          "league": "MLB",
-          "sport": "baseball",
-          "season": 2026,
-          "seasonType": "regular-season",
-          "date": "2026-09-23",
-          "kickoff": "2026-09-23T22:40:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "Top 8th",
-          "period": 8,
-          "clock": "0:00",
-          "teams": {
-            "home": {
-              "id": "22",
-              "name": "Philadelphia Phillies",
-              "shortName": "Phillies",
-              "abbreviation": "PHI",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/phi.png"
-            },
-            "away": {
-              "id": "8",
-              "name": "Milwaukee Brewers",
-              "shortName": "Brewers",
-              "abbreviation": "MIL",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/mil.png"
-            }
-          },
-          "scores": {
-            "home": 1,
-            "away": 4
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260923&limit=100"
-          },
-          "updatedAt": "2026-09-24T00:51:24Z"
-        },
-        {
-          "id": "MLB-401817048",
-          "providerId": "401817048",
-          "league": "MLB",
-          "sport": "baseball",
-          "season": 2026,
-          "seasonType": "regular-season",
-          "date": "2026-09-23",
-          "kickoff": "2026-09-23T22:40:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "Top 7th",
-          "period": 7,
-          "clock": "0:00",
-          "teams": {
-            "home": {
-              "id": "23",
-              "name": "Pittsburgh Pirates",
-              "shortName": "Pirates",
-              "abbreviation": "PIT",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/pit.png"
-            },
-            "away": {
-              "id": "24",
-              "name": "St. Louis Cardinals",
-              "shortName": "Cardinals",
-              "abbreviation": "STL",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/stl.png"
-            }
-          },
-          "scores": {
-            "home": 1,
-            "away": 5
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260923&limit=100"
-          },
-          "updatedAt": "2026-09-24T00:51:24Z"
-        },
-        {
-          "id": "MLB-401817046",
-          "providerId": "401817046",
-          "league": "MLB",
-          "sport": "baseball",
-          "season": 2026,
-          "seasonType": "regular-season",
-          "date": "2026-09-23",
-          "kickoff": "2026-09-23T23:00:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "Bot 6th",
-          "period": 6,
-          "clock": "0:00",
-          "teams": {
-            "home": {
-              "id": "2",
-              "name": "Boston Red Sox",
-              "shortName": "Red Sox",
-              "abbreviation": "BOS",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/bos.png"
-            },
-            "away": {
-              "id": "5",
-              "name": "Cleveland Guardians",
-              "shortName": "Guardians",
-              "abbreviation": "CLE",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/cle.png"
-            }
-          },
-          "scores": {
-            "home": 0,
-            "away": 0
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260923&limit=100"
-          },
-          "updatedAt": "2026-09-24T00:51:24Z"
-        },
-        {
-          "id": "MLB-401817049",
-          "providerId": "401817049",
-          "league": "MLB",
-          "sport": "baseball",
-          "season": 2026,
-          "seasonType": "regular-season",
-          "date": "2026-09-23",
-          "kickoff": "2026-09-23T23:05:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "Bot 5th",
-          "period": 5,
-          "clock": "0:00",
-          "teams": {
-            "home": {
-              "id": "10",
-              "name": "New York Yankees",
-              "shortName": "Yankees",
-              "abbreviation": "NYY",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/nyy.png"
-            },
-            "away": {
-              "id": "30",
-              "name": "Tampa Bay Rays",
-              "shortName": "Rays",
-              "abbreviation": "TB",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/tb.png"
-            }
-          },
-          "scores": {
-            "home": 8,
-            "away": 2
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260923&limit=100"
-          },
-          "updatedAt": "2026-09-24T00:51:24Z"
-        },
-        {
-          "id": "MLB-401817045",
-          "providerId": "401817045",
-          "league": "MLB",
-          "sport": "baseball",
-          "season": 2026,
-          "seasonType": "regular-season",
-          "date": "2026-09-23",
-          "kickoff": "2026-09-23T23:15:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "Mid 6th",
-          "period": 6,
-          "clock": "0:00",
-          "teams": {
-            "home": {
-              "id": "15",
-              "name": "Atlanta Braves",
-              "shortName": "Braves",
-              "abbreviation": "ATL",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/atl.png"
-            },
-            "away": {
-              "id": "17",
-              "name": "Cincinnati Reds",
-              "shortName": "Reds",
-              "abbreviation": "CIN",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/cin.png"
-            }
-          },
-          "scores": {
-            "home": 0,
-            "away": 1
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260923&limit=100"
-          },
-          "updatedAt": "2026-09-24T00:51:24Z"
-        },
-        {
-          "id": "MLB-401817052",
-          "providerId": "401817052",
-          "league": "MLB",
-          "sport": "baseball",
-          "season": 2026,
-          "seasonType": "regular-season",
-          "date": "2026-09-23",
-          "kickoff": "2026-09-23T23:40:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "Top 4th",
-          "period": 4,
-          "clock": "0:00",
-          "teams": {
-            "home": {
-              "id": "7",
-              "name": "Kansas City Royals",
-              "shortName": "Royals",
-              "abbreviation": "KC",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/kc.png"
-            },
-            "away": {
-              "id": "4",
-              "name": "Chicago White Sox",
-              "shortName": "White Sox",
-              "abbreviation": "CHW",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/chw.png"
-            }
-          },
-          "scores": {
-            "home": 4,
-            "away": 4
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260923&limit=100"
-          },
-          "updatedAt": "2026-09-24T00:51:24Z"
-        },
-        {
-          "id": "MLB-401817053",
-          "providerId": "401817053",
-          "league": "MLB",
-          "sport": "baseball",
-          "season": 2026,
-          "seasonType": "regular-season",
-          "date": "2026-09-23",
-          "kickoff": "2026-09-23T23:40:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "Top 5th",
-          "period": 5,
-          "clock": "0:00",
-          "teams": {
-            "home": {
-              "id": "16",
-              "name": "Chicago Cubs",
-              "shortName": "Cubs",
-              "abbreviation": "CHC",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/chc.png"
-            },
-            "away": {
-              "id": "28",
-              "name": "Miami Marlins",
-              "shortName": "Marlins",
-              "abbreviation": "MIA",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/mia.png"
-            }
-          },
-          "scores": {
-            "home": 0,
-            "away": 0
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260923&limit=100"
-          },
-          "updatedAt": "2026-09-24T00:51:24Z"
-        },
-        {
-          "id": "MLB-401817054",
-          "providerId": "401817054",
-          "league": "MLB",
-          "sport": "baseball",
-          "season": 2026,
-          "seasonType": "regular-season",
-          "date": "2026-09-23",
-          "kickoff": "2026-09-24T00:05:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "Top 4th",
-          "period": 4,
-          "clock": "0:00",
-          "teams": {
-            "home": {
-              "id": "13",
-              "name": "Texas Rangers",
-              "shortName": "Rangers",
-              "abbreviation": "TEX",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/tex.png"
-            },
-            "away": {
-              "id": "21",
-              "name": "New York Mets",
-              "shortName": "Mets",
-              "abbreviation": "NYM",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/nym.png"
-            }
-          },
-          "scores": {
-            "home": 0,
-            "away": 2
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260923&limit=100"
-          },
-          "updatedAt": "2026-09-24T00:51:24Z"
-        },
-        {
-          "id": "MLB-401817055",
-          "providerId": "401817055",
-          "league": "MLB",
-          "sport": "baseball",
-          "season": 2026,
-          "seasonType": "regular-season",
-          "date": "2026-09-23",
-          "kickoff": "2026-09-24T00:40:00Z",
-          "timeConfirmed": true,
-          "status": "in_progress",
-          "statusDetail": "Top 1st",
-          "period": 1,
-          "clock": "0:00",
-          "teams": {
-            "home": {
-              "id": "27",
-              "name": "Colorado Rockies",
-              "shortName": "Rockies",
-              "abbreviation": "COL",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/col.png"
-            },
-            "away": {
-              "id": "29",
-              "name": "Arizona Diamondbacks",
-              "shortName": "Diamondbacks",
-              "abbreviation": "ARI",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/ari.png"
-            }
-          },
-          "scores": {
-            "home": 0,
-            "away": 1
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard?dates=20260923&limit=100"
-          },
-          "updatedAt": "2026-09-24T00:51:24Z"
-        },
-        {
-          "id": "MLB-401817056",
-          "providerId": "401817056",
-          "league": "MLB",
-          "sport": "baseball",
-          "season": 2026,
-          "seasonType": "regular-season",
-          "date": "2026-09-23",
-          "kickoff": "2026-09-24T01:40:00Z",
-          "timeConfirmed": true,
-          "status": "scheduled",
-          "statusDetail": "9/23 - 9:40 PM EDT",
-          "period": 1,
-          "clock": "0:00",
-          "teams": {
-            "home": {
-              "id": "11",
-              "name": "Athletics",
-              "shortName": "Athletics",
-              "abbreviation": "ATH",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/ath.png"
-            },
-            "away": {
-              "id": "3",
-              "name": "Los Angeles Angels",
-              "shortName": "Angels",
-              "abbreviation": "LAA",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/laa.png"
-            }
-          },
-          "scores": {
-            "home": null,
-            "away": null
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/mlb/game/_/gameId/401817056/angels-athletics"
-          },
-          "updatedAt": "2026-09-24T00:51:24Z"
-        },
-        {
-          "id": "MLB-401817057",
-          "providerId": "401817057",
-          "league": "MLB",
-          "sport": "baseball",
-          "season": 2026,
-          "seasonType": "regular-season",
-          "date": "2026-09-23",
-          "kickoff": "2026-09-24T02:00:00Z",
-          "timeConfirmed": true,
-          "status": "scheduled",
-          "statusDetail": "9/23 - 10:00 PM EDT",
-          "period": 1,
-          "clock": "0:00",
-          "teams": {
-            "home": {
-              "id": "12",
-              "name": "Seattle Mariners",
-              "shortName": "Mariners",
-              "abbreviation": "SEA",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/sea.png"
-            },
-            "away": {
-              "id": "18",
-              "name": "Houston Astros",
-              "shortName": "Astros",
-              "abbreviation": "HOU",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/hou.png"
-            }
-          },
-          "scores": {
-            "home": null,
-            "away": null
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/mlb/game/_/gameId/401817057/astros-mariners"
-          },
-          "updatedAt": "2026-09-24T00:51:24Z"
-        },
-        {
-          "id": "MLB-401817059",
-          "providerId": "401817059",
-          "league": "MLB",
-          "sport": "baseball",
-          "season": 2026,
-          "seasonType": "regular-season",
-          "date": "2026-09-23",
-          "kickoff": "2026-09-24T02:10:00Z",
-          "timeConfirmed": true,
-          "status": "scheduled",
-          "statusDetail": "9/23 - 10:10 PM EDT",
-          "period": 1,
-          "clock": "0:00",
-          "teams": {
-            "home": {
-              "id": "19",
-              "name": "Los Angeles Dodgers",
-              "shortName": "Dodgers",
-              "abbreviation": "LAD",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/lad.png"
-            },
-            "away": {
-              "id": "25",
-              "name": "San Diego Padres",
-              "shortName": "Padres",
-              "abbreviation": "SD",
-              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/sd.png"
-            }
-          },
-          "scores": {
-            "home": null,
-            "away": null
-          },
-          "source": {
-            "name": "ESPN",
-            "url": "https://www.espn.com/mlb/game/_/gameId/401817059/padres-dodgers"
-          },
-          "updatedAt": "2026-09-24T00:51:24Z"
-        },
         {
           "id": "MLB-401817063",
           "providerId": "401817063",
@@ -752,7 +112,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817063/cardinals-pirates"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817065",
@@ -792,7 +152,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817065/white-sox-royals"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817066",
@@ -832,7 +192,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817066/marlins-cubs"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817067",
@@ -872,7 +232,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817067/mets-rangers"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817068",
@@ -912,7 +272,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817068/diamondbacks-rockies"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817062",
@@ -952,7 +312,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817062/brewers-phillies"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817061",
@@ -992,7 +352,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817061/guardians-red-sox"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817064",
@@ -1032,7 +392,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817064/rays-yankees"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817060",
@@ -1072,7 +432,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817060/reds-braves"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817069",
@@ -1112,7 +472,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817069/angels-mariners"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817070",
@@ -1152,7 +512,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817070/astros-athletics"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817071",
@@ -1192,7 +552,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817071/padres-dodgers"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817104",
@@ -1232,7 +592,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817104/cubs-red-sox"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817074",
@@ -1272,7 +632,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817074/cubs-red-sox"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817077",
@@ -1312,7 +672,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817077/pirates-tigers"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817078",
@@ -1352,7 +712,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817078/rays-phillies"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817076",
@@ -1392,7 +752,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817076/mets-nationals"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817073",
@@ -1432,7 +792,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817073/orioles-yankees"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817075",
@@ -1472,7 +832,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817075/reds-blue-jays"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817072",
@@ -1512,7 +872,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817072/braves-marlins"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817079",
@@ -1552,7 +912,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817079/guardians-royals"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817080",
@@ -1592,7 +952,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817080/rockies-white-sox"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817081",
@@ -1632,7 +992,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817081/cardinals-brewers"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817082",
@@ -1672,7 +1032,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817082/rangers-twins"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817084",
@@ -1712,7 +1072,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817084/diamondbacks-padres"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817085",
@@ -1752,7 +1112,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817085/astros-athletics"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817083",
@@ -1792,7 +1152,7 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817083/angels-mariners"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
         },
         {
           "id": "MLB-401817086",
@@ -1832,7 +1192,607 @@
             "name": "ESPN",
             "url": "https://www.espn.com/mlb/game/_/gameId/401817086/dodgers-giants"
           },
-          "updatedAt": "2026-09-24T00:51:24Z"
+          "updatedAt": "2026-09-24T05:00:36Z"
+        },
+        {
+          "id": "MLB-401817092",
+          "providerId": "401817092",
+          "league": "MLB",
+          "sport": "baseball",
+          "season": 2026,
+          "seasonType": "regular-season",
+          "date": "2026-09-26",
+          "kickoff": "2026-09-26T17:10:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "9/26 - 1:10 PM EDT",
+          "period": 1,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "6",
+              "name": "Detroit Tigers",
+              "shortName": "Tigers",
+              "abbreviation": "DET",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/det.png"
+            },
+            "away": {
+              "id": "23",
+              "name": "Pittsburgh Pirates",
+              "shortName": "Pirates",
+              "abbreviation": "PIT",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/pit.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/mlb/game/_/gameId/401817092/pirates-tigers"
+          },
+          "updatedAt": "2026-09-24T05:00:36Z"
+        },
+        {
+          "id": "MLB-401817090",
+          "providerId": "401817090",
+          "league": "MLB",
+          "sport": "baseball",
+          "season": 2026,
+          "seasonType": "regular-season",
+          "date": "2026-09-26",
+          "kickoff": "2026-09-26T19:07:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "9/26 - 3:07 PM EDT",
+          "period": 1,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "14",
+              "name": "Toronto Blue Jays",
+              "shortName": "Blue Jays",
+              "abbreviation": "TOR",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/tor.png"
+            },
+            "away": {
+              "id": "17",
+              "name": "Cincinnati Reds",
+              "shortName": "Reds",
+              "abbreviation": "CIN",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/cin.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/mlb/game/_/gameId/401817090/reds-blue-jays"
+          },
+          "updatedAt": "2026-09-24T05:00:36Z"
+        },
+        {
+          "id": "MLB-401817091",
+          "providerId": "401817091",
+          "league": "MLB",
+          "sport": "baseball",
+          "season": 2026,
+          "seasonType": "regular-season",
+          "date": "2026-09-26",
+          "kickoff": "2026-09-26T20:05:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "9/26 - 4:05 PM EDT",
+          "period": 1,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "20",
+              "name": "Washington Nationals",
+              "shortName": "Nationals",
+              "abbreviation": "WSH",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/wsh.png"
+            },
+            "away": {
+              "id": "21",
+              "name": "New York Mets",
+              "shortName": "Mets",
+              "abbreviation": "NYM",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/nym.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/mlb/game/_/gameId/401817091/mets-nationals"
+          },
+          "updatedAt": "2026-09-24T05:00:36Z"
+        },
+        {
+          "id": "MLB-401817101",
+          "providerId": "401817101",
+          "league": "MLB",
+          "sport": "baseball",
+          "season": 2026,
+          "seasonType": "regular-season",
+          "date": "2026-09-26",
+          "kickoff": "2026-09-26T20:05:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "9/26 - 4:05 PM EDT",
+          "period": 1,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "26",
+              "name": "San Francisco Giants",
+              "shortName": "Giants",
+              "abbreviation": "SF",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/sf.png"
+            },
+            "away": {
+              "id": "19",
+              "name": "Los Angeles Dodgers",
+              "shortName": "Dodgers",
+              "abbreviation": "LAD",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/lad.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/mlb/game/_/gameId/401817101/dodgers-giants"
+          },
+          "updatedAt": "2026-09-24T05:00:36Z"
+        },
+        {
+          "id": "MLB-401817087",
+          "providerId": "401817087",
+          "league": "MLB",
+          "sport": "baseball",
+          "season": 2026,
+          "seasonType": "regular-season",
+          "date": "2026-09-26",
+          "kickoff": "2026-09-26T20:10:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "9/26 - 4:10 PM EDT",
+          "period": 1,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "28",
+              "name": "Miami Marlins",
+              "shortName": "Marlins",
+              "abbreviation": "MIA",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/mia.png"
+            },
+            "away": {
+              "id": "15",
+              "name": "Atlanta Braves",
+              "shortName": "Braves",
+              "abbreviation": "ATL",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/atl.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/mlb/game/_/gameId/401817087/braves-marlins"
+          },
+          "updatedAt": "2026-09-24T05:00:36Z"
+        },
+        {
+          "id": "MLB-401817097",
+          "providerId": "401817097",
+          "league": "MLB",
+          "sport": "baseball",
+          "season": 2026,
+          "seasonType": "regular-season",
+          "date": "2026-09-26",
+          "kickoff": "2026-09-26T20:10:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "9/26 - 4:10 PM EDT",
+          "period": 1,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "9",
+              "name": "Minnesota Twins",
+              "shortName": "Twins",
+              "abbreviation": "MIN",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/min.png"
+            },
+            "away": {
+              "id": "13",
+              "name": "Texas Rangers",
+              "shortName": "Rangers",
+              "abbreviation": "TEX",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/tex.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/mlb/game/_/gameId/401817097/rangers-twins"
+          },
+          "updatedAt": "2026-09-24T05:00:36Z"
+        },
+        {
+          "id": "MLB-401817094",
+          "providerId": "401817094",
+          "league": "MLB",
+          "sport": "baseball",
+          "season": 2026,
+          "seasonType": "regular-season",
+          "date": "2026-09-26",
+          "kickoff": "2026-09-26T23:10:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "9/26 - 7:10 PM EDT",
+          "period": 1,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "7",
+              "name": "Kansas City Royals",
+              "shortName": "Royals",
+              "abbreviation": "KC",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/kc.png"
+            },
+            "away": {
+              "id": "5",
+              "name": "Cleveland Guardians",
+              "shortName": "Guardians",
+              "abbreviation": "CLE",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/cle.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/mlb/game/_/gameId/401817094/guardians-royals"
+          },
+          "updatedAt": "2026-09-24T05:00:36Z"
+        },
+        {
+          "id": "MLB-401817095",
+          "providerId": "401817095",
+          "league": "MLB",
+          "sport": "baseball",
+          "season": 2026,
+          "seasonType": "regular-season",
+          "date": "2026-09-26",
+          "kickoff": "2026-09-26T23:10:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "9/26 - 7:10 PM EDT",
+          "period": 1,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "4",
+              "name": "Chicago White Sox",
+              "shortName": "White Sox",
+              "abbreviation": "CHW",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/chw.png"
+            },
+            "away": {
+              "id": "27",
+              "name": "Colorado Rockies",
+              "shortName": "Rockies",
+              "abbreviation": "COL",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/col.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/mlb/game/_/gameId/401817095/rockies-white-sox"
+          },
+          "updatedAt": "2026-09-24T05:00:36Z"
+        },
+        {
+          "id": "MLB-401817096",
+          "providerId": "401817096",
+          "league": "MLB",
+          "sport": "baseball",
+          "season": 2026,
+          "seasonType": "regular-season",
+          "date": "2026-09-26",
+          "kickoff": "2026-09-26T23:10:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "9/26 - 7:10 PM EDT",
+          "period": 1,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "8",
+              "name": "Milwaukee Brewers",
+              "shortName": "Brewers",
+              "abbreviation": "MIL",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/mil.png"
+            },
+            "away": {
+              "id": "24",
+              "name": "St. Louis Cardinals",
+              "shortName": "Cardinals",
+              "abbreviation": "STL",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/stl.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/mlb/game/_/gameId/401817096/cardinals-brewers"
+          },
+          "updatedAt": "2026-09-24T05:00:36Z"
+        },
+        {
+          "id": "MLB-401817088",
+          "providerId": "401817088",
+          "league": "MLB",
+          "sport": "baseball",
+          "season": 2026,
+          "seasonType": "regular-season",
+          "date": "2026-09-26",
+          "kickoff": "2026-09-26T23:15:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "9/26 - 7:15 PM EDT",
+          "period": 1,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "10",
+              "name": "New York Yankees",
+              "shortName": "Yankees",
+              "abbreviation": "NYY",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/nyy.png"
+            },
+            "away": {
+              "id": "1",
+              "name": "Baltimore Orioles",
+              "shortName": "Orioles",
+              "abbreviation": "BAL",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/bal.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/mlb/game/_/gameId/401817088/orioles-yankees"
+          },
+          "updatedAt": "2026-09-24T05:00:36Z"
+        },
+        {
+          "id": "MLB-401817089",
+          "providerId": "401817089",
+          "league": "MLB",
+          "sport": "baseball",
+          "season": 2026,
+          "seasonType": "regular-season",
+          "date": "2026-09-26",
+          "kickoff": "2026-09-26T23:15:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "9/26 - 7:15 PM EDT",
+          "period": 1,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "2",
+              "name": "Boston Red Sox",
+              "shortName": "Red Sox",
+              "abbreviation": "BOS",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/bos.png"
+            },
+            "away": {
+              "id": "16",
+              "name": "Chicago Cubs",
+              "shortName": "Cubs",
+              "abbreviation": "CHC",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/chc.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/mlb/game/_/gameId/401817089/cubs-red-sox"
+          },
+          "updatedAt": "2026-09-24T05:00:36Z"
+        },
+        {
+          "id": "MLB-401817093",
+          "providerId": "401817093",
+          "league": "MLB",
+          "sport": "baseball",
+          "season": 2026,
+          "seasonType": "regular-season",
+          "date": "2026-09-26",
+          "kickoff": "2026-09-26T23:15:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "9/26 - 7:15 PM EDT",
+          "period": 1,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "22",
+              "name": "Philadelphia Phillies",
+              "shortName": "Phillies",
+              "abbreviation": "PHI",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/phi.png"
+            },
+            "away": {
+              "id": "30",
+              "name": "Tampa Bay Rays",
+              "shortName": "Rays",
+              "abbreviation": "TB",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/tb.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/mlb/game/_/gameId/401817093/rays-phillies"
+          },
+          "updatedAt": "2026-09-24T05:00:36Z"
+        },
+        {
+          "id": "MLB-401817099",
+          "providerId": "401817099",
+          "league": "MLB",
+          "sport": "baseball",
+          "season": 2026,
+          "seasonType": "regular-season",
+          "date": "2026-09-26",
+          "kickoff": "2026-09-27T00:40:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "9/26 - 8:40 PM EDT",
+          "period": 1,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "25",
+              "name": "San Diego Padres",
+              "shortName": "Padres",
+              "abbreviation": "SD",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/sd.png"
+            },
+            "away": {
+              "id": "29",
+              "name": "Arizona Diamondbacks",
+              "shortName": "Diamondbacks",
+              "abbreviation": "ARI",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/ari.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/mlb/game/_/gameId/401817099/diamondbacks-padres"
+          },
+          "updatedAt": "2026-09-24T05:00:36Z"
+        },
+        {
+          "id": "MLB-401817098",
+          "providerId": "401817098",
+          "league": "MLB",
+          "sport": "baseball",
+          "season": 2026,
+          "seasonType": "regular-season",
+          "date": "2026-09-26",
+          "kickoff": "2026-09-27T01:40:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "9/26 - 9:40 PM EDT",
+          "period": 1,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "12",
+              "name": "Seattle Mariners",
+              "shortName": "Mariners",
+              "abbreviation": "SEA",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/sea.png"
+            },
+            "away": {
+              "id": "3",
+              "name": "Los Angeles Angels",
+              "shortName": "Angels",
+              "abbreviation": "LAA",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/laa.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/mlb/game/_/gameId/401817098/angels-mariners"
+          },
+          "updatedAt": "2026-09-24T05:00:36Z"
+        },
+        {
+          "id": "MLB-401817100",
+          "providerId": "401817100",
+          "league": "MLB",
+          "sport": "baseball",
+          "season": 2026,
+          "seasonType": "regular-season",
+          "date": "2026-09-26",
+          "kickoff": "2026-09-27T01:40:00Z",
+          "timeConfirmed": true,
+          "status": "scheduled",
+          "statusDetail": "9/26 - 9:40 PM EDT",
+          "period": 1,
+          "clock": "0:00",
+          "teams": {
+            "home": {
+              "id": "11",
+              "name": "Athletics",
+              "shortName": "Athletics",
+              "abbreviation": "ATH",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/ath.png"
+            },
+            "away": {
+              "id": "18",
+              "name": "Houston Astros",
+              "shortName": "Astros",
+              "abbreviation": "HOU",
+              "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/hou.png"
+            }
+          },
+          "scores": {
+            "home": null,
+            "away": null
+          },
+          "source": {
+            "name": "ESPN",
+            "url": "https://www.espn.com/mlb/game/_/gameId/401817100/astros-athletics"
+          },
+          "updatedAt": "2026-09-24T05:00:36Z"
         }
       ]
     }
