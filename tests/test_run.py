@@ -248,13 +248,46 @@ class JudgeTests(unittest.TestCase):
         web = [{'id': 'web-1', 'origin': 'claude researcher', 'direction': 'against', 'kind': 'injury', 'claim': 'the starter is suspended'}]
         self.assertIn('suspended', run.judge({'title': 't'}, web, False), 'with the model down, verified reporting against it holds')
 
-    def test_a_big_college_gap_needs_the_web_check(self):
+    def test_the_reasoning_names_what_the_web_check_verified(self):
+        facts = [{'kind': 'injury', 'direction': 'neutral', 'verified': True, 'claim': 'Both starting quarterbacks are expected to play.', 'source': 'https://example.com/a'},
+                 {'kind': 'stats', 'direction': 'for', 'verified': True, 'claim': 'Iowa averages 30 points.', 'source': 'https://example.com/b'},
+                 {'kind': 'role', 'direction': 'against', 'verified': True, 'claim': 'The starter is suspended.', 'source': 'https://example.com/c'},
+                 {'kind': 'injury', 'direction': 'neutral', 'verified': False, 'claim': 'Rumour.', 'source': 'https://example.com/d'}]
+        self.assertEqual([f['source'] for f in run.checked_facts({'_research': facts})], ['https://example.com/a'],
+                         'only verified availability facts that do not argue against the pick')
+
+    def test_a_game_line_post_reason_is_a_fact_that_backs_the_play_or_nothing(self):
+        from types import SimpleNamespace
+        total = {'marketType': 'total', 'direction': 'under', 'line': 43.5, 'gameIds': ['g']}
+        facts = [{'origin': 'claude researcher', 'verified': True, 'kind': 'injury', 'direction': 'for',
+                  'claim': 'Saints receiver Chris Olave is out with a hamstring injury. He had 9 catches last week.'},
+                 {'origin': 'claude researcher', 'verified': True, 'kind': 'stats', 'direction': 'for', 'claim': 'The Saints average 30 points.'},
+                 {'origin': 'claude researcher', 'verified': True, 'kind': 'injury', 'direction': 'against',
+                  'claim': 'Saints quarterback Tyler Shough leads the league with 662 passing yards.'},
+                 {'kind': 'market', 'direction': 'neutral', 'claim': 'The total opened 42.5.'}]
+        ctx = SimpleNamespace(games={})
+        self.assertEqual(run.post_reason(total, facts, ctx, []), 'Saints receiver Chris Olave is out with a hamstring injury.')
+        self.assertIsNone(run.post_reason(total, facts[1:], ctx, []), 'a stats story or a fact against the play is never its reason')
+        wind = [{'kind': 'weather', 'direction': 'for', 'claim': 'Forecast at kickoff: wind 18 mph.'}]
+        self.assertEqual(run.post_reason(total, wind, ctx, []), 'Forecast at kickoff: wind 18 mph.')
+        self.assertIsNone(run.post_reason(dict(total, legs=[{}]), wind, ctx, []))
+
+    def test_every_college_play_needs_the_web_check(self):
         self.assertTrue(run.needs_research({'_league': 'CFB', 'projection': 47.1, 'line': 38.5}))
-        self.assertFalse(run.needs_research({'_league': 'CFB', 'projection': 44.0, 'line': 38.5}))
+        self.assertTrue(run.needs_research({'_league': 'CFB', 'projection': 40.0, 'line': 38.5}), 'no college injury feed at any gap')
         self.assertFalse(run.needs_research({'_league': 'NFL', 'projection': 47.1, 'line': 38.5}), 'the NFL has its injury report')
+        self.assertFalse(run.needs_research({'_league': 'CFB', 'legs': [{}]}), 'the fun parlay is built from the board')
+        self.assertEqual(run.first_sentence("Camden Coleman has started while Evans is out. He completed 19 of 27."),
+                         'Camden Coleman has started while Evans is out.')
 
 
 class PrecheckTests(unittest.TestCase):
+    def test_a_lineup_is_confirmed_only_by_an_availability_fact(self):
+        self.assertTrue(run.lineup_confirmed([{'kind': 'injury'}]))
+        self.assertTrue(run.lineup_confirmed([{'kind': 'stats'}, {'kind': 'role'}]))
+        self.assertFalse(run.lineup_confirmed([{'kind': 'stats'}]))
+        self.assertFalse(run.lineup_confirmed([]))
+
     def test_the_window(self):
         now = datetime(2026, 9, 26, 15, 0, tzinfo=timezone.utc)
         post = lambda key, minutes, **over: dict({'id': key, 'kind': 'buffer:play', 'bufferPostId': 'b', 'dueAt': run.stamp(now + timedelta(minutes=minutes))}, **over)

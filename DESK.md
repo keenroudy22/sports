@@ -84,9 +84,10 @@ So, in this order, every run:
    availability and depth-chart reporting for every play that passes the rules, up to six a run, at every run
    except 6:45 AM and 11:30 PM. It asks first who is expected to play: each starting quarterback, key starters,
    and for a prop the player himself. Every fact is checked against its source page before it is used.
-3. **The big-gap rule**: a college play more than 6 points from the market (`BIG_GAP`) is not published without
-   that web check, because college teams publish no injury report the desk can read and a number that far from
-   the market has more often missed the news.
+3. **College needs the check**: no college play is published until the web check has come back with who is
+   expected to play (`needs_research`, `lineup_confirmed`). College teams publish no injury report the desk can
+   read, so without the check the desk would know nothing about injuries at all. The researcher does not always
+   answer; a play it missed is held, not published blind.
 4. **The judge** (the local model) sees only facts that can matter (`relevant_facts`): the player's own listing
    and his starting quarterback for a prop; the starting quarterbacks, a side missing three or more skill
    players, and a weather flag for a total; and everything the researcher verified. Not the line's move, not
@@ -97,7 +98,15 @@ So, in this order, every run:
 scheduled to post to X in the next 15 to 150 minutes gets the injury report read live from ESPN, the latest line,
 the researcher's news and the judge once more. A play that no longer stands is taken off the Buffer queue and
 closed to new entries on the site with a dated note saying why (the record keeps it and grades it as posted); a
-play that stands is marked checked in the posted log. Quiet when nothing is due.
+play that stands is marked checked in the posted log. A college play whose check comes back without who is
+playing is tried again the next half hour, and inside 45 minutes of its post it is withheld from X (the pick
+stays on the site and is graded). Quiet when nothing is due.
+
+**The post's reason** is chosen when the play is published, from structured facts only (`run.post_reason`,
+stored in `data/x-reasons.json`): a player's own record at the line when it backs the side ("Over 4.5 in 7 of
+his last 10 games"), or for a game line a verified web fact or a weather flag that points the same way as the
+play. It is never mined from the finished prose (the local model rewrites it, and lineup notes and line moves
+read as reasons against). With nothing that backs the play, the post stands on the play and our number.
 
 College teams are named by school in titles, posts and cards ("Central Michigan at Miami (FL)"), from ESPN's
 school name in the slate (`pick_card.team_label`); published titles are never rewritten.

@@ -51,7 +51,7 @@ EASTERN = gates.EASTERN
 SLOT_TOLERANCE = timedelta(minutes=40)     # a run that fires this far from a slot still belongs to it
 PUBLISH_MARGIN = timedelta(minutes=5)      # nothing is published on a game this close to kickoff
 KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'favorite')
-WHITELIST = ('research/', 'data/odds/', 'data/prop-odds/', 'data/x-posted.json', 'data/learning/')
+WHITELIST = ('research/', 'data/odds/', 'data/prop-odds/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/')
 BOOK_SLUG = {'DraftKings': 'dk', 'FanDuel': 'fd', 'BetMGM': 'mgm', 'Caesars': 'czr', 'BetRivers': 'br',
              'ESPN BET': 'espnbet', 'Fanatics': 'fan'}
 VOLUME = {'recYds': 'targets', 'rec': 'targets', 'rushYds': 'carries', 'car': 'carries',
@@ -120,7 +120,7 @@ def git(*args, cwd=ROOT, check=True):
     return result
 
 
-LEFTOVER = ('data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json')
+LEFTOVER = ('data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json')
 
 
 def sync(runner=git):
@@ -611,16 +611,17 @@ def hold_reason(candidate, facts):
 
 
 BIG_GAP = 6.0               # a college play this far from the market needs the web check before it is published
+AVAILABILITY = ('injury', 'role')     # the kinds of verified fact that say who is expected to play
 SKILL_OUT = {'out', 'doubtful'}
 
 
 def needs_research(candidate):
-    """College football has no injury feed the desk can read, and a number far from the market is more often a
-    number that missed the news than a market that did. Such a play waits for the web researcher."""
+    """College football has no injury feed the desk can read: ESPN lists a handful of players across all of FBS.
+    So every college play waits until the web check has come back with who is expected to play; without it the
+    desk would know nothing about injuries at all. (The researcher does not always answer; a play it missed is
+    held, not published blind.)"""
     league = candidate.get('_league') or candidate.get('league')
-    projection, line = candidate.get('projection'), candidate.get('line')
-    return (league == 'CFB' and isinstance(projection, (int, float)) and isinstance(line, (int, float))
-            and abs(projection - line) > BIG_GAP)
+    return league == 'CFB' and not candidate.get('legs')
 
 
 def relevant_facts(candidate, facts, ctx):
@@ -826,6 +827,48 @@ def prop_reasoning(candidate, ctx, records, snapshot):
     return ' '.join(parts)
 
 
+def post_reason(candidate, facts, ctx, records, weights=None):
+    """The one sentence the play's post gives as its reason, chosen now from structured facts, never from prose:
+    for a player prop, his own record at this line when it backs the side; for a game line, a verified fact from
+    the web check or a weather flag that points the same way as the play. None when nothing backs it: then the
+    post stands on the number."""
+    import x_post
+    if candidate.get('legs'):
+        return None
+    side, line = gates.side_of(candidate), float(candidate['line'])
+    if candidate.get('athleteId'):
+        game = ctx.games[candidate['gameIds'][0]]
+        logs = features.player_logs([g for g in records if g['league'] == game['league']]).get(str(candidate['athleteId']), [])
+        recent = [v for v in (features.value(r, gates.market_key(candidate)) for r in logs[-10:]) if v is not None]
+        hits = sum(1 for v in recent if (v > line if side == 'over' else v < line))
+        if len(recent) >= 5 and hits / len(recent) >= 0.6:
+            return f"{'Over' if side == 'over' else 'Under'} {pricing.fmt(line)} in {hits} of his last {len(recent)} games."
+        return None
+    backing = [first_sentence(f['claim']) for f in facts if f.get('direction') == 'for' and f.get('claim')
+               and (f.get('kind') == 'weather' or (f.get('origin') == 'claude researcher' and f.get('verified')
+                                                    and f.get('kind') in ('injury', 'role', 'weather')))]
+    return x_post.reason_for({'why': ' '.join(backing)}, weights) if backing else None
+
+
+def first_sentence(text):
+    import x_post
+    parts = x_post.sentences(text)
+    return (parts[0] if parts else str(text)).rstrip('.') + '.'
+
+
+def learning_weights():
+    import learning
+    return learning.load_policy().get('reasonWeights')
+
+
+def checked_facts(candidate, limit=2):
+    """Up to two verified facts from the web check about who is expected to play, for the reasoning and its sources.
+    Only facts that do not argue against the pick: one that did would have held it."""
+    facts = [f for f in candidate.get('_research') or [] if f.get('verified') and f.get('kind') in AVAILABILITY
+             and f.get('direction') != 'against' and f.get('claim')]
+    return facts[:limit]
+
+
 def write_prose(candidate, ctx, records):
     """Template why and risk from the pick's own numbers. A model may polish these later; it never adds a number."""
     p = candidate.get('_desk') or {}
@@ -861,11 +904,18 @@ def write_prose(candidate, ctx, records):
                              f"voided under the book's rule; one who leaves hurt is graded. Confidence {candidate['confidence']} of 10.")
     else:
         market_words = next((f['claim'] for f in candidate.get('_evidence') or [] if f.get('kind') == 'market'), '')
+        checked = checked_facts(candidate)
         candidate['why'] = (f"Model lean, published on our number alone. Our total is {p['projection']:g} against {pricing.fmt(line)}: the "
                             f"{side} reads {100 * p['chance']:.1f}% after the raw {100 * p['rawChance']:.1f}% is shrunk by the model's "
                             f"record against the close, {p['edgePoints']:+.1f} points clear of the {100 * p['breakEven']:.1f}% that "
                             f"{odds:+d} needs. Nothing sourced argues against it; the number is the reason."
+                            + ''.join(f" Checked before publishing: {first_sentence(f['claim'])}" for f in checked)
                             + (f" The market: {market_words}" if market_words else ''))
+        sources = list(candidate.get('sources') or [])
+        for fact in checked:
+            if str(fact.get('source') or '').startswith('https://') and fact['source'] not in sources:
+                sources.append(fact['source'])
+        candidate['sources'] = sources
         candidate['risk'] = (f"It rests on the model alone, and the closing line beats our number on average, so a gap this size is more "
                              f"often our error than the market's. {sparse}Confidence {candidate['confidence']} of 10.")
     return candidate
@@ -1080,6 +1130,7 @@ def _run(args, now, slot, kinds, status):
     wanted = candidates(lines, games, now)
     log(f'{len(wanted)} candidates on the board')
     decided = []          # every decision this run made, for the learning record
+    reasons = {}          # the reason each published play's post will give (data/x-reasons.json)
     # The web researcher reads the news for every play that passes the rules, on the runs that publish.
     research_on = researcher.enabled() and slot.hour not in (6, 23)
     status['research'] = {'on': research_on, 'asked': 0, 'verified': 0, 'dropped': 0}
@@ -1110,7 +1161,7 @@ def _run(args, now, slot, kinds, status):
             decided.append(decision_record(candidate, league, 'refused', [d.rule for d in gates.refusals(decisions)], first.reason, now, ctx))
             continue
         # Then the news: the web researcher reads injury, availability and depth-chart reporting for the play.
-        researched = False
+        researched = False          # true only when the web check came back with who is expected to play
         if research_on and status['research']['asked'] < RESEARCH_LIMIT:
             game = ctx.games[candidate['gameIds'][0]]
             kept, dropped = researcher.research(game, gates.market_key(candidate), gates.side_of(candidate), now=now,
@@ -1120,14 +1171,15 @@ def _run(args, now, slot, kinds, status):
             status['research']['verified'] += len(kept)
             status['research']['dropped'] += len(dropped)
             facts += kept
-            researched = True
-            log(f"researched {candidate['title']}: {len(kept)} verified facts, {len(dropped)} dropped")
+            researched = any(f.get('kind') in AVAILABILITY for f in kept)
+            log(f"researched {candidate['title']}: {len(kept)} verified facts, {len(dropped)} dropped"
+                + ('' if researched else '; none about who is expected to play'))
             if kept:
                 write_prose(candidate, ctx, records)
         hold = None
         if needs_research(candidate) and not researched:
-            hold = (f"a college play {abs(candidate['projection'] - candidate['line']):.1f} points from the market needs the web "
-                    "check on injuries and news before it is published, and it has not had one")
+            hold = ("a college play needs the web check to confirm who is expected to play before it is published (there is "
+                    "no college injury feed), and it has not come back with that")
         hold = hold or judge(candidate, relevant_facts(candidate, facts, ctx), use_llm, status)
         if hold:
             screened.append({'league': league, 'gameId': candidate['gameIds'][0], 'title': candidate['title'],
@@ -1144,6 +1196,9 @@ def _run(args, now, slot, kinds, status):
         ctx.latest[candidate['id']] = dict(candidate)
         published.append((league, kind, candidate))
         decided.append(decision_record(candidate, league, 'published', [], None, now, ctx))
+        reason = post_reason(candidate, facts, ctx, records, learning_weights())
+        if reason:
+            reasons[candidate['id']] = reason
     if 'longshot' in kinds:
         for league in ('NFL', 'CFB'):
             ticket, reason = longshot_candidate(lines, games, now, league)
@@ -1193,6 +1248,11 @@ def _run(args, now, slot, kinds, status):
             status['checks'].append('tests green')
     drafts(slot, now, ctx, games, settled, status)
     if not args.dry_run:
+        if reasons:
+            import x_post
+            stored = x_post.load_reasons()
+            stored.update(reasons)
+            x_post.save_reasons(stored)
         remember(decided, now, slot, status)
         git_result = commit_push(now, slot, {'published': len(published), 'settled': len(settled), 'closed': len(closed)},
                                  push=not args.no_push)
@@ -1377,6 +1437,12 @@ def show_status(args):
 # ------------------------------------------------------------------ the check before a post goes out
 
 PRECHECK_WINDOW = (timedelta(minutes=15), timedelta(minutes=150))   # posts due this far ahead get their last look
+PRECHECK_LAST = timedelta(minutes=45)      # inside this, an unconfirmed college play is withheld rather than retried
+
+
+def lineup_confirmed(kept):
+    """Did the web check come back with who is expected to play?"""
+    return any(f.get('kind') in AVAILABILITY for f in kept or [])
 
 
 def precheck_due(log_book, now):
@@ -1438,7 +1504,7 @@ def precheck(args):
             use_llm = not args.no_llm and llm.available()
             moved, _ = close_moves(ctx, raw_first, games, desk.captures(), now)
             moved = {revision['id']: (league, kind, revision) for league, kind, revision in moved}
-            closures = []
+            closures, withheld = [], []
             for entry in due:
                 key = entry['id']
                 if key not in ctx.first:
@@ -1452,6 +1518,7 @@ def precheck(args):
                 pick['_team'] = ctx.player_team.get(str(pick.get('athleteId') or ''))
                 pick['_league'] = pick.get('league') or key.split('-')[0]
                 facts = evidence(pick, ctx, context_file)
+                kept = []
                 if researcher.enabled() and game:
                     kept, dropped = researcher.research(game, gates.market_key(pick), gates.side_of(pick), now=now,
                                                         player=ctx.names.get(str(pick.get('athleteId') or '')))
@@ -1459,6 +1526,16 @@ def precheck(args):
                     status['research']['verified'] += len(kept)
                     facts += kept
                 reason = judge(pick, relevant_facts(pick, facts, ctx), use_llm, status)
+                if not reason and needs_research(pick) and not lineup_confirmed(kept):
+                    # A college play with nothing checked is not clear, it is unknown: try again at the next half
+                    # hour; at the last chance, withhold the post (the pick stays on the site and is graded).
+                    if gates.when(entry['dueAt']) - now > PRECHECK_LAST:
+                        log(f"precheck: {key} not confirmed yet (the web check came back without who is playing); next half hour")
+                        continue
+                    entry['precheck'] = {'at': stamp(now), 'result': 'withheld', 'reason': 'the web check could not confirm who is playing'}
+                    withheld.append(entry)
+                    log(f"precheck: {key} withheld from X: the web check could not confirm who is playing")
+                    continue
                 if not reason and key in moved:
                     reason = moved[key][2]['entryNote'].split(': ', 1)[1].split('. Published cutoff')[0]
                 if reason:
@@ -1470,6 +1547,13 @@ def precheck(args):
                     entry['precheck'] = {'at': stamp(now), 'result': 'clear', 'facts': len(relevant_facts(pick, facts, ctx))}
                     log(f"precheck: {key} clear")
             closures = [c for c in closures if c]
+            for entry in withheld:
+                if not args.dry_run:
+                    try:
+                        buffer_post.delete_post(entry['bufferPostId'])
+                        entry['cancelledAt'] = stamp(now)
+                    except buffer_post.BufferError as error:
+                        log(f"precheck: could not withhold {entry['id']}: {error}")
             if closures and not args.dry_run:
                 buffer_post.cancel_closed({c[2]['id'] for c in closures}, log_book, now, log=log)
                 by_league = defaultdict(lambda: ([], [], []))

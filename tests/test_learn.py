@@ -225,9 +225,11 @@ class PostTests(unittest.TestCase):
         text = '🍳 TEAM PROP\nA at B OVER 40.5\n-110 at DraftKings · 1 unit\n\nOur number 44 vs the 40.5\nWind is calm in town.\n\n@Playbook #NFL'
         self.assertEqual(x_post.reason_in(text), 'Wind is calm in town.')
         self.assertIsNone(x_post.reason_in('🍳 TEAM PROP\nA\n-110\n\nOur number 44 vs the 40.5\n\n@Playbook #NFL'))
-        pick = {'why': 'Kentucky lists 5 players out, Barion among them. The total opened 50.5 and moved to 44.5 at DraftKings.'}
-        self.assertEqual(x_post.reason_kind(x_post.reason_for(pick, {'market': 1.0, 'injury': 1.0})), 'market', 'most specific wins at equal weight')
-        self.assertEqual(x_post.reason_kind(x_post.reason_for(pick, {'market': 0.8, 'injury': 1.25})), 'injury', 'engagement tips it')
+        pick = {'why': 'Kentucky lists 5 players out. The tight end has drawn 7 targets in each of his last 2 games.'}
+        self.assertEqual(x_post.reason_kind(x_post.reason_for(pick, {'role': 1.0, 'injury': 1.0})), 'role', 'most specific wins at equal weight')
+        self.assertEqual(x_post.reason_kind(x_post.reason_for(pick, {'role': 0.8, 'injury': 1.25})), 'injury', 'engagement tips it')
+        moved = {'why': 'The total opened 50.5 and is now 44.5 at DraftKings, a move of 6 toward the under.'}
+        self.assertIsNone(x_post.reason_for(moved), "a line's move is never a post's reason")
 
     def test_engagement_is_read_once_two_days_after_and_a_missing_permission_is_said_once(self):
         sent = learning.stamp(NOW - timedelta(days=3))

@@ -45,10 +45,15 @@ LEAD_INS = ('model lean', 'prop lean', 'researched pick', 'longshot from', 'noth
             'published', 'this rests', 'settled from', 'graded', 'active on the', 'inactives post', 'the role is settled')
 # The post says what the play is and one plain reason; the arithmetic lives on the site, not in the timeline.
 JARGON = ('calibrat', 'percentile', 'raw', 'shrunk', 'break-even', 'break even', 'graded', 'closing line', 'the close',
-          'model', 'our number', 'projection', 'curve', 'expected value', 'per unit', 'backtest', 'voided', "book's rule", 'chance', 'than that')
+          'model', 'our number', 'our total', 'our margin', 'projection', 'curve', 'expected value', 'per unit', 'backtest', 'voided', "book's rule", 'chance', 'than that',
+          # the line's move and the books' spread are the price's story, not a reason, and often point the other way
+          'opened', 'a move of', 'toward the', 'books range', 'books span', 'the middle is')
 REASON_MAX = 150
+NOT_REASONS = ('checked before publishing',)   # the web check's lineup notes: diligence for the site, not a reason to play
+
 DANGLING = {'is', 'are', 'was', 'were', 'has', 'have', 'had', 'will', 'would', 'can', 'could', 'does', 'do', 'did',
-            'which', 'that', 'it', 'this', 'these', 'those', 'so', 'but', 'and', 'or'}
+            'which', 'that', 'it', 'this', 'these', 'those', 'so', 'but', 'and', 'or', 'he', 'she', 'they', 'his', 'her',
+            'their', 'its', 'him', 'them'}
 TAGS = {'NFL': '#NFL', 'CFB': '#CFB'}
 
 
@@ -242,8 +247,11 @@ def reasons_for(pick):
     """The pick's own reasoning, most specific first. A sentence that opens with one of the desk's lead-ins keeps
     what follows its colon ("The market: the total opened 50.5" keeps the move) and is dropped otherwise."""
     said = []
+    player = pick_card.play_kind(pick) == 'player'      # "He" is the player in the title; on a team play it is no one
     for sentence in sentences(pick.get('why')):
         low = sentence.lower()
+        if low.startswith(NOT_REASONS) or (not player and low.split(' ', 1)[0] in DANGLING):
+            continue
         if low.startswith(LEAD_INS):
             if ':' not in sentence:
                 continue
@@ -256,9 +264,11 @@ def reasons_for(pick):
 
 
 def plain(sentence):
-    """Short, none of the desk's arithmetic words, and within the house style (no dashes, no model names)."""
+    """Short, none of the desk's arithmetic words, and within the house style (no dashes, no model names). Words
+    match from their start ("raw" is not in "drawn", "calibrat" is in "calibrated")."""
     low = sentence.lower()
-    return len(sentence) <= REASON_MAX and not any(word in low for word in JARGON) and not x_style(sentence)
+    return (len(sentence) <= REASON_MAX and not any(llm.re.search(r'\b' + llm.re.escape(word), low) for word in JARGON)
+            and not x_style(sentence))
 
 
 REASON_WORDS = (      # weather first: "no wind called out" is about the weather, not an injury
@@ -313,9 +323,22 @@ def reason_for(pick, weights=None):
 
 
 PLAYBOOK = '@Playbook'     # the betslip bot (Action Network): tagged on a bet, it replies with the slip pre-loaded
+REASONS = ROOT / 'data' / 'x-reasons.json'   # the reason each play's post gives, chosen when the play is published
 
 
-def draft(pick, game=None, weights=None):
+def load_reasons(path=None):
+    try:
+        return json.loads(Path(path or REASONS).read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        return {}
+
+
+def save_reasons(reasons, path=None):
+    target = Path(path or REASONS)
+    target.write_text(json.dumps(dict(sorted(reasons.items())), indent=1, ensure_ascii=False) + '\n', encoding='utf-8')
+
+
+def draft(pick, game=None, weights=None, reason=None):
     """The post, the same shape every time:
 
         🍳 PLAYER PROP | TEAM PROP | FUN PARLAY   (· FAVORITE for a researched pick)
@@ -330,6 +353,11 @@ def draft(pick, game=None, weights=None):
     A parlay lists its legs and says it is just for fun. No link and no stat line: the card carries the site,
     and @Playbook answers with the betslip. Every number comes from the pick; the units are the site's own
     count (one for a straight play, the ticket's riskUnits for a parlay).
+
+    The reason is the one the desk chose from structured facts when it published the play (data/x-reasons.json,
+    see run.post_reason): the player's own record at the line, a verified fact or a weather flag that points the
+    same way as the play. It is never mined from the finished prose, which the local model rewrites; with no
+    stored reason the post stands on the play and the number.
     """
     league = (game or {}).get('league') or str(pick.get('id', '')).split('-')[0]
     tail = ' '.join(x for x in (PLAYBOOK, TAGS.get(league, '')) if x)
@@ -343,11 +371,14 @@ def draft(pick, game=None, weights=None):
     else:
         top = '\n'.join([head, pick_card.display_title(pick, game), price])
         number = pick_card.number_line(pick)
-        reason = reason_for(pick, weights)
+        if reason is None:
+            reason = load_reasons().get(str(pick.get('id')))
+        if reason and not plain(reason):
+            reason = None
         options = ([top, '\n'.join(x for x in (number, reason) if x), tail], [top, number, tail], [top, tail])
     for parts in options:
         text = '\n\n'.join(part for part in parts if part)
-        if tweet_length(text) <= LIMIT and not guard(text, pick):
+        if tweet_length(text) <= LIMIT and not guard(text, pick, reason):
             return text                 # a reason that trips a guard costs the reason, never the post
     return top[:LIMIT]
 
@@ -361,9 +392,11 @@ def x_style(text):
     return [p for p in llm.check_style(text) if 'emoji' not in p]
 
 
-def guard(text, pick):
+def guard(text, pick, reason=None):
     problems = x_style(text.replace(SITE, ''))
     extra = [{'legCount': len(pick['legs'])}] if pick.get('legs') else []      # "3 legs" is a count of the pick's own legs
+    if reason:
+        extra.append({'reason': reason})       # a stored reason's numbers come from a verified fact or the player's own games
     extra.append({'stake': pick_card.stake(pick)})                              # "1 unit" is the stake the record counts
     ok, strays = llm.numbers_ok(text, pick, extra)
     if not ok:

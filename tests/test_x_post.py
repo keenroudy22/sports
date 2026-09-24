@@ -2,6 +2,7 @@ import json
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -51,7 +52,7 @@ class DraftTests(unittest.TestCase):
         team = x_post.draft(dict(PICK, favorite=False, modelLean=True, projection=31.2), GAME)
         self.assertTrue(team.startswith('🍳 TEAM PROP\nIowa at Michigan under 38.5\n-105 at FanDuel · 1 unit\n\nOur number 31.2 vs the 38.5\n'), team)
         self.assertTrue(team.endswith('\n\n@Playbook #CFB'), team)
-        prop = x_post.draft(PROP, {'league': 'NFL'})
+        prop = x_post.draft(PROP, {'league': 'NFL'}, reason='He has caught 6 in each of his last 2 games.')
         self.assertEqual(prop, '🍳 PLAYER PROP\nPlayer Seven over 4.5 receptions\n-115 at DraftKings · 1 unit\n\n'
                                'Our number 5.8 vs the 4.5\nHe has caught 6 in each of his last 2 games.\n\n@Playbook #NFL')
         favorite = x_post.draft(PICK, GAME)
@@ -59,7 +60,30 @@ class DraftTests(unittest.TestCase):
         for text, pick in ((team, dict(PICK, projection=31.2)), (prop, PROP), (favorite, PICK)):
             self.assertLessEqual(x_post.tweet_length(text), 280)
             self.assertNotIn('http', text, 'no link: the card carries the site')
-            self.assertEqual(x_post.guard(text, pick), [], text)
+            self.assertEqual(x_post.guard(text, pick, 'He has caught 6 in each of his last 2 games.' if pick is PROP else None), [], text)
+
+    def test_the_reason_is_the_stored_one_never_the_prose(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'reasons.json'
+            x_post.save_reasons({PICK['id']: 'Wind is forecast at 18 mph in Ann Arbor.'}, path)
+            with mock.patch.object(x_post, 'REASONS', path):
+                self.assertIn('Our number 31.2 vs the 38.5\nWind is forecast at 18 mph in Ann Arbor.', x_post.draft(dict(PICK, projection=31.2), GAME))
+                other = dict(PICK, id='another', projection=31.2)
+                self.assertTrue(x_post.draft(other, GAME).endswith('Our number 31.2 vs the 38.5\n\n@Playbook #CFB'),
+                                'no stored reason: the prose is not mined, the post stands on the number')
+
+    def test_lineup_checks_duplicates_and_half_sentences_are_not_reasons(self):
+        pick = {'why': 'Model lean, published on our number alone. Our total is 52.3 against 45.5: the over reads 55.8%. '
+                       'Checked before publishing: JMU quarterback JC Evans suffered a lower-body injury against Liberty. '
+                       'He completed 19 of 27 passes for 246 yards against San Diego State.'}
+        self.assertIsNone(x_post.reason_for(pick), 'a model lean with nothing but checks and arithmetic posts on its number')
+
+    def test_arithmetic_words_match_whole_words_only(self):
+        self.assertTrue(x_post.plain('The tight end has drawn 7 targets in each of his last 2 games.'))
+        self.assertTrue(x_post.plain('Crawford has started every game this season.'))
+        self.assertFalse(x_post.plain('The raw read is 61%.'))
+        self.assertFalse(x_post.plain('The calibrated chance clears the price.'))
 
     def test_names_keep_their_suffix_and_a_clean_clause_can_stand_alone(self):
         pick = {'why': 'Prop lean, published on our number alone: our projection is 6.0 against 3.5, so the true chance is lower than that. '
@@ -251,7 +275,7 @@ class ReasonTests(unittest.TestCase):
         reasons = x_post.reasons_for(pick)
         self.assertEqual(reasons[0], 'The total opened 50.5 and is 44.5 at DraftKings, 6 toward the under.', 'the move, its lead-in cut off')
         self.assertTrue(reasons[1].startswith('Our total gap of 7.8 points'), reasons)
-        self.assertEqual(x_post.reason_for(pick), reasons[0], 'the percentile sentence is arithmetic and stays off X')
+        self.assertIsNone(x_post.reason_for(pick), "the line's move is the price's story, not a reason, and the percentile is arithmetic")
         self.assertFalse(any(r.lower().startswith(('model lean', 'nothing sourced', 'the market:')) for r in reasons))
 
     def test_a_longshot_draft_lists_its_legs(self):
