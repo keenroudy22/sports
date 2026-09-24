@@ -4,8 +4,7 @@ Each side's points in a game are modelled as
 
     points = league mean + home edge (zero at a neutral site) + own offense + opponent's defense
 
-fitted by weighted ridge regression on the season's games before a cutoff. Two things set the
-weights:
+fitted by weighted ridge regression on the season's games before a cutoff. Three knobs:
 
   halfLife  a game's weight halves every this many days before the cutoff
   ridge     how many games' worth of evidence last season's number counts for; each team's
@@ -38,8 +37,10 @@ fitted on the tuning season and checked on the holdout.
 
 Usage:
   python scripts/hoops_model.py backtest NBA 2026           walk-forward grade of one season
-  python scripts/hoops_model.py tune CBB [--workers 8]      grid on 2025, holdout 2026 once
-Stdlib only.
+  python scripts/hoops_model.py tune CBB [--workers 8]      grid on 2025, holdout 2026 once;
+                                                             writes data/model/hoops-cbb.json and
+                                                             hoops-backtest-cbb.json, and records the look
+The results and the recommendation are in docs/HOOPS.md. Stdlib only.
 """
 import argparse
 import bisect
@@ -47,13 +48,12 @@ import hashlib
 import json
 import math
 import os
-import random
 import statistics
 import sys
 from collections import defaultdict
 from concurrent.futures import ProcessPoolExecutor
 from copy import deepcopy
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from itertools import product
 from pathlib import Path
 
@@ -69,8 +69,8 @@ VERSION = 'hoops-v1'
 PARAMS = {
     'NBA': {'margin': {'halfLife': 45, 'ridge': 5.0, 'carry': 1.0},
             'total': {'halfLife': 30, 'ridge': 5.0, 'carry': 1.0}, 'refitDays': 1},
-    'CBB': {'margin': {'halfLife': 60, 'ridge': 10.0, 'carry': 0.6},
-            'total': {'halfLife': 60, 'ridge': 10.0, 'carry': 0.6}, 'refitDays': 1},
+    'CBB': {'margin': {'halfLife': 365, 'ridge': 5.0, 'carry': 1.0},
+            'total': {'halfLife': 45, 'ridge': 5.0, 'carry': 0.75}, 'refitDays': 1},
 }
 # The untuned starting point: the grid's other target is held here, and the holdout
 # comparison asks whether the tuned setting beat it.

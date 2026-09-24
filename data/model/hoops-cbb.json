@@ -1,0 +1,5352 @@
+{
+ "league": "CBB",
+ "version": "hoops-v1",
+ "tuneSeason": 2025,
+ "holdoutSeason": 2026,
+ "store": "e498e3657113",
+ "grid": {
+  "halfLife": [
+   20,
+   30,
+   45,
+   60,
+   90,
+   120,
+   180,
+   365
+  ],
+  "ridge": [
+   2.0,
+   5.0,
+   10.0,
+   20.0,
+   40.0
+  ],
+  "carry": [
+   0.3,
+   0.45,
+   0.6,
+   0.75,
+   0.9,
+   1.0
+  ]
+ },
+ "defaults": {
+  "margin": {
+   "halfLife": 60,
+   "ridge": 10.0,
+   "carry": 0.6
+  },
+  "total": {
+   "halfLife": 60,
+   "ridge": 10.0,
+   "carry": 0.6
+  },
+  "refitDays": 1
+ },
+ "chosen": {
+  "margin": {
+   "halfLife": 365,
+   "ridge": 5.0,
+   "carry": 1.0
+  },
+  "total": {
+   "halfLife": 45,
+   "ridge": 5.0,
+   "carry": 0.75
+  },
+  "refitDays": 1
+ },
+ "paramsHash": "e06c854a65fd",
+ "tuning": {
+  "games": 6292,
+  "margin": {
+   "priced": 5762,
+   "miss": 9.25,
+   "closeMiss": 8.792,
+   "openMiss": 8.897,
+   "closerThanClose": 0.4488,
+   "vsClose": {
+    "won": 2852,
+    "lost": 2902,
+    "push": 0,
+    "rate": 0.4957,
+    "interval90": [
+     0.4848,
+     0.5065
+    ]
+   },
+   "byOpeningGap": {
+    "0-1.5": {
+     "n": 2318,
+     "atClose": {
+      "won": 1175,
+      "lost": 1143,
+      "push": 0,
+      "rate": 0.5069,
+      "interval90": [
+       0.4898,
+       0.524
+      ]
+     },
+     "atOpen": {
+      "won": 1186,
+      "lost": 1132,
+      "push": 0,
+      "rate": 0.5116,
+      "interval90": [
+       0.4946,
+       0.5287
+      ]
+     },
+     "lineMove": {
+      "toward": 0.3197,
+      "away": 0.311,
+      "mean": 0.037
+     }
+    },
+    "1.5-3": {
+     "n": 1675,
+     "atClose": {
+      "won": 817,
+      "lost": 858,
+      "push": 0,
+      "rate": 0.4878,
+      "interval90": [
+       0.4677,
+       0.5079
+      ]
+     },
+     "atOpen": {
+      "won": 831,
+      "lost": 844,
+      "push": 0,
+      "rate": 0.4961,
+      "interval90": [
+       0.476,
+       0.5162
+      ]
+     },
+     "lineMove": {
+      "toward": 0.3469,
+      "away": 0.2788,
+      "mean": 0.12
+     }
+    },
+    "3-6": {
+     "n": 1274,
+     "atClose": {
+      "won": 619,
+      "lost": 655,
+      "push": 0,
+      "rate": 0.4859,
+      "interval90": [
+       0.4629,
+       0.5089
+      ]
+     },
+     "atOpen": {
+      "won": 630,
+      "lost": 644,
+      "push": 0,
+      "rate": 0.4945,
+      "interval90": [
+       0.4715,
+       0.5175
+      ]
+     },
+     "lineMove": {
+      "toward": 0.3995,
+      "away": 0.2786,
+      "mean": 0.317
+     }
+    },
+    "6+": {
+     "n": 482,
+     "atClose": {
+      "won": 243,
+      "lost": 239,
+      "push": 0,
+      "rate": 0.5041,
+      "interval90": [
+       0.4668,
+       0.5415
+      ]
+     },
+     "atOpen": {
+      "won": 271,
+      "lost": 211,
+      "push": 0,
+      "rate": 0.5622,
+      "interval90": [
+       0.5248,
+       0.599
+      ]
+     },
+     "lineMove": {
+      "toward": 0.4336,
+      "away": 0.3154,
+      "mean": 1.467
+     }
+    },
+    "lean 3+": {
+     "n": 1756,
+     "atClose": {
+      "won": 862,
+      "lost": 894,
+      "push": 0,
+      "rate": 0.4909,
+      "interval90": [
+       0.4713,
+       0.5105
+      ]
+     },
+     "atOpen": {
+      "won": 901,
+      "lost": 855,
+      "push": 0,
+      "rate": 0.5131,
+      "interval90": [
+       0.4935,
+       0.5327
+      ]
+     },
+     "lineMove": {
+      "toward": 0.4089,
+      "away": 0.2887,
+      "mean": 0.633
+     }
+    },
+    "all": {
+     "n": 5749,
+     "atClose": {
+      "won": 2854,
+      "lost": 2895,
+      "push": 0,
+      "rate": 0.4964,
+      "interval90": [
+       0.4856,
+       0.5073
+      ]
+     },
+     "atOpen": {
+      "won": 2918,
+      "lost": 2831,
+      "push": 0,
+      "rate": 0.5076,
+      "interval90": [
+       0.4967,
+       0.5184
+      ]
+     },
+     "lineMove": {
+      "toward": 0.3548,
+      "away": 0.2948,
+      "mean": 0.243
+     }
+    }
+   },
+   "residualSd": 12.41,
+   "meanForecastSd": 11.745
+  },
+  "total": {
+   "priced": 5762,
+   "miss": 13.071,
+   "closeMiss": 12.662,
+   "openMiss": 12.809,
+   "closerThanClose": 0.4611,
+   "vsClose": {
+    "won": 2889,
+    "lost": 2867,
+    "push": 0,
+    "rate": 0.5019,
+    "interval90": [
+     0.4911,
+     0.5127
+    ]
+   },
+   "byOpeningGap": {
+    "0-1.5": {
+     "n": 1822,
+     "atClose": {
+      "won": 918,
+      "lost": 904,
+      "push": 0,
+      "rate": 0.5038,
+      "interval90": [
+       0.4846,
+       0.5231
+      ]
+     },
+     "atOpen": {
+      "won": 921,
+      "lost": 901,
+      "push": 0,
+      "rate": 0.5055,
+      "interval90": [
+       0.4862,
+       0.5247
+      ]
+     },
+     "lineMove": {
+      "toward": 0.3996,
+      "away": 0.3507,
+      "mean": 0.111
+     }
+    },
+    "1.5-3": {
+     "n": 1531,
+     "atClose": {
+      "won": 777,
+      "lost": 754,
+      "push": 0,
+      "rate": 0.5075,
+      "interval90": [
+       0.4865,
+       0.5285
+      ]
+     },
+     "atOpen": {
+      "won": 793,
+      "lost": 738,
+      "push": 0,
+      "rate": 0.518,
+      "interval90": [
+       0.4969,
+       0.5389
+      ]
+     },
+     "lineMove": {
+      "toward": 0.4357,
+      "away": 0.3233,
+      "mean": 0.242
+     }
+    },
+    "3-6": {
+     "n": 1717,
+     "atClose": {
+      "won": 850,
+      "lost": 867,
+      "push": 0,
+      "rate": 0.495,
+      "interval90": [
+       0.4752,
+       0.5149
+      ]
+     },
+     "atOpen": {
+      "won": 876,
+      "lost": 841,
+      "push": 0,
+      "rate": 0.5102,
+      "interval90": [
+       0.4903,
+       0.53
+      ]
+     },
+     "lineMove": {
+      "toward": 0.4805,
+      "away": 0.3122,
+      "mean": 0.44
+     }
+    },
+    "6+": {
+     "n": 686,
+     "atClose": {
+      "won": 358,
+      "lost": 328,
+      "push": 0,
+      "rate": 0.5219,
+      "interval90": [
+       0.4905,
+       0.5531
+      ]
+     },
+     "atOpen": {
+      "won": 377,
+      "lost": 309,
+      "push": 0,
+      "rate": 0.5496,
+      "interval90": [
+       0.5182,
+       0.5806
+      ]
+     },
+     "lineMove": {
+      "toward": 0.5321,
+      "away": 0.2682,
+      "mean": 1.175
+     }
+    },
+    "lean 3+": {
+     "n": 2403,
+     "atClose": {
+      "won": 1208,
+      "lost": 1195,
+      "push": 0,
+      "rate": 0.5027,
+      "interval90": [
+       0.4859,
+       0.5195
+      ]
+     },
+     "atOpen": {
+      "won": 1253,
+      "lost": 1150,
+      "push": 0,
+      "rate": 0.5214,
+      "interval90": [
+       0.5047,
+       0.5382
+      ]
+     },
+     "lineMove": {
+      "toward": 0.4952,
+      "away": 0.2996,
+      "mean": 0.65
+     }
+    },
+    "all": {
+     "n": 5756,
+     "atClose": {
+      "won": 2903,
+      "lost": 2853,
+      "push": 0,
+      "rate": 0.5043,
+      "interval90": [
+       0.4935,
+       0.5152
+      ]
+     },
+     "atOpen": {
+      "won": 2967,
+      "lost": 2789,
+      "push": 0,
+      "rate": 0.5155,
+      "interval90": [
+       0.5046,
+       0.5263
+      ]
+     },
+     "lineMove": {
+      "toward": 0.4491,
+      "away": 0.3221,
+      "mean": 0.371
+     }
+    }
+   },
+   "residualSd": 16.77,
+   "meanForecastSd": 15.013
+  }
+ },
+ "holdout": {
+  "games": 6300,
+  "margin": {
+   "priced": 5743,
+   "miss": 9.341,
+   "closeMiss": 8.94,
+   "openMiss": 9.066,
+   "closerThanClose": 0.4604,
+   "vsClose": {
+    "won": 2876,
+    "lost": 2847,
+    "push": 3,
+    "rate": 0.5025,
+    "interval90": [
+     0.4917,
+     0.5134
+    ]
+   },
+   "byOpeningGap": {
+    "0-1.5": {
+     "n": 2451,
+     "atClose": {
+      "won": 1240,
+      "lost": 1210,
+      "push": 1,
+      "rate": 0.5061,
+      "interval90": [
+       0.4895,
+       0.5227
+      ]
+     },
+     "atOpen": {
+      "won": 1247,
+      "lost": 1203,
+      "push": 1,
+      "rate": 0.509,
+      "interval90": [
+       0.4924,
+       0.5256
+      ]
+     },
+     "lineMove": {
+      "toward": 0.3562,
+      "away": 0.3048,
+      "mean": 0.119
+     }
+    },
+    "1.5-3": {
+     "n": 1587,
+     "atClose": {
+      "won": 796,
+      "lost": 791,
+      "push": 0,
+      "rate": 0.5016,
+      "interval90": [
+       0.4809,
+       0.5222
+      ]
+     },
+     "atOpen": {
+      "won": 807,
+      "lost": 780,
+      "push": 0,
+      "rate": 0.5085,
+      "interval90": [
+       0.4879,
+       0.5291
+      ]
+     },
+     "lineMove": {
+      "toward": 0.419,
+      "away": 0.2684,
+      "mean": 0.287
+     }
+    },
+    "3-6": {
+     "n": 1280,
+     "atClose": {
+      "won": 630,
+      "lost": 649,
+      "push": 1,
+      "rate": 0.4926,
+      "interval90": [
+       0.4696,
+       0.5156
+      ]
+     },
+     "atOpen": {
+      "won": 642,
+      "lost": 638,
+      "push": 0,
+      "rate": 0.5016,
+      "interval90": [
+       0.4786,
+       0.5245
+      ]
+     },
+     "lineMove": {
+      "toward": 0.45,
+      "away": 0.2844,
+      "mean": 0.423
+     }
+    },
+    "6+": {
+     "n": 414,
+     "atClose": {
+      "won": 189,
+      "lost": 224,
+      "push": 1,
+      "rate": 0.4576,
+      "interval90": [
+       0.4177,
+       0.4981
+      ]
+     },
+     "atOpen": {
+      "won": 212,
+      "lost": 201,
+      "push": 1,
+      "rate": 0.5133,
+      "interval90": [
+       0.4729,
+       0.5536
+      ]
+     },
+     "lineMove": {
+      "toward": 0.5242,
+      "away": 0.2536,
+      "mean": 1.67
+     }
+    },
+    "lean 3+": {
+     "n": 1694,
+     "atClose": {
+      "won": 819,
+      "lost": 873,
+      "push": 2,
+      "rate": 0.484,
+      "interval90": [
+       0.4641,
+       0.504
+      ]
+     },
+     "atOpen": {
+      "won": 854,
+      "lost": 839,
+      "push": 1,
+      "rate": 0.5044,
+      "interval90": [
+       0.4845,
+       0.5244
+      ]
+     },
+     "lineMove": {
+      "toward": 0.4681,
+      "away": 0.2769,
+      "mean": 0.728
+     }
+    },
+    "all": {
+     "n": 5732,
+     "atClose": {
+      "won": 2855,
+      "lost": 2874,
+      "push": 3,
+      "rate": 0.4983,
+      "interval90": [
+       0.4875,
+       0.5092
+      ]
+     },
+     "atOpen": {
+      "won": 2908,
+      "lost": 2822,
+      "push": 2,
+      "rate": 0.5075,
+      "interval90": [
+       0.4966,
+       0.5184
+      ]
+     },
+     "lineMove": {
+      "toward": 0.4067,
+      "away": 0.2865,
+      "mean": 0.345
+     }
+    }
+   },
+   "residualSd": 12.5,
+   "meanForecastSd": 12.003
+  },
+  "total": {
+   "priced": 5748,
+   "miss": 13.869,
+   "closeMiss": 13.378,
+   "openMiss": 13.62,
+   "closerThanClose": 0.4525,
+   "vsClose": {
+    "won": 2850,
+    "lost": 2891,
+    "push": 3,
+    "rate": 0.4964,
+    "interval90": [
+     0.4856,
+     0.5073
+    ]
+   },
+   "byOpeningGap": {
+    "0-1.5": {
+     "n": 1571,
+     "atClose": {
+      "won": 780,
+      "lost": 790,
+      "push": 1,
+      "rate": 0.4968,
+      "interval90": [
+       0.4761,
+       0.5176
+      ]
+     },
+     "atOpen": {
+      "won": 792,
+      "lost": 779,
+      "push": 0,
+      "rate": 0.5041,
+      "interval90": [
+       0.4834,
+       0.5249
+      ]
+     },
+     "lineMove": {
+      "toward": 0.4348,
+      "away": 0.3864,
+      "mean": 0.125
+     }
+    },
+    "1.5-3": {
+     "n": 1441,
+     "atClose": {
+      "won": 744,
+      "lost": 697,
+      "push": 0,
+      "rate": 0.5163,
+      "interval90": [
+       0.4946,
+       0.5379
+      ]
+     },
+     "atOpen": {
+      "won": 756,
+      "lost": 684,
+      "push": 1,
+      "rate": 0.525,
+      "interval90": [
+       0.5033,
+       0.5466
+      ]
+     },
+     "lineMove": {
+      "toward": 0.4879,
+      "away": 0.3407,
+      "mean": 0.486
+     }
+    },
+    "3-6": {
+     "n": 1872,
+     "atClose": {
+      "won": 946,
+      "lost": 924,
+      "push": 2,
+      "rate": 0.5059,
+      "interval90": [
+       0.4869,
+       0.5249
+      ]
+     },
+     "atOpen": {
+      "won": 975,
+      "lost": 895,
+      "push": 2,
+      "rate": 0.5214,
+      "interval90": [
+       0.5024,
+       0.5403
+      ]
+     },
+     "lineMove": {
+      "toward": 0.5422,
+      "away": 0.2965,
+      "mean": 0.773
+     }
+    },
+    "6+": {
+     "n": 859,
+     "atClose": {
+      "won": 438,
+      "lost": 421,
+      "push": 0,
+      "rate": 0.5099,
+      "interval90": [
+       0.4819,
+       0.5379
+      ]
+     },
+     "atOpen": {
+      "won": 459,
+      "lost": 398,
+      "push": 2,
+      "rate": 0.5356,
+      "interval90": [
+       0.5075,
+       0.5635
+      ]
+     },
+     "lineMove": {
+      "toward": 0.5728,
+      "away": 0.3027,
+      "mean": 1.04
+     }
+    },
+    "lean 3+": {
+     "n": 2731,
+     "atClose": {
+      "won": 1384,
+      "lost": 1345,
+      "push": 2,
+      "rate": 0.5071,
+      "interval90": [
+       0.4914,
+       0.5229
+      ]
+     },
+     "atOpen": {
+      "won": 1434,
+      "lost": 1293,
+      "push": 4,
+      "rate": 0.5259,
+      "interval90": [
+       0.5101,
+       0.5415
+      ]
+     },
+     "lineMove": {
+      "toward": 0.5518,
+      "away": 0.2984,
+      "mean": 0.857
+     }
+    },
+    "all": {
+     "n": 5743,
+     "atClose": {
+      "won": 2908,
+      "lost": 2832,
+      "push": 3,
+      "rate": 0.5066,
+      "interval90": [
+       0.4958,
+       0.5175
+      ]
+     },
+     "atOpen": {
+      "won": 2982,
+      "lost": 2756,
+      "push": 5,
+      "rate": 0.5197,
+      "interval90": [
+       0.5088,
+       0.5305
+      ]
+     },
+     "lineMove": {
+      "toward": 0.5037,
+      "away": 0.3331,
+      "mean": 0.564
+     }
+    }
+   },
+   "residualSd": 17.52,
+   "meanForecastSd": 15.756
+  }
+ },
+ "compare": {
+  "tunedVsDefaults": {
+   "margin": {
+    "n": 5743,
+    "meanDelta": -0.64,
+    "interval90": [
+     -0.734,
+     -0.551
+    ],
+    "earlyWeeks": {
+     "n": 1240,
+     "meanDelta": -1.417
+    },
+    "laterWeeks": {
+     "n": 4503,
+     "meanDelta": -0.426
+    },
+    "verdict": "WINS"
+   },
+   "total": {
+    "n": 5748,
+    "meanDelta": -0.1,
+    "interval90": [
+     -0.137,
+     -0.06
+    ],
+    "earlyWeeks": {
+     "n": 1244,
+     "meanDelta": -0.155
+    },
+    "laterWeeks": {
+     "n": 4504,
+     "meanDelta": -0.085
+    },
+    "verdict": "WINS"
+   },
+   "ships": {
+    "margin": true,
+    "total": true
+   }
+  },
+  "oursVsClose": {
+   "margin": {
+    "n": 5743,
+    "meanDelta": 0.401,
+    "interval90": [
+     0.334,
+     0.469
+    ],
+    "earlyWeeks": {
+     "n": 1240,
+     "meanDelta": 0.899
+    },
+    "laterWeeks": {
+     "n": 4503,
+     "meanDelta": 0.264
+    },
+    "verdict": "LOSES"
+   },
+   "total": {
+    "n": 5748,
+    "meanDelta": 0.491,
+    "interval90": [
+     0.401,
+     0.59
+    ],
+    "earlyWeeks": {
+     "n": 1244,
+     "meanDelta": 1.101
+    },
+    "laterWeeks": {
+     "n": 4504,
+     "meanDelta": 0.323
+    },
+    "verdict": "LOSES"
+   }
+  }
+ },
+ "calibration": {
+  "spread": {
+   "k": 0.0,
+   "n": 5754,
+   "tuneWon": 0.4957,
+   "holdout": {
+    "n": 5723,
+    "won": 0.5025,
+    "kRefit": 0.0,
+    "logLikGainOverCoin": 0.0,
+    "logLikGainRaw": -163.95,
+    "reliability": [
+     {
+      "bin": "50-52%",
+      "n": 5723,
+      "expected": 0.5,
+      "won": 0.5025
+     }
+    ],
+    "fits": false
+   }
+  },
+  "total": {
+   "k": 0.0,
+   "n": 5756,
+   "tuneWon": 0.5019,
+   "holdout": {
+    "n": 5741,
+    "won": 0.4964,
+    "kRefit": 0.01,
+    "logLikGainOverCoin": 0.0,
+    "logLikGainRaw": -154.96,
+    "reliability": [
+     {
+      "bin": "50-52%",
+      "n": 5741,
+      "expected": 0.5,
+      "won": 0.4964
+     }
+    ],
+    "fits": false
+   }
+  },
+  "atOpen": {
+   "spread": {
+    "k": 0.1,
+    "n": 5750,
+    "tuneWon": 0.5075,
+    "holdout": {
+     "n": 5731,
+     "won": 0.5076,
+     "kRefit": 0.07,
+     "logLikGainOverCoin": 0.43,
+     "logLikGainRaw": -124.55,
+     "reliability": [
+      {
+       "bin": "50-52%",
+       "n": 5389,
+       "expected": 0.5067,
+       "won": 0.5077
+      },
+      {
+       "bin": "52-54%",
+       "n": 323,
+       "expected": 0.5256,
+       "won": 0.4954
+      },
+      {
+       "bin": "54-57%",
+       "n": 19,
+       "expected": 0.5458,
+       "won": 0.6842
+      }
+     ],
+     "fits": true
+    }
+   },
+   "total": {
+    "k": 0.18,
+    "n": 5756,
+    "tuneWon": 0.5155,
+    "holdout": {
+     "n": 5739,
+     "won": 0.5196,
+     "kRefit": 0.21,
+     "logLikGainOverCoin": 5.61,
+     "logLikGainRaw": -84.13,
+     "reliability": [
+      {
+       "bin": "50-52%",
+       "n": 4109,
+       "expected": 0.5092,
+       "won": 0.5142
+      },
+      {
+       "bin": "52-54%",
+       "n": 1433,
+       "expected": 0.5273,
+       "won": 0.5297
+      },
+      {
+       "bin": "54-57%",
+       "n": 192,
+       "expected": 0.5487,
+       "won": 0.5677
+      },
+      {
+       "bin": "57-100%",
+       "n": 5,
+       "expected": 0.5742,
+       "won": 0.2
+      }
+     ],
+     "fits": true
+    }
+   }
+  }
+ },
+ "trials": {
+  "margin": [
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 2.0,
+     "carry": 0.3
+    },
+    "miss": 9.768,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 2.0,
+     "carry": 0.45
+    },
+    "miss": 9.725,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 2.0,
+     "carry": 0.6
+    },
+    "miss": 9.688,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 2.0,
+     "carry": 0.75
+    },
+    "miss": 9.657,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 2.0,
+     "carry": 0.9
+    },
+    "miss": 9.633,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 2.0,
+     "carry": 1.0
+    },
+    "miss": 9.62,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 5.0,
+     "carry": 0.3
+    },
+    "miss": 9.994,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 5.0,
+     "carry": 0.45
+    },
+    "miss": 9.95,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 5.0,
+     "carry": 0.6
+    },
+    "miss": 9.912,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 5.0,
+     "carry": 0.75
+    },
+    "miss": 9.878,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 5.0,
+     "carry": 0.9
+    },
+    "miss": 9.85,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 5.0,
+     "carry": 1.0
+    },
+    "miss": 9.834,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 10.0,
+     "carry": 0.3
+    },
+    "miss": 10.341,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 10.0,
+     "carry": 0.45
+    },
+    "miss": 10.301,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 10.0,
+     "carry": 0.6
+    },
+    "miss": 10.264,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 10.0,
+     "carry": 0.75
+    },
+    "miss": 10.229,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 10.0,
+     "carry": 0.9
+    },
+    "miss": 10.197,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 10.0,
+     "carry": 1.0
+    },
+    "miss": 10.178,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 20.0,
+     "carry": 0.3
+    },
+    "miss": 10.73,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 20.0,
+     "carry": 0.45
+    },
+    "miss": 10.698,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 20.0,
+     "carry": 0.6
+    },
+    "miss": 10.668,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 20.0,
+     "carry": 0.75
+    },
+    "miss": 10.638,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 20.0,
+     "carry": 0.9
+    },
+    "miss": 10.611,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 20.0,
+     "carry": 1.0
+    },
+    "miss": 10.593,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 40.0,
+     "carry": 0.3
+    },
+    "miss": 11.089,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 40.0,
+     "carry": 0.45
+    },
+    "miss": 11.066,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 40.0,
+     "carry": 0.6
+    },
+    "miss": 11.044,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 40.0,
+     "carry": 0.75
+    },
+    "miss": 11.022,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 40.0,
+     "carry": 0.9
+    },
+    "miss": 11.001,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 40.0,
+     "carry": 1.0
+    },
+    "miss": 10.987,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 2.0,
+     "carry": 0.3
+    },
+    "miss": 9.659,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 2.0,
+     "carry": 0.45
+    },
+    "miss": 9.604,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 2.0,
+     "carry": 0.6
+    },
+    "miss": 9.555,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 2.0,
+     "carry": 0.75
+    },
+    "miss": 9.515,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 2.0,
+     "carry": 0.9
+    },
+    "miss": 9.483,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 2.0,
+     "carry": 1.0
+    },
+    "miss": 9.468,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 5.0,
+     "carry": 0.3
+    },
+    "miss": 9.856,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 5.0,
+     "carry": 0.45
+    },
+    "miss": 9.797,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 5.0,
+     "carry": 0.6
+    },
+    "miss": 9.747,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 5.0,
+     "carry": 0.75
+    },
+    "miss": 9.705,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 5.0,
+     "carry": 0.9
+    },
+    "miss": 9.671,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 5.0,
+     "carry": 1.0
+    },
+    "miss": 9.652,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 10.0,
+     "carry": 0.3
+    },
+    "miss": 10.184,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 10.0,
+     "carry": 0.45
+    },
+    "miss": 10.127,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 10.0,
+     "carry": 0.6
+    },
+    "miss": 10.075,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 10.0,
+     "carry": 0.75
+    },
+    "miss": 10.029,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 10.0,
+     "carry": 0.9
+    },
+    "miss": 9.988,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 10.0,
+     "carry": 1.0
+    },
+    "miss": 9.965,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 20.0,
+     "carry": 0.3
+    },
+    "miss": 10.586,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 20.0,
+     "carry": 0.45
+    },
+    "miss": 10.534,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 20.0,
+     "carry": 0.6
+    },
+    "miss": 10.486,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 20.0,
+     "carry": 0.75
+    },
+    "miss": 10.44,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 20.0,
+     "carry": 0.9
+    },
+    "miss": 10.398,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 20.0,
+     "carry": 1.0
+    },
+    "miss": 10.372,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 40.0,
+     "carry": 0.3
+    },
+    "miss": 10.981,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 40.0,
+     "carry": 0.45
+    },
+    "miss": 10.938,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 40.0,
+     "carry": 0.6
+    },
+    "miss": 10.897,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 40.0,
+     "carry": 0.75
+    },
+    "miss": 10.858,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 40.0,
+     "carry": 0.9
+    },
+    "miss": 10.82,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 40.0,
+     "carry": 1.0
+    },
+    "miss": 10.796,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 2.0,
+     "carry": 0.3
+    },
+    "miss": 9.582,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 2.0,
+     "carry": 0.45
+    },
+    "miss": 9.515,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 2.0,
+     "carry": 0.6
+    },
+    "miss": 9.459,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 2.0,
+     "carry": 0.75
+    },
+    "miss": 9.412,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 2.0,
+     "carry": 0.9
+    },
+    "miss": 9.377,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 2.0,
+     "carry": 1.0
+    },
+    "miss": 9.36,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 5.0,
+     "carry": 0.3
+    },
+    "miss": 9.752,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 5.0,
+     "carry": 0.45
+    },
+    "miss": 9.679,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 5.0,
+     "carry": 0.6
+    },
+    "miss": 9.615,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 5.0,
+     "carry": 0.75
+    },
+    "miss": 9.563,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 5.0,
+     "carry": 0.9
+    },
+    "miss": 9.522,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 5.0,
+     "carry": 1.0
+    },
+    "miss": 9.501,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 10.0,
+     "carry": 0.3
+    },
+    "miss": 10.063,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 10.0,
+     "carry": 0.45
+    },
+    "miss": 9.989,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 10.0,
+     "carry": 0.6
+    },
+    "miss": 9.925,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 10.0,
+     "carry": 0.75
+    },
+    "miss": 9.867,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 10.0,
+     "carry": 0.9
+    },
+    "miss": 9.818,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 10.0,
+     "carry": 1.0
+    },
+    "miss": 9.791,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 20.0,
+     "carry": 0.3
+    },
+    "miss": 10.467,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 20.0,
+     "carry": 0.45
+    },
+    "miss": 10.397,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 20.0,
+     "carry": 0.6
+    },
+    "miss": 10.334,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 20.0,
+     "carry": 0.75
+    },
+    "miss": 10.275,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 20.0,
+     "carry": 0.9
+    },
+    "miss": 10.221,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 20.0,
+     "carry": 1.0
+    },
+    "miss": 10.189,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 40.0,
+     "carry": 0.3
+    },
+    "miss": 10.882,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 40.0,
+     "carry": 0.45
+    },
+    "miss": 10.82,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 40.0,
+     "carry": 0.6
+    },
+    "miss": 10.761,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 40.0,
+     "carry": 0.75
+    },
+    "miss": 10.707,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 40.0,
+     "carry": 0.9
+    },
+    "miss": 10.657,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 40.0,
+     "carry": 1.0
+    },
+    "miss": 10.624,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 2.0,
+     "carry": 0.3
+    },
+    "miss": 9.548,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 2.0,
+     "carry": 0.45
+    },
+    "miss": 9.477,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 2.0,
+     "carry": 0.6
+    },
+    "miss": 9.418,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 2.0,
+     "carry": 0.75
+    },
+    "miss": 9.369,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 2.0,
+     "carry": 0.9
+    },
+    "miss": 9.333,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 2.0,
+     "carry": 1.0
+    },
+    "miss": 9.316,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 5.0,
+     "carry": 0.3
+    },
+    "miss": 9.697,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 5.0,
+     "carry": 0.45
+    },
+    "miss": 9.614,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 5.0,
+     "carry": 0.6
+    },
+    "miss": 9.544,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 5.0,
+     "carry": 0.75
+    },
+    "miss": 9.486,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 5.0,
+     "carry": 0.9
+    },
+    "miss": 9.441,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 5.0,
+     "carry": 1.0
+    },
+    "miss": 9.418,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 10.0,
+     "carry": 0.3
+    },
+    "miss": 9.995,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 10.0,
+     "carry": 0.45
+    },
+    "miss": 9.911,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 10.0,
+     "carry": 0.6
+    },
+    "miss": 9.837,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 10.0,
+     "carry": 0.75
+    },
+    "miss": 9.772,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 10.0,
+     "carry": 0.9
+    },
+    "miss": 9.719,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 10.0,
+     "carry": 1.0
+    },
+    "miss": 9.691,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 20.0,
+     "carry": 0.3
+    },
+    "miss": 10.398,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 20.0,
+     "carry": 0.45
+    },
+    "miss": 10.318,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 20.0,
+     "carry": 0.6
+    },
+    "miss": 10.243,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 20.0,
+     "carry": 0.75
+    },
+    "miss": 10.176,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 20.0,
+     "carry": 0.9
+    },
+    "miss": 10.119,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 20.0,
+     "carry": 1.0
+    },
+    "miss": 10.084,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 40.0,
+     "carry": 0.3
+    },
+    "miss": 10.823,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 40.0,
+     "carry": 0.45
+    },
+    "miss": 10.75,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 40.0,
+     "carry": 0.6
+    },
+    "miss": 10.682,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 40.0,
+     "carry": 0.75
+    },
+    "miss": 10.62,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 40.0,
+     "carry": 0.9
+    },
+    "miss": 10.561,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 40.0,
+     "carry": 1.0
+    },
+    "miss": 10.524,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 2.0,
+     "carry": 0.3
+    },
+    "miss": 9.522,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 2.0,
+     "carry": 0.45
+    },
+    "miss": 9.448,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 2.0,
+     "carry": 0.6
+    },
+    "miss": 9.387,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 2.0,
+     "carry": 0.75
+    },
+    "miss": 9.338,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 2.0,
+     "carry": 0.9
+    },
+    "miss": 9.303,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 2.0,
+     "carry": 1.0
+    },
+    "miss": 9.287,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 5.0,
+     "carry": 0.3
+    },
+    "miss": 9.642,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 5.0,
+     "carry": 0.45
+    },
+    "miss": 9.551,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 5.0,
+     "carry": 0.6
+    },
+    "miss": 9.475,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 5.0,
+     "carry": 0.75
+    },
+    "miss": 9.412,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 5.0,
+     "carry": 0.9
+    },
+    "miss": 9.364,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 5.0,
+     "carry": 1.0
+    },
+    "miss": 9.34,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 10.0,
+     "carry": 0.3
+    },
+    "miss": 9.922,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 10.0,
+     "carry": 0.45
+    },
+    "miss": 9.826,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 10.0,
+     "carry": 0.6
+    },
+    "miss": 9.742,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 10.0,
+     "carry": 0.75
+    },
+    "miss": 9.671,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 10.0,
+     "carry": 0.9
+    },
+    "miss": 9.615,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 10.0,
+     "carry": 1.0
+    },
+    "miss": 9.584,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 20.0,
+     "carry": 0.3
+    },
+    "miss": 10.322,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 20.0,
+     "carry": 0.45
+    },
+    "miss": 10.227,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 20.0,
+     "carry": 0.6
+    },
+    "miss": 10.142,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 20.0,
+     "carry": 0.75
+    },
+    "miss": 10.068,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 20.0,
+     "carry": 0.9
+    },
+    "miss": 10.005,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 20.0,
+     "carry": 1.0
+    },
+    "miss": 9.967,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 40.0,
+     "carry": 0.3
+    },
+    "miss": 10.758,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 40.0,
+     "carry": 0.45
+    },
+    "miss": 10.672,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 40.0,
+     "carry": 0.6
+    },
+    "miss": 10.594,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 40.0,
+     "carry": 0.75
+    },
+    "miss": 10.521,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 40.0,
+     "carry": 0.9
+    },
+    "miss": 10.454,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 40.0,
+     "carry": 1.0
+    },
+    "miss": 10.412,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 2.0,
+     "carry": 0.3
+    },
+    "miss": 9.513,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 2.0,
+     "carry": 0.45
+    },
+    "miss": 9.438,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 2.0,
+     "carry": 0.6
+    },
+    "miss": 9.377,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 2.0,
+     "carry": 0.75
+    },
+    "miss": 9.328,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 2.0,
+     "carry": 0.9
+    },
+    "miss": 9.295,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 2.0,
+     "carry": 1.0
+    },
+    "miss": 9.28,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 5.0,
+     "carry": 0.3
+    },
+    "miss": 9.618,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 5.0,
+     "carry": 0.45
+    },
+    "miss": 9.523,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 5.0,
+     "carry": 0.6
+    },
+    "miss": 9.443,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 5.0,
+     "carry": 0.75
+    },
+    "miss": 9.378,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 5.0,
+     "carry": 0.9
+    },
+    "miss": 9.33,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 5.0,
+     "carry": 1.0
+    },
+    "miss": 9.306,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 10.0,
+     "carry": 0.3
+    },
+    "miss": 9.884,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 10.0,
+     "carry": 0.45
+    },
+    "miss": 9.782,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 10.0,
+     "carry": 0.6
+    },
+    "miss": 9.693,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 10.0,
+     "carry": 0.75
+    },
+    "miss": 9.62,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 10.0,
+     "carry": 0.9
+    },
+    "miss": 9.562,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 10.0,
+     "carry": 1.0
+    },
+    "miss": 9.53,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 20.0,
+     "carry": 0.3
+    },
+    "miss": 10.281,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 20.0,
+     "carry": 0.45
+    },
+    "miss": 10.178,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 20.0,
+     "carry": 0.6
+    },
+    "miss": 10.088,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 20.0,
+     "carry": 0.75
+    },
+    "miss": 10.009,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 20.0,
+     "carry": 0.9
+    },
+    "miss": 9.942,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 20.0,
+     "carry": 1.0
+    },
+    "miss": 9.903,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 40.0,
+     "carry": 0.3
+    },
+    "miss": 10.722,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 40.0,
+     "carry": 0.45
+    },
+    "miss": 10.629,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 40.0,
+     "carry": 0.6
+    },
+    "miss": 10.544,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 40.0,
+     "carry": 0.75
+    },
+    "miss": 10.466,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 40.0,
+     "carry": 0.9
+    },
+    "miss": 10.393,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 40.0,
+     "carry": 1.0
+    },
+    "miss": 10.35,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 2.0,
+     "carry": 0.3
+    },
+    "miss": 9.507,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 2.0,
+     "carry": 0.45
+    },
+    "miss": 9.432,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 2.0,
+     "carry": 0.6
+    },
+    "miss": 9.369,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 2.0,
+     "carry": 0.75
+    },
+    "miss": 9.322,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 2.0,
+     "carry": 0.9
+    },
+    "miss": 9.289,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 2.0,
+     "carry": 1.0
+    },
+    "miss": 9.277,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 5.0,
+     "carry": 0.3
+    },
+    "miss": 9.595,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 5.0,
+     "carry": 0.45
+    },
+    "miss": 9.497,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 5.0,
+     "carry": 0.6
+    },
+    "miss": 9.414,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 5.0,
+     "carry": 0.75
+    },
+    "miss": 9.349,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 5.0,
+     "carry": 0.9
+    },
+    "miss": 9.3,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 5.0,
+     "carry": 1.0
+    },
+    "miss": 9.276,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 10.0,
+     "carry": 0.3
+    },
+    "miss": 9.848,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 10.0,
+     "carry": 0.45
+    },
+    "miss": 9.738,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 10.0,
+     "carry": 0.6
+    },
+    "miss": 9.644,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 10.0,
+     "carry": 0.75
+    },
+    "miss": 9.569,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 10.0,
+     "carry": 0.9
+    },
+    "miss": 9.509,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 10.0,
+     "carry": 1.0
+    },
+    "miss": 9.476,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 20.0,
+     "carry": 0.3
+    },
+    "miss": 10.238,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 20.0,
+     "carry": 0.45
+    },
+    "miss": 10.127,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 20.0,
+     "carry": 0.6
+    },
+    "miss": 10.031,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 20.0,
+     "carry": 0.75
+    },
+    "miss": 9.947,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 20.0,
+     "carry": 0.9
+    },
+    "miss": 9.876,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 20.0,
+     "carry": 1.0
+    },
+    "miss": 9.837,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 40.0,
+     "carry": 0.3
+    },
+    "miss": 10.684,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 40.0,
+     "carry": 0.45
+    },
+    "miss": 10.582,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 40.0,
+     "carry": 0.6
+    },
+    "miss": 10.49,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 40.0,
+     "carry": 0.75
+    },
+    "miss": 10.405,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 40.0,
+     "carry": 0.9
+    },
+    "miss": 10.329,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 40.0,
+     "carry": 1.0
+    },
+    "miss": 10.284,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 2.0,
+     "carry": 0.3
+    },
+    "miss": 9.504,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 2.0,
+     "carry": 0.45
+    },
+    "miss": 9.428,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 2.0,
+     "carry": 0.6
+    },
+    "miss": 9.365,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 2.0,
+     "carry": 0.75
+    },
+    "miss": 9.319,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 2.0,
+     "carry": 0.9
+    },
+    "miss": 9.288,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 2.0,
+     "carry": 1.0
+    },
+    "miss": 9.277,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 5.0,
+     "carry": 0.3
+    },
+    "miss": 9.575,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 5.0,
+     "carry": 0.45
+    },
+    "miss": 9.473,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 5.0,
+     "carry": 0.6
+    },
+    "miss": 9.389,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 5.0,
+     "carry": 0.75
+    },
+    "miss": 9.323,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 5.0,
+     "carry": 0.9
+    },
+    "miss": 9.274,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 5.0,
+     "carry": 1.0
+    },
+    "miss": 9.25,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 10.0,
+     "carry": 0.3
+    },
+    "miss": 9.81,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 10.0,
+     "carry": 0.45
+    },
+    "miss": 9.694,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 10.0,
+     "carry": 0.6
+    },
+    "miss": 9.597,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 10.0,
+     "carry": 0.75
+    },
+    "miss": 9.519,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 10.0,
+     "carry": 0.9
+    },
+    "miss": 9.456,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 10.0,
+     "carry": 1.0
+    },
+    "miss": 9.424,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 20.0,
+     "carry": 0.3
+    },
+    "miss": 10.193,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 20.0,
+     "carry": 0.45
+    },
+    "miss": 10.074,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 20.0,
+     "carry": 0.6
+    },
+    "miss": 9.971,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 20.0,
+     "carry": 0.75
+    },
+    "miss": 9.883,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 20.0,
+     "carry": 0.9
+    },
+    "miss": 9.808,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 20.0,
+     "carry": 1.0
+    },
+    "miss": 9.768,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 40.0,
+     "carry": 0.3
+    },
+    "miss": 10.641,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 40.0,
+     "carry": 0.45
+    },
+    "miss": 10.531,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 40.0,
+     "carry": 0.6
+    },
+    "miss": 10.431,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 40.0,
+     "carry": 0.75
+    },
+    "miss": 10.34,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 40.0,
+     "carry": 0.9
+    },
+    "miss": 10.26,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 40.0,
+     "carry": 1.0
+    },
+    "miss": 10.215,
+    "n": 5762
+   }
+  ],
+  "total": [
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 2.0,
+     "carry": 0.3
+    },
+    "miss": 13.155,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 2.0,
+     "carry": 0.45
+    },
+    "miss": 13.146,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 2.0,
+     "carry": 0.6
+    },
+    "miss": 13.14,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 2.0,
+     "carry": 0.75
+    },
+    "miss": 13.143,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 2.0,
+     "carry": 0.9
+    },
+    "miss": 13.153,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 2.0,
+     "carry": 1.0
+    },
+    "miss": 13.164,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 5.0,
+     "carry": 0.3
+    },
+    "miss": 13.202,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 5.0,
+     "carry": 0.45
+    },
+    "miss": 13.174,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 5.0,
+     "carry": 0.6
+    },
+    "miss": 13.152,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 5.0,
+     "carry": 0.75
+    },
+    "miss": 13.137,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 5.0,
+     "carry": 0.9
+    },
+    "miss": 13.129,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 5.0,
+     "carry": 1.0
+    },
+    "miss": 13.128,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 10.0,
+     "carry": 0.3
+    },
+    "miss": 13.466,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 10.0,
+     "carry": 0.45
+    },
+    "miss": 13.428,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 10.0,
+     "carry": 0.6
+    },
+    "miss": 13.395,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 10.0,
+     "carry": 0.75
+    },
+    "miss": 13.366,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 10.0,
+     "carry": 0.9
+    },
+    "miss": 13.343,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 10.0,
+     "carry": 1.0
+    },
+    "miss": 13.33,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 20.0,
+     "carry": 0.3
+    },
+    "miss": 13.841,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 20.0,
+     "carry": 0.45
+    },
+    "miss": 13.806,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 20.0,
+     "carry": 0.6
+    },
+    "miss": 13.773,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 20.0,
+     "carry": 0.75
+    },
+    "miss": 13.741,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 20.0,
+     "carry": 0.9
+    },
+    "miss": 13.713,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 20.0,
+     "carry": 1.0
+    },
+    "miss": 13.696,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 40.0,
+     "carry": 0.3
+    },
+    "miss": 14.188,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 40.0,
+     "carry": 0.45
+    },
+    "miss": 14.162,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 40.0,
+     "carry": 0.6
+    },
+    "miss": 14.138,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 40.0,
+     "carry": 0.75
+    },
+    "miss": 14.114,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 40.0,
+     "carry": 0.9
+    },
+    "miss": 14.09,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 20,
+     "ridge": 40.0,
+     "carry": 1.0
+    },
+    "miss": 14.075,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 2.0,
+     "carry": 0.3
+    },
+    "miss": 13.154,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 2.0,
+     "carry": 0.45
+    },
+    "miss": 13.145,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 2.0,
+     "carry": 0.6
+    },
+    "miss": 13.143,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 2.0,
+     "carry": 0.75
+    },
+    "miss": 13.148,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 2.0,
+     "carry": 0.9
+    },
+    "miss": 13.159,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 2.0,
+     "carry": 1.0
+    },
+    "miss": 13.17,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 5.0,
+     "carry": 0.3
+    },
+    "miss": 13.139,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 5.0,
+     "carry": 0.45
+    },
+    "miss": 13.112,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 5.0,
+     "carry": 0.6
+    },
+    "miss": 13.093,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 5.0,
+     "carry": 0.75
+    },
+    "miss": 13.083,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 5.0,
+     "carry": 0.9
+    },
+    "miss": 13.081,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 5.0,
+     "carry": 1.0
+    },
+    "miss": 13.084,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 10.0,
+     "carry": 0.3
+    },
+    "miss": 13.341,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 10.0,
+     "carry": 0.45
+    },
+    "miss": 13.298,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 10.0,
+     "carry": 0.6
+    },
+    "miss": 13.262,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 10.0,
+     "carry": 0.75
+    },
+    "miss": 13.235,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 10.0,
+     "carry": 0.9
+    },
+    "miss": 13.215,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 10.0,
+     "carry": 1.0
+    },
+    "miss": 13.206,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 20.0,
+     "carry": 0.3
+    },
+    "miss": 13.692,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 20.0,
+     "carry": 0.45
+    },
+    "miss": 13.645,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 20.0,
+     "carry": 0.6
+    },
+    "miss": 13.601,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 20.0,
+     "carry": 0.75
+    },
+    "miss": 13.563,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 20.0,
+     "carry": 0.9
+    },
+    "miss": 13.528,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 20.0,
+     "carry": 1.0
+    },
+    "miss": 13.507,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 40.0,
+     "carry": 0.3
+    },
+    "miss": 14.067,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 40.0,
+     "carry": 0.45
+    },
+    "miss": 14.027,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 40.0,
+     "carry": 0.6
+    },
+    "miss": 13.989,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 40.0,
+     "carry": 0.75
+    },
+    "miss": 13.953,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 40.0,
+     "carry": 0.9
+    },
+    "miss": 13.919,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 30,
+     "ridge": 40.0,
+     "carry": 1.0
+    },
+    "miss": 13.897,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 2.0,
+     "carry": 0.3
+    },
+    "miss": 13.177,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 2.0,
+     "carry": 0.45
+    },
+    "miss": 13.168,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 2.0,
+     "carry": 0.6
+    },
+    "miss": 13.165,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 2.0,
+     "carry": 0.75
+    },
+    "miss": 13.168,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 2.0,
+     "carry": 0.9
+    },
+    "miss": 13.178,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 2.0,
+     "carry": 1.0
+    },
+    "miss": 13.189,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 5.0,
+     "carry": 0.3
+    },
+    "miss": 13.123,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 5.0,
+     "carry": 0.45
+    },
+    "miss": 13.096,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 5.0,
+     "carry": 0.6
+    },
+    "miss": 13.078,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 5.0,
+     "carry": 0.75
+    },
+    "miss": 13.071,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 5.0,
+     "carry": 0.9
+    },
+    "miss": 13.073,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 5.0,
+     "carry": 1.0
+    },
+    "miss": 13.08,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 10.0,
+     "carry": 0.3
+    },
+    "miss": 13.271,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 10.0,
+     "carry": 0.45
+    },
+    "miss": 13.226,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 10.0,
+     "carry": 0.6
+    },
+    "miss": 13.193,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 10.0,
+     "carry": 0.75
+    },
+    "miss": 13.168,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 10.0,
+     "carry": 0.9
+    },
+    "miss": 13.154,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 10.0,
+     "carry": 1.0
+    },
+    "miss": 13.152,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 20.0,
+     "carry": 0.3
+    },
+    "miss": 13.58,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 20.0,
+     "carry": 0.45
+    },
+    "miss": 13.523,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 20.0,
+     "carry": 0.6
+    },
+    "miss": 13.474,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 20.0,
+     "carry": 0.75
+    },
+    "miss": 13.432,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 20.0,
+     "carry": 0.9
+    },
+    "miss": 13.397,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 20.0,
+     "carry": 1.0
+    },
+    "miss": 13.379,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 40.0,
+     "carry": 0.3
+    },
+    "miss": 13.959,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 40.0,
+     "carry": 0.45
+    },
+    "miss": 13.907,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 40.0,
+     "carry": 0.6
+    },
+    "miss": 13.857,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 40.0,
+     "carry": 0.75
+    },
+    "miss": 13.81,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 40.0,
+     "carry": 0.9
+    },
+    "miss": 13.766,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 45,
+     "ridge": 40.0,
+     "carry": 1.0
+    },
+    "miss": 13.74,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 2.0,
+     "carry": 0.3
+    },
+    "miss": 13.197,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 2.0,
+     "carry": 0.45
+    },
+    "miss": 13.186,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 2.0,
+     "carry": 0.6
+    },
+    "miss": 13.183,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 2.0,
+     "carry": 0.75
+    },
+    "miss": 13.184,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 2.0,
+     "carry": 0.9
+    },
+    "miss": 13.193,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 2.0,
+     "carry": 1.0
+    },
+    "miss": 13.205,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 5.0,
+     "carry": 0.3
+    },
+    "miss": 13.123,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 5.0,
+     "carry": 0.45
+    },
+    "miss": 13.096,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 5.0,
+     "carry": 0.6
+    },
+    "miss": 13.079,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 5.0,
+     "carry": 0.75
+    },
+    "miss": 13.073,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 5.0,
+     "carry": 0.9
+    },
+    "miss": 13.077,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 5.0,
+     "carry": 1.0
+    },
+    "miss": 13.085,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 10.0,
+     "carry": 0.3
+    },
+    "miss": 13.246,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 10.0,
+     "carry": 0.45
+    },
+    "miss": 13.201,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 10.0,
+     "carry": 0.6
+    },
+    "miss": 13.168,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 10.0,
+     "carry": 0.75
+    },
+    "miss": 13.145,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 10.0,
+     "carry": 0.9
+    },
+    "miss": 13.137,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 10.0,
+     "carry": 1.0
+    },
+    "miss": 13.138,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 20.0,
+     "carry": 0.3
+    },
+    "miss": 13.524,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 20.0,
+     "carry": 0.45
+    },
+    "miss": 13.463,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 20.0,
+     "carry": 0.6
+    },
+    "miss": 13.413,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 20.0,
+     "carry": 0.75
+    },
+    "miss": 13.372,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 20.0,
+     "carry": 0.9
+    },
+    "miss": 13.342,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 20.0,
+     "carry": 1.0
+    },
+    "miss": 13.327,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 40.0,
+     "carry": 0.3
+    },
+    "miss": 13.897,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 40.0,
+     "carry": 0.45
+    },
+    "miss": 13.837,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 40.0,
+     "carry": 0.6
+    },
+    "miss": 13.781,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 40.0,
+     "carry": 0.75
+    },
+    "miss": 13.729,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 40.0,
+     "carry": 0.9
+    },
+    "miss": 13.683,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 60,
+     "ridge": 40.0,
+     "carry": 1.0
+    },
+    "miss": 13.655,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 2.0,
+     "carry": 0.3
+    },
+    "miss": 13.224,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 2.0,
+     "carry": 0.45
+    },
+    "miss": 13.213,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 2.0,
+     "carry": 0.6
+    },
+    "miss": 13.208,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 2.0,
+     "carry": 0.75
+    },
+    "miss": 13.21,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 2.0,
+     "carry": 0.9
+    },
+    "miss": 13.218,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 2.0,
+     "carry": 1.0
+    },
+    "miss": 13.23,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 5.0,
+     "carry": 0.3
+    },
+    "miss": 13.131,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 5.0,
+     "carry": 0.45
+    },
+    "miss": 13.104,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 5.0,
+     "carry": 0.6
+    },
+    "miss": 13.087,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 5.0,
+     "carry": 0.75
+    },
+    "miss": 13.082,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 5.0,
+     "carry": 0.9
+    },
+    "miss": 13.087,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 5.0,
+     "carry": 1.0
+    },
+    "miss": 13.098,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 10.0,
+     "carry": 0.3
+    },
+    "miss": 13.228,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 10.0,
+     "carry": 0.45
+    },
+    "miss": 13.183,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 10.0,
+     "carry": 0.6
+    },
+    "miss": 13.15,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 10.0,
+     "carry": 0.75
+    },
+    "miss": 13.131,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 10.0,
+     "carry": 0.9
+    },
+    "miss": 13.127,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 10.0,
+     "carry": 1.0
+    },
+    "miss": 13.131,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 20.0,
+     "carry": 0.3
+    },
+    "miss": 13.473,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 20.0,
+     "carry": 0.45
+    },
+    "miss": 13.41,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 20.0,
+     "carry": 0.6
+    },
+    "miss": 13.361,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 20.0,
+     "carry": 0.75
+    },
+    "miss": 13.324,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 20.0,
+     "carry": 0.9
+    },
+    "miss": 13.297,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 20.0,
+     "carry": 1.0
+    },
+    "miss": 13.285,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 40.0,
+     "carry": 0.3
+    },
+    "miss": 13.83,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 40.0,
+     "carry": 0.45
+    },
+    "miss": 13.763,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 40.0,
+     "carry": 0.6
+    },
+    "miss": 13.701,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 40.0,
+     "carry": 0.75
+    },
+    "miss": 13.647,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 40.0,
+     "carry": 0.9
+    },
+    "miss": 13.6,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 90,
+     "ridge": 40.0,
+     "carry": 1.0
+    },
+    "miss": 13.572,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 2.0,
+     "carry": 0.3
+    },
+    "miss": 13.241,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 2.0,
+     "carry": 0.45
+    },
+    "miss": 13.23,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 2.0,
+     "carry": 0.6
+    },
+    "miss": 13.225,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 2.0,
+     "carry": 0.75
+    },
+    "miss": 13.226,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 2.0,
+     "carry": 0.9
+    },
+    "miss": 13.235,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 2.0,
+     "carry": 1.0
+    },
+    "miss": 13.247,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 5.0,
+     "carry": 0.3
+    },
+    "miss": 13.138,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 5.0,
+     "carry": 0.45
+    },
+    "miss": 13.111,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 5.0,
+     "carry": 0.6
+    },
+    "miss": 13.095,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 5.0,
+     "carry": 0.75
+    },
+    "miss": 13.09,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 5.0,
+     "carry": 0.9
+    },
+    "miss": 13.096,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 5.0,
+     "carry": 1.0
+    },
+    "miss": 13.108,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 10.0,
+     "carry": 0.3
+    },
+    "miss": 13.221,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 10.0,
+     "carry": 0.45
+    },
+    "miss": 13.177,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 10.0,
+     "carry": 0.6
+    },
+    "miss": 13.144,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 10.0,
+     "carry": 0.75
+    },
+    "miss": 13.127,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 10.0,
+     "carry": 0.9
+    },
+    "miss": 13.125,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 10.0,
+     "carry": 1.0
+    },
+    "miss": 13.132,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 20.0,
+     "carry": 0.3
+    },
+    "miss": 13.449,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 20.0,
+     "carry": 0.45
+    },
+    "miss": 13.387,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 20.0,
+     "carry": 0.6
+    },
+    "miss": 13.339,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 20.0,
+     "carry": 0.75
+    },
+    "miss": 13.303,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 20.0,
+     "carry": 0.9
+    },
+    "miss": 13.279,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 20.0,
+     "carry": 1.0
+    },
+    "miss": 13.27,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 40.0,
+     "carry": 0.3
+    },
+    "miss": 13.796,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 40.0,
+     "carry": 0.45
+    },
+    "miss": 13.725,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 40.0,
+     "carry": 0.6
+    },
+    "miss": 13.662,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 40.0,
+     "carry": 0.75
+    },
+    "miss": 13.606,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 40.0,
+     "carry": 0.9
+    },
+    "miss": 13.56,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 120,
+     "ridge": 40.0,
+     "carry": 1.0
+    },
+    "miss": 13.534,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 2.0,
+     "carry": 0.3
+    },
+    "miss": 13.261,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 2.0,
+     "carry": 0.45
+    },
+    "miss": 13.249,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 2.0,
+     "carry": 0.6
+    },
+    "miss": 13.245,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 2.0,
+     "carry": 0.75
+    },
+    "miss": 13.246,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 2.0,
+     "carry": 0.9
+    },
+    "miss": 13.255,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 2.0,
+     "carry": 1.0
+    },
+    "miss": 13.267,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 5.0,
+     "carry": 0.3
+    },
+    "miss": 13.149,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 5.0,
+     "carry": 0.45
+    },
+    "miss": 13.122,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 5.0,
+     "carry": 0.6
+    },
+    "miss": 13.106,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 5.0,
+     "carry": 0.75
+    },
+    "miss": 13.102,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 5.0,
+     "carry": 0.9
+    },
+    "miss": 13.11,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 5.0,
+     "carry": 1.0
+    },
+    "miss": 13.121,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 10.0,
+     "carry": 0.3
+    },
+    "miss": 13.217,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 10.0,
+     "carry": 0.45
+    },
+    "miss": 13.173,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 10.0,
+     "carry": 0.6
+    },
+    "miss": 13.141,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 10.0,
+     "carry": 0.75
+    },
+    "miss": 13.127,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 10.0,
+     "carry": 0.9
+    },
+    "miss": 13.128,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 10.0,
+     "carry": 1.0
+    },
+    "miss": 13.137,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 20.0,
+     "carry": 0.3
+    },
+    "miss": 13.429,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 20.0,
+     "carry": 0.45
+    },
+    "miss": 13.367,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 20.0,
+     "carry": 0.6
+    },
+    "miss": 13.319,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 20.0,
+     "carry": 0.75
+    },
+    "miss": 13.285,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 20.0,
+     "carry": 0.9
+    },
+    "miss": 13.264,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 20.0,
+     "carry": 1.0
+    },
+    "miss": 13.26,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 40.0,
+     "carry": 0.3
+    },
+    "miss": 13.762,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 40.0,
+     "carry": 0.45
+    },
+    "miss": 13.688,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 40.0,
+     "carry": 0.6
+    },
+    "miss": 13.623,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 40.0,
+     "carry": 0.75
+    },
+    "miss": 13.568,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 40.0,
+     "carry": 0.9
+    },
+    "miss": 13.524,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 180,
+     "ridge": 40.0,
+     "carry": 1.0
+    },
+    "miss": 13.501,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 2.0,
+     "carry": 0.3
+    },
+    "miss": 13.284,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 2.0,
+     "carry": 0.45
+    },
+    "miss": 13.272,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 2.0,
+     "carry": 0.6
+    },
+    "miss": 13.267,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 2.0,
+     "carry": 0.75
+    },
+    "miss": 13.269,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 2.0,
+     "carry": 0.9
+    },
+    "miss": 13.279,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 2.0,
+     "carry": 1.0
+    },
+    "miss": 13.291,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 5.0,
+     "carry": 0.3
+    },
+    "miss": 13.163,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 5.0,
+     "carry": 0.45
+    },
+    "miss": 13.136,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 5.0,
+     "carry": 0.6
+    },
+    "miss": 13.121,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 5.0,
+     "carry": 0.75
+    },
+    "miss": 13.118,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 5.0,
+     "carry": 0.9
+    },
+    "miss": 13.126,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 5.0,
+     "carry": 1.0
+    },
+    "miss": 13.139,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 10.0,
+     "carry": 0.3
+    },
+    "miss": 13.217,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 10.0,
+     "carry": 0.45
+    },
+    "miss": 13.173,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 10.0,
+     "carry": 0.6
+    },
+    "miss": 13.142,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 10.0,
+     "carry": 0.75
+    },
+    "miss": 13.131,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 10.0,
+     "carry": 0.9
+    },
+    "miss": 13.134,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 10.0,
+     "carry": 1.0
+    },
+    "miss": 13.146,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 20.0,
+     "carry": 0.3
+    },
+    "miss": 13.41,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 20.0,
+     "carry": 0.45
+    },
+    "miss": 13.349,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 20.0,
+     "carry": 0.6
+    },
+    "miss": 13.302,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 20.0,
+     "carry": 0.75
+    },
+    "miss": 13.27,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 20.0,
+     "carry": 0.9
+    },
+    "miss": 13.254,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 20.0,
+     "carry": 1.0
+    },
+    "miss": 13.254,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 40.0,
+     "carry": 0.3
+    },
+    "miss": 13.727,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 40.0,
+     "carry": 0.45
+    },
+    "miss": 13.651,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 40.0,
+     "carry": 0.6
+    },
+    "miss": 13.585,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 40.0,
+     "carry": 0.75
+    },
+    "miss": 13.532,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 40.0,
+     "carry": 0.9
+    },
+    "miss": 13.491,
+    "n": 5762
+   },
+   {
+    "params": {
+     "halfLife": 365,
+     "ridge": 40.0,
+     "carry": 1.0
+    },
+    "miss": 13.471,
+    "n": 5762
+   }
+  ]
+ },
+ "looks": [
+  {
+   "at": "2026-09-24T13:21:31+00:00",
+   "what": "tuned setting, once",
+   "season": 2026
+  }
+ ]
+}

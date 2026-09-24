@@ -239,5 +239,18 @@ class GradingTests(unittest.TestCase):
             self.assertEqual(r['openMargin'], 2.5)
 
 
+class RecordTests(unittest.TestCase):
+    def test_shipped_parameters_are_the_recorded_tuning(self):
+        """Changing PARAMS without a new tuning record (and its look at the holdout) fails here."""
+        for league in ('NBA', 'CBB'):
+            path = hm.OUT / f'hoops-{league.lower()}.json'
+            if not path.exists():
+                continue
+            record = hm.json.loads(path.read_text(encoding='utf-8'))
+            self.assertEqual(hm.params_hash(hm.PARAMS[league]), record['paramsHash'], league)
+            self.assertEqual(record['chosen'], hm.PARAMS[league])
+            self.assertGreaterEqual(len(record['looks']), 1)
+
+
 if __name__ == '__main__':
     unittest.main()
