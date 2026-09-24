@@ -38,6 +38,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
+          # The branch as it is now, not the commit that triggered the run: runs queue one at a time, and a run
+          # started from an older commit would redo the previous run's appends and conflict with them.
+          ref: main
           fetch-depth: 2
       - uses: actions/setup-python@v6
         with:

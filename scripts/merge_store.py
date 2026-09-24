@@ -1,6 +1,6 @@
 """Resolve a git rebase or merge that stopped on the append-only price stores. Stdlib only.
 
-Two writers append to data/odds and data/prop-odds: the hosted workflow and the desk on the owner's
+Two writers append to the stores (data/odds, data/prop-odds and the others in STORES): the hosted workflow and the desk on the owner's
 machine. When both capture inside the same few minutes, whichever pushes second is rejected, and its
 rebase onto the other stops on the same three files: the .jsonl records (both sides appended), the
 ledger (each side's byte-exact prefix commitment) and the status file (each side's count of the day).
@@ -25,7 +25,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import boxscores
 
 ROOT = Path(__file__).resolve().parents[1]
-STORES = ('data/odds', 'data/prop-odds')
+STORES = ('data/odds', 'data/prop-odds', 'data/props', 'data/forecasts', 'data/weather', 'data/boxscores')
+# Every append-only store two runs can both extend. A conflict anywhere else still stops the rebase for a person.
 
 
 def git(*args, cwd=ROOT):
@@ -46,11 +47,18 @@ def lines_of(text):
     return [line.rstrip('\r\n') for line in (text or '').splitlines() if line.strip()]
 
 
+STAMPS = ('retrievedAt', 'publishedAt', 'capturedAt', 'observedAt')
+
+
 def retrieved(line):
+    """The moment a store line was taken, whichever of the stores' timestamp fields it carries."""
     try:
-        return str(json.loads(line).get('retrievedAt') or '')
-    except (ValueError, AttributeError):
+        record = json.loads(line)
+    except ValueError:
         return ''
+    if not isinstance(record, dict):
+        return ''
+    return str(next((record[k] for k in STAMPS if record.get(k)), '') or '')
 
 
 def merge_lines(base, ours, theirs):
