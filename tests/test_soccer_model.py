@@ -333,8 +333,8 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual(looked['holdout']['evaluation']['matches'], 30)
         self.assertEqual(sorted(looked['verdict']), sorted(sm.MARKETS))
         for market, verdict in looked['verdict'].items():
-            self.assertIn('publish', verdict)
-            self.assertFalse(verdict['publish'], f'{market}: 30 matches is never a sample')
+            self.assertIn('clearsBar', verdict)
+            self.assertFalse(verdict['clearsBar'], f'{market}: 30 matches is never a sample')
         json.dumps(looked)  # the record is plain JSON
 
 

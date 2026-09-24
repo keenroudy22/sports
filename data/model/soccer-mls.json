@@ -1113,5 +1113,357 @@
    "open": null
   }
  },
- "looks": []
+ "looks": [
+  {
+   "at": "2026-09-24T12:46:26+00:00",
+   "season": "2025"
+  }
+ ],
+ "holdout": {
+  "season": "2025",
+  "store": {
+   "file": "data/soccer/mls.jsonl",
+   "lines": 4832,
+   "sha256": "c3eb7f7a0789785fadd9f54ce5c527a9bf43e8f3cbe82cdc1226ec5dbbf61c63"
+  },
+  "evaluation": {
+   "matches": 540,
+   "accuracy": {
+    "1x2": {
+     "n": 540,
+     "logLoss": {
+      "ours": 1.04909,
+      "close": 1.02521,
+      "calibrated": 1.02543
+     },
+     "brier": {
+      "ours": 0.63132,
+      "close": 0.61467,
+      "calibrated": 0.61481
+     },
+     "oursMinusClose": {
+      "mean": 0.02388,
+      "interval90": [
+       0.01157,
+       0.03655
+      ]
+     }
+    }
+   },
+   "leans": {
+    "1x2": {
+     "close": {
+      "2": {
+       "bets": 476,
+       "meanEdge": 7.26,
+       "primary": {
+        "n": 476,
+        "won": 129,
+        "lost": 347,
+        "pushed": 0,
+        "units": -46.71,
+        "roi": -9.81,
+        "meanOdds": 3.782,
+        "roiInterval90": [
+         -22.05,
+         2.17
+        ]
+       },
+       "average": {
+        "n": 475,
+        "won": 128,
+        "lost": 347,
+        "pushed": 0,
+        "units": -66.56,
+        "roi": -14.01,
+        "meanOdds": 3.637,
+        "roiInterval90": [
+         -25.45,
+         -1.49
+        ]
+       }
+      },
+      "4": {
+       "bets": 353,
+       "meanEdge": 8.76,
+       "primary": {
+        "n": 353,
+        "won": 93,
+        "lost": 260,
+        "pushed": 0,
+        "units": -33.53,
+        "roi": -9.5,
+        "meanOdds": 3.86,
+        "roiInterval90": [
+         -24.43,
+         5.09
+        ]
+       },
+       "average": {
+        "n": 352,
+        "won": 92,
+        "lost": 260,
+        "pushed": 0,
+        "units": -49.76,
+        "roi": -14.14,
+        "meanOdds": 3.705,
+        "roiInterval90": [
+         -27.49,
+         -0.3
+        ]
+       }
+      },
+      "6": {
+       "bets": 266,
+       "meanEdge": 9.98,
+       "primary": {
+        "n": 266,
+        "won": 75,
+        "lost": 191,
+        "pushed": 0,
+        "units": 0.04,
+        "roi": 0.02,
+        "meanOdds": 3.934,
+        "roiInterval90": [
+         -18.44,
+         19.41
+        ]
+       },
+       "average": {
+        "n": 265,
+        "won": 74,
+        "lost": 191,
+        "pushed": 0,
+        "units": -14.2,
+        "roi": -5.36,
+        "meanOdds": 3.782,
+        "roiInterval90": [
+         -22.38,
+         12.51
+        ]
+       }
+      }
+     }
+    },
+    "dnb": {
+     "close": {
+      "2": {
+       "bets": 459,
+       "meanEdge": 9.0,
+       "primary": {
+        "n": 459,
+        "won": 119,
+        "lost": 227,
+        "pushed": 113,
+        "units": -42.74,
+        "roi": -9.31,
+        "meanOdds": 2.895,
+        "roiInterval90": [
+         -17.75,
+         -0.42
+        ]
+       },
+       "average": {
+        "n": 458,
+        "won": 118,
+        "lost": 227,
+        "pushed": 113,
+        "units": -59.3,
+        "roi": -12.95,
+        "meanOdds": 2.762,
+        "roiInterval90": [
+         -20.95,
+         -4.66
+        ]
+       }
+      },
+      "4": {
+       "bets": 372,
+       "meanEdge": 10.42,
+       "primary": {
+        "n": 372,
+        "won": 95,
+        "lost": 180,
+        "pushed": 97,
+        "units": -28.4,
+        "roi": -7.64,
+        "meanOdds": 2.962,
+        "roiInterval90": [
+         -18.31,
+         3.01
+        ]
+       },
+       "average": {
+        "n": 371,
+        "won": 94,
+        "lost": 180,
+        "pushed": 97,
+        "units": -42.42,
+        "roi": -11.43,
+        "meanOdds": 2.826,
+        "roiInterval90": [
+         -21.51,
+         -2.16
+        ]
+       }
+      },
+      "6": {
+       "bets": 304,
+       "meanEdge": 11.63,
+       "primary": {
+        "n": 304,
+        "won": 80,
+        "lost": 146,
+        "pushed": 78,
+        "units": -10.36,
+        "roi": -3.41,
+        "meanOdds": 3.006,
+        "roiInterval90": [
+         -14.31,
+         8.69
+        ]
+       },
+       "average": {
+        "n": 303,
+        "won": 79,
+        "lost": 146,
+        "pushed": 78,
+        "units": -23.16,
+        "roi": -7.65,
+        "meanOdds": 2.859,
+        "roiInterval90": [
+         -17.99,
+         2.94
+        ]
+       }
+      }
+     }
+    }
+   }
+  },
+  "calibrationCheck": {
+   "1x2": {
+    "kTuned": 0.03,
+    "kOnHoldout": 0.0,
+    "n": 540,
+    "gainAtTunedK": -0.117,
+    "gainAtRaw": -12.897
+   },
+   "dnb": {
+    "kTuned": 0.03,
+    "kOnHoldout": 0.0,
+    "n": 405,
+    "gainAtTunedK": -0.096,
+    "gainAtRaw": -11.115
+   }
+  },
+  "calibratedLeans": {
+   "1x2": {
+    "close": {
+     "bets": 0,
+     "meanEdge": null
+    }
+   },
+   "dnb": {
+    "close": {
+     "bets": 0,
+     "meanEdge": null
+    }
+   },
+   "total": {},
+   "ah": {}
+  }
+ },
+ "verdict": {
+  "1x2": {
+   "k": 0.03,
+   "calibrationHolds": false,
+   "byTiming": {
+    "open": {
+     "threshold": null,
+     "bets": 0,
+     "roi": null,
+     "roiInterval90": null,
+     "passes": false
+    },
+    "close": {
+     "threshold": "6",
+     "bets": 265,
+     "roi": -5.36,
+     "roiInterval90": [
+      -22.38,
+      12.51
+     ],
+     "passes": false
+    }
+   },
+   "clearsBar": false
+  },
+  "dnb": {
+   "k": 0.03,
+   "calibrationHolds": false,
+   "byTiming": {
+    "open": {
+     "threshold": null,
+     "bets": 0,
+     "roi": null,
+     "roiInterval90": null,
+     "passes": false
+    },
+    "close": {
+     "threshold": "2",
+     "bets": 458,
+     "roi": -12.95,
+     "roiInterval90": [
+      -20.95,
+      -4.66
+     ],
+     "passes": false
+    }
+   },
+   "clearsBar": false
+  },
+  "total": {
+   "k": null,
+   "calibrationHolds": false,
+   "byTiming": {
+    "open": {
+     "threshold": null,
+     "bets": 0,
+     "roi": null,
+     "roiInterval90": null,
+     "passes": false
+    },
+    "close": {
+     "threshold": null,
+     "bets": 0,
+     "roi": null,
+     "roiInterval90": null,
+     "passes": false
+    }
+   },
+   "clearsBar": false
+  },
+  "ah": {
+   "k": null,
+   "calibrationHolds": false,
+   "byTiming": {
+    "open": {
+     "threshold": null,
+     "bets": 0,
+     "roi": null,
+     "roiInterval90": null,
+     "passes": false
+    },
+    "close": {
+     "threshold": null,
+     "bets": 0,
+     "roi": null,
+     "roiInterval90": null,
+     "passes": false
+    }
+   },
+   "clearsBar": false
+  }
+ }
 }

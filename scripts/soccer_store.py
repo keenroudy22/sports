@@ -34,7 +34,6 @@ Stdlib only.
 import argparse
 import csv
 import io
-import json
 import re
 import sys
 import time
@@ -52,8 +51,8 @@ ROOT = Path(__file__).resolve().parents[1]
 STORE = ROOT / 'data' / 'soccer'
 TEAMS = STORE / 'teams.json'
 BASE = 'https://www.football-data.co.uk/'
-LEAGUES = {'EPL': {'file': 'E0', 'espn': 'eng.1', 'split': True},
-           'MLS': {'url': BASE + 'new/USA.csv', 'espn': 'usa.1', 'split': False}}
+LEAGUES = {'EPL': {'file': 'E0', 'split': True},
+           'MLS': {'url': BASE + 'new/USA.csv', 'split': False}}
 ESPN = 'https://site.api.espn.com/apis/site/v2/sports/soccer/'
 ESPN_LEAGUES = {'EPL': 'eng.1', 'MLS': 'usa.1', 'UCL': 'uefa.champions'}
 

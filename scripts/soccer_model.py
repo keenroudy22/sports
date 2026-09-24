@@ -1,4 +1,4 @@
-"""Soccer scores from goals alone: a Dixon-Coles Poisson model, walk-forward. Stdlib only.
+"""Soccer scores from goals and shots: a Dixon-Coles Poisson model, walk-forward. Stdlib only.
 
 Each club has an attack and a defence rating. A match's expected goals are
 
@@ -9,10 +9,10 @@ fitted by maximum likelihood (Newton's method) to every stored match before the 
 match counts 0.5 ** (age in days / halfLife), and last season's matches a further seasonCarry
 per season back. With shotsBlend below 1 the rates are fitted to a blend of goals and the goals
 a side's shots on and off target were worth (Premier League files carry shots; MLS's does not),
-which carries less finishing luck than goals alone. A ridge penalty pulls every rating toward zero, the league average, so a club
-with few matches stays near it. Dixon and Coles' rho, when on, corrects the four low scores
-(0-0, 1-0, 0-1, 1-1) that independent Poisson counts get slightly wrong; it is estimated from
-the same weighted matches at every refit.
+which carries less finishing luck than goals alone. A ridge penalty pulls every rating toward
+zero, the league average, so a club with few matches stays near it. Dixon and Coles' rho, when
+on, corrects the four low scores (0-0, 1-0, 0-1, 1-1) that independent Poisson counts get
+slightly wrong; it is estimated from the same weighted matches at every refit.
 
 A promoted club (or an MLS expansion club) is pulled toward a prior instead of zero: the average
 rating of the clubs that went down, fitted when the season opens. When no club went down (MLS),
@@ -231,7 +231,7 @@ class Ratings:
         edge = 0.0 if neutral else self.home
         return math.exp(self.mu + edge + ah - da), math.exp(self.mu + aa - dh)
 
-    def predict(self, home, away, lines=(), neutral=False, season=None):
+    def predict(self, home, away, lines=(), neutral=False):
         """Expected goals, the score grid's markets, and the handicap at each home line in `lines`."""
         home_rate, away_rate = self.rates(home, away, neutral)
         grid = score_grid(home_rate, away_rate, self.rho)
@@ -782,7 +782,8 @@ def run_tune(league, log=print, records=None, seasons=None, grid=None):
 
 
 def verdict(result):
-    """Per market: does it clear the bar on the untouched season? A rule, not a feel:
+    """Per market: does it clear the bar on the untouched season? A rule, not a feel, and not by itself a
+    decision to publish (docs/SOCCER.md weighs the rest):
 
     - leans: at the threshold the tuning season chose, bets at the market average's price (what a
       typical book offered) return more than they cost over at least MIN_BETS bets, at the opening or
@@ -805,7 +806,7 @@ def verdict(result):
         check = holdout.get('calibrationCheck', {}).get(market) or {}
         holds = bool(k and k > 0 and (check.get('gainAtTunedK') or 0) > 0)
         out[market] = {'k': k, 'calibrationHolds': holds, 'byTiming': checks,
-                       'publish': holds and any(c['passes'] for c in checks.values())}
+                       'clearsBar': holds and any(c['passes'] for c in checks.values())}
     return out
 
 

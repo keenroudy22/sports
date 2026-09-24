@@ -2104,5 +2104,1121 @@
    "open": "6"
   }
  },
- "looks": []
+ "looks": [
+  {
+   "at": "2026-09-24T12:46:24+00:00",
+   "season": "2025-26"
+  }
+ ],
+ "holdout": {
+  "season": "2025-26",
+  "store": {
+   "file": "data/soccer/epl.jsonl",
+   "lines": 3850,
+   "sha256": "7d55d44428e9ee22e9a7e5ed52a322615ea20324e7bd16e0a0dd97fb7e6e7770"
+  },
+  "evaluation": {
+   "matches": 380,
+   "accuracy": {
+    "1x2": {
+     "n": 380,
+     "logLoss": {
+      "ours": 1.02547,
+      "close": 1.01388,
+      "calibrated": 1.01455
+     },
+     "brier": {
+      "ours": 0.61509,
+      "close": 0.60922,
+      "calibrated": 0.60908
+     },
+     "oursMinusClose": {
+      "mean": 0.01159,
+      "interval90": [
+       -0.00122,
+       0.0236
+      ]
+     }
+    },
+    "total": {
+     "n": 380,
+     "logLoss": {
+      "ours": 0.69824,
+      "close": 0.68312,
+      "calibrated": 0.68312
+     },
+     "brier": {
+      "ours": 0.50434,
+      "close": 0.48994,
+      "calibrated": 0.48994
+     },
+     "oursMinusClose": {
+      "mean": 0.01512,
+      "interval90": [
+       0.00424,
+       0.0267
+      ]
+     }
+    }
+   },
+   "leans": {
+    "1x2": {
+     "close": {
+      "2": {
+       "bets": 314,
+       "meanEdge": 5.66,
+       "primary": {
+        "n": 314,
+        "won": 89,
+        "lost": 225,
+        "pushed": 0,
+        "units": -11.98,
+        "roi": -3.82,
+        "meanOdds": 4.305,
+        "roiInterval90": [
+         -19.02,
+         12.06
+        ]
+       },
+       "average": {
+        "n": 314,
+        "won": 89,
+        "lost": 225,
+        "pushed": 0,
+        "units": -18.81,
+        "roi": -5.99,
+        "meanOdds": 4.185,
+        "roiInterval90": [
+         -20.95,
+         9.47
+        ]
+       }
+      },
+      "4": {
+       "bets": 196,
+       "meanEdge": 7.29,
+       "primary": {
+        "n": 196,
+        "won": 51,
+        "lost": 145,
+        "pushed": 0,
+        "units": -15.37,
+        "roi": -7.84,
+        "meanOdds": 4.411,
+        "roiInterval90": [
+         -27.56,
+         12.87
+        ]
+       },
+       "average": {
+        "n": 196,
+        "won": 51,
+        "lost": 145,
+        "pushed": 0,
+        "units": -19.53,
+        "roi": -9.96,
+        "meanOdds": 4.289,
+        "roiInterval90": [
+         -29.16,
+         10.31
+        ]
+       }
+      },
+      "6": {
+       "bets": 115,
+       "meanEdge": 8.91,
+       "primary": {
+        "n": 115,
+        "won": 30,
+        "lost": 85,
+        "pushed": 0,
+        "units": -10.14,
+        "roi": -8.82,
+        "meanOdds": 4.387,
+        "roiInterval90": [
+         -34.78,
+         16.04
+        ]
+       },
+       "average": {
+        "n": 115,
+        "won": 30,
+        "lost": 85,
+        "pushed": 0,
+        "units": -13.06,
+        "roi": -11.36,
+        "meanOdds": 4.252,
+        "roiInterval90": [
+         -36.98,
+         13.1
+        ]
+       }
+      }
+     },
+     "open": {
+      "2": {
+       "bets": 309,
+       "meanEdge": 5.32,
+       "primary": {
+        "n": 309,
+        "won": 84,
+        "lost": 225,
+        "pushed": 0,
+        "units": -26.25,
+        "roi": -8.5,
+        "meanOdds": 4.149,
+        "roiInterval90": [
+         -23.15,
+         7.03
+        ]
+       },
+       "average": {
+        "n": 309,
+        "won": 84,
+        "lost": 225,
+        "pushed": 0,
+        "units": -30.59,
+        "roi": -9.9,
+        "meanOdds": 4.083,
+        "roiInterval90": [
+         -24.34,
+         5.57
+        ]
+       }
+      },
+      "4": {
+       "bets": 176,
+       "meanEdge": 7.04,
+       "primary": {
+        "n": 176,
+        "won": 46,
+        "lost": 130,
+        "pushed": 0,
+        "units": -16.31,
+        "roi": -9.27,
+        "meanOdds": 4.383,
+        "roiInterval90": [
+         -29.31,
+         10.21
+        ]
+       },
+       "average": {
+        "n": 176,
+        "won": 46,
+        "lost": 130,
+        "pushed": 0,
+        "units": -19.07,
+        "roi": -10.84,
+        "meanOdds": 4.314,
+        "roiInterval90": [
+         -30.65,
+         8.26
+        ]
+       }
+      },
+      "6": {
+       "bets": 97,
+       "meanEdge": 8.78,
+       "primary": {
+        "n": 97,
+        "won": 25,
+        "lost": 72,
+        "pushed": 0,
+        "units": -12.9,
+        "roi": -13.3,
+        "meanOdds": 4.317,
+        "roiInterval90": [
+         -38.5,
+         13.38
+        ]
+       },
+       "average": {
+        "n": 97,
+        "won": 25,
+        "lost": 72,
+        "pushed": 0,
+        "units": -14.8,
+        "roi": -15.26,
+        "meanOdds": 4.248,
+        "roiInterval90": [
+         -40.34,
+         11.1
+        ]
+       }
+      }
+     }
+    },
+    "dnb": {
+     "close": {
+      "2": {
+       "bets": 300,
+       "meanEdge": 7.16,
+       "primary": {
+        "n": 300,
+        "won": 74,
+        "lost": 139,
+        "pushed": 87,
+        "units": -21.7,
+        "roi": -7.23,
+        "meanOdds": 3.652,
+        "roiInterval90": [
+         -18.36,
+         3.67
+        ]
+       },
+       "average": {
+        "n": 300,
+        "won": 74,
+        "lost": 139,
+        "pushed": 87,
+        "units": -26.71,
+        "roi": -8.9,
+        "meanOdds": 3.524,
+        "roiInterval90": [
+         -19.76,
+         1.67
+        ]
+       }
+      },
+      "4": {
+       "bets": 213,
+       "meanEdge": 8.91,
+       "primary": {
+        "n": 213,
+        "won": 52,
+        "lost": 103,
+        "pushed": 58,
+        "units": -16.87,
+        "roi": -7.92,
+        "meanOdds": 3.581,
+        "roiInterval90": [
+         -21.82,
+         5.77
+        ]
+       },
+       "average": {
+        "n": 213,
+        "won": 52,
+        "lost": 103,
+        "pushed": 58,
+        "units": -20.45,
+        "roi": -9.6,
+        "meanOdds": 3.474,
+        "roiInterval90": [
+         -23.29,
+         3.73
+        ]
+       }
+      },
+      "6": {
+       "bets": 158,
+       "meanEdge": 10.27,
+       "primary": {
+        "n": 158,
+        "won": 42,
+        "lost": 72,
+        "pushed": 44,
+        "units": -0.06,
+        "roi": -0.04,
+        "meanOdds": 3.549,
+        "roiInterval90": [
+         -15.91,
+         16.3
+        ]
+       },
+       "average": {
+        "n": 158,
+        "won": 42,
+        "lost": 72,
+        "pushed": 44,
+        "units": -3.11,
+        "roi": -1.97,
+        "meanOdds": 3.416,
+        "roiInterval90": [
+         -17.31,
+         13.98
+        ]
+       }
+      }
+     },
+     "open": {
+      "2": {
+       "bets": 295,
+       "meanEdge": 6.8,
+       "primary": {
+        "n": 295,
+        "won": 79,
+        "lost": 134,
+        "pushed": 82,
+        "units": -16.04,
+        "roi": -5.44,
+        "meanOdds": 3.518,
+        "roiInterval90": [
+         -15.79,
+         5.89
+        ]
+       },
+       "average": {
+        "n": 295,
+        "won": 79,
+        "lost": 134,
+        "pushed": 82,
+        "units": -19.16,
+        "roi": -6.49,
+        "meanOdds": 3.477,
+        "roiInterval90": [
+         -16.81,
+         4.71
+        ]
+       }
+      },
+      "4": {
+       "bets": 206,
+       "meanEdge": 8.42,
+       "primary": {
+        "n": 206,
+        "won": 53,
+        "lost": 100,
+        "pushed": 53,
+        "units": -12.84,
+        "roi": -6.23,
+        "meanOdds": 3.598,
+        "roiInterval90": [
+         -20.59,
+         8.71
+        ]
+       },
+       "average": {
+        "n": 206,
+        "won": 53,
+        "lost": 100,
+        "pushed": 53,
+        "units": -14.98,
+        "roi": -7.27,
+        "meanOdds": 3.547,
+        "roiInterval90": [
+         -21.5,
+         7.43
+        ]
+       }
+      },
+      "6": {
+       "bets": 143,
+       "meanEdge": 9.9,
+       "primary": {
+        "n": 143,
+        "won": 35,
+        "lost": 74,
+        "pushed": 34,
+        "units": -12.25,
+        "roi": -8.57,
+        "meanOdds": 3.573,
+        "roiInterval90": [
+         -25.7,
+         10.75
+        ]
+       },
+       "average": {
+        "n": 143,
+        "won": 35,
+        "lost": 74,
+        "pushed": 34,
+        "units": -13.66,
+        "roi": -9.55,
+        "meanOdds": 3.532,
+        "roiInterval90": [
+         -26.59,
+         9.66
+        ]
+       }
+      }
+     }
+    },
+    "total": {
+     "close": {
+      "2": {
+       "bets": 289,
+       "meanEdge": 6.49,
+       "primary": {
+        "n": 289,
+        "won": 132,
+        "lost": 157,
+        "pushed": 0,
+        "units": -25.06,
+        "roi": -8.67,
+        "meanOdds": 2.038,
+        "roiInterval90": [
+         -18.56,
+         0.87
+        ]
+       },
+       "average": {
+        "n": 289,
+        "won": 132,
+        "lost": 157,
+        "pushed": 0,
+        "units": -29.9,
+        "roi": -10.35,
+        "meanOdds": 2.003,
+        "roiInterval90": [
+         -20.01,
+         -1.04
+        ]
+       }
+      },
+      "4": {
+       "bets": 205,
+       "meanEdge": 7.93,
+       "primary": {
+        "n": 205,
+        "won": 91,
+        "lost": 114,
+        "pushed": 0,
+        "units": -20.13,
+        "roi": -9.82,
+        "meanOdds": 2.058,
+        "roiInterval90": [
+         -22.18,
+         2.1
+        ]
+       },
+       "average": {
+        "n": 205,
+        "won": 91,
+        "lost": 114,
+        "pushed": 0,
+        "units": -23.97,
+        "roi": -11.69,
+        "meanOdds": 2.018,
+        "roiInterval90": [
+         -23.85,
+         0.09
+        ]
+       }
+      },
+      "6": {
+       "bets": 135,
+       "meanEdge": 9.47,
+       "primary": {
+        "n": 135,
+        "won": 59,
+        "lost": 76,
+        "pushed": 0,
+        "units": -15.6,
+        "roi": -11.56,
+        "meanOdds": 2.056,
+        "roiInterval90": [
+         -24.48,
+         3.64
+        ]
+       },
+       "average": {
+        "n": 135,
+        "won": 59,
+        "lost": 76,
+        "pushed": 0,
+        "units": -18.79,
+        "roi": -13.92,
+        "meanOdds": 2.005,
+        "roiInterval90": [
+         -26.52,
+         0.76
+        ]
+       }
+      }
+     },
+     "open": {
+      "2": {
+       "bets": 283,
+       "meanEdge": 6.05,
+       "primary": {
+        "n": 283,
+        "won": 138,
+        "lost": 145,
+        "pushed": 0,
+        "units": -12.26,
+        "roi": -4.33,
+        "meanOdds": 2.0,
+        "roiInterval90": [
+         -13.51,
+         6.16
+        ]
+       },
+       "average": {
+        "n": 283,
+        "won": 138,
+        "lost": 145,
+        "pushed": 0,
+        "units": -17.45,
+        "roi": -6.17,
+        "meanOdds": 1.963,
+        "roiInterval90": [
+         -15.18,
+         4.24
+        ]
+       }
+      },
+      "4": {
+       "bets": 177,
+       "meanEdge": 7.86,
+       "primary": {
+        "n": 177,
+        "won": 85,
+        "lost": 92,
+        "pushed": 0,
+        "units": -8.81,
+        "roi": -4.98,
+        "meanOdds": 1.992,
+        "roiInterval90": [
+         -18.15,
+         7.72
+        ]
+       },
+       "average": {
+        "n": 177,
+        "won": 85,
+        "lost": 92,
+        "pushed": 0,
+        "units": -12.52,
+        "roi": -7.07,
+        "meanOdds": 1.952,
+        "roiInterval90": [
+         -19.99,
+         5.2
+        ]
+       }
+      },
+      "6": {
+       "bets": 109,
+       "meanEdge": 9.64,
+       "primary": {
+        "n": 109,
+        "won": 46,
+        "lost": 63,
+        "pushed": 0,
+        "units": -15.79,
+        "roi": -14.49,
+        "meanOdds": 2.006,
+        "roiInterval90": [
+         -29.36,
+         1.65
+        ]
+       },
+       "average": {
+        "n": 109,
+        "won": 46,
+        "lost": 63,
+        "pushed": 0,
+        "units": -18.07,
+        "roi": -16.58,
+        "meanOdds": 1.962,
+        "roiInterval90": [
+         -31.18,
+         -0.73
+        ]
+       }
+      }
+     }
+    },
+    "ah": {
+     "close": {
+      "2": {
+       "bets": 293,
+       "meanEdge": 7.9,
+       "primary": {
+        "n": 293,
+        "won": 148,
+        "lost": 124,
+        "pushed": 21,
+        "units": 14.93,
+        "roi": 5.1,
+        "meanOdds": 1.935,
+        "roiInterval90": [
+         -3.82,
+         13.67
+        ]
+       },
+       "average": {
+        "n": 293,
+        "won": 148,
+        "lost": 124,
+        "pushed": 21,
+        "units": 8.93,
+        "roi": 3.05,
+        "meanOdds": 1.892,
+        "roiInterval90": [
+         -5.53,
+         11.51
+        ]
+       }
+      },
+      "4": {
+       "bets": 231,
+       "meanEdge": 9.23,
+       "primary": {
+        "n": 231,
+        "won": 113,
+        "lost": 100,
+        "pushed": 18,
+        "units": 6.67,
+        "roi": 2.89,
+        "meanOdds": 1.933,
+        "roiInterval90": [
+         -6.26,
+         12.71
+        ]
+       },
+       "average": {
+        "n": 231,
+        "won": 113,
+        "lost": 100,
+        "pushed": 18,
+        "units": 2.44,
+        "roi": 1.06,
+        "meanOdds": 1.891,
+        "roiInterval90": [
+         -7.91,
+         10.7
+        ]
+       }
+      },
+      "6": {
+       "bets": 168,
+       "meanEdge": 10.84,
+       "primary": {
+        "n": 168,
+        "won": 82,
+        "lost": 72,
+        "pushed": 14,
+        "units": 6.46,
+        "roi": 3.85,
+        "meanOdds": 1.933,
+        "roiInterval90": [
+         -7.45,
+         14.29
+        ]
+       },
+       "average": {
+        "n": 168,
+        "won": 82,
+        "lost": 72,
+        "pushed": 14,
+        "units": 3.74,
+        "roi": 2.23,
+        "meanOdds": 1.896,
+        "roiInterval90": [
+         -8.79,
+         12.47
+        ]
+       }
+      }
+     },
+     "open": {
+      "2": {
+       "bets": 295,
+       "meanEdge": 7.6,
+       "primary": {
+        "n": 295,
+        "won": 152,
+        "lost": 123,
+        "pushed": 20,
+        "units": 18.88,
+        "roi": 6.4,
+        "meanOdds": 1.927,
+        "roiInterval90": [
+         -1.82,
+         14.79
+        ]
+       },
+       "average": {
+        "n": 295,
+        "won": 152,
+        "lost": 123,
+        "pushed": 20,
+        "units": 19.33,
+        "roi": 6.55,
+        "meanOdds": 1.916,
+        "roiInterval90": [
+         -1.99,
+         14.74
+        ]
+       }
+      },
+      "4": {
+       "bets": 218,
+       "meanEdge": 9.22,
+       "primary": {
+        "n": 218,
+        "won": 112,
+        "lost": 93,
+        "pushed": 13,
+        "units": 11.08,
+        "roi": 5.08,
+        "meanOdds": 1.922,
+        "roiInterval90": [
+         -4.62,
+         14.95
+        ]
+       },
+       "average": {
+        "n": 218,
+        "won": 112,
+        "lost": 93,
+        "pushed": 13,
+        "units": 7.2,
+        "roi": 3.31,
+        "meanOdds": 1.885,
+        "roiInterval90": [
+         -6.18,
+         12.94
+        ]
+       }
+      },
+      "6": {
+       "bets": 166,
+       "meanEdge": 10.53,
+       "primary": {
+        "n": 166,
+        "won": 80,
+        "lost": 76,
+        "pushed": 10,
+        "units": -0.82,
+        "roi": -0.49,
+        "meanOdds": 1.923,
+        "roiInterval90": [
+         -12.04,
+         10.17
+        ]
+       },
+       "average": {
+        "n": 166,
+        "won": 80,
+        "lost": 76,
+        "pushed": 10,
+        "units": -3.7,
+        "roi": -2.23,
+        "meanOdds": 1.886,
+        "roiInterval90": [
+         -13.44,
+         8.11
+        ]
+       }
+      }
+     }
+    }
+   }
+  },
+  "calibrationCheck": {
+   "1x2": {
+    "kTuned": 0.28,
+    "kOnHoldout": 0.05,
+    "n": 380,
+    "gainAtTunedK": -0.254,
+    "gainAtRaw": -4.405
+   },
+   "dnb": {
+    "kTuned": 0.19,
+    "kOnHoldout": 0.0,
+    "n": 276,
+    "gainAtTunedK": -0.192,
+    "gainAtRaw": -4.165
+   },
+   "total": {
+    "kTuned": 0.0,
+    "kOnHoldout": 0.0,
+    "n": 380,
+    "gainAtTunedK": 0.0,
+    "gainAtRaw": -5.744
+   },
+   "ah": {
+    "kTuned": 0.18,
+    "kOnHoldout": 0.26,
+    "n": 354,
+    "gainAtTunedK": 0.263,
+    "gainAtRaw": -2.408
+   }
+  },
+  "calibratedLeans": {
+   "1x2": {
+    "close": {
+     "bets": 76,
+     "meanEdge": 2.84,
+     "primary": {
+      "n": 76,
+      "won": 24,
+      "lost": 52,
+      "pushed": 0,
+      "units": 7.86,
+      "roi": 10.34,
+      "meanOdds": 4.187,
+      "roiInterval90": [
+       -20.16,
+       44.76
+      ]
+     },
+     "average": {
+      "n": 76,
+      "won": 24,
+      "lost": 52,
+      "pushed": 0,
+      "units": 5.35,
+      "roi": 7.04,
+      "meanOdds": 4.045,
+      "roiInterval90": [
+       -22.96,
+       40.57
+      ]
+     }
+    },
+    "open": {
+     "bets": 1,
+     "meanEdge": 9.87,
+     "primary": {
+      "n": 1,
+      "won": 0,
+      "lost": 1,
+      "pushed": 0,
+      "units": -1.0,
+      "roi": -100.0,
+      "meanOdds": 3.63,
+      "roiInterval90": [
+       -100.0,
+       -100.0
+      ]
+     },
+     "average": {
+      "n": 1,
+      "won": 0,
+      "lost": 1,
+      "pushed": 0,
+      "units": -1.0,
+      "roi": -100.0,
+      "meanOdds": 3.42,
+      "roiInterval90": [
+       -100.0,
+       -100.0
+      ]
+     }
+    }
+   },
+   "dnb": {
+    "close": {
+     "bets": 5,
+     "meanEdge": 5.24,
+     "primary": {
+      "n": 5,
+      "won": 1,
+      "lost": 3,
+      "pushed": 1,
+      "units": 1.62,
+      "roi": 32.45,
+      "meanOdds": 3.057,
+      "roiInterval90": [
+       -100.0,
+       184.9
+      ]
+     },
+     "average": {
+      "n": 5,
+      "won": 1,
+      "lost": 3,
+      "pushed": 1,
+      "units": 1.62,
+      "roi": 32.45,
+      "meanOdds": 2.944,
+      "roiInterval90": [
+       -100.0,
+       184.9
+      ]
+     }
+    },
+    "open": {
+     "bets": 3,
+     "meanEdge": 5.52,
+     "primary": {
+      "n": 3,
+      "won": 0,
+      "lost": 3,
+      "pushed": 0,
+      "units": -3.0,
+      "roi": -100.0,
+      "meanOdds": 2.499,
+      "roiInterval90": [
+       -100.0,
+       -100.0
+      ]
+     },
+     "average": {
+      "n": 3,
+      "won": 0,
+      "lost": 3,
+      "pushed": 0,
+      "units": -3.0,
+      "roi": -100.0,
+      "meanOdds": 2.395,
+      "roiInterval90": [
+       -100.0,
+       -100.0
+      ]
+     }
+    }
+   },
+   "total": {
+    "close": {
+     "bets": 0,
+     "meanEdge": null
+    },
+    "open": {
+     "bets": 0,
+     "meanEdge": null
+    }
+   },
+   "ah": {
+    "close": {
+     "bets": 62,
+     "meanEdge": 2.7,
+     "primary": {
+      "n": 62,
+      "won": 28,
+      "lost": 27,
+      "pushed": 7,
+      "units": -1.86,
+      "roi": -3.0,
+      "meanOdds": 1.937,
+      "roiInterval90": [
+       -21.34,
+       15.0
+      ]
+     },
+     "average": {
+      "n": 62,
+      "won": 28,
+      "lost": 27,
+      "pushed": 7,
+      "units": -2.5,
+      "roi": -4.03,
+      "meanOdds": 1.901,
+      "roiInterval90": [
+       -21.89,
+       13.78
+      ]
+     }
+    },
+    "open": {
+     "bets": 0,
+     "meanEdge": null
+    }
+   }
+  }
+ },
+ "verdict": {
+  "1x2": {
+   "k": 0.28,
+   "calibrationHolds": false,
+   "byTiming": {
+    "open": {
+     "threshold": "6",
+     "bets": 97,
+     "roi": -15.26,
+     "roiInterval90": [
+      -40.34,
+      11.1
+     ],
+     "passes": false
+    },
+    "close": {
+     "threshold": "2",
+     "bets": 314,
+     "roi": -5.99,
+     "roiInterval90": [
+      -20.95,
+      9.47
+     ],
+     "passes": false
+    }
+   },
+   "clearsBar": false
+  },
+  "dnb": {
+   "k": 0.19,
+   "calibrationHolds": false,
+   "byTiming": {
+    "open": {
+     "threshold": "4",
+     "bets": 206,
+     "roi": -7.27,
+     "roiInterval90": [
+      -21.5,
+      7.43
+     ],
+     "passes": false
+    },
+    "close": {
+     "threshold": "4",
+     "bets": 213,
+     "roi": -9.6,
+     "roiInterval90": [
+      -23.29,
+      3.73
+     ],
+     "passes": false
+    }
+   },
+   "clearsBar": false
+  },
+  "total": {
+   "k": 0.0,
+   "calibrationHolds": false,
+   "byTiming": {
+    "open": {
+     "threshold": "6",
+     "bets": 109,
+     "roi": -16.58,
+     "roiInterval90": [
+      -31.18,
+      -0.73
+     ],
+     "passes": false
+    },
+    "close": {
+     "threshold": "4",
+     "bets": 205,
+     "roi": -11.69,
+     "roiInterval90": [
+      -23.85,
+      0.09
+     ],
+     "passes": false
+    }
+   },
+   "clearsBar": false
+  },
+  "ah": {
+   "k": 0.18,
+   "calibrationHolds": true,
+   "byTiming": {
+    "open": {
+     "threshold": "6",
+     "bets": 166,
+     "roi": -2.23,
+     "roiInterval90": [
+      -13.44,
+      8.11
+     ],
+     "passes": false
+    },
+    "close": {
+     "threshold": "2",
+     "bets": 293,
+     "roi": 3.05,
+     "roiInterval90": [
+      -5.53,
+      11.51
+     ],
+     "passes": true
+    }
+   },
+   "clearsBar": true
+  }
+ }
 }
