@@ -632,6 +632,7 @@ def relevant_facts(candidate, facts, ctx):
     a total; a weather flag for a total; and everything the web researcher verified."""
     athlete = str(candidate.get('athleteId') or '')
     team = candidate.get('_team')
+    league = candidate.get('_league') or candidate.get('league') or str(candidate.get('id', '')).split('-')[0]
     total = not athlete
     out, skill = [], defaultdict(list)
     for fact in facts:
@@ -653,7 +654,7 @@ def relevant_facts(candidate, facts, ctx):
         if athlete and player == athlete:
             out.append(fact)
         elif fact.get('position') == 'QB' and (total or fact.get('team') == team) \
-                and (ctx.starters.get(str(fact.get('team'))) == player or status in gates.QB_OUT):
+                and (ctx.starters.get(gates.team_key(league, fact.get('team'))) == player or status in gates.QB_OUT):
             out.append(fact)
         elif total and fact.get('position') in SKILL and status in SKILL_OUT:
             skill[fact.get('team')].append(fact)
@@ -855,6 +856,20 @@ def first_sentence(text):
     import x_post
     parts = x_post.sentences(text)
     return (parts[0] if parts else str(text)).rstrip('.') + '.'
+
+
+def quarterbacks(game, ctx):
+    """Each team's starting passers this season, latest first, by name: the researcher is asked about them."""
+    out = {}
+    for side in ('away', 'home'):
+        seen = ctx.passers.get(gates.team_key(game['league'], game[side]['id'])) or []
+        names = []
+        for pid in reversed(seen):
+            name = ctx.names.get(str(pid))
+            if name and name not in names:
+                names.append(name)
+        out[pick_card.team_label(game[side], game['league'])] = names[:3]
+    return out
 
 
 def learning_weights():
@@ -1170,7 +1185,8 @@ def _run(args, now, slot, kinds, status):
         if research_on and status['research']['asked'] < RESEARCH_LIMIT:
             game = ctx.games[candidate['gameIds'][0]]
             kept, dropped = researcher.research(game, gates.market_key(candidate), gates.side_of(candidate), now=now,
-                                                player=candidate.get('_player') or ctx.names.get(str(candidate.get('athleteId') or '')))
+                                                player=candidate.get('_player') or ctx.names.get(str(candidate.get('athleteId') or '')),
+                                                quarterbacks=quarterbacks(game, ctx))
             candidate['_research'] = [dict(f, verified=True) for f in kept] + [dict(f, verified=False) for f in dropped]
             status['research']['asked'] += 1
             status['research']['verified'] += len(kept)
@@ -1562,7 +1578,8 @@ def precheck(args):
                 kept = []
                 if researcher.enabled() and game:
                     kept, dropped = researcher.research(game, gates.market_key(pick), gates.side_of(pick), now=now,
-                                                        player=ctx.names.get(str(pick.get('athleteId') or '')))
+                                                        player=ctx.names.get(str(pick.get('athleteId') or '')),
+                                                        quarterbacks=quarterbacks(game, ctx))
                     status['research']['asked'] += 1
                     status['research']['verified'] += len(kept)
                     facts += kept

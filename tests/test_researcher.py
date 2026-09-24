@@ -102,5 +102,13 @@ class ReliabilityTests(unittest.TestCase):
                         'a claim with no status word falls back to the name check')
 
 
+class QuarterbackTests(unittest.TestCase):
+    def test_the_prompt_names_every_quarterback_who_started_this_season(self):
+        game = {'away': {'name': 'Navy Midshipmen'}, 'home': {'name': 'UAB Blazers'}, 'league': 'CFB', 'kickoff': 'k'}
+        text = researcher.prompt_for(game, 'total', 'over', policy={}, quarterbacks={'Navy': ['Jackson Gutierrez', 'Braxton Woodson'], 'UAB': ['Ryder Burton']})
+        self.assertIn('Navy: Jackson Gutierrez, Braxton Woodson; UAB: Ryder Burton', text)
+        self.assertNotIn('Quarterbacks who have started', researcher.prompt_for(game, 'total', 'over', policy={}))
+
+
 if __name__ == '__main__':
     unittest.main()

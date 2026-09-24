@@ -213,7 +213,7 @@ class JudgeTests(unittest.TestCase):
 
     def ctx(self):
         from types import SimpleNamespace
-        return SimpleNamespace(starters={'10': '5', '20': '6'})
+        return SimpleNamespace(starters={'NFL-10': '5', 'NFL-20': '6'})
 
     def test_only_facts_that_can_matter_reach_the_judge(self):
         ctx = self.ctx()
@@ -225,10 +225,10 @@ class JudgeTests(unittest.TestCase):
                  {'id': 'injury-20-9', 'kind': 'injury', 'team': '20', 'position': 'WR', 'status': 'Injured Reserve', 'claim': 'WR on IR'},
                  {'id': 'injury-20-77', 'kind': 'injury', 'team': '20', 'position': 'WR', 'status': 'Out', 'claim': 'the prop player out'},
                  {'id': 'web-g-0', 'kind': 'role', 'origin': 'claude researcher', 'direction': 'against', 'claim': 'benched'}]
-        total = {id: None for id in ()} or {'marketType': 'total', 'direction': 'over'}
+        total = {'marketType': 'total', 'direction': 'over', '_league': 'NFL'}
         ids = [f['id'] for f in run.relevant_facts(total, facts, ctx)]
         self.assertEqual(ids, ['weather-w', 'injury-10-5', 'web-g-0'], 'the move, calm weather, a backup and IR stay out')
-        prop = {'athleteId': '77', '_team': '20', 'market': 'rec', 'direction': 'over'}
+        prop = {'athleteId': '77', '_team': '20', 'market': 'rec', 'direction': 'over', '_league': 'NFL'}
         ids = [f['id'] for f in run.relevant_facts(prop, facts, ctx)]
         self.assertEqual(ids, ['injury-20-77', 'web-g-0'], "a prop weighs its own player and his quarterback, not the other side's")
         three = [{'id': f'injury-20-{i}', 'kind': 'injury', 'team': '20', 'position': 'WR', 'status': 'Out', 'claim': 'x'} for i in range(3)]

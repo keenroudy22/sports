@@ -88,7 +88,8 @@ class Context:
     established: set = field(default_factory=set)     # (athleteId, teamId) with 8+ games last season
     names: dict = field(default_factory=dict)          # athleteId -> name
     player_team: dict = field(default_factory=dict)    # athleteId -> teamId in the latest stored game
-    starters: dict = field(default_factory=dict)       # teamId -> usual starting quarterback's athleteId
+    starters: dict = field(default_factory=dict)       # "LEAGUE-teamId" -> usual starting quarterback (most starts of the last four)
+    passers: dict = field(default_factory=dict)        # "LEAGUE-teamId" -> this season's starting passers, game by game
     flags: dict = field(default_factory=lambda: dict(FLAGS))
     policy: dict = field(default_factory=learning.default_policy)   # learned thresholds; the defaults are the written rules
 
@@ -248,12 +249,14 @@ def team_of(candidate, ctx):
 
 
 def listed_status(athlete, team, ctx):
-    entry = (ctx.injuries.get(str(team)) or {}).get(str(athlete)) if team is not None else None
+    """The injury report's status for an athlete (athlete ids are unique across leagues, so the team only narrows it)."""
+    entry = None
+    for key, block in ctx.injuries.items():
+        if str(athlete) in block and (team is None or key.endswith(f'-{team}') or key == str(team)):
+            entry = block[str(athlete)]
+            break
     if entry is None:
-        for block in ctx.injuries.values():
-            if str(athlete) in block:
-                entry = block[str(athlete)]
-                break
+        entry = next((block[str(athlete)] for block in ctx.injuries.values() if str(athlete) in block), None)
     return str((entry or {}).get('status') or '').lower()
 
 
@@ -470,10 +473,11 @@ def qb_available(candidate, ctx):
     checked = False
     for side in ('home', 'away'):
         team = str(game[side]['id'])
-        if team not in ctx.injuries:
+        key = team_key(game['league'], team)
+        if key not in ctx.injuries:
             continue
         checked = True
-        starter = ctx.starters.get(team)
+        starter = ctx.starters.get(key)
         status = listed_status(starter, team, ctx) if starter else ''
         if status in QB_OUT:
             return Decision(False, 'qb_available', f"{game[side]['abbreviation']} starting quarterback "
@@ -702,9 +706,14 @@ def injuries_by_team(context_file):
     for league in ('NFL', 'CFB'):
         block = ((context_file.get('leagues') or {}).get(league) or {}).get('teams') or {}
         for team, data in block.items():
-            out[str(team)] = {str(p['id']): {'status': p.get('status'), 'position': p.get('position'), 'name': p.get('name')}
-                              for p in data.get('players', []) if p.get('id')}
+            out[team_key(league, team)] = {str(p['id']): {'status': p.get('status'), 'position': p.get('position'), 'name': p.get('name')}
+                                           for p in data.get('players', []) if p.get('id')}
     return out
+
+
+def team_key(league, team):
+    """A team as the desk keys it: ESPN numbers teams separately in each league (5 is Cleveland and UAB)."""
+    return f"{league}-{team}"
 
 
 def roster_facts(records, now):
@@ -713,7 +722,7 @@ def roster_facts(records, now):
     for game in records:
         current[game['league']] = max(current.get(game['league'], 0), game['season'])
     appearances, last_season, names, player_team = defaultdict(int), defaultdict(int), {}, {}
-    latest_game, passers = {}, {}
+    latest_game, passers, history = {}, {}, defaultdict(list)
     for game in sorted(records, key=lambda g: g['kickoff']):
         if when(game['kickoff']) > now:
             continue
@@ -730,12 +739,17 @@ def roster_facts(records, now):
                 last_season[(pid, str(player['team']))] += 1
         for side in ('home', 'away'):
             team = str(game[side]['id'])
+            key = team_key(game['league'], team)       # ESPN reuses team numbers across the NFL and college
             throwers = [p for p in game['players'] if str(p.get('team')) == team and (p.get('att') or 0) > 0]
             if throwers:
-                latest_game[team] = game['kickoff']
-                passers[team] = str(max(throwers, key=lambda p: p.get('att') or 0)['id'])
+                latest_game[key] = game['kickoff']
+                passers[key] = str(max(throwers, key=lambda p: p.get('att') or 0)['id'])
+                if game['season'] == season:
+                    history[key].append(passers[key])
     established = {key for key, n in last_season.items() if n >= build_site.ESTABLISHED_GAMES}
-    return appearances, established, names, player_team, passers
+    import starters as _starters
+    usual = {key: _starters.usual(seen[-_starters.RECENT:]) for key, seen in history.items()}
+    return appearances, established, names, player_team, {k: v for k, v in usual.items() if v}, dict(history)
 
 
 def context(now, stores, flags=None):
@@ -743,13 +757,13 @@ def context(now, stores, flags=None):
     games = {g['id']: g for g in stores.slate.get('games', []) if g.get('league') in ('NFL', 'CFB')}
     reports = [r for r in stores.reports if r.get('publishedAt') and when(r['publishedAt']) <= now]
     first, latest = build_site.first_publications(reports)
-    appearances, established, names, player_team, starters = roster_facts(stores.records, now)
+    appearances, established, names, player_team, starters, passers = roster_facts(stores.records, now)
     return Context(now=now, games=games,
                    odds={g: r for g, rows in stores.odds.items() if (r := latest_before(rows, now))},
                    prop_odds={g: r for g, rows in stores.prop_odds.items() if (r := latest_before(rows, now))},
                    snapshots=stores.snapshots, injuries=injuries_by_team(stores.context_file),
                    scoreboard=stores.scoreboard, first=first, latest=latest, appearances=appearances,
-                   established=established, names=names, player_team=player_team, starters=starters,
+                   established=established, names=names, player_team=player_team, starters=starters, passers=passers,
                    flags=dict(FLAGS, **(flags or {})), policy=learning.load_policy(stores.root / 'data' / 'learning' / 'policy.json'))
 
 

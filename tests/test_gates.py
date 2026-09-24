@@ -48,7 +48,7 @@ def prop_lean(**over):
 def context(**over):
     fields = dict(now=NOW, games={'NFL-1': GAME}, odds={'NFL-1': ODDS}, prop_odds={'NFL-1': PROP_ODDS},
                   snapshots={'NFL-1': [SNAPSHOT]}, names={'77': 'Player Seven', '5': 'Quarterback Five'},
-                  appearances=defaultdict(int, {'77': 3}), player_team={'77': '10', '5': '10'}, starters={'10': '5'},
+                  appearances=defaultdict(int, {'77': 3}), player_team={'77': '10', '5': '10'}, starters={'NFL-10': '5'},
                   scoreboard={'props': {'markets': [{'market': 'recYds', 'graded': 158, 'closerThanLine': [66, 92]},
                                                     {'market': 'rec', 'graded': 158, 'closerThanLine': [80, 78]},
                                                     {'market': 'att', 'graded': 12, 'closerThanLine': [4, 8]}]}})
@@ -233,12 +233,12 @@ class ModelLeanRuleTests(unittest.TestCase):
         self.assertTrue(gates.lean_nothing_against(total_lean(_evidence=[dict(facts[0], direction='for')]), context()).ok)
 
     def test_qb_gate_refuses_a_doubtful_starter_and_can_be_switched_off(self):
-        injuries = {'10': {'5': {'status': 'Doubtful', 'position': 'QB', 'name': 'Quarterback Five'}}}
+        injuries = {'NFL-10': {'5': {'status': 'Doubtful', 'position': 'QB', 'name': 'Quarterback Five'}}}
         ctx = context(injuries=injuries)
         refused = gates.qb_available(total_lean(), ctx)
         self.assertFalse(refused.ok)
         self.assertIn('Quarterback Five', refused.reason)
-        fine = context(injuries={'10': {'5': {'status': 'Questionable', 'position': 'QB'}}})
+        fine = context(injuries={'NFL-10': {'5': {'status': 'Questionable', 'position': 'QB'}}})
         self.assertTrue(gates.qb_available(total_lean(), fine).ok, 'questionable is not doubtful')
         off = context(injuries=injuries, flags={'QB_GATE': False})
         self.assertTrue(gates.qb_available(total_lean(), off).ok)
@@ -282,9 +282,9 @@ class PropLeanRuleTests(unittest.TestCase):
         self.assertTrue(gates.prop_not_in_longshot(prop_lean(athleteId='78'), context(first={'ls': ticket}, latest={'ls': ticket})).ok)
 
     def test_prop_injury_clear(self):
-        listed = context(injuries={'10': {'77': {'status': 'Questionable', 'position': 'WR'}}})
+        listed = context(injuries={'NFL-10': {'77': {'status': 'Questionable', 'position': 'WR'}}})
         self.assertFalse(gates.prop_injury_clear(prop_lean(), listed).ok)
-        active = context(injuries={'10': {'77': {'status': 'Active', 'position': 'WR'}}})
+        active = context(injuries={'NFL-10': {'77': {'status': 'Active', 'position': 'WR'}}})
         self.assertTrue(gates.prop_injury_clear(prop_lean(), active).ok)
         self.assertTrue(gates.prop_injury_clear(prop_lean(), context()).ok)
 

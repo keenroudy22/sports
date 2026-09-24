@@ -65,13 +65,13 @@ def enabled(env=None):
     return (env if env is not None else os.environ).get('KEENROUDY_RESEARCHER', '').strip().lower() == 'claude'
 
 
-def prompt_for(game, market, side, policy=None, player=None):
+def prompt_for(game, market, side, policy=None, player=None, quarterbacks=None):
     """The prompt, plus what learning has found about sources: sites whose facts kept checking out come first,
     sites whose facts kept failing the check are left out."""
     away, home = game.get('away') or {}, game.get('home') or {}
     text = PROMPT.format(away=away.get('name') or away.get('abbreviation'), home=home.get('name') or home.get('abbreviation'),
                          league=game.get('league'), kickoff=game.get('kickoff'), market=market, side=side,
-                         player_line=f'\nPlayer: {player}.' if player else '')
+                         player_line=(f'\nPlayer: {player}.' if player else '') + quarterback_line(quarterbacks))
     if policy is None:
         import learning
         policy = learning.load_policy()
@@ -96,6 +96,15 @@ ISOLATION = ['--tools', 'WebSearch,WebFetch', '--allowedTools', 'WebSearch,WebFe
              '--system-prompt', SYSTEM]
 FINISH = ('Stop researching now. Return ONLY the JSON object described at the start, with the facts you have '
           'already found (an empty list if none). No searching, no prose.')
+
+
+def quarterback_line(quarterbacks):
+    """The quarterbacks to ask about by name: everyone who has started for each team this season, latest first."""
+    parts = [f"{team}: {', '.join(names)}" for team, names in (quarterbacks or {}).items() if names]
+    if not parts:
+        return ''
+    return ('\nQuarterbacks who have started this season (latest first), whose status you must confirm first: '
+            + '; '.join(parts) + '.')
 
 
 def run_claude(prompt, runner=subprocess.run, timeout=420, max_turns=MAX_TURNS):
@@ -213,10 +222,10 @@ def status_near_name(fact, page):
     return False
 
 
-def research(game, market, side, runner=subprocess.run, opener=None, now=None, player=None):
+def research(game, market, side, runner=subprocess.run, opener=None, now=None, player=None, quarterbacks=None):
     """Verified facts for one game and market. Empty when the researcher is silent or nothing survives."""
     now = now or datetime.now(timezone.utc)
-    answer = run_claude(prompt_for(game, market, side, player=player), runner)
+    answer = run_claude(prompt_for(game, market, side, player=player, quarterbacks=quarterbacks), runner)
     shaped = [s for s in (shape(f, game['id'], i, now) for i, f in enumerate(extract(answer))) if s]
     checked = [verify(f, opener) for f in shaped]
     return [f for f in checked if f['verified']], [f for f in checked if not f['verified']]
