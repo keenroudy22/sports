@@ -1,19 +1,35 @@
 {
- "at": "2026-09-23T23:47:38Z",
+ "at": "2026-09-24T00:52:36Z",
  "leagues": {
   "CFB": {
-   "books": {},
+   "books": {
+    "draftkings": 279,
+    "fanduel": 241
+   },
    "eventsListed": 200,
-   "eventsMatched": 0,
-   "games": 4,
-   "marketTypes": {},
-   "requestsLeft": 55,
-   "rows": 0,
+   "eventsMatched": 2,
+   "games": 5,
+   "marketTypes": {
+    "player_longest_passing_completion": 2,
+    "player_longest_reception": 7,
+    "player_longest_rush": 6,
+    "player_passing_attempts": 16,
+    "player_passing_completions": 13,
+    "player_passing_touchdowns": 16,
+    "player_passing_yards": 65,
+    "player_receiving_yards": 178,
+    "player_receptions": 62,
+    "player_rushing_attempts": 14,
+    "player_rushing_yards": 141
+   },
+   "requestsLeft": 54,
+   "rows": 520,
    "slateGames": [
     "Liberty Flames at Coastal Carolina Chanticleers 2026-09-24T23:30Z",
     "Army Black Knights at Temple Owls 2026-09-25T20:00Z",
     "Howard Bison at Rutgers Scarlet Knights 2026-09-25T23:00Z",
-    "Navy Midshipmen at UAB Blazers 2026-09-25T23:00Z"
+    "Navy Midshipmen at UAB Blazers 2026-09-25T23:00Z",
+    "Northwestern Wildcats at Indiana Hoosiers 2026-09-26T00:00Z"
    ],
    "unmatchedEvents": [
     {
@@ -211,32 +227,13 @@
    ]
   },
   "NFL": {
-   "books": {
-    "draftkings": 114,
-    "fanduel": 347
-   },
+   "books": {},
    "eventsListed": 200,
-   "eventsMatched": 1,
+   "eventsMatched": 0,
    "games": 1,
-   "marketTypes": {
-    "player_interceptions": 4,
-    "player_longest_passing_completion": 4,
-    "player_longest_reception": 10,
-    "player_longest_rush": 4,
-    "player_passing_+_rushing_yards": 4,
-    "player_passing_attempts": 4,
-    "player_passing_completions": 4,
-    "player_passing_touchdowns": 13,
-    "player_passing_yards": 26,
-    "player_receiving_yards": 160,
-    "player_receptions": 110,
-    "player_rushing_+_receiving_yards": 12,
-    "player_rushing_attempts": 4,
-    "player_rushing_yards": 91,
-    "player_sacks": 11
-   },
-   "requestsLeft": 56,
-   "rows": 461,
+   "marketTypes": {},
+   "requestsLeft": 59,
+   "rows": 0,
    "slateGames": [
     "Atlanta Falcons at Green Bay Packers 2026-09-25T00:15Z"
    ],
@@ -244,12 +241,32 @@
     {
      "away": null,
      "external": {
-      "saba": "o7623369"
+      "betonline": "futures_663143167",
+      "saba": "o7623424"
      },
-     "home": "Caleb Williams",
+     "home": "San Francisco 49ers",
      "sample": {
       "away_team": "",
-      "home_team": "Caleb Williams",
+      "home_team": "San Francisco 49ers",
+      "markets": [
+       "championship_winner",
+       "conference_winner",
+       "outright"
+      ]
+     },
+     "start": "2026-09-25T00:14:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "betonline": "futures_663211392",
+      "saba": "o7623363"
+     },
+     "home": "Baker Mayfield",
+     "sample": {
+      "away_team": "",
+      "home_team": "Baker Mayfield",
       "markets": [
        "mvp"
       ]
@@ -260,12 +277,88 @@
     {
      "away": null,
      "external": {
-      "saba": "o7623370"
+      "betonline": "futures_663142934",
+      "saba": "o7623399"
      },
-     "home": "Cam Ward",
+     "home": "Chicago Bears",
      "sample": {
       "away_team": "",
-      "home_team": "Cam Ward",
+      "home_team": "Chicago Bears",
+      "markets": [
+       "championship_winner",
+       "conference_winner",
+       "outright"
+      ]
+     },
+     "start": "2026-09-25T00:14:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "betonline": "futures_663336813",
+      "saba": "o7623405"
+     },
+     "home": "Cincinnati Bengals",
+     "sample": {
+      "away_team": "",
+      "home_team": "Cincinnati Bengals",
+      "markets": [
+       "championship_winner",
+       "conference_winner",
+       "outright"
+      ]
+     },
+     "start": "2026-09-25T00:14:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "betonline": "futures_663251956",
+      "saba": "o7623364"
+     },
+     "home": "Bijan Robinson",
+     "sample": {
+      "away_team": "",
+      "home_team": "Bijan Robinson",
+      "markets": [
+       "mvp",
+       "outright"
+      ]
+     },
+     "start": "2026-09-25T00:14:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "betonline": "futures_663336813",
+      "saba": "o7623394"
+     },
+     "home": "Buffalo Bills",
+     "sample": {
+      "away_team": "",
+      "home_team": "Buffalo Bills",
+      "markets": [
+       "championship_winner",
+       "conference_winner",
+       "outright"
+      ]
+     },
+     "start": "2026-09-25T00:14:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "betonline": "futures_663211392",
+      "saba": "o7623365"
+     },
+     "home": "Bo Nix",
+     "sample": {
+      "away_team": "",
+      "home_team": "Bo Nix",
       "markets": [
        "mvp"
       ]
@@ -276,12 +369,13 @@
     {
      "away": null,
      "external": {
-      "saba": "o7623391"
+      "betonline": "futures_663211392",
+      "saba": "o7623366"
      },
-     "home": "Sam Darnold",
+     "home": "Brock Purdy",
      "sample": {
       "away_team": "",
-      "home_team": "Sam Darnold",
+      "home_team": "Brock Purdy",
       "markets": [
        "mvp"
       ]
@@ -292,145 +386,75 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNFL1HSPREAD-26SEP24ATLGB-ATL11"
+      "betonline": "futures_663336813",
+      "saba": "o7623397"
      },
-     "home": null,
+     "home": "Denver Broncos",
      "sample": {
       "away_team": "",
-      "home_team": "",
+      "home_team": "Denver Broncos",
       "markets": [
-       "binary"
+       "championship_winner",
+       "conference_winner",
+       "outright"
       ]
      },
-     "start": "2026-09-25T00:15:00Z",
+     "start": "2026-09-25T00:14:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "kalshi": "KXNFL1QSPREAD-26SEP24ATLGB-ATL11"
+      "betonline": "futures_663336813",
+      "saba": "o7623406"
      },
-     "home": null,
+     "home": "Cleveland Browns",
      "sample": {
       "away_team": "",
-      "home_team": "",
+      "home_team": "Cleveland Browns",
       "markets": [
-       "binary"
+       "championship_winner",
+       "conference_winner",
+       "outright"
       ]
      },
-     "start": "2026-09-25T00:15:00Z",
+     "start": "2026-09-25T00:14:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "kalshi": "KXNFL2HSPREAD-26SEP24ATLGB-ATL11"
+      "betonline": "futures_663211392",
+      "saba": "o7623367"
      },
-     "home": null,
+     "home": "Bryce Young",
      "sample": {
       "away_team": "",
-      "home_team": "",
+      "home_team": "Bryce Young",
       "markets": [
-       "binary"
+       "mvp"
       ]
      },
-     "start": "2026-09-25T00:15:00Z",
+     "start": "2026-09-25T00:14:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "kalshi": "KXNFL2QSPREAD-26SEP24ATLGB-ATL11"
+      "betonline": "futures_663143173",
+      "saba": "o7623422"
      },
-     "home": null,
+     "home": "Tampa Bay Buccaneers",
      "sample": {
       "away_team": "",
-      "home_team": "",
+      "home_team": "Tampa Bay Buccaneers",
       "markets": [
-       "binary"
+       "championship_winner",
+       "conference_winner",
+       "outright"
       ]
      },
-     "start": "2026-09-25T00:15:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "kalshi": "KXNFL3QSPREAD-26SEP24ATLGB-ATL11"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-25T00:15:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "kalshi": "KXNFL4QSPREAD-26SEP24ATLGB-ATL11"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-25T00:15:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "kalshi": "KXNFLSPREAD-26SEP24ATLGB-ATL15"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-25T00:15:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "polymarket": "3701433"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-25T00:15:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "polymarket": "3701434"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-25T00:15:00Z",
+     "start": "2026-09-25T00:14:00Z",
      "type": "outright"
     }
    ]
