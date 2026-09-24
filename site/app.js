@@ -15,7 +15,7 @@
   };
 
   const state = {
-    league: saved.get('league', 'NFL'),
+    league: saved.get('league', 'ALL'),     /* a first visit shows every play, whichever sport it is in */
     gamesScope: 'upcoming', gamesQuery: '', boardDay: 'today', boardScope: 'open', boardSort: 'best', boardQuery: '', boardMode: 'games', propMarket: 'all', playerQuery: '', recordQuery: '',
     stat: null, defensePos: 'WR', defenseStat: 'recYds', defenseScope: 'season', defenseOrder: 'soft',
     logSeason: 'all', scoresLeague: 'MLB', scoresDate: null, recordScope: 'all',
