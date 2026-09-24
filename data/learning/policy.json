@@ -31,6 +31,26 @@
    "segment": "NFL/prop",
    "to": 0.13,
    "why": "calibrated chances predicted the later record better than the raw ones"
+  },
+  {
+   "at": "2026-09-24T15:10:33Z",
+   "evidence": {
+    "breakEven": "52.4% at -110",
+    "nflTotalsAtClose": {
+     "2024": "209-206",
+     "2025": "196-213"
+    },
+    "nflTotalsAtOpen": {
+     "2024": "211-204 (50.8%)",
+     "2025": "203-206 (49.6%)"
+    },
+    "source": "data/model/backtest-v2.json with the stored open and close, graded as docs/EDGE.md shows"
+   },
+   "from": false,
+   "knob": "paused",
+   "segment": "NFL/total",
+   "to": true,
+   "why": "no edge on either backtest season: NFL totals our number likes went 50.8% and 49.6% at the opening number, under the 52.4% a -110 price needs; reopens when what it refuses beats the close"
   }
  ],
  "knobs": {
@@ -75,6 +95,11 @@
   "avoidDomains": [],
   "preferDomains": []
  },
- "segments": {},
+ "segments": {
+  "NFL/total": {
+   "paused": true,
+   "since": "2026-09-24T15:10:33Z"
+  }
+ },
  "version": 1
 }
