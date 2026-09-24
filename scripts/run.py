@@ -922,7 +922,14 @@ def validate(new_reports, all_reports, games):
         try:
             refresh.validate_report(json.loads(json.dumps(report)), games)
         except AssertionError as error:
-            raise RunError(f'{name} fails validation: {error}')
+            # Say which check failed, and keep the report for a person to read: an assert without a message
+            # otherwise leaves nothing to go on.
+            frame = traceback.extract_tb(error.__traceback__)[-1]
+            kept = CONF / 'failed' / name
+            kept.parent.mkdir(parents=True, exist_ok=True)
+            kept.write_text(json.dumps(report, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+            raise RunError(f"{name} fails validation at {Path(frame.filename).name}:{frame.lineno} ({frame.line}) {error}; "
+                           f"the report is kept at {kept}")
     try:
         refresh.validate_ledger([json.loads(json.dumps(r)) for r in all_reports + list(new_reports.values())])
     except AssertionError as error:
@@ -1070,6 +1077,8 @@ def _run(args, now, slot, kinds, status):
             continue
         if price(candidate, ctx, now) is None:
             continue
+        if candidate['id'] in ctx.first:
+            continue            # already on the record: only a settlement or a close revises a published pick
         candidate['_team'] = ctx.player_team.get(candidate.get('athleteId', ''))
         facts = evidence(candidate, ctx, context_file)
         candidate['_evidence'] = facts
