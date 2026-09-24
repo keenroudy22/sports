@@ -160,7 +160,11 @@ def display_title(pick, game):
     """The pick's title with each team named as team_label names it. The published title is never changed; this is
     only how a post and a card say it."""
     title = str(pick.get('title') or '')
-    if not game or pick.get('athleteId') or pick.get('legs'):
+    if pick.get('athleteId') or pick.get('legs'):
+        return title
+    for word in ('OVER', 'UNDER'):                      # a team play says over and under in lowercase, every time
+        title = title.replace(f' {word} ', f' {word.lower()} ')
+    if not game:
         return title
     league = game.get('league') or str(pick.get('id', '')).split('-')[0]
     away, home = game.get('away') or {}, game.get('home') or {}

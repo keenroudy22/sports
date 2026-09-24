@@ -87,11 +87,13 @@ class CardTests(unittest.TestCase):
         self.assertEqual(pick_card.team_label({'short': 'Bills', 'abbreviation': 'BUF'}, 'NFL'), 'Bills')
         self.assertEqual(pick_card.display_title({'title': 'Player Seven OVER 4.5 receptions', 'athleteId': '7'}, game),
                          'Player Seven OVER 4.5 receptions', 'a player prop is named by the player')
+        self.assertEqual(pick_card.display_title({'title': 'Iowa at Michigan OVER 38.5', 'marketType': 'total'}, None),
+                         'Iowa at Michigan over 38.5', 'a team play says over in lowercase like every other')
 
     def test_long_titles_wrap_to_two_lines_and_only_then_trim(self):
         self.assertEqual(pick_card.title_lines('Courtland Sutton OVER 3.5 receptions'), ['Courtland Sutton', 'OVER 3.5 receptions'])
         self.assertEqual(pick_card.title_lines('Iowa at Michigan OVER 38.5'), ['Iowa at Michigan OVER 38.5'])
-        text = pick_card.svg(dict(PICK, title='Courtland Sutton OVER 3.5 receptions'))
+        text = pick_card.svg(dict(PICK, title='Courtland Sutton OVER 3.5 receptions', athleteId='4', market='rec'))
         self.assertIn('>Courtland Sutton<', text)
         self.assertIn('>OVER 3.5 receptions<', text)
         self.assertNotIn('…', text)

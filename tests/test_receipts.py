@@ -50,6 +50,13 @@ class ReceiptTests(unittest.TestCase):
         hand = {'posts': [{'id': 'CFB-2026-W3-hand', 'kind': 'pick', 'postedAt': '2026-09-19T12:30:00Z', 'tweetId': None}]}
         self.assertEqual(receipts.served(hand), {'CFB-2026-W3-hand'}, 'a play posted by hand counts in the book')
 
+    def test_a_receipt_names_the_play_as_its_post_did(self):
+        game = {'id': 'g', 'league': 'CFB', 'kickoff': '2026-09-26T22:30Z',
+                'away': {'id': '2117', 'short': 'C Michigan', 'abbreviation': 'CMU', 'school': 'Central Michigan'},
+                'home': {'id': '2390', 'short': 'Miami', 'abbreviation': 'MIA', 'school': 'Miami'}}
+        play = {'id': 'CFB-2026-W4-cmu-mia-under-54-br', 'title': 'C Michigan at Miami under 54', 'marketType': 'total', 'gameIds': ['g']}
+        self.assertEqual(receipts.label(play, {'g': game}), 'Central Michigan at Miami (FL) under 54')
+
     def test_the_morning_after_lists_every_served_play_with_its_result(self):
         first, latest, log = world()
         found = receipts.ready(first, latest, GAMES, log, MONDAY_MORNING)
@@ -117,6 +124,12 @@ class DailyTests(unittest.TestCase):
         self.assertNotIn('Nine', post['text'], 'the player is not named before his post')
         self.assertEqual(post['due'].astimezone(gates.EASTERN).strftime('%H:%M'), '08:45')
         self.assertIsNone(receipts.menu(first, latest, GAMES, log, datetime(2026, 9, 29, 12, 30, tzinfo=timezone.utc)), 'no plays, no menu')
+
+    def test_a_busy_saturday_menu_is_not_refused_as_one_long_sentence(self):
+        text = ("🍳 TODAY'S MENU\n6 plates on the stove today:\n• Iowa at Michigan, 3:30 PM\n• Oklahoma at Georgia, 3:30 PM\n"
+                "• UConn at Miami (OH), 3:30 PM\n• James Madison at Old Dominion, 6:00 PM\nand 2 more on the site\n\n"
+                "Each one drops three hours before kickoff.\n#CFB")
+        self.assertEqual(receipts.guard({'text': text}), [])
 
     def test_the_book_fills_an_empty_evening_and_only_then(self):
         first, latest, log = world()

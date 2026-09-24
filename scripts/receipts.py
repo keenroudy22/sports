@@ -50,10 +50,11 @@ def game_day(pick, games):
     return eastern_date(gates.when(starts[0])) if starts else None
 
 
-def label(pick):
+def label(pick, games=None):
+    """A play as its post and card named it: schools by name, over and under as the post says them."""
     if pick_card.play_kind(pick) == 'parlay':
         return f"{len(pick.get('legs') or [])}-leg parlay"
-    return str(pick.get('title') or '')
+    return pick_card.display_title(pick, (games or {}).get((pick.get('gameIds') or [None])[0]))
 
 
 def record_text(summary):
@@ -109,10 +110,10 @@ def day_receipt(day, first, latest, games, ids):
     name = f'{day:%A}'
     head = f"🍳 RECEIPTS · {name.upper()}\n{record_text(summary)}"
     tail = 'Graded in public, win or lose.\n' + leagues(rows)
-    text = fit([f"{MARKS[r['result']]} {label(r)}" for r in rows], head, tail.strip())
+    text = fit([f"{MARKS[r['result']]} {label(r, games)}" for r in rows], head, tail.strip())
     return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}', 'kind': 'receipt',
             'title': record_text(summary), 'label': 'YESTERDAY’S PLATES', 'when': f'{day:%A, %b %-d}',
-            'rows': [(r['result'], label(r)) for r in rows], 'text': text, 'due': morning(day + timedelta(days=1)),
+            'rows': [(r['result'], label(r, games)) for r in rows], 'text': text, 'due': morning(day + timedelta(days=1)),
             'stale': datetime(day.year, day.month, day.day, LATEST[0], LATEST[1], tzinfo=gates.EASTERN).astimezone(timezone.utc) + timedelta(days=1)}
 
 

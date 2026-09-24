@@ -35,6 +35,11 @@ class StyleTests(unittest.TestCase):
 
 
 class NumbersGuardTests(unittest.TestCase):
+    def test_a_list_is_short_lines_not_one_long_sentence(self):
+        rows = '\n'.join(f'• Team {n} at Team {n + 1}, 3:30 PM' for n in range(9))
+        self.assertEqual(llm.check_style('Six plates on the stove today:\n' + rows), [])
+        self.assertTrue(llm.check_style('Line one\n' + 'word ' * 60), 'one long line still fails')
+
     def test_numbers_in_normalizes(self):
         self.assertEqual(llm.numbers_in('over 44.50 at -110, a 2-7 week, 55.3%'), {'44.5', '110', '2', '7', '55.3'})
         self.assertEqual(llm.numbers_in('see https://www.espn.com/nfl/game/_/gameId/401872932 now'), set())

@@ -134,7 +134,7 @@ def check_style(text):
         problems.append('contains an emoji')
     if '!' in text:
         problems.append('exclamation mark')
-    for sentence in re.split(r'(?<=[.?])\s+', text):
+    for sentence in re.split(r'(?<=[.?])\s+|\n', text):       # a line break ends a sentence: a list is short lines
         if len(sentence) > LONG_SENTENCE:
             problems.append(f'a sentence runs {len(sentence)} characters')
             break
