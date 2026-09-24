@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-24T20:06:25Z",
+  "updatedAt": "2026-09-24T20:17:39Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-09-24T20:01Z",
+              "reportedAt": "2026-09-24T20:06Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -516,7 +516,7 @@
               "name": "Zion Young",
               "position": "LB",
               "status": "Questionable",
-              "injury": "Quadriceps",
+              "injury": null,
               "reportedAt": "2026-09-23T20:52Z",
               "source": "https://www.espn.com/nfl/player/_/id/4839501/zion-young"
             },
@@ -525,7 +525,7 @@
               "name": "John Simpson",
               "position": "G",
               "status": "Questionable",
-              "injury": "Groin",
+              "injury": null,
               "reportedAt": "2026-09-23T20:51Z",
               "source": "https://www.espn.com/nfl/player/_/id/4035479/john-simpson"
             },
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-24T19:37Z",
+              "reportedAt": "2026-09-24T20:08Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1617,6 +1617,24 @@
           "name": "Cleveland Browns",
           "players": [
             {
+              "id": "3131498",
+              "name": "Tytus Howard",
+              "position": "OT",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-24T20:06Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3131498/tytus-howard"
+            },
+            {
+              "id": "4873232",
+              "name": "Mason Graham",
+              "position": "DT",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-24T20:06Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4873232/mason-graham"
+            },
+            {
               "id": "4379397",
               "name": "Tyson Campbell",
               "position": "CB",
@@ -1633,24 +1651,6 @@
               "injury": "Knee",
               "reportedAt": "2026-09-23T19:52Z",
               "source": "https://www.espn.com/nfl/player/_/id/3110565/quincy-williams"
-            },
-            {
-              "id": "3131498",
-              "name": "Tytus Howard",
-              "position": "OT",
-              "status": "Questionable",
-              "injury": "Knee",
-              "reportedAt": "2026-09-23T19:52Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3131498/tytus-howard"
-            },
-            {
-              "id": "4873232",
-              "name": "Mason Graham",
-              "position": "DT",
-              "status": "Questionable",
-              "injury": "Groin",
-              "reportedAt": "2026-09-23T19:51Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4873232/mason-graham"
             },
             {
               "id": "4242208",
@@ -5987,6 +5987,15 @@
           "name": "Pittsburgh Steelers",
           "players": [
             {
+              "id": "4431258",
+              "name": "Gennings Dunker",
+              "position": "G",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-09-24T20:15Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4431258/gennings-dunker"
+            },
+            {
               "id": "4038815",
               "name": "Rico Dowdle",
               "position": "RB",
@@ -6120,15 +6129,6 @@
               "injury": null,
               "reportedAt": "2026-09-21T18:32Z",
               "source": "https://www.espn.com/nfl/player/_/id/4714771/drew-allar"
-            },
-            {
-              "id": "4431258",
-              "name": "Gennings Dunker",
-              "position": "G",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-21T18:32Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4431258/gennings-dunker"
             },
             {
               "id": "4429955",
@@ -6452,7 +6452,7 @@
               "position": "QB",
               "status": "Questionable",
               "injury": "Lower Body",
-              "reportedAt": "2026-09-24T14:34Z",
+              "reportedAt": "2026-09-24T19:59Z",
               "source": "https://www.espn.com/nfl/player/_/id/3912547/sam-darnold"
             },
             {
@@ -6907,6 +6907,15 @@
           "name": "Tennessee Titans",
           "players": [
             {
+              "id": "4428557",
+              "name": "Tyjae Spears",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-09-24T19:54Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4428557/tyjae-spears"
+            },
+            {
               "id": "3916148",
               "name": "Tony Pollard",
               "position": "RB",
@@ -6941,15 +6950,6 @@
               "injury": null,
               "reportedAt": "2026-09-24T00:19Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431613/james-williams-sr"
-            },
-            {
-              "id": "4428557",
-              "name": "Tyjae Spears",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-09-23T21:26Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4428557/tyjae-spears"
             },
             {
               "id": "3117258",
@@ -7366,38 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "14",
-          "name": "Ronnie Rivers",
-          "from": "Questionable",
-          "to": "Injured Reserve",
-          "observedAt": "2026-09-23T20:49:41Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4243003/ronnie-rivers"
-        },
-        {
-          "teamId": "17",
-          "name": "Carlton Davis III",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-09-23T20:49:41Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3916923/carlton-davis-iii"
-        },
-        {
-          "teamId": "18",
-          "name": "Travis Etienne Jr.",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-09-23T20:49:41Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4239996/travis-etienne-jr"
-        },
-        {
-          "teamId": "30",
-          "name": "Cole Van Lanen",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-09-23T20:53:32Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4035791/cole-van-lanen"
-        },
-        {
           "teamId": "30",
           "name": "Jakobi Meyers",
           "from": "Active",
@@ -7764,11 +7732,43 @@
           "to": "Out",
           "observedAt": "2026-09-24T20:06:25Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-09-24T20:17:39Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "5",
+          "name": "Tytus Howard",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-09-24T20:17:39Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3131498/tytus-howard"
+        },
+        {
+          "teamId": "5",
+          "name": "Mason Graham",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-09-24T20:17:39Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4873232/mason-graham"
+        },
+        {
+          "teamId": "23",
+          "name": "Gennings Dunker",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-09-24T20:17:39Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4431258/gennings-dunker"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-24T20:06:25Z",
-      "lastAttemptAt": "2026-09-24T20:06:25Z",
+      "checkedAt": "2026-09-24T20:17:39Z",
+      "lastAttemptAt": "2026-09-24T20:17:39Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-24T20:06:25Z",
-      "lastAttemptAt": "2026-09-24T20:06:25Z",
+      "checkedAt": "2026-09-24T20:17:39Z",
+      "lastAttemptAt": "2026-09-24T20:17:39Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
