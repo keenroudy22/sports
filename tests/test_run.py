@@ -323,6 +323,34 @@ class AlertTests(unittest.TestCase):
                 self.assertFalse(run.alert('x', 'y', now=now, send=lambda r: self.fail('no topic, no push')))
 
 
+    def test_the_heartbeat_reaches_the_phone_when_something_is_wrong(self):
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as folder:
+            conf = Path(folder) / '.config' / 'keenroudy'
+            conf.mkdir(parents=True)
+            sent = []
+            answer = subprocess.CompletedProcess([], 0, stdout='Logged in to github.com account keenroudy22', stderr='')
+            with mock.patch.object(run, 'CONF', conf), \
+                    mock.patch.object(run, 'git', lambda *a, **k: subprocess.CompletedProcess([], 0, stdout='', stderr='')), \
+                    mock.patch.object(run.subprocess, 'run', lambda *a, **k: answer), \
+                    mock.patch('urllib.request.urlopen', side_effect=OSError('refused')), \
+                    mock.patch.object(run, 'alert', lambda title, message, **k: sent.append((title, message))):
+                self.assertEqual(run.heartbeat(None), 1)
+            self.assertEqual(sent[0][0], 'KeenRoudy desk needs a look')
+            self.assertIn('no run has written status.json yet', sent[0][1])
+            self.assertIn('Ollama is not reachable', sent[0][1])
+            self.assertTrue((Path(folder) / 'Library' / 'Logs' / 'KeenRoudy' / 'ALERT.txt').exists())
+
+    def test_a_rehearsal_never_overwrites_the_live_status(self):
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as folder:
+            with mock.patch.object(run, 'CONF', Path(folder)):
+                run.write_status({'outcome': 'failed: sync', 'dryRun': False})
+                run.write_status({'outcome': 'ok', 'dryRun': True})
+            self.assertEqual(json.loads((Path(folder) / 'status.json').read_text())['outcome'], 'failed: sync')
+            self.assertEqual(json.loads((Path(folder) / 'pending' / 'status.json').read_text())['outcome'], 'ok')
+
+
 class FetchTests(unittest.TestCase):
     def test_a_fetch_that_races_another_git_client_is_tried_again_and_other_failures_stop_the_run(self):
         from types import SimpleNamespace

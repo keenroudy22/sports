@@ -1091,7 +1091,9 @@ def load_json(path, fallback):
 
 
 def write_status(status, path=None):
-    path = path or CONF / 'status.json'
+    """The run's outcome for the heartbeat and `run.py status`. A rehearsal (--dry-run) writes beside its reports
+    in pending/, so it can never paper over a real run that failed."""
+    path = path or (CONF / 'pending' / 'status.json' if status.get('dryRun') else CONF / 'status.json')
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(status, indent=1, default=str) + '\n', encoding='utf-8')
 
@@ -1517,17 +1519,17 @@ def heartbeat(args):
     zone = os.path.realpath('/etc/localtime')
     if not any(z in zone for z in ('New_York', 'Indianapolis', 'Detroit', 'US/Eastern', 'EST5EDT')):
         problems.append(f'the machine is not on Eastern time ({zone})')
-    alert = CONF.parent.parent / 'Library' / 'Logs' / 'KeenRoudy' / 'ALERT.txt'
+    alert_file = CONF.parent.parent / 'Library' / 'Logs' / 'KeenRoudy' / 'ALERT.txt'
     if problems:
         text = f"KeenRoudy Sports heartbeat {stamp(now)}\n" + '\n'.join(f'- {p}' for p in problems) + '\n'
-        alert.parent.mkdir(parents=True, exist_ok=True)
-        alert.write_text(text, encoding='utf-8')
+        alert_file.parent.mkdir(parents=True, exist_ok=True)
+        alert_file.write_text(text, encoding='utf-8')
         subprocess.run(['osascript', '-e', f'display notification "{problems[0]}" with title "KeenRoudy Sports"'], capture_output=True)
         alert('KeenRoudy desk needs a look', '\n'.join(f'- {p}' for p in problems))
         print(text)
         return 1
-    if alert.exists():
-        alert.unlink()
+    if alert_file.exists():
+        alert_file.unlink()
     print('heartbeat: all clear')
     return 0
 
