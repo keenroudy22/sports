@@ -96,11 +96,37 @@ class ReceiptTests(unittest.TestCase):
         log['posts'] = [e for e in log['posts'] if e['id'] != 'NFL-2026-W4-m']         # tonight's play has not gone out yet
         plans = buffer_post.plan(first, latest, dict(GAMES, **noon), MONDAY_MORNING, log)
         got = [(p[0], p[1], p[3].astimezone(gates.EASTERN).strftime('%H:%M'), p[4]) for p in plans]
-        self.assertEqual(got[0], ('receipt:day:2026-09-27', 'receipt', '09:00', 'receipt-day-2026-09-27'))
-        self.assertEqual(got[1][:3], ('NFL-2026-W4-n', 'play', '09:10'))
-        self.assertEqual(got[2][:3], ('NFL-2026-W4-m', 'play', '17:15'), 'the Monday night play three hours out')
+        self.assertEqual(got[0][:3], ('menu:day:2026-09-28', 'menu', '08:45'))
+        self.assertEqual(got[1], ('receipt:day:2026-09-27', 'receipt', '09:00', 'receipt-day-2026-09-27'))
+        self.assertEqual(got[2][:3], ('NFL-2026-W4-n', 'play', '09:10'))
+        self.assertEqual(got[3][:3], ('NFL-2026-W4-m', 'play', '17:15'), 'the Monday night play three hours out')
         log['posts'].append({'id': 'receipt:day:2026-09-27', 'kind': 'buffer:receipt'})
         self.assertNotIn('receipt:day:2026-09-27', [p[0] for p in buffer_post.plan(first, latest, dict(GAMES, **noon), MONDAY_MORNING, log)])
+
+
+class DailyTests(unittest.TestCase):
+    def test_the_menu_names_the_games_and_times_never_the_side(self):
+        first, latest, log = world()
+        first['NFL-2026-W4-m2'] = pick('m2', 'mon', title='Player Nine OVER 60.5 receiving yards', athleteId='9', market='recYds')
+        post = receipts.menu(first, latest, GAMES, log, MONDAY_MORNING)
+        self.assertEqual(post['text'], "🍳 TODAY'S MENU\n2 plates on the stove today:\n• Colts at Chiefs, 8:15 PM\n\n"
+                                       'Each one drops three hours before kickoff.\n#NFL')
+        self.assertNotIn('under', post['text'].lower())
+        self.assertNotIn('Nine', post['text'], 'the player is not named before his post')
+        self.assertEqual(post['due'].astimezone(gates.EASTERN).strftime('%H:%M'), '08:45')
+        self.assertIsNone(receipts.menu(first, latest, GAMES, log, datetime(2026, 9, 29, 12, 30, tzinfo=timezone.utc)), 'no plays, no menu')
+
+    def test_the_book_fills_an_empty_evening_and_only_then(self):
+        first, latest, log = world()
+        tuesday_evening = datetime(2026, 9, 29, 21, 30, tzinfo=timezone.utc)      # Tue 5:30 PM ET
+        post = receipts.book(first, latest, GAMES, log, tuesday_evening)
+        self.assertEqual(post['text'].split('\n')[:2], ['🍳 THE BOOK', 'Season: 2-2 · +0.66u'])
+        self.assertIn('Player props 1-0 · +1.00u', post['text'])
+        self.assertEqual(post['due'].astimezone(gates.EASTERN).strftime('%a %H:%M'), 'Tue 18:00')
+        self.assertIsNone(receipts.book(first, latest, GAMES, log, datetime(2026, 9, 29, 14, 0, tzinfo=timezone.utc)), 'not before 5 PM')
+        busy = dict(log, posts=log['posts'] + [{'id': 'r', 'kind': 'buffer:receipt', 'dueAt': '2026-09-29T13:00:00Z'}])
+        self.assertIsNone(receipts.book(first, latest, GAMES, busy, tuesday_evening), 'the day already had a post')
+        self.assertIsNone(receipts.book(first, latest, GAMES, {'posts': []}, tuesday_evening), 'nothing served, nothing to show')
 
 
 if __name__ == '__main__':

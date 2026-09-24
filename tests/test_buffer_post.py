@@ -118,9 +118,11 @@ class PlanTests(unittest.TestCase):
         latest = {k: dict(v) for k, v in first.items()}
         plans = bp.plan(first, latest, GAMES, NOW, {'posts': []})
         self.assertEqual([(p[0], et(p[3])) for p in plans],
-                         [('p', '09:00'), ('a', '09:10'), ('d', '09:20'), ('x', '09:30'), ('b', '16:30')],
-                         'noon kickoff: 9:00 on, player prop first, parlay last; the 7:30 PM game at 4:30 PM; tomorrow waits')
-        self.assertTrue(all(p[1] == 'play' and p[4] == p[0] for p in plans), 'plays only, each with its card')
+                         [('menu:day:2026-09-26', '08:45'), ('p', '09:00'), ('a', '09:10'), ('d', '09:20'), ('x', '09:30'), ('b', '16:30')],
+                         'the menu first; noon kickoff: 9:00 on, player prop first, parlay last; the 7:30 PM game at 4:30 PM; tomorrow waits')
+        self.assertEqual(plans[0][4], 'https://keenroudy.com/sports/img/kitchen-menu.png')
+        plans = [p for p in plans if p[1] == 'play']
+        self.assertTrue(all(p[4] == p[0] for p in plans), 'each play with its own card')
         self.assertTrue(plans[0][2].startswith('🍳 PLAYER PROP'))
         self.assertTrue(plans[3][2].startswith('🍳 FUN PARLAY'))
 
@@ -138,7 +140,7 @@ class PlanTests(unittest.TestCase):
         first = {'a': pick('a'), 'b': pick('b', 'late'), 'c': pick('c', 'late', title='x')}
         latest = {'a': dict(first['a']), 'b': dict(first['b'], entryNote='closed'), 'c': dict(first['c'], result='win')}
         plans = bp.plan(first, latest, GAMES, NOW, {'posts': [{'id': 'a'}]})
-        self.assertEqual(plans, [])
+        self.assertEqual([p for p in plans if p[1] == 'play'], [])
 
     def test_x_gets_plays_only(self):
         yesterday = {'id': 'y', 'league': 'NFL', 'kickoff': '2026-09-25T00:15Z', 'home': {'short': 'A'}, 'away': {'short': 'B'}}

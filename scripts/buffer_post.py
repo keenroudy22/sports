@@ -226,9 +226,10 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None):
             continue
         kickoff = gates.when(starts[0])
         plays.append((max(kickoff - LEAD_TIME, opens), ORDER[pick_card.play_kind(merged)], kickoff - feed.LEAD, key, text, 'play', key))
-    for receipt in receipts.ready(first, latest, games, log_book, now):
-        if receipt['key'] not in posted and not receipts.guard(receipt):
-            plays.append((receipt['due'], -1, receipt['stale'], receipt['key'], receipt['text'], 'receipt', receipt['card']))
+    order = {'menu': -2, 'receipt': -1, 'book': -1}
+    for post in receipts.house_posts(first, latest, games, log_book, now):
+        if post['key'] not in posted and not receipts.guard(post):
+            plays.append((post['due'], order[post['kind']], post['stale'], post['key'], post['text'], post['kind'], post['card']))
     plays.sort()
     out, last = [], None
     for target, _, deadline, key, text, kind, card in plays:
@@ -250,7 +251,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
     for guid, kind, text, due, card_key in plans:
         image = None
         if card_key:
-            url = f'{CARDS}{card_key}.png'
+            url = card_key if str(card_key).startswith('https://') else f'{CARDS}{card_key}.png'
             image = url if reachable(url, opener) else None
             if not image:
                 log(f'buffer: {guid} waits: its card is not live yet (every post carries its card)')

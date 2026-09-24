@@ -81,13 +81,14 @@ def leagues(rows):
     return ' '.join(x_post.TAGS[l] for l in ('NFL', 'CFB') if l in found)
 
 
-def fit(lines, head, tail):
+def fit(lines, head, tail, head_sep='\n\n'):
     """Drop rows from the end until the post fits, saying how many were left off."""
     rows = list(lines)
     while True:
         more = len(lines) - len(rows)
         body = rows + ([f'and {more} more on the site'] if more else [])
-        text = '\n\n'.join(part for part in (head, '\n'.join(body), tail) if part)
+        text = head_sep.join(part for part in (head, '\n'.join(body)) if part)
+        text = '\n\n'.join(part for part in (text, tail) if part)
         if x_post.tweet_length(text) <= x_post.LIMIT or not rows:
             return text
         rows.pop()
@@ -145,6 +146,97 @@ def ready(first, latest, games, log_book, now):
         if receipt:
             out.append(receipt)
     return [r for r in out if r['stale'] > now]
+
+
+# ------------------------------------------------------------------ the rest of the day's posts
+
+HOUSE_CARDS = x_post.SITE + 'img/'           # static cards in the kitchen's frame, deployed with the site
+MENU_AT, MENU_UNTIL = (8, 45), (11, 30)      # Eastern: the game-day menu goes out before the first plate
+BOOK_FROM, BOOK_AT, BOOK_UNTIL = (17, 0), (18, 0), (21, 0)   # Eastern: the book fills a day that had nothing else
+
+
+def at(day, hm):
+    return datetime(day.year, day.month, day.day, hm[0], hm[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)
+
+
+def todays_plays(first, latest, games, now):
+    """Open, postable plays whose first game is today, Eastern."""
+    import feed
+    today = eastern_date(now)
+    out = []
+    for key, pick in first.items():
+        merged = dict(pick, **latest.get(key, {}))
+        if pick.get('historicalImport') or not feed.postable(merged) or merged.get('result') or merged.get('entryNote'):
+            continue
+        if (merged.get('status') or 'active') != 'active':
+            continue
+        if game_day(merged, games) == today:
+            out.append(merged)
+    return out
+
+
+def menu(first, latest, games, log_book, now):
+    """Game-day morning: what is on the stove today and when, by game, never the side. A reason to come back."""
+    today = eastern_date(now)
+    plays = todays_plays(first, latest, games, now)
+    if not plays:
+        return None
+    rows, seen, parlay = [], set(), False
+    for pick in sorted(plays, key=lambda p: min(games[g]['kickoff'] for g in p['gameIds'] if g in games)):
+        if pick_card.play_kind(pick) == 'parlay':
+            parlay = True
+            continue
+        game = games.get(pick['gameIds'][0])
+        if not game or game['id'] in seen:
+            continue
+        seen.add(game['id'])
+        league = game.get('league')
+        kick = gates.when(game['kickoff']).astimezone(gates.EASTERN)
+        rows.append(f"{pick_card.team_label(game.get('away'), league)} at {pick_card.team_label(game.get('home'), league)}, {kick:%-I:%M %p}")
+    count = len(plays)
+    head = f"🍳 TODAY'S MENU\n{count} plate{'s' if count != 1 else ''} on the stove today:"
+    lines = [f'• {r}' for r in rows] + (['• the fun parlay'] if parlay else [])
+    tail = 'Each one drops three hours before kickoff.\n' + leagues(plays)
+    return {'key': f'menu:day:{today.isoformat()}', 'card': HOUSE_CARDS + 'kitchen-menu.png', 'kind': 'menu',
+            'text': fit(lines, head, tail.strip(), head_sep='\n'), 'due': at(today, MENU_AT), 'stale': at(today, MENU_UNTIL)}
+
+
+def book(first, latest, games, log_book, now):
+    """A day with nothing else on it gets the book: the season record of every play that went out on X, graded
+    through yesterday so the numbers hold all day."""
+    today = eastern_date(now)
+    if now < at(today, BOOK_FROM):
+        return None
+    for entry in log_book.get('posts', []):
+        if entry.get('cancelledAt') or entry.get('deletedAt') or not entry.get('dueAt'):
+            continue
+        if eastern_date(gates.when(entry['dueAt'])) == today:
+            return None                    # the day already has a post
+    ids = served(log_book)
+    rows = [r for r in plays_between(first, latest, games, ids, datetime(2000, 1, 1).date(), today - timedelta(days=1))
+            if r.get('result') in MARKS]
+    if not rows:
+        return None
+    lines = []
+    for kind in ('player', 'team', 'parlay'):
+        group = [r for r in rows if pick_card.play_kind(r) == kind]
+        if group:
+            lines.append(f'{KIND_NAMES[kind]} {record_text(x_post.summarize(group))}')
+    head = f"🍳 THE BOOK\nSeason: {record_text(x_post.summarize(rows))}"
+    tail = 'Every play we post, graded in public, win or lose.\n' + leagues(rows)
+    return {'key': f'book:day:{today.isoformat()}', 'card': HOUSE_CARDS + 'kitchen-book.png', 'kind': 'book',
+            'text': fit(lines, head, tail.strip()), 'due': max(at(today, BOOK_AT), now + timedelta(minutes=2)),
+            'stale': at(today, BOOK_UNTIL)}
+
+
+def house_posts(first, latest, games, log_book, now):
+    """Everything the kitchen posts besides the plays: receipts, the game-day menu, and the book on an empty day."""
+    out = [dict(r, kind='receipt') for r in ready(first, latest, games, log_book, now)]
+    for build in (menu, book):
+        post = build(first, latest, games, log_book, now)
+        if post and post['stale'] > now:
+            out.append(post)
+    return out
 
 
 def guard(receipt):

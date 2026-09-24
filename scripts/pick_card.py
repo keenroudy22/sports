@@ -318,10 +318,11 @@ def receipt_svg(receipt, avatar=None):
         f'<rect x="36" y="36" width="{WIDTH - 72}" height="{HEIGHT - 72}" rx="30" fill="none" stroke="{accent}" stroke-opacity="0.55" stroke-width="3"/>',
         PAN.format(x=72, y=78, s=0.5, c=accent),
         f'<text x="140" y="116" fill="{ink}" font-size="34" font-weight="800" letter-spacing="5">KOOK’N</text>',
-        f'<text x="{WIDTH - 80}" y="116" fill="{soft}" font-size="26" font-weight="700" letter-spacing="3" text-anchor="end">RECEIPTS</text>',
+        f'<text x="{WIDTH - 80}" y="116" fill="{soft}" font-size="26" font-weight="700" letter-spacing="3" text-anchor="end">{esc(receipt.get("kicker") or "RECEIPTS")}</text>',
         f'<text x="80" y="212" fill="{soft}" font-size="32">{esc(receipt.get("when") or "")}</text>',
         f'<text x="80" y="262" fill="{accent}" font-size="24" font-weight="700" letter-spacing="4">{esc(receipt.get("label") or "")}</text>',
-        f'<text x="80" y="{262 + 66 + 4}" fill="{ink}" font-size="66" font-weight="800">{esc(receipt.get("title") or "")}</text>',
+        *[f'<text x="80" y="{262 + (size + 6) * (i + 1) - 2}" fill="{ink}" font-size="{size}" font-weight="800">{esc(text)}</text>'
+          for size in [66 if len(receipt.get("title") or "") <= 22 else 54] for i, text in enumerate(title_lines(receipt.get("title") or "", 22, 22))],
         *body,
         f'<text x="80" y="{HEIGHT - 62}" fill="{ink}" font-size="26" font-weight="700">Graded in public, win or lose. <tspan fill="{soft}" font-weight="400">keenroudy.com/sports</tspan></text>',
         f'<text x="{WIDTH - 80}" y="{HEIGHT - 62}" fill="{soft}" font-size="19" text-anchor="end">Entertainment only. Not advice.</text>',

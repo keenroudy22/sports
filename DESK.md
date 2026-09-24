@@ -151,6 +151,16 @@ live on the site: the hosted workflow renders a card for every open play as soon
 schedules after its own push and waits up to 15 minutes for that deploy, and a play whose card is still not
 live waits for the next run. Nothing goes out bare.
 
+**A post every day** (`scripts/receipts.py`, all in the same frame, never a stat line):
+
+| When (Eastern) | Post |
+|---|---|
+| 8:45 AM on a game day with plays | **Today's menu**: how many plates, which games and when, never the side; each drops three hours before kickoff (card `site/img/kitchen-menu.png`) |
+| 9:00 AM the morning after a game day | **Receipts** for every play that went out, with ✅ ❌ ➖ and the day's units |
+| 9:00 AM Wednesday | **The week's receipts** by kind |
+| Three hours before each kickoff | **The plays** |
+| 6:00 PM on a day with nothing else | **The book**: the season record of every play that went out on X, graded through yesterday (card `site/img/kitchen-book.png`) |
+
 **Receipts** (`scripts/receipts.py`) make it a post every day of the season. At 9:00 AM ET the morning after a
 game day, once every play that went out on X that day is settled, the receipt lists each with ✅ ❌ ➖, the day's
 record and units (site/core.js arithmetic), "Graded in public, win or lose." On Wednesday at 9:00 AM the week's
