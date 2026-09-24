@@ -127,12 +127,30 @@ def sync(runner=git):
     rebase_onto_remote(runner)
 
 
+FETCH_RACE = ('cannot lock ref', 'unable to update local ref', 'is at', '.lock')
+
+
+def fetch(runner=git, cwd=ROOT, attempts=5, wait=3, sleep=time.sleep):
+    """Fetch origin/main. Another git client on this machine (the Claude app refreshes the repository in the
+    background) can update the same ref at the same second, and git then refuses with "cannot lock ref"; that
+    is a race, not a fault, so wait a moment and fetch again. Anything else stops the run as before."""
+    for attempt in range(attempts):
+        result = runner('fetch', '--quiet', 'origin', 'main', cwd=cwd, check=False)
+        if not result.returncode:
+            return
+        detail = (result.stderr or result.stdout or '').strip()
+        if attempt + 1 == attempts or not any(sign in detail for sign in FETCH_RACE):
+            raise RunError(f'git fetch --quiet origin main failed: {detail[:400]}')
+        log(f'git fetch raced another git client ({detail[:120]}); trying again in {wait} s')
+        sleep(wait)
+
+
 def rebase_onto_remote(runner=git, cwd=ROOT, attempts=6):
     """Fetch and rebase onto origin/main. When both writers captured prices in the same window the rebase
     stops on the store files; scripts/merge_store.py keeps every record from both sides and recomputes the
     ledger, and the rebase goes on. A conflict anywhere else aborts the rebase and stops the run."""
     import merge_store
-    runner('fetch', '--quiet', 'origin', 'main', cwd=cwd)
+    fetch(runner, cwd)
     result = runner('rebase', '--quiet', 'origin/main', cwd=cwd, check=False)
     for _ in range(attempts):
         if not result.returncode:

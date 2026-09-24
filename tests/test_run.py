@@ -200,6 +200,23 @@ class GitTests(unittest.TestCase):
             run.sync(runner=self.runner)
 
 
+class FetchTests(unittest.TestCase):
+    def test_a_fetch_that_races_another_git_client_is_tried_again_and_other_failures_stop_the_run(self):
+        from types import SimpleNamespace
+        answers = [SimpleNamespace(returncode=1, stdout='', stderr="error: cannot lock ref 'refs/remotes/origin/main': is at b544 but expected 5bfa"),
+                   SimpleNamespace(returncode=0, stdout='', stderr='')]
+        calls, slept = [], []
+        run.fetch(lambda *a, cwd=None, check=True: calls.append(a) or answers.pop(0), sleep=slept.append)
+        self.assertEqual(len(calls), 2)
+        self.assertEqual(slept, [3])
+        broken = lambda *a, cwd=None, check=True: SimpleNamespace(returncode=128, stdout='', stderr='fatal: could not read from remote')
+        with self.assertRaises(run.RunError):
+            run.fetch(broken, sleep=lambda s: self.fail('a real failure is not retried'))
+        always = lambda *a, cwd=None, check=True: SimpleNamespace(returncode=1, stdout='', stderr='cannot lock ref x')
+        with self.assertRaises(run.RunError):
+            run.fetch(always, attempts=3, sleep=lambda s: None)
+
+
 class BufferPostsTests(unittest.TestCase):
     """After a push the run waits for the new cards to go live, then plans again and schedules."""
 
