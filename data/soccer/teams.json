@@ -1,0 +1,813 @@
+{
+ "builtAt": "2026-09-24T12:26:49Z",
+ "leagues": {
+  "EPL": {
+   "espn": "eng.1",
+   "season": "2026-27",
+   "teams": {
+    "Arsenal": {
+     "abbreviation": "ARS",
+     "alternateColor": "#003399",
+     "color": "#e20520",
+     "espnId": "359",
+     "espnName": "Arsenal",
+     "logo": null,
+     "shortName": "Arsenal"
+    },
+    "Aston Villa": {
+     "abbreviation": "AVL",
+     "alternateColor": "#000000",
+     "color": "#660e36",
+     "espnId": "362",
+     "espnName": "Aston Villa",
+     "logo": null,
+     "shortName": "Aston Villa"
+    },
+    "Bournemouth": {
+     "abbreviation": "BOU",
+     "alternateColor": "#b57edc",
+     "color": "#f42727",
+     "espnId": "349",
+     "espnName": "AFC Bournemouth",
+     "logo": null,
+     "shortName": "Bournemouth"
+    },
+    "Brentford": {
+     "abbreviation": "BRE",
+     "alternateColor": "#0f1c3f",
+     "color": "#f42727",
+     "espnId": "337",
+     "espnName": "Brentford",
+     "logo": null,
+     "shortName": "Brentford"
+    },
+    "Brighton": {
+     "abbreviation": "BHA",
+     "alternateColor": "#005f60",
+     "color": "#0606fa",
+     "espnId": "331",
+     "espnName": "Brighton & Hove Albion",
+     "logo": null,
+     "shortName": "Brighton"
+    },
+    "Chelsea": {
+     "abbreviation": "CHE",
+     "alternateColor": "#ffffff",
+     "color": "#144992",
+     "espnId": "363",
+     "espnName": "Chelsea",
+     "logo": null,
+     "shortName": "Chelsea"
+    },
+    "Coventry": {
+     "abbreviation": "COV",
+     "alternateColor": "#ffffff",
+     "color": "#87cced",
+     "espnId": "388",
+     "espnName": "Coventry City",
+     "logo": null,
+     "shortName": "Coventry"
+    },
+    "Crystal Palace": {
+     "abbreviation": "CRY",
+     "alternateColor": "#000000",
+     "color": "#0202fb",
+     "espnId": "384",
+     "espnName": "Crystal Palace",
+     "logo": null,
+     "shortName": "C Palace"
+    },
+    "Everton": {
+     "abbreviation": "EVE",
+     "alternateColor": "#ffffff",
+     "color": "#0606fa",
+     "espnId": "368",
+     "espnName": "Everton",
+     "logo": null,
+     "shortName": "Everton"
+    },
+    "Fulham": {
+     "abbreviation": "FUL",
+     "alternateColor": "#cc0000",
+     "color": "#ffffff",
+     "espnId": "370",
+     "espnName": "Fulham",
+     "logo": null,
+     "shortName": "Fulham"
+    },
+    "Hull": {
+     "abbreviation": "HUL",
+     "alternateColor": "#ffffff",
+     "color": "#f28800",
+     "espnId": "306",
+     "espnName": "Hull City",
+     "logo": null,
+     "shortName": "Hull"
+    },
+    "Ipswich": {
+     "abbreviation": "IPS",
+     "alternateColor": "#f5f2dc",
+     "color": "#0000fa",
+     "espnId": "373",
+     "espnName": "Ipswich Town",
+     "logo": null,
+     "shortName": "Ipswich"
+    },
+    "Leeds": {
+     "abbreviation": "LEE",
+     "alternateColor": "#ffcd00",
+     "color": "#ffffff",
+     "espnId": "357",
+     "espnName": "Leeds United",
+     "logo": null,
+     "shortName": "Leeds"
+    },
+    "Liverpool": {
+     "abbreviation": "LIV",
+     "alternateColor": "#ffffff",
+     "color": "#d11317",
+     "espnId": "364",
+     "espnName": "Liverpool",
+     "logo": null,
+     "shortName": "Liverpool"
+    },
+    "Man City": {
+     "abbreviation": "MNC",
+     "alternateColor": "#000000",
+     "color": "#99c5ea",
+     "espnId": "382",
+     "espnName": "Manchester City",
+     "logo": null,
+     "shortName": "Man City"
+    },
+    "Man United": {
+     "abbreviation": "MAN",
+     "alternateColor": "#4169e1",
+     "color": "#da020e",
+     "espnId": "360",
+     "espnName": "Manchester United",
+     "logo": null,
+     "shortName": "Man United"
+    },
+    "Newcastle": {
+     "abbreviation": "NEW",
+     "alternateColor": "#0b1b3d",
+     "color": "#000000",
+     "espnId": "361",
+     "espnName": "Newcastle United",
+     "logo": null,
+     "shortName": "Newcastle"
+    },
+    "Nott'm Forest": {
+     "abbreviation": "NFO",
+     "alternateColor": "#1b3624",
+     "color": "#c8102e",
+     "espnId": "393",
+     "espnName": "Nottingham Forest",
+     "logo": null,
+     "shortName": "Nottm Forest"
+    },
+    "Sunderland": {
+     "abbreviation": "SUN",
+     "alternateColor": "#ffb6c1",
+     "color": "#eb172b",
+     "espnId": "366",
+     "espnName": "Sunderland",
+     "logo": null,
+     "shortName": "Sunderland"
+    },
+    "Tottenham": {
+     "abbreviation": "TOT",
+     "alternateColor": "#0b1426",
+     "color": "#ffffff",
+     "espnId": "367",
+     "espnName": "Tottenham Hotspur",
+     "logo": null,
+     "shortName": "Spurs"
+    }
+   }
+  },
+  "MLS": {
+   "espn": "usa.1",
+   "season": "2026",
+   "teams": {
+    "Atlanta Utd": {
+     "abbreviation": "ATL",
+     "alternateColor": "#aa9767",
+     "color": "#9d2235",
+     "espnId": "18418",
+     "espnName": "Atlanta United FC",
+     "logo": null,
+     "shortName": "Atlanta"
+    },
+    "Austin FC": {
+     "abbreviation": "ATX",
+     "alternateColor": "#000000",
+     "color": "#00b140",
+     "espnId": "20906",
+     "espnName": "Austin FC",
+     "logo": null,
+     "shortName": "Austin"
+    },
+    "CF Montreal": {
+     "abbreviation": "MTL",
+     "alternateColor": "#c1c5c8",
+     "color": "#003da6",
+     "espnId": "9720",
+     "espnName": "CF Montr\u00e9al",
+     "logo": null,
+     "shortName": "CF Montr\u00e9al"
+    },
+    "Charlotte": {
+     "abbreviation": "CLT",
+     "alternateColor": "#000000",
+     "color": "#0085ca",
+     "espnId": "21300",
+     "espnName": "Charlotte FC",
+     "logo": null,
+     "shortName": "Charlotte"
+    },
+    "Chicago Fire": {
+     "abbreviation": "CHI",
+     "alternateColor": "#ff0000",
+     "color": "#7ccdef",
+     "espnId": "182",
+     "espnName": "Chicago Fire FC",
+     "logo": null,
+     "shortName": "Chicago"
+    },
+    "Colorado Rapids": {
+     "abbreviation": "COL",
+     "alternateColor": "#8ab7e9",
+     "color": "#8a2432",
+     "espnId": "184",
+     "espnName": "Colorado Rapids",
+     "logo": null,
+     "shortName": "Colorado"
+    },
+    "Columbus Crew": {
+     "abbreviation": "CLB",
+     "alternateColor": "#fedd00",
+     "color": "#000000",
+     "espnId": "183",
+     "espnName": "Columbus Crew",
+     "logo": null,
+     "shortName": "Columbus"
+    },
+    "DC United": {
+     "abbreviation": "DC",
+     "alternateColor": "#d61018",
+     "color": "#000000",
+     "espnId": "193",
+     "espnName": "D.C. United",
+     "logo": null,
+     "shortName": "D.C. United"
+    },
+    "FC Cincinnati": {
+     "abbreviation": "CIN",
+     "alternateColor": "#fe5000",
+     "color": "#003087",
+     "espnId": "18267",
+     "espnName": "FC Cincinnati",
+     "logo": null,
+     "shortName": "Cincinnati"
+    },
+    "FC Dallas": {
+     "abbreviation": "DAL",
+     "alternateColor": "#001f5b",
+     "color": "#c6093b",
+     "espnId": "185",
+     "espnName": "FC Dallas",
+     "logo": null,
+     "shortName": "Dallas"
+    },
+    "Houston Dynamo": {
+     "abbreviation": "HOU",
+     "alternateColor": "#101820",
+     "color": "#ff6b00",
+     "espnId": "6077",
+     "espnName": "Houston Dynamo FC",
+     "logo": null,
+     "shortName": "Houston"
+    },
+    "Inter Miami": {
+     "abbreviation": "MIA",
+     "alternateColor": "#f7b5cd",
+     "color": "#231f20",
+     "espnId": "20232",
+     "espnName": "Inter Miami CF",
+     "logo": null,
+     "shortName": "Miami"
+    },
+    "Los Angeles FC": {
+     "abbreviation": "LAFC",
+     "alternateColor": "#c7a36f",
+     "color": "#000000",
+     "espnId": "18966",
+     "espnName": "LAFC",
+     "logo": null,
+     "shortName": "LAFC"
+    },
+    "Los Angeles Galaxy": {
+     "abbreviation": "LA",
+     "alternateColor": "#ffffff",
+     "color": "#00235d",
+     "espnId": "187",
+     "espnName": "LA Galaxy",
+     "logo": null,
+     "shortName": "LA Galaxy"
+    },
+    "Minnesota United": {
+     "abbreviation": "MIN",
+     "alternateColor": "#9bcde4",
+     "color": "#000000",
+     "espnId": "17362",
+     "espnName": "Minnesota United FC",
+     "logo": null,
+     "shortName": "Minnesota"
+    },
+    "Nashville SC": {
+     "abbreviation": "NSH",
+     "alternateColor": "#1f1646",
+     "color": "#ece83a",
+     "espnId": "18986",
+     "espnName": "Nashville SC",
+     "logo": null,
+     "shortName": "Nashville"
+    },
+    "New England Revolution": {
+     "abbreviation": "NE",
+     "alternateColor": "#ce0e2d",
+     "color": "#022166",
+     "espnId": "189",
+     "espnName": "New England Revolution",
+     "logo": null,
+     "shortName": "New England"
+    },
+    "New York City": {
+     "abbreviation": "NYC",
+     "alternateColor": "#000229",
+     "color": "#9fd2ff",
+     "espnId": "17606",
+     "espnName": "New York City FC",
+     "logo": null,
+     "shortName": "NYCFC"
+    },
+    "New York Red Bulls": {
+     "abbreviation": "RBNY",
+     "alternateColor": "#ffc72c",
+     "color": "#ba0c2f",
+     "espnId": "190",
+     "espnName": "Red Bull New York",
+     "logo": null,
+     "shortName": "Red Bull NY"
+    },
+    "Orlando City": {
+     "abbreviation": "ORL",
+     "alternateColor": "#f0d283",
+     "color": "#60269e",
+     "espnId": "12011",
+     "espnName": "Orlando City SC",
+     "logo": null,
+     "shortName": "Orlando"
+    },
+    "Philadelphia Union": {
+     "abbreviation": "PHI",
+     "alternateColor": "#e0d0a6",
+     "color": "#051f31",
+     "espnId": "10739",
+     "espnName": "Philadelphia Union",
+     "logo": null,
+     "shortName": "Philadelphia"
+    },
+    "Portland Timbers": {
+     "abbreviation": "POR",
+     "alternateColor": "#c99700",
+     "color": "#2c5234",
+     "espnId": "9723",
+     "espnName": "Portland Timbers",
+     "logo": null,
+     "shortName": "Portland"
+    },
+    "Real Salt Lake": {
+     "abbreviation": "RSL",
+     "alternateColor": "#daa900",
+     "color": "#a32035",
+     "espnId": "4771",
+     "espnName": "Real Salt Lake",
+     "logo": null,
+     "shortName": "Salt Lake"
+    },
+    "San Diego FC": {
+     "abbreviation": "SD",
+     "alternateColor": "#f89e1a",
+     "color": "#697a7c",
+     "espnId": "22529",
+     "espnName": "San Diego FC",
+     "logo": null,
+     "shortName": "San Diego"
+    },
+    "San Jose Earthquakes": {
+     "abbreviation": "SJ",
+     "alternateColor": "#ffffff",
+     "color": "#003da6",
+     "espnId": "191",
+     "espnName": "San Jose Earthquakes",
+     "logo": null,
+     "shortName": "San Jose"
+    },
+    "Seattle Sounders": {
+     "abbreviation": "SEA",
+     "alternateColor": "#0033a0",
+     "color": "#2dc84d",
+     "espnId": "9726",
+     "espnName": "Seattle Sounders FC",
+     "logo": null,
+     "shortName": "Seattle"
+    },
+    "Sporting Kansas City": {
+     "abbreviation": "SKC",
+     "alternateColor": "#0a2240",
+     "color": "#a7c6ed",
+     "espnId": "186",
+     "espnName": "Sporting Kansas City",
+     "logo": null,
+     "shortName": "Kansas City"
+    },
+    "St. Louis City": {
+     "abbreviation": "STL",
+     "alternateColor": "#001544",
+     "color": "#ec1458",
+     "espnId": "21812",
+     "espnName": "St. Louis CITY SC",
+     "logo": null,
+     "shortName": "St. Louis"
+    },
+    "Toronto FC": {
+     "abbreviation": "TOR",
+     "alternateColor": "#a2a9ad",
+     "color": "#aa182c",
+     "espnId": "7318",
+     "espnName": "Toronto FC",
+     "logo": null,
+     "shortName": "Toronto"
+    },
+    "Vancouver Whitecaps": {
+     "abbreviation": "VAN",
+     "alternateColor": "#12284c",
+     "color": "#ffffff",
+     "espnId": "9727",
+     "espnName": "Vancouver Whitecaps",
+     "logo": null,
+     "shortName": "Vancouver"
+    }
+   }
+  },
+  "UCL": {
+   "espn": "uefa.champions",
+   "season": "2026-27",
+   "teams": {
+    "102": {
+     "abbreviation": "VIL",
+     "alternateColor": "#6cace4",
+     "color": "#ffff00",
+     "espnId": "102",
+     "espnName": "Villarreal",
+     "logo": null,
+     "shortName": "Villarreal"
+    },
+    "104": {
+     "abbreviation": "ROMA",
+     "alternateColor": "#f5f3e5",
+     "color": "#990a2c",
+     "espnId": "104",
+     "espnName": "AS Roma",
+     "logo": null,
+     "shortName": "AS Roma"
+    },
+    "1068": {
+     "abbreviation": "ATM",
+     "alternateColor": "#000000",
+     "color": "#ca3624",
+     "espnId": "1068",
+     "espnName": "Atl\u00e9tico Madrid",
+     "logo": null,
+     "shortName": "Atl\u00e9tico"
+    },
+    "110": {
+     "abbreviation": "INT",
+     "alternateColor": "#ffffff",
+     "color": "#00239c",
+     "espnId": "110",
+     "espnName": "Internazionale",
+     "logo": null,
+     "shortName": "Inter Milan"
+    },
+    "114": {
+     "abbreviation": "NAP",
+     "alternateColor": "#ffffff",
+     "color": "#0677d2",
+     "espnId": "114",
+     "espnName": "Napoli",
+     "logo": null,
+     "shortName": "Napoli"
+    },
+    "11420": {
+     "abbreviation": "RBL",
+     "alternateColor": "#740c14",
+     "color": "#ffffff",
+     "espnId": "11420",
+     "espnName": "RB Leipzig",
+     "logo": null,
+     "shortName": "RB Leipzig"
+    },
+    "124": {
+     "abbreviation": "DOR",
+     "alternateColor": "#272726",
+     "color": "#ffee00",
+     "espnId": "124",
+     "espnName": "Borussia Dortmund",
+     "logo": null,
+     "shortName": "Dortmund"
+    },
+    "132": {
+     "abbreviation": "MUN",
+     "alternateColor": "#1a1a1a",
+     "color": "#dc052d",
+     "espnId": "132",
+     "espnName": "Bayern Munich",
+     "logo": null,
+     "shortName": "Bayern"
+    },
+    "134": {
+     "abbreviation": "VFB",
+     "alternateColor": "#da0308",
+     "color": "#ffffff",
+     "espnId": "134",
+     "espnName": "VfB Stuttgart",
+     "logo": null,
+     "shortName": "Stuttgart"
+    },
+    "142": {
+     "abbreviation": "FEY",
+     "alternateColor": "#000000",
+     "color": "#ef2f24",
+     "espnId": "142",
+     "espnName": "Feyenoord Rotterdam",
+     "logo": null,
+     "shortName": "Feyenoord"
+    },
+    "148": {
+     "abbreviation": "PSV",
+     "alternateColor": "#000000",
+     "color": "#ef2f24",
+     "espnId": "148",
+     "espnName": "PSV Eindhoven",
+     "logo": null,
+     "shortName": "PSV"
+    },
+    "160": {
+     "abbreviation": "PSG",
+     "alternateColor": "#ffffff",
+     "color": "#011f68",
+     "espnId": "160",
+     "espnName": "Paris Saint-Germain",
+     "logo": null,
+     "shortName": "PSG"
+    },
+    "166": {
+     "abbreviation": "LILL",
+     "alternateColor": "#e2d3d7",
+     "color": "#c2051b",
+     "espnId": "166",
+     "espnName": "Lille",
+     "logo": null,
+     "shortName": "Lille"
+    },
+    "175": {
+     "abbreviation": "RCL",
+     "alternateColor": "#004c37",
+     "color": "#e91514",
+     "espnId": "175",
+     "espnName": "Lens",
+     "logo": null,
+     "shortName": "Lens"
+    },
+    "21922": {
+     "abbreviation": "SAB",
+     "alternateColor": "#ff1493",
+     "color": "#000000",
+     "espnId": "21922",
+     "espnName": "Sabah FK",
+     "logo": null,
+     "shortName": "Sabah"
+    },
+    "2250": {
+     "abbreviation": "SCP",
+     "alternateColor": "#ffffff",
+     "color": "#008127",
+     "espnId": "2250",
+     "espnName": "Sporting CP",
+     "logo": null,
+     "shortName": "Sporting"
+    },
+    "244": {
+     "abbreviation": "BET",
+     "alternateColor": "#0a422d",
+     "color": "#288a00",
+     "espnId": "244",
+     "espnName": "Real Betis",
+     "logo": null,
+     "shortName": "Betis"
+    },
+    "2572": {
+     "abbreviation": "COMO",
+     "alternateColor": "#ffffff",
+     "color": "#4169e1",
+     "espnId": "2572",
+     "espnName": "Como",
+     "logo": null,
+     "shortName": "Como"
+    },
+    "2980": {
+     "abbreviation": "BODO",
+     "alternateColor": "#ffffff",
+     "color": "#fcee33",
+     "espnId": "2980",
+     "espnName": "Bodo/Glimt",
+     "logo": null,
+     "shortName": "Bodo/Glimt"
+    },
+    "359": {
+     "abbreviation": "ARS",
+     "alternateColor": "#003399",
+     "color": "#e20520",
+     "espnId": "359",
+     "espnName": "Arsenal",
+     "footballData": {
+      "EPL": "Arsenal"
+     },
+     "logo": null,
+     "shortName": "Arsenal"
+    },
+    "360": {
+     "abbreviation": "MAN",
+     "alternateColor": "#4169e1",
+     "color": "#da020e",
+     "espnId": "360",
+     "espnName": "Manchester United",
+     "footballData": {
+      "EPL": "Man United"
+     },
+     "logo": null,
+     "shortName": "Man United"
+    },
+    "362": {
+     "abbreviation": "AVL",
+     "alternateColor": "#000000",
+     "color": "#660e36",
+     "espnId": "362",
+     "espnName": "Aston Villa",
+     "footballData": {
+      "EPL": "Aston Villa"
+     },
+     "logo": null,
+     "shortName": "Aston Villa"
+    },
+    "364": {
+     "abbreviation": "LIV",
+     "alternateColor": "#ffffff",
+     "color": "#d11317",
+     "espnId": "364",
+     "espnName": "Liverpool",
+     "footballData": {
+      "EPL": "Liverpool"
+     },
+     "logo": null,
+     "shortName": "Liverpool"
+    },
+    "382": {
+     "abbreviation": "MNC",
+     "alternateColor": "#000000",
+     "color": "#99c5ea",
+     "espnId": "382",
+     "espnName": "Manchester City",
+     "footballData": {
+      "EPL": "Man City"
+     },
+     "logo": null,
+     "shortName": "Man City"
+    },
+    "432": {
+     "abbreviation": "GAL",
+     "alternateColor": "#ffffff",
+     "color": "#aa0031",
+     "espnId": "432",
+     "espnName": "Galatasaray",
+     "logo": null,
+     "shortName": "Galatasaray"
+    },
+    "436": {
+     "abbreviation": "FEN",
+     "alternateColor": "#ffffff",
+     "color": "#ffff00",
+     "espnId": "436",
+     "espnName": "Fenerbahce",
+     "logo": null,
+     "shortName": "Fenerbahce"
+    },
+    "437": {
+     "abbreviation": "FCP",
+     "alternateColor": "#ffa000",
+     "color": "#0000dd",
+     "espnId": "437",
+     "espnName": "FC Porto",
+     "logo": null,
+     "shortName": "FC Porto"
+    },
+    "4411": {
+     "abbreviation": "LAS",
+     "alternateColor": "#000000",
+     "color": "#ffffff",
+     "espnId": "4411",
+     "espnName": "LASK Linz",
+     "logo": null,
+     "shortName": "LASK Linz"
+    },
+    "493": {
+     "abbreviation": "SHK",
+     "alternateColor": "#1a1a1a",
+     "color": "#ff5900",
+     "espnId": "493",
+     "espnName": "Shakhtar Donetsk",
+     "logo": null,
+     "shortName": "Shakhtar"
+    },
+    "494": {
+     "abbreviation": "SLP",
+     "alternateColor": "#81c0ff",
+     "color": "#dc1f26",
+     "espnId": "494",
+     "espnName": "Slavia Prague",
+     "logo": null,
+     "shortName": "Slavia Prague"
+    },
+    "510": {
+     "abbreviation": "VIK",
+     "alternateColor": "#ffffff",
+     "color": "#000080",
+     "espnId": "510",
+     "espnName": "Viking FK",
+     "logo": null,
+     "shortName": "Viking FK"
+    },
+    "521": {
+     "abbreviation": "SLB",
+     "alternateColor": "#1a1a1a",
+     "color": "#81c0ff",
+     "espnId": "521",
+     "espnName": "Slovan Bratislava",
+     "logo": null,
+     "shortName": "S Bratislava"
+    },
+    "570": {
+     "abbreviation": "BRU",
+     "alternateColor": "#ffffff",
+     "color": "#0081ff",
+     "espnId": "570",
+     "espnName": "Club Brugge",
+     "logo": null,
+     "shortName": "Club Brugge"
+    },
+    "83": {
+     "abbreviation": "BAR",
+     "alternateColor": "#fce38a",
+     "color": "#990000",
+     "espnId": "83",
+     "espnName": "Barcelona",
+     "logo": null,
+     "shortName": "Barcelona"
+    },
+    "86": {
+     "abbreviation": "RMA",
+     "alternateColor": "#1b4d3e",
+     "color": "#ffffff",
+     "espnId": "86",
+     "espnName": "Real Madrid",
+     "logo": null,
+     "shortName": "Real Madrid"
+    },
+    "887": {
+     "abbreviation": "AEK",
+     "alternateColor": "#000000",
+     "color": "#ffff00",
+     "espnId": "887",
+     "espnName": "AEK Athens",
+     "logo": null,
+     "shortName": "AEK Athens"
+    }
+   }
+  }
+ },
+ "unmatched": {}
+}
