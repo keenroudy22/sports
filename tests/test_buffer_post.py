@@ -156,6 +156,19 @@ class PlanTests(unittest.TestCase):
         plans = bp.plan(first, latest, GAMES, NOW, {'posts': [{'id': 'a'}]})
         self.assertEqual([p for p in plans if p[1] == 'play'], [])
 
+    def test_a_post_that_fails_its_check_is_named_never_silent(self):
+        first = {'a': pick('a', title='Iowa at Michigan \u2014 over 38.5')}
+        latest = {k: dict(v) for k, v in first.items()}
+        refused = []
+        plans = bp.plan(first, latest, GAMES, NOW, {'posts': []}, refused=refused)
+        self.assertNotIn('a', [p[0] for p in plans])
+        self.assertEqual([key for key, _ in refused], ['a'])
+        self.assertTrue(any('dash' in problem for problem in refused[0][1]))
+
+    def test_a_house_card_is_found_by_its_address_and_a_play_card_by_its_key(self):
+        self.assertEqual(bp.card_url('https://keenroudy.com/sports/img/kitchen-menu.png'), 'https://keenroudy.com/sports/img/kitchen-menu.png')
+        self.assertEqual(bp.card_url('CFB-2026-W4-x'), 'https://keenroudy.com/sports/data/cards/CFB-2026-W4-x.png')
+
     def test_x_gets_plays_only(self):
         yesterday = {'id': 'y', 'league': 'NFL', 'kickoff': '2026-09-25T00:15Z', 'home': {'short': 'A'}, 'away': {'short': 'B'}}
         games = dict(GAMES, y=yesterday)

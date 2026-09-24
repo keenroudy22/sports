@@ -45,6 +45,12 @@ ORDER = {'player': 0, 'team': 1, 'parlay': 2}     # inside one kickoff: player p
 MAX_PER_DAY = 8                      # our own ceiling; Buffer's channel limit is queried as well
 
 
+def card_url(card_key):
+    """Where a post's card lives: a house card (menu, book) by its full address, a play's or a receipt's under
+    data/cards/ by its key."""
+    return str(card_key) if str(card_key).startswith('https://') else f'{CARDS}{card_key}.png'
+
+
 class BufferError(RuntimeError):
     pass
 
@@ -193,7 +199,7 @@ def window_open(day):
     return datetime(day.year, day.month, day.day, feed.WINDOW_OPENS[0], feed.WINDOW_OPENS[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)
 
 
-def plan(first, latest, games, now, log_book, player_team=None, soon=None, quotes=None):
+def plan(first, latest, games, now, log_book, player_team=None, soon=None, quotes=None, refused=None):
     """The posts the run should schedule now: [(key, kind, text, due_at, card_key)].
 
     X gets plays and their receipts: player props, team props and the day's fun parlay, the same shape every
@@ -202,7 +208,8 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     before 9:00 AM ET on game day; plays sharing a kickoff go player props first, then team props, then the
     parlay, ten minutes apart. A play published later than its time goes out now, unless kickoff is inside
     45 minutes. Posted, closed, settled and historical plays are left out.
-    `soon` replaces the two-minute lead, for a person who wants time to look at the queue first.
+    `soon` replaces the two-minute lead, for a person who wants time to look at the queue first. A post whose text
+    fails its check is left out and, when `refused` is a list, named there with the problems, so it is never silent.
     """
     soon = soon if soon is not None else SOON
     import learning
@@ -223,14 +230,23 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
         game = games.get((merged.get('gameIds') or [None])[0])
         now_quote = (quotes or {}).get(key)
         text = x_post.draft(merged, game, weights, now_quote=now_quote)
-        if x_post.guard(text, merged, x_post.load_reasons().get(key), now_quote):
+        problems = x_post.guard(text, merged, x_post.load_reasons().get(key), now_quote)
+        if problems:
+            if refused is not None:
+                refused.append((key, problems))
             continue
         kickoff = gates.when(starts[0])
         plays.append((max(kickoff - LEAD_TIME, opens), ORDER[pick_card.play_kind(merged)], kickoff - feed.LEAD, key, text, 'play', key))
     order = {'menu': -2, 'receipt': -1, 'book': -1}
     for post in receipts.house_posts(first, latest, games, log_book, now):
-        if post['key'] not in posted and not receipts.guard(post):
-            plays.append((post['due'], order[post['kind']], post['stale'], post['key'], post['text'], post['kind'], post['card']))
+        if post['key'] in posted:
+            continue
+        problems = receipts.guard(post)
+        if problems:
+            if refused is not None:
+                refused.append((post['key'], problems))
+            continue
+        plays.append((post['due'], order[post['kind']], post['stale'], post['key'], post['text'], post['kind'], post['card']))
     plays.sort()
     out, last = [], None
     for target, _, deadline, key, text, kind, card in plays:
@@ -252,7 +268,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
     for guid, kind, text, due, card_key in plans:
         image = None
         if card_key:
-            url = card_key if str(card_key).startswith('https://') else f'{CARDS}{card_key}.png'
+            url = card_url(card_key)
             image = url if reachable(url, opener) else None
             if not image:
                 log(f'buffer: {guid} waits: its card is not live yet (every post carries its card)')

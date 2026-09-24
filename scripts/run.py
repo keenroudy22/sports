@@ -1394,12 +1394,16 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         if closed_ids:
             buffer_post.cancel_closed(closed_ids, log_book, now, log=log)
         quotes = now_quotes(ctx, games, now)
-        plans = buffer_post.plan(ctx.first, ctx.latest, games, now, log_book, ctx.player_team, quotes=quotes)
+        refused = []
+        plans = buffer_post.plan(ctx.first, ctx.latest, games, now, log_book, ctx.player_team, quotes=quotes, refused=refused)
+        for key, problems in refused:
+            log(f"buffer: {key} held back, its text fails the post check: {'; '.join(problems)}")
+            alert('KeenRoudy post held back', f"{key}: {'; '.join(problems)}")
         if plans and deploying:
             waiting = [card for *_, card in plans if card]
             started = clock()
             while waiting and clock() - started < CARD_WAIT:
-                waiting = [card for card in waiting if not buffer_post.reachable(f'{buffer_post.CARDS}{card}.png')]
+                waiting = [card for card in waiting if not buffer_post.reachable(buffer_post.card_url(card))]
                 if waiting:
                     sleep(CARD_POLL)
             if waiting:

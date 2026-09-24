@@ -396,6 +396,33 @@ class BufferPostsTests(unittest.TestCase):
         self.assertEqual(schedule.call_args[0][0], plans)
         self.assertEqual(status['errors'], [])
 
+    def test_a_house_card_is_checked_at_its_own_address_and_a_held_post_is_reported(self):
+        import buffer_post
+        import x_post
+        from unittest import mock
+        now = datetime(2026, 9, 27, 12, 40, tzinfo=timezone.utc)
+        ctx = type('Ctx', (), {'first': {}, 'latest': {}, 'player_team': {}})()
+        menu = 'https://keenroudy.com/sports/img/kitchen-menu.png'
+        plans = [('menu:day:2026-09-27', 'menu', 'text', now, menu)]
+
+        def plan(*a, refused=None, **k):
+            if refused is not None:
+                refused.append(('receipt:day:2026-09-26', ['a sentence runs 241 characters']))
+            return plans
+        urls, alerts = [], []
+        with mock.patch.dict(os.environ, {'BUFFER_TOKEN': 't'}), \
+                mock.patch.object(x_post, 'load_log', return_value={'posts': []}), mock.patch.object(x_post, 'save_log'), \
+                mock.patch.object(buffer_post, 'x_channel', return_value={'id': 'ch'}), \
+                mock.patch.object(buffer_post, 'reconcile', return_value=[]), \
+                mock.patch.object(buffer_post, 'plan', side_effect=plan), \
+                mock.patch.object(buffer_post, 'daily_limit', return_value=None), \
+                mock.patch.object(buffer_post, 'reachable', side_effect=lambda url: urls.append(url) or True), \
+                mock.patch.object(run, 'alert', side_effect=lambda title, message, **k: alerts.append(message)), \
+                mock.patch.object(buffer_post, 'schedule'):
+            run.buffer_posts(now, ctx, {}, [], {'errors': [], 'x': {}}, deploying=True, sleep=lambda s: self.fail('no wait for a live house card'), clock=lambda: 0)
+        self.assertEqual(urls, [menu])
+        self.assertEqual(alerts, ['receipt:day:2026-09-26: a sentence runs 241 characters'])
+
     def test_no_wait_without_a_deploy(self):
         import buffer_post
         import x_post
