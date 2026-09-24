@@ -144,6 +144,33 @@ def plate(cx, cy, uri, light):
     return parts
 
 
+SCHOOL_NAMES = {'2390': 'Miami (FL)'}      # ESPN calls the Hurricanes plain "Miami"; the RedHawks are "Miami (OH)"
+
+
+def team_label(team, league):
+    """A college team by its school ("Central Michigan", not "C Michigan"); an NFL team by its short name."""
+    if not team:
+        return ''
+    if league == 'CFB':
+        return SCHOOL_NAMES.get(str(team.get('id'))) or team.get('school') or team.get('short') or team.get('abbreviation') or ''
+    return team.get('short') or team.get('abbreviation') or ''
+
+
+def display_title(pick, game):
+    """The pick's title with each team named as team_label names it. The published title is never changed; this is
+    only how a post and a card say it."""
+    title = str(pick.get('title') or '')
+    if not game or pick.get('athleteId') or pick.get('legs'):
+        return title
+    league = game.get('league') or str(pick.get('id', '')).split('-')[0]
+    away, home = game.get('away') or {}, game.get('home') or {}
+    for a in [x for x in (away.get('short'), away.get('abbreviation')) if x]:
+        for h in [x for x in (home.get('short'), home.get('abbreviation')) if x]:
+            if title.startswith(f'{a} at {h}'):
+                return f'{team_label(away, league)} at {team_label(home, league)}' + title[len(f'{a} at {h}'):]
+    return title
+
+
 FRACTIONS = {0.25: '¼', 0.5: '½', 0.75: '¾'}
 
 
@@ -197,7 +224,7 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
     ink = INK if light else CREAM
     soft = shade(INK, 1.35) if light else shade(CREAM, 0.82)
     accent = alternate if abs(luminance(alternate) - luminance(primary)) > 0.25 else (INK if light else CREAM)
-    title = pick.get('title') or ''
+    title = display_title(pick, game)
     price = f"{int(pick['odds']):+d}" if isinstance(pick.get('odds'), (int, float)) else ''
     book = pick.get('book') or ''
     label = kicker(pick)
@@ -208,7 +235,8 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
     matchup = ''
     if game:
         away, home = game.get('away') or {}, game.get('home') or {}
-        matchup = f"{away.get('short') or away.get('abbreviation') or ''} at {home.get('short') or home.get('abbreviation') or ''}".strip()
+        league = game.get('league') or str(pick.get('id', '')).split('-')[0]
+        matchup = f"{team_label(away, league)} at {team_label(home, league)}".strip()
         if game.get('kickoff'):
             try:
                 moment = datetime.fromisoformat(str(game['kickoff']).replace('Z', '+00:00'))

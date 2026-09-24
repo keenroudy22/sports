@@ -39,11 +39,17 @@ RETRY_NOTE = """
 
 Your previous attempt failed these checks: {problems}. Fix them and return only the text."""
 
-JUDGE_SYSTEM = """You weigh sourced facts about a football game against a proposed pick. You never predict, you never
-compute, and you never add facts. A fact argues against the pick only if it plausibly changes what the pick depends on:
-a listed quarterback for a total, the player's own listing or his quarterback for a player prop, several starters out
-on one side, weather for a total. A listing marked Active or a fact about the other team's depth players does not.
-When you are not sure, say confidence low and explain in one sentence."""
+JUDGE_SYSTEM = """You check a proposed football pick against a short list of sourced facts. You never predict, you never
+compute, and you never add facts. The pick's number and price already account for the current betting line, so the
+line's movement is never a reason by itself.
+
+A fact argues against the pick only when it gives a concrete reason the pick is likely wrong that the projection would
+not already know: for a game total, a starting quarterback out or doubtful, several starting skill players out on one
+side, or heavy wind, rain, snow or cold against an over; for a player prop, the player himself out, doubtful or limited,
+or his starting quarterback out. Questionable backups, depth players and injured reserve do not.
+
+If no listed fact does that, the answer is argues_against false with confidence high: nothing here stands against the
+pick. Only when a listed fact does, answer true and give its id."""
 
 JUDGE_USER = """Pick:
 {pick}
@@ -51,8 +57,9 @@ JUDGE_USER = """Pick:
 Facts (each has an id):
 {facts}
 
-Does any fact argue against this pick? Answer in JSON with argues_against, confidence (high, medium or low), fact_ids
-(the ids of the facts you relied on, empty if none) and a one-sentence note in plain words with no numbers."""
+Does any listed fact give a concrete reason this pick is likely wrong? Answer in JSON with argues_against,
+confidence (high, medium or low: how sure you are of your answer), fact_ids (the ids of the facts that argue against
+it; empty when none do) and a one-sentence note in plain words with no numbers."""
 
 SUPPORT_SCHEMA = {'type': 'object',
                   'properties': {'supports': {'type': 'boolean'},

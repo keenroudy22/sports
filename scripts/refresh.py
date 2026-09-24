@@ -121,7 +121,7 @@ def normalize(event, league):
         t = item['team']
         score = item.get('score')
         game[side] = dict(id=t['id'], name=t['displayName'], short=t.get('shortDisplayName', t['displayName']),
-                          abbreviation=t.get('abbreviation', t['displayName']),
+                          abbreviation=t.get('abbreviation', t['displayName']), school=t.get('location'),
                           score=int(score) if score is not None and status['state'] != 'pre' else None)
         if t.get('color'):
             # The team's colours, so a card about a play can wear them.

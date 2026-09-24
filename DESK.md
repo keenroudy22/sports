@@ -72,6 +72,36 @@ retried on both sides. When both captured prices in the same window the rebase s
 the store's ledger the way every capture script writes it, and merges the day's budget counts taking the
 stricter side. A conflict anywhere else aborts the rebase and stops the run for a person. Nothing is ever forced.
 
+## The judge, the news and the last look (2026-09-24)
+
+A review on 2026-09-24 found the local model's judgment holding 24 of 26 candidates, 14 of them without naming a
+fact, and treating the line's move as evidence against a pick. Backtests say otherwise: in 2024-25 college games
+where the market moved two points or more away from our number, our side at the closing number went 232-149.
+So, in this order, every run:
+
+1. **The written rules first** (`gates.admit`). A candidate they refuse costs no research and no model time.
+2. **The news**: the web researcher (`scripts/researcher.py`, `claude -p` with web search) reads injury,
+   availability and depth-chart reporting for every play that passes the rules, up to six a run, at every run
+   except 6:45 AM and 11:30 PM. It asks first who is expected to play: each starting quarterback, key starters,
+   and for a prop the player himself. Every fact is checked against its source page before it is used.
+3. **The big-gap rule**: a college play more than 6 points from the market (`BIG_GAP`) is not published without
+   that web check, because college teams publish no injury report the desk can read and a number that far from
+   the market has more often missed the news.
+4. **The judge** (the local model) sees only facts that can matter (`relevant_facts`): the player's own listing
+   and his starting quarterback for a prop; the starting quarterbacks, a side missing three or more skill
+   players, and a weather flag for a total; and everything the researcher verified. Not the line's move, not
+   injured reserve, not backups. With nothing relevant there is nothing to hold on. A hold must name a fact.
+   With the model down, a rule of thumb holds instead, and verified reporting against the pick always holds.
+
+**The last look** (`run.py precheck`, launchd `com.keenroudy.sports.precheck`, every 30 minutes): a play
+scheduled to post to X in the next 15 to 150 minutes gets the injury report read live from ESPN, the latest line,
+the researcher's news and the judge once more. A play that no longer stands is taken off the Buffer queue and
+closed to new entries on the site with a dated note saying why (the record keeps it and grades it as posted); a
+play that stands is marked checked in the posted log. Quiet when nothing is due.
+
+College teams are named by school in titles, posts and cards ("Central Michigan at Miami (FL)"), from ESPN's
+school name in the slate (`pick_card.team_label`); published titles are never rewritten.
+
 ## The local model
 
 Ollama serves the model at `http://localhost:11434`; `KEENROUDY_LLM_MODEL` in the env file names the

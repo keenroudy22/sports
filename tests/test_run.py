@@ -4,7 +4,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
@@ -198,6 +198,70 @@ class GitTests(unittest.TestCase):
         (self.repo / 'research' / 'old.json').write_text('{"changed": true}')
         with self.assertRaises(run.RunError):
             run.sync(runner=self.runner)
+
+
+class JudgeTests(unittest.TestCase):
+    """The desk's judge only weighs what can matter, and a hold must name a fact."""
+
+    def ctx(self):
+        from types import SimpleNamespace
+        return SimpleNamespace(starters={'10': '5', '20': '6'})
+
+    def test_only_facts_that_can_matter_reach_the_judge(self):
+        ctx = self.ctx()
+        facts = [{'id': 'market-g', 'kind': 'market', 'direction': 'neutral', 'claim': 'moved'},
+                 {'id': 'weather-g', 'kind': 'weather', 'direction': 'neutral', 'claim': 'calm'},
+                 {'id': 'weather-w', 'kind': 'weather', 'direction': 'against', 'claim': 'wind 22 mph'},
+                 {'id': 'injury-10-5', 'kind': 'injury', 'team': '10', 'position': 'QB', 'status': 'Questionable', 'claim': 'QB1 questionable'},
+                 {'id': 'injury-10-8', 'kind': 'injury', 'team': '10', 'position': 'QB', 'status': 'Questionable', 'claim': 'QB2 questionable'},
+                 {'id': 'injury-20-9', 'kind': 'injury', 'team': '20', 'position': 'WR', 'status': 'Injured Reserve', 'claim': 'WR on IR'},
+                 {'id': 'injury-20-77', 'kind': 'injury', 'team': '20', 'position': 'WR', 'status': 'Out', 'claim': 'the prop player out'},
+                 {'id': 'web-g-0', 'kind': 'role', 'origin': 'claude researcher', 'direction': 'against', 'claim': 'benched'}]
+        total = {id: None for id in ()} or {'marketType': 'total', 'direction': 'over'}
+        ids = [f['id'] for f in run.relevant_facts(total, facts, ctx)]
+        self.assertEqual(ids, ['weather-w', 'injury-10-5', 'web-g-0'], 'the move, calm weather, a backup and IR stay out')
+        prop = {'athleteId': '77', '_team': '20', 'market': 'rec', 'direction': 'over'}
+        ids = [f['id'] for f in run.relevant_facts(prop, facts, ctx)]
+        self.assertEqual(ids, ['injury-20-77', 'web-g-0'], "a prop weighs its own player and his quarterback, not the other side's")
+        three = [{'id': f'injury-20-{i}', 'kind': 'injury', 'team': '20', 'position': 'WR', 'status': 'Out', 'claim': 'x'} for i in range(3)]
+        self.assertEqual(len(run.relevant_facts(total, three, ctx)), 3, 'a side missing three skill players matters to a total')
+        self.assertEqual(run.relevant_facts(total, three[:2], ctx), [])
+
+    def test_no_relevant_fact_no_hold_and_a_hold_names_a_fact(self):
+        from unittest import mock
+        self.assertIsNone(run.judge({'title': 't'}, [], True))
+        facts = [{'id': 'injury-10-5', 'kind': 'injury', 'position': 'QB', 'claim': 'QB1 out'}]
+        with mock.patch.object(run.llm_tasks, 'judge_against', return_value={'argues_against': False, 'confidence': 'low', 'fact_ids': [], 'note': 'n'}):
+            self.assertIsNone(run.judge({'title': 't'}, facts, True), 'unsure without a fact is not a hold')
+        with mock.patch.object(run.llm_tasks, 'judge_against', return_value={'argues_against': True, 'confidence': 'medium', 'fact_ids': ['injury-10-5'], 'note': 'QB out'}):
+            self.assertIn('QB out', run.judge({'title': 't'}, facts, True))
+        with mock.patch.object(run.llm_tasks, 'judge_against', return_value={'argues_against': True, 'confidence': 'high', 'fact_ids': [], 'note': 'vibes'}):
+            self.assertIsNone(run.judge({'title': 't'}, facts, True), 'against without naming a fact does not count')
+        web = [{'id': 'web-1', 'origin': 'claude researcher', 'direction': 'against', 'kind': 'injury', 'claim': 'the starter is suspended'}]
+        self.assertIn('suspended', run.judge({'title': 't'}, web, False), 'with the model down, verified reporting against it holds')
+
+    def test_a_big_college_gap_needs_the_web_check(self):
+        self.assertTrue(run.needs_research({'_league': 'CFB', 'projection': 47.1, 'line': 38.5}))
+        self.assertFalse(run.needs_research({'_league': 'CFB', 'projection': 44.0, 'line': 38.5}))
+        self.assertFalse(run.needs_research({'_league': 'NFL', 'projection': 47.1, 'line': 38.5}), 'the NFL has its injury report')
+
+
+class PrecheckTests(unittest.TestCase):
+    def test_the_window(self):
+        now = datetime(2026, 9, 26, 15, 0, tzinfo=timezone.utc)
+        post = lambda key, minutes, **over: dict({'id': key, 'kind': 'buffer:play', 'bufferPostId': 'b', 'dueAt': run.stamp(now + timedelta(minutes=minutes))}, **over)
+        log_book = {'posts': [post('soon', 10), post('in', 60), post('edge', 150), post('far', 200), post('sent', 60, sentAt='x'),
+                              post('gone', 60, cancelledAt='x'), post('done', 60, precheck={'result': 'clear'}),
+                              dict(post('receipt', 60), kind='buffer:receipt')]}
+        self.assertEqual([e['id'] for e in run.precheck_due(log_book, now)], ['in', 'edge'])
+
+    def test_quiet_when_nothing_is_due(self):
+        from types import SimpleNamespace
+        from unittest import mock
+        import x_post
+        with mock.patch.object(x_post, 'load_log', return_value={'posts': []}), mock.patch.object(run, 'Lock') as lock:
+            self.assertEqual(run.precheck(SimpleNamespace(now=None, dry_run=True, no_llm=True, no_push=True)), 0)
+        lock.assert_not_called()
 
 
 class FetchTests(unittest.TestCase):

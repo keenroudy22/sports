@@ -341,7 +341,7 @@ def draft(pick, game=None, weights=None):
         top = '\n'.join([head, count, *[f'• {leg}' for leg in legs]])
         options = ([top, 'Just for fun.', tail], [top, tail], [head, count, tail])
     else:
-        top = '\n'.join([head, str(pick.get('title') or ''), price])
+        top = '\n'.join([head, pick_card.display_title(pick, game), price])
         number = pick_card.number_line(pick)
         reason = reason_for(pick, weights)
         options = ([top, '\n'.join(x for x in (number, reason) if x), tail], [top, number, tail], [top, tail])

@@ -35,11 +35,17 @@ PROMPT = """You are a research assistant for a small football stats site. Find s
 them as JSON. You never predict, never recommend, never compute a number, and never invent a source.
 
 Game: {away} at {home}, {league}, kickoff {kickoff}.
-Market being considered: {market}.
+Market being considered: {market}.{player_line}
+
+First find who is expected to play: each team's starting quarterback and whether he is healthy, suspended or
+benched; key starters listed out, doubtful or questionable; and, for a player market, that player's own status and
+role this week. Then anything else a reasonable person would say bears on this market. College teams often do
+not publish injury reports, so the local beat reporting and the teams' own depth charts and press conferences
+matter most there.
 
 Look only at: official team or league injury and availability reports, the teams' own sites, and established
-beat reporting (major outlets or the local paper that covers the team). For each fact that a reasonable
-person would say bears on this market, give:
+beat reporting (major outlets or the local paper that covers the team). Prefer reporting from the last four days.
+For each fact, give:
   kind: one of injury, role, weather, stats
   direction: "for" if it argues the market's price is wrong in the direction of "{side}", "against" if it argues
              the other way, "neutral" if it matters but does not point either way
@@ -57,12 +63,13 @@ def enabled(env=None):
     return (env if env is not None else os.environ).get('KEENROUDY_RESEARCHER', '').strip().lower() == 'claude'
 
 
-def prompt_for(game, market, side, policy=None):
+def prompt_for(game, market, side, policy=None, player=None):
     """The prompt, plus what learning has found about sources: sites whose facts kept checking out come first,
     sites whose facts kept failing the check are left out."""
     away, home = game.get('away') or {}, game.get('home') or {}
     text = PROMPT.format(away=away.get('name') or away.get('abbreviation'), home=home.get('name') or home.get('abbreviation'),
-                         league=game.get('league'), kickoff=game.get('kickoff'), market=market, side=side)
+                         league=game.get('league'), kickoff=game.get('kickoff'), market=market, side=side,
+                         player_line=f'\nPlayer: {player}.' if player else '')
     if policy is None:
         import learning
         policy = learning.load_policy()
@@ -152,10 +159,10 @@ def verify(fact, opener=None):
     return dict(fact, verified=True)
 
 
-def research(game, market, side, runner=subprocess.run, opener=None, now=None):
+def research(game, market, side, runner=subprocess.run, opener=None, now=None, player=None):
     """Verified facts for one game and market. Empty when the researcher is silent or nothing survives."""
     now = now or datetime.now(timezone.utc)
-    answer = run_claude(prompt_for(game, market, side), runner)
+    answer = run_claude(prompt_for(game, market, side, player=player), runner)
     shaped = [s for s in (shape(f, game['id'], i, now) for i, f in enumerate(extract(answer))) if s]
     checked = [verify(f, opener) for f in shaped]
     return [f for f in checked if f['verified']], [f for f in checked if not f['verified']]

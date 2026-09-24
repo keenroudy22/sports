@@ -75,6 +75,19 @@ class CardTests(unittest.TestCase):
         self.assertTrue(pick_card.CHEF.exists(), 'the cutout ships with the site')
         self.assertTrue(pick_card.avatar_uri(pick_card.CHEF).startswith('data:image/png;base64,'))
 
+    def test_college_teams_are_named_by_school(self):
+        game = {'league': 'CFB', 'kickoff': '2026-09-26T22:30Z',
+                'away': {'id': '2117', 'short': 'C Michigan', 'abbreviation': 'CMU', 'school': 'Central Michigan'},
+                'home': {'id': '2390', 'short': 'Miami', 'abbreviation': 'MIA', 'school': 'Miami'}}
+        pick = {'id': 'CFB-2026-W4-cmu-mia-under-54-br', 'title': 'C Michigan at Miami under 54', 'marketType': 'total'}
+        self.assertEqual(pick_card.display_title(pick, game), 'Central Michigan at Miami (FL) under 54')
+        self.assertIn('Central Michigan at Miami (FL) · Sat 6:30 PM ET', pick_card.svg(dict(pick, odds=-109, book='BetRivers'), game))
+        ohio = dict(game, home={'id': '193', 'short': 'Miami OH', 'abbreviation': 'M-OH', 'school': 'Miami (OH)'})
+        self.assertEqual(pick_card.team_label(ohio['home'], 'CFB'), 'Miami (OH)')
+        self.assertEqual(pick_card.team_label({'short': 'Bills', 'abbreviation': 'BUF'}, 'NFL'), 'Bills')
+        self.assertEqual(pick_card.display_title({'title': 'Player Seven OVER 4.5 receptions', 'athleteId': '7'}, game),
+                         'Player Seven OVER 4.5 receptions', 'a player prop is named by the player')
+
     def test_long_titles_wrap_to_two_lines_and_only_then_trim(self):
         self.assertEqual(pick_card.title_lines('Courtland Sutton OVER 3.5 receptions'), ['Courtland Sutton', 'OVER 3.5 receptions'])
         self.assertEqual(pick_card.title_lines('Iowa at Michigan OVER 38.5'), ['Iowa at Michigan OVER 38.5'])
