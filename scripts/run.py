@@ -1439,9 +1439,19 @@ def requote(entry, pick, game, ctx, now, log=log):
     if x_post.text_hash(text) == entry.get('textHash'):
         return False
     channel = buffer_post.x_channel(wanted='keenkooks')
-    card = f"{buffer_post.CARDS}{entry['id']}.png" if entry.get('card') else None
-    buffer_post.delete_post(entry['bufferPostId'])
-    entry['bufferPostId'] = buffer_post.create_post(text, channel['id'], gates.when(entry['dueAt']), card)
+    card = buffer_post.card_url(entry['id']) if entry.get('card') else None
+    # The new post first, then the old one out: a failed create leaves the post as scheduled, and a failed delete
+    # takes the new one back, so the play goes out once either way.
+    new_id = buffer_post.create_post(text, channel['id'], gates.when(entry['dueAt']), card)
+    try:
+        buffer_post.delete_post(entry['bufferPostId'])
+    except buffer_post.BufferError:
+        try:
+            buffer_post.delete_post(new_id)
+        except buffer_post.BufferError:
+            alert('KeenRoudy post may go out twice', f"{entry['id']}: both {entry['bufferPostId']} and {new_id} are scheduled; delete one in Buffer")
+        raise
+    entry['bufferPostId'] = new_id
     entry['textHash'] = x_post.text_hash(text)
     entry['requotedAt'] = stamp(now)
     log(f"precheck: {entry['id']} rescheduled with the number available now")
@@ -1681,8 +1691,10 @@ def precheck(args):
                     (ROOT / 'research' / name).write_text(json.dumps(report, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
                     log('wrote', ROOT / 'research' / name)
                 run_tests()
-            x_post.save_log(log_book)
-            if not args.dry_run:
+            if args.dry_run:
+                log('precheck: dry run; the post log is left as it was, so the real check still looks at these')
+            else:
+                x_post.save_log(log_book)
                 commit_push(now, now.astimezone(EASTERN), {'published': 0, 'settled': 0, 'closed': len(closures)}, push=not args.no_push)
                 commit_log(now, push=not args.no_push)
             return 0

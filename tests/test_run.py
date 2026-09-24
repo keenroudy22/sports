@@ -304,6 +304,62 @@ class PrecheckTests(unittest.TestCase):
             self.assertEqual(run.precheck(SimpleNamespace(now=None, dry_run=True, no_llm=True, no_push=True)), 0)
         lock.assert_not_called()
 
+    def test_a_rehearsal_leaves_the_post_log_alone(self):
+        from types import SimpleNamespace
+        from unittest import mock
+        import x_post
+        now = datetime(2026, 9, 25, 18, 30, tzinfo=timezone.utc)
+        entry = {'id': 'CFB-2026-W4-x', 'kind': 'buffer:play', 'bufferPostId': 'b', 'dueAt': run.stamp(now + timedelta(minutes=90))}
+        ctx = SimpleNamespace(first={}, latest={}, player_team={}, names={}, games={})
+        stores = mock.MagicMock(reports=[], context_file={})
+        stores.as_of.return_value = ctx
+        with mock.patch.object(x_post, 'load_log', side_effect=lambda: {'posts': [dict(entry)]}), \
+                mock.patch.object(x_post, 'save_log') as save_log, mock.patch.object(run, 'Lock'), \
+                mock.patch.object(run, 'sync', side_effect=AssertionError('no sync in a rehearsal')), \
+                mock.patch.object(run, 'live_games', return_value={}), mock.patch.object(run.features, 'load', return_value=[]), \
+                mock.patch.object(run.gates, 'Stores', return_value=stores), mock.patch.object(run, 'raw_first_publications', return_value={}), \
+                mock.patch.object(run, 'live_context', return_value={}), mock.patch.object(run.llm, 'available', return_value=False), \
+                mock.patch.object(run, 'close_moves', return_value=([], None)), mock.patch.object(run.desk, 'captures', return_value=[]):
+            self.assertEqual(run.precheck(SimpleNamespace(now=run.stamp(now), dry_run=True, no_llm=True, no_push=True)), 0)
+        save_log.assert_not_called()
+
+    def test_a_requote_creates_the_new_post_before_the_old_one_goes(self):
+        import buffer_post
+        from types import SimpleNamespace
+        from unittest import mock
+        now = datetime(2026, 9, 26, 15, 0, tzinfo=timezone.utc)
+        pick = {'id': 'CFB-2026-W4-x', 'title': 'Iowa at Michigan over 38.5', 'marketType': 'total', 'line': 38.5, 'odds': -105,
+                'book': 'ESPN BET', 'direction': 'over', 'gameIds': ['g'], 'projection': 47.1}
+        ctx = SimpleNamespace()
+
+        def attempt(fail_delete=()):
+            entry = {'id': 'CFB-2026-W4-x', 'bufferPostId': 'old', 'dueAt': '2026-09-26T16:30:00Z', 'card': True, 'textHash': 'stale'}
+            calls = []
+
+            def delete(post_id, **k):
+                calls.append(('delete', post_id))
+                if post_id in fail_delete:
+                    raise buffer_post.BufferError('refused')
+            with mock.patch.object(buffer_post, 'x_channel', return_value={'id': 'ch'}), \
+                    mock.patch.object(buffer_post, 'create_post', side_effect=lambda *a, **k: calls.append(('create', a[3])) or 'new'), \
+                    mock.patch.object(buffer_post, 'delete_post', side_effect=delete), \
+                    mock.patch.object(run.gates, 'best_now', return_value=('FanDuel', 39.5, -110)), \
+                    mock.patch.object(run, 'alert') as alerted:
+                try:
+                    run.requote(entry, pick, {'id': 'g', 'league': 'CFB'}, ctx, now, log=lambda *_: None)
+                except buffer_post.BufferError:
+                    pass
+            return entry, calls, alerted
+        entry, calls, _ = attempt()
+        self.assertEqual(calls, [('create', 'https://keenroudy.com/sports/data/cards/CFB-2026-W4-x.png'), ('delete', 'old')])
+        self.assertEqual(entry['bufferPostId'], 'new')
+        entry, calls, alerted = attempt(fail_delete={'old'})
+        self.assertEqual(calls[-1], ('delete', 'new'), 'the old one could not go, so the new one is taken back')
+        self.assertEqual(entry['bufferPostId'], 'old')
+        alerted.assert_not_called()
+        entry, calls, alerted = attempt(fail_delete={'old', 'new'})
+        alerted.assert_called_once()
+
 
 class AlertTests(unittest.TestCase):
     def test_alerts_push_once_per_six_hours_and_never_without_a_topic(self):
