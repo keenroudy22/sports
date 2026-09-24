@@ -194,6 +194,14 @@ class GitTests(unittest.TestCase):
         self.assertEqual(self.sh('log', '-1', '--format=%s').stdout.strip(), 'Posts 2026-09-27 08:40 ET')
         self.assertEqual(self.sh('show', '--name-only', '--format=', 'HEAD').stdout.split(), ['data/x-posted.json'])
 
+    def test_sync_commits_captures_a_stopped_run_left_behind(self):
+        (self.repo / 'data' / 'odds' / 'nfl.jsonl').write_text('{}\n{"x": 1}\n')
+        with self.assertRaises(run.RunError) as caught:        # no remote here, so the rebase step fails after the commit
+            run.sync(runner=self.runner)
+        self.assertNotIn('modified before the run', str(caught.exception))
+        self.assertEqual(self.sh('log', '-1', '--format=%s').stdout.strip(), 'Captures left by a stopped run')
+        self.assertEqual(self.sh('status', '--porcelain').stdout, '')
+
     def test_sync_refuses_a_dirty_tree(self):
         (self.repo / 'research' / 'old.json').write_text('{"changed": true}')
         with self.assertRaises(run.RunError):

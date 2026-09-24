@@ -120,11 +120,23 @@ def git(*args, cwd=ROOT, check=True):
     return result
 
 
+LEFTOVER = ('data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json')
+
+
 def sync(runner=git):
-    """Step 1: a clean tree and a rebase onto the hosted workflow's commits. Never force."""
+    """Step 1: a clean tree and a rebase onto the hosted workflow's commits. Never force.
+
+    A run that stopped after capturing prices leaves the captures uncommitted; they are real records, so they
+    are committed here before the pull. Anything else modified stops the run for a person."""
     dirty = [l for l in runner('status', '--porcelain').stdout.splitlines() if not l.startswith('??')]
-    if dirty:
-        raise RunError(f'tracked files are modified before the run: {dirty[:5]}')
+    leftover = [l[3:].strip().strip('"') for l in dirty if l[3:].strip().strip('"').startswith(LEFTOVER)]
+    others = [l for l in dirty if l[3:].strip().strip('"') not in leftover]
+    if others:
+        raise RunError(f'tracked files are modified before the run: {others[:5]}')
+    if leftover:
+        runner('add', '--', *leftover)
+        runner('commit', '--quiet', '-m', 'Captures left by a stopped run')
+        log(f'committed {len(leftover)} capture file(s) a stopped run left behind')
     rebase_onto_remote(runner)
 
 
