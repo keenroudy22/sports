@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-24T21:34:21Z",
+  "updatedAt": "2026-09-24T21:38:52Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-09-24T21:01Z",
+              "reportedAt": "2026-09-24T21:35Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-24T21:24Z",
+              "reportedAt": "2026-09-24T21:35Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2307,6 +2307,15 @@
           "name": "Detroit Lions",
           "players": [
             {
+              "id": "4710422",
+              "name": "Ahmed Hassanein",
+              "position": "DE",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-24T21:30Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4710422/ahmed-hassanein"
+            },
+            {
               "id": "4429035",
               "name": "Tate Ratledge",
               "position": "G",
@@ -2314,15 +2323,6 @@
               "injury": "Elbow",
               "reportedAt": "2026-09-23T20:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/4429035/tate-ratledge"
-            },
-            {
-              "id": "4710422",
-              "name": "Ahmed Hassanein",
-              "position": "DE",
-              "status": "Questionable",
-              "injury": "Illness",
-              "reportedAt": "2026-09-23T20:21Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4710422/ahmed-hassanein"
             },
             {
               "id": "4569323",
@@ -5067,6 +5067,15 @@
           "name": "New Orleans Saints",
           "players": [
             {
+              "id": "4076951",
+              "name": "Nathan Shepherd",
+              "position": "DT",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-24T21:28Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4076951/nathan-shepherd"
+            },
+            {
               "id": "4599739",
               "name": "Kendre Miller",
               "position": "RB",
@@ -5128,15 +5137,6 @@
               "injury": "Ankle",
               "reportedAt": "2026-09-24T00:39Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685260/kelvin-banks-jr"
-            },
-            {
-              "id": "4076951",
-              "name": "Nathan Shepherd",
-              "position": "DT",
-              "status": "Questionable",
-              "injury": "Hip",
-              "reportedAt": "2026-09-23T21:35Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4076951/nathan-shepherd"
             },
             {
               "id": "4698597",
@@ -6447,6 +6447,15 @@
           "name": "Seattle Seahawks",
           "players": [
             {
+              "id": "4869523",
+              "name": "Nick Emmanwori",
+              "position": "S",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-24T21:26Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4869523/nick-emmanwori"
+            },
+            {
               "id": "3912547",
               "name": "Sam Darnold",
               "position": "QB",
@@ -6535,15 +6544,6 @@
               "injury": "Chest",
               "reportedAt": "2026-09-23T19:34Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685512/jadarian-price"
-            },
-            {
-              "id": "4869523",
-              "name": "Nick Emmanwori",
-              "position": "S",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-23T01:03Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4869523/nick-emmanwori"
             },
             {
               "id": "4597703",
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "13",
-          "name": "Nakobe Dean",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-09-23T23:46:42Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4426340/nakobe-dean"
-        },
-        {
-          "teamId": "24",
-          "name": "Deane Leonard",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-09-23T23:46:42Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4690171/deane-leonard"
-        },
-        {
           "teamId": "14",
           "name": "Colby Parkinson",
           "from": "Active",
@@ -7764,11 +7748,27 @@
           "to": "Active",
           "observedAt": "2026-09-24T21:34:21Z",
           "source": "https://www.espn.com/nfl/player/_/id/4241986/chase-young"
+        },
+        {
+          "teamId": "8",
+          "name": "Ahmed Hassanein",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-09-24T21:38:52Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4710422/ahmed-hassanein"
+        },
+        {
+          "teamId": "18",
+          "name": "Nathan Shepherd",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-09-24T21:38:52Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4076951/nathan-shepherd"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-24T21:34:21Z",
-      "lastAttemptAt": "2026-09-24T21:34:21Z",
+      "checkedAt": "2026-09-24T21:38:52Z",
+      "lastAttemptAt": "2026-09-24T21:38:52Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-24T21:34:21Z",
-      "lastAttemptAt": "2026-09-24T21:34:21Z",
+      "checkedAt": "2026-09-24T21:38:52Z",
+      "lastAttemptAt": "2026-09-24T21:38:52Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
