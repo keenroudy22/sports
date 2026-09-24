@@ -1,5 +1,5 @@
 {
- "at": "2026-09-24T22:54:36Z",
+ "at": "2026-09-24T23:55:49Z",
  "leagues": {
   "CFB": {
    "books": {
@@ -8,7 +8,7 @@
    },
    "eventsListed": 200,
    "eventsMatched": 1,
-   "games": 48,
+   "games": 61,
    "marketTypes": {
     "player_longest_passing_completion": 2,
     "player_longest_reception": 7,
@@ -25,7 +25,6 @@
    "requestsLeft": 51,
    "rows": 496,
    "slateGames": [
-    "Liberty Flames at Coastal Carolina Chanticleers 2026-09-24T23:30Z",
     "Army Black Knights at Temple Owls 2026-09-25T20:00Z",
     "Howard Bison at Rutgers Scarlet Knights 2026-09-25T23:00Z",
     "Navy Midshipmen at UAB Blazers 2026-09-25T23:00Z",
@@ -72,90 +71,23 @@
     "Incarnate Word Cardinals at Texas State Bobcats 2026-09-26T22:00Z",
     "Long Island University Sharks at Florida International Panthers 2026-09-26T22:00Z",
     "Louisiana Ragin' Cajuns at Charlotte 49ers 2026-09-26T22:30Z",
-    "Central Michigan Chippewas at Miami Hurricanes 2026-09-26T22:30Z"
+    "Central Michigan Chippewas at Miami Hurricanes 2026-09-26T22:30Z",
+    "Oklahoma State Cowboys at West Virginia Mountaineers 2026-09-26T23:00Z",
+    "Southern Miss Golden Eagles at Tulane Green Wave 2026-09-26T23:00Z",
+    "Kansas State Wildcats at Cincinnati Bearcats 2026-09-26T23:00Z",
+    "South Carolina Gamecocks at Alabama Crimson Tide 2026-09-26T23:00Z",
+    "Kennesaw State Owls at Arkansas State Red Wolves 2026-09-26T23:00Z",
+    "Mercyhurst Lakers at Western Kentucky Hilltoppers 2026-09-26T23:00Z",
+    "Middle Tennessee Blue Raiders at Jacksonville State Gamecocks 2026-09-26T23:00Z",
+    "Oregon Ducks at USC Trojans 2026-09-26T23:30Z",
+    "Texas A&M Aggies at LSU Tigers 2026-09-26T23:30Z",
+    "App State Mountaineers at NC State Wolfpack 2026-09-26T23:30Z",
+    "Arizona Wildcats at Washington State Cougars 2026-09-26T23:30Z",
+    "Troy Trojans at Utah State Aggies 2026-09-26T23:30Z",
+    "Houston Christian Huskies at North Texas Mean Green 2026-09-26T23:30Z",
+    "Missouri Tigers at Mississippi State Bulldogs 2026-09-26T23:45Z"
    ],
    "unmatchedEvents": [
-    {
-     "away": "Kansas State",
-     "external": {
-      "bet365 us": "201605086"
-     },
-     "home": "Cincinnati",
-     "sample": {
-      "away_team": "Kansas State",
-      "home_team": "Cincinnati",
-      "markets": [
-       "point_spread"
-      ]
-     },
-     "start": "2026-09-24T20:59:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Nebraska",
-     "external": {
-      "bet365 us": "201605023"
-     },
-     "home": "Michigan State",
-     "sample": {
-      "away_team": "Nebraska",
-      "home_team": "Michigan State",
-      "markets": [
-       "point_spread"
-      ]
-     },
-     "start": "2026-09-24T20:59:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Oklahoma State",
-     "external": {
-      "bet365 us": "201605128"
-     },
-     "home": "West Virginia",
-     "sample": {
-      "away_team": "Oklahoma State",
-      "home_team": "West Virginia",
-      "markets": [
-       "point_spread"
-      ]
-     },
-     "start": "2026-09-24T20:59:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "TCU",
-     "external": {
-      "bet365 us": "201605098"
-     },
-     "home": "Central Florida",
-     "sample": {
-      "away_team": "TCU",
-      "home_team": "Central Florida",
-      "markets": [
-       "point_spread"
-      ]
-     },
-     "start": "2026-09-24T20:59:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Benedict Tigers",
-     "external": {
-      "rebet": "sr:match:72482246"
-     },
-     "home": "Tuskegee Golden Tigers",
-     "sample": {
-      "away_team": "Benedict Tigers",
-      "home_team": "Tuskegee Golden Tigers",
-      "markets": [
-       "moneyline",
-       "total_points"
-      ]
-     },
-     "start": "2026-09-24T23:00:00Z",
-     "type": "fixture"
-    },
     {
      "away": null,
      "external": {
@@ -267,13 +199,93 @@
      },
      "start": "2026-09-24T23:29:00Z",
      "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7631599"
+     },
+     "home": "Florida State Seminoles",
+     "sample": {
+      "away_team": "",
+      "home_team": "Florida State Seminoles",
+      "markets": [
+       "tournament_winner"
+      ]
+     },
+     "start": "2026-09-24T23:29:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7631600"
+     },
+     "home": "Georgia Bulldogs",
+     "sample": {
+      "away_team": "",
+      "home_team": "Georgia Bulldogs",
+      "markets": [
+       "tournament_winner"
+      ]
+     },
+     "start": "2026-09-24T23:29:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7631601"
+     },
+     "home": "Georgia Tech Yellow Jackets",
+     "sample": {
+      "away_team": "",
+      "home_team": "Georgia Tech Yellow Jackets",
+      "markets": [
+       "tournament_winner"
+      ]
+     },
+     "start": "2026-09-24T23:29:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7631602"
+     },
+     "home": "Houston Cougars",
+     "sample": {
+      "away_team": "",
+      "home_team": "Houston Cougars",
+      "markets": [
+       "tournament_winner"
+      ]
+     },
+     "start": "2026-09-24T23:29:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7631603"
+     },
+     "home": "Indiana Hoosiers",
+     "sample": {
+      "away_team": "",
+      "home_team": "Indiana Hoosiers",
+      "markets": [
+       "tournament_winner"
+      ]
+     },
+     "start": "2026-09-24T23:29:00Z",
+     "type": "outright"
     }
    ]
   },
   "NFL": {
    "books": {
     "draftkings": 252,
-    "fanduel": 362
+    "fanduel": 361
    },
    "eventsListed": 200,
    "eventsMatched": 1,
@@ -292,7 +304,7 @@
     "player_passing_attempts": 4,
     "player_passing_completions": 4,
     "player_passing_touchdowns": 13,
-    "player_passing_yards": 34,
+    "player_passing_yards": 33,
     "player_receiving_yards": 183,
     "player_receptions": 114,
     "player_rushing_+_receiving_yards": 12,
@@ -303,7 +315,7 @@
     "player_tackles_+_assists": 20
    },
    "requestsLeft": 55,
-   "rows": 614,
+   "rows": 613,
    "slateGames": [
     "Atlanta Falcons at Green Bay Packers 2026-09-25T00:15Z"
    ],
@@ -321,7 +333,7 @@
        "moneyline"
       ]
      },
-     "start": "2026-09-24T20:59:00Z",
+     "start": "2026-09-24T23:41:00Z",
      "type": "fixture"
     },
     {
@@ -337,7 +349,7 @@
        "anytime_touchdown_scorer"
       ]
      },
-     "start": "2026-09-24T20:59:00Z",
+     "start": "2026-09-24T23:41:00Z",
      "type": "fixture"
     },
     {
@@ -353,7 +365,7 @@
        "outright"
       ]
      },
-     "start": "2026-09-24T21:02:00Z",
+     "start": "2026-09-24T23:44:00Z",
      "type": "outright"
     },
     {
