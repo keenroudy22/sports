@@ -37,7 +37,6 @@ Usage:
 Stdlib only.
 """
 import argparse
-import json
 import re
 import statistics
 import sys
@@ -253,15 +252,18 @@ def collect(league, games, fetch=fetch_json, pause=PAUSE, workers=WORKERS, root=
     pending, written, failures = [], {}, {}
 
     def task(game):
+        payload, failure = None, None
         try:
             payload = fetch(odds_url(league, game['eventId']))
         except HTTPError as error:
-            payload = None if error.code == 404 else error  # 404: ESPN has no odds for this game
+            if error.code != 404:  # 404: ESPN has no odds for this game, which is no line
+                failure = f'HTTPError: {error}'
+            error.close()
         except Exception as error:  # one unreadable game is retried next run, never fatal
-            payload = error
+            failure = f'{type(error).__name__}: {error}'
         if pause:
             time.sleep(pause)
-        return game, payload, boxscores.stamp(clock())
+        return game, payload, failure, boxscores.stamp(clock())
 
     def flush():
         by_file = {}
@@ -276,9 +278,9 @@ def collect(league, games, fetch=fetch_json, pause=PAUSE, workers=WORKERS, root=
         boxscores.write_json(root / 'ledger.json', boxscores.ledger(root))
 
     with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
-        for done, (game, payload, retrieved) in enumerate(pool.map(task, work), 1):
-            if isinstance(payload, Exception):
-                failures[game['eventId']] = f'{type(payload).__name__}: {payload}'[:160]
+        for done, (game, payload, failure, retrieved) in enumerate(pool.map(task, work), 1):
+            if failure:
+                failures[game['eventId']] = failure[:160]
             else:
                 pending.append(record(game, payload, retrieved))
             if done % FLUSH_EVERY == 0:
@@ -321,8 +323,11 @@ def main(argv=None):
     else:
         results = refresh([args.league] if args.league else sorted(SLUG), args.days)
     for league, (written, failures) in results.items():
-        print(f'{league}: appended {sum(written.values())} lines {written or ""}; {len(failures)} could not be read '
-              f'this run{" (" + ", ".join(sorted(failures)[:5]) + ")" if failures else ""}.')
+        files = ', '.join(f'{name} {count}' for name, count in sorted(written.items()))
+        text = f'{league}: appended {sum(written.values())} lines' + (f' ({files})' if files else '') + '.'
+        if failures:
+            text += f' {len(failures)} could not be read ({", ".join(sorted(failures)[:5])}); run it again to retry them.'
+        print(text)
     if any(failures for _, failures in results.values()):
         sys.exit(1)
 

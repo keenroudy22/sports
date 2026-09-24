@@ -133,7 +133,7 @@ class ConsensusTests(unittest.TestCase):
 
 
 class FakeFeed:
-    """Scoreboards by day and odds by event; an odds entry may be an exception to raise."""
+    """Scoreboards by day and odds by event; an odds entry that is a number is that HTTP error (404 by default)."""
 
     def __init__(self, days, odds):
         self.days, self.odds, self.calls = days, odds, []
@@ -143,10 +143,9 @@ class FakeFeed:
         if '/scoreboard?' in url:
             day = url.split('dates=')[1][:8]
             return {'events': self.days.get(day, [])}
-        event_id = url.split('/events/')[1].split('/')[0]
-        answer = self.odds.get(event_id, HTTPError(url, 404, 'Not Found', None, None))
-        if isinstance(answer, Exception):
-            raise answer
+        answer = self.odds.get(url.split('/events/')[1].split('/')[0], 404)
+        if isinstance(answer, int):
+            raise HTTPError(url, answer, 'unavailable', None, None)
         return answer
 
 
@@ -157,7 +156,7 @@ class StoreTests(unittest.TestCase):
         self.days = {'20250115': [event('1', '2025-01-16T00:00Z'), event('2', '2025-01-16T01:00Z', state='in', completed=False)],
                      '20250116': [event('3', '2025-01-17T00:30Z', neutral=True), event('4', '2025-01-17T01:00Z')],
                      '20250117': [event('1', '2025-01-16T00:00Z')]}  # listed again the next day
-        self.odds = {'1': REAL, '3': {'count': 0, 'items': []}, '4': HTTPError('x', 503, 'busy', None, None)}
+        self.odds = {'1': REAL, '3': {'count': 0, 'items': []}, '4': 503}
         self.clock = lambda: datetime(2026, 9, 24, 12, tzinfo=timezone.utc)
 
     def tearDown(self):
