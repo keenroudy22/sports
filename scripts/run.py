@@ -51,7 +51,8 @@ EASTERN = gates.EASTERN
 SLOT_TOLERANCE = timedelta(minutes=40)     # a run that fires this far from a slot still belongs to it
 PUBLISH_MARGIN = timedelta(minutes=5)      # nothing is published on a game this close to kickoff
 KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'favorite')
-WHITELIST = ('research/', 'data/odds/', 'data/prop-odds/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/')
+WHITELIST = ('research/', 'data/odds/', 'data/prop-odds/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
+             'data/paper/', 'data/hoops/')
 BOOK_SLUG = {'DraftKings': 'dk', 'FanDuel': 'fd', 'BetMGM': 'mgm', 'Caesars': 'czr', 'BetRivers': 'br',
              'ESPN BET': 'espnbet', 'Fanatics': 'fan'}
 VOLUME = {'recYds': 'targets', 'rec': 'targets', 'rushYds': 'carries', 'car': 'carries',
@@ -120,7 +121,7 @@ def git(*args, cwd=ROOT, check=True):
     return result
 
 
-LEFTOVER = ('data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json')
+LEFTOVER = ('data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/')
 
 
 def sync(runner=git):
@@ -714,6 +715,25 @@ def decision_record(candidate, league, decision, rules, reason, now, ctx):
                          for f in candidate.get('_research') or []]}
 
 
+PAPER_SLOTS = (11, 17, 23)      # the basketball paper trials run at the midday, evening and late runs
+
+
+def paper_trials(now, slot, status):
+    """The basketball totals paper trial (scripts/paper.py): record the lines as they open, grade the finished,
+    publish nothing. Quiet outside the seasons; its errors never fail a run."""
+    if slot.hour not in PAPER_SLOTS:
+        return
+    try:
+        import paper
+        result = paper.step(now, log=log)
+        status['paper'] = result
+        if result.get('recorded') or result.get('graded'):
+            log(f"paper trials: {result.get('recorded', 0)} recorded, {result.get('graded', 0)} graded")
+    except Exception as error:
+        status['errors'].append(f'paper: {type(error).__name__}: {error}')
+        log(f'paper: {type(error).__name__}: {error}')
+
+
 def remember(decided, now, slot, status):
     """Write this run's decisions to the learning record (only what changed since the last time each candidate
     was decided), grade whatever has finished, and on Tuesday morning run the week's learning. Learning never
@@ -1275,6 +1295,7 @@ def _run(args, now, slot, kinds, status):
             stored.update(reasons)
             x_post.save_reasons(stored)
         remember(decided, now, slot, status)
+        paper_trials(now, slot, status)
         git_result = commit_push(now, slot, {'published': len(published), 'settled': len(settled), 'closed': len(closed)},
                                  push=not args.no_push)
         status['git'] = git_result

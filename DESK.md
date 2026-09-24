@@ -260,3 +260,16 @@ be adjusted are adjusted by rule, not by feel (`scripts/learning.py`, `scripts/l
   `data/learning/REPORT.md`. A learning error is reported and never fails a run. Changes to the model itself
   still ship only by the holdout rule (README).
 
+## Paper trials
+
+A market proves itself on paper before any of its plays is published (`scripts/paper.py`, `data/paper/`). The
+first trial is basketball totals (NBA from 20 October, college from 1 November): in the backtest the line moved
+toward our number from the open, so our side won about 53% graded at the opening number but not at the close
+(`docs/HOOPS.md`). At the 11:45 AM, 5:30 PM and 11:30 PM runs the desk records, for every game tipping off in the
+next day and a half, the first DraftKings total it sees (through ESPN's odds feed, with the opener and the
+prices) and our number; a game where our number is 2 points (NBA) or 3 (college) from that line is a paper play.
+Finished games are graded at the number recorded and at the opener, with closing line value against the books'
+consensus close, and `data/paper/REPORT.md` keeps the record. Nothing is posted. Promoting a trial to published
+plays is a person's decision on the graded record, and the soccer model's Premier League handicaps can follow
+the same path.
+
