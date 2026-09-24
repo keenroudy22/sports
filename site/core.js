@@ -250,19 +250,24 @@
     if (p.historicalImport) return { word: 'Unsettled', tone: 'closed' };
     if (p.status === 'withdrawn') return { word: 'Withdrawn', tone: 'closed' };
     if (p.kickoff && Date.parse(p.kickoff) <= now) return { word: 'In play', tone: 'reference' };
-    if (p.entryNote) return { word: 'Closed: line moved', tone: 'closed' };
-    if (p.status === 'expired' || (p.expiresAt && Date.parse(p.expiresAt) <= now)) return { word: 'Closed: price expired', tone: 'closed' };
+    if (p.entryNote) return { word: 'Line moved', tone: 'closed' };
+    if (p.status === 'expired' || (p.expiresAt && Date.parse(p.expiresAt) <= now)) return { word: 'Price expired', tone: 'closed' };
     return { word: 'Open', tone: 'open' };
   };
   /* Open to new entries: unsettled, not closed by a revision, quote unexpired, game not started. */
   const isOpen = (p, now = Date.now()) => pickState(p, now).tone === 'open';
   const isLongshot = p => p.kind === 'riskyProps' || p.parlayType === 'longshot';
 
-  /* A board line's model grade: the word leads, the numbers say why. */
-  const GRADE_WORD = { strong: 'Model likes it', lean: 'Slight lean', pass: 'No edge' };
+  /* A board line's model grade: the word leads, the numbers say why. "Value" is what bettors call positive
+     expected value (+EV): our chance beats what the price needs to break even. */
+  const GRADE_WORD = { strong: 'Good value', lean: 'Some value', pass: 'No value' };
+  /* The verdict the site shows: paused markets never read as value; a calibrated view outranks the raw tier. */
+  const tierOf = g => !g ? 'none' : g.paused ? 'pass' : g.view || g.tier || 'none';
   const gradeOf = (g, note = '', row = null) => {
     if (!g) return { tier: 'none', word: 'No model read', detail: note || '' };
     const pct = x => `${Math.round(100 * x)}%`;
+    if (g.paused) return { tier: 'pass', word: 'Paused', detail: `${pct(g.chance)} our chance · our record on these bets trails the market, so we sit them out` };
+    const tier = tierOf(g);
     /* A player line carries no price, so there is no edge to state: show the projection against
        the number, which side that favours, and how little history it rests on. */
     if (g.needs == null && g.projection != null) {
@@ -270,21 +275,21 @@
       const parts = [`our number ${g.projection} against ${(row || {}).line ?? 'the line'}`, `${pct(g.chance)}${side}`];
       if (g.limited) parts.push('questionable on the report');
       if (g.games != null) parts.push(`${g.games} game${g.games === 1 ? '' : 's'} this season`);
-      return { tier: g.tier, word: g.tier === 'lean' ? 'Slight lean' : g.limited ? 'Questionable' : g.thin ? 'Too early to lean' : 'Close to the line',
+      return { tier, word: tier === 'lean' ? 'Leans our way' : g.limited ? 'Questionable' : g.thin ? 'Too early to tell' : 'Close to the line',
         detail: parts.join(' · ') };
     }
-    const parts = [`${pct(g.chance)} to win${g.push >= 0.01 ? `, ${pct(g.push)} push` : ''}`,
-      g.needs == null ? 'no price yet' : `needs ${pct(g.needs)}`];
-    if (g.thin) parts.push('thin sample');
+    const parts = [`${pct(g.chance)} our chance${g.push >= 0.01 ? `, ${pct(g.push)} push` : ''}`,
+      g.needs == null ? 'no price yet' : `${pct(g.needs)} to break even`];
+    if (g.thin) parts.push('few games so far');
     if (g.limited) parts.push('questionable on the report');
-    if (g.calibrated === false) parts.push('uncalibrated');
-    /* A thin sample with a real gap is not "no edge": it is a read we will not trust on one or two games. */
-    const word = g.tier === 'pass' && g.thin && g.edge != null && g.edge >= 2 ? 'Too early to lean' : GRADE_WORD[g.tier] || GRADE_WORD.pass;
-    return { tier: g.tier, word, detail: parts.join(' · ') };
+    if (g.calibrated === false) parts.push('raw number');
+    /* A thin sample with a real gap is not "no value": it is a read we will not trust on one or two games. */
+    const word = tier === 'pass' && g.thin && g.edge != null && g.edge >= 2 ? 'Too early to tell' : GRADE_WORD[tier] || GRADE_WORD.pass;
+    return { tier, word, detail: parts.join(' · ') };
   };
   const TIER_ORDER = { strong: 0, lean: 1, pass: 2, none: 3 };
   /* Best first: tier, then a solid sample before a thin one, then the size of the edge. */
-  const byGrade = (a, b) => (TIER_ORDER[(a.grade || {}).tier || 'none'] - TIER_ORDER[(b.grade || {}).tier || 'none'])
+  const byGrade = (a, b) => (TIER_ORDER[tierOf(a.grade)] - TIER_ORDER[tierOf(b.grade)])
     || (Boolean((a.grade || {}).thin) - Boolean((b.grade || {}).thin))
     || (((b.grade || {}).edge ?? -1e9) - ((a.grade || {}).edge ?? -1e9));
   const category = p => p.kind === 'gamePicks' ? (p.marketType === 'total' ? 'Totals' : 'Spreads')
@@ -313,7 +318,7 @@
      folded into the straight-pick units. ROI is profit against what was actually risked. */
   /* Three kinds of pick, tracked apart: researched picks, the model's own leans, and longshot parlays. */
   const kindOf = p => p.kind === 'parlays' ? 'longshot' : p.modelLean ? 'model' : 'researched';
-  const KIND_WORD = { researched: 'Researched', model: 'Model leans', longshot: 'Longshots' };
+  const KIND_WORD = { researched: 'Researched', model: 'Model picks', longshot: 'Longshots' };
   /* Picks imported from before the desk recorded prices (the Week 1 props) stay listed with their results but
      are kept out of every total, so a record, its units and its ROI always describe the same priced picks. */
   const isUnpricedImport = p => Boolean(p.historicalImport) && p.odds == null;
@@ -368,5 +373,5 @@
   return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone,
     column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, eligible, summarizeTicket, ticketText,
-    unitsFor, stakeOf, recordOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, byGrade, category, parseRoute, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, shardOf, BASE };
 });

@@ -169,8 +169,8 @@ test('a pick says where it stands in words, and red is only for a loss', () => {
   const pick = { status: 'active', expiresAt: '2026-09-20T15:30:00Z', kickoff: '2026-09-20T17:00:00Z' };
   const word = p => C.pickState(p, now).word;
   assert.equal(word(pick), 'Open');
-  assert.equal(word({ ...pick, entryNote: 'moved 2 against' }), 'Closed: line moved');
-  assert.equal(word({ ...pick, expiresAt: '2026-09-20T11:00:00Z' }), 'Closed: price expired');
+  assert.equal(word({ ...pick, entryNote: 'moved 2 against' }), 'Line moved');
+  assert.equal(word({ ...pick, expiresAt: '2026-09-20T11:00:00Z' }), 'Price expired');
   assert.equal(word({ ...pick, kickoff: '2026-09-20T11:00:00Z' }), 'In play');
   assert.deepEqual(C.pickState({ ...pick, result: 'win' }, now), { word: 'Won', tone: 'win' });
   assert.deepEqual(C.pickState({ ...pick, result: 'loss' }, now), { word: 'Lost', tone: 'loss' });
@@ -182,11 +182,11 @@ test('a pick says where it stands in words, and red is only for a loss', () => {
 
 test('a board line leads with a plain word and backs it with its numbers', () => {
   assert.deepEqual(C.gradeOf({ tier: 'strong', chance: 0.61, push: 0, needs: 0.524, thin: false }),
-    { tier: 'strong', word: 'Model likes it', detail: '61% to win · needs 52%' });
-  assert.equal(C.gradeOf({ tier: 'lean', chance: 0.7, push: 0.03, needs: 0.5, thin: true }).detail, '70% to win, 3% push · needs 50% · thin sample');
+    { tier: 'strong', word: 'Good value', detail: '61% our chance · 52% to break even' });
+  assert.equal(C.gradeOf({ tier: 'lean', chance: 0.7, push: 0.03, needs: 0.5, thin: true }).detail, '70% our chance, 3% push · 50% to break even · few games so far');
   assert.deepEqual(C.gradeOf(null), { tier: 'none', word: 'No model read', detail: '' });
-  assert.equal(C.gradeOf({ tier: 'lean', chance: 0.6, push: 0, needs: 0.524, calibrated: false }).detail, '60% to win · needs 52% · uncalibrated');
-  assert.equal(C.gradeOf({ tier: 'lean', chance: 0.62, push: 0, needs: null, calibrated: false }).detail, '62% to win · no price yet · uncalibrated');
+  assert.equal(C.gradeOf({ tier: 'lean', chance: 0.6, push: 0, needs: 0.524, calibrated: false }).detail, '60% our chance · 52% to break even · raw number');
+  assert.equal(C.gradeOf({ tier: 'lean', chance: 0.62, push: 0, needs: null, calibrated: false }).detail, '62% our chance · no price yet · raw number');
   const lines = [{ id: 'a', grade: { tier: 'pass', edge: -2 } }, { id: 'b' }, { id: 'c', grade: { tier: 'strong', edge: 6 } },
     { id: 'd', grade: { tier: 'strong', edge: 9 } }, { id: 'e', grade: { tier: 'lean', edge: 3 } }];
   assert.deepEqual(lines.sort(C.byGrade).map(l => l.id), ['d', 'c', 'e', 'a', 'b']);
@@ -234,13 +234,25 @@ test('parlays stay out of the straight-pick units and carry their own stake', ()
   assert.equal(C.stakeOf({}), 1, 'a pick with no recorded stake is one unit');
 });
 
-test('a priced line on a thin sample says too early, not no edge', () => {
+test('a priced line on a thin sample says too early, not no value', () => {
   const thin = C.gradeOf({ tier: 'pass', chance: 0.81, needs: 0.44, edge: 37, thin: true, calibrated: false });
-  assert.equal(thin.word, 'Too early to lean');
+  assert.equal(thin.word, 'Too early to tell');
   const flat = C.gradeOf({ tier: 'pass', chance: 0.5, needs: 0.52, edge: -2, thin: true });
-  assert.equal(flat.word, 'No edge');
+  assert.equal(flat.word, 'No value');
   const solid = C.gradeOf({ tier: 'lean', chance: 0.62, needs: 0.52, edge: 10, thin: false });
-  assert.equal(solid.word, 'Slight lean');
+  assert.equal(solid.word, 'Some value');
+});
+
+test('a paused market never reads as value, and the site shows the calibrated verdict over the raw tier', () => {
+  const paused = C.gradeOf({ tier: 'strong', chance: 0.58, needs: 0.52, edge: 6, paused: true });
+  assert.deepEqual([paused.tier, paused.word], ['pass', 'Paused']);
+  assert.match(paused.detail, /58% our chance/);
+  const shrunk = C.gradeOf({ tier: 'lean', view: 'pass', chance: 0.52, needs: 0.53, edge: -1 });
+  assert.deepEqual([shrunk.tier, shrunk.word], ['pass', 'No value']);
+  assert.equal(C.tierOf({ tier: 'lean' }), 'lean');
+  assert.equal(C.tierOf(null), 'none');
+  const rows = [{ grade: { tier: 'strong', paused: true } }, { grade: { tier: 'lean' } }];
+  assert.equal(rows.sort(C.byGrade)[0].grade.tier, 'lean', 'a paused line sorts below one with value');
 });
 
 test('an early exit credit is a loss on the record and zero in units', () => {

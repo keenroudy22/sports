@@ -237,7 +237,7 @@ def v2_summary(snapshot):
             'publishedAt': snapshot['publishedAt'], 'model': snapshot['model']}
 
 
-def lean(v2, mkt, league=None, sd=None):
+def lean(v2, mkt, league=None, sd=None, paused=()):
     """How far v2 sits from the market, from the home side and on the total, with the calibrated chance of each lean.
 
     The chances use pricing.CALIBRATION, so a chip on a game card means the same thing as a grade on the board.
@@ -257,6 +257,9 @@ def lean(v2, mkt, league=None, sd=None):
         if sd and out['total']:
             over, push, under = pricing.chances(v2['total'], sd['total'], mkt['total'])
             out['totalChance'] = calibrated(league, 'total', over if out['total'] > 0 else under)
+    for market in ('spread', 'total'):
+        if f'{league}/{market}' in paused:
+            out[f'{market}Paused'] = True        # learning paused this market: the chip says so instead of a chance
     return out
 
 
@@ -265,7 +268,7 @@ def calibrated(league, market, raw):
     return round(0.5 + k * (raw - 0.5), 3) if k is not None else round(raw, 3)
 
 
-def game_card(game, forecasts_v1, snapshot, names, identities, market_block=None):
+def game_card(game, forecasts_v1, snapshot, names, identities, market_block=None, paused=()):
     league = game['league']
 
     def side(key):
@@ -281,7 +284,7 @@ def game_card(game, forecasts_v1, snapshot, names, identities, market_block=None
             'completed': bool(game.get('completed')), 'status': game.get('status'), 'neutral': bool(game.get('neutral')),
             'home': side('home'), 'away': side('away'), 'market': mkt,
             'v1': {'home': v1['home'], 'away': v1['away'], 'publishedAt': v1['publishedAt']} if v1 else None,
-            'v2': v2, 'lean': lean(v2, mkt, league, snapshot.get('sd') if snapshot else None),
+            'v2': v2, 'lean': lean(v2, mkt, league, snapshot.get('sd') if snapshot else None, paused),
             # The market as evidence beside our number, never inside it (scripts/market_read.py).
             'marketRead': market_block}
 
@@ -565,6 +568,7 @@ def build(now=None):
     established = {key for key, n in last_season.items() if n >= ESTABLISHED_GAMES}
     cfb = league_data['CFB']
     fbs = model_v2.fbs_teams([g for g in cfb['records'] if g['season'] >= cfb['current'] - 1])
+    paused = learned_pauses()
     for line in lines:
         game = by_id.get(line.get('gameId'))
         snapshot = (pregame(forecasts.get(game['id'], []), game['kickoff']) or [None])[-1] if game else None
@@ -573,6 +577,8 @@ def build(now=None):
             or bool(line.get('athleteId')) and appearances[str(line['athleteId'])] < 3
         # v2 compresses FBS-FCS blowouts badly enough that any chance it gives there would mislead.
         line['grade'] = None if fcs else grade_line(line, snapshot, thin)
+        if line['grade'] and f"{game['league']}/{'spread' if line.get('market') == 'point spread' else 'total'}" in paused:
+            line['grade']['paused'] = True       # shown as paused on the site; the desk still sees it and records the refusal
         line['gradeNote'] = 'FBS vs FCS: v2 is not reliable here' if fcs and line.get('state') == 'open' else None
     prop_prices = {gid: rows[-1] for gid, rows in load_store('prop-odds').items()}
     # A stored capture can hold a line the game cannot produce; clean it before it reaches the board.
@@ -586,7 +592,7 @@ def build(now=None):
         snaps_for = pregame(forecasts.get(game['id'], []), game['kickoff'])
         latest_snap = snaps_for[-1] if snaps_for else None
         block = market_read.read(game, latest_snap, books.get(game['id']), gap_rows) if game.get('state') == 'pre' else None
-        card = game_card(game, forecasts_v1, latest_snap, names, identities, block)
+        card = game_card(game, forecasts_v1, latest_snap, names, identities, block, paused)
         card['fcs'] = game['league'] == 'CFB' and not {str(game['home']['id']), str(game['away']['id'])} <= fbs
         cards.append(card)
         info = league_data[game['league']]
@@ -630,11 +636,19 @@ def board_picks(first, latest, by_id, identities):
 
     A pick is a favorite if it was one when first published; a later report cannot promote or demote it.
     """
+    import pick_card
+    try:
+        reasons = json.loads((ROOT / 'data' / 'x-reasons.json').read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        reasons = {}
     rows = []
     for key, pick in first.items():
         recent = latest.get(key, {})
         game = by_id.get((pick.get('gameIds') or [None])[0]) or {}
         rows.append({'id': key, 'league': pick.get('league'), 'kind': pick.get('kind'), 'title': pick.get('title'),
+                     # The same title and one-line reason the play's X post carries, so the site reads like the post.
+                     'displayTitle': pick_card.display_title(pick, game) if game and not pick.get('historicalImport') else pick.get('title'),
+                     'reason': reasons.get(key) if isinstance(reasons, dict) and isinstance(reasons.get(key), str) else None,
                      'riskUnits': pick.get('riskUnits'), 'modelLean': pick.get('modelLean') is True,
                      'earlyExit': recent.get('earlyExit') is True,
                      'player': pick.get('player'), 'athleteId': pick.get('athleteId'), 'position': pick.get('position'),
@@ -725,6 +739,17 @@ def settled_role(athlete, team, appearances, established):
     return appearances[str(athlete)] >= 3 or (str(athlete), str(team)) in (established or set())
 
 
+def learned_pauses():
+    """Segments the learning loop has paused ("NFL/total"): the site marks their lines and chips as paused
+    rather than showing them as value. Empty without a policy."""
+    try:
+        import learning
+        return {segment for segment, entry in (learning.load_policy().get('segments') or {}).items()
+                if isinstance(entry, dict) and entry.get('paused')}
+    except Exception:
+        return set()
+
+
 def learned_prop_calibration():
     """What the learning loop shipped for each league's player chances (data/learning/policy.json):
     {league: (k, minimum calibrated edge in points)}. The board then shows the chance the desk acts on."""
@@ -748,8 +773,10 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, p
     most common error, and the biggest early-season gaps are those.
 
     calibration ({league: (k, minimum edge)}, from learned_prop_calibration) shrinks each raw chance the way the
-    graded record says it should (50% + k * (raw - 50%)); a priced prop then reads as a lean only when that
-    calibrated chance also clears its price, the same rule the desk's gates apply before publishing.
+    graded record says it should (50% + k * (raw - 50%)); the site then shows a priced prop as a lean (grade
+    'view') only when that calibrated chance also clears its price, the rule the desk's gates apply before
+    publishing. grade 'tier' stays the written raw rule: it chooses what the gates judge, and the refusals it
+    produces are the evidence learning uses to ease or tighten.
     """
     calibration = calibration or {}
     rows = []
@@ -824,7 +851,11 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, p
                                             'games': appearances[str(athlete)],
                                             # Player projections have no graded history, so a prop never reads stronger
                                             # than a lean, and an unsettled role never reads as one at all.
-                                            'tier': 'lean' if p['rawChance'] >= 0.6 and settled and not limited
+                                            # tier is the desk's written rule (raw chance), which picks what the gates
+                                            # judge and what learning records; view is what the site shows: a lean only
+                                            # when the calibrated chance also clears the price.
+                                            'tier': 'lean' if p['rawChance'] >= 0.6 and settled and not limited else 'pass',
+                                            'view': 'lean' if p['rawChance'] >= 0.6 and settled and not limited
                                                     and (k is None or edge >= need) else 'pass',
                                             'model': p['model'], 'snapshotAt': p['snapshotAt']}
                         except ValueError:

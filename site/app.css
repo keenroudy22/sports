@@ -400,3 +400,39 @@ table.data a { font-weight: 600; }
   .who h1 { font-size: 40px; }
 }
 [hidden] { display: none !important; }
+
+/* ---------- our plays: one card per play, the same words as its X post ---------- */
+
+.plays { display: grid; gap: 10px; }
+@media (min-width: 860px) { .plays { grid-template-columns: 1fr 1fr; } }
+.play {
+  position: relative; display: block; width: 100%; text-align: left; cursor: pointer;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 13px 14px 12px 19px; color: var(--text); font: inherit; overflow: hidden;
+}
+.play::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--rail, var(--mint)); }
+.play:hover { border-color: #3a4656; }
+.play { display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; }
+.play > span { display: block; }
+.play-top { display: flex !important; align-items: center; justify-content: space-between; gap: 8px; }
+.play-kind { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--amber); }
+.play-title { font-family: 'Barlow Condensed', 'DM Sans', sans-serif; font-weight: 700; font-size: 25px; line-height: 1.12; margin: 7px 0 5px; }
+.play-legs span { display: block; font-size: 13px; color: var(--dim); line-height: 1.45; }
+.play-price { font-size: 14px; font-weight: 600; color: var(--dim); margin-top: 2px; }
+.play-price .num { font-size: 21px; color: var(--text); margin-right: 3px; }
+.play-number { font-size: 14px; margin-top: 7px; }
+.play-reason { font-size: 13px; line-height: 1.45; color: var(--dim); margin-top: 5px; }
+.play-meta { font-size: 11px; color: var(--faint); margin-top: 9px; }
+
+/* the record in one line */
+.record-strip {
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 4px 0 0;
+  padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); color: var(--text);
+}
+.record-strip .eyebrow { margin: 0; width: 100%; }
+.record-strip:hover { border-color: #3a4656; color: var(--text); }
+.record-big { font-size: 34px; line-height: 1; }
+.record-units { font-size: 22px; }
+.record-units.up { color: var(--green); }
+.record-units.down { color: var(--rose); }
+.record-strip .row-meta { margin-left: auto; }

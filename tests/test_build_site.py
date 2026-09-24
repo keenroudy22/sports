@@ -183,9 +183,10 @@ class PropRowTests(unittest.TestCase):
         self.assertTrue(shrunk['calibrated'])
         self.assertEqual(shrunk['raw'], raw['raw'], 'the raw number is kept beside it')
         self.assertLess(shrunk['edge'], 0, 'shrunk toward a coin flip, it no longer clears -118')
-        self.assertEqual((raw['tier'], shrunk['tier']), ('lean', 'pass'), 'the board stops calling it a lean, as the desk would')
+        self.assertEqual((raw['view'], shrunk['view']), ('lean', 'pass'), 'the site stops calling it a lean, as the gates would')
+        self.assertEqual(shrunk['tier'], 'lean', 'the desk still judges it, so its refusal is recorded for learning')
         gentle = build_site.prop_rows(*args, calibration={'NFL': (0.9, 0.0)})[0]['grade']
-        self.assertEqual(gentle['tier'], 'lean', 'a calibrated chance that still clears the price stays a lean')
+        self.assertEqual(gentle['view'], 'lean', 'a calibrated chance that still clears the price stays a lean')
         self.assertEqual(build_site.prop_rows(*args, calibration={'CFB': (0.13, 0.0)})[0]['grade']['chance'], raw['chance'],
                          'another league\'s calibration does not apply')
 
@@ -273,6 +274,10 @@ class ForecastTests(unittest.TestCase):
         self.assertEqual(build_site.lean({'margin': 1.0, 'total': 44.5}, market)['side'], 'away')
         self.assertIsNone(build_site.lean({'margin': 1.0, 'total': 44.5}, None))
         self.assertIsNone(build_site.lean({'margin': 3.0, 'total': 44.5}, market)['side'])
+        paused = build_site.lean({'margin': 5.0, 'total': 42.0}, market, 'NFL', {'margin': 13.21, 'total': 12.79}, {'NFL/total'})
+        self.assertTrue(paused['totalPaused'], 'a market learning paused is marked for the site')
+        self.assertNotIn('spreadPaused', paused)
+        self.assertEqual(paused['totalChance'], nfl['totalChance'], 'the number is kept; only the label changes')
 
 
 class TableTests(unittest.TestCase):
