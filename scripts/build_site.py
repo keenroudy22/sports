@@ -579,7 +579,8 @@ def build(now=None):
     for record in prop_prices.values():
         for book in (record.get('books') or {}).values():
             sharp_odds.drop_impossible(book.get('markets') or {})
-    lines += prop_rows(captures, by_id, forecasts, names, appearances, identities, now, prop_prices, established)
+    lines += prop_rows(captures, by_id, forecasts, names, appearances, identities, now, prop_prices, established,
+                       calibration=learned_prop_calibration())
     gap_rows = market_read.load_rows()
     for game in sorted(window, key=lambda g: (g['kickoff'], g['id'])):
         snaps_for = pregame(forecasts.get(game['id'], []), game['kickoff'])
@@ -724,7 +725,20 @@ def settled_role(athlete, team, appearances, established):
     return appearances[str(athlete)] >= 3 or (str(athlete), str(team)) in (established or set())
 
 
-def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, prices=None, established=None):
+def learned_prop_calibration():
+    """What the learning loop shipped for each league's player chances (data/learning/policy.json):
+    {league: (k, minimum calibrated edge in points)}. The board then shows the chance the desk acts on."""
+    try:
+        import learning
+        policy = learning.load_policy()
+    except Exception:                      # no policy yet: the board reads raw, as it always did
+        return {}
+    need = float(((policy.get('knobs') or {}).get('prop.minCalibratedEdge') or {}).get('value') or 0.0)
+    return {key.split('/')[0]: (float(entry['k']), need) for key, entry in (policy.get('calibration') or {}).items()
+            if key.endswith('/prop') and isinstance(entry, dict) and entry.get('k') is not None}
+
+
+def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, prices=None, established=None, calibration=None):
     """DraftKings' main player lines for upcoming NFL games as board rows, with v2's lean at each.
 
     ESPN relays the lines without prices, so the rows carry no odds and cannot join a ticket. They
@@ -732,7 +746,12 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, p
     never stronger, because player projections have no graded history against a line yet. A player
     with under three games this season stays grey: a role set by one or two games is the model's
     most common error, and the biggest early-season gaps are those.
+
+    calibration ({league: (k, minimum edge)}, from learned_prop_calibration) shrinks each raw chance the way the
+    graded record says it should (50% + k * (raw - 50%)); a priced prop then reads as a lean only when that
+    calibrated chance also clears its price, the same rule the desk's gates apply before publishing.
     """
+    calibration = calibration or {}
     rows = []
     for gid, caps in captures.items():
         game = by_id.get(gid)
@@ -756,8 +775,10 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, p
                         chance = max(over, under)
                         thin = not settled_role(athlete, game[side]['id'] if side else None, appearances, established)
                         limited = bool(player.get('limited'))
-                        grade = {'chance': round(chance, 3), 'raw': round(chance, 3), 'calibrated': False,
-                                 'push': round(push, 3), 'needs': None, 'edge': round(100 * (chance - 0.5), 1),
+                        k = (calibration.get(game['league']) or (None, 0.0))[0]
+                        shown = 0.5 + k * (chance - 0.5) if k is not None else chance
+                        grade = {'chance': round(shown, 3), 'raw': round(chance, 3), 'calibrated': k is not None,
+                                 'push': round(push, 3), 'needs': None, 'edge': round(100 * (shown - 0.5), 1),
                                  'projection': round(mean, 1), 'thin': thin, 'games': appearances[str(athlete)],
                                  'limited': limited,
                                  # A questionable player is a coin flip on snaps before it is a read on volume.
@@ -792,13 +813,19 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, p
                             p = pricing.price(snapshot, key, lean, float(line), int(odds), athlete)
                             settled = settled_role(athlete, game[side]['id'] if side else None, appearances, established)
                             limited = bool(player.get('limited'))
-                            row['grade'] = {'chance': p['chance'], 'raw': p['rawChance'], 'calibrated': p['calibrated'],
-                                            'push': p['push'], 'needs': p['breakEven'], 'edge': p['edgePoints'],
+                            k, need = calibration.get(game['league']) or (None, 0.0)
+                            chance, edge = p['chance'], p['edgePoints']
+                            if k is not None and not p['calibrated']:
+                                chance = round(0.5 + k * (p['rawChance'] - 0.5), 3)
+                                edge = round(100 * (chance - p['breakEven']), 1)
+                            row['grade'] = {'chance': chance, 'raw': p['rawChance'], 'calibrated': p['calibrated'] or k is not None,
+                                            'push': p['push'], 'needs': p['breakEven'], 'edge': edge,
                                             'projection': p['projection'], 'thin': not settled, 'limited': limited,
                                             'games': appearances[str(athlete)],
                                             # Player projections have no graded history, so a prop never reads stronger
                                             # than a lean, and an unsettled role never reads as one at all.
-                                            'tier': 'lean' if p['chance'] >= 0.6 and settled and not limited else 'pass',
+                                            'tier': 'lean' if p['rawChance'] >= 0.6 and settled and not limited
+                                                    and (k is None or edge >= need) else 'pass',
                                             'model': p['model'], 'snapshotAt': p['snapshotAt']}
                         except ValueError:
                             pass

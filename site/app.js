@@ -126,7 +126,7 @@
     /* Only lines our number actually leans on; a list called "we like" never shows a no-edge row. */
     const rows = ((board || {}).lines || []).filter(inLeague)
       .filter(l => l.state === 'open' && l.grade && ['lean', 'strong'].includes(l.grade.tier) && Date.parse(l.kickoff) > Date.now());
-    if (!rows.length) return { rows: [], day: null };
+    if (!rows.length) return { rows: [], games: [], players: [], day: null };   // every caller reads all three lists
     const todayLabel = dayLabel(new Date().toISOString());
     const soonest = rows.slice().sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0];
     const day = rows.some(l => dayLabel(l.kickoff) === todayLabel) ? todayLabel : dayLabel(soonest.kickoff);
@@ -189,7 +189,7 @@
           `<p class="row-meta" style="margin:0 0 8px">The spreads and totals our number likes most, priced at the best book. Leans, not picks: tap + to build a ticket.</p><div class="card"><div class="rows">${best.games.map(lineRow).join('')}</div></div>`,
           '<a href="#board">All game lines →</a>') : ''}
         ${best.players.length ? section(best.day ? `Player props we like · ${esc(best.day)}` : 'Player props we like today',
-          `<p class="row-meta" style="margin:0 0 8px">Our projection against the book's number, on players whose role is settled. Raw chances, not yet calibrated.</p><div class="card"><div class="rows">${best.players.map(lineRow).join('')}</div></div>`,
+          `<p class="row-meta" style="margin:0 0 8px">Our projection against the book's number, on players whose role is settled. Each chance is shrunk by how our player projections have actually done against the line.</p><div class="card"><div class="rows">${best.players.map(lineRow).join('')}</div></div>`,
           '<a href="#board/props">All player props →</a>') : ''}
         ${moves.length ? section('Line moves since open', `<p class="row-meta" style="margin:0 0 8px">Where the market has moved from its opening number. Green moved toward our number, amber away from it.</p><div class="card"><div class="rows">${moves.map(moveRow).join('')}</div></div>`) : ''}
         ${playing.length ? section(`In play now${playing.length > 6 ? ` (${playing.length})` : ''}`, `<div class="card">${playing.slice(0, 6).map(gameRow).join('')}</div>`, '<a href="#games">All games →</a>') : ''}

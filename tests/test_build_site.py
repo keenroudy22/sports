@@ -166,6 +166,29 @@ class PropRowTests(unittest.TestCase):
         self.assertEqual(row['grade']['tier'], 'lean')
         self.assertEqual(row['observedAt'], '2026-09-19T12:40:00Z', 'the row is as fresh as the price on it')
 
+    def test_the_board_shows_the_calibrated_chance_the_desk_acts_on(self):
+        game = {'id': 'NFL-1', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-09-20T17:00:00Z',
+                'home': {'id': '1', 'abbreviation': 'ATL'}, 'away': {'id': '2', 'abbreviation': 'CAR'}}
+        snapshot = {'gameId': 'NFL-1', 'league': 'NFL', 'model': 'v2.0', 'publishedAt': '2026-09-19T12:00:00Z',
+                    'players': {'home': {'players': [{'id': '10', 'pos': 'WR', 'recYds': [70.0, 40.5, 99.5]}]}, 'away': None}}
+        capture = {'retrievedAt': '2026-09-19T12:05:00Z', 'source': 'https://example.test/props',
+                   'lines': {'10': {'recYds': [55.5, 57.5]}}}
+        prices = {'NFL-1': {'retrievedAt': '2026-09-19T12:40:00Z', 'source': 'https://example.test/odds', 'books': {
+            'fanduel': {'markets': {'recYds': {'Player Ten': {'line': 54.5, 'over': -118, 'under': -104}}}}}}}
+        args = ({'NFL-1': [capture]}, {'NFL-1': game}, {'NFL-1': [snapshot]}, {'10': 'Player Ten'}, {'10': 3}, {},
+                datetime(2026, 9, 19, 13, tzinfo=timezone.utc), prices)
+        raw = build_site.prop_rows(*args)[0]['grade']
+        shrunk = build_site.prop_rows(*args, calibration={'NFL': (0.13, 0.0)})[0]['grade']
+        self.assertAlmostEqual(shrunk['chance'], round(0.5 + 0.13 * (raw['raw'] - 0.5), 3), places=3)
+        self.assertTrue(shrunk['calibrated'])
+        self.assertEqual(shrunk['raw'], raw['raw'], 'the raw number is kept beside it')
+        self.assertLess(shrunk['edge'], 0, 'shrunk toward a coin flip, it no longer clears -118')
+        self.assertEqual((raw['tier'], shrunk['tier']), ('lean', 'pass'), 'the board stops calling it a lean, as the desk would')
+        gentle = build_site.prop_rows(*args, calibration={'NFL': (0.9, 0.0)})[0]['grade']
+        self.assertEqual(gentle['tier'], 'lean', 'a calibrated chance that still clears the price stays a lean')
+        self.assertEqual(build_site.prop_rows(*args, calibration={'CFB': (0.13, 0.0)})[0]['grade']['chance'], raw['chance'],
+                         'another league\'s calibration does not apply')
+
     def test_a_role_settled_last_season_is_not_thin_on_one_game(self):
         game = {'id': 'NFL-1', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-09-20T17:00:00Z',
                 'home': {'id': '1', 'abbreviation': 'ATL'}, 'away': {'id': '2', 'abbreviation': 'CAR'}}
