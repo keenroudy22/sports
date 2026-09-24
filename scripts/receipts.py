@@ -32,9 +32,16 @@ KIND_NAMES = {'player': 'Player props', 'team': 'Team props', 'parlay': 'Parlays
 
 
 def served(log_book):
-    """Ids of the plays that went out on X."""
-    return {p['id'] for p in log_book.get('posts', [])
-            if p.get('kind') == 'buffer:play' and p.get('sentAt') and not p.get('cancelledAt') and not p.get('deletedAt')}
+    """Ids of the plays that went out on X: sent through Buffer, or posted by hand before the desk posted (the
+    two seeded 2026-09-19 plays count; the book is every play we posted, win or lose). A cancelled or deleted
+    post was never served."""
+    out = set()
+    for p in log_book.get('posts', []):
+        if p.get('cancelledAt') or p.get('deletedAt'):
+            continue
+        if (p.get('kind') == 'buffer:play' and p.get('sentAt')) or (p.get('kind') == 'pick' and p.get('postedAt')):
+            out.add(p['id'])
+    return out
 
 
 def game_day(pick, games):
@@ -222,6 +229,8 @@ def book(first, latest, games, log_book, now):
         group = [r for r in rows if pick_card.play_kind(r) == kind]
         if group:
             lines.append(f'{KIND_NAMES[kind]} {record_text(x_post.summarize(group))}')
+    if len(lines) < 2:
+        lines = []                         # one kind only: its line would repeat the season's
     head = f"🍳 THE BOOK\nSeason: {record_text(x_post.summarize(rows))}"
     tail = 'Every play we post, graded in public, win or lose.\n' + leagues(rows)
     return {'key': f'book:day:{today.isoformat()}', 'card': HOUSE_CARDS + 'kitchen-book.png', 'kind': 'book',

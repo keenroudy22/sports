@@ -47,6 +47,8 @@ class ReceiptTests(unittest.TestCase):
         log['posts'].append({'id': 'NFL-2026-W4-b', 'kind': 'buffer:play', 'sentAt': 'x', 'deletedAt': 'y'})
         self.assertEqual(receipts.served({'posts': log['posts'][:1]}), {'NFL-2026-W4-a'})
         self.assertNotIn('NFL-2026-W4-quiet', receipts.served(log), 'a cancelled post was never served')
+        hand = {'posts': [{'id': 'CFB-2026-W3-hand', 'kind': 'pick', 'postedAt': '2026-09-19T12:30:00Z', 'tweetId': None}]}
+        self.assertEqual(receipts.served(hand), {'CFB-2026-W3-hand'}, 'a play posted by hand counts in the book')
 
     def test_the_morning_after_lists_every_served_play_with_its_result(self):
         first, latest, log = world()
@@ -127,6 +129,9 @@ class DailyTests(unittest.TestCase):
         busy = dict(log, posts=log['posts'] + [{'id': 'r', 'kind': 'buffer:receipt', 'dueAt': '2026-09-29T13:00:00Z'}])
         self.assertIsNone(receipts.book(first, latest, GAMES, busy, tuesday_evening), 'the day already had a post')
         self.assertIsNone(receipts.book(first, latest, GAMES, {'posts': []}, tuesday_evening), 'nothing served, nothing to show')
+        only = {'posts': [p for p in log['posts'] if p['id'] == 'NFL-2026-W4-a']}
+        lone = receipts.book(first, latest, GAMES, only, tuesday_evening)['text']
+        self.assertEqual(lone.count('1-0'), 1, 'one kind of play: no line repeating the season')
 
 
 if __name__ == '__main__':
