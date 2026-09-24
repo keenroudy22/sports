@@ -305,6 +305,24 @@ class PrecheckTests(unittest.TestCase):
         lock.assert_not_called()
 
 
+class AlertTests(unittest.TestCase):
+    def test_alerts_push_once_per_six_hours_and_never_without_a_topic(self):
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as folder:
+            sent = []
+            now = datetime(2026, 9, 26, 12, 0, tzinfo=timezone.utc)
+            with mock.patch.object(run, 'CONF', Path(folder)), mock.patch.dict(os.environ, {'KEENROUDY_NTFY_TOPIC': 'secret-topic'}):
+                self.assertTrue(run.alert('Run stopped', 'git fetch failed', now=now, send=sent.append))
+                self.assertFalse(run.alert('Run stopped', 'git fetch failed', now=now + timedelta(hours=1), send=sent.append), 'quiet for six hours')
+                self.assertTrue(run.alert('Run stopped', 'git fetch failed', now=now + timedelta(hours=7), send=sent.append))
+                self.assertTrue(run.alert('Run stopped', 'something else', now=now, send=sent.append))
+            self.assertEqual(len(sent), 3)
+            self.assertEqual(sent[0].full_url, 'https://ntfy.sh/secret-topic')
+            self.assertIn(b'git fetch failed', sent[0].data)
+            with mock.patch.object(run, 'CONF', Path(folder)), mock.patch.dict(os.environ, {'KEENROUDY_NTFY_TOPIC': ''}):
+                self.assertFalse(run.alert('x', 'y', now=now, send=lambda r: self.fail('no topic, no push')))
+
+
 class FetchTests(unittest.TestCase):
     def test_a_fetch_that_races_another_git_client_is_tried_again_and_other_failures_stop_the_run(self):
         from types import SimpleNamespace

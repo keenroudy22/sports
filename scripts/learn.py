@@ -327,7 +327,7 @@ def learn_domains(policy, rows, now, dry=False):
 def engagement(entry):
     metrics = entry.get('metrics') or {}
     views = metrics.get('impressions') or metrics.get('views') or 0
-    acts = sum(metrics.get(k) or 0 for k in ('likes', 'reposts', 'comments', 'quotes', 'saves', 'clicks', 'follows'))
+    acts = sum(metrics.get(k) or 0 for k in ('reactions', 'likes', 'reposts', 'comments', 'quotes', 'saves', 'clicks', 'follows'))   # Buffer calls likes reactions
     return (1000.0 * acts / views) if views else None
 
 

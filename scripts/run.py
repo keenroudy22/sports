@@ -1080,6 +1080,8 @@ def run(args):
         status.update(outcome=f'failed: {error}', finishedAt=stamp(datetime.now(timezone.utc)))
         status['errors'].append(str(error))
         write_status(status)
+        if not args.dry_run and 'holds the lock' not in str(error):
+            alert(f"KeenRoudy {slot.strftime('%-I:%M %p')} run stopped", str(error)[:600])
         return 1
     except Exception:
         text = traceback.format_exc()
@@ -1087,6 +1089,8 @@ def run(args):
         status.update(outcome='crashed', finishedAt=stamp(datetime.now(timezone.utc)))
         status['errors'].append(text[-1500:])
         write_status(status)
+        if not args.dry_run:
+            alert(f"KeenRoudy {slot.strftime('%-I:%M %p')} run crashed", text.strip().splitlines()[-1][:600])
         return 2
 
 
@@ -1344,6 +1348,7 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         channel = buffer_post.x_channel(wanted='keenkooks')
         for entry in buffer_post.reconcile(log_book, now, log=log):
             status['errors'].append(f"buffer: {entry['id']} failed to post: {entry['error']}")
+            alert('KeenRoudy post did not go out', f"{entry['id']}: {entry['error']}")
         buffer_post.collect_metrics(log_book, now, log=log)
         closed_ids = {revision['id'] for _, _, revision in closed}
         if closed_ids:
@@ -1387,6 +1392,40 @@ def commit_log(now, push=True, runner=git, cwd=ROOT):
 
 # ------------------------------------------------------------------ status and heartbeat
 
+NTFY = 'https://ntfy.sh/'
+ALERT_QUIET = timedelta(hours=6)       # the same alert is not repeated inside this
+
+
+def alert(title, message, priority='high', now=None, send=None):
+    """A push to the owner's phone through ntfy (free; a private topic in KEENROUDY_NTFY_TOPIC, which the ntfy app
+    subscribes to). Only what went wrong and when: never a key, never a value from the env file. The same alert is
+    sent once per six hours. Silent when no topic is set; a failed push never fails anything."""
+    import hashlib
+    import urllib.request
+    topic = os.environ.get('KEENROUDY_NTFY_TOPIC', '').strip()
+    if not topic:
+        return False
+    now = now or datetime.now(timezone.utc)
+    sent_path = CONF / 'alerts.json'
+    sent = load_json(sent_path, {})
+    key = hashlib.sha256(f'{title}|{message}'.encode()).hexdigest()[:16]
+    if key in sent and now - gates.when(sent[key]) < ALERT_QUIET:
+        return False
+    body = f'{message}\n\n{et(now)}'.encode('utf-8')
+    request = urllib.request.Request(NTFY + topic, data=body, method='POST',
+                                     headers={'Title': title.encode('ascii', 'ignore').decode(), 'Priority': priority, 'Tags': 'cook'})
+    try:
+        (send or (lambda r: urllib.request.urlopen(r, timeout=10).read()))(request)
+    except Exception as error:
+        log(f'alert not sent ({type(error).__name__})')
+        return False
+    sent = {k: v for k, v in sent.items() if now - gates.when(v) < timedelta(days=2)}
+    sent[key] = stamp(now)
+    CONF.mkdir(parents=True, exist_ok=True)
+    (sent_path).write_text(json.dumps(sent, indent=1) + '\n', encoding='utf-8')
+    return True
+
+
 def heartbeat(args):
     """Speak only when something is wrong."""
     now = datetime.now(timezone.utc)
@@ -1420,6 +1459,7 @@ def heartbeat(args):
         alert.parent.mkdir(parents=True, exist_ok=True)
         alert.write_text(text, encoding='utf-8')
         subprocess.run(['osascript', '-e', f'display notification "{problems[0]}" with title "KeenRoudy Sports"'], capture_output=True)
+        alert('KeenRoudy desk needs a look', '\n'.join(f'- {p}' for p in problems))
         print(text)
         return 1
     if alert.exists():
@@ -1575,6 +1615,7 @@ def precheck(args):
             log('precheck: a run is in progress; the check waits for the next half hour')
             return 0
         log('precheck STOPPED:', error)
+        alert('KeenRoudy pre-post check stopped', str(error)[:600])
         return 1
 
 

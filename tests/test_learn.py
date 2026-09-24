@@ -134,7 +134,7 @@ class OtherLearningTests(unittest.TestCase):
 
     def test_reason_weights_follow_engagement_within_bounds(self):
         policy = learning.default_policy()
-        posts = ([{'kind': 'buffer:play', 'reasonKind': 'injury', 'metrics': {'impressions': 1000, 'likes': 40}}] * 8
+        posts = ([{'kind': 'buffer:play', 'reasonKind': 'injury', 'metrics': {'impressions': 1000, 'reactions': 40}}] * 8
                  + [{'kind': 'buffer:play', 'reasonKind': 'market', 'metrics': {'impressions': 1000, 'likes': 10}}] * 8)
         table, changes = learn.learn_reasons(policy, {'posts': posts}, NOW)
         self.assertEqual(table['injury']['perThousand'], 40.0)

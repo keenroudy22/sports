@@ -63,6 +63,10 @@ The schedule went live on 2026-09-23 with `--publish-kinds settle,close` (settle
 Publishing widens one kind at a time by editing the job's `ProgramArguments` and reloading it (the plist
 says how): next `settle,close,lean,prop,longshot`, then everything once the researcher is on.
 
+**Phone alerts** go through ntfy (free): a stopped or crashed run, a post that did not go out, a stopped last look,
+and anything the 7:15 heartbeat finds are pushed to the private topic in `KEENROUDY_NTFY_TOPIC`, which the ntfy app
+on the owner's phone subscribes to. The same alert is not repeated inside six hours; nothing secret is ever sent.
+
 Every commit the desk makes is authored and pushed as `keenroudy22` through the sports-only `gh` login;
 the heartbeat checks that identity every morning and alerts if it changes.
 
