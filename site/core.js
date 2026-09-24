@@ -314,10 +314,16 @@
   /* Three kinds of pick, tracked apart: researched picks, the model's own leans, and longshot parlays. */
   const kindOf = p => p.kind === 'parlays' ? 'longshot' : p.modelLean ? 'model' : 'researched';
   const KIND_WORD = { researched: 'Researched', model: 'Model leans', longshot: 'Longshots' };
+  /* Picks imported from before the desk recorded prices (the Week 1 props) stay listed with their results but
+     are kept out of every total, so a record, its units and its ROI always describe the same priced picks. */
+  const isUnpricedImport = p => Boolean(p.historicalImport) && p.odds == null;
   const recordOf = (picks, minimum = 10) => {
-    const parlays = picks.filter(p => p.kind === 'parlays');
-    const straight = picks.filter(p => p.kind !== 'parlays');
+    const imported = picks.filter(isUnpricedImport);
+    const counted = picks.filter(p => !isUnpricedImport(p));
+    const parlays = counted.filter(p => p.kind === 'parlays');
+    const straight = counted.filter(p => p.kind !== 'parlays');
     return { ...summarizePicks(straight, minimum),
+      imported: imported.length ? summarizePicks(imported, minimum) : null,
       parlays: parlays.length ? summarizePicks(parlays, minimum) : null,
       researched: summarizePicks(straight.filter(p => !p.modelLean), minimum),
       model: summarizePicks(straight.filter(p => p.modelLean), minimum) };
@@ -362,5 +368,5 @@
   return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone,
     column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, eligible, summarizeTicket, ticketText,
-    unitsFor, stakeOf, recordOf, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, byGrade, category, parseRoute, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, byGrade, category, parseRoute, shardOf, BASE };
 });

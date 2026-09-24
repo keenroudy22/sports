@@ -137,17 +137,21 @@ test('the record counts priced picks only and withholds ROI below ten', () => {
   assert.equal(C.recordOf(ten).roi, 20);
 });
 
-test('the Week 1 import counts in the win-loss record but claims no units', () => {
+test('the Week 1 import is listed apart and kept out of the record, its units and its ROI', () => {
   const fs = require('node:fs');
   const report = JSON.parse(fs.readFileSync('research/2026-09-14-NFL-week-1-import.json', 'utf8'));
   const five = new Set(['w1-loveland-rec', 'w1-mayfield-pass', 'w1-otton-rec', 'w1-pollard-carries', 'w1-bateman-rec']);
-  const picks = ['props', 'riskyProps', 'gamePicks', 'parlays'].flatMap(k => report[k] || []);
+  /* build_site stamps the report's historicalImport flag on each of its picks, as the site sees them */
+  const picks = ['props', 'riskyProps', 'gamePicks', 'parlays'].flatMap(k => report[k] || []).map(p => ({ ...p, historicalImport: report.historicalImport }));
   const all = C.recordOf(picks), favorites = C.recordOf(picks.filter(p => five.has(p.id)));
   assert.equal(picks.length, 26);
-  assert.equal(all.priced, 0);
-  assert.equal(all.units, null, 'no price was recorded, so no return is claimed');
-  assert.equal(all.unpriced, all.wins + all.losses + all.pushes);
-  assert.deepEqual([favorites.wins, favorites.losses], [1, 4]);
+  assert.ok(picks.every(C.isUnpricedImport));
+  assert.deepEqual([all.wins, all.losses, all.priced, all.units], [0, 0, 0, null], 'no price was recorded, so nothing is totalled');
+  assert.deepEqual([all.imported.wins, all.imported.losses, all.imported.voids], [14, 11, 1], 'the results are still shown apart');
+  assert.deepEqual([favorites.imported.wins, favorites.imported.losses], [1, 4]);
+  const mixed = C.recordOf([...picks, { result: 'win', odds: -110 }, { result: 'loss', odds: -110 }]);
+  assert.deepEqual([mixed.wins, mixed.losses, mixed.priced, mixed.unpriced], [1, 1, 2, 0], 'the record and its units describe the same picks');
+  assert.equal(C.recordOf([{ result: 'win', odds: -110 }]).imported, null);
 });
 
 test('a pick is open only until its quote expires, its entries close or its game starts', () => {

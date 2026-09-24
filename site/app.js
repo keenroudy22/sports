@@ -216,6 +216,7 @@
         ${stat('ROI', r.roi == null ? DASH : signed(r.roi, 1) + '%', r.roi != null ? 'priced picks only' : r.priced ? `shows at ${r.roiMinimum} priced · ${r.priced} so far` : 'needs recorded prices')}
       </div>
       ${r.unpriced ? `<p class="row-meta" style="margin:12px 0 0">${plural(r.unpriced, 'pick')} ${r.unpriced === 1 ? 'has' : 'have'} no recorded price, so ${r.unpriced === 1 ? 'it counts' : 'they count'} in the record but not in units or ROI.</p>` : ''}
+      ${r.imported ? `<p class="row-meta" style="margin:12px 0 0">${plural(r.imported.wins + r.imported.losses + r.imported.pushes + r.imported.voids, 'pick')} imported from before we recorded prices ${r.imported.wins + r.imported.losses + r.imported.pushes + r.imported.voids === 1 ? 'is' : 'are'} left out of these numbers. ${r.imported.wins + r.imported.losses + r.imported.pushes + r.imported.voids === 1 ? 'It' : 'They'} went ${r.imported.wins}–${r.imported.losses}${r.imported.voids ? ` with ${r.imported.voids} void` : ''} and ${r.imported.wins + r.imported.losses + r.imported.pushes + r.imported.voids === 1 ? 'is' : 'are'} still listed with the settled picks.</p>` : ''}
       ${r.model && (r.model.wins + r.model.losses + r.model.pushes + r.model.pending) ? `<p class="row-meta" style="margin:12px 0 0">Researched ${r.researched.wins}–${r.researched.losses}${r.researched.units == null ? '' : ` (${signed(r.researched.units, 2)}u)`} · Model leans ${r.model.wins}–${r.model.losses}${r.model.units == null ? '' : ` (${signed(r.model.units, 2)}u)`}${r.model.pending ? `, ${r.model.pending} pending` : ''}</p>` : ''}
       ${r.earlyExits ? `<p class="row-meta" style="margin:8px 0 0">${plural(r.earlyExits, 'pick')} lost with the player hurt inside the first half, where the book credits the stake back. Those count as losses in the record above and as zero units, the same as a push.</p>` : ''}
       ${r.parlays ? `<p class="row-meta" style="margin:8px 0 0">Longshots are kept out of the numbers above and tracked at their own stake: ${r.parlays.wins}–${r.parlays.losses}${r.parlays.units == null ? '' : `, ${signed(r.parlays.units, 2)}u on ${r.parlays.staked}u risked`}.</p>` : ''}
@@ -659,13 +660,15 @@
     const settled = picks.filter(p => p.result && matches(p)).sort((a, b) => String(b.settledAt || b.publishedAt).localeCompare(String(a.settledAt || a.publishedAt)));
     const r = state.recordScope === 'longshot' ? { ...C.summaryOf(picks), parlays: null, model: null, researched: null } : C.recordOf(picks);
     const scoped = state.recordScope === 'all' ? data.picks : data.picks.filter(p => C.kindOf(p) === state.recordScope);
-    const kinds = ['researched', 'model', 'longshot'].map(k => [C.KIND_WORD[k], C.summaryOf(league.filter(p => C.kindOf(p) === k))]);
-    const weeks = [...new Set(picks.map(p => C.weekOf(p.kickoff || p.publishedAt)).filter(Boolean))].sort().reverse()
-      .map(w => [w, C.summaryOf(picks.filter(p => C.weekOf(p.kickoff || p.publishedAt) === w))]);
+    /* The tables count what the record counts: picks imported without a price are listed below, never totalled. */
+    const counted = picks.filter(p => !C.isUnpricedImport(p));
+    const kinds = ['researched', 'model', 'longshot'].map(k => [C.KIND_WORD[k], C.summaryOf(league.filter(p => !C.isUnpricedImport(p) && C.kindOf(p) === k))]);
+    const weeks = [...new Set(counted.map(p => C.weekOf(p.kickoff || p.publishedAt)).filter(Boolean))].sort().reverse()
+      .map(w => [w, C.summaryOf(counted.filter(p => C.weekOf(p.kickoff || p.publishedAt) === w))]);
     const weekLabel = w => { const d = new Date(w + 'T12:00:00'); const e = new Date(d); e.setDate(d.getDate() + 6);
       return `${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} to ${e.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`; };
     const leagues = [['NFL', 'NFL'], ['CFB', 'College']].map(([id, name]) => [name, C.recordOf(scoped.filter(p => p.league === id))]);
-    const types = [...new Set(picks.map(C.category))].map(name => [name, C.summaryOf(picks.filter(p => C.category(p) === name))]);
+    const types = [...new Set(counted.map(C.category))].map(name => [name, C.summaryOf(counted.filter(p => C.category(p) === name))]);
     const typeRow = ([name, t]) => `<tr><th scope="row">${esc(name)}</th><td class="num">${t.wins}–${t.losses}–${t.pushes}</td><td class="num">${t.units == null ? DASH : signed(t.units, 2) + 'u'}</td><td class="num">${t.priced}</td></tr>`;
     return `${head('The record', `Every straight pick at one unit, win or lose, ${state.league === 'ALL' ? 'across both sports' : `with ${esc(leagueName(dataLeague()))} selected above`}. Original prices are frozen; later moves are logged, never re-priced. The table below always covers both sports.`)}
       <div class="toolbar">${seg('recordScope', [['all', `All (${league.length})`], ['researched', `Researched (${league.filter(p => C.kindOf(p) === 'researched').length})`],
