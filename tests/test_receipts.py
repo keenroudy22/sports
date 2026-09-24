@@ -107,8 +107,8 @@ class ReceiptTests(unittest.TestCase):
         got = [(p[0], p[1], p[3].astimezone(gates.EASTERN).strftime('%H:%M'), p[4]) for p in plans]
         self.assertEqual(got[0][:3], ('menu:day:2026-09-28', 'menu', '08:45'))
         self.assertEqual(got[1], ('receipt:day:2026-09-27', 'receipt', '09:00', 'receipt-day-2026-09-27'))
-        self.assertEqual(got[2][:3], ('NFL-2026-W4-n', 'play', '09:10'))
-        self.assertEqual(got[3][:3], ('NFL-2026-W4-m', 'play', '17:15'), 'the Monday night play three hours out')
+        self.assertEqual(got[2][:3], ('NFL-2026-W4-n', 'play', '10:00'), 'a noon kickoff posts two hours ahead')
+        self.assertEqual(got[3][:3], ('NFL-2026-W4-m', 'play', '12:00'), 'the Monday night play goes out at midday')
         log['posts'].append({'id': 'receipt:day:2026-09-27', 'kind': 'buffer:receipt'})
         self.assertNotIn('receipt:day:2026-09-27', [p[0] for p in buffer_post.plan(first, latest, dict(GAMES, **noon), MONDAY_MORNING, log)])
 
@@ -119,7 +119,7 @@ class DailyTests(unittest.TestCase):
         first['NFL-2026-W4-m2'] = pick('m2', 'mon', title='Player Nine OVER 60.5 receiving yards', athleteId='9', market='recYds')
         post = receipts.menu(first, latest, GAMES, log, MONDAY_MORNING)
         self.assertEqual(post['text'], "🍳 TODAY'S MENU\n2 plates on the stove today:\n• Colts at Chiefs, 8:15 PM\n\n"
-                                       'Each one drops three hours before kickoff.\n#NFL')
+                                       'Plates go out around noon.\n#NFL')
         self.assertNotIn('under', post['text'].lower())
         self.assertNotIn('Nine', post['text'], 'the player is not named before his post')
         self.assertEqual(post['due'].astimezone(gates.EASTERN).strftime('%H:%M'), '08:45')
@@ -128,7 +128,7 @@ class DailyTests(unittest.TestCase):
     def test_a_busy_saturday_menu_is_not_refused_as_one_long_sentence(self):
         text = ("🍳 TODAY'S MENU\n6 plates on the stove today:\n• Iowa at Michigan, 3:30 PM\n• Oklahoma at Georgia, 3:30 PM\n"
                 "• UConn at Miami (OH), 3:30 PM\n• James Madison at Old Dominion, 6:00 PM\nand 2 more on the site\n\n"
-                "Each one drops three hours before kickoff.\n#CFB")
+                "Plates go out around noon.\n#CFB")
         self.assertEqual(receipts.guard({'text': text}), [])
 
     def test_the_book_fills_an_empty_evening_and_only_then(self):

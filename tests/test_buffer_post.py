@@ -111,15 +111,15 @@ TICKET = dict(legs=[{'title': 'Iowa at Michigan over 38.5'}, {'title': 'Oklahoma
 
 
 class PlanTests(unittest.TestCase):
-    def test_each_play_posts_three_hours_before_its_kickoff_players_then_teams_then_the_parlay(self):
+    def test_plays_post_around_noon_or_two_hours_before_an_early_kickoff_players_then_teams_then_the_parlay(self):
         first = {'a': pick('a'), 'd': pick('d', title='Iowa at Michigan under 38.5', direction='under'),
                  'p': pick('p', **PROP), 'x': pick('x', gameIds=['noon', 'late'], **TICKET),
                  'b': pick('b', 'late', title='Oklahoma at Georgia under 44.5', direction='under'), 'c': pick('c', 'tomorrow')}
         latest = {k: dict(v) for k, v in first.items()}
         plans = bp.plan(first, latest, GAMES, NOW, {'posts': []})
         self.assertEqual([(p[0], et(p[3])) for p in plans],
-                         [('menu:day:2026-09-26', '08:45'), ('p', '09:00'), ('a', '09:10'), ('d', '09:20'), ('x', '09:30'), ('b', '16:30')],
-                         'the menu first; noon kickoff: 9:00 on, player prop first, parlay last; the 7:30 PM game at 4:30 PM; tomorrow waits')
+                         [('menu:day:2026-09-26', '08:45'), ('p', '10:00'), ('a', '10:10'), ('d', '10:20'), ('x', '10:30'), ('b', '12:00')],
+                         'the menu first; the noon kickoff posts two hours ahead, player prop first, parlay last; the 7:30 PM game at noon; tomorrow waits')
         self.assertEqual(plans[0][4], 'https://keenroudy.com/sports/img/kitchen-menu.png')
         plans = [p for p in plans if p[1] == 'play']
         self.assertTrue(all(p[4] == p[0] for p in plans), 'each play with its own card')

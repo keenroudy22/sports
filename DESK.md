@@ -15,7 +15,7 @@ rules in words. When this file and the validator disagree, the validator wins.
 | `scripts/replay_gates.py` | Every published pick back through the gates as of its publication, with what would have been refused and why. |
 | `scripts/llm.py`, `scripts/llm_tasks.py` | The local model (Ollama, on this machine) and the two guards on its prose: the house style and the numbers guard. The model polishes templated `why` and `risk`, drafts posts and weighs the facts against a candidate. It never adds a number. |
 | `scripts/x_post.py` | The post text: one shape for every play (player prop, team prop, fun parlay), with `data/x-posted.json` as the posted log. |
-| `scripts/buffer_post.py` | Scheduling those posts to @keenkooks through Buffer's free plan, three hours before kickoff, each with its card. |
+| `scripts/buffer_post.py` | Scheduling those posts to @keenkooks through Buffer's free plan, around noon on game day, each with its card. |
 
 Nothing here edits an existing file in `research/`, `market-observations/` or a ledger. A quiet run
 writes nothing.
@@ -162,9 +162,10 @@ numbers go.
 
 X meters posting through its API, so the desk posts through **Buffer** (`scripts/buffer_post.py`, free plan:
 Buffer's own X access, 3,000 API requests a month, an exact `dueAt` per post, an image by public URL,
-`deletePost`). The timing is the same every game day: each play posts **three hours before its kickoff**
-(a parlay's first leg), never before 9:00 AM ET; plays sharing a kickoff go player props first, then team
-props, then the parlay, ten minutes apart; a play published later than its time goes out at once unless
+`deletePost`). The timing is the same every game day: plays post **around noon Eastern** (the owner's call,
+2026-09-24), or two hours before a kickoff earlier than 2 PM (a parlay by its first leg), never before 9:00 AM;
+player props first, then team props, then the parlay, ten minutes apart; a late injury after a play is out
+cannot pull the post, though the site still closes the pick; a play published later than its time goes out at once unless
 kickoff is inside 45 minutes. Buffer takes an image only by URL, so a post is scheduled only once its card is
 live on the site: the hosted workflow renders a card for every open play as soon as it is published, the run
 schedules after its own push and waits up to 15 minutes for that deploy, and a play whose card is still not
@@ -174,10 +175,10 @@ live waits for the next run. Nothing goes out bare.
 
 | When (Eastern) | Post |
 |---|---|
-| 8:45 AM on a game day with plays | **Today's menu**: how many plates, which games and when, never the side; each drops three hours before kickoff (card `site/img/kitchen-menu.png`) |
+| 8:45 AM on a game day with plays | **Today's menu**: how many plates, which games and when, never the side; plates go out around noon (card `site/img/kitchen-menu.png`) |
 | 9:00 AM the morning after a game day | **Receipts** for every play that went out, with ✅ ❌ ➖ and the day's units |
 | 9:00 AM Wednesday | **The week's receipts** by kind, with the week's dates |
-| Three hours before each kickoff | **The plays** |
+| Around noon (two hours before a kickoff earlier than 2 PM; never before 9 AM) | **The plays** |
 | 6:00 PM on a day with nothing else | **The book**: the season record of every play that went out on X (the two posted by hand on 2026-09-19 included), graded through yesterday and saying so ("Season through Sep 28"), so back-to-back quiet days never post the same words, which X refuses; with one kind of play only the season line (card `site/img/kitchen-book.png`) |
 
 **Receipts** (`scripts/receipts.py`) make it a post every day of the season. At 9:00 AM ET the morning after a

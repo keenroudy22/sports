@@ -205,7 +205,7 @@ def menu(first, latest, games, log_book, now):
     count = len(plays)
     head = f"🍳 TODAY'S MENU\n{count} plate{'s' if count != 1 else ''} on the stove today:"
     lines = [f'• {r}' for r in rows] + (['• the fun parlay'] if parlay else [])
-    tail = 'Each one drops three hours before kickoff.\n' + leagues(plays)
+    tail = 'Plates go out around noon.\n' + leagues(plays)
     return {'key': f'menu:day:{today.isoformat()}', 'card': HOUSE_CARDS + 'kitchen-menu.png', 'kind': 'menu',
             'text': fit(lines, head, tail.strip(), head_sep='\n'), 'due': at(today, MENU_AT), 'stale': at(today, MENU_UNTIL)}
 

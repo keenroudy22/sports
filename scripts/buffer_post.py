@@ -38,7 +38,8 @@ from sports_refresh import eastern_date
 ROOT = Path(__file__).resolve().parents[1]
 API = 'https://api.buffer.com'
 CARDS = x_post.SITE + 'data/cards/'
-LEAD_TIME = timedelta(hours=3)       # every play posts three hours before its kickoff (not before 9:00 AM ET)
+POST_AT = (12, 0)                    # Eastern: plays go out around midday on game day (the owner's call, 2026-09-24)
+EARLY_LEAD = timedelta(hours=2)      # a game before 2 PM posts two hours ahead of kickoff instead, never before 9:00 AM
 SPACING = timedelta(minutes=10)      # between two posts
 SOON = timedelta(minutes=2)          # a post scheduled "now" goes out this far ahead
 ORDER = {'player': 0, 'team': 1, 'parlay': 2}     # inside one kickoff: player props, then team props, then the parlay
@@ -204,9 +205,9 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
 
     X gets plays and their receipts: player props, team props and the day's fun parlay, the same shape every
     time and always with the card, and the morning after, the receipt (scripts/receipts.py) at 9:00 AM ET,
-    ahead of that morning's plays; on Wednesday the week's receipt too. Each play is due three hours before its kickoff (a parlay's first leg), never
-    before 9:00 AM ET on game day; plays sharing a kickoff go player props first, then team props, then the
-    parlay, ten minutes apart. A play published later than its time goes out now, unless kickoff is inside
+    ahead of that morning's plays; on Wednesday the week's receipt too. Plays go out around noon Eastern on game
+    day (a game before 2 PM posts two hours ahead of its kickoff, a parlay by its first leg; never before 9:00 AM),
+    player props first, then team props, then the parlay, ten minutes apart. A play published later than its time goes out now, unless kickoff is inside
     45 minutes. Posted, closed, settled and historical plays are left out.
     `soon` replaces the two-minute lead, for a person who wants time to look at the queue first. A post whose text
     fails its check is left out and, when `refused` is a list, named there with the problems, so it is never silent.
@@ -236,7 +237,8 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
                 refused.append((key, problems))
             continue
         kickoff = gates.when(starts[0])
-        plays.append((max(kickoff - LEAD_TIME, opens), ORDER[pick_card.play_kind(merged)], kickoff - feed.LEAD, key, text, 'play', key))
+        noon = datetime(today.year, today.month, today.day, POST_AT[0], POST_AT[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)
+        plays.append((max(min(noon, kickoff - EARLY_LEAD), opens), ORDER[pick_card.play_kind(merged)], kickoff - feed.LEAD, key, text, 'play', key))
     order = {'menu': -2, 'receipt': -1, 'book': -1}
     for post in receipts.house_posts(first, latest, games, log_book, now):
         if post['key'] in posted:
