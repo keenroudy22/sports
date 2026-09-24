@@ -128,9 +128,10 @@ def week_receipt(wednesday, first, latest, games, ids):
         group = [r for r in rows if pick_card.play_kind(r) == kind]
         if group:
             by_kind.append((KIND_NAMES[kind], record_text(x_post.summarize(group))))
-    head = f"🍳 RECEIPTS · THE WEEK\n{record_text(summary)}"
+    # The dates keep two weeks with the same record from posting the same words; one kind of play shows only the total.
+    head = f"🍳 RECEIPTS · THE WEEK\n{start:%b} {start.day} to {end:%b} {end.day}: {record_text(summary)}"
     tail = 'Graded in public, win or lose.\n' + leagues(rows)
-    text = fit([f'{name} {rec}' for name, rec in by_kind], head, tail.strip())
+    text = fit([f'{name} {rec}' for name, rec in by_kind] if len(by_kind) > 1 else [], head, tail.strip())
     return {'key': f'receipt:week:{end.isoformat()}', 'card': f'receipt-week-{end.isoformat()}', 'kind': 'receipt',
             'title': record_text(summary), 'label': 'THIS WEEK’S PLATES', 'when': f'{start:%b %-d} to {end:%b %-d}',
             'rows': [(None, f'{name}  {rec}') for name, rec in by_kind], 'text': text, 'due': morning(wednesday),
@@ -232,7 +233,10 @@ def book(first, latest, games, log_book, now):
             lines.append(f'{KIND_NAMES[kind]} {record_text(x_post.summarize(group))}')
     if len(lines) < 2:
         lines = []                         # one kind only: its line would repeat the season's
-    head = f"🍳 THE BOOK\nSeason: {record_text(x_post.summarize(rows))}"
+    through = today - timedelta(days=1)
+    # The day it is graded through is named, so two quiet days in a row never post the same text (X refuses a
+    # repeated post, and the same words twice read like a bot).
+    head = f"🍳 THE BOOK\nSeason through {through:%b} {through.day}: {record_text(x_post.summarize(rows))}"
     tail = 'Every play we post, graded in public, win or lose.\n' + leagues(rows)
     return {'key': f'book:day:{today.isoformat()}', 'card': HOUSE_CARDS + 'kitchen-book.png', 'kind': 'book',
             'text': fit(lines, head, tail.strip()), 'due': max(at(today, BOOK_AT), now + timedelta(minutes=2)),

@@ -1,6 +1,6 @@
 import sys
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
@@ -84,7 +84,7 @@ class ReceiptTests(unittest.TestCase):
         found = {r['key']: r for r in receipts.ready(first, latest, GAMES, log, wednesday)}
         self.assertEqual(sorted(found), ['receipt:week:2026-09-29'])
         week = found['receipt:week:2026-09-29']
-        self.assertEqual(week['text'], '🍳 RECEIPTS · THE WEEK\n2-2-1 · +0.66u\n\n'
+        self.assertEqual(week['text'], '🍳 RECEIPTS · THE WEEK\nSep 23 to Sep 29: 2-2-1 · +0.66u\n\n'
                                        'Player props 1-0 · +1.00u\nTeam props 1-1-1 · -0.09u\nParlays 0-1 · -0.25u\n\n'
                                        'Graded in public, win or lose.\n#NFL')
         self.assertEqual(week['due'].astimezone(gates.EASTERN).strftime('%a %H:%M'), 'Wed 09:00')
@@ -135,7 +135,9 @@ class DailyTests(unittest.TestCase):
         first, latest, log = world()
         tuesday_evening = datetime(2026, 9, 29, 21, 30, tzinfo=timezone.utc)      # Tue 5:30 PM ET
         post = receipts.book(first, latest, GAMES, log, tuesday_evening)
-        self.assertEqual(post['text'].split('\n')[:2], ['🍳 THE BOOK', 'Season: 2-2 · +0.66u'])
+        self.assertEqual(post['text'].split('\n')[:2], ['🍳 THE BOOK', 'Season through Sep 28: 2-2 · +0.66u'])
+        wednesday = receipts.book(first, latest, GAMES, log, tuesday_evening + timedelta(days=1))
+        self.assertNotEqual(wednesday['text'], post['text'], 'a quiet day after a quiet day never repeats the same post')
         self.assertIn('Player props 1-0 · +1.00u', post['text'])
         self.assertEqual(post['due'].astimezone(gates.EASTERN).strftime('%a %H:%M'), 'Tue 18:00')
         self.assertIsNone(receipts.book(first, latest, GAMES, log, datetime(2026, 9, 29, 14, 0, tzinfo=timezone.utc)), 'not before 5 PM')

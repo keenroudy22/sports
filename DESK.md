@@ -176,9 +176,9 @@ live waits for the next run. Nothing goes out bare.
 |---|---|
 | 8:45 AM on a game day with plays | **Today's menu**: how many plates, which games and when, never the side; each drops three hours before kickoff (card `site/img/kitchen-menu.png`) |
 | 9:00 AM the morning after a game day | **Receipts** for every play that went out, with ✅ ❌ ➖ and the day's units |
-| 9:00 AM Wednesday | **The week's receipts** by kind |
+| 9:00 AM Wednesday | **The week's receipts** by kind, with the week's dates |
 | Three hours before each kickoff | **The plays** |
-| 6:00 PM on a day with nothing else | **The book**: the season record of every play that went out on X (the two posted by hand on 2026-09-19 included), graded through yesterday; with one kind of play only the season line (card `site/img/kitchen-book.png`) |
+| 6:00 PM on a day with nothing else | **The book**: the season record of every play that went out on X (the two posted by hand on 2026-09-19 included), graded through yesterday and saying so ("Season through Sep 28"), so back-to-back quiet days never post the same words, which X refuses; with one kind of play only the season line (card `site/img/kitchen-book.png`) |
 
 **Receipts** (`scripts/receipts.py`) make it a post every day of the season. At 9:00 AM ET the morning after a
 game day, once every play that went out on X that day is settled, the receipt lists each with ✅ ❌ ➖, the day's
