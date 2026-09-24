@@ -8129,5 +8129,145 @@
         "jurisdictionVerified": true
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-09-24T15:45:03Z",
+    "targetWeek": 4,
+    "summary": "11:45 AM ET run, published at 11:45 AM ET. Nothing to settle. Nothing to close. Published 4: Oklahoma at Georgia over 44.5 -105 at ESPN BET; Oklahoma State at West Virginia under 59.5 -106 at FanDuel; James Madison at Old Dominion over 45.5 -102 at FanDuel; UConn at Miami (OH) over 51.5 -105 at ESPN BET. Screened and passed on 5: Iowa at Michigan over 38.5 (not_duplicate); Virginia Tech at Boston College over 47.5 (lean_nothing_against); Georgia Tech at Stanford over 48.5 (lean_daily_cap); Missouri State at SMU under 60.5 (lean_daily_cap); Minnesota at Washington over 45.5 (lean_daily_cap). odds_api.py: CFB: skipped (captured 2026-09-24T12:30:01Z, inside the gap) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 44.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401856700"
+        ],
+        "book": "ESPN BET",
+        "odds": -105,
+        "projection": 49.6,
+        "edge": "v2 total 49.6 (80% range 28.9 to 70.4). Chance of over 44.5: 54.5% (v2's raw 62.5% shrunk by its 2024-25 record against the close), against 51.2% break-even at -105: +3.3 points, +0.064u per unit.",
+        "cutoff": "OVER 44.5 at -105 or better. Closed to new entries at 46+, or at -120 or worse at 44.5.",
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-23T14:15:47Z",
+        "quotedAt": "2026-09-24T12:30:01Z",
+        "quoteType": "capture",
+        "quoteNote": "ESPN BET's number and price from the 8:30 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-09-24T21:30:00Z",
+        "title": "Oklahoma at Georgia over 44.5",
+        "id": "CFB-2026-W4-ou-uga-over-44-5-espnbet",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401856700",
+          "https://www.si.com/college/oklahoma/football/where-does-oklahoma-dt-david-stone-stand-on-the-initial-sec-availability-report-01m38aypnf4t",
+          "https://www.newson6.com/university-of-oklahoma/david-stone-jr-not-ruled-out-of-georgia-game-yet-per-brent-venables"
+        ],
+        "why": "Model lean, published on our number alone. Our total is 49.6 against 44.5. The over reads 54.5% after the raw 62.5% is shrunk by the model's record against the close. It is 3.3 points clear of the 51.2% that -105 needs. Nothing sourced argues against it. The number is the reason. Checked before publishing: Oklahoma defensive tackle David Stone is listed as questionable on the first SEC availability report after a knee injury in Monday's practice. Checked before publishing: Brent Venables said David Stone ran his knee into a scout team player on a jog-through. He said it kind of popped out. He said Stone rated his pain about 2 out of 10. He said Stone's availability for Georgia had not been decided. The market: The spread opened -10 and is -14 at DraftKings. That is a move of 4 toward the home. The total opened 52.5 and is 44.5 at DraftKings. That is 8 toward the under. Five books span -14 to -13.5 on the spread. The middle is -14. Our spread gap of 0.9 points is at the 16th percentile of the model's gaps. Gaps this large went 1512-1505 against the close in 3584 graded games. Our total gap of 5.1 points is at the 78th percentile of the model's gaps. Gaps this large went 430-352 against the close in 3602 graded games.",
+        "risk": "It rests on the model alone. The closing line beats our number on average. A gap this size is more often our error than the market's. Confidence 3 of 10.",
+        "jurisdictionVerified": true
+      },
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 59.5,
+        "direction": "under",
+        "gameIds": [
+          "CFB-401856881"
+        ],
+        "book": "FanDuel",
+        "odds": -106,
+        "projection": 53.9,
+        "edge": "v2 total 53.9 (80% range 33.2 to 74.6). Chance of under 59.5: 54.9% (v2's raw 63.5% shrunk by its 2024-25 record against the close), against 51.5% break-even at -106: +3.4 points, +0.066u per unit.",
+        "cutoff": "UNDER 59.5 at -106 or better. Closed to new entries at 58 or lower, or at -121 or worse at 59.5.",
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-23T14:15:47Z",
+        "quotedAt": "2026-09-24T12:30:01Z",
+        "quoteType": "capture",
+        "quoteNote": "FanDuel's number and price from the 8:30 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-09-24T21:30:00Z",
+        "title": "Oklahoma State at West Virginia under 59.5",
+        "id": "CFB-2026-W4-okst-wvu-under-59-5-fd",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401856881",
+          "https://www.si.com/college/oklahomastate/football/explaining-four-big-changes-oklahoma-state-week-4-depth-chart-west-virginia"
+        ],
+        "why": "Model lean, based on our number alone. Our total is 53.9 against 59.5. The under is 54.9 percent after the raw 63.5 percent is adjusted by the model's record against the close. That is 3.4 points above the 51.5 percent needed to break even at -106. No sources argue against it. The number is the reason. Checked before publishing: Drew Mestemaker is still Oklahoma State's starting quarterback on the Week 4 depth chart against West Virginia. The article on the depth chart changes lists no injury for him. Checked before publishing: Oklahoma State left tackle Jacob Sexton has a season-ending injury. Shaun Torgeson has been moved up to sole starter at left tackle over Desmond Magiya. The market: The spread opened at +2.5 and is at -1.5 at DraftKings. That is a move of 4 toward the home. The total opened at 57.5 and is at 60.5 at DraftKings. That is a move of 3 toward the over. Five books span -2 to -1.5 on the spread. The middle is -1.5. Five books span 59.5 to 60.5 on the total. The middle is 60.5. Our spread gap of 6.3 points is at the 72th percentile of the model's gaps. Gaps this large went 506-488 against the close in 3584 graded games. Our total gap of 6.6 points is at the 91th percentile of the model's gaps. Gaps this large went 198-143 against the close in 3602 graded games.",
+        "risk": "It is based on the model alone. The closing line usually beats our number. A gap this big is more often our error than the market's. Confidence 3 of 10.",
+        "jurisdictionVerified": true
+      },
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 45.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401869961"
+        ],
+        "book": "FanDuel",
+        "odds": -102,
+        "projection": 52.3,
+        "edge": "v2 total 52.3 (80% range 31.5 to 73). Chance of over 45.5: 55.8% (v2's raw 66.2% shrunk by its 2024-25 record against the close), against 50.5% break-even at -102: +5.3 points, +0.106u per unit.",
+        "cutoff": "OVER 45.5 at -102 or better. Closed to new entries at 47+, or at -117 or worse at 45.5.",
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-23T14:15:47Z",
+        "quotedAt": "2026-09-24T12:30:01Z",
+        "quoteType": "capture",
+        "quoteNote": "FanDuel's number and price from the 8:30 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-09-24T21:30:00Z",
+        "title": "James Madison at Old Dominion over 45.5",
+        "id": "CFB-2026-W4-jmu-odu-over-45-5-fd",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401869961",
+          "https://odusports.com/news/2026/09/22/game-four-preview-old-dominion-vs-james-madison",
+          "https://www.thescore.com/ncaaf/news/3604443/old-dominion-hosts-james-madison-in-sun-belt-matchup"
+        ],
+        "why": "This is a model lean based on our number alone. Our projection is 52.3 compared to the line of 45.5. The chance of the over is 55.8% after adjusting the model's raw 66.2% by its record against the close. This is 5.3 points above the 50.5% break-even at -102. No outside information argues against it. The number is the reason.  \n\nOld Dominion's official game preview names Quinn Henicle as the Monarchs' starting quarterback. He is 3-2 in his starts. He completed 8-of-20 passes for 94 yards with 1 interception and rushed 16 times for 73 yards against East Carolina.  \n\nJames Madison quarterback Camden Coleman has completed 66.7% of his passes for 474 yards, 3 touchdowns, and zero interceptions.  \n\nThe spread opened at +4.5 and is now +6 at DraftKings, a move of 1.5 toward the away. The total opened at 50.5 and is now 44.5 at DraftKings, a move of 6 toward the under. Five books range from 5.5 to 6.5 on the spread, with the middle at 6. Five books range from 44.5 to 45.5 on the total, with the middle at 44.5.  \n\nOur spread gap of 3.6 points is at the 54th percentile of the model's gaps. Gaps this large went 827-813 against the close in 3584 graded games. Our total gap of 7.8 points is at the 95th percentile of the model's gaps. Gaps this large went 112-58 against the close in 3602 graded games",
+        "risk": "It rests on the model alone. The closing line beats our number on average. A gap this size is more often our error than the market's. Confidence 3 of 10.",
+        "jurisdictionVerified": true
+      },
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 51.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401861970"
+        ],
+        "book": "ESPN BET",
+        "odds": -105,
+        "projection": 55.9,
+        "edge": "v2 total 55.9 (80% range 35.1 to 76.6). Chance of over 51.5: 53.8% (v2's raw 60.6% shrunk by its 2024-25 record against the close), against 51.2% break-even at -105: +2.6 points, +0.051u per unit.",
+        "cutoff": "OVER 51.5 at -105 or better. Closed to new entries at 53+, or at -120 or worse at 51.5.",
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-23T14:15:47Z",
+        "quotedAt": "2026-09-24T12:30:01Z",
+        "quoteType": "capture",
+        "quoteNote": "ESPN BET's number and price from the 8:30 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-09-24T21:30:00Z",
+        "title": "UConn at Miami (OH) over 51.5",
+        "id": "CFB-2026-W4-conn-m-oh-over-51-5-espnbet",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401861970",
+          "https://www.miamistudent.net/article/2026/09/preview-miami-looks-to-bounce-back-in-homecoming-game-against-uconn",
+          "https://www.bythebelt.com/miami-names-mccomb-starting-qb-gotkowski-out-for-season/"
+        ],
+        "why": "Model lean, published on our number alone. Our total is 55.9 against 51.5. The over is 53.8% after the raw 60.6% is adjusted by the model's record against the close. This is 2.6 points above the 51.2% that -105 needs. Nothing from sources argues against it. The number is the reason. Checked before publishing: Junior quarterback Kalieb Osborne has started the first three games of the season for UConn (2-1) ahead of Saturday's game at Miami's Yager Stadium. Checked before publishing: Head coach Chuck Martin named David McComb, a 6'4\", 220-pound transfer from Kansas, Miami's starting quarterback after Thomas Gotkowski suffered a season-ending non-contact injury in practice. The market: The spread opened -3 and is -3.5 at DraftKings, a move of 0.5 toward the home. The total opened 50.5 and is 51.5 at DraftKings, 1 toward the over. Our spread gap of 5.2 points is at the 65th percentile of the model's gaps. Gaps this large went 631-615 against the close in 3584 graded games. Our total gap of 4.4 points is at the 68th percentile of the model's gaps. Gaps this large went 633-508 against the close in 3602 graded games.",
+        "risk": "It rests on the model alone. The closing line beats our number on average. A gap this size is more often our error than the market's. Confidence 3 of 10.",
+        "jurisdictionVerified": true
+      }
+    ]
   }
 ]
