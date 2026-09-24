@@ -637,7 +637,8 @@ def relevant_facts(candidate, facts, ctx):
     for fact in facts:
         kind = fact.get('kind')
         if fact.get('origin') == 'claude researcher':
-            out.append(fact)
+            if kind in ('injury', 'role', 'weather'):   # a stats story is already in the number; it never holds a play
+                out.append(fact)
             continue
         if kind == 'weather':
             if total and fact.get('direction') in ('for', 'against'):

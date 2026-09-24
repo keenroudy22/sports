@@ -45,6 +45,8 @@ matter most there.
 
 Look only at: official team or league injury and availability reports, the teams' own sites, and established
 beat reporting (major outlets or the local paper that covers the team). Prefer reporting from the last four days.
+You have room for about eight searches or page reads. Answer with what you have found by then; an answer with
+two solid facts is worth more than a search that never finishes.
 For each fact, give:
   kind: one of injury, role, weather, stats
   direction: "for" if it argues the market's price is wrong in the direction of "{side}", "against" if it argues
@@ -81,21 +83,48 @@ def prompt_for(game, market, side, policy=None, player=None):
     return text
 
 
-def run_claude(prompt, runner=subprocess.run, timeout=420, max_turns=8):
-    """The `claude -p` JSON result text, or None when the command fails or is missing."""
-    command = ['claude', '-p', prompt, '--output-format', 'json', '--allowedTools', 'WebSearch,WebFetch',
-               '--max-turns', str(max_turns)]
+MAX_TURNS = 12              # web steps before the researcher must answer
+# The researcher runs apart from everything else on the machine: its own empty folder (no project context, no
+# memory, no instruction files), web search and page reads as its only tools, no other tool servers, and a system
+# prompt that makes it a researcher and nothing else. Run from the repository with the default prompt, it had
+# picked up the folder's context and spent its turns trying to run code instead of researching.
+SANDBOX = Path.home() / '.config' / 'keenroudy' / 'research'
+SYSTEM = ('You are a careful sports news researcher. Your only job is to answer the research request you are given, '
+          'using web search and web page reads, and to return exactly the JSON it asks for. You have no other tools '
+          'and no other task: never write code, run commands, or discuss anything but the request.')
+ISOLATION = ['--tools', 'WebSearch,WebFetch', '--allowedTools', 'WebSearch,WebFetch', '--strict-mcp-config',
+             '--system-prompt', SYSTEM]
+FINISH = ('Stop researching now. Return ONLY the JSON object described at the start, with the facts you have '
+          'already found (an empty list if none). No searching, no prose.')
+
+
+def run_claude(prompt, runner=subprocess.run, timeout=420, max_turns=MAX_TURNS):
+    """The `claude -p` JSON result text, or None when the command fails or is missing.
+
+    A researcher that runs out of turns while still searching has found things but not written them down; its
+    session is resumed once with an instruction to answer now, so the search is not thrown away."""
+    command = ['claude', '-p', prompt, '--output-format', 'json', *ISOLATION, '--max-turns', str(max_turns)]
+    payload = _claude(command, runner, timeout)
+    if isinstance(payload, dict) and payload.get('subtype') == 'error_max_turns' and payload.get('session_id'):
+        payload = _claude(['claude', '-p', FINISH, '--resume', payload['session_id'], '--output-format', 'json',
+                           *ISOLATION, '--max-turns', '2'], runner, timeout=180)
+    if isinstance(payload, dict):
+        return payload.get('result')
+    return payload
+
+
+def _claude(command, runner, timeout):
+    """The parsed JSON the command printed (even on a non-zero exit, which is how a turn limit ends), its raw text
+    when it is not JSON, or None when nothing came back."""
+    SANDBOX.mkdir(parents=True, exist_ok=True)
     try:
-        result = runner(command, capture_output=True, text=True, timeout=timeout)
+        result = runner(command, capture_output=True, text=True, timeout=timeout, cwd=str(SANDBOX))
     except (OSError, subprocess.TimeoutExpired):
         return None
-    if result.returncode:
-        return None
     try:
-        payload = json.loads(result.stdout)
-    except ValueError:
-        return result.stdout
-    return payload.get('result') if isinstance(payload, dict) else result.stdout
+        return json.loads(result.stdout)
+    except (ValueError, TypeError):
+        return None if result.returncode else result.stdout
 
 
 def extract(text):
@@ -156,7 +185,32 @@ def verify(fact, opener=None):
         return dict(fact, verified=False, verifyNote=f"not on the page: {', '.join(missing)}")
     if fact['kind'] in ('injury', 'role') and not fact.get('entities'):
         return dict(fact, verified=False, verifyNote='an injury or role fact must name someone')
+    if fact['kind'] in ('injury', 'role') and not status_near_name(fact, page):
+        return dict(fact, verified=False, verifyNote="the page does not put the claim's status next to the name")
     return dict(fact, verified=True)
+
+
+STATUS_WORDS = ('out', 'doubtful', 'questionable', 'probable', 'injur', 'hurt', 'suspend', 'ruled', 'return',
+                'practice', 'limited', 'start', 'starter', 'starting', 'backup', 'bench', 'available', 'active',
+                'inactive', 'reserve', 'surgery', 'concussion', 'protocol', 'sidelined', 'expected to play',
+                'will not play', 'did not', 'depth chart', 'game-time', 'week-to-week', 'day-to-day', 'season-ending')
+NEAR = 300                  # characters either side of the name
+
+
+def status_near_name(fact, page):
+    """An injury or lineup claim counts only when a status word from the claim itself sits within a few hundred
+    characters of the person's surname on the page. A name somewhere on a long page is not enough."""
+    claim = str(fact.get('claim') or '').lower()
+    words = [w for w in STATUS_WORDS if re.search(r'\b' + re.escape(w), claim)]
+    if not words:
+        return True         # the claim names no status to look for; the name check stands alone
+    for name in fact.get('entities') or []:
+        surname = name.split()[-1].lower()
+        for match in re.finditer(re.escape(surname), page):
+            window = page[max(0, match.start() - NEAR):match.end() + NEAR]
+            if any(re.search(r'\b' + re.escape(w), window) for w in words):
+                return True
+    return False
 
 
 def research(game, market, side, runner=subprocess.run, opener=None, now=None, player=None):

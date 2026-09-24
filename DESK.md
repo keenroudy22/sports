@@ -84,10 +84,14 @@ where the market moved two points or more away from our number, our side at the 
 So, in this order, every run:
 
 1. **The written rules first** (`gates.admit`). A candidate they refuse costs no research and no model time.
-2. **The news**: the web researcher (`scripts/researcher.py`, `claude -p` with web search) reads injury,
+2. **The news**: the web researcher (`scripts/researcher.py`, `claude -p` with web search, run in its own empty
+   folder with web search and page reads as its only tools and a research-only system prompt; run from the
+   repository it had picked up the folder's context and spent its turns trying to run code) reads injury,
    availability and depth-chart reporting for every play that passes the rules, up to six a run, at every run
    except 6:45 AM and 11:30 PM. It asks first who is expected to play: each starting quarterback, key starters,
-   and for a prop the player himself. Every fact is checked against its source page before it is used.
+   and for a prop the player himself. Every fact is checked against its source page before it is used: an injury
+   or lineup claim counts only when a status word from the claim sits next to the player's name on the page. A
+   researcher that runs out of turns is asked once to answer with what it found.
 3. **College needs the check**: no college play is published until the web check has come back with who is
    expected to play (`needs_research`, `lineup_confirmed`). College teams publish no injury report the desk can
    read, so without the check the desk would know nothing about injuries at all. The researcher does not always
