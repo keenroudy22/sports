@@ -81,7 +81,7 @@ def pick_items(first, latest, games, now, player_team=None):
         if merged.get('expiresAt') and gates.when(merged['expiresAt']) <= now - timedelta(hours=12):
             continue        # a quote that expired half a day ago is not this morning's play
         text = x_post.draft(merged, game)
-        if x_post.guard(text, merged):
+        if x_post.guard(text, merged, x_post.load_reasons().get(key)):
             continue
         local = now.astimezone(gates.EASTERN)
         opened = local.replace(hour=WINDOW_OPENS[0], minute=WINDOW_OPENS[1], second=0, microsecond=0).astimezone(timezone.utc)

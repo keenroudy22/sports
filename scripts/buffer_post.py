@@ -193,7 +193,7 @@ def window_open(day):
     return datetime(day.year, day.month, day.day, feed.WINDOW_OPENS[0], feed.WINDOW_OPENS[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)
 
 
-def plan(first, latest, games, now, log_book, player_team=None, soon=None):
+def plan(first, latest, games, now, log_book, player_team=None, soon=None, quotes=None):
     """The posts the run should schedule now: [(key, kind, text, due_at, card_key)].
 
     X gets plays and their receipts: player props, team props and the day's fun parlay, the same shape every
@@ -221,8 +221,9 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None):
         if not starts or eastern_date(gates.when(starts[0])) != today:
             continue
         game = games.get((merged.get('gameIds') or [None])[0])
-        text = x_post.draft(merged, game, weights)
-        if x_post.guard(text, merged):
+        now_quote = (quotes or {}).get(key)
+        text = x_post.draft(merged, game, weights, now_quote=now_quote)
+        if x_post.guard(text, merged, x_post.load_reasons().get(key), now_quote):
             continue
         kickoff = gates.when(starts[0])
         plays.append((max(kickoff - LEAD_TIME, opens), ORDER[pick_card.play_kind(merged)], kickoff - feed.LEAD, key, text, 'play', key))
@@ -370,7 +371,8 @@ def main(argv=None):
         ctx = stores.as_of(now)
         log_book = x_post.load_log()
         if args.command in ('plan', 'schedule'):
-            plans = plan(ctx.first, ctx.latest, ctx.games, now, log_book, ctx.player_team, soon=soon)
+            quotes = {k: q for k in ctx.first if (q := gates.best_now(dict(ctx.first[k], **ctx.latest.get(k, {})), ctx))}
+            plans = plan(ctx.first, ctx.latest, ctx.games, now, log_book, ctx.player_team, soon=soon, quotes=quotes)
             for guid, kind, text, due, card in plans:
                 print(f"{due.astimezone(gates.EASTERN):%a %-I:%M %p} ET  {kind:<10} {guid}" + (f"  card {CARDS}{card}.png" if card else ''))
                 print('    ' + text.replace('\n', ' / '))

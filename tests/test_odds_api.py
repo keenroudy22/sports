@@ -83,9 +83,18 @@ class ParseTests(unittest.TestCase):
 
 
 class BudgetTests(unittest.TestCase):
+    def test_college_is_captured_once_a_day_while_its_games_are_a_week_out(self):
+        early = NOW - timedelta(days=5)
+        self.assertIsNone(odds_api.due('CFB', SLATE, {}, early), 'lines just opened: capture')
+        done = {'leagues': {'CFB': {'day': odds_api.eastern_date(early).isoformat(), 'count': 1, 'lastAt': '2000-01-01T00:00:00Z'}}}
+        self.assertIn('1 captures already today', odds_api.due('CFB', SLATE, done, early))
+        self.assertIn('no game inside two days', odds_api.due('NFL', SLATE, {}, NOW - timedelta(days=5)), 'the NFL waits for kickoff week')
+        self.assertIn('no game inside a week', odds_api.due('CFB', SLATE, {}, NOW - timedelta(days=9)))
+
     def test_a_league_is_captured_only_when_due(self):
         self.assertIsNone(odds_api.due('CFB', SLATE, {}, NOW))
-        self.assertIn('no game', odds_api.due('CFB', SLATE, {}, NOW - timedelta(days=3)))
+        self.assertIsNone(odds_api.due('CFB', SLATE, {}, NOW - timedelta(days=3)), 'three days out: the early daily capture')
+        self.assertIn('no game', odds_api.due('CFB', SLATE, {}, NOW - timedelta(days=9)))
         status = {'usage': {'remaining': 25}}
         self.assertIn('reserve', odds_api.due('CFB', SLATE, status, NOW))
         status = {'leagues': {'CFB': {'lastAt': '2026-09-19T12:00:00Z'}}}

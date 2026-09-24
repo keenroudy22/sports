@@ -31,6 +31,7 @@ import build_site
 import gates
 import llm
 import pick_card
+import pricing
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -338,7 +339,7 @@ def save_reasons(reasons, path=None):
     target.write_text(json.dumps(dict(sorted(reasons.items())), indent=1, ensure_ascii=False) + '\n', encoding='utf-8')
 
 
-def draft(pick, game=None, weights=None, reason=None):
+def draft(pick, game=None, weights=None, reason=None, now_quote=None):
     """The post, the same shape every time:
 
         🍳 PLAYER PROP | TEAM PROP | FUN PARLAY   (· FAVORITE for a researched pick)
@@ -369,7 +370,7 @@ def draft(pick, game=None, weights=None, reason=None):
         top = '\n'.join([head, count, *[f'• {leg}' for leg in legs]])
         options = ([top, 'Just for fun.', tail], [top, tail], [head, count, tail])
     else:
-        top = '\n'.join([head, pick_card.display_title(pick, game), price])
+        top = '\n'.join([head, pick_card.display_title(pick, game), price] + ([now_line(pick, now_quote)] if now_line(pick, now_quote) else []))
         number = pick_card.number_line(pick)
         if reason is None:
             reason = load_reasons().get(str(pick.get('id')))
@@ -378,7 +379,7 @@ def draft(pick, game=None, weights=None, reason=None):
         options = ([top, '\n'.join(x for x in (number, reason) if x), tail], [top, number, tail], [top, tail])
     for parts in options:
         text = '\n\n'.join(part for part in parts if part)
-        if tweet_length(text) <= LIMIT and not guard(text, pick, reason):
+        if tweet_length(text) <= LIMIT and not guard(text, pick, reason, now_quote):
             return text                 # a reason that trips a guard costs the reason, never the post
     return top[:LIMIT]
 
@@ -392,11 +393,24 @@ def x_style(text):
     return [p for p in llm.check_style(text) if 'emoji' not in p]
 
 
-def guard(text, pick, reason=None):
+def now_line(pick, quote):
+    """'Now: 52 at -110, DraftKings' when the best number available as the post goes out is not the published one."""
+    if not quote or pick.get('legs'):
+        return ''
+    book, line, odds = quote
+    if float(line) == float(pick['line']) and int(odds) == int(pick['odds']) and book == pick.get('book'):
+        return ''
+    shown = pricing.signed(float(line)) if pick.get('marketType') == 'spread' else pricing.fmt(float(line))
+    return f'Now: {shown} at {int(odds):+d}, {book}'
+
+
+def guard(text, pick, reason=None, now_quote=None):
     problems = x_style(text.replace(SITE, ''))
     extra = [{'legCount': len(pick['legs'])}] if pick.get('legs') else []      # "3 legs" is a count of the pick's own legs
     if reason:
         extra.append({'reason': reason})       # a stored reason's numbers come from a verified fact or the player's own games
+    if now_quote:
+        extra.append({'now': list(now_quote)})  # the number available now comes from the latest capture
     extra.append({'stake': pick_card.stake(pick)})                              # "1 unit" is the stake the record counts
     ok, strays = llm.numbers_ok(text, pick, extra)
     if not ok:

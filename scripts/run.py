@@ -1370,7 +1370,8 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         closed_ids = {revision['id'] for _, _, revision in closed}
         if closed_ids:
             buffer_post.cancel_closed(closed_ids, log_book, now, log=log)
-        plans = buffer_post.plan(ctx.first, ctx.latest, games, now, log_book, ctx.player_team)
+        quotes = now_quotes(ctx, games, now)
+        plans = buffer_post.plan(ctx.first, ctx.latest, games, now, log_book, ctx.player_team, quotes=quotes)
         if plans and deploying:
             waiting = [card for *_, card in plans if card]
             started = clock()
@@ -1381,7 +1382,7 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             if waiting:
                 log(f'buffer: {len(waiting)} card(s) still not live after the wait; those plays wait for the next run')
             later = datetime.now(timezone.utc)
-            plans = buffer_post.plan(ctx.first, ctx.latest, games, max(now, later), log_book, ctx.player_team)
+            plans = buffer_post.plan(ctx.first, ctx.latest, games, max(now, later), log_book, ctx.player_team, quotes=quotes)
         limit = buffer_post.daily_limit(channel['id'], eastern_date(now).isoformat())
         if limit and limit.get('remaining') is not None and limit['remaining'] < len(plans):
             log(f"buffer: the channel can take {limit['remaining']} more posts today; scheduling that many")
@@ -1393,6 +1394,31 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         log(f'buffer: {error}')
         status['errors'].append(f'buffer: {error}')
     x_post.save_log(log_book)
+
+
+def now_quotes(ctx, games, now):
+    """The best number available now for each open play whose game is today, for the post to show."""
+    import receipts
+    return {p['id']: q for p in receipts.todays_plays(ctx.first, ctx.latest, games, now) if (q := gates.best_now(p, ctx))}
+
+
+def requote(entry, pick, game, ctx, now, log=log):
+    """At the last look, rewrite a scheduled post whose number has moved since it was scheduled: the new post shows
+    the number available now. Buffer has no edit here, so the post is deleted and scheduled again at the same time
+    with the same card. Returns True when it was replaced."""
+    import buffer_post
+    import x_post
+    text = x_post.draft(pick, game, learning_weights(), now_quote=gates.best_now(pick, ctx))
+    if x_post.text_hash(text) == entry.get('textHash'):
+        return False
+    channel = buffer_post.x_channel(wanted='keenkooks')
+    card = f"{buffer_post.CARDS}{entry['id']}.png" if entry.get('card') else None
+    buffer_post.delete_post(entry['bufferPostId'])
+    entry['bufferPostId'] = buffer_post.create_post(text, channel['id'], gates.when(entry['dueAt']), card)
+    entry['textHash'] = x_post.text_hash(text)
+    entry['requotedAt'] = stamp(now)
+    log(f"precheck: {entry['id']} rescheduled with the number available now")
+    return True
 
 
 def commit_log(now, push=True, runner=git, cwd=ROOT):
@@ -1604,6 +1630,11 @@ def precheck(args):
                 else:
                     entry['precheck'] = {'at': stamp(now), 'result': 'clear', 'facts': len(relevant_facts(pick, facts, ctx))}
                     log(f"precheck: {key} clear")
+                    if not args.dry_run and game:
+                        try:
+                            requote(entry, pick, game, ctx, now)
+                        except Exception as error:        # the post stands as scheduled; the number is only context
+                            log(f"precheck: {key} not rescheduled with the number now ({type(error).__name__}: {error})")
             closures = [c for c in closures if c]
             for entry in withheld:
                 if not args.dry_run:

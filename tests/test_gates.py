@@ -1,7 +1,7 @@
 import sys
 import unittest
 from collections import defaultdict
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
@@ -244,6 +244,19 @@ class ModelLeanRuleTests(unittest.TestCase):
         self.assertTrue(gates.qb_available(total_lean(), off).ok)
         self.assertTrue(gates.qb_available(total_lean(), context()).ok, 'no report, nothing to refuse on')
         self.assertFalse(gates.qb_available(total_lean(), context()).data['checked'])
+
+
+class BestNowTests(unittest.TestCase):
+    def test_the_best_number_for_the_side_then_the_best_price(self):
+        ctx = context()
+        over = gates.best_now(total_lean(), ctx)
+        under = gates.best_now(total_lean(direction='under'), ctx)
+        self.assertIsNotNone(over)
+        lines = [q[1] for q in gates.quotes_for(dict(total_lean(), _quotes=None), ctx, priced_only=True)]
+        self.assertEqual(over[1], min(lines), 'an over wants the lowest number')
+        self.assertEqual(under[1], max(lines), 'an under wants the highest')
+        stale = context(now=NOW + timedelta(hours=13))
+        self.assertIsNone(gates.best_now(total_lean(), stale), 'a capture half a day old says nothing about now')
 
 
 class PropLeanRuleTests(unittest.TestCase):

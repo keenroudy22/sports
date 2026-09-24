@@ -136,6 +136,20 @@ class PlanTests(unittest.TestCase):
         self.assertEqual([(p[0], p[3]) for p in plans], [('b', evening + bp.SOON)])
         self.assertEqual(bp.plan(first, latest, GAMES, evening, {'posts': []}, soon=timedelta(minutes=20))[0][3], evening + timedelta(minutes=20))
 
+    def test_a_play_whose_stored_reason_has_numbers_is_still_scheduled(self):
+        import tempfile
+        from unittest import mock
+        first = {'p': pick('p', **PROP)}
+        latest = {k: dict(v) for k, v in first.items()}
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'reasons.json'
+            bp.x_post.save_reasons({'p': 'Over 4.5 in 7 of his last 10 games.'}, path)
+            with mock.patch.object(bp.x_post, 'REASONS', path):
+                plans = bp.plan(first, latest, GAMES, NOW, {'posts': []}, quotes={'p': ('FanDuel', 5.5, -120)})
+        play = next(p for p in plans if p[0] == 'p')
+        self.assertIn('Over 4.5 in 7 of his last 10 games.', play[2], 'the reason and its numbers go out')
+        self.assertIn('Now: 5.5 at -120, FanDuel', play[2])
+
     def test_posted_closed_and_settled_plays_are_left_out(self):
         first = {'a': pick('a'), 'b': pick('b', 'late'), 'c': pick('c', 'late', title='x')}
         latest = {'a': dict(first['a']), 'b': dict(first['b'], entryNote='closed'), 'c': dict(first['c'], result='win')}

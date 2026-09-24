@@ -62,6 +62,17 @@ class DraftTests(unittest.TestCase):
             self.assertNotIn('http', text, 'no link: the card carries the site')
             self.assertEqual(x_post.guard(text, pick, 'He has caught 6 in each of his last 2 games.' if pick is PROP else None), [], text)
 
+    def test_the_post_shows_the_number_available_now_when_it_moved(self):
+        pick = dict(PICK, favorite=False, modelLean=True, projection=31.2)
+        moved = x_post.draft(pick, GAME, reason='', now_quote=('DraftKings', 37.5, -110))
+        self.assertIn('-105 at FanDuel · 1 unit\nNow: 37.5 at -110, DraftKings\n', moved)
+        self.assertEqual(x_post.guard(moved, pick, None, ('DraftKings', 37.5, -110)), [])
+        same = x_post.draft(pick, GAME, reason='', now_quote=('FanDuel', 38.5, -105))
+        self.assertNotIn('Now:', same, 'unchanged: nothing to add')
+        spread = x_post.draft(dict(pick, marketType='spread', direction='home', line=-3.0, title='Iowa at Michigan -3'), GAME,
+                              reason='', now_quote=('DraftKings', -3.5, -110))
+        self.assertIn('Now: -3.5 at -110, DraftKings', spread)
+
     def test_the_reason_is_the_stored_one_never_the_prose(self):
         import tempfile
         with tempfile.TemporaryDirectory() as folder:

@@ -184,6 +184,24 @@ def player_name(candidate, ctx):
     return title
 
 
+NOW_FRESH = timedelta(hours=12)      # a capture older than this says nothing about "now"
+
+
+def best_now(pick, ctx, fresh=NOW_FRESH):
+    """(book, line, odds) the best number and price for the pick's own side in the latest capture, or None when the
+    capture is missing or stale. Best means the better number first (lower for an over, higher for an under or a
+    side), then the better price."""
+    game_id = (pick.get('gameIds') or [None])[0]
+    record = (ctx.prop_odds if pick.get('athleteId') else ctx.odds).get(game_id)
+    if not record or not record.get('retrievedAt') or ctx.now - when(record['retrievedAt']) > fresh:
+        return None
+    rows = [r for r in quotes_for(dict(pick, _quotes=None), ctx, priced_only=True) if isinstance(r[1], (int, float))]
+    if not rows or pick.get('legs'):
+        return None
+    side = side_of(pick)
+    return max(rows, key=lambda r: (-float(r[1]) if side == 'over' else float(r[1]), int(r[2])))
+
+
 def quotes_for(candidate, ctx, priced_only=False):
     """[(book, line, odds)] for the candidate's side across the latest capture. odds may be None."""
     if candidate.get('_quotes') is not None:

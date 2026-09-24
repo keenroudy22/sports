@@ -153,12 +153,21 @@ def best(record, side):
     return key, line, price
 
 
+EARLY = {'CFB': timedelta(days=7)}          # college lines open about a week out, and the edge is at the open
+EARLY_CAP = 1                               # one early capture a day, before the near-kickoff captures begin
+
+
 def due(league, games, status, now):
-    """Why a league is or is not captured now; None means capture."""
-    soon = [g for g in games if g['league'] == league and g.get('state') == 'pre'
-            and now < features.when(g['kickoff']) <= now + WINDOW]
-    if not soon:
-        return 'no game inside two days'
+    """Why a league is or is not captured now; None means capture.
+
+    Near kickoff (inside two days) a league is captured up to three times a day, four on its big day. College
+    football is also captured once a day while its next games are up to a week out: its totals edge is at the
+    opening number (docs/EDGE.md), so the desk has to see the lines soon after they open."""
+    upcoming = [g for g in games if g['league'] == league and g.get('state') == 'pre' and now < features.when(g['kickoff'])]
+    soon = [g for g in upcoming if features.when(g['kickoff']) <= now + WINDOW]
+    early = [g for g in upcoming if features.when(g['kickoff']) <= now + EARLY.get(league, WINDOW)]
+    if not early:
+        return 'no game inside two days' if league not in EARLY else 'no game inside a week'
     usage = status.get('usage') or {}
     if usage.get('remaining') is not None and usage['remaining'] - COST < RESERVE:
         return f"only {usage['remaining']} credits left; keeping the reserve"
@@ -166,7 +175,7 @@ def due(league, games, status, now):
     if mine.get('lastAt') and now - features.when(mine['lastAt']) < MIN_GAP:
         return f"captured {mine['lastAt']}, inside the gap"
     today = eastern_date(now)
-    cap = DAILY_CAP[league].get(today.weekday(), DEFAULT_CAP)
+    cap = DAILY_CAP[league].get(today.weekday(), DEFAULT_CAP) if soon else EARLY_CAP
     if mine.get('day') == today.isoformat() and mine.get('count', 0) >= cap:
         return f'{cap} captures already today'
     return None
