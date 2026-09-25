@@ -191,12 +191,14 @@ def best_now(pick, ctx, fresh=NOW_FRESH):
     """(book, line, odds) the best number and price for the pick's own side in the latest capture, or None when the
     capture is missing or stale. Best means the better number first (lower for an over, higher for an under or a
     side), then the better price."""
+    if pick.get('legs') or pick.get('parlayType'):
+        return None                       # a parlay's price is its legs multiplied, not one book's line
     game_id = (pick.get('gameIds') or [None])[0]
     record = (ctx.prop_odds if pick.get('athleteId') else ctx.odds).get(game_id)
     if not record or not record.get('retrievedAt') or ctx.now - when(record['retrievedAt']) > fresh:
         return None
     rows = [r for r in quotes_for(dict(pick, _quotes=None), ctx, priced_only=True) if isinstance(r[1], (int, float))]
-    if not rows or pick.get('legs'):
+    if not rows:
         return None
     side = side_of(pick)
     return max(rows, key=lambda r: (-float(r[1]) if side == 'over' else float(r[1]), int(r[2])))
@@ -676,7 +678,7 @@ RULES = {
                                  prop_one_per_player, prop_not_in_longshot, prop_injury_clear, prop_market_not_trailing, lean_nothing_against),
     'favorite': COMMON + SHOP + (favorite_needs_reason, lean_nothing_against, qb_available, prop_injury_clear),
     'researched': COMMON + SHOP + (lean_nothing_against, qb_available, prop_injury_clear),
-    'longshot': (not_started, expiry_ok, price_present, sources_https, longshot_one_per_day),
+    'longshot': (not_started, expiry_ok, price_present, sources_https, cfb_jurisdiction, longshot_one_per_day),
     'revision': (revision_frozen,),
 }
 

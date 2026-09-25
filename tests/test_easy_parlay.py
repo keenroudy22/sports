@@ -130,6 +130,22 @@ class ExpiryTests(unittest.TestCase):
         self.assertTrue(gates.expiry_ok(ticket, context).ok, gates.expiry_ok(ticket, context).reason)
         self.assertEqual(sorted(l['title'] for l in ticket['legs']), ['Bills at Lions over 44.5', 'Colts at Chiefs over 44.5', 'Jets at Rams over 44.5'],
                          'legs read the way a post says them')
+        spread = dict(row('g1'), id='game-g1-spread', title='LIO -3.5', market='point spread', direction=None, line=-3.5)
+        ticket, _ = run.longshot_candidate([spread, row('g2'), row('g3')], GAMES, NOW, 'NFL')
+        leg = next(l for l in ticket['legs'] if l['market'] == 'point spread')
+        self.assertEqual((leg['side'], leg['title']), ('home', 'Lions -3.5'), 'a home spread is named and graded as the home side')
+        final = dict(GAMES['g1'], home=dict(GAMES['g1']['home'], score=27), away=dict(GAMES['g1']['away'], score=20))
+        self.assertEqual(run.grade_game_pick(run.leg_pick(leg), final)[0], 'win', 'Lions by 7 cover -3.5')
+
+
+class ProseTests(unittest.TestCase):
+    def test_a_parlay_gets_its_words_without_a_line_or_a_side(self):
+        import run
+        for kind, needle in (('longshot', 'Longshot from the board'), ('easyProps', 'Easy props, for fun')):
+            ticket = {'id': 'x', 'parlayType': kind, 'legs': [{}, {}, {}], 'book': 'FanDuel', 'odds': 215, 'gameIds': ['g1']}
+            out = run.write_prose(ticket, SimpleNamespace(snapshot=lambda gid: None), [])
+            self.assertTrue(out['why'].startswith(needle))
+            self.assertIn('one miss sinks the ticket', out['risk'])
 
 
 class GateTests(unittest.TestCase):

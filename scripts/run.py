@@ -457,6 +457,8 @@ def longshot_candidate(lines, games, now, league, exclude=()):
     if not ticket:
         return None, reason
     for leg in ticket['legs']:
+        if leg.get('market') == 'point spread' and not leg.get('side'):
+            leg['side'] = 'home'          # the board's spread row is the home side unless it names the away side
         leg['title'] = readable_leg(leg, games) or leg['title']
     first = games.get(ticket['gameIds'][0]) or {}
     day = eastern_date(now)
@@ -925,14 +927,20 @@ def checked_facts(candidate, limit=2):
 
 def write_prose(candidate, ctx, records):
     """Template why and risk from the pick's own numbers. A model may polish these later; it never adds a number."""
+    if candidate.get('legs'):       # a parlay has no single line or side: its words come first, before any are read
+        if candidate.get('parlayType') == 'easyProps':
+            candidate['why'] = (f"Easy props, for fun: {len(candidate['legs'])} legs at {candidate['book']}, one per game, each an easier line "
+                                f"our projection clears comfortably. A quarter unit, tracked with the longshots, apart from the straight picks.")
+            candidate['risk'] = ('Every leg has to hit; one miss sinks the ticket. Our player chances are tuned for main lines, so these legs '
+                                 'are not value, just fun. A player who does not take the field voids his leg under the book\'s rule.')
+        else:
+            candidate['why'] = (f"Longshot from the board: {len(candidate['legs'])} legs at {candidate['book']}, each at the number our "
+                                f"model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.")
+            candidate['risk'] = 'Most longshots lose. The legs are treated as independent; any one miss sinks the ticket. Confidence 1 of 10.'
+        return candidate
     p = candidate.get('_desk') or {}
     snapshot = ctx.snapshot(candidate['gameIds'][0])
     side, line, odds = gates.side_of(candidate), float(candidate['line']), int(candidate['odds'])
-    if candidate.get('legs'):
-        candidate['why'] = (f"Longshot from the board: {len(candidate['legs'])} legs at {candidate['book']}, each at the number our "
-                            f"model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.")
-        candidate['risk'] = 'Most longshots lose. The legs are treated as independent; any one miss sinks the ticket. Confidence 1 of 10.'
-        return candidate
     sparse = 'A team with under three games this season thins the read. ' if snapshot and snapshot.get('sparse') else ''
     if candidate.get('favorite'):
         claims = ' '.join(f['claim'].rstrip('.') + '.' for f in candidate.get('_support') or [])
@@ -1304,6 +1312,8 @@ def _run(args, now, slot, kinds, status):
             write_prose(ticket, ctx, records)
             ok, decisions = gates.admit(dict(ticket, league=league), ctx)
             if ok:
+                if any(d.rule == 'cfb_jurisdiction' and (d.data or {}).get('jurisdictionVerified') for d in decisions):
+                    ticket['jurisdictionVerified'] = True     # a college ticket at a book available in Indiana
                 ctx.first[ticket['id']] = dict(ticket, league=league, publishedAt=stamp(now), kind='parlays')
                 published.append((league, 'parlays', ticket))
                 decided.append(decision_record(ticket, league, 'published', [], None, now, ctx))
@@ -1688,6 +1698,11 @@ def precheck(args):
                 if pick.get('result') or pick.get('entryNote') or (pick.get('status') or 'active') != 'active':
                     entry['precheck'] = {'at': stamp(now), 'result': 'closed already'}
                     closures.append(None)
+                    continue
+                if pick.get('legs') or pick.get('parlayType'):
+                    # A fun parlay has no single line or side to research; its legs stand at the numbers it was built on.
+                    entry['precheck'] = {'at': stamp(now), 'result': 'clear', 'note': 'a fun parlay: no last look'}
+                    log(f'precheck: {key} is a fun parlay; it goes out as built')
                     continue
                 game = ctx.games.get((pick.get('gameIds') or [None])[0])
                 pick['_team'] = ctx.player_team.get(str(pick.get('athleteId') or ''))
