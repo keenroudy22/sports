@@ -1,10 +1,10 @@
 {
- "at": "2026-09-25T17:35:57Z",
+ "at": "2026-09-25T19:16:07Z",
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 275,
-    "fanduel": 252
+    "draftkings": 280,
+    "fanduel": 283
    },
    "eventsListed": 200,
    "eventsMatched": 2,
@@ -13,17 +13,17 @@
     "player_longest_passing_completion": 2,
     "player_longest_reception": 7,
     "player_longest_rush": 6,
-    "player_passing_attempts": 13,
-    "player_passing_completions": 14,
+    "player_passing_attempts": 14,
+    "player_passing_completions": 13,
     "player_passing_touchdowns": 16,
-    "player_passing_yards": 66,
-    "player_receiving_yards": 178,
-    "player_receptions": 61,
+    "player_passing_yards": 69,
+    "player_receiving_yards": 204,
+    "player_receptions": 63,
     "player_rushing_attempts": 14,
-    "player_rushing_yards": 150
+    "player_rushing_yards": 155
    },
    "requestsLeft": 54,
-   "rows": 527,
+   "rows": 563,
    "slateGames": [
     "Army Black Knights at Temple Owls 2026-09-25T20:00Z",
     "Howard Bison at Rutgers Scarlet Knights 2026-09-25T23:00Z",
@@ -409,8 +409,73 @@
        "outright"
       ]
      },
-     "start": "2026-09-25T17:33:00Z",
+     "start": "2026-09-25T18:48:00Z",
      "type": "outright"
+    },
+    {
+     "away": "Los Angeles Chargers",
+     "external": {
+      "bet365 us": "201319562"
+     },
+     "home": "Buffalo Bills",
+     "sample": {
+      "away_team": "Los Angeles Chargers",
+      "home_team": "Buffalo Bills",
+      "markets": [
+       "game_prop",
+       "player_passing_yards"
+      ]
+     },
+     "start": "2026-09-25T19:02:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Carolina Panthers",
+     "external": {
+      "bet365 us": "201319567"
+     },
+     "home": "Cleveland Browns",
+     "sample": {
+      "away_team": "Carolina Panthers",
+      "home_team": "Cleveland Browns",
+      "markets": [
+       "player_passing_yards"
+      ]
+     },
+     "start": "2026-09-25T19:02:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Kansas City Chiefs",
+     "external": {
+      "bet365 us": "201319567"
+     },
+     "home": "Miami Dolphins",
+     "sample": {
+      "away_team": "Kansas City Chiefs",
+      "home_team": "Miami Dolphins",
+      "markets": [
+       "player_passing_yards"
+      ]
+     },
+     "start": "2026-09-25T19:02:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Houston Texans",
+     "external": {
+      "bet365 us": "201319558"
+     },
+     "home": "Indianapolis Colts",
+     "sample": {
+      "away_team": "Houston Texans",
+      "home_team": "Indianapolis Colts",
+      "markets": [
+       "game_prop"
+      ]
+     },
+     "start": "2026-09-25T19:03:00Z",
+     "type": "fixture"
     },
     {
      "away": null,
@@ -517,70 +582,6 @@
      "sample": {
       "away_team": "",
       "home_team": "Bijan Robinson",
-      "markets": [
-       "mvp"
-      ]
-     },
-     "start": "2026-09-27T16:59:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "saba": "o7623365"
-     },
-     "home": "Bo Nix",
-     "sample": {
-      "away_team": "",
-      "home_team": "Bo Nix",
-      "markets": [
-       "mvp"
-      ]
-     },
-     "start": "2026-09-27T16:59:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "saba": "o7623366"
-     },
-     "home": "Brock Purdy",
-     "sample": {
-      "away_team": "",
-      "home_team": "Brock Purdy",
-      "markets": [
-       "mvp"
-      ]
-     },
-     "start": "2026-09-27T16:59:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "saba": "o7623367"
-     },
-     "home": "Bryce Young",
-     "sample": {
-      "away_team": "",
-      "home_team": "Bryce Young",
-      "markets": [
-       "mvp"
-      ]
-     },
-     "start": "2026-09-27T16:59:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "saba": "o7623369"
-     },
-     "home": "Caleb Williams",
-     "sample": {
-      "away_team": "",
-      "home_team": "Caleb Williams",
       "markets": [
        "mvp"
       ]
