@@ -328,7 +328,7 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
             record_line += f" · {record['units']:+.2f}u"
     lines = title_lines(title)
     # As big as fits beside the plate: the words end before the plate's rim, whatever the plate holds.
-    title_size = max(36, min(66 if len(lines) == 1 else 56, int(TEXT_WIDTH / (0.56 * max(len(line) for line in lines)))))
+    title_size = max(36, min(66 if len(lines) == 1 else 50, int(TEXT_WIDTH / (0.56 * max(len(line) for line in lines)))))
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">',
         '<defs>',
