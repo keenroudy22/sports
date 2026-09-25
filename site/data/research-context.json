@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-25T04:08:46Z",
+  "updatedAt": "2026-09-25T04:12:44Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-09-25T03:01Z",
+              "reportedAt": "2026-09-25T04:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-25T03:01Z",
+              "reportedAt": "2026-09-25T04:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2537,6 +2537,24 @@
           "name": "Green Bay Packers",
           "players": [
             {
+              "id": "4036378",
+              "name": "Jordan Love",
+              "position": "QB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-25T04:02Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4036378/jordan-love"
+            },
+            {
+              "id": "4701936",
+              "name": "Matthew Golden",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-25T03:51Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4701936/matthew-golden"
+            },
+            {
               "id": "4248528",
               "name": "Christian Watson",
               "position": "WR",
@@ -2742,24 +2760,6 @@
               "injury": null,
               "reportedAt": "2026-09-21T02:30Z",
               "source": "https://www.espn.com/nfl/player/_/id/4429023/marshawn-lloyd"
-            },
-            {
-              "id": "4869461",
-              "name": "Trey Smack",
-              "position": "PK",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-21T00:04Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4869461/trey-smack"
-            },
-            {
-              "id": "4572680",
-              "name": "Tucker Kraft",
-              "position": "TE",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-20T22:53Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4572680/tucker-kraft"
             }
           ]
         },
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "4",
-          "name": "Jonathan Allen",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-09-24T20:57:28Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3054840/jonathan-allen"
-        },
-        {
           "teamId": "18",
           "name": "Kendre Miller",
           "from": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-09-25T03:32:54Z",
           "source": "https://www.espn.com/nfl/player/_/id/3125248/jeremy-reaves"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-09-25T04:12:44Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-25T04:08:46Z",
-      "lastAttemptAt": "2026-09-25T04:08:46Z",
+      "checkedAt": "2026-09-25T04:12:44Z",
+      "lastAttemptAt": "2026-09-25T04:12:44Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-25T04:08:46Z",
-      "lastAttemptAt": "2026-09-25T04:08:46Z",
+      "checkedAt": "2026-09-25T04:12:44Z",
+      "lastAttemptAt": "2026-09-25T04:12:44Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
