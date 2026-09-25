@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-25T03:32:54Z",
+  "updatedAt": "2026-09-25T03:48:10Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -237,6 +237,24 @@
           "name": "Atlanta Falcons",
           "players": [
             {
+              "id": "4426502",
+              "name": "Drake London",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-25T03:37Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4426502/drake-london"
+            },
+            {
+              "id": "4430807",
+              "name": "Bijan Robinson",
+              "position": "RB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-25T03:30Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4430807/bijan-robinson"
+            },
+            {
               "id": "5344782",
               "name": "Jack Strand",
               "position": "QB",
@@ -433,24 +451,6 @@
               "injury": null,
               "reportedAt": "2026-09-20T22:02Z",
               "source": "https://www.espn.com/nfl/player/_/id/4360248/kyle-pitts-sr"
-            },
-            {
-              "id": "4426502",
-              "name": "Drake London",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-20T21:14Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4426502/drake-london"
-            },
-            {
-              "id": "4430807",
-              "name": "Bijan Robinson",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-20T20:45Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4430807/bijan-robinson"
             },
             {
               "id": "3672833",
@@ -2307,6 +2307,33 @@
           "name": "Detroit Lions",
           "players": [
             {
+              "id": "4429035",
+              "name": "Tate Ratledge",
+              "position": "G",
+              "status": "Questionable",
+              "injury": "Elbow",
+              "reportedAt": "2026-09-25T03:34Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4429035/tate-ratledge"
+            },
+            {
+              "id": "5081450",
+              "name": "Blake Miller",
+              "position": "OT",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-09-25T03:29Z",
+              "source": "https://www.espn.com/nfl/player/_/id/5081450/blake-miller"
+            },
+            {
+              "id": "4427864",
+              "name": "Christian Mahogany",
+              "position": "G",
+              "status": "Questionable",
+              "injury": "Hip",
+              "reportedAt": "2026-09-25T03:26Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4427864/christian-mahogany"
+            },
+            {
               "id": "4569323",
               "name": "Thomas Harper",
               "position": "S",
@@ -2325,15 +2352,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4710422/ahmed-hassanein"
             },
             {
-              "id": "4429035",
-              "name": "Tate Ratledge",
-              "position": "G",
-              "status": "Questionable",
-              "injury": "Elbow",
-              "reportedAt": "2026-09-23T20:21Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4429035/tate-ratledge"
-            },
-            {
               "id": "4611506",
               "name": "Ben Bartch",
               "position": "G",
@@ -2350,24 +2368,6 @@
               "injury": "Foot",
               "reportedAt": "2026-09-23T00:33Z",
               "source": "https://www.espn.com/nfl/player/_/id/3123938/avonte-maddox"
-            },
-            {
-              "id": "4427864",
-              "name": "Christian Mahogany",
-              "position": "G",
-              "status": "Questionable",
-              "injury": "Hip",
-              "reportedAt": "2026-09-22T20:56Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4427864/christian-mahogany"
-            },
-            {
-              "id": "5081450",
-              "name": "Blake Miller",
-              "position": "OT",
-              "status": "Questionable",
-              "injury": "Knee",
-              "reportedAt": "2026-09-22T20:56Z",
-              "source": "https://www.espn.com/nfl/player/_/id/5081450/blake-miller"
             },
             {
               "id": "4896353",
@@ -7137,6 +7137,15 @@
           "name": "Washington Commanders",
           "players": [
             {
+              "id": "3125248",
+              "name": "Jeremy Reaves",
+              "position": "S",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-25T03:17Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3125248/jeremy-reaves"
+            },
+            {
               "id": "4572460",
               "name": "Tyler Owens",
               "position": "S",
@@ -7171,15 +7180,6 @@
               "injury": null,
               "reportedAt": "2026-09-24T02:56Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685030/brandon-coleman"
-            },
-            {
-              "id": "3125248",
-              "name": "Jeremy Reaves",
-              "position": "S",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-24T01:55Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3125248/jeremy-reaves"
             },
             {
               "id": "4426901",
@@ -7767,8 +7767,8 @@
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-25T03:32:54Z",
-      "lastAttemptAt": "2026-09-25T03:32:54Z",
+      "checkedAt": "2026-09-25T03:48:10Z",
+      "lastAttemptAt": "2026-09-25T03:48:10Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-25T03:32:54Z",
-      "lastAttemptAt": "2026-09-25T03:32:54Z",
+      "checkedAt": "2026-09-25T03:48:10Z",
+      "lastAttemptAt": "2026-09-25T03:48:10Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
