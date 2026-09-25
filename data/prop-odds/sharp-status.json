@@ -1,9 +1,9 @@
 {
- "at": "2026-09-25T03:56:53Z",
+ "at": "2026-09-25T04:03:33Z",
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 280,
+    "draftkings": 281,
     "fanduel": 219
    },
    "eventsListed": 200,
@@ -20,10 +20,10 @@
     "player_receiving_yards": 180,
     "player_receptions": 63,
     "player_rushing_attempts": 14,
-    "player_rushing_yards": 116
+    "player_rushing_yards": 117
    },
    "requestsLeft": 55,
-   "rows": 499,
+   "rows": 500,
    "slateGames": [
     "Army Black Knights at Temple Owls 2026-09-25T20:00Z",
     "Howard Bison at Rutgers Scarlet Knights 2026-09-25T23:00Z",
@@ -114,6 +114,28 @@
      "type": "fixture"
     },
     {
+     "away": "Liberty",
+     "external": {
+      "bet365 us": "201718849",
+      "betfair": "202609247D0290C6",
+      "fanatics_markets": "5498596",
+      "gemini": "NCAAF-2609242330-LIB-CCU-S",
+      "kalshi": "KXNCAAFTEAMTOTAL-26SEP24LIBCCAR",
+      "prophetx": "1700077163",
+      "robinhood": "598f9b1e-8b66-4ad7-8293-0d63a02e57bc"
+     },
+     "home": "Coastal Carolina",
+     "sample": {
+      "away_team": "Liberty",
+      "home_team": "Coastal Carolina",
+      "markets": [
+       "point_spread"
+      ]
+     },
+     "start": "2026-09-25T03:22:00Z",
+     "type": "fixture"
+    },
+    {
      "away": "Nebraska",
      "external": {
       "bet365 us": "201605023"
@@ -180,7 +202,7 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF1HSPREAD-26SEP25ARMYTEM-TEM18"
+      "kalshi": "KXNCAAF1HSPREAD-26SEP25ARMYTEM-ARMY18"
      },
      "home": null,
      "sample": {
@@ -352,22 +374,6 @@
      "sample": {
       "away_team": "",
       "home_team": "East Carolina",
-      "markets": [
-       "conference_winner"
-      ]
-     },
-     "start": "2026-09-25T20:05:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "betonline": "futures_663469081"
-     },
-     "home": "Florida Atlantic",
-     "sample": {
-      "away_team": "",
-      "home_team": "Florida Atlantic",
       "markets": [
        "conference_winner"
       ]
