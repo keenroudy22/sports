@@ -1,31 +1,30 @@
 {
- "at": "2026-09-25T19:16:07Z",
+ "at": "2026-09-25T20:07:55Z",
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 280,
+    "draftkings": 287,
     "fanduel": 283
    },
    "eventsListed": 200,
-   "eventsMatched": 2,
-   "games": 70,
+   "eventsMatched": 1,
+   "games": 69,
    "marketTypes": {
     "player_longest_passing_completion": 2,
     "player_longest_reception": 7,
     "player_longest_rush": 6,
-    "player_passing_attempts": 14,
-    "player_passing_completions": 13,
+    "player_passing_attempts": 13,
+    "player_passing_completions": 14,
     "player_passing_touchdowns": 16,
     "player_passing_yards": 69,
-    "player_receiving_yards": 204,
-    "player_receptions": 63,
+    "player_receiving_yards": 213,
+    "player_receptions": 62,
     "player_rushing_attempts": 14,
-    "player_rushing_yards": 155
+    "player_rushing_yards": 154
    },
-   "requestsLeft": 54,
-   "rows": 563,
+   "requestsLeft": 55,
+   "rows": 570,
    "slateGames": [
-    "Army Black Knights at Temple Owls 2026-09-25T20:00Z",
     "Howard Bison at Rutgers Scarlet Knights 2026-09-25T23:00Z",
     "Navy Midshipmen at UAB Blazers 2026-09-25T23:00Z",
     "Northwestern Wildcats at Indiana Hoosiers 2026-09-26T00:00Z",
@@ -178,6 +177,26 @@
      "type": "outright"
     },
     {
+     "away": "Army West Point Black Knights",
+     "external": {
+      "saba": "134684652"
+     },
+     "home": "Temple Owls",
+     "sample": {
+      "away_team": "Army West Point Black Knights",
+      "home_team": "Temple Owls",
+      "markets": [
+       "1st_half_point_spread",
+       "1st_half_total_points",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-09-25T19:59:00Z",
+     "type": "fixture"
+    },
+    {
      "away": null,
      "external": {
       "kalshi": "KXNCAAF1HSPREAD-26SEP25ARMYTEM-TEM18"
@@ -213,6 +232,9 @@
      "away": "Army",
      "external": {
       "ballybet": "1027507896",
+      "bet365 us": "201757594",
+      "betfair": "202609269363542C",
+      "betfair_lay": "202609269363542C",
       "betmgm": "6:44913",
       "betonline": "491133889",
       "betparx": "1027507896",
@@ -221,25 +243,20 @@
       "bovada": "31133581",
       "bwin": "6:44913",
       "circa": "210600",
-      "coral": "cor-46310916",
       "draftkings": "34674728",
       "fanatics_markets": "5529693",
       "fanduel": "36073771",
-      "fliff": "414517_c_p_209_prematch",
+      "fliff": "414517_c_p_309_inplay",
       "gemini": "NCAAF-2609252000-ARM-TEM-T",
       "goldrush": "30970920",
       "hardrock": "746805152996000166",
       "kalshi": "KXNCAAF1H-26SEP25ARMYTEM",
-      "ladbrokes": "2258c073-f14a-4328-9040-bed8ff485a36",
-      "ladbrokes_uk": "lduk-258660246",
-      "matchbook": "mb-34393237864300081",
       "novig": "01a0b109-ee4e-7533-a292-a9fc9de098d6",
-      "onexbet": "754624528",
-      "pinnacle": "1637146508",
+      "onexbet": "756052337",
+      "pinnacle": "1637162146",
       "prophetx": "1700077160",
       "rebet": "sr:match:70898658",
-      "robinhood": "6851e7a8-0a1b-4886-bb3e-c9c70a1402ba",
-      "smarkets": "45321018",
+      "robinhood": "7427fc34-010d-4305-baaf-710c9563f867",
       "sportzino": "sz-17565222",
       "sx_bet": "L20235566",
       "thescorebet": "StandardEvent:e8752658-1fdc-429d-b0ac-a884df6c8eee",
@@ -251,7 +268,6 @@
       "away_team": "Army",
       "home_team": "Temple",
       "markets": [
-       "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
        "1st_half_moneyline_3-way",
@@ -259,7 +275,6 @@
        "1st_half_team_total",
        "1st_half_total_points",
        "1st_half_total_points_odd_even",
-       "1st_quarter_anytime_touchdown_scorer",
        "1st_quarter_moneyline",
        "1st_quarter_moneyline_3-way",
        "1st_quarter_point_spread",
@@ -267,6 +282,7 @@
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
        "2nd_half_draw_no_bet",
+       "2nd_half_moneyline_3-way",
        "2nd_half_point_spread",
        "2nd_half_total_points",
        "2nd_quarter_moneyline_3-way",
@@ -282,22 +298,22 @@
        "4th_quarter_team_total",
        "4th_quarter_total_points",
        "anytime_touchdown_scorer",
-       "draw_no_bet",
+       "double_chance",
        "first_touchdown_scorer",
-       "game_prop",
-       "halftime_fulltime",
+       "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
-       "match_result_both_teams_to_score",
+       "match_result_total_goals",
        "moneyline",
-       "moneyline_3-way",
        "most_points_player",
        "player_passing_touchdowns",
        "player_passing_yards",
        "player_receiving_yards",
-       "player_receptions",
        "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
+       "race_to_10_points",
+       "race_to_15_points",
+       "race_to_5_points",
        "team_total",
        "team_total_points_odd_even",
        "total_points",
@@ -311,68 +327,52 @@
      "type": "fixture"
     },
     {
-     "away": null,
+     "away": "Kansas State",
      "external": {
-      "betonline": "futures_663469081"
+      "bet365 us": "201605086"
      },
-     "home": "Army",
+     "home": "Cincinnati",
      "sample": {
-      "away_team": "",
-      "home_team": "Army",
+      "away_team": "Kansas State",
+      "home_team": "Cincinnati",
       "markets": [
-       "conference_winner"
+       "point_spread"
       ]
      },
-     "start": "2026-09-25T20:05:00Z",
-     "type": "outright"
+     "start": "2026-09-25T20:00:00Z",
+     "type": "fixture"
     },
     {
-     "away": null,
+     "away": "Houston",
      "external": {
-      "betonline": "futures_663469081"
+      "bet365 us": "201605134"
      },
-     "home": "Charlotte",
+     "home": "Georgia Southern",
      "sample": {
-      "away_team": "",
-      "home_team": "Charlotte",
+      "away_team": "Houston",
+      "home_team": "Georgia Southern",
       "markets": [
-       "conference_winner"
+       "point_spread"
       ]
      },
-     "start": "2026-09-25T20:05:00Z",
-     "type": "outright"
+     "start": "2026-09-25T20:00:00Z",
+     "type": "fixture"
     },
     {
-     "away": null,
+     "away": "Nebraska",
      "external": {
-      "betonline": "futures_663469081"
+      "bet365 us": "201605023"
      },
-     "home": "East Carolina",
+     "home": "Michigan State",
      "sample": {
-      "away_team": "",
-      "home_team": "East Carolina",
+      "away_team": "Nebraska",
+      "home_team": "Michigan State",
       "markets": [
-       "conference_winner"
+       "point_spread"
       ]
      },
-     "start": "2026-09-25T20:05:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "betonline": "futures_663469081"
-     },
-     "home": "Florida Atlantic",
-     "sample": {
-      "away_team": "",
-      "home_team": "Florida Atlantic",
-      "markets": [
-       "conference_winner"
-      ]
-     },
-     "start": "2026-09-25T20:05:00Z",
-     "type": "outright"
+     "start": "2026-09-25T20:00:00Z",
+     "type": "fixture"
     }
    ]
   },
@@ -380,7 +380,7 @@
    "books": {},
    "eventsListed": 200,
    "eventsMatched": 0,
-   "games": 9,
+   "games": 11,
    "marketTypes": {},
    "requestsLeft": 59,
    "rows": 0,
@@ -393,24 +393,27 @@
     "Tennessee Titans at New York Giants 2026-09-27T17:00Z",
     "Cincinnati Bengals at Pittsburgh Steelers 2026-09-27T17:00Z",
     "Seattle Seahawks at Washington Commanders 2026-09-27T17:00Z",
-    "New England Patriots at Jacksonville Jaguars 2026-09-27T17:00Z"
+    "New England Patriots at Jacksonville Jaguars 2026-09-27T17:00Z",
+    "Arizona Cardinals at San Francisco 49ers 2026-09-27T20:05Z",
+    "Minnesota Vikings at Tampa Bay Buccaneers 2026-09-27T20:05Z"
    ],
    "unmatchedEvents": [
     {
-     "away": null,
+     "away": "Cincinnati Bengals",
      "external": {
-      "fanduel": "28041972"
+      "bet365 us": "201319555"
      },
-     "home": "NFL",
+     "home": "Pittsburgh Steelers",
      "sample": {
-      "away_team": "",
-      "home_team": "NFL",
+      "away_team": "Cincinnati Bengals",
+      "home_team": "Pittsburgh Steelers",
       "markets": [
-       "outright"
+       "game_prop",
+       "player_passing_yards"
       ]
      },
-     "start": "2026-09-25T18:48:00Z",
-     "type": "outright"
+     "start": "2026-09-25T20:00:00Z",
+     "type": "fixture"
     },
     {
      "away": "Los Angeles Chargers",
@@ -426,23 +429,7 @@
        "player_passing_yards"
       ]
      },
-     "start": "2026-09-25T19:02:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Carolina Panthers",
-     "external": {
-      "bet365 us": "201319567"
-     },
-     "home": "Cleveland Browns",
-     "sample": {
-      "away_team": "Carolina Panthers",
-      "home_team": "Cleveland Browns",
-      "markets": [
-       "player_passing_yards"
-      ]
-     },
-     "start": "2026-09-25T19:02:00Z",
+     "start": "2026-09-25T20:00:00Z",
      "type": "fixture"
     },
     {
@@ -455,10 +442,11 @@
       "away_team": "Kansas City Chiefs",
       "home_team": "Miami Dolphins",
       "markets": [
+       "game_prop",
        "player_passing_yards"
       ]
      },
-     "start": "2026-09-25T19:02:00Z",
+     "start": "2026-09-25T20:00:00Z",
      "type": "fixture"
     },
     {
@@ -474,8 +462,41 @@
        "game_prop"
       ]
      },
-     "start": "2026-09-25T19:03:00Z",
+     "start": "2026-09-25T20:00:00Z",
      "type": "fixture"
+    },
+    {
+     "away": "New York Jets",
+     "external": {
+      "bet365 us": "201319555"
+     },
+     "home": "Detroit Lions",
+     "sample": {
+      "away_team": "New York Jets",
+      "home_team": "Detroit Lions",
+      "markets": [
+       "game_prop",
+       "player_passing_yards"
+      ]
+     },
+     "start": "2026-09-25T20:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": null,
+     "external": {
+      "fanduel": "28041972"
+     },
+     "home": "NFL",
+     "sample": {
+      "away_team": "",
+      "home_team": "NFL",
+      "markets": [
+       "outright"
+      ]
+     },
+     "start": "2026-09-25T20:03:00Z",
+     "type": "outright"
     },
     {
      "away": null,
@@ -566,22 +587,6 @@
      "sample": {
       "away_team": "",
       "home_team": "Baker Mayfield",
-      "markets": [
-       "mvp"
-      ]
-     },
-     "start": "2026-09-27T16:59:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "saba": "o7623364"
-     },
-     "home": "Bijan Robinson",
-     "sample": {
-      "away_team": "",
-      "home_team": "Bijan Robinson",
       "markets": [
        "mvp"
       ]
