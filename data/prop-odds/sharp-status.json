@@ -1,9 +1,9 @@
 {
- "at": "2026-09-25T04:13:43Z",
+ "at": "2026-09-25T05:05:38Z",
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 278,
+    "draftkings": 276,
     "fanduel": 219
    },
    "eventsListed": 200,
@@ -16,14 +16,14 @@
     "player_passing_attempts": 14,
     "player_passing_completions": 14,
     "player_passing_touchdowns": 16,
-    "player_passing_yards": 68,
-    "player_receiving_yards": 178,
-    "player_receptions": 62,
+    "player_passing_yards": 67,
+    "player_receiving_yards": 177,
+    "player_receptions": 61,
     "player_rushing_attempts": 14,
-    "player_rushing_yards": 116
+    "player_rushing_yards": 117
    },
    "requestsLeft": 55,
-   "rows": 497,
+   "rows": 495,
    "slateGames": [
     "Army Black Knights at Temple Owls 2026-09-25T20:00Z",
     "Howard Bison at Rutgers Scarlet Knights 2026-09-25T23:00Z",
@@ -114,29 +114,6 @@
      "type": "fixture"
     },
     {
-     "away": "Liberty",
-     "external": {
-      "bet365 us": "201718849",
-      "betfair": "202609247D0290C6",
-      "fanatics_markets": "5498596",
-      "gemini": "NCAAF-2609242330-LIB-CCU-S",
-      "kalshi": "KXNCAAFTEAMTOTAL-26SEP24LIBCCAR",
-      "prophetx": "1700077163",
-      "robinhood": "598f9b1e-8b66-4ad7-8293-0d63a02e57bc",
-      "thescorebet": "StandardEvent:e5da4fa6-03c8-497d-a483-a92733e637bf"
-     },
-     "home": "Coastal Carolina",
-     "sample": {
-      "away_team": "Liberty",
-      "home_team": "Coastal Carolina",
-      "markets": [
-       "point_spread"
-      ]
-     },
-     "start": "2026-09-25T03:22:00Z",
-     "type": "fixture"
-    },
-    {
      "away": "Nebraska",
      "external": {
       "bet365 us": "201605023"
@@ -203,7 +180,7 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF1HSPREAD-26SEP25ARMYTEM-TEM18"
+      "kalshi": "KXNCAAF1HSPREAD-26SEP25ARMYTEM-ARMY18"
      },
      "home": null,
      "sample": {
@@ -250,7 +227,7 @@
       "fanatics_markets": "5529693",
       "fanduel": "36073771",
       "fliff": "414517_c_p_209_prematch",
-      "gemini": "NCAAF-2609252000-ARM-TEM-S",
+      "gemini": "NCAAF-2609252000-ARM-TEM-T",
       "goldrush": "30970920",
       "hardrock": "746805152996000166",
       "kalshi": "KXNCAAF1H-26SEP25ARMYTEM",
@@ -262,12 +239,11 @@
       "pinnacle": "1637146508",
       "prophetx": "1700077160",
       "rebet": "sr:match:70898658",
-      "robinhood": "7427fc34-010d-4305-baaf-710c9563f867",
+      "robinhood": "6851e7a8-0a1b-4886-bb3e-c9c70a1402ba",
       "smarkets": "45321018",
       "sportzino": "sz-17565222",
       "sx_bet": "L20235566",
       "thescorebet": "StandardEvent:e8752658-1fdc-429d-b0ac-a884df6c8eee",
-      "thrillzz": "888217009",
       "unibet_ca": "1027507896"
      },
      "home": "Temple",
@@ -315,14 +291,12 @@
        "moneyline",
        "moneyline_3-way",
        "most_points_player",
-       "outright",
        "player_passing_touchdowns",
        "player_passing_yards",
        "player_receiving_yards",
        "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
-       "race_to_10_points",
        "team_total",
        "team_total_points_odd_even",
        "total_points",
@@ -376,6 +350,22 @@
      "sample": {
       "away_team": "",
       "home_team": "East Carolina",
+      "markets": [
+       "conference_winner"
+      ]
+     },
+     "start": "2026-09-25T20:05:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "betonline": "futures_663469081"
+     },
+     "home": "Florida Atlantic",
+     "sample": {
+      "away_team": "",
+      "home_team": "Florida Atlantic",
       "markets": [
        "conference_winner"
       ]
