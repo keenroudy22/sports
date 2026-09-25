@@ -8438,5 +8438,85 @@
         "jurisdictionVerified": true
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-09-25T12:30:06Z",
+    "targetWeek": 4,
+    "summary": "8:30 AM ET run, published at 8:30 AM ET. Nothing to settle. Nothing to close. Published 1: 3-leg longshot at ESPN BET +583 at ESPN BET. Screened and passed on 7: Iowa at Michigan over 38.5 (not_duplicate); James Madison at Old Dominion over 44.5 (not_duplicate); Central Michigan at Miami (FL) under 54.5 (not_duplicate); Virginia Tech at Boston College over 48.5 (lean_nothing_against); Oklahoma State at West Virginia under 61 (not_duplicate); Missouri State at SMU under 60.5 (held); Minnesota at Washington over 45.5 (held). odds_api.py: CFB: skipped (captured 2026-09-25T09:08:00Z, inside the gap) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+    "takeaways": [],
+    "parlays": [
+      {
+        "id": "CFB-2026-W4-longshot-0925-espnbet",
+        "title": "3-leg longshot at ESPN BET",
+        "status": "active",
+        "favorite": false,
+        "parlayType": "longshot",
+        "riskUnits": 0.25,
+        "legs": [
+          {
+            "id": "game-CFB-401862779-over",
+            "title": "Army at Temple over 47.5",
+            "gameId": "CFB-401862779",
+            "market": "total points",
+            "side": "over",
+            "line": 47.5,
+            "odds": -120,
+            "chance": 0.552,
+            "kickoff": "2026-09-25T20:00Z",
+            "observedAt": "2026-09-25T09:08:00Z",
+            "marketWindow": "Full game"
+          },
+          {
+            "id": "game-CFB-401862778-over",
+            "title": "Navy at UAB over 51.5",
+            "gameId": "CFB-401862778",
+            "market": "total points",
+            "side": "over",
+            "line": 51.5,
+            "odds": -105,
+            "chance": 0.533,
+            "kickoff": "2026-09-25T23:00Z",
+            "observedAt": "2026-09-25T09:08:00Z",
+            "marketWindow": "Full game"
+          },
+          {
+            "id": "game-CFB-401858461-home",
+            "title": "Indiana -20.5",
+            "gameId": "CFB-401858461",
+            "market": "point spread",
+            "side": "home",
+            "line": -20.5,
+            "odds": -110,
+            "chance": 0.521,
+            "kickoff": "2026-09-26T00:00Z",
+            "observedAt": "2026-09-25T09:08:00Z",
+            "marketWindow": "Full game"
+          }
+        ],
+        "correlation": "One leg per game, so the ticket treats the legs as independent; its chance is their product.",
+        "gameIds": [
+          "CFB-401862779",
+          "CFB-401862778",
+          "CFB-401858461"
+        ],
+        "book": "ESPN BET",
+        "odds": 583,
+        "quotedAt": "2026-09-25T09:08:00Z",
+        "quoteType": "capture",
+        "confidence": 1,
+        "expiresAt": "2026-09-25T15:45:00Z",
+        "edge": "Our chance 15.3% against 14.6% break-even at +583: +0.047u per unit staked, 0.25u at risk.",
+        "cutoff": "A longshot is not re-entered. It stands or falls as posted.",
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401858461",
+          "https://www.espn.com/college-football/game/_/gameId/401862778",
+          "https://www.espn.com/college-football/game/_/gameId/401862779"
+        ],
+        "why": "Longshot from the board: 3 legs at ESPN BET, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.",
+        "risk": "Most longshots lose. The legs are treated as independent; any one miss sinks the ticket. Confidence 1 of 10.",
+        "jurisdictionVerified": true
+      }
+    ]
   }
 ]
