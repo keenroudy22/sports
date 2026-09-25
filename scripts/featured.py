@@ -4,8 +4,9 @@ gives it its own card and leads the site with it.
 "Likes most" is the calibrated edge: our chance at the play's own line and price (pricing.price, the chance the
 desk publishes on; for a player prop, shrunk by the calibration learning shipped) minus what the price needs to
 break even. Only open plays whose game is that day and has not started count, never a parlay. The choice is made
-once, at the first run of the day that has a play, and never changes, so the post, its card and the site always
-agree. It lives in data/featured.json ({"YYYY-MM-DD": {"id", "chosenAt", "edge"}}), committed by the desk.
+once, at the first run of the day that has a play, and never changes once it has posted, so the post, its card and
+the site always agree. A pick the last look pulls before its post goes out is replaced by the best play left.
+It lives in data/featured.json ({"YYYY-MM-DD": {"id", "chosenAt", "edge", "replaced"?}}), committed by the desk.
 """
 
 import json
@@ -74,23 +75,44 @@ def strength(pick, ctx, policy=None):
     return round(100 * (chance - desk['breakEven']), 2)
 
 
-def choose(ctx, now, path=None, policy=None, write=True, log=print):
-    """Name today's Pick of the Day if it is not named yet; return its id (or None on a day without plays)."""
+def pulled(key, ctx, log_book):
+    """Did the named play close before its post went out? Once it has posted it is the day's pick, win or lose."""
+    if any(p.get('id') == key and p.get('sentAt') for p in (log_book or {}).get('posts', [])):
+        return False
+    merged = dict(ctx.first.get(key) or {}, **(ctx.latest.get(key) or {}))
+    return bool(merged) and not merged.get('result') and bool(merged.get('entryNote') or (merged.get('status') or 'active') != 'active')
+
+
+def choose(ctx, now, path=None, policy=None, write=True, log=print, log_book=None):
+    """Name today's Pick of the Day if it is not named yet; return its id (or None on a day without plays).
+
+    Named once, it stays, unless it closes before its post goes out (the last look pulled it): then the best play
+    left that has not posted takes its place, and the day's entry keeps the ones it replaced."""
     day = eastern_date(now)
     featured = load(path)
-    named = of_day(day.isoformat(), featured)
-    if named:
+    entry = featured.get(day.isoformat()) or {}
+    named = entry.get('id')
+    if log_book is None:
+        import x_post
+        log_book = x_post.load_log()
+    if named and not pulled(named, ctx, log_book):
         return named
+    sent = {p.get('id') for p in log_book.get('posts', []) if p.get('sentAt')}
+    passed = set(entry.get('replaced') or []) | ({named} if named else set())
     scored = []
     for key, pick, kickoff in todays_plays(ctx.first, ctx.latest, ctx.games, day, now):
+        if key in passed or key in sent:
+            continue
         edge = strength(pick, ctx, policy)
         if edge is not None:
             scored.append((edge, -kickoff.timestamp(), key))
     if not scored:
+        if named:
+            log(f'pick of the day {day.isoformat()}: {named} was pulled before it posted, and no other play today can take its place')
         return None
     edge, _, key = max(scored)                 # the biggest edge; on a tie, the earlier kickoff
-    featured[day.isoformat()] = {'id': key, 'chosenAt': gates.stamp(now), 'edge': edge}
+    featured[day.isoformat()] = dict({'id': key, 'chosenAt': gates.stamp(now), 'edge': edge}, **({'replaced': sorted(passed)} if passed else {}))
     if write:
         save(featured, path)
-    log(f'pick of the day {day.isoformat()}: {key} ({edge:+.1f} points over break-even)')
+    log(f'pick of the day {day.isoformat()}: {key} ({edge:+.1f} points over break-even)' + (f', in place of {named}, pulled before it posted' if named else ''))
     return key

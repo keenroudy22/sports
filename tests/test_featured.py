@@ -64,6 +64,33 @@ class ChooseTests(unittest.TestCase):
             self.assertIsNone(featured.choose(ctx, NOW, path, log=lambda *_: None))
             self.assertFalse(path.exists())
 
+    def test_a_pick_pulled_before_it_posts_is_replaced_once_it_has_posted_never(self):
+        """Sep 25: the Pick of the Day (Navy at UAB over) closed at 11:03 AM over the quarterback's ankle, before its
+        noon post. The best play left that has not posted takes its place; one that went out keeps the day."""
+        ctx = self.world()
+        closed = {'entryNote': 'Closed to new entries at 11:03 AM ET, before its post went out: verified reporting argues against it'}
+        with tempfile.TemporaryDirectory() as folder, mock.patch.object(featured.gates, 'desk_for', side_effect=fake_desk):
+            path = Path(folder) / 'featured.json'
+            quiet = dict(log=lambda *_: None, log_book={'posts': []})
+            self.assertEqual(featured.choose(ctx, NOW, path, **quiet), 'b')
+            ctx.latest['b'] = closed
+            self.assertEqual(featured.choose(ctx, NOW, path, **quiet), 'a', 'the best play left')
+            self.assertEqual(featured.load(path)['2026-09-26'], {'id': 'a', 'chosenAt': '2026-09-26T10:45:00Z', 'edge': 3.1, 'replaced': ['b']})
+            self.assertEqual(featured.choose(ctx, NOW, path, **quiet), 'a', 'the replacement stays')
+            ctx.latest['a'] = closed
+            self.assertIsNone(featured.choose(ctx, NOW, path, **quiet), 'nothing left to take its place')
+            self.assertEqual(featured.load(path)['2026-09-26']['id'], 'a', 'the record of the day is left as it was')
+        ctx = self.world()
+        ctx.latest['b'] = closed
+        with tempfile.TemporaryDirectory() as folder, mock.patch.object(featured.gates, 'desk_for', side_effect=fake_desk):
+            path = Path(folder) / 'featured.json'
+            featured.save({'2026-09-26': {'id': 'b'}}, path)
+            sent = {'posts': [{'id': 'b', 'sentAt': '2026-09-26T16:00:05Z'}]}
+            self.assertEqual(featured.choose(ctx, NOW, path, log=lambda *_: None, log_book=sent), 'b', 'it went out: the day keeps it')
+            sent_a = {'posts': [{'id': 'a', 'sentAt': '2026-09-26T16:10:05Z'}]}
+            self.assertIsNone(featured.choose(ctx, NOW, path, log=lambda *_: None, log_book=sent_a),
+                              'a play that already went out as a plain post cannot become the Pick of the Day')
+
     def test_a_player_prop_is_judged_on_its_learned_calibration(self):
         pick = play('p', 'sunday', league='NFL', athleteId='7', market='rec', title='Player Seven over 4.5 receptions')
         desk = {'chance': 0.70, 'rawChance': 0.70, 'breakEven': 0.53, 'calibrated': False}

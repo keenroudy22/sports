@@ -101,6 +101,13 @@ class CandidateTests(unittest.TestCase):
             easy_parlay.candidate(ctx(), GAMES, NOW, key='k', get=self.fake_get(calls), cache=folder, remaining=400, log=lambda *_: None)
             self.assertEqual(len(calls), 4, 'a fresh cache is not fetched again')
 
+    def test_a_game_the_desk_has_a_reason_against_is_left_off(self):
+        with tempfile.TemporaryDirectory() as folder:
+            pick, reason = easy_parlay.candidate(ctx(), GAMES, NOW, key='k', get=lambda url: self.fail('nothing to fetch'), cache=folder,
+                                                 remaining=400, log=lambda *_: None, exclude={'g1'})
+        self.assertIsNone(pick)
+        self.assertIn('only 2 NFL games', reason)
+
     def test_the_reserve_and_a_rehearsal_never_spend(self):
         with tempfile.TemporaryDirectory() as folder:
             pick, reason = easy_parlay.candidate(ctx(), GAMES, NOW, key='k', get=lambda url: self.fail('spent into the reserve'),

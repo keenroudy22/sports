@@ -192,9 +192,10 @@ def build(legs):
     return max(tickets, key=lambda t: (t['room'], -len(t['legs']))), None
 
 
-def candidate(ctx, games, now, key=None, get=None, cache=None, remaining=None, log=print, spend=True):
-    """The day's easy parlay as a pick, or (None, reason)."""
-    today = todays_games(games, now)
+def candidate(ctx, games, now, key=None, get=None, cache=None, remaining=None, log=print, spend=True, exclude=()):
+    """The day's easy parlay as a pick, or (None, reason). Games in `exclude` (the desk has a reason against them)
+    are left off."""
+    today = [g for g in todays_games(games, now) if g['id'] not in set(exclude)]
     if len(today) < LEGS:
         return None, f'only {len(today)} NFL games left today; a ticket needs {LEGS}'
     fetched = fetch_day(today, now, key, get, cache, remaining, log, spend)

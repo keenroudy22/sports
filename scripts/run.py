@@ -95,19 +95,30 @@ def slot_for(now, forced=None):
     return best[1] if best else None
 
 
+RUN_LOCK_WAIT = 15 * 60      # seconds a scheduled run waits out a price check before giving up its slot
+
+
 class Lock:
-    def __init__(self, path):
+    """One desk process at a time. A scheduled run waits (up to `wait` seconds) for a price check to finish rather
+    than lose its slot; the price check itself never waits, it tries again at the next half hour."""
+
+    def __init__(self, path, wait=0, poll=5, sleep=time.sleep, clock=time.monotonic):
         self.path, self.handle = Path(path), None
+        self.wait, self.poll, self.sleep, self.clock = wait, poll, sleep, clock
 
     def __enter__(self):
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.handle = open(self.path, 'w')
-        try:
-            fcntl.flock(self.handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError:
-            self.handle.close()
-            raise RunError('another run holds the lock')
-        return self
+        deadline = self.clock() + self.wait
+        while True:
+            try:
+                fcntl.flock(self.handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                return self
+            except BlockingIOError:
+                if self.clock() >= deadline:
+                    self.handle.close()
+                    raise RunError('another run holds the lock')
+                self.sleep(self.poll)
 
     def __exit__(self, *exc):
         fcntl.flock(self.handle, fcntl.LOCK_UN)
@@ -368,7 +379,7 @@ def settle(ctx, raw_first, games, records, now, fetch=boxscores.fetch_game):
 # ------------------------------------------------------------------ step 3: close moves
 
 def entry_note(now, breaks, pick):
-    return (f"Closed to new entries at {et(now)}: {breaks}. Published cutoff: {pick.get('cutoff') or 'as posted'}. "
+    return (f"Closed to new entries at {et(now)}: {str(breaks).rstrip('. ')}. Published cutoff: {pick.get('cutoff') or 'as posted'}. "
             f"Stays in the record at {pricing.fmt(float(pick['line'])) if pick.get('line') is not None else 'its line'} and "
             f"{int(pick['odds']):+d} and is graded as posted.")
 
@@ -398,6 +409,99 @@ def close_moves(ctx, raw_first, games, boards, now):
         elif row['breaks'] == 'no comparable current line':
             checks.append(key)
     return revisions, checks
+
+
+# A fun parlay never carries a leg the desk has pulled: the same game, market and side as a single play that
+# closed (its line moved past the cutoff, or the news turned against it) closes the ticket too, and the games
+# the desk has a sourced reason against are left off the next ticket.
+AGAINST_RULES = ('lean_nothing_against', 'qb_available', 'prop_injury_clear')
+UNCONFIRMED = 'a college play needs the web check'      # a hold for want of news, not a reason against the game
+
+
+def closed_reason(note):
+    """What closed a play, from its entryNote, without the time stamp or the record's tail."""
+    text = str(note or '')
+    for marker in ('before its post went out: ', ' ET: '):
+        if marker in text:
+            text = text.split(marker, 1)[1]
+            break
+    for tail in ('. Published cutoff', '. Stays in the record'):
+        text = text.split(tail, 1)[0]
+    return text.strip().rstrip('.')
+
+
+def leg_single(leg, parlay):
+    """A parlay leg as a single play on its game: what a closed single is matched against and what the last look
+    checks before the ticket posts."""
+    league = parlay.get('league') or parlay.get('_league') or str(parlay.get('id', '')).split('-')[0]
+    return dict(leg_pick(leg), id=f"{parlay.get('id')}/{leg.get('id')}", title=leg.get('title'), gameIds=[leg.get('gameId')],
+                odds=leg.get('odds'), book=leg.get('book') or parlay.get('book'), league=league, _league=league)
+
+
+def same_bet(a, b):
+    """The same game, market, side and player, whatever the line."""
+    return (a.get('gameIds') or [None])[0] == (b.get('gameIds') or [None])[0] and gates.market_key(a) == gates.market_key(b) \
+        and gates.side_of(a) == gates.side_of(b) and str(a.get('athleteId') or '') == str(b.get('athleteId') or '')
+
+
+def closed_singles(ctx, closing=()):
+    """[(single play, why it closed)] for every single play closed to new entries: in the record, and `closing`,
+    the revisions this pass is writing."""
+    out = {}
+    for key, pick in ctx.first.items():
+        merged = dict(pick, **ctx.latest.get(key, {}))
+        if not pick.get('historicalImport') and not merged.get('legs') and not merged.get('parlayType') and merged.get('entryNote'):
+            out[key] = (merged, closed_reason(merged['entryNote']))
+    for revision in closing:
+        if not revision.get('legs') and not revision.get('parlayType') and revision.get('entryNote'):
+            out[revision['id']] = (revision, closed_reason(revision['entryNote']))
+    return list(out.values())
+
+
+def pulled_leg(parlay, ctx, closing=()):
+    """(leg, why) for the first leg of a parlay that is a single play the desk has closed, or None."""
+    closed = closed_singles(ctx, closing)
+    for leg in parlay.get('legs') or []:
+        single = leg_single(leg, parlay)
+        why = next((reason for other, reason in closed if same_bet(single, other)), None)
+        if why is not None:
+            return leg, why
+    return None
+
+
+def parlay_note(now, reason, pick, before_post=False):
+    moment = f"{et(now)}, before its post went out" if before_post else et(now)
+    return f"Closed to new entries at {moment}: {str(reason).rstrip('. ')}. Stays in the record at {int(pick['odds']):+d} and is graded as posted."
+
+
+def parlay_closures(ctx, raw_first, games, now, closing=()):
+    """Revisions closing every open fun parlay, not yet under way, that carries a leg the desk has pulled."""
+    out = []
+    for key, pick in ctx.first.items():
+        merged = dict(pick, **ctx.latest.get(key, {}))
+        if not merged.get('legs') or key not in raw_first or merged.get('result') or merged.get('entryNote') \
+                or (merged.get('status') or 'active') != 'active':
+            continue
+        starts = [gates.when(games[g]['kickoff']) for g in merged.get('gameIds') or [] if g in games]
+        if not starts or min(starts) <= now:
+            continue
+        hit = pulled_leg(merged, ctx, closing)
+        if hit:
+            kind_key, original = raw_first[key]
+            reason = f"its {hit[0].get('title')} leg was pulled: {hit[1]}"
+            out.append((merged.get('league') or key.split('-')[0], kind_key, dict(original, status='expired', entryNote=parlay_note(now, reason, original))))
+    return out
+
+
+def longshot_exclusions(ctx, screened, closing=()):
+    """Game ids a fun parlay leaves off: games where the desk closed a single play, and games this run found a
+    sourced reason against (weather, a quarterback, verified reporting)."""
+    out = {(pick.get('gameIds') or [None])[0] for pick, _ in closed_singles(ctx, closing)}
+    for row in screened:
+        rule, reason = row.get('rule'), str(row.get('reason') or '')
+        if rule in AGAINST_RULES or (rule == 'held' and not reason.startswith(UNCONFIRMED)):
+            out.add(row.get('gameId'))
+    return {g for g in out if g}
 
 
 # ------------------------------------------------------------------ steps 4 to 7: candidates, prices, facts
@@ -1073,12 +1177,12 @@ def allowed(path):
     return any(path == w.rstrip('/') or path.startswith(w) for w in WHITELIST)
 
 
-def easy_parlay_step(ctx, games, now, records, published, decided, screened, spend=True):
+def easy_parlay_step(ctx, games, now, records, published, decided, screened, spend=True, exclude=()):
     """The day's easy player-prop parlay on an NFL Sunday (scripts/easy_parlay.py), through the same gates as the
-    longshot. Never fails a run."""
+    longshot, leaving off the games in `exclude`. Never fails a run."""
     import easy_parlay
     try:
-        ticket, reason = easy_parlay.candidate(ctx, games, now, log=log, spend=spend)
+        ticket, reason = easy_parlay.candidate(ctx, games, now, log=log, spend=spend, exclude=exclude)
     except Exception as error:
         log(f'NFL easy parlay skipped ({type(error).__name__}: {error})')
         return
@@ -1172,7 +1276,7 @@ def run(args):
         return 0
     kinds = set(args.publish_kinds.split(',')) if args.publish_kinds else set(KINDS)
     try:
-        with Lock(CONF / 'run.lock'):
+        with Lock(CONF / 'run.lock', wait=0 if args.dry_run else RUN_LOCK_WAIT):
             return _run(args, now, slot, kinds, status)
     except RunError as error:
         log('STOPPED:', error)
@@ -1225,6 +1329,7 @@ def _run(args, now, slot, kinds, status):
         log(f'settled {len(settled)}, unclear {len(unclear)}')
     if 'close' in kinds:
         closed, checks = close_moves(ctx, raw_first, games, desk.captures(), now)
+        closed += parlay_closures(ctx, raw_first, games, now, closing=[revision for _, _, revision in closed])
         status['checks'] += [f'CHECK {k}: no comparable current line' for k in checks]
         log(f'closed {len(closed)}, to check by hand {len(checks)}')
 
@@ -1304,8 +1409,9 @@ def _run(args, now, slot, kinds, status):
         if reason:
             reasons[candidate['id']] = reason
     if 'longshot' in kinds:
+        exclude = longshot_exclusions(ctx, screened, [revision for _, _, revision in closed])
         for league in ('NFL', 'CFB'):
-            ticket, reason = longshot_candidate(lines, games, now, league)
+            ticket, reason = longshot_candidate(lines, games, now, league, exclude)
             if not ticket:
                 log(f'{league} longshot: {reason}')
                 continue
@@ -1322,7 +1428,7 @@ def _run(args, now, slot, kinds, status):
                                            gates.refusals(decisions)[0].reason, now, ctx))
             screened.append({'league': league, 'gameId': ticket['gameIds'][0], 'title': ticket['title'],
                              'rule': gates.refusals(decisions)[0].rule, 'reason': gates.refusals(decisions)[0].reason})
-        easy_parlay_step(ctx, games, now, records, published, decided, screened, spend=not args.dry_run)
+        easy_parlay_step(ctx, games, now, records, published, decided, screened, spend=not args.dry_run, exclude=exclude)
 
     by_league = defaultdict(lambda: ([], [], []))
     for item in settled:
@@ -1482,10 +1588,41 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         before = len(log_book.get('posts', []))
         buffer_post.schedule(plans, channel['id'], log_book, now, log=log)
         status['x']['posted'] = len(log_book.get('posts', [])) - before
+        feature_scheduled(log_book, ctx, games, now)
     except (buffer_post.BufferError, buffer_post.MissingToken) as error:
         log(f'buffer: {error}')
         status['errors'].append(f'buffer: {error}')
     x_post.save_log(log_book)
+
+
+def feature_scheduled(log_book, ctx, games, now, log=log):
+    """A Pick of the Day named after its play was queued as a plain play (the first choice was pulled before it
+    posted): the queued post is replaced by the Pick of the Day post, at the same time, once its card is live.
+    Until then it stays queued as it was. Returns True when it was relabeled."""
+    import buffer_post
+    import featured
+    key = featured.of_day(eastern_date(now).isoformat())
+    entry = next((e for e in log_book.get('posts', []) if key and e.get('id') == key and e.get('kind') == 'buffer:play'
+                  and e.get('bufferPostId') and not e.get('sentAt') and not e.get('cancelledAt') and not e.get('featured')), None)
+    if not entry or key not in ctx.first or not entry.get('dueAt') or gates.when(entry['dueAt']) <= now + buffer_post.SOON:
+        return False
+    card = f'{key}-potd'
+    if not buffer_post.reachable(buffer_post.card_url(card)):
+        log(f'buffer: {key} is the Pick of the Day now; its card is not live yet, so its post is relabeled at the next run')
+        return False
+    pick = dict(ctx.first[key], **ctx.latest.get(key, {}))
+    game = games.get((pick.get('gameIds') or [None])[0])
+    before = dict(entry)
+    entry.update(featured=True, cardKey=card, card=True)
+    try:
+        if requote(entry, pick, game, ctx, now, log=log):
+            log(f'buffer: {key} goes out as the Pick of the Day')
+            return True
+    except buffer_post.BufferError as error:
+        log(f'buffer: {key} not relabeled as the Pick of the Day: {error}')
+    entry.clear()
+    entry.update(before)
+    return False
 
 
 def now_quotes(ctx, games, now):
@@ -1653,15 +1790,52 @@ def live_context(stored, now, fetch=None):
 
 
 def precheck_note(now, reason, pick):
-    return (f"Closed to new entries at {et(now)}, before its post went out: {reason}. Stays in the record at "
+    return (f"Closed to new entries at {et(now)}, before its post went out: {str(reason).rstrip('. ')}. Stays in the record at "
             f"{pricing.fmt(float(pick['line'])) if pick.get('line') is not None else 'its line'} and {int(pick['odds']):+d} "
             "and is graded as posted.")
+
+
+def last_look(pick, game, ctx, context_file, use_llm, status, now):
+    """The news check on one play, or one leg of a parlay, before it posts: the injury report read live, the
+    forecast, the web researcher's news when it is on, then the judge on whatever can matter.
+    Returns (why it should not go out or None, the researcher's verified facts, every fact)."""
+    facts = evidence(pick, ctx, context_file)
+    kept = []
+    if researcher.enabled() and game:
+        kept, dropped = researcher.research(game, gates.market_key(pick), gates.side_of(pick), now=now,
+                                            player=ctx.names.get(str(pick.get('athleteId') or '')),
+                                            quarterbacks=quarterbacks(game, ctx))
+        status['research']['asked'] += 1
+        status['research']['verified'] += len(kept)
+        facts += kept
+    return judge(pick, relevant_facts(pick, facts, ctx), use_llm, status), kept, facts
+
+
+def parlay_last_look(pick, ctx, context_file, use_llm, status, now, closing=(), look=None):
+    """Why a fun parlay should not post, or None: a leg that is a single play the desk has closed (in the record or
+    in `closing`, this pass's revisions), or a leg the news check argues against. A college leg is not held for want
+    of news the way a college single is; the ticket is for fun, and what the check finds still stops it."""
+    hit = pulled_leg(pick, ctx, closing)
+    if hit:
+        return f"its {hit[0].get('title')} leg was pulled: {hit[1]}"
+    look = look or last_look
+    for leg in pick.get('legs') or []:
+        single = leg_single(leg, pick)
+        game = ctx.games.get(single['gameIds'][0])
+        if not game:
+            continue
+        single['_team'] = ctx.player_team.get(str(single.get('athleteId') or ''))
+        reason = look(single, game, ctx, context_file, use_llm, status, now)[0]
+        if reason:
+            return f"its {leg.get('title')} leg: {reason}"
+    return None
 
 
 def precheck(args):
     """The last look before a scheduled play posts to X: the injury report read live, the latest line, the web
     researcher's news when it is on, and the judge on whatever can matter. A play that no longer stands is taken
-    off the queue and closed to new entries on the site with the reason; a play that stands is marked checked.
+    off the queue and closed to new entries on the site with the reason; a play that stands is marked checked. A fun
+    parlay gets that look on every leg, after the single plays, and a leg the desk has pulled takes the ticket off too.
     Quiet when nothing is due."""
     import buffer_post
     import x_post
@@ -1689,7 +1863,7 @@ def precheck(args):
             use_llm = not args.no_llm and llm.available()
             moved, _ = close_moves(ctx, raw_first, games, desk.captures(), now)
             moved = {revision['id']: (league, kind, revision) for league, kind, revision in moved}
-            closures, withheld = [], []
+            closures, withheld, parlays = [], [], []
             for entry in due:
                 key = entry['id']
                 if key not in ctx.first:
@@ -1699,24 +1873,13 @@ def precheck(args):
                     entry['precheck'] = {'at': stamp(now), 'result': 'closed already'}
                     closures.append(None)
                     continue
+                pick['_league'] = pick.get('league') or key.split('-')[0]
                 if pick.get('legs') or pick.get('parlayType'):
-                    # A fun parlay has no single line or side to research; its legs stand at the numbers it was built on.
-                    entry['precheck'] = {'at': stamp(now), 'result': 'clear', 'note': 'a fun parlay: no last look'}
-                    log(f'precheck: {key} is a fun parlay; it goes out as built')
+                    parlays.append((entry, pick))       # after the single plays, so a leg pulled just now counts
                     continue
                 game = ctx.games.get((pick.get('gameIds') or [None])[0])
                 pick['_team'] = ctx.player_team.get(str(pick.get('athleteId') or ''))
-                pick['_league'] = pick.get('league') or key.split('-')[0]
-                facts = evidence(pick, ctx, context_file)
-                kept = []
-                if researcher.enabled() and game:
-                    kept, dropped = researcher.research(game, gates.market_key(pick), gates.side_of(pick), now=now,
-                                                        player=ctx.names.get(str(pick.get('athleteId') or '')),
-                                                        quarterbacks=quarterbacks(game, ctx))
-                    status['research']['asked'] += 1
-                    status['research']['verified'] += len(kept)
-                    facts += kept
-                reason = judge(pick, relevant_facts(pick, facts, ctx), use_llm, status)
+                reason, kept, facts = last_look(pick, game, ctx, context_file, use_llm, status, now)
                 if not reason and needs_research(pick) and not lineup_confirmed(kept):
                     # A college play with nothing checked is not clear, it is unknown: try again at the next half
                     # hour; at the last chance, withhold the post (the pick stays on the site and is graded).
@@ -1743,6 +1906,19 @@ def precheck(args):
                         except Exception as error:        # the post stands as scheduled; the number is only context
                             log(f"precheck: {key} not rescheduled with the number now ({type(error).__name__}: {error})")
             closures = [c for c in closures if c]
+            for entry, pick in parlays:
+                # Every leg gets the look a single play gets; a leg the desk has pulled closes the ticket.
+                reason = parlay_last_look(pick, ctx, context_file, use_llm, status, now,
+                                          closing=[c[2] for c in closures] + [m[2] for m in moved.values()])
+                if reason:
+                    kind_key, original = raw_first[entry['id']]
+                    closures.append((pick['_league'], kind_key, dict(original, status='expired',
+                                                                     entryNote=parlay_note(now, reason, original, before_post=True))))
+                    entry['precheck'] = {'at': stamp(now), 'result': 'closed', 'reason': reason}
+                    log(f"precheck: {entry['id']} closed before its post: {reason}")
+                else:
+                    entry['precheck'] = {'at': stamp(now), 'result': 'clear', 'note': f"every leg checked ({len(pick['legs'])})"}
+                    log(f"precheck: {entry['id']} clear: every leg checked")
             for entry in withheld:
                 if not args.dry_run:
                     try:

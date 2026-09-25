@@ -376,6 +376,18 @@ def not_duplicate(candidate, ctx):
     return Decision(True, 'not_duplicate', 'no open pick on this market')
 
 
+def not_republished(candidate, ctx):
+    """A pick id is published once. A later run that forms the same ticket or line again (a day's parlay id is fixed
+    by its date and book) leaves the published one alone; a replay of the publication itself carries its own
+    publishedAt and is not a second write."""
+    original = ctx.first.get(candidate.get('id'))
+    published = (original or {}).get('publishedAt')
+    if not original or original.get('historicalImport') or not published or when(published) > ctx.now \
+            or candidate.get('publishedAt') == published:
+        return Decision(True, 'not_republished', 'not published before')
+    return Decision(False, 'not_republished', f"{candidate['id']} was already published at {published}; it stands as written")
+
+
 def cfb_jurisdiction(candidate, ctx):
     """A college pick quotes a book available in Indiana; college player props are not offered there."""
     league = candidate.get('league') or ((game_of(candidate, ctx) or {}).get('league'))
@@ -670,7 +682,7 @@ def revision_frozen(candidate, ctx):
 
 # ------------------------------------------------------------------ running the rules
 
-COMMON = (not_started, expiry_ok, price_present, data_sanity, sources_https, not_duplicate, cfb_jurisdiction)
+COMMON = (not_started, expiry_ok, price_present, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction)
 SHOP = (one_book, best_quote_by_ev)
 RULES = {
     'modelLean': COMMON + SHOP + (lean_is_total, lean_edge, learned_pause, lean_confidence, lean_daily_cap, lean_nothing_against, qb_available),
@@ -678,7 +690,7 @@ RULES = {
                                  prop_one_per_player, prop_not_in_longshot, prop_injury_clear, prop_market_not_trailing, lean_nothing_against),
     'favorite': COMMON + SHOP + (favorite_needs_reason, lean_nothing_against, qb_available, prop_injury_clear),
     'researched': COMMON + SHOP + (lean_nothing_against, qb_available, prop_injury_clear),
-    'longshot': (not_started, expiry_ok, price_present, sources_https, cfb_jurisdiction, longshot_one_per_day),
+    'longshot': (not_started, expiry_ok, price_present, sources_https, not_republished, cfb_jurisdiction, longshot_one_per_day),
     'revision': (revision_frozen,),
 }
 

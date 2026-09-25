@@ -112,6 +112,17 @@ play that stands is marked checked in the posted log; if its number moved, the p
 playing is tried again the next half hour, and inside 45 minutes of its post it is withheld from X (the pick
 stays on the site and is graded). Quiet when nothing is due.
 
+**A fun parlay gets the same look, leg by leg** (added 2026-09-25, after the 12:10 PM college longshot went out
+carrying Navy at UAB over 51.5, the play the desk had pulled at 11:03 over Navy's quarterback): after the single
+plays, every leg is matched against the single plays the desk has closed (same game, market and side, whatever the
+line), then read like a single play (injury report, forecast, researcher, judge; a college leg is not held for want
+of news). A pulled leg or a reason against takes the ticket off the queue and closes it with a note naming the leg.
+The run does the same for any open ticket not yet under way (`run.parlay_closures`), and the next ticket leaves off
+games with a closed play or a sourced reason against (`run.longshot_exclusions`). A published ticket is never
+written again (`gates.not_republished`: a day's parlay id is fixed by date and book, and the 8:30 run had
+rewritten the 6:45 ticket). A scheduled run now waits up to 15 minutes for a price check holding the lock
+instead of losing its slot.
+
 **The post's reason** is chosen when the play is published, from structured facts only (`run.post_reason`,
 stored in `data/x-reasons.json`): a player's own record at the line when it backs the side ("Over 4.5 in 7 of
 his last 10 games"), or for a game line a verified web fact or a weather flag that points the same way as the
@@ -198,7 +209,9 @@ are tuned for main lines. Every fun parlay carries an expiry (next run or first 
 
 **Pick of the Day** (`scripts/featured.py`, `data/featured.json`): the first run of a game day that has plays names the one
 whose calibrated chance clears its price by the most (never a parlay, never a game already started). It is named once and
-never changes. Its post leads the noon batch with the kicker "PICK OF THE DAY · TEAM PROP" and its own card
+never changes once it has posted; one the last look pulls before its post goes out is replaced by the best play left
+that has not posted (`replaced` in the day's entry), and if that play is already queued, its post is swapped for the
+Pick of the Day post at the same time once its card is live (`run.feature_scheduled`). Its post leads the noon batch with the kicker "PICK OF THE DAY · TEAM PROP" and its own card
 (`cards/<id>-potd.png`, rendered by the hosted build, so a post never carries a stale copy), and the site's Today page
 leads with it, starred.
 

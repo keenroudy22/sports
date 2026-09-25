@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from types import SimpleNamespace
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import run
@@ -380,6 +381,40 @@ class PrecheckTests(unittest.TestCase):
         self.assertIn('Now: 39.5 at -110, FanDuel', text)
         self.assertEqual(card, 'https://keenroudy.com/sports/data/cards/CFB-2026-W4-x-potd.png')
 
+    def test_a_new_pick_of_the_day_already_queued_is_relabeled_once_its_card_is_live(self):
+        import buffer_post
+        import featured
+        from unittest import mock
+        now = datetime(2026, 9, 26, 15, 0, tzinfo=timezone.utc)
+        pick = {'id': 'CFB-2026-W4-x', 'title': 'Iowa at Michigan over 38.5', 'marketType': 'total', 'line': 38.5, 'odds': -105,
+                'book': 'ESPN BET', 'direction': 'over', 'gameIds': ['g'], 'projection': 47.1}
+        ctx = SimpleNamespace(first={pick['id']: pick}, latest={})
+
+        def attempt(live, fail=False):
+            entry = {'id': pick['id'], 'kind': 'buffer:play', 'bufferPostId': 'old', 'dueAt': '2026-09-26T16:10:00Z', 'card': True, 'textHash': 'plain'}
+            created = []
+
+            def create(*a, **k):
+                if fail:
+                    raise buffer_post.BufferError('refused')
+                created.append(a)
+                return 'new'
+            with mock.patch.object(featured, 'of_day', return_value=pick['id']), mock.patch.object(buffer_post, 'reachable', return_value=live), \
+                    mock.patch.object(buffer_post, 'x_channel', return_value={'id': 'ch'}), \
+                    mock.patch.object(buffer_post, 'create_post', side_effect=create), mock.patch.object(buffer_post, 'delete_post'), \
+                    mock.patch.object(run.gates, 'best_now', return_value=None):
+                done = run.feature_scheduled({'posts': [entry]}, ctx, {'g': {'id': 'g', 'league': 'CFB'}}, now, log=lambda *_: None)
+            return done, entry, created
+        done, entry, created = attempt(live=True)
+        self.assertTrue(done)
+        self.assertEqual((entry['bufferPostId'], entry['featured'], entry['cardKey']), ('new', True, 'CFB-2026-W4-x-potd'))
+        self.assertTrue(created[0][0].startswith('🍳 PICK OF THE DAY'))
+        self.assertEqual(created[0][2], datetime(2026, 9, 26, 16, 10, tzinfo=timezone.utc), 'at the time it was queued for')
+        done, entry, created = attempt(live=False)
+        self.assertEqual((done, entry.get('featured'), created), (False, None, []), 'no card yet: it waits, queued as it was')
+        done, entry, _ = attempt(live=True, fail=True)
+        self.assertEqual((done, entry['bufferPostId'], entry.get('featured')), (False, 'old', None), 'a refused post leaves the queue as it was')
+
 
 class AlertTests(unittest.TestCase):
     def test_alerts_push_once_per_six_hours_and_never_without_a_topic(self):
@@ -442,6 +477,123 @@ class FetchTests(unittest.TestCase):
         always = lambda *a, cwd=None, check=True: SimpleNamespace(returncode=1, stdout='', stderr='cannot lock ref x')
         with self.assertRaises(run.RunError):
             run.fetch(always, attempts=3, sleep=lambda s: None)
+
+
+class ParlayGuardTests(unittest.TestCase):
+    """A fun parlay never carries a leg the desk pulled. On Sep 25 the 12:10 PM longshot went out with Navy at UAB
+    over 51.5, the play the desk had closed at 11:03 because Navy's starting quarterback might not play."""
+    NOW = datetime(2026, 9, 25, 15, 30, tzinfo=timezone.utc)       # 11:30 AM ET
+    GAMES = {g: {'id': g, 'league': 'CFB', 'kickoff': '2026-09-25T23:30Z', 'state': 'pre'} for g in ('army', 'navy', 'iu')}
+    NOTE = ("Closed to new entries at 11:03 AM ET, before its post went out: verified reporting argues against it: Navy's "
+            "quarterback sprained his ankle and is week-to-week. Stays in the record at 51.5 and -105 and is graded as posted.")
+
+    def world(self, closed=True):
+        single = {'id': 'CFB-2026-W4-navy-uab-over-51-5-fd', 'title': 'Navy at UAB over 51.5', 'marketType': 'total', 'line': 51.5,
+                  'direction': 'over', 'gameIds': ['navy'], 'odds': -105, 'book': 'FanDuel', 'league': 'CFB', 'status': 'active',
+                  'publishedAt': '2026-09-24T11:40:00Z'}
+        legs = [{'id': 'game-army-total-over', 'title': 'Army at Temple over 47.5', 'gameId': 'army', 'market': 'total points',
+                 'side': 'over', 'line': 47.5, 'odds': -120},
+                {'id': 'game-navy-total-over', 'title': 'Navy at UAB over 51.5', 'gameId': 'navy', 'market': 'total points',
+                 'side': 'over', 'line': 51.5, 'odds': -105},
+                {'id': 'game-iu-home', 'title': 'Indiana -20.5', 'gameId': 'iu', 'market': 'point spread', 'side': 'home',
+                 'line': -20.5, 'odds': -110}]
+        ticket = {'id': 'CFB-2026-W4-longshot-0925-espnbet', 'title': '3-leg longshot at ESPN BET', 'parlayType': 'longshot', 'legs': legs,
+                  'gameIds': ['army', 'navy', 'iu'], 'odds': 583, 'book': 'ESPN BET', 'league': 'CFB', 'status': 'active',
+                  'publishedAt': '2026-09-25T10:45:05Z'}
+        first = {single['id']: single, ticket['id']: ticket}
+        latest = {single['id']: dict(single, status='expired', entryNote=self.NOTE)} if closed else {}
+        ctx = SimpleNamespace(first=first, latest=latest, games=self.GAMES, player_team={}, names={}, starters={})
+        raw_first = {single['id']: ('gamePicks', dict(single)), ticket['id']: ('parlays', dict(ticket))}
+        return ctx, raw_first, ticket, single
+
+    def test_a_ticket_closes_with_a_leg_the_desk_pulled(self):
+        ctx, raw_first, ticket, _ = self.world()
+        [(league, kind, revision)] = run.parlay_closures(ctx, raw_first, self.GAMES, self.NOW)
+        self.assertEqual((league, kind, revision['id'], revision['status']), ('CFB', 'parlays', ticket['id'], 'expired'))
+        self.assertIn('its Navy at UAB over 51.5 leg was pulled: verified reporting argues against it', revision['entryNote'])
+        self.assertIn('Stays in the record at +583', revision['entryNote'])
+        self.assertEqual(revision['legs'], ticket['legs'], 'the ticket stands as written; only its entry closes')
+        self.assertEqual(run.parlay_closures(*self.world(closed=False)[:2], self.GAMES, self.NOW), [], 'nothing pulled, nothing closed')
+        started = dict(self.GAMES, army=dict(self.GAMES['army'], kickoff='2026-09-25T15:00Z'))
+        self.assertEqual(run.parlay_closures(ctx, raw_first, started, self.NOW), [], 'a ticket under way is left to be graded')
+
+    def test_a_leg_matches_the_same_bet_whatever_the_line(self):
+        _, _, ticket, single = self.world()
+        navy, spread = ticket['legs'][1], ticket['legs'][2]
+        self.assertTrue(run.same_bet(run.leg_single(navy, ticket), dict(single, line=53.5)))
+        self.assertFalse(run.same_bet(run.leg_single(navy, ticket), dict(single, direction='under')))
+        home = {'marketType': 'spread', 'direction': 'home', 'line': -21.5, 'gameIds': ['iu']}
+        self.assertTrue(run.same_bet(run.leg_single(spread, ticket), home))
+        self.assertFalse(run.same_bet(run.leg_single(spread, ticket), dict(home, direction='away')))
+        prop_leg = {'id': 'alt', 'title': 'Player 40+ receiving yards', 'gameId': 'g', 'athleteId': '7', 'market': 'recYds', 'direction': 'over', 'line': 39.5}
+        prop = {'athleteId': '7', 'market': 'recYds', 'direction': 'over', 'line': 54.5, 'gameIds': ['g']}
+        self.assertTrue(run.same_bet(run.leg_single(prop_leg, {'id': 'easy', 'legs': [prop_leg]}), prop))
+        self.assertFalse(run.same_bet(run.leg_single(prop_leg, {'id': 'easy', 'legs': [prop_leg]}), dict(prop, athleteId='8')))
+
+    def test_the_next_ticket_leaves_off_games_with_a_reason_against(self):
+        ctx, _, _, _ = self.world()
+        screened = [{'gameId': 'wind', 'rule': 'lean_nothing_against', 'reason': 'wind 21 mph'},
+                    {'gameId': 'qb', 'rule': 'held', 'reason': 'verified reporting argues against it: the starter is out'},
+                    {'gameId': 'unknown', 'rule': 'held', 'reason': 'a college play needs the web check to confirm who is expected to play'},
+                    {'gameId': 'book', 'rule': 'one_book', 'reason': 'only DraftKings'}]
+        self.assertEqual(run.longshot_exclusions(ctx, screened), {'navy', 'wind', 'qb'})
+
+    def test_the_last_look_checks_every_leg(self):
+        ctx, _, ticket, _ = self.world(closed=False)
+        looked = []
+
+        def look(single, game, *rest):
+            looked.append(single['title'])
+            return ('the evidence argues against it: rain and 25 mph wind', [], []) if game['id'] == 'army' else (None, [], [])
+        reason = run.parlay_last_look(ticket, ctx, {}, False, {}, self.NOW, look=look)
+        self.assertEqual(reason, 'its Army at Temple over 47.5 leg: the evidence argues against it: rain and 25 mph wind')
+        looked.clear()
+        clear = run.parlay_last_look(ticket, ctx, {}, False, {}, self.NOW, look=lambda *a: (None, [], []))
+        self.assertIsNone(clear)
+        closing = [dict(self.world()[3], status='expired', entryNote=self.NOTE)]
+        pulled = run.parlay_last_look(ticket, ctx, {}, False, {}, self.NOW, closing=closing, look=lambda *a: self.fail('pulled first'))
+        self.assertTrue(pulled.startswith('its Navy at UAB over 51.5 leg was pulled'))
+
+    def test_the_price_check_takes_a_ticket_off_when_its_leg_was_pulled(self):
+        from unittest import mock
+        import x_post
+        ctx, raw_first, ticket, _ = self.world()
+        entry = {'id': ticket['id'], 'kind': 'buffer:play', 'bufferPostId': 'b', 'dueAt': run.stamp(self.NOW + timedelta(minutes=40))}
+        log_book = {'posts': [entry]}
+        stores = mock.MagicMock(reports=[], context_file={})
+        stores.as_of.return_value = ctx
+        lines = []
+        with mock.patch.object(x_post, 'load_log', return_value=log_book), mock.patch.object(run, 'Lock'), \
+                mock.patch.object(run, 'live_games', return_value=self.GAMES), mock.patch.object(run.features, 'load', return_value=[]), \
+                mock.patch.object(run.gates, 'Stores', return_value=stores), mock.patch.object(run, 'raw_first_publications', return_value=raw_first), \
+                mock.patch.object(run, 'live_context', return_value={}), mock.patch.object(run.llm, 'available', return_value=False), \
+                mock.patch.object(run, 'close_moves', return_value=([], None)), mock.patch.object(run.desk, 'captures', return_value=[]), \
+                mock.patch.object(run, 'last_look', side_effect=AssertionError('a pulled leg needs no news check')), \
+                mock.patch.object(run, 'log', side_effect=lambda *parts: lines.append(' '.join(map(str, parts)))):
+            self.assertEqual(run.precheck(SimpleNamespace(now=run.stamp(self.NOW), dry_run=True, no_llm=True, no_push=True)), 0)
+        self.assertEqual(entry['precheck']['result'], 'closed')
+        self.assertIn('Navy at UAB over 51.5', entry['precheck']['reason'])
+        self.assertTrue(any('closed before its post' in line for line in lines))
+
+    def test_a_run_waits_out_a_price_check_for_the_lock(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'run.lock'
+            held = run.Lock(path).__enter__()
+            with self.assertRaises(run.RunError):
+                run.Lock(path).__enter__()
+            waits = []
+
+            def sleep(seconds):
+                waits.append(seconds)
+                held.__exit__(None, None, None)          # the price check finishes while the run waits
+            waiting = run.Lock(path, wait=60, sleep=sleep).__enter__()
+            self.assertEqual(waits, [5])
+            waiting.__exit__(None, None, None)
+            clock = iter(range(0, 1000, 10))
+            blocker = run.Lock(path).__enter__()
+            with self.assertRaises(run.RunError):
+                run.Lock(path, wait=30, sleep=lambda s: None, clock=lambda: next(clock)).__enter__()
+            blocker.__exit__(None, None, None)
 
 
 class BufferPostsTests(unittest.TestCase):

@@ -331,6 +331,23 @@ class FavoriteLongshotRevisionTests(unittest.TestCase):
         self.assertFalse(gates.longshot_one_per_day(new, context(first={'ls': ticket}, latest={'ls': ticket})).ok)
         self.assertTrue(gates.longshot_one_per_day(new, context()).ok)
 
+    def test_a_published_ticket_is_never_written_again(self):
+        """The 6:45 and 8:30 runs both wrote the Sep 25 longshot: its id is fixed by the date and the book."""
+        ticket = {'id': 'CFB-2026-W4-longshot-0925-espnbet', 'parlayType': 'longshot', 'legs': [{}, {}, {}],
+                  'publishedAt': '2026-09-27T10:45:05Z'}
+        ctx = context(first={ticket['id']: ticket}, latest={ticket['id']: ticket})
+        again = {k: v for k, v in ticket.items() if k != 'publishedAt'}
+        refused = gates.not_republished(again, ctx)
+        self.assertFalse(refused.ok)
+        self.assertIn('already published', refused.reason)
+        self.assertIn('not_republished', [r.__name__ for r in gates.RULES['longshot']])
+        self.assertTrue(gates.not_republished(ticket, ctx).ok, 'a replay of the publication itself is not a second write')
+        self.assertTrue(gates.not_republished(dict(again, id='another'), ctx).ok)
+        earlier = context(first={ticket['id']: ticket}, now=datetime(2026, 9, 27, 10, 0, tzinfo=timezone.utc))
+        self.assertTrue(gates.not_republished(again, earlier).ok, 'published later than this moment')
+        single = total_lean(publishedAt='2026-09-27T12:00:00Z')
+        self.assertFalse(gates.not_republished(total_lean(), context(first={single['id']: single})).ok, 'a single play too')
+
     def test_revision_frozen(self):
         original = total_lean(publishedAt='2026-09-27T12:00:00Z')
         ctx = context(first={original['id']: original}, latest={original['id']: original})
