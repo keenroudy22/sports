@@ -1,5 +1,5 @@
 {
- "at": "2026-09-25T04:03:33Z",
+ "at": "2026-09-25T04:09:46Z",
  "leagues": {
   "CFB": {
    "books": {
@@ -122,14 +122,22 @@
       "gemini": "NCAAF-2609242330-LIB-CCU-S",
       "kalshi": "KXNCAAFTEAMTOTAL-26SEP24LIBCCAR",
       "prophetx": "1700077163",
-      "robinhood": "598f9b1e-8b66-4ad7-8293-0d63a02e57bc"
+      "robinhood": "598f9b1e-8b66-4ad7-8293-0d63a02e57bc",
+      "thescorebet": "StandardEvent:e5da4fa6-03c8-497d-a483-a92733e637bf"
      },
      "home": "Coastal Carolina",
      "sample": {
       "away_team": "Liberty",
       "home_team": "Coastal Carolina",
       "markets": [
-       "point_spread"
+       "moneyline",
+       "player_passing_yards",
+       "player_receiving_yards",
+       "player_rushing_yards",
+       "player_touchdowns",
+       "point_spread",
+       "team_total",
+       "total_points"
       ]
      },
      "start": "2026-09-25T03:22:00Z",
@@ -202,7 +210,7 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF1HSPREAD-26SEP25ARMYTEM-ARMY18"
+      "kalshi": "KXNCAAF1HSPREAD-26SEP25ARMYTEM-TEM18"
      },
      "home": null,
      "sample": {
@@ -265,6 +273,7 @@
       "smarkets": "45321018",
       "sportzino": "sz-17565222",
       "sx_bet": "L20235566",
+      "thescorebet": "StandardEvent:e8752658-1fdc-429d-b0ac-a884df6c8eee",
       "thrillzz": "888217009",
       "unibet_ca": "1027507896"
      },
