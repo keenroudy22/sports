@@ -1,9 +1,9 @@
 {
- "at": "2026-09-25T15:54:28Z",
+ "at": "2026-09-25T17:35:57Z",
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 59,
+    "draftkings": 275,
     "fanduel": 252
    },
    "eventsListed": 200,
@@ -13,14 +13,17 @@
     "player_longest_passing_completion": 2,
     "player_longest_reception": 7,
     "player_longest_rush": 6,
-    "player_passing_touchdowns": 10,
-    "player_passing_yards": 28,
-    "player_receiving_yards": 120,
-    "player_receptions": 39,
-    "player_rushing_yards": 99
+    "player_passing_attempts": 13,
+    "player_passing_completions": 14,
+    "player_passing_touchdowns": 16,
+    "player_passing_yards": 66,
+    "player_receiving_yards": 178,
+    "player_receptions": 61,
+    "player_rushing_attempts": 14,
+    "player_rushing_yards": 150
    },
-   "requestsLeft": 56,
-   "rows": 311,
+   "requestsLeft": 54,
+   "rows": 527,
    "slateGames": [
     "Army Black Knights at Temple Owls 2026-09-25T20:00Z",
     "Howard Bison at Rutgers Scarlet Knights 2026-09-25T23:00Z",
@@ -94,22 +97,6 @@
     "Minnesota Golden Gophers at Washington Huskies 2026-09-27T03:00Z"
    ],
    "unmatchedEvents": [
-    {
-     "away": null,
-     "external": {
-      "betonline": "futures_663879963"
-     },
-     "home": "Yes",
-     "sample": {
-      "away_team": "",
-      "home_team": "Yes",
-      "markets": [
-       "tournament_winner"
-      ]
-     },
-     "start": "2026-09-25T16:06:00Z",
-     "type": "outright"
-    },
     {
      "away": null,
      "external": {
@@ -240,6 +227,7 @@
       "fanduel": "36073771",
       "fliff": "414517_c_p_209_prematch",
       "gemini": "NCAAF-2609252000-ARM-TEM-T",
+      "goldrush": "30970920",
       "hardrock": "746805152996000166",
       "kalshi": "KXNCAAF1H-26SEP25ARMYTEM",
       "ladbrokes": "2258c073-f14a-4328-9040-bed8ff485a36",
@@ -368,6 +356,236 @@
       ]
      },
      "start": "2026-09-25T20:05:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "betonline": "futures_663469081"
+     },
+     "home": "Florida Atlantic",
+     "sample": {
+      "away_team": "",
+      "home_team": "Florida Atlantic",
+      "markets": [
+       "conference_winner"
+      ]
+     },
+     "start": "2026-09-25T20:05:00Z",
+     "type": "outright"
+    }
+   ]
+  },
+  "NFL": {
+   "books": {},
+   "eventsListed": 200,
+   "eventsMatched": 0,
+   "games": 9,
+   "marketTypes": {},
+   "requestsLeft": 59,
+   "rows": 0,
+   "slateGames": [
+    "Los Angeles Chargers at Buffalo Bills 2026-09-27T17:00Z",
+    "Carolina Panthers at Cleveland Browns 2026-09-27T17:00Z",
+    "New York Jets at Detroit Lions 2026-09-27T17:00Z",
+    "Houston Texans at Indianapolis Colts 2026-09-27T17:00Z",
+    "Kansas City Chiefs at Miami Dolphins 2026-09-27T17:00Z",
+    "Tennessee Titans at New York Giants 2026-09-27T17:00Z",
+    "Cincinnati Bengals at Pittsburgh Steelers 2026-09-27T17:00Z",
+    "Seattle Seahawks at Washington Commanders 2026-09-27T17:00Z",
+    "New England Patriots at Jacksonville Jaguars 2026-09-27T17:00Z"
+   ],
+   "unmatchedEvents": [
+    {
+     "away": null,
+     "external": {
+      "fanduel": "28041972"
+     },
+     "home": "NFL",
+     "sample": {
+      "away_team": "",
+      "home_team": "NFL",
+      "markets": [
+       "outright"
+      ]
+     },
+     "start": "2026-09-25T17:33:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "kalshi": "KXSBLSPREAD-26SEP261200HANLEV-LEV19"
+     },
+     "home": null,
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-26T16:00:00Z",
+     "type": "outright"
+    },
+    {
+     "away": "MBK Handlova",
+     "external": {
+      "kalshi": "KXSBLGAME-26SEP261200HANLEV"
+     },
+     "home": "BK Levicki Patrioti",
+     "sample": {
+      "away_team": "MBK Handlova",
+      "home_team": "BK Levicki Patrioti",
+      "markets": [
+       "moneyline"
+      ]
+     },
+     "start": "2026-09-26T16:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Inter Basket",
+     "external": {
+      "kalshi": "KXSBLGAME-26SEP261200INTKOM"
+     },
+     "home": "BC Komarno",
+     "sample": {
+      "away_team": "Inter Basket",
+      "home_team": "BC Komarno",
+      "markets": [
+       "moneyline"
+      ]
+     },
+     "start": "2026-09-26T16:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "BK Iskra Svit",
+     "external": {
+      "kalshi": "KXSBLGAME-26SEP261300ISKSNV"
+     },
+     "home": "BK 04 AC LB SNV Spisski Rytieri",
+     "sample": {
+      "away_team": "BK Iskra Svit",
+      "home_team": "BK 04 AC LB SNV Spisski Rytieri",
+      "markets": [
+       "moneyline"
+      ]
+     },
+     "start": "2026-09-26T17:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": null,
+     "external": {
+      "bovada": "31339363"
+     },
+     "home": "To Sign/ Be Traded For by New York Giants before 2026 Trade Deadline: Proposition",
+     "sample": {
+      "away_team": "",
+      "home_team": "To Sign/ Be Traded For by New York Giants before 2026 Trade Deadline: Proposition",
+      "markets": [
+       "outright"
+      ]
+     },
+     "start": "2026-09-27T04:00:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7623363"
+     },
+     "home": "Baker Mayfield",
+     "sample": {
+      "away_team": "",
+      "home_team": "Baker Mayfield",
+      "markets": [
+       "mvp"
+      ]
+     },
+     "start": "2026-09-27T16:59:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7623364"
+     },
+     "home": "Bijan Robinson",
+     "sample": {
+      "away_team": "",
+      "home_team": "Bijan Robinson",
+      "markets": [
+       "mvp"
+      ]
+     },
+     "start": "2026-09-27T16:59:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7623365"
+     },
+     "home": "Bo Nix",
+     "sample": {
+      "away_team": "",
+      "home_team": "Bo Nix",
+      "markets": [
+       "mvp"
+      ]
+     },
+     "start": "2026-09-27T16:59:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7623366"
+     },
+     "home": "Brock Purdy",
+     "sample": {
+      "away_team": "",
+      "home_team": "Brock Purdy",
+      "markets": [
+       "mvp"
+      ]
+     },
+     "start": "2026-09-27T16:59:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7623367"
+     },
+     "home": "Bryce Young",
+     "sample": {
+      "away_team": "",
+      "home_team": "Bryce Young",
+      "markets": [
+       "mvp"
+      ]
+     },
+     "start": "2026-09-27T16:59:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7623369"
+     },
+     "home": "Caleb Williams",
+     "sample": {
+      "away_team": "",
+      "home_team": "Caleb Williams",
+      "markets": [
+       "mvp"
+      ]
+     },
+     "start": "2026-09-27T16:59:00Z",
      "type": "outright"
     }
    ]
