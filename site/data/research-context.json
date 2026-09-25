@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-25T14:36:24Z",
+  "updatedAt": "2026-09-25T15:08:25Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-09-25T14:01Z",
+              "reportedAt": "2026-09-25T14:56Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-25T14:01Z",
+              "reportedAt": "2026-09-25T14:57Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2537,6 +2537,15 @@
           "name": "Green Bay Packers",
           "players": [
             {
+              "id": "4428037",
+              "name": "Jacob Monk",
+              "position": "C",
+              "status": "Questionable",
+              "injury": "Undisclosed",
+              "reportedAt": "2026-09-25T14:56Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4428037/jacob-monk"
+            },
+            {
               "id": "4429023",
               "name": "MarShawn Lloyd",
               "position": "RB",
@@ -2751,15 +2760,6 @@
               "injury": null,
               "reportedAt": "2026-09-22T00:31Z",
               "source": "https://www.espn.com/nfl/player/_/id/4686906/lukas-van-ness"
-            },
-            {
-              "id": "4259305",
-              "name": "Bo Melton",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-21T23:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4259305/bo-melton"
             }
           ]
         },
@@ -4407,7 +4407,7 @@
               "id": "4869645",
               "name": "Caleb Douglas",
               "position": "WR",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Ankle",
               "reportedAt": "2026-09-24T20:58Z",
               "source": "https://www.espn.com/nfl/player/_/id/4869645/caleb-douglas"
@@ -5527,10 +5527,19 @@
           "name": "New York Jets",
           "players": [
             {
+              "id": "3925345",
+              "name": "Minkah Fitzpatrick",
+              "position": "S",
+              "status": "Out",
+              "injury": "Groin",
+              "reportedAt": "2026-09-25T14:58Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3925345/minkah-fitzpatrick"
+            },
+            {
               "id": "4700136",
               "name": "Kiko Mauigoa",
               "position": "LB",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Quadriceps",
               "reportedAt": "2026-09-25T00:27Z",
               "source": "https://www.espn.com/nfl/player/_/id/4700136/kiko-mauigoa"
@@ -5548,7 +5557,7 @@
               "id": "4808766",
               "name": "Mason Taylor",
               "position": "TE",
-              "status": "Doubtful",
+              "status": "Out",
               "injury": "Thumb",
               "reportedAt": "2026-09-24T22:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/4808766/mason-taylor"
@@ -5561,15 +5570,6 @@
               "injury": "Finger",
               "reportedAt": "2026-09-24T20:19Z",
               "source": "https://www.espn.com/nfl/player/_/id/4597500/adonai-mitchell"
-            },
-            {
-              "id": "3925345",
-              "name": "Minkah Fitzpatrick",
-              "position": "S",
-              "status": "Questionable",
-              "injury": "Groin",
-              "reportedAt": "2026-09-24T00:05Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3925345/minkah-fitzpatrick"
             },
             {
               "id": "4362094",
@@ -7366,38 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "19",
-          "name": "Malik Nabers",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-09-24T20:57:28Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4595348/malik-nabers"
-        },
-        {
-          "teamId": "10",
-          "name": "Micah Robinson",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-09-24T20:57:28Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4695280/micah-robinson"
-        },
-        {
-          "teamId": "6",
-          "name": "Malik Hooker",
-          "from": "Doubtful",
-          "to": "Out",
-          "observedAt": "2026-09-24T21:34:21Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3121415/malik-hooker"
-        },
-        {
-          "teamId": "6",
-          "name": "DeMarvion Overshown",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-09-24T21:34:21Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4362088/demarvion-overshown"
-        },
-        {
           "teamId": "34",
           "name": "Logan Hall",
           "from": "Questionable",
@@ -7764,11 +7732,43 @@
           "to": "Questionable",
           "observedAt": "2026-09-25T11:58:02Z",
           "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
+        },
+        {
+          "teamId": "15",
+          "name": "Caleb Douglas",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-09-25T15:08:25Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4869645/caleb-douglas"
+        },
+        {
+          "teamId": "20",
+          "name": "Minkah Fitzpatrick",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-09-25T15:08:25Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3925345/minkah-fitzpatrick"
+        },
+        {
+          "teamId": "20",
+          "name": "Kiko Mauigoa",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-09-25T15:08:25Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4700136/kiko-mauigoa"
+        },
+        {
+          "teamId": "20",
+          "name": "Mason Taylor",
+          "from": "Doubtful",
+          "to": "Out",
+          "observedAt": "2026-09-25T15:08:25Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4808766/mason-taylor"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-25T14:36:24Z",
-      "lastAttemptAt": "2026-09-25T14:36:24Z",
+      "checkedAt": "2026-09-25T15:08:25Z",
+      "lastAttemptAt": "2026-09-25T15:08:25Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-25T14:36:24Z",
-      "lastAttemptAt": "2026-09-25T14:36:24Z",
+      "checkedAt": "2026-09-25T15:08:25Z",
+      "lastAttemptAt": "2026-09-25T15:08:25Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
