@@ -52,7 +52,7 @@ SLOT_TOLERANCE = timedelta(minutes=40)     # a run that fires this far from a sl
 PUBLISH_MARGIN = timedelta(minutes=5)      # nothing is published on a game this close to kickoff
 KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'favorite')
 WHITELIST = ('research/', 'data/odds/', 'data/prop-odds/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
-             'data/paper/', 'data/hoops/')
+             'data/paper/', 'data/hoops/', 'data/featured.json')
 BOOK_SLUG = {'DraftKings': 'dk', 'FanDuel': 'fd', 'BetMGM': 'mgm', 'Caesars': 'czr', 'BetRivers': 'br',
              'ESPN BET': 'espnbet', 'Fanatics': 'fan'}
 VOLUME = {'recYds': 'targets', 'rec': 'targets', 'rushYds': 'carries', 'car': 'carries',
@@ -121,7 +121,8 @@ def git(*args, cwd=ROOT, check=True):
     return result
 
 
-LEFTOVER = ('data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/')
+LEFTOVER = ('data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/',
+            'data/featured.json')
 
 
 def sync(runner=git):
@@ -1047,6 +1048,16 @@ def allowed(path):
     return any(path == w.rstrip('/') or path.startswith(w) for w in WHITELIST)
 
 
+def pick_of_the_day(now, ctx, status, write=True):
+    """Name today's Pick of the Day (scripts/featured.py) before the push, so its card is rendered by the deploy
+    the push starts. Never fails a run."""
+    try:
+        import featured
+        status['pickOfTheDay'] = featured.choose(ctx, now, write=write, log=log)
+    except Exception as error:
+        log(f'pick of the day not chosen ({type(error).__name__}: {error})')
+
+
 def commit_push(now, slot, counts, push=True, runner=git, cwd=ROOT):
     """Commit only whitelisted paths, in two commits, then push; rebase once on rejection, never force."""
     changed = []
@@ -1298,6 +1309,7 @@ def _run(args, now, slot, kinds, status):
             x_post.save_reasons(stored)
         remember(decided, now, slot, status)
         paper_trials(now, slot, status)
+        pick_of_the_day(now, ctx, status)
         git_result = commit_push(now, slot, {'published': len(published), 'settled': len(settled), 'closed': len(closed)},
                                  push=not args.no_push)
         status['git'] = git_result
@@ -1435,11 +1447,11 @@ def requote(entry, pick, game, ctx, now, log=log):
     with the same card. Returns True when it was replaced."""
     import buffer_post
     import x_post
-    text = x_post.draft(pick, game, learning_weights(), now_quote=gates.best_now(pick, ctx))
+    text = x_post.draft(pick, game, learning_weights(), now_quote=gates.best_now(pick, ctx), featured=bool(entry.get('featured')))
     if x_post.text_hash(text) == entry.get('textHash'):
         return False
     channel = buffer_post.x_channel(wanted='keenkooks')
-    card = buffer_post.card_url(entry['id']) if entry.get('card') else None
+    card = buffer_post.card_url(entry.get('cardKey') or entry['id']) if entry.get('card') else None
     # The new post first, then the old one out: a failed create leaves the post as scheduled, and a failed delete
     # takes the new one back, so the play goes out once either way.
     new_id = buffer_post.create_post(text, channel['id'], gates.when(entry['dueAt']), card)

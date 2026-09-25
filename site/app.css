@@ -436,3 +436,8 @@ table.data a { font-weight: 600; }
 .record-units.up { color: var(--green); }
 .record-units.down { color: var(--rose); }
 .record-strip .row-meta { margin-left: auto; }
+
+/* the day's Pick of the Day leads, marked in the kitchen's amber */
+.play-featured { border-color: rgba(255, 180, 61, .55); box-shadow: 0 0 0 1px rgba(255, 180, 61, .25) inset; }
+.play-featured .play-kind { color: var(--amber); }
+.play-featured .play-kind::before { content: '★ '; }

@@ -119,7 +119,7 @@ class DailyTests(unittest.TestCase):
         first['NFL-2026-W4-m2'] = pick('m2', 'mon', title='Player Nine OVER 60.5 receiving yards', athleteId='9', market='recYds')
         post = receipts.menu(first, latest, GAMES, log, MONDAY_MORNING)
         self.assertEqual(post['text'], "🍳 TODAY'S MENU\n2 plates on the stove today:\n• Colts at Chiefs, 8:15 PM\n\n"
-                                       'Plates go out around noon.\n#NFL')
+                                       'Pick of the Day and the rest go out around noon.\n#NFL')
         self.assertNotIn('under', post['text'].lower())
         self.assertNotIn('Nine', post['text'], 'the player is not named before his post')
         self.assertEqual(post['due'].astimezone(gates.EASTERN).strftime('%H:%M'), '08:45')
@@ -128,7 +128,7 @@ class DailyTests(unittest.TestCase):
     def test_a_busy_saturday_menu_is_not_refused_as_one_long_sentence(self):
         text = ("🍳 TODAY'S MENU\n6 plates on the stove today:\n• Iowa at Michigan, 3:30 PM\n• Oklahoma at Georgia, 3:30 PM\n"
                 "• UConn at Miami (OH), 3:30 PM\n• James Madison at Old Dominion, 6:00 PM\nand 2 more on the site\n\n"
-                "Plates go out around noon.\n#CFB")
+                "Pick of the Day and the rest go out around noon.\n#CFB")
         self.assertEqual(receipts.guard({'text': text}), [])
 
     def test_the_book_fills_an_empty_evening_and_only_then(self):

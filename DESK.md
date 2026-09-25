@@ -178,8 +178,14 @@ live waits for the next run. Nothing goes out bare.
 | 8:45 AM on a game day with plays | **Today's menu**: how many plates, which games and when, never the side; plates go out around noon (card `site/img/kitchen-menu.png`) |
 | 9:00 AM the morning after a game day | **Receipts** for every play that went out, with ✅ ❌ ➖ and the day's units |
 | 9:00 AM Wednesday | **The week's receipts** by kind, with the week's dates |
-| Around noon (two hours before a kickoff earlier than 2 PM; never before 9 AM) | **The plays** |
+| Around noon (two hours before a kickoff earlier than 2 PM; never before 9 AM) | **The plays**, the Pick of the Day first |
 | 6:00 PM on a day with nothing else | **The book**: the season record of every play that went out on X (the two posted by hand on 2026-09-19 included), graded through yesterday and saying so ("Season through Sep 28"), so back-to-back quiet days never post the same words, which X refuses; with one kind of play only the season line (card `site/img/kitchen-book.png`) |
+
+**Pick of the Day** (`scripts/featured.py`, `data/featured.json`): the first run of a game day that has plays names the one
+whose calibrated chance clears its price by the most (never a parlay, never a game already started). It is named once and
+never changes. Its post leads the noon batch with the kicker "PICK OF THE DAY · TEAM PROP" and its own card
+(`cards/<id>-potd.png`, rendered by the hosted build, so a post never carries a stale copy), and the site's Today page
+leads with it, starred.
 
 **Receipts** (`scripts/receipts.py`) make it a post every day of the season. At 9:00 AM ET the morning after a
 game day, once every play that went out on X that day is settled, the receipt lists each with ✅ ❌ ➖, the day's

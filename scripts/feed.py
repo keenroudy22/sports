@@ -157,7 +157,7 @@ def render_cards(items, folder=CARDS, log=print):
                 if 'receipt' in item:
                     pick_card.render(pick_card.receipt_svg(item['receipt']), path)
                 else:
-                    pick_card.render(pick_card.svg(item['pick'], item['game'], player_side=item.get('side')), path)
+                    pick_card.render(pick_card.svg(item['pick'], item['game'], player_side=item.get('side'), featured=item.get('featured', False)), path)
             out[item['guid']] = path
         except Exception as error:
             log(f"card for {item['guid']} not rendered: {error}")
@@ -192,7 +192,12 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
     # schedules the post the moment the card is live, and never posts without one.
     import receipts
     ready = [{'guid': r['card'], 'receipt': r} for r in receipts.ready(ctx.first, ctx.latest, ctx.games, x_post.load_log(), now)]
-    cards = render_cards(card_items(ctx.first, ctx.latest, ctx.games, now, ctx.player_team) + ready, cards_folder, log) if with_cards else {}
+    plays = card_items(ctx.first, ctx.latest, ctx.games, now, ctx.player_team)
+    import featured
+    potd = featured.of_day(eastern_date(now).isoformat())
+    # The Pick of the Day gets a card of its own, under its own name, so a post can never carry a stale copy.
+    plays += [dict(item, guid=f"{item['guid']}-potd", featured=True) for item in plays if item['guid'] == potd]
+    cards = render_cards(plays + ready, cards_folder, log) if with_cards else {}
     Path(out).parent.mkdir(parents=True, exist_ok=True)
     Path(out).write_text(rss(items, cards, now), encoding='utf-8')
     log(f'{len(items)} items in the feed ({sum(1 for i in items if "pick" in i)} plays, {len(cards)} cards) -> {out}')

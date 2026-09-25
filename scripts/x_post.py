@@ -339,7 +339,7 @@ def save_reasons(reasons, path=None):
     target.write_text(json.dumps(dict(sorted(reasons.items())), indent=1, ensure_ascii=False) + '\n', encoding='utf-8')
 
 
-def draft(pick, game=None, weights=None, reason=None, now_quote=None):
+def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=False):
     """The post, the same shape every time:
 
         🍳 PLAYER PROP | TEAM PROP | FUN PARLAY   (· FAVORITE for a researched pick)
@@ -362,7 +362,7 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None):
     """
     league = (game or {}).get('league') or str(pick.get('id', '')).split('-')[0]
     tail = ' '.join(x for x in (PLAYBOOK, TAGS.get(league, '')) if x)
-    head = f"🍳 {pick_card.kicker(pick)}"
+    head = f"🍳 {pick_card.kicker(pick, featured)}"
     price = f"{int(pick['odds']):+d} at {pick.get('book')} · {pick_card.units_label(pick)}"
     if pick_card.play_kind(pick) == 'parlay':
         legs = [str(l.get('title') or '') for l in pick.get('legs') or [] if l.get('title')]

@@ -212,13 +212,15 @@ def play_kind(pick):
     return 'player' if pick.get('athleteId') or pick.get('market') else 'team'
 
 
-def kicker(pick):
-    """The label every card and every post leads with; a researched favorite says so."""
+def kicker(pick, featured=False):
+    """The label every card and every post leads with; the day's Pick of the Day and a researched favorite say so."""
     label = KINDS[play_kind(pick)]
+    if featured:
+        return f'PICK OF THE DAY · {label}'
     return f'{label} · FAVORITE' if pick.get('favorite') is True and play_kind(pick) != 'parlay' else label
 
 
-def svg(pick, game=None, record=None, when=None, player_side=None, identities=None, avatar=None):
+def svg(pick, game=None, record=None, when=None, player_side=None, identities=None, avatar=None, featured=False):
     """The card. Every number on it is a field of the pick or the record handed in."""
     chef = avatar_uri(CHEF) if avatar is None else avatar
     side = side_for(pick, game, player_side)
@@ -231,7 +233,7 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
     title = display_title(pick, game)
     price = f"{int(pick['odds']):+d}" if isinstance(pick.get('odds'), (int, float)) else ''
     book = pick.get('book') or ''
-    label = kicker(pick)
+    label = kicker(pick, featured)
     parlay = play_kind(pick) == 'parlay'
     legs = [str(l.get('title') or '') for l in (pick.get('legs') or []) if l.get('title')]
     if parlay:

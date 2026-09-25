@@ -636,11 +636,13 @@ def board_picks(first, latest, by_id, identities):
 
     A pick is a favorite if it was one when first published; a later report cannot promote or demote it.
     """
+    import featured as featured_store
     import pick_card
     try:
         reasons = json.loads((ROOT / 'data' / 'x-reasons.json').read_text(encoding='utf-8'))
     except (OSError, ValueError):
         reasons = {}
+    named = {entry.get('id') for entry in featured_store.load().values() if isinstance(entry, dict)}   # Picks of the Day
     rows = []
     for key, pick in first.items():
         recent = latest.get(key, {})
@@ -649,6 +651,7 @@ def board_picks(first, latest, by_id, identities):
                      # The same title and one-line reason the play's X post carries, so the site reads like the post.
                      'displayTitle': pick_card.display_title(pick, game) if game and not pick.get('historicalImport') else pick.get('title'),
                      'reason': reasons.get(key) if isinstance(reasons, dict) and isinstance(reasons.get(key), str) else None,
+                     'featured': key in named,
                      'riskUnits': pick.get('riskUnits'), 'modelLean': pick.get('modelLean') is True,
                      'earlyExit': recent.get('earlyExit') is True,
                      'player': pick.get('player'), 'athleteId': pick.get('athleteId'), 'position': pick.get('position'),

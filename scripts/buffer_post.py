@@ -217,6 +217,8 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     weights = learning.load_policy().get('reasonWeights')
     posted = {p['id'] for p in log_book.get('posts', [])}
     today = eastern_date(now)
+    import featured as featured_store
+    potd = featured_store.of_day(today.isoformat())     # the day's Pick of the Day: first, its own card
     opens = window_open(today)
     plays = []
     for key, pick in first.items():
@@ -230,7 +232,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
             continue
         game = games.get((merged.get('gameIds') or [None])[0])
         now_quote = (quotes or {}).get(key)
-        text = x_post.draft(merged, game, weights, now_quote=now_quote)
+        text = x_post.draft(merged, game, weights, now_quote=now_quote, featured=key == potd)
         problems = x_post.guard(text, merged, x_post.load_reasons().get(key), now_quote)
         if problems:
             if refused is not None:
@@ -238,7 +240,8 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
             continue
         kickoff = gates.when(starts[0])
         noon = datetime(today.year, today.month, today.day, POST_AT[0], POST_AT[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)
-        plays.append((max(min(noon, kickoff - EARLY_LEAD), opens), ORDER[pick_card.play_kind(merged)], kickoff - feed.LEAD, key, text, 'play', key))
+        plays.append((max(min(noon, kickoff - EARLY_LEAD), opens), -1 if key == potd else ORDER[pick_card.play_kind(merged)],
+                      kickoff - feed.LEAD, key, text, 'play', f'{key}-potd' if key == potd else key))
     order = {'menu': -2, 'receipt': -1, 'book': -1}
     for post in receipts.house_posts(first, latest, games, log_book, now):
         if post['key'] in posted:
@@ -282,6 +285,10 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             continue
         entry = {'id': guid, 'postedAt': gates.stamp(now), 'dueAt': gates.stamp(due), 'bufferPostId': post_id,
                  'textHash': x_post.text_hash(text), 'kind': f'buffer:{kind}', 'card': bool(image)}
+        if image and card_key and card_key != guid:
+            entry['cardKey'] = card_key            # a Pick of the Day's own card; a requote keeps it
+        if str(card_key or '').endswith('-potd'):
+            entry['featured'] = True
         if kind == 'play':
             entry['reasonKind'] = x_post.reason_kind(x_post.reason_in(text))      # what learning compares engagement by
         log_book.setdefault('posts', []).append(entry)

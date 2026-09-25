@@ -79,9 +79,10 @@
   const numberText = p => typeof p.projection === 'number' && typeof p.line === 'number' ? `Our number ${plainNumber(p.projection)} vs the ${plainNumber(p.line)}` : '';
   const playCard = p => {
     const st = C.pickState(p);
+    const kind = `${p.featured ? 'Pick of the Day · ' : ''}${playKind(p)}`;
     const legs = (p.legs || []).map(l => typeof l === 'string' ? l : l.title || '').filter(Boolean);
-    return `<button class="play" type="button" data-pick="${esc(p.id)}" style="--rail:${esc(p.color || 'var(--mint)')}">
-      <span class="play-top"><span class="play-kind">${esc(playKind(p))}${p.favorite && !legs.length ? ' · Favorite' : ''}</span><span class="pill pill-${st.tone}">${esc(st.word)}</span></span>
+    return `<button class="play${p.featured ? ' play-featured' : ''}" type="button" data-pick="${esc(p.id)}" style="--rail:${esc(p.color || 'var(--mint)')}">
+      <span class="play-top"><span class="play-kind">${esc(kind)}${p.favorite && !legs.length && !p.featured ? ' · Favorite' : ''}</span><span class="pill pill-${st.tone}">${esc(st.word)}</span></span>
       <span class="play-title">${esc(p.displayTitle || p.title || p.player)}</span>
       ${legs.length ? `<span class="play-legs">${legs.map(l => `<span>• ${esc(l)}</span>`).join('')}</span>` : ''}
       <span class="play-price">${p.odds == null ? 'price not recorded' : `<span class="num">${odds(p.odds)}</span> at ${esc(p.book || '')}`} · ${esc(unitsText(p))}</span>
@@ -212,7 +213,7 @@
     const gaps = now.filter(g => g.v2 && g.lean && !g.fcs).sort((a, b) => disagreement(b) - disagreement(a)).slice(0, 8);
     const picks = data.picks.filter(inLeague);
     const live = picks.filter(p => !p.result && !p.historicalImport)
-      .sort((a, b) => (C.isOpen(b) - C.isOpen(a)) || String(a.kickoff).localeCompare(String(b.kickoff)));
+      .sort((a, b) => (Boolean(b.featured) - Boolean(a.featured)) || (C.isOpen(b) - C.isOpen(a)) || String(a.kickoff).localeCompare(String(b.kickoff)));
     const forecasts = now.filter(g => g.v2).length;
     const todayLabel = dayLabel(new Date().toISOString());
     const title = !first ? 'No games scheduled' : dayLabel(first.kickoff) === todayLabel ? todayLabel : `Next slate: ${dayLabel(first.kickoff)}`;

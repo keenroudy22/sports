@@ -360,6 +360,26 @@ class PrecheckTests(unittest.TestCase):
         entry, calls, alerted = attempt(fail_delete={'old', 'new'})
         alerted.assert_called_once()
 
+    def test_a_requote_keeps_the_pick_of_the_day_label_and_card(self):
+        import buffer_post
+        from types import SimpleNamespace
+        from unittest import mock
+        now = datetime(2026, 9, 26, 15, 0, tzinfo=timezone.utc)
+        pick = {'id': 'CFB-2026-W4-x', 'title': 'Iowa at Michigan over 38.5', 'marketType': 'total', 'line': 38.5, 'odds': -105,
+                'book': 'ESPN BET', 'direction': 'over', 'gameIds': ['g'], 'projection': 47.1}
+        entry = {'id': 'CFB-2026-W4-x', 'bufferPostId': 'old', 'dueAt': '2026-09-26T16:00:00Z', 'card': True, 'textHash': 'stale',
+                 'cardKey': 'CFB-2026-W4-x-potd', 'featured': True}
+        created = []
+        with mock.patch.object(buffer_post, 'x_channel', return_value={'id': 'ch'}), \
+                mock.patch.object(buffer_post, 'create_post', side_effect=lambda *a, **k: created.append(a) or 'new'), \
+                mock.patch.object(buffer_post, 'delete_post'), \
+                mock.patch.object(run.gates, 'best_now', return_value=('FanDuel', 39.5, -110)):
+            run.requote(entry, pick, {'id': 'g', 'league': 'CFB'}, SimpleNamespace(), now, log=lambda *_: None)
+        text, _, _, card = created[0]
+        self.assertTrue(text.startswith('🍳 PICK OF THE DAY · TEAM PROP'))
+        self.assertIn('Now: 39.5 at -110, FanDuel', text)
+        self.assertEqual(card, 'https://keenroudy.com/sports/data/cards/CFB-2026-W4-x-potd.png')
+
 
 class AlertTests(unittest.TestCase):
     def test_alerts_push_once_per_six_hours_and_never_without_a_topic(self):
