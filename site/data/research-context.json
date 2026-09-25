@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-25T15:08:25Z",
+  "updatedAt": "2026-09-25T15:31:44Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-09-25T14:56Z",
+              "reportedAt": "2026-09-25T15:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-25T14:57Z",
+              "reportedAt": "2026-09-25T15:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5527,6 +5527,24 @@
           "name": "New York Jets",
           "players": [
             {
+              "id": "4808766",
+              "name": "Mason Taylor",
+              "position": "TE",
+              "status": "Out",
+              "injury": "Thumb",
+              "reportedAt": "2026-09-25T15:17Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4808766/mason-taylor"
+            },
+            {
+              "id": "4597500",
+              "name": "Adonai Mitchell",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Finger",
+              "reportedAt": "2026-09-25T15:15Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4597500/adonai-mitchell"
+            },
+            {
               "id": "3925345",
               "name": "Minkah Fitzpatrick",
               "position": "S",
@@ -5552,24 +5570,6 @@
               "injury": "Back",
               "reportedAt": "2026-09-25T00:13Z",
               "source": "https://www.espn.com/nfl/player/_/id/4035537/kene-nwangwu"
-            },
-            {
-              "id": "4808766",
-              "name": "Mason Taylor",
-              "position": "TE",
-              "status": "Out",
-              "injury": "Thumb",
-              "reportedAt": "2026-09-24T22:12Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4808766/mason-taylor"
-            },
-            {
-              "id": "4597500",
-              "name": "Adonai Mitchell",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Finger",
-              "reportedAt": "2026-09-24T20:19Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4597500/adonai-mitchell"
             },
             {
               "id": "4362094",
@@ -7137,6 +7137,15 @@
           "name": "Washington Commanders",
           "players": [
             {
+              "id": "4360635",
+              "name": "Chig Okonkwo",
+              "position": "TE",
+              "status": "Doubtful",
+              "injury": "Hamstring",
+              "reportedAt": "2026-09-25T15:21Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4360635/chig-okonkwo"
+            },
+            {
               "id": "4426348",
               "name": "Jayden Daniels",
               "position": "QB",
@@ -7171,15 +7180,6 @@
               "injury": null,
               "reportedAt": "2026-09-25T00:33Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685246/kaytron-allen"
-            },
-            {
-              "id": "4360635",
-              "name": "Chig Okonkwo",
-              "position": "TE",
-              "status": "Questionable",
-              "injury": "Hamstring",
-              "reportedAt": "2026-09-24T16:39Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4360635/chig-okonkwo"
             },
             {
               "id": "4685030",
@@ -7365,14 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "34",
-          "name": "Logan Hall",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-09-24T21:34:21Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4360189/logan-hall"
-        },
         {
           "teamId": "12",
           "name": "Felix Anudike-Uzomah",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-09-25T15:08:25Z",
           "source": "https://www.espn.com/nfl/player/_/id/4808766/mason-taylor"
+        },
+        {
+          "teamId": "28",
+          "name": "Chig Okonkwo",
+          "from": "Questionable",
+          "to": "Doubtful",
+          "observedAt": "2026-09-25T15:31:44Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4360635/chig-okonkwo"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-25T15:08:25Z",
-      "lastAttemptAt": "2026-09-25T15:08:25Z",
+      "checkedAt": "2026-09-25T15:31:44Z",
+      "lastAttemptAt": "2026-09-25T15:31:44Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-25T15:08:25Z",
-      "lastAttemptAt": "2026-09-25T15:08:25Z",
+      "checkedAt": "2026-09-25T15:31:44Z",
+      "lastAttemptAt": "2026-09-25T15:31:44Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
