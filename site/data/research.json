@@ -8311,5 +8311,52 @@
         "risk": "The chance is uncalibrated. A player line depends on a few touches. Two games this season. The role was settled by last season. A player who does not play is voided by the book's rule. A player who leaves with an injury is graded. Confidence is 2 of 10."
       }
     ]
+  },
+  {
+    "league": "NFL",
+    "publishedAt": "2026-09-25T03:30:04Z",
+    "targetWeek": 3,
+    "summary": "11:30 PM ET run, published at 11:30 PM ET. Settled 1: Jordan Love UNDER 2.5 carries win. Nothing to close. Nothing published. Screened and passed on 7: Titans at Giants over 38.5 (one_book); Seahawks at Commanders over 40.5 (one_book); Patriots at Jaguars under 45.5 (one_book); Ravens at Cowboys under 52.5 (one_book); Eagles at Bears over 41.5 (one_book); Texans at Colts over 42.5 (one_book); Raiders at Saints under 43.5 (one_book). odds_api.py: CFB: skipped (3 captures already today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "settled",
+        "favorite": false,
+        "modelLean": true,
+        "position": "QB",
+        "athleteId": "4036378",
+        "market": "car",
+        "line": 2.5,
+        "direction": "under",
+        "gameIds": [
+          "NFL-401872948"
+        ],
+        "book": "DraftKings",
+        "odds": -111,
+        "projection": 1.2,
+        "edge": "v2 carries 1.2 (80% range 0 to 3.7). Chance of under 2.5: 74.7% (uncalibrated: no graded history against a line yet), against 52.6% break-even at -111: +22.1 points, +0.421u per unit.",
+        "cutoff": "UNDER 2.5 at -111 or better. Closed to new entries at 2 or lower, or at -126 or worse at 2.5.",
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-23T20:44:16Z",
+        "quotedAt": "2026-09-24T20:42:27Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 4:42 PM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; kickoff is inside three hours.",
+        "expiresAt": "2026-09-24T22:50:00Z",
+        "title": "Jordan Love UNDER 2.5 carries",
+        "id": "NFL-2026-W3-love-under-2-5-car-dk",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401872948",
+          "https://api.sharpapi.io/api/v1/odds"
+        ],
+        "why": "Prop lean on our number alone: our projection is 1.2 against 2.5 and the under reads 74.7% on the raw curve, which has no graded history against a line yet, so the true chance is lower than that. Last 10 games: 6 of 10 under 2.5. Role: 1st of 1 GB QBs by projected carries, 1.2 a game. Defense: ATL allows 2.5 carries a game to QBs, 4 of 32 this season (1 is stingiest).",
+        "risk": "The chance is uncalibrated. A player line depends on a few touches. Two games this season. The role was settled by last season. A player who does not play is voided by the book's rule. A player who leaves with an injury is graded. Confidence is 2 of 10.",
+        "result": "win",
+        "actual": "Jordan Love: 1 carries",
+        "settledAt": "2026-09-25T03:30:04Z",
+        "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401872948",
+        "actualValue": 1
+      }
+    ]
   }
 ]
