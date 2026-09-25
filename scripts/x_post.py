@@ -344,7 +344,7 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
 
         🍳 PLAYER PROP | TEAM PROP | FUN PARLAY   (· FAVORITE for a researched pick)
         the play
-        price at book · units
+        price at book
 
         Our number n vs the line
         one plain reason from the pick
@@ -363,7 +363,7 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
     league = (game or {}).get('league') or str(pick.get('id', '')).split('-')[0]
     tail = ' '.join(x for x in (PLAYBOOK, TAGS.get(league, '')) if x)
     head = f"🍳 {pick_card.kicker(pick, featured)}"
-    price = f"{int(pick['odds']):+d} at {pick.get('book')} · {pick_card.units_label(pick)}"
+    price = f"{int(pick['odds']):+d} at {pick.get('book')}"       # no units on X (the owner's call, 2026-09-24)
     if pick_card.play_kind(pick) == 'parlay':
         legs = [str(l.get('title') or '') for l in pick.get('legs') or [] if l.get('title')]
         count = f"{len(pick.get('legs') or [])} legs · {price}"

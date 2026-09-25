@@ -181,6 +181,12 @@ live waits for the next run. Nothing goes out bare.
 | Around noon (two hours before a kickoff earlier than 2 PM; never before 9 AM) | **The plays**, the Pick of the Day first |
 | 6:00 PM on a day with nothing else | **The book**: the season record of every play that went out on X (the two posted by hand on 2026-09-19 included), graded through yesterday and saying so ("Season through Sep 28"), so back-to-back quiet days never post the same words, which X refuses; with one kind of play only the season line (card `site/img/kitchen-book.png`) |
 
+**What's on the plate** (owner, 2026-09-24): an NFL player prop's card shows the player's ESPN headshot, a team prop
+the teams' logos (a total both, a spread its side), a parlay and the house cards the chef. Images are fetched when
+the card is rendered and embedded; a failed fetch falls back to the chef. The photos are ESPN's and the logos the
+teams' marks: `KEENROUDY_CARD_ART=0` (or `pick_card.CARD_ART = False`) turns them all off. No units on X: posts and
+cards show the price and the book only; the site's record still counts units.
+
 **Pick of the Day** (`scripts/featured.py`, `data/featured.json`): the first run of a game day that has plays names the one
 whose calibrated chance clears its price by the most (never a parlay, never a game already started). It is named once and
 never changes. Its post leads the noon batch with the kicker "PICK OF THE DAY · TEAM PROP" and its own card

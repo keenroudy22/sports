@@ -2,6 +2,7 @@ import os
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
@@ -17,10 +18,11 @@ GAME = {'league': 'CFB', 'kickoff': '2026-09-26T19:30Z',
 class CardTests(unittest.TestCase):
     def test_the_svg_carries_the_picks_fields_the_kitchen_and_the_teams_colours(self):
         text = pick_card.svg(PICK, GAME, {'wins': 3, 'losses': 1, 'units': 1.98})
-        for needle in ('Iowa at Michigan under 38.5', '-105', 'FanDuel', 'Our number 31.2 vs the 38.5', 'FAVORITE', 'KOOK’N',
+        for needle in ('>Iowa at Michigan<', '>under 38.5<', '-105', 'FanDuel', 'Our number 31.2 vs the 38.5', 'FAVORITE', 'KOOK’N',
                        'TODAY’S PLATE', 'Served at', 'Iowa at Michigan', 'Sat 3:30 PM ET', 'Record 3-1', '+1.98u',
-                       'keenroudy.com/sports', 'Graded in public', 'Entertainment only. Not advice.', '· 1 unit'):
+                       'keenroudy.com/sports', 'Graded in public', 'Entertainment only. Not advice.'):
             self.assertIn(needle, text, needle)
+        self.assertNotIn(' unit', text, 'no units on X, the post or the card')
         self.assertIn('#00274c', text, "a total wears the home team's colour")
         self.assertIn('#ffcb05', text, 'with its alternate as the accent')
         self.assertIn('#231f20', text, "and the away team's colour at the edge")
@@ -31,13 +33,38 @@ class CardTests(unittest.TestCase):
         self.assertIn('>TEAM PROP<', pick_card.svg(dict(PICK, favorite=False, modelLean=True)))
         self.assertIn('>PLAYER PROP<', pick_card.svg(dict(PICK, favorite=False, modelLean=True, athleteId='1')))
 
+    def test_a_player_prop_wears_his_photo_a_team_prop_the_logos_a_parlay_the_chef(self):
+        asked = []
+        fetch = lambda url: asked.append(url) or f'data:image/png;base64,{len(asked)}'
+        nfl = {'league': 'NFL', 'away': {'id': '1', 'abbreviation': 'ATL'}, 'home': {'id': '9', 'abbreviation': 'GB'}}
+        prop = dict(PICK, athleteId='4241389', market='rec', title='Drake London under 5.5 receptions')
+        self.assertEqual(pick_card.artwork(prop, nfl, fetch), {'kind': 'photo', 'uri': 'data:image/png;base64,1'})
+        self.assertEqual(asked[-1], 'https://a.espncdn.com/i/headshots/nfl/players/full/4241389.png')
+        total = pick_card.artwork(dict(PICK, athleteId=None), nfl, fetch)
+        self.assertEqual((total['kind'], len(total['uris'])), ('logos', 2))
+        self.assertEqual(asked[-2:], ['https://a.espncdn.com/i/teamlogos/nfl/500/atl.png', 'https://a.espncdn.com/i/teamlogos/nfl/500/gb.png'])
+        spread = pick_card.artwork(dict(PICK, athleteId=None, marketType='spread', direction='home'), dict(GAME, league='CFB'), fetch)
+        self.assertEqual(len(spread['uris']), 1, "a spread wears its side's logo")
+        self.assertIn('/ncaa/500/', asked[-1])
+        self.assertIsNone(pick_card.artwork({'legs': [{'title': 'x'}], 'parlayType': 'longshot'}, nfl, fetch), 'a parlay keeps the chef')
+        self.assertIsNone(pick_card.artwork(prop, nfl, lambda url: None), 'a failed fetch keeps the chef')
+        with mock.patch.object(pick_card, 'CARD_ART', False):
+            self.assertIsNone(pick_card.artwork(prop, nfl, fetch), 'the switch turns every picture off')
+        photo = pick_card.svg(prop, nfl, art={'kind': 'photo', 'uri': 'data:image/png;base64,PHOTO'})
+        self.assertIn('base64,PHOTO', photo)
+        self.assertNotIn(pick_card.avatar_uri(pick_card.CHEF)[:120], photo, 'the chef steps aside for the player')
+        logos = pick_card.svg(PICK, GAME, art={'kind': 'logos', 'uris': ['data:image/png;base64,AWAY', 'data:image/png;base64,HOME']})
+        self.assertLess(logos.index('base64,AWAY'), logos.index('base64,HOME'), 'away on the left, home on the right, as the title reads')
+        self.assertIn(pick_card.avatar_uri(pick_card.CHEF)[:120], pick_card.svg(PICK, GAME), 'no art, the chef')
+
     def test_a_parlay_card_lists_its_legs_in_the_same_frame(self):
         ticket = {'title': '3-leg longshot at DraftKings', 'parlayType': 'longshot', 'odds': 650, 'book': 'DraftKings', 'confidence': 1, 'riskUnits': 0.25,
                   'legs': [{'title': 'Bills at Lions over 44.5'}, {'title': 'Jets +3'}, {'title': 'Player Seven over 4.5 receptions'}]}
         text = pick_card.svg(ticket, GAME)
         for needle in ('FUN PARLAY', '3-leg parlay', '• Bills at Lions over 44.5', '• Jets +3', '• Player Seven over 4.5 receptions',
-                       '+650', 'DraftKings', '· ¼ unit', 'Served at', 'KOOK’N'):
+                       '+650', 'DraftKings', 'Served at', 'KOOK’N'):
             self.assertIn(needle, text, needle)
+        self.assertNotIn(' unit', text)
         many = pick_card.svg(dict(ticket, legs=[{'title': f'Leg {i}'} for i in range(7)]), GAME)
         self.assertIn('and 3 more', many, 'five legs fit; past that, four and a count')
         self.assertEqual(pick_card.play_kind(ticket), 'parlay')
@@ -92,7 +119,8 @@ class CardTests(unittest.TestCase):
 
     def test_long_titles_wrap_to_two_lines_and_only_then_trim(self):
         self.assertEqual(pick_card.title_lines('Courtland Sutton OVER 3.5 receptions'), ['Courtland Sutton', 'OVER 3.5 receptions'])
-        self.assertEqual(pick_card.title_lines('Iowa at Michigan OVER 38.5'), ['Iowa at Michigan OVER 38.5'])
+        self.assertEqual(pick_card.title_lines('Iowa at Michigan OVER 38.5'), ['Iowa at Michigan', 'OVER 38.5'], 'long enough to reach the plate: two lines')
+        self.assertEqual(pick_card.title_lines('Navy at UAB over 51.5'), ['Navy at UAB over 51.5'])
         text = pick_card.svg(dict(PICK, title='Courtland Sutton OVER 3.5 receptions', athleteId='4', market='rec'))
         self.assertIn('>Courtland Sutton<', text)
         self.assertIn('>OVER 3.5 receptions<', text)

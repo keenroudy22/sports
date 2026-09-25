@@ -157,7 +157,8 @@ def render_cards(items, folder=CARDS, log=print):
                 if 'receipt' in item:
                     pick_card.render(pick_card.receipt_svg(item['receipt']), path)
                 else:
-                    pick_card.render(pick_card.svg(item['pick'], item['game'], player_side=item.get('side'), featured=item.get('featured', False)), path)
+                    pick_card.render(pick_card.svg(item['pick'], item['game'], player_side=item.get('side'), featured=item.get('featured', False),
+                                                   art=pick_card.artwork(item['pick'], item['game'])), path)
             out[item['guid']] = path
         except Exception as error:
             log(f"card for {item['guid']} not rendered: {error}")

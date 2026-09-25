@@ -131,13 +131,76 @@ def badge(x, y, r, uri, ring):
             f'<circle cx="{x}" cy="{y}" r="{r}" fill="none" stroke="{ring}" stroke-width="4"/>')
 
 
-def plate(cx, cy, uri, light):
-    """The plate every card serves on, with the chef in it: the cutout scaled past the rim so the edges of the
-    source picture (the hat's top, the shoulders) fall outside, and the rim drawn over it."""
+# What sits on the plate: the player's photo on a player prop, the teams' logos on a team prop, the chef on a parlay
+# and on anything whose image cannot be fetched. The photos are ESPN's and the logos are the teams' marks; set
+# KEENROUDY_CARD_ART=0 (or CARD_ART = False) to serve every card with the chef again.
+CARD_ART = os.environ.get('KEENROUDY_CARD_ART', '1') != '0'
+HEADSHOT = 'https://a.espncdn.com/i/headshots/nfl/players/full/{athlete}.png'
+LOGO = {'NFL': 'https://a.espncdn.com/i/teamlogos/nfl/500/{abbr}.png', 'CFB': 'https://a.espncdn.com/i/teamlogos/ncaa/500/{id}.png'}
+
+
+def fetch_data_uri(url, timeout=10):
+    """An image by URL as a data URI, so the rendered card never depends on the network; None on any failure."""
+    import base64
+    import urllib.request
+    try:
+        with urllib.request.urlopen(url, timeout=timeout) as response:
+            kind = response.headers.get('Content-Type', '')
+            body = response.read()
+    except Exception:
+        return None
+    if not kind.startswith('image/') or len(body) < 200:
+        return None
+    return f'data:{kind.split(";")[0]};base64,' + base64.b64encode(body).decode('ascii')
+
+
+def logo_url(team, league):
+    if league == 'NFL' and team.get('abbreviation'):
+        return LOGO['NFL'].format(abbr=str(team['abbreviation']).lower())
+    if league == 'CFB' and team.get('id'):
+        return LOGO['CFB'].format(id=team['id'])
+    return None
+
+
+def artwork(pick, game, fetch=None):
+    """{'kind': 'photo', 'uri'} for an NFL player prop, {'kind': 'logos', 'uris'} for a team prop (the side's logo
+    on a spread, both teams' on a total), or None for the chef: a parlay, a failed fetch, or the switch off."""
+    if not CARD_ART or not game or play_kind(pick) == 'parlay':
+        return None
+    fetch = fetch or fetch_data_uri
+    league = game.get('league') or str(pick.get('id', '')).split('-')[0]
+    if play_kind(pick) == 'player':
+        if league != 'NFL' or not pick.get('athleteId'):
+            return None
+        uri = fetch(HEADSHOT.format(athlete=pick['athleteId']))
+        return {'kind': 'photo', 'uri': uri} if uri else None
+    direction = str(pick.get('direction') or '').lower()
+    sides = [direction] if pick.get('marketType') == 'spread' and direction in ('home', 'away') else ['away', 'home']
+    urls = [logo_url(game.get(side) or {}, league) for side in sides]
+    uris = [fetch(url) for url in urls if url]
+    return {'kind': 'logos', 'uris': uris} if len(uris) == len(sides) and all(uris) else None
+
+
+def plate(cx, cy, uri, light, art=None):
+    """The plate every card serves on. The chef: the cutout scaled past the rim so the edges of the source picture
+    fall outside. A player: his photo standing on the rim. A team prop: the logos, side by side on a total."""
     r, size = 178, 380
     parts = [f'<circle cx="{cx}" cy="{cy}" r="215" fill="{CREAM}" fill-opacity="{0.10 if not light else 0.35}"/>',
              f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="{CREAM}" fill-opacity="{0.16 if not light else 0.45}"/>']
-    if uri:
+    kind = (art or {}).get('kind')
+    if kind == 'photo':
+        w, h = 430, 312                          # ESPN headshots are 350 by 254: shoulders on the rim, face centred
+        parts += [f'<defs><clipPath id="plate"><circle cx="{cx}" cy="{cy}" r="{r}"/></clipPath></defs>',
+                  f'<image href="{art["uri"]}" x="{cx - w // 2}" y="{cy + r - h}" width="{w}" height="{h}" clip-path="url(#plate)" preserveAspectRatio="xMidYMax meet"/>']
+    elif kind == 'logos':
+        uris = art['uris']
+        if len(uris) == 1:
+            parts.append(f'<image href="{uris[0]}" x="{cx - 120}" y="{cy - 120}" width="240" height="240" preserveAspectRatio="xMidYMid meet"/>')
+        else:
+            parts += [f'<image href="{uris[0]}" x="{cx - 150}" y="{cy - 82}" width="138" height="138" preserveAspectRatio="xMidYMid meet"/>',
+                      f'<image href="{uris[1]}" x="{cx + 12}" y="{cy - 82}" width="138" height="138" preserveAspectRatio="xMidYMid meet"/>',
+                      f'<text x="{cx}" y="{cy + 96}" fill="{INK if light else CREAM}" fill-opacity="0.8" font-size="24" font-weight="700" text-anchor="middle" letter-spacing="3">AT</text>']
+    elif uri:
         parts += [f'<defs><clipPath id="plate"><circle cx="{cx}" cy="{cy}" r="{r}"/></clipPath></defs>',
                   f'<image href="{uri}" x="{cx - 195}" y="{cy - r - 22}" width="{size}" height="{size}" clip-path="url(#plate)"/>']
     parts.append(f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="{CREAM}" stroke-opacity="{0.35 if not light else 0.6}" stroke-width="4"/>')
@@ -220,7 +283,10 @@ def kicker(pick, featured=False):
     return f'{label} · FAVORITE' if pick.get('favorite') is True and play_kind(pick) != 'parlay' else label
 
 
-def svg(pick, game=None, record=None, when=None, player_side=None, identities=None, avatar=None, featured=False):
+TEXT_WIDTH = 640     # pixels the title may use: from the left margin to short of the plate
+
+
+def svg(pick, game=None, record=None, when=None, player_side=None, identities=None, avatar=None, featured=False, art=None):
     """The card. Every number on it is a field of the pick or the record handed in."""
     chef = avatar_uri(CHEF) if avatar is None else avatar
     side = side_for(pick, game, player_side)
@@ -261,7 +327,8 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
         if record.get('units') is not None:
             record_line += f" · {record['units']:+.2f}u"
     lines = title_lines(title)
-    title_size = 66 if len(lines) == 1 and len(title) <= 24 else 56 if len(lines) == 1 else 50
+    # As big as fits beside the plate: the words end before the plate's rim, whatever the plate holds.
+    title_size = max(36, min(66 if len(lines) == 1 else 56, int(TEXT_WIDTH / (0.56 * max(len(line) for line in lines)))))
     parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">',
         '<defs>',
@@ -269,7 +336,7 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
         '</defs>',
         f'<rect width="{WIDTH}" height="{HEIGHT}" fill="url(#bg)"/>',
         # the plate the play is served on, the chef in it: the same on every card
-        *plate(WIDTH - 250, HEIGHT // 2 + 20, chef, light),
+        *plate(WIDTH - 250, HEIGHT // 2 + 20, chef, light, art),
         f'<rect x="36" y="36" width="{WIDTH - 72}" height="{HEIGHT - 72}" rx="30" fill="none" stroke="{accent}" stroke-opacity="0.55" stroke-width="3"/>',
         PAN.format(x=72, y=78, s=0.5, c=accent),
         f'<text x="140" y="116" fill="{ink}" font-size="34" font-weight="800" letter-spacing="5">KOOK’N</text>',
@@ -280,8 +347,7 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
           for i, text in enumerate(lines)],
         *(parlay_body(legs, price, book, units, ink, soft, accent, title_size) if parlay else [
         f'<text x="80" y="418" fill="{soft}" font-size="26" letter-spacing="1">Served at</text>',
-        f'<text x="80" y="470" fill="{ink}" font-size="50" font-weight="800">{esc(price)}<tspan fill="{soft}" font-size="34" font-weight="600" dx="18">{esc(book)}</tspan>'
-        f'<tspan fill="{soft}" font-size="26" font-weight="400" dx="14">· {esc(units)}</tspan></text>',
+        f'<text x="80" y="470" fill="{ink}" font-size="50" font-weight="800">{esc(price)}<tspan fill="{soft}" font-size="34" font-weight="600" dx="18">{esc(book)}</tspan></text>',
         f'<text x="80" y="530" fill="{ink}" font-size="32">{esc(ours)}</text>']),
         f'<text x="80" y="{HEIGHT - 62}" fill="{ink}" font-size="26" font-weight="700">Graded in public, win or lose. <tspan fill="{soft}" font-weight="400">keenroudy.com/sports</tspan></text>',
         f'<text x="{WIDTH - 80}" y="{HEIGHT - 62}" fill="{soft}" font-size="19" text-anchor="end">Entertainment only. Not advice.</text>',
@@ -336,7 +402,7 @@ def receipt_svg(receipt, avatar=None):
     return '\n'.join(parts)
 
 
-def title_lines(title, width=26, limit=30):
+def title_lines(title, width=26, limit=22):
     """The play on one line, or on two when it is long: a player's name above the line he is on
     ("Courtland Sutton" / "OVER 3.5 receptions"), else split at the word nearest the middle."""
     if len(title) <= limit:
@@ -362,7 +428,7 @@ def parlay_body(legs, price, book, units, ink, soft, accent, title_size):
         rows.append(f'<text x="80" y="{top + 34 * len(shown)}" fill="{soft}" font-size="24">and {len(legs) - len(shown)} more</text>')
     rows.append(f'<text x="80" y="562" fill="{soft}" font-size="26" letter-spacing="1">Served at <tspan fill="{ink}" font-size="44" '
                 f'font-weight="800" letter-spacing="0" dx="8">{esc(price)}</tspan><tspan fill="{soft}" font-size="30" font-weight="600" '
-                f'letter-spacing="0" dx="14">{esc(book)}</tspan><tspan fill="{soft}" font-size="26" letter-spacing="0" dx="14">· {esc(units)}</tspan></text>')
+                f'letter-spacing="0" dx="14">{esc(book)}</tspan></text>')
     return rows
 
 
