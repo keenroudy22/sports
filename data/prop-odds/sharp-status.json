@@ -1,29 +1,14 @@
 {
- "at": "2026-09-24T23:55:49Z",
+ "at": "2026-09-25T00:47:01Z",
  "leagues": {
   "CFB": {
-   "books": {
-    "draftkings": 277,
-    "fanduel": 219
-   },
+   "books": {},
    "eventsListed": 200,
-   "eventsMatched": 1,
-   "games": 61,
-   "marketTypes": {
-    "player_longest_passing_completion": 2,
-    "player_longest_reception": 7,
-    "player_longest_rush": 6,
-    "player_passing_attempts": 14,
-    "player_passing_completions": 13,
-    "player_passing_touchdowns": 16,
-    "player_passing_yards": 66,
-    "player_receiving_yards": 179,
-    "player_receptions": 64,
-    "player_rushing_attempts": 15,
-    "player_rushing_yards": 114
-   },
-   "requestsLeft": 51,
-   "rows": 496,
+   "eventsMatched": 0,
+   "games": 63,
+   "marketTypes": {},
+   "requestsLeft": 59,
+   "rows": 0,
    "slateGames": [
     "Army Black Knights at Temple Owls 2026-09-25T20:00Z",
     "Howard Bison at Rutgers Scarlet Knights 2026-09-25T23:00Z",
@@ -85,7 +70,9 @@
     "Arizona Wildcats at Washington State Cougars 2026-09-26T23:30Z",
     "Troy Trojans at Utah State Aggies 2026-09-26T23:30Z",
     "Houston Christian Huskies at North Texas Mean Green 2026-09-26T23:30Z",
-    "Missouri Tigers at Mississippi State Bulldogs 2026-09-26T23:45Z"
+    "Missouri Tigers at Mississippi State Bulldogs 2026-09-26T23:45Z",
+    "Florida Atlantic Owls at UL Monroe Warhawks 2026-09-27T00:00Z",
+    "Tulsa Golden Hurricane at Arkansas Razorbacks 2026-09-27T00:00Z"
    ],
    "unmatchedEvents": [
     {
@@ -278,238 +265,6 @@
       ]
      },
      "start": "2026-09-24T23:29:00Z",
-     "type": "outright"
-    }
-   ]
-  },
-  "NFL": {
-   "books": {
-    "draftkings": 252,
-    "fanduel": 361
-   },
-   "eventsListed": 200,
-   "eventsMatched": 1,
-   "games": 1,
-   "marketTypes": {
-    "player_assists": 20,
-    "player_extra_points_made": 4,
-    "player_fantasy_score": 18,
-    "player_field_goals_made": 4,
-    "player_interceptions": 9,
-    "player_kicking_points": 4,
-    "player_longest_passing_completion": 4,
-    "player_longest_reception": 12,
-    "player_longest_rush": 8,
-    "player_passing_+_rushing_yards": 4,
-    "player_passing_attempts": 4,
-    "player_passing_completions": 4,
-    "player_passing_touchdowns": 13,
-    "player_passing_yards": 33,
-    "player_receiving_yards": 183,
-    "player_receptions": 114,
-    "player_rushing_+_receiving_yards": 12,
-    "player_rushing_attempts": 12,
-    "player_rushing_yards": 94,
-    "player_sacks": 17,
-    "player_tackles": 20,
-    "player_tackles_+_assists": 20
-   },
-   "requestsLeft": 55,
-   "rows": 613,
-   "slateGames": [
-    "Atlanta Falcons at Green Bay Packers 2026-09-25T00:15Z"
-   ],
-   "unmatchedEvents": [
-    {
-     "away": "Cincinnati Bengals",
-     "external": {
-      "bet365 us": "201319557"
-     },
-     "home": "Pittsburgh Steelers",
-     "sample": {
-      "away_team": "Cincinnati Bengals",
-      "home_team": "Pittsburgh Steelers",
-      "markets": [
-       "moneyline"
-      ]
-     },
-     "start": "2026-09-24T23:41:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Baltimore Ravens",
-     "external": {
-      "bet365 us": "201319558"
-     },
-     "home": "Dallas Cowboys",
-     "sample": {
-      "away_team": "Baltimore Ravens",
-      "home_team": "Dallas Cowboys",
-      "markets": [
-       "anytime_touchdown_scorer"
-      ]
-     },
-     "start": "2026-09-24T23:41:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": null,
-     "external": {
-      "fanduel": "28041972"
-     },
-     "home": "NFL",
-     "sample": {
-      "away_team": "",
-      "home_team": "NFL",
-      "markets": [
-       "outright"
-      ]
-     },
-     "start": "2026-09-24T23:44:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "saba": "o7623369"
-     },
-     "home": "Caleb Williams",
-     "sample": {
-      "away_team": "",
-      "home_team": "Caleb Williams",
-      "markets": [
-       "mvp"
-      ]
-     },
-     "start": "2026-09-25T00:14:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "saba": "o7623370"
-     },
-     "home": "Cam Ward",
-     "sample": {
-      "away_team": "",
-      "home_team": "Cam Ward",
-      "markets": [
-       "mvp"
-      ]
-     },
-     "start": "2026-09-25T00:14:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "saba": "o7623391"
-     },
-     "home": "Sam Darnold",
-     "sample": {
-      "away_team": "",
-      "home_team": "Sam Darnold",
-      "markets": [
-       "mvp"
-      ]
-     },
-     "start": "2026-09-25T00:14:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "kalshi": "KXNFL1HSPREAD-26SEP24ATLGB-ATL11"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-25T00:15:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "kalshi": "KXNFL1QSPREAD-26SEP24ATLGB-ATL11"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-25T00:15:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "kalshi": "KXNFL2HSPREAD-26SEP24ATLGB-ATL11"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-25T00:15:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "kalshi": "KXNFL2QSPREAD-26SEP24ATLGB-ATL11"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-25T00:15:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "kalshi": "KXNFL3QSPREAD-26SEP24ATLGB-ATL11"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-25T00:15:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "kalshi": "KXNFL4QSPREAD-26SEP24ATLGB-ATL11"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-25T00:15:00Z",
      "type": "outright"
     }
    ]
