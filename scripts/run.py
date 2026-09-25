@@ -438,10 +438,26 @@ def candidates(lines, games, now):
     return out
 
 
+def readable_leg(leg, games):
+    """A leg the way a post says it: "Iowa at Michigan over 38.5", "Coastal +2.5". None when it cannot say."""
+    import pick_card
+    game = games.get(leg.get('gameId'))
+    if not game or not isinstance(leg.get('line'), (int, float)):
+        return None
+    league, side = game.get('league'), str(leg.get('side') or '').lower()
+    if leg.get('market') == 'total points' and side in ('over', 'under'):
+        return f"{pick_card.team_label(game.get('away'), league)} at {pick_card.team_label(game.get('home'), league)} {side} {pricing.fmt(float(leg['line']))}"
+    if leg.get('market') == 'point spread' and side in ('home', 'away'):
+        return f"{pick_card.team_label(game.get(side), league)} {pricing.signed(float(leg['line']))}"
+    return None
+
+
 def longshot_candidate(lines, games, now, league, exclude=()):
     ticket, reason = parlay.build(lines, now, None, LONGSHOT_TARGET, league, exclude)
     if not ticket:
         return None, reason
+    for leg in ticket['legs']:
+        leg['title'] = readable_leg(leg, games) or leg['title']
     first = games.get(ticket['gameIds'][0]) or {}
     day = eastern_date(now)
     return {'id': f"{league}-{first.get('season', day.year)}-W{first.get('week', 0)}-longshot-{day:%m%d}-{BOOK_SLUG.get(ticket['book'], slug(ticket['book']))}",
@@ -450,6 +466,7 @@ def longshot_candidate(lines, games, now, league, exclude=()):
             'correlation': 'One leg per game, so the ticket treats the legs as independent; its chance is their product.',
             'gameIds': ticket['gameIds'], '_league': league, 'book': ticket['book'], 'odds': ticket['odds'],
             'quotedAt': ticket['quotedAt'], 'quoteType': 'capture', 'confidence': 1,
+            'expiresAt': stamp(min(gates.next_slot(now), gates.when(ticket['firstKickoff']))),
             'edge': (f"Our chance {100 * ticket['fairChance']:.1f}% against {100 * ticket['breakEven']:.1f}% break-even at "
                      f"{ticket['odds']:+d}: {ticket['evPerUnit']:+.3f}u per unit staked, {parlay.STAKE}u at risk."),
             'cutoff': 'A longshot is not re-entered. It stands or falls as posted.',
@@ -1048,6 +1065,31 @@ def allowed(path):
     return any(path == w.rstrip('/') or path.startswith(w) for w in WHITELIST)
 
 
+def easy_parlay_step(ctx, games, now, records, published, decided, screened, spend=True):
+    """The day's easy player-prop parlay on an NFL Sunday (scripts/easy_parlay.py), through the same gates as the
+    longshot. Never fails a run."""
+    import easy_parlay
+    try:
+        ticket, reason = easy_parlay.candidate(ctx, games, now, log=log, spend=spend)
+    except Exception as error:
+        log(f'NFL easy parlay skipped ({type(error).__name__}: {error})')
+        return
+    if not ticket:
+        log(f'NFL easy parlay: {reason}')
+        return
+    write_prose(ticket, ctx, records)
+    ok, decisions = gates.admit(dict(ticket, league='NFL'), ctx)
+    if ok:
+        ctx.first[ticket['id']] = dict(ticket, league='NFL', publishedAt=stamp(now), kind='parlays')
+        published.append(('NFL', 'parlays', ticket))
+        decided.append(decision_record(ticket, 'NFL', 'published', [], None, now, ctx))
+        log(f"NFL easy parlay: {ticket['title']} {ticket['odds']:+d}: " + ' / '.join(l['title'] for l in ticket['legs']))
+        return
+    refusal = gates.refusals(decisions)[0]
+    decided.append(decision_record(ticket, 'NFL', 'refused', [d.rule for d in gates.refusals(decisions)], refusal.reason, now, ctx))
+    screened.append({'league': 'NFL', 'gameId': ticket['gameIds'][0], 'title': ticket['title'], 'rule': refusal.rule, 'reason': refusal.reason})
+
+
 def pick_of_the_day(now, ctx, status, write=True):
     """Name today's Pick of the Day (scripts/featured.py) before the push, so its card is rendered by the deploy
     the push starts. Never fails a run."""
@@ -1270,6 +1312,7 @@ def _run(args, now, slot, kinds, status):
                                            gates.refusals(decisions)[0].reason, now, ctx))
             screened.append({'league': league, 'gameId': ticket['gameIds'][0], 'title': ticket['title'],
                              'rule': gates.refusals(decisions)[0].rule, 'reason': gates.refusals(decisions)[0].reason})
+        easy_parlay_step(ctx, games, now, records, published, decided, screened, spend=not args.dry_run)
 
     by_league = defaultdict(lambda: ([], [], []))
     for item in settled:

@@ -187,6 +187,15 @@ the card is rendered and embedded; a failed fetch falls back to the chef. The ph
 teams' marks: `KEENROUDY_CARD_ART=0` (or `pick_card.CARD_ART = False`) turns them all off. No units on X: posts and
 cards show the price and the book only; the site's record still counts units.
 
+**The easy parlay** (`scripts/easy_parlay.py`, owner's ask 2026-09-24: "dumbed down player props for a nice parlay"): on an
+NFL day with three or more games left, the run takes DraftKings' and FanDuel's easier alternate lines (receiving and
+rushing yards, from The Odds API: two credits a game, once a day, cached four hours in `~/.config/keenroudy/alt-props/`,
+never below a 120-credit reserve, never on a rehearsal) and builds one leg per game where our projection clears the
+line with room (80%+ on our numbers, 8+ points above the price's own, priced -350 to -150, settled role, not
+questionable): three legs at one book paying +150 to +700, "Drake London 40+ receiving yards". A quarter unit, the
+longshot's gates (one of each kind a day), kept with the longshots, and never called value: our player chances
+are tuned for main lines. Every fun parlay carries an expiry (next run or first kickoff), which the longshot lacked.
+
 **Pick of the Day** (`scripts/featured.py`, `data/featured.json`): the first run of a game day that has plays names the one
 whose calibrated chance clears its price by the most (never a parlay, never a game already started). It is named once and
 never changes. Its post leads the noon batch with the kicker "PICK OF THE DAY · TEAM PROP" and its own card

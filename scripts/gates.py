@@ -639,10 +639,14 @@ def favorite_needs_reason(candidate, ctx):
 
 
 def longshot_one_per_day(candidate, ctx):
-    today = [k for k, p in published_today(ctx, candidate.get('id')) if p.get('parlayType') == 'longshot' or p.get('legs')]
+    """One fun parlay of each kind a day: the longshot (game lines) and the easy parlay (easier player lines)."""
+    kind = candidate.get('parlayType') or 'longshot'
+    today = [k for k, p in published_today(ctx, candidate.get('id'))
+             if (p.get('parlayType') or ('longshot' if p.get('legs') else None)) == kind]
+    word = 'easy parlay' if kind == 'easyProps' else 'longshot'
     if len(today) >= LONGSHOTS_PER_DAY:
-        return Decision(False, 'longshot_one_per_day', f"{today[0]} is already today's longshot")
-    return Decision(True, 'longshot_one_per_day', 'first longshot today')
+        return Decision(False, 'longshot_one_per_day', f"{today[0]} is already today's {word}")
+    return Decision(True, 'longshot_one_per_day', f'first {word} today')
 
 
 FROZEN = tuple(dict.fromkeys(integrity.PICK_FIELDS + ('legs', 'riskUnits', 'parlayType')))
