@@ -1,22 +1,29 @@
 {
- "at": "2026-09-25T09:08:00Z",
+ "at": "2026-09-25T10:47:03Z",
  "leagues": {
   "CFB": {
    "books": {
-    "fanduel": 393
+    "draftkings": 278,
+    "fanduel": 392
    },
    "eventsListed": 200,
    "eventsMatched": 3,
    "games": 70,
    "marketTypes": {
-    "player_passing_touchdowns": 18,
-    "player_passing_yards": 49,
-    "player_receiving_yards": 145,
-    "player_receptions": 40,
-    "player_rushing_yards": 141
+    "player_longest_passing_completion": 2,
+    "player_longest_reception": 7,
+    "player_longest_rush": 6,
+    "player_passing_attempts": 13,
+    "player_passing_completions": 14,
+    "player_passing_touchdowns": 24,
+    "player_passing_yards": 89,
+    "player_receiving_yards": 228,
+    "player_receptions": 62,
+    "player_rushing_attempts": 14,
+    "player_rushing_yards": 211
    },
-   "requestsLeft": 55,
-   "rows": 393,
+   "requestsLeft": 54,
+   "rows": 670,
    "slateGames": [
     "Army Black Knights at Temple Owls 2026-09-25T20:00Z",
     "Howard Bison at Rutgers Scarlet Knights 2026-09-25T23:00Z",
@@ -91,70 +98,6 @@
    ],
    "unmatchedEvents": [
     {
-     "away": "Kansas State",
-     "external": {
-      "bet365 us": "201605086"
-     },
-     "home": "Cincinnati",
-     "sample": {
-      "away_team": "Kansas State",
-      "home_team": "Cincinnati",
-      "markets": [
-       "point_spread"
-      ]
-     },
-     "start": "2026-09-25T08:02:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Nebraska",
-     "external": {
-      "bet365 us": "201605023"
-     },
-     "home": "Michigan State",
-     "sample": {
-      "away_team": "Nebraska",
-      "home_team": "Michigan State",
-      "markets": [
-       "point_spread"
-      ]
-     },
-     "start": "2026-09-25T08:02:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Oklahoma State",
-     "external": {
-      "bet365 us": "201605128"
-     },
-     "home": "West Virginia",
-     "sample": {
-      "away_team": "Oklahoma State",
-      "home_team": "West Virginia",
-      "markets": [
-       "point_spread"
-      ]
-     },
-     "start": "2026-09-25T08:02:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "TCU",
-     "external": {
-      "bet365 us": "201605098"
-     },
-     "home": "Central Florida",
-     "sample": {
-      "away_team": "TCU",
-      "home_team": "Central Florida",
-      "markets": [
-       "point_spread"
-      ]
-     },
-     "start": "2026-09-25T08:02:00Z",
-     "type": "fixture"
-    },
-    {
      "away": null,
      "external": {
       "betonline": "futures_663879963"
@@ -168,6 +111,86 @@
       ]
      },
      "start": "2026-09-25T16:06:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7631594"
+     },
+     "home": "Boise State Broncos",
+     "sample": {
+      "away_team": "",
+      "home_team": "Boise State Broncos",
+      "markets": [
+       "tournament_winner"
+      ]
+     },
+     "start": "2026-09-25T19:59:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7631601"
+     },
+     "home": "Georgia Tech Yellow Jackets",
+     "sample": {
+      "away_team": "",
+      "home_team": "Georgia Tech Yellow Jackets",
+      "markets": [
+       "tournament_winner"
+      ]
+     },
+     "start": "2026-09-25T19:59:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7652872"
+     },
+     "home": "Pittsburgh Panthers",
+     "sample": {
+      "away_team": "",
+      "home_team": "Pittsburgh Panthers",
+      "markets": [
+       "tournament_winner"
+      ]
+     },
+     "start": "2026-09-25T19:59:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7631627"
+     },
+     "home": "Virginia Tech Hokies",
+     "sample": {
+      "away_team": "",
+      "home_team": "Virginia Tech Hokies",
+      "markets": [
+       "tournament_winner"
+      ]
+     },
+     "start": "2026-09-25T19:59:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "saba": "o7631628"
+     },
+     "home": "Washington Huskies",
+     "sample": {
+      "away_team": "",
+      "home_team": "Washington Huskies",
+      "markets": [
+       "tournament_winner"
+      ]
+     },
+     "start": "2026-09-25T19:59:00Z",
      "type": "outright"
     },
     {
@@ -341,22 +364,6 @@
      "sample": {
       "away_team": "",
       "home_team": "East Carolina",
-      "markets": [
-       "conference_winner"
-      ]
-     },
-     "start": "2026-09-25T20:05:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "betonline": "futures_663469081"
-     },
-     "home": "Florida Atlantic",
-     "sample": {
-      "away_team": "",
-      "home_team": "Florida Atlantic",
       "markets": [
        "conference_winner"
       ]
