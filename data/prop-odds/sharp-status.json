@@ -1,14 +1,30 @@
 {
- "at": "2026-09-26T14:13:46Z",
+ "at": "2026-09-26T14:44:02Z",
  "leagues": {
   "CFB": {
-   "books": {},
+   "books": {
+    "draftkings": 1134,
+    "fanduel": 915
+   },
    "eventsListed": 200,
-   "eventsMatched": 11,
+   "eventsMatched": 6,
    "games": 65,
-   "marketTypes": {},
-   "requestsLeft": 47,
-   "rows": 0,
+   "marketTypes": {
+    "player_longest_passing_completion": 7,
+    "player_longest_reception": 31,
+    "player_longest_rush": 18,
+    "player_passing_+_rushing_yards": 72,
+    "player_passing_attempts": 46,
+    "player_passing_completions": 38,
+    "player_passing_touchdowns": 58,
+    "player_passing_yards": 253,
+    "player_receiving_yards": 724,
+    "player_receptions": 238,
+    "player_rushing_attempts": 62,
+    "player_rushing_yards": 502
+   },
+   "requestsLeft": 44,
+   "rows": 2049,
    "slateGames": [
     "Illinois Fighting Illini at Ohio State Buckeyes 2026-09-26T16:00Z",
     "Sam Houston Bearkats at Texas Tech Red Raiders 2026-09-26T16:00Z",
@@ -90,7 +106,7 @@
        "point_spread"
       ]
      },
-     "start": "2026-09-26T14:10:00Z",
+     "start": "2026-09-26T14:22:00Z",
      "type": "fixture"
     },
     {
@@ -106,7 +122,7 @@
        "point_spread"
       ]
      },
-     "start": "2026-09-26T14:10:00Z",
+     "start": "2026-09-26T14:22:00Z",
      "type": "fixture"
     },
     {
@@ -122,7 +138,7 @@
        "point_spread"
       ]
      },
-     "start": "2026-09-26T14:10:00Z",
+     "start": "2026-09-26T14:22:00Z",
      "type": "fixture"
     },
     {
@@ -138,7 +154,7 @@
        "point_spread"
       ]
      },
-     "start": "2026-09-26T14:10:00Z",
+     "start": "2026-09-26T14:22:00Z",
      "type": "fixture"
     },
     {
@@ -154,7 +170,7 @@
        "point_spread"
       ]
      },
-     "start": "2026-09-26T14:10:00Z",
+     "start": "2026-09-26T14:22:00Z",
      "type": "fixture"
     },
     {
@@ -170,7 +186,7 @@
        "point_spread"
       ]
      },
-     "start": "2026-09-26T14:10:00Z",
+     "start": "2026-09-26T14:22:00Z",
      "type": "fixture"
     },
     {
@@ -186,7 +202,7 @@
        "point_spread"
       ]
      },
-     "start": "2026-09-26T14:10:00Z",
+     "start": "2026-09-26T14:22:00Z",
      "type": "fixture"
     },
     {
@@ -198,23 +214,6 @@
      "sample": {
       "away_team": "Presbyterian College Blue Hose",
       "home_team": "Marist Red Foxes",
-      "markets": [
-       "moneyline",
-       "point_spread"
-      ]
-     },
-     "start": "2026-09-26T15:59:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "New Hampshire Wildcats",
-     "external": {
-      "saba": "134927918"
-     },
-     "home": "Sacred Heart Pioneers",
-     "sample": {
-      "away_team": "New Hampshire Wildcats",
-      "home_team": "Sacred Heart Pioneers",
       "markets": [
        "moneyline",
        "point_spread"
@@ -270,6 +269,22 @@
      },
      "start": "2026-09-26T16:00:00Z",
      "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "kalshi": "KXNCAAF1HSPREAD-26SEP26CSUUTSA-CSU15"
+     },
+     "home": null,
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-26T16:00:00Z",
+     "type": "outright"
     }
    ]
   },
@@ -311,7 +326,7 @@
        "outright"
       ]
      },
-     "start": "2026-09-26T14:03:00Z",
+     "start": "2026-09-26T14:13:00Z",
      "type": "outright"
     },
     {
@@ -327,7 +342,7 @@
        "player_passing_yards"
       ]
      },
-     "start": "2026-09-26T14:10:00Z",
+     "start": "2026-09-26T14:22:00Z",
      "type": "fixture"
     },
     {
@@ -344,7 +359,7 @@
        "player_passing_yards"
       ]
      },
-     "start": "2026-09-26T14:10:00Z",
+     "start": "2026-09-26T14:22:00Z",
      "type": "fixture"
     },
     {
@@ -361,7 +376,7 @@
        "player_passing_yards"
       ]
      },
-     "start": "2026-09-26T14:10:00Z",
+     "start": "2026-09-26T14:22:00Z",
      "type": "fixture"
     },
     {
@@ -377,7 +392,7 @@
        "game_prop"
       ]
      },
-     "start": "2026-09-26T14:10:00Z",
+     "start": "2026-09-26T14:22:00Z",
      "type": "fixture"
     },
     {
@@ -393,13 +408,29 @@
        "player_passing_yards"
       ]
      },
-     "start": "2026-09-26T14:10:00Z",
+     "start": "2026-09-26T14:22:00Z",
      "type": "fixture"
     },
     {
      "away": null,
      "external": {
       "kalshi": "KXSBLSPREAD-26SEP261200HANLEV-LEV19"
+     },
+     "home": null,
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-26T16:00:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "kalshi": "KXSBLSPREAD-26SEP261200INTKOM-KOM7"
      },
      "home": null,
      "sample": {
@@ -475,22 +506,6 @@
      },
      "start": "2026-09-26T17:00:00Z",
      "type": "fixture"
-    },
-    {
-     "away": null,
-     "external": {
-      "bovada": "31339363"
-     },
-     "home": "To Sign/ Be Traded For by New York Giants before 2026 Trade Deadline: Proposition",
-     "sample": {
-      "away_team": "",
-      "home_team": "To Sign/ Be Traded For by New York Giants before 2026 Trade Deadline: Proposition",
-      "markets": [
-       "outright"
-      ]
-     },
-     "start": "2026-09-27T04:00:00Z",
-     "type": "outright"
     }
    ]
   }
