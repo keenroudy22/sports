@@ -1,0 +1,108 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-09-26T15:45:05Z",
+  "targetWeek": 4,
+  "summary": "11:45 AM ET run, published at 11:45 AM ET. Nothing to settle. Nothing to close. Published 3: New Mexico at New Mexico State over 48.5 +100 at ESPN BET; South Florida at Bowling Green over 48.5 -110 at FanDuel; Missouri State at SMU under 60.5 -110 at FanDuel. Screened and passed on 7: Iowa at Michigan over 38.5 (not_duplicate); Virginia Tech at Boston College over 46.5 (lean_nothing_against); James Madison at Old Dominion over 44.5 (lean_nothing_against); Oklahoma State at West Virginia under 61.5 (not_duplicate); Utah at Iowa State over 48 (held); Central Michigan at Miami (FL) under 53.5 (not_duplicate); 5-leg longshot at ESPN BET (not_republished). odds_api.py: CFB: skipped (captured 2026-09-26T12:43:49Z, inside the gap) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "gamePicks": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 48.5,
+      "direction": "over",
+      "gameIds": [
+        "CFB-401864579"
+      ],
+      "book": "ESPN BET",
+      "odds": 100,
+      "projection": 51.7,
+      "edge": "v2 total 51.7 (80% range 30.9 to 72.4). Chance of over 48.5: 52.8% (v2's raw 57.8% shrunk by its 2024-25 record against the close), against 50.0% break-even at +100: +2.8 points, +0.056u per unit.",
+      "cutoff": "OVER 48.5 at +100 or better. Closed to new entries at 50+, or at -115 or worse at 48.5.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-09-23T14:15:47Z",
+      "quotedAt": "2026-09-26T12:43:49Z",
+      "quoteType": "capture",
+      "quoteNote": "ESPN BET's number and price from the 8:43 AM ET capture across 5 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-09-26T19:30:00Z",
+      "title": "New Mexico at New Mexico State over 48.5",
+      "id": "CFB-2026-W4-unm-nmsu-over-48-5-espnbet",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401864579",
+        "https://www.abqjournal.com/sports/whos-starting-for-the-lobos-against-nm-state/3129329",
+        "https://www.abqjournal.com/sports/its-rivalry-week-everything-you-need-to-know-about-new-mexicos-rivalry-tilt-with-new-mexico-state/3126130"
+      ],
+      "why": "Model lean, published on our number alone. Our total is 51.7 against 48.5: the over reads 52.8% after the raw 57.8% is shrunk by the model's record against the close, +2.8 points clear of the 50.0% that +100 needs. Nothing sourced argues against it; the number is the reason. Checked before publishing: New Mexico coach Jason Eck had not decided on a starting quarterback between Luke Moga and Toa Fa'avae for the NM State game; both are listed on the two-deep, and Fa'avae took the majority of snaps in the loss at Oklahoma. Checked before publishing: UNM tight end Tripp Walsh and wide receiver Massiah Mingo are hoping to return, while wide receiver Shawn Miller is not expected to play after suffering a concussion before the season opener. The market: The spread opened +12.5 and is +11.5 at DraftKings, a move of 1 toward the home. The total opened 49.5 and is 47.5 at DraftKings, 2 toward the under. 5 books span 11 to 11.5 on the spread; the middle is 11.5. Our spread gap of 0.9 points is at the 16th percentile of the model's gaps; gaps this large went 1512-1505 against the close in 3584 graded games. Our total gap of 4.2 points is at the 67th percentile of the model's gaps; gaps this large went 658-525 against the close in 3602 graded games.",
+      "risk": "It rests on the model alone. The closing line beats our number on average. A gap this size is more often our error than the market's. Confidence 3 of 10.",
+      "jurisdictionVerified": true
+    },
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 48.5,
+      "direction": "over",
+      "gameIds": [
+        "CFB-401862785"
+      ],
+      "book": "FanDuel",
+      "odds": -110,
+      "projection": 53.9,
+      "edge": "v2 total 53.9 (80% range 33.1 to 74.6). Chance of over 48.5: 54.7% (v2's raw 63.0% shrunk by its 2024-25 record against the close), against 52.4% break-even at -110: +2.3 points, +0.044u per unit.",
+      "cutoff": "OVER 48.5 at -110 or better. Closed to new entries at 50+, or at -125 or worse at 48.5.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-09-23T14:15:47Z",
+      "quotedAt": "2026-09-26T12:43:49Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 8:43 AM ET capture across 5 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-09-26T21:00:00Z",
+      "title": "South Florida at Bowling Green over 48.5",
+      "id": "CFB-2026-W4-usf-bgsu-over-48-5-fd",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401862785",
+        "https://www.usforacle.com/2026/09/24/preview-south-florida-looks-to-stay-undefeated-against-bowling-green/",
+        "https://sports.yahoo.com/articles/2026-week-4-preview-south-143000773.html"
+      ],
+      "why": "This is a model lean based on our number alone. Our projection is 53.9 compared to the line of 48.5. The over has a 54.7% chance after the raw 63.0% is adjusted for the model's record against the close. This is 2.3 points above the 52.4% needed to break even at -110. No outside information argues against it. The number is the reason. Before publishing: Junior Jay Kastantin leads the Bowling Green offense with 442 yards and a 66.7 percent completion rate. Before publishing: Bowling Green cornerback JoJo Johnson, who had 13 pass breakups last season, missed the Iowa State game due to injury, and his status against South Florida remains unknown. The market: The spread opened +15.5 and is +18.5 at DraftKings, a move of 3 toward the away. The total opened 51.5 and is 48.5 at DraftKings, 3 toward the under. Five books range from 17.5 to 18.5 on the spread. The middle is 17.5. Our spread gap of 4.9 points is at the 64th percentile of the model's gaps. Gaps this large went 657-641 against the close in 3584 graded games. Our total gap of 5.4 points is at the 79th percentile of the model's gaps. Gaps this large went 411-338 against the close in 3602 graded games.",
+      "risk": "It rests on the model alone. The closing line beats our number on average. A gap this size is more often our error than the market's. Confidence 3 of 10.",
+      "jurisdictionVerified": true
+    },
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 60.5,
+      "direction": "under",
+      "gameIds": [
+        "CFB-401858241"
+      ],
+      "book": "FanDuel",
+      "odds": -110,
+      "projection": 55.2,
+      "edge": "v2 total 55.2 (80% range 34.5 to 76). Chance of under 60.5: 54.6% (v2's raw 62.8% shrunk by its 2024-25 record against the close), against 52.4% break-even at -110: +2.2 points, +0.042u per unit.",
+      "cutoff": "UNDER 60.5 at -110 or better. Closed to new entries at 59 or lower, or at -125 or worse at 60.5.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-09-23T14:15:47Z",
+      "quotedAt": "2026-09-26T12:43:49Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 8:43 AM ET capture across 5 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-09-26T21:30:00Z",
+      "title": "Missouri State at SMU under 60.5",
+      "id": "CFB-2026-W4-most-smu-under-60-5-fd",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401858241",
+        "https://www.nationalfootballpost.com/2026/09/23/no-22-smu-begins-extended-homestand-against-missouri-state",
+        "https://sports.yahoo.com/articles/missouri-states-injury-report-leading-191209075.html"
+      ],
+      "why": "Model lean, based on our number alone. Our total is 55.2 against 60.5. The under is 54.6 percent after the raw 62.8 percent is adjusted by the model's record against the close. That is 2.2 points above the 52.4 percent needed to break even at -110. No outside information argues against it. The number is the reason. Checked before publishing: Missouri State quarterback Skyler Locklear, a UTEP transfer, has 597 passing yards, 3 touchdowns, 1 interception, and a 67.7 percent completion rate. Checked before publishing: Missouri State running back Breezy Dubar suffered a lower body injury in the fourth quarter against Marshall. Coach Casey Woods said \"He will be a questionable guy throughout the course of the week.\" The market: The spread opened -34.5 and is -33.5 at DraftKings, a move of 1 toward the away. The total opened 59.5 and is 60.5 at DraftKings, a move of 1 toward the over. Five books span -33.5 to -32.5 on the spread. The middle is -33. Five books span 59.5 to 60.5 on the total. The middle is 59.5. Our spread gap of 8.5 points is at the 82nd percentile of the model's gaps. Gaps this large went 324-314 against the close in 3584 graded games. Our total gap of 5.3 points is at the 79th percentile of the model's gaps. Gaps this large went 420-347 against the close in 3602 graded games.",
+      "risk": "It rests on the model alone. The closing line beats our number on average. A gap this size is more often our error than the market's. Confidence 3 of 10.",
+      "jurisdictionVerified": true
+    }
+  ]
+}
