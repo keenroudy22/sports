@@ -1,17 +1,31 @@
 {
- "at": "2026-09-26T17:57:19Z",
+ "at": "2026-09-26T18:33:54Z",
  "leagues": {
   "CFB": {
-   "books": {},
+   "books": {
+    "draftkings": 289,
+    "fanduel": 248
+   },
    "eventsListed": 200,
-   "eventsMatched": 1,
-   "games": 51,
-   "marketTypes": {},
-   "requestsLeft": 57,
-   "rows": 0,
+   "eventsMatched": 5,
+   "games": 49,
+   "marketTypes": {
+    "player_longest_passing_completion": 1,
+    "player_longest_reception": 6,
+    "player_longest_rush": 4,
+    "player_passing_+_rushing_yards": 40,
+    "player_passing_attempts": 8,
+    "player_passing_completions": 6,
+    "player_passing_touchdowns": 15,
+    "player_passing_yards": 60,
+    "player_receiving_yards": 172,
+    "player_receptions": 42,
+    "player_rushing_attempts": 16,
+    "player_rushing_yards": 167
+   },
+   "requestsLeft": 51,
+   "rows": 537,
    "slateGames": [
-    "Notre Dame Fighting Irish at Purdue Boilermakers 2026-09-26T18:00Z",
-    "Northern Illinois Huskies at Georgia State Panthers 2026-09-26T18:00Z",
     "Central Arkansas Bears at Florida State Seminoles 2026-09-26T19:00Z",
     "Hawai'i Rainbow Warriors at Wyoming Cowboys 2026-09-26T19:00Z",
     "Boise State Broncos at Western Michigan Broncos 2026-09-26T19:30Z",
@@ -66,7 +80,7 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF1HSPREAD-26SEP26ILLOSU-ILL3"
+      "kalshi": "KXNCAAF1HSPREAD-26SEP26USAUK-UK28"
      },
      "home": null,
      "sample": {
@@ -76,13 +90,13 @@
        "binary"
       ]
      },
-     "start": "2026-09-26T16:00:00Z",
+     "start": "2026-09-26T16:45:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF1HSPREAD-26SEP26WAKELOU-WAKE8"
+      "kalshi": "KXNCAAF2HSPREAD-26SEP26USAUK-USA7"
      },
      "home": null,
      "sample": {
@@ -92,13 +106,13 @@
        "binary"
       ]
      },
-     "start": "2026-09-26T16:00:00Z",
+     "start": "2026-09-26T16:45:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF2HSPREAD-26SEP26COLOBAY-COLO10"
+      "kalshi": "KXNCAAF2QSPREAD-26SEP26USAUK-UK20"
      },
      "home": null,
      "sample": {
@@ -108,13 +122,13 @@
        "binary"
       ]
      },
-     "start": "2026-09-26T16:00:00Z",
+     "start": "2026-09-26T16:45:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF2HSPREAD-26SEP26ILLOSU-ILL4"
+      "kalshi": "KXNCAAF3QSPREAD-26SEP26USAUK-USA11"
      },
      "home": null,
      "sample": {
@@ -124,13 +138,13 @@
        "binary"
       ]
      },
-     "start": "2026-09-26T16:00:00Z",
+     "start": "2026-09-26T16:45:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF2HSPREAD-26SEP26SHSUTTU-TTU24"
+      "kalshi": "KXNCAAF4QSPREAD-26SEP26USAUK-USA11"
      },
      "home": null,
      "sample": {
@@ -140,13 +154,13 @@
        "binary"
       ]
      },
-     "start": "2026-09-26T16:00:00Z",
+     "start": "2026-09-26T16:45:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF2HSPREAD-26SEP26TEXTENN-TEX21"
+      "kalshi": "KXNCAAFSPREAD-26SEP26USAUK-USA2"
      },
      "home": null,
      "sample": {
@@ -156,13 +170,107 @@
        "binary"
       ]
      },
-     "start": "2026-09-26T16:00:00Z",
+     "start": "2026-09-26T16:45:00Z",
+     "type": "outright"
+    },
+    {
+     "away": "South Alabama",
+     "external": {
+      "ballybet": "1027507933",
+      "bet365 us": "201819502",
+      "betfair": "2026092658B07692",
+      "betfair_lay": "2026092658B07692",
+      "betmgm": "6:45016",
+      "betonline": "1737947",
+      "betparx": "1027507933",
+      "betrivers": "1027507933",
+      "bovada": "31200381",
+      "bwin": "6:45016",
+      "draftkings": "34674756",
+      "fanatics_markets": "5553782",
+      "fanduel": "36073935",
+      "fliff": "415023_c_p_309_inplay",
+      "gemini": "NCAAF-2609261645-USA-KEN-M",
+      "hardrock": "7072524383448859019",
+      "kalshi": "KXNCAAF3QTOTAL-26SEP26USAUK",
+      "novig": "01a0b570-4316-7802-9b1e-3b1a8d701bfb",
+      "onexbet": "756324494",
+      "pinnacle": "1637183361",
+      "prophetx": "1700077142",
+      "rebet": "sr:match:70918844",
+      "robinhood": "a3eda667-b441-4cc1-a6e0-6513a2a65639",
+      "sportzino": "sz-17575383",
+      "sx_bet": "L20250832",
+      "thescorebet": "StandardEvent:4c2c43da-b488-4432-98ba-d7d6394467d5",
+      "thrillzz": "888217013",
+      "unibet_ca": "1027507933"
+     },
+     "home": "Kentucky",
+     "sample": {
+      "away_team": "South Alabama",
+      "home_team": "Kentucky",
+      "markets": [
+       "1st_half_moneyline",
+       "1st_half_point_spread",
+       "1st_half_team_total",
+       "1st_half_total_points",
+       "2nd_half_draw_no_bet",
+       "2nd_half_moneyline",
+       "2nd_half_point_spread",
+       "2nd_half_total_points",
+       "2nd_half_total_points_odd_even",
+       "2nd_quarter_moneyline",
+       "2nd_quarter_point_spread",
+       "2nd_quarter_total_points",
+       "3rd_quarter_moneyline",
+       "3rd_quarter_moneyline_3-way",
+       "3rd_quarter_point_spread",
+       "3rd_quarter_team_total",
+       "3rd_quarter_total_points",
+       "3rd_quarter_total_points_odd_even",
+       "4th_quarter_moneyline",
+       "4th_quarter_moneyline_3-way",
+       "4th_quarter_point_spread",
+       "4th_quarter_total_points",
+       "double_chance",
+       "highest_scoring_half",
+       "highest_scoring_quarter_will_have_how_many_points",
+       "match_result_total_goals",
+       "moneyline",
+       "player_touchdowns",
+       "point_spread",
+       "race_to_25_points",
+       "race_to_30_points",
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime",
+       "winning_margin"
+      ]
+     },
+     "start": "2026-09-26T16:45:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": null,
+     "external": {
+      "kalshi": "KXNCAAFSPREAD-26SEP26DRKEDAV-DAV6"
+     },
+     "home": null,
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-26T17:00:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF2HSPREAD-26SEP26VTBC-VT3"
+      "kalshi": "KXNCAAFSPREAD-26SEP26LEHPENN-LEH28"
      },
      "home": null,
      "sample": {
@@ -172,13 +280,13 @@
        "binary"
       ]
      },
-     "start": "2026-09-26T16:00:00Z",
+     "start": "2026-09-26T17:00:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF2HSPREAD-26SEP26WAKELOU-LOU18"
+      "kalshi": "KXNCAAFSPREAD-26SEP26LINWEMU-EMU6"
      },
      "home": null,
      "sample": {
@@ -188,13 +296,13 @@
        "binary"
       ]
      },
-     "start": "2026-09-26T16:00:00Z",
+     "start": "2026-09-26T17:00:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF2QSPREAD-26SEP26COLOBAY-BAY7"
+      "kalshi": "KXNCAAFSPREAD-26SEP26MONMDART-DART23"
      },
      "home": null,
      "sample": {
@@ -204,13 +312,13 @@
        "binary"
       ]
      },
-     "start": "2026-09-26T16:00:00Z",
+     "start": "2026-09-26T17:00:00Z",
      "type": "outright"
     },
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF2QSPREAD-26SEP26ILLOSU-OSU17"
+      "kalshi": "KXNCAAFSPREAD-26SEP26NHCMRMK-MRMK22"
      },
      "home": null,
      "sample": {
@@ -220,39 +328,7 @@
        "binary"
       ]
      },
-     "start": "2026-09-26T16:00:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "kalshi": "KXNCAAF2QSPREAD-26SEP26SHSUTTU-SHSU4"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-26T16:00:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "kalshi": "KXNCAAF2QSPREAD-26SEP26WAKELOU-LOU11"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-26T16:00:00Z",
+     "start": "2026-09-26T17:00:00Z",
      "type": "outright"
     }
    ]
@@ -285,122 +361,7 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXSBLSPREAD-26SEP261200INTKOM-INT11"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-26T16:00:00Z",
-     "type": "outright"
-    },
-    {
-     "away": "Inter Basket",
-     "external": {
-      "kalshi": "KXSBLGAME-26SEP261200INTKOM"
-     },
-     "home": "BC Komarno",
-     "sample": {
-      "away_team": "Inter Basket",
-      "home_team": "BC Komarno",
-      "markets": [
-       "moneyline",
-       "total_points"
-      ]
-     },
-     "start": "2026-09-26T16:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "ARI Cardinals",
-     "external": {
-      "bet365 us": "201319555"
-     },
-     "home": "San Francisco 49ers",
-     "sample": {
-      "away_team": "ARI Cardinals",
-      "home_team": "San Francisco 49ers",
-      "markets": [
-       "player_passing_yards"
-      ]
-     },
-     "start": "2026-09-26T16:35:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Cincinnati Bengals",
-     "external": {
-      "bet365 us": "201319555"
-     },
-     "home": "Pittsburgh Steelers",
-     "sample": {
-      "away_team": "Cincinnati Bengals",
-      "home_team": "Pittsburgh Steelers",
-      "markets": [
-       "game_prop",
-       "player_passing_yards"
-      ]
-     },
-     "start": "2026-09-26T16:35:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Kansas City Chiefs",
-     "external": {
-      "bet365 us": "201319567"
-     },
-     "home": "Miami Dolphins",
-     "sample": {
-      "away_team": "Kansas City Chiefs",
-      "home_team": "Miami Dolphins",
-      "markets": [
-       "game_prop",
-       "player_passing_yards"
-      ]
-     },
-     "start": "2026-09-26T16:35:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Houston Texans",
-     "external": {
-      "bet365 us": "201319558"
-     },
-     "home": "Indianapolis Colts",
-     "sample": {
-      "away_team": "Houston Texans",
-      "home_team": "Indianapolis Colts",
-      "markets": [
-       "game_prop"
-      ]
-     },
-     "start": "2026-09-26T16:35:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Baltimore Ravens",
-     "external": {
-      "bet365 us": "201319561"
-     },
-     "home": "Dallas Cowboys",
-     "sample": {
-      "away_team": "Baltimore Ravens",
-      "home_team": "Dallas Cowboys",
-      "markets": [
-       "player_passing_yards"
-      ]
-     },
-     "start": "2026-09-26T16:35:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": null,
-     "external": {
-      "kalshi": "KXSBLSPREAD-26SEP261300ISKSNV-SNV11"
+      "kalshi": "KXSBLSPREAD-26SEP261300ISKSNV-SNV15"
      },
      "home": null,
      "sample": {
@@ -416,7 +377,7 @@
     {
      "away": "BK Iskra Svit",
      "external": {
-      "kalshi": "KXSBLTOTAL-26SEP261300ISKSNV"
+      "kalshi": "KXSBLGAME-26SEP261300ISKSNV"
      },
      "home": "BK 04 AC LB SNV Spisski Rytieri",
      "sample": {
@@ -428,6 +389,87 @@
       ]
      },
      "start": "2026-09-26T17:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "ARI Cardinals",
+     "external": {
+      "bet365 us": "201319555"
+     },
+     "home": "San Francisco 49ers",
+     "sample": {
+      "away_team": "ARI Cardinals",
+      "home_team": "San Francisco 49ers",
+      "markets": [
+       "player_passing_yards"
+      ]
+     },
+     "start": "2026-09-26T18:04:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Carolina Panthers",
+     "external": {
+      "bet365 us": "201319567"
+     },
+     "home": "Cleveland Browns",
+     "sample": {
+      "away_team": "Carolina Panthers",
+      "home_team": "Cleveland Browns",
+      "markets": [
+       "player_passing_yards"
+      ]
+     },
+     "start": "2026-09-26T18:04:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Kansas City Chiefs",
+     "external": {
+      "bet365 us": "201319564"
+     },
+     "home": "Miami Dolphins",
+     "sample": {
+      "away_team": "Kansas City Chiefs",
+      "home_team": "Miami Dolphins",
+      "markets": [
+       "game_prop",
+       "player_passing_yards"
+      ]
+     },
+     "start": "2026-09-26T18:04:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Houston Texans",
+     "external": {
+      "bet365 us": "201319558"
+     },
+     "home": "Indianapolis Colts",
+     "sample": {
+      "away_team": "Houston Texans",
+      "home_team": "Indianapolis Colts",
+      "markets": [
+       "game_prop"
+      ]
+     },
+     "start": "2026-09-26T18:04:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Baltimore Ravens",
+     "external": {
+      "bet365 us": "201319561"
+     },
+     "home": "Dallas Cowboys",
+     "sample": {
+      "away_team": "Baltimore Ravens",
+      "home_team": "Dallas Cowboys",
+      "markets": [
+       "player_passing_yards"
+      ]
+     },
+     "start": "2026-09-26T18:04:00Z",
      "type": "fixture"
     },
     {
@@ -443,7 +485,7 @@
        "outright"
       ]
      },
-     "start": "2026-09-26T17:27:00Z",
+     "start": "2026-09-26T18:06:00Z",
      "type": "outright"
     },
     {
@@ -477,6 +519,38 @@
      },
      "start": "2026-09-27T04:00:00Z",
      "type": "fixture"
+    },
+    {
+     "away": "Seattle Seahawks",
+     "external": {
+      "kalshi": "KXNFLDELAY-26SEP27WASSEA"
+     },
+     "home": "Washington game to be delayed due to weather",
+     "sample": {
+      "away_team": "Seattle Seahawks",
+      "home_team": "Washington game to be delayed due to weather",
+      "markets": [
+       "moneyline"
+      ]
+     },
+     "start": "2026-09-27T04:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": null,
+     "external": {
+      "kalshi": "KXSBLSPREAD-26SEP271200BKMPRI-PRI11"
+     },
+     "home": null,
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-27T16:00:00Z",
+     "type": "outright"
     }
    ]
   }
