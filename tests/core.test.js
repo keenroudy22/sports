@@ -217,7 +217,6 @@ test('old links land on the matching new pages', () => {
     '#team/CFB/2390': { view: 'team', league: 'CFB', id: '2390' }, '#nonsense': { view: 'today' },
     '#pick/CFB-2026-W3-duke-minus-10-vs-stan-dk': { view: 'today', pick: 'CFB-2026-W3-duke-minus-10-vs-stan-dk' },
     '#pick': { view: 'today' },
-    '#numbers': { view: 'numbers' }, '#more': { view: 'more' }, '#board': { view: 'board', tab: 'games' }, '#games': { view: 'games' },
   };
   for (const [hash, expected] of Object.entries(cases)) assert.deepEqual(C.parseRoute(hash), expected, hash);
   assert.equal(C.shardOf('4430878', 32), 4430878 % 32);

@@ -48,20 +48,10 @@
     board: '<path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h10"/>',
     model: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>',
     record: '<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/>',
-    numbers: '<path d="M4 19V10"/><path d="M10 19V5"/><path d="M16 19v-6"/><path d="M22 19H2"/>',
+    more: '<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
   };
-  /* Three tabs: our plays, the record, and everything our numbers see. Every older page lives under Numbers. */
-  const TABS = [['today', 'Picks'], ['record', 'Record'], ['numbers', 'Numbers']];
-  const TAB_FOR = { more: 'numbers', board: 'numbers', ticket: 'numbers', games: 'numbers', game: 'numbers', stats: 'numbers', player: 'numbers',
-    team: 'numbers', model: 'numbers', research: 'numbers', scores: 'numbers' };
-  const NUMBER_PAGES = [['numbers', 'Overview'], ['board', 'Board'], ['games', 'Games'], ['stats', 'Players'], ['model', 'Scoreboard']];
-  const HERE = { more: 'numbers', game: 'games', player: 'stats', team: 'stats', ticket: 'board' };
-  /* Inside Numbers, a strip to move between its pages. */
-  const subnav = route => {
-    if ((TAB_FOR[route.view] || route.view) !== 'numbers') return '';
-    const here = HERE[route.view] || route.view;
-    return `<nav class="subnav" aria-label="Numbers">${NUMBER_PAGES.map(([id, label]) => `<a href="#${id}"${here === id ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</nav>`;
-  };
+  const TABS = [['today', 'Today'], ['board', 'Board'], ['games', 'Games'], ['stats', 'Stats'], ['record', 'Record'], ['more', 'More']];
+  const TAB_FOR = { game: 'games', player: 'stats', team: 'stats', model: 'more', ticket: 'board', research: 'more', scores: 'more' };
 
   /* The two model generations, in plain words. The data keeps its own version names. */
   const MODEL_NAME = { 'v2.0': 'Our model', v1: 'First model', 'v1 replay': 'First model replay' };
@@ -175,6 +165,57 @@
   };
 
   /* Once a game kicks off the real score is the headline number and the forecast moves to the small line. */
+  /* One game as a projection card, the way the projection posts lay it out: both teams with their logos, our
+     projected score big in the middle with the total and kickoff, our win probability as a bar in the teams'
+     colours, and our spread and total against the market's with the side our number likes. Once a game starts the
+     real score takes the middle and ours moves to the small line. Names wrap under their logos, never cut off. */
+  const LOGO = { CFB: t => `https://a.espncdn.com/i/teamlogos/ncaa/500/${encodeURIComponent(t.id)}.png`,
+    NFL: t => `https://a.espncdn.com/i/teamlogos/nfl/500/${encodeURIComponent(String(t.abbr || '').toLowerCase())}.png` };
+  const DULL = '#64748b';
+  const inkOn = hex => { const m = /^#?([0-9a-f]{6})$/i.exec(hex || ''); if (!m) return '#fff';
+    const n = parseInt(m[1], 16); return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255 > 0.6 ? '#0a0d13' : '#fff'; };
+  const projTeam = (game, team) => `<span class="proj-team">${LOGO[game.league] && team.id ? `<img class="proj-logo" src="${esc(LOGO[game.league](team))}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<span class="proj-logo"></span>'}
+      <span class="proj-name">${esc(teamName(team))}</span><span class="proj-abbr">${esc(team.abbr || '')}</span></span>`;
+  const projCard = game => {
+    const v2 = game.v2, m = game.market || {}, raw = game.lean || {};
+    const final = game.completed, live = !final && game.state === 'in';
+    const scores = (final || live) && game.away.score != null && game.home.score != null;
+    const label = final ? 'Final' : live ? 'Live' : 'Projected';
+    const score = scores ? `${game.away.score}<span class="faint"> – </span>${game.home.score}`
+      : v2 ? `${fixed(v2.away, 1)}<span class="faint"> – </span>${fixed(v2.home, 1)}` : DASH;
+    const total = scores ? (v2 ? `we had ${fixed(v2.away, 0)}–${fixed(v2.home, 0)}` : '') : v2 && v2.total != null ? `Total ${fixed(v2.total, 1)}` : 'no number yet';
+    const home = typeof (v2 || {}).winProb === 'number' ? v2.winProb : null;
+    /* The teams' own colours; a near-black one uses its alternate so the bar shows on the dark card. */
+    const light = hex => { const m = /^#?([0-9a-f]{6})$/i.exec(hex || ''); if (!m) return 0; const n = parseInt(m[1], 16);
+      return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255; };
+    const pickColor = t => { const c = (t.color || '').toLowerCase(); return c && light(c) < 0.1 && t.alt && light(t.alt) < 0.9 ? t.alt : c; };
+    let colors = [pickColor(game.away), pickColor(game.home)];
+    if (colors.some(c => !c || c === DULL || light(c) < 0.1) || colors[0] === colors[1]) colors = ['#38bdf8', '#5eeaa4'];
+    const bar = home == null || game.fcs ? '' : `<span class="proj-bar" role="img" aria-label="Win probability: ${esc(teamName(game.away))} ${Math.round(100 * (1 - home))}%, ${esc(teamName(game.home))} ${Math.round(100 * home)}%">
+        <span style="width:${(100 * (1 - home)).toFixed(1)}%;background:${esc(colors[0])};color:${inkOn(colors[0])}">${Math.round(100 * (1 - home))}%</span><span style="width:${(100 * home).toFixed(1)}%;background:${esc(colors[1])};color:${inkOn(colors[1])}">${Math.round(100 * home)}%</span></span>
+      <span class="proj-bar-labels"><span>${esc(game.away.abbr || '')}</span><span>Win probability</span><span>${esc(game.home.abbr || '')}</span></span>`;
+    const lean = C.leanText(game) || {};
+    const fav = spread => spread == null ? DASH : Math.abs(spread) < 0.05 ? 'Pick' : `${esc((spread < 0 ? game.home : game.away).abbr)} -${Math.abs(spread)}`;
+    const ours = v2 && v2.margin != null ? (Math.abs(v2.margin) < 0.05 ? 'Even' : `${esc((v2.margin > 0 ? game.home : game.away).abbr)} by ${Math.abs(v2.margin).toFixed(1)}`) : DASH;
+    const sideTeam = raw.side === 'home' ? game.home : game.away;
+    const sideLine = m.spread == null ? '' : ` ${C.spreadText('', raw.side === 'home' ? m.spread : -m.spread).trim()}`;
+    const pick = (text, chance, paused) => paused ? `<span class="lean">${text} · paused</span>` : chance == null ? '<span class="faint">no lean</span>'
+      : `<span class="lean ${C.leanTone(chance, Boolean((v2 || {}).sparse))}">${text} · ${Math.round(100 * chance)}%</span>`;
+    const lines = scores || game.fcs || !v2 ? '' : `<span class="proj-lines">
+        <span class="proj-line proj-line-head"><span></span><span>Ours</span><span>Line</span><span>Our side</span></span>
+        <span class="proj-line"><span>Spread</span><span>${ours}</span><span>${fav(m.spread)}</span><span>${lean.side ? pick(`${esc(sideTeam.abbr)}${esc(sideLine)}`, lean.side.chance, raw.spreadPaused) : '<span class="faint">no lean</span>'}</span></span>
+        <span class="proj-line"><span>Total</span><span>${v2.total != null ? fixed(v2.total, 1) : DASH}</span><span>${m.total ?? DASH}</span><span>${lean.total ? pick(`${lean.total.direction} ${m.total ?? ''}`, lean.total.chance, raw.totalPaused) : '<span class="faint">no lean</span>'}</span></span>
+      </span>`;
+    return `<a class="proj${live ? ' proj-live' : ''}" href="#game/${esc(game.id)}">
+      <span class="proj-top">${projTeam(game, game.away)}
+        <span class="proj-mid"><span class="proj-label">${label}</span><span class="proj-score num">${score}</span><span class="proj-total">${esc(total)}</span>
+          <span class="proj-when">${esc(whenShort(game.kickoff))}</span></span>
+        ${projTeam(game, game.home)}</span>
+      ${game.fcs ? '<span class="proj-note">FBS vs FCS: our number is not reliable here</span>' : bar}${lines}
+    </a>`;
+  };
+  const projGrid = games => `<div class="projs">${games.map(projCard).join('')}</div>`;
+
   const gameRow = game => {
     const m = game.market || {}, v2 = game.v2, v1 = game.v1;
     const final = game.completed;
@@ -258,46 +299,30 @@
   const lastGameDay = picks => picks.filter(p => p.result && p.settledAt && !p.historicalImport && Date.now() - Date.parse(p.settledAt) < 40 * 3600 * 1000)
     .sort((a, b) => String(b.settledAt).localeCompare(String(a.settledAt)));
 
-  /* The Picks tab: our plays and the record, nothing else. What our numbers see lives on the Numbers tab. */
   async function viewToday() {
-    const data = await get('app/today.json');
-    const picks = data.picks.filter(inLeague);
-    markPicks(picks.filter(p => !p.result && !p.historicalImport));
-    const settledRecently = lastGameDay(picks);
+    const [data, board] = await Promise.all([get('app/today.json'), maybe('app/lines.json')]);
+    markPicks(data.picks.filter(inLeague).filter(p => !p.result && !p.historicalImport));
+    const moves = lineMoves(slate(data.games.filter(inLeague)));   /* this slate only, not look-ahead lines */
+    const settledRecently = lastGameDay(data.picks.filter(inLeague));
     const recent = C.summaryOf(settledRecently.filter(p => !C.isParlay(p) && !C.isUnpricedImport(p)));
     const games = data.games.filter(inLeague);
-    const first = slate(games)[0];
+    const best = bestOnBoard(board);
+    const now = slate(games);
+    const playing = games.filter(g => !g.completed && g.state === 'in');
+    const first = now[0];
+    const gaps = now.filter(g => g.v2 && g.lean && !g.fcs).sort((a, b) => disagreement(b) - disagreement(a)).slice(0, 8);
+    const picks = data.picks.filter(inLeague);
     const live = picks.filter(p => !p.result && !p.historicalImport)
       .sort((a, b) => (Boolean(b.featured) - Boolean(a.featured)) || (C.isOpen(b) - C.isOpen(a)) || String(a.kickoff).localeCompare(String(b.kickoff)));
+    const forecasts = now.filter(g => g.v2).length;
     const todayLabel = dayLabel(new Date().toISOString());
     const title = !first ? 'No games scheduled' : dayLabel(first.kickoff) === todayLabel ? todayLabel : `Next slate: ${dayLabel(first.kickoff)}`;
     gameIndex = new Map(games.map(g => [g.id, g]));
-    return `${head(title, live.length ? 'Our plays, graded in public, win or lose. Tap one for the research.'
-      : 'No plays up yet. The desk puts them up when a number beats the line, usually by 8:30 AM on game days, and they post to X around noon.')}
-      <div class="picks-page">
-        ${recordStrip(C.theRecord(picks), state.league === 'ALL' ? 'The record' : `The record · ${leagueName(dataLeague())}`)}
-        ${live.length ? section('Our plays', `<div class="plays">${live.map(playCard).join('')}</div>`, '<a href="#record">Record →</a>')
-          : section('Our plays', empty('Nothing on the stove yet', 'Plays show here the moment they go up. Check back in the morning.'))}
-        ${settledRecently.length ? section('Last game day', `<p class="row-meta" style="margin:0 0 8px">${played(recent) ? wl(recent) : 'Fun parlays only'}${recent.units == null ? '' : ` · ${unitText(recent.units)}`}.</p><div class="card"><div class="rows">${settledRecently.map(pickRow).join('')}</div></div>`, '<a href="#record">Record →</a>') : ''}
-        <p class="row-meta more-link">The numbers behind the plays, every line and every game: <a href="#numbers">Numbers →</a></p>
-      </div>`;
-  }
-
-  /* The Numbers tab: what our numbers see across the slate, for anyone who wants it. Reads, not picks. */
-  async function viewNumbers() {
-    const [data, board] = await Promise.all([get('app/today.json'), maybe('app/lines.json')]);
-    const games = data.games.filter(inLeague);
-    const now = slate(games);
-    const moves = lineMoves(now);
-    const best = bestOnBoard(board);
-    const playing = games.filter(g => !g.completed && g.state === 'in');
-    const gaps = now.filter(g => g.v2 && g.lean && !g.fcs).sort((a, b) => disagreement(b) - disagreement(a)).slice(0, 8);
-    markPicks(data.picks.filter(inLeague).filter(p => !p.result && !p.historicalImport));
-    gameIndex = new Map(games.map(g => [g.id, g]));
-    const count = state.ticket.length;
-    const link = (href, label, note) => `<a href="${href}"><span>${label}</span><small>${note}</small></a>`;
-    return `${head('Numbers', 'What our numbers see across the slate. These are reads, not picks; our plays are on the Picks tab.')}
+    return `${head(title,
+      first ? `${now.length} games on this slate. Our plays come first; everything under them is what our numbers see, not picks.` : 'Nothing kicks off in the next eight days in this league.')}
       <div class="two-col"><div>
+        ${recordStrip(C.theRecord(picks), state.league === 'ALL' ? 'The record' : `The record · ${leagueName(dataLeague())}`)}
+        ${live.length ? section('Our plays', `<div class="plays">${live.map(playCard).join('')}</div>`, '<a href="#record">Record →</a>') : ''}
         ${best.games.length ? section(best.day ? `Game lines with value · ${esc(best.day)}` : 'Game lines with value today',
           `<p class="row-meta" style="margin:0 0 8px">Where our chance beats what the price needs, at the best price we found. Worth a look, not picks.</p><div class="card"><div class="rows">${best.games.map(lineRow).join('')}</div></div>`,
           '<a href="#board">All game lines →</a>') : ''}
@@ -305,17 +330,15 @@
           `<p class="row-meta" style="margin:0 0 8px">Our projection against the book's number. Each chance is pulled toward 50% by how our player numbers have actually done.</p><div class="card"><div class="rows">${best.players.map(lineRow).join('')}</div></div>`,
           '<a href="#board/props">All player props →</a>') : ''}
         ${moves.length ? section('How the lines have moved', `<p class="row-meta" style="margin:0 0 8px">Where the betting line has moved since it opened. Green: toward our number. Amber: away from it.</p><div class="card"><div class="rows">${moves.map(moveRow).join('')}</div></div>`) : ''}
-        ${playing.length ? section(`In play now${playing.length > 6 ? ` (${playing.length})` : ''}`, `<div class="card">${playing.slice(0, 6).map(gameRow).join('')}</div>`, '<a href="#games">All games →</a>') : ''}
-        ${section('Our numbers vs the betting lines', gaps.length ? `<p class="row-meta" style="margin:0 0 8px">Each game shows the betting line, our predicted score, and the side our number favors with how often we think it wins. A standard -110 bet needs about 52% to break even; green means we clear that comfortably. Paused means our record on that kind of bet trails the market.</p><div class="card">${gaps.map(gameRow).join('')}</div>`
+        ${playing.length ? section(`In play now${playing.length > 6 ? ` (${playing.length})` : ''}`, projGrid(playing.slice(0, 6)), '<a href="#games">All games →</a>') : ''}
+        ${settledRecently.length ? section('Last game day', `<p class="row-meta" style="margin:0 0 8px">${played(recent) ? wl(recent) : 'Fun parlays only'}${recent.units == null ? '' : ` · ${unitText(recent.units)}`}.</p><div class="card"><div class="rows">${settledRecently.map(pickRow).join('')}</div></div>`, '<a href="#record">Record →</a>') : ''}
+        ${section('Our projections', gaps.length ? `<p class="row-meta" style="margin:0 0 8px">Our projected score and how often we think each team wins, then our spread and total against the betting line. The percentage on the side we like is how often we think it wins; a standard -110 bet needs about 52%, and green clears that comfortably. Paused means our record on that kind of bet trails the market. Reads, not picks.</p>${projGrid(gaps)}`
           : empty('No model calls yet', 'The model publishes after the hosted refresh runs. Every game still shows the market number.'), '<a href="#games">All games →</a>')}
+        ${!live.length && !best.rows.length ? section('Our plays', empty('Nothing on the card yet', 'Plays appear here once lines are priced for the next slate.', '<a class="btn" href="#board">Open the board</a>'), '<a href="#record">Record →</a>') : ''}
       </div><div>
-        ${section('Everything else', `<div class="card menu">${link('#board', 'Board', 'Every line, our chance against the price')}${link('#games', 'Games', 'Every game with our predicted score')}
-          ${link('#stats', 'Players', 'Stats, projections and last ten games')}${link('#stats/defense', 'Defense vs position', 'Rankings')}
-          ${link('#model', 'The scoreboard', 'Our numbers graded against the closing line')}${link('#research', 'Research desk', 'Injuries and analyst notes')}
-          ${link('#ticket', 'Parlay builder', count ? `${count} line${count === 1 ? '' : 's'} on your ticket` : 'Build your own ticket')}${link('#scores/NBA', 'NBA scores', 'Schedules and scores')}${link('#scores/MLB', 'MLB scores', 'Schedules and scores')}</div>`)}
+        ${section(state.league === 'ALL' ? 'The record' : `The record · ${esc(leagueName(dataLeague()))}`, theRecordCard(C.theRecord(picks)), '<a href="#record">Details →</a>')}
         ${section('How the model is doing', modelCard(data.model), '<a href="#model">Scoreboard →</a>')}
         ${section('Data freshness', freshnessCard(data))}
-        <div class="section card" style="padding:14px"><p class="prose" style="margin:0"><b>About.</b> KeenRoudy Sports is a stats engine graded against the betting market. The model publishes score and player projections before kickoff, every forecast is kept, and the scoreboard grades them against the closing line. Stats come from ESPN’s public feeds and nflverse. For entertainment only; nothing here is betting advice.</p></div>
       </div></div>`;
   }
 
@@ -349,10 +372,10 @@
     const groups = new Map();
     for (const g of games) { const day = dayLabel(g.kickoff); if (!groups.has(day)) groups.set(day, []); groups.get(day).push(g); }
     gameIndex = new Map(data.games.map(g => [g.id, g]));
-    return `${head('Games', 'Every game: the betting line, our predicted score, and the side our number favors. The percentage is how often we think that side wins.')}
+    return `${head('Games', 'Every game: our projected score, how often we think each team wins, and our spread and total against the betting line. Reads, not picks.')}
       <div class="toolbar">${seg('gamesScope', [['upcoming', 'Upcoming'], ['final', 'Recent finals']], state.gamesScope)}</div>
       <input class="search" type="search" data-input="gamesQuery" placeholder="Find a team" value="${esc(state.gamesQuery)}" aria-label="Find a team">
-      ${games.length ? [...groups].map(([day, rows]) => section(day, `<div class="card">${rows.map(gameRow).join('')}</div>`)).join('')
+      ${games.length ? [...groups].map(([day, rows]) => section(day, projGrid(rows))).join('')
         : empty(gq ? 'No game matches' : state.gamesScope === 'final' ? 'No recent finals' : 'No upcoming games', gq ? 'Try a team abbreviation or name.' : 'Nothing in this league inside the current window.')}`;
   }
 
@@ -956,6 +979,15 @@
 
   /* ---------- more ---------- */
 
+  async function viewMore() {
+    const count = state.ticket.length;
+    const link = (href, label, note) => `<a href="${href}"><span>${label}</span><small>${note}</small></a>`;
+    return `${head('More', '')}
+      <div class="card menu">${link('#model', 'The scoreboard', 'Our numbers graded against the closing line')}${link('#ticket', 'Your ticket', count ? `${count} line${count === 1 ? '' : 's'}` : 'Parlay builder')}
+      ${link('#research', 'Research desk', 'Injuries and analyst notes')}${link('#stats/defense', 'Defense vs position', 'Rankings')}${link('#scores/NBA', 'NBA scores', 'Schedules and scores')}${link('#scores/MLB', 'MLB scores', 'Schedules and scores')}</div>
+      <div class="section card" style="padding:14px"><p class="prose" style="margin:0"><b>About.</b> KeenRoudy Sports is a stats engine graded against the betting market. The model publishes score and player projections before kickoff, every forecast is kept, and the scoreboard grades them against the closing line. Stats come from ESPN’s public feeds and nflverse. For entertainment only; nothing here is betting advice.</p></div>`;
+  }
+
   /* ---------- pick details ---------- */
 
   async function openPick(id) {
@@ -1093,8 +1125,7 @@
   /* ---------- shell ---------- */
 
   const VIEWS = { today: viewToday, games: viewGames, game: viewGame, stats: viewStats, player: viewPlayer, team: viewTeam,
-    model: viewModel, record: viewRecord, board: viewBoard, ticket: viewTicket, research: viewResearch, scores: viewScores,
-    numbers: viewNumbers, more: viewNumbers };
+    model: viewModel, record: viewRecord, board: viewBoard, ticket: viewTicket, research: viewResearch, scores: viewScores, more: viewMore };
   document.addEventListener('click', event => {
     const button = event.target.closest('[data-set^="boardMode:"]');
     if (button) { const mode = button.dataset.set.split(':')[1]; state.boardMode = mode; location.hash = mode === 'props' ? '#board/props' : '#board'; }
@@ -1121,7 +1152,7 @@
     try {
       const html = await (VIEWS[route.view] || viewToday)(route);
       if (mine !== token) return;
-      view.innerHTML = subnav(route) + html;
+      view.innerHTML = html;
       if (route.pick) openPick(route.pick);
     } catch (error) {
       if (mine !== token) return;

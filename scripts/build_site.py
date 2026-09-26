@@ -205,6 +205,24 @@ def team_names(records, slate):
     return teams
 
 
+@lru_cache(maxsize=1)
+def cfb_colours():
+    """ESPN's colours for every college team, fetched once (data/team-colors-cfb.json): {team id: {color, alternateColor}}."""
+    return read(ROOT / 'data' / 'team-colors-cfb.json', {}).get('teams') or {}
+
+
+def team_colours(league, team):
+    """(primary, alternate) for a team: the slate's own ESPN colours, else the stored college table; None when unknown."""
+    def fix(c):
+        c = str(c or '').strip().lower()
+        return ('#' + c.lstrip('#')) if len(c.lstrip('#')) == 6 else None
+    primary, alternate = fix(team.get('color')), fix(team.get('alternateColor'))
+    if not primary and league == 'CFB':
+        stored = cfb_colours().get(str(team.get('id'))) or {}
+        primary, alternate = fix(stored.get('color')), fix(stored.get('alternateColor'))
+    return primary, alternate
+
+
 def color(league, abbr, identities):
     return NFL_COLORS.get(abbr, NEUTRAL) if league == 'NFL' else identities.get(abbr, NEUTRAL)
 
@@ -273,8 +291,10 @@ def game_card(game, forecasts_v1, snapshot, names, identities, market_block=None
 
     def side(key):
         team = game[key]
+        colours = team_colours(league, team)
         return {'id': str(team['id']), 'abbr': team.get('abbreviation'), 'name': team.get('short') or team.get('name'),
-                'color': color(league, team.get('abbreviation'), identities), 'score': team.get('score')}
+                'color': colours[0] or color(league, team.get('abbreviation'), identities), 'alt': colours[1],
+                'score': team.get('score')}
 
     v1 = forecasts_v1.get(game['id'])
     mkt = market(game)

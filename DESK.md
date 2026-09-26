@@ -268,14 +268,18 @@ The same plays are published as an RSS feed, `https://keenroudy.com/sports/data/
 as a public record. `x_post.py` can still post through X's API (`post PICK_ID --confirm --card`) when credits
 exist, and writes review drafts to `~/.config/keenroudy/x-drafts/`.
 
-## The site (three tabs, 2026-09-25)
+## The site (2026-09-26)
 
-The owner wanted the site as easy as the pick accounts the owner follows. Three tabs: **Picks** (today's plays as cards in
-the X post's words, the Pick of the Day first, the record strip, the last game day's results; a play the desk still
-stands behind reads "Open" until kickoff, with the age of its price), **Record** (the one record, see X above) and
-**Numbers** (everything our numbers see: value lines, line moves, games in play, our numbers against the lines, and
-the Board, Games, Players, Scoreboard, Research and parlay-builder pages under a strip of their own). Every older link
-(#board, #games, #stats, #model, #more, #game/<id>, #player/..., #pick/<id>) still lands where it did.
+For one night the site had three tabs (Picks, Record, Numbers); the owner preferred the Today page and the Board
+where they were, so the tabs are Today, Board, Games, Stats, Record, More again. What stayed from the rework: plays
+first on Today as cards in the X post's words (the Pick of the Day on top, "Open" with the age of its price until
+kickoff, "Pulled" for a play pulled before its post), the one record in units on the Record tab, and games laid out
+as **projection cards** like the projection posts the owner likes (Toad Sports' weekly grid): both teams with their
+ESPN logos, our projected score big with the total and kickoff, our win probability as a bar in the teams' colours
+(ESPN's, from the slate or `data/team-colors-cfb.json`, fetched once for every college team; a near-black colour uses
+its alternate), and our spread and total against the line with the side our number likes and its chance. Names wrap
+under their logos (the old game rows cut them off on phones). The Games tab and Today's "Our projections" and "In play
+now" use the cards.
 
 ## Weather
 

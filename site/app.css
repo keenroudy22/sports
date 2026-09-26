@@ -188,12 +188,12 @@ main { padding: 0 var(--gutter) 28px; max-width: 1240px; margin: 0 auto; }
 /* ---------- games ---------- */
 
 .game-row { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; padding: 11px 13px; border-bottom: 1px solid #1a222c; color: inherit; }
-.game-leans { flex-basis: 100%; padding-left: 67px; }
+.game-leans { flex-basis: 100%; padding-left: 0; }
 .game-leans .leans { justify-content: flex-start; }
 .game-row:last-child { border-bottom: 0; }
 .game-row:hover { background: #121823; }
-.game-teams { display: flex; flex-direction: column; gap: 3px; width: 58px; flex-shrink: 0; }
-.game-team { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; }
+.game-teams { display: flex; flex-direction: column; gap: 3px; width: 112px; flex-shrink: 0; }
+.game-team { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; line-height: 1.25; overflow-wrap: anywhere; }
 .game-chip { width: 3px; height: 12px; border-radius: 2px; flex-shrink: 0; }
 .game-mid { flex: 1 1 0; min-width: 0; font-size: 12px; color: var(--faint); line-height: 1.45; }
 .game-mid b { color: var(--text); font-weight: 600; white-space: nowrap; }
@@ -457,11 +457,34 @@ table.data a { font-weight: 600; }
 .play-featured .play-kind { color: var(--amber); }
 .play-featured .play-kind::before { content: '★ '; }
 
-/* inside Numbers: a strip to move between its pages */
-.subnav { display: flex; gap: 6px; overflow-x: auto; padding: 10px 0 2px; margin: 0 0 4px; scrollbar-width: none; }
-.subnav::-webkit-scrollbar { display: none; }
-.subnav a { flex: none; padding: 7px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 13px; font-weight: 600; background: var(--surface); }
-.subnav a[aria-current="page"] { color: var(--bg); background: var(--mint); border-color: var(--mint); }
-.picks-page { max-width: 760px; }
-.more-link { margin: 18px 2px 8px; }
+/* a game as a projection card: logos, our projected score, the win-probability bar, ours against the line */
+.projs { display: grid; grid-template-columns: 1fr; gap: 10px; }
+@media (min-width: 700px) { .projs { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1180px) { .projs { grid-template-columns: 1fr 1fr 1fr; } }
+.two-col .projs { grid-template-columns: 1fr; }
+@media (min-width: 1400px) { .two-col .projs { grid-template-columns: 1fr 1fr; } }
+.proj { display: flex; flex-direction: column; padding: 14px 14px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); color: var(--text); }
+.proj:hover { border-color: #3a4656; color: var(--text); }
+.proj-live { border-color: rgba(94, 234, 164, .45); }
+.proj-top { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: start; gap: 6px; }
+.proj-team { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 3px; min-width: 0; }
+.proj-logo { width: 42px; height: 42px; object-fit: contain; display: block; }
+.proj-name { font-size: 13px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+.proj-abbr { font-size: 10px; color: var(--faint); letter-spacing: .08em; }
+.proj-mid { display: flex; flex-direction: column; align-items: center; gap: 2px; padding-top: 1px; }
+.proj-label { font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
+.proj-live .proj-label { color: var(--mint); }
+.proj-score { font-size: 26px; font-weight: 700; line-height: 1.1; white-space: nowrap; }
+.proj-total { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.proj-when { font-size: 11px; color: var(--faint); margin-top: 3px; white-space: nowrap; }
+.proj-bar { display: flex; height: 22px; margin-top: 12px; border-radius: 6px; overflow: hidden; font-size: 11px; font-weight: 700; }
+.proj-bar span { display: flex; align-items: center; padding: 0 7px; min-width: 38px; }
+.proj-bar span:last-child { justify-content: flex-end; }
+.proj-bar-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--faint); margin-top: 4px; letter-spacing: .06em; }
+.proj-note { margin-top: 10px; font-size: 12px; color: var(--faint); }
+.proj-lines { display: block; margin-top: 10px; padding-top: 6px; border-top: 1px solid var(--line); font-size: 12px; }
+.proj-line { display: grid; grid-template-columns: 46px minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.35fr); gap: 6px; padding: 4px 0; align-items: center; }
+.proj-line > span:nth-child(n+2) { text-align: right; }
+.proj-line-head { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); padding-bottom: 0; }
+.proj-line .lean { white-space: nowrap; }
 
