@@ -95,15 +95,40 @@ def same_team(a, b):
     return any(short[i:i + 4] in long_ for i in range(len(short) - 3))
 
 
+# The feed's spelling of a school -> ESPN's, where the two differ by more than punctuation.
+SCHOOL_ALIASES = {'connecticut': 'uconn', 'miami ohio': 'miami oh', 'miami florida': 'miami', 'miami fl': 'miami',
+                  'louisiana monroe': 'ul monroe', 'southern mississippi': 'southern miss', 'massachusetts': 'umass',
+                  'texas san antonio': 'utsa', 'central florida': 'ucf', 'brigham young': 'byu', 'southern methodist': 'smu',
+                  'texas christian': 'tcu', 'louisiana state': 'lsu', 'mississippi': 'ole miss', 'hawaii': 'hawai i',
+                  'louisiana lafayette': 'louisiana', 'north carolina state': 'nc state', 'florida international': 'fiu',
+                  'texas el paso': 'utep', 'nevada las vegas': 'unlv', 'alabama birmingham': 'uab', 'sam houston state': 'sam houston'}
+
+
+def school_key(text):
+    """A school's name, flattened: "Miami (OH)" and "Miami Ohio" both read "miami oh", "Hawai'i" and "Hawaii" alike."""
+    flat = re.sub(r'[^a-z0-9]+', ' ', str(text or '').lower().replace('&', ' and ').replace("'", '').replace('’', '')).strip()
+    return SCHOOL_ALIASES.get(flat, flat).replace('hawai i', 'hawaii')
+
+
+def team_matches(team, name):
+    """A slate team against a feed's name for it: the full name as same_team reads it, or the school. The feed names
+    college teams without their mascots ("Oklahoma", "Central Arkansas"), which matched 4 of 49 college games on
+    2026-09-26."""
+    if same_team(team.get('name'), name):
+        return True
+    school = team.get('school') or team.get('location')
+    return bool(school) and bool(school_key(name)) and school_key(school) == school_key(name)
+
+
 def find_game(row, games):
     """The slate game a SharpAPI row belongs to, by both teams and a kickoff within six hours."""
     start = features.when(row['event_start_time']) if row.get('event_start_time') else None
     for game in games:
         if start and abs(features.when(game['kickoff']) - start) > timedelta(hours=6):
             continue
-        if same_team(game['home']['name'], row.get('home_team')) and same_team(game['away']['name'], row.get('away_team')):
+        if team_matches(game['home'], row.get('home_team')) and team_matches(game['away'], row.get('away_team')):
             return game
-        if same_team(game['home']['name'], row.get('away_team')) and same_team(game['away']['name'], row.get('home_team')):
+        if team_matches(game['home'], row.get('away_team')) and team_matches(game['away'], row.get('home_team')):
             return game
     return None
 

@@ -32,6 +32,18 @@ class MappingTests(unittest.TestCase):
         for market, key in cases.items():
             self.assertEqual(sharp_odds.market_key(market), key, market)
 
+    def test_college_teams_named_by_school_alone_find_their_game(self):
+        games = [dict(game('CFB-1', '2026-09-26T19:30Z', 'Georgia Bulldogs', 'Oklahoma Sooners', 'CFB'),
+                      home={'name': 'Georgia Bulldogs', 'school': 'Georgia'}, away={'name': 'Oklahoma Sooners', 'school': 'Oklahoma'}),
+                 dict(game('CFB-2', '2026-09-26T19:00Z', 'Wyoming Cowboys', "Hawai'i Rainbow Warriors", 'CFB'),
+                      home={'name': 'Wyoming Cowboys', 'school': 'Wyoming'}, away={'name': "Hawai'i Rainbow Warriors", 'school': "Hawai'i"}),
+                 dict(game('CFB-3', '2026-09-26T19:30Z', 'Iowa State Cyclones', 'Oklahoma State Cowboys', 'CFB'),
+                      home={'name': 'Iowa State Cyclones', 'school': 'Iowa State'}, away={'name': 'Oklahoma State Cowboys', 'school': 'Oklahoma State'})]
+        row = lambda away, home: {'away_team': away, 'home_team': home, 'event_start_time': '2026-09-26T19:30:00Z'}
+        self.assertEqual(sharp_odds.find_game(row('Oklahoma', 'Georgia'), games)['id'], 'CFB-1')
+        self.assertEqual(sharp_odds.find_game(row('Hawaii', 'Wyoming'), games)['id'], 'CFB-2')
+        self.assertIsNone(sharp_odds.find_game(row('Oklahoma', 'Iowa State'), games), 'Oklahoma is not Oklahoma State')
+
     def test_combined_and_longest_markets_are_not_the_plain_stat(self):
         for market in ('player_passing_+_rushing_yards', 'player_rushing_+_receiving_yards', 'player_longest_passing_completion',
                        'player_longest_rush', 'player_rush_and_receiving_yards'):

@@ -277,7 +277,10 @@ gate stays the NFL's.
 
 **The prop price feed** (SharpAPI, `scripts/sharp_odds.py`): its event list is every sport's events soonest first
 unless filtered; on 2026-09-26 one page of 200 held none of Sunday's NFL games and 6 of 52 college games, so most games
-were never priced. It now asks for upcoming events at DraftKings and FanDuel only (33 NFL, 58 college). Combined and
+were never priced. It now asks for upcoming events at DraftKings and FanDuel only (33 NFL, 58 college), and a college
+team is found by its school as well as its full name (the feed writes "Oklahoma", the slate "Oklahoma Sooners"; a
+short alias list covers "Connecticut", "Miami Ohio" and the like), which took college matches from 4 of 49 to all of
+them. Combined and
 longest-play markets are no longer read as the plain stat ("passing + rushing yards" was being filed as passing
 yards), and a book's alternates keep only the main line's own ladder: DraftKings filed first-half and other period
 ladders under the full-game market (Mahomes 14.5 to 49.5 passing yards beside a 222.5 main line).
