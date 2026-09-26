@@ -280,6 +280,29 @@ def captured_lines(games):
     return out
 
 
+def name_key(name):
+    words = re.sub(r"[^a-z ]", ' ', str(name or '').lower().replace('-', ' ')).split()
+    return ' '.join(w for w in words if w not in ('jr', 'sr', 'ii', 'iii', 'iv', 'v'))
+
+
+def feed_lines(games, root=None):
+    """gameId -> (retrievedAt, lines) for college games, which ESPN's feed of main lines does not carry: the priced
+    feed's own main numbers (sharp_odds.main_lines) in its last record before kickoff, matched to the box score's
+    players by name. Learning grades college player projections against these; the scoreboard's NFL rows never see them."""
+    import sharp_odds
+    out = {}
+    for path in sorted(Path(root or ROOT / 'data' / 'prop-odds').glob('cfb-*.jsonl')):
+        for record in boxscores.read_store(path):
+            game = games.get(record['gameId'])
+            if not game or not before(record['retrievedAt'], game['kickoff']):
+                continue
+            ids = {name_key(p.get('name')): p['id'] for p in game.get('players', []) if p.get('name')}
+            lines = sharp_odds.main_lines(record, lambda name: ids.get(name_key(name)))
+            if lines:
+                out[record['gameId']] = (record['retrievedAt'], lines)
+    return out
+
+
 def settle_value(player, stat):
     if player is None:
         return None

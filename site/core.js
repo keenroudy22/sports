@@ -271,6 +271,7 @@
     if (!g) return { tier: 'none', word: 'No model read', detail: note || '' };
     const pct = x => `${Math.round(100 * x)}%`;
     if (g.paused) return { tier: 'pass', word: 'Paused', detail: `${pct(g.chance)} our chance · our record on these bets trails the market, so we sit them out` };
+    if (g.unproven) return { tier: 'pass', word: 'Grading first', detail: `our number ${g.projection} · ${pct(g.chance)} on the raw curve · college player numbers get graded against the line before we play them` };
     const tier = tierOf(g);
     /* A player line carries no price, so there is no edge to state: show the projection against
        the number, which side that favours, and how little history it rests on. */
@@ -298,7 +299,7 @@
     || (((b.grade || {}).edge ?? -1e9) - ((a.grade || {}).edge ?? -1e9));
   const category = p => p.kind === 'gamePicks' ? (p.marketType === 'total' ? 'Totals' : 'Spreads')
     : p.kind === 'props' ? 'Straights' : p.kind === 'riskyProps' ? 'Risky lines'
-      : p.parlayType === 'longshot' ? 'Longshots' : 'Parlays';
+      : p.parlayType === 'longshot' ? 'Longshots' : p.parlayType === 'ladder' ? 'Ladder' : 'Parlays';
   const summarizePicks = (picks, minimum) => {
     const settled = picks.filter(p => ['win', 'loss', 'push', 'void'].includes(p.result));
     const priced = picks.filter(p => unitsFor(p) != null);
@@ -321,15 +322,15 @@
   /* Parlays are staked at their own size, never a full unit, so they are summarized apart and never
      folded into the straight-pick units. ROI is profit against what was actually risked. */
   /* Three kinds of pick, tracked apart: researched picks, the model's own leans, and longshot parlays. */
-  const kindOf = p => p.kind === 'parlays' ? 'longshot' : p.modelLean ? 'model' : 'researched';
-  const KIND_WORD = { researched: 'Researched', model: 'Model picks', longshot: 'Longshots' };
+  const kindOf = p => p.parlayType === 'ladder' ? 'ladder' : p.kind === 'parlays' ? 'longshot' : p.modelLean ? 'model' : 'researched';
+  const KIND_WORD = { researched: 'Researched', model: 'Model picks', longshot: 'Longshots', ladder: 'Ladder' };
   /* Picks imported from before the desk recorded prices (the Week 1 props) stay listed with their results but
      are kept out of every total, so a record, its units and its ROI always describe the same priced picks. */
   const isUnpricedImport = p => Boolean(p.historicalImport) && p.odds == null;
   const recordOf = (picks, minimum = 10) => {
     const imported = picks.filter(isUnpricedImport);
     const counted = picks.filter(p => !isUnpricedImport(p));
-    const parlays = counted.filter(p => p.kind === 'parlays');
+    const parlays = counted.filter(p => p.kind === 'parlays' && !isLadder(p));
     const straight = counted.filter(p => p.kind !== 'parlays');
     return { ...summarizePicks(straight, minimum),
       imported: imported.length ? summarizePicks(imported, minimum) : null,
@@ -342,6 +343,28 @@
      one). Fun parlays (smaller stakes) and the Week 1 legs posted before prices were recorded get their own lines.
      The Pick of the Day record counts the days its post went out. */
   const isParlay = p => p.kind === 'parlays' || Boolean((p.legs || []).length) || Boolean(p.parlayType);
+  /* The Kook'n Ladder (scripts/ladder.py): $50 to $1,000, the whole bankroll riding on each rung, kept apart from the
+     record and counted in dollars. Its state is read from the rungs the way the desk reads it: a win rolls the payout
+     into the next step, reaching $1,000 finishes the climb, a miss starts a new climb at $50, a push keeps the stake,
+     and a rung pulled before its post went out never counts. */
+  const isLadder = p => p.parlayType === 'ladder';
+  const LADDER = { start: 50, goal: 1000 };
+  const theLadder = picks => {
+    const rungs = picks.filter(isLadder).filter(p => p.result || (!p.entryNote && (p.status || 'active') === 'active'))
+      .sort((a, b) => String(a.publishedAt || '').localeCompare(String(b.publishedAt || '')) || String(a.id).localeCompare(String(b.id)));
+    let run = 1, step = 1, stake = LADDER.start, open = null, best = LADDER.start;
+    const history = [], climbs = [];
+    for (const r of rungs) {
+      const info = r.ladder || {};
+      if (!r.result) { open = r; continue; }
+      history.push(r);
+      if (r.result === 'win') {
+        stake = Number(info.payout) || stake; step += 1; best = Math.max(best, stake);
+        if (stake >= LADDER.goal) { climbs.push({ run, steps: step - 1, final: stake }); run += 1; step = 1; stake = LADDER.start; }
+      } else if (r.result === 'loss') { run += 1; step = 1; stake = LADDER.start; }
+    }
+    return { run, step, stake, open, history, climbs, best, ...LADDER };
+  };
   const dayOf = iso => {
     const d = new Date(iso);
     if (Number.isNaN(d.getTime())) return null;
@@ -361,7 +384,8 @@
       week: summarizePicks(straight.filter(p => weekOf(when(p)) === week), 10),
       lastDay: last ? { day: last, ...summarizePicks(straight.filter(p => dayOf(when(p)) === last), 10) } : null,
       potd: summarizePicks(straight.filter(p => p.featured && p.posted), 10),
-      parlays: summarizePicks(counted.filter(isParlay), 10),
+      parlays: summarizePicks(counted.filter(p => isParlay(p) && !isLadder(p)), 10),
+      ladder: theLadder(picks),
       imported: imported.length ? summarizePicks(imported, 10) : null,
       /* Graded plays whose price was never recorded and is assumed (the Week 1 lines, at -115): the site says so. */
       assumed: straight.filter(p => p.priceAssumed && ['win', 'loss', 'push'].includes(p.result)).length,
@@ -407,5 +431,5 @@
   return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone,
     column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, eligible, summarizeTicket, ticketText,
-    unitsFor, stakeOf, recordOf, theRecord, isParlay, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, theRecord, isParlay, isLadder, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, shardOf, BASE };
 });

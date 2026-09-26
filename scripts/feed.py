@@ -199,6 +199,9 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
     # The Pick of the Day gets a card of its own, under its own name, so a post can never carry a stale copy.
     plays += [dict(item, guid=f"{item['guid']}-potd", featured=True) for item in plays if item['guid'] == potd]
     cards = render_cards(plays + ready, cards_folder, log) if with_cards else {}
+    if with_cards:
+        import sheet          # the weekly projections sheet on its league's day, from the page payloads just built
+        cards.update(sheet.render_due(now, cards_folder, log=log))
     Path(out).parent.mkdir(parents=True, exist_ok=True)
     Path(out).write_text(rss(items, cards, now), encoding='utf-8')
     log(f'{len(items)} items in the feed ({sum(1 for i in items if "pick" in i)} plays, {len(cards)} cards) -> {out}')

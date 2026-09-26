@@ -13,6 +13,7 @@ pan, a plate served at a book.
 """
 import argparse
 import html
+import math
 import os
 import shutil
 import subprocess
@@ -165,7 +166,7 @@ def logo_url(team, league):
 def artwork(pick, game, fetch=None):
     """{'kind': 'photo', 'uri'} for an NFL player prop, {'kind': 'logos', 'uris'} for a team prop (the side's logo
     on a spread, both teams' on a total), or None for the chef: a parlay, a failed fetch, or the switch off."""
-    if not CARD_ART or not game or play_kind(pick) == 'parlay':
+    if not CARD_ART or not game or play_kind(pick) in ('parlay', 'ladder'):
         return None
     fetch = fetch or fetch_data_uri
     league = game.get('league') or str(pick.get('id', '')).split('-')[0]
@@ -231,10 +232,13 @@ def display_title(pick, game):
         return title
     league = game.get('league') or str(pick.get('id', '')).split('-')[0]
     away, home = game.get('away') or {}, game.get('home') or {}
-    for a in [x for x in (away.get('short'), away.get('abbreviation')) if x]:
-        for h in [x for x in (home.get('short'), home.get('abbreviation')) if x]:
-            if title.startswith(f'{a} at {h}'):
-                return f'{team_label(away, league)} at {team_label(home, league)}' + title[len(f'{a} at {h}'):]
+    names = lambda team: sorted({x for x in (team.get('school'), team.get('short'), team.get('abbreviation')) if x}, key=len, reverse=True)
+    for a in names(away):
+        for h in names(home):
+            lead = f'{a} at {h}'
+            # Whole names only: "New Mexico St" is not the start of "New Mexico State" (2026-09-26 posted "Stateate").
+            if title.startswith(lead) and title[len(lead):len(lead) + 1] in ('', ' '):
+                return f'{team_label(away, league)} at {team_label(home, league)}' + title[len(lead):]
     return title
 
 
@@ -273,11 +277,14 @@ def number_line(pick):
     return f"Our number {value} vs the {pricing.fmt(float(line))}"
 
 
-KINDS = {'player': 'PLAYER PROP', 'team': 'TEAM PROP', 'parlay': 'FUN PARLAY'}
+KINDS = {'player': 'PLAYER PROP', 'team': 'TEAM PROP', 'parlay': 'FUN PARLAY', 'ladder': 'LADDER'}
 
 
 def play_kind(pick):
-    """What goes to X, in the owner's words: player props, team props (sides and totals) and fun parlays."""
+    """What goes to X, in the owner's words: player props, team props (sides and totals), fun parlays and the ladder's
+    rungs (scripts/ladder.py), which keep their own count in dollars."""
+    if pick.get('parlayType') == 'ladder':
+        return 'ladder'
     if pick.get('legs') or pick.get('parlayType'):
         return 'parlay'
     return 'player' if pick.get('athleteId') or pick.get('market') else 'team'
@@ -285,6 +292,8 @@ def play_kind(pick):
 
 def kicker(pick, featured=False):
     """The label every card and every post leads with; the day's Pick of the Day and a researched favorite say so."""
+    if play_kind(pick) == 'ladder':
+        return f"LADDER · STEP {(pick.get('ladder') or {}).get('step', 1)}"
     label = KINDS[play_kind(pick)]
     if featured:
         return f'PICK OF THE DAY · {label}'
@@ -300,6 +309,8 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
     side = side_for(pick, game, player_side)
     primary, alternate = team_colors(game, side, identities)
     other, _ = team_colors(game, 'away' if side == 'home' else 'home', identities)
+    if play_kind(pick) == 'ladder':          # the ladder is the kitchen's own, whichever games carry the rung
+        primary, other, alternate = HOUSE
     light = luminance(primary) > 0.55
     ink = INK if light else CREAM
     soft = shade(INK, 1.35) if light else shade(CREAM, 0.82)
@@ -308,10 +319,14 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
     price = f"{int(pick['odds']):+d}" if isinstance(pick.get('odds'), (int, float)) else ''
     book = pick.get('book') or ''
     label = kicker(pick, featured)
-    parlay = play_kind(pick) == 'parlay'
+    rung = play_kind(pick) == 'ladder'
+    parlay = play_kind(pick) in ('parlay', 'ladder')
     legs = [str(l.get('title') or '') for l in (pick.get('legs') or []) if l.get('title')]
     if parlay:
         title = f"{len(pick.get('legs') or [])}-leg parlay"
+    if rung:
+        info = pick.get('ladder') or {}
+        title = f"{dollars(info.get('stake'))} → {dollars(info.get('payout'))}"
     matchup = ''
     if game:
         away, home = game.get('away') or {}, game.get('home') or {}
@@ -348,10 +363,12 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
         f'<text x="140" y="116" fill="{ink}" font-size="34" font-weight="800" letter-spacing="5">KOOK’N</text>',
         f'<text x="{WIDTH - 80}" y="116" fill="{soft}" font-size="26" font-weight="700" letter-spacing="3" text-anchor="end">{esc(label)}</text>',
         f'<text x="80" y="212" fill="{soft}" font-size="32">{esc(matchup)}</text>',
-        f'<text x="80" y="262" fill="{accent}" font-size="24" font-weight="700" letter-spacing="4">TODAY’S PLATE</text>',
+        f'<text x="80" y="262" fill="{accent}" font-size="24" font-weight="700" letter-spacing="4">'
+        f'{"THE CLIMB: " + esc(dollars(LADDER[0])) + " TO " + esc(dollars(LADDER[1])) if rung else "TODAY’S PLATE"}</text>',
         *[f'<text x="80" y="{262 + (title_size + 6) * (i + 1) - 2}" fill="{ink}" font-size="{title_size}" font-weight="800">{esc(text)}</text>'
           for i, text in enumerate(lines)],
-        *(parlay_body(legs, price, book, units, ink, soft, accent, title_size) if parlay else [
+        *(ladder_body(pick.get('ladder') or {}, legs, price, book, ink, soft, accent, title_size) if rung else
+          parlay_body(legs, price, book, units, ink, soft, accent, title_size) if parlay else [
         f'<text x="80" y="418" fill="{soft}" font-size="26" letter-spacing="1">Served at</text>',
         f'<text x="80" y="470" fill="{ink}" font-size="50" font-weight="800">{esc(price)}<tspan fill="{soft}" font-size="34" font-weight="600" dx="18">{esc(book)}</tspan></text>',
         f'<text x="80" y="530" fill="{ink}" font-size="32">{esc(ours)}</text>']),
@@ -438,7 +455,43 @@ def parlay_body(legs, price, book, units, ink, soft, accent, title_size):
     return rows
 
 
-def render(svg_text, out, chrome=None, timeout=45):
+LADDER = (50, 1000)          # the ladder's start and goal in dollars (scripts/ladder.py START, GOAL)
+
+
+def dollars(amount):
+    try:
+        return f'${int(amount):,}'
+    except (TypeError, ValueError):
+        return ''
+
+
+def ladder_body(info, legs, price, book, ink, soft, accent, title_size):
+    """A rung in the same frame: its two legs, the climb from $50 to $1,000 as a bar (a log scale, so every doubling is
+    the same step), filled to the stake riding with what a win makes it shaded after, and the price."""
+    top = 262 + title_size + 4 + 44
+    rows = [f'<text x="80" y="{top + 34 * i}" fill="{ink}" font-size="26">• {esc(fit(leg, 40))}</text>' for i, leg in enumerate(legs[:3])]
+    x0, x1, y = 80, 660, top + 34 * len(legs[:3]) + 18
+
+    def at(amount):
+        try:
+            share = math.log(max(float(amount), LADDER[0]) / LADDER[0]) / math.log(LADDER[1] / LADDER[0])
+        except (TypeError, ValueError):
+            share = 0.0
+        return x0 + (x1 - x0) * max(0.0, min(1.0, share))
+
+    now_x, win_x = at(info.get('stake')), at(info.get('payout'))
+    rows += [f'<rect x="{x0}" y="{y}" width="{x1 - x0}" height="14" rx="7" fill="{soft}" fill-opacity="0.28"/>',
+             f'<rect x="{x0}" y="{y}" width="{max(14.0, win_x - x0):.0f}" height="14" rx="7" fill="{accent}" fill-opacity="0.45"/>',
+             f'<rect x="{x0}" y="{y}" width="{max(14.0, now_x - x0):.0f}" height="14" rx="7" fill="{accent}"/>',
+             f'<text x="{x0}" y="{y + 42}" fill="{soft}" font-size="22">{esc(dollars(LADDER[0]))}</text>',
+             f'<text x="{x1}" y="{y + 42}" fill="{soft}" font-size="22" text-anchor="end">{esc(dollars(LADDER[1]))}</text>',
+             f'<text x="80" y="562" fill="{soft}" font-size="26" letter-spacing="1">Served at <tspan fill="{ink}" font-size="44" '
+             f'font-weight="800" letter-spacing="0" dx="8">{esc(price)}</tspan><tspan fill="{soft}" font-size="30" font-weight="600" '
+             f'letter-spacing="0" dx="14">{esc(book)}</tspan></text>']
+    return rows
+
+
+def render(svg_text, out, chrome=None, timeout=45, size=None):
     """Rasterize the SVG to a PNG with the machine's headless browser. Raises when there is none.
 
     Chrome writes the screenshot and then, on this machine, does not exit on its own, so the file is
@@ -458,7 +511,7 @@ def render(svg_text, out, chrome=None, timeout=45):
                         f'svg{{display:block}}</style></head><body>{svg_text}</body></html>', encoding='utf-8')
         process = subprocess.Popen([chrome, '--headless', '--disable-gpu', '--no-sandbox', '--hide-scrollbars',
                                     '--disable-extensions', '--no-first-run', '--virtual-time-budget=2000',
-                                    f'--user-data-dir={folder}/profile', f'--window-size={WIDTH},{HEIGHT}',
+                                    f'--user-data-dir={folder}/profile', '--window-size={},{}'.format(*(size or (WIDTH, HEIGHT))),
                                     f'--screenshot={out}', page.as_uri()],
                                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         deadline, last_size, stable = time.time() + timeout, -1, 0

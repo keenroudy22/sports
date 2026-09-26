@@ -324,6 +324,9 @@ def reason_for(pick, weights=None):
 
 
 PLAYBOOK = '@Playbook'     # the betslip bot (Action Network): tagged on a bet, it replies with the slip pre-loaded
+ASK = "❤️ if you're tailing"                   # the ask the big accounts close on (docs/X-NOTES.md): a like is a vote to tail
+LADDER_ASK = "❤️ if you're climbing with us"
+LOTTO = 1000                                   # a fun parlay paying this or more is a lotto, and its post says so first
 REASONS = ROOT / 'data' / 'x-reasons.json'   # the reason each play's post gives, chosen when the play is published
 
 
@@ -339,19 +342,44 @@ def save_reasons(reasons, path=None):
     target.write_text(json.dumps(dict(sorted(reasons.items())), indent=1, ensure_ascii=False) + '\n', encoding='utf-8')
 
 
+def parlay_head(pick, league):
+    """A fun parlay leads with its price, the way the most-saved posts do: "🎰 +2506 COLLEGE LOTTO" from +1000 up,
+    "🎯 +583 NFL LONGSHOT" under it, "🍳 +450 NFL EASY PROPS" for the easy parlay."""
+    odds = int(pick['odds'])
+    where = 'COLLEGE' if league == 'CFB' else 'NFL'
+    if pick.get('parlayType') == 'easyProps':
+        return f'🍳 {odds:+d} {where} EASY PROPS'
+    return f'🎰 {odds:+d} {where} LOTTO' if odds >= LOTTO else f'🎯 {odds:+d} {where} LONGSHOT'
+
+
+def ladder_text(pick):
+    """(head, money line, pitch) for a ladder rung: "🪜 KOOK’N LADDER · STEP 2", "$96 → $187 · +95 at FanDuel"."""
+    info = pick.get('ladder') or {}
+    head = f"🪜 KOOK’N LADDER · STEP {info.get('step', 1)}"
+    money = f"{pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))} · {int(pick['odds']):+d} at {pick.get('book')}"
+    start, goal = pick_card.dollars(info.get('start', 50)), pick_card.dollars(info.get('goal', 1000))
+    pitch = f'{start} to {goal}, one rung at a time. A miss starts it over.'
+    if (info.get('run') or 1) > 1:
+        pitch = f"Climb {info['run']}. " + pitch
+    return head, money, pitch
+
+
 def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=False):
     """The post, the same shape every time:
 
-        🍳 PLAYER PROP | TEAM PROP | FUN PARLAY   (· FAVORITE for a researched pick)
+        🍳 PLAYER PROP | TEAM PROP   (· FAVORITE for a researched pick; PICK OF THE DAY first on the day's pick)
         the play
         price at book
 
         We project n (total points, receptions, ...)
         one plain reason from the pick
 
+        ❤️ if you're tailing
         @Playbook #league
 
-    A parlay lists its legs and says it is just for fun. No link and no stat line: the card carries the site,
+    A fun parlay leads with its price ("🎰 +2506 COLLEGE LOTTO"), lists its legs and says it is just for fun; a ladder
+    rung leads with its step and the money riding ("🪜 KOOK’N LADDER · STEP 2", "$96 → $187"). The ask goes first when
+    something has to give, then the reason. No link and no stat line: the card carries the site,
     and @Playbook answers with the betslip. Every number comes from the pick; the units are the site's own
     count (one for a straight play, the ticket's riskUnits for a parlay).
 
@@ -362,13 +390,21 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
     """
     league = (game or {}).get('league') or str(pick.get('id', '')).split('-')[0]
     tail = ' '.join(x for x in (PLAYBOOK, TAGS.get(league, '')) if x)
+    ask = f'{ASK}\n{tail}'
     head = f"🍳 {pick_card.kicker(pick, featured)}"
     price = f"{int(pick['odds']):+d} at {pick.get('book')}"       # no units on X (the owner's call, 2026-09-24)
-    if pick_card.play_kind(pick) == 'parlay':
-        legs = [str(l.get('title') or '') for l in pick.get('legs') or [] if l.get('title')]
-        count = f"{len(pick.get('legs') or [])} legs · {price}"
-        top = '\n'.join([head, count, *[f'• {leg}' for leg in legs]])
-        options = ([top, 'Just for fun.', tail], [top, tail], [head, count, tail])
+    kind = pick_card.play_kind(pick)
+    legs = [f"• {l.get('title')}" for l in pick.get('legs') or [] if l.get('title')]
+    if kind == 'ladder':
+        head, money, pitch = ladder_text(pick)
+        top = '\n'.join([head, money, *legs])
+        climbing = f'{LADDER_ASK}\n{tail}'
+        options = ([top, pitch, climbing], [top, climbing], [top, tail])
+    elif kind == 'parlay':
+        head = parlay_head(pick, league)
+        count = f"{len(pick.get('legs') or [])} legs at {pick.get('book')}"
+        top = '\n'.join([head, count, *legs])
+        options = ([top, 'Just for fun.', ask], [top, ask], [top, tail], [head, count, tail])
     else:
         top = '\n'.join([head, pick_card.display_title(pick, game), price] + ([now_line(pick, now_quote)] if now_line(pick, now_quote) else []))
         number = pick_card.number_line(pick)
@@ -376,7 +412,7 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
             reason = load_reasons().get(str(pick.get('id')))
         if reason and not plain(reason):
             reason = None
-        options = ([top, '\n'.join(x for x in (number, reason) if x), tail], [top, number, tail], [top, tail])
+        options = ([top, '\n'.join(x for x in (number, reason) if x), ask], [top, number, ask], [top, ask], [top, number, tail], [top, tail])
     for parts in options:
         text = '\n\n'.join(part for part in parts if part)
         if tweet_length(text) <= LIMIT and not guard(text, pick, reason, now_quote):
@@ -412,6 +448,8 @@ def guard(text, pick, reason=None, now_quote=None):
     if now_quote:
         extra.append({'now': list(now_quote)})  # the number available now comes from the latest capture
     extra.append({'stake': pick_card.stake(pick)})                              # "1 unit" is the stake the record counts
+    if pick.get('ladder'):          # "$1,062" reads as 1 and 62: the rung's dollars as the post writes them
+        extra.append({k: pick_card.dollars(v) for k, v in pick['ladder'].items() if isinstance(v, int)})
     ok, strays = llm.numbers_ok(text, pick, extra)
     if not ok:
         problems.append(f"numbers not in the pick: {', '.join(strays)}")

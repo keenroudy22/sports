@@ -310,3 +310,22 @@ test('one record: the straight plays in wins and losses and units, the side reco
   assert.equal(C.unitsFor({ result: 'void', odds: -110, units: 0 }), null, 'a void is out of the units');
   assert.equal(C.isParlay({ kind: 'parlays' }) && C.isParlay({ legs: [{}] }) && !C.isParlay({ kind: 'props' }), true);
 });
+
+test('the ladder climbs on wins, starts over on a miss, finishes at $1,000 and stays out of the fun parlays', () => {
+  const rung = (id, published, step, stake, payout, result, extra = {}) => ({ id, kind: 'parlays', parlayType: 'ladder', publishedAt: published,
+    status: result ? 'settled' : 'active', result, odds: 100, riskUnits: 0.25, legs: [{ title: 'a' }, { title: 'b' }],
+    ladder: { run: 1, step, stake, payout, start: 50, goal: 1000 }, ...extra });
+  const picks = [rung('r1', '2026-09-27T12:30:00Z', 1, 50, 96, 'win'), rung('r2', '2026-09-28T12:30:00Z', 2, 96, 187, 'loss'),
+    rung('r3', '2026-10-01T12:30:00Z', 1, 50, 99, null, { entryNote: 'Closed before its post went out', status: 'expired' }),
+    rung('r4', '2026-10-03T12:30:00Z', 1, 50, 97, null)];
+  const L = C.theLadder(picks);
+  assert.deepEqual([L.run, L.step, L.stake, L.open.id, L.history.map(r => r.id)], [2, 1, 50, 'r4', ['r1', 'r2']]);
+  assert.equal(L.best, 96);
+  const top = C.theLadder([rung('a', '2026-09-27T12:30:00Z', 5, 540, 1062, 'win')]);
+  assert.deepEqual([top.climbs.length, top.climbs[0].final, top.run, top.stake], [1, 1062, 2, 50]);
+  const fun = { id: 'f', kind: 'parlays', parlayType: 'longshot', result: 'win', odds: 600, riskUnits: 0.25, legs: [{ title: 'x' }] };
+  const rec = C.theRecord([...picks, fun]);
+  assert.equal(rec.parlays.wins + rec.parlays.losses, 1, 'only the longshot is a fun parlay');
+  assert.equal(rec.ladder.history.length, 2);
+  assert.ok(C.isLadder(picks[0]) && !C.isLadder(fun));
+});

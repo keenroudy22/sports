@@ -124,7 +124,7 @@ class PlanTests(unittest.TestCase):
         plans = [p for p in plans if p[1] == 'play']
         self.assertTrue(all(p[4] == p[0] for p in plans), 'each play with its own card')
         self.assertTrue(plans[0][2].startswith('🍳 PLAYER PROP'))
-        self.assertTrue(plans[3][2].startswith('🍳 FUN PARLAY'))
+        self.assertTrue(plans[3][2].startswith('🎯 +'), 'a fun parlay leads with its price')
 
     def test_a_late_play_goes_out_now_and_a_passed_window_is_skipped(self):
         first = {'a': pick('a'), 'b': pick('b', 'late', title='Oklahoma at Georgia under 44.5', direction='under')}
@@ -177,6 +177,28 @@ class PlanTests(unittest.TestCase):
         for now in (datetime(2026, 9, 29, 12, 40, tzinfo=timezone.utc), datetime(2026, 9, 25, 4, 30, tzinfo=timezone.utc)):
             kinds = {p[1] for p in bp.plan(first, latest, games, now, {'posts': []})}
             self.assertFalse(kinds - {'receipt'}, 'no recap, no scoreboard: plays and their receipts only')
+
+
+class SpacingTests(unittest.TestCase):
+    def test_a_later_run_never_takes_a_queued_posts_slot(self):
+        # 2026-09-26: the 11:45 run scheduled three plays at 12:00, 12:10 and 12:20 beside the six already queued there.
+        queued = [{'id': f'q{i}', 'dueAt': f'2026-09-26T16:{10 * i:02d}:00Z', 'kind': 'buffer:play'} for i in range(6)]
+        first = {'a': pick('a', 'late'), 'b': pick('b', 'late', title='Oklahoma at Georgia under 44.5', direction='under')}
+        latest = {k: dict(v) for k, v in first.items()}
+        eleven = datetime(2026, 9, 26, 15, 58, tzinfo=timezone.utc)       # 11:58 AM ET
+        plans = bp.plan(first, latest, GAMES, eleven, {'posts': queued})
+        self.assertEqual([(p[0], et(p[3])) for p in plans], [('a', '13:00'), ('b', '13:10')],
+                         'after the queue, ten minutes from every post already scheduled')
+        cancelled = [dict(q, cancelledAt='2026-09-26T14:00:00Z') if q['id'] == 'q2' else q for q in queued]
+        plans = bp.plan(first, latest, GAMES, eleven, {'posts': cancelled})
+        self.assertEqual([et(p[3]) for p in plans], ['12:20', '13:00'], 'a cancelled post frees its slot')
+
+    def test_a_day_holds_at_most_the_ceiling_counting_what_is_queued(self):
+        queued = [{'id': f'q{i}', 'dueAt': f'2026-09-26T{10 + i // 6:02d}:{10 * (i % 6):02d}:00Z'} for i in range(bp.MAX_PER_DAY - 1)]
+        first = {'a': pick('a', 'late'), 'b': pick('b', 'late', title='Oklahoma at Georgia under 44.5', direction='under')}
+        latest = {k: dict(v) for k, v in first.items()}
+        plans = bp.plan(first, latest, GAMES, NOW, {'posts': queued})
+        self.assertEqual(len(plans), 1, 'one more fits under the ceiling')
 
 
 class ScheduleTests(unittest.TestCase):

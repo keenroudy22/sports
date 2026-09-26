@@ -1051,6 +1051,15 @@ def checked_facts(candidate, limit=2):
 def write_prose(candidate, ctx, records):
     """Template why and risk from the pick's own numbers. A model may polish these later; it never adds a number."""
     if candidate.get('legs'):       # a parlay has no single line or side: its words come first, before any are read
+        if candidate.get('parlayType') == 'ladder':
+            info = candidate['ladder']
+            candidate['why'] = (f"Ladder step {info['step']}: two easier lines at {candidate['book']}, one per game, each one our projection "
+                                f"clears comfortably. The whole ${info['stake']} rides to ${info['payout']}: a win rolls it into the next "
+                                f"step, a miss starts the climb over at ${info['start']}. Kept apart from the record, in dollars.")
+            candidate['risk'] = ('Both legs have to hit; one miss ends the climb. Our player chances are tuned for main lines, so these legs '
+                                 'are not value, just the fun of the climb. A player who does not take the field voids his leg under the '
+                                 "book's rule, and a person settles the rung.")
+            return candidate
         if candidate.get('parlayType') == 'easyProps':
             candidate['why'] = (f"Easy props, for fun: {len(candidate['legs'])} legs at {candidate['book']}, one per game, each an easier line "
                                 f"our projection clears comfortably. A quarter unit, tracked with the longshots, apart from the straight picks.")
@@ -1222,6 +1231,36 @@ def easy_parlay_step(ctx, games, now, records, published, decided, screened, spe
     refusal = gates.refusals(decisions)[0]
     decided.append(decision_record(ticket, 'NFL', 'refused', [d.rule for d in gates.refusals(decisions)], refusal.reason, now, ctx))
     screened.append({'league': 'NFL', 'gameId': ticket['gameIds'][0], 'title': ticket['title'], 'rule': refusal.rule, 'reason': refusal.reason})
+
+
+def ladder_step(ctx, games, now, records, published, decided, screened, exclude=()):
+    """The ladder's next rung (scripts/ladder.py), through the ladder's gates, leaving off the games in `exclude`.
+    Never fails a run."""
+    import ladder
+    try:
+        ticket, reason = ladder.candidate(ctx, games, now, exclude=exclude)
+    except Exception as error:
+        log(f'ladder skipped ({type(error).__name__}: {error})')
+        return
+    if not ticket:
+        log(f'ladder: {reason}')
+        return
+    league = ticket['_league']
+    write_prose(ticket, ctx, records)
+    ok, decisions = gates.admit(dict(ticket, league=league), ctx)
+    if ok:
+        if any(d.rule == 'cfb_jurisdiction' and (d.data or {}).get('jurisdictionVerified') for d in decisions):
+            ticket['jurisdictionVerified'] = True     # a college rung at a book available in Indiana
+        ctx.first[ticket['id']] = dict(ticket, league=league, publishedAt=stamp(now), kind='parlays')
+        published.append((league, 'parlays', ticket))
+        decided.append(decision_record(ticket, league, 'published', [], None, now, ctx))
+        info = ticket['ladder']
+        log(f"ladder: step {info['step']} {ticket['odds']:+d} at {ticket['book']}, ${info['stake']} to ${info['payout']}: "
+            + ' / '.join(l['title'] for l in ticket['legs']))
+        return
+    refusal = gates.refusals(decisions)[0]
+    decided.append(decision_record(ticket, league, 'refused', [d.rule for d in gates.refusals(decisions)], refusal.reason, now, ctx))
+    screened.append({'league': league, 'gameId': ticket['gameIds'][0], 'title': ticket['title'], 'rule': refusal.rule, 'reason': refusal.reason})
 
 
 def pick_of_the_day(now, ctx, status, write=True):
@@ -1452,6 +1491,7 @@ def _run(args, now, slot, kinds, status):
             screened.append({'league': league, 'gameId': ticket['gameIds'][0], 'title': ticket['title'],
                              'rule': gates.refusals(decisions)[0].rule, 'reason': gates.refusals(decisions)[0].reason})
         easy_parlay_step(ctx, games, now, records, published, decided, screened, spend=not args.dry_run, exclude=exclude)
+        ladder_step(ctx, games, now, records, published, decided, screened, exclude=exclude)
 
     by_league = defaultdict(lambda: ([], [], []))
     for item in settled:
@@ -1641,6 +1681,11 @@ def lotto_pings(plans, ctx):
         if pick and pick_card.play_kind(pick) == 'parlay' and isinstance(pick.get('odds'), (int, float)):
             out.append(('Longshot hit: pin it', f"{pick.get('title') or 'The fun parlay'} cashed at {int(pick['odds']):+d}. "
                         "The CASHED post is at the top of the profile: tap to open it, then ... and Pin to your profile."))
+        info = pick.get('ladder') or {}
+        if pick and pick_card.play_kind(pick) == 'ladder' and (info.get('payout') or 0) >= (info.get('goal') or 1000):
+            out.append(('Ladder complete: pin it', f"The ladder reached ${info['payout']:,} from ${info.get('start', 50)} in "
+                        f"{info.get('step', 1)} steps. The LADDER COMPLETE post is at the top of the profile: tap to open it, then ... "
+                        "and Pin to your profile."))
     return out
 
 

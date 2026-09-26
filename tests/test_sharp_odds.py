@@ -32,6 +32,11 @@ class MappingTests(unittest.TestCase):
         for market, key in cases.items():
             self.assertEqual(sharp_odds.market_key(market), key, market)
 
+    def test_combined_and_longest_markets_are_not_the_plain_stat(self):
+        for market in ('player_passing_+_rushing_yards', 'player_rushing_+_receiving_yards', 'player_longest_passing_completion',
+                       'player_longest_rush', 'player_rush_and_receiving_yards'):
+            self.assertIsNone(sharp_odds.market_key(market), market)
+
     def test_team_spellings_match_across_the_two_feeds(self):
         self.assertTrue(sharp_odds.same_team('Las Vegas Raiders', 'LV Raiders'))
         self.assertTrue(sharp_odds.same_team('Los Angeles Chargers', 'LA Chargers'))
@@ -69,7 +74,26 @@ class QuoteTests(unittest.TestCase):
                 (g, row('draftkings', 'player_receiving_yards', 'Tre Tucker', 'over', 49.5, 300, is_alternate_line=True))]
         q = sharp_odds.quotes_from(rows)['NFL-1']['draftkings']['recYds']['Tre Tucker']
         self.assertEqual((q['line'], q['over'], q['under']), (35.5, -110, -114))
-        self.assertEqual([a['line'] for a in q['alternates']], [14.5, 49.5])
+        self.assertEqual([a['line'] for a in q['alternates']], [49.5], 'the +235 rung below the main line is out of order: another market')
+
+    def test_a_period_ladder_filed_under_the_full_game_market_is_dropped(self):
+        # DraftKings' Mahomes passing yards on 2026-09-26: rungs from 14.5 to 49.5 and 69.5 to 139.5 beside a 222.5 main.
+        quote = {'line': 222.5, 'over': -113, 'under': -111, 'alternates': [
+            {'line': 14.5, 'over': -205}, {'line': 19.5, 'over': -125}, {'line': 49.5, 'over': 1300}, {'line': 69.5, 'over': -215},
+            {'line': 139.5, 'over': 1300}, {'line': 199.5, 'over': -200}, {'line': 174.5, 'over': -390}, {'line': 249.5, 'over': 172},
+            {'line': 274.5, 'over': 290}, {'line': 244.5, 'over': -111}]}
+        self.assertEqual([a['line'] for a in sharp_odds.consistent(quote)], [174.5, 199.5, 244.5, 249.5, 274.5],
+                         'down from the main line the over only gets shorter, up from it only longer; the first rung out of order ends the walk')
+        self.assertEqual(sharp_odds.consistent({'line': None, 'alternates': quote['alternates']}), [])
+
+    def test_the_event_list_asks_for_upcoming_games_at_the_two_books(self):
+        seen = {}
+
+        def fetch(path, key, **params):
+            seen.update(params, path=path)
+            return {'data': [{'id': 'e1'}]}
+        self.assertEqual(sharp_odds.events('nfl', 'k', fetch=fetch), [{'id': 'e1'}])
+        self.assertEqual((seen['path'], seen['league'], seen['sportsbook'], seen['status']), ('/events', 'nfl', 'draftkings,fanduel', 'upcoming'))
 
     def test_a_completions_line_above_the_attempts_line_is_not_a_quote(self):
         g = self.slate[0]

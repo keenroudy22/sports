@@ -600,7 +600,10 @@ def build(now=None):
         if line['grade'] and f"{game['league']}/{'spread' if line.get('market') == 'point spread' else 'total'}" in paused:
             line['grade']['paused'] = True       # shown as paused on the site; the desk still sees it and records the refusal
         line['gradeNote'] = 'FBS vs FCS: v2 is not reliable here' if fcs and line.get('state') == 'open' else None
-    prop_prices = {gid: rows[-1] for gid, rows in load_store('prop-odds').items()}
+    prop_store = load_store('prop-odds')
+    prop_prices = {gid: rows[-1] for gid, rows in prop_store.items()}
+    # College players have no ESPN feed of main lines: their board rows come from the priced feed's own main numbers.
+    captures = {**feed_captures(prop_store, by_id, forecasts, names), **captures}
     # A stored capture can hold a line the game cannot produce; clean it before it reaches the board.
     for record in prop_prices.values():
         for book in (record.get('books') or {}).values():
@@ -697,6 +700,7 @@ def board_picks(first, latest, by_id, identities):
                      'projection': pick.get('projection'), 'confidence': pick.get('confidence'),
                      'favorite': pick.get('favorite') is True or key in FAVORITES_BEFORE_FLAG,
                      'marketType': pick.get('marketType'), 'parlayType': pick.get('parlayType'),
+                     'ladder': pick.get('ladder'),                         # a ladder rung's run, step and dollars (scripts/ladder.py)
                      'cutoff': pick.get('cutoff'), 'why': pick.get('why'),
                      'risk': pick.get('risk'), 'edge': pick.get('edge'), 'quotedAt': pick.get('quotedAt'),
                      'expiresAt': pick.get('expiresAt'), 'publishedAt': pick.get('publishedAt'),
@@ -804,6 +808,35 @@ def learned_prop_calibration():
             if key.endswith('/prop') and isinstance(entry, dict) and entry.get('k') is not None}
 
 
+PROP_OWN_CALIBRATION = {'CFB'}   # leagues whose player chances wait for their own calibration (gates.OWN_CALIBRATION)
+FEED_SOURCE = 'https://sharpapi.io/'
+
+
+def feed_captures(prop_store, by_id, forecasts, names, leagues=('CFB',)):
+    """gameId -> captures in the shape of ESPN's (retrievedAt, source, provider, lines) for games ESPN's feed does not
+    carry: one per prop-odds record, each player's main number (sharp_odds.main_lines), matched to the forecast's
+    players by name."""
+    out = {}
+    for gid, rows in prop_store.items():
+        game = by_id.get(gid)
+        if not game or game.get('league') not in leagues:
+            continue
+        snapshot = (pregame(forecasts.get(gid, []), game['kickoff']) or [None])[-1]
+        if not snapshot:
+            continue
+        ids = {person(names.get(p['id'])): p['id'] for side in ('home', 'away')
+               for p in ((snapshot.get('players') or {}).get(side) or {}).get('players', []) if names.get(p['id'])}
+        caps = []
+        for record in rows:
+            lines = sharp_odds.main_lines(record, lambda name: ids.get(person(name)))
+            if lines:
+                caps.append({'retrievedAt': record['retrievedAt'], 'source': FEED_SOURCE, 'lines': lines,
+                             'provider': 'DraftKings' if 'draftkings' in (record.get('books') or {}) else 'FanDuel'})
+        if caps:
+            out[gid] = caps
+    return out
+
+
 def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, prices=None, established=None, calibration=None):
     """DraftKings' main player lines for upcoming NFL games as board rows, with v2's lean at each.
 
@@ -897,8 +930,11 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, p
                                             # when the calibrated chance also clears the price.
                                             'tier': 'lean' if p['rawChance'] >= 0.6 and settled and not limited else 'pass',
                                             'view': 'lean' if p['rawChance'] >= 0.6 and settled and not limited
-                                                    and (k is None or edge >= need) else 'pass',
+                                                    and (k is None and game['league'] not in PROP_OWN_CALIBRATION
+                                                         or k is not None and edge >= need) else 'pass',
                                             'model': p['model'], 'snapshotAt': p['snapshotAt']}
+                            if k is None and game['league'] in PROP_OWN_CALIBRATION:
+                                row['grade']['unproven'] = True     # the site says it is being graded before it is played
                         except ValueError:
                             pass
                 rows.append(row)

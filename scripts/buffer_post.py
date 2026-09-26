@@ -42,8 +42,8 @@ POST_AT = (12, 0)                    # Eastern: plays go out around midday on ga
 EARLY_LEAD = timedelta(hours=2)      # a game before 2 PM posts two hours ahead of kickoff instead, never before 9:00 AM
 SPACING = timedelta(minutes=10)      # between two posts
 SOON = timedelta(minutes=2)          # a post scheduled "now" goes out this far ahead
-ORDER = {'player': 0, 'team': 1, 'parlay': 2}     # inside one kickoff: player props, then team props, then the parlay
-MAX_PER_DAY = 8                      # our own ceiling; Buffer's channel limit is queried as well
+ORDER = {'player': 0, 'team': 1, 'ladder': 2, 'parlay': 3}   # inside one kickoff: player props, team props, the ladder, the parlay
+MAX_PER_DAY = 20                     # our own ceiling for a day's posts, counting those already scheduled; Buffer allows 50
 
 
 def card_url(card_key):
@@ -200,6 +200,37 @@ def window_open(day):
     return datetime(day.year, day.month, day.day, feed.WINDOW_OPENS[0], feed.WINDOW_OPENS[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)
 
 
+def taken(log_book, now):
+    """When the posts already in Buffer go out: every scheduled post not cancelled, deleted or failed, from one spacing
+    before now on. A new post keeps its distance from these as well as from the others it is planned with."""
+    out = []
+    for entry in log_book.get('posts', []):
+        if entry.get('cancelledAt') or entry.get('deletedAt') or entry.get('error') or not entry.get('dueAt'):
+            continue
+        due = gates.when(entry['dueAt'])
+        if due > now - SPACING:
+            out.append(due)
+    return sorted(out)
+
+
+def free_slot(due, busy):
+    """The first time at or after `due` at least one spacing from every busy time. Plays a later run published used to
+    take the same noon slots as the queue (three pairs went out eight seconds apart on 2026-09-26)."""
+    moved = True
+    while moved:
+        moved = False
+        for other in busy:
+            if abs((due - other).total_seconds()) < SPACING.total_seconds():
+                due, moved = other + SPACING, True
+    return due
+
+
+def day_count(log_book, day):
+    """Posts scheduled or sent for an Eastern day, not counting any taken back."""
+    return sum(1 for entry in log_book.get('posts', []) if entry.get('dueAt') and not entry.get('cancelledAt')
+               and not entry.get('deletedAt') and eastern_date(gates.when(entry['dueAt'])) == day)
+
+
 def plan(first, latest, games, now, log_book, player_team=None, soon=None, quotes=None, refused=None):
     """The posts the run should schedule now: [(key, kind, text, due_at, card_key)].
 
@@ -244,7 +275,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
         noon = datetime(today.year, today.month, today.day, POST_AT[0], POST_AT[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)
         plays.append((max(min(noon, kickoff - EARLY_LEAD), opens), -1 if key == potd else ORDER[pick_card.play_kind(merged)],
                       kickoff - feed.LEAD, key, text, 'play', f'{key}-potd' if key == potd else key))
-    order = {'menu': -2, 'receipt': -1, 'book': -1, 'cashed': 1}
+    order = {'menu': -2, 'receipt': -1, 'book': -1, 'sheet': 0, 'cashed': 1}
     for post in receipts.house_posts(first, latest, games, log_book, now):
         if set(post['key'].split('+')) & posted:
             continue
@@ -255,16 +286,21 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
             continue
         plays.append((post['due'], order[post['kind']], post['stale'], post['key'], post['text'], post['kind'], post['card']))
     plays.sort()
-    out, last = [], None
+    out, last, busy, counts = [], None, taken(log_book, now), {}
     for target, _, deadline, key, text, kind, card in plays:
-        if len(out) >= MAX_PER_DAY:
-            break
         due = max(target, now + soon)
         if last is not None:
             due = max(due, last + SPACING)
+        due = free_slot(due, busy)
         if due > deadline:
             continue                    # this one's window has passed; a later one may still fit
+        day = eastern_date(due)
+        counts.setdefault(day, day_count(log_book, day))
+        if counts[day] >= MAX_PER_DAY:
+            continue
         out.append((key, kind, text, due, card))
+        busy.append(due)
+        counts[day] += 1
         last = due
     return out
 

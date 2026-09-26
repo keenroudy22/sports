@@ -190,6 +190,28 @@ class PropRowTests(unittest.TestCase):
         self.assertEqual(build_site.prop_rows(*args, calibration={'CFB': (0.13, 0.0)})[0]['grade']['chance'], raw['chance'],
                          'another league\'s calibration does not apply')
 
+    def test_college_player_lines_come_from_the_priced_feed_and_are_graded_before_they_are_played(self):
+        game = {'id': 'CFB-1', 'league': 'CFB', 'state': 'pre', 'kickoff': '2026-10-03T16:00:00Z',
+                'home': {'id': '1', 'abbreviation': 'MICH'}, 'away': {'id': '2', 'abbreviation': 'IOWA'}}
+        snapshot = {'gameId': 'CFB-1', 'league': 'CFB', 'model': 'v2.0', 'publishedAt': '2026-10-02T12:00:00Z', 'kickoff': game['kickoff'],
+                    'players': {'home': {'players': [{'id': '10', 'pos': 'WR', 'recYds': [70.0, 40.5, 99.5]}]}, 'away': None}}
+        record = {'gameId': 'CFB-1', 'retrievedAt': '2026-10-03T12:00:00Z', 'source': 'x', 'books': {
+            'fanduel': {'markets': {'recYds': {'Player Ten': {'line': 56.5, 'over': -110, 'under': -110}}}},
+            'draftkings': {'markets': {'recYds': {'Player Ten Jr.': {'line': 55.5, 'over': -115, 'under': -105}},
+                                       'rec': {'Nobody Known': {'line': 3.5, 'over': -110, 'under': -110}}}}}}
+        captures = build_site.feed_captures({'CFB-1': [record]}, {'CFB-1': game}, {'CFB-1': [snapshot]}, {'10': 'Player Ten'})
+        self.assertEqual(captures['CFB-1'][0]['lines'], {'10': {'recYds': [55.5, None]}}, "DraftKings' main number, matched by name")
+        self.assertEqual(captures['CFB-1'][0]['provider'], 'DraftKings')
+        rows = build_site.prop_rows(captures, {'CFB-1': game}, {'CFB-1': [snapshot]}, {'10': 'Player Ten'}, {'10': 3}, {},
+                                    datetime(2026, 10, 3, 13, tzinfo=timezone.utc), {'CFB-1': record})
+        grade = rows[0]['grade']
+        self.assertEqual((rows[0]['state'], rows[0]['league']), ('open', 'CFB'))
+        self.assertEqual((grade['tier'], grade['view'], grade.get('unproven')), ('lean', 'pass', True),
+                         'the desk judges it (and learning grades it); the site says it is graded before it is played')
+        calibrated = build_site.prop_rows(captures, {'CFB-1': game}, {'CFB-1': [snapshot]}, {'10': 'Player Ten'}, {'10': 3}, {},
+                                          datetime(2026, 10, 3, 13, tzinfo=timezone.utc), {'CFB-1': record}, calibration={'CFB': (0.9, 0.0)})
+        self.assertNotIn('unproven', calibrated[0]['grade'])
+
     def test_a_role_settled_last_season_is_not_thin_on_one_game(self):
         game = {'id': 'NFL-1', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-09-20T17:00:00Z',
                 'home': {'id': '1', 'abbreviation': 'ATL'}, 'away': {'id': '2', 'abbreviation': 'CAR'}}

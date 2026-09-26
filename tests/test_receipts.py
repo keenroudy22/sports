@@ -174,6 +174,29 @@ class CashedTests(unittest.TestCase):
         self.assertEqual(again, ['cashed:NFL-2026-W4-c'])
 
 
+class LadderReceiptTests(unittest.TestCase):
+    RUNG = dict(title='Ladder step 2: 2 legs at FanDuel', parlayType='ladder', riskUnits=0.25, odds=95, book='FanDuel',
+                legs=[{'title': 'A 40+ receiving yards'}, {'title': 'B 50+ rushing yards'}],
+                ladder={'run': 1, 'step': 2, 'stake': 96, 'payout': 187, 'start': 50, 'goal': 1000})
+
+    def test_a_rung_is_named_by_its_step_and_money_and_kept_off_the_straight_record(self):
+        rung = pick('l', 'sun', **self.RUNG, result='win')
+        self.assertEqual(receipts.label(rung), 'Ladder step 2: $96 to $187')
+        straight = pick('s', 'sun', result='loss')
+        self.assertEqual(receipts.headline([rung, straight]), '0-1', 'the ladder is not a straight play')
+        self.assertEqual(receipts.headline([rung]), 'Ladder 1-0')
+        self.assertIn(('Ladder', '1-0'), receipts.by_kind([rung, straight]))
+
+    def test_a_cashed_rung_names_the_next_step_and_the_top_of_the_ladder_says_so(self):
+        head, body = receipts.ladder_cashed(pick('l', 'sun', **self.RUNG))
+        self.assertEqual(head, '✅ LADDER STEP 2 CASHED')
+        self.assertEqual(body, '$96 → $187\nStep 3 is next: all $187 rides.')
+        top = dict(self.RUNG, ladder=dict(self.RUNG['ladder'], step=5, stake=540, payout=1062))
+        head, body = receipts.ladder_cashed(pick('l', 'sun', **top))
+        self.assertEqual(head, '🪜 LADDER COMPLETE')
+        self.assertTrue(body.startswith('$50 → $1,062 in 5 steps.'))
+
+
 class DailyTests(unittest.TestCase):
     def test_the_menu_names_the_games_and_times_never_the_side(self):
         first, latest, log = world()

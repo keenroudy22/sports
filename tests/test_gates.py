@@ -159,7 +159,8 @@ class CommonRuleTests(unittest.TestCase):
         self.assertTrue(gates.cfb_jurisdiction(pick, ctx).ok)
         self.assertTrue(pick.get('jurisdictionVerified'))
         self.assertFalse(gates.cfb_jurisdiction(total_lean(league='CFB', gameIds=['CFB-1'], book='Bovada'), ctx).ok)
-        self.assertFalse(gates.cfb_jurisdiction(prop_lean(league='CFB', gameIds=['CFB-1']), ctx).ok, 'no college props in Indiana')
+        self.assertTrue(gates.cfb_jurisdiction(prop_lean(league='CFB', gameIds=['CFB-1']), ctx).ok,
+                        'pregame college player props are legal in Indiana (the Gaming Commission kept them on 2026-09-24)')
 
 
 class ShoppingRuleTests(unittest.TestCase):
@@ -312,6 +313,20 @@ class PropLeanRuleTests(unittest.TestCase):
         self.assertTrue(gates.prop_market_not_trailing(prop_lean(), off).ok)
         reopened = context(scoreboard={'props': {'markets': [{'market': 'recYds', 'graded': 200, 'closerThanLine': [110, 90]}]}})
         self.assertTrue(gates.prop_market_not_trailing(prop_lean(), reopened).ok, 'reopens when the projection improves')
+
+
+    def test_college_props_wait_for_their_own_calibration_and_skip_the_nfl_scoreboard(self):
+        college = prop_lean(league='CFB', id='CFB-2026-W5-seven-over-49-5-recyds-dk')
+        waiting = gates.prop_calibrated_value(college, context())
+        self.assertFalse(waiting.ok)
+        self.assertIn('own calibration', waiting.reason)
+        self.assertTrue(gates.prop_calibrated_value(prop_lean(), context()).ok, 'the NFL rule is unchanged without a calibration')
+        import learning
+        calibrated = context(policy=dict(learning.default_policy(), calibration={'CFB/prop': {'k': 0.5, 'n': 320}}))
+        self.assertNotIn('own calibration', gates.prop_calibrated_value(college, calibrated).reason)
+        skipped = gates.prop_market_not_trailing(college, context())
+        self.assertTrue(skipped.ok, "the scoreboard's closer-than-line rows are the NFL's")
+        self.assertIn('CFB', skipped.reason)
 
 
 class FavoriteLongshotRevisionTests(unittest.TestCase):

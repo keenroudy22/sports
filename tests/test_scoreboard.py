@@ -110,6 +110,24 @@ if __name__ == '__main__':
     unittest.main()
 
 
+class FeedLineTests(unittest.TestCase):
+    def test_college_lines_are_the_priced_feeds_last_main_numbers_before_kickoff(self):
+        import json
+        import tempfile
+        game = {'league': 'CFB', 'eventId': '1', 'kickoff': '2026-10-03T16:00Z', 'players': [{'id': '10', 'name': 'Player Ten'}]}
+        records = [{'gameId': 'CFB-1', 'retrievedAt': '2026-10-03T12:00:00Z',
+                    'books': {'draftkings': {'markets': {'recYds': {'Player Ten': {'line': 55.5, 'over': -115}}}}}},
+                   {'gameId': 'CFB-1', 'retrievedAt': '2026-10-03T15:00:00Z',
+                    'books': {'draftkings': {'markets': {'recYds': {'Player Ten Jr.': {'line': 57.5, 'over': -110}}}}}},
+                   {'gameId': 'CFB-1', 'retrievedAt': '2026-10-03T16:30:00Z',
+                    'books': {'draftkings': {'markets': {'recYds': {'Player Ten': {'line': 60.5, 'over': -110}}}}}}]
+        with tempfile.TemporaryDirectory() as folder:
+            Path(folder, 'cfb-2026.jsonl').write_text(''.join(json.dumps(r) + '\n' for r in records))
+            lines = sb.feed_lines({'CFB-1': game}, root=folder)
+        self.assertEqual(lines, {'CFB-1': ('2026-10-03T15:00:00Z', {'10': {'recYds': [57.5, None]}})},
+                         'the last line before kickoff, never one taken after it')
+
+
 class SnapshotSelectionTests(unittest.TestCase):
     def test_the_grade_uses_the_last_regular_snapshot_and_skips_late_ones(self):
         games = {'NFL-1': dict(game(), id='NFL-1')}

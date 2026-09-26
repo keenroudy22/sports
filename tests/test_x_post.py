@@ -51,10 +51,10 @@ class DraftTests(unittest.TestCase):
     def test_every_post_has_the_same_shape(self):
         team = x_post.draft(dict(PICK, favorite=False, modelLean=True, projection=31.2), GAME)
         self.assertTrue(team.startswith('🍳 TEAM PROP\nIowa at Michigan under 38.5\n-105 at FanDuel\n\nWe project 31.2 total points\n'), team)
-        self.assertTrue(team.endswith('\n\n@Playbook #CFB'), team)
+        self.assertTrue(team.endswith("\n\n❤️ if you're tailing\n@Playbook #CFB"), team)
         prop = x_post.draft(PROP, {'league': 'NFL'}, reason='He has caught 6 in each of his last 2 games.')
         self.assertEqual(prop, '🍳 PLAYER PROP\nPlayer Seven over 4.5 receptions\n-115 at DraftKings\n\n'
-                               'We project 5.8 receptions\nHe has caught 6 in each of his last 2 games.\n\n@Playbook #NFL')
+                               "We project 5.8 receptions\nHe has caught 6 in each of his last 2 games.\n\n❤️ if you're tailing\n@Playbook #NFL")
         favorite = x_post.draft(PICK, GAME)
         self.assertTrue(favorite.startswith('🍳 TEAM PROP · FAVORITE\n'), favorite)
         for text, pick in ((team, dict(PICK, projection=31.2)), (prop, PROP), (favorite, PICK)):
@@ -81,7 +81,7 @@ class DraftTests(unittest.TestCase):
             with mock.patch.object(x_post, 'REASONS', path):
                 self.assertIn('We project 31.2 total points\nWind is forecast at 18 mph in Ann Arbor.', x_post.draft(dict(PICK, projection=31.2), GAME))
                 other = dict(PICK, id='another', projection=31.2)
-                self.assertTrue(x_post.draft(other, GAME).endswith('We project 31.2 total points\n\n@Playbook #CFB'),
+                self.assertTrue(x_post.draft(other, GAME).endswith("We project 31.2 total points\n\n❤️ if you're tailing\n@Playbook #CFB"),
                                 'no stored reason: the prose is not mined, the post stands on the number')
 
     def test_lineup_checks_duplicates_and_half_sentences_are_not_reasons(self):
@@ -117,7 +117,7 @@ class DraftTests(unittest.TestCase):
         self.assertIsNone(x_post.reason_for(arithmetic), 'no stat talk in the timeline')
         text = x_post.draft(dict(arithmetic, projection=31.2), GAME)
         self.assertNotIn('percentile', text)
-        self.assertIn('We project 31.2 total points\n\n@Playbook #CFB', text)
+        self.assertIn("We project 31.2 total points\n\n❤️ if you're tailing\n@Playbook #CFB", text)
 
     def test_url_counts_as_twenty_three(self):
         self.assertEqual(x_post.tweet_length('hi https://keenroudy.com/sports/#pick/a-very-long-identifier-indeed'), 3 + 23)
@@ -126,6 +126,28 @@ class DraftTests(unittest.TestCase):
         long = dict(PICK, why=' '.join(['A long reason that goes on for a while and says a great deal about nothing much at all.'] * 6))
         text = x_post.draft(long, GAME)
         self.assertLessEqual(x_post.tweet_length(text), 280)
+
+
+class FunPostTests(unittest.TestCase):
+    RUNG = {'id': 'NFL-2026-W4-ladder-0927-fd', 'title': 'Ladder step 2: 2 legs at FanDuel', 'status': 'active', 'parlayType': 'ladder',
+            'riskUnits': 0.25, 'odds': 95, 'book': 'FanDuel', 'gameIds': ['NFL-1'],
+            'legs': [{'title': 'Drake London 40+ receiving yards'}, {'title': 'Bijan Robinson 50+ rushing yards'}],
+            'ladder': {'run': 1, 'step': 2, 'stake': 96, 'payout': 187, 'start': 50, 'goal': 1000}}
+
+    def test_a_ladder_rung_leads_with_its_step_and_the_money_riding(self):
+        text = x_post.draft(self.RUNG, {'league': 'NFL'})
+        self.assertEqual(text, "🪜 KOOK’N LADDER · STEP 2\n$96 → $187 · +95 at FanDuel\n• Drake London 40+ receiving yards\n"
+                               "• Bijan Robinson 50+ rushing yards\n\n$50 to $1,000, one rung at a time. A miss starts it over.\n\n"
+                               "❤️ if you're climbing with us\n@Playbook #NFL")
+        self.assertEqual(x_post.guard(text, self.RUNG), [], '$1,000 and $187 are the rung\'s own numbers')
+        second = dict(self.RUNG, ladder=dict(self.RUNG['ladder'], run=2, step=1, stake=50, payout=98))
+        self.assertIn('Climb 2. $50 to $1,000', x_post.draft(second, {'league': 'NFL'}))
+
+    def test_a_fun_parlay_leads_with_its_price(self):
+        ticket = {'odds': 2506, 'parlayType': 'longshot'}
+        self.assertEqual(x_post.parlay_head(ticket, 'CFB'), '🎰 +2506 COLLEGE LOTTO')
+        self.assertEqual(x_post.parlay_head(dict(ticket, odds=583), 'NFL'), '🎯 +583 NFL LONGSHOT')
+        self.assertEqual(x_post.parlay_head({'odds': 450, 'parlayType': 'easyProps'}, 'NFL'), '🍳 +450 NFL EASY PROPS')
 
 
 class RefusalTests(unittest.TestCase):
@@ -295,7 +317,7 @@ class ReasonTests(unittest.TestCase):
                   'parlayType': 'longshot', 'riskUnits': 0.25, 'book': 'DraftKings', 'odds': 650,
                   'why': 'Longshot from the board: 3 legs at DraftKings, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.'}
         text = x_post.draft(ticket, {'league': 'NFL'})
-        self.assertEqual(text, '🍳 FUN PARLAY\n3 legs · +650 at DraftKings\n• Bills at Lions over 44.5\n• Jets +3\n• Player Seven over 4.5 receptions'
-                               '\n\nJust for fun.\n\n@Playbook #NFL')
+        self.assertEqual(text, '🎯 +650 NFL LONGSHOT\n3 legs at DraftKings\n• Bills at Lions over 44.5\n• Jets +3\n• Player Seven over 4.5 receptions'
+                               "\n\nJust for fun.\n\n❤️ if you're tailing\n@Playbook #NFL")
         self.assertLessEqual(x_post.tweet_length(text), 280)
         self.assertEqual(x_post.guard(text, ticket), [], text)

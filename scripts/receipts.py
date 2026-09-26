@@ -28,7 +28,7 @@ MORNING = (9, 0)                  # Eastern: when a receipt posts
 LATEST = (20, 0)                  # Eastern, the day after: a receipt not scheduled by then is stale and skipped
 WEEKDAY = 2                       # Wednesday: the week's receipt
 MARKS = {'win': '✅', 'loss': '❌', 'push': '➖', 'void': '➖'}
-KIND_NAMES = {'player': 'Player props', 'team': 'Team props', 'parlay': 'Fun parlays'}
+KIND_NAMES = {'player': 'Player props', 'team': 'Team props', 'parlay': 'Fun parlays', 'ladder': 'Ladder'}
 
 
 def served(log_book):
@@ -62,6 +62,9 @@ def game_day(pick, games):
 
 def label(pick, games=None):
     """A play as its post and card named it: schools by name, over and under as the post says them."""
+    if pick_card.play_kind(pick) == 'ladder':
+        info = pick.get('ladder') or {}
+        return f"Ladder step {info.get('step', 1)}: {pick_card.dollars(info.get('stake'))} to {pick_card.dollars(info.get('payout'))}"
     if pick_card.play_kind(pick) == 'parlay':
         return f"{len(pick.get('legs') or [])}-leg fun parlay"
     return pick_card.display_title(pick, (games or {}).get((pick.get('gameIds') or [None])[0]))
@@ -73,17 +76,20 @@ def record_text(summary):
 
 
 def headline(rows):
-    """The record a receipt leads with: the straight plays; fun parlays only when there is nothing else."""
-    straight = [r for r in rows if pick_card.play_kind(r) != 'parlay']
+    """The record a receipt leads with: the straight plays; fun parlays, then the ladder, only when there is nothing else."""
+    straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder')]
     if straight:
         return record_text(x_post.summarize(straight))
-    return f"Fun parlay{'s' if len(rows) != 1 else ''} {record_text(x_post.summarize(rows))}"
+    fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
+    if fun:
+        return f"Fun parlay{'s' if len(fun) != 1 else ''} {record_text(x_post.summarize(fun))}"
+    return f"Ladder {record_text(x_post.summarize(rows))}"
 
 
 def by_kind(rows):
     """[(name, record)] for each kind of play among the rows: player props, team props, fun parlays."""
     out = []
-    for kind in ('player', 'team', 'parlay'):
+    for kind in ('player', 'team', 'parlay', 'ladder'):
         group = [r for r in rows if pick_card.play_kind(r) == kind]
         if group:
             out.append((KIND_NAMES[kind], record_text(x_post.summarize(group))))
@@ -104,7 +110,7 @@ def plays_between(first, latest, games, ids, start, end):
         day = game_day(pick, games)
         if day and start <= day <= end:
             rows.append(pick)
-    order = {'player': 0, 'team': 1, 'parlay': 2}           # the order the plays posted in
+    order = {'player': 0, 'team': 1, 'ladder': 2, 'parlay': 3}           # the order the plays posted in
     return sorted(rows, key=lambda p: (game_day(p, games), order[pick_card.play_kind(p)], str(p.get('title'))))
 
 
@@ -212,10 +218,13 @@ def menu(first, latest, games, log_book, now):
     plays = todays_plays(first, latest, games, now)
     if not plays:
         return None
-    rows, seen, parlay = [], set(), False
+    rows, seen, parlay, rung = [], set(), False, None
     for pick in sorted(plays, key=lambda p: min(games[g]['kickoff'] for g in p['gameIds'] if g in games)):
         if pick_card.play_kind(pick) == 'parlay':
             parlay = True
+            continue
+        if pick_card.play_kind(pick) == 'ladder':
+            rung = pick
             continue
         game = games.get(pick['gameIds'][0])
         if not game or game['id'] in seen:
@@ -226,7 +235,8 @@ def menu(first, latest, games, log_book, now):
         rows.append(f"{pick_card.team_label(game.get('away'), league)} at {pick_card.team_label(game.get('home'), league)}, {kick:%-I:%M %p}")
     count = len(plays)
     head = f"🍳 TODAY'S MENU\n{count} plate{'s' if count != 1 else ''} on the stove today:"
-    lines = [f'• {r}' for r in rows] + (['• the fun parlay'] if parlay else [])
+    lines = ([f'• {r}' for r in rows] + (['• the fun parlay'] if parlay else [])
+             + ([f"• the ladder, step {(rung.get('ladder') or {}).get('step', 1)}"] if rung else []))
     tail = ('Pick of the Day and the rest go out around noon.' if len(plays) > 1 else 'Pick of the Day goes out around noon.') + '\n' + leagues(plays)
     return {'key': f'menu:day:{today.isoformat()}', 'card': HOUSE_CARDS + 'kitchen-menu.png', 'kind': 'menu',
             'text': fit(lines, head, tail.strip(), head_sep='\n'), 'due': at(today, MENU_AT), 'stale': at(today, MENU_UNTIL)}
@@ -289,12 +299,24 @@ def cashed(first, latest, games, log_book, now):
         head = '✅ ' + ('PICK OF THE DAY ' if entry.get('featured') else 'FUN PARLAY ' if parlay else '') + 'CASHED'
         price = f"{int(pick['odds']):+d} at {pick.get('book')}"
         what = f"{len(pick.get('legs') or [])} legs · {price}" if parlay else f"{label(pick, games)}\n{price}"
+        if pick_card.play_kind(pick) == 'ladder':
+            head, what = ladder_cashed(pick)
         league = str(key).split('-')[0]
         tag = x_post.TAGS.get(league, '')
         text = f"{head}\n{what}\n\n{tag}\nhttps://x.com/{HANDLE}/status/{entry['tweetId']}".replace('\n\n\n', '\n\n')
         out.append({'key': f'cashed:{key}', 'kind': 'cashed', 'card': None, 'text': text, 'due': now,
                     'stale': settled_at + CASHED_FRESH})
     return out
+
+
+def ladder_cashed(pick):
+    """(head, body) for a rung that won: the next step, or the top of the ladder."""
+    info = pick.get('ladder') or {}
+    stake, won = pick_card.dollars(info.get('stake')), pick_card.dollars(info.get('payout'))
+    if (info.get('payout') or 0) >= (info.get('goal') or 1000):
+        return (f"🪜 LADDER COMPLETE", f"{pick_card.dollars(info.get('start', 50))} → {won} in {info.get('step', 1)} steps.\n"
+                                        f"A new climb starts at {pick_card.dollars(info.get('start', 50))}.")
+    return (f"✅ LADDER STEP {info.get('step', 1)} CASHED", f"{stake} → {won}\nStep {info.get('step', 1) + 1} is next: all {won} rides.")
 
 
 def with_menu(receipt, post, plays_today):
@@ -312,7 +334,8 @@ def with_menu(receipt, post, plays_today):
 
 def house_posts(first, latest, games, log_book, now):
     """Everything the kitchen posts besides the plays: receipts, the game-day menu (riding on the morning's receipt when
-    there is one), the book on an empty day, and a cashed post for each winning play as it settles."""
+    there is one), the book on an empty day, a cashed post for each winning play as it settles, and the weekly
+    projections sheet (scripts/sheet.py) on college Saturday and NFL Sunday."""
     out = [dict(r, kind='receipt') for r in ready(first, latest, games, log_book, now)]
     today = eastern_date(now)
     posted = {part for p in log_book.get('posts', []) for part in str(p.get('id')).split('+')}
@@ -328,6 +351,10 @@ def house_posts(first, latest, games, log_book, now):
     if extra and extra['stale'] > now:
         out.append(extra)
     out += cashed(first, latest, games, log_book, now)
+    import sheet
+    weekly = sheet.post(games, now)          # the weekly projections sheet, on its league's day
+    if weekly and weekly['stale'] > now:
+        out.append(weekly)
     return out
 
 

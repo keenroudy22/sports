@@ -73,7 +73,7 @@
 
   /* Our plays, one card each, in the same words as the play's X post: what it is, the play, the price and
      stake, our number against the line, and the one reason the post gives. Tap for the full research. */
-  const playKind = p => (p.legs || []).length || p.parlayType ? 'Fun parlay' : p.athleteId ? 'Player prop' : 'Team prop';
+  const playKind = p => C.isLadder(p) ? 'Ladder' : (p.legs || []).length || p.parlayType ? 'Fun parlay' : p.athleteId ? 'Player prop' : 'Team prop';
   /* What we project, in the card's and the post's words: "We project 47.1 total points", "We project 4.6 receptions". */
   const MARKET_WORDS = { rec: 'receptions', car: 'carries', recYds: 'receiving yards', rushYds: 'rushing yards', att: 'pass attempts',
     cmp: 'completions', passYds: 'passing yards' };
@@ -126,16 +126,26 @@
     const stale = raw.word === 'Price expired' && !p.entryNote && p.status !== 'expired';
     return { st: stale ? { word: 'Open', tone: 'open' } : raw, stale };
   };
+  /* The ladder's climb as a bar on a log scale, so every doubling is the same step: filled to the money riding, a lighter
+     stretch to what a win makes it. */
+  const money = n => `$${Math.round(Number(n) || 0).toLocaleString('en-US')}`;
+  const ladderPct = n => Math.max(0, Math.min(100, 100 * Math.log(Math.max(Number(n) || 50, 50) / 50) / Math.log(1000 / 50)));
+  const ladderBar = (stake, payout) => `<span class="ladder-track" role="img" aria-label="${esc(money(stake))} on the way to $1,000">
+      <i class="ladder-win" style="width:${ladderPct(payout).toFixed(1)}%"></i><i class="ladder-now" style="width:${ladderPct(stake).toFixed(1)}%"></i></span>
+    <span class="ladder-ends"><span>$50</span><span>$1,000</span></span>`;
   const playCard = p => {
     const { st, stale } = playState(p);
     const legs = (p.legs || []).filter(l => typeof l === 'string' || l.title);
-    const lotto = legs.length && p.odds >= 1000;
-    const kind = `${p.featured ? 'Pick of the Day · ' : ''}${lotto ? `🎰 Lotto · ${legs.length} legs` : playKind(p)}`;
+    const rung = C.isLadder(p), info = p.ladder || {};
+    const lotto = !rung && legs.length && p.odds >= 1000;
+    const kind = rung ? `🪜 Ladder · Step ${info.step || 1}` : `${p.featured ? 'Pick of the Day · ' : ''}${lotto ? `🎰 Lotto · ${legs.length} legs` : playKind(p)}`;
     const when = countdown(p.kickoff) || whenShort(p.kickoff || p.publishedAt);
-    return `<button class="play${p.featured ? ' play-featured' : ''}${lotto ? ' play-lotto' : ''}" type="button" data-pick="${esc(p.id)}" style="--rail:${esc(p.color || 'var(--mint)')}">
+    const title = rung ? `${money(info.stake)} → ${money(info.payout)}` : p.displayTitle || p.title || p.player;
+    return `<button class="play${p.featured ? ' play-featured' : ''}${lotto ? ' play-lotto' : ''}${rung ? ' play-ladder' : ''}" type="button" data-pick="${esc(p.id)}" style="--rail:${esc(rung ? '#f28c28' : p.color || 'var(--mint)')}">
       <span class="play-top"><span class="play-kind">${esc(kind)}${p.favorite && !legs.length && !p.featured ? ' · Favorite' : ''}</span><span class="pill pill-${st.tone}">${esc(st.word)}</span></span>
-      <span class="play-hero">${legs.length ? '' : avatar(p, 'ava-lg')}<span class="play-title">${lotto ? `<span class="lotto-odds num">${esc(odds(p.odds))}</span> ` : ''}${esc(p.displayTitle || p.title || p.player)}</span></span>
+      <span class="play-hero">${legs.length ? '' : avatar(p, 'ava-lg')}<span class="play-title${rung ? ' num' : ''}">${lotto ? `<span class="lotto-odds num">${esc(odds(p.odds))}</span> ` : ''}${esc(title)}</span></span>
       ${legs.length ? `<span class="play-legs">${legs.map(l => typeof l === 'string' ? `<span class="leg">• ${esc(l)}</span>` : `<span class="leg">${avatar(l, 'ava-sm') || '•'} ${esc(l.title)}</span>`).join('')}</span>` : ''}
+      ${rung ? `<span class="ladder-bar">${ladderBar(info.stake, info.payout)}</span>` : ''}
       ${statTiles(p)}
       ${p.reason ? `<span class="play-reason">${esc(p.reason)}</span>` : ''}
       <span class="play-meta">${esc(when)}${stale && p.quotedAt ? ` · price from ${esc(ago(p.quotedAt))}` : ''} · tap for the research ›</span>
@@ -192,6 +202,37 @@
     return lines.length ? `<p class="side-lines">${lines.join('<br>')}</p>` : '';
   };
   const theRecordCard = rec => `<div class="card record-card">${recordBoxes(rec)}${moneyLine(rec)}${sideLines(rec)}</div>`;
+  /* The ladder in one line under the record, so a phone sees it without scrolling past the plays. */
+  const ladderStrip = L => {
+    const open = L.open, info = (open && open.ladder) || {};
+    const riding = open ? info.stake : L.stake;
+    const text = open ? `Step ${info.step || 1} is live: ${money(info.stake)} rides to ${money(info.payout)}`
+      : L.history.length ? `Step ${L.step} is next, ${money(L.stake)} riding` : 'The first rung goes up on the next game day';
+    return `<a class="record-strip ladder-strip" href="#record"><span class="eyebrow">🪜 The ladder · climb ${esc(L.run)}</span>
+      <span class="num record-big ladder-big">${money(riding)}</span><span class="record-note">${esc(text)}</span>
+      <span class="ladder-bar">${ladderBar(riding, open ? info.payout : riding)}</span></a>`;
+  };
+  /* The Kook'n Ladder (C.theLadder): where the climb stands, the bar, and the rungs played so far, newest first. */
+  const ladderCard = L => {
+    const open = L.open, info = (open && open.ladder) || {};
+    const riding = open ? info.stake : L.stake;
+    const status = open ? `Step ${info.step || 1} is live: ${money(info.stake)} rides to ${money(info.payout)}`
+      : L.history.length ? `Step ${L.step} is next, with ${money(L.stake)} riding` : 'The first rung goes up on the next game day';
+    const paid = r => { const i = r.ladder || {}; return r.result === 'win' ? money(i.payout) : r.result === 'loss' ? '$0' : money(i.stake); };
+    const rows = L.history.slice().reverse().slice(0, 8).map(r => `<button class="row" type="button" data-pick="${esc(r.id)}">
+      <span class="row-main"><span class="row-top"><span class="row-name">${MARKS[r.result] || '•'} Step ${esc((r.ladder || {}).step || '')}</span><span class="row-meta">${esc(whenShort(r.kickoff || r.publishedAt))}</span></span>
+      <span class="row-meta clamp">${esc((r.legs || []).map(l => l.title).filter(Boolean).join(' · '))}</span></span>
+      <span class="row-price"><span class="row-odds num ${r.result === 'win' ? 'up' : r.result === 'loss' ? 'down' : ''}">${esc(money((r.ladder || {}).stake))} → ${esc(paid(r))}</span><span class="row-book">${esc(r.book || '')} ${esc(odds(r.odds))}</span></span></button>`).join('');
+    const best = L.climbs.length ? Math.max(...L.climbs.map(c => c.final)) : null;
+    return `<div class="card ladder-card">
+      <div class="ladder-head"><span class="ladder-title">🪜 The Kook’n Ladder</span><span class="pill pill-ladder">Climb ${esc(L.run)}</span></div>
+      <p class="ladder-pitch">${money(L.start)} to ${money(L.goal)}, the whole bankroll on each rung. A miss starts it over.</p>
+      <div class="ladder-now-line"><b class="num">${money(riding)}</b><span>${esc(status)}</span></div>
+      <span class="ladder-bar">${ladderBar(riding, open ? info.payout : riding)}</span>
+      ${rows ? `<div class="rows ladder-rows">${rows}</div>` : ''}
+      <p class="row-meta ladder-note">${L.climbs.length ? `Climbs finished: ${L.climbs.length}, best ${money(best)}. ` : ''}Two easier player lines a rung, about even money, kept apart from the record and counted in dollars. Just for fun.</p>
+    </div>`;
+  };
   const external = (url, label) => /^https:\/\//.test(url || '') ? `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)} ↗</a>` : '';
   const espnGame = id => { const [league, event] = String(id).split('-'); return `https://www.espn.com/${league === 'CFB' ? 'college-football' : 'nfl'}/game/_/gameId/${event}`; };
 
@@ -370,6 +411,7 @@
       first ? `${now.length} games on this slate. Our plays come first; everything under them is what our numbers see, not picks.` : 'Nothing kicks off in the next eight days in this league.')}
       <div class="two-col"><div>
         ${recordStrip(C.theRecord(picks), state.league === 'ALL' ? 'The record' : `The record · ${leagueName(dataLeague())}`, picks)}
+        ${ladderStrip(C.theLadder(data.picks))}
         ${live.length ? section('Our plays', `<div class="plays">${live.map(playCard).join('')}</div>`, '<a href="#record">Record →</a>') : ''}
         ${best.games.length ? section(best.day ? `Game lines with value · ${esc(best.day)}` : 'Game lines with value today',
           `<p class="row-meta" style="margin:0 0 8px">Where our chance beats what the price needs, at the best price we found. Worth a look, not picks.</p><div class="card"><div class="rows">${best.games.map(lineRow).join('')}</div></div>`,
@@ -385,6 +427,7 @@
         ${!live.length && !best.rows.length ? section('Our plays', empty('Nothing on the card yet', 'Plays appear here once lines are priced for the next slate.', '<a class="btn" href="#board">Open the board</a>'), '<a href="#record">Record →</a>') : ''}
       </div><div>
         ${section(state.league === 'ALL' ? 'The record' : `The record · ${esc(leagueName(dataLeague()))}`, theRecordCard(C.theRecord(picks)), '<a href="#record">Details →</a>')}
+        ${section('The ladder', ladderCard(C.theLadder(data.picks)), '<a href="#record">Record →</a>')}
         ${section('How the model is doing', modelCard(data.model), '<a href="#model">Scoreboard →</a>')}
         ${section('Data freshness', freshnessCard(data))}
       </div></div>`;
@@ -854,7 +897,7 @@
     const scoped = data.picks.filter(p => !C.isUnpricedImport(p) && !C.isParlay(p));
     const leagues = [['NFL', 'NFL'], ['CFB', 'College']].map(([id, name]) => [name, C.summaryOf(scoped.filter(p => p.league === id))]);
     const kinds = [['Researched plays', straight.filter(p => !p.modelLean)], ['Model plays', straight.filter(p => p.modelLean)],
-      ['Fun parlays', counted.filter(C.isParlay)]].map(([name, rows]) => [name, C.summaryOf(rows)]);
+      ['Fun parlays', counted.filter(p => C.isParlay(p) && !C.isLadder(p))]].map(([name, rows]) => [name, C.summaryOf(rows)]);
     const weeks = [...new Set(straight.map(p => C.weekOf(p.kickoff || p.publishedAt)).filter(Boolean))].sort().reverse()
       .map(w => [w, C.summaryOf(straight.filter(p => C.weekOf(p.kickoff || p.publishedAt) === w))]);
     const weekLabel = w => { const d = new Date(w + 'T12:00:00'); const e = new Date(d); e.setDate(d.getDate() + 6);
@@ -865,6 +908,7 @@
       `<tr><th scope="row">${esc(name)}</th><td class="num">${t.wins}–${t.losses}–${t.pushes}</td><td class="num ${unitTone(t.units)}">${unitText(t.units)}</td><td class="num">${t.pending}</td></tr>`).join('')}</tbody></table></div>`;
     return `${head('The record', `Every play we publish, graded win or lose. The same numbers go out on X.${state.league === 'ALL' ? '' : ` ${esc(leagueName(dataLeague()))} shown; switch sports at the top.`}`)}
       ${theRecordCard(rec)}
+      ${section('The ladder', ladderCard(C.theLadder(data.picks)))}
       ${section('Every play', `<input class="search" type="search" data-input="recordQuery" placeholder="Search by player, team or market" value="${esc(state.recordQuery)}" aria-label="Search the plays">
         ${settled.length ? settledWeeks(settled, clv, Boolean(rq), weekLabel) : empty(rq ? 'No play matches' : 'Nothing settled yet', rq ? 'Try a player, a team or a market.' : 'Plays show here once their games are final.')}`)}
       <details class="card more-numbers"><summary>More numbers</summary><div class="more-body">
@@ -885,9 +929,10 @@
     const what = [p.actual ? String(typeof p.actual === 'string' ? p.actual : JSON.stringify(p.actual)).split(/[.;]\s/)[0] : '', c && c.clv != null ? `CLV ${signed(c.clv)}` : ''].filter(Boolean).join(' · ');
     return `<button class="row" type="button" data-pick="${esc(p.id)}">
       <span class="row-rail" style="background:${p.result === 'win' ? 'var(--green)' : p.result === 'loss' ? 'var(--rose)' : 'var(--line)'}"></span>
-      <span class="row-main"><span class="row-top">${avatar(p, 'ava-row')}<span class="row-name">${MARKS[p.result] ? MARKS[p.result] + ' ' : ''}${esc(p.displayTitle || p.title || p.player)}</span>${p.featured && p.posted ? '<span class="pill pill-ours">Pick of the Day</span>' : ''}${p.earlyExit ? '<span class="pill pill-closed">Early exit credit</span>' : ''}${C.isParlay(p) ? '<span class="pill pill-stale">Fun parlay</span>' : ''}${p.historicalImport ? '<span class="pill pill-reference">Week 1</span>' : ''}</span>
+      <span class="row-main"><span class="row-top">${avatar(p, 'ava-row')}<span class="row-name">${MARKS[p.result] ? MARKS[p.result] + ' ' : ''}${esc(p.displayTitle || p.title || p.player)}</span>${p.featured && p.posted ? '<span class="pill pill-ours">Pick of the Day</span>' : ''}${p.earlyExit ? '<span class="pill pill-closed">Early exit credit</span>' : ''}${C.isLadder(p) ? '<span class="pill pill-ladder">Ladder</span>' : C.isParlay(p) ? '<span class="pill pill-stale">Fun parlay</span>' : ''}${p.historicalImport ? '<span class="pill pill-reference">Week 1</span>' : ''}</span>
         <span class="row-meta clamp">${esc(whenShort(p.kickoff || p.publishedAt))}${what ? ' · ' + esc(what) : ''}</span></span>
-      <span class="row-price"><span class="row-odds num ${unitTone(u)}">${u == null ? (p.odds == null ? '' : odds(p.odds)) : unitText(u)}</span><span class="row-book">${p.odds == null ? 'no price recorded' : p.priceAssumed ? `${odds(p.odds)} assumed` : `${esc(p.book || '')} ${odds(p.odds)}`}</span></span>
+      ${C.isLadder(p) ? `<span class="row-price"><span class="row-odds num ${p.result === 'win' ? 'up' : p.result === 'loss' ? 'down' : ''}">${esc(money((p.ladder || {}).stake))} → ${esc(p.result === 'win' ? money((p.ladder || {}).payout) : p.result === 'loss' ? '$0' : money((p.ladder || {}).stake))}</span><span class="row-book">${esc(p.book || '')} ${odds(p.odds)}</span></span>`
+        : `<span class="row-price"><span class="row-odds num ${unitTone(u)}">${u == null ? (p.odds == null ? '' : odds(p.odds)) : unitText(u)}</span><span class="row-book">${p.odds == null ? 'no price recorded' : p.priceAssumed ? `${odds(p.odds)} assumed` : `${esc(p.book || '')} ${odds(p.odds)}`}</span></span>`}
     </button>`;
   };
   /* Settled plays by week, newest first: this week open, the rest folded with their record, so the list never sprawls. */

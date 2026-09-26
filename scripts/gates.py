@@ -45,7 +45,9 @@ EASTERN = ZoneInfo('America/New_York')
 SCHEDULE = ((6, 45, None), (8, 30, None), (11, 45, None), (14, 45, (6,)), (17, 30, None),
             (18, 50, (0, 3, 6)), (23, 30, None))
 FLAGS = {'QB_GATE': True, 'MARKET_GATE': True}
-# Books available in Indiana; a college pick must quote one of them and college player props are not offered.
+# Books available in Indiana; a college pick must quote one of them. Pregame college player props are legal there: the
+# Indiana Gaming Commission voted on 2026-09-24 to keep them and bars only in-game college props, which the desk never
+# publishes (https://www.covers.com/industry/indiana-college-player-prop-ban-rejected-sports-betting-regulators-ncaa-september-2026).
 INDIANA_BOOKS = {'DraftKings', 'FanDuel', 'BetMGM', 'Caesars', 'BetRivers', 'ESPN BET', 'Fanatics', 'bet365',
                  'Hard Rock Bet'}
 LISTED = {'questionable', 'doubtful', 'out', 'injured reserve', 'suspension', 'game-time decision'}
@@ -55,6 +57,10 @@ STARTED_MARGIN = timedelta(minutes=5)      # a game this close to kickoff cannot
 ONE_BOOK_EXCEPTION = timedelta(hours=3)    # inside this, one book is all there will be
 LEAN_EDGE, LEAN_STRONG = 1.0, 2.0          # model lean: points clear of break-even; confidence 3 at 2+
 PROP_RAW, PROP_EDGE, PROP_FLOOR = 0.60, 5.0, -200
+# Leagues whose player chances publish only once learning has calibrated them against that league's own graded lines:
+# college player numbers were never graded against a line before 2026-09-26, and the NFL's k (0.13) says raw player
+# chances run far too confident.
+OWN_CALIBRATION = build_site.PROP_OWN_CALIBRATION
 LEANS_PER_DAY, PROPS_PER_WINDOW, LONGSHOTS_PER_DAY = 4, 3, 1
 MARKET_GATE_MIN = 30                       # graded player markets before the scoreboard can close one
 TOTAL_RANGE, SPREAD_MAX = (20.0, 100.0), 70.0
@@ -142,9 +148,11 @@ def same_day(a, b):
 # ------------------------------------------------------------------ candidate helpers
 
 def kind_of(pick):
-    """favorite, modelLean, propLean, longshot, researched or revision."""
+    """favorite, modelLean, propLean, longshot, ladder, researched or revision."""
     if pick.get('result') or pick.get('status') in ('settled', 'expired', 'withdrawn') or pick.get('entryNote'):
         return 'revision'
+    if pick.get('parlayType') == 'ladder':
+        return 'ladder'
     if pick.get('legs') or pick.get('parlayType'):
         return 'longshot'
     if pick.get('favorite') is True:
@@ -389,12 +397,11 @@ def not_republished(candidate, ctx):
 
 
 def cfb_jurisdiction(candidate, ctx):
-    """A college pick quotes a book available in Indiana; college player props are not offered there."""
+    """A college pick quotes a book available in Indiana. Pregame college player props are legal there (see
+    INDIANA_BOOKS); every pick the desk publishes is pregame."""
     league = candidate.get('league') or ((game_of(candidate, ctx) or {}).get('league'))
     if league != 'CFB':
         return Decision(True, 'cfb_jurisdiction', 'not a college pick')
-    if candidate.get('athleteId'):
-        return Decision(False, 'cfb_jurisdiction', 'college player props are not offered in Indiana')
     book = candidate.get('book')
     if book not in INDIANA_BOOKS:
         return Decision(False, 'cfb_jurisdiction', f'{book} is not a book available in Indiana')
@@ -549,6 +556,9 @@ def prop_calibrated_value(candidate, ctx):
     league = candidate.get('league') or str(candidate.get('id', '')).split('-')[0]
     cal = ((ctx.policy.get('calibration') or {}).get(f'{league}/prop') or {})
     k = cal.get('k')
+    if k is None and league in OWN_CALIBRATION:
+        return Decision(False, 'prop_calibrated_value', f'{league} player chances wait for their own calibration: learning grades '
+                                                        f'every projection against the line and ships one after enough games')
     if k is None:
         return Decision(True, 'prop_calibrated_value', 'no learned calibration for player chances yet')
     desk = desk_for(candidate, ctx)
@@ -626,6 +636,9 @@ def prop_market_not_trailing(candidate, ctx):
     """No prop lean in a market where the book's line has been closer to the result than our projection."""
     if not ctx.flags.get('MARKET_GATE', True):
         return Decision(True, 'prop_market_not_trailing', 'gate off by flag')
+    league = candidate.get('league') or str(candidate.get('id', '')).split('-')[0]
+    if league != 'NFL':          # the scoreboard grades DraftKings' NFL lines only; college has its own calibration gate
+        return Decision(True, 'prop_market_not_trailing', f'no graded {league} player markets on the scoreboard')
     market = market_key(candidate)
     rows = {m.get('market'): m for m in ((ctx.scoreboard.get('props') or {}).get('markets') or [])}
     row = rows.get(market)
@@ -663,7 +676,22 @@ def longshot_one_per_day(candidate, ctx):
     return Decision(True, 'longshot_one_per_day', f'first {word} today')
 
 
-FROZEN = tuple(dict.fromkeys(integrity.PICK_FIELDS + ('legs', 'riskUnits', 'parlayType')))
+def ladder_one_rung(candidate, ctx):
+    """The ladder climbs one rung at a time: no new rung while one is open (published, not closed, not graded), and
+    one rung a day. A rung closed before its post went out never counts, so the day may try again."""
+    for key, pick in ctx.first.items():
+        if key == candidate.get('id') or pick.get('parlayType') != 'ladder' or when(pick['publishedAt']) > ctx.now:
+            continue
+        recent = dict(pick, **ctx.latest.get(key, {}))
+        if recent.get('result') or recent.get('entryNote') or (recent.get('status') or 'active') != 'active':
+            if not recent.get('result') or not same_day(pick['publishedAt'], ctx.now):
+                continue
+            return Decision(False, 'ladder_one_rung', f'{key} was already today\'s rung')
+        return Decision(False, 'ladder_one_rung', f'{key} is still open; the next rung waits for its result')
+    return Decision(True, 'ladder_one_rung', 'no rung open and none played today')
+
+
+FROZEN = tuple(dict.fromkeys(integrity.PICK_FIELDS + ('legs', 'riskUnits', 'parlayType', 'ladder')))
 
 
 def revision_frozen(candidate, ctx):
@@ -691,6 +719,7 @@ RULES = {
     'favorite': COMMON + SHOP + (favorite_needs_reason, lean_nothing_against, qb_available, prop_injury_clear),
     'researched': COMMON + SHOP + (lean_nothing_against, qb_available, prop_injury_clear),
     'longshot': (not_started, expiry_ok, price_present, sources_https, not_republished, cfb_jurisdiction, longshot_one_per_day),
+    'ladder': (not_started, expiry_ok, price_present, sources_https, not_republished, cfb_jurisdiction, ladder_one_rung),
     'revision': (revision_frozen,),
 }
 

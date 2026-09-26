@@ -52,8 +52,8 @@ FRESH = timedelta(hours=12)          # other books' quotes older than this are n
 def market_key(market_type):
     """SharpAPI's market type -> the projection key the desk prices, or None."""
     m = str(market_type or '').lower()
-    if not m.startswith('player_'):
-        return None
+    if not m.startswith('player_') or '+' in m or '_and_' in m or 'longest' in m:
+        return None                 # combined stats and longest plays are other markets: "passing + rushing yards" is not passing yards
     if 'pass' in m and ('yard' in m or 'yds' in m):
         return 'passYds'
     if 'rush' in m and ('yard' in m or 'yds' in m):
@@ -153,9 +153,13 @@ def pages(league, key, fetch=fetch, sleep=time.sleep, log=print, budget=None, ev
 
 
 def events(league, key, fetch=fetch, log=print):
-    """SharpAPI's upcoming events for a league: id, teams and start time."""
+    """SharpAPI's upcoming events for a league at the two books: id, teams and start time.
+
+    Unfiltered, a league lists every game hundreds of times over (4,180 NFL events on 2026-09-26, soonest first), so
+    one page of 200 ended before the next day's games and most college games were never found. The book and status
+    filters list each upcoming game once."""
     try:
-        payload = fetch('/events', key, league=league, limit=PAGE)
+        payload = fetch('/events', key, league=league, sportsbook=','.join(BOOKS), status='upcoming', limit=PAGE)
     except Exception as error:
         log(f'sharp: event list failed for {league} ({type(error).__name__})')
         return []
@@ -193,7 +197,8 @@ def quotes_from(rows):
                         del market[name]
                         continue
                     entry = {k: v for k, v in main.items() if k in ('line', 'over', 'under')}
-                    alternates = [{k: v for k, v in r.items() if k in ('line', 'over', 'under')} for r in rungs if r is not main]
+                    alternates = consistent(dict(entry, alternates=[{k: v for k, v in r.items() if k in ('line', 'over', 'under')}
+                                                                    for r in rungs if r is not main]))
                     if alternates:
                         entry['alternates'] = alternates
                     market[name] = entry
@@ -202,6 +207,48 @@ def quotes_from(rows):
             drop_impossible(book)
             if not book:
                 del game_books[book_key]
+    return out
+
+
+def consistent(quote):
+    """The alternates that belong to the main line's own ladder. Inside one market the over gets likelier as the line
+    drops, so walking down from the main line each rung's over price must be no longer than the one before, and walking
+    up, no shorter. The feed files some books' period ladders under the full-game market (DraftKings' Mahomes passing
+    yards had rungs from 14.5 to 49.5 and 69.5 to 139.5 beside a 222.5 main line on 2026-09-26); the first rung out of
+    order ends the walk on its side."""
+    line, over = quote.get('line'), quote.get('over')
+    if not isinstance(line, (int, float)) or not isinstance(over, (int, float)):
+        return []
+    rungs = [a for a in quote.get('alternates') or []
+             if isinstance(a.get('line'), (int, float)) and isinstance(a.get('over'), (int, float)) and a['line'] != line]
+    keep = []
+    for side, order in ((-1, lambda a: -a['line']), (1, lambda a: a['line'])):
+        last = pricing_cents(over)
+        for rung in sorted((a for a in rungs if (a['line'] - line) * side > 0), key=order):
+            cents = pricing_cents(rung['over'])
+            if (cents - last) * side < 0:
+                break
+            keep.append(rung)
+            last = cents
+    return sorted(keep, key=lambda a: a['line'])
+
+
+PREFERRED = ('draftkings', 'fanduel')      # whose main number stands in for ESPN's feed, in order
+
+
+def main_lines(record, athlete_of):
+    """{athlete: {market: [line, None]}} from one prop-odds record: each player's main number at DraftKings, else FanDuel,
+    else another book. ESPN's feed of main lines carries NFL players only; for a college game this stands in for it,
+    without an opening number. athlete_of(name) gives the ESPN athlete id for a feed name, or None."""
+    books = record.get('books') or {}
+    order = [b for b in PREFERRED if b in books] + sorted(b for b in books if b not in PREFERRED)
+    out = {}
+    for book in order:
+        for market, players in ((books[book] or {}).get('markets') or {}).items():
+            for name, quote in (players or {}).items():
+                athlete, line = athlete_of(name), (quote or {}).get('line')
+                if athlete and isinstance(line, (int, float)):
+                    out.setdefault(str(athlete), {}).setdefault(market, [line, None])
     return out
 
 

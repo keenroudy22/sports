@@ -532,3 +532,27 @@ table.data a { font-weight: 600; }
 .dot-loss { background: var(--rose); }
 .streak { font-size: 13px; font-weight: 700; color: var(--amber); }
 
+/* The Kook'n Ladder: the kitchen's orange, a bar from $50 to $1,000. */
+.play-ladder { background: linear-gradient(135deg, rgba(242, 140, 40, .12), transparent 60%), var(--surface); border-color: rgba(242, 140, 40, .45); }
+.play-ladder .play-kind { color: #f6a55a; }
+.pill-ladder { background: rgba(242, 140, 40, .16); color: #f6a55a; }
+.ladder-bar { display: block; margin: 10px 0 2px; }
+.ladder-track { position: relative; display: block; height: 10px; border-radius: 5px; background: #1f2935; overflow: hidden; }
+.ladder-track i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; min-width: 10px; }
+.ladder-win { background: rgba(242, 140, 40, .38); }
+.ladder-now { background: #f28c28; }
+.ladder-ends { display: flex; justify-content: space-between; font-size: 11px; color: var(--faint); margin-top: 4px; }
+.ladder-card { padding: 14px; }
+.ladder-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.ladder-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: .02em; }
+.ladder-pitch { margin: 6px 0 10px; font-size: 13px; color: var(--dim); }
+.ladder-now-line { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.ladder-now-line b { font-size: 30px; color: #f6a55a; }
+.ladder-now-line span { font-size: 13px; color: var(--dim); }
+.ladder-rows { margin-top: 10px; border-top: 1px solid var(--line); }
+.ladder-note { margin: 10px 2px 0; }
+.ladder-strip { margin-top: 10px; border-color: rgba(242, 140, 40, .35); }
+.ladder-strip .eyebrow { color: #f6a55a; }
+.ladder-big { color: #f6a55a; }
+.ladder-strip .ladder-bar { width: 100%; margin-top: 8px; }
+

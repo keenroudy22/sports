@@ -400,7 +400,8 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
     policy_path = policy_path or Path(root) / 'policy.json'
     policy = learning.load_policy(policy_path)
     games = games if games is not None else store_games()
-    captures = scoreboard.captured_lines(games)
+    # DraftKings' NFL lines from ESPN's feed, and college lines from the priced feed (learning calibrates each league apart).
+    captures = {**scoreboard.feed_lines(games), **scoreboard.captured_lines(games)}
     grade_pending(now, root, games, captures)
     rows = joined(root)
     if log_book is None:

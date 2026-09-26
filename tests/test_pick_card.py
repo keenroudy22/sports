@@ -72,6 +72,27 @@ class CardTests(unittest.TestCase):
         self.assertEqual(pick_card.play_kind({'market': 'rec'}), 'player')
         self.assertEqual(pick_card.play_kind({'marketType': 'spread'}), 'team')
 
+    def test_a_school_is_swapped_only_as_a_whole_name(self):
+        game = {'league': 'CFB', 'away': {'short': 'New Mexico', 'abbreviation': 'UNM', 'school': 'New Mexico'},
+                'home': {'short': 'New Mexico St', 'abbreviation': 'NMSU', 'school': 'New Mexico State'}}
+        pick = {'title': 'New Mexico at New Mexico State over 48.5', 'marketType': 'total'}
+        self.assertEqual(pick_card.display_title(pick, game), 'New Mexico at New Mexico State over 48.5',
+                         'the 2026-09-26 post said "Stateate": a short name matched the start of the school name')
+        self.assertEqual(pick_card.display_title(dict(pick, title='UNM at NMSU OVER 48.5'), game), 'New Mexico at New Mexico State over 48.5')
+        self.assertEqual(pick_card.display_title(dict(pick, title='New Mexico at New Mexico St over 48.5'), game),
+                         'New Mexico at New Mexico State over 48.5')
+
+    def test_a_ladder_card_shows_the_money_the_legs_and_the_climb(self):
+        rung = {'title': 'Ladder step 2: 2 legs at FanDuel', 'parlayType': 'ladder', 'odds': 95, 'book': 'FanDuel', 'riskUnits': 0.25,
+                'legs': [{'title': 'Drake London 40+ receiving yards'}, {'title': 'Bijan Robinson 50+ rushing yards'}],
+                'ladder': {'run': 1, 'step': 2, 'stake': 96, 'payout': 187, 'start': 50, 'goal': 1000}}
+        text = pick_card.svg(rung, GAME)
+        for needle in ('LADDER · STEP 2', '$96 → $187', 'THE CLIMB: $50 TO $1,000', '• Drake London 40+ receiving yards', '+95', 'FanDuel',
+                       pick_card.HOUSE[2]):
+            self.assertIn(needle, text, needle)
+        self.assertEqual(pick_card.play_kind(rung), 'ladder')
+        self.assertIsNone(pick_card.artwork(rung, GAME, fetch=lambda url: 'data:x'), 'the chef serves the ladder')
+
     def test_the_side_the_play_is_on_picks_the_palette(self):
         spread_away = pick_card.svg({'title': 'Iowa +7', 'marketType': 'spread', 'direction': 'away', 'odds': -110, 'book': 'DK'}, GAME)
         self.assertLess(spread_away.index('#231f20'), spread_away.index('#00274c'), "the away spread leads with Iowa's colour")

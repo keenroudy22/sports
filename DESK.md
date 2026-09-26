@@ -32,8 +32,12 @@ Exactly what `PROMPT.md` allows, and only when every gate passes:
 - **Prop leans**: raw chance 60% or better on a settled role, five points clear of the price, never worse
   than -200, three per kickoff window, one per player, never a player listed questionable or worse, never in
   a market where the closing line has been closer than our projection (read live from the scoreboard),
-  and never on one book's number unless kickoff is inside three hours.
+  and never on one book's number unless kickoff is inside three hours. College player props are legal pregame in
+  Indiana (the Gaming Commission kept them on 2026-09-24; only in-game college props are barred), so they are judged
+  like the NFL's, but a league's player chances publish only once learning has calibrated them against that league's
+  own graded lines (`gates.OWN_CALIBRATION`, college until then; see "College player props" below).
 - **Longshots**: one a game day from `scripts/parlay.py`.
+- **The ladder**: one rung at a time from `scripts/ladder.py` (below), never while a rung is open, one a day.
 - **Favorites**: only with a verified, sourced reason attached by the run. The web-reading researcher
   that supplies those reasons is off until the owner turns it on, so the desk publishes no favorites yet.
 
@@ -150,15 +154,22 @@ the model scoreboard stays on the site. Every play post has the same shape, draf
 the pick's own fields:
 
 ```
-🍳 PLAYER PROP                    (TEAM PROP, FUN PARLAY; "· FAVORITE" on a researched pick)
+🍳 PLAYER PROP                    (TEAM PROP; "· FAVORITE" on a researched pick; PICK OF THE DAY first)
 Player Seven over 4.5 receptions
--115 at DraftKings · 1 unit
+-115 at DraftKings
 
-Our number 5.8 vs the 4.5
+We project 5.8 receptions
 He has caught 6 in each of his last 2 games.
 
+❤️ if you're tailing
 @Playbook #NFL
 ```
+
+A fun parlay leads with its price, the way the most-saved posts do (`x_post.parlay_head`, owner's yes 2026-09-26):
+"🎰 +2506 COLLEGE LOTTO" from +1000 up, "🎯 +583 NFL LONGSHOT" under it, "🍳 +450 NFL EASY PROPS" for the easy
+parlay, then "5 legs at ESPN BET", the legs, "Just for fun." Every play and parlay ends on the ask the big accounts
+use, "❤️ if you're tailing" (a ladder rung: "❤️ if you're climbing with us"); when a post runs long the reason goes
+before the ask does.
 
 The reason is one sentence of the pick's own `why`, short and free of the desk's arithmetic words; when
 every sentence is arithmetic the post stands on the play and the number. No units anywhere a follower reads.
@@ -175,7 +186,9 @@ X meters posting through its API, so the desk posts through **Buffer** (`scripts
 Buffer's own X access, 3,000 API requests a month, an exact `dueAt` per post, an image by public URL,
 `deletePost`). The timing is the same every game day: plays post **around noon Eastern** (the owner's call,
 2026-09-24), or two hours before a kickoff earlier than 2 PM (a parlay by its first leg), never before 9:00 AM;
-player props first, then team props, then the parlay, ten minutes apart; a late injury after a play is out
+player props first, then team props, the ladder, then the parlay, ten minutes apart, and ten minutes from every post
+already in the queue (`buffer_post.free_slot`: on 2026-09-26 the 11:45 run put three plays eight seconds after three
+queued ones); a late injury after a play is out
 cannot pull the post, though the site still closes the pick; a play published later than its time goes out at once unless
 kickoff is inside 45 minutes. Buffer takes an image only by URL, so a post is scheduled only once its card is
 live on the site: the hosted workflow renders a card for every open play as soon as it is published, the run
@@ -191,6 +204,8 @@ live waits for the next run. Nothing goes out bare.
 | 9:00 AM Wednesday | **The week's receipts** by kind, with the week's dates |
 | Around noon (two hours before a kickoff earlier than 2 PM; never before 9 AM) | **The plays**, the Pick of the Day first |
 | As a win settles (9 AM to 12:30 AM, within three hours) | **Cashed**: "✅ CASHED" (or "✅ PICK OF THE DAY CASHED", "✅ FUN PARLAY CASHED"), the play and its price, and the original post quoted by its X link; text only. Losses are not singled out: the morning receipt lists every play, win or lose. The run feeds its own settlements forward (`run.absorb`), so the cashed post goes out from the run that settled it |
+| 10:00 AM college Saturday and NFL Sunday | **📌 SAVE THIS**: the week's projections sheet (`scripts/sheet.py`), one 1080x1350 image of the slate as the Games page shows it: logos, our projected score, win chances as bars, our spread and total beside the line, orange where our number leans clearly (the site's strong chip). College shows the 16 games where our number and the line differ most, the NFL the whole Sunday slate. Drawn by the hosted build (`feed.py`, `cards/sheet-<league>-<date>.png`), posted by the desk once the image is live, never after 11:45 AM. Not picks |
+| As a rung wins | **Ladder cashed**: "✅ LADDER STEP 2 CASHED", "$96 → $187", "Step 3 is next: all $187 rides."; at $1,000 "🪜 LADDER COMPLETE", and the phone gets "Ladder complete: pin it" |
 | 6:00 PM on a day with nothing else | **The book**: the season record, graded through yesterday and saying so ("Season through Sep 28"), so back-to-back quiet days never post the same words, which X refuses; with one kind of play only the season line (card `site/img/kitchen-book.png`) |
 
 **What works on X** (`learn.post_times`): the weekly learning report adds engagement per thousand views by kind of post
@@ -231,6 +246,42 @@ questionable): three legs at one book paying +150 to +700, "Drake London 40+ rec
 longshot's gates (one of each kind a day), kept with the longshots, and never called value: our player chances
 are tuned for main lines. Every fun parlay carries an expiry (next run or first kickoff), which the longshot lacked.
 
+**The Kook'n Ladder** (`scripts/ladder.py`, the owner's call 2026-09-26: "50 -> 1000 on 1-2 leg safe bets", "start
+the ladder this week"): $50 to $1,000, the whole bankroll on each rung. A rung is two legs from different games at
+one book (DraftKings or FanDuel), priced -130 to +130 together, built from easier player lines ("Bijan Robinson 50+
+rushing yards") in SharpAPI's alternates (`data/prop-odds`, no credits, both leagues): only rungs of the main line's
+own ladder (`sharp_odds.consistent`), priced -350 to -150, our projection clearing the line 80% or more and 8 to 18
+points above the price's own chance (a bigger gap on an easy line is a data or role problem, not a gift), the book's
+main line within 0.6 to 1.6 times our projection, a settled role, nobody on the injury report, a capture younger
+than twelve hours, games 90 minutes or more from kickoff; the pair with the best joint chance on our numbers wins.
+A win rolls the payout (whole dollars) into the next step, a miss starts a new climb at $50, $1,000 finishes the
+climb. The state is never stored: `ladder.state` (and `site/core.js theLadder`) read it from the rungs and their
+results, so it cannot drift; a rung pulled before its post never counts. One rung open at a time, one played a day
+(`gates.ladder_one_rung`); the run tries NFL games first, then college, from the 6:45 AM run on. Kept apart from the
+record in dollars: the site has a ladder card on Today and Record, receipts list a rung as "Ladder step 2: $96 to
+$187", and the posts lead "🪜 KOOK’N LADDER · STEP 2" with "$96 → $187 · +95 at FanDuel", on a card in the
+kitchen's own colours with the climb as a bar. Never called value: the book's price carries the safety, our number
+only agrees with room to spare. A rung with a void leg goes to a person (run.settle names it) and the ladder waits.
+
+**College player props** (owner, 2026-09-26: "Im not seeing any player props for cfb why not"): two reasons, both
+fixed. A rule from the desk's first week said college player props are not offered in Indiana; the Gaming Commission
+voted on 2026-09-24 to keep pregame ones, so `gates.cfb_jurisdiction` now only asks for a book available there. And
+the board built player rows from ESPN's feed of DraftKings lines, which carries NFL players only: college rows now
+come from the priced feed's own main numbers (`build_site.feed_captures`, `sharp_odds.main_lines`), matched to our
+projections by name. Our college player numbers had never been graded against a line (98 graded on 2026-09-26: 55%
+won against a 66% average raw chance, as overconfident as the NFL's were), so they wait for their own calibration:
+learning grades every college projection against those lines (`scoreboard.feed_lines`) and ships a `CFB/prop` k after
+300 when it predicts better than the raw chance. Until then the board shows college rows as "Grading first" and the
+gates refuse them (`prop_calibrated_value`), which records each refusal for learning. The scoreboard's closer-than-line
+gate stays the NFL's.
+
+**The prop price feed** (SharpAPI, `scripts/sharp_odds.py`): its event list is every sport's events soonest first
+unless filtered; on 2026-09-26 one page of 200 held none of Sunday's NFL games and 6 of 52 college games, so most games
+were never priced. It now asks for upcoming events at DraftKings and FanDuel only (33 NFL, 58 college). Combined and
+longest-play markets are no longer read as the plain stat ("passing + rushing yards" was being filed as passing
+yards), and a book's alternates keep only the main line's own ladder: DraftKings filed first-half and other period
+ladders under the full-game market (Mahomes 14.5 to 49.5 passing yards beside a 222.5 main line).
+
 **Posting time and the price** (`scripts/line_timing.py`, owner's question 2026-09-25: "are we posting early enough to
 get the lines you like?"): for every single play, the number and price at its own book when it was published, when
 its post went out (or would have, under the posting rule), and in the last capture before kickoff, each marked worse,
@@ -259,7 +310,7 @@ beside each play and the chef on the plate.
 Every post is logged in `data/x-posted.json` (kind `buffer:*`, committed on its own as "Posts <date> <time>
 ET") so nothing goes out twice; once its time has passed the run records the X link it went out under, or the
 failure (which fails the run, so the heartbeat alerts). A play that closes before its time is cancelled, and
-the channel's own daily limit (50) is respected, with ours at eight.
+the channel's own daily limit (50) is respected, with ours at twenty a day, counting what is already queued.
 
 One-time setup, done 2026-09-23: a free Buffer account with @keenkooks connected, and a personal API key as
 `BUFFER_TOKEN` in `~/.config/keenroudy/env` (the free plan allows one key; replaced 2026-09-24 by one that also reads
