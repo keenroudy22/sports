@@ -1,29 +1,30 @@
 {
- "at": "2026-09-26T05:08:52Z",
+ "at": "2026-09-26T08:51:52Z",
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 401,
-    "fanduel": 535
+    "draftkings": 1429,
+    "fanduel": 1071
    },
    "eventsListed": 200,
-   "eventsMatched": 6,
+   "eventsMatched": 9,
    "games": 65,
    "marketTypes": {
-    "player_longest_passing_completion": 3,
-    "player_longest_reception": 12,
-    "player_longest_rush": 7,
-    "player_passing_attempts": 15,
-    "player_passing_completions": 13,
-    "player_passing_touchdowns": 36,
-    "player_passing_yards": 137,
-    "player_receiving_yards": 362,
-    "player_receptions": 127,
-    "player_rushing_attempts": 18,
-    "player_rushing_yards": 206
+    "player_longest_passing_completion": 9,
+    "player_longest_reception": 41,
+    "player_longest_rush": 23,
+    "player_passing_+_rushing_yards": 72,
+    "player_passing_attempts": 62,
+    "player_passing_completions": 53,
+    "player_passing_touchdowns": 77,
+    "player_passing_yards": 330,
+    "player_receiving_yards": 911,
+    "player_receptions": 262,
+    "player_rushing_attempts": 73,
+    "player_rushing_yards": 587
    },
-   "requestsLeft": 49,
-   "rows": 936,
+   "requestsLeft": 39,
+   "rows": 2500,
    "slateGames": [
     "Illinois Fighting Illini at Ohio State Buckeyes 2026-09-26T16:00Z",
     "Sam Houston Bearkats at Texas Tech Red Raiders 2026-09-26T16:00Z",
@@ -93,40 +94,6 @@
    ],
    "unmatchedEvents": [
     {
-     "away": "UCLA",
-     "external": {
-      "bet365 us": "201605185"
-     },
-     "home": "Maryland",
-     "sample": {
-      "away_team": "UCLA",
-      "home_team": "Maryland",
-      "markets": [
-       "total_points"
-      ]
-     },
-     "start": "2026-09-26T03:30:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "CLEMSON",
-     "external": {
-      "circa": "212761"
-     },
-     "home": "CALIFORNIA",
-     "sample": {
-      "away_team": "CLEMSON",
-      "home_team": "CALIFORNIA",
-      "markets": [
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-09-26T04:35:00Z",
-     "type": "fixture"
-    },
-    {
      "away": null,
      "external": {
       "kalshi": "KXNCAAF1HSPREAD-26SEP26BALLKENT-BALL18"
@@ -145,7 +112,7 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF1HSPREAD-26SEP26BUCKPITT-PITT14"
+      "kalshi": "KXNCAAF1HSPREAD-26SEP26BUCKPITT-PITT15"
      },
      "home": null,
      "sample": {
@@ -161,7 +128,7 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF1HSPREAD-26SEP26COLOBAY-BAY21"
+      "kalshi": "KXNCAAF1HSPREAD-26SEP26COLOBAY-BAY18"
      },
      "home": null,
      "sample": {
@@ -177,7 +144,7 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF1HSPREAD-26SEP26CSUUTSA-UTSA18"
+      "kalshi": "KXNCAAF1HSPREAD-26SEP26CSUUTSA-UTSA24"
      },
      "home": null,
      "sample": {
@@ -193,7 +160,7 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF1HSPREAD-26SEP26ILLOSU-OSU28"
+      "kalshi": "KXNCAAF1HSPREAD-26SEP26ILLOSU-ILL11"
      },
      "home": null,
      "sample": {
@@ -209,7 +176,7 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF1HSPREAD-26SEP26SDSUTOL-TOL18"
+      "kalshi": "KXNCAAF1HSPREAD-26SEP26SDSUTOL-SDSU18"
      },
      "home": null,
      "sample": {
@@ -225,7 +192,7 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF1HSPREAD-26SEP26SHSUTTU-SHSU11"
+      "kalshi": "KXNCAAF1HSPREAD-26SEP26SHSUTTU-SHSU10"
      },
      "home": null,
      "sample": {
@@ -241,23 +208,7 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF1HSPREAD-26SEP26TEXTENN-TENN15"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-26T16:00:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "kalshi": "KXNCAAF1HSPREAD-26SEP26UNLVAKR-UNLV18"
+      "kalshi": "KXNCAAF1HSPREAD-26SEP26UNLVAKR-UNLV24"
      },
      "home": null,
      "sample": {
@@ -274,6 +225,54 @@
      "away": null,
      "external": {
       "kalshi": "KXNCAAF1HSPREAD-26SEP26VTBC-VT21"
+     },
+     "home": null,
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-26T16:00:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "kalshi": "KXNCAAF1HSPREAD-26SEP26WAKELOU-WAKE15"
+     },
+     "home": null,
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-26T16:00:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "kalshi": "KXNCAAF1QSPREAD-26SEP26COLOBAY-COLO11"
+     },
+     "home": null,
+     "sample": {
+      "away_team": "",
+      "home_team": "",
+      "markets": [
+       "binary"
+      ]
+     },
+     "start": "2026-09-26T16:00:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
+      "kalshi": "KXNCAAF1QSPREAD-26SEP26ILLOSU-ILL11"
      },
      "home": null,
      "sample": {
@@ -460,6 +459,25 @@
     {
      "away": null,
      "external": {
+      "betonline": "futures_663142886",
+      "saba": "o7623424"
+     },
+     "home": "San Francisco 49ers",
+     "sample": {
+      "away_team": "",
+      "home_team": "San Francisco 49ers",
+      "markets": [
+       "championship_winner",
+       "conference_winner",
+       "outright"
+      ]
+     },
+     "start": "2026-09-27T16:59:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
       "saba": "o7623363"
      },
      "home": "Baker Mayfield",
@@ -476,30 +494,16 @@
     {
      "away": null,
      "external": {
-      "saba": "o7623364"
+      "betonline": "futures_663176132",
+      "saba": "o7623399"
      },
-     "home": "Bijan Robinson",
+     "home": "Chicago Bears",
      "sample": {
       "away_team": "",
-      "home_team": "Bijan Robinson",
+      "home_team": "Chicago Bears",
       "markets": [
-       "mvp"
-      ]
-     },
-     "start": "2026-09-27T16:59:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "saba": "o7623365"
-     },
-     "home": "Bo Nix",
-     "sample": {
-      "away_team": "",
-      "home_team": "Bo Nix",
-      "markets": [
-       "mvp"
+       "championship_winner",
+       "conference_winner"
       ]
      },
      "start": "2026-09-27T16:59:00Z",
