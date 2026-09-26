@@ -1,0 +1,74 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-09-26T21:30:05Z",
+  "targetWeek": 4,
+  "summary": "5:30 PM ET run, published at 5:30 PM ET. Nothing to settle. Closed 1: C Michigan at Miami under 54. Published 1: Central Michigan at Miami (FL) under 53.5 -108 at FanDuel. Screened and passed on 76: Michael Hawkins Jr. UNDER 84.5 rushing yards (prop_calibrated_value); Cooper Barkate UNDER 54.5 receiving yards (prop_calibrated_value); Darian Mensah UNDER 289.5 passing yards (prop_calibrated_value); Dante Moore UNDER 271.5 passing yards (prop_calibrated_value); Dilin Jones UNDER 94.5 rushing yards (prop_calibrated_value); Tanook Hines UNDER 3.5 receptions (prop_calibrated_value); Avery Johnson UNDER 60.5 rushing yards (prop_calibrated_value); Evan Stewart UNDER 64.5 receiving yards (prop_calibrated_value); and 68 more. odds_api.py: CFB: skipped (4 captures already today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "gamePicks": [
+    {
+      "status": "expired",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 54.0,
+      "direction": "under",
+      "gameIds": [
+        "CFB-401858238"
+      ],
+      "book": "BetRivers",
+      "odds": -109,
+      "projection": 48.5,
+      "edge": "v2 total 48.5 (80% range 27.8 to 69.2). Chance of under 54: 54.4% (v2's raw 62.1% shrunk by its 2024-25 record against the close), push 2.3%, against 52.2% break-even at -109: +2.2 points, +0.066u per unit.",
+      "cutoff": "UNDER 54 at -109 or better. Closed to new entries at 52.5 or lower, or at -124 or worse at 54.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-09-23T14:15:47Z",
+      "quotedAt": "2026-09-23T12:44:31Z",
+      "quoteType": "capture",
+      "quoteNote": "BetRivers's number and price from the 8:44 AM ET capture across 5 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-09-24T03:30:00Z",
+      "title": "C Michigan at Miami under 54",
+      "id": "CFB-2026-W4-cmu-mia-under-54-br",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401858238"
+      ],
+      "why": "This is a model lean based only on our number. Our total is 48.5 against 54. The under has a 54.4% chance after the raw 62.1% is adjusted for the model's record against the close. This is 2.2 points better than the 52.2% needed to break even at -109. No outside information argues against it. The number is the reason. The market shows the spread opened at -42.5 and is now -41.5 at DraftKings, a 1-point move toward the away. The total opened at 54.5 and is now 53.5 at DraftKings, a 1-point move toward the under. Five books offer totals between 53.5 and 54. The middle is 53.5. Our spread gap of 3.4 points is at the 48th percentile of the model's gaps. Gaps this large went 923-921 against the close in 3584 graded games. Our total gap of 5 points is at the 78th percentile of the model's gaps. Gaps this large went 444-363 against the close in 3602 graded games.",
+      "risk": "It rests on the model alone. The closing line beats our number on average. A gap this size is more often our error than the market's. Confidence 3 of 10.",
+      "jurisdictionVerified": true,
+      "entryNote": "Closed to new entries at 5:30 PM ET: total moved 1.5 against, from 54 to 52.5. Published cutoff: UNDER 54 at -109 or better. Closed to new entries at 52.5 or lower, or at -124 or worse at 54.. Stays in the record at 54 and -109 and is graded as posted."
+    },
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 53.5,
+      "direction": "under",
+      "gameIds": [
+        "CFB-401858238"
+      ],
+      "book": "FanDuel",
+      "odds": -108,
+      "projection": 48.5,
+      "edge": "v2 total 48.5 (80% range 27.8 to 69.2). Chance of under 53.5: 54.4% (v2's raw 62.1% shrunk by its 2024-25 record against the close), against 51.9% break-even at -108: +2.4 points, +0.047u per unit.",
+      "cutoff": "UNDER 53.5 at -108 or better. Closed to new entries at 52 or lower, or at -123 or worse at 53.5.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-09-26T05:08:01Z",
+      "quotedAt": "2026-09-26T17:06:30Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 1:06 PM ET capture across 5 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-09-26T22:30:00Z",
+      "title": "Central Michigan at Miami (FL) under 53.5",
+      "id": "CFB-2026-W4-cmu-mia-under-53-5-fd",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401858238",
+        "https://www.si.com/college/miami/central-michigan-at-miami-game-central-rundown-live-updates-analysis",
+        "https://sports.yahoo.com/articles/miami-injury-report-malachi-toney-110207337.html"
+      ],
+      "why": "Model lean, published on our number alone. Our total is 48.5 against 53.5: the under reads 54.4% after the raw 62.1% is shrunk by the model's record against the close, +2.4 points clear of the 51.9% that -108 needs. Nothing sourced argues against it; the number is the reason. Checked before publishing: Miami starting running back Mark Fletcher Jr., who left the Wake Forest game with five minutes left, was not in uniform while the rest of the team warmed up before the game. Checked before publishing: Mario Cristobal said 'everything looks favorable' for wide receiver Malachi Toney, and if Fletcher is out, Miami would use Girard Pringle Jr. and freshman Javian Mallory at running back. The market: The spread opened -42.5 and is -41.5 at DraftKings, a move of 1 toward the away. The total opened 54.5 and is 52.5 at DraftKings, 2 toward the under. 5 books span 53.5 to 54.5 on the total; the middle is 53.5. Our spread gap of 4 points is at the 56th percentile of the model's gaps; gaps this large went 787-786 against the close in 3584 graded games. Our total gap of 4 points is at the 66th percentile of the model's gaps; gaps this large went 675-546 against the close in 3602 graded games.",
+      "risk": "It rests on the model alone, and the closing line beats our number on average, so a gap this size is more often our error than the market's. Confidence 3 of 10.",
+      "jurisdictionVerified": true
+    }
+  ]
+}
