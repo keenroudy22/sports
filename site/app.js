@@ -84,21 +84,61 @@
     else if (p.marketType === 'total' || ['over', 'under'].includes(String(p.direction || '').toLowerCase())) return `We project ${value} total points`;
     return `Our number ${value} vs the ${plainNumber(p.line)}`;
   };
-  const playCard = p => {
-    /* A play the desk still stands behind is open until kickoff; an old quote says how old it is instead of "expired". */
+  /* The projection cards' look everywhere a team or a player shows: team logos (the away team, then the home team) or
+     the player's photo, from ESPN. A missing image just drops out. */
+  const HEADSHOT = { NFL: id => `https://a.espncdn.com/i/headshots/nfl/players/full/${encodeURIComponent(id)}.png`,
+    CFB: id => `https://a.espncdn.com/i/headshots/college-football/players/full/${encodeURIComponent(id)}.png` };
+  const pic = (src, cls) => src ? `<img class="${cls}" src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()">` : '';
+  const gameOf = x => gameIndex.get(x.gameId || (x.gameIds || [])[0]);
+  const avatar = (x, size = '') => {
+    const league = x.league || String(x.gameId || (x.gameIds || [])[0] || x.id || '').split('-')[0];
+    if (x.athleteId && HEADSHOT[league]) return `<span class="ava ava-head ${size}">${pic(HEADSHOT[league](x.athleteId), 'ava-img')}</span>`;
+    const g = gameOf(x);
+    if (!g || !LOGO[g.league] || !g.away || !g.home) return '';
+    return `<span class="ava ava-pair ${size}">${pic(LOGO[g.league](g.away), 'ava-logo')}${pic(LOGO[g.league](g.home), 'ava-logo')}</span>`;
+  };
+  /* How far our projection clears the line, in the play's direction: positive is our way. */
+  const edgeOf = p => {
+    const d = String(p.direction || '').toLowerCase();
+    if (typeof p.projection !== 'number' || typeof p.line !== 'number' || !['over', 'under'].includes(d)) return null;
+    return d === 'over' ? p.projection - p.line : p.line - p.projection;
+  };
+  /* The numbers a play stands on, in tiles like the projection apps: the price, the line, what we project, the edge. */
+  const statTiles = p => {
+    const cells = [];
+    if (p.odds != null) cells.push(['Price', odds(p.odds), p.book || '']);
+    if (typeof p.line === 'number' && !(p.legs || []).length) cells.push(['Line', plainNumber(p.line), String(p.direction || '').toLowerCase()]);
+    if (typeof p.projection === 'number') cells.push(['We project', plainNumber(p.projection), MARKET_WORDS[p.market] || (p.marketType === 'total' ? 'points' : '')]);
+    const e = edgeOf(p);
+    if (e != null) cells.push(['Edge', `${e > 0 ? '+' : ''}${plainNumber(e)}`, e > 0 ? 'our way' : 'against us']);
+    if ((p.legs || []).length) cells.push(['Legs', String(p.legs.length), 'one per game']);
+    return cells.length ? `<span class="play-stats">${cells.map(([k, v, sub]) => `<span><small>${esc(k)}</small><b class="num${k === 'Edge' ? (v.startsWith('+') ? ' up' : ' down') : ''}">${esc(v)}</b>${sub ? `<em>${esc(sub)}</em>` : ''}</span>`).join('')}</span>` : '';
+  };
+  const countdown = iso => {
+    const ms = Date.parse(iso) - Date.now();
+    if (!(ms > 0) || ms >= 24 * 36e5) return '';
+    const h = Math.floor(ms / 36e5), m = Math.floor((ms % 36e5) / 6e4);
+    return h ? `kicks off in ${h}h ${m}m` : `kicks off in ${m}m`;
+  };
+  /* A play the desk still stands behind is open until kickoff; an old quote says how old it is instead of "expired". */
+  const playState = p => {
     const raw = C.pickState(p);
     const stale = raw.word === 'Price expired' && !p.entryNote && p.status !== 'expired';
-    const st = stale ? { word: 'Open', tone: 'open' } : raw;
-    const kind = `${p.featured ? 'Pick of the Day · ' : ''}${playKind(p)}`;
-    const legs = (p.legs || []).map(l => typeof l === 'string' ? l : l.title || '').filter(Boolean);
-    return `<button class="play${p.featured ? ' play-featured' : ''}" type="button" data-pick="${esc(p.id)}" style="--rail:${esc(p.color || 'var(--mint)')}">
+    return { st: stale ? { word: 'Open', tone: 'open' } : raw, stale };
+  };
+  const playCard = p => {
+    const { st, stale } = playState(p);
+    const legs = (p.legs || []).filter(l => typeof l === 'string' || l.title);
+    const lotto = legs.length && p.odds >= 1000;
+    const kind = `${p.featured ? 'Pick of the Day · ' : ''}${lotto ? `🎰 Lotto · ${legs.length} legs` : playKind(p)}`;
+    const when = countdown(p.kickoff) || whenShort(p.kickoff || p.publishedAt);
+    return `<button class="play${p.featured ? ' play-featured' : ''}${lotto ? ' play-lotto' : ''}" type="button" data-pick="${esc(p.id)}" style="--rail:${esc(p.color || 'var(--mint)')}">
       <span class="play-top"><span class="play-kind">${esc(kind)}${p.favorite && !legs.length && !p.featured ? ' · Favorite' : ''}</span><span class="pill pill-${st.tone}">${esc(st.word)}</span></span>
-      <span class="play-title">${esc(p.displayTitle || p.title || p.player)}</span>
-      ${legs.length ? `<span class="play-legs">${legs.map(l => `<span>• ${esc(l)}</span>`).join('')}</span>` : ''}
-      <span class="play-price">${p.odds == null ? 'price not recorded' : `<span class="num">${odds(p.odds)}</span> at ${esc(p.book || '')}`}</span>
-      ${numberText(p) ? `<span class="play-number">${esc(numberText(p))}</span>` : ''}
+      <span class="play-hero">${legs.length ? '' : avatar(p, 'ava-lg')}<span class="play-title">${lotto ? `<span class="lotto-odds num">${esc(odds(p.odds))}</span> ` : ''}${esc(p.displayTitle || p.title || p.player)}</span></span>
+      ${legs.length ? `<span class="play-legs">${legs.map(l => typeof l === 'string' ? `<span class="leg">• ${esc(l)}</span>` : `<span class="leg">${avatar(l, 'ava-sm') || '•'} ${esc(l.title)}</span>`).join('')}</span>` : ''}
+      ${statTiles(p)}
       ${p.reason ? `<span class="play-reason">${esc(p.reason)}</span>` : ''}
-      <span class="play-meta">${esc(whenShort(p.kickoff || p.publishedAt))}${stale && p.quotedAt ? ` · price from ${esc(ago(p.quotedAt))}` : ''} · tap for the research ›</span>
+      <span class="play-meta">${esc(when)}${stale && p.quotedAt ? ` · price from ${esc(ago(p.quotedAt))}` : ''} · tap for the research ›</span>
     </button>`;
   };
   /* The one record (C.theRecord), the way the pick accounts keep it: wins and losses, and units at one unit a play
@@ -115,11 +155,18 @@
     const d = new Date(day + 'T12:00:00');
     return Date.now() - d.getTime() < 6 * 864e5 ? d.toLocaleDateString('en-US', { weekday: 'long' }) : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
-  const recordStrip = (rec, label) => {
+  /* The last ten graded plays as dots, oldest first, and a win streak worth a flame. */
+  const formDots = picks => {
+    const last = picks.filter(p => ['win', 'loss', 'push'].includes(p.result) && !C.isParlay(p) && !C.isUnpricedImport(p))
+      .sort((a, b) => String(b.settledAt || b.kickoff || '').localeCompare(String(a.settledAt || a.kickoff || ''))).slice(0, 10).reverse();
+    return last.length ? `<span class="dots" aria-label="Last ${last.length}: ${last.map(p => p.result).join(', ')}">${last.map(p => `<i class="dot dot-${p.result}"></i>`).join('')}</span>` : '';
+  };
+  const recordStrip = (rec, label, picks = []) => {
     const u = rec.season.units;
+    const hot = rec.season.streak && rec.season.streak.result === 'win' && rec.season.streak.length >= 2 ? `<span class="streak">🔥 ${rec.season.streak.length} straight</span>` : '';
     return `<a class="record-strip" href="#record"><span class="eyebrow">${esc(label)}</span>
-    <span class="num record-big">${wl(rec.season)}</span>${u == null ? '' : `<span class="num record-units ${unitTone(u)}">${unitText(u)}</span><span class="record-note">one unit a play</span>`}
-    <span class="row-meta">Every play graded, win or lose ›</span></a>`;
+    <span class="num record-big">${wl(rec.season)}</span>${u == null ? '' : `<span class="num record-units ${unitTone(u)}">${unitText(u)}</span><span class="record-note">one unit a play</span>`}${hot}
+    <span class="record-form">${formDots(picks)}<span class="row-meta">Every play graded, win or lose ›</span></span></a>`;
   };
   /* Three boxes, the money, then the Pick of the Day and the fun parlays on their own line. */
   const recordBoxes = rec => {
@@ -237,9 +284,9 @@
     const tone = pick.result === 'win' ? 'var(--green)' : pick.result === 'loss' ? 'var(--rose)' : 'var(--mint)';
     return `<button class="row" type="button" data-pick="${esc(pick.id)}">
       <span class="row-rail" style="background:${pick.result ? tone : esc(pick.color || 'var(--mint)')}"></span>
-      <span class="row-main"><span class="row-top"><span class="row-name">${esc(pick.displayTitle || pick.title || pick.player)}</span>
+      <span class="row-main"><span class="row-top">${avatar(pick, 'ava-row')}<span class="row-name">${pick.result && MARKS[pick.result] ? MARKS[pick.result] + ' ' : ''}${esc(pick.displayTitle || pick.title || pick.player)}</span>
         ${pick.favorite ? '<span class="pill pill-ours">Favorite</span>' : ''}${pick.modelLean ? '<span class="pill pill-reference">Model pick</span>' : ''}${pick.earlyExit ? '<span class="pill pill-closed">Early exit credit</span>' : ''}${C.isLongshot(pick) ? '<span class="pill pill-stale">Longshot</span>' : ''}${pick.historicalImport ? '<span class="pill pill-reference">Imported</span>' : ''}
-        <span class="pill pill-${C.pickState(pick).tone}">${esc(C.pickState(pick).word)}</span></span>
+        <span class="pill pill-${playState(pick).st.tone}">${esc(playState(pick).st.word)}</span></span>
         <span class="row-market">${pick.actual ? esc(pick.actual) : (pick.legs || []).length ? `${pick.legs.length} legs` : numberText(pick) ? esc(numberText(pick)) : pick.projection != null ? 'We project ' + esc(pick.projection) : ''}</span>
         <span class="row-meta">${esc(whenShort(pick.kickoff || pick.publishedAt))}${pick.quotedAt ? ' · price from ' + esc(ago(pick.quotedAt)) : ''}</span></span>
       ${pick.odds == null && pick.historicalImport ? '<span class="row-price"><span class="row-book">price not recorded</span></span>'
@@ -293,7 +340,7 @@
     return out.sort((a, b) => b.size - a.size).slice(0, 6);
   };
   const moveRow = mv => `<div class="row" style="cursor:default"><span class="row-rail" style="background:${mv.agrees === true ? 'var(--green)' : mv.agrees === false ? 'var(--amber)' : 'var(--line)'}"></span>
-      <span class="row-main"><span class="row-top"><span class="row-name"><a href="#game/${esc(mv.game.id)}">${esc(teamName(mv.game.away))} at ${esc(teamName(mv.game.home))}</a></span></span>
+      <span class="row-main"><span class="row-top">${avatar({ gameId: mv.game.id }, 'ava-row')}<span class="row-name"><a href="#game/${esc(mv.game.id)}">${esc(teamName(mv.game.away))} at ${esc(teamName(mv.game.home))}</a></span></span>
         <span class="row-market">${esc(mv.text)} · ${esc(mv.note)}</span>
         <span class="row-meta">${esc(whenShort(mv.game.kickoff))}${mv.agrees === true ? ' · moved toward our number' : mv.agrees === false ? ' · moved away from our number' : ''}</span></span></div>`;
   /* Picks settled in the last day and a half, newest first: the morning-after scorecard. */
@@ -322,7 +369,7 @@
     return `${head(title,
       first ? `${now.length} games on this slate. Our plays come first; everything under them is what our numbers see, not picks.` : 'Nothing kicks off in the next eight days in this league.')}
       <div class="two-col"><div>
-        ${recordStrip(C.theRecord(picks), state.league === 'ALL' ? 'The record' : `The record · ${leagueName(dataLeague())}`)}
+        ${recordStrip(C.theRecord(picks), state.league === 'ALL' ? 'The record' : `The record · ${leagueName(dataLeague())}`, picks)}
         ${live.length ? section('Our plays', `<div class="plays">${live.map(playCard).join('')}</div>`, '<a href="#record">Record →</a>') : ''}
         ${best.games.length ? section(best.day ? `Game lines with value · ${esc(best.day)}` : 'Game lines with value today',
           `<p class="row-meta" style="margin:0 0 8px">Where our chance beats what the price needs, at the best price we found. Worth a look, not picks.</p><div class="card"><div class="rows">${best.games.map(lineRow).join('')}</div></div>`,
@@ -539,6 +586,9 @@
     return t.replace(/ over /, ' Over ').replace(/ under /, ' Under ');
   };
 
+  /* Our chance as a bar, with a tick where the price needs it to be to break even. */
+  const chanceBar = (chance, needs, tier) => `<span class="cbar" aria-hidden="true"><span class="cbar-fill cbar-${esc(tier)}" style="width:${Math.max(2, Math.min(100, 100 * chance)).toFixed(0)}%"></span>${typeof needs === 'number' ? `<span class="cbar-mark" style="left:${(100 * needs).toFixed(1)}%"></span>` : ''}</span>`;
+
   const lineRow = row => {
     const inTicket = state.ticket.some(t => t.id === row.id);
     const ours = pickKeys.get(rowKey(row)) || pickKeys.get(row.id);
@@ -548,11 +598,12 @@
     const books = row.books || [];
     return `<div class="row${open ? '' : ' row-closed'}${row.athleteId ? ' row-prop' : ''}"${row.athleteId ? ` data-prop="${esc(row.id)}" role="button" tabindex="0"` : ' style="cursor:default"'}>
       <span class="row-rail" style="background:${graded && RAIL[g.tier] || 'var(--line)'}"></span>
-      <span class="row-main"><span class="row-top"><span class="row-name">${esc(niceTitle(row))}</span>${row.position ? `<span class="row-meta">${esc(row.position)}</span>` : ''}${ours ? '<span class="pill pill-ours">Our pick</span>' : ''}
+      <span class="row-main"><span class="row-top">${avatar(row, 'ava-row')}<span class="row-name">${esc(niceTitle(row))}</span>${row.position ? `<span class="row-meta">${esc(row.position)}</span>` : ''}${ours ? '<span class="pill pill-ours">Our pick</span>' : ''}
         ${!open ? `<span class="pill pill-${esc(row.state)}">${esc({ stale: 'Recheck price', closed: 'Closed', unpriced: 'No price', reference: 'Unverified price' }[row.state] || row.state)}</span>` : ''}
         ${row.move && typeof row.line === 'number' ? `<span class="move">opened ${esc(lineText(row.line - row.move))}</span>` : ''}</span>
         ${row.player ? `<span class="row-market">${esc([row.direction, row.line, row.market].filter(v => v != null && v !== '').join(' '))}</span>` : ''}
         ${graded ? `<span class="grade grade-${g.tier}"><b>${esc(g.word)}</b>${g.detail ? `<span>${esc(g.detail)}</span>` : ''}</span>` : ''}
+        ${graded && row.grade && typeof row.grade.chance === 'number' ? chanceBar(row.grade.chance, row.grade.needs, g.tier) : ''}
         <span class="row-meta">${esc(whenShort(row.kickoff))}${row.observedAt ? ' · price checked ' + esc(ago(row.observedAt)) : ''}${row.athleteId ? '<span class="more"> · last 10 and matchup ›</span>' : ''}</span></span>
       <span class="row-price"><span class="row-odds num">${odds(row.odds)}</span><span class="row-book">${row.book ? `at ${esc(row.book)}` : 'No book'}${books.length > 1 ? `<br>best of ${books.length} books` : ''}</span></span>
       ${row.state === 'open' && row.odds != null ? `<button class="add" type="button" data-add="${esc(row.id)}" aria-pressed="${inTicket}" aria-label="${inTicket ? 'Remove from ticket' : 'Add to ticket'}">${inTicket ? '✓' : '+'}</button>` : ''}
@@ -790,6 +841,7 @@
     const [data, board] = await Promise.all([get('app/today.json'), maybe('scoreboard.json')]);
     const clv = new Map((((board || {}).picks || {}).rows || []).map(r => [r.id, r]));
     const league = data.picks.filter(inLeague);
+    gameIndex = new Map(data.games.map(g => [g.id, g]));
     const rec = C.theRecord(league);
     const rq = state.recordQuery.trim().toLowerCase();
     const matches = p => !rq || [p.title, p.displayTitle, p.player, p.kind, p.result, p.book].some(v => String(v || '').toLowerCase().includes(rq));
@@ -833,7 +885,7 @@
     const what = [p.actual ? String(typeof p.actual === 'string' ? p.actual : JSON.stringify(p.actual)).split(/[.;]\s/)[0] : '', c && c.clv != null ? `CLV ${signed(c.clv)}` : ''].filter(Boolean).join(' · ');
     return `<button class="row" type="button" data-pick="${esc(p.id)}">
       <span class="row-rail" style="background:${p.result === 'win' ? 'var(--green)' : p.result === 'loss' ? 'var(--rose)' : 'var(--line)'}"></span>
-      <span class="row-main"><span class="row-top"><span class="row-name">${MARKS[p.result] ? MARKS[p.result] + ' ' : ''}${esc(p.displayTitle || p.title || p.player)}</span>${p.featured && p.posted ? '<span class="pill pill-ours">Pick of the Day</span>' : ''}${p.earlyExit ? '<span class="pill pill-closed">Early exit credit</span>' : ''}${C.isParlay(p) ? '<span class="pill pill-stale">Fun parlay</span>' : ''}${p.historicalImport ? '<span class="pill pill-reference">Week 1</span>' : ''}</span>
+      <span class="row-main"><span class="row-top">${avatar(p, 'ava-row')}<span class="row-name">${MARKS[p.result] ? MARKS[p.result] + ' ' : ''}${esc(p.displayTitle || p.title || p.player)}</span>${p.featured && p.posted ? '<span class="pill pill-ours">Pick of the Day</span>' : ''}${p.earlyExit ? '<span class="pill pill-closed">Early exit credit</span>' : ''}${C.isParlay(p) ? '<span class="pill pill-stale">Fun parlay</span>' : ''}${p.historicalImport ? '<span class="pill pill-reference">Week 1</span>' : ''}</span>
         <span class="row-meta clamp">${esc(whenShort(p.kickoff || p.publishedAt))}${what ? ' · ' + esc(what) : ''}</span></span>
       <span class="row-price"><span class="row-odds num ${unitTone(u)}">${u == null ? (p.odds == null ? '' : odds(p.odds)) : unitText(u)}</span><span class="row-book">${p.odds == null ? 'no price recorded' : p.priceAssumed ? `${odds(p.odds)} assumed` : `${esc(p.book || '')} ${odds(p.odds)}`}</span></span>
     </button>`;
