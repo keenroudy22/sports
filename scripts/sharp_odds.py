@@ -262,18 +262,22 @@ PREFERRED = ('draftkings', 'fanduel')      # whose main number stands in for ESP
 
 
 def main_lines(record, athlete_of):
-    """{athlete: {market: [line, None]}} from one prop-odds record: each player's main number at DraftKings, else FanDuel,
-    else another book. ESPN's feed of main lines carries NFL players only; for a college game this stands in for it,
-    without an opening number. athlete_of(name) gives the ESPN athlete id for a feed name, or None."""
+    """{athlete: {market: [line, None]}} from one prop-odds record: each player's main number, the first priced on both
+    sides at DraftKings, else FanDuel, else another book. A one-sided number is a milestone, not a main line (the feed's
+    DraftKings college quarterback "199.5 passing yards, over -175" beside FanDuel's 213.5 at -112 both ways), so a
+    player and market with no two-sided number is left out. ESPN's feed of main lines carries NFL players only; for a
+    college game this stands in for it, without an opening number. athlete_of(name) gives the ESPN athlete id or None."""
     books = record.get('books') or {}
     order = [b for b in PREFERRED if b in books] + sorted(b for b in books if b not in PREFERRED)
+    number = lambda value: isinstance(value, (int, float))
     out = {}
     for book in order:
         for market, players in ((books[book] or {}).get('markets') or {}).items():
             for name, quote in (players or {}).items():
-                athlete, line = athlete_of(name), (quote or {}).get('line')
-                if athlete and isinstance(line, (int, float)):
-                    out.setdefault(str(athlete), {}).setdefault(market, [line, None])
+                quote = quote or {}
+                athlete = athlete_of(name)
+                if athlete and number(quote.get('line')) and number(quote.get('over')) and number(quote.get('under')):
+                    out.setdefault(str(athlete), {}).setdefault(market, [quote['line'], None])
     return out
 
 

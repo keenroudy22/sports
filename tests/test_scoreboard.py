@@ -116,11 +116,11 @@ class FeedLineTests(unittest.TestCase):
         import tempfile
         game = {'league': 'CFB', 'eventId': '1', 'kickoff': '2026-10-03T16:00Z', 'players': [{'id': '10', 'name': 'Player Ten'}]}
         records = [{'gameId': 'CFB-1', 'retrievedAt': '2026-10-03T12:00:00Z',
-                    'books': {'draftkings': {'markets': {'recYds': {'Player Ten': {'line': 55.5, 'over': -115}}}}}},
+                    'books': {'draftkings': {'markets': {'recYds': {'Player Ten': {'line': 55.5, 'over': -115, 'under': -105}}}}}},
                    {'gameId': 'CFB-1', 'retrievedAt': '2026-10-03T15:00:00Z',
-                    'books': {'draftkings': {'markets': {'recYds': {'Player Ten Jr.': {'line': 57.5, 'over': -110}}}}}},
+                    'books': {'draftkings': {'markets': {'recYds': {'Player Ten Jr.': {'line': 57.5, 'over': -110, 'under': -110}}}}}},
                    {'gameId': 'CFB-1', 'retrievedAt': '2026-10-03T16:30:00Z',
-                    'books': {'draftkings': {'markets': {'recYds': {'Player Ten': {'line': 60.5, 'over': -110}}}}}}]
+                    'books': {'draftkings': {'markets': {'recYds': {'Player Ten': {'line': 60.5, 'over': -110, 'under': -110}}}}}}]
         with tempfile.TemporaryDirectory() as folder:
             Path(folder, 'cfb-2026.jsonl').write_text(''.join(json.dumps(r) + '\n' for r in records))
             lines = sb.feed_lines({'CFB-1': game}, root=folder)

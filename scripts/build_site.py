@@ -885,6 +885,8 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, p
                                  # A questionable player is a coin flip on snaps before it is a read on volume.
                                  'tier': 'lean' if chance >= 0.6 and not thin and not limited else 'pass',
                                  'model': snapshot['model'], 'snapshotAt': snapshot['publishedAt']}
+                        if k is None and game['league'] in PROP_OWN_CALIBRATION:
+                            grade['unproven'] = True        # graded against the line before it is played
                 name = names.get(athlete, f'Athlete {athlete}')
                 team = game[side]['abbreviation'] if side else None
                 # A price turns a read into a line that can be graded against what it needs.

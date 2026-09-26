@@ -98,6 +98,18 @@ class QuoteTests(unittest.TestCase):
                          'down from the main line the over only gets shorter, up from it only longer; the first rung out of order ends the walk')
         self.assertEqual(sharp_odds.consistent({'line': None, 'alternates': quote['alternates']}), [])
 
+    def test_a_main_line_is_priced_both_ways_and_draftkings_leads(self):
+        record = {'books': {
+            'fanduel': {'markets': {'passYds': {'Devon Dampier': {'line': 213.5, 'over': -112, 'under': -112}},
+                                    'recYds': {'Wide Out': {'line': 44.5, 'over': -110, 'under': -120}}}},
+            'draftkings': {'markets': {'passYds': {'Devon Dampier': {'line': 199.5, 'over': -175}},
+                                       'att': {'Devon Dampier': {'line': 27.5, 'over': 106}},
+                                       'recYds': {'Wide Out': {'line': 45.5, 'over': -115, 'under': -105}}}}}}
+        ids = {'Devon Dampier': '1', 'Wide Out': '2'}
+        self.assertEqual(sharp_odds.main_lines(record, ids.get),
+                         {'1': {'passYds': [213.5, None]}, '2': {'recYds': [45.5, None]}},
+                         "a one-sided milestone is not a main line; DraftKings' two-sided number leads")
+
     def test_the_event_list_asks_for_upcoming_games_at_the_two_books(self):
         seen = {}
 
