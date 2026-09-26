@@ -145,6 +145,21 @@ class OtherLearningTests(unittest.TestCase):
         quiet = learning.default_policy()
         self.assertEqual(learn.learn_reasons(quiet, {'posts': posts[:3]}, NOW)[1], [], 'too few posts to move anything')
 
+    def test_engagement_by_kind_of_post_and_hour_is_reported_not_acted_on(self):
+        posts = [{'kind': 'buffer:play', 'sentAt': '2026-09-26T16:00:05Z', 'metrics': {'impressions': 1000, 'reactions': 30}},     # noon ET
+                 {'kind': 'buffer:receipt', 'sentAt': '2026-09-26T13:00:05Z', 'metrics': {'impressions': 500, 'likes': 5}},       # 9 AM ET
+                 {'kind': 'buffer:cashed', 'sentAt': '2026-09-26T23:40:00Z', 'metrics': {'impressions': 800, 'reposts': 16}},     # 7:40 PM ET
+                 {'kind': 'buffer:play', 'sentAt': '2026-09-26T16:10:05Z'},                                                        # no metrics yet
+                 {'kind': 'pick', 'postedAt': '2026-09-19T12:30:00Z'}]
+        times = learn.post_times({'posts': posts})
+        self.assertEqual(times['byKind'], {'cashed': {'posts': 1, 'perThousand': 20.0}, 'play': {'posts': 1, 'perThousand': 30.0},
+                                           'receipt': {'posts': 1, 'perThousand': 10.0}})
+        self.assertEqual(list(times['byHour']), ['9 to 11 AM', '11 AM to 2 PM', 'after 6 PM'])
+        shell = {'at': '2026-10-06T12:30:00Z', 'candidates': 0, 'graded': 0, 'changes': [], 'segments': {}, 'calibration': {},
+                 'gates': {}, 'judge': {}, 'researcher': {}, 'posts': {}, 'model': {}, 'postTimes': times}
+        self.assertIn('## Which posts and which hours', learn.markdown(shell))
+        self.assertIn('- cashed: 1 posts, 20.0 engagements per thousand views', learn.markdown(shell))
+
     def test_the_week_writes_the_policy_and_a_plain_report(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

@@ -215,7 +215,9 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     soon = soon if soon is not None else SOON
     import learning
     weights = learning.load_policy().get('reasonWeights')
-    posted = {p['id'] for p in log_book.get('posts', [])}
+    # A post can stand for two (the morning receipt that carries the menu is keyed "receipt:...+menu:..."): neither
+    # goes out again on its own.
+    posted = {part for p in log_book.get('posts', []) for part in str(p['id']).split('+')}
     today = eastern_date(now)
     import featured as featured_store
     potd = featured_store.of_day(today.isoformat())     # the day's Pick of the Day: first, its own card
@@ -242,9 +244,9 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
         noon = datetime(today.year, today.month, today.day, POST_AT[0], POST_AT[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)
         plays.append((max(min(noon, kickoff - EARLY_LEAD), opens), -1 if key == potd else ORDER[pick_card.play_kind(merged)],
                       kickoff - feed.LEAD, key, text, 'play', f'{key}-potd' if key == potd else key))
-    order = {'menu': -2, 'receipt': -1, 'book': -1}
+    order = {'menu': -2, 'receipt': -1, 'book': -1, 'cashed': 1}
     for post in receipts.house_posts(first, latest, games, log_book, now):
-        if post['key'] in posted:
+        if set(post['key'].split('+')) & posted:
             continue
         problems = receipts.guard(post)
         if problems:

@@ -491,8 +491,8 @@ def recap(day, first, latest, games, now):
     lines = [f"Kitchen's closed for {datetime.fromisoformat(day):%A}."]
     if favorites:
         fav = summarize(favorites)
-        lines.append(f"Favorites {fav['win']}-{fav['loss']}" + (f"-{fav['push']}" if fav['push'] else '') + f" ({fav['units']:+.2f}u).")
-    lines.append(f"Everything on the record {everything['win']}-{everything['loss']}" + (f"-{everything['push']}" if everything['push'] else '') + f" ({everything['units']:+.2f}u).")
+        lines.append(f"Favorites {fav['win']}-{fav['loss']}" + (f"-{fav['push']}" if fav['push'] else '') + '.')
+    lines.append(f"Everything on the record {everything['win']}-{everything['loss']}" + (f"-{everything['push']}" if everything['push'] else '') + '.')
     hits = [r['title'] for r in rows if r.get('result') == 'win'][:3]
     misses = [r['title'] for r in rows if r.get('result') == 'loss'][:3]
     if hits:

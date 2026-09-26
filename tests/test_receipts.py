@@ -115,12 +115,61 @@ class ReceiptTests(unittest.TestCase):
         log['posts'] = [e for e in log['posts'] if e['id'] != 'NFL-2026-W4-m']         # tonight's play has not gone out yet
         plans = buffer_post.plan(first, latest, dict(GAMES, **noon), MONDAY_MORNING, log)
         got = [(p[0], p[1], p[3].astimezone(gates.EASTERN).strftime('%H:%M'), p[4]) for p in plans]
-        self.assertEqual(got[0][:3], ('menu:day:2026-09-28', 'menu', '08:45'))
-        self.assertEqual(got[1], ('receipt:day:2026-09-27', 'receipt', '09:00', 'receipt-day-2026-09-27'))
-        self.assertEqual(got[2][:3], ('NFL-2026-W4-n', 'play', '10:00'), 'a noon kickoff posts two hours ahead')
-        self.assertEqual(got[3][:3], ('NFL-2026-W4-m', 'play', '12:00'), 'the Monday night play goes out at midday')
-        log['posts'].append({'id': 'receipt:day:2026-09-27', 'kind': 'buffer:receipt'})
-        self.assertNotIn('receipt:day:2026-09-27', [p[0] for p in buffer_post.plan(first, latest, dict(GAMES, **noon), MONDAY_MORNING, log)])
+        self.assertEqual(got[0], ('receipt:day:2026-09-27+menu:day:2026-09-28', 'receipt', '09:00', 'receipt-day-2026-09-27'),
+                         'one morning post: the receipt carries the menu')
+        self.assertIn('Today: 2 plates on the stove. Pick of the Day goes out around noon.', plans[0][2])
+        self.assertTrue(plans[0][2].startswith('🍳 RECEIPTS · SUNDAY\n2-1\n\n✅ Player Seven'), plans[0][2])
+        self.assertEqual(got[1][:3], ('NFL-2026-W4-n', 'play', '10:00'), 'a noon kickoff posts two hours ahead')
+        self.assertEqual(got[2][:3], ('NFL-2026-W4-m', 'play', '12:00'), 'the Monday night play goes out at midday')
+        log['posts'].append({'id': 'receipt:day:2026-09-27+menu:day:2026-09-28', 'kind': 'buffer:receipt'})
+        again = [p[0] for p in buffer_post.plan(first, latest, dict(GAMES, **noon), MONDAY_MORNING, log)]
+        self.assertFalse([k for k in again if k.startswith(('receipt:', 'menu:'))], 'neither goes out again on its own')
+        log['posts'][-1] = {'id': 'receipt:day:2026-09-27', 'kind': 'buffer:receipt'}
+        alone = [p[:2] for p in buffer_post.plan(first, latest, dict(GAMES, **noon), MONDAY_MORNING, log)]
+        self.assertIn(('menu:day:2026-09-28', 'menu'), alone, 'a receipt that already went out leaves the menu to go alone')
+
+
+class CashedTests(unittest.TestCase):
+    """A win that went out on X gets its own post as it settles, quoting the original; losses wait for the receipt."""
+    SUNDAY_EVENING = datetime(2026, 9, 27, 22, 0, tzinfo=timezone.utc)          # Sun 6:00 PM ET
+
+    def world(self):
+        first, latest, log = world()
+        latest['NFL-2026-W4-a'] = {'result': 'win', 'settledAt': '2026-09-27T21:30:00Z'}
+        latest['NFL-2026-W4-b'] = {'result': 'loss', 'settledAt': '2026-09-27T21:30:00Z'}
+        latest['NFL-2026-W4-c'] = {'result': 'win', 'settledAt': '2026-09-27T21:30:00Z'}
+        for entry in log['posts']:
+            entry['tweetId'] = f"20{entry['id'][-1]}"
+        return first, latest, log
+
+    def test_a_win_that_went_out_is_cashed_with_its_post_quoted(self):
+        first, latest, log = self.world()
+        posts = {p['key']: p for p in receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING)}
+        self.assertEqual(sorted(posts), ['cashed:NFL-2026-W4-a', 'cashed:NFL-2026-W4-c'], 'wins only; the loss waits for the receipt')
+        self.assertEqual(posts['cashed:NFL-2026-W4-a']['text'],
+                         '✅ CASHED\nPlayer Seven over 4.5 receptions\n+100 at DraftKings\n\n#NFL\nhttps://x.com/keenkooks/status/20a')
+        self.assertTrue(posts['cashed:NFL-2026-W4-c']['text'].startswith('✅ FUN PARLAY CASHED\n3 legs · +600 at DraftKings'))
+        self.assertIsNone(posts['cashed:NFL-2026-W4-a']['card'], 'text only: the quoted post carries the card')
+        self.assertEqual(receipts.guard(posts['cashed:NFL-2026-W4-a']), [])
+        log['posts'][0]['featured'] = True
+        self.assertTrue(receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING)[0]['text'].startswith('✅ PICK OF THE DAY CASHED'))
+
+    def test_not_overnight_not_late_and_not_a_play_that_never_went_out(self):
+        first, latest, log = self.world()
+        self.assertEqual(receipts.cashed(first, latest, GAMES, log, datetime(2026, 9, 28, 6, 0, tzinfo=timezone.utc)), [], '2 AM: the receipt carries it')
+        self.assertEqual(receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING + timedelta(hours=4)), [], 'three hours on, it is old news')
+        for entry in log['posts']:
+            entry.pop('tweetId')
+        self.assertEqual(receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING), [], 'never went out, nothing to quote')
+
+    def test_the_planner_sends_it_once_right_away(self):
+        first, latest, log = self.world()
+        plans = [p for p in buffer_post.plan(first, latest, GAMES, self.SUNDAY_EVENING, log) if p[1] == 'cashed']
+        self.assertEqual([(p[0], p[4]) for p in plans], [('cashed:NFL-2026-W4-a', None), ('cashed:NFL-2026-W4-c', None)])
+        self.assertLessEqual(plans[0][3] - self.SUNDAY_EVENING, timedelta(minutes=5), 'as it settles, not the next morning')
+        log['posts'].append({'id': 'cashed:NFL-2026-W4-a', 'kind': 'buffer:cashed'})
+        again = [p[0] for p in buffer_post.plan(first, latest, GAMES, self.SUNDAY_EVENING, log) if p[1] == 'cashed']
+        self.assertEqual(again, ['cashed:NFL-2026-W4-c'])
 
 
 class DailyTests(unittest.TestCase):

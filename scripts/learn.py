@@ -30,6 +30,7 @@ import sys
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import boxscores
@@ -361,6 +362,27 @@ def learn_reasons(policy, log_book, now, dry=False):
     return table, changes
 
 
+EASTERN = ZoneInfo('America/New_York')
+HOURS = ((0, 9, 'before 9 AM'), (9, 11, '9 to 11 AM'), (11, 14, '11 AM to 2 PM'), (14, 18, '2 to 6 PM'), (18, 24, 'after 6 PM'))
+
+
+def post_times(log_book):
+    """Engagement per thousand views by the kind of post (play, receipt, menu, book, cashed) and by the Eastern hour it
+    went out. A report for the owner, not a knob: after a couple of weeks it says which posts and which times work."""
+    kinds, hours = defaultdict(list), defaultdict(list)
+    for entry in log_book.get('posts', []):
+        rate = engagement(entry)
+        sent = entry.get('sentAt') or entry.get('dueAt')
+        if rate is None or not str(entry.get('kind') or '').startswith('buffer:') or not sent:
+            continue
+        kinds[entry['kind'].split(':', 1)[1]].append(rate)
+        hour = datetime.fromisoformat(str(sent).replace('Z', '+00:00')).astimezone(EASTERN).hour
+        hours[next(name for low, high, name in HOURS if low <= hour < high)].append(rate)
+    table = lambda groups: {k: {'posts': len(v), 'perThousand': round(sum(v) / len(v), 2)} for k, v in groups.items()}
+    order = [name for _, _, name in HOURS]
+    return {'byKind': dict(sorted(table(kinds).items())), 'byHour': dict(sorted(table(hours).items(), key=lambda kv: order.index(kv[0])))}
+
+
 def model_findings():
     board = json.loads((ROOT / 'site' / 'data' / 'scoreboard.json').read_text(encoding='utf-8')) if (ROOT / 'site' / 'data' / 'scoreboard.json').exists() else {}
     out = {}
@@ -396,7 +418,7 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
     changes += moved
     report = {'at': learning.stamp(now), 'candidates': len(rows), 'graded': sum(1 for r in rows if r.get('result')),
               'segments': segments, 'calibration': calibration, 'gates': by_rule(rows), 'judge': judge_findings(rows),
-              'researcher': domains, 'posts': reasons, 'model': model_findings(), 'changes': changes}
+              'researcher': domains, 'posts': reasons, 'postTimes': post_times(log_book), 'model': model_findings(), 'changes': changes}
     if not dry:
         learning.save_policy(policy, policy_path)
         boxscores.write_json(Path(root) / 'report.json', report)
@@ -447,6 +469,13 @@ def markdown(report):
         lines += ['', '## Posts', '']
         for kind, t in report['posts'].items():
             lines.append(f"- reason kind {kind}: {t['posts']} posts, {t['perThousand']} engagements per thousand views")
+    times = report.get('postTimes') or {}
+    if times.get('byKind') or times.get('byHour'):
+        lines += ['', '## Which posts and which hours', '']
+        for kind, t in (times.get('byKind') or {}).items():
+            lines.append(f"- {kind}: {t['posts']} posts, {t['perThousand']} engagements per thousand views")
+        for hour, t in (times.get('byHour') or {}).items():
+            lines.append(f"- {hour}: {t['posts']} posts, {t['perThousand']} engagements per thousand views")
     if report['model']:
         lines += ['', '## The number against the close (season to date)', '']
         for key, m in report['model'].items():

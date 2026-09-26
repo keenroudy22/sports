@@ -384,6 +384,13 @@ def entry_note(now, breaks, pick):
             f"{int(pick['odds']):+d} and is graded as posted.")
 
 
+def absorb(ctx, revisions):
+    """This run's settlements and closes, seen by every later step of the run: a play that closed is not queued, a
+    win that settled gets its cashed post now rather than at the next run."""
+    for _, _, revision in revisions:
+        ctx.latest[revision['id']] = dict(ctx.latest.get(revision['id'], {}), **revision)
+
+
 def close_moves(ctx, raw_first, games, boards, now):
     """Revisions marking picks closed to new entries, from the feed (desk.moves) and the pick's own book."""
     picks = build_site.board_picks(ctx.first, ctx.latest, games, {})
@@ -1332,6 +1339,7 @@ def _run(args, now, slot, kinds, status):
         closed += parlay_closures(ctx, raw_first, games, now, closing=[revision for _, _, revision in closed])
         status['checks'] += [f'CHECK {k}: no comparable current line' for k in checks]
         log(f'closed {len(closed)}, to check by hand {len(checks)}')
+    absorb(ctx, settled + closed)
 
     build_site.build(now)
     lines = load_json(build_site.OUT / 'lines.json', {'lines': []})['lines']

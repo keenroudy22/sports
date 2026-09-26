@@ -256,13 +256,74 @@ def book(first, latest, games, log_book, now):
             'stale': at(today, BOOK_UNTIL)}
 
 
+CASHED_FRESH = timedelta(hours=3)          # a win settled longer ago than this is left to the morning receipt
+QUIET = ((0, 30), (9, 0))                  # Eastern: no cashed post overnight; the morning receipt carries those wins
+HANDLE = 'keenkooks'
+
+
+def cashed(first, latest, games, log_book, now):
+    """A winning play that went out on X gets its own post when it settles: "✅ CASHED", the play and its price, and
+    the original post quoted (its X link in the text shows the post under it). Text only: the quoted post carries
+    the card. Losses are not singled out; the morning receipt lists every play, win or lose. Overnight, or three
+    hours after it settled, a win is left to that receipt."""
+    local = now.astimezone(gates.EASTERN)
+    minute = local.hour * 60 + local.minute
+    if QUIET[0][0] * 60 + QUIET[0][1] <= minute < QUIET[1][0] * 60 + QUIET[1][1]:
+        return []
+    out = []
+    for entry in log_book.get('posts', []):
+        key = entry.get('id')
+        if entry.get('kind') != 'buffer:play' or not entry.get('tweetId') or entry.get('cancelledAt') or entry.get('deletedAt') or key not in first:
+            continue
+        pick = dict(first[key], **latest.get(key, {}))
+        if pick.get('result') != 'win' or not pick.get('settledAt'):
+            continue
+        settled_at = gates.when(pick['settledAt'])
+        if not now - CASHED_FRESH < settled_at <= now:
+            continue
+        parlay = pick_card.play_kind(pick) == 'parlay'
+        head = '✅ ' + ('PICK OF THE DAY ' if entry.get('featured') else 'FUN PARLAY ' if parlay else '') + 'CASHED'
+        price = f"{int(pick['odds']):+d} at {pick.get('book')}"
+        what = f"{len(pick.get('legs') or [])} legs · {price}" if parlay else f"{label(pick, games)}\n{price}"
+        league = str(key).split('-')[0]
+        tag = x_post.TAGS.get(league, '')
+        text = f"{head}\n{what}\n\n{tag}\nhttps://x.com/{HANDLE}/status/{entry['tweetId']}".replace('\n\n\n', '\n\n')
+        out.append({'key': f'cashed:{key}', 'kind': 'cashed', 'card': None, 'text': text, 'due': now,
+                    'stale': settled_at + CASHED_FRESH})
+    return out
+
+
+def with_menu(receipt, post, plays_today):
+    """One morning post instead of two: yesterday's receipt with a line for what is on the stove today. Its key names
+    both, so neither goes out again on its own."""
+    rows = receipt.get('rows') or []
+    count = len(plays_today)
+    today = f"Today: {count} plate{'s' if count != 1 else ''} on the stove. Pick of the Day goes out around noon."
+    tags = ' '.join(t for t in (x_post.TAGS[l] for l in ('NFL', 'CFB')) if t in receipt['text'] + ' ' + post['text'])
+    lines = [f"{MARKS.get(result, '•')} {name}" for result, name in rows] if receipt['key'].startswith('receipt:day:') else [name for _, name in rows]
+    head = receipt['text'].split('\n\n')[0]
+    text = fit(lines, head, f'Graded in public, win or lose.\n{today}\n{tags}'.strip())
+    return dict(receipt, key=f"{receipt['key']}+{post['key']}", text=text, stale=min(receipt['stale'], post['stale']))
+
+
 def house_posts(first, latest, games, log_book, now):
-    """Everything the kitchen posts besides the plays: receipts, the game-day menu, and the book on an empty day."""
+    """Everything the kitchen posts besides the plays: receipts, the game-day menu (riding on the morning's receipt when
+    there is one), the book on an empty day, and a cashed post for each winning play as it settles."""
     out = [dict(r, kind='receipt') for r in ready(first, latest, games, log_book, now)]
-    for build in (menu, book):
-        post = build(first, latest, games, log_book, now)
-        if post and post['stale'] > now:
+    today = eastern_date(now)
+    posted = {part for p in log_book.get('posts', []) for part in str(p.get('id')).split('+')}
+    post = menu(first, latest, games, log_book, now)
+    if post and post['stale'] > now:
+        morning_receipt = next((i for i, r in enumerate(out) if r['key'].startswith('receipt:day:') and r['key'] not in posted
+                                and eastern_date(r['due']) == today), None)
+        if morning_receipt is not None:
+            out[morning_receipt] = with_menu(out[morning_receipt], post, todays_plays(first, latest, games, now))
+        else:
             out.append(post)
+    extra = book(first, latest, games, log_book, now)
+    if extra and extra['stale'] > now:
+        out.append(extra)
+    out += cashed(first, latest, games, log_book, now)
     return out
 
 

@@ -596,6 +596,16 @@ class ParlayGuardTests(unittest.TestCase):
             blocker.__exit__(None, None, None)
 
 
+class AbsorbTests(unittest.TestCase):
+    def test_this_runs_settlements_and_closes_reach_the_posting_step(self):
+        """A win settled at 11:30 PM gets its cashed post from that run, and a play closed in a run is never queued by it."""
+        ctx = SimpleNamespace(latest={'a': {'status': 'active', 'odds': -110}})
+        run.absorb(ctx, [('NFL', 'props', {'id': 'a', 'status': 'settled', 'result': 'win', 'settledAt': '2026-09-27T03:30:00Z'}),
+                         ('CFB', 'gamePicks', {'id': 'b', 'status': 'expired', 'entryNote': 'Closed to new entries'})])
+        self.assertEqual(ctx.latest['a'], {'status': 'settled', 'odds': -110, 'id': 'a', 'result': 'win', 'settledAt': '2026-09-27T03:30:00Z'})
+        self.assertEqual(ctx.latest['b']['entryNote'], 'Closed to new entries')
+
+
 class BufferPostsTests(unittest.TestCase):
     """After a push the run waits for the new cards to go live, then plans again and schedules."""
 

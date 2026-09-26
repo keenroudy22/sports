@@ -186,11 +186,16 @@ live waits for the next run. Nothing goes out bare.
 
 | When (Eastern) | Post |
 |---|---|
-| 8:45 AM on a game day with plays | **Today's menu**: how many plates, which games and when, never the side; plates go out around noon (card `site/img/kitchen-menu.png`) |
-| 9:00 AM the morning after a game day | **Receipts** for every play of the day, with ✅ ❌ ➖ and the day's record |
+| 9:00 AM the morning after a game day | **Receipts** for every play of the day, with ✅ ❌ ➖ and the day's record; on a game day it carries the menu too ("Today: 6 plates on the stove. Pick of the Day goes out around noon."), one morning post instead of two, keyed `receipt:day:<date>+menu:day:<date>` so neither goes out again alone |
+| 8:45 AM on a game day with plays and no receipt that morning | **Today's menu**: how many plates, which games and when, never the side; plates go out around noon (card `site/img/kitchen-menu.png`) |
 | 9:00 AM Wednesday | **The week's receipts** by kind, with the week's dates |
 | Around noon (two hours before a kickoff earlier than 2 PM; never before 9 AM) | **The plays**, the Pick of the Day first |
-| 6:00 PM on a day with nothing else | **The book**: the season record of every play that went out on X (the two posted by hand on 2026-09-19 included), graded through yesterday and saying so ("Season through Sep 28"), so back-to-back quiet days never post the same words, which X refuses; with one kind of play only the season line (card `site/img/kitchen-book.png`) |
+| As a win settles (9 AM to 12:30 AM, within three hours) | **Cashed**: "✅ CASHED" (or "✅ PICK OF THE DAY CASHED", "✅ FUN PARLAY CASHED"), the play and its price, and the original post quoted by its X link; text only. Losses are not singled out: the morning receipt lists every play, win or lose. The run feeds its own settlements forward (`run.absorb`), so the cashed post goes out from the run that settled it |
+| 6:00 PM on a day with nothing else | **The book**: the season record, graded through yesterday and saying so ("Season through Sep 28"), so back-to-back quiet days never post the same words, which X refuses; with one kind of play only the season line (card `site/img/kitchen-book.png`) |
+
+**What works on X** (`learn.post_times`): the weekly learning report adds engagement per thousand views by kind of post
+(play, receipt, menu, book, cashed) and by the hour it went out. A report for the owner, not a knob. X posts carry no
+links (the card and the bio carry the site).
 
 **What's on the plate** (owner, 2026-09-24): an NFL player prop's card shows the player's ESPN headshot, a team prop
 the teams' logos (a total both, a spread its side), a parlay and the house cards the chef. Images are fetched when
@@ -260,7 +265,7 @@ exist, and writes review drafts to `~/.config/keenroudy/x-drafts/`.
 
 ## The site (three tabs, 2026-09-25)
 
-The owner wanted the site as easy as the pick accounts he follows. Three tabs: **Picks** (today's plays as cards in
+The owner wanted the site as easy as the pick accounts the owner follows. Three tabs: **Picks** (today's plays as cards in
 the X post's words, the Pick of the Day first, the record strip, the last game day's results; a play the desk still
 stands behind reads "Open" until kickoff, with the age of its price), **Record** (the one record, see X above) and
 **Numbers** (everything our numbers see: value lines, line moves, games in play, our numbers against the lines, and
