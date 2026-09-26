@@ -74,6 +74,17 @@ class TextTests(unittest.TestCase):
         self.assertEqual(reports['2026-09-27-NFL-2340-settlement.json']['targetWeek'], 4)
         self.assertIn('Settled 1', reports['2026-09-27-NFL-2340-settlement.json']['summary'])
 
+    def test_a_report_is_never_published_before_the_prices_in_it(self):
+        """Sep 26: the 8:30 run started at 12:30:05Z, captured prices at 12:30:06Z and published from them; the report
+        said 12:30:05Z and failed validation (quote <= published)."""
+        now = datetime(2026, 9, 26, 12, 30, 5, tzinfo=timezone.utc)
+        pick = {'id': 'x', 'title': 'USF at BGSU over 48.5', 'status': 'active', 'quotedAt': '2026-09-26T12:30:06Z', 'odds': -110, 'book': 'FanDuel'}
+        [report] = run.build_reports({'CFB': ([], [], [('CFB', 'gamePicks', pick)])}, run.slot_for(now), now, [], [], [], {}, False).values()
+        self.assertEqual(report['publishedAt'], '2026-09-26T12:30:06Z')
+        [quiet] = run.build_reports({'CFB': ([], [], [('CFB', 'gamePicks', dict(pick, quotedAt='2026-09-26T11:00:00Z'))])},
+                                    run.slot_for(now), now, [], [], [], {}, False).values()
+        self.assertEqual(quiet['publishedAt'], '2026-09-26T12:30:05Z', 'an older quote leaves the run time alone')
+
     def test_a_quiet_run_writes_no_report(self):
         now = datetime(2026, 9, 29, 15, 50, tzinfo=timezone.utc)
         self.assertEqual(run.build_reports({'NFL': ([], [], [])}, run.slot_for(now), now, [], [], [], {}, False), {})

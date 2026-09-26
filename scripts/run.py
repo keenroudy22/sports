@@ -1147,7 +1147,10 @@ def build_reports(league_items, slot, now, screened, unclear, captures, target_w
     for league, (settled, closed, published) in league_items.items():
         if not settled and not closed and not published:
             continue
-        report = {'league': league, 'publishedAt': stamp(now)}
+        # Published no earlier than the newest price in it: a run that captures prices after it starts and publishes
+        # from that capture has a quote a second or two past its own start (Sep 26 8:30 run, quote <= published).
+        quoted = [gates.when(p['quotedAt']) for _, _, p in published if p.get('quotedAt')]
+        report = {'league': league, 'publishedAt': stamp(max([now] + quoted))}
         if target_weeks.get(league) is not None:
             report['targetWeek'] = target_weeks[league]
         own_screened = [s for s in screened if s['league'] == league]
