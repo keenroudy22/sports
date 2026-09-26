@@ -1,30 +1,30 @@
 {
- "at": "2026-09-26T08:51:52Z",
+ "at": "2026-09-26T10:48:29Z",
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1429,
-    "fanduel": 1071
+    "draftkings": 1141,
+    "fanduel": 872
    },
    "eventsListed": 200,
-   "eventsMatched": 9,
+   "eventsMatched": 7,
    "games": 65,
    "marketTypes": {
-    "player_longest_passing_completion": 9,
-    "player_longest_reception": 41,
-    "player_longest_rush": 23,
+    "player_longest_passing_completion": 7,
+    "player_longest_reception": 31,
+    "player_longest_rush": 18,
     "player_passing_+_rushing_yards": 72,
-    "player_passing_attempts": 62,
-    "player_passing_completions": 53,
-    "player_passing_touchdowns": 77,
-    "player_passing_yards": 330,
-    "player_receiving_yards": 911,
-    "player_receptions": 262,
-    "player_rushing_attempts": 73,
-    "player_rushing_yards": 587
+    "player_passing_attempts": 47,
+    "player_passing_completions": 39,
+    "player_passing_touchdowns": 61,
+    "player_passing_yards": 257,
+    "player_receiving_yards": 709,
+    "player_receptions": 238,
+    "player_rushing_attempts": 64,
+    "player_rushing_yards": 470
    },
-   "requestsLeft": 39,
-   "rows": 2500,
+   "requestsLeft": 43,
+   "rows": 2013,
    "slateGames": [
     "Illinois Fighting Illini at Ohio State Buckeyes 2026-09-26T16:00Z",
     "Sam Houston Bearkats at Texas Tech Red Raiders 2026-09-26T16:00Z",
@@ -94,9 +94,26 @@
    ],
    "unmatchedEvents": [
     {
+     "away": "Presbyterian College Blue Hose",
+     "external": {
+      "saba": "134929505"
+     },
+     "home": "Marist Red Foxes",
+     "sample": {
+      "away_team": "Presbyterian College Blue Hose",
+      "home_team": "Marist Red Foxes",
+      "markets": [
+       "moneyline",
+       "point_spread"
+      ]
+     },
+     "start": "2026-09-26T15:59:00Z",
+     "type": "fixture"
+    },
+    {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF1HSPREAD-26SEP26BALLKENT-BALL18"
+      "kalshi": "KXNCAAF1HSPREAD-26SEP26BALLKENT-KENT18"
      },
      "home": null,
      "sample": {
@@ -112,7 +129,7 @@
     {
      "away": null,
      "external": {
-      "kalshi": "KXNCAAF1HSPREAD-26SEP26BUCKPITT-PITT15"
+      "kalshi": "KXNCAAF1HSPREAD-26SEP26BUCKPITT-PITT10"
      },
      "home": null,
      "sample": {
@@ -257,22 +274,6 @@
      "away": null,
      "external": {
       "kalshi": "KXNCAAF1QSPREAD-26SEP26COLOBAY-COLO11"
-     },
-     "home": null,
-     "sample": {
-      "away_team": "",
-      "home_team": "",
-      "markets": [
-       "binary"
-      ]
-     },
-     "start": "2026-09-26T16:00:00Z",
-     "type": "outright"
-    },
-    {
-     "away": null,
-     "external": {
-      "kalshi": "KXNCAAF1QSPREAD-26SEP26ILLOSU-ILL11"
      },
      "home": null,
      "sample": {
