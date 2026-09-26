@@ -1,0 +1,110 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-09-26T14:40:53Z",
+  "summary": "10:40 AM ET run, published at 10:40 AM ET. Nothing to settle. Closed 1: 5-leg longshot at ESPN BET. Nothing published. precheck before posting",
+  "takeaways": [],
+  "parlays": [
+    {
+      "id": "CFB-2026-W4-longshot-0926-espnbet",
+      "title": "5-leg longshot at ESPN BET",
+      "status": "expired",
+      "favorite": false,
+      "parlayType": "longshot",
+      "riskUnits": 0.25,
+      "legs": [
+        {
+          "id": "game-CFB-401858463-over",
+          "title": "Iowa at Michigan over 38.5",
+          "gameId": "CFB-401858463",
+          "market": "total points",
+          "side": "over",
+          "line": 38.5,
+          "odds": -105,
+          "chance": 0.573,
+          "kickoff": "2026-09-26T19:30Z",
+          "observedAt": "2026-09-26T08:51:52Z",
+          "marketWindow": "Full game"
+        },
+        {
+          "id": "game-CFB-401869961-over",
+          "title": "James Madison at Old Dominion over 44.5",
+          "gameId": "CFB-401869961",
+          "market": "total points",
+          "side": "over",
+          "line": 44.5,
+          "odds": 100,
+          "chance": 0.566,
+          "kickoff": "2026-09-26T22:00Z",
+          "observedAt": "2026-09-26T08:51:52Z",
+          "marketWindow": "Full game"
+        },
+        {
+          "id": "game-CFB-401856881-under",
+          "title": "Oklahoma State at West Virginia under 61.5",
+          "gameId": "CFB-401856881",
+          "market": "total points",
+          "side": "under",
+          "line": 61.5,
+          "odds": -115,
+          "chance": 0.565,
+          "kickoff": "2026-09-26T23:00Z",
+          "observedAt": "2026-09-26T08:51:52Z",
+          "marketWindow": "Full game"
+        },
+        {
+          "id": "game-CFB-401858466-over",
+          "title": "Wisconsin at Penn State over 43.5",
+          "gameId": "CFB-401858466",
+          "market": "total points",
+          "side": "over",
+          "line": 43.5,
+          "odds": -115,
+          "chance": 0.548,
+          "kickoff": "2026-09-26T21:00Z",
+          "observedAt": "2026-09-26T08:51:52Z",
+          "marketWindow": "Full game"
+        },
+        {
+          "id": "game-CFB-401862785-over",
+          "title": "South Florida at Bowling Green over 48.5",
+          "gameId": "CFB-401862785",
+          "market": "total points",
+          "side": "over",
+          "line": 48.5,
+          "odds": -110,
+          "chance": 0.547,
+          "kickoff": "2026-09-26T21:00Z",
+          "observedAt": "2026-09-26T08:51:52Z",
+          "marketWindow": "Full game"
+        }
+      ],
+      "correlation": "One leg per game, so the ticket treats the legs as independent; its chance is their product.",
+      "gameIds": [
+        "CFB-401858463",
+        "CFB-401869961",
+        "CFB-401856881",
+        "CFB-401858466",
+        "CFB-401862785"
+      ],
+      "book": "ESPN BET",
+      "odds": 2506,
+      "quotedAt": "2026-09-26T08:51:52Z",
+      "quoteType": "capture",
+      "confidence": 1,
+      "expiresAt": "2026-09-26T12:30:00Z",
+      "edge": "Our chance 5.5% against 3.8% break-even at +2506: +0.431u per unit staked, 0.25u at risk.",
+      "cutoff": "A longshot is not re-entered. It stands or falls as posted.",
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401856881",
+        "https://www.espn.com/college-football/game/_/gameId/401858463",
+        "https://www.espn.com/college-football/game/_/gameId/401858466",
+        "https://www.espn.com/college-football/game/_/gameId/401862785",
+        "https://www.espn.com/college-football/game/_/gameId/401869961"
+      ],
+      "why": "Longshot from the board: 5 legs at ESPN BET, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.",
+      "risk": "Most longshots lose. The legs are treated as independent; any one miss sinks the ticket. Confidence 1 of 10.",
+      "jurisdictionVerified": true,
+      "entryNote": "Closed to new entries at 10:40 AM ET, before its post went out: its James Madison at Old Dominion over 44.5 leg was pulled: the evidence argues against it: JC Evans, the starting quarterback for James Madison, is listed as doubtful with a lower body injury, which could impact the team's offensive output and make the over less likely. Stays in the record at +2506 and is graded as posted."
+    }
+  ]
+}
