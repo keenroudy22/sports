@@ -456,3 +456,12 @@ table.data a { font-weight: 600; }
 .play-featured { border-color: rgba(255, 180, 61, .55); box-shadow: 0 0 0 1px rgba(255, 180, 61, .25) inset; }
 .play-featured .play-kind { color: var(--amber); }
 .play-featured .play-kind::before { content: '★ '; }
+
+/* inside Numbers: a strip to move between its pages */
+.subnav { display: flex; gap: 6px; overflow-x: auto; padding: 10px 0 2px; margin: 0 0 4px; scrollbar-width: none; }
+.subnav::-webkit-scrollbar { display: none; }
+.subnav a { flex: none; padding: 7px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 13px; font-weight: 600; background: var(--surface); }
+.subnav a[aria-current="page"] { color: var(--bg); background: var(--mint); border-color: var(--mint); }
+.picks-page { max-width: 760px; }
+.more-link { margin: 18px 2px 8px; }
+

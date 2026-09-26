@@ -258,6 +258,15 @@ The same plays are published as an RSS feed, `https://keenroudy.com/sports/data/
 as a public record. `x_post.py` can still post through X's API (`post PICK_ID --confirm --card`) when credits
 exist, and writes review drafts to `~/.config/keenroudy/x-drafts/`.
 
+## The site (three tabs, 2026-09-25)
+
+The owner wanted the site as easy as the pick accounts he follows. Three tabs: **Picks** (today's plays as cards in
+the X post's words, the Pick of the Day first, the record strip, the last game day's results; a play the desk still
+stands behind reads "Open" until kickoff, with the age of its price), **Record** (the one record, see X above) and
+**Numbers** (everything our numbers see: value lines, line moves, games in play, our numbers against the lines, and
+the Board, Games, Players, Scoreboard, Research and parlay-builder pages under a strip of their own). Every older link
+(#board, #games, #stats, #model, #more, #game/<id>, #player/..., #pick/<id>) still lands where it did.
+
 ## Weather
 
 `scripts/venues.py` keeps `data/venues.json`: for every venue the store or slate names, ESPN's roof
