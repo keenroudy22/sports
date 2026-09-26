@@ -1,14 +1,22 @@
 {
- "at": "2026-09-26T02:08:38Z",
+ "at": "2026-09-26T02:22:35Z",
  "leagues": {
   "CFB": {
-   "books": {},
+   "books": {
+    "fanduel": 779
+   },
    "eventsListed": 200,
-   "eventsMatched": 12,
+   "eventsMatched": 8,
    "games": 66,
-   "marketTypes": {},
-   "requestsLeft": 46,
-   "rows": 0,
+   "marketTypes": {
+    "player_passing_touchdowns": 35,
+    "player_passing_yards": 98,
+    "player_receiving_yards": 341,
+    "player_receptions": 101,
+    "player_rushing_yards": 204
+   },
+   "requestsLeft": 48,
+   "rows": 779,
    "slateGames": [
     "Clemson Tigers at California Golden Bears 2026-09-26T02:30Z",
     "Illinois Fighting Illini at Ohio State Buckeyes 2026-09-26T16:00Z",
@@ -298,22 +306,6 @@
    ],
    "unmatchedEvents": [
     {
-     "away": null,
-     "external": {
-      "fanduel": "28041972"
-     },
-     "home": "NFL",
-     "sample": {
-      "away_team": "",
-      "home_team": "NFL",
-      "markets": [
-       "outright"
-      ]
-     },
-     "start": "2026-09-26T01:12:00Z",
-     "type": "outright"
-    },
-    {
      "away": "Cincinnati Bengals",
      "external": {
       "bet365 us": "201319555"
@@ -396,6 +388,22 @@
      },
      "start": "2026-09-26T02:04:00Z",
      "type": "fixture"
+    },
+    {
+     "away": null,
+     "external": {
+      "fanduel": "28041972"
+     },
+     "home": "NFL",
+     "sample": {
+      "away_team": "",
+      "home_team": "NFL",
+      "markets": [
+       "outright"
+      ]
+     },
+     "start": "2026-09-26T02:07:00Z",
+     "type": "outright"
     },
     {
      "away": null,
