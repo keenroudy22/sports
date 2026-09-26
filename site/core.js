@@ -234,6 +234,8 @@
   const stakeOf = pick => { const r = Number(pick.riskUnits); return Number.isFinite(r) && r > 0 ? r : 1; };
   const unitsFor = pick => {
     if (!pick.odds || !['win', 'loss', 'push'].includes(pick.result)) return null;
+    /* Units saved with the result when the play was graded stand as written; older plays are summed the same way. */
+    if (typeof pick.units === 'number' && Number.isFinite(pick.units) && !pick.earlyExit) return pick.units;
     const stake = stakeOf(pick);
     if (pick.result === 'win') return stake * (pick.odds > 0 ? pick.odds / 100 : 100 / Math.abs(pick.odds));
     /* The book credited the stake back after a first-half injury, so the money came home: zero units,
@@ -336,9 +338,9 @@
       model: summarizePicks(straight.filter(p => p.modelLean), minimum) };
   };
   /* The one record, the same on the site and on X: every play we publish, graded win or lose. The record is the
-     straight plays; money is what betting $100 on each would have made at the price we posted (recorded prices
-     only, never an assumed one). Fun parlays ($25 a ticket) and the Week 1 legs posted before prices were recorded
-     get their own lines. The Pick of the Day record counts the days its post went out. */
+     straight plays at one unit each, at the line and price we published (recorded prices only, never an assumed
+     one). Fun parlays (smaller stakes) and the Week 1 legs posted before prices were recorded get their own lines.
+     The Pick of the Day record counts the days its post went out. */
   const isParlay = p => p.kind === 'parlays' || Boolean((p.legs || []).length) || Boolean(p.parlayType);
   const dayOf = iso => {
     const d = new Date(iso);
@@ -346,7 +348,6 @@
     const e = new Date(d.toLocaleString('en-US', { timeZone: 'America/New_York' }));
     return `${e.getFullYear()}-${String(e.getMonth() + 1).padStart(2, '0')}-${String(e.getDate()).padStart(2, '0')}`;
   };
-  const dollars = units => units == null ? null : Math.round(100 * units);
   const theRecord = (picks, now = Date.now()) => {
     const when = p => p.kickoff || p.publishedAt;
     const imported = picks.filter(isUnpricedImport);
@@ -404,5 +405,5 @@
   return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone,
     column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, eligible, summarizeTicket, ticketText,
-    unitsFor, stakeOf, recordOf, theRecord, isParlay, dayOf, dollars, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, theRecord, isParlay, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, shardOf, BASE };
 });

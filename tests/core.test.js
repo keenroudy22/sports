@@ -280,7 +280,7 @@ test('app.js parses', () => {
   assert.doesNotThrow(() => new vm.Script(source), 'site/app.js has a syntax error');
 });
 
-test('one record: the straight plays in wins and losses, $100 a play, the side records apart', () => {
+test('one record: the straight plays in wins and losses and units, the side records apart', () => {
   const now = Date.parse('2026-09-26T13:00:00Z');                          // Saturday 9 AM ET
   const play = (id, result, odds, kickoff, extra = {}) => ({ id, result, odds, kickoff, kind: 'gamePicks', ...extra });
   const picks = [
@@ -294,8 +294,7 @@ test('one record: the straight plays in wins and losses, $100 a play, the side r
   ];
   const r = C.theRecord(picks, now);
   assert.deepEqual([r.season.wins, r.season.losses, r.season.pending], [2, 2, 1], 'every published straight play, pulled or not');
-  assert.equal(C.dollars(r.season.units), Math.round(100 * (1 + 100 / 111 - 1 - 1)), 'money at $100 a play');
-  assert.equal(C.dollars(r.season.units), -10);
+  assert.equal(Math.round(100 * r.season.units) / 100, -0.1, 'one unit a play at the published price: +0.90 - 1 + 1 - 1');
   assert.deepEqual([r.week.wins, r.week.losses], [2, 1], 'this football week, Tuesday to Monday');
   assert.equal(r.lastDay.day, '2026-09-25', 'the last day with a settled play, by Eastern kickoff');
   assert.deepEqual([r.lastDay.wins, r.lastDay.losses], [1, 1]);
@@ -303,6 +302,9 @@ test('one record: the straight plays in wins and losses, $100 a play, the side r
   assert.deepEqual([r.parlays.wins, r.parlays.losses], [0, 1], 'fun parlays on their own line');
   assert.equal(r.imported.wins, 1, 'the Week 1 legs listed apart');
   assert.equal(C.dayOf('2026-09-26T02:30:00Z'), '2026-09-25', 'a late Friday kickoff is Friday in the East');
-  assert.equal(C.dollars(null), null);
+  assert.equal(C.unitsFor({ result: 'win', odds: -110, units: 0.91 }), 0.91, 'units saved with the result stand as written');
+  assert.equal(C.unitsFor({ result: 'win', odds: -110 }), 100 / 110, 'an older play is summed the same way');
+  assert.equal(C.unitsFor({ result: 'loss', odds: -110, units: -1, earlyExit: true }), 0, 'an early-exit credit is zero');
+  assert.equal(C.unitsFor({ result: 'void', odds: -110, units: 0 }), null, 'a void is out of the units');
   assert.equal(C.isParlay({ kind: 'parlays' }) && C.isParlay({ legs: [{}] }) && !C.isParlay({ kind: 'props' }), true);
 });

@@ -676,6 +676,7 @@ def board_picks(first, latest, by_id, identities):
                      'marketWindow': pick.get('marketWindow'), 'entryNote': recent.get('entryNote') or pick.get('entryNote'),
                      'status': recent.get('status') or pick.get('status'),
                      'result': recent.get('result'), 'actual': recent.get('actual'), 'settledAt': recent.get('settledAt'),
+                     'units': recent.get('units'),                         # saved when the play was graded
                      'settlementReason': recent.get('settlementReason'), 'resultSource': recent.get('resultSource'),
                      'kickoff': game.get('kickoff'),
                      'color': color(pick.get('league'), (game.get('home') or {}).get('abbreviation'), identities)})

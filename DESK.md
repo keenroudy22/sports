@@ -206,11 +206,16 @@ cards show the price and the book only.
 **One record** (owner, 2026-09-25: "the record is confusing as hell"): every play the desk publishes counts, the
 same on the site and on X, whether or not its post went out (a play pulled before its post stays in the record,
 graded as posted); the Week 1 legs imported without prices are listed apart and never counted. The record is the
-straight plays' wins and losses; money shows on the site only, as "Betting $100 on every play" (units x $100, at
-the posted price). Fun parlays and the Pick of the Day have their own lines (a Pick of the Day counts once its post
-went out, `posted` from `receipts.served`). The Record tab leads with three boxes (last game day, this week,
-season), then every play with ✅ ❌ ➖ and what $100 on it made; the tables sit under "More numbers"
-(`site/core.js theRecord`, `receipts.counted`). A pick pulled before its post shows "Pulled" and never the star.
+straight plays' wins and losses; units show on the site only (the owner prefers units to dollars there, 2026-09-26),
+one unit a play at the line and price it was published at. Each play's units are written into its settlement when it
+is graded (`run.lock_units`, the `units` field) and the site sums the saved figure, so a graded play's units never
+move; older plays are summed the same way from their saved prices (no published line, price or result has ever
+changed: checked over all 56 plays on 2026-09-26). Fun parlays and the Pick of the Day have their own lines (a Pick
+of the Day counts once its post went out, `posted` from `receipts.served`). The Record tab leads with three boxes
+(last game day, this week, season), then every play with ✅ ❌ ➖, its price and its units; the tables sit under
+"More numbers" (`site/core.js theRecord`, `receipts.counted`). A pick pulled before its post shows "Pulled" and
+never the star. The owner pins the big fun-parlay wins by hand: when one cashes, the phone gets "Longshot hit: pin
+it" five minutes later, opening the profile (`run.lotto_pings`); nothing on X is clicked by the desk.
 
 **The easy parlay** (`scripts/easy_parlay.py`, owner's ask 2026-09-24: "dumbed down player props for a nice parlay"): on an
 NFL day with three or more games left, the run takes DraftKings' and FanDuel's easier alternate lines (receiving and

@@ -372,8 +372,20 @@ def settle(ctx, raw_first, games, records, now, fetch=boxscores.fetch_game):
             revision['actualValue'] = value
         if reason:
             revision['settlementReason'] = reason
+        lock_units(revision)
         revisions.append((league, kind, revision))
     return revisions, unclear
+
+
+def lock_units(revision):
+    """Write the units a graded play won or lost into its settlement, at the line and price it was published at (one
+    unit a play, a parlay at its own stake, a push zero), so the record's units are saved with the result and never
+    move when the code that sums them does."""
+    import x_post
+    units = x_post.units_for(revision)
+    if units is not None:
+        revision['units'] = round(units, 3)
+    return revision
 
 
 # ------------------------------------------------------------------ step 3: close moves
@@ -1598,11 +1610,35 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         before = len(log_book.get('posts', []))
         buffer_post.schedule(plans, channel['id'], log_book, now, log=log)
         status['x']['posted'] = len(log_book.get('posts', [])) - before
+        scheduled = {entry['id'] for entry in log_book.get('posts', [])[before:]}
+        for title, message in lotto_pings([p for p in plans if p[0] in scheduled], ctx):
+            alert(title, message, click=f'https://x.com/{receipts_handle()}', delay='5m')
         feature_scheduled(log_book, ctx, games, now)
     except (buffer_post.BufferError, buffer_post.MissingToken) as error:
         log(f'buffer: {error}')
         status['errors'].append(f'buffer: {error}')
     x_post.save_log(log_book)
+
+
+def receipts_handle():
+    import receipts
+    return receipts.HANDLE
+
+
+def lotto_pings(plans, ctx):
+    """A fun parlay that hit is the post worth pinning (the owner pins the big ones by hand): (title, message) for each
+    cashed parlay just scheduled. The ping lands five minutes later, when the cashed post is at the top of the profile."""
+    import pick_card
+    out = []
+    for key, kind, *_ in plans:
+        if kind != 'cashed':
+            continue
+        pick_id = key.split(':', 1)[1]
+        pick = dict(ctx.first.get(pick_id) or {}, **ctx.latest.get(pick_id, {}))
+        if pick and pick_card.play_kind(pick) == 'parlay' and isinstance(pick.get('odds'), (int, float)):
+            out.append(('Longshot hit: pin it', f"{pick.get('title') or 'The fun parlay'} cashed at {int(pick['odds']):+d}. "
+                        "The CASHED post is at the top of the profile: tap to open it, then ... and Pin to your profile."))
+    return out
 
 
 def feature_scheduled(log_book, ctx, games, now, log=log):
@@ -1688,7 +1724,7 @@ NTFY = 'https://ntfy.sh/'
 ALERT_QUIET = timedelta(hours=6)       # the same alert is not repeated inside this
 
 
-def alert(title, message, priority='high', now=None, send=None):
+def alert(title, message, priority='high', now=None, send=None, click=None, delay=None):
     """A push to the owner's phone through ntfy (free; a private topic in KEENROUDY_NTFY_TOPIC, which the ntfy app
     subscribes to). Only what went wrong and when: never a key, never a value from the env file. The same alert is
     sent once per six hours. Silent when no topic is set; a failed push never fails anything."""
@@ -1704,8 +1740,12 @@ def alert(title, message, priority='high', now=None, send=None):
     if key in sent and now - gates.when(sent[key]) < ALERT_QUIET:
         return False
     body = f'{message}\n\n{et(now)}'.encode('utf-8')
-    request = urllib.request.Request(NTFY + topic, data=body, method='POST',
-                                     headers={'Title': title.encode('ascii', 'ignore').decode(), 'Priority': priority, 'Tags': 'cook'})
+    headers = {'Title': title.encode('ascii', 'ignore').decode(), 'Priority': priority, 'Tags': 'cook'}
+    if click:
+        headers['Click'] = click            # tapping the notification opens this link
+    if delay:
+        headers['Delay'] = delay            # ntfy holds it this long ("5m"), so the post it points at is up
+    request = urllib.request.Request(NTFY + topic, data=body, method='POST', headers=headers)
     try:
         (send or (lambda r: urllib.request.urlopen(r, timeout=10).read()))(request)
     except Exception as error:

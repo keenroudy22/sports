@@ -111,10 +111,10 @@
       <span class="play-meta">${esc(whenShort(p.kickoff || p.publishedAt))}${stale && p.quotedAt ? ` · price from ${esc(ago(p.quotedAt))}` : ''} · tap for the research ›</span>
     </button>`;
   };
-  /* The one record (C.theRecord), in the words the pick accounts use: wins and losses, and what betting $100 on
-     every play would have made. No units anywhere: followers never see a stake. */
-  const bucks = d => d == null ? DASH : `${d > 0 ? '+' : d < 0 ? '-' : ''}$${Math.abs(d)}`;
-  const bucksTone = d => d > 0 ? 'up' : d < 0 ? 'down' : '';
+  /* The one record (C.theRecord), the way the pick accounts keep it: wins and losses, and units at one unit a play
+     at the line and price we published. The units are saved with each result, so they never move once graded. */
+  const unitText = u => u == null ? DASH : `${signed(u, 2)}u`;
+  const unitTone = u => u > 0.004 ? 'up' : u < -0.004 ? 'down' : '';
   const wl = t => `${t.wins}–${t.losses}${t.pushes ? `–${t.pushes}` : ''}`;
   const played = t => Boolean(t) && t.wins + t.losses + t.pushes > 0;
   const MARKS = { win: '✅', loss: '❌', push: '➖', void: '➖' };
@@ -126,9 +126,9 @@
     return Date.now() - d.getTime() < 6 * 864e5 ? d.toLocaleDateString('en-US', { weekday: 'long' }) : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
   const recordStrip = (rec, label) => {
-    const d = C.dollars(rec.season.units);
+    const u = rec.season.units;
     return `<a class="record-strip" href="#record"><span class="eyebrow">${esc(label)}</span>
-    <span class="num record-big">${wl(rec.season)}</span>${d == null ? '' : `<span class="num record-units ${bucksTone(d)}">${bucks(d)}</span><span class="record-note">betting $100 a play</span>`}
+    <span class="num record-big">${wl(rec.season)}</span>${u == null ? '' : `<span class="num record-units ${unitTone(u)}">${unitText(u)}</span><span class="record-note">one unit a play</span>`}
     <span class="row-meta">Every play graded, win or lose ›</span></a>`;
   };
   /* Three boxes, the money, then the Pick of the Day and the fun parlays on their own line. */
@@ -142,15 +142,15 @@
       ${box('Season', rec.season, rate(rec.season))}</div>`;
   };
   const moneyLine = rec => {
-    const d = C.dollars(rec.season.units);
-    if (d == null) return '';
-    const unpriced = rec.season.unpriced ? ` (${rec.season.unpriced} without a recorded price left out)` : '';
-    return `<p class="money-line">Betting $100 on every play: <b class="num ${bucksTone(d)}">${bucks(d)}</b>${esc(unpriced)}</p>`;
+    const u = rec.season.units;
+    if (u == null) return '';
+    const unpriced = rec.season.unpriced ? ` ${rec.season.unpriced} without a recorded price left out.` : '';
+    return `<p class="money-line">Units: <b class="num ${unitTone(u)}">${unitText(u)}</b> <span class="faint">every play at one unit, at the price we published.${esc(unpriced)}</span></p>`;
   };
   const sideLines = rec => {
     const lines = [];
     if (played(rec.potd)) lines.push(`Pick of the Day <b class="num">${wl(rec.potd)}</b>`);
-    if (played(rec.parlays)) lines.push(`Fun parlays <b class="num">${wl(rec.parlays)}</b> <span class="faint">(just for fun, not in the record)</span>`);
+    if (played(rec.parlays)) lines.push(`Fun parlays <b class="num">${wl(rec.parlays)}</b>${rec.parlays.units == null ? '' : ` · <b class="num ${unitTone(rec.parlays.units)}">${unitText(rec.parlays.units)}</b>`} <span class="faint">(smaller stakes, not in the record)</span>`);
     return lines.length ? `<p class="side-lines">${lines.join('<br>')}</p>` : '';
   };
   const theRecordCard = rec => `<div class="card record-card">${recordBoxes(rec)}${moneyLine(rec)}${sideLines(rec)}</div>`;
@@ -278,7 +278,7 @@
         ${recordStrip(C.theRecord(picks), state.league === 'ALL' ? 'The record' : `The record · ${leagueName(dataLeague())}`)}
         ${live.length ? section('Our plays', `<div class="plays">${live.map(playCard).join('')}</div>`, '<a href="#record">Record →</a>')
           : section('Our plays', empty('Nothing on the stove yet', 'Plays show here the moment they go up. Check back in the morning.'))}
-        ${settledRecently.length ? section('Last game day', `<p class="row-meta" style="margin:0 0 8px">${played(recent) ? wl(recent) : 'Fun parlays only'}${C.dollars(recent.units) == null ? '' : ` · ${bucks(C.dollars(recent.units))} betting $100 a play`}.</p><div class="card"><div class="rows">${settledRecently.map(pickRow).join('')}</div></div>`, '<a href="#record">Record →</a>') : ''}
+        ${settledRecently.length ? section('Last game day', `<p class="row-meta" style="margin:0 0 8px">${played(recent) ? wl(recent) : 'Fun parlays only'}${recent.units == null ? '' : ` · ${unitText(recent.units)}`}.</p><div class="card"><div class="rows">${settledRecently.map(pickRow).join('')}</div></div>`, '<a href="#record">Record →</a>') : ''}
         <p class="row-meta more-link">The numbers behind the plays, every line and every game: <a href="#numbers">Numbers →</a></p>
       </div>`;
   }
@@ -785,8 +785,8 @@
       return `${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} to ${e.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`; };
     const MARKET_NAME = { Totals: 'Game totals', Spreads: 'Spreads', Straights: 'Player props', 'Risky lines': 'Risky player lines' };
     const types = [...new Set(straight.map(C.category))].map(name => [MARKET_NAME[name] || name, C.summaryOf(straight.filter(p => C.category(p) === name))]);
-    const table = (first, rows) => `<div class="table-wrap"><table class="data"><thead><tr><th>${esc(first)}</th><th>W–L–P</th><th>$100 a play</th><th>Pending</th></tr></thead><tbody>${rows.map(([name, t]) =>
-      `<tr><th scope="row">${esc(name)}</th><td class="num">${t.wins}–${t.losses}–${t.pushes}</td><td class="num ${bucksTone(C.dollars(t.units))}">${bucks(C.dollars(t.units))}</td><td class="num">${t.pending}</td></tr>`).join('')}</tbody></table></div>`;
+    const table = (first, rows) => `<div class="table-wrap"><table class="data"><thead><tr><th>${esc(first)}</th><th>W–L–P</th><th>Units</th><th>Pending</th></tr></thead><tbody>${rows.map(([name, t]) =>
+      `<tr><th scope="row">${esc(name)}</th><td class="num">${t.wins}–${t.losses}–${t.pushes}</td><td class="num ${unitTone(t.units)}">${unitText(t.units)}</td><td class="num">${t.pending}</td></tr>`).join('')}</tbody></table></div>`;
     return `${head('The record', `Every play we publish, graded win or lose. The same numbers go out on X.${state.league === 'ALL' ? '' : ` ${esc(leagueName(dataLeague()))} shown; switch sports at the top.`}`)}
       ${theRecordCard(rec)}
       ${section('Every play', `<input class="search" type="search" data-input="recordQuery" placeholder="Search by player, team or market" value="${esc(state.recordQuery)}" aria-label="Search the plays">
@@ -802,15 +802,16 @@
         <div class="rows">${imported.map(p => settledRow(p, null)).join('')}</div></details>` : ''}`;
   }
 
-  /* One settled play on one line: ✅ or ❌, the play, what happened, and what $100 on it made. Tap for the full card. */
+  /* One settled play on one line: ✅ or ❌, the play, what happened, the price it was graded at and the units it won
+     or lost. Tap for the full card. */
   const settledRow = (p, c) => {
-    const d = C.dollars(C.unitsFor(p));
+    const u = C.unitsFor(p);
     const what = [p.actual ? String(typeof p.actual === 'string' ? p.actual : JSON.stringify(p.actual)).split(/[.;]\s/)[0] : '', c && c.clv != null ? `CLV ${signed(c.clv)}` : ''].filter(Boolean).join(' · ');
     return `<button class="row" type="button" data-pick="${esc(p.id)}">
       <span class="row-rail" style="background:${p.result === 'win' ? 'var(--green)' : p.result === 'loss' ? 'var(--rose)' : 'var(--line)'}"></span>
       <span class="row-main"><span class="row-top"><span class="row-name">${MARKS[p.result] ? MARKS[p.result] + ' ' : ''}${esc(p.displayTitle || p.title || p.player)}</span>${p.featured && p.posted ? '<span class="pill pill-ours">Pick of the Day</span>' : ''}${p.earlyExit ? '<span class="pill pill-closed">Early exit credit</span>' : ''}${C.isParlay(p) ? '<span class="pill pill-stale">Fun parlay</span>' : ''}${p.historicalImport ? '<span class="pill pill-reference">Week 1</span>' : ''}</span>
         <span class="row-meta clamp">${esc(whenShort(p.kickoff || p.publishedAt))}${what ? ' · ' + esc(what) : ''}</span></span>
-      <span class="row-price"><span class="row-odds num ${bucksTone(d)}">${d == null ? (p.odds == null ? '' : odds(p.odds)) : bucks(d)}</span><span class="row-book">${p.odds == null ? 'no price recorded' : `${esc(p.book || '')} ${odds(p.odds)}`}</span></span>
+      <span class="row-price"><span class="row-odds num ${unitTone(u)}">${u == null ? (p.odds == null ? '' : odds(p.odds)) : unitText(u)}</span><span class="row-book">${p.odds == null ? 'no price recorded' : `${esc(p.book || '')} ${odds(p.odds)}`}</span></span>
     </button>`;
   };
   /* Settled plays by week, newest first: this week open, the rest folded with their record, so the list never sprawls. */
@@ -819,9 +820,8 @@
     for (const p of settled) { const w = C.weekOf(p.kickoff || p.settledAt || p.publishedAt) || '0000-00-00'; if (!byWeek.has(w)) byWeek.set(w, []); byWeek.get(w).push(p); }
     return [...byWeek].sort((a, b) => b[0].localeCompare(a[0])).map(([w, rows], i) => {
       const t = C.summaryOf(rows.filter(p => !C.isParlay(p)));
-      const d = C.dollars(t.units);
       const label = w === '0000-00-00' ? 'Undated' : weekLabel(w);
-      return `<details class="card week"${i === 0 || searching ? ' open' : ''}><summary><span>${esc(label)}</span><span class="row-meta">${played(t) ? wl(t) : 'fun parlays only'}${d == null ? '' : ` · ${bucks(d)}`} · ${rows.length} play${rows.length === 1 ? '' : 's'}</span></summary>
+      return `<details class="card week"${i === 0 || searching ? ' open' : ''}><summary><span>${esc(label)}</span><span class="row-meta">${played(t) ? wl(t) : 'fun parlays only'}${t.units == null ? '' : ` · ${unitText(t.units)}`} · ${rows.length} play${rows.length === 1 ? '' : 's'}</span></summary>
         <div class="rows">${rows.map(p => settledRow(p, clv.get(p.id))).join('')}</div></details>`;
     }).join('');
   };
@@ -981,7 +981,7 @@
       ${p.actual ? `<h4>Result</h4><p>${esc(prose(p.actual))}</p>` : ''}${p.settlementReason ? `<p>${esc(prose(p.settlementReason))}</p>` : ''}
       ${(p.sources || []).length ? `<h4>Sources</h4><div class="sources">${p.sources.filter(s => /^https:/.test(s)).map((s, i) => `<a href="${esc(s)}" target="_blank" rel="noopener noreferrer">${esc(hostOf(s, i))} ↗</a>`).join('')}</div>` : ''}
       ${p.athleteId ? '<div data-context><p class="row-meta">Loading the last ten games and the matchup…</p></div>' : ''}
-      <p class="row-meta" style="margin-top:14px">${C.isParlay(p) ? 'A fun parlay: a smaller ticket, kept out of the record.' : 'Graded as a $100 play.'} The original price is kept for grading even after the line moves.</p></div></div>`;
+      <p class="row-meta" style="margin-top:14px">${C.isParlay(p) ? 'A fun parlay: a smaller stake, kept out of the record.' : 'Graded at one unit, at the line and price we published.'} The original price is kept for grading even after the line moves.</p></div></div>`;
     dialog.showModal();
     if (p.athleteId) {
       const html = await propContext(p);

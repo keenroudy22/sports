@@ -7,6 +7,7 @@ import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from types import SimpleNamespace
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import run
@@ -594,6 +595,32 @@ class ParlayGuardTests(unittest.TestCase):
             with self.assertRaises(run.RunError):
                 run.Lock(path, wait=30, sleep=lambda s: None, clock=lambda: next(clock)).__enter__()
             blocker.__exit__(None, None, None)
+
+
+class LockedUnitsTests(unittest.TestCase):
+    def test_a_graded_play_carries_its_units_at_the_published_price(self):
+        self.assertEqual(run.lock_units({'odds': -111, 'result': 'win'})['units'], round(100 / 111, 3))
+        self.assertEqual(run.lock_units({'odds': 583, 'result': 'loss', 'riskUnits': 0.25})['units'], -0.25, 'a parlay at its own stake')
+        self.assertEqual(run.lock_units({'odds': -110, 'result': 'push'})['units'], 0.0)
+        self.assertNotIn('units', run.lock_units({'odds': -110, 'result': 'void'}), 'a void has no units')
+        self.assertNotIn('units', run.lock_units({'odds': None, 'result': 'win'}), 'no price, no units')
+
+    def test_a_longshot_that_hits_pings_the_owner_to_pin_it(self):
+        ctx = SimpleNamespace(first={'CFB-x-longshot': {'title': '3-leg longshot at ESPN BET', 'legs': [{}, {}, {}], 'odds': 583},
+                                     'CFB-y': {'title': 'Iowa at Michigan over 38.5', 'odds': -105}}, latest={})
+        plans = [('cashed:CFB-x-longshot', 'cashed', 'text', None, None), ('cashed:CFB-y', 'cashed', 'text', None, None),
+                 ('CFB-z', 'play', 'text', None, 'CFB-z')]
+        [(title, message)] = run.lotto_pings(plans, ctx)
+        self.assertEqual(title, 'Longshot hit: pin it')
+        self.assertIn('3-leg longshot at ESPN BET cashed at +583', message)
+
+    def test_an_alert_can_open_a_link_and_wait(self):
+        sent = []
+        with tempfile.TemporaryDirectory() as folder, mock.patch.dict(os.environ, {'KEENROUDY_NTFY_TOPIC': 'topic'}), \
+                mock.patch.object(run, 'CONF', Path(folder)):
+            run.alert('Longshot hit: pin it', 'body', click='https://x.com/keenkooks', delay='5m', send=sent.append)
+        headers = {k.lower(): v for k, v in sent[0].header_items()}
+        self.assertEqual((headers['click'], headers['delay']), ('https://x.com/keenkooks', '5m'))
 
 
 class AbsorbTests(unittest.TestCase):
