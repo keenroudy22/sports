@@ -216,6 +216,13 @@ questionable): three legs at one book paying +150 to +700, "Drake London 40+ rec
 longshot's gates (one of each kind a day), kept with the longshots, and never called value: our player chances
 are tuned for main lines. Every fun parlay carries an expiry (next run or first kickoff), which the longshot lacked.
 
+**Posting time and the price** (`scripts/line_timing.py`, owner's question 2026-09-25: "are we posting early enough to
+get the lines you like?"): for every single play, the number and price at its own book when it was published, when
+its post went out (or would have, under the posting rule), and in the last capture before kickoff, each marked worse,
+about the same or better (half a point, or ten cents at the same number). The rule: if most plays are worse by the
+time they post, posts move earlier (`buffer_post.POST_AT`, about 10 AM); otherwise noon stays. First read, Sep 25:
+7 plays measurable, none worse, one better. The Monday review runs it.
+
 **Pick of the Day** (`scripts/featured.py`, `data/featured.json`): the first run of a game day that has plays names the one
 whose calibrated chance clears its price by the most (never a parlay, never a game already started). It is named once and
 never changes once it has posted; one the last look pulls before its post goes out is replaced by the best play left
