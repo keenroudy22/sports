@@ -159,6 +159,20 @@ class QuoteTests(unittest.TestCase):
             n = sharp_odds.capture({'games': self.slate}, NOW, 'secret', fetch=fetch, sleep=lambda s: None, root=root, log=lambda *a: None)
             self.assertEqual(n, 0, 'unchanged numbers are not appended again')
 
+    def test_the_league_that_plays_first_is_priced_first(self):
+        slate = [game('NFL-9', '2026-09-27T17:00Z', 'Buffalo Bills', 'Los Angeles Chargers'),
+                 game('CFB-9', '2026-09-26T19:30Z', 'Georgia Bulldogs', 'Oklahoma Sooners', 'CFB')]
+        listed = []
+
+        def fetch(path, key, **params):
+            if path == '/events':
+                listed.append(params['league'])
+            return {'data': []}
+        with tempfile.TemporaryDirectory() as folder:
+            sharp_odds.capture({'games': slate}, datetime(2026, 9, 26, 15, 0, tzinfo=timezone.utc), 'k', fetch=fetch,
+                               sleep=lambda s: None, root=Path(folder), log=lambda *a: None)
+        self.assertEqual(listed, ['ncaaf', 'nfl'], "Saturday's college games before Sunday's NFL")
+
 
 if __name__ == '__main__':
     unittest.main()

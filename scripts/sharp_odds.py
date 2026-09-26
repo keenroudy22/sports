@@ -328,8 +328,11 @@ def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=prin
     written = 0
     budget = [RUN_REQUESTS]
     status = {'at': boxscores.stamp(now), 'leagues': {}}
-    for league, code in LEAGUES.items():
-        mine = [g for g in games if g['league'] == league]
+    # The run's requests are few (RUN_REQUESTS): the league and the games that kick off soonest go first, so a
+    # college Saturday is priced before Sunday's NFL slate and a Sunday before Monday.
+    soonest = lambda league: min((g['kickoff'] for g in games if g['league'] == league), default='9999')
+    for league, code in sorted(LEAGUES.items(), key=lambda kv: soonest(kv[0])):
+        mine = sorted((g for g in games if g['league'] == league), key=lambda g: (g['kickoff'], g['id']))
         if not mine:
             continue
         listing = events(code, key, fetch=fetch, log=log)
