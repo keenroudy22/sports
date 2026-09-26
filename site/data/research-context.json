@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-26T17:05:43Z",
+  "updatedAt": "2026-09-26T17:56:43Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,8 +1162,26 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-26T16:05Z",
+              "reportedAt": "2026-09-26T17:48Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+            },
+            {
+              "id": "4434153",
+              "name": "Tyson Bagent",
+              "position": "QB",
+              "status": "Questionable",
+              "injury": "Concussion",
+              "reportedAt": "2026-09-26T16:59Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4434153/tyson-bagent"
+            },
+            {
+              "id": "4431611",
+              "name": "Caleb Williams",
+              "position": "QB",
+              "status": "Doubtful",
+              "injury": "Hamstring",
+              "reportedAt": "2026-09-26T16:56Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4431611/caleb-williams"
             },
             {
               "id": "4426374",
@@ -1182,24 +1200,6 @@
               "injury": "Hip",
               "reportedAt": "2026-09-25T20:24Z",
               "source": "https://www.espn.com/nfl/player/_/id/17427/cairo-santos"
-            },
-            {
-              "id": "4434153",
-              "name": "Tyson Bagent",
-              "position": "QB",
-              "status": "Questionable",
-              "injury": "Concussion",
-              "reportedAt": "2026-09-25T19:52Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4434153/tyson-bagent"
-            },
-            {
-              "id": "4431611",
-              "name": "Caleb Williams",
-              "position": "QB",
-              "status": "Doubtful",
-              "injury": "Hamstring",
-              "reportedAt": "2026-09-25T19:46Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4431611/caleb-williams"
             },
             {
               "id": "4608686",
@@ -2779,7 +2779,7 @@
               "id": "4241250",
               "name": "Jake Hummel",
               "position": "LB",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Groin",
               "reportedAt": "2026-09-25T22:31Z",
               "source": "https://www.espn.com/nfl/player/_/id/4241250/jake-hummel"
@@ -5527,6 +5527,15 @@
           "name": "New York Jets",
           "players": [
             {
+              "id": "4035537",
+              "name": "Kene Nwangwu",
+              "position": "RB",
+              "status": "Out",
+              "injury": "Back",
+              "reportedAt": "2026-09-26T17:39Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4035537/kene-nwangwu"
+            },
+            {
               "id": "4892576",
               "name": "Jamaal Pritchett",
               "position": "WR",
@@ -5579,15 +5588,6 @@
               "injury": "Groin",
               "reportedAt": "2026-09-25T21:17Z",
               "source": "https://www.espn.com/nfl/player/_/id/3925345/minkah-fitzpatrick"
-            },
-            {
-              "id": "4035537",
-              "name": "Kene Nwangwu",
-              "position": "RB",
-              "status": "Doubtful",
-              "injury": "Back",
-              "reportedAt": "2026-09-25T21:15Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4035537/kene-nwangwu"
             },
             {
               "id": "4597500",
@@ -7367,22 +7367,6 @@
       "changes": [
         {
           "teamId": "15",
-          "name": "Chris Bell",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-09-25T21:35:53Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4869961/chris-bell"
-        },
-        {
-          "teamId": "15",
-          "name": "Robert Beal Jr.",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-09-25T21:35:53Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4259558/robert-beal-jr"
-        },
-        {
-          "teamId": "15",
           "name": "Tucker Addington",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7748,27 @@
           "to": "Injured Reserve",
           "observedAt": "2026-09-26T17:05:43Z",
           "source": "https://www.espn.com/nfl/player/_/id/4360078/alec-pierce"
+        },
+        {
+          "teamId": "34",
+          "name": "Jake Hummel",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-09-26T17:56:43Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4241250/jake-hummel"
+        },
+        {
+          "teamId": "20",
+          "name": "Kene Nwangwu",
+          "from": "Doubtful",
+          "to": "Out",
+          "observedAt": "2026-09-26T17:56:43Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4035537/kene-nwangwu"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-26T17:05:43Z",
-      "lastAttemptAt": "2026-09-26T17:05:43Z",
+      "checkedAt": "2026-09-26T17:56:43Z",
+      "lastAttemptAt": "2026-09-26T17:56:43Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-26T17:05:43Z",
-      "lastAttemptAt": "2026-09-26T17:05:43Z",
+      "checkedAt": "2026-09-26T17:56:43Z",
+      "lastAttemptAt": "2026-09-26T17:56:43Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
