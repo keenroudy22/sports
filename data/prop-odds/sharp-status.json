@@ -1,33 +1,31 @@
 {
- "at": "2026-09-26T18:51:49Z",
+ "at": "2026-09-26T19:00:40Z",
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 4280,
-    "fanduel": 2969
+    "draftkings": 4433,
+    "fanduel": 3055
    },
-   "eventsListed": 49,
-   "eventsMatched": 47,
-   "games": 49,
+   "eventsListed": 47,
+   "eventsMatched": 45,
+   "games": 47,
    "marketTypes": {
-    "player_longest_passing_completion": 28,
-    "player_longest_reception": 118,
-    "player_longest_rush": 64,
-    "player_passing_+_rushing_yards": 441,
-    "player_passing_attempts": 162,
-    "player_passing_completions": 144,
-    "player_passing_touchdowns": 220,
-    "player_passing_yards": 947,
-    "player_receiving_yards": 2609,
-    "player_receptions": 454,
-    "player_rushing_attempts": 209,
-    "player_rushing_yards": 1853
+    "player_longest_passing_completion": 30,
+    "player_longest_reception": 125,
+    "player_longest_rush": 68,
+    "player_passing_+_rushing_yards": 474,
+    "player_passing_attempts": 195,
+    "player_passing_completions": 168,
+    "player_passing_touchdowns": 223,
+    "player_passing_yards": 978,
+    "player_receiving_yards": 2677,
+    "player_receptions": 493,
+    "player_rushing_attempts": 215,
+    "player_rushing_yards": 1842
    },
    "requestsLeft": 0,
-   "rows": 7249,
+   "rows": 7488,
    "slateGames": [
-    "Central Arkansas Bears at Florida State Seminoles 2026-09-26T19:00Z",
-    "Hawai'i Rainbow Warriors at Wyoming Cowboys 2026-09-26T19:00Z",
     "Ole Miss Rebels at Florida Gators 2026-09-26T19:30Z",
     "Oklahoma Sooners at Georgia Bulldogs 2026-09-26T19:30Z",
     "TCU Horned Frogs at UCF Knights 2026-09-26T19:30Z",
@@ -116,11 +114,13 @@
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
+       "1st_half_moneyline_3-way",
        "1st_half_point_spread",
        "1st_half_team_total",
        "1st_half_total_points",
        "1st_half_total_points_odd_even",
        "1st_quarter_moneyline",
+       "1st_quarter_moneyline_3-way",
        "1st_quarter_point_spread",
        "1st_quarter_team_total",
        "1st_quarter_total_points",
@@ -175,21 +175,32 @@
      "type": "fixture"
     },
     {
-     "away": "Tennessee Volunteers",
+     "away": "Texas",
      "external": {
-      "fanduel": "36073928",
-      "onexbet": "756307477"
+      "fanduel": "36073928"
      },
-     "home": "Texas Longhorns",
+     "home": "Tennessee",
      "sample": {
-      "away_team": "Tennessee Volunteers",
-      "home_team": "Texas Longhorns",
+      "away_team": "Texas",
+      "home_team": "Tennessee",
       "markets": [
+       "4th_quarter_moneyline",
+       "4th_quarter_point_spread",
+       "4th_quarter_total_points",
+       "anytime_touchdown_scorer",
+       "moneyline",
+       "outright",
+       "player_passing_touchdowns",
+       "player_passing_yards",
+       "player_receiving_yards",
+       "player_receptions",
+       "player_rushing_yards",
        "point_spread",
-       "total_points"
+       "total_points",
+       "winning_margin"
       ]
      },
-     "start": "2026-09-26T15:45:00Z",
+     "start": "2026-09-26T15:57:00Z",
      "type": "fixture"
     }
    ]
