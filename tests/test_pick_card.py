@@ -19,10 +19,11 @@ class CardTests(unittest.TestCase):
     def test_the_svg_carries_the_picks_fields_the_kitchen_and_the_teams_colours(self):
         text = pick_card.svg(PICK, GAME, {'wins': 3, 'losses': 1, 'units': 1.98})
         for needle in ('>Iowa at Michigan<', '>under 38.5<', '-105', 'FanDuel', 'We project 31.2 total points', 'FAVORITE', 'KOOK’N',
-                       'TODAY’S PLATE', 'Served at', 'Iowa at Michigan', 'Sat 3:30 PM ET', 'Record 3-1', '+1.98u',
+                       'TODAY’S PLATE', 'Served at', 'Iowa at Michigan', 'Sat 3:30 PM ET', 'Record 3-1',
                        'keenroudy.com/sports', 'Graded in public', 'Entertainment only. Not advice.'):
             self.assertIn(needle, text, needle)
         self.assertNotIn(' unit', text, 'no units on X, the post or the card')
+        self.assertNotIn('1.98', text, 'a record on a card is wins and losses, never units')
         self.assertIn('#00274c', text, "a total wears the home team's colour")
         self.assertIn('#ffcb05', text, 'with its alternate as the accent')
         self.assertIn('#231f20', text, "and the away team's colour at the edge")

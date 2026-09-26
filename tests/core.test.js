@@ -170,6 +170,9 @@ test('a pick says where it stands in words, and red is only for a loss', () => {
   const word = p => C.pickState(p, now).word;
   assert.equal(word(pick), 'Open');
   assert.equal(word({ ...pick, entryNote: 'moved 2 against' }), 'Line moved');
+  assert.equal(word({ ...pick, entryNote: 'Closed to new entries at 11:03 AM ET, before its post went out: the quarterback is out.' }), 'Pulled',
+    'a play pulled over news before its post says so, not that the line moved');
+  assert.equal(word({ ...pick, kickoff: '2026-09-20T11:00:00Z', entryNote: 'before its post went out: news' }), 'Pulled', 'even once its game is on');
   assert.equal(word({ ...pick, expiresAt: '2026-09-20T11:00:00Z' }), 'Price expired');
   assert.equal(word({ ...pick, kickoff: '2026-09-20T11:00:00Z' }), 'In play');
   assert.deepEqual(C.pickState({ ...pick, result: 'win' }, now), { word: 'Won', tone: 'win' });
@@ -274,4 +277,31 @@ test('app.js parses', () => {
   const path = require('node:path');
   const source = fs.readFileSync(path.join(__dirname, '..', 'site', 'app.js'), 'utf8');
   assert.doesNotThrow(() => new vm.Script(source), 'site/app.js has a syntax error');
+});
+
+test('one record: the straight plays in wins and losses, $100 a play, the side records apart', () => {
+  const now = Date.parse('2026-09-26T13:00:00Z');                          // Saturday 9 AM ET
+  const play = (id, result, odds, kickoff, extra = {}) => ({ id, result, odds, kickoff, kind: 'gamePicks', ...extra });
+  const picks = [
+    play('thu', 'win', -111, '2026-09-25T00:15:00Z', { featured: true, posted: true }),        // Thursday night (Eastern)
+    play('fri', 'loss', -105, '2026-09-25T23:00:00Z', { featured: true, entryNote: 'before its post went out' }), // pulled: never posted
+    play('fri2', 'win', 100, '2026-09-26T00:00:00Z'),                                           // Friday 8 PM ET
+    play('old', 'loss', -110, '2026-09-19T17:00:00Z', { posted: true }),                       // last week
+    play('open', null, -110, '2026-09-26T19:30:00Z'),
+    { id: 'ls', kind: 'parlays', parlayType: 'longshot', legs: [{}, {}, {}], result: 'loss', odds: 583, riskUnits: 0.25, kickoff: '2026-09-25T20:00:00Z' },
+    { id: 'w1', historicalImport: true, result: 'win', odds: null, kickoff: '2026-09-07T17:00:00Z' },
+  ];
+  const r = C.theRecord(picks, now);
+  assert.deepEqual([r.season.wins, r.season.losses, r.season.pending], [2, 2, 1], 'every published straight play, pulled or not');
+  assert.equal(C.dollars(r.season.units), Math.round(100 * (1 + 100 / 111 - 1 - 1)), 'money at $100 a play');
+  assert.equal(C.dollars(r.season.units), -10);
+  assert.deepEqual([r.week.wins, r.week.losses], [2, 1], 'this football week, Tuesday to Monday');
+  assert.equal(r.lastDay.day, '2026-09-25', 'the last day with a settled play, by Eastern kickoff');
+  assert.deepEqual([r.lastDay.wins, r.lastDay.losses], [1, 1]);
+  assert.deepEqual([r.potd.wins, r.potd.losses], [1, 0], 'the Pick of the Day counts the days its post went out');
+  assert.deepEqual([r.parlays.wins, r.parlays.losses], [0, 1], 'fun parlays on their own line');
+  assert.equal(r.imported.wins, 1, 'the Week 1 legs listed apart');
+  assert.equal(C.dayOf('2026-09-26T02:30:00Z'), '2026-09-25', 'a late Friday kickoff is Friday in the East');
+  assert.equal(C.dollars(null), null);
+  assert.equal(C.isParlay({ kind: 'parlays' }) && C.isParlay({ legs: [{}] }) && !C.isParlay({ kind: 'props' }), true);
 });

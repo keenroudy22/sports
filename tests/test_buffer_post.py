@@ -175,7 +175,8 @@ class PlanTests(unittest.TestCase):
         first = {'p': pick('p', 'y', publishedAt='2026-09-24T12:00:00Z')}
         latest = {'p': dict(first['p'], result='win', settledAt='2026-09-25T04:00:00Z')}
         for now in (datetime(2026, 9, 29, 12, 40, tzinfo=timezone.utc), datetime(2026, 9, 25, 4, 30, tzinfo=timezone.utc)):
-            self.assertEqual(bp.plan(first, latest, games, now, {'posts': []}), [], 'no recap, no scoreboard')
+            kinds = {p[1] for p in bp.plan(first, latest, games, now, {'posts': []})}
+            self.assertFalse(kinds - {'receipt'}, 'no recap, no scoreboard: plays and their receipts only')
 
 
 class ScheduleTests(unittest.TestCase):

@@ -643,6 +643,11 @@ def board_picks(first, latest, by_id, identities):
     except (OSError, ValueError):
         reasons = {}
     named = {entry.get('id') for entry in featured_store.load().values() if isinstance(entry, dict)}   # Picks of the Day
+    try:                                  # the plays whose post went out on X: the Pick of the Day record counts those
+        import receipts
+        went_out = receipts.served(json.loads((ROOT / 'data' / 'x-posted.json').read_text(encoding='utf-8')))
+    except (OSError, ValueError):
+        went_out = set()
     rows = []
     for key, pick in first.items():
         recent = latest.get(key, {})
@@ -651,7 +656,10 @@ def board_picks(first, latest, by_id, identities):
                      # The same title and one-line reason the play's X post carries, so the site reads like the post.
                      'displayTitle': pick_card.display_title(pick, game) if game and not pick.get('historicalImport') else pick.get('title'),
                      'reason': reasons.get(key) if isinstance(reasons, dict) and isinstance(reasons.get(key), str) else None,
-                     'featured': key in named,
+                     # A Pick of the Day pulled before its post went out never wears the star.
+                     'featured': key in named and (key in went_out or not (recent.get('entryNote') or pick.get('entryNote'))),
+                     'posted': key in went_out,
+                     'market': pick.get('market') or (pricing.market_of(pick) if pick.get('athleteId') else None),
                      'riskUnits': pick.get('riskUnits'), 'modelLean': pick.get('modelLean') is True,
                      'earlyExit': recent.get('earlyExit') is True,
                      'player': pick.get('player'), 'athleteId': pick.get('athleteId'), 'position': pick.get('position'),

@@ -436,6 +436,21 @@ table.data a { font-weight: 600; }
 .record-units.up { color: var(--green); }
 .record-units.down { color: var(--rose); }
 .record-strip .row-meta { margin-left: auto; }
+.record-note { font-size: 12px; color: var(--muted); }
+
+/* the one record: three boxes, the money, then the side records */
+.record-card { padding: 14px; }
+.record-boxes .stat-value { font-size: 28px; }
+.money-line { margin: 12px 2px 0; font-size: 15px; }
+.money-line b { font-size: 18px; margin-left: 4px; }
+.side-lines { margin: 8px 2px 0; font-size: 13px; color: var(--muted); line-height: 1.6; }
+.side-lines b { color: var(--text); }
+.more-numbers { margin: 14px 0 10px; }
+.more-numbers > summary { padding: 12px 14px; cursor: pointer; font-weight: 600; font-size: 14px; list-style: none; }
+.more-numbers > summary::-webkit-details-marker { display: none; }
+.more-numbers > summary::before { content: '▸'; color: var(--muted); margin-right: 8px; font-size: 12px; }
+.more-numbers[open] > summary::before { content: '▾'; }
+.more-body { padding: 0 12px 12px; }
 
 /* the day's Pick of the Day leads, marked in the kitchen's amber */
 .play-featured { border-color: rgba(255, 180, 61, .55); box-shadow: 0 0 0 1px rgba(255, 180, 61, .25) inset; }

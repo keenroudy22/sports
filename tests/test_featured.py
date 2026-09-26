@@ -139,6 +139,17 @@ class PostTests(unittest.TestCase):
                 rows = build_site.board_picks({'a': play('a', 'g1'), 'b': play('b', 'g2')}, {}, {}, {})
         self.assertEqual({r['id']: r['featured'] for r in rows}, {'a': False, 'b': True})
 
+    def test_the_site_never_stars_a_pick_pulled_before_its_post(self):
+        import receipts
+        pulled = {'entryNote': 'Closed to new entries at 11:03 AM ET, before its post went out: the quarterback is out.'}
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'featured.json'
+            featured.save({'2026-09-25': {'id': 'a'}, '2026-09-26': {'id': 'b'}}, path)
+            with mock.patch.object(featured, 'PATH', path), mock.patch.object(receipts, 'served', return_value={'b'}):
+                rows = build_site.board_picks({'a': play('a', 'g1'), 'b': play('b', 'g2')}, {'a': pulled, 'b': {'result': 'win'}}, {}, {})
+        got = {r['id']: (r['featured'], r['posted']) for r in rows}
+        self.assertEqual(got, {'a': (False, False), 'b': (True, True)}, 'pulled before it posted: no star; posted: starred and counted')
+
 
 if __name__ == '__main__':
     unittest.main()

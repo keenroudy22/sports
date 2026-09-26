@@ -249,6 +249,8 @@
     if (p.result) return { word: RESULT_WORD[p.result] || p.result, tone: p.result === 'win' ? 'win' : p.result === 'loss' ? 'loss' : 'closed' };
     if (p.historicalImport) return { word: 'Unsettled', tone: 'closed' };
     if (p.status === 'withdrawn') return { word: 'Withdrawn', tone: 'closed' };
+    /* Pulled over news before its post went out: that stays the word through kickoff, until it is graded. */
+    if (/before its post went out/.test(p.entryNote || '')) return { word: 'Pulled', tone: 'closed' };
     if (p.kickoff && Date.parse(p.kickoff) <= now) return { word: 'In play', tone: 'reference' };
     if (p.entryNote) return { word: 'Line moved', tone: 'closed' };
     if (p.status === 'expired' || (p.expiresAt && Date.parse(p.expiresAt) <= now)) return { word: 'Price expired', tone: 'closed' };
@@ -333,6 +335,35 @@
       researched: summarizePicks(straight.filter(p => !p.modelLean), minimum),
       model: summarizePicks(straight.filter(p => p.modelLean), minimum) };
   };
+  /* The one record, the same on the site and on X: every play we publish, graded win or lose. The record is the
+     straight plays; money is what betting $100 on each would have made at the price we posted (recorded prices
+     only, never an assumed one). Fun parlays ($25 a ticket) and the Week 1 legs posted before prices were recorded
+     get their own lines. The Pick of the Day record counts the days its post went out. */
+  const isParlay = p => p.kind === 'parlays' || Boolean((p.legs || []).length) || Boolean(p.parlayType);
+  const dayOf = iso => {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return null;
+    const e = new Date(d.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+    return `${e.getFullYear()}-${String(e.getMonth() + 1).padStart(2, '0')}-${String(e.getDate()).padStart(2, '0')}`;
+  };
+  const dollars = units => units == null ? null : Math.round(100 * units);
+  const theRecord = (picks, now = Date.now()) => {
+    const when = p => p.kickoff || p.publishedAt;
+    const imported = picks.filter(isUnpricedImport);
+    const counted = picks.filter(p => !isUnpricedImport(p));
+    const straight = counted.filter(p => !isParlay(p));
+    const days = [...new Set(straight.filter(p => ['win', 'loss', 'push', 'void'].includes(p.result)).map(p => dayOf(when(p))).filter(Boolean))].sort();
+    const last = days.length ? days[days.length - 1] : null;
+    const week = weekOf(new Date(now).toISOString());
+    return {
+      season: summarizePicks(straight, 10),
+      week: summarizePicks(straight.filter(p => weekOf(when(p)) === week), 10),
+      lastDay: last ? { day: last, ...summarizePicks(straight.filter(p => dayOf(when(p)) === last), 10) } : null,
+      potd: summarizePicks(straight.filter(p => p.featured && p.posted), 10),
+      parlays: summarizePicks(counted.filter(isParlay), 10),
+      imported: imported.length ? summarizePicks(imported, 10) : null,
+    };
+  };
   /* Football weeks run Thursday to Monday, so a week starts on Tuesday, Eastern. */
   const weekOf = iso => {
     const d = new Date(iso);
@@ -373,5 +404,5 @@
   return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone,
     column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, eligible, summarizeTicket, ticketText,
-    unitsFor, stakeOf, recordOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, theRecord, isParlay, dayOf, dollars, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, shardOf, BASE };
 });

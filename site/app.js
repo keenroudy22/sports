@@ -73,10 +73,17 @@
 
   /* Our plays, one card each, in the same words as the play's X post: what it is, the play, the price and
      stake, our number against the line, and the one reason the post gives. Tap for the full research. */
-  const FRACTION = { 0.25: '¼', 0.5: '½', 0.75: '¾' };
   const playKind = p => (p.legs || []).length || p.parlayType ? 'Fun parlay' : p.athleteId ? 'Player prop' : 'Team prop';
-  const unitsText = p => { const s = C.stakeOf(p); return FRACTION[s] ? `${FRACTION[s]} unit` : `${s} unit${s === 1 ? '' : 's'}`; };
-  const numberText = p => typeof p.projection === 'number' && typeof p.line === 'number' ? `Our number ${plainNumber(p.projection)} vs the ${plainNumber(p.line)}` : '';
+  /* What we project, in the card's and the post's words: "We project 47.1 total points", "We project 4.6 receptions". */
+  const MARKET_WORDS = { rec: 'receptions', car: 'carries', recYds: 'receiving yards', rushYds: 'rushing yards', att: 'pass attempts',
+    cmp: 'completions', passYds: 'passing yards' };
+  const numberText = p => {
+    if (typeof p.projection !== 'number' || typeof p.line !== 'number') return '';
+    const value = plainNumber(p.projection);
+    if (p.athleteId || p.market) { if (MARKET_WORDS[p.market]) return `We project ${value} ${MARKET_WORDS[p.market]}`; }
+    else if (p.marketType === 'total' || ['over', 'under'].includes(String(p.direction || '').toLowerCase())) return `We project ${value} total points`;
+    return `Our number ${value} vs the ${plainNumber(p.line)}`;
+  };
   const playCard = p => {
     const st = C.pickState(p);
     const kind = `${p.featured ? 'Pick of the Day · ' : ''}${playKind(p)}`;
@@ -85,16 +92,55 @@
       <span class="play-top"><span class="play-kind">${esc(kind)}${p.favorite && !legs.length && !p.featured ? ' · Favorite' : ''}</span><span class="pill pill-${st.tone}">${esc(st.word)}</span></span>
       <span class="play-title">${esc(p.displayTitle || p.title || p.player)}</span>
       ${legs.length ? `<span class="play-legs">${legs.map(l => `<span>• ${esc(l)}</span>`).join('')}</span>` : ''}
-      <span class="play-price">${p.odds == null ? 'price not recorded' : `<span class="num">${odds(p.odds)}</span> at ${esc(p.book || '')}`} · ${esc(unitsText(p))}</span>
+      <span class="play-price">${p.odds == null ? 'price not recorded' : `<span class="num">${odds(p.odds)}</span> at ${esc(p.book || '')}`}</span>
       ${numberText(p) ? `<span class="play-number">${esc(numberText(p))}</span>` : ''}
       ${p.reason ? `<span class="play-reason">${esc(p.reason)}</span>` : ''}
       <span class="play-meta">${esc(whenShort(p.kickoff || p.publishedAt))} · tap for the research ›</span>
     </button>`;
   };
-  /* The record in one line, as the pick accounts show it. */
-  const recordStrip = (r, label) => `<a class="record-strip" href="#record"><span class="eyebrow">${esc(label)}</span>
-    <span class="num record-big">${r.wins}–${r.losses}${r.pushes ? `–${r.pushes}` : ''}</span>${r.units == null ? '' : `<span class="num record-units ${r.units > 0 ? 'up' : r.units < 0 ? 'down' : ''}">${signed(r.units, 2)}u</span>`}
+  /* The one record (C.theRecord), in the words the pick accounts use: wins and losses, and what betting $100 on
+     every play would have made. No units anywhere: followers never see a stake. */
+  const bucks = d => d == null ? DASH : `${d > 0 ? '+' : d < 0 ? '-' : ''}$${Math.abs(d)}`;
+  const bucksTone = d => d > 0 ? 'up' : d < 0 ? 'down' : '';
+  const wl = t => `${t.wins}–${t.losses}${t.pushes ? `–${t.pushes}` : ''}`;
+  const played = t => Boolean(t) && t.wins + t.losses + t.pushes > 0;
+  const MARKS = { win: '✅', loss: '❌', push: '➖', void: '➖' };
+  const dayName = day => {
+    if (!day) return 'Last game day';
+    if (day === C.dayOf(new Date().toISOString())) return 'Today';
+    if (day === C.dayOf(new Date(Date.now() - 864e5).toISOString())) return 'Yesterday';
+    const d = new Date(day + 'T12:00:00');
+    return Date.now() - d.getTime() < 6 * 864e5 ? d.toLocaleDateString('en-US', { weekday: 'long' }) : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  };
+  const recordStrip = (rec, label) => {
+    const d = C.dollars(rec.season.units);
+    return `<a class="record-strip" href="#record"><span class="eyebrow">${esc(label)}</span>
+    <span class="num record-big">${wl(rec.season)}</span>${d == null ? '' : `<span class="num record-units ${bucksTone(d)}">${bucks(d)}</span><span class="record-note">betting $100 a play</span>`}
     <span class="row-meta">Every play graded, win or lose ›</span></a>`;
+  };
+  /* Three boxes, the money, then the Pick of the Day and the fun parlays on their own line. */
+  const recordBoxes = rec => {
+    const rate = t => t && t.hitRate != null ? `${Math.round(t.hitRate)}% won` : '';
+    const last = rec.lastDay;
+    const box = (label, t, note) => stat(label, played(t) ? wl(t) : DASH, note);
+    return `<div class="stats record-boxes">
+      ${box(dayName(last && last.day), last, last && last.pending ? `${last.pending} still to play` : rate(last))}
+      ${box('This week', rec.week, played(rec.week) ? rate(rec.week) : 'nothing settled yet')}
+      ${box('Season', rec.season, rate(rec.season))}</div>`;
+  };
+  const moneyLine = rec => {
+    const d = C.dollars(rec.season.units);
+    if (d == null) return '';
+    const unpriced = rec.season.unpriced ? ` (${rec.season.unpriced} without a recorded price left out)` : '';
+    return `<p class="money-line">Betting $100 on every play: <b class="num ${bucksTone(d)}">${bucks(d)}</b>${esc(unpriced)}</p>`;
+  };
+  const sideLines = rec => {
+    const lines = [];
+    if (played(rec.potd)) lines.push(`Pick of the Day <b class="num">${wl(rec.potd)}</b>`);
+    if (played(rec.parlays)) lines.push(`Fun parlays <b class="num">${wl(rec.parlays)}</b> <span class="faint">(just for fun, not in the record)</span>`);
+    return lines.length ? `<p class="side-lines">${lines.join('<br>')}</p>` : '';
+  };
+  const theRecordCard = rec => `<div class="card record-card">${recordBoxes(rec)}${moneyLine(rec)}${sideLines(rec)}</div>`;
   const external = (url, label) => /^https:\/\//.test(url || '') ? `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)} ↗</a>` : '';
   const espnGame = id => { const [league, event] = String(id).split('-'); return `https://www.espn.com/${league === 'CFB' ? 'college-football' : 'nfl'}/game/_/gameId/${event}`; };
 
@@ -139,7 +185,7 @@
       <span class="row-main"><span class="row-top"><span class="row-name">${esc(pick.displayTitle || pick.title || pick.player)}</span>
         ${pick.favorite ? '<span class="pill pill-ours">Favorite</span>' : ''}${pick.modelLean ? '<span class="pill pill-reference">Model pick</span>' : ''}${pick.earlyExit ? '<span class="pill pill-closed">Early exit credit</span>' : ''}${C.isLongshot(pick) ? '<span class="pill pill-stale">Longshot</span>' : ''}${pick.historicalImport ? '<span class="pill pill-reference">Imported</span>' : ''}
         <span class="pill pill-${C.pickState(pick).tone}">${esc(C.pickState(pick).word)}</span></span>
-        <span class="row-market">${pick.actual ? esc(pick.actual) : (pick.legs || []).length ? `${pick.legs.length} legs${pick.riskUnits != null && pick.riskUnits !== 1 ? ` · ${esc(pick.riskUnits)}u` : ''}` : numberText(pick) ? esc(numberText(pick)) : pick.projection != null ? 'Our number ' + esc(pick.projection) : ''}</span>
+        <span class="row-market">${pick.actual ? esc(pick.actual) : (pick.legs || []).length ? `${pick.legs.length} legs` : numberText(pick) ? esc(numberText(pick)) : pick.projection != null ? 'We project ' + esc(pick.projection) : ''}</span>
         <span class="row-meta">${esc(whenShort(pick.kickoff || pick.publishedAt))}${pick.quotedAt ? ' · price from ' + esc(ago(pick.quotedAt)) : ''}</span></span>
       ${pick.odds == null && pick.historicalImport ? '<span class="row-price"><span class="row-book">price not recorded</span></span>'
         : `<span class="row-price"><span class="row-odds num">${odds(pick.odds)}</span><span class="row-book">${esc(pick.book || 'No book')}</span></span>`}
@@ -204,7 +250,7 @@
     markPicks(data.picks.filter(inLeague).filter(p => !p.result && !p.historicalImport));
     const moves = lineMoves(slate(data.games.filter(inLeague)));   /* this slate only, not look-ahead lines */
     const settledRecently = lastGameDay(data.picks.filter(inLeague));
-    const recent = C.summaryOf(settledRecently);
+    const recent = C.summaryOf(settledRecently.filter(p => !C.isParlay(p) && !C.isUnpricedImport(p)));
     const games = data.games.filter(inLeague);
     const best = bestOnBoard(board);
     const now = slate(games);
@@ -221,7 +267,7 @@
     return `${head(title,
       first ? `${now.length} games on this slate. Our plays come first; everything under them is what our numbers see, not picks.` : 'Nothing kicks off in the next eight days in this league.')}
       <div class="two-col"><div>
-        ${recordStrip(C.recordOf(picks), state.league === 'ALL' ? 'The record' : `The record · ${leagueName(dataLeague())}`)}
+        ${recordStrip(C.theRecord(picks), state.league === 'ALL' ? 'The record' : `The record · ${leagueName(dataLeague())}`)}
         ${live.length ? section('Our plays', `<div class="plays">${live.map(playCard).join('')}</div>`, '<a href="#record">Record →</a>') : ''}
         ${best.games.length ? section(best.day ? `Game lines with value · ${esc(best.day)}` : 'Game lines with value today',
           `<p class="row-meta" style="margin:0 0 8px">Where our chance beats what the price needs, at the best price we found. Worth a look, not picks.</p><div class="card"><div class="rows">${best.games.map(lineRow).join('')}</div></div>`,
@@ -231,35 +277,16 @@
           '<a href="#board/props">All player props →</a>') : ''}
         ${moves.length ? section('How the lines have moved', `<p class="row-meta" style="margin:0 0 8px">Where the betting line has moved since it opened. Green: toward our number. Amber: away from it.</p><div class="card"><div class="rows">${moves.map(moveRow).join('')}</div></div>`) : ''}
         ${playing.length ? section(`In play now${playing.length > 6 ? ` (${playing.length})` : ''}`, `<div class="card">${playing.slice(0, 6).map(gameRow).join('')}</div>`, '<a href="#games">All games →</a>') : ''}
-        ${settledRecently.length ? section('Last game day', `<p class="row-meta" style="margin:0 0 8px">${recent.wins}–${recent.losses}${recent.pushes ? `–${recent.pushes}` : ''}${recent.units == null ? '' : `, ${signed(recent.units, 2)}u at the recorded stakes`}.</p><div class="card"><div class="rows">${settledRecently.map(pickRow).join('')}</div></div>`, '<a href="#record">Record →</a>') : ''}
+        ${settledRecently.length ? section('Last game day', `<p class="row-meta" style="margin:0 0 8px">${played(recent) ? wl(recent) : 'Fun parlays only'}${C.dollars(recent.units) == null ? '' : ` · ${bucks(C.dollars(recent.units))} betting $100 a play`}.</p><div class="card"><div class="rows">${settledRecently.map(pickRow).join('')}</div></div>`, '<a href="#record">Record →</a>') : ''}
         ${section('Our numbers vs the betting lines', gaps.length ? `<p class="row-meta" style="margin:0 0 8px">Each game shows the betting line, our predicted score, and the side our number favors with how often we think it wins. A standard -110 bet needs about 52% to break even; green means we clear that comfortably. Paused means our record on that kind of bet trails the market. These are reads, not picks.</p><div class="card">${gaps.map(gameRow).join('')}</div>`
           : empty('No model calls yet', 'The model publishes after the hosted refresh runs. Every game still shows the market number.'), '<a href="#games">All games →</a>')}
         ${!live.length && !best.rows.length ? section('Our plays', empty('Nothing on the card yet', 'Plays appear here once lines are priced for the next slate.', '<a class="btn" href="#board">Open the board</a>'), '<a href="#record">Record →</a>') : ''}
       </div><div>
-        ${section(state.league === 'ALL' ? 'The record' : `The record · ${esc(leagueName(dataLeague()))}`, recordCard(C.recordOf(picks), true), '<a href="#record">Details →</a>')}
+        ${section(state.league === 'ALL' ? 'The record' : `The record · ${esc(leagueName(dataLeague()))}`, theRecordCard(C.theRecord(picks)), '<a href="#record">Details →</a>')}
         ${section('How the model is doing', modelCard(data.model), '<a href="#model">Scoreboard →</a>')}
         ${section('Data freshness', freshnessCard(data))}
       </div></div>`;
   }
-
-  const recordCard = (r, compact) => {
-    if (!r || !(r.wins + r.losses + r.pushes + r.voids + r.pending)) return empty('No record yet', 'Settled picks appear here.');
-    const graded = r.wins + r.losses;
-    const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
-    return `<div class="card" style="padding:16px"><div style="text-align:center">
-      <div class="num" style="font-size:${compact ? 42 : 56}px;line-height:1">${r.wins}<span class="faint">–</span>${r.losses}<span class="faint">–</span>${r.pushes}</div>
-      <div class="row-meta" style="margin-top:7px;font-size:13px">${graded ? r.hitRate.toFixed(1) + '% hit rate' : 'nothing settled'} · ${r.pending} pending${r.streak && r.streak.length > 1 ? ` · ${r.streak.length} straight ${r.streak.result === 'win' ? 'wins' : 'losses'}` : ''}</div></div>
-      <div class="stats" style="margin-top:12px">
-        ${stat('Units won or lost', r.units == null ? DASH : signed(r.units, 2) + 'u', r.priced ? `${plural(r.priced, 'priced pick')}, ${r.pricedWins}–${r.pricedLosses}` : 'no recorded prices yet', r.units > 0 ? 'up' : r.units < 0 ? 'down' : '')}
-        ${stat('Return', r.roi == null ? DASH : signed(r.roi, 1) + '%', r.roi != null ? 'per unit risked' : r.priced ? `shows at ${r.roiMinimum} priced · ${r.priced} so far` : 'needs recorded prices')}
-      </div>
-      ${r.unpriced ? `<p class="row-meta" style="margin:12px 0 0">${plural(r.unpriced, 'pick')} ${r.unpriced === 1 ? 'has' : 'have'} no recorded price, so ${r.unpriced === 1 ? 'it counts' : 'they count'} in the record but not in units or ROI.</p>` : ''}
-      ${r.imported ? `<p class="row-meta" style="margin:12px 0 0">${plural(r.imported.wins + r.imported.losses + r.imported.pushes + r.imported.voids, 'pick')} imported from before we recorded prices ${r.imported.wins + r.imported.losses + r.imported.pushes + r.imported.voids === 1 ? 'is' : 'are'} left out of these numbers. ${r.imported.wins + r.imported.losses + r.imported.pushes + r.imported.voids === 1 ? 'It' : 'They'} went ${r.imported.wins}–${r.imported.losses}${r.imported.voids ? ` with ${r.imported.voids} void` : ''} and ${r.imported.wins + r.imported.losses + r.imported.pushes + r.imported.voids === 1 ? 'is' : 'are'} still listed with the settled picks.</p>` : ''}
-      ${r.model && (r.model.wins + r.model.losses + r.model.pushes + r.model.pending) ? `<p class="row-meta" style="margin:12px 0 0">Researched picks ${r.researched.wins}–${r.researched.losses}${r.researched.units == null ? '' : ` (${signed(r.researched.units, 2)}u)`} · Model picks ${r.model.wins}–${r.model.losses}${r.model.units == null ? '' : ` (${signed(r.model.units, 2)}u)`}${r.model.pending ? `, ${r.model.pending} pending` : ''}</p>` : ''}
-      ${r.earlyExits ? `<p class="row-meta" style="margin:8px 0 0">${plural(r.earlyExits, 'pick')} lost with the player hurt inside the first half, where the book credits the stake back. Those count as losses in the record above and as zero units, the same as a push.</p>` : ''}
-      ${r.parlays ? `<p class="row-meta" style="margin:8px 0 0">Longshots are kept out of the numbers above and tracked at their own stake: ${r.parlays.wins}–${r.parlays.losses}${r.parlays.units == null ? '' : `, ${signed(r.parlays.units, 2)}u on ${r.parlays.staked}u risked`}.</p>` : ''}
-    </div>`;
-  };
 
   const modelCard = model => {
     const rows = ((model || {}).live || []).filter(inLeague);
@@ -708,59 +735,62 @@
     const [data, board] = await Promise.all([get('app/today.json'), maybe('scoreboard.json')]);
     const clv = new Map((((board || {}).picks || {}).rows || []).map(r => [r.id, r]));
     const league = data.picks.filter(inLeague);
-    const picks = state.recordScope === 'all' ? league : league.filter(p => C.kindOf(p) === state.recordScope);
+    const rec = C.theRecord(league);
     const rq = state.recordQuery.trim().toLowerCase();
-    const matches = p => !rq || [p.title, p.player, p.kind, p.result, p.book].some(v => String(v || '').toLowerCase().includes(rq));
-    const settled = picks.filter(p => p.result && matches(p)).sort((a, b) => String(b.settledAt || b.publishedAt).localeCompare(String(a.settledAt || a.publishedAt)));
-    const r = state.recordScope === 'longshot' ? { ...C.summaryOf(picks), parlays: null, model: null, researched: null } : C.recordOf(picks);
-    const scoped = state.recordScope === 'all' ? data.picks : data.picks.filter(p => C.kindOf(p) === state.recordScope);
-    /* The tables count what the record counts: picks imported without a price are listed below, never totalled. */
-    const counted = picks.filter(p => !C.isUnpricedImport(p));
-    const kinds = ['researched', 'model', 'longshot'].map(k => [C.KIND_WORD[k], C.summaryOf(league.filter(p => !C.isUnpricedImport(p) && C.kindOf(p) === k))]);
-    const weeks = [...new Set(counted.map(p => C.weekOf(p.kickoff || p.publishedAt)).filter(Boolean))].sort().reverse()
-      .map(w => [w, C.summaryOf(counted.filter(p => C.weekOf(p.kickoff || p.publishedAt) === w))]);
+    const matches = p => !rq || [p.title, p.displayTitle, p.player, p.kind, p.result, p.book].some(v => String(v || '').toLowerCase().includes(rq));
+    const newest = (a, b) => String(b.settledAt || b.publishedAt).localeCompare(String(a.settledAt || a.publishedAt));
+    const settled = league.filter(p => p.result && !C.isUnpricedImport(p) && matches(p)).sort(newest);
+    const imported = league.filter(p => p.result && C.isUnpricedImport(p)).sort(newest);
+    /* The numbers behind the record, for anyone who wants them: the same plays, cut by sport, kind, week and market. */
+    const counted = league.filter(p => !C.isUnpricedImport(p));
+    const straight = counted.filter(p => !C.isParlay(p));
+    const scoped = data.picks.filter(p => !C.isUnpricedImport(p) && !C.isParlay(p));
+    const leagues = [['NFL', 'NFL'], ['CFB', 'College']].map(([id, name]) => [name, C.summaryOf(scoped.filter(p => p.league === id))]);
+    const kinds = [['Researched plays', straight.filter(p => !p.modelLean)], ['Model plays', straight.filter(p => p.modelLean)],
+      ['Fun parlays', counted.filter(C.isParlay)]].map(([name, rows]) => [name, C.summaryOf(rows)]);
+    const weeks = [...new Set(straight.map(p => C.weekOf(p.kickoff || p.publishedAt)).filter(Boolean))].sort().reverse()
+      .map(w => [w, C.summaryOf(straight.filter(p => C.weekOf(p.kickoff || p.publishedAt) === w))]);
     const weekLabel = w => { const d = new Date(w + 'T12:00:00'); const e = new Date(d); e.setDate(d.getDate() + 6);
       return `${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} to ${e.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`; };
-    const leagues = [['NFL', 'NFL'], ['CFB', 'College']].map(([id, name]) => [name, C.recordOf(scoped.filter(p => p.league === id))]);
-    const types = [...new Set(counted.map(C.category))].map(name => [name, C.summaryOf(counted.filter(p => C.category(p) === name))]);
-    const typeRow = ([name, t]) => `<tr><th scope="row">${esc(name)}</th><td class="num">${t.wins}–${t.losses}–${t.pushes}</td><td class="num">${t.units == null ? DASH : signed(t.units, 2) + 'u'}</td><td class="num">${t.priced}</td></tr>`;
-    return `${head('The record', `Every pick we have published, graded win or lose. Each counts as a 1-unit bet at the price we posted, so units show what following every pick would have won or lost${state.league === 'ALL' ? '' : ` (${esc(leagueName(dataLeague()))} shown; switch sports at the top)`}.`)}
-      <div class="toolbar">${seg('recordScope', [['all', `All (${league.length})`], ['researched', `Researched (${league.filter(p => C.kindOf(p) === 'researched').length})`],
-        ['model', `Model leans (${league.filter(p => C.kindOf(p) === 'model').length})`], ['longshot', `Longshots (${league.filter(p => C.kindOf(p) === 'longshot').length})`]], state.recordScope)}</div>
-      ${recordCard(r, false)}
-      ${section('By sport', `<div class="table-wrap"><table class="data"><thead><tr><th>Sport</th><th>W–L–P</th><th>Net units</th><th>Priced</th><th>Pending</th></tr></thead><tbody>${leagues.map(([name, t]) =>
-        `<tr><th scope="row">${esc(name)}</th><td class="num">${t.wins}–${t.losses}–${t.pushes}</td><td class="num">${t.units == null ? DASH : signed(t.units, 2) + 'u'}</td><td class="num">${t.priced}</td><td class="num">${t.pending}</td></tr>`).join('')}</tbody></table></div>`)}
-      ${section('By kind', `<div class="table-wrap"><table class="data"><thead><tr><th>Kind</th><th>W–L–P</th><th>Net units</th><th>Priced</th><th>Pending</th></tr></thead><tbody>${kinds.map(([name, t]) =>
-        `<tr><th scope="row">${esc(name)}</th><td class="num">${t.wins}–${t.losses}–${t.pushes}</td><td class="num">${t.units == null ? DASH : signed(t.units, 2) + 'u'}</td><td class="num">${t.priced}</td><td class="num">${t.pending}</td></tr>`).join('')}</tbody></table></div>
-        <p class="row-meta" style="margin:8px 2px 0">Researched picks are backed by a checked news fact. Model picks go out on our number alone, so the model earns its own record. Longshots are fun parlays at a quarter unit.</p>`)}
-      ${weeks.length ? section('By week', `<div class="table-wrap"><table class="data"><thead><tr><th>Week</th><th>W–L–P</th><th>Net units</th><th>Priced</th><th>Pending</th></tr></thead><tbody>${weeks.map(([w, t]) =>
-        `<tr><th scope="row">${esc(weekLabel(w))}</th><td class="num">${t.wins}–${t.losses}–${t.pushes}</td><td class="num">${t.units == null ? DASH : signed(t.units, 2) + 'u'}</td><td class="num">${t.priced}</td><td class="num">${t.pending}</td></tr>`).join('')}</tbody></table></div>`) : ''}
-      ${types.length > 1 ? section('By market', `<div class="table-wrap"><table class="data"><thead><tr><th>Type</th><th>W–L–P</th><th>Net units</th><th>Priced</th></tr></thead><tbody>${types.map(typeRow).join('')}</tbody></table></div>`) : ''}
-      <input class="search" type="search" data-input="recordQuery" placeholder="Search settled picks by player, team or market" value="${esc(state.recordQuery)}" aria-label="Search settled picks">
-      <p class="row-meta" style="margin:0 0 8px">CLV compares the number we took with the last betting line before kickoff. Positive means we got a better number than the market closed at, which tends to show up before wins do.</p>
-      ${section('Every settled pick', settled.length ? settledWeeks(settled, clv, Boolean(rq), weekLabel) : empty('Nothing settled yet', ''))}`;
+    const MARKET_NAME = { Totals: 'Game totals', Spreads: 'Spreads', Straights: 'Player props', 'Risky lines': 'Risky player lines' };
+    const types = [...new Set(straight.map(C.category))].map(name => [MARKET_NAME[name] || name, C.summaryOf(straight.filter(p => C.category(p) === name))]);
+    const table = (first, rows) => `<div class="table-wrap"><table class="data"><thead><tr><th>${esc(first)}</th><th>W–L–P</th><th>$100 a play</th><th>Pending</th></tr></thead><tbody>${rows.map(([name, t]) =>
+      `<tr><th scope="row">${esc(name)}</th><td class="num">${t.wins}–${t.losses}–${t.pushes}</td><td class="num ${bucksTone(C.dollars(t.units))}">${bucks(C.dollars(t.units))}</td><td class="num">${t.pending}</td></tr>`).join('')}</tbody></table></div>`;
+    return `${head('The record', `Every play we publish, graded win or lose. The same numbers go out on X.${state.league === 'ALL' ? '' : ` ${esc(leagueName(dataLeague()))} shown; switch sports at the top.`}`)}
+      ${theRecordCard(rec)}
+      ${section('Every play', `<input class="search" type="search" data-input="recordQuery" placeholder="Search by player, team or market" value="${esc(state.recordQuery)}" aria-label="Search the plays">
+        ${settled.length ? settledWeeks(settled, clv, Boolean(rq), weekLabel) : empty(rq ? 'No play matches' : 'Nothing settled yet', rq ? 'Try a player, a team or a market.' : 'Plays show here once their games are final.')}`)}
+      <details class="card more-numbers"><summary>More numbers</summary><div class="more-body">
+        ${section('By sport', table('Sport', leagues))}
+        ${section('By kind', table('Kind', kinds) + '<p class="row-meta" style="margin:8px 2px 0">Researched plays are backed by a checked news fact. Model plays go out on our number alone. Fun parlays are smaller tickets, just for fun, and stay out of the record.</p>')}
+        ${weeks.length ? section('By week', table('Week', weeks.map(([w, t]) => [weekLabel(w), t]))) : ''}
+        ${types.length > 1 ? section('By market', table('Market', types)) : ''}
+        <p class="row-meta" style="margin:4px 2px 0">CLV compares the number we took with the last betting line before kickoff. Positive means we got a better number than the market closed at, which tends to show up before wins do.</p>
+      </div></details>
+      ${rec.imported ? `<details class="card week"><summary><span>Week 1 hand-posted legs (no prices)</span><span class="row-meta">${wl(rec.imported)}${rec.imported.voids ? `, ${rec.imported.voids} void` : ''} · not counted</span></summary>
+        <div class="rows">${imported.map(p => settledRow(p, null)).join('')}</div></details>` : ''}`;
   }
 
-  /* One settled pick on one line: the result, what happened in a few words, and what it returned. Tap for the full card. */
+  /* One settled play on one line: ✅ or ❌, the play, what happened, and what $100 on it made. Tap for the full card. */
   const settledRow = (p, c) => {
-    const u = C.unitsFor(p);
-    const state_ = C.pickState(p);
+    const d = C.dollars(C.unitsFor(p));
     const what = [p.actual ? String(typeof p.actual === 'string' ? p.actual : JSON.stringify(p.actual)).split(/[.;]\s/)[0] : '', c && c.clv != null ? `CLV ${signed(c.clv)}` : ''].filter(Boolean).join(' · ');
     return `<button class="row" type="button" data-pick="${esc(p.id)}">
       <span class="row-rail" style="background:${p.result === 'win' ? 'var(--green)' : p.result === 'loss' ? 'var(--rose)' : 'var(--line)'}"></span>
-      <span class="row-main"><span class="row-top"><span class="row-name">${esc(p.title || p.player)}</span><span class="pill pill-${state_.tone}">${esc(state_.word)}</span>${p.modelLean ? '<span class="pill pill-reference">Model lean</span>' : ''}${p.earlyExit ? '<span class="pill pill-closed">Early exit credit</span>' : ''}${C.isLongshot(p) ? '<span class="pill pill-stale">Longshot</span>' : ''}${p.historicalImport ? '<span class="pill pill-reference">Imported</span>' : ''}</span>
+      <span class="row-main"><span class="row-top"><span class="row-name">${MARKS[p.result] ? MARKS[p.result] + ' ' : ''}${esc(p.displayTitle || p.title || p.player)}</span>${p.featured && p.posted ? '<span class="pill pill-ours">Pick of the Day</span>' : ''}${p.earlyExit ? '<span class="pill pill-closed">Early exit credit</span>' : ''}${C.isParlay(p) ? '<span class="pill pill-stale">Fun parlay</span>' : ''}${p.historicalImport ? '<span class="pill pill-reference">Week 1</span>' : ''}</span>
         <span class="row-meta clamp">${esc(whenShort(p.kickoff || p.publishedAt))}${what ? ' · ' + esc(what) : ''}</span></span>
-      <span class="row-price"><span class="row-odds num ${u > 0 ? 'up' : u < 0 ? 'down' : ''}">${u == null ? (p.odds == null ? '' : odds(p.odds)) : signed(u, 2) + 'u'}</span><span class="row-book">${p.odds == null ? 'no price recorded' : `${esc(p.book || '')} ${odds(p.odds)}`}</span></span>
+      <span class="row-price"><span class="row-odds num ${bucksTone(d)}">${d == null ? (p.odds == null ? '' : odds(p.odds)) : bucks(d)}</span><span class="row-book">${p.odds == null ? 'no price recorded' : `${esc(p.book || '')} ${odds(p.odds)}`}</span></span>
     </button>`;
   };
-  /* Settled picks by week, newest first: this week open, the rest folded with their line, so the list never sprawls. */
+  /* Settled plays by week, newest first: this week open, the rest folded with their record, so the list never sprawls. */
   const settledWeeks = (settled, clv, searching, weekLabel) => {
     const byWeek = new Map();
     for (const p of settled) { const w = C.weekOf(p.kickoff || p.settledAt || p.publishedAt) || '0000-00-00'; if (!byWeek.has(w)) byWeek.set(w, []); byWeek.get(w).push(p); }
     return [...byWeek].sort((a, b) => b[0].localeCompare(a[0])).map(([w, rows], i) => {
-      const t = C.summaryOf(rows);
+      const t = C.summaryOf(rows.filter(p => !C.isParlay(p)));
+      const d = C.dollars(t.units);
       const label = w === '0000-00-00' ? 'Undated' : weekLabel(w);
-      return `<details class="card week"${i === 0 || searching ? ' open' : ''}><summary><span>${esc(label)}</span><span class="row-meta">${t.wins}–${t.losses}${t.pushes ? `–${t.pushes}` : ''} · ${t.units == null ? 'no priced picks' : signed(t.units, 2) + 'u'} · ${rows.length} pick${rows.length === 1 ? '' : 's'}</span></summary>
+      return `<details class="card week"${i === 0 || searching ? ' open' : ''}><summary><span>${esc(label)}</span><span class="row-meta">${played(t) ? wl(t) : 'fun parlays only'}${d == null ? '' : ` · ${bucks(d)}`} · ${rows.length} play${rows.length === 1 ? '' : 's'}</span></summary>
         <div class="rows">${rows.map(p => settledRow(p, clv.get(p.id))).join('')}</div></details>`;
     }).join('');
   };
@@ -921,7 +951,7 @@
     const started = p.kickoff && Date.parse(p.kickoff) <= Date.now();
     dialog.innerHTML = `<div class="detail-inner"><div class="detail-head"><div><div class="row-top">${p.result ? `<span class="pill pill-${p.result === 'win' ? 'win' : p.result === 'loss' ? 'loss' : 'closed'}">${esc(p.result)}</span>` : '<span class="pill pill-ours">Our pick</span>'}</div>
       <h3 style="margin:7px 0 0;font-size:17px">${esc(p.title)}</h3><p class="row-meta" style="margin:4px 0 0">${esc(when(p.kickoff || p.publishedAt))}</p></div><button class="close" type="button" data-close aria-label="Close">×</button></div>
-      <div class="detail-body"><div class="kv"><div><span>Price</span><strong>${esc(p.book || 'No book')} ${odds(p.odds)}</strong></div><div><span>Our number</span><strong>${p.projection ?? DASH}</strong></div><div><span>Confidence</span><strong>${p.confidence != null ? p.confidence + '/10' : DASH}</strong></div>${p.riskUnits != null && p.riskUnits !== 1 ? `<div><span>Stake</span><strong>${esc(p.riskUnits)}u</strong></div>` : ''}<div><span>Quoted</span><strong style="font-size:12px">${esc(ago(p.quotedAt))}</strong></div></div>
+      <div class="detail-body"><div class="kv"><div><span>Price</span><strong>${esc(p.book || 'No book')} ${odds(p.odds)}</strong></div><div><span>We project</span><strong>${p.projection ?? DASH}</strong></div><div><span>Quoted</span><strong style="font-size:12px">${esc(ago(p.quotedAt))}</strong></div></div>
       ${closed ? `<div class="notice" style="margin-top:12px"><strong>Closed to new entries.</strong> ${esc(prose(p.entryNote) || (p.status === 'withdrawn' ? 'Withdrawn before kickoff.' : started ? 'The game has started.' : 'The quote has expired.'))} The original is still graded at its published price.</div>` : ''}
       ${clv && clv.clv != null ? `<div class="notice" style="margin-top:12px"><strong>Closing line value ${signed(clv.clv)}.</strong> We posted ${clv.postedLine ?? DASH} and the last number before kickoff was ${clv.closeLine ?? DASH}. ${clv.clv > 0 ? 'We got the better number, which is the part we control.' : clv.clv < 0 ? 'The market moved to a better number after we posted.' : 'We matched the close.'}</div>` : ''}
       ${(p.legs || []).length ? `<h4>Legs</h4><ul style="margin:0;padding-left:18px">${p.legs.map(l => `<li>${esc(leg(l))}</li>`).join('')}</ul>` : ''}${p.correlation ? `<h4>How the legs relate</h4><p>${esc(prose(p.correlation))}</p>` : ''}
@@ -929,7 +959,7 @@
       ${p.actual ? `<h4>Result</h4><p>${esc(prose(p.actual))}</p>` : ''}${p.settlementReason ? `<p>${esc(prose(p.settlementReason))}</p>` : ''}
       ${(p.sources || []).length ? `<h4>Sources</h4><div class="sources">${p.sources.filter(s => /^https:/.test(s)).map((s, i) => `<a href="${esc(s)}" target="_blank" rel="noopener noreferrer">${esc(hostOf(s, i))} ↗</a>`).join('')}</div>` : ''}
       ${p.athleteId ? '<div data-context><p class="row-meta">Loading the last ten games and the matchup…</p></div>' : ''}
-      <p class="row-meta" style="margin-top:14px">${p.riskUnits != null && p.riskUnits !== 1 ? `Recorded at ${esc(p.riskUnits)} units.` : 'Recorded at one unit.'} The original price is kept for grading even after the line moves.</p></div></div>`;
+      <p class="row-meta" style="margin-top:14px">${C.isParlay(p) ? 'A fun parlay: a smaller ticket, kept out of the record.' : 'Graded as a $100 play.'} The original price is kept for grading even after the line moves.</p></div></div>`;
     dialog.showModal();
     if (p.athleteId) {
       const html = await propContext(p);

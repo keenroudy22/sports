@@ -1,15 +1,15 @@
-"""Receipts: what the plays posted to @keenkooks did, one post the morning after each game day and one on
-Wednesday for the week. Stdlib only.
+"""Receipts: what the desk's plays did, one post the morning after each game day and one on Wednesday for the
+week. Stdlib only.
 
-The desk posts plays only, and the brand is that every one of them is graded in public, win or lose. So every
-morning after a game day, once every play that went out on X is settled, the desk posts the receipt: each play
-with its result, the day's record and units, in the same card frame as the plays. On Wednesday morning the
-week's receipt sums up the seven days before it by kind. Together with the plays that makes a post every day
-of the season.
+The brand is that every play is graded in public, win or lose. So every morning after a game day, once every
+play of that day is settled, the desk posts the receipt: each play with its result and the day's record, in the
+same card frame as the plays. On Wednesday morning the week's receipt sums up the seven days before it by kind.
+Together with the plays that makes a post every day of the season.
 
-Only plays that actually went out count: `buffer:play` entries in data/x-posted.json with a `sentAt`, not
-cancelled and not deleted. Records and units follow site/core.js exactly (x_post.summarize): one unit a straight
-play, riskUnits for a parlay, push and void score zero.
+One record, the same on the site and on X (the owner's call, 2026-09-25): every play the desk published counts,
+whether or not its post went out (a play pulled before its post stays in the record and is graded as posted),
+apart from the Week 1 legs imported without prices. The record is wins and losses of the straight plays; fun
+parlays get their own line. No units on X: money lives on the site only, at $100 a play (site/core.js).
 
   python scripts/receipts.py [--now ISO]      print the receipts that are ready and their text
 """
@@ -28,13 +28,13 @@ MORNING = (9, 0)                  # Eastern: when a receipt posts
 LATEST = (20, 0)                  # Eastern, the day after: a receipt not scheduled by then is stale and skipped
 WEEKDAY = 2                       # Wednesday: the week's receipt
 MARKS = {'win': '✅', 'loss': '❌', 'push': '➖', 'void': '➖'}
-KIND_NAMES = {'player': 'Player props', 'team': 'Team props', 'parlay': 'Parlays'}
+KIND_NAMES = {'player': 'Player props', 'team': 'Team props', 'parlay': 'Fun parlays'}
 
 
 def served(log_book):
-    """Ids of the plays that went out on X: sent through Buffer, or posted by hand before the desk posted (the
-    two seeded 2026-09-19 plays count; the book is every play we posted, win or lose). A cancelled or deleted
-    post was never served."""
+    """Ids of the plays whose post went out on X: sent through Buffer, or posted by hand before the desk posted
+    (the two seeded 2026-09-19 plays). A cancelled or deleted post was never served. The record counts every
+    published play (counted); this says which ones followers saw, for the Pick of the Day record."""
     out = set()
     for p in log_book.get('posts', []):
         if p.get('cancelledAt') or p.get('deletedAt'):
@@ -42,6 +42,12 @@ def served(log_book):
         if (p.get('kind') == 'buffer:play' and p.get('sentAt')) or (p.get('kind') == 'pick' and p.get('postedAt')):
             out.add(p['id'])
     return out
+
+
+def counted(first):
+    """Ids of every play in the record: everything published, apart from the legs imported without a price. The
+    site's record (site/core.js theRecord) counts the same plays."""
+    return {key for key, pick in first.items() if not (pick.get('historicalImport') and pick.get('odds') is None)}
 
 
 def game_day(pick, games):
@@ -53,13 +59,31 @@ def game_day(pick, games):
 def label(pick, games=None):
     """A play as its post and card named it: schools by name, over and under as the post says them."""
     if pick_card.play_kind(pick) == 'parlay':
-        return f"{len(pick.get('legs') or [])}-leg parlay"
+        return f"{len(pick.get('legs') or [])}-leg fun parlay"
     return pick_card.display_title(pick, (games or {}).get((pick.get('gameIds') or [None])[0]))
 
 
 def record_text(summary):
-    text = f"{summary['win']}-{summary['loss']}" + (f"-{summary['push']}" if summary['push'] else '')
-    return f"{text} · {summary['units']:+.2f}u"
+    """Wins and losses (and pushes), as the site shows them. No units: followers never see a stake."""
+    return f"{summary['win']}-{summary['loss']}" + (f"-{summary['push']}" if summary['push'] else '')
+
+
+def headline(rows):
+    """The record a receipt leads with: the straight plays; fun parlays only when there is nothing else."""
+    straight = [r for r in rows if pick_card.play_kind(r) != 'parlay']
+    if straight:
+        return record_text(x_post.summarize(straight))
+    return f"Fun parlay{'s' if len(rows) != 1 else ''} {record_text(x_post.summarize(rows))}"
+
+
+def by_kind(rows):
+    """[(name, record)] for each kind of play among the rows: player props, team props, fun parlays."""
+    out = []
+    for kind in ('player', 'team', 'parlay'):
+        group = [r for r in rows if pick_card.play_kind(r) == kind]
+        if group:
+            out.append((KIND_NAMES[kind], record_text(x_post.summarize(group))))
+    return out
 
 
 def morning(day):
@@ -106,13 +130,12 @@ def day_receipt(day, first, latest, games, ids):
     rows = plays_between(first, latest, games, ids, day, day)
     if not settled(rows):
         return None
-    summary = x_post.summarize(rows)
     name = f'{day:%A}'
-    head = f"🍳 RECEIPTS · {name.upper()}\n{record_text(summary)}"
+    head = f"🍳 RECEIPTS · {name.upper()}\n{headline(rows)}"
     tail = 'Graded in public, win or lose.\n' + leagues(rows)
     text = fit([f"{MARKS[r['result']]} {label(r, games)}" for r in rows], head, tail.strip())
     return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}', 'kind': 'receipt',
-            'title': record_text(summary), 'label': 'YESTERDAY’S PLATES', 'when': f'{day:%A, %b %-d}',
+            'title': headline(rows), 'label': 'YESTERDAY’S PLATES', 'when': f'{day:%A, %b %-d}',
             'rows': [(r['result'], label(r, games)) for r in rows], 'text': text, 'due': morning(day + timedelta(days=1)),
             'stale': datetime(day.year, day.month, day.day, LATEST[0], LATEST[1], tzinfo=gates.EASTERN).astimezone(timezone.utc) + timedelta(days=1)}
 
@@ -122,26 +145,21 @@ def week_receipt(wednesday, first, latest, games, ids):
     rows = plays_between(first, latest, games, ids, start, end)
     if not settled(rows):
         return None
-    summary = x_post.summarize(rows)
-    by_kind = []
-    for kind in ('player', 'team', 'parlay'):
-        group = [r for r in rows if pick_card.play_kind(r) == kind]
-        if group:
-            by_kind.append((KIND_NAMES[kind], record_text(x_post.summarize(group))))
+    kinds = by_kind(rows)
     # The dates keep two weeks with the same record from posting the same words; one kind of play shows only the total.
-    head = f"🍳 RECEIPTS · THE WEEK\n{start:%b} {start.day} to {end:%b} {end.day}: {record_text(summary)}"
+    head = f"🍳 RECEIPTS · THE WEEK\n{start:%b} {start.day} to {end:%b} {end.day}: {headline(rows)}"
     tail = 'Graded in public, win or lose.\n' + leagues(rows)
-    text = fit([f'{name} {rec}' for name, rec in by_kind] if len(by_kind) > 1 else [], head, tail.strip())
+    text = fit([f'{name} {rec}' for name, rec in kinds] if len(kinds) > 1 else [], head, tail.strip())
     return {'key': f'receipt:week:{end.isoformat()}', 'card': f'receipt-week-{end.isoformat()}', 'kind': 'receipt',
-            'title': record_text(summary), 'label': 'THIS WEEK’S PLATES', 'when': f'{start:%b %-d} to {end:%b %-d}',
-            'rows': [(None, f'{name}  {rec}') for name, rec in by_kind], 'text': text, 'due': morning(wednesday),
+            'title': headline(rows), 'label': 'THIS WEEK’S PLATES', 'when': f'{start:%b %-d} to {end:%b %-d}',
+            'rows': [(None, f'{name}  {rec}') for name, rec in kinds], 'text': text, 'due': morning(wednesday),
             'stale': datetime(wednesday.year, wednesday.month, wednesday.day, LATEST[0], LATEST[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)}
 
 
 def ready(first, latest, games, log_book, now):
     """The receipts that can go out now: yesterday's (or the day before's, if it settled late) and, on Wednesday,
     the week's. Each only when every play it covers is settled, and none after its evening."""
-    ids = served(log_book)
+    ids = counted(first)
     if not ids:
         return []
     today = eastern_date(now)
@@ -211,8 +229,8 @@ def menu(first, latest, games, log_book, now):
 
 
 def book(first, latest, games, log_book, now):
-    """A day with nothing else on it gets the book: the season record of every play that went out on X, graded
-    through yesterday so the numbers hold all day."""
+    """A day with nothing else on it gets the book: the season record of every play, graded through yesterday so
+    the numbers hold all day."""
     today = eastern_date(now)
     if now < at(today, BOOK_FROM):
         return None
@@ -221,22 +239,17 @@ def book(first, latest, games, log_book, now):
             continue
         if eastern_date(gates.when(entry['dueAt'])) == today:
             return None                    # the day already has a post
-    ids = served(log_book)
-    rows = [r for r in plays_between(first, latest, games, ids, datetime(2000, 1, 1).date(), today - timedelta(days=1))
+    rows = [r for r in plays_between(first, latest, games, counted(first), datetime(2000, 1, 1).date(), today - timedelta(days=1))
             if r.get('result') in MARKS]
     if not rows:
         return None
-    lines = []
-    for kind in ('player', 'team', 'parlay'):
-        group = [r for r in rows if pick_card.play_kind(r) == kind]
-        if group:
-            lines.append(f'{KIND_NAMES[kind]} {record_text(x_post.summarize(group))}')
+    lines = [f'{name} {rec}' for name, rec in by_kind(rows)]
     if len(lines) < 2:
         lines = []                         # one kind only: its line would repeat the season's
     through = today - timedelta(days=1)
     # The day it is graded through is named, so two quiet days in a row never post the same text (X refuses a
     # repeated post, and the same words twice read like a bot).
-    head = f"🍳 THE BOOK\nSeason through {through:%b} {through.day}: {record_text(x_post.summarize(rows))}"
+    head = f"🍳 THE BOOK\nSeason through {through:%b} {through.day}: {headline(rows)}"
     tail = 'Every play we post, graded in public, win or lose.\n' + leagues(rows)
     return {'key': f'book:day:{today.isoformat()}', 'card': HOUSE_CARDS + 'kitchen-book.png', 'kind': 'book',
             'text': fit(lines, head, tail.strip()), 'due': max(at(today, BOOK_AT), now + timedelta(minutes=2)),
