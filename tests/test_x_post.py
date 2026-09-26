@@ -50,11 +50,11 @@ PROP = {'id': 'NFL-2026-W4-p7-over-4-5-rec-dk', 'title': 'Player Seven over 4.5 
 class DraftTests(unittest.TestCase):
     def test_every_post_has_the_same_shape(self):
         team = x_post.draft(dict(PICK, favorite=False, modelLean=True, projection=31.2), GAME)
-        self.assertTrue(team.startswith('🍳 TEAM PROP\nIowa at Michigan under 38.5\n-105 at FanDuel\n\nOur number 31.2 vs the 38.5\n'), team)
+        self.assertTrue(team.startswith('🍳 TEAM PROP\nIowa at Michigan under 38.5\n-105 at FanDuel\n\nWe project 31.2 total points\n'), team)
         self.assertTrue(team.endswith('\n\n@Playbook #CFB'), team)
         prop = x_post.draft(PROP, {'league': 'NFL'}, reason='He has caught 6 in each of his last 2 games.')
         self.assertEqual(prop, '🍳 PLAYER PROP\nPlayer Seven over 4.5 receptions\n-115 at DraftKings\n\n'
-                               'Our number 5.8 vs the 4.5\nHe has caught 6 in each of his last 2 games.\n\n@Playbook #NFL')
+                               'We project 5.8 receptions\nHe has caught 6 in each of his last 2 games.\n\n@Playbook #NFL')
         favorite = x_post.draft(PICK, GAME)
         self.assertTrue(favorite.startswith('🍳 TEAM PROP · FAVORITE\n'), favorite)
         for text, pick in ((team, dict(PICK, projection=31.2)), (prop, PROP), (favorite, PICK)):
@@ -79,9 +79,9 @@ class DraftTests(unittest.TestCase):
             path = Path(folder) / 'reasons.json'
             x_post.save_reasons({PICK['id']: 'Wind is forecast at 18 mph in Ann Arbor.'}, path)
             with mock.patch.object(x_post, 'REASONS', path):
-                self.assertIn('Our number 31.2 vs the 38.5\nWind is forecast at 18 mph in Ann Arbor.', x_post.draft(dict(PICK, projection=31.2), GAME))
+                self.assertIn('We project 31.2 total points\nWind is forecast at 18 mph in Ann Arbor.', x_post.draft(dict(PICK, projection=31.2), GAME))
                 other = dict(PICK, id='another', projection=31.2)
-                self.assertTrue(x_post.draft(other, GAME).endswith('Our number 31.2 vs the 38.5\n\n@Playbook #CFB'),
+                self.assertTrue(x_post.draft(other, GAME).endswith('We project 31.2 total points\n\n@Playbook #CFB'),
                                 'no stored reason: the prose is not mined, the post stands on the number')
 
     def test_lineup_checks_duplicates_and_half_sentences_are_not_reasons(self):
@@ -117,7 +117,7 @@ class DraftTests(unittest.TestCase):
         self.assertIsNone(x_post.reason_for(arithmetic), 'no stat talk in the timeline')
         text = x_post.draft(dict(arithmetic, projection=31.2), GAME)
         self.assertNotIn('percentile', text)
-        self.assertIn('Our number 31.2 vs the 38.5\n\n@Playbook #CFB', text)
+        self.assertIn('We project 31.2 total points\n\n@Playbook #CFB', text)
 
     def test_url_counts_as_twenty_three(self):
         self.assertEqual(x_post.tweet_length('hi https://keenroudy.com/sports/#pick/a-very-long-identifier-indeed'), 3 + 23)

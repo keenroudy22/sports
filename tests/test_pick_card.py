@@ -18,7 +18,7 @@ GAME = {'league': 'CFB', 'kickoff': '2026-09-26T19:30Z',
 class CardTests(unittest.TestCase):
     def test_the_svg_carries_the_picks_fields_the_kitchen_and_the_teams_colours(self):
         text = pick_card.svg(PICK, GAME, {'wins': 3, 'losses': 1, 'units': 1.98})
-        for needle in ('>Iowa at Michigan<', '>under 38.5<', '-105', 'FanDuel', 'Our number 31.2 vs the 38.5', 'FAVORITE', 'KOOK’N',
+        for needle in ('>Iowa at Michigan<', '>under 38.5<', '-105', 'FanDuel', 'We project 31.2 total points', 'FAVORITE', 'KOOK’N',
                        'TODAY’S PLATE', 'Served at', 'Iowa at Michigan', 'Sat 3:30 PM ET', 'Record 3-1', '+1.98u',
                        'keenroudy.com/sports', 'Graded in public', 'Entertainment only. Not advice.'):
             self.assertIn(needle, text, needle)
@@ -116,6 +116,17 @@ class CardTests(unittest.TestCase):
                          'Player Seven OVER 4.5 receptions', 'a player prop is named by the player')
         self.assertEqual(pick_card.display_title({'title': 'Iowa at Michigan OVER 38.5', 'marketType': 'total'}, None),
                          'Iowa at Michigan over 38.5', 'a team play says over in lowercase like every other')
+
+    def test_the_number_line_says_what_we_project_in_plain_words(self):
+        total = {'marketType': 'total', 'direction': 'over', 'line': 38.5, 'projection': 47.1}
+        self.assertEqual(pick_card.number_line(total), 'We project 47.1 total points')
+        self.assertEqual(pick_card.number_line({'direction': 'under', 'line': 38.5, 'projection': 31.0}), 'We project 31 total points')
+        prop = {'athleteId': '7', 'market': 'rec', 'direction': 'under', 'line': 5.5, 'projection': 4.6}
+        self.assertEqual(pick_card.number_line(prop), 'We project 4.6 receptions')
+        self.assertEqual(pick_card.number_line(dict(prop, market='recYds', line=49.5, projection=61.2)), 'We project 61.2 receiving yards')
+        side = {'marketType': 'spread', 'direction': 'home', 'line': -10.0, 'projection': -14.2}
+        self.assertEqual(pick_card.number_line(side), 'Our number -14.2 vs the -10', 'a side keeps the comparison')
+        self.assertEqual(pick_card.number_line({'line': 38.5}), '', 'no projection, no line')
 
     def test_long_titles_wrap_to_two_lines_and_only_then_trim(self):
         self.assertEqual(pick_card.title_lines('Courtland Sutton OVER 3.5 receptions'), ['Courtland Sutton', 'OVER 3.5 receptions'])

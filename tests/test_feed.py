@@ -39,7 +39,7 @@ class FeedTests(unittest.TestCase):
         lean = next(i for i in items if i['guid'] == 'lean')
         self.assertTrue(lean['title'].startswith('Team prop: '), lean['title'])
         self.assertIn('#pick/lean', lean['link'])
-        self.assertIn('Our number 48 vs the 44.5', lean['text'])
+        self.assertIn('We project 48 total points', lean['text'])
         early = next(i for i in items if i['guid'] == 'early')
         self.assertEqual(early['pubDate'].isoformat(), '2026-09-29T13:00:00+00:00', 'dated when its window opened, not when it was published')
 

@@ -295,7 +295,7 @@ def reason_in(text):
     """The reason sentence of a drafted play post: the line after its number line, when there is one."""
     lines = str(text or '').split('\n')
     for i, line in enumerate(lines[:-1]):
-        if line.startswith('Our number') and lines[i + 1].strip() and not lines[i + 1].startswith(('@', '#')):
+        if line.startswith(('We project', 'Our number')) and lines[i + 1].strip() and not lines[i + 1].startswith(('@', '#')):
             return lines[i + 1]
     return None
 
@@ -346,7 +346,7 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
         the play
         price at book
 
-        Our number n vs the line
+        We project n (total points, receptions, ...)
         one plain reason from the pick
 
         @Playbook #league
@@ -584,7 +584,7 @@ def main(argv=None):
             card = None
             if args.card:
                 import pick_card
-                card = pick_card.render(pick_card.svg(pick, game), CONF / 'x-drafts' / f"{pick['id']}.png")
+                card = pick_card.render(pick_card.svg(pick, game, art=pick_card.artwork(pick, game)), CONF / 'x-drafts' / f"{pick['id']}.png")
                 print(f'card: {card}')
             if args.command == 'post':
                 if not args.confirm:

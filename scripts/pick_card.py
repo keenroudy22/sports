@@ -258,11 +258,19 @@ def units_label(pick):
 
 
 def number_line(pick):
-    """Our number against the line, the same words on the card and in the post."""
+    """What we project, in plain words, the same on the card and in the post: "We project 47.1 total points" for a
+    game total, "We project 4.6 receptions" for a player. A side keeps "Our number -14 vs the -10"."""
     projection, line = pick.get('projection'), pick.get('line')
-    if isinstance(projection, (int, float)) and isinstance(line, (int, float)):
-        return f"Our number {pricing.fmt(float(projection))} vs the {pricing.fmt(float(line))}"
-    return ''
+    if not isinstance(projection, (int, float)) or not isinstance(line, (int, float)):
+        return ''
+    value = pricing.fmt(float(projection))
+    if pick.get('athleteId') or pick.get('market'):
+        words = pricing.WORDS.get(pricing.market_of(pick))
+        if words:
+            return f"We project {value} {words}"
+    elif pick.get('marketType') == 'total' or str(pick.get('direction') or '').lower() in ('over', 'under'):
+        return f"We project {value} total points"
+    return f"Our number {value} vs the {pricing.fmt(float(line))}"
 
 
 KINDS = {'player': 'PLAYER PROP', 'team': 'TEAM PROP', 'parlay': 'FUN PARLAY'}
