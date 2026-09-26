@@ -651,6 +651,11 @@ def build(now=None):
 FAVORITES_BEFORE_FLAG = {'w1-loveland-rec', 'w1-mayfield-pass', 'w1-otton-rec', 'w1-pollard-carries', 'w1-bateman-rec'}
 
 
+def first_of(pick, recent, field):
+    """A published field as first published; only when the first publication left it empty, a later report's."""
+    return pick.get(field) if pick.get(field) is not None else recent.get(field)
+
+
 def board_picks(first, latest, by_id, identities):
     """The board's pick rows (first publication plus latest settlement), newest first.
 
@@ -679,12 +684,16 @@ def board_picks(first, latest, by_id, identities):
                      # A Pick of the Day pulled before its post went out never wears the star.
                      'featured': key in named and (key in went_out or not (recent.get('entryNote') or pick.get('entryNote'))),
                      'posted': key in went_out,
-                     'market': pick.get('market') or (pricing.market_of(pick) if pick.get('athleteId') else None),
+                     'market': pick.get('market') or recent.get('market') or (pricing.market_of(pick) if pick.get('athleteId') else None),
                      'riskUnits': pick.get('riskUnits'), 'modelLean': pick.get('modelLean') is True,
                      'earlyExit': recent.get('earlyExit') is True,
                      'player': pick.get('player'), 'athleteId': pick.get('athleteId'), 'position': pick.get('position'),
-                     'gameId': (pick.get('gameIds') or [None])[0], 'line': pick.get('line'),
-                     'direction': pick.get('direction'), 'book': pick.get('book'), 'odds': pick.get('odds'),
+                     # The first publication's line and price; a play imported without them takes the ones a later
+                     # report filled in (the Week 1 prices, marked assumed), never a change to one that had them.
+                     'gameId': (pick.get('gameIds') or [None])[0], 'line': first_of(pick, recent, 'line'),
+                     'direction': first_of(pick, recent, 'direction'), 'book': pick.get('book'), 'odds': first_of(pick, recent, 'odds'),
+                     'priceAssumed': pick.get('odds') is None and recent.get('priceAssumed') is True,
+                     'priceNote': recent.get('priceNote') if pick.get('odds') is None else None,
                      'projection': pick.get('projection'), 'confidence': pick.get('confidence'),
                      'favorite': pick.get('favorite') is True or key in FAVORITES_BEFORE_FLAG,
                      'marketType': pick.get('marketType'), 'parlayType': pick.get('parlayType'),

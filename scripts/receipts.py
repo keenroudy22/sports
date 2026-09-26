@@ -44,10 +44,14 @@ def served(log_book):
     return out
 
 
-def counted(first):
-    """Ids of every play in the record: everything published, apart from the legs imported without a price. The
-    site's record (site/core.js theRecord) counts the same plays."""
-    return {key for key, pick in first.items() if not (pick.get('historicalImport') and pick.get('odds') is None)}
+def counted(first, latest=None):
+    """Ids of every play in the record: everything published, apart from plays imported without a price that no later
+    report priced (the Week 1 lines got an assumed price on 2026-09-26). The site's record (site/core.js theRecord)
+    counts the same plays."""
+    latest = latest or {}
+    def priced(key, pick):
+        return pick.get('odds') is not None or (latest.get(key) or {}).get('odds') is not None
+    return {key for key, pick in first.items() if not pick.get('historicalImport') or priced(key, pick)}
 
 
 def game_day(pick, games):
@@ -159,7 +163,7 @@ def week_receipt(wednesday, first, latest, games, ids):
 def ready(first, latest, games, log_book, now):
     """The receipts that can go out now: yesterday's (or the day before's, if it settled late) and, on Wednesday,
     the week's. Each only when every play it covers is settled, and none after its evening."""
-    ids = counted(first)
+    ids = counted(first, latest)
     if not ids:
         return []
     today = eastern_date(now)
@@ -239,7 +243,7 @@ def book(first, latest, games, log_book, now):
             continue
         if eastern_date(gates.when(entry['dueAt'])) == today:
             return None                    # the day already has a post
-    rows = [r for r in plays_between(first, latest, games, counted(first), datetime(2000, 1, 1).date(), today - timedelta(days=1))
+    rows = [r for r in plays_between(first, latest, games, counted(first, latest), datetime(2000, 1, 1).date(), today - timedelta(days=1))
             if r.get('result') in MARKS]
     if not rows:
         return None

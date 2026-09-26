@@ -58,6 +58,8 @@ class ReceiptTests(unittest.TestCase):
         self.assertIn('NFL-2026-W4-quiet', ids, 'pulled before its post went out: still in the record, graded as posted')
         self.assertNotIn('NFL-2026-W1-leg', ids, 'the Week 1 legs imported without a price are kept apart')
         self.assertIn('NFL-2026-W1-priced', ids)
+        self.assertIn('NFL-2026-W1-leg', receipts.counted(first, {'NFL-2026-W1-leg': {'odds': -115, 'priceAssumed': True}}),
+                      'a Week 1 line a later report priced (assumed -115) counts')
 
     def test_a_receipt_names_the_play_as_its_post_did(self):
         game = {'id': 'g', 'league': 'CFB', 'kickoff': '2026-09-26T22:30Z',

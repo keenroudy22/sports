@@ -135,7 +135,8 @@
     const u = rec.season.units;
     if (u == null) return '';
     const unpriced = rec.season.unpriced ? ` ${rec.season.unpriced} without a recorded price left out.` : '';
-    return `<p class="money-line">Units: <b class="num ${unitTone(u)}">${unitText(u)}</b> <span class="faint">every play at one unit, at the price we published.${esc(unpriced)}</span></p>`;
+    const assumed = rec.assumed ? ` The ${rec.assumed} Week 1 plays had no recorded price, so they count at an assumed -115.` : '';
+    return `<p class="money-line">Units: <b class="num ${unitTone(u)}">${unitText(u)}</b> <span class="faint">every play at one unit, at the price we published.${esc(unpriced)}${esc(assumed)}</span></p>`;
   };
   const sideLines = rec => {
     const lines = [];
@@ -834,7 +835,7 @@
       <span class="row-rail" style="background:${p.result === 'win' ? 'var(--green)' : p.result === 'loss' ? 'var(--rose)' : 'var(--line)'}"></span>
       <span class="row-main"><span class="row-top"><span class="row-name">${MARKS[p.result] ? MARKS[p.result] + ' ' : ''}${esc(p.displayTitle || p.title || p.player)}</span>${p.featured && p.posted ? '<span class="pill pill-ours">Pick of the Day</span>' : ''}${p.earlyExit ? '<span class="pill pill-closed">Early exit credit</span>' : ''}${C.isParlay(p) ? '<span class="pill pill-stale">Fun parlay</span>' : ''}${p.historicalImport ? '<span class="pill pill-reference">Week 1</span>' : ''}</span>
         <span class="row-meta clamp">${esc(whenShort(p.kickoff || p.publishedAt))}${what ? ' · ' + esc(what) : ''}</span></span>
-      <span class="row-price"><span class="row-odds num ${unitTone(u)}">${u == null ? (p.odds == null ? '' : odds(p.odds)) : unitText(u)}</span><span class="row-book">${p.odds == null ? 'no price recorded' : `${esc(p.book || '')} ${odds(p.odds)}`}</span></span>
+      <span class="row-price"><span class="row-odds num ${unitTone(u)}">${u == null ? (p.odds == null ? '' : odds(p.odds)) : unitText(u)}</span><span class="row-book">${p.odds == null ? 'no price recorded' : p.priceAssumed ? `${odds(p.odds)} assumed` : `${esc(p.book || '')} ${odds(p.odds)}`}</span></span>
     </button>`;
   };
   /* Settled plays by week, newest first: this week open, the rest folded with their record, so the list never sprawls. */
@@ -1006,6 +1007,7 @@
     dialog.innerHTML = `<div class="detail-inner"><div class="detail-head"><div><div class="row-top">${p.result ? `<span class="pill pill-${p.result === 'win' ? 'win' : p.result === 'loss' ? 'loss' : 'closed'}">${esc(p.result)}</span>` : '<span class="pill pill-ours">Our pick</span>'}</div>
       <h3 style="margin:7px 0 0;font-size:17px">${esc(p.title)}</h3><p class="row-meta" style="margin:4px 0 0">${esc(when(p.kickoff || p.publishedAt))}</p></div><button class="close" type="button" data-close aria-label="Close">×</button></div>
       <div class="detail-body"><div class="kv"><div><span>Price</span><strong>${esc(p.book || 'No book')} ${odds(p.odds)}</strong></div><div><span>We project</span><strong>${p.projection ?? DASH}</strong></div><div><span>Quoted</span><strong style="font-size:12px">${esc(ago(p.quotedAt))}</strong></div></div>
+      ${p.priceAssumed ? `<div class="notice" style="margin-top:12px"><strong>Price assumed.</strong> ${esc(p.priceNote || 'No price was recorded for this play, so it counts at an assumed -115.')}</div>` : ''}
       ${closed ? `<div class="notice" style="margin-top:12px"><strong>Closed to new entries.</strong> ${esc(prose(p.entryNote) || (p.status === 'withdrawn' ? 'Withdrawn before kickoff.' : started ? 'The game has started.' : 'The quote has expired.'))} The original is still graded at its published price.</div>` : ''}
       ${clv && clv.clv != null ? `<div class="notice" style="margin-top:12px"><strong>Closing line value ${signed(clv.clv)}.</strong> We posted ${clv.postedLine ?? DASH} and the last number before kickoff was ${clv.closeLine ?? DASH}. ${clv.clv > 0 ? 'We got the better number, which is the part we control.' : clv.clv < 0 ? 'The market moved to a better number after we posted.' : 'We matched the close.'}</div>` : ''}
       ${(p.legs || []).length ? `<h4>Legs</h4><ul style="margin:0;padding-left:18px">${p.legs.map(l => `<li>${esc(leg(l))}</li>`).join('')}</ul>` : ''}${p.correlation ? `<h4>How the legs relate</h4><p>${esc(prose(p.correlation))}</p>` : ''}

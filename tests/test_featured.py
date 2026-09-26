@@ -148,6 +148,12 @@ class PostTests(unittest.TestCase):
             with mock.patch.object(featured, 'PATH', path), mock.patch.object(receipts, 'served', return_value={'b'}):
                 rows = build_site.board_picks({'a': play('a', 'g1'), 'b': play('b', 'g2')}, {'a': pulled, 'b': {'result': 'win'}}, {}, {})
         got = {r['id']: (r['featured'], r['posted']) for r in rows}
+        imported = {'id': 'w1', 'title': 'Player OVER 50.5 receiving yards', 'status': 'historical', 'historicalImport': True, 'gameIds': ['g1']}
+        backfill = {'odds': -115, 'line': 50.5, 'direction': 'over', 'priceAssumed': True, 'priceNote': 'assumed', 'result': 'win'}
+        [row] = build_site.board_picks({'w1': imported}, {'w1': backfill}, {}, {})
+        self.assertEqual((row['odds'], row['line'], row['direction'], row['priceAssumed']), (-115, 50.5, 'over', True))
+        [kept] = build_site.board_picks({'a': play('a', 'g1')}, {'a': dict(backfill, odds=-150)}, {}, {})
+        self.assertEqual((kept['odds'], kept['priceAssumed']), (-105, False), 'a published price is never replaced')
         self.assertEqual(got, {'a': (False, False), 'b': (True, True)}, 'pulled before it posted: no star; posted: starred and counted')
 
 

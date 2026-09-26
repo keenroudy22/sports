@@ -205,7 +205,12 @@ cards show the price and the book only.
 
 **One record** (owner, 2026-09-25: "the record is confusing as hell"): every play the desk publishes counts, the
 same on the site and on X, whether or not its post went out (a play pulled before its post stays in the record,
-graded as posted); the Week 1 legs imported without prices are listed apart and never counted. The record is the
+graded as posted). The 26 Week 1 player lines imported from a screenshot had no recorded price; at the owner's
+request (2026-09-26) a correction report (`research/2026-09-26-NFL-week-1-prices.json`) gives each an assumed -115,
+the usual main-line prop price and the one Week 1 price that was recorded, with the line and side from its title.
+They count in the record (23-22, -0.44u that day, audited two ways: straight from the reports and through
+site/core.js), and the site marks each price "assumed" (`priceAssumed`, `priceNote`); a published price is never
+replaced (`build_site.first_of`). The record is the
 straight plays' wins and losses; units show on the site only (the owner prefers units to dollars there, 2026-09-26),
 one unit a play at the line and price it was published at. Each play's units are written into its settlement when it
 is graded (`run.lock_units`, the `units` field) and the site sums the saved figure, so a graded play's units never

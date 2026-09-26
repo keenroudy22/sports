@@ -363,6 +363,8 @@
       potd: summarizePicks(straight.filter(p => p.featured && p.posted), 10),
       parlays: summarizePicks(counted.filter(isParlay), 10),
       imported: imported.length ? summarizePicks(imported, 10) : null,
+      /* Graded plays whose price was never recorded and is assumed (the Week 1 lines, at -115): the site says so. */
+      assumed: straight.filter(p => p.priceAssumed && ['win', 'loss', 'push'].includes(p.result)).length,
     };
   };
   /* Football weeks run Thursday to Monday, so a week starts on Tuesday, Eastern. */

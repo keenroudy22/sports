@@ -300,6 +300,9 @@ test('one record: the straight plays in wins and losses and units, the side reco
   assert.deepEqual([r.potd.wins, r.potd.losses], [1, 0], 'the Pick of the Day counts the days its post went out');
   assert.deepEqual([r.parlays.wins, r.parlays.losses], [0, 1], 'fun parlays on their own line');
   assert.equal(r.imported.wins, 1, 'the Week 1 legs listed apart');
+  const priced = C.theRecord([...picks, { id: 'w1b', historicalImport: true, result: 'win', odds: -115, priceAssumed: true, kickoff: '2026-09-07T17:00:00Z' }], now);
+  assert.equal(priced.season.wins, 3, 'a Week 1 line priced later counts in the record');
+  assert.equal(priced.assumed, 1, 'and the record says its price is assumed');
   assert.equal(C.dayOf('2026-09-26T02:30:00Z'), '2026-09-25', 'a late Friday kickoff is Friday in the East');
   assert.equal(C.unitsFor({ result: 'win', odds: -110, units: 0.91 }), 0.91, 'units saved with the result stand as written');
   assert.equal(C.unitsFor({ result: 'win', odds: -110 }), 100 / 110, 'an older play is summed the same way');
