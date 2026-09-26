@@ -1,48 +1,48 @@
 {
- "at": "2026-09-26T19:17:07Z",
+ "at": "2026-09-26T19:21:21Z",
  "confirmed": {
   "CFB-401856696": "2026-09-26T19:08:06Z",
-  "CFB-401856698": "2026-09-26T19:08:06Z",
+  "CFB-401856698": "2026-09-26T19:21:21Z",
   "CFB-401856699": "2026-09-26T19:17:07Z",
   "CFB-401856700": "2026-09-26T19:17:07Z",
   "CFB-401856702": "2026-09-26T19:08:06Z",
   "CFB-401856804": "2026-09-26T19:08:06Z",
-  "CFB-401856806": "2026-09-26T19:08:06Z",
+  "CFB-401856806": "2026-09-26T19:21:21Z",
   "CFB-401856814": "2026-09-26T19:08:06Z",
   "CFB-401856816": "2026-09-26T19:17:07Z",
   "CFB-401856881": "2026-09-26T19:08:06Z",
   "CFB-401858238": "2026-09-26T19:08:06Z",
   "CFB-401858239": "2026-09-26T19:08:06Z",
   "CFB-401858463": "2026-09-26T19:17:07Z",
-  "CFB-401858464": "2026-09-26T19:08:06Z",
+  "CFB-401858464": "2026-09-26T19:21:21Z",
   "CFB-401858466": "2026-09-26T19:08:06Z",
-  "CFB-401860897": "2026-09-26T19:08:06Z"
+  "CFB-401860897": "2026-09-26T19:21:21Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1232,
-    "fanduel": 916
+    "draftkings": 990,
+    "fanduel": 521
    },
-   "eventsListed": 46,
-   "eventsMatched": 45,
+   "eventsListed": 42,
+   "eventsMatched": 40,
    "games": 47,
    "marketTypes": {
-    "player_longest_passing_completion": 7,
-    "player_longest_reception": 35,
-    "player_longest_rush": 18,
-    "player_passing_+_rushing_yards": 148,
-    "player_passing_attempts": 53,
-    "player_passing_completions": 47,
-    "player_passing_touchdowns": 57,
-    "player_passing_yards": 251,
-    "player_receiving_yards": 749,
-    "player_receptions": 163,
-    "player_rushing_attempts": 68,
-    "player_rushing_yards": 552
+    "player_longest_passing_completion": 8,
+    "player_longest_reception": 31,
+    "player_longest_rush": 17,
+    "player_passing_+_rushing_yards": 113,
+    "player_passing_attempts": 47,
+    "player_passing_completions": 38,
+    "player_passing_touchdowns": 53,
+    "player_passing_yards": 238,
+    "player_receiving_yards": 562,
+    "player_receptions": 26,
+    "player_rushing_attempts": 30,
+    "player_rushing_yards": 348
    },
    "requestsLeft": 0,
-   "rows": 2148,
+   "rows": 1511,
    "slateGames": [
     "Ole Miss Rebels at Florida Gators 2026-09-26T19:30Z",
     "Oklahoma Sooners at Georgia Bulldogs 2026-09-26T19:30Z",
@@ -108,7 +108,7 @@
       "bwin": "6:45026",
       "draftkings": "34674789",
       "fanduel": "36073979",
-      "gemini": "NCAAF-2609262330-APP-NCS-M",
+      "gemini": "NCAAF-2609262330-APP-NCS-T",
       "goldrush": "30982738",
       "hardrock": "8955416605538517418",
       "ladbrokes": "f987326b-fa69-4071-8672-7f7f399ff2ce",
@@ -190,6 +190,29 @@
       ]
      },
      "start": "2026-09-26T23:30:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Texas Longhorns",
+     "external": {
+      "fanduel": "36073928",
+      "onexbet": "756307477",
+      "saba": "134739854"
+     },
+     "home": "Tennessee Volunteers",
+     "sample": {
+      "away_team": "Texas Longhorns",
+      "home_team": "Tennessee Volunteers",
+      "markets": [
+       "1st_half_moneyline",
+       "1st_half_point_spread",
+       "1st_half_total_points",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-09-26T15:45:00Z",
      "type": "fixture"
     }
    ]
