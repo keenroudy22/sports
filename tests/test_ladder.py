@@ -103,6 +103,12 @@ class LegTests(unittest.TestCase):
         listed = ctx(injuries={'NFL-g1h': {'g1p': {'status': 'Questionable'}}})
         self.assertEqual(ladder.legs_for_game(GAMES['g1'], record('g1'), listed, NOW), [])
         self.assertEqual(ladder.legs_for_game(GAMES['g1'], record('g1', retrieved='2026-09-26T20:00:00Z'), ctx(), NOW), [])
+        confirmed = ladder.legs_for_game(GAMES['g1'], record('g1', retrieved='2026-09-26T20:00:00Z'), ctx(), NOW,
+                                         {'g1': '2026-09-27T12:05:00Z'})
+        self.assertEqual([l['observedAt'] for l in confirmed], ['2026-09-27T12:05:00Z'],
+                         'unchanged since last night but read again this morning: the prices are this morning\'s')
+        self.assertEqual(ladder.legs_for_game(GAMES['g1'], record('g1', retrieved='2026-09-26T20:00:00Z'), ctx(), NOW,
+                                              {'g1': '2026-09-27T13:05:00Z'}), [], 'a reading after now does not count')
         self.assertEqual(ladder.legs_for_game(GAMES['g1'], record('g1', price=-150), ctx(), NOW), [],
                          '91% against 60% is a gap no book leaves on an easy line: a data or role problem')
 

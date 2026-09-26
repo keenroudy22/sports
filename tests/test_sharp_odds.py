@@ -162,6 +162,7 @@ class QuoteTests(unittest.TestCase):
             self.assertIn(('/odds', 'ev1', None), calls, 'props are requested one game at a time by event id')
             status = json.loads((root / 'sharp-status.json').read_text(encoding='utf-8'))
             self.assertEqual(status['leagues']['NFL']['eventsMatched'], 1)
+            self.assertEqual(status['confirmed'], {'NFL-1': sharp_odds.boxscores.stamp(NOW)}, 'when the game\'s numbers were last read')
             self.assertNotIn('secret', json.dumps(status))
             stored = [json.loads(l) for l in (root / 'nfl-2026.jsonl').read_text(encoding='utf-8').splitlines()]
             books = stored[-1]['books']

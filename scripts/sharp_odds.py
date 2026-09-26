@@ -331,7 +331,15 @@ def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=prin
             latest[line['gameId']] = line
     written = 0
     budget = [RUN_REQUESTS]
-    status = {'at': boxscores.stamp(now), 'leagues': {}}
+    # When each game's numbers were last read, changed or not: the store only grows when a number moves, so an
+    # unchanged game's last record can be hours older than the prices it still holds (scripts/ladder.py reads this).
+    try:
+        confirmed = json.loads((root / 'sharp-status.json').read_text(encoding='utf-8')).get('confirmed') or {}
+    except (OSError, ValueError):
+        confirmed = {}
+    kickoffs = {g['id']: g['kickoff'] for g in slate.get('games', [])}
+    confirmed = {gid: at for gid, at in confirmed.items() if gid in kickoffs and now < features.when(kickoffs[gid])}
+    status = {'at': boxscores.stamp(now), 'leagues': {}, 'confirmed': confirmed}
     # The run's requests are few (RUN_REQUESTS): the league and the games that kick off soonest go first, so a
     # college Saturday is priced before Sunday's NFL slate and a Sunday before Monday.
     soonest = lambda league: min((g['kickoff'] for g in games if g['league'] == league), default='9999')
@@ -377,6 +385,7 @@ def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=prin
             fresh_books = by_game.get(game['id'])
             if not fresh_books:
                 continue
+            confirmed[game['id']] = boxscores.stamp(now)
             previous = latest.get(game['id'])
             books = merge(previous, fresh_books, now)
             if previous and previous.get('books') == books:

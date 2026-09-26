@@ -252,8 +252,9 @@ one book (DraftKings or FanDuel), priced -130 to +130 together, built from easie
 rushing yards") in SharpAPI's alternates (`data/prop-odds`, no credits, both leagues): only rungs of the main line's
 own ladder (`sharp_odds.consistent`), priced -350 to -150, our projection clearing the line 80% or more and 8 to 18
 points above the price's own chance (a bigger gap on an easy line is a data or role problem, not a gift), the book's
-main line within 0.6 to 1.6 times our projection, a settled role, nobody on the injury report, a capture younger
-than twelve hours, games 90 minutes or more from kickoff; the pair with the best joint chance on our numbers wins.
+main line within 0.6 to 1.6 times our projection, a settled role, nobody on the injury report, prices read within
+twelve hours (the feed stamps each game when it reads it, `confirmed` in `data/prop-odds/sharp-status.json`, since the
+store only grows when a number moves), games 90 minutes or more from kickoff; the pair with the best joint chance on our numbers wins.
 A win rolls the payout (whole dollars) into the next step, a miss starts a new climb at $50, $1,000 finishes the
 climb. The state is never stored: `ladder.state` (and `site/core.js theLadder`) read it from the rungs and their
 results, so it cannot drift; a rung pulled before its post never counts. One rung open at a time, one played a day

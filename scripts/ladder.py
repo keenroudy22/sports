@@ -22,6 +22,7 @@ only from a capture younger than FRESH. The ladder is kept apart from the record
   python scripts/ladder.py [--now ISO]      where the ladder stands, and the rung the desk would build now
 """
 import argparse
+import json
 import sys
 from datetime import datetime, timedelta, timezone
 from itertools import combinations
@@ -106,10 +107,24 @@ def todays_games(games, now, league, exclude=()):
             and eastern_date(gates.when(g['kickoff'])) == day and gates.when(g['kickoff']) > now + LEAD]
 
 
-def legs_for_game(game, record, ctx, now):
-    """Every easier line in this game our projection clears comfortably, at a price worth a rung, from each book."""
+def confirmed_at(root=None):
+    """gameId -> when the prop feed last read the game's numbers, changed or not (data/prop-odds/sharp-status.json)."""
+    path = Path(root or Path(__file__).resolve().parents[1]) / 'data' / 'prop-odds' / 'sharp-status.json'
+    try:
+        return json.loads(path.read_text(encoding='utf-8')).get('confirmed') or {}
+    except (OSError, ValueError):
+        return {}
+
+
+def legs_for_game(game, record, ctx, now, confirmed=None):
+    """Every easier line in this game our projection clears comfortably, at a price worth a rung, from each book. The
+    prices are as of the last time the feed read them (`confirmed`), or when they were stored."""
     snapshot = ctx.snapshot(game['id'])
-    if not snapshot or not record or now - gates.when(record['retrievedAt']) > FRESH:
+    if not snapshot or not record:
+        return []
+    seen = max([record['retrievedAt']] + [at for at in [(confirmed or {}).get(game['id'])] if at and gates.when(at) <= now],
+               key=gates.when)
+    if now - gates.when(seen) > FRESH:
         return []
     ids = [p['id'] for side in ('home', 'away') for p in ((snapshot.get('players') or {}).get(side) or {}).get('players', [])]
     by_name = {easy_parlay.name_key(ctx.names.get(str(i))): str(i) for i in ids if ctx.names.get(str(i))}
@@ -153,7 +168,7 @@ def legs_for_game(game, record, ctx, now):
                                 'gameId': game['id'], 'athleteId': athlete, 'player': shown, 'market': stat, 'direction': 'over',
                                 'line': float(point), 'book': BOOKS[book_key], 'odds': price, 'chance': round(over, 3),
                                 'implied': round(implied, 3), 'projection': round(mean, 1), 'kickoff': game['kickoff'],
-                                'observedAt': record['retrievedAt'], 'marketWindow': 'Full game'})
+                                'observedAt': seen, 'marketWindow': 'Full game'})
     return out
 
 
@@ -193,7 +208,8 @@ def candidate(ctx, games, now, exclude=()):
         if len(today) < 2:
             reasons.append(f'{league}: {len(today)} games left today')
             continue
-        legs = [leg for g in today for leg in legs_for_game(g, ctx.prop_odds.get(g['id']), ctx, now)]
+        seen = confirmed_at()
+        legs = [leg for g in today for leg in legs_for_game(g, ctx.prop_odds.get(g['id']), ctx, now, seen)]
         ticket, reason = build(legs)
         if not ticket:
             reasons.append(f'{league}: {reason}')
