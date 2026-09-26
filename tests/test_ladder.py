@@ -137,6 +137,16 @@ class BuildTests(unittest.TestCase):
         self.assertIn('still open', why)
         self.assertIn('0 games left today', ladder.candidate(ctx(), {'late': GAMES['late']}, NOW)[1])
 
+    def test_college_legs_wait_for_college_calibration(self):
+        college = {gid: dict(g, league='CFB') for gid, g in GAMES.items()}
+        none, why = ladder.candidate(ctx(), college, NOW)
+        self.assertIsNone(none)
+        self.assertIn('CFB: player numbers wait for their own calibration', why)
+        calibrated = ctx()
+        calibrated.policy = {'calibration': {'CFB/prop': {'k': 0.4, 'n': 320}}}
+        pick, _ = ladder.candidate(calibrated, college, NOW)
+        self.assertEqual(pick['id'][:4], 'CFB-')
+
 
 class GateTests(unittest.TestCase):
     def test_one_rung_open_at_a_time_and_one_played_a_day(self):

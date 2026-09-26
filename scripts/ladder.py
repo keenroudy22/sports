@@ -16,8 +16,8 @@ closed before its post went out never counts, and the day may try again. A rung 
 person (run.settle reports it), and the ladder waits for that.
 
 Prices: SharpAPI's DraftKings and FanDuel alternate player lines in data/prop-odds (scripts/sharp_odds.py), no
-credits, both leagues: pregame college player props are legal in Indiana (gates.INDIANA_BOOKS). A rung is built
-only from a capture younger than FRESH. The ladder is kept apart from the record, in dollars, on the site and on X.
+credits. NFL legs now; college legs (legal pregame in Indiana, gates.INDIANA_BOOKS) once learning has calibrated
+college player numbers, as for college props. A rung is built only from prices read within FRESH. The ladder is kept apart from the record, in dollars, on the site and on X.
 
   python scripts/ladder.py [--now ISO]      where the ladder stands, and the rung the desk would build now
 """
@@ -204,6 +204,11 @@ def candidate(ctx, games, now, exclude=()):
         return None, f"{where['open']['id']} is still open; the next rung waits for its result"
     reasons = []
     for league in ('NFL', 'CFB'):
+        # College legs wait for the same thing college props do: player numbers calibrated against that league's lines
+        # (and college has no injury feed to catch a benched player).
+        if league in gates.OWN_CALIBRATION and not ((getattr(ctx, 'policy', None) or {}).get('calibration') or {}).get(f'{league}/prop'):
+            reasons.append(f'{league}: player numbers wait for their own calibration')
+            continue
         today = todays_games(games, now, league, exclude)
         if len(today) < 2:
             reasons.append(f'{league}: {len(today)} games left today')

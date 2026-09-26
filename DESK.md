@@ -258,7 +258,8 @@ store only grows when a number moves), games 90 minutes or more from kickoff; th
 A win rolls the payout (whole dollars) into the next step, a miss starts a new climb at $50, $1,000 finishes the
 climb. The state is never stored: `ladder.state` (and `site/core.js theLadder`) read it from the rungs and their
 results, so it cannot drift; a rung pulled before its post never counts. One rung open at a time, one played a day
-(`gates.ladder_one_rung`); the run tries NFL games first, then college, from the 6:45 AM run on. Kept apart from the
+(`gates.ladder_one_rung`); NFL legs only until learning calibrates college player numbers (college has no injury
+feed either), then college too, from the 6:45 AM run on. Kept apart from the
 record in dollars: the site has a ladder card on Today and Record, receipts list a rung as "Ladder step 2: $96 to
 $187", and the posts lead "🪜 KOOK’N LADDER · STEP 2" with "$96 → $187 · +95 at FanDuel", on a card in the
 kitchen's own colours with the climb as a bar. Never called value: the book's price carries the safety, our number
