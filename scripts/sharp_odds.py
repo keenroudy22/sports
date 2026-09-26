@@ -319,7 +319,7 @@ def merge(previous, fresh_books, now):
     return books
 
 
-def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=print, probe=False):
+def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=print, probe=False, requests=RUN_REQUESTS):
     games = [g for g in slate.get('games', []) if g.get('league') in LEAGUES and g.get('state') == 'pre'
              and now < features.when(g['kickoff']) <= now + WINDOW]
     if not games:
@@ -330,7 +330,7 @@ def capture(slate, now, key, fetch=fetch, sleep=time.sleep, root=STORE, log=prin
         for line in boxscores.read_store(path):
             latest[line['gameId']] = line
     written = 0
-    budget = [RUN_REQUESTS]
+    budget = [requests]
     # When each game's numbers were last read, changed or not: the store only grows when a number moves, so an
     # unchanged game's last record can be hours older than the prices it still holds (scripts/ladder.py reads this).
     try:
@@ -417,7 +417,9 @@ def main():
         sys.exit('Refusing to append to a prop-price store whose recorded lines changed:\n  ' + '\n  '.join(problems))
     STORE.mkdir(parents=True, exist_ok=True)
     slate = json.loads((ROOT / 'site' / 'data' / 'slate.json').read_text(encoding='utf-8'))
-    written = capture(slate, datetime.now(timezone.utc), key, probe=args.probe)
+    # A deploy the desk is waiting on (a push) reads a few games; the hourly builds read the full budget.
+    requests = int(os.environ.get('SHARP_REQUESTS') or RUN_REQUESTS)
+    written = capture(slate, datetime.now(timezone.utc), key, probe=args.probe, requests=requests)
     if not args.probe:
         boxscores.write_json(STORE / 'ledger.json', boxscores.ledger(STORE))
         print(f'sharp: {written} records appended')

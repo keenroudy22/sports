@@ -281,7 +281,9 @@ unless filtered; on 2026-09-26 one page of 200 held none of Sunday's NFL games a
 were never priced. It now asks for upcoming events at DraftKings and FanDuel only (33 NFL, 58 college), and a college
 team is found by its school as well as its full name (the feed writes "Oklahoma", the slate "Oklahoma Sooners"; a
 short alias list covers "Connecticut", "Miami Ohio" and the like), which took college matches from 4 of 49 to all of
-them. Combined and
+them. Reading every game takes the full sixty requests (about five and a half minutes), so a build started by a push,
+usually the desk waiting for its cards, reads fifteen (`SHARP_REQUESTS` in the workflow) and the scheduled builds read
+the rest. Combined and
 longest-play markets are no longer read as the plain stat ("passing + rushing yards" was being filed as passing
 yards), and a book's alternates keep only the main line's own ladder: DraftKings filed first-half and other period
 ladders under the full-game market (Mahomes 14.5 to 49.5 passing yards beside a 222.5 main line).
