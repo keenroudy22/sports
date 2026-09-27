@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-27T01:33:59Z",
+  "updatedAt": "2026-09-27T03:32:14Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-27T01:03Z",
+              "reportedAt": "2026-09-27T03:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2537,6 +2537,15 @@
           "name": "Green Bay Packers",
           "players": [
             {
+              "id": "3054212",
+              "name": "Jonnu Smith",
+              "position": "TE",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-27T01:43Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3054212/jonnu-smith"
+            },
+            {
               "id": "4635009",
               "name": "J. Michael Sturdivant",
               "position": "WR",
@@ -2751,15 +2760,6 @@
               "injury": null,
               "reportedAt": "2026-09-23T20:05Z",
               "source": "https://www.espn.com/nfl/player/_/id/5076652/brandon-cisse"
-            },
-            {
-              "id": "3054212",
-              "name": "Jonnu Smith",
-              "position": "TE",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-23T00:41Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3054212/jonnu-smith"
             }
           ]
         },
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "10",
-          "name": "Daniel Bellinger",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-09-25T21:35:53Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4361516/daniel-bellinger"
-        },
-        {
-          "teamId": "10",
           "name": "Solomon Thomas",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Injured Reserve",
           "observedAt": "2026-09-26T21:40:23Z",
           "source": "https://www.espn.com/nfl/player/_/id/3043116/demarcus-robinson"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-09-27T03:32:14Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-27T01:33:59Z",
-      "lastAttemptAt": "2026-09-27T01:33:59Z",
+      "checkedAt": "2026-09-27T03:32:14Z",
+      "lastAttemptAt": "2026-09-27T03:32:14Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-27T01:33:59Z",
-      "lastAttemptAt": "2026-09-27T01:33:59Z",
+      "checkedAt": "2026-09-27T03:32:14Z",
+      "lastAttemptAt": "2026-09-27T03:32:14Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-27T01:33:52Z",
+  "updatedAt": "2026-09-27T03:32:01Z",
   "sources": [
     {
       "league": "NFL",
@@ -7,7 +7,7 @@
       "dateWindowUrls": [
         "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=3&limit=1000"
       ],
-      "retrievedAt": "2026-09-27T01:33:52Z",
+      "retrievedAt": "2026-09-27T03:32:01Z",
       "trainingCoverage": "season feed",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -29,7 +29,7 @@
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2026&seasontype=2&week=4&limit=1000&groups=37",
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2026&seasontype=2&week=4&limit=1000&groups=151"
       ],
-      "retrievedAt": "2026-09-27T01:33:52Z",
+      "retrievedAt": "2026-09-27T03:32:01Z",
       "trainingCoverage": "limited weekly provider sample",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -75548,9 +75548,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "In Progress",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401869961",
@@ -75570,7 +75570,7 @@
         "short": "James Madison",
         "abbreviation": "JMU",
         "school": "James Madison",
-        "score": 45,
+        "score": 46,
         "color": "#450084",
         "alternateColor": "#cbb677"
       },
@@ -76630,9 +76630,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "In Progress",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401860892",
@@ -76642,7 +76642,7 @@
         "short": "Texas St",
         "abbreviation": "TXST",
         "school": "Texas State",
-        "score": 56,
+        "score": 63,
         "color": "#501214",
         "alternateColor": "#6a5638"
       },
@@ -77670,9 +77670,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "In Progress",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401862780",
@@ -77692,7 +77692,7 @@
         "short": "Louisiana",
         "abbreviation": "UL",
         "school": "Louisiana",
-        "score": 27,
+        "score": 34,
         "color": "#ce181e",
         "alternateColor": "#000000"
       },
@@ -78211,9 +78211,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "In Progress",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401858238",
@@ -78752,9 +78752,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "In Progress",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401856881",
@@ -78774,7 +78774,7 @@
         "short": "Oklahoma St",
         "abbreviation": "OKST",
         "school": "Oklahoma State",
-        "score": 28,
+        "score": 41,
         "color": "#fe5c00",
         "alternateColor": "#000000"
       },
@@ -79293,9 +79293,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "In Progress",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401862784",
@@ -79305,7 +79305,7 @@
         "short": "Tulane",
         "abbreviation": "TULN",
         "school": "Tulane",
-        "score": 14,
+        "score": 24,
         "color": "#006747",
         "alternateColor": "#418fde"
       },
@@ -79834,9 +79834,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "In Progress",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401856814",
@@ -79846,7 +79846,7 @@
         "short": "Cincinnati",
         "abbreviation": "CIN",
         "school": "Cincinnati",
-        "score": 24,
+        "score": 31,
         "color": "#000000",
         "alternateColor": "#e00122"
       },
@@ -79856,7 +79856,7 @@
         "short": "Kansas St",
         "abbreviation": "KSU",
         "school": "Kansas State",
-        "score": 17,
+        "score": 26,
         "color": "#330a57",
         "alternateColor": "#e2e3e4"
       },
@@ -80375,9 +80375,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "In Progress",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401869931",
@@ -80916,9 +80916,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "In Progress",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401870745",
@@ -80928,7 +80928,7 @@
         "short": "Western KY",
         "abbreviation": "WKU",
         "school": "Western Kentucky",
-        "score": 45,
+        "score": 52,
         "color": "#e13a3e",
         "alternateColor": "#ffffff"
       },
@@ -81416,9 +81416,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "In Progress",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401871048",
@@ -81428,7 +81428,7 @@
         "short": "Jax State",
         "abbreviation": "JXST",
         "school": "Jacksonville State",
-        "score": 20,
+        "score": 23,
         "color": "#cc0000",
         "alternateColor": "#000000"
       },
@@ -81957,9 +81957,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "In Progress",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401856696",
@@ -81969,7 +81969,7 @@
         "short": "Alabama",
         "abbreviation": "ALA",
         "school": "Alabama",
-        "score": 35,
+        "score": 49,
         "color": "#9e1b32",
         "alternateColor": "#ffffff"
       },
@@ -81979,7 +81979,7 @@
         "short": "South Carolina",
         "abbreviation": "SC",
         "school": "South Carolina",
-        "score": 10,
+        "score": 18,
         "color": "#73000a",
         "alternateColor": "#000000"
       },
@@ -82498,9 +82498,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "Halftime",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401858469",
@@ -82510,7 +82510,7 @@
         "short": "USC",
         "abbreviation": "USC",
         "school": "USC",
-        "score": 10,
+        "score": 27,
         "color": "#9d2235",
         "alternateColor": "#ffc72c"
       },
@@ -82520,7 +82520,7 @@
         "short": "Oregon",
         "abbreviation": "ORE",
         "school": "Oregon",
-        "score": 13,
+        "score": 41,
         "color": "#00934b",
         "alternateColor": "#fff41b"
       },
@@ -83039,9 +83039,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "Halftime",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401856702",
@@ -83051,7 +83051,7 @@
         "short": "LSU",
         "abbreviation": "LSU",
         "school": "LSU",
-        "score": 14,
+        "score": 35,
         "color": "#461d76",
         "alternateColor": "#fdd023"
       },
@@ -83061,7 +83061,7 @@
         "short": "Texas A&M",
         "abbreviation": "TA&M",
         "school": "Texas A&M",
-        "score": 3,
+        "score": 6,
         "color": "#500000",
         "alternateColor": "#ffffff"
       },
@@ -83580,9 +83580,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "In Progress",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401864572",
@@ -83592,7 +83592,7 @@
         "short": "NC State",
         "abbreviation": "NCSU",
         "school": "NC State",
-        "score": 28,
+        "score": 41,
         "color": "#cc0000",
         "alternateColor": "#ffffff"
       },
@@ -83602,7 +83602,7 @@
         "short": "App State",
         "abbreviation": "APP",
         "school": "App State",
-        "score": 10,
+        "score": 31,
         "color": "#000000",
         "alternateColor": "#ffcd00"
       },
@@ -84121,9 +84121,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "Halftime",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401856804",
@@ -84133,7 +84133,7 @@
         "short": "Washington St",
         "abbreviation": "WSU",
         "school": "Washington State",
-        "score": 17,
+        "score": 24,
         "color": "#a60f2d",
         "alternateColor": "#4d4d4d"
       },
@@ -84143,7 +84143,7 @@
         "short": "Arizona",
         "abbreviation": "ARIZ",
         "school": "Arizona",
-        "score": 14,
+        "score": 34,
         "color": "#cc0033",
         "alternateColor": "#003366"
       },
@@ -84662,9 +84662,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "In Progress",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401860894",
@@ -84674,7 +84674,7 @@
         "short": "Utah State",
         "abbreviation": "USU",
         "school": "Utah State",
-        "score": 14,
+        "score": 21,
         "color": "#0f2439",
         "alternateColor": "#ffffff"
       },
@@ -85203,9 +85203,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "In Progress",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401862783",
@@ -85215,7 +85215,7 @@
         "short": "North Texas",
         "abbreviation": "UNT",
         "school": "North Texas",
-        "score": 42,
+        "score": 63,
         "color": "#068f33",
         "alternateColor": "#ffffff"
       },
@@ -85743,9 +85743,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "In Progress",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401856703",
@@ -85755,7 +85755,7 @@
         "short": "Mississippi St",
         "abbreviation": "MSST",
         "school": "Mississippi State",
-        "score": 14,
+        "score": 31,
         "color": "#5d1725",
         "alternateColor": "#c1c6c8"
       },
@@ -85765,7 +85765,7 @@
         "short": "Missouri",
         "abbreviation": "MIZ",
         "school": "Missouri",
-        "score": 10,
+        "score": 24,
         "color": "#f1b82d",
         "alternateColor": "#000000"
       },
@@ -86284,9 +86284,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "In Progress",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401862782",
@@ -86306,7 +86306,7 @@
         "short": "FAU",
         "abbreviation": "FAU",
         "school": "Florida Atlantic",
-        "score": 28,
+        "score": 45,
         "color": "#003366",
         "alternateColor": "#cc0000"
       },
@@ -86825,9 +86825,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "in",
-      "completed": false,
-      "status": "Halftime",
+      "state": "post",
+      "completed": true,
+      "status": "Final",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401856697",
@@ -86837,7 +86837,7 @@
         "short": "Arkansas",
         "abbreviation": "ARK",
         "school": "Arkansas",
-        "score": 16,
+        "score": 34,
         "color": "#a32136",
         "alternateColor": "#ffffff"
       },
@@ -86847,7 +86847,7 @@
         "short": "Tulsa",
         "abbreviation": "TLSA",
         "school": "Tulsa",
-        "score": 0,
+        "score": 6,
         "color": "#003595",
         "alternateColor": "#d0b787"
       },
@@ -87378,7 +87378,7 @@
         "short": "Sacramento St",
         "abbreviation": "SAC",
         "school": "Sacramento State",
-        "score": 0,
+        "score": 6,
         "color": "#00573C",
         "alternateColor": "#cdb97d"
       },
@@ -87388,7 +87388,7 @@
         "short": "UMass",
         "abbreviation": "MASS",
         "school": "Massachusetts",
-        "score": 7,
+        "score": 28,
         "color": "#881c1c",
         "alternateColor": "#ffffff"
       },
@@ -87919,7 +87919,7 @@
         "short": "SMU",
         "abbreviation": "SMU",
         "school": "SMU",
-        "score": 0,
+        "score": 21,
         "color": "#a80000",
         "alternateColor": "#0033a1"
       },
@@ -87929,7 +87929,7 @@
         "short": "Missouri St",
         "abbreviation": "MOST",
         "school": "Missouri State",
-        "score": 0,
+        "score": 10,
         "color": "#5e0009",
         "alternateColor": "#ffffff"
       },
@@ -88460,7 +88460,7 @@
         "short": "UTEP",
         "abbreviation": "UTEP",
         "school": "UTEP",
-        "score": 0,
+        "score": 7,
         "color": "#ff8200",
         "alternateColor": "#041e42"
       },
@@ -88470,7 +88470,7 @@
         "short": "Oregon St",
         "abbreviation": "ORST",
         "school": "Oregon State",
-        "score": 10,
+        "score": 33,
         "color": "#dc4405",
         "alternateColor": "#000000"
       },
@@ -88989,9 +88989,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "pre",
+      "state": "in",
       "completed": false,
-      "status": "Scheduled",
+      "status": "In Progress",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401860891",
@@ -89001,7 +89001,7 @@
         "short": "Fresno St",
         "abbreviation": "FRES",
         "school": "Fresno State",
-        "score": null,
+        "score": 7,
         "color": "#b1102b",
         "alternateColor": "#13284c"
       },
@@ -89011,7 +89011,7 @@
         "short": "Rice",
         "abbreviation": "RICE",
         "school": "Rice",
-        "score": null,
+        "score": 14,
         "color": "#00205b",
         "alternateColor": "#c1c6c8"
       },
@@ -89019,17 +89019,6 @@
         "id": "3660",
         "name": "Valley Children's Stadium",
         "indoor": false
-      },
-      "market": {
-        "provider": "DraftKings",
-        "spread": "-12.5",
-        "spreadOdds": "-112",
-        "spreadOpen": "-13.5",
-        "total": 43.5,
-        "totalOpen": "o43.5",
-        "overOdds": "-115",
-        "underOdds": "-105",
-        "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34674806"
       },
       "marketHistory": [
         {
@@ -89532,8 +89521,7 @@
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
         }
-      ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      ]
     },
     {
       "id": "CFB-401864509",
@@ -89542,9 +89530,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "pre",
+      "state": "in",
       "completed": false,
-      "status": "Scheduled",
+      "status": "In Progress",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401864509",
@@ -89554,7 +89542,7 @@
         "short": "Nevada",
         "abbreviation": "NEV",
         "school": "Nevada",
-        "score": null,
+        "score": 10,
         "color": "#041e42",
         "alternateColor": "#8a8d8f"
       },
@@ -89564,7 +89552,7 @@
         "short": "Air Force",
         "abbreviation": "AFA",
         "school": "Air Force",
-        "score": null,
+        "score": 3,
         "color": "#003594",
         "alternateColor": "#ffffff"
       },
@@ -89572,17 +89560,6 @@
         "id": "3816",
         "name": "Mackay Stadium",
         "indoor": false
-      },
-      "market": {
-        "provider": "DraftKings",
-        "spread": "+5.5",
-        "spreadOdds": "-108",
-        "spreadOpen": "+4.5",
-        "total": 50.5,
-        "totalOpen": "o48.5",
-        "overOdds": "-110",
-        "underOdds": "-110",
-        "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34674745"
       },
       "marketHistory": [
         {
@@ -90085,8 +90062,7 @@
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
         }
-      ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      ]
     },
     {
       "id": "CFB-401858240",
@@ -90095,9 +90071,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "pre",
+      "state": "in",
       "completed": false,
-      "status": "Scheduled",
+      "status": "In Progress",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401858240",
@@ -90107,7 +90083,7 @@
         "short": "Stanford",
         "abbreviation": "STAN",
         "school": "Stanford",
-        "score": null,
+        "score": 7,
         "color": "#8c1515",
         "alternateColor": "#ffffff"
       },
@@ -90117,7 +90093,7 @@
         "short": "Georgia Tech",
         "abbreviation": "GT",
         "school": "Georgia Tech",
-        "score": null,
+        "score": 13,
         "color": "#b3a369",
         "alternateColor": "#ffffff"
       },
@@ -90125,17 +90101,6 @@
         "id": "3940",
         "name": "Stanford Stadium",
         "indoor": false
-      },
-      "market": {
-        "provider": "DraftKings",
-        "spread": "+3",
-        "spreadOdds": "-110",
-        "spreadOpen": "+4.5",
-        "total": 48.5,
-        "totalOpen": "o48.5",
-        "overOdds": "-115",
-        "underOdds": "-105",
-        "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34674807"
       },
       "marketHistory": [
         {
@@ -90638,8 +90603,7 @@
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
         }
-      ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      ]
     },
     {
       "id": "CFB-401858470",
@@ -90648,9 +90612,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 4,
-      "state": "pre",
+      "state": "in",
       "completed": false,
-      "status": "Scheduled",
+      "status": "In Progress",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/college-football/game/_/gameId/401858470",
@@ -90660,7 +90624,7 @@
         "short": "Washington",
         "abbreviation": "WASH",
         "school": "Washington",
-        "score": null,
+        "score": 0,
         "color": "#33006f",
         "alternateColor": "#e8d3a2"
       },
@@ -90670,7 +90634,7 @@
         "short": "Minnesota",
         "abbreviation": "MINN",
         "school": "Minnesota",
-        "score": null,
+        "score": 7,
         "color": "#5e0a2f",
         "alternateColor": "#fab41c"
       },
@@ -90678,17 +90642,6 @@
         "id": "3765",
         "name": "Husky Stadium",
         "indoor": false
-      },
-      "market": {
-        "provider": "DraftKings",
-        "spread": "-11.5",
-        "spreadOdds": "-112",
-        "spreadOpen": "-9.5",
-        "total": 45.5,
-        "totalOpen": "o44.5",
-        "overOdds": "-112",
-        "underOdds": "-108",
-        "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34674743"
       },
       "marketHistory": [
         {
@@ -91191,8 +91144,7 @@
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
         }
-      ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      ]
     },
     {
       "id": "NFL-401872953",
@@ -91233,9 +91185,9 @@
         "indoor": false
       },
       "market": {
-        "provider": "DraftKings",
+        "provider": "Draft Kings",
         "spread": "-7",
-        "spreadOdds": "-112",
+        "spreadOdds": "-115",
         "spreadOpen": "-2.5",
         "total": 49.5,
         "totalOpen": "o48.5",
@@ -91244,16 +91196,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118212"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "-7",
-          "spreadOdds": "-115",
-          "total": 50.5,
-          "overOdds": "-105",
-          "underOdds": "-115",
-          "retrievedAt": "2026-09-23T14:31:28Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "-7",
@@ -91743,9 +91685,19 @@
           "underOdds": "-105",
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "-7",
+          "spreadOdds": "-115",
+          "total": 49.5,
+          "overOdds": "-115",
+          "underOdds": "-105",
+          "retrievedAt": "2026-09-27T03:32:01Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      "marketRetrievedAt": "2026-09-27T03:32:01Z"
     },
     {
       "id": "NFL-401872949",
@@ -91786,7 +91738,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "DraftKings",
+        "provider": "Draft Kings",
         "spread": "+1.5",
         "spreadOdds": "-108",
         "spreadOpen": "+1.5",
@@ -91797,16 +91749,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118105"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "+2.5",
-          "spreadOdds": "+100",
-          "total": 42.5,
-          "overOdds": "-108",
-          "underOdds": "-112",
-          "retrievedAt": "2026-09-23T14:21:49Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "+2.5",
@@ -92296,9 +92238,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "+1.5",
+          "spreadOdds": "-108",
+          "total": 42.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-27T03:32:01Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      "marketRetrievedAt": "2026-09-27T03:32:01Z"
     },
     {
       "id": "NFL-401872954",
@@ -92339,7 +92291,7 @@
         "indoor": true
       },
       "market": {
-        "provider": "DraftKings",
+        "provider": "Draft Kings",
         "spread": "-6.5",
         "spreadOdds": "-120",
         "spreadOpen": "-9.5",
@@ -92350,16 +92302,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118222"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "-6.5",
-          "spreadOdds": "-110",
-          "total": 47.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-23T14:42:07Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "-6.5",
@@ -92849,9 +92791,19 @@
           "underOdds": "-112",
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "-6.5",
+          "spreadOdds": "-120",
+          "total": 48.5,
+          "overOdds": "-108",
+          "underOdds": "-112",
+          "retrievedAt": "2026-09-27T03:32:01Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      "marketRetrievedAt": "2026-09-27T03:32:01Z"
     },
     {
       "id": "NFL-401872951",
@@ -92892,7 +92844,7 @@
         "indoor": true
       },
       "market": {
-        "provider": "DraftKings",
+        "provider": "Draft Kings",
         "spread": "+1.5",
         "spreadOdds": "-102",
         "spreadOpen": "+1.5",
@@ -92903,16 +92855,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118261"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "+3",
-          "spreadOdds": "-118",
-          "total": 42.5,
-          "overOdds": "-112",
-          "underOdds": "-108",
-          "retrievedAt": "2026-09-23T14:31:28Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "+3",
@@ -93402,9 +93344,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "+1.5",
+          "spreadOdds": "-102",
+          "total": 42.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-27T03:32:01Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      "marketRetrievedAt": "2026-09-27T03:32:01Z"
     },
     {
       "id": "NFL-401872952",
@@ -93445,7 +93397,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "DraftKings",
+        "provider": "Draft Kings",
         "spread": "+10",
         "spreadOdds": "-112",
         "spreadOpen": "+7",
@@ -93456,16 +93408,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118189"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "+11.5",
-          "spreadOdds": "-112",
-          "total": 46.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-23T14:31:28Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "+11.5",
@@ -93955,9 +93897,19 @@
           "underOdds": "-115",
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "+10",
+          "spreadOdds": "-112",
+          "total": 45.5,
+          "overOdds": "-105",
+          "underOdds": "-115",
+          "retrievedAt": "2026-09-27T03:32:01Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      "marketRetrievedAt": "2026-09-27T03:32:01Z"
     },
     {
       "id": "NFL-401872956",
@@ -93998,7 +93950,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "DraftKings",
+        "provider": "Draft Kings",
         "spread": "-2.5",
         "spreadOdds": "-110",
         "spreadOpen": "-3",
@@ -94009,16 +93961,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118112"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "-2.5",
-          "spreadOdds": "-120",
-          "total": 39.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-23T14:42:07Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "-2.5",
@@ -94508,9 +94450,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "-2.5",
+          "spreadOdds": "-110",
+          "total": 37.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-27T03:32:01Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      "marketRetrievedAt": "2026-09-27T03:32:01Z"
     },
     {
       "id": "NFL-401872950",
@@ -94551,7 +94503,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "DraftKings",
+        "provider": "Draft Kings",
         "spread": "+3.5",
         "spreadOdds": "-112",
         "spreadOpen": "+1.5",
@@ -94562,16 +94514,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118057"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "+3.5",
-          "spreadOdds": "-105",
-          "total": 42.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-23T14:10:07Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "+3.5",
@@ -95061,9 +95003,19 @@
           "underOdds": "-108",
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "+3.5",
+          "spreadOdds": "-112",
+          "total": 42.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "retrievedAt": "2026-09-27T03:32:01Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      "marketRetrievedAt": "2026-09-27T03:32:01Z"
     },
     {
       "id": "NFL-401872955",
@@ -95104,7 +95056,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "DraftKings",
+        "provider": "Draft Kings",
         "spread": "+7.5",
         "spreadOdds": "-102",
         "spreadOpen": "+3.5",
@@ -95115,16 +95067,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118053"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "+7",
-          "spreadOdds": "-112",
-          "total": 40.5,
-          "overOdds": "-102",
-          "underOdds": "-118",
-          "retrievedAt": "2026-09-23T14:21:49Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "+7",
@@ -95614,9 +95556,19 @@
           "underOdds": "-118",
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "+7.5",
+          "spreadOdds": "-102",
+          "total": 40.5,
+          "overOdds": "-102",
+          "underOdds": "-118",
+          "retrievedAt": "2026-09-27T03:32:01Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      "marketRetrievedAt": "2026-09-27T03:32:01Z"
     },
     {
       "id": "NFL-401872957",
@@ -95657,9 +95609,9 @@
         "indoor": false
       },
       "market": {
-        "provider": "DraftKings",
+        "provider": "Draft Kings",
         "spread": "-3",
-        "spreadOdds": "-102",
+        "spreadOdds": "-105",
         "spreadOpen": "-1.5",
         "total": 46.5,
         "totalOpen": "o45.5",
@@ -95668,16 +95620,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118258"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "-3",
-          "spreadOdds": "-108",
-          "total": 45.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-23T14:21:49Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "-3",
@@ -96167,9 +96109,19 @@
           "underOdds": "-115",
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "-3",
+          "spreadOdds": "-105",
+          "total": 46.5,
+          "overOdds": "-105",
+          "underOdds": "-115",
+          "retrievedAt": "2026-09-27T03:32:01Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      "marketRetrievedAt": "2026-09-27T03:32:01Z"
     },
     {
       "id": "NFL-401872958",
@@ -96210,7 +96162,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "DraftKings",
+        "provider": "Draft Kings",
         "spread": "-7.5",
         "spreadOdds": "-108",
         "spreadOpen": "-11.5",
@@ -96221,16 +96173,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118047"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "-8.5",
-          "spreadOdds": "-105",
-          "total": 47.5,
-          "overOdds": "-115",
-          "underOdds": "-105",
-          "retrievedAt": "2026-09-23T14:31:28Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "-8.5",
@@ -96720,9 +96662,19 @@
           "underOdds": "-105",
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "-7.5",
+          "spreadOdds": "-108",
+          "total": 47.5,
+          "overOdds": "-115",
+          "underOdds": "-105",
+          "retrievedAt": "2026-09-27T03:32:01Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      "marketRetrievedAt": "2026-09-27T03:32:01Z"
     },
     {
       "id": "NFL-401872959",
@@ -96763,9 +96715,9 @@
         "indoor": false
       },
       "market": {
-        "provider": "DraftKings",
+        "provider": "Draft Kings",
         "spread": "+1.5",
-        "spreadOdds": "-112",
+        "spreadOdds": "-118",
         "spreadOpen": "-1.5",
         "total": 42.5,
         "totalOpen": "o43.5",
@@ -96774,16 +96726,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118145"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "+1.5",
-          "spreadOdds": "-110",
-          "total": 42.5,
-          "overOdds": "-112",
-          "underOdds": "-108",
-          "retrievedAt": "2026-09-23T13:03:20Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "+1.5",
@@ -97273,9 +97215,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "+1.5",
+          "spreadOdds": "-118",
+          "total": 42.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-27T03:32:01Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      "marketRetrievedAt": "2026-09-27T03:32:01Z"
     },
     {
       "id": "NFL-401872960",
@@ -97316,7 +97268,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "DraftKings",
+        "provider": "Draft Kings",
         "spread": "+3",
         "spreadOdds": "-102",
         "spreadOpen": "+2.5",
@@ -97327,16 +97279,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118119"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "+3.5",
-          "spreadOdds": "-115",
-          "total": 52.5,
-          "overOdds": "-112",
-          "underOdds": "-108",
-          "retrievedAt": "2026-09-23T14:21:49Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "+3.5",
@@ -97826,9 +97768,19 @@
           "underOdds": "-112",
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "+3",
+          "spreadOdds": "-102",
+          "total": 53.5,
+          "overOdds": "-108",
+          "underOdds": "-112",
+          "retrievedAt": "2026-09-27T03:32:01Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      "marketRetrievedAt": "2026-09-27T03:32:01Z"
     },
     {
       "id": "NFL-401872961",
@@ -97869,7 +97821,7 @@
         "indoor": true
       },
       "market": {
-        "provider": "DraftKings",
+        "provider": "Draft Kings",
         "spread": "-3.5",
         "spreadOdds": "-102",
         "spreadOpen": "-3",
@@ -97880,16 +97832,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118012"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "-3",
-          "spreadOdds": "-122",
-          "total": 43.5,
-          "overOdds": "-118",
-          "underOdds": "-102",
-          "retrievedAt": "2026-09-23T14:33:24Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "-3",
@@ -98379,9 +98321,19 @@
           "underOdds": "-102",
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "-3.5",
+          "spreadOdds": "-102",
+          "total": 43.5,
+          "overOdds": "-118",
+          "underOdds": "-102",
+          "retrievedAt": "2026-09-27T03:32:01Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      "marketRetrievedAt": "2026-09-27T03:32:01Z"
     },
     {
       "id": "NFL-401872962",
@@ -98422,7 +98374,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "DraftKings",
+        "provider": "Draft Kings",
         "spread": "+2.5",
         "spreadOdds": "-115",
         "spreadOpen": "+2.5",
@@ -98433,16 +98385,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118276"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "+2.5",
-          "spreadOdds": "-105",
-          "total": 45.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-23T16:59:17Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "+2.5",
@@ -98932,9 +98874,19 @@
           "underOdds": "-102",
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "+2.5",
+          "spreadOdds": "-115",
+          "total": 43.5,
+          "overOdds": "-118",
+          "underOdds": "-102",
+          "retrievedAt": "2026-09-27T03:32:01Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      "marketRetrievedAt": "2026-09-27T03:32:01Z"
     },
     {
       "id": "NFL-401872963",
@@ -98975,7 +98927,7 @@
         "indoor": false
       },
       "market": {
-        "provider": "DraftKings",
+        "provider": "Draft Kings",
         "spread": "+3.5",
         "spreadOdds": "-110",
         "spreadOpen": "-1.5",
@@ -98986,16 +98938,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118030"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "+4.5",
-          "spreadOdds": "-105",
-          "total": 41.5,
-          "overOdds": "-105",
-          "underOdds": "-115",
-          "retrievedAt": "2026-09-23T13:03:20Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "+4.5",
@@ -99485,9 +99427,19 @@
           "underOdds": "-115",
           "retrievedAt": "2026-09-27T01:33:52Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "+3.5",
+          "spreadOdds": "-110",
+          "total": 42.5,
+          "overOdds": "-105",
+          "underOdds": "-115",
+          "retrievedAt": "2026-09-27T03:32:01Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-27T01:33:52Z"
+      "marketRetrievedAt": "2026-09-27T03:32:01Z"
     }
   ]
 }
