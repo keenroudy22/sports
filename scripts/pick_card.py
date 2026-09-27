@@ -242,6 +242,55 @@ def display_title(pick, game):
     return title
 
 
+SHORT_WORDS = (('receiving yards', 'rec yds'), ('rushing yards', 'rush yds'), ('passing yards', 'pass yds'),
+               ('pass attempts', 'pass att'))
+
+
+def short_words(text):
+    for long_, short in SHORT_WORDS:
+        text = text.replace(long_, short)
+    return text
+
+
+def short_leg(title):
+    """A leg the way a bettor types it: "Iowa/Michigan over 38.5", "Drake London 40+ rec yds"."""
+    text = str(title or '')
+    for word in ('OVER', 'UNDER'):
+        text = text.replace(f' {word} ', f' {word.lower()} ')
+    if ' at ' in text and (' over ' in text or ' under ' in text):
+        text = text.replace(' at ', '/', 1)
+    return short_words(text)
+
+
+def short_title(pick, game=None):
+    """The play the way a bettor types it: "Iowa/Michigan over 38.5", "Duke -10 vs Stanford", "Jeremiyah Love over
+    85.5 rush yds". Only how a post says it; the published title never changes."""
+    return short_leg(display_title(pick, game))
+
+
+def plain_number(value):
+    """47.1 reads 47 and 96.8 reads 97; under ten it keeps its tenth (4.6 receptions)."""
+    return str(int(round(value))) if abs(value) >= 10 else f'{round(value, 1):g}'
+
+
+def our_number(pick, game=None):
+    """What we make it, the way a bettor says it: "We have it at 47." for a total or a player, "We have Duke by 14." for
+    a side. Empty without a projection."""
+    projection = pick.get('projection')
+    if not isinstance(projection, (int, float)) or pick.get('legs'):
+        return ''
+    direction = str(pick.get('direction') or '').lower()
+    if pick.get('marketType') == 'spread' and not (pick.get('athleteId') or pick.get('market')) and game and direction in ('home', 'away'):
+        league = game.get('league') or str(pick.get('id', '')).split('-')[0]
+        side = game.get(direction) or {}
+        other = game.get('away' if direction == 'home' else 'home') or {}
+        if abs(projection) < 0.5:
+            return 'We have it even.'
+        team = side if projection < 0 else other          # the side's own number: -14 is that side by 14
+        return f"We have {team_label(team, league)} by {int(round(abs(projection)))}."
+    return f'We have it at {plain_number(projection)}.'
+
+
 FRACTIONS = {0.25: '¼', 0.5: '½', 0.75: '¾'}
 
 

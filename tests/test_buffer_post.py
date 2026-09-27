@@ -123,7 +123,7 @@ class PlanTests(unittest.TestCase):
         self.assertEqual(plans[0][4], 'https://keenroudy.com/sports/img/kitchen-menu.png')
         plans = [p for p in plans if p[1] == 'play']
         self.assertTrue(all(p[4] == p[0] for p in plans), 'each play with its own card')
-        self.assertTrue(plans[0][2].startswith('🍳 PLAYER PROP'))
+        self.assertTrue(plans[0][2].startswith('Player Seven over 4.5 receptions (-115, '), plans[0][2])
         self.assertTrue(plans[3][2].startswith('🎯 +'), 'a fun parlay leads with its price')
 
     def test_a_late_play_goes_out_now_and_a_passed_window_is_skipped(self):
@@ -147,8 +147,8 @@ class PlanTests(unittest.TestCase):
             with mock.patch.object(bp.x_post, 'REASONS', path):
                 plans = bp.plan(first, latest, GAMES, NOW, {'posts': []}, quotes={'p': ('FanDuel', 5.5, -120)})
         play = next(p for p in plans if p[0] == 'p')
-        self.assertIn('Over 4.5 in 7 of his last 10 games.', play[2], 'the reason and its numbers go out')
-        self.assertIn('Now: 5.5 at -120, FanDuel', play[2])
+        self.assertNotIn('Over 4.5 in 7 of his last 10 games.', play[2], 'the reason stays on the site; the post is the play')
+        self.assertIn('Now 5.5 (-120, FanDuel)', play[2])
 
     def test_posted_closed_and_settled_plays_are_left_out(self):
         first = {'a': pick('a'), 'b': pick('b', 'late'), 'c': pick('c', 'late', title='x')}

@@ -55,7 +55,12 @@ QB_OUT = {'doubtful', 'out', 'injured reserve', 'suspension'}
 QUOTE_TYPES = {'capture', 'feed', 'page', 'sportsbook'}
 STARTED_MARGIN = timedelta(minutes=5)      # a game this close to kickoff cannot be published in time
 ONE_BOOK_EXCEPTION = timedelta(hours=3)    # inside this, one book is all there will be
-LEAN_EDGE, LEAN_STRONG = 1.0, 2.0          # model lean: points clear of break-even; confidence 3 at 2+
+LEAN_EDGE, LEAN_STRONG = 3.0, 2.0          # model lean: points clear of break-even (favorites only, below); confidence 3 at 2+
+# Only the desk's favorites go out (the owner, 2026-09-26: "you need to only post your favorite lines"): a straight play
+# needs FAVORITE_EDGE calibrated points clear of break-even, and a game day carries at most FAVORITES_PER_DAY of them,
+# FAVORITES[kind] of each kind. Runs judge the strongest first, so the day's card keeps the best each run sees.
+FAVORITE_EDGE = 3.0
+FAVORITES_PER_DAY, FAVORITES = 3, {'team': 2, 'player': 2}
 PROP_RAW, PROP_EDGE, PROP_FLOOR = 0.60, 5.0, -200
 # Leagues whose player chances publish only once learning has calibrated them against that league's own graded lines:
 # college player numbers were never graded against a line before 2026-09-26, and the NFL's k (0.13) says raw player
@@ -367,21 +372,23 @@ def sources_https(candidate, ctx):
 
 
 def not_duplicate(candidate, ctx):
-    """One open pick per market and side, per game or per player."""
+    """One pick per bet: per game, market and side, or per game, player and market; open or closed. A pick closed to
+    new entries is not published again at another number (2026-09-26: the 5:30 PM run closed an under 54 whose line had
+    moved and published the under 53.5 at another book)."""
     market, side = market_key(candidate), side_of(candidate)
     game_id, athlete = (candidate.get('gameIds') or [None])[0], str(candidate.get('athleteId') or '')
     for key, pick in ctx.first.items():
-        if key == candidate.get('id') or pick.get('historicalImport') or pick.get('legs') or not is_open(key, ctx):
+        if key == candidate.get('id') or pick.get('historicalImport') or pick.get('legs'):
             continue
-        if when(pick.get('publishedAt') or '1970-01-01T00:00Z') > ctx.now:
+        if when(pick.get('publishedAt') or '1970-01-01T00:00Z') > ctx.now or (pick.get('gameIds') or [None])[0] != game_id:
             continue
+        state = 'open' if is_open(key, ctx) else 'published'
         if athlete:
             if str(pick.get('athleteId') or '') == athlete and market_key(pick) == market:
-                return Decision(False, 'not_duplicate', f'{key} is already open on this player and market')
-        elif (pick.get('gameIds') or [None])[0] == game_id and market_key(pick) == market and side_of(pick) == side \
-                and not pick.get('athleteId'):
-            return Decision(False, 'not_duplicate', f'{key} is already open on this game, market and side')
-    return Decision(True, 'not_duplicate', 'no open pick on this market')
+                return Decision(False, 'not_duplicate', f'{key} is already {state} on this player and market')
+        elif market_key(pick) == market and side_of(pick) == side and not pick.get('athleteId'):
+            return Decision(False, 'not_duplicate', f'{key} is already {state} on this game, market and side')
+    return Decision(True, 'not_duplicate', 'no pick on this bet yet')
 
 
 def not_republished(candidate, ctx):
@@ -484,6 +491,35 @@ def lean_confidence(candidate, ctx):
     return Decision(True, 'lean_confidence', f'confidence {want}')
 
 
+def slate_day(pick, ctx):
+    """The Eastern date of a pick's first game, or None when its games are not in the slate."""
+    starts = [when(ctx.games[g]['kickoff']) for g in pick.get('gameIds') or [] if g in ctx.games]
+    return eastern_date(min(starts)) if starts else None
+
+
+def favorites_cap(candidate, ctx):
+    """Only the day's favorites: at most FAVORITES_PER_DAY straight plays whose games fall on one Eastern day, and at
+    most FAVORITES[kind] team plays or player props among them, whenever they were published."""
+    day = slate_day(candidate, ctx)
+    if day is None:
+        return Decision(False, 'favorites_cap', 'game not in the slate')
+    kind = 'player' if candidate.get('athleteId') else 'team'
+    count = {'team': 0, 'player': 0}
+    for key, pick in ctx.first.items():
+        if key == candidate.get('id') or pick.get('historicalImport') or pick.get('legs') or pick.get('parlayType'):
+            continue
+        if when(pick.get('publishedAt') or '1970-01-01T00:00Z') > ctx.now or slate_day(pick, ctx) != day:
+            continue
+        count['player' if pick.get('athleteId') else 'team'] += 1
+    if sum(count.values()) >= FAVORITES_PER_DAY:
+        return Decision(False, 'favorites_cap', f"{sum(count.values())} plays already on the {day} card; favorites only, "
+                                                f"{FAVORITES_PER_DAY} a day")
+    if count[kind] >= FAVORITES[kind]:
+        return Decision(False, 'favorites_cap', f"{count[kind]} {'player props' if kind == 'player' else 'team plays'} already on "
+                                                f"the {day} card; the cap is {FAVORITES[kind]}")
+    return Decision(True, 'favorites_cap', f"{sum(count.values())} of {FAVORITES_PER_DAY} on the {day} card")
+
+
 def lean_daily_cap(candidate, ctx):
     today = [k for k, p in published_today(ctx, candidate.get('id'))
              if p.get('modelLean') and not p.get('athleteId') and not p.get('legs')]
@@ -566,7 +602,7 @@ def prop_calibrated_value(candidate, ctx):
         return Decision(False, 'prop_calibrated_value', 'v2 has no projection for this player and market')
     chance = 0.5 + k * (desk['rawChance'] - 0.5)
     edge = 100 * (chance - desk['breakEven'])
-    need = learning.threshold(ctx.policy, 'prop.minCalibratedEdge', learning.segment_of(candidate))
+    need = max(FAVORITE_EDGE, learning.threshold(ctx.policy, 'prop.minCalibratedEdge', learning.segment_of(candidate)))
     if edge < need:
         return Decision(False, 'prop_calibrated_value',
                         f"calibrated {100 * chance:.1f}% (raw {100 * desk['rawChance']:.1f}% shrunk by k {k:g}, learned from "
@@ -713,11 +749,12 @@ def revision_frozen(candidate, ctx):
 COMMON = (not_started, expiry_ok, price_present, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction)
 SHOP = (one_book, best_quote_by_ev)
 RULES = {
-    'modelLean': COMMON + SHOP + (lean_is_total, lean_edge, learned_pause, lean_confidence, lean_daily_cap, lean_nothing_against, qb_available),
+    'modelLean': COMMON + SHOP + (lean_is_total, lean_edge, learned_pause, lean_confidence, favorites_cap, lean_nothing_against, qb_available),
     'propLean': COMMON + SHOP + (prop_raw_edge, prop_calibrated_value, learned_pause, prop_settled_role, prop_price_floor, prop_window_cap,
-                                 prop_one_per_player, prop_not_in_longshot, prop_injury_clear, prop_market_not_trailing, lean_nothing_against),
-    'favorite': COMMON + SHOP + (favorite_needs_reason, lean_nothing_against, qb_available, prop_injury_clear),
-    'researched': COMMON + SHOP + (lean_nothing_against, qb_available, prop_injury_clear),
+                                 prop_one_per_player, prop_not_in_longshot, prop_injury_clear, prop_market_not_trailing, favorites_cap,
+                                 lean_nothing_against),
+    'favorite': COMMON + SHOP + (favorite_needs_reason, favorites_cap, lean_nothing_against, qb_available, prop_injury_clear),
+    'researched': COMMON + SHOP + (favorites_cap, lean_nothing_against, qb_available, prop_injury_clear),
     'longshot': (not_started, expiry_ok, price_present, sources_https, not_republished, cfb_jurisdiction, longshot_one_per_day),
     'ladder': (not_started, expiry_ok, price_present, sources_https, not_republished, cfb_jurisdiction, ladder_one_rung),
     'revision': (revision_frozen,),

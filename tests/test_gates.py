@@ -45,6 +45,11 @@ def prop_lean(**over):
     return pick
 
 
+def favorite_context(**over):
+    """The same board with v2's total at 49: the 44.5 over clears the favorites bar."""
+    return context(snapshots={'NFL-1': [dict(SNAPSHOT, total=49.0)]}, **over)
+
+
 def context(**over):
     fields = dict(now=NOW, games={'NFL-1': GAME}, odds={'NFL-1': ODDS}, prop_odds={'NFL-1': PROP_ODDS},
                   snapshots={'NFL-1': [SNAPSHOT]}, names={'77': 'Player Seven', '5': 'Quarterback Five'},
@@ -146,8 +151,13 @@ class CommonRuleTests(unittest.TestCase):
         ctx = context(first={'earlier': existing}, latest={'earlier': existing})
         self.assertFalse(gates.not_duplicate(total_lean(), ctx).ok)
         self.assertTrue(gates.not_duplicate(total_lean(direction='under'), ctx).ok)
-        settled = dict(existing, status='settled', result='win')
-        self.assertTrue(gates.not_duplicate(total_lean(), context(first={'earlier': existing}, latest={'earlier': settled})).ok)
+        closed = dict(existing, status='expired', entryNote='Closed to new entries at 5:30 PM ET: total moved 1.5 against')
+        refused = gates.not_duplicate(total_lean(), context(first={'earlier': existing}, latest={'earlier': closed}))
+        self.assertFalse(refused.ok, 'a bet the desk closed is not published again at another number')
+        self.assertIn('already published', refused.reason)
+        elsewhere = dict(existing, gameIds=['NFL-2'])
+        self.assertTrue(gates.not_duplicate(total_lean(), context(first={'earlier': elsewhere}, latest={'earlier': elsewhere})).ok,
+                        'another game is another bet')
         prop = prop_lean(id='p1', publishedAt='2026-09-27T11:00:00Z')
         ctx = context(first={'p1': prop}, latest={'p1': prop})
         self.assertFalse(gates.not_duplicate(prop_lean(), ctx).ok)
@@ -205,11 +215,13 @@ class ModelLeanRuleTests(unittest.TestCase):
         self.assertFalse(gates.lean_is_total(total_lean(marketType='spread', direction='home', line=-3), context()).ok)
 
     def test_lean_edge_and_confidence(self):
-        ctx = context()
-        over = total_lean()                     # v2 total 48 against 44.5: calibrated chance clears break-even
+        near = gates.lean_edge(total_lean(), context())          # v2 total 48 against 44.5: +2.4 points, not a favorite
+        self.assertFalse(near.ok, 'favorites only: three points clear of break-even')
+        ctx = favorite_context()
+        over = total_lean()                     # v2 total 49 against 44.5: +3.8 points
         edge = gates.lean_edge(over, ctx)
         self.assertTrue(edge.ok, edge.reason)
-        self.assertGreaterEqual(edge.data['edgePoints'], 1.0)
+        self.assertGreaterEqual(edge.data['edgePoints'], gates.FAVORITE_EDGE)
         self.assertFalse(gates.lean_edge(total_lean(direction='under'), ctx).ok)
         want = 3 if edge.data['edgePoints'] >= 2 else 2
         self.assertTrue(gates.lean_confidence(total_lean(confidence=want), ctx).ok)
@@ -374,9 +386,34 @@ class FavoriteLongshotRevisionTests(unittest.TestCase):
         self.assertFalse(gates.revision_frozen(dict(settled, id='never-published'), ctx).ok)
 
 
+class FavoritesTests(unittest.TestCase):
+    def test_a_game_day_carries_three_favorites_two_of_a_kind(self):
+        games = {gid: dict(GAME, id=gid) for gid in ('NFL-1', 'NFL-2', 'NFL-3', 'NFL-4')}
+        games['NFL-5'] = dict(GAME, id='NFL-5', kickoff='2026-09-28T17:00Z')        # Monday
+        team = lambda key, gid: total_lean(id=key, gameIds=[gid], publishedAt='2026-09-25T12:00:00Z')
+        two = {'a': team('a', 'NFL-2'), 'b': team('b', 'NFL-3')}
+        ctx = context(games=games, first=two, latest=two)
+        refused = gates.favorites_cap(total_lean(), ctx)
+        self.assertFalse(refused.ok, 'two team plays already on Sunday, published days before')
+        self.assertIn('the cap is 2', refused.reason)
+        self.assertTrue(gates.favorites_cap(prop_lean(), ctx).ok, 'a player prop still fits: two of three')
+        three = dict(two, c=prop_lean(id='c', gameIds=['NFL-4'], publishedAt='2026-09-26T12:00:00Z'))
+        self.assertIn('favorites only, 3 a day', gates.favorites_cap(prop_lean(), context(games=games, first=three, latest=three)).reason)
+        self.assertTrue(gates.favorites_cap(total_lean(gameIds=['NFL-5']), context(games=games, first=three, latest=three)).ok,
+                        "Monday's card is its own")
+        fun = dict(two, t={'id': 't', 'legs': [{}, {}], 'parlayType': 'longshot', 'gameIds': ['NFL-4'], 'publishedAt': '2026-09-26T12:00:00Z'})
+        self.assertTrue(gates.favorites_cap(prop_lean(), context(games=games, first=fun, latest=fun)).ok, 'fun parlays are not on the card')
+
+    def test_a_prop_needs_the_favorites_bar_on_its_calibrated_chance(self):
+        import learning
+        policy = dict(learning.default_policy(), calibration={'NFL/prop': {'k': 0.5, 'n': 600}})
+        verdict = gates.prop_calibrated_value(prop_lean(), context(policy=policy))
+        self.assertIn(f"needs +{gates.FAVORITE_EDGE:.0f}", verdict.reason if not verdict.ok else f"needs +{gates.FAVORITE_EDGE:.0f}")
+
+
 class AdmitTests(unittest.TestCase):
     def test_a_clean_model_lean_is_admitted(self):
-        ok, decisions = gates.admit(total_lean(), context())     # DraftKings 44.5 at -110 is the best value on the board
+        ok, decisions = gates.admit(total_lean(confidence=3), favorite_context())     # DraftKings 44.5 at -110 is the best value on the board
         self.assertTrue(ok, [str(d) for d in decisions if not d.ok])
         self.assertEqual({d.rule for d in decisions}, {r.__name__ for r in gates.RULES['modelLean']})
 

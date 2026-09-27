@@ -66,16 +66,16 @@ class ReceiptTests(unittest.TestCase):
                 'away': {'id': '2117', 'short': 'C Michigan', 'abbreviation': 'CMU', 'school': 'Central Michigan'},
                 'home': {'id': '2390', 'short': 'Miami', 'abbreviation': 'MIA', 'school': 'Miami'}}
         play = {'id': 'CFB-2026-W4-cmu-mia-under-54-br', 'title': 'C Michigan at Miami under 54', 'marketType': 'total', 'gameIds': ['g']}
-        self.assertEqual(receipts.label(play, {'g': game}), 'Central Michigan at Miami (FL) under 54')
+        self.assertEqual(receipts.label(play, {'g': game}), 'Central Michigan/Miami (FL) under 54')
 
     def test_the_morning_after_lists_every_play_with_its_result_and_no_units(self):
         first, latest, log = world()
         found = receipts.ready(first, latest, GAMES, log, MONDAY_MORNING)
         self.assertEqual([r['key'] for r in found], ['receipt:day:2026-09-27'])
         sunday = found[0]
-        self.assertEqual(sunday['text'], '🍳 RECEIPTS · SUNDAY\n2-1\n\n'
-                                         '✅ Player Seven over 4.5 receptions\n❌ Jets at Rams over 44.5\n✅ Not posted over 40.5\n'
-                                         '❌ 3-leg fun parlay\n\nGraded in public, win or lose.\n#NFL',
+        self.assertEqual(sunday['text'], 'Sunday: 2-1\n'
+                                         '✅ Player Seven over 4.5 receptions\n❌ Jets/Rams over 44.5\n✅ Not posted over 40.5\n'
+                                         '❌ 3-leg parlay\n\n#NFL',
                          'the record is the straight plays; the fun parlay is listed but not counted in it')
         self.assertEqual(sunday['due'].astimezone(gates.EASTERN).strftime('%a %H:%M'), 'Mon 09:00')
         self.assertEqual(sunday['card'], 'receipt-day-2026-09-27')
@@ -96,9 +96,8 @@ class ReceiptTests(unittest.TestCase):
         found = {r['key']: r for r in receipts.ready(first, latest, GAMES, log, wednesday)}
         self.assertEqual(sorted(found), ['receipt:week:2026-09-29'])
         week = found['receipt:week:2026-09-29']
-        self.assertEqual(week['text'], '🍳 RECEIPTS · THE WEEK\nSep 23 to Sep 29: 3-1-1\n\n'
-                                       'Player props 1-0\nTeam props 2-1-1\nFun parlays 0-1\n\n'
-                                       'Graded in public, win or lose.\n#NFL')
+        self.assertEqual(week['text'], 'The week (Sep 23 to Sep 29): 3-1-1\n'
+                                       'Player props 1-0\nTeam props 2-1-1\nFun parlays 0-1\n\n#NFL')
         self.assertEqual(week['due'].astimezone(gates.EASTERN).strftime('%a %H:%M'), 'Wed 09:00')
         self.assertEqual(week['when'], 'Sep 23 to Sep 29')
 
@@ -119,8 +118,9 @@ class ReceiptTests(unittest.TestCase):
         got = [(p[0], p[1], p[3].astimezone(gates.EASTERN).strftime('%H:%M'), p[4]) for p in plans]
         self.assertEqual(got[0], ('receipt:day:2026-09-27+menu:day:2026-09-28', 'receipt', '09:00', 'receipt-day-2026-09-27'),
                          'one morning post: the receipt carries the menu')
-        self.assertIn('Today: 2 plates on the stove. Pick of the Day goes out around noon.', plans[0][2])
-        self.assertTrue(plans[0][2].startswith('🍳 RECEIPTS · SUNDAY\n2-1\n\n✅ Player Seven'), plans[0][2])
+        self.assertIn('\n\nToday: 2 plays.\n#NFL', plans[0][2])
+        self.assertTrue(plans[0][2].startswith('Sunday: 2-1\n✅ Player Seven'), plans[0][2])
+        self.assertEqual(plans[0][2].count('Player Seven'), 1, 'each play once')
         self.assertEqual(got[1][:3], ('NFL-2026-W4-n', 'play', '10:00'), 'a noon kickoff posts two hours ahead')
         self.assertEqual(got[2][:3], ('NFL-2026-W4-m', 'play', '12:00'), 'the Monday night play goes out at midday')
         log['posts'].append({'id': 'receipt:day:2026-09-27+menu:day:2026-09-28', 'kind': 'buffer:receipt'})
@@ -149,12 +149,12 @@ class CashedTests(unittest.TestCase):
         posts = {p['key']: p for p in receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING)}
         self.assertEqual(sorted(posts), ['cashed:NFL-2026-W4-a', 'cashed:NFL-2026-W4-c'], 'wins only; the loss waits for the receipt')
         self.assertEqual(posts['cashed:NFL-2026-W4-a']['text'],
-                         '✅ CASHED\nPlayer Seven over 4.5 receptions\n+100 at DraftKings\n\n#NFL\nhttps://x.com/keenkooks/status/20a')
-        self.assertTrue(posts['cashed:NFL-2026-W4-c']['text'].startswith('✅ FUN PARLAY CASHED\n3 legs · +600 at DraftKings'))
+                         '✅ Cashed: Player Seven over 4.5 receptions (+100, DraftKings)\n#NFL\nhttps://x.com/keenkooks/status/20a')
+        self.assertTrue(posts['cashed:NFL-2026-W4-c']['text'].startswith('✅ +600 3-leg parlay cashed (DraftKings)\n'))
         self.assertIsNone(posts['cashed:NFL-2026-W4-a']['card'], 'text only: the quoted post carries the card')
         self.assertEqual(receipts.guard(posts['cashed:NFL-2026-W4-a']), [])
         log['posts'][0]['featured'] = True
-        self.assertTrue(receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING)[0]['text'].startswith('✅ PICK OF THE DAY CASHED'))
+        self.assertTrue(receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING)[0]['text'].startswith('✅ POTD cashed: '))
 
     def test_not_overnight_not_late_and_not_a_play_that_never_went_out(self):
         first, latest, log = self.world()
@@ -181,7 +181,7 @@ class LadderReceiptTests(unittest.TestCase):
 
     def test_a_rung_is_named_by_its_step_and_money_and_kept_off_the_straight_record(self):
         rung = pick('l', 'sun', **self.RUNG, result='win')
-        self.assertEqual(receipts.label(rung), 'Ladder step 2: $96 to $187')
+        self.assertEqual(receipts.label(rung), 'Ladder step 2 ($96 → $187)')
         straight = pick('s', 'sun', result='loss')
         self.assertEqual(receipts.headline([rung, straight]), '0-1', 'the ladder is not a straight play')
         self.assertEqual(receipts.headline([rung]), 'Ladder 1-0')
@@ -189,12 +189,10 @@ class LadderReceiptTests(unittest.TestCase):
 
     def test_a_cashed_rung_names_the_next_step_and_the_top_of_the_ladder_says_so(self):
         head, body = receipts.ladder_cashed(pick('l', 'sun', **self.RUNG))
-        self.assertEqual(head, '✅ LADDER STEP 2 CASHED')
-        self.assertEqual(body, '$96 → $187\nStep 3 is next: all $187 rides.')
+        self.assertEqual((head, body), ('✅ Ladder step 2 cashed: $96 → $187', 'Step 3 next.'))
         top = dict(self.RUNG, ladder=dict(self.RUNG['ladder'], step=5, stake=540, payout=1062))
         head, body = receipts.ladder_cashed(pick('l', 'sun', **top))
-        self.assertEqual(head, '🪜 LADDER COMPLETE')
-        self.assertTrue(body.startswith('$50 → $1,062 in 5 steps.'))
+        self.assertEqual((head, body), ('🪜 Ladder complete: $50 → $1,062 in 5 steps', ''))
 
 
 class DailyTests(unittest.TestCase):
@@ -202,24 +200,22 @@ class DailyTests(unittest.TestCase):
         first, latest, log = world()
         first['NFL-2026-W4-m2'] = pick('m2', 'mon', title='Player Nine OVER 60.5 receiving yards', athleteId='9', market='recYds')
         post = receipts.menu(first, latest, GAMES, log, MONDAY_MORNING)
-        self.assertEqual(post['text'], "🍳 TODAY'S MENU\n2 plates on the stove today:\n• Colts at Chiefs, 8:15 PM\n\n"
-                                       'Pick of the Day and the rest go out around noon.\n#NFL')
+        self.assertEqual(post['text'], 'Today: 2 plays\nColts/Chiefs 8:15 PM\n\n#NFL')
         self.assertNotIn('under', post['text'].lower())
         self.assertNotIn('Nine', post['text'], 'the player is not named before his post')
         self.assertEqual(post['due'].astimezone(gates.EASTERN).strftime('%H:%M'), '08:45')
         self.assertIsNone(receipts.menu(first, latest, GAMES, log, datetime(2026, 9, 29, 12, 30, tzinfo=timezone.utc)), 'no plays, no menu')
 
     def test_a_busy_saturday_menu_is_not_refused_as_one_long_sentence(self):
-        text = ("🍳 TODAY'S MENU\n6 plates on the stove today:\n• Iowa at Michigan, 3:30 PM\n• Oklahoma at Georgia, 3:30 PM\n"
-                "• UConn at Miami (OH), 3:30 PM\n• James Madison at Old Dominion, 6:00 PM\nand 2 more on the site\n\n"
-                "Pick of the Day and the rest go out around noon.\n#CFB")
+        text = ("Today: 6 plays\nIowa/Michigan 3:30 PM\nOklahoma/Georgia 3:30 PM\n"
+                "UConn/Miami (OH) 3:30 PM\nJames Madison/Old Dominion 6:00 PM\nand 2 more on the site\n\n#CFB")
         self.assertEqual(receipts.guard({'text': text}), [])
 
     def test_the_book_fills_an_empty_evening_and_only_then(self):
         first, latest, log = world()
         tuesday_evening = datetime(2026, 9, 29, 21, 30, tzinfo=timezone.utc)      # Tue 5:30 PM ET
         post = receipts.book(first, latest, GAMES, log, tuesday_evening)
-        self.assertEqual(post['text'].split('\n')[:2], ['🍳 THE BOOK', 'Season through Sep 28: 3-1'])
+        self.assertEqual(post['text'].split('\n')[:2], ['Season through Sep 28: 3-1', 'Player props 1-0'])
         wednesday = receipts.book(first, latest, GAMES, log, tuesday_evening + timedelta(days=1))
         self.assertNotEqual(wednesday['text'], post['text'], 'a quiet day after a quiet day never repeats the same post')
         self.assertIn('Player props 1-0\nTeam props 2-1\nFun parlays 0-1', post['text'])

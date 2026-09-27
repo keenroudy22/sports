@@ -61,7 +61,7 @@ class PostTests(unittest.TestCase):
         early = datetime(2026, 9, 27, 10, 45, tzinfo=timezone.utc)       # 6:45 AM ET Sunday
         post = sheet.post(self.GAMES, early)
         self.assertEqual((post['key'], post['kind'], post['card']), ('sheet:NFL:2026-09-27', 'sheet', 'sheet-nfl-2026-09-27'))
-        self.assertTrue(post['text'].startswith('📌 SAVE THIS\nOur Week 3 NFL projections'))
+        self.assertEqual(post['text'], '📌 Save this: our Week 3 NFL projections\n#NFL')
         self.assertEqual(post['due'], datetime(2026, 9, 27, 14, 0, tzinfo=timezone.utc))
         import receipts
         self.assertEqual(receipts.guard(post), [])

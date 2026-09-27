@@ -16,7 +16,7 @@ import learning
 import researcher
 import run
 import x_post
-from test_gates import context, prop_lean, total_lean
+from test_gates import SNAPSHOT, context, prop_lean, total_lean
 
 NOW = datetime(2026, 10, 6, 12, 30, tzinfo=timezone.utc)        # a Tuesday, 8:30 AM ET
 RECORD = {'league': 'NFL', 'eventId': '1', 'kickoff': '2026-10-04T17:00Z', 'season': 2026,
@@ -177,12 +177,12 @@ class OtherLearningTests(unittest.TestCase):
 
 class GateTests(unittest.TestCase):
     def test_learned_thresholds_pause_and_calibration_in_the_gates(self):
-        self.assertTrue(gates.lean_edge(total_lean(), context()).ok, 'the written rule by default')
+        strong = {'NFL-1': [dict(SNAPSHOT, total=49.0)]}          # +3.8 points: over the favorites bar
+        self.assertTrue(gates.lean_edge(total_lean(), context(snapshots=strong)).ok, 'the written rule by default')
         stricter = learning.default_policy()
         stricter['segments']['NFL/total'] = {'minEdge': 3.0}
-        refused = gates.lean_edge(total_lean(), context(policy=stricter))
-        edge = gates.lean_edge(total_lean(), context()).data['edgePoints']
-        self.assertEqual(refused.ok, edge >= 3.0)
+        self.assertTrue(gates.lean_edge(total_lean(), context(policy=stricter, snapshots=strong)).ok,
+                        "learning's strictest setting is the favorites bar; past it, learning pauses the segment")
         stopped = learning.default_policy()
         stopped['segments']['NFL/total'] = {'paused': True, 'since': '2026-10-06T12:30:00Z'}
         self.assertFalse(gates.learned_pause(total_lean(), context(policy=stopped)).ok)

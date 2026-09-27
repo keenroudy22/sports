@@ -389,8 +389,8 @@ class PrecheckTests(unittest.TestCase):
                 mock.patch.object(run.gates, 'best_now', return_value=('FanDuel', 39.5, -110)):
             run.requote(entry, pick, {'id': 'g', 'league': 'CFB'}, SimpleNamespace(), now, log=lambda *_: None)
         text, _, _, card = created[0]
-        self.assertTrue(text.startswith('🍳 PICK OF THE DAY · TEAM PROP'))
-        self.assertIn('Now: 39.5 at -110, FanDuel', text)
+        self.assertTrue(text.startswith('POTD: '), text)
+        self.assertIn('Now 39.5 (-110, FanDuel)', text)
         self.assertEqual(card, 'https://keenroudy.com/sports/data/cards/CFB-2026-W4-x-potd.png')
 
     def test_a_new_pick_of_the_day_already_queued_is_relabeled_once_its_card_is_live(self):
@@ -420,7 +420,7 @@ class PrecheckTests(unittest.TestCase):
         done, entry, created = attempt(live=True)
         self.assertTrue(done)
         self.assertEqual((entry['bufferPostId'], entry['featured'], entry['cardKey']), ('new', True, 'CFB-2026-W4-x-potd'))
-        self.assertTrue(created[0][0].startswith('🍳 PICK OF THE DAY'))
+        self.assertTrue(created[0][0].startswith('POTD: '), created[0][0])
         self.assertEqual(created[0][2], datetime(2026, 9, 26, 16, 10, tzinfo=timezone.utc), 'at the time it was queued for')
         done, entry, created = attempt(live=False)
         self.assertEqual((done, entry.get('featured'), created), (False, None, []), 'no card yet: it waits, queued as it was')

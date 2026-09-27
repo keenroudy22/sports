@@ -109,8 +109,8 @@ class PostTests(unittest.TestCase):
             with mock.patch.object(featured, 'PATH', path):
                 plans = [p for p in buffer_post.plan(first, latest, GAMES, NOW, {'posts': []}) if p[1] == 'play']
         self.assertEqual([p[0] for p in plans], ['b', 'a'], 'the Pick of the Day goes first at noon')
-        self.assertTrue(plans[0][2].startswith('🍳 PICK OF THE DAY · TEAM PROP'))
-        self.assertTrue(plans[1][2].startswith('🍳 TEAM PROP'))
+        self.assertTrue(plans[0][2].startswith('POTD: '), plans[0][2])
+        self.assertFalse(plans[1][2].startswith('POTD'))
         self.assertEqual((plans[0][4], plans[1][4]), ('b-potd', 'a'), 'its own card, so no stale copy is ever attached')
 
     def test_the_label_on_the_card(self):

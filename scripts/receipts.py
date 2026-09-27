@@ -61,13 +61,14 @@ def game_day(pick, games):
 
 
 def label(pick, games=None):
-    """A play as its post and card named it: schools by name, over and under as the post says them."""
+    """A play as its post named it: "Iowa/Michigan over 38.5", "5-leg lotto", "Ladder step 2 ($96 → $187)"."""
     if pick_card.play_kind(pick) == 'ladder':
         info = pick.get('ladder') or {}
-        return f"Ladder step {info.get('step', 1)}: {pick_card.dollars(info.get('stake'))} to {pick_card.dollars(info.get('payout'))}"
+        return f"Ladder step {info.get('step', 1)} ({pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))})"
     if pick_card.play_kind(pick) == 'parlay':
-        return f"{len(pick.get('legs') or [])}-leg fun parlay"
-    return pick_card.display_title(pick, (games or {}).get((pick.get('gameIds') or [None])[0]))
+        odds = pick.get('odds')
+        return f"{len(pick.get('legs') or [])}-leg {'lotto' if isinstance(odds, (int, float)) and odds >= x_post.LOTTO else 'parlay'}"
+    return pick_card.short_title(pick, (games or {}).get((pick.get('gameIds') or [None])[0]))
 
 
 def record_text(summary):
@@ -141,9 +142,9 @@ def day_receipt(day, first, latest, games, ids):
     if not settled(rows):
         return None
     name = f'{day:%A}'
-    head = f"🍳 RECEIPTS · {name.upper()}\n{headline(rows)}"
-    tail = 'Graded in public, win or lose.\n' + leagues(rows)
-    text = fit([f"{MARKS[r['result']]} {label(r, games)}" for r in rows], head, tail.strip())
+    head = f"{name}: {headline(rows)}"
+    tail = leagues(rows)
+    text = fit([f"{MARKS[r['result']]} {label(r, games)}" for r in rows], head, tail.strip(), head_sep='\n')
     return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}', 'kind': 'receipt',
             'title': headline(rows), 'label': 'YESTERDAY’S PLATES', 'when': f'{day:%A, %b %-d}',
             'rows': [(r['result'], label(r, games)) for r in rows], 'text': text, 'due': morning(day + timedelta(days=1)),
@@ -157,9 +158,9 @@ def week_receipt(wednesday, first, latest, games, ids):
         return None
     kinds = by_kind(rows)
     # The dates keep two weeks with the same record from posting the same words; one kind of play shows only the total.
-    head = f"🍳 RECEIPTS · THE WEEK\n{start:%b} {start.day} to {end:%b} {end.day}: {headline(rows)}"
-    tail = 'Graded in public, win or lose.\n' + leagues(rows)
-    text = fit([f'{name} {rec}' for name, rec in kinds] if len(kinds) > 1 else [], head, tail.strip())
+    head = f"The week ({start:%b} {start.day} to {end:%b} {end.day}): {headline(rows)}"
+    tail = leagues(rows)
+    text = fit([f'{name} {rec}' for name, rec in kinds] if len(kinds) > 1 else [], head, tail.strip(), head_sep='\n')
     return {'key': f'receipt:week:{end.isoformat()}', 'card': f'receipt-week-{end.isoformat()}', 'kind': 'receipt',
             'title': headline(rows), 'label': 'THIS WEEK’S PLATES', 'when': f'{start:%b %-d} to {end:%b %-d}',
             'rows': [(None, f'{name}  {rec}') for name, rec in kinds], 'text': text, 'due': morning(wednesday),
@@ -232,12 +233,12 @@ def menu(first, latest, games, log_book, now):
         seen.add(game['id'])
         league = game.get('league')
         kick = gates.when(game['kickoff']).astimezone(gates.EASTERN)
-        rows.append(f"{pick_card.team_label(game.get('away'), league)} at {pick_card.team_label(game.get('home'), league)}, {kick:%-I:%M %p}")
+        rows.append(f"{pick_card.team_label(game.get('away'), league)}/{pick_card.team_label(game.get('home'), league)} {kick:%-I:%M %p}")
     count = len(plays)
-    head = f"🍳 TODAY'S MENU\n{count} plate{'s' if count != 1 else ''} on the stove today:"
-    lines = ([f'• {r}' for r in rows] + (['• the fun parlay'] if parlay else [])
-             + ([f"• the ladder, step {(rung.get('ladder') or {}).get('step', 1)}"] if rung else []))
-    tail = ('Pick of the Day and the rest go out around noon.' if len(plays) > 1 else 'Pick of the Day goes out around noon.') + '\n' + leagues(plays)
+    head = f"Today: {count} play{'s' if count != 1 else ''}"
+    lines = (rows + (['a lotto'] if parlay else [])
+             + ([f"ladder step {(rung.get('ladder') or {}).get('step', 1)}"] if rung else []))
+    tail = leagues(plays)
     return {'key': f'menu:day:{today.isoformat()}', 'card': HOUSE_CARDS + 'kitchen-menu.png', 'kind': 'menu',
             'text': fit(lines, head, tail.strip(), head_sep='\n'), 'due': at(today, MENU_AT), 'stale': at(today, MENU_UNTIL)}
 
@@ -263,10 +264,10 @@ def book(first, latest, games, log_book, now):
     through = today - timedelta(days=1)
     # The day it is graded through is named, so two quiet days in a row never post the same text (X refuses a
     # repeated post, and the same words twice read like a bot).
-    head = f"🍳 THE BOOK\nSeason through {through:%b} {through.day}: {headline(rows)}"
-    tail = 'Every play we post, graded in public, win or lose.\n' + leagues(rows)
+    head = f"Season through {through:%b} {through.day}: {headline(rows)}"
+    tail = leagues(rows)
     return {'key': f'book:day:{today.isoformat()}', 'card': HOUSE_CARDS + 'kitchen-book.png', 'kind': 'book',
-            'text': fit(lines, head, tail.strip()), 'due': max(at(today, BOOK_AT), now + timedelta(minutes=2)),
+            'text': fit(lines, head, tail.strip(), head_sep='\n'), 'due': max(at(today, BOOK_AT), now + timedelta(minutes=2)),
             'stale': at(today, BOOK_UNTIL)}
 
 
@@ -296,14 +297,16 @@ def cashed(first, latest, games, log_book, now):
         if not now - CASHED_FRESH < settled_at <= now:
             continue
         parlay = pick_card.play_kind(pick) == 'parlay'
-        head = '✅ ' + ('PICK OF THE DAY ' if entry.get('featured') else 'FUN PARLAY ' if parlay else '') + 'CASHED'
-        price = f"{int(pick['odds']):+d} at {pick.get('book')}"
-        what = f"{len(pick.get('legs') or [])} legs · {price}" if parlay else f"{label(pick, games)}\n{price}"
+        price = f"({int(pick['odds']):+d}, {pick.get('book')})"
+        head = f"✅ {'POTD cashed' if entry.get('featured') else 'Cashed'}: {label(pick, games)} {price}"
+        what = ''
+        if parlay:
+            head, what = f"✅ {int(pick['odds']):+d} {label(pick, games)} cashed ({pick.get('book')})", ''
         if pick_card.play_kind(pick) == 'ladder':
             head, what = ladder_cashed(pick)
         league = str(key).split('-')[0]
         tag = x_post.TAGS.get(league, '')
-        text = f"{head}\n{what}\n\n{tag}\nhttps://x.com/{HANDLE}/status/{entry['tweetId']}".replace('\n\n\n', '\n\n')
+        text = '\n'.join(x for x in (head, what, tag, f"https://x.com/{HANDLE}/status/{entry['tweetId']}") if x)
         out.append({'key': f'cashed:{key}', 'kind': 'cashed', 'card': None, 'text': text, 'due': now,
                     'stale': settled_at + CASHED_FRESH})
     return out
@@ -314,9 +317,8 @@ def ladder_cashed(pick):
     info = pick.get('ladder') or {}
     stake, won = pick_card.dollars(info.get('stake')), pick_card.dollars(info.get('payout'))
     if (info.get('payout') or 0) >= (info.get('goal') or 1000):
-        return (f"🪜 LADDER COMPLETE", f"{pick_card.dollars(info.get('start', 50))} → {won} in {info.get('step', 1)} steps.\n"
-                                        f"A new climb starts at {pick_card.dollars(info.get('start', 50))}.")
-    return (f"✅ LADDER STEP {info.get('step', 1)} CASHED", f"{stake} → {won}\nStep {info.get('step', 1) + 1} is next: all {won} rides.")
+        return (f"🪜 Ladder complete: {pick_card.dollars(info.get('start', 50))} → {won} in {info.get('step', 1)} steps", '')
+    return (f"✅ Ladder step {info.get('step', 1)} cashed: {stake} → {won}", f"Step {info.get('step', 1) + 1} next.")
 
 
 def with_menu(receipt, post, plays_today):
@@ -324,11 +326,11 @@ def with_menu(receipt, post, plays_today):
     both, so neither goes out again on its own."""
     rows = receipt.get('rows') or []
     count = len(plays_today)
-    today = f"Today: {count} plate{'s' if count != 1 else ''} on the stove. Pick of the Day goes out around noon."
+    today = f"Today: {count} play{'s' if count != 1 else ''}."
     tags = ' '.join(t for t in (x_post.TAGS[l] for l in ('NFL', 'CFB')) if t in receipt['text'] + ' ' + post['text'])
     lines = [f"{MARKS.get(result, '•')} {name}" for result, name in rows] if receipt['key'].startswith('receipt:day:') else [name for _, name in rows]
-    head = receipt['text'].split('\n\n')[0]
-    text = fit(lines, head, f'Graded in public, win or lose.\n{today}\n{tags}'.strip())
+    head = receipt['text'].split('\n')[0]           # "Saturday: 5-3"
+    text = fit(lines, head, f'{today}\n{tags}'.strip(), head_sep='\n')
     return dict(receipt, key=f"{receipt['key']}+{post['key']}", text=text, stale=min(receipt['stale'], post['stale']))
 
 

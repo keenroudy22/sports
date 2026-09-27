@@ -27,8 +27,13 @@ Exactly what `PROMPT.md` allows, and only when every gate passes:
 - **Settlements and closes**: revisions of published picks, graded from the box score or closed to
   new entries when the line moved past the published cutoff. An outcome the code cannot grade (a player
   with no line in the box score, a parlay leg that pushed) is left for a person and named in the log.
-- **Model leans**: totals only, calibrated chance one point or more clear of break-even, at the best
-  expected value across the books, four a day, none when a starting quarterback is doubtful or worse.
+- **Favorites only** (the owner, 2026-09-26: "you need to only post your favorite lines"): a straight play needs its
+  calibrated chance three points or more clear of break-even (`gates.FAVORITE_EDGE`), and a game day carries at most
+  three straight plays, at most two team plays and two player props, whenever they were published
+  (`gates.favorites_cap`); runs judge the strongest first. One pick per bet, open or closed: a bet the desk closed
+  is never published again at another number (`gates.not_duplicate`). Fun parlays and the ladder are apart.
+- **Model leans**: totals only, the favorites bar above, at the best expected value across the books, none when a
+  starting quarterback is doubtful or worse.
 - **Prop leans**: raw chance 60% or better on a settled role, five points clear of the price, never worse
   than -200, three per kickoff window, one per player, never a player listed questionable or worse, never in
   a market where the closing line has been closer than our projection (read live from the scoreboard),
@@ -154,22 +159,21 @@ the model scoreboard stays on the site. Every play post has the same shape, draf
 the pick's own fields:
 
 ```
-🍳 PLAYER PROP                    (TEAM PROP; "· FAVORITE" on a researched pick; PICK OF THE DAY first)
-Player Seven over 4.5 receptions
--115 at DraftKings
-
-We project 5.8 receptions
-He has caught 6 in each of his last 2 games.
+POTD: Iowa/Michigan over 38.5 (-105, ESPN BET)        ("POTD: " on the Pick of the Day only)
+We have it at 47.
 
 ❤️ if you're tailing
-@Playbook #NFL
+@Playbook #CFB
 ```
 
-A fun parlay leads with its price, the way the most-saved posts do (`x_post.parlay_head`, owner's yes 2026-09-26):
-"🎰 +2506 COLLEGE LOTTO" from +1000 up, "🎯 +583 NFL LONGSHOT" under it, "🍳 +450 NFL EASY PROPS" for the easy
-parlay, then "5 legs at ESPN BET", the legs, "Just for fun." Every play and parlay ends on the ask the big accounts
-use, "❤️ if you're tailing" (a ladder rung: "❤️ if you're climbing with us"); when a post runs long the reason goes
-before the ask does.
+Short and plain, the way a bettor types it (the owner, 2026-09-26: "Not so AI looking. And straight to the point on
+the tweets"): the play, the price and book, and our number in a few words ("We have it at 47.", "We have Duke by
+14."); no labels, no slogans, no reason sentences (the site keeps the reasons). A fun parlay leads with its price
+and book (`x_post.parlay_head`): "🎰 +2506 COLLEGE LOTTO (ESPN BET)" from +1000 up, "🎯 +583 NFL LONGSHOT" under it,
+"🍀 +450 NFL EASY PROPS", then its legs one a line ("Iowa/Michigan over 38.5", "Drake London 40+ rec yds"). A ladder
+rung: "🪜 $50 → $1,000 ladder: step 2", "$96 → $187 (+95, FanDuel)", its legs, "❤️ if you're climbing". Receipts,
+the book, the menu and cashed posts are one-liners too ("Saturday: 5-3" with ✅ ❌ per play, "✅ Cashed: ...",
+"Today: 3 plays.", "📌 Save this: our Week 3 NFL projections").
 
 The reason is one sentence of the pick's own `why`, short and free of the desk's arithmetic words; when
 every sentence is arithmetic the post stands on the play and the number. No units anywhere a follower reads.
@@ -199,11 +203,11 @@ live waits for the next run. Nothing goes out bare.
 
 | When (Eastern) | Post |
 |---|---|
-| 9:00 AM the morning after a game day | **Receipts** for every play of the day, with ✅ ❌ ➖ and the day's record; on a game day it carries the menu too ("Today: 6 plates on the stove. Pick of the Day goes out around noon."), one morning post instead of two, keyed `receipt:day:<date>+menu:day:<date>` so neither goes out again alone |
+| 9:00 AM the morning after a game day | **Receipts** for every play of the day, with ✅ ❌ ➖ and the day's record; on a game day it carries the menu too ("Today: 6 plays."), one morning post instead of two, keyed `receipt:day:<date>+menu:day:<date>` so neither goes out again alone |
 | 8:45 AM on a game day with plays and no receipt that morning | **Today's menu**: how many plates, which games and when, never the side; plates go out around noon (card `site/img/kitchen-menu.png`) |
 | 9:00 AM Wednesday | **The week's receipts** by kind, with the week's dates |
 | Around noon (two hours before a kickoff earlier than 2 PM; never before 9 AM) | **The plays**, the Pick of the Day first |
-| As a win settles (9 AM to 12:30 AM, within three hours) | **Cashed**: "✅ CASHED" (or "✅ PICK OF THE DAY CASHED", "✅ FUN PARLAY CASHED"), the play and its price, and the original post quoted by its X link; text only. Losses are not singled out: the morning receipt lists every play, win or lose. The run feeds its own settlements forward (`run.absorb`), so the cashed post goes out from the run that settled it |
+| As a win settles (9 AM to 12:30 AM, within three hours) | **Cashed**: "✅ Cashed: Iowa/Michigan over 38.5 (-105, ESPN BET)" (or "✅ POTD cashed: ...", "✅ +2506 5-leg lotto cashed (ESPN BET)"), and the original post quoted by its X link; text only. Losses are not singled out: the morning receipt lists every play, win or lose. The run feeds its own settlements forward (`run.absorb`), so the cashed post goes out from the run that settled it |
 | 10:00 AM college Saturday and NFL Sunday | **📌 SAVE THIS**: the week's projections sheet (`scripts/sheet.py`), one 1080x1350 image of the slate as the Games page shows it: logos, our projected score, win chances as bars, our spread and total beside the line, orange where our number leans clearly (the site's strong chip). College shows the 16 games where our number and the line differ most, the NFL the whole Sunday slate. Drawn by the hosted build (`feed.py`, `cards/sheet-<league>-<date>.png`), posted by the desk once the image is live, never after 11:45 AM. Not picks |
 | As a rung wins | **Ladder cashed**: "✅ LADDER STEP 2 CASHED", "$96 → $187", "Step 3 is next: all $187 rides."; at $1,000 "🪜 LADDER COMPLETE", and the phone gets "Ladder complete: pin it" |
 | 6:00 PM on a day with nothing else | **The book**: the season record, graded through yesterday and saying so ("Season through Sep 28"), so back-to-back quiet days never post the same words, which X refuses; with one kind of play only the season line (card `site/img/kitchen-book.png`) |

@@ -206,10 +206,7 @@ def post(games, now):
             continue
         week = min((g.get('week') for g in todays if g.get('week') is not None), default=None)
         name = 'college' if league == 'CFB' else 'NFL'
-        scope = ("today's games where our number and the line differ most" if league == 'CFB' else 'every Sunday game')
-        head = f"📌 SAVE THIS\nOur Week {week} {name} projections" if week else f"📌 SAVE THIS\nOur {name} projections"
-        text = (f"{head}: the projected score, how often each team wins, and our spread and total next to the line, for {scope}.\n\n"
-                f"Graded in public. The plays go out on their own.\n#{league}")
+        text = (f"📌 Save this: our Week {week} {name} projections" if week else f"📌 Save this: our {name} projections") + f"\n#{league}"
         return {'key': f'sheet:{league}:{day.isoformat()}', 'kind': 'sheet', 'card': key(league, day), 'text': text,
                 'due': max(at(day, POST_AT), now + timedelta(minutes=2)), 'stale': at(day, POST_UNTIL)}
     return None
