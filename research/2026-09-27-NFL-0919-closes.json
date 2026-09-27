@@ -1,0 +1,109 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-09-27T13:19:11Z",
+  "summary": "9:19 AM ET run, published at 9:19 AM ET. Nothing to settle. Closed 1: 5-leg longshot at ESPN BET. Nothing published. precheck before posting",
+  "takeaways": [],
+  "parlays": [
+    {
+      "id": "NFL-2026-W3-longshot-0927-espnbet",
+      "title": "5-leg longshot at ESPN BET",
+      "status": "expired",
+      "favorite": false,
+      "parlayType": "longshot",
+      "riskUnits": 0.25,
+      "legs": [
+        {
+          "id": "game-NFL-401872956-over",
+          "title": "Titans at Giants over 37.5",
+          "gameId": "NFL-401872956",
+          "market": "total points",
+          "side": "over",
+          "line": 37.5,
+          "odds": -105,
+          "chance": 0.578,
+          "kickoff": "2026-09-27T17:00Z",
+          "observedAt": "2026-09-27T09:33:18Z",
+          "marketWindow": "Full game"
+        },
+        {
+          "id": "game-NFL-401872955-over",
+          "title": "Seahawks at Commanders over 39.5",
+          "gameId": "NFL-401872955",
+          "market": "total points",
+          "side": "over",
+          "line": 39.5,
+          "odds": -115,
+          "chance": 0.56,
+          "kickoff": "2026-09-27T17:00Z",
+          "observedAt": "2026-09-27T09:33:18Z",
+          "marketWindow": "Full game"
+        },
+        {
+          "id": "game-NFL-401872960-under",
+          "title": "Ravens at Cowboys under 53.5",
+          "gameId": "NFL-401872960",
+          "market": "total points",
+          "side": "under",
+          "line": 53.5,
+          "odds": -115,
+          "chance": 0.559,
+          "kickoff": "2026-09-27T20:25Z",
+          "observedAt": "2026-09-27T09:33:18Z",
+          "marketWindow": "Full game"
+        },
+        {
+          "id": "game-NFL-401872951-over",
+          "title": "Texans at Colts over 42.5",
+          "gameId": "NFL-401872951",
+          "market": "total points",
+          "side": "over",
+          "line": 42.5,
+          "odds": -105,
+          "chance": 0.555,
+          "kickoff": "2026-09-27T17:00Z",
+          "observedAt": "2026-09-27T09:33:18Z",
+          "marketWindow": "Full game"
+        },
+        {
+          "id": "game-NFL-401872949-over",
+          "title": "Panthers at Browns over 41.5",
+          "gameId": "NFL-401872949",
+          "market": "total points",
+          "side": "over",
+          "line": 41.5,
+          "odds": -110,
+          "chance": 0.54,
+          "kickoff": "2026-09-27T17:00Z",
+          "observedAt": "2026-09-27T09:33:18Z",
+          "marketWindow": "Full game"
+        }
+      ],
+      "correlation": "One leg per game, so the ticket treats the legs as independent; its chance is their product.",
+      "gameIds": [
+        "NFL-401872956",
+        "NFL-401872955",
+        "NFL-401872960",
+        "NFL-401872951",
+        "NFL-401872949"
+      ],
+      "book": "ESPN BET",
+      "odds": 2444,
+      "quotedAt": "2026-09-27T09:33:18Z",
+      "quoteType": "capture",
+      "confidence": 1,
+      "expiresAt": "2026-09-27T12:30:00Z",
+      "edge": "Our chance 5.4% against 3.9% break-even at +2444: +0.379u per unit staked, 0.25u at risk.",
+      "cutoff": "A longshot is not re-entered. It stands or falls as posted.",
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401872949",
+        "https://www.espn.com/nfl/game/_/gameId/401872951",
+        "https://www.espn.com/nfl/game/_/gameId/401872955",
+        "https://www.espn.com/nfl/game/_/gameId/401872956",
+        "https://www.espn.com/nfl/game/_/gameId/401872960"
+      ],
+      "why": "Longshot from the board: 5 legs at ESPN BET, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.",
+      "risk": "Most longshots lose. The legs are treated as independent; any one miss sinks the ticket. Confidence 1 of 10.",
+      "entryNote": "Closed to new entries at 9:19 AM ET, before its post went out: its Titans at Giants over 37.5 leg: verified reporting argues against it: Titans RB Tyjae Spears (ankle) is questionable after missing practice Wednesday and Thursday and practicing on a limited basis Friday; RB Tony Pollard (ankle) missed practice Wednesday and was limited Thursday and Friday; and CB Cor'Dale Flott (quad) is questionable after limited practices all week. Stays in the record at +2444 and is graded as posted."
+    }
+  ]
+}
