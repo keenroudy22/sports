@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-27T12:32:03Z",
+  "updatedAt": "2026-09-27T12:51:16Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -697,6 +697,15 @@
           "name": "Buffalo Bills",
           "players": [
             {
+              "id": "4635008",
+              "name": "Keon Coleman",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-09-27T12:35Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4635008/keon-coleman"
+            },
+            {
               "id": "4596480",
               "name": "Jordan Hancock",
               "position": "CB",
@@ -740,15 +749,6 @@
               "injury": null,
               "reportedAt": "2026-09-25T19:23Z",
               "source": "https://www.espn.com/nfl/player/_/id/3915411/ty-johnson"
-            },
-            {
-              "id": "4635008",
-              "name": "Keon Coleman",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-09-25T18:32Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4635008/keon-coleman"
             },
             {
               "id": "3915416",
@@ -7767,8 +7767,8 @@
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-27T12:32:03Z",
-      "lastAttemptAt": "2026-09-27T12:32:03Z",
+      "checkedAt": "2026-09-27T12:51:16Z",
+      "lastAttemptAt": "2026-09-27T12:51:16Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-27T12:32:03Z",
-      "lastAttemptAt": "2026-09-27T12:32:03Z",
+      "checkedAt": "2026-09-27T12:51:16Z",
+      "lastAttemptAt": "2026-09-27T12:51:16Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
