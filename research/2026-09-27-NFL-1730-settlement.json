@@ -1,0 +1,101 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-09-27T21:30:05Z",
+  "targetWeek": 3,
+  "summary": "5:30 PM ET run, published at 5:30 PM ET. Settled 1: 3-leg easy props at FanDuel loss. Nothing to close. Nothing published. Screened and passed on 38: Kyren Williams OVER 2.5 receptions (prop_market_not_trailing); Terrance Ferguson UNDER 3.5 receptions (prop_market_not_trailing); Matthew Stafford OVER 0.5 rushing yards (prop_market_not_trailing); Pat Bryant UNDER 2.5 receptions (prop_market_not_trailing); Eagles at Bears over 41.5 (learned_pause); J.K. Dobbins UNDER 12.5 carries (prop_calibrated_value); Evan Engram UNDER 2.5 receptions (prop_calibrated_value); Kyren Williams OVER 12.5 carries (prop_calibrated_value); and 30 more. odds_api.py: CFB: skipped (no game inside a week) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "parlays": [
+    {
+      "id": "NFL-2026-W3-easy-0927-fd",
+      "title": "3-leg easy props at FanDuel",
+      "status": "settled",
+      "favorite": false,
+      "parlayType": "easyProps",
+      "riskUnits": 0.25,
+      "legs": [
+        {
+          "id": "alt-NFL-401872956-4883647-recYds-9.5",
+          "title": "Elic Ayomanor 10+ receiving yards",
+          "gameId": "NFL-401872956",
+          "athleteId": "4883647",
+          "player": "Elic Ayomanor",
+          "market": "recYds",
+          "direction": "over",
+          "line": 9.5,
+          "book": "FanDuel",
+          "odds": -166,
+          "chance": 0.82,
+          "implied": 0.624,
+          "projection": 32.0,
+          "kickoff": "2026-09-27T17:00Z",
+          "observedAt": "2026-09-27T10:45:06Z",
+          "marketWindow": "Full game"
+        },
+        {
+          "id": "alt-NFL-401872952-4429160-rushYds-49.5",
+          "title": "De'Von Achane 50+ rushing yards",
+          "gameId": "NFL-401872952",
+          "athleteId": "4429160",
+          "player": "De'Von Achane",
+          "market": "rushYds",
+          "direction": "over",
+          "line": 49.5,
+          "book": "FanDuel",
+          "odds": -205,
+          "chance": 0.821,
+          "implied": 0.672,
+          "projection": 94.7,
+          "kickoff": "2026-09-27T17:00Z",
+          "observedAt": "2026-09-27T10:45:06Z",
+          "marketWindow": "Full game"
+        },
+        {
+          "id": "alt-NFL-401872953-3930086-recYds-4.5",
+          "title": "Dawson Knox 5+ receiving yards",
+          "gameId": "NFL-401872953",
+          "athleteId": "3930086",
+          "player": "Dawson Knox",
+          "market": "recYds",
+          "direction": "over",
+          "line": 4.5,
+          "book": "FanDuel",
+          "odds": -205,
+          "chance": 0.809,
+          "implied": 0.672,
+          "projection": 22.4,
+          "kickoff": "2026-09-27T17:00Z",
+          "observedAt": "2026-09-27T10:45:06Z",
+          "marketWindow": "Full game"
+        }
+      ],
+      "correlation": "One leg per game, so the book prices the ticket as the legs multiplied.",
+      "gameIds": [
+        "NFL-401872956",
+        "NFL-401872952",
+        "NFL-401872953"
+      ],
+      "book": "FanDuel",
+      "odds": 255,
+      "quotedAt": "2026-09-27T10:45:06Z",
+      "expiresAt": "2026-09-27T12:30:00Z",
+      "quoteType": "capture",
+      "confidence": 1,
+      "edge": "For fun, not value: each leg is an easier line our projection clears comfortably (81% or better on our numbers, which are tuned for main lines), priced at FanDuel's own alternate-line price and multiplied to +255. A quarter unit, kept with the longshots.",
+      "cutoff": "A fun parlay is not re-entered. It stands or falls as posted.",
+      "sources": [
+        "https://the-odds-api.com/",
+        "https://www.espn.com/nfl/game/_/gameId/401872952",
+        "https://www.espn.com/nfl/game/_/gameId/401872953",
+        "https://www.espn.com/nfl/game/_/gameId/401872956"
+      ],
+      "why": "Easy props, for fun: 3 legs at FanDuel, one per game, each an easier line our projection clears comfortably. A quarter unit, tracked with the longshots, apart from the straight picks.",
+      "risk": "Every leg has to hit; one miss sinks the ticket. Our player chances are tuned for main lines, so these legs are not value, just fun. A player who does not take the field voids his leg under the book's rule.",
+      "result": "loss",
+      "actual": "legs: win, loss, win",
+      "settledAt": "2026-09-27T21:30:05Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401872956",
+      "settlementReason": "One leg lost; the ticket loses.",
+      "units": -0.25
+    }
+  ]
+}
