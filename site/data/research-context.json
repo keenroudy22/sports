@@ -1,11 +1,38 @@
 {
-  "updatedAt": "2026-09-27T18:50:11Z",
+  "updatedAt": "2026-09-27T18:58:40Z",
   "leagues": {
     "NFL": {
       "teams": {
         "22": {
           "name": "Arizona Cardinals",
           "players": [
+            {
+              "id": "4698113",
+              "name": "Max Melton",
+              "position": "CB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-27T18:50Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4698113/max-melton"
+            },
+            {
+              "id": "4040805",
+              "name": "Roy Lopez",
+              "position": "DT",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-27T18:48Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4040805/roy-lopez"
+            },
+            {
+              "id": "4430841",
+              "name": "Carson Beck",
+              "position": "QB",
+              "status": "Out",
+              "injury": "Coach's Decision",
+              "reportedAt": "2026-09-27T18:46Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4430841/carson-beck"
+            },
             {
               "id": "4428633",
               "name": "Dadrion Taylor-Demerson",
@@ -34,24 +61,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4429782/josh-fryar"
             },
             {
-              "id": "4698113",
-              "name": "Max Melton",
-              "position": "CB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-27T18:40Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4698113/max-melton"
-            },
-            {
-              "id": "4430841",
-              "name": "Carson Beck",
-              "position": "QB",
-              "status": "Out",
-              "injury": "Coach's Decision",
-              "reportedAt": "2026-09-27T18:40Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4430841/carson-beck"
-            },
-            {
               "id": "3051775",
               "name": "Andrew Billings",
               "position": "DT",
@@ -59,15 +68,6 @@
               "injury": "Coach's Decision",
               "reportedAt": "2026-09-27T18:40Z",
               "source": "https://www.espn.com/nfl/player/_/id/3051775/andrew-billings"
-            },
-            {
-              "id": "4040805",
-              "name": "Roy Lopez",
-              "position": "DT",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-27T18:40Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4040805/roy-lopez"
             },
             {
               "id": "4568506",
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-27T18:40Z",
+              "reportedAt": "2026-09-27T18:57Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -3921,7 +3921,7 @@
               "name": "Donte Jackson",
               "position": "CB",
               "status": "Questionable",
-              "injury": "Head",
+              "injury": "Concussion",
               "reportedAt": "2026-09-27T18:22Z",
               "source": "https://www.espn.com/nfl/player/_/id/3843769/donte-jackson"
             },
@@ -6220,9 +6220,9 @@
               "id": "16737",
               "name": "Mike Evans",
               "position": "WR",
-              "status": "Questionable",
-              "injury": "Hip",
-              "reportedAt": "2026-09-27T11:06Z",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-27T18:52Z",
               "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans"
             },
             {
@@ -6452,7 +6452,7 @@
               "position": "S",
               "status": "Active",
               "injury": null,
-              "reportedAt": "2026-09-27T18:36Z",
+              "reportedAt": "2026-09-27T18:41Z",
               "source": "https://www.espn.com/nfl/player/_/id/4869523/nick-emmanwori"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "20",
-          "name": "Joseph Ossai",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-09-27T15:52:13Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4362094/joseph-ossai"
-        },
-        {
-          "teamId": "20",
           "name": "Adonai Mitchell",
           "from": "Questionable",
           "to": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-09-27T18:46:29Z",
           "source": "https://www.espn.com/nfl/player/_/id/4426901/leo-chenal"
+        },
+        {
+          "teamId": "25",
+          "name": "Mike Evans",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-09-27T18:58:40Z",
+          "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-27T18:50:11Z",
-      "lastAttemptAt": "2026-09-27T18:50:11Z",
+      "checkedAt": "2026-09-27T18:58:40Z",
+      "lastAttemptAt": "2026-09-27T18:58:40Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-27T18:50:11Z",
-      "lastAttemptAt": "2026-09-27T18:50:11Z",
+      "checkedAt": "2026-09-27T18:58:40Z",
+      "lastAttemptAt": "2026-09-27T18:58:40Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
