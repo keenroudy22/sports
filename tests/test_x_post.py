@@ -143,12 +143,12 @@ class FunPostTests(unittest.TestCase):
 
     def test_a_ladder_rung_leads_with_its_step_and_the_money_riding(self):
         text = x_post.draft(self.RUNG, {'league': 'NFL'})
-        self.assertEqual(text, "🪜 KOOK'N 80/20 LADDER · STEP 2\n$75 → $146 (+95, FanDuel)\n$19 banked · win banks $29, $117 rides\nDrake London 40+ rec yds\n"
+        self.assertEqual(text, "🪜 KOOK'N 80/20 BANKROLL LADDER · STEP 2\n$75 → $146 (+95, FanDuel)\n$19 banked · win banks $29, $117 rides\nDrake London 40+ rec yds\n"
                                "Bijan Robinson 50+ rush yds\n\n❤️ if you're climbing\n@Playbook #NFL")
         self.assertEqual(x_post.guard(text, self.RUNG), [], 'every dollar and percentage is the rung\'s own number')
         second = dict(self.RUNG, ladder=dict(self.RUNG['ladder'], run=2, step=1, stake=50, payout=98, banked=0,
                                              bankThisWin=20, bankedAfter=20, nextStake=78, totalAfter=98))
-        self.assertTrue(x_post.draft(second, {'league': 'NFL'}).startswith("🪜 KOOK'N 80/20 LADDER · CLIMB 2 · STEP 1\n$50 → $98"))
+        self.assertTrue(x_post.draft(second, {'league': 'NFL'}).startswith("🪜 KOOK'N 80/20 BANKROLL LADDER · CLIMB 2 · STEP 1\n$50 → $98"))
 
     def test_a_fun_parlay_leads_with_its_price(self):
         ticket = {'odds': 2506, 'parlayType': 'longshot'}

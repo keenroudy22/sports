@@ -129,7 +129,7 @@ Handy commands (from `~/Projects/sports`):
 - **Tweets are short and human** (2026-09-26: "Not so AI looking. And straight to the point"): the play with price
   and book, "We have it at 47.", "❤️ if you're tailing", @Playbook and the league tag. No labels, slogans or
   reason sentences. POTD: "POTD: ..." first. Lotto: "🎰 +2506 COLLEGE LOTTO (ESPN BET)" then the legs.
-- **The Kook'n 80/20 Ladder** ($50 to $1,000, `scripts/ladder.py`): bank 20% of every winning return and ride 80% on
+- **The Kook'n 80/20 Bankroll Ladder** ($50 to $1,000, `scripts/ladder.py`): bank 20% of every winning return and ride 80% on
   the next rung, so a miss cannot take what was banked. Two safer player lines at one book, each priced -500 to -180
   and together -250 to -110. A slower climb is preferred to forcing an even-money rung. One rung open at a time, one
   a day, NFL legs until college player numbers are calibrated. Never force it on a one-game slate: the two legs stay

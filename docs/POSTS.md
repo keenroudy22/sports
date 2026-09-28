@@ -30,12 +30,12 @@ and what gets saved is in `docs/X-NOTES.md`.
 | **Side** | As a play | `Duke -10 vs Stanford (-110, FanDuel)` / `We have Duke by 14.` | the side's logo | |
 | **Lotto / longshot** | After the plays | `🎰 +2506 COLLEGE LOTTO (ESPN BET)` (from +1000; `🎯 +583 NFL LONGSHOT` under it) then one leg a line; fun tickets may mix feed-priced alternates such as `Drake London 40+ rec yds` | parlay card with the legs | `x_post.parlay_head` |
 | **Easy props** (alternate lines) | Sat (college) and Sun (NFL) | `🍀 +450 NFL EASY PROPS (FanDuel)` then legs like `Drake London 40+ rec yds` | parlay card | `easy_parlay.py` |
-| **80/20 ladder step** | With the plays, one a day when two clean games exist | `🪜 KOOK'N 80/20 LADDER · STEP 2` / `$75 → $146 (+95, FanDuel)` / `$19 banked · win banks $29, $117 rides` / legs / `❤️ if you're climbing` | a tall winding route with the real bank, ride, rung and unpriced future checkpoints | `ladder.py`, `pick_card.ladder_svg` |
+| **80/20 bankroll ladder step** | With the plays, one a day when two clean games exist | `🪜 KOOK'N 80/20 BANKROLL LADDER · STEP 2` / `$75 → $146 (+95, FanDuel)` / `$19 banked · win banks $29, $117 rides` / legs / `❤️ if you're climbing` | a tall winding route with the real bank, ride, rung and unpriced future checkpoints | `ladder.py`, `pick_card.ladder_svg` |
 | **Conversation prompt** | Once on a multi-play card, after the first play | `First play is out. Who wants the next one? 👀` or one of the short rotating slate questions, then the league tag | none; intentionally text-only | `buffer_post.conversation_text` |
 | **Morning receipt** | 9 AM the day after a game day | `Saturday: 5-3` then `✅ Iowa/Michigan over 38.5` per play, `Today: 3 plays.`, tags | the receipt card (W/L per play, the chef) | `receipts.day_receipt`, `with_menu`, `pick_card.receipt_svg` |
 | **Week's receipt** | Wednesday 9 AM | `The week (Sep 23 to Sep 29): 12-9` then the record by kind | receipt card | `receipts.week_receipt` |
 | **Save this watchlist** | 10 AM college Saturday and NFL Sunday | `📌 4 NFL games where our numbers disagree most with the market.` / save ask / tag | 1080x1350 grid with four large model/market tiles | `sheet.py` |
-| **Cashed** | As a win settles (9 AM to 12:30 AM, within three hours) | `✅ Cashed: Iowa/Michigan over 38.5 (-105, ESPN BET)` (or `✅ POTD cashed: ...`, `✅ +2506 5-leg lotto cashed (ESPN BET)`, `✅ 80/20 ladder step 2 cashed: $75 → $146` / `$48 banked. $117 rides step 3.`) then the tag and the original post's link | none (it quotes the original) | `receipts.cashed` |
+| **Cashed** | As a win settles (9 AM to 12:30 AM, within three hours) | `✅ Cashed: Iowa/Michigan over 38.5 (-105, ESPN BET)` (or `✅ POTD cashed: ...`, `✅ +2506 5-leg lotto cashed (ESPN BET)`, `✅ 80/20 bankroll ladder step 2 cashed: $75 → $146` / `$48 banked. $117 rides step 3.`) then the tag and the original post's link | none (it quotes the original) | `receipts.cashed` |
 | **Menu** (alone) | 8:45 AM on a game day with no receipt | `Today: 6 plays` then `Iowa/Michigan 3:30 PM` per game | `site/img/kitchen-menu.png` | `receipts.menu` |
 | **The book** | 6 PM on a day with nothing else | `Season through Sep 28: 23-22` then by kind | `site/img/kitchen-book.png` | `receipts.book` |
 
@@ -52,7 +52,7 @@ served at `https://keenroudy.com/sports/data/cards/<name>.png`: `<pick id>.png`,
 
 One frame for every card (`docs/examples/`):
 - top left the **KOOK'N** wordmark and pan icon; top right the precise label (`PLAYER PROP`, `GAME TOTAL`,
-  `GAME SPREAD`, `LONGSHOT`, `LOTTO TICKET`, `EASY PROPS`, `PICK OF THE DAY · GAME TOTAL`, `80/20 LADDER · STEP 2`,
+  `GAME SPREAD`, `LONGSHOT`, `LOTTO TICKET`, `EASY PROPS`, `PICK OF THE DAY · GAME TOTAL`, `80/20 BANKROLL LADDER · STEP 2`,
   `RECEIPTS`);
 - the matchup and kickoff (a parlay: how many games and the day); `TODAY'S PLATE` (`THE CLIMB: $50 TO $1,000` on a
   rung, `YESTERDAY'S PLATES` on a receipt); the play big; `Served at` the price and book; `We project ...`;

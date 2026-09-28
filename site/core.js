@@ -344,7 +344,7 @@
      one). Fun parlays (smaller stakes) and the Week 1 legs posted before prices were recorded get their own lines.
      The Pick of the Day record counts the days its post went out. */
   const isParlay = p => p.kind === 'parlays' || Boolean((p.legs || []).length) || Boolean(p.parlayType);
-  /* The Kook'n 80/20 Ladder (scripts/ladder.py): bank 20% of every winning return and ride 80% on the next rung.
+  /* The Kook'n 80/20 Bankroll Ladder (scripts/ladder.py): bank 20% of every winning return and ride 80% on the next rung.
      The current climb reaches $1,000 on bank plus ride; a miss starts a new $50 climb but cannot take the saved bank.
      It stays outside the straight record, and a rung pulled before its post still counts and waits for its result. */
   const isLadder = p => p.parlayType === 'ladder';

@@ -101,7 +101,7 @@ class CardTests(unittest.TestCase):
                            'bankedAfter': 48, 'nextStake': 117, 'totalAfter': 165, 'bankPercent': 20,
                            'ridePercent': 80, 'start': 50, 'goal': 1000}}
         text = pick_card.svg(rung, GAME)
-        for needle in ('THE 80/20 LADDER', 'CLIMB 1', 'BANK 20 · RIDE 80 · $1,000 GOAL',
+        for needle in ('THE 80/20 BANKROLL LADDER', 'CLIMB 1', 'BANK 20 · RIDE 80 · $1,000 GOAL',
                        '$19 BANKED · $75 RIDING', 'STEP 2 · TODAY', '$75 → $146', 'WIN: BANK $29 · RIDE $117',
                        '• Drake London 40+ rec yds', '+95 AT FANDUEL', 'FUTURE RUNGS UNLOCK ONE AT A TIME',
                        pick_card.HOUSE[2]):

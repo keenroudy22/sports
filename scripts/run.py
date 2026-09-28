@@ -1765,7 +1765,7 @@ def lotto_pings(plans, ctx):
         info = pick.get('ladder') or {}
         if pick and pick_card.play_kind(pick) == 'ladder' and (info.get('totalAfter') or info.get('payout') or 0) >= (info.get('goal') or 1000):
             final = info.get('totalAfter') or info.get('payout')
-            out.append(('Ladder complete: pin it', f"The 80/20 ladder reached ${final:,} from ${info.get('start', 50)} in "
+            out.append(('Bankroll ladder complete: pin it', f"The 80/20 bankroll ladder reached ${final:,} from ${info.get('start', 50)} in "
                         f"{info.get('step', 1)} steps. The LADDER COMPLETE post is at the top of the profile: tap to open it, then ... "
                         "and Pin to your profile."))
     return out
