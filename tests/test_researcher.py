@@ -38,6 +38,43 @@ class ResearcherTests(unittest.TestCase):
     def test_off_unless_the_switch_is_set(self):
         self.assertFalse(researcher.enabled({}))
         self.assertTrue(researcher.enabled({'KEENROUDY_RESEARCHER': 'claude'}))
+        self.assertTrue(researcher.enabled({'KEENROUDY_RESEARCHER': 'Codex'}))
+        self.assertFalse(researcher.enabled({'KEENROUDY_RESEARCHER': 'gemini'}), 'only the engines the desk knows')
+
+    def test_codex_reads_the_web_read_only_in_its_own_folder_and_answers_to_a_schema(self):
+        import tempfile
+        seen = {}
+
+        def codex(command, **kwargs):
+            seen['command'], seen['cwd'] = command, kwargs.get('cwd')
+            out = Path(command[command.index('--output-last-message') + 1])
+            out.write_text(json.dumps(ANSWER))
+            return subprocess.CompletedProcess(command, 0, stdout='', stderr='')
+        with tempfile.TemporaryDirectory() as folder:
+            text = researcher.run_codex('the prompt', runner=codex, folder=folder)
+            schema = json.loads((Path(folder) / 'facts.schema.json').read_text())
+        command = seen['command']
+        self.assertEqual(command[:2], ['codex', 'exec'])
+        for flag, value in (('--sandbox', 'read-only'), ('--cd', seen['cwd'])):
+            self.assertEqual(command[command.index(flag) + 1], value)
+        self.assertIn('web_search="live"', command)
+        self.assertIn('approval_policy="never"', command)
+        self.assertTrue(command[-1].startswith(researcher.SYSTEM) and command[-1].endswith('the prompt'))
+        self.assertEqual(json.loads(text), ANSWER)
+        self.assertEqual(schema['properties']['facts']['items']['properties']['kind']['enum'], list(researcher.KINDS))
+
+    def test_the_engine_names_the_facts_it_found(self):
+        def codex(command, **kwargs):
+            Path(command[command.index('--output-last-message') + 1]).write_text(json.dumps(ANSWER))
+            return subprocess.CompletedProcess(command, 0, stdout='', stderr='')
+        import tempfile
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as folder, mock.patch.object(researcher, 'SANDBOX', Path(folder)):
+            kept, _ = researcher.research(GAME, 'total', 'over', runner=codex, opener=fake_opener,
+                                          now=datetime(2026, 9, 26, tzinfo=timezone.utc), env={'KEENROUDY_RESEARCHER': 'codex'})
+        self.assertEqual({f['origin'] for f in kept}, {'codex researcher'})
+        self.assertTrue(all(researcher.from_web(f) for f in kept))
+        self.assertTrue(researcher.from_web({'origin': 'claude researcher'}), 'facts stored before the move still count')
 
     def test_the_prompt_names_the_game_and_the_market(self):
         text = researcher.prompt_for(GAME, 'total', 'over')

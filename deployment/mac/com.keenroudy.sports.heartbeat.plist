@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  KeenRoudy Sports heartbeat: once a day, speak only when something is wrong (a failed run, no
+  run in 26 hours, a dirty clone, the wrong GitHub login, Ollama down, the machine off Eastern).
+  Writes ~/Library/Logs/KeenRoudy/ALERT.txt and a notification; silent otherwise.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.keenroudy.sports.heartbeat</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/keen/.config/keenroudy/run.sh</string>
+    <string>heartbeat</string>
+  </array>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>TZ</key>
+    <string>America/New_York</string>
+  </dict>
+
+  <key>StartCalendarInterval</key>
+  <dict><key>Hour</key><integer>7</integer><key>Minute</key><integer>15</integer></dict>
+
+  <key>RunAtLoad</key>
+  <false/>
+
+  <key>ProcessType</key>
+  <string>Background</string>
+
+  <key>StandardOutPath</key>
+  <string>/Users/keen/Library/Logs/KeenRoudy/launchd.heartbeat.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/keen/Library/Logs/KeenRoudy/launchd.heartbeat.log</string>
+</dict>
+</plist>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  KeenRoudy Sports pre-post check: every 30 minutes, look for a play scheduled to post to X in the next
+  15 to 150 minutes and give it a last look (live injury report, latest line, the web researcher's news, the
+  judge). A play that no longer stands is taken off the queue and closed on the site with the reason.
+  Quiet when nothing is due.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.keenroudy.sports.precheck</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/keen/.config/keenroudy/run.sh</string>
+    <string>precheck</string>
+  </array>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>TZ</key>
+    <string>America/New_York</string>
+  </dict>
+
+  <key>StartInterval</key>
+  <integer>1800</integer>
+
+  <key>RunAtLoad</key>
+  <false/>
+
+  <key>ProcessType</key>
+  <string>Background</string>
+
+  <key>StandardOutPath</key>
+  <string>/Users/keen/Library/Logs/KeenRoudy/launchd.precheck.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/keen/Library/Logs/KeenRoudy/launchd.precheck.log</string>
+</dict>
+</plist>

@@ -1,11 +1,13 @@
-"""Web-sourced facts for a candidate pick, from a headless Claude Code run, verified before anyone uses them.
+"""Web-sourced facts for a candidate pick, from a headless coding agent run, verified before anyone uses them.
 
 The local model reads what the pipeline hands it. It cannot read the web. Researched favorites need
 what the web says: an official availability report, a beat reporter on a role change, a forecast for
-an outdoor game. This module asks the `claude` command line, running headless with only web search
-and web fetch, for structured facts about one game, each with a source URL. Nothing it says is used
-until verify() has fetched the URL itself and found every named person on the page. Unverified facts
-are dropped, never argued from. It is off unless KEENROUDY_RESEARCHER=claude is set.
+an outdoor game. This module asks an agent's command line, running headless with only web search, for
+structured facts about one game, each with a source URL: OpenAI's `codex exec` (KEENROUDY_RESEARCHER=codex,
+the owner's ChatGPT plan, with live web search in a read-only sandbox) or Anthropic's `claude -p`
+(KEENROUDY_RESEARCHER=claude). Nothing it says is used until verify() has fetched the URL itself and found
+every named person on the page. Unverified facts are dropped, never argued from. It is off when the
+variable is unset.
 
   python scripts/researcher.py GAME_ID [--market total|spread|recYds ...]
 Stdlib only.
@@ -61,8 +63,23 @@ Return ONLY this JSON, nothing else:
 If you find nothing solid, return {{"facts": []}}."""
 
 
+ENGINES = ('codex', 'claude')
+ORIGINS = ('codex researcher', 'claude researcher')     # a stored fact's origin; older facts say "claude researcher"
+
+
+def engine(env=None):
+    """The agent that reads the web for the desk, or None when the researcher is off."""
+    value = (env if env is not None else os.environ).get('KEENROUDY_RESEARCHER', '').strip().lower()
+    return value if value in ENGINES else None
+
+
 def enabled(env=None):
-    return (env if env is not None else os.environ).get('KEENROUDY_RESEARCHER', '').strip().lower() == 'claude'
+    return engine(env) is not None
+
+
+def from_web(fact):
+    """Did this fact come from the web researcher (either engine)?"""
+    return fact.get('origin') in ORIGINS
 
 
 def prompt_for(game, market, side, policy=None, player=None, quarterbacks=None):
@@ -122,6 +139,45 @@ def run_claude(prompt, runner=subprocess.run, timeout=420, max_turns=MAX_TURNS):
     return payload
 
 
+CODEX_SCHEMA = {'type': 'object', 'additionalProperties': False, 'required': ['facts'], 'properties': {'facts': {
+    'type': 'array', 'items': {'type': 'object', 'additionalProperties': False,
+                               'required': ['kind', 'direction', 'claim', 'entities', 'source', 'publishedAt'],
+                               'properties': {'kind': {'type': 'string', 'enum': list(KINDS)},
+                                              'direction': {'type': 'string', 'enum': list(DIRECTIONS)},
+                                              'claim': {'type': 'string'}, 'entities': {'type': 'array', 'items': {'type': 'string'}},
+                                              'source': {'type': 'string'}, 'publishedAt': {'type': 'string'}}}}}}
+
+
+def run_codex(prompt, runner=subprocess.run, timeout=420, folder=None):
+    """`codex exec`'s last message (the JSON the prompt asks for), or None when the command fails or is missing.
+
+    Codex runs in the researcher's own empty folder, read-only, with live web search and no approvals to wait on,
+    answers to a JSON schema, and writes its last message to a file; it has no system-prompt flag, so the researcher's
+    role leads the prompt. Sign in once with `codex login` (the ChatGPT plan); the desk never holds a key for it."""
+    folder = Path(folder or SANDBOX)
+    folder.mkdir(parents=True, exist_ok=True)
+    schema, answer = folder / 'facts.schema.json', folder / 'codex-answer.json'
+    schema.write_text(json.dumps(CODEX_SCHEMA), encoding='utf-8')
+    if answer.exists():
+        answer.unlink()
+    command = ['codex', 'exec', '--skip-git-repo-check', '--ephemeral', '--sandbox', 'read-only',
+               '--config', 'web_search="live"', '--config', 'approval_policy="never"', '--cd', str(folder),
+               '--output-schema', str(schema), '--output-last-message', str(answer), f'{SYSTEM}\n\n{prompt}']
+    try:
+        result = runner(command, capture_output=True, text=True, timeout=timeout, cwd=str(folder))
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    try:
+        return answer.read_text(encoding='utf-8')
+    except OSError:
+        return None if result.returncode else (result.stdout or None)
+
+
+def ask(prompt, runner=subprocess.run, env=None):
+    """The configured engine's answer to the research prompt, or None."""
+    return run_codex(prompt, runner) if engine(env) == 'codex' else run_claude(prompt, runner)
+
+
 def _claude(command, runner, timeout):
     """The parsed JSON the command printed (even on a non-zero exit, which is how a turn limit ends), its raw text
     when it is not JSON, or None when nothing came back."""
@@ -151,7 +207,7 @@ def extract(text):
     return [f for f in (facts or []) if isinstance(f, dict)][:MAX_FACTS]
 
 
-def shape(fact, game_id, index, now):
+def shape(fact, game_id, index, now, origin=None):
     """A fact in the run's shape, unverified, with anything malformed dropped."""
     kind = str(fact.get('kind') or '').lower()
     direction = str(fact.get('direction') or '').lower()
@@ -161,8 +217,8 @@ def shape(fact, game_id, index, now):
     if kind not in KINDS or direction not in DIRECTIONS or not source.startswith('https://') or not claim:
         return None
     return {'id': f'web-{game_id}-{index}', 'kind': kind, 'direction': direction, 'claim': claim[:400], 'entities': entities[:6],
-            'source': source, 'publishedAt': fact.get('publishedAt'), 'retrievedAt': gates.stamp(now), 'verified': False,
-            'origin': 'claude researcher'}
+            'source': source, 'publishedAt': fact.get('publishedAt') or None, 'retrievedAt': gates.stamp(now), 'verified': False,
+            'origin': origin or f"{engine() or 'claude'} researcher"}
 
 
 def fetch_text(url, opener=None, timeout=20):
@@ -222,11 +278,12 @@ def status_near_name(fact, page):
     return False
 
 
-def research(game, market, side, runner=subprocess.run, opener=None, now=None, player=None, quarterbacks=None):
+def research(game, market, side, runner=subprocess.run, opener=None, now=None, player=None, quarterbacks=None, env=None):
     """Verified facts for one game and market. Empty when the researcher is silent or nothing survives."""
     now = now or datetime.now(timezone.utc)
-    answer = run_claude(prompt_for(game, market, side, player=player, quarterbacks=quarterbacks), runner)
-    shaped = [s for s in (shape(f, game['id'], i, now) for i, f in enumerate(extract(answer))) if s]
+    answer = ask(prompt_for(game, market, side, player=player, quarterbacks=quarterbacks), runner, env)
+    origin = f"{engine(env) or 'claude'} researcher"
+    shaped = [s for s in (shape(f, game['id'], i, now, origin) for i, f in enumerate(extract(answer))) if s]
     checked = [verify(f, opener) for f in shaped]
     return [f for f in checked if f['verified']], [f for f in checked if not f['verified']]
 

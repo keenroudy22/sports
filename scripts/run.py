@@ -785,7 +785,7 @@ def hold_reason(candidate, facts):
     listed holds a prop; three or more skill players out or doubtful on one side holds either; and web reporting
     holds only when it is hard news (`hard`), never a rotation note or a snap count.
     """
-    web = [f for f in facts if f.get('origin') == 'claude researcher' and f.get('direction') == 'against' and hard(f)]
+    web = [f for f in facts if researcher.from_web(f) and f.get('direction') == 'against' and hard(f)]
     if web:
         return f"verified reporting argues against it: {web[0]['claim']}"
     game_qbs = [f for f in facts if f.get('kind') == 'injury' and f.get('position') == 'QB']
@@ -831,7 +831,7 @@ def relevant_facts(candidate, facts, ctx):
     out, skill = [], defaultdict(list)
     for fact in facts:
         kind = fact.get('kind')
-        if fact.get('origin') == 'claude researcher':
+        if researcher.from_web(fact):
             if kind in ('injury', 'role', 'weather'):   # a stats story is already in the number; it never holds a play
                 out.append(fact)
             continue
@@ -1060,7 +1060,7 @@ def post_reason(candidate, facts, ctx, records, weights=None):
             return f"{'Over' if side == 'over' else 'Under'} {pricing.fmt(line)} in {hits} of his last {len(recent)} games."
         return None
     backing = [first_sentence(f['claim']) for f in facts if f.get('direction') == 'for' and f.get('claim')
-               and (f.get('kind') == 'weather' or (f.get('origin') == 'claude researcher' and f.get('verified')
+               and (f.get('kind') == 'weather' or (researcher.from_web(f) and f.get('verified')
                                                     and f.get('kind') in ('injury', 'role', 'weather')))]
     return x_post.reason_for({'why': ' '.join(backing)}, weights) if backing else None
 

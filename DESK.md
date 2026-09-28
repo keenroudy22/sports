@@ -101,9 +101,10 @@ where the market moved two points or more away from our number, our side at the 
 So, in this order, every run:
 
 1. **The written rules first** (`gates.admit`). A candidate they refuse costs no research and no model time.
-2. **The news**: the web researcher (`scripts/researcher.py`, `claude -p` with web search, run in its own empty
-   folder with web search and page reads as its only tools and a research-only system prompt; run from the
-   repository it had picked up the folder's context and spent its turns trying to run code) reads injury,
+2. **The news**: the web researcher (`scripts/researcher.py`: `codex exec` with live web search in a read-only
+   sandbox since 2026-09-28, when the owner moved to GPT, or `claude -p` with web search; either runs in its own
+   empty folder with a research-only prompt, because run from the repository it had picked up the folder's context
+   and spent its turns trying to run code) reads injury,
    availability and depth-chart reporting for every play that passes the rules, up to six a run, at every run
    except 6:45 AM and 11:30 PM. It asks first who is expected to play: each starting quarterback, key starters,
    and for a prop the player himself. Every fact is checked against its source page before it is used: an injury
@@ -154,6 +155,10 @@ soft web notes: a receiver "remains in the rotation", a Week 2 snap share, two r
 only hard news can: out, doubtful, inactive, suspended, benched, a lost job (`run.hard`, `run.HARD_NEWS`), or a
 flagged forecast for a total. The fallback holds on hard web news only, and a fun ticket's leg stands on soft news
 even when the model argues against it (the log says so).
+
+**Moving to GPT** (2026-09-28): the owner moved the desk's AI work from Claude to OpenAI. `AGENTS.md` is the
+operating manual Codex reads; `docs/MOVE-TO-GPT.md` has the owner's steps; `deployment/mac/` holds copies of the Mac's
+`run.sh`, the launchd jobs and the settings' names. The desk itself never depended on a chat assistant.
 
 ## The local model
 
@@ -386,8 +391,9 @@ books disagree, and where our gap sits among the model's historical gaps with th
 large against the close. A model lean's `why` ends with it; game cards carry it as `marketRead`.
 
 `scripts/researcher.py` is the only part of the desk that reads the web. Off unless the env file sets
-`KEENROUDY_RESEARCHER=claude`; then, at the 8:30 and 17:30 runs on game days, it asks the `claude` command
-line (headless, web search and fetch only) for sourced facts about the strongest candidates, fetches every
+`KEENROUDY_RESEARCHER=codex` (OpenAI's Codex CLI, signed in with the owner's ChatGPT plan; `claude` still works);
+then, at the runs that publish on game days, it asks that command line (headless, web search only, answering to a
+JSON schema) for sourced facts about the strongest candidates, fetches every
 source URL itself and keeps a fact only when each named person is on the page. Verified facts feed the
 gates' `favorite_needs_reason` rule; nothing unverified is argued from.
 
