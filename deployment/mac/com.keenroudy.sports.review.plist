@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!--
+  KeenRoudy Sports weekly review on GPT (scripts/review.py): every Monday at 9:30 AM Eastern the week's facts are
+  gathered from the desk's own records, Codex (the owner's ChatGPT plan, read-only, no web) writes the plain-words
+  review to ~/Library/Logs/KeenRoudy/review-<date>.md, and its opening goes to the phone. It changes nothing.
+  Separate from every com.mygolflinks.* job.
+  -->
+  <key>Label</key>
+  <string>com.keenroudy.sports.review</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/keen/.config/keenroudy/run.sh</string>
+    <string>py</string>
+    <string>scripts/review.py</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>TZ</key>
+    <string>America/New_York</string>
+  </dict>
+  <key>StartCalendarInterval</key>
+  <dict><key>Weekday</key><integer>1</integer><key>Hour</key><integer>9</integer><key>Minute</key><integer>30</integer></dict>
+  <key>RunAtLoad</key>
+  <false/>
+  <key>ProcessType</key>
+  <string>Background</string>
+  <key>StandardOutPath</key>
+  <string>/Users/keen/Library/Logs/KeenRoudy/launchd.review.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/keen/Library/Logs/KeenRoudy/launchd.review.log</string>
+</dict>
+</plist>

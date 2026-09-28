@@ -321,6 +321,8 @@ test('the ladder climbs on wins, starts over on a miss, finishes at $1,000 and s
   const L = C.theLadder(picks);
   assert.deepEqual([L.run, L.step, L.stake, L.open.id, L.history.map(r => r.id)], [2, 1, 50, 'r4', ['r1', 'r2']]);
   assert.equal(L.best, 96);
+  const graded = C.theLadder([rung('g', '2026-09-27T10:45:06Z', 1, 50, 94, 'win', { entryNote: 'Closed to new entries at 8:46 AM ET, before its post went out: x' })]);
+  assert.deepEqual([graded.step, graded.stake, graded.history.length], [1, 50, 0], 'a pulled rung never counts, even graded');
   const top = C.theLadder([rung('a', '2026-09-27T12:30:00Z', 5, 540, 1062, 'win')]);
   assert.deepEqual([top.climbs.length, top.climbs[0].final, top.run, top.stake], [1, 1062, 2, 50]);
   const fun = { id: 'f', kind: 'parlays', parlayType: 'longshot', result: 'win', odds: 600, riskUnits: 0.25, legs: [{ title: 'x' }] };

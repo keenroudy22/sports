@@ -81,6 +81,11 @@ class CardTests(unittest.TestCase):
         self.assertEqual(pick_card.display_title(dict(pick, title='UNM at NMSU OVER 48.5'), game), 'New Mexico at New Mexico State over 48.5')
         self.assertEqual(pick_card.display_title(dict(pick, title='New Mexico at New Mexico St over 48.5'), game),
                          'New Mexico at New Mexico State over 48.5')
+        miami = {'league': 'CFB', 'away': {'short': 'C Michigan', 'school': 'Central Michigan'},
+                 'home': {'id': '2390', 'short': 'Miami', 'school': 'Miami'}}
+        for title in ('Central Michigan at Miami (FL) under 53.5', 'C Michigan at Miami under 53.5'):
+            self.assertEqual(pick_card.display_title({'title': title, 'marketType': 'total'}, miami),
+                             'Central Michigan at Miami (FL) under 53.5', "the 2026-09-26 receipt said \"Miami (FL) (FL)\"")
 
     def test_a_ladder_card_shows_the_money_the_legs_and_the_climb(self):
         rung = {'title': 'Ladder step 2: 2 legs at FanDuel', 'parlayType': 'ladder', 'odds': 95, 'book': 'FanDuel', 'riskUnits': 0.25,

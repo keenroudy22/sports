@@ -60,7 +60,10 @@ def rungs(first, latest):
 
 
 def played(rung):
-    """A rung that was played: graded, or still open. A rung closed before it went out never counts."""
+    """A rung that was played: graded, or still open. A rung closed before its post went out never counts, even
+    though the record grades it (2026-09-27: the pulled step 1 would have won; the climb still starts at step 1)."""
+    if 'before its post went out' in str(rung.get('entryNote') or ''):
+        return False
     if rung.get('result'):
         return True
     return not rung.get('entryNote') and (rung.get('status') or 'active') == 'active'

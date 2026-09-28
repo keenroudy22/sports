@@ -742,6 +742,8 @@ def ladder_one_rung(candidate, ctx):
     for key, pick in ctx.first.items():
         if key == candidate.get('id') or pick.get('parlayType') != 'ladder' or when(pick['publishedAt']) > ctx.now:
             continue
+        if pulled_before_post(key, ctx):
+            continue                    # never went out: not a rung, whatever the record later grades it
         recent = dict(pick, **ctx.latest.get(key, {}))
         if recent.get('result') or recent.get('entryNote') or (recent.get('status') or 'active') != 'active':
             if not recent.get('result') or not same_day(pick['publishedAt'], ctx.now):

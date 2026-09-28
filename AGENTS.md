@@ -14,7 +14,7 @@ may say otherwise.
 Three things run it, none of them an AI chat:
 1. **launchd on the owner's Mac Studio** runs `~/.config/keenroudy/run.sh` (copy: `deployment/mac/`): the desk run
    at 6:45, 8:30 and 11:45 AM, 5:30 and 11:30 PM Eastern (plus 2:45 PM Sunday and 6:50 PM Sunday, Monday, Thursday),
-   the pre-post check every 30 minutes, and the heartbeat at 7:15 AM. The run settles and closes plays, builds the
+   the pre-post check every 30 minutes, the heartbeat at 7:15 AM, and the weekly review Monday 9:30 AM. The run settles and closes plays, builds the
    board, judges candidates through `scripts/gates.py`, publishes reports to `research/`, pushes, and schedules X
    posts in Buffer. Logs: `~/Library/Logs/KeenRoudy/run-YYYY-MM-DD.log` (times in UTC).
 2. **GitHub Actions** (`.github/workflows/publish.yml`) on a schedule and on every push: captures scores, odds and
@@ -58,7 +58,7 @@ watch the runs, and fix what breaks.
 | The desk's own clone (the runs work here; do not edit by hand) | `~/Projects/sports` (branch `main`) |
 | Your working copy for changes | `~/Projects/sports-dev` (git worktree of the same repo, branch `dev`) |
 | Wrapper, settings, lock, drafts, failed reports | `~/.config/keenroudy/` (`run.sh`, `env`, `run.lock`, `x-drafts/`, `failed/`, `pending/`) |
-| launchd jobs | `~/Library/LaunchAgents/com.keenroudy.sports.{run,precheck,heartbeat}.plist` (copies in `deployment/mac/`) |
+| launchd jobs | `~/Library/LaunchAgents/com.keenroudy.sports.{run,precheck,heartbeat,review}.plist` (copies in `deployment/mac/`) |
 | Logs | `~/Library/Logs/KeenRoudy/` (`run-YYYY-MM-DD.log`, `launchd.*.log`, `ALERT.txt` when the heartbeat found a problem) |
 | Post log (every X post, Buffer id, tweet id, metrics) | `data/x-posted.json` |
 | Learning (what the desk learned, weekly) | `data/learning/` (`policy.json`, `REPORT.md`) |
@@ -130,13 +130,25 @@ Handy commands (from `~/Projects/sports`):
 - **Posting**: plays around noon Eastern (two hours before an earlier kickoff), ten minutes apart and from every
   queued post, twenty posts a day at most; receipts at 9 AM; cashed posts as wins settle.
 
-## Weekly review (Mondays)
+## Posts and graphics
 
-Read the weekend's run logs for `STOPPED|CRASHED|Traceback|held back|not scheduled|failed to post|holds the lock`;
-list what each run published, settled and closed; check every X post went out (`data/x-posted.json`: `sentAt`,
-`tweetId`, `error`, `cancelledAt`, `precheck`); the weekend record in the one-record terms; the GitHub runs; any
-`ALERT.txt`; `scripts/line_timing.py --since <last Monday>`; and `data/learning/REPORT.md` after Tuesday's learning
-step. Report to the owner in plain words: what went out, what broke, what you fixed, at most three recommendations.
+Everything that goes to X, its exact words, its card and when it posts is in **`docs/POSTS.md`**, with example cards
+in `docs/examples/` (Pick of the Day, player prop, lotto, ladder step, receipt, the Save this sheet). The short
+version: tweets are short and human (the play, price and book, "We have it at 47.", the ask, @Playbook, the tag); every
+play and house post carries its card (`scripts/pick_card.py`, drawn by the hosted build into `site/data/cards/`);
+nothing posts until its card is live; no units on X; new post types need the owner's yes. Preview before changing
+anything: `python3 scripts/pick_card.py <pick id>`, `python3 scripts/x_post.py draft <pick id>`,
+`run.sh py scripts/buffer_post.py plan`.
+
+## Weekly review (Mondays, automatic)
+
+A launchd job, `com.keenroudy.sports.review` (Monday 9:30 AM Eastern; copy in `deployment/mac/`), runs
+`scripts/review.py`: it gathers the week from the desk's own records (run logs, the post log, the record, the ladder,
+the GitHub runs, `line_timing.py`), has Codex write the plain-words review read-only, saves it to
+`~/Library/Logs/KeenRoudy/review-<date>.md` (the facts in `review-packet-<date>.md`) and sends its opening to the
+owner's phone. It changes nothing. When the owner asks you to act on a review, read that file, then fix what it names
+the way this file says. To run it by hand: `~/.config/keenroudy/run.sh py scripts/review.py` (`--no-codex` for the
+packet only, `--no-push` to skip the phone).
 
 ## When something breaks
 

@@ -86,6 +86,12 @@ class StateTests(unittest.TestCase):
         self.assertEqual(where['climbs'], [{'run': 1, 'steps': 4, 'final': 1062, 'id': 'a'}])
         self.assertEqual((where['run'], where['step'], where['stake'], where['open']), (2, 1, 50, None))
 
+    def test_a_rung_pulled_before_its_post_never_counts_even_once_graded(self):
+        note = 'Closed to new entries at 8:46 AM ET, before its post went out: soft news'
+        first, latest = book_of(rung('pulled', '2026-09-27T10:45:06Z', 1, 50, 94, 'win', entryNote=note))
+        where = ladder.state(first, latest)
+        self.assertEqual((where['step'], where['stake'], where['history']), (1, 50, []), 'the climb starts at step 1')
+
     def test_payout_is_whole_dollars(self):
         self.assertEqual(ladder.payout(50, -108), 96)
         self.assertEqual(ladder.payout(96, 125), 216)

@@ -88,18 +88,28 @@ tweets shorter"). `AGENTS.md` tells it how to change the code and deploy safely:
 lock, push as keenroudy22, and watch the site deploy. When it asks to run a command, it is asking for your approval;
 approve the ones in `AGENTS.md`'s deploy steps.
 
-## Step 5: the Monday review
+## Step 5: the Monday review (automatic)
 
-Each Monday morning, in Codex:
+A Mac job runs every Monday at 9:30 AM Eastern (`com.keenroudy.sports.review`, installed 2026-09-28): it gathers the
+week from the desk's records, has GPT (Codex, read-only) write the review, saves it to
+`~/Library/Logs/KeenRoudy/review-<date>.md`, and sends the opening to your phone through the usual alerts. It changes
+nothing. To act on it, tell Codex:
 
-> Do the weekly review in AGENTS.md for the weekend just past, and fix only clear code defects the way AGENTS.md
-> says. Tell me what went out, what broke, and at most three recommendations.
+> Read this week's review in ~/Library/Logs/KeenRoudy/ and fix what it names, the way AGENTS.md says.
 
-## Step 6: turn off the Claude pieces (after Step 3 works)
+To run it any time: `~/.config/keenroudy/run.sh py scripts/review.py`.
 
-- The Claude scheduled task "KeenRoudy weekend check-in" was a one-time review for 2026-09-28; nothing repeats.
-- Nothing else on the Mac depends on Claude once Step 3 is done. `run.sh doctor` shows both `claude` and `codex`; the
-  desk only calls the one named in `KEENROUDY_RESEARCHER`.
+## Step 6: the Claude pieces are off
+
+- The Claude scheduled task "KeenRoudy weekend check-in" was a one-time review for 2026-09-28; it is disabled and its
+  stuck run stopped. No Claude routine is scheduled for the desk.
+- Nothing on the Mac depends on Claude now: the news check runs on Codex (Step 3), the review on Codex (Step 5).
+  `run.sh doctor` still shows the `claude` command if it is installed; nothing calls it. The Claude app can go.
+
+## Graphics and posts
+
+Codex knows every post's words and card from `docs/POSTS.md` (examples in `docs/examples/`), which `AGENTS.md` points
+it to. Ask it to preview before changing a post: it can draw any card and draft any tweet without posting.
 
 ## What Codex must never do (the short list; `AGENTS.md` has the rest)
 

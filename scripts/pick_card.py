@@ -232,7 +232,8 @@ def display_title(pick, game):
         return title
     league = game.get('league') or str(pick.get('id', '')).split('-')[0]
     away, home = game.get('away') or {}, game.get('home') or {}
-    names = lambda team: sorted({x for x in (team.get('school'), team.get('short'), team.get('abbreviation')) if x}, key=len, reverse=True)
+    names = lambda team: sorted({x for x in (team_label(team, league), team.get('school'), team.get('short'), team.get('abbreviation')) if x},
+                                key=len, reverse=True)      # the posted name first: "Miami (FL)" is not "Miami" plus " (FL)"
     for a in names(away):
         for h in names(home):
             lead = f'{a} at {h}'
