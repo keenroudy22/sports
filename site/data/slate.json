@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-27T23:50:27Z",
+  "updatedAt": "2026-09-28T01:09:36Z",
   "sources": [
     {
       "league": "NFL",
@@ -7,7 +7,7 @@
       "dateWindowUrls": [
         "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=3&limit=1000"
       ],
-      "retrievedAt": "2026-09-27T23:50:27Z",
+      "retrievedAt": "2026-09-28T01:09:36Z",
       "trainingCoverage": "season feed",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -29,7 +29,7 @@
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2026&seasontype=2&week=4&limit=1000&groups=37",
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2026&seasontype=2&week=4&limit=1000&groups=151"
       ],
-      "retrievedAt": "2026-09-27T23:50:27Z",
+      "retrievedAt": "2026-09-28T01:09:36Z",
       "trainingCoverage": "limited weekly provider sample",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -98186,9 +98186,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 3,
-      "state": "pre",
+      "state": "in",
       "completed": false,
-      "status": "Scheduled",
+      "status": "In Progress",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/nfl/game/_/gameId/401872962",
@@ -98198,7 +98198,7 @@
         "short": "Broncos",
         "abbreviation": "DEN",
         "school": "Denver",
-        "score": null,
+        "score": 0,
         "color": "#0a2343",
         "alternateColor": "#fc4c02"
       },
@@ -98208,7 +98208,7 @@
         "short": "Rams",
         "abbreviation": "LAR",
         "school": "Los Angeles",
-        "score": null,
+        "score": 7,
         "color": "#003594",
         "alternateColor": "#ffd100"
       },
@@ -98216,17 +98216,6 @@
         "id": "3937",
         "name": "Empower Field at Mile High",
         "indoor": false
-      },
-      "market": {
-        "provider": "DraftKings",
-        "spread": "+1.5",
-        "spreadOdds": "-120",
-        "spreadOpen": "+2.5",
-        "total": 44.5,
-        "totalOpen": "o45.5",
-        "overOdds": "-102",
-        "underOdds": "-118",
-        "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118276"
       },
       "marketHistory": [
         {
@@ -98729,8 +98718,7 @@
           "retrievedAt": "2026-09-27T23:50:27Z",
           "phase": "pregame"
         }
-      ],
-      "marketRetrievedAt": "2026-09-27T23:50:27Z"
+      ]
     },
     {
       "id": "NFL-401872963",
@@ -99283,7 +99271,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-27T23:50:27Z"
+      "marketRetrievedAt": "2026-09-28T01:09:36Z"
     }
   ]
 }
