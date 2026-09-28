@@ -137,15 +137,18 @@ class FunPostTests(unittest.TestCase):
     RUNG = {'id': 'NFL-2026-W4-ladder-0927-fd', 'title': 'Ladder step 2: 2 legs at FanDuel', 'status': 'active', 'parlayType': 'ladder',
             'riskUnits': 0.25, 'odds': 95, 'book': 'FanDuel', 'gameIds': ['NFL-1'],
             'legs': [{'title': 'Drake London 40+ receiving yards'}, {'title': 'Bijan Robinson 50+ rushing yards'}],
-            'ladder': {'run': 1, 'step': 2, 'stake': 96, 'payout': 187, 'start': 50, 'goal': 1000}}
+            'ladder': {'run': 1, 'step': 2, 'stake': 75, 'payout': 146, 'banked': 19, 'bankThisWin': 29,
+                       'bankedAfter': 48, 'nextStake': 117, 'totalAfter': 165, 'bankPercent': 20,
+                       'ridePercent': 80, 'start': 50, 'goal': 1000}}
 
     def test_a_ladder_rung_leads_with_its_step_and_the_money_riding(self):
         text = x_post.draft(self.RUNG, {'league': 'NFL'})
-        self.assertEqual(text, "🪜 $50 → $1,000 ladder: step 2\n$96 → $187 (+95, FanDuel)\nDrake London 40+ rec yds\n"
+        self.assertEqual(text, "🪜 KOOK'N 80/20 LADDER · STEP 2\n$75 → $146 (+95, FanDuel)\n$19 banked · win banks $29, $117 rides\nDrake London 40+ rec yds\n"
                                "Bijan Robinson 50+ rush yds\n\n❤️ if you're climbing\n@Playbook #NFL")
-        self.assertEqual(x_post.guard(text, self.RUNG), [], '$1,000 and $187 are the rung\'s own numbers')
-        second = dict(self.RUNG, ladder=dict(self.RUNG['ladder'], run=2, step=1, stake=50, payout=98))
-        self.assertTrue(x_post.draft(second, {'league': 'NFL'}).startswith('🪜 $50 → $1,000 ladder, round 2: step 1\n$50 → $98'))
+        self.assertEqual(x_post.guard(text, self.RUNG), [], 'every dollar and percentage is the rung\'s own number')
+        second = dict(self.RUNG, ladder=dict(self.RUNG['ladder'], run=2, step=1, stake=50, payout=98, banked=0,
+                                             bankThisWin=20, bankedAfter=20, nextStake=78, totalAfter=98))
+        self.assertTrue(x_post.draft(second, {'league': 'NFL'}).startswith("🪜 KOOK'N 80/20 LADDER · CLIMB 2 · STEP 1\n$50 → $98"))
 
     def test_a_fun_parlay_leads_with_its_price(self):
         ticket = {'odds': 2506, 'parlayType': 'longshot'}

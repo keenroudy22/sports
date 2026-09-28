@@ -51,9 +51,11 @@ def record(gid, price=-300, retrieved='2026-09-27T12:10:00Z'):
         'Somebody Else': quote()}}}, 'betmgm': {'markets': {'recYds': {f'Player {gid.upper()}': quote()}}}}}
 
 
-def rung(key, published, step, stake, payout, result=None, run=1, **over):
+def rung(key, published, step, stake, payout, result=None, run=1, ladder_info=None, **over):
+    info = {'run': run, 'step': step, 'stake': stake, 'payout': payout, 'start': 50, 'goal': 1000}
+    info.update(ladder_info or {})
     pick = {'id': key, 'parlayType': 'ladder', 'publishedAt': published, 'status': 'active', 'odds': 100, 'book': 'FanDuel',
-            'ladder': {'run': run, 'step': step, 'stake': stake, 'payout': payout, 'start': 50, 'goal': 1000},
+            'ladder': info,
             'legs': [{'title': 'A 40+ receiving yards'}, {'title': 'B 50+ rushing yards'}]}
     latest = dict(pick, **over)
     if result:
@@ -69,34 +71,41 @@ def book_of(*rungs):
 
 
 class StateTests(unittest.TestCase):
-    def test_a_win_rolls_the_payout_a_loss_starts_over_and_an_open_rung_is_kept(self):
+    def test_a_win_banks_twenty_rides_eighty_and_a_loss_cannot_take_the_bank(self):
         first, latest = book_of(rung('r1', '2026-09-27T12:30:00Z', 1, 50, 96, 'win'),
-                                rung('r2', '2026-09-28T12:30:00Z', 2, 96, 187, 'loss'),
+                                rung('r2', '2026-09-28T12:30:00Z', 2, 77, 150, 'loss'),
                                 rung('r4', '2026-10-03T12:30:00Z', 1, 50, 97, run=2))
         where = ladder.state(first, latest)
         self.assertEqual((where['run'], where['step'], where['stake']), (2, 1, 50))
+        self.assertEqual((where['banked'], where['saved']), (0, 19))
         self.assertEqual(where['open']['id'], 'r4')
         self.assertEqual([h['id'] for h in where['history']], ['r1', 'r2'])
+        self.assertEqual((where['history'][0]['bankedAfter'], where['history'][0]['nextStake']), (19, 77))
 
     def test_the_goal_finishes_a_climb_and_a_push_keeps_the_stake(self):
-        first, latest = book_of(rung('a', '2026-09-27T12:30:00Z', 4, 540, 1062, 'win'),
+        first, latest = book_of(rung('a', '2026-09-27T12:30:00Z', 5, 675, 850, 'win',
+                                            ladder_info={'banked': 150, 'bankThisWin': 170, 'bankedAfter': 320,
+                                                         'nextStake': 680, 'totalAfter': 1000}),
                                 rung('b', '2026-09-28T12:30:00Z', 1, 50, 98, 'push', run=2))
         where = ladder.state(first, latest)
-        self.assertEqual(where['climbs'], [{'run': 1, 'steps': 4, 'final': 1062, 'id': 'a'}])
+        self.assertEqual(where['climbs'], [{'run': 1, 'steps': 5, 'final': 1000, 'banked': 320, 'id': 'a'}])
         self.assertEqual((where['run'], where['step'], where['stake'], where['open']), (2, 1, 50, None))
 
     def test_a_rung_pulled_before_its_post_counts_once_graded_and_blocks_while_ungraded(self):
         note = 'Closed to new entries at 8:46 AM ET, before its post went out: soft news'
         first, latest = book_of(rung('pulled', '2026-09-27T10:45:06Z', 1, 50, 94, 'win', entryNote=note))
         where = ladder.state(first, latest)
-        self.assertEqual((where['step'], where['stake'], [h['id'] for h in where['history']]), (2, 94, ['pulled']))
-        first, latest = book_of(rung('waiting', '2026-09-28T10:45:06Z', 2, 94, 180, entryNote=note, status='expired'))
+        self.assertEqual((where['step'], where['stake'], where['banked'], where['saved'], [h['id'] for h in where['history']]),
+                         (2, 75, 19, 19, ['pulled']))
+        first, latest = book_of(rung('waiting', '2026-09-28T10:45:06Z', 2, 75, 146, entryNote=note, status='expired'))
         where = ladder.state(first, latest)
         self.assertEqual(where['open']['id'], 'waiting', 'a pulled rung still waits for its result')
 
     def test_payout_is_whole_dollars(self):
         self.assertEqual(ladder.payout(50, -108), 96)
         self.assertEqual(ladder.payout(96, 125), 216)
+        self.assertEqual(ladder.split_return(94), (19, 75))
+        self.assertEqual(ladder.split_return(89), (18, 71))
 
 
 class LegTests(unittest.TestCase):
@@ -140,7 +149,9 @@ class BuildTests(unittest.TestCase):
         self.assertIsNone(reason)
         self.assertEqual(pick['id'], 'NFL-2026-W4-ladder-0927-dk')
         self.assertEqual((pick['parlayType'], pick['odds'], pick['book']), ('ladder', -129, 'DraftKings'))
-        self.assertEqual(pick['ladder'], {'run': 1, 'step': 1, 'stake': 50, 'payout': 89, 'start': 50, 'goal': 1000})
+        self.assertEqual(pick['ladder'], {'run': 1, 'step': 1, 'stake': 50, 'payout': 89, 'banked': 0,
+                                          'bankThisWin': 18, 'bankedAfter': 18, 'nextStake': 71, 'totalAfter': 89,
+                                          'bankPercent': 20, 'ridePercent': 80, 'start': 50, 'goal': 1000})
         self.assertEqual(pick['expiresAt'], '2026-09-27T15:45:00Z', 'the next run, before the first kickoff')
         self.assertIn('https://sharpapi.io/', pick['sources'])
         first, latest = book_of(rung('open', '2026-09-26T12:30:00Z', 1, 50, 96))

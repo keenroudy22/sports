@@ -353,13 +353,14 @@ def parlay_head(pick, league):
 
 
 def ladder_text(pick):
-    """(head, money line) for a ladder rung: "🪜 $50 → $1,000 ladder: step 2", "$96 → $187 (+95, FanDuel)"."""
+    """The three money lines for the Kook'n 80/20 Ladder: stake, return, bank and next ride."""
     info = pick.get('ladder') or {}
-    start, goal = pick_card.dollars(info.get('start', 50)), pick_card.dollars(info.get('goal', 1000))
-    round_ = f", round {info['run']}" if (info.get('run') or 1) > 1 else ''
-    head = f"🪜 {start} → {goal} ladder{round_}: step {info.get('step', 1)}"
+    round_ = f" · CLIMB {info['run']}" if (info.get('run') or 1) > 1 else ''
+    head = f"🪜 KOOK'N 80/20 LADDER{round_} · STEP {info.get('step', 1)}"
     money = f"{pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))} ({int(pick['odds']):+d}, {pick.get('book')})"
-    return head, money
+    bank = (f"{pick_card.dollars(info.get('banked', 0))} banked · win banks "
+            f"{pick_card.dollars(info.get('bankThisWin'))}, {pick_card.dollars(info.get('nextStake'))} rides")
+    return head, money, bank
 
 
 def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=False):
@@ -373,7 +374,7 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
         @Playbook #CFB
 
     A fun parlay leads with its price and book, "🎰 +2506 COLLEGE LOTTO (ESPN BET)", then its legs one a line; a
-    ladder rung "🪜 $50 → $1,000 ladder: step 2", "$96 → $187 (+95, FanDuel)", then its legs. No labels, slogans or
+    ladder rung "🪜 KOOK'N 80/20 LADDER · STEP 2", "$75 → $146", the bank/ride split, then its legs. No labels, slogans or
     reasons in sentences: the site keeps the reasons, and the card carries the site and "Entertainment only". No units.
     Every number comes from the pick (x_post.guard checks). `weights` and `reason` are kept for callers; the post no
     longer carries a reason.
@@ -383,8 +384,8 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
     kind = pick_card.play_kind(pick)
     legs = [pick_card.short_leg(l.get('title')) for l in pick.get('legs') or [] if l.get('title')]
     if kind == 'ladder':
-        head, money = ladder_text(pick)
-        top = '\n'.join([head, money, *legs])
+        head, money, bank = ladder_text(pick)
+        top = '\n'.join([head, money, bank, *legs])
         options = ([top, f'{LADDER_ASK}\n{tail}'], [top, tail])
     elif kind == 'parlay':
         top = '\n'.join([f"{parlay_head(pick, league)} ({pick.get('book')})", *legs])

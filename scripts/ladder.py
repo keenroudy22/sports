@@ -1,10 +1,12 @@
-"""The Kook'n Ladder: $50 to $1,000, one rung at a time. Stdlib only.
+"""The Kook'n 80/20 Ladder: $50 to $1,000, one rung at a time. Stdlib only.
 
 The owner's call (2026-09-26): "50 -> 1000 on 1-2 leg safe bets", with alternate lines. Each rung is a two-leg
 ticket at one book, priced as a favorite (TARGET), built from safer player lines ("Bijan Robinson 50+ rushing
-yards") that our projection clears comfortably, one leg per game. The slower climb is deliberate. The whole bankroll rides: a win rolls the payout
-into the next rung, a miss starts the ladder over at $50, and reaching $1,000 finishes the climb (the next rung starts
-a new one). Money is whole dollars: a rung pays round(stake x the ticket's decimal price).
+yards") that our projection clears comfortably, one leg per game. The slower climb is deliberate. After a win the
+ladder banks 20% of the return and rides the other 80% on the next rung. A miss ends that climb but cannot take what
+was banked. The climb reaches $1,000 when its bank plus the next stake reaches the goal; the next rung then starts a
+new climb at $50. Money is whole dollars: a rung pays round(stake x the ticket's decimal price), the bank gets
+round(return x 20%), and the remainder rides.
 
 Like the easy parlay, a rung is never called value. Our player chances are tuned against main lines (and learning
 found them too confident even there), so on easier lines they can say "clears comfortably", not "beats the price".
@@ -38,6 +40,7 @@ import sharp_odds
 from sports_refresh import eastern_date
 
 START, GOAL = 50, 1000              # dollars
+BANK_RATE = 0.20                    # "Bank 20. Ride 80." (owner, 2026-09-28)
 BOOKS = {'draftkings': 'DraftKings', 'fanduel': 'FanDuel'}
 SLUGS = {'DraftKings': 'dk', 'FanDuel': 'fd'}
 MARKETS = ('recYds', 'rushYds', 'rec', 'passYds')     # lines a follower reads at a glance
@@ -71,11 +74,12 @@ def played(rung):
 
 def state(first, latest):
     """Where the ladder stands, from the rungs themselves:
-    {'run', 'step', 'stake', 'open', 'history', 'climbs', 'start', 'goal'}.
+    {'run', 'step', 'stake', 'banked', 'saved', 'open', 'history', 'climbs', 'start', 'goal'}.
 
-    A win rolls the payout into the next rung; reaching the goal finishes the climb and the next rung starts a new
-    run at START; a loss starts a new run too; a push or a void keeps the stake and the step."""
-    run, step, stake, open_rung = 1, 1, START, None
+    A win banks 20% of its return and rides 80%; reaching the goal with the bank plus the next stake finishes the
+    climb. A loss starts a new climb at START while the already saved money stays saved; a push or void keeps the
+    stake, bank and step."""
+    run, step, stake, banked, saved, open_rung = 1, 1, START, 0, 0, None
     history, climbs = [], []
     for rung in rungs(first, latest):
         if not played(rung):
@@ -85,22 +89,39 @@ def state(first, latest):
         if not result:
             open_rung = rung
             continue
-        history.append({'id': rung['id'], 'run': info.get('run'), 'step': info.get('step'), 'stake': info.get('stake'),
-                        'payout': info.get('payout'), 'odds': rung.get('odds'), 'result': result,
-                        'settledAt': rung.get('settledAt')})
+        item = {'id': rung['id'], 'run': info.get('run'), 'step': info.get('step'), 'stake': info.get('stake'),
+                'payout': info.get('payout'), 'odds': rung.get('odds'), 'result': result,
+                'settledAt': rung.get('settledAt')}
         if result == 'win':
-            stake, step = int(info.get('payout') or stake), step + 1
-            if stake >= GOAL:
-                climbs.append({'run': run, 'steps': int(info.get('step') or step - 1), 'final': stake, 'id': rung['id']})
-                run, step, stake = run + 1, 1, START
+            returned = int(info.get('payout') or stake)
+            before = int(info.get('banked') if info.get('banked') is not None else banked)
+            cut, next_stake = split_return(returned)
+            after = int(info.get('bankedAfter') if info.get('bankedAfter') is not None else before + cut)
+            next_stake = int(info.get('nextStake') if info.get('nextStake') is not None else next_stake)
+            saved += max(0, after - before)
+            banked, stake, step = after, next_stake, step + 1
+            item.update({'banked': before, 'bankedAfter': after, 'nextStake': next_stake})
+            if banked + stake >= GOAL:
+                climbs.append({'run': run, 'steps': int(info.get('step') or step - 1), 'final': banked + stake,
+                               'banked': banked, 'id': rung['id']})
+                run, step, stake, banked = run + 1, 1, START, 0
         elif result == 'loss':
-            run, step, stake = run + 1, 1, START
+            run, step, stake, banked = run + 1, 1, START, 0
+        history.append(item)
     return {'run': run, 'step': step, 'stake': stake, 'open': open_rung, 'history': history, 'climbs': climbs,
-            'start': START, 'goal': GOAL}
+            'banked': banked, 'saved': saved, 'bankPercent': int(BANK_RATE * 100),
+            'ridePercent': 100 - int(BANK_RATE * 100), 'start': START, 'goal': GOAL}
 
 
 def payout(stake, odds):
     return int(round(stake * parlay.decimal(odds)))
+
+
+def split_return(returned):
+    """Whole-dollar 80/20 split: bank 20% of the return and ride the remainder."""
+    returned = int(returned)
+    bank = int(round(returned * BANK_RATE))
+    return bank, returned - bank
 
 
 def todays_games(games, now, league, exclude=()):
@@ -225,8 +246,13 @@ def candidate(ctx, games, now, exclude=()):
             continue
         first = games.get(ticket['gameIds'][0]) or {}
         day = eastern_date(now)
-        stake = where['stake']
-        info = {'run': where['run'], 'step': where['step'], 'stake': stake, 'payout': payout(stake, ticket['odds']),
+        stake, banked = where['stake'], where['banked']
+        returned = payout(stake, ticket['odds'])
+        bank_cut, next_stake = split_return(returned)
+        info = {'run': where['run'], 'step': where['step'], 'stake': stake, 'payout': returned,
+                'banked': banked, 'bankThisWin': bank_cut, 'bankedAfter': banked + bank_cut,
+                'nextStake': next_stake, 'totalAfter': banked + returned,
+                'bankPercent': int(BANK_RATE * 100), 'ridePercent': 100 - int(BANK_RATE * 100),
                 'start': START, 'goal': GOAL}
         chances = ' and '.join(f"{100 * l['chance']:.0f}%" for l in ticket['legs'])
         base = f"{league}-{first.get('season', day.year)}-W{first.get('week', 0)}-ladder-{day:%m%d}-{SLUGS[ticket['book']]}"
@@ -239,7 +265,8 @@ def candidate(ctx, games, now, exclude=()):
                 'quoteType': 'capture', 'confidence': 1,
                 'edge': (f"For fun, not value: two easier lines our projections clear comfortably ({chances} on our numbers, "
                          f"which are tuned for main lines), at {ticket['book']}'s own prices, multiplied to {ticket['odds']:+d}. "
-                         f"The ladder's whole ${stake} rides to ${info['payout']}."),
+                         f"${stake} rides with ${banked} already banked. A win returns ${returned}: ${bank_cut} goes "
+                         f"to the bank and ${next_stake} rides next. Bank 20, ride 80."),
                 'cutoff': 'A ladder rung is not re-entered. It stands or falls as posted.',
                 'sources': sorted({SOURCE} | {games[g]['source'] for g in ticket['gameIds'] if g in games and games[g].get('source')})}, None
     return None, '; '.join(reasons) or 'no games today'
@@ -252,11 +279,14 @@ def main(argv=None):
     now = gates.when(args.now) if args.now else datetime.now(timezone.utc)
     ctx = gates.Stores().as_of(now)
     where = state(ctx.first, ctx.latest)
-    print(f"run {where['run']}, step {where['step']}, ${where['stake']} riding; {len(where['history'])} rungs played, "
+    print(f"run {where['run']}, step {where['step']}, ${where['stake']} riding, ${where['banked']} banked; "
+          f"{len(where['history'])} rungs played, "
           f"{len(where['climbs'])} climbs finished" + (f"; open: {where['open']['id']}" if where['open'] else ''))
     pick, reason = candidate(ctx, ctx.games, now)
     if pick:
-        print(f"next rung: {pick['title']} {pick['odds']:+d}: ${pick['ladder']['stake']} to ${pick['ladder']['payout']}")
+        info = pick['ladder']
+        print(f"next rung: {pick['title']} {pick['odds']:+d}: ${info['stake']} to ${info['payout']}; "
+              f"a win banks ${info['bankThisWin']} and rides ${info['nextStake']}")
         for leg in pick['legs']:
             print(f"  {leg['title']} {leg['odds']:+d} (ours {100 * leg['chance']:.0f}%, the price {100 * leg['implied']:.0f}%)")
     else:

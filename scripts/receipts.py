@@ -61,10 +61,10 @@ def game_day(pick, games):
 
 
 def label(pick, games=None):
-    """A play as its post named it: "Iowa/Michigan over 38.5", "5-leg lotto", "Ladder step 2 ($96 → $187)"."""
+    """A play as its post named it: "Iowa/Michigan over 38.5", "5-leg lotto", "80/20 ladder step 2"."""
     if pick_card.play_kind(pick) == 'ladder':
         info = pick.get('ladder') or {}
-        return f"Ladder step {info.get('step', 1)} ({pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))})"
+        return f"80/20 ladder step {info.get('step', 1)} ({pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))})"
     if pick_card.play_kind(pick) == 'parlay':
         odds = pick.get('odds')
         return f"{len(pick.get('legs') or [])}-leg {'lotto' if isinstance(odds, (int, float)) and odds >= x_post.LOTTO else 'parlay'}"
@@ -315,10 +315,17 @@ def cashed(first, latest, games, log_book, now):
 def ladder_cashed(pick):
     """(head, body) for a rung that won: the next step, or the top of the ladder."""
     info = pick.get('ladder') or {}
-    stake, won = pick_card.dollars(info.get('stake')), pick_card.dollars(info.get('payout'))
-    if (info.get('payout') or 0) >= (info.get('goal') or 1000):
-        return (f"🪜 Ladder complete: {pick_card.dollars(info.get('start', 50))} → {won} in {info.get('step', 1)} steps", '')
-    return (f"✅ Ladder step {info.get('step', 1)} cashed: {stake} → {won}", f"Step {info.get('step', 1) + 1} next.")
+    returned = int(info.get('payout') or 0)
+    bank_this = int(info.get('bankThisWin') if info.get('bankThisWin') is not None else round(returned * 0.20))
+    banked_after = int(info.get('bankedAfter') if info.get('bankedAfter') is not None else (info.get('banked') or 0) + bank_this)
+    next_stake = int(info.get('nextStake') if info.get('nextStake') is not None else returned - bank_this)
+    total = int(info.get('totalAfter') if info.get('totalAfter') is not None else banked_after + next_stake)
+    stake, won = pick_card.dollars(info.get('stake')), pick_card.dollars(returned)
+    if total >= (info.get('goal') or 1000):
+        return (f"🪜 80/20 ladder complete: {pick_card.dollars(info.get('start', 50))} → {pick_card.dollars(total)} in {info.get('step', 1)} steps",
+                f"{pick_card.dollars(banked_after)} banked along the way.")
+    return (f"✅ 80/20 ladder step {info.get('step', 1)} cashed: {stake} → {won}",
+            f"{pick_card.dollars(banked_after)} banked. {pick_card.dollars(next_stake)} rides step {info.get('step', 1) + 1}.")
 
 
 def with_menu(receipt, post, plays_today):

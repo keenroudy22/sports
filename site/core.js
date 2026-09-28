@@ -344,28 +344,39 @@
      one). Fun parlays (smaller stakes) and the Week 1 legs posted before prices were recorded get their own lines.
      The Pick of the Day record counts the days its post went out. */
   const isParlay = p => p.kind === 'parlays' || Boolean((p.legs || []).length) || Boolean(p.parlayType);
-  /* The Kook'n Ladder (scripts/ladder.py): $50 to $1,000, the whole bankroll riding on each rung, kept apart from the
-     record and counted in dollars. Its state is read from the rungs the way the desk reads it: a win rolls the payout
-     into the next step, reaching $1,000 finishes the climb, a miss starts a new climb at $50, a push keeps the stake,
-     and a rung pulled before its post went out still counts and waits for its result. */
+  /* The Kook'n 80/20 Ladder (scripts/ladder.py): bank 20% of every winning return and ride 80% on the next rung.
+     The current climb reaches $1,000 on bank plus ride; a miss starts a new $50 climb but cannot take the saved bank.
+     It stays outside the straight record, and a rung pulled before its post still counts and waits for its result. */
   const isLadder = p => p.parlayType === 'ladder';
-  const LADDER = { start: 50, goal: 1000 };
+  const LADDER = { start: 50, goal: 1000, bankPercent: 20, ridePercent: 80 };
+  const ladderSplit = returned => {
+    const gross = Math.round(Number(returned) || 0), bank = Math.round(gross * LADDER.bankPercent / 100);
+    return { bank, ride: gross - bank };
+  };
   const theLadder = picks => {
     const pulled = p => /before its post went out/.test(p.entryNote || '');
     const rungs = picks.filter(isLadder).filter(p => p.result || pulled(p) || (!p.entryNote && (p.status || 'active') === 'active'))
       .sort((a, b) => String(a.publishedAt || '').localeCompare(String(b.publishedAt || '')) || String(a.id).localeCompare(String(b.id)));
-    let run = 1, step = 1, stake = LADDER.start, open = null, best = LADDER.start;
+    let run = 1, step = 1, stake = LADDER.start, banked = 0, saved = 0, open = null, best = LADDER.start;
     const history = [], climbs = [];
     for (const r of rungs) {
       const info = r.ladder || {};
       if (!r.result) { open = r; continue; }
       history.push(r);
       if (r.result === 'win') {
-        stake = Number(info.payout) || stake; step += 1; best = Math.max(best, stake);
-        if (stake >= LADDER.goal) { climbs.push({ run, steps: step - 1, final: stake }); run += 1; step = 1; stake = LADDER.start; }
-      } else if (r.result === 'loss') { run += 1; step = 1; stake = LADDER.start; }
+        const returned = Number(info.payout) || stake, split = ladderSplit(returned);
+        const before = Number.isFinite(Number(info.banked)) ? Number(info.banked) : banked;
+        const after = Number.isFinite(Number(info.bankedAfter)) ? Number(info.bankedAfter) : before + split.bank;
+        const nextStake = Number.isFinite(Number(info.nextStake)) ? Number(info.nextStake) : split.ride;
+        saved += Math.max(0, after - before); banked = after; stake = nextStake; step += 1;
+        best = Math.max(best, banked + stake);
+        if (banked + stake >= LADDER.goal) {
+          climbs.push({ run, steps: step - 1, final: banked + stake, banked });
+          run += 1; step = 1; stake = LADDER.start; banked = 0;
+        }
+      } else if (r.result === 'loss') { run += 1; step = 1; stake = LADDER.start; banked = 0; }
     }
-    return { run, step, stake, open, history, climbs, best, ...LADDER };
+    return { run, step, stake, banked, saved, open, history, climbs, best, ...LADDER };
   };
   const dayOf = iso => {
     const d = new Date(iso);
@@ -433,5 +444,5 @@
   return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone,
     column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, eligible, summarizeTicket, ticketText,
-    unitsFor, stakeOf, recordOf, theRecord, isParlay, isLadder, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, shardOf, BASE };
 });

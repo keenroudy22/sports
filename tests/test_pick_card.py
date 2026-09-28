@@ -97,9 +97,12 @@ class CardTests(unittest.TestCase):
     def test_a_ladder_card_shows_the_money_the_legs_and_the_climb(self):
         rung = {'title': 'Ladder step 2: 2 legs at FanDuel', 'parlayType': 'ladder', 'odds': 95, 'book': 'FanDuel', 'riskUnits': 0.25,
                 'legs': [{'title': 'Drake London 40+ receiving yards'}, {'title': 'Bijan Robinson 50+ rushing yards'}],
-                'ladder': {'run': 1, 'step': 2, 'stake': 96, 'payout': 187, 'start': 50, 'goal': 1000}}
+                'ladder': {'run': 1, 'step': 2, 'stake': 75, 'payout': 146, 'banked': 19, 'bankThisWin': 29,
+                           'bankedAfter': 48, 'nextStake': 117, 'totalAfter': 165, 'bankPercent': 20,
+                           'ridePercent': 80, 'start': 50, 'goal': 1000}}
         text = pick_card.svg(rung, GAME)
-        for needle in ('THE LADDER', 'CLIMB 1', '$50 START · $1,000 GOAL', 'STEP 2 · TODAY', '$96 → $187',
+        for needle in ('THE 80/20 LADDER', 'CLIMB 1', 'BANK 20 · RIDE 80 · $1,000 GOAL',
+                       '$19 BANKED · $75 RIDING', 'STEP 2 · TODAY', '$75 → $146', 'WIN: BANK $29 · RIDE $117',
                        '• Drake London 40+ rec yds', '+95 AT FANDUEL', 'FUTURE RUNGS UNLOCK ONE AT A TIME',
                        pick_card.HOUSE[2]):
             self.assertIn(needle, text, needle)

@@ -658,15 +658,22 @@ class LockedUnitsTests(unittest.TestCase):
 
     def test_the_top_of_the_ladder_pings_the_owner_and_a_rung_has_its_own_words(self):
         top = {'title': 'Ladder step 5: 2 legs at FanDuel', 'parlayType': 'ladder', 'legs': [{}, {}], 'odds': 100,
-               'ladder': {'run': 1, 'step': 5, 'stake': 540, 'payout': 1080, 'start': 50, 'goal': 1000}}
-        ctx = SimpleNamespace(first={'NFL-ladder': top, 'NFL-low': dict(top, ladder=dict(top['ladder'], step=2, stake=96, payout=187))}, latest={})
+               'ladder': {'run': 1, 'step': 5, 'stake': 675, 'payout': 850, 'banked': 150, 'bankThisWin': 170,
+                          'bankedAfter': 320, 'nextStake': 680, 'totalAfter': 1000, 'bankPercent': 20,
+                          'ridePercent': 80, 'start': 50, 'goal': 1000}}
+        ctx = SimpleNamespace(first={'NFL-ladder': top, 'NFL-low': dict(top, ladder=dict(top['ladder'], step=2, stake=75,
+                                                                                       payout=146, banked=19,
+                                                                                       bankThisWin=29, bankedAfter=48,
+                                                                                       nextStake=117, totalAfter=165))}, latest={})
         plans = [('cashed:NFL-ladder', 'cashed', 'text', None, None), ('cashed:NFL-low', 'cashed', 'text', None, None)]
         [(title, message)] = run.lotto_pings(plans, ctx)
         self.assertEqual(title, 'Ladder complete: pin it')
-        self.assertIn('$1,080 from $50 in 5 steps', message)
+        self.assertIn('$1,000 from $50 in 5 steps', message)
         rung = run.write_prose(dict(top, book='FanDuel'), ctx, [])
-        self.assertIn('The whole $540 rides to $1080', rung['why'])
+        self.assertIn('$675 rides with $150 banked', rung['why'])
+        self.assertIn('bank $170 and ride $680', rung['why'])
         self.assertIn('Both legs have to hit', rung['risk'])
+        self.assertIn('cannot take money already banked', rung['risk'])
 
     def test_an_alert_can_open_a_link_and_wait(self):
         sent = []

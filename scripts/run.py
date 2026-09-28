@@ -1120,9 +1120,9 @@ def write_prose(candidate, ctx, records):
         if candidate.get('parlayType') == 'ladder':
             info = candidate['ladder']
             candidate['why'] = (f"Ladder step {info['step']}: two easier lines at {candidate['book']}, one per game, each one our projection "
-                                f"clears comfortably. The whole ${info['stake']} rides to ${info['payout']}: a win rolls it into the next "
-                                f"step, a miss starts the climb over at ${info['start']}. Kept apart from the record, in dollars.")
-            candidate['risk'] = ('Both legs have to hit; one miss ends the climb. Our player chances are tuned for main lines, so these legs '
+                                f"clears comfortably. ${info['stake']} rides with ${info['banked']} banked. A win returns ${info['payout']}: "
+                                f"bank ${info['bankThisWin']} and ride ${info['nextStake']} on the next step. Kept apart from the record, in dollars.")
+            candidate['risk'] = ('Both legs have to hit; one miss ends the climb, but it cannot take money already banked. Our player chances are tuned for main lines, so these legs '
                                  'are not value, just the fun of the climb. A player who does not take the field voids his leg under the '
                                  "book's rule, and a person settles the rung.")
             return candidate
@@ -1331,7 +1331,8 @@ def ladder_step(ctx, games, now, records, published, decided, screened, exclude=
         published.append((league, 'parlays', ticket))
         decided.append(decision_record(ticket, league, 'published', [], None, now, ctx))
         info = ticket['ladder']
-        log(f"ladder: step {info['step']} {ticket['odds']:+d} at {ticket['book']}, ${info['stake']} to ${info['payout']}: "
+        log(f"ladder: step {info['step']} {ticket['odds']:+d} at {ticket['book']}, ${info['stake']} to ${info['payout']}; "
+            f"bank ${info['bankThisWin']}, ride ${info['nextStake']}: "
             + ' / '.join(l['title'] for l in ticket['legs']))
         return
     refusal = gates.refusals(decisions)[0]
@@ -1762,8 +1763,9 @@ def lotto_pings(plans, ctx):
             out.append(('Longshot hit: pin it', f"{pick.get('title') or 'The fun parlay'} cashed at {int(pick['odds']):+d}. "
                         "The CASHED post is at the top of the profile: tap to open it, then ... and Pin to your profile."))
         info = pick.get('ladder') or {}
-        if pick and pick_card.play_kind(pick) == 'ladder' and (info.get('payout') or 0) >= (info.get('goal') or 1000):
-            out.append(('Ladder complete: pin it', f"The ladder reached ${info['payout']:,} from ${info.get('start', 50)} in "
+        if pick and pick_card.play_kind(pick) == 'ladder' and (info.get('totalAfter') or info.get('payout') or 0) >= (info.get('goal') or 1000):
+            final = info.get('totalAfter') or info.get('payout')
+            out.append(('Ladder complete: pin it', f"The 80/20 ladder reached ${final:,} from ${info.get('start', 50)} in "
                         f"{info.get('step', 1)} steps. The LADDER COMPLETE post is at the top of the profile: tap to open it, then ... "
                         "and Pin to your profile."))
     return out

@@ -313,23 +313,27 @@ test('one record: the straight plays in wins and losses and units, the side reco
   assert.equal(C.isParlay({ kind: 'parlays' }) && C.isParlay({ legs: [{}] }) && !C.isParlay({ kind: 'props' }), true);
 });
 
-test('the ladder climbs on wins, starts over on a miss, finishes at $1,000 and stays out of the fun parlays', () => {
+test('the 80/20 ladder banks wins, protects the bank on a miss, finishes at $1,000 and stays out of the fun parlays', () => {
   const rung = (id, published, step, stake, payout, result, extra = {}) => ({ id, kind: 'parlays', parlayType: 'ladder', publishedAt: published,
     status: result ? 'settled' : 'active', result, odds: 100, riskUnits: 0.25, legs: [{ title: 'a' }, { title: 'b' }],
     ladder: { run: 1, step, stake, payout, start: 50, goal: 1000 }, ...extra });
-  const picks = [rung('r1', '2026-09-27T12:30:00Z', 1, 50, 96, 'win'), rung('r2', '2026-09-28T12:30:00Z', 2, 96, 187, 'loss'),
+  const picks = [rung('r1', '2026-09-27T12:30:00Z', 1, 50, 96, 'win'), rung('r2', '2026-09-28T12:30:00Z', 2, 77, 150, 'loss'),
     rung('r3', '2026-10-01T12:30:00Z', 1, 50, 99, null, { entryNote: 'Closed before its post went out', status: 'expired' }),
     rung('r4', '2026-10-03T12:30:00Z', 1, 50, 97, null)];
   const L = C.theLadder(picks);
   assert.deepEqual([L.run, L.step, L.stake, L.open.id, L.history.map(r => r.id)], [2, 1, 50, 'r4', ['r1', 'r2']]);
   assert.equal(L.best, 96);
+  assert.deepEqual([L.banked, L.saved, L.bankPercent, L.ridePercent], [0, 19, 20, 80]);
   const graded = C.theLadder([rung('g', '2026-09-27T10:45:06Z', 1, 50, 94, 'win', { entryNote: 'Closed to new entries at 8:46 AM ET, before its post went out: x' })]);
-  assert.deepEqual([graded.step, graded.stake, graded.history.length], [2, 94, 1], 'a pulled rung counts once graded');
-  const waiting = C.theLadder([rung('w', '2026-09-28T10:45:06Z', 2, 94, 180, null,
+  assert.deepEqual([graded.step, graded.stake, graded.banked, graded.saved, graded.history.length], [2, 75, 19, 19, 1], 'a pulled rung counts and splits once graded');
+  const waiting = C.theLadder([rung('w', '2026-09-28T10:45:06Z', 2, 75, 146, null,
     { entryNote: 'Closed to new entries before its post went out: injury', status: 'expired' })]);
   assert.equal(waiting.open.id, 'w', 'an ungraded pulled rung blocks the next one');
-  const top = C.theLadder([rung('a', '2026-09-27T12:30:00Z', 5, 540, 1062, 'win')]);
-  assert.deepEqual([top.climbs.length, top.climbs[0].final, top.run, top.stake], [1, 1062, 2, 50]);
+  const topInfo = { run: 1, step: 5, stake: 675, payout: 850, banked: 150, bankThisWin: 170,
+    bankedAfter: 320, nextStake: 680, totalAfter: 1000, start: 50, goal: 1000 };
+  const top = C.theLadder([rung('a', '2026-09-27T12:30:00Z', 5, 675, 850, 'win', { ladder: topInfo })]);
+  assert.deepEqual([top.climbs.length, top.climbs[0].final, top.climbs[0].banked, top.run, top.stake], [1, 1000, 320, 2, 50]);
+  assert.deepEqual(C.ladderSplit(94), { bank: 19, ride: 75 });
   const fun = { id: 'f', kind: 'parlays', parlayType: 'longshot', result: 'win', odds: 600, riskUnits: 0.25, legs: [{ title: 'x' }] };
   const rec = C.theRecord([...picks, fun]);
   assert.equal(rec.parlays.wins + rec.parlays.losses, 1, 'only the longshot is a fun parlay');

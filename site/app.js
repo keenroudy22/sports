@@ -126,26 +126,32 @@
     const stale = raw.word === 'Price expired' && !p.entryNote && p.status !== 'expired';
     return { st: stale ? { word: 'Open', tone: 'open' } : raw, stale };
   };
-  /* The ladder's climb as a bar on a log scale, so every doubling is the same step: filled to the money riding, a lighter
-     stretch to what a win makes it. */
+  /* The ladder's climb as a bar on a log scale, so every doubling is the same step: current bank plus ride filled,
+     and the total after a win shaded ahead. */
   const money = n => `$${Math.round(Number(n) || 0).toLocaleString('en-US')}`;
   const ladderPct = n => Math.max(0, Math.min(100, 100 * Math.log(Math.max(Number(n) || 50, 50) / 50) / Math.log(1000 / 50)));
   const ladderBar = (stake, payout) => `<span class="ladder-track" role="img" aria-label="${esc(money(stake))} on the way to $1,000">
       <i class="ladder-win" style="width:${ladderPct(payout).toFixed(1)}%"></i><i class="ladder-now" style="width:${ladderPct(stake).toFixed(1)}%"></i></span>
     <span class="ladder-ends"><span>$50</span><span>$1,000</span></span>`;
+  const rungMoney = info => {
+    const split = C.ladderSplit(info.payout), banked = Number(info.banked) || 0;
+    return { banked, bankThisWin: Number(info.bankThisWin) || split.bank,
+      bankedAfter: Number(info.bankedAfter) || banked + split.bank, nextStake: Number(info.nextStake) || split.ride };
+  };
   const playCard = p => {
     const { st, stale } = playState(p);
     const legs = (p.legs || []).filter(l => typeof l === 'string' || l.title);
     const rung = C.isLadder(p), info = p.ladder || {};
     const lotto = !rung && legs.length && p.odds >= 1000;
-    const kind = rung ? `🪜 Ladder · Step ${info.step || 1}` : `${p.featured ? 'Pick of the Day · ' : ''}${lotto ? `🎰 Lotto · ${legs.length} legs` : playKind(p)}`;
+    const kind = rung ? `🪜 80/20 Ladder · Step ${info.step || 1}` : `${p.featured ? 'Pick of the Day · ' : ''}${lotto ? `🎰 Lotto · ${legs.length} legs` : playKind(p)}`;
     const when = countdown(p.kickoff) || whenShort(p.kickoff || p.publishedAt);
     const title = rung ? `${money(info.stake)} → ${money(info.payout)}` : p.displayTitle || p.title || p.player;
     return `<button class="play${p.featured ? ' play-featured' : ''}${lotto ? ' play-lotto' : ''}${rung ? ' play-ladder' : ''}" type="button" data-pick="${esc(p.id)}" style="--rail:${esc(rung ? '#f28c28' : p.color || 'var(--mint)')}">
       <span class="play-top"><span class="play-kind">${esc(kind)}${p.favorite && !legs.length && !p.featured ? ' · Favorite' : ''}</span><span class="pill pill-${st.tone}">${esc(st.word)}</span></span>
       <span class="play-hero">${legs.length ? '' : avatar(p, 'ava-lg')}<span class="play-title${rung ? ' num' : ''}">${lotto ? `<span class="lotto-odds num">${esc(odds(p.odds))}</span> ` : ''}${esc(title)}</span></span>
       ${legs.length ? `<span class="play-legs">${legs.map(l => typeof l === 'string' ? `<span class="leg">• ${esc(l)}</span>` : `<span class="leg">${avatar(l, 'ava-sm') || '•'} ${esc(l.title)}</span>`).join('')}</span>` : ''}
-      ${rung ? `<span class="ladder-bar">${ladderBar(info.stake, info.payout)}</span>` : ''}
+      ${rung ? `<span class="play-reason">${money(rungMoney(info).banked)} banked · a win banks ${money(rungMoney(info).bankThisWin)} and rides ${money(rungMoney(info).nextStake)}</span>
+      <span class="ladder-bar">${ladderBar((Number(info.banked) || 0) + Number(info.stake || 0), Number(info.totalAfter) || (Number(info.banked) || 0) + Number(info.payout || 0))}</span>` : ''}
       ${statTiles(p)}
       ${p.reason ? `<span class="play-reason">${esc(p.reason)}</span>` : ''}
       <span class="play-meta">${esc(when)}${stale && p.quotedAt ? ` · price from ${esc(ago(p.quotedAt))}` : ''} · tap for the research ›</span>
@@ -205,32 +211,33 @@
   /* The ladder in one line under the record, so a phone sees it without scrolling past the plays. */
   const ladderStrip = L => {
     const open = L.open, info = (open && open.ladder) || {};
-    const riding = open ? info.stake : L.stake;
-    const text = open ? `Step ${info.step || 1} is live: ${money(info.stake)} rides to ${money(info.payout)}`
-      : L.history.length ? `Step ${L.step} is next, ${money(L.stake)} riding` : 'The first rung goes up on the next game day';
-    return `<a class="record-strip ladder-strip" href="#record"><span class="eyebrow">🪜 The ladder · climb ${esc(L.run)}</span>
+    const riding = Number(open ? info.stake : L.stake), banked = Number(open ? info.banked : L.banked) || 0;
+    const text = open ? `Step ${info.step || 1}: ${money(riding)} riding · ${money(banked)} banked`
+      : L.history.length ? `Step ${L.step} next · ${money(riding)} riding · ${money(banked)} banked` : 'The first rung goes up when two clean games qualify';
+    const after = open ? Number(info.totalAfter) || banked + Number(info.payout || 0) : banked + riding;
+    return `<a class="record-strip ladder-strip" href="#record"><span class="eyebrow">🪜 80/20 ladder · climb ${esc(L.run)}</span>
       <span class="num record-big ladder-big">${money(riding)}</span><span class="record-note">${esc(text)}</span>
-      <span class="ladder-bar">${ladderBar(riding, open ? info.payout : riding)}</span></a>`;
+      <span class="ladder-bar">${ladderBar(banked + riding, after)}</span></a>`;
   };
-  /* The Kook'n Ladder (C.theLadder): where the climb stands, the bar, and the rungs played so far, newest first. */
+  /* The Kook'n 80/20 Ladder (C.theLadder): where the climb stands, its bank, and the rungs played so far. */
   const ladderCard = L => {
     const open = L.open, info = (open && open.ladder) || {};
-    const riding = open ? info.stake : L.stake;
-    const status = open ? `Step ${info.step || 1} is live: ${money(info.stake)} rides to ${money(info.payout)}`
-      : L.history.length ? `Step ${L.step} is next, with ${money(L.stake)} riding` : 'The first rung goes up on the next game day';
+    const riding = Number(open ? info.stake : L.stake), banked = Number(open ? info.banked : L.banked) || 0;
+    const status = open ? `Step ${info.step || 1} is live · ${money(banked)} banked`
+      : L.history.length ? `Step ${L.step} is next · ${money(banked)} banked` : 'The first rung waits for two clean games';
     const paid = r => { const i = r.ladder || {}; return r.result === 'win' ? money(i.payout) : r.result === 'loss' ? '$0' : money(i.stake); };
     const rows = L.history.slice().reverse().slice(0, 8).map(r => `<button class="row" type="button" data-pick="${esc(r.id)}">
       <span class="row-main"><span class="row-top"><span class="row-name">${MARKS[r.result] || '•'} Step ${esc((r.ladder || {}).step || '')}</span><span class="row-meta">${esc(whenShort(r.kickoff || r.publishedAt))}</span></span>
       <span class="row-meta clamp">${esc((r.legs || []).map(l => l.title).filter(Boolean).join(' · '))}</span></span>
-      <span class="row-price"><span class="row-odds num ${r.result === 'win' ? 'up' : r.result === 'loss' ? 'down' : ''}">${esc(money((r.ladder || {}).stake))} → ${esc(paid(r))}</span><span class="row-book">${esc(r.book || '')} ${esc(odds(r.odds))}</span></span></button>`).join('');
+      <span class="row-price"><span class="row-odds num ${r.result === 'win' ? 'up' : r.result === 'loss' ? 'down' : ''}">${esc(money((r.ladder || {}).stake))} → ${esc(paid(r))}</span><span class="row-book">${r.result === 'win' ? `bank +${esc(money(rungMoney(r.ladder || {}).bankThisWin))}` : `${esc(r.book || '')} ${esc(odds(r.odds))}`}</span></span></button>`).join('');
     const best = L.climbs.length ? Math.max(...L.climbs.map(c => c.final)) : null;
     return `<div class="card ladder-card">
-      <div class="ladder-head"><span class="ladder-title">🪜 The Kook’n Ladder</span><span class="pill pill-ladder">Climb ${esc(L.run)}</span></div>
-      <p class="ladder-pitch">${money(L.start)} to ${money(L.goal)}, the whole bankroll on each rung. A miss starts it over.</p>
-      <div class="ladder-now-line"><b class="num">${money(riding)}</b><span>${esc(status)}</span></div>
-      <span class="ladder-bar">${ladderBar(riding, open ? info.payout : riding)}</span>
+      <div class="ladder-head"><span class="ladder-title">🪜 The Kook’n 80/20 Ladder</span><span class="pill pill-ladder">Climb ${esc(L.run)}</span></div>
+      <p class="ladder-pitch">Bank 20% of every winning return. Ride 80%. A miss cannot take the bank.</p>
+      <div class="ladder-now-line"><b class="num">${money(riding)} riding</b><span>${esc(status)}</span></div>
+      <span class="ladder-bar">${ladderBar(banked + riding, open ? Number(info.totalAfter) || banked + Number(info.payout || 0) : banked + riding)}</span>
       ${rows ? `<div class="rows ladder-rows">${rows}</div>` : ''}
-      <p class="row-meta ladder-note">${L.climbs.length ? `Climbs finished: ${L.climbs.length}, best ${money(best)}. ` : ''}Two easier player lines a rung, about even money, kept apart from the record and counted in dollars. Just for fun.</p>
+      <p class="row-meta ladder-note">${L.climbs.length ? `Climbs finished: ${L.climbs.length}, best ${money(best)}. ` : ''}${L.saved ? `${money(L.saved)} has been banked across wins. ` : ''}Two easier player lines, one per game. No rung is forced when the slate is too small. Just for fun.</p>
     </div>`;
   };
   const external = (url, label) => /^https:\/\//.test(url || '') ? `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)} ↗</a>` : '';

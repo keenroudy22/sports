@@ -185,11 +185,13 @@ class CashedTests(unittest.TestCase):
 class LadderReceiptTests(unittest.TestCase):
     RUNG = dict(title='Ladder step 2: 2 legs at FanDuel', parlayType='ladder', riskUnits=0.25, odds=95, book='FanDuel',
                 legs=[{'title': 'A 40+ receiving yards'}, {'title': 'B 50+ rushing yards'}],
-                ladder={'run': 1, 'step': 2, 'stake': 96, 'payout': 187, 'start': 50, 'goal': 1000})
+                ladder={'run': 1, 'step': 2, 'stake': 75, 'payout': 146, 'banked': 19, 'bankThisWin': 29,
+                        'bankedAfter': 48, 'nextStake': 117, 'totalAfter': 165, 'bankPercent': 20,
+                        'ridePercent': 80, 'start': 50, 'goal': 1000})
 
     def test_a_rung_is_named_by_its_step_and_money_and_kept_off_the_straight_record(self):
         rung = pick('l', 'sun', **self.RUNG, result='win')
-        self.assertEqual(receipts.label(rung), 'Ladder step 2 ($96 → $187)')
+        self.assertEqual(receipts.label(rung), '80/20 ladder step 2 ($75 → $146)')
         straight = pick('s', 'sun', result='loss')
         self.assertEqual(receipts.headline([rung, straight]), '0-1', 'the ladder is not a straight play')
         self.assertEqual(receipts.headline([rung]), 'Ladder 1-0')
@@ -197,10 +199,11 @@ class LadderReceiptTests(unittest.TestCase):
 
     def test_a_cashed_rung_names_the_next_step_and_the_top_of_the_ladder_says_so(self):
         head, body = receipts.ladder_cashed(pick('l', 'sun', **self.RUNG))
-        self.assertEqual((head, body), ('✅ Ladder step 2 cashed: $96 → $187', 'Step 3 next.'))
-        top = dict(self.RUNG, ladder=dict(self.RUNG['ladder'], step=5, stake=540, payout=1062))
+        self.assertEqual((head, body), ('✅ 80/20 ladder step 2 cashed: $75 → $146', '$48 banked. $117 rides step 3.'))
+        top = dict(self.RUNG, ladder=dict(self.RUNG['ladder'], step=5, stake=675, payout=850, banked=150,
+                                          bankThisWin=170, bankedAfter=320, nextStake=680, totalAfter=1000))
         head, body = receipts.ladder_cashed(pick('l', 'sun', **top))
-        self.assertEqual((head, body), ('🪜 Ladder complete: $50 → $1,062 in 5 steps', ''))
+        self.assertEqual((head, body), ('🪜 80/20 ladder complete: $50 → $1,000 in 5 steps', '$320 banked along the way.'))
 
 
 class DailyTests(unittest.TestCase):

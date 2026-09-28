@@ -376,7 +376,7 @@ def play_label(pick):
 def kicker(pick, featured=False):
     """The label every card and every post leads with; the day's Pick of the Day and a researched favorite say so."""
     if play_kind(pick) == 'ladder':
-        return f"LADDER · STEP {(pick.get('ladder') or {}).get('step', 1)}"
+        return f"80/20 LADDER · STEP {(pick.get('ladder') or {}).get('step', 1)}"
     label = play_label(pick)
     if featured:
         return f'PICK OF THE DAY · {label}'
@@ -387,18 +387,23 @@ TEXT_WIDTH = 640     # pixels the title may use: from the left margin to short o
 
 
 def ladder_svg(pick, avatar=None):
-    """A tall, winding progress card for a ladder rung. Only the current rung is priced; future checkpoints stay
-    deliberately blank because the climb has no promised number of steps or returns."""
+    """A tall, winding 80/20 progress card. Only the current rung is priced; future checkpoints stay deliberately
+    blank because the climb has no promised number of steps or returns."""
     info = pick.get('ladder') or {}
     legs = [short_leg(l.get('title')) for l in (pick.get('legs') or []) if l.get('title')]
     chef = avatar_uri(CHEF) if avatar is None else avatar
     run, step = int(info.get('run') or 1), int(info.get('step') or 1)
     start, goal = dollars(info.get('start') or LADDER[0]), dollars(info.get('goal') or LADDER[1])
     stake_, payout_ = dollars(info.get('stake')), dollars(info.get('payout'))
+    banked = int(info.get('banked') or 0)
+    returned = int(info.get('payout') or 0)
+    bank_this = int(info.get('bankThisWin') if info.get('bankThisWin') is not None else round(returned * .20))
+    banked_after = int(info.get('bankedAfter') if info.get('bankedAfter') is not None else banked + bank_this)
+    next_stake = int(info.get('nextStake') if info.get('nextStake') is not None else returned - bank_this)
     price = f"{int(pick['odds']):+d}" if isinstance(pick.get('odds'), (int, float)) else ''
     book = str(pick.get('book') or '')
-    progress = f'{start} → {stake_}' if step > 1 else f'{start} START'
-    leg_rows = ''.join(f'<text x="330" y="{602 + 40 * i}" fill="{CREAM}" font-size="25" font-weight="650">• {esc(fit(leg, 38))}</text>'
+    progress = f'{dollars(banked)} BANKED · {stake_} RIDING'
+    leg_rows = ''.join(f'<text x="330" y="{590 + 38 * i}" fill="{CREAM}" font-size="25" font-weight="650">• {esc(fit(leg, 38))}</text>'
                        for i, leg in enumerate(legs[:2]))
     chef_art = (f'<image href="{chef}" x="768" y="988" width="224" height="224" '
                 'preserveAspectRatio="xMidYMid meet" clip-path="url(#chefClip)"/>') if chef else ''
@@ -413,30 +418,31 @@ def ladder_svg(pick, avatar=None):
 <circle cx="91" cy="94" r="14" fill="none" stroke="#f28c28" stroke-width="5"/><circle cx="91" cy="94" r="5" fill="#f28c28"/><path d="M105 94h28" stroke="#f28c28" stroke-width="5" stroke-linecap="round"/>
 <text x="142" y="116" fill="{CREAM}" font-size="34" font-weight="800" letter-spacing="5">KOOK’N</text>
 <text x="986" y="112" fill="#d8d1c6" font-size="22" font-weight="700" letter-spacing="3" text-anchor="end">CLIMB {run}</text>
-<text x="540" y="190" fill="{CREAM}" font-size="65" font-weight="900" text-anchor="middle" letter-spacing="2">THE LADDER</text>
-<text x="540" y="232" fill="#f28c28" font-size="28" font-weight="800" text-anchor="middle" letter-spacing="4">{esc(start)} START · {esc(goal)} GOAL</text>
+<text x="540" y="190" fill="{CREAM}" font-size="61" font-weight="900" text-anchor="middle" letter-spacing="2">THE 80/20 LADDER</text>
+<text x="540" y="232" fill="#f28c28" font-size="27" font-weight="800" text-anchor="middle" letter-spacing="4">BANK 20 · RIDE 80 · {esc(goal)} GOAL</text>
 
 <path d="M140 315 H810 Q920 315 920 425 Q920 535 810 535 H270 Q160 535 160 645 Q160 755 270 755 H810 Q920 755 920 865 Q920 975 810 975 H270 Q160 975 160 1085 Q160 1185 270 1185 H690" fill="none" stroke="#756b62" stroke-opacity=".55" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M140 315 H810 Q920 315 920 425 Q920 535 810 535 H270" fill="none" stroke="#f28c28" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M140 315 H810 Q920 315 920 425 Q920 535 810 535 H270 Q160 535 160 645 Q160 755 270 755 H810 Q920 755 920 865 Q920 975 810 975 H270 Q160 975 160 1085 Q160 1185 270 1185 H690" fill="none" stroke="{CREAM}" stroke-opacity=".46" stroke-width="3" stroke-dasharray="3 24" stroke-linecap="round"/>
 
 <circle cx="140" cy="315" r="34" fill="#f28c28" stroke="{CREAM}" stroke-width="4"/><text x="140" y="323" fill="#17100c" font-size="22" font-weight="900" text-anchor="middle">{esc(start)}</text><text x="140" y="375" fill="#d8d1c6" font-size="20" font-weight="700" text-anchor="middle" letter-spacing="2">START</text>
-<rect x="530" y="273" width="318" height="84" rx="17" fill="#173a2a" stroke="#6fdc8c" stroke-opacity=".7" stroke-width="2"/>
-<text x="558" y="307" fill="#a6e8b8" font-size="18" font-weight="800" letter-spacing="2">CLIMB TO DATE</text><text x="558" y="338" fill="{CREAM}" font-size="27" font-weight="900">{esc(progress)}</text>
+<rect x="510" y="273" width="358" height="84" rx="17" fill="#173a2a" stroke="#6fdc8c" stroke-opacity=".7" stroke-width="2"/>
+<text x="536" y="307" fill="#a6e8b8" font-size="18" font-weight="800" letter-spacing="2">CLIMB TO DATE</text><text x="536" y="338" fill="{CREAM}" font-size="25" font-weight="900">{esc(progress)}</text>
 
 <circle cx="270" cy="535" r="41" fill="#f28c28" fill-opacity=".22" stroke="#f28c28" stroke-width="5" filter="url(#glow)"/><circle cx="270" cy="535" r="12" fill="#f28c28"/>
-<rect x="300" y="478" width="586" height="198" rx="20" fill="#3b2617" stroke="#f28c28" stroke-width="3"/>
+<rect x="300" y="478" width="586" height="220" rx="20" fill="#3b2617" stroke="#f28c28" stroke-width="3"/>
 <text x="330" y="518" fill="#f28c28" font-size="20" font-weight="900" letter-spacing="3">STEP {step} · TODAY</text>
 <text x="850" y="518" fill="#d8d1c6" font-size="21" font-weight="700" text-anchor="end">{esc(price)} AT {esc(book.upper())}</text>
 <text x="330" y="561" fill="{CREAM}" font-size="36" font-weight="900">{esc(stake_)} → {esc(payout_)}</text>
 {leg_rows}
+<text x="330" y="675" fill="#a6e8b8" font-size="21" font-weight="850">WIN: BANK {esc(dollars(bank_this))} · RIDE {esc(dollars(next_stake))}</text>
 
 <g fill="#756b62" stroke="#d8d1c6" stroke-opacity=".55" stroke-width="3"><circle cx="520" cy="755" r="25"/><circle cx="810" cy="755" r="25"/><circle cx="650" cy="975" r="25"/><circle cx="270" cy="975" r="25"/><circle cx="320" cy="1185" r="25"/></g>
 <g fill="#d8d1c6" fill-opacity=".72"><circle cx="520" cy="755" r="5"/><circle cx="810" cy="755" r="5"/><circle cx="650" cy="975" r="5"/><circle cx="270" cy="975" r="5"/><circle cx="320" cy="1185" r="5"/></g>
-<text x="665" y="720" fill="#d8d1c6" fill-opacity=".65" font-size="21" font-weight="700" text-anchor="middle" letter-spacing="2">FUTURE RUNGS UNLOCK ONE AT A TIME</text>
+<text x="665" y="730" fill="#d8d1c6" fill-opacity=".65" font-size="21" font-weight="700" text-anchor="middle" letter-spacing="2">FUTURE RUNGS UNLOCK ONE AT A TIME</text>
 <path d="M690 1185v-88" stroke="{CREAM}" stroke-width="6" stroke-linecap="round"/><path d="M696 1098h110l-22 30 22 30H696z" fill="#f28c28"/><text x="750" y="1136" fill="#17100c" font-size="22" font-weight="900" text-anchor="middle">{esc(goal)}</text><text x="690" y="1225" fill="#f28c28" font-size="23" font-weight="900" text-anchor="middle" letter-spacing="3">THE GOAL</text>
 <circle cx="880" cy="1100" r="134" fill="{CREAM}" fill-opacity=".07"/><circle cx="880" cy="1100" r="115" fill="{CREAM}" fill-opacity=".09" stroke="{CREAM}" stroke-opacity=".4" stroke-width="3"/>{chef_art}
-<text x="76" y="1260" fill="{CREAM}" font-size="22" font-weight="750">One two-leg rung. Whole ladder bankroll.</text><text x="76" y="1292" fill="{CREAM}" font-size="22" font-weight="750">A miss starts a new climb.</text><text x="1002" y="1260" fill="#d8d1c6" font-size="22" text-anchor="end">keenroudy.com/sports</text><text x="1002" y="1292" fill="#a69d92" font-size="17" text-anchor="end">Entertainment only. Not advice.</text>
+<text x="76" y="1260" fill="{CREAM}" font-size="22" font-weight="750">Bank 20% of every return.</text><text x="76" y="1292" fill="{CREAM}" font-size="22" font-weight="750">Ride 80%. A miss cannot take the bank.</text><text x="1002" y="1260" fill="#d8d1c6" font-size="22" text-anchor="end">keenroudy.com/sports</text><text x="1002" y="1292" fill="#a69d92" font-size="17" text-anchor="end">Entertainment only. Not advice.</text>
 </svg>'''
 
 
@@ -622,7 +628,9 @@ def ladder_body(info, legs, price, book, ink, soft, accent, title_size):
             share = 0.0
         return x0 + (x1 - x0) * max(0.0, min(1.0, share))
 
-    now_x, win_x = at(info.get('stake')), at(info.get('payout'))
+    now_x = at((info.get('banked') or 0) + (info.get('stake') or 0))
+    win_x = at(info.get('totalAfter') if info.get('totalAfter') is not None else
+               (info.get('banked') or 0) + (info.get('payout') or 0))
     rows += [f'<rect x="{x0}" y="{y}" width="{x1 - x0}" height="14" rx="7" fill="{soft}" fill-opacity="0.28"/>',
              f'<rect x="{x0}" y="{y}" width="{max(14.0, win_x - x0):.0f}" height="14" rx="7" fill="{accent}" fill-opacity="0.45"/>',
              f'<rect x="{x0}" y="{y}" width="{max(14.0, now_x - x0):.0f}" height="14" rx="7" fill="{accent}"/>',

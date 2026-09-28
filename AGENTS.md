@@ -116,7 +116,8 @@ Handy commands (from `~/Projects/sports`):
 - **The daily card** (2026-09-28): five straight plays on Saturday and Sunday, a mix of game lines and player props
   (three of a kind at most); one play on other days, the NFL game's on an NFL night (`gates.card_cap`, ordered by
   `run.rank_card`). Never leave an NFL day without a post. A fun parlay with alternate lines every Saturday (college,
-  `easy_parlay.sharp_candidate`) and Sunday (NFL easy props), plus the lotto when one qualifies.
+  `easy_parlay.sharp_candidate`) and Sunday (NFL easy props), plus the lotto when one qualifies. Pick of the Day is
+  independent of every challenge and may come from any qualifying game, including a one-game slate.
 - **Alternate lines are for fun tickets** (2026-09-28): the ladder, lotto/longshot, easy parlay and any other fun
   parlay may use a book's feed-priced alternate when our number likes it at that price. One book, one leg per game,
   full-game half-point rungs from that market's own ladder only (`sharp_odds.consistent`); college player legs wait
@@ -128,9 +129,11 @@ Handy commands (from `~/Projects/sports`):
 - **Tweets are short and human** (2026-09-26: "Not so AI looking. And straight to the point"): the play with price
   and book, "We have it at 47.", "❤️ if you're tailing", @Playbook and the league tag. No labels, slogans or
   reason sentences. POTD: "POTD: ..." first. Lotto: "🎰 +2506 COLLEGE LOTTO (ESPN BET)" then the legs.
-- **The Kook'n Ladder** ($50 to $1,000, `scripts/ladder.py`): two safer player lines at one book, each priced -500
-  to -180 and together -250 to -110. A slower climb is preferred to forcing an even-money rung. One rung open at a
-  time, one a day, NFL legs until college player numbers are calibrated. It must post; alternates
+- **The Kook'n 80/20 Ladder** ($50 to $1,000, `scripts/ladder.py`): bank 20% of every winning return and ride 80% on
+  the next rung, so a miss cannot take what was banked. Two safer player lines at one book, each priced -500 to -180
+  and together -250 to -110. A slower climb is preferred to forcing an even-money rung. One rung open at a time, one
+  a day, NFL legs until college player numbers are calibrated. Never force it on a one-game slate: the two legs stay
+  in different games. It must post; alternates
   are allowed and expected. A rung pulled before its X post still counts, win or lose; while ungraded it blocks the
   next rung, and after grading the climb moves from its result.
 - **College player props** are legal pregame in Indiana (Gaming Commission, 2026-09-24). Their board rows come from
