@@ -561,6 +561,37 @@ def candidates(lines, games, now):
     return out
 
 
+CARD_PROP_PRICES = (-200, 120)     # a prop on the card is priced like a main line: past +120, shrinking our chance
+                                   # toward 50% (the calibration) overstates a plus-money over the market prices at 42%
+PROVISIONAL_K = 0.2                # a league's player chances before learning has calibrated them (the NFL's is 0.13)
+
+
+def rank_card(wanted, ctx):
+    """The card's candidates, best first: by our calibrated number against the price (a player's chance shrunk by the
+    league's learned k, or PROVISIONAL_K before there is one), with a paused market, a player market where the line has
+    been closer than our projection, or a chance that does not clear its price after all the rest. Those three rules
+    ordered the card instead of refusing from 2026-09-28, when the owner asked for a full card every game day."""
+    import learning
+    def score(c):
+        row, league = c['_row'], c['_league']
+        grade = row.get('grade') or {}
+        pick = dict(c, league=league)
+        if c.get('athleteId'):
+            raw, needs = grade.get('raw'), grade.get('needs')
+            k = ((ctx.policy.get('calibration') or {}).get(f'{league}/prop') or {}).get('k')
+            k = PROVISIONAL_K if k is None else k
+            edge = 100 * (0.5 + k * (raw - 0.5) - needs) if raw is not None and needs is not None else -99.0
+            behind = not gates.prop_market_not_trailing(pick, ctx).ok
+        else:
+            edge, behind = float(grade.get('edge') or -99.0), False
+        paused = learning.paused(ctx.policy, learning.segment_of(pick))
+        c['_rank'] = {'edge': round(edge, 1), 'paused': paused, 'behind': behind}
+        return (bool(paused or behind or edge < 0), -edge)
+    kept = [c for c in wanted if not c.get('athleteId')
+            or isinstance(c['_row'].get('odds'), (int, float)) and CARD_PROP_PRICES[0] <= c['_row']['odds'] <= CARD_PROP_PRICES[1]]
+    return sorted(kept, key=score)
+
+
 def readable_leg(leg, games):
     """A leg the way a post says it: "Iowa at Michigan over 38.5", "Coastal +2.5". None when it cannot say."""
     import pick_card
@@ -1227,29 +1258,37 @@ def allowed(path):
     return any(path == w.rstrip('/') or path.startswith(w) for w in WHITELIST)
 
 
-def easy_parlay_step(ctx, games, now, records, published, decided, screened, spend=True, exclude=()):
-    """The day's easy player-prop parlay on an NFL Sunday (scripts/easy_parlay.py), through the same gates as the
-    longshot, leaving off the games in `exclude`. Never fails a run."""
+def easy_parlay_step(ctx, games, now, records, published, decided, screened, spend=True, exclude=(), league='NFL'):
+    """The day's easy player-prop parlay (scripts/easy_parlay.py): the NFL's from The Odds API's alternate lines on a day
+    with three games or more, college's from the prop feed's alternates on a Saturday; through the same gates as the
+    longshot, leaving off the games in `exclude`. A ticket pulled before its post is replaced under a new id. Never
+    fails a run."""
     import easy_parlay
     try:
-        ticket, reason = easy_parlay.candidate(ctx, games, now, log=log, spend=spend, exclude=exclude)
+        if league == 'NFL':
+            ticket, reason = easy_parlay.candidate(ctx, games, now, log=log, spend=spend, exclude=exclude)
+        else:
+            ticket, reason = easy_parlay.sharp_candidate(ctx, games, now, league=league, exclude=exclude)
     except Exception as error:
-        log(f'NFL easy parlay skipped ({type(error).__name__}: {error})')
+        log(f'{league} easy parlay skipped ({type(error).__name__}: {error})')
         return
     if not ticket:
-        log(f'NFL easy parlay: {reason}')
+        log(f'{league} easy parlay: {reason}')
         return
+    ticket['id'] = gates.fresh_id(ticket['id'], ctx) if gates.pulled_before_post(ticket['id'], ctx) else ticket['id']
     write_prose(ticket, ctx, records)
-    ok, decisions = gates.admit(dict(ticket, league='NFL'), ctx)
+    ok, decisions = gates.admit(dict(ticket, league=league), ctx)
     if ok:
-        ctx.first[ticket['id']] = dict(ticket, league='NFL', publishedAt=stamp(now), kind='parlays')
-        published.append(('NFL', 'parlays', ticket))
-        decided.append(decision_record(ticket, 'NFL', 'published', [], None, now, ctx))
-        log(f"NFL easy parlay: {ticket['title']} {ticket['odds']:+d}: " + ' / '.join(l['title'] for l in ticket['legs']))
+        if any(d.rule == 'cfb_jurisdiction' and (d.data or {}).get('jurisdictionVerified') for d in decisions):
+            ticket['jurisdictionVerified'] = True     # a college ticket at a book available in Indiana
+        ctx.first[ticket['id']] = dict(ticket, league=league, publishedAt=stamp(now), kind='parlays')
+        published.append((league, 'parlays', ticket))
+        decided.append(decision_record(ticket, league, 'published', [], None, now, ctx))
+        log(f"{league} easy parlay: {ticket['title']} {ticket['odds']:+d}: " + ' / '.join(l['title'] for l in ticket['legs']))
         return
     refusal = gates.refusals(decisions)[0]
-    decided.append(decision_record(ticket, 'NFL', 'refused', [d.rule for d in gates.refusals(decisions)], refusal.reason, now, ctx))
-    screened.append({'league': 'NFL', 'gameId': ticket['gameIds'][0], 'title': ticket['title'], 'rule': refusal.rule, 'reason': refusal.reason})
+    decided.append(decision_record(ticket, league, 'refused', [d.rule for d in gates.refusals(decisions)], refusal.reason, now, ctx))
+    screened.append({'league': league, 'gameId': ticket['gameIds'][0], 'title': ticket['title'], 'rule': refusal.rule, 'reason': refusal.reason})
 
 
 def ladder_step(ctx, games, now, records, published, decided, screened, exclude=()):
@@ -1265,6 +1304,8 @@ def ladder_step(ctx, games, now, records, published, decided, screened, exclude=
         log(f'ladder: {reason}')
         return
     league = ticket['_league']
+    if gates.pulled_before_post(ticket['id'], ctx):
+        ticket['id'] = gates.fresh_id(ticket['id'], ctx)       # the day's first rung was pulled before its post
     write_prose(ticket, ctx, records)
     ok, decisions = gates.admit(dict(ticket, league=league), ctx)
     if ok:
@@ -1416,7 +1457,7 @@ def _run(args, now, slot, kinds, status):
 
     build_site.build(now)
     lines = load_json(build_site.OUT / 'lines.json', {'lines': []})['lines']
-    wanted = candidates(lines, games, now)
+    wanted = rank_card(candidates(lines, games, now), ctx)
     log(f'{len(wanted)} candidates on the board')
     decided = []          # every decision this run made, for the learning record
     reasons = {}          # the reason each published play's post will give (data/x-reasons.json)
@@ -1496,6 +1537,8 @@ def _run(args, now, slot, kinds, status):
             if not ticket:
                 log(f'{league} longshot: {reason}')
                 continue
+            if gates.pulled_before_post(ticket['id'], ctx):
+                ticket['id'] = gates.fresh_id(ticket['id'], ctx)       # the day's first was pulled before its post
             write_prose(ticket, ctx, records)
             ok, decisions = gates.admit(dict(ticket, league=league), ctx)
             if ok:
@@ -1510,6 +1553,8 @@ def _run(args, now, slot, kinds, status):
             screened.append({'league': league, 'gameId': ticket['gameIds'][0], 'title': ticket['title'],
                              'rule': gates.refusals(decisions)[0].rule, 'reason': gates.refusals(decisions)[0].reason})
         easy_parlay_step(ctx, games, now, records, published, decided, screened, spend=not args.dry_run, exclude=exclude)
+        if eastern_date(now).weekday() == 5:          # a college Saturday gets its alternate-line parlay too
+            easy_parlay_step(ctx, games, now, records, published, decided, screened, exclude=exclude, league='CFB')
         ladder_step(ctx, games, now, records, published, decided, screened, exclude=exclude)
 
     by_league = defaultdict(lambda: ([], [], []))

@@ -746,3 +746,24 @@ class BufferPostsTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class CardRankTests(unittest.TestCase):
+    def test_the_card_orders_by_our_number_with_paused_and_trailing_markets_last(self):
+        import learning
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from test_gates import context
+        policy = learning.default_policy()
+        policy['segments']['NFL/total'] = {'paused': True}
+        policy['calibration']['NFL/prop'] = {'k': 0.5, 'n': 600}
+        ctx = context(policy=policy, scoreboard={'props': {'markets': [{'market': 'recYds', 'graded': 200, 'closerThanLine': [80, 120]}]}})
+        total = lambda key, edge, league='NFL': {'id': key, 'marketType': 'total', '_league': league, '_row': {'grade': {'edge': edge}}}
+        prop = lambda key, market, raw, needs, odds: {'id': key, 'athleteId': key, 'market': market, '_league': 'NFL',
+                                                      '_row': {'odds': odds, 'grade': {'raw': raw, 'needs': needs}}}
+        wanted = [total('nfl-total', 4.0), total('cfb-total', 2.0, 'CFB'), prop('rec', 'rec', 0.70, 0.52, -110),
+                  prop('yards', 'recYds', 0.80, 0.52, -110), prop('plus', 'rec', 0.90, 0.42, 140)]
+        order = [c['id'] for c in run.rank_card(wanted, ctx)]
+        self.assertEqual(order, ['rec', 'cfb-total', 'yards', 'nfl-total'],
+                         'a +8 prop, then the +2 college total; the trailing yards market and the paused NFL total after, '
+                         'strongest first; a plus-money prop is not a card play')
+

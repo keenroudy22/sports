@@ -55,12 +55,13 @@ QB_OUT = {'doubtful', 'out', 'injured reserve', 'suspension'}
 QUOTE_TYPES = {'capture', 'feed', 'page', 'sportsbook'}
 STARTED_MARGIN = timedelta(minutes=5)      # a game this close to kickoff cannot be published in time
 ONE_BOOK_EXCEPTION = timedelta(hours=3)    # inside this, one book is all there will be
-LEAN_EDGE, LEAN_STRONG = 3.0, 2.0          # model lean: points clear of break-even (favorites only, below); confidence 3 at 2+
-# Only the desk's favorites go out (the owner, 2026-09-26: "you need to only post your favorite lines"): a straight play
-# needs FAVORITE_EDGE calibrated points clear of break-even, and a game day carries at most FAVORITES_PER_DAY of them,
-# FAVORITES[kind] of each kind. Runs judge the strongest first, so the day's card keeps the best each run sees.
-FAVORITE_EDGE = 3.0
-FAVORITES_PER_DAY, FAVORITES = 3, {'team': 2, 'player': 2}
+LEAN_EDGE, LEAN_STRONG = 1.0, 2.0          # model lean: points clear of break-even; confidence 3 at 2+
+# The day's card (the owner, 2026-09-28: "post like 5 plays you like when there are multiple games like a Sunday.
+# Monday and Thursday you can just do one play. I want a good mix of game lines and player props"): five straight plays
+# on a Saturday or a Sunday, three of a kind at most; one on any other day, the NFL game's on a night with one. The
+# runs judge the strongest first (run.rank_card), so the card is the best each run sees.
+CARD = {'weekend': 5, 'weekday': 1}
+CARD_KIND_MAX = 3
 PROP_RAW, PROP_EDGE, PROP_FLOOR = 0.60, 5.0, -200
 # Leagues whose player chances publish only once learning has calibrated them against that league's own graded lines:
 # college player numbers were never graded against a line before 2026-09-26, and the NFL's k (0.13) says raw player
@@ -497,27 +498,50 @@ def slate_day(pick, ctx):
     return eastern_date(min(starts)) if starts else None
 
 
-def favorites_cap(candidate, ctx):
-    """Only the day's favorites: at most FAVORITES_PER_DAY straight plays whose games fall on one Eastern day, and at
-    most FAVORITES[kind] team plays or player props among them, whenever they were published."""
+def pulled_before_post(key, ctx):
+    """Was the pick closed before its post went out? It stays in the record; it never reached a follower."""
+    recent = dict(ctx.first.get(key) or {}, **ctx.latest.get(key, {}))
+    return 'before its post went out' in str(recent.get('entryNote') or '')
+
+
+def fresh_id(base, ctx):
+    """An id for a fun ticket that replaces one pulled earlier the same day: the day's ids are fixed by date and book,
+    and a replacement under the pulled one's id would be refused as a second write (2026-09-27, the ladder)."""
+    if base not in ctx.first:
+        return base
+    n = 2
+    while f'{base}-{n}' in ctx.first:
+        n += 1
+    return f'{base}-{n}'
+
+
+def card_cap(candidate, ctx):
+    """The day's card: CARD['weekend'] straight plays on a Saturday or a Sunday, CARD_KIND_MAX team plays or player props
+    at most, and CARD['weekday'] on any other day, the NFL game's when the day has one. It counts the plays whose games
+    fall on that Eastern day, whenever they were published, apart from one pulled before its post went out."""
     day = slate_day(candidate, ctx)
     if day is None:
-        return Decision(False, 'favorites_cap', 'game not in the slate')
+        return Decision(False, 'card_cap', 'game not in the slate')
+    weekend = day.weekday() in (5, 6)
+    size = CARD['weekend' if weekend else 'weekday']
     kind = 'player' if candidate.get('athleteId') else 'team'
     count = {'team': 0, 'player': 0}
     for key, pick in ctx.first.items():
         if key == candidate.get('id') or pick.get('historicalImport') or pick.get('legs') or pick.get('parlayType'):
             continue
-        if when(pick.get('publishedAt') or '1970-01-01T00:00Z') > ctx.now or slate_day(pick, ctx) != day:
+        if when(pick.get('publishedAt') or '1970-01-01T00:00Z') > ctx.now or slate_day(pick, ctx) != day or pulled_before_post(key, ctx):
             continue
         count['player' if pick.get('athleteId') else 'team'] += 1
-    if sum(count.values()) >= FAVORITES_PER_DAY:
-        return Decision(False, 'favorites_cap', f"{sum(count.values())} plays already on the {day} card; favorites only, "
-                                                f"{FAVORITES_PER_DAY} a day")
-    if count[kind] >= FAVORITES[kind]:
-        return Decision(False, 'favorites_cap', f"{count[kind]} {'player props' if kind == 'player' else 'team plays'} already on "
-                                                f"the {day} card; the cap is {FAVORITES[kind]}")
-    return Decision(True, 'favorites_cap', f"{sum(count.values())} of {FAVORITES_PER_DAY} on the {day} card")
+    if sum(count.values()) >= size:
+        return Decision(False, 'card_cap', f"{sum(count.values())} plays already on the {day} card; the card is {size}")
+    if weekend and count[kind] >= CARD_KIND_MAX:
+        return Decision(False, 'card_cap', f"{count[kind]} {'player props' if kind == 'player' else 'game lines'} already on the "
+                                           f"{day} card; {CARD_KIND_MAX} of a kind at most, for a mix")
+    league = candidate.get('league') or (game_of(candidate, ctx) or {}).get('league')
+    if not weekend and league != 'NFL' and any(g.get('league') == 'NFL' and eastern_date(when(g['kickoff'])) == day
+                                               for g in ctx.games.values()):
+        return Decision(False, 'card_cap', f"the one play on {day:%A}'s card is the NFL game's")
+    return Decision(True, 'card_cap', f"{sum(count.values())} of {size} on the {day} card")
 
 
 def lean_daily_cap(candidate, ctx):
@@ -602,7 +626,7 @@ def prop_calibrated_value(candidate, ctx):
         return Decision(False, 'prop_calibrated_value', 'v2 has no projection for this player and market')
     chance = 0.5 + k * (desk['rawChance'] - 0.5)
     edge = 100 * (chance - desk['breakEven'])
-    need = max(FAVORITE_EDGE, learning.threshold(ctx.policy, 'prop.minCalibratedEdge', learning.segment_of(candidate)))
+    need = learning.threshold(ctx.policy, 'prop.minCalibratedEdge', learning.segment_of(candidate))
     if edge < need:
         return Decision(False, 'prop_calibrated_value',
                         f"calibrated {100 * chance:.1f}% (raw {100 * desk['rawChance']:.1f}% shrunk by k {k:g}, learned from "
@@ -705,7 +729,7 @@ def longshot_one_per_day(candidate, ctx):
     """One fun parlay of each kind a day: the longshot (game lines) and the easy parlay (easier player lines)."""
     kind = candidate.get('parlayType') or 'longshot'
     today = [k for k, p in published_today(ctx, candidate.get('id'))
-             if (p.get('parlayType') or ('longshot' if p.get('legs') else None)) == kind]
+             if (p.get('parlayType') or ('longshot' if p.get('legs') else None)) == kind and not pulled_before_post(k, ctx)]
     word = 'easy parlay' if kind == 'easyProps' else 'longshot'
     if len(today) >= LONGSHOTS_PER_DAY:
         return Decision(False, 'longshot_one_per_day', f"{today[0]} is already today's {word}")
@@ -749,12 +773,13 @@ def revision_frozen(candidate, ctx):
 COMMON = (not_started, expiry_ok, price_present, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction)
 SHOP = (one_book, best_quote_by_ev)
 RULES = {
-    'modelLean': COMMON + SHOP + (lean_is_total, lean_edge, learned_pause, lean_confidence, favorites_cap, lean_nothing_against, qb_available),
-    'propLean': COMMON + SHOP + (prop_raw_edge, prop_calibrated_value, learned_pause, prop_settled_role, prop_price_floor, prop_window_cap,
-                                 prop_one_per_player, prop_not_in_longshot, prop_injury_clear, prop_market_not_trailing, favorites_cap,
-                                 lean_nothing_against),
-    'favorite': COMMON + SHOP + (favorite_needs_reason, favorites_cap, lean_nothing_against, qb_available, prop_injury_clear),
-    'researched': COMMON + SHOP + (favorites_cap, lean_nothing_against, qb_available, prop_injury_clear),
+    # learned_pause, prop_calibrated_value and prop_market_not_trailing order the card now (run.rank_card) instead of
+    # refusing: the owner wants a full card every game day (2026-09-28), and those rules still decide what comes first.
+    'modelLean': COMMON + SHOP + (lean_is_total, lean_edge, lean_confidence, card_cap, lean_nothing_against, qb_available),
+    'propLean': COMMON + SHOP + (prop_raw_edge, prop_settled_role, prop_price_floor, prop_window_cap, prop_one_per_player,
+                                 prop_not_in_longshot, prop_injury_clear, card_cap, lean_nothing_against),
+    'favorite': COMMON + SHOP + (favorite_needs_reason, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
+    'researched': COMMON + SHOP + (card_cap, lean_nothing_against, qb_available, prop_injury_clear),
     'longshot': (not_started, expiry_ok, price_present, sources_https, not_republished, cfb_jurisdiction, longshot_one_per_day),
     'ladder': (not_started, expiry_ok, price_present, sources_https, not_republished, cfb_jurisdiction, ladder_one_rung),
     'revision': (revision_frozen,),

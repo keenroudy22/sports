@@ -225,7 +225,8 @@ def candidate(ctx, games, now, exclude=()):
         info = {'run': where['run'], 'step': where['step'], 'stake': stake, 'payout': payout(stake, ticket['odds']),
                 'start': START, 'goal': GOAL}
         chances = ' and '.join(f"{100 * l['chance']:.0f}%" for l in ticket['legs'])
-        return {'id': f"{league}-{first.get('season', day.year)}-W{first.get('week', 0)}-ladder-{day:%m%d}-{SLUGS[ticket['book']]}",
+        base = f"{league}-{first.get('season', day.year)}-W{first.get('week', 0)}-ladder-{day:%m%d}-{SLUGS[ticket['book']]}"
+        return {'id': gates.fresh_id(base, ctx) if gates.pulled_before_post(base, ctx) else base,
                 'title': f"Ladder step {info['step']}: 2 legs at {ticket['book']}", 'status': 'active', 'favorite': False,
                 'parlayType': 'ladder', 'riskUnits': STAKE, 'ladder': info, 'legs': ticket['legs'], '_league': league,
                 'correlation': 'One leg per game, so the book prices the ticket as the legs multiplied.',

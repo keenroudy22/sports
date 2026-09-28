@@ -203,10 +203,32 @@ def candidate(ctx, games, now, key=None, get=None, cache=None, remaining=None, l
     ticket, reason = build(legs)
     if not ticket:
         return None, reason
+    return ticket_pick(ticket, games, now, 'NFL', SOURCE), None
+
+
+def sharp_candidate(ctx, games, now, league='CFB', exclude=()):
+    """The day's easy parlay from the prop feed's own alternate lines (SharpAPI, no credits), for a college Saturday
+    (the owner, 2026-09-28: "on saturday and sunday you should do a fun parlay with alternate lines"): the ladder's
+    legs (`ladder.legs_for_game`: the main line's own ladder, a settled role, nobody listed), three games at one book."""
+    import ladder
+    day = eastern_date(now)
+    today = [g for g in games.values() if g.get('league') == league and g.get('state', 'pre') == 'pre' and g['id'] not in set(exclude)
+             and eastern_date(gates.when(g['kickoff'])) == day and gates.when(g['kickoff']) > now + LEAD]
+    if len(today) < LEGS:
+        return None, f'only {len(today)} {league} games left today; a ticket needs {LEGS}'
+    seen = ladder.confirmed_at()
+    legs = [leg for g in today for leg in ladder.legs_for_game(g, ctx.prop_odds.get(g['id']), ctx, now, seen)]
+    ticket, reason = build(legs)
+    if not ticket:
+        return None, reason
+    return ticket_pick(ticket, games, now, league, 'https://sharpapi.io/'), None
+
+
+def ticket_pick(ticket, games, now, league, source):
     first = games.get(ticket['gameIds'][0]) or {}
     day = eastern_date(now)
     lows = min(l['chance'] for l in ticket['legs'])
-    return {'id': f"NFL-{first.get('season', day.year)}-W{first.get('week', 0)}-easy-{day:%m%d}-{'dk' if ticket['book'] == 'DraftKings' else 'fd'}",
+    return {'id': f"{league}-{first.get('season', day.year)}-W{first.get('week', 0)}-easy-{day:%m%d}-{'dk' if ticket['book'] == 'DraftKings' else 'fd'}",
             'title': f"{len(ticket['legs'])}-leg easy props at {ticket['book']}", 'status': 'active', 'favorite': False,
             'parlayType': 'easyProps', 'riskUnits': STAKE, 'legs': ticket['legs'],
             'correlation': 'One leg per game, so the book prices the ticket as the legs multiplied.',
@@ -217,4 +239,4 @@ def candidate(ctx, games, now, key=None, get=None, cache=None, remaining=None, l
                      f"on our numbers, which are tuned for main lines), priced at {ticket['book']}'s own alternate-line price and "
                      f"multiplied to {ticket['odds']:+d}. A quarter unit, kept with the longshots."),
             'cutoff': 'A fun parlay is not re-entered. It stands or falls as posted.',
-            'sources': sorted({SOURCE} | {games[g]['source'] for g in ticket['gameIds'] if g in games and games[g].get('source')})}, None
+            'sources': sorted({source} | {games[g]['source'] for g in ticket['gameIds'] if g in games and games[g].get('source')})}

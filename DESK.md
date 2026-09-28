@@ -27,13 +27,20 @@ Exactly what `PROMPT.md` allows, and only when every gate passes:
 - **Settlements and closes**: revisions of published picks, graded from the box score or closed to
   new entries when the line moved past the published cutoff. An outcome the code cannot grade (a player
   with no line in the box score, a parlay leg that pushed) is left for a person and named in the log.
-- **Favorites only** (the owner, 2026-09-26: "you need to only post your favorite lines"): a straight play needs its
-  calibrated chance three points or more clear of break-even (`gates.FAVORITE_EDGE`), and a game day carries at most
-  three straight plays, at most two team plays and two player props, whenever they were published
-  (`gates.favorites_cap`); runs judge the strongest first. One pick per bet, open or closed: a bet the desk closed
-  is never published again at another number (`gates.not_duplicate`). Fun parlays and the ladder are apart.
-- **Model leans**: totals only, the favorites bar above, at the best expected value across the books, none when a
-  starting quarterback is doubtful or worse.
+- **The daily card** (the owner, 2026-09-28, after a Sunday with no NFL post: "post like 5 plays you like when there
+  are multiple games like a Sunday. Monday and Thursday you can just do one play. I want a good mix of game lines and
+  player props"): five straight plays on a Saturday or a Sunday, three of a kind at most; one on any other day, and on
+  a night with an NFL game, that game's (`gates.card_cap`, counting the day's plays whenever published, apart from one
+  pulled before its post). The runs judge candidates best first (`run.rank_card`): by our calibrated number against
+  the price (a player's chance shrunk by the league's learned k, 0.2 before there is one), with a paused market, a
+  player market where the line has been closer than our projection, or a chance that does not clear its price after
+  the rest. Those three rules (`learned_pause`, `prop_market_not_trailing`, `prop_calibrated_value`) order the card
+  now instead of refusing; so college props can make the card too. A card prop is priced -200 to +120 (past +120 the
+  calibration overstates a plus-money over). One pick per bet, open or closed: a bet the desk closed is never
+  published again at another number (`gates.not_duplicate`). Fun parlays and the ladder are apart. (For two days
+  before, 2026-09-26 to 28, the rule was "favorites only": three a day at three points; it left NFL Sunday empty.)
+- **Model leans**: totals only, a calibrated chance one point or more clear of break-even, at the best expected value
+  across the books, none when a starting quarterback is doubtful or worse.
 - **Prop leans**: raw chance 60% or better on a settled role, five points clear of the price, never worse
   than -200, three per kickoff window, one per player, never a player listed questionable or worse, never in
   a market where the closing line has been closer than our projection (read live from the scoreboard),
@@ -270,7 +277,13 @@ A win rolls the payout (whole dollars) into the next step, a miss starts a new c
 climb. The state is never stored: `ladder.state` (and `site/core.js theLadder`) read it from the rungs and their
 results, so it cannot drift; a rung pulled before its post never counts. One rung open at a time, one played a day
 (`gates.ladder_one_rung`); NFL legs only until learning calibrates college player numbers (college has no injury
-feed either), then college too, from the 6:45 AM run on. Kept apart from the
+feed either), then college too, from the 6:45 AM run on. A rung pulled before its post is replaced the same day under
+a new id (`gates.fresh_id`: Sunday 2026-09-27's replacement was refused as a second write of the pulled one's id); the
+lotto and the easy parlay are replaced the same way, and a pulled ticket no longer counts as the day's one.
+
+**Alternate-line parlays every weekend** (the owner, 2026-09-28): the NFL's easy parlay on a Sunday, and on a college
+Saturday one from the prop feed's own alternates (`easy_parlay.sharp_candidate`, the ladder's legs, three games at one
+book, +150 to +700), college legs included: it is for fun, at a quarter unit. Kept apart from the
 record in dollars: the site has a ladder card on Today and Record, receipts list a rung as "Ladder step 2: $96 to
 $187", and the posts lead "🪜 KOOK’N LADDER · STEP 2" with "$96 → $187 · +95 at FanDuel", on a card in the
 kitchen's own colours with the climb as a bar. Never called value: the book's price carries the safety, our number

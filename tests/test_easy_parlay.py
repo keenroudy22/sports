@@ -170,3 +170,26 @@ class GateTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class CollegeTests(unittest.TestCase):
+    def test_a_college_saturday_gets_its_alternate_line_parlay_from_the_prop_feed(self):
+        from unittest import mock
+        import ladder
+        saturday = datetime(2026, 10, 3, 12, 30, tzinfo=timezone.utc)
+        games = {gid: dict(game(gid, 'A' + gid, 'H' + gid, '2026-10-03T19:30Z'), league='CFB') for gid in ('c1', 'c2', 'c3')}
+
+        def legs(g, record, ctx, now, seen=None):
+            return [{'id': f"alt-{g['id']}", 'title': f"Player {g['id']} 40+ rec yds", 'gameId': g['id'], 'athleteId': g['id'] + 'p',
+                     'market': 'recYds', 'direction': 'over', 'line': 39.5, 'book': 'FanDuel', 'odds': -250, 'chance': 0.88,
+                     'implied': 0.714, 'projection': 70.0, 'kickoff': g['kickoff'], 'observedAt': '2026-10-03T12:00:00Z',
+                     'marketWindow': 'Full game'}]
+        view = SimpleNamespace(prop_odds={})
+        with mock.patch.object(ladder, 'legs_for_game', legs), mock.patch.object(ladder, 'confirmed_at', lambda: {}):
+            pick, reason = easy_parlay.sharp_candidate(view, games, saturday)
+        self.assertIsNone(reason)
+        self.assertEqual((pick['id'], pick['parlayType'], pick['odds'], len(pick['legs'])), ('CFB-2026-W4-easy-1003-fd', 'easyProps', 174, 3))
+        self.assertIn('https://sharpapi.io/', pick['sources'])
+        with mock.patch.object(ladder, 'legs_for_game', legs), mock.patch.object(ladder, 'confirmed_at', lambda: {}):
+            self.assertIn('only 2 CFB games', easy_parlay.sharp_candidate(view, dict(list(games.items())[:2]), saturday)[1])
+
