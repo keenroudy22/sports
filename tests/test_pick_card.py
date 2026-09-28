@@ -30,8 +30,9 @@ class CardTests(unittest.TestCase):
         nasty = pick_card.svg(dict(PICK, title='A&M <script> under 40', book='B&B'))
         self.assertIn('A&amp;M &lt;script&gt; under 40', nasty)
         self.assertNotIn('<script>', nasty)
-        self.assertIn('TEAM PROP · FAVORITE', text)
-        self.assertIn('>TEAM PROP<', pick_card.svg(dict(PICK, favorite=False, modelLean=True)))
+        self.assertIn('GAME TOTAL · FAVORITE', text)
+        self.assertIn('>GAME TOTAL<', pick_card.svg(dict(PICK, favorite=False, modelLean=True)))
+        self.assertIn('>GAME SPREAD<', pick_card.svg(dict(PICK, favorite=False, marketType='spread', direction='home')))
         self.assertIn('>PLAYER PROP<', pick_card.svg(dict(PICK, favorite=False, modelLean=True, athleteId='1')))
 
     def test_a_player_prop_wears_his_photo_a_team_prop_the_logos_a_parlay_the_chef(self):
@@ -78,12 +79,15 @@ class CardTests(unittest.TestCase):
         pick = {'title': 'New Mexico at New Mexico State over 48.5', 'marketType': 'total'}
         self.assertEqual(pick_card.display_title(pick, game), 'New Mexico at New Mexico State over 48.5',
                          'the 2026-09-26 post said "Stateate": a short name matched the start of the school name')
+        self.assertEqual(pick_card.display_title(dict(pick, title='New Mexico at New Mexico Stateate over 48.5'), game),
+                         'New Mexico at New Mexico State over 48.5')
         self.assertEqual(pick_card.display_title(dict(pick, title='UNM at NMSU OVER 48.5'), game), 'New Mexico at New Mexico State over 48.5')
         self.assertEqual(pick_card.display_title(dict(pick, title='New Mexico at New Mexico St over 48.5'), game),
                          'New Mexico at New Mexico State over 48.5')
         miami = {'league': 'CFB', 'away': {'short': 'C Michigan', 'school': 'Central Michigan'},
                  'home': {'id': '2390', 'short': 'Miami', 'school': 'Miami'}}
-        for title in ('Central Michigan at Miami (FL) under 53.5', 'C Michigan at Miami under 53.5'):
+        for title in ('Central Michigan at Miami (FL) under 53.5', 'Central Michigan at Miami (FL) (FL) under 53.5',
+                      'C Michigan at Miami under 53.5'):
             self.assertEqual(pick_card.display_title({'title': title, 'marketType': 'total'}, miami),
                              'Central Michigan at Miami (FL) under 53.5', "the 2026-09-26 receipt said \"Miami (FL) (FL)\"")
 

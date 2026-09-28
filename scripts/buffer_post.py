@@ -12,7 +12,7 @@ a desk that posts a handful of plays a day at set times.
   python scripts/buffer_post.py post PICK_ID [--at ISO]   schedule one pick's post (needs --confirm)
   python scripts/buffer_post.py reconcile          record the X link, or the error, for every post whose time passed
 
-X gets plays only: player props, team props and the day's fun parlay, the same shape every time and always
+X gets plays only: player props, game lines and the day's fun parlay, the same shape every time and always
 with the card. The run (scripts/run.py) schedules each play once, three hours before its kickoff and never
 before 9:00 AM ET on game day, ten minutes apart, and logs every post in data/x-posted.json so nothing goes
 out twice. A play whose card is not live yet waits; a play that closes to new entries before its time is
@@ -42,7 +42,7 @@ POST_AT = (12, 0)                    # Eastern: plays go out around midday on ga
 EARLY_LEAD = timedelta(hours=2)      # a game before 2 PM posts two hours ahead of kickoff instead, never before 9:00 AM
 SPACING = timedelta(minutes=10)      # between two posts
 SOON = timedelta(minutes=2)          # a post scheduled "now" goes out this far ahead
-ORDER = {'player': 0, 'team': 1, 'ladder': 2, 'parlay': 3}   # inside one kickoff: player props, team props, the ladder, the parlay
+ORDER = {'player': 0, 'team': 1, 'ladder': 2, 'parlay': 3}   # inside one kickoff: player props, game lines, the ladder, the parlay
 MAX_PER_DAY = 20                     # our own ceiling for a day's posts, counting those already scheduled; Buffer allows 50
 
 
@@ -234,11 +234,11 @@ def day_count(log_book, day):
 def plan(first, latest, games, now, log_book, player_team=None, soon=None, quotes=None, refused=None):
     """The posts the run should schedule now: [(key, kind, text, due_at, card_key)].
 
-    X gets plays and their receipts: player props, team props and the day's fun parlay, the same shape every
+    X gets plays and their receipts: player props, game lines and the day's fun parlay, the same shape every
     time and always with the card, and the morning after, the receipt (scripts/receipts.py) at 9:00 AM ET,
     ahead of that morning's plays; on Wednesday the week's receipt too. Plays go out around noon Eastern on game
     day (a game before 2 PM posts two hours ahead of its kickoff, a parlay by its first leg; never before 9:00 AM),
-    player props first, then team props, then the parlay, ten minutes apart. A play published later than its time goes out now, unless kickoff is inside
+    player props first, then game lines, then the parlay, ten minutes apart. A play published later than its time goes out now, unless kickoff is inside
     45 minutes. Posted, closed, settled and historical plays are left out.
     `soon` replaces the two-minute lead, for a person who wants time to look at the queue first. A post whose text
     fails its check is left out and, when `refused` is a list, named there with the problems, so it is never silent.

@@ -285,6 +285,7 @@
     }
     const parts = [`${pct(g.chance)} our chance${g.push >= 0.01 ? `, ${pct(g.push)} push` : ''}`,
       g.needs == null ? 'no price yet' : `${pct(g.needs)} to break even`];
+    if (typeof g.edge === 'number') parts.push(`${g.edge >= 0 ? '+' : ''}${Number(g.edge).toFixed(1)} point edge`);
     if (g.thin) parts.push('few games so far');
     if (g.limited) parts.push('questionable on the report');
     if (g.calibrated === false) parts.push('raw number');

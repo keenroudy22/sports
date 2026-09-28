@@ -4,8 +4,8 @@ The most saved data posts among the accounts we follow are cheat sheets with the
 "Save this post now", Toad's "Bookmark this sheet"; docs/X-NOTES.md). The owner said yes on 2026-09-26. Once a week
 per league, on its big day (college Saturday, NFL Sunday), the morning post is one image: each game's logos, our
 projected score, how often we think each team wins, and our spread and total beside the betting line, the same numbers
-as the Games page (built from the site's own game cards, site/data/app/today.json). College shows the day's games
-where our number and the line differ most; the NFL shows the whole Sunday slate.
+as the Games page (built from the site's own game cards, site/data/app/today.json). Each sheet shows the eight games
+where our number and the line differ most; the complete slate stays on the site.
 
 The hosted build draws it (feed.py, into site/data/cards/, like every card) and the desk posts it at 10:00 AM
 (receipts.house_posts). Nothing on it is a pick: the plays go out on their own.
@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TODAY = ROOT / 'site' / 'data' / 'app' / 'today.json'
 DAYS = {'CFB': 5, 'NFL': 6}             # Saturday for college, Sunday for the NFL (Monday is 0)
 POST_AT, POST_UNTIL = (10, 0), (11, 45)  # Eastern
-MOST, FEWEST = 16, 4                    # games on a sheet; a slate thinner than FEWEST gets none
+MOST, FEWEST = 8, 4                     # readable highlights; a slate thinner than FEWEST gets none
 WIDTH, HEIGHT = 1080, 1350              # 4:5, the tallest image X shows whole in the feed
 BG, CARD, LINE, TEXT, DIM, ORANGE = '#0d1218', '#161d27', '#2a3441', '#f4f7fa', '#94a3b4', '#f28c28'
 WORDS = {'CFB': 'COLLEGE', 'NFL': 'NFL'}
@@ -49,12 +49,11 @@ def disagreement(card):
 
 def pick_games(cards, league, day):
     """The games on the sheet: the league's games that day with our number and a line, none against an FCS school.
-    College: the MOST where our number and the line differ most. NFL: the slate. Kickoff order either way."""
+    The MOST where our number and the line differ most, returned in kickoff order."""
     games = [c for c in cards if c.get('league') == league and c.get('v2') and (c.get('market') or {}).get('total') is not None
              and not c.get('fcs') and c.get('state', 'pre') == 'pre' and eastern_date(gates.when(c['kickoff'])) == day]
-    if league == 'CFB':
-        games = sorted(games, key=lambda c: -disagreement(c))[:MOST]
-    return sorted(games, key=lambda c: (c['kickoff'], c['id']))[:MOST]
+    games = sorted(games, key=lambda c: -disagreement(c))[:MOST]
+    return sorted(games, key=lambda c: (c['kickoff'], c['id']))
 
 
 def logo_uri(card, side, fetch=None):
@@ -97,30 +96,30 @@ def card_svg(card, x, y, w, h, logos):
     rows = []
     for i, side in enumerate(('away', 'home')):
         team = card[side]
-        top = y + 14 + 36 * i
+        top = y + 22 + 52 * i
         chance = None if home_chance is None else (home_chance if side == 'home' else 1 - home_chance)
         uri = logos.get((card['id'], side))
-        rows.append(f'<image href="{uri}" x="{x + 16}" y="{top}" width="30" height="30" preserveAspectRatio="xMidYMid meet"/>' if uri else
-                    f'<circle cx="{x + 31}" cy="{top + 15}" r="13" fill="{readable(team)}"/>')
-        rows.append(f'<text x="{x + 56}" y="{top + 24}" fill="{TEXT}" font-size="24" font-weight="800">{esc(team.get("abbr") or "")}</text>')
+        rows.append(f'<image href="{uri}" x="{x + 16}" y="{top}" width="40" height="40" preserveAspectRatio="xMidYMid meet"/>' if uri else
+                    f'<circle cx="{x + 36}" cy="{top + 20}" r="18" fill="{readable(team)}"/>')
+        rows.append(f'<text x="{x + 68}" y="{top + 31}" fill="{TEXT}" font-size="29" font-weight="800">{esc(team.get("abbr") or "")}</text>')
         points = v2.get(side)
-        rows.append(f'<text x="{x + 236}" y="{top + 25}" fill="{TEXT}" font-size="28" font-weight="800" text-anchor="end">'
+        rows.append(f'<text x="{x + 246}" y="{top + 32}" fill="{TEXT}" font-size="34" font-weight="800" text-anchor="end">'
                     f'{esc(f"{points:.1f}" if isinstance(points, (int, float)) else "-")}</text>')
         if chance is not None:
             bar = max(4, round(150 * chance))
-            rows.append(f'<rect x="{x + 256}" y="{top + 8}" width="150" height="16" rx="8" fill="{LINE}"/>')
-            rows.append(f'<rect x="{x + 256}" y="{top + 8}" width="{bar}" height="16" rx="8" fill="{readable(team)}"/>')
-            rows.append(f'<text x="{x + w - 16}" y="{top + 22}" fill="{TEXT}" font-size="20" font-weight="700" text-anchor="end">{round(100 * chance)}%</text>')
+            rows.append(f'<rect x="{x + 266}" y="{top + 12}" width="150" height="18" rx="9" fill="{LINE}"/>')
+            rows.append(f'<rect x="{x + 266}" y="{top + 12}" width="{bar}" height="18" rx="9" fill="{readable(team)}"/>')
+            rows.append(f'<text x="{x + w - 16}" y="{top + 29}" fill="{TEXT}" font-size="22" font-weight="700" text-anchor="end">{round(100 * chance)}%</text>')
     # Our numbers against the line; the one our number leans to clearly (as the site's chips do) in orange.
     strong = lambda chance, paused: chance is not None and chance >= 0.574 and not paused and not v2.get('sparse')
     spread_tone = ORANGE if strong(lean.get('spreadChance'), lean.get('spreadPaused')) else TEXT
     total_tone = ORANGE if strong(lean.get('totalChance'), lean.get('totalPaused')) else TEXT
     ours_spread, line_spread = spread_text(card, v2.get('margin')), spread_text(card, -market['spread'] if market.get('spread') is not None else None)
     base = y + h - 16
-    rows.append(f'<text x="{x + 16}" y="{base}" fill="{DIM}" font-size="15">Spread <tspan fill="{spread_tone}" font-weight="700">'
+    rows.append(f'<text x="{x + 16}" y="{base}" fill="{DIM}" font-size="18">Spread <tspan fill="{spread_tone}" font-weight="700">'
                 f'{esc(ours_spread)}</tspan> vs {esc(line_spread)}</text>')
     total = v2.get('total')
-    rows.append(f'<text x="{x + w - 16}" y="{base}" fill="{DIM}" font-size="15" text-anchor="end">Total <tspan fill="{total_tone}" font-weight="700">'
+    rows.append(f'<text x="{x + w - 16}" y="{base}" fill="{DIM}" font-size="18" text-anchor="end">Total <tspan fill="{total_tone}" font-weight="700">'
                 f'{esc(f"{total:.1f}" if isinstance(total, (int, float)) else "-")}</tspan> vs {esc(pricing_fmt(market["total"]))}</text>')
     return [f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="16" fill="{CARD}" stroke="{LINE}" stroke-width="2"/>'] + rows
 
@@ -132,7 +131,7 @@ def svg(games, league, day, week=None, logos=None):
     rows = (len(games) + 1) // 2
     top, foot, gap = 196, 96, 12
     pitch = (HEIGHT - top - foot) / max(rows, 1)
-    h = min(150, pitch - gap)
+    h = min(230, pitch - gap)
     w = (WIDTH - 72 - 20) // 2
     title = f"WEEK {week} {WORDS[league]} PROJECTIONS" if week else f"{WORDS[league]} PROJECTIONS"
     when = f"{day:%A, %B} {day.day}"
@@ -144,7 +143,7 @@ def svg(games, league, day, week=None, logos=None):
              f'<text x="64" y="71" fill="{ORANGE}" font-size="26" font-weight="800" letter-spacing="5">SAVE THIS</text>',
              f'<text x="{WIDTH - 36}" y="71" fill="{DIM}" font-size="24" font-weight="700" letter-spacing="4" text-anchor="end">KOOK’N</text>',
              f'<text x="36" y="132" fill="{TEXT}" font-size="54" font-weight="800">{esc(title)}</text>',
-             f'<text x="36" y="172" fill="{DIM}" font-size="22">{esc(when)} · projected score, win chance, our number vs the line</text>']
+             f'<text x="36" y="172" fill="{DIM}" font-size="22">{esc(when)} · {len(games)} games where our number differs most</text>']
     for i, card in enumerate(games):
         col, row = i % 2, i // 2
         parts += card_svg(card, 36 + col * (w + 20), round(top + row * pitch), w, round(h), logos)
@@ -196,7 +195,7 @@ def at(day, hm):
 
 def post(games, now):
     """The morning post for the day's sheet, or None: {key, kind, card, text, due, stale}. `games` is the slate
-    (gameId -> game), so the desk can say which week without the site's files."""
+    (gameId -> game), so the desk can schedule it without the site's files."""
     day = eastern_date(now)
     for league in DAYS:
         if not sheet_day(league, day) or now >= at(day, POST_UNTIL):
@@ -204,9 +203,9 @@ def post(games, now):
         todays = [g for g in games.values() if g.get('league') == league and eastern_date(gates.when(g['kickoff'])) == day]
         if len(todays) < FEWEST:
             continue
-        week = min((g.get('week') for g in todays if g.get('week') is not None), default=None)
         name = 'college' if league == 'CFB' else 'NFL'
-        text = (f"📌 Save this: our Week {week} {name} projections" if week else f"📌 Save this: our {name} projections") + f"\n#{league}"
+        lead = f"📌 {name} games where our numbers disagree most with the market."
+        text = lead + "\nSave this for the slate. Full projections on the site." + f"\n#{league}"
         return {'key': f'sheet:{league}:{day.isoformat()}', 'kind': 'sheet', 'card': key(league, day), 'text': text,
                 'due': max(at(day, POST_AT), now + timedelta(minutes=2)), 'stale': at(day, POST_UNTIL)}
     return None

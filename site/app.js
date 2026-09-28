@@ -192,7 +192,7 @@
     const u = rec.season.units;
     if (u == null) return '';
     const unpriced = rec.season.unpriced ? ` ${rec.season.unpriced} without a recorded price left out.` : '';
-    const assumed = rec.assumed ? ` The ${rec.assumed} Week 1 plays had no recorded price, so they count at an assumed -115.` : '';
+    const assumed = rec.assumed ? ` The ${rec.assumed} graded Week 1 play${rec.assumed === 1 ? '' : 's'} had no recorded price, so ${rec.assumed === 1 ? 'it counts' : 'they count'} at an assumed -115; voids do not affect the record.` : '';
     return `<p class="money-line">Units: <b class="num ${unitTone(u)}">${unitText(u)}</b> <span class="faint">every play at one unit, at the price we published.${esc(unpriced)}${esc(assumed)}</span></p>`;
   };
   const sideLines = rec => {
@@ -408,7 +408,7 @@
     const title = !first ? 'No games scheduled' : dayLabel(first.kickoff) === todayLabel ? todayLabel : `Next slate: ${dayLabel(first.kickoff)}`;
     gameIndex = new Map(games.map(g => [g.id, g]));
     return `${head(title,
-      first ? `${now.length} games on this slate. Our plays come first; everything under them is what our numbers see, not picks.` : 'Nothing kicks off in the next eight days in this league.')}
+      first ? `${now.length} game${now.length === 1 ? '' : 's'} on this slate. Our plays come first; everything under them is what our numbers see, not picks.` : 'Nothing kicks off in the next eight days in this league.')}
       <div class="two-col"><div>
         ${recordStrip(C.theRecord(picks), state.league === 'ALL' ? 'The record' : `The record · ${leagueName(dataLeague())}`, picks)}
         ${ladderStrip(C.theLadder(data.picks))}
@@ -999,7 +999,7 @@
       ${(() => { const mine = ourPicks.filter(p => props ? Boolean(p.athleteId) : !p.athleteId); return mine.length ? section(props ? 'Our player picks' : 'Our game picks', `<div class="card"><div class="rows">${mine.map(pickRow).join('')}</div></div>`, '<a href="#record">Record →</a>') : ''; })()}
       ${dayNote ? `<p class="row-meta" style="margin:0 0 8px">${esc(dayNote)}</p>` : ''}
       <details class="explainer"><summary>What do these numbers mean?</summary>
-      <p class="row-meta" style="margin:8px 0 10px">Each line shows <b>our chance</b> of it winning next to the chance its price needs to <b>break even</b> (about 52% for a standard -110 bet). When our chance is higher, the line has <b>value</b>. Bettors call that positive expected value, or <b>+EV</b>: bet it many times at that price and you would expect to come out ahead. <b class="grade-word grade-strong">Good value</b> clears break-even by 5 points or more; <b class="grade-word grade-lean">Some value</b> by 2 to 5. Anything closer is a coin flip once the book takes its cut, so it reads as no value. <b>Paused</b> means our record on that kind of bet trails the market, so we sit it out for now. Our chances are pulled toward 50% by how our numbers have actually done, so value is small on purpose. Player lines with no price show our projection against the number instead. This shows where to look, not what to bet.</p></details>
+      <p class="row-meta" style="margin:8px 0 10px">Each line shows <b>our chance</b> of it winning next to the chance its price needs to <b>break even</b> (about 52% for a standard -110 bet). When our chance is higher, the line has <b>value</b>. Bettors call that positive expected value, or <b>+EV</b>. If our estimate stayed accurate across many similar lines, a positive edge would be a favorable price. <b class="grade-word grade-strong">Good value</b> clears break-even by 5 points or more; <b class="grade-word grade-lean">Some value</b> by 2 to 5. Anything closer is a coin flip once the book takes its cut, so it reads as no value. <b>Paused</b> means our record on that kind of bet trails the market, so we sit it out for now. Our chances are pulled toward 50% by how our numbers have actually done, so value is small on purpose. Player lines with no price show our projection against the number instead. This shows where to look, not what to bet.</p></details>
       <input class="search" type="search" data-input="boardQuery" placeholder="Player, team or market" value="${esc(state.boardQuery)}" aria-label="Search lines">
       <div id="board-rows">${body}</div>
       <p class="row-meta" style="margin-top:10px">Tap + to add a line to your own ticket. It is saved only on this device and never counts in our record.</p>`;

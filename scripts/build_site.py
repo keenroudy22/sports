@@ -682,7 +682,7 @@ def board_picks(first, latest, by_id, identities):
         game = by_id.get((pick.get('gameIds') or [None])[0]) or {}
         rows.append({'id': key, 'league': pick.get('league'), 'kind': pick.get('kind'), 'title': pick.get('title'),
                      # The same title and one-line reason the play's X post carries, so the site reads like the post.
-                     'displayTitle': pick_card.display_title(pick, game) if game and not pick.get('historicalImport') else pick.get('title'),
+                     'displayTitle': pick_card.display_title(pick, game) if game else pick.get('title'),
                      'reason': reasons.get(key) if isinstance(reasons, dict) and isinstance(reasons.get(key), str) else None,
                      # A Pick of the Day pulled before its post went out never wears the star.
                      'featured': key in named and (key in went_out or not (recent.get('entryNote') or pick.get('entryNote'))),

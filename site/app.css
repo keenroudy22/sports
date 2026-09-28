@@ -169,11 +169,11 @@ main { padding: 0 var(--gutter) 28px; max-width: 1240px; margin: 0 auto; }
 .week { margin-bottom: 8px }
 .week summary { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 12px 14px; cursor: pointer; font-weight: 600; font-size: 14px; list-style: none }
 .week summary::-webkit-details-marker { display: none }
-.week summary::before { content: '▸'; color: var(--muted); margin-right: 8px; font-size: 12px }
+.week summary::before { content: '▸'; color: var(--dim); margin-right: 8px; font-size: 12px }
 .week[open] summary::before { content: '▾' }
 .week summary > span:first-child::before { content: '' }
 .clamp { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100% }
-.explainer summary { cursor: pointer; color: var(--muted); font-size: 13px; padding: 2px 0 }
+.explainer summary { cursor: pointer; color: var(--dim); font-size: 13px; padding: 2px 0 }
 .row-closed { opacity: .6; }
 .row-prop { cursor: pointer; }
 .row-prop:focus-visible { outline: 2px solid var(--sky); outline-offset: -2px; }
@@ -356,7 +356,7 @@ table.data a { font-weight: 600; }
 .chart .b.under { background: var(--rose); }
 .chart .b.push { background: var(--faint); }
 .chart .v { font-size: 10px; color: var(--dim); margin-bottom: 3px; }
-.chart .x { font-size: 9px; color: var(--faint); margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.chart .x { font-size: 10px; color: var(--faint); margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 .chart .line { position: absolute; left: 12px; right: 12px; border-top: 1px dashed var(--amber); pointer-events: none; }
 .chart .line span { position: absolute; right: 0; top: -15px; font-size: 10px; font-weight: 700; color: var(--amber); }
 
@@ -436,19 +436,19 @@ table.data a { font-weight: 600; }
 .record-units.up { color: var(--green); }
 .record-units.down { color: var(--rose); }
 .record-strip .row-meta { margin-left: auto; }
-.record-note { font-size: 12px; color: var(--muted); }
+.record-note { font-size: 12px; color: var(--dim); }
 
 /* the one record: three boxes, the money, then the side records */
 .record-card { padding: 14px; }
 .record-boxes .stat-value { font-size: 28px; }
 .money-line { margin: 12px 2px 0; font-size: 15px; }
 .money-line b { font-size: 18px; margin-left: 4px; }
-.side-lines { margin: 8px 2px 0; font-size: 13px; color: var(--muted); line-height: 1.6; }
+.side-lines { margin: 8px 2px 0; font-size: 13px; color: var(--dim); line-height: 1.6; }
 .side-lines b { color: var(--text); }
 .more-numbers { margin: 14px 0 10px; }
 .more-numbers > summary { padding: 12px 14px; cursor: pointer; font-weight: 600; font-size: 14px; list-style: none; }
 .more-numbers > summary::-webkit-details-marker { display: none; }
-.more-numbers > summary::before { content: '▸'; color: var(--muted); margin-right: 8px; font-size: 12px; }
+.more-numbers > summary::before { content: '▸'; color: var(--dim); margin-right: 8px; font-size: 12px; }
 .more-numbers[open] > summary::before { content: '▾'; }
 .more-body { padding: 0 12px 12px; }
 
@@ -472,10 +472,10 @@ table.data a { font-weight: 600; }
 .proj-name { font-size: 13px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
 .proj-abbr { font-size: 10px; color: var(--faint); letter-spacing: .08em; }
 .proj-mid { display: flex; flex-direction: column; align-items: center; gap: 2px; padding-top: 1px; }
-.proj-label { font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); }
+.proj-label { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
 .proj-live .proj-label { color: var(--mint); }
 .proj-score { font-size: 26px; font-weight: 700; line-height: 1.1; white-space: nowrap; }
-.proj-total { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.proj-total { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); }
 .proj-when { font-size: 11px; color: var(--faint); margin-top: 3px; white-space: nowrap; }
 .proj-bar { display: flex; height: 22px; margin-top: 12px; border-radius: 6px; overflow: hidden; font-size: 11px; font-weight: 700; }
 .proj-bar span { display: flex; align-items: center; padding: 0 7px; min-width: 38px; }
@@ -485,7 +485,7 @@ table.data a { font-weight: 600; }
 .proj-lines { display: block; margin-top: 10px; padding-top: 6px; border-top: 1px solid var(--line); font-size: 12px; }
 .proj-line { display: grid; grid-template-columns: 46px minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.35fr); gap: 6px; padding: 4px 0; align-items: center; }
 .proj-line > span:nth-child(n+2) { text-align: right; }
-.proj-line-head { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); padding-bottom: 0; }
+.proj-line-head { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); padding-bottom: 0; }
 .proj-line .lean { white-space: nowrap; }
 
 /* logos and photos everywhere a team or a player shows */
@@ -512,9 +512,9 @@ table.data a { font-weight: 600; }
 .play-legs .leg { display: flex; align-items: center; gap: 6px; }
 .play-stats { display: grid !important; grid-template-columns: repeat(auto-fit, minmax(68px, 1fr)); gap: 6px; margin-top: 10px; }
 .play-stats > span { background: rgba(255, 255, 255, .035); border: 1px solid var(--line); border-radius: 10px; padding: 7px 6px 6px; text-align: center; min-width: 0; }
-.play-stats small { display: block; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+.play-stats small { display: block; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
 .play-stats b { display: block; font-size: 20px; line-height: 1.15; margin-top: 2px; }
-.play-stats em { display: block; font-style: normal; font-size: 10px; color: var(--faint); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.play-stats em { display: block; font-style: normal; font-size: 11px; color: var(--faint); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* our chance against break-even, on the board */
 .cbar { position: relative; display: block; height: 6px; margin: 7px 0 3px; border-radius: 3px; background: #1f2935; max-width: 260px; }
@@ -555,4 +555,3 @@ table.data a { font-weight: 600; }
 .ladder-strip .eyebrow { color: #f6a55a; }
 .ladder-big { color: #f6a55a; }
 .ladder-strip .ladder-bar { width: 100%; margin-top: 8px; }
-

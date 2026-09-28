@@ -2,7 +2,7 @@
 
 The site publishes site/data/feed.xml: one item per play the desk posts, in the same words
 scripts/x_post.py drafts (the kind of play, the play at its price, our number, one plain reason). X gets
-plays only: player props, team props and the day's fun parlay. Every open play gets its card as soon as
+plays only: player props, game lines and the day's fun parlay. Every open play gets its card as soon as
 it is published, rendered by the machine's browser into site/data/cards/ (GitHub's runners have Chrome;
 the Mac has Chrome), so the desk can attach it the moment it schedules the post. Neither the feed nor the
 cards are committed; the hosted workflow builds and deploys them with the rest of the page payloads.
@@ -34,11 +34,11 @@ WINDOW_OPENS = (9, 0)                # Eastern: no plays before 9:00 AM on game 
 LEAD = timedelta(minutes=45)         # and none inside 45 minutes of kickoff
 RECAP_DAYS = 3
 TITLE = 'KeenRoudy Sports plays'
-ABOUT = 'Player props, team props and fun parlays from keenroudy.com/sports, graded in public. Entertainment only.'
+ABOUT = 'Player props, game lines and fun parlays from keenroudy.com/sports, graded in public. Entertainment only.'
 
 
 def postable(pick):
-    """Player props, team props and the day's fun parlay: favorites, model leans, prop leans and the longshot."""
+    """Player props, game lines and the day's fun parlay: favorites, model leans, prop leans and the longshot."""
     return pick.get('favorite') is True or bool(pick.get('modelLean')) or bool(pick.get('legs')) or pick.get('parlayType') == 'longshot'
 
 

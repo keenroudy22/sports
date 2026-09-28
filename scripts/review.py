@@ -36,8 +36,9 @@ write the review:
 1. One line: did the week run cleanly?
 2. A short table of each day's posts: what went out, when, and what happened to anything that did not.
 3. The week's record: straight plays won and lost with units; fun parlays; the ladder in dollars.
-4. What broke, why, and the exact fix you would make (the file and the function), without making it.
-5. At most three recommendations.
+4. Reach: what post types earned attention in the settled Buffer metrics. Say when the sample is small.
+5. What broke, why, and the exact fix you would make (the file and the function), without making it.
+6. At most three recommendations.
 
 Plain words, short sentences, no jargon, no em dashes, they/them for the owner. Entertainment only: never phrase
 anything as betting advice.
@@ -92,6 +93,34 @@ def post_rows(log_book, first, last):
     return [row for _, row in sorted(rows, key=lambda r: r[0])]
 
 
+def post_metrics(log_book, first, last):
+    """Settled Buffer reach for posts sent in the period, overall and by kind.
+
+    Buffer's engagementRate includes interactions its per-action fields do not expose, so aggregate it as an
+    impression-weighted rate instead of rebuilding a smaller, misleading numerator. Metrics arrive once, 48 hours
+    after a post; the packet says how many posts are measured so a young sample cannot sound conclusive.
+    """
+    groups = {'all': []}
+    for entry in log_book.get('posts', []):
+        sent, metrics = entry.get('sentAt'), entry.get('metrics') or {}
+        if not sent or not metrics or not first <= eastern_date(gates.when(sent)) <= last:
+            continue
+        views = metrics.get('impressions') or metrics.get('views') or 0
+        if not views:
+            continue
+        row = (views, metrics.get('engagementRate'))
+        groups['all'].append(row)
+        groups.setdefault(str(entry.get('kind') or 'unknown').removeprefix('buffer:'), []).append(row)
+
+    def summarize(rows):
+        views = sum(row[0] for row in rows)
+        rated = [(v, r) for v, r in rows if isinstance(r, (int, float))]
+        rate = round(sum(v * r for v, r in rated) / sum(v for v, _ in rated), 2) if rated else None
+        return {'posts': len(rows), 'impressions': views, 'engagementRate': rate}
+
+    return {kind: summarize(rows) for kind, rows in groups.items() if rows}
+
+
 def record(first_picks, latest, first, last):
     """The week's settled plays in the one-record terms: straight plays, fun parlays and ladder rungs apart."""
     import x_post
@@ -121,9 +150,17 @@ def record(first_picks, latest, first, last):
 
 
 def hosted_runs(first, runner=subprocess.run):
-    """The GitHub publish runs since `first`: counts by result and the failures."""
+    """The GitHub publish runs since `first`: counts by result and each failure's useful detail.
+
+    The desk can run close to two hundred workflows in a week, so the old 100-run window silently
+    dropped the start of busy weeks.  GitHub filters before applying the limit; one thousand is well
+    above the desk's weekly schedule without asking for old history.  Failed runs get one extra cheap
+    lookup so the review can name the link and the step that needs attention.
+    """
     try:
-        result = runner(['gh', 'run', 'list', '-R', 'keenroudy22/sports', '-L', '100', '--json', 'conclusion,createdAt,event,displayTitle'],
+        fields = 'conclusion,createdAt,event,displayTitle,databaseId,url'
+        result = runner(['gh', 'run', 'list', '-R', 'keenroudy22/sports', '--created', f'>={first.isoformat()}',
+                         '-L', '1000', '--json', fields],
                         capture_output=True, text=True, timeout=60, env={**os.environ, **GH})
         runs = json.loads(result.stdout or '[]')
     except (OSError, ValueError, subprocess.TimeoutExpired):
@@ -132,8 +169,30 @@ def hosted_runs(first, runner=subprocess.run):
     counts = {}
     for r in runs:
         counts[r.get('conclusion') or 'running'] = counts.get(r.get('conclusion') or 'running', 0) + 1
-    failed = [f"{r['createdAt']} {r.get('event')}: {r.get('displayTitle')}" for r in runs if r.get('conclusion') == 'failure']
-    return counts, failed[:10]
+    failed = []
+    for run in (r for r in runs if r.get('conclusion') == 'failure'):
+        link = run.get('url') or ''
+        steps = []
+        if run.get('databaseId') is not None:
+            try:
+                detail = runner(['gh', 'run', 'view', str(run['databaseId']), '-R', 'keenroudy22/sports',
+                                 '--json', 'jobs,url'], capture_output=True, text=True, timeout=60,
+                                env={**os.environ, **GH})
+                payload = json.loads(detail.stdout or '{}')
+                link = payload.get('url') or link
+                for job in payload.get('jobs') or []:
+                    for step in job.get('steps') or []:
+                        if step.get('conclusion') == 'failure':
+                            steps.append(f"{job.get('name') or 'job'} / {step.get('name') or 'step'}")
+            except (OSError, ValueError, subprocess.TimeoutExpired):
+                pass
+        text = f"{run['createdAt']} {run.get('event')}: {run.get('displayTitle')}"
+        if steps:
+            text += f" | failed step: {', '.join(steps)}"
+        if link:
+            text += f" | {link}"
+        failed.append(text)
+    return counts, failed
 
 
 def timing(first, runner=subprocess.run):
@@ -145,7 +204,7 @@ def timing(first, runner=subprocess.run):
         return ''
 
 
-def packet(first, last, runs, posts, week, hosted, line_timing, ladder_now, alert_file):
+def packet(first, last, runs, posts, week, hosted, line_timing, ladder_now, alert_file, reach=None):
     straight, fun, rungs, lines = week
     out = [f'# Week of {first:%b %-d} to {last:%b %-d}, {last.year}', '', '## Desk runs (from the run logs, times UTC)']
     for day, info in sorted(runs.items()):
@@ -158,6 +217,20 @@ def packet(first, last, runs, posts, week, hosted, line_timing, ladder_now, aler
             f"- Fun parlays: {fun['win']}-{fun['loss']}",
             f"- Ladder rungs: {'; '.join(rungs) or 'none settled'}; now: {ladder_now}"]
     out += [f'  - {line}' for line in lines]
+    out += ['', '## X reach (Buffer metrics settle after 48 hours)']
+    if not reach:
+        out.append('- no posts in this period have settled metrics yet')
+    else:
+        overall = reach.get('all') or {}
+        rate = overall.get('engagementRate')
+        out.append(f"- measured posts: {overall.get('posts', 0)}; impressions: {overall.get('impressions', 0)}; "
+                   f"engagement rate: {f'{rate:.2f}%' if rate is not None else 'not available'}")
+        for kind, result in sorted((reach or {}).items()):
+            if kind == 'all':
+                continue
+            rate = result.get('engagementRate')
+            out.append(f"  - {kind}: {result['posts']} posts, {result['impressions']} impressions, "
+                       f"{f'{rate:.2f}%' if rate is not None else 'rate not available'}")
     if hosted is None:
         out += ['', '## GitHub publish runs', '- could not be read (gh)']
     else:
@@ -192,8 +265,10 @@ def main(argv=None):
     ctx = gates.Stores().as_of(now)
     where = ladder.state(ctx.first, ctx.latest)
     ladder_now = f"climb {where['run']}, step {where['step']}, ${where['stake']} riding" + (f", open {where['open']['id']}" if where['open'] else '')
-    text = packet(first, last, run_lines(first, last), post_rows(x_post.load_log(), first, last),
-                  record(ctx.first, ctx.latest, first, last), hosted_runs(first), timing(first), ladder_now, LOGS / 'ALERT.txt')
+    log_book = x_post.load_log()
+    text = packet(first, last, run_lines(first, last), post_rows(log_book, first, last),
+                  record(ctx.first, ctx.latest, first, last), hosted_runs(first), timing(first), ladder_now,
+                  LOGS / 'ALERT.txt', post_metrics(log_book, first, last))
     LOGS.mkdir(parents=True, exist_ok=True)
     packet_path, review_path = LOGS / f'review-packet-{last.isoformat()}.md', LOGS / f'review-{last.isoformat()}.md'
     packet_path.write_text(text, encoding='utf-8')

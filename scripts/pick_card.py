@@ -132,7 +132,7 @@ def badge(x, y, r, uri, ring):
             f'<circle cx="{x}" cy="{y}" r="{r}" fill="none" stroke="{ring}" stroke-width="4"/>')
 
 
-# What sits on the plate: the player's photo on a player prop, the teams' logos on a team prop, the chef on a parlay
+# What sits on the plate: the player's photo on a player prop, the teams' logos on a game line, the chef on a parlay
 # and on anything whose image cannot be fetched. The photos are ESPN's and the logos are the teams' marks; set
 # KEENROUDY_CARD_ART=0 (or CARD_ART = False) to serve every card with the chef again.
 CARD_ART = os.environ.get('KEENROUDY_CARD_ART', '1') != '0'
@@ -164,7 +164,7 @@ def logo_url(team, league):
 
 
 def artwork(pick, game, fetch=None):
-    """{'kind': 'photo', 'uri'} for an NFL player prop, {'kind': 'logos', 'uris'} for a team prop (the side's logo
+    """{'kind': 'photo', 'uri'} for an NFL player prop, {'kind': 'logos', 'uris'} for a game line (the side's logo
     on a spread, both teams' on a total), or None for the chef: a parlay, a failed fetch, or the switch off."""
     if not CARD_ART or not game or play_kind(pick) in ('parlay', 'ladder'):
         return None
@@ -184,7 +184,7 @@ def artwork(pick, game, fetch=None):
 
 def plate(cx, cy, uri, light, art=None):
     """The plate every card serves on. The chef: the cutout scaled past the rim so the edges of the source picture
-    fall outside. A player: his photo standing on the rim. A team prop: the logos, side by side on a total."""
+    fall outside. A player: his photo standing on the rim. A game line: the logos, side by side on a total."""
     r, size = 178, 380
     parts = [f'<circle cx="{cx}" cy="{cy}" r="215" fill="{CREAM}" fill-opacity="{0.10 if not light else 0.35}"/>',
              f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="{CREAM}" fill-opacity="{0.16 if not light else 0.45}"/>']
@@ -232,6 +232,19 @@ def display_title(pick, game):
         return title
     league = game.get('league') or str(pick.get('id', '')).split('-')[0]
     away, home = game.get('away') or {}, game.get('home') or {}
+    # A game total always names the matchup from the slate and keeps only the market suffix from the
+    # append-only published title. This repairs old public typos such as "Stateate" and a repeated
+    # "(FL)" without rewriting the record that produced them.
+    if pick.get('marketType') == 'total' or str(pick.get('direction') or '').lower() in ('over', 'under'):
+        low = title.lower()
+        for word in ('over', 'under'):
+            marker = f' {word} '
+            # Rebuild only from human team names. Some small fixtures and incomplete feeds have abbreviations only;
+            # in that case the already-readable published matchup is better than "IOWA at MICH".
+            named = lambda team: SCHOOL_NAMES.get(str(team.get('id'))) or team.get('school') or team.get('short')
+            if marker in low and named(away) and named(home):
+                suffix = title[low.index(marker) + len(marker):]
+                return f'{team_label(away, league)} at {team_label(home, league)} {word} {suffix}'
     names = lambda team: sorted({x for x in (team_label(team, league), team.get('school'), team.get('short'), team.get('abbreviation')) if x},
                                 key=len, reverse=True)      # the posted name first: "Miami (FL)" is not "Miami" plus " (FL)"
     for a in names(away):
@@ -327,11 +340,11 @@ def number_line(pick):
     return f"Our number {value} vs the {pricing.fmt(float(line))}"
 
 
-KINDS = {'player': 'PLAYER PROP', 'team': 'TEAM PROP', 'parlay': 'FUN PARLAY', 'ladder': 'LADDER'}
+KINDS = {'player': 'PLAYER PROP', 'parlay': 'FUN PARLAY', 'ladder': 'LADDER'}
 
 
 def play_kind(pick):
-    """What goes to X, in the owner's words: player props, team props (sides and totals), fun parlays and the ladder's
+    """The internal kind used for ordering: player props, game lines (sides and totals), fun parlays and the ladder's
     rungs (scripts/ladder.py), which keep their own count in dollars."""
     if pick.get('parlayType') == 'ladder':
         return 'ladder'
@@ -340,11 +353,25 @@ def play_kind(pick):
     return 'player' if pick.get('athleteId') or pick.get('market') else 'team'
 
 
+def play_label(pick):
+    """The precise public label. A whole-game side or total is a game line, not a team prop."""
+    kind = play_kind(pick)
+    if kind != 'team':
+        return KINDS[kind]
+    market = str(pick.get('marketType') or '').lower()
+    direction = str(pick.get('direction') or '').lower()
+    if market == 'total' or direction in ('over', 'under'):
+        return 'GAME TOTAL'
+    if market == 'spread' or direction in ('home', 'away'):
+        return 'GAME SPREAD'
+    return 'GAME LINE'
+
+
 def kicker(pick, featured=False):
     """The label every card and every post leads with; the day's Pick of the Day and a researched favorite say so."""
     if play_kind(pick) == 'ladder':
         return f"LADDER · STEP {(pick.get('ladder') or {}).get('step', 1)}"
-    label = KINDS[play_kind(pick)]
+    label = play_label(pick)
     if featured:
         return f'PICK OF THE DAY · {label}'
     return f'{label} · FAVORITE' if pick.get('favorite') is True and play_kind(pick) != 'parlay' else label
@@ -446,11 +473,13 @@ def receipt_svg(receipt, avatar=None):
     for i, (result, text) in enumerate(shown):
         y = top + 36 * i
         if result is None:
-            body.append(f'<text x="80" y="{y + 6}" fill="{ink}" font-size="30">{esc(fit(text, 36))}</text>')
+            size, limit = (30, 36) if len(text) <= 36 else (24, 48)
+            body.append(f'<text x="80" y="{y + 6}" fill="{ink}" font-size="{size}">{esc(fit(text, limit))}</text>')
             continue
         mark, colour = RESULT_MARKS.get(result, ('?', None))
+        size, limit = (26, 34) if len(text) <= 34 else (22, 50)
         body.append(f'<text x="80" y="{y}" fill="{colour or soft}" font-size="26" font-weight="800">{mark}</text>')
-        body.append(f'<text x="116" y="{y}" fill="{ink}" font-size="26">{esc(fit(text, 38))}</text>')
+        body.append(f'<text x="116" y="{y}" fill="{ink}" font-size="{size}">{esc(fit(text, limit))}</text>')
     if len(rows) > len(shown):
         body.append(f'<text x="80" y="{top + 36 * len(shown)}" fill="{soft}" font-size="24">and {len(rows) - len(shown)} more on the site</text>')
     parts = [

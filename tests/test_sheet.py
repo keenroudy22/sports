@@ -22,8 +22,8 @@ SUNDAY = date(2026, 9, 27)
 
 
 class PickTests(unittest.TestCase):
-    def test_the_nfl_sheet_is_the_sunday_slate_in_kickoff_order(self):
-        cards = [card('late', '2026-09-27T20:25Z'), card('early', '2026-09-27T17:00Z'), card('mon', '2026-09-29T00:15Z'),
+    def test_the_nfl_sheet_is_the_strongest_sunday_games_in_kickoff_order(self):
+        cards = [card('late', '2026-09-27T20:25Z', gap=4), card('early', '2026-09-27T17:00Z', gap=5), card('mon', '2026-09-29T00:15Z'),
                  card('nov2', '2026-09-27T17:00Z', v2=None), card('started', '2026-09-27T17:00Z', state='in')]
         self.assertEqual([c['id'] for c in sheet.pick_games(cards, 'NFL', SUNDAY)], ['early', 'late'])
 
@@ -61,7 +61,8 @@ class PostTests(unittest.TestCase):
         early = datetime(2026, 9, 27, 10, 45, tzinfo=timezone.utc)       # 6:45 AM ET Sunday
         post = sheet.post(self.GAMES, early)
         self.assertEqual((post['key'], post['kind'], post['card']), ('sheet:NFL:2026-09-27', 'sheet', 'sheet-nfl-2026-09-27'))
-        self.assertEqual(post['text'], '📌 Save this: our Week 3 NFL projections\n#NFL')
+        self.assertEqual(post['text'], '📌 NFL games where our numbers disagree most with the market.\n'
+                                       'Save this for the slate. Full projections on the site.\n#NFL')
         self.assertEqual(post['due'], datetime(2026, 9, 27, 14, 0, tzinfo=timezone.utc))
         import receipts
         self.assertEqual(receipts.guard(post), [])

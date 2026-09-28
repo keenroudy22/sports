@@ -20,6 +20,16 @@ def slate_game(game_id, kickoff, state='pre', **market):
 
 
 class PickTests(unittest.TestCase):
+    def test_the_site_uses_the_same_safe_public_title_as_posts_and_cards(self):
+        game = {'id': 'CFB-1', 'league': 'CFB', 'kickoff': '2026-09-26T22:30:00Z',
+                'away': {'id': '2117', 'short': 'C Michigan', 'abbreviation': 'CMU', 'school': 'Central Michigan'},
+                'home': {'id': '2390', 'short': 'Miami', 'abbreviation': 'MIA', 'school': 'Miami'}}
+        pick = {'id': 'x', 'title': 'Central Michigan at Miami (FL) (FL) under 53.5', 'marketType': 'total',
+                'gameIds': ['CFB-1'], 'historicalImport': True}
+        [row] = build_site.board_picks({'x': pick}, {}, {'CFB-1': game}, {})
+        self.assertEqual(row['displayTitle'], 'Central Michigan at Miami (FL) under 53.5')
+        self.assertEqual(row['title'], pick['title'], 'the append-only published title remains untouched')
+
     def test_board_rows_keep_the_first_published_price(self):
         reports = [{'league': 'NFL', 'publishedAt': '2026-09-01T12:00:00Z',
                     'props': [{'id': 'a', 'odds': -110, 'line': 60.5, 'gameIds': ['NFL-1']}]},

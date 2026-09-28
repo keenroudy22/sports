@@ -14,7 +14,7 @@ rules in words. When this file and the validator disagree, the validator wins.
 | `scripts/gates.py` | The publishing rules, one function per rule. A candidate passes every gate or it is not published. `python scripts/gates.py CANDIDATE.json` evaluates one. |
 | `scripts/replay_gates.py` | Every published pick back through the gates as of its publication, with what would have been refused and why. |
 | `scripts/llm.py`, `scripts/llm_tasks.py` | The local model (Ollama, on this machine) and the two guards on its prose: the house style and the numbers guard. The model polishes templated `why` and `risk`, drafts posts and weighs the facts against a candidate. It never adds a number. |
-| `scripts/x_post.py` | The post text: one shape for every play (player prop, team prop, fun parlay), with `data/x-posted.json` as the posted log. |
+| `scripts/x_post.py` | The post text: one shape for every play (player prop, game line, fun parlay), with `data/x-posted.json` as the posted log. |
 | `scripts/buffer_post.py` | Scheduling those posts to @keenkooks through Buffer's free plan, around noon on game day, each with its card. |
 
 Nothing here edits an existing file in `research/`, `market-observations/` or a ledger. A quiet run
@@ -172,7 +172,7 @@ With Ollama down the run publishes on templates and holds on a quarterback rule 
 ## X
 
 X gets plays and their receipts (the owner's call after the first post, a stats line, went out on 2026-09-23
-and was deleted): **player props**, **team props** (sides and totals) and the day's **fun parlay**, and the
+and was deleted): **player props**, **game lines** (spreads and totals) and the day's **fun parlay**, and the
 morning after, the **receipt** for those plays. Favorites, model leans, prop leans and the longshot all qualify;
 the model scoreboard stays on the site. Every play post has the same shape, drafted by `scripts/x_post.py` from
 the pick's own fields:
@@ -192,7 +192,7 @@ and book (`x_post.parlay_head`): "🎰 +2506 COLLEGE LOTTO (ESPN BET)" from +100
 "🍀 +450 NFL EASY PROPS", then its legs one a line ("Iowa/Michigan over 38.5", "Drake London 40+ rec yds"). A ladder
 rung: "🪜 $50 → $1,000 ladder: step 2", "$96 → $187 (+95, FanDuel)", its legs, "❤️ if you're climbing". Receipts,
 the book, the menu and cashed posts are one-liners too ("Saturday: 5-3" with ✅ ❌ per play, "✅ Cashed: ...",
-"Today: 3 plays.", "📌 Save this: our Week 3 NFL projections").
+"Today: 3 plays.", "📌 8 NFL games where our numbers disagree most with the market.").
 
 The reason is one sentence of the pick's own `why`, short and free of the desk's arithmetic words; when
 every sentence is arithmetic the post stands on the play and the number. No units anywhere a follower reads.
@@ -209,7 +209,7 @@ X meters posting through its API, so the desk posts through **Buffer** (`scripts
 Buffer's own X access, 3,000 API requests a month, an exact `dueAt` per post, an image by public URL,
 `deletePost`). The timing is the same every game day: plays post **around noon Eastern** (the owner's call,
 2026-09-24), or two hours before a kickoff earlier than 2 PM (a parlay by its first leg), never before 9:00 AM;
-player props first, then team props, the ladder, then the parlay, ten minutes apart, and ten minutes from every post
+player props first, then game lines, the ladder, then the parlay, ten minutes apart, and ten minutes from every post
 already in the queue (`buffer_post.free_slot`: on 2026-09-26 the 11:45 run put three plays eight seconds after three
 queued ones); a late injury after a play is out
 cannot pull the post, though the site still closes the pick; a play published later than its time goes out at once unless
@@ -227,7 +227,7 @@ live waits for the next run. Nothing goes out bare.
 | 9:00 AM Wednesday | **The week's receipts** by kind, with the week's dates |
 | Around noon (two hours before a kickoff earlier than 2 PM; never before 9 AM) | **The plays**, the Pick of the Day first |
 | As a win settles (9 AM to 12:30 AM, within three hours) | **Cashed**: "✅ Cashed: Iowa/Michigan over 38.5 (-105, ESPN BET)" (or "✅ POTD cashed: ...", "✅ +2506 5-leg lotto cashed (ESPN BET)"), and the original post quoted by its X link; text only. Losses are not singled out: the morning receipt lists every play, win or lose. The run feeds its own settlements forward (`run.absorb`), so the cashed post goes out from the run that settled it |
-| 10:00 AM college Saturday and NFL Sunday | **📌 SAVE THIS**: the week's projections sheet (`scripts/sheet.py`), one 1080x1350 image of the slate as the Games page shows it: logos, our projected score, win chances as bars, our spread and total beside the line, orange where our number leans clearly (the site's strong chip). College shows the 16 games where our number and the line differ most, the NFL the whole Sunday slate. Drawn by the hosted build (`feed.py`, `cards/sheet-<league>-<date>.png`), posted by the desk once the image is live, never after 11:45 AM. Not picks |
+| 10:00 AM college Saturday and NFL Sunday | **📌 SAVE THIS**: the week's projections sheet (`scripts/sheet.py`), one 1080x1350 image with the eight games where our number and the line differ most: logos, our projected score, win chances as bars, our spread and total beside the line, orange where our number leans clearly (the site's strong chip). The complete slate stays on the site. Drawn by the hosted build (`feed.py`, `cards/sheet-<league>-<date>.png`), posted by the desk once the image is live, never after 11:45 AM. Not picks |
 | As a rung wins | **Ladder cashed**: "✅ LADDER STEP 2 CASHED", "$96 → $187", "Step 3 is next: all $187 rides."; at $1,000 "🪜 LADDER COMPLETE", and the phone gets "Ladder complete: pin it" |
 | 6:00 PM on a day with nothing else | **The book**: the season record, graded through yesterday and saying so ("Season through Sep 28"), so back-to-back quiet days never post the same words, which X refuses; with one kind of play only the season line (card `site/img/kitchen-book.png`) |
 
@@ -235,7 +235,15 @@ live waits for the next run. Nothing goes out bare.
 (play, receipt, menu, book, cashed) and by the hour it went out. A report for the owner, not a knob. X posts carry no
 links (the card and the bio carry the site).
 
-**What's on the plate** (owner, 2026-09-24): an NFL player prop's card shows the player's ESPN headshot, a team prop
+**Growth without account risk**: `docs/GROWTH.md` is the operating plan for the owner's 10,000-follower stretch goal.
+Keep the automated broadcast useful and varied. Never automate replies, likes, follows, unfollows or trending-topic
+posts; X requires prior approval for AI reply bots and prohibits non-API website scripting. Human replies during live
+football conversations are encouraged because they add a real point of view. Use exactly the relevant `#NFL` or
+`#CFB` tag on desk posts, not extra or unrelated trending tags. The Monday review includes settled Buffer reach by
+post type; the owner records the account-level Premium snapshot separately because Buffer does not expose follower or
+profile-visit totals.
+
+**What's on the plate** (owner, 2026-09-24): an NFL player prop's card shows the player's ESPN headshot, a game line
 the teams' logos (a total both, a spread its side), a parlay and the house cards the chef. Images are fetched when
 the card is rendered and embedded; a failed fetch falls back to the chef. The photos are ESPN's and the logos the
 teams' marks: `KEENROUDY_CARD_ART=0` (or `pick_card.CARD_ART = False`) turns them all off. No units on X: posts and
@@ -329,7 +337,7 @@ time they post, posts move earlier (`buffer_post.POST_AT`, about 10 AM); otherwi
 whose calibrated chance clears its price by the most (never a parlay, never a game already started). It is named once and
 never changes once it has posted; one the last look pulls before its post goes out is replaced by the best play left
 that has not posted (`replaced` in the day's entry), and if that play is already queued, its post is swapped for the
-Pick of the Day post at the same time once its card is live (`run.feature_scheduled`). Its post leads the noon batch with the kicker "PICK OF THE DAY · TEAM PROP" and its own card
+Pick of the Day post at the same time once its card is live (`run.feature_scheduled`). Its post leads the noon batch with a precise kicker such as "PICK OF THE DAY · GAME TOTAL" and its own card
 (`cards/<id>-potd.png`, rendered by the hosted build, so a post never carries a stale copy), and the site's Today page
 leads with it, starred.
 
@@ -444,4 +452,3 @@ Finished games are graded at the number recorded and at the opener, with closing
 consensus close, and `data/paper/REPORT.md` keeps the record. Nothing is posted. Promoting a trial to published
 plays is a person's decision on the graded record, and the soccer model's Premier League handicaps can follow
 the same path.
-

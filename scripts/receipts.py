@@ -28,7 +28,7 @@ MORNING = (9, 0)                  # Eastern: when a receipt posts
 LATEST = (20, 0)                  # Eastern, the day after: a receipt not scheduled by then is stale and skipped
 WEEKDAY = 2                       # Wednesday: the week's receipt
 MARKS = {'win': '✅', 'loss': '❌', 'push': '➖', 'void': '➖'}
-KIND_NAMES = {'player': 'Player props', 'team': 'Team props', 'parlay': 'Fun parlays', 'ladder': 'Ladder'}
+KIND_NAMES = {'player': 'Player props', 'team': 'Game lines', 'parlay': 'Fun parlays', 'ladder': 'Ladder'}
 
 
 def served(log_book):
@@ -88,7 +88,7 @@ def headline(rows):
 
 
 def by_kind(rows):
-    """[(name, record)] for each kind of play among the rows: player props, team props, fun parlays."""
+    """[(name, record)] for each kind of play among the rows: player props, game lines, fun parlays."""
     out = []
     for kind in ('player', 'team', 'parlay', 'ladder'):
         group = [r for r in rows if pick_card.play_kind(r) == kind]

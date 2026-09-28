@@ -37,7 +37,7 @@ class FeedTests(unittest.TestCase):
         ticket = next(i for i in items if i['guid'] == 'ticket')
         self.assertTrue(ticket['title'].startswith('Fun parlay: '), ticket['title'])
         lean = next(i for i in items if i['guid'] == 'lean')
-        self.assertTrue(lean['title'].startswith('Team prop: '), lean['title'])
+        self.assertTrue(lean['title'].startswith('Game total: '), lean['title'])
         self.assertIn('#pick/lean', lean['link'])
         self.assertIn('We have it at 48.', lean['text'])
         early = next(i for i in items if i['guid'] == 'early')

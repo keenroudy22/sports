@@ -114,8 +114,8 @@ class PostTests(unittest.TestCase):
         self.assertEqual((plans[0][4], plans[1][4]), ('b-potd', 'a'), 'its own card, so no stale copy is ever attached')
 
     def test_the_label_on_the_card(self):
-        self.assertEqual(pick_card.kicker(play('a', 'g1'), featured=True), 'PICK OF THE DAY · TEAM PROP')
-        self.assertEqual(pick_card.kicker(play('a', 'g1', favorite=True)), 'TEAM PROP · FAVORITE')
+        self.assertEqual(pick_card.kicker(play('a', 'g1'), featured=True), 'PICK OF THE DAY · GAME TOTAL')
+        self.assertEqual(pick_card.kicker(play('a', 'g1', favorite=True)), 'GAME TOTAL · FAVORITE')
         svgs = []
         with tempfile.TemporaryDirectory() as folder, mock.patch.object(pick_card, 'chrome_path', return_value='chrome'), \
                 mock.patch.object(pick_card, 'render', side_effect=lambda svg, path: svgs.append(svg)):
@@ -126,7 +126,7 @@ class PostTests(unittest.TestCase):
         sent = []
         with mock.patch.object(buffer_post, 'create_post', side_effect=lambda *a, **k: sent.append(a) or 'post-1'), \
                 mock.patch.object(buffer_post, 'reachable', return_value=True):
-            log_book = buffer_post.schedule([('b', 'play', '🍳 PICK OF THE DAY · TEAM PROP\nb', NOW, 'b-potd')], 'ch', {'posts': []}, NOW, log=lambda *_: None)
+            log_book = buffer_post.schedule([('b', 'play', '🍳 PICK OF THE DAY · GAME TOTAL\nb', NOW, 'b-potd')], 'ch', {'posts': []}, NOW, log=lambda *_: None)
         entry = log_book['posts'][0]
         self.assertEqual((entry['cardKey'], entry['featured']), ('b-potd', True))
         self.assertEqual(sent[0][3], 'https://keenroudy.com/sports/data/cards/b-potd.png')

@@ -74,7 +74,7 @@ class ReceiptTests(unittest.TestCase):
         self.assertEqual([r['key'] for r in found], ['receipt:day:2026-09-27'])
         sunday = found[0]
         self.assertEqual(sunday['text'], 'Sunday: 2-1\n'
-                                         '✅ Player Seven over 4.5 receptions\n❌ Jets/Rams over 44.5\n✅ Not posted over 40.5\n'
+                                         '✅ Player Seven over 4.5 receptions\n❌ Jets/Rams over 44.5\n✅ Bills/Lions over 40.5\n'
                                          '❌ 3-leg parlay\n\n#NFL',
                          'the record is the straight plays; the fun parlay is listed but not counted in it')
         self.assertEqual(sunday['due'].astimezone(gates.EASTERN).strftime('%a %H:%M'), 'Mon 09:00')
@@ -97,7 +97,7 @@ class ReceiptTests(unittest.TestCase):
         self.assertEqual(sorted(found), ['receipt:week:2026-09-29'])
         week = found['receipt:week:2026-09-29']
         self.assertEqual(week['text'], 'The week (Sep 23 to Sep 29): 3-1-1\n'
-                                       'Player props 1-0\nTeam props 2-1-1\nFun parlays 0-1\n\n#NFL')
+                                   'Player props 1-0\nGame lines 2-1-1\nFun parlays 0-1\n\n#NFL')
         self.assertEqual(week['due'].astimezone(gates.EASTERN).strftime('%a %H:%M'), 'Wed 09:00')
         self.assertEqual(week['when'], 'Sep 23 to Sep 29')
 
@@ -108,6 +108,14 @@ class ReceiptTests(unittest.TestCase):
                        'Player Seven over 4.5 receptions', 'clip-path="url(#plate)"', 'Graded in public', 'Entertainment only. Not advice.'):
             self.assertIn(needle, card, needle)
         self.assertNotIn('Confidence', card)
+
+    def test_a_receipt_keeps_a_long_game_total_readable(self):
+        receipt = {'title': '5-5', 'when': 'Saturday, Sep 26', 'label': 'YESTERDAY\'S PLATES',
+                   'rows': [('loss', 'Central Michigan/Miami (FL) under 53.5')]}
+        card = pick_card.receipt_svg(receipt, avatar='')
+        self.assertIn('Central Michigan/Miami (FL) under 53.5', card)
+        self.assertNotIn('under 53…', card)
+        self.assertIn('font-size="22"', card, 'long rows shrink before they are shortened')
 
     def test_the_receipt_goes_out_at_nine_ahead_of_the_mornings_plays(self):
         first, latest, log = world()
@@ -218,7 +226,7 @@ class DailyTests(unittest.TestCase):
         self.assertEqual(post['text'].split('\n')[:2], ['Season through Sep 28: 3-1', 'Player props 1-0'])
         wednesday = receipts.book(first, latest, GAMES, log, tuesday_evening + timedelta(days=1))
         self.assertNotEqual(wednesday['text'], post['text'], 'a quiet day after a quiet day never repeats the same post')
-        self.assertIn('Player props 1-0\nTeam props 2-1\nFun parlays 0-1', post['text'])
+        self.assertIn('Player props 1-0\nGame lines 2-1\nFun parlays 0-1', post['text'])
         self.assertNotIn('u\n', post['text'].replace('\n\n', '\n'), 'no units anywhere')
         self.assertEqual(post['due'].astimezone(gates.EASTERN).strftime('%a %H:%M'), 'Tue 18:00')
         self.assertIsNone(receipts.book(first, latest, GAMES, log, datetime(2026, 9, 29, 14, 0, tzinfo=timezone.utc)), 'not before 5 PM')

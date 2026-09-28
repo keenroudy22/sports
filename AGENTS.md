@@ -76,17 +76,19 @@ Handy commands (from `~/Projects/sports`):
 
 1. Work in `~/Projects/sports-dev` on branch `dev`. First bring it up to date:
    `git -C ~/Projects/sports-dev fetch -q origin && git -C ~/Projects/sports-dev rebase origin/main`.
-2. Change the code, add or update tests, and pass both suites:
-   `python3 -m unittest discover -s tests` and `node --test tests/*.test.js`.
+2. Change the code, add or update tests, and pass both suites in the development worktree:
+   `cd ~/Projects/sports-dev && /opt/homebrew/bin/python3 -m unittest discover -s tests` and
+   `cd ~/Projects/sports-dev && node --test tests/*.test.js`. Do not use `run.sh py` for these: that wrapper deliberately
+   changes into the production checkout.
 3. Rehearse the next run without publishing anything:
-   `cd ~/Projects/sports-dev && python3 scripts/run.py run --dry-run --no-llm --slot HHMM`
+   `cd ~/Projects/sports-dev && /opt/homebrew/bin/python3 scripts/run.py run --dry-run --no-llm --slot HHMM`
    (a `--now` in the future stops at report validation on purpose; a dry run writes to `~/.config/keenroudy/pending/`).
    Move any file it leaves in `~/.config/keenroudy/failed/` out of there, so it is not mistaken for a real stop.
 4. Commit on `dev` as keenroudy22, ending the message with an attribution line for the agent that wrote it.
 5. Deploy while holding the run lock (it waits for a run in progress), then fast-forward and push:
    ```
    cd ~/Projects/sports
-   python3 - <<'PY'
+   /opt/homebrew/bin/python3 - <<'PY'
    import fcntl, subprocess, sys, time
    lock = open('/Users/keen/.config/keenroudy/run.lock', 'a')
    while True:
@@ -95,7 +97,7 @@ Handy commands (from `~/Projects/sports`):
        except OSError:
            time.sleep(5)
    steps = 'git fetch -q origin && git merge -q --ff-only origin/main && git -C ../sports-dev rebase -q main && ' \
-           '(cd ../sports-dev && python3 -m unittest discover -s tests 2>&1 | tail -1) && ' \
+           '(cd ../sports-dev && /opt/homebrew/bin/python3 -m unittest discover -s tests 2>&1 | tail -1) && ' \
            'git merge -q --ff-only dev && git push -q origin main'
    sys.exit(subprocess.call(steps, shell=True, env={**__import__('os').environ,
             'GH_CONFIG_DIR': '/Users/keen/.config/keenroudy/gh', 'GIT_CONFIG_NOSYSTEM': '1'}))
@@ -125,6 +127,10 @@ Handy commands (from `~/Projects/sports`):
 - **One record** everywhere: every published play counts, win or lose; units on the site only (one unit a play,
   saved at grading), none on X; fun parlays and the ladder apart; the 26 Week 1 plays at an assumed -115, marked.
 - **Weekly "📌 Save this" projections sheet**: college Saturday and NFL Sunday at 10 AM (`scripts/sheet.py`).
+- **Growth goal** (2026-09-28): grow @keenkooks toward 10,000 followers by the end of football season without paid
+  reach or account-risk shortcuts. One relevant league hashtag per post is enough. The ladder is a continuing story,
+  not a claim of guaranteed profit. No automated replies, likes, follows, unfollows or trend posts; no bought or
+  exchanged engagement. `docs/GROWTH.md` has the baseline, weekly scorecard and experiments.
 - **The site**: the projection-card look everywhere (logos, photos, tiles), tabs Today, Board, Games, Stats, Record,
   More; always check changes at 375 px.
 - **Posting**: plays around noon Eastern (two hours before an earlier kickoff), ten minutes apart and from every

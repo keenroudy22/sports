@@ -157,7 +157,7 @@ class PlanTests(unittest.TestCase):
         self.assertEqual([p for p in plans if p[1] == 'play'], [])
 
     def test_a_post_that_fails_its_check_is_named_never_silent(self):
-        first = {'a': pick('a', title='Iowa at Michigan \u2014 over 38.5')}
+        first = {'a': pick('a', title='Iowa at Michigan over 38.5 \u2014 today')}
         latest = {k: dict(v) for k, v in first.items()}
         refused = []
         plans = bp.plan(first, latest, GAMES, NOW, {'posts': []}, refused=refused)

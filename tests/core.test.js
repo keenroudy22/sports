@@ -184,11 +184,13 @@ test('a pick says where it stands in words, and red is only for a loss', () => {
 });
 
 test('a board line leads with a plain word and backs it with its numbers', () => {
-  assert.deepEqual(C.gradeOf({ tier: 'strong', chance: 0.61, push: 0, needs: 0.524, thin: false }),
-    { tier: 'strong', word: 'Good value', detail: '61% our chance · 52% to break even' });
-  assert.equal(C.gradeOf({ tier: 'lean', chance: 0.7, push: 0.03, needs: 0.5, thin: true }).detail, '70% our chance, 3% push · 50% to break even · few games so far');
+  assert.deepEqual(C.gradeOf({ tier: 'strong', chance: 0.61, push: 0, needs: 0.524, edge: 8.6, thin: false }),
+    { tier: 'strong', word: 'Good value', detail: '61% our chance · 52% to break even · +8.6 point edge' });
+  assert.equal(C.gradeOf({ tier: 'lean', chance: 0.7, push: 0.03, needs: 0.5, edge: 20, thin: true }).detail,
+    '70% our chance, 3% push · 50% to break even · +20.0 point edge · few games so far');
   assert.deepEqual(C.gradeOf(null), { tier: 'none', word: 'No model read', detail: '' });
-  assert.equal(C.gradeOf({ tier: 'lean', chance: 0.6, push: 0, needs: 0.524, calibrated: false }).detail, '60% our chance · 52% to break even · raw number');
+  assert.equal(C.gradeOf({ tier: 'lean', chance: 0.6, push: 0, needs: 0.524, edge: 7.6, calibrated: false }).detail,
+    '60% our chance · 52% to break even · +7.6 point edge · raw number');
   assert.equal(C.gradeOf({ tier: 'lean', chance: 0.62, push: 0, needs: null, calibrated: false }).detail, '62% our chance · no price yet · raw number');
   const lines = [{ id: 'a', grade: { tier: 'pass', edge: -2 } }, { id: 'b' }, { id: 'c', grade: { tier: 'strong', edge: 6 } },
     { id: 'd', grade: { tier: 'strong', edge: 9 } }, { id: 'e', grade: { tier: 'lean', edge: 3 } }];
