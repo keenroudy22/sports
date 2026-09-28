@@ -157,7 +157,7 @@ FETCH_RACE = ('cannot lock ref', 'unable to update local ref', 'is at', '.lock')
 
 
 def fetch(runner=git, cwd=ROOT, attempts=5, wait=3, sleep=time.sleep):
-    """Fetch origin/main. Another git client on this machine (the Claude app refreshes the repository in the
+    """Fetch origin/main. Another git client on this machine (a desktop app can refresh the repository in the
     background) can update the same ref at the same second, and git then refuses with "cannot lock ref"; that
     is a race, not a fault, so wait a moment and fetch again. Anything else stops the run as before."""
     for attempt in range(attempts):

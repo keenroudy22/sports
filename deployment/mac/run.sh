@@ -48,7 +48,6 @@ doctor() {
   echo "git clean       $(if [ -z "$(git -C "$KEENROUDY_REPO" status --porcelain)" ]; then echo yes; else echo NO; fi)"
   echo "gh account      $(gh auth status 2>&1 | grep -oE 'account [^ ]+' | head -1 || echo 'not logged in')  (GH_CONFIG_DIR=$GH_CONFIG_DIR)"
   echo "ollama          $(curl -s -m 3 http://localhost:11434/api/version 2>/dev/null || echo 'not reachable')"
-  echo "claude          $(claude --version 2>/dev/null || echo 'not found')"
   echo "codex           $(codex --version 2>/dev/null || echo 'not found')  (codex login status: $(codex login status 2>&1 | head -1 || echo 'unknown'))"
   local keys=""
   for k in ODDS_API_KEY SHARP_API X_API_KEY X_API_SECRET X_ACCESS_TOKEN X_ACCESS_SECRET KEENROUDY_LLM_MODEL KEENROUDY_RESEARCHER KEENROUDY_X_AUTONOMOUS BUFFER_TOKEN BUFFER_CHANNEL KEENROUDY_NTFY_TOPIC; do

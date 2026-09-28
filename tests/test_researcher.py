@@ -24,8 +24,9 @@ PAGES = {'https://www.detroitlions.com/team/injury-report': b'<html><body>Injury
 
 
 def fake_runner(command, **kwargs):
-    assert command[:2] == ['claude', '-p'] and '--allowedTools' in command
-    return subprocess.CompletedProcess(command, 0, stdout=json.dumps({'result': 'Here you go:\n' + json.dumps(ANSWER)}), stderr='')
+    assert command[:2] == ['codex', 'exec'] and '--output-last-message' in command
+    Path(command[command.index('--output-last-message') + 1]).write_text('Here you go:\n' + json.dumps(ANSWER))
+    return subprocess.CompletedProcess(command, 0, stdout='', stderr='')
 
 
 def fake_opener(url):
@@ -37,7 +38,7 @@ def fake_opener(url):
 class ResearcherTests(unittest.TestCase):
     def test_off_unless_the_switch_is_set(self):
         self.assertFalse(researcher.enabled({}))
-        self.assertTrue(researcher.enabled({'KEENROUDY_RESEARCHER': 'claude'}))
+        self.assertFalse(researcher.enabled({'KEENROUDY_RESEARCHER': 'claude'}), 'the retired engine stays off')
         self.assertTrue(researcher.enabled({'KEENROUDY_RESEARCHER': 'Codex'}))
         self.assertFalse(researcher.enabled({'KEENROUDY_RESEARCHER': 'gemini'}), 'only the engines the desk knows')
 
@@ -88,7 +89,12 @@ class ResearcherTests(unittest.TestCase):
         self.assertEqual(researcher.extract(json.dumps({'facts': [{}] * 20})), [{}] * researcher.MAX_FACTS)
 
     def test_research_keeps_only_verified_well_formed_facts(self):
-        kept, dropped = researcher.research(GAME, 'total', 'over', runner=fake_runner, opener=fake_opener, now=datetime(2026, 9, 26, tzinfo=timezone.utc))
+        import tempfile
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as folder, mock.patch.object(researcher, 'SANDBOX', Path(folder)):
+            kept, dropped = researcher.research(
+                GAME, 'total', 'over', runner=fake_runner, opener=fake_opener,
+                now=datetime(2026, 9, 26, tzinfo=timezone.utc), env={'KEENROUDY_RESEARCHER': 'codex'})
         self.assertEqual([f['kind'] for f in kept], ['injury', 'weather'])
         self.assertTrue(all(f['verified'] for f in kept))
         self.assertEqual(kept[0]['entities'], ['Terrion Arnold', 'D.J. Reed'])
@@ -99,36 +105,28 @@ class ResearcherTests(unittest.TestCase):
         self.assertNotIn('Take the over.', notes, 'a malformed kind is dropped before any fetch')
 
     def test_a_failed_command_is_silence_not_an_error(self):
+        import tempfile
+        from unittest import mock
         def broken(command, **kwargs):
             return subprocess.CompletedProcess(command, 1, stdout='', stderr='boom')
-        self.assertEqual(researcher.research(GAME, 'total', 'over', runner=broken, opener=fake_opener), ([], []))
-
         def missing(command, **kwargs):
-            raise OSError('no claude')
-        self.assertEqual(researcher.research(GAME, 'total', 'over', runner=missing, opener=fake_opener), ([], []))
+            raise OSError('no codex')
+        with tempfile.TemporaryDirectory() as folder, mock.patch.object(researcher, 'SANDBOX', Path(folder)):
+            env = {'KEENROUDY_RESEARCHER': 'codex'}
+            self.assertEqual(researcher.research(GAME, 'total', 'over', runner=broken, opener=fake_opener, env=env), ([], []))
+            self.assertEqual(researcher.research(GAME, 'total', 'over', runner=missing, opener=fake_opener, env=env), ([], []))
+
+    def test_an_unknown_or_retired_engine_never_runs_a_fallback(self):
+        from unittest import mock
+        with mock.patch.object(researcher, 'run_codex') as codex:
+            self.assertIsNone(researcher.ask('prompt', env={'KEENROUDY_RESEARCHER': 'claude'}))
+            self.assertIsNone(researcher.ask('prompt', env={'KEENROUDY_RESEARCHER': 'unknown'}))
+        codex.assert_not_called()
 
 
 
 
 class ReliabilityTests(unittest.TestCase):
-    def test_a_researcher_that_runs_out_of_turns_is_asked_to_answer_with_what_it_found(self):
-        import json as _json
-        from types import SimpleNamespace
-        calls = []
-
-        def runner(command, **kw):
-            calls.append(command)
-            if '--resume' in command:
-                return SimpleNamespace(returncode=0, stdout=_json.dumps({'result': '{"facts": [{"kind": "injury"}]}'}), stderr='')
-            return SimpleNamespace(returncode=1, stdout=_json.dumps({'subtype': 'error_max_turns', 'session_id': 's-1', 'result': None}), stderr='')
-        self.assertEqual(researcher.run_claude('p', runner=runner), '{"facts": [{"kind": "injury"}]}')
-        self.assertIn('--resume', calls[1])
-        self.assertIn('s-1', calls[1])
-        self.assertIn('--max-turns', calls[0])
-        self.assertEqual(calls[0][calls[0].index('--max-turns') + 1], str(researcher.MAX_TURNS))
-        broken = lambda command, **kw: SimpleNamespace(returncode=1, stdout='', stderr='boom')
-        self.assertIsNone(researcher.run_claude('p', runner=broken))
-
     def test_an_injury_claim_needs_its_status_next_to_the_name(self):
         fact = {'kind': 'injury', 'claim': 'Navy quarterback Blake Horvath is out with a knee injury.', 'entities': ['Blake Horvath']}
         near = 'navy notes. quarterback blake horvath is out for saturday after the knee injury he suffered.'

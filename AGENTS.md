@@ -50,6 +50,9 @@ watch the runs, and fix what breaks.
   (the owner decides). The owner pins big wins by hand from the phone ping.
 - **Deploy only while holding the run lock** `~/.config/keenroudy/run.lock` (below), never mid-run.
 - **Do not change how the record counts** without telling the owner the before and after numbers.
+- **Keep the operating stack free.** Do not add a paid service, increase a metered request budget or buy reach
+  without the owner's approval. Build the audience with free plays first; a paid tier and compliant bonus links are
+  future options only after the owner explicitly decides to launch them.
 
 ## Where things are
 

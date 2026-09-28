@@ -66,8 +66,8 @@ cd ~/Projects/sports && ~/.config/keenroudy/run.sh py scripts/researcher.py NFL-
 ```
 
 Use any upcoming game id from the site's game pages (the part after `#game/`). If Codex is not signed in, the desk
-keeps running and simply works without the news check; to switch back, set the line to `claude`, or leave it empty
-to turn the news check off.
+keeps running and simply works without the news check. Leave the setting empty to turn the news check off; unknown
+or retired provider names do not trigger a fallback.
 
 ## Step 4: work with Codex instead of Claude
 
@@ -103,8 +103,8 @@ To run it any time: `~/.config/keenroudy/run.sh py scripts/review.py`.
 
 - The Claude scheduled task "KeenRoudy weekend check-in" was a one-time review for 2026-09-28; it is disabled and its
   stuck run stopped. No Claude routine is scheduled for the desk.
-- Nothing on the Mac depends on Claude now: the news check runs on Codex (Step 3), the review on Codex (Step 5).
-  `run.sh doctor` still shows the `claude` command if it is installed; nothing calls it. The Claude app can go.
+- Nothing on the Mac depends on Claude now: the news check runs only on Codex (Step 3), the review runs on Codex
+  (Step 5), and `run.sh doctor` checks only the tools the desk uses. The Claude app can go.
 
 ## Graphics and posts
 

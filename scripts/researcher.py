@@ -3,11 +3,10 @@
 The local model reads what the pipeline hands it. It cannot read the web. Researched favorites need
 what the web says: an official availability report, a beat reporter on a role change, a forecast for
 an outdoor game. This module asks an agent's command line, running headless with only web search, for
-structured facts about one game, each with a source URL: OpenAI's `codex exec` (KEENROUDY_RESEARCHER=codex,
-the owner's ChatGPT plan, with live web search in a read-only sandbox) or Anthropic's `claude -p`
-(KEENROUDY_RESEARCHER=claude). Nothing it says is used until verify() has fetched the URL itself and found
-every named person on the page. Unverified facts are dropped, never argued from. It is off when the
-variable is unset.
+structured facts about one game, each with a source URL, through OpenAI's `codex exec`
+(KEENROUDY_RESEARCHER=codex, the owner's ChatGPT plan, with live web search in a read-only sandbox).
+Nothing it says is used until verify() has fetched the URL itself and found every named person on the page.
+Unverified facts are dropped, never argued from. It is off when the variable is unset or unknown.
 
   python scripts/researcher.py GAME_ID [--market total|spread|recYds ...]
 Stdlib only.
@@ -63,7 +62,7 @@ Return ONLY this JSON, nothing else:
 If you find nothing solid, return {{"facts": []}}."""
 
 
-ENGINES = ('codex', 'claude')
+ENGINES = ('codex',)
 ORIGINS = ('codex researcher', 'claude researcher')     # a stored fact's origin; older facts say "claude researcher"
 
 
@@ -100,7 +99,6 @@ def prompt_for(game, market, side, policy=None, player=None, quarterbacks=None):
     return text
 
 
-MAX_TURNS = 12              # web steps before the researcher must answer
 # The researcher runs apart from everything else on the machine: its own empty folder (no project context, no
 # memory, no instruction files), web search and page reads as its only tools, no other tool servers, and a system
 # prompt that makes it a researcher and nothing else. Run from the repository with the default prompt, it had
@@ -109,12 +107,6 @@ SANDBOX = Path.home() / '.config' / 'keenroudy' / 'research'
 SYSTEM = ('You are a careful sports news researcher. Your only job is to answer the research request you are given, '
           'using web search and web page reads, and to return exactly the JSON it asks for. You have no other tools '
           'and no other task: never write code, run commands, or discuss anything but the request.')
-ISOLATION = ['--tools', 'WebSearch,WebFetch', '--allowedTools', 'WebSearch,WebFetch', '--strict-mcp-config',
-             '--system-prompt', SYSTEM]
-FINISH = ('Stop researching now. Return ONLY the JSON object described at the start, with the facts you have '
-          'already found (an empty list if none). No searching, no prose.')
-
-
 def quarterback_line(quarterbacks):
     """The quarterbacks to ask about by name: everyone who has started for each team this season, latest first."""
     parts = [f"{team}: {', '.join(names)}" for team, names in (quarterbacks or {}).items() if names]
@@ -122,21 +114,6 @@ def quarterback_line(quarterbacks):
         return ''
     return ('\nQuarterbacks who have started this season (latest first), whose status you must confirm first: '
             + '; '.join(parts) + '.')
-
-
-def run_claude(prompt, runner=subprocess.run, timeout=420, max_turns=MAX_TURNS):
-    """The `claude -p` JSON result text, or None when the command fails or is missing.
-
-    A researcher that runs out of turns while still searching has found things but not written them down; its
-    session is resumed once with an instruction to answer now, so the search is not thrown away."""
-    command = ['claude', '-p', prompt, '--output-format', 'json', *ISOLATION, '--max-turns', str(max_turns)]
-    payload = _claude(command, runner, timeout)
-    if isinstance(payload, dict) and payload.get('subtype') == 'error_max_turns' and payload.get('session_id'):
-        payload = _claude(['claude', '-p', FINISH, '--resume', payload['session_id'], '--output-format', 'json',
-                           *ISOLATION, '--max-turns', '2'], runner, timeout=180)
-    if isinstance(payload, dict):
-        return payload.get('result')
-    return payload
 
 
 CODEX_SCHEMA = {'type': 'object', 'additionalProperties': False, 'required': ['facts'], 'properties': {'facts': {
@@ -175,21 +152,7 @@ def run_codex(prompt, runner=subprocess.run, timeout=420, folder=None):
 
 def ask(prompt, runner=subprocess.run, env=None):
     """The configured engine's answer to the research prompt, or None."""
-    return run_codex(prompt, runner) if engine(env) == 'codex' else run_claude(prompt, runner)
-
-
-def _claude(command, runner, timeout):
-    """The parsed JSON the command printed (even on a non-zero exit, which is how a turn limit ends), its raw text
-    when it is not JSON, or None when nothing came back."""
-    SANDBOX.mkdir(parents=True, exist_ok=True)
-    try:
-        result = runner(command, capture_output=True, text=True, timeout=timeout, cwd=str(SANDBOX))
-    except (OSError, subprocess.TimeoutExpired):
-        return None
-    try:
-        return json.loads(result.stdout)
-    except (ValueError, TypeError):
-        return None if result.returncode else result.stdout
+    return run_codex(prompt, runner) if engine(env) == 'codex' else None
 
 
 def extract(text):
@@ -218,7 +181,7 @@ def shape(fact, game_id, index, now, origin=None):
         return None
     return {'id': f'web-{game_id}-{index}', 'kind': kind, 'direction': direction, 'claim': claim[:400], 'entities': entities[:6],
             'source': source, 'publishedAt': fact.get('publishedAt') or None, 'retrievedAt': gates.stamp(now), 'verified': False,
-            'origin': origin or f"{engine() or 'claude'} researcher"}
+            'origin': origin or 'codex researcher'}
 
 
 def fetch_text(url, opener=None, timeout=20):
@@ -282,7 +245,7 @@ def research(game, market, side, runner=subprocess.run, opener=None, now=None, p
     """Verified facts for one game and market. Empty when the researcher is silent or nothing survives."""
     now = now or datetime.now(timezone.utc)
     answer = ask(prompt_for(game, market, side, player=player, quarterbacks=quarterbacks), runner, env)
-    origin = f"{engine(env) or 'claude'} researcher"
+    origin = 'codex researcher'
     shaped = [s for s in (shape(f, game['id'], i, now, origin) for i, f in enumerate(extract(answer))) if s]
     checked = [verify(f, opener) for f in shaped]
     return [f for f in checked if f['verified']], [f for f in checked if not f['verified']]

@@ -1,5 +1,7 @@
 # Mac Studio setup and model rebuild
 
+> **Retired 2026-09-28.** This pre-GPT setup note is history only. Do not run it. Use `docs/MOVE-TO-GPT.md`.
+
 Paste everything below the line into Claude Code on the Mac Studio, in an empty directory where
 you want the repo to live.
 

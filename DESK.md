@@ -102,7 +102,7 @@ So, in this order, every run:
 
 1. **The written rules first** (`gates.admit`). A candidate they refuse costs no research and no model time.
 2. **The news**: the web researcher (`scripts/researcher.py`: `codex exec` with live web search in a read-only
-   sandbox since 2026-09-28, when the owner moved to GPT, or `claude -p` with web search; either runs in its own
+   sandbox since 2026-09-28, when the owner moved to GPT; it runs in its own
    empty folder with a research-only prompt, because run from the repository it had picked up the folder's context
    and spent its turns trying to run code) reads injury,
    availability and depth-chart reporting for every play that passes the rules, up to six a run, at every run
@@ -406,7 +406,7 @@ books disagree, and where our gap sits among the model's historical gaps with th
 large against the close. A model lean's `why` ends with it; game cards carry it as `marketRead`.
 
 `scripts/researcher.py` is the only part of the desk that reads the web. Off unless the env file sets
-`KEENROUDY_RESEARCHER=codex` (OpenAI's Codex CLI, signed in with the owner's ChatGPT plan; `claude` still works);
+`KEENROUDY_RESEARCHER=codex` (OpenAI's Codex CLI, signed in with the owner's ChatGPT plan; any other value turns it off);
 then, at the runs that publish on game days, it asks that command line (headless, web search only, answering to a
 JSON schema) for sourced facts about the strongest candidates, fetches every
 source URL itself and keeps a fact only when each named person is on the page. Verified facts feed the
