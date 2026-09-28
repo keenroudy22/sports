@@ -128,8 +128,9 @@ Handy commands (from `~/Projects/sports`):
 - **Tweets are short and human** (2026-09-26: "Not so AI looking. And straight to the point"): the play with price
   and book, "We have it at 47.", "❤️ if you're tailing", @Playbook and the league tag. No labels, slogans or
   reason sentences. POTD: "POTD: ..." first. Lotto: "🎰 +2506 COLLEGE LOTTO (ESPN BET)" then the legs.
-- **The Kook'n Ladder** ($50 to $1,000, `scripts/ladder.py`): two easier player lines at one book near even money,
-  one rung open at a time, one a day, NFL legs until college player numbers are calibrated. It must post; alternates
+- **The Kook'n Ladder** ($50 to $1,000, `scripts/ladder.py`): two safer player lines at one book, each priced -500
+  to -180 and together -250 to -110. A slower climb is preferred to forcing an even-money rung. One rung open at a
+  time, one a day, NFL legs until college player numbers are calibrated. It must post; alternates
   are allowed and expected. A rung pulled before its X post still counts, win or lose; while ungraded it blocks the
   next rung, and after grading the climb moves from its result.
 - **College player props** are legal pregame in Indiana (Gaming Commission, 2026-09-24). Their board rows come from

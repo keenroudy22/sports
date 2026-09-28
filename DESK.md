@@ -279,10 +279,11 @@ are tuned for main lines. Every fun parlay carries an expiry (next run or first 
 
 **The Kook'n Ladder** (`scripts/ladder.py`, the owner's call 2026-09-26: "50 -> 1000 on 1-2 leg safe bets", "start
 the ladder this week"): $50 to $1,000, the whole bankroll on each rung. A rung is two legs from different games at
-one book (DraftKings or FanDuel), priced -130 to +130 together, built from easier player lines ("Bijan Robinson 50+
+one book (DraftKings or FanDuel), priced -250 to -110 together, built from safer player lines ("Bijan Robinson 50+
 rushing yards") in SharpAPI's alternates (`data/prop-odds`, no credits, both leagues): only rungs of the main line's
-own ladder (`sharp_odds.consistent`), priced -350 to -150, our projection clearing the line 80% or more and 8 to 18
-points above the price's own chance (a bigger gap on an easy line is a data or role problem, not a gift), the book's
+own ladder (`sharp_odds.consistent`), priced -500 to -180, our projection clearing the line 85% or more and 4 to 18
+points above the price's own chance (the price carries the safety; a bigger gap on an easy line is a data or role
+problem, not a gift), the book's
 main line within 0.6 to 1.6 times our projection, a settled role, nobody on the injury report, prices read within
 twelve hours (the feed stamps each game when it reads it, `confirmed` in `data/prop-odds/sharp-status.json`, since the
 store only grows when a number moves), games 90 minutes or more from kickoff; the pair with the best joint chance on our numbers wins.
@@ -305,7 +306,8 @@ quarter-unit tickets, never called value, and only hard news pulls a leg.
 
 The ladder stays apart from the record in dollars: the site has a ladder card on Today and Record, receipts list a
 rung as "Ladder step 2: $96 to $187", and the posts lead "🪜 KOOK’N LADDER · STEP 2" with "$96 → $187 · +95 at
-FanDuel", on a card in the kitchen's own colours with the climb as a bar. The book's price carries the safety, our
+FanDuel", on a tall card in the kitchen's own colours with a winding route, the real current rung and deliberately
+unpriced future checkpoints. The book's price carries the safety, our
 number only agrees with room to spare. A rung with a void leg goes to a person (run.settle names it) and the ladder
 waits.
 

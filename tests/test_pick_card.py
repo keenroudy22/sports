@@ -99,9 +99,12 @@ class CardTests(unittest.TestCase):
                 'legs': [{'title': 'Drake London 40+ receiving yards'}, {'title': 'Bijan Robinson 50+ rushing yards'}],
                 'ladder': {'run': 1, 'step': 2, 'stake': 96, 'payout': 187, 'start': 50, 'goal': 1000}}
         text = pick_card.svg(rung, GAME)
-        for needle in ('LADDER · STEP 2', '$96 → $187', 'THE CLIMB: $50 TO $1,000', '• Drake London 40+ receiving yards', '+95', 'FanDuel',
+        for needle in ('THE LADDER', 'CLIMB 1', '$50 START · $1,000 GOAL', 'STEP 2 · TODAY', '$96 → $187',
+                       '• Drake London 40+ rec yds', '+95 AT FANDUEL', 'FUTURE RUNGS UNLOCK ONE AT A TIME',
                        pick_card.HOUSE[2]):
             self.assertIn(needle, text, needle)
+        self.assertEqual(pick_card.svg_size(text), (1080, 1350))
+        self.assertEqual(pick_card.svg_size(pick_card.svg(PICK, GAME)), (1200, 675))
         self.assertEqual(pick_card.play_kind(rung), 'ladder')
         self.assertIsNone(pick_card.artwork(rung, GAME, fetch=lambda url: 'data:x'), 'the chef serves the ladder')
 

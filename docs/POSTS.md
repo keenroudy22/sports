@@ -30,7 +30,7 @@ and what gets saved is in `docs/X-NOTES.md`.
 | **Side** | As a play | `Duke -10 vs Stanford (-110, FanDuel)` / `We have Duke by 14.` | the side's logo | |
 | **Lotto / longshot** | After the plays | `🎰 +2506 COLLEGE LOTTO (ESPN BET)` (from +1000; `🎯 +583 NFL LONGSHOT` under it) then one leg a line; fun tickets may mix feed-priced alternates such as `Drake London 40+ rec yds` | parlay card with the legs | `x_post.parlay_head` |
 | **Easy props** (alternate lines) | Sat (college) and Sun (NFL) | `🍀 +450 NFL EASY PROPS (FanDuel)` then legs like `Drake London 40+ rec yds` | parlay card | `easy_parlay.py` |
-| **Ladder step** | With the plays, one a day | `🪜 $50 → $1,000 ladder: step 2` / `$96 → $187 (+95, FanDuel)` / legs / `❤️ if you're climbing` | the ladder card (kitchen colours, the climb as a bar) | `ladder.py`, `pick_card.ladder_body` |
+| **Ladder step** | With the plays, one a day | `🪜 $50 → $1,000 ladder: step 2` / `$96 → $187 (+95, FanDuel)` / legs / `❤️ if you're climbing` | a tall winding route with the real rung and unpriced future checkpoints | `ladder.py`, `pick_card.ladder_svg` |
 | **Morning receipt** | 9 AM the day after a game day | `Saturday: 5-3` then `✅ Iowa/Michigan over 38.5` per play, `Today: 3 plays.`, tags | the receipt card (W/L per play, the chef) | `receipts.day_receipt`, `with_menu`, `pick_card.receipt_svg` |
 | **Week's receipt** | Wednesday 9 AM | `The week (Sep 23 to Sep 29): 12-9` then the record by kind | receipt card | `receipts.week_receipt` |
 | **Save this watchlist** | 10 AM college Saturday and NFL Sunday | `📌 4 NFL games where our numbers disagree most with the market.` / save ask / tag | 1080x1350 grid with four large model/market tiles | `sheet.py` |

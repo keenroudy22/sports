@@ -118,16 +118,19 @@ class LegTests(unittest.TestCase):
                          'unchanged since last night but read again this morning: the prices are this morning\'s')
         self.assertEqual(ladder.legs_for_game(GAMES['g1'], record('g1', retrieved='2026-09-26T20:00:00Z'), ctx(), NOW,
                                               {'g1': '2026-09-27T13:05:00Z'}), [], 'a reading after now does not count')
+        self.assertEqual(ladder.legs_for_game(GAMES['g1'], record('g1', price=-180), ctx(), NOW), [],
+                         '91% against 64% is a gap no book leaves on an easy line: a data or role problem')
         self.assertEqual(ladder.legs_for_game(GAMES['g1'], record('g1', price=-150), ctx(), NOW), [],
-                         '91% against 60% is a gap no book leaves on an easy line: a data or role problem')
+                         'the ladder now requires a safer individual price')
 
 
 class BuildTests(unittest.TestCase):
-    def test_two_games_one_book_about_even_money(self):
+    def test_two_games_one_book_make_a_favored_ticket(self):
         legs = [leg for gid in ('g1', 'g2') for leg in ladder.legs_for_game(GAMES[gid], record(gid), ctx(), NOW)]
         ticket, reason = ladder.build(legs)
         self.assertIsNone(reason)
         self.assertEqual((ticket['book'], ticket['odds'], sorted(ticket['gameIds'])), ('DraftKings', -129, ['g1', 'g2']))
+        self.assertLessEqual(ticket['odds'], -110)
         none, why = ladder.build(legs[:1])
         self.assertIsNone(none)
         self.assertIn('two games', why)

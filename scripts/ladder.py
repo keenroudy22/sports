@@ -1,8 +1,8 @@
 """The Kook'n Ladder: $50 to $1,000, one rung at a time. Stdlib only.
 
 The owner's call (2026-09-26): "50 -> 1000 on 1-2 leg safe bets", with alternate lines. Each rung is a two-leg
-ticket at one book, priced near even money (TARGET), built from easier player lines ("Bijan Robinson 50+ rushing
-yards") that our projection clears comfortably, one leg per game. The whole bankroll rides: a win rolls the payout
+ticket at one book, priced as a favorite (TARGET), built from safer player lines ("Bijan Robinson 50+ rushing
+yards") that our projection clears comfortably, one leg per game. The slower climb is deliberate. The whole bankroll rides: a win rolls the payout
 into the next rung, a miss starts the ladder over at $50, and reaching $1,000 finishes the climb (the next rung starts
 a new one). Money is whole dollars: a rung pays round(stake x the ticket's decimal price).
 
@@ -41,12 +41,12 @@ START, GOAL = 50, 1000              # dollars
 BOOKS = {'draftkings': 'DraftKings', 'fanduel': 'FanDuel'}
 SLUGS = {'DraftKings': 'dk', 'FanDuel': 'fd'}
 MARKETS = ('recYds', 'rushYds', 'rec', 'passYds')     # lines a follower reads at a glance
-LEG_PRICES = (-350, -150)           # a leg worth a rung: favored by the book, never a near-certainty
-MIN_CHANCE = 0.80                   # our projection's chance the player clears the easier line
-MIN_GAP = 0.08                      # our chance at least this far above the chance the price implies
+LEG_PRICES = (-500, -180)           # safer favored legs, while avoiding prices that barely move the climb
+MIN_CHANCE = 0.85                   # our projection's chance the player clears the easier line
+MIN_GAP = 0.04                      # safety comes from the price; our number still has to agree
 MAX_GAP = 0.18                      # and no further: a book that far off an easy line is a data or role problem, not a gift
 MAIN_RATIO = (0.6, 1.6)             # the book's main line against our projection: outside this, the market is another one
-TARGET = (-130, 130)                # a rung pays about even money
+TARGET = (-250, -110)               # a favored rung: more wins may be needed, but each step is safer
 LEAD = timedelta(minutes=90)        # a game this close to kickoff is left off
 FRESH = timedelta(hours=12)         # prices older than this are not used
 STAKE = parlay.STAKE                # the ticket's size in the desk's own terms; the ladder itself counts dollars
