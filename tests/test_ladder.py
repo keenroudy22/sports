@@ -69,15 +69,14 @@ def book_of(*rungs):
 
 
 class StateTests(unittest.TestCase):
-    def test_a_win_rolls_the_payout_a_loss_starts_over_and_a_pulled_rung_never_counts(self):
+    def test_a_win_rolls_the_payout_a_loss_starts_over_and_an_open_rung_is_kept(self):
         first, latest = book_of(rung('r1', '2026-09-27T12:30:00Z', 1, 50, 96, 'win'),
                                 rung('r2', '2026-09-28T12:30:00Z', 2, 96, 187, 'loss'),
-                                rung('r3', '2026-10-01T12:30:00Z', 1, 50, 99, entryNote='Closed before its post went out', status='expired'),
                                 rung('r4', '2026-10-03T12:30:00Z', 1, 50, 97, run=2))
         where = ladder.state(first, latest)
         self.assertEqual((where['run'], where['step'], where['stake']), (2, 1, 50))
         self.assertEqual(where['open']['id'], 'r4')
-        self.assertEqual([h['id'] for h in where['history']], ['r1', 'r2'], 'the pulled rung is not in the climb')
+        self.assertEqual([h['id'] for h in where['history']], ['r1', 'r2'])
 
     def test_the_goal_finishes_a_climb_and_a_push_keeps_the_stake(self):
         first, latest = book_of(rung('a', '2026-09-27T12:30:00Z', 4, 540, 1062, 'win'),
@@ -86,11 +85,14 @@ class StateTests(unittest.TestCase):
         self.assertEqual(where['climbs'], [{'run': 1, 'steps': 4, 'final': 1062, 'id': 'a'}])
         self.assertEqual((where['run'], where['step'], where['stake'], where['open']), (2, 1, 50, None))
 
-    def test_a_rung_pulled_before_its_post_never_counts_even_once_graded(self):
+    def test_a_rung_pulled_before_its_post_counts_once_graded_and_blocks_while_ungraded(self):
         note = 'Closed to new entries at 8:46 AM ET, before its post went out: soft news'
         first, latest = book_of(rung('pulled', '2026-09-27T10:45:06Z', 1, 50, 94, 'win', entryNote=note))
         where = ladder.state(first, latest)
-        self.assertEqual((where['step'], where['stake'], where['history']), (1, 50, []), 'the climb starts at step 1')
+        self.assertEqual((where['step'], where['stake'], [h['id'] for h in where['history']]), (2, 94, ['pulled']))
+        first, latest = book_of(rung('waiting', '2026-09-28T10:45:06Z', 2, 94, 180, entryNote=note, status='expired'))
+        where = ladder.state(first, latest)
+        self.assertEqual(where['open']['id'], 'waiting', 'a pulled rung still waits for its result')
 
     def test_payout_is_whole_dollars(self):
         self.assertEqual(ladder.payout(50, -108), 96)
@@ -164,9 +166,20 @@ class GateTests(unittest.TestCase):
         self.assertIn('still open', gates.ladder_one_rung(pick, view(first, latest)).reason)
         first, latest = book_of(rung('today', '2026-09-27T11:00:00Z', 1, 50, 96, 'win'))
         self.assertIn("today's rung", gates.ladder_one_rung(pick, view(first, latest)).reason)
-        first, latest = book_of(rung('pulled', '2026-09-27T11:00:00Z', 1, 50, 96, entryNote='pulled', status='expired'),
+        first, latest = book_of(rung('pulled', '2026-09-27T11:00:00Z', 1, 50, 96,
+                                     entryNote='Closed before its post went out: injury', status='expired'),
                                 rung('yesterday', '2026-09-26T11:00:00Z', 1, 50, 96, 'loss'))
-        self.assertTrue(gates.ladder_one_rung(pick, view(first, latest)).ok, 'a pulled rung and yesterday\'s graded one leave today free')
+        self.assertIn('still open', gates.ladder_one_rung(pick, view(first, latest)).reason,
+                      'an ungraded pulled rung blocks the next one')
+
+    def test_a_pulled_rung_never_gets_a_replacement_id(self):
+        first_pick, _ = ladder.candidate(ctx(), GAMES, NOW)
+        pulled, recent = rung(first_pick['id'], '2026-09-27T10:45:06Z', 1, 50, 94, 'win',
+                              entryNote='Closed before its post went out: injury')
+        world = ctx()
+        world.first[pulled['id']], world.latest[pulled['id']] = pulled, recent
+        next_pick, _ = ladder.candidate(world, GAMES, NOW)
+        self.assertEqual(next_pick['id'], first_pick['id'], 'the fixed daily id is not changed to a replacement id')
 
 
 if __name__ == '__main__':

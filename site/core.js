@@ -347,12 +347,12 @@
   /* The Kook'n Ladder (scripts/ladder.py): $50 to $1,000, the whole bankroll riding on each rung, kept apart from the
      record and counted in dollars. Its state is read from the rungs the way the desk reads it: a win rolls the payout
      into the next step, reaching $1,000 finishes the climb, a miss starts a new climb at $50, a push keeps the stake,
-     and a rung pulled before its post went out never counts. */
+     and a rung pulled before its post went out still counts and waits for its result. */
   const isLadder = p => p.parlayType === 'ladder';
   const LADDER = { start: 50, goal: 1000 };
   const theLadder = picks => {
     const pulled = p => /before its post went out/.test(p.entryNote || '');
-    const rungs = picks.filter(isLadder).filter(p => !pulled(p) && (p.result || (!p.entryNote && (p.status || 'active') === 'active')))
+    const rungs = picks.filter(isLadder).filter(p => p.result || pulled(p) || (!p.entryNote && (p.status || 'active') === 'active'))
       .sort((a, b) => String(a.publishedAt || '').localeCompare(String(b.publishedAt || '')) || String(a.id).localeCompare(String(b.id)));
     let run = 1, step = 1, stake = LADDER.start, open = null, best = LADDER.start;
     const history = [], climbs = [];

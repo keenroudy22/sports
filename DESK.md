@@ -288,11 +288,10 @@ twelve hours (the feed stamps each game when it reads it, `confirmed` in `data/p
 store only grows when a number moves), games 90 minutes or more from kickoff; the pair with the best joint chance on our numbers wins.
 A win rolls the payout (whole dollars) into the next step, a miss starts a new climb at $50, $1,000 finishes the
 climb. The state is never stored: `ladder.state` (and `site/core.js theLadder`) read it from the rungs and their
-results, so it cannot drift; a rung pulled before its post never counts. One rung open at a time, one played a day
-(`gates.ladder_one_rung`); NFL legs only until learning calibrates college player numbers (college has no injury
-feed either), then college too, from the 6:45 AM run on. A rung pulled before its post is replaced the same day under
-a new id (`gates.fresh_id`: Sunday 2026-09-27's replacement was refused as a second write of the pulled one's id); the
-lotto and the easy parlay are replaced the same way, and a pulled ticket no longer counts as the day's one.
+results, so it cannot drift. A rung pulled before its X post still counts, win or lose; it is not replaced, and while
+ungraded it blocks the next rung. One rung open at a time, one played a day (`gates.ladder_one_rung`); NFL legs only
+until learning calibrates college player numbers (college has no injury feed either), then college too, from the 6:45
+AM run on. Same-day replacement under a new id (`gates.fresh_id`) is for a pulled lotto or easy parlay only.
 
 **Alternate-line parlays every weekend** (the owner, 2026-09-28): the NFL's easy parlay on a Sunday, and on a college
 Saturday one from the prop feed's own alternates (`easy_parlay.sharp_candidate`, the ladder's legs, three games at one

@@ -12,8 +12,8 @@ The market's own price carries most of the safety; our number has to agree with 
 
 The ladder's state is never stored. state() reads it from the published rungs and their results, so it can not
 drift from the record. One rung is open at a time and one rung is played a day (gates.ladder_one_rung); a rung
-closed before its post went out never counts, and the day may try again. A rung with a void leg is settled by a
-person (run.settle reports it), and the ladder waits for that.
+pulled before its post still counts and is not replaced. A rung with a void leg is settled by a person
+(run.settle reports it), and the ladder waits for that.
 
 Prices: SharpAPI's DraftKings and FanDuel alternate player lines in data/prop-odds (scripts/sharp_odds.py), no
 credits. NFL legs now; college legs (legal pregame in Indiana, gates.INDIANA_BOOKS) once learning has calibrated
@@ -60,11 +60,11 @@ def rungs(first, latest):
 
 
 def played(rung):
-    """A rung that was played: graded, or still open. A rung closed before its post went out never counts, even
-    though the record grades it (2026-09-27: the pulled step 1 would have won; the climb still starts at step 1)."""
-    if 'before its post went out' in str(rung.get('entryNote') or ''):
-        return False
+    """A rung that counts: graded, still open, or pulled before its post. The owner counts every published ladder
+    decision (2026-09-28), so a pulled ungraded rung stays open and blocks the next one until its result."""
     if rung.get('result'):
+        return True
+    if 'before its post went out' in str(rung.get('entryNote') or ''):
         return True
     return not rung.get('entryNote') and (rung.get('status') or 'active') == 'active'
 
@@ -229,7 +229,7 @@ def candidate(ctx, games, now, exclude=()):
                 'start': START, 'goal': GOAL}
         chances = ' and '.join(f"{100 * l['chance']:.0f}%" for l in ticket['legs'])
         base = f"{league}-{first.get('season', day.year)}-W{first.get('week', 0)}-ladder-{day:%m%d}-{SLUGS[ticket['book']]}"
-        return {'id': gates.fresh_id(base, ctx) if gates.pulled_before_post(base, ctx) else base,
+        return {'id': base,
                 'title': f"Ladder step {info['step']}: 2 legs at {ticket['book']}", 'status': 'active', 'favorite': False,
                 'parlayType': 'ladder', 'riskUnits': STAKE, 'ladder': info, 'legs': ticket['legs'], '_league': league,
                 'correlation': 'One leg per game, so the book prices the ticket as the legs multiplied.',

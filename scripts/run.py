@@ -1304,8 +1304,6 @@ def ladder_step(ctx, games, now, records, published, decided, screened, exclude=
         log(f'ladder: {reason}')
         return
     league = ticket['_league']
-    if gates.pulled_before_post(ticket['id'], ctx):
-        ticket['id'] = gates.fresh_id(ticket['id'], ctx)       # the day's first rung was pulled before its post
     write_prose(ticket, ctx, records)
     ok, decisions = gates.admit(dict(ticket, league=league), ctx)
     if ok:

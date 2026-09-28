@@ -114,14 +114,16 @@ Handy commands (from `~/Projects/sports`):
   (three of a kind at most); one play on other days, the NFL game's on an NFL night (`gates.card_cap`, ordered by
   `run.rank_card`). Never leave an NFL day without a post. A fun parlay with alternate lines every Saturday (college,
   `easy_parlay.sharp_candidate`) and Sunday (NFL easy props), plus the lotto when one qualifies.
-- **Only hard news pulls a play** before it posts: out, doubtful, inactive, suspended, benched (`run.hard`). A fun
-  ticket pulled before its post is replaced the same day under a new id (`gates.fresh_id`).
+- **Only hard news pulls a play** before it posts: out, doubtful, inactive, suspended, benched (`run.hard`). A lotto
+  or easy parlay pulled before its post is replaced the same day under a new id (`gates.fresh_id`). A ladder rung is
+  never replaced.
 - **Tweets are short and human** (2026-09-26: "Not so AI looking. And straight to the point"): the play with price
   and book, "We have it at 47.", "❤️ if you're tailing", @Playbook and the league tag. No labels, slogans or
   reason sentences. POTD: "POTD: ..." first. Lotto: "🎰 +2506 COLLEGE LOTTO (ESPN BET)" then the legs.
 - **The Kook'n Ladder** ($50 to $1,000, `scripts/ladder.py`): two easier player lines at one book near even money,
   one rung open at a time, one a day, NFL legs until college player numbers are calibrated. It must post; alternates
-  are allowed and expected.
+  are allowed and expected. A rung pulled before its X post still counts, win or lose; while ungraded it blocks the
+  next rung, and after grading the climb moves from its result.
 - **College player props** are legal pregame in Indiana (Gaming Commission, 2026-09-24). Their board rows come from
   SharpAPI's own lines; learning calibrates them weekly (`CFB/prop`).
 - **One record** everywhere: every published play counts, win or lose; units on the site only (one unit a play,

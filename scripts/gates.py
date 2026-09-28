@@ -505,8 +505,7 @@ def pulled_before_post(key, ctx):
 
 
 def fresh_id(base, ctx):
-    """An id for a fun ticket that replaces one pulled earlier the same day: the day's ids are fixed by date and book,
-    and a replacement under the pulled one's id would be refused as a second write (2026-09-27, the ladder)."""
+    """An id for a lotto or easy parlay replacing one pulled earlier the same day. Ladder rungs are never replaced."""
     if base not in ctx.first:
         return base
     n = 2
@@ -737,19 +736,18 @@ def longshot_one_per_day(candidate, ctx):
 
 
 def ladder_one_rung(candidate, ctx):
-    """The ladder climbs one rung at a time: no new rung while one is open (published, not closed, not graded), and
-    one rung a day. A rung closed before its post went out never counts, so the day may try again."""
+    """The ladder climbs one rung at a time: no new rung while one is ungraded, including a rung pulled before its
+    post, and one rung a day. A pulled rung counts and is never replaced."""
     for key, pick in ctx.first.items():
         if key == candidate.get('id') or pick.get('parlayType') != 'ladder' or when(pick['publishedAt']) > ctx.now:
             continue
-        if pulled_before_post(key, ctx):
-            continue                    # never went out: not a rung, whatever the record later grades it
         recent = dict(pick, **ctx.latest.get(key, {}))
-        if recent.get('result') or recent.get('entryNote') or (recent.get('status') or 'active') != 'active':
-            if not recent.get('result') or not same_day(pick['publishedAt'], ctx.now):
-                continue
+        if not recent.get('result'):
+            if pulled_before_post(key, ctx) or (not recent.get('entryNote') and (recent.get('status') or 'active') == 'active'):
+                return Decision(False, 'ladder_one_rung', f'{key} is still open; the next rung waits for its result')
+            continue
+        if same_day(pick['publishedAt'], ctx.now):
             return Decision(False, 'ladder_one_rung', f'{key} was already today\'s rung')
-        return Decision(False, 'ladder_one_rung', f'{key} is still open; the next rung waits for its result')
     return Decision(True, 'ladder_one_rung', 'no rung open and none played today')
 
 

@@ -623,6 +623,23 @@ class ParlayGuardTests(unittest.TestCase):
 
 
 class LockedUnitsTests(unittest.TestCase):
+    def test_a_pulled_ladder_step_gets_no_replacement(self):
+        ticket = {'id': 'NFL-2026-W3-ladder-0927-fd', '_league': 'NFL', 'title': 'Ladder step 2',
+                  'parlayType': 'ladder', 'book': 'FanDuel', 'odds': -110, 'legs': [{}, {}], 'gameIds': ['g1'],
+                  'ladder': {'run': 1, 'step': 2, 'stake': 94, 'payout': 180}}
+        ctx = SimpleNamespace(first={ticket['id']: {'id': ticket['id']}}, latest={ticket['id']: {
+            'entryNote': 'Closed before its post went out: injury', 'result': 'win'}}, games={})
+        published, decided, screened = [], [], []
+        refusal = run.gates.Decision(False, 'not_republished', 'the rung already exists')
+        with mock.patch('ladder.candidate', return_value=(ticket, None)), \
+                mock.patch.object(run, 'write_prose', side_effect=lambda pick, *_: pick), \
+                mock.patch.object(run.gates, 'pulled_before_post', return_value=True), \
+                mock.patch.object(run.gates, 'fresh_id', side_effect=AssertionError('the ladder never gets a replacement id')), \
+                mock.patch.object(run.gates, 'admit', return_value=(False, [refusal])):
+            run.ladder_step(ctx, {}, datetime(2026, 9, 27, 13, 0, tzinfo=timezone.utc), [], published, decided, screened)
+        self.assertEqual(ticket['id'], 'NFL-2026-W3-ladder-0927-fd')
+        self.assertEqual(published, [])
+
     def test_a_graded_play_carries_its_units_at_the_published_price(self):
         self.assertEqual(run.lock_units({'odds': -111, 'result': 'win'})['units'], round(100 / 111, 3))
         self.assertEqual(run.lock_units({'odds': 583, 'result': 'loss', 'riskUnits': 0.25})['units'], -0.25, 'a parlay at its own stake')
@@ -766,4 +783,3 @@ class CardRankTests(unittest.TestCase):
         self.assertEqual(order, ['rec', 'cfb-total', 'yards', 'nfl-total'],
                          'a +8 prop, then the +2 college total; the trailing yards market and the paused NFL total after, '
                          'strongest first; a plus-money prop is not a card play')
-
