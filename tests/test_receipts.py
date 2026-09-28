@@ -130,7 +130,9 @@ class ReceiptTests(unittest.TestCase):
         self.assertTrue(plans[0][2].startswith('Sunday: 2-1\n✅ Player Seven'), plans[0][2])
         self.assertEqual(plans[0][2].count('Player Seven'), 1, 'each play once')
         self.assertEqual(got[1][:3], ('NFL-2026-W4-n', 'play', '10:00'), 'a noon kickoff posts two hours ahead')
-        self.assertEqual(got[2][:3], ('NFL-2026-W4-m', 'play', '12:00'), 'the Monday night play goes out at midday')
+        self.assertEqual(got[2][:3], ('conversation:day:2026-09-28', 'conversation', '10:10'),
+                         'the one conversation prompt follows the first play')
+        self.assertEqual(got[3][:3], ('NFL-2026-W4-m', 'play', '12:00'), 'the Monday night play goes out at midday')
         log['posts'].append({'id': 'receipt:day:2026-09-27+menu:day:2026-09-28', 'kind': 'buffer:receipt'})
         again = [p[0] for p in buffer_post.plan(first, latest, dict(GAMES, **noon), MONDAY_MORNING, log)]
         self.assertFalse([k for k in again if k.startswith(('receipt:', 'menu:'))], 'neither goes out again on its own')

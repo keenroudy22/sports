@@ -118,13 +118,28 @@ class PlanTests(unittest.TestCase):
         latest = {k: dict(v) for k, v in first.items()}
         plans = bp.plan(first, latest, GAMES, NOW, {'posts': []})
         self.assertEqual([(p[0], et(p[3])) for p in plans],
-                         [('menu:day:2026-09-26', '08:45'), ('p', '10:00'), ('a', '10:10'), ('d', '10:20'), ('x', '10:30'), ('b', '12:00')],
-                         'the menu first; the noon kickoff posts two hours ahead, player prop first, parlay last; the 7:30 PM game at noon; tomorrow waits')
+                         [('menu:day:2026-09-26', '08:45'), ('p', '10:00'), ('conversation:day:2026-09-26', '10:10'),
+                          ('a', '10:20'), ('d', '10:30'), ('x', '10:40'), ('b', '12:00')],
+                         'the menu first; one conversation prompt follows the first play, then the card continues; tomorrow waits')
         self.assertEqual(plans[0][4], 'https://keenroudy.com/sports/img/kitchen-menu.png')
         plans = [p for p in plans if p[1] == 'play']
         self.assertTrue(all(p[4] == p[0] for p in plans), 'each play with its own card')
         self.assertTrue(plans[0][2].startswith('Player Seven over 4.5 receptions (-115, '), plans[0][2])
         self.assertTrue(plans[3][2].startswith('🎯 +'), 'a fun parlay leads with its price')
+
+    def test_one_prompt_sits_between_plays_once_but_a_single_play_gets_no_filler(self):
+        first = {'a': pick('a'), 'b': pick('b', 'late', title='Oklahoma at Georgia under 44.5', direction='under')}
+        latest = {k: dict(v) for k, v in first.items()}
+        plans = bp.plan(first, latest, GAMES, NOW, {'posts': []})
+        prompt = next(p for p in plans if p[1] == 'conversation')
+        self.assertEqual(prompt[0], 'conversation:day:2026-09-26')
+        self.assertIn(prompt[2].split('\n\n')[0], bp.CONVERSATION)
+        self.assertTrue(prompt[2].endswith('#CFB'))
+        self.assertIsNone(prompt[4], 'a conversational post is intentionally text-only')
+        already = {'posts': [{'id': prompt[0], 'dueAt': prompt[3].isoformat(), 'kind': 'buffer:conversation'}]}
+        self.assertNotIn('conversation', {p[1] for p in bp.plan(first, latest, GAMES, NOW, already)})
+        single = {'a': first['a']}
+        self.assertNotIn('conversation', {p[1] for p in bp.plan(single, {'a': latest['a']}, GAMES, NOW, {'posts': []})})
 
     def test_a_late_play_goes_out_now_and_a_passed_window_is_skipped(self):
         first = {'a': pick('a'), 'b': pick('b', 'late', title='Oklahoma at Georgia under 44.5', direction='under')}
@@ -187,11 +202,12 @@ class SpacingTests(unittest.TestCase):
         latest = {k: dict(v) for k, v in first.items()}
         eleven = datetime(2026, 9, 26, 15, 58, tzinfo=timezone.utc)       # 11:58 AM ET
         plans = bp.plan(first, latest, GAMES, eleven, {'posts': queued})
-        self.assertEqual([(p[0], et(p[3])) for p in plans], [('a', '13:00'), ('b', '13:10')],
-                         'after the queue, ten minutes from every post already scheduled')
+        self.assertEqual([(p[0], et(p[3])) for p in plans],
+                         [('a', '13:00'), ('conversation:day:2026-09-26', '13:10'), ('b', '13:20')],
+                         'after the queue, every play and the between-play prompt stay ten minutes apart')
         cancelled = [dict(q, cancelledAt='2026-09-26T14:00:00Z') if q['id'] == 'q2' else q for q in queued]
         plans = bp.plan(first, latest, GAMES, eleven, {'posts': cancelled})
-        self.assertEqual([et(p[3]) for p in plans], ['12:20', '13:00'], 'a cancelled post frees its slot')
+        self.assertEqual([et(p[3]) for p in plans], ['12:20', '13:00', '13:10'], 'a cancelled post frees its slot')
 
     def test_a_day_holds_at_most_the_ceiling_counting_what_is_queued(self):
         queued = [{'id': f'q{i}', 'dueAt': f'2026-09-26T{10 + i // 6:02d}:{10 * (i % 6):02d}:00Z'} for i in range(bp.MAX_PER_DAY - 1)]
@@ -199,6 +215,18 @@ class SpacingTests(unittest.TestCase):
         latest = {k: dict(v) for k, v in first.items()}
         plans = bp.plan(first, latest, GAMES, NOW, {'posts': queued})
         self.assertEqual(len(plans), 1, 'one more fits under the ceiling')
+        queued = [dict(q) for q in queued[:-1]]
+        queued[0]['id'] = 'menu:day:2026-09-26'
+        plans = bp.plan(first, latest, GAMES, NOW, {'posts': queued})
+        self.assertEqual([p[1] for p in plans], ['play', 'play'], 'the optional prompt never takes the last slot from a play')
+
+    def test_a_tight_buffer_allowance_drops_the_conversation_before_a_play(self):
+        due = NOW + timedelta(hours=1)
+        plans = [('a', 'play', 'a', due, 'a'), ('conversation:day:2026-09-26', 'conversation', 'talk', due + bp.SPACING, None),
+                 ('b', 'play', 'b', due + 2 * bp.SPACING, 'b')]
+        self.assertEqual([p[0] for p in bp.fit_limit(plans, 2)], ['a', 'b'])
+        self.assertEqual(bp.fit_limit(plans, 0), [])
+        self.assertEqual(bp.fit_limit(plans, 3), plans)
 
 
 class ScheduleTests(unittest.TestCase):

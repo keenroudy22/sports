@@ -1730,7 +1730,7 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         limit = buffer_post.daily_limit(channel['id'], eastern_date(now).isoformat())
         if limit and limit.get('remaining') is not None and limit['remaining'] < len(plans):
             log(f"buffer: the channel can take {limit['remaining']} more posts today; scheduling that many")
-            plans = plans[:max(0, limit['remaining'])]
+            plans = buffer_post.fit_limit(plans, limit['remaining'])
         before = len(log_book.get('posts', []))
         buffer_post.schedule(plans, channel['id'], log_book, now, log=log)
         status['x']['posted'] = len(log_book.get('posts', [])) - before

@@ -12,8 +12,8 @@ a desk that posts a handful of plays a day at set times.
   python scripts/buffer_post.py post PICK_ID [--at ISO]   schedule one pick's post (needs --confirm)
   python scripts/buffer_post.py reconcile          record the X link, or the error, for every post whose time passed
 
-X gets plays only: player props, game lines and the day's fun parlay, the same shape every time and always
-with the card. The run (scripts/run.py) schedules each play once, three hours before its kickoff and never
+X gets the plays, their receipts and one short conversation prompt between plays on a multi-play card. Plays use the
+same shape every time and always carry the card. The run (scripts/run.py) schedules each play once, three hours before its kickoff and never
 before 9:00 AM ET on game day, ten minutes apart, and logs every post in data/x-posted.json so nothing goes
 out twice. A play whose card is not live yet waits; a play that closes to new entries before its time is
 cancelled. The token lives in the environment (BUFFER_TOKEN) and never in a log.
@@ -44,6 +44,11 @@ SPACING = timedelta(minutes=10)      # between two posts
 SOON = timedelta(minutes=2)          # a post scheduled "now" goes out this far ahead
 ORDER = {'player': 0, 'team': 1, 'ladder': 2, 'parlay': 3}   # inside one kickoff: player props, game lines, the ladder, the parlay
 MAX_PER_DAY = 20                     # our own ceiling for a day's posts, counting those already scheduled; Buffer allows 50
+CONVERSATION = (
+    "First play is out. Who wants the next one? 👀",
+    "The card is rolling. What game are you watching today?",
+    "One play down. Side, total or prop next?",
+)
 
 
 def card_url(card_key):
@@ -231,11 +236,41 @@ def day_count(log_book, day):
                and not entry.get('deletedAt') and eastern_date(gates.when(entry['dueAt'])) == day)
 
 
+def conversation_text(day, play_rows, first, games):
+    """One factual, varied prompt for a multi-play card. It goes after the first play, never pretends replies choose
+    the card, and carries only the league tags the planned plays actually cover."""
+    leagues = set()
+    for row in play_rows:
+        pick = first.get(row[3]) or {}
+        for gid in pick.get('gameIds') or []:
+            league = (games.get(gid) or {}).get('league')
+            if league in ('NFL', 'CFB'):
+                leagues.add(league)
+    tags = ' '.join(f'#{league}' for league in ('CFB', 'NFL') if league in leagues)
+    copy = CONVERSATION[day.toordinal() % len(CONVERSATION)]
+    return f'{copy}\n\n{tags}'.rstrip()
+
+
+def fit_limit(plans, remaining):
+    """Respect Buffer's live daily allowance without ever letting optional conversation copy displace a play or
+    house post. When space is tight, prompts go first; the essential posts keep their scheduled order."""
+    if remaining is None or remaining >= len(plans):
+        return plans
+    remaining = max(0, int(remaining))
+    essential = [plan for plan in plans if plan[1] != 'conversation']
+    optional = [plan for plan in plans if plan[1] == 'conversation']
+    chosen = essential[:remaining]
+    if len(chosen) < remaining:
+        chosen += optional[:remaining - len(chosen)]
+    return sorted(chosen, key=lambda plan: plan[3])
+
+
 def plan(first, latest, games, now, log_book, player_team=None, soon=None, quotes=None, refused=None):
     """The posts the run should schedule now: [(key, kind, text, due_at, card_key)].
 
-    X gets plays and their receipts: player props, game lines and the day's fun parlay, the same shape every
-    time and always with the card, and the morning after, the receipt (scripts/receipts.py) at 9:00 AM ET,
+    X gets plays, their receipts and one short prompt between the first two plays of a multi-play card. Player props,
+    game lines and the day's fun parlay use the same shape every time and always carry the card; the morning after,
+    the receipt (scripts/receipts.py) goes at 9:00 AM ET,
     ahead of that morning's plays; on Wednesday the week's receipt too. Plays go out around noon Eastern on game
     day (a game before 2 PM posts two hours ahead of its kickoff, a parlay by its first leg; never before 9:00 AM),
     player props first, then game lines, then the parlay, ten minutes apart. A play published later than its time goes out now, unless kickoff is inside
@@ -286,6 +321,15 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
             continue
         plays.append((post['due'], order[post['kind']], post['stale'], post['key'], post['text'], post['kind'], post['card']))
     plays.sort()
+    play_rows = [row for row in plays if row[5] == 'play']
+    conversation_key = f'conversation:day:{today.isoformat()}'
+    essential_today = sum(1 for row in plays if eastern_date(row[0]) == today)
+    room_for_prompt = day_count(log_book, today) + essential_today < MAX_PER_DAY
+    if conversation_key not in posted and len(play_rows) >= 2 and room_for_prompt:
+        first_index = next(i for i, row in enumerate(plays) if row is play_rows[0])
+        prompt = (play_rows[0][0], play_rows[0][1], min(play_rows[0][2], play_rows[1][2]), conversation_key,
+                  conversation_text(today, play_rows, first, games), 'conversation', None)
+        plays.insert(first_index + 1, prompt)
     out, last, busy, counts = [], None, taken(log_book, now), {}
     for target, _, deadline, key, text, kind, card in plays:
         due = max(target, now + soon)
