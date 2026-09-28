@@ -376,7 +376,7 @@ def play_label(pick):
 def kicker(pick, featured=False):
     """The label every card and every post leads with; the day's Pick of the Day and a researched favorite say so."""
     if play_kind(pick) == 'ladder':
-        return f"80/20 BANKROLL LADDER · STEP {(pick.get('ladder') or {}).get('step', 1)}"
+        return f"80/20 CLIMB · STEP {(pick.get('ladder') or {}).get('step', 1)}"
     label = play_label(pick)
     if featured:
         return f'PICK OF THE DAY · {label}'
@@ -418,8 +418,8 @@ def ladder_svg(pick, avatar=None):
 <circle cx="91" cy="94" r="14" fill="none" stroke="#f28c28" stroke-width="5"/><circle cx="91" cy="94" r="5" fill="#f28c28"/><path d="M105 94h28" stroke="#f28c28" stroke-width="5" stroke-linecap="round"/>
 <text x="142" y="116" fill="{CREAM}" font-size="34" font-weight="800" letter-spacing="5">KOOK’N</text>
 <text x="986" y="112" fill="#d8d1c6" font-size="22" font-weight="700" letter-spacing="3" text-anchor="end">CLIMB {run}</text>
-<text x="540" y="190" fill="{CREAM}" font-size="49" font-weight="900" text-anchor="middle" letter-spacing="2">THE 80/20 BANKROLL LADDER</text>
-<text x="540" y="232" fill="#f28c28" font-size="27" font-weight="800" text-anchor="middle" letter-spacing="4">BANK 20 · RIDE 80 · {esc(goal)} GOAL</text>
+<text x="540" y="190" fill="{CREAM}" font-size="58" font-weight="900" text-anchor="middle" letter-spacing="3">THE 80/20 CLIMB</text>
+<text x="540" y="232" fill="#f28c28" font-size="25" font-weight="800" text-anchor="middle" letter-spacing="3">BANK 20 · RIDE 80 · CLIMB TO {esc(goal)}</text>
 
 <path d="M140 315 H810 Q920 315 920 425 Q920 535 810 535 H270 Q160 535 160 645 Q160 755 270 755 H810 Q920 755 920 865 Q920 975 810 975 H270 Q160 975 160 1085 Q160 1185 270 1185 H690" fill="none" stroke="#756b62" stroke-opacity=".55" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M140 315 H810 Q920 315 920 425 Q920 535 810 535 H270" fill="none" stroke="#f28c28" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>

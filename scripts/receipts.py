@@ -61,10 +61,10 @@ def game_day(pick, games):
 
 
 def label(pick, games=None):
-    """A play as its post named it: "Iowa/Michigan over 38.5", "5-leg lotto", "80/20 bankroll ladder step 2"."""
+    """A play as its post named it: "Iowa/Michigan over 38.5", "5-leg lotto", "80/20 Climb step 2"."""
     if pick_card.play_kind(pick) == 'ladder':
         info = pick.get('ladder') or {}
-        return f"80/20 bankroll ladder step {info.get('step', 1)} ({pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))})"
+        return f"80/20 Climb step {info.get('step', 1)} ({pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))})"
     if pick_card.play_kind(pick) == 'parlay':
         odds = pick.get('odds')
         return f"{len(pick.get('legs') or [])}-leg {'lotto' if isinstance(odds, (int, float)) and odds >= x_post.LOTTO else 'parlay'}"
@@ -322,9 +322,9 @@ def ladder_cashed(pick):
     total = int(info.get('totalAfter') if info.get('totalAfter') is not None else banked_after + next_stake)
     stake, won = pick_card.dollars(info.get('stake')), pick_card.dollars(returned)
     if total >= (info.get('goal') or 1000):
-        return (f"🪜 80/20 bankroll ladder complete: {pick_card.dollars(info.get('start', 50))} → {pick_card.dollars(total)} in {info.get('step', 1)} steps",
+        return (f"🪜 80/20 Climb complete: {pick_card.dollars(info.get('start', 50))} → {pick_card.dollars(total)} in {info.get('step', 1)} steps",
                 f"{pick_card.dollars(banked_after)} banked along the way.")
-    return (f"✅ 80/20 bankroll ladder step {info.get('step', 1)} cashed: {stake} → {won}",
+    return (f"✅ 80/20 Climb step {info.get('step', 1)} cashed: {stake} → {won}",
             f"{pick_card.dollars(banked_after)} banked. {pick_card.dollars(next_stake)} rides step {info.get('step', 1) + 1}.")
 
 

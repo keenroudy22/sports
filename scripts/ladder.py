@@ -1,4 +1,4 @@
-"""The Kook'n 80/20 Bankroll Ladder: $50 to $1,000, one rung at a time. Stdlib only.
+"""The Kook'n 80/20 Climb: a $50-to-$1,000 bankroll ladder, one rung at a time. Stdlib only.
 
 The owner's call (2026-09-26): "50 -> 1000 on 1-2 leg safe bets", with alternate lines. Each rung is a two-leg
 ticket at one book, priced as a favorite (TARGET), built from safer player lines ("Bijan Robinson 50+ rushing

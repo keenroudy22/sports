@@ -353,10 +353,10 @@ def parlay_head(pick, league):
 
 
 def ladder_text(pick):
-    """The three money lines for the Kook'n 80/20 Bankroll Ladder: stake, return, bank and next ride."""
+    """The three money lines for the Kook'n 80/20 Climb: stake, return, bank and next ride."""
     info = pick.get('ladder') or {}
-    round_ = f" · CLIMB {info['run']}" if (info.get('run') or 1) > 1 else ''
-    head = f"🪜 KOOK'N 80/20 BANKROLL LADDER{round_} · STEP {info.get('step', 1)}"
+    round_ = f" #{info['run']}" if (info.get('run') or 1) > 1 else ''
+    head = f"🪜 KOOK'N 80/20 CLIMB{round_} · STEP {info.get('step', 1)}"
     money = f"{pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))} ({int(pick['odds']):+d}, {pick.get('book')})"
     bank = (f"{pick_card.dollars(info.get('banked', 0))} banked · win banks "
             f"{pick_card.dollars(info.get('bankThisWin'))}, {pick_card.dollars(info.get('nextStake'))} rides")
@@ -374,7 +374,7 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
         @Playbook #CFB
 
     A fun parlay leads with its price and book, "🎰 +2506 COLLEGE LOTTO (ESPN BET)", then its legs one a line; a
-    ladder rung "🪜 KOOK'N 80/20 BANKROLL LADDER · STEP 2", "$75 → $146", the bank/ride split, then its legs. No labels, slogans or
+    ladder rung "🪜 KOOK'N 80/20 CLIMB · STEP 2", "$75 → $146", the bank/ride split, then its legs. No labels, slogans or
     reasons in sentences: the site keeps the reasons, and the card carries the site and "Entertainment only". No units.
     Every number comes from the pick (x_post.guard checks). `weights` and `reason` are kept for callers; the post no
     longer carries a reason.

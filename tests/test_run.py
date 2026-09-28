@@ -667,7 +667,7 @@ class LockedUnitsTests(unittest.TestCase):
                                                                                        nextStake=117, totalAfter=165))}, latest={})
         plans = [('cashed:NFL-ladder', 'cashed', 'text', None, None), ('cashed:NFL-low', 'cashed', 'text', None, None)]
         [(title, message)] = run.lotto_pings(plans, ctx)
-        self.assertEqual(title, 'Bankroll ladder complete: pin it')
+        self.assertEqual(title, '80/20 Climb complete: pin it')
         self.assertIn('$1,000 from $50 in 5 steps', message)
         rung = run.write_prose(dict(top, book='FanDuel'), ctx, [])
         self.assertIn('$675 rides with $150 banked', rung['why'])

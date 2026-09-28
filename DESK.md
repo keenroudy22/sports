@@ -49,7 +49,7 @@ Exactly what `PROMPT.md` allows, and only when every gate passes:
   like the NFL's, but a league's player chances publish only once learning has calibrated them against that league's
   own graded lines (`gates.OWN_CALIBRATION`, college until then; see "College player props" below).
 - **Longshots**: one a game day from `scripts/parlay.py`.
-- **The 80/20 bankroll ladder**: one rung at a time from `scripts/ladder.py` (below), never while a rung is open, one a day.
+- **The Kook'n 80/20 Climb**: one bankroll-ladder rung at a time from `scripts/ladder.py` (below), never while a rung is open, one a day.
   Bank 20% of each winning return and ride 80%; never force a rung when fewer than two clean games are available.
   Pick of the Day is independent and may use any qualifying game, including the only game on a slate.
 - **Favorites**: only with a verified, sourced reason attached by the run. The web-reading researcher
@@ -192,7 +192,7 @@ the tweets"): the play, the price and book, and our number in a few words ("We h
 14."); no labels, no slogans, no reason sentences (the site keeps the reasons). A fun parlay leads with its price
 and book (`x_post.parlay_head`): "🎰 +2506 COLLEGE LOTTO (ESPN BET)" from +1000 up, "🎯 +583 NFL LONGSHOT" under it,
 "🍀 +450 NFL EASY PROPS", then its legs one a line ("Iowa/Michigan over 38.5", "Drake London 40+ rec yds"). A ladder
-rung: "🪜 KOOK'N 80/20 BANKROLL LADDER · STEP 2", "$75 → $146 (+95, FanDuel)", "$19 banked · win banks $29, $117 rides",
+rung: "🪜 KOOK'N 80/20 CLIMB · STEP 2", "$75 → $146 (+95, FanDuel)", "$19 banked · win banks $29, $117 rides",
 its legs, "❤️ if you're climbing". Receipts,
 the book, the menu and cashed posts are one-liners too ("Saturday: 5-3" with ✅ ❌ per play, "✅ Cashed: ...",
 "Today: 3 plays.", "📌 4 NFL games where our numbers disagree most with the market.").
@@ -232,7 +232,7 @@ live waits for the next run. Nothing goes out bare.
 | Between the first two plays on a multi-play card | **Conversation prompt**: one short rotating question such as "First play is out. Who wants the next one? 👀"; text-only, one relevant league tag, at most once that day. Never added to a single-play day and never followed by automated replies |
 | As a win settles (9 AM to 12:30 AM, within three hours) | **Cashed**: "✅ Cashed: Iowa/Michigan over 38.5 (-105, ESPN BET)" (or "✅ POTD cashed: ...", "✅ +2506 5-leg lotto cashed (ESPN BET)"), and the original post quoted by its X link; text only. Losses are not singled out: the morning receipt lists every play, win or lose. The run feeds its own settlements forward (`run.absorb`), so the cashed post goes out from the run that settled it |
 | 10:00 AM college Saturday and NFL Sunday | **📌 SAVE THIS**: the week's model watchlist (`scripts/sheet.py`), one 1080x1350 image with four large tiles for the games where our number and the line differ most: logos, projected score, win chances, and our spread and total beside the market. The complete slate stays on the site. Drawn by the hosted build (`feed.py`, `cards/sheet-<league>-<date>.png`), posted by the desk once the image is live, never after 11:45 AM. Not picks |
-| As a rung wins | **80/20 bankroll ladder cashed**: "$75 → $146", "$48 banked. $117 rides step 3."; at $1,000 total bank plus ride, "🪜 80/20 BANKROLL LADDER COMPLETE", and the phone gets "Bankroll ladder complete: pin it" |
+| As a rung wins | **80/20 Climb cashed**: "$75 → $146", "$48 banked. $117 rides step 3."; at $1,000 total bank plus ride, "🪜 80/20 CLIMB COMPLETE", and the phone gets "80/20 Climb complete: pin it" |
 | 6:00 PM on a day with nothing else | **The book**: the season record, graded through yesterday and saying so ("Season through Sep 28"), so back-to-back quiet days never post the same words, which X refuses; with one kind of play only the season line (card `site/img/kitchen-book.png`) |
 
 **What works on X** (`learn.post_times`): the weekly learning report adds engagement per thousand views by kind of post
@@ -281,7 +281,7 @@ questionable): three legs at one book paying +150 to +700, "Drake London 40+ rec
 longshot's gates (one of each kind a day), kept with the longshots, and never called value: our player chances
 are tuned for main lines. Every fun parlay carries an expiry (next run or first kickoff), which the longshot lacked.
 
-**The Kook'n 80/20 Bankroll Ladder** (`scripts/ladder.py`, the owner's calls 2026-09-26 and 2026-09-28: "50 -> 1000 on 1-2 leg
+**The Kook'n 80/20 Climb** (`scripts/ladder.py`, the owner's calls 2026-09-26 and 2026-09-28: "50 -> 1000 on 1-2 leg
 safe bets", then bank 20% of each win): $50 to $1,000 total bank plus ride. Every winning return sends 20% to the
 bank (rounded to whole dollars) and the other 80% becomes the next stake; a loss ends the climb but cannot take the
 bank. A rung is two legs from different games at
@@ -314,7 +314,7 @@ version still comes from `easy_parlay.sharp_candidate` (three games at one book,
 quarter-unit tickets, never called value, and only hard news pulls a leg.
 
 The ladder stays apart from the record in dollars: the site has a ladder card on Today and Record, receipts list a
-rung as "80/20 bankroll ladder step 2: $75 to $146", and the posts lead "🪜 KOOK’N 80/20 BANKROLL LADDER · STEP 2" with the return,
+rung as "80/20 Climb step 2: $75 to $146", and the posts lead "🪜 KOOK’N 80/20 CLIMB · STEP 2" with the return,
 the bank and the next ride, on a tall card in the kitchen's own colours with a winding route, the real current rung and deliberately
 unpriced future checkpoints. The book's price carries the safety, our
 number only agrees with room to spare. A rung with a void leg goes to a person (run.settle names it) and the ladder

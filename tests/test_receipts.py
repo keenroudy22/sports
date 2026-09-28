@@ -193,7 +193,7 @@ class LadderReceiptTests(unittest.TestCase):
 
     def test_a_rung_is_named_by_its_step_and_money_and_kept_off_the_straight_record(self):
         rung = pick('l', 'sun', **self.RUNG, result='win')
-        self.assertEqual(receipts.label(rung), '80/20 bankroll ladder step 2 ($75 → $146)')
+        self.assertEqual(receipts.label(rung), '80/20 Climb step 2 ($75 → $146)')
         straight = pick('s', 'sun', result='loss')
         self.assertEqual(receipts.headline([rung, straight]), '0-1', 'the ladder is not a straight play')
         self.assertEqual(receipts.headline([rung]), 'Ladder 1-0')
@@ -201,11 +201,11 @@ class LadderReceiptTests(unittest.TestCase):
 
     def test_a_cashed_rung_names_the_next_step_and_the_top_of_the_ladder_says_so(self):
         head, body = receipts.ladder_cashed(pick('l', 'sun', **self.RUNG))
-        self.assertEqual((head, body), ('✅ 80/20 bankroll ladder step 2 cashed: $75 → $146', '$48 banked. $117 rides step 3.'))
+        self.assertEqual((head, body), ('✅ 80/20 Climb step 2 cashed: $75 → $146', '$48 banked. $117 rides step 3.'))
         top = dict(self.RUNG, ladder=dict(self.RUNG['ladder'], step=5, stake=675, payout=850, banked=150,
                                           bankThisWin=170, bankedAfter=320, nextStake=680, totalAfter=1000))
         head, body = receipts.ladder_cashed(pick('l', 'sun', **top))
-        self.assertEqual((head, body), ('🪜 80/20 bankroll ladder complete: $50 → $1,000 in 5 steps', '$320 banked along the way.'))
+        self.assertEqual((head, body), ('🪜 80/20 Climb complete: $50 → $1,000 in 5 steps', '$320 banked along the way.'))
 
 
 class DailyTests(unittest.TestCase):

@@ -313,7 +313,7 @@ test('one record: the straight plays in wins and losses and units, the side reco
   assert.equal(C.isParlay({ kind: 'parlays' }) && C.isParlay({ legs: [{}] }) && !C.isParlay({ kind: 'props' }), true);
 });
 
-test('the 80/20 bankroll ladder banks wins, protects the bank on a miss, finishes at $1,000 and stays out of the fun parlays', () => {
+test('the 80/20 Climb banks wins, protects the bank on a miss, finishes at $1,000 and stays out of the fun parlays', () => {
   const rung = (id, published, step, stake, payout, result, extra = {}) => ({ id, kind: 'parlays', parlayType: 'ladder', publishedAt: published,
     status: result ? 'settled' : 'active', result, odds: 100, riskUnits: 0.25, legs: [{ title: 'a' }, { title: 'b' }],
     ladder: { run: 1, step, stake, payout, start: 50, goal: 1000 }, ...extra });
