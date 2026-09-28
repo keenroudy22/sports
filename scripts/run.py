@@ -729,13 +729,32 @@ def gap_rows():
     return _GAP_ROWS
 
 
+HARD_NEWS = re.compile(r"\b(ruled out|will not (?:play|start|dress|travel)|won'?t (?:play|start|dress|travel)|"
+                       r"not expected to (?:play|start)|inactive|suspended|suspension|benched|demoted|"
+                       r"lost (?:the|his|her|their) (?:starting )?(?:job|role)|did not travel|out for (?:the )?(?:game|season|week|year)|"
+                       r"placed on (?:injured reserve|ir)|doubtful|season-ending)\b", re.IGNORECASE)
+
+
+def hard(fact):
+    """News that changes who plays: out, doubtful, inactive, suspended, benched; or a flagged forecast. "Questionable",
+    a snap share or a fantasy note is not (2026-09-27: all three NFL fun tickets were pulled on notes like those)."""
+    if fact.get('kind') == 'weather':
+        return fact.get('direction') == 'against'
+    if fact.get('kind') not in ('injury', 'role'):
+        return False
+    if str(fact.get('status') or '').lower() in gates.QB_OUT | {'inactive'}:
+        return True
+    return bool(HARD_NEWS.search(str(fact.get('claim') or '')))
+
+
 def hold_reason(candidate, facts):
     """Without a model to weigh the facts, the run holds anything a quarterback listing could turn.
 
     A quarterback on either team listed at all holds a total; the player's own team's quarterback
-    listed holds a prop; three or more skill players out or doubtful on one side holds either.
+    listed holds a prop; three or more skill players out or doubtful on one side holds either; and web reporting
+    holds only when it is hard news (`hard`), never a rotation note or a snap count.
     """
-    web = [f for f in facts if f.get('origin') == 'claude researcher' and f.get('direction') == 'against']
+    web = [f for f in facts if f.get('origin') == 'claude researcher' and f.get('direction') == 'against' and hard(f)]
     if web:
         return f"verified reporting argues against it: {web[0]['claim']}"
     game_qbs = [f for f in facts if f.get('kind') == 'injury' and f.get('position') == 'QB']
@@ -1923,7 +1942,11 @@ def parlay_last_look(pick, ctx, context_file, use_llm, status, now, closing=(), 
         if not game:
             continue
         single['_team'] = ctx.player_team.get(str(single.get('athleteId') or ''))
-        reason = look(single, game, ctx, context_file, use_llm, status, now)[0]
+        reason, _, facts = look(single, game, ctx, context_file, use_llm, status, now)
+        if reason and not any(hard(f) for f in relevant_facts(single, facts, ctx)):
+            # A fun ticket is not pulled on soft news: a questionable tag, a rotation or snap-count note.
+            log(f"precheck: {pick.get('id')}: its {leg.get('title')} leg stands, the news is not hard: {reason}")
+            continue
         if reason:
             return f"its {leg.get('title')} leg: {reason}"
     return None

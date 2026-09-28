@@ -113,6 +113,13 @@ class HoldTests(unittest.TestCase):
         self.assertIsNotNone(run.hold_reason({'athleteId': '77', '_team': '10'}, facts))
         self.assertIsNone(run.hold_reason({'athleteId': '77', '_team': '20'}, facts), "the other team's quarterback does not hold a prop")
         self.assertIsNone(run.hold_reason({'marketType': 'total'}, []))
+        note = {'origin': 'claude researcher', 'direction': 'against', 'kind': 'role',
+                'claim': 'Elic Ayomanor played 28 of 53 offensive snaps (52.8%) in Week 2 against the Eagles.'}
+        self.assertIsNone(run.hold_reason({'athleteId': '7'}, [note]), 'a snap count is not news that holds a play')
+        out = dict(note, kind='injury', claim='Elic Ayomanor (hamstring) was ruled out for Sunday.')
+        self.assertIn('ruled out', run.hold_reason({'athleteId': '7'}, [out]))
+        self.assertFalse(run.hard({'kind': 'injury', 'status': 'Questionable', 'claim': 'Tyjae Spears (ankle) is questionable.'}))
+        self.assertTrue(run.hard({'kind': 'injury', 'status': 'Doubtful', 'claim': 'JC Evans is listed as doubtful.'}))
         heavy = [{'kind': 'injury', 'position': p, 'team': '20', 'status': 'Out', 'claim': ''} for p in ('WR', 'WR', 'TE')]
         self.assertIsNotNone(run.hold_reason({'marketType': 'total'}, heavy))
 
@@ -554,11 +561,18 @@ class ParlayGuardTests(unittest.TestCase):
         ctx, _, ticket, _ = self.world(closed=False)
         looked = []
 
+        wind = {'id': 'w1', 'kind': 'weather', 'direction': 'against', 'claim': 'rain and 25 mph wind'}
+
         def look(single, game, *rest):
             looked.append(single['title'])
-            return ('the evidence argues against it: rain and 25 mph wind', [], []) if game['id'] == 'army' else (None, [], [])
+            return ('the evidence argues against it: rain and 25 mph wind', [], [wind]) if game['id'] == 'army' else (None, [], [])
         reason = run.parlay_last_look(ticket, ctx, {}, False, {}, self.NOW, look=look)
         self.assertEqual(reason, 'its Army at Temple over 47.5 leg: the evidence argues against it: rain and 25 mph wind')
+        soft = {'id': 'r1', 'kind': 'role', 'direction': 'against', 'origin': 'claude researcher', 'verified': True,
+                'claim': "Quentin Johnston remains in the Chargers' receiver rotation while Ladd McConkey is the clearest fantasy option."}
+        stands = run.parlay_last_look(ticket, ctx, {}, False, {}, self.NOW,
+                                      look=lambda single, game, *rest: (f"verified reporting argues against it: {soft['claim']}", [], [soft]))
+        self.assertIsNone(stands, 'Sunday 2026-09-27: a rotation note pulled the ladder; soft news never pulls a fun ticket')
         looked.clear()
         clear = run.parlay_last_look(ticket, ctx, {}, False, {}, self.NOW, look=lambda *a: (None, [], []))
         self.assertIsNone(clear)

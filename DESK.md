@@ -141,6 +141,13 @@ read as reasons against). With nothing that backs the play, the post stands on t
 College teams are named by school in titles, posts and cards ("Central Michigan at Miami (FL)"), from ESPN's
 school name in the slate (`pick_card.team_label`); published titles are never rewritten.
 
+**What can pull a play before it posts** (2026-09-28): on Sunday 2026-09-27 the local model's verdicts came back empty
+on long checks, and the fallback rule pulled all three NFL fun tickets (the ladder, the easy parlay, the longshot) on
+soft web notes: a receiver "remains in the rotation", a Week 2 snap share, two running backs listed questionable. Now
+only hard news can: out, doubtful, inactive, suspended, benched, a lost job (`run.hard`, `run.HARD_NEWS`), or a
+flagged forecast for a total. The fallback holds on hard web news only, and a fun ticket's leg stands on soft news
+even when the model argues against it (the log says so).
+
 ## The local model
 
 Ollama serves the model at `http://localhost:11434`; `KEENROUDY_LLM_MODEL` in the env file names the
