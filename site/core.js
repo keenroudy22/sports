@@ -224,7 +224,7 @@
       reason: 'Illustrative: separate-game quotes multiplied. The sportsbook sets the actual ticket price.' };
   };
 
-  const ticketText = selected => ['KeenRoudy Sports: personal draft, not an official ticket',
+  const ticketText = selected => ["Kook'n Sports: personal draft, not an official ticket",
     ...selected.map((row, i) => `${i + 1}. ${row.title || row.player || 'Line'} | ${row.book || 'Book unavailable'} ${odds(row.odds)} | seen ${row.observedAt || 'time unavailable'}`),
     'Check every market, price and the sportsbook’s ticket total yourself.'].join('\n');
 

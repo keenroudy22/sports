@@ -64,13 +64,15 @@ a:hover { color: #8ff3c2; }
   background: var(--bg);
   border-bottom: 1px solid var(--line);
 }
-.mark {
-  width: 29px; height: 29px; border-radius: 9px; flex-shrink: 0;
-  background: var(--mint); color: #06210f;
-  display: grid; place-items: center;
-  font-size: 12px; font-weight: 700; letter-spacing: -.02em;
+.brand { display: inline-flex; align-items: center; gap: 9px; color: var(--text); }
+.brand:hover { color: var(--text); }
+.brand-mark {
+  width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+  object-fit: cover; object-position: center 18%;
+  background: linear-gradient(145deg, #283446, #101722);
+  border: 1px solid #3b4858;
 }
-.wordmark { font-size: 13px; font-weight: 700; letter-spacing: .13em; }
+.wordmark { font-size: 14px; font-weight: 700; letter-spacing: .13em; }
 .top-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
 
 .leagues { display: flex; gap: 4px; padding: 2px; background: var(--surface); border-radius: 999px; }
