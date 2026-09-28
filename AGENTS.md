@@ -145,7 +145,8 @@ Handy commands (from `~/Projects/sports`):
 - **Growth goal** (2026-09-28): grow @keenkooks toward 10,000 followers by the end of football season without paid
   reach or account-risk shortcuts. One relevant league hashtag per post is enough. The ladder is a continuing story,
   not a claim of guaranteed profit. On a multi-play card, one short text-only conversation prompt goes between the
-  first two plays; single-play days get no filler. No automated replies, likes, follows, unfollows or trend posts; no bought or
+  first two plays; when a Climb rung or fun ticket is already ready, that prompt becomes a factual teaser for it.
+  Single-play days get no filler. No automated replies, likes, follows, unfollows or trend posts; no bought or
   exchanged engagement. `docs/GROWTH.md` has the baseline, weekly scorecard and experiments.
 - **The site**: the projection-card look everywhere (logos, photos, tiles), tabs Today, Board, Games, Stats, Record,
   More; always check changes at 375 px.

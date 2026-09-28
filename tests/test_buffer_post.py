@@ -141,6 +141,17 @@ class PlanTests(unittest.TestCase):
         single = {'a': first['a']}
         self.assertNotIn('conversation', {p[1] for p in bp.plan(single, {'a': latest['a']}, GAMES, NOW, {'posts': []})})
 
+    def test_a_ready_climb_or_fun_ticket_makes_the_one_prompt_a_real_teaser(self):
+        rung = pick('rung', gameIds=['noon', 'late'], parlayType='ladder', legs=TICKET['legs'], riskUnits=0.25,
+                    ladder={'step': 2, 'stake': 75, 'banked': 19}, odds=-114)
+        rows = [(None, None, None, 'a'), (None, None, None, 'rung')]
+        text = bp.conversation_text(bp.gates.eastern_date(NOW), rows, {'a': pick('a'), 'rung': rung}, GAMES)
+        self.assertEqual(text, "The 80/20 Climb is back later today. Step 2 is already cooked. 🪜\n$75 riding · $19 banked.\n\n#CFB")
+        ticket = pick('ticket', gameIds=['noon', 'late'], **TICKET)
+        text = bp.conversation_text(bp.gates.eastern_date(NOW), rows, {'a': pick('a'), 'rung': ticket}, GAMES)
+        self.assertIn(text.split('\n')[0], {copy.split('\n')[0] for copy in bp.FUN_TEASERS})
+        self.assertTrue(text.endswith('#CFB'))
+
     def test_a_late_play_goes_out_now_and_a_passed_window_is_skipped(self):
         first = {'a': pick('a'), 'b': pick('b', 'late', title='Oklahoma at Georgia under 44.5', direction='under')}
         latest = {k: dict(v) for k, v in first.items()}

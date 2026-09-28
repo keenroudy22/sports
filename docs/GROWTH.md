@@ -31,8 +31,9 @@ rate and 5 profile visits over the prior four weeks; nearly all of that reach ar
   signup and bare-link posts did not. `docs/X-NOTES.md` records the sample and its limits.
 - Use the team, player, matchup and league words naturally. They are more useful than a pile of hashtags.
 - Keep the voice conversational. No certainty language, fake urgency, guarantees or selective records.
-- On a multi-play card, one short text-only conversation prompt may go between the first two plays. Keep it factual,
-  vary the question, and never imply replies choose a play that is already decided. Single-play days get no filler.
+- On a multi-play card, one short text-only conversation prompt may go between the first two plays. When a Climb rung
+  or fun ticket is already ready, use that slot for a factual teaser with the real step, ride and bank instead. Vary
+  ordinary slate questions and never imply replies choose a play that is already decided. Single-play days get no filler.
 - No bought followers, engagement exchanges, follow churn, automated likes, automated replies or automated trend
   posts. Buffer remains the only posting path.
 
