@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-28T15:21:55Z",
+  "updatedAt": "2026-09-28T16:01:59Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -927,6 +927,24 @@
           "name": "Carolina Panthers",
           "players": [
             {
+              "id": "4362847",
+              "name": "Jaycee Horn",
+              "position": "CB",
+              "status": "Questionable",
+              "injury": "Quadriceps",
+              "reportedAt": "2026-09-28T15:32Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4362847/jaycee-horn"
+            },
+            {
+              "id": "4695883",
+              "name": "Jalen Coker",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Quadriceps",
+              "reportedAt": "2026-09-28T15:16Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4695883/jalen-coker"
+            },
+            {
               "id": "4568263",
               "name": "Ryan Fitzgerald",
               "position": "PK",
@@ -970,15 +988,6 @@
               "injury": null,
               "reportedAt": "2026-09-27T22:19Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685472/tetairoa-mcmillan"
-            },
-            {
-              "id": "4695883",
-              "name": "Jalen Coker",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Quadriceps",
-              "reportedAt": "2026-09-27T21:06Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4695883/jalen-coker"
             },
             {
               "id": "4362647",
@@ -1141,15 +1150,6 @@
               "injury": null,
               "reportedAt": "2026-09-23T23:26Z",
               "source": "https://www.espn.com/nfl/player/_/id/4036063/patrick-jones-ii"
-            },
-            {
-              "id": "4678008",
-              "name": "Jonathon Brooks",
-              "position": "RB",
-              "status": "Injured Reserve",
-              "injury": "Abdomen",
-              "reportedAt": "2026-09-23T13:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4678008/jonathon-brooks"
             }
           ]
         },
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-28T15:01Z",
+              "reportedAt": "2026-09-28T15:32Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -7137,6 +7137,15 @@
           "name": "Washington Commanders",
           "players": [
             {
+              "id": "4426348",
+              "name": "Jayden Daniels",
+              "position": "QB",
+              "status": "Out",
+              "injury": "Elbow",
+              "reportedAt": "2026-09-28T15:24Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4426348/jayden-daniels"
+            },
+            {
               "id": "4697815",
               "name": "Rachaad White",
               "position": "RB",
@@ -7234,15 +7243,6 @@
               "injury": "Illness",
               "reportedAt": "2026-09-27T15:35Z",
               "source": "https://www.espn.com/nfl/player/_/id/4426403/nick-cross"
-            },
-            {
-              "id": "4426348",
-              "name": "Jayden Daniels",
-              "position": "QB",
-              "status": "Out",
-              "injury": "Elbow",
-              "reportedAt": "2026-09-27T15:35Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4426348/jayden-daniels"
             },
             {
               "id": "4259491",
@@ -7365,14 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "10",
-          "name": "Fernando Carmona",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-09-27T19:51:59Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4710000/fernando-carmona"
-        },
         {
           "teamId": "28",
           "name": "Leo Chenal",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-09-28T14:53:24Z",
           "source": "https://www.espn.com/nfl/player/_/id/4429160/devon-achane"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-09-28T16:01:59Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-28T15:21:55Z",
-      "lastAttemptAt": "2026-09-28T15:21:55Z",
+      "checkedAt": "2026-09-28T16:01:59Z",
+      "lastAttemptAt": "2026-09-28T16:01:59Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-28T15:21:55Z",
-      "lastAttemptAt": "2026-09-28T15:21:55Z",
+      "checkedAt": "2026-09-28T16:01:59Z",
+      "lastAttemptAt": "2026-09-28T16:01:59Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
