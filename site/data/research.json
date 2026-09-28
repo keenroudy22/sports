@@ -10864,5 +10864,200 @@
         "units": -0.25
       }
     ]
+  },
+  {
+    "league": "NFL",
+    "publishedAt": "2026-09-28T03:30:05Z",
+    "targetWeek": 3,
+    "summary": "11:30 PM ET run, published at 11:30 PM ET. Settled 2: 5-leg longshot at ESPN BET loss; Ladder step 1: 2 legs at FanDuel win. Nothing to close. Nothing published. Screened and passed on 15: Eagles at Bears over 41.5 (learned_pause); Colston Loveland OVER 3.5 receptions (prop_calibrated_value); DeVonta Smith OVER 5.5 receptions (prop_calibrated_value); Jalen Hurts OVER 27.5 pass attempts (one_book); Colston Loveland OVER 35.5 receiving yards (prop_calibrated_value); Cole Kmet OVER 9.5 receiving yards (prop_calibrated_value); Luther Burden III OVER 35.5 receiving yards (prop_calibrated_value); DeVonta Smith OVER 71.5 receiving yards (prop_calibrated_value); and 7 more. odds_api.py: CFB: skipped (no game inside a week) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+    "takeaways": [],
+    "parlays": [
+      {
+        "id": "NFL-2026-W3-longshot-0927-espnbet",
+        "title": "5-leg longshot at ESPN BET",
+        "status": "settled",
+        "favorite": false,
+        "parlayType": "longshot",
+        "riskUnits": 0.25,
+        "legs": [
+          {
+            "id": "game-NFL-401872956-over",
+            "title": "Titans at Giants over 37.5",
+            "gameId": "NFL-401872956",
+            "market": "total points",
+            "side": "over",
+            "line": 37.5,
+            "odds": -105,
+            "chance": 0.578,
+            "kickoff": "2026-09-27T17:00Z",
+            "observedAt": "2026-09-27T09:33:18Z",
+            "marketWindow": "Full game"
+          },
+          {
+            "id": "game-NFL-401872955-over",
+            "title": "Seahawks at Commanders over 39.5",
+            "gameId": "NFL-401872955",
+            "market": "total points",
+            "side": "over",
+            "line": 39.5,
+            "odds": -115,
+            "chance": 0.56,
+            "kickoff": "2026-09-27T17:00Z",
+            "observedAt": "2026-09-27T09:33:18Z",
+            "marketWindow": "Full game"
+          },
+          {
+            "id": "game-NFL-401872960-under",
+            "title": "Ravens at Cowboys under 53.5",
+            "gameId": "NFL-401872960",
+            "market": "total points",
+            "side": "under",
+            "line": 53.5,
+            "odds": -115,
+            "chance": 0.559,
+            "kickoff": "2026-09-27T20:25Z",
+            "observedAt": "2026-09-27T09:33:18Z",
+            "marketWindow": "Full game"
+          },
+          {
+            "id": "game-NFL-401872951-over",
+            "title": "Texans at Colts over 42.5",
+            "gameId": "NFL-401872951",
+            "market": "total points",
+            "side": "over",
+            "line": 42.5,
+            "odds": -105,
+            "chance": 0.555,
+            "kickoff": "2026-09-27T17:00Z",
+            "observedAt": "2026-09-27T09:33:18Z",
+            "marketWindow": "Full game"
+          },
+          {
+            "id": "game-NFL-401872949-over",
+            "title": "Panthers at Browns over 41.5",
+            "gameId": "NFL-401872949",
+            "market": "total points",
+            "side": "over",
+            "line": 41.5,
+            "odds": -110,
+            "chance": 0.54,
+            "kickoff": "2026-09-27T17:00Z",
+            "observedAt": "2026-09-27T09:33:18Z",
+            "marketWindow": "Full game"
+          }
+        ],
+        "correlation": "One leg per game, so the ticket treats the legs as independent; its chance is their product.",
+        "gameIds": [
+          "NFL-401872956",
+          "NFL-401872955",
+          "NFL-401872960",
+          "NFL-401872951",
+          "NFL-401872949"
+        ],
+        "book": "ESPN BET",
+        "odds": 2444,
+        "quotedAt": "2026-09-27T09:33:18Z",
+        "quoteType": "capture",
+        "confidence": 1,
+        "expiresAt": "2026-09-27T12:30:00Z",
+        "edge": "Our chance 5.4% against 3.9% break-even at +2444: +0.379u per unit staked, 0.25u at risk.",
+        "cutoff": "A longshot is not re-entered. It stands or falls as posted.",
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401872949",
+          "https://www.espn.com/nfl/game/_/gameId/401872951",
+          "https://www.espn.com/nfl/game/_/gameId/401872955",
+          "https://www.espn.com/nfl/game/_/gameId/401872956",
+          "https://www.espn.com/nfl/game/_/gameId/401872960"
+        ],
+        "why": "Longshot from the board: 5 legs at ESPN BET, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.",
+        "risk": "Most longshots lose. The legs are treated as independent; any one miss sinks the ticket. Confidence 1 of 10.",
+        "result": "loss",
+        "actual": "legs: loss, win, loss, loss, loss",
+        "settledAt": "2026-09-28T03:30:05Z",
+        "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401872956",
+        "settlementReason": "One leg lost; the ticket loses.",
+        "units": -0.25
+      },
+      {
+        "id": "NFL-2026-W3-ladder-0927-fd",
+        "title": "Ladder step 1: 2 legs at FanDuel",
+        "status": "settled",
+        "favorite": false,
+        "parlayType": "ladder",
+        "riskUnits": 0.25,
+        "ladder": {
+          "run": 1,
+          "step": 1,
+          "stake": 50,
+          "payout": 94,
+          "start": 50,
+          "goal": 1000
+        },
+        "legs": [
+          {
+            "id": "ladder-NFL-401872953-4429025-recYds-24.5",
+            "title": "Quentin Johnston 25+ receiving yards",
+            "gameId": "NFL-401872953",
+            "athleteId": "4429025",
+            "player": "Quentin Johnston",
+            "market": "recYds",
+            "direction": "over",
+            "line": 24.5,
+            "book": "FanDuel",
+            "odds": -240,
+            "chance": 0.828,
+            "implied": 0.706,
+            "projection": 58.9,
+            "kickoff": "2026-09-27T17:00Z",
+            "observedAt": "2026-09-27T09:33:19Z",
+            "marketWindow": "Full game"
+          },
+          {
+            "id": "ladder-NFL-401872961-4429086-rec-1.5",
+            "title": "Michael Mayer 2+ receptions",
+            "gameId": "NFL-401872961",
+            "athleteId": "4429086",
+            "player": "Michael Mayer",
+            "market": "rec",
+            "direction": "over",
+            "line": 1.5,
+            "book": "FanDuel",
+            "odds": -310,
+            "chance": 0.875,
+            "implied": 0.756,
+            "projection": 4.1,
+            "kickoff": "2026-09-27T20:25Z",
+            "observedAt": "2026-09-27T09:33:19Z",
+            "marketWindow": "Full game"
+          }
+        ],
+        "correlation": "One leg per game, so the book prices the ticket as the legs multiplied.",
+        "gameIds": [
+          "NFL-401872953",
+          "NFL-401872961"
+        ],
+        "book": "FanDuel",
+        "odds": -114,
+        "quotedAt": "2026-09-27T09:33:19Z",
+        "expiresAt": "2026-09-27T12:30:00Z",
+        "quoteType": "capture",
+        "confidence": 1,
+        "edge": "For fun, not value: two easier lines our projections clear comfortably (83% and 88% on our numbers, which are tuned for main lines), at FanDuel's own prices, multiplied to -114. The ladder's whole $50 rides to $94.",
+        "cutoff": "A ladder rung is not re-entered. It stands or falls as posted.",
+        "sources": [
+          "https://sharpapi.io/",
+          "https://www.espn.com/nfl/game/_/gameId/401872953",
+          "https://www.espn.com/nfl/game/_/gameId/401872961"
+        ],
+        "why": "Ladder step 1: two easier lines at FanDuel, one per game, each one our projection clears comfortably. The whole $50 rides to $94: a win rolls it into the next step, a miss starts the climb over at $50. Kept apart from the record, in dollars.",
+        "risk": "Both legs have to hit; one miss ends the climb. Our player chances are tuned for main lines, so these legs are not value, just the fun of the climb. A player who does not take the field voids his leg under the book's rule, and a person settles the rung.",
+        "result": "win",
+        "actual": "all 2 legs won",
+        "settledAt": "2026-09-28T03:30:05Z",
+        "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401872953",
+        "settlementReason": "Every leg won.",
+        "units": 0.219
+      }
+    ]
   }
 ]

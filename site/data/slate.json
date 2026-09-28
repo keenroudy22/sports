@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-28T01:45:42Z",
+  "updatedAt": "2026-09-28T03:31:06Z",
   "sources": [
     {
       "league": "NFL",
@@ -7,7 +7,7 @@
       "dateWindowUrls": [
         "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=3&limit=1000"
       ],
-      "retrievedAt": "2026-09-28T01:45:42Z",
+      "retrievedAt": "2026-09-28T03:31:06Z",
       "trainingCoverage": "season feed",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -29,7 +29,7 @@
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2026&seasontype=2&week=4&limit=1000&groups=37",
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2026&seasontype=2&week=4&limit=1000&groups=151"
       ],
-      "retrievedAt": "2026-09-28T01:45:42Z",
+      "retrievedAt": "2026-09-28T03:31:06Z",
       "trainingCoverage": "limited weekly provider sample",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -98198,7 +98198,7 @@
         "short": "Broncos",
         "abbreviation": "DEN",
         "school": "Denver",
-        "score": 0,
+        "score": 23,
         "color": "#0a2343",
         "alternateColor": "#fc4c02"
       },
@@ -98208,7 +98208,7 @@
         "short": "Rams",
         "abbreviation": "LAR",
         "school": "Los Angeles",
-        "score": 13,
+        "score": 26,
         "color": "#003594",
         "alternateColor": "#ffd100"
       },
@@ -99271,7 +99271,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-28T01:45:42Z"
+      "marketRetrievedAt": "2026-09-28T03:31:06Z"
     }
   ]
 }
