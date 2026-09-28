@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-28T21:12:44Z",
+  "updatedAt": "2026-09-28T21:30:59Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-28T21:04Z",
+              "reportedAt": "2026-09-28T21:18Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -7137,6 +7137,15 @@
           "name": "Washington Commanders",
           "players": [
             {
+              "id": "4360635",
+              "name": "Chig Okonkwo",
+              "position": "TE",
+              "status": "Out",
+              "injury": "Hamstring",
+              "reportedAt": "2026-09-28T21:07Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4360635/chig-okonkwo"
+            },
+            {
               "id": "4426901",
               "name": "Leo Chenal",
               "position": "LB",
@@ -7162,15 +7171,6 @@
               "injury": "Groin",
               "reportedAt": "2026-09-28T19:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/3127273/frankie-luvu"
-            },
-            {
-              "id": "4360635",
-              "name": "Chig Okonkwo",
-              "position": "TE",
-              "status": "Out",
-              "injury": "Hamstring",
-              "reportedAt": "2026-09-28T19:21Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4360635/chig-okonkwo"
             },
             {
               "id": "4361357",
@@ -7365,14 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "15",
-          "name": "Chukwuebuka Godrick",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-09-28T20:40:47Z",
-          "source": "https://www.espn.com/nfl/player/_/id/5144457/chukwuebuka-godrick"
-        },
         {
           "teamId": "16",
           "name": "Zemaiah Vaughn",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-09-28T21:12:44Z",
           "source": "https://www.espn.com/nfl/player/_/id/5091793/charles-demmings"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-09-28T21:30:59Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-28T21:12:44Z",
-      "lastAttemptAt": "2026-09-28T21:12:44Z",
+      "checkedAt": "2026-09-28T21:30:59Z",
+      "lastAttemptAt": "2026-09-28T21:30:59Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-28T21:12:44Z",
-      "lastAttemptAt": "2026-09-28T21:12:44Z",
+      "checkedAt": "2026-09-28T21:30:59Z",
+      "lastAttemptAt": "2026-09-28T21:30:59Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
