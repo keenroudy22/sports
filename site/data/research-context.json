@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-28T12:54:45Z",
+  "updatedAt": "2026-09-28T14:00:42Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-28T12:00Z",
+              "reportedAt": "2026-09-28T13:43Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1171,7 +1171,7 @@
               "position": "QB",
               "status": "Active",
               "injury": null,
-              "reportedAt": "2026-09-27T18:27Z",
+              "reportedAt": "2026-09-28T13:29Z",
               "source": "https://www.espn.com/nfl/player/_/id/4434153/tyson-bagent"
             },
             {
@@ -4224,7 +4224,7 @@
               "position": "TE",
               "status": "Active",
               "injury": null,
-              "reportedAt": "2026-09-28T00:50Z",
+              "reportedAt": "2026-09-28T01:05Z",
               "source": "https://www.espn.com/nfl/player/_/id/4570037/terrance-ferguson"
             },
             {
@@ -4655,8 +4655,8 @@
               "id": "3921690",
               "name": "Josh Oliver",
               "position": "TE",
-              "status": "Questionable",
-              "injury": "Arm",
+              "status": "Doubtful",
+              "injury": "Biceps",
               "reportedAt": "2026-09-27T23:19Z",
               "source": "https://www.espn.com/nfl/player/_/id/3921690/josh-oliver"
             },
@@ -5297,6 +5297,15 @@
           "name": "New York Giants",
           "players": [
             {
+              "id": "4035631",
+              "name": "Brian Burns",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-09-28T13:14Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4035631/brian-burns"
+            },
+            {
               "id": "5082424",
               "name": "Dominic Zvada",
               "position": "PK",
@@ -5331,15 +5340,6 @@
               "injury": null,
               "reportedAt": "2026-09-27T20:57Z",
               "source": "https://www.espn.com/nfl/player/_/id/4696981/cam-skattebo"
-            },
-            {
-              "id": "4035631",
-              "name": "Brian Burns",
-              "position": "LB",
-              "status": "Questionable",
-              "injury": "Knee",
-              "reportedAt": "2026-09-27T20:50Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4035631/brian-burns"
             },
             {
               "id": "4428328",
@@ -5527,6 +5527,15 @@
           "name": "New York Jets",
           "players": [
             {
+              "id": "4427366",
+              "name": "Breece Hall",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Thigh",
+              "reportedAt": "2026-09-28T13:48Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4427366/breece-hall"
+            },
+            {
               "id": "5083315",
               "name": "Kenyon Sadiq",
               "position": "TE",
@@ -5552,15 +5561,6 @@
               "injury": null,
               "reportedAt": "2026-09-27T22:14Z",
               "source": "https://www.espn.com/nfl/player/_/id/4569618/garrett-wilson"
-            },
-            {
-              "id": "4427366",
-              "name": "Breece Hall",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Thigh",
-              "reportedAt": "2026-09-27T20:40Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4427366/breece-hall"
             },
             {
               "id": "4243375",
@@ -6036,7 +6036,7 @@
               "name": "Brandin Echols",
               "position": "CB",
               "status": "Questionable",
-              "injury": "Head",
+              "injury": "Concussion",
               "reportedAt": "2026-09-27T19:56Z",
               "source": "https://www.espn.com/nfl/player/_/id/4567979/brandin-echols"
             },
@@ -6907,6 +6907,15 @@
           "name": "Tennessee Titans",
           "players": [
             {
+              "id": "4876319",
+              "name": "Jackson Slater",
+              "position": "G",
+              "status": "Questionable",
+              "injury": "Foot",
+              "reportedAt": "2026-09-28T13:36Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4876319/jackson-slater"
+            },
+            {
               "id": "4710000",
               "name": "Fernando Carmona",
               "position": "G",
@@ -7121,15 +7130,6 @@
               "injury": null,
               "reportedAt": "2026-09-22T00:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/3925357/calvin-ridley"
-            },
-            {
-              "id": "4686728",
-              "name": "Gunnar Helm",
-              "position": "TE",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-21T03:45Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4686728/gunnar-helm"
             }
           ]
         },
@@ -7185,7 +7185,7 @@
               "id": "4426901",
               "name": "Leo Chenal",
               "position": "LB",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Neck",
               "reportedAt": "2026-09-27T19:23Z",
               "source": "https://www.espn.com/nfl/player/_/id/4426901/leo-chenal"
@@ -7365,22 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "25",
-          "name": "Enrique Cruz Jr.",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-09-27T19:51:59Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4691556/enrique-cruz-jr"
-        },
-        {
-          "teamId": "27",
-          "name": "Billy Schrauth",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-09-27T19:51:59Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4685549/billy-schrauth"
-        },
         {
           "teamId": "27",
           "name": "Ayden Garnes",
@@ -7764,11 +7748,27 @@
           "to": "Injured Reserve",
           "observedAt": "2026-09-28T10:11:33Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "16",
+          "name": "Josh Oliver",
+          "from": "Questionable",
+          "to": "Doubtful",
+          "observedAt": "2026-09-28T14:00:42Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3921690/josh-oliver"
+        },
+        {
+          "teamId": "28",
+          "name": "Leo Chenal",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-09-28T14:00:42Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4426901/leo-chenal"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-28T12:54:45Z",
-      "lastAttemptAt": "2026-09-28T12:54:45Z",
+      "checkedAt": "2026-09-28T14:00:42Z",
+      "lastAttemptAt": "2026-09-28T14:00:42Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-28T12:54:45Z",
-      "lastAttemptAt": "2026-09-28T12:54:45Z",
+      "checkedAt": "2026-09-28T14:00:42Z",
+      "lastAttemptAt": "2026-09-28T14:00:42Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
