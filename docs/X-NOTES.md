@@ -46,4 +46,37 @@ posts from ten of the biggest or closest to what we do. Numbers are views, likes
 
 We post a clean, consistent card for every play, a morning receipt and cashed posts, graded in public. We have what
 the data accounts sell: a projection for every game and player, win probability and our chance on every line. What
-we do not do yet: lotto framing, "save this" sheets, a running challenge, teasers, and asks.
+we have since added: lotto framing, "save this" sheets, the $50 to $1,000 ladder, short asks and a clearer projection
+card. The opportunity is no longer adding every format the larger accounts use; it is making those formats recognizably
+Kook'n and measuring which ones cause profile visits and follows.
+
+## Follow-up read, Sep 28
+
+The Following feed was read again after the account moved to GPT. These are same-moment observations, not fair
+account-to-account benchmarks: the accounts have very different audience sizes, post ages and paid distribution.
+
+| Post shape | Example seen | Views | Likes | Saves |
+|---|---|---:|---:|---:|
+| Short anticipation | JBigs: “I’ve been searching for a banger. MNF might bring us one.” | 5,159 | 97 | 16 |
+| Short anticipation | Swicks: “Almost lock o’clock” | 3,886 | 88 | — |
+| Ticket plus a real follower quote | Cody Brown: +431 MNF SGP | 153,753 | 535 | 312 |
+| Pick plus one supporting split | Alex Caruso: Hurts interception under | 21,870 | 65 | 10 |
+| Model announcement plus social proof | The Prop Dealer: touchdown model | 31,579 | 76 | 15 |
+| Repeated membership promotion | The Prop Dealer: direct Bet Club pitch | 1,505 | 1 | — |
+| Sportsbook signup promotion | Austin: spend $10, get $100 | 4,349 | 3 | — |
+| Standalone outbound link after a pick | JBigs: compare books and tail | 154 | 0 | — |
+
+What this changes for Kook'n:
+
+1. Use at most one truthful anticipation post per main slate, only after a real card or ticket is ready. Do not hold a
+   pick hostage to likes or say “locked” when it is not scheduled.
+2. Keep the play itself self-contained. The site link belongs in the profile, pinned introduction, receipts and posts
+   whose explicit job is site traffic; a bare follow-up link is not a growth post.
+3. Quote genuine results and follower reactions when they exist. Never manufacture a testimonial or use a win to hide
+   the full record.
+4. Let the winding ladder, receipts and watchlist become the recognizable visual series. Raw betslips and crowded
+   neon collages are common; readable Kook'n hierarchy is the differentiator.
+5. Keep affiliate offers separate and clearly disclosed later. The current feed confirms that repetitive promotions
+   earn weak interaction even when the account already has reach.
+6. Treat anticipation, receipts and questions as measured experiments. Raw view totals from large accounts are ideas,
+   not proof; Kook'n keeps a format only when its own profile visits or follows improve over at least eight posts.

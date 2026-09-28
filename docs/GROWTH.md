@@ -2,7 +2,7 @@
 
 The goal is to grow [@keenkooks](https://x.com/keenkooks) toward 10,000 followers by the end of football season while
 keeping the account useful, honest and safe. Ten thousand is a stretch target, not a promised outcome. At the Sep 28,
-2026 baseline the account had 70 followers. X Premium showed 2,000 impressions, 31 engagements, a 1.4% engagement
+2026 baseline the account had 70 followers (75 later that day). X Premium showed 2,000 impressions, 31 engagements, a 1.4% engagement
 rate and 5 profile visits over the prior four weeks; nearly all of that reach arrived in the most recent seven days.
 
 ## The job each post does
@@ -16,6 +16,8 @@ rate and 5 profile visits over the prior four weeks; nearly all of that reach ar
   pick card.
 - **Human conversation creates discovery.** On game days, the owner can add a few thoughtful, non-promotional replies
   to relevant football conversations. Those replies are never automated and never copied.
+- **Anticipation can open the loop.** At most one short teaser per main slate, and only after a real card or ticket is
+  ready. It never withholds a pick until a like target and never uses fake urgency.
 
 ## Copy and discovery rules
 
@@ -24,6 +26,9 @@ rate and 5 profile visits over the prior four weeks; nearly all of that reach ar
 - Ask for one action at a time: tail, climb, save, reply or visit. Do not stack calls to action.
 - Keep most posts self-contained. The bio holds the site link; use an in-post site link only when the post's purpose is
   specifically to send readers to the full board.
+- Keep signup offers and repeated sales copy out of ordinary play posts. A Sep 28 read of the Following feed found
+  that short anticipation, real follower quotes and useful pick context drew interaction while repeated membership,
+  signup and bare-link posts did not. `docs/X-NOTES.md` records the sample and its limits.
 - Use the team, player, matchup and league words naturally. They are more useful than a pile of hashtags.
 - Keep the voice conversational. No certainty language, fake urgency, guarantees or selective records.
 - No bought followers, engagement exchanges, follow churn, automated likes, automated replies or automated trend
