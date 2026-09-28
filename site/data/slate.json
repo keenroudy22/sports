@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-28T17:39:28Z",
+  "updatedAt": "2026-09-28T18:15:17Z",
   "sources": [
     {
       "league": "NFL",
@@ -7,7 +7,7 @@
       "dateWindowUrls": [
         "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=3&limit=1000"
       ],
-      "retrievedAt": "2026-09-28T17:39:28Z",
+      "retrievedAt": "2026-09-28T18:15:17Z",
       "trainingCoverage": "season feed",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -29,7 +29,7 @@
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2026&seasontype=2&week=4&limit=1000&groups=37",
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2026&seasontype=2&week=4&limit=1000&groups=151"
       ],
-      "retrievedAt": "2026-09-28T17:39:28Z",
+      "retrievedAt": "2026-09-28T18:15:17Z",
       "trainingCoverage": "limited weekly provider sample",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -98759,9 +98759,9 @@
         "indoor": false
       },
       "market": {
-        "provider": "DraftKings",
+        "provider": "Draft Kings",
         "spread": "+3.5",
-        "spreadOdds": "-112",
+        "spreadOdds": "-105",
         "spreadOpen": "-1.5",
         "total": 41.5,
         "totalOpen": "o46.5",
@@ -98770,16 +98770,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118030"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "+4.5",
-          "spreadOdds": "-105",
-          "total": 41.5,
-          "overOdds": "-105",
-          "underOdds": "-115",
-          "retrievedAt": "2026-09-24T20:17:31Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "+4.5",
@@ -99269,9 +99259,19 @@
           "underOdds": "-110",
           "retrievedAt": "2026-09-28T15:21:48Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "+3.5",
+          "spreadOdds": "-105",
+          "total": 41.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "retrievedAt": "2026-09-28T18:15:17Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-09-28T17:39:28Z"
+      "marketRetrievedAt": "2026-09-28T18:15:17Z"
     }
   ]
 }
