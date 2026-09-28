@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-28T21:33:47Z",
+  "updatedAt": "2026-09-28T21:39:24Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-28T21:18Z",
+              "reportedAt": "2026-09-28T21:35Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -4607,6 +4607,15 @@
           "name": "Minnesota Vikings",
           "players": [
             {
+              "id": "4360637",
+              "name": "Jeshaun Jones",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-28T21:34Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4360637/jeshaun-jones"
+            },
+            {
               "id": "4262921",
               "name": "Justin Jefferson",
               "position": "WR",
@@ -4821,15 +4830,6 @@
               "injury": null,
               "reportedAt": "2026-09-22T02:22Z",
               "source": "https://www.espn.com/nfl/player/_/id/4832846/demond-claiborne"
-            },
-            {
-              "id": "4565190",
-              "name": "Dallas Turner",
-              "position": "LB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-21T21:13Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4565190/dallas-turner"
             }
           ]
         },
@@ -6907,6 +6907,15 @@
           "name": "Tennessee Titans",
           "players": [
             {
+              "id": "4710000",
+              "name": "Fernando Carmona",
+              "position": "G",
+              "status": "Doubtful",
+              "injury": "Ankle",
+              "reportedAt": "2026-09-28T21:30Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4710000/fernando-carmona"
+            },
+            {
               "id": "4426987",
               "name": "Brandon Crenshaw-Dickson",
               "position": "OT",
@@ -6968,15 +6977,6 @@
               "injury": "Foot",
               "reportedAt": "2026-09-28T13:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/4876319/jackson-slater"
-            },
-            {
-              "id": "4710000",
-              "name": "Fernando Carmona",
-              "position": "G",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-09-28T04:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4710000/fernando-carmona"
             },
             {
               "id": "4569587",
@@ -7367,22 +7367,6 @@
       "changes": [
         {
           "teamId": "16",
-          "name": "Elijah Williams",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-09-28T20:40:47Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4696782/elijah-williams"
-        },
-        {
-          "teamId": "16",
-          "name": "Tavierre Thomas",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-09-28T20:40:47Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4334405/tavierre-thomas"
-        },
-        {
-          "teamId": "16",
           "name": "Caleb Tiernan",
           "from": "Out",
           "to": "Active",
@@ -7764,11 +7748,27 @@
           "to": "Out",
           "observedAt": "2026-09-28T21:32:19Z",
           "source": "https://www.espn.com/nfl/player/_/id/5092508/colbie-young"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-09-28T21:39:24Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "10",
+          "name": "Fernando Carmona",
+          "from": "Questionable",
+          "to": "Doubtful",
+          "observedAt": "2026-09-28T21:39:24Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4710000/fernando-carmona"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-28T21:33:47Z",
-      "lastAttemptAt": "2026-09-28T21:33:47Z",
+      "checkedAt": "2026-09-28T21:39:24Z",
+      "lastAttemptAt": "2026-09-28T21:39:24Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-28T21:33:47Z",
-      "lastAttemptAt": "2026-09-28T21:33:47Z",
+      "checkedAt": "2026-09-28T21:39:24Z",
+      "lastAttemptAt": "2026-09-28T21:39:24Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
