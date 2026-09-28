@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-28T20:52:36Z",
+  "updatedAt": "2026-09-28T21:12:44Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -697,6 +697,15 @@
           "name": "Buffalo Bills",
           "players": [
             {
+              "id": "3918298",
+              "name": "Josh Allen",
+              "position": "QB",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-09-28T21:03Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3918298/josh-allen"
+            },
+            {
               "id": "4606712",
               "name": "Ar'maj Reed-Adams",
               "position": "G",
@@ -767,15 +776,6 @@
               "injury": null,
               "reportedAt": "2026-09-27T23:02Z",
               "source": "https://www.espn.com/nfl/player/_/id/3915416/dj-moore"
-            },
-            {
-              "id": "3918298",
-              "name": "Josh Allen",
-              "position": "QB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-27T21:09Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3918298/josh-allen"
             },
             {
               "id": "4379399",
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-28T20:40Z",
+              "reportedAt": "2026-09-28T21:04Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -4718,7 +4718,7 @@
               "id": "5091793",
               "name": "Charles Demmings",
               "position": "CB",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Hamstring",
               "reportedAt": "2026-09-27T22:39Z",
               "source": "https://www.espn.com/nfl/player/_/id/5091793/charles-demmings"
@@ -5527,6 +5527,15 @@
           "name": "New York Jets",
           "players": [
             {
+              "id": "4685247",
+              "name": "Braelon Allen",
+              "position": "RB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-28T20:48Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4685247/braelon-allen"
+            },
+            {
               "id": "4427366",
               "name": "Breece Hall",
               "position": "RB",
@@ -5741,15 +5750,6 @@
               "injury": null,
               "reportedAt": "2026-09-23T00:30Z",
               "source": "https://www.espn.com/nfl/player/_/id/3116177/troy-reeder"
-            },
-            {
-              "id": "4695404",
-              "name": "Isaiah Davis",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-23T00:17Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4695404/isaiah-davis"
             }
           ]
         },
@@ -5987,6 +5987,15 @@
           "name": "Pittsburgh Steelers",
           "players": [
             {
+              "id": "4038815",
+              "name": "Rico Dowdle",
+              "position": "RB",
+              "status": "Out",
+              "injury": "Toe",
+              "reportedAt": "2026-09-28T20:45Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4038815/rico-dowdle"
+            },
+            {
               "id": "4426506",
               "name": "Joey Porter Jr.",
               "position": "CB",
@@ -5994,15 +6003,6 @@
               "injury": "Undisclosed",
               "reportedAt": "2026-09-28T19:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4426506/joey-porter-jr"
-            },
-            {
-              "id": "4038815",
-              "name": "Rico Dowdle",
-              "position": "RB",
-              "status": "Out",
-              "injury": "Toe",
-              "reportedAt": "2026-09-28T19:00Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4038815/rico-dowdle"
             },
             {
               "id": "4431533",
@@ -7367,30 +7367,6 @@
       "changes": [
         {
           "teamId": "15",
-          "name": "Marcellas Dial Jr.",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-09-28T20:40:47Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4875079/marcellas-dial-jr"
-        },
-        {
-          "teamId": "15",
-          "name": "DJ Campbell",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-09-28T20:40:47Z",
-          "source": "https://www.espn.com/nfl/player/_/id/5081977/dj-campbell"
-        },
-        {
-          "teamId": "15",
-          "name": "Brady Cook",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-09-28T20:40:47Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4429435/brady-cook"
-        },
-        {
-          "teamId": "15",
           "name": "Chukwuebuka Godrick",
           "from": "Out",
           "to": "Active",
@@ -7764,11 +7740,35 @@
           "to": "Out",
           "observedAt": "2026-09-28T20:48:12Z",
           "source": "https://www.espn.com/nfl/player/_/id/4603186/jack-bech"
+        },
+        {
+          "teamId": "2",
+          "name": "Josh Allen",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-09-28T21:12:44Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3918298/josh-allen"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-09-28T21:12:44Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "16",
+          "name": "Charles Demmings",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-09-28T21:12:44Z",
+          "source": "https://www.espn.com/nfl/player/_/id/5091793/charles-demmings"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-28T20:52:36Z",
-      "lastAttemptAt": "2026-09-28T20:52:36Z",
+      "checkedAt": "2026-09-28T21:12:44Z",
+      "lastAttemptAt": "2026-09-28T21:12:44Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-28T20:52:36Z",
-      "lastAttemptAt": "2026-09-28T20:52:36Z",
+      "checkedAt": "2026-09-28T21:12:44Z",
+      "lastAttemptAt": "2026-09-28T21:12:44Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
