@@ -171,7 +171,8 @@ def legs_for_game(game, record, ctx, now, confirmed=None):
                                 'gameId': game['id'], 'athleteId': athlete, 'player': shown, 'market': stat, 'direction': 'over',
                                 'line': float(point), 'book': BOOKS[book_key], 'odds': price, 'chance': round(over, 3),
                                 'implied': round(implied, 3), 'projection': round(mean, 1), 'kickoff': game['kickoff'],
-                                'observedAt': seen, 'marketWindow': 'Full game'})
+                                'observedAt': seen, 'marketWindow': 'Full game',
+                                'alternate': float(point) != float(main)})
     return out
 
 

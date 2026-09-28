@@ -114,6 +114,11 @@ Handy commands (from `~/Projects/sports`):
   (three of a kind at most); one play on other days, the NFL game's on an NFL night (`gates.card_cap`, ordered by
   `run.rank_card`). Never leave an NFL day without a post. A fun parlay with alternate lines every Saturday (college,
   `easy_parlay.sharp_candidate`) and Sunday (NFL easy props), plus the lotto when one qualifies.
+- **Alternate lines are for fun tickets** (2026-09-28): the ladder, lotto/longshot, easy parlay and any other fun
+  parlay may use a book's feed-priced alternate when our number likes it at that price. One book, one leg per game,
+  full-game half-point rungs from that market's own ladder only (`sharp_odds.consistent`); college player legs wait
+  for college calibration. Straight card plays stay on main lines. Never invent a price, scrape one or spend new
+  Odds API credits for a lotto.
 - **Only hard news pulls a play** before it posts: out, doubtful, inactive, suspended, benched (`run.hard`). A lotto
   or easy parlay pulled before its post is replaced the same day under a new id (`gates.fresh_id`). A ladder rung is
   never replaced.

@@ -144,6 +144,49 @@ class ExpiryTests(unittest.TestCase):
         final = dict(GAMES['g1'], home=dict(GAMES['g1']['home'], score=27), away=dict(GAMES['g1']['away'], score=20))
         self.assertEqual(run.grade_game_pick(run.leg_pick(leg), final)[0], 'win', 'Lions by 7 cover -3.5')
 
+    def test_lotto_can_mix_sharp_alternates_without_an_api_call(self):
+        from unittest import mock
+        import ladder
+        import run
+        world = ctx()
+        world.prop_odds = {gid: {'retrievedAt': '2026-09-27T12:20:00Z'} for gid in ('g1', 'g2', 'g3')}
+        rows = [dict(id=f'line-{gid}', title=f'{gid} under 44.5', gameId=gid, league='NFL', state='open', odds=-110,
+                     grade={'chance': 0.56}, kickoff=GAMES[gid]['kickoff'], market='total points', direction='under',
+                     line=44.5, book='DraftKings', observedAt='2026-09-27T12:00:00Z') for gid in ('g1', 'g2', 'g3')]
+
+        def legs(game_, record_, ctx_, now_, confirmed=None):
+            return [{'id': f"alt-{game_['id']}", 'title': f"Player {game_['id'].upper()} 40+ receiving yards",
+                     'gameId': game_['id'], 'athleteId': game_['id'] + 'p', 'market': 'recYds', 'direction': 'over',
+                     'line': 39.5, 'book': 'DraftKings', 'odds': -150, 'chance': 0.83, 'implied': 0.6,
+                     'projection': 70.0, 'kickoff': game_['kickoff'], 'observedAt': '2026-09-27T12:20:00Z',
+                     'marketWindow': 'Full game', 'alternate': True}]
+
+        with mock.patch.object(ladder, 'legs_for_game', legs), mock.patch.object(ladder, 'confirmed_at', lambda: {}):
+            ticket, reason = run.longshot_candidate(rows, GAMES, NOW, 'NFL', ctx=world)
+        self.assertIsNone(reason)
+        self.assertTrue(any(leg.get('alternate') for leg in ticket['legs']))
+        self.assertIn('https://sharpapi.io/', ticket['sources'])
+        self.assertTrue(all(leg['book'] == ticket['book'] for leg in ticket['legs']))
+
+    def test_college_lotto_alternates_wait_for_college_calibration(self):
+        from unittest import mock
+        import ladder
+        import run
+        saturday = datetime(2026, 10, 3, 12, 30, tzinfo=timezone.utc)
+        games = {gid: dict(game(gid, 'A' + gid, 'H' + gid, '2026-10-03T19:30Z'), league='CFB') for gid in ('c1', 'c2', 'c3')}
+        world = ctx()
+        world.prop_odds = {gid: {'retrievedAt': '2026-10-03T12:20:00Z'} for gid in games}
+        with mock.patch.object(ladder, 'legs_for_game', side_effect=AssertionError('uncalibrated college legs were read')):
+            self.assertEqual(run.longshot_alternates(world, games, saturday, 'CFB'), [])
+        world.policy = {'calibration': {'CFB/prop': {'k': 0.23, 'n': 398}}}
+        leg = lambda game_: {'id': f"alt-{game_['id']}", 'title': f"Player {game_['id']} 40+ rec yds",
+                             'gameId': game_['id'], 'market': 'recYds', 'line': 39.5, 'book': 'FanDuel',
+                             'odds': -200, 'chance': 0.83, 'kickoff': game_['kickoff'],
+                             'observedAt': '2026-10-03T12:20:00Z', 'marketWindow': 'Full game', 'alternate': True}
+        with mock.patch.object(ladder, 'legs_for_game', side_effect=lambda game_, *_: [leg(game_)]), \
+                mock.patch.object(ladder, 'confirmed_at', lambda: {}):
+            self.assertEqual(len(run.longshot_alternates(world, games, saturday, 'CFB')), 3)
+
 
 class ProseTests(unittest.TestCase):
     def test_a_parlay_gets_its_words_without_a_line_or_a_side(self):
@@ -192,4 +235,3 @@ class CollegeTests(unittest.TestCase):
         self.assertIn('https://sharpapi.io/', pick['sources'])
         with mock.patch.object(ladder, 'legs_for_game', legs), mock.patch.object(ladder, 'confirmed_at', lambda: {}):
             self.assertIn('only 2 CFB games', easy_parlay.sharp_candidate(view, dict(list(games.items())[:2]), saturday)[1])
-

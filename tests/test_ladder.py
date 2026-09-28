@@ -105,6 +105,7 @@ class LegTests(unittest.TestCase):
         self.assertEqual([(l['title'], l['odds'], l['book']) for l in legs], [('Player G1 40+ receiving yards', -300, 'DraftKings')])
         leg = legs[0]
         self.assertEqual((leg['athleteId'], leg['market'], leg['direction'], leg['line']), ('g1p', 'recYds', 'over', 39.5))
+        self.assertTrue(leg['alternate'], 'the selected rung is distinct from the market main line')
         self.assertTrue(ladder.MIN_GAP <= leg['chance'] - leg['implied'] <= ladder.MAX_GAP)
 
     def test_a_listed_player_a_stale_capture_and_a_book_far_off_our_number_are_left_off(self):

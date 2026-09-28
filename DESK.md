@@ -293,13 +293,21 @@ ungraded it blocks the next rung. One rung open at a time, one played a day (`ga
 until learning calibrates college player numbers (college has no injury feed either), then college too, from the 6:45
 AM run on. Same-day replacement under a new id (`gates.fresh_id`) is for a pulled lotto or easy parlay only.
 
-**Alternate-line parlays every weekend** (the owner, 2026-09-28): the NFL's easy parlay on a Sunday, and on a college
-Saturday one from the prop feed's own alternates (`easy_parlay.sharp_candidate`, the ladder's legs, three games at one
-book, +150 to +700), college legs included: it is for fun, at a quarter unit. Kept apart from the
-record in dollars: the site has a ladder card on Today and Record, receipts list a rung as "Ladder step 2: $96 to
-$187", and the posts lead "🪜 KOOK’N LADDER · STEP 2" with "$96 → $187 · +95 at FanDuel", on a card in the
-kitchen's own colours with the climb as a bar. Never called value: the book's price carries the safety, our number
-only agrees with room to spare. A rung with a void leg goes to a person (run.settle names it) and the ladder waits.
+**Alternate lines on every fun ticket** (the owner, 2026-09-28: "you don't have to take the full lines on those
+bets"): the ladder, lotto/longshot, easy parlay and any other fun parlay may use a book's alternate line when our
+numbers like it at that feed price. Straight plays on the daily card stay on main lines. `run.longshot_alternates`
+reuses the SharpAPI records already captured in `data/prop-odds`, so the lotto makes no new Odds API request and
+spends no credits. An alternate is a full-game half-point rung from its own market's monotonic ladder
+(`sharp_odds.consistent`), never a period or combined market; every ticket stays at one book with one leg per game.
+College player legs wait for `CFB/prop` calibration. The NFL easy parlay still runs Sunday, and Saturday's college
+version still comes from `easy_parlay.sharp_candidate` (three games at one book, +150 to +700). These are fun
+quarter-unit tickets, never called value, and only hard news pulls a leg.
+
+The ladder stays apart from the record in dollars: the site has a ladder card on Today and Record, receipts list a
+rung as "Ladder step 2: $96 to $187", and the posts lead "🪜 KOOK’N LADDER · STEP 2" with "$96 → $187 · +95 at
+FanDuel", on a card in the kitchen's own colours with the climb as a bar. The book's price carries the safety, our
+number only agrees with room to spare. A rung with a void leg goes to a person (run.settle names it) and the ladder
+waits.
 
 **College player props** (owner, 2026-09-26: "Im not seeing any player props for cfb why not"): two reasons, both
 fixed. A rule from the desk's first week said college player props are not offered in Indiana; the Gaming Commission

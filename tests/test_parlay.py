@@ -65,6 +65,23 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(parlay.american(1.5), -200)
         self.assertEqual(parlay.retitle({'title': 'A @ B under 43.5', 'line': 43.5}, 43.0), 'A @ B under 43')
 
+    def test_feed_priced_alternates_can_mix_with_main_lines_without_breaking_ticket_guards(self):
+        def alternate(gid, line_=39.5, window='Full game'):
+            return {'id': f'alt-{gid}', 'title': f'Player {gid} 40+ receiving yards', 'gameId': gid,
+                    'athleteId': f'p-{gid}', 'market': 'recYds', 'direction': 'over', 'line': line_,
+                    'book': DK, 'odds': -200, 'chance': 0.83, 'kickoff': '2026-09-20T17:00Z',
+                    'observedAt': '2026-09-20T13:00:00Z', 'marketWindow': window, 'alternate': True}
+        extras = [alternate('NFL-1'), alternate('NFL-2'), alternate('NFL-3', 40.0),
+                  alternate('NFL-4', window='First half')]
+        ticket, reason = parlay.build(self.rows, NOW, target=500, extra_legs=extras)
+        self.assertIsNone(reason)
+        self.assertTrue(any(leg.get('alternate') for leg in ticket['legs']))
+        self.assertTrue(any(not leg.get('alternate') for leg in ticket['legs']))
+        self.assertEqual(len(ticket['gameIds']), len(set(ticket['gameIds'])), 'one leg per game')
+        self.assertEqual({leg.get('book', ticket['book']) for leg in ticket['legs']}, {DK})
+        self.assertNotIn('alt-NFL-3', {leg['id'] for leg in ticket['legs']}, 'whole-number lines can push')
+        self.assertNotIn('alt-NFL-4', {leg['id'] for leg in ticket['legs']}, 'period markets cannot leak in')
+
 
 if __name__ == '__main__':
     unittest.main()

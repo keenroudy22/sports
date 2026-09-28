@@ -606,8 +606,22 @@ def readable_leg(leg, games):
     return None
 
 
-def longshot_candidate(lines, games, now, league, exclude=()):
-    ticket, reason = parlay.build(lines, now, None, LONGSHOT_TARGET, league, exclude)
+def longshot_alternates(ctx, games, now, league, exclude=()):
+    """True SharpAPI alternate rungs for a lotto/longshot, with no new network calls or credits."""
+    if ctx is None or not getattr(ctx, 'prop_odds', None):
+        return []
+    if league in gates.OWN_CALIBRATION and not (((getattr(ctx, 'policy', None) or {}).get('calibration') or {}).get(f'{league}/prop')):
+        return []
+    import ladder
+    seen = ladder.confirmed_at()
+    today = ladder.todays_games(games, now, league, exclude)
+    legs = [leg for game in today for leg in ladder.legs_for_game(game, ctx.prop_odds.get(game['id']), ctx, now, seen)]
+    return [dict(leg, league=league) for leg in legs if leg.get('alternate') is True]
+
+
+def longshot_candidate(lines, games, now, league, exclude=(), ctx=None):
+    alternates = longshot_alternates(ctx, games, now, league, exclude)
+    ticket, reason = parlay.build(lines, now, None, LONGSHOT_TARGET, league, exclude, alternates)
     if not ticket:
         return None, reason
     for leg in ticket['legs']:
@@ -626,7 +640,9 @@ def longshot_candidate(lines, games, now, league, exclude=()):
             'edge': (f"Our chance {100 * ticket['fairChance']:.1f}% against {100 * ticket['breakEven']:.1f}% break-even at "
                      f"{ticket['odds']:+d}: {ticket['evPerUnit']:+.3f}u per unit staked, {parlay.STAKE}u at risk."),
             'cutoff': 'A longshot is not re-entered. It stands or falls as posted.',
-            'sources': sorted({games[g]['source'] for g in ticket['gameIds'] if g in games and games[g].get('source')} | {row['source'] for row in lines if row.get('id') in {l['id'] for l in ticket['legs']} and row.get('source')})}, None
+            'sources': sorted(({games[g]['source'] for g in ticket['gameIds'] if g in games and games[g].get('source')}
+                               | {row['source'] for row in lines if row.get('id') in {l['id'] for l in ticket['legs']} and row.get('source')}
+                               | ({'https://sharpapi.io/'} if any(l.get('alternate') for l in ticket['legs']) else set())))}, None
 
 
 def price(candidate, ctx, now):
@@ -1116,7 +1132,9 @@ def write_prose(candidate, ctx, records):
             candidate['risk'] = ('Every leg has to hit; one miss sinks the ticket. Our player chances are tuned for main lines, so these legs '
                                  'are not value, just fun. A player who does not take the field voids his leg under the book\'s rule.')
         else:
-            candidate['why'] = (f"Longshot from the board: {len(candidate['legs'])} legs at {candidate['book']}, each at the number our "
+            alternate = any(leg.get('alternate') for leg in candidate['legs'])
+            source = 'the board and feed-priced alternates' if alternate else 'the board'
+            candidate['why'] = (f"Longshot from {source}: {len(candidate['legs'])} legs at {candidate['book']}, each at the number our "
                                 f"model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.")
             candidate['risk'] = 'Most longshots lose. The legs are treated as independent; any one miss sinks the ticket. Confidence 1 of 10.'
         return candidate
@@ -1531,7 +1549,7 @@ def _run(args, now, slot, kinds, status):
     if 'longshot' in kinds:
         exclude = longshot_exclusions(ctx, screened, [revision for _, _, revision in closed])
         for league in ('NFL', 'CFB'):
-            ticket, reason = longshot_candidate(lines, games, now, league, exclude)
+            ticket, reason = longshot_candidate(lines, games, now, league, exclude, ctx)
             if not ticket:
                 log(f'{league} longshot: {reason}')
                 continue

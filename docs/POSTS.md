@@ -28,7 +28,7 @@ and what gets saved is in `docs/X-NOTES.md`.
 | **Pick of the Day** | First in the noon batch | `POTD: ...` then as a play | the play card labelled `PICK OF THE DAY` (`cards/<id>-potd.png`) | `featured.py` |
 | **Player prop** | As a play | `Jordan Love under 2.5 carries (-111, DraftKings)` / `We have it at 1.2.` | the player's ESPN headshot on the plate | `pick_card.artwork` |
 | **Side** | As a play | `Duke -10 vs Stanford (-110, FanDuel)` / `We have Duke by 14.` | the side's logo | |
-| **Lotto / longshot** | After the plays | `🎰 +2506 COLLEGE LOTTO (ESPN BET)` (from +1000; `🎯 +583 NFL LONGSHOT` under it) then one leg a line | parlay card with the legs | `x_post.parlay_head` |
+| **Lotto / longshot** | After the plays | `🎰 +2506 COLLEGE LOTTO (ESPN BET)` (from +1000; `🎯 +583 NFL LONGSHOT` under it) then one leg a line; fun tickets may mix feed-priced alternates such as `Drake London 40+ rec yds` | parlay card with the legs | `x_post.parlay_head` |
 | **Easy props** (alternate lines) | Sat (college) and Sun (NFL) | `🍀 +450 NFL EASY PROPS (FanDuel)` then legs like `Drake London 40+ rec yds` | parlay card | `easy_parlay.py` |
 | **Ladder step** | With the plays, one a day | `🪜 $50 → $1,000 ladder: step 2` / `$96 → $187 (+95, FanDuel)` / legs / `❤️ if you're climbing` | the ladder card (kitchen colours, the climb as a bar) | `ladder.py`, `pick_card.ladder_body` |
 | **Morning receipt** | 9 AM the day after a game day | `Saturday: 5-3` then `✅ Iowa/Michigan over 38.5` per play, `Today: 3 plays.`, tags | the receipt card (W/L per play, the chef) | `receipts.day_receipt`, `with_menu`, `pick_card.receipt_svg` |

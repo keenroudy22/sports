@@ -1,8 +1,9 @@
-"""A longshot parlay for the day, assembled from the board's priced lines at one book.
+"""A longshot parlay for the day, assembled from priced board lines and vetted feed alternates at one book.
 
 One leg per game, three to five legs, every leg priced at the same book at the number its
 read was graded at, so the combined price is that book's own parlay arithmetic: decimal
-odds multiplied. The legs are the lines our number likes most. The ticket's chance is the
+odds multiplied. An alternate comes only from its own market ladder and competes with the board's main lines; straight
+plays are unchanged. The legs are the lines our number likes most. The ticket's chance is the
 product of the legs' calibrated chances, which treats the games as independent; that is
 why the legs come from different games. Its stake is a quarter unit and it is tracked
 apart from the straight picks. A fun ticket with a high miss rate, not a favorite.
@@ -16,6 +17,7 @@ import json
 import re
 import sys
 from datetime import datetime, timedelta, timezone
+from itertools import combinations, product
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -29,6 +31,7 @@ MIN_CHANCE = 0.52          # a game line's calibrated chance: the side our numbe
 MIN_LEGS, MAX_LEGS = 3, 5
 LEAD = timedelta(minutes=30)
 STAKE = 0.25
+ALT_GAME_POOL = 10          # bound the alternate search on a large college slate
 
 
 def decimal(odds):
@@ -59,10 +62,42 @@ def retitle(row, line):
     return re.sub(re.escape(f"{row['line']:g}"), f'{line:g}', row['title'], count=1)
 
 
-def build(rows, now, day=None, target=500, league=None, exclude=()):
+def extra_eligible(leg, now, day, exclude):
+    """A feed-priced alternate safe to mix into a fun ticket.
+
+    The caller supplies only rungs accepted by the SharpAPI ladder reader; these checks keep the parlay boundary
+    strict too: full-game, half-point, fresh enough to post, and never a made-up price.
+    """
+    return leg.get('alternate') is True and leg.get('gameId') not in set(exclude) \
+        and leg.get('marketWindow') == 'Full game' and isinstance(leg.get('line'), (int, float)) \
+        and float(leg['line']) == int(leg['line']) + 0.5 and isinstance(leg.get('odds'), (int, float)) \
+        and isinstance(leg.get('chance'), (int, float)) and 0 < leg['chance'] < 1 \
+        and bool(leg.get('book')) and bool(leg.get('kickoff')) \
+        and features.when(leg['kickoff']) > now + LEAD and eastern_date(features.when(leg['kickoff'])).isoformat() == day
+
+
+def priced_ticket(book, legs):
+    """Price one same-book, one-leg-per-game combination."""
+    chosen = sorted(legs, key=lambda l: (l['kickoff'], l['title']))
+    dec = 1.0
+    fair = 1.0
+    for leg in chosen:
+        dec *= decimal(leg['odds'])
+        fair *= leg['chance']
+    price = american(dec)
+    return {'book': book, 'legs': chosen, 'odds': price, 'decimal': round(dec, 3), 'fairChance': round(fair, 4),
+            'breakEven': round(1 / dec, 4), 'evPerUnit': round(fair * (dec - 1) - (1 - fair), 3),
+            'riskUnits': STAKE, 'gameIds': [l['gameId'] for l in chosen],
+            'quotedAt': max(l.get('observedAt') or '' for l in chosen),
+            'firstKickoff': min(l['kickoff'] for l in chosen)}
+
+
+def build(rows, now, day=None, target=500, league=None, exclude=(), extra_legs=()):
     """The best ticket on the board for the day: None with a reason when there is none.
 
     exclude: game ids the research run has a sourced reason to leave off, such as weather.
+    extra_legs: already-vetted, feed-priced alternate player lines. They may mix with the board, but a ticket still
+    has one book and at most one leg from any game.
     """
     day = day or eastern_date(now).isoformat()
     picks = [r for r in rows if eligible(r, now, day, league) and r['gameId'] not in set(exclude)]
@@ -70,39 +105,56 @@ def build(rows, now, day=None, target=500, league=None, exclude=()):
     for row in sorted(picks, key=lambda r: -r['grade']['chance']):
         best_per_game.setdefault(row['gameId'], row)
     candidates = list(best_per_game.values())
-    if len(candidates) < MIN_LEGS:
-        return None, f'only {len(candidates)} games with a line our number likes on {day}; a ticket needs {MIN_LEGS}'
+    extras = [dict(leg) for leg in extra_legs if extra_eligible(leg, now, day, exclude)]
+    available_games = {r['gameId'] for r in candidates} | {l['gameId'] for l in extras}
+    if len(available_games) < MIN_LEGS:
+        return None, f'only {len(available_games)} games with a line our number likes on {day}; a ticket needs {MIN_LEGS}'
     tickets = []
-    books = {q['book'] for row in candidates for q in row.get('books') or []} | {row['book'] for row in candidates}
+    books = ({q['book'] for row in candidates for q in row.get('books') or []} | {row['book'] for row in candidates}
+             | {leg['book'] for leg in extras})
     for book in books:
-        legs = []
+        board = []
         for row in candidates:
             quotes = row.get('books') or [{'book': row['book'], 'line': row['line'], 'odds': row['odds']}]
             quote = next((q for q in quotes if q['book'] == book and q['line'] == row['line'] and q.get('odds') is not None), None)
             if quote:   # a leg is taken only at the number its read was graded at
-                legs.append({'id': row['id'], 'title': retitle(row, quote['line']), 'gameId': row['gameId'],
-                             'market': row['market'], 'side': row.get('direction') or row.get('side'),
-                             'line': quote['line'], 'odds': quote['odds'], 'chance': row['grade']['chance'],
-                             'kickoff': row['kickoff'], 'observedAt': row.get('observedAt'), 'marketWindow': 'Full game'})
-        legs.sort(key=lambda l: -l['chance'])
-        for count in range(MIN_LEGS, min(MAX_LEGS, len(legs)) + 1):
-            chosen = legs[:count]
-            dec = 1.0
-            fair = 1.0
-            for leg in chosen:
-                dec *= decimal(leg['odds'])
-                fair *= leg['chance']
-            price = american(dec)
-            tickets.append({'book': book, 'legs': chosen, 'odds': price, 'decimal': round(dec, 3), 'fairChance': round(fair, 4),
-                            'breakEven': round(1 / dec, 4), 'evPerUnit': round(fair * (dec - 1) - (1 - fair), 3),
-                            'riskUnits': STAKE, 'gameIds': [l['gameId'] for l in chosen],
-                            'quotedAt': max(l['observedAt'] or '' for l in chosen), 'firstKickoff': min(l['kickoff'] for l in chosen)})
+                board.append({'id': row['id'], 'title': retitle(row, quote['line']), 'gameId': row['gameId'],
+                              'market': row['market'], 'side': row.get('direction') or row.get('side'),
+                              'line': quote['line'], 'odds': quote['odds'], 'book': book, 'chance': row['grade']['chance'],
+                              'kickoff': row['kickoff'], 'observedAt': row.get('observedAt'), 'marketWindow': 'Full game',
+                              'alternate': False})
+        board.sort(key=lambda l: -l['chance'])
+        # Preserve the board-only candidates exactly; alternates are additional choices, not a new requirement.
+        for count in range(MIN_LEGS, min(MAX_LEGS, len(board)) + 1):
+            tickets.append(priced_ticket(book, board[:count]))
+
+        # Search a bounded set of the strongest games. Each game contributes at most its best board leg and best
+        # alternate, which keeps a full college slate deterministic and small while allowing genuinely mixed tickets.
+        by_game = {}
+        for leg in board:
+            by_game.setdefault(leg['gameId'], {})['board'] = leg
+        for leg in (l for l in extras if l['book'] == book):
+            choices = by_game.setdefault(leg['gameId'], {})
+            old = choices.get('alternate')
+            edge = leg['chance'] - pricing.break_even(int(leg['odds']))
+            old_edge = old['chance'] - pricing.break_even(int(old['odds'])) if old else -1
+            if old is None or (edge, leg['chance']) > (old_edge, old['chance']):
+                choices['alternate'] = leg
+        groups = sorted(by_game.values(), key=lambda choices: -max(l['chance'] for l in choices.values()))[:ALT_GAME_POOL]
+        for count in range(MIN_LEGS, min(MAX_LEGS, len(groups)) + 1):
+            for selected in combinations(groups, count):
+                for chosen in product(*(tuple(group.values()) for group in selected)):
+                    if any(l.get('alternate') for l in chosen):
+                        tickets.append(priced_ticket(book, chosen))
     if not tickets:
         return None, 'no book carries three of those lines at the graded numbers'
     reaching = [t for t in tickets if t['odds'] >= target]
     pool = reaching or tickets
     # The best expected value at the fewest legs that reach the target; failing the target, the longest price.
-    pool.sort(key=lambda t: (-t['evPerUnit'], len(t['legs'])) if reaching else (-t['odds'],))
+    if reaching:
+        pool.sort(key=lambda t: (-t['evPerUnit'], len(t['legs'])))
+    else:
+        pool.sort(key=lambda t: (-t['odds'],))
     ticket = pool[0]
     ticket['reachedTarget'] = bool(reaching)
     return ticket, None
