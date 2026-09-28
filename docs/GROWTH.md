@@ -12,7 +12,7 @@ rate and 5 profile visits over the prior four weeks; nearly all of that reach ar
 - **The ladder creates a story.** Every rung states the current stake, target payout and prior result. Wins and losses
   both get receipts. It is entertainment, never a promise or a rescue chase.
 - **Receipts create trust.** Keep them public, short and complete. A bad day does not disappear.
-- **The weekly sheet creates saves.** Eight readable disagreements, with the complete slate on the site. It is not a
+- **The weekly watchlist tests saves.** Four large, readable disagreements, with the complete slate on the site. It is not a
   pick card.
 - **Human conversation creates discovery.** On game days, the owner can add a few thoughtful, non-promotional replies
   to relevant football conversations. Those replies are never automated and never copied.
@@ -52,7 +52,7 @@ the hook or profile before increasing post volume.
 
 ## Four-week experiment cycle
 
-1. **Week 1: clarity.** Use the corrected game-line labels, readable cards and the eight-game sheet. Establish the
+1. **Week 1: clarity.** Use the corrected game-line labels, readable cards and the four-game watchlist. Establish the
    Premium baseline and keep the one-tag rule.
 2. **Week 2: ladder story.** Give every ladder post a clear step number and dollar path. Compare ladder impressions,
    reposts and profile visits with ordinary plays.

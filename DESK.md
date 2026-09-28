@@ -192,7 +192,7 @@ and book (`x_post.parlay_head`): "🎰 +2506 COLLEGE LOTTO (ESPN BET)" from +100
 "🍀 +450 NFL EASY PROPS", then its legs one a line ("Iowa/Michigan over 38.5", "Drake London 40+ rec yds"). A ladder
 rung: "🪜 $50 → $1,000 ladder: step 2", "$96 → $187 (+95, FanDuel)", its legs, "❤️ if you're climbing". Receipts,
 the book, the menu and cashed posts are one-liners too ("Saturday: 5-3" with ✅ ❌ per play, "✅ Cashed: ...",
-"Today: 3 plays.", "📌 8 NFL games where our numbers disagree most with the market.").
+"Today: 3 plays.", "📌 4 NFL games where our numbers disagree most with the market.").
 
 The reason is one sentence of the pick's own `why`, short and free of the desk's arithmetic words; when
 every sentence is arithmetic the post stands on the play and the number. No units anywhere a follower reads.
@@ -227,7 +227,7 @@ live waits for the next run. Nothing goes out bare.
 | 9:00 AM Wednesday | **The week's receipts** by kind, with the week's dates |
 | Around noon (two hours before a kickoff earlier than 2 PM; never before 9 AM) | **The plays**, the Pick of the Day first |
 | As a win settles (9 AM to 12:30 AM, within three hours) | **Cashed**: "✅ Cashed: Iowa/Michigan over 38.5 (-105, ESPN BET)" (or "✅ POTD cashed: ...", "✅ +2506 5-leg lotto cashed (ESPN BET)"), and the original post quoted by its X link; text only. Losses are not singled out: the morning receipt lists every play, win or lose. The run feeds its own settlements forward (`run.absorb`), so the cashed post goes out from the run that settled it |
-| 10:00 AM college Saturday and NFL Sunday | **📌 SAVE THIS**: the week's projections sheet (`scripts/sheet.py`), one 1080x1350 image with the eight games where our number and the line differ most: logos, our projected score, win chances as bars, our spread and total beside the line, orange where our number leans clearly (the site's strong chip). The complete slate stays on the site. Drawn by the hosted build (`feed.py`, `cards/sheet-<league>-<date>.png`), posted by the desk once the image is live, never after 11:45 AM. Not picks |
+| 10:00 AM college Saturday and NFL Sunday | **📌 SAVE THIS**: the week's model watchlist (`scripts/sheet.py`), one 1080x1350 image with four large tiles for the games where our number and the line differ most: logos, projected score, win chances, and our spread and total beside the market. The complete slate stays on the site. Drawn by the hosted build (`feed.py`, `cards/sheet-<league>-<date>.png`), posted by the desk once the image is live, never after 11:45 AM. Not picks |
 | As a rung wins | **Ladder cashed**: "✅ LADDER STEP 2 CASHED", "$96 → $187", "Step 3 is next: all $187 rides."; at $1,000 "🪜 LADDER COMPLETE", and the phone gets "Ladder complete: pin it" |
 | 6:00 PM on a day with nothing else | **The book**: the season record, graded through yesterday and saying so ("Season through Sep 28"), so back-to-back quiet days never post the same words, which X refuses; with one kind of play only the season line (card `site/img/kitchen-book.png`) |
 

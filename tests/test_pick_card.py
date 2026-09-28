@@ -63,7 +63,7 @@ class CardTests(unittest.TestCase):
         ticket = {'title': '3-leg longshot at DraftKings', 'parlayType': 'longshot', 'odds': 650, 'book': 'DraftKings', 'confidence': 1, 'riskUnits': 0.25,
                   'legs': [{'title': 'Bills at Lions over 44.5'}, {'title': 'Jets +3'}, {'title': 'Player Seven over 4.5 receptions'}]}
         text = pick_card.svg(ticket, GAME)
-        for needle in ('FUN PARLAY', '3-leg parlay', '• Bills at Lions over 44.5', '• Jets +3', '• Player Seven over 4.5 receptions',
+        for needle in ('LONGSHOT', '3-leg longshot', '• Bills at Lions over 44.5', '• Jets +3', '• Player Seven over 4.5 receptions',
                        '+650', 'DraftKings', 'Served at', 'KOOK’N'):
             self.assertIn(needle, text, needle)
         self.assertNotIn(' unit', text)
@@ -72,6 +72,9 @@ class CardTests(unittest.TestCase):
         self.assertEqual(pick_card.play_kind(ticket), 'parlay')
         self.assertEqual(pick_card.play_kind({'market': 'rec'}), 'player')
         self.assertEqual(pick_card.play_kind({'marketType': 'spread'}), 'team')
+        self.assertIn('LOTTO TICKET', pick_card.svg(dict(ticket, odds=1250), GAME))
+        self.assertIn('5-leg lotto', pick_card.svg(dict(ticket, odds=1250, legs=[{'title': str(i)} for i in range(5)]), GAME))
+        self.assertIn('EASY PROPS', pick_card.svg(dict(ticket, parlayType='easyProps'), GAME))
 
     def test_a_school_is_swapped_only_as_a_whole_name(self):
         game = {'league': 'CFB', 'away': {'short': 'New Mexico', 'abbreviation': 'UNM', 'school': 'New Mexico'},

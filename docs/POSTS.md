@@ -33,7 +33,7 @@ and what gets saved is in `docs/X-NOTES.md`.
 | **Ladder step** | With the plays, one a day | `🪜 $50 → $1,000 ladder: step 2` / `$96 → $187 (+95, FanDuel)` / legs / `❤️ if you're climbing` | the ladder card (kitchen colours, the climb as a bar) | `ladder.py`, `pick_card.ladder_body` |
 | **Morning receipt** | 9 AM the day after a game day | `Saturday: 5-3` then `✅ Iowa/Michigan over 38.5` per play, `Today: 3 plays.`, tags | the receipt card (W/L per play, the chef) | `receipts.day_receipt`, `with_menu`, `pick_card.receipt_svg` |
 | **Week's receipt** | Wednesday 9 AM | `The week (Sep 23 to Sep 29): 12-9` then the record by kind | receipt card | `receipts.week_receipt` |
-| **Save this sheet** | 10 AM college Saturday and NFL Sunday | `📌 8 NFL games where our numbers disagree most with the market.` / save ask / tag | 1080x1350 projections grid | `sheet.py` |
+| **Save this watchlist** | 10 AM college Saturday and NFL Sunday | `📌 4 NFL games where our numbers disagree most with the market.` / save ask / tag | 1080x1350 grid with four large model/market tiles | `sheet.py` |
 | **Cashed** | As a win settles (9 AM to 12:30 AM, within three hours) | `✅ Cashed: Iowa/Michigan over 38.5 (-105, ESPN BET)` (or `✅ POTD cashed: ...`, `✅ +2506 5-leg lotto cashed (ESPN BET)`, `✅ Ladder step 2 cashed: $96 → $187` / `Step 3 next.`) then the tag and the original post's link | none (it quotes the original) | `receipts.cashed` |
 | **Menu** (alone) | 8:45 AM on a game day with no receipt | `Today: 6 plays` then `Iowa/Michigan 3:30 PM` per game | `site/img/kitchen-menu.png` | `receipts.menu` |
 | **The book** | 6 PM on a day with nothing else | `Season through Sep 28: 23-22` then by kind | `site/img/kitchen-book.png` | `receipts.book` |
@@ -51,7 +51,8 @@ served at `https://keenroudy.com/sports/data/cards/<name>.png`: `<pick id>.png`,
 
 One frame for every card (`docs/examples/`):
 - top left the **KOOK'N** wordmark and pan icon; top right the precise label (`PLAYER PROP`, `GAME TOTAL`,
-  `GAME SPREAD`, `FUN PARLAY`, `PICK OF THE DAY · GAME TOTAL`, `LADDER · STEP 2`, `RECEIPTS`);
+  `GAME SPREAD`, `LONGSHOT`, `LOTTO TICKET`, `EASY PROPS`, `PICK OF THE DAY · GAME TOTAL`, `LADDER · STEP 2`,
+  `RECEIPTS`);
 - the matchup and kickoff (a parlay: how many games and the day); `TODAY'S PLATE` (`THE CLIMB: $50 TO $1,000` on a
   rung, `YESTERDAY'S PLATES` on a receipt); the play big; `Served at` the price and book; `We project ...`;
 - at the foot `Graded in public, win or lose. keenroudy.com/sports` and `Entertainment only. Not advice.`;
@@ -66,10 +67,10 @@ ladder, receipts and house cards. Cream `#f6f1e6` and ink `#141414` for text. Im
 `.../teamlogos/ncaa/500/<id>.png`), fetched when the card is drawn and embedded; a failed fetch falls back to the
 chef. `KEENROUDY_CARD_ART=0` turns photos and logos off. No units on any card.
 
-The **Save this sheet** (`scripts/sheet.py`): a header (`SAVE THIS`, `WEEK 3 NFL PROJECTIONS`, the date), two columns
-of game cards (logos, our projected score to a tenth, win chances as bars in the teams' colours, `Spread ours vs the
-line` and `Total ours vs the line`, orange where our number leans clearly), and the foot. Both sports show at most
-eight games where our number and the line differ most; the complete slate stays on the site.
+The **Save this watchlist** (`scripts/sheet.py`): a header (`SAVE THIS`, `WEEK 3 NFL WATCHLIST`, the date), two columns
+of game cards (logos, our projected score to a tenth, win chances as bars in the teams' colours, and large model/market
+spread and total comparisons, orange where our number leans clearly), and the foot. Both sports show the four games
+where our number and the line differ most; the complete slate stays on the site.
 
 ## Previewing before anything posts
 

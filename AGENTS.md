@@ -133,7 +133,8 @@ Handy commands (from `~/Projects/sports`):
   SharpAPI's own lines; learning calibrates them weekly (`CFB/prop`).
 - **One record** everywhere: every published play counts, win or lose; units on the site only (one unit a play,
   saved at grading), none on X; fun parlays and the ladder apart; the 26 Week 1 plays at an assumed -115, marked.
-- **Weekly "📌 Save this" projections sheet**: college Saturday and NFL Sunday at 10 AM (`scripts/sheet.py`).
+- **Weekly "📌 Save this" model watchlist**: four large, readable model/market gaps, college Saturday and NFL Sunday
+  at 10 AM (`scripts/sheet.py`); the full slate stays on the site.
 - **Growth goal** (2026-09-28): grow @keenkooks toward 10,000 followers by the end of football season without paid
   reach or account-risk shortcuts. One relevant league hashtag per post is enough. The ladder is a continuing story,
   not a claim of guaranteed profit. No automated replies, likes, follows, unfollows or trend posts; no bought or

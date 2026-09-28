@@ -341,6 +341,7 @@ def number_line(pick):
 
 
 KINDS = {'player': 'PLAYER PROP', 'parlay': 'FUN PARLAY', 'ladder': 'LADDER'}
+LOTTO = 1000
 
 
 def play_kind(pick):
@@ -356,6 +357,10 @@ def play_kind(pick):
 def play_label(pick):
     """The precise public label. A whole-game side or total is a game line, not a team prop."""
     kind = play_kind(pick)
+    if kind == 'parlay':
+        if pick.get('parlayType') == 'easyProps':
+            return 'EASY PROPS'
+        return 'LOTTO TICKET' if isinstance(pick.get('odds'), (int, float)) and pick['odds'] >= LOTTO else 'LONGSHOT'
     if kind != 'team':
         return KINDS[kind]
     market = str(pick.get('marketType') or '').lower()
@@ -400,7 +405,9 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
     parlay = play_kind(pick) in ('parlay', 'ladder')
     legs = [str(l.get('title') or '') for l in (pick.get('legs') or []) if l.get('title')]
     if parlay:
-        title = f"{len(pick.get('legs') or [])}-leg parlay"
+        word = ('ladder' if rung else 'easy props' if pick.get('parlayType') == 'easyProps' else
+                'lotto' if isinstance(pick.get('odds'), (int, float)) and pick['odds'] >= LOTTO else 'longshot')
+        title = f"{len(pick.get('legs') or [])}-leg {word}"
     if rung:
         info = pick.get('ladder') or {}
         title = f"{dollars(info.get('stake'))} → {dollars(info.get('payout'))}"

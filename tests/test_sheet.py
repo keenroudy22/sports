@@ -40,10 +40,12 @@ class DrawTests(unittest.TestCase):
     def test_the_sheet_says_save_this_and_shows_every_number_the_games_page_does(self):
         games = [card('a', '2026-09-27T17:00Z', gap=2.4), card('b', '2026-09-27T20:25Z')]
         text = sheet.svg(games, 'NFL', SUNDAY, 3, {('a', 'away'): 'data:image/png;base64,x'})
-        for needle in ('SAVE THIS', 'WEEK 3 NFL PROJECTIONS', 'Sunday, September 27', 'Aa', 'Ha', '20.4', '24.0', '62%', '38%',
-                       'Ha -3.6', 'vs Ha -2.5', '44.4', 'vs 41.5', 'data:image/png;base64,x', 'Entertainment only.'):
+        for needle in ('SAVE THIS', 'WEEK 3 NFL WATCHLIST', 'Sunday, September 27', '2 biggest model/market gaps', 'Aa', 'Ha',
+                       '20.4', '24.0', '62%', '38%', 'OUR NUMBER / MARKET', 'Ha -3.6', 'Ha -2.5', '44.4', '41.5',
+                       'Left: model · Right: market', 'data:image/png;base64,x', 'Entertainment only.'):
             self.assertIn(needle, text, needle)
-        self.assertIn(sheet.ORANGE + '" font-weight="700">Ha -3.6', text, 'a spread our number leans to clearly is orange')
+        self.assertIn(sheet.ORANGE + '" font-size="31" font-weight="800">Ha -3.6', text,
+                      'a spread our number leans to clearly is orange')
         self.assertIn('Orange: our number leans clearly.', text)
 
     def test_a_dark_team_colour_gives_way_to_one_that_shows(self):
@@ -61,7 +63,7 @@ class PostTests(unittest.TestCase):
         early = datetime(2026, 9, 27, 10, 45, tzinfo=timezone.utc)       # 6:45 AM ET Sunday
         post = sheet.post(self.GAMES, early)
         self.assertEqual((post['key'], post['kind'], post['card']), ('sheet:NFL:2026-09-27', 'sheet', 'sheet-nfl-2026-09-27'))
-        self.assertEqual(post['text'], '📌 NFL games where our numbers disagree most with the market.\n'
+        self.assertEqual(post['text'], '📌 4 NFL games where our numbers disagree most with the market.\n'
                                        'Save this for the slate. Full projections on the site.\n#NFL')
         self.assertEqual(post['due'], datetime(2026, 9, 27, 14, 0, tzinfo=timezone.utc))
         import receipts
