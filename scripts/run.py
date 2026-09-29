@@ -1396,6 +1396,8 @@ def load_json(path, fallback):
 def write_status(status, path=None):
     """The run's outcome for the heartbeat and `run.py status`. A rehearsal (--dry-run) writes beside its reports
     in pending/, so it can never paper over a real run that failed."""
+    if (status.get('llm') or {}).get('used'):
+        status['llm']['calls'] = llm.call_stats()
     path = path or (CONF / 'pending' / 'status.json' if status.get('dryRun') else CONF / 'status.json')
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(status, indent=1, default=str) + '\n', encoding='utf-8')
@@ -1456,9 +1458,14 @@ def _run(args, now, slot, kinds, status):
     raw_first = raw_first_publications(stores.reports)
     context_file = stores.context_file
     settled, closed, published, screened, unclear = [], [], [], [], []
+    llm.reset_calls()
     use_llm = not args.no_llm and llm.available()
-    status['llm'] = {'used': use_llm, 'model': llm.model_name() if use_llm else None, 'polished': 0, 'kept': 0, 'judged': 0}
-    log('local model:', f"{llm.model_name()} at {llm.base_url()}" if use_llm else 'off' if args.no_llm else 'not reachable; templates only')
+    status['llm'] = {'used': use_llm, 'model': llm.model_name() if use_llm else None,
+                     'judgeModel': llm.model_name() if use_llm else None,
+                     'writingModel': llm.fast_model_name() if use_llm else None,
+                     'polished': 0, 'kept': 0, 'judged': 0}
+    log('local models:', (f"writing {llm.fast_model_name()}, judgment {llm.model_name()} at {llm.base_url()}"
+                          if use_llm else 'off' if args.no_llm else 'not reachable; templates and rules only'))
 
     if 'settle' in kinds:
         settled, unclear = settle(ctx, raw_first, games, records, now)

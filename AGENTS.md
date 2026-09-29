@@ -21,9 +21,11 @@ Three things run it, none of them an AI chat:
    `~/Library/Logs/KeenRoudy/run-YYYY-MM-DD.log` (times in UTC).
 2. **GitHub Actions** (`.github/workflows/publish.yml`) on a schedule and on every push: captures scores, odds and
    prop prices, publishes model forecasts, grades against the close, builds the site and the cards, and deploys.
-3. **Local models on the Mac**: Ollama (`KEENROUDY_LLM_MODEL`, default `qwen3:32b`) polishes prose and weighs news;
-   the web researcher (`scripts/researcher.py`) reads the news on game days through `codex exec` (GPT, the owner's
-   ChatGPT plan) when `KEENROUDY_RESEARCHER=codex`.
+3. **Routed models on the Mac**: Ollama `qwen3:8b` (override: `KEENROUDY_LLM_FAST_MODEL`) handles guarded prose;
+   Ollama `qwen3:32b` (override: `KEENROUDY_LLM_MODEL`) weighs verified facts and never falls through to the smaller
+   model. The live web researcher uses `codex exec` with `gpt-6-sol` at low reasoning by default; the weekly review
+   uses the same model at medium reasoning. Both use the owner's ChatGPT plan and can be overridden with the named
+   researcher/review settings in `deployment/mac/env.example`.
 
 Your job as the agent is what a person would do: answer the owner's questions, change the code, deploy it safely,
 watch the runs, and fix what breaks.

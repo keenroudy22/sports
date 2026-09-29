@@ -17,6 +17,9 @@ def chat(payload):
 
 
 class ClientTests(unittest.TestCase):
+    def setUp(self):
+        llm.reset_calls()
+
     def test_draft_returns_the_text_with_thinking_off_and_stripped(self):
         sent = {}
 
@@ -29,6 +32,9 @@ class ClientTests(unittest.TestCase):
         self.assertFalse(sent['body']['think'])
         self.assertEqual(sent['body']['options']['num_predict'], 400)
         self.assertEqual(sent['body']['messages'][0]['role'], 'system')
+        stats = llm.call_stats()
+        self.assertEqual(stats['byModel']['m']['calls'], 1)
+        self.assertEqual(stats['failures'], 0)
 
     def test_unreachable_and_malformed_raise(self):
         def refused(url, body, headers, timeout):
@@ -39,6 +45,7 @@ class ClientTests(unittest.TestCase):
             llm.draft('s', 'u', send=lambda *a: b'not json')
         with self.assertRaises(llm.LLMUnavailable):
             llm.draft('s', 'u', send=lambda *a: completion(''))
+        self.assertEqual(llm.call_stats()['failures'], 3)
 
     def test_draft_json_constrains_and_parses(self):
         sent = {}
@@ -64,10 +71,18 @@ PICK = {'id': 'NFL-2026-W4-buf-det-over-44-5-dk', 'title': 'Bills at Lions over 
 
 
 class TaskTests(unittest.TestCase):
+    def setUp(self):
+        llm.reset_calls()
+
     def test_polish_keeps_a_clean_rewrite(self):
-        text, note = llm_tasks.why_for(PICK, send=lambda *a: completion('Our total is 48 against 44.5. The over reads 55.3%, 2.9 points clear of what -110 needs.'))
+        seen = {}
+        def send(url, body, headers, timeout):
+            seen.update(model=body['model'], timeout=timeout)
+            return completion('Our total is 48 against 44.5. The over reads 55.3%, 2.9 points clear of what -110 needs.')
+        text, note = llm_tasks.why_for(PICK, send=send)
         self.assertEqual(note, 'polished')
         self.assertIn('55.3%', text)
+        self.assertEqual(seen, {'model': llm.fast_model_name(), 'timeout': 60})
 
     def test_polish_falls_back_to_the_template_after_two_failed_tries(self):
         calls = []

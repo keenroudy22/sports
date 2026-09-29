@@ -45,6 +45,8 @@ anything as betting advice.
 
 PACKET
 """
+DEFAULT_CODEX_MODEL = 'gpt-6-sol'
+DEFAULT_CODEX_REASONING = 'medium'
 
 
 def period(now, since=None):
@@ -243,7 +245,11 @@ def packet(first, last, runs, posts, week, hosted, line_timing, ladder_now, aler
 
 def ask_codex(text, out, runner=subprocess.run, timeout=900):
     """Codex's review (its last message) or None. Read-only, no web search, in the repository, one session."""
-    command = ['codex', 'exec', '--ephemeral', '--sandbox', 'read-only', '--config', 'approval_policy="never"',
+    model = os.environ.get('KEENROUDY_REVIEW_MODEL', '').strip() or DEFAULT_CODEX_MODEL
+    reasoning = os.environ.get('KEENROUDY_REVIEW_REASONING', '').strip().lower()
+    reasoning = reasoning if reasoning in ('low', 'medium', 'high', 'xhigh', 'max') else DEFAULT_CODEX_REASONING
+    command = ['codex', 'exec', '--ephemeral', '--model', model, '--config', f'model_reasoning_effort="{reasoning}"',
+               '--sandbox', 'read-only', '--config', 'approval_policy="never"',
                '--cd', str(ROOT), '--output-last-message', str(out), PROMPT + text]
     try:
         runner(command, capture_output=True, text=True, timeout=timeout, cwd=str(ROOT))

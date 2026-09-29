@@ -8,7 +8,8 @@ Written 2026-09-28, when the owner moved the desk's AI work from Claude to OpenA
 - the Mac runs the desk on its schedule (launchd: 6:45, 8:30, 11:45 AM, 5:30 and 11:30 PM Eastern, plus Sunday
   2:45 PM and Sunday, Monday and Thursday 6:50 PM), the pre-post check every 30 minutes, and the 7:15 AM heartbeat;
 - GitHub runs the captures, forecasts, site build and deploy (`.github/workflows/publish.yml`);
-- Buffer posts to X; ntfy sends the phone alerts; Ollama on the Mac (Qwen, not Claude) writes and weighs.
+- Buffer posts to X; ntfy sends the phone alerts; Ollama on the Mac (Qwen, not Claude) writes and weighs. The 8B local
+  model handles guarded rewrites, while the 32B model is reserved for judging verified facts.
 
 **Four things change:**
 
@@ -68,6 +69,10 @@ cd ~/Projects/sports && ~/.config/keenroudy/run.sh py scripts/researcher.py NFL-
 Use any upcoming game id from the site's game pages (the part after `#game/`). If Codex is not signed in, the desk
 keeps running and simply works without the news check. Leave the setting empty to turn the news check off; unknown
 or retired provider names do not trigger a fallback.
+
+The routine news check pins `gpt-6-sol` at low reasoning instead of inheriting the interactive Codex model. The
+Monday review pins it at medium reasoning. These defaults save plan usage without moving live-news verification to
+an offline model. Their optional overrides are listed in `deployment/mac/env.example`.
 
 ## Step 4: work with Codex instead of Claude
 

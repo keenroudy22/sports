@@ -51,7 +51,7 @@ doctor() {
   echo "ollama          $(curl -s -m 3 http://localhost:11434/api/version 2>/dev/null || echo 'not reachable')"
   echo "codex           $(codex --version 2>/dev/null || echo 'not found')  (codex login status: $(codex login status 2>&1 | head -1 || echo 'unknown'))"
   local keys=""
-  for k in ODDS_API_KEY SHARP_API X_API_KEY X_API_SECRET X_ACCESS_TOKEN X_ACCESS_SECRET KEENROUDY_LLM_MODEL KEENROUDY_RESEARCHER KEENROUDY_X_AUTONOMOUS BUFFER_TOKEN BUFFER_CHANNEL DISCORD_WEBHOOK_URL KEENROUDY_NTFY_TOPIC; do
+  for k in ODDS_API_KEY SHARP_API X_API_KEY X_API_SECRET X_ACCESS_TOKEN X_ACCESS_SECRET KEENROUDY_LLM_MODEL KEENROUDY_LLM_FAST_MODEL KEENROUDY_RESEARCHER KEENROUDY_RESEARCHER_MODEL KEENROUDY_RESEARCHER_REASONING KEENROUDY_REVIEW_MODEL KEENROUDY_REVIEW_REASONING KEENROUDY_X_AUTONOMOUS BUFFER_TOKEN BUFFER_CHANNEL DISCORD_WEBHOOK_URL KEENROUDY_NTFY_TOPIC; do
     if [ -n "${!k:-}" ]; then keys="$keys $k"; fi
   done
   echo "env keys set   ${keys:- (none)}"

@@ -102,6 +102,8 @@ class ReviewTests(unittest.TestCase):
             text = review.ask_codex('packet', Path(folder) / 'review.md', runner=codex)
         self.assertEqual(text, 'The week ran cleanly.')
         command = seen['command']
+        self.assertEqual(command[command.index('--model') + 1], review.DEFAULT_CODEX_MODEL)
+        self.assertIn(f'model_reasoning_effort="{review.DEFAULT_CODEX_REASONING}"', command)
         self.assertEqual(command[command.index('--sandbox') + 1], 'read-only')
         self.assertNotIn('web_search="live"', command, 'the review reads the packet, not the web')
         self.assertTrue(command[-1].startswith(review.PROMPT[:40]) and command[-1].endswith('packet'))

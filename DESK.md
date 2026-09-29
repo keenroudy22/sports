@@ -164,12 +164,18 @@ operating manual Codex reads; `docs/MOVE-TO-GPT.md` has the owner's steps; `depl
 
 ## The local model
 
-Ollama serves the model at `http://localhost:11434`; `KEENROUDY_LLM_MODEL` in the env file names the
-tag. The model is asked for prose and judgment only. Every rewrite passes `llm.check_style` (no em or en
+Ollama serves two roles at `http://localhost:11434`. `KEENROUDY_LLM_FAST_MODEL` (default `qwen3:8b`) handles
+guarded prose rewrites; `KEENROUDY_LLM_MODEL` (default `qwen3:32b`) handles fact judgment and never falls through
+to the smaller model. The models are asked for prose and judgment only. Every rewrite passes `llm.check_style` (no em or en
 dashes, plain words, short sentences, no model or version names, no marketing, no advice) and
 `llm.numbers_ok` (every number in the text appears in the pick's fields, the desk output or the facts),
 or the template stands. A judgment counts only when it points at a fact by id; unsure means hold.
-With Ollama down the run publishes on templates and holds on a quarterback rule of thumb.
+With Ollama down the run publishes on templates and holds on a quarterback rule of thumb. The run status records
+only model names, latency, token counts and failures. It never records prompts or answers.
+
+Live web extraction stays on GPT because a local model cannot verify current injuries by itself. The routine
+researcher pins `gpt-6-sol` at low reasoning; the code-aware weekly review pins it at medium reasoning. This avoids
+using the interactive Codex default for repetitive work while preserving verified URLs and the existing local guards.
 
 ## X
 

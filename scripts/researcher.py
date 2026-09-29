@@ -64,6 +64,8 @@ If you find nothing solid, return {{"facts": []}}."""
 
 ENGINES = ('codex',)
 ORIGINS = ('codex researcher', 'claude researcher')     # a stored fact's origin; older facts say "claude researcher"
+DEFAULT_CODEX_MODEL = 'gpt-6-sol'
+DEFAULT_CODEX_REASONING = 'low'
 
 
 def engine(env=None):
@@ -125,7 +127,16 @@ CODEX_SCHEMA = {'type': 'object', 'additionalProperties': False, 'required': ['f
                                               'source': {'type': 'string'}, 'publishedAt': {'type': 'string'}}}}}}
 
 
-def run_codex(prompt, runner=subprocess.run, timeout=420, folder=None):
+def codex_model(env=None):
+    return (env if env is not None else os.environ).get('KEENROUDY_RESEARCHER_MODEL', '').strip() or DEFAULT_CODEX_MODEL
+
+
+def codex_reasoning(env=None):
+    value = (env if env is not None else os.environ).get('KEENROUDY_RESEARCHER_REASONING', '').strip().lower()
+    return value if value in ('low', 'medium', 'high', 'xhigh', 'max') else DEFAULT_CODEX_REASONING
+
+
+def run_codex(prompt, runner=subprocess.run, timeout=420, folder=None, env=None):
     """`codex exec`'s last message (the JSON the prompt asks for), or None when the command fails or is missing.
 
     Codex runs in the researcher's own empty folder, read-only, with live web search and no approvals to wait on,
@@ -137,7 +148,8 @@ def run_codex(prompt, runner=subprocess.run, timeout=420, folder=None):
     schema.write_text(json.dumps(CODEX_SCHEMA), encoding='utf-8')
     if answer.exists():
         answer.unlink()
-    command = ['codex', 'exec', '--skip-git-repo-check', '--ephemeral', '--sandbox', 'read-only',
+    command = ['codex', 'exec', '--skip-git-repo-check', '--ephemeral', '--model', codex_model(env),
+               '--config', f'model_reasoning_effort="{codex_reasoning(env)}"', '--sandbox', 'read-only',
                '--config', 'web_search="live"', '--config', 'approval_policy="never"', '--cd', str(folder),
                '--output-schema', str(schema), '--output-last-message', str(answer), f'{SYSTEM}\n\n{prompt}']
     try:
@@ -152,7 +164,7 @@ def run_codex(prompt, runner=subprocess.run, timeout=420, folder=None):
 
 def ask(prompt, runner=subprocess.run, env=None):
     """The configured engine's answer to the research prompt, or None."""
-    return run_codex(prompt, runner) if engine(env) == 'codex' else None
+    return run_codex(prompt, runner, env=env) if engine(env) == 'codex' else None
 
 
 def extract(text):

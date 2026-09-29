@@ -115,7 +115,8 @@ def polish(text, pick, extra=(), system=None, send=None, max_tokens=400):
     for attempt in range(2):
         prompt = user + (RETRY_NOTE.format(problems='; '.join(problems)) if problems else '')
         try:
-            draft = llm.draft(system or llm.STYLE_SYSTEM, prompt, max_tokens=max_tokens, send=send)
+            draft = llm.draft(system or llm.STYLE_SYSTEM, prompt, max_tokens=max_tokens, timeout=60,
+                              model=llm.fast_model_name(), send=send, kind='polish')
         except llm.LLMUnavailable as error:
             return text, f'model unavailable: {error}'
         problems = guarded(draft, pick, extra)
@@ -152,7 +153,8 @@ def judge_against(candidate, facts, send=None):
     facts_text = '\n'.join(f"- {f.get('id')}: {f.get('claim')} (source: {f.get('source')})" for f in facts) or '- none'
     try:
         verdict = llm.draft_json(JUDGE_SYSTEM, JUDGE_USER.format(pick=json.dumps(shown, ensure_ascii=False, default=str),
-                                                                 facts=facts_text), JUDGE_SCHEMA, send=send)
+                                                                 facts=facts_text), JUDGE_SCHEMA,
+                                 model=llm.model_name(), send=send, kind='judge')
     except llm.LLMUnavailable:
         return None
     if not isinstance(verdict, dict) or not isinstance(verdict.get('argues_against'), bool):
@@ -172,7 +174,8 @@ def judge_for(candidate, facts, send=None):
     facts_text = '\n'.join(f"- {f.get('id')}: [{f.get('direction')}] {f.get('claim')} (source: {f.get('source')})" for f in facts) or '- none'
     try:
         verdict = llm.draft_json(JUDGE_SYSTEM, SUPPORT_USER.format(pick=json.dumps(shown, ensure_ascii=False, default=str),
-                                                                   facts=facts_text), SUPPORT_SCHEMA, send=send)
+                                                                   facts=facts_text), SUPPORT_SCHEMA,
+                                 model=llm.model_name(), send=send, kind='judge')
     except llm.LLMUnavailable:
         return None
     if not isinstance(verdict, dict) or not isinstance(verdict.get('supports'), bool):

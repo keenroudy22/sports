@@ -16,13 +16,16 @@ Stdlib only.
 import json
 import os
 import re
+import time
 import urllib.error
 import urllib.request
 
 DEFAULT_BASE = 'http://localhost:11434'
 DEFAULT_MODEL = 'qwen3:32b'
+DEFAULT_FAST_MODEL = 'qwen3:8b'
 NUM_CTX = 16384
 KEEP_ALIVE = '15m'
+_CALLS = []
 
 
 def base_url():
@@ -31,6 +34,43 @@ def base_url():
 
 def model_name():
     return os.environ.get('KEENROUDY_LLM_MODEL') or DEFAULT_MODEL
+
+
+def fast_model_name():
+    """The smaller local model for guarded rewrites and summaries; judgment keeps `model_name()`."""
+    return os.environ.get('KEENROUDY_LLM_FAST_MODEL') or DEFAULT_FAST_MODEL
+
+
+def reset_calls():
+    _CALLS.clear()
+
+
+def call_stats(reset=False):
+    """Small, value-free telemetry for the run status: model, latency, tokens and failures, never prompts or answers."""
+    by_model = {}
+    for row in _CALLS:
+        item = by_model.setdefault(row['model'], {'calls': 0, 'failures': 0, 'seconds': 0.0,
+                                                   'promptTokens': 0, 'outputTokens': 0})
+        item['calls'] += 1
+        item['failures'] += row['status'] != 'ok'
+        item['seconds'] += row['seconds']
+        item['promptTokens'] += row.get('promptTokens', 0)
+        item['outputTokens'] += row.get('outputTokens', 0)
+    for item in by_model.values():
+        item['seconds'] = round(item['seconds'], 2)
+    out = {'calls': len(_CALLS), 'failures': sum(row['status'] != 'ok' for row in _CALLS),
+           'seconds': round(sum(row['seconds'] for row in _CALLS), 2), 'byModel': by_model}
+    if reset:
+        reset_calls()
+    return out
+
+
+def record_call(model, kind, started, status, payload=None):
+    payload = payload if isinstance(payload, dict) else {}
+    _CALLS.append({'model': model, 'kind': kind, 'status': status,
+                   'seconds': time.monotonic() - started,
+                   'promptTokens': int(payload.get('prompt_eval_count') or 0),
+                   'outputTokens': int(payload.get('eval_count') or 0)})
 
 
 class LLMUnavailable(RuntimeError):
@@ -62,38 +102,54 @@ def strip_thinking(text):
     return re.sub(r'<think>.*?</think>', '', text or '', flags=re.DOTALL).strip()
 
 
-def draft(system, user, max_tokens=400, temperature=0.2, timeout=90, model=None, base=None, send=None):
+def draft(system, user, max_tokens=400, temperature=0.2, timeout=90, model=None, base=None, send=None, kind='text'):
     """One completion over Ollama's native chat endpoint, thinking off. Raises LLMUnavailable rather than returning ''.
 
     The OpenAI-compatible endpoint cannot switch a reasoning model's thinking off, and the model then
     spends the whole token budget on scratch work and returns nothing; the native endpoint can.
     """
-    body = {'model': model or model_name(), 'stream': False, 'think': False, 'keep_alive': KEEP_ALIVE,
+    chosen = model or model_name()
+    body = {'model': chosen, 'stream': False, 'think': False, 'keep_alive': KEEP_ALIVE,
             'options': {'num_ctx': NUM_CTX, 'temperature': temperature, 'num_predict': max_tokens},
             'messages': [{'role': 'system', 'content': system}, {'role': 'user', 'content': user}]}
-    raw = (send or transport)(f'{base or base_url()}/api/chat', body, {}, timeout)
+    started = time.monotonic()
     try:
+        raw = (send or transport)(f'{base or base_url()}/api/chat', body, {}, timeout)
         payload = json.loads(raw)
         text = strip_thinking(payload['message']['content'])
+        if not text:
+            raise LLMUnavailable('the model returned no text')
+    except LLMUnavailable:
+        record_call(chosen, kind, started, 'unavailable')
+        raise
     except (ValueError, KeyError, IndexError, TypeError) as error:
+        record_call(chosen, kind, started, 'malformed')
         raise LLMUnavailable(f'malformed completion: {error}') from None
-    if not text:
-        raise LLMUnavailable('the model returned no text')
+    record_call(chosen, kind, started, 'ok', payload)
     return text
 
 
-def draft_json(system, user, schema, max_tokens=400, temperature=0.0, timeout=90, model=None, base=None, send=None):
+def draft_json(system, user, schema, max_tokens=400, temperature=0.0, timeout=90, model=None, base=None, send=None,
+               kind='json'):
     """A structured answer over Ollama's native endpoint, constrained to `schema` (a JSON schema dict)."""
-    body = {'model': model or model_name(), 'stream': False, 'format': schema, 'think': False,
+    chosen = model or model_name()
+    body = {'model': chosen, 'stream': False, 'format': schema, 'think': False,
             'keep_alive': KEEP_ALIVE, 'options': {'num_ctx': NUM_CTX, 'temperature': temperature, 'num_predict': max_tokens},
             'messages': [{'role': 'system', 'content': system}, {'role': 'user', 'content': user}]}
-    raw = (send or transport)(f'{base or base_url()}/api/chat', body, {}, timeout)
+    started = time.monotonic()
     try:
+        raw = (send or transport)(f'{base or base_url()}/api/chat', body, {}, timeout)
         payload = json.loads(raw)
         content = strip_thinking(payload['message']['content'])
-        return json.loads(content)
+        answer = json.loads(content)
+    except LLMUnavailable:
+        record_call(chosen, kind, started, 'unavailable')
+        raise
     except (ValueError, KeyError, TypeError) as error:
+        record_call(chosen, kind, started, 'malformed')
         raise LLMUnavailable(f'malformed structured answer: {error}') from None
+    record_call(chosen, kind, started, 'ok', payload)
+    return answer
 
 
 # ------------------------------------------------------------------ house style

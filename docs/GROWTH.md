@@ -79,9 +79,10 @@ and timing may change.
 ## AI roles
 
 - Deterministic code owns prices, projections, records, grading, limits and what is actually scheduled.
-- Local Qwen can draft short copy variants and summarize settled analytics without sending data away. Its output must
-  pass the existing factual guards; it never chooses a side or invents a number.
-- Codex handles sourced research, weekly operational review, code changes and deployment checks.
+- Local Qwen 8B drafts short copy variants; Qwen 32B weighs already verified facts. The smaller model never makes a
+  news judgment, and every rewrite still passes the factual guards. Neither local model chooses a side or invents a number.
+- Codex handles sourced live research with an efficient low-reasoning model, the weekly operational review at medium
+  reasoning, and interactive code and deployment work at the model chosen for that job.
 - No model posts replies, follows accounts or acts on a trending topic automatically.
 
 ## Referral offers, kept separate

@@ -56,6 +56,8 @@ class ResearcherTests(unittest.TestCase):
             schema = json.loads((Path(folder) / 'facts.schema.json').read_text())
         command = seen['command']
         self.assertEqual(command[:2], ['codex', 'exec'])
+        self.assertEqual(command[command.index('--model') + 1], researcher.DEFAULT_CODEX_MODEL)
+        self.assertIn(f'model_reasoning_effort="{researcher.DEFAULT_CODEX_REASONING}"', command)
         for flag, value in (('--sandbox', 'read-only'), ('--cd', seen['cwd'])):
             self.assertEqual(command[command.index(flag) + 1], value)
         self.assertIn('web_search="live"', command)
