@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-28T22:50:49Z",
+  "updatedAt": "2026-09-29T01:02:38Z",
   "sources": [
     {
       "league": "NFL",
@@ -7,7 +7,7 @@
       "dateWindowUrls": [
         "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=3&limit=1000"
       ],
-      "retrievedAt": "2026-09-28T22:50:49Z",
+      "retrievedAt": "2026-09-29T01:02:38Z",
       "trainingCoverage": "season feed",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -29,7 +29,7 @@
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2026&seasontype=2&week=4&limit=1000&groups=37",
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2026&seasontype=2&week=4&limit=1000&groups=151"
       ],
-      "retrievedAt": "2026-09-28T22:50:49Z",
+      "retrievedAt": "2026-09-29T01:02:38Z",
       "trainingCoverage": "limited weekly provider sample",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -98727,9 +98727,9 @@
       "seasonType": 2,
       "season": 2026,
       "week": 3,
-      "state": "pre",
+      "state": "in",
       "completed": false,
-      "status": "Scheduled",
+      "status": "In Progress",
       "neutral": false,
       "timeValid": true,
       "source": "https://www.espn.com/nfl/game/_/gameId/401872963",
@@ -98739,7 +98739,7 @@
         "short": "Bears",
         "abbreviation": "CHI",
         "school": "Chicago",
-        "score": null,
+        "score": 7,
         "color": "#0b1c3a",
         "alternateColor": "#e64100"
       },
@@ -98749,7 +98749,7 @@
         "short": "Eagles",
         "abbreviation": "PHI",
         "school": "Philadelphia",
-        "score": null,
+        "score": 0,
         "color": "#06424d",
         "alternateColor": "#000000"
       },
@@ -98757,17 +98757,6 @@
         "id": "3933",
         "name": "Soldier Field",
         "indoor": false
-      },
-      "market": {
-        "provider": "DraftKings",
-        "spread": "+3.5",
-        "spreadOdds": "-115",
-        "spreadOpen": "-1.5",
-        "total": 42.5,
-        "totalOpen": "o46.5",
-        "overOdds": "-108",
-        "underOdds": "-112",
-        "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34118030"
       },
       "marketHistory": [
         {
@@ -99270,8 +99259,7 @@
           "retrievedAt": "2026-09-28T22:50:49Z",
           "phase": "pregame"
         }
-      ],
-      "marketRetrievedAt": "2026-09-28T22:50:49Z"
+      ]
     }
   ]
 }
