@@ -271,6 +271,13 @@ adding an Odds API request group, but `odds_api.PICK_BOOKS` prevents it from cha
 boosts are personal and absent from feeds: `python scripts/arbs.py boost +298 50 -195` distinguishes a true locked
 profit from a break-even-downside free roll.
 
+**SportsGameOdds shadow feed** (`scripts/sgo_shadow.py`): a second, evaluation-only look at fresh NFL/college prices.
+It is not an alert source. The key is header-only, every sample first checks the free usage endpoint, and an events
+request is allowed only when the service reports the Amateur plan's 2,500-object ceiling. It stops at 1,800 objects,
+reserves 700, fetches at most ten events with a six-hour gap and 30-object daily cap, and runs only with a football
+game inside 48 hours. Its compact local history lives at `~/.config/keenroudy/sgo-shadow.json`; no key or full API
+response is stored. A missing/changed usage limit or any request error fails closed and never stops the desk.
+
 **What's on the plate** (owner, 2026-09-24): an NFL player prop's card shows the player's ESPN headshot, a game line
 the teams' logos (a total both, a spread its side), a parlay and the house cards the chef. Images are fetched when
 the card is rendered and embedded; a failed fetch falls back to the chef. The photos are ESPN's and the logos the

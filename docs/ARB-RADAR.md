@@ -30,9 +30,16 @@ does not include Hard Rock, Fanatics or BetRivers. Its own arb guide says these 
 makes the free tier promising as a shadow feed for broader sports and comparison testing, but not yet trustworthy as
 the sole source of an executable phone alert.
 
-Before paying for anything, connect the free key in shadow mode, measure how many candidates remain available when
-checked in the book apps, and record misses without notifying. Only evidence that it materially improves executable
-coverage can justify proposing a paid feed to the owner.
+`scripts/sgo_shadow.py` is that shadow mode. The key stays in `~/.config/keenroudy/env` as
+`SPORTSGAMEODDS_API_KEY` and is sent only in the `x-api-key` header. Before every event sample it calls the free
+`/account/usage` endpoint. It refuses to sample unless the account reports the Amateur plan's exact 2,500-object
+monthly ceiling, stops at 1,800 used (a 700-object reserve), asks for at most ten events, takes at most 30 objects a
+day, waits six hours between samples and runs only when an NFL or college game is inside 48 hours. The local state is
+`~/.config/keenroudy/sgo-shadow.json`; it holds compact counts and never the key or a full odds response.
+
+This feed never sends an alert. It silently measures fresh exact-line candidates so we can learn whether a
+ten-minute free feed is still actionable. Only evidence that it materially improves executable coverage can justify
+proposing a paid feed to the owner, and no upgrade happens without their explicit approval.
 
 Sources: [SportsGameOdds pricing](https://sportsgameodds.com/pricing),
 [rate limits](https://sportsgameodds.com/docs/info/rate-limiting),

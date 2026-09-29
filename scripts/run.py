@@ -44,6 +44,7 @@ import pricing
 import refresh
 import researcher
 import scoreboard
+import sgo_shadow
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -1459,6 +1460,18 @@ def _run(args, now, slot, kinds, status):
         if not args.dry_run and alert("Kook'n Arb Radar", arbs.message(hit), now=now):
             status['arbs']['alerted'] += 1
     slate = load_json(ROOT / 'site' / 'data' / 'slate.json', {'games': []})
+    if not args.dry_run:
+        try:
+            shadow = sgo_shadow.sample(slate, now)
+            status['sgoShadow'] = shadow
+            if shadow['sampled']:
+                log(f"SportsGameOdds shadow: {shadow['events']} events, {shadow['candidates']} candidates; "
+                    f"usage was {shadow['usage']}/{shadow['limit']}")
+            elif 'not configured' not in shadow['reason']:
+                log('SportsGameOdds shadow skipped:', shadow['reason'])
+        except Exception as error:  # an optional evaluation feed can never stop the desk
+            status['sgoShadow'] = {'sampled': False, 'error': type(error).__name__}
+            log(f'SportsGameOdds shadow unavailable ({type(error).__name__}); the desk continues')
     slate_games = {g['id']: g for g in slate.get('games', []) if g.get('league') in ('NFL', 'CFB')}
     games = live_games(now, slate_games)
     records = features.load()

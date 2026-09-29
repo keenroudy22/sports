@@ -127,6 +127,9 @@ Handy commands (from `~/Projects/sports`):
   the owner's phone through ntfy. It never places a wager, never posts publicly, never calls a middle an arb and
   always says to verify both apps, limits and settlement rules before acting. Account-specific boosts use the manual
   calculator because feeds cannot see them. Hard Rock is comparison-only and cannot become an official play.
+- **SportsGameOdds stays free and silent** (2026-09-29): its Amateur key is evaluation-only. Shadow mode must check
+  `/account/usage` before each event sample, run only when the reported monthly ceiling is exactly 2,500 objects,
+  stop at 1,800, keep its six-hour/30-object daily caps, and never alert, publish or change a play. Never upgrade it.
 - **Daily presence, never a forced play** (2026-09-29): publish at least one useful X post every day. A receipt,
   menu, official play, watchlist, verified injury angle, cashed post or Climb update satisfies the day; when none
   exists, `receipts.book` schedules the public record at 6 PM. Daily posting never lowers a play gate or creates a
