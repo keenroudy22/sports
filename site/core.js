@@ -203,6 +203,22 @@
   const american = value => value >= 2 ? Math.round((value - 1) * 100) : Math.round(-100 / (value - 1));
   const bookName = book => String(book || '').replace(/\s+/g, '').toLowerCase();
 
+  /* Equal-return stakes for two outcomes that exhaust the market. This is math only: availability, limits,
+     settlement rules and voids still have to be checked in both sportsbook apps. */
+  const arbSplit = (first, second, bankroll = 100) => {
+    const a = Number(first), b = Number(second), total = Number(bankroll);
+    if (!Number.isFinite(a) || !Number.isFinite(b) || a === 0 || b === 0 || !Number.isFinite(total) || total <= 0)
+      return { valid: false, reason: 'Enter two non-zero American prices and a positive bankroll.' };
+    const d1 = decimal(a), d2 = decimal(b), implied = 1 / d1 + 1 / d2;
+    const firstStake = Math.round(total * (1 / d1) / implied * 100) / 100;
+    const secondStake = Math.round((total - firstStake) * 100) / 100;
+    const returned = Math.min(firstStake * d1, secondStake * d2);
+    const profit = returned - total;
+    return { valid: true, arb: profit > 0.004, firstStake, secondStake, return: Math.round(returned * 100) / 100,
+      profit: Math.round(profit * 100) / 100, roi: Math.round(10000 * profit / total) / 100,
+      implied: Math.round(implied * 10000) / 100 };
+  };
+
   const eligible = (row, now) => row.state === 'open' && row.odds != null
     && (!row.expiresAt || Date.parse(row.expiresAt) > now) && (!row.kickoff || Date.parse(row.kickoff) > now);
 
@@ -434,7 +450,7 @@
     if (view === 'defense') return { view: 'stats', tab: 'defense' };
     /* Bare #scores was the old football board; only #scores/<league> is the other-sports page. */
     if (view === 'scores' && rest[0]) return { view: 'scores', league: rest[0].toUpperCase() };
-    const known = ['today', 'games', 'stats', 'model', 'record', 'board', 'ticket', 'research', 'more'];
+    const known = ['today', 'games', 'stats', 'model', 'record', 'board', 'ticket', 'research', 'arbs', 'more'];
     if (known.includes(view)) return { view };
     return { view: LEGACY[view] || 'today' };
   };
@@ -443,6 +459,6 @@
 
   return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone,
     column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
-    rankDefenses, rankOf, rankTone, decimal, american, eligible, summarizeTicket, ticketText,
+    rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
     unitsFor, stakeOf, recordOf, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, shardOf, BASE };
 });

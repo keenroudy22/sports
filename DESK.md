@@ -278,6 +278,10 @@ reserves 700, fetches at most ten events with a six-hour gap and 30-object daily
 game inside 48 hours. Its compact local history lives at `~/.config/keenroudy/sgo-shadow.json`; no key or full API
 response is stored. A missing/changed usage limit or any request error fails closed and never stops the desk.
 
+The site's **Kook'n Arb Radar** page (`#arbs`) is public but the candidate feed is not. It explains the guards and
+offers a local two-price equal-return calculator (`core.arbSplit`); no key or price feed reaches the browser. It must
+never present an example as currently available or turn a shadow candidate into a public recommendation.
+
 **What's on the plate** (owner, 2026-09-24): an NFL player prop's card shows the player's ESPN headshot, a game line
 the teams' logos (a total both, a spread its side), a parlay and the house cards the chef. Images are fetched when
 the card is rendered and embedded; a failed fetch falls back to the chef. The photos are ESPN's and the logos the

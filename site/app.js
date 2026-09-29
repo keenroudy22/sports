@@ -20,6 +20,7 @@
     stat: null, defensePos: 'WR', defenseStat: 'recYds', defenseScope: 'season', defenseOrder: 'soft',
     logSeason: 'all', scoresLeague: 'MLB', scoresDate: null, recordScope: 'all',
     ticket: saved.get('ticket', []), stake: saved.get('stake', { amount: 1, mode: 'units', unit: 10 }),
+    arb: saved.get('arb', { first: 298, second: -195, bankroll: 181.55 }),
   };
 
   const cache = new Map();
@@ -51,7 +52,7 @@
     more: '<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
   };
   const TABS = [['today', 'Today'], ['board', 'Board'], ['games', 'Games'], ['stats', 'Stats'], ['record', 'Record'], ['more', 'More']];
-  const TAB_FOR = { game: 'games', player: 'stats', team: 'stats', model: 'more', ticket: 'board', research: 'more', scores: 'more' };
+  const TAB_FOR = { game: 'games', player: 'stats', team: 'stats', model: 'more', ticket: 'board', research: 'more', scores: 'more', arbs: 'more' };
 
   /* The two model generations, in plain words. The data keeps its own version names. */
   const MODEL_NAME = { 'v2.0': 'Our model', v1: 'First model', 'v1 replay': 'First model replay' };
@@ -1082,13 +1083,50 @@
         : empty(`No ${league} games in the window`, block.status === 'ok' ? 'The provider returned no games for these dates.' : 'The feed is unavailable; the last good data is kept.')}`;
   }
 
+  /* ---------- private radar, public calculator ---------- */
+
+  const dollars = value => {
+    const n = Number(value);
+    return Number.isFinite(n) ? `${n < 0 ? '−' : ''}$${Math.abs(n).toFixed(2)}` : DASH;
+  };
+  const arbSummary = result => {
+    if (!result.valid) return `<div class="arb-result arb-wait"><p class="eyebrow">Waiting for prices</p><h3>Enter both sides</h3><p>${esc(result.reason)}</p></div>`;
+    const title = result.arb ? 'The math shows an arb' : 'These prices are not an arb';
+    const note = result.arb
+      ? `${dollars(result.profit)} remains if either side wins and both bets are accepted and settled as expected.`
+      : `The implied chances total ${result.implied.toFixed(2)}%. They must be below 100% for a locked return.`;
+    return `<div class="arb-result ${result.arb ? 'arb-yes' : 'arb-no'}"><p class="eyebrow">${result.arb ? 'Positive split' : 'No locked return'}</p><h3>${title}</h3>
+      <div class="stats arb-stats">${stat('Side A stake', dollars(result.firstStake))}${stat('Side B stake', dollars(result.secondStake))}${stat('Lowest return', dollars(result.return))}${stat(result.arb ? 'Difference' : 'Shortfall', dollars(result.profit), `${result.roi > 0 ? '+' : ''}${result.roi.toFixed(2)}%`)}</div>
+      <p>${esc(note)}</p></div>`;
+  };
+
+  function viewArbs() {
+    const result = C.arbSplit(state.arb.first, state.arb.second, state.arb.bankroll);
+    return `${head("Kook'n Arb Radar", 'Two books. Every outcome covered. Exact math—with the catches left in.')}
+      <div class="arb-hero card"><div><span class="radar-dot" aria-hidden="true"></span><span class="pill pill-reference">Private testing</span></div>
+        <h2>We scan. We verify. We do not chase stale numbers.</h2>
+        <p>The live radar compares fresh prices privately. A candidate never becomes a Kook’n play, and the public page never claims a price is still available.</p>
+        <div class="arb-guard"><span><b>Exact markets</b><small>Same event, period and line</small></span><span><b>Different books</b><small>Both sides priced from feeds</small></span><span><b>Human check</b><small>Apps, limits and rules first</small></span></div>
+      </div>
+      ${section('Check the math', `<div class="card arb-calc"><div class="arb-fields">
+          <label class="field">Side A American odds<input inputmode="numeric" type="number" step="1" data-arb="first" value="${esc(state.arb.first)}" aria-label="Side A American odds"></label>
+          <label class="field">Side B American odds<input inputmode="numeric" type="number" step="1" data-arb="second" value="${esc(state.arb.second)}" aria-label="Side B American odds"></label>
+          <label class="field">Total bankroll<input inputmode="decimal" type="number" min="0.01" step="0.01" data-arb="bankroll" value="${esc(state.arb.bankroll)}" aria-label="Total bankroll"></label>
+        </div><div id="arb-summary">${arbSummary(result)}</div></div>`)}
+      ${section('The non-negotiables', `<div class="card arb-rules"><ol><li><b>Exact means exact.</b> Same event, market, period and line. A middle is not labeled an arb.</li>
+        <li><b>Both bets must still exist.</b> Prices can disappear before the second bet is accepted.</li>
+        <li><b>Settlement rules must match.</b> Voids, limits, account restrictions and different house rules can break the math.</li>
+        <li><b>No automatic wagering.</b> The radar never touches a sportsbook account or places a bet.</li></ol></div>`)}
+      <div class="notice arb-notice"><strong>Entertainment and calculation only.</strong> This calculator does not know whether either price is available to you. Verify the exact event, market, line, period, price, limits and settlement rules in both apps before doing anything.</div>`;
+  }
+
   /* ---------- more ---------- */
 
   async function viewMore() {
     const count = state.ticket.length;
     const link = (href, label, note) => `<a href="${href}"${href.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}><span>${label}</span><small>${note}</small></a>`;
     return `${head('More', '')}
-      <div class="card menu">${link('https://discord.gg/CvNTUUSnNz', 'Join the Discord', 'Confirmed plays about 10 minutes before X')}${link('https://x.com/keenkooks', 'Follow on X', '@keenkooks')}${link('#model', 'The scoreboard', 'Our numbers graded against the closing line')}${link('#ticket', 'Your ticket', count ? `${count} line${count === 1 ? '' : 's'}` : 'Parlay builder')}
+      <div class="card menu">${link('https://discord.gg/CvNTUUSnNz', 'Join the Discord', 'Confirmed plays about 10 minutes before X')}${link('https://x.com/keenkooks', 'Follow on X', '@keenkooks')}${link('#arbs', "Kook'n Arb Radar", 'Private scanner and public calculator')}${link('#model', 'The scoreboard', 'Our numbers graded against the closing line')}${link('#ticket', 'Your ticket', count ? `${count} line${count === 1 ? '' : 's'}` : 'Parlay builder')}
       ${link('#research', 'Research desk', 'Injuries and analyst notes')}${link('#stats/defense', 'Defense vs position', 'Rankings')}${link('#scores/NBA', 'NBA scores', 'Schedules and scores')}${link('#scores/MLB', 'MLB scores', 'Schedules and scores')}</div>
       <div class="section card" style="padding:14px"><p class="prose" style="margin:0"><b>About.</b> Kook'n is a sports stats engine graded against the betting market. The model publishes score and player projections before kickoff, every forecast is kept, and the scoreboard grades them against the closing line. Stats come from ESPN’s public feeds and nflverse. For entertainment only; nothing here is betting advice.</p></div>`;
   }
@@ -1231,7 +1269,8 @@
   /* ---------- shell ---------- */
 
   const VIEWS = { today: viewToday, games: viewGames, game: viewGame, stats: viewStats, player: viewPlayer, team: viewTeam,
-    model: viewModel, record: viewRecord, board: viewBoard, ticket: viewTicket, research: viewResearch, scores: viewScores, more: viewMore };
+    model: viewModel, record: viewRecord, board: viewBoard, ticket: viewTicket, research: viewResearch, scores: viewScores,
+    arbs: viewArbs, more: viewMore };
   document.addEventListener('click', event => {
     const button = event.target.closest('[data-set^="boardMode:"]');
     if (button) { const mode = button.dataset.set.split(':')[1]; state.boardMode = mode; location.hash = mode === 'props' ? '#board/props' : '#board'; }
@@ -1339,7 +1378,12 @@
 
   document.addEventListener('input', event => {
     const field = event.target;
-    if (field.dataset.input === 'playerQuery') {
+    if (field.dataset.arb) {
+      state.arb[field.dataset.arb] = field.value;
+      saved.set('arb', state.arb);
+      const box = $('#arb-summary');
+      if (box) box.innerHTML = arbSummary(C.arbSplit(state.arb.first, state.arb.second, state.arb.bankroll));
+    } else if (field.dataset.input === 'playerQuery') {
       state.playerQuery = field.value;
       get(`app/players/${dataLeague()}.json`).then(index => { const box = $('#player-results'); if (box) box.innerHTML = playerResults(index, dataLeague()); });
     } else if (field.dataset.input) {

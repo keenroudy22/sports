@@ -396,6 +396,42 @@ table.data a { font-weight: 600; }
 .field { display: flex; flex-direction: column; gap: 5px; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: var(--faint); text-transform: uppercase; }
 .field input { min-height: 40px; padding: 0 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 9px; color: var(--text); font: inherit; font-size: 14px; }
 
+/* Kook'n Arb Radar: live candidates stay private; the public page teaches and checks the stake math. */
+.arb-hero { padding: 18px; background: radial-gradient(circle at 100% 0, rgba(94, 234, 164, .14), transparent 44%), var(--surface); }
+.arb-hero h2 { margin: 13px 0 7px; max-width: 25ch; font-family: 'Barlow Condensed', sans-serif; font-size: 28px; line-height: 1.05; text-transform: uppercase; }
+.arb-hero > p { margin: 0; max-width: 68ch; color: var(--dim); font-size: 13px; line-height: 1.55; }
+.radar-dot { display: inline-block; width: 9px; height: 9px; margin-right: 7px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 0 6px rgba(94, 234, 164, .10); }
+.arb-guard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+.arb-guard span { min-width: 0; padding: 10px; background: rgba(0, 0, 0, .16); border: 1px solid var(--line); border-radius: 10px; }
+.arb-guard b, .arb-guard small { display: block; }
+.arb-guard b { font-size: 12px; }
+.arb-guard small { margin-top: 3px; color: var(--faint); font-size: 10px; line-height: 1.35; }
+.arb-calc { padding: 14px; }
+.arb-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.arb-fields input { width: 100%; font-variant-numeric: tabular-nums; }
+.arb-result { margin-top: 14px; padding: 14px; border-radius: 11px; border: 1px solid var(--line); background: var(--bg); }
+.arb-result h3 { margin: 0 0 10px; font-size: 17px; }
+.arb-result > .eyebrow { margin-bottom: 5px; }
+.arb-result > p:last-child { margin: 10px 1px 0; color: var(--dim); font-size: 12px; line-height: 1.5; }
+.arb-result.arb-yes { border-color: rgba(63, 217, 139, .55); background: rgba(63, 217, 139, .06); }
+.arb-result.arb-yes h3 { color: var(--green); }
+.arb-result.arb-no { border-color: rgba(255, 180, 61, .42); }
+.arb-result.arb-no h3 { color: var(--amber); }
+.arb-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.arb-stats .stat { background: rgba(0, 0, 0, .14); }
+.arb-rules { padding: 14px 16px; }
+.arb-rules ol { margin: 0; padding-left: 21px; }
+.arb-rules li { padding: 5px 0 5px 4px; color: var(--dim); font-size: 13px; line-height: 1.5; }
+.arb-rules b { color: var(--text); }
+.arb-notice { margin-top: 20px; }
+
+@media (max-width: 620px) {
+  .arb-guard { grid-template-columns: 1fr; }
+  .arb-fields { grid-template-columns: 1fr 1fr; }
+  .arb-fields .field:last-child { grid-column: 1 / -1; }
+  .arb-stats { grid-template-columns: 1fr 1fr; }
+}
+
 @media (min-width: 860px) {
   .grid-2 { grid-template-columns: 1fr 1fr; }
   .ticket-bar { left: auto; right: 28px; bottom: 28px; width: 330px; }

@@ -41,6 +41,14 @@ This feed never sends an alert. It silently measures fresh exact-line candidates
 ten-minute free feed is still actionable. Only evidence that it materially improves executable coverage can justify
 proposing a paid feed to the owner, and no upgrade happens without their explicit approval.
 
+## Public page
+
+`#arbs` on the site explains the private radar and includes a browser-only equal-return calculator. It never receives
+the API key, calls an odds provider, or publishes a live candidate. A visitor supplies two American prices and a
+bankroll; `core.arbSplit()` shows the equal-return stakes and says plainly when the prices are not an arb. The page
+also names the real execution risks: a moved price, an unaccepted second bet, limits, voids and mismatched settlement
+rules. The public page is an educational tool; private alerts remain on the owner's phone.
+
 Sources: [SportsGameOdds pricing](https://sportsgameodds.com/pricing),
 [rate limits](https://sportsgameodds.com/docs/info/rate-limiting),
 [arb API guide](https://sportsgameodds.com/use-cases/arbitrage-betting-api), and

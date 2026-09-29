@@ -110,6 +110,22 @@ test('an illustrative parlay multiplies separate-game prices at one book', () =>
   assert.equal(C.american(1.5), -200);
 });
 
+test('arb calculator splits two prices equally and does not call ordinary juice an arb', () => {
+  const split = C.arbSplit(298, -195, 181.55);
+  assert.equal(split.valid, true);
+  assert.equal(split.arb, true);
+  assert.ok(Math.abs(split.firstStake - 50) <= 0.02);
+  assert.ok(Math.abs(split.secondStake - 131.55) <= 0.02);
+  assert.ok(Math.abs(split.profit - 17.45) <= 0.03);
+  assert.ok(Math.abs(split.roi - 9.61) <= 0.02);
+  assert.equal(C.arbSplit(-110, -110, 100).arb, false);
+  assert.equal(C.arbSplit(0, -110, 100).valid, false);
+});
+
+test('arb radar has a shareable route', () => {
+  assert.deepEqual(C.parseRoute('#arbs'), { view: 'arbs' });
+});
+
 test('a ticket refuses what the sportsbook would price differently or not at all', () => {
   const reason = rows => C.summarizeTicket(rows, 1, 'units', 10, now).reason;
   assert.match(reason([leg('1', -110)]), /at least two/);
