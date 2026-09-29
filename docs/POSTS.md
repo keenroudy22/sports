@@ -46,7 +46,7 @@ Confirmed official plays, the Pick of the Day and fun/challenge tickets use the 
 says "plays hit Discord first," never "guaranteed bets" or anything that implies a win.
 | **Cashed** | As a win settles (9 AM to 12:30 AM, within three hours) | `✅ Cashed: Iowa/Michigan over 38.5 (-105, ESPN BET)` (or `✅ POTD cashed: ...`, `✅ +2506 5-leg lotto cashed (ESPN BET)`, `✅ 80/20 Climb step 2 cashed: $75 → $146` / `$48 banked. $117 rides step 3.`) then the tag and the original post's link | none (it quotes the original) | `receipts.cashed` |
 | **Menu** (alone) | 8:45 AM on a game day with no receipt | `Today: 6 plays` then `Iowa/Michigan 3:30 PM` per game | `site/img/kitchen-menu.png` | `receipts.menu` |
-| **The book** | 6 PM on a day with nothing else | `Season through Sep 28: 23-22` then by kind | `site/img/kitchen-book.png` | `receipts.book` |
+| **The book** | 6 PM on a day with nothing else; the daily-presence fallback, never a forced play | `Season through Sep 28: 23-22` then by kind | `site/img/kitchen-book.png` | `receipts.book` |
 
 An injury angle only exists after a newer projection removed the player and redistributed their role, and after a
 book price was captured following the news. It never counts as a play; a qualifying official play posts separately.

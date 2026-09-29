@@ -122,6 +122,11 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Daily presence, never a forced play** (2026-09-29): publish at least one useful X post every day. A receipt,
+  menu, official play, watchlist, verified injury angle, cashed post or Climb update satisfies the day; when none
+  exists, `receipts.book` schedules the public record at 6 PM. Daily posting never lowers a play gate or creates a
+  pick. Add a sport to official plays only after its paper trial shows a real edge; schedules and scores may appear
+  earlier as factual coverage.
 - **The daily card** (2026-09-28): five straight plays on Saturday and Sunday, a mix of game lines and player props
   (three of a kind at most); one play on other days, the NFL game's on an NFL night (`gates.card_cap`, ordered by
   `run.rank_card`). Never leave an NFL day without a post. A fun parlay with alternate lines every Saturday (college,

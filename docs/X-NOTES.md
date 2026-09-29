@@ -80,3 +80,23 @@ What this changes for Kook'n:
    earn weak interaction even when the account already has reach.
 6. Treat anticipation, receipts and questions as measured experiments. Raw view totals from large accounts are ideas,
    not proof; Kook'n keeps a format only when its own profile visits or follows improve over at least eight posts.
+
+## Follow-up read, Sep 29
+
+A fresh read reinforced that recurring, saveable series outperform an account simply saying more. These figures were
+captured at different post ages and from accounts with very different audiences, so they are creative clues rather
+than causal comparisons.
+
+| Post shape | Example seen | Views | Likes | Saves |
+|---|---|---:|---:|---:|
+| Saveable matchup card | Cody Brown: one-game matchup sheet | 117,549 | 163 | 407 |
+| Winner continuation | Cody Brown: next step quoting the prior winner | 149,745 | 195 | 17 |
+| Weekly recap | Cody Brown: complete weekly results | 110,128 | 199 | 1 |
+| Long single-game analysis | Cody Brown: dense matchup write-up | 8,041 | 19 | 5 |
+| Teaser quoting a ready ticket | Dan's AI Sports Picks | 98,575 | 90 | 8 |
+| Recurring short video | Swicks: Monday Night Football series | 53,037 | 464 | 63 |
+| New seven-day challenge | Swicks: “7 Days 7 Locks” early sample | 4,561 | 140 | 49 |
+
+The useful lesson is not to copy “locks” or force seven bets. Kook'n should show up daily with a recognizable series:
+the 80/20 Climb, complete receipts, a saveable watchlist or a factual slate/news post. The quiet-day book remains the
+floor. More volume is earned by useful information; official plays still have to clear the model and price gates.

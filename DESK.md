@@ -233,7 +233,9 @@ the exact same text and public card. The mirror state lives beside the Buffer en
 later check cannot post it twice. `DISCORD_WEBHOOK_URL` stays only in `~/.config/keenroudy/env`; a failure retries and
 alerts the owner's phone through ntfy. Posts that predate this mirror have no payload and are never replayed.
 
-**A post every day** (`scripts/receipts.py`, all in the same frame, never a stat line):
+**A post every day** (owner confirmed 2026-09-29; `scripts/receipts.py`, all in the same frame, never a stat line):
+daily presence is a publishing rule, not a betting rule. Any useful scheduled post satisfies it. Never relax a play
+gate to fill the calendar; if the day has nothing else, the public book closes the gap at 6 PM.
 
 | When (Eastern) | Post |
 |---|---|

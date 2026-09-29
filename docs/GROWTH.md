@@ -7,6 +7,9 @@ rate and 5 profile visits over the prior four weeks; nearly all of that reach ar
 
 ## The job each post does
 
+- **Daily presence builds the habit.** Publish at least one useful post every day, but never manufacture a play to
+  do it. Receipts, menus, watchlists, verified news, cashed posts and challenge updates all count. On a genuinely
+  quiet day, the 6 PM public record card is the fallback.
 - **Individual plays create reach.** One decision, price, book, our number and a readable card. These have been the
   strongest repeatable format in the first measured sample.
 - **The ladder creates a story.** Every rung states the current stake, target payout and prior result. Wins and losses
@@ -60,6 +63,12 @@ The stretch target requires roughly 10,000 additional followers in one season. T
 reach alone. The leading goals are therefore: first earn 25,000 weekly impressions, then convert at least 1% of those
 impressions into profile visits and at least 10% of profile visits into follows. If those rates do not move, change
 the hook or profile before increasing post volume.
+
+Daily posting broadens the number of chances to be discovered; it does not justify more official picks. Expand the
+calendar in stages: use MLB, NBA, CBB and soccer schedules, results and verified news as factual coverage; keep new
+betting models in paper trials; promote a sport to official plays only after a documented held-out edge and the same
+price, news, grading and record safeguards used for football. Basketball is the first active paper trial, with MLB
+and soccer following when their models and feeds are ready.
 
 ## Four-week experiment cycle
 
