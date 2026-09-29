@@ -11101,5 +11101,52 @@
         "risk": "Uncalibrated chance; a player line turns on a handful of touches. 2 games this season, the role settled by last season. A player who does not take the field is voided under the book's rule; one who leaves hurt is graded. Confidence 2 of 10."
       }
     ]
+  },
+  {
+    "league": "NFL",
+    "publishedAt": "2026-09-29T03:30:05Z",
+    "summary": "11:30 PM ET run, published at 11:30 PM ET. Settled 1: DeVonta Smith OVER 71.5 receiving yards loss. Nothing to close. Nothing published. odds_api.py: CFB: skipped (no game inside a week) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "settled",
+        "favorite": false,
+        "modelLean": true,
+        "position": "WR",
+        "athleteId": "4241478",
+        "market": "recYds",
+        "line": 71.5,
+        "direction": "over",
+        "gameIds": [
+          "NFL-401872963"
+        ],
+        "book": "DraftKings",
+        "odds": -112,
+        "projection": 91.5,
+        "edge": "v2 receiving yards 91.5 (80% range 26.9 to 156.2). Chance of over 71.5: 65.4% (uncalibrated: no graded history against a line yet), against 52.8% break-even at -112: +12.6 points, +0.238u per unit.",
+        "cutoff": "OVER 71.5 at -112 or better. Closed to new entries at 72+, or at -127 or worse at 71.5.",
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-27T23:50:34Z",
+        "quotedAt": "2026-09-28T15:22:01Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 11:22 AM ET capture across 2 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-09-28T21:30:00Z",
+        "title": "DeVonta Smith OVER 71.5 receiving yards",
+        "id": "NFL-2026-W3-smith-over-71-5-recyds-dk",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401872963",
+          "https://api.sharpapi.io/api/v1/odds"
+        ],
+        "why": "Prop lean on our number alone: our projection is 91.5 against 71.5 and the over reads 65.4% on the raw curve, which has no graded history against a line yet, so the true chance is lower than that. Last 10 games: 2 of 10 over 71.5. Role: 1st of 4 PHI WRs by projected targets, 10.4 a game. Defense: CHI allows 144.5 receiving yards a game to WRs, 17 of 32 this season (1 is stingiest).",
+        "risk": "Uncalibrated chance; a player line turns on a handful of touches. 2 games this season, the role settled by last season. A player who does not take the field is voided under the book's rule; one who leaves hurt is graded. Confidence 2 of 10.",
+        "result": "loss",
+        "actual": "DeVonta Smith: 65 receiving yards",
+        "settledAt": "2026-09-29T03:30:05Z",
+        "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401872963",
+        "actualValue": 65,
+        "units": -1
+      }
+    ]
   }
 ]
