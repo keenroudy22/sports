@@ -69,8 +69,11 @@ def monthly_usage(payload):
     """Return (used, maximum, end time), or None. Unknown usage always stops the metered events call."""
     try:
         month = payload['data']['rateLimits']['per-month']
-        return (int(month['currentIntervalEntities']), int(month['maxEntitiesPerInterval']),
-                month.get('currentIntervalEndTime'))
+        # The live v2 response uses hyphenated names; older docs and some accounts still show the verbose names.
+        used = month.get('current-entities', month.get('currentIntervalEntities'))
+        maximum = month.get('max-entities', month.get('maxEntitiesPerInterval'))
+        end = month.get('interval-end-time', month.get('currentIntervalEndTime'))
+        return int(used), int(maximum), end
     except (KeyError, TypeError, ValueError):
         return None
 

@@ -36,6 +36,10 @@ def quote(price, line=41.5, updated='2026-09-29T17:55:00Z'):
 
 
 class BudgetTests(unittest.TestCase):
+    def test_live_hyphenated_usage_shape_is_supported(self):
+        payload = {'data': {'rateLimits': {'per-month': {'current-entities': 0, 'max-entities': 2500}}}}
+        self.assertEqual(sgo_shadow.monthly_usage(payload), (0, 2500, None))
+
     def test_unknown_or_nonfree_ceiling_fails_closed(self):
         self.assertIn('numeric', sgo_shadow.due({}, SLATE, NOW, None))
         self.assertIn('not the confirmed free-tier', sgo_shadow.due({}, SLATE, NOW, (0, 100000, None)))
