@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Kook'n Sports Discord</title>
+  <desc id="desc">The kitchen is open. Free plays, honest receipts, the 80/20 Climb and live game talk.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#160f0b"/>
+      <stop offset="0.52" stop-color="#2a1c14"/>
+      <stop offset="1" stop-color="#101620"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.42" r="0.54">
+      <stop offset="0" stop-color="#f28c28" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#f28c28" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse">
+      <path d="M42 0H0V42" fill="none" stroke="#f6f1e6" stroke-opacity="0.035"/>
+    </pattern>
+    <clipPath id="chef"><circle cx="965" cy="326" r="178"/></clipPath>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <rect width="1200" height="675" fill="url(#glow)"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <rect x="24" y="24" width="1152" height="627" rx="28" fill="none" stroke="#f28c28" stroke-opacity="0.7" stroke-width="2"/>
+
+  <g transform="translate(66 62)" fill="none" stroke="#f28c28" stroke-width="7" stroke-linecap="round">
+    <circle cx="34" cy="34" r="26"/>
+    <path d="M60 34h58"/>
+    <circle cx="34" cy="34" r="12" stroke-width="4" stroke-opacity="0.6"/>
+  </g>
+  <text x="204" y="104" fill="#f6f1e6" font-family="Arial, Helvetica, sans-serif" font-size="35" font-weight="900" letter-spacing="6">KOOK'N SPORTS</text>
+
+  <text x="68" y="222" fill="#f28c28" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="800" letter-spacing="4">THE KITCHEN IS OPEN</text>
+  <text x="64" y="309" fill="#f6f1e6" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="900">JOIN THE</text>
+  <text x="64" y="386" fill="#f6f1e6" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="900">DISCORD</text>
+
+  <g font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#f6f1e6">
+    <rect x="68" y="430" width="178" height="48" rx="24" fill="#f28c28" fill-opacity="0.17" stroke="#f28c28" stroke-opacity="0.55"/>
+    <text x="157" y="461" text-anchor="middle">FREE PLAYS</text>
+    <rect x="258" y="430" width="228" height="48" rx="24" fill="#5eeaa4" fill-opacity="0.12" stroke="#5eeaa4" stroke-opacity="0.55"/>
+    <text x="372" y="461" text-anchor="middle">HONEST RECEIPTS</text>
+    <rect x="68" y="492" width="212" height="48" rx="24" fill="#5eeaa4" fill-opacity="0.12" stroke="#5eeaa4" stroke-opacity="0.55"/>
+    <text x="174" y="523" text-anchor="middle">80/20 CLIMB</text>
+    <rect x="292" y="492" width="254" height="48" rx="24" fill="#f28c28" fill-opacity="0.17" stroke="#f28c28" stroke-opacity="0.55"/>
+    <text x="419" y="523" text-anchor="middle">LIVE GAME TALK</text>
+  </g>
+
+  <text x="68" y="608" fill="#5eeaa4" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="800">discord.gg/CvNTUUSnNz</text>
+
+  <g filter="url(#shadow)">
+    <circle cx="965" cy="326" r="196" fill="#f6f1e6" fill-opacity="0.07" stroke="#f28c28" stroke-width="4"/>
+    <circle cx="965" cy="326" r="178" fill="#3d2a1d"/>
+    <image href="../kookn-chef.png" x="787" y="148" width="356" height="356" preserveAspectRatio="xMidYMid meet" clip-path="url(#chef)"/>
+  </g>
+  <path d="M820 492c42 34 91 51 145 51s103-17 145-51" fill="none" stroke="#5eeaa4" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="837" cy="493" r="7" fill="#5eeaa4"/>
+  <circle cx="1093" cy="493" r="7" fill="#5eeaa4"/>
+  <text x="965" y="590" text-anchor="middle" fill="#f6f1e6" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" letter-spacing="1">FREE • PUBLIC RECORD • NO GUARANTEES</text>
+</svg>
