@@ -1,5 +1,14 @@
 {
  "calibration": {
+  "CFB/prop": {
+   "at": "2026-09-29T12:30:05Z",
+   "heldOut": {
+    "k": -116.06,
+    "raw": -126.35
+   },
+   "k": 0.23,
+   "n": 398
+  },
   "NFL/prop": {
    "at": "2026-09-23T21:06:27Z",
    "heldOut": {
@@ -51,6 +60,172 @@
    "segment": "NFL/total",
    "to": true,
    "why": "no edge on either backtest season: NFL totals our number likes went 50.8% and 49.6% at the opening number, under the 52.4% a -110 price needs; reopens when what it refuses beats the close"
+  },
+  {
+   "at": "2026-09-29T12:30:05Z",
+   "evidence": {
+    "current": null,
+    "heldOut": {
+     "k": -116.06,
+     "raw": -126.35
+    },
+    "hitRate": 0.515,
+    "kAll": 0.23,
+    "kTrain": 0.57,
+    "meanRaw": 0.621,
+    "n": 398,
+    "segment": "CFB/prop"
+   },
+   "from": null,
+   "knob": "calibration",
+   "segment": "CFB/prop",
+   "to": 0.23,
+   "why": "calibrated chances predicted the later record better than the raw ones"
+  },
+  {
+   "at": "2026-09-29T12:30:05Z",
+   "evidence": {
+    "abqjournal.com": {
+     "facts": 5,
+     "rate": 0.8,
+     "verified": 4
+    },
+    "ajc.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "bythebelt.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "clevelandbrowns.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "dailylobo.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "espn.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "fox11online.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "golobos.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "miamihurricanes.com": {
+     "facts": 3,
+     "rate": 1.0,
+     "verified": 3
+    },
+    "miamistudent.net": {
+     "facts": 3,
+     "rate": 1.0,
+     "verified": 3
+    },
+    "nationalfootballpost.com": {
+     "facts": 4,
+     "rate": 0.75,
+     "verified": 3
+    },
+    "nbcmiami.com": {
+     "facts": 2,
+     "rate": 0.0,
+     "verified": 0
+    },
+    "newson6.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "nfl.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "odusports.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "packers.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "panthers.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "patriots.com": {
+     "facts": 4,
+     "rate": 0.5,
+     "verified": 2
+    },
+    "si.com": {
+     "facts": 11,
+     "rate": 0.82,
+     "verified": 9
+    },
+    "soflobulls.com": {
+     "facts": 4,
+     "rate": 0.5,
+     "verified": 2
+    },
+    "sports.yahoo.com": {
+     "facts": 11,
+     "rate": 0.82,
+     "verified": 9
+    },
+    "thescore.com": {
+     "facts": 4,
+     "rate": 1.0,
+     "verified": 4
+    },
+    "usforacle.com": {
+     "facts": 2,
+     "rate": 0.5,
+     "verified": 1
+    },
+    "wsbtv.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "wvmetronews.com": {
+     "facts": 3,
+     "rate": 1.0,
+     "verified": 3
+    }
+   },
+   "from": {
+    "avoidDomains": [],
+    "preferDomains": []
+   },
+   "knob": "domains",
+   "segment": "researcher",
+   "to": {
+    "avoidDomains": [],
+    "preferDomains": [
+     "si.com",
+     "sports.yahoo.com",
+     "abqjournal.com"
+    ]
+   },
+   "why": "which sites the researcher cites keep checking out"
   }
  ],
  "knobs": {
@@ -93,7 +268,11 @@
  },
  "researcher": {
   "avoidDomains": [],
-  "preferDomains": []
+  "preferDomains": [
+   "si.com",
+   "sports.yahoo.com",
+   "abqjournal.com"
+  ]
  },
  "segments": {
   "NFL/total": {
