@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Confirm due Buffer posts and mirror them to Discord after X, normally within five minutes. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.keenroudy.sports.discord</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/keen/.config/keenroudy/run.sh</string>
+    <string>mirror</string>
+  </array>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>TZ</key>
+    <string>America/New_York</string>
+  </dict>
+
+  <key>StartInterval</key>
+  <integer>300</integer>
+
+  <key>RunAtLoad</key>
+  <false/>
+
+  <key>ProcessType</key>
+  <string>Background</string>
+
+  <key>StandardOutPath</key>
+  <string>/Users/keen/Library/Logs/KeenRoudy/launchd.discord.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/keen/Library/Logs/KeenRoudy/launchd.discord.log</string>
+</dict>
+</plist>

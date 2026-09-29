@@ -14,9 +14,10 @@ may say otherwise.
 Three things run it, none of them an AI chat:
 1. **launchd on the owner's Mac Studio** runs `~/.config/keenroudy/run.sh` (copy: `deployment/mac/`): the desk run
    at 6:45, 8:30 and 11:45 AM, 5:30 and 11:30 PM Eastern (plus 2:45 PM Sunday and 6:50 PM Sunday, Monday, Thursday),
-   the pre-post check every 30 minutes, the heartbeat at 7:15 AM, and the weekly review Monday 9:30 AM. The run settles and closes plays, builds the
+   the pre-post check every 30 minutes, the Discord mirror every 5 minutes, the heartbeat at 7:15 AM, and the weekly review Monday 9:30 AM. The run settles and closes plays, builds the
    board, judges candidates through `scripts/gates.py`, publishes reports to `research/`, pushes, and schedules X
-   posts in Buffer. Logs: `~/Library/Logs/KeenRoudy/run-YYYY-MM-DD.log` (times in UTC).
+   posts in Buffer. After Buffer confirms a post went live, the exact words and card mirror to Discord through one
+   incoming webhook. Logs: `~/Library/Logs/KeenRoudy/run-YYYY-MM-DD.log` (times in UTC).
 2. **GitHub Actions** (`.github/workflows/publish.yml`) on a schedule and on every push: captures scores, odds and
    prop prices, publishes model forecasts, grades against the close, builds the site and the cards, and deploys.
 3. **Local models on the Mac**: Ollama (`KEENROUDY_LLM_MODEL`, default `qwen3:32b`) polishes prose and weighs news;
@@ -48,6 +49,8 @@ watch the runs, and fix what breaks.
 - **Python standard library only** in the repo. Node only for the site's tests.
 - **X:** posts go through Buffer only. No browser automation on X, ever unattended. Never delete a post that went out
   (the owner decides). The owner pins big wins by hand from the phone ping.
+- **Discord:** one-way mirror only. X remains the source of truth; Discord receives the same words and card only after
+  Buffer confirms the X post. The webhook stays in `~/.config/keenroudy/env`, never the repo or a log.
 - **Deploy only while holding the run lock** `~/.config/keenroudy/run.lock` (below), never mid-run.
 - **Do not change how the record counts** without telling the owner the before and after numbers.
 - **Keep the operating stack free.** Do not add a paid service, increase a metered request budget or buy reach
@@ -61,7 +64,7 @@ watch the runs, and fix what breaks.
 | The desk's own clone (the runs work here; do not edit by hand) | `~/Projects/sports` (branch `main`) |
 | Your working copy for changes | `~/Projects/sports-dev` (git worktree of the same repo, branch `dev`) |
 | Wrapper, settings, lock, drafts, failed reports | `~/.config/keenroudy/` (`run.sh`, `env`, `run.lock`, `x-drafts/`, `failed/`, `pending/`) |
-| launchd jobs | `~/Library/LaunchAgents/com.keenroudy.sports.{run,precheck,heartbeat,review}.plist` (copies in `deployment/mac/`) |
+| launchd jobs | `~/Library/LaunchAgents/com.keenroudy.sports.{run,precheck,discord,heartbeat,review}.plist` (copies in `deployment/mac/`) |
 | Logs | `~/Library/Logs/KeenRoudy/` (`run-YYYY-MM-DD.log`, `launchd.*.log`, `ALERT.txt` when the heartbeat found a problem) |
 | Post log (every X post, Buffer id, tweet id, metrics) | `data/x-posted.json` |
 | Learning (what the desk learned, weekly) | `data/learning/` (`policy.json`, `REPORT.md`) |
@@ -148,6 +151,9 @@ Handy commands (from `~/Projects/sports`):
   first two plays; when a Climb rung or fun ticket is already ready, that prompt becomes a factual teaser for it.
   Single-play days get no filler. No automated replies, likes, follows, unfollows or trend posts; no bought or
   exchanged engagement. `docs/GROWTH.md` has the baseline, weekly scorecard and experiments.
+- **Discord community** (2026-09-28): the free Kook'n Sports server gets the same approved posts and graphics as X,
+  after they are live on X. Sportsbook referral offers live in their own channel, use only the owner's exact links,
+  and are clearly labeled as referral offers with age, location and terms language; never mix them into ordinary plays.
 - **The site**: the projection-card look everywhere (logos, photos, tiles), tabs Today, Board, Games, Stats, Record,
   More; always check changes at 375 px.
 - **Posting**: plays around noon Eastern (two hours before an earlier kickoff), ten minutes apart and from every

@@ -249,6 +249,8 @@ class ScheduleTests(unittest.TestCase):
         self.assertEqual([p['id'] for p in log_book['posts']], ['a'], 'b waits for its card')
         self.assertTrue(log_book['posts'][0]['card'])
         self.assertEqual(log_book['posts'][0]['kind'], 'buffer:play')
+        self.assertEqual(log_book['posts'][0]['discord'], {
+            'state': 'pending', 'text': 'text a', 'image': 'https://keenroudy.com/sports/data/cards/a.png'})
         inputs = [c['variables']['input'] for c in fake.calls if 'createPost' in c['query']]
         self.assertEqual(len(inputs), 1)
         self.assertEqual(inputs[0]['assets'], [{'image': {'url': 'https://keenroudy.com/sports/data/cards/a.png'}}])
@@ -256,6 +258,7 @@ class ScheduleTests(unittest.TestCase):
         self.assertTrue(any('b waits' in line for line in seen))
         text_only = bp.schedule([('r', 'recap', 'text r', NOW + timedelta(hours=1), None)], 'ch-x', {'posts': []}, NOW, key='t', send=FakeBuffer(), log=lambda *_: None)
         self.assertEqual([p['id'] for p in text_only['posts']], ['r'], 'a post with no card key at all (by hand) still goes')
+        self.assertEqual(text_only['posts'][0]['discord'], {'state': 'pending', 'text': 'text r'})
 
     def test_reconcile_records_the_x_link_or_the_error_once(self):
         fake = FakeBuffer()

@@ -382,6 +382,11 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             continue
         entry = {'id': guid, 'postedAt': gates.stamp(now), 'dueAt': gates.stamp(due), 'bufferPostId': post_id,
                  'textHash': x_post.text_hash(text), 'kind': f'buffer:{kind}', 'card': bool(image)}
+        # Only entries scheduled after Discord mirroring was introduced carry this payload. That prevents enabling
+        # the webhook from replaying the account's older X history into a new server.
+        entry['discord'] = {'state': 'pending', 'text': text}
+        if image:
+            entry['discord']['image'] = image
         if image and card_key and card_key != guid:
             entry['cardKey'] = card_key            # a Pick of the Day's own card; a requote keeps it
         if str(card_key or '').endswith('-potd'):

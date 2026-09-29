@@ -81,9 +81,13 @@ and timing may change.
 - Codex handles sourced research, weekly operational review, code changes and deployment checks.
 - No model posts replies, follows accounts or acts on a trending topic automatically.
 
-## Paid and affiliate later
+## Referral offers, kept separate
+
+The owner decided on Sep 28 to add their sportsbook referral links. Launch only with the exact owner-provided URL and
+after checking the current offer terms. Put the standing links in Discord's dedicated sportsbook-promos channel;
+on X, use an occasional clearly labeled offer post rather than adding links to ordinary plays. Every offer says that
+Kook'n may receive a bonus, that eligibility and availability vary by location and account, and that the book's terms
+control. Do not guess a link, promise a bonus, or imply that anyone needs an account to follow the free card.
 
 Do not buy X ads for the current sports-picks account without first checking X's gambling-ad pre-authorization and
-landing-page restrictions. Before adding sportsbook bonus links, confirm the program permits the traffic, add clear
-affiliate and eligibility disclosures, and review the rules for every state the link can reach. Keep picks free while
-the audience and conversion data are still this small.
+landing-page restrictions. Keep the picks and public record free while the audience and conversion data are small.

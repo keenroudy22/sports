@@ -5,6 +5,10 @@ plus, for plays and house posts, an image card. This page is the complete spec: 
 goes out, and the code that makes it. Examples of the cards are in `docs/examples/`. What the accounts we follow post
 and what gets saved is in `docs/X-NOTES.md`.
 
+The free Kook'n Sports Discord mirrors this feed. It is deliberately second: a five-minute local job waits until
+Buffer confirms the X post was sent, then sends Discord the exact same text and card once. A Discord failure retries
+and alerts ntfy; it never changes, advances or replaces the X post.
+
 ## The voice (the owner's rules)
 
 - **Short and human, straight to the point** (2026-09-26: "Not so AI looking. And straight to the point on the

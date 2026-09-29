@@ -6,6 +6,7 @@
 #   run.sh py SCRIPT [args]  run a repo script with the sports environment, printing to the terminal
 #   run.sh [run.py args]     run scripts/run.py in the repo with the sports environment
 #   run.sh precheck          the last look before a scheduled post (launchd, every 30 minutes)
+#   run.sh mirror            mirror a Buffer-confirmed X post to Discord (launchd, every 5 minutes)
 set -euo pipefail
 
 export HOME=/Users/keen
@@ -50,7 +51,7 @@ doctor() {
   echo "ollama          $(curl -s -m 3 http://localhost:11434/api/version 2>/dev/null || echo 'not reachable')"
   echo "codex           $(codex --version 2>/dev/null || echo 'not found')  (codex login status: $(codex login status 2>&1 | head -1 || echo 'unknown'))"
   local keys=""
-  for k in ODDS_API_KEY SHARP_API X_API_KEY X_API_SECRET X_ACCESS_TOKEN X_ACCESS_SECRET KEENROUDY_LLM_MODEL KEENROUDY_RESEARCHER KEENROUDY_X_AUTONOMOUS BUFFER_TOKEN BUFFER_CHANNEL KEENROUDY_NTFY_TOPIC; do
+  for k in ODDS_API_KEY SHARP_API X_API_KEY X_API_SECRET X_ACCESS_TOKEN X_ACCESS_SECRET KEENROUDY_LLM_MODEL KEENROUDY_RESEARCHER KEENROUDY_X_AUTONOMOUS BUFFER_TOKEN BUFFER_CHANNEL DISCORD_WEBHOOK_URL KEENROUDY_NTFY_TOPIC; do
     if [ -n "${!k:-}" ]; then keys="$keys $k"; fi
   done
   echo "env keys set   ${keys:- (none)}"
@@ -70,7 +71,7 @@ fi
 
 exec >> "$LOGS/run-$(date +%Y-%m-%d).log" 2>&1
 find "$LOGS" -name 'run-*.log' -mtime +30 -delete 2>/dev/null || true
-# The half-hourly pre-post check speaks only when a post is due; its own lines carry the story.
-if [ "${1:-}" != "precheck" ]; then echo "=== $(date '+%Y-%m-%d %H:%M:%S %Z') run.sh $*"; fi
+# The half-hourly pre-post check and five-minute Discord mirror speak only when work is due.
+if [ "${1:-}" != "precheck" ] && [ "${1:-}" != "mirror" ]; then echo "=== $(date '+%Y-%m-%d %H:%M:%S %Z') run.sh $*"; fi
 cd "$KEENROUDY_REPO"
 exec python3 scripts/run.py "$@"

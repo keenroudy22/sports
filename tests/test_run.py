@@ -768,6 +768,18 @@ class BufferPostsTests(unittest.TestCase):
         schedule.assert_called_once()
 
 
+class DiscordMirrorTests(unittest.TestCase):
+    def test_only_due_or_sent_pending_entries_wake_the_mirror(self):
+        now = datetime(2026, 9, 28, 16, 0, tzinfo=timezone.utc)
+        post = lambda **over: dict({'id': 'a', 'bufferPostId': 'b', 'dueAt': run.stamp(now + timedelta(minutes=5)),
+                                    'discord': {'state': 'pending', 'text': 'a'}}, **over)
+        self.assertFalse(run.mirror_due({'posts': [post()]}, now))
+        self.assertTrue(run.mirror_due({'posts': [post(dueAt=run.stamp(now - timedelta(minutes=1)))]}, now))
+        self.assertTrue(run.mirror_due({'posts': [post(sentAt=run.stamp(now))]}, now))
+        self.assertFalse(run.mirror_due({'posts': [post(sentAt=run.stamp(now), discord={'state': 'sent'})]}, now))
+        self.assertFalse(run.mirror_due({'posts': [post(cancelledAt=run.stamp(now))]}, now))
+
+
 if __name__ == '__main__':
     unittest.main()
 

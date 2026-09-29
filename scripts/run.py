@@ -1696,6 +1696,7 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
     new cards takes a few minutes, so the run waits for them (up to 15 minutes) before scheduling; a play whose
     card is still not live waits for the next run."""
     import buffer_post
+    import discord_post
     import x_post
     if not os.environ.get('BUFFER_TOKEN', '').strip():
         log('buffer: no BUFFER_TOKEN; posts stay as drafts')
@@ -1706,6 +1707,9 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         for entry in buffer_post.reconcile(log_book, now, log=log):
             status['errors'].append(f"buffer: {entry['id']} failed to post: {entry['error']}")
             alert('KeenRoudy post did not go out', f"{entry['id']}: {entry['error']}")
+        for entry in discord_post.mirror_sent(log_book, now, log=log):
+            status['errors'].append(f"discord: {entry['id']} failed to mirror: {entry['error']}")
+            alert("Kook'n Discord post did not go out", f"{entry['id']}: {entry['error']}")
         buffer_post.collect_metrics(log_book, now, log=log)
         closed_ids = {revision['id'] for _, _, revision in closed}
         if closed_ids:
@@ -1742,6 +1746,59 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         log(f'buffer: {error}')
         status['errors'].append(f'buffer: {error}')
     x_post.save_log(log_book)
+
+
+def mirror_due(log_book, now):
+    """Is there an X post whose result or Discord delivery the lightweight mirror job should check?"""
+    for entry in log_book.get('posts', []):
+        if entry.get('cancelledAt') or entry.get('deletedAt'):
+            continue
+        mirror = entry.get('discord') or {}
+        if entry.get('sentAt') and mirror.get('state') == 'pending':
+            return True
+        if entry.get('bufferPostId') and not entry.get('sentAt') and not entry.get('error') and entry.get('dueAt') \
+                and gates.when(entry['dueAt']) <= now:
+            return True
+    return False
+
+
+def mirror(args):
+    """Every five minutes, confirm due Buffer posts and mirror newly sent ones to Discord."""
+    import buffer_post
+    import discord_post
+    import x_post
+    if not os.environ.get('BUFFER_TOKEN', '').strip() or not discord_post.webhook():
+        return 0
+    now = gates.when(args.now) if args.now else datetime.now(timezone.utc)
+    if not mirror_due(x_post.load_log(), now):
+        return 0
+    if args.dry_run:
+        log('discord mirror: work is due; dry run sends nothing')
+        return 0
+    failed = []
+    try:
+        with Lock(CONF / 'run.lock'):
+            if not args.dry_run:
+                sync()
+            log_book = x_post.load_log()
+            if not mirror_due(log_book, now):
+                return 0
+            for entry in buffer_post.reconcile(log_book, now, log=log):
+                failed.append(f"X: {entry['id']}: {entry['error']}")
+                alert("Kook'n post did not go out", f"{entry['id']}: {entry['error']}")
+            for entry in discord_post.mirror_sent(log_book, now, log=log):
+                failed.append(f"Discord: {entry['id']}: {entry['error']}")
+                alert("Kook'n Discord post did not go out", f"{entry['id']}: {entry['error']}")
+            x_post.save_log(log_book)
+            commit_log(now, push=not args.no_push)
+    except RunError as error:
+        if 'holds the lock' in str(error):
+            log('discord mirror: a run is in progress; trying again in five minutes')
+            return 0
+        log('discord mirror STOPPED:', error)
+        alert("Kook'n Discord mirror stopped", str(error)[:600])
+        return 1
+    return 1 if failed else 0
 
 
 def receipts_handle():
@@ -2139,7 +2196,7 @@ def precheck(args):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.split('\n')[0])
-    parser.add_argument('command', nargs='?', default='run', choices=('run', 'status', 'heartbeat', 'precheck'))
+    parser.add_argument('command', nargs='?', default='run', choices=('run', 'status', 'heartbeat', 'precheck', 'mirror'))
     parser.add_argument('--slot', help='force the run slot, HHMM Eastern')
     parser.add_argument('--now', help='pretend it is this UTC instant')
     parser.add_argument('--dry-run', action='store_true', help='no sync, capture, git; reports go to the pending folder')
@@ -2154,6 +2211,8 @@ def main(argv=None):
         return show_status(args)
     if args.command == 'precheck':
         return precheck(args)
+    if args.command == 'mirror':
+        return mirror(args)
     return run(args)
 
 

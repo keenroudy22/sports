@@ -221,6 +221,12 @@ live on the site: the hosted workflow renders a card for every open play as soon
 schedules after its own push and waits up to 15 minutes for that deploy, and a play whose card is still not
 live waits for the next run. Nothing goes out bare.
 
+Discord is downstream of that same path (`scripts/discord_post.py`), not a second publisher. A five-minute launchd
+job asks Buffer about posts whose time has passed; only after Buffer says the X post was sent does Discord receive
+the exact same text and public card. The mirror state lives beside the Buffer entry in `data/x-posted.json`, so a
+later check cannot post it twice. `DISCORD_WEBHOOK_URL` stays only in `~/.config/keenroudy/env`; a failure retries and
+alerts the owner's phone through ntfy. Posts that predate this mirror have no payload and are never replayed.
+
 **A post every day** (`scripts/receipts.py`, all in the same frame, never a stat line):
 
 | When (Eastern) | Post |
@@ -370,9 +376,15 @@ fails its check anyway is named in the run log and on the phone, never dropped s
 beside each play and the chef on the plate.
 
 Every post is logged in `data/x-posted.json` (kind `buffer:*`, committed on its own as "Posts <date> <time>
-ET") so nothing goes out twice; once its time has passed the run records the X link it went out under, or the
-failure (which fails the run, so the heartbeat alerts). A play that closes before its time is cancelled, and
+ET") so nothing goes out twice; new entries also hold the exact public caption, card URL and Discord delivery state.
+Once its time has passed the run records the X link it went out under, or the failure (which fails the run, so the
+heartbeat alerts). A play that closes before its time is cancelled, and
 the channel's own daily limit (50) is respected, with ours at twenty a day, counting what is already queued.
+
+The Kook'n Sports Discord has a dedicated public feed for that mirror, plus separate community and sportsbook-offer
+channels. Referral offers are not ordinary play copy: use only the owner's exact URL, say plainly that Kook'n may
+receive a bonus, include age/location/terms language, and keep the offer in its dedicated channel. Never guess a
+referral URL or claim a bonus whose current terms have not been checked.
 
 One-time setup, done 2026-09-23: a free Buffer account with @keenkooks connected, and a personal API key as
 `BUFFER_TOKEN` in `~/.config/keenroudy/env` (the free plan allows one key; replaced 2026-09-24 by one that also reads
