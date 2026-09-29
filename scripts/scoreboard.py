@@ -9,11 +9,12 @@
   picks     closing-line value on published picks: the line when posted against
             the last comparable line before kickoff
 
-A game is graded when the box-score store has its final and the provider's
-closing line. Sides and totals are graded against the close; a forecast equal
-to the close takes no side. Missing lines, closes or results leave a row
-ungraded; nothing is estimated. Writes site/data/scoreboard.json and
-site/data/scoreboard-games.json. No network.
+A game is graded when the box-score store has its final. Straight-up winners
+are graded from the forecast margin and final score. Sides and totals are
+graded against the provider's closing line; a forecast equal to the close
+takes no side. Missing lines, closes or results leave a row ungraded; nothing
+is estimated. Writes site/data/scoreboard.json and site/data/scoreboard-games.json.
+No network.
 
 Usage: python scripts/scoreboard.py
 """
@@ -82,6 +83,15 @@ def against(forecast, line, actual):
     return 'W' if (forecast > line) == (actual > line) else 'L'
 
 
+def winner(forecast, actual):
+    """W/L for the straight-up winner a margin forecasts; P for a final tie."""
+    if forecast is None or actual is None or forecast == 0:
+        return None
+    if actual == 0:
+        return 'P'
+    return 'W' if (forecast > 0) == (actual > 0) else 'L'
+
+
 def grade(game, margin, total, sd=None, home_prob=None):
     """Grade one forecast (home margin and total) against the close and the result."""
     lines = features.market_lines(game)     # a price stored as a line reads as no line
@@ -94,6 +104,7 @@ def grade(game, margin, total, sd=None, home_prob=None):
            'total': round(total, 1) if total is not None else None,
            'closeMargin': close_margin, 'closeTotal': close_total,
            'actualMargin': actual_margin, 'actualTotal': actual_total,
+           'winner': winner(margin, actual_margin),
            'side': against(margin, close_margin, actual_margin),
            'ou': against(total, close_total, actual_total)}
     for key, value, line, actual in (('Margin', margin, close_margin, actual_margin),
@@ -126,7 +137,7 @@ def summarize(rows):
 
     priced = [r for r in rows if r['closeMargin'] is not None and r['margin'] is not None]
     totals = [r for r in rows if r['closeTotal'] is not None and r['total'] is not None]
-    out = {'games': len(rows), 'side': record('side'), 'ou': record('ou'),
+    out = {'games': len(rows), 'winner': record('winner'), 'side': record('side'), 'ou': record('ou'),
            'marginMiss': mean(abs(r['margin'] - r['actualMargin']) for r in priced),
            'closeMarginMiss': mean(abs(r['closeMargin'] - r['actualMargin']) for r in priced),
            'totalMiss': mean(abs(r['total'] - r['actualTotal']) for r in totals),
@@ -464,6 +475,7 @@ def build():
                'picks': {'summary': summarize_picks(picks), 'rows': picks},
                'method': {'close': 'Provider closing line from ESPN (DraftKings from 2026, ESPN BET for 2024-2025).',
                           'live': 'Only forecasts published before kickoff: v1 original, v2 last snapshot, analyst last call.',
+                          'winner': 'Straight-up winner record from each pregame forecast; final ties are pushes.',
                           'backtest': 'Retrospective walk-forward; never published and not part of the live record.',
                           'props': 'v2 projection vs the last DraftKings line captured before kickoff; no prices.',
                           'clv': 'Posted line vs the last comparable line before kickoff, in points, positive when better.'}}

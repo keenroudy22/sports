@@ -28,10 +28,16 @@ class GradingTests(unittest.TestCase):
 
     def test_a_forecast_takes_the_side_it_disagrees_with_the_close_on(self):
         row = sb.grade(game(), margin=5.0, total=41.0)
-        self.assertEqual((row['closeMargin'], row['side'], row['ou']), (3.0, 'W', 'L'))
+        self.assertEqual((row['winner'], row['closeMargin'], row['side'], row['ou']), ('W', 3.0, 'W', 'L'))
         self.assertEqual(sb.grade(game(), margin=1.0, total=50)['side'], 'L')
         self.assertIsNone(sb.grade(game(), margin=3.0, total=44.5)['side'], 'agreeing with the close takes no side')
         self.assertEqual(sb.grade(game(home_points=23, away_points=20), margin=5.0, total=41)['side'], 'P')
+
+    def test_straight_up_winners_are_separate_from_the_spread(self):
+        self.assertEqual(sb.grade(game(), margin=1.0, total=44.0)['winner'], 'W')
+        self.assertEqual(sb.grade(game(), margin=-1.0, total=44.0)['winner'], 'L')
+        self.assertEqual(sb.grade(game(home_points=20, away_points=20), margin=1.0, total=44.0)['winner'], 'P')
+        self.assertIsNone(sb.grade(game(), margin=0.0, total=44.0)['winner'], 'an even forecast picks no winner')
 
     def test_closer_than_the_close_and_market_movement_toward_the_model(self):
         row = sb.grade(game(), margin=6.0, total=46.0)
@@ -50,6 +56,7 @@ class GradingTests(unittest.TestCase):
         rows = [sb.row_for(game(week=w), 'v2.0', None, sb.grade(game(week=w), m, 44.0)) for w, m in ((1, 5), (1, 1), (2, 5))]
         grouped = sb.group(rows)
         self.assertEqual(len(grouped), 1)
+        self.assertEqual(grouped[0]['summary']['winner'], [3, 0, 0])
         self.assertEqual(grouped[0]['summary']['side'], [2, 1, 0])
         self.assertEqual([w['week'] for w in grouped[0]['weeks']], ['1', '2'])
         self.assertEqual(grouped[0]['summary']['marginMiss'], round((2 + 6 + 2) / 3, 2))
