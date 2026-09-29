@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-29T20:53:59Z",
+  "updatedAt": "2026-09-29T22:09:31Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -237,6 +237,15 @@
           "name": "Atlanta Falcons",
           "players": [
             {
+              "id": "4361508",
+              "name": "Keshawn Banks",
+              "position": "DE",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-29T21:28Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4361508/keshawn-banks"
+            },
+            {
               "id": "3045527",
               "name": "Samson Ebukam",
               "position": "DE",
@@ -451,15 +460,6 @@
               "injury": null,
               "reportedAt": "2026-09-22T23:11Z",
               "source": "https://www.espn.com/nfl/player/_/id/4240596/cj-henderson"
-            },
-            {
-              "id": "4241479",
-              "name": "Tua Tagovailoa",
-              "position": "QB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-22T20:08Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4241479/tua-tagovailoa"
             }
           ]
         },
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-29T20:34Z",
+              "reportedAt": "2026-09-29T21:49Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5297,6 +5297,15 @@
           "name": "New York Giants",
           "players": [
             {
+              "id": "4035631",
+              "name": "Brian Burns",
+              "position": "LB",
+              "status": "Injured Reserve",
+              "injury": "Knee - ACL",
+              "reportedAt": "2026-09-29T21:03Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4035631/brian-burns"
+            },
+            {
               "id": "3123075",
               "name": "Braxton Berrios",
               "position": "WR",
@@ -5340,15 +5349,6 @@
               "injury": null,
               "reportedAt": "2026-09-28T20:04Z",
               "source": "https://www.espn.com/nfl/player/_/id/2969939/jameis-winston"
-            },
-            {
-              "id": "4035631",
-              "name": "Brian Burns",
-              "position": "LB",
-              "status": "Out",
-              "injury": "Knee - ACL",
-              "reportedAt": "2026-09-28T19:57Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4035631/brian-burns"
             },
             {
               "id": "2979632",
@@ -5987,6 +5987,15 @@
           "name": "Pittsburgh Steelers",
           "players": [
             {
+              "id": "4361411",
+              "name": "Pat Freiermuth",
+              "position": "TE",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-29T20:57Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4361411/pat-freiermuth"
+            },
+            {
               "id": "4038815",
               "name": "Rico Dowdle",
               "position": "RB",
@@ -6183,15 +6192,6 @@
               "injury": null,
               "reportedAt": "2026-09-22T02:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/4430802/darnell-washington"
-            },
-            {
-              "id": "4361411",
-              "name": "Pat Freiermuth",
-              "position": "TE",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-21T22:54Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4361411/pat-freiermuth"
             },
             {
               "id": "4685261",
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "30",
-          "name": "Albert Regis",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-09-29T19:57:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4612298/albert-regis"
-        },
-        {
-          "teamId": "12",
-          "name": "Josh Simmons",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-09-29T19:57:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4569659/josh-simmons"
-        },
-        {
           "teamId": "12",
           "name": "Chamarri Conner",
           "from": "Out",
@@ -7764,11 +7748,27 @@
           "to": "Injured Reserve",
           "observedAt": "2026-09-29T20:49:32Z",
           "source": "https://www.espn.com/nfl/player/_/id/4603186/jack-bech"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-09-29T22:09:31Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "19",
+          "name": "Brian Burns",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-09-29T22:09:31Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4035631/brian-burns"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-29T20:53:59Z",
-      "lastAttemptAt": "2026-09-29T20:53:59Z",
+      "checkedAt": "2026-09-29T22:09:31Z",
+      "lastAttemptAt": "2026-09-29T22:09:31Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-29T20:53:59Z",
-      "lastAttemptAt": "2026-09-29T20:53:59Z",
+      "checkedAt": "2026-09-29T22:09:31Z",
+      "lastAttemptAt": "2026-09-29T22:09:31Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
