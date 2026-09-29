@@ -151,6 +151,11 @@ Handy commands (from `~/Projects/sports`):
   first two plays; when a Climb rung or fun ticket is already ready, that prompt becomes a factual teaser for it.
   Single-play days get no filler. No automated replies, likes, follows, unfollows or trend posts; no bought or
   exchanged engagement. `docs/GROWTH.md` has the baseline, weekly scorecard and experiments.
+- **Injury-angle posts** (2026-09-29): up to two timely text posts a day when ESPN lists a top QB/RB/WR/TE out,
+  doubtful or inactive, a newer projection has removed them and redistributed the role, and a sportsbook price
+  captured after the news still grades as a lean. Name the matchup, the priced teammate prop and the opponent's
+  allowed-by-position stat when available; label it a board lean, not a posted play. These posts never enter the
+  record, never displace a play or receipt, and mirror to Discord after X like every other post.
 - **Discord community** (2026-09-28): the free Kook'n Sports server gets the same approved posts and graphics as X,
   after they are live on X. Sportsbook referral offers live in their own channel, use only the owner's exact links,
   and are clearly labeled as referral offers with age, location and terms language; never mix them into ordinary plays.

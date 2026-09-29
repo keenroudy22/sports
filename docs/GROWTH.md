@@ -14,6 +14,9 @@ rate and 5 profile visits over the prior four weeks; nearly all of that reach ar
 - **Receipts create trust.** Keep them public, short and complete. A bad day does not disappear.
 - **The weekly watchlist tests saves.** Four large, readable disagreements, with the complete slate on the site. It is not a
   pick card.
+- **Verified injury angles join live conversation.** A top-player absence can earn a timely text post only after the
+  model redistributed the role and a book posted a fresh price. Pair the teammate prop with one opponent-position
+  stat and ask “take it or pass?”; keep it explicitly outside the posted-play record.
 - **Human conversation creates discovery.** On game days, the owner can add a few thoughtful, non-promotional replies
   to relevant football conversations. Those replies are never automated and never copied.
 - **Anticipation can open the loop.** At most one short teaser per main slate, and only after a real card or ticket is
@@ -50,7 +53,7 @@ Capture the Monday X Premium 7-day totals before changing the plan:
 | Profile visits | 5 | Curiosity and profile conversion |
 
 Also record the best three posts by impressions, engagement rate, profile visits and follows. The automated Monday
-review reports settled Buffer impressions and engagement rate by post type. Do not declare a format a winner with
+review reports settled Buffer impressions and engagement rate by post type, including `news`. Do not declare a format a winner with
 fewer than eight measured posts.
 
 The stretch target requires roughly 10,000 additional followers in one season. That cannot come from the current

@@ -239,6 +239,17 @@ class SpacingTests(unittest.TestCase):
         self.assertEqual(bp.fit_limit(plans, 0), [])
         self.assertEqual(bp.fit_limit(plans, 3), plans)
 
+    def test_injury_news_is_spaced_and_never_displaces_an_official_post(self):
+        news = [{'key': 'news:NFL-1:7:out', 'text': 'verified angle', 'target': NOW,
+                 'deadline': NOW + timedelta(hours=2)}]
+        first = {'a': pick('a', 'late')}
+        plans = bp.plan(first, first, GAMES, NOW, {'posts': []}, news=news)
+        self.assertIn(('news:NFL-1:7:out', 'news'), [(p[0], p[1]) for p in plans])
+        self.assertTrue(all(b[3] - a[3] >= bp.SPACING for a, b in zip(plans, plans[1:])))
+        due = NOW + timedelta(hours=1)
+        tight = [('n', 'news', 'news', due, None), ('a', 'play', 'play', due + bp.SPACING, 'a')]
+        self.assertEqual([p[0] for p in bp.fit_limit(tight, 1)], ['a'])
+
 
 class ScheduleTests(unittest.TestCase):
     def test_schedule_never_posts_a_play_without_its_card(self):

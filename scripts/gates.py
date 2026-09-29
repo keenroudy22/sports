@@ -833,7 +833,8 @@ def injuries_by_team(context_file):
     for league in ('NFL', 'CFB'):
         block = ((context_file.get('leagues') or {}).get(league) or {}).get('teams') or {}
         for team, data in block.items():
-            out[team_key(league, team)] = {str(p['id']): {'status': p.get('status'), 'position': p.get('position'), 'name': p.get('name')}
+            out[team_key(league, team)] = {str(p['id']): {key: p.get(key) for key in
+                                                          ('status', 'position', 'name', 'injury', 'reportedAt', 'source')}
                                            for p in data.get('players', []) if p.get('id')}
     return out
 

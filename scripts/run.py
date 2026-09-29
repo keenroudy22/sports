@@ -1716,7 +1716,11 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             buffer_post.cancel_closed(closed_ids, log_book, now, log=log)
         quotes = now_quotes(ctx, games, now)
         refused = []
-        plans = buffer_post.plan(ctx.first, ctx.latest, games, now, log_book, ctx.player_team, quotes=quotes, refused=refused)
+        import news_posts
+        lines = load_json(build_site.OUT / 'lines.json', {'lines': []}).get('lines') or []
+        news = news_posts.candidates(ctx, features.load(), lines, now, log_book, games=games)
+        plans = buffer_post.plan(ctx.first, ctx.latest, games, now, log_book, ctx.player_team, quotes=quotes,
+                                 refused=refused, news=news)
         for key, problems in refused:
             log(f"buffer: {key} held back, its text fails the post check: {'; '.join(problems)}")
             alert('KeenRoudy post held back', f"{key}: {'; '.join(problems)}")
@@ -1730,7 +1734,8 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             if waiting:
                 log(f'buffer: {len(waiting)} card(s) still not live after the wait; those plays wait for the next run')
             later = datetime.now(timezone.utc)
-            plans = buffer_post.plan(ctx.first, ctx.latest, games, max(now, later), log_book, ctx.player_team, quotes=quotes)
+            plans = buffer_post.plan(ctx.first, ctx.latest, games, max(now, later), log_book, ctx.player_team,
+                                     quotes=quotes, news=news)
         limit = buffer_post.daily_limit(channel['id'], eastern_date(now).isoformat())
         if limit and limit.get('remaining') is not None and limit['remaining'] < len(plans):
             log(f"buffer: the channel can take {limit['remaining']} more posts today; scheduling that many")

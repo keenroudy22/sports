@@ -36,12 +36,16 @@ and alerts ntfy; it never changes, advances or replaces the X post.
 | **Easy props** (alternate lines) | Sat (college) and Sun (NFL) | `🍀 +450 NFL EASY PROPS (FanDuel)` then legs like `Drake London 40+ rec yds` | parlay card | `easy_parlay.py` |
 | **80/20 Climb step** | With the plays, one a day when two clean games exist | `🪜 KOOK'N 80/20 CLIMB · STEP 2` / `$75 → $146 (+95, FanDuel)` / `$19 banked · win banks $29, $117 rides` / legs / `❤️ if you're climbing` | a tall winding route with the real bank, ride, rung and unpriced future checkpoints | `ladder.py`, `pick_card.ladder_svg` |
 | **Conversation prompt / teaser** | Once on a multi-play card, after the first play | A short slate question, or—when it is already ready—`The 80/20 Climb is back later today. Step 2 is already cooked. 🪜` with its real ride and bank, then the league tag | none; intentionally text-only | `buffer_post.conversation_text` |
+| **Injury angle** | After verified top-player news, at most two a day | `🚨 ESPN lists A.J. Brown OUT for PHI at CHI.` / a teammate's real post-news line, price and book / the opponent's allowed-by-position stat / `Board lean, not a posted play. Take it or pass? #NFL` | none; timeliness and the question are the point | `news_posts.candidates` |
 | **Morning receipt** | 9 AM the day after a game day | `Saturday: 5-3` then `✅ Iowa/Michigan over 38.5` per play, `Today: 3 plays.`, tags | the receipt card (W/L per play, the chef) | `receipts.day_receipt`, `with_menu`, `pick_card.receipt_svg` |
 | **Week's receipt** | Wednesday 9 AM | `The week (Sep 23 to Sep 29): 12-9` then the record by kind | receipt card | `receipts.week_receipt` |
 | **Save this watchlist** | 10 AM college Saturday and NFL Sunday | `📌 4 NFL games where our numbers disagree most with the market.` / save ask / tag | 1080x1350 grid with four large model/market tiles | `sheet.py` |
 | **Cashed** | As a win settles (9 AM to 12:30 AM, within three hours) | `✅ Cashed: Iowa/Michigan over 38.5 (-105, ESPN BET)` (or `✅ POTD cashed: ...`, `✅ +2506 5-leg lotto cashed (ESPN BET)`, `✅ 80/20 Climb step 2 cashed: $75 → $146` / `$48 banked. $117 rides step 3.`) then the tag and the original post's link | none (it quotes the original) | `receipts.cashed` |
 | **Menu** (alone) | 8:45 AM on a game day with no receipt | `Today: 6 plays` then `Iowa/Michigan 3:30 PM` per game | `site/img/kitchen-menu.png` | `receipts.menu` |
 | **The book** | 6 PM on a day with nothing else | `Season through Sep 28: 23-22` then by kind | `site/img/kitchen-book.png` | `receipts.book` |
+
+An injury angle only exists after a newer projection removed the player and redistributed their role, and after a
+book price was captured following the news. It never counts as a play; a qualifying official play posts separately.
 
 Limits: twenty posts a day at most, counting what is queued (`buffer_post.MAX_PER_DAY`); ten minutes between any two
 posts (`buffer_post.free_slot`). The card must be live on the site before a post is scheduled; a play whose card is

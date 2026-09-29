@@ -12,7 +12,7 @@ a desk that posts a handful of plays a day at set times.
   python scripts/buffer_post.py post PICK_ID [--at ISO]   schedule one pick's post (needs --confirm)
   python scripts/buffer_post.py reconcile          record the X link, or the error, for every post whose time passed
 
-X gets the plays, their receipts and one short conversation prompt between plays on a multi-play card. Plays use the
+X gets the plays, their receipts, verified injury angles and one short conversation prompt between plays on a multi-play card. Plays use the
 same shape every time and always carry the card. The run (scripts/run.py) schedules each play once, three hours before its kickoff and never
 before 9:00 AM ET on game day, ten minutes apart, and logs every post in data/x-posted.json so nothing goes
 out twice. A play whose card is not live yet waits; a play that closes to new entries before its time is
@@ -267,20 +267,20 @@ def conversation_text(day, play_rows, first, games):
 
 
 def fit_limit(plans, remaining):
-    """Respect Buffer's live daily allowance without ever letting optional conversation copy displace a play or
-    house post. When space is tight, prompts go first; the essential posts keep their scheduled order."""
+    """Respect Buffer's live daily allowance without ever letting optional news or conversation copy displace a
+    play or house post. When space is tight, optional posts go first; essential posts keep their scheduled order."""
     if remaining is None or remaining >= len(plans):
         return plans
     remaining = max(0, int(remaining))
-    essential = [plan for plan in plans if plan[1] != 'conversation']
-    optional = [plan for plan in plans if plan[1] == 'conversation']
+    essential = [plan for plan in plans if plan[1] not in ('conversation', 'news')]
+    optional = [plan for plan in plans if plan[1] in ('conversation', 'news')]
     chosen = essential[:remaining]
     if len(chosen) < remaining:
         chosen += optional[:remaining - len(chosen)]
     return sorted(chosen, key=lambda plan: plan[3])
 
 
-def plan(first, latest, games, now, log_book, player_team=None, soon=None, quotes=None, refused=None):
+def plan(first, latest, games, now, log_book, player_team=None, soon=None, quotes=None, refused=None, news=None):
     """The posts the run should schedule now: [(key, kind, text, due_at, card_key)].
 
     X gets plays, their receipts and one short prompt between the first two plays of a multi-play card. Player props,
@@ -335,11 +335,18 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
                 refused.append((post['key'], problems))
             continue
         plays.append((post['due'], order[post['kind']], post['stale'], post['key'], post['text'], post['kind'], post['card']))
+    # News is useful but optional. Reserve every official play and house post first, then admit no more news than
+    # the day's remaining room. A late headline can never crowd a pick or receipt out of the queue.
+    essential_today = sum(1 for row in plays if eastern_date(row[0]) == today)
+    news_room = max(0, MAX_PER_DAY - day_count(log_book, today) - essential_today)
+    for item in (news or [])[:news_room]:
+        if item['key'] not in posted:
+            plays.append((item['target'], -3, item['deadline'], item['key'], item['text'], 'news', None))
     plays.sort()
     play_rows = [row for row in plays if row[5] == 'play']
     conversation_key = f'conversation:day:{today.isoformat()}'
-    essential_today = sum(1 for row in plays if eastern_date(row[0]) == today)
-    room_for_prompt = day_count(log_book, today) + essential_today < MAX_PER_DAY
+    planned_today = sum(1 for row in plays if eastern_date(row[0]) == today)
+    room_for_prompt = day_count(log_book, today) + planned_today < MAX_PER_DAY
     if conversation_key not in posted and len(play_rows) >= 2 and room_for_prompt:
         first_index = next(i for i, row in enumerate(plays) if row is play_rows[0])
         prompt = (play_rows[0][0], play_rows[0][1], min(play_rows[0][2], play_rows[1][2]), conversation_key,
