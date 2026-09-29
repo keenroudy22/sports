@@ -121,6 +121,8 @@ def best(record, market, player, side):
     """The best number and price for one side of one player's market: number first, then price."""
     found = []
     for book, entry in (record.get('books') or {}).items():
+        if book not in odds_api.PICK_BOOKS:
+            continue
         quote = ((entry.get('markets') or {}).get(market) or {}).get(player)
         if not quote or side not in quote:
             continue

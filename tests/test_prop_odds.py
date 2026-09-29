@@ -72,6 +72,15 @@ class ParseTests(unittest.TestCase):
                          'the under wants the highest number')
         self.assertIsNone(prop_odds.best(record, 'rushYds', 'Nobody', 'over'))
 
+    def test_hard_rock_prices_are_comparison_only_for_official_props(self):
+        event = {'bookmakers': self.event['bookmakers'] + [
+            {'key': 'hardrockbet', 'title': 'Hard Rock Bet', 'last_update': '2026-09-20T15:00:00Z', 'markets': [
+                {'key': 'player_rush_yds', 'outcomes': [outcome('Bijan Robinson', 'Over', 79.5, 200),
+                                                       outcome('Bijan Robinson', 'Under', 79.5, -250)]}]}]}
+        record = {'books': prop_odds.quotes_of(event)}
+        self.assertIn('hardrockbet', record['books'])
+        self.assertEqual(prop_odds.best(record, 'rushYds', 'Bijan Robinson', 'over'), ('fanduel', 79.5, -108))
+
 
 class CaptureTests(unittest.TestCase):
     def test_a_capture_writes_once_and_stops_repeating_itself(self):

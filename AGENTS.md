@@ -76,6 +76,7 @@ watch the runs, and fix what breaks.
 | Learning (what the desk learned, weekly) | `data/learning/` (`policy.json`, `REPORT.md`) |
 | Site source / built data | `site/` / `site/data/app/` (built, not committed) |
 | Operating guide and history | `DESK.md`; what the accounts we follow post: `docs/X-NOTES.md`; edges: `docs/EDGE.md` |
+| Private arb rules and feed evaluation | `docs/ARB-RADAR.md` |
 
 Handy commands (from `~/Projects/sports`):
 - `~/.config/keenroudy/run.sh doctor`: versions, identities, which settings are set (never their values).
@@ -122,6 +123,10 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Private Arb Radar** (2026-09-29): exact-line, two-outcome opportunities from fresh captured prices may alert
+  the owner's phone through ntfy. It never places a wager, never posts publicly, never calls a middle an arb and
+  always says to verify both apps, limits and settlement rules before acting. Account-specific boosts use the manual
+  calculator because feeds cannot see them. Hard Rock is comparison-only and cannot become an official play.
 - **Daily presence, never a forced play** (2026-09-29): publish at least one useful X post every day. A receipt,
   menu, official play, watchlist, verified injury angle, cashed post or Climb update satisfies the day; when none
   exists, `receipts.book` schedules the public record at 6 PM. Daily posting never lowers a play gate or creates a

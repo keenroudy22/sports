@@ -81,6 +81,15 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(odds_api.best(record, 'under'), ('fanduel', 50.5, -110))
         self.assertIsNone(odds_api.best({'books': {}}, 'home'))
 
+    def test_hard_rock_is_captured_for_arbs_but_cannot_change_an_official_pick(self):
+        books = odds_api.books_of(event('Texas A&M Aggies', 'Kentucky Wildcats', '2026-09-19T19:30:00Z', [
+            book('draftkings', -16.5, -110, -110, 49.5, -110, -110),
+            book('hardrockbet', -16.5, 200, -250, 49.5, 200, -250)]),
+            'Texas A&M Aggies', 'Kentucky Wildcats')
+        self.assertIn('hardrockbet', books)
+        self.assertEqual(odds_api.best({'books': books}, 'home'), ('draftkings', -16.5, -110))
+        self.assertEqual(odds_api.best({'books': books}, 'over'), ('draftkings', 49.5, -110))
+
 
 class BudgetTests(unittest.TestCase):
     def test_college_is_captured_once_a_day_while_its_games_are_a_week_out(self):

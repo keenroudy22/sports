@@ -262,6 +262,15 @@ football conversations are encouraged because they add a real point of view. Use
 post type; the owner records the account-level Premium snapshot separately because Buffer does not expose follower or
 profile-visit totals.
 
+**Private Arb Radar** (`scripts/arbs.py`): after each scheduled capture, compare only exact complementary sides at
+the same line, event and market, at different books. Both the saved record and each book update must be fresh, the
+game must not have started, and the default locked return must be at least 1%. Qualifying opportunities go only to
+the owner's ntfy topic with exact equal-return stakes and a verify-both-apps warning; they never create a play, site
+record, Discord message or X post and never place a wager. Hard Rock is captured as an eighth comparison book without
+adding an Odds API request group, but `odds_api.PICK_BOOKS` prevents it from changing official selections. Promo
+boosts are personal and absent from feeds: `python scripts/arbs.py boost +298 50 -195` distinguishes a true locked
+profit from a break-even-downside free roll.
+
 **What's on the plate** (owner, 2026-09-24): an NFL player prop's card shows the player's ESPN headshot, a game line
 the teams' logos (a total both, a spread its side), a parlay and the house cards the chef. Images are fetched when
 the card is rendered and embedded; a failed fetch falls back to the chef. The photos are ESPN's and the logos the

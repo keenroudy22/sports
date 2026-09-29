@@ -30,6 +30,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import boxscores
+import arbs
 import build_site
 import desk
 import features
@@ -1447,6 +1448,16 @@ def _run(args, now, slot, kinds, status):
         captures = ['dry run: no capture']
     for note in captures:
         log(note)
+    try:
+        opportunities = arbs.scan(ROOT, now)
+    except Exception as error:  # an optional private alert can never stop grading or publishing
+        opportunities = []
+        log(f'arb radar unavailable ({type(error).__name__}); the desk continues')
+    status['arbs'] = {'found': len(opportunities), 'alerted': 0}
+    for hit in opportunities[:3]:
+        log(f"arb radar: {hit['label']} {hit['roi']:.2f}%")
+        if not args.dry_run and alert("Kook'n Arb Radar", arbs.message(hit), now=now):
+            status['arbs']['alerted'] += 1
     slate = load_json(ROOT / 'site' / 'data' / 'slate.json', {'games': []})
     slate_games = {g['id']: g for g in slate.get('games', []) if g.get('league') in ('NFL', 'CFB')}
     games = live_games(now, slate_games)
