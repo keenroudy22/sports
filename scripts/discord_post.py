@@ -1,8 +1,8 @@
-"""Mirror posts that Buffer confirmed on X into the Kook'n Discord.
+"""Deliver approved posts into the Kook'n Discord.
 
-The Discord webhook is deliberately downstream of Buffer: nothing reaches Discord until X says the
-post was sent. The exact X text and public card URL are saved with a newly scheduled Buffer entry,
-then marked sent here so a later desk run cannot duplicate it.
+Official plays use the Buffer schedule as their clock but arrive in Discord first. Other copy remains deliberately
+downstream of Buffer and waits until X says the post was sent. The exact text and public card URL are saved with a
+newly scheduled Buffer entry, then marked sent here so a later desk run cannot duplicate it.
 """
 import json
 import os
@@ -43,14 +43,20 @@ def send_message(url, text, image_url=None, send=http_send):
 
 
 def mirror_sent(log_book, now, url=None, send=http_send, log=print):
-    """Mirror eligible sent X posts once. Return only newly changed failures, so ntfy does not repeat them."""
+    """Deliver each Discord payload once.
+
+    Confirmed plays carry ``readyAt`` and go to Discord before X. House, news and engagement posts keep the old
+    downstream rule and wait for Buffer to confirm X. Return only newly changed failures, so ntfy does not repeat.
+    """
     url = url if url is not None else webhook()
     if not url:
         return []
     failed = []
     for entry in log_book.get('posts', []):
         mirror = entry.get('discord') or {}
-        if mirror.get('state') != 'pending' or not entry.get('sentAt') or entry.get('cancelledAt') or entry.get('deletedAt'):
+        ready = mirror.get('readyAt') and gates.when(mirror['readyAt']) <= now
+        if mirror.get('state') != 'pending' or not (ready or entry.get('sentAt')) \
+                or entry.get('cancelledAt') or entry.get('deletedAt'):
             continue
         try:
             send_message(url, mirror.get('text') or '', mirror.get('image'), send=send)
@@ -67,8 +73,35 @@ def mirror_sent(log_book, now, url=None, send=http_send, log=print):
             continue
         mirror['state'] = 'sent'
         mirror['sentAt'] = gates.stamp(now)
+        mirror['beforeX'] = not bool(entry.get('sentAt'))
         mirror.pop('error', None)
         mirror.pop('lastAttemptAt', None)
         entry['discord'] = mirror
-        log(f"discord: {entry['id']} mirrored after X")
+        log(f"discord: {entry['id']} " + ('posted before X' if mirror['beforeX'] else 'mirrored after X'))
+    for entry in log_book.get('posts', []):
+        mirror = entry.get('discord') or {}
+        followup = mirror.get('followup') or {}
+        if followup.get('state') != 'pending':
+            continue
+        try:
+            send_message(url, followup.get('text') or '', send=send)
+        except DiscordError as error:
+            message = str(error)
+            changed = followup.get('error') != message
+            followup['error'] = message
+            followup['lastAttemptAt'] = gates.stamp(now)
+            followup['attempts'] = int(followup.get('attempts') or 0) + 1
+            mirror['followup'] = followup
+            entry['discord'] = mirror
+            log(f"discord: {entry['id']} update not sent: {message}")
+            if changed:
+                failed.append({'id': entry['id'], 'error': message})
+            continue
+        followup['state'] = 'sent'
+        followup['sentAt'] = gates.stamp(now)
+        followup.pop('error', None)
+        followup.pop('lastAttemptAt', None)
+        mirror['followup'] = followup
+        entry['discord'] = mirror
+        log(f"discord: {entry['id']} pull update sent")
     return failed

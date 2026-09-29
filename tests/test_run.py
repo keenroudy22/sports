@@ -776,8 +776,14 @@ class DiscordMirrorTests(unittest.TestCase):
         self.assertFalse(run.mirror_due({'posts': [post()]}, now))
         self.assertTrue(run.mirror_due({'posts': [post(dueAt=run.stamp(now - timedelta(minutes=1)))]}, now))
         self.assertTrue(run.mirror_due({'posts': [post(sentAt=run.stamp(now))]}, now))
+        self.assertTrue(run.mirror_due({'posts': [post(discord={'state': 'pending', 'text': 'a',
+                                                                 'readyAt': run.stamp(now)})]}, now))
+        self.assertFalse(run.mirror_due({'posts': [post(discord={'state': 'pending', 'text': 'a',
+                                                                  'readyAt': run.stamp(now + timedelta(minutes=1))})]}, now))
         self.assertFalse(run.mirror_due({'posts': [post(sentAt=run.stamp(now), discord={'state': 'sent'})]}, now))
         self.assertFalse(run.mirror_due({'posts': [post(cancelledAt=run.stamp(now))]}, now))
+        self.assertTrue(run.mirror_due({'posts': [post(cancelledAt=run.stamp(now), discord={
+            'state': 'sent', 'followup': {'state': 'pending', 'text': 'pulled'}})]}, now))
 
 
 if __name__ == '__main__':

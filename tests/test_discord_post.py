@@ -43,6 +43,30 @@ class DiscordPostTests(unittest.TestCase):
         self.assertEqual(entry['discord']['attempts'], 2)
         self.assertEqual(entry['discord']['state'], 'pending')
 
+    def test_a_due_play_posts_before_x_but_other_copy_still_waits(self):
+        sent = []
+        log_book = {'posts': [
+            {'id': 'play', 'dueAt': '2026-09-28T16:15:00Z',
+             'discord': {'state': 'pending', 'readyAt': '2026-09-28T16:00:00Z', 'text': 'The play'}},
+            {'id': 'later', 'discord': {'state': 'pending', 'readyAt': '2026-09-28T16:01:00Z', 'text': 'Too soon'}},
+            {'id': 'house', 'discord': {'state': 'pending', 'text': 'Wait for X'}},
+        ]}
+        send = lambda url, body, headers: (sent.append(body) or (204, b''))
+        discord_post.mirror_sent(log_book, NOW, url='secret', send=send, log=lambda *_: None)
+        self.assertEqual([body['content'] for body in sent], ['The play'])
+        self.assertTrue(log_book['posts'][0]['discord']['beforeX'])
+        self.assertEqual(log_book['posts'][2]['discord']['state'], 'pending')
+
+    def test_a_pull_followup_is_sent_once(self):
+        sent = []
+        entry = {'id': 'a', 'cancelledAt': '2026-09-28T16:00:00Z', 'discord': {
+            'state': 'sent', 'followup': {'state': 'pending', 'text': 'Pulled after confirmed news'}}}
+        send = lambda url, body, headers: (sent.append(body) or (204, b''))
+        discord_post.mirror_sent({'posts': [entry]}, NOW, url='secret', send=send, log=lambda *_: None)
+        discord_post.mirror_sent({'posts': [entry]}, NOW, url='secret', send=send, log=lambda *_: None)
+        self.assertEqual([body['content'] for body in sent], ['Pulled after confirmed news'])
+        self.assertEqual(entry['discord']['followup']['state'], 'sent')
+
     def test_no_webhook_is_a_quiet_noop(self):
         entry = {'id': 'a', 'sentAt': '2026-09-28T15:59:00Z', 'discord': {'state': 'pending', 'text': 'Play'}}
         self.assertEqual(discord_post.mirror_sent({'posts': [entry]}, NOW, url='', log=lambda *_: None), [])

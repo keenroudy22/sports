@@ -94,3 +94,15 @@ control. Do not guess a link, promise a bonus, or imply that anyone needs an acc
 
 Do not buy X ads for the current sports-picks account without first checking X's gambling-ad pre-authorization and
 landing-page restrictions. Keep the picks and public record free while the audience and conversion data are small.
+
+## Discord-first funnel
+
+Beginning Sep 29, confirmed official plays, the Pick of the Day and fun/challenge tickets use Discord as the first
+alert. Their saved Buffer time remains the X time; `discord.readyAt` is fifteen minutes earlier, so the five-minute
+delivery job normally gives members a 10-15 minute head start. Use "plays," not "bets," in public copy. Receipts,
+injury angles and conversation posts still mirror after X because early access to those does not create useful value.
+
+Do not delay X by more than this. The goal is a meaningful Discord reason without making @keenkooks stale. Promote
+the benefit in one pinned/launch post, the profile bio and the site's Discord link; do not repeat it under every play.
+Track invite joins, X link clicks and follows weekly. Once a play is live in Discord it is official, stays in the
+public record and is graded. Confirmed hard news before X produces a Discord pull update and cancels the X post.

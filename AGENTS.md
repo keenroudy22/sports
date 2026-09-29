@@ -16,8 +16,9 @@ Three things run it, none of them an AI chat:
    at 6:45, 8:30 and 11:45 AM, 5:30 and 11:30 PM Eastern (plus 2:45 PM Sunday and 6:50 PM Sunday, Monday, Thursday),
    the pre-post check every 30 minutes, the Discord mirror every 5 minutes, the heartbeat at 7:15 AM, and the weekly review Monday 9:30 AM. The run settles and closes plays, builds the
    board, judges candidates through `scripts/gates.py`, publishes reports to `research/`, pushes, and schedules X
-   posts in Buffer. After Buffer confirms a post went live, the exact words and card mirror to Discord through one
-   incoming webhook. Logs: `~/Library/Logs/KeenRoudy/run-YYYY-MM-DD.log` (times in UTC).
+   posts in Buffer. Confirmed official plays reach Discord about 10-15 minutes before X; other post types mirror
+   after Buffer confirms X. The same words and card use one incoming webhook. Logs:
+   `~/Library/Logs/KeenRoudy/run-YYYY-MM-DD.log` (times in UTC).
 2. **GitHub Actions** (`.github/workflows/publish.yml`) on a schedule and on every push: captures scores, odds and
    prop prices, publishes model forecasts, grades against the close, builds the site and the cards, and deploys.
 3. **Local models on the Mac**: Ollama (`KEENROUDY_LLM_MODEL`, default `qwen3:32b`) polishes prose and weighs news;
@@ -49,8 +50,11 @@ watch the runs, and fix what breaks.
 - **Python standard library only** in the repo. Node only for the site's tests.
 - **X:** posts go through Buffer only. No browser automation on X, ever unattended. Never delete a post that went out
   (the owner decides). The owner pins big wins by hand from the phone ping.
-- **Discord:** one-way mirror only. X remains the source of truth; Discord receives the same words and card only after
-  Buffer confirms the X post. The webhook stays in `~/.config/keenroudy/env`, never the repo or a log.
+- **Discord:** one-way publisher only. The append-only site record remains the source of truth. Confirmed official
+  plays use the same words and card and go to Discord about 10-15 minutes before X; receipts, news and engagement
+  posts mirror only after Buffer confirms X. Once Discord publishes a play it is public and stays in the record. A
+  hard-news pull before X gets a Discord update and cancels X, but never erases the play. The webhook stays in
+  `~/.config/keenroudy/env`, never the repo or a log.
 - **Deploy only while holding the run lock** `~/.config/keenroudy/run.lock` (below), never mid-run.
 - **Do not change how the record counts** without telling the owner the before and after numbers.
 - **Keep the operating stack free.** Do not add a paid service, increase a metered request budget or buy reach
@@ -156,9 +160,11 @@ Handy commands (from `~/Projects/sports`):
   captured after the news still grades as a lean. Name the matchup, the priced teammate prop and the opponent's
   allowed-by-position stat when available; label it a board lean, not a posted play. These posts never enter the
   record, never displace a play or receipt, and mirror to Discord after X like every other post.
-- **Discord community** (2026-09-28): the free Kook'n Sports server gets the same approved posts and graphics as X,
-  after they are live on X. Sportsbook referral offers live in their own channel, use only the owner's exact links,
-  and are clearly labeled as referral offers with age, location and terms language; never mix them into ordinary plays.
+- **Discord community** (2026-09-29): the free Kook'n Sports server gets confirmed official plays and graphics about
+  10-15 minutes before X; all other approved posts mirror after X. It has a read-only links/resources index and
+  concise click-to-accept rules for 21+, legal-location, entertainment-only use. Sportsbook referral offers live in
+  their own channel, use only the owner's exact links, and are clearly labeled with age, location, changing-terms and
+  Kook'n-benefit language; never mix them into ordinary plays.
 - **The site**: the projection-card look everywhere (logos, photos, tiles), tabs Today, Board, Games, Stats, Record,
   More; always check changes at 375 px.
 - **Posting**: plays around noon Eastern (two hours before an earlier kickoff), ten minutes apart and from every

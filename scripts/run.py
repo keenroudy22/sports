@@ -1754,11 +1754,16 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
 
 
 def mirror_due(log_book, now):
-    """Is there an X post whose result or Discord delivery the lightweight mirror job should check?"""
+    """Is there an X result or Discord-first delivery the lightweight job should handle?"""
     for entry in log_book.get('posts', []):
         if entry.get('cancelledAt') or entry.get('deletedAt'):
+            followup = (entry.get('discord') or {}).get('followup') or {}
+            if followup.get('state') == 'pending':
+                return True
             continue
         mirror = entry.get('discord') or {}
+        if mirror.get('state') == 'pending' and mirror.get('readyAt') and gates.when(mirror['readyAt']) <= now:
+            return True
         if entry.get('sentAt') and mirror.get('state') == 'pending':
             return True
         if entry.get('bufferPostId') and not entry.get('sentAt') and not entry.get('error') and entry.get('dueAt') \
@@ -1768,7 +1773,7 @@ def mirror_due(log_book, now):
 
 
 def mirror(args):
-    """Every five minutes, confirm due Buffer posts and mirror newly sent ones to Discord."""
+    """Every five minutes, send due Discord-first plays and reconcile/mirror the rest from Buffer."""
     import buffer_post
     import discord_post
     import x_post
@@ -1841,7 +1846,8 @@ def feature_scheduled(log_book, ctx, games, now, log=log):
     import featured
     key = featured.of_day(eastern_date(now).isoformat())
     entry = next((e for e in log_book.get('posts', []) if key and e.get('id') == key and e.get('kind') == 'buffer:play'
-                  and e.get('bufferPostId') and not e.get('sentAt') and not e.get('cancelledAt') and not e.get('featured')), None)
+                  and e.get('bufferPostId') and not e.get('sentAt') and not e.get('cancelledAt') and not e.get('featured')
+                  and (e.get('discord') or {}).get('state') != 'sent'), None)
     if not entry or key not in ctx.first or not entry.get('dueAt') or gates.when(entry['dueAt']) <= now + buffer_post.SOON:
         return False
     card = f'{key}-potd'
@@ -1875,6 +1881,9 @@ def requote(entry, pick, game, ctx, now, log=log):
     with the same card. Returns True when it was replaced."""
     import buffer_post
     import x_post
+    if (entry.get('discord') or {}).get('state') == 'sent':
+        log(f"precheck: {entry['id']} is already public in Discord; X keeps the same posted number")
+        return False
     text = x_post.draft(pick, game, learning_weights(), now_quote=gates.best_now(pick, ctx), featured=bool(entry.get('featured')))
     if x_post.text_hash(text) == entry.get('textHash'):
         return False
@@ -1894,6 +1903,12 @@ def requote(entry, pick, game, ctx, now, log=log):
     entry['bufferPostId'] = new_id
     entry['textHash'] = x_post.text_hash(text)
     entry['requotedAt'] = stamp(now)
+    mirror = entry.get('discord') or {}
+    if mirror.get('state') == 'pending':
+        mirror['text'] = text
+        if card:
+            mirror['image'] = card
+        entry['discord'] = mirror
     log(f"precheck: {entry['id']} rescheduled with the number available now")
     return True
 

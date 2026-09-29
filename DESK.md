@@ -382,10 +382,14 @@ Once its time has passed the run records the X link it went out under, or the fa
 heartbeat alerts). A play that closes before its time is cancelled, and
 the channel's own daily limit (50) is respected, with ours at twenty a day, counting what is already queued.
 
-The Kook'n Sports Discord has a dedicated public feed for that mirror, plus separate community and sportsbook-offer
-channels. Referral offers are not ordinary play copy: use only the owner's exact URL, say plainly that Kook'n may
-receive a bonus, include age/location/terms language, and keep the offer in its dedicated channel. Never guess a
-referral URL or claim a bonus whose current terms have not been checked.
+The Kook'n Sports Discord has a dedicated public feed, separate community and sportsbook-offer channels, and a
+read-only links/resources index. Confirmed official plays go there first from the Buffer schedule: `readyAt` is 15
+minutes before X, and the five-minute delivery job normally makes the real lead 10-15 minutes. Receipts, news and
+engagement posts still wait for X confirmation. The same words and card go to both. Once Discord publishes a play,
+it is public and remains in the append-only record. If confirmed hard news closes it before X, Buffer cancels X and
+Discord receives a pull update; the play is still graded. Referral offers are not ordinary play copy: use only the
+owner's exact URL, say plainly that Kook'n may receive a bonus, include age/location/terms language, and keep the
+offer in its dedicated channel. Never guess a referral URL or claim a bonus whose current terms have not been checked.
 
 One-time setup, done 2026-09-23: a free Buffer account with @keenkooks connected, and a personal API key as
 `BUFFER_TOKEN` in `~/.config/keenroudy/env` (the free plan allows one key; replaced 2026-09-24 by one that also reads

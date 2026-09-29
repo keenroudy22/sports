@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<!-- Confirm due Buffer posts and mirror them to Discord after X, normally within five minutes. -->
+<!-- Deliver Discord-first official plays, then reconcile and mirror other posts after X, every five minutes. -->
 <plist version="1.0">
 <dict>
   <key>Label</key>

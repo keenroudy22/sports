@@ -40,6 +40,10 @@ and alerts ntfy; it never changes, advances or replaces the X post.
 | **Morning receipt** | 9 AM the day after a game day | `Saturday: 5-3` then `✅ Iowa/Michigan over 38.5` per play, `Today: 3 plays.`, tags | the receipt card (W/L per play, the chef) | `receipts.day_receipt`, `with_menu`, `pick_card.receipt_svg` |
 | **Week's receipt** | Wednesday 9 AM | `The week (Sep 23 to Sep 29): 12-9` then the record by kind | receipt card | `receipts.week_receipt` |
 | **Save this watchlist** | 10 AM college Saturday and NFL Sunday | `📌 4 NFL games where our numbers disagree most with the market.` / save ask / tag | 1080x1350 grid with four large model/market tiles | `sheet.py` |
+
+Confirmed official plays, the Pick of the Day and fun/challenge tickets use the same copy and card in Discord about
+10-15 minutes before their X time. Receipts, injury angles and conversation prompts mirror after X. Public promotion
+says "plays hit Discord first," never "guaranteed bets" or anything that implies a win.
 | **Cashed** | As a win settles (9 AM to 12:30 AM, within three hours) | `✅ Cashed: Iowa/Michigan over 38.5 (-105, ESPN BET)` (or `✅ POTD cashed: ...`, `✅ +2506 5-leg lotto cashed (ESPN BET)`, `✅ 80/20 Climb step 2 cashed: $75 → $146` / `$48 banked. $117 rides step 3.`) then the tag and the original post's link | none (it quotes the original) | `receipts.cashed` |
 | **Menu** (alone) | 8:45 AM on a game day with no receipt | `Today: 6 plays` then `Iowa/Michigan 3:30 PM` per game | `site/img/kitchen-menu.png` | `receipts.menu` |
 | **The book** | 6 PM on a day with nothing else | `Season through Sep 28: 23-22` then by kind | `site/img/kitchen-book.png` | `receipts.book` |

@@ -12,8 +12,9 @@ a desk that posts a handful of plays a day at set times.
   python scripts/buffer_post.py post PICK_ID [--at ISO]   schedule one pick's post (needs --confirm)
   python scripts/buffer_post.py reconcile          record the X link, or the error, for every post whose time passed
 
-X gets the plays, their receipts, verified injury angles and one short conversation prompt between plays on a multi-play card. Plays use the
-same shape every time and always carry the card. The run (scripts/run.py) schedules each play once, three hours before its kickoff and never
+X gets the plays, their receipts, verified injury angles and one short conversation prompt between plays on a multi-play card. Confirmed
+official plays reach Discord about 10-15 minutes before their Buffer time; the rest mirrors after X. Plays use the same shape every time and
+always carry the card. The run (scripts/run.py) schedules each play once, three hours before its kickoff and never
 before 9:00 AM ET on game day, ten minutes apart, and logs every post in data/x-posted.json so nothing goes
 out twice. A play whose card is not live yet waits; a play that closes to new entries before its time is
 cancelled. The token lives in the environment (BUFFER_TOKEN) and never in a log.
@@ -44,6 +45,7 @@ SPACING = timedelta(minutes=10)      # between two posts
 SOON = timedelta(minutes=2)          # a post scheduled "now" goes out this far ahead
 ORDER = {'player': 0, 'team': 1, 'ladder': 2, 'parlay': 3}   # inside one kickoff: player props, game lines, the ladder, the parlay
 MAX_PER_DAY = 20                     # our own ceiling for a day's posts, counting those already scheduled; Buffer allows 50
+DISCORD_PLAY_LEAD = timedelta(minutes=15)  # the five-minute delivery job makes plays land about 10-15 minutes before X
 CONVERSATION = (
     "First play is out. What are you riding today? 👀",
     "The card is rolling. Which game has your attention?",
@@ -392,6 +394,10 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         # Only entries scheduled after Discord mirroring was introduced carry this payload. That prevents enabling
         # the webhook from replaying the account's older X history into a new server.
         entry['discord'] = {'state': 'pending', 'text': text}
+        if kind == 'play':
+            # A confirmed play is the reason to join Discord. Schedule it first; the lightweight delivery job runs
+            # every five minutes, so a 15-minute target gives members roughly 10-15 minutes before the X post.
+            entry['discord']['readyAt'] = gates.stamp(max(now, due - DISCORD_PLAY_LEAD))
         if image:
             entry['discord']['image'] = image
         if image and card_key and card_key != guid:
@@ -413,6 +419,15 @@ def cancel_closed(closed_ids, log_book, now, key=None, send=http_send, log=print
             try:
                 delete_post(entry['bufferPostId'], key=key, send=send)
                 entry['cancelledAt'] = gates.stamp(now)
+                mirror = entry.get('discord') or {}
+                if mirror.get('state') == 'sent' and not mirror.get('followup'):
+                    headline = str(mirror.get('text') or entry['id']).splitlines()[0]
+                    mirror['followup'] = {
+                        'state': 'pending',
+                        'text': (f"⚠️ UPDATE: {headline}\n\nPulled before the X post because of confirmed hard news. "
+                                 "It stays in the public record and will be graded."),
+                    }
+                    entry['discord'] = mirror
                 log(f"buffer: {entry['id']} cancelled, the pick closed before its post went out")
             except BufferError as error:
                 log(f"buffer: could not cancel {entry['id']}: {error}")
