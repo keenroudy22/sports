@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-29T13:24:27Z",
+  "updatedAt": "2026-09-29T14:33:02Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -927,6 +927,15 @@
           "name": "Carolina Panthers",
           "players": [
             {
+              "id": "4362647",
+              "name": "Damien Lewis",
+              "position": "G",
+              "status": "Doubtful",
+              "injury": "Elbow",
+              "reportedAt": "2026-09-29T14:07Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4362647/damien-lewis"
+            },
+            {
               "id": "4243256",
               "name": "Devin Lloyd",
               "position": "LB",
@@ -1053,15 +1062,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4685472/tetairoa-mcmillan"
             },
             {
-              "id": "4362647",
-              "name": "Damien Lewis",
-              "position": "G",
-              "status": "Questionable",
-              "injury": "Elbow",
-              "reportedAt": "2026-09-27T18:15Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4362647/damien-lewis"
-            },
-            {
               "id": "3917853",
               "name": "Mike Jackson",
               "position": "CB",
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-29T13:01Z",
+              "reportedAt": "2026-09-29T14:16Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1847,6 +1847,24 @@
           "name": "Dallas Cowboys",
           "players": [
             {
+              "id": "5095865",
+              "name": "Shavon Revel Jr.",
+              "position": "CB",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-09-29T13:57Z",
+              "source": "https://www.espn.com/nfl/player/_/id/5095865/shavon-revel-jr"
+            },
+            {
+              "id": "2980097",
+              "name": "Jonathan Bullard",
+              "position": "DT",
+              "status": "Out",
+              "injury": "Calf",
+              "reportedAt": "2026-09-29T13:56Z",
+              "source": "https://www.espn.com/nfl/player/_/id/2980097/jonathan-bullard"
+            },
+            {
               "id": "4242355",
               "name": "Jake Ferguson",
               "position": "TE",
@@ -2052,24 +2070,6 @@
               "injury": null,
               "reportedAt": "2026-09-16T01:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/4683848/donovan-ezeiruaku"
-            },
-            {
-              "id": "3676833",
-              "name": "KaVontae Turpin",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-15T02:44Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3676833/kavontae-turpin"
-            },
-            {
-              "id": "4426485",
-              "name": "Jonathan Mingo",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-15T02:39Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4426485/jonathan-mingo"
             }
           ]
         },
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "20",
-          "name": "Blake Grupe",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-09-28T20:40:47Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4259619/blake-grupe"
-        },
-        {
-          "teamId": "20",
           "name": "Nahshon Wright",
           "from": "Out",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-09-29T10:10:00Z",
           "source": "https://www.espn.com/nfl/player/_/id/4251007/braxton-jones"
+        },
+        {
+          "teamId": "29",
+          "name": "Damien Lewis",
+          "from": "Questionable",
+          "to": "Doubtful",
+          "observedAt": "2026-09-29T14:33:02Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4362647/damien-lewis"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-29T13:24:27Z",
-      "lastAttemptAt": "2026-09-29T13:24:27Z",
+      "checkedAt": "2026-09-29T14:33:02Z",
+      "lastAttemptAt": "2026-09-29T14:33:02Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-29T13:24:27Z",
-      "lastAttemptAt": "2026-09-29T13:24:27Z",
+      "checkedAt": "2026-09-29T14:33:02Z",
+      "lastAttemptAt": "2026-09-29T14:33:02Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
