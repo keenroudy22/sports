@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-29T20:40:12Z",
+  "updatedAt": "2026-09-29T20:49:32Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-29T20:21Z",
+              "reportedAt": "2026-09-29T20:34Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -3771,7 +3771,7 @@
               "id": "4603186",
               "name": "Jack Bech",
               "position": "WR",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Forearm",
               "reportedAt": "2026-09-28T20:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/4603186/jack-bech"
@@ -5987,6 +5987,15 @@
           "name": "Pittsburgh Steelers",
           "players": [
             {
+              "id": "4038815",
+              "name": "Rico Dowdle",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Toe",
+              "reportedAt": "2026-09-29T20:38Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4038815/rico-dowdle"
+            },
+            {
               "id": "4567979",
               "name": "Brandin Echols",
               "position": "CB",
@@ -6021,15 +6030,6 @@
               "injury": null,
               "reportedAt": "2026-09-28T23:42Z",
               "source": "https://www.espn.com/nfl/player/_/id/4426506/joey-porter-jr"
-            },
-            {
-              "id": "4038815",
-              "name": "Rico Dowdle",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Toe",
-              "reportedAt": "2026-09-28T20:45Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4038815/rico-dowdle"
             },
             {
               "id": "4431533",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "11",
-          "name": "Ashton Dulin",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-09-29T19:57:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4061956/ashton-dulin"
-        },
-        {
           "teamId": "30",
           "name": "Albert Regis",
           "from": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Injured Reserve",
           "observedAt": "2026-09-29T20:29:05Z",
           "source": "https://www.espn.com/nfl/player/_/id/4426901/leo-chenal"
+        },
+        {
+          "teamId": "13",
+          "name": "Jack Bech",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-09-29T20:49:32Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4603186/jack-bech"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-29T20:40:12Z",
-      "lastAttemptAt": "2026-09-29T20:40:12Z",
+      "checkedAt": "2026-09-29T20:49:32Z",
+      "lastAttemptAt": "2026-09-29T20:49:32Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-29T20:40:12Z",
-      "lastAttemptAt": "2026-09-29T20:40:12Z",
+      "checkedAt": "2026-09-29T20:49:32Z",
+      "lastAttemptAt": "2026-09-29T20:49:32Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
