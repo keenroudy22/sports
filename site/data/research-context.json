@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-29T19:57:38Z",
+  "updatedAt": "2026-09-29T20:29:05Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-29T19:29Z",
+              "reportedAt": "2026-09-29T20:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -4377,6 +4377,15 @@
           "name": "Miami Dolphins",
           "players": [
             {
+              "id": "4429576",
+              "name": "James Ester",
+              "position": "G",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-29T20:06Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4429576/james-ester"
+            },
+            {
               "id": "4259558",
               "name": "Robert Beal Jr.",
               "position": "DE",
@@ -4591,15 +4600,6 @@
               "injury": "Hamstring",
               "reportedAt": "2026-09-19T21:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/3859006/ronnie-harrison-jr"
-            },
-            {
-              "id": "4714379",
-              "name": "Seydou Traore",
-              "position": "TE",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-18T22:04Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4714379/seydou-traore"
             }
           ]
         },
@@ -4837,6 +4837,15 @@
           "name": "New England Patriots",
           "players": [
             {
+              "id": "15718",
+              "name": "Greg Van Roten",
+              "position": "G",
+              "status": "Injured Reserve",
+              "injury": "Thigh",
+              "reportedAt": "2026-09-29T20:21Z",
+              "source": "https://www.espn.com/nfl/player/_/id/15718/greg-van-roten"
+            },
+            {
               "id": "4428930",
               "name": "Craig Woodson",
               "position": "S",
@@ -4961,15 +4970,6 @@
               "injury": null,
               "reportedAt": "2026-09-27T22:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431452/drake-maye"
-            },
-            {
-              "id": "15718",
-              "name": "Greg Van Roten",
-              "position": "G",
-              "status": "Questionable",
-              "injury": "Thigh",
-              "reportedAt": "2026-09-27T18:11Z",
-              "source": "https://www.espn.com/nfl/player/_/id/15718/greg-van-roten"
             },
             {
               "id": "4372030",
@@ -7137,6 +7137,24 @@
           "name": "Washington Commanders",
           "players": [
             {
+              "id": "4685425",
+              "name": "Marvin Jones Jr.",
+              "position": "LB",
+              "status": "Out",
+              "injury": "Undisclosed",
+              "reportedAt": "2026-09-29T20:16Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4685425/marvin-jones-jr"
+            },
+            {
+              "id": "4426901",
+              "name": "Leo Chenal",
+              "position": "LB",
+              "status": "Injured Reserve",
+              "injury": "Neck",
+              "reportedAt": "2026-09-29T20:15Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4426901/leo-chenal"
+            },
+            {
               "id": "3127273",
               "name": "Frankie Luvu",
               "position": "LB",
@@ -7189,15 +7207,6 @@
               "injury": "Hamstring",
               "reportedAt": "2026-09-28T21:07Z",
               "source": "https://www.espn.com/nfl/player/_/id/4360635/chig-okonkwo"
-            },
-            {
-              "id": "4426901",
-              "name": "Leo Chenal",
-              "position": "LB",
-              "status": "Out",
-              "injury": "Neck",
-              "reportedAt": "2026-09-28T20:24Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4426901/leo-chenal"
             },
             {
               "id": "4361357",
@@ -7351,44 +7360,11 @@
               "injury": null,
               "reportedAt": "2026-09-23T04:02Z",
               "source": "https://www.espn.com/nfl/player/_/id/4567156/treylon-burks"
-            },
-            {
-              "id": "4048228",
-              "name": "John Bates",
-              "position": "TE",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-23T03:58Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4048228/john-bates"
             }
           ]
         }
       },
       "changes": [
-        {
-          "teamId": "34",
-          "name": "Ed Ingram",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-09-29T19:57:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4242227/ed-ingram"
-        },
-        {
-          "teamId": "34",
-          "name": "Jadeveon Clowney",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-09-29T19:57:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/16734/jadeveon-clowney"
-        },
-        {
-          "teamId": "34",
-          "name": "Nico Collins",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-09-29T19:57:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4258173/nico-collins"
-        },
         {
           "teamId": "11",
           "name": "Ashton Dulin",
@@ -7764,11 +7740,35 @@
           "to": "Questionable",
           "observedAt": "2026-09-29T19:57:38Z",
           "source": "https://www.espn.com/nfl/player/_/id/4360635/chig-okonkwo"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-09-29T20:29:05Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "17",
+          "name": "Greg Van Roten",
+          "from": "Questionable",
+          "to": "Injured Reserve",
+          "observedAt": "2026-09-29T20:29:05Z",
+          "source": "https://www.espn.com/nfl/player/_/id/15718/greg-van-roten"
+        },
+        {
+          "teamId": "28",
+          "name": "Leo Chenal",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-09-29T20:29:05Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4426901/leo-chenal"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-29T19:57:38Z",
-      "lastAttemptAt": "2026-09-29T19:57:38Z",
+      "checkedAt": "2026-09-29T20:29:05Z",
+      "lastAttemptAt": "2026-09-29T20:29:05Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-29T19:57:38Z",
-      "lastAttemptAt": "2026-09-29T19:57:38Z",
+      "checkedAt": "2026-09-29T20:29:05Z",
+      "lastAttemptAt": "2026-09-29T20:29:05Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
