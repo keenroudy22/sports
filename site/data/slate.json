@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-30T10:45:41Z",
+  "updatedAt": "2026-09-30T12:45:36Z",
   "sources": [
     {
       "league": "NFL",
@@ -7,7 +7,7 @@
       "dateWindowUrls": [
         "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=3&limit=1000"
       ],
-      "retrievedAt": "2026-09-30T10:45:41Z",
+      "retrievedAt": "2026-09-30T12:45:36Z",
       "trainingCoverage": "season feed",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -33,7 +33,7 @@
       "trainingCoverage": "limited weekly provider sample",
       "fetchStatus": "failed",
       "fetchMethod": "verified season-week union",
-      "lastAttemptAt": "2026-09-30T10:45:41Z",
+      "lastAttemptAt": "2026-09-30T12:45:36Z",
       "failureReason": "ESPN scoreboard HTTP 400",
       "fallbackFailure": "CFB: no saved weeks to verify fallback coverage"
     }
