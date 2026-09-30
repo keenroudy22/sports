@@ -187,7 +187,8 @@ Handy commands (from `~/Projects/sports`):
   10-15 minutes before X; all other approved posts mirror after X. It has a read-only links/resources index and
   concise click-to-accept rules for 21+, legal-location, entertainment-only use. Sportsbook referral offers live in
   their own channel, use only the owner's exact links, and are clearly labeled with age, location, changing-terms and
-  Kook'n-benefit language; never mix them into ordinary plays.
+  Kook'n-benefit language; never mix them into ordinary plays. The site's front-page community card is the main
+  conversion path: it promises only early official plays, Discord-only Arb Radar candidates and the public record.
 - **The site**: the projection-card look everywhere (logos, photos, tiles), tabs Today, Board, Games, Stats, Record,
   More; always check changes at 375 px.
 - **Posting**: plays around noon Eastern (two hours before an earlier kickoff), ten minutes apart and from every

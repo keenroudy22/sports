@@ -209,6 +209,14 @@
     return lines.length ? `<p class="side-lines">${lines.join('<br>')}</p>` : '';
   };
   const theRecordCard = rec => `<div class="card record-card">${recordBoxes(rec)}${moneyLine(rec)}${sideLines(rec)}</div>`;
+  /* The free community is the site's clearest next step: official plays arrive shortly before X, while the
+     append-only record stays public here. Keep the claim precise and keep short-lived arb candidates separate. */
+  const communityCard = () => `<aside class="community-card card" aria-label="Join the Kook'n Discord">
+    <div class="community-copy"><p class="eyebrow">Free Kook'n Discord</p><h2>The card lands here first.</h2>
+      <p>Official plays and graphics arrive about 10–15 minutes before X. Time-sensitive Arb Radar candidates stay in Discord.</p>
+      <div class="community-actions"><a class="btn btn-primary" href="https://discord.gg/CvNTUUSnNz" target="_blank" rel="noopener">Join the free Discord ↗</a><a class="btn" href="#record">See every result</a></div></div>
+    <div class="community-proof" aria-label="What the community gets"><span><b>Early</b><small>official plays</small></span><span><b>Fast</b><small>arb alerts</small></span><span><b>Public</b><small>win-or-lose record</small></span></div>
+  </aside>`;
   /* The ladder in one line under the record, so a phone sees it without scrolling past the plays. */
   const ladderStrip = L => {
     const open = L.open, info = (open && open.ladder) || {};
@@ -417,6 +425,8 @@
     gameIndex = new Map(games.map(g => [g.id, g]));
     return `${head(title,
       first ? `${now.length} game${now.length === 1 ? '' : 's'} on this slate. Our plays come first; everything under them is what our numbers see, not picks.` : 'Nothing kicks off in the next eight days in this league.')}
+      ${communityCard()}
+      <nav class="discovery" aria-label="Explore Kook'n"><a href="#scores/MLB"><b>Scores</b><small>7 leagues</small></a><a href="#lab"><b>Kook'n Lab</b><small>What is being tested</small></a><a href="#arbs"><b>Arb Radar</b><small>Calculator and rules</small></a></nav>
       <div class="two-col"><div>
         ${recordStrip(C.theRecord(picks), state.league === 'ALL' ? 'The record' : `The record · ${leagueName(dataLeague())}`, picks)}
         ${ladderStrip(C.theLadder(data.picks))}
@@ -1154,7 +1164,7 @@
   async function viewMore() {
     const count = state.ticket.length;
     const link = (href, label, note) => `<a href="${href}"${href.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}><span>${label}</span><small>${note}</small></a>`;
-    return `${head('More', '')}
+    return `${head('More', '')}${communityCard()}
       <div class="card menu">${link('https://discord.gg/CvNTUUSnNz', 'Join the Discord', 'Confirmed plays early plus time-sensitive arb alerts')}${link('https://x.com/keenkooks', 'Follow on X', '@keenkooks')}${link('#lab', "Kook'n Lab", 'How every new sport earns its way onto the card')}${link('#arbs', "Kook'n Arb Radar", 'Discord alerts and public calculator')}${link('#model', 'The scoreboard', 'Our numbers graded against the closing line')}${link('#ticket', 'Your ticket', count ? `${count} line${count === 1 ? '' : 's'}` : 'Parlay builder')}
       ${link('#research', 'Research desk', 'Injuries and analyst notes')}${link('#scores/MLB', 'All sports scores', 'NBA, WNBA, college hoops, MLB, NHL, Premier League and MLS')}</div>
       <div class="section card" style="padding:14px"><p class="prose" style="margin:0"><b>About.</b> Kook'n is a sports stats engine graded against the betting market. The model publishes score and player projections before kickoff, every forecast is kept, and the scoreboard grades them against the closing line. Stats come from ESPN’s public feeds and nflverse. For entertainment only; nothing here is betting advice.</p></div>`;

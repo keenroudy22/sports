@@ -300,6 +300,10 @@ test('app.js parses', () => {
   const path = require('node:path');
   const source = fs.readFileSync(path.join(__dirname, '..', 'site', 'app.js'), 'utf8');
   assert.doesNotThrow(() => new vm.Script(source), 'site/app.js has a syntax error');
+  assert.match(source, /Join the free Discord/);
+  assert.match(source, /about 10–15 minutes before X/);
+  assert.match(source, /Time-sensitive Arb Radar candidates stay in Discord/);
+  assert.match(source, /href="#record">See every result/);
 });
 
 test('one record: the straight plays in wins and losses and units, the side records apart', () => {

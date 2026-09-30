@@ -114,6 +114,8 @@ delivery job normally gives members a 10-15 minute head start. Use "plays," not 
 injury angles and conversation posts still mirror after X because early access to those does not create useful value.
 
 Do not delay X by more than this. The goal is a meaningful Discord reason without making @keenkooks stale. Promote
-the benefit in one pinned/launch post, the profile bio and the site's Discord link; do not repeat it under every play.
+the benefit in one pinned/launch post, the profile bio and the site's front-page community card; do not repeat it
+under every play. The card keeps the three promises together: official plays early, short-lived Arb Radar candidates
+only in Discord, and the full win-or-lose record public on the site.
 Track invite joins, X link clicks and follows weekly. Once a play is live in Discord it is official, stays in the
 public record and is graded. Confirmed hard news before X produces a Discord pull update and cancels the X post.
