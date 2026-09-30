@@ -9,7 +9,8 @@ Together with the plays that makes a post every day of the season.
 One record, the same on the site and on X (the owner's call, 2026-09-25): every play the desk published counts,
 whether or not its post went out (a play pulled before its post stays in the record and is graded as posted),
 apart from the Week 1 legs imported without prices. The record is wins and losses of the straight plays; fun
-parlays get their own line. No units on X: money lives on the site only, at $100 a play (site/core.js).
+parlays get their own line. Straight-play units live on the site. A fun ticket's smaller stake is shown on the
+receipt so nobody mistakes a 0.25u parlay for a full-unit straight play.
 
   python scripts/receipts.py [--now ISO]      print the receipts that are ready and their text
 """
@@ -71,6 +72,51 @@ def label(pick, games=None):
     return pick_card.short_title(pick, (games or {}).get((pick.get('gameIds') or [None])[0]))
 
 
+def stake_text(pick):
+    """The deliberately smaller fun-ticket stake, only when the stored play supplies one."""
+    stake = pick.get('riskUnits')
+    if not isinstance(stake, (int, float)):
+        return ''
+    return f'{stake:g}u'
+
+
+def leg_results(pick):
+    """The settled result of each parlay leg from the immutable settlement text, when it was recorded."""
+    actual = str(pick.get('actual') or '')
+    if not actual.lower().startswith('legs:'):
+        return []
+    results = [part.strip().lower() for part in actual.split(':', 1)[1].split(',')]
+    return [result for result in results if result in MARKS]
+
+
+def result_detail(pick):
+    """One factual line that makes a receipt worth reading without manufacturing a stat.
+
+    Parlays say how many legs hit and call out a one-leg miss. Straight plays use the preserved final result.
+    """
+    if pick_card.play_kind(pick) == 'parlay':
+        results = leg_results(pick)
+        stake = stake_text(pick)
+        pieces = [stake] if stake else []
+        if results:
+            won = results.count('win')
+            pieces.append(f'{won}/{len(results)} legs hit')
+            if pick.get('result') == 'loss' and results.count('loss') == 1:
+                pieces.append('missed by one leg')
+            elif pick.get('result') == 'win':
+                pieces.append('clean sweep')
+        return ' · '.join(pieces)
+    actual = str(pick.get('actual') or '').strip()
+    return f'Final: {actual}' if actual else ''
+
+
+def result_line(pick, games=None):
+    """The compact public receipt row, with the result first and a useful second line when one exists."""
+    main = f"{MARKS[pick['result']]} {label(pick, games)}"
+    detail = result_detail(pick)
+    return f'{main} · {detail}' if detail else main
+
+
 def record_text(summary):
     """Wins and losses (and pushes), as the site shows them. No units: followers never see a stake."""
     return f"{summary['win']}-{summary['loss']}" + (f"-{summary['push']}" if summary['push'] else '')
@@ -95,6 +141,18 @@ def by_kind(rows):
         if group:
             out.append((KIND_NAMES[kind], record_text(x_post.summarize(group))))
     return out
+
+
+def kind_line(name, rec, rows):
+    """A category line; fun parlays name their stored smaller stake instead of looking like full-unit plays."""
+    if name != KIND_NAMES['parlay']:
+        return f'{name} {rec}'
+    stakes = {stake_text(r) for r in rows if pick_card.play_kind(r) == 'parlay' and stake_text(r)}
+    if len(stakes) == 1:
+        stake = next(iter(stakes))
+        count = len([r for r in rows if pick_card.play_kind(r) == 'parlay'])
+        return f"{name} {rec} · {stake}{' each' if count > 1 else ''}"
+    return f'{name} {rec}'
 
 
 def morning(day):
@@ -144,10 +202,15 @@ def day_receipt(day, first, latest, games, ids):
     name = f'{day:%A}'
     head = f"{name}: {headline(rows)}"
     tail = leagues(rows)
-    text = fit([f"{MARKS[r['result']]} {label(r, games)}" for r in rows], head, tail.strip(), head_sep='\n')
+    text = fit([result_line(r, games) for r in rows], head, tail.strip(), head_sep='\n')
+    straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder')]
+    fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
     return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}', 'kind': 'receipt',
             'title': headline(rows), 'label': 'YESTERDAY’S PLATES', 'when': f'{day:%A, %b %-d}',
-            'rows': [(r['result'], label(r, games)) for r in rows], 'text': text, 'due': morning(day + timedelta(days=1)),
+            'summary': {'straight': record_text(x_post.summarize(straight)) if straight else None,
+                        'fun': record_text(x_post.summarize(fun)) if fun else None},
+            'rows': [(r['result'], label(r, games), result_detail(r)) for r in rows], 'text': text,
+            'due': morning(day + timedelta(days=1)),
             'stale': datetime(day.year, day.month, day.day, LATEST[0], LATEST[1], tzinfo=gates.EASTERN).astimezone(timezone.utc) + timedelta(days=1)}
 
 
@@ -160,10 +223,15 @@ def week_receipt(wednesday, first, latest, games, ids):
     # The dates keep two weeks with the same record from posting the same words; one kind of play shows only the total.
     head = f"The week ({start:%b} {start.day} to {end:%b} {end.day}): {headline(rows)}"
     tail = leagues(rows)
-    text = fit([f'{name} {rec}' for name, rec in kinds] if len(kinds) > 1 else [], head, tail.strip(), head_sep='\n')
+    detail_rows = [kind_line(name, rec, rows) for name, rec in kinds]
+    text = fit(detail_rows if len(kinds) > 1 else [], head, tail.strip(), head_sep='\n')
+    straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder')]
+    fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
     return {'key': f'receipt:week:{end.isoformat()}', 'card': f'receipt-week-{end.isoformat()}', 'kind': 'receipt',
             'title': headline(rows), 'label': 'THIS WEEK’S PLATES', 'when': f'{start:%b %-d} to {end:%b %-d}',
-            'rows': [(None, f'{name}  {rec}') for name, rec in kinds], 'text': text, 'due': morning(wednesday),
+            'summary': {'straight': record_text(x_post.summarize(straight)) if straight else None,
+                        'fun': record_text(x_post.summarize(fun)) if fun else None},
+            'rows': [(None, kind_line(name, rec, rows), '') for name, rec in kinds], 'text': text, 'due': morning(wednesday),
             'stale': datetime(wednesday.year, wednesday.month, wednesday.day, LATEST[0], LATEST[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)}
 
 
@@ -258,7 +326,7 @@ def book(first, latest, games, log_book, now):
             if r.get('result') in MARKS]
     if not rows:
         return None
-    lines = [f'{name} {rec}' for name, rec in by_kind(rows)]
+    lines = [kind_line(name, rec, rows) for name, rec in by_kind(rows)]
     if len(lines) < 2:
         lines = []                         # one kind only: its line would repeat the season's
     through = today - timedelta(days=1)
@@ -335,7 +403,10 @@ def with_menu(receipt, post, plays_today):
     count = len(plays_today)
     today = f"Today: {count} play{'s' if count != 1 else ''}."
     tags = ' '.join(t for t in (x_post.TAGS[l] for l in ('NFL', 'CFB')) if t in receipt['text'] + ' ' + post['text'])
-    lines = [f"{MARKS.get(result, '•')} {name}" for result, name in rows] if receipt['key'].startswith('receipt:day:') else [name for _, name in rows]
+    if receipt['key'].startswith('receipt:day:'):
+        lines = [f"{MARKS.get(row[0], '•')} {row[1]}" + (f" · {row[2]}" if len(row) > 2 and row[2] else '') for row in rows]
+    else:
+        lines = [row[1] for row in rows]
     head = receipt['text'].split('\n')[0]           # "Saturday: 5-3"
     text = fit(lines, head, f'{today}\n{tags}'.strip(), head_sep='\n')
     return dict(receipt, key=f"{receipt['key']}+{post['key']}", text=text, stale=min(receipt['stale'], post['stale']))

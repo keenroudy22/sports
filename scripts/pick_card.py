@@ -409,29 +409,29 @@ def ladder_svg(pick, avatar=None):
                 'preserveAspectRatio="xMidYMid meet" clip-path="url(#chefClip)"/>') if chef else ''
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
 <defs>
-  <linearGradient id="ladderBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a1c14"/><stop offset="0.72" stop-color="#17100c"/><stop offset="1" stop-color="#3d2a1d"/></linearGradient>
+  <linearGradient id="ladderBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#08131d"/><stop offset="0.72" stop-color="#071018"/><stop offset="1" stop-color="#10313a"/></linearGradient>
   <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="10" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
   <clipPath id="chefClip"><circle cx="880" cy="1100" r="112"/></clipPath>
 </defs>
 <rect width="1080" height="1350" fill="url(#ladderBg)"/>
-<rect x="34" y="34" width="1012" height="1282" rx="34" fill="none" stroke="#f28c28" stroke-opacity=".58" stroke-width="3"/>
-<circle cx="91" cy="94" r="14" fill="none" stroke="#f28c28" stroke-width="5"/><circle cx="91" cy="94" r="5" fill="#f28c28"/><path d="M105 94h28" stroke="#f28c28" stroke-width="5" stroke-linecap="round"/>
+<rect x="34" y="34" width="1012" height="1282" rx="34" fill="none" stroke="#5eeaa4" stroke-opacity=".58" stroke-width="3"/>
+<circle cx="91" cy="94" r="14" fill="none" stroke="#5eeaa4" stroke-width="5"/><circle cx="91" cy="94" r="5" fill="#5eeaa4"/><path d="M105 94h28" stroke="#5eeaa4" stroke-width="5" stroke-linecap="round"/>
 <text x="142" y="116" fill="{CREAM}" font-size="34" font-weight="800" letter-spacing="5">KOOK’N</text>
 <text x="986" y="112" fill="#d8d1c6" font-size="22" font-weight="700" letter-spacing="3" text-anchor="end">CLIMB {run}</text>
 <text x="540" y="190" fill="{CREAM}" font-size="58" font-weight="900" text-anchor="middle" letter-spacing="3">THE 80/20 CLIMB</text>
-<text x="540" y="232" fill="#f28c28" font-size="25" font-weight="800" text-anchor="middle" letter-spacing="3">BANK 20 · RIDE 80 · CLIMB TO {esc(goal)}</text>
+<text x="540" y="232" fill="#5eeaa4" font-size="25" font-weight="800" text-anchor="middle" letter-spacing="3">BANK 20 · RIDE 80 · CLIMB TO {esc(goal)}</text>
 
 <path d="M140 315 H810 Q920 315 920 425 Q920 535 810 535 H270 Q160 535 160 645 Q160 755 270 755 H810 Q920 755 920 865 Q920 975 810 975 H270 Q160 975 160 1085 Q160 1185 270 1185 H690" fill="none" stroke="#756b62" stroke-opacity=".55" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M140 315 H810 Q920 315 920 425 Q920 535 810 535 H270" fill="none" stroke="#f28c28" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M140 315 H810 Q920 315 920 425 Q920 535 810 535 H270" fill="none" stroke="#5eeaa4" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M140 315 H810 Q920 315 920 425 Q920 535 810 535 H270 Q160 535 160 645 Q160 755 270 755 H810 Q920 755 920 865 Q920 975 810 975 H270 Q160 975 160 1085 Q160 1185 270 1185 H690" fill="none" stroke="{CREAM}" stroke-opacity=".46" stroke-width="3" stroke-dasharray="3 24" stroke-linecap="round"/>
 
-<circle cx="140" cy="315" r="34" fill="#f28c28" stroke="{CREAM}" stroke-width="4"/><text x="140" y="323" fill="#17100c" font-size="22" font-weight="900" text-anchor="middle">{esc(start)}</text><text x="140" y="375" fill="#d8d1c6" font-size="20" font-weight="700" text-anchor="middle" letter-spacing="2">START</text>
+<circle cx="140" cy="315" r="34" fill="#5eeaa4" stroke="{CREAM}" stroke-width="4"/><text x="140" y="323" fill="#071018" font-size="22" font-weight="900" text-anchor="middle">{esc(start)}</text><text x="140" y="375" fill="#d8d1c6" font-size="20" font-weight="700" text-anchor="middle" letter-spacing="2">START</text>
 <rect x="510" y="273" width="358" height="84" rx="17" fill="#173a2a" stroke="#6fdc8c" stroke-opacity=".7" stroke-width="2"/>
 <text x="536" y="307" fill="#a6e8b8" font-size="18" font-weight="800" letter-spacing="2">CLIMB TO DATE</text><text x="536" y="338" fill="{CREAM}" font-size="25" font-weight="900">{esc(progress)}</text>
 
-<circle cx="270" cy="535" r="41" fill="#f28c28" fill-opacity=".22" stroke="#f28c28" stroke-width="5" filter="url(#glow)"/><circle cx="270" cy="535" r="12" fill="#f28c28"/>
-<rect x="300" y="478" width="586" height="220" rx="20" fill="#3b2617" stroke="#f28c28" stroke-width="3"/>
-<text x="330" y="518" fill="#f28c28" font-size="20" font-weight="900" letter-spacing="3">STEP {step} · TODAY</text>
+<circle cx="270" cy="535" r="41" fill="#5eeaa4" fill-opacity=".22" stroke="#5eeaa4" stroke-width="5" filter="url(#glow)"/><circle cx="270" cy="535" r="12" fill="#5eeaa4"/>
+<rect x="300" y="478" width="586" height="220" rx="20" fill="#102330" stroke="#5eeaa4" stroke-width="3"/>
+<text x="330" y="518" fill="#5eeaa4" font-size="20" font-weight="900" letter-spacing="3">STEP {step} · TODAY</text>
 <text x="850" y="518" fill="#d8d1c6" font-size="21" font-weight="700" text-anchor="end">{esc(price)} AT {esc(book.upper())}</text>
 <text x="330" y="561" fill="{CREAM}" font-size="36" font-weight="900">{esc(stake_)} → {esc(payout_)}</text>
 {leg_rows}
@@ -440,7 +440,7 @@ def ladder_svg(pick, avatar=None):
 <g fill="#756b62" stroke="#d8d1c6" stroke-opacity=".55" stroke-width="3"><circle cx="520" cy="755" r="25"/><circle cx="810" cy="755" r="25"/><circle cx="650" cy="975" r="25"/><circle cx="270" cy="975" r="25"/><circle cx="320" cy="1185" r="25"/></g>
 <g fill="#d8d1c6" fill-opacity=".72"><circle cx="520" cy="755" r="5"/><circle cx="810" cy="755" r="5"/><circle cx="650" cy="975" r="5"/><circle cx="270" cy="975" r="5"/><circle cx="320" cy="1185" r="5"/></g>
 <text x="665" y="730" fill="#d8d1c6" fill-opacity=".65" font-size="21" font-weight="700" text-anchor="middle" letter-spacing="2">FUTURE RUNGS UNLOCK ONE AT A TIME</text>
-<path d="M690 1185v-88" stroke="{CREAM}" stroke-width="6" stroke-linecap="round"/><path d="M696 1098h110l-22 30 22 30H696z" fill="#f28c28"/><text x="750" y="1136" fill="#17100c" font-size="22" font-weight="900" text-anchor="middle">{esc(goal)}</text><text x="690" y="1225" fill="#f28c28" font-size="23" font-weight="900" text-anchor="middle" letter-spacing="3">THE GOAL</text>
+<path d="M690 1185v-88" stroke="{CREAM}" stroke-width="6" stroke-linecap="round"/><path d="M696 1098h110l-22 30 22 30H696z" fill="#5eeaa4"/><text x="750" y="1136" fill="#071018" font-size="22" font-weight="900" text-anchor="middle">{esc(goal)}</text><text x="690" y="1225" fill="#5eeaa4" font-size="23" font-weight="900" text-anchor="middle" letter-spacing="3">THE GOAL</text>
 <circle cx="880" cy="1100" r="134" fill="{CREAM}" fill-opacity=".07"/><circle cx="880" cy="1100" r="115" fill="{CREAM}" fill-opacity=".09" stroke="{CREAM}" stroke-opacity=".4" stroke-width="3"/>{chef_art}
 <text x="76" y="1260" fill="{CREAM}" font-size="22" font-weight="750">Bank 20% of every return.</text><text x="76" y="1292" fill="{CREAM}" font-size="22" font-weight="750">Ride 80%. A miss cannot take the bank.</text><text x="1002" y="1260" fill="#d8d1c6" font-size="22" text-anchor="end">keenroudy.com/sports</text><text x="1002" y="1292" fill="#a69d92" font-size="17" text-anchor="end">Entertainment only. Not advice.</text>
 </svg>'''
@@ -526,50 +526,80 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
     return '\n'.join(parts)
 
 
-HOUSE = ('#2a1c14', '#3d2a1d', '#f28c28')      # the kitchen's own colours, for a card that is not on one team
+HOUSE = ('#08131d', '#10313a', '#5eeaa4')      # Kook'n navy and mint, for cards that are not tied to one team
 RESULT_MARKS = {'win': ('W', '#6fdc8c'), 'loss': ('L', '#ff7a6b'), 'push': ('P', None), 'void': ('P', None)}
 
 
 def receipt_svg(receipt, avatar=None):
-    """A receipt in the same frame as a play: the kitchen's colours, the record as the title, each play with
-    its result where a play's numbers go, and the chef on the plate."""
+    """A tall, shareable result report: the record leads, then every play gets room for its final or parlay sweat."""
     chef = avatar_uri(CHEF) if avatar is None else avatar
     primary, other, accent = HOUSE
-    ink, soft = CREAM, shade(CREAM, 0.82)
+    ink, soft, raised = CREAM, '#9eb1bf', '#102330'
     rows = receipt.get('rows') or []
     shown = rows if len(rows) <= 6 else rows[:5]
-    top = 262 + 66 + 4 + 44
+    top = 475
+    row_h = min(176, 690 // max(len(shown), 1))
+    box_h = row_h - 12
     body = []
-    for i, (result, text) in enumerate(shown):
-        y = top + 36 * i
+    for i, row in enumerate(shown):
+        result, text = row[:2]
+        detail = row[2] if len(row) > 2 else ''
+        y = top + row_h * i
+        tone = RESULT_MARKS.get(result, ('', accent))[1] if result else accent
+        middle = y + box_h // 2
+        body.append(f'<rect x="56" y="{y}" width="968" height="{box_h}" rx="18" fill="{raised}" stroke="{tone or accent}" stroke-opacity=".28" stroke-width="2"/>')
         if result is None:
-            size, limit = (30, 36) if len(text) <= 36 else (24, 48)
-            body.append(f'<text x="80" y="{y + 6}" fill="{ink}" font-size="{size}">{esc(fit(text, limit))}</text>')
+            size, limit = (30, 42) if len(text) <= 42 else (25, 55)
+            body.append(f'<circle cx="91" cy="{middle}" r="13" fill="{accent}"/>')
+            body.append(f'<text x="122" y="{middle + 10}" fill="{ink}" font-size="{size}" font-weight="750">{esc(fit(text, limit))}</text>')
             continue
         mark, colour = RESULT_MARKS.get(result, ('?', None))
-        size, limit = (26, 34) if len(text) <= 34 else (22, 50)
-        body.append(f'<text x="80" y="{y}" fill="{colour or soft}" font-size="26" font-weight="800">{mark}</text>')
-        body.append(f'<text x="116" y="{y}" fill="{ink}" font-size="{size}">{esc(fit(text, limit))}</text>')
+        size, limit = (28, 45) if len(text) <= 45 else (23, 57)
+        body.append(f'<circle cx="98" cy="{middle}" r="27" fill="{colour or soft}" fill-opacity=".15" stroke="{colour or soft}" stroke-width="3"/>')
+        body.append(f'<text x="98" y="{middle + 9}" fill="{colour or soft}" font-size="27" font-weight="900" text-anchor="middle">{mark}</text>')
+        body.append(f'<text x="144" y="{middle + (-5 if detail else 10)}" fill="{ink}" font-size="{size}" font-weight="750">{esc(fit(text, limit))}</text>')
+        if detail:
+            body.append(f'<text x="144" y="{middle + 29}" fill="{soft}" font-size="20" font-weight="600">{esc(fit(detail, 70))}</text>')
     if len(rows) > len(shown):
-        body.append(f'<text x="80" y="{top + 36 * len(shown)}" fill="{soft}" font-size="24">and {len(rows) - len(shown)} more on the site</text>')
+        body.append(f'<text x="540" y="{top + row_h * len(shown) + 18}" fill="{soft}" font-size="21" text-anchor="middle">+ {len(rows) - len(shown)} more graded on the site</text>')
+    summary = receipt.get('summary') or {}
+    straight, fun = summary.get('straight'), summary.get('fun')
+    chips = []
+    if straight:
+        chips += [f'<rect x="56" y="366" width="330" height="76" rx="16" fill="{raised}" stroke="#284253" stroke-width="2"/>',
+                  f'<text x="78" y="395" fill="{soft}" font-size="17" font-weight="800" letter-spacing="2">STRAIGHT PLAYS</text>',
+                  f'<text x="78" y="428" fill="{ink}" font-size="31" font-weight="900">{esc(straight)}</text>']
+    if fun:
+        x = 408 if straight else 56
+        chips += [f'<rect x="{x}" y="366" width="350" height="76" rx="16" fill="{raised}" stroke="{accent}" stroke-opacity=".35" stroke-width="2"/>',
+                  f'<text x="{x + 22}" y="395" fill="{soft}" font-size="17" font-weight="800" letter-spacing="2">FUN TICKETS · 0.25U</text>',
+                  f'<text x="{x + 22}" y="428" fill="{ink}" font-size="31" font-weight="900">{esc(fun)}</text>']
+    chef_art = (f'<defs><clipPath id="receiptChef"><circle cx="930" cy="176" r="88"/></clipPath></defs>'
+                f'<circle cx="930" cy="176" r="98" fill="{accent}" fill-opacity=".09" stroke="{accent}" stroke-opacity=".55" stroke-width="3"/>'
+                f'<image href="{chef}" x="842" y="88" width="176" height="176" clip-path="url(#receiptChef)" preserveAspectRatio="xMidYMid meet"/>') if chef else ''
     parts = [
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">',
+        '<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">',
         '<defs>',
-        f'<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{primary}"/><stop offset="0.72" stop-color="{shade(primary, 0.8)}"/><stop offset="1" stop-color="{other}"/></linearGradient>',
+        f'<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{primary}"/><stop offset="0.68" stop-color="#071018"/><stop offset="1" stop-color="{other}"/></linearGradient>',
+        '<pattern id="dots" width="34" height="34" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.4" fill="#5eeaa4" fill-opacity=".07"/></pattern>',
         '</defs>',
-        f'<rect width="{WIDTH}" height="{HEIGHT}" fill="url(#bg)"/>',
-        *plate(WIDTH - 250, HEIGHT // 2 + 20, chef, False),
-        f'<rect x="36" y="36" width="{WIDTH - 72}" height="{HEIGHT - 72}" rx="30" fill="none" stroke="{accent}" stroke-opacity="0.55" stroke-width="3"/>',
-        PAN.format(x=72, y=78, s=0.5, c=accent),
-        f'<text x="140" y="116" fill="{ink}" font-size="34" font-weight="800" letter-spacing="5">KOOK’N</text>',
-        f'<text x="{WIDTH - 80}" y="116" fill="{soft}" font-size="26" font-weight="700" letter-spacing="3" text-anchor="end">{esc(receipt.get("kicker") or "RECEIPTS")}</text>',
-        f'<text x="80" y="212" fill="{soft}" font-size="32">{esc(receipt.get("when") or "")}</text>',
-        f'<text x="80" y="262" fill="{accent}" font-size="24" font-weight="700" letter-spacing="4">{esc(receipt.get("label") or "")}</text>',
-        *[f'<text x="80" y="{262 + (size + 6) * (i + 1) - 2}" fill="{ink}" font-size="{size}" font-weight="800">{esc(text)}</text>'
-          for size in [66 if len(receipt.get("title") or "") <= 22 else 54] for i, text in enumerate(title_lines(receipt.get("title") or "", 22, 22))],
+        '<rect width="1080" height="1350" fill="url(#bg)"/>',
+        '<rect width="1080" height="1350" fill="url(#dots)"/>',
+        f'<rect x="28" y="28" width="1024" height="1294" rx="34" fill="none" stroke="{accent}" stroke-opacity=".42" stroke-width="3"/>',
+        f'<rect x="28" y="28" width="1024" height="9" rx="4" fill="{accent}"/>',
+        PAN.format(x=56, y=76, s=0.44, c=accent),
+        f'<text x="116" y="109" fill="{ink}" font-size="31" font-weight="900" letter-spacing="5">KOOK’N</text>',
+        f'<text x="790" y="106" fill="{soft}" font-size="18" font-weight="800" letter-spacing="4" text-anchor="end">FINAL REPORT</text>',
+        f'<text x="56" y="171" fill="{accent}" font-size="22" font-weight="850" letter-spacing="5">{esc(receipt.get("label") or "FINAL REPORT")}</text>',
+        f'<text x="56" y="218" fill="{soft}" font-size="27" font-weight="650">{esc(receipt.get("when") or "")}</text>',
+        f'<text x="56" y="324" fill="{ink}" font-size="{112 if len(receipt.get("title") or "") <= 8 else 68 if len(receipt.get("title") or "") <= 18 else 50}" font-weight="950" letter-spacing="-3">{esc(receipt.get("title") or "")}</text>',
+        chef_art,
+        *chips,
         *body,
-        f'<text x="80" y="{HEIGHT - 62}" fill="{ink}" font-size="26" font-weight="700">Graded in public, win or lose. <tspan fill="{soft}" font-weight="400">keenroudy.com/sports</tspan></text>',
-        f'<text x="{WIDTH - 80}" y="{HEIGHT - 62}" fill="{soft}" font-size="19" text-anchor="end">Entertainment only. Not advice.</text>',
+        f'<line x1="56" y1="1227" x2="1024" y2="1227" stroke="{accent}" stroke-opacity=".23" stroke-width="2"/>',
+        f'<text x="56" y="1270" fill="{ink}" font-size="24" font-weight="800">NO HIDING. GRADED IN PUBLIC, WIN OR LOSE.</text>',
+        f'<text x="56" y="1300" fill="{soft}" font-size="20">Full record + details at keenroudy.com/sports</text>',
+        f'<text x="1024" y="1300" fill="{soft}" font-size="17" text-anchor="end">Entertainment only. Not advice.</text>',
         '</svg>']
     return '\n'.join(parts)
 

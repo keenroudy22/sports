@@ -200,11 +200,12 @@ and book (`x_post.parlay_head`): "🎰 +2506 COLLEGE LOTTO (ESPN BET)" from +100
 "🍀 +450 NFL EASY PROPS", then its legs one a line ("Iowa/Michigan over 38.5", "Drake London 40+ rec yds"). A ladder
 rung: "🪜 KOOK'N 80/20 CLIMB · STEP 2", "$75 → $146 (+95, FanDuel)", "$19 banked · win banks $29, $117 rides",
 its legs, "❤️ if you're climbing". Receipts,
-the book, the menu and cashed posts are one-liners too ("Saturday: 5-3" with ✅ ❌ per play, "✅ Cashed: ...",
+the book, the menu and cashed posts stay compact too ("Saturday: 5-3" with ✅ ❌ per play, "✅ Cashed: ...",
 "Today: 3 plays.", "📌 4 NFL games where our numbers disagree most with the market.").
 
 The reason is one sentence of the pick's own `why`, short and free of the desk's arithmetic words; when
-every sentence is arithmetic the post stands on the play and the number. No units anywhere a follower reads.
+every sentence is arithmetic the post stands on the play and the number. Straight-play units stay off X. A receipt
+may identify a fun ticket as 0.25u so followers do not read it as a full-unit play.
 A parlay lists its legs and says "Just for fun."
 Every post tags @Playbook, Action Network's betslip bot, which replies with the bet pre-loaded. There is no link
 (X shows fewer people a post that leaves the site); the card carries keenroudy.com/sports and no confidence
@@ -239,7 +240,7 @@ gate to fill the calendar; if the day has nothing else, the public book closes t
 
 | When (Eastern) | Post |
 |---|---|
-| 9:00 AM the morning after a game day | **Receipts** for every play of the day, with ✅ ❌ ➖ and the day's record; on a game day it carries the menu too ("Today: 6 plays."), one morning post instead of two, keyed `receipt:day:<date>+menu:day:<date>` so neither goes out again alone |
+| 9:00 AM the morning after a game day | **Receipts** for every play of the day, with ✅ ❌ ➖ and the day's record; final-result detail when stored; a 0.25u fun ticket says how many legs hit and calls out a one-leg miss without counting it as a win; on a game day it carries the menu too ("Today: 6 plays."), one morning post instead of two, keyed `receipt:day:<date>+menu:day:<date>` so neither goes out again alone |
 | 8:45 AM on a game day with plays and no receipt that morning | **Today's menu**: how many plates, which games and when, never the side; plates go out around noon (card `site/img/kitchen-menu.png`) |
 | 9:00 AM Wednesday | **The week's receipts** by kind, with the week's dates |
 | Around noon (two hours before a kickoff earlier than 2 PM; never before 9 AM) | **The plays**, the Pick of the Day first |
@@ -286,8 +287,8 @@ never present an example as currently available or turn a shadow candidate into 
 **What's on the plate** (owner, 2026-09-24): an NFL player prop's card shows the player's ESPN headshot, a game line
 the teams' logos (a total both, a spread its side), a parlay and the house cards the chef. Images are fetched when
 the card is rendered and embedded; a failed fetch falls back to the chef. The photos are ESPN's and the logos the
-teams' marks: `KEENROUDY_CARD_ART=0` (or `pick_card.CARD_ART = False`) turns them all off. No units on X: posts and
-cards show the price and the book only.
+teams' marks: `KEENROUDY_CARD_ART=0` (or `pick_card.CARD_ART = False`) turns them all off. No straight-play units on X:
+play cards show the price and the book only; receipt cards may label the fun-ticket stake.
 
 **One record** (owner, 2026-09-25: "the record is confusing as hell"): every play the desk publishes counts, the
 same on the site and on X, whether or not its post went out (a play pulled before its post stays in the record,
@@ -397,13 +398,15 @@ leads with it, starred.
 
 **Receipts** (`scripts/receipts.py`) make it a post every day of the season. At 9:00 AM ET the morning after a
 game day, once every play of that day is settled, the receipt lists each with ✅ ❌ ➖ and the day's record (the
-straight plays' wins and losses; a fun parlay is listed but kept out of it), "Graded in public, win or lose." On
+straight plays' wins and losses; a fun parlay is listed at its smaller 0.25u stake but kept out of it). Stored finals
+make the report more useful; a settled parlay says how many legs hit and, when true, that it missed by one leg. It is
+still a loss. The tall navy/mint card says "Graded in public, win or lose." On
 Wednesday at 9:00 AM the week's receipt sums the seven days before it by kind. Losing days post too. Every play the
 desk published counts (`receipts.counted`, the same plays as the site's record), and a receipt not ready by 8:00 PM
 the next day is skipped. Plays are named as their posts named them (schools by name).
 A line break ends a sentence for the style check, so a long list is short lines, not one long sentence; a post that
-fails its check anyway is named in the run log and on the phone, never dropped silently. Its card is the same frame in the kitchen's own colours (`pick_card.receipt_svg`), with W, L or P
-beside each play and the chef on the plate.
+fails its check anyway is named in the run log and on the phone, never dropped silently. Its tall report card uses
+the kitchen's navy/mint (`pick_card.receipt_svg`), with W, L or P beside each play and the chef in the header.
 
 Every post is logged in `data/x-posted.json` (kind `buffer:*`, committed on its own as "Posts <date> <time>
 ET") so nothing goes out twice; new entries also hold the exact public caption, card URL and Discord delivery state.

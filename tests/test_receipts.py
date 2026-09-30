@@ -31,7 +31,8 @@ def world():
         pick('quiet', 'sun', title='Not posted over 40.5'),
         pick('m', 'mon', title='Colts at Chiefs under 47.5', direction='under'),
         pick('t', 'thu', title='Giants at Eagles over 41.5'))}
-    latest = {'NFL-2026-W4-a': {'result': 'win'}, 'NFL-2026-W4-b': {'result': 'loss'}, 'NFL-2026-W4-c': {'result': 'loss'},
+    latest = {'NFL-2026-W4-a': {'result': 'win'}, 'NFL-2026-W4-b': {'result': 'loss'},
+              'NFL-2026-W4-c': {'result': 'loss', 'actual': 'legs: win, loss, win'},
               'NFL-2026-W4-quiet': {'result': 'win'}, 'NFL-2026-W4-t': {'result': 'win'}}
     log = {'posts': [{'id': f'NFL-2026-W4-{k}', 'kind': 'buffer:play', 'sentAt': '2026-09-27T14:00:00Z'} for k in ('a', 'b', 'c', 'm', 't')]
            + [{'id': 'NFL-2026-W4-quiet', 'kind': 'buffer:play', 'cancelledAt': '2026-09-27T13:00:00Z'}]}
@@ -68,14 +69,14 @@ class ReceiptTests(unittest.TestCase):
         play = {'id': 'CFB-2026-W4-cmu-mia-under-54-br', 'title': 'C Michigan at Miami under 54', 'marketType': 'total', 'gameIds': ['g']}
         self.assertEqual(receipts.label(play, {'g': game}), 'Central Michigan/Miami (FL) under 54')
 
-    def test_the_morning_after_lists_every_play_with_its_result_and_no_units(self):
+    def test_the_morning_after_lists_every_play_with_its_result_and_the_smaller_fun_stake(self):
         first, latest, log = world()
         found = receipts.ready(first, latest, GAMES, log, MONDAY_MORNING)
         self.assertEqual([r['key'] for r in found], ['receipt:day:2026-09-27'])
         sunday = found[0]
         self.assertEqual(sunday['text'], 'Sunday: 2-1\n'
                                          '✅ Player Seven over 4.5 receptions\n❌ Jets/Rams over 44.5\n✅ Bills/Lions over 40.5\n'
-                                         '❌ 3-leg parlay\n\n#NFL',
+                                         '❌ 3-leg parlay · 0.25u · 2/3 legs hit · missed by one leg\n\n#NFL',
                          'the record is the straight plays; the fun parlay is listed but not counted in it')
         self.assertEqual(sunday['due'].astimezone(gates.EASTERN).strftime('%a %H:%M'), 'Mon 09:00')
         self.assertEqual(sunday['card'], 'receipt-day-2026-09-27')
@@ -97,15 +98,16 @@ class ReceiptTests(unittest.TestCase):
         self.assertEqual(sorted(found), ['receipt:week:2026-09-29'])
         week = found['receipt:week:2026-09-29']
         self.assertEqual(week['text'], 'The week (Sep 23 to Sep 29): 3-1-1\n'
-                                   'Player props 1-0\nGame lines 2-1-1\nFun parlays 0-1\n\n#NFL')
+                                   'Player props 1-0\nGame lines 2-1-1\nFun parlays 0-1 · 0.25u\n\n#NFL')
         self.assertEqual(week['due'].astimezone(gates.EASTERN).strftime('%a %H:%M'), 'Wed 09:00')
         self.assertEqual(week['when'], 'Sep 23 to Sep 29')
 
     def test_the_receipt_card_is_the_same_frame(self):
         first, latest, log = world()
         card = pick_card.receipt_svg(receipts.ready(first, latest, GAMES, log, MONDAY_MORNING)[0], avatar='data:image/png;base64,AAAA')
-        for needle in ('RECEIPTS', 'KOOK’N', 'YESTERDAY’S PLATES', 'Sunday, Sep 27', '>2-1<', '>W<', '>L<',
-                       'Player Seven over 4.5 receptions', 'clip-path="url(#plate)"', 'Graded in public', 'Entertainment only. Not advice.'):
+        for needle in ('FINAL REPORT', 'KOOK’N', 'YESTERDAY’S PLATES', 'Sunday, Sep 27', '>2-1<', '>W<', '>L<',
+                       'Player Seven over 4.5 receptions', 'missed by one leg', 'FUN TICKETS · 0.25U',
+                       'clip-path="url(#receiptChef)"', 'GRADED IN PUBLIC', 'Entertainment only. Not advice.'):
             self.assertIn(needle, card, needle)
         self.assertNotIn('Confidence', card)
 
@@ -231,8 +233,8 @@ class DailyTests(unittest.TestCase):
         self.assertEqual(post['text'].split('\n')[:2], ['Season through Sep 28: 3-1', 'Player props 1-0'])
         wednesday = receipts.book(first, latest, GAMES, log, tuesday_evening + timedelta(days=1))
         self.assertNotEqual(wednesday['text'], post['text'], 'a quiet day after a quiet day never repeats the same post')
-        self.assertIn('Player props 1-0\nGame lines 2-1\nFun parlays 0-1', post['text'])
-        self.assertNotIn('u\n', post['text'].replace('\n\n', '\n'), 'no units anywhere')
+        self.assertIn('Player props 1-0\nGame lines 2-1\nFun parlays 0-1 · 0.25u', post['text'])
+        self.assertEqual(post['text'].count('0.25u'), 1, 'only the fun ticket names its smaller stake')
         self.assertEqual(post['due'].astimezone(gates.EASTERN).strftime('%a %H:%M'), 'Tue 18:00')
         self.assertIsNone(receipts.book(first, latest, GAMES, log, datetime(2026, 9, 29, 14, 0, tzinfo=timezone.utc)), 'not before 5 PM')
         busy = dict(log, posts=log['posts'] + [{'id': 'r', 'kind': 'buffer:receipt', 'dueAt': '2026-09-29T13:00:00Z'}])

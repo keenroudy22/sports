@@ -79,14 +79,28 @@ def retained_source(league, error, prior_sources, games, now):
     return source
 
 def fetch_by_week(league, season, games, now, end):
-    """Recover current results from complete week/conference unions when date ranges fail."""
+    """Recover current results from complete week/conference unions when date ranges fail.
+
+    The fallback must discover the next week, not merely refetch weeks already saved. ESPN can reject the broad
+    date window before it has exposed a new week's games to us; the most recent saved regular-season week is the
+    anchor and the next three are sampled too. That covers the 14-day publishing horizon, including college games
+    that begin midweek.
+    """
     slug = 'nfl' if league == 'NFL' else 'college-football'
     start = now - timedelta(days=2)
     saved = [g for g in games.values() if g['league'] == league and g['season'] == season
              and start <= datetime.fromisoformat(g['kickoff'].replace('Z', '+00:00')) <= end]
-    weeks = sorted({g['week'] for g in saved})
-    if not weeks:
+    recent = [g for g in games.values() if g['league'] == league and g['season'] == season and g.get('week')
+              and g.get('seasonType', 2) == 2
+              and datetime.fromisoformat(g['kickoff'].replace('Z', '+00:00')) <= now]
+    anchors = {g['week'] for g in saved if g.get('week')}
+    if recent:
+        anchors.add(max(recent, key=lambda g: datetime.fromisoformat(g['kickoff'].replace('Z', '+00:00')))['week'])
+    if not anchors:
         raise ValueError(f'{league}: no saved weeks to verify fallback coverage')
+    final_week = 18 if league == 'NFL' else 16
+    first, last = min(anchors), min(final_week, max(anchors) + 3)
+    weeks = range(first, last + 1)
     events, urls = {}, []
     for week in weeks:
         for group in (FBS_GROUPS if league == 'CFB' else (None,)):

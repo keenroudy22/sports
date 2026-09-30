@@ -18,7 +18,8 @@ and alerts ntfy; it never changes, advances or replaces the X post.
   (rounded projections and ladder dollars are allowed as the post writes them). No em or en dashes, no "!", no
   marketing words ("lock", "guaranteed"), no advice ("bet this"), no model names. A post that fails its check is held
   and named in the log and on the phone, never posted.
-- **No units on X, ever.** Money and units live on the site only.
+- **No straight-play units on X.** Money and full record units live on the site. Receipts may identify a fun parlay
+  as its smaller 0.25u stake so it cannot be mistaken for a full-unit straight play.
 - **Every play and fun parlay ends on the ask** `❤️ if you're tailing` (a ladder rung: `❤️ if you're climbing`), then
   `@Playbook` (Action Network's betslip bot, which replies with the bet pre-loaded) and the league tag `#CFB` / `#NFL`.
 - **No links in play posts** (X shows linked posts to fewer people); the card carries keenroudy.com/sports. Cashed
@@ -37,8 +38,8 @@ and alerts ntfy; it never changes, advances or replaces the X post.
 | **80/20 Climb step** | With the plays, one a day when two clean games exist | `🪜 KOOK'N 80/20 CLIMB · STEP 2` / `$75 → $146 (+95, FanDuel)` / `$19 banked · win banks $29, $117 rides` / legs / `❤️ if you're climbing` | a tall winding route with the real bank, ride, rung and unpriced future checkpoints | `ladder.py`, `pick_card.ladder_svg` |
 | **Conversation prompt / teaser** | Once on a multi-play card, after the first play | A short slate question, or—when it is already ready—`The 80/20 Climb is back later today. Step 2 is already cooked. 🪜` with its real ride and bank, then the league tag | none; intentionally text-only | `buffer_post.conversation_text` |
 | **Injury angle** | After verified top-player news, at most two a day | `🚨 ESPN lists A.J. Brown OUT for PHI at CHI.` / a teammate's real post-news line, price and book / the opponent's allowed-by-position stat / `Board lean, not a posted play. Take it or pass? #NFL` | none; timeliness and the question are the point | `news_posts.candidates` |
-| **Morning receipt** | 9 AM the day after a game day | `Saturday: 5-3` then `✅ Iowa/Michigan over 38.5` per play, `Today: 3 plays.`, tags | the receipt card (W/L per play, the chef) | `receipts.day_receipt`, `with_menu`, `pick_card.receipt_svg` |
-| **Week's receipt** | Wednesday 9 AM | `The week (Sep 23 to Sep 29): 12-9` then the record by kind | receipt card | `receipts.week_receipt` |
+| **Morning receipt** | 9 AM the day after a game day | `Saturday: 5-3` then `✅ Iowa/Michigan over 38.5` per play; a fun ticket adds `0.25u · 2/3 legs hit · missed by one leg` when the stored settlement supports it; `Today: 3 plays.`, tags | the tall navy/mint report card (W/L per play, finals, parlay sweat, the chef) | `receipts.day_receipt`, `with_menu`, `pick_card.receipt_svg` |
+| **Week's receipt** | Wednesday 9 AM | `The week (Sep 23 to Sep 29): 12-9` then the record by kind; fun parlays show their smaller stake | receipt report card | `receipts.week_receipt` |
 | **Save this watchlist** | 10 AM college Saturday and NFL Sunday | `📌 4 NFL games where our numbers disagree most with the market.` / save ask / tag | 1080x1350 grid with four large model/market tiles | `sheet.py` |
 
 Confirmed official plays, the Pick of the Day and fun/challenge tickets use the same copy and card in Discord about
@@ -74,11 +75,12 @@ One frame for every card (`docs/examples/`):
   `site/kookn.jpg`) for parlays, receipts and house cards.
 
 Colours: the side the play is on, from the slate (ESPN) or `data/team-colors-cfb.json`, with a near-black primary
-using its alternate; the kitchen's own brown and orange (`pick_card.HOUSE`: `#2a1c14`, `#3d2a1d`, `#f28c28`) for the
+using its alternate; the kitchen's own navy and mint (`pick_card.HOUSE`: `#08131d`, `#10313a`, `#5eeaa4`) for the
 ladder, receipts and house cards. Cream `#f6f1e6` and ink `#141414` for text. Images are ESPN's (headshots
 `https://a.espncdn.com/i/headshots/nfl/players/full/<id>.png`, logos `.../teamlogos/nfl/500/<abbr>.png` and
 `.../teamlogos/ncaa/500/<id>.png`), fetched when the card is drawn and embedded; a failed fetch falls back to the
-chef. `KEENROUDY_CARD_ART=0` turns photos and logos off. No units on any card.
+chef. `KEENROUDY_CARD_ART=0` turns photos and logos off. No straight-play units on cards; a receipt may show a fun
+ticket's 0.25u stake.
 
 The **Save this watchlist** (`scripts/sheet.py`): a header (`SAVE THIS`, `WEEK 3 NFL WATCHLIST`, the date), two columns
 of game cards (logos, our projected score to a tenth, win chances as bars in the teams' colours, and large model/market

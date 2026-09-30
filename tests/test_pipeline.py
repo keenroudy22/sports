@@ -1,7 +1,7 @@
 import sys
 import unittest
 from pathlib import Path
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 from refresh import Model, validate_report, retained_source, fetch_by_week
 from urllib.error import HTTPError
@@ -104,9 +104,32 @@ class PipelineTests(unittest.TestCase):
         with patch('refresh.urlopen',side_effect=response):
             events, urls=fetch_by_week('NFL',2026,{g['id']:g},at,at.replace(day=30))
             self.assertEqual([e['id'] for e in events],['1'])
-            self.assertEqual(len(urls),1)
+            self.assertEqual(len(urls),4, 'the saved week and three upcoming weeks cover the 14-day horizon')
             other=dict(g,id='NFL-2')
             with self.assertRaisesRegex(ValueError,'missing 1 saved games'):
                 fetch_by_week('NFL',2026,{g['id']:g,other['id']:other},at,at.replace(day=30))
+
+    def test_week_feed_discovers_the_next_week_instead_of_only_refetching_saved_games(self):
+        at=datetime(2026,9,30,16,30,tzinfo=timezone.utc)
+        old=self.game();old.update(kickoff='2026-09-28T00:15:00Z',week=3,seasonType=2)
+        def response(url, timeout=45):
+            week=int(url.split('week=')[1].split('&')[0])
+            ids=['1'] if week == 3 else ['2'] if week == 4 else []
+            return BytesIO(json.dumps({'events':[{'id': key} for key in ids]}).encode())
+        with patch('refresh.urlopen',side_effect=response):
+            events, urls=fetch_by_week('NFL',2026,{old['id']:old},at,at.replace(day=30) + timedelta(days=14))
+        self.assertEqual({e['id'] for e in events},{'1','2'})
+        self.assertTrue(any('week=4' in url for url in urls), 'Thursday week 4 is discovered before it was saved')
+
+    def test_week_feed_uses_the_latest_past_week_when_the_saved_window_is_empty(self):
+        at=datetime(2026,9,30,16,30,tzinfo=timezone.utc)
+        old=self.game();old.update(league='CFB',kickoff='2026-09-20T20:00:00Z',week=4,seasonType=2)
+        def response(url, timeout=45):
+            week=int(url.split('week=')[1].split('&')[0])
+            return BytesIO(json.dumps({'events':[{'id':'2'}] if week == 5 else []}).encode())
+        with patch('refresh.urlopen',side_effect=response):
+            events, urls=fetch_by_week('CFB',2026,{old['id']:old},at,at + timedelta(days=14))
+        self.assertEqual({e['id'] for e in events},{'2'})
+        self.assertTrue(any('week=5' in url for url in urls), 'college week 5 is discovered from the prior saved week')
 
 if __name__ == '__main__': unittest.main()

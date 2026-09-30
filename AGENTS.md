@@ -171,8 +171,10 @@ Handy commands (from `~/Projects/sports`):
   next rung, and after grading the climb moves from its result.
 - **College player props** are legal pregame in Indiana (Gaming Commission, 2026-09-24). Their board rows come from
   SharpAPI's own lines; learning calibrates them weekly (`CFB/prop`).
-- **One record** everywhere: every published play counts, win or lose; units on the site only (one unit a play,
-  saved at grading), none on X; fun parlays and the ladder apart; the 26 Week 1 plays at an assumed -115, marked.
+- **One record** everywhere: every published play counts, win or lose; straight-play units stay on the site (one unit
+  a play, saved at grading). Receipt posts may label fun parlays as their smaller 0.25u stake and say how many legs
+  hit, but keep them apart from the straight record and never imply a near miss was a win. The ladder stays apart;
+  the 26 Week 1 plays are at an assumed -115, marked.
 - **Weekly "📌 Save this" model watchlist**: four large, readable model/market gaps, college Saturday and NFL Sunday
   at 10 AM (`scripts/sheet.py`); the full slate stays on the site.
 - **Growth goal** (2026-09-28): grow @keenkooks toward 10,000 followers by the end of football season without paid
@@ -203,7 +205,8 @@ Everything that goes to X, its exact words, its card and when it posts is in **`
 in `docs/examples/` (Pick of the Day, player prop, lotto, ladder step, receipt, the Save this sheet). The short
 version: tweets are short and human (the play, price and book, "We have it at 47.", the ask, @Playbook, the tag); every
 play and house post carries its card (`scripts/pick_card.py`, drawn by the hosted build into `site/data/cards/`);
-nothing posts until its card is live; no units on X; new post types need the owner's yes. Preview before changing
+nothing posts until its card is live; no straight-play units on X (a receipt may identify a fun ticket as 0.25u);
+new post types need the owner's yes. Preview before changing
 anything: `python3 scripts/pick_card.py <pick id>`, `python3 scripts/x_post.py draft <pick id>`,
 `run.sh py scripts/buffer_post.py plan`.
 
