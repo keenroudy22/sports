@@ -1,7 +1,7 @@
 """Spreads and totals across books from The Odds API, captured before kickoff on a credit budget.
 
 One call per league returns every upcoming game with each book's spread and total
-(DraftKings, FanDuel, BetMGM, Caesars, BetRivers, ESPN BET, Fanatics, plus Hard Rock for private arb comparison). Each capture is
+(DraftKings, FanDuel, BetMGM, Caesars, BetRivers, ESPN BET, Fanatics, plus Hard Rock for Discord arb comparison). Each capture is
 appended to data/odds/<league>-<season>.jsonl only when a game's numbers changed, with
 the retrieval time; the board shows the best price per side and names the book, and
 the scoreboard can grade closing-line value against the book a pick was taken at.
@@ -38,7 +38,7 @@ STORE = ROOT / 'data' / 'odds'
 API = 'https://api.the-odds-api.com/v4/sports/{sport}/odds'
 SPORTS = {'NFL': 'americanfootball_nfl', 'CFB': 'americanfootball_ncaaf'}
 PICK_BOOKS = ('draftkings', 'fanduel', 'betmgm', 'caesars', 'betrivers', 'espnbet', 'fanatics')
-# Hard Rock is captured for the private arb radar. It is deliberately not in PICK_BOOKS, so adding the comparison
+# Hard Rock is captured for the Discord-only arb radar. It is deliberately not in PICK_BOOKS, so adding the comparison
 # price cannot change an official play or fun ticket. Eight requested books still fit one <=10-book request group.
 BOOKS = PICK_BOOKS + ('hardrockbet',)
 MARKETS = ('spreads', 'totals')

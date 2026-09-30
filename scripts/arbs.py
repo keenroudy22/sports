@@ -1,8 +1,8 @@
-"""Private pregame arbitrage radar over the desk's already captured prices.
+"""Discord-only pregame arbitrage radar over the desk's already captured prices.
 
-This never places a wager and never creates a public post. It accepts only exact two-way complements at the same
-line, from different books, with recently updated prices. The scheduled desk sends qualifying results privately
-through its existing ntfy topic; this module only reads stores and performs arithmetic.
+This never places a wager, creates an official play or posts to X. It accepts only exact two-way complements at the
+same line, from different books, with recently updated prices. The scheduled desk sends qualifying results only to
+Discord; this module only reads stores and performs arithmetic.
 
 Usage:
   python scripts/arbs.py
@@ -197,12 +197,21 @@ def scan(root=ROOT, now=None, minimum=None, allowed=None):
     return sorted(hits, key=lambda h: -h['roi'])
 
 
+def alert_id(hit):
+    """A stable identity keeps the same market/books from spamming Discord as prices are recaptured."""
+    sides = sorted(((hit['first']['bookKey'], hit['first']['side']),
+                    (hit['second']['bookKey'], hit['second']['side'])))
+    return '|'.join(map(str, (hit['gameId'], hit['kind'], hit['label'], hit['line'], sides)))
+
+
 def message(hit):
-    return (f"VERIFY BOTH BEFORE PLACING\n{hit['label']}\n"
+    return (f"⚡ KOOK'N ARB RADAR — MOVE FAST\n{hit['label']}\n"
             f"{hit['first']['side']} {hit['first']['price']:+d} at {hit['first']['book']} · ${hit['firstStake']:.2f}\n"
             f"{hit['second']['side']} {hit['second']['price']:+d} at {hit['second']['book']} · ${hit['secondStake']:.2f}\n"
             f"$100.00 in → at least ${hit['return']:.2f} · ${hit['profit']:.2f} ({hit['roi']:.2f}%)\n"
-            "Confirm the same event, market, line, limits and settlement rules in both apps first.")
+            "VALID ONLY if both listed odds are still available or better. Prices can disappear in seconds. "
+            "Verify the same event, market, line, limits and settlement rules in both apps, and make sure both "
+            "bets are accepted before either price moves. Not an official Kook'n play.")
 
 
 def main(argv=None):

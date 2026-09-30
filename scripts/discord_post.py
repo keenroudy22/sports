@@ -5,9 +5,12 @@ downstream of Buffer and waits until X says the post was sent. The exact text an
 newly scheduled Buffer entry, then marked sent here so a later desk run cannot duplicate it.
 """
 import json
+import hashlib
 import os
 import urllib.error
 import urllib.request
+from datetime import timedelta
+from pathlib import Path
 
 import gates
 
@@ -18,6 +21,12 @@ class DiscordError(RuntimeError):
 
 def webhook(env=None):
     return ((env if env is not None else os.environ).get('DISCORD_WEBHOOK_URL') or '').strip()
+
+
+def arb_webhook(env=None):
+    """Use a dedicated Arb Radar channel when configured, otherwise the existing plays channel."""
+    values = env if env is not None else os.environ
+    return (values.get('DISCORD_ARB_WEBHOOK_URL') or values.get('DISCORD_WEBHOOK_URL') or '').strip()
 
 
 def http_send(url, body, headers):
@@ -31,15 +40,46 @@ def http_send(url, body, headers):
         raise DiscordError(f'Discord network error: {type(error).__name__}') from error
 
 
-def send_message(url, text, image_url=None, send=http_send):
+def send_message(url, text, image_url=None, send=http_send, username="Kook'n Sports"):
     """Send one webhook message without ever putting the secret URL in an error or log."""
-    body = {'username': "Kook'n Sports", 'avatar_url': 'https://keenroudy.com/sports/kookn.jpg', 'content': text}
+    body = {'username': username, 'avatar_url': 'https://keenroudy.com/sports/kookn.jpg', 'content': text}
     if image_url:
         body['embeds'] = [{'image': {'url': image_url}}]
     status, raw = send(url, body, {'Content-Type': 'application/json', 'User-Agent': 'KooknSports/1.0'})
     if status not in (200, 204):
         detail = raw.decode('utf-8', 'replace')[:240] if isinstance(raw, bytes) else str(raw)[:240]
         raise DiscordError(f'Discord returned HTTP {status}: {detail}')
+
+
+ARB_QUIET = timedelta(hours=6)
+
+
+def send_arb_alert(text, alert_id, now, state_path, url=None, send=None):
+    """Post one time-sensitive arb to Discord once per six hours; never to X or the public record."""
+    url = url if url is not None else arb_webhook()
+    if not url:
+        return False
+    path = Path(state_path)
+    try:
+        state = json.loads(path.read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        state = {}
+    if not isinstance(state, dict):
+        state = {}
+    key = hashlib.sha256(str(alert_id).encode('utf-8')).hexdigest()[:20]
+    if key in state and now - gates.when(state[key]) < ARB_QUIET:
+        return False
+    kwargs = {'username': "Kook'n Arb Radar"}
+    if send is not None:
+        kwargs['send'] = send
+    send_message(url, text, **kwargs)
+    state = {k: v for k, v in state.items() if now - gates.when(v) < timedelta(days=2)}
+    state[key] = gates.stamp(now)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + '.tmp')
+    temporary.write_text(json.dumps(state, indent=1) + '\n', encoding='utf-8')
+    temporary.replace(path)
+    return True
 
 
 def mirror_sent(log_book, now, url=None, send=http_send, log=print):

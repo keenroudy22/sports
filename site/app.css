@@ -396,7 +396,7 @@ table.data a { font-weight: 600; }
 .field { display: flex; flex-direction: column; gap: 5px; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: var(--faint); text-transform: uppercase; }
 .field input { min-height: 40px; padding: 0 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 9px; color: var(--text); font: inherit; font-size: 14px; }
 
-/* Kook'n Arb Radar: live candidates stay private; the public page teaches and checks the stake math. */
+/* Kook'n Arb Radar: live candidates stay in Discord; the public page teaches and checks the stake math. */
 .arb-hero { padding: 18px; background: radial-gradient(circle at 100% 0, rgba(94, 234, 164, .14), transparent 44%), var(--surface); }
 .arb-hero h2 { margin: 13px 0 7px; max-width: 25ch; font-family: 'Barlow Condensed', sans-serif; font-size: 28px; line-height: 1.05; text-transform: uppercase; }
 .arb-hero > p { margin: 0; max-width: 68ch; color: var(--dim); font-size: 13px; line-height: 1.55; }

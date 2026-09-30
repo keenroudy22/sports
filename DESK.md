@@ -262,11 +262,12 @@ football conversations are encouraged because they add a real point of view. Use
 post type; the owner records the account-level Premium snapshot separately because Buffer does not expose follower or
 profile-visit totals.
 
-**Private Arb Radar** (`scripts/arbs.py`): after each scheduled capture, compare only exact complementary sides at
+**Discord-only Arb Radar** (`scripts/arbs.py`): after each scheduled capture, compare only exact complementary sides at
 the same line, event and market, at different books. Both the saved record and each book update must be fresh, the
 game must not have started, and the default locked return must be at least 1%. Qualifying opportunities go only to
-the owner's ntfy topic with exact equal-return stakes and a verify-both-apps warning; they never create a play, site
-record, Discord message or X post and never place a wager. Hard Rock is captured as an eighth comparison book without
+Discord with exact equal-return stakes, a move-fast warning and a rule that both listed prices must still be
+available or better. They never create an official play or site record, never post to X or ntfy and never place a
+wager. The same market/books alert at most once per six hours. Hard Rock is captured as an eighth comparison book without
 adding an Odds API request group, but `odds_api.PICK_BOOKS` prevents it from changing official selections. Promo
 boosts are personal and absent from feeds: `python scripts/arbs.py boost +298 50 -195` distinguishes a true locked
 profit from a break-even-downside free roll.
@@ -278,7 +279,7 @@ reserves 700, fetches at most ten events with a six-hour gap and 30-object daily
 game inside 48 hours. Its compact local history lives at `~/.config/keenroudy/sgo-shadow.json`; no key or full API
 response is stored. A missing/changed usage limit or any request error fails closed and never stops the desk.
 
-The site's **Kook'n Arb Radar** page (`#arbs`) is public but the candidate feed is not. It explains the guards and
+The site's **Kook'n Arb Radar** page (`#arbs`) is public but never shows the candidate feed. It explains the guards and
 offers a local two-price equal-return calculator (`core.arbSplit`); no key or price feed reaches the browser. It must
 never present an example as currently available or turn a shadow candidate into a public recommendation.
 

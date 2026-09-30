@@ -1,4 +1,4 @@
-"""SportsGameOdds free-tier evaluation feed for the private Arb Radar.
+"""SportsGameOdds free-tier evaluation feed for the Discord-only Arb Radar.
 
 This is deliberately shadow-only: it never alerts, publishes, changes a play, or places a wager. It samples a
 small number of upcoming football events, records only a compact local evaluation summary, and fails closed unless

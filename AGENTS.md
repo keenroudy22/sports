@@ -56,7 +56,8 @@ watch the runs, and fix what breaks.
   plays use the same words and card and go to Discord about 10-15 minutes before X; receipts, news and engagement
   posts mirror only after Buffer confirms X. Once Discord publishes a play it is public and stays in the record. A
   hard-news pull before X gets a Discord update and cancels X, but never erases the play. The webhook stays in
-  `~/.config/keenroudy/env`, never the repo or a log.
+  `~/.config/keenroudy/env`, never the repo or a log. Arb alerts are explicitly not official plays and may go only
+  to Discord under the separate Arb Radar rule.
 - **Deploy only while holding the run lock** `~/.config/keenroudy/run.lock` (below), never mid-run.
 - **Do not change how the record counts** without telling the owner the before and after numbers.
 - **Keep the operating stack free.** Do not add a paid service, increase a metered request budget or buy reach
@@ -123,12 +124,13 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
-- **Private Arb Radar** (2026-09-29): exact-line, two-outcome opportunities from fresh captured prices may alert
-  the owner's phone through ntfy. It never places a wager, never posts publicly, never calls a middle an arb and
-  always says to verify both apps, limits and settlement rules before acting. Account-specific boosts use the manual
-  calculator because feeds cannot see them. Hard Rock is comparison-only and cannot become an official play. The
-  public `#arbs` page explains the scanner and calculates a user-entered split; it never exposes live candidates or
-  the API key and never calls any odds feed from the browser.
+- **Discord-only Arb Radar** (2026-09-29): exact-line, two-outcome opportunities from fresh captured prices may post
+  to Discord, but never X, the live site, ntfy or the official record. Every alert says to move quickly and is valid
+  only when both exact listed prices are still available or better; it also says to verify both apps, limits and
+  settlement rules before acting. It never places a wager or calls a middle an arb. The same market/books alert at
+  most once per six hours. Account-specific boosts use the manual calculator because feeds cannot see them. Hard
+  Rock is comparison-only and cannot become an official play. The public `#arbs` page explains the scanner and
+  calculates a user-entered split; it never exposes live candidates or the API key and never calls an odds feed.
 - **SportsGameOdds stays free and silent** (2026-09-29): its Amateur key is evaluation-only. Shadow mode must check
   `/account/usage` before each event sample, run only when the reported monthly ceiling is exactly 2,500 objects,
   stop at 1,800, keep its six-hour/30-object daily caps, and never alert, publish or change a play. Never upgrade it.

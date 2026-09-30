@@ -1454,11 +1454,18 @@ def _run(args, now, slot, kinds, status):
     except Exception as error:  # an optional private alert can never stop grading or publishing
         opportunities = []
         log(f'arb radar unavailable ({type(error).__name__}); the desk continues')
-    status['arbs'] = {'found': len(opportunities), 'alerted': 0}
+    import discord_post
+    status['arbs'] = {'found': len(opportunities), 'alerted': 0, 'destination': 'Discord'}
     for hit in opportunities[:3]:
         log(f"arb radar: {hit['label']} {hit['roi']:.2f}%")
-        if not args.dry_run and alert("Kook'n Arb Radar", arbs.message(hit), now=now):
-            status['arbs']['alerted'] += 1
+        if args.dry_run:
+            continue
+        try:
+            if discord_post.send_arb_alert(arbs.message(hit), arbs.alert_id(hit), now,
+                                           CONF / 'arb-discord-alerts.json'):
+                status['arbs']['alerted'] += 1
+        except discord_post.DiscordError as error:  # an optional alert can never stop the desk
+            log(f'arb radar Discord alert not sent: {error}')
     slate = load_json(ROOT / 'site' / 'data' / 'slate.json', {'games': []})
     if not args.dry_run:
         try:

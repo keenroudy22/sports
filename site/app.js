@@ -1083,7 +1083,7 @@
         : empty(`No ${league} games in the window`, block.status === 'ok' ? 'The provider returned no games for these dates.' : 'The feed is unavailable; the last good data is kept.')}`;
   }
 
-  /* ---------- private radar, public calculator ---------- */
+  /* ---------- Discord radar, public calculator ---------- */
 
   const dollars = value => {
     const n = Number(value);
@@ -1103,9 +1103,9 @@
   function viewArbs() {
     const result = C.arbSplit(state.arb.first, state.arb.second, state.arb.bankroll);
     return `${head("Kook'n Arb Radar", 'Two books. Every outcome covered. Exact math—with the catches left in.')}
-      <div class="arb-hero card"><div><span class="radar-dot" aria-hidden="true"></span><span class="pill pill-reference">Private testing</span></div>
+      <div class="arb-hero card"><div><span class="radar-dot" aria-hidden="true"></span><span class="pill pill-reference">Discord alerts</span></div>
         <h2>We scan. We verify. We do not chase stale numbers.</h2>
-        <p>The live radar compares fresh prices privately. A candidate never becomes a Kook’n play, and the public page never claims a price is still available.</p>
+        <p>The radar sends time-sensitive candidates only to Discord. A candidate never becomes a Kook’n play, and this page never claims a price is still available.</p>
         <div class="arb-guard"><span><b>Exact markets</b><small>Same event, period and line</small></span><span><b>Different books</b><small>Both sides priced from feeds</small></span><span><b>Human check</b><small>Apps, limits and rules first</small></span></div>
       </div>
       ${section('Check the math', `<div class="card arb-calc"><div class="arb-fields">
@@ -1126,7 +1126,7 @@
     const count = state.ticket.length;
     const link = (href, label, note) => `<a href="${href}"${href.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}><span>${label}</span><small>${note}</small></a>`;
     return `${head('More', '')}
-      <div class="card menu">${link('https://discord.gg/CvNTUUSnNz', 'Join the Discord', 'Confirmed plays about 10 minutes before X')}${link('https://x.com/keenkooks', 'Follow on X', '@keenkooks')}${link('#arbs', "Kook'n Arb Radar", 'Private scanner and public calculator')}${link('#model', 'The scoreboard', 'Our numbers graded against the closing line')}${link('#ticket', 'Your ticket', count ? `${count} line${count === 1 ? '' : 's'}` : 'Parlay builder')}
+      <div class="card menu">${link('https://discord.gg/CvNTUUSnNz', 'Join the Discord', 'Confirmed plays early plus time-sensitive arb alerts')}${link('https://x.com/keenkooks', 'Follow on X', '@keenkooks')}${link('#arbs', "Kook'n Arb Radar", 'Discord alerts and public calculator')}${link('#model', 'The scoreboard', 'Our numbers graded against the closing line')}${link('#ticket', 'Your ticket', count ? `${count} line${count === 1 ? '' : 's'}` : 'Parlay builder')}
       ${link('#research', 'Research desk', 'Injuries and analyst notes')}${link('#stats/defense', 'Defense vs position', 'Rankings')}${link('#scores/NBA', 'NBA scores', 'Schedules and scores')}${link('#scores/MLB', 'MLB scores', 'Schedules and scores')}</div>
       <div class="section card" style="padding:14px"><p class="prose" style="margin:0"><b>About.</b> Kook'n is a sports stats engine graded against the betting market. The model publishes score and player projections before kickoff, every forecast is kept, and the scoreboard grades them against the closing line. Stats come from ESPN’s public feeds and nflverse. For entertainment only; nothing here is betting advice.</p></div>`;
   }

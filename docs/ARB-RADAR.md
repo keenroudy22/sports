@@ -1,8 +1,8 @@
 # Kook'n Arb Radar
 
-The radar is private. It never places a wager, changes an official Kook'n play, enters the public record, or posts to
-X or Discord. It reads captured prices, accepts only exact complementary outcomes, calculates equal-return stakes and
-sends a phone alert through the existing ntfy topic when every guard passes.
+The radar posts qualifying alerts only to Discord. It never places a wager, changes an official Kook'n play, enters
+the public record, or posts to X, ntfy or the live site's candidate feed. It reads captured prices, accepts only exact
+complementary outcomes and calculates equal-return stakes when every guard passes.
 
 ## What counts
 
@@ -28,7 +28,7 @@ lines and live prices, with 2,500 event objects per month, ten requests per minu
 The important limitation is a roughly ten-minute update frequency; the free book list shown on its pricing page also
 does not include Hard Rock, Fanatics or BetRivers. Its own arb guide says these windows can close in seconds. That
 makes the free tier promising as a shadow feed for broader sports and comparison testing, but not yet trustworthy as
-the sole source of an executable phone alert.
+the sole source of an actionable Discord alert.
 
 `scripts/sgo_shadow.py` is that shadow mode. The key stays in `~/.config/keenroudy/env` as
 `SPORTSGAMEODDS_API_KEY` and is sent only in the `x-api-key` header. Before every event sample it calls the free
@@ -43,11 +43,16 @@ proposing a paid feed to the owner, and no upgrade happens without their explici
 
 ## Public page
 
-`#arbs` on the site explains the private radar and includes a browser-only equal-return calculator. It never receives
+Each Discord alert says to move fast and is valid only if both exact listed odds remain available or improve. It also
+says to verify both apps, limits and settlement rules and to confirm both bets before either price moves. The same
+market/books combination is suppressed for six hours after it alerts. `DISCORD_ARB_WEBHOOK_URL` can point at a
+dedicated channel; when it is blank, the existing `DISCORD_WEBHOOK_URL` is used.
+
+`#arbs` on the site explains the Discord radar and includes a browser-only equal-return calculator. It never receives
 the API key, calls an odds provider, or publishes a live candidate. A visitor supplies two American prices and a
 bankroll; `core.arbSplit()` shows the equal-return stakes and says plainly when the prices are not an arb. The page
 also names the real execution risks: a moved price, an unaccepted second bet, limits, voids and mismatched settlement
-rules. The public page is an educational tool; private alerts remain on the owner's phone.
+rules. The public page is an educational tool; time-sensitive alerts live only in Discord.
 
 Sources: [SportsGameOdds pricing](https://sportsgameodds.com/pricing),
 [rate limits](https://sportsgameodds.com/docs/info/rate-limiting),

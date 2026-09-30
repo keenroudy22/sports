@@ -1,4 +1,5 @@
 import sys
+import tempfile
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
@@ -71,6 +72,29 @@ class DiscordPostTests(unittest.TestCase):
         entry = {'id': 'a', 'sentAt': '2026-09-28T15:59:00Z', 'discord': {'state': 'pending', 'text': 'Play'}}
         self.assertEqual(discord_post.mirror_sent({'posts': [entry]}, NOW, url='', log=lambda *_: None), [])
         self.assertEqual(entry['discord']['state'], 'pending')
+
+    def test_an_arb_alert_uses_discord_only_and_is_deduplicated(self):
+        sent = []
+        send = lambda url, body, headers: (sent.append((url, body)) or (204, b''))
+        with tempfile.TemporaryDirectory() as folder:
+            state = Path(folder) / 'arb-discord-alerts.json'
+            self.assertTrue(discord_post.send_arb_alert('MOVE FAST', 'market-a', NOW, state,
+                                                        url='discord-secret', send=send))
+            self.assertFalse(discord_post.send_arb_alert('MOVE FAST', 'market-a', NOW, state,
+                                                         url='discord-secret', send=send))
+            later = datetime(2026, 9, 28, 22, 1, tzinfo=timezone.utc)
+            self.assertTrue(discord_post.send_arb_alert('MOVE FAST', 'market-a', later, state,
+                                                        url='discord-secret', send=send))
+        self.assertEqual(len(sent), 2)
+        self.assertEqual(sent[0][0], 'discord-secret')
+        self.assertEqual(sent[0][1]['username'], "Kook'n Arb Radar")
+        self.assertEqual(sent[0][1]['content'], 'MOVE FAST')
+
+    def test_arb_webhook_can_have_its_own_channel_and_falls_back_to_plays(self):
+        self.assertEqual(discord_post.arb_webhook({'DISCORD_ARB_WEBHOOK_URL': 'arb',
+                                                   'DISCORD_WEBHOOK_URL': 'plays'}), 'arb')
+        self.assertEqual(discord_post.arb_webhook({'DISCORD_WEBHOOK_URL': 'plays'}), 'plays')
+        self.assertFalse(discord_post.send_arb_alert('x', 'y', NOW, '/unused', url=''))
 
 
 if __name__ == '__main__':

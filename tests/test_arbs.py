@@ -45,6 +45,17 @@ class ScanTests(unittest.TestCase):
             'hardrockbet': book('Hard Rock Bet', total={'line': 42.5, 'over': -130, 'under': 115})}}
         self.assertEqual(arbs.game_arbs(middle, NOW), [], 'different lines can middle, but do not guarantee both outcomes')
 
+    def test_discord_copy_is_time_sensitive_and_requires_the_listed_odds(self):
+        hit = {'gameId': 'NFL-1', 'kind': 'game total', 'label': 'Bears at Lions total', 'line': 41.5,
+               'first': {'bookKey': 'fanduel', 'book': 'FanDuel', 'side': 'over 41.5', 'price': 120},
+               'second': {'bookKey': 'hardrockbet', 'book': 'Hard Rock Bet', 'side': 'under 41.5', 'price': -130},
+               'firstStake': 36.63, 'secondStake': 63.37, 'return': 101.23, 'profit': 1.23, 'roi': 1.23}
+        copy = arbs.message(hit)
+        self.assertIn('MOVE FAST', copy)
+        self.assertIn('VALID ONLY if both listed odds are still available or better', copy)
+        self.assertIn("Not an official Kook'n play", copy)
+        self.assertEqual(arbs.alert_id(hit), arbs.alert_id(dict(hit)), 'the same market has a stable dedupe id')
+
     def test_a_player_prop_needs_the_same_half_point_market_and_fresh_quotes(self):
         base = {'gameId': 'NFL-1', 'kickoff': '2026-09-30T00:00:00Z', 'retrievedAt': '2026-09-29T17:59:00Z'}
         record = dict(base, books={
