@@ -1,4 +1,4 @@
-"""Refresh read-only NBA/MLB schedules and scores in six bounded requests.
+"""Refresh read-only schedules and scores for Kook'n's multi-sport score center.
 
 This snapshot supplies no odds, forecasts, recommended picks, or betting results.
 A failed league keeps its entire last successful snapshot and its original time.
@@ -13,7 +13,16 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'site/data/sports.json'
-LEAGUES = {'NBA': ('basketball', 'nba'), 'MLB': ('baseball', 'mlb')}
+LEAGUES = {
+    'NBA': {'sport': 'basketball', 'slug': 'nba', 'provider': {'NBA'}},
+    'WNBA': {'sport': 'basketball', 'slug': 'wnba', 'provider': {'WNBA'}},
+    'CBB': {'sport': 'basketball', 'slug': 'mens-college-basketball', 'provider': {'NCAAM'},
+            'query': '&groups=50&limit=1000'},
+    'MLB': {'sport': 'baseball', 'slug': 'mlb', 'provider': {'MLB'}},
+    'NHL': {'sport': 'hockey', 'slug': 'nhl', 'provider': {'NHL'}},
+    'EPL': {'sport': 'soccer', 'slug': 'eng.1', 'provider': {'PREMIER LEAGUE', 'ENG.1'}},
+    'MLS': {'sport': 'soccer', 'slug': 'usa.1', 'provider': {'MLS'}},
+}
 TIME_ZONE = 'America/Indianapolis'
 
 
@@ -42,16 +51,20 @@ def eastern_date(value):
 
 
 def endpoint(league, day):
-    sport, slug = LEAGUES[league]
-    return (f'https://site.api.espn.com/apis/site/v2/sports/{sport}/{slug}/scoreboard'
-            f'?dates={day:%Y%m%d}&limit=100')
+    info = LEAGUES[league]
+    query = info.get('query', '&limit=100')
+    return (f'https://site.api.espn.com/apis/site/v2/sports/{info["sport"]}/{info["slug"]}/scoreboard'
+            f'?dates={day:%Y%m%d}{query}')
 
 
 def source_link(event, fallback):
-    for link in event.get('links', []):
-        url = link.get('href', '')
-        if 'summary' in link.get('rel', []) and url.startswith('https://www.espn.com/'):
-            return url
+    links = [link for link in event.get('links', [])
+             if str(link.get('href', '')).startswith(('https://www.espn.com/', 'https://espn.com/'))]
+    for link in links:
+        if 'summary' in link.get('rel', []):
+            return link['href']
+    if links:
+        return links[0]['href']
     return fallback
 
 
@@ -86,7 +99,8 @@ def score_value(raw):
 def normalize(payload, league, now, url):
     if not isinstance(payload, dict) or not isinstance(payload.get('events'), list):
         raise ValueError('Provider did not supply an event list')
-    if not any(str(item.get('abbreviation', '')).upper() == league
+    expected = LEAGUES[league]['provider']
+    if not any(str(item.get('abbreviation', '')).upper() in expected
                for item in payload.get('leagues', [])):
         raise ValueError('Provider league identity could not be verified')
     games = []
@@ -122,7 +136,7 @@ def normalize(payload, league, now, url):
         season = event.get('season', {})
         games.append({
             'id': f'{league}-{provider_id}', 'providerId': provider_id,
-            'league': league, 'sport': LEAGUES[league][0],
+            'league': league, 'sport': LEAGUES[league]['sport'],
             'season': season.get('year'), 'seasonType': season.get('slug'),
             'date': eastern_date(kickoff).isoformat(), 'kickoff': kickoff,
             'timeConfirmed': competition.get('timeValid', True) is not False,
@@ -141,7 +155,8 @@ def refresh(previous, fetch, now):
     days = [start + timedelta(days=offset) for offset in range(3)]
     window = {'from': days[0].isoformat(), 'through': days[-1].isoformat(), 'timeZone': TIME_ZONE}
     result = {'schemaVersion': 1, 'updatedAt': now, 'timeZone': TIME_ZONE, 'leagues': {}}
-    for league, (sport, _) in LEAGUES.items():
+    for league, info in LEAGUES.items():
+        sport = info['sport']
         old = previous.get('leagues', {}).get(league, {})
         base = {'league': league, 'sport': sport,
                 'coverage': {'scores': True, 'forecasts': False, 'props': False, 'picks': False},

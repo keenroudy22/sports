@@ -4,7 +4,11 @@ Public site: https://keenroudy.com/sports/ · Source repository: `keenroudy22/sp
 
 NFL and FBS football forecasts, researched player props, and a public record of what was actually published before kickoff.
 
-NBA and MLB currently provide separate schedules and score snapshots, with Eastern date filters and source freshness. Their betting research and forecasts are not enabled. The old `/football-predictions/` address redirects to `/sports/`, preserving game/results fragments and query strings. Its redirect lives in the root portfolio repository, with a source copy in `deployment/legacy-redirect/`. Game IDs, football weeks and season records are preserved. See `SPORTS-ROADMAP.md` for the next coverage gates.
+The multi-sport score center covers NBA, WNBA, men's college basketball, MLB, NHL, the Premier League and MLS with
+Eastern date filters and source freshness. The public Kook'n Lab shows which sports are live, in a silent paper trial,
+or still research-only. New betting coverage is never inferred from a score feed. The old `/football-predictions/`
+address redirects to `/sports/`, preserving game/results fragments and query strings. See `SPORTS-ROADMAP.md` for the
+promotion gates.
 
 Static website hosted on GitHub Pages. No paid API, account signup, tracking scripts, or betting transactions.
 
@@ -32,7 +36,7 @@ One page, hash-routed, no framework: `site/index.html`, `site/app.css`, `site/co
 - **Today:** the slate, where v2 and the market disagree most, live picks, the record, how the model is doing, and how fresh each source is.
 - **Games:** every NFL and FBS game in the window with the market spread and total, v1 and v2. A game page adds the v2 forecast with its inputs and range, player projections next to the DraftKings line, both teams' last five, defense-vs-position ranks, injuries, line movement, published picks, and after the final, leaders and grades against the close.
 - **Stats:** every player with a line in the last two seasons, with last 5/10/20, season, home/away/neutral, head-to-head and a hit-rate chart against any line; defense vs position (season or last five, sortable); teams.
-- **Model:** the scoreboard. **Record:** every published pick at one unit, with closing-line value. **More:** the line board, the illustrative ticket builder, the research desk, and NBA/MLB scores.
+- **Model:** the scoreboard. **Record:** every published pick at one unit, with closing-line value. **More:** the line board, the illustrative ticket builder, the research desk, the multi-sport score center and Kook'n Lab.
 - **The board** grades every open, priced line with the research desk's arithmetic (`scripts/pricing.py`): v2's chance of winning it against what the price needs. The chance is shrunk toward 50% by v2's 2024-25 record against the closing line (`scripts/calibrate.py`; the side it favoured won 49.5% of NFL spreads, 52.9% of NFL totals, 50.5% of FBS spreads, 53.4% of FBS totals). Player lines appear at their best book with v2's lean, uncalibrated and grey until the role is settled (three games this season, or eight or more for the same team last season) and never while the report lists the player questionable. Every player line opens a card with the last 10 games against the number, the player's place among teammates at his position by projected volume, and what the defense has allowed the position game by game, this season and last; a pick on a player carries the same card. Today's games show first. *Model likes it* is 5+ points clear; *Slight lean* is 2 to 5, or any edge while a team or player has under three games this season; *No edge* is below that. FBS-FCS games get no grade, because v2 compresses those blowouts. Best lines sort first. Picks say where they stand in words: Open, In play, Closed (line moved or price expired), Won, Lost.
 
 `scripts/build_site.py` writes the page payloads to `site/data/app/` (today, lines, one file per game, player logs sharded by athlete ID, teams, research). They are derived from committed data, so they are not committed; the hosted workflow rebuilds them before every deploy. Old links (`#record`, `#scores`, `#props`, `#parlays`, `#players`, `#game/<id>`, `#player/<league>/<id>`, `#sport/<league>`) land on the matching new page.

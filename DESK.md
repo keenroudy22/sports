@@ -516,3 +516,11 @@ Finished games are graded at the number recorded and at the opener, with closing
 consensus close, and `data/paper/REPORT.md` keeps the record. Nothing is posted. Promoting a trial to published
 plays is a person's decision on the graded record, and the soccer model's Premier League handicaps can follow
 the same path.
+
+## Multi-sport score center and Lab
+
+`scripts/sports_refresh.py` uses ESPN's public scoreboards for NBA, WNBA, men's college basketball, MLB, NHL, the
+Premier League and MLS. It requests today and the next two Indianapolis calendar dates, preserves each league's last
+good snapshot independently and supplies no odds or picks. The site's `#scores/<league>` pages display that data;
+`#lab` explains the actual stage of every sport. A score feed is factual coverage, never evidence of a betting edge.
+This expansion adds no call to The Odds API, SharpAPI or SportsGameOdds and does not change their free-plan budgets.

@@ -126,6 +126,11 @@ test('arb radar has a shareable route', () => {
   assert.deepEqual(C.parseRoute('#arbs'), { view: 'arbs' });
 });
 
+test('the multi-sport lab has a shareable route', () => {
+  assert.deepEqual(C.parseRoute('#lab'), { view: 'lab' });
+  assert.deepEqual(C.parseRoute('#scores/NHL'), { view: 'scores', league: 'NHL' });
+});
+
 test('a ticket refuses what the sportsbook would price differently or not at all', () => {
   const reason = rows => C.summarizeTicket(rows, 1, 'units', 10, now).reason;
   assert.match(reason([leg('1', -110)]), /at least two/);

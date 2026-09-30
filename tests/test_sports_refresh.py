@@ -21,7 +21,12 @@ def event(identifier='123', kickoff='2026-09-17T23:00Z', state='pre', completed=
 
 
 def payload(events=None, league='MLB'):
-    return {'leagues': [{'abbreviation': league}], 'events': events or []}
+    provider = next(iter(sports.LEAGUES[league]['provider'])) if league in sports.LEAGUES else league
+    return {'leagues': [{'abbreviation': provider}], 'events': events or []}
+
+
+def league_for_url(url):
+    return next(league for league, info in sports.LEAGUES.items() if f'/{info["slug"]}/' in url)
 
 
 class SportsRefreshTests(unittest.TestCase):
@@ -36,6 +41,11 @@ class SportsRefreshTests(unittest.TestCase):
         self.assertEqual(game['season'], 2026)
         self.assertNotIn('week', game)
         self.assertEqual(game['source']['url'], 'https://www.espn.com/mlb/game/_/gameId/123')
+
+    def test_a_human_espn_link_beats_the_api_fallback_even_without_summary_rel(self):
+        item = event()
+        item['links'] = [{'rel': ['preview'], 'href': 'https://www.espn.com/mlb/preview/_/gameId/123'}]
+        self.assertEqual(self.normalize([item])[0]['source']['url'], 'https://www.espn.com/mlb/preview/_/gameId/123')
 
     def test_final_and_in_progress_are_not_forecasts(self):
         final = self.normalize([event(state='post', completed=True)])[0]
@@ -61,19 +71,19 @@ class SportsRefreshTests(unittest.TestCase):
         self.assertEqual(game['scores'], {'away': None, 'home': None})
 
     def test_empty_verified_league_is_success(self):
-        result = sports.refresh({}, lambda url: payload(league='NBA' if '/nba/' in url else 'MLB'), NOW)
+        result = sports.refresh({}, lambda url: payload(league=league_for_url(url)), NOW)
         for league in result['leagues'].values():
             self.assertEqual(league['status'], 'ok')
             self.assertEqual(league['games'], [])
             self.assertFalse(league['coverage']['picks'])
 
     def test_failed_league_preserves_snapshot_and_success_time(self):
-        old = sports.refresh({}, lambda url: payload([event()] if '/mlb/' in url else [], 'MLB' if '/mlb/' in url else 'NBA'), NOW)
+        old = sports.refresh({}, lambda url: payload([event()] if '/mlb/' in url else [], league_for_url(url)), NOW)
         untouched = deepcopy(old)
         def fetch(url):
             if '/mlb/' in url:
                 raise OSError('upstream unavailable')
-            return payload(league='NBA')
+            return payload(league=league_for_url(url))
         result = sports.refresh(old, fetch, '2026-09-18T04:30:00Z')
         mlb = result['leagues']['MLB']
         self.assertEqual(mlb['status'], 'stale')
@@ -92,11 +102,11 @@ class SportsRefreshTests(unittest.TestCase):
         self.assertIsNone(result['leagues']['MLB']['checkedAt'])
 
     def test_partial_day_failure_retains_entire_last_good_snapshot(self):
-        old = sports.refresh({}, lambda url: payload([event()] if '/mlb/' in url else [], 'MLB' if '/mlb/' in url else 'NBA'), NOW)
+        old = sports.refresh({}, lambda url: payload([event()] if '/mlb/' in url else [], league_for_url(url)), NOW)
         def fetch(url):
             if 'dates=20260918' in url and '/mlb/' in url:
                 raise OSError('one date failed')
-            return payload([event('999')] if '/mlb/' in url else [], 'MLB' if '/mlb/' in url else 'NBA')
+            return payload([event('999')] if '/mlb/' in url else [], league_for_url(url))
         result = sports.refresh(old, fetch, NOW)
         self.assertEqual(result['leagues']['MLB']['games'], old['leagues']['MLB']['games'])
         self.assertEqual(result['leagues']['MLB']['status'], 'stale')
@@ -115,12 +125,18 @@ class SportsRefreshTests(unittest.TestCase):
         calls = []
         def fetch(url):
             calls.append(url)
-            return payload([event()] if '/mlb/' in url else [], 'MLB' if '/mlb/' in url else 'NBA')
+            return payload([event()] if '/mlb/' in url else [], league_for_url(url))
         result = sports.refresh({}, fetch, '2026-09-18T02:00:00Z')
-        self.assertEqual(len(calls), 6)
+        self.assertEqual(len(calls), 3 * len(sports.LEAGUES))
         self.assertEqual(len(result['leagues']['MLB']['games']), 1)
         self.assertEqual(result['leagues']['MLB']['window']['from'], '2026-09-17')
         self.assertEqual(result['leagues']['MLB']['window']['through'], '2026-09-19')
+
+    def test_every_requested_sport_has_a_verified_endpoint(self):
+        self.assertIn('/mens-college-basketball/', sports.endpoint('CBB', sports.eastern_date(NOW)))
+        self.assertIn('groups=50', sports.endpoint('CBB', sports.eastern_date(NOW)))
+        self.assertIn('/soccer/eng.1/', sports.endpoint('EPL', sports.eastern_date(NOW)))
+        self.assertEqual(set(sports.LEAGUES), {'NBA', 'WNBA', 'CBB', 'MLB', 'NHL', 'EPL', 'MLS'})
 
     def test_et_date_respects_winter_and_summer_offsets(self):
         self.assertEqual(str(sports.eastern_date('2026-07-01T04:30:00Z')), '2026-07-01')

@@ -1,15 +1,23 @@
 # KeenRoudy Sports: league coverage and rollout
 
-Updated September 17, 2026. The intended researched coverage is NFL, FBS college football, NBA and MLB under the KeenRoudy Sports name. Prioritize FanDuel and DraftKings with Indiana as the market-availability verification jurisdiction. Confirm current rules and each exact offered market; naming a jurisdiction alone does not verify availability.
+Updated September 29, 2026. The intended long-term coverage is NFL, FBS college football, NBA, WNBA, men's college
+basketball, MLB, NHL, the Premier League and MLS under Kook'n Sports. Prioritize FanDuel and DraftKings with Indiana
+as the market-availability verification jurisdiction. Confirm current rules and each exact offered market; naming a
+jurisdiction alone does not verify availability.
 
 ## First implemented expansion
 
 - NFL and FBS college football retain their existing research, game pages, picks and season records. Their original event IDs and football week rules remain intact.
-- `scripts/sports_refresh.py` writes a separate `site/data/sports.json` snapshot for NBA and MLB schedules and scores. It makes at most six public ESPN requests per run for today and the next two dates in America/Indianapolis. It does not create a new background process or scheduler.
-- The initial September 17 snapshot successfully returned 39 MLB games across September 17–19 and no NBA games in that three-day window. This is an observed date-window result, not a claim that an entire season has no games.
+- `scripts/sports_refresh.py` writes `site/data/sports.json` for NBA, WNBA, men's college basketball, MLB, NHL, the
+  Premier League and MLS schedules and scores. It makes three bounded public ESPN requests per league for today and
+  the next two dates in America/Indianapolis. It does not create a new background process or scheduler.
+- The September 29 expansion snapshot returned WNBA, MLB, NHL and MLS games while NBA, college basketball and the
+  Premier League had none in their three-day windows. A verified empty window is not a claim that a season has no games.
 - Each game carries a league-qualified provider event ID, ET calendar date, season, teams, supplied game link, provider status and observed scores. MLB doubleheaders keep distinct event IDs. Scheduled games display no placeholder 0–0 result.
 - Each league has its own last successful check, last attempt, source and coverage flags. A failed date refresh preserves the entire last good league snapshot and its original timestamp; an empty verified response differs from unavailable data.
-- NBA/MLB odds, props, forecasts, official picks and betting results are **not enabled** in this phase. The score feed does not imply researched betting coverage. The next stage requires sport-specific data and settlement checks below.
+- Odds, props, forecasts and official picks are **not enabled** merely by this score expansion. The score feed does
+  not imply researched betting coverage. NBA and college totals already have a separate silent paper-trial path;
+  the other sports still need sport-specific models, usable prices and settlement checks.
 - Refresh hook for the existing hosted workflow: `python scripts/sports_refresh.py`, before committing `site/data`. No extra scheduled run is needed. The hosted source check remains periodic rather than a continuous live score feed.
 
 Validation: `python -m unittest discover -s tests -p test_sports_refresh.py` covers final and upcoming games, interrupted responses, stale-data preservation, unavailable versus empty slates, ET dates, doubleheaders, deduplication and mismatched provider identities. Deployment and mobile presentation are separate release checks.

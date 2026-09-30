@@ -52,7 +52,7 @@
     more: '<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
   };
   const TABS = [['today', 'Today'], ['board', 'Board'], ['games', 'Games'], ['stats', 'Stats'], ['record', 'Record'], ['more', 'More']];
-  const TAB_FOR = { game: 'games', player: 'stats', team: 'stats', model: 'more', ticket: 'board', research: 'more', scores: 'more', arbs: 'more' };
+  const TAB_FOR = { game: 'games', player: 'stats', team: 'stats', model: 'more', ticket: 'board', research: 'more', scores: 'more', arbs: 'more', lab: 'more' };
 
   /* The two model generations, in plain words. The data keeps its own version names. */
   const MODEL_NAME = { 'v2.0': 'Our model', v1: 'First model', 'v1 replay': 'First model replay' };
@@ -1064,23 +1064,52 @@
         : empty('No notes yet', 'Notes appear when the research run publishes.'))}`;
   }
 
-  /* ---------- NBA and MLB scores ---------- */
+  /* ---------- multi-sport scores ---------- */
+
+  const SCORE_LEAGUES = ['NBA', 'WNBA', 'CBB', 'MLB', 'NHL', 'EPL', 'MLS'];
+  const SCORE_NAMES = { NBA: 'NBA', WNBA: 'WNBA', CBB: 'College hoops', MLB: 'MLB', NHL: 'NHL', EPL: 'Premier League', MLS: 'MLS' };
 
   async function viewScores(route) {
     const data = await get('sports.json');
-    const league = route.league === 'NBA' || route.league === 'MLB' ? route.league : state.scoresLeague;
+    const league = SCORE_LEAGUES.includes(route.league) ? route.league : state.scoresLeague;
     const block = (data.leagues || {})[league] || {};
     const games = (block.games || []).slice().sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
     const days = [...new Set(games.map(g => g.date))];
     const day = days.includes(state.scoresDate) ? state.scoresDate : days[0];
     const shown = games.filter(g => g.date === day);
-    const side = (team, score) => `<div class="game-team"><span>${esc(team.abbreviation || team.shortName || DASH)}</span>${score != null ? `<span class="score" style="margin-left:auto">${esc(score)}</span>` : ''}</div>`;
-    return `${head(`${league} scores`, `${esc(block.coverageNote || 'Schedules and scores only.')} Checked ${esc(ago(block.checkedAt))}.`)}
-      <div class="toolbar"><div class="seg" role="group"><a class="chip" href="#scores/NBA" aria-pressed="${league === 'NBA'}" style="display:inline-flex;align-items:center">NBA</a><a class="chip" href="#scores/MLB" aria-pressed="${league === 'MLB'}" style="display:inline-flex;align-items:center">MLB</a></div>
+    const side = (team, score) => `<div class="game-team">${team.logo ? `<img class="score-logo" src="${esc(team.logo)}" alt="">` : ''}<span>${esc(team.abbreviation || team.shortName || DASH)}</span>${score != null ? `<span class="score" style="margin-left:auto">${esc(score)}</span>` : ''}</div>`;
+    const chips = SCORE_LEAGUES.map(key => `<a class="chip" href="#scores/${key}" aria-pressed="${league === key}" style="display:inline-flex;align-items:center">${esc(SCORE_NAMES[key])}</a>`).join('');
+    return `${head(`${SCORE_NAMES[league] || league} scores`, `${esc(block.coverageNote || 'Schedules and scores only.')} Checked ${esc(ago(block.checkedAt))}.`)}
+      <div class="toolbar"><div class="seg score-leagues" role="group">${chips}</div>
         ${days.length ? seg('scoresDate', days.map(d => [d, new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })]), day) : ''}</div>
-      ${shown.length ? `<div class="card">${shown.map(g => `<div class="game-row"><span class="game-teams" style="width:92px">${side(g.teams.away, g.teams.away.score)}${side(g.teams.home, g.teams.home.score)}</span>
-          <span class="game-mid">${esc(g.statusDetail || g.status)}</span>${external(g.link || g.source, 'ESPN')}</div>`).join('')}</div>`
+      ${shown.length ? `<div class="card">${shown.map(g => `<div class="game-row"><span class="game-teams score-teams">${side(g.teams.away, (g.scores || {}).away)}${side(g.teams.home, (g.scores || {}).home)}</span>
+          <span class="game-mid">${esc(g.statusDetail || g.status)}</span>${external((g.source || {}).url, 'ESPN')}</div>`).join('')}</div>`
         : empty(`No ${league} games in the window`, block.status === 'ok' ? 'The provider returned no games for these dates.' : 'The feed is unavailable; the last good data is kept.')}`;
+  }
+
+  /* ---------- the multi-sport buildout ---------- */
+
+  async function viewLab() {
+    const data = await get('sports.json');
+    const available = data.leagues || {};
+    const stage = (league, name, status, tone, copy) => {
+      const block = available[league] || {};
+      const count = (block.games || []).length;
+      const feed = block.status === 'ok' ? `${count} game${count === 1 ? '' : 's'} in the three-day window` : 'score feed waiting';
+      return `<article class="lab-card card"><div class="lab-card-head"><h3>${esc(name)}</h3><span class="pill ${tone}">${esc(status)}</span></div><p>${esc(copy)}</p><a href="#scores/${league}">${esc(feed)} →</a></article>`;
+    };
+    return `${head("Kook'n Lab", 'Every sport earns its way onto the card. Scores come first, then a silent paper trial, then public plays only if the recorded results beat the price.')}
+      <div class="lab-hero card"><p class="eyebrow">The rule</p><h2>No forced picks. No hidden misses.</h2><p>Football is live. Basketball is built and waiting for its in-season paper record. The other sports are coverage-first while their models and usable price feeds are tested.</p></div>
+      ${section('In the kitchen', `<div class="lab-grid">
+        ${stage('NBA', 'NBA', 'Paper trial', 'pill-q', 'A tested totals model starts recording real available lines when the regular season opens. Nothing posts until the live paper record clears the price.')}
+        ${stage('CBB', 'College basketball', 'Paper trial', 'pill-q', 'College totals begin their silent trial when November games start. The historical model alone was not good enough to publish.')}
+        ${stage('EPL', 'Premier League', 'Research', 'pill-closed', 'The Asian-handicap model is the only soccer signal worth watching. It still needs a season of usable US-book prices.')}
+        ${stage('MLB', 'MLB', 'Score center', 'pill-reference', 'Schedules and results are live. A baseball model and paper market are the next build, not an excuse to force daily plays.')}
+        ${stage('NHL', 'NHL', 'Score center', 'pill-reference', 'Schedules and results are live while the first hockey model and market test are scoped.')}
+        ${stage('WNBA', 'WNBA', 'Score center', 'pill-reference', 'Schedules and results are live. Modeling waits for a clean offseason build and an honest holdout test.')}
+        ${stage('MLS', 'MLS', 'Score center', 'pill-reference', 'Schedules and results are live. The current goals model did not beat the market, so there are no MLS picks yet.')}
+      </div>`)}
+      <div class="notice"><strong>What promotion means.</strong> A sport moves to public plays only after prices were captured before games, every result was graded, the sample beat break-even and the closing market, and the owner approved the new card.</div>`;
   }
 
   /* ---------- Discord radar, public calculator ---------- */
@@ -1126,8 +1155,8 @@
     const count = state.ticket.length;
     const link = (href, label, note) => `<a href="${href}"${href.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}><span>${label}</span><small>${note}</small></a>`;
     return `${head('More', '')}
-      <div class="card menu">${link('https://discord.gg/CvNTUUSnNz', 'Join the Discord', 'Confirmed plays early plus time-sensitive arb alerts')}${link('https://x.com/keenkooks', 'Follow on X', '@keenkooks')}${link('#arbs', "Kook'n Arb Radar", 'Discord alerts and public calculator')}${link('#model', 'The scoreboard', 'Our numbers graded against the closing line')}${link('#ticket', 'Your ticket', count ? `${count} line${count === 1 ? '' : 's'}` : 'Parlay builder')}
-      ${link('#research', 'Research desk', 'Injuries and analyst notes')}${link('#stats/defense', 'Defense vs position', 'Rankings')}${link('#scores/NBA', 'NBA scores', 'Schedules and scores')}${link('#scores/MLB', 'MLB scores', 'Schedules and scores')}</div>
+      <div class="card menu">${link('https://discord.gg/CvNTUUSnNz', 'Join the Discord', 'Confirmed plays early plus time-sensitive arb alerts')}${link('https://x.com/keenkooks', 'Follow on X', '@keenkooks')}${link('#lab', "Kook'n Lab", 'How every new sport earns its way onto the card')}${link('#arbs', "Kook'n Arb Radar", 'Discord alerts and public calculator')}${link('#model', 'The scoreboard', 'Our numbers graded against the closing line')}${link('#ticket', 'Your ticket', count ? `${count} line${count === 1 ? '' : 's'}` : 'Parlay builder')}
+      ${link('#research', 'Research desk', 'Injuries and analyst notes')}${link('#scores/MLB', 'All sports scores', 'NBA, WNBA, college hoops, MLB, NHL, Premier League and MLS')}</div>
       <div class="section card" style="padding:14px"><p class="prose" style="margin:0"><b>About.</b> Kook'n is a sports stats engine graded against the betting market. The model publishes score and player projections before kickoff, every forecast is kept, and the scoreboard grades them against the closing line. Stats come from ESPN’s public feeds and nflverse. For entertainment only; nothing here is betting advice.</p></div>`;
   }
 
@@ -1270,7 +1299,7 @@
 
   const VIEWS = { today: viewToday, games: viewGames, game: viewGame, stats: viewStats, player: viewPlayer, team: viewTeam,
     model: viewModel, record: viewRecord, board: viewBoard, ticket: viewTicket, research: viewResearch, scores: viewScores,
-    arbs: viewArbs, more: viewMore };
+    arbs: viewArbs, lab: viewLab, more: viewMore };
   document.addEventListener('click', event => {
     const button = event.target.closest('[data-set^="boardMode:"]');
     if (button) { const mode = button.dataset.set.split(':')[1]; state.boardMode = mode; location.hash = mode === 'props' ? '#board/props' : '#board'; }

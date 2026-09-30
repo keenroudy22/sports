@@ -56,7 +56,7 @@ jobs:
           node --test tests/*.test.js
       - name: Refresh schedules and record original forecasts
         run: python scripts/refresh.py
-      - name: Refresh NBA and MLB scoreboards
+      - name: Refresh the multi-sport score center
         run: python scripts/sports_refresh.py
       - name: Store box scores, play-by-play and closing lines for new finals
         run: python scripts/boxscores.py

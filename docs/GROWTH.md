@@ -65,10 +65,11 @@ impressions into profile visits and at least 10% of profile visits into follows.
 the hook or profile before increasing post volume.
 
 Daily posting broadens the number of chances to be discovered; it does not justify more official picks. Expand the
-calendar in stages: use MLB, NBA, CBB and soccer schedules, results and verified news as factual coverage; keep new
+calendar in stages: use NBA, WNBA, CBB, MLB, NHL and soccer schedules and results as factual coverage; keep new
 betting models in paper trials; promote a sport to official plays only after a documented held-out edge and the same
 price, news, grading and record safeguards used for football. Basketball is the first active paper trial, with MLB
-and soccer following when their models and feeds are ready.
+and Premier League research following when their models and usable US-book feeds are ready. The public Kook'n Lab
+makes those stages visible, which turns model restraint into part of the story instead of creating filler picks.
 
 ## Four-week experiment cycle
 
