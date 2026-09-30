@@ -1,0 +1,106 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-09-30T21:30:06Z",
+  "targetWeek": 4,
+  "summary": "5:30 PM ET run, published at 5:30 PM ET. Nothing to settle. Nothing to close. Published 3: Chiefs at Raiders under 48 -109 at BetRivers; Falcons at Saints under 48 -108 at BetRivers; Roman Wilson OVER 19.5 receiving yards -104 at FanDuel. Screened and passed on 16: Aaron Rodgers OVER 21.5 completions (one_book); Aaron Rodgers OVER 34.5 pass attempts (one_book); Packers at Buccaneers over 39.5 (lean_nothing_against); Quinshon Judkins UNDER 16.5 carries (one_book); Quinshon Judkins UNDER 56.5 rushing yards (card_cap); DK Metcalf OVER 41.5 receiving yards (card_cap); Pat Freiermuth OVER 28.5 receiving yards (card_cap); Aaron Rodgers OVER 211.5 passing yards (card_cap); and 8 more. odds_api.py: CFB: skipped (captured 2026-09-30T19:14:41Z, inside the gap) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "position": "WR",
+      "athleteId": "4431492",
+      "market": "recYds",
+      "line": 19.5,
+      "direction": "over",
+      "gameIds": [
+        "NFL-401872964"
+      ],
+      "book": "FanDuel",
+      "odds": -104,
+      "projection": 43.2,
+      "edge": "v2 receiving yards 43.2 (80% range 5.4 to 80.9). Chance of over 19.5: 79.0% (uncalibrated: no graded history against a line yet), against 51.0% break-even at -104: +28.0 points, +0.549u per unit.",
+      "cutoff": "OVER 19.5 at -104 or better. Closed to new entries at 20+, or at -119 or worse at 19.5.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-09-30T19:57:56Z",
+      "quotedAt": "2026-09-30T19:58:45Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 3:58 PM ET capture across 2 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-01T03:30:00Z",
+      "title": "Roman Wilson OVER 19.5 receiving yards",
+      "id": "NFL-2026-W4-wilson-over-19-5-recyds-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401872964",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "why": "Our number says Roman Wilson will get 43.2 receiving yards. The over is 79.0% likely based on our projection, but that number hasn't been tested against a line yet. The true chance is probably lower. In his last 10 games, he went over 19.5 yards 5 times. He's the 2nd highest target WR for PIT with 5.6 yards per game. CLE allows 155.33 yards per game to WRs, and Wilson is 17th out of 32 WRs this season. One team is the stingiest.",
+      "risk": "Our number is 43.2 receiving yards. The 80% range is 5.4 to 80.9. Chance of over 19.5 is 79.0%. That's uncalibrated because there's no graded history against a line yet. Break-even is 51.0% at -104. Edge is +28.0 points or +0.549u per unit. The line is 19.5 at -104. Closed to new entries at 20+ or -119 or worse at 19.5. Confidence is 2 out of 10."
+    }
+  ],
+  "gamePicks": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 48.0,
+      "direction": "under",
+      "gameIds": [
+        "NFL-401872976"
+      ],
+      "book": "BetRivers",
+      "odds": -109,
+      "projection": 43.4,
+      "edge": "v2 total 43.4 (80% range 27 to 59.8). Chance of under 48: 55.3% (v2's raw 62.5% shrunk by its 2024-25 record against the close), push 2.9%, against 52.2% break-even at -109: +3.1 points, +0.089u per unit.",
+      "cutoff": "UNDER 48 at -109 or better. Closed to new entries at 46.5 or lower, or at -124 or worse at 48.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-09-30T19:13:51Z",
+      "quotedAt": "2026-09-30T19:14:41Z",
+      "quoteType": "capture",
+      "quoteNote": "BetRivers's number and price from the 3:14 PM ET capture across 6 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-01T03:30:00Z",
+      "title": "Chiefs at Raiders under 48",
+      "id": "NFL-2026-W4-kc-lv-under-48-br",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401872976",
+        "https://www.chiefs.com/team/injury-report/week/REG-4"
+      ],
+      "why": "Our number is 43.4 for the under 48. The chance of under 48 is 55.3% after the raw 62.5% is adjusted by the model's record against the close. The edge is +3.1 points over the 52.2% needed at -109. No sources argue against this. Checked before publishing: Patrick Mahomes was listed with a knee injury but practiced fully. Checked before publishing: Chiefs tackle Josh Simmons did not practice because of a back injury. The market: The spread opened +5.5 and is now +4.5 at DraftKings, a move of 1 point toward the home team. The total opened 43.5 and is now 47.5 at DraftKings, a move of 4 points toward the over. Six books have totals from 47.5 to 48; the middle is 47.5. Our spread gap of 1.8 points is at the 46th percentile of the model's gaps. Gaps this large went 308-303 against the close in 1132 graded games. Our total gap of 4.1 points is at the 83rd percentile of the model's gaps. Gaps this large went 101-93 against the close in 1134 graded games.",
+      "risk": "Our projection is 43.4. The closing line is higher than our number. The gap is larger than usual, and it's more likely our model is wrong than the market is. Confidence 3 of 10."
+    },
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 48.0,
+      "direction": "under",
+      "gameIds": [
+        "NFL-401872979"
+      ],
+      "book": "BetRivers",
+      "odds": -108,
+      "projection": 43.4,
+      "edge": "v2 total 43.4 (80% range 27 to 59.8). Chance of under 48: 55.2% (v2's raw 62.5% shrunk by its 2024-25 record against the close), push 2.9%, against 51.9% break-even at -108: +3.3 points, +0.093u per unit.",
+      "cutoff": "UNDER 48 at -108 or better. Closed to new entries at 46.5 or lower, or at -123 or worse at 48.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-09-30T19:13:51Z",
+      "quotedAt": "2026-09-30T19:14:41Z",
+      "quoteType": "capture",
+      "quoteNote": "BetRivers's number and price from the 3:14 PM ET capture across 6 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-01T03:30:00Z",
+      "title": "Falcons at Saints under 48",
+      "id": "NFL-2026-W4-atl-no-under-48-br",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401872979",
+        "https://www.atlantafalcons.com/news/michael-penix-jr-resiliency-falcons-win-thursday-night-football-packers"
+      ],
+      "why": "Our number is 43.4 for the under 48. The chance of under 48 is 55.2% after the raw 62.5% is adjusted for the model's record against the close. The line is -108, which breaks even at 51.9%. The edge is +3.3 points and +0.093 units per unit. Nothing in the data argues against this. The total opened at 45.5 and is now 47.5 at DraftKings, moving 2 points toward the over. Six books have totals from 47.5 to 48.5, with the middle at 47.75. Our spread gap of 0.3 points is at the 4th percentile of the model's gaps. Gaps this large went 563-525 against the close in 1132 graded games. Our total gap of 4.1 points is at the 83rd percentile of the model's gaps. Gaps this large went 101-93 against the close in 1134 graded games. Checked before publishing: Michael Penix Jr. started for Atlanta against Green Bay on September 24 after Cooper Rush started the Falcons' first two games. The Falcons have not yet published a game-week injury designation for Penix.",
+      "risk": "Our number is 43.4. The closing line is higher. A gap this large is more often our error than the market's. Confidence 3 of 10."
+    }
+  ]
+}
