@@ -17,10 +17,17 @@ jurisdiction alone does not verify availability.
 - Each league has its own last successful check, last attempt, source and coverage flags. A failed date refresh preserves the entire last good league snapshot and its original timestamp; an empty verified response differs from unavailable data.
 - Odds, props, forecasts and official picks are **not enabled** merely by this score expansion. The score feed does
   not imply researched betting coverage. NBA and college totals already have a separate silent paper-trial path;
-  the other sports still need sport-specific models, usable prices and settlement checks.
+  MLB and NHL now have a separate append-only market lab (`scripts/market_lab.py`, `data/market-lab/`) that preserves
+  supplied DraftKings pregame totals, moneylines, run/puck lines, changed snapshots and final scores. It makes no
+  prediction and applies no settlement rule. The other sports still need sport-specific models, usable prices and
+  settlement checks.
 - Refresh hook for the existing hosted workflow: `python scripts/sports_refresh.py`, before committing `site/data`. No extra scheduled run is needed. The hosted source check remains periodic rather than a continuous live score feed.
 
 Validation: `python -m unittest discover -s tests -p test_sports_refresh.py` covers final and upcoming games, interrupted responses, stale-data preservation, unavailable versus empty slates, ET dates, doubleheaders, deduplication and mismatched provider identities. Deployment and mobile presentation are separate release checks.
+
+`python -m unittest tests.test_market_lab` covers live-feed exclusion, exact supplied prices, changed-snapshot
+deduplication, append-only final joins and unavailable prices. The desk runs this silent capture beside basketball's
+paper trials at 11:45 AM, 5:30 PM and 11:30 PM Eastern. It adds no paid or metered odds call.
 
 ## Shared foundation
 

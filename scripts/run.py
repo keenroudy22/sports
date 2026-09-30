@@ -54,7 +54,7 @@ SLOT_TOLERANCE = timedelta(minutes=40)     # a run that fires this far from a sl
 PUBLISH_MARGIN = timedelta(minutes=5)      # nothing is published on a game this close to kickoff
 KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'favorite')
 WHITELIST = ('research/', 'data/odds/', 'data/prop-odds/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
-             'data/paper/', 'data/hoops/', 'data/featured.json')
+             'data/paper/', 'data/hoops/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json')
 BOOK_SLUG = {'DraftKings': 'dk', 'FanDuel': 'fd', 'BetMGM': 'mgm', 'Caesars': 'czr', 'BetRivers': 'br',
              'ESPN BET': 'espnbet', 'Fanatics': 'fan'}
 VOLUME = {'recYds': 'targets', 'rec': 'targets', 'rushYds': 'carries', 'car': 'carries',
@@ -135,7 +135,7 @@ def git(*args, cwd=ROOT, check=True):
 
 
 LEFTOVER = ('data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/',
-            'data/featured.json')
+            'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json')
 
 
 def sync(runner=git):
@@ -926,12 +926,11 @@ def decision_record(candidate, league, decision, rules, reason, now, ctx):
                          for f in candidate.get('_research') or []]}
 
 
-PAPER_SLOTS = (11, 17, 23)      # the basketball paper trials run at the midday, evening and late runs
+PAPER_SLOTS = (11, 17, 23)      # silent expansion trials run at the midday, evening and late runs
 
 
 def paper_trials(now, slot, status):
-    """The basketball totals paper trial (scripts/paper.py): record the lines as they open, grade the finished,
-    publish nothing. Quiet outside the seasons; its errors never fail a run."""
+    """Silent expansion work: basketball paper picks plus MLB/NHL market evidence. Publish nothing."""
     if slot.hour not in PAPER_SLOTS:
         return
     try:
@@ -943,6 +942,15 @@ def paper_trials(now, slot, status):
     except Exception as error:
         status['errors'].append(f'paper: {type(error).__name__}: {error}')
         log(f'paper: {type(error).__name__}: {error}')
+    try:
+        import market_lab
+        result = market_lab.step(now, log=log)
+        status['marketLab'] = result
+        if result.get('captured') or result.get('graded'):
+            log(f"market lab: {result.get('captured', 0)} changed quotes, {result.get('graded', 0)} finals")
+    except Exception as error:
+        status['errors'].append(f'market lab: {type(error).__name__}: {error}')
+        log(f'market lab: {type(error).__name__}: {error}')
 
 
 def remember(decided, now, slot, status):

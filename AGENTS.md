@@ -142,7 +142,10 @@ Handy commands (from `~/Projects/sports`):
 - **Multi-sport buildout** (2026-09-29): the free score center covers NBA, WNBA, men's college basketball, MLB, NHL,
   the Premier League and MLS. `#lab` tells visitors whether each sport is score-only, research, paper trial or live.
   NBA and college totals use the existing silent paper trial when their seasons open; historical backtests alone do
-  not authorize a post. Do not add odds requests, public picks or cross-sport tickets merely because scores exist.
+  not authorize a post. MLB and NHL use `scripts/market_lab.py` to preserve supplied DraftKings pregame markets,
+  changed snapshots and final scores before either sport gets a model. This uses ESPN's public feed, not a metered
+  service, and never grades or publishes a play. Do not add public picks or cross-sport tickets merely because scores
+  or market captures exist.
 - **The daily card** (2026-09-28): five straight plays on Saturday and Sunday, a mix of game lines and player props
   (three of a kind at most); one play on other days, the NFL game's on an NFL night (`gates.card_cap`, ordered by
   `run.rank_card`). Never leave an NFL day without a post. A fun parlay with alternate lines every Saturday (college,

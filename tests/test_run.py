@@ -153,6 +153,11 @@ class GitTests(unittest.TestCase):
             raise run.RunError(result.stderr)
         return result
 
+    def test_silent_market_lab_outputs_are_whitelisted_but_other_site_data_is_not(self):
+        self.assertTrue(run.allowed('data/market-lab/mlb-2026.jsonl'))
+        self.assertTrue(run.allowed('site/data/market-lab.json'))
+        self.assertFalse(run.allowed('site/data/slate.json'))
+
     def test_commit_whitelist_restores_everything_else(self):
         (self.repo / 'site' / 'data' / 'slate.json').write_text('{"a": 2}')                 # the hosted workflow owns this
         (self.repo / 'data' / 'odds' / 'nfl.jsonl').write_text('{}\n{}\n')                     # a capture

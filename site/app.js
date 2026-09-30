@@ -1100,13 +1100,18 @@
   /* ---------- the multi-sport buildout ---------- */
 
   async function viewLab() {
-    const data = await get('sports.json');
+    const [data, market] = await Promise.all([get('sports.json'), maybe('market-lab.json')]);
     const available = data.leagues || {};
-    const stage = (league, name, status, tone, copy) => {
+    const progress = league => {
+      const row = ((market || {}).leagues || {})[league];
+      if (!row || !row.gamesQuoted) return 'Market capture armed; waiting for the next supplied pregame line.';
+      return `${row.gamesQuoted} game${row.gamesQuoted === 1 ? '' : 's'} quoted · ${row.snapshots} changed snapshot${row.snapshots === 1 ? '' : 's'} · ${row.gamesGraded} final${row.gamesGraded === 1 ? '' : 's'} joined`;
+    };
+    const stage = (league, name, status, tone, copy, labProgress = '') => {
       const block = available[league] || {};
       const count = (block.games || []).length;
       const feed = block.status === 'ok' ? `${count} game${count === 1 ? '' : 's'} in the three-day window` : 'score feed waiting';
-      return `<article class="lab-card card"><div class="lab-card-head"><h3>${esc(name)}</h3><span class="pill ${tone}">${esc(status)}</span></div><p>${esc(copy)}</p><a href="#scores/${league}">${esc(feed)} →</a></article>`;
+      return `<article class="lab-card card"><div class="lab-card-head"><h3>${esc(name)}</h3><span class="pill ${tone}">${esc(status)}</span></div><p>${esc(copy)}</p>${labProgress ? `<p class="lab-progress">${esc(labProgress)}</p>` : ''}<a href="#scores/${league}">${esc(feed)} →</a></article>`;
     };
     return `${head("Kook'n Lab", 'Every sport earns its way onto the card. Scores come first, then a silent paper trial, then public plays only if the recorded results beat the price.')}
       <div class="lab-hero card"><p class="eyebrow">The rule</p><h2>No forced picks. No hidden misses.</h2><p>Football is live. Basketball is built and waiting for its in-season paper record. The other sports are coverage-first while their models and usable price feeds are tested.</p></div>
@@ -1114,8 +1119,8 @@
         ${stage('NBA', 'NBA', 'Paper trial', 'pill-q', 'A tested totals model starts recording real available lines when the regular season opens. Nothing posts until the live paper record clears the price.')}
         ${stage('CBB', 'College basketball', 'Paper trial', 'pill-q', 'College totals begin their silent trial when November games start. The historical model alone was not good enough to publish.')}
         ${stage('EPL', 'Premier League', 'Research', 'pill-closed', 'The Asian-handicap model is the only soccer signal worth watching. It still needs a season of usable US-book prices.')}
-        ${stage('MLB', 'MLB', 'Score center', 'pill-reference', 'Schedules and results are live. A baseball model and paper market are the next build, not an excuse to force daily plays.')}
-        ${stage('NHL', 'NHL', 'Score center', 'pill-reference', 'Schedules and results are live while the first hockey model and market test are scoped.')}
+        ${stage('MLB', 'MLB', 'Market capture', 'pill-q', 'Real pregame DraftKings totals, moneylines and run lines are being preserved with final scores. No model or picks yet.', progress('MLB'))}
+        ${stage('NHL', 'NHL', 'Market capture', 'pill-q', 'Real pregame DraftKings totals, moneylines and puck lines are being preserved with final scores. No model or picks yet.', progress('NHL'))}
         ${stage('WNBA', 'WNBA', 'Score center', 'pill-reference', 'Schedules and results are live. Modeling waits for a clean offseason build and an honest holdout test.')}
         ${stage('MLS', 'MLS', 'Score center', 'pill-reference', 'Schedules and results are live. The current goals model did not beat the market, so there are no MLS picks yet.')}
       </div>`)}

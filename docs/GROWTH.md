@@ -67,8 +67,9 @@ the hook or profile before increasing post volume.
 Daily posting broadens the number of chances to be discovered; it does not justify more official picks. Expand the
 calendar in stages: use NBA, WNBA, CBB, MLB, NHL and soccer schedules and results as factual coverage; keep new
 betting models in paper trials; promote a sport to official plays only after a documented held-out edge and the same
-price, news, grading and record safeguards used for football. Basketball is the first active paper trial, with MLB
-and Premier League research following when their models and usable US-book feeds are ready. The public Kook'n Lab
+price, news, grading and record safeguards used for football. Basketball is the first model-backed paper trial. MLB
+and NHL first collect real pregame market snapshots and finals without making picks; models come only after that
+auditable baseline exists. Premier League research follows when usable US-book feeds are ready. The public Kook'n Lab
 makes those stages visible, which turns model restraint into part of the story instead of creating filler picks.
 
 ## Four-week experiment cycle

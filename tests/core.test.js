@@ -304,6 +304,8 @@ test('app.js parses', () => {
   assert.match(source, /about 10–15 minutes before X/);
   assert.match(source, /Time-sensitive Arb Radar candidates stay in Discord/);
   assert.match(source, /href="#record">See every result/);
+  assert.match(source, /Real pregame DraftKings totals, moneylines and run lines are being preserved/);
+  assert.match(source, /Real pregame DraftKings totals, moneylines and puck lines are being preserved/);
 });
 
 test('one record: the straight plays in wins and losses and units, the side records apart', () => {

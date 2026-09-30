@@ -517,6 +517,13 @@ consensus close, and `data/paper/REPORT.md` keeps the record. Nothing is posted.
 plays is a person's decision on the graded record, and the soccer model's Premier League handicaps can follow
 the same path.
 
+Before MLB or NHL has a model, `scripts/market_lab.py` builds the price history that a model will have to beat. At
+the same three silent-trial runs it records the first supplied DraftKings full-game total, moneyline and run/puck
+line, appends a snapshot only when that market changes, and joins the final score later. The append-only records and
+ledger live in `data/market-lab/`; `site/data/market-lab.json` gives the public Lab honest coverage counts. It never
+predicts a side, applies sport-specific settlement, becomes a play, or calls a metered service. Those missing layers
+are promotion gates, not details to infer from the score.
+
 ## Multi-sport score center and Lab
 
 `scripts/sports_refresh.py` uses ESPN's public scoreboards for NBA, WNBA, men's college basketball, MLB, NHL, the

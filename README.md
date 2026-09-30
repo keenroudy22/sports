@@ -6,7 +6,8 @@ NFL and FBS football forecasts, researched player props, and a public record of 
 
 The multi-sport score center covers NBA, WNBA, men's college basketball, MLB, NHL, the Premier League and MLS with
 Eastern date filters and source freshness. The public Kook'n Lab shows which sports are live, in a silent paper trial,
-or still research-only. New betting coverage is never inferred from a score feed. The old `/football-predictions/`
+capturing a real market baseline, or still research-only. MLB and NHL preserve supplied pregame DraftKings markets
+and final scores without making picks. New betting coverage is never inferred from a score feed. The old `/football-predictions/`
 address redirects to `/sports/`, preserving game/results fragments and query strings. See `SPORTS-ROADMAP.md` for the
 promotion gates.
 
