@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-30T00:12:37Z",
+  "updatedAt": "2026-09-30T00:21:43Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -697,6 +697,24 @@
           "name": "Buffalo Bills",
           "players": [
             {
+              "id": "3930086",
+              "name": "Dawson Knox",
+              "position": "TE",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-30T00:13Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3930086/dawson-knox"
+            },
+            {
+              "id": "4635008",
+              "name": "Keon Coleman",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-30T00:05Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4635008/keon-coleman"
+            },
+            {
               "id": "4606712",
               "name": "Ar'maj Reed-Adams",
               "position": "G",
@@ -841,15 +859,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4568624/dorian-williams"
             },
             {
-              "id": "4635008",
-              "name": "Keon Coleman",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-27T15:53Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4635008/keon-coleman"
-            },
-            {
               "id": "4039303",
               "name": "Ed Oliver",
               "position": "DT",
@@ -911,15 +920,6 @@
               "injury": null,
               "reportedAt": "2026-09-19T03:20Z",
               "source": "https://www.espn.com/nfl/player/_/id/4259166/terrel-bernard"
-            },
-            {
-              "id": "4362506",
-              "name": "Greg Rousseau",
-              "position": "LB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-19T03:09Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4362506/greg-rousseau"
             }
           ]
         },
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-09-29T23:35Z",
+              "reportedAt": "2026-09-30T00:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "24",
-          "name": "Elijah Molden",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-09-29T19:57:38Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4243328/elijah-molden"
-        },
-        {
-          "teamId": "24",
           "name": "Kayode Awosika",
           "from": "Out",
           "to": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-09-30T00:12:37Z",
           "source": "https://www.espn.com/nfl/player/_/id/4363097/percy-butler"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-09-30T00:21:43Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-09-30T00:12:37Z",
-      "lastAttemptAt": "2026-09-30T00:12:37Z",
+      "checkedAt": "2026-09-30T00:21:43Z",
+      "lastAttemptAt": "2026-09-30T00:21:43Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-09-30T00:12:37Z",
-      "lastAttemptAt": "2026-09-30T00:12:37Z",
+      "checkedAt": "2026-09-30T00:21:43Z",
+      "lastAttemptAt": "2026-09-30T00:21:43Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
