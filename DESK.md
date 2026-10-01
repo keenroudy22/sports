@@ -70,8 +70,8 @@ player returned; it never infers an injury from a quiet box score. A verified in
 verified, or a failed check leaves the play pending until 12 hours after kickoff and sends an informational alert.
 The owner does not have to supply a wager screenshot. The check does not turn an injury into a push or void on its
 own. If no different official book settlement is known by the deadline, the play is graded from the official stats
-with its review note and sources preserved; stronger settlement evidence later becomes an append-only dated
-correction.
+with its review note and sources preserved. The final receipt says the player was injured in-game and checked before
+grading; stronger settlement evidence later becomes an append-only dated correction.
 
 ## Operating it
 

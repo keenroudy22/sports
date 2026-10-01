@@ -126,6 +126,20 @@ class ReceiptTests(unittest.TestCase):
         self.assertEqual(detail, '0.25u · 2/2 live legs hit · 1 leg voided')
         self.assertNotIn('missed', detail)
 
+    def test_a_verified_in_game_injury_is_named_on_the_final_receipt(self):
+        straight = pick('hurt', 'sun', result='loss', actual='Player Seven: 12 receiving yards',
+                        injuryPlayers=['Player Seven'])
+        self.assertEqual(receipts.result_detail(straight),
+                         'injured in-game · checked before grading · Final: Player Seven: 12 receiving yards')
+        ticket = pick('hurt-parlay', 'sun', parlayType='easyProps', result='loss', riskUnits=0.25,
+                      actual='legs: win, loss, win', injuryPlayers=['Player Seven'])
+        self.assertEqual(receipts.result_detail(ticket),
+                         'Player Seven injured in-game · checked before grading · 0.25u · 2/3 legs hit · missed by one leg')
+        card = pick_card.receipt_svg({'title': '0-1', 'when': 'Sunday, Sep 27', 'label': 'YESTERDAY\'S PLATES',
+                                      'rows': [('loss', 'Player Seven over 49.5 receiving yards',
+                                                receipts.result_detail(straight))]}, avatar='')
+        self.assertIn('injured in-game · checked before grading', card)
+
     def test_a_receipt_keeps_a_long_game_total_readable(self):
         receipt = {'title': '5-5', 'when': 'Saturday, Sep 26', 'label': 'YESTERDAY\'S PLATES',
                    'rows': [('loss', 'Central Michigan/Miami (FL) under 53.5')]}

@@ -83,6 +83,7 @@ class GradingTests(unittest.TestCase):
         self.assertEqual(settled[0][2]['result'], 'loss')
         self.assertIn('no confirmed different FanDuel settlement', settled[0][2]['settlementReason'])
         self.assertEqual(settled[0][2]['settlementReviewSources'], ['https://www.example.com/injury'])
+        self.assertEqual(settled[0][2]['injuryPlayers'], ['Player Seven'])
 
     def test_every_losing_player_leg_is_checked_and_one_injury_pauses_the_whole_parlay(self):
         now = datetime(2026, 9, 28, tzinfo=timezone.utc)

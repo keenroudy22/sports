@@ -714,7 +714,9 @@ def board_picks(first, latest, by_id, identities):
                      'status': recent.get('status') or pick.get('status'),
                      'result': recent.get('result'), 'actual': recent.get('actual'), 'settledAt': recent.get('settledAt'),
                      'units': recent.get('units'),                         # saved when the play was graded
-                     'settlementReason': recent.get('settlementReason'), 'resultSource': recent.get('resultSource'),
+                     'settlementReason': recent.get('settlementReason'),
+                     'settlementReviewSources': recent.get('settlementReviewSources'),
+                     'injuryPlayers': recent.get('injuryPlayers'), 'resultSource': recent.get('resultSource'),
                      'kickoff': game.get('kickoff'),
                      'color': color(pick.get('league'), (game.get('home') or {}).get('abbreviation'), identities)})
     rows.sort(key=lambda p: p.get('publishedAt') or '', reverse=True)

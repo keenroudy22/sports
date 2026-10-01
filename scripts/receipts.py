@@ -90,16 +90,30 @@ def leg_results(pick):
     return [result for result in results if result in MARKS]
 
 
+def injury_detail(pick):
+    """A compact, factual receipt note only when grading preserved a verified in-game injury report."""
+    names = [str(name).strip() for name in pick.get('injuryPlayers') or [] if str(name).strip()]
+    if not names:
+        return ''
+    if pick_card.play_kind(pick) != 'parlay':
+        return 'injured in-game · checked before grading'
+    who = names[0] + (f' +{len(names) - 1}' if len(names) > 1 else '')
+    return f'{who} injured in-game · checked before grading'
+
+
 def result_detail(pick):
     """One factual line that makes a receipt worth reading without manufacturing a stat.
 
     Parlays say how many live legs hit, identify protected voids, and call out a one-leg miss. Straight plays use
     the preserved final result.
     """
+    injury = injury_detail(pick)
     if pick_card.play_kind(pick) == 'parlay':
         results = leg_results(pick)
         stake = stake_text(pick)
-        pieces = [stake] if stake else []
+        pieces = [injury] if injury else []
+        if stake:
+            pieces.append(stake)
         if results:
             won = results.count('win')
             voided = results.count('void') + results.count('push')
@@ -113,7 +127,7 @@ def result_detail(pick):
                 pieces.append('clean sweep')
         return ' · '.join(pieces)
     actual = str(pick.get('actual') or '').strip()
-    return f'Final: {actual}' if actual else ''
+    return ' · '.join(part for part in (injury, f'Final: {actual}' if actual else '') if part)
 
 
 def result_line(pick, games=None):

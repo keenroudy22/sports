@@ -378,8 +378,9 @@ def settle(ctx, raw_first, games, records, now, fetch=boxscores.fetch_game, inju
             claims = ' '.join(f['claim'] for f in review['facts'])
             sources = [f['source'] for f in review['facts']]
             return ({'pending': True, 'why': f'{claims} {wait_text}. Injury alone is not a push or void.',
-                     'sources': sources} if waiting else {'pending': False, 'note': f'{claims} {fallback}',
-                                                         'sources': sources})
+                     'sources': sources, 'injuryPlayers': [player]} if waiting else
+                    {'pending': False, 'note': f'{claims} {fallback}', 'sources': sources,
+                     'injuryPlayers': [player]})
         return None
 
     for key, pick in ctx.first.items():
@@ -391,7 +392,7 @@ def settle(ctx, raw_first, games, records, now, fetch=boxscores.fetch_game, inju
         if not ids or not all(g and g.get('completed') for g in played):
             continue
         kind, original = raw_first[key]
-        league, reason, review_notes, review_sources = pick.get('league'), None, [], []
+        league, reason, review_notes, review_sources, injury_players = pick.get('league'), None, [], [], []
         if kind == 'parlays':
             results, pending = [], []
             for leg in original.get('legs') or []:
@@ -406,6 +407,7 @@ def settle(ctx, raw_first, games, records, now, fetch=boxscores.fetch_game, inju
                         else:
                             review_notes.append(review['note'])
                             review_sources.extend(review['sources'])
+                            injury_players.extend(review.get('injuryPlayers') or [])
             if pending:
                 unclear.append({'id': key, 'why': ' '.join(review['why'] for review in pending),
                                 'sources': list(dict.fromkeys(source for review in pending
@@ -435,6 +437,7 @@ def settle(ctx, raw_first, games, records, now, fetch=boxscores.fetch_game, inju
             if review:
                 review_notes.append(review['note'])
                 review_sources.extend(review['sources'])
+                injury_players.extend(review.get('injuryPlayers') or [])
         if review_notes:
             reason = ' '.join(filter(None, [reason, *review_notes]))
         revision = dict(original, status='settled', result=result, actual=actual, settledAt=stamp(now),
@@ -445,6 +448,8 @@ def settle(ctx, raw_first, games, records, now, fetch=boxscores.fetch_game, inju
             revision['settlementReason'] = reason
         if review_sources:
             revision['settlementReviewSources'] = list(dict.fromkeys(review_sources))
+        if injury_players:
+            revision['injuryPlayers'] = list(dict.fromkeys(injury_players))
         lock_units(revision)
         revisions.append((league, kind, revision))
     return revisions, unclear

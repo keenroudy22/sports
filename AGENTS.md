@@ -195,7 +195,8 @@ Handy commands (from `~/Projects/sports`):
   the player returned. A verified injury, an unverified report or a failed check pauses settlement through 12 hours
   after kickoff and sends an informational alert; the owner never has to supply a wager screenshot. Never auto-push
   or void it. If no different official book settlement is known by the deadline, grade from the official stats,
-  preserve the review note and sources, and append a dated correction later if stronger evidence appears.
+  preserve the review note and sources, name the verified in-game injury on the final receipt, and append a dated
+  correction later if stronger evidence appears.
 - **Weekly "📌 Save this" projection sheet**: the full NFL slate or 16 college games, college Saturday and NFL
   Sunday at 10 AM (`scripts/sheet.py`). Every spread and total read carries the exact captured line, price and book.
   Numbered mint rings identify up to four markets where the calibrated chance clears that price by the Board's value
