@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-01T19:41:39Z",
+  "updatedAt": "2026-10-01T20:00:37Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-10-01T19:37Z",
+              "reportedAt": "2026-10-01T19:50Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -927,6 +927,33 @@
           "name": "Carolina Panthers",
           "players": [
             {
+              "id": "4430034",
+              "name": "Xavier Legette",
+              "position": "WR",
+              "status": "Doubtful",
+              "injury": "Knee",
+              "reportedAt": "2026-10-01T19:42Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4430034/xavier-legette"
+            },
+            {
+              "id": "4429166",
+              "name": "Princely Umanmielen",
+              "position": "LB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-01T19:37Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4429166/princely-umanmielen"
+            },
+            {
+              "id": "4431551",
+              "name": "Lee Hunter",
+              "position": "DT",
+              "status": "Questionable",
+              "injury": "Foot",
+              "reportedAt": "2026-10-01T19:36Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4431551/lee-hunter"
+            },
+            {
               "id": "4695883",
               "name": "Jalen Coker",
               "position": "WR",
@@ -979,24 +1006,6 @@
               "injury": "Groin",
               "reportedAt": "2026-09-30T19:44Z",
               "source": "https://www.espn.com/nfl/player/_/id/3917853/mike-jackson"
-            },
-            {
-              "id": "4430034",
-              "name": "Xavier Legette",
-              "position": "WR",
-              "status": "Doubtful",
-              "injury": "Knee",
-              "reportedAt": "2026-09-30T19:24Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4430034/xavier-legette"
-            },
-            {
-              "id": "4429166",
-              "name": "Princely Umanmielen",
-              "position": "LB",
-              "status": "Questionable",
-              "injury": null,
-              "reportedAt": "2026-09-30T19:23Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4429166/princely-umanmielen"
             },
             {
               "id": "4685720",
@@ -1141,15 +1150,6 @@
               "injury": null,
               "reportedAt": "2026-09-24T02:04Z",
               "source": "https://www.espn.com/nfl/player/_/id/4372518/bobby-brown-iii"
-            },
-            {
-              "id": "4035462",
-              "name": "Isaiah Simmons",
-              "position": "S",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-24T00:09Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4035462/isaiah-simmons"
             }
           ]
         },
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-01T19:37Z",
+              "reportedAt": "2026-10-01T19:50Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -3019,7 +3019,7 @@
               "name": "Akeem Davis-Gaither",
               "position": "LB",
               "status": "Questionable",
-              "injury": "Knee",
+              "injury": null,
               "reportedAt": "2026-09-30T19:48Z",
               "source": "https://www.espn.com/nfl/player/_/id/3917142/akeem-davis-gaither"
             },
@@ -3028,7 +3028,7 @@
               "name": "Ashton Dulin",
               "position": "WR",
               "status": "Questionable",
-              "injury": "Ankle",
+              "injury": null,
               "reportedAt": "2026-09-30T18:49Z",
               "source": "https://www.espn.com/nfl/player/_/id/4061956/ashton-dulin"
             },
@@ -4607,6 +4607,15 @@
           "name": "Minnesota Vikings",
           "players": [
             {
+              "id": "4262921",
+              "name": "Justin Jefferson",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-01T19:49Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4262921/justin-jefferson"
+            },
+            {
               "id": "3728281",
               "name": "Blake Cashman",
               "position": "LB",
@@ -4614,15 +4623,6 @@
               "injury": "Elbow",
               "reportedAt": "2026-10-01T00:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/3728281/blake-cashman"
-            },
-            {
-              "id": "4262921",
-              "name": "Justin Jefferson",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-09-30T18:33Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4262921/justin-jefferson"
             },
             {
               "id": "4046537",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "30",
-          "name": "LeQuint Allen Jr.",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-09-30T20:59:07Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4911851/lequint-allen-jr"
-        },
-        {
           "teamId": "19",
           "name": "Andrew Thomas",
           "from": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-10-01T16:20:26Z",
           "source": "https://www.espn.com/nfl/player/_/id/4567979/brandin-echols"
+        },
+        {
+          "teamId": "29",
+          "name": "Princely Umanmielen",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-01T20:00:37Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4429166/princely-umanmielen"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-01T19:41:39Z",
-      "lastAttemptAt": "2026-10-01T19:41:39Z",
+      "checkedAt": "2026-10-01T20:00:37Z",
+      "lastAttemptAt": "2026-10-01T20:00:37Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-01T19:41:39Z",
-      "lastAttemptAt": "2026-10-01T19:41:39Z",
+      "checkedAt": "2026-10-01T20:00:37Z",
+      "lastAttemptAt": "2026-10-01T20:00:37Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
