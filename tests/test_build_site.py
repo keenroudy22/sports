@@ -134,6 +134,7 @@ class GradeTests(unittest.TestCase):
         self.assertEqual(len(rows), 1, 'one alternate ladder cannot fill the whole panel')
         self.assertEqual((rows[0]['title'], rows[0]['book'], rows[0]['odds'], rows[0]['projection']),
                          ('Player Ten 30+ receiving yards', 'FanDuel', -400, 70.0))
+        self.assertEqual(rows[0]['line'], 29.5)
         self.assertTrue(rows[0]['alternate'])
         self.assertGreaterEqual(rows[0]['chance'], .72)
         self.assertNotEqual(rows[0]['line'], 19.5, 'an out-of-order rung is not accepted from the mixed ladder')

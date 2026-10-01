@@ -1013,6 +1013,7 @@ def favorite_lines(game, snapshot, record, lines, names, appearances, establishe
             continue
         out.append({'id': f"favorite-{row['id']}", 'kind': 'game', 'title': row['title'],
                     'book': row['book'], 'odds': int(row['odds']), 'line': row.get('line'),
+                    'market': row.get('market'), 'direction': row.get('direction'), 'side': row.get('side'),
                     'chance': grade.get('chance'), 'needs': grade.get('needs'), 'edge': grade.get('edge'),
                     'projection': grade.get('projection'), 'observedAt': row.get('observedAt'),
                     'source': row.get('source'), 'alternate': False, 'score': grade.get('edge') or 0.0})

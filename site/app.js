@@ -499,7 +499,18 @@
       const player = line.kind === 'player';
       const chance = line.chance != null ? `${Math.round(100 * line.chance)}% ${player ? 'raw model clear chance' : 'calibrated chance'}` : '';
       const need = line.needs != null ? `${Math.round(100 * line.needs)}% price break-even` : '';
-      const detailText = [line.projection != null ? `our projection ${fixed(line.projection)}` : '', chance, need]
+      let comparison = '';
+      if (typeof line.line === 'number' && typeof line.projection === 'number') {
+        if (line.market === 'point spread') {
+          const team = String(line.title || '').split(' ')[0];
+          const modelLine = line.side === 'home' ? -line.projection : line.projection;
+          comparison = `market ${team} ${signed(line.line)} vs our spread ${team} ${signed(modelLine)}`;
+        } else {
+          const gap = line.projection - line.line;
+          comparison = `line ${fixed(line.line)} vs projection ${fixed(line.projection)} (${fixed(Math.abs(gap))} ${gap >= 0 ? 'higher' : 'lower'})`;
+        }
+      }
+      const detailText = [comparison, chance, need]
         .filter(Boolean).join(' · ');
       return `<div class="row favorite-line" style="cursor:default"><span class="row-rail" style="background:var(--mint)"></span>
         <span class="row-main"><span class="row-top"><span class="pill pill-ours">#${i + 1}</span><span class="row-name">${esc(line.title)}</span>${line.team ? `<span class="row-meta">${esc(line.team)}</span>` : ''}${line.alternate ? '<span class="pill pill-reference">Alternate</span>' : ''}</span>
