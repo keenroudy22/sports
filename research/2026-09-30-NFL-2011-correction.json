@@ -1,0 +1,33 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-10-01T00:11:24Z",
+  "summary": "Correction to the Sep 27 FanDuel easy-props settlement: De'Von Achane left in the first quarter with a knee injury and did not return. FanDuel's automatically applied September Bet Protect+ removed that eligible leg. Ayomanor and Knox both won, so the repriced two-leg ticket won rather than losing.",
+  "takeaways": [],
+  "parlays": [
+    {
+      "id": "NFL-2026-W3-easy-0927-fd",
+      "title": "3-leg easy props at FanDuel",
+      "status": "settled",
+      "favorite": false,
+      "parlayType": "easyProps",
+      "riskUnits": 0.25,
+      "book": "FanDuel",
+      "odds": 255,
+      "settledOdds": 138,
+      "why": "Easy props, for fun: 3 legs at FanDuel, one per game, each an easier line our projection clears comfortably. A quarter unit, tracked with the longshots, apart from the straight picks.",
+      "risk": "Every leg has to hit; one miss sinks the ticket. Our player chances are tuned for main lines, so these legs are not value, just fun. A player who does not take the field voids his leg under the book's rule.",
+      "sources": [
+        "https://www.fanduel.com/research/fanduel-s-bet-protect-is-free-all-september",
+        "https://fieldlevelmedia.com/news/dolphins-rb-devon-achane-out-with-knee-injury/",
+        "https://www.espn.com/nfl/boxscore/_/gameId/401872952"
+      ],
+      "result": "win",
+      "actual": "legs: win, void, win",
+      "settledAt": "2026-10-01T00:11:24Z",
+      "resultSource": "https://www.fanduel.com/research/fanduel-s-bet-protect-is-free-all-september",
+      "settlementReason": "Achane's protected rushing-yards leg was removed after his first-quarter injury. The two live legs both won, and their captured -166 and -205 prices reprice the ticket to +138.",
+      "units": 0.346,
+      "correctionOf": "research/2026-09-27-NFL-1730-settlement.json"
+    }
+  ]
+}

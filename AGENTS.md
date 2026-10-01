@@ -178,6 +178,11 @@ Handy commands (from `~/Projects/sports`):
   a play, saved at grading). Receipt posts may label fun parlays as their smaller 0.25u stake and say how many legs
   hit, but keep them apart from the straight record and never imply a near miss was a win. The ladder stays apart;
   the 26 Week 1 plays are at an assumed -115, marked.
+- **The listed book's official settlement wins over the raw box score.** If a sourced injury-protection program
+  removes a leg, show that leg as void and reprice the remaining parlay only from its captured leg prices. Never
+  assume protection from an injury alone. The Sep 27 FanDuel easy-props ticket is 2/2 on its live legs and a win:
+  Achane's first-quarter injury leg was automatically protected during FanDuel's free September promotion. Its
+  Sep 30 correction is appended to the record; the original settlement is never rewritten.
 - **Weekly "📌 Save this" model watchlist**: four large, readable model/market gaps, college Saturday and NFL Sunday
   at 10 AM (`scripts/sheet.py`); the full slate stays on the site.
 - **Growth goal** (2026-09-28): grow @keenkooks toward 10,000 followers by the end of football season without paid

@@ -93,7 +93,8 @@ def leg_results(pick):
 def result_detail(pick):
     """One factual line that makes a receipt worth reading without manufacturing a stat.
 
-    Parlays say how many legs hit and call out a one-leg miss. Straight plays use the preserved final result.
+    Parlays say how many live legs hit, identify protected voids, and call out a one-leg miss. Straight plays use
+    the preserved final result.
     """
     if pick_card.play_kind(pick) == 'parlay':
         results = leg_results(pick)
@@ -101,10 +102,14 @@ def result_detail(pick):
         pieces = [stake] if stake else []
         if results:
             won = results.count('win')
-            pieces.append(f'{won}/{len(results)} legs hit')
+            voided = results.count('void') + results.count('push')
+            live = len(results) - voided
+            pieces.append(f'{won}/{live} live legs hit' if voided else f'{won}/{len(results)} legs hit')
+            if voided:
+                pieces.append(f"{voided} leg{'s' if voided != 1 else ''} voided")
             if pick.get('result') == 'loss' and results.count('loss') == 1:
                 pieces.append('missed by one leg')
-            elif pick.get('result') == 'win':
+            elif pick.get('result') == 'win' and not voided:
                 pieces.append('clean sweep')
         return ' · '.join(pieces)
     actual = str(pick.get('actual') or '').strip()

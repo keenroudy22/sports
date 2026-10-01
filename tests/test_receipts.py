@@ -119,6 +119,13 @@ class ReceiptTests(unittest.TestCase):
             self.assertIn(needle, card, needle)
         self.assertNotIn('Confidence', card)
 
+    def test_a_protected_injury_void_is_not_called_a_missed_leg(self):
+        ticket = pick('protected', 'sun', parlayType='easyProps', result='win', riskUnits=0.25,
+                      actual='legs: win, void, win', odds=255)
+        detail = receipts.result_detail(ticket)
+        self.assertEqual(detail, '0.25u · 2/2 live legs hit · 1 leg voided')
+        self.assertNotIn('missed', detail)
+
     def test_a_receipt_keeps_a_long_game_total_readable(self):
         receipt = {'title': '5-5', 'when': 'Saturday, Sep 26', 'label': 'YESTERDAY\'S PLATES',
                    'rows': [('loss', 'Central Michigan/Miami (FL) under 53.5')]}

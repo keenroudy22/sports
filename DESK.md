@@ -58,6 +58,12 @@ Exactly what `PROMPT.md` allows, and only when every gate passes:
 Everything is priced at the quote with the best expected value, not the best-looking number. The
 `expiresAt` is the next scheduled run or kickoff, whichever comes first.
 
+The listed book's official settlement outranks a raw box-score grade. Injury protection is applied only when the
+book's sourced terms covered that wager, never merely because a player got hurt. A protected parlay leg is voided;
+the remaining legs are repriced only from their captured prices. On Sep 27, 2026, FanDuel's automatically applied,
+free September Bet Protect+ removed De'Von Achane after his first-quarter injury. Ayomanor and Knox won, so the
+easy-props ticket was corrected on Sep 30 from a loss to a +138 two-leg win (0.346u on its 0.25u stake).
+
 ## Operating it
 
 Everything sports-related lives outside the repo under `~/.config/keenroudy/` (the `env` file with the

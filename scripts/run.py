@@ -1140,7 +1140,8 @@ def write_prose(candidate, ctx, records):
             candidate['why'] = (f"Easy props, for fun: {len(candidate['legs'])} legs at {candidate['book']}, one per game, each an easier line "
                                 f"our projection clears comfortably. A quarter unit, tracked with the longshots, apart from the straight picks.")
             candidate['risk'] = ('Every leg has to hit; one miss sinks the ticket. Our player chances are tuned for main lines, so these legs '
-                                 'are not value, just fun. A player who does not take the field voids his leg under the book\'s rule.')
+                                 'are not value, just fun. A player who does not take the field voids his leg; a verified book protection '
+                                 'may also remove an injury leg, and the book\'s official settlement controls.')
         else:
             alternate = any(leg.get('alternate') for leg in candidate['legs'])
             source = 'the board and feed-priced alternates' if alternate else 'the board'
@@ -1173,7 +1174,8 @@ def write_prose(candidate, ctx, records):
         games_played = ctx.appearances.get(candidate['athleteId'], 0)
         candidate['risk'] = (f"Uncalibrated chance; a player line turns on a handful of touches. {games_played} games this season"
                              f"{'' if games_played >= 3 else ', the role settled by last season'}. A player who does not take the field is "
-                             f"voided under the book's rule; one who leaves hurt is graded. Confidence {candidate['confidence']} of 10.")
+                             f"voided; an in-game injury is graded unless a verified book protection applies. Confidence "
+                             f"{candidate['confidence']} of 10.")
     else:
         market_words = next((f['claim'] for f in candidate.get('_evidence') or [] if f.get('kind') == 'market'), '')
         checked = checked_facts(candidate)

@@ -476,6 +476,9 @@ def units_for(pick):
     odds, result = pick.get('odds'), pick.get('result')
     if not isinstance(odds, (int, float)) or result not in ('win', 'loss', 'push'):
         return None
+    saved = pick.get('units')
+    if isinstance(saved, (int, float)) and not pick.get('earlyExit'):
+        return saved
     stake = pick.get('riskUnits') or 1
     if result == 'win':
         return round(payout(odds) * stake, 3)

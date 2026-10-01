@@ -224,6 +224,8 @@ class RecapTests(unittest.TestCase):
         self.assertIsNone(x_post.units_for({'odds': -110, 'result': 'void'}), 'void carries no units')
         self.assertIsNone(x_post.units_for({'result': 'win'}), 'no price, no units')
         self.assertEqual(x_post.units_for({'odds': 500, 'result': 'win', 'riskUnits': 0.25}), 1.25)
+        self.assertEqual(x_post.units_for({'odds': 255, 'result': 'win', 'riskUnits': 0.25, 'units': 0.346}), 0.346,
+                         'a corrected or repriced settlement keeps the book result that was saved')
 
     def test_recap_text(self):
         games = {'g1': {'kickoff': '2026-09-26T17:00Z'}, 'g2': {'kickoff': '2026-09-26T20:00Z'}, 'g3': {'kickoff': '2026-09-27T17:00Z'}}
