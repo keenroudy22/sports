@@ -42,7 +42,7 @@ and alerts ntfy; it never changes, advances or replaces the X post.
 | **Injury angle** | After verified top-player news, at most two a day | `🚨 ESPN lists A.J. Brown OUT for PHI at CHI.` / a teammate's real post-news line, price and book / the opponent's allowed-by-position stat / `Board lean, not a posted play. Take it or pass? #NFL` | none; timeliness and the question are the point | `news_posts.candidates` |
 | **Morning receipt** | 9 AM the day after a game day | `Saturday: 5-3` then `✅ Iowa/Michigan over 38.5` per play; a fun ticket adds `0.25u · 2/3 legs hit · missed by one leg` when the stored settlement supports it; `Today: 3 plays.`, tags | the tall navy/mint report card (W/L per play, finals, parlay sweat, the chef) | `receipts.day_receipt`, `with_menu`, `pick_card.receipt_svg` |
 | **Week's receipt** | Wednesday 9 AM | `The week (Sep 23 to Sep 29): 12-9` then the record by kind; fun parlays show their smaller stake | receipt report card | `receipts.week_receipt` |
-| **Save this watchlist** | 10 AM college Saturday and NFL Sunday | `📌 4 NFL games where our numbers disagree most with the market.` / save ask / tag | 1080x1350 grid with four large model/market tiles | `sheet.py` |
+| **Save this projection sheet** | 10 AM college Saturday and NFL Sunday | full NFL slate or 16 college games / four mint-ring model-market gaps / save ask / tag | 1080x1350 compact projection grid | `sheet.py` |
 
 Confirmed official plays, the Pick of the Day and fun/challenge tickets use the same copy and card in Discord about
 10-15 minutes before their X time. Receipts, injury angles and conversation prompts mirror after X. Public promotion
@@ -84,10 +84,12 @@ ladder, receipts and house cards. Cream `#f6f1e6` and ink `#141414` for text. Im
 chef. `KEENROUDY_CARD_ART=0` turns photos and logos off. No straight-play units on cards; a receipt may show a fun
 ticket's 0.25u stake.
 
-The **Save this watchlist** (`scripts/sheet.py`): a header (`SAVE THIS`, `WEEK 3 NFL WATCHLIST`, the date), two columns
-of game cards (logos, our projected score to a tenth, win chances as bars in the teams' colours, and large model/market
-spread and total comparisons, orange where our number leans clearly), and the foot. Both sports show the four games
-where our number and the line differ most; the complete slate stays on the site.
+The **Save this projection sheet** (`scripts/sheet.py`): a header (`SAVE THIS`, `WEEK 3 NFL PROJECTIONS`, the date), two
+columns of compact game cards (logos, our projected score to a tenth, win chances as bars in the teams' colours, and
+model/market spread and total comparisons), and the foot. NFL shows the full slate; college shows the 16 largest
+gaps. A numbered mint ring marks the four strongest model/market disagreements and says whether the gap is in the
+spread or total, explicitly as watches rather than official plays. Moneyline does not appear until the sheet carries
+a real book price to compare with the projected win chance. The complete college slate stays on the site.
 
 ## Previewing before anything posts
 

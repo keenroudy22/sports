@@ -15,8 +15,9 @@ rate and 5 profile visits over the prior four weeks; nearly all of that reach ar
 - **The ladder creates a story.** Every rung states the current stake, target payout and prior result. Wins and losses
   both get receipts. It is entertainment, never a promise or a rescue chase.
 - **Receipts create trust.** Keep them public, short and complete. A bad day does not disappear.
-- **The weekly watchlist tests saves.** Four large, readable disagreements, with the complete slate on the site. It is not a
-  pick card.
+- **The weekly projection sheet tests saves.** The full NFL slate or 16 college games in one compact reference card;
+  numbered mint rings mark the four largest model/market disagreements and label the responsible spread or total.
+  They are watches, not official plays, and the complete college slate stays on the site.
 - **Verified injury angles join live conversation.** A top-player absence can earn a timely text post only after the
   model redistributed the role and a book posted a fresh price. Pair the teammate prop with one opponent-position
   stat and ask “take it or pass?”; keep it explicitly outside the posted-play record.
@@ -74,7 +75,7 @@ makes those stages visible, which turns model restraint into part of the story i
 
 ## Four-week experiment cycle
 
-1. **Week 1: clarity.** Use the corrected game-line labels, readable cards and the four-game watchlist. Establish the
+1. **Week 1: clarity.** Use the corrected game-line labels, readable cards and the full-slate projection sheet. Establish the
    Premium baseline and keep the one-tag rule.
 2. **Week 2: ladder story.** Give every ladder post a clear step number and dollar path. Compare ladder impressions,
    reposts and profile visits with ordinary plays.

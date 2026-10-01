@@ -187,8 +187,10 @@ Handy commands (from `~/Projects/sports`):
   assume protection from an injury alone. The Sep 27 FanDuel easy-props ticket is 2/2 on its live legs and a win:
   Achane's first-quarter injury leg was automatically protected during FanDuel's free September promotion. Its
   Sep 30 correction is appended to the record; the original settlement is never rewritten.
-- **Weekly "📌 Save this" model watchlist**: four large, readable model/market gaps, college Saturday and NFL Sunday
-  at 10 AM (`scripts/sheet.py`); the full slate stays on the site.
+- **Weekly "📌 Save this" projection sheet**: the full NFL slate or 16 college games, college Saturday and NFL
+  Sunday at 10 AM (`scripts/sheet.py`). Numbered mint rings identify the four largest model/market gaps and say
+  whether each is a spread or total watch; they are not official plays. Never show a moneyline watch without a
+  captured book price to compare with the projected win chance. The complete college slate stays on the site.
 - **Growth goal** (2026-09-28): grow @keenkooks toward 10,000 followers by the end of football season without paid
   reach or account-risk shortcuts. One relevant league hashtag per post is enough. The ladder is a continuing story,
   not a claim of guaranteed profit. On a multi-play card, one short text-only conversation prompt goes between the

@@ -40,20 +40,39 @@ class DrawTests(unittest.TestCase):
     def test_the_sheet_says_save_this_and_shows_every_number_the_games_page_does(self):
         games = [card('a', '2026-09-27T17:00Z', gap=2.4), card('b', '2026-09-27T20:25Z')]
         text = sheet.svg(games, 'NFL', SUNDAY, 3, {('a', 'away'): 'data:image/png;base64,x'})
-        for needle in ('SAVE THIS', 'WEEK 3 NFL WATCHLIST', 'Sunday, September 27', '2 biggest model/market gaps', 'Aa', 'Ha',
+        for needle in ('SAVE THIS', 'WEEK 3 NFL PROJECTIONS', 'Sunday, September 27', 'mint rings = 4 biggest model/market gaps', 'Aa', 'Ha',
                        '20.4', '24.0', '62%', '38%', 'OUR NUMBER / MARKET', 'Ha -3.6', 'Ha -2.5', '44.4', '41.5',
                        'Left: model · Right: market', 'data:image/png;base64,x', 'Entertainment only.'):
             self.assertIn(needle, text, needle)
-        self.assertIn(sheet.ORANGE + '" font-size="31" font-weight="800">Ha -3.6', text,
-                      'a spread our number leans to clearly is orange')
-        self.assertIn('Orange: our number leans clearly.', text)
+        self.assertIn(sheet.ACCENT + '" font-size="31" font-weight="800">Ha -3.6', text,
+                      'a spread our number leans to clearly is mint')
+        self.assertIn('Mint: strongest model/market disagreements.', text)
+        self.assertIn('stroke="' + sheet.ACCENT + '" stroke-width="4"', text, 'watch games get a mint ring')
+
+    def test_a_full_slate_uses_compact_tiles_and_numbers_the_four_biggest_gaps(self):
+        games = [card(str(i), f'2026-09-27T{17 + i // 6:02d}:00Z', gap=float(i)) for i in range(16)]
+        text = sheet.svg(games, 'NFL', SUNDAY, 3)
+        self.assertEqual(text.count('stroke="' + sheet.ACCENT + '" stroke-width="4"'), 4)
+        for rank in ('>1</text>', '>2</text>', '>3</text>', '>4</text>'):
+            self.assertIn(rank, text)
+        self.assertIn('>SPREAD</text>', text)
+        self.assertNotIn('OUR NUMBER / MARKET', text, 'compact tiles keep the comparison on one line')
+
+    def test_the_watch_badge_names_the_market_behind_the_gap(self):
+        total = card('total', '2026-09-27T17:00Z', gap=2.0,
+                     lean={'spread': 2.0, 'spreadChance': .58, 'total': -6.0, 'totalChance': .60})
+        spread = card('spread', '2026-09-27T20:25Z', gap=7.0)
+        text = sheet.svg([total, spread], 'NFL', SUNDAY, 3)
+        self.assertIn('>TOTAL</text>', text)
+        self.assertIn('>SPREAD</text>', text)
+        self.assertEqual(sheet.watch_market(total), 'TOTAL')
 
     def test_a_dark_team_colour_gives_way_to_one_that_shows(self):
         self.assertEqual(sheet.readable({'color': '#5a1414', 'alt': '#ffb612'}), '#ffb612')
         self.assertEqual(sheet.readable({'color': '#d50a0a', 'alt': '#34302b'}), '#d50a0a')
         light = sheet.readable({'color': '#241773', 'alt': '#ffffff'})
         self.assertNotIn(light, ('#241773', '#ffffff'), 'lightened, never plain white')
-        self.assertEqual(sheet.readable({}), sheet.ORANGE)
+        self.assertEqual(sheet.readable({}), sheet.ACCENT)
 
 
 class PostTests(unittest.TestCase):
@@ -63,8 +82,8 @@ class PostTests(unittest.TestCase):
         early = datetime(2026, 9, 27, 10, 45, tzinfo=timezone.utc)       # 6:45 AM ET Sunday
         post = sheet.post(self.GAMES, early)
         self.assertEqual((post['key'], post['kind'], post['card']), ('sheet:NFL:2026-09-27', 'sheet', 'sheet-nfl-2026-09-27'))
-        self.assertEqual(post['text'], '📌 4 NFL games where our numbers disagree most with the market.\n'
-                                       'Save this for the slate. Full projections on the site.\n#NFL')
+        self.assertEqual(post['text'], '📌 Full NFL projections for the slate.\n'
+                                       'Mint rings mark our 4 biggest model/market gaps (not official plays). Save this one.\n#NFL')
         self.assertEqual(post['due'], datetime(2026, 9, 27, 14, 0, tzinfo=timezone.utc))
         import receipts
         self.assertEqual(receipts.guard(post), [])
