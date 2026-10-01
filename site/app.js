@@ -612,6 +612,21 @@
     return `<p class="depth-history"><b>${esc(subject)}</b> · ${Math.round(100 * usage.snapPct)}% snaps${volume.length ? ` · ${esc(volume.join(' · '))}` : ''}<br><span>${esc(scoring.join(' · '))}</span></p>`;
   };
 
+  const sleeperText = (evidence, next, projection, abbr) => {
+    if (!evidence || !projection) return '';
+    const signal = C.injurySleeperSignal(evidence, opportunity(projection));
+    if (!signal) return '';
+    const role = evidence.roleUsage;
+    const redKind = /^(RB|FB)$/.test(evidence.group) ? 'carry' : 'target';
+    const volumeKind = /^(RB|FB)$/.test(evidence.group) ? 'opportunities (carries + targets)' : 'targets';
+    const roleLine = `${abbr} ${evidence.role} has averaged ${fixed(signal.roleOpportunities)} ${volumeKind} and ${Math.round(100 * role.snapPct)}% of snaps`;
+    const redLine = role.redZone ? `, with ${role.redZone} red-zone ${redKind}${role.redZone === 1 ? '' : 's'} in ${role.redZoneGames} of ${role.games} games` : '';
+    const verdict = signal.tier === 'volume'
+      ? `The adjusted model gives ${next.name} ${fixed(signal.projected)} opportunities, enough to monitor his lines once a real price is available.`
+      : `The adjusted model gives ${next.name} only ${fixed(signal.projected)} opportunities, so this is a long-shot touchdown dart—not a volume prop.`;
+    return `<div class="depth-sleeper depth-sleeper-${esc(signal.tier)}"><div><span class="pill">${esc(signal.label)}</span> <b>${esc(next.name)}</b></div><p>${esc(roleLine + redLine)}. ${esc(verdict)} <span>Sneaky angle, not an official play.</span></p></div>`;
+  };
+
   const depthChartSection = (card, detail) => {
     if (card.league !== 'NFL' || !detail || !detail.forecast) return '';
     const cards = [];
@@ -645,9 +660,11 @@
           `${card[side].abbr} ${evidence.role} actual role this season (${evidence.roleUsage.games} games)`) : '';
         const playerEvidence = evidence && evidence.playerUsage ? roleUsageText({...evidence.playerUsage, group: evidence.group},
           `${next.name} himself this season (${evidence.playerUsage.games} games)`) : '';
+        const nextProjection = role.find(p => String(p.id) === String(next.id));
+        const sleeper = sleeperText(evidence, next, nextProjection, card[side].abbr);
         cards.push(`<div class="card depth-card"><div class="depth-head"><span><span class="pill pill-out">${esc(hurt.status)}</span> <b>${esc(hurt.name)}</b> <span class="row-meta">${esc(hurt.injury || 'injury not listed')}</span></span><span class="row-meta">${esc(card[side].abbr)}</span></div>
           <p class="depth-move"><b>${esc(next.name)}</b> moves from ${esc(slot.label)}${index + 2} to ${esc(slot.label)}${index + 1} on ESPN's listed order.</p>
-          <div class="depth-line">${order}</div>${roleEvidence}${playerEvidence}${adjusted ? `<p class="depth-work"><b>Tonight's model:</b> ${adjusted}</p>` : ''}</div>`);
+          <div class="depth-line">${order}</div>${roleEvidence}${playerEvidence}${adjusted ? `<p class="depth-work"><b>Tonight's model:</b> ${adjusted}</p>` : ''}${sleeper}</div>`);
       }
     }
     if (!cards.length) return '';
@@ -657,7 +674,7 @@
       .sort()
       .pop();
     return section('Next up after injuries', `<div class="grid-2">${cards.join('')}</div>
-      <p class="row-meta depth-note">An actual role (RB2, WR3, etc.) is that position's player with the matching offensive-snap rank in each game; ties use snap count. Red-zone work comes from ESPN play-by-play. Tonight's workload is our projection after the unavailable player is removed. None of this is a touchdown projection. Checked ${esc(ago(checkedAt))}.</p>`);
+      <p class="row-meta depth-note">An actual role (RB2, WR3, etc.) is that position's player with the matching offensive-snap rank in each game; ties use snap count. Red-zone carries and targets come from ESPN play-by-play. Sleeper labels require both a real role history and current model volume; a deep sleeper can instead be a clearly labeled low-volume touchdown dart. None of this is a touchdown projection. Checked ${esc(ago(checkedAt))}.</p>`);
   };
 
   const projectionSection = (card, detail) => {

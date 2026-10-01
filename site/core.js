@@ -78,6 +78,23 @@
   /* A chip's color is its calibrated chance against a standard -110 price: the same bar as the board. */
   const leanTone = (chance, thin) => chance == null ? '' : chance >= 0.574 && !thin ? 'lean-strong' : chance >= 0.544 ? 'lean-mild' : '';
 
+  /* A descriptive injury angle, never a bet or touchdown probability.  The
+     role history says what that slot has received; the current projection
+     keeps a newly promoted player from inheriting the label on name alone. */
+  const injurySleeperSignal = (evidence, projectedOpportunities) => {
+    const role = evidence && evidence.roleUsage;
+    const projected = Number(projectedOpportunities);
+    if (!role || evidence.group === 'QB' || role.games < 2 || !Number.isFinite(projected)) return null;
+    const roleOpportunities = Object.values(role.volume || {}).reduce((sum, value) => sum + Number(value || 0), 0);
+    const qualifiedRole = role.snapPct >= .15 && roleOpportunities >= 3;
+    if (!qualifiedRole) return null;
+    if (projected >= 4) return { tier: 'volume', label: 'Sleeper watch', roleOpportunities, projected };
+    if (projected >= 1.5 && role.redZone > 0) {
+      return { tier: 'dart', label: 'Deep sleeper', roleOpportunities, projected };
+    }
+    return null;
+  };
+
   /* ---------- stat windows ---------- */
 
   /* Log rows are arrays: [eventId, date, season, week, seasonType, team, opp, home, ...stats]. */
@@ -457,7 +474,7 @@
 
   const shardOf = (id, shards) => Number(id) % shards;
 
-  return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone,
+  return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal,
     column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
     unitsFor, stakeOf, recordOf, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, shardOf, BASE };

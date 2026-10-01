@@ -67,8 +67,20 @@ test('game pages explain next-up depth after hard injuries without calling it a 
   assert.match(source, /Next up after injuries/);
   assert.match(source, /moves from/);
   assert.match(source, /actual role this season/);
-  assert.match(source, /red-zone carries/);
+  assert.match(source, /red-zone carries and targets/i);
+  assert.match(source, /depth-sleeper/);
   assert.match(source, /None of this is a touchdown projection/);
+});
+
+test('injury sleeper labels require an established role plus current opportunity', () => {
+  const role = { group: 'RB', roleUsage: { games: 3, snapPct: .23, volume: { car: 6, tgt: 2.7 }, redZone: 1 } };
+  assert.deepEqual(C.injurySleeperSignal(role, 1.7),
+    { tier: 'dart', label: 'Deep sleeper', roleOpportunities: 8.7, projected: 1.7 });
+  assert.deepEqual(C.injurySleeperSignal(role, 5),
+    { tier: 'volume', label: 'Sleeper watch', roleOpportunities: 8.7, projected: 5 });
+  assert.equal(C.injurySleeperSignal(role, 1), null, 'a depth-chart promotion alone is not enough');
+  assert.equal(C.injurySleeperSignal({ group: 'WR', roleUsage: { games: 1, snapPct: .5, volume: { tgt: 8 }, redZone: 2 } }, 8), null,
+    'one game is not an established role');
 });
 
 test('splits separate home, away and neutral and list head-to-head meetings', () => {

@@ -489,7 +489,10 @@ depth and usage context only: it never labels the backup a touchdown pick and it
 The card also defines the team's actual RB2/WR2/etc. role by ranking that position's offensive snap share in each
 prior game, then reports average snaps and volume plus red-zone, inside-the-10 and touchdown counts from stored ESPN
 play-by-play. The next player's own season usage stays separate from the team role, so a depth-chart promotion does
-not pretend he has already earned that workload.
+not pretend he has already earned that workload. A **Sleeper watch** label requires at least two role games, a real
+snap/workload floor and at least four adjusted model opportunities for the promoted player. A **Deep sleeper** may
+appear at lower projected volume only when the role has recorded red-zone work; its copy must say touchdown dart,
+not volume prop, touchdown projection or official play. These labels use stored data and make no extra API request.
 
 ## Weather
 
