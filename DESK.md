@@ -474,6 +474,13 @@ its alternate), and our spread and total against the line with the side our numb
 under their logos (the old game rows cut them off on phones). The Games tab and Today's "Our projections" and "In play
 now" use the cards.
 
+Every upcoming game page starts with **Kook'n favorite lines** (owner, 2026-10-01): up to five current, real
+sportsbook lines ranked from that game's numbers. A player alternate must come from its main market's consistent
+ladder, use a settled role, carry a real half-point price and have the raw projection chance clear the price's
+break-even chance. Game spreads and totals use the calibrated Board grade and paused markets never qualify. One
+player appears once. The page names the price, book, projection and chance, labels alternates, and says these are
+optional reads rather than additional official plays. If nothing qualifies, it says so instead of forcing a line.
+
 ## Weather
 
 `scripts/venues.py` keeps `data/venues.json`: for every venue the store or slate names, ESPN's roof

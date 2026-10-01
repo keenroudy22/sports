@@ -306,6 +306,8 @@ test('app.js parses', () => {
   assert.match(source, /href="#record">See every result/);
   assert.match(source, /Real pregame DraftKings totals, moneylines and run lines are being preserved/);
   assert.match(source, /Real pregame DraftKings totals, moneylines and puck lines are being preserved/);
+  assert.match(source, /Kook'n favorite lines/);
+  assert.match(source, /No qualifying favorite yet/);
 });
 
 test('one record: the straight plays in wins and losses and units, the side records apart', () => {

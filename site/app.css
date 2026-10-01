@@ -172,6 +172,9 @@ main { padding: 0 var(--gutter) 28px; max-width: 1240px; margin: 0 auto; }
 .row-price { padding: 11px 12px 11px 6px; text-align: right; flex-shrink: 0; align-self: center; }
 .row-odds { display: block; font-size: 21px; line-height: 1; }
 .row-book { display: block; margin-top: 3px; font-size: 11px; color: var(--faint); }
+.favorite-lines { background: radial-gradient(circle at 100% 0, rgba(94, 234, 164, .10), transparent 38%), var(--surface); }
+.favorite-line .row-market { color: var(--text); }
+.favorite-note { margin: 8px 2px 0; line-height: 1.5; }
 
 .pill {
   padding: 1px 6px; border-radius: 4px;

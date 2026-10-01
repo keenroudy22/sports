@@ -490,6 +490,26 @@
 
   /* ---------- one game ---------- */
 
+  const favoriteLinesSection = (card, detail) => {
+    if (card.completed || !detail) return '';
+    const favorites = detail.favoriteLines || [];
+    if (!favorites.length) return section("Kook'n favorite lines",
+      empty('No qualifying favorite yet', 'We have a projection, but no fresh sportsbook line currently clears the price and role checks. Nothing is forced.'));
+    const rows = favorites.map((line, i) => {
+      const player = line.kind === 'player';
+      const chance = line.chance != null ? `${Math.round(100 * line.chance)}% ${player ? 'raw model clear chance' : 'calibrated chance'}` : '';
+      const need = line.needs != null ? `${Math.round(100 * line.needs)}% price break-even` : '';
+      const detailText = [line.projection != null ? `our projection ${fixed(line.projection)}` : '', chance, need]
+        .filter(Boolean).join(' · ');
+      return `<div class="row favorite-line" style="cursor:default"><span class="row-rail" style="background:var(--mint)"></span>
+        <span class="row-main"><span class="row-top"><span class="pill pill-ours">#${i + 1}</span><span class="row-name">${esc(line.title)}</span>${line.team ? `<span class="row-meta">${esc(line.team)}</span>` : ''}${line.alternate ? '<span class="pill pill-reference">Alternate</span>' : ''}</span>
+        <span class="row-market">${esc(detailText)}</span><span class="row-meta">Captured ${esc(ago(line.observedAt))} · easier lines are reads, not additional official plays</span></span>
+        <span class="row-price"><span class="row-odds num">${esc(C.odds(line.odds))}</span><span class="row-book">${esc(line.book)}</span></span></div>`;
+    }).join('');
+    return section("Kook'n favorite lines", `<div class="card favorite-lines"><div class="rows">${rows}</div></div>
+      <p class="row-meta favorite-note">Ranked from fresh, real sportsbook prices. Player-alternate chances use the raw projection curve and are less proven than our main-line grades. These are optional reads; official plays are labeled separately.</p>`);
+  };
+
   async function viewGame(route) {
     const [today, detail] = await Promise.all([get('app/today.json'), maybe(`app/games/${route.id}.json`)]);
     const card = detail || today.games.find(g => g.id === route.id);
@@ -517,6 +537,7 @@
       </div>
       ${card.lean && !card.completed ? `<div style="margin-top:10px">${leanChips(card)}</div>` : ''}
       ${v2 && v2.sparse ? '<div class="notice" style="margin-top:12px"><strong>Thin history.</strong> One of these teams has fewer than three games this season, so this forecast leans on last season and the league average.</div>' : ''}`;
+    html += favoriteLinesSection(card, detail);
     if (final) html += finalSection(card, detail, teams);
     if (f) {
       html += section('Why the model says this', `<div class="card" style="padding:14px"><p class="prose" style="margin:0">${esc(f.why)}</p>

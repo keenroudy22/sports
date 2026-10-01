@@ -223,7 +223,9 @@ Handy commands (from `~/Projects/sports`):
   Kook'n-benefit language; never mix them into ordinary plays. The site's front-page community card is the main
   conversion path: it promises only early official plays, Discord-only Arb Radar candidates and the public record.
 - **The site**: the projection-card look everywhere (logos, photos, tiles), tabs Today, Board, Games, Stats, Record,
-  More; always check changes at 375 px.
+  More. Every upcoming game page has **Kook'n favorite lines**: up to five fresh, actually priced main or alternate
+  reads whose projection, established role and price agree; an empty panel is better than a forced line. These are
+  optional reads, never extra official plays. Always check changes at 375 px.
 - **Posting**: plays around noon Eastern (two hours before an earlier kickoff), ten minutes apart and from every
   queued post, twenty posts a day at most; receipts at 9 AM; cashed posts as wins settle.
 

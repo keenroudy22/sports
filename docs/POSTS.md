@@ -115,3 +115,7 @@ every play and line, stat tiles (price, line, we project, edge), a lotto look fo
 card, chance bars, form dots. Tabs: Today, Board, Games, Stats, Record, More. Check every change at 375 px wide (no
 sideways scroll, no console errors) and bump the asset versions in `site/index.html` (`app.css?v=`, `core.js?v=`,
 `app.js?v=`) so phones load the new files.
+
+Each upcoming game detail page also has **Kook'n favorite lines** near the top: no more than five fresh, priced reads
+with the book, projection and chance. Alternate player lines are clearly marked, use only their market's verified
+ladder, and stay separate from official plays. The section may honestly be empty when no price qualifies.
