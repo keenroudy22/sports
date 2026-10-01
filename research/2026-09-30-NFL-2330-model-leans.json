@@ -1,0 +1,39 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-10-01T03:30:05Z",
+  "targetWeek": 4,
+  "summary": "11:30 PM ET run, published at 11:30 PM ET. Nothing to settle. Nothing to close. Published 1: Patriots at Bills under 48.5 -105 at ESPN BET. Screened and passed on 17: Packers at Buccaneers over 39 (lean_nothing_against); Quinshon Judkins UNDER 16.5 carries (one_book); Roman Wilson OVER 19.5 receiving yards (not_duplicate); KC Concepcion OVER 0.5 rushing yards (card_cap); DK Metcalf OVER 41.5 receiving yards (card_cap); Quinshon Judkins UNDER 55.5 rushing yards (card_cap); Pat Freiermuth OVER 28.5 receiving yards (card_cap); Aaron Rodgers OVER 34.5 pass attempts (one_book); and 9 more. odds_api.py: CFB: skipped (captured 2026-10-01T00:06:14Z, inside the gap) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "gamePicks": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 48.5,
+      "direction": "under",
+      "gameIds": [
+        "NFL-401872971"
+      ],
+      "book": "ESPN BET",
+      "odds": -105,
+      "projection": 45.8,
+      "edge": "v2 total 45.8 (80% range 29.4 to 62.2). Chance of under 48.5: 53.5% (v2's raw 58.2% shrunk by its 2024-25 record against the close), against 51.2% break-even at -105: +2.2 points, +0.044u per unit.",
+      "cutoff": "UNDER 48.5 at -105 or better. Closed to new entries at 47 or lower, or at -120 or worse at 48.5.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-09-30T21:54:12Z",
+      "quotedAt": "2026-10-01T00:06:14Z",
+      "quoteType": "capture",
+      "quoteNote": "ESPN BET's number and price from the 8:06 PM ET capture across 6 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-01T10:45:00Z",
+      "title": "Patriots at Bills under 48.5",
+      "id": "NFL-2026-W4-ne-buf-under-48-5-espnbet",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401872971"
+      ],
+      "why": "Model lean, published on our number alone. Our total is 45.8 against 48.5: the under reads 53.5% after the raw 58.2% is shrunk by the model's record against the close, +2.2 points clear of the 51.2% that -105 needs. Nothing sourced argues against it; the number is the reason. The market: The spread opened -3 and is -6.5 at DraftKings, a move of 3.5 toward the home. The total opened 49.5 and is 48.5 at DraftKings, 1 toward the under. 6 books span -7 to -6.5 on the spread; the middle is -6.5. 6 books span 48 to 48.5 on the total; the middle is 48.5. Our spread gap of 2.9 points is at the 63th percentile of the model's gaps; gaps this large went 213-207 against the close in 1132 graded games. Our total gap of 2.7 points is at the 69th percentile of the model's gaps; gaps this large went 196-155 against the close in 1134 graded games.",
+      "risk": "It rests on the model alone, and the closing line beats our number on average, so a gap this size is more often our error than the market's. Confidence 3 of 10."
+    }
+  ]
+}
