@@ -22,9 +22,10 @@ Three things run it, none of them an AI chat:
    `~/Library/Logs/KeenRoudy/run-YYYY-MM-DD.log` (times in UTC).
 2. **GitHub Actions** (`.github/workflows/publish.yml`) on a schedule and on every push: captures scores, odds and
    prop prices, publishes model forecasts, grades against the close, builds the site and the cards, and deploys.
-3. **Routed models on the Mac**: Ollama `qwen3:8b` (override: `KEENROUDY_LLM_FAST_MODEL`) handles guarded prose;
-   Ollama `qwen3:32b` (override: `KEENROUDY_LLM_MODEL`) weighs verified facts and never falls through to the smaller
-   model. The live web researcher uses `codex exec` with `gpt-6-sol` at low reasoning by default; the weekly review
+3. **Routed models on the Mac**: Ollama `qwen3.8:27b` (override: `KEENROUDY_LLM_MODEL`) weighs verified facts. The
+   deterministic, sourced templates are the live prose by default, so routine cards do not spend local-model calls
+   merely rewording them. Optional guarded rewriting uses `qwen3.5:9b-mlx` only when `KEENROUDY_LLM_POLISH=1`; judgment
+   never falls through to it. The live web researcher uses `codex exec` with `gpt-6-sol` at low reasoning by default; the weekly review
    uses the same model at medium reasoning. Both use the owner's ChatGPT plan and can be overridden with the named
    researcher/review settings in `deployment/mac/env.example`.
 

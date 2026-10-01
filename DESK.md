@@ -13,7 +13,7 @@ rules in words. When this file and the validator disagree, the validator wins.
 | `scripts/learning.py`, `scripts/learn.py` | The desk learning from its own record: every candidate recorded and graded, the weekly step that adjusts what it may (see Learning below). |
 | `scripts/gates.py` | The publishing rules, one function per rule. A candidate passes every gate or it is not published. `python scripts/gates.py CANDIDATE.json` evaluates one. |
 | `scripts/replay_gates.py` | Every published pick back through the gates as of its publication, with what would have been refused and why. |
-| `scripts/llm.py`, `scripts/llm_tasks.py` | The local model (Ollama, on this machine) and the two guards on its prose: the house style and the numbers guard. The model polishes templated `why` and `risk`, drafts posts and weighs the facts against a candidate. It never adds a number. |
+| `scripts/llm.py`, `scripts/llm_tasks.py` | The local model (Ollama, on this machine), its structured fact judgment, and the two guards on optional prose rewrites: the house style and the numbers guard. It never adds a number. |
 | `scripts/x_post.py` | The post text: one shape for every play (player prop, game line, fun parlay), with `data/x-posted.json` as the posted log. |
 | `scripts/buffer_post.py` | Scheduling those posts to @keenkooks through Buffer's free plan, around noon on game day, each with its card. |
 
@@ -170,12 +170,14 @@ operating manual Codex reads; `docs/MOVE-TO-GPT.md` has the owner's steps; `depl
 
 ## The local model
 
-Ollama serves two roles at `http://localhost:11434`. `KEENROUDY_LLM_FAST_MODEL` (default `qwen3:8b`) handles
-guarded prose rewrites; `KEENROUDY_LLM_MODEL` (default `qwen3:32b`) handles fact judgment and never falls through
-to the smaller model. The models are asked for prose and judgment only. Every rewrite passes `llm.check_style` (no em or en
-dashes, plain words, short sentences, no model or version names, no marketing, no advice) and
-`llm.numbers_ok` (every number in the text appears in the pick's fields, the desk output or the facts),
-or the template stands. A judgment counts only when it points at a fact by id; unsure means hold.
+Ollama serves locally at `http://localhost:11434`. `KEENROUDY_LLM_MODEL` (default `qwen3.8:27b`) handles structured
+fact judgment and uses an 8K context. The deterministic, sourced `why` and `risk` templates stay live by default. This
+avoids rewriting text that is already complete, saves six calls on a three-play card, and removes a source of subtle
+meaning drift. Guarded rewriting is still available for experiments with `KEENROUDY_LLM_POLISH=1`; it uses
+`KEENROUDY_LLM_FAST_MODEL` (default `qwen3.5:9b-mlx`) with a 4K context and never receives judgment work. Every
+rewrite passes `llm.check_style` (no em or en dashes, plain words, short sentences, no model or version names, no
+marketing, no advice) and `llm.numbers_ok` (every number in the text appears in the pick's fields, the desk output or
+the facts), or the template stands. A judgment counts only when it points at a fact by id; unsure means hold.
 With Ollama down the run publishes on templates and holds on a quarterback rule of thumb. The run status records
 only model names, latency, token counts and failures. It never records prompts or answers.
 

@@ -21,9 +21,11 @@ import urllib.error
 import urllib.request
 
 DEFAULT_BASE = 'http://localhost:11434'
-DEFAULT_MODEL = 'qwen3:32b'
-DEFAULT_FAST_MODEL = 'qwen3:8b'
-NUM_CTX = 16384
+DEFAULT_MODEL = 'qwen3.8:27b'
+DEFAULT_FAST_MODEL = 'qwen3.5:9b-mlx'
+NUM_CTX = 8192
+WRITE_CTX = 4096
+JUDGE_CTX = 8192
 KEEP_ALIVE = '15m'
 _CALLS = []
 
@@ -39,6 +41,11 @@ def model_name():
 def fast_model_name():
     """The smaller local model for guarded rewrites and summaries; judgment keeps `model_name()`."""
     return os.environ.get('KEENROUDY_LLM_FAST_MODEL') or DEFAULT_FAST_MODEL
+
+
+def polish_enabled():
+    """Prose rewriting is opt-in; the deterministic templates are already complete and safer by default."""
+    return os.environ.get('KEENROUDY_LLM_POLISH', '').strip().lower() in ('1', 'true', 'yes', 'on')
 
 
 def reset_calls():
@@ -102,7 +109,8 @@ def strip_thinking(text):
     return re.sub(r'<think>.*?</think>', '', text or '', flags=re.DOTALL).strip()
 
 
-def draft(system, user, max_tokens=400, temperature=0.2, timeout=90, model=None, base=None, send=None, kind='text'):
+def draft(system, user, max_tokens=400, temperature=0.2, timeout=90, model=None, base=None, send=None, kind='text',
+          num_ctx=NUM_CTX):
     """One completion over Ollama's native chat endpoint, thinking off. Raises LLMUnavailable rather than returning ''.
 
     The OpenAI-compatible endpoint cannot switch a reasoning model's thinking off, and the model then
@@ -110,7 +118,7 @@ def draft(system, user, max_tokens=400, temperature=0.2, timeout=90, model=None,
     """
     chosen = model or model_name()
     body = {'model': chosen, 'stream': False, 'think': False, 'keep_alive': KEEP_ALIVE,
-            'options': {'num_ctx': NUM_CTX, 'temperature': temperature, 'num_predict': max_tokens},
+            'options': {'num_ctx': num_ctx, 'temperature': temperature, 'num_predict': max_tokens},
             'messages': [{'role': 'system', 'content': system}, {'role': 'user', 'content': user}]}
     started = time.monotonic()
     try:
@@ -130,11 +138,11 @@ def draft(system, user, max_tokens=400, temperature=0.2, timeout=90, model=None,
 
 
 def draft_json(system, user, schema, max_tokens=400, temperature=0.0, timeout=90, model=None, base=None, send=None,
-               kind='json'):
+               kind='json', num_ctx=NUM_CTX):
     """A structured answer over Ollama's native endpoint, constrained to `schema` (a JSON schema dict)."""
     chosen = model or model_name()
     body = {'model': chosen, 'stream': False, 'format': schema, 'think': False,
-            'keep_alive': KEEP_ALIVE, 'options': {'num_ctx': NUM_CTX, 'temperature': temperature, 'num_predict': max_tokens},
+            'keep_alive': KEEP_ALIVE, 'options': {'num_ctx': num_ctx, 'temperature': temperature, 'num_predict': max_tokens},
             'messages': [{'role': 'system', 'content': system}, {'role': 'user', 'content': user}]}
     started = time.monotonic()
     try:

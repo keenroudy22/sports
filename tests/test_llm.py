@@ -1,6 +1,8 @@
 import json
+import os
 import sys
 import unittest
+from unittest import mock
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
@@ -30,6 +32,7 @@ class ClientTests(unittest.TestCase):
         self.assertEqual(sent['url'], 'http://x/api/chat')
         self.assertEqual(sent['body']['model'], 'm')
         self.assertFalse(sent['body']['think'])
+        self.assertEqual(sent['body']['options']['num_ctx'], llm.NUM_CTX)
         self.assertEqual(sent['body']['options']['num_predict'], 400)
         self.assertEqual(sent['body']['messages'][0]['role'], 'system')
         stats = llm.call_stats()
@@ -58,8 +61,15 @@ class ClientTests(unittest.TestCase):
         self.assertEqual(sent['url'], 'http://x/api/chat')
         self.assertEqual(sent['body']['format'], llm_tasks.JUDGE_SCHEMA)
         self.assertFalse(sent['body']['think'])
+        self.assertEqual(sent['body']['options']['num_ctx'], llm.NUM_CTX)
         with self.assertRaises(llm.LLMUnavailable):
             llm.draft_json('s', 'u', {}, send=lambda *a: json.dumps({'message': {'content': 'nope'}}).encode())
+
+    def test_prose_polish_is_opt_in(self):
+        with mock.patch.dict(os.environ, {}, clear=True):
+            self.assertFalse(llm.polish_enabled())
+        with mock.patch.dict(os.environ, {'KEENROUDY_LLM_POLISH': 'yes'}, clear=True):
+            self.assertTrue(llm.polish_enabled())
 
 
 PICK = {'id': 'NFL-2026-W4-buf-det-over-44-5-dk', 'title': 'Bills at Lions over 44.5', 'line': 44.5, 'odds': -110,
@@ -77,12 +87,12 @@ class TaskTests(unittest.TestCase):
     def test_polish_keeps_a_clean_rewrite(self):
         seen = {}
         def send(url, body, headers, timeout):
-            seen.update(model=body['model'], timeout=timeout)
+            seen.update(model=body['model'], timeout=timeout, num_ctx=body['options']['num_ctx'])
             return completion('Our total is 48 against 44.5. The over reads 55.3%, 2.9 points clear of what -110 needs.')
         text, note = llm_tasks.why_for(PICK, send=send)
         self.assertEqual(note, 'polished')
         self.assertIn('55.3%', text)
-        self.assertEqual(seen, {'model': llm.fast_model_name(), 'timeout': 60})
+        self.assertEqual(seen, {'model': llm.fast_model_name(), 'timeout': 60, 'num_ctx': llm.WRITE_CTX})
 
     def test_polish_falls_back_to_the_template_after_two_failed_tries(self):
         calls = []
@@ -105,9 +115,14 @@ class TaskTests(unittest.TestCase):
 
     def test_judge_drops_unknown_fact_ids_and_downgrades_an_unsupported_against(self):
         facts = [{'id': 'f1', 'claim': 'QB1 is Doubtful', 'source': 'https://x'}]
-        verdict = llm_tasks.judge_against(PICK, facts, send=lambda *a: chat({'argues_against': True, 'confidence': 'high', 'fact_ids': ['f1', 'ghost'], 'note': 'qb'}))
+        seen = {}
+        def send(url, body, headers, timeout):
+            seen['num_ctx'] = body['options']['num_ctx']
+            return chat({'argues_against': True, 'confidence': 'high', 'fact_ids': ['f1', 'ghost'], 'note': 'qb'})
+        verdict = llm_tasks.judge_against(PICK, facts, send=send)
         self.assertEqual(verdict['fact_ids'], ['f1'])
         self.assertEqual(verdict['confidence'], 'high')
+        self.assertEqual(seen['num_ctx'], llm.JUDGE_CTX)
         weak = llm_tasks.judge_against(PICK, facts, send=lambda *a: chat({'argues_against': True, 'confidence': 'high', 'fact_ids': [], 'note': 'feel'}))
         self.assertEqual(weak['confidence'], 'low')
         self.assertIsNone(llm_tasks.judge_against(PICK, facts, send=lambda *a: chat({'argues_against': 'maybe', 'confidence': 'high', 'fact_ids': [], 'note': ''})))

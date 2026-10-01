@@ -116,7 +116,7 @@ def polish(text, pick, extra=(), system=None, send=None, max_tokens=400):
         prompt = user + (RETRY_NOTE.format(problems='; '.join(problems)) if problems else '')
         try:
             draft = llm.draft(system or llm.STYLE_SYSTEM, prompt, max_tokens=max_tokens, timeout=60,
-                              model=llm.fast_model_name(), send=send, kind='polish')
+                              model=llm.fast_model_name(), send=send, kind='polish', num_ctx=llm.WRITE_CTX)
         except llm.LLMUnavailable as error:
             return text, f'model unavailable: {error}'
         problems = guarded(draft, pick, extra)
@@ -154,7 +154,7 @@ def judge_against(candidate, facts, send=None):
     try:
         verdict = llm.draft_json(JUDGE_SYSTEM, JUDGE_USER.format(pick=json.dumps(shown, ensure_ascii=False, default=str),
                                                                  facts=facts_text), JUDGE_SCHEMA,
-                                 model=llm.model_name(), send=send, kind='judge')
+                                 model=llm.model_name(), send=send, kind='judge', num_ctx=llm.JUDGE_CTX)
     except llm.LLMUnavailable:
         return None
     if not isinstance(verdict, dict) or not isinstance(verdict.get('argues_against'), bool):
@@ -175,7 +175,7 @@ def judge_for(candidate, facts, send=None):
     try:
         verdict = llm.draft_json(JUDGE_SYSTEM, SUPPORT_USER.format(pick=json.dumps(shown, ensure_ascii=False, default=str),
                                                                    facts=facts_text), SUPPORT_SCHEMA,
-                                 model=llm.model_name(), send=send, kind='judge')
+                                 model=llm.model_name(), send=send, kind='judge', num_ctx=llm.JUDGE_CTX)
     except llm.LLMUnavailable:
         return None
     if not isinstance(verdict, dict) or not isinstance(verdict.get('supports'), bool):

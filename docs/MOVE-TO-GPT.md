@@ -8,8 +8,9 @@ Written 2026-09-28, when the owner moved the desk's AI work from Claude to OpenA
 - the Mac runs the desk on its schedule (launchd: 6:45, 8:30, 11:45 AM, 5:30 and 11:30 PM Eastern, plus Sunday
   2:45 PM and Sunday, Monday and Thursday 6:50 PM), the pre-post check every 30 minutes, and the 7:15 AM heartbeat;
 - GitHub runs the captures, forecasts, site build and deploy (`.github/workflows/publish.yml`);
-- Buffer posts to X; ntfy sends the phone alerts; Ollama on the Mac (Qwen, not Claude) writes and weighs. The 8B local
-  model handles guarded rewrites, while the 32B model is reserved for judging verified facts.
+- Buffer posts to X; ntfy sends the phone alerts; Ollama on the Mac (Qwen, not Claude) weighs verified facts. The
+  detailed templates stay live by default, while the 27B local model is reserved for structured judgment. Guarded 9B
+  rewrites remain available as an opt-in experiment.
 
 **Four things change:**
 

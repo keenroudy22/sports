@@ -1501,11 +1501,14 @@ def _run(args, now, slot, kinds, status):
     settled, closed, published, screened, unclear = [], [], [], [], []
     llm.reset_calls()
     use_llm = not args.no_llm and llm.available()
+    polish_on = use_llm and llm.polish_enabled()
     status['llm'] = {'used': use_llm, 'model': llm.model_name() if use_llm else None,
                      'judgeModel': llm.model_name() if use_llm else None,
-                     'writingModel': llm.fast_model_name() if use_llm else None,
+                     'writingModel': llm.fast_model_name() if polish_on else None,
+                     'polishEnabled': polish_on,
                      'polished': 0, 'kept': 0, 'judged': 0}
-    log('local models:', (f"writing {llm.fast_model_name()}, judgment {llm.model_name()} at {llm.base_url()}"
+    log('local models:', (f"judgment {llm.model_name()} at {llm.base_url()}; "
+                          + (f"writing {llm.fast_model_name()}" if polish_on else 'verified templates kept')
                           if use_llm else 'off' if args.no_llm else 'not reachable; templates and rules only'))
 
     if 'settle' in kinds:
@@ -1584,7 +1587,7 @@ def _run(args, now, slot, kinds, status):
             continue
         if research_on and 'favorite' in kinds and promote(candidate, facts, use_llm, status):
             log(f"favorite: {candidate['title']} ({candidate.get('_supportNote')})")
-        if use_llm:
+        if polish_on:
             polish(candidate, facts, status)
         # Admitted picks join the day's count so the caps hold within one run.
         kind = 'props' if candidate.get('athleteId') else 'gamePicks'
