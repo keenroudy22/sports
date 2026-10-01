@@ -61,6 +61,7 @@ VOLUME = {'recYds': 'targets', 'rec': 'targets', 'rushYds': 'carries', 'car': 'c
           'passYds': 'att', 'cmp': 'att', 'att': 'att'}
 SKILL = {'QB', 'RB', 'FB', 'WR', 'TE', 'OT', 'OG', 'C', 'G', 'T', 'OL'}
 LONGSHOT_TARGET = 500
+SETTLEMENT_REVIEW_WINDOW = timedelta(hours=12)  # through the next morning for injury news/book notices to catch up
 
 
 class RunError(Exception):
@@ -324,7 +325,8 @@ def settle(ctx, raw_first, games, records, now, fetch=boxscores.fetch_game, inju
     """Revisions for every unsettled pick whose game is final. Unclear outcomes are reported, not guessed.
 
     Every raw player-prop loss gets a sourced postgame injury check. An injury can change a book's settlement, but
-    never does so by assumption: evidence pauses the grade until that listed book's official result is confirmed.
+    never does so by assumption: evidence pauses the grade through the next morning. If no official protection can
+    be confirmed by then, the public record uses the final stats and remains correctable by a later dated revision.
     """
     revisions, unclear = [], []
     by_event = {f"{g['league']}-{g['eventId']}": g for g in records}
@@ -358,16 +360,26 @@ def settle(ctx, raw_first, games, records, now, fetch=boxscores.fetch_game, inju
                     log(f'settlement injury check for {player} unavailable ({type(error).__name__})')
                     injury_cache[cache_key] = {'checked': False, 'facts': [], 'dropped': []}
         review = injury_cache[cache_key]
+        kickoff = gates.when(game['kickoff']) if game.get('kickoff') else None
+        deadline = kickoff + SETTLEMENT_REVIEW_WINDOW if kickoff else now
+        waiting = now < deadline
+        wait_text = (f'holding through {et(deadline)} while public settlement evidence catches up; '
+                     'no owner action is required')
+        fallback = (f'Postgame injury review found no confirmed different {book} settlement by {et(deadline)}; '
+                    'graded from the official stats and subject to a later dated correction.')
         if not review.get('checked'):
-            return {'why': f'postgame injury check for {player} did not complete; confirm {book} before grading',
-                    'sources': []}
+            return ({'pending': True, 'why': f'postgame injury check for {player} did not complete; {wait_text}',
+                     'sources': []} if waiting else {'pending': False, 'note': fallback, 'sources': []})
         if review.get('dropped'):
-            return {'why': f'a possible postgame injury report for {player} could not be verified; confirm {book} before grading',
-                    'sources': [f.get('source') for f in review['dropped'] if f.get('source')]}
+            sources = [f.get('source') for f in review['dropped'] if f.get('source')]
+            return ({'pending': True, 'why': f'a possible postgame injury report for {player} could not be verified; {wait_text}',
+                     'sources': sources} if waiting else {'pending': False, 'note': fallback, 'sources': sources})
         if review.get('facts'):
             claims = ' '.join(f['claim'] for f in review['facts'])
-            return {'why': f'{claims} Confirm {book}\'s official settlement; injury alone is not a push or void.',
-                    'sources': [f['source'] for f in review['facts']]}
+            sources = [f['source'] for f in review['facts']]
+            return ({'pending': True, 'why': f'{claims} {wait_text}. Injury alone is not a push or void.',
+                     'sources': sources} if waiting else {'pending': False, 'note': f'{claims} {fallback}',
+                                                         'sources': sources})
         return None
 
     for key, pick in ctx.first.items():
@@ -379,7 +391,7 @@ def settle(ctx, raw_first, games, records, now, fetch=boxscores.fetch_game, inju
         if not ids or not all(g and g.get('completed') for g in played):
             continue
         kind, original = raw_first[key]
-        league, reason = pick.get('league'), None
+        league, reason, review_notes, review_sources = pick.get('league'), None, [], []
         if kind == 'parlays':
             results, pending = [], []
             for leg in original.get('legs') or []:
@@ -389,7 +401,11 @@ def settle(ctx, raw_first, games, records, now, fetch=boxscores.fetch_game, inju
                 if graded and graded[0] == 'loss' and not shaped.get('marketType'):
                     review = review_loss(shaped, game, original.get('book') or 'the listed book')
                     if review:
-                        pending.append(review)
+                        if review['pending']:
+                            pending.append(review)
+                        else:
+                            review_notes.append(review['note'])
+                            review_sources.extend(review['sources'])
             if pending:
                 unclear.append({'id': key, 'why': ' '.join(review['why'] for review in pending),
                                 'sources': list(dict.fromkeys(source for review in pending
@@ -411,17 +427,24 @@ def settle(ctx, raw_first, games, records, now, fetch=boxscores.fetch_game, inju
             continue
         result, actual, value = graded
         if kind in ('props', 'riskyProps') and result == 'loss':
-            pending = review_loss(original, played[0], original.get('book') or 'the listed book')
-            if pending:
-                unclear.append({'id': key, 'why': pending['why'], 'sources': pending['sources'],
+            review = review_loss(original, played[0], original.get('book') or 'the listed book')
+            if review and review['pending']:
+                unclear.append({'id': key, 'why': review['why'], 'sources': review['sources'],
                                 'settlementReview': True})
                 continue
+            if review:
+                review_notes.append(review['note'])
+                review_sources.extend(review['sources'])
+        if review_notes:
+            reason = ' '.join(filter(None, [reason, *review_notes]))
         revision = dict(original, status='settled', result=result, actual=actual, settledAt=stamp(now),
                         resultSource=box_url(league, ids[0].split('-', 1)[1]))
         if value is not None:
             revision['actualValue'] = value
         if reason:
             revision['settlementReason'] = reason
+        if review_sources:
+            revision['settlementReviewSources'] = list(dict.fromkeys(review_sources))
         lock_units(revision)
         revisions.append((league, kind, revision))
     return revisions, unclear
@@ -1566,7 +1589,7 @@ def _run(args, now, slot, kinds, status):
         log(f'settled {len(settled)}, unclear {len(unclear)}')
         reviews = [u for u in unclear if u.get('settlementReview')]
         if reviews and not args.dry_run:
-            alert("Kook'n settlement needs confirmation",
+            alert("Kook'n settlement review in progress",
                   '\n'.join(f"{u['id']}: {u['why']}" for u in reviews)[:1800], priority='default')
     if 'close' in kinds:
         closed, checks = close_moves(ctx, raw_first, games, desk.captures(), now)

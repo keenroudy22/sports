@@ -30,7 +30,8 @@ class SlotTests(unittest.TestCase):
 
 
 class GradingTests(unittest.TestCase):
-    GAME = {'id': 'NFL-1', 'league': 'NFL', 'home': {'short': 'Lions', 'abbreviation': 'DET', 'score': 27},
+    GAME = {'id': 'NFL-1', 'league': 'NFL', 'kickoff': '2026-09-27T17:00:00Z',
+            'home': {'short': 'Lions', 'abbreviation': 'DET', 'score': 27},
             'away': {'short': 'Bills', 'abbreviation': 'BUF', 'score': 24}, 'completed': True}
 
     def test_spread_and_total_grades(self):
@@ -73,8 +74,15 @@ class GradingTests(unittest.TestCase):
         settled, unclear = run.settle(ctx, raw, {'NFL-1': self.GAME}, records, now, injury_check=hurt)
         self.assertEqual(settled, [])
         self.assertTrue(unclear[0]['settlementReview'])
-        self.assertIn("Confirm FanDuel's official settlement", unclear[0]['why'])
-        self.assertIn('injury alone is not a push or void', unclear[0]['why'])
+        self.assertIn('no owner action is required', unclear[0]['why'])
+        self.assertIn('injury alone is not a push or void', unclear[0]['why'].lower())
+
+        later = datetime(2026, 9, 28, 6, 0, tzinfo=timezone.utc)
+        settled, unclear = run.settle(ctx, raw, {'NFL-1': self.GAME}, records, later, injury_check=hurt)
+        self.assertEqual(unclear, [])
+        self.assertEqual(settled[0][2]['result'], 'loss')
+        self.assertIn('no confirmed different FanDuel settlement', settled[0][2]['settlementReason'])
+        self.assertEqual(settled[0][2]['settlementReviewSources'], ['https://www.example.com/injury'])
 
     def test_every_losing_player_leg_is_checked_and_one_injury_pauses_the_whole_parlay(self):
         now = datetime(2026, 9, 28, tzinfo=timezone.utc)

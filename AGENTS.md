@@ -192,8 +192,10 @@ Handy commands (from `~/Projects/sports`):
   Sep 30 correction is appended to the record; the original settlement is never rewritten.
 - **Every raw player-prop loss gets a postgame injury check** (2026-10-01), including a losing leg on a fun ticket.
   Before the loss is graded, the web researcher checks whether the player left hurt, when it happened and whether
-  the player returned. A verified injury, an unverified report or a failed check pauses settlement and alerts the
-  owner. Never auto-push or void it: the listed book's official result and sourced terms still decide the grade.
+  the player returned. A verified injury, an unverified report or a failed check pauses settlement through 12 hours
+  after kickoff and sends an informational alert; the owner never has to supply a wager screenshot. Never auto-push
+  or void it. If no different official book settlement is known by the deadline, grade from the official stats,
+  preserve the review note and sources, and append a dated correction later if stronger evidence appears.
 - **Weekly "📌 Save this" projection sheet**: the full NFL slate or 16 college games, college Saturday and NFL
   Sunday at 10 AM (`scripts/sheet.py`). Every spread and total read carries the exact captured line, price and book.
   Numbered mint rings identify up to four markets where the calibrated chance clears that price by the Board's value

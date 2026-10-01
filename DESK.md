@@ -67,8 +67,11 @@ easy-props ticket was corrected on Sep 30 from a loss to a +138 two-leg win (0.3
 Every raw losing player prop now gets a narrow postgame web check before it is graded, including a losing player leg
 inside a parlay. The check looks only for an explicit in-game injury or evaluation, when it happened and whether the
 player returned; it never infers an injury from a quiet box score. A verified injury, a report whose source cannot be
-verified, or a failed check leaves the play pending and alerts the owner to confirm the listed book. It does not turn
-an injury into a push or void on its own; the book's official settlement and sourced terms still control.
+verified, or a failed check leaves the play pending until 12 hours after kickoff and sends an informational alert.
+The owner does not have to supply a wager screenshot. The check does not turn an injury into a push or void on its
+own. If no different official book settlement is known by the deadline, the play is graded from the official stats
+with its review note and sources preserved; stronger settlement evidence later becomes an append-only dated
+correction.
 
 ## Operating it
 
