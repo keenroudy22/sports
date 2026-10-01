@@ -26,13 +26,25 @@ class DiscordPostTests(unittest.TestCase):
             sent.append((url, body, headers))
             return 204, b''
 
-        self.assertEqual(discord_post.mirror_sent(log_book, NOW, url='secret', send=send, log=lambda *_: None), [])
+        fetch = lambda _: (b'png bytes', 'image/png', 'kookn-card.png')
+        self.assertEqual(discord_post.mirror_sent(log_book, NOW, url='secret', send=send, fetch=fetch, log=lambda *_: None), [])
         self.assertEqual(len(sent), 1)
-        self.assertEqual(sent[0][1]['content'], 'The play')
-        self.assertEqual(sent[0][1]['embeds'][0]['image']['url'], 'https://example.com/card.png')
+        self.assertIsInstance(sent[0][1], bytes)
+        self.assertIn(b'The play', sent[0][1])
+        self.assertIn(b'png bytes', sent[0][1])
+        self.assertIn('multipart/form-data', sent[0][2]['Content-Type'])
+        self.assertNotIn(b'https://example.com/card.png', sent[0][1])
         self.assertEqual(log_book['posts'][0]['discord']['state'], 'sent')
-        discord_post.mirror_sent(log_book, NOW, url='secret', send=send, log=lambda *_: None)
+        discord_post.mirror_sent(log_book, NOW, url='secret', send=send, fetch=fetch, log=lambda *_: None)
         self.assertEqual(len(sent), 1, 'a later desk run cannot duplicate it')
+
+    def test_a_card_download_failure_falls_back_to_the_public_embed(self):
+        sent = []
+        fail = lambda _: (_ for _ in ()).throw(discord_post.DiscordError('no card'))
+        send = lambda url, body, headers: (sent.append((body, headers)) or (204, b''))
+        discord_post.send_message('secret', 'Still deliver it', 'https://example.com/card.png', send=send, fetch=fail)
+        self.assertEqual(sent[0][0]['embeds'][0]['image']['url'], 'https://example.com/card.png')
+        self.assertEqual(sent[0][1]['Content-Type'], 'application/json')
 
     def test_a_failure_retries_but_only_reports_a_changed_error(self):
         entry = {'id': 'a', 'sentAt': '2026-09-28T15:59:00Z', 'discord': {'state': 'pending', 'text': 'Play'}}

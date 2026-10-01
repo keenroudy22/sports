@@ -102,6 +102,14 @@ class ReceiptTests(unittest.TestCase):
         self.assertEqual(week['due'].astimezone(gates.EASTERN).strftime('%a %H:%M'), 'Wed 09:00')
         self.assertEqual(week['when'], 'Sep 23 to Sep 29')
 
+    def test_recent_receipt_cards_survive_after_the_posting_window(self):
+        first, latest, log = world()
+        latest['NFL-2026-W4-m'] = {'result': 'push'}
+        wednesday = datetime(2026, 9, 30, 20, 30, tzinfo=timezone.utc)
+        cards = {r['card'] for r in receipts.card_history(first, latest, GAMES, wednesday)}
+        self.assertIn('receipt-day-2026-09-27', cards)
+        self.assertIn('receipt-week-2026-09-29', cards)
+
     def test_the_receipt_card_is_the_same_frame(self):
         first, latest, log = world()
         card = pick_card.receipt_svg(receipts.ready(first, latest, GAMES, log, MONDAY_MORNING)[0], avatar='data:image/png;base64,AAAA')

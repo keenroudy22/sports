@@ -28,6 +28,7 @@ from sports_refresh import eastern_date
 MORNING = (9, 0)                  # Eastern: when a receipt posts
 LATEST = (20, 0)                  # Eastern, the day after: a receipt not scheduled by then is stale and skipped
 WEEKDAY = 2                       # Wednesday: the week's receipt
+CARD_HISTORY_DAYS = 8             # Discord embeds and retrying publishers need recent generated URLs to survive
 MARKS = {'win': '✅', 'loss': '❌', 'push': '➖', 'void': '➖'}
 KIND_NAMES = {'player': 'Player props', 'team': 'Game lines', 'parlay': 'Fun parlays', 'ladder': 'Ladder'}
 
@@ -252,6 +253,27 @@ def ready(first, latest, games, log_book, now):
         if receipt:
             out.append(receipt)
     return [r for r in out if r['stale'] > now]
+
+
+def card_history(first, latest, games, now, days=CARD_HISTORY_DAYS):
+    """Recently settled receipt cards, even after their posting window.
+
+    Discord now uploads cards, but this short public history also repairs an embed when Discord had to fall back
+    to the image URL and gives Buffer a stable retry window.
+    """
+    ids = counted(first, latest)
+    today = eastern_date(now)
+    out = []
+    for back in range(days + 1):
+        day = today - timedelta(days=back)
+        receipt = day_receipt(day, first, latest, games, ids)
+        if receipt:
+            out.append(receipt)
+        if day.weekday() == WEEKDAY:
+            receipt = week_receipt(day, first, latest, games, ids)
+            if receipt:
+                out.append(receipt)
+    return out
 
 
 # ------------------------------------------------------------------ the rest of the day's posts

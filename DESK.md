@@ -230,7 +230,9 @@ live waits for the next run. Nothing goes out bare.
 
 Discord is downstream of that same path (`scripts/discord_post.py`), not a second publisher. A five-minute launchd
 job asks Buffer about posts whose time has passed; only after Buffer says the X post was sent does Discord receive
-the exact same text and public card. The mirror state lives beside the Buffer entry in `data/x-posted.json`, so a
+the exact same text and public card. The mirror downloads that card and uploads it as a Discord attachment, so an
+old message does not break when a generated site card rolls out of a later build. Recent receipt card URLs remain
+live for eight days as a retry fallback. The mirror state lives beside the Buffer entry in `data/x-posted.json`, so a
 later check cannot post it twice. `DISCORD_WEBHOOK_URL` stays only in `~/.config/keenroudy/env`; a failure retries and
 alerts the owner's phone through ntfy. Posts that predate this mirror have no payload and are never replayed.
 

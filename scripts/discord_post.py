@@ -7,7 +7,9 @@ newly scheduled Buffer entry, then marked sent here so a later desk run cannot d
 import json
 import hashlib
 import os
+import mimetypes
 import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import timedelta
 from pathlib import Path
@@ -30,7 +32,8 @@ def arb_webhook(env=None):
 
 
 def http_send(url, body, headers):
-    request = urllib.request.Request(url, data=json.dumps(body).encode('utf-8'), headers=headers, method='POST')
+    data = body if isinstance(body, bytes) else json.dumps(body).encode('utf-8')
+    request = urllib.request.Request(url, data=data, headers=headers, method='POST')
     try:
         with urllib.request.urlopen(request, timeout=30) as response:
             return response.status, response.read()
@@ -40,12 +43,62 @@ def http_send(url, body, headers):
         raise DiscordError(f'Discord network error: {type(error).__name__}') from error
 
 
-def send_message(url, text, image_url=None, send=http_send, username="Kook'n Sports"):
-    """Send one webhook message without ever putting the secret URL in an error or log."""
+MAX_IMAGE_BYTES = 8 * 1024 * 1024
+
+
+def download_image(url, opener=urllib.request.urlopen):
+    """Fetch a public card for a durable Discord attachment, never a short-lived external embed."""
+    request = urllib.request.Request(url, headers={'User-Agent': 'KooknSports/1.0'})
+    try:
+        with opener(request, timeout=30) as response:
+            data = response.read(MAX_IMAGE_BYTES + 1)
+            content_type = (response.headers.get('Content-Type') or '').split(';', 1)[0].strip().lower()
+    except (urllib.error.HTTPError, urllib.error.URLError, OSError, TimeoutError) as error:
+        raise DiscordError(f'card download failed: {type(error).__name__}') from error
+    if not data or len(data) > MAX_IMAGE_BYTES:
+        raise DiscordError('card download failed: invalid size')
+    if content_type not in ('image/png', 'image/jpeg', 'image/webp', 'image/gif'):
+        content_type = mimetypes.guess_type(urllib.parse.urlparse(url).path)[0] or ''
+    if content_type not in ('image/png', 'image/jpeg', 'image/webp', 'image/gif'):
+        raise DiscordError('card download failed: unsupported image type')
+    extension = {'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp', 'image/gif': 'gif'}[content_type]
+    return data, content_type, f'kookn-card.{extension}'
+
+
+def multipart(payload, image):
+    """Discord's payload_json plus one uploaded image."""
+    data, content_type, filename = image
+    boundary = '----KooknDiscord' + hashlib.sha256(data).hexdigest()[:20]
+    chunks = [
+        f'--{boundary}\r\nContent-Disposition: form-data; name="payload_json"\r\n'
+        'Content-Type: application/json\r\n\r\n'.encode('utf-8'),
+        json.dumps(payload, ensure_ascii=False).encode('utf-8'),
+        f'\r\n--{boundary}\r\nContent-Disposition: form-data; name="files[0]"; filename="{filename}"\r\n'
+        f'Content-Type: {content_type}\r\n\r\n'.encode('utf-8'),
+        data,
+        f'\r\n--{boundary}--\r\n'.encode('utf-8'),
+    ]
+    return b''.join(chunks), f'multipart/form-data; boundary={boundary}'
+
+
+def send_message(url, text, image_url=None, send=http_send, username="Kook'n Sports", fetch=download_image):
+    """Send one webhook message without ever putting the secret URL in an error or log.
+
+    Cards are uploaded to Discord so an old post cannot break when the generated site card rolls out of the
+    current build. If the card cannot be downloaded, the external embed remains a safe delivery fallback.
+    """
     body = {'username': username, 'avatar_url': 'https://keenroudy.com/sports/kookn.jpg', 'content': text}
+    headers = {'Content-Type': 'application/json', 'User-Agent': 'KooknSports/1.0'}
     if image_url:
-        body['embeds'] = [{'image': {'url': image_url}}]
-    status, raw = send(url, body, {'Content-Type': 'application/json', 'User-Agent': 'KooknSports/1.0'})
+        try:
+            image = fetch(image_url)
+        except DiscordError:
+            body['embeds'] = [{'image': {'url': image_url}}]
+        else:
+            body['attachments'] = [{'id': 0, 'filename': image[2]}]
+            body, content_type = multipart(body, image)
+            headers['Content-Type'] = content_type
+    status, raw = send(url, body, headers)
     if status not in (200, 204):
         detail = raw.decode('utf-8', 'replace')[:240] if isinstance(raw, bytes) else str(raw)[:240]
         raise DiscordError(f'Discord returned HTTP {status}: {detail}')
@@ -82,7 +135,7 @@ def send_arb_alert(text, alert_id, now, state_path, url=None, send=None):
     return True
 
 
-def mirror_sent(log_book, now, url=None, send=http_send, log=print):
+def mirror_sent(log_book, now, url=None, send=http_send, fetch=download_image, log=print):
     """Deliver each Discord payload once.
 
     Confirmed plays carry ``readyAt`` and go to Discord before X. House, news and engagement posts keep the old
@@ -99,7 +152,7 @@ def mirror_sent(log_book, now, url=None, send=http_send, log=print):
                 or entry.get('cancelledAt') or entry.get('deletedAt'):
             continue
         try:
-            send_message(url, mirror.get('text') or '', mirror.get('image'), send=send)
+            send_message(url, mirror.get('text') or '', mirror.get('image'), send=send, fetch=fetch)
         except DiscordError as error:
             message = str(error)
             changed = mirror.get('error') != message

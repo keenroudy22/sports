@@ -6,7 +6,9 @@ goes out, and the code that makes it. Examples of the cards are in `docs/example
 and what gets saved is in `docs/X-NOTES.md`.
 
 The free Kook'n Sports Discord mirrors this feed. It is deliberately second: a five-minute local job waits until
-Buffer confirms the X post was sent, then sends Discord the exact same text and card once. A Discord failure retries
+Buffer confirms the X post was sent, then sends Discord the exact same text and card once. The card is uploaded as
+a Discord attachment instead of a temporary external embed; recent receipt URLs remain live for eight days as a
+delivery fallback. A Discord failure retries
 and alerts ntfy; it never changes, advances or replaces the X post.
 
 ## The voice (the owner's rules)

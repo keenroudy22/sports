@@ -17,7 +17,8 @@ Three things run it, none of them an AI chat:
    the pre-post check every 30 minutes, the Discord mirror every 5 minutes, the heartbeat at 7:15 AM, and the weekly review Monday 9:30 AM. The run settles and closes plays, builds the
    board, judges candidates through `scripts/gates.py`, publishes reports to `research/`, pushes, and schedules X
    posts in Buffer. Confirmed official plays reach Discord about 10-15 minutes before X; other post types mirror
-   after Buffer confirms X. The same words and card use one incoming webhook. Logs:
+   after Buffer confirms X. The same words and card use one incoming webhook; the card is uploaded as a durable
+   Discord attachment rather than left as a temporary site embed. Logs:
    `~/Library/Logs/KeenRoudy/run-YYYY-MM-DD.log` (times in UTC).
 2. **GitHub Actions** (`.github/workflows/publish.yml`) on a schedule and on every push: captures scores, odds and
    prop prices, publishes model forecasts, grades against the close, builds the site and the cards, and deploys.
@@ -54,7 +55,9 @@ watch the runs, and fix what breaks.
   (the owner decides). The owner pins big wins by hand from the phone ping.
 - **Discord:** one-way publisher only. The append-only site record remains the source of truth. Confirmed official
   plays use the same words and card and go to Discord about 10-15 minutes before X; receipts, news and engagement
-  posts mirror only after Buffer confirms X. Once Discord publishes a play it is public and stays in the record. A
+  posts mirror only after Buffer confirms X. Image cards are uploaded to Discord so an old message cannot lose its
+  art when generated site files roll forward; recent receipt URLs also stay live for eight days as a retry fallback.
+  Once Discord publishes a play it is public and stays in the record. A
   hard-news pull before X gets a Discord update and cancels X, but never erases the play. The webhook stays in
   `~/.config/keenroudy/env`, never the repo or a log. Arb alerts are explicitly not official plays and may go only
   to Discord under the separate Arb Radar rule.

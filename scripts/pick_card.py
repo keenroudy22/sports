@@ -537,8 +537,24 @@ def receipt_svg(receipt, avatar=None):
     ink, soft, raised = CREAM, '#9eb1bf', '#102330'
     rows = receipt.get('rows') or []
     shown = rows if len(rows) <= 6 else rows[:5]
-    top = 475
-    row_h = min(176, 690 // max(len(shown), 1))
+    wins = sum(1 for row in rows if row and row[0] == 'win')
+    losses = sum(1 for row in rows if row and row[0] == 'loss')
+    # Weekly cards have category rows instead of W/L rows, so their title supplies the overall record.
+    if not wins and not losses:
+        try:
+            title_record = [int(piece) for piece in str(receipt.get('title') or '').split('-')[:2]]
+            wins, losses = title_record
+        except (TypeError, ValueError):
+            pass
+    if losses > wins:
+        primary, other, accent = '#151323', '#3a162d', '#ff7283'
+    elif wins > losses:
+        primary, other, accent = '#071a20', '#0d4a43', '#5eeaa4'
+    else:
+        primary, other, accent = '#0a1828', '#173856', '#68c1ff'
+    single = len(shown) == 1 and shown[0][0] in RESULT_MARKS
+    top = 555 if single else 475
+    row_h = 230 if single else min(176, 690 // max(len(shown), 1))
     box_h = row_h - 12
     body = []
     for i, row in enumerate(shown):
@@ -554,14 +570,24 @@ def receipt_svg(receipt, avatar=None):
             body.append(f'<text x="122" y="{middle + 10}" fill="{ink}" font-size="{size}" font-weight="750">{esc(fit(text, limit))}</text>')
             continue
         mark, colour = RESULT_MARKS.get(result, ('?', None))
-        size, limit = (28, 45) if len(text) <= 45 else (23, 57)
-        body.append(f'<circle cx="98" cy="{middle}" r="27" fill="{colour or soft}" fill-opacity=".15" stroke="{colour or soft}" stroke-width="3"/>')
-        body.append(f'<text x="98" y="{middle + 9}" fill="{colour or soft}" font-size="27" font-weight="900" text-anchor="middle">{mark}</text>')
-        body.append(f'<text x="144" y="{middle + (-5 if detail else 10)}" fill="{ink}" font-size="{size}" font-weight="750">{esc(fit(text, limit))}</text>')
+        size, limit = ((35, 39) if len(text) <= 39 else (28, 50)) if single else ((28, 45) if len(text) <= 45 else (23, 57))
+        circle_x, circle_r = (112, 38) if single else (98, 27)
+        text_x = 178 if single else 144
+        body.append(f'<circle cx="{circle_x}" cy="{middle}" r="{circle_r}" fill="{colour or soft}" fill-opacity=".15" stroke="{colour or soft}" stroke-width="3"/>')
+        body.append(f'<text x="{circle_x}" y="{middle + (13 if single else 9)}" fill="{colour or soft}" font-size="{38 if single else 27}" font-weight="900" text-anchor="middle">{mark}</text>')
+        body.append(f'<text x="{text_x}" y="{middle + (-10 if detail else 12)}" fill="{ink}" font-size="{size}" font-weight="800">{esc(fit(text, limit))}</text>')
         if detail:
-            body.append(f'<text x="144" y="{middle + 29}" fill="{soft}" font-size="20" font-weight="600">{esc(fit(detail, 70))}</text>')
+            body.append(f'<text x="{text_x}" y="{middle + (38 if single else 29)}" fill="{soft}" font-size="{25 if single else 20}" font-weight="600">{esc(fit(detail, 55 if single else 70))}</text>')
     if len(rows) > len(shown):
         body.append(f'<text x="540" y="{top + row_h * len(shown) + 18}" fill="{soft}" font-size="21" text-anchor="middle">+ {len(rows) - len(shown)} more graded on the site</text>')
+    if single:
+        hero = 'CLEAN PLATE.' if wins and not losses else 'BACK TO WORK.' if losses and not wins else 'THE HONEST RECEIPT.'
+        sub = 'The win is on the record. Next plate waits for the right spot.' if wins and not losses else 'The miss is on the record. Next plate starts clean.'
+        body += [
+            f'<rect x="56" y="838" width="968" height="154" rx="24" fill="{accent}" fill-opacity=".10" stroke="{accent}" stroke-opacity=".55" stroke-width="3"/>',
+            f'<text x="88" y="903" fill="{accent}" font-size="54" font-weight="950" letter-spacing="-1">{hero}</text>',
+            f'<text x="88" y="956" fill="{ink}" font-size="25" font-weight="700">{sub}</text>',
+        ]
     summary = receipt.get('summary') or {}
     straight, fun = summary.get('straight'), summary.get('fun')
     chips = []

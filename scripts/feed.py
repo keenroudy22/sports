@@ -192,7 +192,9 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
     # A card for every open play as soon as it is published, not only inside its posting window: the desk
     # schedules the post the moment the card is live, and never posts without one.
     import receipts
-    ready = [{'guid': r['card'], 'receipt': r} for r in receipts.ready(ctx.first, ctx.latest, ctx.games, x_post.load_log(), now)]
+    # Keep recent receipt images in every build. Discord normally uploads a permanent copy, but retaining these
+    # URLs repairs old embeds and gives a failed delivery several days to retry without losing its card.
+    ready = [{'guid': r['card'], 'receipt': r} for r in receipts.card_history(ctx.first, ctx.latest, ctx.games, now)]
     plays = card_items(ctx.first, ctx.latest, ctx.games, now, ctx.player_team)
     import featured
     potd = featured.of_day(eastern_date(now).isoformat())
