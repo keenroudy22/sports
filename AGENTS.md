@@ -128,6 +128,9 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **No brown house graphics** (2026-10-01): Kook'n-owned cards use midnight navy/black, electric mint and crisp
+  cyan. Never use brown, tan, bronze, copper, amber, sepia or muddy burnt orange as a house-card background or
+  accent. A real team's supplied colors may still appear on that team's play card.
 - **Discord-only Arb Radar** (2026-09-29): exact-line, two-outcome opportunities from fresh captured prices may post
   to Discord, but never X, the live site, ntfy or the official record. Every alert says to move quickly and is valid
   only when both exact listed prices are still available or better; it also says to verify both apps, limits and

@@ -733,7 +733,7 @@ class BufferPostsTests(unittest.TestCase):
         from unittest import mock
         now = datetime(2026, 9, 27, 12, 40, tzinfo=timezone.utc)
         ctx = type('Ctx', (), {'first': {}, 'latest': {}, 'player_team': {}})()
-        menu = 'https://keenroudy.com/sports/img/kitchen-menu.png'
+        menu = 'https://keenroudy.com/sports/img/kitchen-menu-neon.png'
         plans = [('menu:day:2026-09-27', 'menu', 'text', now, menu)]
 
         def plan(*a, refused=None, **k):

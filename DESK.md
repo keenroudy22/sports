@@ -294,6 +294,10 @@ The site's **Kook'n Arb Radar** page (`#arbs`) is public but never shows the can
 offers a local two-price equal-return calculator (`core.arbSplit`); no key or price feed reaches the browser. It must
 never present an example as currently available or turn a shadow candidate into a public recommendation.
 
+**House-card color** (owner, 2026-10-01): the Kook'n menu, book and other house-owned graphics use midnight
+navy/black with electric mint and crisp cyan. Brown, tan, bronze, copper, amber, sepia and muddy burnt orange do not
+belong in that system. A real team's supplied colors remain faithful on that team's own play card.
+
 **What's on the plate** (owner, 2026-09-24): an NFL player prop's card shows the player's ESPN headshot, a game line
 the teams' logos (a total both, a spread its side), a parlay and the house cards the chef. Images are fetched when
 the card is rendered and embedded; a failed fetch falls back to the chef. The photos are ESPN's and the logos the

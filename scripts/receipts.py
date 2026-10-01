@@ -334,7 +334,7 @@ def menu(first, latest, games, log_book, now):
     lines = (rows + (['a lotto'] if parlay else [])
              + ([f"ladder step {(rung.get('ladder') or {}).get('step', 1)}"] if rung else []))
     tail = leagues(plays)
-    return {'key': f'menu:day:{today.isoformat()}', 'card': HOUSE_CARDS + 'kitchen-menu.png', 'kind': 'menu',
+    return {'key': f'menu:day:{today.isoformat()}', 'card': HOUSE_CARDS + 'kitchen-menu-neon.png', 'kind': 'menu',
             'text': fit(lines, head, tail.strip(), head_sep='\n'), 'due': at(today, MENU_AT), 'stale': at(today, MENU_UNTIL)}
 
 
@@ -361,7 +361,7 @@ def book(first, latest, games, log_book, now):
     # repeated post, and the same words twice read like a bot).
     head = f"Season through {through:%b} {through.day}: {headline(rows)}"
     tail = leagues(rows)
-    return {'key': f'book:day:{today.isoformat()}', 'card': HOUSE_CARDS + 'kitchen-book.png', 'kind': 'book',
+    return {'key': f'book:day:{today.isoformat()}', 'card': HOUSE_CARDS + 'kitchen-book-neon.png', 'kind': 'book',
             'text': fit(lines, head, tail.strip(), head_sep='\n'), 'due': max(at(today, BOOK_AT), now + timedelta(minutes=2)),
             'stale': at(today, BOOK_UNTIL)}
 
