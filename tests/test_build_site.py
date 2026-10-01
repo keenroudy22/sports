@@ -421,13 +421,14 @@ class TableTests(unittest.TestCase):
 
     def test_defense_table_averages_regular_season_games_allowed(self):
         logs = {'A': [{'season': 2026, 'seasonType': 1, 'allowed': {'WR': {'recYds': 500}}},
-                      {'season': 2026, 'seasonType': 2, 'allowed': {'WR': {'recYds': 150, 'rec': 12}}},
-                      {'season': 2026, 'seasonType': 2, 'allowed': {'WR': {'recYds': 90, 'rec': 8}}},
+                      {'season': 2026, 'seasonType': 2, 'allowed': {'WR': {'recYds': 150, 'rec': 12}, 'QB': {'rushTD': 2}}},
+                      {'season': 2026, 'seasonType': 2, 'allowed': {'WR': {'recYds': 90, 'rec': 8}, 'QB': {'rushTD': 1}}},
                       {'season': 2025, 'seasonType': 2, 'allowed': {'WR': {'recYds': 10}}}]}
         table = build_site.defense_table('NFL', logs, 2026)
         self.assertEqual(table['A']['g'], 2)
         self.assertEqual((table['A']['WR']['recYds'], table['A']['WR']['rec']), (120.0, 10.0))
         self.assertEqual(table['A']['QB']['att'], 0.0)
+        self.assertEqual(table['A']['QB']['rushTD'], 1.5)
         self.assertEqual(build_site.defense_table('NFL', logs, 2026, last=1)['A']['WR']['recYds'], 90.0)
         self.assertEqual(build_site.defense_table('NFL', logs, 2024), {})
 

@@ -56,6 +56,12 @@ test('a listed player without a counting stat had zero, but longest and snaps st
   assert.equal(C.cell(r, KEYS, 'notAKey'), null);
 });
 
+test('quarterback pages include rushing touchdowns beside their rushing volume', () => {
+  assert.deepEqual(C.POSITION_STATS.QB,
+    ['passYds', 'cmp', 'att', 'passTD', 'int', 'rushYds', 'car', 'rushTD']);
+  assert.equal(C.LABEL.rushTD, 'Rush TD');
+});
+
 test('splits separate home, away and neutral and list head-to-head meetings', () => {
   const rows = [row('2025-09-07', '2', 1, 50, 4), row('2025-09-14', '2', 0, 80, 6), row('2026-01-04', '3', -1, 20, 1)];
   const s = C.splits(rows, KEYS, 'recYds', '2');

@@ -46,7 +46,7 @@ WINDOW_BACK, WINDOW_AHEAD = timedelta(days=3), timedelta(days=8)
 LOG_KEYS = ('cmp', 'att', 'passYds', 'passTD', 'int', 'sacks', 'car', 'rushYds', 'rushTD', 'rushLong',
             'targets', 'rec', 'recYds', 'recTD', 'recLong', 'rzTgt', 'i10Tgt', 'rzCar', 'i10Car', 'i5Car',
             'scrambles', 'fumLost', 'fgm', 'fga', 'xpm', 'kPts', 'snaps', 'snapPct')
-ALLOWED_KEYS = {'QB': ('att', 'cmp', 'passYds', 'passTD', 'int', 'sacks', 'car', 'rushYds'),
+ALLOWED_KEYS = {'QB': ('att', 'cmp', 'passYds', 'passTD', 'int', 'sacks', 'car', 'rushYds', 'rushTD'),
                 'RB': ('car', 'rushYds', 'rushTD', 'targets', 'rec', 'recYds', 'recTD'),
                 'WR': ('targets', 'rec', 'recYds', 'recTD'), 'TE': ('targets', 'rec', 'recYds', 'recTD')}
 

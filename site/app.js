@@ -860,7 +860,7 @@
     return `<div class="card"><div class="chart" role="img" aria-label="Recent games">${bars}${marker}</div></div>`;
   };
 
-  const LOG_COLS = { QB: ['cmp', 'att', 'passYds', 'passTD', 'int', 'car', 'rushYds'], RB: ['car', 'rushYds', 'rushTD', 'targets', 'rec', 'recYds', 'rzCar'],
+  const LOG_COLS = { QB: ['cmp', 'att', 'passYds', 'passTD', 'int', 'car', 'rushYds', 'rushTD'], RB: ['car', 'rushYds', 'rushTD', 'targets', 'rec', 'recYds', 'rzCar'],
     WR: ['targets', 'rec', 'recYds', 'recTD', 'recLong', 'rzTgt'], TE: ['targets', 'rec', 'recYds', 'recTD', 'recLong', 'rzTgt'], PK: ['fgm', 'fga', 'xpm', 'kPts'] };
 
   const gameLog = (rows, keys, pos, abbr, league) => {

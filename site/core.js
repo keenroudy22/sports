@@ -134,7 +134,7 @@
 
   /* Which stats matter for a position, in display order. */
   const POSITION_STATS = {
-    QB: ['passYds', 'cmp', 'att', 'passTD', 'int', 'rushYds', 'car'],
+    QB: ['passYds', 'cmp', 'att', 'passTD', 'int', 'rushYds', 'car', 'rushTD'],
     RB: ['rushYds', 'car', 'recYds', 'rec', 'targets', 'rzCar'],
     FB: ['rushYds', 'car', 'recYds', 'rec', 'targets'],
     WR: ['recYds', 'rec', 'targets', 'rzTgt', 'recLong'],
