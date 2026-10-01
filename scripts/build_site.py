@@ -569,7 +569,8 @@ def build(now=None):
         current = max((g['season'] for g in league_records), default=now.year)
         team_logs = features.team_logs(league_records)
         defense_logs = features.defense_logs(league_records)
-        league_data[league] = {'team_logs': team_logs, 'defense': defense_table(league, defense_logs, current),
+        league_data[league] = {'team_logs': team_logs, 'player_logs': features.player_logs(league_records),
+                               'defense': defense_table(league, defense_logs, current),
                                'defense_logs': defense_logs, 'current': current, 'records': league_records}
     injuries = {}
     for league in ('NFL', 'CFB'):
@@ -624,8 +625,7 @@ def build(now=None):
         card['fcs'] = game['league'] == 'CFB' and not {str(game['home']['id']), str(game['away']['id'])} <= fbs
         cards.append(card)
         info = league_data[game['league']]
-        favorites = favorite_lines(game, latest_snap, prop_prices.get(game['id']), lines, names, appearances,
-                                   established, now)
+        favorites = favorite_lines(game, latest_snap, lines, now, info['player_logs'])
         write(OUT / 'games' / f"{game['id']}.json",
               game_detail(card, game, stored.get(game['id']), snaps_for, captures.get(game['id'], []), lines, picks,
                           names, info['team_logs'], info['defense'], injuries, now, grading, favorites))
@@ -986,20 +986,34 @@ BOOK_NAMES = {'draftkings': 'DraftKings', 'fanduel': 'FanDuel', 'betmgm': 'BetMG
               'betrivers': 'BetRivers', 'espnbet': 'ESPN BET', 'fanatics': 'Fanatics'}
 ODDS_FRESH = timedelta(hours=12)   # an older multi-book capture is history, not a board row
 
-FAVORITE_PROP_MARKETS = ('recYds', 'rushYds', 'rec', 'passYds')
-FAVORITE_PROP_PRICES = (-500, -150)    # useful safer alternates, not a pile of nearly price-less milestones
-FAVORITE_MIN_CHANCE = 0.72
-FAVORITE_MIN_EDGE = 0.0                # the model must at least agree with what the captured price implies
-FAVORITE_MAX = 5
+def favorite_hit_rates(game, row, player_logs):
+    """Recent and season-to-date results against this exact player line, before this game's kickoff."""
+    athlete, stat = str(row.get('athleteId') or ''), row.get('stat')
+    if not athlete or stat not in LOG_KEYS or not isinstance(row.get('line'), (int, float)):
+        return None
+    before = features.when(game['kickoff'])
+    played = sorted((r for r in (player_logs or {}).get(athlete, [])
+                     if features.when(r['kickoff']) < before and r.get('seasonType') == 2
+                     and isinstance((r.get('stats') or {}).get(stat), (int, float))),
+                    key=lambda r: features.when(r['kickoff']))
+    direction, line = str(row.get('direction') or '').lower(), float(row['line'])
+
+    def block(rows):
+        values = [(r.get('stats') or {})[stat] for r in rows]
+        hits = sum(value < line if direction == 'under' else value > line for value in values)
+        return {'hits': hits, 'games': len(values), 'rate': round(100 * hits / len(values))} if values else None
+
+    last = block(played[-10:])
+    season = block([r for r in played if r.get('season') == game.get('season')])
+    return {'last': last, 'season': season} if last or season else None
 
 
-def favorite_lines(game, snapshot, record, lines, names, appearances, established, now):
-    """The strongest current, priced reads to show near the top of one game page.
+def favorite_lines(game, snapshot, lines, now, player_logs=None):
+    """Every current main line the calibrated Board actually likes for one game, best price edge first.
 
-    These are not published plays. Game markets use the calibrated Board grade. Player alternates use the raw
-    projection curve because the learning policy is trained on main lines; the page says that plainly. An alternate
-    still has to clear its book-implied chance, come from the main market's consistent ladder, use a settled role,
-    and carry a real half-point price. One player appears once so a long alternate ladder cannot fill the panel.
+    These are not extra published plays. A player line qualifies only when the Board's learned/calibrated view says
+    lean; a spread or total uses the same lean/strong tier shown on the Board. Alternates are a reader's optional
+    choice and never replace the main line in this list.
     """
     if not snapshot or game.get('state') != 'pre' or features.when(game['kickoff']) <= now:
         return []
@@ -1007,71 +1021,24 @@ def favorite_lines(game, snapshot, record, lines, names, appearances, establishe
     for row in lines:
         grade = row.get('grade') or {}
         seen = instant(row.get('observedAt'))
-        if row.get('gameId') != game['id'] or not row.get('gameMarket') or row.get('state') != 'open' \
-                or grade.get('paused') or grade.get('tier') not in ('lean', 'strong') \
+        liked = grade.get('tier') in ('lean', 'strong') if row.get('gameMarket') else grade.get('view') == 'lean'
+        if row.get('gameId') != game['id'] or row.get('state') != 'open' or not liked \
+                or grade.get('paused') or grade.get('limited') or grade.get('thin') \
                 or not isinstance(row.get('odds'), (int, float)) or seen is None or now - seen > ODDS_FRESH:
             continue
-        out.append({'id': f"favorite-{row['id']}", 'kind': 'game', 'title': row['title'],
+        history = None if row.get('gameMarket') else favorite_hit_rates(game, row, player_logs)
+        out.append({'id': f"favorite-{row['id']}", 'kind': 'game' if row.get('gameMarket') else 'player',
+                    'title': row['title'], 'player': row.get('player'), 'athleteId': row.get('athleteId'),
+                    'position': row.get('position'),
                     'book': row['book'], 'odds': int(row['odds']), 'line': row.get('line'),
                     'market': row.get('market'), 'direction': row.get('direction'), 'side': row.get('side'),
                     'chance': grade.get('chance'), 'needs': grade.get('needs'), 'edge': grade.get('edge'),
+                    'calibrated': grade.get('calibrated'),
                     'projection': grade.get('projection'), 'observedAt': row.get('observedAt'),
-                    'source': row.get('source'), 'alternate': False, 'score': grade.get('edge') or 0.0})
-    seen = instant((record or {}).get('retrievedAt'))
-    if record and seen is not None and now - seen <= ODDS_FRESH:
-        players = [(side, p) for side in ('home', 'away')
-                   for p in (((snapshot.get('players') or {}).get(side) or {}).get('players') or [])]
-        by_name = {person(names.get(str(p['id']), p.get('name'))): (side, p) for side, p in players}
-        best = {}
-        for book_key, book in (record.get('books') or {}).items():
-            book_name = BOOK_NAMES.get(book_key, (book or {}).get('title') or book_key)
-            for market, quoted in ((book or {}).get('markets') or {}).items():
-                if market not in FAVORITE_PROP_MARKETS:
-                    continue
-                for quoted_name, quote in (quoted or {}).items():
-                    match = by_name.get(person(quoted_name))
-                    if not match:
-                        continue
-                    side, player = match
-                    athlete = str(player['id'])
-                    projected = player.get(pricing.PROJECTED[market])
-                    if not projected or player.get('limited') \
-                            or not settled_role(athlete, game[side]['id'], appearances, established):
-                        continue
-                    mean, low, high = projected
-                    sd = (high - mean) / pricing.Z80
-                    main = quote.get('line')
-                    if sd <= 0 or not isinstance(main, (int, float)) or not 0.6 <= main / max(mean, 1.0) <= 1.6:
-                        continue
-                    offers = [(main, quote.get('over'), False)] + [
-                        (rung['line'], rung.get('over'), True) for rung in sharp_odds.consistent(quote)]
-                    for point, odds, alternate in offers:
-                        if not isinstance(point, (int, float)) or not isinstance(odds, (int, float)) \
-                                or float(point) != int(point) + 0.5 or not FAVORITE_PROP_PRICES[0] <= odds <= FAVORITE_PROP_PRICES[1]:
-                            continue
-                        chance, _, _ = pricing.chances(mean, sd, float(point))
-                        needs = pricing.break_even(int(odds))
-                        edge = chance - needs
-                        if chance < FAVORITE_MIN_CHANCE or edge < FAVORITE_MIN_EDGE:
-                            continue
-                        threshold = int(point + 0.5)
-                        row = {'id': f'favorite-{game["id"]}-{athlete}-{market}-{book_key}-{point:g}',
-                               'kind': 'player', 'title': f'{names.get(athlete, quoted_name)} {threshold}+ {pricing.WORDS[market]}',
-                               'player': names.get(athlete, quoted_name), 'team': game[side]['abbreviation'],
-                               'athleteId': athlete, 'market': market, 'line': float(point), 'direction': 'over',
-                               'book': book_name, 'odds': int(odds), 'chance': round(chance, 3),
-                               'needs': round(needs, 3), 'edge': round(100 * edge, 1), 'projection': round(mean, 1),
-                               'range80': [round(low, 1), round(high, 1)], 'observedAt': record['retrievedAt'],
-                               'source': record.get('source'), 'alternate': alternate,
-                               'score': round(100 * edge, 1)}
-                        old = best.get(athlete)
-                        # Safety first; a better price breaks a tie between equally likely milestones.
-                        if old is None or (row['chance'], pricing.cents(row['odds'])) > \
-                                (old['chance'], pricing.cents(old['odds'])):
-                            best[athlete] = row
-        out.extend(best.values())
+                    'source': row.get('source'), 'alternate': False, 'history': history,
+                    'score': grade.get('edge') or 0.0})
     return [{k: v for k, v in row.items() if k != 'score'} for row in
-            sorted(out, key=lambda row: (-row['score'], -float(row.get('chance') or 0), row['title']))[:FAVORITE_MAX]]
+            sorted(out, key=lambda row: (-row['score'], -float(row.get('chance') or 0), row['title']))]
 
 
 def book_rows(game, record):

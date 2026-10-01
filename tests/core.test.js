@@ -309,6 +309,8 @@ test('app.js parses', () => {
   assert.match(source, /Kook'n favorite lines/);
   assert.match(source, /No qualifying favorite yet/);
   assert.match(source, /line.*vs projection.*higher/);
+  assert.match(source, /Historical hit rate/);
+  assert.match(source, /ranked by edge against the sportsbook price/);
 });
 
 test('one record: the straight plays in wins and losses and units, the side records apart', () => {

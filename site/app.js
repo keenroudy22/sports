@@ -497,8 +497,9 @@
       empty('No qualifying favorite yet', 'We have a projection, but no fresh sportsbook line currently clears the price and role checks. Nothing is forced.'));
     const rows = favorites.map((line, i) => {
       const player = line.kind === 'player';
-      const chance = line.chance != null ? `${Math.round(100 * line.chance)}% ${player ? 'raw model clear chance' : 'calibrated chance'}` : '';
+      const chance = line.chance != null ? `${Math.round(100 * line.chance)}% ${line.calibrated ? 'calibrated chance' : 'model chance'}` : '';
       const need = line.needs != null ? `${Math.round(100 * line.needs)}% price break-even` : '';
+      const priceEdge = typeof line.edge === 'number' ? `${signed(line.edge)} pt edge vs price` : '';
       let comparison = '';
       if (typeof line.line === 'number' && typeof line.projection === 'number') {
         if (line.market === 'point spread') {
@@ -510,15 +511,19 @@
           comparison = `line ${fixed(line.line)} vs projection ${fixed(line.projection)} (${fixed(Math.abs(gap))} ${gap >= 0 ? 'higher' : 'lower'})`;
         }
       }
-      const detailText = [comparison, chance, need]
+      const detailText = [comparison, chance, need, priceEdge]
+        .filter(Boolean).join(' · ');
+      const history = line.history || {};
+      const rate = (label, value) => value && value.games ? `${value.hits}/${value.games} (${value.rate}%) ${label}` : '';
+      const historyText = [rate(`last ${history.last ? history.last.games : 0}`, history.last), rate('this season', history.season)]
         .filter(Boolean).join(' · ');
       return `<div class="row favorite-line" style="cursor:default"><span class="row-rail" style="background:var(--mint)"></span>
         <span class="row-main"><span class="row-top"><span class="pill pill-ours">#${i + 1}</span><span class="row-name">${esc(line.title)}</span>${line.team ? `<span class="row-meta">${esc(line.team)}</span>` : ''}${line.alternate ? '<span class="pill pill-reference">Alternate</span>' : ''}</span>
-        <span class="row-market">${esc(detailText)}</span><span class="row-meta">Captured ${esc(ago(line.observedAt))} · easier lines are reads, not additional official plays</span></span>
+        <span class="row-market">${esc(detailText)}</span>${historyText ? `<span class="row-meta favorite-history">Historical hit rate: ${esc(historyText)}</span>` : ''}<span class="row-meta">Captured ${esc(ago(line.observedAt))} · main-line value read, not an additional official play</span></span>
         <span class="row-price"><span class="row-odds num">${esc(C.odds(line.odds))}</span><span class="row-book">${esc(line.book)}</span></span></div>`;
     }).join('');
     return section("Kook'n favorite lines", `<div class="card favorite-lines"><div class="rows">${rows}</div></div>
-      <p class="row-meta favorite-note">Ranked from fresh, real sportsbook prices. Player-alternate chances use the raw projection curve and are less proven than our main-line grades. These are optional reads; official plays are labeled separately.</p>`);
+      <p class="row-meta favorite-note">Every fresh main line our priced model currently likes, ranked by edge against the sportsbook price. Historical hit rates are context, not a prediction. Want less risk? You can choose an alternate at your book. These are optional reads; official plays are labeled separately.</p>`);
   };
 
   async function viewGame(route) {

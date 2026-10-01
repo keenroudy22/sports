@@ -116,6 +116,9 @@ card, chance bars, form dots. Tabs: Today, Board, Games, Stats, Record, More. Ch
 sideways scroll, no console errors) and bump the asset versions in `site/index.html` (`app.css?v=`, `core.js?v=`,
 `app.js?v=`) so phones load the new files.
 
-Each upcoming game detail page also has **Kook'n favorite lines** near the top: no more than five fresh, priced reads
-with the book, projection and chance. Alternate player lines are clearly marked, use only their market's verified
-ladder, and stay separate from official plays. The section may honestly be empty when no price qualifies.
+Each upcoming game detail page also has **Kook'n favorite lines** near the top: every fresh, priced main line the
+calibrated Board likes, ranked by edge against the price with line vs projection, book, chance and break-even shown.
+Player lines also show exact-line last-ten and season hit rates when the stored game log supports them, labeled as
+history rather than a prediction. Readers may choose alternates at their book, but alternates do not replace the main
+value line in this list. The reads stay separate from official plays, and the section may honestly be empty when no
+price qualifies.

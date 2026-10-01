@@ -118,26 +118,42 @@ class GradeTests(unittest.TestCase):
         self.assertAlmostEqual(home['raw'] + away['raw'], 1.0, places=2)
         self.assertEqual(away['tier'], 'pass')
 
-    def test_a_game_page_gets_one_real_safer_line_per_established_player(self):
+    def test_a_game_page_gets_every_priced_main_line_the_board_likes_with_hit_rates(self):
         now = datetime(2026, 9, 19, 13, tzinfo=timezone.utc)
-        game = {'id': 'NFL-1', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-09-20T17:00:00Z',
+        game = {'id': 'NFL-1', 'league': 'NFL', 'season': 2026, 'state': 'pre', 'kickoff': '2026-09-20T17:00:00Z',
                 'home': {'id': '1', 'abbreviation': 'ATL'}, 'away': {'id': '2', 'abbreviation': 'CAR'}}
         snapshot = {'gameId': 'NFL-1', 'league': 'NFL', 'model': 'v2.0', 'publishedAt': '2026-09-19T12:00:00Z',
                     'players': {'home': {'players': [{'id': '10', 'pos': 'WR', 'recYds': [70.0, 40.0, 100.0]}]},
                                 'away': {'players': []}}}
-        record = {'retrievedAt': '2026-09-19T12:40:00Z', 'source': 'https://example.test/odds', 'books': {
-            'fanduel': {'title': 'FanDuel', 'markets': {'recYds': {'Player Ten': {
-                'line': 55.5, 'over': -110, 'under': -110,
-                'alternates': [{'line': 29.5, 'over': -400}, {'line': 39.5, 'over': -220},
-                               {'line': 19.5, 'over': -150}]}}}}}}
-        rows = build_site.favorite_lines(game, snapshot, record, [], {'10': 'Player Ten'}, {'10': 3}, set(), now)
-        self.assertEqual(len(rows), 1, 'one alternate ladder cannot fill the whole panel')
-        self.assertEqual((rows[0]['title'], rows[0]['book'], rows[0]['odds'], rows[0]['projection']),
-                         ('Player Ten 30+ receiving yards', 'FanDuel', -400, 70.0))
-        self.assertEqual(rows[0]['line'], 29.5)
-        self.assertTrue(rows[0]['alternate'])
-        self.assertGreaterEqual(rows[0]['chance'], .72)
-        self.assertNotEqual(rows[0]['line'], 19.5, 'an out-of-order rung is not accepted from the mixed ladder')
+        lines = [
+            {'id': 'prop-1', 'gameId': 'NFL-1', 'state': 'open', 'gameMarket': False,
+             'title': 'Player Ten over 55.5 receiving yards', 'player': 'Player Ten', 'athleteId': '10',
+             'position': 'WR', 'stat': 'recYds', 'market': 'receiving yards', 'direction': 'over', 'line': 55.5,
+             'odds': -110, 'book': 'FanDuel', 'observedAt': '2026-09-19T12:40:00Z',
+             'grade': {'view': 'lean', 'chance': .58, 'needs': .524, 'edge': 5.6, 'projection': 70.0,
+                       'calibrated': True, 'thin': False, 'limited': False}},
+            {'id': 'prop-2', 'gameId': 'NFL-1', 'state': 'open', 'gameMarket': False,
+             'title': 'Player Ten over 5.5 receptions', 'player': 'Player Ten', 'athleteId': '10',
+             'position': 'WR', 'stat': 'rec', 'market': 'receptions', 'direction': 'over', 'line': 5.5,
+             'odds': +120, 'book': 'DraftKings', 'observedAt': '2026-09-19T12:40:00Z',
+             'grade': {'view': 'lean', 'chance': .50, 'needs': .455, 'edge': 4.5, 'projection': 6.2,
+                       'calibrated': True, 'thin': False, 'limited': False}},
+        ]
+        history = {'10': [
+            {'kickoff': '2026-09-01T17:00:00Z', 'season': 2026, 'seasonType': 2,
+             'stats': {'recYds': 40, 'rec': 4}},
+            {'kickoff': '2026-09-08T17:00:00Z', 'season': 2026, 'seasonType': 2,
+             'stats': {'recYds': 60, 'rec': 6}},
+            {'kickoff': '2026-09-15T17:00:00Z', 'season': 2026, 'seasonType': 2,
+             'stats': {'recYds': 70, 'rec': 7}},
+        ]}
+        rows = build_site.favorite_lines(game, snapshot, lines, now, history)
+        self.assertEqual([row['title'] for row in rows],
+                         ['Player Ten over 55.5 receiving yards', 'Player Ten over 5.5 receptions'])
+        self.assertEqual(rows[0]['line'], 55.5, 'the listed favorite is the main value line, not an alternate')
+        self.assertFalse(rows[0]['alternate'])
+        self.assertEqual(rows[0]['history'], {'last': {'hits': 2, 'games': 3, 'rate': 67},
+                                              'season': {'hits': 2, 'games': 3, 'rate': 67}})
 
     def test_favorites_do_not_force_a_thin_role_or_an_unpriced_read(self):
         now = datetime(2026, 9, 19, 13, tzinfo=timezone.utc)
@@ -146,14 +162,17 @@ class GradeTests(unittest.TestCase):
         snapshot = {'gameId': 'NFL-1', 'league': 'NFL', 'model': 'v2.0', 'publishedAt': '2026-09-19T12:00:00Z',
                     'players': {'home': {'players': [{'id': '10', 'pos': 'WR', 'recYds': [70.0, 40.0, 100.0]}]},
                                 'away': {'players': []}}}
-        record = {'retrievedAt': '2026-09-19T12:40:00Z', 'source': 'https://example.test/odds', 'books': {
-            'fanduel': {'markets': {'recYds': {'Player Ten': {'line': 55.5, 'over': -110, 'under': -110,
-                                                               'alternates': [{'line': 39.5, 'over': -220}]}}}}}}
-        self.assertEqual(build_site.favorite_lines(game, snapshot, record, [], {'10': 'Player Ten'},
-                                                   {'10': 2}, set(), now), [])
-        stale = dict(record, retrievedAt='2026-09-18T12:00:00Z')
-        self.assertEqual(build_site.favorite_lines(game, snapshot, stale, [], {'10': 'Player Ten'},
-                                                   {'10': 3}, set(), now), [])
+        base = {'id': 'prop-1', 'gameId': 'NFL-1', 'state': 'open', 'gameMarket': False,
+                'title': 'Player Ten over 55.5 receiving yards', 'athleteId': '10', 'stat': 'recYds',
+                'market': 'receiving yards', 'direction': 'over', 'line': 55.5, 'odds': -110,
+                'book': 'FanDuel', 'observedAt': '2026-09-19T12:40:00Z',
+                'grade': {'view': 'lean', 'chance': .58, 'needs': .524, 'edge': 5.6, 'projection': 70.0,
+                          'thin': True, 'limited': False}}
+        self.assertEqual(build_site.favorite_lines(game, snapshot, [base], now), [])
+        stale = dict(base, observedAt='2026-09-18T12:00:00Z', grade=dict(base['grade'], thin=False))
+        self.assertEqual(build_site.favorite_lines(game, snapshot, [stale], now), [])
+        unpriced = dict(base, odds=None, grade=dict(base['grade'], thin=False))
+        self.assertEqual(build_site.favorite_lines(game, snapshot, [unpriced], now), [])
 
     def test_a_thin_sample_never_reads_strong_and_closed_or_unpriced_lines_get_no_grade(self):
         self.assertEqual(build_site.grade_line(self.line(), self.snapshot, thin=True)['tier'], 'lean')
