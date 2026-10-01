@@ -286,7 +286,7 @@ def calibrated(league, market, raw):
     return round(0.5 + k * (raw - 0.5), 3) if k is not None else round(raw, 3)
 
 
-def game_card(game, forecasts_v1, snapshot, names, identities, market_block=None, paused=()):
+def game_card(game, forecasts_v1, snapshot, names, identities, market_block=None, paused=(), values=None):
     league = game['league']
 
     def side(key):
@@ -305,6 +305,9 @@ def game_card(game, forecasts_v1, snapshot, names, identities, market_block=None
             'home': side('home'), 'away': side('away'), 'market': mkt,
             'v1': {'home': v1['home'], 'away': v1['away'], 'publishedAt': v1['publishedAt']} if v1 else None,
             'v2': v2, 'lean': lean(v2, mkt, league, snapshot.get('sd') if snapshot else None, paused),
+            # Best captured, price-aware spread and total reads for the weekly projection sheet. These are built
+            # from the same multi-book rows as the Board; no price means no highlighted value.
+            'value': values or None,
             # The market as evidence beside our number, never inside it (scripts/market_read.py).
             'marketRead': market_block}
 
@@ -600,6 +603,7 @@ def build(now=None):
         if line['grade'] and f"{game['league']}/{'spread' if line.get('market') == 'point spread' else 'total'}" in paused:
             line['grade']['paused'] = True       # shown as paused on the site; the desk still sees it and records the refusal
         line['gradeNote'] = 'FBS vs FCS: v2 is not reliable here' if fcs and line.get('state') == 'open' else None
+    values = sheet_values(lines, now)
     prop_store = load_store('prop-odds')
     prop_prices = {gid: rows[-1] for gid, rows in prop_store.items()}
     # College players have no ESPN feed of main lines: their board rows come from the priced feed's own main numbers.
@@ -615,7 +619,7 @@ def build(now=None):
         snaps_for = pregame(forecasts.get(game['id'], []), game['kickoff'])
         latest_snap = snaps_for[-1] if snaps_for else None
         block = market_read.read(game, latest_snap, books.get(game['id']), gap_rows) if game.get('state') == 'pre' else None
-        card = game_card(game, forecasts_v1, latest_snap, names, identities, block, paused)
+        card = game_card(game, forecasts_v1, latest_snap, names, identities, block, paused, values.get(game['id']))
         card['fcs'] = game['league'] == 'CFB' and not {str(game['home']['id']), str(game['away']['id'])} <= fbs
         cards.append(card)
         info = league_data[game['league']]
@@ -743,6 +747,36 @@ def grade_line(line, snapshot, thin):
             'needs': p['breakEven'], 'edge': p['edgePoints'],
             'projection': p['projection'], 'thin': thin, 'tier': pricing.tier(p['edgePoints'], thin),
             'model': p['model'], 'snapshotAt': p['snapshotAt']}
+
+
+def sheet_values(lines, now=None):
+    """game -> best priced side for its spread and total, using the already graded Board rows.
+
+    The line, price and named book stay together. A projection gap alone never becomes a value marker.
+    """
+    out = defaultdict(dict)
+    for row in lines:
+        grade = row.get('grade') or {}
+        if not row.get('gameMarket') or row.get('state') != 'open' or not grade \
+                or not isinstance(row.get('odds'), (int, float)):
+            continue
+        seen = instant(row.get('observedAt'))
+        if now is not None and (seen is None or now - seen > ODDS_FRESH):
+            continue
+        market = ('spread' if row.get('market') == 'point spread' else
+                  'total' if row.get('market') == 'total points' else None)
+        side = row.get('side') if market == 'spread' else row.get('direction') if market == 'total' else None
+        if not market or side not in ('home', 'away', 'over', 'under'):
+            continue
+        value = {'side': side, 'line': row.get('line'), 'odds': int(row['odds']), 'book': row.get('book'),
+                 'observedAt': row.get('observedAt'),
+                 **{k: grade.get(k) for k in ('chance', 'needs', 'edge', 'tier', 'paused', 'thin')}}
+        old = out[row['gameId']].get(market)
+        score = value.get('edge') if isinstance(value.get('edge'), (int, float)) else -999
+        old_score = old.get('edge') if old and isinstance(old.get('edge'), (int, float)) else -999
+        if old is None or score > old_score:
+            out[row['gameId']][market] = value
+    return dict(out)
 
 
 def person(name):

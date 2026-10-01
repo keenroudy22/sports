@@ -130,6 +130,29 @@ class GradeTests(unittest.TestCase):
         self.assertEqual(build_site.grade_line(prop, self.snapshot, False)['projection'], 70.0)
         self.assertIsNone(build_site.grade_line(dict(prop, athleteId='99'), self.snapshot, False))
 
+    def test_projection_sheet_values_keep_the_best_real_price_and_its_gate_state(self):
+        lines = [
+            {'gameId': 'NFL-1', 'gameMarket': True, 'state': 'open', 'market': 'point spread', 'side': 'home',
+             'line': -3.5, 'odds': -110, 'book': 'DraftKings', 'observedAt': '2026-09-19T12:00:00Z',
+             'grade': {'chance': .54, 'needs': .524, 'edge': 1.6, 'tier': 'pass', 'thin': False}},
+            {'gameId': 'NFL-1', 'gameMarket': True, 'state': 'open', 'market': 'point spread', 'side': 'away',
+             'line': 4.0, 'odds': -105, 'book': 'FanDuel', 'observedAt': '2026-09-19T12:00:00Z',
+             'grade': {'chance': .56, 'needs': .512, 'edge': 4.8, 'tier': 'lean', 'paused': True, 'thin': False}},
+            {'gameId': 'NFL-1', 'gameMarket': True, 'state': 'open', 'market': 'total points', 'direction': 'under',
+             'line': 44.5, 'odds': 100, 'book': 'BetMGM', 'observedAt': '2026-09-19T12:00:00Z',
+             'grade': {'chance': .55, 'needs': .5, 'edge': 5.0, 'tier': 'strong', 'thin': False}},
+            {'gameId': 'NFL-1', 'gameMarket': True, 'state': 'open', 'market': 'total points', 'direction': 'over',
+             'line': 43.5, 'odds': -120, 'book': 'Caesars', 'grade': None},
+        ]
+        values = build_site.sheet_values(lines, datetime(2026, 9, 19, 18, tzinfo=timezone.utc))['NFL-1']
+        self.assertEqual((values['spread']['side'], values['spread']['odds'], values['spread']['book']),
+                         ('away', -105, 'FanDuel'))
+        self.assertTrue(values['spread']['paused'])
+        self.assertEqual((values['total']['side'], values['total']['line'], values['total']['edge']),
+                         ('under', 44.5, 5.0))
+        self.assertEqual(build_site.sheet_values(lines, datetime(2026, 9, 20, 1, tzinfo=timezone.utc)), {},
+                         'a price older than twelve hours cannot earn a sheet highlight')
+
 
 class PropRowTests(unittest.TestCase):
     def test_player_lines_become_board_rows_with_the_models_lean(self):

@@ -13,6 +13,10 @@ def card(gid, kickoff, gap=0.0, league='NFL', week=3, **over):
             'home': {'abbr': f'H{gid}', 'id': '2', 'color': '#ffb612', 'alt': '#000000'},
             'v2': {'away': 20.4, 'home': 24.0, 'margin': 3.6, 'total': 44.4, 'winProb': 0.62, 'sparse': False},
             'market': {'spread': -2.5, 'total': 41.5},
+            'value': {'spread': {'side': 'home', 'line': -2.5, 'odds': -105, 'book': 'FanDuel',
+                                 'chance': .58, 'needs': .512, 'edge': 6.8, 'tier': 'strong', 'thin': False},
+                      'total': {'side': 'over', 'line': 41.5, 'odds': -110, 'book': 'BetMGM',
+                                'chance': .52, 'needs': .524, 'edge': -.4, 'tier': 'pass', 'thin': False}},
             'lean': {'side': 'home', 'spread': gap, 'spreadChance': 0.58, 'total': 2.9, 'totalChance': 0.52}}
     base.update(over)
     return base
@@ -40,32 +44,46 @@ class DrawTests(unittest.TestCase):
     def test_the_sheet_says_save_this_and_shows_every_number_the_games_page_does(self):
         games = [card('a', '2026-09-27T17:00Z', gap=2.4), card('b', '2026-09-27T20:25Z')]
         text = sheet.svg(games, 'NFL', SUNDAY, 3, {('a', 'away'): 'data:image/png;base64,x'})
-        for needle in ('SAVE THIS', 'WEEK 3 NFL PROJECTIONS', 'Sunday, September 27', 'mint rings = 4 biggest model/market gaps', 'Aa', 'Ha',
-                       '20.4', '24.0', '62%', '38%', 'OUR NUMBER / MARKET', 'Ha -3.6', 'Ha -2.5', '44.4', '41.5',
+        for needle in ('SAVE THIS', 'WEEK 3 NFL PROJECTIONS', 'Sunday, September 27', 'mint rings = real price value', 'Aa', 'Ha',
+                       '20.4', '24.0', '62%', '38%', 'OUR NUMBER / MARKET', 'Ha -3.6', 'Ha -2.5 -105 FD', '44.4', 'O41.5 -110 MGM',
                        'Left: model · Right: market', 'data:image/png;base64,x', 'Entertainment only.'):
             self.assertIn(needle, text, needle)
         self.assertIn(sheet.ACCENT + '" font-size="31" font-weight="800">Ha -3.6', text,
                       'a spread our number leans to clearly is mint')
-        self.assertIn('Mint: strongest model/market disagreements.', text)
+        self.assertIn('Mint: our chance clears the captured price.', text)
         self.assertIn('stroke="' + sheet.ACCENT + '" stroke-width="4"', text, 'watch games get a mint ring')
 
-    def test_a_full_slate_uses_compact_tiles_and_numbers_the_four_biggest_gaps(self):
-        games = [card(str(i), f'2026-09-27T{17 + i // 6:02d}:00Z', gap=float(i)) for i in range(16)]
+    def test_a_full_slate_uses_compact_tiles_and_numbers_the_four_best_priced_edges(self):
+        games = [card(str(i), f'2026-09-27T{17 + i // 6:02d}:00Z', gap=float(i),
+                      value={'spread': {'side': 'home', 'line': -2.5, 'odds': -105, 'book': 'FanDuel',
+                                        'chance': .55 + i / 100, 'needs': .512, 'edge': float(i),
+                                        'tier': 'lean' if i else 'pass', 'thin': False}}) for i in range(16)]
         text = sheet.svg(games, 'NFL', SUNDAY, 3)
         self.assertEqual(text.count('stroke="' + sheet.ACCENT + '" stroke-width="4"'), 4)
         for rank in ('>1</text>', '>2</text>', '>3</text>', '>4</text>'):
             self.assertIn(rank, text)
         self.assertIn('>SPREAD</text>', text)
+        self.assertIn('-2.5 -105 FD', text)
         self.assertNotIn('OUR NUMBER / MARKET', text, 'compact tiles keep the comparison on one line')
 
-    def test_the_watch_badge_names_the_market_behind_the_gap(self):
-        total = card('total', '2026-09-27T17:00Z', gap=2.0,
-                     lean={'spread': 2.0, 'spreadChance': .58, 'total': -6.0, 'totalChance': .60})
+    def test_the_watch_badge_names_the_market_with_value_after_price(self):
+        total = card('total', '2026-09-27T17:00Z', gap=20.0,
+                     value={'total': {'side': 'under', 'line': 44.5, 'odds': 100, 'book': 'BetMGM',
+                                      'chance': .56, 'needs': .5, 'edge': 6.0, 'tier': 'strong', 'thin': False}})
         spread = card('spread', '2026-09-27T20:25Z', gap=7.0)
         text = sheet.svg([total, spread], 'NFL', SUNDAY, 3)
         self.assertIn('>TOTAL</text>', text)
         self.assertIn('>SPREAD</text>', text)
-        self.assertEqual(sheet.watch_market(total), 'TOTAL')
+        self.assertEqual(sheet.priced_watch(total)[1], 'TOTAL')
+
+    def test_an_unpriced_gap_and_a_paused_market_are_not_highlighted(self):
+        unpriced = card('gap', '2026-09-27T17:00Z', gap=30, value=None)
+        paused = card('paused', '2026-09-27T20:25Z', gap=30,
+                      value={'total': {'side': 'over', 'line': 41.5, 'odds': -105, 'book': 'FanDuel',
+                                       'chance': .60, 'needs': .512, 'edge': 8.8, 'tier': 'strong',
+                                       'paused': True, 'thin': False}})
+        text = sheet.svg([unpriced, paused], 'NFL', SUNDAY, 3)
+        self.assertNotIn('stroke="' + sheet.ACCENT + '" stroke-width="4"', text)
 
     def test_a_dark_team_colour_gives_way_to_one_that_shows(self):
         self.assertEqual(sheet.readable({'color': '#5a1414', 'alt': '#ffb612'}), '#ffb612')
@@ -83,7 +101,7 @@ class PostTests(unittest.TestCase):
         post = sheet.post(self.GAMES, early)
         self.assertEqual((post['key'], post['kind'], post['card']), ('sheet:NFL:2026-09-27', 'sheet', 'sheet-nfl-2026-09-27'))
         self.assertEqual(post['text'], '📌 Full NFL projections for the slate.\n'
-                                       'Mint rings mark our 4 biggest model/market gaps (not official plays). Save this one.\n#NFL')
+                                       'Mint rings mark up to 4 real-price value spots (not official plays). Save this one.\n#NFL')
         self.assertEqual(post['due'], datetime(2026, 9, 27, 14, 0, tzinfo=timezone.utc))
         import receipts
         self.assertEqual(receipts.guard(post), [])

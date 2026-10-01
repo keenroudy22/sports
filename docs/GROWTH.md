@@ -16,8 +16,10 @@ rate and 5 profile visits over the prior four weeks; nearly all of that reach ar
   both get receipts. It is entertainment, never a promise or a rescue chase.
 - **Receipts create trust.** Keep them public, short and complete. A bad day does not disappear.
 - **The weekly projection sheet tests saves.** The full NFL slate or 16 college games in one compact reference card;
-  numbered mint rings mark the four largest model/market disagreements and label the responsible spread or total.
-  They are watches, not official plays, and the complete college slate stays on the site.
+  each spread and total read carries an exact captured line, price and book. Numbered mint rings mark up to four
+  markets where our calibrated chance clears the real price and label the responsible spread or total. Missing,
+  paused and pass prices stay unringed. They are watches, not official plays, and the complete college slate stays
+  on the site.
 - **Verified injury angles join live conversation.** A top-player absence can earn a timely text post only after the
   model redistributed the role and a book posted a fresh price. Pair the teammate prop with one opponent-position
   stat and ask “take it or pass?”; keep it explicitly outside the posted-play record.

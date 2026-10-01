@@ -188,9 +188,11 @@ Handy commands (from `~/Projects/sports`):
   Achane's first-quarter injury leg was automatically protected during FanDuel's free September promotion. Its
   Sep 30 correction is appended to the record; the original settlement is never rewritten.
 - **Weekly "📌 Save this" projection sheet**: the full NFL slate or 16 college games, college Saturday and NFL
-  Sunday at 10 AM (`scripts/sheet.py`). Numbered mint rings identify the four largest model/market gaps and say
-  whether each is a spread or total watch; they are not official plays. Never show a moneyline watch without a
-  captured book price to compare with the projected win chance. The complete college slate stays on the site.
+  Sunday at 10 AM (`scripts/sheet.py`). Every spread and total read carries the exact captured line, price and book.
+  Numbered mint rings identify up to four markets where the calibrated chance clears that price by the Board's value
+  threshold; missing, stale, thin, paused and pass prices never get a ring. They are watches, not official plays.
+  Never show a moneyline watch without both sides' captured book prices to compare with the projected win chance.
+  The complete college slate stays on the site.
 - **Growth goal** (2026-09-28): grow @keenkooks toward 10,000 followers by the end of football season without paid
   reach or account-risk shortcuts. One relevant league hashtag per post is enough. The ladder is a continuing story,
   not a claim of guaranteed profit. On a multi-play card, one short text-only conversation prompt goes between the
