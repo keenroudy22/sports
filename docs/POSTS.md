@@ -88,8 +88,9 @@ The **Save this projection sheet** (`scripts/sheet.py`): a header (`SAVE THIS`, 
 columns of compact game cards (logos, our projected score to a tenth, win chances as bars in the teams' colours, and
 spread and total comparisons with the exact captured line, odds and book), and the foot. NFL shows the full slate;
 college shows the 16 largest projection gaps. A numbered mint ring marks up to four markets where our calibrated
-chance clears that real price by the Board's value threshold and says whether it is a spread or total. Missing,
-stale, thin, paused and pass prices do not get a ring. Rings are watches, not official plays. Moneyline does not
+chance clears that real price by the Board's value threshold and names the actual wager (`OVER 45.5`, `MINN +3.5`);
+the selected market line and price are mint instead of the model projection. Missing, stale, thin, paused and pass
+prices do not get a ring. Rings are watches, not official plays. Moneyline does not
 appear until both sides carry real book prices to compare with the projected win chance. The complete college slate
 stays on the site.
 

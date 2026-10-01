@@ -44,13 +44,13 @@ class DrawTests(unittest.TestCase):
     def test_the_sheet_says_save_this_and_shows_every_number_the_games_page_does(self):
         games = [card('a', '2026-09-27T17:00Z', gap=2.4), card('b', '2026-09-27T20:25Z')]
         text = sheet.svg(games, 'NFL', SUNDAY, 3, {('a', 'away'): 'data:image/png;base64,x'})
-        for needle in ('SAVE THIS', 'WEEK 3 NFL PROJECTIONS', 'Sunday, September 27', 'mint rings = real price value', 'Aa', 'Ha',
-                       '20.4', '24.0', '62%', '38%', 'OUR NUMBER / MARKET', 'Ha -3.6', 'Ha -2.5 -105 FD', '44.4', 'O41.5 -110 MGM',
+        for needle in ('SAVE THIS', 'WEEK 3 NFL PROJECTIONS', 'Sunday, September 27', 'rings name the lines we like', 'Aa', 'Ha',
+                       '20.4', '24.0', '62%', '38%', 'OUR NUMBER / MARKET', 'Ha -3.6', 'LIKE: Ha -2.5 -105 FD', '44.4', 'OVER 41.5 -110 MGM',
                        'Left: model · Right: market', 'data:image/png;base64,x', 'Entertainment only.'):
             self.assertIn(needle, text, needle)
-        self.assertIn(sheet.ACCENT + '" font-size="31" font-weight="800">Ha -3.6', text,
-                      'a spread our number leans to clearly is mint')
-        self.assertIn('Mint: our chance clears the captured price.', text)
+        self.assertIn(sheet.ACCENT + '" font-size="23" font-weight="800" text-anchor="end">LIKE: Ha -2.5 -105 FD', text,
+                      'the actual line and price we like are mint, not merely our projected spread')
+        self.assertIn('Mint: the labeled line clears its captured price.', text)
         self.assertIn('stroke="' + sheet.ACCENT + '" stroke-width="4"', text, 'watch games get a mint ring')
 
     def test_a_full_slate_uses_compact_tiles_and_numbers_the_four_best_priced_edges(self):
@@ -62,8 +62,7 @@ class DrawTests(unittest.TestCase):
         self.assertEqual(text.count('stroke="' + sheet.ACCENT + '" stroke-width="4"'), 4)
         for rank in ('>1</text>', '>2</text>', '>3</text>', '>4</text>'):
             self.assertIn(rank, text)
-        self.assertIn('>SPREAD</text>', text)
-        self.assertIn('-2.5 -105 FD', text)
+        self.assertIn('LIKE: H15 -2.5 -105 FD', text)
         self.assertNotIn('OUR NUMBER / MARKET', text, 'compact tiles keep the comparison on one line')
 
     def test_the_watch_badge_names_the_market_with_value_after_price(self):
@@ -72,9 +71,9 @@ class DrawTests(unittest.TestCase):
                                       'chance': .56, 'needs': .5, 'edge': 6.0, 'tier': 'strong', 'thin': False}})
         spread = card('spread', '2026-09-27T20:25Z', gap=7.0)
         text = sheet.svg([total, spread], 'NFL', SUNDAY, 3)
-        self.assertIn('>TOTAL</text>', text)
-        self.assertIn('>SPREAD</text>', text)
-        self.assertEqual(sheet.priced_watch(total)[1], 'TOTAL')
+        self.assertIn('LIKE: UNDER 44.5 +100 MGM', text)
+        self.assertIn('LIKE: Hspread -2.5 -105 FD', text)
+        self.assertEqual(sheet.priced_watch(total)[1:3], ('total', 'UNDER 44.5'))
 
     def test_an_unpriced_gap_and_a_paused_market_are_not_highlighted(self):
         unpriced = card('gap', '2026-09-27T17:00Z', gap=30, value=None)
@@ -101,7 +100,7 @@ class PostTests(unittest.TestCase):
         post = sheet.post(self.GAMES, early)
         self.assertEqual((post['key'], post['kind'], post['card']), ('sheet:NFL:2026-09-27', 'sheet', 'sheet-nfl-2026-09-27'))
         self.assertEqual(post['text'], '📌 Full NFL projections for the slate.\n'
-                                       'Mint rings mark up to 4 real-price value spots (not official plays). Save this one.\n#NFL')
+                                       'Mint rings name up to 4 lines we like at the listed price (not official plays). Save this one.\n#NFL')
         self.assertEqual(post['due'], datetime(2026, 9, 27, 14, 0, tzinfo=timezone.utc))
         import receipts
         self.assertEqual(receipts.guard(post), [])

@@ -201,6 +201,40 @@ def event_candidates(event, now, minimum=arbs.MIN_ROI):
     return sorted(found, key=lambda hit: -hit['roi'])
 
 
+def team_total_inventory(events, now):
+    """Compact fresh two-sided team-total coverage already present in the sampled response.
+
+    This spends no additional API objects and makes no pick. It only establishes whether the free feed supplies an
+    exact line and both prices at one book before a separately calibrated team-total model is considered.
+    """
+    rows = {}
+    for event in events:
+        odds = event.get('odds') or {}
+        for entity in ('away', 'home'):
+            sides = {}
+            for odd in odds.values():
+                if (odd.get('statID'), odd.get('statEntityID'), odd.get('periodID'), odd.get('betTypeID')) == \
+                        ('points', entity, 'game', 'ou') and odd.get('sideID') in {'over', 'under'}:
+                    sides[odd['sideID']] = odd
+            if set(sides) != {'over', 'under'}:
+                continue
+            over_books, under_books = sides['over'].get('byBookmaker') or {}, sides['under'].get('byBookmaker') or {}
+            for bookmaker in sorted(set(over_books) & set(under_books)):
+                overs = quotes(bookmaker, over_books[bookmaker], now)
+                unders = quotes(bookmaker, under_books[bookmaker], now)
+                for _, over, over_price in overs:
+                    for _, under, under_price in unders:
+                        okay, line = compatible(over, under, 'ou', False)
+                        if not okay:
+                            continue
+                        key = (event.get('eventID'), entity, bookmaker, line)
+                        rows[key] = {'eventID': event.get('eventID'), 'team': entity, 'line': line,
+                                     'book': BOOK_NAMES.get(bookmaker, bookmaker),
+                                     'over': over_price, 'under': under_price,
+                                     'updatedAt': max(over['lastUpdatedAt'], under['lastUpdatedAt'])}
+    return [rows[key] for key in sorted(rows)]
+
+
 def evaluate(events, now):
     hits = [hit for event in events for hit in event_candidates(event, now)]
     # One summary per market; keeping every book permutation would inflate the private state file.
@@ -239,19 +273,22 @@ def sample(slate, now=None, key=None, state_path=STATE, opener=urllib.request.ur
     if not isinstance(events, list):
         raise ValueError('SportsGameOdds events response did not contain a list')
     hits = evaluate(events, now)
+    team_totals = team_total_inventory(events, now)
     used, maximum, end = usage
     today = eastern_date(now).isoformat()
     charged = max(1, len(events))
     day_count = state.get('dayCount', 0) if state.get('day') == today else 0
     summary = {'at': stamp(now), 'events': len(events), 'candidates': len(hits),
-               'bestRoi': hits[0]['roi'] if hits else None, 'usageBefore': used}
+               'bestRoi': hits[0]['roi'] if hits else None, 'teamTotalPairs': len(team_totals),
+               'usageBefore': used}
     last = {**summary, 'candidateDetails': [candidate_summary(hit) for hit in hits[:10]],
-            'filteredNotice': bool(payload.get('notice'))}
-    state.update(version=1, lastAt=stamp(now), day=today, dayCount=day_count + charged,
+            'teamTotalExamples': team_totals[:12], 'filteredNotice': bool(payload.get('notice'))}
+    state.update(version=2, lastAt=stamp(now), day=today, dayCount=day_count + charged,
                  usage={'usedBefore': used, 'maximum': maximum, 'endsAt': end}, last=last)
     state['history'] = (state.get('history') or [])[-59:] + [summary]
     save(state, state_path)
     return {'sampled': True, 'events': len(events), 'candidates': len(hits), 'bestRoi': summary['bestRoi'],
+            'teamTotalPairs': len(team_totals),
             'usage': used, 'limit': maximum, 'notice': bool(payload.get('notice'))}
 
 
@@ -264,6 +301,7 @@ def main():
         return 0
     if result['sampled']:
         print(f"SportsGameOdds shadow: {result['events']} events, {result['candidates']} candidates; "
+              f"{result['teamTotalPairs']} fresh team-total pairs; "
               f"usage was {result['usage']}/{result['limit']} before this sample.")
     else:
         print('SportsGameOdds shadow skipped: ' + result['reason'])

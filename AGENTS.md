@@ -141,6 +141,9 @@ Handy commands (from `~/Projects/sports`):
 - **SportsGameOdds stays free and silent** (2026-09-29): its Amateur key is evaluation-only. Shadow mode must check
   `/account/usage` before each event sample, run only when the reported monthly ceiling is exactly 2,500 objects,
   stop at 1,800, keep its six-hour/30-object daily caps, and never alert, publish or change a play. Never upgrade it.
+  The same already-budgeted response may inventory fresh, two-sided team-total prices for a silent coverage trial;
+  this adds no request and does not make team totals eligible for a card, watch or play. Public use waits for a
+  documented calibration against settled team scores and the same price gates as every other market.
 - **Daily presence, never a forced play** (2026-09-29): publish at least one useful X post every day. A receipt,
   menu, official play, watchlist, verified injury angle, cashed post or Climb update satisfies the day; when none
   exists, `receipts.book` schedules the public record at 6 PM. Daily posting never lowers a play gate or creates a
@@ -190,7 +193,9 @@ Handy commands (from `~/Projects/sports`):
 - **Weekly "📌 Save this" projection sheet**: the full NFL slate or 16 college games, college Saturday and NFL
   Sunday at 10 AM (`scripts/sheet.py`). Every spread and total read carries the exact captured line, price and book.
   Numbered mint rings identify up to four markets where the calibrated chance clears that price by the Board's value
-  threshold; missing, stale, thin, paused and pass prices never get a ring. They are watches, not official plays.
+  threshold and name the wager itself (`OVER 45.5`, `MINN +3.5`), not merely `TOTAL` or `SPREAD`; the selected priced
+  line, rather than the model projection, is mint. Missing, stale, thin, paused and pass prices never get a ring.
+  They are watches, not official plays.
   Never show a moneyline watch without both sides' captured book prices to compare with the projected win chance.
   The complete college slate stays on the site.
 - **Growth goal** (2026-09-28): grow @keenkooks toward 10,000 followers by the end of football season without paid

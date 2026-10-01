@@ -118,6 +118,19 @@ class CandidateTests(unittest.TestCase):
         self.assertEqual(saved['first']['book'], 'FanDuel')
         self.assertNotIn('deeplink', saved['first'])
 
+    def test_team_totals_are_inventoried_from_the_same_sample_without_becoming_a_pick(self):
+        over_id, under_id = 'points-home-game-ou-over', 'points-home-game-ou-under'
+        event = {'eventID': 'event-1', 'status': {}, 'odds': {
+            over_id: odd(over_id, under_id, 'over', {'fanduel': quote(-115, 24.5)},
+                         entity='home', market='Home team total'),
+            under_id: odd(under_id, over_id, 'under', {'fanduel': quote(-105, 24.5)},
+                          entity='home', market='Home team total')}}
+        rows = sgo_shadow.team_total_inventory([event], NOW)
+        self.assertEqual(rows, [{'eventID': 'event-1', 'team': 'home', 'line': 24.5, 'book': 'FanDuel',
+                                 'over': -115, 'under': -105, 'updatedAt': '2026-09-29T17:55:00Z'}])
+        self.assertEqual(sgo_shadow.event_candidates(event, NOW), [],
+                         'same-book team-total coverage is research, not an arb alert or a play')
+
 
 if __name__ == '__main__':
     unittest.main()

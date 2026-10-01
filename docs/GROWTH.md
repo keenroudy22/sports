@@ -17,9 +17,9 @@ rate and 5 profile visits over the prior four weeks; nearly all of that reach ar
 - **Receipts create trust.** Keep them public, short and complete. A bad day does not disappear.
 - **The weekly projection sheet tests saves.** The full NFL slate or 16 college games in one compact reference card;
   each spread and total read carries an exact captured line, price and book. Numbered mint rings mark up to four
-  markets where our calibrated chance clears the real price and label the responsible spread or total. Missing,
-  paused and pass prices stay unringed. They are watches, not official plays, and the complete college slate stays
-  on the site.
+  markets where our calibrated chance clears the real price and name the exact opinion (`OVER 45.5`, `MINN +3.5`),
+  with the real line and price in mint. Missing, paused and pass prices stay unringed. They are watches, not official
+  plays, and the complete college slate stays on the site.
 - **Verified injury angles join live conversation.** A top-player absence can earn a timely text post only after the
   model redistributed the role and a book posted a fresh price. Pair the teammate prop with one opponent-position
   stat and ask “take it or pass?”; keep it explicitly outside the posted-play record.
@@ -74,6 +74,9 @@ price, news, grading and record safeguards used for football. Basketball is the 
 and NHL first collect real pregame market snapshots and finals without making picks; models come only after that
 auditable baseline exists. Premier League research follows when usable US-book feeds are ready. The public Kook'n Lab
 makes those stages visible, which turns model restraint into part of the story instead of creating filler picks.
+Football team totals enter the same way: the existing capped SportsGameOdds sample may measure whether books provide
+fresh two-sided prices at no extra request cost, but the market stays silent until team-score errors are calibrated
+against finals. A projected score by itself is not a team-total edge.
 
 ## Four-week experiment cycle
 

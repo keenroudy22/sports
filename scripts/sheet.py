@@ -57,22 +57,34 @@ def priced_value(card, market):
     return value
 
 
+def watch_label(card, market, value):
+    """Name the wager itself, not merely its market family: OVER 44.5, HA -2.5, or HA ML."""
+    side, line = value.get('side'), value.get('line')
+    if market == 'total':
+        return f"{'OVER' if side == 'over' else 'UNDER'} {line:g}"
+    team = card.get(side) or {}
+    abbr = team.get('abbr') or str(side or '').upper()
+    if market == 'moneyline':
+        return f'{abbr} ML'
+    return f'{abbr} {line:+g}'
+
+
 def priced_watch(card):
     """The strongest usable price edge, or None. Missing, paused and pass prices never get a mint ring."""
     rows = []
     for market in ('spread', 'total'):
         value = priced_value(card, market)
         if value:
-            rows.append((value.get('edge') or -999, market.upper(), value))
+            rows.append((value.get('edge') or -999, market, watch_label(card, market, value), value))
     return max(rows, default=None, key=lambda row: row[0])
 
 
 def watches(games):
-    """game id -> (rank, market, priced row) for the strongest real-price edges on the sheet."""
+    """game id -> (rank, market, bet label, priced row) for the strongest real-price edges on the sheet."""
     rows = [(priced_watch(card), card['id']) for card in games]
     rows = [(watch, gid) for watch, gid in rows if watch]
     rows.sort(key=lambda row: (-row[0][0], row[1]))
-    return {gid: (rank, watch[1], watch[2]) for rank, (watch, gid) in enumerate(rows[:WATCH], 1)}
+    return {gid: (rank, watch[1], watch[2], watch[3]) for rank, (watch, gid) in enumerate(rows[:WATCH], 1)}
 
 
 def book_short(name):
@@ -90,7 +102,7 @@ def priced_text(card, market):
         team = card.get(side) or {}
         pick = f"{team.get('abbr') or ''} {line:+g}"
     else:
-        pick = f"{'O' if side == 'over' else 'U'}{line:g}"
+        pick = f"{'OVER' if side == 'over' else 'UNDER'} {line:g}"
     return f"{pick} {odds:+d} {book_short(value.get('book'))}".strip()
 
 
@@ -157,30 +169,32 @@ def card_svg(card, x, y, w, h, logos, watch=None):
             rows.append(f'<rect x="{x + 276}" y="{top + 15}" width="125" height="20" rx="10" fill="{LINE}"/>')
             rows.append(f'<rect x="{x + 276}" y="{top + 15}" width="{bar}" height="20" rx="10" fill="{readable(team)}"/>')
             rows.append(f'<text x="{x + w - 18}" y="{top + 34}" fill="{TEXT}" font-size="24" font-weight="700" text-anchor="end">{round(100 * chance)}%</text>')
-    # Mint only when the calibrated chance clears this captured price by the Board's value threshold.
-    spread_tone = ACCENT if priced_value(card, 'spread') else TEXT
-    total_tone = ACCENT if priced_value(card, 'total') else TEXT
+    # Mint the selected wager, not the model projection, so the opinion cannot be mistaken for the market line.
+    watch_market = watch[1] if watch else None
+    spread_tone = ACCENT if watch_market == 'spread' else TEXT
+    total_tone = ACCENT if watch_market == 'total' else TEXT
     ours_spread, line_spread = spread_text(card, v2.get('margin')), spread_text(card, -market['spread'] if market.get('spread') is not None else None)
     rows.append(f'<line x1="{x + 16}" y1="{y + 158}" x2="{x + w - 16}" y2="{y + 158}" stroke="{LINE}" stroke-width="2"/>')
     rows.append(f'<text x="{x + 18}" y="{y + 205}" fill="{ACCENT}" font-size="19" font-weight="800" letter-spacing="3">OUR NUMBER / MARKET</text>')
     rows.append(f'<text x="{x + 18}" y="{y + 266}" fill="{DIM}" font-size="21">SPREAD</text>')
-    rows.append(f'<text x="{x + 18}" y="{y + 307}" fill="{spread_tone}" font-size="31" font-weight="800">{esc(ours_spread)}</text>')
+    rows.append(f'<text x="{x + 18}" y="{y + 307}" fill="{TEXT}" font-size="31" font-weight="800">{esc(ours_spread)}</text>')
     spread_price = priced_text(card, 'spread')
-    rows.append(f'<text x="{x + w - 18}" y="{y + 307}" fill="{TEXT}" font-size="23" font-weight="700" text-anchor="end">'
+    spread_price = ('LIKE: ' if watch_market == 'spread' else '') + spread_price
+    rows.append(f'<text x="{x + w - 18}" y="{y + 307}" fill="{spread_tone}" font-size="23" font-weight="800" text-anchor="end">'
                 f'{esc(spread_price if spread_price != "-" else line_spread)}</text>')
     total = v2.get('total')
     rows.append(f'<text x="{x + 18}" y="{y + 365}" fill="{DIM}" font-size="21">TOTAL</text>')
-    rows.append(f'<text x="{x + 18}" y="{y + 406}" fill="{total_tone}" font-size="31" font-weight="800">'
+    rows.append(f'<text x="{x + 18}" y="{y + 406}" fill="{TEXT}" font-size="31" font-weight="800">'
                 f'{esc(f"{total:.1f}" if isinstance(total, (int, float)) else "-")}</text>')
     total_price = priced_text(card, 'total')
-    rows.append(f'<text x="{x + w - 18}" y="{y + 406}" fill="{TEXT}" font-size="23" font-weight="700" text-anchor="end">'
+    total_price = ('LIKE: ' if watch_market == 'total' else '') + total_price
+    rows.append(f'<text x="{x + w - 18}" y="{y + 406}" fill="{total_tone}" font-size="23" font-weight="800" text-anchor="end">'
                 f'{esc(total_price if total_price != "-" else pricing_fmt(market["total"]))}</text>')
     rows.append(f'<text x="{x + 18}" y="{y + h - 22}" fill="{DIM}" font-size="18">Left: model · Right: market</text>')
     ring = ACCENT if watch else LINE
-    rank, market_name, value = watch if watch else (None, None, None)
+    rank, market_name, bet_label, value = watch if watch else (None, None, None, None)
     badge = ([f'<circle cx="{x + w - 24}" cy="{y + 24}" r="16" fill="{ACCENT}"/>',
-              f'<text x="{x + w - 24}" y="{y + 30}" fill="{BG}" font-size="16" font-weight="900" text-anchor="middle">{rank}</text>',
-              f'<text x="{x + w - 24}" y="{y + 53}" fill="{ACCENT}" font-size="10" font-weight="900" letter-spacing="1" text-anchor="middle">{market_name}</text>']
+              f'<text x="{x + w - 24}" y="{y + 30}" fill="{BG}" font-size="16" font-weight="900" text-anchor="middle">{rank}</text>']
              if watch else [])
     return [f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="16" fill="{CARD}" stroke="{ring}" stroke-width="{4 if watch else 2}"/>'] + badge + rows
 
@@ -210,17 +224,19 @@ def compact_card_svg(card, x, y, w, h, logos, watch=None):
     ours_spread = spread_text(card, v2.get('margin'))
     total = v2.get('total')
     total_text = f'{total:.1f}' if isinstance(total, (int, float)) else '-'
-    spread_tone = ACCENT if priced_value(card, 'spread') else TEXT
-    total_tone = ACCENT if priced_value(card, 'total') else TEXT
+    watch_market = watch[1] if watch else None
+    spread_tone = ACCENT if watch_market == 'spread' else DIM
+    total_tone = ACCENT if watch_market == 'total' else DIM
     spread_price, total_price = priced_text(card, 'spread'), priced_text(card, 'total')
+    spread_price = ('LIKE: ' if watch_market == 'spread' else '') + spread_price
+    total_price = ('LIKE: ' if watch_market == 'total' else '') + total_price
     rows += [f'<line x1="{x + 14}" y1="{y + h - 45}" x2="{x + w - 14}" y2="{y + h - 45}" stroke="{LINE}"/>',
-             f'<text x="{x + 14}" y="{y + h - 27}" fill="{DIM}" font-size="12">SPREAD <tspan fill="{spread_tone}" font-weight="800">{esc(ours_spread)}</tspan> · {esc(spread_price)}</text>',
-             f'<text x="{x + 14}" y="{y + h - 9}" fill="{DIM}" font-size="12">TOTAL <tspan fill="{total_tone}" font-weight="800">{esc(total_text)}</tspan> · {esc(total_price)}</text>']
+             f'<text x="{x + 14}" y="{y + h - 27}" fill="{DIM}" font-size="12">SPREAD <tspan fill="{TEXT}" font-weight="800">{esc(ours_spread)}</tspan> · <tspan fill="{spread_tone}" font-weight="800">{esc(spread_price)}</tspan></text>',
+             f'<text x="{x + 14}" y="{y + h - 9}" fill="{DIM}" font-size="12">TOTAL <tspan fill="{TEXT}" font-weight="800">{esc(total_text)}</tspan> · <tspan fill="{total_tone}" font-weight="800">{esc(total_price)}</tspan></text>']
     ring = ACCENT if watch else LINE
-    rank, market_name, value = watch if watch else (None, None, None)
+    rank, market_name, bet_label, value = watch if watch else (None, None, None, None)
     badge = ([f'<circle cx="{x + w - 23}" cy="{y + 22}" r="15" fill="{ACCENT}"/>',
-              f'<text x="{x + w - 23}" y="{y + 27}" fill="{BG}" font-size="14" font-weight="900" text-anchor="middle">{rank}</text>',
-              f'<text x="{x + w - 23}" y="{y + 48}" fill="{ACCENT}" font-size="9" font-weight="900" letter-spacing=".5" text-anchor="middle">{market_name}</text>']
+              f'<text x="{x + w - 23}" y="{y + 27}" fill="{BG}" font-size="14" font-weight="900" text-anchor="middle">{rank}</text>']
              if watch else [])
     return [f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="15" fill="{CARD}" stroke="{ring}" stroke-width="{4 if watch else 2}"/>'] + badge + rows
 
@@ -244,7 +260,7 @@ def svg(games, league, day, week=None, logos=None):
              f'<text x="64" y="71" fill="{ACCENT}" font-size="26" font-weight="800" letter-spacing="5">SAVE THIS</text>',
              f'<text x="{WIDTH - 36}" y="71" fill="{DIM}" font-size="24" font-weight="700" letter-spacing="4" text-anchor="end">KOOK’N</text>',
              f'<text x="36" y="132" fill="{TEXT}" font-size="54" font-weight="800">{esc(title)}</text>',
-             f'<text x="36" y="172" fill="{DIM}" font-size="22">{esc(when)} · mint rings = real price value · not picks</text>']
+             f'<text x="36" y="172" fill="{DIM}" font-size="22">{esc(when)} · rings name the lines we like · not picks</text>']
     watch = watches(games)
     for i, card in enumerate(games):
         col, row = i % 2, i // 2
@@ -253,7 +269,7 @@ def svg(games, league, day, week=None, logos=None):
     parts += [f'<text x="36" y="{HEIGHT - 52}" fill="{TEXT}" font-size="22" font-weight="700">Graded in public, win or lose. '
               f'<tspan fill="{DIM}" font-weight="400">keenroudy.com/sports</tspan></text>',
               f'<text x="36" y="{HEIGHT - 22}" fill="{DIM}" font-size="17">Not picks: our plays go out on their own. '
-              f'Mint: our chance clears the captured price. Entertainment only.</text>',
+              f'Mint: the labeled line clears its captured price. Entertainment only.</text>',
               '</svg>']
     return '\n'.join(parts)
 
@@ -309,7 +325,7 @@ def post(games, now):
         name = 'college' if league == 'CFB' else 'NFL'
         lead = (f"📌 Full {name} projections for the slate." if league == 'NFL' else
                 f"📌 16 {name} projections for the slate.")
-        text = lead + "\nMint rings mark up to 4 real-price value spots (not official plays). Save this one." + f"\n#{league}"
+        text = lead + "\nMint rings name up to 4 lines we like at the listed price (not official plays). Save this one." + f"\n#{league}"
         return {'key': f'sheet:{league}:{day.isoformat()}', 'kind': 'sheet', 'card': key(league, day), 'text': text,
                 'due': max(at(day, POST_AT), now + timedelta(minutes=2)), 'stale': at(day, POST_UNTIL)}
     return None
