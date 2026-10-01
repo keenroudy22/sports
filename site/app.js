@@ -562,6 +562,7 @@
         html += section('Forecast history', `<div class="table-wrap"><table class="data"><thead><tr><th>Published</th><th>Home margin</th><th>Total</th></tr></thead><tbody>
           ${f.history.map(h => `<tr><td>${esc(whenShort(h.at))}</td><td>${signed(h.margin)}</td><td>${fixed(h.total)}</td></tr>`).join('')}</tbody></table></div>`);
       }
+      html += depthChartSection(card, detail);
       html += projectionSection(card, detail);
     } else if (!card.completed) {
       html += section('Player projections', empty('No projection yet', 'Player projections publish with the model, from each player’s recent share of the team’s volume.'));
@@ -594,6 +595,54 @@
   };
 
   const PROJ_COLS = [['targets', 'Tgt'], ['receptions', 'Rec'], ['recYds', 'Rec yds'], ['carries', 'Car'], ['rushYds', 'Rush yds'], ['att', 'Att'], ['cmp', 'Cmp'], ['passYds', 'Pass yds']];
+
+  const HARD_INJURY = /out|doubtful|suspension/i;
+  const opportunity = p => (p.carries ? p.carries[0] : 0) + (p.targets ? p.targets[0] : 0) + (p.att ? p.att[0] : 0);
+  const workload = p => [['carries', 'carries'], ['targets', 'targets'], ['att', 'attempts']]
+    .filter(([key]) => p && p[key] && p[key][0] >= .5).map(([key, label]) => `${fixed(p[key][0])} ${label}`).join(' + ');
+
+  const depthChartSection = (card, detail) => {
+    if (card.league !== 'NFL' || !detail || !detail.forecast) return '';
+    const cards = [];
+    for (const side of ['away', 'home']) {
+      const team = detail.teams[side] || {};
+      const chart = team.depthChart;
+      if (!chart || !chart.positions || !chart.positions.length) continue;
+      const injuries = (team.injuries || []).filter(p => HARD_INJURY.test(p.status || '') && /^(QB|RB|FB|WR|TE)$/.test(p.position || ''));
+      const unavailable = new Set(injuries.map(p => String(p.id)));
+      const projections = ((detail.forecast.players[side] || {}).players || []);
+      for (const hurt of injuries) {
+        const slot = chart.positions.find(position => position.players.some(p => String(p.id) === String(hurt.id)));
+        if (!slot) continue;
+        const index = slot.players.findIndex(p => String(p.id) === String(hurt.id));
+        const next = slot.players.slice(index + 1).find(p => !unavailable.has(String(p.id)));
+        if (!next) continue;
+        const group = slot.group === 'FB' ? 'RB' : slot.group;
+        const role = projections.filter(p => (p.pos === 'FB' ? 'RB' : p.pos) === group).sort((a, b) => opportunity(b) - opportunity(a));
+        const relevant = [];
+        for (const player of [...role.slice(0, 1), role.find(p => String(p.id) === String(next.id))].filter(Boolean)) {
+          if (!relevant.some(p => p.id === player.id)) relevant.push(player);
+        }
+        const order = slot.players.map((p, i) => {
+          const isOut = unavailable.has(String(p.id));
+          const isNext = String(p.id) === String(next.id);
+          return `<a class="depth-person ${isOut ? 'depth-out' : ''} ${isNext ? 'depth-next' : ''}" href="#player/${esc(card.league)}/${esc(p.id)}"><b>${esc(slot.label)}${i + 1}</b> ${esc(p.name)}${isOut ? ' · OUT' : isNext ? ' · NEXT UP' : ''}</a>`;
+        }).join('<span class="depth-arrow">→</span>');
+        const adjusted = relevant.map(p => `<a href="#player/${esc(card.league)}/${esc(p.id)}">${esc(p.name)}</a> ${esc(workload(p) || 'role below projection threshold')}`).join(' · ');
+        cards.push(`<div class="card depth-card"><div class="depth-head"><span><span class="pill pill-out">${esc(hurt.status)}</span> <b>${esc(hurt.name)}</b> <span class="row-meta">${esc(hurt.injury || 'injury not listed')}</span></span><span class="row-meta">${esc(card[side].abbr)}</span></div>
+          <p class="depth-move"><b>${esc(next.name)}</b> moves from ${esc(slot.label)}${index + 2} to ${esc(slot.label)}${index + 1} on ESPN's listed order.</p>
+          <div class="depth-line">${order}</div>${adjusted ? `<p class="depth-work"><b>Adjusted workload:</b> ${adjusted}</p>` : ''}</div>`);
+      }
+    }
+    if (!cards.length) return '';
+    const checkedAt = ['away', 'home']
+      .map(side => detail.teams[side].depthChart?.checkedAt)
+      .filter(Boolean)
+      .sort()
+      .pop();
+    return section('Next up after injuries', `<div class="grid-2">${cards.join('')}</div>
+      <p class="row-meta depth-note">ESPN's listed depth-chart order paired with the current injury report. Workload is our projection after the unavailable player is removed; it is not a touchdown projection. Checked ${esc(ago(checkedAt))}.</p>`);
+  };
 
   const projectionSection = (card, detail) => {
     const f = detail.forecast;

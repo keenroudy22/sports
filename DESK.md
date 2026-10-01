@@ -482,6 +482,11 @@ limited, paused, thin, stale and unpriced markets never qualify. Alternates are 
 their book, not what determines the favorite. These are optional reads rather than additional official plays. If
 nothing qualifies, the page says so instead of forcing a line.
 
+When a current hard QB/RB/FB/WR/TE injury affects an upcoming NFL game, `scripts/depth_charts.py` captures that
+team's ESPN-listed offensive depth order. The game page shows the injured player's listed slot, the next available
+player in that same slot and the active players' current model workload after the injury redistribution. This is
+depth and usage context only: it never labels the backup a touchdown pick and it makes no metered request.
+
 ## Weather
 
 `scripts/venues.py` keeps `data/venues.json`: for every venue the store or slate names, ESPN's roof

@@ -347,8 +347,8 @@ def pregame(snapshots, kickoff):
     return [s for s in snapshots if features.when(s['publishedAt']) < start]
 
 
-def game_detail(card, game, record, snapshots, captures, lines, picks, names, team_logs, defense, injuries, now,
-                grading, favorites=None):
+def game_detail(card, game, record, snapshots, captures, lines, picks, names, team_logs, defense, injuries, depth_charts,
+                now, grading, favorites=None):
     """snapshots: this game's pregame v2 snapshots, oldest first."""
     league = card['league']
     detail = dict(card)
@@ -380,7 +380,7 @@ def game_detail(card, game, record, snapshots, captures, lines, picks, names, te
         opponent = card['away' if side == 'home' else 'home']['id']
         detail['teams'][side] = {'form': recent_form(team, league, team_logs, kickoff),
                                  'defense': defense.get(team), 'opponentDefense': defense.get(opponent),
-                                 'injuries': injuries.get(team, [])}
+                                 'injuries': injuries.get(team, []), 'depthChart': depth_charts.get(team)}
     detail['lines'] = [l for l in lines if l.get('gameId') == card['id'] and not l.get('gameMarket')]
     detail['picks'] = [p for p in picks if p.get('gameId') == card['id']]
     detail['favoriteLines'] = favorites or []
@@ -534,6 +534,7 @@ def build(now=None):
     catalog = read(DATA / 'market-lines.json', {})
     identities = identity_colors(read(DATA / 'player-identity.json', {}))
     context = read(DATA / 'research-context.json', {})
+    depth_charts = read(DATA / 'depth-charts.json', {}).get('teams', {})
     scoreboard = read(DATA / 'scoreboard.json', {})
     forecasts_v1 = {f['gameId']: f for f in read(DATA / 'forecasts.json', [])}
     records = features.load()
@@ -628,7 +629,7 @@ def build(now=None):
         favorites = favorite_lines(game, latest_snap, lines, now, info['player_logs'])
         write(OUT / 'games' / f"{game['id']}.json",
               game_detail(card, game, stored.get(game['id']), snaps_for, captures.get(game['id'], []), lines, picks,
-                          names, info['team_logs'], info['defense'], injuries, now, grading, favorites))
+                          names, info['team_logs'], info['defense'], injuries, depth_charts, now, grading, favorites))
     summary = {'live': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('live', [])],
                'backtest': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('backtest', [])],
                'picks': (scoreboard.get('picks') or {}).get('summary')}

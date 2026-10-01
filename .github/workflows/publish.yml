@@ -83,6 +83,8 @@ jobs:
         run: python scripts/opponent_history.py
       - name: Refresh injury context
         run: python scripts/research_context.py
+      - name: Refresh ESPN depth charts for offensive injuries
+        run: python scripts/depth_charts.py
       - name: Refresh NFL snap counts and game context from nflverse
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event.schedule == '07 11 * * *'
         run: python scripts/nflverse.py

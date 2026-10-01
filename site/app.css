@@ -415,6 +415,21 @@ table.data a { font-weight: 600; }
 .pill-win { background: rgba(63, 217, 139, .16); color: var(--green); }
 .pill-loss { background: rgba(255, 93, 110, .16); color: var(--rose); }
 
+/* ESPN-listed depth order plus the model's already-adjusted role after a hard injury. */
+.depth-card { padding: 14px; }
+.depth-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; }
+.depth-move { margin: 10px 0; color: #c7d2dc; font-size: 13px; line-height: 1.45; }
+.depth-move b { color: var(--mint); }
+.depth-line { display: flex; align-items: center; gap: 6px; overflow-x: auto; padding: 9px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); scrollbar-width: thin; }
+.depth-person { flex: 0 0 auto; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; color: var(--dim); font-size: 11px; white-space: nowrap; }
+.depth-person b { color: var(--faint); }
+.depth-person.depth-out { border-color: rgba(255, 93, 110, .45); color: var(--rose); text-decoration: line-through; }
+.depth-person.depth-next { border-color: rgba(94, 234, 164, .52); background: rgba(94, 234, 164, .08); color: var(--mint); text-decoration: none; }
+.depth-arrow { flex: 0 0 auto; color: var(--faint); font-size: 11px; }
+.depth-work { margin: 10px 0 0; color: var(--dim); font-size: 12px; line-height: 1.5; }
+.depth-work b { color: var(--text); }
+.depth-note { margin: 8px 2px 0; }
+
 /* tickets */
 .add { min-width: 40px; min-height: 40px; margin: 0 6px 0 0; align-self: center; border-radius: 9px; border: 1px solid var(--line); background: var(--raised); color: var(--mint); font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; }
 .add[aria-pressed="true"] { background: var(--mint); color: #06210f; border-color: var(--mint); }
@@ -473,6 +488,8 @@ table.data a { font-weight: 600; }
   .arb-fields { grid-template-columns: 1fr 1fr; }
   .arb-fields .field:last-child { grid-column: 1 / -1; }
   .arb-stats { grid-template-columns: 1fr 1fr; }
+  .depth-line { flex-wrap: wrap; overflow-x: visible; }
+  .depth-arrow { display: none; }
 }
 
 @media (min-width: 860px) {
