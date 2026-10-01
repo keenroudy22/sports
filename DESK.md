@@ -486,6 +486,10 @@ When a current hard QB/RB/FB/WR/TE injury affects an upcoming NFL game, `scripts
 team's ESPN-listed offensive depth order. The game page shows the injured player's listed slot, the next available
 player in that same slot and the active players' current model workload after the injury redistribution. This is
 depth and usage context only: it never labels the backup a touchdown pick and it makes no metered request.
+The card also defines the team's actual RB2/WR2/etc. role by ranking that position's offensive snap share in each
+prior game, then reports average snaps and volume plus red-zone, inside-the-10 and touchdown counts from stored ESPN
+play-by-play. The next player's own season usage stays separate from the team role, so a depth-chart promotion does
+not pretend he has already earned that workload.
 
 ## Weather
 

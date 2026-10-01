@@ -228,8 +228,9 @@ Handy commands (from `~/Projects/sports`):
   shown when stored history exists. Alternates are the reader's optional choice, not the listed favorite; an empty
   panel is better than a forced line. These are optional reads, never extra official plays. When a current hard
   QB/RB/FB/WR/TE injury appears, the game page pairs it with ESPN's listed offensive depth order, names the next
-  player up and shows the model's already-adjusted workload without calling it a touchdown projection. Always check
-  changes at 375 px.
+  player up and shows the model's already-adjusted workload without calling it a touchdown projection. The same card
+  compares that player's own season usage with the team's actual depth role by offensive snaps, including red-zone
+  and inside-the-10 work from stored play-by-play. Always check changes at 375 px.
 - **Posting**: plays around noon Eastern (two hours before an earlier kickoff), ten minutes apart and from every
   queued post, twenty posts a day at most; receipts at 9 AM; cashed posts as wins settle.
 

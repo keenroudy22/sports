@@ -66,7 +66,9 @@ test('game pages explain next-up depth after hard injuries without calling it a 
   const source = require('node:fs').readFileSync('site/app.js', 'utf8');
   assert.match(source, /Next up after injuries/);
   assert.match(source, /moves from/);
-  assert.match(source, /it is not a touchdown projection/);
+  assert.match(source, /actual role this season/);
+  assert.match(source, /red-zone carries/);
+  assert.match(source, /None of this is a touchdown projection/);
 });
 
 test('splits separate home, away and neutral and list head-to-head meetings', () => {

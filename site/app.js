@@ -600,6 +600,17 @@
   const opportunity = p => (p.carries ? p.carries[0] : 0) + (p.targets ? p.targets[0] : 0) + (p.att ? p.att[0] : 0);
   const workload = p => [['carries', 'carries'], ['targets', 'targets'], ['att', 'attempts']]
     .filter(([key]) => p && p[key] && p[key][0] >= .5).map(([key, label]) => `${fixed(p[key][0])} ${label}`).join(' + ');
+  const roleUsageText = (usage, subject) => {
+    if (!usage) return '';
+    const labels = { car: 'carries', tgt: 'targets', att: 'pass attempts' };
+    const volume = Object.entries(usage.volume || {}).map(([key, value]) => `${fixed(value)} ${labels[key] || key}`);
+    const redLabel = /^(RB|FB)$/.test(usage.group) ? ['red-zone carry', 'red-zone carries']
+      : usage.group === 'QB' ? ['red-zone pass attempt', 'red-zone pass attempts'] : ['red-zone target', 'red-zone targets'];
+    const scoring = [`${usage.redZone} ${redLabel[usage.redZone === 1 ? 0 : 1]} in ${usage.redZoneGames} of ${usage.games} games`];
+    if (usage.inside10 != null) scoring.push(`${usage.inside10} inside the 10`);
+    scoring.push(`${usage.touchdowns} TD${usage.touchdowns === 1 ? '' : 's'}`);
+    return `<p class="depth-history"><b>${esc(subject)}</b> · ${Math.round(100 * usage.snapPct)}% snaps${volume.length ? ` · ${esc(volume.join(' · '))}` : ''}<br><span>${esc(scoring.join(' · '))}</span></p>`;
+  };
 
   const depthChartSection = (card, detail) => {
     if (card.league !== 'NFL' || !detail || !detail.forecast) return '';
@@ -629,9 +640,14 @@
           return `<a class="depth-person ${isOut ? 'depth-out' : ''} ${isNext ? 'depth-next' : ''}" href="#player/${esc(card.league)}/${esc(p.id)}"><b>${esc(slot.label)}${i + 1}</b> ${esc(p.name)}${isOut ? ' · OUT' : isNext ? ' · NEXT UP' : ''}</a>`;
         }).join('<span class="depth-arrow">→</span>');
         const adjusted = relevant.map(p => `<a href="#player/${esc(card.league)}/${esc(p.id)}">${esc(p.name)}</a> ${esc(workload(p) || 'role below projection threshold')}`).join(' · ');
+        const evidence = (team.depthUsage || {})[String(hurt.id)];
+        const roleEvidence = evidence ? roleUsageText({...evidence.roleUsage, group: evidence.group},
+          `${card[side].abbr} ${evidence.role} actual role this season (${evidence.roleUsage.games} games)`) : '';
+        const playerEvidence = evidence && evidence.playerUsage ? roleUsageText({...evidence.playerUsage, group: evidence.group},
+          `${next.name} himself this season (${evidence.playerUsage.games} games)`) : '';
         cards.push(`<div class="card depth-card"><div class="depth-head"><span><span class="pill pill-out">${esc(hurt.status)}</span> <b>${esc(hurt.name)}</b> <span class="row-meta">${esc(hurt.injury || 'injury not listed')}</span></span><span class="row-meta">${esc(card[side].abbr)}</span></div>
           <p class="depth-move"><b>${esc(next.name)}</b> moves from ${esc(slot.label)}${index + 2} to ${esc(slot.label)}${index + 1} on ESPN's listed order.</p>
-          <div class="depth-line">${order}</div>${adjusted ? `<p class="depth-work"><b>Adjusted workload:</b> ${adjusted}</p>` : ''}</div>`);
+          <div class="depth-line">${order}</div>${roleEvidence}${playerEvidence}${adjusted ? `<p class="depth-work"><b>Tonight's model:</b> ${adjusted}</p>` : ''}</div>`);
       }
     }
     if (!cards.length) return '';
@@ -641,7 +657,7 @@
       .sort()
       .pop();
     return section('Next up after injuries', `<div class="grid-2">${cards.join('')}</div>
-      <p class="row-meta depth-note">ESPN's listed depth-chart order paired with the current injury report. Workload is our projection after the unavailable player is removed; it is not a touchdown projection. Checked ${esc(ago(checkedAt))}.</p>`);
+      <p class="row-meta depth-note">An actual role (RB2, WR3, etc.) is that position's player with the matching offensive-snap rank in each game; ties use snap count. Red-zone work comes from ESPN play-by-play. Tonight's workload is our projection after the unavailable player is removed. None of this is a touchdown projection. Checked ${esc(ago(checkedAt))}.</p>`);
   };
 
   const projectionSection = (card, detail) => {

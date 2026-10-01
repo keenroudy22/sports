@@ -180,13 +180,85 @@ def load_store(folder):
     return out
 
 
-def snaps_by_event():
-    """eventId -> athlete ID -> (snaps, share)."""
+def snap_players_by_event():
+    """eventId -> athlete ID -> nflverse player line, including team, position and snap share."""
     out = {}
     for path in sorted((ROOT / 'data' / 'nflverse').glob('nfl-*.jsonl')):
         for event, line in boxscores.latest(boxscores.read_store(path)).items():
-            out[event] = {p['id']: (p['snaps'], p['pct']) for p in line['players'] if p.get('id')}
+            out[event] = {p['id']: p for p in line['players'] if p.get('id')}
     return out
+
+
+def snaps_by_event(players=None):
+    """eventId -> athlete ID -> (snaps, share), the compact player-page form."""
+    players = players if players is not None else snap_players_by_event()
+    return {event: {pid: (p['snaps'], p['pct']) for pid, p in rows.items()} for event, rows in players.items()}
+
+
+ROLE_STATS = {
+    'QB': {'volume': ('att', 'car'), 'red': 'rzAtt', 'inside10': None, 'td': ('passTD', 'rushTD')},
+    'RB': {'volume': ('car', 'tgt'), 'red': 'rzCar', 'inside10': 'i10Car', 'td': ('rushTD', 'recTD')},
+    'FB': {'volume': ('car', 'tgt'), 'red': 'rzCar', 'inside10': 'i10Car', 'td': ('rushTD', 'recTD')},
+    'WR': {'volume': ('tgt',), 'red': 'rzTgt', 'inside10': 'i10Tgt', 'td': ('rushTD', 'recTD')},
+    'TE': {'volume': ('tgt',), 'red': 'rzTgt', 'inside10': 'i10Tgt', 'td': ('rushTD', 'recTD')},
+}
+
+
+def depth_role_usage(records, snap_players, team, group, role, before, season, athlete=None):
+    """Actual usage for a team's Nth player at a position by offensive snaps.
+
+    This is descriptive, not a projection: each past game ranks the active
+    position group by offensive snap share, then measures the player in that
+    slot.  The named next-up player's own line is kept separately so a depth
+    promotion cannot imply that he has already handled the full role.
+    """
+    spec = ROLE_STATS.get(group)
+    if not spec or not isinstance(role, int) or role < 1:
+        return None
+    cutoff = features.when(before) if isinstance(before, str) else before
+    selected, personal = [], []
+    for game in records:
+        if game.get('league') != 'NFL' or game.get('season') != season or game.get('seasonType') != 2 \
+                or features.when(game.get('kickoff')) >= cutoff or str(team) not in game.get('teams', {}):
+            continue
+        snap_rows = [p for p in (snap_players.get(str(game.get('eventId'))) or {}).values()
+                     if str(p.get('team')) == str(team)
+                     and p.get('pos') == group
+                     and isinstance(p.get('pct'), (int, float))]
+        snap_rows.sort(key=lambda p: (-p['pct'], -p.get('snaps', 0), str(p.get('id'))))
+        if len(snap_rows) < role:
+            continue
+        box = {str(p.get('id')): p for p in game.get('players', []) if str(p.get('team')) == str(team)}
+
+        def line(snap):
+            stats = box.get(str(snap.get('id')), {})
+            return {'player': str(snap.get('id')), 'name': snap.get('name') or stats.get('name'),
+                    'snapPct': snap.get('pct'), **{key: stats.get(key, 0) for key in
+                    (*spec['volume'], spec['red'], spec['inside10'], *spec['td']) if key}}
+
+        selected.append(line(snap_rows[role - 1]))
+        if athlete:
+            own = next((p for p in snap_rows if str(p.get('id')) == str(athlete)), None)
+            if own:
+                personal.append(line(own))
+    if not selected:
+        return None
+
+    def summarize(rows):
+        red, inside = spec['red'], spec['inside10']
+        return {'games': len(rows),
+                'snapPct': round(sum(r['snapPct'] for r in rows) / len(rows), 3),
+                'volume': {key: round(sum(r.get(key, 0) for r in rows) / len(rows), 1) for key in spec['volume']},
+                'redZone': sum(r.get(red, 0) for r in rows),
+                'redZoneGames': sum(1 for r in rows if r.get(red, 0) > 0),
+                'inside10': sum(r.get(inside, 0) for r in rows) if inside else None,
+                'touchdowns': sum(sum(r.get(key, 0) for key in spec['td']) for r in rows)}
+
+    return {'role': f'{group}{role}', 'group': group, 'season': season, 'roleUsage': summarize(selected),
+            'playerUsage': summarize(personal) if personal else None,
+            'player': str(athlete) if athlete else None,
+            'definition': f'No. {role} {group} by offensive snaps in each game',
+            'sources': ['nflverse offensive snaps', 'ESPN play-by-play']}
 
 
 def team_names(records, slate):
@@ -348,7 +420,7 @@ def pregame(snapshots, kickoff):
 
 
 def game_detail(card, game, record, snapshots, captures, lines, picks, names, team_logs, defense, injuries, depth_charts,
-                now, grading, favorites=None):
+                records, snap_players, now, grading, favorites=None):
     """snapshots: this game's pregame v2 snapshots, oldest first."""
     league = card['league']
     detail = dict(card)
@@ -378,9 +450,26 @@ def game_detail(card, game, record, snapshots, captures, lines, picks, names, te
     for side in ('home', 'away'):
         team = card[side]['id']
         opponent = card['away' if side == 'home' else 'home']['id']
+        chart = depth_charts.get(team)
+        unavailable = {str(p.get('id')) for p in injuries.get(team, [])
+                       if re.search(r'out|doubtful|suspension', str(p.get('status', '')), re.I)}
+        usage = {}
+        if game.get('league') == 'NFL' and not card.get('completed') and chart:
+            for slot in chart.get('positions') or []:
+                for index, player in enumerate(slot.get('players') or []):
+                    if str(player.get('id')) not in unavailable:
+                        continue
+                    next_player = next((p for p in slot['players'][index + 1:]
+                                        if str(p.get('id')) not in unavailable), None)
+                    if next_player:
+                        summary = depth_role_usage(records, snap_players, team, slot.get('group'), index + 1,
+                                                   game['kickoff'], game.get('season'), next_player.get('id'))
+                        if summary:
+                            usage[str(player.get('id'))] = summary
         detail['teams'][side] = {'form': recent_form(team, league, team_logs, kickoff),
                                  'defense': defense.get(team), 'opponentDefense': defense.get(opponent),
-                                 'injuries': injuries.get(team, []), 'depthChart': depth_charts.get(team)}
+                                 'injuries': injuries.get(team, []), 'depthChart': chart,
+                                 'depthUsage': usage}
     detail['lines'] = [l for l in lines if l.get('gameId') == card['id'] and not l.get('gameMarket')]
     detail['picks'] = [p for p in picks if p.get('gameId') == card['id']]
     detail['favoriteLines'] = favorites or []
@@ -541,7 +630,8 @@ def build(now=None):
     stored = {f"{g['league']}-{g['eventId']}": g for g in records}
     forecasts = load_store('forecasts')
     captures = load_store('props')
-    snaps = snaps_by_event()
+    snap_players = snap_players_by_event()
+    snaps = snaps_by_event(snap_players)
     names = {}
     for game in records:
         for p in game['players']:
@@ -629,7 +719,8 @@ def build(now=None):
         favorites = favorite_lines(game, latest_snap, lines, now, info['player_logs'])
         write(OUT / 'games' / f"{game['id']}.json",
               game_detail(card, game, stored.get(game['id']), snaps_for, captures.get(game['id'], []), lines, picks,
-                          names, info['team_logs'], info['defense'], injuries, depth_charts, now, grading, favorites))
+                          names, info['team_logs'], info['defense'], injuries, depth_charts, info['records'],
+                          snap_players, now, grading, favorites))
     summary = {'live': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('live', [])],
                'backtest': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('backtest', [])],
                'picks': (scoreboard.get('picks') or {}).get('summary')}

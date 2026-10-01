@@ -92,6 +92,40 @@ class GameLineTests(unittest.TestCase):
         self.assertEqual(build_site.game_market_lines({'games': games}, self.now), [])
 
 
+class DepthRoleUsageTests(unittest.TestCase):
+    def test_second_back_usage_comes_from_each_games_actual_snap_order(self):
+        records = [
+            {'eventId': '1', 'league': 'NFL', 'season': 2026, 'seasonType': 2, 'kickoff': '2026-09-01T17:00:00Z',
+             'teams': {'23': {}, '5': {}}, 'players': [
+                 {'id': 'a', 'team': '23', 'name': 'Lead One', 'pos': 'RB', 'car': 10, 'tgt': 2, 'rzCar': 2, 'i10Car': 1, 'rushTD': 1},
+                 {'id': 'b', 'team': '23', 'name': 'Second One', 'pos': 'RB', 'car': 5, 'tgt': 3}]},
+            {'eventId': '2', 'league': 'NFL', 'season': 2026, 'seasonType': 2, 'kickoff': '2026-09-08T17:00:00Z',
+             'teams': {'23': {}, '6': {}}, 'players': [
+                 {'id': 'a', 'team': '23', 'name': 'Lead One', 'pos': 'RB', 'car': 12, 'tgt': 2},
+                 {'id': 'c', 'team': '23', 'name': 'Next Up', 'pos': 'RB', 'car': 7, 'tgt': 1, 'rzCar': 1}]},
+        ]
+        snaps = {
+            '1': {'a': {'id': 'a', 'team': '23', 'pos': 'RB', 'name': 'Lead One', 'snaps': 42, 'pct': .70},
+                  'b': {'id': 'b', 'team': '23', 'pos': 'RB', 'name': 'Second One', 'snaps': 18, 'pct': .30}},
+            '2': {'a': {'id': 'a', 'team': '23', 'pos': 'RB', 'name': 'Lead One', 'snaps': 36, 'pct': .60},
+                  'c': {'id': 'c', 'team': '23', 'pos': 'RB', 'name': 'Next Up', 'snaps': 24, 'pct': .40}},
+        }
+        usage = build_site.depth_role_usage(records, snaps, '23', 'RB', 2, '2026-09-15T17:00:00Z', 2026, 'c')
+        self.assertEqual((usage['role'], usage['definition']), ('RB2', 'No. 2 RB by offensive snaps in each game'))
+        self.assertEqual(usage['roleUsage'], {'games': 2, 'snapPct': .35, 'volume': {'car': 6.0, 'tgt': 2.0},
+                                               'redZone': 1, 'redZoneGames': 1, 'inside10': 0, 'touchdowns': 0})
+        self.assertEqual(usage['playerUsage'], {'games': 1, 'snapPct': .4, 'volume': {'car': 7.0, 'tgt': 1.0},
+                                                 'redZone': 1, 'redZoneGames': 1, 'inside10': 0, 'touchdowns': 0})
+
+    def test_role_usage_never_looks_past_the_game_being_built(self):
+        records = [{'eventId': 'late', 'league': 'NFL', 'season': 2026, 'seasonType': 2,
+                    'kickoff': '2026-09-20T17:00:00Z', 'teams': {'23': {}, '5': {}}, 'players': []}]
+        snaps = {'late': {'x': {'id': 'x', 'team': '23', 'pos': 'RB', 'snaps': 30, 'pct': .5},
+                          'y': {'id': 'y', 'team': '23', 'pos': 'RB', 'snaps': 20, 'pct': .3}}}
+        self.assertIsNone(build_site.depth_role_usage(records, snaps, '23', 'RB', 2,
+                                                       '2026-09-20T17:00:00Z', 2026, 'y'))
+
+
 class GradeTests(unittest.TestCase):
     snapshot = {'gameId': 'CFB-1', 'league': 'CFB', 'model': 'v2.0', 'publishedAt': '2026-09-19T10:00:00Z', 'margin': 5.0, 'total': 30.0,
                 'sd': {'margin': 13.0, 'total': 12.0}, 'range80': {'margin': [-11.7, 21.7], 'total': [25.6, 56.4]},
