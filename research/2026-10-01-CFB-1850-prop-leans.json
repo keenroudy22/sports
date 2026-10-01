@@ -1,0 +1,43 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-10-01T22:50:05Z",
+  "targetWeek": 5,
+  "summary": "6:50 PM ET run, published at 6:50 PM ET. Nothing to settle. Nothing to close. Published 1: Marcellous Hawkins Jr. OVER 45.5 rushing yards -114 at FanDuel. Screened and passed on 138: Baylor Hayes UNDER 229.5 passing yards (card_cap); Rocco Conti UNDER 44.5 rushing yards (one_book); Rodney Tisdale Jr. UNDER 246.5 passing yards (card_cap); Tony Diaz UNDER 4.5 receptions (one_book); Michael Hawkins Jr. UNDER 87.5 rushing yards (one_book); Kevin Jennings UNDER 17.5 rushing yards (one_book); Temple at South Florida over 47.5 (card_cap); Jaziun Patterson UNDER 59.5 rushing yards (one_book); and 130 more. odds_api.py: CFB: skipped (captured 2026-10-01T19:42:28Z, inside the gap) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "position": "RB",
+      "athleteId": "5260847",
+      "market": "rushYds",
+      "line": 45.5,
+      "direction": "over",
+      "gameIds": [
+        "CFB-401858245"
+      ],
+      "book": "FanDuel",
+      "odds": -114,
+      "projection": 58.0,
+      "edge": "v2 rushing yards 58.0 (80% range 0 to 120.5). Chance of over 45.5: 60.1% (uncalibrated: no graded history against a line yet), against 53.3% break-even at -114: +6.8 points, +0.128u per unit.",
+      "cutoff": "OVER 45.5 at -114 or better. Closed to new entries at 46+, or at -129 or worse at 45.5.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-09-30T19:13:51Z",
+      "quotedAt": "2026-10-01T21:42:31Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 5:42 PM ET capture across 2 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-02T03:30:00Z",
+      "title": "Marcellous Hawkins Jr. OVER 45.5 rushing yards",
+      "id": "CFB-2026-W5-jr-over-45-5-rushyds-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401858245",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "why": "Prop lean on our number alone: our projection is 58 against 45.5 and the over reads 60.1% on the raw curve, which has no graded history against a line yet, so the true chance is lower than that. Last 10 games: 7 of 10 over 45.5. Role: 2nd of 4 VT RBs by projected carries, 10.5 a game. Defense: PITT allows 50 rushing yards a game to RBs, 6 of 233 this season (1 is stingiest).",
+      "risk": "Uncalibrated chance; a player line turns on a handful of touches. 4 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies. Confidence 2 of 10.",
+      "jurisdictionVerified": true
+    }
+  ]
+}
