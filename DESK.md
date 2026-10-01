@@ -64,6 +64,12 @@ the remaining legs are repriced only from their captured prices. On Sep 27, 2026
 free September Bet Protect+ removed De'Von Achane after his first-quarter injury. Ayomanor and Knox won, so the
 easy-props ticket was corrected on Sep 30 from a loss to a +138 two-leg win (0.346u on its 0.25u stake).
 
+Every raw losing player prop now gets a narrow postgame web check before it is graded, including a losing player leg
+inside a parlay. The check looks only for an explicit in-game injury or evaluation, when it happened and whether the
+player returned; it never infers an injury from a quiet box score. A verified injury, a report whose source cannot be
+verified, or a failed check leaves the play pending and alerts the owner to confirm the listed book. It does not turn
+an injury into a push or void on its own; the book's official settlement and sourced terms still control.
+
 ## Operating it
 
 Everything sports-related lives outside the repo under `~/.config/keenroudy/` (the `env` file with the

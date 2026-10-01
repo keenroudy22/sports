@@ -61,6 +61,24 @@ Return ONLY this JSON, nothing else:
 {{"facts": [{{"kind": "...", "direction": "...", "claim": "...", "entities": ["..."], "source": "https://...", "publishedAt": "..."}}]}}
 If you find nothing solid, return {{"facts": []}}."""
 
+SETTLEMENT_PROMPT = """You are checking a completed player-prop result before a public record is graded.
+
+Game: {away} at {home}, {league}, kickoff {kickoff}.
+Player: {player}.
+
+Find out whether this player suffered an injury during this game or left early for an injury evaluation. If so,
+report when it happened (quarter/half or game time when the source gives it) and whether the player returned. Do not
+infer an injury from a low stat line, reduced usage, a benching, or an absence from the second-half box score.
+
+Use only an official team or league report, the team's own postgame coverage, or established beat reporting. For
+each supported injury fact return kind "injury", direction "neutral", one plain factual claim, the player's full
+name in entities, the exact https source URL, and the source date. If no trustworthy source explicitly reports an
+in-game injury or evaluation for this player, return an empty facts list. Never decide how a sportsbook grades it.
+
+Return ONLY this JSON, nothing else:
+{{"facts": [{{"kind": "injury", "direction": "neutral", "claim": "...", "entities": ["{player}"],
+"source": "https://...", "publishedAt": "..."}}]}}"""
+
 
 ENGINES = ('codex',)
 ORIGINS = ('codex researcher', 'claude researcher')     # a stored fact's origin; older facts say "claude researcher"
@@ -99,6 +117,14 @@ def prompt_for(game, market, side, policy=None, player=None, quarterbacks=None):
     if learned.get('avoidDomains'):
         text += '\nSites whose facts have not checked out for us; do not use them: ' + ', '.join(learned['avoidDomains']) + '.'
     return text
+
+
+def settlement_prompt_for(game, player):
+    """A narrow postgame check: injury and return status only, never a sportsbook ruling."""
+    away, home = game.get('away') or {}, game.get('home') or {}
+    return SETTLEMENT_PROMPT.format(away=away.get('name') or away.get('abbreviation'),
+                                    home=home.get('name') or home.get('abbreviation'),
+                                    league=game.get('league'), kickoff=game.get('kickoff'), player=player)
 
 
 # The researcher runs apart from everything else on the machine: its own empty folder (no project context, no
@@ -261,6 +287,33 @@ def research(game, market, side, runner=subprocess.run, opener=None, now=None, p
     shaped = [s for s in (shape(f, game['id'], i, now, origin) for i, f in enumerate(extract(answer))) if s]
     checked = [verify(f, opener) for f in shaped]
     return [f for f in checked if f['verified']], [f for f in checked if not f['verified']]
+
+
+def settlement_injury(game, player, runner=subprocess.run, opener=None, now=None, env=None):
+    """Whether a postgame injury search completed, plus verified and unverified facts about this player.
+
+    An empty verified list is meaningful only when ``checked`` is true. The caller still applies the listed book's
+    official settlement; this function never turns an injury into a push or void.
+    """
+    now = now or datetime.now(timezone.utc)
+    answer = ask(settlement_prompt_for(game, player), runner, env)
+    if answer is None:
+        return {'checked': False, 'facts': [], 'dropped': []}
+    start, end = answer.find('{'), answer.rfind('}')
+    try:
+        payload = json.loads(answer[start:end + 1])
+    except (json.JSONDecodeError, TypeError):
+        return {'checked': False, 'facts': [], 'dropped': []}
+    if not isinstance(payload, dict) or not isinstance(payload.get('facts'), list):
+        return {'checked': False, 'facts': [], 'dropped': []}
+    surname = str(player or '').split()[-1].lower()
+    shaped = [s for s in (shape(f, game['id'], i, now, 'codex researcher')
+                          for i, f in enumerate(payload['facts'][:MAX_FACTS]))
+              if s and s.get('kind') == 'injury'
+              and any(str(entity).split()[-1].lower() == surname for entity in s.get('entities') or [])]
+    verified = [verify(f, opener) for f in shaped]
+    return {'checked': True, 'facts': [f for f in verified if f['verified']],
+            'dropped': [f for f in verified if not f['verified']]}
 
 
 def main(argv=None):

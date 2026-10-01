@@ -85,6 +85,13 @@ class ResearcherTests(unittest.TestCase):
         self.assertIn('Market being considered: total', text)
         self.assertIn('Return ONLY this JSON', text)
 
+    def test_the_settlement_prompt_checks_in_game_injury_and_return_without_ruling_for_a_book(self):
+        text = researcher.settlement_prompt_for(GAME, 'DeVon Achane')
+        self.assertIn('completed player-prop result', text)
+        self.assertIn('DeVon Achane', text)
+        self.assertIn('whether the player returned', text)
+        self.assertIn('Never decide how a sportsbook grades it', text)
+
     def test_extract_tolerates_prose_and_caps_the_list(self):
         self.assertEqual(len(researcher.extract('Sure!\n' + json.dumps(ANSWER) + '\nDone.')), 5)
         self.assertEqual(researcher.extract('no json here'), [])
@@ -117,6 +124,51 @@ class ResearcherTests(unittest.TestCase):
             env = {'KEENROUDY_RESEARCHER': 'codex'}
             self.assertEqual(researcher.research(GAME, 'total', 'over', runner=broken, opener=fake_opener, env=env), ([], []))
             self.assertEqual(researcher.research(GAME, 'total', 'over', runner=missing, opener=fake_opener, env=env), ([], []))
+
+    def test_settlement_injury_distinguishes_a_clean_check_from_a_failed_one(self):
+        import tempfile
+        from unittest import mock
+        answer = {'facts': [{
+            'kind': 'injury', 'direction': 'neutral',
+            'claim': 'DeVon Achane left in the first quarter with a shoulder injury and did not return.',
+            'entities': ['DeVon Achane'], 'source': 'https://www.example.com/achane',
+            'publishedAt': '2026-09-27'}]}
+
+        def codex(command, **kwargs):
+            Path(command[command.index('--output-last-message') + 1]).write_text(json.dumps(answer))
+            return subprocess.CompletedProcess(command, 0, stdout='', stderr='')
+
+        def page(url):
+            self.assertEqual(url, 'https://www.example.com/achane')
+            return b'DeVon Achane left in the first quarter with a shoulder injury and did not return.'
+
+        def missing(command, **kwargs):
+            raise OSError('no codex')
+
+        with tempfile.TemporaryDirectory() as folder, mock.patch.object(researcher, 'SANDBOX', Path(folder)):
+            result = researcher.settlement_injury(
+                GAME, 'DeVon Achane', runner=codex, opener=page,
+                now=datetime(2026, 9, 28, tzinfo=timezone.utc), env={'KEENROUDY_RESEARCHER': 'codex'})
+            failed = researcher.settlement_injury(
+                GAME, 'DeVon Achane', runner=missing, opener=page,
+                now=datetime(2026, 9, 28, tzinfo=timezone.utc), env={'KEENROUDY_RESEARCHER': 'codex'})
+        self.assertTrue(result['checked'])
+        self.assertEqual(len(result['facts']), 1)
+        self.assertFalse(failed['checked'])
+
+    def test_malformed_settlement_answer_is_not_mistaken_for_a_clean_check(self):
+        import tempfile
+        from unittest import mock
+
+        def codex(command, **kwargs):
+            Path(command[command.index('--output-last-message') + 1]).write_text('not json')
+            return subprocess.CompletedProcess(command, 0, stdout='', stderr='')
+
+        with tempfile.TemporaryDirectory() as folder, mock.patch.object(researcher, 'SANDBOX', Path(folder)):
+            result = researcher.settlement_injury(
+                GAME, 'DeVon Achane', runner=codex,
+                now=datetime(2026, 9, 28, tzinfo=timezone.utc), env={'KEENROUDY_RESEARCHER': 'codex'})
+        self.assertFalse(result['checked'])
 
     def test_an_unknown_or_retired_engine_never_runs_a_fallback(self):
         from unittest import mock

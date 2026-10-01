@@ -54,6 +54,54 @@ class GradingTests(unittest.TestCase):
         leg = run.leg_pick({'id': 'prop-NFL-1-77-recYds', 'market': 'receiving yards', 'side': 'over', 'line': 49.5, 'title': 'P over 49.5 receiving yards'})
         self.assertEqual(leg['athleteId'], '77')
 
+    def test_a_losing_prop_waits_for_injury_review_and_never_assumes_a_push(self):
+        now = datetime(2026, 9, 28, tzinfo=timezone.utc)
+        pick = {'id': 'NFL-prop-77', 'league': 'NFL', 'gameIds': ['NFL-1'], 'athleteId': '77',
+                'market': 'recYds', 'line': 49.5, 'direction': 'over', 'book': 'FanDuel', 'odds': -110}
+        ctx = SimpleNamespace(first={pick['id']: dict(pick)}, latest={}, names={'77': 'Player Seven'})
+        raw = {pick['id']: ('props', dict(pick))}
+        records = [{'league': 'NFL', 'eventId': '1',
+                    'players': [{'id': '77', 'name': 'Player Seven', 'recYds': 12}]}]
+        clean = lambda game, player, now=None: {'checked': True, 'facts': [], 'dropped': []}
+        settled, unclear = run.settle(ctx, raw, {'NFL-1': self.GAME}, records, now, injury_check=clean)
+        self.assertEqual(settled[0][2]['result'], 'loss')
+        self.assertEqual(unclear, [])
+
+        injury = {'claim': 'Player Seven left in the first quarter and did not return.',
+                  'source': 'https://www.example.com/injury'}
+        hurt = lambda game, player, now=None: {'checked': True, 'facts': [injury], 'dropped': []}
+        settled, unclear = run.settle(ctx, raw, {'NFL-1': self.GAME}, records, now, injury_check=hurt)
+        self.assertEqual(settled, [])
+        self.assertTrue(unclear[0]['settlementReview'])
+        self.assertIn("Confirm FanDuel's official settlement", unclear[0]['why'])
+        self.assertIn('injury alone is not a push or void', unclear[0]['why'])
+
+    def test_every_losing_player_leg_is_checked_and_one_injury_pauses_the_whole_parlay(self):
+        now = datetime(2026, 9, 28, tzinfo=timezone.utc)
+        ticket = {'id': 'NFL-parlay', 'league': 'NFL', 'gameIds': ['NFL-1'], 'book': 'FanDuel', 'odds': 100,
+                  'legs': [{'gameId': 'NFL-1', 'athleteId': '77', 'market': 'recYds', 'line': 49.5,
+                            'side': 'over', 'title': 'Player Seven 50+ receiving yards'},
+                           {'gameId': 'NFL-1', 'athleteId': '88', 'market': 'recYds', 'line': 39.5,
+                            'side': 'over', 'title': 'Player Eight 40+ receiving yards'}]}
+        ctx = SimpleNamespace(first={ticket['id']: dict(ticket)}, latest={},
+                              names={'77': 'Player Seven', '88': 'Player Eight'})
+        raw = {ticket['id']: ('parlays', dict(ticket))}
+        records = [{'league': 'NFL', 'eventId': '1',
+                    'players': [{'id': '77', 'name': 'Player Seven', 'recYds': 12},
+                                {'id': '88', 'name': 'Player Eight', 'recYds': 10}]}]
+        checked = []
+
+        def hurt(game, player, now=None):
+            checked.append(player)
+            facts = ([{'claim': 'Player Eight left in the first half and did not return.',
+                       'source': 'https://www.example.com/injury'}] if player == 'Player Eight' else [])
+            return {'checked': True, 'facts': facts, 'dropped': []}
+
+        settled, unclear = run.settle(ctx, raw, {'NFL-1': self.GAME}, records, now, injury_check=hurt)
+        self.assertEqual(settled, [])
+        self.assertEqual(checked, ['Player Seven', 'Player Eight'])
+        self.assertTrue(unclear[0]['settlementReview'])
+
 
 class TextTests(unittest.TestCase):
     def test_entry_note_quotes_the_rule_and_the_numbers(self):

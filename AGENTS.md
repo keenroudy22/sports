@@ -190,6 +190,10 @@ Handy commands (from `~/Projects/sports`):
   assume protection from an injury alone. The Sep 27 FanDuel easy-props ticket is 2/2 on its live legs and a win:
   Achane's first-quarter injury leg was automatically protected during FanDuel's free September promotion. Its
   Sep 30 correction is appended to the record; the original settlement is never rewritten.
+- **Every raw player-prop loss gets a postgame injury check** (2026-10-01), including a losing leg on a fun ticket.
+  Before the loss is graded, the web researcher checks whether the player left hurt, when it happened and whether
+  the player returned. A verified injury, an unverified report or a failed check pauses settlement and alerts the
+  owner. Never auto-push or void it: the listed book's official result and sourced terms still decide the grade.
 - **Weekly "📌 Save this" projection sheet**: the full NFL slate or 16 college games, college Saturday and NFL
   Sunday at 10 AM (`scripts/sheet.py`). Every spread and total read carries the exact captured line, price and book.
   Numbered mint rings identify up to four markets where the calibrated chance clears that price by the Board's value
