@@ -1,20 +1,20 @@
 {
- "at": "2026-10-01T13:27:09Z",
+ "at": "2026-10-01T13:30:31Z",
  "confirmed": {
-  "CFB-401858245": "2026-10-01T13:27:09Z",
-  "CFB-401858476": "2026-10-01T13:27:09Z",
-  "CFB-401862786": "2026-10-01T13:27:09Z",
-  "CFB-401871049": "2026-10-01T13:27:09Z",
-  "CFB-401871050": "2026-10-01T13:27:09Z",
-  "NFL-401872964": "2026-10-01T13:27:09Z"
+  "CFB-401858245": "2026-10-01T13:30:31Z",
+  "CFB-401858476": "2026-10-01T13:30:31Z",
+  "CFB-401862786": "2026-10-01T13:30:31Z",
+  "CFB-401871049": "2026-10-01T13:30:31Z",
+  "CFB-401871050": "2026-10-01T13:30:31Z",
+  "NFL-401872964": "2026-10-01T13:30:31Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 940,
-    "fanduel": 903
+    "draftkings": 849,
+    "fanduel": 195
    },
-   "eventsListed": 72,
+   "eventsListed": 71,
    "eventsMatched": 5,
    "games": 5,
    "marketTypes": {
@@ -24,15 +24,15 @@
     "player_passing_+_rushing_yards": 23,
     "player_passing_attempts": 30,
     "player_passing_completions": 25,
-    "player_passing_touchdowns": 59,
-    "player_passing_yards": 259,
-    "player_receiving_yards": 784,
-    "player_receptions": 156,
+    "player_passing_touchdowns": 33,
+    "player_passing_yards": 175,
+    "player_receiving_yards": 383,
+    "player_receptions": 60,
     "player_rushing_attempts": 31,
-    "player_rushing_yards": 431
+    "player_rushing_yards": 239
    },
-   "requestsLeft": 2,
-   "rows": 1843,
+   "requestsLeft": 50,
+   "rows": 1044,
    "slateGames": [
     "Western Kentucky Hilltoppers at New Mexico State Aggies 2026-10-02T00:00Z",
     "North Texas Mean Green at Tulsa Golden Hurricane 2026-10-02T01:00Z",
@@ -154,7 +154,7 @@
       "gemini": "NCAAF-2610031600-ALA-MSST-S",
       "goldrush": "31057379",
       "hardrock": "2456558735355675015",
-      "kalshi": "KXNCAAF2H-26OCT03ALAMSST",
+      "kalshi": "KXNCAAF1HSPREAD-26OCT03ALAMSST",
       "ladbrokes": "7edbcf0d-f4f9-4304-b1f5-31e84e71c913",
       "ladbrokes_uk": "lduk-258797250",
       "matchbook": "mb-34438103722200081",
@@ -545,7 +545,6 @@
        "moneyline",
        "moneyline_3-way",
        "most_points_player",
-       "outright",
        "player_longest_passing_completion",
        "player_longest_rush",
        "player_passing_+_rushing_yards",
@@ -555,7 +554,6 @@
        "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
-       "race_to_10_points",
        "team_total",
        "total_points",
        "total_points_band",
@@ -809,7 +807,7 @@
       "gemini": "NCAAF-2610031600-NDU-UNC-S",
       "goldrush": "31057409",
       "hardrock": "3881948017418437013",
-      "kalshi": "KXNCAAF4QSPREAD-26OCT03NDUNC",
+      "kalshi": "KXNCAAF2H-26OCT03NDUNC",
       "ladbrokes": "b79fd75f-e52d-4595-955d-121e8a703a51",
       "ladbrokes_uk": "lduk-258811175",
       "matchbook": "mb-33928489668700023",
@@ -909,6 +907,7 @@
       "betrivers": "1027508091",
       "bovada": "31485563",
       "bwin": "6:45359",
+      "caesars": "1760b3bb-8e57-4e0e-85f0-e30553dd46c5",
       "circa": "214025",
       "coral": "cor-46473009",
       "draftkings": "34708279",
@@ -979,6 +978,7 @@
        "moneyline",
        "moneyline_3-way",
        "most_points_player",
+       "outright",
        "player_interceptions",
        "player_longest_passing_completion",
        "player_longest_reception",
@@ -996,6 +996,7 @@
        "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
+       "race_to_10_points",
        "team_total",
        "total_points",
        "total_points_band",
@@ -1209,7 +1210,7 @@
      "type": "fixture"
     },
     {
-     "away": "Vanderbilt",
+     "away": "Vanderbilt Commodores",
      "external": {
       "ballybet": "1027508082",
       "betmgm": "6:45412",
@@ -1244,10 +1245,10 @@
       "thescorebet": "StandardEvent:422dbdad-35c4-4d49-bfe4-e453ac229eb9",
       "underdog": "underdog_230173"
      },
-     "home": "Georgia",
+     "home": "Georgia Bulldogs",
      "sample": {
-      "away_team": "Vanderbilt",
-      "home_team": "Georgia",
+      "away_team": "Vanderbilt Commodores",
+      "home_team": "Georgia Bulldogs",
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
@@ -1312,7 +1313,8 @@
   },
   "NFL": {
    "books": {
-    "draftkings": 200
+    "draftkings": 320,
+    "fanduel": 364
    },
    "eventsListed": 32,
    "eventsMatched": 1,
@@ -1324,18 +1326,25 @@
     "player_field_goals_made": 4,
     "player_interceptions": 4,
     "player_kicking_points": 4,
-    "player_longest_passing_completion": 4,
-    "player_longest_reception": 24,
+    "player_longest_passing_completion": 2,
+    "player_longest_reception": 20,
     "player_longest_rush": 8,
     "player_passing_+_rushing_yards": 4,
     "player_passing_attempts": 4,
     "player_passing_completions": 4,
-    "player_passing_touchdowns": 4,
-    "player_passing_yards": 54,
-    "player_receiving_yards": 50
+    "player_passing_touchdowns": 13,
+    "player_passing_yards": 76,
+    "player_receiving_yards": 228,
+    "player_receptions": 120,
+    "player_rushing_+_receiving_yards": 14,
+    "player_rushing_attempts": 6,
+    "player_rushing_yards": 99,
+    "player_sacks": 10,
+    "player_tackles": 16,
+    "player_tackles_+_assists": 16
    },
-   "requestsLeft": 0,
-   "rows": 200,
+   "requestsLeft": 45,
+   "rows": 684,
    "slateGames": [
     "Pittsburgh Steelers at Cleveland Browns 2026-10-02T00:15Z"
    ],
