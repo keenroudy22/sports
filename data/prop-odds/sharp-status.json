@@ -1,39 +1,48 @@
 {
- "at": "2026-10-01T16:21:19Z",
+ "at": "2026-10-01T16:27:44Z",
  "confirmed": {
-  "CFB-401856707": "2026-10-01T16:21:19Z",
-  "CFB-401858245": "2026-10-01T16:21:19Z",
-  "CFB-401858476": "2026-10-01T16:21:19Z",
-  "CFB-401862786": "2026-10-01T16:21:19Z",
-  "CFB-401871049": "2026-10-01T16:21:19Z",
-  "CFB-401871050": "2026-10-01T16:21:19Z",
-  "NFL-401872964": "2026-10-01T15:50:58Z"
+  "CFB-401856707": "2026-10-01T16:27:44Z",
+  "CFB-401856807": "2026-10-01T16:27:44Z",
+  "CFB-401856819": "2026-10-01T16:27:44Z",
+  "CFB-401856822": "2026-10-01T16:27:44Z",
+  "CFB-401858245": "2026-10-01T16:27:44Z",
+  "CFB-401858246": "2026-10-01T16:27:44Z",
+  "CFB-401858250": "2026-10-01T16:27:44Z",
+  "CFB-401858251": "2026-10-01T16:27:44Z",
+  "CFB-401858252": "2026-10-01T16:27:44Z",
+  "CFB-401858474": "2026-10-01T16:27:44Z",
+  "CFB-401858476": "2026-10-01T16:27:44Z",
+  "CFB-401862786": "2026-10-01T16:27:44Z",
+  "CFB-401862791": "2026-10-01T16:27:44Z",
+  "CFB-401871049": "2026-10-01T16:27:44Z",
+  "CFB-401871050": "2026-10-01T16:27:44Z",
+  "NFL-401872964": "2026-10-01T16:27:44Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1331,
-    "fanduel": 951
+    "draftkings": 2718,
+    "fanduel": 2451
    },
-   "eventsListed": 72,
+   "eventsListed": 71,
    "eventsMatched": 15,
    "games": 15,
    "marketTypes": {
-    "player_longest_passing_completion": 8,
-    "player_longest_reception": 38,
-    "player_longest_rush": 18,
-    "player_passing_+_rushing_yards": 72,
-    "player_passing_attempts": 46,
-    "player_passing_completions": 39,
-    "player_passing_touchdowns": 75,
-    "player_passing_yards": 335,
-    "player_receiving_yards": 890,
-    "player_receptions": 186,
-    "player_rushing_attempts": 63,
-    "player_rushing_yards": 512
+    "player_longest_passing_completion": 20,
+    "player_longest_reception": 74,
+    "player_longest_rush": 42,
+    "player_passing_+_rushing_yards": 252,
+    "player_passing_attempts": 77,
+    "player_passing_completions": 65,
+    "player_passing_touchdowns": 185,
+    "player_passing_yards": 802,
+    "player_receiving_yards": 1824,
+    "player_receptions": 301,
+    "player_rushing_attempts": 88,
+    "player_rushing_yards": 1439
    },
-   "requestsLeft": 0,
-   "rows": 2282,
+   "requestsLeft": 25,
+   "rows": 5169,
    "slateGames": [
     "Western Kentucky Hilltoppers at New Mexico State Aggies 2026-10-02T00:00Z",
     "North Texas Mean Green at Tulsa Golden Hurricane 2026-10-02T01:00Z",
@@ -131,21 +140,18 @@
        "player_longest_passing_completion",
        "player_longest_reception",
        "player_longest_rush",
-       "player_passing_+_rushing_yards",
        "player_passing_attempts",
        "player_passing_completions",
        "player_passing_touchdowns",
        "player_passing_yards",
        "player_receiving_yards",
        "player_receptions",
-       "player_rushing_attempts",
        "player_rushing_yards",
        "point_spread",
        "team_total",
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -234,7 +240,6 @@
        "player_longest_passing_completion",
        "player_longest_reception",
        "player_longest_rush",
-       "player_passing_+_rushing_yards",
        "player_passing_touchdowns",
        "player_passing_yards",
        "player_points",
@@ -249,7 +254,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -318,9 +322,7 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
        "draw_no_bet",
-       "first_touchdown_scorer",
        "game_prop",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
@@ -333,7 +335,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -399,9 +400,7 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
        "draw_no_bet",
-       "first_touchdown_scorer",
        "game_prop",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
@@ -416,7 +415,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -483,8 +481,6 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
-       "first_touchdown_scorer",
        "game_prop",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
@@ -497,7 +493,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -580,7 +575,6 @@
        "player_longest_passing_completion",
        "player_longest_reception",
        "player_longest_rush",
-       "player_passing_+_rushing_yards",
        "player_passing_attempts",
        "player_passing_completions",
        "player_passing_touchdowns",
@@ -596,7 +590,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -659,8 +652,6 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
-       "first_touchdown_scorer",
        "game_prop",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
@@ -675,7 +666,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -748,7 +738,6 @@
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
        "anytime_touchdown_scorer",
-       "first_touchdown_scorer",
        "game_prop",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
@@ -757,7 +746,6 @@
        "player_longest_passing_completion",
        "player_longest_reception",
        "player_longest_rush",
-       "player_passing_+_rushing_yards",
        "player_passing_touchdowns",
        "player_passing_yards",
        "player_receiving_yards",
@@ -768,7 +756,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -836,8 +823,6 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
-       "first_touchdown_scorer",
        "game_prop",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
@@ -850,7 +835,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -916,8 +900,6 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
-       "first_touchdown_scorer",
        "game_prop",
        "halftime_fulltime",
        "moneyline",
@@ -926,7 +908,6 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -1012,7 +993,6 @@
        "player_longest_passing_completion",
        "player_longest_reception",
        "player_longest_rush",
-       "player_passing_+_rushing_yards",
        "player_passing_attempts",
        "player_passing_completions",
        "player_passing_touchdowns",
@@ -1029,7 +1009,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -1111,9 +1090,7 @@
        "player_longest_passing_completion",
        "player_longest_reception",
        "player_longest_rush",
-       "player_passing_+_rushing_yards",
        "player_passing_attempts",
-       "player_passing_completions",
        "player_passing_touchdowns",
        "player_passing_yards",
        "player_receiving_yards",
@@ -1125,7 +1102,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -1136,13 +1112,39 @@
    ]
   },
   "NFL": {
-   "books": {},
+   "books": {
+    "draftkings": 337,
+    "fanduel": 364
+   },
    "eventsListed": 32,
    "eventsMatched": 1,
    "games": 1,
-   "marketTypes": {},
-   "requestsLeft": -1,
-   "rows": 0,
+   "marketTypes": {
+    "player_assists": 16,
+    "player_extra_points_made": 4,
+    "player_fantasy_score": 12,
+    "player_field_goals_made": 4,
+    "player_interceptions": 4,
+    "player_kicking_points": 4,
+    "player_longest_passing_completion": 4,
+    "player_longest_reception": 24,
+    "player_longest_rush": 8,
+    "player_passing_+_rushing_yards": 4,
+    "player_passing_attempts": 4,
+    "player_passing_completions": 4,
+    "player_passing_touchdowns": 12,
+    "player_passing_yards": 77,
+    "player_receiving_yards": 231,
+    "player_receptions": 126,
+    "player_rushing_+_receiving_yards": 14,
+    "player_rushing_attempts": 6,
+    "player_rushing_yards": 99,
+    "player_sacks": 12,
+    "player_tackles": 16,
+    "player_tackles_+_assists": 16
+   },
+   "requestsLeft": 20,
+   "rows": 701,
    "slateGames": [
     "Pittsburgh Steelers at Cleveland Browns 2026-10-02T00:15Z"
    ],
@@ -1326,7 +1328,7 @@
       "galera": "20920376",
       "gemini": "NFL-2610041700-NYJ-CHI-T",
       "hardrock": "6143567565357711794",
-      "kalshi": "KXNFL4QTOTAL-26OCT04NYJCHI",
+      "kalshi": "KXNFLRECYDS-26OCT04NYJCHI-CHIKMONANGAI25-40",
       "ladbrokes": "45bbe32a-f6a3-4831-b856-a2cb36cfb1b3",
       "ladbrokes_uk": "lduk-258815052",
       "matchbook": "mb-33321410535900023",
@@ -1778,7 +1780,7 @@
       "galera": "20920343",
       "gemini": "NFL-2610041700-GB-TB-TT",
       "hardrock": "3324032723647070607",
-      "kalshi": "KXNFL2QTOTAL-26OCT04GBTB",
+      "kalshi": "KXNFLRSHYDS-26OCT04GBTB-TBKGAINWELL1-10",
       "ladbrokes": "bbe95770-6c6d-417f-9d4f-5f485a0bf092",
       "ladbrokes_uk": "lduk-258815088",
       "matchbook": "mb-33321481335600023",
@@ -2525,7 +2527,7 @@
       "galera": "20920364",
       "gemini": "NFL-2610042005-MIA-MIN-TT",
       "hardrock": "5450013222742655393",
-      "kalshi": "KXNFL4QTOTAL-26OCT04MIAMIN",
+      "kalshi": "KXNFL2HTOTAL-26OCT04MIAMIN",
       "ladbrokes": "bdc1fa0e-bc5a-4e8c-9176-e6f6b4185195",
       "ladbrokes_uk": "lduk-258814984",
       "matchbook": "mb-33321551697300023",
