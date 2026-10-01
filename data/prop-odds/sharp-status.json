@@ -1,38 +1,38 @@
 {
- "at": "2026-10-01T15:47:13Z",
+ "at": "2026-10-01T15:50:58Z",
  "confirmed": {
-  "CFB-401858245": "2026-10-01T15:47:13Z",
-  "CFB-401858476": "2026-10-01T15:47:13Z",
-  "CFB-401862786": "2026-10-01T15:47:13Z",
-  "CFB-401871049": "2026-10-01T15:47:13Z",
-  "CFB-401871050": "2026-10-01T15:47:13Z",
-  "NFL-401872964": "2026-10-01T15:47:13Z"
+  "CFB-401858245": "2026-10-01T15:50:58Z",
+  "CFB-401858476": "2026-10-01T15:50:58Z",
+  "CFB-401862786": "2026-10-01T15:50:58Z",
+  "CFB-401871049": "2026-10-01T15:50:58Z",
+  "CFB-401871050": "2026-10-01T15:50:58Z",
+  "NFL-401872964": "2026-10-01T15:50:58Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 986,
+    "draftkings": 833,
     "fanduel": 894
    },
    "eventsListed": 71,
    "eventsMatched": 5,
    "games": 5,
    "marketTypes": {
-    "player_longest_passing_completion": 6,
-    "player_longest_reception": 28,
-    "player_longest_rush": 14,
+    "player_longest_passing_completion": 5,
+    "player_longest_reception": 24,
+    "player_longest_rush": 13,
     "player_passing_+_rushing_yards": 23,
-    "player_passing_attempts": 31,
+    "player_passing_attempts": 30,
     "player_passing_completions": 25,
-    "player_passing_touchdowns": 58,
-    "player_passing_yards": 256,
-    "player_receiving_yards": 778,
-    "player_receptions": 157,
+    "player_passing_touchdowns": 52,
+    "player_passing_yards": 221,
+    "player_receiving_yards": 712,
+    "player_receptions": 152,
     "player_rushing_attempts": 43,
-    "player_rushing_yards": 461
+    "player_rushing_yards": 427
    },
-   "requestsLeft": 2,
-   "rows": 1880,
+   "requestsLeft": 3,
+   "rows": 1727,
    "slateGames": [
     "Western Kentucky Hilltoppers at New Mexico State Aggies 2026-10-02T00:00Z",
     "North Texas Mean Green at Tulsa Golden Hurricane 2026-10-02T01:00Z",
@@ -249,7 +249,7 @@
      "type": "fixture"
     },
     {
-     "away": "Boston College",
+     "away": "Boston College Eagles",
      "external": {
       "ballybet": "1027508100",
       "bet365 us": "201985879",
@@ -285,10 +285,10 @@
       "thescorebet": "StandardEvent:5de2a454-8260-42d6-a96c-0325658fa9f6",
       "underdog": "underdog_226487"
      },
-     "home": "SMU",
+     "home": "SMU Mustangs",
      "sample": {
-      "away_team": "Boston College",
-      "home_team": "SMU",
+      "away_team": "Boston College Eagles",
+      "home_team": "SMU Mustangs",
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
@@ -687,7 +687,7 @@
       "fliff": "fobj__conflict_event__415731",
       "gemini": "NCAAF-2610031600-MIC-MIN-S",
       "hardrock": "2530868129207288223",
-      "kalshi": "KXNCAAF1HSPREAD-26OCT03MICHMINN",
+      "kalshi": "KXNCAAF2H-26OCT03MICHMINN",
       "ladbrokes": "cc031732-a055-4ee6-90ef-08d8a2bb12d4",
       "ladbrokes_uk": "lduk-258811267",
       "matchbook": "mb-34429188077800081",
@@ -724,6 +724,7 @@
        "1st_quarter_team_total",
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
+       "2nd_half_moneyline",
        "2nd_half_point_spread",
        "2nd_half_total_points",
        "2nd_quarter_moneyline",
@@ -1108,7 +1109,7 @@
      "type": "fixture"
     },
     {
-     "away": "Michigan State",
+     "away": "Michigan State Spartans",
      "external": {
       "ballybet": "1027507970",
       "betmgm": "6:45367",
@@ -1142,10 +1143,10 @@
       "thescorebet": "StandardEvent:863c83df-cc8b-4fbf-ab89-f3473a6c9f61",
       "underdog": "underdog_226491"
      },
-     "home": "Wisconsin",
+     "home": "Wisconsin Badgers",
      "sample": {
-      "away_team": "Michigan State",
-      "home_team": "Wisconsin",
+      "away_team": "Michigan State Spartans",
+      "home_team": "Wisconsin Badgers",
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
@@ -1315,7 +1316,8 @@
   },
   "NFL": {
    "books": {
-    "draftkings": 200
+    "draftkings": 335,
+    "fanduel": 65
    },
    "eventsListed": 32,
    "eventsMatched": 1,
@@ -1328,19 +1330,24 @@
     "player_interceptions": 4,
     "player_kicking_points": 4,
     "player_longest_passing_completion": 4,
-    "player_longest_reception": 16,
+    "player_longest_reception": 24,
     "player_longest_rush": 8,
     "player_passing_+_rushing_yards": 4,
     "player_passing_attempts": 4,
     "player_passing_completions": 4,
-    "player_passing_touchdowns": 4,
-    "player_passing_yards": 54,
-    "player_receiving_yards": 39,
-    "player_receptions": 18,
-    "player_rushing_+_receiving_yards": 1
+    "player_passing_touchdowns": 12,
+    "player_passing_yards": 77,
+    "player_receiving_yards": 103,
+    "player_receptions": 26,
+    "player_rushing_+_receiving_yards": 6,
+    "player_rushing_attempts": 6,
+    "player_rushing_yards": 40,
+    "player_sacks": 6,
+    "player_tackles": 16,
+    "player_tackles_+_assists": 16
    },
    "requestsLeft": 0,
-   "rows": 200,
+   "rows": 400,
    "slateGames": [
     "Pittsburgh Steelers at Cleveland Browns 2026-10-02T00:15Z"
    ],
@@ -1685,7 +1692,7 @@
       "prizepicks": "prizepicks_185003",
       "prophetx": "1700008848",
       "rebet": "sr:match:71515850",
-      "robinhood": "b52cf04b-d502-4243-b02d-0f71c71d536c",
+      "robinhood": "694d6f74-d224-4642-b7e8-6aaa86a2647e",
       "sportzino": "sz-17035367",
       "stake": "73efc76e-0808-4056-ac4b-d9318ee64020",
       "sx_bet": "L19431764",
@@ -1838,7 +1845,7 @@
       "prizepicks": "prizepicks_185007",
       "prophetx": "1700008926",
       "rebet": "sr:match:71515846",
-      "robinhood": "8cdd5179-e734-44ac-a6c5-8d9776c8431d",
+      "robinhood": "e663dc5d-2021-43d2-ae91-13106ca9d149",
       "sportzino": "sz-16564354",
       "stake": "a1831228-cf06-423a-a900-0b7db8580e3e",
       "sx_bet": "L19431783",
@@ -1985,7 +1992,7 @@
       "prizepicks": "prizepicks_185009",
       "prophetx": "1700008918",
       "rebet": "sr:match:71515858",
-      "robinhood": "cea66932-160c-4084-9683-14f1b22550cf",
+      "robinhood": "6c33c892-b196-4e30-83a0-d4cedef68b88",
       "sportzino": "sz-16551777",
       "stake": "c8879a20-b023-480d-8247-b585c770fbbc",
       "sx_bet": "L19776347",
@@ -2281,7 +2288,7 @@
       "prizepicks": "prizepicks_185005",
       "prophetx": "1700008914",
       "rebet": "sr:match:71515852",
-      "robinhood": "b44e99c6-2b56-4ce8-be30-5cac0f5f652f",
+      "robinhood": "c5f99ddd-eb85-4908-8168-db7e7586b8a3",
       "sportzino": "sz-16551802",
       "stake": "036ed6f1-1a17-4f81-9df5-856069d22be5",
       "sx_bet": "L19431777",
@@ -2732,7 +2739,7 @@
       "prizepicks": "prizepicks_185010",
       "prophetx": "1700008785",
       "rebet": "sr:match:71515860",
-      "robinhood": "498c3b33-0b43-4966-b158-3b320c9bded3",
+      "robinhood": "d9011cf7-c277-440f-865b-e5659f5e6634",
       "sportzino": "sz-16551828",
       "stake": "771ed22b-740a-4a47-b994-27606eadf6fe",
       "sx_bet": "L19431791",
@@ -2804,7 +2811,6 @@
        "player_longest_passing_completion",
        "player_longest_reception",
        "player_longest_rush",
-       "player_passes_completed",
        "player_passing_+_rushing_yards",
        "player_passing_attempts",
        "player_passing_completions",
@@ -2871,7 +2877,7 @@
       "prizepicks": "prizepicks_185013",
       "prophetx": "1700008924",
       "rebet": "sr:match:71531176",
-      "robinhood": "255d4f3e-9483-4afa-ba69-7a4913a15ee8",
+      "robinhood": "6652aa4c-aeaa-4b08-aada-30e118a3f1eb",
       "sportzino": "sz-16551844",
       "stake": "6b555b49-9648-4d0c-90af-da7d0af2c2e5",
       "sx_bet": "L19431796",
