@@ -1,16 +1,16 @@
 {
- "at": "2026-10-02T10:05:54Z",
+ "at": "2026-10-02T11:06:02Z",
  "confirmed": {
   "CFB-401856705": "2026-10-02T10:05:54Z",
-  "CFB-401856707": "2026-10-02T10:05:54Z",
+  "CFB-401856707": "2026-10-02T11:06:02Z",
   "CFB-401856708": "2026-10-02T10:05:54Z",
   "CFB-401856709": "2026-10-01T20:22:32Z",
   "CFB-401856710": "2026-10-02T10:05:54Z",
-  "CFB-401856807": "2026-10-02T10:05:54Z",
-  "CFB-401856819": "2026-10-02T10:05:54Z",
-  "CFB-401856822": "2026-10-02T10:05:54Z",
-  "CFB-401858245": "2026-10-02T10:05:54Z",
-  "CFB-401858246": "2026-10-02T10:05:54Z",
+  "CFB-401856807": "2026-10-02T11:06:02Z",
+  "CFB-401856819": "2026-10-02T11:06:02Z",
+  "CFB-401856822": "2026-10-02T11:06:02Z",
+  "CFB-401858245": "2026-10-02T11:06:02Z",
+  "CFB-401858246": "2026-10-02T11:06:02Z",
   "CFB-401858247": "2026-10-02T10:05:54Z",
   "CFB-401858248": "2026-10-02T10:05:54Z",
   "CFB-401858250": "2026-10-02T10:05:54Z",
@@ -21,37 +21,34 @@
   "CFB-401858473": "2026-10-02T10:05:54Z",
   "CFB-401858474": "2026-10-02T10:05:54Z",
   "CFB-401858475": "2026-10-01T20:22:32Z",
-  "CFB-401858476": "2026-10-02T10:05:54Z",
+  "CFB-401858476": "2026-10-02T11:06:02Z",
   "CFB-401858479": "2026-10-02T10:05:54Z",
+  "CFB-401862787": "2026-10-02T11:06:02Z",
   "CFB-401862791": "2026-10-02T10:05:54Z",
   "CFB-401866432": "2026-10-02T10:05:54Z",
-  "CFB-401871050": "2026-10-02T10:05:54Z"
+  "CFB-401871050": "2026-10-02T11:06:02Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 4783,
-    "fanduel": 3786
+    "draftkings": 311,
+    "fanduel": 1653
    },
-   "eventsListed": 70,
+   "eventsListed": 69,
    "eventsMatched": 56,
    "games": 57,
    "marketTypes": {
-    "player_longest_passing_completion": 33,
-    "player_longest_reception": 122,
-    "player_longest_rush": 66,
-    "player_passing_+_rushing_yards": 438,
-    "player_passing_attempts": 150,
-    "player_passing_completions": 124,
-    "player_passing_touchdowns": 291,
-    "player_passing_yards": 1255,
-    "player_receiving_yards": 3071,
-    "player_receptions": 554,
-    "player_rushing_attempts": 174,
-    "player_rushing_yards": 2291
+    "player_longest_reception": 3,
+    "player_longest_rush": 6,
+    "player_passing_touchdowns": 90,
+    "player_passing_yards": 294,
+    "player_receiving_yards": 816,
+    "player_receptions": 154,
+    "player_rushing_attempts": 8,
+    "player_rushing_yards": 593
    },
    "requestsLeft": 0,
-   "rows": 8569,
+   "rows": 1964,
    "slateGames": [
     "Pittsburgh Panthers at Virginia Tech Hokies 2026-10-02T23:00Z",
     "Liberty Flames at Delaware Blue Hens 2026-10-02T23:00Z",
@@ -118,6 +115,7 @@
       "ballybet": "1027508085",
       "betparx": "1027508085",
       "betrivers": "1027508085",
+      "caesars": "89063176-6f20-4769-919d-b94a939ba388",
       "draftkings": "34708335",
       "fanduel": "36112825",
       "hardrock": "5616396823909499297",
@@ -159,6 +157,7 @@
        "moneyline",
        "player_passing_touchdowns",
        "player_passing_yards",
+       "player_points",
        "player_receiving_yards",
        "player_rushing_yards",
        "point_spread",
@@ -305,33 +304,6 @@
      "type": "fixture"
     },
     {
-     "away": "Georgia",
-     "external": {
-      "ballybet": "1027552988",
-      "betparx": "1027552988",
-      "betrivers": "1027552988",
-      "draftkings": "34226065",
-      "fanduel": "35632859",
-      "fliff": "394822_c_p_209_prematch",
-      "kalshi": "KXNCAAF1H-26OCT10UGAALA",
-      "polymarket": "nfl_alabamacrimsontide_georgiabulldogs_2026-10-10_b3",
-      "robinhood": "96121e33-9f03-4e15-af97-8e461fbac376"
-     },
-     "home": "Alabama",
-     "sample": {
-      "away_team": "Georgia",
-      "home_team": "Alabama",
-      "markets": [
-       "1st_half_moneyline",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-10T17:00:00Z",
-     "type": "fixture"
-    },
-    {
      "away": "South Carolina",
      "external": {
       "ballybet": "1027508049",
@@ -458,6 +430,32 @@
       ]
      },
      "start": "2026-10-10T23:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Georgia",
+     "external": {
+      "ballybet": "1027552988",
+      "betparx": "1027552988",
+      "betrivers": "1027552988",
+      "fanduel": "35632859",
+      "fliff": "394822_c_p_209_prematch",
+      "kalshi": "KXNCAAF1H-26OCT10UGAALA",
+      "polymarket": "nfl_alabamacrimsontide_georgiabulldogs_2026-10-10_b3",
+      "robinhood": "96121e33-9f03-4e15-af97-8e461fbac376"
+     },
+     "home": "Alabama",
+     "sample": {
+      "away_team": "Georgia",
+      "home_team": "Alabama",
+      "markets": [
+       "1st_half_moneyline",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-10T23:30:00Z",
      "type": "fixture"
     }
    ]
