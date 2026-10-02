@@ -1,15 +1,15 @@
 {
- "at": "2026-10-02T19:43:31Z",
+ "at": "2026-10-02T19:47:07Z",
  "confirmed": {
   "CFB-401856705": "2026-10-02T15:49:07Z",
-  "CFB-401856707": "2026-10-02T19:43:31Z",
+  "CFB-401856707": "2026-10-02T19:47:07Z",
   "CFB-401856708": "2026-10-02T15:49:07Z",
   "CFB-401856709": "2026-10-01T20:22:32Z",
   "CFB-401856710": "2026-10-02T15:49:07Z",
-  "CFB-401856807": "2026-10-02T19:43:31Z",
+  "CFB-401856807": "2026-10-02T19:47:07Z",
   "CFB-401856819": "2026-10-02T16:06:14Z",
   "CFB-401856822": "2026-10-02T16:06:14Z",
-  "CFB-401858245": "2026-10-02T19:43:31Z",
+  "CFB-401858245": "2026-10-02T19:47:07Z",
   "CFB-401858246": "2026-10-02T16:06:14Z",
   "CFB-401858247": "2026-10-02T15:49:07Z",
   "CFB-401858248": "2026-10-02T15:49:07Z",
@@ -21,39 +21,39 @@
   "CFB-401858473": "2026-10-02T15:49:07Z",
   "CFB-401858474": "2026-10-02T15:49:07Z",
   "CFB-401858475": "2026-10-01T20:22:32Z",
-  "CFB-401858476": "2026-10-02T19:43:31Z",
+  "CFB-401858476": "2026-10-02T19:47:07Z",
   "CFB-401858479": "2026-10-02T15:49:07Z",
   "CFB-401862787": "2026-10-02T19:34:01Z",
   "CFB-401862791": "2026-10-02T15:49:07Z",
   "CFB-401864515": "2026-10-02T15:49:07Z",
   "CFB-401866432": "2026-10-02T15:49:07Z",
-  "CFB-401871050": "2026-10-02T19:43:31Z"
+  "CFB-401871050": "2026-10-02T19:47:07Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1178,
-    "fanduel": 822
+    "draftkings": 1055,
+    "fanduel": 946
    },
-   "eventsListed": 70,
+   "eventsListed": 73,
    "eventsMatched": 56,
    "games": 57,
    "marketTypes": {
-    "player_longest_passing_completion": 8,
-    "player_longest_reception": 33,
-    "player_longest_rush": 18,
-    "player_passing_+_rushing_yards": 72,
-    "player_passing_attempts": 55,
-    "player_passing_completions": 42,
-    "player_passing_touchdowns": 60,
-    "player_passing_yards": 274,
-    "player_receiving_yards": 784,
-    "player_receptions": 219,
-    "player_rushing_attempts": 35,
-    "player_rushing_yards": 400
+    "player_longest_passing_completion": 7,
+    "player_longest_reception": 30,
+    "player_longest_rush": 17,
+    "player_passing_+_rushing_yards": 48,
+    "player_passing_attempts": 49,
+    "player_passing_completions": 37,
+    "player_passing_touchdowns": 63,
+    "player_passing_yards": 265,
+    "player_receiving_yards": 812,
+    "player_receptions": 211,
+    "player_rushing_attempts": 37,
+    "player_rushing_yards": 425
    },
    "requestsLeft": 0,
-   "rows": 2000,
+   "rows": 2001,
    "slateGames": [
     "Pittsburgh Panthers at Virginia Tech Hokies 2026-10-02T23:00Z",
     "Liberty Flames at Delaware Blue Hens 2026-10-02T23:00Z",
@@ -229,6 +229,26 @@
      "type": "fixture"
     },
     {
+     "away": "New Mexico State",
+     "external": {
+      "fanduel": "36137754",
+      "kalshi": "KXNCAAFGAME-26OCT07NMSUFIU",
+      "robinhood": "f1e9c44f-d4b8-4b41-958d-59aa01008a6f"
+     },
+     "home": "Florida International",
+     "sample": {
+      "away_team": "New Mexico State",
+      "home_team": "Florida International",
+      "markets": [
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-07T23:30:00Z",
+     "type": "fixture"
+    },
+    {
      "away": "Iowa",
      "external": {
       "ballybet": "1027569821",
@@ -301,6 +321,24 @@
       "home_team": "Nebraska",
       "markets": [
        "1st_half_moneyline",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-10T16:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "USC",
+     "external": {
+      "draftkings": "34226077"
+     },
+     "home": "Penn State",
+     "sample": {
+      "away_team": "USC",
+      "home_team": "Penn State",
+      "markets": [
        "moneyline",
        "point_spread",
        "total_points"
@@ -412,58 +450,6 @@
      },
      "start": "2026-10-10T19:30:00Z",
      "type": "fixture"
-    },
-    {
-     "away": "UCLA",
-     "external": {
-      "ballybet": "1027508062",
-      "betparx": "1027508062",
-      "betrivers": "1027508062",
-      "draftkings": "34745994",
-      "fanduel": "36130161",
-      "fliff": "416483_c_p_209_prematch",
-      "kalshi": "KXNCAAF1H-26OCT10UCLAORE",
-      "polymarket": "nfl_oregonducks_uclabruins_2026-10-10_b2",
-      "robinhood": "ec933964-d0fe-4c42-aca0-6458a032dbb5"
-     },
-     "home": "Oregon",
-     "sample": {
-      "away_team": "UCLA",
-      "home_team": "Oregon",
-      "markets": [
-       "1st_half_moneyline",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-10T19:30:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "LSU",
-     "external": {
-      "ballybet": "1027508199",
-      "betparx": "1027508199",
-      "betrivers": "1027508199",
-      "draftkings": "34746039",
-      "fliff": "417032_c_p_209_prematch",
-      "kalshi": "KXNCAAF1H-26OCT10LSUUK",
-      "polymarket": "nfl_kentuckywildcats_lsutigers_2026-10-10_b3",
-      "robinhood": "7d5b0aa1-92d9-48d9-831d-1838f10a7ce6"
-     },
-     "home": "Kentucky",
-     "sample": {
-      "away_team": "LSU",
-      "home_team": "Kentucky",
-      "markets": [
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-10T23:00:00Z",
-     "type": "fixture"
     }
    ]
   },
@@ -525,7 +511,7 @@
       "galera": "20920364",
       "gemini": "NFL-2610042005-MIA-MIN-T",
       "hardrock": "5450013222742655393",
-      "kalshi": "KXNFLRECYDS-26OCT04MIAMIN-MINTFELTON13-15",
+      "kalshi": "KXNFLREC-26OCT04MIAMIN-MINTFELTON13-4",
       "ladbrokes": "bdc1fa0e-bc5a-4e8c-9176-e6f6b4185195",
       "ladbrokes_uk": "lduk-258814984",
       "matchbook": "mb-33321551697300023",
@@ -681,7 +667,7 @@
       "galera": "20920344",
       "gemini": "NFL-2610042025-DEN-SF-T",
       "hardrock": "4067408137139913119",
-      "kalshi": "KXNFL2H-26OCT04DENSF",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT04DENSF",
       "ladbrokes": "df4e94f9-be5e-4e57-ae61-04262d4bc3e6",
       "ladbrokes_uk": "lduk-258814980",
       "matchbook": "mb-33321590454400023",
@@ -837,9 +823,9 @@
       "fanduel": "36104921",
       "fliff": "400037_c_p_202_prematch",
       "galera": "20920365",
-      "gemini": "NFL-2610042025-LAC-SEA-S",
+      "gemini": "NFL-2610042025-LAC-SEA-TT",
       "hardrock": "336457320840167815",
-      "kalshi": "KXNFLRECYDS-26OCT04LACSEA-LACLMCCONKEY15-60",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT04LACSEA",
       "ladbrokes": "3835a766-0f66-4b23-99af-8cd02dee4668",
       "ladbrokes_uk": "lduk-258814970",
       "matchbook": "mb-33321597988100023",
@@ -1157,7 +1143,7 @@
       "galera": "20920336",
       "gemini": "NFL-2610050020-DET-CAR-T",
       "hardrock": "8921444110515175844",
-      "kalshi": "KXNFL1HTEAMTOTAL-26OCT04DETCAR",
+      "kalshi": "KXNFLREC-26OCT04DETCAR-CARTMCMILLAN4-3",
       "ladbrokes": "0a94e18b-214d-4b3e-9bde-7acdb23fc8db",
       "ladbrokes_uk": "lduk-258814969",
       "matchbook": "mb-33321612243700023",
@@ -1319,7 +1305,7 @@
       "galera": "20940866",
       "gemini": "NFL-2610060015-ATL-NO-S",
       "hardrock": "3637145959005290894",
-      "kalshi": "KXNFL1H-26OCT05ATLNO",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT05ATLNO",
       "ladbrokes": "92974676-464a-4db3-89f6-5c6b0ee28a2e",
       "ladbrokes_uk": "lduk-258814960",
       "matchbook": "mb-33321622423000023",
@@ -1329,7 +1315,7 @@
       "prizepicks": "prizepicks_185425",
       "prophetx": "1700008800",
       "rebet": "sr:match:71515870",
-      "robinhood": "88b1d7d5-0178-4324-92e3-0f766a709599",
+      "robinhood": "ab88939b-88b5-464a-8d83-73d6b15d2028",
       "stake": "53a997c1-5d00-4c13-b73f-bb1590ed41b6",
       "sx_bet": "L19431812",
       "thescorebet": "StandardEvent:5b2498b8-8c9b-41ee-8b11-ef71836d528b",
