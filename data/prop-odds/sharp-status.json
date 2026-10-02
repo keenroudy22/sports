@@ -1,15 +1,15 @@
 {
- "at": "2026-10-02T12:48:33Z",
+ "at": "2026-10-02T13:01:57Z",
  "confirmed": {
   "CFB-401856705": "2026-10-02T12:48:33Z",
-  "CFB-401856707": "2026-10-02T12:48:33Z",
+  "CFB-401856707": "2026-10-02T13:01:57Z",
   "CFB-401856708": "2026-10-02T12:48:33Z",
   "CFB-401856709": "2026-10-01T20:22:32Z",
   "CFB-401856710": "2026-10-02T12:48:33Z",
-  "CFB-401856807": "2026-10-02T12:48:33Z",
+  "CFB-401856807": "2026-10-02T13:01:57Z",
   "CFB-401856819": "2026-10-02T12:48:33Z",
   "CFB-401856822": "2026-10-02T12:48:33Z",
-  "CFB-401858245": "2026-10-02T12:48:33Z",
+  "CFB-401858245": "2026-10-02T13:01:57Z",
   "CFB-401858246": "2026-10-02T12:48:33Z",
   "CFB-401858247": "2026-10-02T12:48:33Z",
   "CFB-401858248": "2026-10-02T12:48:33Z",
@@ -21,39 +21,39 @@
   "CFB-401858473": "2026-10-02T12:48:33Z",
   "CFB-401858474": "2026-10-02T12:48:33Z",
   "CFB-401858475": "2026-10-01T20:22:32Z",
-  "CFB-401858476": "2026-10-02T12:48:33Z",
+  "CFB-401858476": "2026-10-02T13:01:57Z",
   "CFB-401858479": "2026-10-02T12:48:33Z",
-  "CFB-401862787": "2026-10-02T12:38:03Z",
+  "CFB-401862787": "2026-10-02T13:01:57Z",
   "CFB-401862791": "2026-10-02T12:48:33Z",
   "CFB-401864515": "2026-10-02T12:48:33Z",
   "CFB-401866432": "2026-10-02T12:48:33Z",
-  "CFB-401871050": "2026-10-02T12:48:33Z"
+  "CFB-401871050": "2026-10-02T13:01:57Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 4778,
-    "fanduel": 3864
+    "draftkings": 1116,
+    "fanduel": 949
    },
-   "eventsListed": 71,
+   "eventsListed": 69,
    "eventsMatched": 56,
    "games": 57,
    "marketTypes": {
-    "player_longest_passing_completion": 33,
-    "player_longest_reception": 122,
-    "player_longest_rush": 66,
-    "player_passing_+_rushing_yards": 438,
-    "player_passing_attempts": 150,
-    "player_passing_completions": 124,
-    "player_passing_touchdowns": 295,
-    "player_passing_yards": 1270,
-    "player_receiving_yards": 3097,
-    "player_receptions": 553,
-    "player_rushing_attempts": 172,
-    "player_rushing_yards": 2322
+    "player_longest_passing_completion": 8,
+    "player_longest_reception": 34,
+    "player_longest_rush": 16,
+    "player_passing_+_rushing_yards": 72,
+    "player_passing_attempts": 32,
+    "player_passing_completions": 25,
+    "player_passing_touchdowns": 73,
+    "player_passing_yards": 286,
+    "player_receiving_yards": 819,
+    "player_receptions": 194,
+    "player_rushing_attempts": 29,
+    "player_rushing_yards": 477
    },
    "requestsLeft": 0,
-   "rows": 8642,
+   "rows": 2065,
    "slateGames": [
     "Pittsburgh Panthers at Virginia Tech Hokies 2026-10-02T23:00Z",
     "Liberty Flames at Delaware Blue Hens 2026-10-02T23:00Z",
@@ -311,24 +311,6 @@
      "type": "fixture"
     },
     {
-     "away": "USC",
-     "external": {
-      "draftkings": "34226077"
-     },
-     "home": "Penn State",
-     "sample": {
-      "away_team": "USC",
-      "home_team": "Penn State",
-      "markets": [
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-10T16:00:00Z",
-     "type": "fixture"
-    },
-    {
      "away": "Georgia",
      "external": {
       "ballybet": "1027552988",
@@ -456,6 +438,32 @@
       ]
      },
      "start": "2026-10-10T19:30:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "LSU",
+     "external": {
+      "ballybet": "1027508199",
+      "betparx": "1027508199",
+      "betrivers": "1027508199",
+      "draftkings": "34746039",
+      "fliff": "417032_c_p_209_prematch",
+      "kalshi": "KXNCAAF1H-26OCT10LSUUK",
+      "polymarket": "nfl_kentuckywildcats_lsutigers_2026-10-10_b3",
+      "robinhood": "7d5b0aa1-92d9-48d9-831d-1838f10a7ce6"
+     },
+     "home": "Kentucky",
+     "sample": {
+      "away_team": "LSU",
+      "home_team": "Kentucky",
+      "markets": [
+       "1st_half_moneyline",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-10T23:00:00Z",
      "type": "fixture"
     }
    ]
