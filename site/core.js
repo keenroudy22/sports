@@ -402,6 +402,30 @@
      one). Fun parlays (smaller stakes) and the Week 1 legs posted before prices were recorded get their own lines.
      The Pick of the Day record counts the days its post went out. */
   const isParlay = p => p.kind === 'parlays' || Boolean((p.legs || []).length) || Boolean(p.parlayType);
+  const recordBreakdown = picks => {
+    const straight = picks.filter(p => !isParlay(p));
+    const captured = straight.filter(p => !p.priceAssumed && !isUnpricedImport(p) && typeof p.odds === 'number');
+    const assumed = straight.filter(p => p.priceAssumed || isUnpricedImport(p));
+    // Promotional refunds are not evidence that a losing model pick made money.
+    const beforeCredits = captured.map(p => p.earlyExit && p.result === 'loss'
+      ? { ...p, earlyExit: false, units: -stakeOf(p) } : p);
+    return { all: summarizePicks(straight), captured: summarizePicks(beforeCredits), assumed: summarizePicks(assumed),
+      credits: captured.filter(p => p.earlyExit && p.result === 'loss').reduce((sum, p) => sum + stakeOf(p), 0) };
+  };
+  const cardSchedule = (picks, now = Date.now()) => {
+    const today = dayOf(new Date(now).toISOString());
+    const active = picks.filter(p => !p.result && !p.historicalImport);
+    const day = p => dayOf(p.kickoff);
+    return { today: active.filter(p => day(p) === today),
+      upcoming: active.filter(p => day(p) && day(p) > today),
+      awaiting: active.filter(p => !day(p) || day(p) < today) };
+  };
+  const modelCaution = game => {
+    const margin = game?.v2?.margin, spread = game?.market?.spread;
+    if (game?.league !== 'CFB' || typeof margin !== 'number' || typeof spread !== 'number'
+      || Math.abs(margin + spread) < 7) return '';
+    return 'Large model / market gap. College schedule strength, blowouts and changing roles can distort this estimate—not an automatic edge.';
+  };
   /* The Kook'n 80/20 Climb (scripts/ladder.py): bank 20% of every winning return and ride 80% on the next rung.
      The current climb reaches $1,000 on bank plus ride; a miss starts a new $50 climb but cannot take the saved bank.
      It stays outside the straight record, and a rung pulled before its post still counts and waits for its result. */
@@ -513,5 +537,5 @@
   return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal,
     column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
-    unitsFor, stakeOf, recordOf, projectionScorecard, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, pickResearchRoute, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, modelCaution, projectionScorecard, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, pickResearchRoute, shardOf, BASE };
 });

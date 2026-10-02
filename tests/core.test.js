@@ -3,6 +3,36 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const C = require('../site/core.js');
 
+test('headline record separates assumed prices and promotional credits without rewriting plays', () => {
+  const picks = [{ result:'win', odds:100 }, { result:'loss', odds:-110, earlyExit:true, units:0 },
+    { result:'win', odds:-115, priceAssumed:true }, { result:'loss', odds:200, kind:'parlays' }];
+  const frozen = JSON.stringify(picks);
+  const r = C.recordBreakdown(picks);
+  assert.equal(r.all.wins, 2);
+  assert.equal(r.all.losses, 1);
+  assert.equal(r.captured.units, 0);
+  assert.equal(r.captured.wins, 1);
+  assert.equal(r.assumed.wins, 1);
+  assert.equal(r.credits, 1);
+  assert.equal(JSON.stringify(picks), frozen);
+});
+
+test('official card separates Eastern dates and keeps ungraded older plays visible', () => {
+  const picks = [{id:'today',kickoff:'2026-10-03T00:00:00Z'}, {id:'tomorrow',kickoff:'2026-10-03T17:00:00Z'},
+    {id:'old',kickoff:'2026-10-01T22:00:00Z'}, {id:'settled',kickoff:'2026-10-03T00:00:00Z',result:'win'}];
+  const r = C.cardSchedule(picks, Date.parse('2026-10-02T14:00:00Z'));
+  assert.deepEqual(r.today.map(p=>p.id), ['today']);
+  assert.deepEqual(r.upcoming.map(p=>p.id), ['tomorrow']);
+  assert.deepEqual(r.awaiting.map(p=>p.id), ['old']);
+});
+
+test('college disagreement caution uses home-margin sign and is not a selection', () => {
+  assert.match(C.modelCaution({league:'CFB', v2:{margin:6}, market:{spread:7}}), /not an automatic edge/);
+  assert.equal(C.modelCaution({league:'CFB', v2:{margin:6}, market:{spread:-7}}), '');
+  assert.equal(C.modelCaution({league:'NFL', v2:{margin:6}, market:{spread:7}}), '');
+  assert.equal(C.modelCaution({league:'CFB', v2:{margin:6}, market:{}}), '');
+});
+
 test('straight play cards link to the player or matchup; tickets and incomplete props keep details', () => {
   assert.equal(C.pickResearchRoute({ kind: 'props', athleteId: '5138451', league: 'CFB', gameId: 'CFB-401858245' }), '#player/CFB/5138451');
   assert.equal(C.pickResearchRoute({ athleteId: 3122840, league: 'NFL' }), '#player/NFL/3122840');

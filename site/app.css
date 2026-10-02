@@ -14,13 +14,36 @@
 
   --mint: #5eeaa4;
   --green: #3fd98b;
-  --amber: #ffb43d;
+  --amber: #6fc2f0;
   --rose: #ff5d6e;
   --sky: #6fc2f0;
 
   --radius: 13px;
   --gutter: 16px;
   --tabbar: 62px;
+}
+
+.board-tabs { display:flex; gap:6px; flex-wrap:wrap; margin:0 0 22px; }
+.board-tabs a { padding:11px 15px; min-height:44px; border:1px solid var(--line); border-radius:999px; color:var(--dim); font-size:13px; font-weight:700; }
+.board-tabs a[aria-current] { background:var(--mint); color:#06251b; border-color:var(--mint); }
+.upcoming-card { margin:16px 0; padding:16px; }
+.upcoming-card summary { cursor:pointer; font-weight:700; min-height:44px; }
+.upcoming-card summary span { display:block; color:var(--dim); font-size:12px; font-weight:400; margin:6px 0 12px; }
+.transparent-record { padding:18px; margin:24px 0; border-top:2px solid var(--mint); }
+.transparent-record .stats { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.transparent-record .stat { min-width:0; }
+.transparent-record .stat-label { overflow-wrap:anywhere; }
+.transparent-record .row-meta { margin:12px 0 0; }
+.research-heading { padding:12px 0 4px; }
+.research-heading h2 { margin:6px 0; font-size:30px; }
+.research-heading p:last-child { color:var(--dim); font-size:13px; line-height:1.6; }
+.two-col > div { min-width:0; }
+.two-col .scorecard-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+@media(max-width:420px) {
+  .transparent-record { padding:12px; }
+  .transparent-record .stat { padding:9px; }
+  .transparent-record .stat-value { font-size:25px; }
+  .board-tabs a { padding:11px 12px; }
 }
 
 * { box-sizing: border-box; }
@@ -596,7 +619,7 @@ table.data a { font-weight: 600; }
 }
 
 /* the day's Pick of the Day leads, marked in the kitchen's amber */
-.play-featured { border-color: rgba(255, 180, 61, .55); box-shadow: 0 0 0 1px rgba(255, 180, 61, .25) inset; }
+.play-featured { border-color: rgba(94, 234, 164, .55); box-shadow: 0 0 0 1px rgba(94, 234, 164, .25) inset; }
 .play-featured .play-kind { color: var(--amber); }
 .play-featured .play-kind::before { content: '★ '; }
 
@@ -651,13 +674,16 @@ table.data a { font-weight: 600; }
 .play-hero { display: flex !important; align-items: center; gap: 12px; margin: 8px 0 2px; }
 .play-hero .play-title { margin: 0; min-width: 0; }
 .lotto-odds { color: var(--amber); }
-.play-lotto { background: linear-gradient(135deg, rgba(242, 140, 40, .10), transparent 60%), var(--surface); border-color: rgba(242, 140, 40, .45); }
+.play-lotto { background: linear-gradient(135deg, rgba(111, 194, 240, .10), transparent 60%), var(--surface); border-color: rgba(111, 194, 240, .45); }
 .play-legs .leg { display: flex; align-items: center; gap: 6px; }
 .play-stats { display: grid !important; grid-template-columns: repeat(auto-fit, minmax(68px, 1fr)); gap: 6px; margin-top: 10px; }
 .play-stats > span { background: rgba(255, 255, 255, .035); border: 1px solid var(--line); border-radius: 10px; padding: 7px 6px 6px; text-align: center; min-width: 0; }
 .play-stats small { display: block; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
 .play-stats b { display: block; font-size: 20px; line-height: 1.15; margin-top: 2px; }
-.play-stats em { display: block; font-style: normal; font-size: 11px; color: var(--faint); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.play-stats em { display: block; font-style: normal; font-size: 11px; color: var(--faint); margin-top: 1px; }
+.play-stats:has(> span:nth-child(4)) { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.play-stats > span:last-child:nth-child(4) { grid-column:1/-1; display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; }
+.favorite-line .row-market, .favorite-line .row-meta { display:block; margin-top:6px; line-height:1.5; }
 
 /* our chance against break-even, on the board */
 .cbar { position: relative; display: block; height: 6px; margin: 7px 0 3px; border-radius: 3px; background: #1f2935; max-width: 260px; }
@@ -676,25 +702,25 @@ table.data a { font-weight: 600; }
 .streak { font-size: 13px; font-weight: 700; color: var(--amber); }
 
 /* The Kook'n 80/20 Climb: bank plus ride, in the kitchen's orange, from $50 to $1,000. */
-.play-ladder { background: linear-gradient(135deg, rgba(242, 140, 40, .12), transparent 60%), var(--surface); border-color: rgba(242, 140, 40, .45); }
-.play-ladder .play-kind { color: #f6a55a; }
-.pill-ladder { background: rgba(242, 140, 40, .16); color: #f6a55a; }
+.play-ladder { background: linear-gradient(135deg, rgba(72, 232, 195, .12), transparent 60%), var(--surface); border-color: rgba(72, 232, 195, .45); }
+.play-ladder .play-kind { color: var(--mint); }
+.pill-ladder { background: rgba(72, 232, 195, .16); color: var(--mint); }
 .ladder-bar { display: block; margin: 10px 0 2px; }
 .ladder-track { position: relative; display: block; height: 10px; border-radius: 5px; background: #1f2935; overflow: hidden; }
 .ladder-track i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; min-width: 10px; }
-.ladder-win { background: rgba(242, 140, 40, .38); }
-.ladder-now { background: #f28c28; }
+.ladder-win { background: rgba(94, 234, 164, .28); }
+.ladder-now { background: var(--mint); }
 .ladder-ends { display: flex; justify-content: space-between; font-size: 11px; color: var(--faint); margin-top: 4px; }
 .ladder-card { padding: 14px; }
 .ladder-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .ladder-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: .02em; }
 .ladder-pitch { margin: 6px 0 10px; font-size: 13px; color: var(--dim); }
 .ladder-now-line { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-.ladder-now-line b { font-size: 30px; color: #f6a55a; }
+.ladder-now-line b { font-size: 30px; color: var(--mint); }
 .ladder-now-line span { font-size: 13px; color: var(--dim); }
 .ladder-rows { margin-top: 10px; border-top: 1px solid var(--line); }
 .ladder-note { margin: 10px 2px 0; }
-.ladder-strip { margin-top: 10px; border-color: rgba(242, 140, 40, .35); }
-.ladder-strip .eyebrow { color: #f6a55a; }
-.ladder-big { color: #f6a55a; }
+.ladder-strip { margin-top: 10px; border-color: rgba(94, 234, 164, .35); }
+.ladder-strip .eyebrow { color: var(--mint); }
+.ladder-big { color: var(--mint); }
 .ladder-strip .ladder-bar { width: 100%; margin-top: 8px; }
