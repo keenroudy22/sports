@@ -1,15 +1,15 @@
 {
- "at": "2026-10-02T19:47:07Z",
+ "at": "2026-10-02T19:51:13Z",
  "confirmed": {
   "CFB-401856705": "2026-10-02T15:49:07Z",
-  "CFB-401856707": "2026-10-02T19:47:07Z",
+  "CFB-401856707": "2026-10-02T19:51:13Z",
   "CFB-401856708": "2026-10-02T15:49:07Z",
   "CFB-401856709": "2026-10-01T20:22:32Z",
   "CFB-401856710": "2026-10-02T15:49:07Z",
-  "CFB-401856807": "2026-10-02T19:47:07Z",
+  "CFB-401856807": "2026-10-02T19:51:13Z",
   "CFB-401856819": "2026-10-02T16:06:14Z",
   "CFB-401856822": "2026-10-02T16:06:14Z",
-  "CFB-401858245": "2026-10-02T19:47:07Z",
+  "CFB-401858245": "2026-10-02T19:51:13Z",
   "CFB-401858246": "2026-10-02T16:06:14Z",
   "CFB-401858247": "2026-10-02T15:49:07Z",
   "CFB-401858248": "2026-10-02T15:49:07Z",
@@ -21,39 +21,39 @@
   "CFB-401858473": "2026-10-02T15:49:07Z",
   "CFB-401858474": "2026-10-02T15:49:07Z",
   "CFB-401858475": "2026-10-01T20:22:32Z",
-  "CFB-401858476": "2026-10-02T19:47:07Z",
+  "CFB-401858476": "2026-10-02T19:51:13Z",
   "CFB-401858479": "2026-10-02T15:49:07Z",
   "CFB-401862787": "2026-10-02T19:34:01Z",
   "CFB-401862791": "2026-10-02T15:49:07Z",
   "CFB-401864515": "2026-10-02T15:49:07Z",
   "CFB-401866432": "2026-10-02T15:49:07Z",
-  "CFB-401871050": "2026-10-02T19:47:07Z"
+  "CFB-401871050": "2026-10-02T19:51:13Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1055,
-    "fanduel": 946
+    "draftkings": 1181,
+    "fanduel": 791
    },
-   "eventsListed": 73,
+   "eventsListed": 72,
    "eventsMatched": 56,
    "games": 57,
    "marketTypes": {
-    "player_longest_passing_completion": 7,
-    "player_longest_reception": 30,
-    "player_longest_rush": 17,
-    "player_passing_+_rushing_yards": 48,
-    "player_passing_attempts": 49,
-    "player_passing_completions": 37,
-    "player_passing_touchdowns": 63,
-    "player_passing_yards": 265,
-    "player_receiving_yards": 812,
-    "player_receptions": 211,
-    "player_rushing_attempts": 37,
-    "player_rushing_yards": 425
+    "player_longest_passing_completion": 8,
+    "player_longest_reception": 33,
+    "player_longest_rush": 18,
+    "player_passing_+_rushing_yards": 73,
+    "player_passing_attempts": 55,
+    "player_passing_completions": 42,
+    "player_passing_touchdowns": 54,
+    "player_passing_yards": 267,
+    "player_receiving_yards": 765,
+    "player_receptions": 220,
+    "player_rushing_attempts": 36,
+    "player_rushing_yards": 401
    },
    "requestsLeft": 0,
-   "rows": 2001,
+   "rows": 1972,
    "slateGames": [
     "Pittsburgh Panthers at Virginia Tech Hokies 2026-10-02T23:00Z",
     "Liberty Flames at Delaware Blue Hens 2026-10-02T23:00Z",
@@ -233,6 +233,7 @@
      "external": {
       "fanduel": "36137754",
       "kalshi": "KXNCAAFGAME-26OCT07NMSUFIU",
+      "polymarket": "nfl_floridainternational_newmexicostate_2026-10-07_b3",
       "robinhood": "f1e9c44f-d4b8-4b41-958d-59aa01008a6f"
      },
      "home": "Florida International",
@@ -321,24 +322,6 @@
       "home_team": "Nebraska",
       "markets": [
        "1st_half_moneyline",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-10T16:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "USC",
-     "external": {
-      "draftkings": "34226077"
-     },
-     "home": "Penn State",
-     "sample": {
-      "away_team": "USC",
-      "home_team": "Penn State",
-      "markets": [
        "moneyline",
        "point_spread",
        "total_points"
@@ -450,6 +433,33 @@
      },
      "start": "2026-10-10T19:30:00Z",
      "type": "fixture"
+    },
+    {
+     "away": "UCLA",
+     "external": {
+      "ballybet": "1027508062",
+      "betparx": "1027508062",
+      "betrivers": "1027508062",
+      "draftkings": "34745994",
+      "fanduel": "36130161",
+      "fliff": "416483_c_p_209_prematch",
+      "kalshi": "KXNCAAF1H-26OCT10UCLAORE",
+      "polymarket": "nfl_oregonducks_uclabruins_2026-10-10_b2",
+      "robinhood": "ec933964-d0fe-4c42-aca0-6458a032dbb5"
+     },
+     "home": "Oregon",
+     "sample": {
+      "away_team": "UCLA",
+      "home_team": "Oregon",
+      "markets": [
+       "1st_half_moneyline",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-10T19:30:00Z",
+     "type": "fixture"
     }
    ]
   },
@@ -501,7 +511,7 @@
       "betrivers": "1028812630",
       "bovada": "27950388",
       "bwin": "6:43509",
-      "circa": "216050",
+      "circa": "216059",
       "coral": "cor-46477056",
       "draftkings": "34118170",
       "fanatics": "5445586",
@@ -1315,7 +1325,7 @@
       "prizepicks": "prizepicks_185425",
       "prophetx": "1700008800",
       "rebet": "sr:match:71515870",
-      "robinhood": "ab88939b-88b5-464a-8d83-73d6b15d2028",
+      "robinhood": "88b1d7d5-0178-4324-92e3-0f766a709599",
       "stake": "53a997c1-5d00-4c13-b73f-bb1590ed41b6",
       "sx_bet": "L19431812",
       "thescorebet": "StandardEvent:5b2498b8-8c9b-41ee-8b11-ef71836d528b",

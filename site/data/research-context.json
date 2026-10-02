@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-02T19:46:24Z",
+  "updatedAt": "2026-10-02T19:50:02Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -2585,7 +2585,7 @@
               "id": "4242390",
               "name": "Aaron Banks",
               "position": "G",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Toe",
               "reportedAt": "2026-10-02T01:27Z",
               "source": "https://www.espn.com/nfl/player/_/id/4242390/aaron-banks"
@@ -4147,6 +4147,15 @@
           "name": "Los Angeles Rams",
           "players": [
             {
+              "id": "4242557",
+              "name": "Colby Parkinson",
+              "position": "TE",
+              "status": "Questionable",
+              "injury": "Shoulder - AC Joint",
+              "reportedAt": "2026-10-02T19:41Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4242557/colby-parkinson"
+            },
+            {
               "id": "4426515",
               "name": "Puka Nacua",
               "position": "WR",
@@ -4181,15 +4190,6 @@
               "injury": "Shoulder",
               "reportedAt": "2026-10-02T18:37Z",
               "source": "https://www.espn.com/nfl/player/_/id/4697639/jaylen-watson"
-            },
-            {
-              "id": "4242557",
-              "name": "Colby Parkinson",
-              "position": "TE",
-              "status": "Questionable",
-              "injury": "Shoulder - AC Joint",
-              "reportedAt": "2026-10-01T23:31Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4242557/colby-parkinson"
             },
             {
               "id": "4596363",
@@ -5576,7 +5576,7 @@
               "name": "Jeremy Ruckert",
               "position": "TE",
               "status": "Questionable",
-              "injury": "Knee",
+              "injury": null,
               "reportedAt": "2026-10-01T21:57Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361372/jeremy-ruckert"
             },
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "20",
-          "name": "Dylan Parham",
-          "from": "Doubtful",
-          "to": "Out",
-          "observedAt": "2026-10-02T15:00:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4243375/dylan-parham"
-        },
-        {
-          "teamId": "20",
           "name": "Breece Hall",
           "from": "Doubtful",
           "to": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-02T19:42:46Z",
           "source": "https://www.espn.com/nfl/player/_/id/4887255/anthony-campbell"
+        },
+        {
+          "teamId": "9",
+          "name": "Aaron Banks",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-02T19:50:02Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4242390/aaron-banks"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-02T19:46:24Z",
-      "lastAttemptAt": "2026-10-02T19:46:24Z",
+      "checkedAt": "2026-10-02T19:50:02Z",
+      "lastAttemptAt": "2026-10-02T19:50:02Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-02T19:46:24Z",
-      "lastAttemptAt": "2026-10-02T19:46:24Z",
+      "checkedAt": "2026-10-02T19:50:02Z",
+      "lastAttemptAt": "2026-10-02T19:50:02Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
