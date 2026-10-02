@@ -1208,12 +1208,14 @@ def write_prose(candidate, ctx, records):
     if candidate.get('legs'):       # a parlay has no single line or side: its words come first, before any are read
         if candidate.get('parlayType') == 'ladder':
             info = candidate['ladder']
-            candidate['why'] = (f"Ladder step {info['step']}: two easier lines at {candidate['book']}, one per game, each one our projection "
+            game_lines = candidate.get('quoteType') == 'sportsbook'
+            candidate['why'] = (f"Ladder step {info['step']}: two easier {'game lines' if game_lines else 'player lines'} at {candidate['book']}, one per game, each one our projection "
                                 f"clears comfortably. ${info['stake']} rides with ${info['banked']} banked. A win returns ${info['payout']}: "
                                 f"bank ${info['bankThisWin']} and ride ${info['nextStake']} on the next step. Kept apart from the record, in dollars.")
-            candidate['risk'] = ('Both legs have to hit; one miss ends the climb, but it cannot take money already banked. Our player chances are tuned for main lines, so these legs '
-                                 'are not value, just the fun of the climb. A player who does not take the field voids his leg under the '
-                                 "book's rule, and a person settles the rung.")
+            candidate['risk'] = ('Both legs have to hit; one miss ends the climb, but it cannot take money already banked. '
+                                 + ('College score models are uncertain and their raw alternate-spread chances are not calibrated price edges. '
+                                    if game_lines else 'Our player chances are tuned for main lines, so these legs are not value. ')
+                                 + "This is the fun of the climb; the book's official settlement controls, and a person settles the rung.")
             return candidate
         if candidate.get('parlayType') == 'easyProps':
             candidate['why'] = (f"Easy props, for fun: {len(candidate['legs'])} legs at {candidate['book']}, one per game, each an easier line "
@@ -1402,12 +1404,13 @@ def easy_parlay_step(ctx, games, now, records, published, decided, screened, spe
     screened.append({'league': league, 'gameId': ticket['gameIds'][0], 'title': ticket['title'], 'rule': refusal.rule, 'reason': refusal.reason})
 
 
-def ladder_step(ctx, games, now, records, published, decided, screened, exclude=()):
+def ladder_step(ctx, games, now, records, published, decided, screened, exclude=(), manual=None):
     """The ladder's next rung (scripts/ladder.py), through the ladder's gates, leaving off the games in `exclude`.
     Never fails a run."""
     import ladder
     try:
-        ticket, reason = ladder.candidate(ctx, games, now, exclude=exclude)
+        ticket, reason = (ladder.manual_candidate(ctx, games, now, manual) if manual
+                          else ladder.candidate(ctx, games, now, exclude=exclude))
     except Exception as error:
         log(f'ladder skipped ({type(error).__name__}: {error})')
         return
@@ -1708,7 +1711,8 @@ def _run(args, now, slot, kinds, status):
         easy_parlay_step(ctx, games, now, records, published, decided, screened, spend=not args.dry_run, exclude=exclude)
         if eastern_date(now).weekday() == 5:          # a college Saturday gets its alternate-line parlay too
             easy_parlay_step(ctx, games, now, records, published, decided, screened, exclude=exclude, league='CFB')
-        ladder_step(ctx, games, now, records, published, decided, screened, exclude=exclude)
+        manual_ladder = load_json(Path(args.ladder_spec), None) if args.ladder_spec else None
+        ladder_step(ctx, games, now, records, published, decided, screened, exclude=exclude, manual=manual_ladder)
 
     by_league = defaultdict(lambda: ([], [], []))
     for item in settled:
@@ -2370,6 +2374,7 @@ def main(argv=None):
     parser.add_argument('--no-push', action='store_true', help='commit but do not push')
     parser.add_argument('--record-screens', action='store_true', help='list screened candidates in the report')
     parser.add_argument('--publish-kinds', help=f"comma list of {','.join(KINDS)}; default all")
+    parser.add_argument('--ladder-spec', help='exact sportsbook quotes for a person-approved ladder rung')
     args = parser.parse_args(argv)
     if args.command == 'heartbeat':
         return heartbeat(args)

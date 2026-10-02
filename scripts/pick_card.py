@@ -12,6 +12,7 @@ pan, a plate served at a book.
   python scripts/pick_card.py PICK_ID [--out FILE.png] [--svg]
 """
 import argparse
+import hashlib
 import html
 import math
 import os
@@ -20,6 +21,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import textwrap
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -386,6 +388,145 @@ def kicker(pick, featured=False):
 TEXT_WIDTH = 640     # pixels the title may use: from the left margin to short of the plate
 
 
+def ticket_leg_parts(title):
+    """Split display text only; never infer a different line, direction or market."""
+    title = str(title or '').strip()
+    match = re.match(r'^(.*?)\s+(over|under)\s+([+-]?\d+(?:\.\d+)?)\b\s*(.*)$', title, re.I)
+    if match:
+        name, direction, line, market = match.groups()
+        return name, f'{direction.upper()} {line}', market
+    match = re.match(r'^(.*?)\s+(\d+(?:\.\d+)?\+)\s+(.+)$', title)
+    if match:
+        return match.groups()
+    match = re.match(r'^(.*?)\s+([+-]\d+(?:\.\d+)?|ML|moneyline)$', title, re.I)
+    if match:
+        return match.group(1), match.group(2), ''
+    return '', title, ''                 # unfamiliar markets retain the complete published wording
+
+
+TICKET_STYLES = (
+    {'accent': '#54edbf', 'accent2': '#32cfff', 'bg': '#07111e', 'bg2': '#102c38', 'row': '#102230', 'edge': '#284653'},
+    {'accent': '#32cfff', 'accent2': '#54edbf', 'bg': '#071322', 'bg2': '#0d2941', 'row': '#0d2234', 'edge': '#23516b'},
+    {'accent': '#72f2c0', 'accent2': '#65d8ff', 'bg': '#061018', 'bg2': '#12313b', 'row': '#10262d', 'edge': '#2d535a'},
+)
+
+
+def ticket_style(pick, style=None):
+    """A stable visual rotation: rerendering one published ticket never changes its look."""
+    if style is None:
+        digest = hashlib.sha256(str(pick.get('id') or pick.get('title') or '').encode('utf-8')).digest()
+        style = digest[0]
+    return TICKET_STYLES[int(style) % len(TICKET_STYLES)]
+
+
+def leg_athlete_id(leg):
+    return str(leg.get('athleteId') or (re.match(r'prop-[A-Z]+-\d+-(\d+)-', str(leg.get('id') or '')) or ('', ''))[1] or '')
+
+
+def ticket_art(pick, games=None, player_team=None, fetch=None):
+    """One real player photo or relevant team mark per leg, with a safe empty fallback."""
+    fetch = fetch or fetch_data_uri
+    games, player_team = games or {}, player_team or {}
+    league = str(pick.get('league') or pick.get('id') or '').split('-')[0]
+    result = []
+    for leg in pick.get('legs') or []:
+        athlete = leg_athlete_id(leg)
+        uri = fetch(HEADSHOT.format(sport='nfl' if league == 'NFL' else 'college-football', athlete=athlete)) if athlete and league in ('NFL', 'CFB') else None
+        if uri:
+            result.append({'kind': 'photo', 'uri': uri})
+            continue
+        game = games.get(leg.get('gameId')) or {}
+        side = str(leg.get('direction') or leg.get('side') or '').lower()
+        teams = [game.get(side)] if side in ('home', 'away') else [game.get('away'), game.get('home')]
+        if athlete and player_team:
+            team_id = str(player_team.get(athlete) or '')
+            teams = [team for team in teams if team and str(team.get('id')) == team_id] or teams
+        uris = [fetch(url) for team in teams if team and (url := logo_url(team, league))]
+        uris = [value for value in uris if value]
+        result.append({'kind': 'logos', 'uris': uris[:2]} if uris else None)
+    return result
+
+
+def ticket_leg_art(index, art, y, height, accent):
+    item = art[index] if index < len(art) else None
+    if not item:
+        return ''
+    uris = [item['uri']] if item.get('kind') == 'photo' and item.get('uri') else item.get('uris') or []
+    if not uris:
+        return ''
+    clip = f'legArt{index}'
+    if len(uris) == 1:
+        return (f'<defs><clipPath id="{clip}"><rect x="760" y="{y + 4}" width="272" height="{height - 8}" rx="20"/></clipPath>'
+                f'<linearGradient id="legFade{index}" x1="0" x2="1"><stop stop-color="#102230" stop-opacity=".95"/><stop offset=".45" stop-color="#102230" stop-opacity=".18"/><stop offset="1" stop-color="#102230" stop-opacity="0"/></linearGradient></defs>'
+                f'<image href="{uris[0]}" x="772" y="{y + 10}" width="250" height="{height - 14}" clip-path="url(#{clip})" preserveAspectRatio="xMidYMax meet"/>'
+                f'<rect x="742" y="{y + 4}" width="160" height="{height - 8}" fill="url(#legFade{index})"/>')
+    logo_y = y + max(18, (height - 124) // 2)
+    return (f'<image href="{uris[0]}" x="806" y="{logo_y}" width="104" height="104" preserveAspectRatio="xMidYMid meet"/>'
+            f'<image href="{uris[1]}" x="914" y="{logo_y}" width="104" height="104" preserveAspectRatio="xMidYMid meet"/>')
+
+
+def ticket_svg(pick, game=None, avatar=None, art=None, style=None):
+    """Phone-first fun tickets: full-width legs, no truncated wagers or oversized artwork."""
+    legs = pick.get('legs') or []
+    art = art or []
+    colors = ticket_style(pick, style)
+    accent, accent2 = colors['accent'], colors['accent2']
+    rows = []
+    y = 252
+    for index, leg in enumerate(legs, 1):
+        name, line, market = ticket_leg_parts(leg.get('title') or 'Leg details unavailable')
+        names = textwrap.wrap(name, 27) if name else []
+        lines = textwrap.wrap(line, 19)
+        markets = textwrap.wrap(market, 44) if market else []
+        height = 56 + len(names) * 52 + len(lines) * 88 + len(markets) * 40
+        rows.append(f'<g data-leg="{index}"><rect x="44" y="{y}" width="992" height="{height}" rx="24" fill="{colors["row"]}" stroke="{colors["edge"]}" stroke-width="2"/>')
+        rows.append(f'<rect x="44" y="{y + 25}" width="6" height="{height - 50}" rx="3" fill="{accent}"/>')
+        rows.append(ticket_leg_art(index - 1, art, y, height, accent2))
+        rows.append(f'<text x="1003" y="{y + 38}" text-anchor="end" fill="#b8cbd5" font-size="20" font-weight="800">0{index}</text>')
+        baseline = y + 24
+        for name_line in names:
+            baseline += 52
+            rows.append(f'<text x="82" y="{baseline}" fill="#f5faff" font-size="46" font-weight="750">{esc(name_line)}</text>')
+        for line_part in lines:
+            baseline += 88
+            rows.append(f'<text x="78" y="{baseline}" fill="{accent}" font-size="80" font-weight="900" letter-spacing="-2">{esc(line_part)}</text>')
+        for market_line in markets:
+            baseline += 40
+            rows.append(f'<text x="82" y="{baseline}" fill="#c4d7e2" font-size="32" font-weight="550">{esc(market_line)}</text>')
+        rows.append('</g>')
+        y += height + 18
+    height = y + 140
+    price = f"{int(pick['odds']):+d}" if isinstance(pick.get('odds'), (int, float)) else '—'
+    context = f"{len(set(pick.get('gameIds') or [])) or len(legs)} games"
+    if (game or {}).get('kickoff'):
+        try:
+            from zoneinfo import ZoneInfo
+            local = datetime.fromisoformat(game['kickoff'].replace('Z', '+00:00')).astimezone(ZoneInfo('America/New_York'))
+            context += f' · {local:%a %b %-d}'
+        except (ValueError, TypeError):
+            pass
+    chef = avatar_uri(CHEF) if avatar is None else avatar
+    small_chef = badge(983, 66, 34, chef, '#54edbf') if chef else ''
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="{height}" viewBox="0 0 1080 {height}" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<defs><linearGradient id="ticketBg" x2="1" y2="1"><stop stop-color="{colors['bg']}"/><stop offset="1" stop-color="{colors['bg2']}"/></linearGradient><pattern id="ticketGrid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="{accent2}" stroke-opacity=".035"/></pattern></defs>
+<rect width="1080" height="{height}" fill="url(#ticketBg)"/>
+<rect width="1080" height="{height}" fill="url(#ticketGrid)"/>
+<rect width="1080" height="8" fill="{accent}"/><rect x="0" y="8" width="360" height="4" fill="{accent2}"/>
+{PAN.format(x=44, y=44, s=.48, c=accent)}
+<text x="108" y="78" fill="#f5faff" font-size="32" font-weight="800" letter-spacing="5">KOOK’N</text>
+{small_chef}
+<text x="44" y="155" fill="#f5faff" font-size="46" font-weight="850">{esc(play_label(pick))}</text>
+<text x="44" y="202" fill="#a7c1cf" font-size="29">{esc(context)}</text>
+<text x="1036" y="158" text-anchor="end" fill="{accent}" font-size="66" font-weight="900">{esc(price)}</text>
+<text x="1036" y="202" text-anchor="end" fill="#f5faff" font-size="30" font-weight="650">{esc(pick.get('book') or 'Book unavailable')}</text>
+{''.join(rows)}
+<text x="44" y="{y + 30}" fill="#f5faff" font-size="29" font-weight="750">{len(legs)} LEGS. ONE TICKET.</text>
+<text x="44" y="{y + 72}" fill="#a7c1cf" font-size="26">Graded in public, win or lose.</text>
+<text x="44" y="{y + 110}" fill="{accent}" font-size="25" font-weight="650">keenroudy.com/sports</text>
+<text x="1036" y="{y + 110}" text-anchor="end" fill="#a7c1cf" font-size="22">Entertainment only. Not advice.</text>
+</svg>'''
+
+
 def ladder_svg(pick, avatar=None):
     """A tall, winding 80/20 progress card. Only the current rung is priced; future checkpoints stay deliberately
     blank because the climb has no promised number of steps or returns."""
@@ -440,6 +581,7 @@ def ladder_svg(pick, avatar=None):
 <g fill="#756b62" stroke="#d8d1c6" stroke-opacity=".55" stroke-width="3"><circle cx="520" cy="755" r="25"/><circle cx="810" cy="755" r="25"/><circle cx="650" cy="975" r="25"/><circle cx="270" cy="975" r="25"/><circle cx="320" cy="1185" r="25"/></g>
 <g fill="#d8d1c6" fill-opacity=".72"><circle cx="520" cy="755" r="5"/><circle cx="810" cy="755" r="5"/><circle cx="650" cy="975" r="5"/><circle cx="270" cy="975" r="5"/><circle cx="320" cy="1185" r="5"/></g>
 <text x="665" y="730" fill="#d8d1c6" fill-opacity=".65" font-size="21" font-weight="700" text-anchor="middle" letter-spacing="2">FUTURE RUNGS UNLOCK ONE AT A TIME</text>
+<text x="665" y="788" fill="#a6e8b8" fill-opacity=".85" font-size="18" font-weight="750" text-anchor="middle" letter-spacing="1.4">WEEKEND CHECK-INS · WEEKDAY BONUSES WHEN QUALIFIED</text>
 <path d="M690 1185v-88" stroke="{CREAM}" stroke-width="6" stroke-linecap="round"/><path d="M696 1098h110l-22 30 22 30H696z" fill="#5eeaa4"/><text x="750" y="1136" fill="#071018" font-size="22" font-weight="900" text-anchor="middle">{esc(goal)}</text><text x="690" y="1225" fill="#5eeaa4" font-size="23" font-weight="900" text-anchor="middle" letter-spacing="3">THE GOAL</text>
 <circle cx="880" cy="1100" r="134" fill="{CREAM}" fill-opacity=".07"/><circle cx="880" cy="1100" r="115" fill="{CREAM}" fill-opacity=".09" stroke="{CREAM}" stroke-opacity=".4" stroke-width="3"/>{chef_art}
 <text x="76" y="1260" fill="{CREAM}" font-size="22" font-weight="750">Bank 20% of every return.</text><text x="76" y="1292" fill="{CREAM}" font-size="22" font-weight="750">Ride 80%. A miss cannot take the bank.</text><text x="1002" y="1260" fill="#d8d1c6" font-size="22" text-anchor="end">keenroudy.com/sports</text><text x="1002" y="1292" fill="#a69d92" font-size="17" text-anchor="end">Entertainment only. Not advice.</text>
@@ -450,6 +592,8 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
     """The card. Every number on it is a field of the pick or the record handed in."""
     if play_kind(pick) == 'ladder':
         return ladder_svg(pick, avatar)
+    if play_kind(pick) == 'parlay':
+        return ticket_svg(pick, game, avatar, art)
     chef = avatar_uri(CHEF) if avatar is None else avatar
     side = side_for(pick, game, player_side)
     primary, alternate = team_colors(game, side, identities)
@@ -760,6 +904,7 @@ def main(argv=None):
     parser.add_argument('--out', help='PNG path; default the sports config folder')
     parser.add_argument('--svg', action='store_true', help='print the SVG instead of rendering')
     parser.add_argument('--featured', action='store_true', help='preview the Pick of the Day treatment')
+    parser.add_argument('--ticket-style', type=int, choices=range(len(TICKET_STYLES)), help='preview one ticket treatment (0-2)')
     args = parser.parse_args(argv)
     import gates
     stores = gates.Stores()
@@ -772,7 +917,9 @@ def main(argv=None):
     if pick.get('athleteId') and game:
         team = ctx.player_team.get(str(pick['athleteId']))
         player_side = 'home' if team == str(game['home']['id']) else 'away' if team == str(game['away']['id']) else None
-    text = svg(pick, game, player_side=player_side, art=artwork(pick, game), featured=args.featured)
+    card_art = ticket_art(pick, ctx.games, ctx.player_team) if play_kind(pick) == 'parlay' else artwork(pick, game)
+    text = (ticket_svg(pick, game, art=card_art, style=args.ticket_style) if play_kind(pick) == 'parlay' and args.ticket_style is not None
+            else svg(pick, game, player_side=player_side, art=card_art, featured=args.featured))
     if args.svg:
         if args.out:
             Path(args.out).write_text(text)

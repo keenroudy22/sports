@@ -141,7 +141,7 @@ def scoreboard_item(scoreboard, now):
             'text': text, 'link': f'{SITE}#model', 'pubDate': due.astimezone(timezone.utc)}
 
 
-def render_cards(items, folder=CARDS, log=print):
+def render_cards(items, folder=CARDS, log=print, games=None, player_team=None):
     """A PNG per pick item, when a browser is on the machine. Returns {guid: path}."""
     import pick_card
     if not pick_card.chrome_path():
@@ -157,8 +157,9 @@ def render_cards(items, folder=CARDS, log=print):
                 if 'receipt' in item:
                     pick_card.render(pick_card.receipt_svg(item['receipt']), path)
                 else:
-                    pick_card.render(pick_card.svg(item['pick'], item['game'], player_side=item.get('side'), featured=item.get('featured', False),
-                                                   art=pick_card.artwork(item['pick'], item['game'])), path)
+                    art = (pick_card.ticket_art(item['pick'], games, player_team) if pick_card.play_kind(item['pick']) == 'parlay'
+                           else pick_card.artwork(item['pick'], item['game']))
+                    pick_card.render(pick_card.svg(item['pick'], item['game'], player_side=item.get('side'), featured=item.get('featured', False), art=art), path)
             out[item['guid']] = path
         except Exception as error:
             log(f"card for {item['guid']} not rendered: {error}")
@@ -200,7 +201,7 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
     potd = featured.of_day(eastern_date(now).isoformat())
     # The Pick of the Day gets a card of its own, under its own name, so a post can never carry a stale copy.
     plays += [dict(item, guid=f"{item['guid']}-potd", featured=True) for item in plays if item['guid'] == potd]
-    cards = render_cards(plays + ready, cards_folder, log) if with_cards else {}
+    cards = render_cards(plays + ready, cards_folder, log, ctx.games, ctx.player_team) if with_cards else {}
     if with_cards:
         import sheet          # the weekly projections sheet on its league's day, from the page payloads just built
         cards.update(sheet.render_due(now, cards_folder, log=log))

@@ -739,6 +739,10 @@ class LockedUnitsTests(unittest.TestCase):
         self.assertIn('bank $170 and ride $680', rung['why'])
         self.assertIn('Both legs have to hit', rung['risk'])
         self.assertIn('cannot take money already banked', rung['risk'])
+        game_rung = run.write_prose(dict(top, book='FanDuel', quoteType='sportsbook'), ctx, [])
+        self.assertIn('two easier game lines', game_rung['why'])
+        self.assertIn('not calibrated price edges', game_rung['risk'])
+        self.assertNotIn('player who does not take the field', game_rung['risk'])
 
     def test_an_alert_can_open_a_link_and_wait(self):
         sent = []

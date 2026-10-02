@@ -40,7 +40,7 @@ def ctx(first=None, latest=None, prop_odds=None, injuries=None):
                            latest=latest or {}, policy={}, prop_odds=prop_odds if prop_odds is not None else {g: record(g) for g in ('g1', 'g2')})
 
 
-def record(gid, price=-300, retrieved='2026-09-27T12:10:00Z'):
+def record(gid, price=-400, retrieved='2026-09-27T12:10:00Z'):
     ladder_rungs = [{'line': 39.5, 'over': price},        # 91% on our numbers against 75%: the leg
                     {'line': 29.5, 'over': -150},          # out of order below it: another market's rung
                     {'line': 24.5, 'over': -900},          # never reached: the walk stopped at 29.5
@@ -111,7 +111,7 @@ class StateTests(unittest.TestCase):
 class LegTests(unittest.TestCase):
     def test_only_the_main_lines_own_ladder_at_a_sane_price_for_a_settled_healthy_player(self):
         legs = ladder.legs_for_game(GAMES['g1'], record('g1'), ctx(), NOW)
-        self.assertEqual([(l['title'], l['odds'], l['book']) for l in legs], [('Player G1 40+ receiving yards', -300, 'DraftKings')])
+        self.assertEqual([(l['title'], l['odds'], l['book']) for l in legs], [('Player G1 40+ receiving yards', -400, 'DraftKings')])
         leg = legs[0]
         self.assertEqual((leg['athleteId'], leg['market'], leg['direction'], leg['line']), ('g1p', 'recYds', 'over', 39.5))
         self.assertTrue(leg['alternate'], 'the selected rung is distinct from the market main line')
@@ -129,8 +129,8 @@ class LegTests(unittest.TestCase):
                                               {'g1': '2026-09-27T13:05:00Z'}), [], 'a reading after now does not count')
         self.assertEqual(ladder.legs_for_game(GAMES['g1'], record('g1', price=-180), ctx(), NOW), [],
                          '91% against 64% is a gap no book leaves on an easy line: a data or role problem')
-        self.assertEqual(ladder.legs_for_game(GAMES['g1'], record('g1', price=-150), ctx(), NOW), [],
-                         'the ladder now requires a safer individual price')
+        self.assertEqual(ladder.legs_for_game(GAMES['g1'], record('g1', price=-1000), ctx(), NOW), [],
+                         'a price so short it barely moves the climb is left off')
 
 
 class BuildTests(unittest.TestCase):
@@ -138,8 +138,8 @@ class BuildTests(unittest.TestCase):
         legs = [leg for gid in ('g1', 'g2') for leg in ladder.legs_for_game(GAMES[gid], record(gid), ctx(), NOW)]
         ticket, reason = ladder.build(legs)
         self.assertIsNone(reason)
-        self.assertEqual((ticket['book'], ticket['odds'], sorted(ticket['gameIds'])), ('DraftKings', -129, ['g1', 'g2']))
-        self.assertLessEqual(ticket['odds'], -110)
+        self.assertEqual((ticket['book'], ticket['odds'], sorted(ticket['gameIds'])), ('DraftKings', -178, ['g1', 'g2']))
+        self.assertTrue(ladder.TARGET[0] <= ticket['odds'] <= ladder.TARGET[1])
         none, why = ladder.build(legs[:1])
         self.assertIsNone(none)
         self.assertIn('two games', why)
@@ -148,9 +148,9 @@ class BuildTests(unittest.TestCase):
         pick, reason = ladder.candidate(ctx(), GAMES, NOW)
         self.assertIsNone(reason)
         self.assertEqual(pick['id'], 'NFL-2026-W4-ladder-0927-dk')
-        self.assertEqual((pick['parlayType'], pick['odds'], pick['book']), ('ladder', -129, 'DraftKings'))
-        self.assertEqual(pick['ladder'], {'run': 1, 'step': 1, 'stake': 50, 'payout': 89, 'banked': 0,
-                                          'bankThisWin': 18, 'bankedAfter': 18, 'nextStake': 71, 'totalAfter': 89,
+        self.assertEqual((pick['parlayType'], pick['odds'], pick['book']), ('ladder', -178, 'DraftKings'))
+        self.assertEqual(pick['ladder'], {'run': 1, 'step': 1, 'stake': 50, 'payout': 78, 'banked': 0,
+                                          'bankThisWin': 16, 'bankedAfter': 16, 'nextStake': 62, 'totalAfter': 78,
                                           'bankPercent': 20, 'ridePercent': 80, 'start': 50, 'goal': 1000})
         self.assertEqual(pick['expiresAt'], '2026-09-27T15:45:00Z', 'the next run, before the first kickoff')
         self.assertIn('https://sharpapi.io/', pick['sources'])
@@ -169,6 +169,30 @@ class BuildTests(unittest.TestCase):
         calibrated.policy = {'calibration': {'CFB/prop': {'k': 0.4, 'n': 320}}}
         pick, _ = ladder.candidate(calibrated, college, NOW)
         self.assertEqual(pick['id'][:4], 'CFB-')
+
+    def test_manual_game_alternates_need_model_support_and_make_the_faster_rung(self):
+        games = {gid: dict(g, league='CFB') for gid, g in GAMES.items() if gid in ('g1', 'g2')}
+        spec = {'book': 'FanDuel', 'quotedAt': '2026-09-27T12:20:00Z',
+                'source': 'https://sportsbook.fanduel.com/', 'legs': [
+                    {'gameId': 'g1', 'marketType': 'spread', 'direction': 'home', 'line': 10.5, 'odds': -390},
+                    {'gameId': 'g2', 'marketType': 'spread', 'direction': 'home', 'line': 12.5, 'odds': -410},
+                ]}
+        original = ladder.pricing.price
+        ladder.pricing.price = lambda *a, **k: {'rawChance': .76, 'breakEven': .8, 'projection': -1.0}
+        try:
+            pick, reason = ladder.manual_candidate(ctx(), games, NOW, spec)
+            self.assertIsNone(reason)
+            self.assertEqual((pick['odds'], pick['quoteType'], pick['priceEstimated']), (-178, 'sportsbook', False))
+            self.assertEqual([l['title'] for l in pick['legs']], ['Lions +10.5', 'Rams +12.5'])
+            self.assertNotIn(ladder.SOURCE, pick['sources'], 'a person-verified sportsbook quote is not SharpAPI data')
+            self.assertEqual((pick['ladder']['stake'], pick['ladder']['payout'], pick['ladder']['bankThisWin'],
+                              pick['ladder']['nextStake']), (50, 78, 16, 62))
+            ladder.pricing.price = lambda *a, **k: {'rawChance': .60, 'breakEven': .8, 'projection': -1.0}
+            none, why = ladder.manual_candidate(ctx(), games, NOW, spec)
+            self.assertIsNone(none)
+            self.assertIn('raw model only gives', why)
+        finally:
+            ladder.pricing.price = original
 
 
 class GateTests(unittest.TestCase):

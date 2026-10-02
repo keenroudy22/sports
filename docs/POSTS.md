@@ -46,7 +46,7 @@ prevents duplicates, and the normal queue limits apply. These are updates, not p
 | **Side** | As a play | `Duke -10 vs Stanford (-110, FanDuel)` / `We have Duke by 14.` | the side's logo | |
 | **Lotto / longshot** | After the plays | `🎰 +2506 COLLEGE LOTTO (ESPN BET)` (from +1000; `🎯 +583 NFL LONGSHOT` under it) then one leg a line; fun tickets may mix feed-priced alternates such as `Drake London 40+ rec yds` | parlay card with the legs | `x_post.parlay_head` |
 | **Easy props** (alternate lines) | Sat (college) and Sun (NFL) | `🍀 +450 NFL EASY PROPS (FanDuel)` then legs like `Drake London 40+ rec yds` | parlay card | `easy_parlay.py` |
-| **80/20 Climb step** | With the plays, one a day when two clean games exist | `🪜 KOOK'N 80/20 CLIMB · STEP 2` / `$75 → $146 (+95, FanDuel)` / `$19 banked · win banks $29, $117 rides` / legs / `❤️ if you're climbing` | a tall winding route with the real bank, ride, rung and unpriced future checkpoints | `ladder.py`, `pick_card.ladder_svg` |
+| **80/20 Climb step** | With the plays, one a day when a clean -180 to -130 rung exists | `🪜 KOOK'N 80/20 CLIMB · STEP 2` / `$75 → $117 (-178, FanDuel)` / `$19 banked · win banks $23, $94 rides` / legs / `❤️ if you're climbing` | a tall winding route with the real bank, ride, rung and unpriced future checkpoints | `ladder.py`, `pick_card.ladder_svg` |
 | **Conversation prompt / teaser** | Once on a multi-play card, after the first play | A short slate question, or—when it is already ready—`The 80/20 Climb is back later today. Step 2 is already cooked. 🪜` with its real ride and bank, then the league tag | none; intentionally text-only | `buffer_post.conversation_text` |
 | **Injury angle** | After verified top-player news, at most two a day | `🚨 ESPN lists A.J. Brown OUT for PHI at CHI.` / a teammate's real post-news line, price and book / the opponent's allowed-by-position stat / `Board lean, not a posted play. Take it or pass? #NFL` | none; timeliness and the question are the point | `news_posts.candidates` |
 | **Morning receipt** | 9 AM the day after a game day | `Saturday: 5-3` then `✅ Iowa/Michigan over 38.5` per play; a fun ticket adds `0.25u · 2/3 legs hit · missed by one leg` when the stored settlement supports it; a raw losing player prop waits for its injury/return review until 12 hours after kickoff, then uses the official stats if no different official book settlement is known; a verified injury adds `injured in-game · checked before grading`; `Today: 3 plays.`, tags | the tall navy/mint report card (W/L per play, finals, parlay sweat, the chef) | `receipts.day_receipt`, `with_menu`, `pick_card.receipt_svg` |
@@ -68,6 +68,15 @@ posts (`buffer_post.free_slot`). The card must be live on the site before a post
 not live waits for the next run (nothing goes out bare).
 
 ## The cards (graphics)
+
+**Lines-first ticket design (owner approved 2026-10-02):** longshots, lottos and easy
+props use `pick_card.ticket_svg`: 1080 px wide with height that grows for every complete leg. Each full-width
+panel leads with the player/team, an 80 px wager line, and the market. Unknown market wording stays intact;
+never truncate a leg or hide it behind “more.” Each player leg uses its real ESPN cutout large on the right side
+without a circular portrait badge when available; game
+legs use the relevant team logo or both matchup logos. Three deterministic navy/mint/cyan treatments rotate by
+ticket ID, so a published card never changes on rerender. A small chef badge and price/book in the header replace
+the oversized mascot. The ladder and straight-play renderers stay separate. Existing Discord/X attachments are not replaced.
 
 Drawn as SVG by `scripts/pick_card.py` and rendered to PNG by headless Chrome (`pick_card.render`), 1200x675, except
 the sheet (1080x1350). The hosted build draws them on every deploy (`scripts/feed.py`) into `site/data/cards/`,

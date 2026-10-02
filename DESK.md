@@ -277,6 +277,12 @@ The reason is one sentence of the pick's own `why`, short and free of the desk's
 every sentence is arithmetic the post stands on the play and the number. Straight-play units stay off X. A receipt
 may identify a fun ticket as 0.25u so followers do not read it as a full-unit play.
 A parlay lists its legs and says "Just for fun."
+Approved design (2026-10-02): `pick_card.ticket_svg` gives each longshot/lotto/easy-props
+leg a full-width navy/mint panel, with the line larger than the title or branding. The chef is a small badge;
+all legs remain visible, including long names and alternate/period market wording. Player legs use large real ESPN
+cutouts on the right without a portrait circle; game legs use the relevant team logo(s). Three stable navy/mint/cyan treatments rotate
+by ticket ID, so a rerender cannot change an already-published card. No picks, prices or posting
+schedule change. The owner approved the preview; never replace an already-posted attachment automatically.
 Every post tags @Playbook, Action Network's betslip bot, which replies with the bet pre-loaded. There is no link
 (X shows fewer people a post that leaves the site); the card carries keenroudy.com/sports and no confidence
 score or date. Every post carries its card (`scripts/pick_card.py`), one frame for every kind:
@@ -299,6 +305,11 @@ schedules after its own push and waits up to 15 minutes for that deploy, and a p
 live waits for the next run. Nothing goes out bare.
 
 Discord is downstream of that same path (`scripts/discord_post.py`), not a second publisher. A five-minute launchd
+job uses the existing plays-and-results destination. On Oct 2 the owner requested a cleaner sidebar: eight retired
+channels were hidden from ordinary members in private HISTORY, preserving all messages. Rules, sportsbook promos
+and links moved to RESOURCES with their existing permissions. The @everyone preview confirmed no history category
+and no posting permission in the official feed. Both the main webhook and the arb fallback use plays-and-results;
+no active publisher depends on a retired channel. The five-minute launchd
 job asks Buffer about posts whose time has passed; only after Buffer says the X post was sent does Discord receive
 the exact same text and public card. The mirror downloads that card and uploads it as a Discord attachment, so an
 old message does not break when a generated site card rolls out of a later build. Recent receipt card URLs remain
@@ -400,15 +411,19 @@ are tuned for main lines. Every fun parlay carries an expiry (next run or first 
 **The Kook'n 80/20 Climb** (`scripts/ladder.py`, the owner's calls 2026-09-26 and 2026-09-28: "50 -> 1000 on 1-2 leg
 safe bets", then bank 20% of each win): $50 to $1,000 total bank plus ride. Every winning return sends 20% to the
 bank (rounded to whole dollars) and the other 80% becomes the next stake; a loss ends the climb but cannot take the
-bank. A rung is two legs from different games at
-one book (DraftKings or FanDuel), priced -250 to -110 together, built from safer player lines ("Bijan Robinson 50+
+bank. A rung is usually two legs from different games at
+one book (DraftKings or FanDuel), priced -180 to -130 together, preferably two independently strong legs around
+-400. It may mix safer player lines ("Bijan Robinson 50+
 rushing yards") in SharpAPI's alternates (`data/prop-odds`, no credits, both leagues): only rungs of the main line's
-own ladder (`sharp_odds.consistent`), priced -500 to -180, our projection clearing the line 85% or more and 4 to 18
+own ladder (`sharp_odds.consistent`), priced -900 to -180, our projection clearing the line 85% or more and 4 to 18
 points above the price's own chance (the price carries the safety; a bigger gap on an easy line is a data or role
 problem, not a gift), the book's
 main line within 0.6 to 1.6 times our projection, a settled role, nobody on the injury report, prices read within
 twelve hours (the feed stamps each game when it reads it, `confirmed` in `data/prop-odds/sharp-status.json`, since the
 store only grows when a number moves), games 90 minutes or more from kickoff; the pair with the best joint chance on our numbers wins.
+Exact sportsbook alternate spreads or totals may be supplied through `run.py --ladder-spec` after a person verifies
+the visible line and price. They are never scraped or invented: the spec records the sportsbook page and quote time,
+and `ladder.manual_candidate` requires a half-point line, 72%+ on the raw model, one leg per game and the same ticket target.
 A win splits the payout in whole dollars, a miss starts a new climb at $50, and bank plus next stake reaching $1,000
 finishes the climb. Money banked across prior climbs remains visible as saved. The state is never stored:
 `ladder.state` (and `site/core.js theLadder`) read it from the rungs and their

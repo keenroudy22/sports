@@ -1,8 +1,10 @@
 """The Kook'n 80/20 Climb: a $50-to-$1,000 bankroll ladder, one rung at a time. Stdlib only.
 
-The owner's call (2026-09-26): "50 -> 1000 on 1-2 leg safe bets", with alternate lines. Each rung is a two-leg
-ticket at one book, priced as a favorite (TARGET), built from safer player lines ("Bijan Robinson 50+ rushing
-yards") that our projection clears comfortably, one leg per game. The slower climb is deliberate. After a win the
+The owner's call (2026-09-26): "50 -> 1000 on 1-2 leg safe bets", with alternate lines. An automatic rung is a
+two-leg ticket at one book, priced as a favorite (TARGET), built from safer player lines ("Bijan Robinson 50+
+rushing yards") that our projection clears comfortably, one leg per game. A person may also supply exact, fresh
+sportsbook quotes for alternate spreads or totals; those legs have to clear the same model-agreement and ticket
+guards. After a win the
 ladder banks 20% of the return and rides the other 80% on the next rung. A miss ends that climb but cannot take what
 was banked. The climb reaches $1,000 when its bank plus the next stake reaches the goal; the next rung then starts a
 new climb at $50. Money is whole dollars: a rung pays round(stake x the ticket's decimal price), the bank gets
@@ -44,12 +46,13 @@ BANK_RATE = 0.20                    # "Bank 20. Ride 80." (owner, 2026-09-28)
 BOOKS = {'draftkings': 'DraftKings', 'fanduel': 'FanDuel'}
 SLUGS = {'DraftKings': 'dk', 'FanDuel': 'fd'}
 MARKETS = ('recYds', 'rushYds', 'rec', 'passYds')     # lines a follower reads at a glance
-LEG_PRICES = (-500, -180)           # safer favored legs, while avoiding prices that barely move the climb
+LEG_PRICES = (-900, -180)           # safer favored legs; two around -400 is the preferred shape
 MIN_CHANCE = 0.85                   # our projection's chance the player clears the easier line
 MIN_GAP = 0.04                      # safety comes from the price; our number still has to agree
 MAX_GAP = 0.18                      # and no further: a book that far off an easy line is a data or role problem, not a gift
 MAIN_RATIO = (0.6, 1.6)             # the book's main line against our projection: outside this, the market is another one
-TARGET = (-250, -110)               # a favored rung: more wins may be needed, but each step is safer
+TARGET = (-180, -130)               # enough protection without making the climb take forever (owner, 2026-10-02)
+MANUAL_RAW_CHANCE = 0.72             # exact game alternates: the unshrunk model must still agree comfortably
 LEAD = timedelta(minutes=90)        # a game this close to kickoff is left off
 FRESH = timedelta(hours=12)         # prices older than this are not used
 STAKE = parlay.STAKE                # the ticket's size in the desk's own terms; the ladder itself counts dollars
@@ -221,6 +224,118 @@ def build(legs):
     return best[1], None
 
 
+def ticket_pick(ticket, league, where, now, games):
+    """Attach the climb's dollars and public fields to a validated ticket."""
+    first = games.get(ticket['gameIds'][0]) or {}
+    day = eastern_date(now)
+    stake, banked = where['stake'], where['banked']
+    returned = payout(stake, ticket['odds'])
+    bank_cut, next_stake = split_return(returned)
+    info = {'run': where['run'], 'step': where['step'], 'stake': stake, 'payout': returned,
+            'banked': banked, 'bankThisWin': bank_cut, 'bankedAfter': banked + bank_cut,
+            'nextStake': next_stake, 'totalAfter': banked + returned,
+            'bankPercent': int(BANK_RATE * 100), 'ridePercent': 100 - int(BANK_RATE * 100),
+            'start': START, 'goal': GOAL}
+    chances = ' and '.join(f"{100 * l['chance']:.0f}%" for l in ticket['legs'])
+    base = f"{league}-{first.get('season', day.year)}-W{first.get('week', 0)}-ladder-{day:%m%d}-{SLUGS[ticket['book']]}"
+    sources = set(ticket.get('sources') or [])
+    if ticket.get('quoteType', 'capture') == 'capture':
+        sources.add(SOURCE)
+    sources.update(games[g]['source'] for g in ticket['gameIds'] if g in games and games[g].get('source'))
+    return {'id': base,
+            'title': f"Ladder step {info['step']}: {len(ticket['legs'])} legs at {ticket['book']}",
+            'status': 'active', 'favorite': False, 'parlayType': 'ladder', 'riskUnits': STAKE,
+            'ladder': info, 'legs': ticket['legs'], '_league': league,
+            'correlation': 'One leg per game, so the book prices the ticket as the legs multiplied.',
+            'gameIds': ticket['gameIds'], 'book': ticket['book'], 'odds': ticket['odds'],
+            'quotedAt': ticket['quotedAt'], 'priceEstimated': ticket.get('priceEstimated', True),
+            'expiresAt': gates.stamp(min(gates.next_slot(now), gates.when(ticket['firstKickoff']))),
+            'quoteType': ticket.get('quoteType', 'capture'), 'confidence': 1,
+            'edge': (f"For fun, not value: {len(ticket['legs'])} protected lines our model agrees with "
+                     f"({chances} on the raw model numbers), at {ticket['book']}'s exact prices, multiplied to "
+                     f"{ticket['odds']:+d}. ${stake} rides with ${banked} already banked. A win returns "
+                     f"${returned}: ${bank_cut} goes to the bank and ${next_stake} rides next. Bank 20, ride 80."),
+            'cutoff': 'A ladder rung is not re-entered. It stands or falls as posted.',
+            'sources': sorted(sources)}
+
+
+def manual_candidate(ctx, games, now, spec):
+    """Build one rung from exact sportsbook game-alternate quotes a person just verified.
+
+    This is deliberately not a scraper. The spec records the visible book, line, price, source URL and quote time;
+    the model supplies the chance and refuses a leg it does not independently support.
+    """
+    where = state(ctx.first, ctx.latest)
+    if where['open']:
+        return None, f"{where['open']['id']} is still open; the next rung waits for its result"
+    if not isinstance(spec, dict) or len(spec.get('legs') or []) not in (1, 2):
+        return None, 'a manual rung needs one or two quoted legs'
+    book = spec.get('book')
+    if book not in SLUGS:
+        return None, 'the manual rung needs one supported book'
+    quoted = spec.get('quotedAt')
+    try:
+        age = now - gates.when(quoted)
+    except (TypeError, ValueError):
+        return None, 'the manual rung needs a valid quote time'
+    if not timedelta(minutes=-1) <= age <= FRESH:
+        return None, 'the manual sportsbook quotes are stale'
+    legs, leagues, game_ids, sources = [], set(), set(), set()
+    for row in spec['legs']:
+        game = games.get(row.get('gameId'))
+        if not game or game.get('state', 'pre') != 'pre' or gates.when(game['kickoff']) <= now + LEAD:
+            return None, f"{row.get('gameId')} is missing, started, or too close to kickoff"
+        if game['id'] in game_ids:
+            return None, 'a rung uses one leg per game'
+        market, side = row.get('marketType'), row.get('direction')
+        line, price = row.get('line'), row.get('odds')
+        allowed = ('home', 'away') if market == 'spread' else ('over', 'under')
+        if market not in ('spread', 'total') or side not in allowed:
+            return None, 'a manual game leg needs a spread side or total direction'
+        if not isinstance(line, (int, float)) or float(line) != int(line) + 0.5:
+            return None, 'manual game alternates use half-point lines so they cannot push'
+        if not isinstance(price, (int, float)) or not LEG_PRICES[0] <= int(price) <= LEG_PRICES[1]:
+            return None, f'each manual leg must be priced {LEG_PRICES[0]:+d} to {LEG_PRICES[1]:+d}'
+        snapshot = ctx.snapshot(game['id'])
+        if not snapshot:
+            return None, f"no model snapshot for {game['id']}"
+        try:
+            desk = pricing.price(snapshot, market, side, float(line), int(price))
+        except (ValueError, KeyError):
+            return None, f"the model cannot price {game['id']} {market}"
+        if desk['rawChance'] < MANUAL_RAW_CHANCE:
+            return None, f"the raw model only gives {100 * desk['rawChance']:.1f}% to {game['id']} {market}"
+        team = game[side]['short'] if market == 'spread' else f"{game['away']['short']} at {game['home']['short']}"
+        title = f"{team} {pricing.signed(float(line))}" if market == 'spread' else f"{team} {side} {pricing.fmt(float(line))}"
+        source = row.get('source') or spec.get('source')
+        if not str(source or '').startswith('https://'):
+            return None, 'every manual quote needs its sportsbook page'
+        sources.add(source)
+        game_ids.add(game['id'])
+        leagues.add(game['league'])
+        legs.append({'id': f"ladder-{game['id']}-{market}-{side}-{float(line):g}", 'title': title,
+                     'gameId': game['id'], 'marketType': market, 'direction': side, 'line': float(line),
+                     'book': book, 'odds': int(price), 'chance': desk['rawChance'], 'implied': desk['breakEven'],
+                     'projection': desk['projection'], 'kickoff': game['kickoff'], 'observedAt': quoted,
+                     'marketWindow': 'Full game', 'alternate': True})
+    if len(leagues) != 1:
+        return None, 'a rung stays inside one league'
+    dec = 1.0
+    for leg in legs:
+        dec *= parlay.decimal(leg['odds'])
+    price = parlay.american(dec)
+    if not TARGET[0] <= price <= TARGET[1]:
+        return None, f'the quoted ticket is {price:+d}; the climb targets {TARGET[0]:+d} to {TARGET[1]:+d}'
+    chance = 1.0
+    for leg in legs:
+        chance *= leg['chance']
+    ticket = {'book': book, 'legs': legs, 'odds': price, 'decimal': round(dec, 3),
+              'gameIds': [leg['gameId'] for leg in legs], 'quotedAt': quoted,
+              'firstKickoff': min(l['kickoff'] for l in legs), 'chance': round(chance, 4),
+              'priceEstimated': False, 'quoteType': 'sportsbook', 'sources': sorted(sources)}
+    return ticket_pick(ticket, leagues.pop(), where, now, games), None
+
+
 def candidate(ctx, games, now, exclude=()):
     """The next rung as a pick, or (None, reason). Games in `exclude` (the desk has a reason against them) are left off.
     NFL first, then college: a rung stays inside one league, as a report does."""
@@ -244,31 +359,7 @@ def candidate(ctx, games, now, exclude=()):
         if not ticket:
             reasons.append(f'{league}: {reason}')
             continue
-        first = games.get(ticket['gameIds'][0]) or {}
-        day = eastern_date(now)
-        stake, banked = where['stake'], where['banked']
-        returned = payout(stake, ticket['odds'])
-        bank_cut, next_stake = split_return(returned)
-        info = {'run': where['run'], 'step': where['step'], 'stake': stake, 'payout': returned,
-                'banked': banked, 'bankThisWin': bank_cut, 'bankedAfter': banked + bank_cut,
-                'nextStake': next_stake, 'totalAfter': banked + returned,
-                'bankPercent': int(BANK_RATE * 100), 'ridePercent': 100 - int(BANK_RATE * 100),
-                'start': START, 'goal': GOAL}
-        chances = ' and '.join(f"{100 * l['chance']:.0f}%" for l in ticket['legs'])
-        base = f"{league}-{first.get('season', day.year)}-W{first.get('week', 0)}-ladder-{day:%m%d}-{SLUGS[ticket['book']]}"
-        return {'id': base,
-                'title': f"Ladder step {info['step']}: 2 legs at {ticket['book']}", 'status': 'active', 'favorite': False,
-                'parlayType': 'ladder', 'riskUnits': STAKE, 'ladder': info, 'legs': ticket['legs'], '_league': league,
-                'correlation': 'One leg per game, so the book prices the ticket as the legs multiplied.',
-                'gameIds': ticket['gameIds'], 'book': ticket['book'], 'odds': ticket['odds'], 'quotedAt': ticket['quotedAt'], 'priceEstimated': True,
-                'expiresAt': gates.stamp(min(gates.next_slot(now), gates.when(ticket['firstKickoff']))),
-                'quoteType': 'capture', 'confidence': 1,
-                'edge': (f"For fun, not value: two easier lines our projections clear comfortably ({chances} on our numbers, "
-                         f"which are tuned for main lines), at {ticket['book']}'s own prices, multiplied to {ticket['odds']:+d}. "
-                         f"${stake} rides with ${banked} already banked. A win returns ${returned}: ${bank_cut} goes "
-                         f"to the bank and ${next_stake} rides next. Bank 20, ride 80."),
-                'cutoff': 'A ladder rung is not re-entered. It stands or falls as posted.',
-                'sources': sorted({SOURCE} | {games[g]['source'] for g in ticket['gameIds'] if g in games and games[g].get('source')})}, None
+        return ticket_pick(ticket, league, where, now, games), None
     return None, '; '.join(reasons) or 'no games today'
 
 

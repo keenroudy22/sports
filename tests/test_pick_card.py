@@ -2,6 +2,7 @@ import os
 import sys
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 from unittest import mock
 from pathlib import Path
 
@@ -62,22 +63,68 @@ class CardTests(unittest.TestCase):
         self.assertLess(logos.index('base64,AWAY'), logos.index('base64,HOME'), 'away on the left, home on the right, as the title reads')
         self.assertIn(pick_card.avatar_uri(pick_card.CHEF)[:120], pick_card.svg(PICK, GAME), 'no art, the chef')
 
-    def test_a_parlay_card_lists_its_legs_in_the_same_frame(self):
+    def test_a_parlay_card_prioritizes_complete_legs_in_full_width_panels(self):
         ticket = {'title': '3-leg longshot at DraftKings', 'parlayType': 'longshot', 'odds': 650, 'book': 'DraftKings', 'confidence': 1, 'riskUnits': 0.25,
                   'legs': [{'title': 'Bills at Lions over 44.5'}, {'title': 'Jets +3'}, {'title': 'Player Seven over 4.5 receptions'}]}
         text = pick_card.svg(ticket, GAME)
-        for needle in ('LONGSHOT', '3-leg longshot', '• Bills at Lions over 44.5', '• Jets +3', '• Player Seven over 4.5 receptions',
-                       '+650', 'DraftKings', 'Served at', 'KOOK’N'):
+        for needle in ('LONGSHOT', '3 LEGS. ONE TICKET.', '>Bills at Lions<', '>OVER 44.5<', '>Jets<', '>+3<',
+                       '>Player Seven<', '>OVER 4.5<', '>receptions<', '+650', 'DraftKings', 'KOOK’N'):
             self.assertIn(needle, text, needle)
         self.assertNotIn(' unit', text)
         many = pick_card.svg(dict(ticket, legs=[{'title': f'Leg {i}'} for i in range(7)]), GAME)
-        self.assertIn('and 3 more', many, 'five legs fit; past that, four and a count')
+        for i in range(7):
+            self.assertIn(f'>Leg {i}<', many, 'no leg can disappear behind a more count')
+        self.assertNotIn('and 3 more', many)
+        self.assertGreater(pick_card.svg_size(many)[1], pick_card.svg_size(text)[1])
+        self.assertIn('font-size="80"', text)
+        self.assertNotIn('#00274c', text, 'multi-game tickets use house colors, not one team')
+        ET.fromstring(text)
         self.assertEqual(pick_card.play_kind(ticket), 'parlay')
         self.assertEqual(pick_card.play_kind({'market': 'rec'}), 'player')
         self.assertEqual(pick_card.play_kind({'marketType': 'spread'}), 'team')
         self.assertIn('LOTTO TICKET', pick_card.svg(dict(ticket, odds=1250), GAME))
-        self.assertIn('5-leg lotto', pick_card.svg(dict(ticket, odds=1250, legs=[{'title': str(i)} for i in range(5)]), GAME))
+        self.assertIn('5 LEGS. ONE TICKET.', pick_card.svg(dict(ticket, odds=1250, legs=[{'title': str(i)} for i in range(5)]), GAME))
         self.assertIn('EASY PROPS', pick_card.svg(dict(ticket, parlayType='easyProps'), GAME))
+
+    def test_ticket_splitting_preserves_alternates_and_unfamiliar_markets(self):
+        cases = {
+            'Que’Sean Brown under 5.5 receptions': ('Que’Sean Brown', 'UNDER 5.5', 'receptions'),
+            'Drake London 40+ receiving yards': ('Drake London', '40+', 'receiving yards'),
+            'Jets +3': ('Jets', '+3', ''),
+            'Jets ML': ('Jets', 'ML', ''),
+            'Player anytime touchdown': ('', 'Player anytime touchdown', ''),
+        }
+        for title, expected in cases.items():
+            self.assertEqual(pick_card.ticket_leg_parts(title), expected)
+        title = 'A very long player name with suffix Junior under 198.5 passing yards in the first half'
+        card = pick_card.ticket_svg({'legs': [{'title': title}, {'title': 'A&M <script> over 4.5 receptions'}]}, avatar='')
+        root = ET.fromstring(card)
+        words = ' '.join(root.itertext())
+        self.assertIn('A very long player name with suffix Junior', ' '.join(words.split()))
+        self.assertIn('UNDER 198.5', words)
+        self.assertIn('passing yards in the first half', words)
+        self.assertNotIn('…', card)
+        self.assertNotIn('<script>', card)
+        self.assertNotIn('<image', card)
+
+    def test_ticket_art_uses_real_players_then_team_marks_and_rotates_stably(self):
+        calls = []
+        fetch = lambda url: calls.append(url) or f'data:image/png;base64,{len(calls)}'
+        game = dict(GAME, id='CFB-401')
+        player = {'id': 'prop-CFB-401-5138131-passYds', 'gameId': 'CFB-401', 'title': 'Player under 10.5 passing yards'}
+        total = {'gameId': 'CFB-401', 'title': 'Iowa at Michigan over 44.5'}
+        pick = {'id': 'CFB-ticket-one', 'legs': [player, total]}
+        art = pick_card.ticket_art(pick, {'CFB-401': game}, {'5138131': '130'}, fetch)
+        self.assertEqual(art[0]['kind'], 'photo')
+        self.assertIn('/college-football/players/full/5138131.png', calls[0])
+        self.assertEqual((art[1]['kind'], len(art[1]['uris'])), ('logos', 2))
+        card = pick_card.ticket_svg(pick, GAME, avatar='', art=art, style=1)
+        self.assertEqual(card.count('<image href="data:image/png;base64,'), 3)
+        self.assertIn('id="legArt0"', card)
+        self.assertNotIn('r="59"', card, 'player art has no circular badge')
+        self.assertIn('width="250"', card, 'the player fills the right side of the leg')
+        self.assertEqual(pick_card.ticket_style(pick), pick_card.ticket_style(pick))
+        self.assertEqual(len({pick_card.ticket_style(pick, i)['accent'] for i in range(3)}), 3)
 
     def test_a_school_is_swapped_only_as_a_whole_name(self):
         game = {'league': 'CFB', 'away': {'short': 'New Mexico', 'abbreviation': 'UNM', 'school': 'New Mexico'},
@@ -107,6 +154,7 @@ class CardTests(unittest.TestCase):
         for needle in ('THE 80/20 CLIMB', 'CLIMB 1', 'BANK 20 · RIDE 80 · CLIMB TO $1,000',
                        '$19 BANKED · $75 RIDING', 'STEP 2 · TODAY', '$75 → $146', 'WIN: BANK $29 · RIDE $117',
                        '• Drake London 40+ rec yds', '+95 AT FANDUEL', 'FUTURE RUNGS UNLOCK ONE AT A TIME',
+                       'WEEKEND CHECK-INS · WEEKDAY BONUSES WHEN QUALIFIED',
                        pick_card.HOUSE[2]):
             self.assertIn(needle, text, needle)
         self.assertEqual(pick_card.svg_size(text), (1080, 1350))
@@ -137,9 +185,9 @@ class CardTests(unittest.TestCase):
         for pick in (PICK, prop, ticket):
             card = pick_card.svg(pick, GAME, avatar='data:image/png;base64,AAAA')
             self.assertEqual(card.count('<image href="data:image/png;base64,AAAA"'), 1, 'one chef, on the plate')
-            self.assertIn('clip-path="url(#plate)"', card)
+            self.assertIn('clip-path="url(#badge)"' if pick is ticket else 'clip-path="url(#plate)"', card)
             self.assertIn('stroke-linecap="round"', card, 'the pan marks the corner')
-            self.assertIn('Served at', card, 'every kind prices on the same line')
+            self.assertIn('+650' if pick is ticket else 'Served at', card)
         self.assertNotIn('<image', pick_card.svg(PICK, GAME, avatar=''), 'no picture, an empty plate')
         self.assertIsNone(pick_card.avatar_uri(Path('/nonexistent/kookn.jpg')))
         self.assertTrue(pick_card.CHEF.exists(), 'the cutout ships with the site')

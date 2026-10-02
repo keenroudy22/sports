@@ -128,10 +128,16 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Legibility first (2026-10-02):** the actual wager lines must be the dominant part of ticket graphics.
+  Prefer large full-width leg panels and small branding over oversized mascots and tiny lists. Preserve all
+  leg wording and prices; use real player/team art when available and rotate stable navy/mint/cyan treatments
+  by ticket ID. The owner approved the preview on Oct 2; existing posted attachments are never replaced.
 - **Simple Discord and ladder check-ins (2026-10-02, owner approved):** four active text destinations: Start Here,
   Plays & Results (the existing webhook channel, owner/publisher only), general chat, and Wins & Bad Beats.
-  Older channels are archived without deleting history. Rules and referral disclosures remain accessible from
-  Start Here. Saturday/Sunday are regular Climb check-in days, not guaranteed ticket days; weekdays are bonuses
+  Eight retired channels are in private HISTORY (owner-accessible, hidden from ordinary members), without
+  deleting history. Rules, sportsbook promos and links remain accessible under RESOURCES. Verified with
+  Discord's @everyone preview on Oct 2; the official feed remains read-only. The live webhook and arb fallback
+  both target plays-and-results. Saturday/Sunday are regular Climb check-in days, not guaranteed ticket days; weekdays are bonuses
   only when qualifying legs exist. The existing run schedules a text status at/after 11:45 AM ET and before 2 PM
   through Buffer, mirrored to Discord after X. An actual same-day open ticket replaces the extra status. Each
   date is deduplicated and existing spacing/daily caps apply. Never lower thresholds to satisfy the calendar.
@@ -224,8 +230,10 @@ Handy commands (from `~/Projects/sports`):
   and book, "We have it at 47.", "❤️ if you're tailing", @Playbook and the league tag. No labels, slogans or
   reason sentences. POTD: "POTD: ..." first. Lotto: "🎰 +2506 COLLEGE LOTTO (ESPN BET)" then the legs.
 - **The Kook'n 80/20 Climb** ($50 to $1,000 bankroll ladder, `scripts/ladder.py`): bank 20% of every winning return and ride 80% on
-  the next rung, so a miss cannot take what was banked. Two safer player lines at one book, each priced -500 to -180
-  and together -250 to -110. A slower climb is preferred to forcing an even-money rung. One rung open at a time, one
+  the next rung, so a miss cannot take what was banked. Prefer two independently strong legs around -400 at one book,
+  together -180 to -130, so protection does not make the climb take forever. Feed-priced player alternates and exact,
+  freshly verified sportsbook alternate spreads/totals may mix, but every leg must agree with the model and stay in a
+  different game. One rung open at a time, one
   a day, NFL legs until college player numbers are calibrated. Never force it on a one-game slate: the two legs stay
   in different games. It must post; alternates
   are allowed and expected. A rung pulled before its X post still counts, win or lose; while ungraded it blocks the
