@@ -1913,13 +1913,20 @@ def mirror_due(log_book, now):
 
 
 def mirror(args):
-    """Every five minutes, send due Discord-first plays and reconcile/mirror the rest from Buffer."""
+    """Every five minutes, observe public plays, send due Discord-first plays and mirror the rest from Buffer."""
     import buffer_post
     import discord_post
     import x_post
+    now = gates.when(args.now) if args.now else datetime.now(timezone.utc)
+    if os.environ.get('KEENROUDY_LIVE_SHADOW', '1').strip() != '0':
+        try:
+            import live_watch
+            live_watch.run_shadow(now=now, persist=not args.dry_run, log=log)
+        except Exception as error:
+            # Shadow evidence can never interrupt official delivery.
+            log(f'live shadow unavailable ({type(error).__name__})')
     if not os.environ.get('BUFFER_TOKEN', '').strip() or not discord_post.webhook():
         return 0
-    now = gates.when(args.now) if args.now else datetime.now(timezone.utc)
     if not mirror_due(x_post.load_log(), now):
         return 0
     if args.dry_run:

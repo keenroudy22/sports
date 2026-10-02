@@ -516,6 +516,10 @@ def house_posts(first, latest, games, log_book, now):
     weekly = sheet.post(games, now)          # the weekly projections sheet, on its league's day
     if weekly and weekly['stale'] > now:
         out.append(weekly)
+    import research_posts
+    research = research_posts.post(games, now)  # one stale-safe editorial research card at most
+    if research and research['stale'] > now:
+        out.append(research)
     return out
 
 

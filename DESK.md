@@ -33,7 +33,11 @@ unknown, with observed-game counts. End-zone rows require three current-season p
 forecast no older than seven days; the age and college injury-coverage limitation are explicit. These are not TD
 probabilities or priced recommendations. Upset Watch requires both fresh same-book moneylines and a forecast
 published in the last day; moneylines now come from the already-requested ESPN score feed at no additional call.
-There may be no watch until fresh qualifying evidence exists. Team-total recommendations remain unsupported.
+The Today page keeps the Underdog Watch visible even when none qualify and separates an outright winner disagreement
+from a positive-spread cover read. At most one 10:30 AM editorial research card now enters the ordinary Buffer
+pipeline per slate, with fresh outright underdogs first and priced spread dogs, Matchup Menu or End-zone Work as
+fallbacks. It is explicitly research, never a play, and is optional before official queue space. Team-total
+recommendations remain unsupported.
 
 The detailed record and new receipts distinguish captured prices, assumed-price history and promotional credits.
 No outcomes or stored publications changed. Integrity checks also preserve every complete JSONL store revision
@@ -50,9 +54,10 @@ and SportsGameOdds' independent 1,800-object stop are unchanged. Unknown usage m
 walk-forward game/week blocks across 2024/2025. No convincing overall improvement justified a live model change.
 Those seasons were already examined in model development, so prospective shadow evidence is still required.
 `scripts/local_benchmark.py` uses four synthetic evidence cases without paid calls. Qwen 27B passed four; Ollama
-8B timed out three times. Neither routing nor live weights were changed. New editorial HTML previews are generated
-by `scripts/editorial_preview.py`; they are not linked to the publication queue. Remaining pilot gates are in
-`docs/AUDIT-IMPLEMENTATION.md`.
+8B timed out three times. Neither routing nor live weights were changed. The approved research families are rendered
+from the same page payloads by `scripts/research_posts.py`; a missing or stale view produces no post. The five-minute
+mirror also runs `scripts/live_watch.py` in silent shadow mode for already-public plays. It stores bounded transition
+evidence outside the repo and never posts. Remaining pilot gates are in `docs/AUDIT-IMPLEMENTATION.md`.
 
 | Script | Job |
 |---|---|

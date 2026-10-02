@@ -158,6 +158,17 @@ Handy commands (from `~/Projects/sports`):
   red-zone/inside-10 work, requires three games and a role snapshot within seven days, displays its timestamp,
   excludes passing TDs, and discloses incomplete college injury coverage. It has no TD price or probability.
   Missing play-by-play and usage are unknown, not zero. These views never publish an official play.
+- **Underdog/editorial release (2026-10-02, owner approved):** Today always shows Underdog Watch, including an
+  honest empty state, and keeps outright-upset research separate from positive-spread cover value. At most one
+  10:30 AM research graphic may publish per football slate: a fresh outright underdog first, then a priced spread
+  dog, exact-line Matchup Menu, or End-zone Work. Every card and post says research, not an official play; it uses
+  only current stored prices/evidence, becomes optional before queue limits, and mirrors to Discord only after X.
+  Hard Rock remains comparison-only and never appears on the editorial research post.
+- **Live progress shadow (2026-10-02):** the five-minute mirror job silently observes already-public football
+  plays with one free ESPN summary per game. It is capped at eight games, records source time, early crossings,
+  close calls, corrections and finals in `~/.config/keenroudy/live-watch.json`, and makes no odds or model call.
+  It sends nothing. Discord needs a reviewed clean pilot; X still needs three clean Discord pilots and a separate
+  release decision. `KEENROUDY_LIVE_SHADOW=0` is the kill switch.
 - **Free-budget guard (2026-10-02):** every metered Odds API path uses `quota.guarded_json`: verify the account's
   500-credit allowance, serialize and reserve locally before requesting, preserve a 24-credit buffer (120 for
   easy parlays), and stop when usage cannot be verified. Existing caller limits remain. SportsGameOdds keeps its

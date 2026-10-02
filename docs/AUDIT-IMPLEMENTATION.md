@@ -41,8 +41,9 @@ of the audit is finished. Free service ceilings and the append-only public recor
   reserve before metered calls; no quota increase. SportsGameOdds retains its existing independent guard.
 - Local synthetic evidence benchmark: Qwen 27B passed 4/4; Ollama 8B timed out on 3/4 (45-second cap). Tiny test,
   not a quality guarantee or a test of the optional MLX runtime. Keep current routing and template-first prose.
-- Three original preview families (Matchup Menu, End-zone Work, Week of Football), generated from real site
-  data. Navy/mint/cyan/violet. Preview only: nothing queued or advertised as coming.
+- Original research families generated from real site data in navy/mint/cyan/violet. On October 2 the owner approved
+  one optional public research card per slate. Outright and spread underdogs are kept separate; Matchup Menu and
+  End-zone Work are evidence-only fallbacks. The generic Week of Football preview remains unqueued.
 
 ## Remaining staged work — not enabled by the second release
 
@@ -52,10 +53,11 @@ of the audit is finished. Free service ceilings and the append-only public recor
    report explicitly labels its prior-season coverage heuristic; it is not official membership data.
 3. Validated priced team totals, touchdown probabilities and alternate-line streak sheets need evidence not
    currently available; do not hand-tune to named players or overwrite current forecasts.
-4. Live tracked-game worker in shadow only: shared free source fetch per game, bounded cadence, explicit source
-   age, deduplication, corrections and final reconciliation. Then one Discord game, then three clean pilots before
-   an X milestone release. No LLM or paid-odds call per tick. None of this is currently enabled.
-5. New graphics' public-release checkpoint and measured editorial experiment. The manual mentions workflow is
+4. The live tracked-game worker is enabled in shadow only: one shared free ESPN source fetch per game, four-minute
+   minimum cadence, eight-game cap, source age, transition deduplication, corrections and final reconciliation.
+   Review its evidence, then one Discord game, then three clean pilots before an X milestone release. No LLM or
+   paid-odds call per tick; no live alert is currently enabled.
+5. Measure the newly released research graphic experiment. The manual mentions workflow is
    documented in GROWTH.md; there is no automatic inbox/reply worker. Age-matched analytics remain an operational
    collection step, not an implemented new analytics feed. No automated likes, follows, unsolicited replies,
    trend-chasing or engagement purchases. X's automation

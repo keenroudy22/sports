@@ -447,6 +447,28 @@
       <span class="row-meta">${esc(whenShort(game.kickoff))} · ${esc(w.book)} · opposing ML ${odds(w.opponentOdds)} · captured ${esc(ago(w.observedAt))}</span>
       <span class="row-meta">Raw model estimate, not a calibrated value bet.${game.league === 'CFB' ? ' College schedule strength and changing roles can distort this.' : ''}</span></span></a>`;
   };
+  const underdogSpreads = board => {
+    const rows = ((board || {}).lines || []).filter(inLeague).filter(line => {
+      const grade = line.grade || {};
+      return line.gameMarket && line.market === 'point spread' && Number(line.line) > 0 && line.state === 'open' &&
+        ['lean', 'strong'].includes(C.tierOf(grade)) && Date.parse(line.kickoff) > Date.now();
+    });
+    if (!rows.length) return [];
+    const nextDay = dayLabel(rows.slice().sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0].kickoff);
+    return rows.filter(line => dayLabel(line.kickoff) === nextDay).sort(C.byGrade).slice(0, 4);
+  };
+  const underdogWatch = (games, board) => {
+    const outright = games.filter(currentUpset).slice(0, 4);
+    const spreads = underdogSpreads(board);
+    const block = (title, note, body) => `<div class="card underdog-block"><div class="section-head"><div><p class="eyebrow">${esc(title)}</p><p class="row-meta">${esc(note)}</p></div></div>${body}</div>`;
+    return section('Underdog Watch',
+      `<p class="row-meta" style="margin:0 0 8px">Two different questions, kept separate: can the underdog win the game, and can it stay inside the spread?</p>` +
+      block('Outright upset candidates', 'Raw winner disagreement. Moneyline research, not an official play.',
+        outright.length ? `<div class="rows">${outright.map(upsetRow).join('')}</div>` : empty('No fresh outright candidate', 'Both same-book moneylines and a current forecast are required. The watch stays here instead of silently disappearing.')) +
+      block('Underdog spread value', 'Price-tested cover reads. Covering does not mean winning outright.',
+        spreads.length ? `<div class="rows">${spreads.map(lineRow).join('')}</div>` : empty('No priced underdog spread qualifies', 'A positive spread must clear the current price and model checks. Nothing is forced.')),
+      '<a href="#games">Open game research →</a>');
+  };
   const matchupResearch = (card, detail) => {
     if (!detail || card.state !== 'pre' || Date.parse(card.kickoff) <= Date.now()) return '';
     const trends = (detail.favoriteLines || []).filter(l => l.history && l.history.last && l.history.last.games >= 5 &&
@@ -509,7 +531,7 @@
       </div>
       <div class="two-col"><div>
         <div class="research-heading"><p class="eyebrow">The research counter</p><h2>Explore the numbers</h2><p>These are model reads, not additional official plays. The price and the uncertainty matter as much as the projection.</p></div>
-        ${now.some(currentUpset) ? section('Upset Watch · outright winners, not spread covers', `<div class="card"><div class="rows">${now.filter(currentUpset).slice(0, 4).map(upsetRow).join('')}</div></div>`, '<a href="#games">Game research →</a>') : ''}
+        ${underdogWatch(now, board)}
         ${best.games.length ? section(best.day ? `Game lines with value · ${esc(best.day)}` : 'Game lines with value today',
           `<p class="row-meta" style="margin:0 0 8px">Where our chance beats what the price needs, at the best price we found. Worth a look, not picks.</p><div class="card"><div class="rows">${best.games.map(lineRow).join('')}</div></div>`,
           '<a href="#board">All game lines →</a>') : ''}
@@ -1330,6 +1352,12 @@
     };
     return `${head("Kook'n Lab", 'Every sport earns its way onto the card. Scores come first, then a silent paper trial, then public plays only if the recorded results beat the price.')}
       <div class="lab-hero card"><p class="eyebrow">The rule</p><h2>No forced picks. No hidden misses.</h2><p>Football is live. Basketball is built and waiting for its in-season paper record. The other sports are coverage-first while their models and usable price feeds are tested.</p></div>
+      ${section('Live-game pilot', `<div class="card"><div class="row" style="cursor:default"><span class="row-main"><span class="row-top"><span class="row-name">Official-play progress watcher</span><span class="pill pill-q">Shadow</span></span><span class="row-market">Checks already-public football plays from one free ESPN summary per game. It records close calls, early crossings, corrections and finals without posting them.</span><span class="row-meta">No odds call and no AI call per update. Discord alerts wait for a clean pilot; X waits for three clean Discord pilots.</span></span></div></div>`)}
+      ${section('Football experiments', `<div class="lab-grid">
+        <article class="lab-card card"><div class="lab-card-head"><h3>Team totals</h3><span class="pill pill-q">Coverage trial</span></div><p>Existing SportsGameOdds samples inventory two-sided prices without another request. Recommendations wait for team-score errors to be measured against finals.</p></article>
+        <article class="lab-card card"><div class="lab-card-head"><h3>Touchdown scorers</h3><span class="pill pill-q">Opportunity only</span></div><p>Game pages rank verified red-zone and inside-the-10 work. There is no public TD probability or priced scorer pick until real prices can be tested.</p></article>
+        <article class="lab-card card"><div class="lab-card-head"><h3>Alternate-line streaks</h3><span class="pill pill-reference">Waiting for prices</span></div><p>Main-line history is live. Alternate streak cards wait for verified alternate prices from the same market ladder.</p></article>
+      </div>`)}
       ${section('In the kitchen', `<div class="lab-grid">
         ${stage('NBA', 'NBA', 'Paper trial', 'pill-q', 'A tested totals model starts recording real available lines when the regular season opens. Nothing posts until the live paper record clears the price.')}
         ${stage('CBB', 'College basketball', 'Paper trial', 'pill-q', 'College totals begin their silent trial when November games start. The historical model alone was not good enough to publish.')}

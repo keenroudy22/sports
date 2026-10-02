@@ -103,16 +103,18 @@ official play or research, and have the owner review and post it themselves. Do 
 reply across conversations, solicit tags, or treat a mention as permission for repeated automated messages.
 No AI reply bot, unattended X browser, auto-like or auto-follow is enabled.
 
-The new Matchup Menu, End-zone Work and Week of Football graphics are previews, not scheduled post promises.
-Approve the rendered format before connecting one to Buffer. Start with at most one new research graphic per
-slate; all existing spacing, 20-post daily cap and official-play priority still apply. Keep the complete historical
+The owner approved the research format on October 2. At most one evidence-first research graphic now enters Buffer
+per football slate: fresh outright Underdog Watch, priced underdog cover value, exact-line Matchup Menu, then
+End-zone Work in that order of availability. All existing spacing, the 20-post daily cap and official-play priority
+still apply; the research card is dropped before an official or required house post. Keep the complete historical
 sample visible, and never turn an observed 100% streak into a 100% future chance.
 
 For comparisons, save each post's metrics at the same age (24 hours, then seven days) and compare the same post
 type and similar slate sizes. Record impressions, engagement per impression, profile visits and follows when X
 actually supplies them; unknown values stay unknown. Do not compare a one-hour post with a week-old post or
 declare a winner before eight comparable examples. This remains manual collection, not an added paid analytics
-service. Live-game graphics still require the separate shadow/Discord pilots before any X release.
+service. The live observer is collecting silent shadow transitions from free ESPN summaries; Discord still needs
+a reviewed pilot and X still waits for three clean Discord pilots and a separate release decision.
 
 - Deterministic code owns prices, projections, records, grading, limits and what is actually scheduled.
 - Local Qwen 27B weighs already verified facts through a strict JSON contract. Detailed deterministic templates are

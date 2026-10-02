@@ -269,13 +269,12 @@ def conversation_text(day, play_rows, first, games):
 
 
 def fit_limit(plans, remaining):
-    """Respect Buffer's live daily allowance without ever letting optional news or conversation copy displace a
-    play or house post. When space is tight, optional posts go first; essential posts keep their scheduled order."""
+    """Respect Buffer's live allowance without optional conversation, news or research displacing essentials."""
     if remaining is None or remaining >= len(plans):
         return plans
     remaining = max(0, int(remaining))
-    essential = [plan for plan in plans if plan[1] not in ('conversation', 'news')]
-    optional = [plan for plan in plans if plan[1] in ('conversation', 'news')]
+    essential = [plan for plan in plans if plan[1] not in ('conversation', 'news', 'research')]
+    optional = [plan for plan in plans if plan[1] in ('conversation', 'news', 'research')]
     chosen = essential[:remaining]
     if len(chosen) < remaining:
         chosen += optional[:remaining - len(chosen)]
@@ -327,7 +326,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
         noon = datetime(today.year, today.month, today.day, POST_AT[0], POST_AT[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)
         plays.append((max(min(noon, kickoff - EARLY_LEAD), opens), -1 if key == potd else ORDER[pick_card.play_kind(merged)],
                       kickoff - feed.LEAD, key, text, 'play', f'{key}-potd' if key == potd else key))
-    order = {'menu': -2, 'receipt': -1, 'book': -1, 'sheet': 0, 'cashed': 1}
+    order = {'menu': -2, 'receipt': -1, 'book': -1, 'sheet': 0, 'research': 1, 'cashed': 2}
     for post in receipts.house_posts(first, latest, games, log_book, now):
         if set(post['key'].split('+')) & posted:
             continue
@@ -355,6 +354,19 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
         prompt = (play_rows[0][0], play_rows[0][1], min(play_rows[0][2], play_rows[1][2]), conversation_key,
                   conversation_text(today, play_rows, first, games), 'conversation', None)
         plays.insert(first_index + 1, prompt)
+    # The desk's own ceiling gets the same protection as Buffer's allowance. A research card is useful, but never
+    # at the cost of a play, receipt, sheet, menu or record post.
+    room = max(0, MAX_PER_DAY - day_count(log_book, today))
+    todays = [row for row in plays if eastern_date(row[0]) == today]
+    overflow = max(0, len(todays) - room)
+    if overflow:
+        for kind in ('research', 'conversation', 'news'):
+            for row in list(plays):
+                if overflow <= 0:
+                    break
+                if row[5] == kind and eastern_date(row[0]) == today:
+                    plays.remove(row)
+                    overflow -= 1
     out, last, busy, counts = [], None, taken(log_book, now), {}
     for target, _, deadline, key, text, kind, card in plays:
         due = max(target, now + soon)
