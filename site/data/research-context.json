@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-02T19:50:02Z",
+  "updatedAt": "2026-10-02T19:56:08Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-10-02T19:45Z",
+              "reportedAt": "2026-10-02T19:47Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-02T19:45Z",
+              "reportedAt": "2026-10-02T19:40Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -4837,6 +4837,15 @@
           "name": "New England Patriots",
           "players": [
             {
+              "id": "4372030",
+              "name": "Christian Barmore",
+              "position": "DT",
+              "status": "Out",
+              "injury": "Shoulder",
+              "reportedAt": "2026-10-02T19:49Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4372030/christian-barmore"
+            },
+            {
               "id": "4686772",
               "name": "Christian Gonzalez",
               "position": "CB",
@@ -4853,15 +4862,6 @@
               "injury": null,
               "reportedAt": "2026-10-02T19:08Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431452/drake-maye"
-            },
-            {
-              "id": "4372030",
-              "name": "Christian Barmore",
-              "position": "DT",
-              "status": "Out",
-              "injury": "Shoulder",
-              "reportedAt": "2026-10-02T17:33Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4372030/christian-barmore"
             },
             {
               "id": "4831959",
@@ -5527,6 +5527,15 @@
           "name": "New York Jets",
           "players": [
             {
+              "id": "5083315",
+              "name": "Kenyon Sadiq",
+              "position": "TE",
+              "status": "Questionable",
+              "injury": "Back",
+              "reportedAt": "2026-10-02T19:47Z",
+              "source": "https://www.espn.com/nfl/player/_/id/5083315/kenyon-sadiq"
+            },
+            {
               "id": "4597500",
               "name": "Adonai Mitchell",
               "position": "WR",
@@ -5597,15 +5606,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-01T21:40Z",
               "source": "https://www.espn.com/nfl/player/_/id/4362840/kingsley-enagbare"
-            },
-            {
-              "id": "5083315",
-              "name": "Kenyon Sadiq",
-              "position": "TE",
-              "status": "Questionable",
-              "injury": "Back",
-              "reportedAt": "2026-10-01T20:17Z",
-              "source": "https://www.espn.com/nfl/player/_/id/5083315/kenyon-sadiq"
             },
             {
               "id": "14958",
@@ -6677,6 +6677,15 @@
           "name": "Tampa Bay Buccaneers",
           "players": [
             {
+              "id": "4596448",
+              "name": "Bucky Irving",
+              "position": "RB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-02T19:42Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4596448/bucky-irving"
+            },
+            {
               "id": "4816107",
               "name": "Benjamin Morrison",
               "position": "CB",
@@ -6711,15 +6720,6 @@
               "injury": null,
               "reportedAt": "2026-10-01T23:40Z",
               "source": "https://www.espn.com/nfl/player/_/id/4870998/josiah-trotter"
-            },
-            {
-              "id": "4596448",
-              "name": "Bucky Irving",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Lower Body",
-              "reportedAt": "2026-10-01T20:34Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4596448/bucky-irving"
             },
             {
               "id": "3116165",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "20",
-          "name": "Breece Hall",
-          "from": "Doubtful",
-          "to": "Out",
-          "observedAt": "2026-10-02T15:00:34Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4427366/breece-hall"
-        },
-        {
-          "teamId": "20",
           "name": "Adonai Mitchell",
           "from": "Doubtful",
           "to": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-02T19:50:02Z",
           "source": "https://www.espn.com/nfl/player/_/id/4242390/aaron-banks"
+        },
+        {
+          "teamId": "27",
+          "name": "Bucky Irving",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-02T19:56:08Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4596448/bucky-irving"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-02T19:50:02Z",
-      "lastAttemptAt": "2026-10-02T19:50:02Z",
+      "checkedAt": "2026-10-02T19:56:08Z",
+      "lastAttemptAt": "2026-10-02T19:56:08Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-02T19:50:02Z",
-      "lastAttemptAt": "2026-10-02T19:50:02Z",
+      "checkedAt": "2026-10-02T19:56:08Z",
+      "lastAttemptAt": "2026-10-02T19:56:08Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
