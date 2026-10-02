@@ -474,6 +474,17 @@
 
   /* ---------- routes ---------- */
 
+  /* Straight cards lead to their research; multi-game tickets and incomplete imports keep their receipt. */
+  const pickResearchRoute = p => {
+    if (isParlay(p)) return null;
+    if (p.athleteId) {
+      return ['NFL', 'CFB'].includes(p.league)
+        ? `#player/${p.league}/${encodeURIComponent(p.athleteId)}` : null;
+    }
+    if (p.kind === 'props') return null;
+    return p.gameId ? `#game/${encodeURIComponent(p.gameId)}` : null;
+  };
+
   const LEGACY = { '': 'today', sports: 'today', home: 'today', overview: 'today', scores: 'games', props: 'board',
     parlays: 'ticket', lines: 'board', results: 'record', research: 'research', players: 'stats' };
   /* Old links keep working: #game/<id>, #player/<league>/<id>, #record, #players and the rest. */
@@ -502,5 +513,5 @@
   return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal,
     column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
-    unitsFor, stakeOf, recordOf, projectionScorecard, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, projectionScorecard, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, pickResearchRoute, shardOf, BASE };
 });

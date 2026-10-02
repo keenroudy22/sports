@@ -582,6 +582,13 @@ ledger live in `data/market-lab/`; `site/data/market-lab.json` gives the public 
 predicts a side, applies sport-specific settlement, becomes a play, or calls a metered service. Those missing layers
 are promotion gates, not details to infer from the score.
 
+## Today card navigation (2026-10-02)
+
+Straight player-prop cards open that player's stats; game-line and team-total cards open the matchup.
+A separate "Pick details" button preserves the original quote, sources and receipt. Parlays, ladder tickets,
+and older plays without the required research identifier still open their pick details. Shared `#pick/` links
+and record receipts are unchanged.
+
 ## Multi-sport score center and Lab
 
 `scripts/sports_refresh.py` uses ESPN's public scoreboards for NBA, WNBA, men's college basketball, MLB, NHL, the

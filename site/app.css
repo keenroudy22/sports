@@ -524,14 +524,20 @@ table.data a { font-weight: 600; }
 .plays { display: grid; gap: 10px; }
 @media (min-width: 860px) { .plays { grid-template-columns: 1fr 1fr; } }
 .play {
-  position: relative; display: block; width: 100%; text-align: left; cursor: pointer;
+  position: relative; display: block; width: 100%; text-align: left;
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 13px 14px 12px 19px; color: var(--text); font: inherit; overflow: hidden;
+  padding: 0; color: var(--text); font: inherit; overflow: hidden;
 }
 .play::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--rail, var(--mint)); }
 .play:hover { border-color: #3a4656; }
 .play { display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; }
-.play > span { display: block; }
+.play-main { display: flex; flex: 1; flex-direction: column; align-items: stretch; width: 100%; padding: 13px 14px 12px 19px; border: 0; background: none; color: var(--text); font: inherit; text-align: left; cursor: pointer; }
+.play-main:hover { color: var(--text); }
+.play-main:focus-visible, .play-details:focus-visible { outline-offset: -3px; }
+.play-main > span { display: block; }
+.play-action { color: var(--mint); font-size: 12px; font-weight: 700; margin-top: 10px; }
+.play-details { align-self: flex-start; min-height: 44px; margin: 0 14px 8px 19px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--raised); color: var(--dim); font: inherit; font-size: 12px; cursor: pointer; }
+.play-details:hover { color: var(--text); }
 .play-top { display: flex !important; align-items: center; justify-content: space-between; gap: 8px; }
 .play-kind { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--amber); }
 .play-title { font-family: 'Barlow Condensed', 'DM Sans', sans-serif; font-weight: 700; font-size: 25px; line-height: 1.12; margin: 7px 0 5px; }

@@ -147,7 +147,10 @@
     const kind = rung ? `🪜 80/20 Climb · Step ${info.step || 1}` : `${p.featured ? 'Pick of the Day · ' : ''}${lotto ? `🎰 Lotto · ${legs.length} legs` : playKind(p)}`;
     const when = countdown(p.kickoff) || whenShort(p.kickoff || p.publishedAt);
     const title = rung ? `${money(info.stake)} → ${money(info.payout)}` : p.displayTitle || p.title || p.player;
-    return `<button class="play${p.featured ? ' play-featured' : ''}${lotto ? ' play-lotto' : ''}${rung ? ' play-ladder' : ''}" type="button" data-pick="${esc(p.id)}" style="--rail:${esc(rung ? '#f28c28' : p.color || 'var(--mint)')}">
+    const route = C.pickResearchRoute(p);
+    const action = route ? (p.athleteId ? 'View player stats' : 'View matchup') : 'View pick details';
+    return `<article class="play${p.featured ? ' play-featured' : ''}${lotto ? ' play-lotto' : ''}${rung ? ' play-ladder' : ''}" style="--rail:${esc(rung ? '#f28c28' : p.color || 'var(--mint)')}">
+      ${route ? `<a class="play-main" href="${esc(route)}">` : `<button class="play-main" type="button" data-pick="${esc(p.id)}">`}
       <span class="play-top"><span class="play-kind">${esc(kind)}${p.favorite && !legs.length && !p.featured ? ' · Favorite' : ''}</span><span class="pill pill-${st.tone}">${esc(st.word)}</span></span>
       <span class="play-hero">${legs.length ? '' : avatar(p, 'ava-lg')}<span class="play-title${rung ? ' num' : ''}">${lotto ? `<span class="lotto-odds num">${esc(odds(p.odds))}</span> ` : ''}${esc(title)}</span></span>
       ${legs.length ? `<span class="play-legs">${legs.map(l => typeof l === 'string' ? `<span class="leg">• ${esc(l)}</span>` : `<span class="leg">${avatar(l, 'ava-sm') || '•'} ${esc(l.title)}</span>`).join('')}</span>` : ''}
@@ -155,8 +158,11 @@
       <span class="ladder-bar">${ladderBar((Number(info.banked) || 0) + Number(info.stake || 0), Number(info.totalAfter) || (Number(info.banked) || 0) + Number(info.payout || 0))}</span>` : ''}
       ${statTiles(p)}
       ${p.reason ? `<span class="play-reason">${esc(p.reason)}</span>` : ''}
-      <span class="play-meta">${esc(when)}${stale && p.quotedAt ? ` · price from ${esc(ago(p.quotedAt))}` : ''} · tap for the research ›</span>
-    </button>`;
+      <span class="play-meta">${esc(when)}${stale && p.quotedAt ? ` · price from ${esc(ago(p.quotedAt))}` : ''}</span>
+      <span class="play-action">${action} ›</span>
+      ${route ? '</a>' : '</button>'}
+      ${route ? `<button class="play-details" type="button" data-pick="${esc(p.id)}" aria-label="Pick details: ${esc(title)}">Pick details</button>` : ''}
+    </article>`;
   };
   /* The one record (C.theRecord), the way the pick accounts keep it: wins and losses, and units at one unit a play
      at the line and price we published. The units are saved with each result, so they never move once graded. */

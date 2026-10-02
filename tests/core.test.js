@@ -3,6 +3,22 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const C = require('../site/core.js');
 
+test('straight play cards link to the player or matchup; tickets and incomplete props keep details', () => {
+  assert.equal(C.pickResearchRoute({ kind: 'props', athleteId: '5138451', league: 'CFB', gameId: 'CFB-401858245' }), '#player/CFB/5138451');
+  assert.equal(C.pickResearchRoute({ athleteId: 3122840, league: 'NFL' }), '#player/NFL/3122840');
+  for (const marketType of ['total', 'spread', 'moneyline', 'team_total']) {
+    assert.equal(C.pickResearchRoute({ marketType, gameId: 'NFL-123' }), '#game/NFL-123');
+  }
+  for (const p of [{}, { kind: 'props', gameId: 'NFL-123' }, { athleteId: '1' },
+    { kind: 'parlays', gameId: 'NFL-123' }, { legs: ['leg'], gameId: 'NFL-123' },
+    { parlayType: 'ladder', athleteId: '1', league: 'NFL' }]) {
+    assert.equal(C.pickResearchRoute(p), null);
+  }
+  const route = C.pickResearchRoute({ gameId: 'NFL-123/"<&' });
+  assert.equal(route, '#game/NFL-123%2F%22%3C%26');
+  assert.deepEqual(C.parseRoute(route), { view: 'game', id: 'NFL-123/"<&' });
+});
+
 const KEYS = ['recYds', 'rec', 'recLong', 'snapPct'];
 // [eventId, date, season, week, seasonType, team, opp, home, ...stats]
 const row = (date, opp, home, recYds, rec, extra = {}) =>
