@@ -437,7 +437,7 @@
   const upsetRow = game => {
     const w = game.upsetWatch;
     return `<a class="row" href="#game/${esc(game.id)}"><span class="row-main"><span class="row-name">${esc(w.team)} · ${odds(w.odds)} ML</span>
-      <span class="row-market">Model ${pct(w.modelChance)} to win outright · market ${pct(w.marketChanceNoVig)} after removing the book’s margin</span>
+      <span class="row-market">Model ${C.pct(w.modelChance)} to win outright · market ${C.pct(w.marketChanceNoVig)} after removing the book’s margin</span>
       <span class="row-meta">${esc(whenShort(game.kickoff))} · ${esc(w.book)} · opposing ML ${odds(w.opponentOdds)} · captured ${esc(ago(w.observedAt))}</span>
       <span class="row-meta">Raw model estimate, not a calibrated value bet.${game.league === 'CFB' ? ' College schedule strength and changing roles can distort this.' : ''}</span></span></a>`;
   };
