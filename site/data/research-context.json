@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-02T13:34:53Z",
+  "updatedAt": "2026-10-02T14:11:32Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -7137,6 +7137,15 @@
           "name": "Washington Commanders",
           "players": [
             {
+              "id": "4697815",
+              "name": "Rachaad White",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Shoulder",
+              "reportedAt": "2026-10-02T13:48Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4697815/rachaad-white"
+            },
+            {
               "id": "3127273",
               "name": "Frankie Luvu",
               "position": "LB",
@@ -7176,19 +7185,10 @@
               "id": "4426348",
               "name": "Jayden Daniels",
               "position": "QB",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Elbow",
               "reportedAt": "2026-10-01T18:30Z",
               "source": "https://www.espn.com/nfl/player/_/id/4426348/jayden-daniels"
-            },
-            {
-              "id": "4697815",
-              "name": "Rachaad White",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Shoulder",
-              "reportedAt": "2026-10-01T14:30Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4697815/rachaad-white"
             },
             {
               "id": "5081807",
@@ -7365,14 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "29",
-          "name": "Princely Umanmielen",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-01T20:00:37Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4429166/princely-umanmielen"
-        },
         {
           "teamId": "3",
           "name": "Anthony Johnson Jr.",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-02T13:34:53Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "28",
+          "name": "Jayden Daniels",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-02T14:11:32Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4426348/jayden-daniels"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-02T13:34:53Z",
-      "lastAttemptAt": "2026-10-02T13:34:53Z",
+      "checkedAt": "2026-10-02T14:11:32Z",
+      "lastAttemptAt": "2026-10-02T14:11:32Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-02T13:34:53Z",
-      "lastAttemptAt": "2026-10-02T13:34:53Z",
+      "checkedAt": "2026-10-02T14:11:32Z",
+      "lastAttemptAt": "2026-10-02T14:11:32Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
