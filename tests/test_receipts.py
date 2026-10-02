@@ -245,6 +245,7 @@ class DailyTests(unittest.TestCase):
         first['NFL-2026-W4-m2'] = pick('m2', 'mon', title='Player Nine OVER 60.5 receiving yards', athleteId='9', market='recYds')
         post = receipts.menu(first, latest, GAMES, log, MONDAY_MORNING)
         self.assertEqual(post['text'], 'Today: 2 plays\nColts/Chiefs 8:15 PM\n\n#NFL')
+        self.assertEqual(post['card'], 'https://keenroudy.com/sports/img/kitchen-menu-approved.png')
         self.assertNotIn('under', post['text'].lower())
         self.assertNotIn('Nine', post['text'], 'the player is not named before his post')
         self.assertEqual(post['due'].astimezone(gates.EASTERN).strftime('%H:%M'), '08:45')

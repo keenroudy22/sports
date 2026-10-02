@@ -260,7 +260,7 @@ gate to fill the calendar; if the day has nothing else, the public book closes t
 | When (Eastern) | Post |
 |---|---|
 | 9:00 AM the morning after a game day | **Receipts** for every play of the day, with ✅ ❌ ➖ and the day's record; final-result detail when stored; a 0.25u fun ticket says how many legs hit and calls out a one-leg miss without counting it as a win; on a game day it carries the menu too ("Today: 6 plays."), one morning post instead of two, keyed `receipt:day:<date>+menu:day:<date>` so neither goes out again alone |
-| 8:45 AM on a game day with plays and no receipt that morning | **Today's menu**: how many plates, which games and when, never the side; plates go out around noon (card `site/img/kitchen-menu.png`) |
+| 8:45 AM on a game day with plays and no receipt that morning | **Today's menu**: only already-approved, postable plays; the live text gives the exact count, games and times, never the side. The reusable art promises no market categories, so a screened-out prop or fun ticket was never advertised. Plates go out around noon (card `site/img/kitchen-menu-approved.png`) |
 | 9:00 AM Wednesday | **The week's receipts** by kind, with the week's dates |
 | Around noon (two hours before a kickoff earlier than 2 PM; never before 9 AM) | **The plays**, the Pick of the Day first |
 | Between the first two plays on a multi-play card | **Conversation prompt or teaser**: one short slate question; when a Climb rung or fun ticket is already ready, tease that real post instead (for example, "The 80/20 Climb is back later today. Step 2 is already cooked."); text-only, one relevant league tag, at most once that day. Never added to a single-play day and never followed by automated replies |

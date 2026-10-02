@@ -149,6 +149,10 @@ Handy commands (from `~/Projects/sports`):
   exists, `receipts.book` schedules the public record at 6 PM. Daily posting never lowers a play gate or creates a
   pick. Add a sport to official plays only after its paper trial shows a real edge; schedules and scores may appear
   earlier as factual coverage.
+- **The menu promises only approved plays** (2026-10-01): the morning menu's live text gives the exact count, games
+  and times from the active postable card. Its reusable artwork never names player props, team props, a fun parlay
+  or any other category. Do not advertise a category as coming unless its actual play has already cleared every
+  gate and is scheduled. A later screen-out is not replaced with a forced bet.
 - **Multi-sport buildout** (2026-09-29): the free score center covers NBA, WNBA, men's college basketball, MLB, NHL,
   the Premier League and MLS. `#lab` tells visitors whether each sport is score-only, research, paper trial or live.
   NBA and college totals use the existing silent paper trial when their seasons open; historical backtests alone do

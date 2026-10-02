@@ -323,7 +323,11 @@ def todays_plays(first, latest, games, now):
 
 
 def menu(first, latest, games, log_book, now):
-    """Game-day morning: what is on the stove today and when, by game, never the side. A reason to come back."""
+    """Game-day morning: what is already approved today and when, by game, never the side.
+
+    The reusable card deliberately promises no market category; the live text below is the source of truth for the
+    exact count and schedule. That keeps a screened-out prop or fun ticket from being advertised before it exists.
+    """
     today = eastern_date(now)
     plays = todays_plays(first, latest, games, now)
     if not plays:
@@ -348,7 +352,7 @@ def menu(first, latest, games, log_book, now):
     lines = (rows + (['a lotto'] if parlay else [])
              + ([f"ladder step {(rung.get('ladder') or {}).get('step', 1)}"] if rung else []))
     tail = leagues(plays)
-    return {'key': f'menu:day:{today.isoformat()}', 'card': HOUSE_CARDS + 'kitchen-menu-neon.png', 'kind': 'menu',
+    return {'key': f'menu:day:{today.isoformat()}', 'card': HOUSE_CARDS + 'kitchen-menu-approved.png', 'kind': 'menu',
             'text': fit(lines, head, tail.strip(), head_sep='\n'), 'due': at(today, MENU_AT), 'stale': at(today, MENU_UNTIL)}
 
 

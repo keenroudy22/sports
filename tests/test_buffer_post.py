@@ -121,7 +121,7 @@ class PlanTests(unittest.TestCase):
                          [('menu:day:2026-09-26', '08:45'), ('p', '10:00'), ('conversation:day:2026-09-26', '10:10'),
                           ('a', '10:20'), ('d', '10:30'), ('x', '10:40'), ('b', '12:00')],
                          'the menu first; one conversation prompt follows the first play, then the card continues; tomorrow waits')
-        self.assertEqual(plans[0][4], 'https://keenroudy.com/sports/img/kitchen-menu-neon.png')
+        self.assertEqual(plans[0][4], 'https://keenroudy.com/sports/img/kitchen-menu-approved.png')
         plans = [p for p in plans if p[1] == 'play']
         self.assertTrue(all(p[4] == p[0] for p in plans), 'each play with its own card')
         self.assertTrue(plans[0][2].startswith('Player Seven over 4.5 receptions (-115, '), plans[0][2])
@@ -192,8 +192,8 @@ class PlanTests(unittest.TestCase):
         self.assertTrue(any('dash' in problem for problem in refused[0][1]))
 
     def test_a_house_card_is_found_by_its_address_and_a_play_card_by_its_key(self):
-        self.assertEqual(bp.card_url('https://keenroudy.com/sports/img/kitchen-menu-neon.png'),
-                         'https://keenroudy.com/sports/img/kitchen-menu-neon.png')
+        self.assertEqual(bp.card_url('https://keenroudy.com/sports/img/kitchen-menu-approved.png'),
+                         'https://keenroudy.com/sports/img/kitchen-menu-approved.png')
         self.assertEqual(bp.card_url('CFB-2026-W4-x'), 'https://keenroudy.com/sports/data/cards/CFB-2026-W4-x.png')
 
     def test_x_gets_plays_only(self):
