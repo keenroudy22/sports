@@ -106,10 +106,10 @@
     if (typeof p.projection !== 'number' || typeof p.line !== 'number' || !['over', 'under'].includes(d)) return null;
     return d === 'over' ? p.projection - p.line : p.line - p.projection;
   };
-  /* The numbers a play stands on, in tiles like the projection apps: the price, the line, what we project, the edge. */
+  /* The numbers a play stands on, in tiles like the projection apps: the posted price, the line, what we project, the edge. */
   const statTiles = p => {
     const cells = [];
-    if (p.odds != null) cells.push([p.priceEstimated ? 'Est. ticket price' : 'Original price', odds(p.odds), p.book || '']);
+    if (p.odds != null) cells.push([p.priceEstimated ? 'Est. ticket price' : 'Posted price', odds(p.odds), p.book || '']);
     if (typeof p.line === 'number' && !(p.legs || []).length) cells.push(['Line', plainNumber(p.line), String(p.direction || '').toLowerCase()]);
     if (typeof p.projection === 'number') cells.push(['We project', plainNumber(p.projection), MARKET_WORDS[p.market] || (p.marketType === 'total' ? 'points' : '')]);
     const e = edgeOf(p);
@@ -151,22 +151,26 @@
     const title = rung ? `${money(info.stake)} → ${money(info.payout)}` : p.displayTitle || p.title || p.player;
     const route = C.pickResearchRoute(p);
     const action = route ? (p.athleteId ? 'View player stats' : 'View matchup') : 'View pick details';
-    return `<article class="play${p.featured ? ' play-featured' : ''}${lotto ? ' play-lotto' : ''}${rung ? ' play-ladder' : ''}" style="--rail:${esc(rung ? '#48e8c3' : p.color || 'var(--mint)')}">
-      ${route ? `<a class="play-main" href="${esc(route)}">` : `<button class="play-main" type="button" data-pick="${esc(p.id)}">`}
-      <span class="play-top"><span class="play-kind">${esc(kind)}${p.favorite && !legs.length && !p.featured ? ' · Favorite' : ''}</span><span class="pill pill-${st.tone}">${esc(st.word)}</span></span>
+    const compact = [p.odds != null ? `Posted ${odds(p.odds)}` : '', p.book || '', when].filter(Boolean).join(' · ');
+    const open = typeof window === 'undefined' || !window.matchMedia || !window.matchMedia('(max-width: 620px)').matches ? ' open' : '';
+    return `<details class="play${p.featured ? ' play-featured' : ''}${lotto ? ' play-lotto' : ''}${rung ? ' play-ladder' : ''}" style="--rail:${esc(rung ? '#48e8c3' : p.color || 'var(--mint)')}"${open}>
+      <summary class="play-summary">
+      <span class="play-top"><span class="play-kind">${esc(kind)}${p.favorite && !legs.length && !p.featured ? ' · Favorite' : ''}</span>${stale ? '' : `<span class="pill pill-${st.tone}">${esc(st.word)}</span>`}</span>
       <span class="play-hero">${legs.length ? '' : avatar(p, 'ava-lg')}<span class="play-title${rung ? ' num' : ''}">${lotto ? `<span class="lotto-odds num">${esc(odds(p.odds))}</span> ` : ''}${esc(title)}</span></span>
+      <span class="play-compact-meta">${esc(compact)}${stale ? ' · check current price' : ''}</span>
+      <span class="play-expand-hint"><span>Tap for projection &amp; details</span></span>
+      </summary>
+      <div class="play-body">
       ${legs.length ? `<span class="play-legs">${legs.map(l => typeof l === 'string' ? `<span class="leg">• ${esc(l)}</span>` : `<span class="leg">${avatar(l, 'ava-sm') || '•'} ${esc(l.title)}</span>`).join('')}</span>` : ''}
       ${rung ? `<span class="play-reason">${money(rungMoney(info).banked)} banked · a win banks ${money(rungMoney(info).bankThisWin)} and rides ${money(rungMoney(info).nextStake)}</span>
       <span class="ladder-bar">${ladderBar((Number(info.banked) || 0) + Number(info.stake || 0), Number(info.totalAfter) || (Number(info.banked) || 0) + Number(info.payout || 0))}</span>` : ''}
       ${statTiles(p)}
       ${p.reason ? `<span class="play-reason">${esc(p.reason)}</span>` : ''}
-      <span class="play-meta">${esc(when)}${stale && p.quotedAt ? ` · price from ${esc(ago(p.quotedAt))}` : ''}</span>
+      <span class="play-meta">${esc(when)}${stale && p.quotedAt ? ` · posted price captured ${esc(ago(p.quotedAt))} · check current price` : ''}</span>
       ${C.deliveryText(p) ? `<span class="play-meta">${esc(C.deliveryText(p))}</span>` : ''}
-      ${st.word === 'Price expired' ? '<span class="play-meta">The original quote expired, not the recorded play. Check current odds on the game page; do not assume the old price is still available.</span>' : ''}
-      <span class="play-action">${action} ›</span>
-      ${route ? '</a>' : '</button>'}
-      ${route ? `<button class="play-details" type="button" data-pick="${esc(p.id)}" aria-label="Pick details: ${esc(title)}">Pick details</button>` : ''}
-    </article>`;
+      <span class="play-actions">${route ? `<a class="play-action" href="${esc(route)}">${action} ›</a>` : ''}<button class="play-details" type="button" data-pick="${esc(p.id)}" aria-label="Pick details: ${esc(title)}">Pick details</button></span>
+      </div>
+    </details>`;
   };
   /* The one record (C.theRecord), the way the pick accounts keep it: wins and losses, and units at one unit a play
      at the line and price we published. The units are saved with each result, so they never move once graded. */
@@ -245,7 +249,7 @@
       <div class="community-actions"><a class="btn btn-primary" href="https://discord.gg/CvNTUUSnNz" target="_blank" rel="noopener">Join the free Discord ↗</a><a class="btn" href="#record">See every result</a></div></div>
     <div class="community-proof" aria-label="What the community gets"><span><b>Early</b><small>official plays</small></span><span><b>Fast</b><small>arb alerts</small></span><span><b>Public</b><small>win-or-lose record</small></span></div>
   </aside>`;
-  /* The ladder in one line under the record, so a phone sees it without scrolling past the plays. */
+  /* The ladder in one line near the top, so a phone sees its schedule and bankroll before the ordinary card. */
   const ladderStrip = L => {
     const open = L.open, info = (open && open.ladder) || {};
     const riding = Number(open ? info.stake : L.stake), banked = Number(open ? info.banked : L.banked) || 0;
@@ -485,11 +489,14 @@
     const todayLabel = dayLabel(new Date().toISOString());
     const title = !first ? 'No games scheduled' : dayLabel(first.kickoff) === todayLabel ? todayLabel : `Next slate: ${dayLabel(first.kickoff)}`;
     gameIndex = new Map(games.map(g => [g.id, g]));
-    const scheduled = C.cardSchedule(live);
+    const ladder = C.theLadder(data.picks);
+    /* The Climb is its own top-level feature. Removing it from the ordinary schedule prevents duplicate cards. */
+    const scheduled = C.cardSchedule(live.filter(p => !C.isLadder(p)));
     const todayGames = games.filter(g => C.dayOf(g.kickoff) === C.dayOf(new Date().toISOString()));
     const results = C.recordBreakdown(picks);
     return `${head("What's cooking", `${esc(todayLabel)} · ${todayGames.length} game${todayGames.length === 1 ? '' : 's'} today${state.league === 'ALL' ? '' : ` · ${esc(leagueName(state.league))}`}. Official plays first. Research is optional.`)}
       ${boardTabs('card')}
+      ${section('The 80/20 Climb', ladder.open ? `<div class="plays plays-ladder">${playCard(ladder.open)}</div>` : ladderStrip(ladder), '<a href="#record">Climb record →</a>')}
       ${section("Today's official card", scheduled.today.length ? `<div class="plays">${scheduled.today.map(playCard).join('')}</div>`
         : empty('No qualifying play on the card today', 'A daily post does not mean a daily bet. We wait for a fresh price that clears the checks.'), '<a href="#record">Every result →</a>')}
       ${scheduled.upcoming.length ? `<details class="card upcoming-card"><summary>Upcoming official plays · ${scheduled.upcoming.length}<span>Separate from today’s card</span></summary><div class="plays">${scheduled.upcoming.map(playCard).join('')}</div></details>` : ''}
@@ -515,7 +522,6 @@
         ${section('Model / market disagreements', gaps.length ? `<p class="row-meta" style="margin:0 0 8px">Largest disagreements across the next eight days—not a best-bets list. A big gap may be model error, especially in college football with uneven schedules and changing roles. Win percentages are model estimates, not proof of value.</p>${projGrid(gaps)}`
           : empty('No model calls yet', 'The model publishes after the hosted refresh runs. Every game still shows the market number.'), '<a href="#games">All games →</a>')}
       </div><div>
-        ${section('The ladder', ladderCard(C.theLadder(data.picks)), '<a href="#record">Record →</a>')}
         ${communityCard(true)}
         ${section('Model accuracy · not posted bets', scorecardCard(scoreboard || {}, data.picks))}
         ${section('Data freshness', freshnessCard(data))}
