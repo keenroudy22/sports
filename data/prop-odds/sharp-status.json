@@ -1,15 +1,15 @@
 {
- "at": "2026-10-02T21:31:40Z",
+ "at": "2026-10-02T21:37:10Z",
  "confirmed": {
   "CFB-401856705": "2026-10-02T20:58:06Z",
-  "CFB-401856707": "2026-10-02T21:31:40Z",
+  "CFB-401856707": "2026-10-02T21:37:10Z",
   "CFB-401856708": "2026-10-02T20:58:06Z",
   "CFB-401856709": "2026-10-01T20:22:32Z",
   "CFB-401856710": "2026-10-02T20:58:06Z",
-  "CFB-401856807": "2026-10-02T21:31:40Z",
+  "CFB-401856807": "2026-10-02T21:37:10Z",
   "CFB-401856819": "2026-10-02T20:58:06Z",
   "CFB-401856822": "2026-10-02T20:58:06Z",
-  "CFB-401858245": "2026-10-02T21:31:40Z",
+  "CFB-401858245": "2026-10-02T21:37:10Z",
   "CFB-401858246": "2026-10-02T20:58:06Z",
   "CFB-401858247": "2026-10-02T20:58:06Z",
   "CFB-401858248": "2026-10-02T20:58:06Z",
@@ -21,21 +21,21 @@
   "CFB-401858473": "2026-10-02T20:58:06Z",
   "CFB-401858474": "2026-10-02T20:58:06Z",
   "CFB-401858475": "2026-10-01T20:22:32Z",
-  "CFB-401858476": "2026-10-02T21:31:40Z",
+  "CFB-401858476": "2026-10-02T21:37:10Z",
   "CFB-401858479": "2026-10-02T20:58:06Z",
-  "CFB-401862787": "2026-10-02T19:34:01Z",
+  "CFB-401862787": "2026-10-02T21:37:10Z",
   "CFB-401862791": "2026-10-02T20:58:06Z",
   "CFB-401864515": "2026-10-02T15:49:07Z",
   "CFB-401866432": "2026-10-02T20:58:06Z",
-  "CFB-401871050": "2026-10-02T21:31:40Z"
+  "CFB-401871050": "2026-10-02T21:37:10Z"
  },
  "leagues": {
   "CFB": {
    "books": {
     "draftkings": 1229,
-    "fanduel": 909
+    "fanduel": 1025
    },
-   "eventsListed": 72,
+   "eventsListed": 70,
    "eventsMatched": 56,
    "games": 57,
    "marketTypes": {
@@ -45,15 +45,15 @@
     "player_passing_+_rushing_yards": 73,
     "player_passing_attempts": 56,
     "player_passing_completions": 43,
-    "player_passing_touchdowns": 60,
-    "player_passing_yards": 272,
-    "player_receiving_yards": 819,
+    "player_passing_touchdowns": 67,
+    "player_passing_yards": 287,
+    "player_receiving_yards": 882,
     "player_receptions": 281,
     "player_rushing_attempts": 40,
-    "player_rushing_yards": 431
+    "player_rushing_yards": 462
    },
    "requestsLeft": 0,
-   "rows": 2138,
+   "rows": 2254,
    "slateGames": [
     "Pittsburgh Panthers at Virginia Tech Hokies 2026-10-02T23:00Z",
     "Liberty Flames at Delaware Blue Hens 2026-10-02T23:00Z",
@@ -162,7 +162,6 @@
        "moneyline",
        "player_passing_touchdowns",
        "player_passing_yards",
-       "player_points",
        "player_receiving_yards",
        "player_rushing_yards",
        "point_spread",
@@ -331,24 +330,6 @@
      "type": "fixture"
     },
     {
-     "away": "USC",
-     "external": {
-      "draftkings": "34226077"
-     },
-     "home": "Penn State",
-     "sample": {
-      "away_team": "USC",
-      "home_team": "Penn State",
-      "markets": [
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-10T16:00:00Z",
-     "type": "fixture"
-    },
-    {
      "away": "Georgia",
      "external": {
       "ballybet": "1027552988",
@@ -451,6 +432,34 @@
      },
      "start": "2026-10-10T19:30:00Z",
      "type": "fixture"
+    },
+    {
+     "away": "UCLA",
+     "external": {
+      "ballybet": "1027508062",
+      "betparx": "1027508062",
+      "betrivers": "1027508062",
+      "draftkings": "34745994",
+      "fanduel": "36130161",
+      "fliff": "416483_c_p_209_prematch",
+      "kalshi": "KXNCAAF1H-26OCT10UCLAORE",
+      "novig": "01a0fe1b-56df-73a3-89fd-4fc145734f86",
+      "polymarket": "nfl_oregonducks_uclabruins_2026-10-10_b2",
+      "robinhood": "ec933964-d0fe-4c42-aca0-6458a032dbb5"
+     },
+     "home": "Oregon",
+     "sample": {
+      "away_team": "UCLA",
+      "home_team": "Oregon",
+      "markets": [
+       "1st_half_moneyline",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-10T19:30:00Z",
+     "type": "fixture"
     }
    ]
   },
@@ -506,7 +515,7 @@
       "betrivers": "1028812992",
       "bovada": "27951368",
       "bwin": "6:43513",
-      "circa": "214895",
+      "circa": "214911",
       "coral": "cor-46477000",
       "draftkings": "34118032",
       "fanatics": "5446048",
@@ -670,7 +679,7 @@
       "bovada": "27950836",
       "bwin": "6:43529",
       "caesars": "3ad276a0-4d8f-0e9b-b2cb-b43314afed69",
-      "circa": "214896",
+      "circa": "214912",
       "coral": "cor-46476996",
       "draftkings": "34118279",
       "fanatics": "5453713",

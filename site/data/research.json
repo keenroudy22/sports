@@ -12025,5 +12025,49 @@
         "jurisdictionVerified": true
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-02T21:30:05Z",
+    "targetWeek": 5,
+    "summary": "5:30 PM ET run, published at 5:30 PM ET. Nothing to settle. Closed 1: Jelani Thurman OVER 24.5 receiving yards. Nothing published. Screened and passed on 122: Rocco Conti UNDER 44.5 rushing yards (one_book); Navy at Air Force over 45.5 (not_duplicate); Luke Reynolds UNDER 5.5 receptions (card_cap); Jaziun Patterson UNDER 66.5 rushing yards (one_book); Chase Sowell UNDER 3.5 receptions (card_cap); Tony Diaz UNDER 4.5 receptions (one_book); Michael Hawkins Jr. UNDER 87.5 rushing yards (one_book); Kevin Jennings UNDER 17.5 rushing yards (one_book); and 114 more. odds_api.py: CFB: skipped (captured 2026-10-02T19:35:34Z, inside the gap) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "expired",
+        "favorite": false,
+        "modelLean": true,
+        "position": "TE",
+        "athleteId": "4871039",
+        "market": "recYds",
+        "line": 24.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401858250"
+        ],
+        "book": "DraftKings",
+        "odds": -121,
+        "projection": 59.4,
+        "edge": "v2 receiving yards 59.4 (80% range 7.1 to 111.8). Chance of over 24.5: 80.3% (uncalibrated: no graded history against a line yet), against 54.8% break-even at -121: +25.6 points, +0.467u per unit.",
+        "cutoff": "OVER 24.5 at -121 or better. Closed to new entries at 25+, or at -136 or worse at 24.5.",
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-30T19:13:51Z",
+        "quotedAt": "2026-10-01T20:22:32Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 4:22 PM ET capture across 2 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-10-01T22:50:00Z",
+        "title": "Jelani Thurman OVER 24.5 receiving yards",
+        "id": "CFB-2026-W5-thurman-over-24-5-recyds-dk",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401858250",
+          "https://api.sharpapi.io/api/v1/odds"
+        ],
+        "why": "Prop lean on our number alone: our projection is 59.4 against 24.5 and the over reads 80.3% on the raw curve, which has no graded history against a line yet, so the true chance is lower than that. Last 10 games: 3 of 10 over 24.5. Role: 1st of 1 UNC TEs by projected targets, 6.6 a game. Defense: ND allows 21.25 receiving yards a game to TEs, 63 of 233 this season (1 is stingiest).",
+        "risk": "Uncalibrated chance; a player line turns on a handful of touches. 3 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies. Confidence 2 of 10.",
+        "jurisdictionVerified": true,
+        "entryNote": "Closed to new entries at 5:30 PM ET: price moved 21 cents against, from -121 to -142 at DraftKings. Published cutoff: OVER 24.5 at -121 or better. Closed to new entries at 25+, or at -136 or worse at 24.5.. Stays in the record at 24.5 and -121 and is graded as posted."
+      }
+    ]
   }
 ]
