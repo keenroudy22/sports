@@ -1,0 +1,48 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-10-02T10:45:05Z",
+  "targetWeek": 4,
+  "summary": "6:45 AM ET run, published at 6:45 AM ET. Settled 1: Roman Wilson OVER 19.5 receiving yards win. Nothing to close. Nothing published. Screened and passed on 6: Packers at Buccaneers over 38.5 (one_book); Chiefs at Raiders under 47.5 (not_duplicate); Chargers at Seahawks under 42.5 (one_book); Falcons at Saints under 47.5 (not_duplicate); Patriots at Bills under 48.5 (not_duplicate); Titans at Ravens over 42.5 (one_book). odds_api.py: CFB: skipped (captured 2026-10-02T10:05:53Z, inside the gap) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "position": "WR",
+      "athleteId": "4431492",
+      "market": "recYds",
+      "line": 19.5,
+      "direction": "over",
+      "gameIds": [
+        "NFL-401872964"
+      ],
+      "book": "FanDuel",
+      "odds": -104,
+      "projection": 43.2,
+      "edge": "v2 receiving yards 43.2 (80% range 5.4 to 80.9). Chance of over 19.5: 79.0% (uncalibrated: no graded history against a line yet), against 51.0% break-even at -104: +28.0 points, +0.549u per unit.",
+      "cutoff": "OVER 19.5 at -104 or better. Closed to new entries at 20+, or at -119 or worse at 19.5.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-09-30T19:57:56Z",
+      "quotedAt": "2026-09-30T19:58:45Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 3:58 PM ET capture across 2 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-01T03:30:00Z",
+      "title": "Roman Wilson OVER 19.5 receiving yards",
+      "id": "NFL-2026-W4-wilson-over-19-5-recyds-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401872964",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "why": "Our number says Roman Wilson will get 43.2 receiving yards. The over is 79.0% likely based on our projection, but that number hasn't been tested against a line yet. The true chance is probably lower. In his last 10 games, he went over 19.5 yards 5 times. He's the 2nd highest target WR for PIT with 5.6 yards per game. CLE allows 155.33 yards per game to WRs, and Wilson is 17th out of 32 WRs this season. One team is the stingiest.",
+      "risk": "Our number is 43.2 receiving yards. The 80% range is 5.4 to 80.9. Chance of over 19.5 is 79.0%. That's uncalibrated because there's no graded history against a line yet. Break-even is 51.0% at -104. Edge is +28.0 points or +0.549u per unit. The line is 19.5 at -104. Closed to new entries at 20+ or -119 or worse at 19.5. Confidence is 2 out of 10.",
+      "result": "win",
+      "actual": "Roman Wilson: 74 receiving yards",
+      "settledAt": "2026-10-02T10:45:05Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401872964",
+      "actualValue": 74,
+      "units": 0.962
+    }
+  ]
+}
