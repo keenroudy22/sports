@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-02T01:48:36Z",
+  "updatedAt": "2026-10-02T02:15:50Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-10-02T01:39Z",
+              "reportedAt": "2026-10-02T02:08Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -5987,10 +5987,19 @@
           "name": "Pittsburgh Steelers",
           "players": [
             {
+              "id": "3873935",
+              "name": "Jamel Dean",
+              "position": "CB",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-02T01:45Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3873935/jamel-dean"
+            },
+            {
               "id": "4682980",
               "name": "Derrick Harmon",
               "position": "DT",
-              "status": "Active",
+              "status": "Questionable",
               "injury": "Foot",
               "reportedAt": "2026-10-02T01:16Z",
               "source": "https://www.espn.com/nfl/player/_/id/4682980/derrick-harmon"
@@ -6183,15 +6192,6 @@
               "injury": null,
               "reportedAt": "2026-09-27T21:47Z",
               "source": "https://www.espn.com/nfl/player/_/id/4569987/jaylen-warren"
-            },
-            {
-              "id": "3873935",
-              "name": "Jamel Dean",
-              "position": "CB",
-              "status": "Active",
-              "injury": "Ankle",
-              "reportedAt": "2026-09-27T16:04Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3873935/jamel-dean"
             },
             {
               "id": "4241087",
@@ -6447,6 +6447,15 @@
           "name": "Seattle Seahawks",
           "players": [
             {
+              "id": "4259651",
+              "name": "Brandon Pili",
+              "position": "DT",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-02T01:40Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4259651/brandon-pili"
+            },
+            {
               "id": "4247808",
               "name": "Ty Okada",
               "position": "S",
@@ -6472,15 +6481,6 @@
               "injury": null,
               "reportedAt": "2026-10-01T23:32Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115312/jarran-reed"
-            },
-            {
-              "id": "4259651",
-              "name": "Brandon Pili",
-              "position": "DT",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-01T23:32Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4259651/brandon-pili"
             },
             {
               "id": "4429835",
@@ -7370,22 +7370,6 @@
           "name": "Anthony Johnson Jr.",
           "from": "Out",
           "to": "Injured Reserve",
-          "observedAt": "2026-10-01T10:29:37Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
-        },
-        {
-          "teamId": "3",
-          "name": "Anthony Johnson Jr.",
-          "from": "Injured Reserve",
-          "to": "Out",
-          "observedAt": "2026-10-01T12:31:50Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
-        },
-        {
-          "teamId": "3",
-          "name": "Anthony Johnson Jr.",
-          "from": "Out",
-          "to": "Injured Reserve",
           "observedAt": "2026-10-01T16:20:26Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         },
@@ -7764,11 +7748,27 @@
           "to": "Questionable",
           "observedAt": "2026-10-02T01:38:56Z",
           "source": "https://www.espn.com/nfl/player/_/id/4873232/mason-graham"
+        },
+        {
+          "teamId": "23",
+          "name": "Jamel Dean",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-02T02:15:50Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3873935/jamel-dean"
+        },
+        {
+          "teamId": "23",
+          "name": "Derrick Harmon",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-02T02:15:50Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4682980/derrick-harmon"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-02T01:48:36Z",
-      "lastAttemptAt": "2026-10-02T01:48:36Z",
+      "checkedAt": "2026-10-02T02:15:50Z",
+      "lastAttemptAt": "2026-10-02T02:15:50Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-02T01:48:36Z",
-      "lastAttemptAt": "2026-10-02T01:48:36Z",
+      "checkedAt": "2026-10-02T02:15:50Z",
+      "lastAttemptAt": "2026-10-02T02:15:50Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
