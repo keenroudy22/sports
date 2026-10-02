@@ -11934,5 +11934,96 @@
         "entryNote": "Closed to new entries at 11:45 AM ET: price moved 23 cents against, from -121 to -144 at DraftKings. Published cutoff: OVER 24.5 at -121 or better. Closed to new entries at 25+, or at -136 or worse at 24.5.. Stays in the record at 24.5 and -121 and is graded as posted."
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-02T19:35:33Z",
+    "targetWeek": 5,
+    "summary": "5:30 PM ET run, published at 3:35 PM ET. Nothing to settle. Nothing to close. Published 1: Ladder step 2: 2 legs at FanDuel -178 at FanDuel. odds_api.py:   not on the slate: USC Trojans at Penn State Nittany Lions 2026-10-10T16:00:00Z; South Carolina Gamecocks at Florida Gators 2026-10-10T17:00:00Z; Texas A&M Aggies at Missouri Tigers 2026-10-10T17:00:00Z prop_odds.py: props: PSU @ NU 3 books, 40 player lines; credits used 52 remaining 448",
+    "takeaways": [],
+    "parlays": [
+      {
+        "id": "CFB-2026-W5-ladder-1002-fd",
+        "title": "Ladder step 2: 2 legs at FanDuel",
+        "status": "active",
+        "favorite": false,
+        "parlayType": "ladder",
+        "riskUnits": 0.25,
+        "ladder": {
+          "run": 1,
+          "step": 2,
+          "stake": 75,
+          "payout": 117,
+          "banked": 19,
+          "bankThisWin": 23,
+          "bankedAfter": 42,
+          "nextStake": 94,
+          "totalAfter": 136,
+          "bankPercent": 20,
+          "ridePercent": 80,
+          "start": 50,
+          "goal": 1000
+        },
+        "legs": [
+          {
+            "id": "ladder-CFB-401858245-spread-away-10.5",
+            "title": "Pitt +10.5",
+            "gameId": "CFB-401858245",
+            "marketType": "spread",
+            "direction": "away",
+            "line": 10.5,
+            "book": "FanDuel",
+            "odds": -390,
+            "chance": 0.763,
+            "implied": 0.796,
+            "projection": -1.2,
+            "kickoff": "2026-10-02T23:00Z",
+            "observedAt": "2026-10-02T19:18:00Z",
+            "marketWindow": "Full game",
+            "alternate": true
+          },
+          {
+            "id": "ladder-CFB-401858476-spread-home-12.5",
+            "title": "Northwestern +12.5",
+            "gameId": "CFB-401858476",
+            "marketType": "spread",
+            "direction": "home",
+            "line": 12.5,
+            "book": "FanDuel",
+            "odds": -410,
+            "chance": 0.758,
+            "implied": 0.804,
+            "projection": -1.1,
+            "kickoff": "2026-10-03T00:00Z",
+            "observedAt": "2026-10-02T19:18:00Z",
+            "marketWindow": "Full game",
+            "alternate": true
+          }
+        ],
+        "correlation": "One leg per game, so the book prices the ticket as the legs multiplied.",
+        "gameIds": [
+          "CFB-401858245",
+          "CFB-401858476"
+        ],
+        "book": "FanDuel",
+        "odds": -178,
+        "quotedAt": "2026-10-02T19:18:00Z",
+        "priceEstimated": false,
+        "expiresAt": "2026-10-02T21:30:00Z",
+        "quoteType": "sportsbook",
+        "confidence": 1,
+        "edge": "For fun, not value: 2 protected lines our model agrees with (76% and 76% on the raw model numbers), at FanDuel's exact prices, multiplied to -178. $75 rides with $19 already banked. A win returns $117: $23 goes to the bank and $94 rides next. Bank 20, ride 80.",
+        "cutoff": "A ladder rung is not re-entered. It stands or falls as posted.",
+        "sources": [
+          "https://in.sportsbook.fanduel.com/football/ncaa-football-games/penn-state-@-northwestern-36112228",
+          "https://in.sportsbook.fanduel.com/football/ncaa-football-games/pittsburgh-@-virginia-tech-36112224",
+          "https://www.espn.com/college-football/game/_/gameId/401858245",
+          "https://www.espn.com/college-football/game/_/gameId/401858476"
+        ],
+        "why": "Ladder step 2: two easier game lines at FanDuel, one per game, each one our projection clears comfortably. $75 rides with $19 banked. A win returns $117: bank $23 and ride $94 on the next step. Kept apart from the record, in dollars.",
+        "risk": "Both legs have to hit; one miss ends the climb, but it cannot take money already banked. College score models are uncertain and their raw alternate-spread chances are not calibrated price edges. This is the fun of the climb; the book's official settlement controls, and a person settles the rung.",
+        "jurisdictionVerified": true
+      }
+    ]
   }
 ]
