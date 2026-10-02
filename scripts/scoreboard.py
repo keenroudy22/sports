@@ -475,7 +475,9 @@ def build():
                'picks': {'summary': summarize_picks(picks), 'rows': picks},
                'method': {'close': 'Provider closing line from ESPN (DraftKings from 2026, ESPN BET for 2024-2025).',
                           'live': 'Only forecasts published before kickoff: v1 original, v2 last snapshot, analyst last call.',
-                          'winner': 'Straight-up winner record from each pregame forecast; final ties are pushes.',
+                          'winner': ('Moneyline-style projection record: the team on the positive side of each pregame '
+                                     'projected margin against the final winner. Final ties are pushes; no sportsbook '
+                                     'price or profit is implied.'),
                           'backtest': 'Retrospective walk-forward; never published and not part of the live record.',
                           'props': 'v2 projection vs the last DraftKings line captured before kickoff; no prices.',
                           'clv': 'Posted line vs the last comparable line before kickoff, in points, positive when better.'}}

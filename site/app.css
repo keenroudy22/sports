@@ -256,6 +256,8 @@ main { padding: 0 var(--gutter) 28px; max-width: 1240px; margin: 0 auto; }
   background: rgba(255, 180, 61, .08); border: 1px solid rgba(255, 180, 61, .25); color: #e8c88a;
 }
 .notice strong { color: var(--amber); }
+.notice-model { background: rgba(111, 194, 240, .08); border-color: rgba(94, 234, 164, .28); color: #b8d9e8; }
+.notice-model strong { color: var(--mint); }
 
 /* ---------- filters ---------- */
 

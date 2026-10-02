@@ -474,6 +474,11 @@ its alternate), and our spread and total against the line with the side our numb
 under their logos (the old game rows cut them off on phones). The Games tab and Today's "Our projections" and "In play
 now" use the cards.
 
+The scoreboard also keeps a separate **projected-winner record** (owner, 2026-10-02): the team on the positive side
+of each pregame projected margin is the moneyline-style call, graded against the final winner. Today shows its W-L-P
+and hit rate, and the model scoreboard breaks it out by league, model, season and week. This is projection accuracy,
+not the official play record or a profit claim; without a captured sportsbook moneyline price it never shows units.
+
 Every upcoming game page starts with **Kook'n favorite lines** (owner, 2026-10-01): every current, real main line the
 calibrated Board likes, ranked by edge against the sportsbook price. It shows line vs projection, price, book,
 calibrated/model chance, break-even chance, the resulting price edge and exact-line last-ten and current-season hit

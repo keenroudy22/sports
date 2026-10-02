@@ -201,6 +201,10 @@ Handy commands (from `~/Projects/sports`):
   or void it. If no different official book settlement is known by the deadline, grade from the official stats,
   preserve the review note and sources, name the verified in-game injury on the final receipt, and append a dated
   correction later if stronger evidence appears.
+- **Projected-winner record** (2026-10-02): every pregame score projection also grades the team it made more likely
+  to win straight up. Show that moneyline-style W-L-P record and hit rate by league, model, season and week on Today
+  and the model scoreboard. It is model accuracy, never an official play or a profit claim; do not calculate units
+  without a real captured moneyline price.
 - **Weekly "📌 Save this" projection sheet**: the full NFL slate or 16 college games, college Saturday and NFL
   Sunday at 10 AM (`scripts/sheet.py`). Every spread and total read carries the exact captured line, price and book.
   Numbered mint rings identify up to four markets where the calibrated chance clears that price by the Board's value

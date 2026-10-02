@@ -330,6 +330,9 @@ test('app.js parses', () => {
   assert.match(source, /Join the free Discord/);
   assert.match(source, /community-card-compact/);
   assert.match(source, /communityCard\(true\)/);
+  assert.match(source, /Projected winners/);
+  assert.match(source, /Projected winner/);
+  assert.match(source, /moneyline-style call/);
   assert.match(source, /about 10–15 minutes before X/);
   assert.match(source, /Time-sensitive Arb Radar candidates stay in Discord/);
   assert.match(source, /href="#record">See every result/);
