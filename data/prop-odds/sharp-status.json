@@ -1,15 +1,15 @@
 {
- "at": "2026-10-02T17:07:49Z",
+ "at": "2026-10-02T19:34:01Z",
  "confirmed": {
   "CFB-401856705": "2026-10-02T15:49:07Z",
-  "CFB-401856707": "2026-10-02T17:07:49Z",
+  "CFB-401856707": "2026-10-02T19:34:01Z",
   "CFB-401856708": "2026-10-02T15:49:07Z",
   "CFB-401856709": "2026-10-01T20:22:32Z",
   "CFB-401856710": "2026-10-02T15:49:07Z",
-  "CFB-401856807": "2026-10-02T17:07:49Z",
+  "CFB-401856807": "2026-10-02T19:34:01Z",
   "CFB-401856819": "2026-10-02T16:06:14Z",
   "CFB-401856822": "2026-10-02T16:06:14Z",
-  "CFB-401858245": "2026-10-02T17:07:49Z",
+  "CFB-401858245": "2026-10-02T19:34:01Z",
   "CFB-401858246": "2026-10-02T16:06:14Z",
   "CFB-401858247": "2026-10-02T15:49:07Z",
   "CFB-401858248": "2026-10-02T15:49:07Z",
@@ -21,39 +21,39 @@
   "CFB-401858473": "2026-10-02T15:49:07Z",
   "CFB-401858474": "2026-10-02T15:49:07Z",
   "CFB-401858475": "2026-10-01T20:22:32Z",
-  "CFB-401858476": "2026-10-02T17:07:49Z",
+  "CFB-401858476": "2026-10-02T19:34:01Z",
   "CFB-401858479": "2026-10-02T15:49:07Z",
-  "CFB-401862787": "2026-10-02T16:26:19Z",
+  "CFB-401862787": "2026-10-02T19:34:01Z",
   "CFB-401862791": "2026-10-02T15:49:07Z",
   "CFB-401864515": "2026-10-02T15:49:07Z",
   "CFB-401866432": "2026-10-02T15:49:07Z",
-  "CFB-401871050": "2026-10-02T17:07:49Z"
+  "CFB-401871050": "2026-10-02T19:34:01Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1157,
-    "fanduel": 824
+    "draftkings": 1180,
+    "fanduel": 938
    },
-   "eventsListed": 71,
+   "eventsListed": 69,
    "eventsMatched": 56,
    "games": 57,
    "marketTypes": {
     "player_longest_passing_completion": 8,
-    "player_longest_reception": 34,
-    "player_longest_rush": 17,
-    "player_passing_+_rushing_yards": 72,
-    "player_passing_attempts": 47,
-    "player_passing_completions": 38,
-    "player_passing_touchdowns": 65,
-    "player_passing_yards": 267,
-    "player_receiving_yards": 751,
-    "player_receptions": 210,
-    "player_rushing_attempts": 32,
-    "player_rushing_yards": 440
+    "player_longest_reception": 33,
+    "player_longest_rush": 18,
+    "player_passing_+_rushing_yards": 71,
+    "player_passing_attempts": 53,
+    "player_passing_completions": 44,
+    "player_passing_touchdowns": 68,
+    "player_passing_yards": 289,
+    "player_receiving_yards": 850,
+    "player_receptions": 218,
+    "player_rushing_attempts": 35,
+    "player_rushing_yards": 431
    },
    "requestsLeft": 0,
-   "rows": 1981,
+   "rows": 2118,
    "slateGames": [
     "Pittsburgh Panthers at Virginia Tech Hokies 2026-10-02T23:00Z",
     "Liberty Flames at Delaware Blue Hens 2026-10-02T23:00Z",
@@ -185,6 +185,7 @@
       "kalshi": "KXNCAAFGAME-26OCT06USMTROY",
       "novig": "01a0ea7f-3f63-7272-8159-6ac924421f89",
       "polymarket": "nfl_southernmiss_troy_2026-10-06_b3",
+      "prophetx": "1700084005",
       "robinhood": "40a15926-7d66-473a-8aa0-7d4391fcb5d0"
      },
      "home": "Troy",
@@ -209,8 +210,10 @@
       "fliff": "416775_c_p_209_prematch",
       "novig": "01a0ef67-2906-7471-85e4-ac7a3da0a5d9",
       "polymarket": "nfl_jacksonvillestate_kennesawstate_2026-10-07_b3",
+      "prophetx": "1700084008",
       "robinhood": "0b0cdbe6-83d5-420b-b9cb-20aba1f4e70e",
-      "sx_bet": "L20365083"
+      "sx_bet": "L20365083",
+      "thescorebet": "StandardEvent:d2e4e0f3-90bd-40d0-a23b-f251b0e82525"
      },
      "home": "Kennesaw State",
      "sample": {
@@ -234,7 +237,6 @@
       "draftkings": "34745936",
       "fliff": "416970_c_p_209_prematch",
       "kalshi": "KXNCAAF1H-26OCT09IOWAWASH",
-      "novig": "01a0fa22-9a62-7810-9857-99892819a5a9",
       "polymarket": "nfl_iowahawkeyes_washington_2026-10-09_b3",
       "robinhood": "4f7ff034-c578-46f5-9114-1bfa5a7487dd"
      },
@@ -299,24 +301,6 @@
       "home_team": "Nebraska",
       "markets": [
        "1st_half_moneyline",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-10T16:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "USC",
-     "external": {
-      "draftkings": "34226077"
-     },
-     "home": "Penn State",
-     "sample": {
-      "away_team": "USC",
-      "home_team": "Penn State",
-      "markets": [
        "moneyline",
        "point_spread",
        "total_points"
@@ -455,6 +439,32 @@
      },
      "start": "2026-10-10T19:30:00Z",
      "type": "fixture"
+    },
+    {
+     "away": "LSU",
+     "external": {
+      "ballybet": "1027508199",
+      "betparx": "1027508199",
+      "betrivers": "1027508199",
+      "draftkings": "34746039",
+      "fliff": "417032_c_p_209_prematch",
+      "kalshi": "KXNCAAF1H-26OCT10LSUUK",
+      "polymarket": "nfl_kentuckywildcats_lsutigers_2026-10-10_b3",
+      "robinhood": "7d5b0aa1-92d9-48d9-831d-1838f10a7ce6"
+     },
+     "home": "Kentucky",
+     "sample": {
+      "away_team": "LSU",
+      "home_team": "Kentucky",
+      "markets": [
+       "1st_half_moneyline",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-10T23:00:00Z",
+     "type": "fixture"
     }
    ]
   },
@@ -491,7 +501,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-02T16:57:00Z",
+     "start": "2026-10-02T18:43:00Z",
      "type": "outright"
     },
     {
@@ -514,9 +524,9 @@
       "fanduel": "36104925",
       "fliff": "fobj__conflict_event__400035",
       "galera": "20920364",
-      "gemini": "NFL-2610042005-MIA-MIN-S",
+      "gemini": "NFL-2610042005-MIA-MIN-T",
       "hardrock": "5450013222742655393",
-      "kalshi": "KXNFL1H-26OCT04MIAMIN",
+      "kalshi": "KXNFLREC-26OCT04MIAMIN-MINTFELTON13-5",
       "ladbrokes": "bdc1fa0e-bc5a-4e8c-9176-e6f6b4185195",
       "ladbrokes_uk": "lduk-258814984",
       "matchbook": "mb-33321551697300023",
@@ -526,7 +536,7 @@
       "prizepicks": "prizepicks_185010",
       "prophetx": "1700008785",
       "rebet": "sr:match:71515860",
-      "robinhood": "498c3b33-0b43-4966-b158-3b320c9bded3",
+      "robinhood": "07a3d5c7-32d1-4890-9404-36dc3d522ee0",
       "sportzino": "sz-16551828",
       "stake": "771ed22b-740a-4a47-b994-27606eadf6fe",
       "sx_bet": "L19431791",
@@ -579,16 +589,19 @@
        "2nd_quarter_point_spread",
        "2nd_quarter_team_total",
        "2nd_quarter_total_points",
+       "2nd_quarter_total_points_odd_even",
        "3rd_quarter_moneyline",
        "3rd_quarter_moneyline_3-way",
        "3rd_quarter_point_spread",
        "3rd_quarter_team_total",
        "3rd_quarter_total_points",
+       "3rd_quarter_total_points_odd_even",
        "4th_quarter_moneyline",
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_team_total",
        "4th_quarter_total_points",
+       "4th_quarter_total_points_odd_even",
        "anytime_touchdown_scorer",
        "both_teams_to_score",
        "correct_score",
@@ -659,8 +672,7 @@
       "betrivers": "1029006773",
       "bovada": "27950609",
       "bwin": "6:43510",
-      "caesars": "14265787-bf1e-b0b5-87df-21d47c4cf116",
-      "circa": "216077",
+      "circa": "216087",
       "coral": "cor-46477052",
       "draftkings": "34118067",
       "fanatics": "5445652",
@@ -680,7 +692,7 @@
       "prizepicks": "prizepicks_185013",
       "prophetx": "1700008924",
       "rebet": "sr:match:71531176",
-      "robinhood": "255d4f3e-9483-4afa-ba69-7a4913a15ee8",
+      "robinhood": "5521a20b-df99-4e3f-85da-456cfde432e5",
       "sportzino": "sz-16551844",
       "stake": "6b555b49-9648-4d0c-90af-da7d0af2c2e5",
       "sx_bet": "L19431796",
@@ -818,7 +830,7 @@
       "betrivers": "1028812626",
       "bovada": "27950608",
       "bwin": "6:43512",
-      "circa": "214894",
+      "circa": "216156",
       "coral": "cor-46477001",
       "draftkings": "34118039",
       "fanatics": "5445650",
@@ -828,7 +840,7 @@
       "galera": "20920365",
       "gemini": "NFL-2610042025-LAC-SEA-TT",
       "hardrock": "336457320840167815",
-      "kalshi": "KXNFL1H-26OCT04LACSEA",
+      "kalshi": "KXNFLRECYDS-26OCT04LACSEA-LACLMCCONKEY15-120",
       "ladbrokes": "3835a766-0f66-4b23-99af-8cd02dee4668",
       "ladbrokes_uk": "lduk-258814970",
       "matchbook": "mb-33321597988100023",
@@ -915,6 +927,7 @@
        "match_result_both_teams_to_score",
        "moneyline",
        "most_points_player",
+       "outright",
        "player_assists",
        "player_defensive_interceptions",
        "player_extra_points_made",
@@ -934,10 +947,8 @@
        "player_points",
        "player_prop",
        "player_punts",
-       "player_receiving_targets",
        "player_receiving_yards",
        "player_receptions",
-       "player_rushing_+_receiving_touchdowns",
        "player_rushing_+_receiving_yards",
        "player_rushing_attempts",
        "player_rushing_yards",
@@ -976,8 +987,7 @@
       "betrivers": "1028812629",
       "bovada": "27950830",
       "bwin": "6:43511",
-      "caesars": "a162a6c2-d51b-d5da-3a7c-50ccfec09138",
-      "circa": "214893",
+      "circa": "216133",
       "coral": "cor-46477051",
       "draftkings": "34118238",
       "fanatics": "5445648",
@@ -985,9 +995,9 @@
       "fanduel": "36104926",
       "fliff": "fobj__conflict_event__400036",
       "galera": "20920333",
-      "gemini": "NFL-2610042025-KC-LV-TT",
+      "gemini": "NFL-2610042025-KC-LV-S",
       "hardrock": "8269266589476585872",
-      "kalshi": "KXNFL2QTOTAL-26OCT04KCLV",
+      "kalshi": "KXNFLFFPTS-26OCT04KCLV-KCPMAHOMES15-21P2",
       "ladbrokes": "9860a845-cdc0-4c08-8cac-c7e35fc8ec36",
       "ladbrokes_uk": "lduk-258814979",
       "matchbook": "mb-33321570910100023",
@@ -997,7 +1007,7 @@
       "prizepicks": "prizepicks_185012",
       "prophetx": "1700008922",
       "rebet": "sr:match:71515862",
-      "robinhood": "f0306a44-49be-409b-ac29-293220e4acd3",
+      "robinhood": "c11e5354-14d4-44bc-82bc-147256fd4d1f",
       "sportzino": "sz-16551834",
       "stake": "c2bc9d56-350e-469e-bbeb-2530e64d4abf",
       "sx_bet": "L19431792",
@@ -1138,7 +1148,6 @@
       "betrivers": "1028812992",
       "bovada": "27951368",
       "bwin": "6:43513",
-      "caesars": "45ed09b1-c1f5-c8b0-17fc-0c0f5caf14c6",
       "circa": "214895",
       "coral": "cor-46477000",
       "draftkings": "34118032",
@@ -1159,7 +1168,7 @@
       "prizepicks": "prizepicks_185210",
       "prophetx": "1700008887",
       "rebet": "sr:match:71515868",
-      "robinhood": "d56b4abc-48ec-44e1-b80d-82413a2aab17",
+      "robinhood": "6a215621-5b3c-43c4-8119-e4efbff3bce3",
       "sportzino": "sz-16551846",
       "stake": "8edf2574-372a-4eaf-bff4-ba017a17b12a",
       "sx_bet": "L19431806",
@@ -1309,7 +1318,7 @@
       "fanduel": "36104928",
       "fliff": "400040_c_p_202_prematch",
       "galera": "20940866",
-      "gemini": "NFL-2610060015-ATL-NO-T",
+      "gemini": "NFL-2610060015-ATL-NO-S",
       "hardrock": "3637145959005290894",
       "kalshi": "KXNFL1H-26OCT05ATLNO",
       "ladbrokes": "92974676-464a-4db3-89f6-5c6b0ee28a2e",
@@ -1321,7 +1330,7 @@
       "prizepicks": "prizepicks_185425",
       "prophetx": "1700008800",
       "rebet": "sr:match:71515870",
-      "robinhood": "db97cfd1-a708-47d8-bf74-0afd8a1843e4",
+      "robinhood": "88b1d7d5-0178-4324-92e3-0f766a709599",
       "stake": "53a997c1-5d00-4c13-b73f-bb1590ed41b6",
       "sx_bet": "L19431812",
       "thescorebet": "StandardEvent:5b2498b8-8c9b-41ee-8b11-ef71836d528b",
