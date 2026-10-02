@@ -21,23 +21,46 @@ of the audit is finished. Free service ceilings and the append-only public recor
   totals remain available and explicitly explain their assumptions.
 - Midnight/mint/cyan styling, clearer small-screen tiles and favorite-line spacing. No new services or polling.
 
-## Remaining work — not deployed by this release
+## Second release: research clarity and reliability
 
-1. Finish the shared line-read payload and market-grouped favorites, including explicit missing-price / unsupported
-   team-total states. Add per-field usage completeness and clearer current-season/current-role player comparisons.
-2. Extend integrity coverage to complete append-only store revisions; add component-level health/fallback status
-   and actionable-transition alerts. Complete the accounting split across receipts and the detailed scoreboard.
-3. Model evaluation harness: game/week-separated holdouts; college FBS/FCS schedule labels, blowout sensitivity,
-   roster/current-role weighting and opponent-adjusted efficiency candidates. Test new versions in shadow before
-   promotion; do not hand-tune to McKenzie, Hawkins, UConn or NC State or overwrite current forecasts.
+- Market-grouped game favorites reuse the existing shared priced-line payload. Explicit unsupported ML value,
+  team-total and alternate-streak states prevent empty data from looking like a recommendation.
+- Per-field role-usage completeness and observed denominators; missing red-zone data remains unknown.
+- Upset Watch uses two same-book moneylines from existing free ESPN captures, fresh quote/forecast checks and a
+  raw-model warning. No automatic ML play. Missing coverage gives no watch.
+- Matchup Menu requires fresh priced favorites, five historical games and an 80% historical hit rate; it never
+  truncates a window to manufacture 100%. End-zone research reports opportunities, not probabilities, with
+  explicit role-forecast age and incomplete CFB injury coverage.
+- Complete append-only JSONL and market-capture preservation against the trusted base; no ledger replacement.
+- Component source-age/fallback labels; existing heartbeat failure-change/recovery notifications.
+- Captured/assumed/promo accounting on detailed record and future receipts. No regrading.
+- Offline college model variants and game/week-blocked comparisons saved in `audit-evaluation-2026-10-02.json`.
+  Blowout downweighting worsened margin error in both seasons; other variants show no convincing overall gain.
+  Keep released weights. This is retrospective comparative evidence, not a fresh untouched holdout.
+- Shared fail-closed Odds API gate across main odds, props and NFL alternates. Verify 500-credit allowance and
+  reserve before metered calls; no quota increase. SportsGameOdds retains its existing independent guard.
+- Local synthetic evidence benchmark: Qwen 27B passed 4/4; Ollama 8B timed out on 3/4 (45-second cap). Tiny test,
+  not a quality guarantee or a test of the optional MLX runtime. Keep current routing and template-first prose.
+- Three original preview families (Matchup Menu, End-zone Work, Week of Football), generated from real site
+  data. Navy/mint/cyan/violet. Preview only: nothing queued or advertised as coming.
+
+## Remaining staged work — not enabled by the second release
+
+1. Broader line-payload consolidation and per-component operational alerting beyond the current heartbeat checks.
+   Source-age labels already exist, but are not a complete per-provider health monitor.
+2. Prospective model shadow evaluation and independently validated FBS/FCS membership labels. The evaluation
+   report explicitly labels its prior-season coverage heuristic; it is not official membership data.
+3. Validated priced team totals, touchdown probabilities and alternate-line streak sheets need evidence not
+   currently available; do not hand-tune to named players or overwrite current forecasts.
 4. Live tracked-game worker in shadow only: shared free source fetch per game, bounded cadence, explicit source
    age, deduplication, corrections and final reconciliation. Then one Discord game, then three clean pilots before
    an X milestone release. No LLM or paid-odds call per tick. None of this is currently enabled.
-5. Human-reviewed mentions workflow; new graphic families and editorial experiment; age-matched engagement
-   metrics. No automated likes, follows, unsolicited replies, trend-chasing or engagement purchases. X's automation
+5. New graphics' public-release checkpoint and measured editorial experiment. The manual mentions workflow is
+   documented in GROWTH.md; there is no automatic inbox/reply worker. Age-matched analytics remain an operational
+   collection step, not an implemented new analytics feed. No automated likes, follows, unsolicited replies,
+   trend-chasing or engagement purchases. X's automation
    rules require prior written approval for an AI reply bot: https://help.x.com/en/rules-and-policies/x-automation
-6. Central quota ledger / fail-closed service guard and local-model benchmark. Existing free limits remain in
-   force; do not infer that the new governor exists. NBA/CBB remain paper-only; other sports retain existing
+6. Cross-service quota reporting beyond the new shared Odds API guard. NBA/CBB remain paper-only; other sports retain existing
    factual coverage/capture status. Public market promotion needs prospective evidence and owner sign-off.
 
 ## Verification and deployment

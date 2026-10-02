@@ -7,6 +7,35 @@ rules in words. When this file and the validator disagree, the validator wins.
 
 ## What runs
 
+### October 2 research and reliability release
+
+Game favorites now group spreads, totals and player props using the existing shared priced-line data. Research
+below the favorites adds an exact-line historical Matchup Menu and scoring-opportunity history. Missing usage is
+unknown, with observed-game counts. End-zone rows require three current-season play-by-play games and a role
+forecast no older than seven days; the age and college injury-coverage limitation are explicit. These are not TD
+probabilities or priced recommendations. Upset Watch requires both fresh same-book moneylines and a forecast
+published in the last day; moneylines now come from the already-requested ESPN score feed at no additional call.
+There may be no watch until fresh qualifying evidence exists. Team-total recommendations remain unsupported.
+
+The detailed record and new receipts distinguish captured prices, assumed-price history and promotional credits.
+No outcomes or stored publications changed. Integrity checks also preserve every complete JSONL store revision
+and captured market file against the trusted Git base. Feed-age labels expose stale/missing source components;
+heartbeat alerts now notify on a changed failure or recovery, not the same issue every morning.
+
+`scripts/quota.py` checks the Odds API's free usage endpoint before each metered call. Its private work journal
+reserves credits before calling, retains reservations on failures, requires the 500-credit plan, and preserves
+24 credits (120 for easy parlays). All three metered request paths share it. This local lock is not a distributed
+lock; account-wide usage checks and the buffer cover ordinary overlapping hosted/Mac runs. Existing daily caps
+and SportsGameOdds' independent 1,800-object stop are unchanged. Unknown usage means no metered request.
+
+`scripts/audit_evaluate.py` compares college blowout weighting, roster continuity and efficiency variants by
+walk-forward game/week blocks across 2024/2025. No convincing overall improvement justified a live model change.
+Those seasons were already examined in model development, so prospective shadow evidence is still required.
+`scripts/local_benchmark.py` uses four synthetic evidence cases without paid calls. Qwen 27B passed four; Ollama
+8B timed out three times. Neither routing nor live weights were changed. New editorial HTML previews are generated
+by `scripts/editorial_preview.py`; they are not linked to the publication queue. Remaining pilot gates are in
+`docs/AUDIT-IMPLEMENTATION.md`.
+
 | Script | Job |
 |---|---|
 | `scripts/run.py` | One scheduled run: sync, capture prices, settle finals, close picks whose line moved, build the board, price the candidates our number likes, gather sourced facts, hold what the facts argue against, run every candidate through the gates, write one report per league, validate, commit the whitelisted paths and push. |

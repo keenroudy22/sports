@@ -128,6 +128,21 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Research rollout (2026-10-02):** favorites are grouped by market. Matchup Menu is exact-main-line historical
+  evidence with at least five games, never a guarantee or fabricated head-to-head stat. Upset Watch requires a
+  future game, a forecast published within 24 hours, and both same-book moneylines captured within four hours;
+  it is a raw winner disagreement, not calibrated moneyline value. End-zone research ranks observed current-season
+  red-zone/inside-10 work, requires three games and a role snapshot within seven days, displays its timestamp,
+  excludes passing TDs, and discloses incomplete college injury coverage. It has no TD price or probability.
+  Missing play-by-play and usage are unknown, not zero. These views never publish an official play.
+- **Free-budget guard (2026-10-02):** every metered Odds API path uses `quota.guarded_json`: verify the account's
+  500-credit allowance, serialize and reserve locally before requesting, preserve a 24-credit buffer (120 for
+  easy parlays), and stop when usage cannot be verified. Existing caller limits remain. SportsGameOdds keeps its
+  separate, stricter evaluation guard; no new service or subscription. No API keys in usage journals.
+- **Evaluation outcome (2026-10-02):** offline CFB blowout/continuity/efficiency comparisons do not justify a live
+  weight change. `docs/audit-evaluation-2026-10-02.json` is retrospective, not an untouched holdout. No candidate
+  is promoted. Qwen 27B passed four small evidence tests; Ollama 8B timed out on three. Keep live routing and
+  deterministic routine prose; this did not test the separate optional MLX rewrite runtime.
 - **Audit implementation approved (2026-10-02):** card sizes are ceilings, never quotas. Paused segments,
   missing learned prop calibration, nonpositive calibrated price edges, stale quotes and the NFL prop-market
   underperformance check must block new official straight plays, including favorites and researched labels.

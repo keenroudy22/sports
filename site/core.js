@@ -85,6 +85,8 @@
     const role = evidence && evidence.roleUsage;
     const projected = Number(projectedOpportunities);
     if (!role || evidence.group === 'QB' || role.games < 2 || !Number.isFinite(projected)) return null;
+    if (Object.values(role.volume || {}).some(value => value == null)) return null;
+    if (role.coverage && Object.keys(role.volume || {}).some(k => role.coverage[k] < role.games)) return null;
     const roleOpportunities = Object.values(role.volume || {}).reduce((sum, value) => sum + Number(value || 0), 0);
     const qualifiedRole = role.snapPct >= .15 && roleOpportunities >= 3;
     if (!qualifiedRole) return null;
@@ -106,7 +108,7 @@
     const i = column(keys, key);
     if (i < 0) return null;
     const v = row[i];
-    if (v == null) return LONGEST.has(key) || key === 'snaps' || key === 'snapPct' ? null : 0;
+    if (v == null) return LONGEST.has(key) || key === 'snaps' || key === 'snapPct' || /^(rz|i10|i5)/.test(key) ? null : 0;
     return v;
   };
 

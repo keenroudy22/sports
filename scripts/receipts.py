@@ -142,6 +142,17 @@ def record_text(summary):
     return f"{summary['win']}-{summary['loss']}" + (f"-{summary['push']}" if summary['push'] else '')
 
 
+def accounting(rows):
+    """Price provenance, without changing outcomes or advertising straight stakes on X."""
+    straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder')]
+    captured = [r for r in straight if not r.get('priceAssumed') and isinstance(r.get('odds'), (int, float))]
+    assumed = [r for r in straight if r.get('priceAssumed')]
+    return {'captured': record_text(x_post.summarize(captured)) if captured else None,
+            'assumed': record_text(x_post.summarize(assumed)) if assumed else None,
+            'promotionalCredits': sum(bool(r.get('earlyExit')) for r in straight),
+            'note': 'Historical assumed prices kept separate; promotional credits are not wins.'}
+
+
 def headline(rows):
     """The record a receipt leads with: the straight plays; fun parlays, then the ladder, only when there is nothing else."""
     straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder')]
@@ -229,6 +240,7 @@ def day_receipt(day, first, latest, games, ids):
             'title': headline(rows), 'label': 'YESTERDAY’S PLATES', 'when': f'{day:%A, %b %-d}',
             'summary': {'straight': record_text(x_post.summarize(straight)) if straight else None,
                         'fun': record_text(x_post.summarize(fun)) if fun else None},
+            'accounting': accounting(rows),
             'rows': [(r['result'], label(r, games), result_detail(r)) for r in rows], 'text': text,
             'due': morning(day + timedelta(days=1)),
             'stale': datetime(day.year, day.month, day.day, LATEST[0], LATEST[1], tzinfo=gates.EASTERN).astimezone(timezone.utc) + timedelta(days=1)}
@@ -251,6 +263,7 @@ def week_receipt(wednesday, first, latest, games, ids):
             'title': headline(rows), 'label': 'THIS WEEK’S PLATES', 'when': f'{start:%b %-d} to {end:%b %-d}',
             'summary': {'straight': record_text(x_post.summarize(straight)) if straight else None,
                         'fun': record_text(x_post.summarize(fun)) if fun else None},
+            'accounting': accounting(rows),
             'rows': [(None, kind_line(name, rec, rows), '') for name, rec in kinds], 'text': text, 'due': morning(wednesday),
             'stale': datetime(wednesday.year, wednesday.month, wednesday.day, LATEST[0], LATEST[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)}
 

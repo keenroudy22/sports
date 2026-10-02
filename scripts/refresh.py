@@ -160,6 +160,8 @@ def normalize(event, league):
             'totalOpen': total.get('over', {}).get('open', {}).get('line'),
             'overOdds': total.get('over', {}).get('close', {}).get('odds'),
             'underOdds': total.get('under', {}).get('close', {}).get('odds'),
+            'homeML': odds.get('moneyline', {}).get('home', {}).get('close', {}).get('odds'),
+            'awayML': odds.get('moneyline', {}).get('away', {}).get('close', {}).get('odds'),
             'link': odds.get('link', {}).get('href')
         }
     return game
@@ -363,7 +365,7 @@ def main():
             history = previous.get('marketHistory', [])
             if g.get('market'):
                 market = g['market']
-                keys = ('provider', 'spread', 'spreadOdds', 'total', 'overOdds', 'underOdds')
+                keys = ('provider', 'spread', 'spreadOdds', 'total', 'overOdds', 'underOdds', 'homeML', 'awayML')
                 snapshot = {key: market.get(key) for key in keys}
                 if not history or any(history[-1].get(key) != snapshot[key] for key in keys):
                     snapshot['retrievedAt'] = stamp(now)

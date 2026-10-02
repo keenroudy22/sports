@@ -528,6 +528,8 @@ class AlertTests(unittest.TestCase):
                     mock.patch('urllib.request.urlopen', side_effect=OSError('refused')), \
                     mock.patch.object(run, 'alert', lambda title, message, **k: sent.append((title, message))):
                 self.assertEqual(run.heartbeat(None), 1)
+                self.assertEqual(run.heartbeat(None), 1)
+                self.assertEqual(len(sent), 1, 'unchanged problems do not repeatedly alert')
             self.assertEqual(sent[0][0], 'KeenRoudy desk needs a look')
             self.assertIn('no run has written status.json yet', sent[0][1])
             self.assertIn('Ollama is not reachable', sent[0][1])

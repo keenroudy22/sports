@@ -1,0 +1,678 @@
+{
+  "purpose": "offline evaluation only",
+  "promotion": false,
+  "variants": {
+    "released": {
+      "margin": {
+        "halfLife": 90,
+        "ridge": 1.0,
+        "priorWeight": 0.3,
+        "eloWeight": 0.0
+      },
+      "total": {
+        "halfLife": 90,
+        "ridge": 10.0,
+        "priorWeight": 0.6,
+        "blend": 1.0
+      },
+      "sdMargin": 16.31,
+      "sdTotal": 16.18,
+      "pace": 70.0
+    },
+    "blowout": {
+      "margin": {
+        "halfLife": 90,
+        "ridge": 1.0,
+        "priorWeight": 0.3,
+        "eloWeight": 0.0,
+        "blowoutWeight": 0.35
+      },
+      "total": {
+        "halfLife": 90,
+        "ridge": 10.0,
+        "priorWeight": 0.6,
+        "blend": 1.0,
+        "blowoutWeight": 0.35
+      },
+      "sdMargin": 16.31,
+      "sdTotal": 16.18,
+      "pace": 70.0
+    },
+    "continuity": {
+      "margin": {
+        "halfLife": 90,
+        "ridge": 1.0,
+        "priorWeight": 0.3,
+        "eloWeight": 0.0,
+        "continuity": 1.0
+      },
+      "total": {
+        "halfLife": 90,
+        "ridge": 10.0,
+        "priorWeight": 0.6,
+        "blend": 1.0,
+        "continuity": 1.0
+      },
+      "sdMargin": 16.31,
+      "sdTotal": 16.18,
+      "pace": 70.0
+    },
+    "efficiency": {
+      "margin": {
+        "halfLife": 90,
+        "ridge": 1.0,
+        "priorWeight": 0.3,
+        "eloWeight": 0.0
+      },
+      "total": {
+        "halfLife": 90,
+        "ridge": 10.0,
+        "priorWeight": 0.6,
+        "blend": 0.7
+      },
+      "sdMargin": 16.31,
+      "sdTotal": 16.18,
+      "pace": 70.0
+    }
+  },
+  "caveat": "Retrospective holdout already examined for the released baseline. Prospective shadow required.",
+  "inputDigest": "d44758aba2143203039dad4c8787126e32c2e1a50a0aedb48e03edb94a21d451",
+  "seasons": {
+    "2024": {
+      "released": {
+        "score": {
+          "games": 919,
+          "priced": 871,
+          "marginMiss": 12.95,
+          "closeMarginMiss": 11.87,
+          "totalMiss": 12.79,
+          "closeTotalMiss": 12.7,
+          "sideVsClose": [
+            429,
+            442
+          ],
+          "totalVsClose": [
+            472,
+            399
+          ],
+          "within80": {
+            "margin": 0.8,
+            "total": 0.8
+          },
+          "residualSd": {
+            "margin": 16.31,
+            "total": 16.18
+          }
+        },
+        "comparison": {
+          "margin": {
+            "games": 919,
+            "weeks": 22,
+            "meanErrorDelta": 0.0,
+            "interval90": [
+              0.0,
+              0.0
+            ],
+            "status": "uncertain"
+          },
+          "total": {
+            "games": 919,
+            "weeks": 22,
+            "meanErrorDelta": 0.0,
+            "interval90": [
+              0.0,
+              0.0
+            ],
+            "status": "uncertain"
+          }
+        },
+        "scheduleCoverage": {
+          "bothPreviouslyFbsCoverage": 787,
+          "fcsOrUncertainCoverage": 132
+        },
+        "fbsOnlyComparison": {
+          "margin": {
+            "games": 787,
+            "weeks": 22,
+            "meanErrorDelta": 0.0,
+            "interval90": [
+              0.0,
+              0.0
+            ],
+            "status": "uncertain"
+          },
+          "total": {
+            "games": 787,
+            "weeks": 22,
+            "meanErrorDelta": 0.0,
+            "interval90": [
+              0.0,
+              0.0
+            ],
+            "status": "uncertain"
+          }
+        }
+      },
+      "blowout": {
+        "score": {
+          "games": 919,
+          "priced": 871,
+          "marginMiss": 13.23,
+          "closeMarginMiss": 11.87,
+          "totalMiss": 12.75,
+          "closeTotalMiss": 12.7,
+          "sideVsClose": [
+            416,
+            455
+          ],
+          "totalVsClose": [
+            468,
+            403
+          ],
+          "within80": {
+            "margin": 0.79,
+            "total": 0.81
+          },
+          "residualSd": {
+            "margin": 16.76,
+            "total": 16.18
+          }
+        },
+        "comparison": {
+          "margin": {
+            "games": 919,
+            "weeks": 22,
+            "meanErrorDelta": 0.305,
+            "interval90": [
+              0.06,
+              0.529
+            ],
+            "status": "worse"
+          },
+          "total": {
+            "games": 919,
+            "weeks": 22,
+            "meanErrorDelta": -0.031,
+            "interval90": [
+              -0.076,
+              0.022
+            ],
+            "status": "uncertain"
+          }
+        },
+        "scheduleCoverage": {
+          "bothPreviouslyFbsCoverage": 787,
+          "fcsOrUncertainCoverage": 132
+        },
+        "fbsOnlyComparison": {
+          "margin": {
+            "games": 787,
+            "weeks": 22,
+            "meanErrorDelta": 0.223,
+            "interval90": [
+              0.012,
+              0.424
+            ],
+            "status": "worse"
+          },
+          "total": {
+            "games": 787,
+            "weeks": 22,
+            "meanErrorDelta": -0.015,
+            "interval90": [
+              -0.053,
+              0.027
+            ],
+            "status": "uncertain"
+          }
+        }
+      },
+      "continuity": {
+        "score": {
+          "games": 919,
+          "priced": 871,
+          "marginMiss": 12.95,
+          "closeMarginMiss": 11.87,
+          "totalMiss": 12.78,
+          "closeTotalMiss": 12.7,
+          "sideVsClose": [
+            430,
+            441
+          ],
+          "totalVsClose": [
+            470,
+            401
+          ],
+          "within80": {
+            "margin": 0.8,
+            "total": 0.8
+          },
+          "residualSd": {
+            "margin": 16.31,
+            "total": 16.17
+          }
+        },
+        "comparison": {
+          "margin": {
+            "games": 919,
+            "weeks": 22,
+            "meanErrorDelta": -0.003,
+            "interval90": [
+              -0.012,
+              0.006
+            ],
+            "status": "uncertain"
+          },
+          "total": {
+            "games": 919,
+            "weeks": 22,
+            "meanErrorDelta": -0.01,
+            "interval90": [
+              -0.021,
+              0.001
+            ],
+            "status": "uncertain"
+          }
+        },
+        "scheduleCoverage": {
+          "bothPreviouslyFbsCoverage": 787,
+          "fcsOrUncertainCoverage": 132
+        },
+        "fbsOnlyComparison": {
+          "margin": {
+            "games": 787,
+            "weeks": 22,
+            "meanErrorDelta": -0.002,
+            "interval90": [
+              -0.012,
+              0.009
+            ],
+            "status": "uncertain"
+          },
+          "total": {
+            "games": 787,
+            "weeks": 22,
+            "meanErrorDelta": -0.011,
+            "interval90": [
+              -0.024,
+              0.003
+            ],
+            "status": "uncertain"
+          }
+        }
+      },
+      "efficiency": {
+        "score": {
+          "games": 919,
+          "priced": 871,
+          "marginMiss": 12.95,
+          "closeMarginMiss": 11.87,
+          "totalMiss": 12.8,
+          "closeTotalMiss": 12.7,
+          "sideVsClose": [
+            429,
+            442
+          ],
+          "totalVsClose": [
+            472,
+            399
+          ],
+          "within80": {
+            "margin": 0.8,
+            "total": 0.81
+          },
+          "residualSd": {
+            "margin": 16.31,
+            "total": 16.2
+          }
+        },
+        "comparison": {
+          "margin": {
+            "games": 919,
+            "weeks": 22,
+            "meanErrorDelta": 0.0,
+            "interval90": [
+              0.0,
+              0.0
+            ],
+            "status": "uncertain"
+          },
+          "total": {
+            "games": 919,
+            "weeks": 22,
+            "meanErrorDelta": 0.018,
+            "interval90": [
+              -0.025,
+              0.066
+            ],
+            "status": "uncertain"
+          }
+        },
+        "scheduleCoverage": {
+          "bothPreviouslyFbsCoverage": 787,
+          "fcsOrUncertainCoverage": 132
+        },
+        "fbsOnlyComparison": {
+          "margin": {
+            "games": 787,
+            "weeks": 22,
+            "meanErrorDelta": 0.0,
+            "interval90": [
+              0.0,
+              0.0
+            ],
+            "status": "uncertain"
+          },
+          "total": {
+            "games": 787,
+            "weeks": 22,
+            "meanErrorDelta": 0.033,
+            "interval90": [
+              -0.01,
+              0.072
+            ],
+            "status": "uncertain"
+          }
+        }
+      }
+    },
+    "2025": {
+      "released": {
+        "score": {
+          "games": 934,
+          "priced": 914,
+          "marginMiss": 12.48,
+          "closeMarginMiss": 11.91,
+          "totalMiss": 12.66,
+          "closeTotalMiss": 12.47,
+          "sideVsClose": [
+            470,
+            441
+          ],
+          "totalVsClose": [
+            483,
+            431
+          ],
+          "within80": {
+            "margin": 0.81,
+            "total": 0.8
+          },
+          "residualSd": {
+            "margin": 15.87,
+            "total": 15.69
+          }
+        },
+        "comparison": {
+          "margin": {
+            "games": 934,
+            "weeks": 22,
+            "meanErrorDelta": 0.0,
+            "interval90": [
+              0.0,
+              0.0
+            ],
+            "status": "uncertain"
+          },
+          "total": {
+            "games": 934,
+            "weeks": 22,
+            "meanErrorDelta": 0.0,
+            "interval90": [
+              0.0,
+              0.0
+            ],
+            "status": "uncertain"
+          }
+        },
+        "scheduleCoverage": {
+          "bothPreviouslyFbsCoverage": 784,
+          "fcsOrUncertainCoverage": 150
+        },
+        "fbsOnlyComparison": {
+          "margin": {
+            "games": 784,
+            "weeks": 22,
+            "meanErrorDelta": 0.0,
+            "interval90": [
+              0.0,
+              0.0
+            ],
+            "status": "uncertain"
+          },
+          "total": {
+            "games": 784,
+            "weeks": 22,
+            "meanErrorDelta": 0.0,
+            "interval90": [
+              0.0,
+              0.0
+            ],
+            "status": "uncertain"
+          }
+        }
+      },
+      "blowout": {
+        "score": {
+          "games": 934,
+          "priced": 914,
+          "marginMiss": 12.97,
+          "closeMarginMiss": 11.91,
+          "totalMiss": 12.69,
+          "closeTotalMiss": 12.47,
+          "sideVsClose": [
+            475,
+            436
+          ],
+          "totalVsClose": [
+            469,
+            445
+          ],
+          "within80": {
+            "margin": 0.79,
+            "total": 0.8
+          },
+          "residualSd": {
+            "margin": 16.48,
+            "total": 15.79
+          }
+        },
+        "comparison": {
+          "margin": {
+            "games": 934,
+            "weeks": 22,
+            "meanErrorDelta": 0.559,
+            "interval90": [
+              0.226,
+              0.847
+            ],
+            "status": "worse"
+          },
+          "total": {
+            "games": 934,
+            "weeks": 22,
+            "meanErrorDelta": 0.043,
+            "interval90": [
+              -0.045,
+              0.143
+            ],
+            "status": "uncertain"
+          }
+        },
+        "scheduleCoverage": {
+          "bothPreviouslyFbsCoverage": 784,
+          "fcsOrUncertainCoverage": 150
+        },
+        "fbsOnlyComparison": {
+          "margin": {
+            "games": 784,
+            "weeks": 22,
+            "meanErrorDelta": 0.435,
+            "interval90": [
+              0.162,
+              0.706
+            ],
+            "status": "worse"
+          },
+          "total": {
+            "games": 784,
+            "weeks": 22,
+            "meanErrorDelta": 0.002,
+            "interval90": [
+              -0.065,
+              0.074
+            ],
+            "status": "uncertain"
+          }
+        }
+      },
+      "continuity": {
+        "score": {
+          "games": 934,
+          "priced": 914,
+          "marginMiss": 12.47,
+          "closeMarginMiss": 11.91,
+          "totalMiss": 12.67,
+          "closeTotalMiss": 12.47,
+          "sideVsClose": [
+            472,
+            439
+          ],
+          "totalVsClose": [
+            484,
+            430
+          ],
+          "within80": {
+            "margin": 0.81,
+            "total": 0.8
+          },
+          "residualSd": {
+            "margin": 15.87,
+            "total": 15.7
+          }
+        },
+        "comparison": {
+          "margin": {
+            "games": 934,
+            "weeks": 22,
+            "meanErrorDelta": -0.006,
+            "interval90": [
+              -0.021,
+              0.008
+            ],
+            "status": "uncertain"
+          },
+          "total": {
+            "games": 934,
+            "weeks": 22,
+            "meanErrorDelta": 0.008,
+            "interval90": [
+              0.001,
+              0.015
+            ],
+            "status": "worse"
+          }
+        },
+        "scheduleCoverage": {
+          "bothPreviouslyFbsCoverage": 784,
+          "fcsOrUncertainCoverage": 150
+        },
+        "fbsOnlyComparison": {
+          "margin": {
+            "games": 784,
+            "weeks": 22,
+            "meanErrorDelta": -0.008,
+            "interval90": [
+              -0.028,
+              0.013
+            ],
+            "status": "uncertain"
+          },
+          "total": {
+            "games": 784,
+            "weeks": 22,
+            "meanErrorDelta": 0.01,
+            "interval90": [
+              0.002,
+              0.018
+            ],
+            "status": "worse"
+          }
+        }
+      },
+      "efficiency": {
+        "score": {
+          "games": 934,
+          "priced": 914,
+          "marginMiss": 12.48,
+          "closeMarginMiss": 11.91,
+          "totalMiss": 12.71,
+          "closeTotalMiss": 12.47,
+          "sideVsClose": [
+            470,
+            441
+          ],
+          "totalVsClose": [
+            479,
+            435
+          ],
+          "within80": {
+            "margin": 0.81,
+            "total": 0.8
+          },
+          "residualSd": {
+            "margin": 15.87,
+            "total": 15.71
+          }
+        },
+        "comparison": {
+          "margin": {
+            "games": 934,
+            "weeks": 22,
+            "meanErrorDelta": 0.0,
+            "interval90": [
+              0.0,
+              0.0
+            ],
+            "status": "uncertain"
+          },
+          "total": {
+            "games": 934,
+            "weeks": 22,
+            "meanErrorDelta": 0.047,
+            "interval90": [
+              -0.021,
+              0.123
+            ],
+            "status": "uncertain"
+          }
+        },
+        "scheduleCoverage": {
+          "bothPreviouslyFbsCoverage": 784,
+          "fcsOrUncertainCoverage": 150
+        },
+        "fbsOnlyComparison": {
+          "margin": {
+            "games": 784,
+            "weeks": 22,
+            "meanErrorDelta": 0.0,
+            "interval90": [
+              0.0,
+              0.0
+            ],
+            "status": "uncertain"
+          },
+          "total": {
+            "games": 784,
+            "weeks": 22,
+            "meanErrorDelta": 0.063,
+            "interval90": [
+              -0.014,
+              0.144
+            ],
+            "status": "uncertain"
+          }
+        }
+      }
+    }
+  }
+}

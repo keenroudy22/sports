@@ -11,6 +11,20 @@ import integrity
 
 
 class LedgerTests(unittest.TestCase):
+    def test_full_store_rows_preserve_nested_inputs_and_duplicates(self):
+        before = '{"id":1,"inputs":{"role":2}}\n' * 2
+        self.assertTrue(integrity.complete_rows(before) - integrity.complete_rows(before.splitlines()[0]))
+        self.assertTrue(integrity.complete_rows(before) - integrity.complete_rows(before.replace('"role":2', '"role":3')))
+        self.assertFalse(integrity.complete_rows(before) - integrity.complete_rows(before + '{"id":2}\n'))
+
+    def test_store_guard_uses_git_not_regenerated_ledger(self):
+        with tempfile.TemporaryDirectory() as root:
+            os.makedirs(os.path.join(root, 'data'))
+            with open(os.path.join(root, 'data', 'prices.jsonl'), 'w') as f:
+                f.write('{"odds":110}\n')
+            with patch('integrity.subprocess.check_output', side_effect=['M\tdata/prices.jsonl\n', '{"odds":100}\n']):
+                self.assertTrue(integrity.verify_store_history('base', root))
+
     def test_whole_report_guard_covers_later_revisions_legs_and_saved_units(self):
         changes = 'A\tresearch/new.json\nM\tresearch/later-revision.json\nD\tresearch/original.json\n'
         with patch('integrity.subprocess.check_output', return_value=changes):

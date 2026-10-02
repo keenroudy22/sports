@@ -25,6 +25,7 @@ import build_site
 import gates
 import parlay
 import pricing
+import quota
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -51,6 +52,8 @@ def name_key(name):
 
 
 def http_get(url):
+    if urllib.parse.urlsplit(url).path.endswith('/odds'):
+        return quota.guarded_json(url, len(MARKETS), reserve=RESERVE, timeout=30)
     with urllib.request.urlopen(url, timeout=30) as response:
         headers = {h: response.headers.get(h) for h in ('x-requests-remaining', 'x-requests-used', 'x-requests-last')}
         return json.load(response), headers
@@ -113,7 +116,11 @@ def fetch_day(games, now, key=None, get=None, cache=None, remaining=None, log=pr
             continue
         query = urllib.parse.urlencode({'apiKey': key, 'regions': 'us', 'markets': ','.join(MARKETS),
                                         'bookmakers': ','.join(BOOKS), 'oddsFormat': 'american'})
-        data, last = get(f"{API}/events/{event['id']}/odds?{query}")
+        try:
+            data, last = get(f"{API}/events/{event['id']}/odds?{query}")
+        except quota.QuotaBlocked:
+            log('easy parlay: free usage guard stopped further requests')
+            break
         out[game['id']] = data.get('bookmakers') or []
     cache.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({'fetchedAt': gates.stamp(wall), 'games': out}))

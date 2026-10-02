@@ -31,6 +31,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import boxscores
 import features
+import quota
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -190,9 +191,7 @@ def fetch(sport, key):
     query = urllib.parse.urlencode({'apiKey': key, 'markets': ','.join(MARKETS), 'bookmakers': ','.join(BOOKS),
                                     'oddsFormat': 'american', 'dateFormat': 'iso'})
     request = urllib.request.Request(API.format(sport=sport) + '?' + query, headers={'User-Agent': 'keenroudy-sports'})
-    with urllib.request.urlopen(request, timeout=60) as response:
-        headers = {k: response.headers.get(k) for k in ('x-requests-remaining', 'x-requests-used', 'x-requests-last')}
-        return json.load(response), headers
+    return quota.guarded_json(request, COST, reserve=RESERVE)
 
 
 def capture(slate, now, key, status, fetch=fetch, root=STORE, log=print):

@@ -34,6 +34,7 @@ import boxscores
 import features
 import odds_api
 import pricing
+import quota
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -84,9 +85,7 @@ def fetch_odds(sport, event, key, opener=urllib.request.urlopen):
                                     'oddsFormat': 'american', 'dateFormat': 'iso'})
     url = ODDS.format(sport=sport, event=event) + '?' + query
     request = urllib.request.Request(url, headers={'User-Agent': 'keenroudy-sports'})
-    with opener(request, timeout=60) as response:
-        headers = {k: response.headers.get(k) for k in ('x-requests-remaining', 'x-requests-used', 'x-requests-last')}
-        return json.load(response), headers
+    return quota.guarded_json(request, COST, reserve=RESERVE, opener=opener)
 
 
 def quotes_of(event):

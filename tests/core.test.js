@@ -108,6 +108,14 @@ test('quarterback pages include rushing touchdowns beside their rushing volume',
   assert.equal(C.LABEL.rushTD, 'Rush TD');
 });
 
+test('missing play-by-play counts stay unknown instead of becoming zeros', () => {
+  assert.equal(C.cell([...Array(8), null], ['rzCar'], 'rzCar'), null);
+  assert.equal(C.cell([...Array(8), 0], ['rzCar'], 'rzCar'), 0);
+  assert.equal(C.cell([...Array(8), null], ['i10Tgt'], 'i10Tgt'), null);
+  const role = { group: 'RB', roleUsage: { games: 4, volume: {car: null, tgt: 3}, redZone: 8 } };
+  assert.equal(C.injurySleeperSignal(role, 10), null);
+});
+
 test('game pages explain next-up depth after hard injuries without calling it a touchdown projection', () => {
   const source = require('node:fs').readFileSync('site/app.js', 'utf8');
   assert.match(source, /Next up after injuries/);

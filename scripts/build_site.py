@@ -36,6 +36,7 @@ import model_v2
 import odds_api
 import pricing
 import sharp_odds
+import research_views
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -232,9 +233,11 @@ def depth_role_usage(records, snap_players, team, group, role, before, season, a
 
         def line(snap):
             stats = box.get(str(snap.get('id')), {})
+            pbp_ok = (game.get('quality') or {}).get('plays') == 'ok'
+            keys = (*spec['volume'], spec['red'], spec['inside10'], *spec['td'])
+            values = {key: stats.get(key, 0 if pbp_ok and stats else None) for key in keys if key}
             return {'player': str(snap.get('id')), 'name': snap.get('name') or stats.get('name'),
-                    'snapPct': snap.get('pct'), **{key: stats.get(key, 0) for key in
-                    (*spec['volume'], spec['red'], spec['inside10'], *spec['td']) if key}}
+                    'snapPct': snap.get('pct'), **values}
 
         selected.append(line(snap_rows[role - 1]))
         if athlete:
@@ -246,13 +249,19 @@ def depth_role_usage(records, snap_players, team, group, role, before, season, a
 
     def summarize(rows):
         red, inside = spec['red'], spec['inside10']
+        keys = [k for k in (*spec['volume'], red, inside, *spec['td']) if k]
+        coverage = {k: sum(isinstance(r.get(k), (int, float)) for r in rows) for k in keys}
+        def total(key):
+            return sum(r[key] for r in rows if isinstance(r.get(key), (int, float))) if coverage.get(key) else None
+        td_rows = [r for r in rows if all(isinstance(r.get(k), (int, float)) for k in spec['td'])]
         return {'games': len(rows),
                 'snapPct': round(sum(r['snapPct'] for r in rows) / len(rows), 3),
-                'volume': {key: round(sum(r.get(key, 0) for r in rows) / len(rows), 1) for key in spec['volume']},
-                'redZone': sum(r.get(red, 0) for r in rows),
-                'redZoneGames': sum(1 for r in rows if r.get(red, 0) > 0),
-                'inside10': sum(r.get(inside, 0) for r in rows) if inside else None,
-                'touchdowns': sum(sum(r.get(key, 0) for key in spec['td']) for r in rows)}
+                'volume': {key: round(total(key) / coverage[key], 1) if coverage[key] else None for key in spec['volume']},
+                'redZone': total(red),
+                'redZoneGames': sum(1 for r in rows if (r.get(red) or 0) > 0) if coverage[red] else None,
+                'inside10': total(inside) if inside else None,
+                'touchdowns': sum(sum(r[k] for k in spec['td']) for r in td_rows) if td_rows else None,
+                'coverage': coverage, 'redZoneObserved': coverage[red], 'touchdownObserved': len(td_rows)}
 
     return {'role': f'{group}{role}', 'group': group, 'season': season, 'roleUsage': summarize(selected),
             'playerUsage': summarize(personal) if personal else None,
@@ -315,7 +324,8 @@ def market(game):
             'spreadOpen': opened, 'spreadMove': round(spread - opened, 1) if spread is not None and opened is not None
             else None, 'total': number(raw.get('total')), 'totalOpen': number(str(raw.get('totalOpen') or '').lstrip('ou')),
             'spreadOdds': american(raw.get('spreadOdds')), 'overOdds': american(raw.get('overOdds')),
-            'underOdds': american(raw.get('underOdds')), 'retrievedAt': game.get('marketRetrievedAt')}
+            'underOdds': american(raw.get('underOdds')), 'homeML': american(raw.get('homeML')),
+            'awayML': american(raw.get('awayML')), 'retrievedAt': game.get('marketRetrievedAt')}
 
 
 def v2_summary(snapshot):
@@ -473,6 +483,10 @@ def game_detail(card, game, record, snapshots, captures, lines, picks, names, te
     detail['lines'] = [l for l in lines if l.get('gameId') == card['id'] and not l.get('gameMarket')]
     detail['picks'] = [p for p in picks if p.get('gameId') == card['id']]
     detail['favoriteLines'] = favorites or []
+    detail['scorerResearch'] = research_views.scorer_research(game, final, records, names, now)
+    detail['researchStatus'] = {'moneyline': 'Winner research only; moneyline value not calibrated.',
+                               'teamTotals': 'Research trial only; no validated public team-total prices.',
+                               'touchdowns': 'Scoring opportunities, not TD probabilities or priced recommendations.'}
     if record:
         detail['final'] = {'home': record['home']['score'], 'away': record['away']['score'],
                            'periods': {'home': record['home'].get('periods'), 'away': record['away'].get('periods')},
@@ -723,6 +737,7 @@ def build(now=None):
         block = market_read.read(game, latest_snap, books.get(game['id']), gap_rows) if game.get('state') == 'pre' else None
         card = game_card(game, forecasts_v1, latest_snap, names, identities, block, paused, values.get(game['id']))
         card['fcs'] = game['league'] == 'CFB' and not {str(game['home']['id']), str(game['away']['id'])} <= fbs
+        card['upsetWatch'] = research_views.upset_watch(card, now)
         cards.append(card)
         info = league_data[game['league']]
         favorites = favorite_lines(game, latest_snap, lines, now, info['player_logs'])
@@ -738,7 +753,8 @@ def build(now=None):
                  'forecasts': max((s['publishedAt'] for rows in forecasts.values() for s in rows), default=None),
                  'injuries': ((context.get('leagues') or {}).get('NFL') or {}).get('checkedAt'),
                  'props': max((c['retrievedAt'] for rows in captures.values() for c in rows), default=None)}
-    write(OUT / 'today.json', {'generatedAt': stamp(now), 'freshness': freshness, 'games': cards, 'picks': picks,
+    write(OUT / 'today.json', {'generatedAt': stamp(now), 'freshness': freshness,
+                               'health': research_views.health(freshness, now), 'games': cards, 'picks': picks,
                                'model': summary})
     write(OUT / 'lines.json', {'generatedAt': stamp(now), 'lines': lines})
     for league in ('NFL', 'CFB'):

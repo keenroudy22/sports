@@ -431,6 +431,39 @@
   const lastGameDay = picks => picks.filter(p => p.result && p.settledAt && !p.historicalImport && Date.now() - Date.parse(p.settledAt) < 40 * 3600 * 1000)
     .sort((a, b) => String(b.settledAt).localeCompare(String(a.settledAt)));
 
+  const currentUpset = game => game.upsetWatch && game.state === 'pre' && !game.completed &&
+    Date.parse(game.kickoff) > Date.now() && Date.now() >= Date.parse(game.upsetWatch.observedAt) &&
+    Date.now() - Date.parse(game.upsetWatch.observedAt) <= 4 * 3600000;
+  const upsetRow = game => {
+    const w = game.upsetWatch;
+    return `<a class="row" href="#game/${esc(game.id)}"><span class="row-main"><span class="row-name">${esc(w.team)} · ${odds(w.odds)} ML</span>
+      <span class="row-market">Model ${pct(w.modelChance)} to win outright · market ${pct(w.marketChanceNoVig)} after removing the book’s margin</span>
+      <span class="row-meta">${esc(whenShort(game.kickoff))} · ${esc(w.book)} · opposing ML ${odds(w.opponentOdds)} · captured ${esc(ago(w.observedAt))}</span>
+      <span class="row-meta">Raw model estimate, not a calibrated value bet.${game.league === 'CFB' ? ' College schedule strength and changing roles can distort this.' : ''}</span></span></a>`;
+  };
+  const matchupResearch = (card, detail) => {
+    if (!detail || card.state !== 'pre' || Date.parse(card.kickoff) <= Date.now()) return '';
+    const trends = (detail.favoriteLines || []).filter(l => l.history && l.history.last && l.history.last.games >= 5 &&
+      l.history.last.rate >= 80 && Date.now() - Date.parse(l.observedAt) >= 0 &&
+      Date.now() - Date.parse(l.observedAt) <= 12 * 3600000).slice(0, 6);
+    const scorers = (detail.scorerResearch || []).filter(s => {
+      const age = Date.now() - Date.parse(s.roleSnapshotAt);
+      return age >= 0 && age <= 7 * 86400000;
+    });
+    return (currentUpset(card) ? section('Upset Watch · research', `<div class="card">${upsetRow(card)}</div>`) : '') +
+      section('Matchup Menu · historical trends', trends.length ? `<div class="card"><div class="rows">${trends.map(l =>
+        `<a class="row" href="#player/${esc(card.league)}/${esc(l.athleteId)}"><span class="row-main"><span class="row-name">${esc(l.title)}</span>
+          <span class="row-market">${l.history.last.hits}/${l.history.last.games} last games · ${l.history.last.rate}% historical</span>
+          <span class="row-meta">${l.history.season ? `${l.history.season.hits}/${l.history.season.games} this season · ` : ''}${odds(l.odds)} ${esc(l.book)} · not head-to-head history or a guaranteed outcome</span></span></a>`).join('')}</div></div>`
+        : empty('No qualifying streak sheet', 'At least five observed games and a fresh, priced favorite are required. We never shorten the window just to show 100%.')) +
+      section('Who’s finding the end zone? · research', `<p class="row-meta">Current-season red-zone opportunities, ranked by work inside the 10 per observed game. These are not TD probabilities or priced TD picks; passing TDs do not count as a scorer’s TD. ${card.league === 'CFB' ? 'College injury coverage is incomplete; verify availability before using this research.' : 'Verify the latest injury report and availability.'}</p>` +
+        (scorers.length ? `<div class="card"><div class="rows">${scorers.map(s => `<a class="row" href="#player/${esc(card.league)}/${esc(s.athleteId)}"><span class="row-main"><span class="row-name">${esc(s.player)}</span>
+          <span class="row-market">${s.redZone} red-zone carries + targets · ${s.inside10} inside the 10 · ${s.touchdowns} rushing/receiving TDs</span>
+          <span class="row-meta">${s.games}/${s.teamGames} team games with player and play-by-play coverage · ${fixed(s.projectedOpportunities)} projected carries + targets · role forecast ${esc(whenShort(s.roleSnapshotAt))} · ${esc(s.priceStatus)}</span></span></a>`).join('')}</div></div>`
+        : empty('Not enough scoring-opportunity evidence', 'We need current involvement and at least three observed games; missing data does not mean zero opportunities.'))) +
+      `<details class="card"><summary>Markets still in research</summary><p class="row-meta">Moneyline value: not calibrated. Team totals: not yet validated for public recommendations. Alternate streak sheets need verified alternate prices. No price, no priced recommendation.</p></details>`;
+  };
+
   async function viewToday() {
     const [data, board, scoreboard] = await Promise.all([get('app/today.json'), maybe('app/lines.json'), maybe('scoreboard.json')]);
     markPicks(data.picks.filter(inLeague).filter(p => !p.result && !p.historicalImport));
@@ -467,6 +500,7 @@
       </div>
       <div class="two-col"><div>
         <div class="research-heading"><p class="eyebrow">The research counter</p><h2>Explore the numbers</h2><p>These are model reads, not additional official plays. The price and the uncertainty matter as much as the projection.</p></div>
+        ${now.some(currentUpset) ? section('Upset Watch · outright winners, not spread covers', `<div class="card"><div class="rows">${now.filter(currentUpset).slice(0, 4).map(upsetRow).join('')}</div></div>`, '<a href="#games">Game research →</a>') : ''}
         ${best.games.length ? section(best.day ? `Game lines with value · ${esc(best.day)}` : 'Game lines with value today',
           `<p class="row-meta" style="margin:0 0 8px">Where our chance beats what the price needs, at the best price we found. Worth a look, not picks.</p><div class="card"><div class="rows">${best.games.map(lineRow).join('')}</div></div>`,
           '<a href="#board">All game lines →</a>') : ''}
@@ -502,6 +536,7 @@
     const f = data.freshness || {};
     const item = (label, iso) => `<div><span>${esc(label)}</span><strong style="font-size:12px">${esc(ago(iso))}</strong></div>`;
     return `<div class="card" style="padding:12px"><div class="kv">${item('Schedule & lines', f.slate)}${item('Box scores', f.boxscores)}${item('Model', f.forecasts)}${item('Injuries', f.injuries)}${item('Prop lines', f.props)}</div>
+      ${(data.health || []).filter(h => h.status !== 'current').map(h => `<p class="row-meta">${esc(h.component)}: ${esc(h.status)} at build. ${esc(h.fallback)}</p>`).join('')}
       <p class="row-meta" style="margin:10px 2px 0">Hosted refreshes run through the day and can run late. These are the latest successful checks, not a live feed.</p></div>`;
   };
 
@@ -532,7 +567,7 @@
     const favorites = detail.favoriteLines || [];
     if (!favorites.length) return section("Kook'n favorite lines",
       empty('No qualifying favorite yet', 'We have a projection, but no fresh sportsbook line currently clears the price and role checks. Nothing is forced.'));
-    const rows = favorites.map((line, i) => {
+    const renderLine = (line, i) => {
       const player = line.kind === 'player';
       const chance = line.chance != null ? `${Math.round(100 * line.chance)}% ${line.calibrated ? 'calibrated chance' : 'model chance'}` : '';
       const need = line.needs != null ? `${Math.round(100 * line.needs)}% price break-even` : '';
@@ -558,8 +593,12 @@
         <span class="row-main"><span class="row-top"><span class="pill pill-ours">#${i + 1}</span><span class="row-name">${esc(line.title)}</span>${line.team ? `<span class="row-meta">${esc(line.team)}</span>` : ''}${line.alternate ? '<span class="pill pill-reference">Alternate</span>' : ''}</span>
         <span class="row-market">${esc(detailText)}</span>${historyText ? `<span class="row-meta favorite-history">Historical hit rate: ${esc(historyText)}</span>` : ''}<span class="row-meta">Captured ${esc(ago(line.observedAt))} · main-line value read, not an additional official play</span></span>
         <span class="row-price"><span class="row-odds num">${esc(C.odds(line.odds))}</span><span class="row-book">${esc(line.book)}</span></span></div>`;
-    }).join('');
-    return section("Kook'n favorite lines", `<div class="card favorite-lines"><div class="rows">${rows}</div></div>
+    };
+    const groups = [['Spreads', favorites.filter(l => l.market === 'point spread')],
+      ['Game totals', favorites.filter(l => l.kind === 'game' && l.market !== 'point spread')],
+      ['Player props', favorites.filter(l => l.kind === 'player')]];
+    return section("Kook'n favorite lines", groups.filter(([, rows]) => rows.length).map(([name, rows]) =>
+      `<h3 class="eyebrow">${esc(name)}</h3><div class="card favorite-lines"><div class="rows">${rows.map(renderLine).join('')}</div></div>`).join('') + `
       <p class="row-meta favorite-note">Every fresh main line our priced model currently likes, ranked by edge against the sportsbook price. Historical hit rates are context, not a prediction. Want less risk? You can choose an alternate at your book. These are optional reads; official plays are labeled separately.</p>`);
   };
 
@@ -581,6 +620,7 @@
     const win = v2 ? (v2.winProb >= 0.5 ? `${card.home.abbr} ${Math.round(100 * v2.winProb)}%` : `${card.away.abbr} ${Math.round(100 * (1 - v2.winProb))}%`) : DASH;
     let html = `${head(title, `${status}${card.neutral ? ' · neutral site' : ''} · ${esc(leagueName(league))}`, back)}
       ${favoriteLinesSection(card, detail)}
+      ${matchupResearch(card, detail)}
       ${!card.completed && C.modelCaution(card) ? `<div class="notice">${esc(C.modelCaution(card))}</div>` : ''}
       <div class="stats">
         ${stat('Our score', v2 ? `${fixed(v2.away, 0)}–${fixed(v2.home, 0)}` : DASH, v2 ? `${esc(card.away.abbr)} ${fixed(v2.away)}, ${esc(card.home.abbr)} ${fixed(v2.home)}` : 'no number yet')}
@@ -641,12 +681,12 @@
   const roleUsageText = (usage, subject) => {
     if (!usage) return '';
     const labels = { car: 'carries', tgt: 'targets', att: 'pass attempts' };
-    const volume = Object.entries(usage.volume || {}).map(([key, value]) => `${fixed(value)} ${labels[key] || key}`);
+    const volume = Object.entries(usage.volume || {}).map(([key, value]) => value == null ? `${labels[key] || key} unavailable` : `${fixed(value)} ${labels[key] || key} (${(usage.coverage || {})[key] ?? usage.games}/${usage.games} games observed)`);
     const redLabel = /^(RB|FB)$/.test(usage.group) ? ['red-zone carry', 'red-zone carries']
       : usage.group === 'QB' ? ['red-zone pass attempt', 'red-zone pass attempts'] : ['red-zone target', 'red-zone targets'];
-    const scoring = [`${usage.redZone} ${redLabel[usage.redZone === 1 ? 0 : 1]} in ${usage.redZoneGames} of ${usage.games} games`];
+    const scoring = [usage.redZone == null ? 'Red-zone data unavailable' : `${usage.redZone} ${redLabel[usage.redZone === 1 ? 0 : 1]} in ${usage.redZoneGames} of ${usage.redZoneObserved ?? usage.games} observed games`];
     if (usage.inside10 != null) scoring.push(`${usage.inside10} inside the 10`);
-    scoring.push(`${usage.touchdowns} TD${usage.touchdowns === 1 ? '' : 's'}`);
+    if (usage.touchdowns != null) scoring.push(`${usage.touchdowns} TD${usage.touchdowns === 1 ? '' : 's'} (${usage.touchdownObserved ?? usage.games}/${usage.games} games observed)`);
     return `<p class="depth-history"><b>${esc(subject)}</b> · ${Math.round(100 * usage.snapPct)}% snaps${volume.length ? ` · ${esc(volume.join(' · '))}` : ''}<br><span>${esc(scoring.join(' · '))}</span></p>`;
   };
 
@@ -1063,6 +1103,7 @@
     const league = data.picks.filter(inLeague);
     gameIndex = new Map(data.games.map(g => [g.id, g]));
     const rec = C.theRecord(league);
+    const accounting = C.recordBreakdown(league);
     const rq = state.recordQuery.trim().toLowerCase();
     const matches = p => !rq || [p.title, p.displayTitle, p.player, p.kind, p.result, p.book].some(v => String(v || '').toLowerCase().includes(rq));
     const newest = (a, b) => String(b.settledAt || b.publishedAt).localeCompare(String(a.settledAt || a.publishedAt));
@@ -1085,11 +1126,16 @@
       `<tr><th scope="row">${esc(name)}</th><td class="num">${t.wins}–${t.losses}–${t.pushes}</td><td class="num ${unitTone(t.units)}">${unitText(t.units)}</td><td class="num">${t.pending}</td></tr>`).join('')}</tbody></table></div>`;
     return `${head('The record', `Every play we publish, graded win or lose. The same numbers go out on X.${state.league === 'ALL' ? '' : ` ${esc(leagueName(dataLeague()))} shown; switch sports at the top.`}`)}
       ${scoreTabs('official')}
-      ${theRecordCard(rec)}
+      <div class="card transparent-record"><p class="eyebrow">All published straight plays · ${wl(accounting.all)}</p><div class="stats">
+        ${stat('Captured prices', wl(accounting.captured), `${unitText(accounting.captured.units)} before promo credits`)}
+        ${stat('Historical / assumed', wl(accounting.assumed), `${unitText(accounting.assumed.units)} at assumed prices`)}
+        ${stat('Promo credits', unitText(accounting.credits), 'separate from betting returns')}
+      </div><p class="row-meta">Same outcomes, separated price provenance. Parlays and the Climb remain separate.</p></div>
+      <details class="card"><summary>Legacy combined totals · includes assumed prices and credits</summary>${theRecordCard(rec)}</details>
       ${section('The ladder', ladderCard(C.theLadder(data.picks)))}
       ${section('Every play', `<input class="search" type="search" data-input="recordQuery" placeholder="Search by player, team or market" value="${esc(state.recordQuery)}" aria-label="Search the plays">
         ${settled.length ? settledWeeks(settled, clv, Boolean(rq), weekLabel) : empty(rq ? 'No play matches' : 'Nothing settled yet', rq ? 'Try a player, a team or a market.' : 'Plays show here once their games are final.')}`)}
-      <details class="card more-numbers"><summary>More numbers</summary><div class="more-body">
+      <details class="card more-numbers"><summary>More numbers · legacy combined accounting</summary><div class="more-body"><p class="row-meta">These breakdowns include historical assumed prices and promotional credits. Use the captured-price headline above for returns before credits.</p>
         ${section('By sport', table('Sport', leagues))}
         ${section('By kind', table('Kind', kinds) + '<p class="row-meta" style="margin:8px 2px 0">Researched plays are backed by a checked news fact. Model plays go out on our number alone. Fun parlays are smaller tickets, just for fun, and stay out of the record.</p>')}
         ${weeks.length ? section('By week', table('Week', weeks.map(([w, t]) => [weekLabel(w), t]))) : ''}

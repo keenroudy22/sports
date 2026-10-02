@@ -15,6 +15,8 @@ import json
 import os
 import subprocess
 import sys
+from collections import Counter
+from pathlib import Path
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LEDGER = os.path.join(ROOT, 'tests', 'integrity-ledger.json')
@@ -99,10 +101,10 @@ def compare(current, saved):
 
 def main():
     if len(sys.argv) == 3 and sys.argv[1] == '--verify-base':
-        problems = verify_report_history(sys.argv[2])
+        problems = verify_report_history(sys.argv[2]) + verify_store_history(sys.argv[2])
         if problems:
             raise SystemExit('\n'.join(problems))
-        print('All prior published reports are byte-for-byte unchanged.')
+        print('Prior reports and complete stored revisions are unchanged; only additions allowed.')
         return
     ledger = build()
     with open(LEDGER, 'w', encoding='utf-8') as handle:
@@ -123,6 +125,41 @@ def verify_report_history(base, root=ROOT):
                                       cwd=root, text=True)
     return [f'Published report changed: {line}' for line in changed.splitlines()
             if line and not line.startswith('A\t')]
+
+
+def complete_rows(text, array=False):
+    rows = json.loads(text) if array else [json.loads(line) for line in text.splitlines() if line.strip()]
+    if not isinstance(rows, list):
+        raise ValueError('store must contain records')
+    return Counter(json.dumps(row, sort_keys=True, separators=(',', ':')) for row in rows)
+
+
+def verify_store_history(base, root=ROOT):
+    """Preserve every complete old JSONL revision, including duplicates; merges may reorder.
+
+    Compare against Git, never a regenerated ledger. Mutable caches/status JSON are
+    not stores. Legacy forecast arrays and complete market observation files are protected too.
+    """
+    changed = subprocess.check_output(['git', 'diff', '--no-renames', '--name-status', base, '--',
+                                      'data/', 'site/data/forecasts.json', 'market-observations/'],
+                                     cwd=root, text=True)
+    problems = []
+    for change in changed.splitlines():
+        mode, path = change.split('\t', 1)
+        if mode == 'A' or not (path.endswith('.jsonl') or path == 'site/data/forecasts.json'
+                               or path.startswith('market-observations/')):
+            continue
+        try:
+            before = subprocess.check_output(['git', 'show', f'{base}:{path}'], cwd=root, text=True)
+            after = (Path(root) / path).read_text()
+            if path.startswith('market-observations/'):
+                if before != after:
+                    problems.append(f'Published observation changed: {path}')
+            elif complete_rows(before, path.endswith('.json')) - complete_rows(after, path.endswith('.json')):
+                problems.append(f'Complete stored revision changed or disappeared: {path}')
+        except (ValueError, OSError, subprocess.CalledProcessError):
+            problems.append(f'Cannot verify prior stored revisions: {path}')
+    return problems
 
 
 if __name__ == '__main__':

@@ -127,6 +127,7 @@ jobs:
         run: python scripts/feed.py
       - name: Preserve the public record
         run: |
+          python scripts/integrity.py --verify-base HEAD
           python scripts/integrity.py
           git config user.name 'football-forecast[bot]'
           git config user.email 'football-forecast[bot]@users.noreply.github.com'

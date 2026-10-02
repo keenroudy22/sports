@@ -2129,16 +2129,26 @@ def heartbeat(args):
     if not any(z in zone for z in ('New_York', 'Indianapolis', 'Detroit', 'US/Eastern', 'EST5EDT')):
         problems.append(f'the machine is not on Eastern time ({zone})')
     alert_file = CONF.parent.parent / 'Library' / 'Logs' / 'KeenRoudy' / 'ALERT.txt'
+    transition_path = CONF / 'heartbeat-state.json'
+    previous = load_json(transition_path, {}) or {}
+    if not isinstance(previous, dict):
+        previous = {}
+    changed = sorted(problems) != previous.get('problems', [])
+    transition_path.parent.mkdir(parents=True, exist_ok=True)
+    transition_path.write_text(json.dumps({'problems': sorted(problems), 'checkedAt': stamp(now)}))
     if problems:
         text = f"KeenRoudy Sports heartbeat {stamp(now)}\n" + '\n'.join(f'- {p}' for p in problems) + '\n'
         alert_file.parent.mkdir(parents=True, exist_ok=True)
         alert_file.write_text(text, encoding='utf-8')
-        subprocess.run(['osascript', '-e', f'display notification "{problems[0]}" with title "KeenRoudy Sports"'], capture_output=True)
-        alert('KeenRoudy desk needs a look', '\n'.join(f'- {p}' for p in problems))
+        if changed:
+            subprocess.run(['osascript', '-e', f'display notification "{problems[0]}" with title "KeenRoudy Sports"'], capture_output=True)
+            alert('KeenRoudy desk needs a look', '\n'.join(f'- {p}' for p in problems))
         print(text)
         return 1
     if alert_file.exists():
         alert_file.unlink()
+    if changed and previous.get('problems'):
+        alert('KeenRoudy desk recovered', 'The checks that previously failed are clear again.')
     print('heartbeat: all clear')
     return 0
 

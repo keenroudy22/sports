@@ -43,6 +43,14 @@ MONDAY_MORNING = datetime(2026, 9, 28, 12, 30, tzinfo=timezone.utc)       # Mon 
 
 
 class ReceiptTests(unittest.TestCase):
+    def test_accounting_keeps_assumed_prices_and_credits_separate(self):
+        rows = [pick('a', 'sun', result='win'), pick('b', 'sun', result='loss', earlyExit=True),
+                pick('c', 'sun', result='win', priceAssumed=True)]
+        result = receipts.accounting(rows)
+        self.assertEqual(result['captured'], '1-1')
+        self.assertEqual(result['assumed'], '1-0')
+        self.assertEqual(result['promotionalCredits'], 1)
+
     def test_only_plays_that_went_out_count(self):
         first, latest, log = world()
         log['posts'].append({'id': 'NFL-2026-W4-b', 'kind': 'buffer:play', 'sentAt': 'x', 'deletedAt': 'y'})

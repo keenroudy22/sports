@@ -113,9 +113,12 @@ class DepthRoleUsageTests(unittest.TestCase):
         usage = build_site.depth_role_usage(records, snaps, '23', 'RB', 2, '2026-09-15T17:00:00Z', 2026, 'c')
         self.assertEqual((usage['role'], usage['definition']), ('RB2', 'No. 2 RB by offensive snaps in each game'))
         self.assertEqual(usage['roleUsage'], {'games': 2, 'snapPct': .35, 'volume': {'car': 6.0, 'tgt': 2.0},
-                                               'redZone': 1, 'redZoneGames': 1, 'inside10': 0, 'touchdowns': 0})
-        self.assertEqual(usage['playerUsage'], {'games': 1, 'snapPct': .4, 'volume': {'car': 7.0, 'tgt': 1.0},
-                                                 'redZone': 1, 'redZoneGames': 1, 'inside10': 0, 'touchdowns': 0})
+            'redZone': 1, 'redZoneGames': 1, 'inside10': None, 'touchdowns': None,
+            'coverage': {'car': 2, 'tgt': 2, 'rzCar': 1, 'i10Car': 0, 'rushTD': 0, 'recTD': 0},
+            'redZoneObserved': 1, 'touchdownObserved': 0})
+        self.assertEqual(usage['playerUsage']['redZoneObserved'], 1)
+        self.assertIsNone(usage['playerUsage']['inside10'], 'missing play-by-play is not zero')
+        self.assertEqual(usage['playerUsage']['volume'], {'car': 7.0, 'tgt': 1.0})
 
     def test_role_usage_never_looks_past_the_game_being_built(self):
         records = [{'eventId': 'late', 'league': 'NFL', 'season': 2026, 'seasonType': 2,

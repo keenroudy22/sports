@@ -76,6 +76,20 @@ class LegTests(unittest.TestCase):
 
 
 class CandidateTests(unittest.TestCase):
+    def test_quota_stop_does_not_abort_desk_or_retry_other_games(self):
+        calls = []
+        base = self.fake_get(calls)
+        def get(url):
+            if '/odds?' in url:
+                calls.append(url)
+                raise easy_parlay.quota.QuotaBlocked('free reserve reached')
+            return base(url)
+        with tempfile.TemporaryDirectory() as folder:
+            result = easy_parlay.fetch_day(list(GAMES.values()), NOW, key='k', get=get,
+                                          cache=folder, remaining=400, log=lambda *_: None)
+            self.assertEqual(result, {})
+            self.assertEqual(len(calls), 2)
+
     def fake_get(self, calls):
         events = [{'id': f'e-{gid}', 'commence_time': '2026-09-27T17:00:00Z', 'away_team': f'Buffalo {GAMES[gid]["away"]["short"]}',
                    'home_team': f'Detroit {GAMES[gid]["home"]["short"]}'} for gid in ('g1', 'g2', 'g3')]

@@ -589,8 +589,11 @@ def receipt_svg(receipt, avatar=None):
             f'<text x="88" y="956" fill="{ink}" font-size="25" font-weight="700">{sub}</text>',
         ]
     summary = receipt.get('summary') or {}
+    accounting = receipt.get('accounting') or {}
     straight, fun = summary.get('straight'), summary.get('fun')
     chips = []
+    if accounting.get('assumed') or accounting.get('promotionalCredits'):
+        chips.append(f'<text x="56" y="460" fill="{soft}" font-size="17">Captured: {esc(accounting.get("captured") or "none")} · assumed history: {esc(accounting.get("assumed") or "none")} · promo credits: {accounting.get("promotionalCredits", 0)}</text>')
     if straight:
         chips += [f'<rect x="56" y="366" width="330" height="76" rx="16" fill="{raised}" stroke="#284253" stroke-width="2"/>',
                   f'<text x="78" y="395" fill="{soft}" font-size="17" font-weight="800" letter-spacing="2">STRAIGHT PLAYS</text>',

@@ -113,7 +113,8 @@ def observations(records, pace):
             team = game[side]['id']
             rows.append({'eventId': game['eventId'], 'kickoff': features.when(game['kickoff']), 'season': game['season'],
                          'team': team, 'opp': game[other]['id'], 'home': side == 'home' and not game['neutral'],
-                         'points': game[side]['score'], 'efficiency': efficiency(game['teams'].get(team, {}), pace)})
+                         'points': game[side]['score'], 'finalMarginAbs': abs(game['home']['score'] - game['away']['score']),
+                         'efficiency': efficiency(game['teams'].get(team, {}), pace)})
     return rows
 
 
@@ -262,6 +263,10 @@ def fit(rows, cutoff, season, params, fcs, target, warm=None, offseason=None, ro
         age = (cutoff - row['kickoff']).total_seconds() / 86400 - (offseason or {}).get(row['season'], 0.0)
         carry = carry_for(row, bent, roster or {}, mean_c) if row['season'] < season else params['priorWeight']
         weight = 0.5 ** (max(age, 0.0) / params['halfLife']) * carry ** (season - row['season'])
+        # Experiment-only; absent from released parameters. Only already-finished
+        # training games can receive this weight, never the game being forecast.
+        if params.get('blowoutWeight') is not None and row.get('finalMarginAbs', 0) >= 28:
+            weight *= params['blowoutWeight']
         columns = [0, index['off', row['team']], index['def', row['opp']]]
         if row['home']:
             columns.append(1)
