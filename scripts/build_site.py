@@ -783,6 +783,15 @@ def first_of(pick, recent, field):
     return pick.get(field) if pick.get(field) is not None else recent.get(field)
 
 
+def public_delivery(entry):
+    """Only public delivery clocks, never captions, webhook URLs or platform IDs."""
+    discord = entry.get('discord') or {}
+    cancelled = bool(entry.get('cancelledAt') or entry.get('deletedAt'))
+    return {'discordAt': discord.get('sentAt') if discord.get('state') == 'sent' else None,
+            'xAt': entry.get('sentAt'), 'xDue': None if cancelled or entry.get('error') else entry.get('dueAt'),
+            'cancelled': cancelled, 'failed': bool(entry.get('error'))}
+
+
 def board_picks(first, latest, by_id, identities):
     """The board's pick rows (first publication plus latest settlement), newest first.
 
@@ -797,9 +806,12 @@ def board_picks(first, latest, by_id, identities):
     named = {entry.get('id') for entry in featured_store.load().values() if isinstance(entry, dict)}   # Picks of the Day
     try:                                  # the plays whose post went out on X: the Pick of the Day record counts those
         import receipts
-        went_out = receipts.served(json.loads((ROOT / 'data' / 'x-posted.json').read_text(encoding='utf-8')))
+        post_log = json.loads((ROOT / 'data' / 'x-posted.json').read_text(encoding='utf-8'))
+        went_out = receipts.served(post_log)
+        deliveries = {entry['id']: public_delivery(entry) for entry in post_log.get('posts', []) if entry.get('id')}
     except (OSError, ValueError):
         went_out = set()
+        deliveries = {}
     rows = []
     for key, pick in first.items():
         recent = latest.get(key, {})
@@ -811,6 +823,7 @@ def board_picks(first, latest, by_id, identities):
                      # A Pick of the Day pulled before its post went out never wears the star.
                      'featured': key in named and (key in went_out or not (recent.get('entryNote') or pick.get('entryNote'))),
                      'posted': key in went_out,
+                     'delivery': deliveries.get(key),
                      'market': pick.get('market') or recent.get('market') or (pricing.market_of(pick) if pick.get('athleteId') else None),
                      'riskUnits': pick.get('riskUnits'), 'modelLean': pick.get('modelLean') is True,
                      'earlyExit': recent.get('earlyExit') is True,

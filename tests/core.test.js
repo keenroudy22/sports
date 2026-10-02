@@ -3,6 +3,16 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const C = require('../site/core.js');
 
+test('delivery status distinguishes sent, queued, overdue, cancelled and unknown', () => {
+  const now = Date.parse('2026-10-02T16:00:00Z');
+  assert.match(C.deliveryText({delivery:{discordAt:'2026-10-02T15:45:00Z',xDue:'2026-10-02T16:10:00Z'}}, now), /Discord sent.*X scheduled/);
+  assert.match(C.deliveryText({delivery:{xAt:'2026-10-02T15:50:00Z'}}, now), /X sent/);
+  assert.match(C.deliveryText({delivery:{xDue:'2026-10-02T15:50:00Z'}}, now), /awaiting confirmation/);
+  assert.match(C.deliveryText({delivery:{cancelled:true}}, now), /cancelled/);
+  assert.match(C.deliveryText({}, now), /not yet confirmed/);
+  assert.equal(C.deliveryText({result:'win'}, now), '');
+});
+
 test('headline record separates assumed prices and promotional credits without rewriting plays', () => {
   const picks = [{ result:'win', odds:100 }, { result:'loss', odds:-110, earlyExit:true, units:0 },
     { result:'win', odds:-115, priceAssumed:true }, { result:'loss', odds:200, kind:'parlays' }];

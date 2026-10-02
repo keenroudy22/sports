@@ -161,6 +161,8 @@
       ${statTiles(p)}
       ${p.reason ? `<span class="play-reason">${esc(p.reason)}</span>` : ''}
       <span class="play-meta">${esc(when)}${stale && p.quotedAt ? ` · price from ${esc(ago(p.quotedAt))}` : ''}</span>
+      ${C.deliveryText(p) ? `<span class="play-meta">${esc(C.deliveryText(p))}</span>` : ''}
+      ${st.word === 'Price expired' ? '<span class="play-meta">The original quote expired, not the recorded play. Check current odds on the game page; do not assume the old price is still available.</span>' : ''}
       <span class="play-action">${action} ›</span>
       ${route ? '</a>' : '</button>'}
       ${route ? `<button class="play-details" type="button" data-pick="${esc(p.id)}" aria-label="Pick details: ${esc(title)}">Pick details</button>` : ''}
@@ -248,7 +250,7 @@
     const open = L.open, info = (open && open.ladder) || {};
     const riding = Number(open ? info.stake : L.stake), banked = Number(open ? info.banked : L.banked) || 0;
     const text = open ? `Step ${info.step || 1}: ${money(riding)} riding · ${money(banked)} banked`
-      : L.history.length ? `Step ${L.step} next · ${money(riding)} riding · ${money(banked)} banked` : 'The first rung goes up when two clean games qualify';
+      : L.history.length ? `Step ${L.step} next · not scheduled yet · ${money(banked)} banked` : 'The first rung goes up when two clean games qualify';
     const after = open ? Number(info.totalAfter) || banked + Number(info.payout || 0) : banked + riding;
     return `<a class="record-strip ladder-strip" href="#record"><span class="eyebrow">🪜 80/20 Climb · climb ${esc(L.run)}</span>
       <span class="num record-big ladder-big">${money(riding)}</span><span class="record-note">${esc(text)}</span>
@@ -259,7 +261,7 @@
     const open = L.open, info = (open && open.ladder) || {};
     const riding = Number(open ? info.stake : L.stake), banked = Number(open ? info.banked : L.banked) || 0;
     const status = open ? `Step ${info.step || 1} is live · ${money(banked)} banked`
-      : L.history.length ? `Step ${L.step} is next · ${money(banked)} banked` : 'The first rung waits for two clean games';
+      : L.history.length ? `Step ${L.step} is next · not scheduled yet · ${money(banked)} banked` : 'The first rung waits for two clean games';
     const paid = r => { const i = r.ladder || {}; return r.result === 'win' ? money(i.payout) : r.result === 'loss' ? '$0' : money(i.stake); };
     const rows = L.history.slice().reverse().slice(0, 8).map(r => `<button class="row" type="button" data-pick="${esc(r.id)}">
       <span class="row-main"><span class="row-top"><span class="row-name">${MARKS[r.result] || '•'} Step ${esc((r.ladder || {}).step || '')}</span><span class="row-meta">${esc(whenShort(r.kickoff || r.publishedAt))}</span></span>
@@ -272,7 +274,7 @@
       <div class="ladder-now-line"><b class="num">${money(riding)} riding</b><span>${esc(status)}</span></div>
       <span class="ladder-bar">${ladderBar(banked + riding, open ? Number(info.totalAfter) || banked + Number(info.payout || 0) : banked + riding)}</span>
       ${rows ? `<div class="rows ladder-rows">${rows}</div>` : ''}
-      <p class="row-meta ladder-note">${L.climbs.length ? `Climbs finished: ${L.climbs.length}, best ${money(best)}. ` : ''}${L.saved ? `${money(L.saved)} has been banked across wins. ` : ''}Two easier player lines, one per game. No rung is forced when the slate is too small. Just for fun.</p>
+      <p class="row-meta ladder-note">${L.climbs.length ? `Climbs finished: ${L.climbs.length}, best ${money(best)}. ` : ''}${L.saved ? `${money(L.saved)} has been banked across wins. ` : ''}Two easier player lines, one per game. Checked on game days; a step is scheduled only after both legs qualify. After a loss or a completed climb, the next qualifying ticket starts a new $50 climb. Previously banked money stays banked. Just for fun.</p>
     </div>`;
   };
   const external = (url, label) => /^https:\/\//.test(url || '') ? `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)} ↗</a>` : '';

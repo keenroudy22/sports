@@ -137,7 +137,7 @@ def badge(x, y, r, uri, ring):
 # and on anything whose image cannot be fetched. The photos are ESPN's and the logos are the teams' marks; set
 # KEENROUDY_CARD_ART=0 (or CARD_ART = False) to serve every card with the chef again.
 CARD_ART = os.environ.get('KEENROUDY_CARD_ART', '1') != '0'
-HEADSHOT = 'https://a.espncdn.com/i/headshots/nfl/players/full/{athlete}.png'
+HEADSHOT = 'https://a.espncdn.com/i/headshots/{sport}/players/full/{athlete}.png'
 LOGO = {'NFL': 'https://a.espncdn.com/i/teamlogos/nfl/500/{abbr}.png', 'CFB': 'https://a.espncdn.com/i/teamlogos/ncaa/500/{id}.png'}
 
 
@@ -165,16 +165,16 @@ def logo_url(team, league):
 
 
 def artwork(pick, game, fetch=None):
-    """{'kind': 'photo', 'uri'} for an NFL player prop, {'kind': 'logos', 'uris'} for a game line (the side's logo
+    """{'kind': 'photo', 'uri'} for an NFL/college player prop, {'kind': 'logos', 'uris'} for a game line (the side's logo
     on a spread, both teams' on a total), or None for the chef: a parlay, a failed fetch, or the switch off."""
     if not CARD_ART or not game or play_kind(pick) in ('parlay', 'ladder'):
         return None
     fetch = fetch or fetch_data_uri
     league = game.get('league') or str(pick.get('id', '')).split('-')[0]
     if play_kind(pick) == 'player':
-        if league != 'NFL' or not pick.get('athleteId'):
+        if league not in ('NFL', 'CFB') or not pick.get('athleteId'):
             return None
-        uri = fetch(HEADSHOT.format(athlete=pick['athleteId']))
+        uri = fetch(HEADSHOT.format(sport='nfl' if league == 'NFL' else 'college-football', athlete=pick['athleteId']))
         return {'kind': 'photo', 'uri': uri} if uri else None
     direction = str(pick.get('direction') or '').lower()
     sides = [direction] if pick.get('marketType') == 'spread' and direction in ('home', 'away') else ['away', 'home']
@@ -759,6 +759,7 @@ def main(argv=None):
     parser.add_argument('pick_id')
     parser.add_argument('--out', help='PNG path; default the sports config folder')
     parser.add_argument('--svg', action='store_true', help='print the SVG instead of rendering')
+    parser.add_argument('--featured', action='store_true', help='preview the Pick of the Day treatment')
     args = parser.parse_args(argv)
     import gates
     stores = gates.Stores()
@@ -771,9 +772,13 @@ def main(argv=None):
     if pick.get('athleteId') and game:
         team = ctx.player_team.get(str(pick['athleteId']))
         player_side = 'home' if team == str(game['home']['id']) else 'away' if team == str(game['away']['id']) else None
-    text = svg(pick, game, player_side=player_side)
+    text = svg(pick, game, player_side=player_side, art=artwork(pick, game), featured=args.featured)
     if args.svg:
-        print(text)
+        if args.out:
+            Path(args.out).write_text(text)
+            print(args.out)
+        else:
+            print(text)
         return 0
     out = Path(args.out) if args.out else Path(os.environ.get('KEENROUDY_CONF') or (Path.home() / '.config' / 'keenroudy')) / 'x-drafts' / f'{args.pick_id}.png'
     print(render(text, out))

@@ -20,6 +20,15 @@ def slate_game(game_id, kickoff, state='pre', **market):
 
 
 class PickTests(unittest.TestCase):
+    def test_delivery_payload_is_whitelisted_and_cancellation_is_not_delivery(self):
+        row = build_site.public_delivery({'dueAt': '2026-10-02T16:00:00Z', 'cancelledAt': '2026-10-02T15:00:00Z',
+            'token': 'secret', 'discord': {'state': 'pending', 'sentAt': None, 'text': 'private'}})
+        self.assertIsNone(row['xDue'])
+        self.assertTrue(row['cancelled'])
+        self.assertIsNone(row['discordAt'])
+        self.assertNotIn('secret', str(row))
+        self.assertNotIn('private', str(row))
+
     def test_the_site_uses_the_same_safe_public_title_as_posts_and_cards(self):
         game = {'id': 'CFB-1', 'league': 'CFB', 'kickoff': '2026-09-26T22:30:00Z',
                 'away': {'id': '2117', 'short': 'C Michigan', 'abbreviation': 'CMU', 'school': 'Central Michigan'},

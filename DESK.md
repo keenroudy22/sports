@@ -617,6 +617,20 @@ ledger live in `data/market-lab/`; `site/data/market-lab.json` gives the public 
 predicts a side, applies sport-specific settlement, becomes a play, or calls a metered service. Those missing layers
 are promotion gates, not details to infer from the score.
 
+## Delivery clarity and player portraits (2026-10-02)
+
+Board cards distinguish confirmed social delivery from future X scheduling and original-quote expiry. Only
+public delivery fields are copied from the post log; payloads, IDs, errors and webhook details are not exposed.
+The legacy Discord timestamp represents the job start, not the exact minute a message appeared, so the Board
+shows confirmed delivery without an exact Discord time. An expired original quote remains expired even after
+delivery. The original public play and record are unchanged.
+
+Both NFL and college cards fetch the matching ESPN athlete portrait, retaining the existing fallback for a
+missing image. The local card preview now follows the same artwork path and supports the POTD treatment.
+Already-posted attachments are not replaced. The ladder distinguishes the next step from a scheduled ticket;
+it already restarts a completed or lost climb at $50 when a new ticket qualifies, preserving banked money.
+No pick thresholds, posting times, request budgets or Discord channels changed in this release.
+
 ## Today card navigation (2026-10-02)
 
 Straight player-prop cards open that player's stats; game-line and team-total cards open the matchup.

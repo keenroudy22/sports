@@ -128,6 +128,12 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Delivery clarity and portraits (2026-10-02):** Board cards show confirmed Discord/X delivery separately from
+  scheduled X time and original-quote expiry. A due time alone is never evidence of delivery. Discord's legacy
+  timestamp is the job-start time, so do not display it as the exact delivery minute. Missing delivery evidence
+  stays unconfirmed. College and NFL cards both use the real athlete portrait when available, with the existing
+  fallback when unavailable. A next ladder step is not a scheduled ticket; explicitly say when it is not scheduled.
+  Completed or lost climbs restart at $50 on the next qualifying ticket; previously banked money stays banked.
 - **Research rollout (2026-10-02):** favorites are grouped by market. Matchup Menu is exact-main-line historical
   evidence with at least five games, never a guarantee or fabricated head-to-head stat. Upset Watch requires a
   future game, a forecast published within 24 hours, and both same-book moneylines captured within four hours;

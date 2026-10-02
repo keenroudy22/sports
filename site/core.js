@@ -536,7 +536,18 @@
 
   const shardOf = (id, shards) => Number(id) % shards;
 
-  return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal,
+  const deliveryText = (pick, now = Date.now()) => {
+    if (pick.result || pick.historicalImport) return '';
+    const d = pick.delivery || {}, parts = [];
+    if (d.discordAt) parts.push('Discord sent');
+    if (d.xAt) parts.push(`X sent ${whenShort(d.xAt)}`);
+    else if (d.cancelled) parts.push('X post cancelled');
+    else if (d.failed) parts.push('X delivery needs attention');
+    else if (d.xDue) parts.push(Date.parse(d.xDue) > now ? `X scheduled ${whenShort(d.xDue)}` : 'X delivery awaiting confirmation');
+    return parts.join(' · ') || 'On the website · social delivery not yet confirmed';
+  };
+
+  return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText,
     column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
     unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, modelCaution, projectionScorecard, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, pickResearchRoute, shardOf, BASE };
