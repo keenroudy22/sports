@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-02T16:09:05Z",
+  "updatedAt": "2026-10-02T16:13:45Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -2767,6 +2767,15 @@
           "name": "Houston Texans",
           "players": [
             {
+              "id": "4373273",
+              "name": "British Brooks",
+              "position": "RB",
+              "status": "Out",
+              "injury": "Hamstring",
+              "reportedAt": "2026-10-02T16:11Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4373273/british-brooks"
+            },
+            {
               "id": "4258173",
               "name": "Nico Collins",
               "position": "WR",
@@ -2792,15 +2801,6 @@
               "injury": null,
               "reportedAt": "2026-10-01T23:30Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685724/will-anderson-jr"
-            },
-            {
-              "id": "4373273",
-              "name": "British Brooks",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Hamstring",
-              "reportedAt": "2026-10-01T23:26Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4373273/british-brooks"
             },
             {
               "id": "4360189",
@@ -6041,15 +6041,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4569987/jaylen-warren"
             },
             {
-              "id": "4682980",
-              "name": "Derrick Harmon",
-              "position": "DT",
-              "status": "Questionable",
-              "injury": "Foot",
-              "reportedAt": "2026-10-02T02:41Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4682980/derrick-harmon"
-            },
-            {
               "id": "3873935",
               "name": "Jamel Dean",
               "position": "CB",
@@ -6057,6 +6048,15 @@
               "injury": "Ankle",
               "reportedAt": "2026-10-02T02:22Z",
               "source": "https://www.espn.com/nfl/player/_/id/3873935/jamel-dean"
+            },
+            {
+              "id": "4682980",
+              "name": "Derrick Harmon",
+              "position": "DT",
+              "status": "Questionable",
+              "injury": "Foot",
+              "reportedAt": "2026-10-02T01:16Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4682980/derrick-harmon"
             },
             {
               "id": "4430947",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "10",
-          "name": "Tony Pollard",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-01T20:29:49Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3916148/tony-pollard"
-        },
-        {
           "teamId": "33",
           "name": "Zay Flowers",
           "from": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-02T15:48:13Z",
           "source": "https://www.espn.com/nfl/player/_/id/4808766/mason-taylor"
+        },
+        {
+          "teamId": "34",
+          "name": "British Brooks",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-02T16:13:45Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4373273/british-brooks"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-02T16:09:05Z",
-      "lastAttemptAt": "2026-10-02T16:09:05Z",
+      "checkedAt": "2026-10-02T16:13:45Z",
+      "lastAttemptAt": "2026-10-02T16:13:45Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-02T16:09:05Z",
-      "lastAttemptAt": "2026-10-02T16:09:05Z",
+      "checkedAt": "2026-10-02T16:13:45Z",
+      "lastAttemptAt": "2026-10-02T16:13:45Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
