@@ -231,7 +231,10 @@ Handy commands (from `~/Projects/sports`):
   Kook'n-benefit language; never mix them into ordinary plays. The site's front-page community card is the main
   conversion path: it promises only early official plays, Discord-only Arb Radar candidates and the public record.
 - **The site**: the projection-card look everywhere (logos, photos, tiles), tabs Today, Board, Games, Stats, Record,
-  More. Every upcoming game page has **Kook'n favorite lines**: every fresh, actually priced main line the calibrated
+  More. Today and the model scoreboard lead with the same simple season scorecard: spread vs close, projected
+  moneyline winner, total vs close, player projection vs captured line, and published fun parlays. The first four
+  are model accuracy and the parlay tile is labeled separately; never imply the mixed card is a profit record.
+  Every upcoming game page has **Kook'n favorite lines**: every fresh, actually priced main line the calibrated
   Board likes, ranked by edge against the price with line vs projection and exact-line last-ten/season hit rates
   shown when stored history exists. Alternates are the reader's optional choice, not the listed favorite; an empty
   panel is better than a forced line. These are optional reads, never extra official plays. When a current hard

@@ -372,6 +372,31 @@
       researched: summarizePicks(straight.filter(p => !p.modelLean), minimum),
       model: summarizePicks(straight.filter(p => p.modelLean), minimum) };
   };
+  /* The simple public scorecard: the current model's final pregame calls for the three game markets and player
+     props, plus the separately labeled result of the fun tickets that were actually published. Adding records
+     preserves pushes and never turns model accuracy into units or profit. */
+  const addRecords = records => (records || []).reduce((sum, row) => {
+    const r = Array.isArray(row) ? row : [0, 0, 0];
+    return [sum[0] + Number(r[0] || 0), sum[1] + Number(r[1] || 0), sum[2] + Number(r[2] || 0)];
+  }, [0, 0, 0]);
+  const projectionScorecard = (board, picks, league = 'ALL') => {
+    const candidates = ((board || {}).live || []).filter(row => row.model === 'v2.0'
+      && (league === 'ALL' || row.league === league));
+    const latest = candidates.reduce((out, row) => out.set(row.league,
+      Math.max(out.get(row.league) ?? -Infinity, Number(row.season))), new Map());
+    const live = candidates.filter(row => Number(row.season) === latest.get(row.league));
+    const modelRecord = key => addRecords(live.map(row => (row.summary || {})[key]));
+    const propMarkets = ((board || {}).props || {}).markets || [];
+    const props = league === 'CFB' ? [0, 0, 0] : addRecords(propMarkets.map(row => row.record));
+    const tickets = summarizePicks((picks || []).filter(p => (league === 'ALL' || p.league === league)
+      && p.kind === 'parlays' && !isLadder(p)), 10);
+    return {
+      spread: modelRecord('side'), moneyline: modelRecord('winner'), total: modelRecord('ou'),
+      props, parlays: [tickets.wins, tickets.losses, tickets.pushes],
+      /* The projection scoreboard's captured player-line comparison is NFL-only today. */
+      propsNote: league === 'CFB' ? 'not graded here yet' : 'vs captured line',
+    };
+  };
   /* The one record, the same on the site and on X: every play we publish, graded win or lose. The record is the
      straight plays at one unit each, at the line and price we published (recorded prices only, never an assumed
      one). Fun parlays (smaller stakes) and the Week 1 legs posted before prices were recorded get their own lines.
@@ -477,5 +502,5 @@
   return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal,
     column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
-    unitsFor, stakeOf, recordOf, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, projectionScorecard, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, shardOf, BASE };
 });

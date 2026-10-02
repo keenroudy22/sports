@@ -209,6 +209,20 @@
     return lines.length ? `<p class="side-lines">${lines.join('<br>')}</p>` : '';
   };
   const theRecordCard = rec => `<div class="card record-card">${recordBoxes(rec)}${moneyLine(rec)}${sideLines(rec)}</div>`;
+  /* Five familiar results before the deep tables: model calls for spread, winner, total and player lines, then the
+     separately labeled published fun tickets. This is accuracy, not a profit claim. */
+  const scorecardCard = (board, picks) => {
+    const score = C.projectionScorecard(board, picks, state.league);
+    const record = row => `${row[0]}–${row[1]}${row[2] ? `–${row[2]}` : ''}`;
+    const rate = row => row[0] + row[1] ? `${Math.round(100 * row[0] / (row[0] + row[1]))}% hit` : 'No results yet';
+    const tile = (label, row, note) => `<div class="scorecard-item"><span class="scorecard-label">${esc(label)}</span>
+      <strong class="num">${record(row)}</strong><span class="scorecard-rate">${rate(row)}</span><small>${esc(note)}</small></div>`;
+    return `<div class="card scorecard-card"><div class="scorecard-head"><div><p class="eyebrow">Season scorecard</p>
+      <p>Final pregame calls${state.league === 'ALL' ? '' : ` · ${esc(leagueName(dataLeague()))}`}</p></div><a href="#model">Full scoreboard →</a></div>
+      <div class="scorecard-grid">${tile('Spread', score.spread, 'vs closing spread')}${tile('Moneyline', score.moneyline, 'projected winners')}
+        ${tile('Totals', score.total, 'vs closing total')}${tile('Player props', score.props, score.propsNote)}${tile('Parlays', score.parlays, 'published fun tickets')}</div>
+      <p class="scorecard-foot">Model accuracy for the first four. Parlays are posted tickets at smaller stakes. No profit is implied without captured prices.</p></div>`;
+  };
   /* The free community is the site's clearest next step: official plays arrive shortly before X, while the
      append-only record stays public here. Keep the claim precise and keep short-lived arb candidates separate. */
   const communityCard = (compact = false) => compact ? `<aside class="community-card community-card-compact card" aria-label="Join the Kook'n Discord">
@@ -409,7 +423,7 @@
     .sort((a, b) => String(b.settledAt).localeCompare(String(a.settledAt)));
 
   async function viewToday() {
-    const [data, board] = await Promise.all([get('app/today.json'), maybe('app/lines.json')]);
+    const [data, board, scoreboard] = await Promise.all([get('app/today.json'), maybe('app/lines.json'), maybe('scoreboard.json')]);
     markPicks(data.picks.filter(inLeague).filter(p => !p.result && !p.historicalImport));
     const moves = lineMoves(slate(data.games.filter(inLeague)));   /* this slate only, not look-ahead lines */
     const settledRecently = lastGameDay(data.picks.filter(inLeague));
@@ -431,6 +445,7 @@
       first ? `${now.length} game${now.length === 1 ? '' : 's'} on this slate. Our plays come first; everything under them is what our numbers see, not picks.` : 'Nothing kicks off in the next eight days in this league.')}
       ${communityCard(true)}
       <nav class="discovery" aria-label="Explore Kook'n"><a href="#scores/MLB"><b>Scores</b><small>7 leagues</small></a><a href="#lab"><b>Kook'n Lab</b><small>What is being tested</small></a><a href="#arbs"><b>Arb Radar</b><small>Calculator and rules</small></a></nav>
+      ${scorecardCard(scoreboard || {}, data.picks)}
       <div class="two-col"><div>
         ${recordStrip(C.theRecord(picks), state.league === 'ALL' ? 'The record' : `The record · ${leagueName(dataLeague())}`, picks)}
         ${ladderStrip(C.theLadder(data.picks))}
@@ -993,7 +1008,7 @@
   /* ---------- model scoreboard ---------- */
 
   async function viewModel() {
-    const board = await get('scoreboard.json');
+    const [board, today] = await Promise.all([get('scoreboard.json'), get('app/today.json')]);
     const live = (board.live || []).filter(inLeague);
     const back = (board.backtest || []).filter(inLeague);
     const rec = r => `${r[0]}–${r[1]}${r[2] ? '–' + r[2] : ''}`;
@@ -1008,6 +1023,7 @@
     const props = (board.props || {}).markets || [];
     const picks = (board.picks || {}).rows || [];
     return `${head('The scoreboard', 'Every forecast published before kickoff, graded against the closing line and the final score. The point is to see how well the model actually does, not to sell it.')}
+      ${scorecardCard(board, today.picks)}
       <div class="notice notice-model"><strong>How to read this.</strong> “Projected winner” is the model's moneyline-style call: whichever team it gave the higher pregame win chance, graded against the final winner. It is separate from posted bets and does not claim profit without a captured sportsbook price. “Vs close” takes the side the model preferred against the closing spread; 52.4% breaks even at -110. “Miss” is the average distance from the final margin or total, next to the closing line’s own miss. “Line moved our way” counts games where the market moved from its open toward the model, a faster signal than wins and losses.</div>
       ${section('Live record', live.length ? table(live, 'Published before kickoff') + weeks(live) : empty('Nothing graded yet', 'Live grades start when the first numbers reach kickoff.'))}
       ${section('Backtests', back.length ? table(back, 'Retrospective walk-forward, never published') + weeks(back) : empty('No backtests', ''))}

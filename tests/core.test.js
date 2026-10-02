@@ -377,6 +377,31 @@ test('one record: the straight plays in wins and losses and units, the side reco
   assert.equal(C.isParlay({ kind: 'parlays' }) && C.isParlay({ legs: [{}] }) && !C.isParlay({ kind: 'props' }), true);
 });
 
+test('the simple scorecard combines final model calls and keeps published parlays separate', () => {
+  const board = {
+    live: [
+      { league: 'NFL', model: 'v2.0', season: 2026, summary: { side: [5, 3, 1], winner: [6, 2, 0], ou: [4, 4, 0] } },
+      { league: 'CFB', model: 'v2.0', season: 2026, summary: { side: [7, 5, 0], winner: [10, 2, 0], ou: [8, 4, 1] } },
+      { league: 'NFL', model: 'v2.0', season: 2025, summary: { side: [50, 0, 0], winner: [50, 0, 0], ou: [50, 0, 0] } },
+      { league: 'NFL', model: 'v1', summary: { side: [99, 0, 0], winner: [99, 0, 0], ou: [99, 0, 0] } },
+    ],
+    props: { markets: [{ record: [3, 2, 0] }, { record: [4, 1, 1] }] },
+  };
+  const picks = [
+    { league: 'NFL', kind: 'parlays', parlayType: 'longshot', result: 'win', odds: 400, riskUnits: .25 },
+    { league: 'CFB', kind: 'parlays', parlayType: 'longshot', result: 'loss', odds: 1000, riskUnits: .25 },
+    { league: 'NFL', kind: 'parlays', parlayType: 'ladder', result: 'win', odds: -110, riskUnits: .25 },
+  ];
+  const all = C.projectionScorecard(board, picks);
+  assert.deepEqual(all.spread, [12, 8, 1]);
+  assert.deepEqual(all.moneyline, [16, 4, 0]);
+  assert.deepEqual(all.total, [12, 8, 1]);
+  assert.deepEqual(all.props, [7, 3, 1]);
+  assert.deepEqual(all.parlays, [1, 1, 0], 'the ladder stays out of the fun-ticket result');
+  assert.deepEqual(C.projectionScorecard(board, picks, 'NFL').spread, [5, 3, 1]);
+  assert.deepEqual(C.projectionScorecard(board, picks, 'CFB').props, [0, 0, 0], 'an NFL-only prop comparison never appears under College');
+});
+
 test('the 80/20 Climb banks wins, protects the bank on a miss, finishes at $1,000 and stays out of the fun parlays', () => {
   const rung = (id, published, step, stake, payout, result, extra = {}) => ({ id, kind: 'parlays', parlayType: 'ladder', publishedAt: published,
     status: result ? 'settled' : 'active', result, odds: 100, riskUnits: 0.25, legs: [{ title: 'a' }, { title: 'b' }],

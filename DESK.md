@@ -478,6 +478,10 @@ The scoreboard also keeps a separate **projected-winner record** (owner, 2026-10
 of each pregame projected margin is the moneyline-style call, graded against the final winner. Today shows its W-L-P
 and hit rate, and the model scoreboard breaks it out by league, model, season and week. This is projection accuracy,
 not the official play record or a profit claim; without a captured sportsbook moneyline price it never shows units.
+Today and the top of the model scoreboard also show one plain **Season scorecard**: spread against the closing
+spread, projected moneyline winner, total against the closing total, player projection against the captured line,
+and the published fun-parlay record. The first four tiles are final pregame model accuracy. The parlay tile is
+explicitly labeled as posted fun tickets at smaller stakes, so the summary never presents mixed results as profit.
 
 Every upcoming game page starts with **Kook'n favorite lines** (owner, 2026-10-01): every current, real main line the
 calibrated Board likes, ranked by edge against the sportsbook price. It shows line vs projection, price, book,
