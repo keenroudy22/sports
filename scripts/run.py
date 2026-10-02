@@ -2161,7 +2161,7 @@ def show_status(args):
 
 # ------------------------------------------------------------------ the check before a post goes out
 
-PRECHECK_WINDOW = (timedelta(minutes=15), timedelta(minutes=150))   # posts due this far ahead get their last look
+PRECHECK_WINDOW = (timedelta(minutes=15), timedelta(minutes=45))    # closer to Discord release; same one-check budget
 PRECHECK_LAST = timedelta(minutes=45)      # inside this, an unconfirmed college play is withheld rather than retried
 
 

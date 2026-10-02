@@ -344,7 +344,8 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     for item in (news or [])[:news_room]:
         if item['key'] not in posted:
             plays.append((item['target'], -3, item['deadline'], item['key'], item['text'], 'news', None))
-    plays.sort()
+    # Informational Climb check-ins must never delay the official card or its normal conversation slot.
+    plays.sort(key=lambda row: (row[3].startswith('climb:checkin:'), row))
     play_rows = [row for row in plays if row[5] == 'play']
     conversation_key = f'conversation:day:{today.isoformat()}'
     planned_today = sum(1 for row in plays if eastern_date(row[0]) == today)

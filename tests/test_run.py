@@ -373,10 +373,11 @@ class PrecheckTests(unittest.TestCase):
     def test_the_window(self):
         now = datetime(2026, 9, 26, 15, 0, tzinfo=timezone.utc)
         post = lambda key, minutes, **over: dict({'id': key, 'kind': 'buffer:play', 'bufferPostId': 'b', 'dueAt': run.stamp(now + timedelta(minutes=minutes))}, **over)
-        log_book = {'posts': [post('soon', 10), post('in', 60), post('edge', 150), post('far', 200), post('sent', 60, sentAt='x'),
-                              post('gone', 60, cancelledAt='x'), post('done', 60, precheck={'result': 'clear'}),
-                              dict(post('receipt', 60), kind='buffer:receipt')]}
-        self.assertEqual([e['id'] for e in run.precheck_due(log_book, now)], ['in', 'edge'])
+        log_book = {'posts': [post('soon', 10), post('in', 30), post('edge', 45), post('lower', 15),
+                              post('old-window', 150), post('far', 60), post('sent', 30, sentAt='x'),
+                              post('gone', 30, cancelledAt='x'), post('done', 30, precheck={'result': 'clear'}),
+                              dict(post('receipt', 30), kind='buffer:receipt')]}
+        self.assertEqual([e['id'] for e in run.precheck_due(log_book, now)], ['in', 'edge', 'lower'])
 
     def test_quiet_when_nothing_is_due(self):
         from types import SimpleNamespace

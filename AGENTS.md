@@ -128,6 +128,17 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Simple Discord and ladder check-ins (2026-10-02, owner approved):** four active text destinations: Start Here,
+  Plays & Results (the existing webhook channel, owner/publisher only), general chat, and Wins & Bad Beats.
+  Older channels are archived without deleting history. Rules and referral disclosures remain accessible from
+  Start Here. Saturday/Sunday are regular Climb check-in days, not guaranteed ticket days; weekdays are bonuses
+  only when qualifying legs exist. The existing run schedules a text status at/after 11:45 AM ET and before 2 PM
+  through Buffer, mirrored to Discord after X. An actual same-day open ticket replaces the extra status. Each
+  date is deduplicated and existing spacing/daily caps apply. Never lower thresholds to satisfy the calendar.
+- **Closer pre-post review (2026-10-02):** the existing half-hour job checks plays 15–45 minutes before X instead
+  of up to 150 minutes beforehand. It still checks once, uses existing feed snapshots, and does not add metered
+  calls or change the Discord lead. Unconfirmed college availability is withheld, never guessed. Feed prices are
+  not live guarantees; the post preserves the original quote and shows a current captured quote when available.
 - **Delivery clarity and portraits (2026-10-02):** Board cards show confirmed Discord/X delivery separately from
   scheduled X time and original-quote expiry. A due time alone is never evidence of delivery. Discord's legacy
   timestamp is the job-start time, so do not display it as the exact delivery minute. Missing delivery evidence

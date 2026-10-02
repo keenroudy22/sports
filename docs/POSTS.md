@@ -18,6 +18,10 @@ post and from expiry of the original price; it never labels a due time as proof 
 
 ## The voice (the owner's rules)
 
+Weekend Climb check-ins are approved text-only house posts. At/after the 11:45 AM Saturday/Sunday run, report
+the bank, next stake and unscheduled/open state unless a same-day ticket is already open. The date-specific key
+prevents duplicates, and the normal queue limits apply. These are updates, not promises that a ticket will post.
+
 - **Short and human, straight to the point** (2026-09-26: "Not so AI looking. And straight to the point on the
   tweets"). A play is one line with its price and book, then our number in a few words. No labels ("TEAM PROP"), no
   slogans ("Graded in public") and no reason sentences in the tweet; the site keeps the reasons.

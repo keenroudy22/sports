@@ -470,6 +470,26 @@ def with_menu(receipt, post, plays_today):
     return dict(receipt, key=f"{receipt['key']}+{post['key']}", text=text, stale=min(receipt['stale'], post['stale']))
 
 
+def climb_checkin(first, latest, games, now):
+    """A weekend status, not a promised ticket. Existing run/Buffer limits deliver it once per day."""
+    import ladder
+    day = eastern_date(now)
+    if day.weekday() not in (5, 6) or not at(day, (11, 45)) <= now < at(day, (14, 0)):
+        return None
+    state = ladder.state(first, latest)
+    opened = state['open']
+    if opened and game_day(opened, games) == day:
+        return None  # The actual ticket is the check-in; never add a conflicting "waiting" post.
+    head = f"80/20 Climb · {day:%a %b} {day.day}"
+    if opened:
+        body = f"Step {(opened.get('ladder') or {}).get('step', state['step'])} is still open. Next step waits for its result."
+    else:
+        body = f"Step {state['step']} is next, not scheduled yet. ${state['stake']} riding; ${state['banked']} banked."
+    text = head + '\n' + body + '\nWeekend check-ins; weekday bonus tickets only when two legs qualify. No forced step.'
+    return {'key': f'climb:checkin:{day.isoformat()}', 'kind': 'book', 'card': None,
+            'text': text, 'due': now + timedelta(minutes=2), 'stale': at(day, (14, 0))}
+
+
 def house_posts(first, latest, games, log_book, now):
     """Everything the kitchen posts besides the plays: receipts, the game-day menu (riding on the morning's receipt when
     there is one), the book on an empty day, a cashed post for each winning play as it settles, and the weekly
@@ -489,6 +509,9 @@ def house_posts(first, latest, games, log_book, now):
     if extra and extra['stale'] > now:
         out.append(extra)
     out += cashed(first, latest, games, log_book, now)
+    climb = climb_checkin(first, latest, games, now)
+    if climb:
+        out.append(climb)
     import sheet
     weekly = sheet.post(games, now)          # the weekly projections sheet, on its league's day
     if weekly and weekly['stale'] > now:

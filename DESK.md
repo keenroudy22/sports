@@ -7,6 +7,24 @@ rules in words. When this file and the validator disagree, the validator wins.
 
 ## What runs
 
+### October 2 Discord simplification and Climb check-ins
+
+The owner approved one official Plays & Results feed, Start Here, general chat and Wins & Bad Beats. The
+existing webhook channel is renamed, not replaced, so delivery credentials and history stay intact. Unused
+channels become an archive; rules and disclosed sportsbook referral references remain linked from Start Here.
+The official feed remains read-only to members, while the community channels allow discussion.
+
+`receipts.climb_checkin` supplies a dated text-only Saturday/Sunday status to the existing Buffer pipeline from
+11:45 AM until 2 PM ET. It reports the ledger-derived bank/ride and waiting state, never a candidate as a promise.
+If a same-day ladder ticket is open, that ticket is the check-in and no extra status is generated. Existing
+deduplication, 10-minute spacing and 20-post ceiling apply; Discord mirrors this house status after X. Weekday
+bonus tickets still need the same two-game/price/model checks. No new service, API call or model call is added.
+
+The existing half-hour pre-post job now considers posts 15–45 minutes before X rather than 15–150. This moves
+the single review closer to Discord release without adding a second research call. Existing source snapshots
+are used, so this is not real-time sportsbook verification. If college availability cannot be confirmed at this
+last review, publication is withheld under the existing rule. Discord's lead and normal X schedule stay unchanged.
+
 ### October 2 research and reliability release
 
 Game favorites now group spreads, totals and player props using the existing shared priced-line data. Research

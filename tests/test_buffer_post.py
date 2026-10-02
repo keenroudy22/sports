@@ -215,11 +215,14 @@ class SpacingTests(unittest.TestCase):
         eleven = datetime(2026, 9, 26, 15, 58, tzinfo=timezone.utc)       # 11:58 AM ET
         plans = bp.plan(first, latest, GAMES, eleven, {'posts': queued})
         self.assertEqual([(p[0], et(p[3])) for p in plans],
-                         [('a', '13:00'), ('conversation:day:2026-09-26', '13:10'), ('b', '13:20')],
+                         [('a', '13:00'), ('conversation:day:2026-09-26', '13:10'), ('b', '13:20'),
+                          ('climb:checkin:2026-09-26', '13:30')],
                          'after the queue, every play and the between-play prompt stay ten minutes apart')
         cancelled = [dict(q, cancelledAt='2026-09-26T14:00:00Z') if q['id'] == 'q2' else q for q in queued]
         plans = bp.plan(first, latest, GAMES, eleven, {'posts': cancelled})
-        self.assertEqual([et(p[3]) for p in plans], ['12:20', '13:00', '13:10'], 'a cancelled post frees its slot')
+        self.assertEqual([et(p[3]) for p in plans], ['12:20', '13:00', '13:10', '13:20'], 'a cancelled post frees its slot')
+        already = queued + [{'id':'climb:checkin:2026-09-26', 'kind':'buffer:book', 'dueAt':'2026-09-26T15:50:00Z'}]
+        self.assertFalse(any(p[0].startswith('climb:checkin:') for p in bp.plan(first, latest, GAMES, eleven, {'posts':already})))
 
     def test_a_day_holds_at_most_the_ceiling_counting_what_is_queued(self):
         queued = [{'id': f'q{i}', 'dueAt': f'2026-09-26T{10 + i // 6:02d}:{10 * (i % 6):02d}:00Z'} for i in range(bp.MAX_PER_DAY - 1)]
