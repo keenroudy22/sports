@@ -211,7 +211,11 @@
   const theRecordCard = rec => `<div class="card record-card">${recordBoxes(rec)}${moneyLine(rec)}${sideLines(rec)}</div>`;
   /* The free community is the site's clearest next step: official plays arrive shortly before X, while the
      append-only record stays public here. Keep the claim precise and keep short-lived arb candidates separate. */
-  const communityCard = () => `<aside class="community-card card" aria-label="Join the Kook'n Discord">
+  const communityCard = (compact = false) => compact ? `<aside class="community-card community-card-compact card" aria-label="Join the Kook'n Discord">
+    <div class="community-compact-copy"><p class="eyebrow">Free Kook'n Discord</p>
+      <p>Official plays early. Fast Arb Radar alerts.</p></div>
+    <a class="btn btn-primary community-join" href="https://discord.gg/CvNTUUSnNz" target="_blank" rel="noopener">Join Discord ↗</a>
+  </aside>` : `<aside class="community-card card" aria-label="Join the Kook'n Discord">
     <div class="community-copy"><p class="eyebrow">Free Kook'n Discord</p><h2>The card lands here first.</h2>
       <p>Official plays and graphics arrive about 10–15 minutes before X. Time-sensitive Arb Radar candidates stay in Discord.</p>
       <div class="community-actions"><a class="btn btn-primary" href="https://discord.gg/CvNTUUSnNz" target="_blank" rel="noopener">Join the free Discord ↗</a><a class="btn" href="#record">See every result</a></div></div>
@@ -425,7 +429,7 @@
     gameIndex = new Map(games.map(g => [g.id, g]));
     return `${head(title,
       first ? `${now.length} game${now.length === 1 ? '' : 's'} on this slate. Our plays come first; everything under them is what our numbers see, not picks.` : 'Nothing kicks off in the next eight days in this league.')}
-      ${communityCard()}
+      ${communityCard(true)}
       <nav class="discovery" aria-label="Explore Kook'n"><a href="#scores/MLB"><b>Scores</b><small>7 leagues</small></a><a href="#lab"><b>Kook'n Lab</b><small>What is being tested</small></a><a href="#arbs"><b>Arb Radar</b><small>Calculator and rules</small></a></nav>
       <div class="two-col"><div>
         ${recordStrip(C.theRecord(picks), state.league === 'ALL' ? 'The record' : `The record · ${leagueName(dataLeague())}`, picks)}
