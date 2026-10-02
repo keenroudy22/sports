@@ -629,7 +629,7 @@ def candidates(lines, games, now):
             out.append({'status': 'active', 'favorite': False, 'modelLean': True, 'marketType': 'total',
                         'line': row['line'], 'direction': row['direction'], 'gameIds': [game['id']],
                         '_league': game['league'], '_row': row, '_quotes': books})
-        elif row.get('athleteId') and grade.get('tier') == 'lean':
+        elif row.get('athleteId') and grade.get('rawTier', grade.get('tier')) == 'lean':
             out.append({'status': 'active', 'favorite': False, 'modelLean': True, 'position': row.get('position'),
                         'athleteId': str(row['athleteId']), 'market': row.get('stat') or pricing.market_of(row),
                         'line': row['line'], 'direction': row['direction'], 'gameIds': [game['id']],
@@ -713,9 +713,9 @@ def longshot_candidate(lines, games, now, league, exclude=(), ctx=None):
             'parlayType': 'longshot', 'riskUnits': parlay.STAKE, 'legs': ticket['legs'],
             'correlation': 'One leg per game, so the ticket treats the legs as independent; its chance is their product.',
             'gameIds': ticket['gameIds'], '_league': league, 'book': ticket['book'], 'odds': ticket['odds'],
-            'quotedAt': ticket['quotedAt'], 'quoteType': 'capture', 'confidence': 1,
+            'quotedAt': ticket['quotedAt'], 'quoteType': 'capture', 'confidence': 1, 'priceEstimated': True,
             'expiresAt': stamp(min(gates.next_slot(now), gates.when(ticket['firstKickoff']))),
-            'edge': (f"Our chance {100 * ticket['fairChance']:.1f}% against {100 * ticket['breakEven']:.1f}% break-even at "
+            'edge': (f"Estimated combined price from captured leg odds; verify the sportsbook's ticket price. Our chance {100 * ticket['fairChance']:.1f}% against {100 * ticket['breakEven']:.1f}% break-even at "
                      f"{ticket['odds']:+d}: {ticket['evPerUnit']:+.3f}u per unit staked, {parlay.STAKE}u at risk."),
             'cutoff': 'A longshot is not re-entered. It stands or falls as posted.',
             'sources': sorted(({games[g]['source'] for g in ticket['gameIds'] if g in games and games[g].get('source')}
@@ -735,7 +735,7 @@ def price(candidate, ctx, now):
         if not isinstance(odds, (int, float)) or abs(odds) < 100:
             continue
         try:
-            p = pricing.price(snapshot, market, side, float(line), int(odds), candidate.get('athleteId'))
+            p = gates.calibrated_desk(pricing.price(snapshot, market, side, float(line), int(odds), candidate.get('athleteId')), candidate, ctx)
         except (ValueError, KeyError):
             continue
         priced.append((p['evPerUnit'], book, float(line), int(odds), p))
@@ -751,6 +751,9 @@ def price(candidate, ctx, now):
     candidate.update(book=book, line=line, odds=odds, _desk=p, projection=p['projection'], edge=p['edge'],
                      cutoff=p['cutoff'], modelVersion=p['model'], snapshotAt=p['snapshotAt'], quotedAt=seen,
                      quoteType='capture', quoteNote=note, expiresAt=stamp(min(gates.next_slot(now), kickoff)))
+    candidate['probabilityAtPublication'] = {key: p.get(key) for key in
+        ('rawChance', 'chance', 'calibrated', 'calibration', 'calibrationN', 'push', 'breakEven', 'edgePoints', 'evPerUnit', 'snapshotAt')}
+    candidate['probabilityAtPublication']['evaluatedAt'] = stamp(now)
     away, home = game['away'], game['home']
     if candidate.get('athleteId'):
         words = pricing.WORDS[market]
@@ -1225,7 +1228,7 @@ def write_prose(candidate, ctx, records):
                                 f"model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.")
             candidate['risk'] = 'Most longshots lose. The legs are treated as independent; any one miss sinks the ticket. Confidence 1 of 10.'
         return candidate
-    p = candidate.get('_desk') or {}
+    p = gates.desk_for(candidate, ctx) or {}
     snapshot = ctx.snapshot(candidate['gameIds'][0])
     side, line, odds = gates.side_of(candidate), float(candidate['line']), int(candidate['odds'])
     sparse = 'A team with under three games this season thins the read. ' if snapshot and snapshot.get('sparse') else ''
@@ -1244,11 +1247,13 @@ def write_prose(candidate, ctx, records):
         candidate['sources'] = sources
         return candidate
     if candidate.get('athleteId'):
-        candidate['why'] = (f"Prop lean on our number alone: our projection is {p['projection']:g} against {pricing.fmt(line)} and the "
-                            f"{side} reads {100 * p['rawChance']:.1f}% on the raw curve, which has no graded history against a line yet, "
-                            f"so the true chance is lower than that. {prop_reasoning(candidate, ctx, records, snapshot)}")
+        chance_text = (f"{p['chance']:.1%} after adjustment from the raw {p['rawChance']:.1%}" if p.get('calibrated')
+                       else f"{p['rawChance']:.1%} on an uncalibrated curve; not eligible as an official play")
+        candidate['why'] = (f"Prop lean: our projection is {p['projection']:g} against {pricing.fmt(line)}. The "
+                            f"{side} reads {chance_text}; {pricing.break_even(odds):.1%} is needed at {odds:+d}. "
+                            f"{prop_reasoning(candidate, ctx, records, snapshot)}")
         games_played = ctx.appearances.get(candidate['athleteId'], 0)
-        candidate['risk'] = (f"Uncalibrated chance; a player line turns on a handful of touches. {games_played} games this season"
+        candidate['risk'] = (f"An estimated chance, not a guarantee; a player line turns on a handful of touches. {games_played} games this season"
                              f"{'' if games_played >= 3 else ', the role settled by last season'}. A player who does not take the field is "
                              f"voided; an in-game injury is graded unless a verified book protection applies. Confidence "
                              f"{candidate['confidence']} of 10.")

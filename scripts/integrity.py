@@ -13,6 +13,8 @@ import glob
 import hashlib
 import json
 import os
+import subprocess
+import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LEDGER = os.path.join(ROOT, 'tests', 'integrity-ledger.json')
@@ -96,6 +98,12 @@ def compare(current, saved):
 
 
 def main():
+    if len(sys.argv) == 3 and sys.argv[1] == '--verify-base':
+        problems = verify_report_history(sys.argv[2])
+        if problems:
+            raise SystemExit('\n'.join(problems))
+        print('All prior published reports are byte-for-byte unchanged.')
+        return
     ledger = build()
     with open(LEDGER, 'w', encoding='utf-8') as handle:
         json.dump(ledger, handle, indent=1, sort_keys=True)
@@ -103,6 +111,18 @@ def main():
     print('Froze %d picks, %d settled results, %d forecasts -> %s'
           % (len(ledger['picks']), len(ledger['results']), len(ledger['forecasts']),
              os.path.relpath(LEDGER, ROOT)))
+
+
+def verify_report_history(base, root=ROOT):
+    """Compare complete published reports with a trusted Git base, including every revision and leg.
+
+    New report files are allowed; changed/deleted/renamed existing files are not.
+    This complements the old field ledger without ever replacing that ledger.
+    """
+    changed = subprocess.check_output(['git', 'diff', '--no-renames', '--name-status', base, '--', 'research/'],
+                                      cwd=root, text=True)
+    return [f'Published report changed: {line}' for line in changed.splitlines()
+            if line and not line.startswith('A\t')]
 
 
 if __name__ == '__main__':

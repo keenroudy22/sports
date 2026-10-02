@@ -183,7 +183,7 @@ def build(legs):
             price = parlay.american(dec)
             if TARGET[0] <= price <= TARGET[1]:
                 tickets.append({'book': book, 'legs': chosen[:count], 'odds': price, 'decimal': round(dec, 3),
-                                'gameIds': [l['gameId'] for l in chosen[:count]], 'quotedAt': max(l['observedAt'] for l in chosen[:count]),
+                                'gameIds': [l['gameId'] for l in chosen[:count]], 'quotedAt': min(l['observedAt'] for l in chosen[:count]),
                                 'firstKickoff': min(l['kickoff'] for l in chosen[:count]),
                                 'room': round(sum(l['chance'] - l['implied'] for l in chosen[:count]), 3)})
                 break
@@ -232,7 +232,7 @@ def ticket_pick(ticket, games, now, league, source):
             'title': f"{len(ticket['legs'])}-leg easy props at {ticket['book']}", 'status': 'active', 'favorite': False,
             'parlayType': 'easyProps', 'riskUnits': STAKE, 'legs': ticket['legs'],
             'correlation': 'One leg per game, so the book prices the ticket as the legs multiplied.',
-            'gameIds': ticket['gameIds'], 'book': ticket['book'], 'odds': ticket['odds'], 'quotedAt': ticket['quotedAt'],
+            'gameIds': ticket['gameIds'], 'book': ticket['book'], 'odds': ticket['odds'], 'quotedAt': ticket['quotedAt'], 'priceEstimated': True,
             'expiresAt': gates.stamp(min(gates.next_slot(now), gates.when(ticket['firstKickoff']))),
             'quoteType': 'capture', 'confidence': 1,
             'edge': (f"For fun, not value: each leg is an easier line our projection clears comfortably ({100 * lows:.0f}% or better "

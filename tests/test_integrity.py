@@ -3,6 +3,7 @@ import os
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scripts'))
 
@@ -10,6 +11,15 @@ import integrity
 
 
 class LedgerTests(unittest.TestCase):
+    def test_whole_report_guard_covers_later_revisions_legs_and_saved_units(self):
+        changes = 'A\tresearch/new.json\nM\tresearch/later-revision.json\nD\tresearch/original.json\n'
+        with patch('integrity.subprocess.check_output', return_value=changes):
+            errors = integrity.verify_report_history('trusted-base')
+        self.assertEqual(len(errors), 2)
+        self.assertIn('later-revision.json', errors[0])
+        self.assertIn('original.json', errors[1])
+        with patch('integrity.subprocess.check_output', return_value='A\tresearch/new.json\n'):
+            self.assertEqual(integrity.verify_report_history('trusted-base'), [])
     def test_published_record_is_unchanged(self):
         """The published record must never change. Fails loudly if it did.
 

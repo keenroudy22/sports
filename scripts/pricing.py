@@ -168,6 +168,31 @@ def cutoff(market, side, line, odds):
             f'{fmt(limit)}{"+" if side == "over" else " or lower"}, or at {worst:+d} or worse at {fmt(line)}.')
 
 
+def calibrated_prop(value, calibration):
+    """One learned prop verdict for selection, quote shopping, prose and the site.
+
+    Always start from rawChance: applying the helper twice must not shrink twice.
+    No calibration means no claim of a calibrated probability. Does not mutate input.
+    """
+    if not value or value.get('market') not in PROJECTED:
+        return value
+    k = (calibration or {}).get('k')
+    if not isinstance(k, (int, float)) or not math.isfinite(k) or not 0 <= k <= 1:
+        return value
+    p = dict(value)
+    chance = 0.5 + k * (p['rawChance'] - 0.5)
+    even = break_even(p['odds'])
+    edge = 100 * (chance - even)
+    ev = chance * payout(p['odds']) - max(0.0, 1 - chance - p['push'])
+    p.update(chance=round(chance, 3), calibration=k, calibrated=True,
+             calibrationN=calibration.get('n'), edgePoints=round(edge, 1), evPerUnit=round(ev, 3))
+    p['edge'] = (f"Projection {p['projection']:g} against {p['line']:g}. "
+                 f"Adjusted chance {chance:.1%} (raw {p['rawChance']:.1%}, learned factor {k:g}); "
+                 f"{even:.1%} needed at {p['odds']:+d}: {edge:+.1f} percentage points. "
+                 "An estimate, not a guarantee.")
+    return p
+
+
 def market_of(pick):
     key = pick.get('market')
     if key in WORDS:

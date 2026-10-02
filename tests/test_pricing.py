@@ -61,6 +61,18 @@ class PriceTests(unittest.TestCase):
 
 
 class CalibrationTests(unittest.TestCase):
+    def test_learned_prop_verdict_is_idempotent_and_does_not_change_the_raw_number(self):
+        raw = pricing.price(SNAPSHOT, 'recYds', 'over', 45.5, -114, athlete='10')
+        cal = {'k': 0.13, 'n': 500}
+        adjusted = pricing.calibrated_prop(raw, cal)
+        self.assertLess(adjusted['edgePoints'], 0)
+        self.assertEqual(adjusted['rawChance'], raw['rawChance'])
+        self.assertFalse(raw['calibrated'])
+        self.assertTrue(adjusted['calibrated'])
+        self.assertEqual(pricing.calibrated_prop(adjusted, cal), adjusted)
+        self.assertIn('Adjusted chance', adjusted['edge'])
+        self.assertNotIn('uncalibrated', adjusted['edge'])
+
     def test_game_lines_are_shrunk_toward_fifty_by_league_and_market(self):
         cfb = pricing.price(SNAPSHOT, 'total', 'under', 52.5, -110)      # raw phi(8.5/12) = 76.1%
         self.assertAlmostEqual(cfb['rawChance'], 0.761, places=3)

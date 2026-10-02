@@ -214,7 +214,7 @@ def build(legs):
             if best is None or key > best[0]:
                 pair = sorted((a, b), key=lambda l: (l['kickoff'], l['title']))
                 best = (key, {'book': book, 'legs': pair, 'odds': price, 'decimal': round(dec, 3),
-                              'gameIds': [l['gameId'] for l in pair], 'quotedAt': max(l['observedAt'] for l in pair),
+                              'gameIds': [l['gameId'] for l in pair], 'quotedAt': min(l['observedAt'] for l in pair),
                               'firstKickoff': min(l['kickoff'] for l in pair), 'chance': key[0]})
     if not best:
         return None, f'no book has two games with easier lines our numbers clear comfortably that pay {TARGET[0]:+d} to {TARGET[1]:+d} together'
@@ -260,7 +260,7 @@ def candidate(ctx, games, now, exclude=()):
                 'title': f"Ladder step {info['step']}: 2 legs at {ticket['book']}", 'status': 'active', 'favorite': False,
                 'parlayType': 'ladder', 'riskUnits': STAKE, 'ladder': info, 'legs': ticket['legs'], '_league': league,
                 'correlation': 'One leg per game, so the book prices the ticket as the legs multiplied.',
-                'gameIds': ticket['gameIds'], 'book': ticket['book'], 'odds': ticket['odds'], 'quotedAt': ticket['quotedAt'],
+                'gameIds': ticket['gameIds'], 'book': ticket['book'], 'odds': ticket['odds'], 'quotedAt': ticket['quotedAt'], 'priceEstimated': True,
                 'expiresAt': gates.stamp(min(gates.next_slot(now), gates.when(ticket['firstKickoff']))),
                 'quoteType': 'capture', 'confidence': 1,
                 'edge': (f"For fun, not value: two easier lines our projections clear comfortably ({chances} on our numbers, "

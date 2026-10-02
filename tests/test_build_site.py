@@ -286,7 +286,7 @@ class PropRowTests(unittest.TestCase):
         self.assertEqual(len(row['books']), 2, 'a suffix does not hide the same player at another book')
         self.assertEqual(row['grade']['needs'], round(118 / 218, 3), 'a price means the chance has something to beat')
         self.assertGreater(row['grade']['edge'], 0)
-        self.assertEqual(row['grade']['tier'], 'lean')
+        self.assertEqual(row['grade']['tier'], 'pass', 'raw-only value is not a calibrated lean')
         self.assertEqual(row['observedAt'], '2026-09-19T12:40:00Z', 'the row is as fresh as the price on it')
 
     def test_the_board_shows_the_calibrated_chance_the_desk_acts_on(self):
@@ -306,8 +306,9 @@ class PropRowTests(unittest.TestCase):
         self.assertTrue(shrunk['calibrated'])
         self.assertEqual(shrunk['raw'], raw['raw'], 'the raw number is kept beside it')
         self.assertLess(shrunk['edge'], 0, 'shrunk toward a coin flip, it no longer clears -118')
-        self.assertEqual((raw['view'], shrunk['view']), ('lean', 'pass'), 'the site stops calling it a lean, as the gates would')
-        self.assertEqual(shrunk['tier'], 'lean', 'the desk still judges it, so its refusal is recorded for learning')
+        self.assertEqual((raw['view'], shrunk['view']), ('pass', 'pass'), 'raw-only and negative learned value both fail')
+        self.assertEqual(shrunk['tier'], 'pass')
+        self.assertEqual(shrunk['rawTier'], 'lean', 'the desk still records its refusal for learning')
         gentle = build_site.prop_rows(*args, calibration={'NFL': (0.9, 0.0)})[0]['grade']
         self.assertEqual(gentle['view'], 'lean', 'a calibrated chance that still clears the price stays a lean')
         self.assertEqual(build_site.prop_rows(*args, calibration={'CFB': (0.13, 0.0)})[0]['grade']['chance'], raw['chance'],
@@ -329,7 +330,7 @@ class PropRowTests(unittest.TestCase):
                                     datetime(2026, 10, 3, 13, tzinfo=timezone.utc), {'CFB-1': record})
         grade = rows[0]['grade']
         self.assertEqual((rows[0]['state'], rows[0]['league']), ('open', 'CFB'))
-        self.assertEqual((grade['tier'], grade['view'], grade.get('unproven')), ('lean', 'pass', True),
+        self.assertEqual((grade['tier'], grade['view'], grade.get('unproven')), ('pass', 'pass', True),
                          'the desk judges it (and learning grades it); the site says it is graded before it is played')
         calibrated = build_site.prop_rows(captures, {'CFB-1': game}, {'CFB-1': [snapshot]}, {'10': 'Player Ten'}, {'10': 3}, {},
                                           datetime(2026, 10, 3, 13, tzinfo=timezone.utc), {'CFB-1': record}, calibration={'CFB': (0.9, 0.0)})

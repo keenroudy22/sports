@@ -330,7 +330,7 @@ class PropLeanRuleTests(unittest.TestCase):
         waiting = gates.prop_calibrated_value(college, context())
         self.assertFalse(waiting.ok)
         self.assertIn('own calibration', waiting.reason)
-        self.assertTrue(gates.prop_calibrated_value(prop_lean(), context()).ok, 'the NFL rule is unchanged without a calibration')
+        self.assertFalse(gates.prop_calibrated_value(prop_lean(), context()).ok, 'every league needs learned calibration')
         import learning
         calibrated = context(policy=dict(learning.default_policy(), calibration={'CFB/prop': {'k': 0.5, 'n': 320}}))
         self.assertNotIn('own calibration', gates.prop_calibrated_value(college, calibrated).reason)
@@ -434,7 +434,7 @@ class AdmitTests(unittest.TestCase):
         self.assertEqual({d.rule for d in decisions}, {r.__name__ for r in gates.RULES['modelLean']})
 
     def test_a_clean_prop_lean_is_admitted_when_the_market_gate_allows(self):
-        ctx = context(scoreboard={'props': {'markets': []}})
+        ctx = context(scoreboard={'props': {'markets': []}}, policy={**gates.learning.default_policy(), 'calibration': {'NFL/prop': {'k': 0.9, 'n': 500}}})
         ok, decisions = gates.admit(prop_lean(), ctx)
         self.assertTrue(ok, [str(d) for d in decisions if not d.ok])
 
@@ -446,8 +446,21 @@ class AdmitTests(unittest.TestCase):
         # One book, a price past the floor, a market the scoreboard has closed, an edge that -250 eats,
         # and a better quote (-115) sitting in the capture: every one of them is named.
         self.assertEqual({d.rule for d in gates.refusals(decisions)},
-                         {'one_book', 'prop_price_floor', 'prop_raw_edge', 'best_quote_by_ev'},
-                         'the scoreboard market rule orders the card now (run.rank_card); it no longer refuses')
+                         {'one_book', 'prop_price_floor', 'prop_raw_edge', 'best_quote_by_ev',
+                          'prop_market_not_trailing', 'prop_calibrated_value'})
+
+    def test_no_straight_kind_can_bypass_a_paused_segment_or_negative_calibrated_value(self):
+        ctx = context(policy={**gates.learning.default_policy(), 'calibration': {'NFL/prop': {'k': 0.13, 'n': 500}},
+                              'segments': {'NFL/prop:recYds': {'paused': True}}})
+        for kind in ('propLean', 'favorite', 'researched'):
+            ok, decisions = gates.admit(prop_lean(), ctx, kind)
+            self.assertFalse(ok)
+            self.assertIn('learned_pause', {d.rule for d in gates.refusals(decisions)})
+            self.assertIn('prop_calibrated_value', {d.rule for d in gates.refusals(decisions)})
+
+    def test_expiry_does_not_refresh_a_stale_quote(self):
+        self.assertFalse(gates.fresh_quote(total_lean(quotedAt='2026-09-26T13:00:00Z'), context()).ok)
+        self.assertTrue(gates.fresh_quote(total_lean(), context()).ok)
 
 
 class ReplayTests(unittest.TestCase):

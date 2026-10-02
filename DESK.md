@@ -24,6 +24,12 @@ writes nothing.
 
 Exactly what `PROMPT.md` allows, and only when every gate passes:
 
+**2026-10-02 audit policy supersedes the full-card preference:** paused segments, missing learned player
+calibration, nonpositive adjusted value and stale quotes now refuse new straight plays. Favorites and researched
+labels do not bypass those checks. Zero plays is a valid card. Quote shopping, published explanations and the
+site share the learned prop arithmetic. New reports save the probability inputs at publication; old reports are
+never retroactively assigned today's probabilities. Existing public plays stay in the record.
+
 - **Settlements and closes**: revisions of published picks, graded from the box score or closed to
   new entries when the line moved past the published cutoff. An outcome the code cannot grade (a player
   with no line in the box score, a parlay leg that pushed) is left for a person and named in the log.
@@ -34,8 +40,8 @@ Exactly what `PROMPT.md` allows, and only when every gate passes:
   pulled before its post). The runs judge candidates best first (`run.rank_card`): by our calibrated number against
   the price (a player's chance shrunk by the league's learned k, 0.2 before there is one), with a paused market, a
   player market where the line has been closer than our projection, or a chance that does not clear its price after
-  the rest. Those three rules (`learned_pause`, `prop_market_not_trailing`, `prop_calibrated_value`) order the card
-  now instead of refusing; so college props can make the card too. A card prop is priced -200 to +120 (past +120 the
+  the rest. Those three rules (`learned_pause`, `prop_market_not_trailing`, `prop_calibrated_value`) now also refuse
+  ineligible new plays; the ranking never overrides them. A card prop is priced -200 to +120 (past +120 the
   calibration overstates a plus-money over). One pick per bet, open or closed: a bet the desk closed is never
   published again at another number (`gates.not_duplicate`). Fun parlays and the ladder are apart. (For two days
   before, 2026-09-26 to 28, the rule was "favorites only": three a day at three points; it left NFL Sunday empty.)

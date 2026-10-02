@@ -128,6 +128,21 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Audit implementation approved (2026-10-02):** card sizes are ceilings, never quotas. Paused segments,
+  missing learned prop calibration, nonpositive calibrated price edges, stale quotes and the NFL prop-market
+  underperformance check must block new official straight plays, including favorites and researched labels.
+  Fewer or zero plays are valid. Existing publications and their results remain untouched. Calibrated prop pricing
+  is shared by quote shopping, gates, prose and the site; new publications preserve their probability inputs.
+- **Transparent Board (2026-10-02):** official plays first; future plays grouped separately. Navigation is Board,
+  Games, Players, Scoreboard, More (old hashes remain valid). The headline separates all published W-L from
+  captured-price returns, assumed historical prices and promotional credits. Combined legacy totals stay available
+  and labeled in the detailed record. Do not turn an expired original quote into an Open badge. A yard/point gap
+  is a projection gap, not a probability edge. College disagreements of at least seven spread points carry a
+  caution, not an automatic bet. No team or player model weights change without held-out evaluation.
+- **Rollout boundaries (2026-10-02):** no new paid feeds, quota increases or automatic X interactions. Live
+  milestones require a shadow trial, a Discord pilot, then a separate public-release checkpoint. An AI reply bot
+  remains off; X requires prior explicit written approval. Full remaining audit work is tracked in
+  `docs/AUDIT-IMPLEMENTATION.md`; do not call an unfinished phase deployed.
 - **No brown house graphics** (2026-10-01): Kook'n-owned cards use midnight navy/black, electric mint and crisp
   cyan. Never use brown, tan, bronze, copper, amber, sepia or muddy burnt orange as a house-card background or
   accent. A real team's supplied colors may still appear on that team's play card.
@@ -160,7 +175,7 @@ Handy commands (from `~/Projects/sports`):
   changed snapshots and final scores before either sport gets a model. This uses ESPN's public feed, not a metered
   service, and never grades or publishes a play. Do not add public picks or cross-sport tickets merely because scores
   or market captures exist.
-- **The daily card** (2026-09-28): five straight plays on Saturday and Sunday, a mix of game lines and player props
+- **The daily card** (2026-09-28, ceilings clarified 2026-10-02): up to five straight plays on Saturday and Sunday, a mix of game lines and player props
   (three of a kind at most); one play on other days, the NFL game's on an NFL night (`gates.card_cap`, ordered by
   `run.rank_card`). Never leave an NFL day without a post. A fun parlay with alternate lines every Saturday (college,
   `easy_parlay.sharp_candidate`) and Sunday (NFL easy props), plus the lotto when one qualifies. Pick of the Day is
@@ -230,8 +245,8 @@ Handy commands (from `~/Projects/sports`):
   their own channel, use only the owner's exact links, and are clearly labeled with age, location, changing-terms and
   Kook'n-benefit language; never mix them into ordinary plays. The site's front-page community card is the main
   conversion path: it promises only early official plays, Discord-only Arb Radar candidates and the public record.
-- **The site**: the projection-card look everywhere (logos, photos, tiles), tabs Today, Board, Games, Stats, Record,
-  More. Today and the model scoreboard lead with the same simple season scorecard: spread vs close, projected
+- **The site**: the projection-card look everywhere (logos, photos, tiles), tabs Board, Games, Players, Scoreboard,
+  More. The Board leads with official plays; the separately labeled model scorecard shows spread vs close, projected
   moneyline winner, total vs close, player projection vs captured line, and published fun parlays. The first four
   are model accuracy and the parlay tile is labeled separately; never imply the mixed card is a profit record.
   Every upcoming game page has **Kook'n favorite lines**: every fresh, actually priced main line the calibrated

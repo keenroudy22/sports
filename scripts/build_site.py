@@ -707,6 +707,15 @@ def build(now=None):
             sharp_odds.drop_impossible(book.get('markets') or {})
     lines += prop_rows(captures, by_id, forecasts, names, appearances, identities, now, prop_prices, established,
                        calibration=learned_prop_calibration())
+    for row in lines:
+        if row.get('athleteId') and row.get('grade'):
+            segment = f"{row['league']}/prop:{row.get('stat')}"
+            market_record = next((r for r in (scoreboard.get('props') or {}).get('markets', [])
+                                  if r.get('market') == row.get('stat')), {})
+            closeness = market_record.get('closerThanLine') or [0, 0]
+            behind = row['league'] == 'NFL' and market_record.get('graded', 0) >= 30 and closeness[0] < closeness[1]
+            if segment in paused or behind:
+                row['grade']['paused'] = True
     gap_rows = market_read.load_rows()
     for game in sorted(window, key=lambda g: (g['kickoff'], g['id'])):
         snaps_for = pregame(forecasts.get(game['id'], []), game['kickoff'])
@@ -796,6 +805,8 @@ def board_picks(first, latest, by_id, identities):
                      'direction': first_of(pick, recent, 'direction'), 'book': pick.get('book'), 'odds': first_of(pick, recent, 'odds'),
                      'priceAssumed': pick.get('odds') is None and recent.get('priceAssumed') is True,
                      'priceNote': recent.get('priceNote') if pick.get('odds') is None else None,
+                     'priceEstimated': pick.get('priceEstimated') is True,
+                     'probabilityAtPublication': pick.get('probabilityAtPublication'),
                      'projection': pick.get('projection'), 'confidence': pick.get('confidence'),
                      'favorite': pick.get('favorite') is True or key in FAVORITES_BEFORE_FLAG,
                      'marketType': pick.get('marketType'), 'parlayType': pick.get('parlayType'),
@@ -1034,9 +1045,19 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, p
                 side_quotes = [(book, line, over if lean == 'over' else under)
                                for book, line, over, under in quotes if (over if lean == 'over' else under) is not None]
                 if side_quotes:
-                    # Best number first, then best price: the over wants the lowest line, the under the highest.
+                    # Shop the adjusted expected return, as the desk does. Without a projection we can only
+                    # order the reference quotes by line and price; they cannot become an official lean.
                     book, line, odds = sorted(side_quotes, key=lambda q: (q[1] if lean == 'over' else -q[1],
                                                                           -pricing.cents(q[2])))[0]
+                    if snapshot and player and pricing.PROJECTED[key] in player:
+                        def quote_value(q):
+                            try:
+                                value = pricing.price(snapshot, key, lean, float(q[1]), int(q[2]), athlete)
+                                k = (calibration.get(game['league']) or (None, 0.0))[0]
+                                return pricing.calibrated_prop(value, {'k': k})['evPerUnit'], q[0]
+                            except (ValueError, KeyError):
+                                return float('-inf'), q[0]
+                        book, line, odds = max(side_quotes, key=quote_value)
                     row.update({'line': line, 'odds': odds, 'book': BOOK_NAMES.get(book, book), 'state': 'open',
                                 'observedAt': priced['retrievedAt'], 'source': priced['source'],
                                 'title': f'{name} {lean} {line:g} {pricing.WORDS[key]}',
@@ -1048,23 +1069,19 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, p
                             settled = settled_role(athlete, game[side]['id'] if side else None, appearances, established)
                             limited = bool(player.get('limited'))
                             k, need = calibration.get(game['league']) or (None, 0.0)
+                            p = pricing.calibrated_prop(p, {'k': k})
                             chance, edge = p['chance'], p['edgePoints']
-                            if k is not None and not p['calibrated']:
-                                chance = round(0.5 + k * (p['rawChance'] - 0.5), 3)
-                                edge = round(100 * (chance - p['breakEven']), 1)
                             row['grade'] = {'chance': chance, 'raw': p['rawChance'], 'calibrated': p['calibrated'] or k is not None,
                                             'push': p['push'], 'needs': p['breakEven'], 'edge': edge,
                                             'projection': p['projection'], 'thin': not settled, 'limited': limited,
                                             'games': appearances[str(athlete)],
-                                            # Player projections have no graded history, so a prop never reads stronger
-                                            # than a lean, and an unsettled role never reads as one at all.
-                                            # tier is the desk's written rule (raw chance), which picks what the gates
-                                            # judge and what learning records; view is what the site shows: a lean only
-                                            # when the calibrated chance also clears the price.
-                                            'tier': 'lean' if p['rawChance'] >= 0.6 and settled and not limited else 'pass',
+                                            'rawTier': 'lean' if p['rawChance'] >= 0.6 and settled and not limited else 'pass',
+                                            # Raw candidates still reach the gates for an auditable refusal.
+                                            # Both public labels require positive learned value.
+                                            'tier': 'lean' if p['rawChance'] >= 0.6 and settled and not limited
+                                                    and k is not None and edge > 0 and edge >= need else 'pass',
                                             'view': 'lean' if p['rawChance'] >= 0.6 and settled and not limited
-                                                    and (k is None and game['league'] not in PROP_OWN_CALIBRATION
-                                                         or k is not None and edge >= need) else 'pass',
+                                                    and k is not None and edge > 0 and edge >= need else 'pass',
                                             'model': p['model'], 'snapshotAt': p['snapshotAt']}
                             if k is None and game['league'] in PROP_OWN_CALIBRATION:
                                 row['grade']['unproven'] = True     # the site says it is being graded before it is played

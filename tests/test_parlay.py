@@ -65,6 +65,16 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(parlay.american(1.5), -200)
         self.assertEqual(parlay.retitle({'title': 'A @ B under 43.5', 'line': 43.5}, 43.0), 'A @ B under 43')
 
+    def test_ticket_timestamp_is_the_oldest_leg_not_the_newest(self):
+        legs = [dict(title=str(i), gameId=f'NFL-{i}', kickoff='2026-09-20T17:00Z', odds=-110,
+                     chance=0.6, observedAt=stamp) for i, stamp in enumerate(
+                     ['2026-09-20T09:00:00Z', '2026-09-20T13:00:00Z'])]
+        ticket = parlay.priced_ticket(DK, legs)
+        self.assertEqual(ticket['quotedAt'], '2026-09-20T09:00:00Z')
+        self.assertTrue(ticket['priceEstimated'])
+        legs[0].pop('observedAt')
+        self.assertEqual(parlay.priced_ticket(DK, legs)['quotedAt'], '')
+
     def test_feed_priced_alternates_can_mix_with_main_lines_without_breaking_ticket_guards(self):
         def alternate(gid, line_=39.5, window='Full game'):
             return {'id': f'alt-{gid}', 'title': f'Player {gid} 40+ receiving yards', 'gameId': gid,

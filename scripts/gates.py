@@ -250,17 +250,44 @@ def quotes_for(candidate, ctx, priced_only=False):
 def desk_for(candidate, ctx):
     """pricing.price() for the candidate at its own line and price, or None when v2 has no number."""
     if candidate.get('_desk') is not None:
-        return candidate['_desk']
+        return calibrated_desk(candidate['_desk'], candidate, ctx)
     snapshot = ctx.snapshot((candidate.get('gameIds') or [None])[0])
     market, side = market_key(candidate), side_of(candidate)
     if not snapshot or not market or not isinstance(candidate.get('line'), (int, float)) \
             or not isinstance(candidate.get('odds'), (int, float)):
         return None
     try:
-        return pricing.price(snapshot, market, side, float(candidate['line']), int(candidate['odds']),
-                             candidate.get('athleteId'))
+        return calibrated_desk(pricing.price(snapshot, market, side, float(candidate['line']), int(candidate['odds']),
+                             candidate.get('athleteId')), candidate, ctx)
     except (ValueError, KeyError):
         return None
+
+
+def calibrated_desk(value, candidate, ctx):
+    league = candidate.get('league') or (game_of(candidate, ctx) or {}).get('league') or str(candidate.get('id', '')).split('-')[0]
+    return pricing.calibrated_prop(value, (ctx.policy.get('calibration') or {}).get(f'{league}/prop') or {})
+
+
+def fresh_quote(candidate, ctx):
+    """A future expiry never makes an old captured price fresh again."""
+    seen = candidate.get('quotedAt')
+    if not seen:
+        return Decision(False, 'fresh_quote', 'missing quote timestamp')
+    try:
+        age = ctx.now - when(seen)
+    except (TypeError, ValueError):
+        return Decision(False, 'fresh_quote', 'invalid quote timestamp')
+    ok = timedelta(minutes=-1) <= age <= build_site.ODDS_FRESH
+    return Decision(ok, 'fresh_quote', 'quote is within the 12-hour capture limit' if ok else 'quote is stale or in the future')
+
+
+def straight_value(candidate, ctx):
+    """No favorite/researched label can bypass calibrated price eligibility."""
+    if candidate.get('athleteId'):
+        return prop_calibrated_value(candidate, ctx)
+    desk = desk_for(candidate, ctx)
+    ok = bool(desk and desk.get('calibrated') and desk.get('edgePoints', 0) > 0)
+    return Decision(ok, 'straight_value', 'adjusted chance clears the price' if ok else 'no positive calibrated edge at this price')
 
 
 def published_today(ctx, exclude=None):
@@ -444,7 +471,7 @@ def best_quote_by_ev(candidate, ctx):
     priced = []
     for book, line, odds in quotes:
         try:
-            p = pricing.price(snapshot, market, side, float(line), int(odds), candidate.get('athleteId'))
+            p = calibrated_desk(pricing.price(snapshot, market, side, float(line), int(odds), candidate.get('athleteId')), candidate, ctx)
         except (ValueError, KeyError):
             continue
         priced.append((p['evPerUnit'], book, line, int(odds)))
@@ -595,9 +622,10 @@ def prop_raw_edge(candidate, ctx):
     edge_need = max(PROP_EDGE, learning.threshold(ctx.policy, 'prop.minEdge', segment))
     if desk['rawChance'] < raw_need:
         return Decision(False, 'prop_raw_edge', f"raw chance {100 * desk['rawChance']:.1f}% is under {100 * raw_need:.0f}%")
-    if desk['edgePoints'] < edge_need:
-        return Decision(False, 'prop_raw_edge', f"{desk['edgePoints']:+.1f} points against the price; needs {edge_need:+.0f}")
-    return Decision(True, 'prop_raw_edge', f"raw {100 * desk['rawChance']:.1f}%, {desk['edgePoints']:+.1f} points")
+    raw_edge = 100 * (desk['rawChance'] - pricing.break_even(candidate['odds']))
+    if raw_edge < edge_need:
+        return Decision(False, 'prop_raw_edge', f"{raw_edge:+.1f} raw points against the price; needs {edge_need:+.0f}")
+    return Decision(True, 'prop_raw_edge', f"raw {100 * desk['rawChance']:.1f}%, {raw_edge:+.1f} points")
 
 
 def learned_pause(candidate, ctx):
@@ -610,23 +638,20 @@ def learned_pause(candidate, ctx):
 
 
 def prop_calibrated_value(candidate, ctx):
-    """Once learning has calibrated the raw player chances against the graded record, a prop must clear its
-    price on the calibrated chance too. Before that, the written raw-chance rule stands alone."""
+    """A prop needs its league's learned probability and must clear the actual price after adjustment."""
     league = candidate.get('league') or str(candidate.get('id', '')).split('-')[0]
     cal = ((ctx.policy.get('calibration') or {}).get(f'{league}/prop') or {})
     k = cal.get('k')
-    if k is None and league in OWN_CALIBRATION:
+    if not isinstance(k, (int, float)) or not 0 <= k <= 1:
         return Decision(False, 'prop_calibrated_value', f'{league} player chances wait for their own calibration: learning grades '
                                                         f'every projection against the line and ships one after enough games')
-    if k is None:
-        return Decision(True, 'prop_calibrated_value', 'no learned calibration for player chances yet')
     desk = desk_for(candidate, ctx)
     if not desk:
         return Decision(False, 'prop_calibrated_value', 'v2 has no projection for this player and market')
     chance = 0.5 + k * (desk['rawChance'] - 0.5)
-    edge = 100 * (chance - desk['breakEven'])
+    edge = 100 * (chance - pricing.break_even(candidate['odds']))
     need = learning.threshold(ctx.policy, 'prop.minCalibratedEdge', learning.segment_of(candidate))
-    if edge < need:
+    if edge <= 0 or edge < need:
         return Decision(False, 'prop_calibrated_value',
                         f"calibrated {100 * chance:.1f}% (raw {100 * desk['rawChance']:.1f}% shrunk by k {k:g}, learned from "
                         f"{cal.get('n')} graded projections) is {edge:+.1f} points against the price; needs {need:+.0f}")
@@ -693,6 +718,8 @@ def prop_injury_clear(candidate, ctx):
 
 def prop_market_not_trailing(candidate, ctx):
     """No prop lean in a market where the book's line has been closer to the result than our projection."""
+    if not candidate.get('athleteId'):
+        return Decision(True, 'prop_market_not_trailing', 'not a player market')
     if not ctx.flags.get('MARKET_GATE', True):
         return Decision(True, 'prop_market_not_trailing', 'gate off by flag')
     league = candidate.get('league') or str(candidate.get('id', '')).split('-')[0]
@@ -770,18 +797,17 @@ def revision_frozen(candidate, ctx):
 
 # ------------------------------------------------------------------ running the rules
 
-COMMON = (not_started, expiry_ok, price_present, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction)
+COMMON = (not_started, expiry_ok, fresh_quote, price_present, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction)
 SHOP = (one_book, best_quote_by_ev)
 RULES = {
-    # learned_pause, prop_calibrated_value and prop_market_not_trailing order the card now (run.rank_card) instead of
-    # refusing: the owner wants a full card every game day (2026-09-28), and those rules still decide what comes first.
-    'modelLean': COMMON + SHOP + (lean_is_total, lean_edge, lean_confidence, card_cap, lean_nothing_against, qb_available),
-    'propLean': COMMON + SHOP + (prop_raw_edge, prop_settled_role, prop_price_floor, prop_window_cap, prop_one_per_player,
+    # Caps are ceilings, not quotas. A paused or negative-value market cannot fill the card.
+    'modelLean': COMMON + SHOP + (learned_pause, straight_value, lean_is_total, lean_edge, lean_confidence, card_cap, lean_nothing_against, qb_available),
+    'propLean': COMMON + SHOP + (learned_pause, prop_calibrated_value, prop_market_not_trailing, prop_raw_edge, prop_settled_role, prop_price_floor, prop_window_cap, prop_one_per_player,
                                  prop_not_in_longshot, prop_injury_clear, card_cap, lean_nothing_against),
-    'favorite': COMMON + SHOP + (favorite_needs_reason, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
-    'researched': COMMON + SHOP + (card_cap, lean_nothing_against, qb_available, prop_injury_clear),
-    'longshot': (not_started, expiry_ok, price_present, sources_https, not_republished, cfb_jurisdiction, longshot_one_per_day),
-    'ladder': (not_started, expiry_ok, price_present, sources_https, not_republished, cfb_jurisdiction, ladder_one_rung),
+    'favorite': COMMON + SHOP + (learned_pause, straight_value, prop_market_not_trailing, favorite_needs_reason, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
+    'researched': COMMON + SHOP + (learned_pause, straight_value, prop_market_not_trailing, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
+    'longshot': (not_started, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, longshot_one_per_day),
+    'ladder': (not_started, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, ladder_one_rung),
     'revision': (revision_frozen,),
 }
 

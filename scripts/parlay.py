@@ -88,7 +88,8 @@ def priced_ticket(book, legs):
     return {'book': book, 'legs': chosen, 'odds': price, 'decimal': round(dec, 3), 'fairChance': round(fair, 4),
             'breakEven': round(1 / dec, 4), 'evPerUnit': round(fair * (dec - 1) - (1 - fair), 3),
             'riskUnits': STAKE, 'gameIds': [l['gameId'] for l in chosen],
-            'quotedAt': max(l.get('observedAt') or '' for l in chosen),
+            'quotedAt': min(l.get('observedAt') or '' for l in chosen),
+            'priceEstimated': True,
             'firstKickoff': min(l['kickoff'] for l in chosen)}
 
 

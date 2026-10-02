@@ -41,7 +41,7 @@ jobs:
           # The branch as it is now, not the commit that triggered the run: runs queue one at a time, and a run
           # started from an older commit would redo the previous run's appends and conflict with them.
           ref: main
-          fetch-depth: 2
+          fetch-depth: 0
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
@@ -49,6 +49,11 @@ jobs:
         run: python -m unittest discover -s tests
       - name: Verify no published record was rewritten
         run: python -m unittest tests.test_integrity -v
+      - name: Compare complete reports with the pre-push record
+        if: github.event_name == 'push' && github.event.before != '0000000000000000000000000000000000000000'
+        env:
+          RECORD_BASE: ${{ github.event.before }}
+        run: python scripts/integrity.py --verify-base "$RECORD_BASE"
       - name: Check browser scripts
         run: |
           node --check site/core.js
