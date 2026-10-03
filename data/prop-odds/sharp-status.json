@@ -1,14 +1,14 @@
 {
- "at": "2026-10-03T11:49:10Z",
+ "at": "2026-10-03T12:27:37Z",
  "confirmed": {
   "CFB-401856705": "2026-10-03T11:49:10Z",
-  "CFB-401856707": "2026-10-03T11:49:10Z",
+  "CFB-401856707": "2026-10-03T12:27:37Z",
   "CFB-401856708": "2026-10-03T11:49:10Z",
   "CFB-401856709": "2026-10-03T09:27:54Z",
   "CFB-401856710": "2026-10-03T11:49:10Z",
-  "CFB-401856807": "2026-10-03T11:49:10Z",
-  "CFB-401856819": "2026-10-03T11:49:10Z",
-  "CFB-401856822": "2026-10-03T11:49:10Z",
+  "CFB-401856807": "2026-10-03T12:27:37Z",
+  "CFB-401856819": "2026-10-03T12:27:37Z",
+  "CFB-401856822": "2026-10-03T12:27:37Z",
   "CFB-401858246": "2026-10-03T11:49:10Z",
   "CFB-401858247": "2026-10-03T11:49:10Z",
   "CFB-401858248": "2026-10-03T11:49:10Z",
@@ -30,28 +30,28 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 5220,
-    "fanduel": 3412
+    "draftkings": 1353,
+    "fanduel": 827
    },
    "eventsListed": 67,
    "eventsMatched": 53,
    "games": 54,
    "marketTypes": {
-    "player_longest_passing_completion": 32,
-    "player_longest_reception": 122,
-    "player_longest_rush": 63,
-    "player_passing_+_rushing_yards": 442,
-    "player_passing_attempts": 214,
-    "player_passing_completions": 164,
-    "player_passing_touchdowns": 266,
-    "player_passing_yards": 1137,
-    "player_receiving_yards": 3044,
-    "player_receptions": 532,
-    "player_rushing_attempts": 202,
-    "player_rushing_yards": 2414
+    "player_longest_passing_completion": 8,
+    "player_longest_reception": 33,
+    "player_longest_rush": 17,
+    "player_passing_+_rushing_yards": 141,
+    "player_passing_attempts": 51,
+    "player_passing_completions": 39,
+    "player_passing_touchdowns": 64,
+    "player_passing_yards": 266,
+    "player_receiving_yards": 745,
+    "player_receptions": 156,
+    "player_rushing_attempts": 67,
+    "player_rushing_yards": 593
    },
    "requestsLeft": 0,
-   "rows": 8632,
+   "rows": 2180,
    "slateGames": [
     "Memphis Tigers at Charlotte 49ers 2026-10-03T15:00Z",
     "Alabama Crimson Tide at Mississippi State Bulldogs 2026-10-03T16:00Z",
@@ -164,7 +164,6 @@
        "most_points_player",
        "player_passing_touchdowns",
        "player_passing_yards",
-       "player_points",
        "player_receiving_yards",
        "player_rushing_yards",
        "player_touchdowns",
@@ -237,7 +236,7 @@
      "external": {
       "fanduel": "36137754",
       "fliff": "417148_c_p_209_prematch",
-      "kalshi": "KXNCAAFTOTAL-26OCT07NMSUFIU",
+      "kalshi": "KXNCAAF1H-26OCT07NMSUFIU",
       "novig": "01a0ef82-8438-7101-8c66-0a5b820ee786",
       "polymarket": "nfl_floridainternational_newmexicostate_2026-10-07_b3",
       "robinhood": "81402cfd-4645-4ce9-ad37-0cea23aae3fe"
@@ -247,6 +246,7 @@
       "away_team": "New Mexico State",
       "home_team": "Florida International",
       "markets": [
+       "1st_half_moneyline",
        "moneyline",
        "point_spread",
        "total_points"
@@ -264,7 +264,7 @@
       "kalshi": "KXNCAAFTOTAL-26OCT09IOWAWASH",
       "novig": "01a0fa22-9a62-7810-9857-99892819a5a9",
       "polymarket": "nfl_iowahawkeyes_washington_2026-10-09_b3",
-      "robinhood": "4f7ff034-c578-46f5-9114-1bfa5a7487dd"
+      "robinhood": "cfd0ea70-3bcb-4e0f-a7f0-cdb96187e132"
      },
      "home": "Washington",
      "sample": {
@@ -285,7 +285,7 @@
       "ballybet": "1027508025",
       "draftkings": "34745944",
       "fliff": "416969_c_p_209_prematch",
-      "kalshi": "KXNCAAFTOTAL-26OCT09ISUBYU",
+      "kalshi": "KXNCAAFSPREAD-26OCT09ISUBYU",
       "novig": "01a0fa75-17b7-7711-bcb2-70e18c3d0a9f",
       "polymarket": "nfl_byucougars_iowastatecyclones_2026-10-09_b3",
       "robinhood": "604da240-4e7c-4022-afc6-c021dc8d8f4c",
@@ -314,7 +314,7 @@
       "fliff": "416849_c_p_209_prematch",
       "kalshi": "KXNCAAF1H-26OCT10INDNEB",
       "polymarket": "nfl_indianahoosiers_nebraskacornhuskers_2026-10-10_b2",
-      "robinhood": "31e2751a-0c4f-464c-af07-2680a0d62833",
+      "robinhood": "d778d664-2b04-4efc-856e-4da7ccc0301e",
       "sx_bet": "L20371298"
      },
      "home": "Nebraska",
@@ -463,7 +463,7 @@
   },
   "NFL": {
    "books": {},
-   "eventsListed": 32,
+   "eventsListed": 33,
    "eventsMatched": 14,
    "games": 14,
    "marketTypes": {},
@@ -489,18 +489,19 @@
     {
      "away": null,
      "external": {
-      "fanduel": "28041972"
+      "draftkings": "8be5e1fe-236c-4c8b-bcea-08df1af5395e"
      },
-     "home": "NFL",
+     "home": "NFL 2026/27 \u2013 Week 4 Specials",
      "sample": {
       "away_team": "",
-      "home_team": "NFL",
+      "home_team": "NFL 2026/27 \u2013 Week 4 Specials",
       "markets": [
-       "outright"
+       "highest_scoring_half",
+       "total_points"
       ]
      },
-     "start": "2026-10-03T10:20:00Z",
-     "type": "outright"
+     "start": "2026-10-04T17:00:00Z",
+     "type": "unknown"
     },
     {
      "away": "Atlanta Falcons",
