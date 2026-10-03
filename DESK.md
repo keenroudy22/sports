@@ -573,6 +573,8 @@ Today and the top of the model scoreboard also show one plain **Season scorecard
 spread, projected moneyline winner, total against the closing total, player projection against the captured line,
 and the published fun-parlay record. The first four tiles are final pregame model accuracy. The parlay tile is
 explicitly labeled as posted fun tickets at smaller stakes, so the summary never presents mixed results as profit.
+On Today it sits directly below the official results and before optional research, and names both the graded-game
+count and last graded kickoff so a reader can tell whether the season record includes the latest final.
 
 Every upcoming game page starts with **Kook'n favorite lines** (owner, 2026-10-01): every current, real main line the
 calibrated Board likes, ranked by edge against the sportsbook price. It shows line vs projection, price, book,

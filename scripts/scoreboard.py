@@ -166,7 +166,8 @@ def group(rows, keys=('league', 'model', 'season')):
         for row in members:
             weeks[row['week']].append(row)
         order = sorted(weeks, key=lambda w: (w == 'post', int(w) if w.isdigit() else 99))
-        out.append({**dict(zip(keys, key)), 'summary': summarize(members),
+        out.append({**dict(zip(keys, key)), 'updatedThrough': max(r['kickoff'] for r in members),
+                    'summary': summarize(members),
                     'weeks': [{'week': w, **summarize(weeks[w])} for w in order]})
     return out
 

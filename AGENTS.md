@@ -308,7 +308,9 @@ Handy commands (from `~/Projects/sports`):
   Kook'n-benefit language; never mix them into ordinary plays. The site's front-page community card is the main
   conversion path: it promises only early official plays, Discord-only Arb Radar candidates and the public record.
 - **The site**: the projection-card look everywhere (logos, photos, tiles), tabs Board, Games, Players, Scoreboard,
-  More. The Board leads with official plays; the separately labeled model scorecard shows spread vs close, projected
+  More. The Board leads with official plays; its season scorecard follows the official record before any optional
+  research, shows the graded-game count and last graded kickoff, and links to the full scoreboard. The separately
+  labeled model scorecard shows spread vs close, projected
   moneyline winner, total vs close, player projection vs captured line, and published fun parlays. The first four
   are model accuracy and the parlay tile is labeled separately; never imply the mixed card is a profit record.
   Every upcoming game page has **Kook'n favorite lines**: every fresh, actually priced main line the calibrated

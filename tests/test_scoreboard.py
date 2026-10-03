@@ -58,6 +58,7 @@ class GradingTests(unittest.TestCase):
         self.assertEqual(len(grouped), 1)
         self.assertEqual(grouped[0]['summary']['winner'], [3, 0, 0])
         self.assertEqual(grouped[0]['summary']['side'], [2, 1, 0])
+        self.assertEqual(grouped[0]['updatedThrough'], '2026-09-13T17:00Z')
         self.assertEqual([w['week'] for w in grouped[0]['weeks']], ['1', '2'])
         self.assertEqual(grouped[0]['summary']['marginMiss'], round((2 + 6 + 2) / 3, 2))
 

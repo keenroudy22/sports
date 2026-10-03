@@ -28,3 +28,11 @@ test('Underdog Watch stays visible and separates outright winners from spread co
   assert.match(source, /\$\{underdogWatch\(now, board\)\}/,
     'the Today page renders the permanent section without a qualifying-candidate conditional');
 });
+
+test('Today keeps the season scorecard above the research counter', () => {
+  const source = fs.readFileSync('site/app.js', 'utf8');
+  const today = source.slice(source.indexOf('async function viewToday()'), source.indexOf('const modelCard ='));
+  assert.ok(today.indexOf("section('Season scorecard · model accuracy'") > today.indexOf('transparent-record'));
+  assert.ok(today.indexOf("section('Season scorecard · model accuracy'") < today.indexOf('research-heading'));
+  assert.equal((today.match(/scorecardCard\(/g) || []).length, 1, 'Today renders one prominent scorecard');
+});

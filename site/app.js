@@ -231,8 +231,10 @@
     const rate = row => row[0] + row[1] ? `${Math.round(100 * row[0] / (row[0] + row[1]))}% hit` : 'No results yet';
     const tile = (label, row, note) => `<div class="scorecard-item"><span class="scorecard-label">${esc(label)}</span>
       <strong class="num">${record(row)}</strong><span class="scorecard-rate">${rate(row)}</span><small>${esc(note)}</small></div>`;
+    const coverage = [state.league === 'ALL' ? '' : leagueName(dataLeague()), score.games ? `${score.games} graded games` : '',
+      score.updatedThrough ? `through ${dayLabel(score.updatedThrough)}` : ''].filter(Boolean).join(' · ');
     return `<div class="card scorecard-card"><div class="scorecard-head"><div><p class="eyebrow">Season scorecard</p>
-      <p>Final pregame calls${state.league === 'ALL' ? '' : ` · ${esc(leagueName(dataLeague()))}`}</p></div><a href="#model">Full scoreboard →</a></div>
+      <p>Final pregame calls${coverage ? ` · ${esc(coverage)}` : ''}</p></div><a href="#model">Full scoreboard →</a></div>
       <div class="scorecard-grid">${tile('Spread', score.spread, 'vs closing spread')}${tile('Moneyline', score.moneyline, 'projected winners')}
         ${tile('Totals', score.total, 'vs closing total')}${tile('Player props', score.props, score.propsNote)}${tile('Parlays', score.parlays, 'published fun tickets')}</div>
       <p class="scorecard-foot">Model accuracy for the first four. Parlays are posted tickets at smaller stakes. No profit is implied without captured prices.</p></div>`;
@@ -529,6 +531,7 @@
           ${stat('Historical / assumed', wl(results.assumed), 'kept apart from captured returns')}</div>
         <p class="row-meta">${results.credits ? `${unitText(results.credits)} in promotional stake credits shown separately. ` : ''}Parlays and the Climb have their own records. <a href="#model">Model accuracy, not wagers →</a></p>
       </div>
+      ${section('Season scorecard · model accuracy', scorecardCard(scoreboard || {}, data.picks))}
       <div class="two-col"><div>
         <div class="research-heading"><p class="eyebrow">The research counter</p><h2>Explore the numbers</h2><p>These are model reads, not additional official plays. The price and the uncertainty matter as much as the projection.</p></div>
         ${underdogWatch(now, board)}
@@ -545,7 +548,6 @@
           : empty('No model calls yet', 'The model publishes after the hosted refresh runs. Every game still shows the market number.'), '<a href="#games">All games →</a>')}
       </div><div>
         ${communityCard(true)}
-        ${section('Model accuracy · not posted bets', scorecardCard(scoreboard || {}, data.picks))}
         ${section('Data freshness', freshnessCard(data))}
         <nav class="discovery" aria-label="Explore Kook'n"><a href="#scores/MLB"><b>Scores</b><small>7 leagues</small></a><a href="#lab"><b>Kook'n Lab</b><small>What is being tested</small></a><a href="#arbs"><b>Arb Radar</b><small>Calculator and rules</small></a></nav>
       </div></div>`;

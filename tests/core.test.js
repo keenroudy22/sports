@@ -444,8 +444,8 @@ test('one record: the straight plays in wins and losses and units, the side reco
 test('the simple scorecard combines final model calls and keeps published parlays separate', () => {
   const board = {
     live: [
-      { league: 'NFL', model: 'v2.0', season: 2026, summary: { side: [5, 3, 1], winner: [6, 2, 0], ou: [4, 4, 0] } },
-      { league: 'CFB', model: 'v2.0', season: 2026, summary: { side: [7, 5, 0], winner: [10, 2, 0], ou: [8, 4, 1] } },
+      { league: 'NFL', model: 'v2.0', season: 2026, updatedThrough: '2026-10-02T00:15Z', summary: { games: 9, side: [5, 3, 1], winner: [6, 2, 0], ou: [4, 4, 0] } },
+      { league: 'CFB', model: 'v2.0', season: 2026, updatedThrough: '2026-10-03T00:00Z', summary: { games: 12, side: [7, 5, 0], winner: [10, 2, 0], ou: [8, 4, 1] } },
       { league: 'NFL', model: 'v2.0', season: 2025, summary: { side: [50, 0, 0], winner: [50, 0, 0], ou: [50, 0, 0] } },
       { league: 'NFL', model: 'v1', summary: { side: [99, 0, 0], winner: [99, 0, 0], ou: [99, 0, 0] } },
     ],
@@ -462,7 +462,10 @@ test('the simple scorecard combines final model calls and keeps published parlay
   assert.deepEqual(all.total, [12, 8, 1]);
   assert.deepEqual(all.props, [7, 3, 1]);
   assert.deepEqual(all.parlays, [1, 1, 0], 'the ladder stays out of the fun-ticket result');
-  assert.deepEqual(C.projectionScorecard(board, picks, 'NFL').spread, [5, 3, 1]);
+  assert.deepEqual([all.games, all.updatedThrough], [21, '2026-10-03T00:00Z']);
+  const nfl = C.projectionScorecard(board, picks, 'NFL');
+  assert.deepEqual(nfl.spread, [5, 3, 1]);
+  assert.deepEqual([nfl.games, nfl.updatedThrough], [9, '2026-10-02T00:15Z']);
   assert.deepEqual(C.projectionScorecard(board, picks, 'CFB').props, [0, 0, 0], 'an NFL-only prop comparison never appears under College');
 });
 

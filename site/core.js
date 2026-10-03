@@ -392,9 +392,12 @@
     const props = league === 'CFB' ? [0, 0, 0] : addRecords(propMarkets.map(row => row.record));
     const tickets = summarizePicks((picks || []).filter(p => (league === 'ALL' || p.league === league)
       && p.kind === 'parlays' && !isLadder(p)), 10);
+    const updated = live.map(row => row.updatedThrough).filter(Boolean).sort();
     return {
       spread: modelRecord('side'), moneyline: modelRecord('winner'), total: modelRecord('ou'),
       props, parlays: [tickets.wins, tickets.losses, tickets.pushes],
+      games: live.reduce((sum, row) => sum + Number((row.summary || {}).games || 0), 0),
+      updatedThrough: updated.at(-1) || (board || {}).updatedThrough || null,
       /* The projection scoreboard's captured player-line comparison is NFL-only today. */
       propsNote: league === 'CFB' ? 'not graded here yet' : 'vs captured line',
     };
