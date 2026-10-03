@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-03T20:00:24Z",
+  "updatedAt": "2026-10-03T21:40:16Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,8 +472,26 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-10-03T19:58Z",
+              "reportedAt": "2026-10-03T21:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
+            },
+            {
+              "id": "3042738",
+              "name": "Ethan Pocic",
+              "position": "C",
+              "status": "Injured Reserve",
+              "injury": "Knee",
+              "reportedAt": "2026-10-03T20:11Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3042738/ethan-pocic"
+            },
+            {
+              "id": "4362845",
+              "name": "Jovaughn Gwyn",
+              "position": "G",
+              "status": "Injured Reserve",
+              "injury": "Lower Leg",
+              "reportedAt": "2026-10-03T20:11Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4362845/jovaughn-gwyn"
             },
             {
               "id": "2980153",
@@ -539,15 +557,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/3916387/lamar-jackson"
             },
             {
-              "id": "4362845",
-              "name": "Jovaughn Gwyn",
-              "position": "G",
-              "status": "Out",
-              "injury": "Lower Leg",
-              "reportedAt": "2026-10-01T00:39Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4362845/jovaughn-gwyn"
-            },
-            {
               "id": "3915189",
               "name": "Roquan Smith",
               "position": "LB",
@@ -564,15 +573,6 @@
               "injury": null,
               "reportedAt": "2026-09-29T01:04Z",
               "source": "https://www.espn.com/nfl/player/_/id/3116365/mark-andrews"
-            },
-            {
-              "id": "3042738",
-              "name": "Ethan Pocic",
-              "position": "C",
-              "status": "Out",
-              "injury": "Knee",
-              "reportedAt": "2026-09-29T01:00Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3042738/ethan-pocic"
             },
             {
               "id": "4035463",
@@ -927,11 +927,20 @@
           "name": "Carolina Panthers",
           "players": [
             {
+              "id": "4430034",
+              "name": "Xavier Legette",
+              "position": "WR",
+              "status": "Injured Reserve",
+              "injury": "Knee",
+              "reportedAt": "2026-10-03T20:15Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4430034/xavier-legette"
+            },
+            {
               "id": "4870694",
               "name": "Monroe Freeling",
               "position": "OT",
-              "status": "Questionable",
-              "injury": "Concussion",
+              "status": "Active",
+              "injury": null,
               "reportedAt": "2026-10-03T01:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/4870694/monroe-freeling"
             },
@@ -943,15 +952,6 @@
               "injury": "Elbow",
               "reportedAt": "2026-10-03T00:58Z",
               "source": "https://www.espn.com/nfl/player/_/id/4362647/damien-lewis"
-            },
-            {
-              "id": "4430034",
-              "name": "Xavier Legette",
-              "position": "WR",
-              "status": "Out",
-              "injury": "Knee",
-              "reportedAt": "2026-10-02T16:46Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4430034/xavier-legette"
             },
             {
               "id": "4695883",
@@ -1160,16 +1160,16 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-03T19:36Z",
+              "reportedAt": "2026-10-03T21:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
               "id": "4251007",
               "name": "Braxton Jones",
               "position": "OT",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Knee",
               "reportedAt": "2026-10-03T01:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/4251007/braxton-jones"
@@ -4837,6 +4837,15 @@
           "name": "New England Patriots",
           "players": [
             {
+              "id": "4688779",
+              "name": "Channing Canada",
+              "position": "CB",
+              "status": "Out",
+              "injury": "Hamstring",
+              "reportedAt": "2026-10-03T20:54Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4688779/channing-canada"
+            },
+            {
               "id": "4245273",
               "name": "Christian Elliss",
               "position": "LB",
@@ -4907,15 +4916,6 @@
               "injury": null,
               "reportedAt": "2026-10-02T19:08Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431452/drake-maye"
-            },
-            {
-              "id": "4688779",
-              "name": "Channing Canada",
-              "position": "CB",
-              "status": "Questionable",
-              "injury": "Hamstring",
-              "reportedAt": "2026-10-01T20:44Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4688779/channing-canada"
             },
             {
               "id": "16771",
@@ -5757,6 +5757,15 @@
           "name": "Philadelphia Eagles",
           "players": [
             {
+              "id": "15835",
+              "name": "Zach Ertz",
+              "position": "TE",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-03T20:09Z",
+              "source": "https://www.espn.com/nfl/player/_/id/15835/zach-ertz"
+            },
+            {
               "id": "3915106",
               "name": "Fred Johnson",
               "position": "OT",
@@ -5881,15 +5890,6 @@
               "injury": null,
               "reportedAt": "2026-09-30T23:33Z",
               "source": "https://www.espn.com/nfl/player/_/id/4879250/cole-payton"
-            },
-            {
-              "id": "15835",
-              "name": "Zach Ertz",
-              "position": "TE",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-30T00:30Z",
-              "source": "https://www.espn.com/nfl/player/_/id/15835/zach-ertz"
             },
             {
               "id": "4218312",
@@ -6452,7 +6452,7 @@
               "position": "RB",
               "status": "Injured Reserve",
               "injury": "Chest",
-              "reportedAt": "2026-10-03T19:58Z",
+              "reportedAt": "2026-10-03T20:02Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685512/jadarian-price"
             },
             {
@@ -7366,62 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "27",
-          "name": "Keionte Scott",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-02T20:57:10Z",
-          "source": "https://www.espn.com/nfl/player/_/id/5093694/keionte-scott"
-        },
-        {
-          "teamId": "27",
-          "name": "Yaya Diaby",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-02T20:57:10Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4686334/yaya-diaby"
-        },
-        {
-          "teamId": "10",
-          "name": "John Franklin-Myers",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-02T20:57:10Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3120464/john-franklin-myers"
-        },
-        {
-          "teamId": "3",
-          "name": "Anthony Johnson Jr.",
-          "from": "Injured Reserve",
-          "to": "Out",
-          "observedAt": "2026-10-02T21:30:45Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
-        },
-        {
-          "teamId": "8",
-          "name": "Ben Bartch",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-10-02T21:30:45Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4611506/ben-bartch"
-        },
-        {
-          "teamId": "14",
-          "name": "Terrance Ferguson",
-          "from": "Out",
-          "to": "Injured Reserve",
-          "observedAt": "2026-10-02T21:30:45Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4570037/terrance-ferguson"
-        },
-        {
-          "teamId": "19",
-          "name": "Tyler Nubin",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-02T21:30:45Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4430261/tyler-nubin"
-        },
-        {
           "teamId": "19",
           "name": "Deonte Banks",
           "from": "Questionable",
@@ -7764,11 +7708,67 @@
           "to": "Injured Reserve",
           "observedAt": "2026-10-03T20:00:24Z",
           "source": "https://www.espn.com/nfl/player/_/id/4685512/jadarian-price"
+        },
+        {
+          "teamId": "33",
+          "name": "Ethan Pocic",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-03T21:40:16Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3042738/ethan-pocic"
+        },
+        {
+          "teamId": "33",
+          "name": "Jovaughn Gwyn",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-03T21:40:16Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4362845/jovaughn-gwyn"
+        },
+        {
+          "teamId": "29",
+          "name": "Xavier Legette",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-03T21:40:16Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4430034/xavier-legette"
+        },
+        {
+          "teamId": "29",
+          "name": "Monroe Freeling",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-03T21:40:16Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4870694/monroe-freeling"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-03T21:40:16Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Braxton Jones",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-03T21:40:16Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4251007/braxton-jones"
+        },
+        {
+          "teamId": "17",
+          "name": "Channing Canada",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-03T21:40:16Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4688779/channing-canada"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-03T20:00:24Z",
-      "lastAttemptAt": "2026-10-03T20:00:24Z",
+      "checkedAt": "2026-10-03T21:40:16Z",
+      "lastAttemptAt": "2026-10-03T21:40:16Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-03T20:00:24Z",
-      "lastAttemptAt": "2026-10-03T20:00:24Z",
+      "checkedAt": "2026-10-03T21:40:16Z",
+      "lastAttemptAt": "2026-10-03T21:40:16Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
