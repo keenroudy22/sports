@@ -1,15 +1,15 @@
 {
- "at": "2026-10-03T14:56:16Z",
+ "at": "2026-10-03T15:04:01Z",
  "confirmed": {
   "CFB-401856705": "2026-10-03T14:56:16Z",
-  "CFB-401856707": "2026-10-03T14:56:16Z",
+  "CFB-401856707": "2026-10-03T15:04:01Z",
   "CFB-401856708": "2026-10-03T14:56:16Z",
   "CFB-401856709": "2026-10-03T14:20:16Z",
   "CFB-401856710": "2026-10-03T14:56:16Z",
-  "CFB-401856807": "2026-10-03T14:56:16Z",
-  "CFB-401856819": "2026-10-03T14:56:16Z",
-  "CFB-401856822": "2026-10-03T14:56:16Z",
-  "CFB-401858246": "2026-10-03T14:56:16Z",
+  "CFB-401856807": "2026-10-03T15:04:01Z",
+  "CFB-401856819": "2026-10-03T15:04:01Z",
+  "CFB-401856822": "2026-10-03T15:04:01Z",
+  "CFB-401858246": "2026-10-03T15:04:01Z",
   "CFB-401858247": "2026-10-03T14:56:16Z",
   "CFB-401858248": "2026-10-03T14:56:16Z",
   "CFB-401858250": "2026-10-03T14:56:16Z",
@@ -21,7 +21,6 @@
   "CFB-401858474": "2026-10-03T14:56:16Z",
   "CFB-401858475": "2026-10-03T14:20:16Z",
   "CFB-401858479": "2026-10-03T14:56:16Z",
-  "CFB-401862787": "2026-10-03T13:42:01Z",
   "CFB-401862791": "2026-10-03T14:56:16Z",
   "CFB-401864515": "2026-10-03T14:56:16Z",
   "CFB-401866432": "2026-10-03T14:56:16Z",
@@ -30,30 +29,29 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 5097,
-    "fanduel": 3369
+    "draftkings": 1549,
+    "fanduel": 825
    },
    "eventsListed": 66,
-   "eventsMatched": 53,
-   "games": 54,
+   "eventsMatched": 52,
+   "games": 53,
    "marketTypes": {
-    "player_longest_passing_completion": 31,
-    "player_longest_reception": 123,
-    "player_longest_rush": 62,
-    "player_passing_+_rushing_yards": 417,
-    "player_passing_attempts": 190,
-    "player_passing_completions": 149,
-    "player_passing_touchdowns": 255,
-    "player_passing_yards": 1104,
-    "player_receiving_yards": 3035,
-    "player_receptions": 545,
-    "player_rushing_attempts": 200,
-    "player_rushing_yards": 2355
+    "player_longest_passing_completion": 10,
+    "player_longest_reception": 38,
+    "player_longest_rush": 20,
+    "player_passing_+_rushing_yards": 164,
+    "player_passing_attempts": 63,
+    "player_passing_completions": 51,
+    "player_passing_touchdowns": 70,
+    "player_passing_yards": 308,
+    "player_receiving_yards": 835,
+    "player_receptions": 153,
+    "player_rushing_attempts": 71,
+    "player_rushing_yards": 591
    },
    "requestsLeft": 0,
-   "rows": 8466,
+   "rows": 2374,
    "slateGames": [
-    "Memphis Tigers at Charlotte 49ers 2026-10-03T15:00Z",
     "Alabama Crimson Tide at Mississippi State Bulldogs 2026-10-03T16:00Z",
     "Middle Tennessee Blue Raiders at Kansas Jayhawks 2026-10-03T16:00Z",
     "UCF Knights at Houston Cougars 2026-10-03T16:00Z",
@@ -110,9 +108,67 @@
    ],
    "unmatchedEvents": [
     {
+     "away": "Memphis",
+     "external": {
+      "ballybet": "1027508113",
+      "bet365 us": "201985951",
+      "betmgm": "6:45358",
+      "betonline": "491139833",
+      "betparx": "1027508113",
+      "betrivers": "1027508113",
+      "betway": "17283457",
+      "bwin": "6:45358",
+      "caesars": "4f0c5d63-ac9f-483d-a942-13d2510903a0",
+      "circa": "216367",
+      "coral": "cor-46473391",
+      "draftkings": "34708282",
+      "fanatics": "5216823",
+      "fanatics_markets": "6046421",
+      "fanduel": "36112709",
+      "fliff": "416271_c_p_209_prematch",
+      "gemini": "NCAAF-2610031930-MEM-CLT-T",
+      "goldrush": "31057404",
+      "hardrock": "1001192368273228176",
+      "kalshi": "KXNCAAF1H-26OCT03MEMCHAR",
+      "ladbrokes": "ebcb0524-e3e6-4b31-9698-187629e9c6aa",
+      "ladbrokes_uk": "lduk-258811534",
+      "matchbook": "mb-34460457672900081",
+      "novig": "01a0da25-efab-71a2-bff5-f1a57b757f4e",
+      "onexbet": "757883661",
+      "pinnacle": "1637330309",
+      "polymarket": "nfl_charlotte_memphistigers_2026-10-03_b1",
+      "prophetx": "1700082106",
+      "rebet": "sr:match:70898728",
+      "robinhood": "83060dce-c464-49f6-b6f6-7083d97777a5",
+      "saba": "135175528",
+      "smarkets": "45334450",
+      "sportzino": "sz-17861529",
+      "sx_bet": "L20331711",
+      "thescorebet": "StandardEvent:b250a82a-ac8c-412d-8adb-643c961f3673",
+      "underdog": "underdog_226501"
+     },
+     "home": "Charlotte",
+     "sample": {
+      "away_team": "Memphis",
+      "home_team": "Charlotte",
+      "markets": [
+       "1st_half_moneyline",
+       "1st_half_point_spread",
+       "1st_half_total_points",
+       "moneyline",
+       "point_spread",
+       "team_total",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-03T19:30:00Z",
+     "type": "fixture"
+    },
+    {
      "away": "San Jose State",
      "external": {
       "ballybet": "1027508085",
+      "betfair_lay": "202610034F3864C5",
       "betparx": "1027508085",
       "betrivers": "1027508085",
       "betway": "17283584",
@@ -184,6 +240,7 @@
     {
      "away": "Southern Miss",
      "external": {
+      "betfair_lay": "202610062198A91B",
       "draftkings": "34745765",
       "fanduel": "36130008",
       "fliff": "416774_c_p_209_prematch",
@@ -436,31 +493,6 @@
      },
      "start": "2026-10-10T19:30:00Z",
      "type": "fixture"
-    },
-    {
-     "away": "LSU",
-     "external": {
-      "ballybet": "1027508199",
-      "draftkings": "34746039",
-      "fliff": "417032_c_p_209_prematch",
-      "kalshi": "KXNCAAF1H-26OCT10LSUUK",
-      "novig": "01a0fedb-b035-7dd0-b62b-57329bf392e5",
-      "polymarket": "nfl_kentuckywildcats_lsutigers_2026-10-10_b3",
-      "robinhood": "7d5b0aa1-92d9-48d9-831d-1838f10a7ce6"
-     },
-     "home": "Kentucky",
-     "sample": {
-      "away_team": "LSU",
-      "home_team": "Kentucky",
-      "markets": [
-       "1st_half_moneyline",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-10T23:00:00Z",
-     "type": "fixture"
     }
    ]
   },
@@ -511,6 +543,8 @@
       "ballybet": "1028812993",
       "bet365 us": "201714847",
       "betano": "bn-89035742",
+      "betfair": "20261006D7016360",
+      "betfair_lay": "20261006D7016360",
       "betmgm": "6:43529",
       "betonline": "491136023",
       "betparx": "1028812993",
@@ -693,6 +727,7 @@
      "away": "Philadelphia Eagles",
      "external": {
       "ballybet": "1028813030",
+      "betonline": "491141343",
       "betparx": "1028813030",
       "betrivers": "1028813030",
       "draftkings": "34118254",
@@ -788,6 +823,7 @@
      "away": "Cleveland Browns",
      "external": {
       "ballybet": "1028813035",
+      "betonline": "491141346",
       "betparx": "1028813035",
       "betrivers": "1028813035",
       "fanduel": "36132642",
@@ -797,6 +833,7 @@
       "paddypower": "36132642",
       "rebet": "sr:match:71515880",
       "robinhood": "005b6407-c2ee-443d-ad20-7870ca566937",
+      "stake": "fe39230e-dc1d-47c8-97a5-89feac12bd4d",
       "sx_bet": "L19431504"
      },
      "home": "New York Jets",
@@ -817,6 +854,7 @@
      "away": "Indianapolis Colts",
      "external": {
       "ballybet": "1028813032",
+      "betonline": "491141345",
       "betparx": "1028813032",
       "betrivers": "1028813032",
       "fanduel": "36132643",
