@@ -1,16 +1,16 @@
 {
- "at": "2026-10-03T19:15:36Z",
+ "at": "2026-10-03T19:19:25Z",
  "confirmed": {
   "CFB-401856708": "2026-10-03T18:42:16Z",
   "CFB-401856709": "2026-10-03T18:42:16Z",
-  "CFB-401856710": "2026-10-03T19:15:36Z",
+  "CFB-401856710": "2026-10-03T19:19:25Z",
   "CFB-401856711": "2026-10-03T18:42:16Z",
   "CFB-401856818": "2026-10-03T18:42:16Z",
   "CFB-401856821": "2026-10-03T18:42:16Z",
-  "CFB-401858247": "2026-10-03T19:15:36Z",
-  "CFB-401858248": "2026-10-03T19:15:36Z",
+  "CFB-401858247": "2026-10-03T19:19:25Z",
+  "CFB-401858248": "2026-10-03T19:19:25Z",
   "CFB-401858249": "2026-10-03T18:42:16Z",
-  "CFB-401858253": "2026-10-03T19:15:36Z",
+  "CFB-401858253": "2026-10-03T19:19:25Z",
   "CFB-401858472": "2026-10-03T18:42:16Z",
   "CFB-401858473": "2026-10-03T19:15:36Z",
   "CFB-401858475": "2026-10-03T18:42:16Z",
@@ -24,28 +24,28 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1485,
-    "fanduel": 881
+    "draftkings": 1285,
+    "fanduel": 855
    },
    "eventsListed": 44,
-   "eventsMatched": 38,
+   "eventsMatched": 37,
    "games": 39,
    "marketTypes": {
-    "player_longest_passing_completion": 10,
-    "player_longest_reception": 38,
-    "player_longest_rush": 21,
+    "player_longest_passing_completion": 8,
+    "player_longest_reception": 27,
+    "player_longest_rush": 16,
     "player_passing_+_rushing_yards": 140,
-    "player_passing_attempts": 60,
-    "player_passing_completions": 43,
-    "player_passing_touchdowns": 68,
-    "player_passing_yards": 326,
-    "player_receiving_yards": 875,
-    "player_receptions": 143,
+    "player_passing_attempts": 46,
+    "player_passing_completions": 30,
+    "player_passing_touchdowns": 62,
+    "player_passing_yards": 285,
+    "player_receiving_yards": 780,
+    "player_receptions": 125,
     "player_rushing_attempts": 54,
-    "player_rushing_yards": 588
+    "player_rushing_yards": 567
    },
    "requestsLeft": 0,
-   "rows": 2366,
+   "rows": 2140,
    "slateGames": [
     "Auburn Tigers at Tennessee Volunteers 2026-10-03T19:30Z",
     "California Golden Bears at UNLV Rebels 2026-10-03T19:30Z",
@@ -291,6 +291,24 @@
      },
      "start": "2026-10-10T19:30:00Z",
      "type": "fixture"
+    },
+    {
+     "away": "Michigan",
+     "external": {
+      "fanduel": "36112240"
+     },
+     "home": "Minnesota",
+     "sample": {
+      "away_team": "Michigan",
+      "home_team": "Minnesota",
+      "markets": [
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-03T15:59:00Z",
+     "type": "fixture"
     }
    ]
   },
@@ -332,7 +350,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-03T19:16:00Z",
+     "start": "2026-10-03T19:18:00Z",
      "type": "outright"
     },
     {
