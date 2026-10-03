@@ -37,6 +37,13 @@ test('Today keeps the season scorecard above the research counter', () => {
   assert.equal((today.match(/scorecardCard\(/g) || []).length, 1, 'Today renders one prominent scorecard');
 });
 
+test('the Climb shows a cashed rung, the next step state and past lines in a dropdown', () => {
+  const source = fs.readFileSync('site/app.js', 'utf8');
+  assert.match(source, /cashed · Step \$\{L\.step\} is being checked · not posted yet/);
+  assert.match(source, /<details class="ladder-history"><summary>Past steps/);
+  assert.match(source, /map\(l => l\.title\).*join\(' · '\)/);
+});
+
 test('the Lab tracks season futures without presenting a public play', () => {
   const source = fs.readFileSync('site/app.js', 'utf8');
   const lab = source.slice(source.indexOf('async function viewLab()'), source.indexOf('function viewArbs()'));

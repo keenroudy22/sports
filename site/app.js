@@ -251,36 +251,47 @@
       <div class="community-actions"><a class="btn btn-primary" href="https://discord.gg/CvNTUUSnNz" target="_blank" rel="noopener">Join the free Discord ↗</a><a class="btn" href="#record">See every result</a></div></div>
     <div class="community-proof" aria-label="What the community gets"><span><b>Early</b><small>official plays</small></span><span><b>Fast</b><small>arb alerts</small></span><span><b>Public</b><small>win-or-lose record</small></span></div>
   </aside>`;
-  /* The ladder in one line near the top, so a phone sees its schedule and bankroll before the ordinary card. */
+  const ladderStatus = L => {
+    const open = L.open, info = (open && open.ladder) || {}, last = L.history[L.history.length - 1];
+    if (open) return `Step ${info.step || L.step} is live`;
+    if (last && last.result === 'win') return `Step ${(last.ladder || {}).step || L.step - 1} cashed · Step ${L.step} is being checked · not posted yet`;
+    if (last && last.result === 'loss') return `The last climb ended · Step 1 is being checked · not posted yet`;
+    return L.history.length ? `Step ${L.step} is being checked · not posted yet` : 'The first rung waits for two clean games';
+  };
+  const ladderRows = (L, limit = 8) => L.history.slice().reverse().slice(0, limit).map(r => {
+    const info = r.ladder || {}, paid = r.result === 'win' ? money(info.payout) : r.result === 'loss' ? '$0' : money(info.stake);
+    return `<button class="row" type="button" data-pick="${esc(r.id)}">
+      <span class="row-main"><span class="row-top"><span class="row-name">${MARKS[r.result] || '•'} Step ${esc(info.step || '')}</span><span class="row-meta">${esc(whenShort(r.kickoff || r.publishedAt))}</span></span>
+      <span class="row-meta ladder-lines">${esc((r.legs || []).map(l => l.title).filter(Boolean).join(' · '))}</span></span>
+      <span class="row-price"><span class="row-odds num ${r.result === 'win' ? 'up' : r.result === 'loss' ? 'down' : ''}">${esc(money(info.stake))} → ${esc(paid)}</span><span class="row-book">${r.result === 'win' ? `bank +${esc(money(rungMoney(info).bankThisWin))}` : `${esc(r.book || '')} ${esc(odds(r.odds))}`}</span></span></button>`;
+  }).join('');
+  const ladderHistory = L => {
+    const rows = ladderRows(L);
+    return rows ? `<details class="ladder-history"><summary>Past steps <span>${L.history.length}</span></summary><div class="rows ladder-rows">${rows}</div></details>` : '';
+  };
+  /* The ladder in one compact block near the top, so a phone sees what cashed, what is next and the past lines. */
   const ladderStrip = L => {
     const open = L.open, info = (open && open.ladder) || {};
     const riding = Number(open ? info.stake : L.stake), banked = Number(open ? info.banked : L.banked) || 0;
-    const text = open ? `Step ${info.step || 1}: ${money(riding)} riding · ${money(banked)} banked`
-      : L.history.length ? `Step ${L.step} next · not scheduled yet · ${money(banked)} banked` : 'The first rung goes up when two clean games qualify';
+    const text = `${ladderStatus(L)} · ${money(banked)} banked`;
     const after = open ? Number(info.totalAfter) || banked + Number(info.payout || 0) : banked + riding;
-    return `<a class="record-strip ladder-strip" href="#record"><span class="eyebrow">🪜 80/20 Climb · climb ${esc(L.run)}</span>
+    return `<div class="record-strip ladder-strip"><span class="eyebrow">🪜 80/20 Climb · climb ${esc(L.run)}</span>
       <span class="num record-big ladder-big">${money(riding)}</span><span class="record-note">${esc(text)}</span>
-      <span class="ladder-bar">${ladderBar(banked + riding, after)}</span></a>`;
+      <span class="ladder-bar">${ladderBar(banked + riding, after)}</span>${ladderHistory(L)}</div>`;
   };
   /* The Kook'n 80/20 Climb (C.theLadder): where the bankroll ladder stands, its bank, and the rungs played so far. */
   const ladderCard = L => {
     const open = L.open, info = (open && open.ladder) || {};
     const riding = Number(open ? info.stake : L.stake), banked = Number(open ? info.banked : L.banked) || 0;
-    const status = open ? `Step ${info.step || 1} is live · ${money(banked)} banked`
-      : L.history.length ? `Step ${L.step} is next · not scheduled yet · ${money(banked)} banked` : 'The first rung waits for two clean games';
-    const paid = r => { const i = r.ladder || {}; return r.result === 'win' ? money(i.payout) : r.result === 'loss' ? '$0' : money(i.stake); };
-    const rows = L.history.slice().reverse().slice(0, 8).map(r => `<button class="row" type="button" data-pick="${esc(r.id)}">
-      <span class="row-main"><span class="row-top"><span class="row-name">${MARKS[r.result] || '•'} Step ${esc((r.ladder || {}).step || '')}</span><span class="row-meta">${esc(whenShort(r.kickoff || r.publishedAt))}</span></span>
-      <span class="row-meta clamp">${esc((r.legs || []).map(l => l.title).filter(Boolean).join(' · '))}</span></span>
-      <span class="row-price"><span class="row-odds num ${r.result === 'win' ? 'up' : r.result === 'loss' ? 'down' : ''}">${esc(money((r.ladder || {}).stake))} → ${esc(paid(r))}</span><span class="row-book">${r.result === 'win' ? `bank +${esc(money(rungMoney(r.ladder || {}).bankThisWin))}` : `${esc(r.book || '')} ${esc(odds(r.odds))}`}</span></span></button>`).join('');
+    const status = `${ladderStatus(L)} · ${money(banked)} banked`;
     const best = L.climbs.length ? Math.max(...L.climbs.map(c => c.final)) : null;
     return `<div class="card ladder-card">
       <div class="ladder-head"><span class="ladder-title">🪜 The Kook’n 80/20 Climb</span><span class="pill pill-ladder">Climb ${esc(L.run)}</span></div>
       <p class="ladder-pitch">Bank 20% of every winning return. Ride 80%. A miss cannot take the bank.</p>
       <div class="ladder-now-line"><b class="num">${money(riding)} riding</b><span>${esc(status)}</span></div>
       <span class="ladder-bar">${ladderBar(banked + riding, open ? Number(info.totalAfter) || banked + Number(info.payout || 0) : banked + riding)}</span>
-      ${rows ? `<div class="rows ladder-rows">${rows}</div>` : ''}
-      <p class="row-meta ladder-note">${L.climbs.length ? `Climbs finished: ${L.climbs.length}, best ${money(best)}. ` : ''}${L.saved ? `${money(L.saved)} has been banked across wins. ` : ''}Two easier player lines, one per game. Checked on game days; a step is scheduled only after both legs qualify. After a loss or a completed climb, the next qualifying ticket starts a new $50 climb. Previously banked money stays banked. Just for fun.</p>
+      ${ladderHistory(L)}
+      <p class="row-meta ladder-note">${L.climbs.length ? `Climbs finished: ${L.climbs.length}, best ${money(best)}. ` : ''}${L.saved ? `${money(L.saved)} has been banked across wins. ` : ''}Two protected lines, one per game. Checked on game days; a step is scheduled only after both legs qualify. After a loss or a completed climb, the next qualifying ticket starts a new $50 climb. Previously banked money stays banked. Just for fun.</p>
     </div>`;
   };
   const external = (url, label) => /^https:\/\//.test(url || '') ? `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)} ↗</a>` : '';
@@ -520,7 +531,7 @@
     const results = C.recordBreakdown(picks);
     return `${head("What's cooking", `${esc(todayLabel)} · ${todayGames.length} game${todayGames.length === 1 ? '' : 's'} today${state.league === 'ALL' ? '' : ` · ${esc(leagueName(state.league))}`}. Official plays first. Research is optional.`)}
       ${boardTabs('card')}
-      ${section('The 80/20 Climb', ladder.open ? `<div class="plays plays-ladder">${playCard(ladder.open)}</div>` : ladderStrip(ladder), '<a href="#record">Climb record →</a>')}
+      ${section('The 80/20 Climb', ladder.open ? `<div class="plays plays-ladder">${playCard(ladder.open)}</div>${ladderHistory(ladder)}` : ladderStrip(ladder), '<a href="#record">Climb record →</a>')}
       ${section("Today's official card", scheduled.today.length ? `<div class="plays">${scheduled.today.map(playCard).join('')}</div>`
         : empty('No qualifying play on the card today', 'A daily post does not mean a daily bet. We wait for a fresh price that clears the checks.'), '<a href="#record">Every result →</a>')}
       ${scheduled.upcoming.length ? `<details class="card upcoming-card"><summary>Upcoming official plays · ${scheduled.upcoming.length}<span>Separate from today’s card</span></summary><div class="plays">${scheduled.upcoming.map(playCard).join('')}</div></details>` : ''}

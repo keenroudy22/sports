@@ -145,6 +145,9 @@ Handy commands (from `~/Projects/sports`):
   final remains eligible for 24 hours and the 6:45 AM run queues it for 9:05 AM, so an overnight result cannot miss
   the story. If a text-only advancement was already queued before settlement, the run safely replaces that future
   Buffer item with the same words plus the live card. Never create a duplicate post or change the rung's record.
+  Today and Record must use that same ledger state: name the most recent winning step as cashed, call the next step
+  "being checked · not posted yet" until a real rung exists, and keep every completed rung's exact lines in a compact
+  Past steps dropdown. The phone view must show this before the ordinary card.
 - **Legibility first (2026-10-02):** the actual wager lines must be the dominant part of ticket graphics.
   Prefer large full-width leg panels and small branding over oversized mascots and tiny lists. Preserve all
   leg wording and prices; use real player/team art when available and rotate stable navy/mint/cyan treatments

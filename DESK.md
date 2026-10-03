@@ -34,6 +34,11 @@ publish twice. Exact manually supplied alternate spreads and totals keep their g
 from final scores; they do not wait for a person merely because they did not come from the normal feed builder. This
 adds no odds call, paid service or model use.
 
+The site reads the identical ledger state. After a win, the top Climb block says which step cashed and that the next
+step is being checked but is not posted yet; once a rung exists it says the step is live. A collapsed Past steps row
+keeps the exact completed lines, return and bank cut available on both Today and Record without making the phone page
+feel like a second results table.
+
 ### October 2 Discord simplification and Climb check-ins
 
 The owner approved one official Plays & Results feed, Start Here, general chat and Wins & Bad Beats. The
