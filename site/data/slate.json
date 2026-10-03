@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-03T14:51:24Z",
+  "updatedAt": "2026-10-03T14:55:20Z",
   "sources": [
     {
       "league": "NFL",
@@ -12,7 +12,7 @@
         "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=8&limit=1000",
         "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=2026&seasontype=2&week=9&limit=1000"
       ],
-      "retrievedAt": "2026-10-03T14:51:24Z",
+      "retrievedAt": "2026-10-03T14:55:20Z",
       "trainingCoverage": "season feed",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -94,7 +94,7 @@
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2026&seasontype=2&week=10&limit=1000&groups=37",
         "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2026&seasontype=2&week=10&limit=1000&groups=151"
       ],
-      "retrievedAt": "2026-10-03T14:51:24Z",
+      "retrievedAt": "2026-10-03T14:55:20Z",
       "trainingCoverage": "limited weekly provider sample",
       "fetchStatus": "ok",
       "fetchMethod": "verified season-week union"
@@ -102049,7 +102049,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401858250",
@@ -102664,7 +102664,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856707",
@@ -103275,7 +103275,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856819",
@@ -103318,27 +103318,17 @@
       "market": {
         "provider": "Draft Kings",
         "spread": "-10.5",
-        "spreadOdds": "-115",
+        "spreadOdds": "-110",
         "spreadOpen": "-12.5",
         "total": 50.5,
         "totalOpen": "o51.5",
-        "overOdds": "-118",
-        "underOdds": "-102",
+        "overOdds": "-112",
+        "underOdds": "-108",
         "homeML": "-425",
         "awayML": "+330",
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34708295"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "-12.5",
-          "spreadOdds": "-105",
-          "total": 51.5,
-          "overOdds": "-102",
-          "underOdds": "-118",
-          "retrievedAt": "2026-09-30T21:53:47Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "-11.5",
@@ -103880,9 +103870,21 @@
           "awayML": "+330",
           "retrievedAt": "2026-10-03T14:41:16Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "-10.5",
+          "spreadOdds": "-110",
+          "total": 50.5,
+          "overOdds": "-112",
+          "underOdds": "-108",
+          "homeML": "-425",
+          "awayML": "+330",
+          "retrievedAt": "2026-10-03T14:55:20Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401858246",
@@ -104491,7 +104493,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856807",
@@ -105098,7 +105100,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856822",
@@ -105709,7 +105711,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401858251",
@@ -106320,7 +106322,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401858252",
@@ -106365,25 +106367,15 @@
         "spread": "+6.5",
         "spreadOdds": "-105",
         "spreadOpen": "+6.5",
-        "total": 50.5,
+        "total": 51.5,
         "totalOpen": "o53.5",
-        "overOdds": "-112",
-        "underOdds": "-108",
+        "overOdds": "-105",
+        "underOdds": "-115",
         "homeML": "+215",
         "awayML": "-265",
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34708270"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "+6.5",
-          "spreadOdds": "-102",
-          "total": 50.5,
-          "overOdds": "-108",
-          "underOdds": "-112",
-          "retrievedAt": "2026-10-01T10:46:31Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "+6.5",
@@ -106927,9 +106919,21 @@
           "awayML": "-265",
           "retrievedAt": "2026-10-03T14:41:16Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "+6.5",
+          "spreadOdds": "-105",
+          "total": 51.5,
+          "overOdds": "-105",
+          "underOdds": "-115",
+          "homeML": "+215",
+          "awayML": "-265",
+          "retrievedAt": "2026-10-03T14:55:20Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401858474",
@@ -106976,23 +106980,13 @@
         "spreadOpen": "+8.5",
         "total": 41.5,
         "totalOpen": "o44.5",
-        "overOdds": "-115",
-        "underOdds": "-105",
+        "overOdds": "-110",
+        "underOdds": "-110",
         "homeML": "+200",
         "awayML": "-245",
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34708297"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "+5.5",
-          "spreadOdds": "-110",
-          "total": 43.5,
-          "overOdds": "-108",
-          "underOdds": "-112",
-          "retrievedAt": "2026-09-30T21:53:47Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "+5.5",
@@ -107538,9 +107532,21 @@
           "awayML": "-245",
           "retrievedAt": "2026-10-03T14:41:16Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "+6",
+          "spreadOdds": "-108",
+          "total": 41.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "homeML": "+200",
+          "awayML": "-245",
+          "retrievedAt": "2026-10-03T14:55:20Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401862791",
@@ -108157,7 +108163,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401858479",
@@ -108766,7 +108772,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856705",
@@ -109375,7 +109381,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401866432",
@@ -109986,7 +109992,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401866431",
@@ -110597,7 +110603,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401858473",
@@ -111204,7 +111210,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856708",
@@ -111811,7 +111817,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856710",
@@ -112420,7 +112426,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401858247",
@@ -113033,7 +113039,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401858248",
@@ -113642,7 +113648,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401858253",
@@ -114253,7 +114259,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401866430",
@@ -114862,7 +114868,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401866433",
@@ -115471,7 +115477,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401866434",
@@ -116078,7 +116084,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401866477",
@@ -116695,7 +116701,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401864515",
@@ -116744,21 +116750,11 @@
         "totalOpen": "o47.5",
         "overOdds": "-108",
         "underOdds": "-112",
-        "homeML": "-950",
-        "awayML": "+625",
+        "homeML": "-1000",
+        "awayML": "+650",
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34708316"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "-17.5",
-          "spreadOdds": "-112",
-          "total": 45.5,
-          "overOdds": "-112",
-          "underOdds": "-108",
-          "retrievedAt": "2026-10-01T13:36:02Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "-17.5",
@@ -117306,9 +117302,21 @@
           "awayML": "+625",
           "retrievedAt": "2026-10-03T14:41:16Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "-16.5",
+          "spreadOdds": "-112",
+          "total": 44.5,
+          "overOdds": "-108",
+          "underOdds": "-112",
+          "homeML": "-1000",
+          "awayML": "+650",
+          "retrievedAt": "2026-10-03T14:55:20Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401869956",
@@ -117915,7 +117923,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401862793",
@@ -118530,7 +118538,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401869962",
@@ -118572,28 +118580,18 @@
       },
       "market": {
         "provider": "Draft Kings",
-        "spread": "-17.5",
-        "spreadOdds": "-112",
+        "spread": "-16.5",
+        "spreadOdds": "-108",
         "spreadOpen": "-13.5",
         "total": 55.5,
         "totalOpen": "o55.5",
         "overOdds": "-110",
         "underOdds": "-110",
-        "homeML": "-1050",
-        "awayML": "+675",
+        "homeML": "-800",
+        "awayML": "+550",
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34708322"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "-19.5",
-          "spreadOdds": "-105",
-          "total": 56.5,
-          "overOdds": "-105",
-          "underOdds": "-115",
-          "retrievedAt": "2026-10-01T13:36:02Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "-18.5",
@@ -119141,9 +119139,21 @@
           "awayML": "+675",
           "retrievedAt": "2026-10-03T14:41:16Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "-16.5",
+          "spreadOdds": "-108",
+          "total": 55.5,
+          "overOdds": "-110",
+          "underOdds": "-110",
+          "homeML": "-800",
+          "awayML": "+550",
+          "retrievedAt": "2026-10-03T14:55:20Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401858475",
@@ -119750,7 +119760,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401864514",
@@ -119795,25 +119805,15 @@
         "spread": "-23.5",
         "spreadOdds": "-110",
         "spreadOpen": "-21",
-        "total": 47.5,
+        "total": 48.5,
         "totalOpen": "o53.5",
-        "overOdds": "-115",
-        "underOdds": "-105",
+        "overOdds": "-102",
+        "underOdds": "-118",
         "homeML": "-2400",
         "awayML": "+1200",
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34708317"
       },
       "marketHistory": [
-        {
-          "provider": "Draft Kings",
-          "spread": "-22.5",
-          "spreadOdds": "-112",
-          "total": 48.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-30T20:58:49Z",
-          "phase": "pregame"
-        },
         {
           "provider": "DraftKings",
           "spread": "-22.5",
@@ -120355,9 +120355,21 @@
           "awayML": "+1200",
           "retrievedAt": "2026-10-03T14:41:16Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "-23.5",
+          "spreadOdds": "-110",
+          "total": 48.5,
+          "overOdds": "-102",
+          "underOdds": "-118",
+          "homeML": "-2400",
+          "awayML": "+1200",
+          "retrievedAt": "2026-10-03T14:55:20Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401858472",
@@ -120966,7 +120978,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856709",
@@ -121575,7 +121587,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401860899",
@@ -122184,7 +122196,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401862790",
@@ -122226,8 +122238,8 @@
       },
       "market": {
         "provider": "Draft Kings",
-        "spread": "-44.5",
-        "spreadOdds": "-122",
+        "spread": "-45.5",
+        "spreadOdds": "-102",
         "spreadOpen": "-43.5",
         "total": 61.5,
         "totalOpen": "o60.5",
@@ -122238,16 +122250,6 @@
         "link": "https://sportsbook.draftkings.com/gateway?s=__s__&wpcid=__wpcid__&wpsrc=413&wpcn=ESPN&wpscn=Widget&wpcrn=BetSlipDeepLink&wpscid=__wpscid__&wpcrid=xx&preurl=https%3A%2F%2Fsportsbook.draftkings.com%2Fevent%2F34708326"
       },
       "marketHistory": [
-        {
-          "provider": "DraftKings",
-          "spread": "-43.5",
-          "spreadOdds": "-110",
-          "total": 60.5,
-          "overOdds": "-110",
-          "underOdds": "-110",
-          "retrievedAt": "2026-09-30T21:53:47Z",
-          "phase": "pregame"
-        },
         {
           "provider": "Draft Kings",
           "spread": "-43.5",
@@ -122791,9 +122793,21 @@
           "awayML": "OFF",
           "retrievedAt": "2026-10-03T14:41:16Z",
           "phase": "pregame"
+        },
+        {
+          "provider": "Draft Kings",
+          "spread": "-45.5",
+          "spreadOdds": "-102",
+          "total": 61.5,
+          "overOdds": "-118",
+          "underOdds": "-102",
+          "homeML": "OFF",
+          "awayML": "OFF",
+          "retrievedAt": "2026-10-03T14:55:20Z",
+          "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856818",
@@ -123404,7 +123418,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856711",
@@ -124011,7 +124025,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401869942",
@@ -124622,7 +124636,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401871089",
@@ -125229,7 +125243,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401862788",
@@ -125826,7 +125840,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401858249",
@@ -126437,7 +126451,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856821",
@@ -127046,7 +127060,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401858478",
@@ -127653,7 +127667,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401860898",
@@ -128264,7 +128278,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401869842",
@@ -128875,7 +128889,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401862792",
@@ -129488,7 +129502,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856706",
@@ -130100,7 +130114,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401858477",
@@ -130707,7 +130721,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401869932",
@@ -131318,7 +131332,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401860921",
@@ -131925,7 +131939,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856817",
@@ -132532,7 +132546,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401860900",
@@ -133139,7 +133153,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856820",
@@ -133752,7 +133766,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401864513",
@@ -134367,7 +134381,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872965",
@@ -134978,7 +134992,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872971",
@@ -135587,7 +135601,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872972",
@@ -136196,7 +136210,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872969",
@@ -136793,7 +136807,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872966",
@@ -137402,7 +137416,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872970",
@@ -138009,7 +138023,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872968",
@@ -138620,7 +138634,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872973",
@@ -139231,7 +139245,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872967",
@@ -139828,7 +139842,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872974",
@@ -140425,7 +140439,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872976",
@@ -141022,7 +141036,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872975",
@@ -141619,7 +141633,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872977",
@@ -142230,7 +142244,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872978",
@@ -142839,7 +142853,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872979",
@@ -143450,7 +143464,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401871090",
@@ -144049,7 +144063,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401871051",
@@ -144636,7 +144650,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401871066",
@@ -145428,7 +145442,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401858254",
@@ -146054,7 +146068,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401860922",
@@ -146719,7 +146733,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856714",
@@ -147306,7 +147320,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856716",
@@ -147893,7 +147907,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401862798",
@@ -148558,7 +148572,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856824",
@@ -149652,7 +149666,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401858480",
@@ -150298,7 +150312,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856718",
@@ -151353,7 +151367,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401864517",
@@ -152116,7 +152130,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401856712",
@@ -152723,7 +152737,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401864516",
@@ -153564,7 +153578,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872990",
@@ -154161,7 +154175,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872984",
@@ -154770,7 +154784,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872982",
@@ -155379,7 +155393,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872986",
@@ -155976,7 +155990,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872987",
@@ -156573,7 +156587,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872983",
@@ -157784,7 +157798,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872989",
@@ -158381,7 +158395,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872991",
@@ -158978,7 +158992,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872992",
@@ -159585,7 +159599,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872993",
@@ -160194,7 +160208,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "NFL-401872994",
@@ -160801,7 +160815,7 @@
           "phase": "pregame"
         }
       ],
-      "marketRetrievedAt": "2026-10-03T14:51:24Z"
+      "marketRetrievedAt": "2026-10-03T14:55:20Z"
     },
     {
       "id": "CFB-401871067",
