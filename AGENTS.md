@@ -128,6 +128,12 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Season futures are their own track (2026-10-03):** at the beginning of each covered sport's season, research
+  championship, conference/division, playoff qualification and season-total markets; add awards only with reliable
+  eligibility and settlement coverage. Preserve the first exact price, book, source, observation time and model
+  snapshot, then append every movement and final settlement. Paper watches do not count as daily plays and open
+  futures do not inflate the daily record. No scraping, paid call, invented price or automatic public future. The
+  staged rollout and promotion gates are in `docs/FUTURES.md`.
 - **Automatic Climb result graphics (2026-10-03):** every winning 80/20 Climb rung gets a dedicated 1080x1350
   advancement card; the goal-reaching rung gets the completion version. The ticket and result cards share one
   persistent path: completed steps have green checkmarks, the current/next step is outlined, future checkpoints are

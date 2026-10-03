@@ -36,3 +36,13 @@ test('Today keeps the season scorecard above the research counter', () => {
   assert.ok(today.indexOf("section('Season scorecard · model accuracy'") < today.indexOf('research-heading'));
   assert.equal((today.match(/scorecardCard\(/g) || []).length, 1, 'Today renders one prominent scorecard');
 });
+
+test('the Lab tracks season futures without presenting a public play', () => {
+  const source = fs.readFileSync('site/app.js', 'utf8');
+  const lab = source.slice(source.indexOf('async function viewLab()'), source.indexOf('function viewArbs()'));
+  assert.match(lab, /Season futures/);
+  assert.match(lab, />Planned</);
+  assert.match(lab, /Original price, book, date and every later move will be preserved/);
+  assert.match(lab, /Research watches stay separate from official plays/);
+  assert.doesNotMatch(lab, /official futures? (?:pick|play)/i);
+});

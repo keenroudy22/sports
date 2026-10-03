@@ -7,6 +7,15 @@ rules in words. When this file and the validator disagree, the validator wins.
 
 ## What runs
 
+### October 3 season-futures track
+
+Futures are now a separate item on the multi-sport roadmap. At each league's preseason opening window, the eventual
+tracker will preserve exact championship, conference/division, playoff and season-total prices with their book,
+source, observation time and model snapshot. Awards wait for reliable eligibility and settlement coverage. The
+first quote and every move are append-only, and final grading follows the listed book's rules rather than a guessed
+standings result. A paper watch is not an official play, an open future is not a pending daily play, and there is no
+new odds call or automated future yet. `docs/FUTURES.md` defines the rollout and public-promotion gates.
+
 ### October 3 automatic Climb results
 
 A winning 80/20 Climb rung now produces its own result card in the hosted build. The open ticket and its result use

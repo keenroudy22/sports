@@ -1360,6 +1360,9 @@
         <article class="lab-card card"><div class="lab-card-head"><h3>Touchdown scorers</h3><span class="pill pill-q">Opportunity only</span></div><p>Game pages rank verified red-zone and inside-the-10 work. There is no public TD probability or priced scorer pick until real prices can be tested.</p></article>
         <article class="lab-card card"><div class="lab-card-head"><h3>Alternate-line streaks</h3><span class="pill pill-reference">Waiting for prices</span></div><p>Main-line history is live. Alternate streak cards wait for verified alternate prices from the same market ladder.</p></article>
       </div>`)}
+      ${section('Across every season', `<div class="lab-grid">
+        <article class="lab-card card"><div class="lab-card-head"><h3>Season futures</h3><span class="pill pill-reference">Planned</span></div><p>Championship, division or conference, playoff and season-total markets will get their own preseason tracker as each sport is added.</p><p class="lab-progress">Original price, book, date and every later move will be preserved. Research watches stay separate from official plays.</p></article>
+      </div>`)}
       ${section('In the kitchen', `<div class="lab-grid">
         ${stage('NBA', 'NBA', 'Paper trial', 'pill-q', 'A tested totals model starts recording real available lines when the regular season opens. Nothing posts until the live paper record clears the price.')}
         ${stage('CBB', 'College basketball', 'Paper trial', 'pill-q', 'College totals begin their silent trial when November games start. The historical model alone was not good enough to publish.')}

@@ -31,6 +31,12 @@ paper trials at 11:45 AM, 5:30 PM and 11:30 PM Eastern. It adds no paid or meter
 
 ## Shared foundation
 
+Season futures are a separate preseason track across every supported sport. Championship, conference/division,
+playoff qualification and season-total markets begin with an append-only original-price ledger when each league's
+markets open; awards wait for reliable player eligibility and settlement coverage. Research watches never count as
+daily plays, and no future becomes official until its sport has a defensible season model, a verified exact price,
+complete settlement rules and owner approval. The detailed rollout is in `docs/FUTURES.md`.
+
 Player research now has a searchable directory at #players and separate #player/<league>/<athleteId> pages. It indexes only verified identities already present in gathered research, preserving separate market thresholds, game windows and source dates. Sourced identity snapshots add team names and colors without implying health or starter status. Picks remain short and link to those pages for graphs, logs, workload and line-history detail. NBA/MLB player research remains unavailable until its independent activation gates pass.
 
 The next implemented research layer adds exact-line Last 5/10/20, recorded-season, opponent and home/away comparisons, with average/median/sample and source game logs. A separate NFL defense panel shows individual same-position results from up to five prior regular-season games for the upcoming followed matchup. It distinguishes group totals from individual props and labels prior-season samples. These are descriptive views; predictions and official pick grades remain unchanged.
@@ -64,6 +70,9 @@ Recent-form charts must use the exact market and window. Show sample size and ro
 4. Validate sport-specific settlement and original-price preservation before publishing official picks or parlays. Keep cross-sport tickets disabled until rules and genuine combined book prices are supported.
 5. Retain NFL/CFB week filters, including Monday games and college Week 0; use dates and season filters for daily sports. Do not reuse football week numbering for NBA/MLB.
 6. Design later scheduled research around each sport's start times and lineup-release patterns. Scope runs to upcoming games and meaningful changes to control usage. The initial read-only data refresh uses the existing hosted workflow and adds no schedule.
+7. Add each league's futures opening window to the season calendar. Preserve the first verified quote and every
+   later movement, keep paper watches apart from official futures, and do not use a daily odds budget to poll a
+   months-long market.
 
 Acceptance: football records unchanged; stable player/event identities; no doubleheader collisions; injury/scratch and postponement rules tested; duplicate revisions cannot double-count; missing prices never produce invented ROI; original pregame predictions remain auditable.
 
