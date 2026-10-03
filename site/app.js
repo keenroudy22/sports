@@ -417,7 +417,7 @@
     const todayLabel = dayLabel(new Date().toISOString());
     const soonest = rows.slice().sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0];
     const day = rows.some(l => dayLabel(l.kickoff) === todayLabel) ? todayLabel : dayLabel(soonest.kickoff);
-    const onDay = rows.filter(l => dayLabel(l.kickoff) === day).sort(C.byGrade);
+    const onDay = C.rankConfidence(rows.filter(l => dayLabel(l.kickoff) === day).sort(C.byGrade));
     return { rows: onDay.slice(0, 6), games: onDay.filter(l => !l.athleteId).slice(0, 4), players: onDay.filter(l => l.athleteId).slice(0, 4),
       day: day === todayLabel ? null : day };
   };
@@ -453,12 +453,15 @@
   const currentUpset = game => game.upsetWatch && game.state === 'pre' && !game.completed &&
     Date.parse(game.kickoff) > Date.now() && Date.now() >= Date.parse(game.upsetWatch.observedAt) &&
     Date.now() - Date.parse(game.upsetWatch.observedAt) <= 4 * 3600000;
-  const upsetRow = game => {
+  const upsetRow = (game, rank = null) => {
     const w = game.upsetWatch;
-    return `<a class="row" href="#game/${esc(game.id)}"><span class="row-main"><span class="row-name">${esc(w.team)} · ${odds(w.odds)} ML</span>
+    const reasons = (w.reasons || []).slice(0, 4);
+    const warnings = w.warnings || [`Raw model estimate, not a calibrated value bet.${game.league === 'CFB' ? ' College schedule strength and changing roles can distort this.' : ''}`];
+    return `<a class="row upset-row" href="#game/${esc(game.id)}"><span class="row-main"><span class="row-top"><span class="row-name">${esc(w.team)} · ${odds(w.odds)} ML</span>${rank === 1 ? '<span class="pill pill-upset">Top upset signal</span>' : rank ? `<span class="pill pill-reference">#${rank} upset signal</span>` : ''}</span>
       <span class="row-market">Model ${C.pct(w.modelChance)} to win outright · market ${C.pct(w.marketChanceNoVig)} after removing the book’s margin</span>
+      ${reasons.length ? `<span class="upset-why"><b>Why it is highlighted</b>${reasons.map(reason => `<span>• ${esc(reason)}</span>`).join('')}</span>` : ''}
       <span class="row-meta">${esc(whenShort(game.kickoff))} · ${esc(w.book)} · opposing ML ${odds(w.opponentOdds)} · captured ${esc(ago(w.observedAt))}</span>
-      <span class="row-meta">Raw model estimate, not a calibrated value bet.${game.league === 'CFB' ? ' College schedule strength and changing roles can distort this.' : ''}</span></span></a>`;
+      <span class="row-meta upset-warning">${warnings.map(esc).join(' · ')}</span></span></a>`;
   };
   const underdogSpreads = board => {
     const rows = ((board || {}).lines || []).filter(inLeague).filter(line => {
@@ -468,16 +471,18 @@
     });
     if (!rows.length) return [];
     const nextDay = dayLabel(rows.slice().sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0].kickoff);
-    return rows.filter(line => dayLabel(line.kickoff) === nextDay).sort(C.byGrade).slice(0, 4);
+    return C.rankConfidence(rows.filter(line => dayLabel(line.kickoff) === nextDay).sort(C.byGrade)).slice(0, 4);
   };
   const underdogWatch = (games, board) => {
-    const outright = games.filter(currentUpset).slice(0, 4);
+    const outright = games.filter(currentUpset)
+      .sort((a, b) => ((b.upsetWatch.modelChance - b.upsetWatch.marketChanceNoVig) - (a.upsetWatch.modelChance - a.upsetWatch.marketChanceNoVig)))
+      .slice(0, 4);
     const spreads = underdogSpreads(board);
     const block = (title, note, body) => `<div class="card underdog-block"><div class="section-head"><div><p class="eyebrow">${esc(title)}</p><p class="row-meta">${esc(note)}</p></div></div>${body}</div>`;
     return section('Underdog Watch',
       `<p class="row-meta" style="margin:0 0 8px">Two different questions, kept separate: can the underdog win the game, and can it stay inside the spread?</p>` +
       block('Outright upset candidates', 'Raw winner disagreement. Moneyline research, not an official play.',
-        outright.length ? `<div class="rows">${outright.map(upsetRow).join('')}</div>` : empty('No fresh outright candidate', 'Both same-book moneylines and a current forecast are required. The watch stays here instead of silently disappearing.')) +
+        outright.length ? `<div class="rows">${outright.map((game, index) => upsetRow(game, index + 1)).join('')}</div>` : empty('No fresh outright candidate', 'Both same-book moneylines and a current forecast are required. The watch stays here instead of silently disappearing.')) +
       block('Underdog spread value', 'Price-tested cover reads. Covering does not mean winning outright.',
         spreads.length ? `<div class="rows">${spreads.map(lineRow).join('')}</div>` : empty('No priced underdog spread qualifies', 'A positive spread must clear the current price and model checks. Nothing is forced.')),
       '<a href="#games">Open game research →</a>');
@@ -607,7 +612,7 @@
 
   const favoriteLinesSection = (card, detail) => {
     if (card.completed || !detail) return '';
-    const favorites = detail.favoriteLines || [];
+    const favorites = C.rankConfidence(detail.favoriteLines || []);
     if (!favorites.length) return section("Kook'n favorite lines",
       empty('No qualifying favorite yet', 'We have a projection, but no fresh sportsbook line currently clears the price and role checks. Nothing is forced.'));
     const renderLine = (line, i) => {
@@ -632,8 +637,9 @@
       const rate = (label, value) => value && value.games ? `${value.hits}/${value.games} (${value.rate}%) ${label}` : '';
       const historyText = [rate(`last ${history.last ? history.last.games : 0}`, history.last), rate('this season', history.season)]
         .filter(Boolean).join(' · ');
+      const confidence = line.confidenceRank && line.confidenceRank <= 5 ? (line.confidenceRank === 1 ? 'Highest confidence' : `#${line.confidenceRank} confidence`) : '';
       return `<div class="row favorite-line" style="cursor:default"><span class="row-rail" style="background:var(--mint)"></span>
-        <span class="row-main"><span class="row-top"><span class="pill pill-ours">#${i + 1}</span><span class="row-name">${esc(line.title)}</span>${line.team ? `<span class="row-meta">${esc(line.team)}</span>` : ''}${line.alternate ? '<span class="pill pill-reference">Alternate</span>' : ''}</span>
+        <span class="row-main"><span class="row-top"><span class="pill pill-ours">#${i + 1} value</span>${confidence ? `<span class="pill pill-confidence">${esc(confidence)}</span>` : ''}<span class="row-name">${esc(line.title)}</span>${line.team ? `<span class="row-meta">${esc(line.team)}</span>` : ''}${line.alternate ? '<span class="pill pill-reference">Alternate</span>' : ''}</span>
         <span class="row-market">${esc(detailText)}</span>${historyText ? `<span class="row-meta favorite-history">Historical hit rate: ${esc(historyText)}</span>` : ''}<span class="row-meta">Captured ${esc(ago(line.observedAt))} · main-line value read, not an additional official play</span></span>
         <span class="row-price"><span class="row-odds num">${esc(C.odds(line.odds))}</span><span class="row-book">${esc(line.book)}</span></span></div>`;
     };
@@ -642,7 +648,7 @@
       ['Player props', favorites.filter(l => l.kind === 'player')]];
     return section("Kook'n favorite lines", groups.filter(([, rows]) => rows.length).map(([name, rows]) =>
       `<h3 class="eyebrow">${esc(name)}</h3><div class="card favorite-lines"><div class="rows">${rows.map(renderLine).join('')}</div></div>`).join('') + `
-      <p class="row-meta favorite-note">Every fresh main line our priced model currently likes, ranked by edge against the sportsbook price. Historical hit rates are context, not a prediction. Want less risk? You can choose an alternate at your book. These are optional reads; official plays are labeled separately.</p>`);
+      <p class="row-meta favorite-note">Every fresh main line our priced model currently likes, ranked by edge against the sportsbook price. Confidence ranks the calibrated win chance among these qualifying lines; value rank measures price edge, so they can disagree. Neither is a guarantee. Historical hit rates are context, not a prediction. Want less risk? You can choose an alternate at your book. These are optional reads; official plays are labeled separately.</p>`);
   };
 
   async function viewGame(route) {
@@ -897,9 +903,10 @@
     const open = row.state === 'open';
     const graded = open || Boolean(row.athleteId);   /* player lines have no price but do have a read */
     const books = row.books || [];
+    const confidence = row.confidenceRank && row.confidenceRank <= 5 ? (row.confidenceRank === 1 ? 'Highest confidence' : `#${row.confidenceRank} confidence`) : '';
     return `<div class="row${open ? '' : ' row-closed'}${row.athleteId ? ' row-prop' : ''}"${row.athleteId ? ` data-prop="${esc(row.id)}" role="button" tabindex="0"` : ' style="cursor:default"'}>
       <span class="row-rail" style="background:${graded && RAIL[g.tier] || 'var(--line)'}"></span>
-      <span class="row-main"><span class="row-top">${avatar(row, 'ava-row')}<span class="row-name">${esc(niceTitle(row))}</span>${row.position ? `<span class="row-meta">${esc(row.position)}</span>` : ''}${ours ? '<span class="pill pill-ours">Our pick</span>' : ''}
+      <span class="row-main"><span class="row-top">${avatar(row, 'ava-row')}<span class="row-name">${esc(niceTitle(row))}</span>${row.position ? `<span class="row-meta">${esc(row.position)}</span>` : ''}${ours ? '<span class="pill pill-ours">Our pick</span>' : ''}${confidence ? `<span class="pill pill-confidence">${esc(confidence)}</span>` : ''}
         ${!open ? `<span class="pill pill-${esc(row.state)}">${esc({ stale: 'Recheck price', closed: 'Closed', unpriced: 'No price', reference: 'Unverified price' }[row.state] || row.state)}</span>` : ''}
         ${row.move && typeof row.line === 'number' ? `<span class="move">opened ${esc(lineText(row.line - row.move))}</span>` : ''}</span>
         ${row.player ? `<span class="row-market">${esc([row.direction, row.line, row.market].filter(v => v != null && v !== '').join(' '))}</span>` : ''}
@@ -1244,7 +1251,9 @@
     }
     const rank = { open: 0, reference: 1, stale: 2, unpriced: 3, closed: 4 };
     const byKickoff = (a, b) => String(a.kickoff).localeCompare(String(b.kickoff)) || String(a.player || a.title).localeCompare(String(b.player || b.title));
-    shown.sort((a, b) => (rank[a.state] - rank[b.state]) || (state.boardSort === 'best' ? C.byGrade(a, b) : 0) || byKickoff(a, b));
+    shown = C.rankConfidence(shown);
+    shown.sort((a, b) => (rank[a.state] - rank[b.state]) || (state.boardSort === 'best' ? C.byGrade(a, b) : 0)
+      || (state.boardSort === 'confidence' ? C.byConfidence(a, b) : 0) || byKickoff(a, b));
     gameIndex = new Map(((today || {}).games || []).map(g => [g.id, g]));
     const valued = shown.filter(l => l.state === 'open' && l.grade && l.grade.calibrated && !l.grade.paused && ['lean', 'strong'].includes(C.tierOf(l.grade))).length;
     const priced = shown.filter(l => l.state === 'open').length;
@@ -1262,12 +1271,12 @@
         : `<div class="card"><div class="rows">${shown.slice(0, 250).map(lineRow).join('')}</div></div>`;
     return `${head(props ? 'Player props' : 'The board', intro)}
       ${boardTabs('lines')}
-      <div class="toolbar">${seg('boardMode', [['games', 'Game lines'], ['props', 'Player props']], state.boardMode)}${seg('boardDay', [['today', 'Today'], ['week', 'This week']], state.boardDay)}${seg('boardSort', [['best', 'Best first'], ['time', 'By kickoff']], state.boardSort)}${seg('boardScope', [['open', 'Upcoming'], ['settled', 'Started']], state.boardScope)}</div>
+      <div class="toolbar">${seg('boardMode', [['games', 'Game lines'], ['props', 'Player props']], state.boardMode)}${seg('boardDay', [['today', 'Today'], ['week', 'This week']], state.boardDay)}${seg('boardSort', [['best', 'Best value'], ['confidence', 'Confidence'], ['time', 'By kickoff']], state.boardSort)}${seg('boardScope', [['open', 'Upcoming'], ['settled', 'Started']], state.boardScope)}</div>
       ${props ? `<div class="toolbar">${seg('propMarket', PROP_MARKETS, state.propMarket)}</div>` : ''}
       <p class="row-meta"><a href="#today">Official plays are on the card →</a> The lines below are research, not posted picks.</p>
       ${dayNote ? `<p class="row-meta" style="margin:0 0 8px">${esc(dayNote)}</p>` : ''}
       <details class="explainer"><summary>What do these numbers mean?</summary>
-      <p class="row-meta" style="margin:8px 0 10px">Each line shows <b>our chance</b> of it winning next to the chance its price needs to <b>break even</b> (about 52% for a standard -110 bet). When our chance is higher, the line has <b>value</b>. Bettors call that positive expected value, or <b>+EV</b>. If our estimate stayed accurate across many similar lines, a positive edge would be a favorable price. <b class="grade-word grade-strong">Good value</b> clears break-even by 5 points or more; <b class="grade-word grade-lean">Some value</b> by 2 to 5. Anything closer is a coin flip once the book takes its cut, so it reads as no value. <b>Paused</b> means our record on that kind of bet trails the market, so we sit it out for now. Our chances are pulled toward 50% by how our numbers have actually done, so value is small on purpose. Player lines with no price show our projection against the number instead. This shows where to look, not what to bet.</p></details>
+      <p class="row-meta" style="margin:8px 0 10px">Each line shows <b>our chance</b> of it winning next to the chance its price needs to <b>break even</b> (about 52% for a standard -110 bet). When our chance is higher, the line has <b>value</b>. Bettors call that positive expected value, or <b>+EV</b>. <b>Confidence rank</b> orders only fresh, qualifying lines by calibrated win chance; <b>best value</b> orders them by how far that chance clears the price. They can disagree, and neither means lock. If our estimate stayed accurate across many similar lines, a positive edge would be a favorable price. <b class="grade-word grade-strong">Good value</b> clears break-even by 5 points or more; <b class="grade-word grade-lean">Some value</b> by 2 to 5. Anything closer is a coin flip once the book takes its cut, so it reads as no value. <b>Paused</b> means our record on that kind of bet trails the market, so we sit it out for now. Our chances are pulled toward 50% by how our numbers have actually done, so value is small on purpose. Player lines with no price show our projection against the number instead. This shows where to look, not what to bet.</p></details>
       <input class="search" type="search" data-input="boardQuery" placeholder="Player, team or market" value="${esc(state.boardQuery)}" aria-label="Search lines">
       <div id="board-rows">${body}</div>
       <p class="row-meta" style="margin-top:10px">Tap + to add a line to your own ticket. It is saved only on this device and never counts in our record.</p>`;

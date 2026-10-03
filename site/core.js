@@ -333,6 +333,27 @@
   const byGrade = (a, b) => (TIER_ORDER[tierOf(a.grade)] - TIER_ORDER[tierOf(b.grade)])
     || (Boolean((a.grade || {}).thin) - Boolean((b.grade || {}).thin))
     || (((b.grade || {}).edge ?? -1e9) - ((a.grade || {}).edge ?? -1e9));
+  /* Confidence and value answer different questions. Confidence orders only fresh, calibrated reads by their
+     estimated chance to win; value orders them by how far that chance clears the price. The UI shows both and
+     never turns either into a lock score. */
+  const confidenceChance = row => typeof ((row.grade || {}).chance) === 'number' ? row.grade.chance
+    : typeof row.chance === 'number' ? row.chance : null;
+  const confidenceEligible = row => {
+    const grade = row.grade || row;
+    const tier = row.grade ? tierOf(grade) : row.calibrated === true ? 'lean' : 'none';
+    return (row.state == null || row.state === 'open') && confidenceChance(row) != null && grade.calibrated === true
+      && !grade.paused && !grade.unproven && !grade.thin && !grade.limited
+      && ['lean', 'strong'].includes(tier);
+  };
+  const byConfidence = (a, b) => (Number(confidenceEligible(b)) - Number(confidenceEligible(a)))
+    || ((confidenceChance(b) ?? -1) - (confidenceChance(a) ?? -1))
+    || (((b.grade || b).edge ?? -1e9) - ((a.grade || a).edge ?? -1e9))
+    || String(a.title || a.id).localeCompare(String(b.title || b.id));
+  const rankConfidence = rows => {
+    const ordered = rows.filter(confidenceEligible).slice().sort(byConfidence);
+    const ranks = new Map(ordered.map((row, index) => [row.id, index + 1]));
+    return rows.map(row => ranks.has(row.id) ? { ...row, confidenceRank: ranks.get(row.id), confidencePool: ordered.length } : row);
+  };
   const category = p => p.kind === 'gamePicks' ? (p.marketType === 'total' ? 'Totals' : 'Spreads')
     : p.kind === 'props' ? 'Straights' : p.kind === 'riskyProps' ? 'Risky lines'
       : p.parlayType === 'longshot' ? 'Longshots' : p.parlayType === 'ladder' ? 'Ladder' : 'Parlays';
@@ -553,5 +574,5 @@
   return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText,
     column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
-    unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, modelCaution, projectionScorecard, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, category, parseRoute, pickResearchRoute, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, modelCaution, projectionScorecard, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };
 });

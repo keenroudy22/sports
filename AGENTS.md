@@ -128,6 +128,13 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Confidence order and explained upsets (2026-10-03):** qualifying Board lines may show a confidence rank based
+  on their calibrated chance to win after the ordinary freshness, sample and market-pause rules. Keep this separate
+  from value rank, which measures how far the chance clears the exact price; the two may disagree and neither is a
+  lock score. Thin, paused, stale, unpriced and uncalibrated rows receive no confidence rank. Upset Watch ranks its
+  fresh outright candidates by the raw model-versus-market probability disagreement and says why each is highlighted:
+  exact projected score, spread disagreement and only rating drivers present in that forecast. A large line move and
+  college schedule/role uncertainty are warnings, not supporting evidence. It remains research, never an official play.
 - **Season futures are their own track (2026-10-03):** at the beginning of each covered sport's season, research
   championship, conference/division, playoff qualification and season-total markets; add awards only with reliable
   eligibility and settlement coverage. Preserve the first exact price, book, source, observation time and model

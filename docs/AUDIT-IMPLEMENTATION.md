@@ -3,6 +3,18 @@
 Owner approved implementation on October 2, 2026. This is the release checklist, not a claim that every phase
 of the audit is finished. Free service ceilings and the append-only public record remain mandatory.
 
+## Third release: confidence order and explained upsets
+
+- Every fresh, calibrated value read can be compared by confidence without hiding the separate value ordering.
+  Confidence is the calibrated chance to win; value is how far that chance clears the price. The current view labels
+  only its top five confidence reads and offers an explicit confidence sort. No thin, paused, stale, unpriced or
+  uncalibrated row is ranked, and no rank is called a lock.
+- Upset Watch ranks fresh outright candidates by the raw winner disagreement and exposes the reasons behind the
+  signal: projected score, model-versus-spread gap and only the offense/defense rating drivers stored in that exact
+  forecast. Large line movement and college schedule/role uncertainty are shown as warnings.
+- The existing optional Underdog Watch graphic uses the same projected score and spread gap. This does not promote
+  moneyline wagering, change model weights, add a feed call or turn the watch into an official play.
+
 ## First release: safeguards and the picks-first Board
 
 - Hard refusal of paused / negative calibrated value / missing prop calibration / stale new straight plays.

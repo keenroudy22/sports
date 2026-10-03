@@ -27,11 +27,16 @@ class ResearchPostTests(unittest.TestCase):
     def test_fresh_upset_has_priority_and_is_plainly_not_a_play(self):
         watch = {'side': 'home', 'team': 'Underdog', 'odds': 160, 'opponentOdds': -192,
                  'book': 'DraftKings', 'observedAt': '2026-10-03T13:30:00Z',
-                 'modelChance': .60, 'marketChanceNoVig': .369}
+                 'modelChance': .60, 'marketChanceNoVig': .369,
+                 'projectedFor': 27, 'projectedAgainst': 23, 'spreadGap': 7.5,
+                 'reasons': ['Our score has Underdog by 4', "Underdog's offense rates 2.1 points above average"]}
         choice = R.select({'games': [game(watch)]}, {'CFB-1': {}}, NOW)
         self.assertEqual(choice['kind'], 'upset')
         self.assertIn('Underdog +160 ML (DK) | model 60% | market 37%', choice['text'])
         self.assertIn('Research only, not official plays.', choice['text'])
+        self.assertEqual(choice['rows'][0]['metric'], 'Our score DOG 27–23 FAV')
+        self.assertIn('7.5-pt gap vs spread', choice['rows'][0]['detail'])
+        self.assertIn("offense rates 2.1 points above average", choice['rows'][0]['reason'])
         post = {'text': choice['text']}
         self.assertEqual(receipts.guard(post), [])
 

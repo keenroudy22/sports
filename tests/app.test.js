@@ -6,16 +6,21 @@ const C = require('../site/core.js');
 
 test('a qualifying Upset Watch renders percentages without relying on another view’s local helpers', () => {
   const source = fs.readFileSync('site/app.js', 'utf8');
-  const body = source.match(/const upsetRow = game => \{([\s\S]*?)\n  \};/)[1];
-  const render = new Function('C', 'esc', 'odds', 'whenShort', 'ago', 'game', body);
+  const body = source.match(/const upsetRow = \(game, rank = null\) => \{([\s\S]*?)\n  \};/)[1];
+  const render = new Function('C', 'esc', 'odds', 'whenShort', 'ago', 'game', 'rank', body);
   const html = render(C, C.esc, C.odds, C.whenShort, C.ago, {
     id: 'NFL-test', league: 'NFL', kickoff: '2026-10-04T17:00:00Z',
     upsetWatch: {team: 'Underdog', odds: 160, opponentOdds: -192, book: 'DraftKings',
-      modelChance: .6, marketChanceNoVig: .369, observedAt: '2026-10-02T16:00:00Z'}
-  });
+      modelChance: .6, marketChanceNoVig: .369, observedAt: '2026-10-02T16:00:00Z',
+      reasons: ['Our score has Underdog 27.0, Favorite 23.0 — Underdog by 4.0'],
+      warnings: ['Raw model estimate, not a calibrated value bet']}
+  }, 1);
   assert.match(html, /Model 60%/);
   assert.match(html, /market 37%/);
   assert.match(html, /not a calibrated value bet/);
+  assert.match(html, /Why it is highlighted/);
+  assert.match(html, /Underdog by 4.0/);
+  assert.match(html, /Top upset signal/);
   assert.match(html, /#game\/NFL-test/);
 });
 
@@ -25,8 +30,28 @@ test('Underdog Watch stays visible and separates outright winners from spread co
   assert.match(source, /Outright upset candidates/);
   assert.match(source, /Underdog spread value/);
   assert.match(source, /Covering does not mean winning outright/);
+  assert.match(source, /Top upset signal/);
   assert.match(source, /\$\{underdogWatch\(now, board\)\}/,
     'the Today page renders the permanent section without a qualifying-candidate conditional');
+});
+
+test('confidence labels rank calibrated chances without calling them locks', () => {
+  const rows = C.rankConfidence([
+    { id: 'value', title: 'B', grade: { calibrated: true, tier: 'strong', chance: .55, edge: 8 } },
+    { id: 'chance', title: 'A', grade: { calibrated: true, tier: 'lean', chance: .59, edge: 3 } },
+    { id: 'thin', title: 'C', grade: { calibrated: true, tier: 'lean', chance: .70, edge: 4, thin: true } },
+    { id: 'unpriced', title: 'D', state: 'unpriced', grade: { calibrated: true, tier: 'lean', chance: .80, edge: 5 } },
+  ]);
+  assert.equal(rows.find(row => row.id === 'chance').confidenceRank, 1);
+  assert.equal(rows.find(row => row.id === 'value').confidenceRank, 2);
+  assert.equal(rows.find(row => row.id === 'thin').confidenceRank, undefined);
+  assert.equal(rows.find(row => row.id === 'unpriced').confidenceRank, undefined);
+  assert.equal(rows.slice(0, 2).sort(C.byConfidence)[0].id, 'chance');
+  assert.equal([rows[0], rows[2]].sort(C.byConfidence)[0].id, 'value',
+    'a qualifying value read sorts ahead of a higher raw chance that failed the thin-data gate');
+  const source = fs.readFileSync('site/app.js', 'utf8');
+  assert.match(source, /Highest confidence/);
+  assert.match(source, /neither means lock/);
 });
 
 test('Today keeps the season scorecard above the research counter', () => {

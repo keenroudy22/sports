@@ -7,6 +7,21 @@ rules in words. When this file and the validator disagree, the validator wins.
 
 ## What runs
 
+### October 3 confidence order and explained upsets
+
+The Board now keeps two rankings separate. Best value is the calibrated chance minus the break-even chance at the
+captured price. Confidence is the calibrated chance itself, ordered only among fresh lines that already passed the
+sample, calibration and market-health rules. A line may rank first in one and not the other. The site labels only the
+top five confidence reads in the current view and offers a confidence sort; it never calls the rank a lock or gives a
+confidence badge to a thin, paused, stale, unpriced or uncalibrated row.
+
+Underdog Watch now leads with the strongest raw model-versus-market winner disagreement and opens the arithmetic
+instead of showing a bare percentage. Each card gives the exact projected score, how that score compares with the
+current spread and, when the stored forecast contains a full-point rating driver, the relevant above/below-average
+offense or defense. Large movement from the book's opener is a warning to recheck news. College cards repeat the
+schedule-strength and changing-role warning. The daily research graphic uses the same projected score and spread gap.
+This remains raw upset research, not a calibrated moneyline value rating or an official play.
+
 ### October 3 season-futures track
 
 Futures are now a separate item on the multi-sport roadmap. At each league's preseason opening window, the eventual

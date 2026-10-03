@@ -737,7 +737,7 @@ def build(now=None):
         block = market_read.read(game, latest_snap, books.get(game['id']), gap_rows) if game.get('state') == 'pre' else None
         card = game_card(game, forecasts_v1, latest_snap, names, identities, block, paused, values.get(game['id']))
         card['fcs'] = game['league'] == 'CFB' and not {str(game['home']['id']), str(game['away']['id'])} <= fbs
-        card['upsetWatch'] = research_views.upset_watch(card, now)
+        card['upsetWatch'] = research_views.upset_watch(card, now, latest_snap)
         cards.append(card)
         info = league_data[game['league']]
         favorites = favorite_lines(game, latest_snap, lines, now, info['player_logs'])

@@ -211,6 +211,8 @@ main { padding: 0 var(--gutter) 28px; max-width: 1240px; margin: 0 auto; }
   font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
 }
 .pill-ours { background: var(--mint); color: #06210f; }
+.pill-confidence { background: rgba(106, 223, 255, .16); color: var(--cyan); }
+.pill-upset { background: rgba(194, 162, 255, .18); color: #d8c6ff; }
 .pill-open { background: rgba(94, 234, 164, .16); color: var(--mint); }
 .pill-stale { background: rgba(255, 180, 61, .16); color: var(--amber); }
 .pill-closed { background: var(--raised); color: var(--dim); }
@@ -691,6 +693,11 @@ table.data a { font-weight: 600; }
 .play-stats:has(> span:nth-child(4)) { grid-template-columns:repeat(3,minmax(0,1fr)); }
 .play-stats > span:last-child:nth-child(4) { grid-column:1/-1; display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; }
 .favorite-line .row-market, .favorite-line .row-meta { display:block; margin-top:6px; line-height:1.5; }
+.underdog-block + .underdog-block { margin-top: 10px; }
+.upset-row { background: radial-gradient(circle at 100% 0, rgba(194, 162, 255, .10), transparent 42%); }
+.upset-why { display: grid; gap: 3px; margin: 8px 0; color: var(--dim); font-size: 12px; line-height: 1.4; }
+.upset-why b { color: var(--text); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+.upset-warning { display: block; margin-top: 6px; line-height: 1.4; }
 
 /* our chance against break-even, on the board */
 .cbar { position: relative; display: block; height: 6px; margin: 7px 0 3px; border-radius: 3px; background: #1f2935; max-width: 260px; }

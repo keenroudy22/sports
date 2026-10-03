@@ -13,13 +13,21 @@ class ResearchViewsTests(unittest.TestCase):
     def card(self):
         return {'state': 'pre', 'kickoff': '2026-10-03T17:00:00Z', 'league': 'CFB',
                 'home': {'name': 'Home'}, 'away': {'name': 'Away'},
-                'v2': {'winProb': .6, 'publishedAt': '2026-10-02T12:00:00Z'},
+                'v2': {'home': 27.0, 'away': 23.0, 'margin': 4.0,
+                       'winProb': .6, 'publishedAt': '2026-10-02T12:00:00Z'},
                 'market': {'homeML': 160, 'awayML': -192, 'book': 'DraftKings',
-                           'retrievedAt': '2026-10-02T14:00:00Z'}}
+                           'spread': 3.5, 'spreadMove': 4.0, 'retrievedAt': '2026-10-02T14:00:00Z'}}
 
     def test_upsets_are_outright_not_cover_leans(self):
         card = self.card()
-        self.assertEqual(R.upset_watch(card, NOW)['side'], 'home')
+        snapshot = {'inputs': {'ratings': {'home': {'margin': {'off': 2.2, 'def': -1.4}},
+                                                   'away': {'margin': {'off': -1.3, 'def': 1.8}}}}}
+        watch = R.upset_watch(card, NOW, snapshot)
+        self.assertEqual(watch['side'], 'home')
+        self.assertEqual((watch['modelMargin'], watch['marketSpread'], watch['spreadGap']), (4.0, 3.5, 7.5))
+        self.assertTrue(any(reason.startswith('Our score has Home 27.0, Away 23.0') for reason in watch['reasons']))
+        self.assertTrue(any("Home's offense" in reason for reason in watch['reasons']))
+        self.assertTrue(any('spread has moved 4 points' in warning for warning in watch['warnings']))
         card['v2']['winProb'] = .4
         self.assertIsNone(R.upset_watch(card, NOW))
         card['market'].update(homeML=-192, awayML=160)

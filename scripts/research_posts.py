@@ -86,17 +86,26 @@ def upset_candidate(games, now):
         side = watch.get('side')
         team = game.get(side) or {}
         opponent = game.get('away' if side == 'home' else 'home') or {}
+        projected_for, projected_against = watch.get('projectedFor'), watch.get('projectedAgainst')
+        score = f"Our score {team.get('abbr') or team.get('name')} {projected_for:g}–{projected_against:g} {opponent.get('abbr') or opponent.get('name')}" \
+            if isinstance(projected_for, (int, float)) and isinstance(projected_against, (int, float)) else \
+            f"Model {round(100 * watch['modelChance'])}% | market {round(100 * watch['marketChanceNoVig'])}%"
+        gap = watch.get('spreadGap')
+        comparison = f"Model {round(100 * watch['modelChance'])}% | market {round(100 * watch['marketChanceNoVig'])}%"
+        if isinstance(gap, (int, float)):
+            comparison += f" | {gap:g}-pt gap vs spread"
         rows.append({'league': game.get('league'), 'gameId': game['id'], 'kickoff': game['kickoff'],
                      'title': watch.get('team') or team.get('name'), 'team': team, 'opponent': opponent,
                      'price': price(watch['odds']) + ' ML', 'book': watch.get('book'),
-                     'metric': f"Model {round(100 * watch['modelChance'])}% | market {round(100 * watch['marketChanceNoVig'])}%",
-                     'detail': f"vs {opponent.get('name') or opponent.get('abbr')} | opposing ML {price(watch['opponentOdds'])}",
+                     'metric': score, 'detail': comparison,
+                     'copyMetric': f"Model {round(100 * watch['modelChance'])}% | market {round(100 * watch['marketChanceNoVig'])}%",
+                     'reason': ((watch.get('reasons') or [None])[-1]),
                      'score': watch['modelChance'] - watch['marketChanceNoVig'], 'observedAt': watch['observedAt']})
     rows.sort(key=lambda row: (-row['score'], row['kickoff'], row['gameId']))
     if not rows:
         return None
     shown = rows[:3]
-    lines = [f"{row['title']} {row['price']} ({book_short(row['book'])}) | {row['metric'].lower()}" for row in shown]
+    lines = [f"{row['title']} {row['price']} ({book_short(row['book'])}) | {row['copyMetric'].lower()}" for row in shown]
     return {'kind': 'upset', 'title': 'UNDERDOG WATCH', 'kicker': 'OUTRIGHT WINNERS', 'accent': MINT,
             'rows': shown, 'text': '\n'.join(['🐕 UNDERDOG WATCH', 'Our raw model sees these outright underdogs differently:',
                                              *lines, '', 'Research only, not official plays. Check current prices.', tags(shown)])}
