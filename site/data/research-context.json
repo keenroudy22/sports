@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-03T19:23:27Z",
+  "updatedAt": "2026-10-03T20:00:24Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-10-03T19:14Z",
+              "reportedAt": "2026-10-03T19:58Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-03T19:14Z",
+              "reportedAt": "2026-10-03T19:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -3687,6 +3687,15 @@
           "name": "Las Vegas Raiders",
           "players": [
             {
+              "id": "4260394",
+              "name": "Aidan O'Connell",
+              "position": "QB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-03T19:36Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4260394/aidan-oconnell"
+            },
+            {
               "id": "4432775",
               "name": "Dont'e Thornton Jr.",
               "position": "WR",
@@ -3748,15 +3757,6 @@
               "injury": null,
               "reportedAt": "2026-10-01T01:38Z",
               "source": "https://www.espn.com/nfl/player/_/id/4426340/nakobe-dean"
-            },
-            {
-              "id": "4260394",
-              "name": "Aidan O'Connell",
-              "position": "QB",
-              "status": "Questionable",
-              "injury": "Personal",
-              "reportedAt": "2026-09-30T20:49Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4260394/aidan-oconnell"
             },
             {
               "id": "4837248",
@@ -6447,6 +6447,15 @@
           "name": "Seattle Seahawks",
           "players": [
             {
+              "id": "4685512",
+              "name": "Jadarian Price",
+              "position": "RB",
+              "status": "Injured Reserve",
+              "injury": "Chest",
+              "reportedAt": "2026-10-03T19:58Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4685512/jadarian-price"
+            },
+            {
               "id": "4247808",
               "name": "Ty Okada",
               "position": "S",
@@ -6499,15 +6508,6 @@
               "injury": null,
               "reportedAt": "2026-10-02T20:53Z",
               "source": "https://www.espn.com/nfl/player/_/id/4887558/emanuel-wilson"
-            },
-            {
-              "id": "4685512",
-              "name": "Jadarian Price",
-              "position": "RB",
-              "status": "Out",
-              "injury": "Chest",
-              "reportedAt": "2026-10-02T20:39Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4685512/jadarian-price"
             },
             {
               "id": "4259651",
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "20",
-          "name": "Jeremy Ruckert",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-02T20:57:10Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4361372/jeremy-ruckert"
-        },
-        {
-          "teamId": "26",
-          "name": "Jadarian Price",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-10-02T20:57:10Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4685512/jadarian-price"
-        },
-        {
           "teamId": "27",
           "name": "Keionte Scott",
           "from": "Questionable",
@@ -7764,11 +7748,27 @@
           "to": "Active",
           "observedAt": "2026-10-03T19:23:27Z",
           "source": "https://www.espn.com/nfl/player/_/id/4698597/barion-brown"
+        },
+        {
+          "teamId": "13",
+          "name": "Aidan O'Connell",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-03T20:00:24Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4260394/aidan-oconnell"
+        },
+        {
+          "teamId": "26",
+          "name": "Jadarian Price",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-03T20:00:24Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4685512/jadarian-price"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-03T19:23:27Z",
-      "lastAttemptAt": "2026-10-03T19:23:27Z",
+      "checkedAt": "2026-10-03T20:00:24Z",
+      "lastAttemptAt": "2026-10-03T20:00:24Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-03T19:23:27Z",
-      "lastAttemptAt": "2026-10-03T19:23:27Z",
+      "checkedAt": "2026-10-03T20:00:24Z",
+      "lastAttemptAt": "2026-10-03T20:00:24Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
