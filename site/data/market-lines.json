@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-10-02T21:38:36Z",
+  "updatedAt": "2026-10-03T00:39:08Z",
   "status": "ok",
   "coverage": "Observed NFL/CFB player markets from saved research and dated public references. Not an exhaustive sportsbook menu. Rebuilding does not refresh quote times or create recommendations.",
   "freshnessPolicy": "Direct observed prices expire after at most 60 minutes or a sooner supplied expiry; all article/comparison prices require independent sportsbook recheck.",
   "counts": {
     "lines": 132,
     "current": 0,
-    "references": 3
+    "references": 2
   },
   "lines": [
     {
@@ -7153,9 +7153,9 @@
       "quoteType": "source reference",
       "checkedAt": "2026-10-01T21:42:31Z",
       "kickoff": "2026-10-02T23:00Z",
-      "status": "reference",
-      "quoteStatus": "reference",
-      "reason": "Public article or comparison quote; verify the exact market in your sportsbook.",
+      "status": "closed",
+      "quoteStatus": "closed",
+      "reason": "Game has started or finished; retained for research history only.",
       "builderEligible": false,
       "title": "Marcellous Hawkins Jr. OVER 45.5 rushing yards",
       "id": "line-bbb181c0f3dfe20b31f5",
