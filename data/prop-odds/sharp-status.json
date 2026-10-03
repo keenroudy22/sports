@@ -1,5 +1,5 @@
 {
- "at": "2026-10-03T13:21:04Z",
+ "at": "2026-10-03T13:31:17Z",
  "confirmed": {
   "CFB-401856705": "2026-10-03T11:49:10Z",
   "CFB-401856707": "2026-10-03T13:21:04Z",
@@ -8,11 +8,11 @@
   "CFB-401856710": "2026-10-03T11:49:10Z",
   "CFB-401856807": "2026-10-03T13:21:04Z",
   "CFB-401856819": "2026-10-03T13:21:04Z",
-  "CFB-401856822": "2026-10-03T13:21:04Z",
-  "CFB-401858246": "2026-10-03T11:49:10Z",
+  "CFB-401856822": "2026-10-03T13:31:17Z",
+  "CFB-401858246": "2026-10-03T13:31:17Z",
   "CFB-401858247": "2026-10-03T11:49:10Z",
   "CFB-401858248": "2026-10-03T11:49:10Z",
-  "CFB-401858250": "2026-10-03T11:49:10Z",
+  "CFB-401858250": "2026-10-03T13:31:17Z",
   "CFB-401858251": "2026-10-03T11:49:10Z",
   "CFB-401858252": "2026-10-03T11:49:10Z",
   "CFB-401858253": "2026-10-03T11:49:10Z",
@@ -30,28 +30,27 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1353,
-    "fanduel": 826
+    "draftkings": 781
    },
    "eventsListed": 67,
    "eventsMatched": 53,
    "games": 54,
    "marketTypes": {
-    "player_longest_passing_completion": 8,
-    "player_longest_reception": 33,
-    "player_longest_rush": 17,
-    "player_passing_+_rushing_yards": 141,
-    "player_passing_attempts": 51,
-    "player_passing_completions": 39,
-    "player_passing_touchdowns": 65,
-    "player_passing_yards": 266,
-    "player_receiving_yards": 742,
-    "player_receptions": 156,
-    "player_rushing_attempts": 68,
-    "player_rushing_yards": 593
+    "player_longest_passing_completion": 3,
+    "player_longest_reception": 16,
+    "player_longest_rush": 8,
+    "player_passing_+_rushing_yards": 43,
+    "player_passing_attempts": 11,
+    "player_passing_completions": 6,
+    "player_passing_touchdowns": 18,
+    "player_passing_yards": 109,
+    "player_receiving_yards": 285,
+    "player_receptions": 26,
+    "player_rushing_attempts": 26,
+    "player_rushing_yards": 230
    },
    "requestsLeft": 0,
-   "rows": 2179,
+   "rows": 781,
    "slateGames": [
     "Memphis Tigers at Charlotte 49ers 2026-10-03T15:00Z",
     "Alabama Crimson Tide at Mississippi State Bulldogs 2026-10-03T16:00Z",
@@ -144,15 +143,12 @@
        "1st_quarter_point_spread",
        "1st_quarter_team_total",
        "1st_quarter_total_points",
-       "2nd_quarter_moneyline",
        "2nd_quarter_point_spread",
        "2nd_quarter_team_total",
        "2nd_quarter_total_points",
-       "3rd_quarter_moneyline",
        "3rd_quarter_point_spread",
        "3rd_quarter_team_total",
        "3rd_quarter_total_points",
-       "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_team_total",
        "4th_quarter_total_points",
@@ -161,11 +157,6 @@
        "game_prop",
        "halftime_fulltime",
        "moneyline",
-       "most_points_player",
-       "player_passing_touchdowns",
-       "player_passing_yards",
-       "player_receiving_yards",
-       "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
        "team_total",
@@ -189,6 +180,7 @@
       "kalshi": "KXNCAAFTOTAL-26OCT06USMTROY",
       "novig": "01a0ea7f-3f63-7272-8159-6ac924421f89",
       "polymarket": "nfl_southernmiss_troy_2026-10-06_b3",
+      "prophetx": "1700084005",
       "robinhood": "bfbe822b-ec6f-40e0-8b20-aa86c15f1bb1"
      },
      "home": "Troy",
@@ -499,7 +491,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-03T13:10:00Z",
+     "start": "2026-10-03T13:29:00Z",
      "type": "outright"
     },
     {
@@ -530,6 +522,7 @@
       "betparx": "1028812993",
       "betrivers": "1028812993",
       "bwin": "6:43529",
+      "caesars": "3ad276a0-4d8f-0e9b-b2cb-b43314afed69",
       "circa": "215061",
       "coral": "cor-46476996",
       "draftkings": "34118279",
@@ -540,7 +533,7 @@
       "gemini": "NFL-2610060015-ATL-NO-T",
       "goldrush": "30990838",
       "hardrock": "3637145959005290894",
-      "kalshi": "KXNFL1HTEAMTOTAL-26OCT05ATLNO",
+      "kalshi": "KXNFL1H-26OCT05ATLNO",
       "ladbrokes": "92974676-464a-4db3-89f6-5c6b0ee28a2e",
       "ladbrokes_uk": "lduk-258814960",
       "matchbook": "mb-33321622423000023",
@@ -659,7 +652,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_punts",
        "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
@@ -679,7 +671,7 @@
       "fanduel": "36132640",
       "galera": "21085961",
       "goldrush": "31065451",
-      "kalshi": "KXNFLTOTAL-26OCT08TBDAL",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT08TBDAL",
       "matchbook": "mb-33321633672500023",
       "novig": "01a0ef14-1e69-7631-9389-bf88cf7969ce",
       "paddypower": "36132640",
