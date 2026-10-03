@@ -174,8 +174,8 @@ class BuildTests(unittest.TestCase):
         games = {gid: dict(g, league='CFB') for gid, g in GAMES.items() if gid in ('g1', 'g2')}
         spec = {'book': 'FanDuel', 'quotedAt': '2026-09-27T12:20:00Z',
                 'source': 'https://sportsbook.fanduel.com/', 'legs': [
-                    {'gameId': 'g1', 'marketType': 'spread', 'direction': 'home', 'line': 10.5, 'odds': -390},
-                    {'gameId': 'g2', 'marketType': 'spread', 'direction': 'home', 'line': 12.5, 'odds': -410},
+                    {'gameId': 'g1', 'marketType': 'spread', 'direction': 'home', 'line': -1.5, 'odds': -390},
+                    {'gameId': 'g2', 'marketType': 'spread', 'direction': 'home', 'line': -4.5, 'odds': -410},
                 ]}
         original = ladder.pricing.price
         ladder.pricing.price = lambda *a, **k: {'rawChance': .76, 'breakEven': .8, 'projection': -1.0}
@@ -183,7 +183,7 @@ class BuildTests(unittest.TestCase):
             pick, reason = ladder.manual_candidate(ctx(), games, NOW, spec)
             self.assertIsNone(reason)
             self.assertEqual((pick['odds'], pick['quoteType'], pick['priceEstimated']), (-178, 'sportsbook', False))
-            self.assertEqual([l['title'] for l in pick['legs']], ['Lions +10.5', 'Rams +12.5'])
+            self.assertEqual([l['title'] for l in pick['legs']], ['Lions -1.5', 'Rams -4.5'])
             self.assertNotIn(ladder.SOURCE, pick['sources'], 'a person-verified sportsbook quote is not SharpAPI data')
             self.assertEqual((pick['ladder']['stake'], pick['ladder']['payout'], pick['ladder']['bankThisWin'],
                               pick['ladder']['nextStake']), (50, 78, 16, 62))

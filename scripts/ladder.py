@@ -292,7 +292,11 @@ def manual_candidate(ctx, games, now, spec):
         allowed = ('home', 'away') if market == 'spread' else ('over', 'under')
         if market not in ('spread', 'total') or side not in allowed:
             return None, 'a manual game leg needs a spread side or total direction'
-        if not isinstance(line, (int, float)) or float(line) != int(line) + 0.5:
+        # ``int()`` truncates toward zero, so ``int(-1.5) + .5`` is -0.5.
+        # Check the doubled value instead so favorite spreads such as -1.5
+        # receive the same no-push treatment as +1.5 and game totals.
+        twice = float(line) * 2 if isinstance(line, (int, float)) else 0
+        if not isinstance(line, (int, float)) or not twice.is_integer() or int(twice) % 2 == 0:
             return None, 'manual game alternates use half-point lines so they cannot push'
         if not isinstance(price, (int, float)) or not LEG_PRICES[0] <= int(price) <= LEG_PRICES[1]:
             return None, f'each manual leg must be priced {LEG_PRICES[0]:+d} to {LEG_PRICES[1]:+d}'
