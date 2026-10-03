@@ -9,10 +9,12 @@ rules in words. When this file and the validator disagree, the validator wins.
 
 ### October 3 automatic Climb results
 
-A winning 80/20 Climb rung now produces its own result card in the hosted build. The 1080x1350 layout keeps the
-headline, settled dollars, each rung leg, bank, next stake and total in fixed, separate zones; the chef stays in the
-header and cannot cover the wording. An ordinary advance says which step is next. A goal-reaching win says the
-climb is complete and that the next climb starts at $50.
+A winning 80/20 Climb rung now produces its own result card in the hosted build. The open ticket and its result use
+the same simple path: every completed step gets a green check, the current or next step is outlined, anonymous future
+checkpoints lead to the $1,000 flag, and no future return is guessed. The 1080x1350 layout keeps the actual wager,
+each rung leg, bank and next stake in fixed, separate zones; schedule copy and generic motivational lines stay off
+the image, and the chef remains in the header. A goal-reaching win says the climb is complete and that the next
+climb starts at $50.
 
 Unlike an ordinary cashed post, a Climb advance remains eligible for 24 hours. A late final can therefore be
 settled by the 6:45 AM run and queued for 9:05 AM rather than disappearing into the morning receipt. The post still

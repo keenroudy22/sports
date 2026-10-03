@@ -527,73 +527,76 @@ def ticket_svg(pick, game=None, avatar=None, art=None, style=None):
 </svg>'''
 
 
+def ladder_track(step, completed, goal, complete=False):
+    """A compact persistent path: finished rungs get checks, the next/current rung is called out, and future
+    checkpoints stay anonymous because real prices determine how many steps the climb will take."""
+    step, completed = max(1, int(step or 1)), max(0, int(completed or 0))
+    visible = min(15, max(7, step + (0 if complete else 2)))
+    left, right, y = 104, 850, 374
+    gap = (right - left) / max(1, visible - 1)
+    nodes = []
+    for index in range(1, visible + 1):
+        x = left + (index - 1) * gap
+        if index <= completed:
+            nodes.append(f'<g data-rung="{index}"><circle cx="{x:.1f}" cy="{y}" r="25" fill="#5eeaa4"/>'
+                         f'<text x="{x:.1f}" y="{y + 9}" text-anchor="middle" fill="#07131d" font-size="28" font-weight="950">✓</text>'
+                         f'<text x="{x:.1f}" y="{y + 52}" text-anchor="middle" fill="#5eeaa4" font-size="17" font-weight="850">{index}</text></g>')
+        elif not complete and index == step:
+            nodes.append(f'<g data-rung="{index}"><circle cx="{x:.1f}" cy="{y}" r="29" fill="#102b38" stroke="#2ed8ff" stroke-width="5"/>'
+                         f'<text x="{x:.1f}" y="{y + 8}" text-anchor="middle" fill="#f4efe7" font-size="22" font-weight="950">{index}</text>'
+                         f'<text x="{x:.1f}" y="{y - 45}" text-anchor="middle" fill="#2ed8ff" font-size="16" font-weight="900" letter-spacing="2">NEXT</text></g>')
+        else:
+            nodes.append(f'<circle cx="{x:.1f}" cy="{y}" r="13" fill="#718896" fill-opacity=".30"/>')
+    goal_x = 970
+    goal_mark = ('<circle cx="970" cy="374" r="29" fill="#5eeaa4"/>'
+                 '<text x="970" y="383" text-anchor="middle" fill="#07131d" font-size="28" font-weight="950">✓</text>' if complete else
+                 '<path d="M950 404v-74" stroke="#f4efe7" stroke-width="5" stroke-linecap="round"/>'
+                 '<path d="M955 332h76l-16 23 16 23h-76z" fill="#5eeaa4"/>')
+    filled = goal_x if complete else left + (right - left) * max(0, min(completed - 1, visible - 1)) / max(1, visible - 1)
+    return (f'<g data-zone="ladder-track"><path d="M{left} {y}H{goal_x}" stroke="#718896" stroke-opacity=".28" stroke-width="10" stroke-linecap="round"/>'
+            f'<path d="M{left} {y}H{filled:.1f}" stroke="#5eeaa4" stroke-width="10" stroke-linecap="round"/>'
+            f'{"".join(nodes)}{goal_mark}<text x="970" y="442" text-anchor="middle" fill="#5eeaa4" font-size="20" font-weight="900">{esc(dollars(goal))}</text></g>')
+
+
 def ladder_svg(pick, avatar=None):
-    """A tall, winding 80/20 progress card. Only the current rung is priced; future checkpoints stay deliberately
-    blank because the climb has no promised number of steps or returns."""
+    """The open rung: the whole climb is visible, prior rungs are checked, and the wager dominates."""
     info = pick.get('ladder') or {}
     legs = [short_leg(l.get('title')) for l in (pick.get('legs') or []) if l.get('title')]
     chef = avatar_uri(CHEF) if avatar is None else avatar
     run, step = int(info.get('run') or 1), int(info.get('step') or 1)
-    start, goal = dollars(info.get('start') or LADDER[0]), dollars(info.get('goal') or LADDER[1])
-    stake_, payout_ = dollars(info.get('stake')), dollars(info.get('payout'))
-    banked = int(info.get('banked') or 0)
-    returned = int(info.get('payout') or 0)
+    start, goal = int(info.get('start') or LADDER[0]), int(info.get('goal') or LADDER[1])
+    stake, returned, banked = int(info.get('stake') or 0), int(info.get('payout') or 0), int(info.get('banked') or 0)
     bank_this = int(info.get('bankThisWin') if info.get('bankThisWin') is not None else round(returned * .20))
-    banked_after = int(info.get('bankedAfter') if info.get('bankedAfter') is not None else banked + bank_this)
     next_stake = int(info.get('nextStake') if info.get('nextStake') is not None else returned - bank_this)
     price = f"{int(pick['odds']):+d}" if isinstance(pick.get('odds'), (int, float)) else ''
     book = str(pick.get('book') or '')
-    progress = f'{dollars(banked)} BANKED · {stake_} RIDING'
-    leg_rows = ''.join(f'<text x="330" y="{590 + 38 * i}" fill="{CREAM}" font-size="25" font-weight="650">• {esc(fit(leg, 38))}</text>'
-                       for i, leg in enumerate(legs[:2]))
-    chef_art = (f'<image href="{chef}" x="768" y="988" width="224" height="224" '
-                'preserveAspectRatio="xMidYMid meet" clip-path="url(#chefClip)"/>') if chef else ''
+    leg_blocks = []
+    for index, leg in enumerate(legs[:2]):
+        y = 744 + index * 132
+        leg_blocks.append(f'<rect x="74" y="{y}" width="932" height="108" rx="20" fill="#102330" stroke="#2c4c5b" stroke-width="2"/>'
+                          f'<text x="108" y="{y + 67}" fill="{CREAM}" font-size="33" font-weight="850">{esc(fit(leg, 48))}</text>')
+    chef_art = (f'<image href="{chef}" x="918" y="55" width="100" height="100" preserveAspectRatio="xMidYMid meet"/>') if chef else ''
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
-<defs>
-  <linearGradient id="ladderBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#08131d"/><stop offset="0.72" stop-color="#071018"/><stop offset="1" stop-color="#10313a"/></linearGradient>
-  <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="10" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-  <clipPath id="chefClip"><circle cx="880" cy="1100" r="112"/></clipPath>
-</defs>
-<rect width="1080" height="1350" fill="url(#ladderBg)"/>
-<rect x="34" y="34" width="1012" height="1282" rx="34" fill="none" stroke="#5eeaa4" stroke-opacity=".58" stroke-width="3"/>
-<circle cx="91" cy="94" r="14" fill="none" stroke="#5eeaa4" stroke-width="5"/><circle cx="91" cy="94" r="5" fill="#5eeaa4"/><path d="M105 94h28" stroke="#5eeaa4" stroke-width="5" stroke-linecap="round"/>
-<text x="142" y="116" fill="{CREAM}" font-size="34" font-weight="800" letter-spacing="5">KOOK’N</text>
-<text x="986" y="112" fill="#d8d1c6" font-size="22" font-weight="700" letter-spacing="3" text-anchor="end">CLIMB {run}</text>
-<text x="540" y="190" fill="{CREAM}" font-size="58" font-weight="900" text-anchor="middle" letter-spacing="3">THE 80/20 CLIMB</text>
-<text x="540" y="232" fill="#5eeaa4" font-size="25" font-weight="800" text-anchor="middle" letter-spacing="3">BANK 20 · RIDE 80 · CLIMB TO {esc(goal)}</text>
-
-<path d="M140 315 H810 Q920 315 920 425 Q920 535 810 535 H270 Q160 535 160 645 Q160 755 270 755 H810 Q920 755 920 865 Q920 975 810 975 H270 Q160 975 160 1085 Q160 1185 270 1185 H690" fill="none" stroke="#756b62" stroke-opacity=".55" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M140 315 H810 Q920 315 920 425 Q920 535 810 535 H270" fill="none" stroke="#5eeaa4" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M140 315 H810 Q920 315 920 425 Q920 535 810 535 H270 Q160 535 160 645 Q160 755 270 755 H810 Q920 755 920 865 Q920 975 810 975 H270 Q160 975 160 1085 Q160 1185 270 1185 H690" fill="none" stroke="{CREAM}" stroke-opacity=".46" stroke-width="3" stroke-dasharray="3 24" stroke-linecap="round"/>
-
-<circle cx="140" cy="315" r="34" fill="#5eeaa4" stroke="{CREAM}" stroke-width="4"/><text x="140" y="323" fill="#071018" font-size="22" font-weight="900" text-anchor="middle">{esc(start)}</text><text x="140" y="375" fill="#d8d1c6" font-size="20" font-weight="700" text-anchor="middle" letter-spacing="2">START</text>
-<rect x="510" y="273" width="358" height="84" rx="17" fill="#173a2a" stroke="#6fdc8c" stroke-opacity=".7" stroke-width="2"/>
-<text x="536" y="307" fill="#a6e8b8" font-size="18" font-weight="800" letter-spacing="2">CLIMB TO DATE</text><text x="536" y="338" fill="{CREAM}" font-size="25" font-weight="900">{esc(progress)}</text>
-
-<circle cx="270" cy="535" r="41" fill="#5eeaa4" fill-opacity=".22" stroke="#5eeaa4" stroke-width="5" filter="url(#glow)"/><circle cx="270" cy="535" r="12" fill="#5eeaa4"/>
-<rect x="300" y="478" width="586" height="220" rx="20" fill="#102330" stroke="#5eeaa4" stroke-width="3"/>
-<text x="330" y="518" fill="#5eeaa4" font-size="20" font-weight="900" letter-spacing="3">STEP {step} · TODAY</text>
-<text x="850" y="518" fill="#d8d1c6" font-size="21" font-weight="700" text-anchor="end">{esc(price)} AT {esc(book.upper())}</text>
-<text x="330" y="561" fill="{CREAM}" font-size="36" font-weight="900">{esc(stake_)} → {esc(payout_)}</text>
-{leg_rows}
-<text x="330" y="675" fill="#a6e8b8" font-size="21" font-weight="850">WIN: BANK {esc(dollars(bank_this))} · RIDE {esc(dollars(next_stake))}</text>
-
-<g fill="#756b62" stroke="#d8d1c6" stroke-opacity=".55" stroke-width="3"><circle cx="520" cy="755" r="25"/><circle cx="810" cy="755" r="25"/><circle cx="650" cy="975" r="25"/><circle cx="270" cy="975" r="25"/><circle cx="320" cy="1185" r="25"/></g>
-<g fill="#d8d1c6" fill-opacity=".72"><circle cx="520" cy="755" r="5"/><circle cx="810" cy="755" r="5"/><circle cx="650" cy="975" r="5"/><circle cx="270" cy="975" r="5"/><circle cx="320" cy="1185" r="5"/></g>
-<text x="665" y="730" fill="#d8d1c6" fill-opacity=".65" font-size="21" font-weight="700" text-anchor="middle" letter-spacing="2">FUTURE RUNGS UNLOCK ONE AT A TIME</text>
-<text x="665" y="788" fill="#a6e8b8" fill-opacity=".85" font-size="18" font-weight="750" text-anchor="middle" letter-spacing="1.4">WEEKEND CHECK-INS · WEEKDAY BONUSES WHEN QUALIFIED</text>
-<path d="M690 1185v-88" stroke="{CREAM}" stroke-width="6" stroke-linecap="round"/><path d="M696 1098h110l-22 30 22 30H696z" fill="#5eeaa4"/><text x="750" y="1136" fill="#071018" font-size="22" font-weight="900" text-anchor="middle">{esc(goal)}</text><text x="690" y="1225" fill="#5eeaa4" font-size="23" font-weight="900" text-anchor="middle" letter-spacing="3">THE GOAL</text>
-<circle cx="880" cy="1100" r="134" fill="{CREAM}" fill-opacity=".07"/><circle cx="880" cy="1100" r="115" fill="{CREAM}" fill-opacity=".09" stroke="{CREAM}" stroke-opacity=".4" stroke-width="3"/>{chef_art}
-<text x="76" y="1260" fill="{CREAM}" font-size="22" font-weight="750">Bank 20% of every return.</text><text x="76" y="1292" fill="{CREAM}" font-size="22" font-weight="750">Ride 80%. A miss cannot take the bank.</text><text x="1002" y="1260" fill="#d8d1c6" font-size="22" text-anchor="end">keenroudy.com/sports</text><text x="1002" y="1292" fill="#a69d92" font-size="17" text-anchor="end">Entertainment only. Not advice.</text>
+<defs><linearGradient id="ladderBg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#07131d"/><stop offset="1" stop-color="#0a2b37"/></linearGradient></defs>
+<rect width="1080" height="1350" fill="url(#ladderBg)"/><rect x="30" y="30" width="1020" height="1290" rx="34" fill="none" stroke="#5eeaa4" stroke-opacity=".48" stroke-width="3"/><rect x="30" y="30" width="1020" height="9" rx="4" fill="#5eeaa4"/>
+{PAN.format(x=58, y=67, s=.44, c='#5eeaa4')}<text x="118" y="101" fill="{CREAM}" font-size="31" font-weight="900" letter-spacing="5">KOOK’N</text>
+<text x="880" y="101" fill="#9eb8c7" font-size="21" font-weight="850" letter-spacing="3" text-anchor="end">CLIMB {run}</text>{chef_art}
+<text x="56" y="210" fill="{CREAM}" font-size="66" font-weight="950">80/20 CLIMB</text>
+<text x="60" y="265" fill="#5eeaa4" font-size="30" font-weight="900">{esc(dollars(start))} → {esc(dollars(goal))}</text>
+<text x="1020" y="265" fill="#c2d3dc" font-size="25" font-weight="800" text-anchor="end">{esc(dollars(banked))} BANKED · {esc(dollars(stake))} RIDING</text>
+{ladder_track(step, step - 1, goal)}
+<rect x="56" y="500" width="968" height="660" rx="28" fill="#0e202c" stroke="#5eeaa4" stroke-width="3"/>
+<text x="84" y="560" fill="#5eeaa4" font-size="26" font-weight="950" letter-spacing="3">STEP {step}</text>
+<text x="996" y="560" fill="#c2d3dc" font-size="24" font-weight="800" text-anchor="end">{esc(price)} · {esc(book.upper())}</text>
+<text x="84" y="660" fill="{CREAM}" font-size="78" font-weight="950">{esc(dollars(stake))} → {esc(dollars(returned))}</text>
+{''.join(leg_blocks)}
+<text x="84" y="1084" fill="#5eeaa4" font-size="29" font-weight="900">WIN: {esc(dollars(bank_this))} TO BANK · {esc(dollars(next_stake))} RIDES</text>
+<text x="56" y="1280" fill="#5eeaa4" font-size="23" font-weight="800">keenroudy.com/sports</text><text x="1024" y="1280" fill="#9eb8c7" font-size="17" text-anchor="end">Entertainment only. Not advice.</text>
 </svg>'''
 
 
 def ladder_result_svg(pick, avatar=None):
-    """A clean result card for one 80/20 Climb rung.
-
-    The settled dollars lead, the two legs get their own unobstructed rows, and the bank/next-stake accounting
-    stays in fixed tiles below them. Artwork is confined to the header so it can never cover a wager or total.
-    """
+    """The same climb after settlement: prior rungs stay checked and the next rung is obvious."""
     info = pick.get('ladder') or {}
     result = str(pick.get('result') or 'win').lower()
     run, step = int(info.get('run') or 1), int(info.get('step') or 1)
@@ -606,29 +609,21 @@ def ladder_result_svg(pick, avatar=None):
     total = int(info.get('totalAfter') if info.get('totalAfter') is not None else banked_after + next_stake)
     complete = result == 'win' and total >= goal
     if complete:
-        headline, eyebrow = 'CLIMB COMPLETE', f'RUN {run} · {step} STEPS'
-        hero, sub = f'{dollars(start)} → {dollars(total)}', 'THE FINISH LINE IS IN THE BOOKS.'
+        headline, hero, accent = 'CLIMB COMPLETE', f'{dollars(start)} → {dollars(total)}', '#5eeaa4'
         tiles = [('BANKED', dollars(banked_after)), ('STEPS', str(step)), ('NEXT CLIMB', dollars(start))]
-        progress_total = goal
-        accent, glow = '#5eeaa4', '#2ed8ff'
+        completed, active = step, step
     elif result == 'win':
-        headline, eyebrow = f'STEP {step} CASHED', f'RUN {run} · STEP {step + 1} IS NEXT'
-        hero, sub = f'{dollars(stake)} → {dollars(returned)}', 'BANK 20. RIDE 80. KEEP CLIMBING.'
-        tiles = [('BANKED', dollars(banked_after)), ('NEXT STAKE', dollars(next_stake)), ('TOTAL', dollars(total))]
-        progress_total = total
-        accent, glow = '#5eeaa4', '#2ed8ff'
+        headline, hero, accent = f'STEP {step} CASHED', f'{dollars(stake)} → {dollars(returned)}', '#5eeaa4'
+        tiles = [('BANKED', dollars(banked_after)), (f'STEP {step + 1}', f'{dollars(next_stake)} RIDES')]
+        completed, active = step, step + 1
     elif result == 'loss':
-        headline, eyebrow = f'STEP {step} ENDS', f'RUN {run} · BANK STAYS SAFE'
-        hero, sub = f'{dollars(banked)} SAVED', 'THE NEXT CLIMB STARTS CLEAN.'
-        tiles = [('BANKED', dollars(banked)), ('NEXT CLIMB', dollars(start)), ('RESULT', 'RESET')]
-        progress_total = banked
-        accent, glow = '#ff7283', '#68c1ff'
+        headline, hero, accent = f'STEP {step} MISSED', f'{dollars(banked)} SAVED', '#ff7283'
+        tiles = [('BANKED', dollars(banked)), ('NEXT CLIMB', dollars(start))]
+        completed, active = max(0, step - 1), 1
     else:
-        headline, eyebrow = f'STEP {step} HOLDS', f'RUN {run} · SAME RUNG NEXT'
-        hero, sub = f'{dollars(stake)} RIDES', 'A PUSH OR VOID DOES NOT MOVE THE CLIMB.'
-        tiles = [('BANKED', dollars(banked)), ('RIDING', dollars(stake)), ('NEXT STEP', str(step))]
-        progress_total = banked + stake
-        accent, glow = '#68c1ff', '#5eeaa4'
+        headline, hero, accent = f'STEP {step} PUSH', f'{dollars(stake)} RIDES', '#68c1ff'
+        tiles = [('BANKED', dollars(banked)), (f'STEP {step}', dollars(stake))]
+        completed, active = max(0, step - 1), step
 
     leg_blocks = []
     for index, leg in enumerate((pick.get('legs') or [])[:2], 1):
@@ -636,10 +631,10 @@ def ladder_result_svg(pick, avatar=None):
         wrapped = textwrap.wrap(title, width=42, break_long_words=False, break_on_hyphens=False) or [title]
         if len(wrapped) > 2:
             wrapped = [wrapped[0], fit(' '.join(wrapped[1:]), 48)]
-        y = 610 + (index - 1) * 128
+        y = 584 + (index - 1) * 120
         mark = '✓' if result == 'win' else '•'
         leg_blocks += [
-            f'<g data-zone="leg-{index}"><rect x="56" y="{y}" width="968" height="110" rx="22" fill="#102330" stroke="{accent}" stroke-opacity=".30" stroke-width="2"/>',
+            f'<g data-zone="leg-{index}"><rect x="56" y="{y}" width="968" height="102" rx="20" fill="#102330" stroke="{accent}" stroke-opacity=".30" stroke-width="2"/>',
             f'<circle cx="104" cy="{y + 55}" r="25" fill="{accent}" fill-opacity=".14" stroke="{accent}" stroke-width="3"/>',
             f'<text x="104" y="{y + 65}" text-anchor="middle" fill="{accent}" font-size="31" font-weight="950">{mark}</text>',
         ]
@@ -651,54 +646,34 @@ def ladder_result_svg(pick, avatar=None):
 
     tile_blocks = []
     for index, (label, value) in enumerate(tiles):
-        x = 56 + index * 328
+        width = 468 if len(tiles) == 2 else 304
+        gap = 32 if len(tiles) == 2 else 24
+        x = 56 + index * (width + gap)
         tile_blocks += [
-            f'<g data-zone="accounting-{index}"><rect x="{x}" y="890" width="304" height="150" rx="22" fill="#102330" stroke="#284a5c" stroke-width="2"/>',
-            f'<text x="{x + 24}" y="932" fill="#9eb8c7" font-size="18" font-weight="850" letter-spacing="2.5">{esc(label)}</text>',
-            f'<text x="{x + 24}" y="1001" fill="{accent}" font-size="52" font-weight="950">{esc(value)}</text></g>',
+            f'<g data-zone="accounting-{index}"><rect x="{x}" y="854" width="{width}" height="154" rx="22" fill="#102330" stroke="#284a5c" stroke-width="2"/>',
+            f'<text x="{x + 26}" y="900" fill="#9eb8c7" font-size="18" font-weight="850" letter-spacing="2.5">{esc(label)}</text>',
+            f'<text x="{x + 26}" y="972" fill="{accent}" font-size="48" font-weight="950">{esc(value)}</text></g>',
         ]
-
-    def progress_x(amount):
-        try:
-            share = math.log(max(float(amount), start) / start) / math.log(goal / start)
-        except (TypeError, ValueError, ZeroDivisionError):
-            share = 0.0
-        return 84 + 912 * max(0.0, min(1.0, share))
-
-    bar = max(18, progress_x(progress_total) - 84)
     chef = avatar_uri(CHEF) if avatar is None else avatar
-    chef_art = (f'<image href="{chef}" x="906" y="54" width="112" height="112" preserveAspectRatio="xMidYMid meet"/>') if chef else ''
+    chef_art = (f'<image href="{chef}" x="918" y="55" width="100" height="100" preserveAspectRatio="xMidYMid meet"/>') if chef else ''
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
 <defs>
   <linearGradient id="resultBg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#07131d"/><stop offset=".72" stop-color="#081b27"/><stop offset="1" stop-color="#0b3440"/></linearGradient>
-  <radialGradient id="resultGlow"><stop stop-color="{glow}" stop-opacity=".18"/><stop offset="1" stop-color="{glow}" stop-opacity="0"/></radialGradient>
-  <pattern id="resultGrid" width="44" height="44" patternUnits="userSpaceOnUse"><path d="M44 0H0V44" fill="none" stroke="{glow}" stroke-opacity=".035"/></pattern>
 </defs>
-<rect width="1080" height="1350" fill="url(#resultBg)"/><rect width="1080" height="1350" fill="url(#resultGrid)"/>
-<circle cx="930" cy="185" r="260" fill="url(#resultGlow)"/>
+<rect width="1080" height="1350" fill="url(#resultBg)"/>
 <rect x="28" y="28" width="1024" height="1294" rx="34" fill="none" stroke="{accent}" stroke-opacity=".44" stroke-width="3"/>
 <rect x="28" y="28" width="1024" height="9" rx="4" fill="{accent}"/>
 {PAN.format(x=56, y=64, s=.44, c=accent)}
 <text x="116" y="97" fill="{CREAM}" font-size="31" font-weight="900" letter-spacing="5">KOOK’N</text>
-<text x="56" y="160" fill="#9eb8c7" font-size="20" font-weight="850" letter-spacing="4">80/20 CLIMB · {esc(eyebrow)}</text>
+<text x="870" y="97" text-anchor="end" fill="#9eb8c7" font-size="21" font-weight="850" letter-spacing="3">CLIMB {run}</text>
 {chef_art}
-<g data-zone="headline"><text x="56" y="250" fill="{accent}" font-size="64" font-weight="950" letter-spacing="-1">{esc(headline)}</text>
-<text x="56" y="390" fill="{CREAM}" font-size="112" font-weight="950" letter-spacing="-5">{esc(hero)}</text>
-<text x="60" y="447" fill="#bfd2dc" font-size="25" font-weight="800" letter-spacing="2.2">{esc(sub)}</text></g>
-<rect x="56" y="506" width="968" height="70" rx="18" fill="{accent}" fill-opacity=".10" stroke="{accent}" stroke-opacity=".34" stroke-width="2"/>
-<text x="84" y="551" fill="{CREAM}" font-size="25" font-weight="800">THE RUNG</text><text x="996" y="551" text-anchor="end" fill="{accent}" font-size="22" font-weight="850">GRADED IN PUBLIC</text>
+<g data-zone="headline"><text x="56" y="210" fill="{accent}" font-size="67" font-weight="950">{esc(headline)}</text>
+<text x="56" y="302" fill="{CREAM}" font-size="78" font-weight="950">{esc(hero)}</text></g>
+{ladder_track(active, completed, goal, complete)}
 {''.join(leg_blocks)}
 {''.join(tile_blocks)}
-<g data-zone="progress"><text x="56" y="1102" fill="{CREAM}" font-size="25" font-weight="850">THE CLIMB</text>
-<text x="1024" y="1102" text-anchor="end" fill="#9eb8c7" font-size="21">{esc(dollars(start))} → {esc(dollars(goal))}</text>
-<rect x="84" y="1140" width="912" height="22" rx="11" fill="#9eb8c7" fill-opacity=".20"/>
-<rect x="84" y="1140" width="{bar:.0f}" height="22" rx="11" fill="{accent}"/>
-<circle cx="{progress_x(progress_total):.0f}" cy="1151" r="19" fill="{accent}" stroke="{CREAM}" stroke-width="4"/>
-<text x="84" y="1203" fill="#9eb8c7" font-size="20">{esc(dollars(start))}</text><text x="996" y="1203" text-anchor="end" fill="{accent}" font-size="20" font-weight="850">{esc(dollars(goal))}</text></g>
 <line x1="56" y1="1240" x2="1024" y2="1240" stroke="{accent}" stroke-opacity=".24" stroke-width="2"/>
-<text x="56" y="1281" fill="{CREAM}" font-size="23" font-weight="800">BANK 20% OF EVERY RETURN. RIDE 80%.</text>
-<text x="56" y="1310" fill="#9eb8c7" font-size="19">keenroudy.com/sports</text>
-<text x="1024" y="1310" text-anchor="end" fill="#9eb8c7" font-size="17">Entertainment only. Not advice.</text>
+<text x="56" y="1292" fill="{accent}" font-size="23" font-weight="800">keenroudy.com/sports</text><text x="1024" y="1292" text-anchor="end" fill="#9eb8c7" font-size="17">Entertainment only. Not advice.</text>
 </svg>'''
 
 

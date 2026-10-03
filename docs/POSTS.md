@@ -85,11 +85,12 @@ served at `https://keenroudy.com/sports/data/cards/<name>.png`: `<pick id>.png`,
 `receipt-day-<date>.png`, `receipt-week-<date>.png`, `sheet-<league>-<date>.png`,
 `research-<family>-<date>.png`, `ladder-result-<pick id>.png`.
 
-The **Climb result card** is separate from the winding ticket card. It leads with `STEP N CASHED` or
-`CLIMB COMPLETE`, makes the settled dollars the largest type, gives each leg a full-width result row, and places
-banked money, the next stake and total bankroll in three fixed tiles. The small chef stays in the header; no image
-enters the headline, leg or accounting zones. A completed run replaces the next-stake tile with the clean $50 start
-for the next climb.
+The **Climb ticket and result cards** share one persistent path. Each completed step gets a green checkmark, the
+current or next step is outlined, anonymous future checkpoints lead to the $1,000 flag, and no future return or
+step count is promised. The result leads with `STEP N CASHED` or `CLIMB COMPLETE`, keeps each actual leg in a
+full-width row, and shows only the bank and next stake needed to understand the climb. Schedule explanations and
+generic motivational copy stay in the post, not on the graphic. The small chef stays in the header; no image enters
+the headline, leg or accounting zones. A completed run shows the clean $50 start for the next climb.
 
 One frame for every card (`docs/examples/`):
 - top left the **KOOK'N** wordmark and pan icon; top right the precise label (`PLAYER PROP`, `GAME TOTAL`,

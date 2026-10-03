@@ -151,12 +151,13 @@ class CardTests(unittest.TestCase):
                            'bankedAfter': 48, 'nextStake': 117, 'totalAfter': 165, 'bankPercent': 20,
                            'ridePercent': 80, 'start': 50, 'goal': 1000}}
         text = pick_card.svg(rung, GAME)
-        for needle in ('THE 80/20 CLIMB', 'CLIMB 1', 'BANK 20 · RIDE 80 · CLIMB TO $1,000',
-                       '$19 BANKED · $75 RIDING', 'STEP 2 · TODAY', '$75 → $146', 'WIN: BANK $29 · RIDE $117',
-                       '• Drake London 40+ rec yds', '+95 AT FANDUEL', 'FUTURE RUNGS UNLOCK ONE AT A TIME',
-                       'WEEKEND CHECK-INS · WEEKDAY BONUSES WHEN QUALIFIED',
+        for needle in ('80/20 CLIMB', 'CLIMB 1', '$50 → $1,000', '$19 BANKED · $75 RIDING',
+                       'STEP 2', '$75 → $146', 'WIN: $29 TO BANK · $117 RIDES',
+                       'Drake London 40+ rec yds', '+95 · FANDUEL', 'data-rung="1"', '✓', 'NEXT',
                        pick_card.HOUSE[2]):
             self.assertIn(needle, text, needle)
+        for removed in ('FUTURE RUNGS UNLOCK', 'WEEKEND CHECK-INS', 'One rung at a time'):
+            self.assertNotIn(removed, text)
         self.assertEqual(pick_card.svg_size(text), (1080, 1350))
         self.assertEqual(pick_card.svg_size(pick_card.svg(PICK, GAME)), (1200, 675))
         self.assertEqual(pick_card.play_kind(rung), 'ladder')
@@ -169,11 +170,13 @@ class CardTests(unittest.TestCase):
                            'bankThisWin': 23, 'bankedAfter': 42, 'nextStake': 94, 'totalAfter': 136,
                            'start': 50, 'goal': 1000}}
         text = pick_card.ladder_result_svg(rung, avatar='')
-        for needle in ('STEP 2 CASHED', 'RUN 1 · STEP 3 IS NEXT', '$75 → $117', 'Pitt +10.5',
-                       'Northwestern +12.5', 'BANKED', '$42', 'NEXT STAKE', '$94', 'TOTAL', '$136',
+        for needle in ('STEP 2 CASHED', 'CLIMB 1', '$75 → $117', 'Pitt +10.5',
+                       'Northwestern +12.5', 'BANKED', '$42', 'STEP 3', '$94 RIDES', '✓', 'NEXT',
                        'data-zone="headline"', 'data-zone="leg-1"', 'data-zone="leg-2"',
-                       'data-zone="accounting-0"', 'data-zone="progress"'):
+                       'data-zone="accounting-0"', 'data-zone="ladder-track"', 'data-rung="1"', 'data-rung="2"'):
             self.assertIn(needle, text, needle)
+        for removed in ('GRADED IN PUBLIC', 'THE FINISH LINE IS IN THE BOOKS', 'KEEP CLIMBING'):
+            self.assertNotIn(removed, text)
         self.assertEqual(pick_card.svg_size(text), (1080, 1350))
         root = ET.fromstring(text)
         self.assertEqual(root.attrib['viewBox'], '0 0 1080 1350')
