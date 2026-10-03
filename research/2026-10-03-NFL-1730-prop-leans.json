@@ -1,0 +1,147 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-10-03T21:30:05Z",
+  "targetWeek": 4,
+  "summary": "5:30 PM ET run, published at 5:30 PM ET. Nothing to settle. Nothing to close. Published 3: Bhayshul Tuten UNDER 1.5 receptions +112 at DraftKings; Ryan Flournoy OVER 3.5 receptions +102 at FanDuel; Marvin Harrison Jr. UNDER 2.5 receptions -114 at FanDuel. Screened and passed on 101: Malik Nabers UNDER 4.5 receptions (lean_nothing_against); Bucky Irving OVER 2.5 receptions (lean_nothing_against); Trevor Lawrence UNDER 21.5 completions (one_book); Drake Maye UNDER 30.5 pass attempts (one_book); Trevor Lawrence UNDER 34.5 pass attempts (one_book); Packers at Buccaneers over 39 (learned_pause); Jeremiyah Love UNDER 15.5 carries (one_book); Vikings at Saints under 44.5 (learned_pause); and 93 more. odds_api.py: CFB: skipped (4 captures already today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "position": "RB",
+      "athleteId": "4882093",
+      "market": "rec",
+      "line": 1.5,
+      "direction": "under",
+      "gameIds": [
+        "NFL-401872969"
+      ],
+      "book": "DraftKings",
+      "odds": 112,
+      "projection": 0.9,
+      "edge": "Projection 0.9 against 1.5. Adjusted chance 52.3% (raw 67.4%, learned factor 0.13); 47.2% needed at +112: +5.1 percentage points. An estimate, not a guarantee.",
+      "cutoff": "UNDER 1.5 at +112 or better. Closed to new entries at 1 or lower, or at -103 or worse at 1.5.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-10-02T20:57:11Z",
+      "quotedAt": "2026-10-03T20:01:35Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 4:01 PM ET capture across 2 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-04T03:30:00Z",
+      "probabilityAtPublication": {
+        "rawChance": 0.674,
+        "chance": 0.523,
+        "calibrated": true,
+        "calibration": 0.13,
+        "calibrationN": 538,
+        "push": 0.0,
+        "breakEven": 0.472,
+        "edgePoints": 5.1,
+        "evPerUnit": 0.108,
+        "snapshotAt": "2026-10-02T20:57:11Z",
+        "evaluatedAt": "2026-10-03T21:30:05Z"
+      },
+      "title": "Bhayshul Tuten UNDER 1.5 receptions",
+      "id": "NFL-2026-W4-tuten-under-1-5-rec-dk",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401872969",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "why": "Prop lean: our projection is 0.9 against 1.5. The under reads 52.3% after adjustment from the raw 67.4%; 47.2% is needed at +112. Last 10 games: 8 of 10 under 1.5. Role: 1st of 3 JAX RBs by projected targets, 1.2 a game. Defense: CIN allows 6 receptions a game to RBs, 31 of 32 this season (1 is stingiest).",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 3 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies. Confidence 2 of 10."
+    },
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "position": "WR",
+      "athleteId": "5083754",
+      "market": "rec",
+      "line": 3.5,
+      "direction": "over",
+      "gameIds": [
+        "NFL-401872967"
+      ],
+      "book": "FanDuel",
+      "odds": 102,
+      "projection": 4.2,
+      "edge": "Projection 4.2 against 3.5. Adjusted chance 51.5% (raw 61.8%, learned factor 0.13); 49.5% needed at +102: +2.0 percentage points. An estimate, not a guarantee.",
+      "cutoff": "OVER 3.5 at +102 or better. Closed to new entries at 4+, or at -113 or worse at 3.5.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-10-02T21:36:28Z",
+      "quotedAt": "2026-10-03T20:01:35Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 4:01 PM ET capture across 2 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-04T03:30:00Z",
+      "probabilityAtPublication": {
+        "rawChance": 0.618,
+        "chance": 0.515,
+        "calibrated": true,
+        "calibration": 0.13,
+        "calibrationN": 538,
+        "push": 0.0,
+        "breakEven": 0.495,
+        "edgePoints": 2.0,
+        "evPerUnit": 0.041,
+        "snapshotAt": "2026-10-02T21:36:28Z",
+        "evaluatedAt": "2026-10-03T21:30:05Z"
+      },
+      "title": "Ryan Flournoy OVER 3.5 receptions",
+      "id": "NFL-2026-W4-flournoy-over-3-5-rec-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401872967",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "why": "Prop lean: our projection is 4.2 against 3.5. The over reads 51.5% after adjustment from the raw 61.8%; 49.5% is needed at +102. Last 10 games: 4 of 10 over 3.5. Role: 3rd of 5 DAL WRs by projected targets, 6.3 a game. Defense: HOU allows 12.33 receptions a game to WRs, 25 of 32 this season (1 is stingiest).",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 3 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies. Confidence 2 of 10."
+    },
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "position": "WR",
+      "athleteId": "4432708",
+      "market": "rec",
+      "line": 2.5,
+      "direction": "under",
+      "gameIds": [
+        "NFL-401872966"
+      ],
+      "book": "FanDuel",
+      "odds": -114,
+      "projection": 1.4,
+      "edge": "Projection 1.4 against 2.5. Adjusted chance 53.7% (raw 78.3%, learned factor 0.13); 53.3% needed at -114: +0.4 percentage points. An estimate, not a guarantee.",
+      "cutoff": "UNDER 2.5 at -114 or better. Closed to new entries at 2 or lower, or at -129 or worse at 2.5.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-10-03T00:33:12Z",
+      "quotedAt": "2026-10-03T20:01:35Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 4:01 PM ET capture across 2 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-04T03:30:00Z",
+      "probabilityAtPublication": {
+        "rawChance": 0.783,
+        "chance": 0.537,
+        "calibrated": true,
+        "calibration": 0.13,
+        "calibrationN": 538,
+        "push": 0.0,
+        "breakEven": 0.533,
+        "edgePoints": 0.4,
+        "evPerUnit": 0.008,
+        "snapshotAt": "2026-10-03T00:33:12Z",
+        "evaluatedAt": "2026-10-03T21:30:05Z"
+      },
+      "title": "Marvin Harrison Jr. UNDER 2.5 receptions",
+      "id": "NFL-2026-W4-jr-under-2-5-rec-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401872966",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "why": "Prop lean: our projection is 1.4 against 2.5. The under reads 53.7% after adjustment from the raw 78.3%; 53.3% is needed at -114. Last 10 games: 6 of 10 under 2.5. Role: 3rd of 4 ARI WRs by projected targets, 2.5 a game. Defense: NYG allows 12.33 receptions a game to WRs, 24 of 32 this season (1 is stingiest).",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 3 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies. Confidence 2 of 10."
+    }
+  ]
+}
