@@ -1,16 +1,16 @@
 {
- "at": "2026-10-03T15:52:28Z",
+ "at": "2026-10-03T15:57:07Z",
  "confirmed": {
-  "CFB-401856705": "2026-10-03T14:56:16Z",
+  "CFB-401856705": "2026-10-03T15:57:07Z",
   "CFB-401856707": "2026-10-03T15:28:19Z",
-  "CFB-401856708": "2026-10-03T14:56:16Z",
+  "CFB-401856708": "2026-10-03T15:57:07Z",
   "CFB-401856709": "2026-10-03T14:20:16Z",
-  "CFB-401856710": "2026-10-03T14:56:16Z",
+  "CFB-401856710": "2026-10-03T15:57:07Z",
   "CFB-401856807": "2026-10-03T15:52:28Z",
   "CFB-401856819": "2026-10-03T15:52:28Z",
   "CFB-401856822": "2026-10-03T15:52:28Z",
   "CFB-401858246": "2026-10-03T15:52:28Z",
-  "CFB-401858247": "2026-10-03T14:56:16Z",
+  "CFB-401858247": "2026-10-03T15:57:07Z",
   "CFB-401858248": "2026-10-03T14:56:16Z",
   "CFB-401858250": "2026-10-03T14:56:16Z",
   "CFB-401858251": "2026-10-03T15:52:28Z",
@@ -20,34 +20,34 @@
   "CFB-401858473": "2026-10-03T14:56:16Z",
   "CFB-401858474": "2026-10-03T15:52:28Z",
   "CFB-401858475": "2026-10-03T14:20:16Z",
-  "CFB-401858479": "2026-10-03T14:56:16Z",
+  "CFB-401858479": "2026-10-03T15:57:07Z",
   "CFB-401862791": "2026-10-03T14:56:16Z",
   "CFB-401864515": "2026-10-03T14:56:16Z",
-  "CFB-401866432": "2026-10-03T14:56:16Z",
+  "CFB-401866432": "2026-10-03T15:57:07Z",
   "CFB-401869962": "2026-10-03T14:20:16Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1372,
-    "fanduel": 865
+    "draftkings": 1325,
+    "fanduel": 912
    },
-   "eventsListed": 64,
-   "eventsMatched": 50,
+   "eventsListed": 55,
+   "eventsMatched": 42,
    "games": 53,
    "marketTypes": {
-    "player_longest_passing_completion": 11,
-    "player_longest_reception": 46,
-    "player_longest_rush": 28,
-    "player_passing_+_rushing_yards": 124,
-    "player_passing_attempts": 59,
-    "player_passing_completions": 47,
-    "player_passing_touchdowns": 75,
-    "player_passing_yards": 310,
-    "player_receiving_yards": 821,
-    "player_receptions": 83,
-    "player_rushing_attempts": 43,
-    "player_rushing_yards": 590
+    "player_longest_passing_completion": 9,
+    "player_longest_reception": 34,
+    "player_longest_rush": 17,
+    "player_passing_+_rushing_yards": 100,
+    "player_passing_attempts": 55,
+    "player_passing_completions": 43,
+    "player_passing_touchdowns": 76,
+    "player_passing_yards": 295,
+    "player_receiving_yards": 817,
+    "player_receptions": 144,
+    "player_rushing_attempts": 47,
+    "player_rushing_yards": 600
    },
    "requestsLeft": 0,
    "rows": 2237,
@@ -112,7 +112,6 @@
      "external": {
       "ballybet": "1027508085",
       "betfair": "202610034F3864C5",
-      "betfair_lay": "202610034F3864C5",
       "betparx": "1027508085",
       "betrivers": "1027508085",
       "betway": "17283584",
@@ -184,14 +183,12 @@
      "away": "Southern Miss",
      "external": {
       "betfair": "202610062198A91B",
-      "betfair_lay": "202610062198A91B",
       "draftkings": "34745765",
       "fanduel": "36130008",
       "fliff": "416774_c_p_209_prematch",
       "kalshi": "KXNCAAFGAME-26OCT06USMTROY",
       "novig": "01a0ea7f-3f63-7272-8159-6ac924421f89",
       "polymarket": "nfl_southernmiss_troy_2026-10-06_b3",
-      "prophetx": "1700084005",
       "robinhood": "bfbe822b-ec6f-40e0-8b20-aa86c15f1bb1"
      },
      "home": "Troy",
@@ -242,7 +239,6 @@
       "kalshi": "KXNCAAFTOTAL-26OCT07NMSUFIU",
       "novig": "01a0ef82-8438-7101-8c66-0a5b820ee786",
       "polymarket": "nfl_floridainternational_newmexicostate_2026-10-07_b3",
-      "prophetx": "1700085535",
       "robinhood": "81402cfd-4645-4ce9-ad37-0cea23aae3fe"
      },
      "home": "Florida International",
@@ -335,26 +331,6 @@
       ]
      },
      "start": "2026-10-10T16:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Georgia",
-     "external": {
-      "ballybet": "1027552988",
-      "draftkings": "34226065",
-      "kalshi": "KXNCAAF1H-26OCT10UGAALA"
-     },
-     "home": "Alabama",
-     "sample": {
-      "away_team": "Georgia",
-      "home_team": "Alabama",
-      "markets": [
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-10T17:00:00Z",
      "type": "fixture"
     },
     {
@@ -459,6 +435,31 @@
      },
      "start": "2026-10-10T19:30:00Z",
      "type": "fixture"
+    },
+    {
+     "away": "LSU",
+     "external": {
+      "ballybet": "1027508199",
+      "draftkings": "34746039",
+      "fliff": "417032_c_p_209_prematch",
+      "kalshi": "KXNCAAF1H-26OCT10LSUUK",
+      "novig": "01a0fedb-b035-7dd0-b62b-57329bf392e5",
+      "polymarket": "nfl_kentuckywildcats_lsutigers_2026-10-10_b3",
+      "robinhood": "7d5b0aa1-92d9-48d9-831d-1838f10a7ce6"
+     },
+     "home": "Kentucky",
+     "sample": {
+      "away_team": "LSU",
+      "home_team": "Kentucky",
+      "markets": [
+       "1st_half_moneyline",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-10T23:00:00Z",
+     "type": "fixture"
     }
    ]
   },
@@ -538,7 +539,7 @@
       "fanduel": "36104928",
       "fliff": "400040_c_p_202_prematch",
       "galera": "20940866",
-      "gemini": "NFL-2610060015-ATL-NO-TT",
+      "gemini": "NFL-2610060015-ATL-NO-PPYDS",
       "goldrush": "30990838",
       "hardrock": "3637145959005290894",
       "kalshi": "KXNFL1HTEAMTOTAL-26OCT05ATLNO",
@@ -809,7 +810,6 @@
       "fanduel": "36132642",
       "galera": "21085967",
       "kalshi": "KXNFLGAME-26OCT11CLENYJ",
-      "novig": "01a0ef14-1fcb-7051-94a9-eea19a4672c8",
       "paddypower": "36132642",
       "rebet": "sr:match:71515880",
       "robinhood": "005b6407-c2ee-443d-ad20-7870ca566937",
@@ -839,7 +839,6 @@
       "fanduel": "36132643",
       "galera": "21085962",
       "kalshi": "KXNFLGAME-26OCT11INDPIT",
-      "novig": "01a0ef14-2091-7243-a420-c23ce574aeb3",
       "paddypower": "36132643",
       "rebet": "sr:match:71515882",
       "robinhood": "87321aad-f383-4d0b-9181-2fc700b9765f",
@@ -934,7 +933,6 @@
       "fanduel": "36132639",
       "galera": "21085963",
       "kalshi": "KXNFLGAME-26OCT11MINNO",
-      "novig": "01a0ef14-216f-7ab1-85cf-75b27a28d3b9",
       "paddypower": "36132639",
       "robinhood": "22921e01-4ebf-42af-8b39-f67083d9fcf3",
       "stake": "ae0fbab3-e327-47ff-8555-630645c84cca",
