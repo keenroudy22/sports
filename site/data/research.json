@@ -12396,5 +12396,139 @@
         "jurisdictionVerified": true
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-03T12:30:05Z",
+    "targetWeek": 5,
+    "summary": "8:30 AM ET run, published at 8:30 AM ET. Settled 1: Ladder step 2: 2 legs at FanDuel win. Closed 1: Jelani Thurman OVER 24.5 receiving yards. Nothing published. Screened and passed on 104: Navy at Air Force over 45.5 (not_duplicate); Rocco Conti UNDER 44.5 rushing yards (one_book); Nathan Hayes UNDER 24.5 rushing yards (one_book); Jaziun Patterson UNDER 66.5 rushing yards (one_book); Tony Diaz UNDER 4.5 receptions (one_book); Michael Hawkins Jr. UNDER 87.5 rushing yards (one_book); Kevin Jennings UNDER 17.5 rushing yards (one_book); Temple at South Florida over 48.5 (card_cap); and 96 more. odds_api.py: CFB: skipped (captured 2026-10-03T09:27:53Z, inside the gap) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "expired",
+        "favorite": false,
+        "modelLean": true,
+        "position": "TE",
+        "athleteId": "4871039",
+        "market": "recYds",
+        "line": 24.5,
+        "direction": "over",
+        "gameIds": [
+          "CFB-401858250"
+        ],
+        "book": "DraftKings",
+        "odds": -121,
+        "projection": 59.4,
+        "edge": "v2 receiving yards 59.4 (80% range 7.1 to 111.8). Chance of over 24.5: 80.3% (uncalibrated: no graded history against a line yet), against 54.8% break-even at -121: +25.6 points, +0.467u per unit.",
+        "cutoff": "OVER 24.5 at -121 or better. Closed to new entries at 25+, or at -136 or worse at 24.5.",
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-09-30T19:13:51Z",
+        "quotedAt": "2026-10-01T20:22:32Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 4:22 PM ET capture across 2 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-10-01T22:50:00Z",
+        "title": "Jelani Thurman OVER 24.5 receiving yards",
+        "id": "CFB-2026-W5-thurman-over-24-5-recyds-dk",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401858250",
+          "https://api.sharpapi.io/api/v1/odds"
+        ],
+        "why": "Prop lean on our number alone: our projection is 59.4 against 24.5 and the over reads 80.3% on the raw curve, which has no graded history against a line yet, so the true chance is lower than that. Last 10 games: 3 of 10 over 24.5. Role: 1st of 1 UNC TEs by projected targets, 6.6 a game. Defense: ND allows 21.25 receiving yards a game to TEs, 63 of 233 this season (1 is stingiest).",
+        "risk": "Uncalibrated chance; a player line turns on a handful of touches. 3 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies. Confidence 2 of 10.",
+        "jurisdictionVerified": true,
+        "entryNote": "Closed to new entries at 8:30 AM ET: price moved 24 cents against, from -121 to -145 at DraftKings. Published cutoff: OVER 24.5 at -121 or better. Closed to new entries at 25+, or at -136 or worse at 24.5.. Stays in the record at 24.5 and -121 and is graded as posted."
+      }
+    ],
+    "parlays": [
+      {
+        "id": "CFB-2026-W5-ladder-1002-fd",
+        "title": "Ladder step 2: 2 legs at FanDuel",
+        "status": "settled",
+        "favorite": false,
+        "parlayType": "ladder",
+        "riskUnits": 0.25,
+        "ladder": {
+          "run": 1,
+          "step": 2,
+          "stake": 75,
+          "payout": 117,
+          "banked": 19,
+          "bankThisWin": 23,
+          "bankedAfter": 42,
+          "nextStake": 94,
+          "totalAfter": 136,
+          "bankPercent": 20,
+          "ridePercent": 80,
+          "start": 50,
+          "goal": 1000
+        },
+        "legs": [
+          {
+            "id": "ladder-CFB-401858245-spread-away-10.5",
+            "title": "Pitt +10.5",
+            "gameId": "CFB-401858245",
+            "marketType": "spread",
+            "direction": "away",
+            "line": 10.5,
+            "book": "FanDuel",
+            "odds": -390,
+            "chance": 0.763,
+            "implied": 0.796,
+            "projection": -1.2,
+            "kickoff": "2026-10-02T23:00Z",
+            "observedAt": "2026-10-02T19:18:00Z",
+            "marketWindow": "Full game",
+            "alternate": true
+          },
+          {
+            "id": "ladder-CFB-401858476-spread-home-12.5",
+            "title": "Northwestern +12.5",
+            "gameId": "CFB-401858476",
+            "marketType": "spread",
+            "direction": "home",
+            "line": 12.5,
+            "book": "FanDuel",
+            "odds": -410,
+            "chance": 0.758,
+            "implied": 0.804,
+            "projection": -1.1,
+            "kickoff": "2026-10-03T00:00Z",
+            "observedAt": "2026-10-02T19:18:00Z",
+            "marketWindow": "Full game",
+            "alternate": true
+          }
+        ],
+        "correlation": "One leg per game, so the book prices the ticket as the legs multiplied.",
+        "gameIds": [
+          "CFB-401858245",
+          "CFB-401858476"
+        ],
+        "book": "FanDuel",
+        "odds": -178,
+        "quotedAt": "2026-10-02T19:18:00Z",
+        "priceEstimated": false,
+        "expiresAt": "2026-10-02T21:30:00Z",
+        "quoteType": "sportsbook",
+        "confidence": 1,
+        "edge": "For fun, not value: 2 protected lines our model agrees with (76% and 76% on the raw model numbers), at FanDuel's exact prices, multiplied to -178. $75 rides with $19 already banked. A win returns $117: $23 goes to the bank and $94 rides next. Bank 20, ride 80.",
+        "cutoff": "A ladder rung is not re-entered. It stands or falls as posted.",
+        "sources": [
+          "https://in.sportsbook.fanduel.com/football/ncaa-football-games/penn-state-@-northwestern-36112228",
+          "https://in.sportsbook.fanduel.com/football/ncaa-football-games/pittsburgh-@-virginia-tech-36112224",
+          "https://www.espn.com/college-football/game/_/gameId/401858245",
+          "https://www.espn.com/college-football/game/_/gameId/401858476"
+        ],
+        "why": "Ladder step 2: two easier game lines at FanDuel, one per game, each one our projection clears comfortably. $75 rides with $19 banked. A win returns $117: bank $23 and ride $94 on the next step. Kept apart from the record, in dollars.",
+        "risk": "Both legs have to hit; one miss ends the climb, but it cannot take money already banked. College score models are uncertain and their raw alternate-spread chances are not calibrated price edges. This is the fun of the climb; the book's official settlement controls, and a person settles the rung.",
+        "jurisdictionVerified": true,
+        "result": "win",
+        "actual": "all 2 legs won",
+        "settledAt": "2026-10-03T12:30:05Z",
+        "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401858245",
+        "settlementReason": "Every leg won.",
+        "units": 0.14
+      }
+    ]
   }
 ]
