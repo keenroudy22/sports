@@ -1029,7 +1029,13 @@
     "readyAt": "2026-10-03T14:15:00Z",
     "image": "https://keenroudy.com/sports/data/cards/CFB-2026-W5-mich-minn-over-43-5-espnbet.png"
    },
-   "reasonKind": "none"
+   "reasonKind": "none",
+   "precheck": {
+    "at": "2026-10-03T14:13:44Z",
+    "result": "closed",
+    "reason": "verified reporting argues against it: Michigan starting right tackle Andrew Sprague and sixth offensive lineman Manuel Beigel were ruled out against Minnesota."
+   },
+   "cancelledAt": "2026-10-03T14:13:44Z"
   },
   {
    "id": "CFB-2026-W5-navy-afa-over-46-5-espnbet",
@@ -1048,23 +1054,34 @@
    "reasonKind": "none",
    "featured": true,
    "cardKey": "CFB-2026-W5-navy-afa-over-46-5-espnbet-potd",
-   "requotedAt": "2026-10-03T13:33:51Z"
+   "requotedAt": "2026-10-03T13:33:51Z",
+   "precheck": {
+    "at": "2026-10-03T14:13:44Z",
+    "result": "clear",
+    "facts": 3
+   }
   },
   {
    "id": "CFB-2026-W5-syr-conn-over-50-5-espnbet",
    "postedAt": "2026-10-03T04:22:35Z",
    "dueAt": "2026-10-03T14:50:00Z",
-   "bufferPostId": "6ac0830fca55406b4b2152b1",
-   "textHash": "06b807a9024b1931",
+   "bufferPostId": "6ac10f32905eed02e069715f",
+   "textHash": "b000cfc0e7d53090",
    "kind": "buffer:play",
    "card": true,
    "discord": {
     "state": "pending",
-    "text": "Syracuse/UConn over 50.5 (-105, ESPN BET)\nNow 49.5 (-115, BetRivers)\nWe have it at 55.\n\n❤️ if you're tailing\n@Playbook #CFB",
+    "text": "Syracuse/UConn over 50.5 (-105, ESPN BET)\nWe have it at 55.\n\n❤️ if you're tailing\n@Playbook #CFB",
     "readyAt": "2026-10-03T14:35:00Z",
     "image": "https://keenroudy.com/sports/data/cards/CFB-2026-W5-syr-conn-over-50-5-espnbet.png"
    },
-   "reasonKind": "none"
+   "reasonKind": "none",
+   "precheck": {
+    "at": "2026-10-03T14:13:44Z",
+    "result": "clear",
+    "facts": 3
+   },
+   "requotedAt": "2026-10-03T14:13:44Z"
   },
   {
    "id": "sheet:CFB:2026-10-03",
