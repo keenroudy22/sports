@@ -201,6 +201,13 @@ class HoldTests(unittest.TestCase):
         self.assertIn('ruled out', run.hold_reason({'athleteId': '7'}, [out]))
         self.assertFalse(run.hard({'kind': 'injury', 'status': 'Questionable', 'claim': 'Tyjae Spears (ankle) is questionable.'}))
         self.assertTrue(run.hard({'kind': 'injury', 'status': 'Doubtful', 'claim': 'JC Evans is listed as doubtful.'}))
+        upgraded = {'kind': 'injury', 'status': 'Doubtful',
+                    'claim': 'Nebraska running back Jamal Rule was upgraded from doubtful to questionable on Friday.'}
+        self.assertFalse(run.hard(upgraded), 'an availability upgrade is not adverse hard news')
+        mixed = dict(upgraded, claim='Jamal Rule was upgraded from doubtful to questionable, but the starting QB was ruled out.')
+        self.assertTrue(run.hard(mixed), 'separate hard news in the same report still stops the post')
+        still_doubtful = dict(upgraded, claim='The running back was upgraded from out to doubtful.')
+        self.assertTrue(run.hard(still_doubtful), 'doubtful remains hard news even when it is an improvement')
         heavy = [{'kind': 'injury', 'position': p, 'team': '20', 'status': 'Out', 'claim': ''} for p in ('WR', 'WR', 'TE')]
         self.assertIsNotNone(run.hold_reason({'marketType': 'total'}, heavy))
 

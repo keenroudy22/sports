@@ -862,6 +862,10 @@ HARD_NEWS = re.compile(r"\b(ruled out|will not (?:play|start|dress|travel)|won'?
                        r"not expected to (?:play|start)|inactive|suspended|suspension|benched|demoted|"
                        r"lost (?:the|his|her|their) (?:starting )?(?:job|role)|did not travel|out for (?:the )?(?:game|season|week|year)|"
                        r"placed on (?:injured reserve|ir)|doubtful|season-ending)\b", re.IGNORECASE)
+AVAILABILITY_UPGRADE = re.compile(
+    r"\bupgraded from\s+(?:out|doubtful|questionable|probable)\s+to\s+(?:questionable|probable|available|active)\b",
+    re.IGNORECASE,
+)
 
 
 def hard(fact):
@@ -871,9 +875,14 @@ def hard(fact):
         return fact.get('direction') == 'against'
     if fact.get('kind') not in ('injury', 'role'):
         return False
-    if str(fact.get('status') or '').lower() in gates.QB_OUT | {'inactive'}:
+    claim = str(fact.get('claim') or '')
+    # A status word inside a positive update is historical context, not current bad news. On 2026-10-03
+    # "upgraded from doubtful to questionable" wrongly pulled Climb Step 3 before its post.
+    cleaned = AVAILABILITY_UPGRADE.sub('', claim)
+    improved = cleaned != claim
+    if not improved and str(fact.get('status') or '').lower() in gates.QB_OUT | {'inactive'}:
         return True
-    return bool(HARD_NEWS.search(str(fact.get('claim') or '')))
+    return bool(HARD_NEWS.search(cleaned))
 
 
 def hold_reason(candidate, facts):
