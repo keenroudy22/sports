@@ -1,14 +1,14 @@
 {
- "at": "2026-10-03T13:06:43Z",
+ "at": "2026-10-03T13:21:04Z",
  "confirmed": {
   "CFB-401856705": "2026-10-03T11:49:10Z",
-  "CFB-401856707": "2026-10-03T13:06:43Z",
+  "CFB-401856707": "2026-10-03T13:21:04Z",
   "CFB-401856708": "2026-10-03T11:49:10Z",
   "CFB-401856709": "2026-10-03T09:27:54Z",
   "CFB-401856710": "2026-10-03T11:49:10Z",
-  "CFB-401856807": "2026-10-03T13:06:43Z",
-  "CFB-401856819": "2026-10-03T13:06:43Z",
-  "CFB-401856822": "2026-10-03T13:06:43Z",
+  "CFB-401856807": "2026-10-03T13:21:04Z",
+  "CFB-401856819": "2026-10-03T13:21:04Z",
+  "CFB-401856822": "2026-10-03T13:21:04Z",
   "CFB-401858246": "2026-10-03T11:49:10Z",
   "CFB-401858247": "2026-10-03T11:49:10Z",
   "CFB-401858248": "2026-10-03T11:49:10Z",
@@ -30,7 +30,7 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1351,
+    "draftkings": 1353,
     "fanduel": 826
    },
    "eventsListed": 67,
@@ -40,18 +40,18 @@
     "player_longest_passing_completion": 8,
     "player_longest_reception": 33,
     "player_longest_rush": 17,
-    "player_passing_+_rushing_yards": 140,
+    "player_passing_+_rushing_yards": 141,
     "player_passing_attempts": 51,
     "player_passing_completions": 39,
-    "player_passing_touchdowns": 64,
+    "player_passing_touchdowns": 65,
     "player_passing_yards": 266,
-    "player_receiving_yards": 741,
+    "player_receiving_yards": 742,
     "player_receptions": 156,
     "player_rushing_attempts": 68,
-    "player_rushing_yards": 594
+    "player_rushing_yards": 593
    },
    "requestsLeft": 0,
-   "rows": 2177,
+   "rows": 2179,
    "slateGames": [
     "Memphis Tigers at Charlotte 49ers 2026-10-03T15:00Z",
     "Alabama Crimson Tide at Mississippi State Bulldogs 2026-10-03T16:00Z",
@@ -186,7 +186,7 @@
       "draftkings": "34745765",
       "fanduel": "36130008",
       "fliff": "416774_c_p_209_prematch",
-      "kalshi": "KXNCAAFGAME-26OCT06USMTROY",
+      "kalshi": "KXNCAAFTOTAL-26OCT06USMTROY",
       "novig": "01a0ea7f-3f63-7272-8159-6ac924421f89",
       "polymarket": "nfl_southernmiss_troy_2026-10-06_b3",
       "robinhood": "bfbe822b-ec6f-40e0-8b20-aa86c15f1bb1"
@@ -489,6 +489,22 @@
     {
      "away": null,
      "external": {
+      "fanduel": "28041972"
+     },
+     "home": "NFL",
+     "sample": {
+      "away_team": "",
+      "home_team": "NFL",
+      "markets": [
+       "outright"
+      ]
+     },
+     "start": "2026-10-03T13:10:00Z",
+     "type": "outright"
+    },
+    {
+     "away": null,
+     "external": {
       "draftkings": "8be5e1fe-236c-4c8b-bcea-08df1af5395e"
      },
      "home": "NFL 2026/27 \u2013 Week 4 Specials",
@@ -524,7 +540,7 @@
       "gemini": "NFL-2610060015-ATL-NO-T",
       "goldrush": "30990838",
       "hardrock": "3637145959005290894",
-      "kalshi": "KXNFL4QBTTS-26OCT05ATLNO",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT05ATLNO",
       "ladbrokes": "92974676-464a-4db3-89f6-5c6b0ee28a2e",
       "ladbrokes_uk": "lduk-258814960",
       "matchbook": "mb-33321622423000023",
@@ -924,37 +940,6 @@
      "sample": {
       "away_team": "Minnesota Vikings",
       "home_team": "New Orleans Saints",
-      "markets": [
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-11T17:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Houston Texans",
-     "external": {
-      "ballybet": "1028813037",
-      "betonline": "491141340",
-      "betparx": "1028813037",
-      "betrivers": "1028813037",
-      "draftkings": "34118229",
-      "fanduel": "36132644",
-      "galera": "21085955",
-      "kalshi": "KXNFLGAME-26OCT11HOUTEN",
-      "novig": "01a0ef14-21dd-70b1-bfbd-e8f1957b95de",
-      "paddypower": "36132644",
-      "robinhood": "8dc25d3b-86bc-41da-81d7-b6035f5bfcbf",
-      "stake": "1552de63-5091-45ab-ace5-c9ba0e12c11d",
-      "sx_bet": "L19431496"
-     },
-     "home": "Tennessee Titans",
-     "sample": {
-      "away_team": "Houston Texans",
-      "home_team": "Tennessee Titans",
       "markets": [
        "draw_no_bet",
        "moneyline",
