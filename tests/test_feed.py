@@ -53,6 +53,10 @@ class FeedTests(unittest.TestCase):
         early = datetime(2026, 9, 29, 11, 0, tzinfo=timezone.utc)        # 7:00 AM ET: no window is open yet
         self.assertEqual(feed.pick_items(first, latest, tomorrow, early), [])
         self.assertEqual(sorted(i['guid'] for i in feed.card_items(first, latest, tomorrow, early)), ['next', 'today'])
+        latest['closed']['status'] = 'expired'
+        restored = feed.card_items(first, latest, tomorrow, early, restored={'closed'})
+        self.assertEqual(sorted(i['guid'] for i in restored), ['closed', 'next', 'today'],
+                         'a corrected delivery keeps its card through the next hosted build')
 
     def test_the_posting_window_is_game_day_from_nine_until_45_minutes_out(self):
         kickoff = '2026-09-30T00:15Z'                                                     # Tuesday 8:15 PM ET

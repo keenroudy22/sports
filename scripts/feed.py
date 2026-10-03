@@ -91,14 +91,20 @@ def pick_items(first, latest, games, now, player_team=None):
     return items
 
 
-def card_items(first, latest, games, now, player_team=None):
-    """Every open, postable play whose first game has not started: the plays that may still need a card."""
+def card_items(first, latest, games, now, player_team=None, restored=()):
+    """Every open, postable play whose first game has not started: the plays that may still need a card.
+
+    A post restored after a false precheck closure keeps its card too. Otherwise the hosted rebuild sees the
+    historical closure, deletes the image, and Buffer cannot fetch the graphic for the corrected delivery.
+    """
+    restored = set(restored or ())
     items = []
     for key, pick in first.items():
         merged = dict(pick, **latest.get(key, {}))
-        if pick.get('historicalImport') or not postable(merged) or merged.get('result') or merged.get('entryNote'):
+        if pick.get('historicalImport') or not postable(merged) or merged.get('result') \
+                or (merged.get('entryNote') and key not in restored):
             continue
-        if (merged.get('status') or 'active') != 'active':
+        if (merged.get('status') or 'active') != 'active' and key not in restored:
             continue
         starts = sorted(games[g]['kickoff'] for g in (pick.get('gameIds') or []) if g in games)
         game = games.get((pick.get('gameIds') or [None])[0])
@@ -200,7 +206,13 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
     ready = [{'guid': r['card'], 'receipt': r} for r in receipts.card_history(ctx.first, ctx.latest, ctx.games, now)]
     ready += [{'guid': r['card'], 'ladderResult': r['pick']}
               for r in receipts.ladder_result_cards(ctx.first, ctx.latest, now)]
-    plays = card_items(ctx.first, ctx.latest, ctx.games, now, ctx.player_team)
+    try:
+        post_log = x_post.load_log()
+        restored = {entry.get('id') for entry in post_log.get('posts', [])
+                    if entry.get('restoredAt') and not entry.get('cancelledAt') and not entry.get('deletedAt')}
+    except (OSError, ValueError):
+        restored = set()
+    plays = card_items(ctx.first, ctx.latest, ctx.games, now, ctx.player_team, restored)
     import featured
     potd = featured.of_day(eastern_date(now).isoformat())
     # The Pick of the Day gets a card of its own, under its own name, so a post can never carry a stale copy.

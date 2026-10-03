@@ -789,7 +789,7 @@ def public_delivery(entry):
     cancelled = bool(entry.get('cancelledAt') or entry.get('deletedAt'))
     return {'discordAt': discord.get('sentAt') if discord.get('state') == 'sent' else None,
             'xAt': entry.get('sentAt'), 'xDue': None if cancelled or entry.get('error') else entry.get('dueAt'),
-            'cancelled': cancelled, 'failed': bool(entry.get('error'))}
+            'restoredAt': entry.get('restoredAt'), 'cancelled': cancelled, 'failed': bool(entry.get('error'))}
 
 
 def board_picks(first, latest, by_id, identities):
@@ -816,6 +816,10 @@ def board_picks(first, latest, by_id, identities):
     for key, pick in first.items():
         recent = latest.get(key, {})
         game = by_id.get((pick.get('gameIds') or [None])[0]) or {}
+        delivery = deliveries.get(key)
+        restored = bool(delivery and delivery.get('restoredAt') and not recent.get('result'))
+        entry_note = None if restored else recent.get('entryNote') or pick.get('entryNote')
+        status = 'active' if restored else recent.get('status') or pick.get('status')
         rows.append({'id': key, 'league': pick.get('league'), 'kind': pick.get('kind'), 'title': pick.get('title'),
                      # The same title and one-line reason the play's X post carries, so the site reads like the post.
                      'displayTitle': pick_card.display_title(pick, game) if game else pick.get('title'),
@@ -823,7 +827,7 @@ def board_picks(first, latest, by_id, identities):
                      # A Pick of the Day pulled before its post went out never wears the star.
                      'featured': key in named and (key in went_out or not (recent.get('entryNote') or pick.get('entryNote'))),
                      'posted': key in went_out,
-                     'delivery': deliveries.get(key),
+                     'delivery': delivery,
                      'market': pick.get('market') or recent.get('market') or (pricing.market_of(pick) if pick.get('athleteId') else None),
                      'riskUnits': pick.get('riskUnits'), 'modelLean': pick.get('modelLean') is True,
                      'earlyExit': recent.get('earlyExit') is True,
@@ -845,8 +849,8 @@ def board_picks(first, latest, by_id, identities):
                      'expiresAt': pick.get('expiresAt'), 'publishedAt': pick.get('publishedAt'),
                      'historicalImport': pick.get('historicalImport'), 'sources': pick.get('sources') or [],
                      'legs': pick.get('legs'), 'correlation': pick.get('correlation'), 'riskTier': pick.get('riskTier'),
-                     'marketWindow': pick.get('marketWindow'), 'entryNote': recent.get('entryNote') or pick.get('entryNote'),
-                     'status': recent.get('status') or pick.get('status'),
+                     'marketWindow': pick.get('marketWindow'), 'entryNote': entry_note,
+                     'status': status,
                      'result': recent.get('result'), 'actual': recent.get('actual'), 'settledAt': recent.get('settledAt'),
                      'units': recent.get('units'),                         # saved when the play was graded
                      'settlementReason': recent.get('settlementReason'),

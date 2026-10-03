@@ -26,8 +26,27 @@ class PickTests(unittest.TestCase):
         self.assertIsNone(row['xDue'])
         self.assertTrue(row['cancelled'])
         self.assertIsNone(row['discordAt'])
+        self.assertIsNone(row['restoredAt'])
         self.assertNotIn('secret', str(row))
         self.assertNotIn('private', str(row))
+
+    def test_a_restored_delivery_is_open_on_the_site_without_erasing_the_audit_note(self):
+        import tempfile
+        from unittest import mock
+        pick = {'id': 'step', 'title': 'Ladder step 3', 'gameIds': ['CFB-1'], 'status': 'active',
+                'parlayType': 'ladder', 'legs': [{'title': 'A'}, {'title': 'B'}], 'publishedAt': '2026-10-03T13:00:00Z'}
+        latest = {'step': dict(pick, status='expired', entryNote='Closed before its post went out: false alarm')}
+        game = {'id': 'CFB-1', 'league': 'CFB', 'kickoff': '2026-10-03T20:00:00Z'}
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / 'data').mkdir()
+            (root / 'data' / 'x-posted.json').write_text(json.dumps({'posts': [{
+                'id': 'step', 'restoredAt': '2026-10-03T19:00:00Z', 'sentAt': '2026-10-03T19:05:00Z'}]}))
+            with mock.patch.object(build_site, 'ROOT', root):
+                [row] = build_site.board_picks({'step': pick}, latest, {'CFB-1': game}, {})
+        self.assertEqual(row['status'], 'active')
+        self.assertIsNone(row['entryNote'])
+        self.assertEqual(row['delivery']['restoredAt'], '2026-10-03T19:00:00Z')
 
     def test_the_site_uses_the_same_safe_public_title_as_posts_and_cards(self):
         game = {'id': 'CFB-1', 'league': 'CFB', 'kickoff': '2026-09-26T22:30:00Z',
