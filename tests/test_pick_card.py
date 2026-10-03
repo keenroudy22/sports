@@ -162,6 +162,29 @@ class CardTests(unittest.TestCase):
         self.assertEqual(pick_card.play_kind(rung), 'ladder')
         self.assertIsNone(pick_card.artwork(rung, GAME, fetch=lambda url: 'data:x'), 'the chef serves the ladder')
 
+    def test_a_ladder_result_card_keeps_the_outcome_legs_and_accounting_in_separate_zones(self):
+        rung = {'id': 'CFB-ladder', 'parlayType': 'ladder', 'result': 'win',
+                'legs': [{'title': 'Pitt +10.5'}, {'title': 'Northwestern +12.5'}],
+                'ladder': {'run': 1, 'step': 2, 'stake': 75, 'payout': 117, 'banked': 19,
+                           'bankThisWin': 23, 'bankedAfter': 42, 'nextStake': 94, 'totalAfter': 136,
+                           'start': 50, 'goal': 1000}}
+        text = pick_card.ladder_result_svg(rung, avatar='')
+        for needle in ('STEP 2 CASHED', 'RUN 1 · STEP 3 IS NEXT', '$75 → $117', 'Pitt +10.5',
+                       'Northwestern +12.5', 'BANKED', '$42', 'NEXT STAKE', '$94', 'TOTAL', '$136',
+                       'data-zone="headline"', 'data-zone="leg-1"', 'data-zone="leg-2"',
+                       'data-zone="accounting-0"', 'data-zone="progress"'):
+            self.assertIn(needle, text, needle)
+        self.assertEqual(pick_card.svg_size(text), (1080, 1350))
+        root = ET.fromstring(text)
+        self.assertEqual(root.attrib['viewBox'], '0 0 1080 1350')
+
+        complete = dict(rung, ladder=dict(rung['ladder'], step=5, stake=675, payout=850, banked=150,
+                                           bankThisWin=170, bankedAfter=320, nextStake=680, totalAfter=1000))
+        finished = pick_card.ladder_result_svg(complete, avatar='')
+        self.assertIn('CLIMB COMPLETE', finished)
+        self.assertIn('$50 → $1,000', finished)
+        self.assertIn('NEXT CLIMB', finished)
+
     def test_the_side_the_play_is_on_picks_the_palette(self):
         spread_away = pick_card.svg({'title': 'Iowa +7', 'marketType': 'spread', 'direction': 'away', 'odds': -110, 'book': 'DK'}, GAME)
         self.assertLess(spread_away.index('#231f20'), spread_away.index('#00274c'), "the away spread leads with Iowa's colour")

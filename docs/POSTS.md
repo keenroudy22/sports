@@ -57,7 +57,7 @@ prevents duplicates, and the normal queue limits apply. These are updates, not p
 Confirmed official plays, the Pick of the Day and fun/challenge tickets use the same copy and card in Discord about
 10-15 minutes before their X time. Receipts, injury angles and conversation prompts mirror after X. Public promotion
 says "plays hit Discord first," never "guaranteed bets" or anything that implies a win.
-| **Cashed** | As a win settles (9 AM to 12:30 AM, within three hours) | `✅ Cashed: Iowa/Michigan over 38.5 (-105, ESPN BET)` (or `✅ POTD cashed: ...`, `✅ +2506 5-leg lotto cashed (ESPN BET)`, `✅ 80/20 Climb step 2 cashed: $75 → $146` / `$48 banked. $117 rides step 3.`) then the tag and the original post's link | none (it quotes the original) | `receipts.cashed` |
+| **Cashed** | As an ordinary win settles (9 AM to 12:30 AM, within three hours); a Climb win remains eligible 24 hours and an overnight result targets 9:05 AM | `✅ Cashed: Iowa/Michigan over 38.5 (-105, ESPN BET)` (or `✅ POTD cashed: ...`, `✅ +2506 5-leg lotto cashed (ESPN BET)`, `✅ 80/20 Climb step 2 cashed: $75 → $146` / `$48 banked. $117 rides step 3.`) then the tag and the original post's link | ordinary wins quote the original without a new image; a Climb win adds the dedicated 1080x1350 advancement/completion card | `receipts.cashed`, `pick_card.ladder_result_svg` |
 | **Menu** (alone) | 8:45 AM on a game day with no receipt | `Today: 6 plays` then `Iowa/Michigan 3:30 PM` per game | `site/img/kitchen-menu.png` | `receipts.menu` |
 | **The book** | 6 PM on a day with nothing else; the daily-presence fallback, never a forced play | `Season through Sep 28: 23-22` then by kind | `site/img/kitchen-book.png` | `receipts.book` |
 
@@ -83,7 +83,13 @@ Drawn as SVG and rendered to PNG by headless Chrome (`pick_card.render`), 1200x6
 research cards (1080x1350). The hosted build draws them on every deploy (`scripts/feed.py`) into `site/data/cards/`,
 served at `https://keenroudy.com/sports/data/cards/<name>.png`: `<pick id>.png`, `<pick id>-potd.png`,
 `receipt-day-<date>.png`, `receipt-week-<date>.png`, `sheet-<league>-<date>.png`,
-`research-<family>-<date>.png`.
+`research-<family>-<date>.png`, `ladder-result-<pick id>.png`.
+
+The **Climb result card** is separate from the winding ticket card. It leads with `STEP N CASHED` or
+`CLIMB COMPLETE`, makes the settled dollars the largest type, gives each leg a full-width result row, and places
+banked money, the next stake and total bankroll in three fixed tiles. The small chef stays in the header; no image
+enters the headline, leg or accounting zones. A completed run replaces the next-stake tile with the clean $50 start
+for the next climb.
 
 One frame for every card (`docs/examples/`):
 - top left the **KOOK'N** wordmark and pan icon; top right the precise label (`PLAYER PROP`, `GAME TOTAL`,

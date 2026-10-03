@@ -588,6 +588,120 @@ def ladder_svg(pick, avatar=None):
 </svg>'''
 
 
+def ladder_result_svg(pick, avatar=None):
+    """A clean result card for one 80/20 Climb rung.
+
+    The settled dollars lead, the two legs get their own unobstructed rows, and the bank/next-stake accounting
+    stays in fixed tiles below them. Artwork is confined to the header so it can never cover a wager or total.
+    """
+    info = pick.get('ladder') or {}
+    result = str(pick.get('result') or 'win').lower()
+    run, step = int(info.get('run') or 1), int(info.get('step') or 1)
+    start, goal = int(info.get('start') or LADDER[0]), int(info.get('goal') or LADDER[1])
+    stake, returned = int(info.get('stake') or 0), int(info.get('payout') or 0)
+    banked = int(info.get('banked') or 0)
+    bank_this = int(info.get('bankThisWin') if info.get('bankThisWin') is not None else round(returned * .20))
+    banked_after = int(info.get('bankedAfter') if info.get('bankedAfter') is not None else banked + bank_this)
+    next_stake = int(info.get('nextStake') if info.get('nextStake') is not None else returned - bank_this)
+    total = int(info.get('totalAfter') if info.get('totalAfter') is not None else banked_after + next_stake)
+    complete = result == 'win' and total >= goal
+    if complete:
+        headline, eyebrow = 'CLIMB COMPLETE', f'RUN {run} · {step} STEPS'
+        hero, sub = f'{dollars(start)} → {dollars(total)}', 'THE FINISH LINE IS IN THE BOOKS.'
+        tiles = [('BANKED', dollars(banked_after)), ('STEPS', str(step)), ('NEXT CLIMB', dollars(start))]
+        progress_total = goal
+        accent, glow = '#5eeaa4', '#2ed8ff'
+    elif result == 'win':
+        headline, eyebrow = f'STEP {step} CASHED', f'RUN {run} · STEP {step + 1} IS NEXT'
+        hero, sub = f'{dollars(stake)} → {dollars(returned)}', 'BANK 20. RIDE 80. KEEP CLIMBING.'
+        tiles = [('BANKED', dollars(banked_after)), ('NEXT STAKE', dollars(next_stake)), ('TOTAL', dollars(total))]
+        progress_total = total
+        accent, glow = '#5eeaa4', '#2ed8ff'
+    elif result == 'loss':
+        headline, eyebrow = f'STEP {step} ENDS', f'RUN {run} · BANK STAYS SAFE'
+        hero, sub = f'{dollars(banked)} SAVED', 'THE NEXT CLIMB STARTS CLEAN.'
+        tiles = [('BANKED', dollars(banked)), ('NEXT CLIMB', dollars(start)), ('RESULT', 'RESET')]
+        progress_total = banked
+        accent, glow = '#ff7283', '#68c1ff'
+    else:
+        headline, eyebrow = f'STEP {step} HOLDS', f'RUN {run} · SAME RUNG NEXT'
+        hero, sub = f'{dollars(stake)} RIDES', 'A PUSH OR VOID DOES NOT MOVE THE CLIMB.'
+        tiles = [('BANKED', dollars(banked)), ('RIDING', dollars(stake)), ('NEXT STEP', str(step))]
+        progress_total = banked + stake
+        accent, glow = '#68c1ff', '#5eeaa4'
+
+    leg_blocks = []
+    for index, leg in enumerate((pick.get('legs') or [])[:2], 1):
+        title = short_leg(str(leg.get('title') or 'Leg details unavailable'))
+        wrapped = textwrap.wrap(title, width=42, break_long_words=False, break_on_hyphens=False) or [title]
+        if len(wrapped) > 2:
+            wrapped = [wrapped[0], fit(' '.join(wrapped[1:]), 48)]
+        y = 610 + (index - 1) * 128
+        mark = '✓' if result == 'win' else '•'
+        leg_blocks += [
+            f'<g data-zone="leg-{index}"><rect x="56" y="{y}" width="968" height="110" rx="22" fill="#102330" stroke="{accent}" stroke-opacity=".30" stroke-width="2"/>',
+            f'<circle cx="104" cy="{y + 55}" r="25" fill="{accent}" fill-opacity=".14" stroke="{accent}" stroke-width="3"/>',
+            f'<text x="104" y="{y + 65}" text-anchor="middle" fill="{accent}" font-size="31" font-weight="950">{mark}</text>',
+        ]
+        font = 31 if len(wrapped) == 1 else 27
+        first_y = y + (65 if len(wrapped) == 1 else 45)
+        leg_blocks += [f'<text x="154" y="{first_y + 34 * line}" fill="{CREAM}" font-size="{font}" font-weight="800">{esc(part)}</text>'
+                       for line, part in enumerate(wrapped)]
+        leg_blocks.append('</g>')
+
+    tile_blocks = []
+    for index, (label, value) in enumerate(tiles):
+        x = 56 + index * 328
+        tile_blocks += [
+            f'<g data-zone="accounting-{index}"><rect x="{x}" y="890" width="304" height="150" rx="22" fill="#102330" stroke="#284a5c" stroke-width="2"/>',
+            f'<text x="{x + 24}" y="932" fill="#9eb8c7" font-size="18" font-weight="850" letter-spacing="2.5">{esc(label)}</text>',
+            f'<text x="{x + 24}" y="1001" fill="{accent}" font-size="52" font-weight="950">{esc(value)}</text></g>',
+        ]
+
+    def progress_x(amount):
+        try:
+            share = math.log(max(float(amount), start) / start) / math.log(goal / start)
+        except (TypeError, ValueError, ZeroDivisionError):
+            share = 0.0
+        return 84 + 912 * max(0.0, min(1.0, share))
+
+    bar = max(18, progress_x(progress_total) - 84)
+    chef = avatar_uri(CHEF) if avatar is None else avatar
+    chef_art = (f'<image href="{chef}" x="906" y="54" width="112" height="112" preserveAspectRatio="xMidYMid meet"/>') if chef else ''
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<defs>
+  <linearGradient id="resultBg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#07131d"/><stop offset=".72" stop-color="#081b27"/><stop offset="1" stop-color="#0b3440"/></linearGradient>
+  <radialGradient id="resultGlow"><stop stop-color="{glow}" stop-opacity=".18"/><stop offset="1" stop-color="{glow}" stop-opacity="0"/></radialGradient>
+  <pattern id="resultGrid" width="44" height="44" patternUnits="userSpaceOnUse"><path d="M44 0H0V44" fill="none" stroke="{glow}" stroke-opacity=".035"/></pattern>
+</defs>
+<rect width="1080" height="1350" fill="url(#resultBg)"/><rect width="1080" height="1350" fill="url(#resultGrid)"/>
+<circle cx="930" cy="185" r="260" fill="url(#resultGlow)"/>
+<rect x="28" y="28" width="1024" height="1294" rx="34" fill="none" stroke="{accent}" stroke-opacity=".44" stroke-width="3"/>
+<rect x="28" y="28" width="1024" height="9" rx="4" fill="{accent}"/>
+{PAN.format(x=56, y=64, s=.44, c=accent)}
+<text x="116" y="97" fill="{CREAM}" font-size="31" font-weight="900" letter-spacing="5">KOOK’N</text>
+<text x="56" y="160" fill="#9eb8c7" font-size="20" font-weight="850" letter-spacing="4">80/20 CLIMB · {esc(eyebrow)}</text>
+{chef_art}
+<g data-zone="headline"><text x="56" y="250" fill="{accent}" font-size="64" font-weight="950" letter-spacing="-1">{esc(headline)}</text>
+<text x="56" y="390" fill="{CREAM}" font-size="112" font-weight="950" letter-spacing="-5">{esc(hero)}</text>
+<text x="60" y="447" fill="#bfd2dc" font-size="25" font-weight="800" letter-spacing="2.2">{esc(sub)}</text></g>
+<rect x="56" y="506" width="968" height="70" rx="18" fill="{accent}" fill-opacity=".10" stroke="{accent}" stroke-opacity=".34" stroke-width="2"/>
+<text x="84" y="551" fill="{CREAM}" font-size="25" font-weight="800">THE RUNG</text><text x="996" y="551" text-anchor="end" fill="{accent}" font-size="22" font-weight="850">GRADED IN PUBLIC</text>
+{''.join(leg_blocks)}
+{''.join(tile_blocks)}
+<g data-zone="progress"><text x="56" y="1102" fill="{CREAM}" font-size="25" font-weight="850">THE CLIMB</text>
+<text x="1024" y="1102" text-anchor="end" fill="#9eb8c7" font-size="21">{esc(dollars(start))} → {esc(dollars(goal))}</text>
+<rect x="84" y="1140" width="912" height="22" rx="11" fill="#9eb8c7" fill-opacity=".20"/>
+<rect x="84" y="1140" width="{bar:.0f}" height="22" rx="11" fill="{accent}"/>
+<circle cx="{progress_x(progress_total):.0f}" cy="1151" r="19" fill="{accent}" stroke="{CREAM}" stroke-width="4"/>
+<text x="84" y="1203" fill="#9eb8c7" font-size="20">{esc(dollars(start))}</text><text x="996" y="1203" text-anchor="end" fill="{accent}" font-size="20" font-weight="850">{esc(dollars(goal))}</text></g>
+<line x1="56" y1="1240" x2="1024" y2="1240" stroke="{accent}" stroke-opacity=".24" stroke-width="2"/>
+<text x="56" y="1281" fill="{CREAM}" font-size="23" font-weight="800">BANK 20% OF EVERY RETURN. RIDE 80%.</text>
+<text x="56" y="1310" fill="#9eb8c7" font-size="19">keenroudy.com/sports</text>
+<text x="1024" y="1310" text-anchor="end" fill="#9eb8c7" font-size="17">Entertainment only. Not advice.</text>
+</svg>'''
+
+
 def svg(pick, game=None, record=None, when=None, player_side=None, identities=None, avatar=None, featured=False, art=None):
     """The card. Every number on it is a field of the pick or the record handed in."""
     if play_kind(pick) == 'ladder':

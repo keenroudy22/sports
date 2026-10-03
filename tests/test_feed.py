@@ -3,6 +3,7 @@ import unittest
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import feed
@@ -95,6 +96,17 @@ class FeedTests(unittest.TestCase):
         self.assertEqual(item.find('enclosure').get('type'), 'image/png')
         self.assertIn('over 44.5 (-110, DraftKings)', item.find('description').text)
         self.assertTrue(item.find('pubDate').text.endswith('+0000') or 'GMT' in item.find('pubDate').text or True)
+
+    def test_the_hosted_card_build_renders_a_ladder_result_asset(self):
+        import tempfile
+        settled = {'id': 'CFB-ladder', 'parlayType': 'ladder', 'result': 'win', 'legs': [],
+                   'ladder': {'step': 2, 'stake': 75, 'payout': 117, 'bankedAfter': 42, 'nextStake': 94}}
+        with tempfile.TemporaryDirectory() as folder, mock.patch('pick_card.chrome_path', return_value='/chrome'), \
+                mock.patch('pick_card.ladder_result_svg', return_value='<svg/>') as graphic, \
+                mock.patch('pick_card.render', side_effect=lambda _svg, path: Path(path).write_bytes(b'png')):
+            cards = feed.render_cards([{'guid': 'ladder-result-CFB-ladder', 'ladderResult': settled}], Path(folder))
+        self.assertIn('ladder-result-CFB-ladder', cards)
+        graphic.assert_called_once_with(settled)
 
 
 if __name__ == '__main__':

@@ -149,12 +149,14 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None):
         return {}
     out = {}
     for item in items:
-        if 'pick' not in item and 'receipt' not in item:
+        if 'pick' not in item and 'receipt' not in item and 'ladderResult' not in item:
             continue
         path = Path(folder) / f"{item['guid']}.png"
         try:
             if not path.exists():
-                if 'receipt' in item:
+                if 'ladderResult' in item:
+                    pick_card.render(pick_card.ladder_result_svg(item['ladderResult']), path)
+                elif 'receipt' in item:
                     pick_card.render(pick_card.receipt_svg(item['receipt']), path)
                 else:
                     art = (pick_card.ticket_art(item['pick'], games, player_team) if pick_card.play_kind(item['pick']) == 'parlay'
@@ -196,6 +198,8 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
     # Keep recent receipt images in every build. Discord normally uploads a permanent copy, but retaining these
     # URLs repairs old embeds and gives a failed delivery several days to retry without losing its card.
     ready = [{'guid': r['card'], 'receipt': r} for r in receipts.card_history(ctx.first, ctx.latest, ctx.games, now)]
+    ready += [{'guid': r['card'], 'ladderResult': r['pick']}
+              for r in receipts.ladder_result_cards(ctx.first, ctx.latest, now)]
     plays = card_items(ctx.first, ctx.latest, ctx.games, now, ctx.player_team)
     import featured
     potd = featured.of_day(eastern_date(now).isoformat())

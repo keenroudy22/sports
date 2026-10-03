@@ -270,6 +270,22 @@ class LadderReceiptTests(unittest.TestCase):
         head, body = receipts.ladder_cashed(pick('l', 'sun', **top))
         self.assertEqual((head, body), ('🪜 80/20 Climb complete: $50 → $1,000 in 5 steps', '$320 banked along the way.'))
 
+    def test_an_overnight_ladder_win_queues_a_morning_result_card_instead_of_expiring(self):
+        rung = pick('ladder', 'sun', **self.RUNG)
+        rung['id'] = 'NFL-2026-W4-ladder'
+        first = {rung['id']: rung}
+        latest = {rung['id']: {'result': 'win', 'settledAt': '2026-09-28T04:00:00Z'}}
+        log = {'posts': [{'id': rung['id'], 'kind': 'buffer:play', 'tweetId': '123'}]}
+        morning_run = datetime(2026, 9, 28, 10, 45, tzinfo=timezone.utc)  # 6:45 AM ET
+        [post] = receipts.cashed(first, latest, GAMES, log, morning_run)
+        self.assertEqual(post['card'], 'ladder-result-NFL-2026-W4-ladder')
+        self.assertEqual(post['due'].astimezone(gates.EASTERN).strftime('%H:%M'), '09:05')
+        self.assertGreater(post['stale'], post['due'])
+        self.assertIn('$117 rides step 3', post['text'])
+        [card] = receipts.ladder_result_cards(first, latest, morning_run)
+        self.assertEqual(card['card'], post['card'])
+        self.assertEqual(card['pick']['result'], 'win')
+
 
 class DailyTests(unittest.TestCase):
     def test_the_menu_names_the_games_and_times_never_the_side(self):

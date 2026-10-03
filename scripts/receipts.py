@@ -398,19 +398,42 @@ def book(first, latest, games, log_book, now):
 
 
 CASHED_FRESH = timedelta(hours=3)          # a win settled longer ago than this is left to the morning receipt
+LADDER_CASHED_FRESH = timedelta(hours=24)  # the Climb is a continuing story; an overnight final advances next morning
+LADDER_MORNING = (9, 5)                    # never wake the feed overnight; the 6:45 run can still queue the card
 QUIET = ((0, 30), (9, 0))                  # Eastern: no cashed post overnight; the morning receipt carries those wins
 HANDLE = 'keenkooks'
 
 
+def ladder_result_card_key(key):
+    return f'ladder-result-{key}'
+
+
+def ladder_result_cards(first, latest, now, days=CARD_HISTORY_DAYS):
+    """Recently settled Climb rungs whose result graphics must remain live for Buffer and Discord."""
+    cutoff = now - timedelta(days=days)
+    out = []
+    for key, original in first.items():
+        pick = dict(original, **latest.get(key, {}))
+        if pick_card.play_kind(pick) != 'ladder' or not pick.get('result') or not pick.get('settledAt'):
+            continue
+        try:
+            if gates.when(pick['settledAt']) < cutoff:
+                continue
+        except (TypeError, ValueError):
+            continue
+        out.append({'card': ladder_result_card_key(key), 'pick': pick})
+    return out
+
+
 def cashed(first, latest, games, log_book, now):
     """A winning play that went out on X gets its own post when it settles: "✅ CASHED", the play and its price, and
-    the original post quoted (its X link in the text shows the post under it). Text only: the quoted post carries
-    the card. Losses are not singled out; the morning receipt lists every play, win or lose. Overnight, or three
-    hours after it settled, a win is left to that receipt."""
+    the original post quoted (its X link in the text shows the post under it). Ordinary wins stay text-only because
+    the quoted post carries the card. A Climb win carries its own advancement/completion graphic and remains eligible
+    through the next morning, so a late final cannot silently miss the continuing story. Losses are still handled by
+    the honest morning receipt."""
     local = now.astimezone(gates.EASTERN)
     minute = local.hour * 60 + local.minute
-    if QUIET[0][0] * 60 + QUIET[0][1] <= minute < QUIET[1][0] * 60 + QUIET[1][1]:
-        return []
+    quiet = QUIET[0][0] * 60 + QUIET[0][1] <= minute < QUIET[1][0] * 60 + QUIET[1][1]
     out = []
     for entry in log_book.get('posts', []):
         key = entry.get('id')
@@ -420,7 +443,9 @@ def cashed(first, latest, games, log_book, now):
         if pick.get('result') != 'win' or not pick.get('settledAt'):
             continue
         settled_at = gates.when(pick['settledAt'])
-        if not now - CASHED_FRESH < settled_at <= now:
+        ladder = pick_card.play_kind(pick) == 'ladder'
+        fresh = LADDER_CASHED_FRESH if ladder else CASHED_FRESH
+        if not now - fresh < settled_at <= now or (quiet and not ladder):
             continue
         parlay = pick_card.play_kind(pick) == 'parlay'
         price = f"({int(pick['odds']):+d}, {pick.get('book')})"
@@ -428,13 +453,18 @@ def cashed(first, latest, games, log_book, now):
         what = ''
         if parlay:
             head, what = f"✅ {int(pick['odds']):+d} {label(pick, games)} cashed ({pick.get('book')})", ''
-        if pick_card.play_kind(pick) == 'ladder':
+        card = None
+        due = now
+        if ladder:
             head, what = ladder_cashed(pick)
+            card = ladder_result_card_key(key)
+            if local.hour < LADDER_MORNING[0]:
+                due = at(eastern_date(now), LADDER_MORNING)
         league = str(key).split('-')[0]
         tag = x_post.TAGS.get(league, '')
         text = '\n'.join(x for x in (head, what, tag, f"https://x.com/{HANDLE}/status/{entry['tweetId']}") if x)
-        out.append({'key': f'cashed:{key}', 'kind': 'cashed', 'card': None, 'text': text, 'due': now,
-                    'stale': settled_at + CASHED_FRESH})
+        out.append({'key': f'cashed:{key}', 'kind': 'cashed', 'card': card, 'text': text, 'due': due,
+                    'stale': settled_at + fresh})
     return out
 
 

@@ -128,6 +128,12 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Automatic Climb result graphics (2026-10-03):** every winning 80/20 Climb rung gets a dedicated 1080x1350
+  advancement card; the goal-reaching rung gets the completion version. The settled dollars lead, each leg and the
+  bank/next-stake accounting stay in separate unobstructed zones, and artwork is confined to the header. A late
+  final remains eligible for 24 hours and the 6:45 AM run queues it for 9:05 AM, so an overnight result cannot miss
+  the story. If a text-only advancement was already queued before settlement, the run safely replaces that future
+  Buffer item with the same words plus the live card. Never create a duplicate post or change the rung's record.
 - **Legibility first (2026-10-02):** the actual wager lines must be the dominant part of ticket graphics.
   Prefer large full-width leg panels and small branding over oversized mascots and tiny lists. Preserve all
   leg wording and prices; use real player/team art when available and rotate stable navy/mint/cyan treatments

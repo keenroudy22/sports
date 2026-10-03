@@ -744,6 +744,27 @@ class LockedUnitsTests(unittest.TestCase):
         self.assertIn('not calibrated price edges', game_rung['risk'])
         self.assertNotIn('player who does not take the field', game_rung['risk'])
 
+    def test_a_queued_text_only_ladder_advance_is_upgraded_when_its_card_arrives(self):
+        now = datetime(2026, 10, 3, 10, 45, tzinfo=timezone.utc)
+        pick = {'id': 'CFB-ladder', 'parlayType': 'ladder', 'result': 'win',
+                'ladder': {'step': 2, 'stake': 75, 'payout': 117}}
+        ctx = SimpleNamespace(first={'CFB-ladder': pick}, latest={})
+        log_book = {'posts': [{'id': 'cashed:CFB-ladder', 'kind': 'buffer:cashed', 'bufferPostId': 'old',
+                               'dueAt': '2026-10-03T13:15:00Z', 'card': False,
+                               'discord': {'state': 'pending', 'text': 'Step 2 cashed'}}]}
+        with mock.patch('buffer_post.reachable', return_value=True), \
+                mock.patch('buffer_post.create_post', return_value='new') as create, \
+                mock.patch('buffer_post.delete_post') as delete:
+            changed = run.upgrade_ladder_result_cards(log_book, ctx, now, channel={'id': 'x'}, log=lambda *_: None)
+        self.assertEqual(changed, 1)
+        entry = log_book['posts'][0]
+        self.assertEqual(entry['bufferPostId'], 'new')
+        self.assertTrue(entry['card'])
+        self.assertEqual(entry['cardKey'], 'ladder-result-CFB-ladder')
+        self.assertEqual(entry['discord']['image'], 'https://keenroudy.com/sports/data/cards/ladder-result-CFB-ladder.png')
+        create.assert_called_once()
+        delete.assert_called_once_with('old')
+
     def test_an_alert_can_open_a_link_and_wait(self):
         sent = []
         with tempfile.TemporaryDirectory() as folder, mock.patch.dict(os.environ, {'KEENROUDY_NTFY_TOPIC': 'topic'}), \

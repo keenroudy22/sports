@@ -7,6 +7,20 @@ rules in words. When this file and the validator disagree, the validator wins.
 
 ## What runs
 
+### October 3 automatic Climb results
+
+A winning 80/20 Climb rung now produces its own result card in the hosted build. The 1080x1350 layout keeps the
+headline, settled dollars, each rung leg, bank, next stake and total in fixed, separate zones; the chef stays in the
+header and cannot cover the wording. An ordinary advance says which step is next. A goal-reaching win says the
+climb is complete and that the next climb starts at $50.
+
+Unlike an ordinary cashed post, a Climb advance remains eligible for 24 hours. A late final can therefore be
+settled by the 6:45 AM run and queued for 9:05 AM rather than disappearing into the morning receipt. The post still
+quotes the original rung and keeps its date-specific `cashed:<pick id>` key. The result card is retained for eight
+days for Buffer/Discord retries. If an already-queued advancement predates the card, the run creates the replacement
+with the card first, deletes the old Buffer item second, and updates the same log entry, so it cannot intentionally
+publish twice. This adds no odds call, paid service or model use.
+
 ### October 2 Discord simplification and Climb check-ins
 
 The owner approved one official Plays & Results feed, Start Here, general chat and Wins & Bad Beats. The

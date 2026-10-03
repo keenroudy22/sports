@@ -1864,8 +1864,9 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         for key, problems in refused:
             log(f"buffer: {key} held back, its text fails the post check: {'; '.join(problems)}")
             alert('KeenRoudy post held back', f"{key}: {'; '.join(problems)}")
-        if plans and deploying:
-            waiting = [card for *_, card in plans if card]
+        upgrades = pending_ladder_result_cards(log_book, ctx, now)
+        if deploying and (plans or upgrades):
+            waiting = [card for *_, card in plans if card] + list(upgrades.values())
             started = clock()
             while waiting and clock() - started < CARD_WAIT:
                 waiting = [card for card in waiting if not buffer_post.reachable(buffer_post.card_url(card))]
@@ -1887,6 +1888,7 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         for title, message in lotto_pings([p for p in plans if p[0] in scheduled], ctx):
             alert(title, message, click=f'https://x.com/{receipts_handle()}', delay='5m')
         feature_scheduled(log_book, ctx, games, now)
+        upgrade_ladder_result_cards(log_book, ctx, now, channel=channel)
     except (buffer_post.BufferError, buffer_post.MissingToken) as error:
         log(f'buffer: {error}')
         status['errors'].append(f'buffer: {error}')
@@ -2014,6 +2016,75 @@ def feature_scheduled(log_book, ctx, games, now, log=log):
     entry.clear()
     entry.update(before)
     return False
+
+
+def pending_ladder_result_cards(log_book, ctx, now):
+    """Queued Climb result posts that predate their graphic, keyed by post id.
+
+    Normal runs schedule the result only after its card is live. This also repairs an already-queued text-only
+    advancement when settlement and the hosted card arrive later, without creating a second public post.
+    """
+    import buffer_post
+    import pick_card
+    import receipts
+    out = {}
+    for entry in log_book.get('posts', []):
+        if entry.get('kind') != 'buffer:cashed' or entry.get('card') or not entry.get('bufferPostId'):
+            continue
+        if entry.get('sentAt') or entry.get('cancelledAt') or entry.get('deletedAt') or entry.get('error'):
+            continue
+        if not entry.get('dueAt') or gates.when(entry['dueAt']) <= now + buffer_post.SOON:
+            continue
+        key = str(entry.get('id') or '')
+        pick_id = key[len('cashed:'):] if key.startswith('cashed:') else ''
+        if pick_id not in ctx.first:
+            continue
+        pick = dict(ctx.first[pick_id], **ctx.latest.get(pick_id, {}))
+        if pick_card.play_kind(pick) == 'ladder' and pick.get('result') == 'win':
+            out[key] = receipts.ladder_result_card_key(pick_id)
+    return out
+
+
+def upgrade_ladder_result_cards(log_book, ctx, now, channel=None, log=log):
+    """Safely replace a future text-only Climb result with the same post plus its now-live card."""
+    import buffer_post
+    import x_post
+    wanted = pending_ladder_result_cards(log_book, ctx, now)
+    if not wanted:
+        return 0
+    channel = channel or buffer_post.x_channel(wanted='keenkooks')
+    changed = 0
+    for entry in log_book.get('posts', []):
+        card_key = wanted.get(entry.get('id'))
+        if not card_key:
+            continue
+        card = buffer_post.card_url(card_key)
+        if not buffer_post.reachable(card):
+            log(f"buffer: {entry['id']} still waits for its Climb result card")
+            continue
+        text = str((entry.get('discord') or {}).get('text') or '')
+        if not text:
+            log(f"buffer: {entry['id']} cannot attach its Climb result card: saved text is missing")
+            continue
+        new_id = buffer_post.create_post(text, channel['id'], gates.when(entry['dueAt']), card)
+        try:
+            buffer_post.delete_post(entry['bufferPostId'])
+        except buffer_post.BufferError:
+            try:
+                buffer_post.delete_post(new_id)
+            except buffer_post.BufferError:
+                alert('KeenRoudy post may go out twice',
+                      f"{entry['id']}: both {entry['bufferPostId']} and {new_id} are scheduled; delete one in Buffer")
+            raise
+        entry.update(bufferPostId=new_id, card=True, cardKey=card_key, cardAttachedAt=stamp(now),
+                     textHash=x_post.text_hash(text))
+        mirror = entry.get('discord') or {}
+        if mirror.get('state') == 'pending':
+            mirror['image'] = card
+            entry['discord'] = mirror
+        changed += 1
+        log(f"buffer: {entry['id']} upgraded with its Climb result card")
+    return changed
 
 
 def now_quotes(ctx, games, now):
