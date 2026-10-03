@@ -52,8 +52,32 @@ class GradingTests(unittest.TestCase):
 
     def test_leg_shapes(self):
         self.assertEqual(run.leg_pick({'market': 'total points', 'side': 'over', 'line': 44.5})['marketType'], 'total')
+        self.assertEqual(run.leg_pick({'marketType': 'spread', 'direction': 'away', 'line': 10.5}),
+                         {'marketType': 'spread', 'line': 10.5, 'direction': 'away'})
         leg = run.leg_pick({'id': 'prop-NFL-1-77-recYds', 'market': 'receiving yards', 'side': 'over', 'line': 49.5, 'title': 'P over 49.5 receiving yards'})
         self.assertEqual(leg['athleteId'], '77')
+
+    def test_a_ladder_of_manually_quoted_alternate_spreads_settles_automatically(self):
+        games = {
+            'CFB-1': {'id': 'CFB-1', 'league': 'CFB', 'completed': True,
+                      'away': {'short': 'Pitt', 'score': 35}, 'home': {'short': 'Virginia Tech', 'score': 33}},
+            'CFB-2': {'id': 'CFB-2', 'league': 'CFB', 'completed': True,
+                      'away': {'short': 'Penn State', 'score': 13}, 'home': {'short': 'Northwestern', 'score': 34}},
+        }
+        ticket = {'id': 'CFB-ladder', 'league': 'CFB', 'parlayType': 'ladder', 'book': 'FanDuel', 'odds': -178,
+                  'gameIds': ['CFB-1', 'CFB-2'],
+                  'legs': [{'gameId': 'CFB-1', 'marketType': 'spread', 'direction': 'away', 'line': 10.5,
+                            'title': 'Pitt +10.5'},
+                           {'gameId': 'CFB-2', 'marketType': 'spread', 'direction': 'home', 'line': 12.5,
+                            'title': 'Northwestern +12.5'}],
+                  'ladder': {'run': 1, 'step': 2, 'stake': 75, 'payout': 117, 'banked': 19,
+                             'bankThisWin': 23, 'bankedAfter': 42, 'nextStake': 94, 'totalAfter': 136}}
+        ctx = SimpleNamespace(first={ticket['id']: dict(ticket)}, latest={})
+        settled, unclear = run.settle(ctx, {ticket['id']: ('parlays', dict(ticket))}, games, [],
+                                        datetime(2026, 10, 3, 10, 45, tzinfo=timezone.utc))
+        self.assertEqual(unclear, [])
+        self.assertEqual(settled[0][2]['result'], 'win')
+        self.assertEqual(settled[0][2]['actual'], 'all 2 legs won')
 
     def test_a_losing_prop_waits_for_injury_review_and_never_assumes_a_push(self):
         now = datetime(2026, 9, 28, tzinfo=timezone.utc)

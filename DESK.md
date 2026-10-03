@@ -21,7 +21,9 @@ settled by the 6:45 AM run and queued for 9:05 AM rather than disappearing into 
 quotes the original rung and keeps its date-specific `cashed:<pick id>` key. The result card is retained for eight
 days for Buffer/Discord retries. If an already-queued advancement predates the card, the run creates the replacement
 with the card first, deletes the old Buffer item second, and updates the same log entry, so it cannot intentionally
-publish twice. This adds no odds call, paid service or model use.
+publish twice. Exact manually supplied alternate spreads and totals keep their game-market type and grade directly
+from final scores; they do not wait for a person merely because they did not come from the normal feed builder. This
+adds no odds call, paid service or model use.
 
 ### October 2 Discord simplification and Climb check-ins
 

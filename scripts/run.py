@@ -313,8 +313,9 @@ def grade_prop(pick, record):
 def leg_pick(leg):
     """A parlay leg as the pick shape grade_game_pick and grade_prop read."""
     market = str(leg.get('market') or '')
-    if market in ('point spread', 'total points'):
-        return {'marketType': 'spread' if market == 'point spread' else 'total', 'line': leg.get('line'),
+    market_type = str(leg.get('marketType') or '')
+    if market_type in ('spread', 'total') or market in ('point spread', 'total points'):
+        return {'marketType': market_type or ('spread' if market == 'point spread' else 'total'), 'line': leg.get('line'),
                 'direction': leg.get('side') or leg.get('direction')}
     athlete = leg.get('athleteId') or (re.match(r'prop-[A-Z]+-\d+-(\d+)-', str(leg.get('id') or '')) or [None, None])[1]
     return {'athleteId': athlete, 'market': market, 'title': leg.get('title'), 'line': leg.get('line'),
