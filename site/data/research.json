@@ -12706,5 +12706,96 @@
         "entryNote": "Closed to new entries at 10:13 AM ET, before its post went out: verified reporting argues against it: Michigan starting right tackle Andrew Sprague and sixth offensive lineman Manuel Beigel were ruled out against Minnesota. Stays in the record at 43.5 and +100 and is graded as posted."
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-03T15:21:06Z",
+    "summary": "11:21 AM ET run, published at 11:21 AM ET. Nothing to settle. Closed 1: Ladder step 3: 2 legs at FanDuel. Nothing published. precheck before posting",
+    "takeaways": [],
+    "parlays": [
+      {
+        "id": "CFB-2026-W5-ladder-1003-fd",
+        "title": "Ladder step 3: 2 legs at FanDuel",
+        "status": "expired",
+        "favorite": false,
+        "parlayType": "ladder",
+        "riskUnits": 0.25,
+        "ladder": {
+          "run": 1,
+          "step": 3,
+          "stake": 94,
+          "payout": 148,
+          "banked": 42,
+          "bankThisWin": 30,
+          "bankedAfter": 72,
+          "nextStake": 118,
+          "totalAfter": 190,
+          "bankPercent": 20,
+          "ridePercent": 80,
+          "start": 50,
+          "goal": 1000
+        },
+        "legs": [
+          {
+            "id": "ladder-CFB-401858472-spread-home--1.5",
+            "title": "Illinois -1.5",
+            "gameId": "CFB-401858472",
+            "marketType": "spread",
+            "direction": "home",
+            "line": -1.5,
+            "book": "FanDuel",
+            "odds": -390,
+            "chance": 0.807,
+            "implied": 0.796,
+            "projection": 15.7,
+            "kickoff": "2026-10-03T20:15Z",
+            "observedAt": "2026-10-03T13:27:02Z",
+            "marketWindow": "Full game",
+            "alternate": true
+          },
+          {
+            "id": "ladder-CFB-401858475-spread-home--4.5",
+            "title": "Nebraska -4.5",
+            "gameId": "CFB-401858475",
+            "marketType": "spread",
+            "direction": "home",
+            "line": -4.5,
+            "book": "FanDuel",
+            "odds": -390,
+            "chance": 0.82,
+            "implied": 0.796,
+            "projection": 19.4,
+            "kickoff": "2026-10-03T20:00Z",
+            "observedAt": "2026-10-03T13:27:02Z",
+            "marketWindow": "Full game",
+            "alternate": true
+          }
+        ],
+        "correlation": "One leg per game, so the book prices the ticket as the legs multiplied.",
+        "gameIds": [
+          "CFB-401858472",
+          "CFB-401858475"
+        ],
+        "book": "FanDuel",
+        "odds": -173,
+        "quotedAt": "2026-10-03T13:27:02Z",
+        "priceEstimated": false,
+        "expiresAt": "2026-10-03T15:45:00Z",
+        "quoteType": "sportsbook",
+        "confidence": 1,
+        "edge": "For fun, not value: 2 protected lines our model agrees with (81% and 82% on the raw model numbers), at FanDuel's exact prices, multiplied to -173. $94 rides with $42 already banked. A win returns $148: $30 goes to the bank and $118 rides next. Bank 20, ride 80.",
+        "cutoff": "A ladder rung is not re-entered. It stands or falls as posted.",
+        "sources": [
+          "https://in.sportsbook.fanduel.com/football/ncaa-football-games/maryland-@-nebraska-36112259",
+          "https://in.sportsbook.fanduel.com/football/ncaa-football-games/purdue-@-illinois-36112773",
+          "https://www.espn.com/college-football/game/_/gameId/401858472",
+          "https://www.espn.com/college-football/game/_/gameId/401858475"
+        ],
+        "why": "Ladder step 3: two easier game lines at FanDuel, one per game, each one our projection clears comfortably. $94 rides with $42 banked. A win returns $148: bank $30 and ride $118 on the next step. Kept apart from the record, in dollars.",
+        "risk": "Both legs have to hit; one miss ends the climb, but it cannot take money already banked. College score models are uncertain and their raw alternate-spread chances are not calibrated price edges. This is the fun of the climb; the book's official settlement controls, and a person settles the rung.",
+        "jurisdictionVerified": true,
+        "entryNote": "Closed to new entries at 11:21 AM ET, before its post went out: its Nebraska -4.5 leg: verified reporting argues against it: Nebraska running back Jamal Rule was upgraded from doubtful to questionable on Friday's availability report. Stays in the record at -173 and is graded as posted."
+      }
+    ]
   }
 ]

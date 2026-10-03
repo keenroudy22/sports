@@ -1,15 +1,15 @@
 {
- "at": "2026-10-03T15:12:45Z",
+ "at": "2026-10-03T15:28:19Z",
  "confirmed": {
   "CFB-401856705": "2026-10-03T14:56:16Z",
-  "CFB-401856707": "2026-10-03T15:12:45Z",
+  "CFB-401856707": "2026-10-03T15:28:19Z",
   "CFB-401856708": "2026-10-03T14:56:16Z",
   "CFB-401856709": "2026-10-03T14:20:16Z",
   "CFB-401856710": "2026-10-03T14:56:16Z",
-  "CFB-401856807": "2026-10-03T15:12:45Z",
-  "CFB-401856819": "2026-10-03T15:12:45Z",
-  "CFB-401856822": "2026-10-03T15:12:45Z",
-  "CFB-401858246": "2026-10-03T15:12:45Z",
+  "CFB-401856807": "2026-10-03T15:28:19Z",
+  "CFB-401856819": "2026-10-03T15:28:19Z",
+  "CFB-401856822": "2026-10-03T15:28:19Z",
+  "CFB-401858246": "2026-10-03T15:28:19Z",
   "CFB-401858247": "2026-10-03T14:56:16Z",
   "CFB-401858248": "2026-10-03T14:56:16Z",
   "CFB-401858250": "2026-10-03T14:56:16Z",
@@ -29,28 +29,28 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1548,
-    "fanduel": 825
+    "draftkings": 1329,
+    "fanduel": 912
    },
    "eventsListed": 66,
    "eventsMatched": 52,
    "games": 53,
    "marketTypes": {
-    "player_longest_passing_completion": 10,
-    "player_longest_reception": 38,
-    "player_longest_rush": 20,
-    "player_passing_+_rushing_yards": 164,
-    "player_passing_attempts": 64,
-    "player_passing_completions": 51,
-    "player_passing_touchdowns": 70,
-    "player_passing_yards": 307,
-    "player_receiving_yards": 833,
-    "player_receptions": 154,
-    "player_rushing_attempts": 70,
-    "player_rushing_yards": 592
+    "player_longest_passing_completion": 8,
+    "player_longest_reception": 33,
+    "player_longest_rush": 15,
+    "player_passing_+_rushing_yards": 99,
+    "player_passing_attempts": 42,
+    "player_passing_completions": 28,
+    "player_passing_touchdowns": 71,
+    "player_passing_yards": 292,
+    "player_receiving_yards": 801,
+    "player_receptions": 150,
+    "player_rushing_attempts": 67,
+    "player_rushing_yards": 635
    },
    "requestsLeft": 0,
-   "rows": 2373,
+   "rows": 2241,
    "slateGames": [
     "Alabama Crimson Tide at Mississippi State Bulldogs 2026-10-03T16:00Z",
     "Middle Tennessee Blue Raiders at Kansas Jayhawks 2026-10-03T16:00Z",
@@ -129,7 +129,7 @@
       "gemini": "NCAAF-2610031930-MEM-CLT-T",
       "goldrush": "31057404",
       "hardrock": "1001192368273228176",
-      "kalshi": "KXNCAAF1HTOTAL-26OCT03MEMCHAR",
+      "kalshi": "KXNCAAFTEAMTOTAL-26OCT03MEMCHAR",
       "ladbrokes": "ebcb0524-e3e6-4b31-9698-187629e9c6aa",
       "ladbrokes_uk": "lduk-258811534",
       "matchbook": "mb-34460457672900081",
@@ -152,10 +152,12 @@
       "away_team": "Memphis",
       "home_team": "Charlotte",
       "markets": [
-       "point_spread"
+       "moneyline",
+       "point_spread",
+       "total_points"
       ]
      },
-     "start": "2026-10-03T13:26:00Z",
+     "start": "2026-10-03T19:30:00Z",
      "type": "fixture"
     },
     {
@@ -196,7 +198,6 @@
        "1st_quarter_point_spread",
        "1st_quarter_team_total",
        "1st_quarter_total_points",
-       "2nd_half_total_points",
        "2nd_quarter_moneyline",
        "2nd_quarter_point_spread",
        "2nd_quarter_team_total",
@@ -532,7 +533,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-03T14:17:00Z",
+     "start": "2026-10-03T15:25:00Z",
      "type": "outright"
     },
     {
@@ -572,10 +573,10 @@
       "fanduel": "36104928",
       "fliff": "400040_c_p_202_prematch",
       "galera": "20940866",
-      "gemini": "NFL-2610060015-ATL-NO-TT",
+      "gemini": "NFL-2610060015-ATL-NO-PPYDS",
       "goldrush": "30990838",
       "hardrock": "3637145959005290894",
-      "kalshi": "KXNFL1H-26OCT05ATLNO",
+      "kalshi": "KXNFLFFPTS-26OCT05ATLNO-ATLDLONDON5-16P1",
       "ladbrokes": "92974676-464a-4db3-89f6-5c6b0ee28a2e",
       "ladbrokes_uk": "lduk-258814960",
       "matchbook": "mb-33321622423000023",
@@ -585,7 +586,7 @@
       "prizepicks": "prizepicks_185425",
       "prophetx": "1700008800",
       "rebet": "sr:match:71515870",
-      "robinhood": "b8ab1ecb-b06a-407b-9291-d02da12cfc75",
+      "robinhood": "88b1d7d5-0178-4324-92e3-0f766a709599",
       "stake": "53a997c1-5d00-4c13-b73f-bb1590ed41b6",
       "sx_bet": "L19431812",
       "thescorebet": "StandardEvent:5b2498b8-8c9b-41ee-8b11-ef71836d528b",
@@ -656,7 +657,6 @@
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
        "last_touchdown_scorer",
-       "longest_touchdown_yards",
        "match_result_both_teams_to_score",
        "moneyline",
        "most_points_player",
@@ -694,7 +694,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_punts",
        "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
