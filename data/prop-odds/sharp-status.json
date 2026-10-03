@@ -1,14 +1,14 @@
 {
- "at": "2026-10-03T03:44:57Z",
+ "at": "2026-10-03T04:20:29Z",
  "confirmed": {
   "CFB-401856705": "2026-10-03T01:24:54Z",
-  "CFB-401856707": "2026-10-03T03:44:57Z",
+  "CFB-401856707": "2026-10-03T04:20:29Z",
   "CFB-401856708": "2026-10-03T01:24:54Z",
   "CFB-401856709": "2026-10-01T20:22:32Z",
   "CFB-401856710": "2026-10-03T01:24:54Z",
-  "CFB-401856807": "2026-10-03T03:44:57Z",
-  "CFB-401856819": "2026-10-03T03:44:57Z",
-  "CFB-401856822": "2026-10-03T03:44:57Z",
+  "CFB-401856807": "2026-10-03T04:20:29Z",
+  "CFB-401856819": "2026-10-03T04:20:29Z",
+  "CFB-401856822": "2026-10-03T04:20:29Z",
   "CFB-401858246": "2026-10-03T01:24:54Z",
   "CFB-401858247": "2026-10-03T01:24:54Z",
   "CFB-401858248": "2026-10-03T01:24:54Z",
@@ -29,10 +29,10 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1326,
-    "fanduel": 942
+    "draftkings": 1328,
+    "fanduel": 826
    },
-   "eventsListed": 66,
+   "eventsListed": 68,
    "eventsMatched": 53,
    "games": 54,
    "marketTypes": {
@@ -42,15 +42,15 @@
     "player_passing_+_rushing_yards": 142,
     "player_passing_attempts": 50,
     "player_passing_completions": 38,
-    "player_passing_touchdowns": 70,
-    "player_passing_yards": 281,
-    "player_receiving_yards": 795,
+    "player_passing_touchdowns": 64,
+    "player_passing_yards": 266,
+    "player_receiving_yards": 733,
     "player_receptions": 140,
     "player_rushing_attempts": 67,
-    "player_rushing_yards": 627
+    "player_rushing_yards": 596
    },
    "requestsLeft": 0,
-   "rows": 2268,
+   "rows": 2154,
    "slateGames": [
     "Memphis Tigers at Charlotte 49ers 2026-10-03T15:00Z",
     "Alabama Crimson Tide at Mississippi State Bulldogs 2026-10-03T16:00Z",
@@ -113,6 +113,8 @@
      "external": {
       "ballybet": "1027508085",
       "betfair": "202610034F3864C5",
+      "betparx": "1027508085",
+      "betrivers": "1027508085",
       "caesars": "89063176-6f20-4769-919d-b94a939ba388",
       "draftkings": "34708335",
       "fanduel": "36112825",
@@ -158,6 +160,7 @@
        "outright",
        "player_passing_touchdowns",
        "player_passing_yards",
+       "player_points",
        "player_receiving_yards",
        "player_rushing_yards",
        "point_spread",
@@ -180,10 +183,10 @@
       "draftkings": "34745765",
       "fanduel": "36130008",
       "fliff": "416774_c_p_209_prematch",
-      "kalshi": "KXNCAAFTOTAL-26OCT06USMTROY",
+      "kalshi": "KXNCAAFSPREAD-26OCT06USMTROY",
       "novig": "01a0ea7f-3f63-7272-8159-6ac924421f89",
       "polymarket": "nfl_southernmiss_troy_2026-10-06_b3",
-      "robinhood": "40a15926-7d66-473a-8aa0-7d4391fcb5d0"
+      "robinhood": "bfbe822b-ec6f-40e0-8b20-aa86c15f1bb1"
      },
      "home": "Troy",
      "sample": {
@@ -230,10 +233,10 @@
      "external": {
       "fanduel": "36137754",
       "fliff": "417148_c_p_209_prematch",
-      "kalshi": "KXNCAAFGAME-26OCT07NMSUFIU",
+      "kalshi": "KXNCAAFTOTAL-26OCT07NMSUFIU",
       "novig": "01a0ef82-8438-7101-8c66-0a5b820ee786",
       "polymarket": "nfl_floridainternational_newmexicostate_2026-10-07_b3",
-      "robinhood": "f1e9c44f-d4b8-4b41-958d-59aa01008a6f"
+      "robinhood": "81402cfd-4645-4ce9-ad37-0cea23aae3fe"
      },
      "home": "Florida International",
      "sample": {
@@ -254,7 +257,8 @@
       "ballybet": "1027569821",
       "draftkings": "34745936",
       "fliff": "416970_c_p_209_prematch",
-      "kalshi": "KXNCAAFTOTAL-26OCT09IOWAWASH",
+      "kalshi": "KXNCAAFSPREAD-26OCT09IOWAWASH",
+      "novig": "01a0fa22-9a62-7810-9857-99892819a5a9",
       "polymarket": "nfl_iowahawkeyes_washington_2026-10-09_b3",
       "robinhood": "4f7ff034-c578-46f5-9114-1bfa5a7487dd"
      },
@@ -278,15 +282,17 @@
       "ballybet": "1027508025",
       "draftkings": "34745944",
       "fliff": "416969_c_p_209_prematch",
+      "kalshi": "KXNCAAF1H-26OCT09ISUBYU",
       "novig": "01a0fa75-17b7-7711-bcb2-70e18c3d0a9f",
       "polymarket": "nfl_byucougars_iowastatecyclones_2026-10-09_b3",
-      "robinhood": "e168673d-9b37-4d76-92ce-dc835fad3e00"
+      "robinhood": "604da240-4e7c-4022-afc6-c021dc8d8f4c"
      },
      "home": "BYU",
      "sample": {
       "away_team": "Iowa State",
       "home_team": "BYU",
       "markets": [
+       "1st_half_moneyline",
        "moneyline",
        "point_spread",
        "total_points"
@@ -509,7 +515,7 @@
       "gemini": "NFL-2610060015-ATL-NO-S",
       "goldrush": "30990838",
       "hardrock": "3637145959005290894",
-      "kalshi": "KXNFLFFPTS-26OCT05ATLNO-NOAKAMARA41-10",
+      "kalshi": "KXNFLRECYDS-26OCT05ATLNO-NONFANT87-15",
       "ladbrokes": "92974676-464a-4db3-89f6-5c6b0ee28a2e",
       "ladbrokes_uk": "lduk-258814960",
       "matchbook": "mb-33321622423000023",
