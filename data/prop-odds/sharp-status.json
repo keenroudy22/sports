@@ -1,14 +1,14 @@
 {
- "at": "2026-10-03T14:20:16Z",
+ "at": "2026-10-03T14:27:45Z",
  "confirmed": {
   "CFB-401856705": "2026-10-03T14:20:16Z",
-  "CFB-401856707": "2026-10-03T14:20:16Z",
+  "CFB-401856707": "2026-10-03T14:27:45Z",
   "CFB-401856708": "2026-10-03T14:20:16Z",
   "CFB-401856709": "2026-10-03T14:20:16Z",
   "CFB-401856710": "2026-10-03T14:20:16Z",
-  "CFB-401856807": "2026-10-03T14:20:16Z",
-  "CFB-401856819": "2026-10-03T14:20:16Z",
-  "CFB-401856822": "2026-10-03T14:20:16Z",
+  "CFB-401856807": "2026-10-03T14:27:45Z",
+  "CFB-401856819": "2026-10-03T14:27:45Z",
+  "CFB-401856822": "2026-10-03T14:27:45Z",
   "CFB-401858246": "2026-10-03T14:20:16Z",
   "CFB-401858247": "2026-10-03T14:20:16Z",
   "CFB-401858248": "2026-10-03T14:20:16Z",
@@ -30,28 +30,28 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 5791,
-    "fanduel": 1698
+    "draftkings": 1352,
+    "fanduel": 830
    },
-   "eventsListed": 66,
+   "eventsListed": 67,
    "eventsMatched": 53,
    "games": 54,
    "marketTypes": {
-    "player_longest_passing_completion": 35,
-    "player_longest_reception": 142,
-    "player_longest_rush": 71,
-    "player_passing_+_rushing_yards": 470,
-    "player_passing_attempts": 224,
-    "player_passing_completions": 174,
-    "player_passing_touchdowns": 192,
-    "player_passing_yards": 950,
-    "player_receiving_yards": 2641,
-    "player_receptions": 471,
-    "player_rushing_attempts": 219,
-    "player_rushing_yards": 1900
+    "player_longest_passing_completion": 8,
+    "player_longest_reception": 32,
+    "player_longest_rush": 17,
+    "player_passing_+_rushing_yards": 144,
+    "player_passing_attempts": 49,
+    "player_passing_completions": 37,
+    "player_passing_touchdowns": 64,
+    "player_passing_yards": 268,
+    "player_receiving_yards": 748,
+    "player_receptions": 154,
+    "player_rushing_attempts": 70,
+    "player_rushing_yards": 591
    },
    "requestsLeft": 0,
-   "rows": 7489,
+   "rows": 2182,
    "slateGames": [
     "Memphis Tigers at Charlotte 49ers 2026-10-03T15:00Z",
     "Alabama Crimson Tide at Mississippi State Bulldogs 2026-10-03T16:00Z",
@@ -116,6 +116,7 @@
       "betparx": "1027508085",
       "betrivers": "1027508085",
       "betway": "17283584",
+      "caesars": "89063176-6f20-4769-919d-b94a939ba388",
       "draftkings": "34708335",
       "fanduel": "36112825",
       "gemini": "NCAAF-2610040359-SJS-HAW-S",
@@ -124,7 +125,8 @@
       "novig": "01a0dbf7-d739-7d53-9426-e79b2c3028ef",
       "pinnacle": "1637325660",
       "prophetx": "1700081995",
-      "robinhood": "716a9bf9-410d-4a90-91aa-0dc014c7119c"
+      "robinhood": "716a9bf9-410d-4a90-91aa-0dc014c7119c",
+      "thrillzz": "888226805"
      },
      "home": "Hawaii",
      "sample": {
@@ -143,12 +145,15 @@
        "1st_quarter_point_spread",
        "1st_quarter_team_total",
        "1st_quarter_total_points",
+       "2nd_quarter_moneyline",
        "2nd_quarter_point_spread",
        "2nd_quarter_team_total",
        "2nd_quarter_total_points",
+       "3rd_quarter_moneyline",
        "3rd_quarter_point_spread",
        "3rd_quarter_team_total",
        "3rd_quarter_total_points",
+       "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_team_total",
        "4th_quarter_total_points",
@@ -157,6 +162,11 @@
        "game_prop",
        "halftime_fulltime",
        "moneyline",
+       "most_points_player",
+       "player_passing_touchdowns",
+       "player_passing_yards",
+       "player_receiving_yards",
+       "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
        "team_total",
@@ -227,7 +237,7 @@
      "external": {
       "fanduel": "36137754",
       "fliff": "417148_c_p_209_prematch",
-      "kalshi": "KXNCAAF1H-26OCT07NMSUFIU",
+      "kalshi": "KXNCAAFSPREAD-26OCT07NMSUFIU",
       "novig": "01a0ef82-8438-7101-8c66-0a5b820ee786",
       "polymarket": "nfl_floridainternational_newmexicostate_2026-10-07_b3",
       "robinhood": "81402cfd-4645-4ce9-ad37-0cea23aae3fe"
@@ -252,7 +262,7 @@
       "ballybet": "1027569821",
       "draftkings": "34745936",
       "fliff": "416970_c_p_209_prematch",
-      "kalshi": "KXNCAAFTOTAL-26OCT09IOWAWASH",
+      "kalshi": "KXNCAAF1H-26OCT09IOWAWASH",
       "novig": "01a0fa22-9a62-7810-9857-99892819a5a9",
       "polymarket": "nfl_iowahawkeyes_washington_2026-10-09_b3",
       "robinhood": "cfd0ea70-3bcb-4e0f-a7f0-cdb96187e132"
@@ -277,7 +287,7 @@
       "ballybet": "1027508025",
       "draftkings": "34745944",
       "fliff": "416969_c_p_209_prematch",
-      "kalshi": "KXNCAAFTOTAL-26OCT09ISUBYU",
+      "kalshi": "KXNCAAF1H-26OCT09ISUBYU",
       "novig": "01a0fa75-17b7-7711-bcb2-70e18c3d0a9f",
       "polymarket": "nfl_byucougars_iowastatecyclones_2026-10-09_b3",
       "robinhood": "604da240-4e7c-4022-afc6-c021dc8d8f4c",
@@ -324,6 +334,31 @@
      "type": "fixture"
     },
     {
+     "away": "South Carolina",
+     "external": {
+      "ballybet": "1027508049",
+      "draftkings": "34745981",
+      "fliff": "417035_c_p_209_prematch",
+      "kalshi": "KXNCAAF1H-26OCT10SCARFLA",
+      "novig": "01a0fac7-6423-7992-96db-20517da49e82",
+      "polymarket": "nfl_floridagators_southcarolinagamecocks_2026-10-10_b2",
+      "sx_bet": "L20383142"
+     },
+     "home": "Florida",
+     "sample": {
+      "away_team": "South Carolina",
+      "home_team": "Florida",
+      "markets": [
+       "1st_half_moneyline",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-10T17:00:00Z",
+     "type": "fixture"
+    },
+    {
      "away": "Texas A&M",
      "external": {
       "ballybet": "1027508057",
@@ -351,6 +386,7 @@
      "away": "Texas",
      "external": {
       "ballybet": "1027508024",
+      "draftkings": "34226071",
       "fanduel": "35632875",
       "fliff": "393888_c_p_209_prematch",
       "kalshi": "KXNCAAF1H-26OCT10TEXOKLA",
@@ -422,33 +458,6 @@
       ]
      },
      "start": "2026-10-10T23:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Georgia",
-     "external": {
-      "ballybet": "1027552988",
-      "draftkings": "34226065",
-      "fanduel": "35632859",
-      "fliff": "394822_c_p_209_prematch",
-      "kalshi": "KXNCAAF1H-26OCT10UGAALA",
-      "novig": "01a0fef7-0efd-7091-a24e-73e5530b1785",
-      "polymarket": "nfl_alabamacrimsontide_georgiabulldogs_2026-10-10_b3",
-      "robinhood": "96121e33-9f03-4e15-af97-8e461fbac376",
-      "sx_bet": "L19120017"
-     },
-     "home": "Alabama",
-     "sample": {
-      "away_team": "Georgia",
-      "home_team": "Alabama",
-      "markets": [
-       "1st_half_moneyline",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-10T23:30:00Z",
      "type": "fixture"
     }
    ]
