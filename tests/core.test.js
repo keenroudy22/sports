@@ -126,14 +126,14 @@ test('missing play-by-play counts stay unknown instead of becoming zeros', () =>
   assert.equal(C.injurySleeperSignal(role, 10), null);
 });
 
-test('game pages explain next-up depth after hard injuries without calling it a touchdown projection', () => {
+test('game pages show next-up depth after hard injuries without exposing implementation detail', () => {
   const source = require('node:fs').readFileSync('site/app.js', 'utf8');
   assert.match(source, /Next up after injuries/);
   assert.match(source, /moves from/);
   assert.match(source, /actual role this season/);
-  assert.match(source, /red-zone carries and targets/i);
   assert.match(source, /depth-sleeper/);
-  assert.match(source, /None of this is a touchdown projection/);
+  assert.match(source, /Depth chart and recent usage/);
+  assert.doesNotMatch(source, /ties use snap count/);
 });
 
 test('injury sleeper labels require an established role plus current opportunity', () => {
@@ -401,17 +401,16 @@ test('app.js parses', () => {
   assert.match(source, /communityCard\(true\)/);
   assert.match(source, /Projected winners/);
   assert.match(source, /Projected winner/);
-  assert.match(source, /moneyline-style call/);
+  assert.match(source, /Winner, spread and total results use the final pregame forecast/);
   assert.match(source, /about 10–15 minutes before X/);
   assert.match(source, /Time-sensitive Arb Radar candidates stay in Discord/);
   assert.match(source, /href="#record">See every result/);
-  assert.match(source, /Real pregame DraftKings totals, moneylines and run lines are being preserved/);
-  assert.match(source, /Real pregame DraftKings totals, moneylines and puck lines are being preserved/);
-  assert.match(source, /Kook'n favorite lines/);
-  assert.match(source, /No price-qualified favorites right now/);
-  assert.match(source, /line.*vs projection.*higher/);
+  assert.match(source, /Pregame lines and final scores are being collected for a future launch/);
+  assert.match(source, /Lines we like/);
+  assert.match(source, /No highlighted line at the current price/);
+  assert.match(source, /Line .*Projection .*higher/);
   assert.match(source, /Historical hit rate/);
-  assert.match(source, /ranked by edge against the sportsbook price/);
+  assert.match(source, /Fresh prices/);
 });
 
 test('one record: the straight plays in wins and losses and units, the side records apart', () => {

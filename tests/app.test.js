@@ -34,10 +34,10 @@ test('a qualifying Upset Watch renders percentages without relying on another vi
       reasons: ['Our score has Underdog 27.0, Favorite 23.0 — Underdog by 4.0'],
       warnings: ['Raw model estimate, not a calibrated value bet']}
   }, 1);
-  assert.match(html, /Model 60%/);
+  assert.match(html, /Our chance 60%/);
   assert.match(html, /market 37%/);
   assert.match(html, /not a calibrated value bet/);
-  assert.match(html, /Why it is highlighted/);
+  assert.match(html, />Why</);
   assert.match(html, /Underdog by 4.0/);
   assert.match(html, /Top upset signal/);
   assert.match(html, /#game\/NFL-test/);
@@ -70,15 +70,24 @@ test('confidence labels rank calibrated chances without calling them locks', () 
     'a qualifying value read sorts ahead of a higher raw chance that failed the thin-data gate');
   const source = fs.readFileSync('site/app.js', 'utf8');
   assert.match(source, /Highest confidence/);
-  assert.match(source, /neither means lock/);
+  const board = source.slice(source.indexOf('async function viewBoard(route)'), source.indexOf('async function viewTicket()'));
+  assert.doesNotMatch(board, /lock\b/i);
 });
 
-test('Today keeps the season scorecard above the research counter', () => {
+test('Today keeps the season scorecard above secondary lines and removes the duplicate record block', () => {
   const source = fs.readFileSync('site/app.js', 'utf8');
   const today = source.slice(source.indexOf('async function viewToday()'), source.indexOf('const modelCard ='));
-  assert.ok(today.indexOf("section('Season scorecard · model accuracy'") > today.indexOf('transparent-record'));
-  assert.ok(today.indexOf("section('Season scorecard · model accuracy'") < today.indexOf('research-heading'));
+  assert.ok(today.indexOf('scorecardCard(scoreboard') < today.indexOf('research-heading'));
+  assert.doesNotMatch(today, /transparent-record/);
   assert.equal((today.match(/scorecardCard\(/g) || []).length, 1, 'Today renders one prominent scorecard');
+});
+
+test('game pages put favorites before secondary model reads and do not publish model methodology', () => {
+  const source = fs.readFileSync('site/app.js', 'utf8');
+  const game = source.slice(source.indexOf('async function viewGame(route)'), source.indexOf('const finalSection'));
+  assert.ok(game.indexOf('favoriteLinesSection') < game.indexOf('modelReadsSection'));
+  assert.doesNotMatch(game, /Why the model says this|Forecast history/);
+  assert.doesNotMatch(source, /How we calculated it/);
 });
 
 test('Games shows compact current model offense and defense ranks for both teams', () => {
