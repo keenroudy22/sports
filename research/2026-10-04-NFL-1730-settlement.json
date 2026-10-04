@@ -1,0 +1,151 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-10-04T21:30:04Z",
+  "targetWeek": 4,
+  "summary": "5:30 PM ET run, published at 5:30 PM ET. Settled 3: Patriots at Bills under 48.5 loss; Ryan Flournoy OVER 3.5 receptions win; Marvin Harrison Jr. UNDER 2.5 receptions win. Nothing to close. Nothing published. Screened and passed on 34: Bryce Young OVER 35.5 pass attempts (prop_calibrated_value); Jared Goff OVER 32.5 pass attempts (player_overlap); Drake London UNDER 5.5 receptions (prop_market_not_trailing); Vikings at Saints under 44.5 (learned_pause); Falcons at Saints under 47.5 (not_duplicate); Brycen Tremayne UNDER 2.5 receptions (prop_market_not_trailing); Chuba Hubbard UNDER 16.5 carries (prop_market_not_trailing); Raiders at Patriots under 44 (learned_pause); and 26 more. Awaiting a person: NFL-2026-W4-tuten-under-1-5-rec-dk. odds_api.py: CFB: skipped (1 captures already today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "position": "WR",
+      "athleteId": "5083754",
+      "market": "rec",
+      "line": 3.5,
+      "direction": "over",
+      "gameIds": [
+        "NFL-401872967"
+      ],
+      "book": "FanDuel",
+      "odds": 102,
+      "projection": 4.2,
+      "edge": "Projection 4.2 against 3.5. Adjusted chance 51.5% (raw 61.8%, learned factor 0.13); 49.5% needed at +102: +2.0 percentage points. An estimate, not a guarantee.",
+      "cutoff": "OVER 3.5 at +102 or better. Closed to new entries at 4+, or at -113 or worse at 3.5.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-10-02T21:36:28Z",
+      "quotedAt": "2026-10-03T20:01:35Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 4:01 PM ET capture across 2 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-04T03:30:00Z",
+      "probabilityAtPublication": {
+        "rawChance": 0.618,
+        "chance": 0.515,
+        "calibrated": true,
+        "calibration": 0.13,
+        "calibrationN": 538,
+        "push": 0.0,
+        "breakEven": 0.495,
+        "edgePoints": 2.0,
+        "evPerUnit": 0.041,
+        "snapshotAt": "2026-10-02T21:36:28Z",
+        "evaluatedAt": "2026-10-03T21:30:05Z"
+      },
+      "title": "Ryan Flournoy OVER 3.5 receptions",
+      "id": "NFL-2026-W4-flournoy-over-3-5-rec-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401872967",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "why": "Prop lean: our projection is 4.2 against 3.5. The over reads 51.5% after adjustment from the raw 61.8%; 49.5% is needed at +102. Last 10 games: 4 of 10 over 3.5. Role: 3rd of 5 DAL WRs by projected targets, 6.3 a game. Defense: HOU allows 12.33 receptions a game to WRs, 25 of 32 this season (1 is stingiest).",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 3 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies. Confidence 2 of 10.",
+      "result": "win",
+      "actual": "Ryan Flournoy: 4 receptions",
+      "settledAt": "2026-10-04T21:30:04Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401872967",
+      "actualValue": 4,
+      "units": 1.02
+    },
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "position": "WR",
+      "athleteId": "4432708",
+      "market": "rec",
+      "line": 2.5,
+      "direction": "under",
+      "gameIds": [
+        "NFL-401872966"
+      ],
+      "book": "FanDuel",
+      "odds": -114,
+      "projection": 1.4,
+      "edge": "Projection 1.4 against 2.5. Adjusted chance 53.7% (raw 78.3%, learned factor 0.13); 53.3% needed at -114: +0.4 percentage points. An estimate, not a guarantee.",
+      "cutoff": "UNDER 2.5 at -114 or better. Closed to new entries at 2 or lower, or at -129 or worse at 2.5.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-10-03T00:33:12Z",
+      "quotedAt": "2026-10-03T20:01:35Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 4:01 PM ET capture across 2 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-04T03:30:00Z",
+      "probabilityAtPublication": {
+        "rawChance": 0.783,
+        "chance": 0.537,
+        "calibrated": true,
+        "calibration": 0.13,
+        "calibrationN": 538,
+        "push": 0.0,
+        "breakEven": 0.533,
+        "edgePoints": 0.4,
+        "evPerUnit": 0.008,
+        "snapshotAt": "2026-10-03T00:33:12Z",
+        "evaluatedAt": "2026-10-03T21:30:05Z"
+      },
+      "title": "Marvin Harrison Jr. UNDER 2.5 receptions",
+      "id": "NFL-2026-W4-jr-under-2-5-rec-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401872966",
+        "https://api.sharpapi.io/api/v1/odds"
+      ],
+      "why": "Prop lean: our projection is 1.4 against 2.5. The under reads 53.7% after adjustment from the raw 78.3%; 53.3% is needed at -114. Last 10 games: 6 of 10 under 2.5. Role: 3rd of 4 ARI WRs by projected targets, 2.5 a game. Defense: NYG allows 12.33 receptions a game to WRs, 24 of 32 this season (1 is stingiest).",
+      "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 3 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies. Confidence 2 of 10.",
+      "result": "win",
+      "actual": "Marvin Harrison Jr.: 1 receptions",
+      "settledAt": "2026-10-04T21:30:04Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401872966",
+      "actualValue": 1,
+      "units": 0.877
+    }
+  ],
+  "gamePicks": [
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 48.5,
+      "direction": "under",
+      "gameIds": [
+        "NFL-401872971"
+      ],
+      "book": "ESPN BET",
+      "odds": -105,
+      "projection": 45.8,
+      "edge": "v2 total 45.8 (80% range 29.4 to 62.2). Chance of under 48.5: 53.5% (v2's raw 58.2% shrunk by its 2024-25 record against the close), against 51.2% break-even at -105: +2.2 points, +0.044u per unit.",
+      "cutoff": "UNDER 48.5 at -105 or better. Closed to new entries at 47 or lower, or at -120 or worse at 48.5.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-09-30T21:54:12Z",
+      "quotedAt": "2026-10-01T00:06:14Z",
+      "quoteType": "capture",
+      "quoteNote": "ESPN BET's number and price from the 8:06 PM ET capture across 6 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-01T10:45:00Z",
+      "title": "Patriots at Bills under 48.5",
+      "id": "NFL-2026-W4-ne-buf-under-48-5-espnbet",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401872971"
+      ],
+      "why": "Model lean, published on our number alone. Our total is 45.8 against 48.5: the under reads 53.5% after the raw 58.2% is shrunk by the model's record against the close, +2.2 points clear of the 51.2% that -105 needs. Nothing sourced argues against it; the number is the reason. The market: The spread opened -3 and is -6.5 at DraftKings, a move of 3.5 toward the home. The total opened 49.5 and is 48.5 at DraftKings, 1 toward the under. 6 books span -7 to -6.5 on the spread; the middle is -6.5. 6 books span 48 to 48.5 on the total; the middle is 48.5. Our spread gap of 2.9 points is at the 63th percentile of the model's gaps; gaps this large went 213-207 against the close in 1132 graded games. Our total gap of 2.7 points is at the 69th percentile of the model's gaps; gaps this large went 196-155 against the close in 1134 graded games.",
+      "risk": "It rests on the model alone, and the closing line beats our number on average, so a gap this size is more often our error than the market's. Confidence 3 of 10.",
+      "result": "loss",
+      "actual": "Patriots 29, Bills 26",
+      "settledAt": "2026-10-04T21:30:04Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401872971",
+      "actualValue": 55,
+      "units": -1
+    }
+  ]
+}
