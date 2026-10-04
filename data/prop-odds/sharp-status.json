@@ -1,10 +1,10 @@
 {
- "at": "2026-10-04T03:26:27Z",
+ "at": "2026-10-04T03:29:35Z",
  "confirmed": {
-  "NFL-401872965": "2026-10-04T03:26:27Z",
-  "NFL-401872966": "2026-10-04T03:26:27Z",
-  "NFL-401872967": "2026-10-04T03:26:27Z",
-  "NFL-401872968": "2026-10-04T03:26:27Z",
+  "NFL-401872965": "2026-10-04T03:29:35Z",
+  "NFL-401872966": "2026-10-04T03:29:35Z",
+  "NFL-401872967": "2026-10-04T03:29:35Z",
+  "NFL-401872968": "2026-10-04T03:29:35Z",
   "NFL-401872969": "2026-10-04T03:01:54Z",
   "NFL-401872970": "2026-10-04T03:01:54Z",
   "NFL-401872971": "2026-10-04T03:01:54Z",
@@ -20,7 +20,7 @@
  "leagues": {
   "CFB": {
    "books": {},
-   "eventsListed": 8,
+   "eventsListed": 10,
    "eventsMatched": 0,
    "games": 1,
    "marketTypes": {},
@@ -215,6 +215,26 @@
      "type": "fixture"
     },
     {
+     "away": "Georgia",
+     "external": {
+      "draftkings": "34226065",
+      "kalshi": "KXNCAAF1H-26OCT10UGAALA"
+     },
+     "home": "Alabama",
+     "sample": {
+      "away_team": "Georgia",
+      "home_team": "Alabama",
+      "markets": [
+       "1st_half_moneyline",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-10T17:00:00Z",
+     "type": "fixture"
+    },
+    {
      "away": "Texas Longhorns",
      "external": {
       "draftkings": "34226071",
@@ -346,6 +366,51 @@
       ]
      },
      "start": "2026-10-04T00:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Texas Tech Red Raiders",
+     "external": {
+      "betmgm": "6:45360",
+      "betonline": "1745039",
+      "betparx": "1027508088",
+      "betrivers": "1027508088",
+      "betway": "17283525",
+      "bwin": "6:45360",
+      "caesars": "4378b6ee-8f5f-492b-a317-32cdffbd31cd",
+      "draftkings": "34708315",
+      "fanatics": "5216841",
+      "fanatics_markets": "6069055",
+      "fanduel": "36133705",
+      "gemini": "NCAAF-2610032330-TTU-COL-S",
+      "goldrush": "31057377",
+      "hardrock": "1630711153686610336",
+      "kalshi": "KXNCAAF2HTOTAL-26OCT03TTUCOLO",
+      "novig": "01a0db00-b169-7342-9fd7-be3029d3ff6f",
+      "polymarket": "nfl_coloradobuffaloes_texastechredraiders_2026-10-03_b3",
+      "prophetx": "1700081991",
+      "robinhood": "0b0db57e-b812-4ed8-8288-11fb6e03e1b6",
+      "sportzino": "sz-17647627",
+      "sx_bet": "L20328809",
+      "unibet": "c6a9ce31607d496fae280749c4edd974"
+     },
+     "home": "Colorado Buffaloes",
+     "sample": {
+      "away_team": "Texas Tech Red Raiders",
+      "home_team": "Colorado Buffaloes",
+      "markets": [
+       "1st_half_moneyline_3-way",
+       "game_prop",
+       "outright",
+       "point_spread",
+       "race_to_10_points",
+       "team_total",
+       "total_points_odd_even",
+       "will_there_be_overtime",
+       "winning_margin"
+      ]
+     },
+     "start": "2026-10-03T23:40:00Z",
      "type": "fixture"
     }
    ]
