@@ -664,6 +664,9 @@ table.data a { font-weight: 600; }
 .proj-logo { width: 42px; height: 42px; object-fit: contain; display: block; }
 .proj-name { font-size: 13px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
 .proj-abbr { font-size: 10px; color: var(--faint); letter-spacing: .08em; }
+.proj-ranks { display: flex; flex-wrap: wrap; justify-content: center; gap: 3px 5px; margin-top: 2px; font-size: 9px; line-height: 1.2; color: var(--dim); letter-spacing: .04em; }
+.proj-ranks span { white-space: nowrap; }
+.proj-ranks b { color: var(--text); font-size: 10px; }
 .proj-mid { display: flex; flex-direction: column; align-items: center; gap: 2px; padding-top: 1px; }
 .proj-label { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
 .proj-live .proj-label { color: var(--mint); }

@@ -129,6 +129,11 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Games-tab team strength ranks (2026-10-04):** every Games projection card shows each team's current model
+  offense and defense rank within its league; No. 1 is strongest. Rank the margin model's offense effect from high
+  to low and its opponent-points defense effect from low to high, include only active NFL/FBS teams, share ranks on
+  exact ties, and label them as model ranks rather than standings or raw points-per-game ranks. Keep them compact on
+  mobile and do not add them to the Today cards.
 - **Performance raises the bar; it does not veto a market (2026-10-04):** poor recent results or the book's
   line beating our projection are evidence to consider, not a reason by themselves to suppress every post.
   An underperforming player market must clear its exact price by at least five adjusted percentage points;

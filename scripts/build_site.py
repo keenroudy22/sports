@@ -369,15 +369,43 @@ def calibrated(league, market, raw):
     return round(0.5 + k * (raw - 0.5), 3) if k is not None else round(raw, 3)
 
 
-def game_card(game, forecasts_v1, snapshot, names, identities, market_block=None, paused=(), values=None):
+def rating_ranks(ratings):
+    """Current model offense/defense rank within a league; No. 1 is strongest.
+
+    Offense adds to points scored, so larger is better. Defense is the opponent-points effect,
+    so smaller is better. Ties share a rank and the next rank skips the tied positions.
+    """
+    if not ratings:
+        return {}
+
+    def places(field, reverse):
+        ordered = sorted(((float(row[field]), str(team)) for team, row in ratings.items()),
+                         key=lambda item: ((-item[0] if reverse else item[0]), item[1]))
+        out, previous, place = {}, None, 0
+        for index, (value, team) in enumerate(ordered, 1):
+            if previous is None or value != previous:
+                place = index
+                previous = value
+            out[team] = place
+        return out
+
+    offense, defense = places('off', True), places('def', False)
+    total = len(ratings)
+    return {team: {'offense': offense[team], 'defense': defense[team], 'teams': total}
+            for team in ratings}
+
+
+def game_card(game, forecasts_v1, snapshot, names, identities, market_block=None, paused=(), values=None,
+              strength=None):
     league = game['league']
 
     def side(key):
         team = game[key]
         colours = team_colours(league, team)
-        return {'id': str(team['id']), 'abbr': team.get('abbreviation'), 'name': team.get('short') or team.get('name'),
+        team_id = str(team['id'])
+        return {'id': team_id, 'abbr': team.get('abbreviation'), 'name': team.get('short') or team.get('name'),
                 'color': colours[0] or color(league, team.get('abbreviation'), identities), 'alt': colours[1],
-                'score': team.get('score')}
+                'score': team.get('score'), 'strength': (strength or {}).get(team_id)}
 
     v1 = forecasts_v1.get(game['id'])
     mkt = market(game)
@@ -677,9 +705,13 @@ def build(now=None):
         current = max((g['season'] for g in league_records), default=now.year)
         team_logs = features.team_logs(league_records)
         defense_logs = features.defense_logs(league_records)
+        rank_model = model_v2.Model(league, league_records, now, current, targets=('margin',))
+        active = [team for team, games in rank_model.counts.items() if games and not rank_model.fcs(team)]
+        strength = rating_ranks({str(team): rank_model.margin.team(team) for team in active})
         league_data[league] = {'team_logs': team_logs, 'player_logs': features.player_logs(league_records),
                                'defense': defense_table(league, defense_logs, current),
-                               'defense_logs': defense_logs, 'current': current, 'records': league_records}
+                               'defense_logs': defense_logs, 'strength': strength,
+                               'current': current, 'records': league_records}
     injuries = {}
     for league in ('NFL', 'CFB'):
         block = ((context.get('leagues') or {}).get(league) or {}).get('teams') or {}
@@ -750,7 +782,8 @@ def build(now=None):
         snaps_for = pregame(forecasts.get(game['id'], []), game['kickoff'])
         latest_snap = snaps_for[-1] if snaps_for else None
         block = market_read.read(game, latest_snap, books.get(game['id']), gap_rows) if game.get('state') == 'pre' else None
-        card = game_card(game, forecasts_v1, latest_snap, names, identities, block, paused, values.get(game['id']))
+        card = game_card(game, forecasts_v1, latest_snap, names, identities, block, paused, values.get(game['id']),
+                         league_data[game['league']]['strength'])
         card['fcs'] = game['league'] == 'CFB' and not {str(game['home']['id']), str(game['away']['id'])} <= fbs
         card['upsetWatch'] = research_views.upset_watch(card, now, latest_snap)
         cards.append(card)

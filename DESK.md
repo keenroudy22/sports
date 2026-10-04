@@ -601,7 +601,10 @@ ESPN logos, our projected score big with the total and kickoff, our win probabil
 (ESPN's, from the slate or `data/team-colors-cfb.json`, fetched once for every college team; a near-black colour uses
 its alternate), and our spread and total against the line with the side our number likes and its chance. Names wrap
 under their logos (the old game rows cut them off on phones). The Games tab and Today's "Our projections" and "In play
-now" use the cards.
+now" use the cards. On the Games tab only, each team also carries compact **OFF # / DEF #** current model ranks within
+its league, with No. 1 strongest. These are the same score model's team effects—not standings or raw points per game:
+offense ranks high to low, while defense ranks low to high because that rating measures points added to an opponent.
+Only active NFL/FBS teams enter the table, and exact ties share a rank.
 
 The scoreboard also keeps a separate **projected-winner record** (owner, 2026-10-02): the team on the positive side
 of each pregame projected margin is the moneyline-style call, graded against the final winner. Today shows its W-L-P

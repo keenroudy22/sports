@@ -81,6 +81,15 @@ test('Today keeps the season scorecard above the research counter', () => {
   assert.equal((today.match(/scorecardCard\(/g) || []).length, 1, 'Today renders one prominent scorecard');
 });
 
+test('Games shows compact current model offense and defense ranks for both teams', () => {
+  const source = fs.readFileSync('site/app.js', 'utf8');
+  assert.match(source, /OFF <b>#\$\{rank\.offense\}<\/b>/);
+  assert.match(source, /DEF <b>#\$\{rank\.defense\}<\/b>/);
+  assert.match(source, /No\. 1 is strongest/);
+  const games = source.slice(source.indexOf('async function viewGames()'), source.indexOf('/* ---------- one game ---------- */'));
+  assert.match(games, /projGrid\(rows, true\)/, 'ranks are enabled on the Games tab');
+});
+
 test('the Climb shows a cashed rung, the next step state and past lines in a dropdown', () => {
   const source = fs.readFileSync('site/app.js', 'utf8');
   assert.match(source, /cashed · Step \$\{L\.step\} is being checked · not posted yet/);

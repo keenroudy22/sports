@@ -326,9 +326,13 @@
   const DULL = '#64748b';
   const inkOn = hex => { const m = /^#?([0-9a-f]{6})$/i.exec(hex || ''); if (!m) return '#fff';
     const n = parseInt(m[1], 16); return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255 > 0.6 ? '#0a0d13' : '#fff'; };
-  const projTeam = (game, team) => `<span class="proj-team">${LOGO[game.league] && team.id ? `<img class="proj-logo" src="${esc(LOGO[game.league](team))}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<span class="proj-logo"></span>'}
-      <span class="proj-name">${esc(teamName(team))}</span><span class="proj-abbr">${esc(team.abbr || '')}</span></span>`;
-  const projCard = game => {
+  const projTeam = (game, team, showRanks = false) => {
+    const rank = showRanks && team.strength;
+    const ranks = rank ? `<span class="proj-ranks" title="Current ${esc(leagueName(game.league))} model rank out of ${rank.teams}; No. 1 is strongest"><span>OFF <b>#${rank.offense}</b></span><span>DEF <b>#${rank.defense}</b></span></span>` : '';
+    return `<span class="proj-team">${LOGO[game.league] && team.id ? `<img class="proj-logo" src="${esc(LOGO[game.league](team))}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<span class="proj-logo"></span>'}
+      <span class="proj-name">${esc(teamName(team))}</span><span class="proj-abbr">${esc(team.abbr || '')}</span>${ranks}</span>`;
+  };
+  const projCard = (game, showRanks = false) => {
     const v2 = game.v2, m = game.market || {}, raw = game.lean || {};
     const final = game.completed, live = !final && game.state === 'in';
     const scores = (final || live) && game.away.score != null && game.home.score != null;
@@ -359,15 +363,15 @@
         <span class="proj-line"><span>Total</span><span>${v2.total != null ? fixed(v2.total, 1) : DASH}</span><span>${m.total ?? DASH}</span><span>${lean.total ? pick(`${lean.total.direction} ${m.total ?? ''}`, lean.total.chance, raw.totalCaution) : '<span class="faint">no lean</span>'}</span></span>
       </span>`;
     return `<a class="proj${live ? ' proj-live' : ''}" href="#game/${esc(game.id)}">
-      <span class="proj-top">${projTeam(game, game.away)}
+      <span class="proj-top">${projTeam(game, game.away, showRanks)}
         <span class="proj-mid"><span class="proj-label">${label}</span><span class="proj-score num">${score}</span><span class="proj-total">${esc(total)}</span>
           <span class="proj-when">${esc(whenShort(game.kickoff))}</span></span>
-        ${projTeam(game, game.home)}</span>
+        ${projTeam(game, game.home, showRanks)}</span>
       ${game.fcs ? '<span class="proj-note">FBS vs FCS: our number is not reliable here</span>' : bar}${lines}
       ${!scores && C.modelCaution(game) ? `<span class="proj-note">${esc(C.modelCaution(game))}</span>` : ''}
     </a>`;
   };
-  const projGrid = games => `<div class="projs">${games.map(projCard).join('')}</div>`;
+  const projGrid = (games, showRanks = false) => `<div class="projs">${games.map(game => projCard(game, showRanks)).join('')}</div>`;
 
   const gameRow = game => {
     const m = game.market || {}, v2 = game.v2, v1 = game.v1;
@@ -606,10 +610,10 @@
     const groups = new Map();
     for (const g of games) { const day = dayLabel(g.kickoff); if (!groups.has(day)) groups.set(day, []); groups.get(day).push(g); }
     gameIndex = new Map(data.games.map(g => [g.id, g]));
-    return `${head('Games', 'Every game: our projected score, how often we think each team wins, and our spread and total against the betting line. Reads, not picks.')}
+    return `${head('Games', 'Every game: our projected score, current model offense and defense ranks, win chances, and our spread and total against the betting line. No. 1 is strongest. Reads, not picks.')}
       <div class="toolbar">${seg('gamesScope', [['upcoming', 'Upcoming'], ['final', 'Recent finals']], state.gamesScope)}</div>
       <input class="search" type="search" data-input="gamesQuery" placeholder="Find a team" value="${esc(state.gamesQuery)}" aria-label="Find a team">
-      ${games.length ? [...groups].map(([day, rows]) => section(day, projGrid(rows))).join('')
+      ${games.length ? [...groups].map(([day, rows]) => section(day, projGrid(rows, true))).join('')
         : empty(gq ? 'No game matches' : state.gamesScope === 'final' ? 'No recent finals' : 'No upcoming games', gq ? 'Try a team abbreviation or name.' : 'Nothing in this league inside the current window.')}`;
   }
 

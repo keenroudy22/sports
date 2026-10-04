@@ -494,6 +494,22 @@ class PropRowTests(unittest.TestCase):
 
 
 class ForecastTests(unittest.TestCase):
+    def test_model_strength_ranks_put_best_offense_and_defense_first(self):
+        ranks = build_site.rating_ranks({'A': {'off': 4.0, 'def': 1.5},
+                                         'B': {'off': -1.0, 'def': -3.0},
+                                         'C': {'off': 4.0, 'def': 0.0}})
+        self.assertEqual(ranks['A'], {'offense': 1, 'defense': 3, 'teams': 3})
+        self.assertEqual(ranks['B'], {'offense': 3, 'defense': 1, 'teams': 3})
+        self.assertEqual(ranks['C'], {'offense': 1, 'defense': 2, 'teams': 3}, 'ties share first place')
+
+    def test_game_card_keeps_each_teams_current_model_ranks(self):
+        game = dict(slate_game('NFL-test', '2026-10-05T00:20:00Z'), season=2026)
+        strength = {'1': {'offense': 8, 'defense': 20, 'teams': 32},
+                    '2': {'offense': 14, 'defense': 4, 'teams': 32}}
+        card = build_site.game_card(game, {}, None, {}, {}, strength=strength)
+        self.assertEqual(card['home']['strength'], strength['1'])
+        self.assertEqual(card['away']['strength'], strength['2'])
+
     def test_a_snapshot_published_after_kickoff_is_never_the_forecast(self):
         snaps = [{'publishedAt': '2026-09-20T12:00:00Z'}, {'publishedAt': '2026-09-20T16:30:00Z'}]
         self.assertEqual(build_site.pregame(snaps, '2026-09-20T17:00:00Z'), snaps)
