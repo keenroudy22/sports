@@ -1,11 +1,10 @@
 {
- "at": "2026-10-04T13:02:16Z",
+ "at": "2026-10-04T14:03:13Z",
  "confirmed": {
-  "NFL-401872965": "2026-10-04T13:02:16Z",
-  "NFL-401872966": "2026-10-04T13:02:16Z",
-  "NFL-401872967": "2026-10-04T13:02:16Z",
-  "NFL-401872968": "2026-10-04T13:02:16Z",
-  "NFL-401872969": "2026-10-04T12:31:53Z",
+  "NFL-401872966": "2026-10-04T14:03:13Z",
+  "NFL-401872967": "2026-10-04T14:03:13Z",
+  "NFL-401872968": "2026-10-04T14:03:13Z",
+  "NFL-401872969": "2026-10-04T14:03:13Z",
   "NFL-401872970": "2026-10-04T12:31:53Z",
   "NFL-401872971": "2026-10-04T12:31:53Z",
   "NFL-401872972": "2026-10-04T12:31:53Z",
@@ -20,40 +19,39 @@
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 1277,
-    "fanduel": 1269
+    "draftkings": 1344,
+    "fanduel": 1078
    },
-   "eventsListed": 32,
-   "eventsMatched": 15,
-   "games": 15,
+   "eventsListed": 29,
+   "eventsMatched": 14,
+   "games": 14,
    "marketTypes": {
-    "player_assists": 62,
+    "player_assists": 64,
     "player_extra_points_made": 16,
-    "player_fantasy_score": 42,
+    "player_fantasy_score": 48,
     "player_field_goals_made": 16,
-    "player_interceptions": 21,
+    "player_interceptions": 16,
     "player_kicking_points": 16,
     "player_longest_passing_completion": 16,
-    "player_longest_reception": 80,
-    "player_longest_rush": 38,
+    "player_longest_reception": 90,
+    "player_longest_rush": 42,
     "player_passing_+_rushing_yards": 16,
     "player_passing_attempts": 16,
     "player_passing_completions": 16,
-    "player_passing_touchdowns": 53,
-    "player_passing_yards": 318,
-    "player_receiving_yards": 831,
-    "player_receptions": 434,
-    "player_rushing_+_receiving_yards": 40,
+    "player_passing_touchdowns": 55,
+    "player_passing_yards": 324,
+    "player_receiving_yards": 755,
+    "player_receptions": 367,
+    "player_rushing_+_receiving_yards": 38,
     "player_rushing_attempts": 28,
-    "player_rushing_yards": 317,
-    "player_sacks": 46,
-    "player_tackles": 62,
-    "player_tackles_+_assists": 62
+    "player_rushing_yards": 319,
+    "player_sacks": 36,
+    "player_tackles": 64,
+    "player_tackles_+_assists": 64
    },
    "requestsLeft": 0,
-   "rows": 2546,
+   "rows": 2422,
    "slateGames": [
-    "Indianapolis Colts at Washington Commanders 2026-10-04T13:30Z",
     "Arizona Cardinals at New York Giants 2026-10-04T17:00Z",
     "Dallas Cowboys at Houston Texans 2026-10-04T17:00Z",
     "Green Bay Packers at Tampa Bay Buccaneers 2026-10-04T17:00Z",
@@ -83,7 +81,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-04T13:00:00Z",
+     "start": "2026-10-04T13:37:00Z",
      "type": "outright"
     },
     {
@@ -137,12 +135,14 @@
       "fanatics_markets": "6541296",
       "fanduel": "35605983",
       "galera": "21085966",
-      "kalshi": "KXNFLGAME-26OCT11PHIJAC",
+      "goldrush": "29767421",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT11PHIJAC",
       "novig": "01a0ef14-1ee3-7150-82ab-b40c515a5781",
       "paddypower": "35605983",
       "polymarket": "nfl_eagles_jaguars_2026-10-11_b1",
       "rebet": "sr:match:71488624",
       "robinhood": "594e0246-f897-4943-8f95-1d3dfc177234",
+      "sportzino": "sz-16498883",
       "stake": "450de216-bb43-4ab6-a942-1e3033de5e70",
       "sx_bet": "L18900782"
      },
@@ -154,6 +154,7 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
+       "team_total",
        "total_points"
       ]
      },
@@ -261,73 +262,6 @@
      "type": "fixture"
     },
     {
-     "away": "Indianapolis Colts",
-     "external": {
-      "ballybet": "1028813032",
-      "betonline": "491141345",
-      "betparx": "1028813032",
-      "betrivers": "1028813032",
-      "fanatics_markets": "6541339",
-      "fanduel": "36132643",
-      "fliff": "399976_c_p_202_prematch",
-      "galera": "21085962",
-      "kalshi": "KXNFLGAME-26OCT11INDPIT",
-      "novig": "01a0ef14-2091-7243-a420-c23ce574aeb3",
-      "paddypower": "36132643",
-      "polymarket": "nfl_colts_steelers_2026-10-11_b2",
-      "rebet": "sr:match:71515882",
-      "robinhood": "87321aad-f383-4d0b-9181-2fc700b9765f",
-      "stake": "0aaa1fc6-d046-443a-80e3-9f298d802ec4",
-      "sx_bet": "L19431490"
-     },
-     "home": "Pittsburgh Steelers",
-     "sample": {
-      "away_team": "Indianapolis Colts",
-      "home_team": "Pittsburgh Steelers",
-      "markets": [
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-11T17:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "New York Giants",
-     "external": {
-      "ballybet": "1028813033",
-      "betonline": "491141350",
-      "betparx": "1028813033",
-      "betrivers": "1028813033",
-      "draftkings": "34118048",
-      "fanatics_markets": "6541355",
-      "fanduel": "36132651",
-      "galera": "21085956",
-      "kalshi": "KXNFLGAME-26OCT11NYGWAS",
-      "novig": "01a0ef14-224d-79e1-b32a-ced8146c6ce1",
-      "paddypower": "36132651",
-      "polymarket": "nfl_commanders_giants_2026-10-11_b2",
-      "robinhood": "02982b00-fd9c-4e92-840a-339b92db25cc",
-      "stake": "5a3eb22a-828a-4aba-a5e8-092b683bd2bf",
-      "sx_bet": "L19431509"
-     },
-     "home": "Washington Commanders",
-     "sample": {
-      "away_team": "New York Giants",
-      "home_team": "Washington Commanders",
-      "markets": [
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-11T17:00:00Z",
-     "type": "fixture"
-    },
-    {
      "away": "Las Vegas Raiders",
      "external": {
       "ballybet": "1028813036",
@@ -337,7 +271,6 @@
       "draftkings": "34118223",
       "fanatics_markets": "6541322",
       "fanduel": "36132641",
-      "fliff": "399978_c_p_202_prematch",
       "galera": "21085968",
       "kalshi": "KXNFLGAME-26OCT11LVNE",
       "novig": "01a0ef14-20f7-7a82-82b0-6cbfef3a7653",
@@ -404,7 +337,6 @@
       "draftkings": "34118229",
       "fanatics_markets": "6541346",
       "fanduel": "36132644",
-      "fliff": "399977_c_p_202_prematch",
       "galera": "21085955",
       "kalshi": "KXNFLGAME-26OCT11HOUTEN",
       "novig": "01a0ef14-21dd-70b1-bfbd-e8f1957b95de",
@@ -435,7 +367,6 @@
       "betonline": "491141339",
       "betparx": "1028813040",
       "betrivers": "1028813040",
-      "caesars": "5f7f305e-d738-86ff-2abd-08dcb6b27794",
       "draftkings": "34118147",
       "fanatics_markets": "6541361",
       "fanduel": "36132645",
@@ -455,13 +386,78 @@
       "home_team": "Los Angeles Chargers",
       "markets": [
        "draw_no_bet",
-       "game_prop",
        "moneyline",
        "point_spread",
        "total_points"
       ]
      },
      "start": "2026-10-11T20:05:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "San Francisco 49ers",
+     "external": {
+      "ballybet": "1028813043",
+      "betonline": "491141341",
+      "betparx": "1028813043",
+      "betrivers": "1028813043",
+      "draftkings": "34118017",
+      "fanatics_markets": "6541374",
+      "fanduel": "36132646",
+      "galera": "21085964",
+      "kalshi": "KXNFLGAME-26OCT11SFSEA",
+      "novig": "01a0ef14-2336-7fa2-83b0-8bb8db564f35",
+      "paddypower": "36132646",
+      "polymarket": "nfl_49ers_seahawks_2026-10-11_b2",
+      "robinhood": "1e63d0da-1cff-4c29-a536-309468d55f5f",
+      "stake": "936f230f-b5e2-43a6-95c5-5bac1caad1b8",
+      "sx_bet": "L19431533"
+     },
+     "home": "Seattle Seahawks",
+     "sample": {
+      "away_team": "San Francisco 49ers",
+      "home_team": "Seattle Seahawks",
+      "markets": [
+       "draw_no_bet",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-11T20:25:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Detroit Lions",
+     "external": {
+      "ballybet": "1028813041",
+      "betonline": "491141348",
+      "betparx": "1028813041",
+      "betrivers": "1028813041",
+      "draftkings": "34118121",
+      "fanatics_markets": "6541370",
+      "fanduel": "36132647",
+      "galera": "21085965",
+      "kalshi": "KXNFLGAME-26OCT11DETARI",
+      "novig": "01a0ef14-23a3-7dd0-98b6-3ab15eb26b3d",
+      "paddypower": "36132647",
+      "polymarket": "nfl_cardinals_lions_2026-10-11_b2",
+      "robinhood": "fc5d078c-af2d-4e10-a30c-82dd604087fb",
+      "stake": "500c4c7e-5572-425f-b5e3-e4acf580f625",
+      "sx_bet": "L19431525"
+     },
+     "home": "Arizona Cardinals",
+     "sample": {
+      "away_team": "Detroit Lions",
+      "home_team": "Arizona Cardinals",
+      "markets": [
+       "draw_no_bet",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-11T20:25:00Z",
      "type": "fixture"
     }
    ]
