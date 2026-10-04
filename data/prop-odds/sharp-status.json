@@ -1,10 +1,10 @@
 {
- "at": "2026-10-04T03:01:54Z",
+ "at": "2026-10-04T03:15:45Z",
  "confirmed": {
-  "NFL-401872965": "2026-10-04T03:01:54Z",
-  "NFL-401872966": "2026-10-04T03:01:54Z",
-  "NFL-401872967": "2026-10-04T03:01:54Z",
-  "NFL-401872968": "2026-10-04T03:01:54Z",
+  "NFL-401872965": "2026-10-04T03:15:45Z",
+  "NFL-401872966": "2026-10-04T03:15:45Z",
+  "NFL-401872967": "2026-10-04T03:15:45Z",
+  "NFL-401872968": "2026-10-04T03:15:45Z",
   "NFL-401872969": "2026-10-04T03:01:54Z",
   "NFL-401872970": "2026-10-04T03:01:54Z",
   "NFL-401872971": "2026-10-04T03:01:54Z",
@@ -20,7 +20,7 @@
  "leagues": {
   "CFB": {
    "books": {},
-   "eventsListed": 8,
+   "eventsListed": 7,
    "eventsMatched": 0,
    "games": 1,
    "marketTypes": {},
@@ -43,6 +43,7 @@
       "draftkings": "34708335",
       "fanduel": "36112825",
       "gemini": "NCAAF-2610040359-SJS-HAW-T",
+      "goldrush": "31068908",
       "hardrock": "5616396823909499297",
       "matchbook": "mb-34454781411800081",
       "novig": "01a0dbf7-d739-7d53-9426-e79b2c3028ef",
@@ -120,6 +121,7 @@
       "kalshi": "KXNCAAFSPREAD-26OCT06USMTROY",
       "novig": "01a0ea7f-3f63-7272-8159-6ac924421f89",
       "polymarket": "nfl_southernmiss_troy_2026-10-06_b3",
+      "prophetx": "1700084005",
       "robinhood": "40a15926-7d66-473a-8aa0-7d4391fcb5d0"
      },
      "home": "Troy",
@@ -210,33 +212,13 @@
      "type": "fixture"
     },
     {
-     "away": "Georgia Bulldogs",
-     "external": {
-      "draftkings": "34226065",
-      "onexbet": "757733239"
-     },
-     "home": "Alabama Crimson Tide",
-     "sample": {
-      "away_team": "Georgia Bulldogs",
-      "home_team": "Alabama Crimson Tide",
-      "markets": [
-       "moneyline",
-       "point_spread",
-       "team_total",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-10T17:00:00Z",
-     "type": "fixture"
-    },
-    {
      "away": "Texas Longhorns",
      "external": {
       "draftkings": "34226071",
       "fanatics": "5276575",
       "fanduel": "35632875",
       "fliff": "393888_c_p_209_prematch",
-      "kalshi": "KXNCAAFTOTAL-26OCT10TEXOKLA",
+      "kalshi": "KXNCAAFSPREAD-26OCT10TEXOKLA",
       "novig": "01a0fe1b-536f-7df1-a7cb-793b01be4605",
       "onexbet": "757729930",
       "polymarket": "nfl_oklahomasooners_texaslonghorns_2026-10-10_b2",
@@ -320,6 +302,7 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
+       "team_total",
        "total_points"
       ]
      },
@@ -330,23 +313,38 @@
   },
   "NFL": {
    "books": {
-    "fanduel": 2144
+    "draftkings": 1234,
+    "fanduel": 1034
    },
    "eventsListed": 32,
    "eventsMatched": 15,
    "games": 15,
    "marketTypes": {
-    "player_interceptions": 5,
-    "player_passing_touchdowns": 67,
-    "player_passing_yards": 161,
-    "player_receiving_yards": 975,
-    "player_receptions": 493,
+    "player_assists": 62,
+    "player_extra_points_made": 14,
+    "player_fantasy_score": 42,
+    "player_field_goals_made": 14,
+    "player_interceptions": 21,
+    "player_kicking_points": 14,
+    "player_longest_passing_completion": 16,
+    "player_longest_reception": 80,
+    "player_longest_rush": 38,
+    "player_passing_+_rushing_yards": 16,
+    "player_passing_attempts": 16,
+    "player_passing_completions": 16,
+    "player_passing_touchdowns": 53,
+    "player_passing_yards": 291,
+    "player_receiving_yards": 717,
+    "player_receptions": 334,
     "player_rushing_+_receiving_yards": 28,
-    "player_rushing_yards": 370,
-    "player_sacks": 45
+    "player_rushing_attempts": 28,
+    "player_rushing_yards": 298,
+    "player_sacks": 46,
+    "player_tackles": 62,
+    "player_tackles_+_assists": 62
    },
    "requestsLeft": 0,
-   "rows": 2144,
+   "rows": 2268,
    "slateGames": [
     "Indianapolis Colts at Washington Commanders 2026-10-04T13:30Z",
     "Arizona Cardinals at New York Giants 2026-10-04T17:00Z",
@@ -378,7 +376,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-04T02:51:00Z",
+     "start": "2026-10-04T03:10:00Z",
      "type": "outright"
     },
     {
@@ -460,6 +458,7 @@
       "betonline": "491141342",
       "betparx": "1028813038",
       "betrivers": "1028813038",
+      "draftkings": "34118176",
       "fanduel": "36132649",
       "galera": "21085959",
       "kalshi": "KXNFLGAME-26OCT11CHIGB",
@@ -562,6 +561,7 @@
       "paddypower": "36132643",
       "rebet": "sr:match:71515882",
       "robinhood": "87321aad-f383-4d0b-9181-2fc700b9765f",
+      "smarkets": "45210972",
       "stake": "0aaa1fc6-d046-443a-80e3-9f298d802ec4",
       "sx_bet": "L19431490"
      },
@@ -649,6 +649,7 @@
       "betonline": "491141351",
       "betparx": "1028813034",
       "betrivers": "1028813034",
+      "draftkings": "34118174",
       "fanduel": "36132639",
       "galera": "21085963",
       "kalshi": "KXNFLGAME-26OCT11MINNO",
@@ -680,12 +681,14 @@
       "betonline": "491141340",
       "betparx": "1028813037",
       "betrivers": "1028813037",
+      "draftkings": "34118229",
       "fanduel": "36132644",
       "galera": "21085955",
       "kalshi": "KXNFLGAME-26OCT11HOUTEN",
       "novig": "01a0ef14-21dd-70b1-bfbd-e8f1957b95de",
       "paddypower": "36132644",
       "robinhood": "8dc25d3b-86bc-41da-81d7-b6035f5bfcbf",
+      "smarkets": "45210973",
       "stake": "1552de63-5091-45ab-ace5-c9ba0e12c11d",
       "sx_bet": "L19431496"
      },
