@@ -360,7 +360,7 @@ def lean(v2, mkt, league=None, sd=None, paused=()):
             out['totalChance'] = calibrated(league, 'total', over if out['total'] > 0 else under)
     for market in ('spread', 'total'):
         if f'{league}/{market}' in paused:
-            out[f'{market}Paused'] = True        # learning paused this market: the chip says so instead of a chance
+            out[f'{market}Caution'] = True       # recent performance raises the bar; it does not erase the read
     return out
 
 
@@ -711,7 +711,10 @@ def build(now=None):
         # v2 compresses FBS-FCS blowouts badly enough that any chance it gives there would mislead.
         line['grade'] = None if fcs else grade_line(line, snapshot, thin)
         if line['grade'] and f"{game['league']}/{'spread' if line.get('market') == 'point spread' else 'total'}" in paused:
-            line['grade']['paused'] = True       # shown as paused on the site; the desk still sees it and records the refusal
+            line['grade']['performanceCaution'] = True
+            line['grade']['performanceNeed'] = 3.0
+            if (line['grade'].get('edge') or 0) < 3.0:
+                line['grade']['tier'] = 'pass'
         line['gradeNote'] = 'FBS vs FCS: v2 is not reliable here' if fcs and line.get('state') == 'open' else None
     values = sheet_values(lines, now)
     prop_store = load_store('prop-odds')
@@ -732,7 +735,11 @@ def build(now=None):
             closeness = market_record.get('closerThanLine') or [0, 0]
             behind = row['league'] == 'NFL' and market_record.get('graded', 0) >= 30 and closeness[0] < closeness[1]
             if segment in paused or behind:
-                row['grade']['paused'] = True
+                row['grade']['performanceCaution'] = True
+                row['grade']['performanceNeed'] = 5.0
+                if (row['grade'].get('edge') or 0) < 5.0:
+                    row['grade']['tier'] = 'pass'
+                    row['grade']['view'] = 'pass'
     trend_injuries = {league: {team: block.get('players', []) for team, block in
                       ((context.get('leagues') or {}).get(league, {}).get('teams') or {}).items()}
                       for league in ('NFL', 'CFB')}
@@ -925,7 +932,8 @@ def sheet_values(lines, now=None):
             continue
         value = {'side': side, 'line': row.get('line'), 'odds': int(row['odds']), 'book': row.get('book'),
                  'observedAt': row.get('observedAt'),
-                 **{k: grade.get(k) for k in ('chance', 'needs', 'edge', 'tier', 'paused', 'thin')}}
+                 **{k: grade.get(k) for k in ('chance', 'needs', 'edge', 'tier', 'performanceCaution',
+                                               'performanceNeed', 'thin')}}
         old = out[row['gameId']].get(market)
         score = value.get('edge') if isinstance(value.get('edge'), (int, float)) else -999
         old_score = old.get('edge') if old and isinstance(old.get('edge'), (int, float)) else -999
@@ -974,8 +982,7 @@ def settled_role(athlete, team, appearances, established):
 
 
 def learned_pauses():
-    """Segments the learning loop has paused ("NFL/total"): the site marks their lines and chips as paused
-    rather than showing them as value. Empty without a policy."""
+    """Legacy `paused` policy flags now mean performance caution and a higher admission threshold."""
     try:
         import learning
         return {segment for segment, entry in (learning.load_policy().get('segments') or {}).items()
@@ -1194,7 +1201,7 @@ def archived_model_reads(game, snapshot, captures, names, now, player_logs=None)
 def model_reads(game, snapshot, lines, now, player_logs=None, archived=False):
     """Descriptive projection-side research, deliberately independent of official/value admission.
 
-    Never turn a paused market into a recommendation or a mean gap into a win probability.
+    Never turn a performance warning into false confidence or a mean gap into a win probability.
     Keep the exact quote's side, and omit limited roles and unavailable projections.
     """
     if not snapshot or (not archived and (game.get('state') != 'pre' or features.when(game['kickoff']) <= now)):
@@ -1222,8 +1229,8 @@ def model_reads(game, snapshot, lines, now, player_logs=None, archived=False):
             continue
         seen_keys.add(key)
         warnings = ['Pregame comparison only—not a live line or a previously posted pick.'] if archived else []
-        if grade.get('paused'):
-            warnings.append('Caution: this market is paused for official picks after performance review.')
+        if grade.get('performanceCaution'):
+            warnings.append(f"Performance caution: an official pick needs at least {grade.get('performanceNeed', 5):g} adjusted points above its price.")
         if grade.get('thin'):
             warnings.append('Small sample: the player role or team history is not established.')
         if grade.get('unproven') or not grade.get('calibrated'):
@@ -1243,9 +1250,9 @@ def model_reads(game, snapshot, lines, now, player_logs=None, archived=False):
                     'line': line, 'projection': mean, 'comparison': comparison,
                     'book': row.get('book'), 'odds': row.get('odds') if priced else None,
                     'observedAt': row.get('observedAt'), 'snapshotAt': snapshot['publishedAt'],
-                    'warnings': warnings, 'paused': bool(grade.get('paused')), 'archived': archived,
+                    'warnings': warnings, 'performanceCaution': bool(grade.get('performanceCaution')), 'archived': archived,
                     'history': None if row.get('gameMarket') else favorite_hit_rates(game, row, player_logs)})
-    return sorted(out, key=lambda r: (r['paused'], r['kind'] != 'game', r['market'] or '', r['title']))
+    return sorted(out, key=lambda r: (r['performanceCaution'], r['kind'] != 'game', r['market'] or '', r['title']))
 
 
 def favorite_lines(game, snapshot, lines, now, player_logs=None):
@@ -1263,7 +1270,7 @@ def favorite_lines(game, snapshot, lines, now, player_logs=None):
         seen = instant(row.get('observedAt'))
         liked = grade.get('tier') in ('lean', 'strong') if row.get('gameMarket') else grade.get('view') == 'lean'
         if row.get('gameId') != game['id'] or row.get('state') != 'open' or not liked \
-                or grade.get('paused') or grade.get('limited') or grade.get('thin') \
+                or grade.get('limited') or grade.get('thin') \
                 or not isinstance(row.get('odds'), (int, float)) or seen is None or now - seen > ODDS_FRESH:
             continue
         history = None if row.get('gameMarket') else favorite_hit_rates(game, row, player_logs)

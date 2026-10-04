@@ -7,8 +7,8 @@ of the audit is finished. Free service ceilings and the append-only public recor
 
 - Every fresh, calibrated value read can be compared by confidence without hiding the separate value ordering.
   Confidence is the calibrated chance to win; value is how far that chance clears the price. The current view labels
-  only its top five confidence reads and offers an explicit confidence sort. No thin, paused, stale, unpriced or
-  uncalibrated row is ranked, and no rank is called a lock.
+  only its top five confidence reads and offers an explicit confidence sort. No thin, stale, unpriced or
+  uncalibrated row is ranked, and no rank is called a lock. Performance cautions use a higher value threshold.
 - Upset Watch ranks fresh outright candidates by the raw winner disagreement and exposes the reasons behind the
   signal: projected score, model-versus-spread gap and only the offense/defense rating drivers stored in that exact
   forecast. Large line movement and college schedule/role uncertainty are shown as warnings.
@@ -17,8 +17,9 @@ of the audit is finished. Free service ceilings and the append-only public recor
 
 ## First release: safeguards and the picks-first Board
 
-- Hard refusal of paused / negative calibrated value / missing prop calibration / stale new straight plays.
-  A favorite or researched label is not a bypass. Daily card sizes are maximums.
+- Hard refusal of negative calibrated value / missing prop calibration / stale new straight plays. The October 4
+  policy replaced performance-only pauses with higher thresholds. A favorite or researched label is not a bypass.
+  Daily card sizes are maximums.
 - Shared learned prop arithmetic for quote shopping, gates, generated explanations and priced Board rows.
   Raw candidate screening remains recorded separately. New reports freeze probability inputs; old reports stand.
 - Combined fun-ticket prices are explicitly estimated in new data; freshness uses the oldest leg.

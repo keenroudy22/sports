@@ -230,6 +230,15 @@ class ModelLeanRuleTests(unittest.TestCase):
     def test_lean_edge_refuses_without_a_snapshot(self):
         self.assertFalse(gates.lean_edge(total_lean(), context(snapshots={})).ok)
 
+    def test_game_performance_caution_raises_the_bar_without_vetoing_a_strong_line(self):
+        policy = gates.learning.default_policy()
+        policy['segments']['NFL/total'] = {'paused': True}
+        ordinary = gates.lean_edge(total_lean(), context(policy=policy))
+        self.assertFalse(ordinary.ok)
+        self.assertIn('needs +3.0', ordinary.reason)
+        strong = gates.lean_edge(total_lean(), context(policy=policy, snapshots={'NFL-1': [dict(SNAPSHOT, total=49.0)]}))
+        self.assertTrue(strong.ok, strong.reason)
+
     def test_lean_daily_cap(self):
         leans = {f'l{i}': total_lean(id=f'l{i}', publishedAt='2026-09-27T12:00:00Z', direction='under') for i in range(4)}
         self.assertFalse(gates.lean_daily_cap(total_lean(), context(first=leans, latest=leans)).ok)
@@ -314,8 +323,10 @@ class PropLeanRuleTests(unittest.TestCase):
 
     def test_market_gate_reads_the_live_scoreboard_and_can_be_switched_off(self):
         ctx = context()
-        refused = gates.prop_market_not_trailing(prop_lean(), ctx)
-        self.assertFalse(refused.ok, 'receiving yards: the line was closer in 92 of 158')
+        caution = gates.prop_market_not_trailing(prop_lean(), ctx)
+        self.assertTrue(caution.ok, 'poor performance raises the bar rather than vetoing the market')
+        self.assertIn('performance caution', caution.reason)
+        self.assertTrue(caution.data['performanceCaution'])
         self.assertTrue(gates.prop_market_not_trailing(prop_lean(market='rec', title='Player Seven OVER 4.5 receptions'), ctx).ok)
         self.assertTrue(gates.prop_market_not_trailing(prop_lean(market='att', title='Quarterback Five OVER 30.5 pass attempts'), ctx).ok,
                         'too few graded to close a market')
@@ -457,16 +468,22 @@ class AdmitTests(unittest.TestCase):
         # and a better quote (-115) sitting in the capture: every one of them is named.
         self.assertEqual({d.rule for d in gates.refusals(decisions)},
                          {'one_book', 'prop_price_floor', 'prop_raw_edge', 'best_quote_by_ev',
-                          'prop_market_not_trailing', 'prop_calibrated_value'})
+                          'prop_calibrated_value'})
 
-    def test_no_straight_kind_can_bypass_a_paused_segment_or_negative_calibrated_value(self):
+    def test_underperforming_segment_raises_the_bar_but_does_not_veto_a_strong_price(self):
         ctx = context(policy={**gates.learning.default_policy(), 'calibration': {'NFL/prop': {'k': 0.13, 'n': 500}},
                               'segments': {'NFL/prop:recYds': {'paused': True}}})
         for kind in ('propLean', 'favorite', 'researched'):
             ok, decisions = gates.admit(prop_lean(), ctx, kind)
             self.assertFalse(ok)
-            self.assertIn('learned_pause', {d.rule for d in gates.refusals(decisions)})
+            self.assertNotIn('learned_pause', {d.rule for d in gates.refusals(decisions)})
             self.assertIn('prop_calibrated_value', {d.rule for d in gates.refusals(decisions)})
+        strong = gates.learning.default_policy()
+        strong['calibration']['NFL/prop'] = {'k': 1.0, 'n': 500}
+        strong['segments']['NFL/prop:recYds'] = {'paused': True}
+        verdict = gates.prop_calibrated_value(prop_lean(), context(policy=strong))
+        self.assertTrue(verdict.ok)
+        self.assertIn('raised the bar', verdict.reason)
 
     def test_expiry_does_not_refresh_a_stale_quote(self):
         self.assertFalse(gates.fresh_quote(total_lean(quotedAt='2026-09-26T13:00:00Z'), context()).ok)

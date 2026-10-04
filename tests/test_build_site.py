@@ -28,12 +28,13 @@ class ModelReadTests(unittest.TestCase):
                     'title': 'Player over 25.5 receiving yards', 'stat': 'recYds', 'market': 'receiving yards',
                     'direction': 'over', 'line': 25.5, 'odds': -110, 'book': 'FanDuel',
                     'observedAt': '2026-10-04T14:00:00Z',
-                    'grade': {'projection': 35.0, 'paused': True, 'calibrated': True, 'view': 'lean'}}
+                    'grade': {'projection': 35.0, 'performanceCaution': True, 'performanceNeed': 5.0,
+                              'calibrated': True, 'view': 'pass'}}
 
-    def test_paused_research_is_visible_but_not_a_favorite(self):
+    def test_performance_caution_is_visible_but_not_a_favorite_below_the_higher_bar(self):
         reads = build_site.model_reads(self.game, self.snapshot, [self.row], self.now)
         self.assertEqual(len(reads), 1)
-        self.assertIn('paused', reads[0]['warnings'][0])
+        self.assertIn('at least 5 adjusted points', reads[0]['warnings'][0])
         self.assertIn('9.5 receiving yards above', reads[0]['comparison'])
         self.assertNotIn('chance', reads[0])
         self.assertEqual(build_site.favorite_lines(self.game, self.snapshot, [self.row], self.now), [])
@@ -316,7 +317,8 @@ class GradeTests(unittest.TestCase):
              'grade': {'chance': .54, 'needs': .524, 'edge': 1.6, 'tier': 'pass', 'thin': False}},
             {'gameId': 'NFL-1', 'gameMarket': True, 'state': 'open', 'market': 'point spread', 'side': 'away',
              'line': 4.0, 'odds': -105, 'book': 'FanDuel', 'observedAt': '2026-09-19T12:00:00Z',
-             'grade': {'chance': .56, 'needs': .512, 'edge': 4.8, 'tier': 'lean', 'paused': True, 'thin': False}},
+             'grade': {'chance': .56, 'needs': .512, 'edge': 4.8, 'tier': 'lean',
+                       'performanceCaution': True, 'performanceNeed': 3.0, 'thin': False}},
             {'gameId': 'NFL-1', 'gameMarket': True, 'state': 'open', 'market': 'total points', 'direction': 'under',
              'line': 44.5, 'odds': 100, 'book': 'BetMGM', 'observedAt': '2026-09-19T12:00:00Z',
              'grade': {'chance': .55, 'needs': .5, 'edge': 5.0, 'tier': 'strong', 'thin': False}},
@@ -326,7 +328,8 @@ class GradeTests(unittest.TestCase):
         values = build_site.sheet_values(lines, datetime(2026, 9, 19, 18, tzinfo=timezone.utc))['NFL-1']
         self.assertEqual((values['spread']['side'], values['spread']['odds'], values['spread']['book']),
                          ('away', -105, 'FanDuel'))
-        self.assertTrue(values['spread']['paused'])
+        self.assertTrue(values['spread']['performanceCaution'])
+        self.assertEqual(values['spread']['performanceNeed'], 3.0)
         self.assertEqual((values['total']['side'], values['total']['line'], values['total']['edge']),
                          ('under', 44.5, 5.0))
         self.assertEqual(build_site.sheet_values(lines, datetime(2026, 9, 20, 1, tzinfo=timezone.utc)), {},
@@ -509,10 +512,10 @@ class ForecastTests(unittest.TestCase):
         self.assertEqual(build_site.lean({'margin': 1.0, 'total': 44.5}, market)['side'], 'away')
         self.assertIsNone(build_site.lean({'margin': 1.0, 'total': 44.5}, None))
         self.assertIsNone(build_site.lean({'margin': 3.0, 'total': 44.5}, market)['side'])
-        paused = build_site.lean({'margin': 5.0, 'total': 42.0}, market, 'NFL', {'margin': 13.21, 'total': 12.79}, {'NFL/total'})
-        self.assertTrue(paused['totalPaused'], 'a market learning paused is marked for the site')
-        self.assertNotIn('spreadPaused', paused)
-        self.assertEqual(paused['totalChance'], nfl['totalChance'], 'the number is kept; only the label changes')
+        cautious = build_site.lean({'margin': 5.0, 'total': 42.0}, market, 'NFL', {'margin': 13.21, 'total': 12.79}, {'NFL/total'})
+        self.assertTrue(cautious['totalCaution'], 'poor performance is a visible higher-bar caution')
+        self.assertNotIn('spreadCaution', cautious)
+        self.assertEqual(cautious['totalChance'], nfl['totalChance'], 'the number is kept; only the label changes')
 
 
 class TableTests(unittest.TestCase):

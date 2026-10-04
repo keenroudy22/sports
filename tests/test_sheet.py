@@ -75,14 +75,15 @@ class DrawTests(unittest.TestCase):
         self.assertIn('LIKE: Hspread -2.5 -105 FD', text)
         self.assertEqual(sheet.priced_watch(total)[1:3], ('total', 'UNDER 44.5'))
 
-    def test_an_unpriced_gap_and_a_paused_market_are_not_highlighted(self):
+    def test_an_unpriced_gap_is_not_highlighted_but_a_strong_performance_caution_can_be(self):
         unpriced = card('gap', '2026-09-27T17:00Z', gap=30, value=None)
         paused = card('paused', '2026-09-27T20:25Z', gap=30,
                       value={'total': {'side': 'over', 'line': 41.5, 'odds': -105, 'book': 'FanDuel',
                                        'chance': .60, 'needs': .512, 'edge': 8.8, 'tier': 'strong',
                                        'paused': True, 'thin': False}})
         text = sheet.svg([unpriced, paused], 'NFL', SUNDAY, 3)
-        self.assertNotIn('stroke="' + sheet.ACCENT + '" stroke-width="4"', text)
+        self.assertEqual(text.count('stroke="' + sheet.ACCENT + '" stroke-width="4"'), 1)
+        self.assertIn('LIKE: OVER 41.5 -105 FD', text)
 
     def test_a_dark_team_colour_gives_way_to_one_that_shows(self):
         self.assertEqual(sheet.readable({'color': '#5a1414', 'alt': '#ffb612'}), '#ffb612')

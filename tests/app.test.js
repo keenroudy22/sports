@@ -11,13 +11,13 @@ test('game research is independent of posted plays and shows exact comparisons w
   const html = render(C, C.esc, C.ago, C.whenShort, (title, text) => title + text,
     { league: 'NFL', state: 'pre', kickoff: '2099-10-05T00:20:00Z' },
     { favoriteLines: [], picks: [], modelReads: [{ title: 'Player over 25.5 receiving yards', athleteId: '1',
-      comparison: 'We project 35 vs 25.5', paused: true, warnings: ['Market paused'],
+      comparison: 'We project 35 vs 25.5', performanceCaution: true, warnings: ['Higher bar'],
       observedAt: new Date().toISOString(), snapshotAt: new Date().toISOString(), odds: -110, book: 'FanDuel',
       history: { season: { hits: 3, games: 4 } } }] });
   assert.match(html, /Player over 25.5/);
   assert.match(html, /We project 35 vs 25.5/);
   assert.match(html, /3\/4 this season/);
-  assert.match(html, /Market paused/);
+  assert.match(html, /Higher bar/);
   assert.match(html, /#player\/NFL\/1/);
   assert.match(source, /C.filterTrends\(detail.seasonTrends/);
   assert.doesNotMatch(source, /No qualifying streak sheet/);

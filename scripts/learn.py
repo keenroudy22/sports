@@ -7,7 +7,7 @@ Every run records what it considered (scripts/learning.py). This module closes t
   weekly   Tuesday morning, after Monday night is graded:
            - segments   each league and market (NFL totals, NFL receiving yards, ...) measured on what it
                         published since its last change. Losing to the close with confidence makes it pickier
-                        one step; still losing at the cap pauses it. Beating the close, with the near misses
+                        one step; still losing at the cap adds a higher-bar performance caution. Beating the close, with the near misses
                         it refused beating it too, eases it one step back toward the written rule, never past.
            - props      the raw player chances calibrated against the graded record (every projected player
                         against the DraftKings line and the box score). A calibration ships only when it
@@ -46,7 +46,7 @@ NEAR_MIN = 20         # near misses needed before a segment eases back
 CAL_MIN = 300         # graded prop projections before a calibration may ship
 DOMAIN_MIN = 5        # researched facts from a site before it is preferred or avoided
 ENGAGE_MIN = 8        # posts with numbers per reason kind before its weight moves
-THRESHOLD_RULES = {'lean_edge', 'prop_raw_edge', 'prop_calibrated_value', 'learned_pause'}
+THRESHOLD_RULES = {'straight_value', 'lean_edge', 'prop_raw_edge', 'prop_calibrated_value', 'learned_pause'}
 
 
 # ------------------------------------------------------------------ the store's view of finished games
@@ -191,11 +191,11 @@ def learn_segments(policy, rows, now, dry=False):
         change = None
         if learning.paused(policy, segment):
             if near_clv and near_clv['n'] >= MIN_N and near_clv['low'] > 0:
-                change = learning.set_paused(policy, segment, False, 'what it refused while paused beat the close', evidence, now)
+                change = learning.set_paused(policy, segment, False, 'near misses under the higher bar beat the close', evidence, now)
         elif clv and clv['n'] >= MIN_N and clv['high'] < 0:
             change = learning.move(policy, segment, field, knob, +1, 'its plays lost to the closing line', evidence, now)
             if change is None:
-                change = learning.set_paused(policy, segment, True, 'still losing to the close at the strictest setting', evidence, now)
+                change = learning.set_paused(policy, segment, True, 'still losing to the close at the strictest setting; apply the higher bar', evidence, now)
         elif (clv and clv['n'] >= MIN_N and clv['low'] > 0 and near_clv and near_clv['n'] >= NEAR_MIN and near_clv['mean'] > 0):
             change = learning.move(policy, segment, field, knob, -1, 'its plays and its near misses beat the closing line', evidence, now)
         if change:
@@ -452,7 +452,7 @@ def markdown(report):
         lines.append('- None. Not enough new evidence moved anything.')
     lines += ['', '## Segments (published since their last change)', '']
     for s in report['segments']:
-        state = 'paused' if s['paused'] else f"min edge {s['minEdge']:g}"
+        state = 'higher-bar caution' if s['paused'] else f"min edge {s['minEdge']:g}"
         lines.append(f"- {s['segment']} ({state}): published {fmt_summary(s['published'])}; near misses {fmt_summary(s['nearMisses'])}")
     lines += ['', '## Player chances', '']
     for c in report['calibration']:

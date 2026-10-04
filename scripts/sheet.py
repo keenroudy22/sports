@@ -51,7 +51,7 @@ def disagreement(card):
 def priced_value(card, market):
     """A usable real-price edge for one market, or None."""
     value = (card.get('value') or {}).get(market) or {}
-    if value.get('tier') not in ('lean', 'strong') or value.get('paused') or value.get('thin') \
+    if value.get('tier') not in ('lean', 'strong') or value.get('thin') \
             or not isinstance(value.get('odds'), (int, float)):
         return None
     return value
@@ -70,7 +70,7 @@ def watch_label(card, market, value):
 
 
 def priced_watch(card):
-    """The strongest usable price edge, or None. Missing, paused and pass prices never get a mint ring."""
+    """The strongest usable price edge, or None. Missing, thin and pass prices never get a mint ring."""
     rows = []
     for market in ('spread', 'total'):
         value = priced_value(card, market)

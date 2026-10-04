@@ -648,9 +648,8 @@ PROVISIONAL_K = 0.2                # a league's player chances before learning h
 
 def rank_card(wanted, ctx):
     """The card's candidates, best first: by our calibrated number against the price (a player's chance shrunk by the
-    league's learned k, or PROVISIONAL_K before there is one), with a paused market, a player market where the line has
-    been closer than our projection, or a chance that does not clear its price after all the rest. Those three rules
-    also refuse new plays through the admission gates. Card size is a ceiling, never a quota."""
+    league's learned k, or PROVISIONAL_K before there is one). Recent underperformance raises the required edge;
+    it does not automatically remove a line. Card size is a ceiling, never a quota."""
     import learning
     def score(c):
         row, league = c['_row'], c['_league']
@@ -661,12 +660,14 @@ def rank_card(wanted, ctx):
             k = ((ctx.policy.get('calibration') or {}).get(f'{league}/prop') or {}).get('k')
             k = PROVISIONAL_K if k is None else k
             edge = 100 * (0.5 + k * (raw - 0.5) - needs) if raw is not None and needs is not None else -99.0
-            behind = not gates.prop_market_not_trailing(pick, ctx).ok
+            behind = gates.trailing_prop_market(pick, ctx) is not None
         else:
             edge, behind = float(grade.get('edge') or -99.0), False
-        paused = learning.paused(ctx.policy, learning.segment_of(pick))
-        c['_rank'] = {'edge': round(edge, 1), 'paused': paused, 'behind': behind}
-        return (bool(paused or behind or edge < 0), -edge)
+        cautious = learning.paused(ctx.policy, learning.segment_of(pick)) or behind
+        need = gates.PERFORMANCE_PROP_EDGE if c.get('athleteId') and cautious else \
+               gates.PERFORMANCE_GAME_EDGE if cautious else 0
+        c['_rank'] = {'edge': round(edge, 1), 'performanceCaution': cautious, 'requiredEdge': need}
+        return (bool(edge <= 0 or edge < need), -edge)
     kept = [c for c in wanted if not c.get('athleteId')
             or isinstance(c['_row'].get('odds'), (int, float)) and CARD_PROP_PRICES[0] <= c['_row']['odds'] <= CARD_PROP_PRICES[1]]
     return sorted(kept, key=score)

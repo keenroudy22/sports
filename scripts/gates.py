@@ -71,6 +71,8 @@ PROP_RAW, PROP_EDGE, PROP_FLOOR = 0.60, 5.0, -200
 OWN_CALIBRATION = build_site.PROP_OWN_CALIBRATION
 LEANS_PER_DAY, PROPS_PER_WINDOW, LONGSHOTS_PER_DAY = 4, 3, 1
 MARKET_GATE_MIN = 30                       # graded player markets before the scoreboard can close one
+PERFORMANCE_PROP_EDGE = 5.0                # underperforming markets may post, but only with a stronger priced edge
+PERFORMANCE_GAME_EDGE = 3.0
 TOTAL_RANGE, SPREAD_MAX = (20.0, 100.0), 70.0
 BOOK_NAMES = build_site.BOOK_NAMES
 
@@ -288,8 +290,15 @@ def straight_value(candidate, ctx):
     if candidate.get('athleteId'):
         return prop_calibrated_value(candidate, ctx)
     desk = desk_for(candidate, ctx)
-    ok = bool(desk and desk.get('calibrated') and desk.get('edgePoints', 0) > 0)
-    return Decision(ok, 'straight_value', 'adjusted chance clears the price' if ok else 'no positive calibrated edge at this price')
+    cautious = kind_of(candidate) != 'modelLean' and learning.paused(ctx.policy, learning.segment_of(candidate))
+    need = PERFORMANCE_GAME_EDGE if cautious else 0.0
+    edge = desk.get('edgePoints', 0) if desk else 0
+    ok = bool(desk and desk.get('calibrated') and edge > 0 and edge >= need)
+    reason = (f'adjusted chance clears the price by {edge:+.1f} points' +
+              (f'; recent performance raised the bar to {need:+.0f}' if cautious else '')) if ok else \
+             (f'{edge:+.1f} points against the price; recent performance requires {need:+.0f}' if cautious
+              else 'no positive calibrated edge at this price')
+    return Decision(ok, 'straight_value', reason)
 
 
 def published_today(ctx, exclude=None):
@@ -505,7 +514,9 @@ def lean_edge(candidate, ctx):
         return Decision(False, 'lean_edge', 'v2 has no number for this line')
     if not desk.get('calibrated'):
         return Decision(False, 'lean_edge', 'the chance is uncalibrated; a model lean needs a calibrated chance')
-    need = max(LEAN_EDGE, learning.threshold(ctx.policy, 'lean.minEdge', learning.segment_of(candidate)))
+    segment = learning.segment_of(candidate)
+    need = max(LEAN_EDGE, learning.threshold(ctx.policy, 'lean.minEdge', segment),
+               PERFORMANCE_GAME_EDGE if learning.paused(ctx.policy, segment) else 0)
     if desk['edgePoints'] < need:
         return Decision(False, 'lean_edge', f"{desk['edgePoints']:+.1f} points against break-even; needs {need:+.1f}")
     return Decision(True, 'lean_edge', f"{desk['edgePoints']:+.1f} points clear of break-even", {'edgePoints': desk['edgePoints']})
@@ -641,12 +652,29 @@ def prop_raw_edge(candidate, ctx):
 
 
 def learned_pause(candidate, ctx):
-    """A segment learning paused: its plays kept losing to the closing line even at the strictest setting."""
+    """Past underperformance is a caution and higher threshold, never a veto by itself."""
     segment = learning.segment_of(candidate)
     if learning.paused(ctx.policy, segment):
         since = ((ctx.policy.get('segments') or {}).get(segment) or {}).get('since')
-        return Decision(False, 'learned_pause', f'{segment} is paused by learning since {since}: its plays kept losing to the close')
-    return Decision(True, 'learned_pause', f'{segment} is open')
+        return Decision(True, 'learned_pause', f'{segment} has a performance caution since {since}; a stronger edge is required',
+                        {'performanceCaution': True})
+    return Decision(True, 'learned_pause', f'{segment} has no performance caution')
+
+
+def trailing_prop_market(candidate, ctx):
+    """The relevant NFL market row when the book's line has recently beaten our projection."""
+    if not candidate.get('athleteId') or not ctx.flags.get('MARKET_GATE', True):
+        return None
+    league = candidate.get('league') or str(candidate.get('id', '')).split('-')[0]
+    if league != 'NFL':
+        return None
+    market = market_key(candidate)
+    rows = {m.get('market'): m for m in ((ctx.scoreboard.get('props') or {}).get('markets') or [])}
+    row = rows.get(market)
+    if not row or (row.get('graded') or 0) < MARKET_GATE_MIN:
+        return None
+    ours, theirs = row['closerThanLine']
+    return row if ours < theirs else None
 
 
 def prop_calibrated_value(candidate, ctx):
@@ -662,12 +690,17 @@ def prop_calibrated_value(candidate, ctx):
         return Decision(False, 'prop_calibrated_value', 'v2 has no projection for this player and market')
     chance = 0.5 + k * (desk['rawChance'] - 0.5)
     edge = 100 * (chance - pricing.break_even(candidate['odds']))
-    need = learning.threshold(ctx.policy, 'prop.minCalibratedEdge', learning.segment_of(candidate))
+    segment = learning.segment_of(candidate)
+    cautious = learning.paused(ctx.policy, segment) or trailing_prop_market(candidate, ctx) is not None
+    need = max(learning.threshold(ctx.policy, 'prop.minCalibratedEdge', segment),
+               PERFORMANCE_PROP_EDGE if cautious else 0)
     if edge <= 0 or edge < need:
         return Decision(False, 'prop_calibrated_value',
                         f"calibrated {100 * chance:.1f}% (raw {100 * desk['rawChance']:.1f}% shrunk by k {k:g}, learned from "
                         f"{cal.get('n')} graded projections) is {edge:+.1f} points against the price; needs {need:+.0f}")
-    return Decision(True, 'prop_calibrated_value', f'calibrated {100 * chance:.1f}%, {edge:+.1f} points', {'calibratedChance': round(chance, 3)})
+    return Decision(True, 'prop_calibrated_value', f'calibrated {100 * chance:.1f}%, {edge:+.1f} points'
+                    + (f'; recent performance raised the bar to {need:+.0f}' if cautious else ''),
+                    {'calibratedChance': round(chance, 3), 'performanceCaution': cautious})
 
 
 def prop_settled_role(candidate, ctx):
@@ -776,7 +809,7 @@ def prop_injury_clear(candidate, ctx):
 
 
 def prop_market_not_trailing(candidate, ctx):
-    """No prop lean in a market where the book's line has been closer to the result than our projection."""
+    """Record market performance as a caution; calibrated value enforces its stronger threshold."""
     if not candidate.get('athleteId'):
         return Decision(True, 'prop_market_not_trailing', 'not a player market')
     if not ctx.flags.get('MARKET_GATE', True):
@@ -791,8 +824,10 @@ def prop_market_not_trailing(candidate, ctx):
         return Decision(True, 'prop_market_not_trailing', f'{market}: under {MARKET_GATE_MIN} graded markets, nothing to go on')
     ours, theirs = row['closerThanLine']
     if ours < theirs:
-        return Decision(False, 'prop_market_not_trailing', f"{market}: the line was closer than our projection in "
-                                                           f"{theirs} of {row['graded']} graded games", {'closerThanLine': [ours, theirs]})
+        return Decision(True, 'prop_market_not_trailing', f"{market}: performance caution—the line was closer than our projection in "
+                                                          f"{theirs} of {row['graded']} graded games; requires a "
+                                                          f"{PERFORMANCE_PROP_EDGE:+.0f}-point calibrated edge",
+                        {'closerThanLine': [ours, theirs], 'performanceCaution': True})
     return Decision(True, 'prop_market_not_trailing', f"{market}: our projection closer in {ours} of {row['graded']}")
 
 
@@ -858,7 +893,7 @@ def revision_frozen(candidate, ctx):
 COMMON = (not_started, expiry_ok, fresh_quote, price_present, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction, player_overlap)
 SHOP = (one_book, best_quote_by_ev)
 RULES = {
-    # Caps are ceilings, not quotas. A paused or negative-value market cannot fill the card.
+    # Caps are ceilings, not quotas. Performance cautions raise the edge requirement; negative value still fails.
     'modelLean': COMMON + SHOP + (learned_pause, straight_value, lean_is_total, lean_edge, lean_confidence, card_cap, lean_nothing_against, qb_available),
     'propLean': COMMON + SHOP + (learned_pause, prop_calibrated_value, prop_market_not_trailing, prop_raw_edge, prop_settled_role, prop_price_floor, prop_window_cap, prop_one_per_player,
                                  prop_not_in_longshot, prop_injury_clear, card_cap, lean_nothing_against),

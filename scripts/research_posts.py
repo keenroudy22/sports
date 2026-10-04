@@ -118,7 +118,7 @@ def spread_dog_candidate(games, lines, now):
         grade = line.get('grade') or {}
         if line.get('gameId') not in cards or not line.get('gameMarket') or line.get('market') != 'point spread' \
                 or line.get('state') != 'open' or not isinstance(line.get('line'), (int, float)) or line['line'] <= 0 \
-                or grade.get('tier') not in ('lean', 'strong') or grade.get('paused') or grade.get('thin') \
+                or grade.get('tier') not in ('lean', 'strong') or grade.get('thin') \
                 or line.get('book') not in PUBLIC_BOOKS or not current(line.get('observedAt'), now, timedelta(hours=12)):
             continue
         game = cards[line['gameId']]

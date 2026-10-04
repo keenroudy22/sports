@@ -129,9 +129,15 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Performance raises the bar; it does not veto a market (2026-10-04):** poor recent results or the book's
+  line beating our projection are evidence to consider, not a reason by themselves to suppress every post.
+  An underperforming player market must clear its exact price by at least five adjusted percentage points;
+  an underperforming game market must clear by at least three. A line that clears the higher threshold may still
+  qualify and carries a visible performance caution. Missing calibration, stale or missing prices, thin or limited
+  roles, injury holds and negative value remain hard stops. Existing publications and the record do not change.
 - **Game-page model leans (2026-10-04):** the owner wants useful line-versus-projection research even when
   no official play qualifies. Show a separate compact Model leans section with exact captured lines, projection
-  differences, season hit counts and explicit weak-sample/paused-market cautions. These descriptive directions
+  differences, season hit counts and explicit weak-sample/performance cautions. These descriptive directions
   are not price-qualified recommendations and carry no confidence rank. Hide stale prices and limited roles;
   never flip a quoted side or reuse a price for another side. Season trends use their own full-season data,
   independent of favorite admission. Official selection, favorite gates, social posts and the record are unchanged.
@@ -167,9 +173,9 @@ Handy commands (from `~/Projects/sports`):
   Monday owner review. A retrospective improvement only nominates a future shadow trial; it never changes live
   market weights automatically. All evaluation uses stored data and adds no metered requests.
 - **Confidence order and explained upsets (2026-10-03):** qualifying Board lines may show a confidence rank based
-  on their calibrated chance to win after the ordinary freshness, sample and market-pause rules. Keep this separate
+  on their calibrated chance to win after the ordinary freshness, sample and performance-threshold rules. Keep this separate
   from value rank, which measures how far the chance clears the exact price; the two may disagree and neither is a
-  lock score. Thin, paused, stale, unpriced and uncalibrated rows receive no confidence rank. Upset Watch ranks its
+  lock score. Thin, stale, unpriced and uncalibrated rows receive no confidence rank. Upset Watch ranks its
   fresh outright candidates by the raw model-versus-market probability disagreement and says why each is highlighted:
   exact projected score, spread disagreement and only rating drivers present in that forecast. A large line move and
   college schedule/role uncertainty are warnings, not supporting evidence. It remains research, never an official play.
@@ -346,8 +352,8 @@ Handy commands (from `~/Projects/sports`):
   Sunday at 10 AM (`scripts/sheet.py`). Every spread and total read carries the exact captured line, price and book.
   Numbered mint rings identify up to four markets where the calibrated chance clears that price by the Board's value
   threshold and name the wager itself (`OVER 45.5`, `MINN +3.5`), not merely `TOTAL` or `SPREAD`; the selected priced
-  line, rather than the model projection, is mint. Missing, stale, thin, paused and pass prices never get a ring.
-  They are watches, not official plays.
+  line, rather than the model projection, is mint. Missing, stale, thin and pass prices never get a ring;
+  performance-caution lines must clear their higher threshold. They are watches, not official plays.
   Never show a moneyline watch without both sides' captured book prices to compare with the projected win chance.
   The complete college slate stays on the site.
 - **Growth goal** (2026-09-28): grow @keenkooks toward 10,000 followers by the end of football season without paid

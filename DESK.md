@@ -13,7 +13,7 @@ The Board now keeps two rankings separate. Best value is the calibrated chance m
 captured price. Confidence is the calibrated chance itself, ordered only among fresh lines that already passed the
 sample, calibration and market-health rules. A line may rank first in one and not the other. The site labels only the
 top five confidence reads in the current view and offers a confidence sort; it never calls the rank a lock or gives a
-confidence badge to a thin, paused, stale, unpriced or uncalibrated row.
+confidence badge to a thin, stale, unpriced or uncalibrated row. A performance caution raises its required edge.
 
 Underdog Watch now leads with the strongest raw model-versus-market winner disagreement and opens the arithmetic
 instead of showing a bare percentage. Each card gives the exact projected score, how that score compares with the
@@ -131,9 +131,10 @@ writes nothing.
 
 Exactly what `PROMPT.md` allows, and only when every gate passes:
 
-**2026-10-02 audit policy supersedes the full-card preference:** paused segments, missing learned player
-calibration, nonpositive adjusted value and stale quotes now refuse new straight plays. Favorites and researched
-labels do not bypass those checks. Zero plays is a valid card. Quote shopping, published explanations and the
+**2026-10-04 performance policy supersedes the old hard pause:** recent underperformance raises the threshold
+instead of vetoing every line: five adjusted percentage points for player markets and three for game markets.
+Missing learned player calibration, nonpositive adjusted value and stale quotes still refuse new straight plays.
+Favorites and researched labels do not bypass those checks. Zero plays is a valid card. Quote shopping, published explanations and the
 site share the learned prop arithmetic. New reports save the probability inputs at publication; old reports are
 never retroactively assigned today's probabilities. Existing public plays stay in the record.
 
@@ -145,10 +146,9 @@ never retroactively assigned today's probabilities. Existing public plays stay i
   player props"): five straight plays on a Saturday or a Sunday, three of a kind at most; one on any other day, and on
   a night with an NFL game, that game's (`gates.card_cap`, counting the day's plays whenever published, apart from one
   pulled before its post). The runs judge candidates best first (`run.rank_card`): by our calibrated number against
-  the price (a player's chance shrunk by the league's learned k, 0.2 before there is one), with a paused market, a
-  player market where the line has been closer than our projection, or a chance that does not clear its price after
-  the rest. Those three rules (`learned_pause`, `prop_market_not_trailing`, `prop_calibrated_value`) now also refuse
-  ineligible new plays; the ranking never overrides them. A card prop is priced -200 to +120 (past +120 the
+  the price (a player's chance shrunk by the league's learned k, 0.2 before there is one). A market with a
+  performance caution is ranked by the same edge but must clear the higher threshold before admission
+  (`learned_pause`, `prop_market_not_trailing`, `prop_calibrated_value`). A card prop is priced -200 to +120 (past +120 the
   calibration overstates a plus-money over). One pick per bet, open or closed: a bet the desk closed is never
   published again at another number (`gates.not_duplicate`). Fun parlays and the ladder are apart. (For two days
   before, 2026-09-26 to 28, the rule was "favorites only": three a day at three points; it left NFL Sunday empty.)
@@ -390,7 +390,7 @@ gate to fill the calendar; if the day has nothing else, the public book closes t
 | Between the first two plays on a multi-play card | **Conversation prompt or teaser**: one short slate question; when a Climb rung or fun ticket is already ready, tease that real post instead (for example, "The 80/20 Climb is back later today. Step 2 is already cooked."); text-only, one relevant league tag, at most once that day. Never added to a single-play day and never followed by automated replies |
 | After verified top-player news | **Injury angle**: at most two text-only posts a day. ESPN must list a top QB/RB/WR/TE out, doubtful or inactive; a newer projection must remove them and redistribute the work; and the teammate prop must have a real price captured after the news that still grades as a lean. Add the opponent's allowed-by-position stat when stored. Clearly say it is a board lean, not a posted play; it stays outside the record and never displaces a play or receipt |
 | As a win settles (9 AM to 12:30 AM, within three hours) | **Cashed**: "✅ Cashed: Iowa/Michigan over 38.5 (-105, ESPN BET)" (or "✅ POTD cashed: ...", "✅ +2506 5-leg lotto cashed (ESPN BET)"), and the original post quoted by its X link; text only. Losses are not singled out: the morning receipt lists every play, win or lose. The run feeds its own settlements forward (`run.absorb`), so the cashed post goes out from the run that settled it |
-| 10:00 AM college Saturday and NFL Sunday | **📌 SAVE THIS**: the week's projection sheet (`scripts/sheet.py`), one 1080x1350 image with the full NFL slate or 16 college games: logos, projected score, win chances, and our spread and total beside the exact captured line, price and book. Numbered mint rings identify up to four markets where our calibrated chance clears the price by the Board's value threshold and name the actual wager, such as **OVER 45.5** or **MINN +3.5**; the listed line/price is mint, not the model projection. Missing, stale, thin, paused and pass prices never get a ring; the rings are watches, not official plays. Never label a moneyline watch without both sides' captured book prices. The complete college slate stays on the site. Drawn by the hosted build (`feed.py`, `cards/sheet-<league>-<date>.png`), posted by the desk once the image is live, never after 11:45 AM. Not picks |
+| 10:00 AM college Saturday and NFL Sunday | **📌 SAVE THIS**: the week's projection sheet (`scripts/sheet.py`), one 1080x1350 image with the full NFL slate or 16 college games: logos, projected score, win chances, and our spread and total beside the exact captured line, price and book. Numbered mint rings identify up to four markets where our calibrated chance clears the price by the Board's value threshold and name the actual wager, such as **OVER 45.5** or **MINN +3.5**; the listed line/price is mint, not the model projection. Missing, stale, thin and pass prices never get a ring; a performance caution needs the higher edge before it can earn one. The rings are watches, not official plays. Never label a moneyline watch without both sides' captured book prices. The complete college slate stays on the site. Drawn by the hosted build (`feed.py`, `cards/sheet-<league>-<date>.png`), posted by the desk once the image is live, never after 11:45 AM. Not picks |
 | As a rung settles | **80/20 Climb result**: a win says "$75 → $146" and "$48 banked. $117 rides step 3"; a loss names the leg results, protected bank and $50 restart; a push keeps the stake on the same step. At $1,000 total bank plus ride, "🪜 80/20 CLIMB COMPLETE", and the phone gets "80/20 Climb complete: pin it" |
 | 6:00 PM on a day with nothing else | **The book**: the season record, graded through yesterday and saying so ("Season through Sep 28"), so back-to-back quiet days never post the same words, which X refuses; with one kind of play only the season line (card `site/img/kitchen-book.png`) |
 
@@ -618,7 +618,8 @@ Every upcoming game page starts with **Kook'n favorite lines** (owner, 2026-10-0
 calibrated Board likes, ranked by edge against the sportsbook price. It shows line vs projection, price, book,
 calibrated/model chance, break-even chance, the resulting price edge and exact-line last-ten and current-season hit
 rates from stored games. Historical rates are labeled context, not probability. Player roles must be settled;
-limited, paused, thin, stale and unpriced markets never qualify. Alternates are optional choices a reader can make at
+limited, thin, stale and unpriced markets never qualify. A performance-caution market may qualify only at its higher
+edge threshold. Alternates are optional choices a reader can make at
 their book, not what determines the favorite. These are optional reads rather than additional official plays. If
 nothing qualifies, the page says so instead of forcing a line.
 
@@ -673,10 +674,11 @@ be adjusted are adjusted by rule, not by feel (`scripts/learning.py`, `scripts/l
 - **The weekly step** runs at the Tuesday 8:30 AM slot, after Monday night is graded (`learn.py weekly`):
   - *Segments* (league and market: NFL totals, NFL receiving yards, ...), judged only on what each published
     since its last change. With 30 graded plays losing to the close (the 90% interval of closing line value below
-    zero), its minimum edge rises one step; still losing at the strictest setting, it pauses (`learned_pause`).
+    zero), its minimum edge rises one step; still losing at the strictest setting, it receives a performance caution
+    (`learned_pause`) and the higher threshold applies rather than a blanket veto.
     With 30 beating the close and 20 near misses (refused only by an edge rule) beating it too, it eases one step
     back. The floors are the written rules in `PROMPT.md`: learning makes the desk pickier, never looser than
-    the rules, and a paused segment reopens only when what it refused kept beating the close.
+    the rules, and a cautioned segment returns to the ordinary threshold only when its near misses beat the close.
   - *Player chances.* Raw prop chances are calibrated against every graded projection (each projected player
     against the last DraftKings line and the box score). A calibration ships only when it predicts the later part
     of the record better than the raw chances and better than the one in use; after that a prop must also clear

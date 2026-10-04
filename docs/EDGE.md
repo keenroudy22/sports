@@ -17,8 +17,8 @@ What follows from it:
 - **College totals are the one market with a real edge, and it lives at the opening number.** The market moves
   toward our number during the week, so the same play graded at the close is close to break-even. The desk
   publishes college totals as soon as it sees them, and the record grades them at the number published.
-- **NFL totals have none.** NFL model leans are paused (`data/learning/policy.json`, segment `NFL/total`). The
-  learning step reopens the segment if the plays it now refuses keep beating the close.
+- **NFL totals carry a performance caution.** They need at least three adjusted percentage points above the exact
+  price instead of being automatically removed (`data/learning/policy.json`, segment `NFL/total`).
 - **Sides have none in either league.** Model leans are totals only, as before.
 - Basketball and soccer, built the same way from scores, showed no edge either (`docs/HOOPS.md`,
   `docs/SOCCER.md`). One signal carries over: in basketball totals the line also moves toward our number, so a

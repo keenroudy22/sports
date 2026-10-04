@@ -942,7 +942,7 @@ if __name__ == '__main__':
 
 
 class CardRankTests(unittest.TestCase):
-    def test_the_card_orders_by_our_number_with_paused_and_trailing_markets_last(self):
+    def test_the_card_orders_by_edge_when_performance_cautions_still_clear_the_higher_bar(self):
         import learning
         sys.path.insert(0, str(Path(__file__).resolve().parent))
         from test_gates import context
@@ -956,6 +956,6 @@ class CardRankTests(unittest.TestCase):
         wanted = [total('nfl-total', 4.0), total('cfb-total', 2.0, 'CFB'), prop('rec', 'rec', 0.70, 0.52, -110),
                   prop('yards', 'recYds', 0.80, 0.52, -110), prop('plus', 'rec', 0.90, 0.42, 140)]
         order = [c['id'] for c in run.rank_card(wanted, ctx)]
-        self.assertEqual(order, ['rec', 'cfb-total', 'yards', 'nfl-total'],
-                         'a +8 prop, then the +2 college total; the trailing yards market and the paused NFL total after, '
-                         'strongest first; a plus-money prop is not a card play')
+        self.assertEqual(order, ['yards', 'rec', 'nfl-total', 'cfb-total'],
+                         'strong performance-caution reads can lead once they clear the higher threshold; '
+                         'a plus-money prop outside the card range is removed')

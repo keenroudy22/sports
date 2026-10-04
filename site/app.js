@@ -308,11 +308,11 @@
     const thin = Boolean((game.v2 || {}).sparse);
     const m = game.market || {}, raw = game.lean || {};
     const pct = c => c == null ? '' : ` · ${Math.round(100 * c)}%`;
-    const chip = (text, chance, paused) => `<span class="lean ${paused ? '' : C.leanTone(chance, thin)}">${esc(text)}</span>`;
+    const chip = (text, chance, caution) => `<span class="lean ${C.leanTone(chance, thin)}">${esc(text)}${caution ? ' · higher bar' : ''}</span>`;
     const sideTeam = raw.side === 'home' ? game.home : game.away;
     const sideLine = m.spread == null ? '' : ` ${C.spreadText('', raw.side === 'home' ? m.spread : -m.spread).trim()}`;
-    const side = lean.side ? chip(raw.spreadPaused ? `${teamName(sideTeam)}${sideLine} · paused` : `Our side: ${teamName(sideTeam)}${sideLine}${pct(lean.side.chance)}`, lean.side.chance, raw.spreadPaused) : '';
-    const total = lean.total ? chip(raw.totalPaused ? `${lean.total.direction} ${m.total ?? ''} · paused` : `Our total: ${lean.total.direction} ${m.total ?? ''}${pct(lean.total.chance)}`, lean.total.chance, raw.totalPaused) : '';
+    const side = lean.side ? chip(`Our side: ${teamName(sideTeam)}${sideLine}${pct(lean.side.chance)}`, lean.side.chance, raw.spreadCaution) : '';
+    const total = lean.total ? chip(`Our total: ${lean.total.direction} ${m.total ?? ''}${pct(lean.total.chance)}`, lean.total.chance, raw.totalCaution) : '';
     return `<span class="leans">${side}${total}</span>`;
   };
 
@@ -351,12 +351,12 @@
     const ours = v2 && v2.margin != null ? (Math.abs(v2.margin) < 0.05 ? 'Even' : `${esc((v2.margin > 0 ? game.home : game.away).abbr)} by ${Math.abs(v2.margin).toFixed(1)}`) : DASH;
     const sideTeam = raw.side === 'home' ? game.home : game.away;
     const sideLine = m.spread == null ? '' : ` ${C.spreadText('', raw.side === 'home' ? m.spread : -m.spread).trim()}`;
-    const pick = (text, chance, paused) => paused ? `<span class="lean">${text} · paused</span>` : chance == null ? '<span class="faint">no lean</span>'
-      : `<span class="lean ${C.leanTone(chance, Boolean((v2 || {}).sparse))}">${text} · ${Math.round(100 * chance)}%</span>`;
+    const pick = (text, chance, caution) => chance == null ? '<span class="faint">no lean</span>'
+      : `<span class="lean ${C.leanTone(chance, Boolean((v2 || {}).sparse))}">${text} · ${Math.round(100 * chance)}%${caution ? ' · higher bar' : ''}</span>`;
     const lines = scores || game.fcs || !v2 ? '' : `<span class="proj-lines">
         <span class="proj-line proj-line-head"><span></span><span>Ours</span><span>Line</span><span>Our side</span></span>
-        <span class="proj-line"><span>Spread</span><span>${ours}</span><span>${fav(m.spread)}</span><span>${lean.side ? pick(`${esc(sideTeam.abbr)}${esc(sideLine)}`, lean.side.chance, raw.spreadPaused) : '<span class="faint">no lean</span>'}</span></span>
-        <span class="proj-line"><span>Total</span><span>${v2.total != null ? fixed(v2.total, 1) : DASH}</span><span>${m.total ?? DASH}</span><span>${lean.total ? pick(`${lean.total.direction} ${m.total ?? ''}`, lean.total.chance, raw.totalPaused) : '<span class="faint">no lean</span>'}</span></span>
+        <span class="proj-line"><span>Spread</span><span>${ours}</span><span>${fav(m.spread)}</span><span>${lean.side ? pick(`${esc(sideTeam.abbr)}${esc(sideLine)}`, lean.side.chance, raw.spreadCaution) : '<span class="faint">no lean</span>'}</span></span>
+        <span class="proj-line"><span>Total</span><span>${v2.total != null ? fixed(v2.total, 1) : DASH}</span><span>${m.total ?? DASH}</span><span>${lean.total ? pick(`${lean.total.direction} ${m.total ?? ''}`, lean.total.chance, raw.totalCaution) : '<span class="faint">no lean</span>'}</span></span>
       </span>`;
     return `<a class="proj${live ? ' proj-live' : ''}" href="#game/${esc(game.id)}">
       <span class="proj-top">${projTeam(game, game.away)}
@@ -624,7 +624,7 @@
       const history = line.history && line.history.season;
       const fresh = Date.now() - Date.parse(line.observedAt) >= 0 && Date.now() - Date.parse(line.observedAt) <= 4 * 3600000;
       const price = archived ? 'Pregame comparison · not a live line' : fresh && line.odds != null ? `${C.odds(line.odds)} ${line.book || ''}` : 'Check current price';
-      return `<article class="card model-read"><span class="eyebrow">${archived ? 'Pregame model direction' : line.paused ? 'Model direction · caution' : 'Model lean'}</span>
+      return `<article class="card model-read"><span class="eyebrow">${archived ? 'Pregame model direction' : line.performanceCaution ? 'Model lean · higher bar' : 'Model lean'}</span>
         <h3>${line.athleteId ? `<a href="#player/${esc(card.league)}/${esc(line.athleteId)}">${esc(line.title)} →</a>` : esc(line.title)}</h3>
         <p class="model-read-comparison">${esc(line.comparison)}</p>
         <p class="row-meta">${esc(price)} · line captured ${esc(ago(line.observedAt))}</p>
@@ -632,7 +632,7 @@
         ${line.warnings.length ? `<p class="row-meta model-read-caution">${esc(line.warnings[0])}</p>` : ''}
         <details><summary>Why / what could go wrong</summary><p class="row-meta">${esc(line.comparison)} This is the direction of the projected average, not a proven price edge or a win probability. Forecast ${esc(whenShort(line.snapshotAt))}.</p>${line.warnings.map(w => `<p class="row-meta">${esc(w)}</p>`).join('')}<p class="row-meta">Check opponent, role and injury details below. Historical hit rates do not predict the next game.</p></details></article>`;
     };
-    return section(archived ? 'Pregame model leans' : 'Model leans · lines to explore', `<p class="row-meta">${archived ? 'Saved pregame numbers—not live recommendations or a record of posted plays.' : 'What our numbers lean toward—not just posted plays. Paused markets stay visible with a caution, not an endorsement. Official plays and price-qualified favorites remain separate.'}</p>` +
+    return section(archived ? 'Pregame model leans' : 'Model leans · lines to explore', `<p class="row-meta">${archived ? 'Saved pregame numbers—not live recommendations or a record of posted plays.' : 'What our numbers lean toward—not just posted plays. Recent underperformance raises the required edge instead of automatically removing a market. Official plays and price-qualified favorites remain separate.'}</p>` +
       `<div class="model-read-grid">${reads.slice(0, 3).map(render).join('')}</div>` +
       (reads.length > 3 ? `<details class="model-read-more"><summary>See all ${reads.length} model leans</summary><div class="model-read-grid">${reads.slice(3).map(render).join('')}</div></details>` : ''));
   };
@@ -1282,7 +1282,7 @@
     shown.sort((a, b) => (rank[a.state] - rank[b.state]) || (state.boardSort === 'best' ? C.byGrade(a, b) : 0)
       || (state.boardSort === 'confidence' ? C.byConfidence(a, b) : 0) || byKickoff(a, b));
     gameIndex = new Map(((today || {}).games || []).map(g => [g.id, g]));
-    const valued = shown.filter(l => l.state === 'open' && l.grade && l.grade.calibrated && !l.grade.paused && ['lean', 'strong'].includes(C.tierOf(l.grade))).length;
+    const valued = shown.filter(l => l.state === 'open' && l.grade && l.grade.calibrated && ['lean', 'strong'].includes(C.tierOf(l.grade))).length;
     const priced = shown.filter(l => l.state === 'open').length;
     const intro = props
       ? `${shown.length} player lines${priced ? `, ${priced} with a price` : ''}. ${valued} show value: our chance beats what the price needs. Worth a look, not picks.`
@@ -1303,7 +1303,7 @@
       <p class="row-meta"><a href="#today">Official plays are on the card →</a> The lines below are research, not posted picks.</p>
       ${dayNote ? `<p class="row-meta" style="margin:0 0 8px">${esc(dayNote)}</p>` : ''}
       <details class="explainer"><summary>What do these numbers mean?</summary>
-      <p class="row-meta" style="margin:8px 0 10px">Each line shows <b>our chance</b> of it winning next to the chance its price needs to <b>break even</b> (about 52% for a standard -110 bet). When our chance is higher, the line has <b>value</b>. Bettors call that positive expected value, or <b>+EV</b>. <b>Confidence rank</b> orders only fresh, qualifying lines by calibrated win chance; <b>best value</b> orders them by how far that chance clears the price. They can disagree, and neither means lock. If our estimate stayed accurate across many similar lines, a positive edge would be a favorable price. <b class="grade-word grade-strong">Good value</b> clears break-even by 5 points or more; <b class="grade-word grade-lean">Some value</b> by 2 to 5. Anything closer is a coin flip once the book takes its cut, so it reads as no value. <b>Paused</b> means our record on that kind of bet trails the market, so we sit it out for now. Our chances are pulled toward 50% by how our numbers have actually done, so value is small on purpose. Player lines with no price show our projection against the number instead. This shows where to look, not what to bet.</p></details>
+      <p class="row-meta" style="margin:8px 0 10px">Each line shows <b>our chance</b> of it winning next to the chance its price needs to <b>break even</b> (about 52% for a standard -110 bet). When our chance is higher, the line has <b>value</b>. Bettors call that positive expected value, or <b>+EV</b>. <b>Confidence rank</b> orders only fresh, qualifying lines by calibrated win chance; <b>best value</b> orders them by how far that chance clears the price. They can disagree, and neither means lock. If our estimate stayed accurate across many similar lines, a positive edge would be a favorable price. <b class="grade-word grade-strong">Good value</b> clears break-even by 5 points or more; <b class="grade-word grade-lean">Some value</b> by 2 to 5. Anything closer reads as no value. A <b>performance caution</b> means our recent record on that market trails the line, so it must clear a higher bar—it is not automatically removed. Our chances are pulled toward 50% by how our numbers have actually done, so value is small on purpose. Player lines with no price show our projection against the number instead. This shows where to look, not what to bet.</p></details>
       <input class="search" type="search" data-input="boardQuery" placeholder="Player, team or market" value="${esc(state.boardQuery)}" aria-label="Search lines">
       <div id="board-rows">${body}</div>
       <p class="row-meta" style="margin-top:10px">Tap + to add a line to your own ticket. It is saved only on this device and never counts in our record.</p>`;

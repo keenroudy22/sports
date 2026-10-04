@@ -364,16 +364,17 @@ test('a priced line on a thin sample says too early, not no value', () => {
   assert.equal(solid.word, 'Some value');
 });
 
-test('a paused market never reads as value, and the site shows the calibrated verdict over the raw tier', () => {
-  const paused = C.gradeOf({ tier: 'strong', chance: 0.58, needs: 0.52, edge: 6, paused: true });
-  assert.deepEqual([paused.tier, paused.word], ['pass', 'Paused']);
-  assert.match(paused.detail, /58% our chance/);
+test('a performance caution explains the higher bar without erasing a qualifying line', () => {
+  const cautious = C.gradeOf({ tier: 'strong', chance: 0.58, needs: 0.52, edge: 6,
+    performanceCaution: true, performanceNeed: 5 });
+  assert.deepEqual([cautious.tier, cautious.word], ['strong', 'Good value']);
+  assert.match(cautious.detail, /raised the required edge to 5 points/);
   const shrunk = C.gradeOf({ tier: 'lean', view: 'pass', chance: 0.52, needs: 0.53, edge: -1 });
   assert.deepEqual([shrunk.tier, shrunk.word], ['pass', 'No value']);
   assert.equal(C.tierOf({ tier: 'lean' }), 'lean');
   assert.equal(C.tierOf(null), 'none');
-  const rows = [{ grade: { tier: 'strong', paused: true } }, { grade: { tier: 'lean' } }];
-  assert.equal(rows.sort(C.byGrade)[0].grade.tier, 'lean', 'a paused line sorts below one with value');
+  const rows = [{ grade: { tier: 'strong', performanceCaution: true } }, { grade: { tier: 'lean' } }];
+  assert.equal(rows.sort(C.byGrade)[0].grade.tier, 'strong');
 });
 
 test('an early exit credit is a loss on the record and zero in units', () => {

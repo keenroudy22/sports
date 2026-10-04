@@ -301,12 +301,11 @@
   /* A board line's model grade: the word leads, the numbers say why. "Value" is what bettors call positive
      expected value (+EV): our chance beats what the price needs to break even. */
   const GRADE_WORD = { strong: 'Good value', lean: 'Some value', pass: 'No value' };
-  /* The verdict the site shows: paused markets never read as value; a calibrated view outranks the raw tier. */
-  const tierOf = g => !g ? 'none' : g.paused ? 'pass' : g.view || g.tier || 'none';
+  /* Performance changes the required threshold upstream; it does not erase a sufficiently strong read. */
+  const tierOf = g => !g ? 'none' : g.view || g.tier || 'none';
   const gradeOf = (g, note = '', row = null) => {
     if (!g) return { tier: 'none', word: 'No model read', detail: note || '' };
     const pct = x => `${Math.round(100 * x)}%`;
-    if (g.paused) return { tier: 'pass', word: 'Paused', detail: `${pct(g.chance)} our chance · our record on these bets trails the market, so we sit them out` };
     if (g.unproven) return { tier: 'pass', word: 'Grading first', detail: `our number ${g.projection} · ${pct(g.chance)} on the raw curve · college player numbers get graded against the line before we play them` };
     const tier = tierOf(g);
     /* A player line carries no price, so there is no edge to state: show the projection against
@@ -322,6 +321,7 @@
     const parts = [`${pct(g.chance)} our chance${g.push >= 0.01 ? `, ${pct(g.push)} push` : ''}`,
       g.needs == null ? 'no price yet' : `${pct(g.needs)} to break even`];
     if (typeof g.edge === 'number') parts.push(`${g.edge >= 0 ? '+' : ''}${Number(g.edge).toFixed(1)} point edge`);
+    if (g.performanceCaution) parts.push(`recent results raised the required edge to ${Number(g.performanceNeed || 5).toFixed(0)} points`);
     if (g.thin) parts.push('few games so far');
     if (g.limited) parts.push('questionable on the report');
     if (g.calibrated === false) parts.push('raw number');
@@ -343,7 +343,7 @@
     const grade = row.grade || row;
     const tier = row.grade ? tierOf(grade) : row.calibrated === true ? 'lean' : 'none';
     return (row.state == null || row.state === 'open') && confidenceChance(row) != null && grade.calibrated === true
-      && !grade.paused && !grade.unproven && !grade.thin && !grade.limited
+      && !grade.unproven && !grade.thin && !grade.limited
       && ['lean', 'strong'].includes(tier);
   };
   const byConfidence = (a, b) => (Number(confidenceEligible(b)) - Number(confidenceEligible(a)))

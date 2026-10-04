@@ -187,7 +187,9 @@ class GateTests(unittest.TestCase):
                         "learning's strictest setting is the favorites bar; past it, learning pauses the segment")
         stopped = learning.default_policy()
         stopped['segments']['NFL/total'] = {'paused': True, 'since': '2026-10-06T12:30:00Z'}
-        self.assertFalse(gates.learned_pause(total_lean(), context(policy=stopped)).ok)
+        caution = gates.learned_pause(total_lean(), context(policy=stopped))
+        self.assertTrue(caution.ok)
+        self.assertTrue(caution.data['performanceCaution'])
         self.assertTrue(gates.learned_pause(total_lean(), context()).ok)
         self.assertFalse(gates.prop_calibrated_value(prop_lean(), context()).ok, 'no calibration means no official prop')
         shrunk = learning.default_policy()
