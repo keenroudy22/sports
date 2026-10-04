@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-04T14:02:18Z",
+  "updatedAt": "2026-10-04T14:07:51Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -7137,6 +7137,15 @@
           "name": "Washington Commanders",
           "players": [
             {
+              "id": "2576980",
+              "name": "Marcus Mariota",
+              "position": "QB",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-10-04T14:02Z",
+              "source": "https://www.espn.com/nfl/player/_/id/2576980/marcus-mariota"
+            },
+            {
               "id": "4426948",
               "name": "Luke McCaffrey",
               "position": "WR",
@@ -7308,15 +7317,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/2576736/lucas-patrick"
             },
             {
-              "id": "2576980",
-              "name": "Marcus Mariota",
-              "position": "QB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-02T14:13Z",
-              "source": "https://www.espn.com/nfl/player/_/id/2576980/marcus-mariota"
-            },
-            {
               "id": "4239694",
               "name": "Amik Robertson",
               "position": "CB",
@@ -7365,14 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "14",
-          "name": "Kamren Kinchens",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-03T00:33:09Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4596363/kamren-kinchens"
-        },
         {
           "teamId": "14",
           "name": "Josh Wallace",
@@ -7764,11 +7756,19 @@
           "to": "Doubtful",
           "observedAt": "2026-10-04T14:02:18Z",
           "source": "https://www.espn.com/nfl/player/_/id/4682980/derrick-harmon"
+        },
+        {
+          "teamId": "28",
+          "name": "Marcus Mariota",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-04T14:07:51Z",
+          "source": "https://www.espn.com/nfl/player/_/id/2576980/marcus-mariota"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-04T14:02:18Z",
-      "lastAttemptAt": "2026-10-04T14:02:18Z",
+      "checkedAt": "2026-10-04T14:07:51Z",
+      "lastAttemptAt": "2026-10-04T14:07:51Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-04T14:02:18Z",
-      "lastAttemptAt": "2026-10-04T14:02:18Z",
+      "checkedAt": "2026-10-04T14:07:51Z",
+      "lastAttemptAt": "2026-10-04T14:07:51Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
