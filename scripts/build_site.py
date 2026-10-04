@@ -431,7 +431,7 @@ def pregame(snapshots, kickoff):
 
 
 def game_detail(card, game, record, snapshots, captures, lines, picks, names, team_logs, defense, injuries, depth_charts,
-                records, snap_players, now, grading, favorites=None, trends=None):
+                records, snap_players, now, grading, favorites=None, trends=None, reads=None):
     """snapshots: this game's pregame v2 snapshots, oldest first."""
     league = card['league']
     detail = dict(card)
@@ -484,6 +484,7 @@ def game_detail(card, game, record, snapshots, captures, lines, picks, names, te
     detail['lines'] = [l for l in lines if l.get('gameId') == card['id'] and not l.get('gameMarket')]
     detail['picks'] = [p for p in picks if p.get('gameId') == card['id']]
     detail['favoriteLines'] = favorites or []
+    detail['modelReads'] = reads or []
     detail['seasonTrends'] = trends or []
     detail['scorerResearch'] = research_views.scorer_research(game, final, records, names, now)
     detail['researchStatus'] = {'moneyline': 'Winner research only; moneyline value not calibrated.',
@@ -752,7 +753,11 @@ def build(now=None):
               game_detail(card, game, stored.get(game['id']), snaps_for, captures.get(game['id'], []), lines, picks,
                           names, info['team_logs'], info['defense'], injuries, depth_charts, info['records'],
                           snap_players, now, grading, favorites,
-                          [r for r in trends if r['gameId'] == game['id']]))
+                          [r for r in trends if r['gameId'] == game['id']],
+                          model_reads(game, latest_snap, lines, now, info['player_logs'])
+                          if game.get('state') == 'pre' and features.when(game['kickoff']) > now else
+                          archived_model_reads(game, latest_snap, captures.get(game['id'], []), names,
+                                               now, info['player_logs'])))
     summary = {'live': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('live', [])],
                'backtest': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('backtest', [])],
                'picks': (scoreboard.get('picks') or {}).get('summary')}
@@ -1157,6 +1162,90 @@ def favorite_hit_rates(game, row, player_logs):
     last = block(played[-10:])
     season = block([r for r in played if r.get('season') == game.get('season')])
     return {'last': last, 'season': season} if last or season else None
+
+
+def archived_model_reads(game, snapshot, captures, names, now, player_logs=None):
+    """Reconstruct comparisons only from pregame captures, never live offers or postgame stats."""
+    cutoff = features.when(game['kickoff'])
+    eligible = [c for c in captures if instant(c.get('retrievedAt')) and instant(c['retrievedAt']) < cutoff]
+    if not snapshot or not eligible or instant(snapshot.get('publishedAt')) is None \
+            or instant(snapshot['publishedAt']) >= cutoff:
+        return []
+    capture = max(eligible, key=lambda c: c['retrievedAt'])
+    rows = []
+    for athlete, markets in capture.get('lines', {}).items():
+        _, player = pricing.player_line(snapshot, athlete)
+        if not player or player.get('limited'):
+            continue
+        for stat, values in markets.items():
+            projected = player.get(pricing.PROJECTED.get(stat))
+            if not projected or not values or not isinstance(values[0], (int, float)):
+                continue
+            mean, line = projected[0], values[0]
+            direction = 'over' if mean > line else 'under'
+            rows.append({'id': f"archive-{athlete}-{stat}", 'gameId': game['id'], 'state': 'unpriced',
+                         'athleteId': str(athlete), 'stat': stat, 'market': pricing.WORDS[stat],
+                         'line': line, 'direction': direction, 'observedAt': capture['retrievedAt'],
+                         'title': f"{names.get(str(athlete), athlete)} {direction} {line:g} {pricing.WORDS[stat]}",
+                         'grade': {'projection': mean}})
+    return model_reads(game, snapshot, rows, now, player_logs, archived=True)
+
+
+def model_reads(game, snapshot, lines, now, player_logs=None, archived=False):
+    """Descriptive projection-side research, deliberately independent of official/value admission.
+
+    Never turn a paused market into a recommendation or a mean gap into a win probability.
+    Keep the exact quote's side, and omit limited roles and unavailable projections.
+    """
+    if not snapshot or (not archived and (game.get('state') != 'pre' or features.when(game['kickoff']) <= now)):
+        return []
+    out, seen_keys = [], set()
+    for row in lines:
+        grade = row.get('grade') or {}
+        mean, line = grade.get('projection'), row.get('line')
+        if row.get('gameId') != game['id'] or row.get('state') not in ('open', 'unpriced') \
+                or grade.get('limited') or not isinstance(mean, (int, float)) \
+                or not isinstance(line, (int, float)):
+            continue
+        spread = row.get('market') == 'point spread'
+        if spread:
+            projected_line = -mean if row.get('side', 'home') == 'home' else mean
+            gap = line - projected_line
+            comparison = f"Our spread {projected_line:+g} vs line {line:+g}: {gap:.1f} points toward this side."
+        else:
+            gap = (mean - line) * (-1 if row.get('direction') == 'under' else 1)
+            comparison = f"We project {mean:g} vs {line:g}: {abs(mean - line):.1f} {row.get('market', '')} {'below' if mean < line else 'above'} the line."
+        if gap <= 0:
+            continue
+        key = (row.get('athleteId'), row.get('market'), row.get('side'), row.get('direction'))
+        if key in seen_keys:
+            continue
+        seen_keys.add(key)
+        warnings = ['Pregame comparison only—not a live line or a previously posted pick.'] if archived else []
+        if grade.get('paused'):
+            warnings.append('Caution: this market is paused for official picks after performance review.')
+        if grade.get('thin'):
+            warnings.append('Small sample: the player role or team history is not established.')
+        if grade.get('unproven') or not grade.get('calibrated'):
+            warnings.append('No validated price advantage yet.')
+        if game.get('league') == 'CFB' and spread and gap >= 7:
+            warnings.append('Large college disagreement: opponent strength and changing roles add uncertainty.')
+        observed = instant(row.get('observedAt'))
+        fresh = observed is not None and timedelta(0) <= now - observed <= timedelta(hours=4)
+        priced = isinstance(row.get('odds'), (int, float)) and fresh and not archived
+        if not fresh:
+            warnings.append('Older or unverified line snapshot; check the current line at your book.')
+        elif not priced:
+            warnings.append('Line captured without a verified price; value cannot be assessed.')
+        out.append({'id': f"read-{row['id']}", 'title': row['title'],
+                    'kind': 'game' if row.get('gameMarket') else 'player',
+                    'athleteId': row.get('athleteId'), 'market': row.get('market'),
+                    'line': line, 'projection': mean, 'comparison': comparison,
+                    'book': row.get('book'), 'odds': row.get('odds') if priced else None,
+                    'observedAt': row.get('observedAt'), 'snapshotAt': snapshot['publishedAt'],
+                    'warnings': warnings, 'paused': bool(grade.get('paused')), 'archived': archived,
+                    'history': None if row.get('gameMarket') else favorite_hit_rates(game, row, player_logs)})
+    return sorted(out, key=lambda r: (r['paused'], r['kind'] != 'game', r['market'] or '', r['title']))
 
 
 def favorite_lines(game, snapshot, lines, now, player_logs=None):

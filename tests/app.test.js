@@ -4,6 +4,25 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const C = require('../site/core.js');
 
+test('game research is independent of posted plays and shows exact comparisons with cautions', () => {
+  const source = fs.readFileSync('site/app.js', 'utf8');
+  const body = source.match(/const modelReadsSection = \(card, detail\) => \{([\s\S]*?)\n  \};/)[1];
+  const render = new Function('C', 'esc', 'ago', 'whenShort', 'section', 'card', 'detail', body);
+  const html = render(C, C.esc, C.ago, C.whenShort, (title, text) => title + text,
+    { league: 'NFL', state: 'pre', kickoff: '2099-10-05T00:20:00Z' },
+    { favoriteLines: [], picks: [], modelReads: [{ title: 'Player over 25.5 receiving yards', athleteId: '1',
+      comparison: 'We project 35 vs 25.5', paused: true, warnings: ['Market paused'],
+      observedAt: new Date().toISOString(), snapshotAt: new Date().toISOString(), odds: -110, book: 'FanDuel',
+      history: { season: { hits: 3, games: 4 } } }] });
+  assert.match(html, /Player over 25.5/);
+  assert.match(html, /We project 35 vs 25.5/);
+  assert.match(html, /3\/4 this season/);
+  assert.match(html, /Market paused/);
+  assert.match(html, /#player\/NFL\/1/);
+  assert.match(source, /C.filterTrends\(detail.seasonTrends/);
+  assert.doesNotMatch(source, /No qualifying streak sheet/);
+});
+
 test('a qualifying Upset Watch renders percentages without relying on another view’s local helpers', () => {
   const source = fs.readFileSync('site/app.js', 'utf8');
   const body = source.match(/const upsetRow = \(game, rank = null\) => \{([\s\S]*?)\n  \};/)[1];

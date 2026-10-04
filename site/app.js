@@ -491,19 +491,22 @@
   };
   const matchupResearch = (card, detail) => {
     if (!detail || card.state !== 'pre' || Date.parse(card.kickoff) <= Date.now()) return '';
-    const trends = (detail.favoriteLines || []).filter(l => l.history && l.history.last && l.history.last.games >= 5 &&
-      l.history.last.rate >= 80 && Date.now() - Date.parse(l.observedAt) >= 0 &&
-      Date.now() - Date.parse(l.observedAt) <= 12 * 3600000).slice(0, 6);
+    const trendKeys = new Set();
+    const trends = C.filterTrends(detail.seasonTrends || [], { rate: 80, min: 3 }).filter(l => {
+      const key = `${l.athleteId}/${l.stat}`;
+      if (trendKeys.has(key)) return false;
+      trendKeys.add(key); return true;
+    }).slice(0, 6);
     const scorers = (detail.scorerResearch || []).filter(s => {
       const age = Date.now() - Date.parse(s.roleSnapshotAt);
       return age >= 0 && age <= 7 * 86400000;
     });
     return (currentUpset(card) ? section('Upset Watch · research', `<div class="card">${upsetRow(card)}</div>`) : '') +
       section('Matchup Menu · historical trends', trends.length ? `<div class="card"><div class="rows">${trends.map(l =>
-        `<a class="row" href="#player/${esc(card.league)}/${esc(l.athleteId)}"><span class="row-main"><span class="row-name">${esc(l.title)}</span>
-          <span class="row-market">${l.history.last.hits}/${l.history.last.games} last games · ${l.history.last.rate}% historical</span>
-          <span class="row-meta">${l.history.season ? `${l.history.season.hits}/${l.history.season.games} this season · ` : ''}${odds(l.odds)} ${esc(l.book)} · not head-to-head history or a guaranteed outcome</span></span></a>`).join('')}</div></div>`
-        : empty('No qualifying streak sheet', 'At least five observed games and a fresh, priced favorite are required. We never shorten the window just to show 100%.')) +
+        `<a class="row" href="#player/${esc(card.league)}/${esc(l.athleteId)}"><span class="row-main"><span class="row-name">${esc(l.player)} · ${esc(l.title)}</span>
+          <span class="row-market">${l.hits}/${l.games} this season · ${l.rate}% historical${l.games < 5 ? ' · small sample' : ''}</span>
+          <span class="row-meta">${l.kind === 'milestone' ? 'Stat milestone · not a sportsbook offer' : `${odds(l.odds)} ${esc(l.book)}`} · not head-to-head history or a next-game probability</span></span></a>`).join('')}</div></div>`
+        : '<p class="row-meta">No 80% season trends with at least three recorded games. Browse other thresholds below.</p>') +
       section('Who’s finding the end zone? · research', `<p class="row-meta">Current-season red-zone opportunities, ranked by work inside the 10 per observed game. These are not TD probabilities or priced TD picks; passing TDs do not count as a scorer’s TD. ${card.league === 'CFB' ? 'College injury coverage is incomplete; verify availability before using this research.' : 'Verify the latest injury report and availability.'}</p>` +
         (scorers.length ? `<div class="card"><div class="rows">${scorers.map(s => `<a class="row" href="#player/${esc(card.league)}/${esc(s.athleteId)}"><span class="row-main"><span class="row-name">${esc(s.player)}</span>
           <span class="row-market">${s.redZone} red-zone carries + targets · ${s.inside10} inside the 10 · ${s.touchdowns} rushing/receiving TDs</span>
@@ -612,11 +615,32 @@
 
   /* ---------- one game ---------- */
 
+  const modelReadsSection = (card, detail) => {
+    if (!detail) return '';
+    const archived = card.completed || card.state !== 'pre' || Date.parse(card.kickoff) <= Date.now();
+    const reads = detail.modelReads || [];
+    if (!reads.length) return section('Model leans', '<p class="row-meta">No line-versus-projection comparisons available yet. Team and player forecasts are below.</p>');
+    const render = line => {
+      const history = line.history && line.history.season;
+      const fresh = Date.now() - Date.parse(line.observedAt) >= 0 && Date.now() - Date.parse(line.observedAt) <= 4 * 3600000;
+      const price = archived ? 'Pregame comparison · not a live line' : fresh && line.odds != null ? `${C.odds(line.odds)} ${line.book || ''}` : 'Check current price';
+      return `<article class="card model-read"><span class="eyebrow">${archived ? 'Pregame model direction' : line.paused ? 'Model direction · caution' : 'Model lean'}</span>
+        <h3>${line.athleteId ? `<a href="#player/${esc(card.league)}/${esc(line.athleteId)}">${esc(line.title)} →</a>` : esc(line.title)}</h3>
+        <p class="model-read-comparison">${esc(line.comparison)}</p>
+        <p class="row-meta">${esc(price)} · line captured ${esc(ago(line.observedAt))}</p>
+        ${history ? `<p class="row-meta">${history.hits}/${history.games} this season at this line${history.games < 5 ? ' · small sample' : ''}</p>` : ''}
+        ${line.warnings.length ? `<p class="row-meta model-read-caution">${esc(line.warnings[0])}</p>` : ''}
+        <details><summary>Why / what could go wrong</summary><p class="row-meta">${esc(line.comparison)} This is the direction of the projected average, not a proven price edge or a win probability. Forecast ${esc(whenShort(line.snapshotAt))}.</p>${line.warnings.map(w => `<p class="row-meta">${esc(w)}</p>`).join('')}<p class="row-meta">Check opponent, role and injury details below. Historical hit rates do not predict the next game.</p></details></article>`;
+    };
+    return section(archived ? 'Pregame model leans' : 'Model leans · lines to explore', `<p class="row-meta">${archived ? 'Saved pregame numbers—not live recommendations or a record of posted plays.' : 'What our numbers lean toward—not just posted plays. Paused markets stay visible with a caution, not an endorsement. Official plays and price-qualified favorites remain separate.'}</p>` +
+      `<div class="model-read-grid">${reads.slice(0, 3).map(render).join('')}</div>` +
+      (reads.length > 3 ? `<details class="model-read-more"><summary>See all ${reads.length} model leans</summary><div class="model-read-grid">${reads.slice(3).map(render).join('')}</div></details>` : ''));
+  };
+
   const favoriteLinesSection = (card, detail) => {
     if (card.completed || !detail) return '';
     const favorites = C.rankConfidence(detail.favoriteLines || []);
-    if (!favorites.length) return section("Kook'n favorite lines",
-      empty('No qualifying favorite yet', 'We have a projection, but no fresh sportsbook line currently clears the price and role checks. Nothing is forced.'));
+    if (!favorites.length) return '<p class="row-meta">No price-qualified favorites right now. Model leans above are research, not additional official plays.</p>';
     const renderLine = (line, i) => {
       const player = line.kind === 'player';
       const chance = line.chance != null ? `${Math.round(100 * line.chance)}% ${line.calibrated ? 'calibrated chance' : 'model chance'}` : '';
@@ -670,8 +694,8 @@
     const status = card.completed ? `Final ${card.away.abbr} ${card.away.score}, ${card.home.abbr} ${card.home.score}` : esc(when(card.kickoff));
     const win = v2 ? (v2.winProb >= 0.5 ? `${card.home.abbr} ${Math.round(100 * v2.winProb)}%` : `${card.away.abbr} ${Math.round(100 * (1 - v2.winProb))}%`) : DASH;
     let html = `${head(title, `${status}${card.neutral ? ' · neutral site' : ''} · ${esc(leagueName(league))}`, back)}
+      ${modelReadsSection(card, detail)}
       ${favoriteLinesSection(card, detail)}
-      ${matchupResearch(card, detail)}
       ${!card.completed && C.modelCaution(card) ? `<div class="notice">${esc(C.modelCaution(card))}</div>` : ''}
       <div class="stats">
         ${stat('Our score', v2 ? `${fixed(v2.away, 0)}–${fixed(v2.home, 0)}` : DASH, v2 ? `${esc(card.away.abbr)} ${fixed(v2.away)}, ${esc(card.home.abbr)} ${fixed(v2.home)}` : 'no number yet')}
@@ -684,6 +708,7 @@
       ${card.lean && !card.completed ? `<div style="margin-top:10px">${leanChips(card)}</div>` : ''}
       ${v2 && v2.sparse ? '<div class="notice" style="margin-top:12px"><strong>Thin history.</strong> One of these teams has fewer than three games this season, so this forecast leans on last season and the league average.</div>' : ''}`;
     if (final) html += finalSection(card, detail, teams);
+    html += matchupResearch(card, detail);
     if (f) {
       html += section('Why the model says this', `<div class="card" style="padding:14px"><p class="prose" style="margin:0">${esc(f.why)}</p>
         <p class="row-meta" style="margin:8px 0 0">Published ${esc(when(f.publishedAt))}${f.history && f.history.length > 1 ? ` · ${f.history.length} versions, each kept` : ''}. Injury coverage: ${esc(f.inputs.injuryCoverage)}.</p></div>`);

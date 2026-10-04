@@ -798,3 +798,12 @@ table.data a { font-weight: 600; }
   .play-stats:has(> span:nth-child(3)), .play-stats:has(> span:nth-child(4)) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .play-stats > span:last-child:nth-child(4) { grid-column: auto; display: block; }
 }
+/* Game research stays compact on phones; the full list is opt-in. */
+.model-read-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:12px; }
+.model-read { padding:16px; min-width:0; }
+.model-read h3 { font-size:20px; line-height:1.3; margin:8px 0; overflow-wrap:anywhere; }
+.model-read-comparison { color:var(--mint); margin:8px 0; }
+.model-read p { line-height:1.5; }
+.model-read summary, .model-read-more > summary { cursor:pointer; padding:10px 0; }
+.model-read-more { margin-top:12px; }
+.model-read-caution { border-left:2px solid var(--mint); padding-left:8px; }

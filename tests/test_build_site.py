@@ -19,6 +19,64 @@ def slate_game(game_id, kickoff, state='pre', **market):
                        'total': 44.5, 'totalOpen': 'o45.5', 'overOdds': '-108', 'underOdds': '-112', **market}}
 
 
+class ModelReadTests(unittest.TestCase):
+    def setUp(self):
+        self.now = datetime(2026, 10, 4, 15, tzinfo=timezone.utc)
+        self.game = dict(slate_game('NFL-test', '2026-10-05T00:20:00Z'), season=2026)
+        self.snapshot = {'publishedAt': '2026-10-04T14:00:00Z'}
+        self.row = {'id': 'p', 'gameId': 'NFL-test', 'state': 'open', 'athleteId': '1',
+                    'title': 'Player over 25.5 receiving yards', 'stat': 'recYds', 'market': 'receiving yards',
+                    'direction': 'over', 'line': 25.5, 'odds': -110, 'book': 'FanDuel',
+                    'observedAt': '2026-10-04T14:00:00Z',
+                    'grade': {'projection': 35.0, 'paused': True, 'calibrated': True, 'view': 'lean'}}
+
+    def test_paused_research_is_visible_but_not_a_favorite(self):
+        reads = build_site.model_reads(self.game, self.snapshot, [self.row], self.now)
+        self.assertEqual(len(reads), 1)
+        self.assertIn('paused', reads[0]['warnings'][0])
+        self.assertIn('9.5 receiving yards above', reads[0]['comparison'])
+        self.assertNotIn('chance', reads[0])
+        self.assertEqual(build_site.favorite_lines(self.game, self.snapshot, [self.row], self.now), [])
+
+    def test_never_flip_a_quote_to_the_other_side(self):
+        self.row['direction'] = 'under'
+        self.assertEqual(build_site.model_reads(self.game, self.snapshot, [self.row], self.now), [])
+
+    def test_stale_price_hidden_and_limited_role_omitted(self):
+        self.row['observedAt'] = '2026-10-03T14:00:00Z'
+        read = build_site.model_reads(self.game, self.snapshot, [self.row], self.now)[0]
+        self.assertIsNone(read['odds'])
+        self.assertTrue(any('Older' in w for w in read['warnings']))
+        self.row['grade']['limited'] = True
+        self.assertEqual(build_site.model_reads(self.game, self.snapshot, [self.row], self.now), [])
+
+    def test_spread_sign_for_both_sides(self):
+        row = dict(self.row, gameMarket=True, market='point spread', side='home', line=3.5,
+                   grade={'projection': -1.4})
+        self.assertIn('2.1 points', build_site.model_reads(self.game, self.snapshot, [row], self.now)[0]['comparison'])
+        row.update(side='away', line=-3.5)
+        self.assertEqual(build_site.model_reads(self.game, self.snapshot, [row], self.now), [])
+
+    def test_no_current_recommendation_after_kickoff_or_without_snapshot(self):
+        self.game['state'] = 'in'
+        self.assertEqual(build_site.model_reads(self.game, self.snapshot, [self.row], self.now), [])
+        self.assertEqual(build_site.model_reads(self.game, None, [self.row], self.now), [])
+
+    def test_archive_uses_only_pregame_lines_and_forecasts(self):
+        self.game['state'] = 'in'
+        snapshot = dict(self.snapshot, players={'home': {'players': [
+            {'id': '1', 'recYds': [35, 10, 60]}]}, 'away': {'players': []}})
+        captures = [{'retrievedAt': '2026-10-04T14:00:00Z', 'lines': {'1': {'recYds': [25.5, 24.5]}}},
+                    {'retrievedAt': '2026-10-05T01:00:00Z', 'lines': {'1': {'recYds': [40.5, 25.5]}}}]
+        reads = build_site.archived_model_reads(self.game, snapshot, captures, {'1': 'Player'}, self.now)
+        self.assertEqual(reads[0]['line'], 25.5)
+        self.assertTrue(reads[0]['archived'])
+        self.assertIsNone(reads[0]['odds'])
+        self.assertIn('not a live line', reads[0]['warnings'][0])
+        snapshot['publishedAt'] = '2026-10-05T01:00:00Z'
+        self.assertEqual(build_site.archived_model_reads(self.game, snapshot, captures, {}, self.now), [])
+
+
 class PickTests(unittest.TestCase):
     def test_delivery_payload_is_whitelisted_and_cancellation_is_not_delivery(self):
         row = build_site.public_delivery({'dueAt': '2026-10-02T16:00:00Z', 'cancelledAt': '2026-10-02T15:00:00Z',

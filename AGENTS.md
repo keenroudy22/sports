@@ -129,6 +129,12 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Game-page model leans (2026-10-04):** the owner wants useful line-versus-projection research even when
+  no official play qualifies. Show a separate compact Model leans section with exact captured lines, projection
+  differences, season hit counts and explicit weak-sample/paused-market cautions. These descriptive directions
+  are not price-qualified recommendations and carry no confidence rank. Hide stale prices and limited roles;
+  never flip a quoted side or reuse a price for another side. Season trends use their own full-season data,
+  independent of favorite admission. Official selection, favorite gates, social posts and the record are unchanged.
 - **Playbook tagging (2026-10-04):** tag `@Playbook` only on a new official play/ticket posted to X
   so readers can get its play link. Never tag it on Discord, results, research, recaps, menus or updates.
   Discord keeps the wager, odds, card and timing but removes the X-only mention, including pending older mirrors.

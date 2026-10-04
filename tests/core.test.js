@@ -407,7 +407,7 @@ test('app.js parses', () => {
   assert.match(source, /Real pregame DraftKings totals, moneylines and run lines are being preserved/);
   assert.match(source, /Real pregame DraftKings totals, moneylines and puck lines are being preserved/);
   assert.match(source, /Kook'n favorite lines/);
-  assert.match(source, /No qualifying favorite yet/);
+  assert.match(source, /No price-qualified favorites right now/);
   assert.match(source, /line.*vs projection.*higher/);
   assert.match(source, /Historical hit rate/);
   assert.match(source, /ranked by edge against the sportsbook price/);
