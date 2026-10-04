@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-04T14:24:04Z",
+  "updatedAt": "2026-10-04T14:32:05Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-04T14:07Z",
+              "reportedAt": "2026-10-04T14:24Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1852,7 +1852,7 @@
               "position": "CB",
               "status": "Active",
               "injury": null,
-              "reportedAt": "2026-10-04T00:05Z",
+              "reportedAt": "2026-10-04T14:11Z",
               "source": "https://www.espn.com/nfl/player/_/id/4426506/joey-porter-jr"
             },
             {
@@ -7137,6 +7137,15 @@
           "name": "Washington Commanders",
           "players": [
             {
+              "id": "3929865",
+              "name": "Charles Omenihu",
+              "position": "DE",
+              "status": "Questionable",
+              "injury": "Groin",
+              "reportedAt": "2026-10-04T14:24Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3929865/charles-omenihu"
+            },
+            {
               "id": "2576980",
               "name": "Marcus Mariota",
               "position": "QB",
@@ -7290,15 +7299,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/3115922/nick-allegretti"
             },
             {
-              "id": "3929865",
-              "name": "Charles Omenihu",
-              "position": "DE",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-02T17:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3929865/charles-omenihu"
-            },
-            {
               "id": "4259491",
               "name": "Javon Kinlaw",
               "position": "DT",
@@ -7365,14 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "14",
-          "name": "Josh Wallace",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-03T00:33:09Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4572371/josh-wallace"
-        },
         {
           "teamId": "19",
           "name": "Tyrone Tracy Jr.",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-04T14:07:51Z",
           "source": "https://www.espn.com/nfl/player/_/id/2576980/marcus-mariota"
+        },
+        {
+          "teamId": "28",
+          "name": "Charles Omenihu",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-04T14:32:05Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3929865/charles-omenihu"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-04T14:24:04Z",
-      "lastAttemptAt": "2026-10-04T14:24:04Z",
+      "checkedAt": "2026-10-04T14:32:05Z",
+      "lastAttemptAt": "2026-10-04T14:32:05Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-04T14:24:04Z",
-      "lastAttemptAt": "2026-10-04T14:24:04Z",
+      "checkedAt": "2026-10-04T14:32:05Z",
+      "lastAttemptAt": "2026-10-04T14:32:05Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
