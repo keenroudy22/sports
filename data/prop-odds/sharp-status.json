@@ -1,10 +1,10 @@
 {
- "at": "2026-10-04T16:07:30Z",
+ "at": "2026-10-04T16:11:53Z",
  "confirmed": {
-  "NFL-401872966": "2026-10-04T16:07:30Z",
-  "NFL-401872967": "2026-10-04T16:07:30Z",
-  "NFL-401872968": "2026-10-04T16:07:30Z",
-  "NFL-401872969": "2026-10-04T16:07:30Z",
+  "NFL-401872966": "2026-10-04T16:11:53Z",
+  "NFL-401872967": "2026-10-04T16:11:53Z",
+  "NFL-401872968": "2026-10-04T16:11:53Z",
+  "NFL-401872969": "2026-10-04T16:11:53Z",
   "NFL-401872970": "2026-10-04T15:55:13Z",
   "NFL-401872971": "2026-10-04T15:30:48Z",
   "NFL-401872972": "2026-10-04T15:30:48Z",
@@ -19,10 +19,10 @@
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 1341,
-    "fanduel": 1064
+    "draftkings": 1319,
+    "fanduel": 1076
    },
-   "eventsListed": 29,
+   "eventsListed": 28,
    "eventsMatched": 14,
    "games": 14,
    "marketTypes": {
@@ -34,23 +34,23 @@
     "player_kicking_points": 16,
     "player_longest_passing_completion": 16,
     "player_longest_reception": 90,
-    "player_longest_rush": 42,
+    "player_longest_rush": 40,
     "player_passing_+_rushing_yards": 16,
     "player_passing_attempts": 16,
     "player_passing_completions": 16,
-    "player_passing_touchdowns": 53,
-    "player_passing_yards": 324,
-    "player_receiving_yards": 744,
+    "player_passing_touchdowns": 54,
+    "player_passing_yards": 320,
+    "player_receiving_yards": 753,
     "player_receptions": 365,
-    "player_rushing_+_receiving_yards": 38,
+    "player_rushing_+_receiving_yards": 36,
     "player_rushing_attempts": 28,
-    "player_rushing_yards": 317,
+    "player_rushing_yards": 305,
     "player_sacks": 36,
     "player_tackles": 64,
     "player_tackles_+_assists": 64
    },
    "requestsLeft": 0,
-   "rows": 2405,
+   "rows": 2395,
    "slateGames": [
     "Arizona Cardinals at New York Giants 2026-10-04T17:00Z",
     "Dallas Cowboys at Houston Texans 2026-10-04T17:00Z",
@@ -81,7 +81,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-04T16:05:00Z",
+     "start": "2026-10-04T16:10:00Z",
      "type": "outright"
     },
     {
@@ -121,43 +121,6 @@
       ]
      },
      "start": "2026-10-09T00:15:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Philadelphia Eagles",
-     "external": {
-      "ballybet": "1028813030",
-      "betparx": "1028813030",
-      "betrivers": "1028813030",
-      "draftkings": "34118254",
-      "fanatics_markets": "6541296",
-      "fanduel": "35605983",
-      "galera": "21085966",
-      "goldrush": "29767421",
-      "kalshi": "KXNFL1HTEAMTOTAL-26OCT11PHIJAC",
-      "matchbook": "mb-33272970854400023",
-      "novig": "01a0ef14-1ee3-7150-82ab-b40c515a5781",
-      "paddypower": "35605983",
-      "polymarket": "nfl_eagles_jaguars_2026-10-11_b1",
-      "rebet": "sr:match:71488624",
-      "robinhood": "594e0246-f897-4943-8f95-1d3dfc177234",
-      "sportzino": "sz-16498883",
-      "stake": "450de216-bb43-4ab6-a942-1e3033de5e70",
-      "sx_bet": "L18900782"
-     },
-     "home": "Jacksonville Jaguars",
-     "sample": {
-      "away_team": "Philadelphia Eagles",
-      "home_team": "Jacksonville Jaguars",
-      "markets": [
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "team_total",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-11T13:30:00Z",
      "type": "fixture"
     },
     {
@@ -450,6 +413,38 @@
       ]
      },
      "start": "2026-10-11T20:25:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Baltimore Ravens",
+     "external": {
+      "ballybet": "1028813039",
+      "betparx": "1028813039",
+      "betrivers": "1028813039",
+      "draftkings": "34118099",
+      "fanatics_markets": "6541376",
+      "fanduel": "36132648",
+      "galera": "21085957",
+      "kalshi": "KXNFLGAME-26OCT11BALATL",
+      "novig": "01a0ef14-2435-7f11-8dcf-ba33af5ffb82",
+      "paddypower": "36132648",
+      "polymarket": "nfl_falcons_ravens_2026-10-11_b3",
+      "robinhood": "fcc7dd2e-1496-4eb1-a4c9-5339223c315f",
+      "stake": "5ddfde14-28e7-4085-a853-f97ab1808e51",
+      "sx_bet": "L19431538"
+     },
+     "home": "Atlanta Falcons",
+     "sample": {
+      "away_team": "Baltimore Ravens",
+      "home_team": "Atlanta Falcons",
+      "markets": [
+       "draw_no_bet",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-12T00:20:00Z",
      "type": "fixture"
     }
    ]
