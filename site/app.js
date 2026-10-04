@@ -166,9 +166,10 @@
       <span class="ladder-bar">${ladderBar((Number(info.banked) || 0) + Number(info.stake || 0), Number(info.totalAfter) || (Number(info.banked) || 0) + Number(info.payout || 0))}</span>` : ''}
       ${statTiles(p)}
       ${p.reason ? `<span class="play-reason">${esc(p.reason)}</span>` : ''}
+      ${p.reasoning && p.reasoning.cautions && p.reasoning.cautions.length ? `<span class="play-meta">Watch out: ${esc(p.reasoning.cautions[0])}</span>` : ''}
       <span class="play-meta">${esc(when)}${stale && p.quotedAt ? ` · posted price captured ${esc(ago(p.quotedAt))} · check current price` : ''}</span>
       ${C.deliveryText(p) ? `<span class="play-meta">${esc(C.deliveryText(p))}</span>` : ''}
-      <span class="play-actions">${route ? `<a class="play-action" href="${esc(route)}">${action} ›</a>` : ''}<button class="play-details" type="button" data-pick="${esc(p.id)}" aria-label="Pick details: ${esc(title)}">Pick details</button></span>
+      <span class="play-actions">${route ? `<a class="play-action" href="${esc(route)}">${action} ›</a>` : ''}<button class="play-details" type="button" data-pick="${esc(p.id)}" aria-label="Pick details: ${esc(title)}">Why this play</button></span>
       </div>
     </details>`;
   };
@@ -1459,8 +1460,10 @@
     const closed = !p.result && !p.historicalImport && C.pickState(p).tone === 'closed';
     const started = p.kickoff && Date.parse(p.kickoff) <= Date.now();
     const frozen = p.probabilityAtPublication;
+    const reasoning = p.reasoning;
+    const evidenceNote = reasoning ? `<h4>History and matchup</h4><p>${esc(reasoning.history || '')}</p><ul>${(reasoning.context || []).map(s => `<li>${esc(s)}</li>`).join('')}</ul><p class="row-meta">${esc(reasoning.historyNote || '')}</p>` : '';
     const probabilityNote = frozen && frozen.calibrated
-      ? `<h4>Price check at publication</h4><p>Adjusted chance ${(100 * frozen.chance).toFixed(1)}%; this price needed ${(100 * frozen.breakEven).toFixed(1)}%. Estimated price edge ${signed(frozen.edgePoints)} percentage points. Raw curve: ${(100 * frozen.rawChance).toFixed(1)}%. These are saved estimates from ${esc(when(frozen.evaluatedAt))}, not a fresh quote.</p>`
+      ? `<h4>Why the price matters</h4><div class="kv"><div><span>Estimated chance</span><strong>${(100 * frozen.chance).toFixed(1)}%</strong></div><div><span>Price needs</span><strong>${(100 * frozen.breakEven).toFixed(1)}%</strong></div><div><span>Difference</span><strong>${signed(frozen.edgePoints)} pp</strong></div></div><p class="row-meta">Saved at publication ${esc(when(frozen.evaluatedAt))}. Percentage points measure the estimated advantage over this price, not confidence in a win.</p>${p.athleteId && Number.isFinite(frozen.calibration) ? `<details><summary>How we calculated it</summary><p>The original model estimated ${(100 * frozen.rawChance).toFixed(1)}%. Historical results reduce that estimate: 50% + ${frozen.calibration} × (${(100 * frozen.rawChance).toFixed(1)}% − 50%) ≈ ${(100 * frozen.chance).toFixed(1)}%. The price comparison uses that reduced estimate.</p></details>` : ''}`
       : p.athleteId && p.modelLean ? '<div class="notice">Historical explanation below, preserved as published. Any raw probability in that text is not today’s adjusted probability or a new recommendation.</div>' : '';
     dialog.innerHTML = `<div class="detail-inner"><div class="detail-head"><div><div class="row-top">${p.result ? `<span class="pill pill-${p.result === 'win' ? 'win' : p.result === 'loss' ? 'loss' : 'closed'}">${esc(p.result)}</span>` : '<span class="pill pill-ours">Our pick</span>'}</div>
       <h3 style="margin:7px 0 0;font-size:17px">${esc(p.title)}</h3><p class="row-meta" style="margin:4px 0 0">${esc(when(p.kickoff || p.publishedAt))}</p></div><button class="close" type="button" data-close aria-label="Close">×</button></div>
@@ -1469,7 +1472,7 @@
       ${closed ? `<div class="notice" style="margin-top:12px"><strong>Closed to new entries.</strong> ${esc(prose(p.entryNote) || (p.status === 'withdrawn' ? 'Withdrawn before kickoff.' : started ? 'The game has started.' : 'The quote has expired.'))} The original is still graded at its published price.</div>` : ''}
       ${clv && clv.clv != null ? `<div class="notice" style="margin-top:12px"><strong>Closing line value ${signed(clv.clv)}.</strong> We posted ${clv.postedLine ?? DASH} and the last number before kickoff was ${clv.closeLine ?? DASH}. ${clv.clv > 0 ? 'We got the better number, which is the part we control.' : clv.clv < 0 ? 'The market moved to a better number after we posted.' : 'We matched the close.'}</div>` : ''}
       ${(p.legs || []).length ? `<h4>Legs</h4><ul style="margin:0;padding-left:18px">${p.legs.map(l => `<li>${esc(leg(l))}</li>`).join('')}</ul>` : ''}${p.correlation ? `<h4>How the legs relate</h4><p>${esc(prose(p.correlation))}</p>` : ''}
-      ${probabilityNote}${p.priceEstimated ? '<p>Combined odds are estimated from captured leg prices. Verify the actual ticket price at the sportsbook.</p>' : ''}
+      ${probabilityNote}${evidenceNote}${p.priceEstimated ? '<p>Combined odds are estimated from captured leg prices. Verify the actual ticket price at the sportsbook.</p>' : ''}
       ${p.cutoff ? `<h4>Worst number we would take</h4><p>${esc(prose(p.cutoff))}</p>` : ''}${p.why ? `<h4>Why</h4><p>${esc(prose(p.why))}</p>` : ''}${p.risk ? `<h4>What could go wrong</h4><p>${esc(prose(p.risk))}</p>` : ''}${p.edge ? `<h4>Edge estimate</h4><p>${esc(prose(p.edge))}</p>` : ''}
       ${p.actual ? `<h4>Result</h4><p>${esc(prose(p.actual))}</p>` : ''}${p.settlementReason ? `<p>${esc(prose(p.settlementReason))}</p>` : ''}
       ${(p.sources || []).length ? `<h4>Sources</h4><div class="sources">${p.sources.filter(s => /^https:/.test(s)).map((s, i) => `<a href="${esc(s)}" target="_blank" rel="noopener noreferrer">${esc(hostOf(s, i))} ↗</a>`).join('')}</div>` : ''}

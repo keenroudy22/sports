@@ -295,7 +295,7 @@ def reason_in(text):
     """The reason sentence of a drafted play post: the line after its number line, when there is one."""
     lines = str(text or '').split('\n')
     for i, line in enumerate(lines[:-1]):
-        if line.startswith(('We project', 'Our number')) and lines[i + 1].strip() and not lines[i + 1].startswith(('@', '#')):
+        if line.startswith(('We project', 'Our number', 'We have')) and lines[i + 1].strip() and not lines[i + 1].startswith(('@', '#')):
             return lines[i + 1]
     return None
 
@@ -374,10 +374,9 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
         @Playbook #CFB
 
     A fun parlay leads with its price and book, "🎰 +2506 COLLEGE LOTTO (ESPN BET)", then its legs one a line; a
-    ladder rung "🪜 KOOK'N 80/20 CLIMB · STEP 2", "$75 → $146", the bank/ride split, then its legs. No labels, slogans or
-    reasons in sentences: the site keeps the reasons, and the card carries the site and "Entertainment only". No units.
-    Every number comes from the pick (x_post.guard checks). `weights` and `reason` are kept for callers; the post no
-    longer carries a reason.
+    ladder rung "🪜 KOOK'N 80/20 CLIMB · STEP 2", "$75 → $146", the bank/ride split, then its legs. No filler slogans;
+    the card carries the site and "Entertainment only". No units. One saved supporting reason may follow the number.
+    It was selected from structured evidence at publication; never select an arbitrary sentence as support.
     """
     league = (game or {}).get('league') or str(pick.get('id', '')).split('-')[0]
     tail = ' '.join(x for x in (PLAYBOOK, TAGS.get(league, '')) if x)
@@ -394,11 +393,14 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
         play = f"{'POTD: ' if featured else ''}{pick_card.short_title(pick, game)} ({int(pick['odds']):+d}, {pick.get('book')})"
         now = now_line(pick, now_quote)
         number = pick_card.our_number(pick, game)
-        top = '\n'.join(x for x in (play, now, number) if x)
-        options = ([top, f'{ASK}\n{tail}'], [top, tail], ['\n'.join(x for x in (play, now) if x), tail])
+        reason = reason if reason is not None else load_reasons().get(pick.get('id'))
+        reason = reason if reason and plain(reason) else None
+        top = '\n'.join(x for x in (play, now, number, reason) if x)
+        compact = '\n'.join(x for x in (play, now, number) if x)
+        options = ([top, f'{ASK}\n{tail}'], [top, tail], [compact, tail], ['\n'.join(x for x in (play, now) if x), tail])
     for parts in options:
         text = '\n\n'.join(part for part in parts if part)
-        if tweet_length(text) <= LIMIT and not guard(text, pick, None, now_quote):
+        if tweet_length(text) <= LIMIT and not guard(text, pick, reason, now_quote):
             return text
     return top[:LIMIT]
 

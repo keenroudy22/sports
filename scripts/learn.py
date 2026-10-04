@@ -38,6 +38,7 @@ import features
 import learning
 import pricing
 import scoreboard
+import market_review
 
 ROOT = Path(__file__).resolve().parents[1]
 MIN_N = 30            # published, graded plays a segment needs before learning moves it
@@ -244,22 +245,21 @@ def loglik(rows, k):
 
 
 def fit_k(rows):
-    return max((i / 100 for i in range(0, 151)), key=lambda k: loglik(rows, k))
+    return max((i / 100 for i in range(0, 101)), key=lambda k: loglik(rows, k))
 
 
 def learn_calibration(policy, rows, now, dry=False):
     """Fit k on the earlier part of the record, test it on the later part against the raw chances and against
-    the calibration in use; ship k fitted on everything only when it wins both."""
+    the calibration in use. Keep whole kickoff dates together and ship only the coefficient actually tested."""
     findings, changes = [], []
     for league in sorted({r['league'] for r in rows}):
         group = [r for r in rows if r['league'] == league]
-        cut = int(len(group) * 0.6)
-        train, test = group[:cut], group[cut:]
+        train, test = market_review.split_dates(group)
         key = f'{league}/prop'
         current = ((policy.get('calibration') or {}).get(key) or {}).get('k')
         finding = {'segment': key, 'n': len(group), 'current': current}
-        if len(group) < CAL_MIN or not test:
-            finding['note'] = f'{len(group)} graded projections; a calibration needs {CAL_MIN}'
+        if len(group) < CAL_MIN or len({r['kickoff'][:10] for r in train}) < 4 or len({r['kickoff'][:10] for r in test}) < 2:
+            finding['note'] = f'{len(group)} graded projections; a calibration needs {CAL_MIN}, four earlier dates and two later dates'
             findings.append(finding)
             continue
         k_train = fit_k(train)
@@ -268,14 +268,17 @@ def learn_calibration(policy, rows, now, dry=False):
             held['current'] = round(loglik(test, current), 2)
         k_all = fit_k(group)
         hits = sum(r['won'] for r in group)
-        finding.update(kTrain=k_train, kAll=k_all, heldOut=held, hitRate=round(hits / len(group), 3),
+        finding.update(kTrain=k_train, kAll=k_all, heldOut=held, trainN=len(train), testN=len(test),
+                       trainThrough=max(r['kickoff'] for r in train), testFrom=min(r['kickoff'] for r in test),
+                       hitRate=round(hits / len(group), 3),
                        meanRaw=round(sum(r['raw'] for r in group) / len(group), 3))
         findings.append(finding)
         better = held['k'] > held['raw'] and (current is None or held['k'] > held['current'])
-        if dry or not better or k_all == current:
+        if dry or not better or k_train == current:
             continue
-        policy.setdefault('calibration', {})[key] = {'k': k_all, 'n': len(group), 'at': learning.stamp(now), 'heldOut': held}
-        change = {'at': learning.stamp(now), 'segment': key, 'knob': 'calibration', 'from': current, 'to': k_all,
+        policy.setdefault('calibration', {})[key] = {'k': k_train, 'n': len(group), 'trainN': len(train), 'testN': len(test),
+                                                     'at': learning.stamp(now), 'heldOut': held}
+        change = {'at': learning.stamp(now), 'segment': key, 'knob': 'calibration', 'from': current, 'to': k_train,
                   'why': 'calibrated chances predicted the later record better than the raw ones', 'evidence': finding}
         policy['history'].append(change)
         changes.append(change)
@@ -411,7 +414,8 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
     segments, moved = learn_segments(policy, rows, now, dry)
     changes += moved
     _, snapshots = scoreboard.v2_rows(games)
-    calibration, moved = learn_calibration(policy, prop_rows(games, snapshots, captures), now, dry)
+    historical_props = prop_rows(games, snapshots, captures)
+    calibration, moved = learn_calibration(policy, historical_props, now, dry)
     changes += moved
     domains, moved = learn_domains(policy, rows, now, dry)
     changes += moved
@@ -419,7 +423,8 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
     changes += moved
     report = {'at': learning.stamp(now), 'candidates': len(rows), 'graded': sum(1 for r in rows if r.get('result')),
               'segments': segments, 'calibration': calibration, 'gates': by_rule(rows), 'judge': judge_findings(rows),
-              'researcher': domains, 'posts': reasons, 'postTimes': post_times(log_book), 'model': model_findings(), 'changes': changes}
+              'researcher': domains, 'posts': reasons, 'postTimes': post_times(log_book), 'model': model_findings(), 'changes': changes,
+              'marketReview': market_review.audit(historical_props)}
     if not dry:
         learning.save_policy(policy, policy_path)
         boxscores.write_json(Path(root) / 'report.json', report)
@@ -453,7 +458,7 @@ def markdown(report):
     for c in report['calibration']:
         if 'kAll' in c:
             lines.append(f"- {c['segment']}: {c['n']} graded projections; our favoured side came in {100 * c['hitRate']:.1f}% "
-                         f"against a raw {100 * c['meanRaw']:.1f}%; best shrink k {c['kAll']:.2f} (in use: {c['current']}).")
+                         f"against a raw {100 * c['meanRaw']:.1f}%; tested shrink k {c['kTrain']:.2f} (previous: {c['current']}).")
         else:
             lines.append(f"- {c['segment']}: {c.get('note')}")
     lines += ['', '## What each rule refused', '']
@@ -481,6 +486,8 @@ def markdown(report):
         lines += ['', '## The number against the close (season to date)', '']
         for key, m in report['model'].items():
             lines.append(f"- {key}: {m['games']} games, total miss {m['ourTotalMiss']} vs the close's {m['closeTotalMiss']}")
+    if report.get('marketReview'):
+        lines += ['', market_review.markdown(report['marketReview'])]
     return '\n'.join(lines) + '\n'
 
 

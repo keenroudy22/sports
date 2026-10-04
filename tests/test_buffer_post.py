@@ -173,7 +173,7 @@ class PlanTests(unittest.TestCase):
             with mock.patch.object(bp.x_post, 'REASONS', path):
                 plans = bp.plan(first, latest, GAMES, NOW, {'posts': []}, quotes={'p': ('FanDuel', 5.5, -120)})
         play = next(p for p in plans if p[0] == 'p')
-        self.assertNotIn('Over 4.5 in 7 of his last 10 games.', play[2], 'the reason stays on the site; the post is the play')
+        self.assertIn('Over 4.5 in 7 of his last 10 games.', play[2], 'saved evidence now accompanies the play on both socials')
         self.assertIn('Now 5.5 (-120, FanDuel)', play[2])
 
     def test_posted_closed_and_settled_plays_are_left_out(self):

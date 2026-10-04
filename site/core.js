@@ -179,6 +179,7 @@
   const marketKey = row => {
     if (!row) return null;
     if (row.stat) return row.stat;
+    if (Object.prototype.hasOwnProperty.call(LABEL, row.market)) return PROJECTION_MARKET[row.market] || row.market;
     const text = String(row.market || row.title || '').toLowerCase();
     const hit = MARKET_PHRASES.find(([phrase]) => text.includes(phrase));
     return hit ? hit[1] : null;

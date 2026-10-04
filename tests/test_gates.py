@@ -392,6 +392,16 @@ class CardTests(unittest.TestCase):
     def card(self, picks):
         return context(games=self.GAMES, first=picks, latest=picks)
 
+    def test_third_same_prop_market_requires_stronger_value(self):
+        from unittest.mock import patch
+        picks = {k: prop_lean(id=k, athleteId=k, market='rec', gameIds=[gid], publishedAt='2026-09-26T12:00:00Z')
+                 for k, gid in (('a', 'NFL-2'), ('b', 'NFL-3'))}
+        with patch.object(gates, 'desk_for', return_value={'calibrated': True, 'edgePoints': 2.1}):
+            self.assertFalse(gates.card_cap(prop_lean(market='rec'), self.card(picks)).ok)
+            self.assertTrue(gates.card_cap(prop_lean(market='rushYds'), self.card(picks)).ok)
+        with patch.object(gates, 'desk_for', return_value={'calibrated': True, 'edgePoints': 5.1}):
+            self.assertTrue(gates.card_cap(prop_lean(market='rec'), self.card(picks)).ok)
+
     def test_a_weekend_card_is_five_plays_with_three_of_a_kind_at_most(self):
         team = lambda key, gid: total_lean(id=key, gameIds=[gid], publishedAt='2026-09-25T12:00:00Z')
         prop = lambda key, gid: prop_lean(id=key, gameIds=[gid], athleteId=key, publishedAt='2026-09-26T12:00:00Z')

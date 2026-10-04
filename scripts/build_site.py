@@ -840,6 +840,7 @@ def board_picks(first, latest, by_id, identities):
                      'priceNote': recent.get('priceNote') if pick.get('odds') is None else None,
                      'priceEstimated': pick.get('priceEstimated') is True,
                      'probabilityAtPublication': pick.get('probabilityAtPublication'),
+                     'reasoning': pick.get('reasoning'),
                      'projection': pick.get('projection'), 'confidence': pick.get('confidence'),
                      'favorite': pick.get('favorite') is True or key in FAVORITES_BEFORE_FLAG,
                      'marketType': pick.get('marketType'), 'parlayType': pick.get('parlayType'),

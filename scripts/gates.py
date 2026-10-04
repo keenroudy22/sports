@@ -62,6 +62,7 @@ LEAN_EDGE, LEAN_STRONG = 1.0, 2.0          # model lean: points clear of break-e
 # runs judge the strongest first (run.rank_card), so the card is the best each run sees.
 CARD = {'weekend': 5, 'weekday': 1}
 CARD_KIND_MAX = 3
+CARD_MARKET_MAX = 2
 PROP_RAW, PROP_EDGE, PROP_FLOOR = 0.60, 5.0, -200
 # Leagues whose player chances publish only once learning has calibrated them against that league's own graded lines:
 # college player numbers were never graded against a line before 2026-09-26, and the NFL's k (0.13) says raw player
@@ -552,18 +553,28 @@ def card_cap(candidate, ctx):
     size = CARD['weekend' if weekend else 'weekday']
     kind = 'player' if candidate.get('athleteId') else 'team'
     count = {'team': 0, 'player': 0}
+    family_count = 0
+    family = (candidate.get('league') or str(candidate.get('id', '')).split('-')[0], market_key(candidate))
     for key, pick in ctx.first.items():
         if key == candidate.get('id') or pick.get('historicalImport') or pick.get('legs') or pick.get('parlayType'):
             continue
         if when(pick.get('publishedAt') or '1970-01-01T00:00Z') > ctx.now or slate_day(pick, ctx) != day or pulled_before_post(key, ctx):
             continue
         count['player' if pick.get('athleteId') else 'team'] += 1
+        other_family = (pick.get('league') or str(pick.get('id', '')).split('-')[0], market_key(pick))
+        if kind == 'player' and pick.get('athleteId') and other_family == family:
+            family_count += 1
     if sum(count.values()) >= size:
         return Decision(False, 'card_cap', f"{sum(count.values())} plays already on the {day} card; the card is {size}")
     if weekend and count[kind] >= CARD_KIND_MAX:
         return Decision(False, 'card_cap', f"{count[kind]} {'player props' if kind == 'player' else 'game lines'} already on the "
                                            f"{day} card; {CARD_KIND_MAX} of a kind at most, for a mix")
     league = candidate.get('league') or (game_of(candidate, ctx) or {}).get('league')
+    if family_count >= CARD_MARKET_MAX:
+        price = desk_for(candidate, ctx)
+        if not price or not price.get('calibrated') or price.get('edgePoints', -99) < pricing.STRONG:
+            return Decision(False, 'card_cap', f'{family_count} {family[1]} plays already on the {day} card; '
+                            f'another needs at least {pricing.STRONG:g} adjusted points above its price')
     if not weekend and league != 'NFL' and any(g.get('league') == 'NFL' and eastern_date(when(g['kickoff'])) == day
                                                for g in ctx.games.values()):
         return Decision(False, 'card_cap', f"the one play on {day:%A}'s card is the NFL game's")

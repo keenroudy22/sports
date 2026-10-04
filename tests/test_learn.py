@@ -111,6 +111,8 @@ class CalibrationTests(unittest.TestCase):
         self.assertEqual(len(changes), 1)
         self.assertLess(policy['calibration']['NFL/prop']['k'], 0.2)
         self.assertGreater(findings[0]['heldOut']['k'], findings[0]['heldOut']['raw'])
+        self.assertEqual(policy['calibration']['NFL/prop']['k'], findings[0]['kTrain'])
+        self.assertLess(findings[0]['trainThrough'], findings[0]['testFrom'])
         honest = learning.default_policy()
         calibrated = [dict(r, raw=0.75, won=(i % 4 != 0)) for i, r in enumerate(self.rows(400, 0.75, 1))]
         self.assertEqual(learn.learn_calibration(honest, calibrated, NOW)[1], [], 'raw already right: nothing to fix')

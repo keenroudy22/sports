@@ -129,6 +129,17 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Evidence and selection review (2026-10-04):** new official props need at least two adjusted percentage points
+  above their exact price. A third prop in the same league/market on one slate needs at least five points;
+  the existing five-play and three-player ceilings still apply. This is a conservative selection policy, not
+  a claim that those cutoffs have proved profitable. Existing publications and grading are unchanged.
+  Future X/Discord play copy may include one saved supporting sentence selected from structured evidence,
+  within the existing length and spacing limits. The website's Why this play shows saved history, role,
+  matchup, probability/price comparison and explicit counterarguments. Never turn opposing evidence into support.
+  Weekly learning splits whole kickoff dates and activates only the fitted coefficient actually tested;
+  `market_review.py` compares market-specific pooled formulas offline and joins both weekly learning and the
+  Monday owner review. A retrospective improvement only nominates a future shadow trial; it never changes live
+  market weights automatically. All evaluation uses stored data and adds no metered requests.
 - **Confidence order and explained upsets (2026-10-03):** qualifying Board lines may show a confidence rank based
   on their calibrated chance to win after the ordinary freshness, sample and market-pause rules. Keep this separate
   from value rank, which measures how far the chance clears the exact price; the two may disagree and neither is a
@@ -270,9 +281,9 @@ Handy commands (from `~/Projects/sports`):
 - **Only hard news pulls a play** before it posts: out, doubtful, inactive, suspended, benched (`run.hard`). A lotto
   or easy parlay pulled before its post is replaced the same day under a new id (`gates.fresh_id`). A ladder rung is
   never replaced.
-- **Tweets are short and human** (2026-09-26: "Not so AI looking. And straight to the point"): the play with price
-  and book, "We have it at 47.", "❤️ if you're tailing", @Playbook and the league tag. No labels, slogans or
-  reason sentences. POTD: "POTD: ..." first. Lotto: "🎰 +2506 COLLEGE LOTTO (ESPN BET)" then the legs.
+- **Tweets are short and human** (2026-09-26, reason sentence added Oct 4): the play with price
+  and book, "We have it at 47.", one saved supporting reason when available, "❤️ if you're tailing", @Playbook
+  and the league tag. No labels or slogans. POTD: "POTD: ..." first. Lotto: "🎰 +2506 COLLEGE LOTTO (ESPN BET)" then the legs.
 - **The Kook'n 80/20 Climb** ($50 to $1,000 bankroll ladder, `scripts/ladder.py`): bank 20% of every winning return and ride 80% on
   the next rung, so a miss cannot take what was banked. Prefer two independently strong legs around -400 at one book,
   together -180 to -130, so protection does not make the climb take forever. Feed-priced player alternates and exact,

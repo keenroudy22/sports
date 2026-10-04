@@ -650,7 +650,7 @@ def rank_card(wanted, ctx):
     """The card's candidates, best first: by our calibrated number against the price (a player's chance shrunk by the
     league's learned k, or PROVISIONAL_K before there is one), with a paused market, a player market where the line has
     been closer than our projection, or a chance that does not clear its price after all the rest. Those three rules
-    ordered the card instead of refusing from 2026-09-28, when the owner asked for a full card every game day."""
+    also refuse new plays through the admission gates. Card size is a ceiling, never a quota."""
     import learning
     def score(c):
         row, league = c['_row'], c['_league']
@@ -1138,6 +1138,11 @@ def prop_reasoning(candidate, ctx, records, snapshot):
     recent = [v for v in recent if v is not None]
     hits = sum(1 for v in recent if (v > line if side == 'over' else v < line))
     parts = [f"Last {len(recent)} games: {hits} of {len(recent)} {side} {pricing.fmt(line)}." if recent else 'No stored games for the player yet.']
+    cautions = []
+    if recent and hits / len(recent) < 0.5:
+        cautions.append(f'Only {hits} of the last {len(recent)} games cleared this side of the line; recent results oppose it.')
+    if len(recent) < 5:
+        cautions.append('Fewer than five stored games at this line; history is limited.')
     team_side, player = pricing.player_line(snapshot, athlete)
     volume = VOLUME.get(market)
     if team_side and player and volume:
@@ -1155,6 +1160,13 @@ def prop_reasoning(candidate, ctx, records, snapshot):
         if row:
             parts.append(f"Defense: {opponent['abbreviation']} allows {row['avg']:g} {pricing.WORDS[market]} a game to {group}s, "
                          f"{row['rank']} of {len(table)} this season (1 is stingiest).")
+            if (side == 'under' and row['rank'] > len(table) * 0.75) or (side == 'over' and row['rank'] <= len(table) * 0.25):
+                cautions.append('The opponent\'s positional allowance points against this side. It covers the whole position group, not just this player.')
+    for fact in candidate.get('_research') or []:
+        if fact.get('verified') and fact.get('direction') == 'against' and fact.get('claim'):
+            cautions.append(first_sentence(fact['claim']))
+    candidate['reasoning'] = {'history': parts[0], 'context': parts[1:], 'cautions': list(dict.fromkeys(cautions)),
+                              'historyNote': 'Past hit rate is context, not the predicted chance; opponents and roles can change.'}
     return ' '.join(parts)
 
 
@@ -1270,6 +1282,12 @@ def write_prose(candidate, ctx, records):
                              f"{'' if games_played >= 3 else ', the role settled by last season'}. A player who does not take the field is "
                              f"voided; an in-game injury is graded unless a verified book protection applies. Confidence "
                              f"{candidate['confidence']} of 10.")
+        cautions = (candidate.get('reasoning') or {}).get('cautions') or []
+        if cautions:
+            candidate['risk'] = ' '.join(cautions) + ' ' + candidate['risk']
+        for fact in candidate.get('_research') or []:
+            if fact.get('verified') and str(fact.get('source') or '').startswith('https://'):
+                candidate['sources'] = list(dict.fromkeys([*(candidate.get('sources') or []), fact['source']]))
     else:
         market_words = next((f['claim'] for f in candidate.get('_evidence') or [] if f.get('kind') == 'market'), '')
         checked = checked_facts(candidate)

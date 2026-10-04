@@ -24,7 +24,10 @@ prevents duplicates, and the normal queue limits apply. These are updates, not p
 
 - **Short and human, straight to the point** (2026-09-26: "Not so AI looking. And straight to the point on the
   tweets"). A play is one line with its price and book, then our number in a few words. No labels ("TEAM PROP"), no
-  slogans ("Graded in public") and no reason sentences in the tweet; the site keeps the reasons.
+  slogans ("Graded in public"). From Oct 4, one short saved supporting sentence follows our number when available.
+  It comes from structured history or verified supporting facts; arbitrary prose is never mined for a reason.
+  The site keeps the complete reasoning and counterarguments. Under the character limit, keep the reason ahead
+  of the optional engagement ask; never truncate a wager to fit it.
 - **Every number comes from the pick.** `x_post.guard` refuses a post whose numbers are not in the pick's own fields
   (rounded projections and ladder dollars are allowed as the post writes them). No em or en dashes, no "!", no
   marketing words ("lock", "guaranteed"), no advice ("bet this"), no model names. A post that fails its check is held

@@ -275,6 +275,11 @@ def main(argv=None):
     text = packet(first, last, run_lines(first, last), post_rows(log_book, first, last),
                   record(ctx.first, ctx.latest, first, last), hosted_runs(first), timing(first), ladder_now,
                   LOGS / 'ALERT.txt', post_metrics(log_book, first, last))
+    import market_review
+    try:
+        text += '\n' + market_review.markdown(market_review.from_stores())
+    except Exception as error:
+        text += f'\nProp formula review unavailable: {type(error).__name__}.\n'
     LOGS.mkdir(parents=True, exist_ok=True)
     packet_path, review_path = LOGS / f'review-packet-{last.isoformat()}.md', LOGS / f'review-{last.isoformat()}.md'
     packet_path.write_text(text, encoding='utf-8')

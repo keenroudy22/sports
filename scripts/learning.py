@@ -41,7 +41,7 @@ DEFAULT_KNOBS = {
                      'about': 'Points a prop lean\'s raw chance must clear its price by.'},
     'prop.minRaw': {'value': 0.60, 'floor': 0.60, 'cap': 0.70, 'step': 0.02,
                     'about': 'The raw chance a prop lean must reach.'},
-    'prop.minCalibratedEdge': {'value': 0.0, 'floor': 0.0, 'cap': 5.0, 'step': 1.0,
+    'prop.minCalibratedEdge': {'value': 2.0, 'floor': 2.0, 'cap': 5.0, 'step': 1.0,
                                'about': 'Points a prop\'s learned, calibrated chance must clear its price by.'},
 }
 REASON_KINDS = ('injury', 'weather', 'market', 'stats', 'role', 'other')

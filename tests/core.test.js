@@ -165,6 +165,10 @@ test('a market’s words map to the stat behind it, and a row that names its sta
   assert.equal(C.marketKey({ title: 'Terrance Ferguson under 32.5 receiving yards' }), 'recYds');
   assert.equal(C.marketKey({ market: 'longest reception' }), null);
   assert.equal(C.marketKey({ market: 'receiving yards', stat: 'rec' }), 'rec');
+  assert.equal(C.marketKey({ market: 'rec' }), 'rec');
+  assert.equal(C.marketKey({ market: 'recYds' }), 'recYds');
+  assert.equal(C.marketKey({ market: 'car' }), 'car');
+  assert.equal(C.marketKey({ market: 'receptions' }), 'rec');
   assert.equal(C.marketKey(null), null);
 });
 

@@ -52,8 +52,9 @@ class DraftTests(unittest.TestCase):
         team = x_post.draft(dict(PICK, favorite=False, modelLean=True, projection=31.2), GAME)
         self.assertEqual(team, "Iowa/Michigan under 38.5 (-105, FanDuel)\nWe have it at 31.\n\n❤️ if you're tailing\n@Playbook #CFB")
         prop = x_post.draft(PROP, {'league': 'NFL'}, reason='He has caught 6 in each of his last 2 games.')
-        self.assertEqual(prop, "Player Seven over 4.5 receptions (-115, DraftKings)\nWe have it at 5.8.\n\n❤️ if you're tailing\n@Playbook #NFL",
-                         'no reason sentence, no label: the owner asked for straight to the point (2026-09-26)')
+        self.assertEqual(prop, "Player Seven over 4.5 receptions (-115, DraftKings)\nWe have it at 5.8.\nHe has caught 6 in each of his last 2 games.\n\n❤️ if you're tailing\n@Playbook #NFL",
+                         'one saved supporting reason, requested Oct 4')
+        self.assertEqual(x_post.reason_in(prop), 'He has caught 6 in each of his last 2 games.')
         potd = x_post.draft(PICK, GAME, featured=True)
         self.assertTrue(potd.startswith('POTD: Iowa/Michigan under 38.5 (-105, FanDuel)\n'), potd)
         for text, pick in ((team, dict(PICK, projection=31.2)), (prop, PROP), (potd, PICK)):
@@ -81,13 +82,18 @@ class DraftTests(unittest.TestCase):
                               reason='', now_quote=('DraftKings', -3.5, -110))
         self.assertIn('Now -3.5 (-110, DraftKings)', spread)
 
-    def test_a_stored_reason_stays_on_the_site(self):
+    def test_a_stored_supporting_reason_reaches_the_post(self):
         import tempfile
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / 'reasons.json'
             x_post.save_reasons({PICK['id']: 'Wind is forecast at 18 mph in Ann Arbor.'}, path)
             with mock.patch.object(x_post, 'REASONS', path):
-                self.assertNotIn('Wind', x_post.draft(dict(PICK, projection=31.2), GAME))
+                self.assertIn('Wind is forecast at 18 mph in Ann Arbor.', x_post.draft(dict(PICK, projection=31.2), GAME))
+
+    def test_no_reason_is_invented_from_unlabelled_or_opposing_prose(self):
+        with mock.patch.object(x_post, 'load_reasons', return_value={}):
+            text = x_post.draft(dict(PROP, why='The opponent allows 8 catches, which argues against our under.'), {'league': 'NFL'})
+        self.assertNotIn('opponent allows', text)
 
     def test_lineup_checks_duplicates_and_half_sentences_are_not_reasons(self):
         pick = {'why': 'Model lean, published on our number alone. Our total is 52.3 against 45.5: the over reads 55.8%. '
