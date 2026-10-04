@@ -202,12 +202,15 @@ def build(legs):
 def candidate(ctx, games, now, key=None, get=None, cache=None, remaining=None, log=print, spend=True, exclude=()):
     """The day's easy parlay as a pick, or (None, reason). Games in `exclude` (the desk has a reason against them)
     are left off."""
+    frequency = gates.alternate_parlay_frequency({'league': 'NFL', 'parlayType': 'easyProps'}, ctx)
+    if not frequency.ok:
+        return None, frequency.reason
     today = [g for g in todays_games(games, now) if g['id'] not in set(exclude)]
     if len(today) < LEGS:
         return None, f'only {len(today)} NFL games left today; a ticket needs {LEGS}'
     fetched = fetch_day(today, now, key, get, cache, remaining, log, spend)
     legs = [leg for game in today for leg in legs_for_game(game, fetched.get(game['id']) or [], ctx, now)]
-    ticket, reason = build(legs)
+    ticket, reason = build(gates.without_straight_players(legs, ctx))
     if not ticket:
         return None, reason
     return ticket_pick(ticket, games, now, 'NFL', SOURCE), None
@@ -218,6 +221,9 @@ def sharp_candidate(ctx, games, now, league='CFB', exclude=()):
     (the owner, 2026-09-28: "on saturday and sunday you should do a fun parlay with alternate lines"): the ladder's
     legs (`ladder.legs_for_game`: the main line's own ladder, a settled role, nobody listed), three games at one book."""
     import ladder
+    frequency = gates.alternate_parlay_frequency({'league': league, 'parlayType': 'easyProps'}, ctx)
+    if not frequency.ok:
+        return None, frequency.reason
     day = eastern_date(now)
     today = [g for g in games.values() if g.get('league') == league and g.get('state', 'pre') == 'pre' and g['id'] not in set(exclude)
              and eastern_date(gates.when(g['kickoff'])) == day and gates.when(g['kickoff']) > now + LEAD]
@@ -225,7 +231,7 @@ def sharp_candidate(ctx, games, now, league='CFB', exclude=()):
         return None, f'only {len(today)} {league} games left today; a ticket needs {LEGS}'
     seen = ladder.confirmed_at()
     legs = [leg for g in today for leg in ladder.legs_for_game(g, ctx.prop_odds.get(g['id']), ctx, now, seen)]
-    ticket, reason = build(legs)
+    ticket, reason = build(gates.without_straight_players(legs, ctx))
     if not ticket:
         return None, reason
     return ticket_pick(ticket, games, now, league, 'https://sharpapi.io/'), None

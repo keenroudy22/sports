@@ -120,7 +120,7 @@ def build(rows, now, day=None, target=500, league=None, exclude=(), extra_legs=(
             quote = next((q for q in quotes if q['book'] == book and q['line'] == row['line'] and q.get('odds') is not None), None)
             if quote:   # a leg is taken only at the number its read was graded at
                 board.append({'id': row['id'], 'title': retitle(row, quote['line']), 'gameId': row['gameId'],
-                              'market': row['market'], 'side': row.get('direction') or row.get('side'),
+                              'market': row['market'], 'athleteId': row.get('athleteId'), 'side': row.get('direction') or row.get('side'),
                               'line': quote['line'], 'odds': quote['odds'], 'book': book, 'chance': row['grade']['chance'],
                               'kickoff': row['kickoff'], 'observedAt': row.get('observedAt'), 'marketWindow': 'Full game',
                               'alternate': False})

@@ -361,7 +361,7 @@ def candidate(ctx, games, now, exclude=()):
             continue
         seen = confirmed_at()
         legs = [leg for g in today for leg in legs_for_game(g, ctx.prop_odds.get(g['id']), ctx, now, seen)]
-        ticket, reason = build(legs)
+        ticket, reason = build(gates.without_straight_players(legs, ctx))
         if not ticket:
             reasons.append(f'{league}: {reason}')
             continue

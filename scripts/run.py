@@ -700,8 +700,12 @@ def longshot_alternates(ctx, games, now, league, exclude=()):
 
 
 def longshot_candidate(lines, games, now, league, exclude=(), ctx=None):
-    alternates = longshot_alternates(ctx, games, now, league, exclude)
-    ticket, reason = parlay.build(lines, now, None, LONGSHOT_TARGET, league, exclude, alternates)
+    # Main lines first. Remove player exposure before ranking, so another eligible leg can replace it.
+    lines = gates.without_straight_players(lines, ctx) if ctx is not None else lines
+    ticket, reason = parlay.build(lines, now, None, LONGSHOT_TARGET, league, exclude)
+    if not ticket and ctx is not None and gates.alternate_parlay_frequency({'league': league, 'parlayType': 'easyProps'}, ctx).ok:
+        alternates = gates.without_straight_players(longshot_alternates(ctx, games, now, league, exclude), ctx)
+        ticket, reason = parlay.build(lines, now, None, LONGSHOT_TARGET, league, exclude, alternates)
     if not ticket:
         return None, reason
     for leg in ticket['legs']:

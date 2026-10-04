@@ -23,6 +23,7 @@ Stdlib only.
 """
 import argparse
 import json
+import re
 import sys
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -709,12 +710,59 @@ def prop_one_per_player(candidate, ctx):
 
 
 def prop_not_in_longshot(candidate, ctx):
-    athlete = str(candidate.get('athleteId') or '')
-    for key, pick in published_today(ctx, candidate.get('id')):
-        for leg in pick.get('legs') or []:
-            if str(leg.get('athleteId') or '') == athlete or f'-{athlete}-' in str(leg.get('id') or ''):
-                return Decision(False, 'prop_not_in_longshot', f"the player is a leg of today's longshot {key}")
-    return Decision(True, 'prop_not_in_longshot', "not in today's longshot")
+    result = player_overlap(candidate, ctx)
+    return Decision(result.ok, 'prop_not_in_longshot', result.reason)
+
+
+def player_exposure(row):
+    """Same player/game even across markets, directions, alternate lines and books."""
+    if not isinstance(row, dict):
+        return None                    # legacy text-only tickets predate structured player IDs
+    game = row.get('gameId') or (row.get('gameIds') or [None])[0]
+    athlete = row.get('athleteId')
+    match = re.match(r'^(?:prop|alt)-(NFL|CFB)-([^-]+)-([^-]+)-', str(row.get('id') or ''))
+    if match:
+        game = game or f'{match[1]}-{match[2]}'
+        athlete = athlete or match[3]
+    return (str(game), str(athlete)) if game and athlete else None
+
+
+def player_overlap(candidate, ctx):
+    ticket = bool(candidate.get('legs'))
+    exposures = {player_exposure(r) for r in candidate.get('legs') or [candidate]} - {None}
+    for key, pick in getattr(ctx, 'first', {}).items():
+        if key == candidate.get('id') or pick.get('historicalImport') or bool(pick.get('legs')) == ticket:
+            continue
+        if when(pick.get('publishedAt') or '1970-01-01T00:00Z') > ctx.now:
+            continue
+        # Even an expired quote stays exposure: a reader could already have taken it.
+        existing = {player_exposure(r) for r in pick.get('legs') or [pick]} - {None}
+        if exposures & existing:
+            return Decision(False, 'player_overlap', f'{key} already uses this player in the same game; no straight/parlay stacking')
+    return Decision(True, 'player_overlap', 'no player exposure shared between straights and tickets')
+
+
+def without_straight_players(rows, ctx):
+    return [row for row in rows if player_overlap({'legs': [row]}, ctx).ok]
+
+
+def alternate_parlay_frequency(candidate, ctx):
+    """Regular tickets get at most one alternate-based exception per league in seven days. Ladders stay separate."""
+    if candidate.get('parlayType') == 'ladder' or not (candidate.get('parlayType') == 'easyProps' or
+            any(isinstance(l, dict) and l.get('alternate') for l in candidate.get('legs') or [])):
+        return Decision(True, 'alternate_parlay_frequency', 'main-line ticket or separate ladder')
+    league = candidate.get('league') or candidate.get('_league') or str(candidate.get('id') or '').split('-')[0]
+    for key, pick in getattr(ctx, 'first', {}).items():
+        if key == candidate.get('id') or pick.get('historicalImport') or pick.get('parlayType') == 'ladder':
+            continue
+        if (pick.get('league') or key.split('-')[0]) != league:
+            continue
+        if not (pick.get('parlayType') == 'easyProps' or any(isinstance(l, dict) and l.get('alternate') for l in pick.get('legs') or [])):
+            continue
+        published = when(pick.get('publishedAt') or '1970-01-01T00:00Z')
+        if ctx.now - timedelta(days=7) < published <= ctx.now and not pulled_before_post(key, ctx):
+            return Decision(False, 'alternate_parlay_frequency', f'{key} used the alternate-ticket exception within seven days; main lines only')
+    return Decision(True, 'alternate_parlay_frequency', 'occasional alternate-ticket exception available')
 
 
 def prop_injury_clear(candidate, ctx):
@@ -807,7 +855,7 @@ def revision_frozen(candidate, ctx):
 
 # ------------------------------------------------------------------ running the rules
 
-COMMON = (not_started, expiry_ok, fresh_quote, price_present, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction)
+COMMON = (not_started, expiry_ok, fresh_quote, price_present, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction, player_overlap)
 SHOP = (one_book, best_quote_by_ev)
 RULES = {
     # Caps are ceilings, not quotas. A paused or negative-value market cannot fill the card.
@@ -816,8 +864,8 @@ RULES = {
                                  prop_not_in_longshot, prop_injury_clear, card_cap, lean_nothing_against),
     'favorite': COMMON + SHOP + (learned_pause, straight_value, prop_market_not_trailing, favorite_needs_reason, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
     'researched': COMMON + SHOP + (learned_pause, straight_value, prop_market_not_trailing, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
-    'longshot': (not_started, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, longshot_one_per_day),
-    'ladder': (not_started, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, ladder_one_rung),
+    'longshot': (not_started, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, longshot_one_per_day, player_overlap, alternate_parlay_frequency),
+    'ladder': (not_started, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, ladder_one_rung, player_overlap),
     'revision': (revision_frozen,),
 }
 

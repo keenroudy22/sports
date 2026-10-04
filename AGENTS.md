@@ -129,6 +129,13 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **No straight/parlay player stacking (2026-10-04):** block reuse of the same player in the same game across
+  straight plays and any ticket, including the ladder, in either publication order. A different stat, side, book
+  or alternate does not remove the shared exposure; expired quotes still count. Filter before ticket selection
+  and enforce again at admission. Preserve player IDs on legs. Regular longshots try main lines first; use an
+  alternate fallback or easy-props ticket at most once per league per rolling seven days, never as a daily quota.
+  Check that allowance before fetching easy-prop prices. Ladder alternates remain allowed, with no weekly cap,
+  but the no-stacking rule applies. No historical play, result, or already-published ticket is rewritten.
 - **Evidence and selection review (2026-10-04):** new official props need at least two adjusted percentage points
   above their exact price. A third prop in the same league/market on one slate needs at least five points;
   the existing five-play and three-player ceilings still apply. This is a conservative selection policy, not

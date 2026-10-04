@@ -177,6 +177,9 @@ class ExpiryTests(unittest.TestCase):
 
         with mock.patch.object(ladder, 'legs_for_game', legs), mock.patch.object(ladder, 'confirmed_at', lambda: {}):
             ticket, reason = run.longshot_candidate(rows, GAMES, NOW, 'NFL', ctx=world)
+            self.assertIsNone(reason)
+            self.assertFalse(any(leg.get('alternate') for leg in ticket['legs']), 'prefer a qualifying main-line ticket')
+            ticket, reason = run.longshot_candidate(rows[:2], GAMES, NOW, 'NFL', ctx=world)
         self.assertIsNone(reason)
         self.assertTrue(any(leg.get('alternate') for leg in ticket['legs']))
         self.assertIn('https://sharpapi.io/', ticket['sources'])
