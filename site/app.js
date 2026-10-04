@@ -15,6 +15,7 @@
   };
 
   const state = {
+    trendRate: '80', trendStat: 'all', trendKind: 'all', trendMin: '3', trendQuery: '', trendDay: 'today',
     league: saved.get('league', 'ALL'),     /* a first visit shows every play, whichever sport it is in */
     gamesScope: 'upcoming', gamesQuery: '', boardDay: 'today', boardScope: 'open', boardSort: 'best', boardQuery: '', boardMode: 'games', propMarket: 'all', playerQuery: '', recordQuery: '',
     stat: null, defensePos: 'WR', defenseStat: 'recYds', defenseScope: 'season', defenseOrder: 'soft',
@@ -52,8 +53,8 @@
     more: '<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
   };
   const TABS = [['today', 'Board'], ['games', 'Games'], ['stats', 'Players'], ['record', 'Scoreboard'], ['more', 'More']];
-  const TAB_FOR = { board: 'today', game: 'games', player: 'stats', team: 'stats', model: 'record', ticket: 'today', research: 'more', scores: 'more', arbs: 'more', lab: 'more' };
-  const boardTabs = active => `<nav class="board-tabs" aria-label="Board view"><a href="#today" ${active === 'card' ? 'aria-current="page"' : ''}>Official card</a><a href="#board" ${active === 'lines' ? 'aria-current="page"' : ''}>Explore lines</a><a href="#board/props">Player props</a></nav>`;
+  const TAB_FOR = { trends: 'today', board: 'today', game: 'games', player: 'stats', team: 'stats', model: 'record', ticket: 'today', research: 'more', scores: 'more', arbs: 'more', lab: 'more' };
+  const boardTabs = active => `<nav class="board-tabs" aria-label="Board view"><a href="#today" ${active === 'card' ? 'aria-current="page"' : ''}>Official card</a><a href="#board" ${active === 'lines' ? 'aria-current="page"' : ''}>Explore lines</a><a href="#board/props">Player props</a><a href="#trends" ${active === 'trends' ? 'aria-current="page"' : ''}>Season trends</a></nav>`;
   const scoreTabs = active => `<nav class="board-tabs" aria-label="Scoreboard view"><a href="#record" ${active === 'official' ? 'aria-current="page"' : ''}>Official record</a><a href="#model" ${active === 'model' ? 'aria-current="page"' : ''}>Model accuracy</a></nav>`;
 
   /* The two model generations, in plain words. The data keeps its own version names. */
@@ -508,7 +509,7 @@
           <span class="row-market">${s.redZone} red-zone carries + targets · ${s.inside10} inside the 10 · ${s.touchdowns} rushing/receiving TDs</span>
           <span class="row-meta">${s.games}/${s.teamGames} team games with player and play-by-play coverage · ${fixed(s.projectedOpportunities)} projected carries + targets · role forecast ${esc(whenShort(s.roleSnapshotAt))} · ${esc(s.priceStatus)}</span></span></a>`).join('')}</div></div>`
         : empty('Not enough scoring-opportunity evidence', 'We need current involvement and at least three observed games; missing data does not mean zero opportunities.'))) +
-      `<details class="card"><summary>Markets still in research</summary><p class="row-meta">Moneyline value: not calibrated. Team totals: not yet validated for public recommendations. Alternate streak sheets need verified alternate prices. No price, no priced recommendation.</p></details>`;
+      `<div class="card menu"><a href="#trends/${esc(card.id)}"><span>Season trends →</span><small>70 / 80 / 90 / 100% · main lines, alternates & milestones</small></a></div><details class="card"><summary>Markets still in research</summary><p class="row-meta">Moneyline value: not calibrated. Team totals: not yet validated for public recommendations. Historical hit rates are not next-game probabilities. No price, no priced recommendation.</p></details>`;
   };
 
   async function viewToday() {
@@ -1435,12 +1436,34 @@
 
   /* ---------- more ---------- */
 
+  async function viewTrends(route) {
+    const data = await get('app/trends.json');
+    const rows = C.filterTrends(data.rows || [], { rate: state.trendRate, stat: state.trendStat,
+      kind: state.trendKind, min: state.trendMin, league: state.league, query: state.trendQuery, game: route.id,
+      day: route.id ? 'all' : state.trendDay });
+    const select = (key, title, options) => `<label>${title}<select data-select="${key}">${options.map(([v, t]) => `<option value="${v}" ${state[key] === v ? 'selected' : ''}>${t}</option>`).join('')}</select></label>`;
+    const cards = rows.slice(0, 150).map(r => `<article class="card trend-card">
+      <div class="trend-top"><a href="#player/${esc(r.league)}/${esc(r.athleteId)}"><img class="trend-photo" src="https://a.espncdn.com/i/headshots/${r.league === 'NFL' ? 'nfl' : 'college-football'}/players/full/${esc(r.athleteId)}.png" alt="" loading="lazy"><b>${esc(r.player)}</b></a><span class="trend-rate">${r.rate}%<small>${r.hits}/${r.games} games</small></span></div>
+      <h2>${esc(r.title)}</h2><p class="row-meta">${esc(r.team.name || r.team.abbr || '')} · ${r.season} regular season${r.injuryStatus ? ` · Injury report: ${esc(r.injuryStatus)}` : ''}</p>
+      <p>${r.kind === 'milestone' ? '<span class="pill">Stat milestone</span> <span class="row-meta">No verified price</span>' : `<span class="pill pill-ours">${r.kind === 'alternate' ? 'Alternate' : 'Main line'}</span> <b>${odds(r.odds)} ${esc(r.book)}</b> <span class="row-meta">captured ${esc(ago(r.observedAt))} · verify in book</span>`}</p>
+      <a class="row-meta" href="#game/${esc(r.gameId)}">${esc(r.matchup)} · ${esc(whenShort(r.kickoff))} →</a>
+      <details><summary>See the ${r.games} recorded games${r.games < 5 ? ' · small sample' : ''}</summary><p class="row-meta">All recorded appearances this season, not head-to-head history. ${r.teamGames} current-team games stored; missing appearances are not assumed played. Injury exits count when a stat is recorded. ${r.pushes ? `${r.pushes} statistical ties counted in the denominator, not as hits.` : ''}</p><div class="trend-log">${r.history.map(h => `<span><small>${esc(h.date)}</small><b>${h.value}</b></span>`).join('')}</div><p class="row-meta">Roster inferred from last recorded appearance. Check current role, injury status and opponent strength, especially in college.</p><a href="#player/${esc(r.league)}/${esc(r.athleteId)}">Full player research →</a></details>
+    </article>`).join('');
+    return `${head('Season trends', 'Find the numbers players have cleared—not a promise about their next game.')}${boardTabs('trends')}
+      <div class="card trend-controls"><p class="eyebrow">Historical hit rate</p>${seg('trendRate', [['70','70%+'],['80','80%+'],['90','90%+'],['100','100%']], state.trendRate)}
+      <div class="trend-selects">${select('trendStat','Stat',[['all','All stats'],['rec','Receptions'],['recYds','Receiving yards'],['rushYds','Rushing yards'],['passYds','Passing yards'],['car','Carries'],['att','Pass attempts'],['cmp','Completions']])}${select('trendKind','Line type',[['all','All types'],['main','Main lines'],['alternate','Alternates'],['milestone','Stat milestones']])}${select('trendMin','Minimum sample',[['3','3 games'],['5','5 games'],['8','8 games']])}</div>
+      ${route.id ? '' : seg('trendDay', [['today','Today'],['all','All upcoming']], state.trendDay)}<input aria-label="Search players or teams" placeholder="Search player or team" data-input="trendQuery" value="${esc(state.trendQuery)}"></div>
+      <p class="row-meta">${rows.length} matching trends · built ${esc(ago(data.generatedAt))}. Upcoming games only. Priced captures expire here after four hours. Milestones are not confirmed sportsbook offers.${route.id ? ' <a href="#trends">Show all games →</a>' : ''}</p>
+      <details class="card trend-method"><summary>How to read this</summary><p>100% means every recorded game in the displayed season sample cleared this exact threshold. It does not mean a 100% chance next game or good value at any price. We use the whole season, never a hand-picked winning streak. Unknown stats suppress a trend instead of counting as zero or disappearing from its denominator. “30+” includes exactly 30; “over 30” does not. Book injury/void rules can differ from statistical results.</p><p>Milestones show the highest standard threshold clearing each hit-rate bucket. No new paid data calls, no automatic picks, and no changes to the official record.</p></details>
+      ${cards ? `<div class="trend-grid">${cards}</div>${rows.length > 150 ? '<p class="row-meta">Showing the first 150. Narrow by stat, player or line type to see more.</p>' : ''}` : empty('No matching season trends', 'Try a lower hit rate, another stat or a smaller sample. Missing or old quotes are not filled in.')}`;
+  }
+
   async function viewMore() {
     const count = state.ticket.length;
     const link = (href, label, note) => `<a href="${href}"${href.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}><span>${label}</span><small>${note}</small></a>`;
     return `${head('More', '')}${communityCard()}
       <div class="card menu">${link('https://discord.gg/CvNTUUSnNz', 'Join the Discord', 'Confirmed plays early plus time-sensitive arb alerts')}${link('https://x.com/keenkooks', 'Follow on X', '@keenkooks')}${link('#lab', "Kook'n Lab", 'How every new sport earns its way onto the card')}${link('#arbs', "Kook'n Arb Radar", 'Discord alerts and public calculator')}${link('#model', 'The scoreboard', 'Our numbers graded against the closing line')}${link('#ticket', 'Your ticket', count ? `${count} line${count === 1 ? '' : 's'}` : 'Parlay builder')}
-      ${link('#research', 'Research desk', 'Injuries and analyst notes')}${link('#scores/MLB', 'All sports scores', 'NBA, WNBA, college hoops, MLB, NHL, Premier League and MLS')}</div>
+      ${link('#trends', 'Season trends', '70 / 80 / 90 / 100% historical lines')}${link('#research', 'Research desk', 'Injuries and analyst notes')}${link('#scores/MLB', 'All sports scores', 'NBA, WNBA, college hoops, MLB, NHL, Premier League and MLS')}</div>
       <div class="section card" style="padding:14px"><p class="prose" style="margin:0"><b>About.</b> Kook'n is a sports stats engine graded against the betting market. The model publishes score and player projections before kickoff, every forecast is kept, and the scoreboard grades them against the closing line. Stats come from ESPN’s public feeds and nflverse. For entertainment only; nothing here is betting advice.</p></div>`;
   }
 
@@ -1590,7 +1613,7 @@
 
   const VIEWS = { today: viewToday, games: viewGames, game: viewGame, stats: viewStats, player: viewPlayer, team: viewTeam,
     model: viewModel, record: viewRecord, board: viewBoard, ticket: viewTicket, research: viewResearch, scores: viewScores,
-    arbs: viewArbs, lab: viewLab, more: viewMore };
+    arbs: viewArbs, lab: viewLab, more: viewMore, trends: viewTrends };
   document.addEventListener('click', event => {
     const button = event.target.closest('[data-set^="boardMode:"]');
     if (button) { const mode = button.dataset.set.split(':')[1]; state.boardMode = mode; location.hash = mode === 'props' ? '#board/props' : '#board'; }

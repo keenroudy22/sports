@@ -129,6 +129,15 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Season Trends (2026-10-04):** the Board and game pages link to a full-season player threshold browser with
+  70/80/90/100% minimum-hit filters, stat/type/sample filters and player research links. Show exact hits/games,
+  regular-season recorded appearances only; unknown stats suppress the row rather than inflate its rate.
+  Main and alternate lines require captured prices no older than four hours; unpriced statistical milestones
+  are explicitly separate and are never sportsbook offers or picks. Use existing stores, with no new requests.
+  At least three recorded games on-site; at least five and a fresh public-book quote for social research.
+  Season trends get first consideration on even-numbered dates in the existing optional research slot,
+  with existing editorial priority on odd dates and trends as a fallback. At most one research post per date
+  across all families, including already queued posts. Nothing changes official selection or the record.
 - **No straight/parlay player stacking (2026-10-04):** block reuse of the same player in the same game across
   straight plays and any ticket, including the ladder, in either publication order. A different stat, side, book
   or alternate does not remove the shared exposure; expired quotes still count. Filter before ticket selection

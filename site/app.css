@@ -24,6 +24,24 @@
 }
 
 .board-tabs { display:flex; gap:6px; flex-wrap:wrap; margin:0 0 22px; }
+.trend-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr)); gap:14px; }
+.trend-card,.trend-controls,.trend-method { padding:18px; min-width:0; margin-bottom:14px; }
+.trend-top { display:flex; justify-content:space-between; gap:12px; align-items:center; }
+.trend-top a { display:flex; align-items:center; gap:8px; min-width:0; }
+.trend-photo { width:54px; height:54px; object-fit:contain; }
+.trend-rate { font-size:27px; font-weight:850; color:var(--mint); white-space:nowrap; }
+.trend-rate small { display:block; font-size:12px; color:var(--dim); text-align:right; }
+.trend-card h2 { font-size:26px; margin:16px 0 6px; overflow-wrap:anywhere; }
+.trend-card details { margin-top:16px; border-top:1px solid var(--line); padding-top:12px; }
+.trend-selects { display:flex; flex-wrap:wrap; gap:12px; margin:16px 0; }
+.trend-selects label { flex:1 1 140px; color:var(--dim); font-size:12px; }
+.trend-selects select { display:block; width:100%; margin-top:6px; }
+.trend-selects select,.trend-controls input { border:1px solid var(--line); border-radius:8px; background:#0a1822; color:#f5faff; padding:10px; font:inherit; min-height:42px; }
+.trend-controls input { width:100%; min-width:0; margin-top:12px; }
+.trend-log { display:flex; flex-wrap:wrap; gap:8px; }
+.trend-log span { border:1px solid var(--line); border-radius:8px; padding:8px; text-align:center; }
+.trend-log small,.trend-log b { display:block; }
+.trend-log small { font-size:11px; color:var(--dim); }
 .board-tabs a { padding:11px 15px; min-height:44px; border:1px solid var(--line); border-radius:999px; color:var(--dim); font-size:13px; font-weight:700; }
 .board-tabs a[aria-current] { background:var(--mint); color:#06251b; border-color:var(--mint); }
 .upcoming-card { margin:16px 0; padding:16px; }

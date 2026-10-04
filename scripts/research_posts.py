@@ -196,12 +196,51 @@ def scorer_candidate(games, details, now):
                                              *lines, '', 'Opportunity, not TD probability or an official play.', tags(shown)])}
 
 
+def season_candidate(games, details, now):
+    rows = []
+    for game in games:
+        for row in (details.get(game['id']) or {}).get('seasonTrends') or []:
+            if (row.get('kind') not in ('main', 'alternate') or row.get('games', 0) < 5
+                    or row.get('injuryStatus')
+                    or row.get('hits', 0) * 100 < row['games'] * 80 or row.get('book') not in PUBLIC_BOOKS
+                    or not current(row.get('observedAt'), now, timedelta(hours=4))):
+                continue
+            rows.append(row)
+    unique = []
+    used = set()
+    for row in sorted(rows, key=lambda r: (-r['hits'] / r['games'], -r['games'], r['player'])):
+        key = (row['league'], row['athleteId'])
+        if key not in used:
+            unique.append(row)
+            used.add(key)
+        if len(unique) == 3:
+            break
+    if not unique:
+        return None
+    shown = [{**r, 'title': r['player'], 'price': r['title'],
+              'metric': f"{r['hits']}/{r['games']} this season · {r['rate']:g}% historical",
+              'detail': f"{price(r['odds'])} {r['book']} · {r['season']} regular season"} for r in unique]
+    return {'kind': 'season', 'title': 'SEASON TRENDS', 'kicker': 'THE FULL SEASON · NOT A WIN PROBABILITY',
+            'accent': CYAN, 'rows': shown,
+            'text': '\n'.join(['📊 SEASON TRENDS', *[f"{r['player']}: {r['hits']}/{r['games']}" for r in unique],
+                               'Exact lines + prices on the graphic.', 'History, not a prediction or official play.',
+                               'keenroudy.com/sports/#trends', tags(unique)])}
+
+
+def already_posted(log_book, day):
+    return any(part.startswith('research:') and part.endswith(day.isoformat())
+               for key in (log_book.get('posts') or {}) for part in str(key).split('+'))
+
+
 def select(data, details, now, lines=None):
     games = slate_games(data, now)
     if not games:
         return None
-    chosen = (upset_candidate(games, now) or spread_dog_candidate(games, lines, now)
-              or matchup_candidate(games, details, now) or scorer_candidate(games, details, now))
+    season = season_candidate(games, details, now)
+    # Alternate days share the existing editorial slot; never add another daily post.
+    chosen = (season if eastern_date(now).day % 2 == 0 else None) or (
+        upset_candidate(games, now) or spread_dog_candidate(games, lines, now)
+        or matchup_candidate(games, details, now) or season or scorer_candidate(games, details, now))
     if not chosen:
         return None
     day = eastern_date(now)
@@ -221,6 +260,8 @@ def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES):
     if not choice:
         return None
     stale = min(at(choice['day'], POST_UNTIL), choice['firstKickoff'] - timedelta(minutes=45))
+    if choice['kind'] == 'season':
+        stale = min(stale, *(when(r['observedAt']) + timedelta(hours=4) for r in choice['rows']))
     if now >= stale:
         return None
     return {'key': f"research:{choice['kind']}:{choice['day'].isoformat()}", 'kind': 'research',

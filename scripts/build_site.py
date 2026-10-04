@@ -37,6 +37,7 @@ import odds_api
 import pricing
 import sharp_odds
 import research_views
+import season_trends
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -430,7 +431,7 @@ def pregame(snapshots, kickoff):
 
 
 def game_detail(card, game, record, snapshots, captures, lines, picks, names, team_logs, defense, injuries, depth_charts,
-                records, snap_players, now, grading, favorites=None):
+                records, snap_players, now, grading, favorites=None, trends=None):
     """snapshots: this game's pregame v2 snapshots, oldest first."""
     league = card['league']
     detail = dict(card)
@@ -483,6 +484,7 @@ def game_detail(card, game, record, snapshots, captures, lines, picks, names, te
     detail['lines'] = [l for l in lines if l.get('gameId') == card['id'] and not l.get('gameMarket')]
     detail['picks'] = [p for p in picks if p.get('gameId') == card['id']]
     detail['favoriteLines'] = favorites or []
+    detail['seasonTrends'] = trends or []
     detail['scorerResearch'] = research_views.scorer_research(game, final, records, names, now)
     detail['researchStatus'] = {'moneyline': 'Winner research only; moneyline value not calibrated.',
                                'teamTotals': 'Research trial only; no validated public team-total prices.',
@@ -730,6 +732,11 @@ def build(now=None):
             behind = row['league'] == 'NFL' and market_record.get('graded', 0) >= 30 and closeness[0] < closeness[1]
             if segment in paused or behind:
                 row['grade']['paused'] = True
+    trend_injuries = {league: {team: block.get('players', []) for team, block in
+                      ((context.get('leagues') or {}).get(league, {}).get('teams') or {}).items()}
+                      for league in ('NFL', 'CFB')}
+    trends = season_trends.build(window, league_data, lines, prop_prices, now, trend_injuries)
+    write(OUT / 'trends.json', {'generatedAt': stamp(now), 'rows': trends})
     gap_rows = market_read.load_rows()
     for game in sorted(window, key=lambda g: (g['kickoff'], g['id'])):
         snaps_for = pregame(forecasts.get(game['id'], []), game['kickoff'])
@@ -744,7 +751,8 @@ def build(now=None):
         write(OUT / 'games' / f"{game['id']}.json",
               game_detail(card, game, stored.get(game['id']), snaps_for, captures.get(game['id'], []), lines, picks,
                           names, info['team_logs'], info['defense'], injuries, depth_charts, info['records'],
-                          snap_players, now, grading, favorites))
+                          snap_players, now, grading, favorites,
+                          [r for r in trends if r['gameId'] == game['id']]))
     summary = {'live': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('live', [])],
                'backtest': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('backtest', [])],
                'picks': (scoreboard.get('picks') or {}).get('summary')}

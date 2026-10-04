@@ -572,7 +572,8 @@ def house_posts(first, latest, games, log_book, now):
         out.append(weekly)
     import research_posts
     research = research_posts.post(games, now)  # one stale-safe editorial research card at most
-    if research and research['stale'] > now:
+    research_already = research_posts.already_posted(log_book, eastern_date(now))
+    if research and research['stale'] > now and not research_already:
         out.append(research)
     return out
 

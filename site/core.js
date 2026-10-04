@@ -547,6 +547,7 @@
     if (view === 'player') return { view: 'player', league: (rest[0] || 'NFL').toUpperCase(), id: rest[1] };
     if (view === 'team') return { view: 'team', league: (rest[0] || 'NFL').toUpperCase(), id: rest[1] };
     if (view === 'game') return { view: 'game', id: rest.join('/') };
+    if (view === 'trends') return { view: 'trends', id: rest.join('/') };
     /* A shareable pick: the Today page with that pick's card open, so a post can link to the receipt. */
     if (view === 'pick' && rest.length) return { view: 'today', pick: rest.join('/') };
     if (view === 'stats') return { view: 'stats', tab: rest[0] || 'players' };
@@ -558,6 +559,17 @@
     if (known.includes(view)) return { view };
     return { view: LEGACY[view] || 'today' };
   };
+
+  const filterTrends = (rows, filters = {}, now = Date.now()) => rows.filter(r =>
+    r.games >= Number(filters.min || 3) && r.hits * 100 >= Number(filters.rate || 80) * r.games &&
+    (!filters.league || filters.league === 'ALL' || r.league === filters.league) &&
+    (!filters.stat || filters.stat === 'all' || r.stat === filters.stat) &&
+    (!filters.kind || filters.kind === 'all' || r.kind === filters.kind) &&
+    (filters.day !== 'today' || dayOf(r.kickoff) === dayOf(new Date(now).toISOString())) &&
+    (!filters.game || r.gameId === filters.game) && Date.parse(r.kickoff) > now &&
+    (r.kind === 'milestone' || (Date.parse(r.observedAt) <= now && now - Date.parse(r.observedAt) <= 4 * 3600000)) &&
+    `${r.player} ${r.team?.name || ''} ${r.matchup}`.toLowerCase().includes(String(filters.query || '').toLowerCase()))
+    .sort((a, b) => b.hits / b.games - a.hits / a.games || b.games - a.games || a.player.localeCompare(b.player));
 
   const shardOf = (id, shards) => Number(id) % shards;
 
@@ -572,7 +584,7 @@
     return parts.join(' · ') || 'On the website · social delivery not yet confirmed';
   };
 
-  return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText,
+  return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, filterTrends,
     column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
     unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, modelCaution, projectionScorecard, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };
