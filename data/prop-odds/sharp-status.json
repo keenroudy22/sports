@@ -1,14 +1,14 @@
 {
- "at": "2026-10-04T02:45:51Z",
+ "at": "2026-10-04T02:56:41Z",
  "confirmed": {
   "CFB-401856820": "2026-10-04T02:45:51Z",
-  "NFL-401872965": "2026-10-04T02:45:51Z",
-  "NFL-401872966": "2026-10-04T02:45:51Z",
-  "NFL-401872967": "2026-10-04T02:45:51Z",
-  "NFL-401872968": "2026-10-04T02:45:51Z",
-  "NFL-401872969": "2026-10-04T02:45:51Z",
-  "NFL-401872970": "2026-10-04T02:45:51Z",
-  "NFL-401872971": "2026-10-04T02:45:51Z",
+  "NFL-401872965": "2026-10-04T02:56:41Z",
+  "NFL-401872966": "2026-10-04T02:56:41Z",
+  "NFL-401872967": "2026-10-04T02:56:41Z",
+  "NFL-401872968": "2026-10-04T02:56:41Z",
+  "NFL-401872969": "2026-10-04T02:56:41Z",
+  "NFL-401872970": "2026-10-04T02:56:41Z",
+  "NFL-401872971": "2026-10-04T02:56:41Z",
   "NFL-401872972": "2026-10-04T02:45:51Z",
   "NFL-401872973": "2026-10-04T02:45:51Z",
   "NFL-401872974": "2026-10-04T02:45:51Z",
@@ -20,29 +20,13 @@
  },
  "leagues": {
   "CFB": {
-   "books": {
-    "draftkings": 70,
-    "fanduel": 258
-   },
+   "books": {},
    "eventsListed": 10,
-   "eventsMatched": 1,
+   "eventsMatched": 0,
    "games": 2,
-   "marketTypes": {
-    "player_longest_passing_completion": 2,
-    "player_longest_reception": 6,
-    "player_longest_rush": 4,
-    "player_passing_+_rushing_yards": 5,
-    "player_passing_attempts": 5,
-    "player_passing_completions": 3,
-    "player_passing_touchdowns": 11,
-    "player_passing_yards": 32,
-    "player_receiving_yards": 121,
-    "player_receptions": 7,
-    "player_rushing_attempts": 1,
-    "player_rushing_yards": 131
-   },
-   "requestsLeft": 57,
-   "rows": 328,
+   "marketTypes": {},
+   "requestsLeft": 14,
+   "rows": 0,
    "slateGames": [
     "Cincinnati Bearcats at Arizona Wildcats 2026-10-04T03:00Z",
     "San Jos\u00e9 State Spartans at Hawai'i Rainbow Warriors 2026-10-04T03:59Z"
@@ -57,6 +41,7 @@
       "betparx": "1027508085",
       "betrivers": "1027508085",
       "betway": "17283584",
+      "caesars": "89063176-6f20-4769-919d-b94a939ba388",
       "draftkings": "34708335",
       "fanduel": "36112825",
       "gemini": "NCAAF-2610040359-SJS-HAW-T",
@@ -103,13 +88,14 @@
        "halftime_fulltime",
        "moneyline",
        "most_points_player",
+       "outright",
        "player_passing_touchdowns",
        "player_passing_yards",
-       "player_points",
        "player_receiving_yards",
        "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
+       "race_to_10_points",
        "team_total",
        "team_total_points_odd_even",
        "total_points",
@@ -228,29 +214,7 @@
      "type": "fixture"
     },
     {
-     "away": "Georgia",
-     "external": {
-      "draftkings": "34226065",
-      "kalshi": "KXNCAAF1H-26OCT10UGAALA",
-      "onexbet": "757733239"
-     },
-     "home": "Alabama",
-     "sample": {
-      "away_team": "Georgia",
-      "home_team": "Alabama",
-      "markets": [
-       "1st_half_moneyline",
-       "moneyline",
-       "point_spread",
-       "team_total",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-10T17:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Texas",
+     "away": "Texas Longhorns",
      "external": {
       "draftkings": "34226071",
       "fanatics": "5276575",
@@ -266,10 +230,10 @@
       "sportzino": "sz-16634499",
       "sx_bet": "L19026294"
      },
-     "home": "Oklahoma",
+     "home": "Oklahoma Sooners",
      "sample": {
-      "away_team": "Texas",
-      "home_team": "Oklahoma",
+      "away_team": "Texas Longhorns",
+      "home_team": "Oklahoma Sooners",
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
@@ -290,7 +254,7 @@
       "fanatics_markets": "6370198",
       "fanduel": "36130161",
       "fliff": "416483_c_p_209_prematch",
-      "kalshi": "KXNCAAFTOTAL-26OCT10UCLAORE",
+      "kalshi": "KXNCAAFSPREAD-26OCT10UCLAORE",
       "novig": "01a0fe1b-56df-73a3-89fd-4fc145734f86",
       "onexbet": "757733242",
       "polymarket": "nfl_oregonducks_uclabruins_2026-10-10_b2",
@@ -336,9 +300,11 @@
       "away_team": "Georgia",
       "home_team": "Alabama",
       "markets": [
+       "1st_half_moneyline",
        "draw_no_bet",
        "moneyline",
        "point_spread",
+       "team_total",
        "total_points"
       ]
      },
@@ -387,43 +353,111 @@
      },
      "start": "2026-10-04T00:00:00Z",
      "type": "fixture"
+    },
+    {
+     "away": "Georgia Southern",
+     "external": {
+      "ballybet": "1027508009",
+      "betfair": "20261003DD462500",
+      "betfair_lay": "20261003DD462500",
+      "betmgm": "6:45372",
+      "betparx": "1027508009",
+      "betrivers": "1027508009",
+      "betway": "17283509",
+      "bwin": "6:45372",
+      "draftkings": "34708289",
+      "fanatics": "5216915",
+      "fanatics_markets": "6046453",
+      "fanduel": "36112797",
+      "fliff": "416273_c_p_309_inplay",
+      "gemini": "NCAAF-2610032300-GSU-CCU-M",
+      "goldrush": "31057395",
+      "hardrock": "3597728659684852102",
+      "kalshi": "KXNCAAFTOTAL-26OCT03GASOCCAR",
+      "novig": "01a0dae5-2f8c-7be3-ae29-39a6534b28a3",
+      "onexbet": "758407210",
+      "polymarket": "nfl_coastalcarolina_georgiasouthern_2026-10-03_b3",
+      "prophetx": "1700082115",
+      "rebet": "sr:match:70972256",
+      "robinhood": "c7e875de-ccca-4b44-af76-7b0ffeeff97a",
+      "smarkets": "45337033",
+      "sportzino": "sz-17861575",
+      "sx_bet": "L20331743",
+      "thescorebet": "StandardEvent:4d05e311-43c3-40af-b524-c0b83bb5cb15",
+      "thrillzz": "888227220"
+     },
+     "home": "Coastal Carolina",
+     "sample": {
+      "away_team": "Georgia Southern",
+      "home_team": "Coastal Carolina",
+      "markets": [
+       "total_points"
+      ]
+     },
+     "start": "2026-10-03T23:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Louisiana-Monroe",
+     "external": {
+      "ballybet": "1027634947",
+      "betmgm": "6:45461",
+      "betparx": "1027634947",
+      "betrivers": "1027634947",
+      "betway": "17283515",
+      "bwin": "6:45461",
+      "draftkings": "34708327",
+      "fanatics": "5216871",
+      "fanatics_markets": "6043893",
+      "fanduel": "36112801",
+      "fliff": "416183_c_p_309_inplay",
+      "gemini": "NCAAF-2610032000-ULM-USA-S",
+      "hardrock": "3713582000880353705",
+      "kalshi": "KXNCAAFTEAMTOTAL-26OCT03ULMUSA",
+      "novig": "01a0dae5-2e60-7ff1-8262-4acfc8d00090",
+      "onexbet": "758407393",
+      "polymarket": "nfl_southalabamajaguars_ulmonroewarhawks_2026-10-03_b3",
+      "prophetx": "1700082000",
+      "rebet": "sr:match:70898778",
+      "robinhood": "fe834e0f-1a99-4362-832f-8d520e77bdda",
+      "smarkets": "45339141",
+      "sportzino": "sz-17856413",
+      "sx_bet": "L20328918",
+      "thescorebet": "StandardEvent:ff10a9fc-7969-48e2-917f-fe72904e2169",
+      "thrillzz": "888226839"
+     },
+     "home": "South Alabama",
+     "sample": {
+      "away_team": "Louisiana-Monroe",
+      "home_team": "South Alabama",
+      "markets": [
+       "moneyline"
+      ]
+     },
+     "start": "2026-10-03T23:00:00Z",
+     "type": "fixture"
     }
    ]
   },
   "NFL": {
    "books": {
-    "draftkings": 4702,
-    "fanduel": 4766
+    "fanduel": 2144
    },
    "eventsListed": 32,
    "eventsMatched": 15,
    "games": 15,
    "marketTypes": {
-    "player_assists": 204,
-    "player_extra_points_made": 52,
-    "player_fantasy_score": 148,
-    "player_field_goals_made": 52,
-    "player_interceptions": 65,
-    "player_kicking_points": 52,
-    "player_longest_passing_completion": 60,
-    "player_longest_reception": 280,
-    "player_longest_rush": 130,
-    "player_passing_+_rushing_yards": 58,
-    "player_passing_attempts": 60,
-    "player_passing_completions": 60,
-    "player_passing_touchdowns": 202,
-    "player_passing_yards": 1158,
-    "player_receiving_yards": 3093,
-    "player_receptions": 1511,
-    "player_rushing_+_receiving_yards": 158,
-    "player_rushing_attempts": 110,
-    "player_rushing_yards": 1382,
-    "player_sacks": 225,
-    "player_tackles": 204,
-    "player_tackles_+_assists": 204
+    "player_interceptions": 5,
+    "player_passing_touchdowns": 67,
+    "player_passing_yards": 161,
+    "player_receiving_yards": 975,
+    "player_receptions": 493,
+    "player_rushing_+_receiving_yards": 28,
+    "player_rushing_yards": 370,
+    "player_sacks": 45
    },
    "requestsLeft": 0,
-   "rows": 9468,
+   "rows": 2144,
    "slateGames": [
     "Indianapolis Colts at Washington Commanders 2026-10-04T13:30Z",
     "Arizona Cardinals at New York Giants 2026-10-04T17:00Z",
@@ -455,7 +489,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-04T02:32:00Z",
+     "start": "2026-10-04T02:51:00Z",
      "type": "outright"
     },
     {
@@ -701,6 +735,7 @@
       "novig": "01a0ef14-20f7-7a82-82b0-6cbfef3a7653",
       "paddypower": "36132641",
       "robinhood": "b5e040eb-9547-4136-b709-51938698fdab",
+      "smarkets": "45210969",
       "stake": "a016d0ac-8671-4a65-839d-62152ee8f18b",
       "sx_bet": "L19431498"
      },
