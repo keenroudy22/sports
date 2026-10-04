@@ -228,8 +228,10 @@ def season_candidate(games, details, now):
 
 
 def already_posted(log_book, day):
+    posts = log_book.get('posts') or []
+    keys = posts if isinstance(posts, dict) else (row.get('id', '') for row in posts)
     return any(part.startswith('research:') and part.endswith(day.isoformat())
-               for key in (log_book.get('posts') or {}) for part in str(key).split('+'))
+               for key in keys for part in str(key).split('+'))
 
 
 def select(data, details, now, lines=None):

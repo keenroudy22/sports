@@ -6,7 +6,8 @@ goes out, and the code that makes it. Examples of the cards are in `docs/example
 and what gets saved is in `docs/X-NOTES.md`.
 
 The free Kook'n Sports Discord mirrors this feed. Confirmed official plays arrive about 10–15 minutes before X;
-other posts wait until Buffer confirms X delivery. A five-minute local job sends the same text and card once. The card is uploaded as
+other posts wait until Buffer confirms X delivery. A five-minute local job sends the same wager text and card once,
+but strips the X-only `@Playbook` mention. This also applies to previously queued, unsent Discord mirrors. The card is uploaded as
 a Discord attachment instead of a temporary external embed; recent receipt URLs remain live for eight days as a
 delivery fallback. A Discord failure retries
 and alerts ntfy; it never changes, advances or replaces the X post.
@@ -36,6 +37,8 @@ prevents duplicates, and the normal queue limits apply. These are updates, not p
   as its smaller 0.25u stake so it cannot be mistaken for a full-unit straight play.
 - **Every play and fun parlay ends on the ask** `❤️ if you're tailing` (a ladder rung: `❤️ if you're climbing`), then
   `@Playbook` (Action Network's betslip bot, which replies with the bet pre-loaded) and the league tag `#CFB` / `#NFL`.
+  The Playbook tag is only for **new plays on X**, including new parlay/Climb tickets. It is absent from Discord,
+  results, recaps, research, menus and other updates. Previously published posts are not rewritten.
 - **No links in play posts** (X shows linked posts to fewer people); the card carries keenroudy.com/sports. Cashed
   posts carry the original post's X link, which makes them quote it.
 

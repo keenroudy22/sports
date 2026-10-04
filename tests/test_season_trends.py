@@ -78,6 +78,7 @@ class SeasonTrendsTests(unittest.TestCase):
         self.assertIsNone(R.season_candidate([g], {'NFL-1': {'seasonTrends': rows}}, NOW))
 
     def test_one_editorial_per_day_across_families(self):
+        self.assertTrue(R.already_posted({'posts': [{'id': 'research:upset:2026-10-04'}]}, NOW.date()))
         self.assertTrue(R.already_posted({'posts': {'research:upset:2026-10-04': {}}}, NOW.date()))
         self.assertFalse(R.already_posted({'posts': {'research:season:2026-10-03': {}}}, NOW.date()))
 

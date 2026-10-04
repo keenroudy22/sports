@@ -34,6 +34,7 @@ import gates
 import pick_card
 import receipts
 import x_post
+from social_copy import without_playbook
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -390,6 +391,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
     """Create the planned posts in Buffer and record each in the log; a play whose card is not live yet is left
     for the next run, never posted bare. Returns the log."""
     for guid, kind, text, due, card_key in plans:
+        if kind != 'play':
+            text = without_playbook(text)
         image = None
         if card_key:
             url = card_url(card_key)
@@ -406,7 +409,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                  'textHash': x_post.text_hash(text), 'kind': f'buffer:{kind}', 'card': bool(image)}
         # Only entries scheduled after Discord mirroring was introduced carry this payload. That prevents enabling
         # the webhook from replaying the account's older X history into a new server.
-        entry['discord'] = {'state': 'pending', 'text': text}
+        entry['discord'] = {'state': 'pending', 'text': without_playbook(text)}
         if kind == 'play':
             # A confirmed play is the reason to join Discord. Schedule it first; the lightweight delivery job runs
             # every five minutes, so a 15-minute target gives members roughly 10-15 minutes before the X post.

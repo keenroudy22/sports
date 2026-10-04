@@ -256,6 +256,16 @@ class SpacingTests(unittest.TestCase):
 
 
 class ScheduleTests(unittest.TestCase):
+    def test_playbook_only_on_new_x_plays_never_discord(self):
+        fake = FakeBuffer()
+        plans = [(kind, kind, f'{kind}\n@Playbook #NFL', NOW + timedelta(hours=1), None)
+                 for kind in ('play', 'receipt', 'research', 'cashed', 'menu', 'conversation')]
+        result = bp.schedule(plans, 'ch-x', {'posts': []}, NOW, key='t', send=fake, log=lambda *_: None)
+        texts = [c['variables']['input']['text'] for c in fake.calls if 'createPost' in c['query']]
+        self.assertIn('@Playbook', texts[0])
+        self.assertTrue(all('@Playbook' not in t for t in texts[1:]))
+        self.assertTrue(all('@Playbook' not in p['discord']['text'] for p in result['posts']))
+
     def test_schedule_never_posts_a_play_without_its_card(self):
         fake = FakeBuffer()
         plans = [('a', 'play', 'text a', NOW + timedelta(hours=1), 'a'), ('b', 'play', 'text b', NOW + timedelta(hours=2), 'b')]

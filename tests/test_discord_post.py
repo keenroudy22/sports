@@ -12,6 +12,22 @@ NOW = datetime(2026, 9, 28, 16, 0, tzinfo=timezone.utc)
 
 
 class DiscordPostTests(unittest.TestCase):
+    def test_playbook_is_removed_at_delivery_even_for_an_old_pending_mirror(self):
+        text = 'Player over 4.5 (-110)\n\n@Playbook #NFL'
+        entry = {'id': 'play', 'sentAt': '2026-09-28T15:59:00Z',
+                 'discord': {'state': 'pending', 'text': text}}
+        sent = []
+        send = lambda url, body, headers: (sent.append(body) or (204, b''))
+        discord_post.mirror_sent({'posts': [entry]}, NOW, url='secret', send=send, log=lambda *_: None)
+        self.assertEqual(sent[0]['content'], 'Player over 4.5 (-110)\n\n#NFL')
+        self.assertEqual(entry['discord']['text'], text, 'do not rewrite the stored original')
+
+    def test_playbook_cleanup_keeps_other_tags_and_links(self):
+        from social_copy import without_playbook
+        self.assertEqual(without_playbook('@PLAYBOOK\n\nUpdate\n@Playbook #NFL'), 'Update\n#NFL')
+        self.assertEqual(without_playbook('Hi @Someone #NFL'), 'Hi @Someone #NFL')
+        self.assertEqual(without_playbook('@PlaybookExtra'), '@PlaybookExtra')
+
     def test_only_new_eligible_sent_posts_are_mirrored_once_with_the_same_card(self):
         sent = []
         log_book = {'posts': [

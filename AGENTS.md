@@ -129,6 +129,10 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Playbook tagging (2026-10-04):** tag `@Playbook` only on a new official play/ticket posted to X
+  so readers can get its play link. Never tag it on Discord, results, research, recaps, menus or updates.
+  Discord keeps the wager, odds, card and timing but removes the X-only mention, including pending older mirrors.
+  Do not delete or repost existing publications just to change the tag.
 - **Season Trends (2026-10-04):** the Board and game pages link to a full-season player threshold browser with
   70/80/90/100% minimum-hit filters, stat/type/sample filters and player research links. Show exact hits/games,
   regular-season recorded appearances only; unknown stats suppress the row rather than inflate its rate.
