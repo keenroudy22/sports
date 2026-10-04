@@ -1,0 +1,93 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-10-04T14:00:06Z",
+  "targetWeek": 4,
+  "summary": "10:00 AM ET run, published at 10:00 AM ET. Nothing to settle. Nothing to close. Published 1: Ladder step 1: 2 legs at FanDuel -173 at FanDuel. odds_api.py: CFB: skipped (1 captures already today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "parlays": [
+    {
+      "id": "NFL-2026-W4-ladder-1004-c2s1-fd",
+      "title": "Ladder step 1: 2 legs at FanDuel",
+      "status": "active",
+      "favorite": false,
+      "parlayType": "ladder",
+      "riskUnits": 0.25,
+      "ladder": {
+        "run": 2,
+        "step": 1,
+        "stake": 50,
+        "payout": 79,
+        "banked": 0,
+        "bankThisWin": 16,
+        "bankedAfter": 16,
+        "nextStake": 63,
+        "totalAfter": 79,
+        "bankPercent": 20,
+        "ridePercent": 80,
+        "start": 50,
+        "goal": 1000
+      },
+      "legs": [
+        {
+          "id": "ladder-NFL-401872974-4242512-passYds-124.5",
+          "title": "Malik Willis 125+ passing yards",
+          "gameId": "NFL-401872974",
+          "athleteId": "4242512",
+          "player": "Malik Willis",
+          "market": "passYds",
+          "direction": "over",
+          "line": 124.5,
+          "book": "FanDuel",
+          "odds": -440,
+          "chance": 0.942,
+          "implied": 0.815,
+          "projection": 247.6,
+          "kickoff": "2026-10-04T20:05Z",
+          "observedAt": "2026-10-04T12:31:53Z",
+          "marketWindow": "Full game",
+          "alternate": true
+        },
+        {
+          "id": "ladder-NFL-401872977-4887558-rushYds-29.5",
+          "title": "Emanuel Wilson 30+ rushing yards",
+          "gameId": "NFL-401872977",
+          "athleteId": "4887558",
+          "player": "Emanuel Wilson",
+          "market": "rushYds",
+          "direction": "over",
+          "line": 29.5,
+          "book": "FanDuel",
+          "odds": -350,
+          "chance": 0.865,
+          "implied": 0.778,
+          "projection": 74.5,
+          "kickoff": "2026-10-04T20:25Z",
+          "observedAt": "2026-10-04T12:31:53Z",
+          "marketWindow": "Full game",
+          "alternate": true
+        }
+      ],
+      "correlation": "One leg per game, so the book prices the ticket as the legs multiplied.",
+      "gameIds": [
+        "NFL-401872974",
+        "NFL-401872977"
+      ],
+      "book": "FanDuel",
+      "odds": -173,
+      "quotedAt": "2026-10-04T12:31:53Z",
+      "priceEstimated": true,
+      "expiresAt": "2026-10-04T15:45:00Z",
+      "quoteType": "capture",
+      "confidence": 1,
+      "edge": "For fun, not value: 2 protected lines our model agrees with (94% and 86% on the raw model numbers), at FanDuel's exact prices, multiplied to -173. $50 rides with $0 already banked. A win returns $79: $16 goes to the bank and $63 rides next. Bank 20, ride 80.",
+      "cutoff": "A ladder rung is not re-entered. It stands or falls as posted.",
+      "sources": [
+        "https://sharpapi.io/",
+        "https://www.espn.com/nfl/game/_/gameId/401872974",
+        "https://www.espn.com/nfl/game/_/gameId/401872977"
+      ],
+      "why": "Ladder step 1: two easier player lines at FanDuel, one per game, each one our projection clears comfortably. $50 rides with $0 banked. A win returns $79: bank $16 and ride $63 on the next step. Kept apart from the record, in dollars.",
+      "risk": "Both legs have to hit; one miss ends the climb, but it cannot take money already banked. Our player chances are tuned for main lines, so these legs are not value. This is the fun of the climb; the book's official settlement controls, and a person settles the rung."
+    }
+  ]
+}
