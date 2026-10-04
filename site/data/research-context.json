@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-04T15:12:51Z",
+  "updatedAt": "2026-10-04T15:17:53Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-04T14:24Z",
+              "reportedAt": "2026-10-04T15:05Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5757,6 +5757,15 @@
           "name": "Philadelphia Eagles",
           "players": [
             {
+              "id": "15797",
+              "name": "Lane Johnson",
+              "position": "OT",
+              "status": "Questionable",
+              "injury": "Personal",
+              "reportedAt": "2026-10-04T15:07Z",
+              "source": "https://www.espn.com/nfl/player/_/id/15797/lane-johnson"
+            },
+            {
               "id": "4241478",
               "name": "DeVonta Smith",
               "position": "WR",
@@ -5971,15 +5980,6 @@
               "injury": null,
               "reportedAt": "2026-09-26T00:26Z",
               "source": "https://www.espn.com/nfl/player/_/id/4602197/andrew-mukuba"
-            },
-            {
-              "id": "4685759",
-              "name": "Jalen Carter",
-              "position": "DT",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-26T00:22Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4685759/jalen-carter"
             }
           ]
         },
@@ -7149,7 +7149,7 @@
               "id": "2576980",
               "name": "Marcus Mariota",
               "position": "QB",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Knee",
               "reportedAt": "2026-10-04T14:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576980/marcus-mariota"
@@ -7365,14 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "19",
-          "name": "Tyrone Tracy Jr.",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-03T00:33:09Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4360516/tyrone-tracy-jr"
-        },
         {
           "teamId": "25",
           "name": "Trent Williams",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-04T14:32:05Z",
           "source": "https://www.espn.com/nfl/player/_/id/3929865/charles-omenihu"
+        },
+        {
+          "teamId": "28",
+          "name": "Marcus Mariota",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-04T15:17:53Z",
+          "source": "https://www.espn.com/nfl/player/_/id/2576980/marcus-mariota"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-04T15:12:51Z",
-      "lastAttemptAt": "2026-10-04T15:12:51Z",
+      "checkedAt": "2026-10-04T15:17:53Z",
+      "lastAttemptAt": "2026-10-04T15:17:53Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-04T15:12:51Z",
-      "lastAttemptAt": "2026-10-04T15:12:51Z",
+      "checkedAt": "2026-10-04T15:17:53Z",
+      "lastAttemptAt": "2026-10-04T15:17:53Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
