@@ -1,10 +1,10 @@
 {
- "at": "2026-10-04T03:15:45Z",
+ "at": "2026-10-04T03:21:20Z",
  "confirmed": {
-  "NFL-401872965": "2026-10-04T03:15:45Z",
-  "NFL-401872966": "2026-10-04T03:15:45Z",
-  "NFL-401872967": "2026-10-04T03:15:45Z",
-  "NFL-401872968": "2026-10-04T03:15:45Z",
+  "NFL-401872965": "2026-10-04T03:21:20Z",
+  "NFL-401872966": "2026-10-04T03:21:20Z",
+  "NFL-401872967": "2026-10-04T03:21:20Z",
+  "NFL-401872968": "2026-10-04T03:21:20Z",
   "NFL-401872969": "2026-10-04T03:01:54Z",
   "NFL-401872970": "2026-10-04T03:01:54Z",
   "NFL-401872971": "2026-10-04T03:01:54Z",
@@ -20,7 +20,7 @@
  "leagues": {
   "CFB": {
    "books": {},
-   "eventsListed": 7,
+   "eventsListed": 9,
    "eventsMatched": 0,
    "games": 1,
    "marketTypes": {},
@@ -112,6 +112,7 @@
      "external": {
       "betfair": "202610062198A91B",
       "betfair_lay": "202610062198A91B",
+      "betparx": "1027508027",
       "betrivers": "1027508027",
       "draftkings": "34745765",
       "fanatics_markets": "6034237",
@@ -143,6 +144,7 @@
       "ballybet": "1027508064",
       "betfair": "20261007C3C2727E",
       "betfair_lay": "20261007C3C2727E",
+      "betparx": "1027508064",
       "betrivers": "1027508064",
       "draftkings": "34745766",
       "fanatics": "5251990",
@@ -209,6 +211,24 @@
       ]
      },
      "start": "2026-10-07T23:30:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Georgia",
+     "external": {
+      "draftkings": "34226065"
+     },
+     "home": "Alabama",
+     "sample": {
+      "away_team": "Georgia",
+      "home_team": "Alabama",
+      "markets": [
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-10T16:00:00Z",
      "type": "fixture"
     },
     {
@@ -308,13 +328,50 @@
      },
      "start": "2026-10-10T23:30:00Z",
      "type": "fixture"
+    },
+    {
+     "away": "Arkansas State",
+     "external": {
+      "betfair": "202610030DA5A7E0",
+      "betfair_lay": "202610030DA5A7E0",
+      "betmgm": "6:45459",
+      "betrivers": "1027508094",
+      "betway": "17283574",
+      "bwin": "6:45459",
+      "draftkings": "34708293",
+      "fanatics": "5216869",
+      "fanatics_markets": "6046450",
+      "fanduel": "36112815",
+      "gemini": "NCAAF-2610040000-ARST-UL-S",
+      "hardrock": "8650697072850370983",
+      "kalshi": "KXNCAAFTEAMTOTAL-26OCT03ARSTULL",
+      "novig": "01a0db1c-25a3-7771-8c3a-52e64101cd10",
+      "polymarket": "nfl_arkansasstateredwolves_louisiana_2026-10-03_b3",
+      "prophetx": "1700082157",
+      "robinhood": "46b95910-633a-41db-8a67-fd524db4ccb9",
+      "smarkets": "45334463",
+      "sportzino": "sz-17861690",
+      "sx_bet": "L20331912",
+      "thescorebet": "StandardEvent:1e73fdfe-b61f-4573-b09c-46114e26353a",
+      "thrillzz": "888227253"
+     },
+     "home": "Louisiana",
+     "sample": {
+      "away_team": "Arkansas State",
+      "home_team": "Louisiana",
+      "markets": [
+       "total_points"
+      ]
+     },
+     "start": "2026-10-04T00:00:00Z",
+     "type": "fixture"
     }
    ]
   },
   "NFL": {
    "books": {
     "draftkings": 1234,
-    "fanduel": 1034
+    "fanduel": 1038
    },
    "eventsListed": 32,
    "eventsMatched": 15,
@@ -336,15 +393,15 @@
     "player_passing_yards": 291,
     "player_receiving_yards": 717,
     "player_receptions": 334,
-    "player_rushing_+_receiving_yards": 28,
+    "player_rushing_+_receiving_yards": 30,
     "player_rushing_attempts": 28,
-    "player_rushing_yards": 298,
+    "player_rushing_yards": 300,
     "player_sacks": 46,
     "player_tackles": 62,
     "player_tackles_+_assists": 62
    },
    "requestsLeft": 0,
-   "rows": 2268,
+   "rows": 2272,
    "slateGames": [
     "Indianapolis Colts at Washington Commanders 2026-10-04T13:30Z",
     "Arizona Cardinals at New York Giants 2026-10-04T17:00Z",
@@ -466,6 +523,7 @@
       "paddypower": "36132649",
       "rebet": "sr:match:71515892",
       "robinhood": "407d8d36-642c-4a69-81d4-ce13b5795e10",
+      "smarkets": "45211206",
       "stake": "4ae93e4b-e232-4d3d-9d26-8728a81a44b5",
       "sx_bet": "L19776762"
      },
@@ -593,6 +651,7 @@
       "novig": "01a0ef14-224d-79e1-b32a-ced8146c6ce1",
       "paddypower": "36132651",
       "robinhood": "02982b00-fd9c-4e92-840a-339b92db25cc",
+      "smarkets": "45210974",
       "stake": "5a3eb22a-828a-4aba-a5e8-092b683bd2bf",
       "sx_bet": "L19431509"
      },
