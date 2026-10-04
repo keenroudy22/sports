@@ -1,51 +1,49 @@
 {
- "at": "2026-10-04T01:59:01Z",
+ "at": "2026-10-04T02:45:51Z",
  "confirmed": {
-  "CFB-401856817": "2026-10-04T01:59:01Z",
-  "CFB-401856820": "2026-10-04T01:59:01Z",
-  "NFL-401872965": "2026-10-04T01:59:01Z",
-  "NFL-401872966": "2026-10-04T01:59:01Z",
-  "NFL-401872967": "2026-10-04T01:59:01Z",
-  "NFL-401872968": "2026-10-04T01:59:01Z",
-  "NFL-401872969": "2026-10-04T01:59:01Z",
-  "NFL-401872970": "2026-10-04T01:59:01Z",
-  "NFL-401872971": "2026-10-04T01:59:01Z",
-  "NFL-401872972": "2026-10-04T01:59:01Z",
-  "NFL-401872973": "2026-10-04T01:59:01Z",
-  "NFL-401872974": "2026-10-04T01:59:01Z",
-  "NFL-401872975": "2026-10-04T01:59:01Z",
-  "NFL-401872976": "2026-10-04T01:59:01Z",
-  "NFL-401872977": "2026-10-04T01:59:01Z",
-  "NFL-401872978": "2026-10-04T01:59:01Z",
-  "NFL-401872979": "2026-10-04T01:59:01Z"
+  "CFB-401856820": "2026-10-04T02:45:51Z",
+  "NFL-401872965": "2026-10-04T02:45:51Z",
+  "NFL-401872966": "2026-10-04T02:45:51Z",
+  "NFL-401872967": "2026-10-04T02:45:51Z",
+  "NFL-401872968": "2026-10-04T02:45:51Z",
+  "NFL-401872969": "2026-10-04T02:45:51Z",
+  "NFL-401872970": "2026-10-04T02:45:51Z",
+  "NFL-401872971": "2026-10-04T02:45:51Z",
+  "NFL-401872972": "2026-10-04T02:45:51Z",
+  "NFL-401872973": "2026-10-04T02:45:51Z",
+  "NFL-401872974": "2026-10-04T02:45:51Z",
+  "NFL-401872975": "2026-10-04T02:45:51Z",
+  "NFL-401872976": "2026-10-04T02:45:51Z",
+  "NFL-401872977": "2026-10-04T02:45:51Z",
+  "NFL-401872978": "2026-10-04T02:45:51Z",
+  "NFL-401872979": "2026-10-04T02:45:51Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 455,
-    "fanduel": 470
+    "draftkings": 70,
+    "fanduel": 258
    },
-   "eventsListed": 11,
-   "eventsMatched": 3,
-   "games": 4,
+   "eventsListed": 10,
+   "eventsMatched": 1,
+   "games": 2,
    "marketTypes": {
     "player_longest_passing_completion": 2,
-    "player_longest_reception": 13,
+    "player_longest_reception": 6,
     "player_longest_rush": 4,
-    "player_passing_attempts": 15,
-    "player_passing_completions": 13,
-    "player_passing_touchdowns": 33,
-    "player_passing_yards": 143,
-    "player_receiving_yards": 362,
-    "player_receptions": 75,
-    "player_rushing_attempts": 14,
-    "player_rushing_yards": 251
+    "player_passing_+_rushing_yards": 5,
+    "player_passing_attempts": 5,
+    "player_passing_completions": 3,
+    "player_passing_touchdowns": 11,
+    "player_passing_yards": 32,
+    "player_receiving_yards": 121,
+    "player_receptions": 7,
+    "player_rushing_attempts": 1,
+    "player_rushing_yards": 131
    },
-   "requestsLeft": 52,
-   "rows": 925,
+   "requestsLeft": 57,
+   "rows": 328,
    "slateGames": [
-    "Baylor Bears at Arizona State Sun Devils 2026-10-04T02:30Z",
-    "Texas State Bobcats at San Diego State Aztecs 2026-10-04T02:30Z",
     "Cincinnati Bearcats at Arizona Wildcats 2026-10-04T03:00Z",
     "San Jos\u00e9 State Spartans at Hawai'i Rainbow Warriors 2026-10-04T03:59Z"
    ],
@@ -129,6 +127,8 @@
      "external": {
       "betfair": "202610062198A91B",
       "betfair_lay": "202610062198A91B",
+      "betparx": "1027508027",
+      "betrivers": "1027508027",
       "draftkings": "34745765",
       "fanatics_markets": "6034237",
       "fanduel": "36130008",
@@ -158,6 +158,8 @@
       "ballybet": "1027508064",
       "betfair": "20261007C3C2727E",
       "betfair_lay": "20261007C3C2727E",
+      "betparx": "1027508064",
+      "betrivers": "1027508064",
       "draftkings": "34745766",
       "fanatics": "5251990",
       "fanduel": "36130031",
@@ -167,7 +169,9 @@
       "onexbet": "757741836",
       "polymarket": "nfl_jacksonvillestate_kennesawstate_2026-10-07_b3",
       "prophetx": "1700084008",
+      "rebet": "sr:match:70973330",
       "robinhood": "c7e0f60b-b2c6-4668-b301-bcaf18dfca69",
+      "smarkets": "45340790",
       "sportzino": "sz-17693215",
       "sx_bet": "L20365083",
       "thescorebet": "StandardEvent:d2e4e0f3-90bd-40d0-a23b-f251b0e82525"
@@ -177,6 +181,7 @@
       "away_team": "Jacksonville State",
       "home_team": "Kennesaw State",
       "markets": [
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -198,7 +203,9 @@
       "novig": "01a0ef82-8438-7101-8c66-0a5b820ee786",
       "polymarket": "nfl_floridainternational_newmexicostate_2026-10-07_b3",
       "prophetx": "1700085535",
+      "rebet": "sr:match:71187116",
       "robinhood": "81402cfd-4645-4ce9-ad37-0cea23aae3fe",
+      "smarkets": "45340760",
       "sportzino": "sz-17693214",
       "sx_bet": "L20390540"
      },
@@ -208,9 +215,13 @@
       "home_team": "Florida International",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-07T23:30:00Z",
@@ -220,7 +231,8 @@
      "away": "Georgia",
      "external": {
       "draftkings": "34226065",
-      "kalshi": "KXNCAAF1H-26OCT10UGAALA"
+      "kalshi": "KXNCAAF1H-26OCT10UGAALA",
+      "onexbet": "757733239"
      },
      "home": "Alabama",
      "sample": {
@@ -230,10 +242,11 @@
        "1st_half_moneyline",
        "moneyline",
        "point_spread",
+       "team_total",
        "total_points"
       ]
      },
-     "start": "2026-10-10T16:00:00Z",
+     "start": "2026-10-10T17:00:00Z",
      "type": "fixture"
     },
     {
@@ -247,7 +260,9 @@
       "novig": "01a0fe1b-536f-7df1-a7cb-793b01be4605",
       "onexbet": "757729930",
       "polymarket": "nfl_oklahomasooners_texaslonghorns_2026-10-10_b2",
-      "robinhood": "e08ff8ae-0a0d-4e48-bbd2-46e8dcf93ef9",
+      "rebet": "sr:match:70894844",
+      "robinhood": "eb843774-eec4-4c0d-8ee4-ae154461264e",
+      "smarkets": "45153303",
       "sportzino": "sz-16634499",
       "sx_bet": "L19026294"
      },
@@ -257,6 +272,7 @@
       "home_team": "Oklahoma",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -274,11 +290,12 @@
       "fanatics_markets": "6370198",
       "fanduel": "36130161",
       "fliff": "416483_c_p_209_prematch",
-      "kalshi": "KXNCAAFSPREAD-26OCT10UCLAORE",
+      "kalshi": "KXNCAAFTOTAL-26OCT10UCLAORE",
       "novig": "01a0fe1b-56df-73a3-89fd-4fc145734f86",
       "onexbet": "757733242",
       "polymarket": "nfl_oregonducks_uclabruins_2026-10-10_b2",
       "robinhood": "ec933964-d0fe-4c42-aca0-6458a032dbb5",
+      "smarkets": "45340824",
       "sportzino": "sz-17724250",
       "sx_bet": "L20343105"
      },
@@ -288,6 +305,7 @@
       "home_team": "Oregon",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -309,6 +327,7 @@
       "onexbet": "757733239",
       "polymarket": "nfl_alabamacrimsontide_georgiabulldogs_2026-10-10_b3",
       "robinhood": "96121e33-9f03-4e15-af97-8e461fbac376",
+      "smarkets": "45120541",
       "sportzino": "sz-16722004",
       "sx_bet": "L19120017"
      },
@@ -317,51 +336,94 @@
       "away_team": "Georgia",
       "home_team": "Alabama",
       "markets": [
+       "draw_no_bet",
        "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-10T23:30:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Arkansas",
+     "external": {
+      "ballybet": "1027508083",
+      "betmgm": "6:45465",
+      "betonline": "1745374",
+      "betparx": "1027508083",
+      "betrivers": "1027508083",
+      "betway": "17283519",
+      "bwin": "6:45465",
+      "draftkings": "34708328",
+      "fanatics": "5216877",
+      "fanatics_markets": "6044987",
+      "fanduel": "36112266",
+      "fliff": "416162_c_p_309_inplay",
+      "gemini": "NCAAF-2610032000-ARK-TAM-T",
+      "hardrock": "8105480042961830317",
+      "kalshi": "KXNCAAFTEAMTOTAL-26OCT03ARKTXAM",
+      "novig": "01a0dae5-2bd2-75f0-8b90-e41ac73cd500",
+      "onexbet": "758407182",
+      "pinnacle": "1637476567",
+      "polymarket": "nfl_arkansasrazorbacks_texasamaggies_2026-10-03_b3",
+      "prophetx": "1700081950",
+      "rebet": "sr:match:70900870",
+      "robinhood": "3526aa41-9030-4fb4-a0ea-71a74818518d",
+      "smarkets": "45334473",
+      "sportzino": "sz-17647638",
+      "thescorebet": "StandardEvent:5861d600-f16b-41cf-a11b-6fc13e618dd7",
+      "thrillzz": "888226733"
+     },
+     "home": "Texas A&m",
+     "sample": {
+      "away_team": "Arkansas",
+      "home_team": "Texas A&m",
+      "markets": [
        "point_spread",
        "team_total",
        "total_points"
       ]
      },
-     "start": "2026-10-10T23:30:00Z",
+     "start": "2026-10-04T00:00:00Z",
      "type": "fixture"
     }
    ]
   },
   "NFL": {
    "books": {
-    "draftkings": 2401,
-    "fanduel": 4922
+    "draftkings": 4702,
+    "fanduel": 4766
    },
    "eventsListed": 32,
    "eventsMatched": 15,
    "games": 15,
    "marketTypes": {
-    "player_assists": 100,
-    "player_extra_points_made": 28,
-    "player_fantasy_score": 68,
-    "player_field_goals_made": 28,
-    "player_interceptions": 33,
-    "player_kicking_points": 28,
-    "player_longest_passing_completion": 28,
-    "player_longest_reception": 130,
-    "player_longest_rush": 84,
-    "player_passing_+_rushing_yards": 28,
-    "player_passing_attempts": 28,
-    "player_passing_completions": 28,
-    "player_passing_touchdowns": 170,
-    "player_passing_yards": 740,
-    "player_receiving_yards": 2556,
-    "player_receptions": 1407,
-    "player_rushing_+_receiving_yards": 132,
-    "player_rushing_attempts": 72,
-    "player_rushing_yards": 1247,
-    "player_sacks": 188,
-    "player_tackles": 100,
-    "player_tackles_+_assists": 100
+    "player_assists": 204,
+    "player_extra_points_made": 52,
+    "player_fantasy_score": 148,
+    "player_field_goals_made": 52,
+    "player_interceptions": 65,
+    "player_kicking_points": 52,
+    "player_longest_passing_completion": 60,
+    "player_longest_reception": 280,
+    "player_longest_rush": 130,
+    "player_passing_+_rushing_yards": 58,
+    "player_passing_attempts": 60,
+    "player_passing_completions": 60,
+    "player_passing_touchdowns": 202,
+    "player_passing_yards": 1158,
+    "player_receiving_yards": 3093,
+    "player_receptions": 1511,
+    "player_rushing_+_receiving_yards": 158,
+    "player_rushing_attempts": 110,
+    "player_rushing_yards": 1382,
+    "player_sacks": 225,
+    "player_tackles": 204,
+    "player_tackles_+_assists": 204
    },
-   "requestsLeft": 6,
-   "rows": 7323,
+   "requestsLeft": 0,
+   "rows": 9468,
    "slateGames": [
     "Indianapolis Colts at Washington Commanders 2026-10-04T13:30Z",
     "Arizona Cardinals at New York Giants 2026-10-04T17:00Z",
@@ -393,7 +455,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-04T01:52:00Z",
+     "start": "2026-10-04T02:32:00Z",
      "type": "outright"
     },
     {
@@ -413,6 +475,7 @@
       "paddypower": "36132640",
       "rebet": "sr:match:71515872",
       "robinhood": "c9f4f582-a61d-40e6-a5bd-8b8ffc1ef745",
+      "smarkets": "45205273",
       "sportzino": "sz-16551851",
       "stake": "c426daaa-73e4-4cdd-a60f-d783dc726522",
       "sx_bet": "L19431887"
@@ -449,6 +512,7 @@
       "paddypower": "35605983",
       "rebet": "sr:match:71488624",
       "robinhood": "594e0246-f897-4943-8f95-1d3dfc177234",
+      "smarkets": "45076211",
       "stake": "450de216-bb43-4ab6-a942-1e3033de5e70",
       "sx_bet": "L18900782"
      },
@@ -512,6 +576,7 @@
       "novig": "01a0ef14-1f5c-7001-8758-435bb13ab5bd",
       "paddypower": "36132638",
       "robinhood": "ddbe8be1-305c-46b4-89fe-00d65c90e84b",
+      "smarkets": "45210968",
       "stake": "c1ed168d-103e-4c27-8b96-d320e5029176",
       "sx_bet": "L19431488"
      },
