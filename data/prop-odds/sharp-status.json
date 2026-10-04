@@ -1,8 +1,8 @@
 {
- "at": "2026-10-04T21:36:08Z",
+ "at": "2026-10-04T21:38:59Z",
  "confirmed": {
-  "NFL-401872978": "2026-10-04T21:36:08Z",
-  "NFL-401872979": "2026-10-04T21:36:08Z"
+  "NFL-401872978": "2026-10-04T21:38:59Z",
+  "NFL-401872979": "2026-10-04T21:38:59Z"
  },
  "leagues": {
   "NFL": {
@@ -10,7 +10,7 @@
     "draftkings": 573,
     "fanduel": 653
    },
-   "eventsListed": 4,
+   "eventsListed": 5,
    "eventsMatched": 2,
    "games": 2,
    "marketTypes": {
@@ -54,6 +54,7 @@
       "kalshi": "KXNFL1HTEAMTOTAL-26OCT08TBDAL",
       "matchbook": "mb-33321633672500023",
       "novig": "01a0ef14-1e69-7631-9389-bf88cf7969ce",
+      "paddypower": "36132640",
       "polymarket": "nfl_buccaneers_cowboys_2026-10-08_b3",
       "robinhood": "c9f4f582-a61d-40e6-a5bd-8b8ffc1ef745",
       "smarkets": "45205273",
@@ -73,6 +74,33 @@
       ]
      },
      "start": "2026-10-09T00:15:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Philadelphia Eagles",
+     "external": {
+      "fanatics_markets": "6541296",
+      "fanduel": "35605983",
+      "kalshi": "KXNFLSPREAD-26OCT11PHIJAC",
+      "matchbook": "mb-33272970854400023",
+      "novig": "01a0ef14-1ee3-7150-82ab-b40c515a5781",
+      "paddypower": "35605983",
+      "polymarket": "nfl_eagles_jaguars_2026-10-11_b1",
+      "robinhood": "594e0246-f897-4943-8f95-1d3dfc177234",
+      "sx_bet": "L18900782"
+     },
+     "home": "Jacksonville Jaguars",
+     "sample": {
+      "away_team": "Philadelphia Eagles",
+      "home_team": "Jacksonville Jaguars",
+      "markets": [
+       "moneyline",
+       "point_spread",
+       "team_total",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-11T13:30:00Z",
      "type": "fixture"
     },
     {
