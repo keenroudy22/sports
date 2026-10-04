@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-04T16:34:05Z",
+  "updatedAt": "2026-10-04T16:38:32Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-04T16:29Z",
+              "reportedAt": "2026-10-04T16:15Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5297,6 +5297,15 @@
           "name": "New York Giants",
           "players": [
             {
+              "id": "4362492",
+              "name": "Ar'Darius Washington",
+              "position": "S",
+              "status": "Out",
+              "injury": "Coach's Decision",
+              "reportedAt": "2026-10-04T16:32Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4362492/ardarius-washington"
+            },
+            {
               "id": "4590292",
               "name": "Thomas Fidone II",
               "position": "TE",
@@ -5322,15 +5331,6 @@
               "injury": "Coach's Decision",
               "reportedAt": "2026-10-04T15:37Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115914/jihad-ward"
-            },
-            {
-              "id": "4362492",
-              "name": "Ar'Darius Washington",
-              "position": "S",
-              "status": "Out",
-              "injury": "Coach's Decision",
-              "reportedAt": "2026-10-04T15:37Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4362492/ardarius-washington"
             },
             {
               "id": "4691043",
@@ -7137,19 +7137,28 @@
           "name": "Washington Commanders",
           "players": [
             {
+              "id": "2576980",
+              "name": "Marcus Mariota",
+              "position": "QB",
+              "status": "Out",
+              "injury": "Knee",
+              "reportedAt": "2026-10-04T16:28Z",
+              "source": "https://www.espn.com/nfl/player/_/id/2576980/marcus-mariota"
+            },
+            {
               "id": "4572460",
               "name": "Tyler Owens",
               "position": "S",
               "status": "Questionable",
               "injury": "Hamstring",
-              "reportedAt": "2026-10-04T16:26Z",
+              "reportedAt": "2026-10-04T16:27Z",
               "source": "https://www.espn.com/nfl/player/_/id/4572460/tyler-owens"
             },
             {
               "id": "4602667",
               "name": "Jaylin Lane",
               "position": "WR",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Ankle",
               "reportedAt": "2026-10-04T16:02Z",
               "source": "https://www.espn.com/nfl/player/_/id/4602667/jaylin-lane"
@@ -7171,15 +7180,6 @@
               "injury": "Groin",
               "reportedAt": "2026-10-04T15:20Z",
               "source": "https://www.espn.com/nfl/player/_/id/3929865/charles-omenihu"
-            },
-            {
-              "id": "2576980",
-              "name": "Marcus Mariota",
-              "position": "QB",
-              "status": "Out",
-              "injury": "Knee",
-              "reportedAt": "2026-10-04T15:12Z",
-              "source": "https://www.espn.com/nfl/player/_/id/2576980/marcus-mariota"
             },
             {
               "id": "4426948",
@@ -7365,14 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "2",
-          "name": "Ray Davis",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-04T15:48:58Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4429501/ray-davis"
-        },
         {
           "teamId": "2",
           "name": "Skyler Bell",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-10-04T16:10:48Z",
           "source": "https://www.espn.com/nfl/player/_/id/4912847/jacob-parrish"
+        },
+        {
+          "teamId": "28",
+          "name": "Jaylin Lane",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-04T16:38:32Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4602667/jaylin-lane"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-04T16:34:05Z",
-      "lastAttemptAt": "2026-10-04T16:34:05Z",
+      "checkedAt": "2026-10-04T16:38:32Z",
+      "lastAttemptAt": "2026-10-04T16:38:32Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-04T16:34:05Z",
-      "lastAttemptAt": "2026-10-04T16:34:05Z",
+      "checkedAt": "2026-10-04T16:38:32Z",
+      "lastAttemptAt": "2026-10-04T16:38:32Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
