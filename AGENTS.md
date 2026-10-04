@@ -14,7 +14,8 @@ may say otherwise.
 Three things run it, none of them an AI chat:
 1. **launchd on the owner's Mac Studio** runs `~/.config/keenroudy/run.sh` (copy: `deployment/mac/`): the desk run
    at 6:45, 8:30 and 11:45 AM, 5:30 and 11:30 PM Eastern (plus 2:45 PM Sunday and 6:50 PM Sunday, Monday, Thursday),
-   the pre-post check every 30 minutes, the Discord mirror every 5 minutes, the heartbeat at 7:15 AM, and the weekly review Monday 9:30 AM. The run settles and closes plays, builds the
+   an extra Climb settlement/qualification scan at 10:00 AM, 1:30, 4:00 and 8:00 PM, the pre-post check every 30
+   minutes, the Discord mirror every 5 minutes, the heartbeat at 7:15 AM, and the weekly review Monday 9:30 AM. The run settles and closes plays, builds the
    board, judges candidates through `scripts/gates.py`, publishes reports to `research/`, pushes, and schedules X
    posts in Buffer. Confirmed official plays reach Discord about 10-15 minutes before X; other post types mirror
    after Buffer confirms X. The same words and card use one incoming webhook; the card is uploaded as a durable
@@ -75,7 +76,7 @@ watch the runs, and fix what breaks.
 | The desk's own clone (the runs work here; do not edit by hand) | `~/Projects/sports` (branch `main`) |
 | Your working copy for changes | `~/Projects/sports-dev` (git worktree of the same repo, branch `dev`) |
 | Wrapper, settings, lock, drafts, failed reports | `~/.config/keenroudy/` (`run.sh`, `env`, `run.lock`, `x-drafts/`, `failed/`, `pending/`) |
-| launchd jobs | `~/Library/LaunchAgents/com.keenroudy.sports.{run,precheck,discord,heartbeat,review}.plist` (copies in `deployment/mac/`) |
+| launchd jobs | `~/Library/LaunchAgents/com.keenroudy.sports.{run,ladder,precheck,discord,heartbeat,review}.plist` (copies in `deployment/mac/`) |
 | Logs | `~/Library/Logs/KeenRoudy/` (`run-YYYY-MM-DD.log`, `launchd.*.log`, `ALERT.txt` when the heartbeat found a problem) |
 | Post log (every X post, Buffer id, tweet id, metrics) | `data/x-posted.json` |
 | Learning (what the desk learned, weekly) | `data/learning/` (`policy.json`, `REPORT.md`) |
@@ -141,8 +142,9 @@ Handy commands (from `~/Projects/sports`):
   snapshot, then append every movement and final settlement. Paper watches do not count as daily plays and open
   futures do not inflate the daily record. No scraping, paid call, invented price or automatic public future. The
   staged rollout and promotion gates are in `docs/FUTURES.md`.
-- **Automatic Climb result graphics (2026-10-03):** every winning 80/20 Climb rung gets a dedicated 1080x1350
-  advancement card; the goal-reaching rung gets the completion version. The ticket and result cards share one
+- **Autonomous Climb loop and result graphics (2026-10-03):** every settled 80/20 Climb rung gets a dedicated
+  1080x1350 result card: a win advances, a loss shows the protected bank and the next $50 restart, a push keeps the
+  same stake, and the goal-reaching rung gets the completion version. The ticket and result cards share one
   persistent path: completed steps have green checkmarks, the current/next step is outlined, future checkpoints are
   muted and the $1,000 flag stays visible. Never print guessed future returns or a promised step count. Keep only the
   actual wager, its legs, bank and next stake; schedule explanations and motivational filler do not belong on the
@@ -152,6 +154,10 @@ Handy commands (from `~/Projects/sports`):
   final remains eligible for 24 hours and the 6:45 AM run queues it for 9:05 AM, so an overnight result cannot miss
   the story. If a text-only advancement was already queued before settlement, the run safely replaces that future
   Buffer item with the same words plus the live card. Never create a duplicate post or change the rung's record.
+  One rung may be open at a time. After it settles, a later qualifying scan may publish the next rung or restart on
+  the same day; scans run at 10:00 AM, 1:30, 4:00 and 8:00 PM in addition to the regular desk. The owner gets a
+  private 6:45 AM phone agenda on football days and an exact-ticket phone alert with both release times whenever a
+  rung is scheduled. Discord gets the ticket about 10-15 minutes before X. No scan forces a rung or places a bet.
   Today and Record must use that same ledger state: name the most recent winning step as cashed, call the next step
   "being checked · not posted yet" until a real rung exists, and keep every completed rung's exact lines in a compact
   Past steps dropdown. The phone view must show this before the ordinary card.
@@ -164,8 +170,8 @@ Handy commands (from `~/Projects/sports`):
   Eight retired channels are in private HISTORY (owner-accessible, hidden from ordinary members), without
   deleting history. Rules, sportsbook promos and links remain accessible under RESOURCES. Verified with
   Discord's @everyone preview on Oct 2; the official feed remains read-only. The live webhook and arb fallback
-  both target plays-and-results. Saturday/Sunday are regular Climb check-in days, not guaranteed ticket days; weekdays are bonuses
-  only when qualifying legs exist. The existing run schedules a text status at/after 11:45 AM ET and before 2 PM
+  both target plays-and-results. Saturday/Sunday are regular public Climb check-in days, not guaranteed ticket days;
+  every day gets the private qualifying scans above. The existing run schedules a text status at/after 11:45 AM ET and before 2 PM
   through Buffer, mirrored to Discord after X. An actual same-day open ticket replaces the extra status. Each
   date is deduplicated and existing spacing/daily caps apply. Never lower thresholds to satisfy the calendar.
 - **Closer pre-post review (2026-10-02):** the existing half-hour job checks plays 15–45 minutes before X instead
@@ -271,8 +277,9 @@ Handy commands (from `~/Projects/sports`):
   the next rung, so a miss cannot take what was banked. Prefer two independently strong legs around -400 at one book,
   together -180 to -130, so protection does not make the climb take forever. Feed-priced player alternates and exact,
   freshly verified sportsbook alternate spreads/totals may mix, but every leg must agree with the model and stay in a
-  different game. One rung open at a time, one
-  a day, NFL legs until college player numbers are calibrated. Never force it on a one-game slate: the two legs stay
+  different game. One rung open at a time; after it settles, the next scheduled scan may advance or restart the
+  climb the same day. NFL player legs run now; college player legs wait until their own numbers are calibrated.
+  Never force it on a one-game slate: the two legs stay
   in different games. It must post; alternates
   are allowed and expected. A rung pulled before its X post still counts, win or lose; while ungraded it blocks the
   next rung, and after grading the climb moves from its result.

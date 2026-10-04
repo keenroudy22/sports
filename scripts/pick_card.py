@@ -625,6 +625,13 @@ def ladder_result_svg(pick, avatar=None):
         tiles = [('BANKED', dollars(banked)), (f'STEP {step}', dollars(stake))]
         completed, active = max(0, step - 1), step
 
+    actual = str(pick.get('actual') or '').lower()
+    if actual.startswith('legs:'):
+        leg_results = [part.strip() for part in actual.split(':', 1)[1].split(',')]
+    elif result == 'win':
+        leg_results = ['win'] * len(pick.get('legs') or [])
+    else:
+        leg_results = []
     leg_blocks = []
     for index, leg in enumerate((pick.get('legs') or [])[:2], 1):
         title = short_leg(str(leg.get('title') or 'Leg details unavailable'))
@@ -632,11 +639,13 @@ def ladder_result_svg(pick, avatar=None):
         if len(wrapped) > 2:
             wrapped = [wrapped[0], fit(' '.join(wrapped[1:]), 48)]
         y = 584 + (index - 1) * 120
-        mark = '✓' if result == 'win' else '•'
+        leg_result = leg_results[index - 1] if index <= len(leg_results) else result
+        mark = {'win': '✓', 'loss': '×', 'push': '–', 'void': '–'}.get(leg_result, '•')
+        leg_accent = {'win': '#5eeaa4', 'loss': '#ff7283', 'push': '#68c1ff', 'void': '#68c1ff'}.get(leg_result, accent)
         leg_blocks += [
-            f'<g data-zone="leg-{index}"><rect x="56" y="{y}" width="968" height="102" rx="20" fill="#102330" stroke="{accent}" stroke-opacity=".30" stroke-width="2"/>',
-            f'<circle cx="104" cy="{y + 55}" r="25" fill="{accent}" fill-opacity=".14" stroke="{accent}" stroke-width="3"/>',
-            f'<text x="104" y="{y + 65}" text-anchor="middle" fill="{accent}" font-size="31" font-weight="950">{mark}</text>',
+            f'<g data-zone="leg-{index}"><rect x="56" y="{y}" width="968" height="102" rx="20" fill="#102330" stroke="{leg_accent}" stroke-opacity=".30" stroke-width="2"/>',
+            f'<circle cx="104" cy="{y + 55}" r="25" fill="{leg_accent}" fill-opacity=".14" stroke="{leg_accent}" stroke-width="3"/>',
+            f'<text x="104" y="{y + 65}" text-anchor="middle" fill="{leg_accent}" font-size="31" font-weight="950">{mark}</text>',
         ]
         font = 31 if len(wrapped) == 1 else 27
         first_y = y + (65 if len(wrapped) == 1 else 45)

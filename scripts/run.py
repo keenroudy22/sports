@@ -52,7 +52,8 @@ CONF = Path(os.environ.get('KEENROUDY_CONF') or (Path.home() / '.config' / 'keen
 EASTERN = gates.EASTERN
 SLOT_TOLERANCE = timedelta(minutes=40)     # a run that fires this far from a slot still belongs to it
 PUBLISH_MARGIN = timedelta(minutes=5)      # nothing is published on a game this close to kickoff
-KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'favorite')
+KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'ladder', 'favorite')
+LADDER_SCAN_TIMES = ((10, 0), (13, 30), (16, 0), (20, 0))
 WHITELIST = ('research/', 'data/odds/', 'data/prop-odds/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
              'data/paper/', 'data/hoops/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json')
 BOOK_SLUG = {'DraftKings': 'dk', 'FanDuel': 'fd', 'BetMGM': 'mgm', 'Caesars': 'czr', 'BetRivers': 'br',
@@ -1721,6 +1722,8 @@ def _run(args, now, slot, kinds, status):
         easy_parlay_step(ctx, games, now, records, published, decided, screened, spend=not args.dry_run, exclude=exclude)
         if eastern_date(now).weekday() == 5:          # a college Saturday gets its alternate-line parlay too
             easy_parlay_step(ctx, games, now, records, published, decided, screened, exclude=exclude, league='CFB')
+    if 'ladder' in kinds:
+        exclude = longshot_exclusions(ctx, screened, [revision for _, _, revision in closed])
         manual_ladder = load_json(Path(args.ladder_spec), None) if args.ladder_spec else None
         ladder_step(ctx, games, now, records, published, decided, screened, exclude=exclude, manual=manual_ladder)
 
@@ -1770,6 +1773,7 @@ def _run(args, now, slot, kinds, status):
         # Posts are scheduled after the push: the push deploys the cards of anything just published, and a
         # post never goes out without its card.
         buffer_posts(now, ctx, games, closed, status, deploying=bool(git_result.get('pushed')))
+        owner_agenda(now, ctx, games)
         status['git']['posts'] = commit_log(now, push=not args.no_push)
     status.update(outcome='ok', finishedAt=stamp(datetime.now(timezone.utc)))
     write_status(status)
@@ -1895,6 +1899,8 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         buffer_post.schedule(plans, channel['id'], log_book, now, log=log)
         status['x']['posted'] = len(log_book.get('posts', [])) - before
         scheduled = {entry['id'] for entry in log_book.get('posts', [])[before:]}
+        for title, message in ladder_schedule_pings([p for p in plans if p[0] in scheduled], ctx, games):
+            alert(title, message, click='https://keenroudy.com/sports/#ladder')
         for title, message in lotto_pings([p for p in plans if p[0] in scheduled], ctx):
             alert(title, message, click=f'https://x.com/{receipts_handle()}', delay='5m')
         feature_scheduled(log_book, ctx, games, now)
@@ -1975,6 +1981,52 @@ def receipts_handle():
     return receipts.HANDLE
 
 
+def ladder_schedule_pings(plans, ctx, games):
+    """Private phone notice for every newly scheduled rung: the exact ticket and both public release times."""
+    out = []
+    for key, kind, _, due, _ in plans:
+        pick = dict(ctx.first.get(key) or {}, **ctx.latest.get(key, {}))
+        if kind != 'play' or pick.get('parlayType') != 'ladder':
+            continue
+        info = pick.get('ladder') or {}
+        starts = [gates.when(games[g]['kickoff']) for g in pick.get('gameIds') or [] if g in games]
+        lines = '\n'.join(f"• {leg.get('title')}" for leg in pick.get('legs') or [])
+        message = (f"{pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))} "
+                   f"({int(pick.get('odds')):+d}, {pick.get('book')})\n{lines}\n"
+                   f"Discord: about {et(due - timedelta(minutes=15))}\nX: {et(due)}"
+                   + (f"\nFirst kickoff: {et(min(starts))}" if starts else '')
+                   + "\nNo wager was placed automatically; use the listed line and price cutoff.")
+        out.append((f"80/20 Climb {info.get('run', 1)} Step {info.get('step', 1)} scheduled", message))
+    return out
+
+
+def owner_agenda(now, ctx, games):
+    """One private morning schedule on football days; exact rung details get a second alert when they qualify."""
+    local = now.astimezone(EASTERN)
+    if local.hour != 6:
+        return False
+    day = eastern_date(now)
+    slate = [g for g in games.values() if g.get('league') in ('NFL', 'CFB')
+             and eastern_date(gates.when(g.get('kickoff'))) == day]
+    if not slate:
+        return False
+    import ladder
+    where = ladder.state(ctx.first, ctx.latest)
+    if where['open']:
+        info = where['open'].get('ladder') or {}
+        climb = f"Climb {info.get('run', where['run'])} Step {info.get('step', where['step'])} is open; the next waits for its result."
+    else:
+        climb = (f"Climb {where['run']} Step {where['step']} is being checked—not posted yet. "
+                 f"{pick_card.dollars(where['stake'])} riding; {pick_card.dollars(where['banked'])} banked in this climb.")
+    regular = ', '.join(moment.strftime('%-I:%M %p') for moment in gates.scheduled(day))
+    extra = ', '.join(datetime(2000, 1, 1, hour, minute).strftime('%-I:%M %p') for hour, minute in LADDER_SCAN_TIMES)
+    message = (f"{len(slate)} football games today.\nRegular desk checks: {regular} ET.\n"
+               f"Extra Climb scans: {extra} ET.\n{climb}\n"
+               "A qualifying rung triggers another phone alert with its exact legs, cutoff, Discord time and X time. No forced rung.")
+    return alert(f"Kook'n schedule · {day:%a %b} {day.day}", message, priority='default', now=now,
+                 click='https://keenroudy.com/sports/')
+
+
 def lotto_pings(plans, ctx):
     """A fun parlay that hit is the post worth pinning (the owner pins the big ones by hand): (title, message) for each
     cashed parlay just scheduled. The ping lands five minutes later, when the cashed post is at the top of the profile."""
@@ -2046,11 +2098,12 @@ def pending_ladder_result_cards(log_book, ctx, now):
         if not entry.get('dueAt') or gates.when(entry['dueAt']) <= now + buffer_post.SOON:
             continue
         key = str(entry.get('id') or '')
-        pick_id = key[len('cashed:'):] if key.startswith('cashed:') else ''
+        pick_id = next((key[len(prefix):] for prefix in ('cashed:', 'ladder-loss:', 'ladder-push:', 'ladder-void:')
+                        if key.startswith(prefix)), '')
         if pick_id not in ctx.first:
             continue
         pick = dict(ctx.first[pick_id], **ctx.latest.get(pick_id, {}))
-        if pick_card.play_kind(pick) == 'ladder' and pick.get('result') == 'win':
+        if pick_card.play_kind(pick) == 'ladder' and pick.get('result') in ('win', 'loss', 'push', 'void'):
             out[key] = receipts.ladder_result_card_key(pick_id)
     return out
 
@@ -2454,7 +2507,7 @@ def precheck(args):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.split('\n')[0])
-    parser.add_argument('command', nargs='?', default='run', choices=('run', 'status', 'heartbeat', 'precheck', 'mirror'))
+    parser.add_argument('command', nargs='?', default='run', choices=('run', 'ladder', 'status', 'heartbeat', 'precheck', 'mirror'))
     parser.add_argument('--slot', help='force the run slot, HHMM Eastern')
     parser.add_argument('--now', help='pretend it is this UTC instant')
     parser.add_argument('--dry-run', action='store_true', help='no sync, capture, git; reports go to the pending folder')
@@ -2472,6 +2525,13 @@ def main(argv=None):
         return precheck(args)
     if args.command == 'mirror':
         return mirror(args)
+    if args.command == 'ladder':
+        # A lightweight extra scan: deterministic templates, settlement plus the Climb only. The ordinary free-feed
+        # guards still cap every capture, and the same run lock prevents overlap with the full desk.
+        moment = gates.when(args.now) if args.now else datetime.now(timezone.utc)
+        args.slot = moment.astimezone(EASTERN).strftime('%H%M')
+        args.no_llm = True
+        args.publish_kinds = 'settle,ladder'
     return run(args)
 
 

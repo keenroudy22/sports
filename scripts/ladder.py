@@ -15,8 +15,9 @@ found them too confident even there), so on easier lines they can say "clears co
 The market's own price carries most of the safety; our number has to agree with room to spare.
 
 The ladder's state is never stored. state() reads it from the published rungs and their results, so it can not
-drift from the record. One rung is open at a time and one rung is played a day (gates.ladder_one_rung); a rung
-pulled before its post still counts and is not replaced. A rung with a void leg is settled by a person
+drift from the record. One rung is open at a time. After it settles, the next scheduled scan may publish another
+qualifying rung—including a new $50 climb after a loss—but a rung is never forced. A rung pulled before its post
+still counts and is not replaced. A rung with a void leg is settled by a person
 (run.settle reports it), and the ladder waits for that.
 
 Prices: SharpAPI's DraftKings and FanDuel alternate player lines in data/prop-odds (scripts/sharp_odds.py), no
@@ -237,7 +238,8 @@ def ticket_pick(ticket, league, where, now, games):
             'bankPercent': int(BANK_RATE * 100), 'ridePercent': 100 - int(BANK_RATE * 100),
             'start': START, 'goal': GOAL}
     chances = ' and '.join(f"{100 * l['chance']:.0f}%" for l in ticket['legs'])
-    base = f"{league}-{first.get('season', day.year)}-W{first.get('week', 0)}-ladder-{day:%m%d}-{SLUGS[ticket['book']]}"
+    base = (f"{league}-{first.get('season', day.year)}-W{first.get('week', 0)}-ladder-{day:%m%d}-"
+            f"c{info['run']}s{info['step']}-{SLUGS[ticket['book']]}")
     sources = set(ticket.get('sources') or [])
     if ticket.get('quoteType', 'capture') == 'capture':
         sources.add(SOURCE)

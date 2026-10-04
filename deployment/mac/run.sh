@@ -7,6 +7,7 @@
 #   run.sh [run.py args]     run scripts/run.py in the repo with the sports environment
 #   run.sh precheck          the last look before a scheduled post (launchd, every 30 minutes)
 #   run.sh mirror            mirror a Buffer-confirmed X post to Discord (launchd, every 5 minutes)
+#   run.sh ladder            extra settlement/qualifying-rung scan (launchd, four times a day)
 set -euo pipefail
 
 export HOME=/Users/keen

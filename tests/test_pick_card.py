@@ -188,6 +188,11 @@ class CardTests(unittest.TestCase):
         self.assertIn('$50 → $1,000', finished)
         self.assertIn('NEXT CLIMB', finished)
 
+        missed = dict(rung, result='loss', actual='legs: win, loss')
+        missed_art = pick_card.ladder_result_svg(missed, avatar='')
+        for needle in ('STEP 2 MISSED', '$19 SAVED', 'NEXT CLIMB', '$50', '✓', '×'):
+            self.assertIn(needle, missed_art)
+
     def test_the_side_the_play_is_on_picks_the_palette(self):
         spread_away = pick_card.svg({'title': 'Iowa +7', 'marketType': 'spread', 'direction': 'away', 'odds': -110, 'book': 'DK'}, GAME)
         self.assertLess(spread_away.index('#231f20'), spread_away.index('#00274c'), "the away spread leads with Iowa's colour")

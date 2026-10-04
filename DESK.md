@@ -31,10 +31,11 @@ first quote and every move are append-only, and final grading follows the listed
 standings result. A paper watch is not an official play, an open future is not a pending daily play, and there is no
 new odds call or automated future yet. `docs/FUTURES.md` defines the rollout and public-promotion gates.
 
-### October 3 automatic Climb results
+### October 3 autonomous Climb loop and result cards
 
-A winning 80/20 Climb rung now produces its own result card in the hosted build. The open ticket and its result use
-the same simple path: every completed step gets a green check, the current or next step is outlined, anonymous future
+Every settled 80/20 Climb rung now produces its own result card in the hosted build. A win advances, a loss shows the
+protected bank and the next $50 restart, a push keeps the same stake, and a goal-reaching win completes the climb.
+The open ticket and its result use the same simple path: every completed step gets a green check, the current or next step is outlined, anonymous future
 checkpoints lead to the $1,000 flag, and no future return is guessed. The 1080x1350 layout keeps the actual wager,
 each rung leg, bank and next stake in fixed, separate zones; schedule copy and generic motivational lines stay off
 the image, and the chef remains in the header. A goal-reaching win says the climb is complete and that the next
@@ -49,6 +50,13 @@ publish twice. Exact manually supplied alternate spreads and totals keep their g
 from final scores; they do not wait for a person merely because they did not come from the normal feed builder. This
 adds no odds call, paid service or model use.
 
+One rung may be open at a time. Once it settles, a later qualifying scan may post the next rung or start the next
+climb the same day. The extra scans run daily at 10:00 AM, 1:30, 4:00 and 8:00 PM Eastern in addition to the regular
+desk runs. No scan lowers the gates or places a wager. On a football morning the 6:45 run sends the owner a private
+ntfy agenda with the day's check times and current Climb state. When a rung is actually scheduled, a second private
+alert gives the exact legs, price, stake, projected return, first kickoff, Discord release and X release so the owner
+can tail it before the public posts. Discord still leads X by about 10-15 minutes.
+
 The site reads the identical ledger state. After a win, the top Climb block says which step cashed and that the next
 step is being checked but is not posted yet; once a rung exists it says the step is live. A collapsed Past steps row
 keeps the exact completed lines, return and bank cut available on both Today and Record without making the phone page
@@ -61,11 +69,11 @@ existing webhook channel is renamed, not replaced, so delivery credentials and h
 channels become an archive; rules and disclosed sportsbook referral references remain linked from Start Here.
 The official feed remains read-only to members, while the community channels allow discussion.
 
-`receipts.climb_checkin` supplies a dated text-only Saturday/Sunday status to the existing Buffer pipeline from
+`receipts.climb_checkin` supplies a dated text-only Saturday/Sunday public status to the existing Buffer pipeline from
 11:45 AM until 2 PM ET. It reports the ledger-derived bank/ride and waiting state, never a candidate as a promise.
 If a same-day ladder ticket is open, that ticket is the check-in and no extra status is generated. Existing
 deduplication, 10-minute spacing and 20-post ceiling apply; Discord mirrors this house status after X. Weekday
-bonus tickets still need the same two-game/price/model checks. No new service, API call or model call is added.
+The daily private scans still need the same two-game/price/model checks. No paid service or model call is added.
 
 The existing half-hour pre-post job now considers posts 15–45 minutes before X rather than 15–150. This moves
 the single review closer to Discord release without adding a second research call. Existing source snapshots
@@ -154,7 +162,7 @@ never retroactively assigned today's probabilities. Existing public plays stay i
   like the NFL's, but a league's player chances publish only once learning has calibrated them against that league's
   own graded lines (`gates.OWN_CALIBRATION`, college until then; see "College player props" below).
 - **Longshots**: one a game day from `scripts/parlay.py`.
-- **The Kook'n 80/20 Climb**: one bankroll-ladder rung at a time from `scripts/ladder.py` (below), never while a rung is open, one a day.
+- **The Kook'n 80/20 Climb**: one bankroll-ladder rung at a time from `scripts/ladder.py` (below), never while a rung is open; after settlement, a later scan may advance or restart it the same day.
   Bank 20% of each winning return and ride 80%; never force a rung when fewer than two clean games are available.
   Pick of the Day is independent and may use any qualifying game, including the only game on a slate.
 - **Favorites**: only with a verified, sourced reason attached by the run. The web-reading researcher
@@ -383,7 +391,7 @@ gate to fill the calendar; if the day has nothing else, the public book closes t
 | After verified top-player news | **Injury angle**: at most two text-only posts a day. ESPN must list a top QB/RB/WR/TE out, doubtful or inactive; a newer projection must remove them and redistribute the work; and the teammate prop must have a real price captured after the news that still grades as a lean. Add the opponent's allowed-by-position stat when stored. Clearly say it is a board lean, not a posted play; it stays outside the record and never displaces a play or receipt |
 | As a win settles (9 AM to 12:30 AM, within three hours) | **Cashed**: "✅ Cashed: Iowa/Michigan over 38.5 (-105, ESPN BET)" (or "✅ POTD cashed: ...", "✅ +2506 5-leg lotto cashed (ESPN BET)"), and the original post quoted by its X link; text only. Losses are not singled out: the morning receipt lists every play, win or lose. The run feeds its own settlements forward (`run.absorb`), so the cashed post goes out from the run that settled it |
 | 10:00 AM college Saturday and NFL Sunday | **📌 SAVE THIS**: the week's projection sheet (`scripts/sheet.py`), one 1080x1350 image with the full NFL slate or 16 college games: logos, projected score, win chances, and our spread and total beside the exact captured line, price and book. Numbered mint rings identify up to four markets where our calibrated chance clears the price by the Board's value threshold and name the actual wager, such as **OVER 45.5** or **MINN +3.5**; the listed line/price is mint, not the model projection. Missing, stale, thin, paused and pass prices never get a ring; the rings are watches, not official plays. Never label a moneyline watch without both sides' captured book prices. The complete college slate stays on the site. Drawn by the hosted build (`feed.py`, `cards/sheet-<league>-<date>.png`), posted by the desk once the image is live, never after 11:45 AM. Not picks |
-| As a rung wins | **80/20 Climb cashed**: "$75 → $146", "$48 banked. $117 rides step 3."; at $1,000 total bank plus ride, "🪜 80/20 CLIMB COMPLETE", and the phone gets "80/20 Climb complete: pin it" |
+| As a rung settles | **80/20 Climb result**: a win says "$75 → $146" and "$48 banked. $117 rides step 3"; a loss names the leg results, protected bank and $50 restart; a push keeps the stake on the same step. At $1,000 total bank plus ride, "🪜 80/20 CLIMB COMPLETE", and the phone gets "80/20 Climb complete: pin it" |
 | 6:00 PM on a day with nothing else | **The book**: the season record, graded through yesterday and saying so ("Season through Sep 28"), so back-to-back quiet days never post the same words, which X refuses; with one kind of play only the season line (card `site/img/kitchen-book.png`) |
 
 **What works on X** (`learn.post_times`): the weekly learning report adds engagement per thousand views by kind of post
@@ -480,9 +488,10 @@ A win splits the payout in whole dollars, a miss starts a new climb at $50, and 
 finishes the climb. Money banked across prior climbs remains visible as saved. The state is never stored:
 `ladder.state` (and `site/core.js theLadder`) read it from the rungs and their
 results, so it cannot drift. A rung pulled before its X post still counts, win or lose; it is not replaced, and while
-ungraded it blocks the next rung. One rung open at a time, one played a day (`gates.ladder_one_rung`); NFL legs only
-until learning calibrates college player numbers (college has no injury feed either), then college too, from the 6:45
-AM run on. Because every rung uses one leg per game, a one-game slate gets no forced ladder. Pick of the Day remains
+ungraded it blocks the next rung. One rung is open at a time (`gates.ladder_one_rung`); after settlement, the next
+regular run or the 10:00 AM, 1:30, 4:00 or 8:00 PM Climb scan may publish another qualifying rung, including a new
+$50 climb after a loss. NFL legs run now; college player legs wait until learning calibrates college player numbers
+(college has no injury feed either). Because every rung uses one leg per game, a one-game slate gets no forced ladder. Pick of the Day remains
 independent and may come from any qualifying game. Same-day replacement under a new id (`gates.fresh_id`) is for a
 pulled lotto or easy parlay only.
 

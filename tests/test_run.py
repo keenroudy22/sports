@@ -775,6 +775,36 @@ class LockedUnitsTests(unittest.TestCase):
         self.assertIn('not calibrated price edges', game_rung['risk'])
         self.assertNotIn('player who does not take the field', game_rung['risk'])
 
+    def test_a_scheduled_rung_privately_tells_the_owner_the_ticket_and_release_times(self):
+        due = datetime(2026, 10, 4, 16, 0, tzinfo=timezone.utc)  # noon Eastern
+        ticket = {'id': 'NFL-ladder', 'parlayType': 'ladder', 'odds': -178, 'book': 'FanDuel',
+                  'gameIds': ['g1', 'g2'],
+                  'legs': [{'title': 'Saquon Barkley 40+ rushing yards'},
+                           {'title': 'Amon-Ra St. Brown 4+ receptions'}],
+                  'ladder': {'run': 2, 'step': 1, 'stake': 50, 'payout': 78}}
+        ctx = SimpleNamespace(first={ticket['id']: ticket}, latest={})
+        games = {'g1': {'kickoff': '2026-10-04T17:00:00Z'}, 'g2': {'kickoff': '2026-10-04T20:25:00Z'}}
+        [(title, message)] = run.ladder_schedule_pings(
+            [(ticket['id'], 'play', 'text', due, ticket['id'])], ctx, games)
+        self.assertEqual(title, '80/20 Climb 2 Step 1 scheduled')
+        for needle in ('$50 → $78 (-178, FanDuel)', 'Saquon Barkley 40+ rushing yards',
+                       'Discord: about 11:45 AM ET', 'X: 12:00 PM ET', 'First kickoff: 1:00 PM ET',
+                       'No wager was placed automatically'):
+            self.assertIn(needle, message)
+
+    def test_the_football_morning_agenda_lists_every_check_and_current_climb_state(self):
+        now = datetime(2026, 10, 4, 10, 45, tzinfo=timezone.utc)  # Sunday 6:45 AM Eastern
+        ctx = SimpleNamespace(first={}, latest={})
+        games = {'g1': {'league': 'NFL', 'kickoff': '2026-10-04T17:00:00Z'}}
+        sent = []
+        with mock.patch.object(run, 'alert', side_effect=lambda title, message, **kwargs: sent.append((title, message)) or True):
+            self.assertTrue(run.owner_agenda(now, ctx, games))
+        self.assertEqual(len(sent), 1)
+        self.assertIn('Regular desk checks: 6:45 AM', sent[0][1])
+        self.assertIn('Extra Climb scans: 10:00 AM, 1:30 PM, 4:00 PM, 8:00 PM ET', sent[0][1])
+        self.assertIn('Climb 1 Step 1 is being checked', sent[0][1])
+        self.assertIn('exact legs, cutoff, Discord time and X time', sent[0][1])
+
     def test_a_queued_text_only_ladder_advance_is_upgraded_when_its_card_arrives(self):
         now = datetime(2026, 10, 3, 10, 45, tzinfo=timezone.utc)
         pick = {'id': 'CFB-ladder', 'parlayType': 'ladder', 'result': 'win',

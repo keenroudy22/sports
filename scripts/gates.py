@@ -764,7 +764,8 @@ def longshot_one_per_day(candidate, ctx):
 
 def ladder_one_rung(candidate, ctx):
     """The ladder climbs one rung at a time: no new rung while one is ungraded, including a rung pulled before its
-    post, and one rung a day. A pulled rung counts and is never replaced."""
+    post. Once a rung settles, the next scheduled scan may advance or restart it the same day. A pulled rung counts
+    and is never replaced."""
     for key, pick in ctx.first.items():
         if key == candidate.get('id') or pick.get('parlayType') != 'ladder' or when(pick['publishedAt']) > ctx.now:
             continue
@@ -773,9 +774,7 @@ def ladder_one_rung(candidate, ctx):
             if pulled_before_post(key, ctx) or (not recent.get('entryNote') and (recent.get('status') or 'active') == 'active'):
                 return Decision(False, 'ladder_one_rung', f'{key} is still open; the next rung waits for its result')
             continue
-        if same_day(pick['publishedAt'], ctx.now):
-            return Decision(False, 'ladder_one_rung', f'{key} was already today\'s rung')
-    return Decision(True, 'ladder_one_rung', 'no rung open and none played today')
+    return Decision(True, 'ladder_one_rung', 'no rung is open')
 
 
 FROZEN = tuple(dict.fromkeys(integrity.PICK_FIELDS + ('legs', 'riskUnits', 'parlayType', 'ladder')))

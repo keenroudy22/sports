@@ -286,6 +286,23 @@ class LadderReceiptTests(unittest.TestCase):
         self.assertEqual(card['card'], post['card'])
         self.assertEqual(card['pick']['result'], 'win')
 
+    def test_a_ladder_loss_gets_its_own_short_honest_result_and_restart(self):
+        rung = pick('ladder', 'sun', **self.RUNG)
+        rung['id'] = 'NFL-2026-W4-ladder-loss'
+        first = {rung['id']: rung}
+        latest = {rung['id']: {'result': 'loss', 'actual': 'legs: win, loss',
+                               'settledAt': '2026-09-28T01:00:00Z'}}
+        log = {'posts': [{'id': rung['id'], 'kind': 'buffer:play', 'tweetId': '123'}]}
+        now = datetime(2026, 9, 28, 1, 15, tzinfo=timezone.utc)
+        [post] = receipts.cashed(first, latest, GAMES, log, now)
+        self.assertEqual(post['key'], 'ladder-loss:NFL-2026-W4-ladder-loss')
+        self.assertEqual(post['card'], 'ladder-result-NFL-2026-W4-ladder-loss')
+        self.assertIn('step 2 missed', post['text'])
+        self.assertIn('A 40+ rec yds ✅', post['text'])
+        self.assertIn('B 50+ rush yds ❌', post['text'])
+        self.assertIn('$19 stays banked. Climb 2 restarts at $50.', post['text'])
+        self.assertEqual(receipts.guard(post), [])
+
 
 class DailyTests(unittest.TestCase):
     def test_the_menu_names_the_games_and_times_never_the_side(self):

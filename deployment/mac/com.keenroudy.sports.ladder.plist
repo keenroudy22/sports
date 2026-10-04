@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Extra cached-data Climb scans. The command disables model prose, preserves every free-feed budget guard,
+     settles any finished rung, and publishes only a qualifying next rung. It never places a wager. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.keenroudy.sports.ladder</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/keen/.config/keenroudy/run.sh</string>
+    <string>ladder</string>
+  </array>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>TZ</key>
+    <string>America/New_York</string>
+  </dict>
+
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict><key>Hour</key><integer>10</integer><key>Minute</key><integer>0</integer></dict>
+    <dict><key>Hour</key><integer>13</integer><key>Minute</key><integer>30</integer></dict>
+    <dict><key>Hour</key><integer>16</integer><key>Minute</key><integer>0</integer></dict>
+    <dict><key>Hour</key><integer>20</integer><key>Minute</key><integer>0</integer></dict>
+  </array>
+
+  <key>RunAtLoad</key>
+  <false/>
+  <key>ProcessType</key>
+  <string>Background</string>
+  <key>StandardOutPath</key>
+  <string>/Users/keen/Library/Logs/KeenRoudy/launchd.ladder.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/keen/Library/Logs/KeenRoudy/launchd.ladder.log</string>
+</dict>
+</plist>

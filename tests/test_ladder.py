@@ -147,7 +147,7 @@ class BuildTests(unittest.TestCase):
     def test_the_rung_carries_the_climb_and_waits_while_one_is_open(self):
         pick, reason = ladder.candidate(ctx(), GAMES, NOW)
         self.assertIsNone(reason)
-        self.assertEqual(pick['id'], 'NFL-2026-W4-ladder-0927-dk')
+        self.assertEqual(pick['id'], 'NFL-2026-W4-ladder-0927-c1s1-dk')
         self.assertEqual((pick['parlayType'], pick['odds'], pick['book']), ('ladder', -178, 'DraftKings'))
         self.assertEqual(pick['ladder'], {'run': 1, 'step': 1, 'stake': 50, 'payout': 78, 'banked': 0,
                                           'bankThisWin': 16, 'bankedAfter': 16, 'nextStake': 62, 'totalAfter': 78,
@@ -196,7 +196,7 @@ class BuildTests(unittest.TestCase):
 
 
 class GateTests(unittest.TestCase):
-    def test_one_rung_open_at_a_time_and_one_played_a_day(self):
+    def test_one_rung_open_at_a_time_and_another_may_follow_after_settlement(self):
         pick, _ = ladder.candidate(ctx(), GAMES, NOW)
         self.assertEqual(gates.kind_of(pick), 'ladder')
         view = lambda first, latest: SimpleNamespace(first=first, latest=latest, now=NOW)
@@ -204,21 +204,23 @@ class GateTests(unittest.TestCase):
         first, latest = book_of(rung('open', '2026-09-26T12:30:00Z', 1, 50, 96))
         self.assertIn('still open', gates.ladder_one_rung(pick, view(first, latest)).reason)
         first, latest = book_of(rung('today', '2026-09-27T11:00:00Z', 1, 50, 96, 'win'))
-        self.assertIn("today's rung", gates.ladder_one_rung(pick, view(first, latest)).reason)
+        self.assertTrue(gates.ladder_one_rung(pick, view(first, latest)).ok,
+                        'after settlement a later scan may publish the next qualifying rung')
         first, latest = book_of(rung('pulled', '2026-09-27T11:00:00Z', 1, 50, 96,
                                      entryNote='Closed before its post went out: injury', status='expired'),
                                 rung('yesterday', '2026-09-26T11:00:00Z', 1, 50, 96, 'loss'))
         self.assertIn('still open', gates.ladder_one_rung(pick, view(first, latest)).reason,
                       'an ungraded pulled rung blocks the next one')
 
-    def test_a_pulled_rung_never_gets_a_replacement_id(self):
+    def test_a_graded_pulled_rung_advances_instead_of_being_replaced(self):
         first_pick, _ = ladder.candidate(ctx(), GAMES, NOW)
         pulled, recent = rung(first_pick['id'], '2026-09-27T10:45:06Z', 1, 50, 94, 'win',
                               entryNote='Closed before its post went out: injury')
         world = ctx()
         world.first[pulled['id']], world.latest[pulled['id']] = pulled, recent
         next_pick, _ = ladder.candidate(world, GAMES, NOW)
-        self.assertEqual(next_pick['id'], first_pick['id'], 'the fixed daily id is not changed to a replacement id')
+        self.assertNotEqual(next_pick['id'], first_pick['id'])
+        self.assertIn('-c1s2-', next_pick['id'], 'the original rung counted and the climb advanced to step 2')
 
 
 if __name__ == '__main__':

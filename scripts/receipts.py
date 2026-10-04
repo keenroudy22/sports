@@ -428,8 +428,9 @@ def ladder_result_cards(first, latest, now, days=CARD_HISTORY_DAYS):
 def cashed(first, latest, games, log_book, now):
     """A winning play that went out on X gets its own post when it settles: "✅ CASHED", the play and its price, and
     the original post quoted (its X link in the text shows the post under it). Ordinary wins stay text-only because
-    the quoted post carries the card. A Climb win carries its own advancement/completion graphic and remains eligible
-    through the next morning, so a late final cannot silently miss the continuing story. Losses are still handled by
+    the quoted post carries the card. Every Climb result is its own continuing-story post: a win advances it, a loss
+    shows what stayed banked and starts the next climb at $50, and a push keeps the rung open. The result card remains
+    eligible through the next morning, so a late final cannot silently miss the story. Ordinary losses still wait for
     the honest morning receipt."""
     local = now.astimezone(gates.EASTERN)
     minute = local.hour * 60 + local.minute
@@ -440,10 +441,11 @@ def cashed(first, latest, games, log_book, now):
         if entry.get('kind') != 'buffer:play' or not entry.get('tweetId') or entry.get('cancelledAt') or entry.get('deletedAt') or key not in first:
             continue
         pick = dict(first[key], **latest.get(key, {}))
-        if pick.get('result') != 'win' or not pick.get('settledAt'):
+        result = str(pick.get('result') or '').lower()
+        ladder = pick_card.play_kind(pick) == 'ladder'
+        if not pick.get('settledAt') or (result != 'win' and not ladder):
             continue
         settled_at = gates.when(pick['settledAt'])
-        ladder = pick_card.play_kind(pick) == 'ladder'
         fresh = LADDER_CASHED_FRESH if ladder else CASHED_FRESH
         if not now - fresh < settled_at <= now or (quiet and not ladder):
             continue
@@ -454,34 +456,55 @@ def cashed(first, latest, games, log_book, now):
         if parlay:
             head, what = f"✅ {int(pick['odds']):+d} {label(pick, games)} cashed ({pick.get('book')})", ''
         card = None
+        post_key = f'cashed:{key}'
         due = now
         if ladder:
-            head, what = ladder_cashed(pick)
+            head, what = ladder_result(pick)
             card = ladder_result_card_key(key)
+            if result != 'win':
+                post_key = f'ladder-{result}:{key}'
             if local.hour < LADDER_MORNING[0]:
                 due = at(eastern_date(now), LADDER_MORNING)
         league = str(key).split('-')[0]
         tag = x_post.TAGS.get(league, '')
         text = '\n'.join(x for x in (head, what, tag, f"https://x.com/{HANDLE}/status/{entry['tweetId']}") if x)
-        out.append({'key': f'cashed:{key}', 'kind': 'cashed', 'card': card, 'text': text, 'due': due,
+        out.append({'key': post_key, 'kind': 'cashed', 'card': card, 'text': text, 'due': due,
                     'stale': settled_at + fresh})
     return out
 
 
-def ladder_cashed(pick):
-    """(head, body) for a rung that won: the next step, or the top of the ladder."""
+def ladder_result(pick):
+    """(head, body) for one settled rung: advance, restart with the bank protected, or keep riding."""
     info = pick.get('ladder') or {}
+    result = str(pick.get('result') or 'win').lower()
     returned = int(info.get('payout') or 0)
     bank_this = int(info.get('bankThisWin') if info.get('bankThisWin') is not None else round(returned * 0.20))
     banked_after = int(info.get('bankedAfter') if info.get('bankedAfter') is not None else (info.get('banked') or 0) + bank_this)
     next_stake = int(info.get('nextStake') if info.get('nextStake') is not None else returned - bank_this)
     total = int(info.get('totalAfter') if info.get('totalAfter') is not None else banked_after + next_stake)
     stake, won = pick_card.dollars(info.get('stake')), pick_card.dollars(returned)
-    if total >= (info.get('goal') or 1000):
+    if result == 'win' and total >= (info.get('goal') or 1000):
         return (f"🪜 80/20 Climb complete: {pick_card.dollars(info.get('start', 50))} → {pick_card.dollars(total)} in {info.get('step', 1)} steps",
                 f"{pick_card.dollars(banked_after)} banked along the way.")
-    return (f"✅ 80/20 Climb step {info.get('step', 1)} cashed: {stake} → {won}",
-            f"{pick_card.dollars(banked_after)} banked. {pick_card.dollars(next_stake)} rides step {info.get('step', 1) + 1}.")
+    if result == 'win':
+        return (f"✅ 80/20 Climb step {info.get('step', 1)} cashed: {stake} → {won}",
+                f"{pick_card.dollars(banked_after)} banked. {pick_card.dollars(next_stake)} rides step {info.get('step', 1) + 1}.")
+    if result == 'loss':
+        marks = leg_results(pick)
+        legs = pick.get('legs') or []
+        lines = [f"{pick_card.short_leg(str(leg.get('title') or 'Leg'))} {MARKS.get(marks[index], '•')}"
+                 for index, leg in enumerate(legs) if index < len(marks)]
+        body = '\n'.join(lines + [f"{pick_card.dollars(info.get('banked', 0))} stays banked. Climb {int(info.get('run') or 1) + 1} restarts at "
+                                   f"{pick_card.dollars(info.get('start', 50))}.",
+                                   "That’s why we bank 20%: one miss can’t take it back."])
+        return f"❌ 80/20 Climb step {info.get('step', 1)} missed", body
+    return (f"➖ 80/20 Climb step {info.get('step', 1)} {result}",
+            f"{stake} rides the same step. {pick_card.dollars(info.get('banked', 0))} stays banked.")
+
+
+def ladder_cashed(pick):
+    """Compatibility name for callers and old tests; all rung outcomes now use ladder_result()."""
+    return ladder_result(pick)
 
 
 def with_menu(receipt, post, plays_today):
@@ -515,7 +538,8 @@ def climb_checkin(first, latest, games, now):
         body = f"Step {(opened.get('ladder') or {}).get('step', state['step'])} is still open. Next step waits for its result."
     else:
         body = f"Step {state['step']} is next, not scheduled yet. ${state['stake']} riding; ${state['banked']} banked."
-    text = head + '\n' + body + '\nWeekend check-ins; weekday bonus tickets only when two legs qualify. No forced step.'
+    text = head + '\n' + body + ('\nTicket scans: 10 AM, 1:30 PM, 4 PM and 8 PM ET, plus the regular desk runs.'
+                                 '\nDiscord gets a qualifying ticket first; X follows about 10-15 minutes later. No forced step.')
     return {'key': f'climb:checkin:{day.isoformat()}', 'kind': 'book', 'card': None,
             'text': text, 'due': now + timedelta(minutes=2), 'stale': at(day, (14, 0))}
 
