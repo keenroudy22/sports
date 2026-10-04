@@ -1,10 +1,10 @@
 {
- "at": "2026-10-04T03:33:04Z",
+ "at": "2026-10-04T03:36:15Z",
  "confirmed": {
-  "NFL-401872965": "2026-10-04T03:33:04Z",
-  "NFL-401872966": "2026-10-04T03:33:04Z",
-  "NFL-401872967": "2026-10-04T03:33:04Z",
-  "NFL-401872968": "2026-10-04T03:33:04Z",
+  "NFL-401872965": "2026-10-04T03:36:15Z",
+  "NFL-401872966": "2026-10-04T03:36:15Z",
+  "NFL-401872967": "2026-10-04T03:36:15Z",
+  "NFL-401872968": "2026-10-04T03:36:15Z",
   "NFL-401872969": "2026-10-04T03:01:54Z",
   "NFL-401872970": "2026-10-04T03:01:54Z",
   "NFL-401872971": "2026-10-04T03:01:54Z",
@@ -20,7 +20,7 @@
  "leagues": {
   "CFB": {
    "books": {},
-   "eventsListed": 10,
+   "eventsListed": 12,
    "eventsMatched": 0,
    "games": 1,
    "marketTypes": {},
@@ -191,7 +191,7 @@
       "polymarket": "nfl_floridainternational_newmexicostate_2026-10-07_b3",
       "prophetx": "1700085535",
       "rebet": "sr:match:71187116",
-      "robinhood": "81402cfd-4645-4ce9-ad37-0cea23aae3fe",
+      "robinhood": "6c38014a-59da-42cd-b82a-ad28cc2b7005",
       "smarkets": "45340760",
       "sportzino": "sz-17693214",
       "sx_bet": "L20390540"
@@ -235,6 +235,35 @@
       ]
      },
      "start": "2026-10-09T23:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Iowa State",
+     "external": {
+      "draftkings": "34745944",
+      "fanatics_markets": "6118894",
+      "fliff": "416969_c_p_209_prematch",
+      "kalshi": "KXNCAAFSPREAD-26OCT09ISUBYU",
+      "novig": "01a0fa75-17b7-7711-bcb2-70e18c3d0a9f",
+      "onexbet": "757741833",
+      "polymarket": "nfl_byucougars_iowastatecyclones_2026-10-09_b3",
+      "robinhood": "604da240-4e7c-4022-afc6-c021dc8d8f4c",
+      "sportzino": "sz-17714568",
+      "sx_bet": "L20378067"
+     },
+     "home": "BYU",
+     "sample": {
+      "away_team": "Iowa State",
+      "home_team": "BYU",
+      "markets": [
+       "1st_half_moneyline",
+       "moneyline",
+       "point_spread",
+       "team_total",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-10T02:15:00Z",
      "type": "fixture"
     },
     {
@@ -368,6 +397,48 @@
       "away_team": "Arkansas State",
       "home_team": "Louisiana",
       "markets": [
+       "total_points"
+      ]
+     },
+     "start": "2026-10-04T00:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Indiana",
+     "external": {
+      "ballybet": "1027508005",
+      "betonline": "1745040",
+      "betparx": "1027508005",
+      "betrivers": "1027508005",
+      "betway": "17283575",
+      "bwin": "6:45535",
+      "draftkings": "34708331",
+      "fanatics": "5218957",
+      "fanatics_markets": "5791817",
+      "fanduel": "36112271",
+      "fliff": "416159_c_p_309_inplay",
+      "gemini": "NCAAF-2610040000-IND-RUT-S",
+      "goldrush": "31068904",
+      "hardrock": "8730706334980374943",
+      "kalshi": "KXNCAAF4QSPREAD-26OCT03INDRUTG",
+      "novig": "01a0db1c-276c-7583-891b-424ed8a02da9",
+      "onexbet": "758419699",
+      "polymarket": "nfl_indianahoosiers_rutgersscarletknights_2026-10-03_b3",
+      "prophetx": "1700081946",
+      "rebet": "sr:match:70971306",
+      "robinhood": "724c6429-5fff-4a16-a2cc-f93b848e1b64",
+      "smarkets": "45334504",
+      "sportzino": "sz-17647646",
+      "thescorebet": "StandardEvent:673da8da-6d53-49f0-b418-2dc9259d3c08",
+      "thrillzz": "888226708",
+      "unibet": "3622513bc3a70262336ee7110c455058"
+     },
+     "home": "Rutgers",
+     "sample": {
+      "away_team": "Indiana",
+      "home_team": "Rutgers",
+      "markets": [
+       "point_spread",
        "total_points"
       ]
      },
