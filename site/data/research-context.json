@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-05T21:31:51Z",
+  "updatedAt": "2026-10-05T21:35:12Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -470,9 +470,9 @@
               "id": "2576581",
               "name": "Chris Moore",
               "position": "WR",
-              "status": "Out",
+              "status": "Active",
               "injury": "Ankle",
-              "reportedAt": "2026-10-05T21:06Z",
+              "reportedAt": "2026-10-05T21:33Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-05T21:23Z",
+              "reportedAt": "2026-10-05T21:32Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -4147,6 +4147,15 @@
           "name": "Los Angeles Rams",
           "players": [
             {
+              "id": "4710855",
+              "name": "Konata Mumpfield",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Shoulder",
+              "reportedAt": "2026-10-05T21:25Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4710855/konata-mumpfield"
+            },
+            {
               "id": "4697639",
               "name": "Jaylen Watson",
               "position": "CB",
@@ -4262,15 +4271,6 @@
               "injury": null,
               "reportedAt": "2026-10-04T20:37Z",
               "source": "https://www.espn.com/nfl/player/_/id/4430737/kyren-williams"
-            },
-            {
-              "id": "4710855",
-              "name": "Konata Mumpfield",
-              "position": "WR",
-              "status": "Active",
-              "injury": "Shoulder",
-              "reportedAt": "2026-10-04T19:06Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4710855/konata-mumpfield"
             },
             {
               "id": "4682983",
@@ -5990,9 +5990,9 @@
               "id": "4682980",
               "name": "Derrick Harmon",
               "position": "DT",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Foot",
-              "reportedAt": "2026-10-05T21:23Z",
+              "reportedAt": "2026-10-05T21:29Z",
               "source": "https://www.espn.com/nfl/player/_/id/4682980/derrick-harmon"
             },
             {
@@ -7367,30 +7367,6 @@
       "changes": [
         {
           "teamId": "15",
-          "name": "Marcellas Dial Jr.",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-05T20:08:46Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4875079/marcellas-dial-jr"
-        },
-        {
-          "teamId": "15",
-          "name": "Justin Joly",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-05T20:08:46Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4912052/justin-joly"
-        },
-        {
-          "teamId": "15",
-          "name": "DJ Campbell",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-05T20:08:46Z",
-          "source": "https://www.espn.com/nfl/player/_/id/5081977/dj-campbell"
-        },
-        {
-          "teamId": "15",
           "name": "Brady Cook",
           "from": "Out",
           "to": "Active",
@@ -7764,11 +7740,35 @@
           "to": "Out",
           "observedAt": "2026-10-05T21:31:51Z",
           "source": "https://www.espn.com/nfl/player/_/id/4429013/tank-bigsby"
+        },
+        {
+          "teamId": "33",
+          "name": "Chris Moore",
+          "from": "Out",
+          "to": "Active",
+          "observedAt": "2026-10-05T21:35:12Z",
+          "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
+        },
+        {
+          "teamId": "14",
+          "name": "Konata Mumpfield",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-05T21:35:12Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4710855/konata-mumpfield"
+        },
+        {
+          "teamId": "23",
+          "name": "Derrick Harmon",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-05T21:35:12Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4682980/derrick-harmon"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-05T21:31:51Z",
-      "lastAttemptAt": "2026-10-05T21:31:51Z",
+      "checkedAt": "2026-10-05T21:35:12Z",
+      "lastAttemptAt": "2026-10-05T21:35:12Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-05T21:31:51Z",
-      "lastAttemptAt": "2026-10-05T21:31:51Z",
+      "checkedAt": "2026-10-05T21:35:12Z",
+      "lastAttemptAt": "2026-10-05T21:35:12Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
