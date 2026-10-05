@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-05T16:39:37Z",
+  "updatedAt": "2026-10-05T16:57:03Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Out",
               "injury": "Ankle",
-              "reportedAt": "2026-10-05T16:27Z",
+              "reportedAt": "2026-10-05T16:41Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -1157,6 +1157,24 @@
           "name": "Chicago Bears",
           "players": [
             {
+              "id": "4361748",
+              "name": "Anthony Johnson Jr.",
+              "position": "S",
+              "status": "Out",
+              "injury": "Undisclosed",
+              "reportedAt": "2026-10-05T16:41Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+            },
+            {
+              "id": "15168",
+              "name": "Case Keenum",
+              "position": "QB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-05T16:38Z",
+              "source": "https://www.espn.com/nfl/player/_/id/15168/case-keenum"
+            },
+            {
               "id": "4431611",
               "name": "Caleb Williams",
               "position": "QB",
@@ -1164,15 +1182,6 @@
               "injury": "Hamstring",
               "reportedAt": "2026-10-05T16:30Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431611/caleb-williams"
-            },
-            {
-              "id": "4361748",
-              "name": "Anthony Johnson Jr.",
-              "position": "S",
-              "status": "Out",
-              "injury": "Undisclosed",
-              "reportedAt": "2026-10-05T16:27Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
               "id": "4434153",
@@ -1290,15 +1299,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-04T01:02Z",
               "source": "https://www.espn.com/nfl/player/_/id/4251007/braxton-jones"
-            },
-            {
-              "id": "15168",
-              "name": "Case Keenum",
-              "position": "QB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-03T00:44Z",
-              "source": "https://www.espn.com/nfl/player/_/id/15168/case-keenum"
             },
             {
               "id": "4954445",
@@ -3917,6 +3917,15 @@
           "name": "Los Angeles Chargers",
           "players": [
             {
+              "id": "4242283",
+              "name": "Rashawn Slater",
+              "position": "OT",
+              "status": "Doubtful",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-05T16:40Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4242283/rashawn-slater"
+            },
+            {
               "id": "4429025",
               "name": "Quentin Johnston",
               "position": "WR",
@@ -3987,15 +3996,6 @@
               "injury": "Concussion",
               "reportedAt": "2026-10-04T23:31Z",
               "source": "https://www.espn.com/nfl/player/_/id/4248627/trevor-penning"
-            },
-            {
-              "id": "4242283",
-              "name": "Rashawn Slater",
-              "position": "OT",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-04T23:28Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4242283/rashawn-slater"
             },
             {
               "id": "4612826",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "3",
-          "name": "Kyle Monangai",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-04T21:32:30Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4608686/kyle-monangai"
-        },
-        {
           "teamId": "4",
           "name": "Tee Higgins",
           "from": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-05T16:32:41Z",
           "source": "https://www.espn.com/nfl/player/_/id/4429005/braiden-mcgregor"
+        },
+        {
+          "teamId": "24",
+          "name": "Rashawn Slater",
+          "from": "Questionable",
+          "to": "Doubtful",
+          "observedAt": "2026-10-05T16:57:03Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4242283/rashawn-slater"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-05T16:39:37Z",
-      "lastAttemptAt": "2026-10-05T16:39:37Z",
+      "checkedAt": "2026-10-05T16:57:03Z",
+      "lastAttemptAt": "2026-10-05T16:57:03Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-05T16:39:37Z",
-      "lastAttemptAt": "2026-10-05T16:39:37Z",
+      "checkedAt": "2026-10-05T16:57:03Z",
+      "lastAttemptAt": "2026-10-05T16:57:03Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
