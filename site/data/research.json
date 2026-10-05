@@ -14742,5 +14742,208 @@
         "units": -0.25
       }
     ]
+  },
+  {
+    "league": "NFL",
+    "publishedAt": "2026-10-05T10:45:05Z",
+    "targetWeek": 4,
+    "summary": "6:45 AM ET run, published at 6:45 AM ET. Settled 2: Bhayshul Tuten UNDER 1.5 receptions loss; 5-leg longshot at FanDuel loss. Nothing to close. Nothing published. Screened and passed on 14: Vikings at Saints under 43.5 (lean_nothing_against); Falcons at Saints under 47.5 (not_duplicate); Drake London UNDER 5.5 receptions (prop_calibrated_value); Michael Penix Jr. UNDER 19.5 completions (one_book); Drake London UNDER 78.5 receiving yards (prop_calibrated_value); Tyler Shough OVER 16.5 rushing yards (prop_calibrated_value); Juwan Johnson OVER 3.5 receptions (prop_calibrated_value); Bijan Robinson OVER 87.5 rushing yards (prop_calibrated_value); and 6 more. odds_api.py: CFB: skipped (captured 2026-10-05T09:15:15Z, inside the gap) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "settled",
+        "favorite": false,
+        "modelLean": true,
+        "position": "RB",
+        "athleteId": "4882093",
+        "market": "rec",
+        "line": 1.5,
+        "direction": "under",
+        "gameIds": [
+          "NFL-401872969"
+        ],
+        "book": "DraftKings",
+        "odds": 112,
+        "projection": 0.9,
+        "edge": "Projection 0.9 against 1.5. Adjusted chance 52.3% (raw 67.4%, learned factor 0.13); 47.2% needed at +112: +5.1 percentage points. An estimate, not a guarantee.",
+        "cutoff": "UNDER 1.5 at +112 or better. Closed to new entries at 1 or lower, or at -103 or worse at 1.5.",
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-10-02T20:57:11Z",
+        "quotedAt": "2026-10-03T20:01:35Z",
+        "quoteType": "capture",
+        "quoteNote": "DraftKings's number and price from the 4:01 PM ET capture across 2 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-10-04T03:30:00Z",
+        "probabilityAtPublication": {
+          "rawChance": 0.674,
+          "chance": 0.523,
+          "calibrated": true,
+          "calibration": 0.13,
+          "calibrationN": 538,
+          "push": 0.0,
+          "breakEven": 0.472,
+          "edgePoints": 5.1,
+          "evPerUnit": 0.108,
+          "snapshotAt": "2026-10-02T20:57:11Z",
+          "evaluatedAt": "2026-10-03T21:30:05Z"
+        },
+        "title": "Bhayshul Tuten UNDER 1.5 receptions",
+        "id": "NFL-2026-W4-tuten-under-1-5-rec-dk",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401872969",
+          "https://api.sharpapi.io/api/v1/odds"
+        ],
+        "why": "Prop lean: our projection is 0.9 against 1.5. The under reads 52.3% after adjustment from the raw 67.4%; 47.2% is needed at +112. Last 10 games: 8 of 10 under 1.5. Role: 1st of 3 JAX RBs by projected targets, 1.2 a game. Defense: CIN allows 6 receptions a game to RBs, 31 of 32 this season (1 is stingiest).",
+        "risk": "An estimated chance, not a guarantee; a player line turns on a handful of touches. 3 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies. Confidence 2 of 10.",
+        "result": "loss",
+        "actual": "Bhayshul Tuten: 2 receptions",
+        "settledAt": "2026-10-05T10:45:05Z",
+        "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401872969",
+        "actualValue": 2,
+        "settlementReason": "Bhayshul Tuten was injured in the third quarter against the Bengals, hobbled off after a four-yard run, and returned to the game a short time later. Postgame injury review found no confirmed different DraftKings settlement by 1:00 AM ET; graded from the official stats and subject to a later dated correction.",
+        "settlementReviewSources": [
+          "https://sports.yahoo.com/articles/jaguars-running-back-bhayshul-tuten-190253811.html"
+        ],
+        "injuryPlayers": [
+          "Bhayshul Tuten"
+        ],
+        "units": -1
+      }
+    ],
+    "parlays": [
+      {
+        "id": "NFL-2026-W4-longshot-1004-fd-2",
+        "title": "5-leg longshot at FanDuel",
+        "status": "settled",
+        "favorite": false,
+        "parlayType": "longshot",
+        "riskUnits": 0.25,
+        "legs": [
+          {
+            "id": "game-NFL-401872968-over",
+            "title": "Packers at Buccaneers over 38.5",
+            "gameId": "NFL-401872968",
+            "market": "total points",
+            "side": "over",
+            "line": 38.5,
+            "odds": -114,
+            "book": "FanDuel",
+            "chance": 0.594,
+            "kickoff": "2026-10-04T17:00Z",
+            "observedAt": "2026-10-04T14:00:07Z",
+            "marketWindow": "Full game",
+            "alternate": false
+          },
+          {
+            "id": "game-NFL-401872971-under",
+            "title": "Patriots at Bills under 49.5",
+            "gameId": "NFL-401872971",
+            "market": "total points",
+            "side": "under",
+            "line": 49.5,
+            "odds": -110,
+            "book": "FanDuel",
+            "chance": 0.549,
+            "kickoff": "2026-10-04T17:00Z",
+            "observedAt": "2026-10-04T14:00:07Z",
+            "marketWindow": "Full game",
+            "alternate": false
+          },
+          {
+            "id": "ladder-NFL-401872974-4242512-passYds-124.5",
+            "title": "Malik Willis 125+ passing yards",
+            "gameId": "NFL-401872974",
+            "athleteId": "4242512",
+            "player": "Malik Willis",
+            "market": "passYds",
+            "direction": "over",
+            "line": 124.5,
+            "book": "FanDuel",
+            "odds": -440,
+            "chance": 0.942,
+            "implied": 0.815,
+            "projection": 247.6,
+            "kickoff": "2026-10-04T20:05Z",
+            "observedAt": "2026-10-04T15:30:48Z",
+            "marketWindow": "Full game",
+            "alternate": true,
+            "league": "NFL"
+          },
+          {
+            "id": "ladder-NFL-401872977-4887558-rushYds-29.5",
+            "title": "Emanuel Wilson 30+ rushing yards",
+            "gameId": "NFL-401872977",
+            "athleteId": "4887558",
+            "player": "Emanuel Wilson",
+            "market": "rushYds",
+            "direction": "over",
+            "line": 29.5,
+            "book": "FanDuel",
+            "odds": -360,
+            "chance": 0.865,
+            "implied": 0.783,
+            "projection": 74.5,
+            "kickoff": "2026-10-04T20:25Z",
+            "observedAt": "2026-10-04T15:30:48Z",
+            "marketWindow": "Full game",
+            "alternate": true,
+            "league": "NFL"
+          },
+          {
+            "id": "ladder-NFL-401872978-3046779-passYds-199.5",
+            "title": "Jared Goff 200+ passing yards",
+            "gameId": "NFL-401872978",
+            "athleteId": "3046779",
+            "player": "Jared Goff",
+            "market": "passYds",
+            "direction": "over",
+            "line": 199.5,
+            "book": "FanDuel",
+            "odds": -470,
+            "chance": 0.885,
+            "implied": 0.825,
+            "projection": 293.8,
+            "kickoff": "2026-10-05T00:20Z",
+            "observedAt": "2026-10-04T15:30:48Z",
+            "marketWindow": "Full game",
+            "alternate": true,
+            "league": "NFL"
+          }
+        ],
+        "correlation": "One leg per game, so the ticket treats the legs as independent; its chance is their product.",
+        "gameIds": [
+          "NFL-401872968",
+          "NFL-401872971",
+          "NFL-401872974",
+          "NFL-401872977",
+          "NFL-401872978"
+        ],
+        "book": "FanDuel",
+        "odds": 582,
+        "quotedAt": "2026-10-04T14:00:07Z",
+        "quoteType": "capture",
+        "confidence": 1,
+        "priceEstimated": true,
+        "expiresAt": "2026-10-04T17:00:00Z",
+        "edge": "Estimated combined price from captured leg odds; verify the sportsbook's ticket price. Our chance 23.5% against 14.7% break-even at +582: +0.603u per unit staked, 0.25u at risk.",
+        "cutoff": "A longshot is not re-entered. It stands or falls as posted.",
+        "sources": [
+          "https://sharpapi.io/",
+          "https://www.espn.com/nfl/game/_/gameId/401872968",
+          "https://www.espn.com/nfl/game/_/gameId/401872971",
+          "https://www.espn.com/nfl/game/_/gameId/401872974",
+          "https://www.espn.com/nfl/game/_/gameId/401872977",
+          "https://www.espn.com/nfl/game/_/gameId/401872978"
+        ],
+        "why": "Longshot from the board and feed-priced alternates: 5 legs at FanDuel, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.",
+        "risk": "Most longshots lose. The legs are treated as independent; any one miss sinks the ticket. Confidence 1 of 10.",
+        "result": "loss",
+        "actual": "legs: loss, loss, loss, win, win",
+        "settledAt": "2026-10-05T10:45:05Z",
+        "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401872968",
+        "settlementReason": "One leg lost; the ticket loses.",
+        "units": -0.25
+      }
+    ]
   }
 ]
