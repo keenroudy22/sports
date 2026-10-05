@@ -1,8 +1,8 @@
 {
- "at": "2026-10-05T16:57:50Z",
+ "at": "2026-10-05T17:11:10Z",
  "confirmed": {
-  "CFB-401871090": "2026-10-05T16:57:50Z",
-  "NFL-401872979": "2026-10-05T16:57:50Z"
+  "CFB-401871090": "2026-10-05T17:11:10Z",
+  "NFL-401872979": "2026-10-05T17:11:10Z"
  },
  "leagues": {
   "CFB": {
@@ -896,7 +896,7 @@
   },
   "NFL": {
    "books": {
-    "draftkings": 290,
+    "draftkings": 291,
     "fanduel": 359
    },
    "eventsListed": 17,
@@ -920,14 +920,14 @@
     "player_receiving_yards": 218,
     "player_receptions": 119,
     "player_rushing_+_receiving_yards": 8,
-    "player_rushing_attempts": 6,
-    "player_rushing_yards": 99,
+    "player_rushing_attempts": 8,
+    "player_rushing_yards": 98,
     "player_sacks": 11,
     "player_tackles": 6,
     "player_tackles_+_assists": 6
    },
    "requestsLeft": 10,
-   "rows": 649,
+   "rows": 650,
    "slateGames": [
     "Atlanta Falcons at New Orleans Saints 2026-10-06T00:15Z"
    ],
@@ -1252,8 +1252,12 @@
       "home_team": "Green Bay Packers",
       "markets": [
        "1st_half_team_total",
+       "1st_half_total_points",
        "1st_half_total_points_odd_even",
+       "1st_quarter_moneyline",
+       "1st_quarter_point_spread",
        "1st_quarter_team_total",
+       "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
        "2nd_half_team_total",
        "2nd_half_total_points_odd_even",
@@ -1330,6 +1334,7 @@
       "away_team": "Cincinnati Bengals",
       "home_team": "Miami Dolphins",
       "markets": [
+       "1st_half_draw_no_bet",
        "1st_half_moneyline",
        "1st_half_point_spread",
        "1st_half_team_total",
@@ -1356,6 +1361,7 @@
        "match_result_both_teams_to_score",
        "moneyline",
        "player_passing_yards",
+       "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
        "team_total",
@@ -1511,6 +1517,7 @@
       "markets": [
        "1st_half_both_teams_to_score",
        "1st_half_double_chance",
+       "1st_half_draw_no_bet",
        "1st_half_moneyline",
        "1st_half_point_spread",
        "1st_half_team_total",
@@ -1577,7 +1584,7 @@
       "gemini": "NFL-2610111700-NYG-WAS-S",
       "goldrush": "31065452",
       "hardrock": "5044571930993230235",
-      "kalshi": "KXNFLTEAMTOTAL-26OCT11NYGWAS",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT11NYGWAS",
       "ladbrokes": "51b2b68a-f914-47bb-bd3d-0ec1f4252f01",
       "ladbrokes_uk": "lduk-258966947",
       "matchbook": "mb-33321764048800023",
@@ -1670,7 +1677,7 @@
       "gemini": "NFL-2610111700-LV-NE-S",
       "goldrush": "31065426",
       "hardrock": "1263289870420410795",
-      "kalshi": "KXNFLTEAMTOTAL-26OCT11LVNE",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT11LVNE",
       "ladbrokes": "37d3e40f-f77b-4c96-a3fc-05ac0252bc0e",
       "ladbrokes_uk": "lduk-258967042",
       "matchbook": "mb-33321713272900023",
@@ -1802,6 +1809,7 @@
        "match_result_both_teams_to_score",
        "moneyline",
        "player_passing_yards",
+       "player_rushing_yards",
        "point_spread",
        "team_total",
        "three_way_handicap",
@@ -1929,7 +1937,7 @@
       "gemini": "NFL-2610112005-DEN-LAC-S",
       "goldrush": "31065450",
       "hardrock": "5521109066564370845",
-      "kalshi": "KXNFL1HTEAMTOTAL-26OCT11DENLAC",
+      "kalshi": "KXNFLTEAMTOTAL-26OCT11DENLAC",
       "ladbrokes": "402484a2-1507-4e6c-b1ae-d232203829cc",
       "ladbrokes_uk": "lduk-258966925",
       "matchbook": "mb-33321779942800023",
