@@ -33,6 +33,9 @@ class TicketPolicyTests(unittest.TestCase):
         self.assertFalse(gates.player_overlap(ticket(), context([straight()])).ok)
         self.assertFalse(gates.player_overlap(straight(), context([ticket()])).ok)
         self.assertFalse(gates.player_overlap(ticket(parlayType='ladder'), context([straight()])).ok)
+        earlier_ticket = dict(ticket(), id='NFL-earlier-ticket')
+        self.assertFalse(gates.player_overlap(ticket(parlayType='ladder'), context([earlier_ticket])).ok,
+                         'the same player/game cannot be repeated across a longshot and ladder')
         expired = straight(status='expired')
         self.assertFalse(gates.player_overlap(ticket(), context([expired])).ok)
 

@@ -69,7 +69,8 @@ def private_weekly_delivery(text, day, env=None, state_path=None, metadata=None,
     if not verified or not re.fullmatch(r'\d{15,22}', channel):
         return 'private-destination-not-verified'
     if not re.fullmatch(r'https://discord\.com/api/webhooks/\d{15,22}/[A-Za-z0-9_-]+', url) \
-            or url in {values.get('DISCORD_WEBHOOK_URL'), values.get('DISCORD_ARB_WEBHOOK_URL')}:
+            or url in {values.get('DISCORD_WEBHOOK_URL'), values.get('DISCORD_WINS_WEBHOOK_URL'),
+                       values.get('DISCORD_ARB_WEBHOOK_URL')}:
         return 'private-destination-refused'
     path = Path(state_path or (Path.home() / '.config/keenroudy/review-discord.json'))
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -109,7 +110,8 @@ def private_weekly_delivery(text, day, env=None, state_path=None, metadata=None,
             # Different webhook tokens can still target the same public channel.
             # Refuse that easy configuration mistake using source identities,
             # never by printing or persisting a webhook URL.
-            for public_url in {values.get('DISCORD_WEBHOOK_URL'), values.get('DISCORD_ARB_WEBHOOK_URL')} - {None, ''}:
+            for public_url in {values.get('DISCORD_WEBHOOK_URL'), values.get('DISCORD_WINS_WEBHOOK_URL'),
+                               values.get('DISCORD_ARB_WEBHOOK_URL')} - {None, ''}:
                 public_identity = (metadata or identify)(public_url)
                 public_channel = public_identity.get('channel_id')
                 if not public_channel:

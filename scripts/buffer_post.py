@@ -410,6 +410,10 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         # Only entries scheduled after Discord mirroring was introduced carry this payload. That prevents enabling
         # the webhook from replaying the account's older X history into a new server.
         entry['discord'] = {'state': 'pending', 'text': without_playbook(text)}
+        if kind == 'community':
+            # Owner-submitted model-assisted slips belong in the community wins feed, not the official-play feed.
+            # Its dedicated webhook has no public-channel fallback, so a missing destination holds the receipt.
+            entry['discord']['destination'] = 'wins'
         if kind == 'play':
             # A confirmed play is the reason to join Discord. Schedule it first; the lightweight delivery job runs
             # every five minutes, so a 15-minute target gives members roughly 10-15 minutes before the X post.

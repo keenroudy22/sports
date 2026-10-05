@@ -32,6 +32,11 @@ def arb_webhook(env=None):
     return (values.get('DISCORD_ARB_WEBHOOK_URL') or values.get('DISCORD_WEBHOOK_URL') or '').strip()
 
 
+def wins_webhook(env=None):
+    """Dedicated community-win destination; never fall back to the official plays feed."""
+    return ((env if env is not None else os.environ).get('DISCORD_WINS_WEBHOOK_URL') or '').strip()
+
+
 def http_send(url, body, headers):
     data = body if isinstance(body, bytes) else json.dumps(body).encode('utf-8')
     request = urllib.request.Request(url, data=data, headers=headers, method='POST')
@@ -137,14 +142,15 @@ def send_arb_alert(text, alert_id, now, state_path, url=None, send=None):
     return True
 
 
-def mirror_sent(log_book, now, url=None, send=http_send, fetch=download_image, log=print):
+def mirror_sent(log_book, now, url=None, wins_url=None, send=http_send, fetch=download_image, log=print):
     """Deliver each Discord payload once.
 
     Confirmed plays carry ``readyAt`` and go to Discord before X. House, news and engagement posts keep the old
     downstream rule and wait for Buffer to confirm X. Return only newly changed failures, so ntfy does not repeat.
     """
     url = url if url is not None else webhook()
-    if not url:
+    wins_url = wins_url if wins_url is not None else wins_webhook()
+    if not url and not wins_url:
         return []
     failed = []
     for entry in log_book.get('posts', []):
@@ -153,8 +159,20 @@ def mirror_sent(log_book, now, url=None, send=http_send, fetch=download_image, l
         if mirror.get('state') != 'pending' or not (ready or entry.get('sentAt')) \
                 or entry.get('cancelledAt') or entry.get('deletedAt'):
             continue
+        target = wins_url if mirror.get('destination') == 'wins' else url
+        if not target:
+            message = 'Discord destination is not configured'
+            changed = mirror.get('error') != message
+            mirror['error'] = message
+            mirror['lastAttemptAt'] = gates.stamp(now)
+            mirror['attempts'] = int(mirror.get('attempts') or 0) + 1
+            entry['discord'] = mirror
+            log(f"discord: {entry['id']} not mirrored: {message}")
+            if changed:
+                failed.append({'id': entry['id'], 'error': message})
+            continue
         try:
-            send_message(url, mirror.get('text') or '', mirror.get('image'), send=send, fetch=fetch)
+            send_message(target, mirror.get('text') or '', mirror.get('image'), send=send, fetch=fetch)
         except DiscordError as error:
             message = str(error)
             changed = mirror.get('error') != message
@@ -178,8 +196,11 @@ def mirror_sent(log_book, now, url=None, send=http_send, fetch=download_image, l
         followup = mirror.get('followup') or {}
         if followup.get('state') != 'pending':
             continue
+        target = wins_url if mirror.get('destination') == 'wins' else url
+        if not target:
+            continue
         try:
-            send_message(url, followup.get('text') or '', send=send)
+            send_message(target, followup.get('text') or '', send=send)
         except DiscordError as error:
             message = str(error)
             changed = followup.get('error') != message

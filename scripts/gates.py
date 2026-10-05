@@ -766,18 +766,17 @@ def player_exposure(row):
 
 
 def player_overlap(candidate, ctx):
-    ticket = bool(candidate.get('legs'))
     exposures = {player_exposure(r) for r in candidate.get('legs') or [candidate]} - {None}
     for key, pick in getattr(ctx, 'first', {}).items():
-        if key == candidate.get('id') or pick.get('historicalImport') or bool(pick.get('legs')) == ticket:
+        if key == candidate.get('id') or pick.get('historicalImport'):
             continue
         if when(pick.get('publishedAt') or '1970-01-01T00:00Z') > ctx.now:
             continue
         # Even an expired quote stays exposure: a reader could already have taken it.
         existing = {player_exposure(r) for r in pick.get('legs') or [pick]} - {None}
         if exposures & existing:
-            return Decision(False, 'player_overlap', f'{key} already uses this player in the same game; no straight/parlay stacking')
-    return Decision(True, 'player_overlap', 'no player exposure shared between straights and tickets')
+            return Decision(False, 'player_overlap', f'{key} already uses this player in the same game; no repeated exposure across plays or tickets')
+    return Decision(True, 'player_overlap', 'no player exposure repeated across published plays or tickets')
 
 
 def without_straight_players(rows, ctx):

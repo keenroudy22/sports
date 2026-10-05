@@ -124,6 +124,28 @@ class DiscordPostTests(unittest.TestCase):
         self.assertEqual(discord_post.arb_webhook({'DISCORD_WEBHOOK_URL': 'plays'}), 'plays')
         self.assertFalse(discord_post.send_arb_alert('x', 'y', NOW, '/unused', url=''))
 
+    def test_community_win_uses_dedicated_destination_without_public_fallback(self):
+        sent = []
+        entry = {'id': 'community:win', 'sentAt': '2026-09-28T15:59:00Z',
+                 'discord': {'state': 'pending', 'destination': 'wins', 'text': 'MODEL COOKED'}}
+        send = lambda url, body, headers: (sent.append((url, body)) or (204, b''))
+        self.assertEqual(discord_post.mirror_sent({'posts': [entry]}, NOW, url='plays', wins_url='wins',
+                                                  send=send, log=lambda *_: None), [])
+        self.assertEqual(sent[0][0], 'wins')
+        self.assertEqual(sent[0][1]['content'], 'MODEL COOKED')
+
+        held = {'id': 'community:held', 'sentAt': '2026-09-28T15:59:00Z',
+                'discord': {'state': 'pending', 'destination': 'wins', 'text': 'WIN'}}
+        failures = discord_post.mirror_sent({'posts': [held]}, NOW, url='plays', wins_url='',
+                                            send=send, log=lambda *_: None)
+        self.assertEqual(failures, [{'id': 'community:held', 'error': 'Discord destination is not configured'}])
+        self.assertEqual(held['discord']['state'], 'pending')
+        self.assertEqual(len(sent), 1, 'a community win must never leak into the official plays channel')
+
+    def test_wins_webhook_never_falls_back(self):
+        self.assertEqual(discord_post.wins_webhook({'DISCORD_WINS_WEBHOOK_URL': 'wins'}), 'wins')
+        self.assertEqual(discord_post.wins_webhook({'DISCORD_WEBHOOK_URL': 'plays'}), '')
+
 
 if __name__ == '__main__':
     unittest.main()

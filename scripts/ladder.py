@@ -11,8 +11,10 @@ new climb at $50. Money is whole dollars: a rung pays round(stake x the ticket's
 round(return x 20%), and the remainder rides.
 
 Like the easy parlay, a rung is never called value. Our player chances are tuned against main lines (and learning
-found them too confident even there), so on easier lines they can say "clears comfortably", not "beats the price".
-The market's own price carries most of the safety; our number has to agree with room to spare.
+found them too confident even there), so easier-line probabilities are anchored to the sportsbook price and are
+never presented as raw model certainty. The market's own price carries most of the safety; our number has to agree
+with room to spare. A player needs five current-season appearances, or an established same-team role from last
+season. A quarterback passing leg needs five actual starts for that team unless that same-team role is established.
 
 The ladder's state is never stored. state() reads it from the published rungs and their results, so it can not
 drift from the record. One rung is open at a time. After it settles, the next scheduled scan may publish another
@@ -48,7 +50,9 @@ BOOKS = {'draftkings': 'DraftKings', 'fanduel': 'FanDuel'}
 SLUGS = {'DraftKings': 'dk', 'FanDuel': 'fd'}
 MARKETS = ('recYds', 'rushYds', 'rec', 'passYds')     # lines a follower reads at a glance
 LEG_PRICES = (-900, -180)           # safer favored legs; two around -400 is the preferred shape
-MIN_CHANCE = 0.85                   # our projection's chance the player clears the easier line
+RAW_MIN_CHANCE = 0.85               # the uncalibrated projection still has to clear the easier line comfortably
+MIN_CHANCE = 0.83                   # conservative, market-anchored chance used to compare eligible legs
+MODEL_LIFT_CAP = 0.06               # an alternate-line model cannot claim more than six points above its price
 MIN_GAP = 0.04                      # safety comes from the price; our number still has to agree
 MAX_GAP = 0.18                      # and no further: a book that far off an easy line is a data or role problem, not a gift
 MAIN_RATIO = (0.6, 1.6)             # the book's main line against our projection: outside this, the market is another one
@@ -58,6 +62,23 @@ LEAD = timedelta(minutes=90)        # a game this close to kickoff is left off
 FRESH = timedelta(hours=12)         # prices older than this are not used
 STAKE = parlay.STAKE                # the ticket's size in the desk's own terms; the ladder itself counts dollars
 SOURCE = 'https://sharpapi.io/'
+
+
+def stable_role(ctx, athlete, team, league, stat):
+    """Ladder roles need more evidence than an ordinary research row.
+
+    Five appearances keeps three-game hot starts and newly promoted roles out. Passing yards additionally require
+    five games as that team's primary passer; relief appearances are not a quarterback workload sample. An
+    established same-team role from the prior season remains eligible early in a new season.
+    """
+    athlete, team = str(athlete), str(team)
+    established = (athlete, team) in (getattr(ctx, 'established', set()) or set())
+    if not established and (getattr(ctx, 'appearances', {}).get(athlete, 0) or 0) < 5:
+        return False
+    if stat != 'passYds' or established:
+        return True
+    starts = (getattr(ctx, 'passers', {}) or {}).get(gates.team_key(league, team), [])
+    return sum(str(starter) == athlete for starter in starts) >= 5
 
 
 def rungs(first, latest):
@@ -187,7 +208,7 @@ def legs_for_game(game, record, ctx, now, confirmed=None):
                 projected = (player or {}).get(pricing.PROJECTED[stat])
                 if not projected or player.get('limited') or not side:
                     continue
-                if not build_site.settled_role(athlete, game[side]['id'], ctx.appearances, ctx.established):
+                if not stable_role(ctx, athlete, game[side]['id'], game['league'], stat):
                     continue
                 if gates.listed_status(athlete, str(game[side]['id']), ctx) in gates.LISTED:
                     continue
@@ -204,15 +225,19 @@ def legs_for_game(game, record, ctx, now, confirmed=None):
                     price = int(price)
                     if not LEG_PRICES[0] <= price <= LEG_PRICES[1] or float(point) != int(point) + 0.5:
                         continue            # a half point, so the leg can not push
-                    over, _, _ = pricing.chances(mean, sd, float(point))
+                    raw, _, _ = pricing.chances(mean, sd, float(point))
                     implied = pricing.break_even(price)
-                    if over < MIN_CHANCE or not MIN_GAP <= over - implied <= MAX_GAP:
+                    if raw < RAW_MIN_CHANCE or not MIN_GAP <= raw - implied <= MAX_GAP:
+                        continue
+                    chance = min(raw, implied + MODEL_LIFT_CAP)
+                    if chance < MIN_CHANCE:
                         continue
                     shown = ctx.names.get(athlete) or name
                     out.append({'id': f"ladder-{game['id']}-{athlete}-{stat}-{float(point):g}",
                                 'title': f"{shown} {int(point + 0.5)}+ {pricing.WORDS[stat]}",
                                 'gameId': game['id'], 'athleteId': athlete, 'player': shown, 'market': stat, 'direction': 'over',
-                                'line': float(point), 'book': BOOKS[book_key], 'odds': price, 'chance': round(over, 3),
+                                'line': float(point), 'book': BOOKS[book_key], 'odds': price,
+                                'chance': round(chance, 3), 'rawChance': round(raw, 3),
                                 'implied': round(implied, 3), 'projection': round(mean, 1), 'kickoff': game['kickoff'],
                                 'observedAt': seen, 'marketWindow': 'Full game',
                                 'alternate': float(point) != float(main)})
@@ -255,7 +280,6 @@ def ticket_pick(ticket, league, where, now, games):
             'nextStake': next_stake, 'totalAfter': banked + returned,
             'bankPercent': int(BANK_RATE * 100), 'ridePercent': 100 - int(BANK_RATE * 100),
             'start': START, 'goal': GOAL}
-    chances = ' and '.join(f"{100 * l['chance']:.0f}%" for l in ticket['legs'])
     base = (f"{league}-{first.get('season', day.year)}-W{first.get('week', 0)}-ladder-{day:%m%d}-"
             f"c{info['run']}s{info['step']}-{SLUGS[ticket['book']]}")
     sources = set(ticket.get('sources') or [])
@@ -271,8 +295,8 @@ def ticket_pick(ticket, league, where, now, games):
             'quotedAt': ticket['quotedAt'], 'priceEstimated': ticket.get('priceEstimated', True),
             'expiresAt': gates.stamp(min(gates.next_slot(now), gates.when(ticket['firstKickoff']))),
             'quoteType': ticket.get('quoteType', 'capture'), 'confidence': 1,
-            'edge': (f"For fun, not value: {len(ticket['legs'])} protected lines our model agrees with "
-                     f"({chances} on the raw model numbers), at {ticket['book']}'s exact prices, multiplied to "
+            'edge': (f"For fun, not value: {len(ticket['legs'])} protected lines with stable roles that our model "
+                     f"direction agrees with, at {ticket['book']}'s exact prices, multiplied to "
                      f"{ticket['odds']:+d}. ${stake} rides with ${banked} already banked. A win returns "
                      f"${returned}: ${bank_cut} goes to the bank and ${next_stake} rides next. Bank 20, ride 80."),
             'cutoff': 'A ladder rung is not re-entered. It stands or falls as posted.',

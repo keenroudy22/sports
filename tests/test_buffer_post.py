@@ -286,6 +286,13 @@ class ScheduleTests(unittest.TestCase):
         self.assertEqual([p['id'] for p in text_only['posts']], ['r'], 'a post with no card key at all (by hand) still goes')
         self.assertEqual(text_only['posts'][0]['discord'], {'state': 'pending', 'text': 'text r'})
 
+    def test_community_receipts_are_routed_to_the_wins_channel(self):
+        result = bp.schedule([('community:model-slip', 'community', 'MODEL COOKED',
+                               NOW + timedelta(hours=1), None)],
+                             'ch-x', {'posts': []}, NOW, key='t', send=FakeBuffer(), log=lambda *_: None)
+        self.assertEqual(result['posts'][0]['discord'], {
+            'state': 'pending', 'text': 'MODEL COOKED', 'destination': 'wins'})
+
     def test_cancelled_discord_first_play_gets_a_public_pull_update(self):
         fake = FakeBuffer()
         entry = {'id': 'a', 'bufferPostId': 'bp-a', 'dueAt': '2026-09-26T17:00:00Z',

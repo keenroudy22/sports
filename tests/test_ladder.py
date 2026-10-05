@@ -34,10 +34,11 @@ def ctx(first=None, latest=None, prop_odds=None, injuries=None):
     names, appearances = {}, defaultdict(int)
     for gid in ('g1', 'g2'):
         names.update({f'{gid}p': f'Player {gid.upper()}', f'{gid}q': f'Hurt {gid.upper()}', f'{gid}r': f'Rookie {gid.upper()}'})
-        appearances.update({f'{gid}p': 3, f'{gid}q': 3})               # the rookies have no games: unsettled
-    return SimpleNamespace(snapshot=lambda gid: snapshot(gid) if gid in ('g1', 'g2') else None, names=names,
+        appearances.update({f'{gid}p': 5, f'{gid}q': 5})               # the rookies have no games: unsettled
+    return SimpleNamespace(now=NOW, snapshot=lambda gid: snapshot(gid) if gid in ('g1', 'g2') else None, names=names,
                            appearances=appearances, established=set(), injuries=injuries or {}, first=first or {},
-                           latest=latest or {}, policy={}, prop_odds=prop_odds if prop_odds is not None else {g: record(g) for g in ('g1', 'g2')})
+                           latest=latest or {}, policy={}, passers={},
+                           prop_odds=prop_odds if prop_odds is not None else {g: record(g) for g in ('g1', 'g2')})
 
 
 def record(gid, price=-400, retrieved='2026-09-27T12:10:00Z'):
@@ -121,6 +122,28 @@ class LegTests(unittest.TestCase):
         self.assertEqual((leg['athleteId'], leg['market'], leg['direction'], leg['line']), ('g1p', 'recYds', 'over', 39.5))
         self.assertTrue(leg['alternate'], 'the selected rung is distinct from the market main line')
         self.assertTrue(ladder.MIN_GAP <= leg['chance'] - leg['implied'] <= ladder.MAX_GAP)
+
+    def test_three_game_role_and_three_start_quarterback_are_not_ladder_certainty(self):
+        world = ctx()
+        world.appearances['g1p'] = 3
+        self.assertEqual(ladder.legs_for_game(GAMES['g1'], record('g1'), world, NOW), [])
+
+        passing = snapshot('g1')
+        passing['players']['home']['players'][0] = {
+            'id': 'g1p', 'pos': 'QB', 'passYds': [220.0, 150.0, 290.0]}
+        quote = {'line': 170.5, 'over': -115, 'under': -105,
+                 'alternates': [{'line': 124.5, 'over': -440}]}
+        prices = {'gameId': 'g1', 'retrievedAt': '2026-09-27T12:10:00Z',
+                  'books': {'fanduel': {'markets': {'passYds': {'Player G1': quote}}}}}
+        world.appearances['g1p'] = 5
+        world.passers = {gates.team_key('NFL', 'g1h'): ['g1p', 'g1p', 'g1p']}
+        old_snapshot = world.snapshot
+        world.snapshot = lambda gid: passing if gid == 'g1' else old_snapshot(gid)
+        self.assertEqual(ladder.legs_for_game(GAMES['g1'], prices, world, NOW), [])
+        world.passers[gates.team_key('NFL', 'g1h')] = ['g1p'] * 5
+        legs = ladder.legs_for_game(GAMES['g1'], prices, world, NOW)
+        self.assertEqual([leg['title'] for leg in legs], ['Player G1 125+ passing yards'])
+        self.assertLess(legs[0]['chance'], legs[0]['rawChance'], 'public/ranking chance is anchored to the market')
 
     def test_a_listed_player_a_stale_capture_and_a_book_far_off_our_number_are_left_off(self):
         listed = ctx(injuries={'NFL-g1h': {'g1p': {'status': 'Questionable'}}})
