@@ -557,6 +557,32 @@ class TableTests(unittest.TestCase):
         self.assertEqual(rows[2][8 + keys.index('snaps')], 61)
         self.assertIsNone(rows[0][8 + keys.index('snapPct')], 'no snap count is unknown, not zero')
 
+    def test_player_charts_keep_all_stats_for_upcoming_roles_in_a_compact_payload(self):
+        now = datetime(2026, 10, 4, 15, tzinfo=timezone.utc)
+        upcoming = dict(slate_game('NFL-next', '2026-10-05T00:20:00Z'), season=2026)
+        upcoming['home'].update(name='Falcons')
+        upcoming['away'].update(name='Panthers')
+        snapshot = {'model': 'v2.0', 'publishedAt': '2026-10-04T14:00:00Z', 'players': {
+            'home': {'players': [{'id': '10', 'name': 'Player Ten', 'pos': 'WR',
+                                  'receptions': [4.2, 1, 8], 'recYds': [61.5, 10, 110]}]},
+            'away': {'players': []}}}
+        logs = {'10': [
+            {'kickoff': '2026-09-20T17:00:00Z', 'season': 2026, 'seasonType': 2, 'opp': '9', 'home': True,
+             'stats': {'rec': 5, 'recYds': 72, 'recTD': 1, 'rzTgt': 2}},
+            {'kickoff': '2025-09-20T17:00:00Z', 'season': 2025, 'seasonType': 2, 'opp': '8', 'home': False,
+             'stats': {'rec': 9, 'recYds': 140}}]}
+        line = {'gameId': 'NFL-next', 'athleteId': '10', 'stat': 'recYds', 'state': 'open', 'line': 59.5,
+                'odds': -110, 'book': 'FanDuel', 'direction': 'over', 'observedAt': '2026-10-04T14:00:00Z'}
+        payload = build_site.build_player_charts('NFL', [upcoming], {'NFL-next': [snapshot]}, logs, 2026, [line], now)
+        self.assertEqual(len(payload['games']), 1)
+        self.assertEqual(len(payload['players']), 1)
+        player = payload['players'][0]
+        self.assertEqual(player['projection'], {'rec': 4.2, 'recYds': 61.5})
+        self.assertEqual(player['lines']['recYds']['line'], 59.5)
+        self.assertEqual(player['rows'][0]['stats']['recTD'], 1, 'touchdowns and role stats stay available')
+        self.assertEqual(player['rows'][0]['stats']['rzTgt'], 2)
+        self.assertEqual(len(player['rows']), 1, 'prior seasons do not enter the current chart')
+
     def test_dates_are_eastern_calendar_dates(self):
         self.assertEqual(build_site.day('2026-09-18T00:15Z'), '2026-09-17')
         self.assertEqual(build_site.day('2026-12-01T01:15Z'), '2026-11-30')

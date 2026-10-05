@@ -127,6 +127,22 @@ test('Games shows compact current model offense and defense ranks for both teams
   assert.match(games, /projGrid\(rows, true\)/, 'ranks are enabled on the Games tab');
 });
 
+test('the default stats view is a visual all-stat player chart board with search kept secondary', () => {
+  const source = fs.readFileSync('site/app.js', 'utf8');
+  const css = fs.readFileSync('site/app.css', 'utf8');
+  const stats = source.slice(source.indexOf('async function viewStats(route)'), source.indexOf('async function playerSearch(league)'));
+  assert.match(source, /\['stats', 'Charts'\]/);
+  assert.match(stats, /route\.tab \|\| 'charts'/);
+  assert.match(stats, /Player charts/);
+  assert.match(stats, /\['search', 'Search'\]/);
+  assert.match(source, /const CHART_STATS = \['passYds'.*'snapPct'\]/s);
+  assert.match(source, /app\/player-charts\/\$\{league\}\.json/);
+  assert.match(source, /\['last5', 'Last 5'\], \['last10', 'Last 10'\], \['season', 'Season'\]/);
+  assert.match(css, /\.player-chart-card/);
+  assert.match(css, /\.mini-chart/);
+  assert.match(css, /@media \(max-width: 620px\)[\s\S]*\.chart-team-grid \{ grid-template-columns:1fr;/);
+});
+
 test('the Climb shows a cashed rung, the next step state and past lines in a dropdown', () => {
   const source = fs.readFileSync('site/app.js', 'utf8');
   assert.match(source, /cashed · Step \$\{L\.step\} is being checked · not posted yet/);

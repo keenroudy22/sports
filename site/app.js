@@ -18,6 +18,7 @@
     trendRate: '80', trendStat: 'all', trendKind: 'main', trendWindow: 'season', trendQuery: '', trendDay: 'all',
     league: saved.get('league', 'ALL'),     /* a first visit shows every play, whichever sport it is in */
     gamesScope: 'upcoming', gamesQuery: '', boardDay: 'today', boardScope: 'open', boardSort: 'best', boardQuery: '', boardMode: 'games', propMarket: 'all', playerQuery: '', recordQuery: '',
+    chartStat: 'recYds', chartPos: 'all', chartWindow: 'last5', chartDay: 'next', chartQuery: '',
     stat: null, defensePos: 'WR', defenseStat: 'recYds', defenseScope: 'season', defenseOrder: 'soft',
     logSeason: 'all', scoresLeague: 'MLB', scoresDate: null, recordScope: 'all',
     ticket: saved.get('ticket', []), stake: saved.get('stake', { amount: 1, mode: 'units', unit: 10 }),
@@ -52,7 +53,7 @@
     record: '<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/>',
     more: '<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
   };
-  const TABS = [['today', 'Today'], ['games', 'Games'], ['stats', 'Players'], ['record', 'Record'], ['more', 'More']];
+  const TABS = [['today', 'Today'], ['games', 'Games'], ['stats', 'Charts'], ['record', 'Record'], ['more', 'More']];
   const TAB_FOR = { trends: 'today', board: 'today', game: 'games', player: 'stats', team: 'stats', model: 'record', ticket: 'today', research: 'more', scores: 'more', arbs: 'more', lab: 'more' };
   const boardTabs = active => `<nav class="board-tabs" aria-label="Lines and plays"><a href="#today" ${active === 'card' ? 'aria-current="page"' : ''}>Plays</a><a href="#board/favorites" ${active === 'favorites' ? 'aria-current="page"' : ''}>Best lines</a><a href="#board" ${active === 'lines' ? 'aria-current="page"' : ''}>Games</a><a href="#board/props" ${active === 'props' ? 'aria-current="page"' : ''}>Props</a><a href="#trends" ${active === 'trends' ? 'aria-current="page"' : ''}>Trends</a></nav>`;
   const scoreTabs = active => `<nav class="board-tabs" aria-label="Scoreboard view"><a href="#record" ${active === 'official' ? 'aria-current="page"' : ''}>Results</a><a href="#model" ${active === 'model' ? 'aria-current="page"' : ''}>Model results</a></nav>`;
@@ -954,13 +955,92 @@
 
   async function viewStats(route) {
     const league = dataLeague();
-    const tab = route.tab || 'players';
+    const tab = route.tab === 'players' ? 'search' : route.tab || 'charts';
     const note = state.league === 'ALL' ? '<p class="row-meta">Stats are per league; showing NFL. Switch to College above.</p>' : '';
-    const tabs = `<div class="toolbar"><div class="seg" role="group">${[['players', 'Players'], ['defense', 'Defenses'], ['teams', 'Teams']].map(([id, label]) =>
+    const tabs = `<div class="toolbar"><div class="seg" role="group">${[['charts', 'Player charts'], ['search', 'Search'], ['defense', 'Defenses'], ['teams', 'Teams']].map(([id, label]) =>
       `<a class="chip" style="display:inline-flex;align-items:center" href="#stats/${id}" aria-pressed="${tab === id}">${label}</a>`).join('')}</div></div>`;
     if (tab === 'defense') return head('Defense vs position', `What each ${leagueName(league)} defense allows per game, by position group.`) + note + tabs + await defenseView(league);
     if (tab === 'teams') return head('Teams', `${leagueName(league)} teams with stored games.`) + note + tabs + await teamsList(league);
-    return head('Players', `Season leaders in ${leagueName(league)}. Tap any player for their game-by-game numbers and recent form.`) + note + tabs + await playerSearch(league);
+    if (tab === 'search') return head('Player search', `Find any ${leagueName(league)} player and open their complete game log.`) + note + tabs + await playerSearch(league);
+    return head('Player charts', `Every stat, game by game. Pick a matchup, position and sample, then tap a player for the full log.`) + note + tabs + await playerCharts(league);
+  }
+
+  const CHART_STATS = ['passYds', 'cmp', 'att', 'passTD', 'int', 'sacks', 'scrambles',
+    'rushYds', 'car', 'rushTD', 'rushLong', 'rzCar', 'i10Car', 'i5Car',
+    'recYds', 'rec', 'targets', 'recTD', 'recLong', 'rzTgt', 'i10Tgt',
+    'fumLost', 'fgm', 'fga', 'xpm', 'kPts', 'snaps', 'snapPct'];
+
+  const chartHas = (player, key) => Object.prototype.hasOwnProperty.call(player.projection || {}, key)
+    || Object.prototype.hasOwnProperty.call(player.lines || {}, key)
+    || (player.rows || []).some(row => Object.prototype.hasOwnProperty.call(row.stats || {}, key));
+
+  const chartRows = (player, key) => {
+    const count = state.chartWindow === 'last5' ? 5 : state.chartWindow === 'last10' ? 10 : 100;
+    return (player.rows || []).filter(row => typeof (row.stats || {})[key] === 'number').slice(-count);
+  };
+
+  const miniPlayerChart = (player, key) => {
+    const rows = chartRows(player, key), values = rows.map(row => row.stats[key]);
+    const current = (player.lines || {})[key], line = current && typeof current.line === 'number' ? current.line : null;
+    const projection = typeof (player.projection || {})[key] === 'number' ? player.projection[key] : null;
+    const max = Math.max(line || 0, projection || 0, ...values, 1);
+    const bars = rows.map((row, i) => { const value = values[i];
+      const tone = line == null ? '' : value > line ? 'over' : value < line ? 'under' : 'push';
+      const shown = key === 'snapPct' ? `${Math.round(100 * value)}%` : Number.isInteger(value) ? value : fixed(value);
+      return `<span class="mini-col" title="${esc(row.date)}: ${esc(shown)}"><b>${esc(shown)}</b><i class="${tone}" style="height:${Math.max(3, Math.round(58 * value / max))}px"></i><small>${esc(row.date.slice(5))}</small></span>`;
+    }).join('');
+    const marker = line == null ? '' : `<span class="mini-line" style="bottom:${Math.min(92, Math.max(2, 100 * line / max)).toFixed(1)}%"><b>${esc(line)}</b></span>`;
+    const avg = values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : null;
+    const hits = line == null ? '' : `${values.filter(value => value > line).length}/${values.length} over`;
+    return `<span class="player-chart-numbers">
+        <span><small>Current line</small><b class="num">${line == null ? DASH : esc(line)}</b><em>${current ? `${esc(current.book || '')} ${odds(current.odds)}` : 'not posted'}</em></span>
+        <span><small>Our number</small><b class="num">${projection == null ? DASH : fixed(projection)}</b><em>${esc(C.LABEL[key] || key)}</em></span>
+        <span><small>${hits ? 'Recent' : 'Average'}</small><b class="num">${hits || (avg == null ? DASH : fixed(avg))}</b><em>${values.length} game${values.length === 1 ? '' : 's'}</em></span>
+      </span><span class="mini-chart" role="img" aria-label="${esc(player.name)} ${esc(C.LABEL[key] || key)} by game">${bars || '<span class="mini-empty">No games yet</span>'}${marker}</span>`;
+  };
+
+  const playerChartCard = (player, key, league) => `<a class="player-chart-card" href="#player/${league}/${esc(player.id)}">
+    <span class="player-chart-head">${pic(HEADSHOT[league](player.id), 'player-chart-photo')}<span><b>${esc(player.name)}</b><small>${esc(player.pos || '')}</small></span><span class="player-chart-arrow">›</span></span>
+    ${miniPlayerChart(player, key)}</a>`;
+
+  const chartTeam = (team, game, players, key, league) => {
+    if (!players.length) return '';
+    const logoTeam = { id: team.id, abbr: team.abbreviation };
+    return `<div class="chart-team"><div class="chart-team-head">${pic(LOGO[league](logoTeam), 'chart-team-logo')}<span><b>${esc(team.name || team.abbreviation)}</b><small>${players.length} player${players.length === 1 ? '' : 's'}</small></span></div>
+      <div class="player-chart-grid">${players.map(player => playerChartCard(player, key, league)).join('')}</div></div>`;
+  };
+
+  async function playerCharts(league) {
+    const data = await maybe(`app/player-charts/${league}.json`);
+    if (!data || !data.games || !data.games.length) return empty('No upcoming player charts', 'Charts appear when the next matchup and player roles are available.');
+    const available = new Set(CHART_STATS.filter(key => data.players.some(player => chartHas(player, key))));
+    const key = available.has(state.chartStat) ? state.chartStat : [...available][0];
+    if (!key) return empty('No player stats yet', 'Charts appear after the first stored game.');
+    const days = [...new Set(data.games.map(game => game.day))];
+    const selectedDay = state.chartDay === 'all' ? 'all' : days.includes(state.chartDay) ? state.chartDay : days[0];
+    const query = state.chartQuery.trim().toLowerCase();
+    const playerOk = player => chartHas(player, key) && (state.chartPos === 'all' || player.pos === state.chartPos)
+      && (!query || `${player.name} ${player.pos || ''}`.toLowerCase().includes(query));
+    const games = data.games.filter(game => selectedDay === 'all' || game.day === selectedDay);
+    const shownGames = new Set(games.map(game => game.id));
+    const shownPlayers = data.players.filter(player => shownGames.has(player.gameId) && playerOk(player));
+    const cards = games.map(game => {
+      const players = data.players.filter(player => player.gameId === game.id && playerOk(player));
+      const order = (a, b) => (Number(Boolean((b.lines || {})[key])) - Number(Boolean((a.lines || {})[key])))
+        || ((b.projection || {})[key] || 0) - ((a.projection || {})[key] || 0) || String(a.name).localeCompare(String(b.name));
+      const away = players.filter(player => player.side === 'away').sort(order);
+      const home = players.filter(player => player.side === 'home').sort(order);
+      if (!away.length && !home.length) return '';
+      return `<section class="chart-matchup"><div class="chart-matchup-head"><span><b>${esc(game.away.abbreviation)} at ${esc(game.home.abbreviation)}</b><small>${esc(whenShort(game.kickoff))}</small></span><a href="#game/${esc(game.id)}">Game page →</a></div>
+        <div class="chart-team-grid">${chartTeam(game.away, game, away, key, league)}${chartTeam(game.home, game, home, key, league)}</div></section>`;
+    }).filter(Boolean).join('');
+    const dateOptions = [['next', 'Next slate'], ['all', 'All upcoming'], ...days.map(value => [value, dayLabel(value + 'T17:00:00Z')])];
+    return `<div class="chart-controls card"><div class="chart-selects"><label>Stat<select class="pick" data-select="chartStat">${CHART_STATS.filter(stat => available.has(stat)).map(stat => `<option value="${stat}" ${stat === key ? 'selected' : ''}>${esc(C.LABEL[stat] || stat)}</option>`).join('')}</select></label>
+        <label>Games<select class="pick" data-select="chartDay">${dateOptions.map(([value, label]) => `<option value="${value}" ${state.chartDay === value ? 'selected' : ''}>${esc(label)}</option>`).join('')}</select></label></div>
+      <div class="toolbar">${seg('chartPos', [['all', 'All'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE']], state.chartPos)}${seg('chartWindow', [['last5', 'Last 5'], ['last10', 'Last 10'], ['season', 'Season']], state.chartWindow)}</div>
+      <input class="search" type="search" data-input="chartQuery" placeholder="Search this slate" value="${esc(state.chartQuery)}" aria-label="Search player charts"></div>
+      <p class="row-meta chart-count">${shownPlayers.length} players with ${esc(C.LABEL[key] || key)} data · ${esc(state.chartWindow === 'season' ? String(data.season) + ' season' : state.chartWindow === 'last10' ? 'last 10 games' : 'last 5 games')}</p>
+      ${cards || empty('No matching players', 'Try another stat, position, date or search.')}`;
   }
 
   async function playerSearch(league) {
@@ -1037,7 +1117,7 @@
     const league = route.league === 'CFB' ? 'CFB' : 'NFL';
     const index = await get(`app/players/${league}.json`);
     const entry = index.players.find(p => String(p[0]) === String(route.id));
-    const back = '<a class="back" href="#stats/players">← Players</a>';
+    const back = '<a class="back" href="#stats">← Player charts</a>';
     if (!entry) return head('Player not found', 'No stored games for this player in this league.', back);
     const shard = await get(`app/players/${league}/${C.shardOf(route.id, index.shards)}.json`);
     const data = shard.players[route.id];

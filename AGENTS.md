@@ -129,6 +129,13 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Visual Player Charts replace the directory (2026-10-04):** the main Stats tab is a matchup-first player
+  cheat sheet, not a season-leader directory. Show compact game-by-game bar charts for every stored player stat,
+  with current main line, current projection, recent hit count/average, position, slate-date, sample-window and
+  player-search filters. Group the next slate by matchup and team; tap through to the full player page. Build a
+  compact payload from existing upcoming role forecasts, stored logs and captured lines so college remains fast on
+  mobile and adds no feed cost. Keep the full player directory as a secondary Search tab. Unknown values stay
+  unknown, historical games remain regular-season only, and this research view does not create official plays.
 - **Lifetime Climb dollars (2026-10-04):** track the 80/20 Climb in dollars across every published rung. Show settled
   stakes, actual returns, settled net and any currently live stake separately; a live wager does not become a win or
   loss before settlement. Each past rung keeps the cumulative net immediately after that result, so the public can

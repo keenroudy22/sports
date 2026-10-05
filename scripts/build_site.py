@@ -10,6 +10,7 @@ Each page loads only what it shows:
                               ranks, injuries, picks and lines, the final
   app/players/<L>.json        player directory for a league
   app/players/<L>/<n>.json    game logs, sharded by athlete ID
+  app/player-charts/<L>.json  compact upcoming-matchup player charts
   app/teams/<L>.json          teams and what each defense allows by position
   app/teams/<L>/<id>.json     one team's games, defense log and roster usage
   app/research.json           injury report, status changes, analyst notes
@@ -598,6 +599,88 @@ def build_players(league, records, snaps, teams_meta):
     return index, shards, season_leaders(logs, index, latest_season), latest_season
 
 
+def build_player_charts(league, games, forecasts, player_logs, season, lines, now):
+    """Compact current-slate player histories for the visual cheat sheet.
+
+    The full directory remains sharded for player pages.  This payload only keeps
+    players in the latest pregame role forecast for an upcoming game, their
+    current regular-season rows, and one current main line per stat.  That makes
+    a college slate practical on a phone without another request or data feed.
+    """
+    games = sorted((g for g in games if g.get('league') == league and g.get('state') == 'pre'
+                    and features.when(g['kickoff']) > now), key=lambda g: (g['kickoff'], g['id']))
+    game_ids = {g['id'] for g in games}
+    word_to_key = {word: key for key, word in pricing.WORDS.items()}
+    current_lines = {}
+    state_rank = {'open': 0, 'reference': 1, 'unpriced': 2}
+    for row in lines:
+        if row.get('gameId') not in game_ids or not row.get('athleteId') or row.get('state') not in state_rank:
+            continue
+        key = row.get('stat') or word_to_key.get(str(row.get('market') or '').lower())
+        if key not in LOG_KEYS:
+            continue
+        slot = (row['gameId'], str(row['athleteId']), key)
+        prior = current_lines.get(slot)
+        score = (state_rank[row['state']], -int(instant(row.get('observedAt')).timestamp()) if instant(row.get('observedAt')) else 0)
+        prior_score = (state_rank[prior['state']], -int(instant(prior.get('observedAt')).timestamp()) if instant(prior.get('observedAt')) else 0) if prior else None
+        if prior is None or score < prior_score:
+            current_lines[slot] = row
+
+    projection_key = {value: key for key, value in pricing.PROJECTED.items()}
+    out_games, out_players = [], []
+    seen = set()
+    for game in games:
+        snapshot = (pregame(forecasts.get(game['id'], []), game['kickoff']) or [None])[-1]
+        if not snapshot:
+            continue
+        out_games.append({'id': game['id'], 'kickoff': game['kickoff'], 'day': day(game['kickoff']),
+                          'away': {k: game['away'].get(k) for k in ('id', 'name', 'abbreviation', 'color', 'alternateColor')},
+                          'home': {k: game['home'].get(k) for k in ('id', 'name', 'abbreviation', 'color', 'alternateColor')}})
+        for side in ('away', 'home'):
+            team = str(game[side]['id'])
+            opponent = str(game['home' if side == 'away' else 'away']['id'])
+            for forecast in (((snapshot.get('players') or {}).get(side) or {}).get('players') or []):
+                pid = str(forecast.get('id') or '')
+                if not pid or (game['id'], pid) in seen:
+                    continue
+                seen.add((game['id'], pid))
+                log_rows = player_logs.get(pid, [])
+                history = []
+                for record in log_rows:
+                    if record.get('season') != season or record.get('seasonType') != 2:
+                        continue
+                    values = {key: record['stats'][key] for key in LOG_KEYS
+                              if isinstance(record.get('stats', {}).get(key), (int, float))}
+                    if values:
+                        history.append({'date': day(record['kickoff']), 'opp': str(record['opp']),
+                                        'home': 1 if record.get('home') is True else 0 if record.get('home') is False else -1,
+                                        'stats': values})
+                history = history[-20:]
+                projections = {}
+                for source, key in projection_key.items():
+                    value = forecast.get(source)
+                    if isinstance(value, (list, tuple)) and value and isinstance(value[0], (int, float)):
+                        projections[key] = round(value[0], 1)
+                player_lines = {}
+                for key in LOG_KEYS:
+                    row = current_lines.get((game['id'], pid, key))
+                    if row:
+                        player_lines[key] = {k: row.get(k) for k in ('line', 'odds', 'book', 'direction', 'state', 'observedAt')}
+                if not history and not projections and not player_lines:
+                    continue
+                quote = next((current_lines.get((game['id'], pid, key)) for key in LOG_KEYS
+                              if current_lines.get((game['id'], pid, key))), None)
+                name = forecast.get('name') or next((r.get('name') for r in reversed(log_rows) if r.get('name')), None) \
+                    or (quote or {}).get('player') or f'Player {pid}'
+                pos = forecast.get('pos') or next((r.get('pos') for r in reversed(log_rows) if r.get('pos')), None) \
+                    or (quote or {}).get('position')
+                out_players.append({'id': pid, 'name': name, 'pos': pos,
+                                    'team': team, 'opp': opponent, 'gameId': game['id'], 'side': side,
+                                    'rows': history, 'projection': projections, 'lines': player_lines})
+    return {'generatedAt': stamp(now), 'season': season, 'keys': list(LOG_KEYS),
+            'games': out_games, 'players': out_players}
+
+
 def build_teams(league, records, team_logs, defense_logs, teams_meta, identities, current):
     fbs = {team for team, rows in team_logs.items() if sum(1 for r in rows if r['season'] >= current - 1) >= 8} \
         if league == 'CFB' else set(team_logs)
@@ -812,6 +895,8 @@ def build(now=None):
     write(OUT / 'lines.json', {'generatedAt': stamp(now), 'lines': lines})
     for league in ('NFL', 'CFB'):
         info = league_data[league]
+        write(OUT / 'player-charts' / f'{league}.json',
+              build_player_charts(league, window, forecasts, info['player_logs'], info['current'], lines, now))
         index, shards, leaders, leader_season = build_players(league, info['records'], snaps if league == 'NFL' else {}, teams_meta)
         write(OUT / 'players' / f'{league}.json', {'keys': list(LOG_KEYS), 'shards': SHARDS[league], 'players': index,
                                                    'leaders': leaders, 'season': leader_season})

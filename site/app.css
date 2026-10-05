@@ -443,6 +443,54 @@ table.data a { font-weight: 600; }
 .chart .line { position: absolute; left: 12px; right: 12px; border-top: 1px dashed var(--amber); pointer-events: none; }
 .chart .line span { position: absolute; right: 0; top: -15px; font-size: 10px; font-weight: 700; color: var(--amber); }
 
+/* Upcoming-slate player cheat sheet: compact cards with every stored stat available. */
+.chart-controls { padding:14px; margin-bottom:10px; }
+.chart-selects { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-bottom:10px; }
+.chart-selects label { color:var(--dim); font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
+.chart-selects select { display:block; width:100%; margin-top:5px; text-transform:none; letter-spacing:0; }
+.chart-controls .search { margin:0; }
+.chart-count { margin:10px 2px 2px; }
+.chart-matchup { margin-top:22px; }
+.chart-matchup-head { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; padding:0 2px 8px; border-bottom:1px solid var(--line); }
+.chart-matchup-head b,.chart-matchup-head small { display:block; }
+.chart-matchup-head b { font-family:'Barlow Condensed',sans-serif; font-size:22px; letter-spacing:.02em; text-transform:uppercase; }
+.chart-matchup-head small { margin-top:2px; color:var(--faint); font-size:11px; }
+.chart-matchup-head a { flex-shrink:0; font-size:11px; font-weight:700; }
+.chart-team-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; padding-top:12px; }
+.chart-team { min-width:0; }
+.chart-team-head { display:flex; align-items:center; gap:8px; min-height:34px; margin:0 2px 8px; }
+.chart-team-head b,.chart-team-head small { display:block; }
+.chart-team-head b { color:var(--text); font-size:13px; }
+.chart-team-head small { color:var(--faint); font-size:10px; }
+.chart-team-logo { width:30px; height:30px; object-fit:contain; flex-shrink:0; }
+.player-chart-grid { display:grid; gap:8px; }
+.player-chart-card { display:block; min-width:0; padding:11px; overflow:hidden; border:1px solid var(--line); border-radius:12px; background:var(--surface); color:var(--text); }
+.player-chart-card:hover { border-color:#3c4a5c; color:var(--text); }
+.player-chart-head { display:flex; align-items:center; gap:9px; min-width:0; }
+.player-chart-head > span:nth-child(2) { min-width:0; }
+.player-chart-head b,.player-chart-head small { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.player-chart-head b { font-size:13px; }
+.player-chart-head small { color:var(--faint); font-size:10px; }
+.player-chart-photo { width:36px; height:36px; object-fit:contain; flex-shrink:0; }
+.player-chart-arrow { margin-left:auto; color:var(--mint); font-size:22px; }
+.player-chart-numbers { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:5px; margin-top:10px; }
+.player-chart-numbers > span { min-width:0; padding:7px; border-radius:8px; background:var(--raised); text-align:center; }
+.player-chart-numbers small,.player-chart-numbers b,.player-chart-numbers em { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.player-chart-numbers small { color:var(--faint); font-size:8px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; }
+.player-chart-numbers b { margin-top:2px; font-size:18px; line-height:1.05; }
+.player-chart-numbers em { margin-top:2px; color:var(--faint); font-size:8px; font-style:normal; }
+.mini-chart { position:relative; display:flex; align-items:flex-end; gap:4px; height:92px; margin-top:9px; padding:12px 2px 0; overflow:hidden; }
+.mini-col { position:relative; z-index:1; display:flex; flex:1 1 0; min-width:0; height:100%; flex-direction:column; align-items:center; justify-content:flex-end; }
+.mini-col > b { margin-bottom:2px; color:var(--dim); font-size:8px; line-height:1; }
+.mini-col > i { width:100%; max-width:24px; min-height:2px; border-radius:3px 3px 1px 1px; background:var(--sky); }
+.mini-col > i.over { background:var(--green); }
+.mini-col > i.under { background:var(--rose); }
+.mini-col > i.push { background:var(--faint); }
+.mini-col > small { width:100%; margin-top:3px; overflow:hidden; color:var(--faint); font-size:7px; text-align:center; text-overflow:ellipsis; white-space:nowrap; }
+.mini-line { position:absolute; left:2px; right:2px; z-index:2; border-top:1px dashed var(--amber); pointer-events:none; }
+.mini-line > b { position:absolute; top:-11px; right:0; padding-left:3px; background:var(--surface); color:var(--amber); font-size:8px; line-height:1; }
+.mini-empty { margin:auto; color:var(--faint); font-size:11px; }
+
 /* defense rank chips */
 .rank { display: inline-block; min-width: 40px; padding: 1px 6px; border-radius: 5px; font-size: 11px; font-weight: 700; text-align: center; background: var(--raised); color: var(--dim); }
 .rank-soft { background: rgba(63, 217, 139, .14); color: var(--green); }
@@ -866,6 +914,10 @@ table.data a { font-weight: 600; }
   .trend-card h2 { font-size:22px; line-height:1.12; }
   .menu a { align-items:flex-start; flex-direction:column; gap:3px; min-height:48px; padding:11px 12px; }
   .menu small { font-size:11px; }
+  .chart-team-grid { grid-template-columns:1fr; gap:18px; }
+  .chart-matchup { margin-top:20px; }
+  .chart-matchup-head b { font-size:20px; }
+  .player-chart-card { padding:10px; }
   table.data th, table.data td { padding:7px 8px; }
   table.data { font-size:11px; }
   .proj { padding:12px 10px 10px; }
