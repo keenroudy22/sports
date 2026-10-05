@@ -167,6 +167,17 @@ test('Today puts published plays and official results before optional research a
   assert.equal((today.match(/scorecardCard\(/g) || []).length, 0, 'the model scorecard belongs under Model results');
 });
 
+test('Today answers official, current-board and live-game questions before deeper research', () => {
+  const source = fs.readFileSync('site/app.js', 'utf8');
+  const today = source.slice(source.indexOf('async function viewToday()'), source.indexOf('const modelCard ='));
+  assert.ok(today.indexOf('todayPulse(card, best, playing, todayGames)') < today.indexOf('card.map(playCard)'));
+  assert.ok(today.indexOf('card.map(playCard)') < today.indexOf('boardSpotlight(best)'));
+  assert.ok(today.indexOf('boardSpotlight(best)') < today.indexOf('research-heading'));
+  assert.match(source, /Current price-checked research/);
+  assert.match(source, /These are not official plays unless they also appear above/);
+  assert.doesNotMatch(today, /href="#lab"/);
+});
+
 test('official plays render as a compact collapsed list with details on demand', () => {
   const source = fs.readFileSync('site/app.js', 'utf8');
   const card = source.slice(source.indexOf('const playCard = p =>'), source.indexOf('/* The one record'));
@@ -184,6 +195,14 @@ test('board navigation highlights the selected line view and offers a fast favor
   assert.match(source, /href="#board\/props" \$\{active === 'props' \? 'aria-current="page"'/);
   assert.match(source, /boardTabs\(favorites \? 'favorites' : props \? 'props' : 'lines'\)/);
   assert.match(source, /No best line right now/);
+});
+
+test('Tools leads with saved work and the digest while experiments stay secondary', () => {
+  const source = fs.readFileSync('site/app.js', 'utf8');
+  const tools = source.slice(source.indexOf('async function viewMore()'), source.indexOf('async function viewSchedule()'));
+  assert.ok(tools.indexOf('href="#saved"') < tools.indexOf('href="#arbs"'));
+  assert.ok(tools.indexOf('href="#digest"') < tools.indexOf('href="#lab"'));
+  assert.match(tools, /Specialist tools/);
 });
 
 test('Trends opens on upcoming main lines and supports season, Last 10 and Last 5 windows', () => {

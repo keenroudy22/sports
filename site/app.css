@@ -73,6 +73,32 @@
 .research-heading p:last-child { color:var(--dim); font-size:13px; line-height:1.6; }
 .two-col > * { min-width:0; }
 .two-col .scorecard-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.today-pulse { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:0 0 20px; }
+.today-pulse a { display:flex; min-width:0; min-height:88px; padding:12px 13px; flex-direction:column; border:1px solid var(--line); border-radius:12px; background:linear-gradient(145deg,rgba(94,234,164,.06),rgba(20,26,36,.96)); color:var(--text); }
+.today-pulse a:hover { border-color:rgba(94,234,164,.5); color:var(--text); }
+.today-pulse small,.today-pulse b,.today-pulse span { display:block; min-width:0; overflow-wrap:break-word; word-break:normal; }
+.today-pulse small { color:var(--mint); font-size:9px; font-weight:800; letter-spacing:.11em; text-transform:uppercase; }
+.today-pulse b { margin-top:5px; font-family:'Barlow Condensed','DM Sans',sans-serif; font-size:22px; line-height:1.05; }
+.today-pulse span { margin-top:auto; padding-top:7px; color:var(--faint); font-size:10px; line-height:1.3; }
+.board-spotlight { padding:15px; border:1px solid rgba(94,234,164,.28); border-radius:var(--radius); background:radial-gradient(circle at 100% 0,rgba(94,234,164,.12),transparent 38%),var(--surface); }
+.board-spotlight-head { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:12px; }
+.board-spotlight-head h2 { margin:0; font-family:'Barlow Condensed',sans-serif; font-size:25px; line-height:1.05; text-transform:uppercase; }
+.board-spotlight-head p { max-width:68ch; margin:6px 0 0; color:var(--dim); font-size:12px; line-height:1.5; }
+.board-spotlight-head .btn { flex-shrink:0; }
+.board-spotlight .favorite-lines { background:rgba(7,12,19,.42); }
+.league-switcher { margin:16px 0; }
+.league-switcher > summary { display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:58px; padding:11px 14px; cursor:pointer; list-style:none; }
+.league-switcher > summary::-webkit-details-marker { display:none; }
+.league-switcher > summary span:first-child b,.league-switcher > summary span:first-child small { display:block; }
+.league-switcher > summary b { color:var(--text); font-size:13px; }
+.league-switcher > summary small { margin-top:3px; color:var(--faint); font-size:10px; }
+.league-switcher > summary > span:last-child { color:var(--mint); font-size:11px; font-weight:700; white-space:nowrap; }
+.league-switcher[open] > summary > span:last-child { font-size:0; }
+.league-switcher[open] > summary > span:last-child::after { content:'Close −'; font-size:11px; }
+.league-switcher .sport-links { padding:0 12px 12px; }
+.tool-feature-primary { border-color:rgba(94,234,164,.32); background:radial-gradient(circle at 100% 0,rgba(94,234,164,.11),transparent 42%),var(--surface); }
+.tool-feature-compact { padding:14px; }
+.tool-feature-compact h2 { font-size:21px; }
 @media(max-width:420px) {
   .wordmark { display: none; }
   .leagues button { padding-left: 7px; padding-right: 7px; }
@@ -80,6 +106,11 @@
   .transparent-record .stat { padding:9px; }
   .transparent-record .stat-value { font-size:25px; }
   .board-tabs a { padding:11px 12px; }
+  .today-pulse { grid-template-columns:repeat(3,minmax(0,1fr)); gap:5px; }
+  .today-pulse a { min-height:64px; padding:8px; }
+  .today-pulse small { font-size:8px; letter-spacing:.07em; }
+  .today-pulse b { margin-top:4px; font-size:17px; }
+  .today-pulse span { display:none; }
 }
 
 * { box-sizing: border-box; }
@@ -1051,6 +1082,11 @@ table.data a { font-weight: 600; }
   .proj-line .lean { white-space:normal; justify-content:flex-end; text-align:right; }
   .scorecard-head { align-items:flex-start; }
   .scorecard-head a { white-space:nowrap; }
+  .board-spotlight { padding:12px; }
+  .board-spotlight-head { align-items:flex-start; flex-direction:column; gap:10px; }
+  .board-spotlight-head h2 { font-size:22px; }
+  .board-spotlight-head .btn { width:100%; justify-content:center; }
+  .league-switcher > summary { padding:10px 12px; }
   footer { margin-top:22px; }
 }
 

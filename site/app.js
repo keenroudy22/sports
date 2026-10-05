@@ -356,6 +356,28 @@
     const record = C.recordBreakdown(picks);
     return `<a class="official-strip card" href="#record"><span><small>Published straights · season</small><b>${esc(wl(record.all))}</b></span><span><small>Captured-price returns</small><b class="${unitTone(record.captured.units)}">${unitText(record.captured.units)}</b></span><span class="row-meta">All results →</span></a>`;
   };
+  /* The first-screen answer to three different questions: what is official, what is useful research, and what is
+     live. A visitor should not have to learn the site's section names before finding those answers. */
+  const todayPulse = (card, best, playing, todayGames) => {
+    const official = card.length ? `${card.length} posted` : 'No play forced';
+    const research = best.rows.length ? `${best.rows.length} priced read${best.rows.length === 1 ? '' : 's'}` : 'Nothing qualifies';
+    const scores = playing.length ? `${playing.length} live now` : `${todayGames.length} game${todayGames.length === 1 ? '' : 's'} today`;
+    return `<nav class="today-pulse" aria-label="Today at a glance">
+      <a href="#today"><small>Official card</small><b>${esc(official)}</b><span>Published selections only</span></a>
+      <a href="#board/favorites"><small>Kook’n board</small><b>${esc(research)}</b><span>Current price-checked research</span></a>
+      <a href="#scores"><small>Games</small><b>${esc(scores)}</b><span>Upcoming, live and final</span></a>
+    </nav>`;
+  };
+  const boardSpotlight = best => {
+    const title = best.day ? `Kook’n board · ${best.day}` : 'Kook’n board';
+    const intro = best.rows.length
+      ? `<div class="board-spotlight-head"><div><h2>Start with the strongest current lines.</h2><p>Ranked research at the captured price. These are not official plays unless they also appear above.</p></div><a class="btn" href="#board/favorites">Open full board →</a></div>
+        <div class="card favorite-lines"><div class="rows">${best.rows.slice(0, 3).map(lineRow).join('')}</div></div>`
+      : `<div class="board-spotlight-head"><div><h2>No line clears every check right now.</h2><p>The board stays empty instead of filling space with a forced opinion.</p></div><a class="btn" href="#board">Browse all lines →</a></div>`;
+    return section(title, `<div class="board-spotlight">${intro}</div>`, best.rows.length ? '<a href="#stats">Build your own view →</a>' : '');
+  };
+  const leagueSwitcher = sports => `<details class="card league-switcher" data-persist="league-switcher"><summary><span><b>More sports</b><small>Scores and research for nine leagues</small></span><span>Choose a sport ＋</span></summary>
+    <nav class="sport-links" aria-label="More sports">${SCORE_LEAGUES.map(key => { const n=(sports?.leagues?.[key]?.games || []).filter(g=>g.date===etDay()).length; return `<a href="#today" data-sport-nav="${key}">${esc(SCORE_NAMES[key])}${!['NFL','CFB'].includes(key) ? ` · ${n} today` : ''} →</a>`; }).join('')}</nav></details>`;
   /* The free community is the site's clearest next step: official plays arrive shortly before X, while the
      append-only record stays public here. Keep the claim precise and keep short-lived arb candidates separate. */
   const communityCard = (compact = false) => compact ? `<aside class="community-card community-card-compact card" aria-label="Join the Kook'n Discord">
@@ -678,27 +700,22 @@
     const card = [...scheduled.today, ...(ladder.open && inLeague(ladder.open) && !withdrawn.includes(ladder.open) ? [ladder.open] : [])]
       .sort((a,b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)) || Number(C.isLadder(b)) - Number(C.isLadder(a)) || String(a.kickoff).localeCompare(String(b.kickoff)));
     const todayGames = games.filter(g => C.dayOf(g.kickoff) === C.dayOf(new Date().toISOString()));
-    return `${head('Today', `${esc(todayLabel)} · ${todayGames.length}${state.league === 'ALL' ? ' football' : ''} game${todayGames.length === 1 ? '' : 's'}${state.league === 'ALL' ? '' : ` · ${esc(leagueName(state.league))}`}. Plays and top lines, all in one place.`)}
+    return `${head('Today', `${esc(todayLabel)} · ${todayGames.length}${state.league === 'ALL' ? ' football' : ''} game${todayGames.length === 1 ? '' : 's'}${state.league === 'ALL' ? '' : ` · ${esc(leagueName(state.league))}`}. Published plays first. Current research next.`)}
+      ${todayPulse(card, best, playing, todayGames)}
       ${section("Today's plays", card.length ? `<div class="plays">${card.map(playCard).join('')}</div>`
-        : empty('Nothing posted yet', 'New plays appear here when they are released.'), '<a href="#record">Every result →</a>')}
+        : empty('No official play posted', 'The desk will not manufacture one. Current price-checked research is directly below.', '<a class="btn" href="#board/favorites">See the current board</a>'), '<a href="#record">Every result →</a>')}
       ${officialStrip(picks)}
       <details class="card inactive-ladder" data-persist="climb-status"><summary><span>80/20 Climb</span><span>${esc(ladderStatus(ladder))}</span></summary>${ladderStrip(ladder)}</details>
+      ${boardSpotlight(best)}
       ${scheduled.upcoming.length ? `<details class="card upcoming-card"><summary>Upcoming official plays · ${scheduled.upcoming.length}<span>Separate from today’s card</span></summary><div class="plays">${scheduled.upcoming.map(playCard).join('')}</div></details>` : ''}
       ${scheduled.awaiting.length ? `<details class="card upcoming-card"><summary>Awaiting settlement · ${scheduled.awaiting.length}</summary><div class="plays">${scheduled.awaiting.map(playCard).join('')}</div></details>` : ''}
       ${withdrawn.length ? `<details class="card upcoming-card"><summary>Withdrawn / pulled · ${withdrawn.length}</summary><div class="plays">${withdrawn.map(playCard).join('')}</div></details>` : ''}
-      <div class="today-shortcuts"><a href="#stats">Research charts →</a><a href="#board/favorites">Best lines →</a><a href="#saved">★ Saved</a><a href="#arbs">Arb Radar</a><a href="#lab">Lab</a></div>
-      ${section('Around the leagues', `<nav class="sport-links" aria-label="More sports">${SCORE_LEAGUES.map(key => { const n=(sports?.leagues?.[key]?.games || []).filter(g=>g.date===etDay()).length; return `<a href="#today" data-sport-nav="${key}">${esc(SCORE_NAMES[key])}${!['NFL','CFB'].includes(key) ? ` · ${n} today` : ''} →</a>`; }).join('')}</nav>`, '<a href="#schedule">Release schedule →</a>')}
+      <div class="today-shortcuts"><a href="#stats">Player charts →</a><a href="#trends">Season trends →</a><a href="#saved">★ Saved</a><a href="#schedule">Release schedule →</a></div>
+      ${leagueSwitcher(sports)}
       ${deskNotesSection(notes, games, state.league)}
       <div class="two-col"><div>
-        <div class="research-heading"><p class="eyebrow">More to explore</p><h2>Lines and trends</h2><p>Game lines, player props and matchup trends.</p></div>
+        <div class="research-heading"><p class="eyebrow">Go deeper</p><h2>Matchups and live context</h2><p>Underdogs, game movement and the latest scoreboard.</p></div>
         ${underdogWatch(now, board)}
-        ${best.games.length ? section(best.day ? `Game lines · ${esc(best.day)}` : 'Game lines',
-          `<div class="card"><div class="rows">${best.games.map(lineRow).join('')}</div></div>`,
-          '<a href="#board">All game lines →</a>') : ''}
-        ${best.players.length ? section(best.day ? `Player props · ${esc(best.day)}` : 'Player props',
-          `<div class="card"><div class="rows">${best.players.map(lineRow).join('')}</div></div>`,
-          '<a href="#board/props">All player props →</a>') : ''}
-        ${!best.rows.length ? empty('No highlighted lines right now', 'Browse every available line and projection.', '<a class="btn" href="#board">View game lines</a>') : ''}
         ${playing.length ? section(`In play now${playing.length > 6 ? ` (${playing.length})` : ''}`, liveStamp(liveNow.refreshed)+projGrid(playing.slice(0, 6)), '<a href="#scores">All scores →</a>') : ''}
         ${settledRecently.length ? `<details class="card upcoming-card recent-results"><summary>Last game day · ${played(recent) ? wl(recent) : 'parlays only'}${recent.units == null ? '' : ` · ${unitText(recent.units)}`}<span><a href="#record">Full record →</a></span></summary><div class="rows">${settledRecently.map(pickRow).join('')}</div></details>` : ''}
       </div><div>
@@ -1092,7 +1109,7 @@
     if (tab === 'defense') return head('Defense vs position', `What each ${leagueName(league)} defense allows per game, by position group.`) + note + tabs + await defenseView(league);
     if (tab === 'teams') return head('Teams', `${leagueName(league)} teams with stored games.`) + note + tabs + await teamsList(league);
     if (tab === 'search') return head('Player search', `Find any ${leagueName(league)} player and open their complete game log.`) + note + tabs + await playerSearch(league);
-    return head('Player charts', 'Find a player, team or stat. Compare the line with the games behind it.') + note + tabs + await playerCharts(league);
+    return head('Player charts', 'Pick a stat and matchup. The captured line, our number and every recorded result stay together.') + note + tabs + await playerCharts(league);
   }
 
   const CHART_STATS = ['passYds', 'cmp', 'att', 'passTD', 'int', 'sacks', 'scrambles',
@@ -1820,9 +1837,10 @@
     const data = await maybe('app/today.json');
     const count = state.ticket.length;
     const link = (href, label, note) => `<a href="${href}"${href.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}><span>${label}</span><small>${note}</small></a>`;
-    return `${head('Tools', 'Calculators, experiments and your saved research.')}<div class="tool-feature-grid"><a class="card tool-feature" href="#arbs"><span class="eyebrow">Arb Radar</span><h2>Check the split</h2><p>Public calculator. Time-sensitive candidates stay in Discord.</p></a><a class="card tool-feature" href="#lab"><span class="eyebrow">Kook’n Lab</span><h2>See what’s being tested</h2><p>Data collection, forward trials and release stages.</p></a></div><nav class="board-tabs" aria-label="Your research"><a href="#saved">Saved</a><a href="#digest">Daily digest</a><a href="#start">Start here</a></nav>${communityCard(true)}<p class="inline-links"><a href="#feedback">Help improve Kook’n →</a></p>
+    return `${head('Tools', 'Your saved work and the fastest ways back into the slate.')}<div class="tool-feature-grid"><a class="card tool-feature tool-feature-primary" href="#saved"><span class="eyebrow">Your research</span><h2>Saved lines</h2><p>Reopen players, games and captured prices from this browser.</p></a><a class="card tool-feature tool-feature-primary" href="#digest"><span class="eyebrow">One-page view</span><h2>Daily digest</h2><p>Published plays and the most useful current research in one pass.</p></a></div><nav class="board-tabs" aria-label="Your research"><a href="#ticket">Ticket</a><a href="#start">Start here</a><a href="#feedback">Feedback</a></nav>${communityCard(true)}
       <div class="card menu">${link('https://x.com/keenkooks', 'Follow on X', '@keenkooks')}${link('#model', 'Model results', 'Pregame forecasts graded after the game')}${link('#ticket', 'Your ticket', count ? `${count} line${count === 1 ? '' : 's'}` : 'Parlay builder')}
       ${link('#trends', 'Season trends', '70 / 80 / 90 / 100% historical lines')}${link('#research', 'Research desk', 'Injuries and analyst notes')}${link('#scores', 'All sports scores', 'Football, basketball, baseball, hockey and soccer')}${link('#schedule', 'Posting schedule', 'When plays, research and results appear')}</div>
+      ${section('Specialist tools', `<div class="tool-feature-grid"><a class="card tool-feature tool-feature-compact" href="#arbs"><span class="eyebrow">Arb Radar</span><h2>Check the split</h2><p>Exact two-book stake math. Time-sensitive candidates stay in Discord.</p></a><a class="card tool-feature tool-feature-compact" href="#lab"><span class="eyebrow">Kook’n Lab</span><h2>Trials and new sports</h2><p>See what is collecting evidence before it reaches the public card.</p></a></div>`)}
       ${data ? section('Data status', freshnessCard(data)) : ''}
       <div class="section card" style="padding:14px"><p class="prose" style="margin:0"><b>About Kook'n.</b> Plays, lines, projections and results in one place. Every official play is graded publicly. For entertainment only.</p></div>`;
   }
