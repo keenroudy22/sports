@@ -374,6 +374,11 @@ def main(argv=None):
     # this adds no model call and reads no secrets or provider endpoints.
     health = desk_health.summary(root=ROOT, logs=LOGS, now=now, book=log_book)
     text = desk_health.markdown(health) + '\n' + text
+    import product_followthrough
+    product_status = product_followthrough.read_status(root=ROOT, now=now)
+    # Keep the entire dated queue in the packet, including packet-only runs.
+    # This fixed local read adds no model/provider call or work execution.
+    text = product_followthrough.packet(product_status) + '\n' + text
     import market_review
     try:
         text += '\n' + market_review.markdown(market_review.from_stores())
@@ -392,6 +397,9 @@ def main(argv=None):
     if not review:
         print('review unavailable; the evidence packet stands alone (no automatic cloud fallback)')
         review = 'The summary was unavailable. The complete recorded facts follow.\n'
+    # The model may choose other operational highlights, but cannot omit pending
+    # work from the saved review or either existing private notification excerpt.
+    review = product_followthrough.brief(product_status) + '\n\n' + review
     review_path.write_text(review + '\n\n' + text, encoding='utf-8')
     (LOGS / f'review-routing-{last.isoformat()}.json').write_text(json.dumps({
         'engine': 'codex' if args.codex else 'local', 'localCalls': llm.call_stats(),

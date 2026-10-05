@@ -35,7 +35,7 @@
   };
   restorePreferences(saved.get('research-preferences', {}));
   const preferences = () => Object.fromEntries(preferenceKeys.map(key => [key,state[key]]));
-  const savePreferences = () => saved.set('research-preferences', preferences());
+  const savePreferences = () => {saved.set('research-preferences', preferences());rememberContext();};
   const changeLeague = league => {
     const next=P.league(league);
     if(next!==state.league) state.chartOpponent='all'; // Team IDs are league-specific, not portable filters.
@@ -83,7 +83,8 @@
   const TABS = [['today', 'Today'], ['games', 'Games'], ['stats', 'Charts'], ['record', 'Record'], ['more', 'Tools']];
   ICONS.scores = '<path d="M3 5h18v14H3zM8 9v6M16 9v6M11 12h2"/>';
   const TAB_FOR = { scores:'games', saved:'more', digest:'today', start:'more', feedback:'more', trends: 'stats', board: 'stats', game: 'games', player: 'stats', team: 'stats', model: 'record', ticket: 'today', research: 'more', arbs: 'more', lab: 'more', schedule: 'more' };
-  const boardTabs = active => `<nav class="board-tabs" aria-label="Research workspace"><a href="#stats" ${active === 'charts' ? 'aria-current="page"' : ''}>Player charts</a><a href="#board/favorites" ${active === 'favorites' ? 'aria-current="page"' : ''}>Best lines</a><a href="#board" ${active === 'lines' ? 'aria-current="page"' : ''}>Game lines</a><a href="#board/props" ${active === 'props' ? 'aria-current="page"' : ''}>Prop lines</a><a href="#trends" ${active === 'trends' ? 'aria-current="page"' : ''}>Trends</a></nav>`;
+  const shareResearch = () => '<div class="research-share"><button type="button" class="btn" data-copy-research>Copy research link</button><span class="row-meta" role="status" data-copy-status></span><input class="search" type="url" readonly hidden data-copy-url aria-label="Public research link"></div>';
+  const boardTabs = (active,withShare=true) => `<nav class="board-tabs" aria-label="Research workspace"><a href="#stats" ${active === 'charts' ? 'aria-current="page"' : ''}>Player charts</a><a href="#board/favorites" ${active === 'favorites' ? 'aria-current="page"' : ''}>Best lines</a><a href="#board" ${active === 'lines' ? 'aria-current="page"' : ''}>Game lines</a><a href="#board/props" ${active === 'props' ? 'aria-current="page"' : ''}>Prop lines</a><a href="#trends" ${active === 'trends' ? 'aria-current="page"' : ''}>Trends</a></nav>${withShare?shareResearch():''}`;
   const gamesTabs = active => `<nav class="board-tabs" aria-label="Games view"><a href="#games" ${active === 'matchups' ? 'aria-current="page"' : ''}>Matchups</a><a href="#scores/${esc(state.league)}" ${active === 'scores' ? 'aria-current="page"' : ''}>Live & scores</a></nav>`;
   const scoreTabs = active => `<nav class="board-tabs" aria-label="Results view"><a href="#record" ${active === 'official' ? 'aria-current="page"' : ''}>Published plays</a><a href="#model" ${active === 'model' ? 'aria-current="page"' : ''}>Model results</a><a href="#record/trials" ${active === 'trials' ? 'aria-current="page"' : ''}>Trials</a></nav>`;
 
@@ -1086,7 +1087,7 @@
     const league = dataLeague();
     const tab = route.tab === 'players' ? 'search' : route.tab || 'charts';
     const note = state.league === 'ALL' ? '<p class="row-meta">Stats are per league; showing NFL. Switch to College above.</p>' : '';
-    const tabs = boardTabs('charts') + `<div class="toolbar"><div class="seg" role="group">${[['charts', 'By matchup'], ['search', 'Search'], ['defense', 'Defenses'], ['teams', 'Teams']].map(([id, label]) =>
+    const tabs = boardTabs('charts',tab==='charts') + `<div class="toolbar"><div class="seg" role="group">${[['charts', 'By matchup'], ['search', 'Search'], ['defense', 'Defenses'], ['teams', 'Teams']].map(([id, label]) =>
       `<a class="chip" style="display:inline-flex;align-items:center" href="#stats/${id}" aria-pressed="${tab === id}">${label}</a>`).join('')}</div></div>`;
     if (tab === 'defense') return head('Defense vs position', `What each ${leagueName(league)} defense allows per game, by position group.`) + note + tabs + await defenseView(league);
     if (tab === 'teams') return head('Teams', `${leagueName(league)} teams with stored games.`) + note + tabs + await teamsList(league);
@@ -1138,7 +1139,7 @@
       </span>${quoteMeta(current,player.kickoff)}${historyPlot(plotRows,values,line,side,true,key)}<span class="chart-sample-note">${values.length} recorded this season${ties?` · ${ties} ${ties===1?'tie':'ties'}`:''}${avg==null?'':` · avg ${C.statValue(avg,key)}`}</span>`;
   };
 
-  const playerChartCard = (player, key, league) => `<a class="player-chart-card" href="#player/${league}/${esc(player.id)}">
+  const playerChartCard = (player, key, league) => `<a class="player-chart-card" href="${esc(C.researchHash(`#player/${league}/${encodeURIComponent(player.id)}`,{...state,stat:key,playerSeason:'current',playerWindow:state.chartWindow==='season'?'all':state.chartWindow}))}">
     <span class="player-chart-head">${pic(HEADSHOT[league](player.id), 'player-chart-photo')}<span><b>${esc(player.name)}</b><small>${esc(player.pos || '')}</small></span><span class="player-chart-arrow">›</span></span>
     ${miniPlayerChart(player, key)}</a>`;
 
@@ -1153,9 +1154,9 @@
     const [data,teamData] = await Promise.all([maybe(`app/player-charts/${league}.json`),maybe(`app/teams/${league}.json`)]);
     if (!data || !data.games || !data.games.length) return empty('No upcoming player charts', 'Charts appear when the next matchup and player roles are available.');
     const available = new Set(CHART_STATS.filter(key => data.players.some(player => chartHas(player, key))));
-    const query = state.chartQuery.trim().toLowerCase();
-    const searchedStat = CHART_STATS.find(stat => query && String(C.LABEL[stat] || stat).toLowerCase() === query);
-    const key = searchedStat && available.has(searchedStat) ? searchedStat : available.has(state.chartStat) ? state.chartStat : [...available][0];
+    const query = state.researchQuery ?? state.chartQuery;
+    const searchedStat = C.researchStat(query,CHART_STATS);
+    const key = searchedStat || state.chartStat || [...available][0];
     if (!key) return empty('No player stats yet', 'Charts appear after the first stored game.');
     const days = [...new Set(data.games.map(game => game.day))];
     const opponents=[...new Set(data.players.flatMap(player=>(player.rows || []).map(row=>String(row.opp))))].sort();
@@ -1167,7 +1168,9 @@
     const byGame=new Map(data.games.map(game=>[game.id,game]));
     const playerOk = player => chartHas(player, key) && chartRows(player,key).length>0 && (state.chartPos === 'all' || player.pos === state.chartPos
       || (state.chartPos === 'RB' && player.pos === 'FB'))
-      && (!query || searchedStat || `${player.name} ${player.pos || ''} ${byGame.get(player.gameId)?.[player.side]?.name || ''} ${byGame.get(player.gameId)?.[player.side]?.abbreviation || ''}`.toLowerCase().includes(query));
+      && C.researchMatches(query,player.name,player.pos,byGame.get(player.gameId)?.[player.side]?.name,
+        byGame.get(player.gameId)?.[player.side]?.abbreviation,C.LABEL[key],player.lines?.[key]?.title,
+        player.lines?.[key]?.direction,player.lines?.[key]?.line);
     const games = data.games.filter(game => selectedDay === 'all' || game.day === selectedDay);
     const shownGames = new Set(games.map(game => game.id));
     const shownPlayers = data.players.filter(player => shownGames.has(player.gameId) && playerOk(player));
@@ -1183,11 +1186,11 @@
     }).filter(Boolean).join('');
     const dateOptions = [['next', 'Next slate'], ['all', 'All upcoming'], ...days.map(value => [value, dayLabel(value + 'T17:00:00Z')])];
     const teamNames=new Map(Object.entries(teamData?.teams || {}).map(([id,team])=>[String(id),team.abbr || team.name]));
-    return `<div class="chart-controls card"><div class="chart-selects"><label>Stat<select class="pick" data-select="chartStat">${CHART_STATS.filter(stat => available.has(stat)).map(stat => `<option value="${stat}" ${stat === key ? 'selected' : ''}>${esc(C.LABEL[stat] || stat)}</option>`).join('')}</select></label>
+    return `<div class="chart-controls card"><div class="chart-selects"><label>Stat<select class="pick" data-select="chartStat">${CHART_STATS.filter(stat => available.has(stat) || stat===key).map(stat => `<option value="${stat}" ${stat === key ? 'selected' : ''}>${esc(C.LABEL[stat] || stat)}${available.has(stat)?'':' · no history'}</option>`).join('')}</select></label>
         <label>Games<select class="pick" data-select="chartDay">${dateOptions.map(([value, label]) => `<option value="${value}" ${state.chartDay === value ? 'selected' : ''}>${esc(label)}</option>`).join('')}</select></label></div>
       <div class="toolbar">${seg('chartPos', [['all', 'All'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE'], ['PK', 'K']], state.chartPos)}${seg('chartWindow', [['last5', 'Last 5'], ['last10', 'Last 10'], ['season', 'Season']], state.chartWindow)}</div>
       <details class="chart-more-filters" data-persist="chart-more-filters"><summary>Matchup filters${state.chartVenue!=='all'||state.chartOpponent!=='all'?' · active':''}</summary><div class="chart-selects"><label>Venue<select data-select="chartVenue">${[['all','All venues'],['home','Home'],['away','Away']].map(([value,label])=>`<option value="${value}"${state.chartVenue===value?' selected':''}>${label}</option>`).join('')}</select></label><label>Opponent<select data-select="chartOpponent"><option value="all">All opponents</option>${opponents.map(id=>`<option value="${esc(id)}"${state.chartOpponent===id?' selected':''}>${esc(teamNames.get(id) || 'Team '+id)}</option>`).join('')}</select></label></div></details>
-      <div class="filter-search"><input class="search" type="search" data-input="chartQuery" maxlength="160" placeholder="Player, team or stat" value="${esc(state.chartQuery)}" aria-label="Search player charts">${resetFilters('charts')}</div></div>
+      <div class="filter-search"><input class="search" type="search" data-input="researchQuery" maxlength="160" placeholder="Player, team or market" value="${esc(query)}" aria-label="Search research">${resetFilters('charts')}</div><p class="row-meta">Search follows you across Charts, Lines and Trends. Other filters stay in this view.</p></div>
       ${adjusted?'<p class="row-meta">A saved date or opponent is no longer available. That filter has been reset.</p>':''}
       <p class="row-meta chart-count">${shownPlayers.length} player${shownPlayers.length===1?'':'s'} with matching ${esc(C.LABEL[key] || key)} history · ${esc(state.chartWindow === 'season' ? String(data.season) + ' season' : state.chartWindow === 'last10' ? 'up to last 10 this season' : 'up to last 5 this season')}</p>
       ${cards || empty('No matching player history', 'Try another stat, position, date, venue or opponent.', resetFilters('charts'))}`;
@@ -1275,12 +1278,15 @@
     const rows = data.rows;
     const pos = data.pos;
     const options = [...new Set([...(C.POSITION_STATS[pos] || C.POSITION_STATS.WR), 'snapPct'])].filter(k => keys.includes(k) && rows.some(r => Number.isFinite(C.observedCell(r, keys, k))));
-    const key = options.includes(state.stat) ? state.stat : options[0] || (C.POSITION_STATS[pos] || C.POSITION_STATS.WR)[0];
     const [teams, next] = await Promise.all([get(`app/teams/${league}.json`), nextGameFor(entry[3], league)]);
     const playerKey = `${league}:${route.id}`;
     if(state.historyPlayer !== playerKey) {
-      state.historyPlayer=playerKey; state.playerSeason='current'; state.playerWindow='all';
+      state.historyPlayer=playerKey; state.playerSeason=route.research?.playerSeason || 'current'; state.playerWindow=route.research?.playerWindow || 'all';
+      state.stat=route.research?.stat || null;
     }
+    if(state.stat && Object.hasOwn(C.LABEL,state.stat) && !options.includes(state.stat)) options.push(state.stat);
+    const key = options.includes(state.stat) ? state.stat : options[0] || (C.POSITION_STATS[pos] || C.POSITION_STATS.WR)[0];
+    state.stat=key;
     const currentSeason = next?.game?.season ?? index.season ?? teams.defense?.season;
     const seasons = [...new Set(rows.filter(r=>r[4]===2).map(r=>Number(r[2])))].sort((a,b)=>b-a);
     if(!['current','all'].includes(state.playerSeason) && !seasons.includes(Number(state.playerSeason))) state.playerSeason='current';
@@ -1320,6 +1326,7 @@
     return `${back}<div class="page-head who"><span class="badge" style="background:${esc(team.color || 'var(--raised)')}">${esc(pos || '?')}</span>
         <div><h1>${esc(data.name)}</h1><p>${esc(pos || '')} · <a href="#team/${league}/${esc(entry[3])}">${esc(team.name || entry[4] || '')}</a> · ${currentRows.length} game${currentRows.length===1?'':'s'} this season</p></div></div>
       ${watchButton({type:'player',key:`player:${league}:${route.id}`,title:data.name,league,href:`#player/${league}/${route.id}`})}
+      ${shareResearch()}
       <div class="toolbar"><div class="seg" role="group">${options.map(k => `<button type="button" data-set="stat:${k}" aria-pressed="${k === key}">${esc(C.LABEL[k] || k)}</button>`).join('')}</div></div>
       ${historyControls}<p class="row-meta player-history-scope">${esc(sampleLabel)}</p>
       <div class="tiles">${stat('Average',summary?valueText(summary.avg):DASH,C.LABEL[key] || key)}${stat('Median',summary?valueText(summary.median):DASH,'Selected games')}${stat('Hit count',h?.n?`${h[side]}/${h.n}`:DASH,line==null?'No captured line':`${side} ${valueText(line)}${h?.push?` · ${h.push} tied`:''}`)}${stat('Games',recent.length,summary && summary.n<recent.length?`${summary.n} with this stat recorded`:scopeLabel)}</div>
@@ -1522,13 +1529,13 @@
     });
     const favorites = state.boardMode === 'favorites';
     const props = state.boardMode === 'props';
-    const query = state.boardQuery.trim().toLowerCase();
+    const query = state.researchQuery ?? state.boardQuery;
     let shown = all.filter(l => favorites ? true : props ? Boolean(l.athleteId) : !l.athleteId)
       .filter(l => state.boardScope === 'settled' ? l.state === 'closed' : ['open', 'reference', 'unpriced'].includes(l.state));
     if (favorites) shown = shown.filter(l => l.state === 'open' && l.odds != null && l.grade && l.grade.calibrated
       && ['lean', 'strong'].includes(C.tierOf(l.grade)));
     if (props && state.propMarket !== 'all') shown = shown.filter(l => l.market === state.propMarket);
-    if (query) shown = shown.filter(l => {const game=today?.games?.find(g=>g.id===l.gameId); return `${l.player || ''} ${l.title || ''} ${l.market || ''} ${game?.away?.name || ''} ${game?.home?.name || ''} ${game?.away?.abbr || ''} ${game?.home?.abbr || ''}`.toLowerCase().includes(query);});
+    if (query) shown = shown.filter(l => {const game=today?.games?.find(g=>g.id===l.gameId); return C.researchMatches(query,l.player,l.title,l.market,game?.away?.name,game?.home?.name,game?.away?.abbr,game?.home?.abbr);});
     /* Today first. With nothing left today, the next day that has lines stands in, and the header says so. */
     const todayLabel = dayLabel(new Date().toISOString());
     let dayNote = '';
@@ -1571,7 +1578,7 @@
       ${dayNote ? `<p class="row-meta" style="margin:0 0 8px">${esc(dayNote)}</p>` : ''}
       <details class="explainer"><summary>How to read the board</summary>
       <p class="row-meta" style="margin:8px 0 10px">Green rows are lines we like at the shown price. Confidence ranks the chance of winning; value ranks the difference between our estimate and the price. Tap a player for history and matchup. Nothing is official unless it is labeled as a play.</p></details>
-      <div class="filter-search"><input class="search" type="search" data-input="boardQuery" maxlength="160" placeholder="Player, team or market" value="${esc(state.boardQuery)}" aria-label="Search lines">${resetFilters('lines')}</div>
+      <div class="filter-search"><input class="search" type="search" data-input="researchQuery" maxlength="160" placeholder="Player, team or market" value="${esc(query)}" aria-label="Search research">${resetFilters('lines')}</div>
       <div id="board-rows">${body}</div>
       <p class="row-meta" style="margin-top:10px">☆ Save keeps research in your watchlist. + adds a line to your personal ticket.</p>`;
   }
@@ -1781,16 +1788,17 @@
     const data = await get('app/trends.json');
     const windowed = C.trendWindow(C.bestTrendPrices(data.rows || []), state.trendWindow);
     const rows = C.filterTrends(windowed, { rate: state.trendRate, stat: state.trendStat,
-      kind: state.trendKind, min: 3, league: state.league, query: state.trendQuery, game: route.id,
+      kind: state.trendKind, min: 3, league: state.league, query: state.researchQuery ?? state.trendQuery, game: route.id,
       day: route.id ? 'all' : state.trendDay });
     const select = (key, title, options) => `<label>${title}<select data-select="${key}">${options.map(([v, t]) => `<option value="${v}" ${state[key] === v ? 'selected' : ''}>${t}</option>`).join('')}</select></label>`;
     const windowLabel = state.trendWindow === 'last5' ? 'Last 5 this season' : state.trendWindow === 'last10' ? 'Last 10 this season' : 'This season';
+    const playerLink = r => esc(C.researchHash(`#player/${r.league}/${encodeURIComponent(r.athleteId)}`,{...state,stat:r.stat,playerSeason:'current',playerWindow:state.trendWindow==='season'?'all':state.trendWindow}));
     const cards = rows.slice(0, 150).map(r => `<article class="card trend-card">
-      <div class="trend-top"><a href="#player/${esc(r.league)}/${esc(r.athleteId)}"><img class="trend-photo" src="https://a.espncdn.com/i/headshots/${r.league === 'NFL' ? 'nfl' : 'college-football'}/players/full/${esc(r.athleteId)}.png" alt="" loading="lazy"><b>${esc(r.player)}</b></a><span class="trend-rate">${r.rate}%<small>${r.hits}/${r.games} games</small></span></div>
+      <div class="trend-top"><a href="${playerLink(r)}"><img class="trend-photo" src="https://a.espncdn.com/i/headshots/${r.league === 'NFL' ? 'nfl' : 'college-football'}/players/full/${esc(r.athleteId)}.png" alt="" loading="lazy"><b>${esc(r.player)}</b></a><span class="trend-rate">${r.rate}%<small>${r.hits}/${r.games} games</small></span></div>
       <h2>${esc(r.title)}</h2><p class="row-meta">${esc(r.team.name || r.team.abbr || '')} · ${esc(windowLabel)}${r.injuryStatus ? ` · Injury report: ${esc(r.injuryStatus)}` : ''}</p>
       <p>${r.kind === 'milestone' ? '<span class="pill">Stat milestone</span> <span class="row-meta">No verified price</span>' : `<span class="pill pill-ours">${r.kind === 'alternate' ? 'Alternate' : 'Main line'}</span> <b>${odds(r.odds)} ${esc(r.book)}</b> <span class="row-meta">captured ${esc(ago(r.observedAt))} · verify in book</span>`}</p>
       <a class="row-meta" href="#game/${esc(r.gameId)}">${esc(r.matchup)} · ${esc(whenShort(r.kickoff))} →</a>
-      <details><summary>See ${esc(windowLabel.toLowerCase())}: ${r.hits}/${r.games} hit${r.games < 5 ? ' · small sample' : ''}</summary><p class="row-meta">Recorded regular-season appearances, not head-to-head history. Missing appearances are not assumed played. Injury exits count when a stat is recorded. ${r.pushes ? `${r.pushes} statistical ties counted in the denominator, not as hits.` : ''}</p><div class="trend-log">${r.history.map(h => `<span><small>${esc(h.date)}</small><b>${h.value}</b></span>`).join('')}</div><p class="row-meta">Check current role, injury status and opponent strength, especially in college.</p><a href="#player/${esc(r.league)}/${esc(r.athleteId)}">Full player research →</a></details>
+      <details><summary>See ${esc(windowLabel.toLowerCase())}: ${r.hits}/${r.games} hit${r.games < 5 ? ' · small sample' : ''}</summary><p class="row-meta">Recorded regular-season appearances, not head-to-head history. Missing appearances are not assumed played. Injury exits count when a stat is recorded. ${r.pushes ? `${r.pushes} statistical ties counted in the denominator, not as hits.` : ''}</p><div class="trend-log">${r.history.map(h => `<span><small>${esc(h.date)}</small><b>${h.value}</b></span>`).join('')}</div><p class="row-meta">Check current role, injury status and opponent strength, especially in college.</p><a href="${playerLink(r)}">Full player research →</a></details>
     </article>`).join('');
     return `${head('Trends', 'Main lines first. Switch the history window to see what has held up lately.')}${boardTabs('trends')}
       <div class="card trend-controls">
@@ -1798,7 +1806,7 @@
         <div class="trend-filter-group"><p class="eyebrow">History</p>${seg('trendWindow', [['season','This season'],['last10','Last 10'],['last5','Last 5']], state.trendWindow)}</div>
         <div class="trend-filter-group"><p class="eyebrow">Line</p>${seg('trendKind', [['main','Main lines'],['alternate','Alternates'],['milestone','Milestones']], state.trendKind)}</div>
         <div class="trend-selects">${select('trendStat','Stat',[['all','All stats'],['rec','Receptions'],['recYds','Receiving yards'],['rushYds','Rushing yards'],['passYds','Passing yards'],['car','Carries'],['att','Pass attempts'],['cmp','Completions']])}</div>
-      ${route.id ? '' : `<div class="trend-filter-group"><p class="eyebrow">Games</p>${seg('trendDay', [['all','All upcoming'],['today','Today']], state.trendDay)}</div>`}<div class="filter-search"><input aria-label="Search players or teams" maxlength="160" placeholder="Search player or team" data-input="trendQuery" value="${esc(state.trendQuery)}">${resetFilters('trends')}</div></div>
+      ${route.id ? '' : `<div class="trend-filter-group"><p class="eyebrow">Games</p>${seg('trendDay', [['all','All upcoming'],['today','Today']], state.trendDay)}</div>`}<div class="filter-search"><input type="search" aria-label="Search research" maxlength="160" placeholder="Player, team or market" data-input="researchQuery" value="${esc(state.researchQuery ?? state.trendQuery)}">${resetFilters('trends')}</div></div>
       <p class="row-meta">${rows.length} ${state.trendKind === 'main' ? 'main-line ' : ''}trend${rows.length === 1 ? '' : 's'} · ${esc(windowLabel)} · updated ${esc(ago(data.generatedAt))}. Verify current prices.${route.id ? ' <a href="#trends">Show all games →</a>' : ''}</p>
       <details class="card trend-method"><summary>How to read this</summary><p>The fraction is exact for the selected history window. 100% means the player cleared the listed number in every recorded game shown—not that it is guaranteed next game. Main lines and alternates require a recent sportsbook quote; milestones are unpriced stats.</p></details>
       ${cards ? `<div class="trend-grid">${cards}</div>${rows.length > 150 ? '<p class="row-meta">Showing the first 150. Narrow by stat, player or line type to see more.</p>' : ''}` : empty('No trends match these filters', 'Try another history window, hit rate, stat or line type. Missing and old quotes stay hidden.', resetFilters('trends'))}`;
@@ -2088,8 +2096,16 @@
     const message=`Kook’n feedback\nArea: ${data.get('area')}\nExperience: ${data.get('rating')}\n${data.get('comment') || ''}${data.get('usage')?'\nSection visits and actions on this device: '+counts:''}`;
     $('#feedback-output').innerHTML=`<label>Copy this message<textarea readonly rows="7">${esc(message)}</textarea></label><a href="https://discord.gg/CvNTUUSnNz" target="_blank" rel="noopener">Send in Discord ↗</a>`;
   });
+  let researchLocation=null;
   async function render(preserve = false) {
     const route = C.parseRoute(location.hash);
+    if(researchLocation!==location.hash) {
+      // Apply a link once on entry. Later control changes must not be undone by refreshes.
+      if(historyContext) route.research=C.researchContext(C.researchHash(location.hash,historyContext));
+      if(route.research) {Object.assign(state,route.research);saved.set('league',state.league);savePreferences();}
+      if(route.view==='player') state.historyPlayer=null;
+      researchLocation=location.hash;
+    }
     if(route.view === 'scores') changeLeague(route.league);
     const mine = ++token;
     if(!preserve) { const usage=saved.get('usage',{}); if(usage && typeof usage==='object' && Object.hasOwn(VIEWS,route.view)) {usage[route.view]=Math.min(10000,(Number(usage[route.view]) || 0)+1);saved.set('usage',usage);} }
@@ -2105,7 +2121,10 @@
       const opened = preserve ? new Set(details.filter(el => el.open).map(detailKey)) : new Set();
       const scrolls = preserve ? [...view.querySelectorAll('.table-wrap,.seg,.filters,.board-tabs')].map(el => el.scrollLeft) : [];
       const focus = document.activeElement;
-      const focusKey = el => [el.tagName,el.id,el.getAttribute('href'),el.getAttribute('data-set'),el.closest('[data-persist]')?.dataset.persist,el.textContent.trim()].join('|');
+      const focusKey = el => {
+        const key=['data-watch','data-add','data-set','data-select','data-input','data-reset-filters','data-copy-research'].find(name=>el.hasAttribute(name));
+        return key?[el.tagName,key,el.getAttribute(key)].join('|'):[el.tagName,el.id,el.getAttribute('href'),el.closest('[data-persist]')?.dataset.persist,el.textContent.trim()].join('|');
+      };
       const priorFocus = preserve && view.contains(focus) ? focusKey(focus) : null;
       const scrollY = window.scrollY;
       view.innerHTML = html;
@@ -2136,11 +2155,24 @@
         odds: row.odds, book: row.book, gameId: row.gameId, kickoff: row.kickoff, expiresAt: row.expiresAt, observedAt: row.observedAt, state: row.state });
     }
     saveTicket();
-    render();
+    await render(true);
+    chrome(C.parseRoute(location.hash));
   }
 
   document.addEventListener('click', event => {
     const target = event.target;
+    const copyResearch=target.closest('[data-copy-research]');
+    if(copyResearch) {
+      const url=new URL(location.href); url.search=''; url.hash=C.researchHash(location.hash,state);
+      const feedback=copyResearch.closest('.research-share')?.querySelector('[data-copy-status]');
+      const field=copyResearch.closest('.research-share')?.querySelector('[data-copy-url]');
+      if(field) {field.value=url.href;field.hidden=false;}
+      if(feedback) feedback.textContent='Public filters only. You can copy the link below.';
+      (navigator.clipboard ? navigator.clipboard.writeText(url.href) : Promise.reject(new Error('no clipboard')))
+        .then(()=>{if(feedback) feedback.textContent='Link copied. Filters only; prices refresh.';})
+        .catch(()=>{if(field) {field.focus();field.select();}});
+      return;
+    }
     const league = target.closest('[data-league]');
     if (league) { changeLeague(league.dataset.league); render(); return; }
     const reset = target.closest('[data-reset-filters]');
@@ -2197,7 +2229,10 @@
 
   document.addEventListener('change', event => {
     const select = event.target.closest('[data-select]');
-    if (select) { state[select.dataset.select] = select.value; savePreferences(); render(true); }
+    if (select) {
+      if(select.dataset.select==='chartStat' && C.researchStat(state.researchQuery,CHART_STATS)!==select.value && C.researchStat(state.researchQuery,CHART_STATS)) state.researchQuery='';
+      state[select.dataset.select] = select.value; savePreferences(); render(true);
+    }
   });
 
   document.addEventListener('change', event => {
@@ -2241,13 +2276,15 @@
   /* Browser history restores the research context; saving a preference never stores a result/quote. */
   let historyContext=null;
   if ('scrollRestoration' in history) history.scrollRestoration='manual';
-  const rememberContext=()=>history.replaceState({...history.state,kr:{...preferences(),league:state.league,chartDay:state.chartDay,scoresDate:state.scoresDate,scroll:window.scrollY}},'',location.href);
+  function rememberContext() {history.replaceState({...history.state,kr:{...preferences(),...C.researchContext(C.researchHash(location.hash,state)),league:state.league,chartDay:state.chartDay,scoresDate:state.scoresDate,scroll:window.scrollY}},'',location.href);}
+  let scrollFrame=null;
+  window.addEventListener('scroll',()=>{if(scrollFrame==null) scrollFrame=requestAnimationFrame(()=>{scrollFrame=null;rememberContext();});},{passive:true});
   document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(link && link.getAttribute('href')!==location.hash)rememberContext();},true);
   window.addEventListener('popstate',()=>{
     historyContext=history.state?.kr || null;
     if(historyContext) {restorePreferences(historyContext);state.league=P.league(historyContext.league);state.chartDay=historyContext.chartDay || 'next';state.scoresDate=historyContext.scoresDate || null;saved.set('league',state.league);}
   });
-  window.addEventListener('hashchange', () => { const context=historyContext;historyContext=null;render().then(() => window.scrollTo(0,context?.scroll || 0)); });
+  window.addEventListener('hashchange', () => { const context=historyContext;const rendering=render();historyContext=null;rendering.then(() => window.scrollTo(0,context?.scroll || 0)); });
   function refreshPage() {
     const route = C.parseRoute(location.hash);
     if (!document.hidden && ['today', 'games', 'game', 'scores', 'board', 'trends', 'record', 'stats', 'player', 'saved'].includes(route.view) && !document.activeElement.matches('input, select, textarea') && !$('#detail').open) render(true);

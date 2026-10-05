@@ -580,6 +580,10 @@ table.data a { font-weight: 600; }
 .discovery-aside a, .discovery-aside b, .discovery-aside small { white-space:normal; text-overflow:clip; overflow:visible; }
 .tool-feature-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }.tool-feature { display:block; padding:18px; }.tool-feature h2 { font-size:25px; margin:8px 0; }.tool-feature p { color:var(--dim); font-size:13px; line-height:1.6; }
 .published-parlays { padding:14px; margin:12px 0; }
+.research-share { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin:8px 0 14px; }
+.research-share .btn { white-space:normal; }
+.research-share [role="status"] { overflow-wrap:anywhere; }
+.research-share [data-copy-url] { width:100%; min-width:0; }
 @media (max-width:620px) { .tool-feature-grid { grid-template-columns:1fr; }.history-chart.full-chart { padding-left:3px; padding-right:3px; } }
 
 /* defense rank chips */

@@ -565,8 +565,10 @@
   const LEGACY = { '': 'today', sports: 'today', home: 'today', overview: 'today', charts: 'stats', tools: 'more', props: 'board',
     parlays: 'ticket', lines: 'board', results: 'record', research: 'research', players: 'stats' };
   /* Old links keep working: #game/<id>, #player/<league>/<id>, #record, #players and the rest. */
-  const parseRoute = hash => {
-    const parts = String(hash || '').replace(/^#\/?/, '').split('/').map(decodeURIComponent);
+  const routePath = hash => {
+    const parts = String(hash || '').split('?')[0].replace(/^#\/?/, '').split('/').map(value => {
+      try { return decodeURIComponent(value); } catch (_) { return ''; }
+    });
     let [view, ...rest] = parts;
     view = view || '';
     if (view === 'sport') return { view: 'scores', league: (rest[0] || 'NBA').toUpperCase() };
@@ -585,6 +587,10 @@
     const known = ['today', 'games', 'stats', 'model', 'record', 'board', 'ticket', 'research', 'arbs', 'lab', 'schedule', 'more', 'saved', 'digest', 'start', 'feedback'];
     if (known.includes(view)) return { view };
     return { view: LEGACY[view] || 'today' };
+  };
+  const parseRoute = hash => {
+    const route = routePath(hash), research = researchContext(hash);
+    return research ? {...route,research} : route;
   };
 
   const trendWindow = (rows, window = 'season') => {
@@ -615,7 +621,7 @@
     (filters.day !== 'today' || dayOf(r.kickoff) === dayOf(new Date(now).toISOString())) &&
     (!filters.game || r.gameId === filters.game) && Date.parse(r.kickoff) > now &&
     (r.kind === 'milestone' || (Date.parse(r.observedAt) <= now && now - Date.parse(r.observedAt) <= 4 * 3600000)) &&
-    `${r.player} ${r.team?.name || ''} ${r.matchup}`.toLowerCase().includes(String(filters.query || '').toLowerCase()))
+    researchMatches(filters.query,r.player,r.team?.name,r.team?.abbr,r.matchup,r.title,LABEL[r.stat],r.stat))
     .sort((a, b) => b.hits / b.games - a.hits / a.games || b.games - a.games || a.player.localeCompare(b.player));
 
   const deskNotes = (data, league = 'ALL', now = Date.now(), games = []) => {
@@ -634,6 +640,7 @@
 
   /* Browser-local research settings. Unknown saved values fall back to visible, usable controls. */
   const RESEARCH_DEFAULTS = Object.freeze({
+    researchQuery:'',
     trendRate:'80', trendStat:'all', trendKind:'main', trendWindow:'season', trendQuery:'', trendDay:'all',
     gamesScope:'upcoming', gamesQuery:'', boardDay:'today', boardScope:'open', boardSort:'best', boardQuery:'', propMarket:'all',
     chartStat:'recYds', chartPos:'all', chartWindow:'season', chartDay:'next', chartQuery:'', chartVenue:'all', chartOpponent:'all', recordScope:'straight',
@@ -647,15 +654,84 @@
     chartVenue:['all','home','away'], recordScope:['straight','parlays','ladder','all'],
   };
   const researchPreferences = values => Object.fromEntries(Object.entries(RESEARCH_DEFAULTS).map(([key,fallback]) => {
-    const value=values?.[key];
-    const valid=typeof value==='string' && value.length<=160 && (RESEARCH_CHOICES[key] ? RESEARCH_CHOICES[key].includes(value)
+    let value=key==='researchQuery' ? values?.researchQuery ?? values?.chartQuery ?? values?.boardQuery ?? values?.trendQuery : values?.[key];
+    if(['chartStat','trendStat'].includes(key) && typeof value==='string' && Object.hasOwn(PROJECTION_MARKET,value)) value=PROJECTION_MARKET[value];
+    const valid=typeof value==='string' && value.length<=160 && !/[\u0000-\u001f\u007f]/.test(value) && (RESEARCH_CHOICES[key] ? RESEARCH_CHOICES[key].includes(value)
       : key==='chartOpponent' ? /^(?:all|\d{1,12})$/.test(value)
       : key==='chartDay' ? ['all','next'].includes(value) || /^\d{4}-\d{2}-\d{2}$/.test(value) && Number.isFinite(Date.parse(value+'T12:00Z')) && new Date(value+'T12:00Z').toISOString().slice(0,10)===value
       : /Query$/.test(key));
     return [key,valid?value:fallback];
   }));
   const researchReset = scope => Object.fromEntries(Object.entries(RESEARCH_DEFAULTS).filter(([key]) =>
-    scope==='charts'?key.startsWith('chart'):scope==='trends'?key.startsWith('trend'):scope==='lines'?key.startsWith('board')||key==='propMarket':false));
+    ['charts','trends','lines'].includes(scope) && (key==='researchQuery' || (scope==='charts'?key.startsWith('chart'):scope==='trends'?key.startsWith('trend'):key.startsWith('board')||key==='propMarket'))));
+
+  /* Public research links contain controls only, never captured prices or browser-private tools. */
+  const RESEARCH_PARAMS = {
+    stats:{stat:'chartStat',sample:'chartWindow',date:'chartDay',position:'chartPos',venue:'chartVenue',opponent:'chartOpponent'},
+    board:{market:'propMarket',date:'boardDay',scope:'boardScope',sort:'boardSort'},
+    trends:{stat:'trendStat',sample:'trendWindow',date:'trendDay',rate:'trendRate',kind:'trendKind'},
+    player:{stat:'stat',season:'playerSeason',sample:'playerWindow'},
+  };
+  const RESEARCH_SPORTS = ['ALL','NFL','CFB','NBA','WNBA','CBB','MLB','NHL','EPL','MLS'];
+  const researchValues = (route, values = {}) => {
+    const fields=RESEARCH_PARAMS[route.view];
+    if(!fields) return null;
+    const clean=researchPreferences(values);
+    const result={league:route.view==='player' ? (['NFL','CFB'].includes(route.league)?route.league:'NFL')
+      : RESEARCH_SPORTS.includes(values.league)?values.league:'ALL',researchQuery:clean.researchQuery};
+    for(const key of Object.values(fields)) {
+      if(key==='stat') result[key]=Object.hasOwn(LABEL,values.stat)?(PROJECTION_MARKET[values.stat] || values.stat):'';
+      else if(key==='playerSeason') result[key]=['current','all'].includes(values[key]) || /^(?:19|20)\d{2}$/.test(String(values[key])) ? String(values[key]) : 'current';
+      else if(key==='playerWindow') result[key]=['all','last5','last10','last20'].includes(values[key])?values[key]:'all';
+      else result[key]=clean[key];
+    }
+    return result;
+  };
+  const researchContext = hash => {
+    const text=String(hash || ''), split=text.indexOf('?'), route=routePath(text), fields=RESEARCH_PARAMS[route.view];
+    if(split<0 || !fields || text.length>4096) return null;
+    const params=new URLSearchParams(text.slice(split+1)), values={};
+    for(const [param,key] of Object.entries({sport:'league',q:'researchQuery',...fields}))
+      if(params.getAll(param).length===1) values[key]=params.get(param);
+    return researchValues(route,values);
+  };
+  const researchHash = (hash, values = {}) => {
+    const path=String(hash || '#stats').split('?')[0], route=routePath(path), clean=researchValues(route,values);
+    if(!clean) return path;
+    const params=new URLSearchParams();
+    for(const [param,key] of Object.entries({sport:'league',q:'researchQuery',...RESEARCH_PARAMS[route.view]})) params.set(param,clean[key]);
+    return `${path}?${params}`;
+  };
+
+  /* Alias only stat names already present in the stored schema; no invented combined/TD markets. */
+  const searchText = value => String(value ?? '').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase()
+    .replace(/[’']/g,'').replace(/[^a-z0-9.+-]+/g,' ').trim().replace(/\s+/g,' ');
+  const SEARCH_MARKETS = [...MARKET_PHRASES,['passing completions','cmp'],['pass completions','cmp'],
+    ['passing touchdowns','passTD'],['rushing touchdowns','rushTD'],['receiving touchdowns','recTD'],
+    ...Object.entries(LABEL).map(([key,label])=>[label,PROJECTION_MARKET[key] || key]),
+    ...Object.keys(LABEL).filter(key=>/[A-Z]/.test(key)).map(key=>[key,key])]
+    .map(([phrase,key])=>[searchText(phrase),key]).sort((a,b)=>b[0].length-a[0].length);
+  const searchTerms = value => {
+    let text=` ${searchText(value)} `;
+    for(const [phrase,key] of SEARCH_MARKETS) {
+      // Boundary spaces keep 'carries' and the number 40 from matching parts of other facts.
+      text=text.split(` ${phrase} `).join(` @${key.toLowerCase()} `);
+    }
+    return text.trim().split(/\s+/).filter(Boolean);
+  };
+  const researchMatches = (query, ...fields) => {
+    const wanted=searchTerms(query), terms=fields.flatMap(searchTerms);
+    const aliases=SEARCH_MARKETS.filter(([,key])=>terms.includes('@'+key.toLowerCase())).flatMap(([phrase])=>phrase.split(' '));
+    const haystack=new Set([...terms,...fields.flatMap(value=>searchText(value).split(' ')),...aliases]);
+    return wanted.every(word=>[...haystack].some(token=>token===word || (word.length>3 && !/^[@+\-\d]/.test(word) && token.startsWith(word))));
+  };
+  const researchStat = (query, supported = Object.keys(LABEL)) => {
+    const text=searchText(query);
+    if(/\+|\b(?:and|combined|anytime|any time)\b/.test(text)) return null;
+    const keys=[...new Set(searchTerms(query).filter(word=>word.startsWith('@')).map(word=>
+      supported.find(key=>key.toLowerCase()===word.slice(1))).filter(Boolean))];
+    return keys.length===1?keys[0]:null;
+  };
   const chartHistory = (rows, key, filters = {}) => {
     const count=filters.chartWindow==='last5'?5:filters.chartWindow==='last10'?10:Infinity;
     return (rows || []).filter(row=>Number.isFinite(row.stats?.[key]) &&
@@ -709,7 +785,7 @@
     return parts.join(' · ') || 'On the website · social delivery not yet confirmed';
   };
 
-  return { RESEARCH_DEFAULTS, researchPreferences, researchReset, chartHistory, chartGeometry, thresholdResult, quoteStatus, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, deskNotes,
+  return { RESEARCH_DEFAULTS, researchPreferences, researchReset, researchContext, researchHash, researchMatches, researchStat, chartHistory, chartGeometry, thresholdResult, quoteStatus, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, deskNotes,
     column, cell, observedCell, playerHistory, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
     unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, modelCaution, projectionScorecard, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };

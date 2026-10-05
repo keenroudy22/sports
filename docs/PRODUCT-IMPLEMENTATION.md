@@ -11,13 +11,18 @@ quote states; coherent research filters; private operating visibility; bounded c
 Current sources, free budgets and approved release categories only. Full plan: owner's local
 `kookn-product-plan-2026-10-05.html` (dated audit baseline, not a deployment receipt).
 
+The finite follow-through queue is `docs/product-status.json`. Read it before continuing work. Each item has an
+owner, next action, completion condition and dated evidence. The existing weekly review carries its open items
+without relying on the local model to remember them. A model switch does not reset this queue. Its statuses are
+dated assertions, not a live deployment/health monitor; missing, invalid and stale input must remain visible.
+
 | Workstream | Acceptance evidence | State at implementation handoff |
 |---|---|---|
 | Chart correctness and quote clarity | Shared domain/baseline; below/equal/above, negative/zero/unknown fixtures; samples and quote ages match stored rows. | Implemented with regression fixtures; release verification below. No model or historical-grade change. |
 | Navigation and Today | Five destinations; Scores alias opens Games Live; other aliases survive; sport context, back navigation, opening phone screen and no clipping. | Implemented. Local phone checks confirm the published play appears first and sport selection preserves its section. |
-| Research workspace | Player/team/market search; main-line default; Season/L5/L10 samples; persistent filters; Saved distinct from ticket-building. | Implemented; local search/sample/back and trend filtering checks passed. Unsupported sports remain explicit. |
+| Research workspace | Player/team/market search; main-line default; Season/L5/L10 samples; persistent filters; Saved distinct from ticket-building. | Initial local filtering shipped. Closeout found shareable context and cross-workspace search still incomplete; P02 tracks their verified completion. Unsupported sports remain explicit. |
 | Captions and graphic variation | Overlong text has a factual bounded fallback; readable long-name cards; green/red reflect the selected side, with non-color cues. | Implemented within current categories/caps. Cached end-zone caption now fits 239 characters with all four exact preview rows. Aggregate outcome strips do not invent game order. |
-| Private operations | Distinguish qualified/no-play/held/queued/delivered; identify overdue/failed output; unchanged healthy polls remain quiet. | Snapshot checks shipped in b4770d04; prospective daily reliability shipped in 164df194. Both use existing jobs and local-only evidence. Distinct delivery cohorts are implemented in the next follow-up, pending their own release. No new feed/model calls. Private Discord is prepared but disabled. |
+| Private operations | Distinguish qualified/no-play/held/queued/delivered; identify overdue/failed output; unchanged healthy polls remain quiet. | Snapshot checks shipped in b4770d04; prospective daily reliability shipped in 164df194; distinct delivery cohorts shipped in ffc68f3b. Existing jobs and local-only evidence; no new feed/model calls. Private weekly Discord is prepared but disabled. |
 | Deployment safety | Both Python and Node exit statuses stop promotion; lock held during sync/tests/promotion; isolated offline rehearsal exercises real `_run`. | Shipped in b4770d04 after both suites and the stored-input rehearsal passed. Every follow-up revision must repeat its relevant verification and the deployment gates. |
 | Rights and membership preparation | Source-rights register, measurable gates, processor and entitlement design documented; no billing enabled. | Documents prepared; external permission and elapsed-time gates remain pending. |
 
@@ -129,7 +134,7 @@ still require review; an observed 95% fraction alone cannot approve subscription
   Its first sample contained two required checks, both fresh, no observed gap and a no-new-play desk outcome.
   This proves collection started, not four-week reliability or readiness to charge.
 
-## Pending release: distinct delivery-outcome cohorts
+## Shipped follow-up: distinct delivery-outcome cohorts
 
 `scripts/desk_health.py` adds two private views of the **current stored post log**: distinct publication IDs whose
 saved `dueAt` is between the observation time minus 7 or 28 days and that time, inclusive. Each channel counts its
@@ -155,7 +160,7 @@ cohort is contained in the 28-day cohort, so the two must not be added together.
 - Focused verification: 28 desk-health tests and eight weekly-review tests passed; `git diff --check` passed.
   Fixtures cover deduplication, both exact window boundaries, post-time versus due-time selection, contradictory
   duplicates, channel-specific cancellation, unknown eligibility, future confirmation times, privacy and no calls.
-  This item is implemented but **not yet claimed deployed**; record its own integrated release receipt at handoff.
+  This item shipped in ffc68f3b; integrated release receipt follows below.
 
 ### October 5 POTD audit: finding, not a selection-policy change
 
@@ -187,9 +192,67 @@ owner consideration, but is not implemented or represented as an existing rule i
   network reads, no subprocesses, outside writes or private-state reads. No posts or wagers were made.
 - Local browser checks: 320/375/1440 px, current/all/last-five history, positive/negative/missing observations,
   aligned threshold and value labels, long-history internal scrolling, and a compact research-grid chart.
-  Inspected views had no horizontal page overflow. Production receipt must follow the successful publish.
+  Inspected views had no horizontal page overflow. Verified production receipt follows below.
 
-## Not finishable in this coding release
+## Shipped player-history and delivery-cohort follow-up · October 5
+
+- Production revision: `ffc68f3b0c8f368842ef24860d264828d81dcb2e`.
+- [Hosted publish run 37328565406](https://github.com/keenroudy22/sports/actions/runs/37328565406) completed
+  successfully at `2026-10-05T14:59:38Z`. Live app 108, core 65 and CSS 72 were verified.
+- At 375 px, Landry's current/all/current controls showed four versus 13 actual games; no page overflow or browser
+  errors were observed. Release verification: 857 Python tests, two skipped; 97 frontend tests passed; stored
+  build, publication guard and isolated slot-1000 rehearsal passed with zero outside writes/private reads.
+- Owner receipt: `kookn-player-charts-2026-10-05.html`; image evidence:
+  `implementation-evidence-2026-10-05/live-player-season-mobile.png` in the owner's Kook'n workspace.
+
+## Current operating-policy summary · October 5
+
+This table summarizes current rules; **AGENTS.md remains authoritative**. It does not approve a new release,
+increase caps or claim a configured integration is working. Existing append-only records remain unchanged.
+
+| Feature | Current state and scope | Limits / release condition | Evidence / authority |
+|---|---|---|---|
+| Website | Free Today / Games / Charts / Record / Tools; sport-specific Today; Scores aliases Games Live. | Posted plays first; research/model records clearly separate. No subscription or hidden premium gate. | Release receipts above; AGENTS product approval. |
+| Scores, stats and odds | Current supported sources on existing refresh schedules; visible capture ages. | Not FanDuel-speed odds. No added paid feed, scraping or metered-budget increase. | AGENTS free stack; existing capture/build jobs. |
+| Official plays and Climb | Scheduled evaluation windows, not promised picks. One real Climb rung at a time; may advance after settlement on a later qualified scan. | Preserve price, availability, overlap, calibration and record gates; no forced quota. | AGENTS; existing run/ladder jobs. |
+| Delivery | X through Buffer; official Discord leads X about 10–15 minutes, other types follow confirmed X. | Playbook tag on new X plays only; no automatic replies/likes/follows. A queue entry is not a delivery receipt. | AGENTS and stored channel receipts. |
+| Research / graphics | Tested original variants within approved categories; truthful green/red/gray with non-color cues. | Public trend slot: fresh main lines, at least five games. Alternate/milestone category needs separate approval. | AGENTS creative/category rules; regression fixtures. |
+| Local models | Evidence judgment and bounded homepage/weekly evidence selection; deterministic live prose by default. | No autonomous website deployment; optional small-model polish stays off unless explicitly enabled. | AGENTS routing; existing local_brief and review jobs. |
+| Live-progress posts | Bounded Discord pilot only, actual attempts reviewed after three. | Existing two/day, 45-minute spacing, one/ticket and freshness/recheck gates; X remains off. | AGENTS live-progress approval; actual pilot log, not simulated attempts. |
+| Arb Radar | Website calculator/research plus qualified private Discord alerts under separate arb rules. | Exact fresh prices; never expose private candidates as public live arb. | docs/ARB-RADAR.md; AGENTS. |
+| New sports and futures | Supported website research, prospective trials and paper tracking. | No official new-sport release without forward evidence and separate approval. | Existing supported stores; P11. |
+| Private review / follow-through | Existing Monday 9:30 AM review; local/phone delivery; queue integration tracked as P03 until verified. | Owner-only Discord disabled until destination/permissions confirmed; no public fallback or new job. | scripts/review.py; P05. |
+| Paid access, tips, referrals | Readiness design only, not active. | Real reliability/retention, source rights, processor eligibility, terms and explicit launch approval first. | docs/SUBSCRIPTION-PLAN.md; P06–P09. |
+| POTD comparison proposal | Current designation uses already-published open singles. | A fresh full-market comparison requirement is an owner policy decision, not silently changed here. | Dated POTD audit above; P12. |
+
+## Closeout verification in progress · October 5
+
+The October 5 closeout found real missing shared-link/search behavior and stale release labels; it did not
+declare the plan complete from the earlier summary. P02–P04 remain ready in the dated queue until their final
+integrated publication is verified. Technical checks are not a substitute for the volunteer/cohort gate.
+
+- The weekly follow-through integration adds one bounded local status-file read to the existing review. The full
+  queue is in its packet and a deterministic summary leads saved, phone and verified-private-Discord excerpts.
+  Ten new fixtures cover success/fallback/cloud/packet-only, malformed/future/stale state and no extra calls or
+  status writes. Eight existing review fixtures also pass. No real notification or model call was used to test it.
+- Genuine Chrome 200% zoom was established through the test tab's browser controls (device-pixel ratio 2,
+  532 CSS-pixel effective viewport). Today, Games, Charts, Prop lines, Record, Tools and Saved had no horizontal
+  page overflow in the inspected states. Today's details open with Enter; the research dialog closes with Escape
+  and returns focus to its opener. This replaces the earlier inability to establish zoom, not the human test.
+- Final local integration checks passed: copied Charts links reopen the same search and sample; carries charts
+  open Carries on the player, and Back/Forward retains chart Last 5 versus an explicitly changed player Last 10.
+  Query matching follows Charts, Prop lines and Trends. Save and ticket toggles retain their own keyboard focus.
+  At 320/375/1440 px the inspected player view has no page overflow. Long All-seasons charts scroll internally
+  with ArrowRight (40 px observed). Copy exposes a selectable fallback, styled consistently with other inputs.
+  No browser errors were reported in the verification session.
+- Sharing is offered on the main Charts workspace, Lines, Trends and player detail; legacy Search/Defenses/Teams
+  subtabs do not claim to share unsupported controls. Chart-to-player links retain stat and season/window, while
+  venue/opponent/date filters remain in Charts and return with Back. Player detail labels its actual broader sample.
+- Integrated suites: 867 Python tests, two intentionally skipped; 123 frontend tests passed. Stored build and
+  publication guard passed. Isolated slot-1000 rehearsal exited 0 / outcome ok, with two blocked network reads,
+  zero subprocesses, outside writes or production-private reads. No posts, extra model calls or wagers were made.
+
+## External and elapsed-time gates
 
 | Gate | What remains | Authority/state |
 |---|---|---|

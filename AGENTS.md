@@ -44,6 +44,21 @@ watch the runs, and fix what breaks.
   approved category and its existing caps are approved; a new category, channel, market or release policy is not.
 - Say plainly when something failed, including your own mistakes, and what you did about it.
 
+## Product continuity: finish, verify, carry forward
+
+Before continuing product work, read `docs/PRODUCT-IMPLEMENTATION.md` and `docs/product-status.json`. The dated
+plan is the design baseline; the tracker holds release evidence; the status file is the finite outstanding-work
+queue. Do not restart the audit or silently drop work when the owner changes model or sends another prompt.
+Honor their latest priority, preserve unrelated changes, and give unfinished items a stable ID, owner, specific
+next action and observable completion condition. Mark an item shipped only after its stated verification and
+successful release, with evidence. Never substitute “later” or a queued publish for completion.
+
+The existing weekly review includes this queue deterministically, even if the local model omits it. A missing,
+invalid or stale queue must be visible, not reported as all done. The review surfaces work; it does not grant
+permission to change code, publish new categories, spend money or activate paid access. External/time gates stay
+explicit until real evidence clears them. The current operating-policy summary is in the implementation tracker;
+this file remains the authority when a summary and rule disagree.
+
 ## Rules that never bend
 
 - **Separate from MyGolfLinks (MGL).** Never touch `com.mygolflinks.*`, `~/.mgl`, `~/.config/mgl`, `~/Library/Logs/MGL`,

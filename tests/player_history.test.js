@@ -58,7 +58,7 @@ const playerViewFixture = ({nextSeason = 2026, withNext = true} = {}) => {
   const source = fs.readFileSync('site/app.js', 'utf8');
   const body = source.match(/async function viewPlayer\(route\) \{([\s\S]*?)\n  \}\n\n  const chart =/)[1];
   const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
-  const render = new AsyncFunction('C','state','get','head','nextGameFor','maybe','esc','DASH','watchButton','seg','stat','whenShort','section','quoteMeta','chart','empty','gameLog','ordinal','route',body);
+  const render = new AsyncFunction('C','state','get','head','nextGameFor','maybe','esc','DASH','watchButton','seg','stat','whenShort','section','quoteMeta','chart','empty','gameLog','ordinal','shareResearch','route',body);
   const keys = ['passYds'];
   const current = [row('old', '2025-12-28', 2025, 900), row('one', '2026-09-01', 2026, 10),
     row('two', '2026-09-08', 2026, 30), row('zero', '2026-09-15', 2026, 0), row('unknown', '2026-09-22', 2026, null),
@@ -73,11 +73,11 @@ const playerViewFixture = ({nextSeason = 2026, withNext = true} = {}) => {
   const captured = {stats:[],charts:[],logs:[]};
   const stat = (label,value,note='') => {captured.stats.push({label,value,note});return `<stat>${label}:${value}:${note}</stat>`;};
   const get = async path => path==='app/players/NFL.json'?index:path.startsWith('app/players/NFL/')?{keys,players}:teams;
-  const run = async (id='1') => {
+  const run = async (id='1',research) => {
     captured.stats=[];captured.charts=[];captured.logs=[];
     return render(C,state,get,(title,text)=>title+text,async()=>withNext?next:null,async()=>({lines}),C.esc,C.DASH,()=>'',()=>'',stat,C.whenShort,
       (title,body)=>title+body,()=>'',(rows,values)=>{captured.charts.push({rows,values});return 'chart';},
-      (title,text)=>title+text,rows=>{captured.logs.push(rows);return 'log';},String,{league:'NFL',id});
+      (title,text)=>title+text,rows=>{captured.logs.push(rows);return 'log';},String,()=>'<button>Copy research link</button>',{league:'NFL',id,research});
   };
   return {state,captured,run,players};
 };
@@ -131,6 +131,27 @@ test('player detail honors upcoming event season metadata before the player inde
   const html=await f.run();
   assert.match(html,/2025 season · 1 game/);
   assert.deepEqual(f.captured.charts[0].values,[900]);
+});
+
+test('explicit player links restore stat, season and sample; bare links still open current season', async () => {
+  const f=playerViewFixture();
+  const context=C.researchContext('#player/NFL/1?stat=passYds&season=2025&sample=last5');
+  const html=await f.run('1',context);
+  assert.match(html,/2025 season · 1 game · last 5/);
+  assert.deepEqual(f.captured.charts[0].values,[900]);
+  assert.equal(f.state.stat,'passYds');
+  f.state.historyPlayer=null; // A bare route is a new entry, not an instruction to reuse an older season.
+  await f.run();
+  assert.equal(f.state.playerSeason,'current');
+  assert.deepEqual(f.captured.charts[0].values,[10,30,0,null]);
+});
+
+test('an explicit player stat with no stored coverage never silently substitutes another stat', async () => {
+  const f=playerViewFixture();
+  await f.run('1',C.researchContext('#player/NFL/1?stat=car'));
+  assert.equal(f.state.stat,'car');
+  assert.deepEqual(f.captured.charts[0].values,[null,null,null,null]);
+  assert.equal(f.captured.stats.find(s=>s.label==='Average').value,C.DASH);
 });
 
 const propModalFixture = ({season=2025,kickoff='2025-10-01T20:00Z'}={}) => {
