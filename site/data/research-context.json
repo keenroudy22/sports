@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-05T17:31:41Z",
+  "updatedAt": "2026-10-05T18:26:54Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Out",
               "injury": "Ankle",
-              "reportedAt": "2026-10-05T17:18Z",
+              "reportedAt": "2026-10-05T18:15Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-05T17:18Z",
+              "reportedAt": "2026-10-05T18:15Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2537,6 +2537,15 @@
           "name": "Green Bay Packers",
           "players": [
             {
+              "id": "4430438",
+              "name": "Edgerrin Cooper",
+              "position": "LB",
+              "status": "Out",
+              "injury": "Achilles",
+              "reportedAt": "2026-10-05T17:23Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4430438/edgerrin-cooper"
+            },
+            {
               "id": "4869461",
               "name": "Trey Smack",
               "position": "PK",
@@ -2598,15 +2607,6 @@
               "injury": "Neck",
               "reportedAt": "2026-10-04T20:52Z",
               "source": "https://www.espn.com/nfl/player/_/id/5076652/brandon-cisse"
-            },
-            {
-              "id": "4430438",
-              "name": "Edgerrin Cooper",
-              "position": "LB",
-              "status": "Out",
-              "injury": "Achilles",
-              "reportedAt": "2026-10-04T20:39Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4430438/edgerrin-cooper"
             },
             {
               "id": "4361791",
@@ -4656,7 +4656,7 @@
               "name": "Christian Darrisaw",
               "position": "OT",
               "status": "Questionable",
-              "injury": "Head",
+              "injury": "Concussion",
               "reportedAt": "2026-10-04T22:39Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361985/christian-darrisaw"
             },
@@ -5372,7 +5372,7 @@
               "id": "3123075",
               "name": "Braxton Berrios",
               "position": "WR",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Foot",
               "reportedAt": "2026-10-04T19:53Z",
               "source": "https://www.espn.com/nfl/player/_/id/3123075/braxton-berrios"
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "4",
-          "name": "Ja'Marr Chase",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-04T21:32:30Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4362628/jamarr-chase"
-        },
-        {
           "teamId": "12",
           "name": "Rashee Rice",
           "from": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-05T17:31:41Z",
           "source": "https://www.espn.com/nfl/player/_/id/4430438/edgerrin-cooper"
+        },
+        {
+          "teamId": "19",
+          "name": "Braxton Berrios",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-05T18:26:54Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3123075/braxton-berrios"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-05T17:31:41Z",
-      "lastAttemptAt": "2026-10-05T17:31:41Z",
+      "checkedAt": "2026-10-05T18:26:54Z",
+      "lastAttemptAt": "2026-10-05T18:26:54Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-05T17:31:41Z",
-      "lastAttemptAt": "2026-10-05T17:31:41Z",
+      "checkedAt": "2026-10-05T18:26:54Z",
+      "lastAttemptAt": "2026-10-05T18:26:54Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
