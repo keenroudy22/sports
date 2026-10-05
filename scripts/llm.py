@@ -14,11 +14,13 @@ Two guards run on everything the model writes before it can reach the record:
 Stdlib only.
 """
 import json
+import fcntl
 import os
 import re
 import time
 import urllib.error
 import urllib.request
+from pathlib import Path
 
 DEFAULT_BASE = 'http://localhost:11434'
 DEFAULT_MODEL = 'qwen3.8:27b'
@@ -88,8 +90,13 @@ def transport(url, body, headers, timeout):
     request = urllib.request.Request(url, data=json.dumps(body).encode('utf-8'),
                                      headers={'Content-Type': 'application/json', **headers}, method='POST')
     try:
-        with urllib.request.urlopen(request, timeout=timeout) as response:
-            return response.read()
+        lock_path=Path.home()/'.config/keenroudy/local-model.lock'
+        lock_path.parent.mkdir(parents=True,exist_ok=True)
+        with lock_path.open('a') as lock:
+            try: fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+            except BlockingIOError: raise LLMUnavailable('sports local model is busy; no queued retry') from None
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                return response.read()
     except urllib.error.HTTPError as error:
         raise LLMUnavailable(f'{url} returned HTTP {error.code}: {error.read()[:200]!r}') from None
     except (urllib.error.URLError, OSError, TimeoutError) as error:

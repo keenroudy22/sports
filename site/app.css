@@ -25,14 +25,14 @@
 
 .live-freshness{display:flex;align-items:center;gap:7px;margin:0 0 10px;color:var(--dim)}
 .live-freshness span{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 4px rgba(94,234,164,.11)}
-.schedule-row{display:grid;grid-template-columns:78px minmax(0,1fr);align-items:start}
+.row.schedule-row{display:grid;grid-template-columns:92px minmax(0,1fr);align-items:start}
 .schedule-row .row-main{min-width:0;padding:11px 8px}
 .schedule-row .row-name,.schedule-row .row-meta{display:block}
 .schedule-row .row-meta{margin-top:3px;line-height:1.45;white-space:normal}
 .schedule-time{color:var(--mint);font-size:13px;font-weight:800;white-space:nowrap}
 
 @media (max-width: 520px){
-  .schedule-row{grid-template-columns:68px minmax(0,1fr);gap:10px}
+  .row.schedule-row{grid-template-columns:80px minmax(0,1fr);gap:10px}
   .schedule-time{font-size:12px}
 }
 
@@ -71,7 +71,7 @@
 .research-heading { padding:12px 0 4px; }
 .research-heading h2 { margin:6px 0; font-size:30px; }
 .research-heading p:last-child { color:var(--dim); font-size:13px; line-height:1.6; }
-.two-col > div { min-width:0; }
+.two-col > * { min-width:0; }
 .two-col .scorecard-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
 @media(max-width:420px) {
   .wordmark { display: none; }
@@ -395,7 +395,7 @@ footer strong { color: var(--dim); }
   }
   .tabbar a { flex-grow: 0; min-height: 46px; flex-direction: row; gap: 7px; padding: 0 16px; font-size: 13px; }
   .tabbar svg { width: 15px; height: 15px; }
-  .two-col { display: grid; grid-template-columns: 1.55fr 1fr; gap: 22px; align-items: start; }
+  .two-col { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(0,1fr); gap: 22px; align-items: start; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -758,7 +758,7 @@ table.data a { font-weight: 600; }
 .proj-line { display: grid; grid-template-columns: 46px minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.35fr); gap: 6px; padding: 4px 0; align-items: center; }
 .proj-line > span:nth-child(n+2) { text-align: right; }
 .proj-line-head { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); padding-bottom: 0; }
-.proj-line .lean { white-space: nowrap; }
+.proj-line .lean { white-space: normal; overflow-wrap:break-word; justify-content:flex-end; text-align:right; }
 
 /* logos and photos everywhere a team or a player shows */
 .ava { display: inline-flex; align-items: center; flex-shrink: 0; }
@@ -794,6 +794,32 @@ table.data a { font-weight: 600; }
 .play-stats > span:last-child:nth-child(4) { grid-column:1/-1; display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; }
 .favorite-line .row-market, .favorite-line .row-meta { display:block; margin-top:6px; line-height:1.5; }
 .underdog-block + .underdog-block { margin-top: 10px; }
+.underdog-block { padding:14px; min-width:0; }
+.underdog-block .section-head { padding-bottom:8px; }
+.underdog-block .section-head > div { min-width:0; }
+.underdog-block .empty { padding:16px 12px; text-align:left; }
+.underdog-block .empty p { margin:0; }
+.eyebrow,.section-head { line-height:1.5; }
+.section-head { flex-wrap:wrap; }
+.section-head > * { min-width:0; }
+.live-freshness span { flex:0 0 8px; }
+.live-freshness.stale span,.live-freshness.unavailable span { background:var(--dim); box-shadow:none; }
+.sport-links { display:flex; flex-wrap:wrap; gap:7px; margin:12px 0; }
+.sport-links a { padding:10px 12px; border:1px solid var(--line); border-radius:10px; font-size:12px; font-weight:700; color:var(--dim); }
+.sport-links a:hover { color:var(--mint); border-color:var(--mint); }
+.score-markets { margin:0 12px 12px; padding:10px 0 0; border-top:1px solid var(--line); }
+.score-markets summary { min-height:36px; font-size:12px; color:var(--mint); cursor:pointer; }
+.score-odds { display:grid; grid-template-columns:repeat(auto-fit,minmax(100px,1fr)); gap:7px; }
+.score-odds span { padding:8px; border-radius:8px; background:var(--raised); }
+.score-odds small,.score-odds b { display:block; }
+.score-odds small { font-size:11px; color:var(--dim); }
+.score-odds b { margin-top:3px; font-size:15px; }
+.score-result-history { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 16px; }
+.score-result-history span { min-width:80px; padding:8px; background:var(--raised); border-radius:8px; }
+.score-result-history small,.score-result-history b { display:block; }
+.score-result-history small { font-size:10px; color:var(--dim); }
+.player-chart-head b { white-space:normal; overflow:visible; }
+@media (pointer:coarse) { .seg button,select.pick,.filters button { min-height:44px; } }
 .upset-row { background: radial-gradient(circle at 100% 0, rgba(194, 162, 255, .10), transparent 42%); }
 .upset-why { display: grid; gap: 3px; margin: 8px 0; color: var(--dim); font-size: 12px; line-height: 1.4; }
 .upset-why b { color: var(--text); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }

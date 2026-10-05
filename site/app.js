@@ -25,13 +25,15 @@
     arb: saved.get('arb', { first: 298, second: -195, bankroll: 181.55 }),
   };
 
-  const cache = new Map();
+  const cache = new Map(), cacheTimes = new Map();
   const get = path => {
+    if (Date.now() - (cacheTimes.get(path) || 0) > 300000) cache.delete(path);
     if (!cache.has(path)) {
       const request = fetch('data/' + path, { cache: 'no-cache' })
         .then(r => r.ok ? r.json() : Promise.reject(new Error(`${path} returned HTTP ${r.status}`)));
       request.catch(() => cache.delete(path));
       cache.set(path, request);
+      cacheTimes.set(path, Date.now());
     }
     return cache.get(path);
   };
@@ -53,8 +55,9 @@
     record: '<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/>',
     more: '<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
   };
-  const TABS = [['today', 'Today'], ['games', 'Games'], ['stats', 'Charts'], ['record', 'Record'], ['more', 'More']];
-  const TAB_FOR = { trends: 'today', board: 'today', game: 'games', player: 'stats', team: 'stats', model: 'record', ticket: 'today', research: 'more', scores: 'more', arbs: 'more', lab: 'more', schedule: 'more' };
+  const TABS = [['today', 'Today'], ['games', 'Games'], ['scores', 'Scores'], ['stats', 'Charts'], ['record', 'Record'], ['more', 'More']];
+  ICONS.scores = '<path d="M3 5h18v14H3zM8 9v6M16 9v6M11 12h2"/>';
+  const TAB_FOR = { trends: 'today', board: 'today', game: 'games', player: 'stats', team: 'stats', model: 'record', ticket: 'today', research: 'more', arbs: 'more', lab: 'more', schedule: 'more' };
   const boardTabs = active => `<nav class="board-tabs" aria-label="Lines and plays"><a href="#today" ${active === 'card' ? 'aria-current="page"' : ''}>Plays</a><a href="#board/favorites" ${active === 'favorites' ? 'aria-current="page"' : ''}>Best lines</a><a href="#board" ${active === 'lines' ? 'aria-current="page"' : ''}>Games</a><a href="#board/props" ${active === 'props' ? 'aria-current="page"' : ''}>Props</a><a href="#trends" ${active === 'trends' ? 'aria-current="page"' : ''}>Trends</a></nav>`;
   const scoreTabs = active => `<nav class="board-tabs" aria-label="Scoreboard view"><a href="#record" ${active === 'official' ? 'aria-current="page"' : ''}>Results</a><a href="#model" ${active === 'model' ? 'aria-current="page"' : ''}>Model results</a></nav>`;
 
@@ -135,7 +138,11 @@
     MLB: ['baseball', 'mlb', ''], NHL: ['hockey', 'nhl', ''],
     EPL: ['soccer', 'eng.1', ''], MLS: ['soccer', 'usa.1', ''],
   };
-  const liveCache = new Map(), LIVE_TTL = 45000;
+  let refreshTimer;
+  const liveTransport = window.KRLive.createCache({fetcher: (...args) => fetch(...args), changed: () => {
+    clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(() => refreshPage(), 100);
+  }});
   const etDay = (offset = 0) => {
     const date = new Date(Date.now() + offset * 86400000);
     const parts = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Indiana/Indianapolis',
@@ -168,41 +175,35 @@
     const type = status.type || {};
     return { id: `${league}-${event.id}`, providerId: String(event.id), league, status: kind, completed, state: stateName,
       statusDetail: type.shortDetail || type.description || kind, period: status.period, clock: status.displayClock,
-      kickoff: competition.date || event.date, teams };
+      kickoff: competition.date || event.date, teams, pregameOdds: window.KRLive.pregameOdds(competition, kind),
+      source: {url: (event.links || []).find(link => /^https:\/\/(www\.)?espn\.com\//.test(link.href || ''))?.href || ''} };
   };
   const liveSnapshot = async (league, day) => {
     const config = LIVE[league];
     if (!config || !/^\d{4}-\d{2}-\d{2}$/.test(day || '')) return null;
-    const key = `${league}:${day}`, prior = liveCache.get(key);
-    if (prior && Date.now() - prior.at < LIVE_TTL) return prior;
+    const key = `${league}:${day}`;
     /* The web host is the browser-facing mirror. The older site.api host can return an Akamai 403 to ordinary
        cross-site browser requests even while server-side reads still work. */
     const url = `https://site.web.api.espn.com/apis/site/v2/sports/${config[0]}/${config[1]}/scoreboard?dates=${day.replaceAll('-', '')}${config[2]}`;
-    const controller = new AbortController(), stop = setTimeout(() => controller.abort(), 6500);
-    try {
-      const response = await fetch(url, { cache: 'no-store', signal: controller.signal });
-      if (!response.ok) throw new Error(`score feed returned ${response.status}`);
-      const payload = await response.json();
-      if (!Array.isArray(payload.events)) throw new Error('score feed did not return games');
-      const value = { at: Date.now(), games: payload.events.map(e => liveEvent(e, league)).filter(Boolean) };
-      liveCache.set(key, value);
-      return value;
-    } catch (error) {
-      return prior || null;
-    } finally { clearTimeout(stop); }
+    return liveTransport.read(key, url, e => liveEvent(e, league));
   };
   const liveFootball = async games => {
     const leagues = [...new Set(games.map(game => game.league).filter(league => ['NFL', 'CFB'].includes(league)))];
-    const offsets = state.gamesScope === 'final' ? [0, -1] : [0];
-    const snapshots = (await Promise.all(leagues.flatMap(league => offsets.map(offset => liveSnapshot(league, etDay(offset)))))).filter(Boolean);
+    const dates = [...new Set([etDay(), etDay(-1), ...games.filter(g => g.state === 'in').map(g => window.KRLive.dayOf(g.kickoff))])];
+    const snapshots = (await Promise.all(leagues.flatMap(league => dates.slice(0,3).map(day => liveSnapshot(league, day))))).filter(Boolean);
     const live = new Map(snapshots.flatMap(s => s.games).map(g => [g.id, g]));
-    return { refreshed: snapshots.length ? Math.max(...snapshots.map(s => s.at)) : null, games: games.map(game => {
+    const successful = snapshots.filter(s => s.at);
+    return { refreshed: {at:successful.length ? Math.min(...successful.map(s => s.at)) : null,failed:snapshots.some(s => s.failed)}, games: games.map(game => {
       const now = live.get(game.id); if (!now) return game;
       return { ...game, state: now.state, completed: now.completed, status: now.statusDetail,
         away: { ...game.away, score: now.teams.away.score }, home: { ...game.home, score: now.teams.home.score } };
     }) };
   };
-  const liveStamp = refreshed => refreshed ? `<p class="row-meta live-freshness"><span></span>Scores refresh every minute while this page is open.</p>` : '';
+  const liveStamp = snapshot => {
+    const status = window.KRLive.freshness(snapshot);
+    return `<p class="row-meta live-freshness ${status}" role="status"><span></span>${status === 'fresh' ? 'Scores checked ' + esc(ago(new Date(snapshot.at).toISOString())) + ' · refresh every minute'
+      : snapshot?.at ? 'Score refresh unavailable · last checked ' + esc(ago(new Date(snapshot.at).toISOString())) : snapshot?.failed ? 'Score feed unavailable · saved scores only' : 'Checking scores · saved scores shown until connected'}</p>`;
+  };
   /* Preserve the official pick, but never present an expired quote as a current entry. */
   const playState = p => {
     const raw = C.pickState(p);
@@ -236,7 +237,7 @@
     const route = C.pickResearchRoute(p);
     const action = route ? (p.athleteId ? 'View player stats' : 'View matchup') : 'View pick details';
     const compact = [p.odds != null ? `Posted ${odds(p.odds)}` : '', p.book || '', when].filter(Boolean).join(' · ');
-    return `<details class="play${p.featured ? ' play-featured' : ''}${lotto ? ' play-lotto' : ''}${rung ? ' play-ladder' : ''}" style="--rail:${esc(rung ? '#48e8c3' : p.color || 'var(--mint)')}">
+    return `<details data-persist="pick-${esc(p.id)}" class="play${p.featured ? ' play-featured' : ''}${lotto ? ' play-lotto' : ''}${rung ? ' play-ladder' : ''}" style="--rail:${esc(rung ? '#48e8c3' : p.color || 'var(--mint)')}">
       <summary class="play-summary">
       <span class="play-top"><span class="play-kind">${esc(kind)}${p.favorite && !legs.length && !p.featured ? ' · Favorite' : ''}</span>${stale ? '' : `<span class="pill pill-${st.tone}">${esc(st.word)}</span>`}</span>
       <span class="play-hero">${legs.length ? '' : avatar(p, 'ava-lg')}<span class="play-title${rung ? ' num' : ''}">${lotto ? `<span class="lotto-odds num">${esc(odds(p.odds))}</span> ` : ''}${esc(title)}</span></span>
@@ -644,6 +645,7 @@
         : empty('Nothing posted yet', 'New plays appear here when they are released.'), '<a href="#record">Every result →</a>')}
       ${scheduled.upcoming.length ? `<details class="card upcoming-card"><summary>Upcoming official plays · ${scheduled.upcoming.length}<span>Separate from today’s card</span></summary><div class="plays">${scheduled.upcoming.map(playCard).join('')}</div></details>` : ''}
       ${scheduled.awaiting.length ? `<details class="card upcoming-card"><summary>Awaiting settlement · ${scheduled.awaiting.length}</summary><div class="plays">${scheduled.awaiting.map(playCard).join('')}</div></details>` : ''}
+      ${section('Around the leagues', `<nav class="sport-links" aria-label="More sports">${SCORE_LEAGUES.map(key => `<a href="#scores/${key}">${esc(SCORE_NAMES[key])} →</a>`).join('')}</nav>`, '<a href="#schedule">Release schedule →</a>')}
       <div class="two-col"><div>
         <div class="research-heading"><p class="eyebrow">More to explore</p><h2>Lines and trends</h2><p>Game lines, player props and matchup trends.</p></div>
         ${underdogWatch(now, board)}
@@ -782,7 +784,8 @@
     const f = detail && detail.forecast;
     const final = card.completed && detail && detail.final;
     const title = `${card.away.abbr} @ ${card.home.abbr}`;
-    const status = card.completed ? `Final ${card.away.abbr} ${card.away.score}, ${card.home.abbr} ${card.home.score}` : esc(when(card.kickoff));
+    const status = card.completed ? `Final ${card.away.abbr} ${card.away.score}, ${card.home.abbr} ${card.home.score}`
+      : card.state === 'in' ? `${esc(card.status)} · ${esc(card.away.abbr)} ${card.away.score ?? DASH}–${card.home.score ?? DASH} ${esc(card.home.abbr)}` : esc(when(card.kickoff));
     const win = v2 ? (v2.winProb >= 0.5 ? `${card.home.abbr} ${Math.round(100 * v2.winProb)}%` : `${card.away.abbr} ${Math.round(100 * (1 - v2.winProb))}%`) : DASH;
     let html = `${head(title, `${status}${card.neutral ? ' · neutral site' : ''} · ${esc(leagueName(league))}`, back)}${liveStamp(liveNow.refreshed)}
       ${favoriteLinesSection(card, detail)}
@@ -1541,25 +1544,39 @@
   const SCORE_NAMES = { NBA: 'NBA', WNBA: 'WNBA', CBB: 'College hoops', MLB: 'MLB', NHL: 'NHL', EPL: 'Premier League', MLS: 'MLS' };
 
   async function viewScores(route) {
-    const data = await get('sports.json');
+    const [data, history] = await Promise.all([get('sports.json'),maybe('market-lab.json')]);
     const league = SCORE_LEAGUES.includes(route.league) ? route.league : state.scoresLeague;
     const block = (data.leagues || {})[league] || {};
     const stored = (block.games || []).slice().sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
-    const days = [...new Set(stored.map(g => g.date))];
-    const day = days.includes(state.scoresDate) ? state.scoresDate : days[0];
+    const days = [...new Set([etDay(-1),etDay(),etDay(1),...stored.map(g => g.date)])].sort();
+    const day = days.includes(state.scoresDate) ? state.scoresDate : etDay();
     const snapshot = day ? await liveSnapshot(league, day) : null;
-    const fresh = new Map(((snapshot || {}).games || []).map(g => [g.providerId, g]));
-    const games = stored.map(g => { const now = fresh.get(String(g.providerId)); return now ? { ...g, status: now.status,
-      statusDetail: now.statusDetail, period: now.period, clock: now.clock,
-      scores: { away: now.teams.away.score, home: now.teams.home.score }, updatedAt: new Date(snapshot.at).toISOString() } : g; });
-    const shown = games.filter(g => g.date === day);
+    const shown = window.KRLive.mergeGames(stored, snapshot, day);
     const side = (team, score) => `<div class="game-team">${team.logo ? `<img class="score-logo" src="${esc(team.logo)}" alt="">` : ''}<span>${esc(team.abbreviation || team.shortName || DASH)}</span>${score != null ? `<span class="score" style="margin-left:auto">${esc(score)}</span>` : ''}</div>`;
     const chips = SCORE_LEAGUES.map(key => `<a class="chip" href="#scores/${key}" aria-pressed="${league === key}" style="display:inline-flex;align-items:center">${esc(SCORE_NAMES[key])}</a>`).join('');
-    return `${head(`${SCORE_NAMES[league] || league} scores`, 'Schedules and scores. No picks are implied.')}${liveStamp(snapshot && snapshot.at)}
+    const markets = g => {
+      if(g.status !== 'scheduled' || Date.parse(g.kickoff) <= Date.now() || window.KRLive.freshness(snapshot) !== 'fresh' || !g.pregameOdds) return '';
+      return `<details class="score-markets" data-persist="odds-${esc(g.id)}"><summary>Pregame lines · ${esc(g.pregameOdds.book)}</summary><div class="score-odds">${g.pregameOdds.rows.map(r => {
+        const name = ['away','home'].includes(r.side) ? g.teams[r.side].abbreviation : r.side === 'over' ? 'Over' : 'Under';
+        return `<span><small>${esc(name)} ${esc(r.market)}</small><b>${r.line != null ? esc(r.market === 'Spread' ? signed(r.line) : r.line) + ' ' : ''}${odds(r.price)}</b></span>`;
+      }).join('')}</div><p class="row-meta">ESPN-supplied pregame quotes · checked ${esc(ago(new Date(snapshot.at).toISOString()))}. Book update time unavailable. Confirm in your sportsbook; these are not in-play odds or picks.</p></details>`;
+    };
+    const recent = g => {
+      const parts = ['away','home'].map(side => {
+        const team=g.teams[side], rows=((history || {}).recentResults || []).filter(r=>r.league===league && Date.parse(r.kickoff)<Date.parse(g.kickoff) && [r.home?.id,r.away?.id].map(String).includes(String(team.id))).slice(0,5).reverse();
+        if(!rows.length) return '';
+        return `<div><b>${esc(team.abbreviation)} · last ${rows.length} stored</b><div class="score-result-history">${rows.map(r=>{
+          const home=String(r.home.id)===String(team.id), score=home?r.homeScore:r.awayScore, against=home?r.awayScore:r.homeScore, opponent=home?r.away:r.home;
+          return `<span><small>${esc((opponent.abbreviation || opponent.shortName || '').slice(0,12))}</small><b class="${score>against?'up':score<against?'down':''}">${score}–${against}</b><small>${esc(dayLabel(r.kickoff))}</small></span>`;
+        }).join('')}</div></div>`;
+      }).filter(Boolean);
+      return parts.length ? `<details class="score-markets" data-persist="history-${esc(g.id)}"><summary>Recent team results</summary>${parts.join('')}<p class="row-meta">Recorded finals only, not a complete season. Includes any captured preseason games.</p></details>` : '';
+    };
+    return `${head(`${SCORE_NAMES[league] || league} scores`, 'Today, tomorrow and results. All times Eastern.')}${liveStamp(snapshot)}
       <div class="toolbar"><div class="seg score-leagues" role="group">${chips}</div>
         ${days.length ? seg('scoresDate', days.map(d => [d, new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })]), day) : ''}</div>
-      ${shown.length ? `<div class="card">${shown.map(g => `<div class="game-row"><span class="game-teams score-teams">${side(g.teams.away, (g.scores || {}).away)}${side(g.teams.home, (g.scores || {}).home)}</span>
-          <span class="game-mid">${esc(g.statusDetail || g.status)}</span>${external((g.source || {}).url, 'ESPN')}</div>`).join('')}</div>`
+      ${shown.length ? `<div class="card">${shown.map(g => `<article><div class="game-row"><span class="game-teams score-teams">${side(g.teams.away, (g.scores || {}).away)}${side(g.teams.home, (g.scores || {}).home)}</span>
+          <span class="game-mid">${esc(g.status === 'scheduled' ? whenShort(g.kickoff) : g.statusDetail || g.status)}</span>${external((g.source || {}).url, 'ESPN')}</div>${markets(g)}${recent(g)}</article>`).join('')}</div>`
         : empty(`No ${league} games in the window`, block.status === 'ok' ? 'The provider returned no games for these dates.' : 'The feed is unavailable; the last good data is kept.')}`;
   }
 
@@ -1588,7 +1605,7 @@
         <article class="lab-card card"><div class="lab-card-head"><h3>Alternate-line streaks</h3><span class="pill pill-reference">Planned</span></div><p>Main-line trends are live. More verified alternate lines are next.</p></article>
       </div>`)}
       ${section('Across every season', `<div class="lab-grid">
-        <article class="lab-card card"><div class="lab-card-head"><h3>Season futures</h3><span class="pill pill-reference">Planned</span></div><p>Championship, division or conference, playoff and season-total markets will get their own preseason tracker as each sport is added.</p><p class="lab-progress">Original price, book, date and every later move will be preserved. Research watches stay separate from official plays.</p></article>
+        <article class="lab-card card"><div class="lab-card-head"><h3>Season futures</h3><span class="pill pill-reference">Paper tracker ready</span></div><p>Championship, division, playoff and season-total watches have a separate tracker. No priced watch is published yet.</p><p class="lab-progress">Original quotes, later moves and book settlements stay separate from the daily card.</p></article>
       </div>`)}
       ${section('In the kitchen', `<div class="lab-grid">
         ${stage('NBA', 'NBA', 'Testing', 'pill-q', 'Lines, projections and results are being prepared for the regular season.')}
@@ -1688,6 +1705,7 @@
         ${row('10:00 AM', 'Saveable slate sheet', 'College Saturday and NFL Sunday.')}
         ${row('10:30 AM', 'Research', 'One useful trend, matchup, injury or underdog card when evidence qualifies.')}
         ${row('Around noon', 'Official plays', 'Earlier kickoffs move up. Discord normally sees confirmed plays 10–15 minutes before X.')}
+        ${row('5:50 PM', 'Around the leagues', 'One fresh multi-sport schedule card when games are ahead. No picks implied.')}
         ${row('After results', 'Cashed and Climb updates', 'Wins may post after settlement. Losses stay in the public receipt.')}
         ${row('6:00 PM', 'Quiet-day record', 'Used only when nothing more useful posted that day.')}
       </div></div>`)}
@@ -1696,6 +1714,12 @@
         ${row('1:30 PM', 'Rung scan', 'A settled rung may advance the same day.')}
         ${row('4:00 PM', 'Rung scan', 'Later slates stay available without forcing a step.')}
         ${row('8:00 PM', 'Rung scan', 'The last scheduled daily check.')}
+      </div></div>`)}
+      ${section('Behind the releases', `<div class="card"><div class="rows">
+        ${row('Daily', 'Desk checks', '6:45 AM, 8:30 AM, 11:45 AM, 5:30 PM, 9:00 PM and 11:30 PM ET. Late games and overnight results stay in the rotation.')}
+        ${row('Extra checks', 'Football windows', 'Sunday 2:45 PM. Sunday, Monday and Thursday 6:50 PM. On weekend evening slates, one of the five card places stays available until 4 PM.')}
+        ${row('Every 5 min', 'Delivery checks', 'Discord delivery and silent live-stat monitoring. Public live-play updates are still being tested.')}
+        ${row('Every 30 min', 'Pre-post review', 'Queued plays are checked against stored prices and current news before release. This is not a live sportsbook feed.')}
       </div></div>`)}
       <div class="notice"><b>What “scheduled” means.</b> These are release windows, not promised picks. Prices can move and news can pull a queued play. Discord is the first alert for confirmed plays; X carries the public post and every result.</div>`;
   }
@@ -1864,20 +1888,34 @@
   }
 
   let token = 0;
-  async function render() {
+  async function render(preserve = false) {
     const route = C.parseRoute(location.hash);
     const mine = ++token;
-    chrome(route);
+    if (!preserve) chrome(route);
     const view = $('#view');
-    const slow = setTimeout(() => { if (mine === token) view.innerHTML = '<div class="loading">Loading…</div>'; }, 120);
+    const slow = preserve ? null : setTimeout(() => { if (mine === token) view.innerHTML = '<div class="loading">Loading…</div>'; }, 120);
     try {
       const html = await (VIEWS[route.view] || viewToday)(route);
       if (mine !== token) return;
+      const details = [...view.querySelectorAll('details')];
+      const detailKey = el => el.dataset.persist || el.querySelector('summary')?.textContent.trim();
+      const opened = preserve ? new Set(details.filter(el => el.open).map(detailKey)) : new Set();
+      const scrolls = preserve ? [...view.querySelectorAll('.table-wrap,.seg,.filters,.board-tabs')].map(el => el.scrollLeft) : [];
+      const focus = document.activeElement;
+      const focusKey = el => [el.tagName,el.id,el.getAttribute('href'),el.getAttribute('data-set'),el.closest('[data-persist]')?.dataset.persist,el.textContent.trim()].join('|');
+      const priorFocus = preserve && view.contains(focus) ? focusKey(focus) : null;
+      const scrollY = window.scrollY;
       view.innerHTML = html;
-      if (route.pick) openPick(route.pick);
+      if(preserve) {
+        for(const el of view.querySelectorAll('details')) el.open = opened.has(detailKey(el));
+        [...view.querySelectorAll('.table-wrap,.seg,.filters,.board-tabs')].forEach((el,i) => el.scrollLeft = scrolls[i] || 0);
+        if(priorFocus) [...view.querySelectorAll('a,button,summary,input,select')].find(el=>focusKey(el)===priorFocus)?.focus({preventScroll:true});
+        window.scrollTo(0, scrollY);
+      }
+      if (route.pick && !preserve) openPick(route.pick);
     } catch (error) {
       if (mine !== token) return;
-      view.innerHTML = `<div class="empty" style="margin-top:32px"><h3>Could not load this page</h3><p>${esc(error.message)}</p><button class="btn" type="button" data-retry>Try again</button></div>`;
+      if(!preserve) view.innerHTML = `<div class="empty" style="margin-top:32px"><h3>Could not load this page</h3><p>${esc(error.message)}</p><button class="btn" type="button" data-retry>Try again</button></div>`;
     } finally {
       clearTimeout(slow);
     }
@@ -1980,9 +2018,11 @@
   });
 
   window.addEventListener('hashchange', () => { render().then(() => window.scrollTo(0, 0)); });
-  setInterval(() => {
+  function refreshPage() {
     const route = C.parseRoute(location.hash);
-    if (!document.hidden && ['today', 'games', 'game', 'scores'].includes(route.view) && !document.activeElement.matches('input, select, textarea')) render();
-  }, 60000);
+    if (!document.hidden && ['today', 'games', 'game', 'scores', 'board', 'trends', 'record'].includes(route.view) && !document.activeElement.matches('input, select, textarea') && !$('#detail').open) render(true);
+  }
+  setInterval(refreshPage, 60000);
+  document.addEventListener('visibilitychange', () => { if(!document.hidden) refreshPage(); });
   render();
 })();

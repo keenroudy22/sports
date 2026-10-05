@@ -40,5 +40,9 @@ daily or weekly card look fuller, and open futures do not count as pending daily
 5. At settlement, report the original price and result. Use closing-price movement only as context; it does not turn
    an unsettled future into a win.
 
-Until those gates pass, the public Lab labels Season futures as planned. The first implementation work is the shared
-append-only quote/settlement ledger; individual sport models and cards remain separate promotion decisions.
+The shared paper infrastructure is implemented in `scripts/futures_store.py` (October 5). The Lab now labels it
+"Paper tracker ready"; there are no invented watches or automatic collection jobs. `add <file.json>` accepts an
+exact sourced quote or settlement, validates immutable identity and chronological observations, and appends it with
+an integrity ledger. `report` lists the paper watches. Tests cover movements, settlement, duplicates and tampering.
+Special settlements remain pending. Individual sport models, automatic source capture and official cards remain
+separate promotion decisions; no daily or published record has changed.

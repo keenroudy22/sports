@@ -13,7 +13,7 @@ may say otherwise.
 
 Three things run it, none of them an AI chat:
 1. **launchd on the owner's Mac Studio** runs `~/.config/keenroudy/run.sh` (copy: `deployment/mac/`): the desk run
-   at 6:45, 8:30 and 11:45 AM, 5:30 and 11:30 PM Eastern (plus 2:45 PM Sunday and 6:50 PM Sunday, Monday, Thursday),
+   at 6:45, 8:30 and 11:45 AM, 5:30, 9:00 and 11:30 PM Eastern (plus 2:45 PM Sunday and 6:50 PM Sunday, Monday, Thursday),
    an extra Climb settlement/qualification scan at 10:00 AM, 1:30, 4:00 and 8:00 PM, the pre-post check every 30
    minutes, the Discord mirror every 5 minutes, the heartbeat at 7:15 AM, and the weekly review Monday 9:30 AM. The run settles and closes plays, builds the
    board, judges candidates through `scripts/gates.py`, publishes reports to `research/`, pushes, and schedules X
@@ -26,9 +26,10 @@ Three things run it, none of them an AI chat:
 3. **Routed models on the Mac**: Ollama `qwen3.8:27b` (override: `KEENROUDY_LLM_MODEL`) weighs verified facts. The
    deterministic, sourced templates are the live prose by default, so routine cards do not spend local-model calls
    merely rewording them. Optional guarded rewriting uses `qwen3.5:9b-mlx` only when `KEENROUDY_LLM_POLISH=1`; judgment
-   never falls through to it. The live web researcher uses `codex exec` with `gpt-6-sol` at low reasoning by default; the weekly review
-   uses the same model at medium reasoning. Both use the owner's ChatGPT plan and can be overridden with the named
-   researcher/review settings in `deployment/mac/env.example`.
+   never falls through to it. The live web researcher uses `codex exec` with `gpt-6-sol` at low reasoning by default.
+   The weekly review uses the local 27B model to select exact evidence excerpts, with a deterministic packet fallback.
+   Only an explicit `review.py --codex` uses the cloud review model at medium reasoning. Named researcher/review
+   settings live in `deployment/mac/env.example`.
 
 Your job as the agent is what a person would do: answer the owner's questions, change the code, deploy it safely,
 watch the runs, and fix what breaks.
@@ -128,6 +129,26 @@ Handy commands (from `~/Projects/sports`):
    width (375 px): no sideways scroll, no console errors.
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
+
+- **Overnight polish and multi-sport release (2026-10-05, owner authorized):** Scores has its own main tab and
+  Today links to all seven additional leagues. Browser score refresh preserves open sections and scroll, checks
+  yesterday for midnight games, backs off failures, and never advances a successful timestamp on an error.
+  Supplied DraftKings pregame lines may appear in Scores with retrieval time, never as verified in-play odds;
+  hide them at kickoff or after a failed refresh. MLB/NHL team results use stored finals with coverage labeled.
+  One optional factual multi-sport schedule card is due 5:50 PM ET, selected from fresh, confirmed evening/late
+  fixtures at the 5:30 desk run. No picks, odds, Playbook mention or quota increase. It is lowest priority under
+  the existing daily cap, mirrors only after X, and uses a frozen source snapshot plus eight-day image retention.
+- **Late-slate capacity (2026-10-05):** add the daily 9 PM desk run to the existing schedule. On weekend slates
+  with an evening game, reserve the fifth straight-card place until 4 PM. The five-play and three-of-kind caps
+  remain unchanged. Reserve the final daily Odds API capture for after 4 PM when evening games exist; no credit,
+  cadence, monthly or daily limit increases. The existing four dedicated Climb scans remain unchanged.
+- **Local weekly brief (2026-10-05):** Monday's private review now selects exact evidence excerpts with the local
+  27B model, at most one 180-second call. No invented summary figures and no automatic cloud fallback. Save the
+  full deterministic packet regardless. `review.py --codex` is an explicit cloud-review option; verified live
+  web and settlement research still use Codex. Sports local-model calls serialize without a retry queue.
+- **Futures paper infrastructure (2026-10-05):** `scripts/futures_store.py` validates and appends exact sourced
+  paper quotes, movements and settlements with an integrity ledger. No watches were invented or imported, and no
+  official future or auto-feed collection is enabled. Special settlement cases stay pending for evidence.
 
 - **Visual Player Charts replace the directory (2026-10-04):** the main Stats tab is a matchup-first player
   cheat sheet, not a season-leader directory. Show compact game-by-game bar charts for every stored player stat,
@@ -428,11 +449,11 @@ anything: `python3 scripts/pick_card.py <pick id>`, `python3 scripts/x_post.py d
 
 A launchd job, `com.keenroudy.sports.review` (Monday 9:30 AM Eastern; copy in `deployment/mac/`), runs
 `scripts/review.py`: it gathers the week from the desk's own records (run logs, the post log, the record, the ladder,
-the GitHub runs, `line_timing.py`), has Codex write the plain-words review read-only, saves it to
+the GitHub runs, `line_timing.py`), has the local model select a brief from that evidence read-only, saves it to
 `~/Library/Logs/KeenRoudy/review-<date>.md` (the facts in `review-packet-<date>.md`) and sends its opening to the
 owner's phone. It changes nothing. When the owner asks you to act on a review, read that file, then fix what it names
 the way this file says. To run it by hand: `~/.config/keenroudy/run.sh py scripts/review.py` (`--no-codex` for the
-packet only, `--no-push` to skip the phone).
+packet only, `--no-push` to skip the phone, `--codex` for an explicitly requested cloud review).
 
 ## When something breaks
 

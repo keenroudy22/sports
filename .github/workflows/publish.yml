@@ -63,6 +63,8 @@ jobs:
         run: python scripts/refresh.py
       - name: Refresh the multi-sport score center
         run: python scripts/sports_refresh.py
+      - name: Build recorded multi-sport history
+        run: python scripts/market_lab.py report
       - name: Store box scores, play-by-play and closing lines for new finals
         run: python scripts/boxscores.py
       - name: Check whether player history needs rebuilding

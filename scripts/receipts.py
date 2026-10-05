@@ -575,6 +575,10 @@ def house_posts(first, latest, games, log_book, now):
     research_already = research_posts.already_posted(log_book, eastern_date(now))
     if research and research['stale'] > now and not research_already:
         out.append(research)
+    import sports_posts
+    sports = sports_posts.post(now)
+    if sports:
+        out.append(sports)
     return out
 
 

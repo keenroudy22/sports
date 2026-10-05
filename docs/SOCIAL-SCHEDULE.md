@@ -15,6 +15,7 @@ promise that a play exists. Official plays still require a current line, a usabl
 | Between the first two plays | Conversation | Only on a multi-play day. One short factual question or a real ready-ticket teaser. |
 | 10:00 AM, 1:30 PM, 4:00 PM, 8:00 PM | 80/20 Climb scans | A rung posts only when two independent legs qualify. A settled rung may advance the same day. |
 | After settlement | Cashed / Climb update | Wins can post within the approved window. Losses stay visible in the receipt. |
+| 5:50 PM | Around the leagues | One optional factual evening/late schedule graphic from fresh confirmed fixtures. Lowest priority; no picks or Playbook tag. |
 | 6:00 PM | Quiet-day record | Only when no more useful approved post supplied the daily presence. |
 
 Confirmed plays and fun tickets reach Discord about 10–15 minutes before their X time. Other approved posts mirror
@@ -32,8 +33,9 @@ research, menu or engagement post.
 
 ## Data cadence behind the posts
 
-- The Mac research desk checks football throughout the day and runs extra Climb scans four times daily.
+- The Mac research desk runs at 6:45, 8:30, 11:45 AM and 5:30, 9:00, 11:30 PM ET; also Sunday 2:45 PM and Sunday/Monday/Thursday 6:50 PM. Four extra Climb scans remain as listed above.
+- When a weekend slate includes evening games, the fifth straight-card slot is reserved until 4 PM. The final daily Odds API capture is also held until 4 PM when later games exist. Existing daily and monthly budgets do not increase.
 - A 30-minute pre-post guard catches closed prices and hard news; Discord delivery checks every five minutes.
 - The website's factual score views refresh directly from the public score source once a minute while open. Prices,
-  forecasts and picks retain their captured timestamps and never pretend to be live.
-- Monday at 9:30 AM the private weekly review measures operations, record, reach and timing and alerts the owner.
+  forecasts and picks retain their captured timestamps and never pretend to be live. Scores can show supplied DraftKings pregame quotes with retrieval time; book-update time is unknown, and they disappear at kickoff or on a refresh failure.
+- Monday at 9:30 AM the private weekly review measures operations, record, reach and timing and alerts the owner. Its short evidence brief uses the local model; a failure leaves the complete deterministic packet without a cloud retry.

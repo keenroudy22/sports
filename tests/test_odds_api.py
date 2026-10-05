@@ -92,6 +92,13 @@ class ParseTests(unittest.TestCase):
 
 
 class BudgetTests(unittest.TestCase):
+    def test_last_daily_capture_waits_for_evening_without_raising_budget(self):
+        games=[game('CFB-late','CFB','2026-09-20T02:00:00Z','Home','Away')]
+        status={'leagues':{'CFB':{'day':'2026-09-19','count':3}}}
+        self.assertIn('evening',odds_api.due('CFB',games,status,NOW))
+        self.assertIsNone(odds_api.due('CFB',games,status,datetime(2026,9,19,20,tzinfo=timezone.utc)))
+        status['leagues']['CFB']['count']=4
+        self.assertIn('already today',odds_api.due('CFB',games,status,datetime(2026,9,19,20,tzinfo=timezone.utc)))
     def test_college_is_captured_once_a_day_while_its_games_are_a_week_out(self):
         early = NOW - timedelta(days=5)
         self.assertIsNone(odds_api.due('CFB', SLATE, {}, early), 'lines just opened: capture')

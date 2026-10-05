@@ -57,6 +57,19 @@ class LiveWatchTests(unittest.TestCase):
         self.log['posts'][0]['discord'] = {'state': 'pending'}
         self.assertEqual(L.tracked(self.ctx, self.games, self.log, NOW), [])
 
+    def test_outage_cannot_duplicate_an_early_hit_and_official_result_reconciles(self):
+        with tempfile.TemporaryDirectory() as folder:
+            state=Path(folder)/'state.json'
+            L.run_shadow(self.ctx,self.games,self.log,NOW,state,fetch=lambda _:summary(),log=lambda *_:None)
+            def offline(_): raise OSError('offline')
+            L.run_shadow(self.ctx,self.games,self.log,NOW+timedelta(minutes=5),state,fetch=offline,log=lambda *_:None)
+            self.assertEqual(json.loads(state.read_text())['health']['unavailable'],1)
+            result=L.run_shadow(self.ctx,self.games,self.log,NOW+timedelta(minutes=10),state,fetch=lambda _:summary(),log=lambda *_:None)
+            self.assertEqual(result['events'],[])
+            self.ctx.latest={'p':{'result':'win','settledAt':'2026-10-03T21:00:00Z'}}
+            L.run_shadow(self.ctx,self.games,self.log,NOW+timedelta(hours=4),state,fetch=lambda _:summary(),log=lambda *_:None)
+            self.assertEqual(json.loads(state.read_text())['settlements']['p']['result'],'win')
+
 
 if __name__ == '__main__':
     unittest.main()

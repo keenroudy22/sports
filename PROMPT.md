@@ -1,6 +1,6 @@
 # Scheduled research prompt
 
-Paste everything below the line into the scheduled research task. It runs five times a day, Eastern time, plus a Sunday afternoon run and a night-game run, and each run has a job:
+Paste everything below the line into the scheduled research task. It runs six times a day, Eastern time, plus a Sunday afternoon run and a night-game run, and each run has a job:
 
 | Run | Days | Job |
 |---|---|---|
@@ -10,6 +10,7 @@ Paste everything below the line into the scheduled research task. It runs five t
 | 14:45 | Sundays | NFL inactives for the late window are out at 2:35. Price or pass the 4:05 and 4:25 games, which no other run can reach in time. |
 | 17:30 | every day | Final card for evening games. |
 | 18:50 | Thu, Sun, Mon | Inactives for a night game are out at 6:45. Settle nothing; price or pass that game, which no later run can reach before kickoff. |
+| 21:00 | every day | Late-slate check and settlement. Existing budgets and qualifying rules still apply; nothing is forced. |
 | 23:30 | every day | Settle the day. Weekly review once the week's games are all final. |
 
 A pick's `expiresAt` is the next run or kickoff, whichever comes first. `RESEARCH.md` has the formats and rules in full; this is the order of work.

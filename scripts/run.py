@@ -55,7 +55,7 @@ PUBLISH_MARGIN = timedelta(minutes=5)      # nothing is published on a game this
 KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'ladder', 'favorite')
 LADDER_SCAN_TIMES = ((10, 0), (13, 30), (16, 0), (20, 0))
 WHITELIST = ('research/', 'data/odds/', 'data/prop-odds/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
-             'data/paper/', 'data/hoops/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json')
+             'data/paper/', 'data/hoops/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/')
 BOOK_SLUG = {'DraftKings': 'dk', 'FanDuel': 'fd', 'BetMGM': 'mgm', 'Caesars': 'czr', 'BetRivers': 'br',
              'ESPN BET': 'espnbet', 'Fanatics': 'fan'}
 VOLUME = {'recYds': 'targets', 'rec': 'targets', 'rushYds': 'carries', 'car': 'carries',
@@ -137,7 +137,7 @@ def git(*args, cwd=ROOT, check=True):
 
 
 LEFTOVER = ('data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/',
-            'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json')
+            'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/')
 
 
 def sync(runner=git):
@@ -1021,13 +1021,15 @@ def decision_record(candidate, league, decision, rules, reason, now, ctx):
                          for f in candidate.get('_research') or []]}
 
 
-PAPER_SLOTS = (11, 17, 23)      # silent expansion trials run at the midday, evening and late runs
+PAPER_SLOTS = (11, 17, 21, 23)  # silent expansion trials include West Coast and overnight finals
 
 
 def paper_trials(now, slot, status):
     """Silent expansion work: basketball paper picks plus MLB/NHL market evidence. Publish nothing."""
     if slot.hour not in PAPER_SLOTS:
         return
+    import sports_posts
+    status['sportsSocialPrepared'] = sports_posts.prepare(now)
     try:
         import paper
         result = paper.step(now, log=log)

@@ -1,9 +1,9 @@
-"""The weekly review on GPT: the week's facts gathered by code, read and summed up by Codex, sent to the owner.
+"""The weekly review: recorded evidence prioritized locally, with explicit opt-in Codex review.
 
 The owner moved the desk's AI work to OpenAI on 2026-09-28 and wanted the Monday review as a scheduled routine
 there. A launchd job (deployment/mac/com.keenroudy.sports.review.plist, Monday 9:30 AM Eastern) runs this script:
 it gathers the week from the desk's own records (the run logs, the post log, the record, the ladder, the hosted
-runs, the price timing), hands that packet to `codex exec` (the owner's ChatGPT plan, read-only, no web search),
+runs, the price timing), hands that packet to a bounded local extractive brief (or `--codex` explicitly),
 saves the plain-words review to ~/Library/Logs/KeenRoudy/review-<date>.md, and sends its opening to the phone. It
 changes nothing: a defect it finds is described with the fix, and the owner asks Codex to make it.
 
@@ -262,6 +262,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     parser.add_argument('--since', help='first Eastern date to cover (default: six days before today)')
     parser.add_argument('--no-codex', action='store_true', help='write the packet only')
+    parser.add_argument('--codex', action='store_true', help='explicitly use the cloud review instead of the local brief')
     parser.add_argument('--no-push', action='store_true', help='do not send the phone alert')
     args = parser.parse_args(argv)
     now = datetime.now(timezone.utc)
@@ -286,11 +287,17 @@ def main(argv=None):
     print(f'packet: {packet_path}')
     if args.no_codex:
         return 0
-    review = ask_codex(text, review_path)
+    import local_brief
+    import llm
+    llm.reset_calls()
+    review = ask_codex(text, review_path) if args.codex else local_brief.brief(text)
     if not review:
-        print('codex did not answer; the packet stands alone')
-        review = 'Codex did not answer this week. The facts are in ' + str(packet_path)
-        review_path.write_text(review + '\n', encoding='utf-8')
+        print('review unavailable; the evidence packet stands alone (no automatic cloud fallback)')
+        review = 'The summary was unavailable. The complete recorded facts follow.\n'
+    review_path.write_text(review + '\n\n' + text, encoding='utf-8')
+    (LOGS / f'review-routing-{last.isoformat()}.json').write_text(json.dumps({
+        'engine': 'codex' if args.codex else 'local', 'localCalls': llm.call_stats(),
+        'cloudFallback': False}, indent=2) + '\n', encoding='utf-8')
     print(f'review: {review_path}')
     if not args.no_push:
         import run

@@ -27,6 +27,7 @@ import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import boxscores
@@ -182,6 +183,11 @@ def due(league, games, status, now):
         return f"captured {mine['lastAt']}, inside the gap"
     today = eastern_date(now)
     cap = DAILY_CAP[league].get(today.weekday(), DEFAULT_CAP) if soon else EARLY_CAP
+    late = any(eastern_date(features.when(g['kickoff'])) == today and
+               features.when(g['kickoff']).astimezone(ZoneInfo('America/New_York')).hour >= 18 for g in soon)
+    if late and now.astimezone(ZoneInfo('America/New_York')).hour < 16 \
+            and mine.get('day') == today.isoformat() and mine.get('count',0) >= cap-1:
+        return 'keeping the last daily capture for the evening slate'
     if mine.get('day') == today.isoformat() and mine.get('count', 0) >= cap:
         return f'{cap} captures already today'
     return None

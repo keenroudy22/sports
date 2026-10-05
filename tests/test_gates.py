@@ -85,7 +85,7 @@ class ScheduleTests(unittest.TestCase):
         tuesday_noon = datetime(2026, 9, 29, 16, 0, tzinfo=timezone.utc)
         self.assertEqual(gates.next_slot(tuesday_noon).isoformat(), '2026-09-29T21:30:00+00:00')       # 17:30, no 14:45
         tuesday_6pm = datetime(2026, 9, 29, 22, 0, tzinfo=timezone.utc)
-        self.assertEqual(gates.next_slot(tuesday_6pm).isoformat(), '2026-09-30T03:30:00+00:00')        # 23:30, no 18:50 Tue
+        self.assertEqual(gates.next_slot(tuesday_6pm).isoformat(), '2026-09-30T01:00:00+00:00')        # 21:00 late-slate check
         monday_6pm = datetime(2026, 9, 28, 22, 0, tzinfo=timezone.utc)
         self.assertEqual(gates.next_slot(monday_6pm).isoformat(), '2026-09-28T22:50:00+00:00')         # 18:50 Monday
         late = datetime(2026, 9, 28, 3, 45, tzinfo=timezone.utc)                                          # 23:45 ET Sunday
@@ -396,6 +396,14 @@ class FavoriteLongshotRevisionTests(unittest.TestCase):
 
 
 class CardTests(unittest.TestCase):
+    def test_evening_slate_keeps_one_place_without_increasing_card(self):
+        picks={k: total_lean(id=k,gameIds=[gid],publishedAt='2026-09-26T12:00:00Z') for k,gid in [('a','NFL-2'),('b','NFL-3')]}
+        picks.update({k:prop_lean(id=k,athleteId=k,market='rushYds',gameIds=[gid],publishedAt='2026-09-26T12:00:00Z') for k,gid in [('c','NFL-4'),('d','NFL-5')]})
+        games={**self.GAMES,'late':dict(GAME,id='late',kickoff='2026-09-28T02:30:00Z')}
+        ctx=context(games=games,first=picks,latest=picks)
+        self.assertIn('4 PM',gates.card_cap(total_lean(),ctx).reason)
+        ctx.now=datetime(2026,9,27,20,0,tzinfo=timezone.utc)
+        self.assertTrue(gates.card_cap(total_lean(),ctx).ok)
     GAMES = {gid: dict(GAME, id=gid) for gid in ('NFL-1', 'NFL-2', 'NFL-3', 'NFL-4', 'NFL-5', 'NFL-6')}          # Sunday
     GAMES['MNF'] = dict(GAME, id='MNF', kickoff='2026-09-29T00:15Z')                                              # Monday night
     GAMES['CFB-M'] = dict(GAME, id='CFB-M', league='CFB', kickoff='2026-09-28T23:00Z')                          # Monday, college

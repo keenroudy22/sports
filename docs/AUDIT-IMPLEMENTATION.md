@@ -77,8 +77,8 @@ of the audit is finished. Free service ceilings and the append-only public recor
    rules require prior written approval for an AI reply bot: https://help.x.com/en/rules-and-policies/x-automation
 6. Cross-service quota reporting beyond the new shared Odds API guard. NBA/CBB remain paper-only; other sports retain existing
    factual coverage/capture status. Public market promotion needs prospective evidence and owner sign-off.
-7. Season futures need the shared append-only quote and settlement ledger described in `docs/FUTURES.md`, followed
-   by sport-specific preseason models and paper tracking. The public Lab may show the planned track, but there are
+7. Season futures now have the tested append-only paper quote/settlement ledger in `scripts/futures_store.py`.
+   Exact source collection and sport-specific preseason models are still needed. The Lab labels the tracker ready, but there are
    no official futures selections until an exact free-source price, settlement rules, evidence and owner approval
    all exist.
 

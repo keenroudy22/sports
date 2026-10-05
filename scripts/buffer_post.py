@@ -327,7 +327,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
         noon = datetime(today.year, today.month, today.day, POST_AT[0], POST_AT[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)
         plays.append((max(min(noon, kickoff - EARLY_LEAD), opens), -1 if key == potd else ORDER[pick_card.play_kind(merged)],
                       kickoff - feed.LEAD, key, text, 'play', f'{key}-potd' if key == potd else key))
-    order = {'menu': -2, 'receipt': -1, 'book': -1, 'sheet': 0, 'research': 1, 'cashed': 2}
+    order = {'menu': -2, 'receipt': -1, 'book': -1, 'sheet': 0, 'research': 1, 'cashed': 2, 'sports': 3}
     for post in receipts.house_posts(first, latest, games, log_book, now):
         if set(post['key'].split('+')) & posted:
             continue
@@ -361,7 +361,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     todays = [row for row in plays if eastern_date(row[0]) == today]
     overflow = max(0, len(todays) - room)
     if overflow:
-        for kind in ('research', 'conversation', 'news'):
+        for kind in ('sports', 'research', 'conversation', 'news'):
             for row in list(plays):
                 if overflow <= 0:
                     break

@@ -9,8 +9,12 @@
   forecasts, prices, records and research reproducible at their captured timestamps.
 - While a visitor has Today, Games, a game page or Scores open, the browser now requests factual score/status updates
   once a minute from ESPN's public scoreboard response. NFL, college football, NBA, WNBA, college basketball, MLB,
-  NHL, Premier League and MLS are covered. A blocked or failed request silently keeps the last built snapshot.
-- Live score refreshes never replace stored odds, projections, picks or grading inputs.
+  NHL, Premier League and MLS are covered. A blocked or failed request keeps saved scores and displays a stale or
+  unavailable label. Refreshes preserve open sections, focus and scroll. Hidden tabs pause; returning resumes.
+- Scores can show ESPN-supplied DraftKings pregame quotes from the same response, at no metered feed cost. The
+  label distinguishes retrieval time from the unavailable book update time. These disappear at kickoff, after a
+  failed refresh or after two minutes without a successful observation. They are not verified in-play odds.
+- Live score refreshes never replace official-play odds, projections or grading inputs.
 
 This is deliberately two-speed: scores can move quickly; anything that could be mistaken for a betting recommendation
 keeps a visible, auditable capture time.

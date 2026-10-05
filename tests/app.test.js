@@ -87,7 +87,7 @@ test('official plays render as a compact collapsed list with details on demand',
   const card = source.slice(source.indexOf('const playCard = p =>'), source.indexOf('/* The one record'));
   const css = fs.readFileSync('site/app.css', 'utf8');
   assert.doesNotMatch(card, /matchMedia|\$\{open\}/, 'play cards never auto-expand by viewport');
-  assert.match(card, /<details class="play/);
+  assert.match(card, /<details data-persist="pick-/);
   assert.match(card, /View details/);
   assert.match(css, /\.plays \{ display: grid; grid-template-columns: 1fr;/);
   assert.match(css, /\.play-compact-meta \{ display: block !important;/);
@@ -159,8 +159,8 @@ test('the Lab tracks season futures without presenting a public play', () => {
   const lab = source.slice(source.indexOf('async function viewLab()'), source.indexOf('function viewArbs()'));
   assert.match(lab, /Season futures/);
   assert.match(lab, />Planned</);
-  assert.match(lab, /Original price, book, date and every later move will be preserved/);
-  assert.match(lab, /Research watches stay separate from official plays/);
+  assert.match(lab, /Original quotes, later moves and book settlements/);
+  assert.match(lab, /stay separate from the daily card/);
   assert.doesNotMatch(lab, /official futures? (?:pick|play)/i);
 });
 
@@ -172,10 +172,11 @@ test('score pages refresh factual scores in the browser without treating odds or
   assert.match(live, /MLB: \['baseball', 'mlb'/);
   assert.match(live, /NHL: \['hockey', 'nhl'/);
   assert.match(live, /EPL: \['soccer', 'eng\.1'/);
-  assert.match(live, /LIVE_TTL = 45000/);
-  assert.match(live, /cache: 'no-store'/);
+  const transport = fs.readFileSync('site/live.js', 'utf8');
+  assert.match(transport, /ttl = 45000/);
+  assert.match(transport, /cache:'no-store'/);
   assert.doesNotMatch(live, /competition\.odds|event\.odds|pickOdds/);
-  assert.match(source, /Scores refresh every minute while this page is open/);
+  assert.match(source, /refresh every minute/);
 });
 
 test('More links to the public posting schedule and keeps qualifying language', () => {

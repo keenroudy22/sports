@@ -3,8 +3,8 @@
 <plist version="1.0">
 <dict>
   <!--
-  KeenRoudy Sports weekly review on GPT (scripts/review.py): every Monday at 9:30 AM Eastern the week's facts are
-  gathered from the desk's own records, Codex (the owner's ChatGPT plan, read-only, no web) writes the plain-words
+  KeenRoudy Sports weekly review (scripts/review.py): every Monday at 9:30 AM Eastern the week's facts are
+  gathered from the desk's own records, the local model selects important evidence for the plain-words
   review to ~/Library/Logs/KeenRoudy/review-<date>.md, and its opening goes to the phone. It changes nothing.
   Separate from every com.mygolflinks.* job.
   -->

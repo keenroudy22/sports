@@ -44,7 +44,7 @@ ROOT = Path(__file__).resolve().parents[1]
 EASTERN = ZoneInfo('America/New_York')
 # (hour, minute, weekdays or None for every day); Monday is 0, Sunday is 6. PROMPT.md's table.
 SCHEDULE = ((6, 45, None), (8, 30, None), (11, 45, None), (14, 45, (6,)), (17, 30, None),
-            (18, 50, (0, 3, 6)), (23, 30, None))
+            (18, 50, (0, 3, 6)), (21, 0, None), (23, 30, None))
 FLAGS = {'QB_GATE': True, 'MARKET_GATE': True}
 # Books available in Indiana; a college pick must quote one of them. Pregame college player props are legal there: the
 # Indiana Gaming Commission voted on 2026-09-24 to keep them and bars only in-game college props, which the desk never
@@ -578,6 +578,11 @@ def card_cap(candidate, ctx):
             family_count += 1
     if sum(count.values()) >= size:
         return Decision(False, 'card_cap', f"{sum(count.values())} plays already on the {day} card; the card is {size}")
+    evening = any(g.get('kickoff') and eastern_date(when(g['kickoff'])) == day
+                  and when(g['kickoff']).astimezone(EASTERN).hour >= 18 for g in ctx.games.values())
+    if weekend and evening and ctx.now.astimezone(EASTERN) < datetime(day.year,day.month,day.day,16,tzinfo=EASTERN) \
+            and sum(count.values()) >= size-1:
+        return Decision(False, 'card_cap', 'one card place stays available for the afternoon/evening review until 4 PM ET')
     if weekend and count[kind] >= CARD_KIND_MAX:
         return Decision(False, 'card_cap', f"{count[kind]} {'player props' if kind == 'player' else 'game lines'} already on the "
                                            f"{day} card; {CARD_KIND_MAX} of a kind at most, for a mix")

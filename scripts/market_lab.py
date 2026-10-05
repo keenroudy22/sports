@@ -223,6 +223,12 @@ def report(root=STORE, public=PUBLIC, now=None):
     now = now or datetime.now(timezone.utc)
     rows = read_all(root)
     data = {'updatedAt': boxscores.stamp(now), 'leagues': {}}
+    quotes_by_game = {r['gameId']:r for r in rows if r.get('type')=='quote'}
+    data['recentResults'] = []
+    for result in sorted((r for r in rows if r.get('type')=='grade'), key=lambda r:r['kickoff'], reverse=True)[:100]:
+        original=quotes_by_game.get(result['gameId'])
+        if original:
+            data['recentResults'].append({**result,'home':original['home'],'away':original['away']})
     lines = ['# MLB and NHL market lab', '',
              'Pregame prices and final scores captured silently. No predictions or published plays.', '']
     for league in LEAGUES:

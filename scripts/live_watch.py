@@ -166,7 +166,11 @@ def run_shadow(ctx=None, games=None, log_book=None, now=None, state_path=DEFAULT
         except Exception as error:
             log(f'live shadow: {gid} unavailable ({type(error).__name__})')
     previous = state.get('picks') if isinstance(state.get('picks'), dict) else {}
-    current_state, emitted = {}, []
+    active={p['id'] for p in picks}
+    # A feed outage is not a state transition. Retain the last observation so a
+    # restored feed cannot emit the same early hit a second time.
+    current_state = {key:row for key,row in previous.items() if row.get('pickId') in active}
+    emitted = []
     for pick in picks:
         for leg_id, gid, shaped in shaped_legs(pick):
             record = records.get(gid)
@@ -184,7 +188,15 @@ def run_shadow(ctx=None, games=None, log_book=None, now=None, state_path=DEFAULT
                 emitted.append(event('correction', pick, leg_id, gid, status, record, now))
     known = {row.get('id') for row in state.get('events') or []}
     emitted = [row for row in emitted if row['id'] not in known]
+    reconciled=state.get('settlements') or {}
+    for key in public_ids(log_book):
+        final=ctx.latest.get(key) or {}
+        if final.get('result') in ('win','loss','push','void'):
+            reconciled[key]={'result':final['result'],'settledAt':final.get('settledAt'),
+                             'source':'append-only published settlement'}
     state.update({'mode': 'shadow', 'lastPollAt': boxscores.stamp(now), 'gamesPolled': len(records),
+                  'health':{'requested':len(wanted),'successful':len(records),'unavailable':len(wanted)-len(records)},
+                  'settlements':reconciled,
                   'picks': current_state, 'events': ((state.get('events') or []) + emitted)[-MAX_EVENTS:]})
     if persist:
         write(state_path, state)
