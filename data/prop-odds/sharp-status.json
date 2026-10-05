@@ -1,8 +1,8 @@
 {
- "at": "2026-10-05T22:52:30Z",
+ "at": "2026-10-05T22:55:27Z",
  "confirmed": {
-  "CFB-401871090": "2026-10-05T22:52:30Z",
-  "NFL-401872979": "2026-10-05T22:52:30Z"
+  "CFB-401871090": "2026-10-05T22:55:27Z",
+  "NFL-401872979": "2026-10-05T22:55:27Z"
  },
  "leagues": {
   "CFB": {
@@ -26,7 +26,7 @@
     "player_rushing_attempts": 9,
     "player_rushing_yards": 83
    },
-   "requestsLeft": 8,
+   "requestsLeft": 7,
    "rows": 373,
    "slateGames": [
     "Southern Miss Golden Eagles at Troy Trojans 2026-10-07T00:00Z"
@@ -190,6 +190,10 @@
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
        "moneyline_3-way",
+       "player_passing_touchdowns",
+       "player_passing_yards",
+       "player_receiving_yards",
+       "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
        "team_total",
@@ -1022,8 +1026,8 @@
   },
   "NFL": {
    "books": {
-    "draftkings": 314,
-    "fanduel": 249
+    "draftkings": 293,
+    "fanduel": 357
    },
    "eventsListed": 17,
    "eventsMatched": 1,
@@ -1036,24 +1040,24 @@
     "player_interceptions": 10,
     "player_kicking_points": 4,
     "player_longest_passing_completion": 4,
-    "player_longest_reception": 20,
+    "player_longest_reception": 18,
     "player_longest_rush": 6,
     "player_passing_+_rushing_yards": 4,
     "player_passing_attempts": 4,
     "player_passing_completions": 4,
-    "player_passing_touchdowns": 11,
-    "player_passing_yards": 67,
-    "player_receiving_yards": 178,
-    "player_receptions": 94,
+    "player_passing_touchdowns": 14,
+    "player_passing_yards": 80,
+    "player_receiving_yards": 198,
+    "player_receptions": 114,
     "player_rushing_+_receiving_yards": 10,
     "player_rushing_attempts": 8,
-    "player_rushing_yards": 69,
-    "player_sacks": 8,
+    "player_rushing_yards": 99,
+    "player_sacks": 11,
     "player_tackles": 14,
     "player_tackles_+_assists": 14
    },
-   "requestsLeft": 11,
-   "rows": 563,
+   "requestsLeft": 10,
+   "rows": 650,
    "slateGames": [
     "Atlanta Falcons at New Orleans Saints 2026-10-06T00:15Z"
    ],
@@ -1318,7 +1322,6 @@
        "player_passing_completions",
        "player_passing_touchdowns",
        "player_passing_yards",
-       "player_points",
        "player_receiving_yards",
        "player_receptions",
        "player_rushing_+_receiving_touchdowns",
@@ -1665,7 +1668,6 @@
        "match_result_both_teams_to_score",
        "moneyline",
        "player_passing_yards",
-       "player_points",
        "player_receiving_yards",
        "player_rushing_+_receiving_touchdowns",
        "player_rushing_yards",
