@@ -315,6 +315,15 @@ class GitTests(unittest.TestCase):
         self.assertEqual(self.sh('log', '-1', '--format=%s').stdout.strip(), 'Captures left by a stopped run')
         self.assertEqual(self.sh('status', '--porcelain').stdout, '')
 
+    def test_commit_log_can_deliver_local_notes_without_a_new_post(self):
+        folder = self.repo / 'site/data'
+        folder.mkdir(parents=True, exist_ok=True)
+        (folder / 'desk-notes.json').write_text('{"rows": []}\n')
+        (self.repo / 'research' / 'old.json').write_text('{"not": "this"}')
+        now = datetime(2026, 10, 5, 12, 40, tzinfo=timezone.utc)
+        self.assertEqual(run.commit_log(now, push=False, runner=self.runner, cwd=self.repo), {'committed': True, 'pushed': False})
+        self.assertEqual(self.sh('show', '--name-only', '--format=', 'HEAD').stdout.split(), ['site/data/desk-notes.json'])
+
     def test_sync_refuses_a_dirty_tree(self):
         (self.repo / 'research' / 'old.json').write_text('{"changed": true}')
         with self.assertRaises(run.RunError):

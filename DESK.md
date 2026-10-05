@@ -304,8 +304,22 @@ With Ollama down the run publishes on templates and holds on a quarterback rule 
 only model names, latency, token counts and failures. It never records prompts or answers.
 
 Live web extraction stays on GPT because a local model cannot verify current injuries by itself. The routine
-researcher pins `gpt-6-sol` at low reasoning; the code-aware weekly review pins it at medium reasoning. This avoids
-using the interactive Codex default for repetitive work while preserving verified URLs and the existing local guards.
+researcher pins `gpt-6-sol` at low reasoning. The scheduled weekly brief uses the local 27B model to choose exact
+evidence excerpts; cloud code-aware review is only the explicit `review.py --codex` option.
+
+The owner's October 5 request puts the local model to work on homepage liveliness too. `scripts/local_editor.py`
+selects at most three existing fact rows for **Worth a look** on Today: fresh main-line season counts, observed
+red-zone usage, or confirmed upcoming fixtures across the seven additional sports. The model chooses IDs, not
+new numbers, odds or prose. One call (at most 180 seconds) follows social scheduling in each normal desk run;
+it cannot delay the official card's scheduling. Calls are separated by at least an hour; unchanged facts reuse
+the prior selection and only refresh real source timestamps. No new feeds, cloud fallback or social post type.
+The browser hides notes at their source cutoff or kickoff, and respects the league filter. The public snapshot
+is `site/data/desk-notes.json`; the private call/fingerprint checkpoint is `~/.config/keenroudy/local-editor.json`.
+Disable selection with `KEENROUDY_LOCAL_EDITOR=0` or `--no-llm`. Missing facts or a busy/unavailable model produce
+no filler. Existing selected notes age out normally. This grants no autonomous code-editing or deployment rights.
+Sports requests now ask Ollama to retain the loaded model for 12 hours between checks on the always-on Mac.
+This avoids repeated slow cold loads at the cost of resident memory; Ollama may still evict it for other work.
+No shared service configuration changes. `KEENROUDY_LLM_KEEP_ALIVE=15m` restores the old retention request.
 
 ## X
 

@@ -55,7 +55,7 @@ PUBLISH_MARGIN = timedelta(minutes=5)      # nothing is published on a game this
 KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'ladder', 'favorite')
 LADDER_SCAN_TIMES = ((10, 0), (13, 30), (16, 0), (20, 0))
 WHITELIST = ('research/', 'data/odds/', 'data/prop-odds/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
-             'data/paper/', 'data/hoops/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/')
+             'data/paper/', 'data/hoops/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 BOOK_SLUG = {'DraftKings': 'dk', 'FanDuel': 'fd', 'BetMGM': 'mgm', 'Caesars': 'czr', 'BetRivers': 'br',
              'ESPN BET': 'espnbet', 'Fanatics': 'fan'}
 VOLUME = {'recYds': 'targets', 'rec': 'targets', 'rushYds': 'carries', 'car': 'carries',
@@ -137,7 +137,7 @@ def git(*args, cwd=ROOT, check=True):
 
 
 LEFTOVER = ('data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/',
-            'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/')
+            'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 
 
 def sync(runner=git):
@@ -1799,6 +1799,8 @@ def _run(args, now, slot, kinds, status):
         # post never goes out without its card.
         buffer_posts(now, ctx, games, closed, status, deploying=bool(git_result.get('pushed')))
         owner_agenda(now, ctx, games)
+        # Optional local editorial work comes AFTER official scheduling, never in its critical path.
+        homepage_editor(now, status, enabled=use_llm)
         status['git']['posts'] = commit_log(now, push=not args.no_push)
     status.update(outcome='ok', finishedAt=stamp(datetime.now(timezone.utc)))
     write_status(status)
@@ -2219,11 +2221,23 @@ def requote(entry, pick, game, ctx, now, log=log):
     return True
 
 
+def homepage_editor(now, status, enabled=True):
+    """Noncritical, local-only research selection. Never holds up a play or settlement."""
+    try:
+        import local_editor
+        status['localEditor'] = local_editor.prepare(now, enabled=enabled)
+    except Exception as error:
+        status['localEditor'] = {'status': 'error', 'error': type(error).__name__}
+    log('homepage editor:', status['localEditor'])
+
+
 def commit_log(now, push=True, runner=git, cwd=ROOT):
-    """Commit the posted log on its own, after the posts are scheduled, and push it."""
-    if not runner('status', '--porcelain', '--', 'data/x-posted.json', cwd=cwd).stdout.strip():
+    """Commit delivery evidence and the optional local homepage notes after scheduling."""
+    paths = ('data/x-posted.json', 'site/data/desk-notes.json')
+    changed = [p for p in paths if runner('status', '--porcelain', '--', p, cwd=cwd).stdout.strip()]
+    if not changed:
         return {'committed': False, 'pushed': False}
-    runner('add', '--', 'data/x-posted.json', cwd=cwd)
+    runner('add', '--', *changed, cwd=cwd)
     runner('commit', '--quiet', '-m', f"Posts {eastern_date(now).isoformat()} {now.astimezone(EASTERN):%H:%M} ET", cwd=cwd)
     if not push:
         return {'committed': True, 'pushed': False}

@@ -705,7 +705,7 @@ table.data a { font-weight: 600; }
 
 /* The first thing a casual reader needs: five familiar season records, with the source of each one spelled out. */
 .scorecard-card { padding: 14px; margin: 12px 0 16px; border-color: rgba(94, 234, 164, .24); }
-.scorecard-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.scorecard-head { display: flex; flex-wrap:wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
 .scorecard-head .eyebrow { margin: 0 0 2px; color: var(--mint); }
 .scorecard-head p:last-child { margin: 0; color: var(--dim); font-size: 12px; }
 .scorecard-head a { flex-shrink: 0; font-size: 12px; font-weight: 700; }
@@ -985,3 +985,13 @@ table.data a { font-weight: 600; }
   .community-card.community-card-compact { grid-template-columns:1fr; }
   .community-join { justify-content:center; }
 }
+
+/* Small locally selected research notes; plays and the Climb stay above them. */
+.desk-notes { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr)); gap:10px; align-items:start; }
+.desk-note { padding:14px 16px; min-width:0; border-top:2px solid var(--mint, #5eeaa4); }
+.desk-note summary { cursor:pointer; }
+.desk-note strong { display:block; margin-top:6px; font-size:16px; line-height:1.35; overflow-wrap:anywhere; }
+.desk-note p { margin:12px 0 8px; font-size:14px; line-height:1.5; color:var(--text, #eef5fa); }
+.desk-note small { display:block; line-height:1.5; color:var(--dim); }
+.desk-note > a { display:inline-block; margin-top:12px; font-size:13px; }
+.desk-note .eyebrow { margin:0; line-height:1.5; white-space:normal; overflow-wrap:anywhere; }

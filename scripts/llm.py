@@ -28,7 +28,9 @@ DEFAULT_FAST_MODEL = 'qwen3.5:9b-mlx'
 NUM_CTX = 8192
 WRITE_CTX = 4096
 JUDGE_CTX = 8192
-KEEP_ALIVE = '15m'
+# The sports Mac is always on. Avoid reloading the large model at every desk run;
+# Ollama can still evict it for other workloads. This is per request, not server configuration.
+KEEP_ALIVE = os.environ.get('KEENROUDY_LLM_KEEP_ALIVE', '12h')
 _CALLS = []
 
 

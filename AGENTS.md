@@ -27,7 +27,8 @@ Three things run it, none of them an AI chat:
    deterministic, sourced templates are the live prose by default, so routine cards do not spend local-model calls
    merely rewording them. Optional guarded rewriting uses `qwen3.5:9b-mlx` only when `KEENROUDY_LLM_POLISH=1`; judgment
    never falls through to it. The live web researcher uses `codex exec` with `gpt-6-sol` at low reasoning by default.
-   The weekly review uses the local 27B model to select exact evidence excerpts, with a deterministic packet fallback.
+   The local homepage editor selects exact research notes after social scheduling. The weekly review uses the local
+   27B model to select exact evidence excerpts, with a deterministic packet fallback.
    Only an explicit `review.py --codex` uses the cloud review model at medium reasoning. Named researcher/review
    settings live in `deployment/mac/env.example`.
 
@@ -130,6 +131,16 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Local homepage editor (2026-10-05, owner requested more local liveliness):** after official social scheduling,
+  each normal Mac desk run may use the local 27B model to select up to three exact supplied research notes for
+  Today's compact Worth a look section. Fresh main-line season trends, observed red-zone usage and confirmed
+  multi-sport fixtures only; no free-form facts, picks, live calls, forecast changes or new social posts. One
+  180-second call at most, no calls within an hour, unchanged facts reuse the selection. No cloud fallback.
+  Site notes expire at kickoff or their source cutoff; research stays below official plays. Failures never block
+  official scheduling. `KEENROUDY_LOCAL_EDITOR=0` disables future selection; `--no-llm` skips it too.
+  This is local editorial work, not autonomous website code editing or deployment.
+  Sports requests ask Ollama to retain the model for 12 hours between checks (evictable, not pinned).
+  `KEENROUDY_LLM_KEEP_ALIVE=15m` restores the former memory-saving behavior; no shared server setting changes.
 - **Overnight polish and multi-sport release (2026-10-05, owner authorized):** Scores has its own main tab and
   Today links to all seven additional leagues. Browser score refresh preserves open sections and scroll, checks
   yesterday for midnight games, backs off failures, and never advances a successful timestamp on an error.

@@ -599,6 +599,20 @@
     `${r.player} ${r.team?.name || ''} ${r.matchup}`.toLowerCase().includes(String(filters.query || '').toLowerCase()))
     .sort((a, b) => b.hits / b.games - a.hits / a.games || b.games - a.games || a.player.localeCompare(b.player));
 
+  const deskNotes = (data, league = 'ALL', now = Date.now(), games = []) => {
+    if (data?.schemaVersion !== 1 || !Array.isArray(data.rows)) return [];
+    const current = new Map(games.map(g => [g.id, g]));
+    return data.rows.filter(r => {
+      if (!r || typeof r !== 'object') return false;
+      const g = current.get(r.gameId);
+      return (league === 'ALL' || r.league === league) && Date.parse(r.expiresAt) > now &&
+        Date.parse(r.kickoff) > now && Date.parse(r.observedAt) <= now &&
+        (!['NFL', 'CFB'].includes(r.league) || (g && g.state === 'pre' && !g.completed)) &&
+        typeof r.title === 'string' && typeof r.text === 'string' &&
+        /^#(?:game\/(?:NFL|CFB)-\d+|scores\/(?:NBA|WNBA|CBB|MLB|NHL|EPL|MLS))$/.test(r.href);
+    }).slice(0, 3);
+  };
+
   const shardOf = (id, shards) => Number(id) % shards;
 
   const deliveryText = (pick, now = Date.now()) => {
@@ -612,7 +626,7 @@
     return parts.join(' · ') || 'On the website · social delivery not yet confirmed';
   };
 
-  return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends,
+  return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, deskNotes,
     column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
     unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, modelCaution, projectionScorecard, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };

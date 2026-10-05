@@ -618,8 +618,14 @@
       `<div class="card menu"><a href="#trends/${esc(card.id)}"><span>Season trends →</span><small>70 / 80 / 90 / 100% · main lines and alternates</small></a></div>`;
   };
 
+  const deskNotesSection = (data, games, league) => {
+    const rows = C.deskNotes(data, league, Date.now(), games);
+    if (!rows.length) return '';
+    return section('Worth a look', `<div class="desk-notes">${rows.map(r => `<details class="card desk-note" data-persist="note-${esc(r.gameId)}-${esc(r.title)}"><summary><span class="eyebrow">${esc(r.league)} · ${esc(r.label)}</span><strong>${esc(r.title)}</strong></summary><p>${esc(r.text)}</p><small>${esc(r.matchup)} · ${esc(whenShort(r.kickoff))}<br>As of ${esc(whenShort(r.observedAt))}</small><a href="${esc(r.href)}">Explore →</a></details>`).join('')}</div>`, '<span>Research, not posted plays</span>');
+  };
+
   async function viewToday() {
-    const [data, board, scoreboard] = await Promise.all([get('app/today.json'), maybe('app/lines.json'), maybe('scoreboard.json')]);
+    const [data, board, scoreboard, notes] = await Promise.all([get('app/today.json'), maybe('app/lines.json'), maybe('scoreboard.json'), maybe('desk-notes.json')]);
     markPicks(data.picks.filter(inLeague).filter(p => !p.result && !p.historicalImport));
     const settledRecently = lastGameDay(data.picks.filter(inLeague));
     const recent = C.summaryOf(settledRecently.filter(p => !C.isParlay(p) && !C.isUnpricedImport(p)));
@@ -649,6 +655,7 @@
       ${scheduled.upcoming.length ? `<details class="card upcoming-card"><summary>Upcoming official plays · ${scheduled.upcoming.length}<span>Separate from today’s card</span></summary><div class="plays">${scheduled.upcoming.map(playCard).join('')}</div></details>` : ''}
       ${scheduled.awaiting.length ? `<details class="card upcoming-card"><summary>Awaiting settlement · ${scheduled.awaiting.length}</summary><div class="plays">${scheduled.awaiting.map(playCard).join('')}</div></details>` : ''}
       ${section('Around the leagues', `<nav class="sport-links" aria-label="More sports">${SCORE_LEAGUES.map(key => `<a href="#scores/${key}">${esc(SCORE_NAMES[key])} →</a>`).join('')}</nav>`, '<a href="#schedule">Release schedule →</a>')}
+      ${deskNotesSection(notes, games, state.league)}
       <div class="two-col"><div>
         <div class="research-heading"><p class="eyebrow">More to explore</p><h2>Lines and trends</h2><p>Game lines, player props and matchup trends.</p></div>
         ${underdogWatch(now, board)}
