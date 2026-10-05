@@ -1094,7 +1094,16 @@
    },
    "sentAt": "2026-10-03T14:10:01.933Z",
    "link": "https://twitter.com/keenkooks/status/2106386293320024174",
-   "tweetId": "2106386293320024174"
+   "tweetId": "2106386293320024174",
+   "metrics": {
+    "reactions": 2,
+    "comments": 0,
+    "engagementRate": 3.64,
+    "reposts": 0,
+    "impressions": 55,
+    "clicks": 0
+   },
+   "metricsAt": "2026-10-05T15:45:03Z"
   },
   {
    "id": "CFB-2026-W5-mich-minn-over-43-5-espnbet",
@@ -1145,7 +1154,16 @@
    },
    "sentAt": "2026-10-03T14:40:02.285Z",
    "link": "https://x.com/1753110091912413184/status/2106393844300271706",
-   "tweetId": "2106393844300271706"
+   "tweetId": "2106393844300271706",
+   "metrics": {
+    "reactions": 0,
+    "comments": 1,
+    "engagementRate": 3.56,
+    "reposts": 0,
+    "impressions": 225,
+    "clicks": 0
+   },
+   "metricsAt": "2026-10-05T15:45:03Z"
   },
   {
    "id": "CFB-2026-W5-syr-conn-over-50-5-espnbet",
@@ -1172,7 +1190,16 @@
    "requotedAt": "2026-10-03T14:13:44Z",
    "sentAt": "2026-10-03T14:50:02.365Z",
    "link": "https://x.com/1753110091912413184/status/2106396361243381937",
-   "tweetId": "2106396361243381937"
+   "tweetId": "2106396361243381937",
+   "metrics": {
+    "reactions": 0,
+    "comments": 1,
+    "engagementRate": 1.08,
+    "reposts": 0,
+    "impressions": 186,
+    "clicks": 0
+   },
+   "metricsAt": "2026-10-05T15:45:03Z"
   },
   {
    "id": "sheet:CFB:2026-10-03",
@@ -1192,7 +1219,16 @@
    "cardKey": "sheet-cfb-2026-10-03",
    "sentAt": "2026-10-03T14:20:03.185Z",
    "link": "https://x.com/1753110091912413184/status/2106388814566461876",
-   "tweetId": "2106388814566461876"
+   "tweetId": "2106388814566461876",
+   "metrics": {
+    "reactions": 1,
+    "comments": 0,
+    "engagementRate": 8.51,
+    "reposts": 0,
+    "impressions": 47,
+    "clicks": 0
+   },
+   "metricsAt": "2026-10-05T15:45:03Z"
   },
   {
    "id": "CFB-2026-W5-longshot-1003-fd",
@@ -1213,7 +1249,16 @@
    "reasonKind": "none",
    "sentAt": "2026-10-03T15:00:11.751Z",
    "link": "https://x.com/1753110091912413184/status/2106398916686082102",
-   "tweetId": "2106398916686082102"
+   "tweetId": "2106398916686082102",
+   "metrics": {
+    "reactions": 0,
+    "comments": 1,
+    "engagementRate": 4.31,
+    "reposts": 0,
+    "impressions": 418,
+    "clicks": 0
+   },
+   "metricsAt": "2026-10-05T15:45:03Z"
   },
   {
    "id": "research:spread-dog:2026-10-03",
@@ -1233,7 +1278,16 @@
    "cardKey": "research-spread-dog-2026-10-03",
    "sentAt": "2026-10-03T15:10:02.490Z",
    "link": "https://x.com/1753110091912413184/status/2106401394563469400",
-   "tweetId": "2106401394563469400"
+   "tweetId": "2106401394563469400",
+   "metrics": {
+    "reactions": 0,
+    "comments": 0,
+    "engagementRate": 1.56,
+    "reposts": 0,
+    "impressions": 64,
+    "clicks": 0
+   },
+   "metricsAt": "2026-10-05T15:45:03Z"
   },
   {
    "id": "CFB-2026-W5-ladder-1003-fd",
@@ -1747,10 +1801,12 @@
    "kind": "buffer:play",
    "card": true,
    "discord": {
-    "state": "pending",
+    "state": "sent",
     "text": "POTD: Falcons/Saints under 48 (-108, BetRivers)\nNow 48.5 (-115, ESPN BET)\nWe have it at 43.\n\n❤️ if you're tailing\n#NFL",
     "readyAt": "2026-10-05T15:45:00Z",
-    "image": "https://keenroudy.com/sports/data/cards/NFL-2026-W4-atl-no-under-48-br-potd.png"
+    "image": "https://keenroudy.com/sports/data/cards/NFL-2026-W4-atl-no-under-48-br-potd.png",
+    "sentAt": "2026-10-05T15:45:03Z",
+    "beforeX": true
    },
    "cardKey": "NFL-2026-W4-atl-no-under-48-br-potd",
    "featured": true,
@@ -1760,6 +1816,21 @@
     "result": "clear",
     "facts": 4
    }
+  },
+  {
+   "id": "research:end-zone:2026-10-05",
+   "postedAt": "2026-10-05T15:45:03Z",
+   "dueAt": "2026-10-05T16:10:00Z",
+   "bufferPostId": "6ac3c6b4eebb6731f00d0374",
+   "textHash": "db1d8fc4ce5c218f",
+   "kind": "buffer:research",
+   "card": true,
+   "discord": {
+    "state": "pending",
+    "text": "END-ZONE WORK\nBijan Robinson | 6 inside the 10\nJuwan Johnson | 5 inside the 10\nTyler Shough | 2 inside the 10\nChris Olave | 2 inside the 10\n\nFull details and samples on the graphic.\nOpportunity, not TD probability or an official play.\n#NFL",
+    "image": "https://keenroudy.com/sports/data/cards/research-end-zone-2026-10-05.png"
+   },
+   "cardKey": "research-end-zone-2026-10-05"
   }
  ]
 }
