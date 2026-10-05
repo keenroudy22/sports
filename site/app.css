@@ -23,6 +23,19 @@
   --tabbar: 62px;
 }
 
+.live-freshness{display:flex;align-items:center;gap:7px;margin:0 0 10px;color:var(--dim)}
+.live-freshness span{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 4px rgba(94,234,164,.11)}
+.schedule-row{display:grid;grid-template-columns:78px minmax(0,1fr);align-items:start}
+.schedule-row .row-main{min-width:0;padding:11px 8px}
+.schedule-row .row-name,.schedule-row .row-meta{display:block}
+.schedule-row .row-meta{margin-top:3px;line-height:1.45;white-space:normal}
+.schedule-time{color:var(--mint);font-size:13px;font-weight:800;white-space:nowrap}
+
+@media (max-width: 520px){
+  .schedule-row{grid-template-columns:68px minmax(0,1fr);gap:10px}
+  .schedule-time{font-size:12px}
+}
+
 .board-tabs { display:flex; gap:6px; flex-wrap:nowrap; overflow-x:auto; margin:0 0 20px; padding:0 0 2px; scrollbar-width:none; }
 .board-tabs::-webkit-scrollbar { display:none; }
 .trend-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr)); gap:14px; }
@@ -61,6 +74,8 @@
 .two-col > div { min-width:0; }
 .two-col .scorecard-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
 @media(max-width:420px) {
+  .wordmark { display: none; }
+  .leagues button { padding-left: 7px; padding-right: 7px; }
   .transparent-record { padding:12px; }
   .transparent-record .stat { padding:9px; }
   .transparent-record .stat-value { font-size:25px; }
@@ -105,11 +120,12 @@ a:hover { color: #8ff3c2; }
 .top {
   position: sticky; top: 0; z-index: 20;
   display: flex; align-items: center; gap: 10px;
+  width: 100%; max-width: 100vw; min-width: 0;
   padding: 10px var(--gutter);
   background: var(--bg);
   border-bottom: 1px solid var(--line);
 }
-.brand { display: inline-flex; align-items: center; gap: 9px; color: var(--text); }
+.brand { display: inline-flex; align-items: center; gap: 9px; min-width: 0; flex-shrink: 1; color: var(--text); }
 .brand:hover { color: var(--text); }
 .brand-mark {
   width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
@@ -118,7 +134,7 @@ a:hover { color: #8ff3c2; }
   border: 1px solid #3b4858;
 }
 .wordmark { font-size: 14px; font-weight: 700; letter-spacing: .13em; }
-.top-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.top-right { margin-left: auto; display: flex; flex: 0 1 auto; min-width: 0; align-items: center; gap: 8px; }
 
 .leagues { display: flex; gap: 4px; padding: 2px; background: var(--surface); border-radius: 999px; }
 .leagues button {

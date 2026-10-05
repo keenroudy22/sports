@@ -563,7 +563,7 @@
     if (view === 'defense') return { view: 'stats', tab: 'defense' };
     /* Bare #scores was the old football board; only #scores/<league> is the other-sports page. */
     if (view === 'scores' && rest[0]) return { view: 'scores', league: rest[0].toUpperCase() };
-    const known = ['today', 'games', 'stats', 'model', 'record', 'board', 'ticket', 'research', 'arbs', 'lab', 'more'];
+    const known = ['today', 'games', 'stats', 'model', 'record', 'board', 'ticket', 'research', 'arbs', 'lab', 'schedule', 'more'];
     if (known.includes(view)) return { view };
     return { view: LEGACY[view] || 'today' };
   };

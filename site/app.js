@@ -54,7 +54,7 @@
     more: '<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
   };
   const TABS = [['today', 'Today'], ['games', 'Games'], ['stats', 'Charts'], ['record', 'Record'], ['more', 'More']];
-  const TAB_FOR = { trends: 'today', board: 'today', game: 'games', player: 'stats', team: 'stats', model: 'record', ticket: 'today', research: 'more', scores: 'more', arbs: 'more', lab: 'more' };
+  const TAB_FOR = { trends: 'today', board: 'today', game: 'games', player: 'stats', team: 'stats', model: 'record', ticket: 'today', research: 'more', scores: 'more', arbs: 'more', lab: 'more', schedule: 'more' };
   const boardTabs = active => `<nav class="board-tabs" aria-label="Lines and plays"><a href="#today" ${active === 'card' ? 'aria-current="page"' : ''}>Plays</a><a href="#board/favorites" ${active === 'favorites' ? 'aria-current="page"' : ''}>Best lines</a><a href="#board" ${active === 'lines' ? 'aria-current="page"' : ''}>Games</a><a href="#board/props" ${active === 'props' ? 'aria-current="page"' : ''}>Props</a><a href="#trends" ${active === 'trends' ? 'aria-current="page"' : ''}>Trends</a></nav>`;
   const scoreTabs = active => `<nav class="board-tabs" aria-label="Scoreboard view"><a href="#record" ${active === 'official' ? 'aria-current="page"' : ''}>Results</a><a href="#model" ${active === 'model' ? 'aria-current="page"' : ''}>Model results</a></nav>`;
 
@@ -125,6 +125,84 @@
     const h = Math.floor(ms / 36e5), m = Math.floor((ms % 36e5) / 6e4);
     return h ? `kicks off in ${h}h ${m}m` : `kicks off in ${m}m`;
   };
+
+  /* ESPN's public scoreboards allow direct browser reads. Use them only for factual score/status refreshes: odds,
+     forecasts and picks stay on the desk's timestamped snapshots. A failure quietly falls back to the built page. */
+  const LIVE = {
+    NFL: ['football', 'nfl', ''], CFB: ['football', 'college-football', '&groups=80&limit=1000'],
+    NBA: ['basketball', 'nba', ''], WNBA: ['basketball', 'wnba', ''],
+    CBB: ['basketball', 'mens-college-basketball', '&groups=50&limit=1000'],
+    MLB: ['baseball', 'mlb', ''], NHL: ['hockey', 'nhl', ''],
+    EPL: ['soccer', 'eng.1', ''], MLS: ['soccer', 'usa.1', ''],
+  };
+  const liveCache = new Map(), LIVE_TTL = 45000;
+  const etDay = (offset = 0) => {
+    const date = new Date(Date.now() + offset * 86400000);
+    const parts = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Indiana/Indianapolis',
+      year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(date).map(p => [p.type, p.value]));
+    return `${parts.year}-${parts.month}-${parts.day}`;
+  };
+  const liveState = raw => {
+    const type = ((raw || {}).type || {}), name = String(type.name || '').toUpperCase();
+    if (name.includes('POSTPONED')) return ['postponed', false, 'pre'];
+    if (name.includes('CANCELED') || name.includes('CANCELLED')) return ['cancelled', false, 'pre'];
+    if (name.includes('SUSPENDED')) return ['suspended', false, 'in'];
+    if (name.includes('DELAYED')) return ['delayed', false, type.state || 'pre'];
+    if (type.completed) return ['final', true, 'post'];
+    return [type.state === 'in' ? 'in_progress' : 'scheduled', false, type.state || 'pre'];
+  };
+  const liveEvent = (event, league) => {
+    const competition = (event.competitions || [])[0];
+    if (!competition) return null;
+    const status = competition.status || event.status || {}, [kind, completed, stateName] = liveState(status);
+    const teams = {};
+    for (const row of competition.competitors || []) {
+      const side = row.homeAway, team = row.team || {};
+      if (!['home', 'away'].includes(side)) continue;
+      const rawScore = row.score && typeof row.score === 'object' ? (row.score.value ?? row.score.displayValue) : row.score;
+      const score = ['scheduled', 'postponed', 'cancelled'].includes(kind) || rawScore == null || rawScore === '' ? null : Number(rawScore);
+      teams[side] = { id: String(team.id || ''), name: team.displayName || team.name || '', shortName: team.shortDisplayName || team.name || '',
+        abbreviation: team.abbreviation || '', logo: team.logo || '', score: Number.isFinite(score) ? score : null };
+    }
+    if (!teams.home || !teams.away) return null;
+    const type = status.type || {};
+    return { id: `${league}-${event.id}`, providerId: String(event.id), league, status: kind, completed, state: stateName,
+      statusDetail: type.shortDetail || type.description || kind, period: status.period, clock: status.displayClock,
+      kickoff: competition.date || event.date, teams };
+  };
+  const liveSnapshot = async (league, day) => {
+    const config = LIVE[league];
+    if (!config || !/^\d{4}-\d{2}-\d{2}$/.test(day || '')) return null;
+    const key = `${league}:${day}`, prior = liveCache.get(key);
+    if (prior && Date.now() - prior.at < LIVE_TTL) return prior;
+    /* The web host is the browser-facing mirror. The older site.api host can return an Akamai 403 to ordinary
+       cross-site browser requests even while server-side reads still work. */
+    const url = `https://site.web.api.espn.com/apis/site/v2/sports/${config[0]}/${config[1]}/scoreboard?dates=${day.replaceAll('-', '')}${config[2]}`;
+    const controller = new AbortController(), stop = setTimeout(() => controller.abort(), 6500);
+    try {
+      const response = await fetch(url, { cache: 'no-store', signal: controller.signal });
+      if (!response.ok) throw new Error(`score feed returned ${response.status}`);
+      const payload = await response.json();
+      if (!Array.isArray(payload.events)) throw new Error('score feed did not return games');
+      const value = { at: Date.now(), games: payload.events.map(e => liveEvent(e, league)).filter(Boolean) };
+      liveCache.set(key, value);
+      return value;
+    } catch (error) {
+      return prior || null;
+    } finally { clearTimeout(stop); }
+  };
+  const liveFootball = async games => {
+    const leagues = [...new Set(games.map(game => game.league).filter(league => ['NFL', 'CFB'].includes(league)))];
+    const offsets = state.gamesScope === 'final' ? [0, -1] : [0];
+    const snapshots = (await Promise.all(leagues.flatMap(league => offsets.map(offset => liveSnapshot(league, etDay(offset)))))).filter(Boolean);
+    const live = new Map(snapshots.flatMap(s => s.games).map(g => [g.id, g]));
+    return { refreshed: snapshots.length ? Math.max(...snapshots.map(s => s.at)) : null, games: games.map(game => {
+      const now = live.get(game.id); if (!now) return game;
+      return { ...game, state: now.state, completed: now.completed, status: now.statusDetail,
+        away: { ...game.away, score: now.teams.away.score }, home: { ...game.home, score: now.teams.home.score } };
+    }) };
+  };
+  const liveStamp = refreshed => refreshed ? `<p class="row-meta live-freshness"><span></span>Scores refresh every minute while this page is open.</p>` : '';
   /* Preserve the official pick, but never present an expired quote as a current entry. */
   const playState = p => {
     const raw = C.pickState(p);
@@ -541,7 +619,8 @@
     markPicks(data.picks.filter(inLeague).filter(p => !p.result && !p.historicalImport));
     const settledRecently = lastGameDay(data.picks.filter(inLeague));
     const recent = C.summaryOf(settledRecently.filter(p => !C.isParlay(p) && !C.isUnpricedImport(p)));
-    const games = data.games.filter(inLeague);
+    const liveNow = await liveFootball(data.games.filter(inLeague));
+    const games = liveNow.games;
     const best = bestOnBoard(board);
     const now = slate(games);
     const playing = games.filter(g => !g.completed && g.state === 'in');
@@ -557,6 +636,7 @@
     const scheduled = C.cardSchedule(live.filter(p => !C.isLadder(p)));
     const todayGames = games.filter(g => C.dayOf(g.kickoff) === C.dayOf(new Date().toISOString()));
     return `${head('Today', `${esc(todayLabel)} · ${todayGames.length} game${todayGames.length === 1 ? '' : 's'}${state.league === 'ALL' ? '' : ` · ${esc(leagueName(state.league))}`}. Plays and top lines, all in one place.`)}
+      ${liveStamp(liveNow.refreshed)}
       ${boardTabs('card')}
       ${section('The 80/20 Climb', ladder.open ? `<div class="plays plays-ladder">${playCard(ladder.open)}</div>${ladderLedger(ladder)}${ladderHistory(ladder)}` : ladderStrip(ladder), '<a href="#record">Climb record →</a>')}
       ${scorecardCard(scoreboard || {}, data.picks)}
@@ -605,7 +685,8 @@
 
   async function viewGames() {
     const data = await get('app/today.json');
-    let games = data.games.filter(inLeague);
+    const liveNow = await liveFootball(data.games.filter(inLeague));
+    let games = liveNow.games;
     /* Upcoming keeps games that have kicked off but are not final, or they would show up nowhere. */
     games = state.gamesScope === 'final' ? games.filter(g => g.completed).sort((a, b) => b.kickoff.localeCompare(a.kickoff))
       : games.filter(g => !g.completed).sort((a, b) => a.kickoff.localeCompare(b.kickoff));
@@ -614,7 +695,7 @@
     const groups = new Map();
     for (const g of games) { const day = dayLabel(g.kickoff); if (!groups.has(day)) groups.set(day, []); groups.get(day).push(g); }
     gameIndex = new Map(data.games.map(g => [g.id, g]));
-    return `${head('Games', 'Scores, projections, lines and team strength. No. 1 is strongest.')}
+    return `${head('Games', 'Scores, projections, lines and team strength. No. 1 is strongest.')}${liveStamp(liveNow.refreshed)}
       <div class="toolbar">${seg('gamesScope', [['upcoming', 'Upcoming'], ['final', 'Recent finals']], state.gamesScope)}</div>
       <input class="search" type="search" data-input="gamesQuery" placeholder="Find a team" value="${esc(state.gamesQuery)}" aria-label="Find a team">
       ${games.length ? [...groups].map(([day, rows]) => section(day, projGrid(rows, true))).join('')
@@ -687,12 +768,14 @@
 
   async function viewGame(route) {
     const [today, detail] = await Promise.all([get('app/today.json'), maybe(`app/games/${route.id}.json`)]);
-    const card = detail || today.games.find(g => g.id === route.id);
+    let card = detail || today.games.find(g => g.id === route.id);
     const back = '<a class="back" href="#games">← Games</a>';
     if (!card) {
       return `${head('Game not in the current window', 'This page covers games from three days back to eight days ahead.', back)}
         <div class="inline-links">${external(espnGame(route.id), 'ESPN game page')}<a href="#model">Model scoreboard →</a></div>`;
     }
+    const liveNow = await liveFootball([card]);
+    card = liveNow.games[0];
     const league = card.league;
     const teams = await maybe(`app/teams/${league}.json`);
     const m = card.market || {}, v2 = card.v2;
@@ -701,7 +784,7 @@
     const title = `${card.away.abbr} @ ${card.home.abbr}`;
     const status = card.completed ? `Final ${card.away.abbr} ${card.away.score}, ${card.home.abbr} ${card.home.score}` : esc(when(card.kickoff));
     const win = v2 ? (v2.winProb >= 0.5 ? `${card.home.abbr} ${Math.round(100 * v2.winProb)}%` : `${card.away.abbr} ${Math.round(100 * (1 - v2.winProb))}%`) : DASH;
-    let html = `${head(title, `${status}${card.neutral ? ' · neutral site' : ''} · ${esc(leagueName(league))}`, back)}
+    let html = `${head(title, `${status}${card.neutral ? ' · neutral site' : ''} · ${esc(leagueName(league))}`, back)}${liveStamp(liveNow.refreshed)}
       ${favoriteLinesSection(card, detail)}
       ${modelReadsSection(card, detail)}
       ${!card.completed && C.modelCaution(card) ? `<div class="notice">${esc(C.modelCaution(card))}</div>` : ''}
@@ -1461,13 +1544,18 @@
     const data = await get('sports.json');
     const league = SCORE_LEAGUES.includes(route.league) ? route.league : state.scoresLeague;
     const block = (data.leagues || {})[league] || {};
-    const games = (block.games || []).slice().sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
-    const days = [...new Set(games.map(g => g.date))];
+    const stored = (block.games || []).slice().sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
+    const days = [...new Set(stored.map(g => g.date))];
     const day = days.includes(state.scoresDate) ? state.scoresDate : days[0];
+    const snapshot = day ? await liveSnapshot(league, day) : null;
+    const fresh = new Map(((snapshot || {}).games || []).map(g => [g.providerId, g]));
+    const games = stored.map(g => { const now = fresh.get(String(g.providerId)); return now ? { ...g, status: now.status,
+      statusDetail: now.statusDetail, period: now.period, clock: now.clock,
+      scores: { away: now.teams.away.score, home: now.teams.home.score }, updatedAt: new Date(snapshot.at).toISOString() } : g; });
     const shown = games.filter(g => g.date === day);
     const side = (team, score) => `<div class="game-team">${team.logo ? `<img class="score-logo" src="${esc(team.logo)}" alt="">` : ''}<span>${esc(team.abbreviation || team.shortName || DASH)}</span>${score != null ? `<span class="score" style="margin-left:auto">${esc(score)}</span>` : ''}</div>`;
     const chips = SCORE_LEAGUES.map(key => `<a class="chip" href="#scores/${key}" aria-pressed="${league === key}" style="display:inline-flex;align-items:center">${esc(SCORE_NAMES[key])}</a>`).join('');
-    return `${head(`${SCORE_NAMES[league] || league} scores`, `${esc(block.coverageNote || 'Schedules and scores only.')} Checked ${esc(ago(block.checkedAt))}.`)}
+    return `${head(`${SCORE_NAMES[league] || league} scores`, 'Schedules and scores. No picks are implied.')}${liveStamp(snapshot && snapshot.at)}
       <div class="toolbar"><div class="seg score-leagues" role="group">${chips}</div>
         ${days.length ? seg('scoresDate', days.map(d => [d, new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })]), day) : ''}</div>
       ${shown.length ? `<div class="card">${shown.map(g => `<div class="game-row"><span class="game-teams score-teams">${side(g.teams.away, (g.scores || {}).away)}${side(g.teams.home, (g.scores || {}).home)}</span>
@@ -1586,9 +1674,30 @@
     const link = (href, label, note) => `<a href="${href}"${href.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}><span>${label}</span><small>${note}</small></a>`;
     return `${head('More', '')}${communityCard()}
       <div class="card menu">${link('https://discord.gg/CvNTUUSnNz', 'Join the Discord', 'Confirmed plays early plus time-sensitive arb alerts')}${link('https://x.com/keenkooks', 'Follow on X', '@keenkooks')}${link('#lab', "Kook'n Lab", 'What’s coming next')}${link('#arbs', "Kook'n Arb Radar", 'Discord alerts and public calculator')}${link('#model', 'Model results', 'Pregame forecasts graded after the game')}${link('#ticket', 'Your ticket', count ? `${count} line${count === 1 ? '' : 's'}` : 'Parlay builder')}
-      ${link('#trends', 'Season trends', '70 / 80 / 90 / 100% historical lines')}${link('#research', 'Research desk', 'Injuries and analyst notes')}${link('#scores/MLB', 'All sports scores', 'NBA, WNBA, college hoops, MLB, NHL, Premier League and MLS')}</div>
+      ${link('#trends', 'Season trends', '70 / 80 / 90 / 100% historical lines')}${link('#research', 'Research desk', 'Injuries and analyst notes')}${link('#scores/MLB', 'All sports scores', 'NBA, WNBA, college hoops, MLB, NHL, Premier League and MLS')}${link('#schedule', 'Posting schedule', 'When plays, research and results appear')}</div>
       ${data ? section('Data status', freshnessCard(data)) : ''}
       <div class="section card" style="padding:14px"><p class="prose" style="margin:0"><b>About Kook'n.</b> Plays, lines, projections and results in one place. Every official play is graded publicly. For entertainment only.</p></div>`;
+  }
+
+  async function viewSchedule() {
+    const row = (time, title, note) => `<div class="row schedule-row" style="cursor:default"><span class="schedule-time num">${esc(time)}</span><span class="row-main"><span class="row-name">${esc(title)}</span><span class="row-meta">${esc(note)}</span></span></div>`;
+    return `${head('Posting schedule', 'The rhythm is fixed. A play still has to clear its line, price and news checks.')}
+      ${section('Every game day', `<div class="card"><div class="rows">
+        ${row('8:45 AM', 'Today’s menu', 'Only when approved plays are already ready.')}
+        ${row('9:00 AM', 'Results', 'The prior card, win or lose. Wednesday also includes the weekly recap.')}
+        ${row('10:00 AM', 'Saveable slate sheet', 'College Saturday and NFL Sunday.')}
+        ${row('10:30 AM', 'Research', 'One useful trend, matchup, injury or underdog card when evidence qualifies.')}
+        ${row('Around noon', 'Official plays', 'Earlier kickoffs move up. Discord normally sees confirmed plays 10–15 minutes before X.')}
+        ${row('After results', 'Cashed and Climb updates', 'Wins may post after settlement. Losses stay in the public receipt.')}
+        ${row('6:00 PM', 'Quiet-day record', 'Used only when nothing more useful posted that day.')}
+      </div></div>`)}
+      ${section('80/20 Climb', `<div class="card"><div class="rows">
+        ${row('10:00 AM', 'Rung scan', 'A ticket posts only when two independent legs qualify.')}
+        ${row('1:30 PM', 'Rung scan', 'A settled rung may advance the same day.')}
+        ${row('4:00 PM', 'Rung scan', 'Later slates stay available without forcing a step.')}
+        ${row('8:00 PM', 'Rung scan', 'The last scheduled daily check.')}
+      </div></div>`)}
+      <div class="notice"><b>What “scheduled” means.</b> These are release windows, not promised picks. Prices can move and news can pull a queued play. Discord is the first alert for confirmed plays; X carries the public post and every result.</div>`;
   }
 
   /* ---------- pick details ---------- */
@@ -1737,7 +1846,7 @@
 
   const VIEWS = { today: viewToday, games: viewGames, game: viewGame, stats: viewStats, player: viewPlayer, team: viewTeam,
     model: viewModel, record: viewRecord, board: viewBoard, ticket: viewTicket, research: viewResearch, scores: viewScores,
-    arbs: viewArbs, lab: viewLab, more: viewMore, trends: viewTrends };
+    arbs: viewArbs, lab: viewLab, schedule: viewSchedule, more: viewMore, trends: viewTrends };
   document.addEventListener('click', event => {
     const button = event.target.closest('[data-set^="boardMode:"]');
     if (button) { const mode = button.dataset.set.split(':')[1]; state.boardMode = mode; location.hash = mode === 'props' ? '#board/props' : '#board'; }
@@ -1871,5 +1980,9 @@
   });
 
   window.addEventListener('hashchange', () => { render().then(() => window.scrollTo(0, 0)); });
+  setInterval(() => {
+    const route = C.parseRoute(location.hash);
+    if (!document.hidden && ['today', 'games', 'game', 'scores'].includes(route.view) && !document.activeElement.matches('input, select, textarea')) render();
+  }, 60000);
   render();
 })();

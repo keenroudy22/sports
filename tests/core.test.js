@@ -224,6 +224,7 @@ test('arb radar has a shareable route', () => {
 test('the multi-sport lab has a shareable route', () => {
   assert.deepEqual(C.parseRoute('#lab'), { view: 'lab' });
   assert.deepEqual(C.parseRoute('#scores/NHL'), { view: 'scores', league: 'NHL' });
+  assert.deepEqual(C.parseRoute('#schedule'), { view: 'schedule' });
 });
 
 test('a ticket refuses what the sportsbook would price differently or not at all', () => {

@@ -163,3 +163,28 @@ test('the Lab tracks season futures without presenting a public play', () => {
   assert.match(lab, /Research watches stay separate from official plays/);
   assert.doesNotMatch(lab, /official futures? (?:pick|play)/i);
 });
+
+test('score pages refresh factual scores in the browser without treating odds or picks as live', () => {
+  const source = fs.readFileSync('site/app.js', 'utf8');
+  const live = source.slice(source.indexOf("const LIVE ="), source.indexOf('/* Preserve the official pick'));
+  assert.match(live, /NFL: \['football', 'nfl'/);
+  assert.match(live, /NBA: \['basketball', 'nba'/);
+  assert.match(live, /MLB: \['baseball', 'mlb'/);
+  assert.match(live, /NHL: \['hockey', 'nhl'/);
+  assert.match(live, /EPL: \['soccer', 'eng\.1'/);
+  assert.match(live, /LIVE_TTL = 45000/);
+  assert.match(live, /cache: 'no-store'/);
+  assert.doesNotMatch(live, /competition\.odds|event\.odds|pickOdds/);
+  assert.match(source, /Scores refresh every minute while this page is open/);
+});
+
+test('More links to the public posting schedule and keeps qualifying language', () => {
+  const source = fs.readFileSync('site/app.js', 'utf8');
+  assert.match(source, /link\('#schedule', 'Posting schedule'/);
+  const schedule = source.slice(source.indexOf('async function viewSchedule()'), source.indexOf('/* ---------- pick details'));
+  assert.match(schedule, /8:45 AM/);
+  assert.match(schedule, /10:30 AM/);
+  assert.match(schedule, /Around noon/);
+  assert.match(schedule, /10–15 minutes before X/);
+  assert.match(schedule, /not promised picks/);
+});
