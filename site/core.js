@@ -551,7 +551,7 @@
     /* A shareable pick: the Today page with that pick's card open, so a post can link to the receipt. */
     if (view === 'pick' && rest.length) return { view: 'today', pick: rest.join('/') };
     if (view === 'stats') return { view: 'stats', tab: rest[0] || 'players' };
-    if (view === 'board') return { view: 'board', tab: rest[0] === 'props' ? 'props' : 'games' };
+    if (view === 'board') return { view: 'board', tab: ['props', 'favorites'].includes(rest[0]) ? rest[0] : 'games' };
     if (view === 'defense') return { view: 'stats', tab: 'defense' };
     /* Bare #scores was the old football board; only #scores/<league> is the other-sports page. */
     if (view === 'scores' && rest[0]) return { view: 'scores', league: rest[0].toUpperCase() };

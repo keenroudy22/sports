@@ -93,6 +93,14 @@ test('official plays render as a compact collapsed list with details on demand',
   assert.match(css, /\.play-compact-meta \{ display: block !important;/);
 });
 
+test('board navigation highlights the selected line view and offers a fast favorites view', () => {
+  const source = fs.readFileSync('site/app.js', 'utf8');
+  assert.match(source, /href="#board\/favorites" \$\{active === 'favorites' \? 'aria-current="page"'/);
+  assert.match(source, /href="#board\/props" \$\{active === 'props' \? 'aria-current="page"'/);
+  assert.match(source, /boardTabs\(favorites \? 'favorites' : props \? 'props' : 'lines'\)/);
+  assert.match(source, /No best line right now/);
+});
+
 test('game pages put favorites before secondary model reads and do not publish model methodology', () => {
   const source = fs.readFileSync('site/app.js', 'utf8');
   const game = source.slice(source.indexOf('async function viewGame(route)'), source.indexOf('const finalSection'));

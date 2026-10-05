@@ -54,7 +54,7 @@
   };
   const TABS = [['today', 'Today'], ['games', 'Games'], ['stats', 'Players'], ['record', 'Record'], ['more', 'More']];
   const TAB_FOR = { trends: 'today', board: 'today', game: 'games', player: 'stats', team: 'stats', model: 'record', ticket: 'today', research: 'more', scores: 'more', arbs: 'more', lab: 'more' };
-  const boardTabs = active => `<nav class="board-tabs" aria-label="Board view"><a href="#today" ${active === 'card' ? 'aria-current="page"' : ''}>Plays</a><a href="#board" ${active === 'lines' ? 'aria-current="page"' : ''}>Game lines</a><a href="#board/props">Player props</a><a href="#trends" ${active === 'trends' ? 'aria-current="page"' : ''}>Trends</a></nav>`;
+  const boardTabs = active => `<nav class="board-tabs" aria-label="Lines and plays"><a href="#today" ${active === 'card' ? 'aria-current="page"' : ''}>Plays</a><a href="#board/favorites" ${active === 'favorites' ? 'aria-current="page"' : ''}>Best lines</a><a href="#board" ${active === 'lines' ? 'aria-current="page"' : ''}>Games</a><a href="#board/props" ${active === 'props' ? 'aria-current="page"' : ''}>Props</a><a href="#trends" ${active === 'trends' ? 'aria-current="page"' : ''}>Trends</a></nav>`;
   const scoreTabs = active => `<nav class="board-tabs" aria-label="Scoreboard view"><a href="#record" ${active === 'official' ? 'aria-current="page"' : ''}>Results</a><a href="#model" ${active === 'model' ? 'aria-current="page"' : ''}>Model results</a></nav>`;
 
   /* The two model generations, in plain words. The data keeps its own version names. */
@@ -1247,10 +1247,13 @@
       .sort((a, b) => (C.isOpen(b) - C.isOpen(a)) || String(a.kickoff).localeCompare(String(b.kickoff)));
     markPicks(ourPicks);
     const all = data.lines.filter(inLeague);
+    const favorites = state.boardMode === 'favorites';
     const props = state.boardMode === 'props';
     const query = state.boardQuery.trim().toLowerCase();
-    let shown = all.filter(l => props ? Boolean(l.athleteId) : !l.athleteId)
+    let shown = all.filter(l => favorites ? true : props ? Boolean(l.athleteId) : !l.athleteId)
       .filter(l => state.boardScope === 'settled' ? l.state === 'closed' : ['open', 'reference', 'unpriced'].includes(l.state));
+    if (favorites) shown = shown.filter(l => l.state === 'open' && l.odds != null && l.grade && l.grade.calibrated
+      && ['lean', 'strong'].includes(C.tierOf(l.grade)));
     if (props && state.propMarket !== 'all') shown = shown.filter(l => l.market === state.propMarket);
     if (query) shown = shown.filter(l => `${l.player || ''} ${l.title || ''} ${l.market || ''}`.toLowerCase().includes(query));
     /* Today first. With nothing left today, the next day that has lines stands in, and the header says so. */
@@ -1271,7 +1274,9 @@
     gameIndex = new Map(((today || {}).games || []).map(g => [g.id, g]));
     const valued = shown.filter(l => l.state === 'open' && l.grade && l.grade.calibrated && ['lean', 'strong'].includes(C.tierOf(l.grade))).length;
     const priced = shown.filter(l => l.state === 'open').length;
-    const intro = props
+    const intro = favorites
+      ? `${shown.length} current line${shown.length === 1 ? '' : 's'} clear our price checks.`
+      : props
       ? `${shown.length} player lines${priced ? ` · ${priced} priced` : ''} · ${valued} highlighted.`
       : `${shown.length} game lines · ${valued} highlighted.`;
     /* By kickoff, lines group under their game so a slate reads top to bottom. */
@@ -1280,14 +1285,16 @@
     const gameHead = rows => { const g = gameIndex.get(rows[0].gameId); const named = rows.map(r => String(r.title || '')).find(t => t.includes(' @ '));
       const name = g && g.away && g.home ? `${teamName(g.away)} at ${teamName(g.home)}` : named ? named.split(/ (over|under) /)[0] : rows.map(r => String(r.title || '').split(' ')[0]).filter((v, i, a) => a.indexOf(v) === i).join(' vs ');
       return `<p class="eyebrow" style="margin:12px 2px 6px">${esc(name)} · ${esc(whenShort(rows[0].kickoff))}</p>`; };
-    const body = !shown.length ? empty('Nothing here yet', props ? 'Player lines land once the book posts them and a price is captured.' : 'Try another search or day.')
+    const body = !shown.length ? empty(favorites ? 'No best line right now' : 'Nothing here yet', favorites
+      ? 'Prices move. Check back when a line clears every current check.'
+      : props ? 'Player lines land once the book posts them and a price is captured.' : 'Try another search or day.')
       : groups ? groups.map(([, rows]) => `${gameHead(rows)}<div class="card"><div class="rows">${rows.map(lineRow).join('')}</div></div>`).join('')
         : `<div class="card"><div class="rows">${shown.slice(0, 250).map(lineRow).join('')}</div></div>`;
-    return `${head(props ? 'Player props' : 'The board', intro)}
-      ${boardTabs('lines')}
+    return `${head(favorites ? 'Best lines' : props ? 'Player props' : 'Game lines', intro)}
+      ${boardTabs(favorites ? 'favorites' : props ? 'props' : 'lines')}
       <div class="toolbar">${seg('boardDay', [['today', 'Today'], ['week', 'This week']], state.boardDay)}${seg('boardSort', [['best', 'Best value'], ['confidence', 'Confidence'], ['time', 'By kickoff']], state.boardSort)}${seg('boardScope', [['open', 'Upcoming'], ['settled', 'Started']], state.boardScope)}</div>
       ${props ? `<div class="toolbar">${seg('propMarket', PROP_MARKETS, state.propMarket)}</div>` : ''}
-      <p class="row-meta"><a href="#today">Official plays →</a> Everything below is for reference unless labeled as a play.</p>
+      <p class="row-meta"><a href="#today">Official plays →</a> ${favorites ? 'These are the strongest current references, not posted plays.' : 'Everything below is for reference unless labeled as a play.'}</p>
       ${dayNote ? `<p class="row-meta" style="margin:0 0 8px">${esc(dayNote)}</p>` : ''}
       <details class="explainer"><summary>How to read the board</summary>
       <p class="row-meta" style="margin:8px 0 10px">Green rows are lines we like at the shown price. Confidence ranks the chance of winning; value ranks the difference between our estimate and the price. Tap a player for history and matchup. Nothing is official unless it is labeled as a play.</p></details>

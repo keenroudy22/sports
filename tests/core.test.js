@@ -332,6 +332,7 @@ test('old links land on the matching new pages', () => {
     '#players': { view: 'stats' }, '#research': { view: 'research' }, '#game/NFL-401872932': { view: 'game', id: 'NFL-401872932' },
     '#player/NFL/4430878': { view: 'player', league: 'NFL', id: '4430878' }, '#player/cfb/5': { view: 'player', league: 'CFB', id: '5' },
     '#sport/MLB': { view: 'scores', league: 'MLB' }, '#stats/defense': { view: 'stats', tab: 'defense' },
+    '#board/props': { view: 'board', tab: 'props' }, '#board/favorites': { view: 'board', tab: 'favorites' },
     '#team/CFB/2390': { view: 'team', league: 'CFB', id: '2390' }, '#nonsense': { view: 'today' },
     '#pick/CFB-2026-W3-duke-minus-10-vs-stan-dk': { view: 'today', pick: 'CFB-2026-W3-duke-minus-10-vs-stan-dk' },
     '#pick': { view: 'today' },

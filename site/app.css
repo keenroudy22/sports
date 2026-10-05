@@ -402,7 +402,7 @@ footer strong { color: var(--dim); }
 
 /* segmented controls and toolbars */
 .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 10px; }
-.seg { display: inline-flex; padding: 2px; gap: 2px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+.seg { display: inline-flex; flex-shrink: 0; padding: 2px; gap: 2px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
 .seg::-webkit-scrollbar { display: none; }
 .seg button { min-height: 34px; padding: 0 12px; border: 0; border-radius: 8px; background: none; color: var(--dim); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
 .seg button[aria-pressed="true"] { background: var(--raised); color: var(--text); }
