@@ -79,7 +79,7 @@ const playerViewFixture = ({nextSeason = 2026, withNext = true} = {}) => {
       (title,body)=>title+body,()=>'',(rows,values)=>{captured.charts.push({rows,values});return 'chart';},
       (title,text)=>title+text,rows=>{captured.logs.push(rows);return 'log';},String,()=>'<button>Copy research link</button>',{league:'NFL',id,research});
   };
-  return {state,captured,run,players};
+  return {state,captured,run,players,keys};
 };
 
 test('player detail current-season scope drives chart, averages, hit count, splits, and game log together', async () => {
@@ -152,6 +152,24 @@ test('an explicit player stat with no stored coverage never silently substitutes
   assert.equal(f.state.stat,'car');
   assert.deepEqual(f.captured.charts[0].values,[null,null,null,null]);
   assert.equal(f.captured.stats.find(s=>s.label==='Average').value,C.DASH);
+});
+
+test('skill-player pages offer Any TD and the observed scoring and usage stats', async () => {
+  const f=playerViewFixture({withNext:false});
+  f.keys.splice(0,f.keys.length,'rushTD','recTD','recLong','rzTgt','i10Tgt','snapPct');
+  f.players['1'].pos='TE';
+  f.players['1'].rows=[
+    ['one','2026-09-01',2026,1,2,'a','b',1,0,1,18,2,1,.7],
+    ['two','2026-09-08',2026,2,2,'a','c',0,0,0,25,3,2,.8],
+    ['three','2026-09-15',2026,3,2,'a','b',1,1,0,12,1,1,.6],
+  ];
+  const html=await f.run();
+  for(const [key,label] of [['anyTD','Any TD'],['recTD','Rec TD'],['recLong','Long rec'],['rzTgt','RZ targets'],['i10Tgt','Inside-10 tgts'],['snapPct','Snap %']]) {
+    assert.match(html,new RegExp(`stat:${key}[^>]*>${label}`));
+  }
+  assert.equal(f.state.stat,'anyTD');
+  assert.deepEqual(f.captured.charts[0].values,[1,0,1]);
+  assert.equal(f.captured.stats.find(s=>s.label==='Average').value,'0.7');
 });
 
 const propModalFixture = ({season=2025,kickoff='2025-10-01T20:00Z'}={}) => {

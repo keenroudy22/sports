@@ -1277,7 +1277,9 @@
     const keys = shard.keys;
     const rows = data.rows;
     const pos = data.pos;
-    const options = [...new Set([...(C.POSITION_STATS[pos] || C.POSITION_STATS.WR), 'snapPct'])].filter(k => keys.includes(k) && rows.some(r => Number.isFinite(C.observedCell(r, keys, k))));
+    const playerValue = (row, stat) => C.observedStat(row, keys, stat);
+    const options = [...new Set([...(C.POSITION_STATS[pos] || C.POSITION_STATS.WR), 'snapPct'])]
+      .filter(stat => rows.some(row => Number.isFinite(playerValue(row, stat))));
     const [teams, next] = await Promise.all([get(`app/teams/${league}.json`), nextGameFor(entry[3], league)]);
     const playerKey = `${league}:${route.id}`;
     if(state.historyPlayer !== playerKey) {
@@ -1308,10 +1310,11 @@
       .sort((a,b)=>Number(C.quoteStatus(b,next?.game?.kickoff).current)-Number(C.quoteStatus(a,next?.game?.kickoff).current) || Date.parse(b.observedAt)-Date.parse(a.observedAt))[0];
     if (priced && Number.isFinite(priced.line)) { line = priced.line; quote=priced; }
     const lineLabel=C.quoteStatus(quote,next?.game?.kickoff).label;
-    const values = recent.map(r => C.observedCell(r, keys, key));
+    const values = recent.map(row => playerValue(row, key));
     const opponent = next ? (next.side === 'home' ? next.game.away.id : next.game.home.id) : null;
-    const vsNext = next ? C.splits(recent, keys, key, opponent, C.observedCell).vs : null;
-    const split = C.splits(recent, keys, key, null, C.observedCell);
+    const readPlayerStat = (row, unusedKeys, stat) => playerValue(row, stat);
+    const vsNext = next ? C.splits(recent, keys, key, opponent, readPlayerStat).vs : null;
+    const split = C.splits(recent, keys, key, null, readPlayerStat);
     const group = C.POS_GROUP[pos];
     const allow = next && group ? C.rankOf((teams.defense || {}).rows || {}, opponent, group, key) : null;
     const allowTone = allow ? C.rankTone(allow.rank, allow.of) : 'neutral';
@@ -1349,8 +1352,9 @@
     return `<div class="card">${historyPlot(labels,values,line,direction,false,key)}</div>`;
   };
 
-  const LOG_COLS = { QB: ['cmp', 'att', 'passYds', 'passTD', 'int', 'car', 'rushYds', 'rushTD'], RB: ['car', 'rushYds', 'rushTD', 'targets', 'rec', 'recYds', 'rzCar'],
-    WR: ['targets', 'rec', 'recYds', 'recTD', 'recLong', 'rzTgt'], TE: ['targets', 'rec', 'recYds', 'recTD', 'recLong', 'rzTgt'], PK: ['fgm', 'fga', 'xpm', 'kPts'] };
+  const LOG_COLS = { QB: ['cmp', 'att', 'passYds', 'passTD', 'int', 'car', 'rushYds', 'rushTD'],
+    RB: ['car', 'rushYds', 'anyTD', 'targets', 'rec', 'recYds', 'rzCar'], FB: ['car', 'rushYds', 'anyTD', 'targets', 'rec', 'recYds', 'rzCar'],
+    WR: ['targets', 'rec', 'recYds', 'anyTD', 'recLong', 'rzTgt'], TE: ['targets', 'rec', 'recYds', 'anyTD', 'recLong', 'rzTgt'], PK: ['fgm', 'fga', 'xpm', 'kPts'] };
 
   const gameLog = (rows, keys, pos, abbr, league) => {
     const cols = [...(LOG_COLS[pos] || LOG_COLS.WR), ...(keys.includes('snapPct') && rows.some(r => C.observedCell(r, keys, 'snapPct') != null) ? ['snapPct'] : [])];
@@ -1358,7 +1362,7 @@
     if(!list.length) return empty('No games in this selection', 'Change the Season or Sample filter above.');
     return `<div class="table-wrap"><table class="data"><thead><tr><th>Game</th>${cols.map(c => `<th>${esc(C.LABEL[c] || c)}</th>`).join('')}</tr></thead><tbody>
       ${list.map(r => `<tr><td><a href="#game/${league}-${esc(r[0])}">${esc(r[1])}</a><span class="sub">${r[7] === 0 ? '@' : r[7] === -1 ? 'vs (neutral)' : 'vs'} ${esc(abbr(r[6]))}${r[4] === 3 ? ' · postseason' : ''}</span></td>
-        ${cols.map(c => { const v = C.observedCell(r, keys, c); return `<td>${v == null ? DASH : c === 'snapPct' ? Math.round(100 * v) + '%' : esc(v)}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div>`;
+        ${cols.map(c => { const v = C.observedStat(r, keys, c); return `<td>${v == null ? DASH : c === 'snapPct' ? Math.round(100 * v) + '%' : esc(v)}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div>`;
   };
 
   /* ---------- one team ---------- */

@@ -227,10 +227,28 @@ test('a listed player without a counting stat had zero, but longest and snaps st
   assert.equal(C.cell(r, KEYS, 'notAKey'), null);
 });
 
-test('quarterback pages include rushing touchdowns beside their rushing volume', () => {
+test('player pages expose the common scoring, volume, long-play, and red-zone stats by position', () => {
   assert.deepEqual(C.POSITION_STATS.QB,
-    ['passYds', 'cmp', 'att', 'passTD', 'int', 'rushYds', 'car', 'rushTD']);
+    ['passYds', 'passTD', 'cmp', 'att', 'int', 'rushYds', 'car', 'rushTD', 'scrambles', 'sacks', 'rushLong']);
+  assert.deepEqual(C.POSITION_STATS.RB,
+    ['rushYds', 'car', 'anyTD', 'rushTD', 'recYds', 'rec', 'targets', 'recTD', 'rushLong', 'recLong', 'rzCar', 'i10Car', 'i5Car']);
+  assert.deepEqual(C.POSITION_STATS.WR,
+    ['recYds', 'rec', 'targets', 'anyTD', 'recTD', 'recLong', 'rushYds', 'car', 'rushTD', 'rzTgt', 'i10Tgt']);
+  assert.deepEqual(C.POSITION_STATS.TE,
+    ['recYds', 'rec', 'targets', 'anyTD', 'recTD', 'recLong', 'rzTgt', 'i10Tgt']);
   assert.equal(C.LABEL.rushTD, 'Rush TD');
+  assert.equal(C.LABEL.recTD, 'Rec TD');
+  assert.equal(C.LABEL.anyTD, 'Any TD');
+});
+
+test('Any TD adds observed rushing and receiving scores without turning missing history into zero', () => {
+  const keys = ['rushTD', 'recTD'];
+  const statRow = (rush, rec) => ['g', '2026-09-10', 2026, 1, 2, 'a', 'b', 1, rush, rec];
+  assert.equal(C.observedStat(statRow(1, 2), keys, 'anyTD'), 3);
+  assert.equal(C.observedStat(statRow(null, 1), keys, 'anyTD'), 1);
+  assert.equal(C.observedStat(statRow(0, 0), keys, 'anyTD'), 0);
+  assert.equal(C.observedStat(statRow(null, null), keys, 'anyTD'), null);
+  assert.equal(C.observedStat(statRow(1, 2), keys, 'rushTD'), 1);
 });
 
 test('missing play-by-play counts stay unknown instead of becoming zeros', () => {

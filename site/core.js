@@ -116,6 +116,18 @@
     const i = column(keys, key), value = i < 0 ? null : row[i];
     return Number.isFinite(value) ? value : null;
   };
+  /* A player's anytime-score history is the sum of recorded rushing and
+     receiving touchdowns. It stays a history view: it is never treated as a
+     priced sportsbook line unless a real quote is captured separately. */
+  const DERIVED_STATS = { anyTD: ['rushTD', 'recTD'] };
+  const observedStat = (row, keys, key) => {
+    const components = DERIVED_STATS[key];
+    if (!components) return observedCell(row, keys, key);
+    const values = components.map(component => observedCell(row, keys, component));
+    return values.some(Number.isFinite)
+      ? values.reduce((sum, value) => sum + (Number.isFinite(value) ? value : 0), 0)
+      : null;
+  };
   /* Season is the feed's season, not the calendar year of a January game. */
   const playerHistory = (rows, currentSeason, season = 'current', window = 'all', before = null) => {
     const selected = season === 'all' ? null : Number(season === 'current' ? currentSeason : season);
@@ -170,17 +182,17 @@
 
   /* Which stats matter for a position, in display order. */
   const POSITION_STATS = {
-    QB: ['passYds', 'cmp', 'att', 'passTD', 'int', 'rushYds', 'car', 'rushTD'],
-    RB: ['rushYds', 'car', 'recYds', 'rec', 'targets', 'rzCar'],
-    FB: ['rushYds', 'car', 'recYds', 'rec', 'targets'],
-    WR: ['recYds', 'rec', 'targets', 'rzTgt', 'recLong'],
-    TE: ['recYds', 'rec', 'targets', 'rzTgt', 'recLong'],
+    QB: ['passYds', 'passTD', 'cmp', 'att', 'int', 'rushYds', 'car', 'rushTD', 'scrambles', 'sacks', 'rushLong'],
+    RB: ['rushYds', 'car', 'anyTD', 'rushTD', 'recYds', 'rec', 'targets', 'recTD', 'rushLong', 'recLong', 'rzCar', 'i10Car', 'i5Car'],
+    FB: ['rushYds', 'car', 'anyTD', 'rushTD', 'recYds', 'rec', 'targets', 'recTD', 'rushLong', 'recLong', 'rzCar', 'i10Car', 'i5Car'],
+    WR: ['recYds', 'rec', 'targets', 'anyTD', 'recTD', 'recLong', 'rushYds', 'car', 'rushTD', 'rzTgt', 'i10Tgt'],
+    TE: ['recYds', 'rec', 'targets', 'anyTD', 'recTD', 'recLong', 'rzTgt', 'i10Tgt'],
     PK: ['kPts', 'fgm', 'fga', 'xpm'],
   };
   const LABEL = {
     passYds: 'Pass yds', cmp: 'Completions', att: 'Attempts', passTD: 'Pass TD', int: 'INT', sacks: 'Sacked',
     rushYds: 'Rush yds', car: 'Carries', rushTD: 'Rush TD', rushLong: 'Long rush', targets: 'Targets', rec: 'Receptions',
-    recYds: 'Rec yds', recTD: 'Rec TD', recLong: 'Long rec', rzTgt: 'RZ targets', i10Tgt: 'Inside-10 tgts',
+    recYds: 'Rec yds', recTD: 'Rec TD', anyTD: 'Any TD', recLong: 'Long rec', rzTgt: 'RZ targets', i10Tgt: 'Inside-10 tgts',
     rzCar: 'RZ carries', i10Car: 'Inside-10 car', i5Car: 'Inside-5 car', scrambles: 'Scrambles', fumLost: 'Fum lost',
     fgm: 'FG made', fga: 'FG att', xpm: 'XP made', kPts: 'Kick pts', snaps: 'Snaps', snapPct: 'Snap %',
     receptions: 'Receptions', carries: 'Carries',
@@ -786,7 +798,7 @@
   };
 
   return { RESEARCH_DEFAULTS, researchPreferences, researchReset, researchContext, researchHash, researchMatches, researchStat, chartHistory, chartGeometry, thresholdResult, quoteStatus, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, deskNotes,
-    column, cell, observedCell, playerHistory, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
+    column, cell, observedCell, observedStat, playerHistory, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
     unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, modelCaution, projectionScorecard, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };
 });
