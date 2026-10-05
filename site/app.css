@@ -628,10 +628,10 @@ table.data a { font-weight: 600; }
 .who { display: flex; align-items: center; gap: 12px; }
 .who .badge { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; flex-shrink: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 18px; color: #fff; background: var(--raised); }
 .who h1 { font-size: 30px; }
-.player-profile-art { position:relative; display:grid; min-height:190px; margin:10px 0 14px; place-items:end center; overflow:hidden; border:1px solid var(--line); border-radius:16px; background:linear-gradient(145deg,#111a25,#080d13); background:radial-gradient(circle at 50% 28%,color-mix(in srgb,var(--player-color) 48%,transparent),transparent 58%),linear-gradient(145deg,#111a25,#080d13); }
-.player-profile-art::after { content:''; position:absolute; inset:auto 0 0; height:42%; background:linear-gradient(transparent,rgba(4,8,13,.62)); pointer-events:none; }
-.player-profile-fallback { position:absolute; inset:0; display:grid; place-items:center; color:rgba(255,255,255,.08); font-family:'Barlow Condensed',sans-serif; font-size:92px; font-weight:800; letter-spacing:.04em; }
-.player-profile-photo { position:relative; z-index:1; display:block; width:min(440px,100%); height:220px; object-fit:contain; object-position:center bottom; filter:drop-shadow(0 14px 20px rgba(0,0,0,.32)); }
+.who .player-profile-avatar { position:relative; width:56px; height:56px; overflow:hidden; }
+.player-profile-avatar img { position:absolute; z-index:1; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center; background:var(--surface); }
+.player-profile-avatar > span { display:none; }
+.player-profile-avatar.missing > span { display:grid; }
 .back { font-size: 12px; font-weight: 600; color: var(--faint); }
 
 /* search results and menus */
@@ -741,8 +741,6 @@ table.data a { font-weight: 600; }
   .lab-grid { grid-template-columns: 1fr 1fr; }
   .ticket-bar { left: auto; right: 28px; bottom: 28px; width: 330px; }
   .who h1 { font-size: 40px; }
-  .player-profile-art { min-height:230px; }
-  .player-profile-photo { height:260px; }
 }
 [hidden] { display: none !important; }
 

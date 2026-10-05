@@ -97,14 +97,13 @@ test('player detail current-season scope drives chart, averages, hit count, spli
   assert.equal(JSON.stringify(f.players),original);
 });
 
-test('player detail places the player portrait directly beneath the profile header', async () => {
+test('player detail replaces the position badge with the player portrait', async () => {
   const f=playerViewFixture();
   const html=await f.run();
   assert.match(html,/class="page-head who"/);
-  assert.match(html,/class="player-profile-art"/);
-  assert.match(html,/class="player-profile-photo" src="https:\/\/images\.test\/1\.png" alt="Current Player"/);
-  assert.ok(html.indexOf('class="page-head who"') < html.indexOf('class="player-profile-art"'));
-  assert.ok(html.indexOf('class="player-profile-art"') < html.indexOf('Copy research link'));
+  assert.match(html,/class="badge player-profile-avatar"/);
+  assert.match(html,/<img src="https:\/\/images\.test\/1\.png" alt="Current Player"/);
+  assert.doesNotMatch(html,/player-profile-art|player-profile-photo/);
 });
 
 test('player detail includes older observations only after explicit season choice and labels that scope', async () => {
