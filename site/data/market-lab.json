@@ -2,22 +2,47 @@
  "leagues": {
   "MLB": {
    "gamesGraded": 11,
-   "gamesQuoted": 13,
-   "moneylineSnapshots": 45,
-   "snapshots": 45,
+   "gamesQuoted": 15,
+   "moneylineSnapshots": 49,
+   "snapshots": 49,
    "status": "capturing",
-   "totalSnapshots": 45
+   "totalSnapshots": 49
   },
   "NHL": {
-   "gamesGraded": 34,
-   "gamesQuoted": 39,
-   "moneylineSnapshots": 159,
-   "snapshots": 159,
+   "gamesGraded": 35,
+   "gamesQuoted": 42,
+   "moneylineSnapshots": 166,
+   "snapshots": 166,
    "status": "capturing",
-   "totalSnapshots": 159
+   "totalSnapshots": 166
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "VGK",
+    "id": "37",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/vgk.png",
+    "name": "Vegas Golden Knights",
+    "shortName": "Golden Knights"
+   },
+   "awayScore": 3,
+   "gameId": "NHL-401892444",
+   "gradedAt": "2026-10-05T15:45:03Z",
+   "home": {
+    "abbreviation": "VAN",
+    "id": "22",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/van.png",
+    "name": "Vancouver Canucks",
+    "shortName": "Canucks"
+   },
+   "homeScore": 2,
+   "kickoff": "2026-10-05T01:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "ATL",
@@ -1144,5 +1169,5 @@
    "type": "grade"
   }
  ],
- "updatedAt": "2026-10-05T15:39:10Z"
+ "updatedAt": "2026-10-05T15:45:03Z"
 }
