@@ -149,6 +149,8 @@ jobs:
             done
             [ -n "$pushed" ] || { echo 'push rejected three times'; exit 1; }
           fi
+      - name: Verify the public artifact boundary
+        run: python scripts/publication_guard.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:

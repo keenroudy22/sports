@@ -102,6 +102,10 @@ Handy commands (from `~/Projects/sports`):
    `cd ~/Projects/sports-dev && /opt/homebrew/bin/python3 -m unittest discover -s tests` and
    `cd ~/Projects/sports-dev && node --test tests/*.test.js`. Do not use `run.sh py` for these: that wrapper deliberately
    changes into the production checkout.
+   After building the site, run `python3 scripts/publication_guard.py`. The hosted workflow also checks the exact
+   upload folder before publishing. Unknown file families and known private artifacts/credential fields stop the
+   upload; never weaken the guard just to copy owner-only evidence into the site. `docs/PUBLIC-PAYLOADS.md` lists
+   the reviewed public families. This is not a paywall, license clearance or complete secret scanner.
 3. Rehearse against isolated stored inputs, without any feed/model calls or production writes:
    `cd ~/Projects/sports-dev && /opt/homebrew/bin/python3 scripts/rehearse.py --slot HHMM`.
    Use the current scheduled window, not a fabricated future instant. This copies the desk inputs to a fresh

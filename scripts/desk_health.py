@@ -17,6 +17,13 @@ ROOT = Path(__file__).resolve().parents[1]
 CONF = Path.home() / '.config/keenroudy'
 LOGS = Path.home() / 'Library/Logs/KeenRoudy'
 LEAGUES = ('NBA', 'WNBA', 'CBB', 'MLB', 'NHL', 'EPL', 'MLS')
+RELIABILITY_DAYS = 56
+SOURCE_LIMITS = {'Football schedule': 360, 'Injury context': 360, 'Multi-sport snapshots': 360,
+                 **{f'{league} score snapshot': 360 for league in LEAGUES},
+                 'NFL multi-book prices': 240, 'CFB multi-book prices': 240, 'Sharp prop capture': 240}
+SOURCE_STATES = ('fresh', 'stale', 'failed', 'unknown', 'invalid')
+DELIVERY_FIELDS = ('queued', 'xOverdue', 'xFailed', 'discordOverdue', 'discordFailed',
+                   'withheld', 'xConfirmed', 'discordConfirmed', 'heldCaptions')
 
 
 def read(path):
@@ -54,7 +61,152 @@ def source(name, observed, now, hours, required=False, failed=False):
         state = 'failed'
     return {'name': name, 'state': state, 'observedAt': stamp(observed),
             'ageMinutes': round(max(0, age) / 60) if age is not None else None,
-            'requiredNow': required}
+            'maxAgeMinutes': hours * 60, 'requiredNow': required}
+
+
+def half_hour(now):
+    utc = now.astimezone(timezone.utc)
+    return utc.replace(minute=utc.minute // 30 * 30, second=0, microsecond=0)
+
+
+def reliability_sample(data, now):
+    """Allowlisted prospective observation; never accept a replay as today's evidence."""
+    checked = moment(data.get('checkedAt'))
+    if data.get('mode') != 'private-cached-only' or not checked or not 0 <= (now - checked).total_seconds() <= 300:
+        return None
+    checks = data.get('sources') or []
+    if (not isinstance(checks, list) or any(not isinstance(row, dict) for row in checks) or
+            len(checks) != len(SOURCE_LIMITS) or {row.get('name') for row in checks} != set(SOURCE_LIMITS)):
+        return None
+    states = {}
+    for row in checks:
+        if not isinstance(row.get('requiredNow'), bool) or row.get('maxAgeMinutes') != SOURCE_LIMITS[row['name']]:
+            return None
+        state = row.get('state')
+        states[row['name']] = state if state in SOURCE_STATES else 'unknown'
+        if not row['requiredNow']:
+            states[row['name']] = 'not-required'
+    codes = {row.get('code') for row in data.get('issues') or []}
+    desk = data.get('desk') or {}
+    desk_state = ('failed' if 'desk-failed' in codes else 'unknown' if
+                  'desk-missing' in codes or desk.get('outcome') != 'ok' else
+                  'late' if 'desk-late' in codes else 'ok')
+    decision = desk.get('selection')
+    if desk_state not in ('ok', 'late') or decision not in ('published', 'no-new-play'):
+        decision = 'unknown'
+    deliveries = (data.get('deliveriesLast48h') or {}) if data.get('deliveryLogState') == 'available' else {}
+    return {'window': gates.stamp(half_hour(checked)), 'observedAt': gates.stamp(checked),
+            'sources': states, 'desk': desk_state, 'selection': decision,
+            'deliverySnapshot48h': {key: number(deliveries.get(key)) for key in DELIVERY_FIELDS}}
+
+
+def reliability_view(journal, now=None):
+    """Daily sampled evidence, not an uptime, delivery-success or readiness claim.
+
+    Required unknowns remain in the freshness denominator. Optional sources are
+    excluded. Missing monitor windows have unknown eligibility, so show them as
+    coverage gaps rather than inventing source checks or successful observations.
+    """
+    now = now or datetime.now(timezone.utc)
+    samples = journal.get('samples') or []
+    if not samples:
+        return {'state': 'not-started', 'days': [], 'observedWindows': 0, 'eligibleSourceChecks': 0,
+                'fresh': 0, 'freshPercent': None, 'readiness': 'not-assessed'}
+    days = {}
+    for sample in samples:
+        day = moment(sample['window']).astimezone(gates.EASTERN).date().isoformat()
+        if day not in days:
+            days[day] = {'date': day, 'observedWindows': 0, 'eligibleSourceChecks': 0,
+                         **{state: 0 for state in SOURCE_STATES}, 'notRequired': 0,
+                         'desk': {state: 0 for state in ('ok', 'late', 'failed', 'unknown')}}
+        row = days[day]
+        row['observedWindows'] += 1
+        for state in sample['sources'].values():
+            if state == 'not-required':
+                row['notRequired'] += 1
+            else:
+                row['eligibleSourceChecks'] += 1
+                row[state] += 1
+        row['desk'][sample['desk']] += 1
+        # These are last-seen snapshots, not additive event or play counts.
+        row['latestSelection'] = sample['selection']
+        row['latestDeliverySnapshot48h'] = sample['deliverySnapshot48h']
+    for row in days.values():
+        row['freshPercent'] = round(100 * row['fresh'] / row['eligibleSourceChecks'], 2) if row['eligibleSourceChecks'] else None
+    current = half_hour(now)
+    first = moment(samples[0]['window'])
+    expected = max(0, int((current - first).total_seconds() // 1800))
+    if any(moment(sample['window']) == current for sample in samples):
+        expected += 1  # Include the current partial window only once actually observed.
+    eligible = sum(row['eligibleSourceChecks'] for row in days.values())
+    fresh = sum(row['fresh'] for row in days.values())
+    return {'state': 'collecting', 'startedAt': journal['startedAt'],
+            'retainedFrom': samples[0]['observedAt'], 'lastObservedAt': samples[-1]['observedAt'],
+            'retentionDays': RELIABILITY_DAYS, 'daysObserved': len(days),
+            'observedWindows': len(samples), 'expectedWindowsSinceRetainedStart': expected,
+            'unobservedWindows': max(0, expected - len(samples)),
+            'eligibleSourceChecks': eligible, 'fresh': fresh,
+            'freshPercent': round(100 * fresh / eligible, 2) if eligible else None,
+            'readiness': 'not-assessed', 'days': list(days.values())}
+
+
+def reliability_history(path):
+    """Reject unreadable/incompatible history; do not silently reset prior evidence."""
+    path = Path(path)
+    if not path.exists():
+        return {}
+    journal = read(path)
+    samples = journal.get('samples')
+    if (journal.get('version') != 1 or journal.get('sourceLimitsMinutes') != SOURCE_LIMITS or
+            not moment(journal.get('startedAt')) or not isinstance(samples, list) or
+            not samples or len(samples) > RELIABILITY_DAYS * 48 + 1):
+        raise ValueError('reliability history unavailable or incompatible')
+    previous = None
+    for sample in samples:
+        if not isinstance(sample, dict):
+            raise ValueError('invalid reliability sample')
+        window, seen = moment(sample.get('window')), moment(sample.get('observedAt'))
+        states = sample.get('sources') or {}
+        deliveries = sample.get('deliverySnapshot48h')
+        if (not window or not seen or half_hour(seen) != window or (previous and window <= previous) or
+                set(sample) != {'window', 'observedAt', 'sources', 'desk', 'selection', 'deliverySnapshot48h'} or
+                not isinstance(states, dict) or set(states) != set(SOURCE_LIMITS) or
+                any(state not in (*SOURCE_STATES, 'not-required') for state in states.values()) or
+                sample.get('desk') not in ('ok', 'late', 'failed', 'unknown') or
+                sample.get('selection') not in ('published', 'no-new-play', 'unknown') or
+                not isinstance(deliveries, dict) or set(deliveries) != set(DELIVERY_FIELDS) or
+                any(value is not None and number(value) is None for value in deliveries.values())):
+            raise ValueError('invalid reliability sample')
+        previous = window
+    return journal
+
+
+def record_reliability(data, path, now=None):
+    """Called under the existing monitor lock; one immutable sample per 30-minute window."""
+    now = now or datetime.now(timezone.utc)
+    path = Path(path)
+    try:
+        journal = reliability_history(path)
+        sample = reliability_sample(data, now)
+        if sample is None:
+            return {**reliability_view(journal, now), 'recording': 'skipped-invalid-or-replayed-observation'}
+        samples = journal.get('samples') or []
+        if samples and moment(sample['window']) <= moment(samples[-1]['window']):
+            return {**reliability_view(journal, now), 'recording': 'already-observed'}
+        cutoff = half_hour(now) - timedelta(days=RELIABILITY_DAYS)
+        samples = [row for row in samples if moment(row['window']) > cutoff] + [sample]
+        journal = {'version': 1, 'startedAt': journal.get('startedAt') or sample['observedAt'],
+                   'sourceLimitsMinutes': SOURCE_LIMITS, 'samples': samples}
+        temporary = path.with_suffix('.tmp')
+        with temporary.open('w', encoding='utf-8') as handle:
+            temporary.chmod(0o600)  # Restrict the empty file before writing private evidence.
+            handle.write(json.dumps(journal, separators=(',', ':')) + '\n')
+        temporary.replace(path)
+        return {**reliability_view(journal, now), 'recording': 'recorded'}
+    except (OSError, ValueError, TypeError, KeyError):
+        # Measurement failure must not change existing health alerts or erase history.
+        return {'state': 'unavailable', 'readiness': 'not-assessed', 'days': [],
+                'recording': 'local-history-needs-review'}
 
 
 def held_captions(logs, day, posts):
@@ -177,10 +329,18 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     verified = used is not None and remaining is not None and used + remaining == 500
     if verified and remaining <= 48:
         issue('odds-reserve', 'The stored Odds API balance is near the protected free reserve.')
+    published = number(state.get('published')) if state.get('outcome') == 'ok' else None
+    try:
+        reliability = reliability_view(reliability_history(conf / 'desk-health-reliability.json'), now)
+    except (OSError, ValueError, TypeError, KeyError):
+        reliability = {'state': 'unavailable', 'readiness': 'not-assessed', 'days': []}
     return {'checkedAt': gates.stamp(now), 'mode': 'private-cached-only', 'issues': issues,
             'desk': {'outcome': 'ok' if state.get('outcome') == 'ok' else 'not-ok-or-unknown',
-                     'finishedAt': stamp(state.get('finishedAt')), 'expectedSlot': gates.stamp(expected)},
+                     'finishedAt': stamp(state.get('finishedAt')), 'expectedSlot': gates.stamp(expected),
+                     'selection': 'unknown' if published is None else 'published' if published else 'no-new-play'},
+            'reliability': reliability,
             'sources': checks, 'deliveriesLast48h': counts,
+            'deliveryLogState': 'available' if isinstance(post_book.get('posts'), list) else 'unknown',
             'oddsBudget': {'observedAt': stamp(usage.get('at')), 'used': used if verified else None,
                            'remaining': remaining if verified else None, 'verifiedFromStoredSnapshot': verified},
             'localModel': {'usedLastRun': (state.get('llm') or {}).get('used') is True,
@@ -201,11 +361,20 @@ def markdown(data):
         lines.append(f"{row['name']}: {row['state']}; last successful observation {row['observedAt'] or 'unknown'}.")
     counts = data['deliveriesLast48h']
     lines.append('Delivery evidence (48h): ' + ', '.join(f'{key} {value}' for key, value in counts.items()) + '.')
+    lines.append('Stored delivery log: ' + data.get('deliveryLogState', 'unknown') + '; missing evidence is not a successful delivery.')
     budget = data['oddsBudget']
     lines.append(f"Stored Odds API budget: {budget['used']} used, {budget['remaining']} remaining; observed {budget['observedAt'] or 'unknown'}.")
     llm = data['localModel']
     lines.append(f"Local model last run: {llm['calls']} calls, {llm['failures']} failures; {llm['homepageStories']} homepage stories.")
     lines.append(f"Live Discord pilot: {data['livePilot']['state']}; {data['livePilot']['attempts']} attempts. X remains off.")
+    evidence = data.get('reliability') or {}
+    lines.append('Reliability history: ' + str(evidence.get('state', 'not-started')) + '. Readiness is not assessed.')
+    if evidence.get('state') == 'collecting':
+        lines.append(f"Sampled required-source freshness: {evidence['fresh']}/{evidence['eligibleSourceChecks']} "
+                     f"({evidence['freshPercent']}%); {evidence['observedWindows']} observed half-hours, "
+                     f"{evidence['unobservedWindows']} unobserved since the retained start.")
+        lines.append('Unknown required checks are in the denominator. Missing windows are not successes. '
+                     'Delivery snapshots are not summed; no-new-play is not a delivery failure.')
     return '\n'.join(lines) + '\n'
 
 
@@ -231,6 +400,24 @@ def html_report(data):
                        'withheld': 'Withheld', 'xConfirmed': 'X confirmed',
                        'discordConfirmed': 'Discord confirmed', 'heldCaptions': 'Caption length holds'}
     deliveries = data.get('deliveriesLast48h') or {}
+    evidence = data.get('reliability') or {}
+    evidence_rows = ''.join('<tr>' + ''.join(f'<td>{text(value)}</td>' for value in (
+        row.get('date'), row.get('observedWindows'),
+        f"{row.get('fresh')}/{row.get('eligibleSourceChecks')}", row.get('stale'), row.get('failed'),
+        row.get('unknown'), row.get('invalid'))) + '</tr>' for row in evidence.get('days') or [])
+    reliability = f'''<section><h2>Prospective reliability evidence</h2>
+<p>{text(evidence.get('state', 'not-started'))} · readiness is not assessed. First observation: {text(evidence.get('startedAt'))}.</p>
+<table>{rows([('Retained observed half-hours', evidence.get('observedWindows')),
+              ('Unobserved half-hours since retained start', evidence.get('unobservedWindows')),
+              ('Required-source checks', evidence.get('eligibleSourceChecks')),
+              ('Fresh required-source checks', evidence.get('fresh')),
+              ('Fresh percent of observed required checks', evidence.get('freshPercent'))])}</table>
+<p>One actual sample per half-hour, retained for 56 days. Unknown required checks count in the denominator;
+optional sources do not. Missing windows are unobserved, not successes. The current half-hour stays pending until
+observed or finished. These are cached freshness checks, not feed latency, uptime or a four-week approval.</p>
+<div class="scroll"><table><thead><tr><th>Eastern date</th><th>Samples</th><th>Fresh/required</th><th>Stale</th><th>Failed</th><th>Unknown</th><th>Invalid time</th></tr></thead><tbody>{evidence_rows}</tbody></table></div>
+<p>Delivery figures remain last-48-hour snapshots, never added across observations. No-new-play and withheld decisions
+are not technical failures. Display incidents and grading reconciliation still need separate review.</p></section>'''
     return f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -243,7 +430,8 @@ def html_report(data):
 <section><h2>Needs attention</h2>{notices}</section>
 <section><h2>Desk run</h2><table>{rows([('Latest outcome', desk.get('outcome')), ('Finished at', desk.get('finishedAt')), ('Expected slot', desk.get('expectedSlot'))])}</table></section>
 <section><h2>Source observations</h2><p>Age is time since the stored observation, not measured feed latency.</p><div class="scroll"><table><thead><tr><th>Source</th><th>Status</th><th>Observed at</th><th>Age (minutes)</th><th>Required now</th></tr></thead><tbody>{source_rows}</tbody></table></div></section>
-<section><h2>Delivery evidence · last 48 hours</h2><table>{rows((label, deliveries.get(key)) for key, label in delivery_labels.items())}</table></section>
+{reliability}
+<section><h2>Delivery evidence · last 48 hours</h2><p>Stored log: {text(data.get('deliveryLogState', 'unknown'))}. Missing evidence is not a successful delivery.</p><table>{rows((label, deliveries.get(key)) for key, label in delivery_labels.items())}</table></section>
 <section><h2>Stored free odds budget</h2><table>{rows([('Verified stored balance', 'Yes' if budget.get('verifiedFromStoredSnapshot') else 'No'), ('Observed at', budget.get('observedAt')), ('Used', budget.get('used')), ('Remaining', budget.get('remaining'))])}</table></section>
 <section><h2>Local model · last run</h2><table>{rows([('Used', 'Yes' if local.get('usedLastRun') else 'No'), ('Calls', local.get('calls')), ('Failures', local.get('failures')), ('Homepage stories', local.get('homepageStories'))])}</table></section>
 <section><h2>Live-update pilot</h2><table>{rows([('Status', pilot.get('state')), ('Attempts', pilot.get('attempts')), ('Last observer check', pilot.get('lastObserverAt'))])}</table><p>X live updates remain off. No attempts means the delivery pilot is not yet validated.</p></section>
@@ -275,6 +463,10 @@ def monitor(data, state_path, notify):
         elif not codes and alerted:
             message = 'The previously reported cached desk-health checks have recovered.'
             alerted = []
+        # Uses the same existing job/lock. No additional notification, source call
+        # or write to any public store; repeated windows do not inflate counts.
+        data = dict(data, reliability=record_reliability(
+            data, path.with_name(path.stem + '-reliability.json')))
         saved = {'observed': codes, 'consecutive': consecutive, 'alerted': alerted, 'summary': data}
         temporary = path.with_suffix('.tmp')
         temporary.write_text(json.dumps(saved, indent=2) + '\n', encoding='utf-8')

@@ -4,6 +4,48 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const C = require('../site/core.js');
 
+test('chart cards and singular counts use the history left by matchup filters, not every stored player', async () => {
+  const source=fs.readFileSync('site/app.js','utf8');
+  const body=source.match(/async function playerCharts\(league\) \{([\s\S]*?)\n  \}\n\n  async function playerSearch/)[1];
+  const AsyncFunction=Object.getPrototypeOf(async function(){}).constructor;
+  const render=new AsyncFunction('C','state','maybe','empty','CHART_STATS','chartHas','chartRows','savePreferences','dayLabel','esc','whenShort','chartTeam','seg','resetFilters','league',body);
+  const data={season:2026,games:[{id:'game',day:'2026-10-05',kickoff:'2026-10-05T20:00Z',away:{abbreviation:'A'},home:{abbreviation:'B'}}],players:[
+    {id:'one',gameId:'game',side:'away',name:'One',pos:'WR',rows:[{date:'2026-10-01',home:1,opp:'1',stats:{recYds:0}}]},
+    {id:'two',gameId:'game',side:'home',name:'Two',pos:'WR',rows:[{date:'2026-10-01',home:0,opp:'2',stats:{recYds:30}}]},
+    {id:'unknown',gameId:'game',side:'home',name:'Unknown',pos:'WR',rows:[{date:'2026-10-01',home:1,opp:'1',stats:{recYds:null}}]},
+  ]};
+  const original=JSON.stringify(data);
+  const state={...C.RESEARCH_DEFAULTS,chartVenue:'home',chartDay:'2026-09-01'};
+  let saves=0;
+  const run=()=>render(C,state,async path=>path.includes('player-charts')?data:{teams:{1:{abbr:'ONE'},2:{abbr:'TWO'}}},
+    (title,text,action='')=>title+text+action,['recYds'],()=>true,p=>C.chartHistory(p.rows,'recYds',state),()=>saves++,
+    C.dayLabel,C.esc,C.whenShort,(team,game,players)=>players.map(p=>`card:${p.name}`).join(''),()=>'',scope=>`reset:${scope}`,'NFL');
+  const html=await run();
+  assert.match(html,/1 player with matching Rec yds history/);
+  assert.doesNotMatch(html,/1 players|card:Two|card:Unknown/);
+  assert.match(html,/card:One/,'an observed zero remains a real data point');
+  assert.match(html,/saved date or opponent is no longer available/);
+  assert.equal(state.chartDay,'next');assert.equal(saves,1);
+  state.chartOpponent='2';
+  const empty=await run();
+  assert.match(empty,/0 players with matching/);
+  assert.match(empty,/No matching player history/);assert.match(empty,/reset:charts/);
+  assert.equal(JSON.stringify(data),original,'a view never changes source rows or saved odds');
+});
+
+test('switching sports clears only the league-specific opponent filter', () => {
+  const source=fs.readFileSync('site/app.js','utf8');
+  const body=source.match(/const changeLeague = league => \{([\s\S]*?)\n  \};/)[1];
+  const change=new Function('P','state','saved','savePreferences','league',body);
+  const state={league:'NFL',chartOpponent:'11',chartWindow:'last5',chartQuery:'yards'};
+  let saves=0;
+  change({league:v=>v},state,{set(){}},()=>saves++,'NFL');
+  assert.equal(state.chartOpponent,'11');
+  change({league:v=>v},state,{set(){}},()=>saves++,'CFB');
+  assert.deepEqual(state,{league:'CFB',chartOpponent:'all',chartWindow:'last5',chartQuery:'yards'});
+  assert.equal(saves,2);
+});
+
 test('shared plot renders under hits, ties, unknowns and snap percentages on one scrollable scale', () => {
   const source=fs.readFileSync('site/app.js','utf8');
   const body=source.match(/const historyPlot = \([^\n]+\) => \{([\s\S]*?)\n  \};/)[1];
@@ -146,7 +188,8 @@ test('board navigation highlights the selected line view and offers a fast favor
 
 test('Trends opens on upcoming main lines and supports season, Last 10 and Last 5 windows', () => {
   const source = fs.readFileSync('site/app.js', 'utf8');
-  assert.match(source, /trendKind: 'main', trendWindow: 'season'.*trendDay: 'all'/);
+  assert.deepEqual([C.RESEARCH_DEFAULTS.trendKind,C.RESEARCH_DEFAULTS.trendWindow,C.RESEARCH_DEFAULTS.trendDay],['main','season','all']);
+  assert.match(source,/\.\.\.C.RESEARCH_DEFAULTS/);
   assert.match(source, /C\.trendWindow\(C\.bestTrendPrices\(data\.rows \|\| \[\]\), state\.trendWindow\)/);
   assert.match(source, /\['season','This season'\],\['last10','Last 10'\],\['last5','Last 5'\]/);
   assert.match(source, /\['main','Main lines'\],\['alternate','Alternates'\],\['milestone','Milestones'\]/);

@@ -3,6 +3,46 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const C = require('../site/core.js');
 
+test('saved research filters accept visible choices and reject malformed or obsolete settings', () => {
+  const prefs=C.researchPreferences({trendKind:'all',trendRate:'0',chartPos:'none',chartDay:'2026-99-99',chartOpponent:'undefined',
+    chartQuery:'London',boardScope:'settled',recordScope:'ladder',ticket:[{id:'not-a-filter'}],league:'CFB'});
+  assert.deepEqual([prefs.trendKind,prefs.trendRate,prefs.chartPos,prefs.chartDay,prefs.chartOpponent],['main','80','all','next','all']);
+  assert.equal(prefs.chartQuery,'London');
+  assert.equal(prefs.boardScope,'settled');
+  assert.equal(prefs.recordScope,'ladder');
+  assert.equal(prefs.ticket,undefined);assert.equal(prefs.league,undefined);
+  assert.equal(C.researchPreferences({chartDay:'2026-02-30'}).chartDay,'next');
+  assert.equal(C.researchPreferences({chartDay:'2026-10-05',chartOpponent:'11'}).chartDay,'2026-10-05');
+  assert.equal(C.researchPreferences({chartQuery:'x'.repeat(161)}).chartQuery,'');
+  assert.deepEqual(C.researchPreferences(null),C.RESEARCH_DEFAULTS);
+});
+
+test('a workspace reset leaves other research, Saved, sport and original ticket values untouched', () => {
+  const original={league:'CFB',chartQuery:'London',chartDay:'2026-10-05',chartOpponent:'11',chartWindow:'last5',
+    trendKind:'alternate',boardQuery:'yards',watchlist:[{key:'kept'}],ticket:[{odds:-110,line:25.5}]};
+  const reset={...original,...C.researchReset('charts')};
+  assert.equal(reset.chartQuery,'');assert.equal(reset.chartDay,'next');assert.equal(reset.chartOpponent,'all');
+  assert.equal(reset.chartWindow,'season');assert.equal(reset.trendKind,'alternate');assert.equal(reset.boardQuery,'yards');
+  assert.equal(reset.league,'CFB');assert.equal(reset.watchlist,original.watchlist);assert.equal(reset.ticket,original.ticket);
+  assert.equal(C.researchReset('trends').trendKind,'main');assert.equal(C.researchReset('lines').boardScope,'open');
+  assert.deepEqual(C.researchReset('everything'),{});
+});
+
+test('effective chart history applies venue and opponent before the sample and retains exact observations', () => {
+  const rows=Array.from({length:25},(_,i)=>({date:`2026-09-${String(i+1).padStart(2,'0')}`,home:i%2,opp:String(i%3),stats:{rushYds:i-2}})).reverse();
+  rows.push({date:'2026-09-30',home:1,opp:'1',stats:{rushYds:null}});
+  const before=JSON.stringify(rows);
+  const season=C.chartHistory(rows,'rushYds',{chartWindow:'season'});
+  assert.equal(season.length,25,'Season is not silently capped at 20');
+  assert.deepEqual(season.slice(0,3).map(r=>r.stats.rushYds),[-2,-1,0]);
+  const subset=C.chartHistory(rows,'rushYds',{chartWindow:'last5',chartVenue:'home',chartOpponent:'1'});
+  assert.ok(subset.every(r=>r.home===1&&r.opp==='1'));
+  assert.equal(subset.length,4,'short matching history keeps its true count');
+  assert.equal(C.chartHistory(rows,'rushYds',{chartOpponent:'999'}).length,0);
+  assert.equal(C.chartHistory(rows,'missing').length,0);
+  assert.equal(JSON.stringify(rows),before,'stored history is never sorted/mutated in place');
+});
+
 test('display-only observed values preserve unknown, zero and negative without changing legacy helpers', () => {
   const keys=['rushYds','snapPct'];
   const row=(day,value,snap)=>['game',day,2026,1,2,'a','b',1,value,snap];

@@ -936,7 +936,8 @@ def relevant_facts(candidate, facts, ctx):
     taken at the current number, and backtests show a move away from our number does not hurt our side. Long
     injured reserve is in the projections and the market already. What remains: the player's own listing and
     his starting quarterback for a prop; the starting quarterbacks and a side missing several skill players for
-    a total; a weather flag for a total; and everything the web researcher verified."""
+    a total; a weather flag for a total; and verified web injury, role and weather reporting.
+    Statistical stories remain context, not separate news holds; filtering one does not disprove it."""
     athlete = str(candidate.get('athleteId') or '')
     team = candidate.get('_team')
     league = candidate.get('_league') or candidate.get('league') or str(candidate.get('id', '')).split('-')[0]
@@ -945,7 +946,7 @@ def relevant_facts(candidate, facts, ctx):
     for fact in facts:
         kind = fact.get('kind')
         if researcher.from_web(fact):
-            if kind in ('injury', 'role', 'weather'):   # a stats story is already in the number; it never holds a play
+            if kind in ('injury', 'role', 'weather'):   # statistical reporting is context, not a separate news hold
                 out.append(fact)
             continue
         if kind == 'weather':
@@ -1124,6 +1125,12 @@ def promote(candidate, facts, use_llm, status=None):
 
 def polish(candidate, facts, status):
     """The model's rewrite of the templated why and risk, through both guards; the template stands otherwise."""
+    if verified_opposition(candidate, facts):
+        # The number/style guards cannot prove that a rewrite preserved an
+        # opposing fact. Keep the factual caution instead of making that bet.
+        status['llm']['kept'] += 2
+        log(f"  why/risk templates kept for {candidate.get('title')}: verified opposing evidence")
+        return
     for key, task in (('why', llm_tasks.why_for), ('risk', llm_tasks.risk_for)):
         text, note = task(candidate, facts)
         candidate[key] = text
@@ -1233,6 +1240,19 @@ def checked_facts(candidate, limit=2):
     return facts[:limit]
 
 
+def verified_opposition(candidate, facts=()):
+    """Verified opposing reporting stays visible even when it is not a news hold."""
+    out, seen = [], set()
+    for fact in [*(candidate.get('_research') or []), *(candidate.get('_evidence') or []), *facts]:
+        if not isinstance(fact, dict) or fact.get('verified') is not True or fact.get('direction') != 'against':
+            continue
+        key = (fact.get('kind'), fact.get('claim'), fact.get('source'))
+        if key not in seen:
+            out.append(fact)
+            seen.add(key)
+    return out
+
+
 def write_prose(candidate, ctx, records):
     """Template why and risk from the pick's own numbers. A model may polish these later; it never adds a number."""
     if candidate.get('legs'):       # a parlay has no single line or side: its words come first, before any are read
@@ -1298,19 +1318,27 @@ def write_prose(candidate, ctx, records):
     else:
         market_words = next((f['claim'] for f in candidate.get('_evidence') or [] if f.get('kind') == 'market'), '')
         checked = checked_facts(candidate)
+        opposing_stats = [f for f in verified_opposition(candidate) if f.get('kind') == 'stats' and f.get('claim')]
+        caution = (' Verified statistical reporting also points against this side; see the counterpoints below.') if opposing_stats else ''
         candidate['why'] = (f"Model lean, published on our number alone. Our total is {p['projection']:g} against {pricing.fmt(line)}: the "
                             f"{side} reads {100 * p['chance']:.1f}% after the raw {100 * p['rawChance']:.1f}% is shrunk by the model's "
                             f"record against the close, {p['edgePoints']:+.1f} points clear of the {100 * p['breakEven']:.1f}% that "
-                            f"{odds:+d} needs. Nothing sourced argues against it; the number is the reason."
+                            f"{odds:+d} needs. The projection is the reason for this lean."
+                            + caution
                             + ''.join(f" Checked before publishing: {first_sentence(f['claim'])}" for f in checked)
                             + (f" The market: {market_words}" if market_words else ''))
         sources = list(candidate.get('sources') or [])
-        for fact in checked:
+        for fact in checked + opposing_stats[:2]:
             if str(fact.get('source') or '').startswith('https://') and fact['source'] not in sources:
                 sources.append(fact['source'])
         candidate['sources'] = sources
         candidate['risk'] = (f"It rests on the model alone, and the closing line beats our number on average, so a gap this size is more "
                              f"often our error than the market's. {sparse}Confidence {candidate['confidence']} of 10.")
+        if opposing_stats:
+            counterpoints = ' '.join(f"Statistical counterpoint: {first_sentence(f['claim'])}" for f in opposing_stats[:2])
+            additional = f' {len(opposing_stats) - 2} more verified statistical counterpoints.' if len(opposing_stats) > 2 else ''
+            candidate['risk'] = (counterpoints + additional + ' Historical stats remain context, not a separate injury or availability hold. '
+                                 + candidate['risk'])
     return candidate
 
 

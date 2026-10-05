@@ -378,6 +378,53 @@ class JudgeTests(unittest.TestCase):
         self.assertEqual([f['source'] for f in run.checked_facts({'_research': facts})], ['https://example.com/a'],
                          'only verified availability facts that do not argue against the pick')
 
+    def test_game_lean_keeps_verified_statistical_opposition_even_when_not_a_news_hold(self):
+        facts = [{'kind': 'stats', 'direction': 'against', 'verified': True, 'origin': 'codex researcher',
+                  'claim': 'The Falcons scored 30 points in their last game. More detail.', 'source': 'https://example.com/atl'},
+                 {'kind': 'stats', 'direction': 'against', 'verified': True, 'origin': 'codex researcher',
+                  'claim': 'The Saints scored 28 points in their last game.', 'source': 'https://example.com/no'},
+                 {'kind': 'stats', 'direction': 'against', 'verified': False,
+                  'claim': 'An unverified claim.', 'source': 'https://example.com/unverified'}]
+        pick = {'id': 'NFL-test', 'title': 'Falcons at Saints under 48', 'gameIds': ['NFL-1'], 'modelLean': True,
+                'marketType': 'total', 'direction': 'under', 'line': 48, 'odds': -108, 'confidence': 3,
+                '_research': facts, '_evidence': facts[:2], 'sources': []}
+        desk = {'projection': 43.4, 'chance': .552, 'rawChance': .625, 'edgePoints': 3.3, 'breakEven': .519}
+        ctx = SimpleNamespace(snapshot=lambda _: {}, starters={})
+        self.assertEqual(run.relevant_facts(pick, facts[:2], ctx), [], 'historical statistics do not become a new hold')
+        with mock.patch.object(run.gates, 'desk_for', return_value=desk):
+            run.write_prose(pick, ctx, [])
+        self.assertIn('reporting also points against this side', pick['why'])
+        self.assertNotIn('Nothing sourced argues against', pick['why'])
+        for fact in facts[:2]:
+            self.assertEqual(pick['risk'].count(run.first_sentence(fact['claim'])), 1, 'duplicate evidence is not double-counted')
+            self.assertIn(fact['source'], pick['sources'])
+        self.assertNotIn('unverified claim', pick['risk'])
+        self.assertNotIn(facts[2]['source'], pick['sources'])
+        self.assertIn('not a separate injury or availability hold', pick['risk'])
+        self.assertEqual((pick['line'], pick['odds'], pick['confidence']), (48, -108, 3))
+
+    def test_game_lean_without_opposition_does_not_claim_a_universal_all_clear(self):
+        pick = {'gameIds': ['NFL-1'], 'marketType': 'total', 'direction': 'under', 'line': 48, 'odds': -108, 'confidence': 3}
+        desk = {'projection': 43.4, 'chance': .552, 'rawChance': .625, 'edgePoints': 3.3, 'breakEven': .519}
+        with mock.patch.object(run.gates, 'desk_for', return_value=desk):
+            run.write_prose(pick, SimpleNamespace(snapshot=lambda _: {}), [])
+        self.assertIn('The projection is the reason for this lean.', pick['why'])
+        self.assertNotIn('Nothing sourced', pick['why'])
+        self.assertNotIn('counterpoint', pick['risk'])
+
+    def test_optional_polish_cannot_erase_verified_counterevidence(self):
+        fact = {'kind': 'stats', 'direction': 'against', 'verified': True, 'claim': 'The offense has scored more recently.'}
+        pick = {'title': 'Test', 'why': 'The projection supports it, but statistics point against it.',
+                'risk': 'Statistical counterpoint: The offense has scored more recently.', '_research': [fact]}
+        before = (pick['why'], pick['risk'])
+        status = {'llm': {'kept': 0, 'polished': 0}}
+        with mock.patch.object(run.llm_tasks, 'why_for') as why, mock.patch.object(run.llm_tasks, 'risk_for') as risk:
+            run.polish(pick, [], status)
+        why.assert_not_called()
+        risk.assert_not_called()
+        self.assertEqual((pick['why'], pick['risk']), before)
+        self.assertEqual(status['llm'], {'kept': 2, 'polished': 0})
+
     def test_a_game_line_post_reason_is_a_fact_that_backs_the_play_or_nothing(self):
         from types import SimpleNamespace
         total = {'marketType': 'total', 'direction': 'under', 'line': 43.5, 'gameIds': ['g']}

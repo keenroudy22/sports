@@ -622,6 +622,38 @@
     }).slice(0, 3);
   };
 
+  /* Browser-local research settings. Unknown saved values fall back to visible, usable controls. */
+  const RESEARCH_DEFAULTS = Object.freeze({
+    trendRate:'80', trendStat:'all', trendKind:'main', trendWindow:'season', trendQuery:'', trendDay:'all',
+    gamesScope:'upcoming', gamesQuery:'', boardDay:'today', boardScope:'open', boardSort:'best', boardQuery:'', propMarket:'all',
+    chartStat:'recYds', chartPos:'all', chartWindow:'season', chartDay:'next', chartQuery:'', chartVenue:'all', chartOpponent:'all', recordScope:'straight',
+  });
+  const RESEARCH_CHOICES = {
+    trendRate:['70','80','90','100'], trendStat:['all','rec','recYds','rushYds','passYds','car','att','cmp'],
+    trendKind:['main','alternate','milestone'], trendWindow:['season','last10','last5'], trendDay:['all','today'],
+    gamesScope:['upcoming','final'], boardDay:['today','week'], boardScope:['open','settled'], boardSort:['best','confidence','time'],
+    propMarket:['all','receiving yards','receptions','rushing yards','carries','passing yards'],
+    chartStat:Object.keys(LABEL), chartPos:['all','QB','RB','WR','TE','PK'], chartWindow:['season','last10','last5'],
+    chartVenue:['all','home','away'], recordScope:['straight','parlays','ladder','all'],
+  };
+  const researchPreferences = values => Object.fromEntries(Object.entries(RESEARCH_DEFAULTS).map(([key,fallback]) => {
+    const value=values?.[key];
+    const valid=typeof value==='string' && value.length<=160 && (RESEARCH_CHOICES[key] ? RESEARCH_CHOICES[key].includes(value)
+      : key==='chartOpponent' ? /^(?:all|\d{1,12})$/.test(value)
+      : key==='chartDay' ? ['all','next'].includes(value) || /^\d{4}-\d{2}-\d{2}$/.test(value) && Number.isFinite(Date.parse(value+'T12:00Z')) && new Date(value+'T12:00Z').toISOString().slice(0,10)===value
+      : /Query$/.test(key));
+    return [key,valid?value:fallback];
+  }));
+  const researchReset = scope => Object.fromEntries(Object.entries(RESEARCH_DEFAULTS).filter(([key]) =>
+    scope==='charts'?key.startsWith('chart'):scope==='trends'?key.startsWith('trend'):scope==='lines'?key.startsWith('board')||key==='propMarket':false));
+  const chartHistory = (rows, key, filters = {}) => {
+    const count=filters.chartWindow==='last5'?5:filters.chartWindow==='last10'?10:Infinity;
+    return (rows || []).filter(row=>Number.isFinite(row.stats?.[key]) &&
+      (!filters.chartVenue || filters.chartVenue==='all' || row.home===(filters.chartVenue==='home'?1:0)) &&
+      (!filters.chartOpponent || filters.chartOpponent==='all' || String(row.opp)===filters.chartOpponent))
+      .slice().sort((a,b)=>String(a.date).localeCompare(String(b.date))).slice(-count);
+  };
+
   /* One numerical coordinate system for every historical bar and its threshold. */
   const chartGeometry = (values, line = null) => {
     const finite = values.filter(Number.isFinite), threshold = Number.isFinite(line) ? line : null;
@@ -667,7 +699,7 @@
     return parts.join(' · ') || 'On the website · social delivery not yet confirmed';
   };
 
-  return { chartGeometry, thresholdResult, quoteStatus, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, deskNotes,
+  return { RESEARCH_DEFAULTS, researchPreferences, researchReset, chartHistory, chartGeometry, thresholdResult, quoteStatus, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, deskNotes,
     column, cell, observedCell, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
     unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, modelCaution, projectionScorecard, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };
