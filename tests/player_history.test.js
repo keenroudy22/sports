@@ -58,7 +58,7 @@ const playerViewFixture = ({nextSeason = 2026, withNext = true} = {}) => {
   const source = fs.readFileSync('site/app.js', 'utf8');
   const body = source.match(/async function viewPlayer\(route\) \{([\s\S]*?)\n  \}\n\n  const chart =/)[1];
   const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
-  const render = new AsyncFunction('C','state','get','head','nextGameFor','maybe','esc','DASH','watchButton','seg','stat','whenShort','section','quoteMeta','chart','empty','gameLog','ordinal','shareResearch','route',body);
+  const render = new AsyncFunction('C','state','get','head','nextGameFor','maybe','esc','DASH','watchButton','seg','stat','whenShort','section','quoteMeta','chart','empty','gameLog','ordinal','shareResearch','HEADSHOT','route',body);
   const keys = ['passYds'];
   const current = [row('old', '2025-12-28', 2025, 900), row('one', '2026-09-01', 2026, 10),
     row('two', '2026-09-08', 2026, 30), row('zero', '2026-09-15', 2026, 0), row('unknown', '2026-09-22', 2026, null),
@@ -77,7 +77,7 @@ const playerViewFixture = ({nextSeason = 2026, withNext = true} = {}) => {
     captured.stats=[];captured.charts=[];captured.logs=[];
     return render(C,state,get,(title,text)=>title+text,async()=>withNext?next:null,async()=>({lines}),C.esc,C.DASH,()=>'',()=>'',stat,C.whenShort,
       (title,body)=>title+body,()=>'',(rows,values)=>{captured.charts.push({rows,values});return 'chart';},
-      (title,text)=>title+text,rows=>{captured.logs.push(rows);return 'log';},String,()=>'<button>Copy research link</button>',{league:'NFL',id,research});
+      (title,text)=>title+text,rows=>{captured.logs.push(rows);return 'log';},String,()=>'<button>Copy research link</button>',{NFL:athleteId=>`https://images.test/${athleteId}.png`},{league:'NFL',id,research});
   };
   return {state,captured,run,players,keys};
 };
@@ -95,6 +95,16 @@ test('player detail current-season scope drives chart, averages, hit count, spli
   assert.equal(value('Games'),4);
   assert.equal(f.captured.stats.find(s=>s.label==='Games').note,'3 with this stat recorded');
   assert.equal(JSON.stringify(f.players),original);
+});
+
+test('player detail places the player portrait directly beneath the profile header', async () => {
+  const f=playerViewFixture();
+  const html=await f.run();
+  assert.match(html,/class="page-head who"/);
+  assert.match(html,/class="player-profile-art"/);
+  assert.match(html,/class="player-profile-photo" src="https:\/\/images\.test\/1\.png" alt="Current Player"/);
+  assert.ok(html.indexOf('class="page-head who"') < html.indexOf('class="player-profile-art"'));
+  assert.ok(html.indexOf('class="player-profile-art"') < html.indexOf('Copy research link'));
 });
 
 test('player detail includes older observations only after explicit season choice and labels that scope', async () => {
