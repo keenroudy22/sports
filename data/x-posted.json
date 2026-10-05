@@ -986,7 +986,16 @@
    },
    "sentAt": "2026-10-03T03:39:30.543Z",
    "link": "https://twitter.com/keenkooks/status/2106227616738931038",
-   "tweetId": "2106227616738931038"
+   "tweetId": "2106227616738931038",
+   "metrics": {
+    "reactions": 0,
+    "comments": 0,
+    "engagementRate": 1.32,
+    "reposts": 0,
+    "impressions": 76,
+    "clicks": 0
+   },
+   "metricsAt": "2026-10-05T10:45:05Z"
   },
   {
    "id": "cashed:CFB-2026-W5-ladder-1002-fd",
@@ -1690,6 +1699,39 @@
    "sentAt": "2026-10-05T00:11:01.558Z",
    "link": "https://x.com/1753110091912413184/status/2106899925636178308",
    "tweetId": "2106899925636178308"
+  },
+  {
+   "id": "receipt:day:2026-10-04+menu:day:2026-10-05",
+   "postedAt": "2026-10-05T10:45:05Z",
+   "dueAt": "2026-10-05T13:00:00Z",
+   "bufferPostId": "6ac3819f89f301f319a31ced",
+   "textHash": "1e17375599c0be53",
+   "kind": "buffer:receipt",
+   "card": true,
+   "discord": {
+    "state": "pending",
+    "text": "Sunday: 2-3\n❌ Bhayshul Tuten under 1.5 receptions · injured in-game · checked before grading · Final: Bhayshul Tuten: 2 receptions\n✅ Marvin Harrison Jr. under 2.5 receptions · Final: Marvin Harrison Jr.: 1 receptions\nand 7 more on the site\n\nToday: 1 play.\n#NFL",
+    "image": "https://keenroudy.com/sports/data/cards/receipt-day-2026-10-04.png"
+   },
+   "cardKey": "receipt-day-2026-10-04"
+  },
+  {
+   "id": "NFL-2026-W4-atl-no-under-48-br",
+   "postedAt": "2026-10-05T10:45:05Z",
+   "dueAt": "2026-10-05T16:00:00Z",
+   "bufferPostId": "6ac381a0f2d73dcd7446d6d0",
+   "textHash": "2f1002675b2652c8",
+   "kind": "buffer:play",
+   "card": true,
+   "discord": {
+    "state": "pending",
+    "text": "POTD: Falcons/Saints under 48 (-108, BetRivers)\nNow 48.5 (-115, ESPN BET)\nWe have it at 43.\n\n❤️ if you're tailing\n#NFL",
+    "readyAt": "2026-10-05T15:45:00Z",
+    "image": "https://keenroudy.com/sports/data/cards/NFL-2026-W4-atl-no-under-48-br-potd.png"
+   },
+   "cardKey": "NFL-2026-W4-atl-no-under-48-br-potd",
+   "featured": true,
+   "reasonKind": "none"
   }
  ]
 }
