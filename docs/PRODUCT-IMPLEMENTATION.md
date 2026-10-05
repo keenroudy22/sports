@@ -20,7 +20,7 @@ dated assertions, not a live deployment/health monitor; missing, invalid and sta
 |---|---|---|
 | Chart correctness and quote clarity | Shared domain/baseline; below/equal/above, negative/zero/unknown fixtures; samples and quote ages match stored rows. | Implemented with regression fixtures; release verification below. No model or historical-grade change. |
 | Navigation and Today | Five destinations; Scores alias opens Games Live; other aliases survive; sport context, back navigation, opening phone screen and no clipping. | Implemented. Local phone checks confirm the published play appears first and sport selection preserves its section. |
-| Research workspace | Player/team/market search; main-line default; Season/L5/L10 samples; persistent filters; Saved distinct from ticket-building. | Initial local filtering shipped. Closeout found shareable context and cross-workspace search still incomplete; P02 tracks their verified completion. Unsupported sports remain explicit. |
+| Research workspace | Player/team/market search; main-line default; Season/L5/L10 samples; persistent filters; Saved distinct from ticket-building. | Initial filtering plus shared public context and cross-workspace search shipped; P02 records the closeout release. Unsupported sports remain explicit. |
 | Captions and graphic variation | Overlong text has a factual bounded fallback; readable long-name cards; green/red reflect the selected side, with non-color cues. | Implemented within current categories/caps. Cached end-zone caption now fits 239 characters with all four exact preview rows. Aggregate outcome strips do not invent game order. |
 | Private operations | Distinguish qualified/no-play/held/queued/delivered; identify overdue/failed output; unchanged healthy polls remain quiet. | Snapshot checks shipped in b4770d04; prospective daily reliability shipped in 164df194; distinct delivery cohorts shipped in ffc68f3b. Existing jobs and local-only evidence; no new feed/model calls. Private weekly Discord is prepared but disabled. |
 | Deployment safety | Both Python and Node exit statuses stop promotion; lock held during sync/tests/promotion; isolated offline rehearsal exercises real `_run`. | Shipped in b4770d04 after both suites and the stored-input rehearsal passed. Every follow-up revision must repeat its relevant verification and the deployment gates. |
@@ -221,15 +221,15 @@ increase caps or claim a configured integration is working. Existing append-only
 | Live-progress posts | Bounded Discord pilot only, actual attempts reviewed after three. | Existing two/day, 45-minute spacing, one/ticket and freshness/recheck gates; X remains off. | AGENTS live-progress approval; actual pilot log, not simulated attempts. |
 | Arb Radar | Website calculator/research plus qualified private Discord alerts under separate arb rules. | Exact fresh prices; never expose private candidates as public live arb. | docs/ARB-RADAR.md; AGENTS. |
 | New sports and futures | Supported website research, prospective trials and paper tracking. | No official new-sport release without forward evidence and separate approval. | Existing supported stores; P11. |
-| Private review / follow-through | Existing Monday 9:30 AM review; local/phone delivery; queue integration tracked as P03 until verified. | Owner-only Discord disabled until destination/permissions confirmed; no public fallback or new job. | scripts/review.py; P05. |
+| Private review / follow-through | Existing Monday 9:30 AM review; local/phone delivery; deterministic queue integration shipped in 4660ba13. | Owner-only Discord disabled until destination/permissions confirmed; no public fallback or new job. | scripts/review.py; P03 and P05. |
 | Paid access, tips, referrals | Readiness design only, not active. | Real reliability/retention, source rights, processor eligibility, terms and explicit launch approval first. | docs/SUBSCRIPTION-PLAN.md; P06–P09. |
 | POTD comparison proposal | Current designation uses already-published open singles. | A fresh full-market comparison requirement is an owner policy decision, not silently changed here. | Dated POTD audit above; P12. |
 
-## Closeout verification in progress · October 5
+## Shipped closeout verification · October 5
 
 The October 5 closeout found real missing shared-link/search behavior and stale release labels; it did not
-declare the plan complete from the earlier summary. P02–P04 remain ready in the dated queue until their final
-integrated publication is verified. Technical checks are not a substitute for the volunteer/cohort gate.
+declare the plan complete from the earlier summary. P02–P04 are now verified in the closeout release below.
+Technical checks are not a substitute for the volunteer/cohort gate.
 
 - The weekly follow-through integration adds one bounded local status-file read to the existing review. The full
   queue is in its packet and a deterministic summary leads saved, phone and verified-private-Discord excerpts.
@@ -251,6 +251,18 @@ integrated publication is verified. Technical checks are not a substitute for th
 - Integrated suites: 867 Python tests, two intentionally skipped; 123 frontend tests passed. Stored build and
   publication guard passed. Isolated slot-1000 rehearsal exited 0 / outcome ok, with two blocked network reads,
   zero subprocesses, outside writes or production-private reads. No posts, extra model calls or wagers were made.
+
+### Verified release receipt
+
+- Production revision: `4660ba1387a78b0686c2e74670388f26a983656c`.
+- [Publish run 37333009159](https://github.com/keenroudy22/sports/actions/runs/37333009159) succeeded at
+  `2026-10-05T15:30:45Z`. Live assets app 109, core 66 and CSS 73 were confirmed.
+- Live 375 px: a public Charts query for Bijan carries restored Carries / Last 5 and the exact player link opened
+  the same stat/sample. Document and viewport widths both measured 375; no browser errors were observed.
+- Owner receipt: `kookn-product-closeout-2026-10-05.html`; live image:
+  `implementation-evidence-2026-10-05/live-closeout-player-mobile.png` in the owner's Kook'n workspace.
+- The dated queue now has no ready implementation item. Remaining owner-needed, observing and gated items are
+  listed explicitly, not declared complete. Its receipt-only update changes no runtime code or selection rule.
 
 ## External and elapsed-time gates
 
