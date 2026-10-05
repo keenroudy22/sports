@@ -772,6 +772,62 @@ HOUSE = ('#08131d', '#10313a', '#5eeaa4')      # Kook'n navy and mint, for cards
 RESULT_MARKS = {'win': ('W', '#6fdc8c'), 'loss': ('L', '#ff7a6b'), 'push': ('P', None), 'void': ('P', None)}
 
 
+def modern_svg(pick, game=None, record=None, when=None, player_side=None, identities=None, avatar=None, featured=False, art=None):
+    """2026-10 visual system: full portraits, exact big lines, generous fixed zones. No new facts."""
+    if play_kind(pick) in ('ladder', 'parlay'):
+        return svg(pick, game, record, when, player_side, identities, avatar, featured, art)
+    theme = ticket_style(pick)
+    accent, ink, dim = theme['accent'], '#f5faff', '#aac0cf'
+    name, selection, market = ticket_leg_parts(display_title(pick, game))
+    def lines(value, x, y, width, size, color, weight=750, max_lines=None):
+        words = textwrap.wrap(str(value or ''), width=max(12, int(width/(size*.56))), break_long_words=True, break_on_hyphens=False)
+        while max_lines and len(words) > max_lines and size > 16:
+            size -= 1
+            words = textwrap.wrap(str(value or ''), width=max(12, int(width/(size*.56))), break_long_words=True, break_on_hyphens=False)
+        return ''.join(f'<text x="{x}" y="{y+i*(size+10)}" fill="{color}" font-size="{size}" font-weight="{weight}">{esc(word)}</text>' for i,word in enumerate(words))
+    picture = ''
+    if (art or {}).get('kind') == 'photo':
+        picture = f'<image href="{esc(art["uri"])}" x="550" y="145" width="500" height="365" preserveAspectRatio="xMidYMax meet"/>'
+    elif (art or {}).get('kind') == 'logos':
+        picture = ''.join(f'<image href="{esc(uri)}" x="{580+i*210}" y="210" width="200" height="200" preserveAspectRatio="xMidYMid meet"/>' for i,uri in enumerate(art['uris']))
+    else:
+        chef = avatar_uri(CHEF) if avatar is None else avatar
+        if chef: picture = f'<image href="{esc(chef)}" x="710" y="205" width="260" height="270" preserveAspectRatio="xMidYMid meet" opacity=".8"/>'
+    matchup = ''
+    if game:
+        matchup = f"{team_label(game.get('away') or {}, game.get('league'))} at {team_label(game.get('home') or {}, game.get('league'))}"
+        if game.get('kickoff'):
+            try:
+                from zoneinfo import ZoneInfo
+                dt = datetime.fromisoformat(game['kickoff'].replace('Z','+00:00')).astimezone(ZoneInfo('America/Indiana/Indianapolis'))
+                matchup += f' · {dt:%a %-I:%M %p} ET'
+            except (ValueError,TypeError): pass
+    price = f"{int(pick['odds']):+d}" if isinstance(pick.get('odds'),(int,float)) else 'No price'
+    main_size = min(106, max(48, int(950/(max(1,len(selection))*.59))))
+    name_size = min(58,max(36,int(470/(max(1,min(20,len(name)))*.56))))
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<defs><linearGradient id="modern-bg" x2="1" y2="1"><stop stop-color="{theme['bg']}"/><stop offset="1" stop-color="{theme['bg2']}"/></linearGradient><linearGradient id="portrait-fade" x2="0" y2="1"><stop stop-color="{theme['bg']}" stop-opacity="0"/><stop offset="1" stop-color="{theme['bg']}"/></linearGradient></defs>
+<rect width="1080" height="1350" fill="url(#modern-bg)"/><path d="M800 0L1080 0L1080 530L470 530Z" fill="{accent}" opacity=".06"/>
+{PAN.format(x=48,y=50,s=.45,c=accent)}<text x="115" y="86" fill="{ink}" font-size="34" font-weight="850" letter-spacing="5">KOOK’N</text>
+<text x="1024" y="84" fill="{dim}" font-size="21" text-anchor="end" letter-spacing="3">SPORTS / THE CARD</text>
+{picture}<rect x="540" y="430" width="540" height="85" fill="url(#portrait-fade)"/>
+{lines('PICK OF THE DAY' if featured else play_label(pick),56,170,490,23,accent)}
+{lines(name,56,254,475,name_size,ink,850,max_lines=3)}
+<path d="M56 522H1024" stroke="{accent}" stroke-width="3"/>
+<g data-zone="selection">{lines(selection,56,660,970,main_size,accent,900,max_lines=1)}{lines(market,60,728,940,38,ink,max_lines=1)}</g>
+{lines(matchup,60,820,945,27,dim,500,max_lines=2)}
+<rect x="56" y="886" width="460" height="215" rx="20" fill="{theme['row']}" stroke="{theme['edge']}"/>
+<text x="82" y="927" fill="{dim}" font-size="20" letter-spacing="3">POSTED PRICE</text><text x="82" y="1007" fill="{ink}" font-size="72" font-weight="850">{esc(price)}</text>
+{lines(pick.get('book') or '',82,1060,410,28,dim,max_lines=1)}
+<rect x="536" y="886" width="488" height="215" rx="20" fill="{theme['row']}" stroke="{theme['edge']}"/>
+<text x="562" y="927" fill="{dim}" font-size="20" letter-spacing="3">OUR NUMBER</text>
+{lines(number_line(pick) or 'No projection shown',562,984,426,31,ink,max_lines=3)}
+<text x="56" y="1202" fill="{ink}" font-size="28" font-weight="750">More on the board.</text>
+<text x="56" y="1252" fill="{accent}" font-size="27" font-weight="700">keenroudy.com/sports</text>
+<text x="56" y="1304" fill="{dim}" font-size="19">Entertainment only. Not advice. Verify current prices.</text>
+</svg>'''
+
+
 def receipt_svg(receipt, avatar=None):
     """A tall, shareable result report: the record leads, then every play gets room for its final or parlay sweat."""
     chef = avatar_uri(CHEF) if avatar is None else avatar
@@ -1017,7 +1073,7 @@ def main(argv=None):
         player_side = 'home' if team == str(game['home']['id']) else 'away' if team == str(game['away']['id']) else None
     card_art = ticket_art(pick, ctx.games, ctx.player_team) if play_kind(pick) == 'parlay' else artwork(pick, game)
     text = (ticket_svg(pick, game, art=card_art, style=args.ticket_style) if play_kind(pick) == 'parlay' and args.ticket_style is not None
-            else svg(pick, game, player_side=player_side, art=card_art, featured=args.featured))
+            else modern_svg(pick, game, player_side=player_side, art=card_art, featured=args.featured))
     if args.svg:
         if args.out:
             Path(args.out).write_text(text)

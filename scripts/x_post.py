@@ -612,7 +612,7 @@ def main(argv=None):
             card = None
             if args.card:
                 import pick_card
-                card = pick_card.render(pick_card.svg(pick, game, art=pick_card.artwork(pick, game)), CONF / 'x-drafts' / f"{pick['id']}.png")
+                card = pick_card.render(pick_card.modern_svg(pick, game, art=pick_card.artwork(pick, game)), CONF / 'x-drafts' / f"{pick['id']}.png")
                 print(f'card: {card}')
             if args.command == 'post':
                 if not args.confirm:

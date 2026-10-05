@@ -1856,7 +1856,7 @@ def drafts(slot, now, ctx, games, settled, status):
                 team = ctx.player_team.get(str(pick_now.get('athleteId') or ''))
                 side = 'home' if team == str(game['home']['id']) else 'away' if team == str(game['away']['id']) else None
                 import featured
-                pick_card.render(pick_card.svg(pick_now, game, player_side=side, featured=featured.of_day(eastern_date(now).isoformat()) == key,
+                pick_card.render(pick_card.modern_svg(pick_now, game, player_side=side, featured=featured.of_day(eastern_date(now).isoformat()) == key,
                                                art=pick_card.artwork(pick_now, game)), folder / f'{key}.png')
         except Exception as error:
             log(f'card for {key} not rendered: {error}')

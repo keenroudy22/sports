@@ -4,6 +4,7 @@
   'use strict';
 
   const C = window.KRCore;
+  const P = window.KRPersonal;
   const { esc, DASH, odds, signed, fixed, when, whenShort, dayLabel, ago } = C;
   const $ = selector => document.querySelector(selector);
   document.addEventListener('error', event => {
@@ -19,14 +20,23 @@
 
   const state = {
     trendRate: '80', trendStat: 'all', trendKind: 'main', trendWindow: 'season', trendQuery: '', trendDay: 'all',
-    league: saved.get('league', 'ALL'),     /* a first visit shows every play, whichever sport it is in */
+    league: P.league(saved.get('league', 'ALL')),     /* a first visit shows every play, whichever sport it is in */
     gamesScope: 'upcoming', gamesQuery: '', boardDay: 'today', boardScope: 'open', boardSort: 'best', boardQuery: '', boardMode: 'games', propMarket: 'all', playerQuery: '', recordQuery: '',
     chartStat: 'recYds', chartPos: 'all', chartWindow: 'last5', chartDay: 'next', chartQuery: '',
     stat: null, defensePos: 'WR', defenseStat: 'recYds', defenseScope: 'season', defenseOrder: 'soft',
     logSeason: 'all', scoresDate: null, recordScope: 'all',
     ticket: saved.get('ticket', []), stake: saved.get('stake', { amount: 1, mode: 'units', unit: 10 }),
     arb: saved.get('arb', { first: 298, second: -195, bankroll: 181.55 }),
+    watchlist: saved.get('watchlist', []),
   };
+  state.watchlist = Array.isArray(state.watchlist) ? state.watchlist.filter(r => r && typeof r.key === 'string' && /^#(player|game)\//.test(r.href)).slice(0,100) : [];
+  const watchCandidates = new Map();
+  const watchButton = item => {
+    watchCandidates.set(item.key, item);
+    const selected = state.watchlist.some(r => r.key === item.key);
+    return `<button type="button" class="watch-button" data-watch="${esc(item.key)}" aria-pressed="${selected}" aria-label="${selected ? 'Unsave' : 'Save'} ${esc(item.title)}">${selected ? '★ Saved' : '☆ Save'}</button>`;
+  };
+  const personalLinks = () => '<nav class="personal-links" aria-label="Your tools"><a href="#saved">★ Saved</a><a href="#digest">Daily digest</a><a href="#start">Start here</a><a href="#arbs">Arb Radar</a><a href="#lab">Lab</a></nav>';
 
   const cache = new Map(), cacheTimes = new Map();
   const get = path => {
@@ -60,7 +70,7 @@
   };
   const TABS = [['today', 'Today'], ['games', 'Games'], ['scores', 'Scores'], ['stats', 'Charts'], ['record', 'Record'], ['more', 'More']];
   ICONS.scores = '<path d="M3 5h18v14H3zM8 9v6M16 9v6M11 12h2"/>';
-  const TAB_FOR = { trends: 'today', board: 'today', game: 'games', player: 'stats', team: 'stats', model: 'record', ticket: 'today', research: 'more', arbs: 'more', lab: 'more', schedule: 'more' };
+  const TAB_FOR = { saved:'more', digest:'today', start:'more', feedback:'more', trends: 'today', board: 'today', game: 'games', player: 'stats', team: 'stats', model: 'record', ticket: 'today', research: 'more', arbs: 'more', lab: 'more', schedule: 'more' };
   const boardTabs = active => `<nav class="board-tabs" aria-label="Lines and plays"><a href="#today" ${active === 'card' ? 'aria-current="page"' : ''}>Plays</a><a href="#board/favorites" ${active === 'favorites' ? 'aria-current="page"' : ''}>Best lines</a><a href="#board" ${active === 'lines' ? 'aria-current="page"' : ''}>Games</a><a href="#board/props" ${active === 'props' ? 'aria-current="page"' : ''}>Props</a><a href="#trends" ${active === 'trends' ? 'aria-current="page"' : ''}>Trends</a></nav>`;
   const scoreTabs = active => `<nav class="board-tabs" aria-label="Scoreboard view"><a href="#record" ${active === 'official' ? 'aria-current="page"' : ''}>Results</a><a href="#model" ${active === 'model' ? 'aria-current="page"' : ''}>Model results</a></nav>`;
 
@@ -625,7 +635,7 @@
   };
 
   async function viewToday() {
-    const [data, board, scoreboard, notes] = await Promise.all([get('app/today.json'), maybe('app/lines.json'), maybe('scoreboard.json'), maybe('desk-notes.json')]);
+    const [data, board, scoreboard, notes, sports] = await Promise.all([get('app/today.json'), maybe('app/lines.json'), maybe('scoreboard.json'), maybe('desk-notes.json'), maybe('sports.json')]);
     markPicks(data.picks.filter(inLeague).filter(p => !p.result && !p.historicalImport));
     const settledRecently = lastGameDay(data.picks.filter(inLeague));
     const recent = C.summaryOf(settledRecently.filter(p => !C.isParlay(p) && !C.isUnpricedImport(p)));
@@ -645,16 +655,17 @@
     /* The Climb is its own top-level feature. Removing it from the ordinary schedule prevents duplicate cards. */
     const scheduled = C.cardSchedule(live.filter(p => !C.isLadder(p)));
     const todayGames = games.filter(g => C.dayOf(g.kickoff) === C.dayOf(new Date().toISOString()));
-    return `${head('Today', `${esc(todayLabel)} · ${todayGames.length} game${todayGames.length === 1 ? '' : 's'}${state.league === 'ALL' ? '' : ` · ${esc(leagueName(state.league))}`}. Plays and top lines, all in one place.`)}
+    return `${head('Today', `${esc(todayLabel)} · ${todayGames.length}${state.league === 'ALL' ? ' football' : ''} game${todayGames.length === 1 ? '' : 's'}${state.league === 'ALL' ? '' : ` · ${esc(leagueName(state.league))}`}. Plays and top lines, all in one place.`)}
       ${liveStamp(liveNow.refreshed)}
       ${boardTabs('card')}
+      ${personalLinks()}
       ${section('The 80/20 Climb', ladder.open ? `<div class="plays plays-ladder">${playCard(ladder.open)}</div>${ladderLedger(ladder)}${ladderHistory(ladder)}` : ladderStrip(ladder), '<a href="#record">Climb record →</a>')}
       ${scorecardCard(scoreboard || {}, data.picks)}
       ${section("Today's plays", scheduled.today.length ? `<div class="plays">${scheduled.today.map(playCard).join('')}</div>`
         : empty('Nothing posted yet', 'New plays appear here when they are released.'), '<a href="#record">Every result →</a>')}
       ${scheduled.upcoming.length ? `<details class="card upcoming-card"><summary>Upcoming official plays · ${scheduled.upcoming.length}<span>Separate from today’s card</span></summary><div class="plays">${scheduled.upcoming.map(playCard).join('')}</div></details>` : ''}
       ${scheduled.awaiting.length ? `<details class="card upcoming-card"><summary>Awaiting settlement · ${scheduled.awaiting.length}</summary><div class="plays">${scheduled.awaiting.map(playCard).join('')}</div></details>` : ''}
-      ${section('Around the leagues', `<nav class="sport-links" aria-label="More sports">${SCORE_LEAGUES.map(key => `<a href="#scores/${key}">${esc(SCORE_NAMES[key])} →</a>`).join('')}</nav>`, '<a href="#schedule">Release schedule →</a>')}
+      ${section('Around the leagues', `<nav class="sport-links" aria-label="More sports">${SCORE_LEAGUES.map(key => { const n=(sports?.leagues?.[key]?.games || []).filter(g=>g.date===etDay()).length; return `<a href="#today" data-sport-nav="${key}">${esc(SCORE_NAMES[key])}${!['NFL','CFB'].includes(key) ? ` · ${n} today` : ''} →</a>`; }).join('')}</nav>`, '<a href="#schedule">Release schedule →</a>')}
       ${deskNotesSection(notes, games, state.league)}
       <div class="two-col"><div>
         <div class="research-heading"><p class="eyebrow">More to explore</p><h2>Lines and trends</h2><p>Game lines, player props and matchup trends.</p></div>
@@ -797,7 +808,7 @@
     const status = card.completed ? `Final ${card.away.abbr} ${card.away.score}, ${card.home.abbr} ${card.home.score}`
       : card.state === 'in' ? `${esc(card.status)} · ${esc(card.away.abbr)} ${card.away.score ?? DASH}–${card.home.score ?? DASH} ${esc(card.home.abbr)}` : esc(when(card.kickoff));
     const win = v2 ? (v2.winProb >= 0.5 ? `${card.home.abbr} ${Math.round(100 * v2.winProb)}%` : `${card.away.abbr} ${Math.round(100 * (1 - v2.winProb))}%`) : DASH;
-    let html = `${head(title, `${status}${card.neutral ? ' · neutral site' : ''} · ${esc(leagueName(league))}`, back)}${liveStamp(liveNow.refreshed)}
+    let html = `${head(title, `${status}${card.neutral ? ' · neutral site' : ''} · ${esc(leagueName(league))}`, back)}${watchButton({type:'game',key:'game:'+card.id,title,league,href:'#game/'+card.id,kickoff:card.kickoff})}${liveStamp(liveNow.refreshed)}
       ${favoriteLinesSection(card, detail)}
       ${modelReadsSection(card, detail)}
       ${!card.completed && C.modelCaution(card) ? `<div class="notice">${esc(C.modelCaution(card))}</div>` : ''}
@@ -1043,6 +1054,7 @@
         ${graded && row.grade && typeof row.grade.chance === 'number' ? chanceBar(row.grade.chance, row.grade.needs, g.tier) : ''}
         <span class="row-meta">${esc(whenShort(row.kickoff))}${row.observedAt ? ' · price checked ' + esc(ago(row.observedAt)) : ''}${row.athleteId ? '<span class="more"> · last 10 and matchup ›</span>' : ''}</span></span>
       <span class="row-price"><span class="row-odds num">${odds(row.odds)}</span><span class="row-book">${row.book ? `at ${esc(row.book)}` : 'No book'}${books.length > 1 ? `<br>best of ${books.length} books` : ''}</span></span>
+      ${watchButton(P.snapshot(row))}
       ${row.state === 'open' && row.odds != null ? `<button class="add" type="button" data-add="${esc(row.id)}" aria-pressed="${inTicket}" aria-label="${inTicket ? 'Remove from ticket' : 'Add to ticket'}">${inTicket ? '✓' : '+'}</button>` : ''}
     </div>`;
   };
@@ -1251,6 +1263,7 @@
     const over = w => { if (line == null) return ''; const h = C.hits(values.slice(-w), line); return `${h.over} of ${h.n} over in the last ${h.n}`; };
     return `${back}<div class="page-head who"><span class="badge" style="background:${esc(team.color || 'var(--raised)')}">${esc(pos || '?')}</span>
         <div><h1>${esc(data.name)}</h1><p>${esc(pos || '')} · <a href="#team/${league}/${esc(entry[3])}">${esc(team.name || entry[4] || '')}</a> · ${rows.length} stored games since ${esc(String(rows[0][1]).slice(0, 4))}</p></div></div>
+      ${watchButton({type:'player',key:`player:${league}:${route.id}`,title:data.name,league,href:`#player/${league}/${route.id}`})}
       <div class="toolbar"><div class="seg" role="group">${options.map(k => `<button type="button" data-set="stat:${k}" aria-pressed="${k === key}">${esc(C.LABEL[k] || k)}</button>`).join('')}</div></div>
       <div class="tiles">${tile('Last 5', win.last5)}${tile('Last 10', win.last10)}${tile('Last 20', win.last20)}${tile('This season', win.season)}</div>
       ${next ? section(`Next: ${next.side === 'home' ? 'vs' : '@'} ${abbr(opponent)} · ${whenShort(next.game.kickoff)}`,
@@ -1726,7 +1739,7 @@
     const data = await maybe('app/today.json');
     const count = state.ticket.length;
     const link = (href, label, note) => `<a href="${href}"${href.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}><span>${label}</span><small>${note}</small></a>`;
-    return `${head('More', '')}${communityCard()}
+    return `${head('More', '')}${personalLinks()}${communityCard()}<p class="inline-links"><a href="#feedback">Help improve Kook’n →</a></p>
       <div class="card menu">${link('https://discord.gg/CvNTUUSnNz', 'Join the Discord', 'Confirmed plays early plus time-sensitive arb alerts')}${link('https://x.com/keenkooks', 'Follow on X', '@keenkooks')}${link('#lab', "Kook'n Lab", 'What’s coming next')}${link('#arbs', "Kook'n Arb Radar", 'Discord alerts and public calculator')}${link('#model', 'Model results', 'Pregame forecasts graded after the game')}${link('#ticket', 'Your ticket', count ? `${count} line${count === 1 ? '' : 's'}` : 'Parlay builder')}
       ${link('#trends', 'Season trends', '70 / 80 / 90 / 100% historical lines')}${link('#research', 'Research desk', 'Injuries and analyst notes')}${link('#scores', 'All sports scores', 'Football, basketball, baseball, hockey and soccer')}${link('#schedule', 'Posting schedule', 'When plays, research and results appear')}</div>
       ${data ? section('Data status', freshnessCard(data)) : ''}
@@ -1742,7 +1755,7 @@
         ${row('10:00 AM', 'Saveable slate sheet', 'College Saturday and NFL Sunday.')}
         ${row('10:30 AM', 'Research', 'One useful trend, matchup, injury or underdog card when evidence qualifies.')}
         ${row('Around noon', 'Official plays', 'Earlier kickoffs move up. Discord normally sees confirmed plays 10–15 minutes before X.')}
-        ${row('5:50 PM', 'Around the leagues', 'One fresh multi-sport schedule card when games are ahead. No picks implied.')}
+        ${row('On the website', 'Daily digest', 'The current published card and selected research in one compact view. New-sport social posts are paused.')}
         ${row('After results', 'Cashed and Climb updates', 'Wins may post after settlement. Losses stay in the public receipt.')}
         ${row('6:00 PM', 'Quiet-day record', 'Used only when nothing more useful posted that day.')}
       </div></div>`)}
@@ -1905,7 +1918,56 @@
 
   /* ---------- shell ---------- */
 
-  const VIEWS = { today: viewToday, games: viewGames, game: viewGame, stats: viewStats, player: viewPlayer, team: viewTeam,
+  async function viewSportHome(route) {
+    const league = state.league;
+    const [sports,history,trials] = await Promise.all([get('sports.json'),maybe('market-lab.json'),maybe('app/sport-research.json')]);
+    const name = SCORE_NAMES[league], today = route.view === 'today';
+    if (!['today','games'].includes(route.view)) {
+      const titles = {stats:'Player charts',board:'Lines',trends:'Trends',record:'Official record',model:'Model results',research:'Research'};
+      return head(`${name} · ${titles[route.view] || 'Research'}`, 'This sport is in research, not official picks yet.') + personalLinks()
+        + empty('Not available for this sport yet', 'We’ll show verified data here when coverage is ready. No football data is substituted.', '<a class="btn" href="#today">Today’s games</a>') + sportResearch(league,history,trials);
+    }
+    const days=[etDay(-1),etDay(),etDay(1)];
+    const day=today?etDay():(days.includes(state.scoresDate)?state.scoresDate:etDay());
+    return head(`${name} · ${today?'Today':'Games'}`, `${dayLabel(day+'T16:00:00Z')} · All times Eastern`)+personalLinks()
+      +(today?'<div class="notice"><b>No official plays released.</b> Scores and research are available below.</div>':seg('scoresDate',days.map(d=>[d,dayLabel(d+'T16:00:00Z')]),day))
+      +await scoreLeaguePanel(league,sports,history,trials,day,false)+sportResearch(league,history,trials)
+      +'<p class="inline-links"><a href="#games">Browse games →</a><a href="#lab">Research progress →</a></p>';
+  }
+
+  async function viewSaved() {
+    const data = await maybe('app/lines.json');
+    const items=state.watchlist.filter(inLeague);
+    return head('Saved', 'Your players, games and lines. Stored only in this browser; no account or alerts required.')+personalLinks()
+      +(!items.length?empty('Build your watchlist','Tap ☆ Save on a line, player page or game.','<a class="btn" href="#board">Browse lines</a>'):
+      `<div class="saved-list">${items.map(item=>{
+        const change=P.changes(item,data?.lines || []), current=change.current;
+        return `<article class="card saved-card"><div class="saved-heading"><a href="${esc(/^#(player|game)\//.test(item.href)?item.href:'#today')}"><b>${esc(item.title)}</b></a>${watchButton(item)}</div><p class="row-meta">${esc(item.league)} · ${esc(change.text)}</p>
+          ${item.type==='line'?`<div class="saved-quotes"><span>When saved<b>${esc(item.direction || '')} ${item.line != null ? esc(item.line):''} · ${odds(item.odds)}</b><small>${esc(item.book || '')} · ${esc(whenShort(item.savedAt))}</small></span><span>Latest captured<b>${current?`${esc(current.direction || '')} ${current.line != null ? esc(current.line):''} · ${odds(current.odds)}`:'Unavailable'}</b><small>${current?esc(whenShort(current.observedAt)):'Original quote kept above'}</small></span></div>`:''}
+          <a href="${esc(item.href)}">Open research →</a></article>`;
+      }).join('')}</div>`)+ '<p class="row-meta">Comparisons use the same book, side and market. Refreshes follow the site’s data updates—not sportsbook tick-by-tick odds. Injury context is on the linked research page. Clearing browser storage removes your saves.</p>';
+  }
+
+  async function viewDigest() {
+    const [data,notes]=await Promise.all([get('app/today.json'),maybe('desk-notes.json')]);
+    const plays=data.picks.filter(inLeague).filter(p=>C.dayOf(p.kickoff)===etDay() && !p.historicalImport);
+    gameIndex=new Map(data.games.map(g=>[g.id,g]));
+    return head('Daily digest', `${dayLabel(new Date().toISOString())} · Published plays and selected research.`)+personalLinks()
+      +section('Published card',plays.length?`<div class="plays">${plays.map(playCard).join('')}</div>`:empty('No published plays for today','Check Today for games and available research.'))
+      +deskNotesSection(notes,data.games,state.league)
+      +'<div class="notice">This is an on-demand digest, not another automatic ping. <a href="#schedule">Release schedule →</a></div>';
+  }
+
+  async function viewStart() {
+    return head('Start here', 'Two ways to use Kook’n. Pick yours.')+`<div class="two-col"><article class="card start-card"><p class="eyebrow">The quick route</p><h2>Kook’n’s plays</h2><p>Open Today for the published card and current ladder. Expand a play for its price, timing and research.</p><a class="btn" href="#today">See Today →</a></article><article class="card start-card"><p class="eyebrow">Do your own research</p><h2>Charts & trends</h2><p>Choose a sport, explore a matchup, and save players or lines to compare later.</p><a class="btn" href="#stats">Explore Charts →</a></article></div>
+      <article class="card start-card"><h2>Inside Discord</h2><p><b>Plays & Results:</b> official releases and settled results. Confirmed plays normally arrive 10–15 minutes before X.</p><p><b>General chat:</b> games, questions and feedback. <b>Wins & Bad Beats:</b> your tickets and stories.</p><p><b>The 80/20 Climb:</b> winning returns are split 20% banked / 80% carried forward. A losing step loses its active stake; previously banked money stays separate. A new step is never guaranteed.</p><p>Research is not an official play. A historical hit rate is not a promise. Check the exact current line and price yourself.</p><a class="btn" href="https://discord.gg/CvNTUUSnNz" target="_blank" rel="noopener">Open Discord ↗</a></article>${personalLinks()}<p class="inline-links"><a href="#record">Every published result →</a><a href="#feedback">Give feedback →</a></p>`;
+  }
+
+  async function viewFeedback() {
+    return head('Help improve Kook’n', 'Tell us what was useful—or what got in your way.')+`<form id="feedback-form" class="card start-card"><label>Area<select name="area"><option>Today / plays</option><option>Games / scores</option><option>Charts / trends</option><option>Saved lines</option><option>Discord</option><option>Something else</option></select></label><label>Experience<select name="rating"><option>Useful</option><option>Confusing</option><option>Something broke</option><option>Feature idea</option></select></label><label>Your feedback<textarea name="comment" maxlength="1200" rows="5" placeholder="What were you trying to do?"></textarea></label><label class="feedback-opt"><input type="checkbox" name="usage"> Include my page-use counts (section names only)</label><button class="btn" type="submit">Prepare feedback</button><p class="row-meta">Nothing is sent automatically. Counts stay in this browser and contain no player names, searches or account IDs. Review and copy your message, then send it privately to Kook’n on Discord. Don’t include account or payment details.</p><div id="feedback-output" aria-live="polite"></div></form>`;
+  }
+
+  const VIEWS = { saved:viewSaved, digest:viewDigest, start:viewStart, feedback:viewFeedback, today: viewToday, games: viewGames, game: viewGame, stats: viewStats, player: viewPlayer, team: viewTeam,
     model: viewModel, record: viewRecord, board: viewBoard, ticket: viewTicket, research: viewResearch, scores: viewScores,
     arbs: viewArbs, lab: viewLab, schedule: viewSchedule, more: viewMore, trends: viewTrends };
   document.addEventListener('click', event => {
@@ -1926,14 +1988,43 @@
   }
 
   let token = 0;
+  document.addEventListener('click', event => {
+    const button=event.target.closest('[data-watch]');
+    if(button) {
+      event.preventDefault(); event.stopImmediatePropagation();
+      const item=watchCandidates.get(button.dataset.watch);
+      if(!item) return;
+      if(state.watchlist.some(r=>r.key===item.key)) state.watchlist=state.watchlist.filter(r=>r.key!==item.key);
+      else if(state.watchlist.length<100) state.watchlist.push({...item,savedAt:new Date().toISOString()});
+      else { button.textContent='100 saved · remove one first'; return; }
+      saved.set('watchlist',state.watchlist);render(true);return;
+    }
+    const sport=event.target.closest('[data-sport-nav]');
+    if(sport) {
+      event.preventDefault();event.stopImmediatePropagation();state.league=P.league(sport.dataset.sportNav);saved.set('league',state.league);
+      if(location.hash==='#today') render();else location.hash='#today';
+    }
+  },true);
+  document.addEventListener('submit', event => {
+    if(event.target.id!=='feedback-form') return;
+    event.preventDefault();
+    const data=new FormData(event.target);
+    const usage=saved.get('usage',{});
+    const counts=Object.entries(usage || {}).filter(([key,value])=>Object.hasOwn(VIEWS,key) && Number.isInteger(value) && value>0).map(([key,value])=>`${key}: ${value}`).join(', ');
+    const message=`Kook’n feedback\nArea: ${data.get('area')}\nExperience: ${data.get('rating')}\n${data.get('comment') || ''}${data.get('usage')?'\nSection visits and actions on this device: '+counts:''}`;
+    $('#feedback-output').innerHTML=`<label>Copy this message<textarea readonly rows="7">${esc(message)}</textarea></label><a href="https://discord.gg/CvNTUUSnNz" target="_blank" rel="noopener">Send in Discord ↗</a>`;
+  });
   async function render(preserve = false) {
     const route = C.parseRoute(location.hash);
+    if(route.view === 'scores') {state.league=P.league(route.league);saved.set('league',state.league);}
     const mine = ++token;
+    if(!preserve) { const usage=saved.get('usage',{}); if(usage && typeof usage==='object' && Object.hasOwn(VIEWS,route.view)) {usage[route.view]=Math.min(10000,(Number(usage[route.view]) || 0)+1);saved.set('usage',usage);} }
     if (!preserve) chrome(route);
     const view = $('#view');
     const slow = preserve ? null : setTimeout(() => { if (mine === token) view.innerHTML = '<div class="loading">Loading…</div>'; }, 120);
     try {
-      const html = await (VIEWS[route.view] || viewToday)(route);
+      const researchView = !['NFL','CFB','ALL'].includes(state.league) && ['today','games','stats','board','trends','record','model','research'].includes(route.view);
+      const html = await (researchView ? viewSportHome : VIEWS[route.view] || viewToday)(route);
       if (mine !== token) return;
       const details = [...view.querySelectorAll('details')];
       const detailKey = el => el.dataset.persist || el.querySelector('summary')?.textContent.trim();
@@ -2032,10 +2123,8 @@
     if (!event.target.matches('[data-sport-select]')) return;
     const value = event.target.value, route = C.parseRoute(location.hash);
     if (!['ALL', ...SCORE_LEAGUES].includes(value)) return;
-    const football = ['NFL','CFB','ALL'].includes(value);
-    if (football) { state.league = value; saved.set('league', value); }
-    const destination = !football || ['scores','lab'].includes(route.view) ? `#scores/${value}`
-      : route.view === 'game' ? '#games' : ['player','team'].includes(route.view) ? '#stats' : location.hash;
+    state.league = value; saved.set('league', value);
+    const destination = P.sportRoute(route,value) || location.hash;
     if (destination === location.hash) render(); else location.hash = destination;
     event.target.blur();
   });

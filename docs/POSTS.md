@@ -92,6 +92,18 @@ not live waits for the next run (nothing goes out bare).
 
 ## The cards (graphics)
 
+### October 5 visual refresh
+
+New straight-play assets use `pick_card.modern_svg`: full player portraits or team logos, the exact selection
+as the largest element, and separate book/price and projection blocks. Mint/cyan accents rotate deterministically
+through the existing themes. Kook’n and the chef remain the brand; the wordmark leads data-heavy graphics.
+Parlay and ladder templates retain their specialized layouts. Existing published attachments stay untouched.
+
+Research assets use `research_art.svg`: portrait header, clean rows, exact sample counts and expanding row heights
+for longer fields. Use only selected verified evidence, not statistics transcribed from inspiration screenshots.
+Keep historical trends distinct from official plays; do not call a mixed-rate sheet “100%.” This changes artwork,
+not candidate selection, automatic release times, X/Discord limits, injury checks or data budgets.
+
 **Lines-first ticket design (owner approved 2026-10-02):** longshots, lottos and easy
 props use `pick_card.ticket_svg`: 1080 px wide with height that grows for every complete leg. Each full-width
 panel leads with the player/team, an 80 px wager line, and the market. Unknown market wording stays intact;

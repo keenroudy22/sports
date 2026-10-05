@@ -131,6 +131,16 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Personal tools and visual refresh (2026-10-05):** changing the sport stays in the current section; each sport
+  has its own Today view. Unsupported research stays honest and never substitutes NFL data. This supersedes the
+  older non-football selector redirect to Scores. Saved players/games/lines and original-vs-latest same-book quotes
+  live only in browser storage. Daily Digest is an on-demand website page, not a Discord subscription or new post.
+  Feedback is manually copied/sent, with optional local section counts; no external analytics added. Start Here
+  links quick plays versus research. Discord guide edits require confirmation; no new bot or channel is installed.
+  Straight-play and research artwork now uses full portraits, large exact selections, restrained wordmarks and
+  room for wrapped text. Keep the chef identity; no public avatar replacement. Every historical count/window stays
+  visible, never market a mixed-hit sheet as 100%. Existing post selection, frequency, budgets and release gates
+  are unchanged. Do not recreate already-published attachments merely to change their design.
 - **Website-first new sports (2026-10-05):** Scores is its own main route, including bare `#scores`, and the
   header selector exposes all nine leagues. NFL/CFB Games and Charts remain football research; other sports open
   their Scores/research view, never silently show NFL data. Show saved NBA/CBB pregame trial projections and trial

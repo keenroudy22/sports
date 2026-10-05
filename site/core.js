@@ -563,7 +563,7 @@
     if (view === 'defense') return { view: 'stats', tab: 'defense' };
     /* Scores is a main tab now, not an alias for the football Games board. */
     if (view === 'scores') return { view: 'scores', league: (rest[0] || 'ALL').toUpperCase() };
-    const known = ['today', 'games', 'stats', 'model', 'record', 'board', 'ticket', 'research', 'arbs', 'lab', 'schedule', 'more'];
+    const known = ['today', 'games', 'stats', 'model', 'record', 'board', 'ticket', 'research', 'arbs', 'lab', 'schedule', 'more', 'saved', 'digest', 'start', 'feedback'];
     if (known.includes(view)) return { view };
     return { view: LEGACY[view] || 'today' };
   };

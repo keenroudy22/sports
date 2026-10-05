@@ -167,7 +167,7 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None):
                 else:
                     art = (pick_card.ticket_art(item['pick'], games, player_team) if pick_card.play_kind(item['pick']) == 'parlay'
                            else pick_card.artwork(item['pick'], item['game']))
-                    pick_card.render(pick_card.svg(item['pick'], item['game'], player_side=item.get('side'), featured=item.get('featured', False), art=art), path)
+                    pick_card.render(pick_card.modern_svg(item['pick'], item['game'], player_side=item.get('side'), featured=item.get('featured', False), art=art), path)
             out[item['guid']] = path
         except Exception as error:
             log(f"card for {item['guid']} not rendered: {error}")

@@ -287,6 +287,11 @@ def art_for(row, game, fetch):
 
 
 def svg(choice, art=None):
+    import research_art
+    return research_art.svg(choice, art)
+
+
+def legacy_svg(choice, art=None):
     esc = lambda value: html.escape(str(value or ''))
     accent = choice['accent']
     rows, art = choice['rows'], art or {}
@@ -337,7 +342,7 @@ def render_due(now, folder, data_path=TODAY, detail_root=DETAILS, lines_path=LIN
     images = {i: art_for(row, games.get(row['gameId']) or {}, fetch) for i, row in enumerate(choice['rows'])}
     path = Path(folder) / f"{choice['key']}.png"
     try:
-        pick_card.render(svg(choice, images), path, size=(WIDTH, HEIGHT))
+        pick_card.render(svg(choice, images), path)
     except Exception as error:
         log(f"research card {choice['key']} not drawn: {error}")
         return {}

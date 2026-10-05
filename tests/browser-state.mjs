@@ -50,8 +50,22 @@ try {
  assert.equal(await ev(`document.querySelectorAll('[data-persist^="odds-"]').length`),0);
  assert.match(await ev(`document.querySelector('.live-freshness').textContent`),/unavailable.*last checked/);
  const count=await ev('window.__calls');await ev('window.__ticks.forEach(fn=>fn())');await pause(400);assert.equal(await ev('window.__calls'),count);
+ await call('Page.navigate',{url:base+'#today'});await ready();await pause(500);
+ for(const league of ['MLB','NBA','NFL']) {
+   await ev(`(()=>{const s=document.querySelector('[data-sport-select]');s.value='${league}';s.dispatchEvent(new Event('change',{bubbles:true}))})()`);await pause(700);
+   assert.equal(await ev('location.hash'),'#today','sport selection stays on Today');
+   assert.equal(await ev(`document.querySelector('[data-sport-select]').value`),league);
+   if(league!=='NFL') assert.match(await ev(`document.querySelector('#view h1').textContent`),new RegExp(league));
+ }
  await call('Page.navigate',{url:base+'#board/props'});await ready();await pause(300);
  assert.equal(await ev(`document.querySelector('.board-tabs [aria-current="page"]').textContent`),'Props');
+ await ev(`document.querySelector('[data-watch]').click()`);await pause(500);
+ assert.equal(await ev(`document.querySelector('#detail').open`),false,'saving does not open the prop detail');
+ assert.equal(await ev(`JSON.parse(localStorage.getItem('kr:watchlist')).length`),1);
+ await call('Page.navigate',{url:base+'#saved'});await ready();await pause(400);
+ assert.equal(await ev(`document.querySelectorAll('.saved-card').length`),1);
+ await ev(`document.querySelector('[data-watch]').click()`);await pause(400);
+ assert.equal(await ev(`JSON.parse(localStorage.getItem('kr:watchlist')).length`),0);
  await call('Page.navigate',{url:base+'#trends'});await ready();await pause(300);
  const filter=await ev(`document.querySelector('input[type="search"]')?.outerHTML || ''`);
  if(filter){await ev(`(()=>{const e=document.querySelector('input[type="search"]');e.focus();e.value='check';window.__old=e;window.__ticks.forEach(fn=>fn())})()`);await pause(400);assert.equal(await ev(`document.activeElement===window.__old && window.__old.isConnected`),true);}
