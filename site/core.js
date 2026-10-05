@@ -467,13 +467,16 @@
     const rungs = picks.filter(isLadder).filter(p => p.result || pulled(p) || (!p.entryNote && (p.status || 'active') === 'active'))
       .sort((a, b) => String(a.publishedAt || '').localeCompare(String(b.publishedAt || '')) || String(a.id).localeCompare(String(b.id)));
     let run = 1, step = 1, stake = LADDER.start, banked = 0, saved = 0, open = null, best = LADDER.start;
+    let wagered = 0, returned = 0, wins = 0, losses = 0, pushes = 0, voids = 0;
     const history = [], climbs = [];
     for (const r of rungs) {
       const info = r.ladder || {};
       if (!r.result) { open = r; continue; }
-      history.push(r);
+      const rungStake = Number(info.stake) || stake;
+      wagered += rungStake;
       if (r.result === 'win') {
-        const returned = Number(info.payout) || stake, split = ladderSplit(returned);
+        const gross = Number(info.payout) || stake, split = ladderSplit(gross);
+        returned += gross; wins += 1;
         const before = Number.isFinite(Number(info.banked)) ? Number(info.banked) : banked;
         const after = Number.isFinite(Number(info.bankedAfter)) ? Number(info.bankedAfter) : before + split.bank;
         const nextStake = Number.isFinite(Number(info.nextStake)) ? Number(info.nextStake) : split.ride;
@@ -483,9 +486,14 @@
           climbs.push({ run, steps: step - 1, final: banked + stake, banked });
           run += 1; step = 1; stake = LADDER.start; banked = 0;
         }
-      } else if (r.result === 'loss') { run += 1; step = 1; stake = LADDER.start; banked = 0; }
+      } else if (r.result === 'loss') { losses += 1; run += 1; step = 1; stake = LADDER.start; banked = 0; }
+      else if (r.result === 'push') { returned += rungStake; pushes += 1; }
+      else if (r.result === 'void') { returned += rungStake; voids += 1; }
+      history.push({ ...r, ladderTotal: { wagered, returned, net: returned - wagered } });
     }
-    return { run, step, stake, banked, saved, open, history, climbs, best, ...LADDER };
+    const accounting = { wagered, returned, net: returned - wagered,
+      atRisk: open ? Number((open.ladder || {}).stake) || stake : 0, wins, losses, pushes, voids };
+    return { run, step, stake, banked, saved, open, history, climbs, best, accounting, ...LADDER };
   };
   const dayOf = iso => {
     const d = new Date(iso);

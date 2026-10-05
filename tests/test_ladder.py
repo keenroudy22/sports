@@ -81,6 +81,9 @@ class StateTests(unittest.TestCase):
         self.assertEqual(where['open']['id'], 'r4')
         self.assertEqual([h['id'] for h in where['history']], ['r1', 'r2'])
         self.assertEqual((where['history'][0]['bankedAfter'], where['history'][0]['nextStake']), (19, 77))
+        self.assertEqual(where['accounting'], {'wagered': 127, 'returned': 96, 'net': -31, 'atRisk': 50,
+                                               'wins': 1, 'losses': 1, 'pushes': 0, 'voids': 0})
+        self.assertEqual([h['ladderTotal']['net'] for h in where['history']], [46, -31])
 
     def test_the_goal_finishes_a_climb_and_a_push_keeps_the_stake(self):
         first, latest = book_of(rung('a', '2026-09-27T12:30:00Z', 5, 675, 850, 'win',
@@ -90,6 +93,8 @@ class StateTests(unittest.TestCase):
         where = ladder.state(first, latest)
         self.assertEqual(where['climbs'], [{'run': 1, 'steps': 5, 'final': 1000, 'banked': 320, 'id': 'a'}])
         self.assertEqual((where['run'], where['step'], where['stake'], where['open']), (2, 1, 50, None))
+        self.assertEqual(where['accounting'], {'wagered': 725, 'returned': 900, 'net': 175, 'atRisk': 0,
+                                               'wins': 1, 'losses': 0, 'pushes': 1, 'voids': 0})
 
     def test_a_rung_pulled_before_its_post_counts_once_graded_and_blocks_while_ungraded(self):
         note = 'Closed to new entries at 8:46 AM ET, before its post went out: soft news'

@@ -485,6 +485,8 @@ test('the 80/20 Climb banks wins, protects the bank on a miss, finishes at $1,00
   assert.deepEqual([L.run, L.step, L.stake, L.open.id, L.history.map(r => r.id)], [2, 1, 50, 'r4', ['r1', 'r2']]);
   assert.equal(L.best, 96);
   assert.deepEqual([L.banked, L.saved, L.bankPercent, L.ridePercent], [0, 19, 20, 80]);
+  assert.deepEqual(L.accounting, { wagered: 127, returned: 96, net: -31, atRisk: 50, wins: 1, losses: 1, pushes: 0, voids: 0 });
+  assert.deepEqual(L.history.map(r => r.ladderTotal.net), [46, -31], 'every settled rung preserves the running dollar result');
   const graded = C.theLadder([rung('g', '2026-09-27T10:45:06Z', 1, 50, 94, 'win', { entryNote: 'Closed to new entries at 8:46 AM ET, before its post went out: x' })]);
   assert.deepEqual([graded.step, graded.stake, graded.banked, graded.saved, graded.history.length], [2, 75, 19, 19, 1], 'a pulled rung counts and splits once graded');
   const waiting = C.theLadder([rung('w', '2026-09-28T10:45:06Z', 2, 75, 146, null,
@@ -494,6 +496,7 @@ test('the 80/20 Climb banks wins, protects the bank on a miss, finishes at $1,00
     bankedAfter: 320, nextStake: 680, totalAfter: 1000, start: 50, goal: 1000 };
   const top = C.theLadder([rung('a', '2026-09-27T12:30:00Z', 5, 675, 850, 'win', { ladder: topInfo })]);
   assert.deepEqual([top.climbs.length, top.climbs[0].final, top.climbs[0].banked, top.run, top.stake], [1, 1000, 320, 2, 50]);
+  assert.deepEqual([top.accounting.wagered, top.accounting.returned, top.accounting.net], [675, 850, 175]);
   assert.deepEqual(C.ladderSplit(94), { bank: 19, ride: 75 });
   const fun = { id: 'f', kind: 'parlays', parlayType: 'longshot', result: 'win', odds: 600, riskUnits: 0.25, legs: [{ title: 'x' }] };
   const rec = C.theRecord([...picks, fun]);

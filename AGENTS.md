@@ -129,6 +129,11 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Lifetime Climb dollars (2026-10-04):** track the 80/20 Climb in dollars across every published rung. Show settled
+  stakes, actual returns, settled net and any currently live stake separately; a live wager does not become a win or
+  loss before settlement. Each past rung keeps the cumulative net immediately after that result, so the public can
+  follow the total over time. A winning return includes the stake, a push or void returns its stake, and a loss
+  returns zero. This accounting is derived from the append-only rung ledger and never changes the official record.
 - **Games-tab team strength ranks (2026-10-04):** every Games projection card shows each team's current model
   offense and defense rank within its league; No. 1 is strongest. Rank the margin model's offense effect from high
   to low and its opponent-points defense effect from low to high, include only active NFL/FBS teams, share ranks on

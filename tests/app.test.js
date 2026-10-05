@@ -123,6 +123,9 @@ test('the Climb shows a cashed rung, the next step state and past lines in a dro
   assert.match(source, /cashed · Step \$\{L\.step\} is being checked · not posted yet/);
   assert.match(source, /<details class="ladder-history"><summary>Past steps/);
   assert.match(source, /map\(l => l\.title\).*join\(' · '\)/);
+  assert.match(source, /All-time ladder totals/);
+  assert.match(source, /Settled stake/);
+  assert.match(source, /Running \$\{esc\(signedMoney\(total\.net\)\)\}/);
 });
 
 test('the Lab tracks season futures without presenting a public play', () => {

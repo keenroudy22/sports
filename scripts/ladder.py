@@ -85,6 +85,7 @@ def state(first, latest):
     stake, bank and step."""
     run, step, stake, banked, saved, open_rung = 1, 1, START, 0, 0, None
     history, climbs = [], []
+    wagered = returned_total = wins = losses = pushes = voids = 0
     for rung in rungs(first, latest):
         if not played(rung):
             continue
@@ -93,11 +94,15 @@ def state(first, latest):
         if not result:
             open_rung = rung
             continue
+        rung_stake = int(info.get('stake') or stake)
+        wagered += rung_stake
         item = {'id': rung['id'], 'run': info.get('run'), 'step': info.get('step'), 'stake': info.get('stake'),
                 'payout': info.get('payout'), 'odds': rung.get('odds'), 'result': result,
                 'settledAt': rung.get('settledAt')}
         if result == 'win':
             returned = int(info.get('payout') or stake)
+            returned_total += returned
+            wins += 1
             before = int(info.get('banked') if info.get('banked') is not None else banked)
             cut, next_stake = split_return(returned)
             after = int(info.get('bankedAfter') if info.get('bankedAfter') is not None else before + cut)
@@ -110,11 +115,24 @@ def state(first, latest):
                                'banked': banked, 'id': rung['id']})
                 run, step, stake, banked = run + 1, 1, START, 0
         elif result == 'loss':
+            losses += 1
             run, step, stake, banked = run + 1, 1, START, 0
+        elif result == 'push':
+            returned_total += rung_stake
+            pushes += 1
+        elif result == 'void':
+            returned_total += rung_stake
+            voids += 1
+        item['ladderTotal'] = {'wagered': wagered, 'returned': returned_total,
+                               'net': returned_total - wagered}
         history.append(item)
+    accounting = {'wagered': wagered, 'returned': returned_total, 'net': returned_total - wagered,
+                  'atRisk': int((open_rung.get('ladder') or {}).get('stake') or stake) if open_rung else 0,
+                  'wins': wins, 'losses': losses, 'pushes': pushes, 'voids': voids}
     return {'run': run, 'step': step, 'stake': stake, 'open': open_rung, 'history': history, 'climbs': climbs,
             'banked': banked, 'saved': saved, 'bankPercent': int(BANK_RATE * 100),
-            'ridePercent': 100 - int(BANK_RATE * 100), 'start': START, 'goal': GOAL}
+            'ridePercent': 100 - int(BANK_RATE * 100), 'start': START, 'goal': GOAL,
+            'accounting': accounting}
 
 
 def payout(stake, odds):

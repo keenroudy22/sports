@@ -772,6 +772,11 @@ table.data a { font-weight: 600; }
 .ladder-strip .eyebrow { color: var(--mint); }
 .ladder-big { color: var(--mint); }
 .ladder-strip .ladder-bar { width: 100%; margin-top: 8px; }
+.ladder-ledger { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px, 1fr)); gap: 1px; width: 100%; margin-top: 10px; overflow: hidden; border: 1px solid var(--line); border-radius: 10px; background: var(--line); }
+.ladder-ledger > span { display: flex; min-width: 0; padding: 8px 10px; background: var(--surface); flex-direction: column; }
+.ladder-ledger small { color: var(--faint); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.ladder-ledger b { margin-top: 2px; color: var(--text); font-size: 17px; }
+.ladder-ledger .ladder-live b { color: var(--mint); }
 .ladder-history { width: 100%; margin-top: 10px; border-top: 1px solid var(--line); }
 .ladder-history > summary { display: flex; align-items: center; justify-content: space-between; padding: 10px 2px 0; color: var(--mint); cursor: pointer; font-size: 12px; font-weight: 800; list-style: none; }
 .ladder-history > summary::-webkit-details-marker { display: none; }
@@ -780,6 +785,7 @@ table.data a { font-weight: 600; }
 .ladder-history > summary span { margin-left: 6px; color: var(--faint); }
 .ladder-history .ladder-rows { margin-top: 8px; }
 .ladder-lines { white-space: normal; line-height: 1.35; }
+.ladder-running { margin-top: 2px; font-weight: 800; }
 
 /* Phones get the Climb first and a short, scannable official card. Details stay one tap away. */
 @media (max-width: 620px) {
@@ -808,6 +814,8 @@ table.data a { font-weight: 600; }
   .ladder-strip .record-big { font-size: 30px; }
   .ladder-history .row { align-items: flex-start; gap: 8px; }
   .ladder-history .row-price { min-width: 84px; }
+  .ladder-ledger { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ladder-ledger > span { padding: 7px 9px; }
   .play-stats:has(> span:nth-child(3)), .play-stats:has(> span:nth-child(4)) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .play-stats > span:last-child:nth-child(4) { grid-column: auto; display: block; }
 }

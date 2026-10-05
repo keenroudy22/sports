@@ -133,6 +133,10 @@
   /* The ladder's climb as a bar on a log scale, so every doubling is the same step: current bank plus ride filled,
      and the total after a win shaded ahead. */
   const money = n => `$${Math.round(Number(n) || 0).toLocaleString('en-US')}`;
+  const signedMoney = n => {
+    const value = Math.round(Number(n) || 0), dollars = `$${Math.abs(value).toLocaleString('en-US')}`;
+    return value > 0 ? `+${dollars}` : value < 0 ? `−${dollars}` : dollars;
+  };
   const ladderPct = n => Math.max(0, Math.min(100, 100 * Math.log(Math.max(Number(n) || 50, 50) / 50) / Math.log(1000 / 50)));
   const ladderBar = (stake, payout) => `<span class="ladder-track" role="img" aria-label="${esc(money(stake))} on the way to $1,000">
       <i class="ladder-win" style="width:${ladderPct(payout).toFixed(1)}%"></i><i class="ladder-now" style="width:${ladderPct(stake).toFixed(1)}%"></i></span>
@@ -260,15 +264,27 @@
     return L.history.length ? `Step ${L.step} is being checked · not posted yet` : 'The first rung waits for two clean games';
   };
   const ladderRows = (L, limit = 8) => L.history.slice().reverse().slice(0, limit).map(r => {
-    const info = r.ladder || {}, paid = r.result === 'win' ? money(info.payout) : r.result === 'loss' ? '$0' : money(info.stake);
+    const info = r.ladder || {}, total = r.ladderTotal || {};
+    const paid = r.result === 'win' ? money(info.payout) : r.result === 'loss' ? '$0' : money(info.stake);
     return `<button class="row" type="button" data-pick="${esc(r.id)}">
       <span class="row-main"><span class="row-top"><span class="row-name">${MARKS[r.result] || '•'} Step ${esc(info.step || '')}</span><span class="row-meta">${esc(whenShort(r.kickoff || r.publishedAt))}</span></span>
       <span class="row-meta ladder-lines">${esc((r.legs || []).map(l => l.title).filter(Boolean).join(' · '))}</span></span>
-      <span class="row-price"><span class="row-odds num ${r.result === 'win' ? 'up' : r.result === 'loss' ? 'down' : ''}">${esc(money(info.stake))} → ${esc(paid)}</span><span class="row-book">${r.result === 'win' ? `bank +${esc(money(rungMoney(info).bankThisWin))}` : `${esc(r.book || '')} ${esc(odds(r.odds))}`}</span></span></button>`;
+      <span class="row-price"><span class="row-odds num ${r.result === 'win' ? 'up' : r.result === 'loss' ? 'down' : ''}">${esc(money(info.stake))} → ${esc(paid)}</span><span class="row-book">${r.result === 'win' ? `bank +${esc(money(rungMoney(info).bankThisWin))}` : `${esc(r.book || '')} ${esc(odds(r.odds))}`}</span>
+      <span class="row-meta ladder-running ${Number(total.net) > 0 ? 'up' : Number(total.net) < 0 ? 'down' : ''}">Running ${esc(signedMoney(total.net))}</span></span></button>`;
   }).join('');
+  const ladderLedger = L => {
+    const a = L.accounting || {}, record = `${Number(a.wins) || 0}–${Number(a.losses) || 0}${a.pushes ? `–${a.pushes}` : ''}`;
+    return `<div class="ladder-ledger" aria-label="All-time ladder totals">
+      <span><small>Rungs</small><b class="num">${esc(record)}</b></span>
+      <span><small>Settled stake</small><b class="num">${money(a.wagered)}</b></span>
+      <span><small>Returned</small><b class="num">${money(a.returned)}</b></span>
+      <span><small>Net</small><b class="num ${Number(a.net) > 0 ? 'up' : Number(a.net) < 0 ? 'down' : ''}">${esc(signedMoney(a.net))}</b></span>
+      ${a.atRisk ? `<span class="ladder-live"><small>Live now</small><b class="num">${money(a.atRisk)}</b></span>` : ''}
+    </div>`;
+  };
   const ladderHistory = L => {
     const rows = ladderRows(L);
-    return rows ? `<details class="ladder-history"><summary>Past steps <span>${L.history.length}</span></summary><div class="rows ladder-rows">${rows}</div></details>` : '';
+    return rows ? `<details class="ladder-history"><summary>Past steps <span>${L.history.length} · ${esc(signedMoney((L.accounting || {}).net))} overall</span></summary><div class="rows ladder-rows">${rows}</div></details>` : '';
   };
   /* The ladder in one compact block near the top, so a phone sees what cashed, what is next and the past lines. */
   const ladderStrip = L => {
@@ -278,7 +294,7 @@
     const after = open ? Number(info.totalAfter) || banked + Number(info.payout || 0) : banked + riding;
     return `<div class="record-strip ladder-strip"><span class="eyebrow">🪜 80/20 Climb · climb ${esc(L.run)}</span>
       <span class="num record-big ladder-big">${money(riding)}</span><span class="record-note">${esc(text)}</span>
-      <span class="ladder-bar">${ladderBar(banked + riding, after)}</span>${ladderHistory(L)}</div>`;
+      <span class="ladder-bar">${ladderBar(banked + riding, after)}</span>${ladderLedger(L)}${ladderHistory(L)}</div>`;
   };
   /* The Kook'n 80/20 Climb (C.theLadder): where the bankroll ladder stands, its bank, and the rungs played so far. */
   const ladderCard = L => {
@@ -289,8 +305,9 @@
     return `<div class="card ladder-card">
       <div class="ladder-head"><span class="ladder-title">🪜 The Kook’n 80/20 Climb</span><span class="pill pill-ladder">Climb ${esc(L.run)}</span></div>
       <p class="ladder-pitch">Bank 20% of every winning return. Ride 80%. A miss cannot take the bank.</p>
-      <div class="ladder-now-line"><b class="num">${money(riding)} riding</b><span>${esc(status)}</span></div>
+      <div class="ladder-now-line"><b class="num">${money(riding)} ${open ? 'riding' : 'next stake'}</b><span>${esc(status)}</span></div>
       <span class="ladder-bar">${ladderBar(banked + riding, open ? Number(info.totalAfter) || banked + Number(info.payout || 0) : banked + riding)}</span>
+      ${ladderLedger(L)}
       ${ladderHistory(L)}
       <p class="row-meta ladder-note">${L.climbs.length ? `Climbs finished: ${L.climbs.length}, best ${money(best)}. ` : ''}${L.saved ? `${money(L.saved)} banked across wins. ` : ''}Bank 20%. Ride 80%. A loss cannot touch the bank.</p>
     </div>`;
@@ -540,7 +557,7 @@
     const todayGames = games.filter(g => C.dayOf(g.kickoff) === C.dayOf(new Date().toISOString()));
     return `${head('Today', `${esc(todayLabel)} · ${todayGames.length} game${todayGames.length === 1 ? '' : 's'}${state.league === 'ALL' ? '' : ` · ${esc(leagueName(state.league))}`}. Plays and top lines, all in one place.`)}
       ${boardTabs('card')}
-      ${section('The 80/20 Climb', ladder.open ? `<div class="plays plays-ladder">${playCard(ladder.open)}</div>${ladderHistory(ladder)}` : ladderStrip(ladder), '<a href="#record">Climb record →</a>')}
+      ${section('The 80/20 Climb', ladder.open ? `<div class="plays plays-ladder">${playCard(ladder.open)}</div>${ladderLedger(ladder)}${ladderHistory(ladder)}` : ladderStrip(ladder), '<a href="#record">Climb record →</a>')}
       ${scorecardCard(scoreboard || {}, data.picks)}
       ${section("Today's plays", scheduled.today.length ? `<div class="plays">${scheduled.today.map(playCard).join('')}</div>`
         : empty('Nothing posted yet', 'New plays appear here when they are released.'), '<a href="#record">Every result →</a>')}
