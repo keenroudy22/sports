@@ -1019,7 +1019,8 @@
     const days = [...new Set(data.games.map(game => game.day))];
     const selectedDay = state.chartDay === 'all' ? 'all' : days.includes(state.chartDay) ? state.chartDay : days[0];
     const query = state.chartQuery.trim().toLowerCase();
-    const playerOk = player => chartHas(player, key) && (state.chartPos === 'all' || player.pos === state.chartPos)
+    const playerOk = player => chartHas(player, key) && (state.chartPos === 'all' || player.pos === state.chartPos
+      || (state.chartPos === 'RB' && player.pos === 'FB'))
       && (!query || `${player.name} ${player.pos || ''}`.toLowerCase().includes(query));
     const games = data.games.filter(game => selectedDay === 'all' || game.day === selectedDay);
     const shownGames = new Set(games.map(game => game.id));
@@ -1037,7 +1038,7 @@
     const dateOptions = [['next', 'Next slate'], ['all', 'All upcoming'], ...days.map(value => [value, dayLabel(value + 'T17:00:00Z')])];
     return `<div class="chart-controls card"><div class="chart-selects"><label>Stat<select class="pick" data-select="chartStat">${CHART_STATS.filter(stat => available.has(stat)).map(stat => `<option value="${stat}" ${stat === key ? 'selected' : ''}>${esc(C.LABEL[stat] || stat)}</option>`).join('')}</select></label>
         <label>Games<select class="pick" data-select="chartDay">${dateOptions.map(([value, label]) => `<option value="${value}" ${state.chartDay === value ? 'selected' : ''}>${esc(label)}</option>`).join('')}</select></label></div>
-      <div class="toolbar">${seg('chartPos', [['all', 'All'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE']], state.chartPos)}${seg('chartWindow', [['last5', 'Last 5'], ['last10', 'Last 10'], ['season', 'Season']], state.chartWindow)}</div>
+      <div class="toolbar">${seg('chartPos', [['all', 'All'], ['QB', 'QB'], ['RB', 'RB'], ['WR', 'WR'], ['TE', 'TE'], ['PK', 'K']], state.chartPos)}${seg('chartWindow', [['last5', 'Last 5'], ['last10', 'Last 10'], ['season', 'Season']], state.chartWindow)}</div>
       <input class="search" type="search" data-input="chartQuery" placeholder="Search this slate" value="${esc(state.chartQuery)}" aria-label="Search player charts"></div>
       <p class="row-meta chart-count">${shownPlayers.length} players with ${esc(C.LABEL[key] || key)} data · ${esc(state.chartWindow === 'season' ? String(data.season) + ' season' : state.chartWindow === 'last10' ? 'last 10 games' : 'last 5 games')}</p>
       ${cards || empty('No matching players', 'Try another stat, position, date or search.')}`;

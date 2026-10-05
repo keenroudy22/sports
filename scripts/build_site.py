@@ -627,6 +627,11 @@ def build_player_charts(league, games, forecasts, player_logs, season, lines, no
             current_lines[slot] = row
 
     projection_key = {value: key for key, value in pricing.PROJECTED.items()}
+    roster = defaultdict(list)
+    for pid, rows in player_logs.items():
+        latest = next((r for r in reversed(rows) if r.get('season') == season and r.get('seasonType') == 2), None)
+        if latest and latest.get('team') is not None and latest.get('pos') in {'QB', 'RB', 'FB', 'WR', 'TE', 'PK'}:
+            roster[str(latest['team'])].append({'id': str(pid), 'name': latest.get('name'), 'pos': latest.get('pos')})
     out_games, out_players = [], []
     seen = set()
     for game in games:
@@ -639,7 +644,10 @@ def build_player_charts(league, games, forecasts, player_logs, season, lines, no
         for side in ('away', 'home'):
             team = str(game[side]['id'])
             opponent = str(game['home' if side == 'away' else 'away']['id'])
-            for forecast in (((snapshot.get('players') or {}).get(side) or {}).get('players') or []):
+            projected = (((snapshot.get('players') or {}).get(side) or {}).get('players') or [])
+            projected_ids = {str(player.get('id')) for player in projected}
+            active = list(projected) + [player for player in roster.get(team, []) if str(player.get('id')) not in projected_ids]
+            for forecast in active:
                 pid = str(forecast.get('id') or '')
                 if not pid or (game['id'], pid) in seen:
                     continue
