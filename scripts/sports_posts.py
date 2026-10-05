@@ -5,6 +5,7 @@ art for queued posts and Discord retries. A late or stale slate is skipped.
 """
 import html
 import json
+import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import gates
@@ -58,6 +59,7 @@ def choose(data, now):
 
 
 def prepare(now, data_path=DATA, root=STORE):
+    if os.environ.get('KEENROUDY_SPORTS_SOCIAL', '0') != '1': return False
     try: data=json.loads(Path(data_path).read_text())
     except (OSError,ValueError): return False
     choice=choose(data,now)
@@ -71,6 +73,7 @@ def prepare(now, data_path=DATA, root=STORE):
 
 
 def post(now, root=STORE):
+    if os.environ.get('KEENROUDY_SPORTS_SOCIAL', '0') != '1': return None
     path=Path(root)/f'sports-slate-{sports_refresh.eastern_date(now)}.json'
     try: row=json.loads(path.read_text())
     except (OSError,ValueError): return None

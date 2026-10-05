@@ -28,6 +28,18 @@ await call('Page.addScriptToEvaluateOnNewDocument',{source:`
     return Promise.resolve({ok:true,json:async()=>({events:[event(1),event(2)]})});
   };`});
 try {
+ await call('Page.navigate',{url:base+'#scores'});await ready();await pause(800);
+ assert.equal(await ev(`document.querySelector('#tabs [aria-current="page"]').textContent`),'Scores');
+ assert.equal(await ev(`document.querySelector('[data-sport-select]').value`),'ALL');
+ assert.equal(await ev(`document.querySelectorAll('[data-sport-select] option').length`),10);
+ for (const league of ['NHL','NFL','CFB','NBA']) {
+   await ev(`(()=>{const s=document.querySelector('[data-sport-select]');s.value='${league}';s.dispatchEvent(new Event('change',{bubbles:true}))})()`);await pause(500);
+   assert.equal(await ev('location.hash'),'#scores/'+league);
+   assert.equal(await ev(`document.querySelector('[data-sport-select]').value`),league);
+   assert.equal(await ev(`document.querySelector('#tabs [aria-current="page"]').textContent`),'Scores');
+ }
+ await ev(`document.querySelector('#tabs a[href="#games"]').click()`);await pause(700);
+ assert.equal(await ev(`document.querySelector('#tabs [aria-current="page"]').textContent`),'Games');
  await call('Page.navigate',{url:base+'#scores/MLB'});await ready();await pause(800);
  // Select tomorrow when the controlled fixture crosses midnight in Eastern time.
  await ev(`(()=>{const day=KRLive.dayOf(Date.now()+3600000);document.querySelector('[data-set="scoresDate:'+day+'"]')?.click()})()`);await pause(700);

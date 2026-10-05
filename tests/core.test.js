@@ -329,7 +329,7 @@ test('pick types match the old results page', () => {
 test('old links land on the matching new pages', () => {
   const cases = {
     '': { view: 'today' }, '#sports': { view: 'today' }, '#home': { view: 'today' },
-    '#record': { view: 'record' }, '#scores': { view: 'games' }, '#props': { view: 'board' }, '#parlays': { view: 'ticket' },
+    '#record': { view: 'record' }, '#scores': { view: 'scores', league: 'ALL' }, '#props': { view: 'board' }, '#parlays': { view: 'ticket' },
     '#players': { view: 'stats' }, '#research': { view: 'research' }, '#game/NFL-401872932': { view: 'game', id: 'NFL-401872932' },
     '#player/NFL/4430878': { view: 'player', league: 'NFL', id: '4430878' }, '#player/cfb/5': { view: 'player', league: 'CFB', id: '5' },
     '#sport/MLB': { view: 'scores', league: 'MLB' }, '#stats': { view: 'stats', tab: 'charts' },

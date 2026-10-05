@@ -179,6 +179,33 @@ test('score pages refresh factual scores in the browser without treating odds or
   assert.match(source, /refresh every minute/);
 });
 
+test('Scores has its own route and a nine-league header selector', () => {
+  assert.deepEqual(C.parseRoute('#scores'), {view:'scores',league:'ALL'});
+  for(const league of ['NFL','CFB','NBA','WNBA','CBB','MLB','NHL','EPL','MLS'])
+    assert.deepEqual(C.parseRoute('#scores/'+league), {view:'scores',league});
+  const source=fs.readFileSync('site/app.js','utf8');
+  assert.match(source, /\['scores', 'Scores'\]/);
+  assert.match(source, /data-sport-select aria-label="Choose a sport"/);
+  assert.match(source, /const SCORE_LEAGUES = \['NFL', 'CFB', 'NBA', 'WNBA', 'CBB', 'MLB', 'NHL', 'EPL', 'MLS'\]/);
+  assert.match(source, /event\.target\.matches\('\[data-sport-select\]'\)/);
+  assert.doesNotMatch(source, /scores: 'games'/);
+});
+
+test('sport research distinguishes collected games, trial records and missing projections', () => {
+  const source=fs.readFileSync('site/app.js','utf8');
+  const body=source.match(/const sportResearch = \(league, history, trials\) => \{([\s\S]*?)\n  \};/)[1];
+  const render=new Function('esc','whenShort','league','history','trials',body);
+  const html=render(C.esc,C.whenShort,'MLB',{leagues:{MLB:{gamesQuoted:13,gamesGraded:11}}},null);
+  assert.match(html,/13<\/b> games with saved lines/);
+  assert.match(html,/not prediction wins/);
+  assert.doesNotMatch(html,/trial totals record/);
+  const pending=render(C.esc,C.whenShort,'NBA',null,{leagues:{NBA:{recorded:0,record:{win:0,loss:0,push:0},upcoming:[]}}});
+  assert.match(pending,/Pending/);assert.doesNotMatch(pending,/>0–0/);
+  const trial=render(C.esc,C.whenShort,'NBA',null,{leagues:{NBA:{recorded:12,record:{win:5,loss:3,push:1},upcoming:[]}}});
+  assert.match(trial,/5–3–1/);assert.match(trial,/Not official plays/);
+  assert.match(render(C.esc,C.whenShort,'MLS',null,null),/No model record or projections yet/);
+});
+
 test('More links to the public posting schedule and keeps qualifying language', () => {
   const source = fs.readFileSync('site/app.js', 'utf8');
   assert.match(source, /link\('#schedule', 'Posting schedule'/);

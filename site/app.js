@@ -23,7 +23,7 @@
     gamesScope: 'upcoming', gamesQuery: '', boardDay: 'today', boardScope: 'open', boardSort: 'best', boardQuery: '', boardMode: 'games', propMarket: 'all', playerQuery: '', recordQuery: '',
     chartStat: 'recYds', chartPos: 'all', chartWindow: 'last5', chartDay: 'next', chartQuery: '',
     stat: null, defensePos: 'WR', defenseStat: 'recYds', defenseScope: 'season', defenseOrder: 'soft',
-    logSeason: 'all', scoresLeague: 'MLB', scoresDate: null, recordScope: 'all',
+    logSeason: 'all', scoresDate: null, recordScope: 'all',
     ticket: saved.get('ticket', []), stake: saved.get('stake', { amount: 1, mode: 'units', unit: 10 }),
     arb: saved.get('arb', { first: 298, second: -195, bankroll: 181.55 }),
   };
@@ -670,7 +670,7 @@
         ${settledRecently.length ? `<details class="card upcoming-card recent-results"><summary>Last game day · ${played(recent) ? wl(recent) : 'parlays only'}${recent.units == null ? '' : ` · ${unitText(recent.units)}`}<span><a href="#record">Full record →</a></span></summary><div class="rows">${settledRecently.map(pickRow).join('')}</div></details>` : ''}
       </div><div>
         ${communityCard(true)}
-        <nav class="discovery" aria-label="Explore Kook'n"><a href="#scores/MLB"><b>Scores</b><small>7 leagues</small></a><a href="#lab"><b>Kook'n Lab</b><small>What is being tested</small></a><a href="#arbs"><b>Arb Radar</b><small>Calculator and rules</small></a></nav>
+        <nav class="discovery" aria-label="Explore Kook'n"><a href="#scores"><b>Scores</b><small>9 leagues</small></a><a href="#lab"><b>Kook'n Lab</b><small>What is being tested</small></a><a href="#arbs"><b>Arb Radar</b><small>Calculator and rules</small></a></nav>
       </div></div>`;
   }
 
@@ -707,7 +707,7 @@
     const groups = new Map();
     for (const g of games) { const day = dayLabel(g.kickoff); if (!groups.has(day)) groups.set(day, []); groups.get(day).push(g); }
     gameIndex = new Map(data.games.map(g => [g.id, g]));
-    return `${head('Games', 'Scores, projections, lines and team strength. No. 1 is strongest.')}${liveStamp(liveNow.refreshed)}
+    return `${head('Games', 'Football projections, lines and team strength. All-sport results live in Scores.')}${liveStamp(liveNow.refreshed)}
       <div class="toolbar">${seg('gamesScope', [['upcoming', 'Upcoming'], ['final', 'Recent finals']], state.gamesScope)}</div>
       <input class="search" type="search" data-input="gamesQuery" placeholder="Find a team" value="${esc(state.gamesQuery)}" aria-label="Find a team">
       ${games.length ? [...groups].map(([day, rows]) => section(day, projGrid(rows, true))).join('')
@@ -1550,20 +1550,48 @@
 
   /* ---------- multi-sport scores ---------- */
 
-  const SCORE_LEAGUES = ['NBA', 'WNBA', 'CBB', 'MLB', 'NHL', 'EPL', 'MLS'];
-  const SCORE_NAMES = { NBA: 'NBA', WNBA: 'WNBA', CBB: 'College hoops', MLB: 'MLB', NHL: 'NHL', EPL: 'Premier League', MLS: 'MLS' };
+  const SCORE_LEAGUES = ['NFL', 'CFB', 'NBA', 'WNBA', 'CBB', 'MLB', 'NHL', 'EPL', 'MLS'];
+  const SCORE_NAMES = { ALL: 'All sports', NFL: 'NFL', CFB: 'College football', NBA: 'NBA', WNBA: 'WNBA', CBB: 'College hoops', MLB: 'MLB', NHL: 'NHL', EPL: 'Premier League', MLS: 'MLS' };
+
+  const sportResearch = (league, history, trials) => {
+    if (['NFL','CFB'].includes(league)) return `<p class="inline-links"><a href="#games" data-league="${league}">Game projections →</a><a href="#model" data-league="${league}">Model results →</a></p>`;
+    const market = history?.leagues?.[league], trial = trials?.leagues?.[league];
+    const count = trial?.record || {}, graded = (count.win || 0) + (count.loss || 0) + (count.push || 0);
+    const detail = trial ? `<div class="research-metrics"><span><b>${trial.recorded}</b> projections saved</span><span><b>${graded ? `${count.win}–${count.loss}${count.push ? '–' + count.push : ''}` : 'Pending'}</b> trial totals record</span></div><p class="row-meta">${graded ? `${graded} trial leans graded at their saved lines. Not official plays.` : 'No graded trial leans yet. The record starts with saved pregame projections, not backfilled results.'}</p>`
+      : market ? `<div class="research-metrics"><span><b>${market.gamesQuoted}</b> games with saved lines</span><span><b>${market.gamesGraded}</b> finals linked</span></div><p class="row-meta">Building the history for a model. These are collected games, not prediction wins.</p>`
+      : '<p class="row-meta">Schedules and scores are live. No model record or projections yet.</p>';
+    const upcoming = (trial?.upcoming || []).filter(r => Date.parse(r.kickoff) > Date.now());
+    return `<details class="card sport-research" data-persist="research-${league}"><summary><span>Research tracker</span><span class="pill pill-reference">${trial ? 'Trial model' : market ? 'Collecting data' : 'Scores only'}</span></summary>${detail}
+      ${upcoming.length ? `<div class="rows">${upcoming.map(r => `<div class="row"><span class="row-main"><b>${esc(r.away)} @ ${esc(r.home)}</b><span class="row-market">Projected total ${esc(r.projection)} · saved line ${esc(r.line)}</span><span class="row-meta">${esc(whenShort(r.kickoff))} · captured ${esc(whenShort(r.capturedAt))}${r.sparse ? ' · thin history' : ''}</span></span></div>`).join('')}</div>` : ''}
+      <p class="row-meta">Research stays separate from the official card. No new-sport picks on socials until the trial earns a release.</p><a href="#lab">All research projects →</a></details>`;
+  };
 
   async function viewScores(route) {
-    const [data, history] = await Promise.all([get('sports.json'),maybe('market-lab.json')]);
-    const league = SCORE_LEAGUES.includes(route.league) ? route.league : state.scoresLeague;
+    const [sports, history, trials, football] = await Promise.all([get('sports.json'), maybe('market-lab.json'), maybe('app/sport-research.json'), maybe('app/today.json')]);
+    const league = SCORE_LEAGUES.includes(route.league) ? route.league : 'ALL';
+    const data = {leagues: {...sports.leagues}};
+    for (const key of ['NFL','CFB']) data.leagues[key] = {status: football ? 'ok' : 'unavailable', games: (football?.games || []).filter(g => g.league === key).map(g => ({
+      id:g.id, providerId:g.id.split('-').slice(1).join('-'), league:key, kickoff:g.kickoff, date:window.KRLive.dayOf(g.kickoff),
+      status:g.completed || g.state === 'post' ? 'final' : g.state === 'in' ? 'in_progress' : 'scheduled', statusDetail:g.status,
+      teams:{away:{...g.away,abbreviation:g.away.abbr,logo:LOGO[key](g.away)},home:{...g.home,abbreviation:g.home.abbr,logo:LOGO[key](g.home)}},
+      scores:{away:g.away.score,home:g.home.score}, source:{url:espnGame(g.id)}
+    }))};
+    const selected = league === 'ALL' ? SCORE_LEAGUES : [league];
+    const days = [...new Set([etDay(-1),etDay(),etDay(1),...selected.flatMap(key => (data.leagues[key]?.games || []).map(g => g.date))])].sort();
+    const day = days.includes(state.scoresDate) ? state.scoresDate : etDay();
+    const chips = ['ALL', ...SCORE_LEAGUES].map(key => `<a class="chip" href="#scores/${key}" aria-current="${league === key ? 'page' : 'false'}" aria-pressed="${league === key}">${esc(SCORE_NAMES[key])}</a>`).join('');
+    const panels = await Promise.all(selected.map(key => scoreLeaguePanel(key, data, history, trials, day, league === 'ALL')));
+    return `${head(league === 'ALL' ? 'Scores' : `${SCORE_NAMES[league]} scores`, 'Live scores, upcoming games and results. All times Eastern.')}
+      <div class="toolbar"><div class="seg score-leagues" aria-label="Score leagues">${chips}</div>${seg('scoresDate', days.map(d => [d, new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { weekday:'short',month:'short',day:'numeric',timeZone:'UTC' })]), day)}</div>
+      ${panels.join('')}${league !== 'ALL' ? sportResearch(league, history, trials) : '<p class="inline-links"><a href="#lab">Explore the new-sport research trackers →</a></p>'}`;
+  }
+
+  async function scoreLeaguePanel(league, data, history, trials, day, grouped) {
     const block = (data.leagues || {})[league] || {};
     const stored = (block.games || []).slice().sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
-    const days = [...new Set([etDay(-1),etDay(),etDay(1),...stored.map(g => g.date)])].sort();
-    const day = days.includes(state.scoresDate) ? state.scoresDate : etDay();
     const snapshot = day ? await liveSnapshot(league, day) : null;
     const shown = window.KRLive.mergeGames(stored, snapshot, day);
     const side = (team, score) => `<div class="game-team">${team.logo ? `<img class="score-logo" src="${esc(team.logo)}" alt="">` : ''}<span>${esc(team.abbreviation || team.shortName || DASH)}</span>${score != null ? `<span class="score" style="margin-left:auto">${esc(score)}</span>` : ''}</div>`;
-    const chips = SCORE_LEAGUES.map(key => `<a class="chip" href="#scores/${key}" aria-pressed="${league === key}" style="display:inline-flex;align-items:center">${esc(SCORE_NAMES[key])}</a>`).join('');
     const markets = g => {
       if(g.status !== 'scheduled' || Date.parse(g.kickoff) <= Date.now() || window.KRLive.freshness(snapshot) !== 'fresh' || !g.pregameOdds) return '';
       return `<details class="score-markets" data-persist="odds-${esc(g.id)}"><summary>Pregame lines · ${esc(g.pregameOdds.book)}</summary><div class="score-odds">${g.pregameOdds.rows.map(r => {
@@ -1582,18 +1610,16 @@
       }).filter(Boolean);
       return parts.length ? `<details class="score-markets" data-persist="history-${esc(g.id)}"><summary>Recent team results</summary>${parts.join('')}<p class="row-meta">Recorded finals only, not a complete season. Includes any captured preseason games.</p></details>` : '';
     };
-    return `${head(`${SCORE_NAMES[league] || league} scores`, 'Today, tomorrow and results. All times Eastern.')}${liveStamp(snapshot)}
-      <div class="toolbar"><div class="seg score-leagues" role="group">${chips}</div>
-        ${days.length ? seg('scoresDate', days.map(d => [d, new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })]), day) : ''}</div>
+    return `<section class="score-league-panel">${grouped ? `<div class="section-head"><h2>${esc(SCORE_NAMES[league])}</h2><a href="#scores/${league}">Explore →</a></div>` : ''}${liveStamp(snapshot)}
       ${shown.length ? `<div class="card">${shown.map(g => `<article><div class="game-row"><span class="game-teams score-teams">${side(g.teams.away, (g.scores || {}).away)}${side(g.teams.home, (g.scores || {}).home)}</span>
           <span class="game-mid">${esc(g.status === 'scheduled' ? whenShort(g.kickoff) : g.statusDetail || g.status)}</span>${external((g.source || {}).url, 'ESPN')}</div>${markets(g)}${recent(g)}</article>`).join('')}</div>`
-        : empty(`No ${league} games in the window`, block.status === 'ok' ? 'The provider returned no games for these dates.' : 'The feed is unavailable; the last good data is kept.')}`;
+        : `<p class="row-meta">${snapshot && !snapshot.failed ? 'No games on this date.' : snapshot?.failed ? 'No saved games on this date. Score feed temporarily unavailable.' : 'No saved games on this date. Checking the score feed.'}</p>`}</section>`;
   }
 
   /* ---------- the multi-sport buildout ---------- */
 
   async function viewLab() {
-    const [data, market] = await Promise.all([get('sports.json'), maybe('market-lab.json')]);
+    const [data, market, trials] = await Promise.all([get('sports.json'), maybe('market-lab.json'), maybe('app/sport-research.json')]);
     const available = data.leagues || {};
     const progress = league => {
       const row = ((market || {}).leagues || {})[league];
@@ -1608,6 +1634,7 @@
     };
     return `${head("Kook'n Lab", 'New sports and features in progress.')}
       <div class="lab-hero card"><p class="eyebrow">Coming next</p><h2>More sports. Same clear card.</h2><p>Football is live. Basketball and the next group of sports are being prepared before they join the public card.</p></div>
+      ${section('Trial records', `<div class="lab-grid">${['NBA','CBB','MLB','NHL'].map(key => `<div><h3>${esc(SCORE_NAMES[key])}</h3>${sportResearch(key, market, trials)}</div>`).join('')}</div>`)}
       ${section('Live-game updates', `<div class="card"><div class="row" style="cursor:default"><span class="row-main"><span class="row-top"><span class="row-name">Play progress</span><span class="pill pill-q">Testing</span></span><span class="row-market">Early hits, close calls and finals are being tested for clean live updates.</span></span></div></div>`)}
       ${section('Football experiments', `<div class="lab-grid">
         <article class="lab-card card"><div class="lab-card-head"><h3>Team totals</h3><span class="pill pill-q">Testing</span></div><p>Team total lines and projections are being added to game pages.</p></article>
@@ -1701,7 +1728,7 @@
     const link = (href, label, note) => `<a href="${href}"${href.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}><span>${label}</span><small>${note}</small></a>`;
     return `${head('More', '')}${communityCard()}
       <div class="card menu">${link('https://discord.gg/CvNTUUSnNz', 'Join the Discord', 'Confirmed plays early plus time-sensitive arb alerts')}${link('https://x.com/keenkooks', 'Follow on X', '@keenkooks')}${link('#lab', "Kook'n Lab", 'What’s coming next')}${link('#arbs', "Kook'n Arb Radar", 'Discord alerts and public calculator')}${link('#model', 'Model results', 'Pregame forecasts graded after the game')}${link('#ticket', 'Your ticket', count ? `${count} line${count === 1 ? '' : 's'}` : 'Parlay builder')}
-      ${link('#trends', 'Season trends', '70 / 80 / 90 / 100% historical lines')}${link('#research', 'Research desk', 'Injuries and analyst notes')}${link('#scores/MLB', 'All sports scores', 'NBA, WNBA, college hoops, MLB, NHL, Premier League and MLS')}${link('#schedule', 'Posting schedule', 'When plays, research and results appear')}</div>
+      ${link('#trends', 'Season trends', '70 / 80 / 90 / 100% historical lines')}${link('#research', 'Research desk', 'Injuries and analyst notes')}${link('#scores', 'All sports scores', 'Football, basketball, baseball, hockey and soccer')}${link('#schedule', 'Posting schedule', 'When plays, research and results appear')}</div>
       ${data ? section('Data status', freshnessCard(data)) : ''}
       <div class="section card" style="padding:14px"><p class="prose" style="margin:0"><b>About Kook'n.</b> Plays, lines, projections and results in one place. Every official play is graded publicly. For entertainment only.</p></div>`;
   }
@@ -1889,9 +1916,9 @@
   function chrome(route) {
     const active = TAB_FOR[route.view] || route.view;
     $('#tabs').innerHTML = TABS.map(([id, label]) => `<a href="#${id}" ${active === id ? 'aria-current="page"' : ''}>${icon(ICONS[id])}<span>${label}</span></a>`).join('');
-    $('#leagues').innerHTML = [['NFL', 'NFL'], ['CFB', 'College'], ['ALL', 'All']].map(([value, label]) =>
-      `<button type="button" data-league="${value}" aria-pressed="${state.league === value}">${label}</button>`).join('');
-    $('#leagues').hidden = ['scores','lab'].includes(route.view);
+    const chosen = route.view === 'scores' ? (SCORE_LEAGUES.includes(route.league) ? route.league : 'ALL') : ['NFL','CFB'].includes(route.league) ? route.league : state.league;
+    $('#leagues').innerHTML = `<select data-sport-select aria-label="Choose a sport">${['ALL', ...SCORE_LEAGUES].map(key => `<option value="${key}" ${chosen === key ? 'selected' : ''}>${esc(SCORE_NAMES[key])}</option>`).join('')}</select>`;
+    $('#leagues').hidden = false;
     const bar = $('#ticket-bar');
     const show = state.ticket.length > 0 && route.view !== 'ticket';
     bar.hidden = !show;
@@ -1999,6 +2026,18 @@
   document.addEventListener('change', event => {
     const select = event.target.closest('[data-select]');
     if (select) { state[select.dataset.select] = select.value; render(); }
+  });
+
+  document.addEventListener('change', event => {
+    if (!event.target.matches('[data-sport-select]')) return;
+    const value = event.target.value, route = C.parseRoute(location.hash);
+    if (!['ALL', ...SCORE_LEAGUES].includes(value)) return;
+    const football = ['NFL','CFB','ALL'].includes(value);
+    if (football) { state.league = value; saved.set('league', value); }
+    const destination = !football || ['scores','lab'].includes(route.view) ? `#scores/${value}`
+      : route.view === 'game' ? '#games' : ['player','team'].includes(route.view) ? '#stats' : location.hash;
+    if (destination === location.hash) render(); else location.hash = destination;
+    event.target.blur();
   });
 
   document.addEventListener('input', event => {

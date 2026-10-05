@@ -131,6 +131,14 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Website-first new sports (2026-10-05):** Scores is its own main route, including bare `#scores`, and the
+  header selector exposes all nine leagues. NFL/CFB Games and Charts remain football research; other sports open
+  their Scores/research view, never silently show NFL data. Show saved NBA/CBB pregame trial projections and trial
+  totals W-L-P separately from official plays; zero settled trials means pending, not a proven record. MLB/NHL
+  line/final collection counts are not prediction wins. No new model or edge is invented to fill a page.
+  Keep new-sport research on the website first. Optional multi-sport schedule social posts are paused by default
+  (`KEENROUDY_SPORTS_SOCIAL=0`); a later owner decision is needed to resume. New-sport picks still require their
+  documented trial/release gates. Existing football posts, public results and budgets do not change.
 - **Casual live-update voice (2026-10-05):** the owner wants occasional natural cheering, e.g. "9 to go. Come on!"
   alongside the exact player/line and live clock. Drop redundant "Posted play" labels on straight updates.
   Keep quieter factual updates too; never repeat the casual style consecutively. This exception permits the

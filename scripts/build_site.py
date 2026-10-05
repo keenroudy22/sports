@@ -39,6 +39,7 @@ import pricing
 import sharp_odds
 import research_views
 import season_trends
+import sport_research
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -916,6 +917,7 @@ def build(now=None):
         for team, payload in files.items():
             write(OUT / 'teams' / league / f'{team}.json', payload)
     write(OUT / 'research.json', {'generatedAt': stamp(now), **build_research(context, reports, now)})
+    write(OUT / 'sport-research.json', sport_research.build(now))
     return len(cards)
 
 

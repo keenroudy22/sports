@@ -544,7 +544,7 @@
     return p.gameId ? `#game/${encodeURIComponent(p.gameId)}` : null;
   };
 
-  const LEGACY = { '': 'today', sports: 'today', home: 'today', overview: 'today', scores: 'games', props: 'board',
+  const LEGACY = { '': 'today', sports: 'today', home: 'today', overview: 'today', props: 'board',
     parlays: 'ticket', lines: 'board', results: 'record', research: 'research', players: 'stats' };
   /* Old links keep working: #game/<id>, #player/<league>/<id>, #record, #players and the rest. */
   const parseRoute = hash => {
@@ -561,8 +561,8 @@
     if (view === 'stats') return { view: 'stats', tab: rest[0] || 'charts' };
     if (view === 'board') return { view: 'board', tab: ['props', 'favorites'].includes(rest[0]) ? rest[0] : 'games' };
     if (view === 'defense') return { view: 'stats', tab: 'defense' };
-    /* Bare #scores was the old football board; only #scores/<league> is the other-sports page. */
-    if (view === 'scores' && rest[0]) return { view: 'scores', league: rest[0].toUpperCase() };
+    /* Scores is a main tab now, not an alias for the football Games board. */
+    if (view === 'scores') return { view: 'scores', league: (rest[0] || 'ALL').toUpperCase() };
     const known = ['today', 'games', 'stats', 'model', 'record', 'board', 'ticket', 'research', 'arbs', 'lab', 'schedule', 'more'];
     if (known.includes(view)) return { view };
     return { view: LEGACY[view] || 'today' };

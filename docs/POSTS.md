@@ -19,6 +19,11 @@ post and from expiry of the original price; it never labels a due time as proof 
 
 ## The voice (the owner's rules)
 
+New sports stay website-first (Oct 5). The optional multi-sport schedule post is paused by default
+(`KEENROUDY_SPORTS_SOCIAL=0`). Scores, saved trial projections and separately labeled research records can
+appear on-site; new-sport picks still need validated trial results and their release approval before social posting.
+Existing football releases and results continue unchanged.
+
 The Oct 5 owner-approved live-progress pilot is a text-only Discord exception to the ordinary X-first mirror.
 Examples (fictional previews, never sent): `Receiver over 49.5 receiving yards` / `41 so far. 9 more
 receiving yards to reach 50.` / `8:12 - 4th · Live stats`; or the owner's requested casual version:
