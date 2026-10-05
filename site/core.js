@@ -568,6 +568,26 @@
     return { view: LEGACY[view] || 'today' };
   };
 
+  const trendWindow = (rows, window = 'season') => {
+    const size = window === 'last5' ? 5 : window === 'last10' ? 10 : null;
+    return rows.map(row => {
+      const all = Array.isArray(row.history) ? row.history : [];
+      const history = size ? all.slice(-size) : all.slice();
+      if (!history.length) return { ...row, history, hits: 0, games: 0, pushes: 0, rate: 0, window };
+      const hit = value => row.direction === 'at-least' ? value >= row.line
+        : row.direction === 'over' ? value > row.line : value < row.line;
+      const hits = history.filter(item => hit(Number(item.value))).length;
+      const pushes = row.direction === 'at-least' ? 0 : history.filter(item => Number(item.value) === Number(row.line)).length;
+      return { ...row, history, hits, games: history.length, pushes,
+        rate: Math.round(1000 * hits / history.length) / 10, window };
+    });
+  };
+  const bestTrendPrices = rows => [...rows.reduce((best, row) => {
+    const key = [row.league, row.gameId, row.athleteId, row.stat, row.kind, row.direction, row.line].join('|');
+    const old = best.get(key);
+    if (!old || (Number.isFinite(Number(row.odds)) && Number(row.odds) > Number(old.odds))) best.set(key, row);
+    return best;
+  }, new Map()).values()];
   const filterTrends = (rows, filters = {}, now = Date.now()) => rows.filter(r =>
     r.games >= Number(filters.min || 3) && r.hits * 100 >= Number(filters.rate || 80) * r.games &&
     (!filters.league || filters.league === 'ALL' || r.league === filters.league) &&
@@ -592,7 +612,7 @@
     return parts.join(' · ') || 'On the website · social delivery not yet confirmed';
   };
 
-  return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, filterTrends,
+  return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends,
     column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
     unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, modelCaution, projectionScorecard, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };

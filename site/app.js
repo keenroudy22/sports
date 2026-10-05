@@ -15,7 +15,7 @@
   };
 
   const state = {
-    trendRate: '80', trendStat: 'all', trendKind: 'all', trendMin: '3', trendQuery: '', trendDay: 'today',
+    trendRate: '80', trendStat: 'all', trendKind: 'main', trendWindow: 'season', trendQuery: '', trendDay: 'all',
     league: saved.get('league', 'ALL'),     /* a first visit shows every play, whichever sport it is in */
     gamesScope: 'upcoming', gamesQuery: '', boardDay: 'today', boardScope: 'open', boardSort: 'best', boardQuery: '', boardMode: 'games', propMarket: 'all', playerQuery: '', recordQuery: '',
     stat: null, defensePos: 'WR', defenseStat: 'recYds', defenseScope: 'season', defenseOrder: 'soft',
@@ -1474,24 +1474,29 @@
 
   async function viewTrends(route) {
     const data = await get('app/trends.json');
-    const rows = C.filterTrends(data.rows || [], { rate: state.trendRate, stat: state.trendStat,
-      kind: state.trendKind, min: state.trendMin, league: state.league, query: state.trendQuery, game: route.id,
+    const windowed = C.trendWindow(C.bestTrendPrices(data.rows || []), state.trendWindow);
+    const rows = C.filterTrends(windowed, { rate: state.trendRate, stat: state.trendStat,
+      kind: state.trendKind, min: 3, league: state.league, query: state.trendQuery, game: route.id,
       day: route.id ? 'all' : state.trendDay });
     const select = (key, title, options) => `<label>${title}<select data-select="${key}">${options.map(([v, t]) => `<option value="${v}" ${state[key] === v ? 'selected' : ''}>${t}</option>`).join('')}</select></label>`;
+    const windowLabel = state.trendWindow === 'last5' ? 'Last 5' : state.trendWindow === 'last10' ? 'Last 10' : 'This season';
     const cards = rows.slice(0, 150).map(r => `<article class="card trend-card">
       <div class="trend-top"><a href="#player/${esc(r.league)}/${esc(r.athleteId)}"><img class="trend-photo" src="https://a.espncdn.com/i/headshots/${r.league === 'NFL' ? 'nfl' : 'college-football'}/players/full/${esc(r.athleteId)}.png" alt="" loading="lazy"><b>${esc(r.player)}</b></a><span class="trend-rate">${r.rate}%<small>${r.hits}/${r.games} games</small></span></div>
-      <h2>${esc(r.title)}</h2><p class="row-meta">${esc(r.team.name || r.team.abbr || '')} · ${r.season} regular season${r.injuryStatus ? ` · Injury report: ${esc(r.injuryStatus)}` : ''}</p>
+      <h2>${esc(r.title)}</h2><p class="row-meta">${esc(r.team.name || r.team.abbr || '')} · ${esc(windowLabel)}${r.injuryStatus ? ` · Injury report: ${esc(r.injuryStatus)}` : ''}</p>
       <p>${r.kind === 'milestone' ? '<span class="pill">Stat milestone</span> <span class="row-meta">No verified price</span>' : `<span class="pill pill-ours">${r.kind === 'alternate' ? 'Alternate' : 'Main line'}</span> <b>${odds(r.odds)} ${esc(r.book)}</b> <span class="row-meta">captured ${esc(ago(r.observedAt))} · verify in book</span>`}</p>
       <a class="row-meta" href="#game/${esc(r.gameId)}">${esc(r.matchup)} · ${esc(whenShort(r.kickoff))} →</a>
-      <details><summary>See the ${r.games} recorded games${r.games < 5 ? ' · small sample' : ''}</summary><p class="row-meta">All recorded appearances this season, not head-to-head history. ${r.teamGames} current-team games stored; missing appearances are not assumed played. Injury exits count when a stat is recorded. ${r.pushes ? `${r.pushes} statistical ties counted in the denominator, not as hits.` : ''}</p><div class="trend-log">${r.history.map(h => `<span><small>${esc(h.date)}</small><b>${h.value}</b></span>`).join('')}</div><p class="row-meta">Roster inferred from last recorded appearance. Check current role, injury status and opponent strength, especially in college.</p><a href="#player/${esc(r.league)}/${esc(r.athleteId)}">Full player research →</a></details>
+      <details><summary>See ${esc(windowLabel.toLowerCase())}: ${r.hits}/${r.games} hit${r.games < 5 ? ' · small sample' : ''}</summary><p class="row-meta">Recorded regular-season appearances, not head-to-head history. Missing appearances are not assumed played. Injury exits count when a stat is recorded. ${r.pushes ? `${r.pushes} statistical ties counted in the denominator, not as hits.` : ''}</p><div class="trend-log">${r.history.map(h => `<span><small>${esc(h.date)}</small><b>${h.value}</b></span>`).join('')}</div><p class="row-meta">Check current role, injury status and opponent strength, especially in college.</p><a href="#player/${esc(r.league)}/${esc(r.athleteId)}">Full player research →</a></details>
     </article>`).join('');
-    return `${head('Season trends', 'Find the numbers players have cleared—not a promise about their next game.')}${boardTabs('trends')}
-      <div class="card trend-controls"><p class="eyebrow">Historical hit rate</p>${seg('trendRate', [['70','70%+'],['80','80%+'],['90','90%+'],['100','100%']], state.trendRate)}
-      <div class="trend-selects">${select('trendStat','Stat',[['all','All stats'],['rec','Receptions'],['recYds','Receiving yards'],['rushYds','Rushing yards'],['passYds','Passing yards'],['car','Carries'],['att','Pass attempts'],['cmp','Completions']])}${select('trendKind','Line type',[['all','All types'],['main','Main lines'],['alternate','Alternates'],['milestone','Stat milestones']])}${select('trendMin','Minimum sample',[['3','3 games'],['5','5 games'],['8','8 games']])}</div>
-      ${route.id ? '' : seg('trendDay', [['today','Today'],['all','All upcoming']], state.trendDay)}<input aria-label="Search players or teams" placeholder="Search player or team" data-input="trendQuery" value="${esc(state.trendQuery)}"></div>
-      <p class="row-meta">${rows.length} matching trends · updated ${esc(ago(data.generatedAt))}. Upcoming games only. Verify current prices.${route.id ? ' <a href="#trends">Show all games →</a>' : ''}</p>
-      <details class="card trend-method"><summary>How to read this</summary><p>Hit rate uses every stored regular-season appearance. 100% means the player cleared this line in every listed game—not that it is guaranteed tonight. Milestones are stats only; verify every sportsbook line and injury status.</p></details>
-      ${cards ? `<div class="trend-grid">${cards}</div>${rows.length > 150 ? '<p class="row-meta">Showing the first 150. Narrow by stat, player or line type to see more.</p>' : ''}` : empty('No matching season trends', 'Try a lower hit rate, another stat or a smaller sample. Missing or old quotes are not filled in.')}`;
+    return `${head('Trends', 'Main lines first. Switch the history window to see what has held up lately.')}${boardTabs('trends')}
+      <div class="card trend-controls">
+        <div class="trend-filter-group"><p class="eyebrow">Hit rate</p>${seg('trendRate', [['70','70%+'],['80','80%+'],['90','90%+'],['100','100%']], state.trendRate)}</div>
+        <div class="trend-filter-group"><p class="eyebrow">History</p>${seg('trendWindow', [['season','This season'],['last10','Last 10'],['last5','Last 5']], state.trendWindow)}</div>
+        <div class="trend-filter-group"><p class="eyebrow">Line</p>${seg('trendKind', [['main','Main lines'],['alternate','Alternates'],['milestone','Milestones']], state.trendKind)}</div>
+        <div class="trend-selects">${select('trendStat','Stat',[['all','All stats'],['rec','Receptions'],['recYds','Receiving yards'],['rushYds','Rushing yards'],['passYds','Passing yards'],['car','Carries'],['att','Pass attempts'],['cmp','Completions']])}</div>
+      ${route.id ? '' : `<div class="trend-filter-group"><p class="eyebrow">Games</p>${seg('trendDay', [['all','All upcoming'],['today','Today']], state.trendDay)}</div>`}<input aria-label="Search players or teams" placeholder="Search player or team" data-input="trendQuery" value="${esc(state.trendQuery)}"></div>
+      <p class="row-meta">${rows.length} ${state.trendKind === 'main' ? 'main-line ' : ''}trend${rows.length === 1 ? '' : 's'} · ${esc(windowLabel)} · updated ${esc(ago(data.generatedAt))}. Verify current prices.${route.id ? ' <a href="#trends">Show all games →</a>' : ''}</p>
+      <details class="card trend-method"><summary>How to read this</summary><p>The fraction is exact for the selected history window. 100% means the player cleared the listed number in every recorded game shown—not that it is guaranteed next game. Main lines and alternates require a recent sportsbook quote; milestones are unpriced stats.</p></details>
+      ${cards ? `<div class="trend-grid">${cards}</div>${rows.length > 150 ? '<p class="row-meta">Showing the first 150. Narrow by stat, player or line type to see more.</p>' : ''}` : empty('No trends match these filters', 'Try another history window, hit rate, stat or line type. Missing and old quotes stay hidden.')}`;
   }
 
   async function viewMore() {

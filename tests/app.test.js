@@ -101,6 +101,15 @@ test('board navigation highlights the selected line view and offers a fast favor
   assert.match(source, /No best line right now/);
 });
 
+test('Trends opens on upcoming main lines and supports season, Last 10 and Last 5 windows', () => {
+  const source = fs.readFileSync('site/app.js', 'utf8');
+  assert.match(source, /trendKind: 'main', trendWindow: 'season'.*trendDay: 'all'/);
+  assert.match(source, /C\.trendWindow\(C\.bestTrendPrices\(data\.rows \|\| \[\]\), state\.trendWindow\)/);
+  assert.match(source, /\['season','This season'\],\['last10','Last 10'\],\['last5','Last 5'\]/);
+  assert.match(source, /\['main','Main lines'\],\['alternate','Alternates'\],\['milestone','Milestones'\]/);
+  assert.doesNotMatch(source.slice(source.indexOf('async function viewTrends'), source.indexOf('async function viewMore')), /trendMin/);
+});
+
 test('game pages put favorites before secondary model reads and do not publish model methodology', () => {
   const source = fs.readFileSync('site/app.js', 'utf8');
   const game = source.slice(source.indexOf('async function viewGame(route)'), source.indexOf('const finalSection'));

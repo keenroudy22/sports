@@ -410,7 +410,7 @@ test('app.js parses', () => {
   assert.match(source, /Lines we like/);
   assert.match(source, /No highlighted line at the current price/);
   assert.match(source, /Line .*Projection .*higher/);
-  assert.match(source, /Historical hit rate/);
+  assert.match(source, />Hit rate</);
   assert.match(source, /Fresh prices/);
 });
 

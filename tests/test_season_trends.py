@@ -64,9 +64,16 @@ class SeasonTrendsTests(unittest.TestCase):
     def test_social_full_season_priced_five_games_and_guard(self):
         g, info, q = self.fixture()
         rows = T.build([g], info, [], {'NFL-1': q}, NOW)
+        # Social trend boards use current main lines, never easy alternates.
+        main = dict(next(r for r in rows if r['kind'] == 'alternate'), kind='main')
+        rows.append(main)
         card = R.season_candidate([g], {'NFL-1': {'seasonTrends': rows}}, NOW)
         self.assertEqual(card['kind'], 'season')
+        self.assertEqual(card['title'], '100% TREND BOARD')
+        self.assertTrue(all(r['kind'] == 'main' for r in card['rows']))
         self.assertIn('5/5', card['text'])
+        self.assertIn("KOOK'N 100% TREND BOARD", card['text'])
+        self.assertNotIn('@Playbook', card['text'])
         self.assertEqual(receipts.guard({'text': card['text']}), [])
         self.assertIn('5/5 this season', R.svg(card))
         for r in rows:

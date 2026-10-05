@@ -2,9 +2,9 @@
 
 This is editorial packaging, never candidate selection. It reads the same built
 page payloads visitors see and refuses stale prices. The public priority is:
-fresh outright underdogs, priced underdog spreads, exact-line matchup history,
-then observed end-zone work. A missing view produces no post; nothing is
-invented to fill a calendar.
+fresh outright underdogs, priced underdog spreads, fresh main-line season trends,
+exact-line matchup history, then observed end-zone work. A missing view produces
+no post; nothing is invented to fill a calendar.
 """
 import html
 import json
@@ -200,7 +200,7 @@ def season_candidate(games, details, now):
     rows = []
     for game in games:
         for row in (details.get(game['id']) or {}).get('seasonTrends') or []:
-            if (row.get('kind') not in ('main', 'alternate') or row.get('games', 0) < 5
+            if (row.get('kind') != 'main' or row.get('games', 0) < 5
                     or row.get('injuryStatus')
                     or row.get('hits', 0) * 100 < row['games'] * 80 or row.get('book') not in PUBLIC_BOOKS
                     or not current(row.get('observedAt'), now, timedelta(hours=4))):
@@ -217,13 +217,17 @@ def season_candidate(games, details, now):
             break
     if not unique:
         return None
+    floor = min(100 * r['hits'] / r['games'] for r in unique)
+    bucket = 100 if floor == 100 else 90 if floor >= 90 else 80
+    bucket_label = '100%' if bucket == 100 else f'{bucket}%+'
     shown = [{**r, 'title': r['player'], 'price': r['title'],
               'metric': f"{r['hits']}/{r['games']} this season · {r['rate']:g}% historical",
               'detail': f"{price(r['odds'])} {r['book']} · {r['season']} regular season"} for r in unique]
-    return {'kind': 'season', 'title': 'SEASON TRENDS', 'kicker': 'THE FULL SEASON · NOT A WIN PROBABILITY',
+    return {'kind': 'season', 'title': f'{bucket_label} TREND BOARD', 'kicker': 'CURRENT MAIN LINES · FULL-SEASON HISTORY',
             'accent': CYAN, 'rows': shown,
-            'text': '\n'.join(['📊 SEASON TRENDS', *[f"{r['player']}: {r['hits']}/{r['games']}" for r in unique],
-                               'Exact lines + prices on the graphic.', 'History, not a prediction or official play.',
+            'text': '\n'.join([f'📈 KOOK\'N {bucket_label} TREND BOARD',
+                               *[f"{r['player']} · {r['title']} · {r['hits']}/{r['games']}" for r in unique],
+                               'Fresh main lines on the graphic.', 'History, not a prediction or official play. Check current prices.',
                                'keenroudy.com/sports/#trends', tags(unique)])}
 
 

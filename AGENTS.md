@@ -156,12 +156,14 @@ Handy commands (from `~/Projects/sports`):
   Discord keeps the wager, odds, card and timing but removes the X-only mention, including pending older mirrors.
   Do not delete or repost existing publications just to change the tag.
 - **Season Trends (2026-10-04):** the Board and game pages link to a full-season player threshold browser with
-  70/80/90/100% minimum-hit filters, stat/type/sample filters and player research links. Show exact hits/games,
+  70/80/90/100% minimum-hit filters, stat/type/history-window filters and player research links. Open on fresh
+  main lines across all upcoming games; let readers switch among This Season, Last 10 and Last 5. Show exact hits/games,
   regular-season recorded appearances only; unknown stats suppress the row rather than inflate its rate.
   Main and alternate lines require captured prices no older than four hours; unpriced statistical milestones
   are explicitly separate and are never sportsbook offers or picks. Use existing stores, with no new requests.
   At least three recorded games on-site; at least five and a fresh public-book quote for social research.
-  Season trends get first consideration on even-numbered dates in the existing optional research slot,
+  X trend boards use fresh main lines only, include the exact line and full-season count, carry Kook'n branding,
+  never tag Playbook and remain research rather than official plays. Season trends get first consideration on even-numbered dates in the existing optional research slot,
   with existing editorial priority on odd dates and trends as a fallback. At most one research post per date
   across all families, including already queued posts. Nothing changes official selection or the record.
 - **No straight/parlay player stacking (2026-10-04):** block reuse of the same player in the same game across
@@ -370,7 +372,8 @@ Handy commands (from `~/Projects/sports`):
   reach or account-risk shortcuts. One relevant league hashtag per post is enough. The ladder is a continuing story,
   not a claim of guaranteed profit. On a multi-play card, one short text-only conversation prompt goes between the
   first two plays; when a Climb rung or fun ticket is already ready, that prompt becomes a factual teaser for it.
-  Single-play days get no filler. No automated replies, likes, follows, unfollows or trend posts; no bought or
+  Single-play days get no filler. No automated replies, likes, follows or unfollows; the only automated trend post is
+  the approved evidence-first main-line board in the existing one-research-post daily slot. No bought or
   exchanged engagement. `docs/GROWTH.md` has the baseline, weekly scorecard and experiments.
 - **Injury-angle posts** (2026-09-29): up to two timely text posts a day when ESPN lists a top QB/RB/WR/TE out,
   doubtful or inactive, a newer projection has removed them and redistributed the role, and a sportsbook price
