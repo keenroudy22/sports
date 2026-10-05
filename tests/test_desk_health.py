@@ -325,6 +325,122 @@ class DeskHealthTests(unittest.TestCase):
             self.assertEqual(before, {p: p.read_bytes() for p in (root / 'site').rglob('*') if p.is_file()})
             self.assertFalse(list(root.rglob('*.tmp')))
 
+    def post(self, identity, **values):
+        return {'id': identity, 'dueAt': H.gates.stamp(NOW - timedelta(hours=1)),
+                'bufferPostId': 'stored-provider-id', **values}
+
+    def test_delivery_cohorts_deduplicate_per_channel_without_summing_snapshots(self):
+        sent = self.post('one', sentAt=H.gates.stamp(NOW - timedelta(minutes=59)),
+                         discord={'state': 'sent'})
+        failed = self.post('two', error='private response', discord={'state': 'failed', 'error': 'private webhook'})
+        book = {'posts': [sent, dict(sent), failed]}
+        result = H.delivery_cohorts(book, NOW)
+        self.assertEqual(result, H.delivery_cohorts(book, NOW), 'repeat checks are deterministic, not accumulated')
+        for cohort in result['cohorts']:
+            self.assertEqual((cohort['duePosts'], cohort['duplicateRowsIgnored']), (2, 1))
+            for counts in cohort['channels'].values():
+                self.assertEqual((counts['eligibleDue'], counts['confirmed'], counts['recordedFailure']), (2, 1, 1))
+        for secret in ('one', 'two', 'private response', 'private webhook', 'stored-provider-id'):
+            self.assertNotIn(secret, json.dumps(result))
+
+    def test_delivery_cohorts_use_due_time_not_sent_time_and_have_exact_boundaries(self):
+        rows = [self.post('week-boundary', dueAt=H.gates.stamp(NOW - timedelta(days=7))),
+                self.post('before-week', dueAt=H.gates.stamp(NOW - timedelta(days=7, seconds=1))),
+                self.post('month-boundary', dueAt=H.gates.stamp(NOW - timedelta(days=28))),
+                self.post('old-but-confirmed-now', dueAt=H.gates.stamp(NOW - timedelta(days=29)), sentAt=H.gates.stamp(NOW)),
+                self.post('future', dueAt=H.gates.stamp(NOW + timedelta(seconds=1))),
+                self.post('exact-now', dueAt=H.gates.stamp(NOW))]
+        result = H.delivery_cohorts({'posts': rows}, NOW)
+        week, month = result['cohorts']
+        self.assertEqual((week['duePosts'], month['duePosts']), (2, 4))
+        self.assertEqual((week['futureDuePostsExcluded'], month['futureDuePostsExcluded']), (1, 1))
+        self.assertEqual((week['olderDuePostsExcluded'], month['olderDuePostsExcluded']), (3, 1))
+        self.assertEqual(week['channels']['x']['pending'], 1)
+        self.assertEqual(week['channels']['x']['overdueUnconfirmed'], 1)
+
+    def test_delivery_cohort_holds_and_cancellations_do_not_erase_already_sent_discord(self):
+        cancelled = H.gates.stamp(NOW - timedelta(minutes=30))
+        rows = [self.post('withheld', precheck={'result': 'withheld'}, cancelledAt=cancelled),
+                self.post('cancelled', cancelledAt=cancelled),
+                self.post('discord-public-before-pull', cancelledAt=cancelled, precheck={'result': 'withheld'},
+                          discord={'state': 'sent', 'sentAt': H.gates.stamp(NOW - timedelta(hours=1, minutes=15))})]
+        cohort = H.delivery_cohorts({'posts': rows}, NOW)['cohorts'][0]
+        x, discord = cohort['channels']['x'], cohort['channels']['discord']
+        self.assertEqual((x['eligibleDue'], x['withheld'], x['cancelled']), (0, 2, 1))
+        self.assertEqual((discord['eligibleDue'], discord['confirmed'], discord['withheld'], discord['cancelled']), (1, 1, 1, 1))
+
+    def test_delivery_cohort_unknown_identity_time_and_mirror_eligibility_stay_unknown(self):
+        rows = [self.post('', sentAt=H.gates.stamp(NOW)), self.post('no-time', dueAt=None),
+                self.post('bad-time', dueAt='not-a-timestamp'), self.post('no-mirror'),
+                self.post('no-intent', bufferPostId=None), 'invalid row']
+        result = H.delivery_cohorts({'posts': rows}, NOW)
+        self.assertEqual(result['state'], 'partial')
+        self.assertEqual((result['unknownIdentityRows'], result['unknownDueIdentities'], result['invalidRows']), (1, 2, 1))
+        channels = result['cohorts'][0]['channels']
+        self.assertEqual((channels['x']['eligibleDue'], channels['x']['unknownEligibility']), (1, 1))
+        self.assertEqual((channels['discord']['eligibleDue'], channels['discord']['unknownEligibility']), (0, 2))
+        self.assertFalse(channels['x']['knownRowsClassified'])
+
+    def test_delivery_cohort_conflicting_duplicates_are_order_independent_and_unknown(self):
+        rows = [self.post('state-conflict'), self.post('state-conflict', sentAt=H.gates.stamp(NOW)),
+                self.post('time-conflict'), self.post('time-conflict', dueAt=H.gates.stamp(NOW - timedelta(days=10)))]
+        result = H.delivery_cohorts({'posts': rows}, NOW)
+        self.assertEqual(result, H.delivery_cohorts({'posts': list(reversed(rows))}, NOW))
+        self.assertEqual(result['unknownDueIdentities'], 1)
+        x = result['cohorts'][0]['channels']['x']
+        self.assertEqual((x['eligibleDue'], x['unknownEligibility'], x['duplicateConflicts']), (0, 1, 1))
+
+    def test_delivery_cohort_future_or_invalid_confirmation_is_not_success(self):
+        rows = [self.post('future-time', sentAt=H.gates.stamp(NOW + timedelta(seconds=1)),
+                          discord={'state': 'sent', 'sentAt': H.gates.stamp(NOW + timedelta(seconds=1))}),
+                self.post('invalid-time', sentAt='bad', discord={'state': 'sent', 'sentAt': 'bad'})]
+        channels = H.delivery_cohorts({'posts': rows}, NOW)['cohorts'][0]['channels']
+        for counts in channels.values():
+            self.assertEqual((counts['eligibleDue'], counts['unknown'], counts['confirmed']), (2, 2, 0))
+
+    def test_delivery_cohort_discord_waits_for_x_without_inventing_a_ready_time(self):
+        rows = [self.post('waiting-for-x', discord={'state': 'pending'}),
+                self.post('future-ready', discord={'state': 'pending', 'readyAt': H.gates.stamp(NOW + timedelta(minutes=5))}),
+                self.post('past-ready', discord={'state': 'pending', 'readyAt': H.gates.stamp(NOW - timedelta(minutes=20))})]
+        counts = H.delivery_cohorts({'posts': rows}, NOW)['cohorts'][0]['channels']['discord']
+        self.assertEqual((counts['eligibleDue'], counts['pending'], counts['overdueUnconfirmed'], counts['recordedFailure']), (3, 2, 1, 0))
+
+    def test_missing_corrupt_log_has_unknown_cohorts_not_empty_success(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            self.fixture(root)
+            data = H.summary(root, root / 'private', root, NOW)
+            self.assertEqual(data['deliveryCohorts']['state'], 'unknown')
+            path = root / 'data/x-posted.json'
+            path.write_text('{broken')
+            data = H.summary(root, root / 'private', root, NOW)
+            self.assertEqual(data['deliveryCohorts']['state'], 'unknown')
+            self.assertEqual(data['deliveryCohorts']['cohorts'], [])
+            self.write(root, 'data/x-posted.json', {'posts': []})
+            data = H.summary(root, root / 'private', root, NOW)
+            self.assertEqual(data['deliveryCohorts']['state'], 'available')
+            self.assertEqual(data['deliveryCohorts']['cohorts'][0]['channels']['x']['eligibleDue'], 0)
+            self.assertEqual(data['desk']['selection'], 'no-new-play')
+
+    def test_delivery_cohort_html_and_weekly_text_are_private_allowlisted_and_caveated(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            self.fixture(root)
+            self.write(root, 'data/x-posted.json', {'posts': [self.post('private-id', error='secret-error', text='private-text')]})
+            before = (root / 'data/x-posted.json').read_bytes()
+            with mock.patch('urllib.request.urlopen', side_effect=AssertionError('no network')), \
+                    mock.patch('subprocess.run', side_effect=AssertionError('no process/model')):
+                data = H.summary(root, root / 'private', root, NOW)
+                page, weekly = H.html_report(data), H.markdown(data)
+            for secret in ('private-id', 'secret-error', 'private-text', 'stored-provider-id'):
+                self.assertNotIn(secret, json.dumps(data) + page + weekly)
+            self.assertIn('Distinct scheduled-post outcomes', page)
+            self.assertIn('0/1', page)
+            self.assertIn('never add them', page)
+            self.assertIn('not on-time performance', weekly)
+            self.assertIn('No-new-play is not a delivery event', weekly)
+            self.assertEqual(before, (root / 'data/x-posted.json').read_bytes())
+
 
 if __name__ == '__main__':
     unittest.main()

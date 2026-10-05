@@ -116,6 +116,16 @@
     const i = column(keys, key), value = i < 0 ? null : row[i];
     return Number.isFinite(value) ? value : null;
   };
+  /* Season is the feed's season, not the calendar year of a January game. */
+  const playerHistory = (rows, currentSeason, season = 'current', window = 'all', before = null) => {
+    const selected = season === 'all' ? null : Number(season === 'current' ? currentSeason : season);
+    const limit = {last5:5,last10:10,last20:20}[window];
+    const list = (rows || []).filter(row => row[4] === 2 &&
+      (season === 'all' || Number.isInteger(selected) && selected > 1900 && Number(row[2]) === selected) &&
+      (!before || String(row[1]) < String(before).slice(0,10)))
+      .slice().sort((a,b) => String(a[1]).localeCompare(String(b[1])));
+    return limit ? list.slice(-limit) : list;
+  };
   const statValue = (value, key, digits = 1) => !Number.isFinite(value) ? DASH
     : key === 'snapPct' ? `${Math.round(value * 100)}%` : fixed(value, digits);
 
@@ -700,7 +710,7 @@
   };
 
   return { RESEARCH_DEFAULTS, researchPreferences, researchReset, chartHistory, chartGeometry, thresholdResult, quoteStatus, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, deskNotes,
-    column, cell, observedCell, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
+    column, cell, observedCell, playerHistory, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
     unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, modelCaution, projectionScorecard, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };
 });

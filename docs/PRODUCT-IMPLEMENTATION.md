@@ -17,7 +17,7 @@ Current sources, free budgets and approved release categories only. Full plan: o
 | Navigation and Today | Five destinations; Scores alias opens Games Live; other aliases survive; sport context, back navigation, opening phone screen and no clipping. | Implemented. Local phone checks confirm the published play appears first and sport selection preserves its section. |
 | Research workspace | Player/team/market search; main-line default; Season/L5/L10 samples; persistent filters; Saved distinct from ticket-building. | Implemented; local search/sample/back and trend filtering checks passed. Unsupported sports remain explicit. |
 | Captions and graphic variation | Overlong text has a factual bounded fallback; readable long-name cards; green/red reflect the selected side, with non-color cues. | Implemented within current categories/caps. Cached end-zone caption now fits 239 characters with all four exact preview rows. Aggregate outcome strips do not invent game order. |
-| Private operations | Distinguish qualified/no-play/held/queued/delivered; identify overdue/failed output; unchanged healthy polls remain quiet. | Snapshot checks shipped in b4770d04 on the existing half-hour precheck, with local-only HTML/JSON, two-observation change alerts and weekly evidence. Prospective daily reliability measurement is added in the follow-up below, pending its own release. No new feed/model calls. Private Discord is prepared but disabled. |
+| Private operations | Distinguish qualified/no-play/held/queued/delivered; identify overdue/failed output; unchanged healthy polls remain quiet. | Snapshot checks shipped in b4770d04; prospective daily reliability shipped in 164df194. Both use existing jobs and local-only evidence. Distinct delivery cohorts are implemented in the next follow-up, pending their own release. No new feed/model calls. Private Discord is prepared but disabled. |
 | Deployment safety | Both Python and Node exit statuses stop promotion; lock held during sync/tests/promotion; isolated offline rehearsal exercises real `_run`. | Shipped in b4770d04 after both suites and the stored-input rehearsal passed. Every follow-up revision must repeat its relevant verification and the deployment gates. |
 | Rights and membership preparation | Source-rights register, measurable gates, processor and entitlement design documented; no billing enabled. | Documents prepared; external permission and elapsed-time gates remain pending. |
 
@@ -72,7 +72,7 @@ Report the final integrated test counts, deployed revision, publication result a
 
 The shipped snapshot/change alerts did not retain a freshness denominator. `scripts/desk_health.py` now adds local
 daily evidence on the **existing** half-hour precheck, without a new job, source/model request or notification rule.
-This follow-up is implemented and focused tests pass; its production deployment must be recorded separately.
+This follow-up shipped in 164df194; its production receipt is recorded below.
 
 - Private journal: `~/.config/keenroudy/desk-health-reliability.json`, mode 0600, beside the existing private
   health HTML/JSON. It is never included in the site, a public payload, a post or an analytics provider.
@@ -97,7 +97,7 @@ This follow-up is implemented and focused tests pass; its production deployment 
   Run `/opt/homebrew/bin/python3 -m unittest discover -s tests -p test_desk_health.py` in the development worktree.
 
 The four-week gate remains **not assessed**. This supplies the sampled-freshness denominator only. Critical display
-incidents, settled-play reconciliation, actual delivery event rates, coverage gaps and four genuine observed weeks
+incidents, settled-play reconciliation, delivery-cohort review, coverage gaps and four genuine observed weeks
 still require review; an observed 95% fraction alone cannot approve subscriptions or a model.
 
 ## Follow-up: research usability and truthful explanations
@@ -116,7 +116,46 @@ still require review; an observed 95% fraction alone cannot approve subscription
   Stored-input rehearsal at slot 1000 returned exit 0 / outcome `ok`, with no outside writes or private reads.
   Browser checks confirmed Chart date persistence, all three resets, zero-result chart filtering, and no page
   overflow in inspected research views at 320/375/1440 px. No browser errors were reported in that session.
-  These are pre-release results; the final deployment receipt must be recorded separately.
+  These test results belong to the release receipt below, not subsequent staged changes.
+
+## Shipped reliability and research follow-up · October 5
+
+- Production revision: `164df194e1d62d2a398a8e6b034d7a86d2d5d981`.
+- [Hosted publish run 37325485646](https://github.com/keenroudy22/sports/actions/runs/37325485646) completed
+  successfully at `2026-10-05T14:35:15Z`; the live release receipt was verified.
+- Integrated release evidence above: 848 Python tests run, two skipped, no failures; 85 frontend tests passed;
+  stored-input rehearsal exited 0 with no outside writes/private reads.
+- A read-only check found the private mode-0600 reliability journal had begun at `2026-10-05T14:33:41Z`.
+  Its first sample contained two required checks, both fresh, no observed gap and a no-new-play desk outcome.
+  This proves collection started, not four-week reliability or readiness to charge.
+
+## Pending release: distinct delivery-outcome cohorts
+
+`scripts/desk_health.py` adds two private views of the **current stored post log**: distinct publication IDs whose
+saved `dueAt` is between the observation time minus 7 or 28 days and that time, inclusive. Each channel counts its
+own event. These are recomputed evidence cohorts, never totals added from repeated health snapshots. The seven-day
+cohort is contained in the 28-day cohort, so the two must not be added together.
+
+- The denominator is known eligible due posts per channel. Confirmed, recorded failure, overdue/unconfirmed,
+  pending and unclear outcome remain separate; unclear eligible outcomes remain inside the denominator.
+- Deliberately withheld/cancelled posts are counted separately and excluded. A confirmed channel delivery remains
+  confirmed even if the post was subsequently pulled; for example, Discord may have delivered before X was held.
+  A no-new-play run creates no delivery event. Future/older scheduled posts are outside that window.
+- Missing channel intent, invalid/missing stable IDs or scheduled times, and conflicting duplicate outcomes are
+  explicitly unknown. Missing/corrupt log input is unknown, not an empty successful period. Duplicate rows with
+  conflicting due times cannot be placed into a window; no made-up date is substituted from a send/creation time.
+- The report shows confirmed/eligible counts, not an on-time percentage. Stored X times may reflect reconciliation;
+  legacy Discord times are job-start times. Pending mirrors can legitimately await X confirmation. Unconfirmed is
+  not proof of failure, and a current grace-period check is not measured historical latency.
+- Coverage is limited to the available log, not all historical deliveries. No percentage is assigned to zero
+  eligible events. Nothing here proves retention, betting performance, a complete four-week gate or paid readiness.
+- Output is allowlisted counts in the existing private health JSON/HTML and weekly markdown. No post IDs, bodies,
+  provider IDs, response details or credentials are copied. No new file, job, request, alert rule, social category,
+  public payload, ledger correction or selection policy is added.
+- Focused verification: 28 desk-health tests and eight weekly-review tests passed; `git diff --check` passed.
+  Fixtures cover deduplication, both exact window boundaries, post-time versus due-time selection, contradictory
+  duplicates, channel-specific cancellation, unknown eligibility, future confirmation times, privacy and no calls.
+  This item is implemented but **not yet claimed deployed**; record its own integrated release receipt at handoff.
 
 ### October 5 POTD audit: finding, not a selection-policy change
 
@@ -129,6 +168,26 @@ The October 5 POTD designation ranked already-published open singles by saved ed
 Original research logged opposing statistical evidence, despite an overly broad all-clear explanation. The future
 copy fix above preserves such counterpoints. A fresh comparative review requirement for POTD is recommended for
 owner consideration, but is not implemented or represented as an existing rule in this release.
+
+## Follow-up: current-season player history and readable thresholds
+
+- Player detail opens on the provider's current season, not the latest season in an individual player's history.
+  Season and All games / Last 5 / Last 10 / Last 20 controls sit above the summaries. Older years and All seasons
+  require an explicit selection. The selected rows drive the chart, averages, hit counts, splits and game log.
+- Landry Lyddy's regression uses four 2026 passing observations (46, 25, 194, 243), not all 13 games from 2023–2026.
+  Current average is 127.0; an explicitly selected All seasons has 13 games and an average of 79.6. No prior-year
+  appearances fill an empty current season, and unknown observations do not become zero.
+- The shared chart has a readable side/line legend and a threshold number in a dedicated right gutter. Bars,
+  value labels and opponent labels are centered together. The threshold shares the bars' numerical scale; 206.5
+  sits between 194 and 243. Value-label backgrounds prevent the dashed line cutting through the text.
+- Prop research modals use their event's season and pre-kickoff observations. Present-day aggregate defense
+  rankings are not shown as historical pregame evidence; per-game defense history retains season/date cutoffs.
+- Pre-release verification: 857 Python tests run, two skipped, no failures; all 97 frontend tests passed. The
+  stored build and public-file guard passed. Isolated slot-1000 rehearsal returned exit 0 / outcome ok, two blocked
+  network reads, no subprocesses, outside writes or private-state reads. No posts or wagers were made.
+- Local browser checks: 320/375/1440 px, current/all/last-five history, positive/negative/missing observations,
+  aligned threshold and value labels, long-history internal scrolling, and a compact research-grid chart.
+  Inspected views had no horizontal page overflow. Production receipt must follow the successful publish.
 
 ## Not finishable in this coding release
 

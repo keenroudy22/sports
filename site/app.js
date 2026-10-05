@@ -23,7 +23,7 @@
     league: P.league(saved.get('league', 'ALL')),     /* a first visit shows every play, whichever sport it is in */
     boardMode: 'games', playerQuery: '', recordQuery: '',
     stat: null, defensePos: 'WR', defenseStat: 'recYds', defenseScope: 'season', defenseOrder: 'soft',
-    logSeason: 'all', scoresDate: null, scoreScope: 'all',
+    historyPlayer: null, playerSeason: 'current', playerWindow: 'all', scoresDate: null, scoreScope: 'all',
     ticket: saved.get('ticket', []), stake: saved.get('stake', { amount: 1, mode: 'units', unit: 10 }),
     arb: saved.get('arb', { first: 298, second: -195, bankroll: 181.55 }),
     watchlist: saved.get('watchlist', []),
@@ -1113,7 +1113,7 @@
   const historyPlot = (rows, values, line, direction = 'over', compact = false, key = null) => {
     const geometry=C.chartGeometry(values,line), side=direction === 'under' ? 'under' : 'over';
     const shown=value => C.statValue(value,key,Number.isInteger(value)?0:1);
-    return `<div class="history-chart ${compact?'mini-chart':'full-chart'}" role="img" tabindex="0" aria-label="Game values; ${line == null?'no captured threshold':`${side} ${shown(line)}; green hit, red miss, gray tie`}. Scroll horizontally for long histories."><div class="history-chart-canvas" style="min-width:${Math.max(0,values.length*(compact?32:36)+20)}px">
+    return `<div class="history-chart ${compact?'mini-chart':'full-chart'}" role="img" tabindex="0" aria-label="Game values; ${line == null?'no captured threshold':`${side} ${shown(line)}; green hit, red miss, gray tie`}. Scroll horizontally for long histories.">${geometry.line == null?'':`<div class="plot-legend"><span class="plot-line-key"></span>${esc(side)} ${esc(shown(line))}</div>`}<div class="history-chart-canvas" style="min-width:${Math.max(0,values.length*(compact?32:36)+90)}px">
       <div class="history-plot"><span class="plot-zero" style="top:${geometry.zero}%"></span>
       ${geometry.line == null?'':`<span class="plot-line" style="top:${geometry.line}%"><b>${esc(shown(line))}</b></span>`}
       ${geometry.bars.map((bar,i)=>{const result=C.thresholdResult(values[i],line,side);return `<span class="plot-column" style="left:${100*i/Math.max(1,values.length)}%;width:${100/Math.max(1,values.length)}%" title="${esc(rows[i]?.detail || rows[i]?.label || '')}: ${esc(shown(values[i]))} · ${result}">
@@ -1277,6 +1277,16 @@
     const options = [...new Set([...(C.POSITION_STATS[pos] || C.POSITION_STATS.WR), 'snapPct'])].filter(k => keys.includes(k) && rows.some(r => Number.isFinite(C.observedCell(r, keys, k))));
     const key = options.includes(state.stat) ? state.stat : options[0] || (C.POSITION_STATS[pos] || C.POSITION_STATS.WR)[0];
     const [teams, next] = await Promise.all([get(`app/teams/${league}.json`), nextGameFor(entry[3], league)]);
+    const playerKey = `${league}:${route.id}`;
+    if(state.historyPlayer !== playerKey) {
+      state.historyPlayer=playerKey; state.playerSeason='current'; state.playerWindow='all';
+    }
+    const currentSeason = next?.game?.season ?? index.season ?? teams.defense?.season;
+    const seasons = [...new Set(rows.filter(r=>r[4]===2).map(r=>Number(r[2])))].sort((a,b)=>b-a);
+    if(!['current','all'].includes(state.playerSeason) && !seasons.includes(Number(state.playerSeason))) state.playerSeason='current';
+    const scopeLabel = state.playerSeason==='all' ? 'All seasons' : state.playerSeason==='current' && currentSeason==null ? 'Current season' : `${state.playerSeason==='current'?currentSeason:state.playerSeason} season`;
+    const recent = C.playerHistory(rows,currentSeason,state.playerSeason,state.playerWindow);
+    const currentRows = C.playerHistory(rows,currentSeason);
     const team = teams.teams[entry[3]] || {};
     const abbr = id => (teams.teams[id] || {}).abbr || id;
     let projection = null, line = null, quote = null;
@@ -1292,36 +1302,38 @@
       .sort((a,b)=>Number(C.quoteStatus(b,next?.game?.kickoff).current)-Number(C.quoteStatus(a,next?.game?.kickoff).current) || Date.parse(b.observedAt)-Date.parse(a.observedAt))[0];
     if (priced && Number.isFinite(priced.line)) { line = priced.line; quote=priced; }
     const lineLabel=C.quoteStatus(quote,next?.game?.kickoff).label;
-    const win = C.windows(rows, keys, key, [5,10,20], null, C.observedCell);
-    const recent = [...rows].sort((a, b) => String(b[1]).localeCompare(String(a[1]))).slice(0, 20).reverse();
     const values = recent.map(r => C.observedCell(r, keys, key));
     const opponent = next ? (next.side === 'home' ? next.game.away.id : next.game.home.id) : null;
-    const vsNext = next ? C.splits(rows, keys, key, opponent, C.observedCell).vs : null;
-    const split = C.splits(rows, keys, key, null, C.observedCell);
+    const vsNext = next ? C.splits(recent, keys, key, opponent, C.observedCell).vs : null;
+    const split = C.splits(recent, keys, key, null, C.observedCell);
     const group = C.POS_GROUP[pos];
     const allow = next && group ? C.rankOf((teams.defense || {}).rows || {}, opponent, group, key) : null;
     const allowTone = allow ? C.rankTone(allow.rank, allow.of) : 'neutral';
     const valueText = value => C.statValue(value,key);
-    const tile = (label, s) => stat(label, s ? valueText(s.avg) : DASH, s ? `n ${s.n} · median ${valueText(s.median)} · ${C.statValue(s.min,key,0)} to ${C.statValue(s.max,key,0)}` : 'no games');
+    const summary = C.summarize(values);
     const projKey = { rec: 'receptions', car: 'carries' }[key] || key;
     const side = quote?.direction === 'under' ? 'under' : 'over';
-    const hitSummary = w => { if (line == null) return ''; const h = C.hits(values.slice(-w), line); return `${h[side]} of ${h.n} ${side}${h.push ? ` · ${h.push} tied` : ''}`; };
+    const h = line == null ? null : C.hits(values,line);
+    const hitSummary = () => h?.n ? `${h[side]} of ${h.n} ${side}${h.push ? ` · ${h.push} tied` : ''}` : 'no observed values';
+    const historyControls = `<div class="player-history-controls"><label>Season<select class="pick" data-select="playerSeason" aria-label="Player history season"><option value="current"${state.playerSeason==='current'?' selected':''}>This season · ${esc(currentSeason ?? 'unavailable')}</option>${seasons.filter(s=>s!==Number(currentSeason)).map(s=>`<option value="${s}"${String(s)===state.playerSeason?' selected':''}>${s}</option>`).join('')}<option value="all"${state.playerSeason==='all'?' selected':''}>All seasons</option></select></label><div><span class="filter-label">Sample</span>${seg('playerWindow',[['all','All games'],['last5','Last 5'],['last10','Last 10'],['last20','Last 20']],state.playerWindow)}</div></div>`;
+    const sampleLabel = `${scopeLabel} · ${recent.length} game${recent.length===1?'':'s'}${state.playerWindow==='all'?'':` · ${state.playerWindow.replace('last','last ')}`}`;
     return `${back}<div class="page-head who"><span class="badge" style="background:${esc(team.color || 'var(--raised)')}">${esc(pos || '?')}</span>
-        <div><h1>${esc(data.name)}</h1><p>${esc(pos || '')} · <a href="#team/${league}/${esc(entry[3])}">${esc(team.name || entry[4] || '')}</a> · ${rows.length} stored games since ${esc(String(rows[0][1]).slice(0, 4))}</p></div></div>
+        <div><h1>${esc(data.name)}</h1><p>${esc(pos || '')} · <a href="#team/${league}/${esc(entry[3])}">${esc(team.name || entry[4] || '')}</a> · ${currentRows.length} game${currentRows.length===1?'':'s'} this season</p></div></div>
       ${watchButton({type:'player',key:`player:${league}:${route.id}`,title:data.name,league,href:`#player/${league}/${route.id}`})}
       <div class="toolbar"><div class="seg" role="group">${options.map(k => `<button type="button" data-set="stat:${k}" aria-pressed="${k === key}">${esc(C.LABEL[k] || k)}</button>`).join('')}</div></div>
-      <div class="tiles">${tile('Last 5', win.last5)}${tile('Last 10', win.last10)}${tile('Last 20', win.last20)}${tile('This season', win.season)}</div>
+      ${historyControls}<p class="row-meta player-history-scope">${esc(sampleLabel)}</p>
+      <div class="tiles">${stat('Average',summary?valueText(summary.avg):DASH,C.LABEL[key] || key)}${stat('Median',summary?valueText(summary.median):DASH,'Selected games')}${stat('Hit count',h?.n?`${h[side]}/${h.n}`:DASH,line==null?'No captured line':`${side} ${valueText(line)}${h?.push?` · ${h.push} tied`:''}`)}${stat('Games',recent.length,summary && summary.n<recent.length?`${summary.n} with this stat recorded`:scopeLabel)}</div>
       ${next ? section(`Next: ${next.side === 'home' ? 'vs' : '@'} ${abbr(opponent)} · ${whenShort(next.game.kickoff)}`,
         `<div class="stats">${stat('Projection', projection && projection[projKey] ? valueText(projection[projKey][0]) : DASH, projection && projection[projKey] ? `80%: ${valueText(projection[projKey][1])} to ${valueText(projection[projKey][2])}` : 'none for this stat')}
-          ${stat(lineLabel, line != null ? `${side} ${esc(valueText(line))}` : DASH, line != null ? hitSummary(10) : 'none captured')}
+          ${stat(lineLabel, line != null ? `${side} ${esc(valueText(line))}` : DASH, line != null ? hitSummary() : 'none captured')}
           ${stat(`${esc(abbr(opponent))} vs ${esc(group || pos || '')}s`, allow ? valueText(allow.value) : DASH, allow ? `${esc(C.LABEL[key] || key)} a game · ${ordinal(allow.rank)} of ${allow.of}, 1st allows the least` : 'not tracked by position', allowTone === 'soft' ? 'up' : allowTone === 'tough' ? 'down' : '')}
-          ${stat('Vs this opponent', vsNext && vsNext.summary ? valueText(vsNext.summary.avg) : DASH, vsNext && vsNext.summary ? `${vsNext.summary.n} meeting${vsNext.summary.n === 1 ? '' : 's'} since 2023` : 'no meetings stored')}</div>`,
+          ${stat('Vs this opponent', vsNext && vsNext.summary ? valueText(vsNext.summary.avg) : DASH, vsNext && vsNext.summary ? `${vsNext.summary.n} meeting${vsNext.summary.n === 1 ? '' : 's'} in selected games` : 'none in selected games')}</div>`,
         `<a href="#game/${esc(next.game.id)}">Game page →</a>`) : ''}
       ${quoteMeta(quote,next?.game?.kickoff)}
-      ${section(`Last ${values.length} games · ${C.LABEL[key] || key}`, chart(recent, values, line, abbr, quote?.direction, key))}
+      ${section(`${sampleLabel} · ${C.LABEL[key] || key}`, recent.length?chart(recent, values, line, abbr, quote?.direction, key):empty('No games in this season', 'Choose an earlier season or All seasons to view older games.'))}
       ${section('Splits', `<div class="stats">${stat('Home', split.home ? valueText(split.home.avg) : DASH, split.home ? `n ${split.home.n}` : '')}${stat('Away', split.away ? valueText(split.away.avg) : DASH, split.away ? `n ${split.away.n}` : '')}${split.neutral ? stat('Neutral site', valueText(split.neutral.avg), `n ${split.neutral.n}`) : ''}</div>`)}
-      ${section('Game log', gameLog(rows, keys, pos, abbr, league))}
-      <p class="row-meta" style="margin-top:10px">Stored regular-season games. Green = hit for the displayed side; red = miss; gray = tie. Open a date in the game log for the matchup.</p>`;
+      ${section('Game log', gameLog(recent, keys, pos, abbr, league))}
+      <p class="row-meta" style="margin-top:10px">Regular season · ${esc(sampleLabel)}. Green = hit; red = miss; gray = tie or unrecorded. Open a date for the matchup.</p>`;
   }
 
   const chart = (recent, values, line, abbr, direction = 'over', key = null) => {
@@ -1335,11 +1347,9 @@
 
   const gameLog = (rows, keys, pos, abbr, league) => {
     const cols = [...(LOG_COLS[pos] || LOG_COLS.WR), ...(keys.includes('snapPct') && rows.some(r => C.observedCell(r, keys, 'snapPct') != null) ? ['snapPct'] : [])];
-    const seasons = [...new Set(rows.map(r => r[2]))].sort((a, b) => b - a);
-    const season = seasons.includes(Number(state.logSeason)) ? Number(state.logSeason) : null;
-    const list = rows.filter(r => season == null || r[2] === season).sort((a, b) => String(b[1]).localeCompare(String(a[1])));
-    return `<div class="toolbar">${seg('logSeason', [['all', 'All'], ...seasons.map(s => [String(s), String(s)])], season == null ? 'all' : String(season))}</div>
-      <div class="table-wrap"><table class="data"><thead><tr><th>Game</th>${cols.map(c => `<th>${esc(C.LABEL[c] || c)}</th>`).join('')}</tr></thead><tbody>
+    const list = rows.slice().sort((a, b) => String(b[1]).localeCompare(String(a[1])));
+    if(!list.length) return empty('No games in this selection', 'Change the Season or Sample filter above.');
+    return `<div class="table-wrap"><table class="data"><thead><tr><th>Game</th>${cols.map(c => `<th>${esc(C.LABEL[c] || c)}</th>`).join('')}</tr></thead><tbody>
       ${list.map(r => `<tr><td><a href="#game/${league}-${esc(r[0])}">${esc(r[1])}</a><span class="sub">${r[7] === 0 ? '@' : r[7] === -1 ? 'vs (neutral)' : 'vs'} ${esc(abbr(r[6]))}${r[4] === 3 ? ' · postseason' : ''}</span></td>
         ${cols.map(c => { const v = C.observedCell(r, keys, c); return `<td>${v == null ? DASH : c === 'snapPct' ? Math.round(100 * v) + '%' : esc(v)}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div>`;
   };
@@ -1865,7 +1875,7 @@
       ${p.cutoff ? `<h4>Cutoff</h4><p>${esc(prose(p.cutoff))}</p>` : ''}${p.why ? `<h4>Reason</h4><p>${esc(prose(p.why))}</p>` : ''}${p.risk ? `<h4>Risk</h4><p>${esc(prose(p.risk))}</p>` : ''}${p.edge ? `<h4>Edge</h4><p>${esc(prose(p.edge))}</p>` : ''}
       ${p.actual ? `<h4>Result</h4><p>${esc(prose(p.actual))}</p>` : ''}${p.settlementReason ? `<p>${esc(prose(p.settlementReason))}</p>` : ''}
       ${(p.sources || []).length ? `<h4>Sources</h4><div class="sources">${p.sources.filter(s => /^https:/.test(s)).map((s, i) => `<a href="${esc(s)}" target="_blank" rel="noopener noreferrer">${esc(hostOf(s, i))} ↗</a>`).join('')}</div>` : ''}
-      ${p.athleteId ? '<div data-context><p class="row-meta">Loading the last ten games and the matchup…</p></div>' : ''}
+      ${p.athleteId ? '<div data-context><p class="row-meta">Loading season history and the matchup…</p></div>' : ''}
       <p class="row-meta" style="margin-top:14px">${C.isParlay(p) ? 'A fun parlay: a smaller stake, kept out of the record.' : 'Graded at one unit, at the line and price we published.'} The original price is kept for grading even after the line moves.</p></div></div>`;
     dialog.showModal();
     if (p.athleteId) {
@@ -1895,7 +1905,9 @@
     const data = shard && shard.players[row.athleteId];
     const keys = shard ? shard.keys : [];
     const kickoffDay = row.kickoff ? String(row.kickoff).slice(0, 10) : null;
-    const rows = data ? data.rows.filter(r => !kickoffDay || String(r[1]) < kickoffDay) : [];
+    const season = game?.season ?? index.season;
+    const rows = C.playerHistory(data?.rows,season,'all','all',kickoffDay);
+    const seasonRows = C.playerHistory(rows,season);
     const abbr = id => (teams.teams[id] || {}).abbr || id;
     const latest = newestFirst(rows)[0];
     const teamId = latest ? String(latest[5]) : null;
@@ -1906,19 +1918,18 @@
     const label = (C.LABEL[key] || row.market || 'this stat').toLowerCase();
 
     /* the last ten */
-    const recent = newestFirst(rows).slice(0, 10).reverse();
+    const recent = C.playerHistory(seasonRows,season,'current','last10');
     const values = recent.map(r => C.observedCell(r, keys, key));
-    const win = key && rows.length ? C.windows(rows, keys, key, [5,10,20], null, C.observedCell) : {};
+    const win = key && seasonRows.length ? C.windows(seasonRows, keys, key, [5,10,20], null, C.observedCell) : {};
     const hitWords = h => h && h.n ? `${direction === 'under' ? h.under : h.over} of ${h.n} ${direction}` : null;
     const h10 = line != null ? C.hits(values, line) : null, h5 = line != null ? C.hits(values.slice(-5), line) : null;
     const formLine = [hitWords(h10) ? `${hitWords(h10)} ${line}` : null, hitWords(h5) ? `${hitWords(h5)} in the last 5` : null,
-      win.last10 ? `last 10 average ${fixed(win.last10.avg)}` : null, win.season ? `this season ${fixed(win.season.avg)}` : null].filter(Boolean).join(' · ');
+      win.last10 ? `${recent.length}-game average ${fixed(win.last10.avg)}` : null, win.season ? `${season} season ${fixed(win.season.avg)}` : null].filter(Boolean).join(' · ');
 
     /* the role */
     const block = side && game.forecast ? (game.forecast.players[side] || {}) : {};
     const role = C.roleOf(block.players || [], row.athleteId, pos, key);
     const me = (block.players || []).find(p => String(p.id) === String(row.athleteId));
-    const season = index.season;
     const thisSeason = rows.filter(r => r[2] === season).length;
     const lastSeason = teamId ? rows.filter(r => r[2] === season - 1 && String(r[5]) === teamId).length : 0;
     const snap = latest ? C.observedCell(latest, keys, 'snapPct') : null;
@@ -1929,27 +1940,30 @@
       (row.grade && row.grade.limited) || (me && me.limited) ? 'questionable on the report' : null].filter(Boolean);
 
     /* the defense */
-    const dRows = (teams.defense || {}).rows || {};
+    const matchingDefense = Number(teams.defense?.season) === Number(season);
+    // Current aggregates are not historical pregame snapshots.
+    const currentDefense = matchingDefense && Date.parse(row.kickoff || game?.kickoff) > Date.now();
+    const dRows = currentDefense ? (teams.defense || {}).rows || {} : {};
     const rank = opp && pos && key ? C.rankOf(dRows, opp, pos, key) : null;
-    const last5 = opp && pos && key ? ((((teams.defense || {}).last5 || {})[opp] || {})[pos] || {})[key] : null;
-    const prior = opp && pos && key ? C.rankOf(((teams.defense || {}).prior || {}).rows || {}, opp, pos, key) : null;
+    const last5 = currentDefense && opp && pos && key ? ((((teams.defense || {}).last5 || {})[opp] || {})[pos] || {})[key] : null;
+    const prior = currentDefense && opp && pos && key ? C.rankOf(((teams.defense || {}).prior || {}).rows || {}, opp, pos, key) : null;
     const tone = rank ? C.rankTone(rank.rank, rank.of) : 'neutral';
     const oppFile = opp ? await maybe(`app/teams/${league}/${opp}.json`) : null;
-    const allowed = oppFile ? (oppFile.defense || []).filter(d => d.season === (teams.defense || {}).season && (!kickoffDay || d.date < kickoffDay)) : [];
+    const allowed = oppFile ? (oppFile.defense || []).filter(d => Number(d.season) === Number(season) && (!kickoffDay || d.date < kickoffDay)) : [];
     const homeOf = new Map((oppFile ? oppFile.games || [] : []).map(g => [g.gameId, g.home]));
     const dRecent = allowed.map(d => [d.gameId, d.date, d.season, d.week, 2, opp, d.opp, homeOf.get(d.gameId) === false ? 0 : homeOf.get(d.gameId) == null ? -1 : 1]);
     const dValues = allowed.map(d => pos && d.allowed[pos] && d.allowed[pos][key] != null ? d.allowed[pos][key] : null);
-    const vs = opp && key && rows.length ? C.splits(rows, keys, key, opp, C.observedCell).vs : null;
+    const vs = opp && key && seasonRows.length ? C.splits(seasonRows, keys, key, opp, C.observedCell).vs : null;
     const rankWord = tone === 'soft' ? 'among the most generous' : tone === 'tough' ? 'among the stingiest' : 'middle of the pack';
 
-    return `<h4>Last ${values.length || 10} games · ${esc(C.LABEL[key] || row.market || '')}</h4>
-      ${values.length ? chart(recent, values, line, abbr, direction) : empty('No games stored yet', kickoffDay ? 'Nothing recorded for this player before this game.' : 'The first stat line appears after a game.')}
+    return `<h4>${esc(season)} season · ${values.length} game${values.length===1?'':'s'} · ${esc(C.LABEL[key] || row.market || '')}</h4>
+      ${values.length ? chart(recent, values, line, abbr, direction,key) : empty('No games in this season', 'Open the player page and choose an earlier season to see older games.')}
       ${formLine ? `<p>${esc(formLine)}. History, not a probability.</p>` : ''}
       <h4>Role</h4><p>${esc(roleBits.join(' · '))}.</p>
       ${opp ? `<h4>What ${esc(abbr(opp))} allows ${esc(pos || '')}s</h4>
-        ${rank ? `<p>${esc(abbr(opp))} allow <b>${fixed(rank.value)}</b> ${esc(label)} a game to ${esc(pos)}s this season, <span class="${tone === 'soft' ? 'up' : tone === 'tough' ? 'down' : ''}">${ordinal(rank.rank)} of ${rank.of}</span> where 1st allows the least: ${rankWord}${last5 != null && ((dRows[opp] || {}).g || 0) > 5 ? `. ${fixed(last5)} a game over their last 5` : ''}${prior ? `. Last season ${fixed(prior.value)} a game, ${ordinal(prior.rank)} of ${prior.of}` : ''}.</p>` : `<p>The defense table does not track ${esc(label)} by position.</p>`}
+        ${rank ? `<p>${esc(abbr(opp))} allow <b>${fixed(rank.value)}</b> ${esc(label)} a game to ${esc(pos)}s this season, <span class="${tone === 'soft' ? 'up' : tone === 'tough' ? 'down' : ''}">${ordinal(rank.rank)} of ${rank.of}</span> where 1st allows the least: ${rankWord}${last5 != null && ((dRows[opp] || {}).g || 0) > 5 ? `. ${fixed(last5)} a game over their last 5` : ''}${prior ? `. Last season ${fixed(prior.value)} a game, ${ordinal(prior.rank)} of ${prior.of}` : ''}.</p>` : `<p>${currentDefense ? `The defense table does not track ${esc(label)} by position.` : 'Pregame defense rankings are unavailable for this matchup.'}</p>`}
         ${dValues.some(v => v != null) ? chart(dRecent, dValues, null, abbr) + `<p class="row-meta">Every ${esc(pos)} on the opposing side combined, game by game this season.</p>` : ''}
-        ${vs && vs.summary ? `<p>${esc(data.name)} against ${esc(abbr(opp))}: ${fixed(vs.summary.avg)} ${esc(label)} a game over ${vs.summary.n} stored meeting${vs.summary.n === 1 ? '' : 's'}.</p>` : ''}` : ''}
+        ${vs && vs.summary ? `<p>${esc(data.name)} against ${esc(abbr(opp))}: ${fixed(vs.summary.avg)} ${esc(label)} a game over ${vs.summary.n} meeting${vs.summary.n === 1 ? '' : 's'} in the ${esc(season)} season.</p>` : ''}` : ''}
       <p class="row-meta" style="margin-top:12px"><a href="#player/${league}/${esc(row.athleteId)}">Player page →</a>${row.gameId ? ` · <a href="#game/${esc(row.gameId)}">Game page →</a>` : ''}</p>`;
   }
 

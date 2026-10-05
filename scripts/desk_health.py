@@ -24,6 +24,8 @@ SOURCE_LIMITS = {'Football schedule': 360, 'Injury context': 360, 'Multi-sport s
 SOURCE_STATES = ('fresh', 'stale', 'failed', 'unknown', 'invalid')
 DELIVERY_FIELDS = ('queued', 'xOverdue', 'xFailed', 'discordOverdue', 'discordFailed',
                    'withheld', 'xConfirmed', 'discordConfirmed', 'heldCaptions')
+COHORT_OUTCOMES = ('confirmed', 'recordedFailure', 'overdueUnconfirmed', 'pending', 'unknown')
+COHORT_EXCLUSIONS = ('withheld', 'cancelled', 'unknownEligibility')
 
 
 def read(path):
@@ -260,6 +262,103 @@ def delivery(posts, now):
     return counts
 
 
+def delivery_outcome(post, channel, now):
+    """Current saved evidence only; never infer an actual publication minute."""
+    mirror = post.get('discord')
+    evidence = post if channel == 'x' else mirror if isinstance(mirror, dict) else {}
+    sent_raw = evidence.get('sentAt')
+    sent = moment(sent_raw)
+    invalid_sent = bool(sent_raw) and (sent is None or sent > now)
+    if invalid_sent:
+        return 'unknown'
+    # A later pull cannot erase a delivery that was already confirmed on this channel.
+    if sent or (channel == 'discord' and evidence.get('state') == 'sent'):
+        return 'confirmed'
+    precheck = post.get('precheck')
+    if isinstance(precheck, dict) and precheck.get('result') == 'withheld':
+        return 'withheld'
+    for key in ('cancelledAt', 'deletedAt'):
+        if post.get(key):
+            value = moment(post[key])
+            return 'cancelled' if value and value <= now else 'unknown'
+    if channel == 'discord' and (not isinstance(mirror, dict) or not mirror):
+        return 'unknownEligibility'
+    if evidence.get('error') or (channel == 'discord' and evidence.get('state') in ('failed', 'error')):
+        return 'recordedFailure'
+    if channel == 'x':
+        if not post.get('bufferPostId'):
+            return 'unknownEligibility'
+        ready = moment(post.get('dueAt'))
+    else:
+        if evidence.get('state') != 'pending':
+            return 'unknownEligibility'
+        ready_raw = evidence.get('readyAt') or post.get('sentAt')
+        ready = moment(ready_raw)
+        if ready_raw and ready is None:
+            return 'unknown'
+        # Receipt/news mirrors intentionally wait until X confirms. Not yet ready
+        # is not a Discord failure, and dueAt is not an invented mirror deadline.
+        if ready is None or ready > now:
+            return 'pending'
+    return 'overdueUnconfirmed' if ready and ready < now - timedelta(minutes=15) else 'pending'
+
+
+def delivery_cohorts(book, now):
+    """Distinct due-post cohorts, recomputed from the stored log, not added snapshots.
+
+    A stable publication id defines one event per channel. Duplicate records with
+    conflicting due times cannot be assigned to a cohort; conflicting outcomes
+    become unknown eligibility. Missing identity/time coverage stays explicit.
+    """
+    if not isinstance(book, dict) or not isinstance(book.get('posts'), list):
+        return {'state': 'unknown', 'cohorts': [], 'reason': 'stored-post-log-unavailable',
+                'readiness': 'not-assessed'}
+    groups, missing_identity, invalid_rows = {}, 0, 0
+    for post in book['posts']:
+        if not isinstance(post, dict):
+            invalid_rows += 1
+            continue
+        identity = post.get('id')
+        if not isinstance(identity, str) or not identity.strip():
+            missing_identity += 1
+            continue
+        groups.setdefault(identity, []).append(post)
+    placed, unknown_due = [], 0
+    for posts in groups.values():
+        times = {moment(post.get('dueAt')) for post in posts}
+        if len(times) != 1 or None in times:
+            unknown_due += 1
+        else:
+            placed.append((times.pop(), posts))
+    cohorts = []
+    for days in (7, 28):
+        start = now - timedelta(days=days)
+        rows = [(due, posts) for due, posts in placed if start <= due <= now]
+        channels = {}
+        for channel in ('x', 'discord'):
+            counts = {key: 0 for key in (*COHORT_OUTCOMES, *COHORT_EXCLUSIONS)}
+            conflicts = 0
+            for _, posts in rows:
+                outcomes = {delivery_outcome(post, channel, now) for post in posts}
+                if len(outcomes) != 1:
+                    conflicts += 1
+                    outcome = 'unknownEligibility'
+                else:
+                    outcome = outcomes.pop()
+                counts[outcome] += 1
+            eligible = sum(counts[key] for key in COHORT_OUTCOMES)
+            channels[channel] = {**counts, 'eligibleDue': eligible, 'duplicateConflicts': conflicts,
+                                 'knownRowsClassified': not (invalid_rows or missing_identity or unknown_due or
+                                                            counts['unknownEligibility'] or counts['unknown'])}
+        cohorts.append({'days': days, 'fromAt': gates.stamp(start), 'throughAt': gates.stamp(now),
+                        'duePosts': len(rows), 'duplicateRowsIgnored': sum(len(posts) - 1 for _, posts in rows),
+                        'futureDuePostsExcluded': sum(due > now for due, _ in placed),
+                        'olderDuePostsExcluded': sum(due < start for due, _ in placed), 'channels': channels})
+    return {'state': 'partial' if invalid_rows or missing_identity or unknown_due else 'available',
+            'readiness': 'not-assessed', 'unknownIdentityRows': missing_identity,
+            'invalidRows': invalid_rows, 'unknownDueIdentities': unknown_due, 'cohorts': cohorts}
+
+
 def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     now = now or datetime.now(timezone.utc)
     root, conf = Path(root), Path(conf)
@@ -341,6 +440,7 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
             'reliability': reliability,
             'sources': checks, 'deliveriesLast48h': counts,
             'deliveryLogState': 'available' if isinstance(post_book.get('posts'), list) else 'unknown',
+            'deliveryCohorts': delivery_cohorts(post_book, now),
             'oddsBudget': {'observedAt': stamp(usage.get('at')), 'used': used if verified else None,
                            'remaining': remaining if verified else None, 'verifiedFromStoredSnapshot': verified},
             'localModel': {'usedLastRun': (state.get('llm') or {}).get('used') is True,
@@ -362,6 +462,21 @@ def markdown(data):
     counts = data['deliveriesLast48h']
     lines.append('Delivery evidence (48h): ' + ', '.join(f'{key} {value}' for key, value in counts.items()) + '.')
     lines.append('Stored delivery log: ' + data.get('deliveryLogState', 'unknown') + '; missing evidence is not a successful delivery.')
+    cohorts = data.get('deliveryCohorts') or {}
+    lines.append('Distinct delivery cohorts: ' + str(cohorts.get('state', 'unknown')) + '.')
+    for cohort in cohorts.get('cohorts') or []:
+        lines.append(f"Scheduled {cohort['fromAt']} through {cohort['throughAt']} (inclusive).")
+        for channel, counts in cohort['channels'].items():
+            lines.append(f"{cohort['days']}-day {channel}: {counts['confirmed']}/{counts['eligibleDue']} known eligible "
+                         f"due posts confirmed; {counts['recordedFailure']} recorded failures, "
+                         f"{counts['overdueUnconfirmed']} overdue/unconfirmed, {counts['pending']} pending, "
+                         f"{counts['unknown']} unknown. Excluded: {counts['withheld']} withheld, "
+                         f"{counts['cancelled']} cancelled, {counts['unknownEligibility']} unknown eligibility.")
+    if cohorts.get('cohorts'):
+        lines.append(f"Unplaceable coverage in the stored log: {cohorts['unknownIdentityRows']} rows without an ID, "
+                     f"{cohorts['unknownDueIdentities']} identities without one valid due time, {cohorts['invalidRows']} invalid rows. "
+                     'The 7-day cohort overlaps 28 days; never add them. This is confirmation evidence, not on-time performance. '
+                     'No-new-play is not a delivery event; missing records cannot establish complete coverage.')
     budget = data['oddsBudget']
     lines.append(f"Stored Odds API budget: {budget['used']} used, {budget['remaining']} remaining; observed {budget['observedAt'] or 'unknown'}.")
     llm = data['localModel']
@@ -400,6 +515,26 @@ def html_report(data):
                        'withheld': 'Withheld', 'xConfirmed': 'X confirmed',
                        'discordConfirmed': 'Discord confirmed', 'heldCaptions': 'Caption length holds'}
     deliveries = data.get('deliveriesLast48h') or {}
+    cohorts = data.get('deliveryCohorts') or {}
+    cohort_rows = ''
+    for cohort in cohorts.get('cohorts') or []:
+        for channel, counts in cohort['channels'].items():
+            cohort_rows += '<tr>' + ''.join(f'<td>{text(value)}</td>' for value in (
+                f"{cohort['days']} days · {channel}", f"{counts['confirmed']}/{counts['eligibleDue']}",
+                counts['recordedFailure'], counts['overdueUnconfirmed'], counts['pending'], counts['unknown'],
+                counts['withheld'], counts['cancelled'], counts['unknownEligibility'])) + '</tr>'
+    cohort_html = f'''<section><h2>Distinct scheduled-post outcomes</h2>
+<p>Stored evidence: {text(cohorts.get('state', 'unknown'))}. Each channel counts one event per saved publication ID,
+using its stored scheduled time within the last 7 or 28 days. The 7-day cohort is inside 28 days; never add them.</p>
+<div class="scroll"><table><thead><tr><th>Cohort</th><th>Confirmed / eligible due</th><th>Recorded failure</th><th>Overdue / unconfirmed</th><th>Pending</th><th>Unknown</th><th>Withheld</th><th>Cancelled</th><th>Unknown eligibility</th></tr></thead><tbody>{cohort_rows}</tbody></table></div>
+<p>Coverage not assignable to either window: {text(cohorts.get('unknownIdentityRows'))} rows without a stable ID;
+{text(cohorts.get('unknownDueIdentities'))} identities without a single valid scheduled time;
+{text(cohorts.get('invalidRows'))} invalid rows. Missing channel intent and conflicting duplicate states are unknown
+eligibility, outside the denominator. Known eligible events with unclear outcomes remain inside it.</p>
+<p>Withheld/cancelled posts and future or older scheduled times are excluded. A confirmed send still counts if later
+pulled on that channel. Zero eligible events has no success rate. A no-new-play run creates no delivery event.
+Unconfirmed is not proof a send failed. Approximate confirmation times cannot establish on-time performance.
+This reports only the available log, not complete historical coverage, audience retention or membership readiness.</p></section>'''
     evidence = data.get('reliability') or {}
     evidence_rows = ''.join('<tr>' + ''.join(f'<td>{text(value)}</td>' for value in (
         row.get('date'), row.get('observedWindows'),
@@ -432,6 +567,7 @@ are not technical failures. Display incidents and grading reconciliation still n
 <section><h2>Source observations</h2><p>Age is time since the stored observation, not measured feed latency.</p><div class="scroll"><table><thead><tr><th>Source</th><th>Status</th><th>Observed at</th><th>Age (minutes)</th><th>Required now</th></tr></thead><tbody>{source_rows}</tbody></table></div></section>
 {reliability}
 <section><h2>Delivery evidence · last 48 hours</h2><p>Stored log: {text(data.get('deliveryLogState', 'unknown'))}. Missing evidence is not a successful delivery.</p><table>{rows((label, deliveries.get(key)) for key, label in delivery_labels.items())}</table></section>
+{cohort_html}
 <section><h2>Stored free odds budget</h2><table>{rows([('Verified stored balance', 'Yes' if budget.get('verifiedFromStoredSnapshot') else 'No'), ('Observed at', budget.get('observedAt')), ('Used', budget.get('used')), ('Remaining', budget.get('remaining'))])}</table></section>
 <section><h2>Local model · last run</h2><table>{rows([('Used', 'Yes' if local.get('usedLastRun') else 'No'), ('Calls', local.get('calls')), ('Failures', local.get('failures')), ('Homepage stories', local.get('homepageStories'))])}</table></section>
 <section><h2>Live-update pilot</h2><table>{rows([('Status', pilot.get('state')), ('Attempts', pilot.get('attempts')), ('Last observer check', pilot.get('lastObserverAt'))])}</table><p>X live updates remain off. No attempts means the delivery pilot is not yet validated.</p></section>
