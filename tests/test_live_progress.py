@@ -137,11 +137,21 @@ class ProgressTests(unittest.TestCase):
         L.write(self.watch, {'picks': {'p:leg': self.row}})
         self.assertEqual(self.run_pilot(choose=lambda *a, **kw: {'id': 'p:leg', 'style': 'sweat'}), 'sent')
         self.assertIn('Ticket leg:', self.sent[0])
+        self.assertIn('8 to go. Come on!', self.sent[0])
+        self.assertIn('42/50 receiving yards', self.sent[0])
         self.assertNotIn('cashed', self.sent[0])
         L.write(self.state, {})
         self.pick['legs'].append({**leg, 'id': 'lost'})
         L.write(self.watch, {'picks': {'p:leg': self.row, 'p:lost': {'state': 'final-loss'}}})
         self.assertEqual(self.run_pilot(), 'no-candidate')
+
+    def test_casual_style_is_not_repeated_on_consecutive_updates(self):
+        L.write(self.state, {'attempts': [{'state': 'sent', 'style': 'sweat', 'pickId': 'other',
+                 'day': '2026-10-02', 'at': L.boxscores.stamp(NOW - timedelta(days=1))}]})
+        self.assertEqual(self.run_pilot(choose=lambda *a, **kw: {'id': 'p:p', 'style': 'sweat'}), 'sent')
+        self.assertNotIn('Come on!', self.sent[0])
+        self.assertNotIn('Posted play:', self.sent[0])
+        self.assertIn('8 more receiving yards', self.sent[0])
 
 
 if __name__ == '__main__':

@@ -20,9 +20,12 @@ post and from expiry of the original price; it never labels a due time as proof 
 ## The voice (the owner's rules)
 
 The Oct 5 owner-approved live-progress pilot is a text-only Discord exception to the ordinary X-first mirror.
-Example (fictional preview, never sent): `Posted play: Receiver over 49.5 receiving yards` / `41 so far. 9 more
-receiving yards to reach 50.` / `8:12 - 4th · Live stats`. An optional `The sweat: ` opening is the only local-model
-wording variation. A ticket always says `Ticket leg`, never implies the whole ticket won, and a confirmed losing
+Examples (fictional previews, never sent): `Receiver over 49.5 receiving yards` / `41 so far. 9 more
+receiving yards to reach 50.` / `8:12 - 4th · Live stats`; or the owner's requested casual version:
+`Receiver over 49.5 receiving yards` / `9 to go. Come on!` / `41/50 receiving yards · 8:12 - 4th`.
+The local model chooses plain or casual; casual cannot repeat on consecutive updates. This narrow live-copy
+exception permits `Come on!`, not guarantees, pressure to bet, or unverified wins.
+A ticket always says `Ticket leg`, never implies the whole ticket won, and a confirmed losing
 leg suppresses its remaining updates. At most two/day, 45 minutes apart, one/ticket, three pilot attempts total.
 No images, Playbook tag, unsolicited mentions or replies, and no X delivery in this pilot. Early crossings and
 finals remain with the observer/ordinary settlement receipts rather than another celebration. See `LIVE-PROGRESS.md`.

@@ -131,6 +131,10 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Casual live-update voice (2026-10-05):** the owner wants occasional natural cheering, e.g. "9 to go. Come on!"
+  alongside the exact player/line and live clock. Drop redundant "Posted play" labels on straight updates.
+  Keep quieter factual updates too; never repeat the casual style consecutively. This exception permits the
+  exclamation in live-progress copy, not guarantees, invented urgency or premature wins. All pilot gates stay.
 - **Local live-progress Discord pilot (2026-10-05, owner approved occasional midgame updates):** the existing
   five-minute observer can nominate already-public player overs and full-game total overs for a short text-only
   "what's left" update. The local 27B model selects an exact candidate and wording style; code supplies every

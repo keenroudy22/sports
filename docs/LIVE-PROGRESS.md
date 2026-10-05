@@ -22,6 +22,9 @@ yet occurred. This supports a small pilot, not unrestricted X release or a measu
   half-point line. Missing stats remain missing.
 - Local Qwen chooses an allowed ID and one of two styles. One 20-second call at most per 15 minutes when a
   candidate exists. It can choose silence. Busy/offline/invalid output skips; no cloud fallback.
+- Owner's casual-tone follow-up: mix quiet facts with "9 to go. Come on!" (number from the verified gap),
+  exact player/line above and current stat/target plus clock below. No consecutive casual updates; no redundant
+  "Posted play" label. Ticket-leg context stays explicit. This does not increase post volume or relax any gate.
 - Re-fetch only the selected game's free summary after selection. Discard finals, changed/crossed targets,
   regressions, and selection cycles older than 90 seconds. Retrieval timestamps are not upstream latency claims.
 - Short factual text, with game clock. At most two updates per Eastern date, at least 45 minutes apart, one per
