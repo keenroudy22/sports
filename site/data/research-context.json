@@ -1,11 +1,20 @@
 {
-  "updatedAt": "2026-10-05T21:59:31Z",
+  "updatedAt": "2026-10-05T22:27:36Z",
   "leagues": {
     "NFL": {
       "teams": {
         "22": {
           "name": "Arizona Cardinals",
           "players": [
+            {
+              "id": "4870808",
+              "name": "Jeremiyah Love",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-05T22:03Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4870808/jeremiyah-love"
+            },
             {
               "id": "4428991",
               "name": "Paris Johnson Jr.",
@@ -122,15 +131,6 @@
               "injury": null,
               "reportedAt": "2026-10-04T23:32Z",
               "source": "https://www.espn.com/nfl/player/_/id/2578570/jacoby-brissett"
-            },
-            {
-              "id": "4870808",
-              "name": "Jeremiyah Love",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-04T23:26Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4870808/jeremiyah-love"
             },
             {
               "id": "4361307",
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Out",
               "injury": "Ankle",
-              "reportedAt": "2026-10-05T21:42Z",
+              "reportedAt": "2026-10-05T22:16Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-05T21:49Z",
+              "reportedAt": "2026-10-05T22:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2418,7 +2418,7 @@
               "id": "3910229",
               "name": "Rock Ya-Sin",
               "position": "CB",
-              "status": "Questionable",
+              "status": "Doubtful",
               "injury": "Hamstring",
               "reportedAt": "2026-10-05T02:47Z",
               "source": "https://www.espn.com/nfl/player/_/id/3910229/rock-ya-sin"
@@ -3953,15 +3953,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/5082660/alex-harkey"
             },
             {
-              "id": "4242283",
-              "name": "Rashawn Slater",
-              "position": "OT",
-              "status": "Doubtful",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-05T16:40Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4242283/rashawn-slater"
-            },
-            {
               "id": "4429025",
               "name": "Quentin Johnston",
               "position": "WR",
@@ -4032,6 +4023,15 @@
               "injury": "Concussion",
               "reportedAt": "2026-10-04T23:31Z",
               "source": "https://www.espn.com/nfl/player/_/id/4248627/trevor-penning"
+            },
+            {
+              "id": "4242283",
+              "name": "Rashawn Slater",
+              "position": "OT",
+              "status": "Out",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-04T23:28Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4242283/rashawn-slater"
             },
             {
               "id": "4612826",
@@ -4377,6 +4377,15 @@
           "name": "Miami Dolphins",
           "players": [
             {
+              "id": "4371946",
+              "name": "Reese Taylor",
+              "position": "CB",
+              "status": "Out",
+              "injury": "Quadriceps",
+              "reportedAt": "2026-10-05T22:15Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4371946/reese-taylor"
+            },
+            {
               "id": "4869645",
               "name": "Caleb Douglas",
               "position": "WR",
@@ -4483,15 +4492,6 @@
               "injury": null,
               "reportedAt": "2026-10-05T00:44Z",
               "source": "https://www.espn.com/nfl/player/_/id/4711533/ollie-gordon-ii"
-            },
-            {
-              "id": "4371946",
-              "name": "Reese Taylor",
-              "position": "CB",
-              "status": "Questionable",
-              "injury": "Quadriceps",
-              "reportedAt": "2026-10-04T21:51Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4371946/reese-taylor"
             },
             {
               "id": "4431664",
@@ -6677,6 +6677,15 @@
           "name": "Tampa Bay Buccaneers",
           "players": [
             {
+              "id": "4034790",
+              "name": "Antoine Winfield Jr.",
+              "position": "S",
+              "status": "Out",
+              "injury": "Ribs",
+              "reportedAt": "2026-10-05T22:02Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4034790/antoine-winfield-jr"
+            },
+            {
               "id": "4816107",
               "name": "Benjamin Morrison",
               "position": "CB",
@@ -6792,15 +6801,6 @@
               "injury": null,
               "reportedAt": "2026-10-04T20:45Z",
               "source": "https://www.espn.com/nfl/player/_/id/4596448/bucky-irving"
-            },
-            {
-              "id": "4034790",
-              "name": "Antoine Winfield Jr.",
-              "position": "S",
-              "status": "Out",
-              "injury": "Ribs",
-              "reportedAt": "2026-10-04T20:44Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4034790/antoine-winfield-jr"
             },
             {
               "id": "4429511",
@@ -7366,38 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "17",
-          "name": "Behren Morton",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-05T20:08:46Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4431465/behren-morton"
-        },
-        {
-          "teamId": "17",
-          "name": "Tanner Arkin",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-05T20:08:46Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4683308/tanner-arkin"
-        },
-        {
-          "teamId": "17",
-          "name": "Dametrious Crownover",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-05T20:08:46Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4431526/dametrious-crownover"
-        },
-        {
-          "teamId": "19",
-          "name": "Nikko Reed",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-05T20:08:46Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4691043/nikko-reed"
-        },
-        {
           "teamId": "19",
           "name": "Jihad Ward",
           "from": "Out",
@@ -7764,11 +7732,43 @@
           "to": "Doubtful",
           "observedAt": "2026-10-05T21:59:31Z",
           "source": "https://www.espn.com/nfl/player/_/id/4693337/marques-sigle"
+        },
+        {
+          "teamId": "22",
+          "name": "Jeremiyah Love",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-05T22:27:36Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4870808/jeremiyah-love"
+        },
+        {
+          "teamId": "8",
+          "name": "Rock Ya-Sin",
+          "from": "Questionable",
+          "to": "Doubtful",
+          "observedAt": "2026-10-05T22:27:36Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3910229/rock-ya-sin"
+        },
+        {
+          "teamId": "24",
+          "name": "Rashawn Slater",
+          "from": "Doubtful",
+          "to": "Out",
+          "observedAt": "2026-10-05T22:27:36Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4242283/rashawn-slater"
+        },
+        {
+          "teamId": "15",
+          "name": "Reese Taylor",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-05T22:27:36Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4371946/reese-taylor"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-05T21:59:31Z",
-      "lastAttemptAt": "2026-10-05T21:59:31Z",
+      "checkedAt": "2026-10-05T22:27:36Z",
+      "lastAttemptAt": "2026-10-05T22:27:36Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-05T21:59:31Z",
-      "lastAttemptAt": "2026-10-05T21:59:31Z",
+      "checkedAt": "2026-10-05T22:27:36Z",
+      "lastAttemptAt": "2026-10-05T22:27:36Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
