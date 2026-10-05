@@ -82,6 +82,17 @@ test('Today keeps the season scorecard above secondary lines and removes the dup
   assert.equal((today.match(/scorecardCard\(/g) || []).length, 1, 'Today renders one prominent scorecard');
 });
 
+test('official plays render as a compact collapsed list with details on demand', () => {
+  const source = fs.readFileSync('site/app.js', 'utf8');
+  const card = source.slice(source.indexOf('const playCard = p =>'), source.indexOf('/* The one record'));
+  const css = fs.readFileSync('site/app.css', 'utf8');
+  assert.doesNotMatch(card, /matchMedia|\$\{open\}/, 'play cards never auto-expand by viewport');
+  assert.match(card, /<details class="play/);
+  assert.match(card, /View details/);
+  assert.match(css, /\.plays \{ display: grid; grid-template-columns: 1fr;/);
+  assert.match(css, /\.play-compact-meta \{ display: block !important;/);
+});
+
 test('game pages put favorites before secondary model reads and do not publish model methodology', () => {
   const source = fs.readFileSync('site/app.js', 'utf8');
   const game = source.slice(source.indexOf('async function viewGame(route)'), source.indexOf('const finalSection'));

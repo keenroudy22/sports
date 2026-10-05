@@ -153,8 +153,7 @@
     const route = C.pickResearchRoute(p);
     const action = route ? (p.athleteId ? 'View player stats' : 'View matchup') : 'View pick details';
     const compact = [p.odds != null ? `Posted ${odds(p.odds)}` : '', p.book || '', when].filter(Boolean).join(' · ');
-    const open = typeof window === 'undefined' || !window.matchMedia || !window.matchMedia('(max-width: 620px)').matches ? ' open' : '';
-    return `<details class="play${p.featured ? ' play-featured' : ''}${lotto ? ' play-lotto' : ''}${rung ? ' play-ladder' : ''}" style="--rail:${esc(rung ? '#48e8c3' : p.color || 'var(--mint)')}"${open}>
+    return `<details class="play${p.featured ? ' play-featured' : ''}${lotto ? ' play-lotto' : ''}${rung ? ' play-ladder' : ''}" style="--rail:${esc(rung ? '#48e8c3' : p.color || 'var(--mint)')}">
       <summary class="play-summary">
       <span class="play-top"><span class="play-kind">${esc(kind)}${p.favorite && !legs.length && !p.featured ? ' · Favorite' : ''}</span>${stale ? '' : `<span class="pill pill-${st.tone}">${esc(st.word)}</span>`}</span>
       <span class="play-hero">${legs.length ? '' : avatar(p, 'ava-lg')}<span class="play-title${rung ? ' num' : ''}">${lotto ? `<span class="lotto-odds num">${esc(odds(p.odds))}</span> ` : ''}${esc(title)}</span></span>
