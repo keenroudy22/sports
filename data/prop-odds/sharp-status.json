@@ -1,15 +1,15 @@
 {
- "at": "2026-10-05T15:29:27Z",
+ "at": "2026-10-05T15:36:38Z",
  "confirmed": {
-  "CFB-401871090": "2026-10-05T15:29:27Z",
-  "NFL-401872979": "2026-10-05T15:29:27Z"
+  "CFB-401871090": "2026-10-05T15:36:38Z",
+  "NFL-401872979": "2026-10-05T15:36:38Z"
  },
  "leagues": {
   "CFB": {
    "books": {
     "fanduel": 138
    },
-   "eventsListed": 60,
+   "eventsListed": 62,
    "eventsMatched": 1,
    "games": 1,
    "marketTypes": {
@@ -237,7 +237,7 @@
       "fanatics": "5261714",
       "fliff": "417528_c_p_209_prematch",
       "goldrush": "31121173",
-      "kalshi": "KXNCAAFSPREAD-26OCT08SHSULIB",
+      "kalshi": "KXNCAAF1H-26OCT08SHSULIB",
       "ladbrokes": "1d84f5e8-05b1-4218-abf2-ed079f814837",
       "ladbrokes_uk": "lduk-258958788",
       "matchbook": "mb-34514339680700023",
@@ -824,7 +824,7 @@
      "type": "fixture"
     },
     {
-     "away": "Iowa State",
+     "away": "Iowa State Cyclones",
      "external": {
       "ballybet": "1027508025",
       "betmgm": "6:46061",
@@ -856,10 +856,10 @@
       "sx_bet": "L20378067",
       "thescorebet": "StandardEvent:f78fbd77-3567-4059-a8b2-0dcf3549cf20"
      },
-     "home": "BYU",
+     "home": "BYU Cougars",
      "sample": {
-      "away_team": "Iowa State",
-      "home_team": "BYU",
+      "away_team": "Iowa State Cyclones",
+      "home_team": "BYU Cougars",
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
@@ -1176,11 +1176,11 @@
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
+       "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
        "player_passing_touchdowns",
        "player_passing_yards",
-       "player_points",
        "player_receiving_yards",
        "player_receptions",
        "player_rushing_+_receiving_yards",
@@ -1262,6 +1262,7 @@
        "both_teams_to_score",
        "correct_score",
        "draw_no_bet",
+       "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
        "player_passing_yards",
@@ -1344,6 +1345,7 @@
        "both_teams_to_score",
        "correct_score",
        "draw_no_bet",
+       "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
        "player_passing_yards",
@@ -1352,6 +1354,7 @@
        "team_total",
        "three_way_handicap",
        "total_points",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -1432,6 +1435,7 @@
        "both_teams_to_score",
        "correct_score",
        "draw_no_bet",
+       "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
        "player_passing_yards",
@@ -1444,6 +1448,7 @@
        "three_way_handicap",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -1523,6 +1528,7 @@
        "both_teams_to_score",
        "correct_score",
        "draw_no_bet",
+       "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
        "player_passing_yards",
@@ -1613,6 +1619,7 @@
        "both_teams_to_score",
        "correct_score",
        "draw_no_bet",
+       "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
        "player_passing_yards",
@@ -1702,6 +1709,7 @@
        "both_teams_to_score",
        "correct_score",
        "draw_no_bet",
+       "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
        "player_passing_yards",
@@ -1824,7 +1832,7 @@
       "polymarket": "nfl_texans_titans_2026-10-11_b2",
       "prophetx": "1700008895",
       "rebet": "sr:match:71515884",
-      "robinhood": "db17b22f-8643-42d4-8cc0-be1bd3275d99",
+      "robinhood": "2ad40782-3441-4bad-a439-5bd21f10cc60",
       "sportzino": "sz-16551870",
       "stake": "1552de63-5091-45ab-ace5-c9ba0e12c11d",
       "sx_bet": "L19431496",
@@ -1863,6 +1871,7 @@
        "both_teams_to_score",
        "correct_score",
        "draw_no_bet",
+       "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
        "player_passing_yards",
@@ -1940,6 +1949,7 @@
        "both_teams_to_score",
        "correct_score",
        "draw_no_bet",
+       "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
        "player_passing_yards",
@@ -2028,6 +2038,7 @@
        "both_teams_to_score",
        "correct_score",
        "draw_no_bet",
+       "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
        "player_passing_yards",
