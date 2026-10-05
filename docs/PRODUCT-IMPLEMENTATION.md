@@ -264,6 +264,31 @@ Technical checks are not a substitute for the volunteer/cohort gate.
 - The dated queue now has no ready implementation item. Remaining owner-needed, observing and gated items are
   listed explicitly, not declared complete. Its receipt-only update changes no runtime code or selection rule.
 
+## Shipped player touchdown and prop-stat expansion · October 5
+
+Player detail now includes the touchdown and usage stats people most commonly research, limited to fields the
+recorded history actually contains. Any TD is the observed sum of rushing and receiving touchdowns; it remains
+missing when neither component was recorded, so the page does not turn absent data into a zero.
+
+- TE and WR pages add Any TD, receiving TD, inside-10 targets and the existing receiving, target, long-gain,
+  red-zone and snap-share views. WR also retains rushing work where recorded.
+- RB/FB pages add Any TD, rushing TD, receiving TD, inside-10 and inside-5 carries alongside rushing, receiving,
+  target, long-gain, red-zone and snap-share views.
+- QB pages add passing TDs, interceptions, carries, rushing TDs, scrambles, sacks and long rush alongside passing
+  and rushing volume. A player's menu only shows stats present in that player's recorded history.
+- Any TD is a history view, not an invented sportsbook quote, projection or official pick. No selection, grading,
+  posting, API-budget or public-record rule changed.
+- Verification passed with 871 Python tests (two intentionally skipped), 125 frontend tests, the stored-site build,
+  publication guard and isolated rehearsal. Live Juwan Johnson Any TD passed at 375 and 1440 px with no overflow,
+  clipping or browser errors; the game log visibly includes Any TD.
+
+### Verified release receipt
+
+- Production revision: `0e40d6deec54ee135e4b593ffd3ba18acea5a90c`.
+- [Publish run 37346323493](https://github.com/keenroudy22/sports/actions/runs/37346323493) succeeded at
+  `2026-10-05T17:13:11Z`. Live assets app 110 and core 67 were confirmed.
+- Live page: `https://keenroudy.com/sports/#player/NFL/3929645?stat=anyTD&season=current&sample=all`.
+
 ## External and elapsed-time gates
 
 | Gate | What remains | Authority/state |
