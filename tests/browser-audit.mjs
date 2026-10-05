@@ -22,8 +22,10 @@ for (const width of widths) {
     await call('Page.navigate',{url:base+'#'+route});
     for(let i=0;i<80;i++) { await pause(150); if(await ev(`!!document.querySelector('#view h1')`)) break; }
     await pause(250);
+    await ev('document.fonts.ready.then(()=>true)');
     if(process.env.AUDIT_EXPAND) await ev(`document.querySelectorAll('details').forEach(e=>e.open=true)`);
     if(process.env.AUDIT_TEXT_SCALE) await ev(`document.querySelectorAll('#view *').forEach(e=>{if(!e.children.length) e.style.fontSize=(parseFloat(getComputedStyle(e).fontSize)*${Number(process.env.AUDIT_TEXT_SCALE)})+'px'})`);
+    await pause(100);
     const result = await ev(`(() => {
       const allowed = '.table-wrap,.seg,.filters,.board-tabs,.depth-line';
       const bad = [...document.querySelectorAll('#view *')].filter(e => {
@@ -50,3 +52,4 @@ for (const width of widths) {
 fs.writeFileSync(`${out}/audit.json`,JSON.stringify({base,results,errors},null,2));
 console.log(JSON.stringify({pages:results.length,issues:results.filter(r=>r.bad?.length || r.clipped?.length || r.error),errors},null,2));
 await fetch(`http://localhost:9234/json/close/${target.id}`); ws.close();
+if(errors.length || results.some(r=>r.bad?.length || r.clipped?.length || r.error || r.scrollWidth>r.width+1)) process.exitCode=1;

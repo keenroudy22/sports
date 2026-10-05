@@ -6,6 +6,9 @@
   const C = window.KRCore;
   const { esc, DASH, odds, signed, fixed, when, whenShort, dayLabel, ago } = C;
   const $ = selector => document.querySelector(selector);
+  document.addEventListener('error', event => {
+    if(event.target instanceof HTMLImageElement) event.target.style.visibility = 'hidden';
+  }, true);
 
   /* ---------- storage and state ---------- */
 
@@ -1881,6 +1884,7 @@
     $('#tabs').innerHTML = TABS.map(([id, label]) => `<a href="#${id}" ${active === id ? 'aria-current="page"' : ''}>${icon(ICONS[id])}<span>${label}</span></a>`).join('');
     $('#leagues').innerHTML = [['NFL', 'NFL'], ['CFB', 'College'], ['ALL', 'All']].map(([value, label]) =>
       `<button type="button" data-league="${value}" aria-pressed="${state.league === value}">${label}</button>`).join('');
+    $('#leagues').hidden = ['scores','lab'].includes(route.view);
     const bar = $('#ticket-bar');
     const show = state.ticket.length > 0 && route.view !== 'ticket';
     bar.hidden = !show;

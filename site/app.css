@@ -143,6 +143,7 @@ a:hover { color: #8ff3c2; }
   font: inherit; font-size: 12px; font-weight: 600; cursor: pointer;
 }
 .leagues button[aria-pressed="true"] { background: var(--raised); color: var(--text); }
+.leagues[hidden] { display:none; }
 
 .freshness { font-size: 11px; color: var(--faint); }
 .freshness b { color: var(--dim); font-weight: 600; }

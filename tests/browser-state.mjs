@@ -43,5 +43,13 @@ try {
  await call('Page.navigate',{url:base+'#trends'});await ready();await pause(300);
  const filter=await ev(`document.querySelector('input[type="search"]')?.outerHTML || ''`);
  if(filter){await ev(`(()=>{const e=document.querySelector('input[type="search"]');e.focus();e.value='check';window.__old=e;window.__ticks.forEach(fn=>fn())})()`);await pause(400);assert.equal(await ev(`document.activeElement===window.__old && window.__old.isConnected`),true);}
- console.log('PASS: refresh keeps one expanded game, focus and scroll; outage hides quotes, preserves honest freshness and backs off; Props navigation and focused input survive.');
+ await ev(`(()=>{const img=document.createElement('img');img.id='missing-test';img.src='missing-audit-portrait.png';document.querySelector('#view').append(img)})()`);await pause(300);
+ assert.equal(await ev(`document.querySelector('#missing-test').style.visibility`),'hidden');
+ await call('Network.enable');await call('Network.setBlockedURLs',{urls:['*data/app/lines.json*']});
+ await call('Page.navigate',{url:base+'?audit=failure#board/props'});await pause(1200);
+ assert.match(await ev(`document.querySelector('#view').textContent`),/Could not load this page/);
+ assert.equal(await ev(`!!document.querySelector('[data-retry]')`),true);
+ await call('Network.setBlockedURLs',{urls:[]});await ev(`document.querySelector('[data-retry]').click()`);await pause(1200);
+ assert.equal(await ev(`document.querySelector('.board-tabs [aria-current="page"]').textContent`),'Props');
+ console.log('PASS: expanded game, focus, scroll, stale feed/backoff, active Props tab, focused input, missing image fallback, loading failure and retry.');
 } finally {await fetch('http://localhost:9234/json/close/'+target.id);ws.close();}
