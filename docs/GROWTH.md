@@ -1,5 +1,10 @@
 # Kook'n growth plan
 
+October 5 product implementation keeps the public schedule/caps and evidence gates. Tested creative/copy variants
+inside approved categories can rotate; new social categories, alternate/milestone sheets, X live progress and creator
+outreach still need their separate decisions. Current trend research is fresh main-line-only. `PRODUCT-IMPLEMENTATION.md`
+tracks the release; `SUBSCRIPTION-PLAN.md` defines consent, four-week observation and business-readiness gates.
+
 The goal is to grow [@keenkooks](https://x.com/keenkooks) toward 10,000 followers by the end of football season while
 keeping the account useful, honest and safe. Ten thousand is a stretch target, not a promised outcome. At the Sep 28,
 2026 baseline the account had 70 followers (75 later that day). X Premium showed 2,000 impressions, 31 engagements, a 1.4% engagement
@@ -44,8 +49,9 @@ rate and 5 profile visits over the prior four weeks; nearly all of that reach ar
 - On a multi-play card, one short text-only conversation prompt may go between the first two plays. When a Climb rung
   or fun ticket is already ready, use that slot for a factual teaser with the real step, ride and bank instead. Vary
   ordinary slate questions and never imply replies choose a play that is already decided. Single-play days get no filler.
-- No bought followers, engagement exchanges, follow churn, automated likes, automated replies or automated trend
-  posts. Buffer remains the only posting path.
+- No bought followers, engagement exchanges, follow churn, automated likes or automated replies. The approved
+  main-line research board is the narrow automatic trend exception, within its existing one-research-post cap.
+  Buffer remains the only X posting path.
 
 ## Weekly scorecard
 
@@ -114,8 +120,9 @@ For comparisons, save each post's metrics at the same age (24 hours, then seven 
 type and similar slate sizes. Record impressions, engagement per impression, profile visits and follows when X
 actually supplies them; unknown values stay unknown. Do not compare a one-hour post with a week-old post or
 declare a winner before eight comparable examples. This remains manual collection, not an added paid analytics
-service. The live observer is collecting silent shadow transitions from free ESPN summaries; Discord still needs
-a reviewed pilot and X still waits for three clean Discord pilots and a separate release decision.
+service. The live observer continues its source checks; the bounded October 5 Discord pilot uses the local model
+to select exact supplied progress facts. X still waits for three reviewed clean Discord pilots and a separate
+release decision. A new graphic does not satisfy that operational evidence requirement.
 
 - Deterministic code owns prices, projections, records, grading, limits and what is actually scheduled.
 - Local Qwen 27B weighs already verified facts through a strict JSON contract. Detailed deterministic templates are

@@ -3,6 +3,10 @@
 Owner approved implementation on October 2, 2026. This is the release checklist, not a claim that every phase
 of the audit is finished. Free service ceilings and the append-only public record remain mandatory.
 
+**Current work:** the October 5 product plan and effective navigation supersede older layout descriptions here.
+See `PRODUCT-IMPLEMENTATION.md` for its staged release tracker, `SOURCE-RIGHTS.md` for unresolved commercial
+permissions, and AGENTS.md for the effective operating rules. Earlier release descriptions below are history.
+
 ## Third release: confidence order and explained upsets
 
 - Every fresh, calibrated value read can be compared by confidence without hiding the separate value ordering.
@@ -66,10 +70,11 @@ of the audit is finished. Free service ceilings and the append-only public recor
    report explicitly labels its prior-season coverage heuristic; it is not official membership data.
 3. Validated priced team totals, touchdown probabilities and alternate-line streak sheets need evidence not
    currently available; do not hand-tune to named players or overwrite current forecasts.
-4. The live tracked-game worker is enabled in shadow only: one shared free ESPN source fetch per game, four-minute
+4. The live tracked-game worker began in shadow: one shared free ESPN source fetch per game, four-minute
    minimum cadence, eight-game cap, source age, transition deduplication, corrections and final reconciliation.
-   Review its evidence, then one Discord game, then three clean pilots before an X milestone release. No LLM or
-   paid-odds call per tick; no live alert is currently enabled.
+   October 5 approved a bounded Discord progress pilot with the local model selecting exact supplied facts.
+   See `LIVE-PROGRESS.md` for current attempt limits and evidence. X remains off until its separate release decision;
+   this product implementation does not activate it. No paid-odds call per tick.
 5. Measure the newly released research graphic experiment. The manual mentions workflow is
    documented in GROWTH.md; there is no automatic inbox/reply worker. Age-matched analytics remain an operational
    collection step, not an implemented new analytics feed. No automated likes, follows, unsolicited replies,
@@ -84,6 +89,7 @@ of the audit is finished. Free service ceilings and the append-only public recor
 
 ## Verification and deployment
 
-Run both full test suites, build from stored data, rehearse with `--dry-run --no-llm` and researcher explicitly
-disabled, inspect the responsive pages, then deploy under the desk's run lock. Verify GitHub publication and the
+Run both full test suites with their actual exit statuses, build from stored data, use the isolated offline
+`scripts/rehearse.py --slot HHMM` helper, inspect responsive pages, then deploy under the desk's run lock. The plain
+`run.py --dry-run` path is not itself offline. Verify GitHub publication and the
 live 375px site. Never manually run a publishing desk job to test a release.

@@ -21,6 +21,7 @@ the hosted workflow rebuilds it before each deploy.
 Usage: python scripts/build_site.py
 """
 import json
+import math
 import re
 import shutil
 import sys
@@ -440,16 +441,26 @@ def recent_form(team, league, logs, before, count=5):
 
 
 def defense_table(league, defense_logs, season, last=None):
-    """Per defense: games and per-game averages allowed to each position group."""
+    """Per defense: observed averages and denominators for each position/stat.
+
+    An absent field is not a shutout. These are display summaries only; neither
+    the forecast model nor the append-only result ledgers are changed here.
+    """
     out = {}
     for team, rows in defense_logs.items():
         rows = [r for r in rows if r['season'] == season and r['seasonType'] == 2]
         rows = rows[-last:] if last else rows
         if not rows:
             continue
-        entry = {'g': len(rows)}
+        entry = {'g': len(rows), 'coverage': {}}
         for pos, keys in ALLOWED_KEYS.items():
-            entry[pos] = {k: rnd(sum((r['allowed'].get(pos) or {}).get(k, 0) for r in rows) / len(rows)) for k in keys}
+            entry[pos], entry['coverage'][pos] = {}, {}
+            for key in keys:
+                values = [(r.get('allowed', {}).get(pos) or {}).get(key) for r in rows]
+                values = [v for v in values if isinstance(v, (int, float))
+                          and not isinstance(v, bool) and math.isfinite(v)]
+                entry[pos][key] = rnd(sum(values) / len(values)) if values else None
+                entry['coverage'][pos][key] = len(values)
         out[team] = entry
     return out
 
@@ -656,15 +667,19 @@ def build_player_charts(league, games, forecasts, player_logs, season, lines, no
                 log_rows = player_logs.get(pid, [])
                 history = []
                 for record in log_rows:
-                    if record.get('season') != season or record.get('seasonType') != 2:
+                    if record.get('season') != season or record.get('seasonType') != 2 \
+                            or features.when(record['kickoff']) >= min(now, features.when(game['kickoff'])):
                         continue
                     values = {key: record['stats'][key] for key in LOG_KEYS
-                              if isinstance(record.get('stats', {}).get(key), (int, float))}
+                              if isinstance(record.get('stats', {}).get(key), (int, float))
+                              and not isinstance(record['stats'][key], bool) and math.isfinite(record['stats'][key])}
                     if values:
                         history.append({'date': day(record['kickoff']), 'opp': str(record['opp']),
                                         'home': 1 if record.get('home') is True else 0 if record.get('home') is False else -1,
                                         'stats': values})
-                history = history[-20:]
+                # Keep the complete observed regular season. A rolling-window
+                # control must never silently shorten the Season sample.
+                history.sort(key=lambda row: row['date'])
                 projections = {}
                 for source, key in projection_key.items():
                     value = forecast.get(source)

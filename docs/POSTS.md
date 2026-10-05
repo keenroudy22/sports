@@ -5,6 +5,25 @@ plus, for plays and house posts, an image card. This page is the complete spec: 
 goes out, and the code that makes it. Examples of the cards are in `docs/examples/`. What the accounts we follow post
 and what gets saved is in `docs/X-NOTES.md`.
 
+## October 5 effective creative policy
+
+The owner approved tested original layout/color/short-copy variants within already-approved post categories and
+their existing caps. This is not approval for a new category, extra post volume or broader automation. Exact
+selection, price/book, historical counts/windows and result facts remain source-bound and pass the existing guards.
+Green means hit/support for the selected side, including an under; red means miss/against that side; gray means
+unknown/inactive. Pair color with text or symbols. Keep the chef/name and navy/mint/cyan identity; no public avatar
+replacement or brown/tan/amber house palette. Existing posted attachments remain untouched.
+
+Evaluation/release windows are checks, not quotas: qualified, no-play, held, queued and delivered are distinct
+states. A caption bug gets a bounded factual fallback, never a lower evidence threshold. Rotate a small stable set
+of readable templates rather than changing the brand every day. Keep one clear action per post and preserve the
+Playbook-only-on-new-X-plays rule.
+
+**Separate release checkpoints remain:** social trend sheets use fresh main lines and at least five games only;
+alternate/milestone social sheets are not enabled. The live-progress Discord pilot remains bounded; public X
+progress stays off. New sports stay website-first. No new feed, paid service, metrics collector or public frequency
+increase is authorized by this creative approval. See AGENTS.md and `PRODUCT-IMPLEMENTATION.md`.
+
 The free Kook'n Sports Discord mirrors this feed. Confirmed official plays arrive about 10–15 minutes before X;
 other posts wait until Buffer confirms X delivery. A five-minute local job sends the same wager text and card once,
 but strips the X-only `@Playbook` mention. This also applies to previously queued, unsent Discord mirrors. The card is uploaded as
@@ -67,8 +86,8 @@ prevents duplicates, and the normal queue limits apply. These are updates, not p
 | **Player prop** | As a play | `Jordan Love under 2.5 carries (-111, DraftKings)` / `We have it at 1.2.` | the player's ESPN headshot on the plate | `pick_card.artwork` |
 | **Side** | As a play | `Duke -10 vs Stanford (-110, FanDuel)` / `We have Duke by 14.` | the side's logo | |
 | **Lotto / longshot** | After the plays | `🎰 +2506 COLLEGE LOTTO (ESPN BET)` (from +1000; `🎯 +583 NFL LONGSHOT` under it) then one leg a line; fun tickets may mix feed-priced alternates such as `Drake London 40+ rec yds` | parlay card with the legs | `x_post.parlay_head` |
-| **Easy props** (alternate lines) | Sat (college) and Sun (NFL) | `🍀 +450 NFL EASY PROPS (FanDuel)` then legs like `Drake London 40+ rec yds` | parlay card | `easy_parlay.py` |
-| **80/20 Climb step** | With the plays, one a day when a clean -180 to -130 rung exists | `🪜 KOOK'N 80/20 CLIMB · STEP 2` / `$75 → $117 (-178, FanDuel)` / `$19 banked · win banks $23, $94 rides` / legs / `❤️ if you're climbing` | a tall winding route with the real bank, ride, rung and unpriced future checkpoints | `ladder.py`, `pick_card.ladder_svg` |
+| **Easy props** (alternate lines) | Evaluate weekend slates, within the current once-per-league/seven-day alternate exception; never a quota | `🍀 +450 NFL EASY PROPS (FanDuel)` then legs like `Drake London 40+ rec yds` | parlay card | `easy_parlay.py` |
+| **80/20 Climb step** | On a qualifying scan; one open rung, with same-day advancement/restart allowed after settlement | `🪜 KOOK'N 80/20 CLIMB · STEP 2` / `$75 → $117 (-178, FanDuel)` / `$19 banked · win banks $23, $94 rides` / legs / `❤️ if you're climbing` | a tall winding route with the real bank, ride, rung and unpriced future checkpoints | `ladder.py`, `pick_card.ladder_svg` |
 | **Conversation prompt / teaser** | Once on a multi-play card, after the first play | A short slate question, or—when it is already ready—`The 80/20 Climb is back later today. Step 2 is already cooked. 🪜` with its real ride and bank, then the league tag | none; intentionally text-only | `buffer_post.conversation_text` |
 | **Injury angle** | After verified top-player news, at most two a day | `🚨 ESPN lists A.J. Brown OUT for PHI at CHI.` / a teammate's real post-news line, price and book / the opponent's allowed-by-position stat / `Board lean, not a posted play. Take it or pass? #NFL` | none; timeliness and the question are the point | `news_posts.candidates` |
 | **Morning receipt** | 9 AM the day after a game day | `Saturday: 5-3` then `✅ Iowa/Michigan over 38.5` per play; a fun ticket adds `0.25u · 2/3 legs hit · missed by one leg` when the stored settlement supports it; a raw losing player prop waits for its injury/return review until 12 hours after kickoff, then uses the official stats if no different official book settlement is known; a verified injury adds `injured in-game · checked before grading`; `Today: 3 plays.`, tags | the tall navy/mint report card (W/L per play, finals, parlay sweat, the chef) | `receipts.day_receipt`, `with_menu`, `pick_card.receipt_svg` |
@@ -113,8 +132,9 @@ legs use the relevant team logo or both matchup logos. Three deterministic navy/
 ticket ID, so a published card never changes on rerender. A small chef badge and price/book in the header replace
 the oversized mascot. The ladder and straight-play renderers stay separate. Existing Discord/X attachments are not replaced.
 
-Drawn as SVG and rendered to PNG by headless Chrome (`pick_card.render`), 1200x675, except the sheet and editorial
-research cards (1080x1350). The hosted build draws them on every deploy (`scripts/feed.py`) into `site/data/cards/`,
+Drawn as SVG and rendered to PNG by headless Chrome (`pick_card.render`). New straight cards and Climb cards use
+1080x1350; tickets and research may grow vertically to keep full rows legible. Older house templates retain their
+own dimensions. The hosted build draws needed assets on deploy (`scripts/feed.py`) into `site/data/cards/`,
 served at `https://keenroudy.com/sports/data/cards/<name>.png`: `<pick id>.png`, `<pick id>-potd.png`,
 `receipt-day-<date>.png`, `receipt-week-<date>.png`, `sheet-<league>-<date>.png`,
 `research-<family>-<date>.png`, `ladder-result-<pick id>.png`.
@@ -126,7 +146,7 @@ full-width row, and shows only the bank and next stake needed to understand the 
 generic motivational copy stay in the post, not on the graphic. The small chef stays in the header; no image enters
 the headline, leg or accounting zones. A completed run shows the clean $50 start for the next climb.
 
-One frame for every card (`docs/examples/`):
+Legacy frame reference (`docs/examples/`); the newer specialized templates above supersede it for new assets:
 - top left the **KOOK'N** wordmark and pan icon; top right the precise label (`PLAYER PROP`, `GAME TOTAL`,
   `GAME SPREAD`, `LONGSHOT`, `LOTTO TICKET`, `EASY PROPS`, `PICK OF THE DAY · GAME TOTAL`, `80/20 CLIMB · STEP 2`,
   `RECEIPTS`);

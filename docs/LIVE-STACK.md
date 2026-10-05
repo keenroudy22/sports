@@ -1,5 +1,9 @@
 # Kook'n live-data plan
 
+October 5 product update: live scores now belong inside Games; old `#scores` links remain aliases. Source
+accessibility is not a commercial license: see `SOURCE-RIGHTS.md` before expanding or monetizing feeds/assets.
+This document's free/paid options are evaluations, not permission to buy, increase budgets or activate services.
+
 ## What runs now
 
 - The always-on Mac remains the private desk: it captures prices, verifies news and weather, grades results, prepares

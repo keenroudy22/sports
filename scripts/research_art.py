@@ -3,6 +3,27 @@ import html
 import textwrap
 
 
+def history_strip(row, x, y, width=720):
+    """Aggregate outcomes, never a fabricated chronological streak or forecast."""
+    hits, games, pushes = (row.get(key) for key in ('hits', 'games', 'pushes'))
+    if any(not isinstance(value, int) or isinstance(value, bool) for value in (hits, games, pushes)) \
+            or games < 1 or hits < 0 or pushes < 0 or hits + pushes > games:
+        return ''
+    misses = games - hits - pushes
+    counts = [('hit', hits, '#50edbb'), ('miss', misses, '#ff7987'), ('push', pushes, '#8296a4')]
+    blocks, offset = [], x
+    for label, count, color in counts:
+        if count:
+            size = width * count / games
+            blocks.append(f'<rect data-outcome="{label}" x="{offset:.2f}" y="{y}" width="{size:.2f}" '
+                          f'height="10" fill="{color}"/>')
+            offset += size
+    legend = f'{hits} hit · {misses} missed' + (f' · {pushes} pushed' if pushes else '')
+    return ('<g data-history="aggregate"><title>Historical outcomes, not game order or a forecast</title>'
+            + ''.join(blocks)
+            + f'<text x="{x}" y="{y + 37}" font-size="19" fill="#a7bdca">{html.escape(legend)}</text></g>')
+
+
 def svg(choice, art=None):
     art = art or {}
     esc = lambda value: html.escape(str(value or ''), quote=True)
@@ -23,6 +44,10 @@ def svg(choice, art=None):
         for field,size,color,weight in [('title',30,'#f5faff',700),('price',32,accent,850),('metric',24,'#f5faff',700),('detail',20,'#a7bdca',500)]:
             content.append(text(row[field],72,baseline,748,size,color,weight))
             baseline += max(1,len(wrapped(row[field],748,size)))*(size+8)+14
+        historical = history_strip(row, 72, baseline - 1)
+        if historical:
+            content.append(historical)
+            baseline += 54
         row_h=max(230,baseline-y+8)
         image=f'<image href="{esc(art[i])}" x="845" y="{y+34}" width="160" height="160" preserveAspectRatio="xMidYMid meet"/>' if art.get(i) else ''
         blocks.append(f'<g data-row="{i}"><rect x="44" y="{y}" width="992" height="{row_h}" rx="18" fill="#10212e" stroke="#2a424f"/>'

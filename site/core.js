@@ -111,6 +111,13 @@
     if (v == null) return LONGEST.has(key) || key === 'snaps' || key === 'snapPct' || /^(rz|i10|i5)/.test(key) ? null : 0;
     return v;
   };
+  /* Research views never infer a zero from an absent feed value. Legacy grading keeps cell(). */
+  const observedCell = (row, keys, key) => {
+    const i = column(keys, key), value = i < 0 ? null : row[i];
+    return Number.isFinite(value) ? value : null;
+  };
+  const statValue = (value, key, digits = 1) => !Number.isFinite(value) ? DASH
+    : key === 'snapPct' ? `${Math.round(value * 100)}%` : fixed(value, digits);
 
   const summarize = values => {
     const list = values.filter(v => v != null && !Number.isNaN(v));
@@ -122,25 +129,25 @@
   };
 
   /* Last-N windows counting back from the newest game; short logs report their true n. */
-  const windows = (rows, keys, key, sizes = [5, 10, 20], filter = null) => {
+  const windows = (rows, keys, key, sizes = [5, 10, 20], filter = null, read = cell) => {
     const list = (filter ? rows.filter(filter) : rows).slice().sort((a, b) => String(b[1]).localeCompare(String(a[1])));
-    const values = list.map(r => cell(r, keys, key));
+    const values = list.map(r => read(r, keys, key));
     const out = {};
     for (const size of sizes) out['last' + size] = summarize(values.slice(0, size));
     out.season = null;
     if (list.length) {
       const season = list[0][2];
-      out.season = summarize(list.filter(r => r[2] === season).map(r => cell(r, keys, key)));
+      out.season = summarize(list.filter(r => r[2] === season).map(r => read(r, keys, key)));
     }
     return out;
   };
 
-  const splits = (rows, keys, key, opponent = null) => {
-    const pick = test => summarize(rows.filter(test).map(r => cell(r, keys, key)));
+  const splits = (rows, keys, key, opponent = null, read = cell) => {
+    const pick = test => summarize(rows.filter(test).map(r => read(r, keys, key)));
     const out = { home: pick(r => r[7] === 1), away: pick(r => r[7] === 0), neutral: pick(r => r[7] === -1) };
     if (opponent != null) {
       const meetings = rows.filter(r => String(r[6]) === String(opponent));
-      out.vs = { summary: summarize(meetings.map(r => cell(r, keys, key))), games: meetings.map(r => ({ eventId: r[0], date: r[1], value: cell(r, keys, key) })) };
+      out.vs = { summary: summarize(meetings.map(r => read(r, keys, key))), games: meetings.map(r => ({ eventId: r[0], date: r[1], value: read(r, keys, key) })) };
     }
     return out;
   };
@@ -201,9 +208,10 @@
 
   /* Rank defenses by what they allow; 1 allows the least. Ties share a rank. */
   const rankDefenses = (rows, pos, stat, minGames = 1) => {
+    const observed = row => row.coverage?.[pos]?.[stat] ?? row.g;
     const list = Object.entries(rows || {})
-      .filter(([, r]) => r && r.g >= minGames && r[pos] && r[pos][stat] != null)
-      .map(([team, r]) => ({ team, value: r[pos][stat], games: r.g }))
+      .filter(([, r]) => r && observed(r) >= minGames && Number.isFinite(r[pos]?.[stat]))
+      .map(([team, r]) => ({ team, value: r[pos][stat], games: observed(r) }))
       .sort((a, b) => a.value - b.value || String(a.team).localeCompare(String(b.team)));
     let rank = 0, previous = null;
     list.forEach((row, i) => { if (row.value !== previous) { rank = i + 1; previous = row.value; } row.rank = rank; });
@@ -544,7 +552,7 @@
     return p.gameId ? `#game/${encodeURIComponent(p.gameId)}` : null;
   };
 
-  const LEGACY = { '': 'today', sports: 'today', home: 'today', overview: 'today', props: 'board',
+  const LEGACY = { '': 'today', sports: 'today', home: 'today', overview: 'today', charts: 'stats', tools: 'more', props: 'board',
     parlays: 'ticket', lines: 'board', results: 'record', research: 'research', players: 'stats' };
   /* Old links keep working: #game/<id>, #player/<league>/<id>, #record, #players and the rest. */
   const parseRoute = hash => {
@@ -561,8 +569,9 @@
     if (view === 'stats') return { view: 'stats', tab: rest[0] || 'charts' };
     if (view === 'board') return { view: 'board', tab: ['props', 'favorites'].includes(rest[0]) ? rest[0] : 'games' };
     if (view === 'defense') return { view: 'stats', tab: 'defense' };
-    /* Scores is a main tab now, not an alias for the football Games board. */
+    /* Scores keeps its deep links as the live view inside Games. */
     if (view === 'scores') return { view: 'scores', league: (rest[0] || 'ALL').toUpperCase() };
+    if (view === 'record' && rest[0] === 'trials') return {view:'record',tab:'trials'};
     const known = ['today', 'games', 'stats', 'model', 'record', 'board', 'ticket', 'research', 'arbs', 'lab', 'schedule', 'more', 'saved', 'digest', 'start', 'feedback'];
     if (known.includes(view)) return { view };
     return { view: LEGACY[view] || 'today' };
@@ -613,6 +622,38 @@
     }).slice(0, 3);
   };
 
+  /* One numerical coordinate system for every historical bar and its threshold. */
+  const chartGeometry = (values, line = null) => {
+    const finite = values.filter(Number.isFinite), threshold = Number.isFinite(line) ? line : null;
+    let low = Math.min(0, ...finite, threshold ?? 0), high = Math.max(0, ...finite, threshold ?? 0);
+    if (low === high) high = low + 1;
+    const pad = (high - low) * .12;
+    if (low < 0) low -= pad;
+    if (high > 0) high += pad;
+    const y = value => 100 * (high - value) / (high - low), zero = y(0);
+    return {low, high, zero, line: threshold == null ? null : y(threshold), bars: values.map(value => {
+      if (!Number.isFinite(value)) return null;
+      const point = y(value);
+      return {value, point, top: Math.min(point, zero), height: Math.abs(point - zero)};
+    })};
+  };
+  const thresholdResult = (value, line, direction = 'over', inclusive = false) => {
+    if (!Number.isFinite(value) || !Number.isFinite(line)) return 'unknown';
+    if (inclusive) return (direction === 'under' ? value <= line : value >= line) ? 'hit' : 'miss';
+    if (value === line) return 'push';
+    return (direction === 'under' ? value < line : value > line) ? 'hit' : 'miss';
+  };
+  const quoteStatus = (row, kickoff = null, now = Date.now()) => {
+    if (!row) return {kind:'missing', label:'No captured line', current:false};
+    const at = Date.parse(row.observedAt || row.quotedAt), age = now - at;
+    const started = Date.parse(kickoff || row.kickoff) <= now;
+    if (started || row.state === 'closed') return {kind:'started', label:'Saved pregame line', current:false};
+    if (!Number.isFinite(row.odds) || row.odds === 0 || ['reference','unpriced'].includes(row.state))
+      return {kind:'reference', label:'Reference line · price unverified', current:false};
+    if (!Number.isFinite(age) || age < 0 || age > 4 * 3600000 || Date.parse(row.expiresAt) <= now || row.state !== 'open')
+      return {kind:'stale', label:'Earlier quote · recheck price', current:false};
+    return {kind:'current', label:'Current captured line', current:true};
+  };
   const shardOf = (id, shards) => Number(id) % shards;
 
   const deliveryText = (pick, now = Date.now()) => {
@@ -626,8 +667,8 @@
     return parts.join(' · ') || 'On the website · social delivery not yet confirmed';
   };
 
-  return { esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, deskNotes,
-    column, cell, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
+  return { chartGeometry, thresholdResult, quoteStatus, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, deskNotes,
+    column, cell, observedCell, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
     unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, modelCaution, projectionScorecard, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };
 });

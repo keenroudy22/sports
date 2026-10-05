@@ -3,6 +3,81 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const C = require('../site/core.js');
 
+test('display-only observed values preserve unknown, zero and negative without changing legacy helpers', () => {
+  const keys=['rushYds','snapPct'];
+  const row=(day,value,snap)=>['game',day,2026,1,2,'a','b',1,value,snap];
+  const rows=[row('2026-10-01',null,null),row('2026-09-20',0,0),row('2026-09-10',-3,.8)];
+  assert.equal(C.cell(rows[0],keys,'rushYds'),0,'legacy counting interpretation is preserved');
+  assert.equal(C.observedCell(rows[0],keys,'rushYds'),null);
+  assert.equal(C.observedCell(rows[1],keys,'rushYds'),0);
+  assert.equal(C.observedCell(rows[2],keys,'rushYds'),-3);
+  assert.equal(C.observedCell(rows[2],keys,'unavailable'),null);
+  assert.equal(C.windows(rows,keys,'rushYds').last5.n,3);
+  assert.deepEqual(C.windows(rows,keys,'rushYds',[5],null,C.observedCell).last5,{n:2,avg:-1.5,median:-1.5,min:-3,max:0});
+  assert.equal(C.splits(rows,keys,'rushYds','b',C.observedCell).vs.summary.n,2);
+  assert.deepEqual(C.splits(rows,keys,'rushYds','b',C.observedCell).vs.games.map(r=>r.value),[null,0,-3]);
+});
+
+test('stat display renders snap fractions as percentages without changing chart units', () => {
+  assert.equal(C.statValue(.8,'snapPct'),'80%');
+  assert.equal(C.statValue(0,'snapPct'),'0%');
+  assert.equal(C.statValue(null,'snapPct'),C.DASH);
+  assert.equal(C.statValue(-3,'rushYds'),'-3.0');
+  const plot=C.chartGeometry([0,.8,1],.8);
+  assert.equal(plot.bars[1].point,plot.line,'only text is formatted; geometry uses the real numeric value');
+});
+
+test('historical chart bars and threshold share one coordinate system, including zero and negatives', () => {
+  const g=C.chartGeometry([-10,0,10,20,null],10);
+  assert.equal(g.bars[2].point,g.line);
+  assert.ok(g.bars[3].point<g.line);
+  assert.ok(g.bars[0].point>g.zero);
+  assert.equal(g.bars[1].height,0);
+  assert.equal(g.bars[1].point,g.zero);
+  assert.equal(g.bars[4],null);
+  for(const bar of g.bars.filter(Boolean)) {
+    assert.ok(bar.top>=0 && bar.top+bar.height<=100);
+    assert.equal(Math.min(bar.point,g.zero),bar.top);
+  }
+  assert.equal(C.chartGeometry([0,0],0).line,C.chartGeometry([0,0],0).zero);
+  assert.equal(C.chartGeometry([null],null).line,null);
+  assert.ok(C.chartGeometry([-3,-1],-2).line>0);
+});
+
+test('chart hit colors respect selected unders, pushes and inclusive milestones', () => {
+  assert.equal(C.thresholdResult(8,10,'under'),'hit');
+  assert.equal(C.thresholdResult(12,10,'under'),'miss');
+  assert.equal(C.thresholdResult(10,10,'under'),'push');
+  assert.equal(C.thresholdResult(10,10,'over',true),'hit');
+  assert.equal(C.thresholdResult(10,10.5,'over'),'miss');
+  assert.equal(C.thresholdResult(null,0,'over'),'unknown');
+  assert.equal(C.thresholdResult(-1,0,'under'),'hit');
+});
+
+test('shared quote labels never call old, unknown, unpriced or started lines current', () => {
+  const now=Date.parse('2026-10-05T12:00:00Z');
+  const row={state:'open',odds:-110,line:5.5,observedAt:'2026-10-05T11:00:00Z',kickoff:'2026-10-05T20:00:00Z'};
+  assert.equal(C.quoteStatus(row,null,now).current,true);
+  for(const changed of [{observedAt:'2026-10-05T01:00:00Z'},{observedAt:'2026-10-06T00:00:00Z'},
+    {observedAt:null},{odds:null},{state:'reference'},{state:'stale'},{state:'unpriced'},{state:'closed'},
+    {kickoff:'2026-10-05T11:00:00Z'}]) assert.equal(C.quoteStatus({...row,...changed},null,now).current,false);
+  assert.equal(C.quoteStatus(null,null,now).kind,'missing');
+  assert.equal(C.quoteStatus(row,'2026-10-05T11:00:00Z',now).kind,'started');
+});
+
+test('defense ranks use per-stat observed coverage and never coerce unknown values into zeros', () => {
+  const rows={a:{g:5,WR:{recYds:20},coverage:{WR:{recYds:2}}},b:{g:5,WR:{recYds:null},coverage:{WR:{recYds:0}}},c:{g:4,WR:{recYds:0}}};
+  assert.deepEqual(C.rankDefenses(rows,'WR','recYds').map(r=>[r.team,r.games]),[['c',4],['a',2]]);
+  assert.deepEqual(C.rankDefenses(rows,'WR','recYds',3).map(r=>r.team),['c']);
+});
+
+test('new workspace aliases preserve legacy research and trial routes', () => {
+  assert.deepEqual(C.parseRoute('#charts'),{view:'stats'});
+  assert.deepEqual(C.parseRoute('#tools'),{view:'more'});
+  assert.deepEqual(C.parseRoute('#record/trials'),{view:'record',tab:'trials'});
+  assert.deepEqual(C.parseRoute('#scores/NFL'),{view:'scores',league:'NFL'});
+});
+
 test('delivery status distinguishes sent, queued, overdue, cancelled and unknown', () => {
   const now = Date.parse('2026-10-02T16:00:00Z');
   assert.match(C.deliveryText({delivery:{discordAt:'2026-10-02T15:45:00Z',xDue:'2026-10-02T16:10:00Z'}}, now), /Discord sent.*X scheduled/);

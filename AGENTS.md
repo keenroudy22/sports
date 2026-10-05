@@ -40,7 +40,8 @@ watch the runs, and fix what breaks.
 - Plain words, short sentences, the answer first. No jargon ("CLV", "calibration") without saying what it means.
 - Use they/them for the owner.
 - The owner delegates ("do what you think makes the most sense and get it done") but decides anything public: new
-  post types, how the record counts, how many plays go out. Ask when a choice changes what followers see.
+  post types, how the record counts, how many plays go out. Tested layout/color/copy variants within an already
+  approved category and its existing caps are approved; a new category, channel, market or release policy is not.
 - Say plainly when something failed, including your own mistakes, and what you did about it.
 
 ## Rules that never bend
@@ -101,36 +102,101 @@ Handy commands (from `~/Projects/sports`):
    `cd ~/Projects/sports-dev && /opt/homebrew/bin/python3 -m unittest discover -s tests` and
    `cd ~/Projects/sports-dev && node --test tests/*.test.js`. Do not use `run.sh py` for these: that wrapper deliberately
    changes into the production checkout.
-3. Rehearse the next run without publishing anything:
-   `cd ~/Projects/sports-dev && /opt/homebrew/bin/python3 scripts/run.py run --dry-run --no-llm --slot HHMM`
-   (a `--now` in the future stops at report validation on purpose; a dry run writes to `~/.config/keenroudy/pending/`).
-   Move any file it leaves in `~/.config/keenroudy/failed/` out of there, so it is not mistaken for a real stop.
+3. Rehearse against isolated stored inputs, without any feed/model calls or production writes:
+   `cd ~/Projects/sports-dev && /opt/homebrew/bin/python3 scripts/rehearse.py --slot HHMM`.
+   Use the current scheduled window, not a fabricated future instant. This copies the desk inputs to a fresh
+   temporary workspace, executes the real `run.py` dry-run there, blocks network/process calls and outside writes,
+   and retains the log, reports and `result.json` there. Require exit 0 and outcome `ok`; inspect any denied outside
+   write/private-state access. Missing network-only evidence is expected and must never be invented to make the
+   rehearsal pass. This tests stored-input behavior, not fresh prices, current injury verification or real delivery.
+   `run.py --dry-run --no-llm` alone is **not offline**: live scoreboard/news/weather paths and optional rendering
+   may still run, and it can leave drafts/pending/failed files in the shared private desk. Do not use that command
+   as an isolated test. Do not delete a real failure report to clean up a rehearsal.
 4. Commit on `dev` as keenroudy22, ending the message with an attribution line for the agent that wrote it.
 5. Deploy while holding the run lock (it waits for a run in progress), then fast-forward and push:
    ```
    cd ~/Projects/sports
    /opt/homebrew/bin/python3 - <<'PY'
-   import fcntl, subprocess, sys, time
+   import fcntl, os, subprocess, time
+   from pathlib import Path
+   prod = Path('/Users/keen/Projects/sports')
+   dev = Path('/Users/keen/Projects/sports-dev')
+   env = {**os.environ, 'GH_CONFIG_DIR': '/Users/keen/.config/keenroudy/gh',
+          'GIT_CONFIG_NOSYSTEM': '1'}
+   def command(args, cwd):
+       subprocess.run(args, cwd=cwd, env=env, check=True)
+   def clean(path):
+       state = subprocess.run(['git', 'status', '--porcelain'], cwd=path, env=env,
+                              check=True, capture_output=True, text=True).stdout
+       if state.strip():
+           raise SystemExit(f'{path} is not clean; preserve and review changes before deployment')
    lock = open('/Users/keen/.config/keenroudy/run.lock', 'a')
    while True:
        try:
            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB); break
        except OSError:
            time.sleep(5)
-   steps = 'git fetch -q origin && git merge -q --ff-only origin/main && git -C ../sports-dev rebase -q main && ' \
-           '(cd ../sports-dev && /opt/homebrew/bin/python3 -m unittest discover -s tests 2>&1 | tail -1) && ' \
-           'git merge -q --ff-only dev && git push -q origin main'
-   sys.exit(subprocess.call(steps, shell=True, env={**__import__('os').environ,
-            'GH_CONFIG_DIR': '/Users/keen/.config/keenroudy/gh', 'GIT_CONFIG_NOSYSTEM': '1'}))
+   clean(prod)
+   clean(dev)
+   command(['git', 'fetch', '-q', 'origin'], prod)
+   command(['git', 'merge', '-q', '--ff-only', 'origin/main'], prod)
+   tested_head = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=dev, env=env,
+                                check=True, capture_output=True, text=True).stdout.strip()
+   command(['git', 'rebase', '-q', 'main'], dev)
+   rebased_head = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=dev, env=env,
+                                 check=True, capture_output=True, text=True).stdout.strip()
+   if rebased_head != tested_head:
+       raise SystemExit('Rebased dev; repeat rehearsal and affected visual checks, then retry deployment')
+   command(['/opt/homebrew/bin/python3', '-m', 'unittest', 'discover', '-s', 'tests'], dev)
+   node_tests = sorted(str(p.relative_to(dev)) for p in (dev / 'tests').glob('*.test.js'))
+   if not node_tests:
+       raise SystemExit('No frontend tests found; refusing deployment')
+   command(['node', '--test', *node_tests], dev)
+   clean(prod)
+   clean(dev)
+   command(['git', 'merge', '-q', '--ff-only', 'dev'], prod)
+   command(['git', 'push', '-q', 'origin', 'main'], prod)
    PY
    ```
-   If `~/Projects/sports` is not clean (a stopped run left captures), commit those as "Captures left by a stopped
-   run" first; if a rebase stops on a store, `python3 scripts/merge_store.py` resolves it, then `git rebase --continue`.
+   Each test's exit code must stop deployment on failure; never pipe a test into `tail` without preserving the
+   test's status. If the rebase changed code after the rehearsal/visual QA, repeat affected verification before
+   promoting. If `~/Projects/sports` is not clean, inspect first: commit genuine stopped-run captures as "Captures
+   left by a stopped run", preserving unrelated edits. If a rebase stops on a store, `python3 scripts/merge_store.py`
+   resolves it, then `git rebase --continue`. Never discard data or force the merge.
 6. Watch the publish run until it passes (`gh run watch <id> --exit-status`), then check the live site at phone
    width (375 px): no sideways scroll, no console errors.
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Product implementation approval (2026-10-05):** implement the approved product plan in small, verified
+  releases. The effective main navigation is **Today / Games / Charts / Record / Tools**. Games includes Upcoming,
+  Live and Final; `#scores` remains an alias into the Live view, not a competing main tab. Preserve `#board`,
+  `#stats`, trends, player/game deep links, sport context and back navigation. Each sport retains its own Today;
+  unsupported capabilities are explicit. Today puts compact actual published selections first (POTD then an
+  active Climb), followed by official results and optional research. An unposted Climb is a small status, not the
+  hero. Model accuracy remains separate under Record. This contract supersedes all older Board/Players/Scoreboard
+  and Scores-main-tab instructions below. `docs/PRODUCT-IMPLEMENTATION.md` tracks evidence and unfinished gates.
+- **Evaluation windows, not quotas (2026-10-05):** schedules promise checks and useful status, never a guaranteed
+  pick, parlay or ladder step. Card sizes and post counts are ceilings. A qualified/no-play/held state is distinct
+  from a delivery failure. Existing price, sample, calibration, availability, overlap, record, cadence and budget
+  checks remain; never lower them to fill a slot. The Climb may advance/restart after settlement on a later
+  qualifying scan, including the same day, but only one real rung is open at a time.
+- **Creative testing within approved releases (2026-10-05):** rotate tested original graphic and short-copy
+  variants within existing categories/caps; exact wording and facts still pass the guards. Green means a hit or
+  support for the selected side (including an under); red means miss/against that side; gray means unknown/inactive.
+  Pair colors with numbers/text/icons. Keep the chef/name and navy/mint/cyan foundation; no avatar replacement or
+  brown/tan/amber house palette. Preserve samples, book, price and timing; do not regenerate old public attachments.
+  **Not approved by this implementation:** alternate/milestone social research, new-sport pick promotion, public
+  X live-progress, automated replies, broader social frequency, account/billing activation or creator outreach.
+  Social trend research remains fresh **main lines only**, at least five games, in its existing optional slot.
+  X live-progress still needs the separate pilot-review/release checkpoint.
+- **Business readiness and source rights (2026-10-05):** safe product polish continues free. Record provider and
+  asset permissions in `docs/SOURCE-RIGHTS.md`; public accessibility is not a commercial license. ESPN/portrait,
+  nflverse upstream and SharpAPI use boundaries require review before expansion/monetization. Do not add feeds,
+  increase limits, contact counterparties or activate payments through this approval. `docs/SUBSCRIPTION-PLAN.md`
+  sets measurable reliability/usability/cohort gates; four weeks cannot be declared complete in one release.
+  Browser-local Saved and opt-in feedback remain private; no new tracking or automatic message subscriptions.
+  Future paid payloads require server-side entitlement checks, not hidden public JSON. Public results remain free.
 - **Personal tools and visual refresh (2026-10-05):** changing the sport stays in the current section; each sport
   has its own Today view. Unsupported research stays honest and never substitutes NFL data. This supersedes the
   older non-football selector redirect to Scores. Saved players/games/lines and original-vs-latest same-book quotes
@@ -141,9 +207,10 @@ Handy commands (from `~/Projects/sports`):
   room for wrapped text. Keep the chef identity; no public avatar replacement. Every historical count/window stays
   visible, never market a mixed-hit sheet as 100%. Existing post selection, frequency, budgets and release gates
   are unchanged. Do not recreate already-published attachments merely to change their design.
-- **Website-first new sports (2026-10-05):** Scores is its own main route, including bare `#scores`, and the
-  header selector exposes all nine leagues. NFL/CFB Games and Charts remain football research; other sports open
-  their Scores/research view, never silently show NFL data. Show saved NBA/CBB pregame trial projections and trial
+- **Website-first new sports (2026-10-05; navigation superseded above):** Scores keeps its route alias, and the
+  header selector exposes all nine leagues. NFL/CFB Games and Charts retain their football research; other sports
+  show their own supported capability within the selected section, never silently redirect or show NFL data.
+  Show saved NBA/CBB pregame trial projections and trial
   totals W-L-P separately from official plays; zero settled trials means pending, not a proven record. MLB/NHL
   line/final collection counts are not prediction wins. No new model or edge is invented to fill a page.
   Keep new-sport research on the website first. Optional multi-sport schedule social posts are paused by default
@@ -173,7 +240,7 @@ Handy commands (from `~/Projects/sports`):
   This is local editorial work, not autonomous website code editing or deployment.
   Sports requests ask Ollama to retain the model for 12 hours between checks (evictable, not pinned).
   `KEENROUDY_LLM_KEEP_ALIVE=15m` restores the former memory-saving behavior; no shared server setting changes.
-- **Overnight polish and multi-sport release (2026-10-05, owner authorized):** Scores has its own main tab and
+- **Overnight polish and multi-sport release (2026-10-05; navigation superseded above):** Games includes live scores and
   Today links to all seven additional leagues. Browser score refresh preserves open sections and scroll, checks
   yesterday for midnight games, backs off failures, and never advances a successful timestamp on an error.
   Supplied DraftKings pregame lines may appear in Scores with retrieval time, never as verified in-play odds;
@@ -341,8 +408,8 @@ Handy commands (from `~/Projects/sports`):
   underperformance check must block new official straight plays, including favorites and researched labels.
   Fewer or zero plays are valid. Existing publications and their results remain untouched. Calibrated prop pricing
   is shared by quote shopping, gates, prose and the site; new publications preserve their probability inputs.
-- **Transparent Board (2026-10-02):** official plays first; future plays grouped separately. Navigation is Board,
-  Games, Players, Scoreboard, More (old hashes remain valid). The headline separates all published W-L from
+- **Transparent Board (2026-10-02):** official plays first; future plays grouped separately. The October 5
+  five-destination navigation supersedes the older labels; old hashes remain valid. The headline separates all published W-L from
   captured-price returns, assumed historical prices and promotional credits. Combined legacy totals stay available
   and labeled in the detailed record. Do not turn an expired original quote into an Open badge. A yard/point gap
   is a projection gap, not a probability edge. College disagreements of at least seven spread points carry a
@@ -383,10 +450,10 @@ Handy commands (from `~/Projects/sports`):
   changed snapshots and final scores before either sport gets a model. This uses ESPN's public feed, not a metered
   service, and never grades or publishes a play. Do not add public picks or cross-sport tickets merely because scores
   or market captures exist.
-- **The daily card** (2026-09-28, ceilings clarified 2026-10-02): up to five straight plays on Saturday and Sunday, a mix of game lines and player props
-  (three of a kind at most); one play on other days, the NFL game's on an NFL night (`gates.card_cap`, ordered by
-  `run.rank_card`). Never leave an NFL day without a post. A fun parlay with alternate lines every Saturday (college,
-  `easy_parlay.sharp_candidate`) and Sunday (NFL easy props), plus the lotto when one qualifies. Pick of the Day is
+- **The daily card** (2026-09-28, ceilings clarified October 2/5): up to five straight plays on Saturday and Sunday, a mix of game lines and player props
+  (three of a kind at most); up to one on other days (`gates.card_cap`, ordered by `run.rank_card`). An NFL-day post
+  can be research, status or a receipt; it does not require a pick. Evaluate fun tickets on weekend slates only
+  within the latest main-line-first/alternate-frequency and no-stacking rules; no guaranteed parlay. Pick of the Day is
   independent of every challenge and may come from any qualifying game, including a one-game slate.
 - **Alternate lines are for fun tickets** (2026-09-28): the ladder, lotto/longshot, easy parlay and any other fun
   parlay may use a book's feed-priced alternate when our number likes it at that price. One book, one leg per game,
@@ -406,8 +473,8 @@ Handy commands (from `~/Projects/sports`):
   different game. One rung open at a time; after it settles, the next scheduled scan may advance or restart the
   climb the same day. NFL player legs run now; college player legs wait until their own numbers are calibrated.
   Never force it on a one-game slate: the two legs stay
-  in different games. It must post; alternates
-  are allowed and expected. A rung pulled before its X post still counts, win or lose; while ungraded it blocks the
+  in different games. A qualifying rung must complete its approved delivery; alternates are allowed, not a quota.
+  A rung pulled before its X post still counts, win or lose; while ungraded it blocks the
   next rung, and after grading the climb moves from its result.
 - **College player props** are legal pregame in Indiana (Gaming Commission, 2026-09-24). Their board rows come from
   SharpAPI's own lines; learning calibrates them weekly (`CFB/prop`).
@@ -428,9 +495,10 @@ Handy commands (from `~/Projects/sports`):
   preserve the review note and sources, name the verified in-game injury on the final receipt, and append a dated
   correction later if stronger evidence appears.
 - **Projected-winner record** (2026-10-02): every pregame score projection also grades the team it made more likely
-  to win straight up. Show that moneyline-style W-L-P record and hit rate by league, model, season and week on Today
-  and the model scoreboard. It is model accuracy, never an official play or a profit claim; do not calculate units
-  without a real captured moneyline price.
+  to win straight up. Show that moneyline-style W-L-P record and hit rate by league, model, season and week in
+  **Record → Model**, not on Today. The October 5 product contract supersedes the older Today placement, not the
+  underlying grading. It is model accuracy, never an official play or a profit claim; do not calculate units without
+  a real captured moneyline price.
 - **Weekly "📌 Save this" projection sheet**: the full NFL slate or 16 college games, college Saturday and NFL
   Sunday at 10 AM (`scripts/sheet.py`). Every spread and total read carries the exact captured line, price and book.
   Numbered mint rings identify up to four markets where the calibrated chance clears that price by the Board's value
@@ -457,9 +525,9 @@ Handy commands (from `~/Projects/sports`):
   their own channel, use only the owner's exact links, and are clearly labeled with age, location, changing-terms and
   Kook'n-benefit language; never mix them into ordinary plays. The site's front-page community card is the main
   conversion path: it promises only early official plays, Discord-only Arb Radar candidates and the public record.
-- **The site**: the projection-card look everywhere (logos, photos, tiles), tabs Board, Games, Players, Scoreboard,
-  More. The Board leads with official plays; its season scorecard follows the official record before any optional
-  research, shows the graded-game count and last graded kickoff, and links to the full scoreboard. The separately
+- **The site**: the projection-card look everywhere (logos, photos, tiles), using the October 5 navigation and
+  ordering above. Today leads with official plays and a compact official-results strip. Full model accuracy is
+  under **Record → Model**, not on Today, with graded-game count and last graded kickoff. The separately
   labeled model scorecard shows spread vs close, projected
   moneyline winner, total vs close, player projection vs captured line, and published fun parlays. The first four
   are model accuracy and the parlay tile is labeled separately; never imply the mixed card is a profit record.

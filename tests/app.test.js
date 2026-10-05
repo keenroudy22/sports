@@ -4,6 +4,47 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const C = require('../site/core.js');
 
+test('shared plot renders under hits, ties, unknowns and snap percentages on one scrollable scale', () => {
+  const source=fs.readFileSync('site/app.js','utf8');
+  const body=source.match(/const historyPlot = \([^\n]+\) => \{([\s\S]*?)\n  \};/)[1];
+  const render=new Function('C','esc','rows','values','line','direction','compact','key',body);
+  const rows=[{label:'A'},{label:'B'},{label:'C'},{label:'D'}];
+  const html=render(C,C.esc,rows,[0,.8,1,null],.8,'under',false,'snapPct');
+  assert.match(html,/under 80%; green hit/);
+  assert.match(html,/plot-hit plot-zero-value/);
+  assert.match(html,/plot-push/);
+  assert.match(html,/plot-miss/);
+  assert.match(html,/plot-unknown/);
+  assert.match(html,/>80%<\/b>/);
+  assert.match(html,/history-chart-canvas/);
+  const css=fs.readFileSync('site/app.css','utf8');
+  assert.match(css,/\.history-chart \{[^}]*overflow-x:auto/);
+  assert.doesNotMatch(css,/\.full-chart \.plot-value \{ font-size:8px/);
+});
+
+test('Climb and parlay week labels stay distinct and do not mix dollar and unit summaries', () => {
+  const source=fs.readFileSync('site/app.js','utf8');
+  const body=source.match(/const settledWeeks = \([^\n]+\) => \{([\s\S]*?)\n  \};/)[1];
+  const render=new Function('C','esc','played','wl','unitText','settledRow','settled','clv','searching','weekLabel','scope',body);
+  const row={kind:'parlays',parlayType:'ladder',result:'win',odds:-200,riskUnits:.25,kickoff:'2026-10-04T17:00Z'};
+  const run=(scope,rows)=>render(C,C.esc,t=>t.wins+t.losses+t.pushes,t=>`${t.wins}–${t.losses}`,n=>n+'u',()=>'',rows,new Map(),false,w=>w,scope);
+  assert.match(run('ladder',[row]),/1–0 · 1 ladder step/);
+  assert.doesNotMatch(run('ladder',[row]),/fun parlay|[0-9]u/);
+  assert.match(run('parlays',[{...row,parlayType:'longshot'}]),/1 fun parlay/);
+});
+
+test('research scope, side labels and primary Tools destinations are unambiguous', () => {
+  const source=fs.readFileSync('site/app.js','utf8');
+  assert.match(source,/up to last 5 this season/);
+  assert.match(source,/Last 10 this season/);
+  assert.match(source,/const hitSummary/);
+  assert.match(source,/h\[side\]/);
+  const tools=source.slice(source.indexOf('async function viewMore()'),source.indexOf('async function viewSchedule()'));
+  assert.equal((tools.match(/href="#arbs"/g)||[]).length,1);
+  assert.equal((tools.match(/href="#lab"/g)||[]).length,1);
+  assert.doesNotMatch(tools,/personalLinks\(/);
+});
+
 test('game research is independent of posted plays and shows exact comparisons with cautions', () => {
   const source = fs.readFileSync('site/app.js', 'utf8');
   const body = source.match(/const modelReadsSection = \(card, detail\) => \{([\s\S]*?)\n  \};/)[1];
@@ -74,12 +115,14 @@ test('confidence labels rank calibrated chances without calling them locks', () 
   assert.doesNotMatch(board, /lock\b/i);
 });
 
-test('Today keeps the season scorecard above secondary lines and removes the duplicate record block', () => {
+test('Today puts published plays and official results before optional research and model detail', () => {
   const source = fs.readFileSync('site/app.js', 'utf8');
   const today = source.slice(source.indexOf('async function viewToday()'), source.indexOf('const modelCard ='));
-  assert.ok(today.indexOf('scorecardCard(scoreboard') < today.indexOf('research-heading'));
+  assert.ok(today.indexOf('card.map(playCard)') < today.indexOf('officialStrip(picks)'));
+  assert.ok(today.indexOf('officialStrip(picks)') < today.indexOf('research-heading'));
+  assert.ok(today.indexOf('card.map(playCard)') < today.indexOf('inactive-ladder'));
   assert.doesNotMatch(today, /transparent-record/);
-  assert.equal((today.match(/scorecardCard\(/g) || []).length, 1, 'Today renders one prominent scorecard');
+  assert.equal((today.match(/scorecardCard\(/g) || []).length, 0, 'the model scorecard belongs under Model results');
 });
 
 test('official plays render as a compact collapsed list with details on demand', () => {
@@ -179,16 +222,19 @@ test('score pages refresh factual scores in the browser without treating odds or
   assert.match(source, /refresh every minute/);
 });
 
-test('Scores has its own route and a nine-league header selector', () => {
+test('Scores preserves its old routes under Games with a nine-league header selector', () => {
   assert.deepEqual(C.parseRoute('#scores'), {view:'scores',league:'ALL'});
   for(const league of ['NFL','CFB','NBA','WNBA','CBB','MLB','NHL','EPL','MLS'])
     assert.deepEqual(C.parseRoute('#scores/'+league), {view:'scores',league});
   const source=fs.readFileSync('site/app.js','utf8');
-  assert.match(source, /\['scores', 'Scores'\]/);
+  assert.match(source, /scores:'games'/);
+  assert.match(source, /gamesTabs\('scores'\)/);
   assert.match(source, /data-sport-select aria-label="Choose a sport"/);
   assert.match(source, /const SCORE_LEAGUES = \['NFL', 'CFB', 'NBA', 'WNBA', 'CBB', 'MLB', 'NHL', 'EPL', 'MLS'\]/);
   assert.match(source, /event\.target\.matches\('\[data-sport-select\]'\)/);
-  assert.doesNotMatch(source, /scores: 'games'/);
+  const tabs=source.match(/const TABS = (.*);/)[1];
+  assert.equal((tabs.match(/\['/g) || []).length,5);
+  assert.match(tabs,/\['more', 'Tools'\]/);
 });
 
 test('sport research distinguishes collected games, trial records and missing projections', () => {

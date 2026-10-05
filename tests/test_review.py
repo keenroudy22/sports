@@ -10,6 +10,59 @@ import review
 
 
 class ReviewTests(unittest.TestCase):
+    def test_private_delivery_is_disabled_without_separately_verified_destination(self):
+        never = lambda *a, **k: self.fail('no network without private setup')
+        self.assertEqual(review.private_weekly_delivery('private', '2026-10-05', env={'DISCORD_WEBHOOK_URL': 'public'}, metadata=never, send=never), 'not-configured')
+        self.assertEqual(review.private_weekly_delivery('private', '2026-10-05', env={'DISCORD_REVIEW_WEBHOOK_URL': 'private'}, metadata=never, send=never), 'private-destination-not-verified')
+
+    def test_private_delivery_checks_identity_disables_mentions_and_never_retries_ambiguous_send(self):
+        channel = '1555684007285489805'
+        env = {'DISCORD_REVIEW_WEBHOOK_URL': 'https://discord.com/api/webhooks/1555684007285489806/fake-test-token',
+               'DISCORD_REVIEW_CHANNEL_ID': channel, 'KEENROUDY_REVIEW_DISCORD_PRIVATE_VERIFIED': '1'}
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'review.json'
+            calls = []
+            def send(url, body, headers):
+                calls.append(body)
+                self.assertEqual(body['allowed_mentions'], {'parse': []})
+                self.assertLessEqual(len(body['content']), 2000)
+                return 200, json.dumps({'id': 'message', 'channel_id': channel}).encode()
+            identify = lambda _: {'channel_id': channel, 'guild_id': 'server'}
+            self.assertEqual(review.private_weekly_delivery('a\n' * 2000, '2026-10-05', env, path, identify, send), 'sent')
+            self.assertEqual(review.private_weekly_delivery('private', '2026-10-05', env, path, identify, send), 'already-sent')
+            self.assertEqual(len(calls), 1)
+            self.assertNotIn('fake-test-token', path.read_text())
+            self.assertEqual(review.private_weekly_delivery('private', '2026-10-12', env, path, identify,
+                             lambda *a: (500, b'failed secret')), 'delivery-review-required')
+            self.assertEqual(review.private_weekly_delivery('private', '2026-10-19', env, path, identify, send), 'delivery-review-required')
+            self.assertEqual(len(calls), 1)
+
+    def test_private_destination_mismatch_and_public_webhook_are_refused(self):
+        env = {'DISCORD_REVIEW_WEBHOOK_URL': 'https://discord.com/api/webhooks/1555684007285489806/fake',
+               'DISCORD_REVIEW_CHANNEL_ID': '1555684007285489805', 'KEENROUDY_REVIEW_DISCORD_PRIVATE_VERIFIED': '1'}
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'review.json'
+            self.assertEqual(review.private_weekly_delivery('private', '2026-10-05', env, path,
+                             lambda _: {'channel_id': 'other', 'guild_id': 'server'}), 'private-destination-mismatch')
+            self.assertFalse(path.exists())
+            env['DISCORD_WEBHOOK_URL'] = env['DISCORD_REVIEW_WEBHOOK_URL']
+            self.assertEqual(review.private_weekly_delivery('private', '2026-10-05', env, path), 'private-destination-refused')
+            env['DISCORD_WEBHOOK_URL'] = 'https://discord.com/api/webhooks/1555684007285489807/different-token'
+            self.assertEqual(review.private_weekly_delivery('private', '2026-10-05', env, path,
+                             lambda _: {'channel_id': env['DISCORD_REVIEW_CHANNEL_ID'], 'guild_id': 'server'}),
+                             'private-destination-refused', 'different tokens do not make the same channel private')
+            self.assertFalse(path.exists())
+
+    def test_corrupt_private_delivery_reservation_never_resends(self):
+        env = {'DISCORD_REVIEW_WEBHOOK_URL': 'https://discord.com/api/webhooks/1555684007285489806/fake',
+               'DISCORD_REVIEW_CHANNEL_ID': '1555684007285489805', 'KEENROUDY_REVIEW_DISCORD_PRIVATE_VERIFIED': '1'}
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'review.json'
+            path.write_text('partial write')
+            self.assertEqual(review.private_weekly_delivery('private', '2026-10-05', env, path,
+                             lambda _: self.fail('do not send without readable reservation state')),
+                             'delivery-review-required')
+
     def test_hosted_runs_reads_the_whole_week_and_names_each_failed_step(self):
         commands = []
 

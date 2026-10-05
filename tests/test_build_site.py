@@ -601,10 +601,43 @@ class TableTests(unittest.TestCase):
         table = build_site.defense_table('NFL', logs, 2026)
         self.assertEqual(table['A']['g'], 2)
         self.assertEqual((table['A']['WR']['recYds'], table['A']['WR']['rec']), (120.0, 10.0))
-        self.assertEqual(table['A']['QB']['att'], 0.0)
+        self.assertIsNone(table['A']['QB']['att'], 'unobserved is not a zero-yard/attempt game')
+        self.assertEqual(table['A']['coverage']['QB']['att'], 0)
+        self.assertEqual(table['A']['coverage']['WR']['recYds'], 2)
         self.assertEqual(table['A']['QB']['rushTD'], 1.5)
         self.assertEqual(build_site.defense_table('NFL', logs, 2026, last=1)['A']['WR']['recYds'], 90.0)
         self.assertEqual(build_site.defense_table('NFL', logs, 2024), {})
+
+    def test_defense_missing_values_do_not_inflate_a_defenses_rank(self):
+        logs = {'A': [
+            {'season': 2026, 'seasonType': 2, 'allowed': {'WR': {'recYds': 0}}},
+            {'season': 2026, 'seasonType': 2, 'allowed': {'WR': {'recYds': 100}}},
+            {'season': 2026, 'seasonType': 2, 'allowed': {'WR': {}}},
+            {'season': 2026, 'seasonType': 2, 'allowed': {'WR': {'recYds': None}}},
+            {'season': 2026, 'seasonType': 2, 'allowed': {'WR': {'recYds': float('nan')}}},
+        ]}
+        row = build_site.defense_table('NFL', logs, 2026)['A']
+        self.assertEqual(row['g'], 5)
+        self.assertEqual(row['WR']['recYds'], 50.0)
+        self.assertEqual(row['coverage']['WR']['recYds'], 2)
+        self.assertIsNone(row['TE']['recYds'])
+
+    def test_chart_season_is_complete_and_excludes_future_or_unknown_stats(self):
+        now = datetime(2026, 10, 4, 15, tzinfo=timezone.utc)
+        upcoming = dict(slate_game('NFL-next', '2026-10-05T00:20:00Z'), season=2026)
+        snapshot = {'model': 'v2.0', 'publishedAt': '2026-10-04T14:00:00Z', 'players': {
+            'home': {'players': [{'id': '10', 'name': 'Player Ten', 'pos': 'WR'}]}, 'away': {'players': []}}}
+        rows = [{'kickoff': f'2026-09-{day:02}T17:00:00Z', 'season': 2026, 'seasonType': 2,
+                 'team': '1', 'opp': '2', 'home': False, 'name': 'Player Ten', 'pos': 'WR',
+                 'stats': {'recYds': day - 2, 'rec': None, 'recTD': float('nan')}} for day in range(1, 23)]
+        rows.append(dict(rows[0], kickoff='2026-10-05T17:00:00Z', stats={'recYds': 999}))
+        payload = build_site.build_player_charts('NFL', [upcoming], {'NFL-next': [snapshot]},
+                                                 {'10': list(reversed(rows))}, 2026, [], now)
+        history = payload['players'][0]['rows']
+        self.assertEqual(len(history), 22, 'Season must not silently mean last 20')
+        self.assertEqual(history[0]['stats'], {'recYds': -1})
+        self.assertEqual(history[1]['stats'], {'recYds': 0})
+        self.assertEqual(history[-1]['stats'], {'recYds': 20})
 
 
 if __name__ == '__main__':

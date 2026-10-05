@@ -238,6 +238,43 @@ def already_posted(log_book, day):
                for key in keys for part in str(key).split('+'))
 
 
+def bounded_caption(choice):
+    """Keep exact evidence on the attached graphic; shorten copy without truncating a fact.
+
+    Existing short captions are unchanged. A long sheet gets whole, exact preview
+    rows that fit plus a family-specific research caution. No row on the graphic,
+    eligibility rule, category or posting limit changes.
+    """
+    from x_post import LIMIT, tweet_length
+    original = choice['text']
+    if tweet_length(original) <= LIMIT:
+        return original
+    families = {
+        'upset': ('UNDERDOG WATCH', 'Raw-model research, not official plays. Check current prices.'),
+        'spread-dog': ('UNDERDOG SPREAD WATCH', 'Cover research, not an upset call or official play. Check current prices.'),
+        'matchup': ('MATCHUP MENU', 'History, not a prediction or official play. Check current prices.'),
+        'season': (choice['title'], 'History, not a prediction or official play. Check current prices.'),
+        'end-zone': ('END-ZONE WORK', 'Opportunity, not TD probability or an official play.'),
+    }
+    heading, caution = families[choice['kind']]
+    # Season's title contains a computed bucket, not provider-controlled prose.
+    if tweet_length(heading) > 60:
+        heading = 'KOOK\'N RESEARCH'
+    footer = '\n'.join(['Full details and samples on the graphic.', caution, tags(choice['rows'])])
+    preview = []
+    for row in choice['rows']:
+        fields = [str(row['title']), str(row['price'])]
+        if choice['kind'] in ('matchup', 'season'):
+            fields.append(str(row['metric']))
+        elif choice['kind'] in ('upset', 'spread-dog'):
+            fields.append(book_short(row['book']))
+        exact = ' | '.join(fields)
+        proposed = '\n'.join([heading, *preview, exact, '', footer])
+        if tweet_length(proposed) <= LIMIT:
+            preview.append(exact)
+    return '\n'.join([heading, *preview, '', footer])
+
+
 def select(data, details, now, lines=None):
     games = slate_games(data, now)
     if not games:
@@ -252,6 +289,7 @@ def select(data, details, now, lines=None):
     day = eastern_date(now)
     chosen.update(day=day, key=f"research-{chosen['kind']}-{day.isoformat()}",
                   firstKickoff=min(when(row['kickoff']) for row in chosen['rows']))
+    chosen['text'] = bounded_caption(chosen)
     return chosen
 
 

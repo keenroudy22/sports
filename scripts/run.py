@@ -2316,6 +2316,14 @@ def heartbeat(args):
     zone = os.path.realpath('/etc/localtime')
     if not any(z in zone for z in ('New_York', 'Indianapolis', 'Detroit', 'US/Eastern', 'EST5EDT')):
         problems.append(f'the machine is not on Eastern time ({zone})')
+    # Cached-only product checks share the existing change-only alert path. Never
+    # call a provider or emit raw post bodies, credentials or network errors here.
+    try:
+        import desk_health
+        health = desk_health.summary(root=ROOT, conf=CONF, logs=Path.home() / 'Library/Logs/KeenRoudy', now=now)
+        problems.extend(row['message'] for row in health['issues'])
+    except Exception:
+        problems.append('cached desk-health checks could not be read')
     alert_file = CONF.parent.parent / 'Library' / 'Logs' / 'KeenRoudy' / 'ALERT.txt'
     transition_path = CONF / 'heartbeat-state.json'
     previous = load_json(transition_path, {}) or {}
@@ -2343,7 +2351,10 @@ def heartbeat(args):
 
 def show_status(args):
     status = load_json(CONF / 'status.json', None)
-    print(json.dumps(status, indent=1) if status else 'no status yet')
+    import desk_health
+    shown = dict(status or {})
+    shown['deskHealth'] = desk_health.summary(root=ROOT, conf=CONF)
+    print(json.dumps(shown, indent=1))
     return 0
 
 
@@ -2435,6 +2446,16 @@ def precheck(args):
     import buffer_post
     import x_post
     now = gates.when(args.now) if args.now else datetime.now(timezone.utc)
+    # Reuse the existing half-hour clock even when no play is due. Private,
+    # cached-only checks cannot block the actual pre-post review.
+    if not args.dry_run:
+        try:
+            import desk_health
+            health = desk_health.summary(root=ROOT, conf=CONF, now=now)
+            desk_health.monitor(health, CONF / 'desk-health.json',
+                                lambda message: alert("Kook'n desk health", message, priority='default'))
+        except Exception:
+            log('cached desk-health check unavailable; pre-post review continues')
     if not precheck_due(x_post.load_log(), now):
         return 0
     status = {'errors': [], 'llm': {'judged': 0}, 'research': {'asked': 0, 'verified': 0, 'dropped': 0}}

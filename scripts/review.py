@@ -11,6 +11,8 @@ changes nothing: a defect it finds is described with the fix, and the owner asks
 Stdlib only.
 """
 import argparse
+import fcntl
+import hashlib
 import json
 import os
 import re
@@ -18,6 +20,7 @@ import subprocess
 import sys
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
+from urllib.request import Request, urlopen
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import gates
@@ -47,6 +50,96 @@ PACKET
 """
 DEFAULT_CODEX_MODEL = 'gpt-6-sol'
 DEFAULT_CODEX_REASONING = 'medium'
+
+
+def private_weekly_delivery(text, day, env=None, state_path=None, metadata=None, send=None):
+    """Opt-in owner-only destination; never fall back to the public plays webhook.
+
+    A human must verify the channel's private permissions before setting the
+    confirmation flag. Webhook metadata verifies destination identity, not ACLs.
+    Reserve before sending; an uncertain send needs review, never an auto retry.
+    No environment value, response body or URL is returned or logged.
+    """
+    values = os.environ if env is None else env
+    url = str(values.get('DISCORD_REVIEW_WEBHOOK_URL') or '').strip()
+    channel = str(values.get('DISCORD_REVIEW_CHANNEL_ID') or '').strip()
+    verified = values.get('KEENROUDY_REVIEW_DISCORD_PRIVATE_VERIFIED') == '1'
+    if not url:
+        return 'not-configured'
+    if not verified or not re.fullmatch(r'\d{15,22}', channel):
+        return 'private-destination-not-verified'
+    if not re.fullmatch(r'https://discord\.com/api/webhooks/\d{15,22}/[A-Za-z0-9_-]+', url) \
+            or url in {values.get('DISCORD_WEBHOOK_URL'), values.get('DISCORD_ARB_WEBHOOK_URL')}:
+        return 'private-destination-refused'
+    path = Path(state_path or (Path.home() / '.config/keenroudy/review-discord.json'))
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    def save(value):
+        temporary = path.with_suffix('.tmp')
+        temporary.write_text(json.dumps(value, indent=2) + '\n', encoding='utf-8')
+        temporary.replace(path)
+
+    def identify(target):
+        with urlopen(Request(target, headers={'User-Agent': 'KooknSports/1.0'}), timeout=10) as response:
+            return json.load(response)
+
+    with path.with_suffix('.lock').open('a') as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            return 'busy'
+        try:
+            state = json.loads(path.read_text(encoding='utf-8')) if path.exists() else {}
+        except (OSError, ValueError):
+            return 'delivery-review-required'
+        if not isinstance(state, dict) or not isinstance(state.get('attempts', {}), dict):
+            return 'delivery-review-required'
+        attempts = state.get('attempts') or {}
+        if any(not isinstance(row, dict) for row in attempts.values()):
+            return 'delivery-review-required'
+        key = str(day)
+        if key in attempts:
+            return 'already-sent' if attempts[key].get('state') == 'sent' else 'delivery-review-required'
+        if any(row.get('state') != 'sent' for row in attempts.values()):
+            return 'delivery-review-required'
+        try:
+            identity = (metadata or identify)(url)
+            if str(identity.get('channel_id')) != channel or not identity.get('guild_id'):
+                return 'private-destination-mismatch'
+            # Different webhook tokens can still target the same public channel.
+            # Refuse that easy configuration mistake using source identities,
+            # never by printing or persisting a webhook URL.
+            for public_url in {values.get('DISCORD_WEBHOOK_URL'), values.get('DISCORD_ARB_WEBHOOK_URL')} - {None, ''}:
+                public_identity = (metadata or identify)(public_url)
+                public_channel = public_identity.get('channel_id')
+                if not public_channel:
+                    return 'private-destination-unavailable'
+                if str(public_channel) == channel:
+                    return 'private-destination-refused'
+        except Exception:
+            return 'private-destination-unavailable'
+        # One bounded excerpt. The complete report remains on the owner's Mac.
+        excerpt = text.strip()
+        if len(excerpt) > 1650:
+            excerpt = excerpt[:1650].rsplit('\n', 1)[0] + '\nFull report is saved on the Mac.'
+        body = {'username': "Kook'n Private Desk", 'content': f"Private weekly review · {day}\n\n{excerpt}",
+                'allowed_mentions': {'parse': []}}
+        attempts[key] = {'state': 'sending', 'destination': hashlib.sha256(channel.encode()).hexdigest()[:16],
+                         'at': gates.stamp(datetime.now(timezone.utc))}
+        state['attempts'] = attempts
+        save(state)
+        try:
+            import discord_post
+            code, raw = (send or discord_post.http_send)(url + '?wait=true', body,
+                         {'Content-Type': 'application/json', 'User-Agent': 'KooknSports/1.0'})
+            result = json.loads(raw) if isinstance(raw, (str, bytes)) else raw
+            if code != 200 or not isinstance(result, dict) or not result.get('id') or str(result.get('channel_id')) != channel:
+                return 'delivery-review-required'
+            attempts[key]['state'] = 'sent'
+            save(state)
+            return 'sent'
+        except Exception:
+            return 'delivery-review-required'
 
 
 def period(now, since=None):
@@ -276,6 +369,11 @@ def main(argv=None):
     text = packet(first, last, run_lines(first, last), post_rows(log_book, first, last),
                   record(ctx.first, ctx.latest, first, last), hosted_runs(first), timing(first), ladder_now,
                   LOGS / 'ALERT.txt', post_metrics(log_book, first, last))
+    import desk_health
+    # Put current verified operational facts into the same bounded local brief;
+    # this adds no model call and reads no secrets or provider endpoints.
+    health = desk_health.summary(root=ROOT, logs=LOGS, now=now, book=log_book)
+    text = desk_health.markdown(health) + '\n' + text
     import market_review
     try:
         text += '\n' + market_review.markdown(market_review.from_stores())
@@ -302,6 +400,10 @@ def main(argv=None):
     if not args.no_push:
         import run
         run.alert('KeenRoudy weekly review', review[:1800] + f'\n\nFull review on the Mac: {review_path}', priority='default')
+        delivery = private_weekly_delivery(review, last.isoformat())
+        print(f'private Discord review: {delivery}')
+        if delivery == 'delivery-review-required':
+            run.alert('Kook\'n private review needs a check', 'Private Discord review delivery was uncertain. Check the channel before any retry.', priority='default')
     return 0
 
 

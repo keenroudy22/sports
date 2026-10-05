@@ -24,6 +24,35 @@ def game(watch=None):
 
 
 class ResearchPostTests(unittest.TestCase):
+    def test_long_captions_keep_whole_exact_preview_rows_and_all_graphic_evidence(self):
+        from copy import deepcopy
+        import x_post
+        rows = [{'title': name, 'price': f'{i + 3} inside the 10', 'metric': f'{i + 8} red-zone opportunities',
+                 'detail': '3 rush/rec TDs | 3/3 games observed', 'league': 'NFL', 'book': 'FanDuel'}
+                for i, name in enumerate(('Bijan Robinson', 'Juwan Johnson', 'Tyler Shough', 'Chris Olave'))]
+        original = deepcopy(rows)
+        choice = {'kind': 'end-zone', 'title': 'END-ZONE WORK', 'text': 'x' * 352, 'rows': rows}
+        text = R.bounded_caption(choice)
+        self.assertLessEqual(x_post.tweet_length(text), 280)
+        self.assertIn('Bijan Robinson | 3 inside the 10', text)
+        self.assertIn('not TD probability', text)
+        self.assertEqual(choice['rows'], original)
+        self.assertEqual(receipts.guard({'text': text}), [])
+
+    def test_each_research_family_has_a_bounded_fallback_even_for_long_names(self):
+        import x_post
+        for kind in ('end-zone', 'matchup', 'season', 'upset', 'spread-dog'):
+            with self.subTest(kind=kind):
+                choice = {'kind': kind, 'title': '90%+ TREND BOARD', 'text': 'x' * 900,
+                          'rows': [{'title': 'Very Long Exact Player Name ' * 20, 'price': 'over 19.5 (-110)',
+                                    'metric': '9/10 this season', 'book': 'FanDuel', 'league': 'NFL'}]}
+                text = R.bounded_caption(choice)
+                self.assertLessEqual(x_post.tweet_length(text), 280)
+                self.assertNotIn('Very Long', text, 'never slice an exact player/line in half')
+                self.assertIn('graphic', text)
+                self.assertEqual(receipts.guard({'text': text}), [])
+        self.assertEqual(R.bounded_caption({'text': 'Already short.'}), 'Already short.')
+
     def test_fresh_upset_has_priority_and_is_plainly_not_a_play(self):
         watch = {'side': 'home', 'team': 'Underdog', 'odds': 160, 'opponentOdds': -192,
                  'book': 'DraftKings', 'observedAt': '2026-10-03T13:30:00Z',
