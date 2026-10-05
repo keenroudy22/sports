@@ -1967,6 +1967,10 @@ def mirror(args):
         try:
             import live_watch
             live_watch.run_shadow(now=now, persist=not args.dry_run, log=log)
+            if not args.dry_run:
+                import live_progress
+                live_progress.run(now=now, log=log,
+                                  notify=lambda text: alert("Kook'n live-update pilot", text))
         except Exception as error:
             # Shadow evidence can never interrupt official delivery.
             log(f'live shadow unavailable ({type(error).__name__})')

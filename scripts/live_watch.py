@@ -5,6 +5,7 @@ summary once per tracked game, never an odds feed or an LLM. Events are written
 outside the repository for later pilot review; this module does not post.
 """
 import json
+import math
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -96,8 +97,8 @@ def current_value(pick, record):
 
 def threshold(pick):
     market = pricing.market_of(pick)
-    return {'passYds': 25, 'rushYds': 10, 'recYds': 10, 'receptions': 1, 'targets': 1,
-            'carries': 2, 'passTD': 1, 'rushTD': 1, 'recTD': 1}.get(market, 5)
+    return {'passYds': 25, 'rushYds': 10, 'recYds': 10, 'rec': 1,
+            'car': 2, 'att': 2, 'cmp': 2}.get(market, 5)
 
 
 def progress(pick, record):
@@ -119,16 +120,17 @@ def progress(pick, record):
     if direction == 'over' and value > line:
         state = 'hit-early'
     else:
-        distance = line - value if direction == 'over' else value - line
+        distance = math.floor(line) + 1 - value if direction == 'over' else value - line
         state = 'close' if 0 <= distance <= threshold(pick) else 'live'
     return {'state': state, 'value': value, 'line': line,
-            'remaining': max(0, line - value) if direction == 'over' else max(0, value - line)}
+            'remaining': max(0, math.floor(line) + 1 - value) if direction == 'over' else max(0, value - line)}
 
 
 def shaped_legs(pick):
     if not pick.get('legs'):
         return [(pick.get('id'), (pick.get('gameIds') or [None])[0], pick)]
-    return [(leg.get('id') or f"{pick.get('id')}:leg:{i}", leg.get('gameId'), desk_run.leg_pick(leg))
+    return [(leg.get('id') or f"{pick.get('id')}:leg:{i}", leg.get('gameId'),
+             {**desk_run.leg_pick(leg), 'title': leg.get('title')})
             for i, leg in enumerate(pick.get('legs') or [])]
 
 
@@ -181,6 +183,10 @@ def run_shadow(ctx=None, games=None, log_book=None, now=None, state_path=DEFAULT
             before = previous.get(key) or {}
             current_state[key] = {**status, 'pickId': pick['id'], 'legId': leg_id, 'gameId': gid,
                                   'observedAt': record['observedAt'], 'gameStatus': record.get('status'),
+                                  'previousObservedAt': before.get('observedAt'),
+                                  'previousGameStatus': before.get('gameStatus'),
+                                  'previousValue': before.get('value'),
+                                  'live': record.get('state') == 'in' and not record.get('completed'),
                                   'source': record['source']}
             if status['state'] != before.get('state') and status['state'] in ('close', 'hit-early', 'final-win', 'final-loss', 'final-push'):
                 emitted.append(event(status['state'], pick, leg_id, gid, status, record, now))

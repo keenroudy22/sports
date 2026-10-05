@@ -131,6 +131,16 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Local live-progress Discord pilot (2026-10-05, owner approved occasional midgame updates):** the existing
+  five-minute observer can nominate already-public player overs and full-game total overs for a short text-only
+  "what's left" update. The local 27B model selects an exact candidate and wording style; code supplies every
+  number. Require two recent observations with game-clock movement, no stat regression, then re-fetch the chosen
+  game before sending. Two updates per Eastern date, 45 minutes apart, one per ticket, ten minutes clear of ordinary
+  Discord releases. No Playbook, mentions, replies, new picks or early "cashed" claims. Max three attempted pilot
+  messages, then pause and notify the owner for review; ambiguous delivery pauses without retrying. No cloud
+  fallback or metered odds calls. `KEENROUDY_LIVE_PROGRESS=0` disables delivery; the shadow kill switch disables both.
+  X remains off pending three reviewed clean Discord trials and the separate release checkpoint. Scores and stats
+  are supplied by the feed, never inferred by the local model. See `docs/LIVE-PROGRESS.md` for rollout evidence.
 - **Local homepage editor (2026-10-05, owner requested more local liveliness):** after official social scheduling,
   each normal Mac desk run may use the local 27B model to select up to three exact supplied research notes for
   Today's compact Worth a look section. Fresh main-line season trends, observed red-zone usage and confirmed

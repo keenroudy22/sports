@@ -19,6 +19,14 @@ post and from expiry of the original price; it never labels a due time as proof 
 
 ## The voice (the owner's rules)
 
+The Oct 5 owner-approved live-progress pilot is a text-only Discord exception to the ordinary X-first mirror.
+Example (fictional preview, never sent): `Posted play: Receiver over 49.5 receiving yards` / `41 so far. 9 more
+receiving yards to reach 50.` / `8:12 - 4th · Live stats`. An optional `The sweat: ` opening is the only local-model
+wording variation. A ticket always says `Ticket leg`, never implies the whole ticket won, and a confirmed losing
+leg suppresses its remaining updates. At most two/day, 45 minutes apart, one/ticket, three pilot attempts total.
+No images, Playbook tag, unsolicited mentions or replies, and no X delivery in this pilot. Early crossings and
+finals remain with the observer/ordinary settlement receipts rather than another celebration. See `LIVE-PROGRESS.md`.
+
 Weekend Climb check-ins are approved text-only house posts. At/after the 11:45 AM Saturday/Sunday run, report
 the bank, next stake and unscheduled/open state unless a same-day ticket is already open. The date-specific key
 prevents duplicates, and the normal queue limits apply. These are updates, not promises that a ticket will post.
