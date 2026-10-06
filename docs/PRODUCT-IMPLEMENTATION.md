@@ -338,6 +338,35 @@ missing when neither component was recorded, so the page does not turn absent da
   season, keeps Playoffs and Full season selectable, and preserves sport-specific records. The NFL parlay slice
   visibly includes both official wins and reports 2–5; the all-sports official parlay record remains 2–9.
 
+## October 6 CFB visibility, matchup edges and research-card release
+
+- The blank-looking CFB Best Lines page was a hidden-state problem, not a missing-data problem. Switching sports
+  now clears player/team searches that do not transfer across leagues, while preserving useful research controls.
+  Best Lines also shows the current slate coverage before any filter: matchups, qualifying best lines, priced
+  player props and game lines. An active search is called out and can be cleared in one tap.
+- Game pages now put a compact Matchup edges section beneath strict favorites. A ranked edge must have a current
+  priced player line and at least two visible signals across the stored projection, exact-line season history and
+  opponent defense by position/stat. Opposing defense evidence stays visible as `Defense disagrees`; it is never
+  hidden to make a line look stronger. These rows remain research and never create an official play.
+- The existing research-post category now renders as a 1200×675 X card instead of a tall card with empty space.
+  A single line leads with the play and price, includes an exact hit/miss strip, and uses one hero portrait rather
+  than repeating the same image. The owner-supplied Landry Lyddy action-photo cutout is a visual prototype only;
+  unattended action-photo use still requires an approved/licensed or explicitly owner-supplied asset source under
+  P08. The safe current portrait remains the automated fallback.
+- Verification passed 879 Python tests (two intentionally skipped), 129 frontend tests, the complete stored-site
+  build, public-file boundary, and an isolated slot-1000 rehearsal. Local 375/1440 px checks covered CFB Best Lines
+  and the USM–Troy game page after rebasing onto the latest captured data, with no overflow, missing required
+  sections or browser errors.
+
+### Verified release receipt
+
+- Production revision: `a7d9038138e5e9f9808c27a0e9888d0bffd0e138`.
+- [Publish run 37482789725](https://github.com/keenroudy22/sports/actions/runs/37482789725) succeeded on
+  October 6 after the hosted record reconciliation and public artifact boundary passed. Live assets app 115,
+  core 68 and CSS 77 were confirmed.
+- Live 375 px Chrome checks passed on CFB Best Lines and `#game/CFB-401871090`: page width equaled viewport width,
+  the slate totals and Matchup edges were present, and the browser reported no script or console errors.
+
 ## External and elapsed-time gates
 
 | Gate | What remains | Authority/state |
