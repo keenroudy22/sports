@@ -1,34 +1,31 @@
 {
- "at": "2026-10-06T01:05:33Z",
+ "at": "2026-10-06T01:48:15Z",
  "confirmed": {
-  "CFB-401871051": "2026-10-06T01:05:33Z",
-  "CFB-401871066": "2026-10-06T01:05:33Z",
-  "CFB-401871090": "2026-10-06T01:05:33Z"
+  "CFB-401871051": "2026-10-06T01:48:15Z",
+  "CFB-401871066": "2026-10-06T01:48:15Z",
+  "CFB-401871090": "2026-10-06T01:48:15Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 232,
+    "draftkings": 157,
     "fanduel": 470
    },
-   "eventsListed": 62,
+   "eventsListed": 60,
    "eventsMatched": 3,
    "games": 3,
    "marketTypes": {
     "player_longest_passing_completion": 2,
-    "player_longest_reception": 8,
-    "player_longest_rush": 4,
     "player_passing_attempts": 8,
     "player_passing_completions": 6,
     "player_passing_touchdowns": 32,
     "player_passing_yards": 124,
-    "player_receiving_yards": 306,
+    "player_receiving_yards": 274,
     "player_receptions": 11,
-    "player_rushing_attempts": 8,
-    "player_rushing_yards": 193
+    "player_rushing_yards": 170
    },
-   "requestsLeft": 10,
-   "rows": 702,
+   "requestsLeft": 55,
+   "rows": 627,
    "slateGames": [
     "Southern Miss Golden Eagles at Troy Trojans 2026-10-07T00:00Z",
     "Jacksonville State Gamecocks at Kennesaw State Owls 2026-10-07T23:00Z",
@@ -97,7 +94,7 @@
       "fliff": "417528_c_p_209_prematch",
       "gemini": "NCAAF-2610082300-SHS-LIB-M",
       "goldrush": "31121173",
-      "kalshi": "KXNCAAFSPREAD-26OCT08SHSULIB",
+      "kalshi": "KXNCAAF1H-26OCT08SHSULIB",
       "ladbrokes": "1d84f5e8-05b1-4218-abf2-ed079f814837",
       "ladbrokes_uk": "lduk-258958788",
       "matchbook": "mb-34514339680700023",
@@ -137,9 +134,7 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
        "draw_no_bet",
-       "first_touchdown_scorer",
        "game_prop",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
@@ -149,9 +144,7 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
-       "total_touchdowns",
-       "will_there_be_overtime",
-       "winning_margin"
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-08T23:00:00Z",
@@ -177,7 +170,7 @@
       "gemini": "NCAAF-2610082300-MOST-WKU-M",
       "goldrush": "31121549",
       "hardrock": "6020102309256757664",
-      "kalshi": "KXNCAAF1HSPREAD-26OCT08MOSUWKU",
+      "kalshi": "KXNCAAF1H-26OCT08MOSUWKU",
       "ladbrokes": "ccf59e0a-8204-4de6-b960-b843960ed2bf",
       "ladbrokes_uk": "lduk-258965235",
       "matchbook": "mb-34514414509300023",
@@ -256,7 +249,7 @@
      "type": "fixture"
     },
     {
-     "away": "South Alabama Jaguars",
+     "away": "South Alabama",
      "external": {
       "ballybet": "1027508030",
       "betmgm": "6:46091",
@@ -275,7 +268,7 @@
       "gemini": "NCAAF-2610082330-USA-ARST-M",
       "goldrush": "31120577",
       "hardrock": "2750488979785777565",
-      "kalshi": "KXNCAAF1HTOTAL-26OCT08USAARST",
+      "kalshi": "KXNCAAF1H-26OCT08USAARST",
       "ladbrokes": "8ac78c37-7fae-46eb-9f72-ca6b03500b26",
       "ladbrokes_uk": "lduk-258952513",
       "matchbook": "mb-34514511383700023",
@@ -290,12 +283,13 @@
       "sportzino": "sz-17702593",
       "sx_bet": "L20405725",
       "thescorebet": "StandardEvent:9c31090a-8bf8-43dd-bc68-28479f5fe21d",
+      "thrillzz": "888237791",
       "underdog": "underdog_183227"
      },
-     "home": "Arkansas State Red Wolves",
+     "home": "Arkansas State",
      "sample": {
-      "away_team": "South Alabama Jaguars",
-      "home_team": "Arkansas State Red Wolves",
+      "away_team": "South Alabama",
+      "home_team": "Arkansas State",
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
@@ -327,9 +321,7 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
        "draw_no_bet",
-       "first_touchdown_scorer",
        "game_prop",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
@@ -342,21 +334,18 @@
        "player_passes_completed",
        "player_passing_+_rushing_yards",
        "player_passing_attempts",
-       "player_passing_completions",
        "player_passing_touchdowns",
        "player_passing_yards",
        "player_receiving_yards",
        "player_receptions",
        "player_rushing_+_receiving_touchdowns",
        "player_rushing_+_receiving_yards",
-       "player_rushing_attempts",
        "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
        "team_total",
        "total_points",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -374,6 +363,7 @@
       "betrivers": "1027508050",
       "bovada": "31794367",
       "bwin": "6:46058",
+      "caesars": "2103abc4-ddcc-451f-ad5d-645e3ad0a2b2",
       "circa": "217644",
       "coral": "cor-46629682",
       "draftkings": "34745880",
@@ -384,7 +374,7 @@
       "gemini": "NCAAF-2610082330-USF-UTS-M",
       "goldrush": "31116158",
       "hardrock": "7687560071290683791",
-      "kalshi": "KXNCAAF1HTOTAL-26OCT08USFUTSA",
+      "kalshi": "KXNCAAF1H-26OCT08USFUTSA",
       "ladbrokes": "d82007d4-befc-4d50-bcb1-0ef5c72010ab",
       "ladbrokes_uk": "lduk-258958791",
       "matchbook": "mb-34514455980100023",
@@ -439,12 +429,12 @@
        "4th_quarter_total_points",
        "anytime_touchdown_scorer",
        "draw_no_bet",
-       "first_touchdown_scorer",
        "game_prop",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
        "moneyline_3-way",
+       "outright",
        "player_extra_points_made",
        "player_field_goals_made",
        "player_interceptions",
@@ -467,10 +457,10 @@
        "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
+       "race_to_10_points",
        "team_total",
        "total_points",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -498,7 +488,7 @@
       "gemini": "NCAAF-2610092300-FSU-LOU-M",
       "goldrush": "31120004",
       "hardrock": "2507294599907770759",
-      "kalshi": "KXNCAAF1HSPREAD-26OCT09FSULOU",
+      "kalshi": "KXNCAAF1H-26OCT09FSULOU",
       "ladbrokes": "97e64f2d-4889-4ef0-9b94-9665428015d3",
       "ladbrokes_uk": "lduk-258949201",
       "novig": "01a0f9b4-db58-7200-a92c-bbb02a0daf61",
@@ -656,6 +646,7 @@
       "betparx": "1027508197",
       "betrivers": "1027508197",
       "bwin": "6:46059",
+      "caesars": "33e723d9-a2b2-45b3-88ef-d56e1a23afdc",
       "circa": "217660",
       "coral": "cor-46633514",
       "draftkings": "34745942",
@@ -666,7 +657,7 @@
       "gemini": "NCAAF-2610100100-WYO-SJS-M",
       "goldrush": "31121068",
       "hardrock": "5019529135794553237",
-      "kalshi": "KXNCAAF1HSPREAD-26OCT09WYOSJSU",
+      "kalshi": "KXNCAAF1H-26OCT09WYOSJSU",
       "ladbrokes": "f30d0c1e-3795-48b7-a8db-8c5d607ced53",
       "ladbrokes_uk": "lduk-258962355",
       "novig": "01a0fa22-9aee-7061-8ed6-c271056fa1c8",
@@ -713,7 +704,6 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -792,7 +782,6 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -832,7 +821,8 @@
       "smarkets": "45340799",
       "sportzino": "sz-17714568",
       "sx_bet": "L20378067",
-      "thescorebet": "StandardEvent:f78fbd77-3567-4059-a8b2-0dcf3549cf20"
+      "thescorebet": "StandardEvent:f78fbd77-3567-4059-a8b2-0dcf3549cf20",
+      "thrillzz": "888232409"
      },
      "home": "BYU Cougars",
      "sample": {
@@ -891,6 +881,7 @@
       "betrivers": "1027553017",
       "bovada": "31792392",
       "bwin": "6:46371",
+      "caesars": "ef503724-16cc-408a-b2b6-87651ba262e1",
       "circa": "217604",
       "coral": "cor-46622719",
       "draftkings": "34745949",
@@ -913,7 +904,8 @@
       "smarkets": "45348290",
       "sportzino": "sz-17724263",
       "sx_bet": "L20405720",
-      "thescorebet": "StandardEvent:21870df6-730f-4e54-84a7-ab598b45eae9"
+      "thescorebet": "StandardEvent:21870df6-730f-4e54-84a7-ab598b45eae9",
+      "thrillzz": "888237712"
      },
      "home": "West Virginia",
      "sample": {
@@ -945,11 +937,13 @@
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
        "draw_no_bet",
+       "game_prop",
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
        "moneyline_3-way",
+       "outright",
        "point_spread",
        "race_to_10_points",
        "race_to_15_points",
@@ -959,6 +953,7 @@
        "total_points",
        "total_points_odd_even",
        "total_touchdowns",
+       "will_there_be_overtime",
        "winning_margin"
       ]
      },
@@ -975,6 +970,7 @@
       "betrivers": "1027552997",
       "bovada": "31807771",
       "bwin": "6:46062",
+      "caesars": "10dd6ff0-755b-4281-ac18-6e2e6592baf7",
       "circa": "217651",
       "coral": "cor-46633537",
       "draftkings": "34745947",
@@ -1028,12 +1024,16 @@
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
        "draw_no_bet",
+       "game_prop",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
        "moneyline_3-way",
+       "outright",
        "point_spread",
+       "race_to_10_points",
        "team_total",
        "total_points",
+       "total_points_odd_even",
        "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
