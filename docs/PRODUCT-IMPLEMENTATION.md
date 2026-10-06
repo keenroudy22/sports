@@ -325,8 +325,18 @@ missing when neither component was recorded, so the page does not turn absent da
   stored-site build, the public-file boundary and the new reconciliation across all 90 official entries. Local
   Record and Trial views passed 320/375/1440 px Chrome checks with no page overflow, clipped headings, load failures
   or browser errors. The isolated slot-1000 rehearsal finished `ok`, with two expected blocked network reads and no
-  subprocesses, outside writes or private-state reads. Production receipt follows after deployment; these local
-  checks alone are not proof that the release is live.
+  subprocesses, outside writes or private-state reads.
+
+### Verified release receipt
+
+- Production revision: `80b40b4303bb2ab9b3884242ef1d3d194173c7b1`.
+- [Publish run 37475297200](https://github.com/keenroudy22/sports/actions/runs/37475297200) succeeded on
+  October 6. The hosted reconciliation checked all 90 official entries before publication; live assets app 114,
+  core 68 and CSS 76 were confirmed.
+- Live Record and Trial views passed a 375 px Chrome check with no horizontal overflow, clipped headings, load
+  failures or browser errors. The live Record exposes Season and Stage selectors, defaults NFL to 2026 regular
+  season, keeps Playoffs and Full season selectable, and preserves sport-specific records. The NFL parlay slice
+  visibly includes both official wins and reports 2–5; the all-sports official parlay record remains 2–9.
 
 ## External and elapsed-time gates
 
