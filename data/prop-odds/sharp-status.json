@@ -1,35 +1,35 @@
 {
- "at": "2026-10-06T15:57:41Z",
+ "at": "2026-10-06T16:56:41Z",
  "confirmed": {
-  "CFB-401871051": "2026-10-06T15:57:41Z",
-  "CFB-401871066": "2026-10-06T15:57:41Z",
-  "CFB-401871090": "2026-10-06T15:57:41Z"
+  "CFB-401871051": "2026-10-06T16:56:41Z",
+  "CFB-401871066": "2026-10-06T16:56:41Z",
+  "CFB-401871090": "2026-10-06T16:56:41Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 514,
-    "fanduel": 651
+    "draftkings": 760,
+    "fanduel": 639
    },
-   "eventsListed": 63,
+   "eventsListed": 60,
    "eventsMatched": 3,
    "games": 3,
    "marketTypes": {
-    "player_longest_passing_completion": 4,
-    "player_longest_reception": 11,
-    "player_longest_rush": 8,
+    "player_longest_passing_completion": 6,
+    "player_longest_reception": 20,
+    "player_longest_rush": 12,
     "player_passing_+_rushing_yards": 49,
-    "player_passing_attempts": 21,
-    "player_passing_completions": 20,
-    "player_passing_touchdowns": 38,
-    "player_passing_yards": 168,
-    "player_receiving_yards": 444,
-    "player_receptions": 78,
-    "player_rushing_attempts": 12,
-    "player_rushing_yards": 312
+    "player_passing_attempts": 29,
+    "player_passing_completions": 28,
+    "player_passing_touchdowns": 43,
+    "player_passing_yards": 189,
+    "player_receiving_yards": 527,
+    "player_receptions": 102,
+    "player_rushing_attempts": 31,
+    "player_rushing_yards": 363
    },
-   "requestsLeft": 52,
-   "rows": 1165,
+   "requestsLeft": 50,
+   "rows": 1399,
    "slateGames": [
     "Southern Miss Golden Eagles at Troy Trojans 2026-10-07T00:00Z",
     "Jacksonville State Gamecocks at Kennesaw State Owls 2026-10-07T23:00Z",
@@ -147,7 +147,9 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "anytime_touchdown_scorer",
        "draw_no_bet",
+       "first_touchdown_scorer",
        "game_prop",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
@@ -160,6 +162,7 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -186,7 +189,7 @@
       "gemini": "NCAAF-2610082300-MOST-WKU-M",
       "goldrush": "31121549",
       "hardrock": "6020102309256757664",
-      "kalshi": "KXNCAAF1H-26OCT08MOSUWKU",
+      "kalshi": "KXNCAAF1HSPREAD-26OCT08MOSUWKU",
       "ladbrokes": "ccf59e0a-8204-4de6-b960-b843960ed2bf",
       "ladbrokes_uk": "lduk-258965235",
       "matchbook": "mb-34514414509300023",
@@ -271,7 +274,7 @@
      "type": "fixture"
     },
     {
-     "away": "South Alabama",
+     "away": "South Alabama Jaguars",
      "external": {
       "ballybet": "1027508030",
       "betmgm": "6:46091",
@@ -306,10 +309,10 @@
       "thescorebet": "StandardEvent:9c31090a-8bf8-43dd-bc68-28479f5fe21d",
       "underdog": "underdog_183227"
      },
-     "home": "Arkansas State",
+     "home": "Arkansas State Red Wolves",
      "sample": {
-      "away_team": "South Alabama",
-      "home_team": "Arkansas State",
+      "away_team": "South Alabama Jaguars",
+      "home_team": "Arkansas State Red Wolves",
       "markets": [
        "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
@@ -498,6 +501,7 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -697,7 +701,6 @@
       "betparx": "1027508197",
       "betrivers": "1027508197",
       "bwin": "6:46059",
-      "caesars": "33e723d9-a2b2-45b3-88ef-d56e1a23afdc",
       "circa": "217660",
       "coral": "cor-46633514",
       "draftkings": "34745942",
@@ -756,9 +759,7 @@
        "highest_scoring_quarter_will_have_how_many_points",
        "match_result_both_teams_to_score",
        "moneyline",
-       "outright",
        "point_spread",
-       "race_to_10_points",
        "team_total",
        "total_points",
        "total_points_band",
@@ -847,6 +848,7 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -923,6 +925,7 @@
        "moneyline",
        "player_passing_touchdowns",
        "player_passing_yards",
+       "player_points",
        "player_receiving_yards",
        "player_rushing_+_receiving_touchdowns",
        "player_rushing_yards",
@@ -1042,7 +1045,6 @@
       "betrivers": "1027552997",
       "bovada": "31807771",
       "bwin": "6:46062",
-      "caesars": "10dd6ff0-755b-4281-ac18-6e2e6592baf7",
       "circa": "217651",
       "coral": "cor-46633537",
       "draftkings": "34745947",
@@ -1060,7 +1062,7 @@
       "polymarket": "nfl_army_tulanegreenwave_2026-10-10_b2",
       "prophetx": "1700086727",
       "rebet": "sr:match:70900878",
-      "robinhood": "13c7974b-7942-4689-888c-8f39461cea45",
+      "robinhood": "1bb165e6-2938-4b6e-84fb-75ca2ed4aa5f",
       "smarkets": "45340801",
       "sportzino": "sz-17931813",
       "sx_bet": "L20408580",
@@ -1105,13 +1107,12 @@
        "match_result_both_teams_to_score",
        "moneyline",
        "moneyline_3-way",
-       "outright",
        "point_spread",
-       "race_to_10_points",
        "team_total",
        "total_points",
        "total_points_band",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
