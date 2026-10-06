@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-06T21:38:16Z",
+  "updatedAt": "2026-10-06T23:14:31Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-10-06T21:19Z",
+              "reportedAt": "2026-10-06T23:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-06T21:31Z",
+              "reportedAt": "2026-10-06T23:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5757,13 +5757,13 @@
           "name": "Philadelphia Eagles",
           "players": [
             {
-              "id": "15797",
-              "name": "Lane Johnson",
-              "position": "OT",
-              "status": "Reserve-Ret",
-              "injury": "Personal",
-              "reportedAt": "2026-10-06T20:06Z",
-              "source": "https://www.espn.com/nfl/player/_/id/15797/lane-johnson"
+              "id": "4429013",
+              "name": "Tank Bigsby",
+              "position": "RB",
+              "status": "Injured Reserve",
+              "injury": "Abdomen",
+              "reportedAt": "2026-10-06T23:00Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4429013/tank-bigsby"
             },
             {
               "id": "4241478",
@@ -5874,15 +5874,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/3929630/saquon-barkley"
             },
             {
-              "id": "4429013",
-              "name": "Tank Bigsby",
-              "position": "RB",
-              "status": "Out",
-              "injury": "Abdomen",
-              "reportedAt": "2026-10-05T21:17Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4429013/tank-bigsby"
-            },
-            {
               "id": "4879250",
               "name": "Cole Payton",
               "position": "QB",
@@ -5980,6 +5971,15 @@
               "injury": null,
               "reportedAt": "2026-09-30T23:34Z",
               "source": "https://www.espn.com/nfl/player/_/id/4240585/aj-epenesa"
+            },
+            {
+              "id": "4218312",
+              "name": "Kenny Moore II",
+              "position": "CB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-09-29T23:22Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4218312/kenny-moore-ii"
             }
           ]
         },
@@ -6677,6 +6677,33 @@
           "name": "Tampa Bay Buccaneers",
           "players": [
             {
+              "id": "4816107",
+              "name": "Benjamin Morrison",
+              "position": "CB",
+              "status": "Questionable",
+              "injury": "Quadriceps",
+              "reportedAt": "2026-10-06T21:48Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4816107/benjamin-morrison"
+            },
+            {
+              "id": "4034779",
+              "name": "Ko Kieft",
+              "position": "TE",
+              "status": "Questionable",
+              "injury": "Elbow",
+              "reportedAt": "2026-10-06T21:42Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4034779/ko-kieft"
+            },
+            {
+              "id": "4870998",
+              "name": "Josiah Trotter",
+              "position": "LB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-06T21:32Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4870998/josiah-trotter"
+            },
+            {
               "id": "3150744",
               "name": "Chase McLaughlin",
               "position": "PK",
@@ -6693,24 +6720,6 @@
               "injury": "Illness",
               "reportedAt": "2026-10-06T19:54Z",
               "source": "https://www.espn.com/nfl/player/_/id/3894856/anthony-nelson"
-            },
-            {
-              "id": "4816107",
-              "name": "Benjamin Morrison",
-              "position": "CB",
-              "status": "Questionable",
-              "injury": "Quadriceps",
-              "reportedAt": "2026-10-06T18:21Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4816107/benjamin-morrison"
-            },
-            {
-              "id": "4034779",
-              "name": "Ko Kieft",
-              "position": "TE",
-              "status": "Questionable",
-              "injury": "Elbow",
-              "reportedAt": "2026-10-06T18:21Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4034779/ko-kieft"
             },
             {
               "id": "4608810",
@@ -6774,15 +6783,6 @@
               "injury": null,
               "reportedAt": "2026-10-06T00:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4870617/rueben-bain-jr"
-            },
-            {
-              "id": "4870998",
-              "name": "Josiah Trotter",
-              "position": "LB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-06T00:07Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4870998/josiah-trotter"
             },
             {
               "id": "4034790",
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "29",
-          "name": "Jalen Coker",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-06T20:01:41Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4695883/jalen-coker"
-        },
-        {
-          "teamId": "4",
-          "name": "Colbie Young",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-06T20:01:41Z",
-          "source": "https://www.espn.com/nfl/player/_/id/5092508/colbie-young"
-        },
-        {
           "teamId": "4",
           "name": "Bryan Cook",
           "from": "Out",
@@ -7764,11 +7748,27 @@
           "to": "Injured Reserve",
           "observedAt": "2026-10-06T21:32:56Z",
           "source": "https://www.espn.com/nfl/player/_/id/4602667/jaylin-lane"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-10-06T23:14:31Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "21",
+          "name": "Tank Bigsby",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-06T23:14:31Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4429013/tank-bigsby"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-06T21:38:16Z",
-      "lastAttemptAt": "2026-10-06T21:38:16Z",
+      "checkedAt": "2026-10-06T23:14:31Z",
+      "lastAttemptAt": "2026-10-06T23:14:31Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-06T21:38:16Z",
-      "lastAttemptAt": "2026-10-06T21:38:16Z",
+      "checkedAt": "2026-10-06T23:14:31Z",
+      "lastAttemptAt": "2026-10-06T23:14:31Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
