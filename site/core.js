@@ -531,6 +531,43 @@
     const e = new Date(d.toLocaleString('en-US', { timeZone: 'America/New_York' }));
     return `${e.getFullYear()}-${String(e.getMonth() + 1).padStart(2, '0')}-${String(e.getDate()).padStart(2, '0')}`;
   };
+  const recordPhaseOf = pick => {
+    const value = String(pick?.seasonType ?? '').toLowerCase();
+    return value === '3' || /post|playoff/.test(value) ? 'playoffs' : 'regular';
+  };
+  /* A season rollover changes the default slice; it never removes an older published result. "Current" is
+     evaluated per league because NFL 2026 and NHL 2027 can be active at the same time. */
+  const recordArchive = (picks, selectedSeason = 'current', selectedPhase = 'current') => {
+    const rows = Array.isArray(picks) ? picks.slice() : [];
+    const seasonOf = pick => Number.isInteger(Number(pick?.season)) && Number(pick.season) >= 1900 && Number(pick.season) <= 2200
+      ? Number(pick.season) : null;
+    const currentByLeague = {};
+    for (const pick of rows) {
+      const season = seasonOf(pick), league = String(pick?.league || 'OTHER');
+      if (season != null && (currentByLeague[league] == null || season > currentByLeague[league])) currentByLeague[league] = season;
+    }
+    const validSeason = /^(?:19|20|21)\d{2}$/.test(String(selectedSeason));
+    const season = validSeason ? Number(selectedSeason) : ['current', 'all'].includes(selectedSeason) ? selectedSeason : 'current';
+    const phase = ['current', 'regular', 'playoffs', 'all'].includes(selectedPhase) ? selectedPhase : 'current';
+    const base = rows.filter(pick => {
+      const value = seasonOf(pick), current = currentByLeague[String(pick?.league || 'OTHER')];
+      if (season === 'all') return true;
+      if (season === 'current') return current == null ? value == null : value === current;
+      return value === season;
+    });
+    const phaseByLeague = {};
+    for (const league of new Set(rows.map(pick => String(pick?.league || 'OTHER')))) {
+      const referenceSeason = season === 'current' ? currentByLeague[league] : season === 'all' ? currentByLeague[league] : season;
+      const reference = rows.filter(pick => String(pick?.league || 'OTHER') === league &&
+        (referenceSeason == null ? seasonOf(pick) == null : seasonOf(pick) === referenceSeason));
+      phaseByLeague[league] = reference.some(pick => recordPhaseOf(pick) === 'playoffs') ? 'playoffs' : 'regular';
+    }
+    const filtered = phase === 'all' ? base : base.filter(pick => recordPhaseOf(pick) ===
+      (phase === 'current' ? phaseByLeague[String(pick?.league || 'OTHER')] || 'regular' : phase));
+    return { rows: filtered, seasons: [...new Set(rows.map(seasonOf).filter(value => value != null))].sort((a, b) => b - a),
+      currentByLeague, phaseByLeague, selectedSeason: season, selectedPhase: phase,
+      unassigned: rows.filter(pick => seasonOf(pick) == null).length };
+  };
   const theRecord = (picks, now = Date.now()) => {
     const when = p => p.kickoff || p.publishedAt;
     const imported = picks.filter(isUnpricedImport);
@@ -655,7 +692,8 @@
     researchQuery:'',
     trendRate:'80', trendStat:'all', trendKind:'main', trendWindow:'season', trendQuery:'', trendDay:'all',
     gamesScope:'upcoming', gamesQuery:'', boardDay:'today', boardScope:'open', boardSort:'best', boardQuery:'', propMarket:'all',
-    chartStat:'recYds', chartPos:'all', chartWindow:'season', chartDay:'next', chartQuery:'', chartVenue:'all', chartOpponent:'all', recordScope:'straight',
+    chartStat:'recYds', chartPos:'all', chartWindow:'season', chartDay:'next', chartQuery:'', chartVenue:'all', chartOpponent:'all',
+    recordScope:'straight', recordSeason:'current', recordPhase:'current',
   });
   const RESEARCH_CHOICES = {
     trendRate:['70','80','90','100'], trendStat:['all','rec','recYds','rushYds','passYds','car','att','cmp'],
@@ -663,7 +701,7 @@
     gamesScope:['upcoming','final'], boardDay:['today','week'], boardScope:['open','settled'], boardSort:['best','confidence','time'],
     propMarket:['all','receiving yards','receptions','rushing yards','carries','passing yards'],
     chartStat:Object.keys(LABEL), chartPos:['all','QB','RB','WR','TE','PK'], chartWindow:['season','last10','last5'],
-    chartVenue:['all','home','away'], recordScope:['straight','parlays','ladder','all'],
+    chartVenue:['all','home','away'], recordScope:['straight','parlays','ladder','all'], recordPhase:['current','regular','playoffs','all'],
   };
   const researchPreferences = values => Object.fromEntries(Object.entries(RESEARCH_DEFAULTS).map(([key,fallback]) => {
     let value=key==='researchQuery' ? values?.researchQuery ?? values?.chartQuery ?? values?.boardQuery ?? values?.trendQuery : values?.[key];
@@ -671,6 +709,7 @@
     const valid=typeof value==='string' && value.length<=160 && !/[\u0000-\u001f\u007f]/.test(value) && (RESEARCH_CHOICES[key] ? RESEARCH_CHOICES[key].includes(value)
       : key==='chartOpponent' ? /^(?:all|\d{1,12})$/.test(value)
       : key==='chartDay' ? ['all','next'].includes(value) || /^\d{4}-\d{2}-\d{2}$/.test(value) && Number.isFinite(Date.parse(value+'T12:00Z')) && new Date(value+'T12:00Z').toISOString().slice(0,10)===value
+      : key==='recordSeason' ? ['current','all'].includes(value) || /^(?:19|20|21)\d{2}$/.test(value)
       : /Query$/.test(key));
     return [key,valid?value:fallback];
   }));
@@ -800,5 +839,5 @@
   return { RESEARCH_DEFAULTS, researchPreferences, researchReset, researchContext, researchHash, researchMatches, researchStat, chartHistory, chartGeometry, thresholdResult, quoteStatus, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, deskNotes,
     column, cell, observedCell, observedStat, playerHistory, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
-    unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, modelCaution, projectionScorecard, theRecord, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, modelCaution, projectionScorecard, theRecord, recordPhaseOf, recordArchive, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };
 });

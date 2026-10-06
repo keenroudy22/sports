@@ -82,6 +82,8 @@ class MarketLabTests(unittest.TestCase):
             self.assertEqual((rows[-1]['awayScore'], rows[-1]['homeScore']), (3, 5))
             summary = json.loads(public.read_text())['leagues']['MLB']
             self.assertEqual((summary['gamesQuoted'], summary['snapshots'], summary['gamesGraded']), (1, 2, 1))
+            self.assertEqual(summary['seasons'], [{'season': 2026, 'phase': 'regular', 'gamesQuoted': 1, 'gamesGraded': 1}])
+            self.assertEqual({row['seasonType'] for row in rows}, {'regular-season'})
             self.assertEqual(market_lab.append([], root), 0)
 
     def test_bad_or_missing_prices_create_no_quote(self):

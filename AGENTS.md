@@ -187,6 +187,13 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Season and postseason record lifecycle (2026-10-06, owner approved):** every official published record keeps
+  provider season and stage metadata. The default Record view is each selected sport's current season and current
+  stage; the first postseason play starts a separate playoff view, and the first play of a new season starts a new
+  regular-season view. Older regular seasons and playoffs remain browsable and are never rewritten. Personal/social
+  tickets remain outside the official record. New-sport trials and collection coverage may be grouped by season and
+  stage, but must stay labeled separately from official plays and prediction wins. The hosted build must reconcile
+  the public pick IDs and settlements against the append-only research history before deployment.
 - **Fresh POTD comparison (2026-10-05, owner approved):** the first POTD designation must compare every open
   official single for that Eastern game date against a matching fresh current-board market from the same run.
   Rank those official singles by the calibrated edge at the current quote, not the older saved publication price.

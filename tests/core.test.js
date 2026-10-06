@@ -5,16 +5,35 @@ const C = require('../site/core.js');
 
 test('saved research filters accept visible choices and reject malformed or obsolete settings', () => {
   const prefs=C.researchPreferences({trendKind:'all',trendRate:'0',chartPos:'none',chartDay:'2026-99-99',chartOpponent:'undefined',
-    chartQuery:'London',boardScope:'settled',recordScope:'ladder',ticket:[{id:'not-a-filter'}],league:'CFB'});
+    chartQuery:'London',boardScope:'settled',recordScope:'ladder',recordSeason:'2026',recordPhase:'playoffs',ticket:[{id:'not-a-filter'}],league:'CFB'});
   assert.deepEqual([prefs.trendKind,prefs.trendRate,prefs.chartPos,prefs.chartDay,prefs.chartOpponent],['main','80','all','next','all']);
   assert.equal(prefs.chartQuery,'London');
   assert.equal(prefs.boardScope,'settled');
   assert.equal(prefs.recordScope,'ladder');
+  assert.equal(prefs.recordSeason,'2026');assert.equal(prefs.recordPhase,'playoffs');
   assert.equal(prefs.ticket,undefined);assert.equal(prefs.league,undefined);
   assert.equal(C.researchPreferences({chartDay:'2026-02-30'}).chartDay,'next');
   assert.equal(C.researchPreferences({chartDay:'2026-10-05',chartOpponent:'11'}).chartDay,'2026-10-05');
   assert.equal(C.researchPreferences({chartQuery:'x'.repeat(161)}).chartQuery,'');
+  assert.equal(C.researchPreferences({recordSeason:'2206',recordPhase:'preseason'}).recordSeason,'current');
   assert.deepEqual(C.researchPreferences(null),C.RESEARCH_DEFAULTS);
+});
+
+test('published records default to each sport current season and stage while preserving archives', () => {
+  const pick=(id,league,season,seasonType,result='win')=>({id,league,season,seasonType,result,odds:-110,kickoff:`${season}-10-01T00:00:00Z`});
+  const rows=[pick('n25','NFL',2025,2),pick('n26r','NFL',2026,2,'loss'),pick('n26p','NFL',2026,3),
+    pick('h26','NHL',2026,'post-season','loss'),pick('h27','NHL',2027,'regular-season'),
+    {...pick('manual','CFB',2026,null),season:null}];
+  const current=C.recordArchive(rows);
+  assert.deepEqual(current.rows.map(row=>row.id),['n26p','h27','manual'],'current is evaluated per sport and playoffs start a new default slice');
+  assert.deepEqual(current.seasons,[2027,2026,2025]);
+  assert.deepEqual(current.currentByLeague,{NFL:2026,NHL:2027});
+  assert.equal(current.unassigned,1,'missing metadata stays visible instead of silently disappearing');
+  assert.deepEqual(C.recordArchive(rows,'2026','regular').rows.map(row=>row.id),['n26r']);
+  assert.deepEqual(C.recordArchive(rows,'2026','playoffs').rows.map(row=>row.id),['n26p','h26']);
+  assert.equal(C.recordArchive(rows,'all','all').rows.length,rows.length,'the archive retains every published row');
+  assert.equal(C.recordPhaseOf({seasonType:'playoffs'}),'playoffs');
+  assert.equal(C.recordPhaseOf({seasonType:null}),'regular');
 });
 
 test('a workspace reset leaves other research, Saved, sport and original ticket values untouched', () => {

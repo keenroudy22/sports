@@ -49,6 +49,7 @@ class PaperTests(unittest.TestCase):
         fetch = FakeFetch([event('1', '2026-10-21T23:30Z'), event('2', '2026-10-21T23:30Z', state='post'),
                            event('3', '2026-10-24T23:30Z'), event('4', '2026-10-21T23:30Z', season_type=1)])
         self.assertEqual([g['id'] for g in paper.upcoming('NBA', NOW, fetch)], ['NBA-1'])
+        self.assertEqual(paper.upcoming('NBA', NOW, fetch)[0]['seasonType'], 2)
 
     def test_the_line_is_draftkings_now_with_its_opener_and_prices(self):
         quote = paper.current_line('NBA', '1', FakeFetch([], odds_payload()))
@@ -62,6 +63,7 @@ class PaperTests(unittest.TestCase):
             self.assertEqual(paper.record(NOW, fetch, folder, models, log=lambda *_: None), 0, 'first capture only')
             rows = paper.read('NBA', 2027, folder)
             self.assertEqual((rows[0]['line'], rows[0]['open'], rows[0]['side'], rows[0]['price'], rows[0]['lean']), (221.5, 219.5, 'over', -112, True))
+            self.assertEqual(rows[0]['seasonType'], 2)
             self.assertEqual(rows[0]['gap'], 3.5)
             close = {'NBA': {'NBA-1': {'homeScore': 120, 'awayScore': 110, 'close': {'total': 223.5}},
                              'NBA-5': {'homeScore': 100, 'awayScore': 101, 'close': {'total': 220.0}}}}

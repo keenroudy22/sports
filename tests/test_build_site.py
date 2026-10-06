@@ -129,6 +129,18 @@ class PickTests(unittest.TestCase):
         self.assertEqual(rows[0]['publishedAt'], '2026-09-01T12:00:00Z')
         self.assertEqual(rows[0]['kickoff'], '2026-09-03T17:00:00Z')
 
+    def test_board_rows_keep_season_stage_and_week_for_the_record_archive(self):
+        pick = {'id': 'NFL-2026-W19-playoff', 'league': 'NFL', 'gameIds': ['NFL-1'],
+                'publishedAt': '2027-01-10T12:00:00Z'}
+        game = {'id': 'NFL-1', 'league': 'NFL', 'season': 2026, 'seasonType': 3, 'week': 1,
+                'kickoff': '2027-01-10T18:00:00Z'}
+        [row] = build_site.board_picks({'x': pick}, {}, {'NFL-1': game}, {})
+        self.assertEqual((row['season'], row['seasonType'], row['week']), (2026, 3, 1))
+        self.assertEqual(row['gameIds'], ['NFL-1'])
+        manual = dict(pick, id='CFB-2025-W1-manual', gameIds=[])
+        [row] = build_site.board_picks({'CFB-2025-W1-manual': manual}, {}, {}, {})
+        self.assertEqual(row['season'], 2025, 'dated public ids keep manual historical imports in their season')
+
     def test_favorite_status_is_fixed_at_first_publication(self):
         reports = [{'league': 'NFL', 'publishedAt': '2026-09-01T12:00:00Z',
                     'props': [{'id': 'a', 'favorite': True}, {'id': 'b'}, {'id': 'w1-otton-rec'}]},

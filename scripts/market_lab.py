@@ -174,6 +174,15 @@ def quote_key(row):
     return json.dumps({'book': row.get('book'), 'current': row.get('current'), 'open': row.get('open')}, sort_keys=True)
 
 
+def phase(value):
+    text = str(value or '').lower()
+    if 'post' in text or 'playoff' in text or text == '3':
+        return 'playoffs'
+    if 'regular' in text or text == '2':
+        return 'regular'
+    return 'unclassified'
+
+
 def step(now=None, fetch=boxscores.fetch_json, root=STORE, public=PUBLIC, log=print):
     """Capture changed pregame markets and final scores; publish nothing."""
     now = now or datetime.now(timezone.utc)
@@ -191,6 +200,7 @@ def step(now=None, fetch=boxscores.fetch_json, root=STORE, public=PUBLIC, log=pr
                 if not captured:
                     continue
                 row = {'type': 'quote', 'gameId': game['id'], 'league': league, 'season': game['season'],
+                       'seasonType': game.get('seasonType'),
                        'kickoff': game['kickoff'], 'capturedAt': boxscores.stamp(now), 'book': captured['book'],
                        'home': game['teams']['home'], 'away': game['teams']['away'],
                        'current': captured['current'], 'open': captured['open']}
@@ -204,6 +214,7 @@ def step(now=None, fetch=boxscores.fetch_json, root=STORE, public=PUBLIC, log=pr
                 if scores.get('home') is None or scores.get('away') is None:
                     continue
                 out.append({'type': 'grade', 'gameId': game['id'], 'league': league, 'season': game['season'],
+                            'seasonType': game.get('seasonType'),
                             'kickoff': game['kickoff'], 'gradedAt': boxscores.stamp(now),
                             'homeScore': scores['home'], 'awayScore': scores['away'],
                             'statusDetail': game.get('statusDetail')})
@@ -242,6 +253,18 @@ def report(root=STORE, public=PUBLIC, now=None):
         summary = {'status': 'capturing', 'gamesQuoted': len(games), 'snapshots': len(quotes),
                    'gamesGraded': len({row['gameId'] for row in grades}),
                    'totalSnapshots': totals, 'moneylineSnapshots': moneylines}
+        groups = {}
+        for row in mine:
+            if not isinstance(row.get('season'), int):
+                continue
+            groups.setdefault((row['season'], phase(row.get('seasonType'))), []).append(row)
+        summary['seasons'] = []
+        for (season, stage), items in sorted(groups.items(), key=lambda item: (item[0][0], item[0][1]), reverse=True):
+            stage_quotes = [row for row in items if row.get('type') == 'quote']
+            stage_grades = [row for row in items if row.get('type') == 'grade']
+            summary['seasons'].append({'season': season, 'phase': stage,
+                                       'gamesQuoted': len({row['gameId'] for row in stage_quotes}),
+                                       'gamesGraded': len({row['gameId'] for row in stage_grades})})
         data['leagues'][league] = summary
         lines.append(f"- **{league}**: {summary['gamesQuoted']} games quoted, {summary['snapshots']} changed snapshots, "
                      f"{summary['gamesGraded']} finals joined; totals on {totals} snapshots, both moneylines on {moneylines}.")

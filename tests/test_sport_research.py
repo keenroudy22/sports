@@ -11,7 +11,7 @@ NOW = datetime(2026, 10, 25, 12, tzinfo=timezone.utc)
 class SportResearchTests(unittest.TestCase):
     def row(self, **extra):
         return {'league':'NBA','gameId':'NBA-1','capturedAt':'2026-10-23T12:00:00Z',
-                'kickoff':'2026-10-24T00:00:00Z','ours':210,'line':215.5,'lean':True,
+                'season':2027,'seasonType':2,'kickoff':'2026-10-24T00:00:00Z','ours':210,'line':215.5,'lean':True,
                 'result':'win','gradedAt':'2026-10-24T04:00:00Z', **extra}
 
     def test_only_original_pregame_trial_leans_count_once(self):
@@ -36,6 +36,12 @@ class SportResearchTests(unittest.TestCase):
         self.assertEqual(r['leagues']['NBA']['upcoming'][0]['projection'],210)
         self.assertNotIn('units',r['leagues']['NBA'])
         self.assertEqual(r['leagues']['CBB']['recorded'],0)
+
+    def test_regular_season_and_playoffs_have_separate_browsable_trial_records(self):
+        rows=[self.row(),self.row(gameId='NBA-2',seasonType=3,result='loss')]
+        seasons=S.build(NOW,rows)['leagues']['NBA']['seasons']
+        self.assertEqual([(row['phase'],row['record']) for row in seasons],
+                         [('regular',dict(win=1,loss=0,push=0)),('playoffs',dict(win=0,loss=1,push=0))])
 
 
 if __name__ == '__main__': unittest.main()

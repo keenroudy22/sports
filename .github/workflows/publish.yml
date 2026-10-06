@@ -125,6 +125,8 @@ jobs:
         run: python scripts/market_lines.py
       - name: Build the page payloads (site/data/app, not committed)
         run: python scripts/build_site.py
+      - name: Reconcile the public record with official publications
+        run: python scripts/record_audit.py
       - name: Build the plays feed and its cards (site/data/feed.xml and cards, not committed)
         run: python scripts/feed.py
       - name: Preserve the public record

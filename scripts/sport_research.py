@@ -16,6 +16,23 @@ def number(value):
     return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
 
 
+def phase(row):
+    value = str(row.get('seasonType') or '').lower()
+    return 'playoffs' if value == '3' or 'post' in value or 'playoff' in value else 'regular'
+
+
+def record_of(rows, now):
+    record = dict(win=0, loss=0, push=0)
+    for row in rows:
+        if row.get('lean') is True and row.get('result') in record:
+            try:
+                if when(row['kickoff']) <= when(row['gradedAt']) <= now:
+                    record[row['result']] += 1
+            except (KeyError, TypeError, ValueError, AttributeError):
+                pass
+    return record
+
+
 def build(now=None, rows=None):
     now = now or datetime.now(timezone.utc)
     rows = paper.joined() if rows is None else rows
@@ -33,19 +50,20 @@ def build(now=None, rows=None):
     leagues = {}
     for league in paper.LEAGUES:
         mine = [row for row in valid.values() if row['league'] == league]
-        record = dict(win=0, loss=0, push=0)
+        record = record_of(mine, now)
         upcoming = []
         for row in mine:
-            if row.get('lean') is True and row.get('result') in record:
-                try:
-                    if when(row['kickoff']) <= when(row['gradedAt']) <= now:
-                        record[row['result']] += 1
-                except (KeyError, TypeError, ValueError, AttributeError):
-                    pass
             if when(row['kickoff']) > now and not row.get('result'):
                 upcoming.append({key: row.get(key) for key in
-                                 ('gameId', 'kickoff', 'home', 'away', 'line', 'capturedAt', 'sparse')}
+                                 ('gameId', 'season', 'seasonType', 'kickoff', 'home', 'away', 'line', 'capturedAt', 'sparse')}
                                 | {'projection': row['ours']})
+        grouped = {}
+        for row in mine:
+            if not isinstance(row.get('season'), int):
+                continue
+            grouped.setdefault((row['season'], phase(row)), []).append(row)
+        seasons = [{'season': season, 'phase': stage, 'recorded': len(items), 'record': record_of(items, now)}
+                   for (season, stage), items in sorted(grouped.items(), key=lambda item: (item[0][0], item[0][1]), reverse=True)]
         leagues[league] = {'recorded': len(mine), 'record': record,
-                           'upcoming': sorted(upcoming, key=lambda r: r['kickoff'])[:12]}
+                           'seasons': seasons, 'upcoming': sorted(upcoming, key=lambda r: r['kickoff'])[:12]}
     return {'generatedAt': now.isoformat(timespec='seconds'), 'scope': 'paper-trials-only', 'leagues': leagues}

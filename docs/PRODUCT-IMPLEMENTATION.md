@@ -305,6 +305,29 @@ missing when neither component was recorded, so the page does not turn absent da
   `2026-10-05T17:13:11Z`. Live assets app 110 and core 67 were confirmed.
 - Live page: `https://keenroudy.com/sports/#player/NFL/3929645?stat=anyTD&season=current&sample=all`.
 
+## October 6 season and postseason record lifecycle
+
+- The owner approved a per-sport season archive. Record now defaults to each sport's active provider season and
+  active stage, so an NFL 2026 record and NHL 2027 record can coexist without one hiding the other.
+- The first official postseason play changes that sport's default to a fresh Playoffs slice. The first official
+  play in the next provider season changes it to a fresh Regular season slice. Previous regular seasons and
+  playoffs remain selectable; no published play, price, result or unit value is rewritten.
+- Official straight plays, published fun parlays and Climb steps remain distinct. Personal tickets shown on X or
+  Discord never enter the official record. The Climb keeps its own run lifecycle and is not restarted by a sport's
+  season selector.
+- NBA/CBB paper trials and MLB/NHL collection coverage now retain season/stage fields prospectively and show
+  season history separately. Old collection rows that predate stage capture are labeled unclassified rather than
+  guessed. Trial records remain separate from official plays; line/final collection is not called a prediction win.
+- A deterministic hosted reconciliation now requires the public record to contain exactly the official IDs from
+  the append-only research history, with matching publication/settlement fields and valid season metadata. Any
+  extra personal/social ticket, missing official pick, stale grade, duplicate ID or missing season stops release.
+- Pre-release verification passed 878 Python tests (two intentionally skipped), 129 frontend tests, the complete
+  stored-site build, the public-file boundary and the new reconciliation across all 90 official entries. Local
+  Record and Trial views passed 320/375/1440 px Chrome checks with no page overflow, clipped headings, load failures
+  or browser errors. The isolated slot-1000 rehearsal finished `ok`, with two expected blocked network reads and no
+  subprocesses, outside writes or private-state reads. Production receipt follows after deployment; these local
+  checks alone are not proof that the release is live.
+
 ## External and elapsed-time gates
 
 | Gate | What remains | Authority/state |

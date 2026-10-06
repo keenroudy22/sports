@@ -790,7 +790,10 @@ def build(now=None):
             if p.get('name'):
                 names[p['id']] = p['name']
     teams_meta = team_names(records, slate)
-    by_id = {g['id']: g for g in slate.get('games', [])}
+    # The current slate eventually rolls to the next season. Keep completed historical games available so an
+    # older published play never loses its season/week/postseason identity when that happens.
+    by_id = {key: {**game, 'id': key} for key, game in stored.items()}
+    by_id.update({g['id']: g for g in slate.get('games', [])})
     first, latest = first_publications(reports)
     picks = [p for p in board_picks(first, latest, by_id, identities)]
     books = {gid: rows[-1] for gid, rows in load_store('odds').items()}
@@ -978,7 +981,18 @@ def board_picks(first, latest, by_id, identities):
     rows = []
     for key, pick in first.items():
         recent = latest.get(key, {})
-        game = by_id.get((pick.get('gameIds') or [None])[0]) or {}
+        game_ids = pick.get('gameIds') or ([pick.get('gameId')] if pick.get('gameId') else [])
+        games = [by_id[game_id] for game_id in game_ids if game_id in by_id]
+        game = games[0] if games else {}
+
+        def common(field):
+            values = {item.get(field) for item in games if item.get(field) is not None}
+            return values.pop() if len(values) == 1 else pick.get(field)
+
+        season = common('season')
+        if season is None:
+            match = re.match(r'^(?:NFL|CFB)-(20\d{2})(?:-|$)', str(key))
+            season = int(match.group(1)) if match else None
         delivery = deliveries.get(key)
         restored = bool(delivery and delivery.get('restoredAt') and not recent.get('result'))
         entry_note = None if restored else recent.get('entryNote') or pick.get('entryNote')
@@ -997,7 +1011,9 @@ def board_picks(first, latest, by_id, identities):
                      'player': pick.get('player'), 'athleteId': pick.get('athleteId'), 'position': pick.get('position'),
                      # The first publication's line and price; a play imported without them takes the ones a later
                      # report filled in (the Week 1 prices, marked assumed), never a change to one that had them.
-                     'gameId': (pick.get('gameIds') or [None])[0], 'line': first_of(pick, recent, 'line'),
+                     'gameId': game_ids[0] if game_ids else None, 'gameIds': game_ids,
+                     'season': season, 'seasonType': common('seasonType'), 'week': common('week'),
+                     'line': first_of(pick, recent, 'line'),
                      'direction': first_of(pick, recent, 'direction'), 'book': pick.get('book'), 'odds': first_of(pick, recent, 'odds'),
                      'priceAssumed': pick.get('odds') is None and recent.get('priceAssumed') is True,
                      'priceNote': recent.get('priceNote') if pick.get('odds') is None else None,

@@ -87,7 +87,8 @@ def upcoming(league, now, fetch=hoops_store.fetch_json):
             if not home.get('id') or not away.get('id'):
                 continue
             event_id = str(event['id'])
-            out.append({'id': f'{league}-{event_id}', 'eventId': event_id, 'season': int(season['year']), 'kickoff': kickoff,
+            out.append({'id': f'{league}-{event_id}', 'eventId': event_id, 'season': int(season['year']),
+                        'seasonType': int(season['type']), 'kickoff': kickoff,
                         'neutral': bool(competition.get('neutralSite')), 'home': home, 'away': away})
     unique = {g['id']: g for g in out}
     return sorted(unique.values(), key=lambda g: g['kickoff'])
@@ -175,7 +176,8 @@ def record(now, fetch=hoops_store.fetch_json, root=STORE, models=None, log=print
             side = 'over' if gap > 0 else 'under'
             lean = abs(gap) >= hoops_model.LEAN[league]
             rows[game['season']].append({
-                'type': 'record', 'gameId': game['id'], 'league': league, 'season': game['season'], 'kickoff': game['kickoff'],
+                'type': 'record', 'gameId': game['id'], 'league': league, 'season': game['season'],
+                'seasonType': game.get('seasonType'), 'kickoff': game['kickoff'],
                 'home': game['home'].get('abbreviation'), 'away': game['away'].get('abbreviation'), 'capturedAt': learning.stamp(now),
                 'book': quote['book'], 'line': quote['now'], 'open': quote['open'], 'ours': round(ours['total'], 1),
                 'sd': round(ours.get('sdTotal') or 0, 1), 'sparse': bool(ours.get('sparse')), 'gap': gap, 'side': side,

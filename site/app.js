@@ -1454,7 +1454,9 @@
     }
     const [data, board] = await Promise.all([get('app/today.json'), maybe('scoreboard.json')]);
     const clv = new Map((((board || {}).picks || {}).rows || []).map(r => [r.id, r]));
-    const league = data.picks.filter(inLeague);
+    const allLeague = data.picks.filter(inLeague);
+    const archive = C.recordArchive(allLeague, state.recordSeason, state.recordPhase);
+    const league = archive.rows;
     gameIndex = new Map(data.games.map(g => [g.id, g]));
     const rec = C.theRecord(league);
     const accounting = C.recordBreakdown(league);
@@ -1469,7 +1471,7 @@
     /* The numbers behind the record, for anyone who wants them: the same plays, cut by sport, kind, week and market. */
     const counted = league.filter(p => !C.isUnpricedImport(p));
     const straight = counted.filter(p => !C.isParlay(p));
-    const scoped = data.picks.filter(p => !C.isUnpricedImport(p) && !C.isParlay(p));
+    const scoped = league.filter(p => !C.isUnpricedImport(p) && !C.isParlay(p));
     const leagues = [['NFL', 'NFL'], ['CFB', 'College']].map(([id, name]) => [name, C.summaryOf(scoped.filter(p => p.league === id))]);
     const kinds = [['Researched plays', straight.filter(p => !p.modelLean)], ['Model plays', straight.filter(p => p.modelLean)],
       ['Fun parlays', counted.filter(p => C.isParlay(p) && !C.isLadder(p))]].map(([name, rows]) => [name, C.summaryOf(rows)]);
@@ -1481,8 +1483,33 @@
     const types = [...new Set(straight.map(C.category))].map(name => [MARKET_NAME[name] || name, C.summaryOf(straight.filter(p => C.category(p) === name))]);
     const table = (first, rows) => `<div class="table-wrap"><table class="data"><thead><tr><th>${esc(first)}</th><th>W–L–P</th><th>Units</th><th>Pending</th></tr></thead><tbody>${rows.map(([name, t]) =>
       `<tr><th scope="row">${esc(name)}</th><td class="num">${t.wins}–${t.losses}–${t.pushes}</td><td class="num ${unitTone(t.units)}">${unitText(t.units)}</td><td class="num">${t.pending}</td></tr>`).join('')}</tbody></table></div>`;
+    const selectedLeague = state.league === 'ALL' ? null : state.league;
+    const currentSeasons = [...new Set(Object.entries(archive.currentByLeague).filter(([key]) => !selectedLeague || key === selectedLeague).map(([,value]) => value))];
+    const currentPhases = [...new Set(Object.entries(archive.phaseByLeague).filter(([key]) => !selectedLeague || key === selectedLeague).map(([,value]) => value))];
+    const currentSeasonLabel = currentSeasons.length === 1 ? `Current · ${currentSeasons[0]}` : 'Current seasons';
+    const currentPhaseLabel = currentPhases.length === 1 ? `Current stage · ${currentPhases[0] === 'playoffs' ? 'Playoffs' : 'Regular season'}` : 'Current stages';
+    const seasonLabel = archive.selectedSeason === 'current' ? currentSeasonLabel : archive.selectedSeason === 'all' ? 'All seasons' : String(archive.selectedSeason);
+    const phaseLabel = archive.selectedPhase === 'current' ? currentPhaseLabel.replace('Current stage · ', '') : archive.selectedPhase === 'all' ? 'Full season' : archive.selectedPhase === 'playoffs' ? 'Playoffs' : 'Regular season';
+    const seasonOptions = [['current',currentSeasonLabel],...archive.seasons.map(value=>[String(value),String(value)]),['all','All seasons']];
+    const archiveGroups = new Map();
+    for(const pick of allLeague) {
+      if(!Number.isInteger(Number(pick.season))) continue;
+      const key=[pick.league,pick.season,C.recordPhaseOf(pick)].join('|');
+      if(!archiveGroups.has(key)) archiveGroups.set(key,[]);
+      archiveGroups.get(key).push(pick);
+    }
+    const archiveRows = [...archiveGroups].sort((a,b)=>b[0].localeCompare(a[0])).map(([key,rows])=>{
+      const [sport,season,phase]=key.split('|'), straightRows=rows.filter(p=>!C.isParlay(p)&&!C.isUnpricedImport(p));
+      const parlayRows=rows.filter(p=>C.isParlay(p)&&!C.isLadder(p)&&!C.isUnpricedImport(p));
+      const climbRows=rows.filter(C.isLadder);
+      const compact=items=>{const total=C.summaryOf(items);return items.length?`${wl(total)}${total.pending?` · ${total.pending} pending`:''}`:'—';};
+      return [`${sport} ${season} · ${phase==='playoffs'?'Playoffs':'Regular season'}`,compact(straightRows),compact(parlayRows),compact(climbRows)];
+    });
+    const archiveTable = archiveRows.length ? `<div class="table-wrap"><table class="data"><thead><tr><th>Season</th><th>Straights</th><th>Parlays</th><th>Climb steps</th></tr></thead><tbody>${archiveRows.map(row=>`<tr><th scope="row">${esc(row[0])}</th><td class="num">${esc(row[1])}</td><td class="num">${esc(row[2])}</td><td class="num">${esc(row[3])}</td></tr>`).join('')}</tbody></table></div>` : '';
     return `${head('The record', `Every play we publish, graded win or lose. The same numbers go out on X.${state.league === 'ALL' ? '' : ` ${esc(leagueName(dataLeague()))} shown; switch sports at the top.`}`)}
       ${scoreTabs('official')}
+      <div class="player-history-controls record-history-controls"><label>Season<select class="pick" data-select="recordSeason" aria-label="Record season">${seasonOptions.map(([value,label])=>`<option value="${esc(value)}"${String(archive.selectedSeason)===value?' selected':''}>${esc(label)}</option>`).join('')}</select></label><label>Stage<select class="pick" data-select="recordPhase" aria-label="Record stage">${[['current',currentPhaseLabel],['regular','Regular season'],['playoffs','Playoffs'],['all','Full season']].map(([value,label])=>`<option value="${value}"${archive.selectedPhase===value?' selected':''}>${esc(label)}</option>`).join('')}</select></label></div>
+      <p class="row-meta record-context">Showing ${esc(seasonLabel)} · ${esc(phaseLabel)}. A new season or the first playoff play starts a fresh default view; older results stay in the archive.</p>
       <div class="toolbar">${seg('recordScope',[['straight','Straights'],['parlays','Parlays'],['ladder','Climb'],['all','All published']],scope)}</div>
       ${scope==='straight'||scope==='all'?`
       <div class="card transparent-record"><p class="eyebrow">All published straight plays · ${wl(accounting.all)}</p><div class="stats">
@@ -1491,7 +1518,7 @@
         ${stat('Promo credits', unitText(accounting.credits), 'separate from betting returns')}
       </div><p class="row-meta">Same outcomes, separated price provenance. Parlays and the Climb remain separate.</p></div>`:''}
       ${scope==='parlays'||scope==='all'?`<div class="card published-parlays"><p class="eyebrow">Published parlays</p><div class="stats">${stat('Record',wl(parlayRecord),'Climb excluded')}${stat('Returns',unitText(parlayRecord.units),'recorded ticket stakes')}${stat('Pending',parlayRecord.pending,'not settled')}</div></div>`:''}
-      ${scope==='ladder'||scope==='all'?section('The Climb', ladderCard(C.theLadder(data.picks))):''}
+      ${scope==='ladder'||scope==='all'?section('The Climb', ladderCard(C.theLadder(allLeague))+'<p class="row-meta">The Climb keeps its own run history; changing a sport season does not alter an active run.</p>'):''}
       ${scope==='straight'||scope==='all'?`<details class="card"><summary>Legacy combined totals · includes assumed prices and credits</summary>${theRecordCard(rec)}</details>`:''}
       ${section(scope==='all'?'Every published play':scope==='ladder'?'Every Climb step':scope==='parlays'?'Every parlay':'Every straight play', `<input class="search" type="search" data-input="recordQuery" placeholder="Search by player, team or market" value="${esc(state.recordQuery)}" aria-label="Search the plays">
         ${settled.length ? settledWeeks(settled, clv, Boolean(rq), weekLabel, scope) : empty(rq ? 'No play matches' : 'Nothing settled yet', rq ? 'Try a player, a team or a market.' : 'Plays show here once their games are final.')}`)}
@@ -1503,7 +1530,8 @@
         <p class="row-meta" style="margin:4px 2px 0">CLV compares the number we took with the last betting line before kickoff. Positive means we got a better number than the market closed at, which tends to show up before wins do.</p>
       </div></details>`:''}
       ${(scope==='straight'||scope==='all') && rec.imported ? `<details class="card week"><summary><span>Week 1 hand-posted legs (no prices)</span><span class="row-meta">${wl(rec.imported)}${rec.imported.voids ? `, ${rec.imported.voids} void` : ''} · not counted</span></summary>
-        <div class="rows">${imported.map(p => settledRow(p, null)).join('')}</div></details>` : ''}`;
+        <div class="rows">${imported.map(p => settledRow(p, null)).join('')}</div></details>` : ''}
+      ${archiveTable?`<details class="card more-numbers"><summary>Season archive</summary><div class="more-body"><p class="row-meta">Official posted results only. Personal tickets never enter these totals.</p>${archiveTable}</div></details>`:''}`;
   }
 
   /* One settled play on one line: ✅ or ❌, the play, what happened, the price it was graded at and the units it won
@@ -1668,8 +1696,15 @@
     const detail = trial ? `<div class="research-metrics"><span><b>${trial.recorded}</b> projections saved</span><span><b>${graded ? `${count.win}–${count.loss}${count.push ? '–' + count.push : ''}` : 'Pending'}</b> trial totals record</span></div><p class="row-meta">${graded ? `${graded} trial leans graded at their saved lines. Not official plays.` : 'No graded trial leans yet. The record starts with saved pregame projections, not backfilled results.'}</p>`
       : market ? `<div class="research-metrics"><span><b>${market.gamesQuoted}</b> games with saved lines</span><span><b>${market.gamesGraded}</b> finals linked</span></div><p class="row-meta">Building the history for a model. These are collected games, not prediction wins.</p>`
       : '<p class="row-meta">Schedules and scores are live. No model record or projections yet.</p>';
+    const seasons = trial?.seasons || market?.seasons || [];
+    const seasonRows = seasons.map(row=>{
+      const label=`${row.season} · ${row.phase==='playoffs'?'Playoffs':row.phase==='regular'?'Regular season':'Stage not captured'}`;
+      if(trial) {const r=row.record||{}, played=(r.win||0)+(r.loss||0)+(r.push||0);return [label,`${row.recorded} saved`,played?`${r.win||0}–${r.loss||0}${r.push?'–'+r.push:''}`:'Pending'];}
+      return [label,`${row.gamesQuoted||0} quoted`,`${row.gamesGraded||0} finals`];
+    });
+    const seasonTable = seasonRows.length ? `<details class="season-tracker"><summary>Season history</summary><div class="table-wrap"><table class="data"><thead><tr><th>Season</th><th>Coverage</th><th>${trial?'Trial record':'Finals linked'}</th></tr></thead><tbody>${seasonRows.map(row=>`<tr><th scope="row">${esc(row[0])}</th><td>${esc(row[1])}</td><td class="num">${esc(row[2])}</td></tr>`).join('')}</tbody></table></div></details>` : '';
     const upcoming = (trial?.upcoming || []).filter(r => Date.parse(r.kickoff) > Date.now());
-    return `<details class="card sport-research" data-persist="research-${league}"><summary><span>Research tracker</span><span class="pill pill-reference">${trial ? 'Trial model' : market ? 'Collecting data' : 'Scores only'}</span></summary>${detail}
+    return `<details class="card sport-research" data-persist="research-${league}"><summary><span>Research tracker</span><span class="pill pill-reference">${trial ? 'Trial model' : market ? 'Collecting data' : 'Scores only'}</span></summary>${detail}${seasonTable}
       ${upcoming.length ? `<div class="rows">${upcoming.map(r => `<div class="row"><span class="row-main"><b>${esc(r.away)} @ ${esc(r.home)}</b><span class="row-market">Projected total ${esc(r.projection)} · saved line ${esc(r.line)}</span><span class="row-meta">${esc(whenShort(r.kickoff))} · captured ${esc(whenShort(r.capturedAt))}${r.sparse ? ' · thin history' : ''}</span></span></div>`).join('')}</div>` : ''}
       <p class="row-meta">Research stays separate from the official card. No new-sport picks on socials until the trial earns a release.</p><a href="#lab">All research projects →</a></details>`;
   };
@@ -2136,7 +2171,7 @@
     const view = $('#view');
     const slow = preserve ? null : setTimeout(() => { if (mine === token) view.innerHTML = '<div class="loading">Loading…</div>'; }, 120);
     try {
-      const researchView = !['NFL','CFB','ALL'].includes(state.league) && ['today','games','stats','board','trends','record','model','research'].includes(route.view) && !(route.view==='record'&&route.tab==='trials');
+      const researchView = !['NFL','CFB','ALL'].includes(state.league) && ['today','games','stats','board','trends','model','research'].includes(route.view);
       const html = await (researchView ? viewSportHome : VIEWS[route.view] || viewToday)(route);
       if (mine !== token) return;
       const details = [...view.querySelectorAll('details')];
