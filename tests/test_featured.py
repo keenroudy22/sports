@@ -64,6 +64,30 @@ class ChooseTests(unittest.TestCase):
             self.assertIsNone(featured.choose(ctx, NOW, path, log=lambda *_: None))
             self.assertFalse(path.exists())
 
+    def test_first_designation_uses_fresh_current_market_comparison(self):
+        ctx = self.world()
+        current = [play('a', 'g1'), play('b', 'g2')]
+        edges = {'a': 7.2, 'b': 2.4}
+        with tempfile.TemporaryDirectory() as folder, \
+                mock.patch.object(featured, 'strength', side_effect=lambda pick, *_: edges.get(pick['id'])):
+            path = Path(folder) / 'featured.json'
+            self.assertEqual(featured.choose(ctx, NOW, path, log=lambda *_: None, current=current), 'a',
+                             'the current market comparison beats the older saved ordering')
+            entry = featured.load(path)['2026-09-26']
+            self.assertEqual((entry['id'], entry['edge'], entry['compared']), ('a', 7.2, 2))
+            self.assertEqual(entry['comparisonAt'], '2026-09-26T10:45:00Z')
+
+    def test_first_designation_requires_a_fresh_market_match(self):
+        ctx = self.world()
+        current = [play('a', 'g1')]
+        with tempfile.TemporaryDirectory() as folder, \
+                mock.patch.object(featured, 'strength', return_value=4.0):
+            path = Path(folder) / 'featured.json'
+            self.assertEqual(featured.choose(ctx, NOW, path, log=lambda *_: None, current=current), 'a')
+            path.unlink()
+            self.assertIsNone(featured.choose(ctx, NOW, path, log=lambda *_: None, current=[]),
+                              'an old official play without a current board match is not labeled POTD')
+
     def test_a_pick_pulled_before_it_posts_is_replaced_once_it_has_posted_never(self):
         """Sep 25: the Pick of the Day (Navy at UAB over) closed at 11:03 AM over the quarterback's ankle, before its
         noon post. The best play left that has not posted takes its place; one that went out keeps the day."""

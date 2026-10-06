@@ -162,7 +162,7 @@ cohort is contained in the 28-day cohort, so the two must not be added together.
   duplicates, channel-specific cancellation, unknown eligibility, future confirmation times, privacy and no calls.
   This item shipped in ffc68f3b; integrated release receipt follows below.
 
-### October 5 POTD audit: finding, not a selection-policy change
+### October 5 POTD audit and approved follow-up
 
 Falcons at Saints under 48 at -108 was published September 30 with a 43.43 total projection (ATL 20.3 / NO 23.1).
 The raw 62.48% under chance was reduced to 55.24%; its stored conservative edge cleared the existing 3pp NFL-total
@@ -171,8 +171,12 @@ selection record. Neither fact proves the selected play will win.
 
 The October 5 POTD designation ranked already-published open singles by saved edge, not the entire current market.
 Original research logged opposing statistical evidence, despite an overly broad all-clear explanation. The future
-copy fix above preserves such counterpoints. A fresh comparative review requirement for POTD is recommended for
-owner consideration, but is not implemented or represented as an existing rule in this release.
+copy fix above preserves such counterpoints. The owner approved the recommended fresh comparison later on October 5.
+The implementation requires every first designation to pair each open official single with a matching fresh board
+market from that run and rank the official choices at the current calibrated edge. A market that was not admitted
+cannot become POTD or create another play, and an old official play with no fresh match receives no POTD label yet.
+The label stays fixed after designation unless the existing pre-post pull rule applies. Production evidence belongs
+to P12 in the finite queue; this paragraph alone is not a deployment receipt.
 
 ## Follow-up: current-season player history and readable thresholds
 
@@ -221,9 +225,9 @@ increase caps or claim a configured integration is working. Existing append-only
 | Live-progress posts | Bounded Discord pilot only, actual attempts reviewed after three. | Existing two/day, 45-minute spacing, one/ticket and freshness/recheck gates; X remains off. | AGENTS live-progress approval; actual pilot log, not simulated attempts. |
 | Arb Radar | Website calculator/research plus qualified private Discord alerts under separate arb rules. | Exact fresh prices; never expose private candidates as public live arb. | docs/ARB-RADAR.md; AGENTS. |
 | New sports and futures | Supported website research, prospective trials and paper tracking. | No official new-sport release without forward evidence and separate approval. | Existing supported stores; P11. |
-| Private review / follow-through | Existing Monday 9:30 AM review; local/phone delivery; deterministic queue integration shipped in 4660ba13. | Owner-only Discord disabled until destination/permissions confirmed; no public fallback or new job. | scripts/review.py; P03 and P05. |
+| Private review / follow-through | Existing Monday 9:30 AM review; local/phone delivery; deterministic queue integration shipped in 4660ba13. | Dedicated owner-only Discord delivery verified October 5; no public fallback or new job. | scripts/review.py; P03 and P05. |
 | Paid access, tips, referrals | Readiness design only, not active. | Real reliability/retention, source rights, processor eligibility, terms and explicit launch approval first. | docs/SUBSCRIPTION-PLAN.md; P06–P09. |
-| POTD comparison proposal | Current designation uses already-published open singles. | A fresh full-market comparison requirement is an owner policy decision, not silently changed here. | Dated POTD audit above; P12. |
+| POTD comparison | Owner approved a fresh comparison among official singles using current-board markets from the designation run. | Never creates an extra pick, bypasses the card cap or promotes an unadmitted market. Production receipt tracked in P12. | Dated POTD audit above; P12; AGENTS current rule. |
 
 ## Shipped closeout verification · October 5
 

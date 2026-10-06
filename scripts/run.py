@@ -1500,12 +1500,12 @@ def ladder_step(ctx, games, now, records, published, decided, screened, exclude=
     screened.append({'league': league, 'gameId': ticket['gameIds'][0], 'title': ticket['title'], 'rule': refusal.rule, 'reason': refusal.reason})
 
 
-def pick_of_the_day(now, ctx, status, write=True):
+def pick_of_the_day(now, ctx, status, current=None, write=True):
     """Name today's Pick of the Day (scripts/featured.py) before the push, so its card is rendered by the deploy
     the push starts. Never fails a run."""
     try:
         import featured
-        status['pickOfTheDay'] = featured.choose(ctx, now, write=write, log=log)
+        status['pickOfTheDay'] = featured.choose(ctx, now, write=write, log=log, current=current)
     except Exception as error:
         log(f'pick of the day not chosen ({type(error).__name__}: {error})')
 
@@ -1684,12 +1684,14 @@ def _run(args, now, slot, kinds, status):
     # The web researcher reads the news for every play that passes the rules, on the runs that publish.
     research_on = researcher.enabled() and slot.hour not in (6, 23)
     status['research'] = {'on': research_on, 'asked': 0, 'verified': 0, 'dropped': 0}
+    potd_market = []      # fresh priced board markets; only matching official singles can receive the POTD label
     for candidate in wanted:
         want = 'prop' if candidate.get('athleteId') else 'lean'
         if want not in kinds:
             continue
         if price(candidate, ctx, now) is None:
             continue
+        potd_market.append(dict(candidate))
         if candidate['id'] in ctx.first:
             continue            # already on the record: only a settlement or a close revises a published pick
         candidate['_team'] = ctx.player_team.get(candidate.get('athleteId', ''))
@@ -1818,7 +1820,7 @@ def _run(args, now, slot, kinds, status):
             x_post.save_reasons(stored)
         remember(decided, now, slot, status)
         paper_trials(now, slot, status)
-        pick_of_the_day(now, ctx, status)
+        pick_of_the_day(now, ctx, status, current=potd_market)
         git_result = commit_push(now, slot, {'published': len(published), 'settled': len(settled), 'closed': len(closed)},
                                  push=not args.no_push)
         status['git'] = git_result

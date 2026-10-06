@@ -187,6 +187,13 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Fresh POTD comparison (2026-10-05, owner approved):** the first POTD designation must compare every open
+  official single for that Eastern game date against a matching fresh current-board market from the same run.
+  Rank those official singles by the calibrated edge at the current quote, not the older saved publication price.
+  An official play with no matching fresh board market receives no POTD label yet. A current market that was not
+  admitted as an official play cannot become POTD, create an extra pick, bypass the daily card cap or weaken any
+  price, availability, overlap, calibration, performance or news gate. Once named, POTD remains fixed unless the
+  pre-post check pulls it; the existing replacement rule then uses the best remaining fresh official single.
 - **Product implementation approval (2026-10-05):** implement the approved product plan in small, verified
   releases. The effective main navigation is **Today / Games / Charts / Record / Tools**. Games includes Upcoming,
   Live and Final; `#scores` remains an alias into the Live view, not a competing main tab. Preserve `#board`,
