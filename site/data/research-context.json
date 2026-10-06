@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-06T20:01:41Z",
+  "updatedAt": "2026-10-06T20:13:28Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-10-06T19:49Z",
+              "reportedAt": "2026-10-06T20:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-06T19:49Z",
+              "reportedAt": "2026-10-06T20:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5757,6 +5757,15 @@
           "name": "Philadelphia Eagles",
           "players": [
             {
+              "id": "15797",
+              "name": "Lane Johnson",
+              "position": "OT",
+              "status": "Reserve-Ret",
+              "injury": "Personal",
+              "reportedAt": "2026-10-06T20:00Z",
+              "source": "https://www.espn.com/nfl/player/_/id/15797/lane-johnson"
+            },
+            {
               "id": "4241478",
               "name": "DeVonta Smith",
               "position": "WR",
@@ -5773,15 +5782,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-06T18:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/3915106/fred-johnson"
-            },
-            {
-              "id": "15797",
-              "name": "Lane Johnson",
-              "position": "OT",
-              "status": "Questionable",
-              "injury": "Personal",
-              "reportedAt": "2026-10-06T18:21Z",
-              "source": "https://www.espn.com/nfl/player/_/id/15797/lane-johnson"
             },
             {
               "id": "3139368",
@@ -6677,6 +6677,24 @@
           "name": "Tampa Bay Buccaneers",
           "players": [
             {
+              "id": "3150744",
+              "name": "Chase McLaughlin",
+              "position": "PK",
+              "status": "Questionable",
+              "injury": "Groin",
+              "reportedAt": "2026-10-06T19:55Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3150744/chase-mclaughlin"
+            },
+            {
+              "id": "3894856",
+              "name": "Anthony Nelson",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Illness",
+              "reportedAt": "2026-10-06T19:54Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3894856/anthony-nelson"
+            },
+            {
               "id": "4816107",
               "name": "Benjamin Morrison",
               "position": "CB",
@@ -6812,15 +6830,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4429007/demonte-capehart"
             },
             {
-              "id": "3150744",
-              "name": "Chase McLaughlin",
-              "position": "PK",
-              "status": "Active",
-              "injury": "Groin",
-              "reportedAt": "2026-10-05T04:29Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3150744/chase-mclaughlin"
-            },
-            {
               "id": "4371733",
               "name": "Kenny Gainwell",
               "position": "RB",
@@ -6891,15 +6900,6 @@
               "injury": null,
               "reportedAt": "2026-10-02T20:47Z",
               "source": "https://www.espn.com/nfl/player/_/id/5093694/keionte-scott"
-            },
-            {
-              "id": "4686334",
-              "name": "Yaya Diaby",
-              "position": "LB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-02T20:46Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4686334/yaya-diaby"
             }
           ]
         },
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "21",
-          "name": "Hollywood Brown",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-06T18:29:15Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4241372/hollywood-brown"
-        },
-        {
-          "teamId": "1",
-          "name": "Jared Ivey",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-06T20:01:41Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4605478/jared-ivey"
-        },
-        {
           "teamId": "1",
           "name": "Malcolm DeWalt IV",
           "from": "Out",
@@ -7764,11 +7748,27 @@
           "to": "Questionable",
           "observedAt": "2026-10-06T20:01:41Z",
           "source": "https://www.espn.com/nfl/player/_/id/4426348/jayden-daniels"
+        },
+        {
+          "teamId": "21",
+          "name": "Lane Johnson",
+          "from": "Questionable",
+          "to": "Reserve-Ret",
+          "observedAt": "2026-10-06T20:13:28Z",
+          "source": "https://www.espn.com/nfl/player/_/id/15797/lane-johnson"
+        },
+        {
+          "teamId": "27",
+          "name": "Chase McLaughlin",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-06T20:13:28Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3150744/chase-mclaughlin"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-06T20:01:41Z",
-      "lastAttemptAt": "2026-10-06T20:01:41Z",
+      "checkedAt": "2026-10-06T20:13:28Z",
+      "lastAttemptAt": "2026-10-06T20:13:28Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-06T20:01:41Z",
-      "lastAttemptAt": "2026-10-06T20:01:41Z",
+      "checkedAt": "2026-10-06T20:13:28Z",
+      "lastAttemptAt": "2026-10-06T20:13:28Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
