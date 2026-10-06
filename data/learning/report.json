@@ -1,60 +1,53 @@
 {
- "at": "2026-09-29T12:30:05Z",
+ "at": "2026-10-06T12:30:06Z",
  "calibration": [
   {
-   "current": null,
+   "current": 0.23,
    "heldOut": {
-    "k": -116.06,
-    "raw": -126.35
+    "current": -292.92,
+    "k": -292.92,
+    "raw": -311.31
    },
-   "hitRate": 0.515,
-   "kAll": 0.23,
-   "kTrain": 0.57,
-   "meanRaw": 0.621,
-   "n": 398,
-   "segment": "CFB/prop"
+   "hitRate": 0.518,
+   "kAll": 0.15,
+   "kTrain": 0.23,
+   "meanRaw": 0.614,
+   "n": 820,
+   "segment": "CFB/prop",
+   "testFrom": "2026-10-02T00:00Z",
+   "testN": 422,
+   "trainN": 398,
+   "trainThrough": "2026-09-27T03:00Z"
   },
   {
    "current": 0.13,
    "heldOut": {
-    "current": -308.1,
-    "k": -308.13,
-    "raw": -325.98
+    "current": -449.87,
+    "k": -449.89,
+    "raw": -480.3
    },
-   "hitRate": 0.522,
-   "kAll": 0.11,
-   "kTrain": 0.1,
-   "meanRaw": 0.622,
-   "n": 1111,
-   "segment": "NFL/prop"
+   "hitRate": 0.518,
+   "kAll": 0.14,
+   "kTrain": 0.12,
+   "meanRaw": 0.618,
+   "n": 1725,
+   "segment": "NFL/prop",
+   "testFrom": "2026-09-29T00:15Z",
+   "testN": 650,
+   "trainN": 1075,
+   "trainThrough": "2026-09-28T00:20Z"
   }
  ],
- "candidates": 667,
+ "candidates": 1620,
  "changes": [
   {
-   "at": "2026-09-29T12:30:05Z",
+   "at": "2026-10-06T12:30:06Z",
    "evidence": {
-    "current": null,
-    "heldOut": {
-     "k": -116.06,
-     "raw": -126.35
+    "146.freechallenge.14.racing.cbssports.com": {
+     "facts": 2,
+     "rate": 0.0,
+     "verified": 0
     },
-    "hitRate": 0.515,
-    "kAll": 0.23,
-    "kTrain": 0.57,
-    "meanRaw": 0.621,
-    "n": 398,
-    "segment": "CFB/prop"
-   },
-   "from": null,
-   "knob": "calibration",
-   "segment": "CFB/prop",
-   "to": 0.23,
-   "why": "calibrated chances predicted the later record better than the raw ones"
-  },
-  {
-   "at": "2026-09-29T12:30:05Z",
-   "evidence": {
     "abqjournal.com": {
      "facts": 5,
      "rate": 0.8,
@@ -65,20 +58,70 @@
      "rate": 1.0,
      "verified": 2
     },
+    "amp.nfl.com": {
+     "facts": 3,
+     "rate": 0.67,
+     "verified": 2
+    },
+    "arizonawildcats.com": {
+     "facts": 3,
+     "rate": 0.67,
+     "verified": 2
+    },
+    "atlantafalcons.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "azcardinals.com": {
+     "facts": 3,
+     "rate": 1.0,
+     "verified": 3
+    },
+    "azdesertswarm.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "bceagles.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "boston.com": {
+     "facts": 3,
+     "rate": 1.0,
+     "verified": 3
+    },
     "bythebelt.com": {
      "facts": 1,
      "rate": 1.0,
      "verified": 1
     },
-    "clevelandbrowns.com": {
+    "chiefs.com": {
      "facts": 2,
      "rate": 1.0,
      "verified": 2
+    },
+    "clevelandbrowns.com": {
+     "facts": 4,
+     "rate": 0.75,
+     "verified": 3
+    },
+    "cuse.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
     },
     "dailylobo.com": {
      "facts": 1,
      "rate": 1.0,
      "verified": 1
+    },
+    "dallascowboys.com": {
+     "facts": 4,
+     "rate": 1.0,
+     "verified": 4
     },
     "espn.com": {
      "facts": 2,
@@ -90,10 +133,70 @@
      "rate": 1.0,
      "verified": 1
     },
+    "gamedaynd.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "giants.com": {
+     "facts": 5,
+     "rate": 0.8,
+     "verified": 4
+    },
+    "goairforcefalcons.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "goaztecs.com": {
+     "facts": 6,
+     "rate": 0.83,
+     "verified": 5
+    },
+    "goheels.com": {
+     "facts": 6,
+     "rate": 1.0,
+     "verified": 6
+    },
+    "gohuskies.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
     "golobos.com": {
      "facts": 2,
      "rate": 1.0,
      "verified": 2
+    },
+    "gophersports.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "hawkeyesports.com": {
+     "facts": 3,
+     "rate": 0.67,
+     "verified": 2
+    },
+    "houstontexans.com": {
+     "facts": 4,
+     "rate": 0.75,
+     "verified": 3
+    },
+    "jaguars.com": {
+     "facts": 3,
+     "rate": 0.67,
+     "verified": 2
+    },
+    "kolotv.com": {
+     "facts": 3,
+     "rate": 1.0,
+     "verified": 3
+    },
+    "mgoblue.com": {
+     "facts": 4,
+     "rate": 1.0,
+     "verified": 4
     },
     "miamihurricanes.com": {
      "facts": 3,
@@ -110,10 +213,25 @@
      "rate": 0.75,
      "verified": 3
     },
+    "navysports.com": {
+     "facts": 6,
+     "rate": 1.0,
+     "verified": 6
+    },
     "nbcmiami.com": {
      "facts": 2,
      "rate": 0.0,
      "verified": 0
+    },
+    "nevadawolfpack.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "neworleanssaints.com": {
+     "facts": 3,
+     "rate": 0.67,
+     "verified": 2
     },
     "newson6.com": {
      "facts": 1,
@@ -121,14 +239,19 @@
      "verified": 1
     },
     "nfl.com": {
-     "facts": 2,
+     "facts": 4,
      "rate": 1.0,
-     "verified": 2
+     "verified": 4
     },
     "odusports.com": {
      "facts": 2,
      "rate": 1.0,
      "verified": 2
+    },
+    "osubeavers.com": {
+     "facts": 2,
+     "rate": 0.5,
+     "verified": 1
     },
     "packers.com": {
      "facts": 2,
@@ -145,10 +268,20 @@
      "rate": 0.5,
      "verified": 2
     },
+    "raiders.com": {
+     "facts": 4,
+     "rate": 0.75,
+     "verified": 3
+    },
     "si.com": {
-     "facts": 11,
-     "rate": 0.82,
-     "verified": 9
+     "facts": 24,
+     "rate": 0.79,
+     "verified": 19
+    },
+    "smumustangs.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
     },
     "soflobulls.com": {
      "facts": 4,
@@ -156,19 +289,34 @@
      "verified": 2
     },
     "sports.yahoo.com": {
-     "facts": 11,
-     "rate": 0.82,
-     "verified": 9
+     "facts": 13,
+     "rate": 0.85,
+     "verified": 11
+    },
+    "steelers.com": {
+     "facts": 5,
+     "rate": 0.6,
+     "verified": 3
     },
     "thescore.com": {
      "facts": 4,
      "rate": 1.0,
      "verified": 4
     },
+    "uconnhuskies.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
     "usforacle.com": {
      "facts": 2,
      "rate": 0.5,
      "verified": 1
+    },
+    "utepminers.com": {
+     "facts": 4,
+     "rate": 0.75,
+     "verified": 3
     },
     "wsbtv.com": {
      "facts": 1,
@@ -179,20 +327,32 @@
      "facts": 3,
      "rate": 1.0,
      "verified": 3
+    },
+    "wvusports.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
     }
    },
    "from": {
     "avoidDomains": [],
-    "preferDomains": []
+    "preferDomains": [
+     "si.com",
+     "sports.yahoo.com",
+     "abqjournal.com"
+    ]
    },
    "knob": "domains",
    "segment": "researcher",
    "to": {
     "avoidDomains": [],
     "preferDomains": [
-     "si.com",
      "sports.yahoo.com",
-     "abqjournal.com"
+     "goaztecs.com",
+     "goheels.com",
+     "navysports.com",
+     "abqjournal.com",
+     "giants.com"
     ]
    },
    "why": "which sites the researcher cites keep checking out"
@@ -201,17 +361,42 @@
  "gates": {
   "card_cap": {
    "clv": {
-    "high": 0.667,
-    "low": 0.0,
-    "mean": 0.31,
-    "n": 21
+    "high": 0.38,
+    "low": 0.187,
+    "mean": 0.286,
+    "n": 553
    },
-   "graded": 21,
+   "graded": 862,
    "record": {
-    "loss": 12,
+    "loss": 419,
     "push": 0,
-    "units": -3.61,
-    "win": 9
+    "units": -34.49,
+    "win": 443
+   }
+  },
+  "cfb_jurisdiction": {
+   "clv": {
+    "high": 1.125,
+    "low": -0.625,
+    "mean": 0.25,
+    "n": 8
+   },
+   "graded": 19,
+   "record": {
+    "loss": 9,
+    "push": 0,
+    "units": 0.11,
+    "win": 10
+   }
+  },
+  "fresh_quote": {
+   "clv": null,
+   "graded": 18,
+   "record": {
+    "loss": 8,
+    "push": 0,
+    "units": 0.77,
+    "win": 10
    }
   },
   "held": {
@@ -246,47 +431,47 @@
   },
   "lean_edge": {
    "clv": {
-    "high": 0.0,
+    "high": -0.3,
     "low": -1.5,
-    "mean": -0.75,
-    "n": 4
+    "mean": -0.9,
+    "n": 5
    },
-   "graded": 4,
+   "graded": 5,
    "record": {
-    "loss": 3,
+    "loss": 4,
     "push": 0,
-    "units": -2.09,
+    "units": -3.09,
     "win": 1
    }
   },
   "lean_nothing_against": {
    "clv": {
-    "high": 0.43,
-    "low": -0.176,
-    "mean": 0.127,
-    "n": 71
+    "high": 0.37,
+    "low": 0.037,
+    "mean": 0.2,
+    "n": 150
    },
-   "graded": 71,
+   "graded": 150,
    "record": {
-    "loss": 36,
+    "loss": 79,
     "push": 0,
-    "units": -4.03,
-    "win": 35
+    "units": -16.65,
+    "win": 71
    }
   },
   "learned_pause": {
    "clv": {
-    "high": -0.478,
-    "low": -0.957,
-    "mean": -0.717,
-    "n": 23
+    "high": -0.333,
+    "low": -0.714,
+    "mean": -0.524,
+    "n": 42
    },
-   "graded": 23,
+   "graded": 42,
    "record": {
-    "loss": 18,
+    "loss": 36,
     "push": 0,
-    "units": -13.31,
-    "win": 5
+    "units": -30.38,
+    "win": 6
    }
   },
   "longshot_one_per_day": {
@@ -301,92 +486,107 @@
   },
   "not_duplicate": {
    "clv": {
-    "high": 0.833,
-    "low": 0.083,
-    "mean": 0.458,
-    "n": 12
+    "high": 0.45,
+    "low": -0.15,
+    "mean": 0.15,
+    "n": 30
    },
-   "graded": 12,
+   "graded": 34,
    "record": {
-    "loss": 6,
+    "loss": 24,
     "push": 0,
-    "units": -0.37,
-    "win": 6
+    "units": -14.03,
+    "win": 10
    }
   },
   "one_book": {
    "clv": {
-    "high": 0.596,
-    "low": 0.174,
-    "mean": 0.385,
-    "n": 218
+    "high": 0.438,
+    "low": 0.176,
+    "mean": 0.306,
+    "n": 432
    },
-   "graded": 222,
+   "graded": 652,
    "record": {
-    "loss": 112,
+    "loss": 323,
     "push": 0,
-    "units": -11.47,
-    "win": 110
+    "units": -35.4,
+    "win": 329
+   }
+  },
+  "player_overlap": {
+   "clv": {
+    "high": 0.6,
+    "low": -0.2,
+    "mean": 0.2,
+    "n": 10
+   },
+   "graded": 10,
+   "record": {
+    "loss": 5,
+    "push": 0,
+    "units": -0.66,
+    "win": 5
    }
   },
   "prop_calibrated_value": {
    "clv": {
-    "high": 0.647,
-    "low": 0.361,
-    "mean": 0.495,
-    "n": 416
+    "high": 0.561,
+    "low": 0.369,
+    "mean": 0.466,
+    "n": 777
    },
-   "graded": 488,
+   "graded": 951,
    "record": {
-    "loss": 249,
+    "loss": 465,
     "push": 0,
-    "units": -46.48,
-    "win": 239
+    "units": -56.32,
+    "win": 486
    }
   },
   "prop_market_not_trailing": {
    "clv": {
-    "high": 0.685,
-    "low": 0.377,
-    "mean": 0.528,
-    "n": 432
+    "high": 0.577,
+    "low": 0.374,
+    "mean": 0.474,
+    "n": 719
    },
-   "graded": 433,
+   "graded": 723,
    "record": {
-    "loss": 219,
+    "loss": 352,
     "push": 0,
-    "units": -0.21,
-    "win": 214
+    "units": 6.72,
+    "win": 371
    }
   },
   "prop_not_in_longshot": {
    "clv": {
-    "high": 0.6,
-    "low": 0.067,
-    "mean": 0.333,
-    "n": 15
+    "high": 0.3,
+    "low": -0.275,
+    "mean": 0.025,
+    "n": 40
    },
-   "graded": 15,
+   "graded": 51,
    "record": {
-    "loss": 12,
+    "loss": 29,
     "push": 0,
-    "units": -9.0,
-    "win": 3
+    "units": -9.03,
+    "win": 22
    }
   },
   "prop_one_per_player": {
    "clv": {
-    "high": 0.667,
-    "low": 0.0,
-    "mean": 0.333,
-    "n": 3
+    "high": 0.636,
+    "low": -0.636,
+    "mean": 0.0,
+    "n": 11
    },
-   "graded": 3,
+   "graded": 14,
    "record": {
-    "loss": 1,
+    "loss": 5,
     "push": 0,
-    "units": 0.82,
-    "win": 2
+    "units": 3.09,
+    "win": 9
    }
   },
   "prop_price_floor": {
@@ -406,36 +606,51 @@
   },
   "prop_raw_edge": {
    "clv": {
-    "high": 0.075,
-    "low": -0.1,
-    "mean": -0.025,
-    "n": 40
+    "high": 0.061,
+    "low": -0.049,
+    "mean": 0.0,
+    "n": 82
    },
-   "graded": 45,
+   "graded": 114,
    "record": {
-    "loss": 21,
+    "loss": 58,
     "push": 0,
-    "units": -3.13,
-    "win": 24
+    "units": -16.89,
+    "win": 56
+   }
+  },
+  "prop_window_cap": {
+   "clv": {
+    "high": 0.5,
+    "low": 0.125,
+    "mean": 0.306,
+    "n": 160
+   },
+   "graded": 160,
+   "record": {
+    "loss": 82,
+    "push": 0,
+    "units": -16.01,
+    "win": 78
    }
   },
   "qb_available": {
    "clv": {
-    "high": 0.833,
-    "low": 0.0,
-    "mean": 0.5,
-    "n": 3
+    "high": 0.182,
+    "low": -0.318,
+    "mean": -0.091,
+    "n": 11
    },
-   "graded": 3,
+   "graded": 11,
    "record": {
-    "loss": 2,
+    "loss": 10,
     "push": 0,
-    "units": -1.02,
+    "units": -9.02,
     "win": 1
    }
   }
  },
- "graded": 643,
+ "graded": 1509,
  "judge": {
   "argues against": {
    "clv": {
@@ -454,17 +669,17 @@
   },
   "published": {
    "clv": {
-    "high": 0.407,
-    "low": -0.537,
-    "mean": -0.056,
-    "n": 27
+    "high": 0.365,
+    "low": -0.432,
+    "mean": -0.041,
+    "n": 37
    },
-   "graded": 29,
+   "graded": 43,
    "record": {
-    "loss": 16,
+    "loss": 23,
     "push": 0,
-    "units": -3.69,
-    "win": 13
+    "units": -3.98,
+    "win": 20
    }
   },
   "rule of thumb": {
@@ -498,86 +713,487 @@
    }
   }
  },
+ "marketReview": {
+  "evaluation": "Earlier 60% of kickoff dates train; later dates test. Both error scores must improve. Repeated retrospective evaluation; future shadow results required before promotion. Counts are prop observations, not independent games; no ROI claim without captured prices.",
+  "excluded": 0,
+  "formula": "p = 0.5 + k * (raw - 0.5); k = w*k_market + (1-w)*k_league; w = n_train/(n_train+300)",
+  "markets": [
+   {
+    "league": {
+     "brier": 0.2540207017071447,
+     "logLoss": 0.7012810520900072,
+     "n": 76,
+     "observed": 0.4868421052631579,
+     "predicted": 0.5268818822539331
+    },
+    "leagueK": 0.23,
+    "marketK": 0.12,
+    "pooled": {
+     "brier": 0.25358338778219613,
+     "logLoss": 0.7003828936314553,
+     "n": 76,
+     "observed": 0.4868421052631579,
+     "predicted": 0.5246213895273721
+    },
+    "pooledK": 0.210659,
+    "raw": {
+     "brier": 0.2862317292052942,
+     "logLoss": 0.795659233456658,
+     "n": 76,
+     "observed": 0.4868421052631579,
+     "predicted": 0.6168777489301439
+    },
+    "segment": "CFB/prop:passYds",
+    "status": "insufficient history",
+    "testDays": 3,
+    "testFrom": "2026-10-02T00:00Z",
+    "testN": 76,
+    "trainDays": 4,
+    "trainN": 64,
+    "trainThrough": "2026-09-27T03:00Z"
+   },
+   {
+    "league": {
+     "brier": 0.25280390092403915,
+     "logLoss": 0.6987754720934192,
+     "n": 66,
+     "observed": 0.45454545454545453,
+     "predicted": 0.5294959125464163
+    },
+    "leagueK": 0.23,
+    "marketK": 0.0,
+    "pooled": {
+     "brier": 0.2520755479542909,
+     "logLoss": 0.6973075948773775,
+     "n": 66,
+     "observed": 0.45454545454545453,
+     "predicted": 0.5238511422208219
+    },
+    "pooledK": 0.185984,
+    "raw": {
+     "brier": 0.2802275014563756,
+     "logLoss": 0.761058018627324,
+     "n": 66,
+     "observed": 0.45454545454545453,
+     "predicted": 0.6282430980278968
+    },
+    "segment": "CFB/prop:rec",
+    "status": "insufficient history",
+    "testDays": 3,
+    "testFrom": "2026-10-02T00:00Z",
+    "testN": 66,
+    "trainDays": 4,
+    "trainN": 71,
+    "trainThrough": "2026-09-27T03:00Z"
+   },
+   {
+    "league": {
+     "brier": 0.24935335221532656,
+     "logLoss": 0.691850185589529,
+     "n": 157,
+     "observed": 0.5159235668789809,
+     "predicted": 0.5189053816011969
+    },
+    "leagueK": 0.23,
+    "marketK": 0.13,
+    "pooled": {
+     "brier": 0.24937516044754698,
+     "logLoss": 0.6918948294875958,
+     "n": 157,
+     "observed": 0.5159235668789809,
+     "predicted": 0.5162270422439195
+    },
+    "pooledK": 0.197416,
+    "raw": {
+     "brier": 0.25554401879280214,
+     "logLoss": 0.7050607092483383,
+     "n": 157,
+     "observed": 0.5159235668789809,
+     "predicted": 0.5821973113095521
+    },
+    "segment": "CFB/prop:recYds",
+    "status": "keep league formula",
+    "testDays": 3,
+    "testFrom": "2026-10-02T00:00Z",
+    "testN": 157,
+    "trainDays": 4,
+    "trainN": 145,
+    "trainThrough": "2026-09-27T03:00Z"
+   },
+   {
+    "league": {
+     "brier": 0.24847198549949623,
+     "logLoss": 0.6901216922917303,
+     "n": 123,
+     "observed": 0.5853658536585366,
+     "predicted": 0.5273915574346953
+    },
+    "leagueK": 0.23,
+    "marketK": 0.6,
+    "pooled": {
+     "brier": 0.24860416977641248,
+     "logLoss": 0.6904836751147955,
+     "n": 123,
+     "observed": 0.5853658536585366,
+     "predicted": 0.539830868830564
+    },
+    "pooledK": 0.33445,
+    "raw": {
+     "brier": 0.2615654258028862,
+     "logLoss": 0.7310188737145795,
+     "n": 123,
+     "observed": 0.5853658536585366,
+     "predicted": 0.6190937279769366
+    },
+    "segment": "CFB/prop:rushYds",
+    "status": "keep league formula",
+    "testDays": 3,
+    "testFrom": "2026-10-02T00:00Z",
+    "testN": 123,
+    "trainDays": 4,
+    "trainN": 118,
+    "trainThrough": "2026-09-27T03:00Z"
+   },
+   {
+    "league": {
+     "brier": 0.2518426970114821,
+     "logLoss": 0.6968395670628466,
+     "n": 32,
+     "observed": 0.46875,
+     "predicted": 0.5117022829310842
+    },
+    "leagueK": 0.12,
+    "marketK": 0.35,
+    "pooled": {
+     "brier": 0.2524948842129667,
+     "logLoss": 0.6981529260097643,
+     "n": 32,
+     "observed": 0.46875,
+     "predicted": 0.5152834437440281
+    },
+    "pooledK": 0.156723,
+    "raw": {
+     "brier": 0.2788541903350844,
+     "logLoss": 0.7586976355779511,
+     "n": 32,
+     "observed": 0.46875,
+     "predicted": 0.5975190244257024
+    },
+    "segment": "NFL/prop:att",
+    "status": "insufficient history",
+    "testDays": 5,
+    "testFrom": "2026-09-29T00:15Z",
+    "testN": 32,
+    "trainDays": 6,
+    "trainN": 57,
+    "trainThrough": "2026-09-28T00:20Z"
+   },
+   {
+    "league": {
+     "brier": 0.24994609951014218,
+     "logLoss": 0.6930550529717058,
+     "n": 63,
+     "observed": 0.5396825396825397,
+     "predicted": 0.5160808519156584
+    },
+    "leagueK": 0.12,
+    "marketK": 0.23,
+    "pooled": {
+     "brier": 0.2500570046870531,
+     "logLoss": 0.6932916682235635,
+     "n": 63,
+     "observed": 0.5396825396825397,
+     "predicted": 0.5197660471463302
+    },
+    "pooledK": 0.1475,
+    "raw": {
+     "brier": 0.2762914117603802,
+     "logLoss": 0.8724252653088231,
+     "n": 63,
+     "observed": 0.5396825396825397,
+     "predicted": 0.6340070992971534
+    },
+    "segment": "NFL/prop:car",
+    "status": "keep league formula",
+    "testDays": 5,
+    "testFrom": "2026-09-29T00:15Z",
+    "testN": 63,
+    "trainDays": 6,
+    "trainN": 100,
+    "trainThrough": "2026-09-28T00:20Z"
+   },
+   {
+    "league": {
+     "brier": 0.24832068858839126,
+     "logLoss": 0.6897866405354451,
+     "n": 32,
+     "observed": 0.53125,
+     "predicted": 0.5143039323550749
+    },
+    "leagueK": 0.12,
+    "marketK": 1.0,
+    "pooled": {
+     "brier": 0.247089267756504,
+     "logLoss": 0.6873142038605006,
+     "n": 32,
+     "observed": 0.53125,
+     "predicted": 0.5310519539921095
+    },
+    "pooledK": 0.260504,
+    "raw": {
+     "brier": 0.25367288992599646,
+     "logLoss": 0.7026826394234875,
+     "n": 32,
+     "observed": 0.53125,
+     "predicted": 0.619199436292291
+    },
+    "segment": "NFL/prop:cmp",
+    "status": "insufficient history",
+    "testDays": 5,
+    "testFrom": "2026-09-29T00:15Z",
+    "testN": 32,
+    "trainDays": 6,
+    "trainN": 57,
+    "trainThrough": "2026-09-28T00:20Z"
+   },
+   {
+    "league": {
+     "brier": 0.25422496053091287,
+     "logLoss": 0.7016059410693423,
+     "n": 31,
+     "observed": 0.3548387096774194,
+     "predicted": 0.5124531639880245
+    },
+    "leagueK": 0.12,
+    "marketK": 1.0,
+    "pooled": {
+     "brier": 0.2597029659978346,
+     "logLoss": 0.712651563073265,
+     "n": 31,
+     "observed": 0.3548387096774194,
+     "predicted": 0.5268186115846971
+    },
+    "pooledK": 0.258427,
+    "raw": {
+     "brier": 0.3000726274440212,
+     "logLoss": 0.8046333438803631,
+     "n": 31,
+     "observed": 0.3548387096774194,
+     "predicted": 0.6037763665668714
+    },
+    "segment": "NFL/prop:passYds",
+    "status": "insufficient history",
+    "testDays": 5,
+    "testFrom": "2026-09-29T00:15Z",
+    "testN": 31,
+    "trainDays": 6,
+    "trainN": 56,
+    "trainThrough": "2026-09-28T00:20Z"
+   },
+   {
+    "league": {
+     "brier": 0.2483773296571869,
+     "logLoss": 0.6898962936739945,
+     "n": 198,
+     "observed": 0.5252525252525253,
+     "predicted": 0.5141980673667436
+    },
+    "leagueK": 0.12,
+    "marketK": 0.1,
+    "pooled": {
+     "brier": 0.24849254973058094,
+     "logLoss": 0.6901279796856166,
+     "n": 198,
+     "observed": 0.5252525252525253,
+     "predicted": 0.512974884429351
+    },
+    "pooledK": 0.109662,
+    "raw": {
+     "brier": 0.25555345895016374,
+     "logLoss": 0.7055039014211921,
+     "n": 198,
+     "observed": 0.5252525252525253,
+     "predicted": 0.6183172280561965
+    },
+    "segment": "NFL/prop:rec",
+    "status": "keep league formula",
+    "testDays": 5,
+    "testFrom": "2026-09-29T00:15Z",
+    "testN": 198,
+    "trainDays": 6,
+    "trainN": 321,
+    "trainThrough": "2026-09-28T00:20Z"
+   },
+   {
+    "league": {
+     "brier": 0.24869588654637972,
+     "logLoss": 0.6905364690382467,
+     "n": 198,
+     "observed": 0.5353535353535354,
+     "predicted": 0.5120831768922165
+    },
+    "leagueK": 0.12,
+    "marketK": 0.03,
+    "pooled": {
+     "brier": 0.24914633811324136,
+     "logLoss": 0.6914392328284595,
+     "n": 198,
+     "observed": 0.5353535353535354,
+     "predicted": 0.5074058180952294
+    },
+    "pooledK": 0.073548,
+    "raw": {
+     "brier": 0.25313601212918363,
+     "logLoss": 0.7010108552848205,
+     "n": 198,
+     "observed": 0.5353535353535354,
+     "predicted": 0.6006931407684709
+    },
+    "segment": "NFL/prop:recYds",
+    "status": "keep league formula",
+    "testDays": 5,
+    "testFrom": "2026-09-29T00:15Z",
+    "testN": 198,
+    "trainDays": 6,
+    "trainN": 320,
+    "trainThrough": "2026-09-28T00:20Z"
+   },
+   {
+    "league": {
+     "brier": 0.2512187444042696,
+     "logLoss": 0.6955902607467234,
+     "n": 96,
+     "observed": 0.4479166666666667,
+     "predicted": 0.512963770126069
+    },
+    "leagueK": 0.12,
+    "marketK": 0.0,
+    "pooled": {
+     "brier": 0.2507216333532974,
+     "logLoss": 0.6945918274501944,
+     "n": 96,
+     "observed": 0.4479166666666667,
+     "predicted": 0.5083817479263377
+    },
+    "pooledK": 0.077586,
+    "raw": {
+     "brier": 0.277898853896339,
+     "logLoss": 0.7827275395630396,
+     "n": 96,
+     "observed": 0.4479166666666667,
+     "predicted": 0.6080314177172416
+    },
+    "segment": "NFL/prop:rushYds",
+    "status": "shadow candidate",
+    "testDays": 5,
+    "testFrom": "2026-09-29T00:15Z",
+    "testN": 96,
+    "trainDays": 6,
+    "trainN": 164,
+    "trainThrough": "2026-09-28T00:20Z"
+   }
+  ]
+ },
  "model": {
   "CFB v1": {
-   "closeTotalMiss": 11.96,
+   "closeTotalMiss": 12.23,
    "closerTotal": [
-    68,
-    78
+    96,
+    109
    ],
-   "games": 146,
-   "ourTotalMiss": 12.32
+   "games": 205,
+   "ourTotalMiss": 12.66
   },
   "CFB v2.0": {
-   "closeTotalMiss": 12.1,
+   "closeTotalMiss": 12.33,
    "closerTotal": [
-    70,
-    72
+    94,
+    107
    ],
-   "games": 142,
-   "ourTotalMiss": 12.27
+   "games": 201,
+   "ourTotalMiss": 12.62
   },
   "NFL v1": {
-   "closeTotalMiss": 10.47,
+   "closeTotalMiss": 10.17,
    "closerTotal": [
-    12,
-    21
+    18,
+    31
    ],
-   "games": 33,
-   "ourTotalMiss": 11.79
+   "games": 49,
+   "ourTotalMiss": 11.41
   },
   "NFL v2.0": {
-   "closeTotalMiss": 10.53,
+   "closeTotalMiss": 10.2,
    "closerTotal": [
-    10,
-    21
+    15,
+    32
    ],
-   "games": 31,
-   "ourTotalMiss": 11.5
+   "games": 47,
+   "ourTotalMiss": 11.44
   }
  },
  "postTimes": {
   "byHour": {
    "11 AM to 2 PM": {
-    "perThousand": 8.76,
-    "posts": 9
+    "perThousand": 10.73,
+    "posts": 17
    },
    "2 to 6 PM": {
-    "perThousand": 29.41,
-    "posts": 1
+    "perThousand": 24.46,
+    "posts": 3
    },
    "9 to 11 AM": {
-    "perThousand": 25.0,
-    "posts": 2
+    "perThousand": 12.76,
+    "posts": 15
    },
    "after 6 PM": {
-    "perThousand": 23.8,
-    "posts": 4
+    "perThousand": 16.4,
+    "posts": 8
    },
    "before 9 AM": {
     "perThousand": 0.0,
-    "posts": 1
+    "posts": 2
    }
   },
   "byKind": {
+   "announcement": {
+    "perThousand": 0.0,
+    "posts": 1
+   },
    "book": {
     "perThousand": 32.26,
     "posts": 1
    },
    "cashed": {
-    "perThousand": 20.98,
+    "perThousand": 20.81,
+    "posts": 5
+   },
+   "community": {
+    "perThousand": 36.04,
+    "posts": 1
+   },
+   "conversation": {
+    "perThousand": 30.14,
     "posts": 3
    },
    "menu": {
     "perThousand": 0.0,
-    "posts": 1
+    "posts": 3
    },
    "play": {
-    "perThousand": 10.83,
-    "posts": 10
+    "perThousand": 11.13,
+    "posts": 19
    },
    "receipt": {
-    "perThousand": 25.0,
+    "perThousand": 9.2,
+    "posts": 9
+   },
+   "research": {
+    "perThousand": 0.0,
+    "posts": 1
+   },
+   "sheet": {
+    "perThousand": 10.64,
     "posts": 2
    }
   }
@@ -588,8 +1204,8 @@
    "posts": 4
   },
   "none": {
-   "perThousand": 9.17,
-   "posts": 5
+   "perThousand": 10.65,
+   "posts": 14
   },
   "stats": {
    "perThousand": 29.41,
@@ -597,6 +1213,11 @@
   }
  },
  "researcher": {
+  "146.freechallenge.14.racing.cbssports.com": {
+   "facts": 2,
+   "rate": 0.0,
+   "verified": 0
+  },
   "abqjournal.com": {
    "facts": 5,
    "rate": 0.8,
@@ -607,20 +1228,70 @@
    "rate": 1.0,
    "verified": 2
   },
+  "amp.nfl.com": {
+   "facts": 3,
+   "rate": 0.67,
+   "verified": 2
+  },
+  "arizonawildcats.com": {
+   "facts": 3,
+   "rate": 0.67,
+   "verified": 2
+  },
+  "atlantafalcons.com": {
+   "facts": 2,
+   "rate": 1.0,
+   "verified": 2
+  },
+  "azcardinals.com": {
+   "facts": 3,
+   "rate": 1.0,
+   "verified": 3
+  },
+  "azdesertswarm.com": {
+   "facts": 2,
+   "rate": 1.0,
+   "verified": 2
+  },
+  "bceagles.com": {
+   "facts": 1,
+   "rate": 1.0,
+   "verified": 1
+  },
+  "boston.com": {
+   "facts": 3,
+   "rate": 1.0,
+   "verified": 3
+  },
   "bythebelt.com": {
    "facts": 1,
    "rate": 1.0,
    "verified": 1
   },
-  "clevelandbrowns.com": {
+  "chiefs.com": {
    "facts": 2,
    "rate": 1.0,
    "verified": 2
+  },
+  "clevelandbrowns.com": {
+   "facts": 4,
+   "rate": 0.75,
+   "verified": 3
+  },
+  "cuse.com": {
+   "facts": 1,
+   "rate": 1.0,
+   "verified": 1
   },
   "dailylobo.com": {
    "facts": 1,
    "rate": 1.0,
    "verified": 1
+  },
+  "dallascowboys.com": {
+   "facts": 4,
+   "rate": 1.0,
+   "verified": 4
   },
   "espn.com": {
    "facts": 2,
@@ -632,10 +1303,70 @@
    "rate": 1.0,
    "verified": 1
   },
+  "gamedaynd.com": {
+   "facts": 1,
+   "rate": 1.0,
+   "verified": 1
+  },
+  "giants.com": {
+   "facts": 5,
+   "rate": 0.8,
+   "verified": 4
+  },
+  "goairforcefalcons.com": {
+   "facts": 1,
+   "rate": 1.0,
+   "verified": 1
+  },
+  "goaztecs.com": {
+   "facts": 6,
+   "rate": 0.83,
+   "verified": 5
+  },
+  "goheels.com": {
+   "facts": 6,
+   "rate": 1.0,
+   "verified": 6
+  },
+  "gohuskies.com": {
+   "facts": 2,
+   "rate": 1.0,
+   "verified": 2
+  },
   "golobos.com": {
    "facts": 2,
    "rate": 1.0,
    "verified": 2
+  },
+  "gophersports.com": {
+   "facts": 2,
+   "rate": 1.0,
+   "verified": 2
+  },
+  "hawkeyesports.com": {
+   "facts": 3,
+   "rate": 0.67,
+   "verified": 2
+  },
+  "houstontexans.com": {
+   "facts": 4,
+   "rate": 0.75,
+   "verified": 3
+  },
+  "jaguars.com": {
+   "facts": 3,
+   "rate": 0.67,
+   "verified": 2
+  },
+  "kolotv.com": {
+   "facts": 3,
+   "rate": 1.0,
+   "verified": 3
+  },
+  "mgoblue.com": {
+   "facts": 4,
+   "rate": 1.0,
+   "verified": 4
   },
   "miamihurricanes.com": {
    "facts": 3,
@@ -652,10 +1383,25 @@
    "rate": 0.75,
    "verified": 3
   },
+  "navysports.com": {
+   "facts": 6,
+   "rate": 1.0,
+   "verified": 6
+  },
   "nbcmiami.com": {
    "facts": 2,
    "rate": 0.0,
    "verified": 0
+  },
+  "nevadawolfpack.com": {
+   "facts": 1,
+   "rate": 1.0,
+   "verified": 1
+  },
+  "neworleanssaints.com": {
+   "facts": 3,
+   "rate": 0.67,
+   "verified": 2
   },
   "newson6.com": {
    "facts": 1,
@@ -663,14 +1409,19 @@
    "verified": 1
   },
   "nfl.com": {
-   "facts": 2,
+   "facts": 4,
    "rate": 1.0,
-   "verified": 2
+   "verified": 4
   },
   "odusports.com": {
    "facts": 2,
    "rate": 1.0,
    "verified": 2
+  },
+  "osubeavers.com": {
+   "facts": 2,
+   "rate": 0.5,
+   "verified": 1
   },
   "packers.com": {
    "facts": 2,
@@ -687,10 +1438,20 @@
    "rate": 0.5,
    "verified": 2
   },
+  "raiders.com": {
+   "facts": 4,
+   "rate": 0.75,
+   "verified": 3
+  },
   "si.com": {
-   "facts": 11,
-   "rate": 0.82,
-   "verified": 9
+   "facts": 24,
+   "rate": 0.79,
+   "verified": 19
+  },
+  "smumustangs.com": {
+   "facts": 1,
+   "rate": 1.0,
+   "verified": 1
   },
   "soflobulls.com": {
    "facts": 4,
@@ -698,19 +1459,34 @@
    "verified": 2
   },
   "sports.yahoo.com": {
-   "facts": 11,
-   "rate": 0.82,
-   "verified": 9
+   "facts": 13,
+   "rate": 0.85,
+   "verified": 11
+  },
+  "steelers.com": {
+   "facts": 5,
+   "rate": 0.6,
+   "verified": 3
   },
   "thescore.com": {
    "facts": 4,
    "rate": 1.0,
    "verified": 4
   },
+  "uconnhuskies.com": {
+   "facts": 2,
+   "rate": 1.0,
+   "verified": 2
+  },
   "usforacle.com": {
    "facts": 2,
    "rate": 0.5,
    "verified": 1
+  },
+  "utepminers.com": {
+   "facts": 4,
+   "rate": 0.75,
+   "verified": 3
   },
   "wsbtv.com": {
    "facts": 1,
@@ -721,6 +1497,11 @@
    "facts": 3,
    "rate": 1.0,
    "verified": 3
+  },
+  "wvusports.com": {
+   "facts": 1,
+   "rate": 1.0,
+   "verified": 1
   }
  },
  "segments": [
@@ -739,12 +1520,12 @@
    "paused": false,
    "published": {
     "clv": null,
-    "graded": 0,
+    "graded": 1,
     "record": {
      "loss": 0,
      "push": 0,
-     "units": 0.0,
-     "win": 0
+     "units": 1.0,
+     "win": 1
     }
    },
    "segment": "CFB/prop:passYds",
@@ -765,12 +1546,12 @@
    "paused": false,
    "published": {
     "clv": null,
-    "graded": 0,
+    "graded": 1,
     "record": {
      "loss": 0,
      "push": 0,
-     "units": 0.0,
-     "win": 0
+     "units": 1.08,
+     "win": 1
     }
    },
    "segment": "CFB/prop:rec",
@@ -791,12 +1572,12 @@
    "paused": false,
    "published": {
     "clv": null,
-    "graded": 0,
+    "graded": 1,
     "record": {
      "loss": 0,
      "push": 0,
-     "units": 0.0,
-     "win": 0
+     "units": 0.83,
+     "win": 1
     }
    },
    "segment": "CFB/prop:recYds",
@@ -817,11 +1598,11 @@
    "paused": false,
    "published": {
     "clv": null,
-    "graded": 0,
+    "graded": 1,
     "record": {
-     "loss": 0,
+     "loss": 1,
      "push": 0,
-     "units": 0.0,
+     "units": -1.0,
      "win": 0
     }
    },
@@ -874,17 +1655,17 @@
    "paused": false,
    "published": {
     "clv": {
-     "high": 0.455,
-     "low": -0.545,
-     "mean": -0.045,
-     "n": 11
+     "high": 0.321,
+     "low": -0.679,
+     "mean": -0.179,
+     "n": 14
     },
-    "graded": 11,
+    "graded": 14,
     "record": {
-     "loss": 6,
+     "loss": 8,
      "push": 0,
-     "units": -1.21,
-     "win": 5
+     "units": -2.25,
+     "win": 6
     }
    },
    "segment": "CFB/total",
@@ -1017,14 +1798,14 @@
      "high": 0.0,
      "low": 0.0,
      "mean": 0.0,
-     "n": 1
+     "n": 4
     },
-    "graded": 2,
+    "graded": 5,
     "record": {
-     "loss": 1,
+     "loss": 2,
      "push": 0,
-     "units": 0.16,
-     "win": 1
+     "units": 1.06,
+     "win": 3
     }
    },
    "segment": "NFL/prop:rec",
@@ -1045,17 +1826,17 @@
    "paused": false,
    "published": {
     "clv": {
-     "high": 2.2,
-     "low": -0.6,
-     "mean": 0.8,
-     "n": 5
+     "high": 2.5,
+     "low": -0.167,
+     "mean": 1.167,
+     "n": 6
     },
-    "graded": 6,
+    "graded": 7,
     "record": {
      "loss": 3,
      "push": 0,
-     "units": -0.35,
-     "win": 3
+     "units": 0.61,
+     "win": 4
     }
    },
    "segment": "NFL/prop:recYds",
@@ -1111,12 +1892,17 @@
    },
    "paused": true,
    "published": {
-    "clv": null,
-    "graded": 0,
+    "clv": {
+     "high": 0.5,
+     "low": -0.833,
+     "mean": -0.333,
+     "n": 3
+    },
+    "graded": 3,
     "record": {
-     "loss": 0,
+     "loss": 3,
      "push": 0,
-     "units": 0.0,
+     "units": -3.0,
      "win": 0
     }
    },
