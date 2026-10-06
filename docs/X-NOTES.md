@@ -128,3 +128,83 @@ What changes:
 4. Tickets are the account's strongest recent view signal. Keep their graphic clean and readable, but do not add a
    posting slot, force a parlay or weaken a gate because one ticket drew more views.
 5. Questions work when they sound like a person and refer to a real ready slate. Avoid empty engagement bait.
+
+## Deep review: Cody Brown Bets, Oct 6
+
+This pass read the original posts from Oct 2 through Oct 6, opened the full Best Bet write-up and inspected the
+ticket, touchdown and mismatch graphics. It is a creative benchmark, not evidence that Kook'n should match Cody's
+volume, affiliate model or risk language. View counts were captured at different post ages on an account with more
+than 600,000 followers.
+
+### The operating loop
+
+Cody does not rely on one perfect post. He builds a small story around the slate and gives each post one job:
+
+1. **Reset / receipt.** A win is celebrated immediately, then summarized the next morning. A rough day is also
+   acknowledged directly instead of disappearing.
+2. **Useful research.** A watchlist, hit-rate list, touchdown sheet or mismatch table gives people something to save
+   before prices move.
+3. **Real anticipation.** A short teaser appears only when the sheet, ticket or slate is already prepared.
+4. **The drop.** The exact bet, odds and payout are visible immediately. The graphic carries most of the detail.
+5. **Live emotion.** Short reactions keep the audience in the same game-day conversation.
+6. **Result.** The original ticket or follower reaction is quoted so the outcome is attached to the thing that was
+   actually posted.
+
+The same loop appeared on three consecutive slates:
+
+| Day | Observed sequence (Eastern) |
+|---|---|
+| Saturday | 8:44 email reminder; 9:17 mismatch teaser; 9:46 sheet; 12:09 injury angles; 1:57 viral ticket; 3:29 reminder; 5:45 SGP teaser; 6:11 SGP; 8:17 all-bets index |
+| Sunday | 7:58 early-game reminder; 9:15 notification prompt; 9:32 flyer; 11:58 all-bets index; 3:22 result; 4:22 late SGP; 9:24 and 10:19 live updates; 11:41 honest rough-day recap |
+| Monday | 8:46 day's menu; 9:18 hit-rate research; 10:34 props thread; 12:54 SGP; 2:58 Best Bet; 10:52 result |
+| Tuesday | 8:59 morning recap; 9:30 prior-sheet proof; 10:46 Week 5 watchlist; 2:08 real-ticket teaser; 2:30 ticket drop |
+
+### What each format actually earns
+
+| Format | Examples in this sample | Observable behavior |
+|---|---|---|
+| Saveable research | Touchdown sheet: 324K views / 936 saves; mismatch table: 229K / 386; Monday hit rates: 245K / 607; Week 5 watchlist: 136K / 1,092 | Best save rate. A clear list beats explaining the research process. |
+| Ticket / pick drop | MNF SGP: 429K / 417 saves; SNF SGP: 332K / 247; London SGP: 426K / 265; `$20 pays $1K`: 575K / 664 | Best combination of reach and tail intent. Exact odds and payout are above the fold. |
+| Teaser | TNF teaser: 66K / 28 replies / 4 saves; Monday menu: 154K / 25 replies / 12 saves; London teaser: 192K / 30 replies / 4 saves | Conversation tool, not reference value. It works because a real drop follows quickly. |
+| Result / receipt | Immediate sweep: 126K / 1,193 likes / 75 replies / 9 saves; morning recap: 78K / 261 / 19 / 3 | Community and trust, not bookmarks. The immediate emotion performs better than the delayed summary. |
+| Long Best Bet analysis | Juwan Johnson: 168K views / 62 saves | Detailed analysis can work, but it trails a clean visual list or ticket in saves. |
+| All-bets index | Saturday-night Sunday index: 500K views / 480 saves | A useful hub once several real posts exist. It should never become a list of filler bets. |
+
+### Visual system
+
+- Ticket cards use one dominant player, a huge odds/game headline, the actual slip and the possible return. There is
+  no second decorative portrait competing with the play.
+- Research sheets switch to a plain, high-contrast utility layout. The mismatch graphic is essentially a clean white
+  table with a large title, green score column, player, line and odds.
+- The touchdown sheet is dense but scannable: one giant category headline, eight faces, odds beside every name and a
+  short reason. It succeeds as a reference, not as an art piece.
+- Team colors and action photography provide energy; the typography supplies the hierarchy. Decorative copy stays
+  out of the way.
+- The caption and image do not repeat a long disclaimer. The category, exact line and one clear action are enough.
+
+### Copy and conversion system
+
+- The first sentence tells the reader exactly what the post is: `MNF Best Bet`, `Falcons @ Saints Hit Rates`, or
+  `+2025 Bucs @ Cowboys Flyer`.
+- One post gets one call to action: bookmark the sheet, answer the teaser, tail the ticket or react to the result.
+- A follower quote is attached to most important drops. That turns the account into a group conversation and supplies
+  social proof, but Kook'n must use only genuine owner-approved replies and never manufacture a testimonial.
+- The profile makes one promise (free NFL picks and data every day) and one destination (free Discord). Posts move
+  from useful free data to a ready ticket, then back to proof and community.
+
+### The Kook'n adaptation
+
+Kook'n should copy the **structure**, not the costume:
+
+1. Keep the truthful receipt at 9:00.
+2. Publish one saveable slate asset when the data is useful: a matchup menu, touchdown board, defense-vs-position
+   table or short watchlist. The image should show the answer; the site holds the drill-down.
+3. Use the existing single conversation slot as a pre-drop teaser only when at least two real plays or a real ticket
+   are already approved. No `like and I'll post it`, no holding a pick hostage and no teaser on a one-play day.
+4. Drop the official play with the exact line, price and one strongest reason. Let the card carry the detail.
+5. Use the existing result category for a quick honest outcome. The full record remains the source of truth.
+6. Keep live X updates out until the owner separately approves a limited pilot; game footage also creates rights risk.
+
+Do not copy `looks too easy`, `smash spot`, selective streak claims, forced daily tickets, copyrighted game clips or
+affiliate-heavy link stacks. Cody's system is powerful because it is simple and repeated. Kook'n's advantage should
+be the same clarity with a complete public record, fresher data and fewer forced bets.
