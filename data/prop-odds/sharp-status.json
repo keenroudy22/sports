@@ -1,35 +1,35 @@
 {
- "at": "2026-10-06T16:56:41Z",
+ "at": "2026-10-06T17:32:25Z",
  "confirmed": {
-  "CFB-401871051": "2026-10-06T16:56:41Z",
-  "CFB-401871066": "2026-10-06T16:56:41Z",
-  "CFB-401871090": "2026-10-06T16:56:41Z"
+  "CFB-401871051": "2026-10-06T17:32:25Z",
+  "CFB-401871066": "2026-10-06T17:32:25Z",
+  "CFB-401871090": "2026-10-06T17:32:25Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 760,
-    "fanduel": 639
+    "draftkings": 831,
+    "fanduel": 642
    },
-   "eventsListed": 60,
+   "eventsListed": 63,
    "eventsMatched": 3,
    "games": 3,
    "marketTypes": {
     "player_longest_passing_completion": 6,
-    "player_longest_reception": 20,
-    "player_longest_rush": 12,
+    "player_longest_reception": 22,
+    "player_longest_rush": 14,
     "player_passing_+_rushing_yards": 49,
-    "player_passing_attempts": 29,
-    "player_passing_completions": 28,
-    "player_passing_touchdowns": 43,
-    "player_passing_yards": 189,
-    "player_receiving_yards": 527,
-    "player_receptions": 102,
-    "player_rushing_attempts": 31,
-    "player_rushing_yards": 363
+    "player_passing_attempts": 37,
+    "player_passing_completions": 34,
+    "player_passing_touchdowns": 42,
+    "player_passing_yards": 190,
+    "player_receiving_yards": 548,
+    "player_receptions": 118,
+    "player_rushing_attempts": 38,
+    "player_rushing_yards": 375
    },
-   "requestsLeft": 50,
-   "rows": 1399,
+   "requestsLeft": 4,
+   "rows": 1473,
    "slateGames": [
     "Southern Miss Golden Eagles at Troy Trojans 2026-10-07T00:00Z",
     "Jacksonville State Gamecocks at Kennesaw State Owls 2026-10-07T23:00Z",
@@ -189,7 +189,7 @@
       "gemini": "NCAAF-2610082300-MOST-WKU-M",
       "goldrush": "31121549",
       "hardrock": "6020102309256757664",
-      "kalshi": "KXNCAAF1HSPREAD-26OCT08MOSUWKU",
+      "kalshi": "KXNCAAF1H-26OCT08MOSUWKU",
       "ladbrokes": "ccf59e0a-8204-4de6-b960-b843960ed2bf",
       "ladbrokes_uk": "lduk-258965235",
       "matchbook": "mb-34514414509300023",
@@ -274,7 +274,7 @@
      "type": "fixture"
     },
     {
-     "away": "South Alabama Jaguars",
+     "away": "South Alabama",
      "external": {
       "ballybet": "1027508030",
       "betmgm": "6:46091",
@@ -309,10 +309,10 @@
       "thescorebet": "StandardEvent:9c31090a-8bf8-43dd-bc68-28479f5fe21d",
       "underdog": "underdog_183227"
      },
-     "home": "Arkansas State Red Wolves",
+     "home": "Arkansas State",
      "sample": {
-      "away_team": "South Alabama Jaguars",
-      "home_team": "Arkansas State Red Wolves",
+      "away_team": "South Alabama",
+      "home_team": "Arkansas State",
       "markets": [
        "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
@@ -609,7 +609,7 @@
      "type": "fixture"
     },
     {
-     "away": "Iowa Hawkeyes",
+     "away": "Iowa",
      "external": {
       "ballybet": "1027569821",
       "betmgm": "6:46060",
@@ -627,7 +627,7 @@
       "gemini": "NCAAF-2610100100-IOW-WAS-S",
       "goldrush": "31132229",
       "hardrock": "6325669784755241369",
-      "kalshi": "KXNCAAF1H-26OCT09IOWAWASH",
+      "kalshi": "KXNCAAF1HTEAMTOTAL-26OCT09IOWAWASH",
       "ladbrokes": "240fd9bf-6140-4a43-b36f-f04bcee86501",
       "ladbrokes_uk": "lduk-258958797",
       "matchbook": "mb-34490017013900023",
@@ -643,10 +643,10 @@
       "sx_bet": "L20378221",
       "thescorebet": "StandardEvent:2fcf8f00-b061-4cd7-9c4c-6d27a4e8361b"
      },
-     "home": "Washington Huskies",
+     "home": "Washington",
      "sample": {
-      "away_team": "Iowa Hawkeyes",
-      "home_team": "Washington Huskies",
+      "away_team": "Iowa",
+      "home_team": "Washington",
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
@@ -773,7 +773,7 @@
      "type": "fixture"
     },
     {
-     "away": "Washington State Cougars",
+     "away": "Washington State",
      "external": {
       "ballybet": "1027508063",
       "betmgm": "6:46301",
@@ -804,10 +804,10 @@
       "sx_bet": "L20405816",
       "thescorebet": "StandardEvent:7e8b1257-c959-47b3-9c10-9689d574c894"
      },
-     "home": "Utah State Aggies",
+     "home": "Utah State",
      "sample": {
-      "away_team": "Washington State Cougars",
-      "home_team": "Utah State Aggies",
+      "away_team": "Washington State",
+      "home_team": "Utah State",
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
@@ -918,6 +918,8 @@
        "4th_quarter_total_points",
        "anytime_touchdown_scorer",
        "draw_no_bet",
+       "first_touchdown_scorer",
+       "game_prop",
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
