@@ -1,15 +1,15 @@
 {
- "at": "2026-10-06T12:37:10Z",
+ "at": "2026-10-06T13:04:12Z",
  "confirmed": {
-  "CFB-401871051": "2026-10-06T12:37:10Z",
-  "CFB-401871066": "2026-10-06T12:37:10Z",
-  "CFB-401871090": "2026-10-06T12:37:10Z"
+  "CFB-401871051": "2026-10-06T13:04:12Z",
+  "CFB-401871066": "2026-10-06T13:04:12Z",
+  "CFB-401871090": "2026-10-06T13:04:12Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 671,
-    "fanduel": 461
+    "draftkings": 669,
+    "fanduel": 472
    },
    "eventsListed": 61,
    "eventsMatched": 3,
@@ -21,15 +21,15 @@
     "player_passing_+_rushing_yards": 48,
     "player_passing_attempts": 16,
     "player_passing_completions": 13,
-    "player_passing_touchdowns": 39,
-    "player_passing_yards": 190,
-    "player_receiving_yards": 433,
+    "player_passing_touchdowns": 42,
+    "player_passing_yards": 191,
+    "player_receiving_yards": 438,
     "player_receptions": 35,
     "player_rushing_attempts": 23,
     "player_rushing_yards": 297
    },
    "requestsLeft": 8,
-   "rows": 1132,
+   "rows": 1141,
    "slateGames": [
     "Southern Miss Golden Eagles at Troy Trojans 2026-10-07T00:00Z",
     "Jacksonville State Gamecocks at Kennesaw State Owls 2026-10-07T23:00Z",
@@ -54,12 +54,14 @@
       "away_team": "Sam Houston State",
       "home_team": "Liberty",
       "markets": [
+       "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
        "1st_half_point_spread",
        "1st_half_team_total",
        "1st_half_total_points",
        "1st_half_total_points_odd_even",
+       "1st_quarter_anytime_touchdown_scorer",
        "1st_quarter_moneyline",
        "1st_quarter_point_spread",
        "1st_quarter_team_total",
@@ -74,6 +76,8 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "anytime_touchdown_scorer",
+       "first_touchdown_scorer",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
        "match_result_both_teams_to_score",
@@ -207,6 +211,7 @@
       "away_team": "Missouri State Bears",
       "home_team": "Western Kentucky Hilltoppers",
       "markets": [
+       "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
        "1st_half_moneyline_3-way",
@@ -216,6 +221,7 @@
        "1st_half_team_total",
        "1st_half_total_points",
        "1st_half_total_points_odd_even",
+       "1st_quarter_anytime_touchdown_scorer",
        "1st_quarter_moneyline",
        "1st_quarter_moneyline_3-way",
        "1st_quarter_player_passing_yards",
@@ -268,7 +274,7 @@
      "type": "fixture"
     },
     {
-     "away": "South Alabama Jaguars",
+     "away": "South Alabama",
      "external": {
       "ballybet": "1027508030",
       "betmgm": "6:46091",
@@ -303,11 +309,12 @@
       "thescorebet": "StandardEvent:9c31090a-8bf8-43dd-bc68-28479f5fe21d",
       "underdog": "underdog_183227"
      },
-     "home": "Arkansas State Red Wolves",
+     "home": "Arkansas State",
      "sample": {
-      "away_team": "South Alabama Jaguars",
-      "home_team": "Arkansas State Red Wolves",
+      "away_team": "South Alabama",
+      "home_team": "Arkansas State",
       "markets": [
+       "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
        "1st_half_moneyline_3-way",
@@ -318,6 +325,7 @@
        "1st_half_team_total",
        "1st_half_total_points",
        "1st_half_total_points_odd_even",
+       "1st_quarter_anytime_touchdown_scorer",
        "1st_quarter_moneyline",
        "1st_quarter_moneyline_3-way",
        "1st_quarter_player_passing_yards",
@@ -420,6 +428,7 @@
       "away_team": "South Florida",
       "home_team": "UTSA",
       "markets": [
+       "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
        "1st_half_moneyline_3-way",
@@ -430,12 +439,14 @@
        "1st_half_team_total",
        "1st_half_total_points",
        "1st_half_total_points_odd_even",
+       "1st_quarter_anytime_touchdown_scorer",
        "1st_quarter_moneyline",
        "1st_quarter_moneyline_3-way",
        "1st_quarter_player_passing_yards",
        "1st_quarter_player_receiving_yards",
        "1st_quarter_player_rushing_yards",
        "1st_quarter_point_spread",
+       "1st_quarter_team_total",
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
        "2nd_half_point_spread",
@@ -546,6 +557,7 @@
        "1st_quarter_moneyline",
        "1st_quarter_moneyline_3-way",
        "1st_quarter_point_spread",
+       "1st_quarter_team_total",
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
        "2nd_half_point_spread",
@@ -594,7 +606,7 @@
      "type": "fixture"
     },
     {
-     "away": "Iowa Hawkeyes",
+     "away": "Iowa",
      "external": {
       "ballybet": "1027569821",
       "betmgm": "6:46060",
@@ -628,10 +640,10 @@
       "sx_bet": "L20378221",
       "thescorebet": "StandardEvent:2fcf8f00-b061-4cd7-9c4c-6d27a4e8361b"
      },
-     "home": "Washington Huskies",
+     "home": "Washington",
      "sample": {
-      "away_team": "Iowa Hawkeyes",
-      "home_team": "Washington Huskies",
+      "away_team": "Iowa",
+      "home_team": "Washington",
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
@@ -641,6 +653,7 @@
        "1st_half_total_points_odd_even",
        "1st_quarter_moneyline",
        "1st_quarter_point_spread",
+       "1st_quarter_team_total",
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
        "2nd_quarter_moneyline",
@@ -724,6 +737,7 @@
        "1st_quarter_moneyline",
        "1st_quarter_moneyline_3-way",
        "1st_quarter_point_spread",
+       "1st_quarter_team_total",
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
        "2nd_quarter_moneyline",
@@ -764,6 +778,7 @@
       "betrivers": "1027508063",
       "bovada": "31795765",
       "bwin": "6:46301",
+      "caesars": "1158e158-03ad-4153-b013-6e5cf2f69d5b",
       "draftkings": "34745943",
       "fanatics": "5268595",
       "fanduel": "36137790",
@@ -800,6 +815,7 @@
        "1st_quarter_moneyline",
        "1st_quarter_moneyline_3-way",
        "1st_quarter_point_spread",
+       "1st_quarter_team_total",
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
        "2nd_half_point_spread",
@@ -823,7 +839,9 @@
        "match_result_both_teams_to_score",
        "moneyline",
        "moneyline_3-way",
+       "outright",
        "point_spread",
+       "race_to_10_points",
        "team_total",
        "total_points",
        "total_points_band",
@@ -884,6 +902,7 @@
        "1st_half_total_points_odd_even",
        "1st_quarter_moneyline",
        "1st_quarter_point_spread",
+       "1st_quarter_team_total",
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
        "2nd_quarter_moneyline",
@@ -1023,6 +1042,7 @@
       "betrivers": "1027552997",
       "bovada": "31807771",
       "bwin": "6:46062",
+      "caesars": "10dd6ff0-755b-4281-ac18-6e2e6592baf7",
       "circa": "217651",
       "coral": "cor-46633537",
       "draftkings": "34745947",
@@ -1084,7 +1104,9 @@
        "match_result_both_teams_to_score",
        "moneyline",
        "moneyline_3-way",
+       "outright",
        "point_spread",
+       "race_to_10_points",
        "team_total",
        "total_points",
        "total_points_band",
