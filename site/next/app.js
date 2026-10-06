@@ -217,7 +217,7 @@
     const m = String(row.marketType || row.market || '').toLowerCase();
     return [/spread/.test(m) ? 'spread' : /total/.test(m) ? 'total' : /money|winner/.test(m) ? 'ml' : m, row.gameId, dir].join('|');
   };
-  const onBoard = (vm, now = Date.now()) => vm.state === 'open' && isNum(Number(vm.odds)) && vm.book && Date.parse(vm.kickoff) > now;
+  const onBoard = (vm, now = Date.now()) => vm.state === 'open' && isNum(Number(vm.odds)) && Math.abs(Number(vm.odds)) >= 100 && vm.book && Date.parse(vm.kickoff) > now;
   const hasValue = vm => vm.calibrated && ['lean', 'strong'].includes(vm.tier) && !vm.thin && !vm.limited && isNum(vm.edge) && vm.edge > 0;
   /* One row per player, stat and side (or game market and side): keep the strongest edge, count the rest. */
   const collapse = rows => {
