@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-10-06T15:37:41Z",
+  "updatedAt": "2026-10-06T15:50:59Z",
   "status": "ok",
   "coverage": "Observed NFL/CFB player markets from saved research and dated public references. Not an exhaustive sportsbook menu. Rebuilding does not refresh quote times or create recommendations.",
   "freshnessPolicy": "Direct observed prices expire after at most 60 minutes or a sooner supplied expiry; all article/comparison prices require independent sportsbook recheck.",
   "counts": {
-    "lines": 136,
+    "lines": 137,
     "current": 0,
-    "references": 0
+    "references": 1
   },
   "lines": [
     {
@@ -7569,6 +7569,69 @@
           "source": "https://www.espn.com/nfl/game/_/gameId/401872969",
           "marketWindow": "Full game",
           "cutoff": "UNDER 1.5 at +112 or better. Closed to new entries at 1 or lower, or at -103 or worse at 1.5.",
+          "quoteType": "source reference"
+        }
+      ]
+    },
+    {
+      "league": "CFB",
+      "gameId": "CFB-401871066",
+      "player": "TK King",
+      "athleteId": "4869443",
+      "position": "WR",
+      "reportId": "CFB-2026-W6-king-over-49-5-recyds-dk",
+      "identityVerified": true,
+      "direction": "OVER",
+      "line": 49.5,
+      "market": "receiving yards",
+      "book": "DraftKings",
+      "odds": -102,
+      "observedAt": "2026-10-06T15:27:33Z",
+      "expiresAt": "2026-10-06T21:30:00Z",
+      "source": "https://www.espn.com/college-football/game/_/gameId/401871066",
+      "marketWindow": "Full game",
+      "cutoff": "OVER 49.5 at -102 or better. Closed to new entries at 50+, or at -117 or worse at 49.5.",
+      "quoteType": "source reference",
+      "checkedAt": "2026-10-06T15:27:33Z",
+      "kickoff": "2026-10-07T23:30Z",
+      "status": "reference",
+      "quoteStatus": "reference",
+      "reason": "Public article or comparison quote; verify the exact market in your sportsbook.",
+      "builderEligible": false,
+      "title": "TK King OVER 49.5 receiving yards",
+      "id": "line-b80945ee6602db434db9",
+      "observations": [
+        {
+          "line": 49.5,
+          "odds": -102,
+          "observedAt": "2026-10-06T15:27:33Z",
+          "source": "https://www.espn.com/college-football/game/_/gameId/401871066",
+          "quoteType": "source reference",
+          "sourceDate": null,
+          "sourcePart": null,
+          "sourceTimeNote": null
+        }
+      ],
+      "observationCount": 1,
+      "originalRecommendations": [
+        {
+          "league": "CFB",
+          "gameId": "CFB-401871066",
+          "player": "TK King",
+          "athleteId": "4869443",
+          "position": "WR",
+          "reportId": "CFB-2026-W6-king-over-49-5-recyds-dk",
+          "identityVerified": true,
+          "direction": "OVER",
+          "line": 49.5,
+          "market": "receiving yards",
+          "book": "DraftKings",
+          "odds": -102,
+          "observedAt": "2026-10-06T15:27:33Z",
+          "expiresAt": "2026-10-06T21:30:00Z",
+          "source": "https://www.espn.com/college-football/game/_/gameId/401871066",
+          "marketWindow": "Full game",
+          "cutoff": "OVER 49.5 at -102 or better. Closed to new entries at 50+, or at -117 or worse at 49.5.",
           "quoteType": "source reference"
         }
       ]
