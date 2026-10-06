@@ -1,6 +1,6 @@
 # Kook'n Sports subscription plan
 
-Updated October 5, 2026 to the approved product plan. This prepares membership readiness, not an activated
+Updated October 6, 2026 to the approved product plan and redesign direction. This prepares membership readiness, not an activated
 paywall, account system, processor, tip jar, referral program or paid data contract. The present product stays free.
 
 ## The product promise
@@ -14,7 +14,9 @@ The advantage is not having the most rows. It is turning a large slate into a sh
 
 Sell saved time, dependable research and useful workflows. Do not sell “AI” as proof of quality, guaranteed winning
 picks, or an assumed edge from a high favorite-win percentage. Keep Kook'n Sports as the umbrella; Kook'n Lines
-can describe research and Kook'n Pro can name a later membership. No public rebrand is part of this release.
+can describe research and Kook'n Pro can name a later membership. The owner-approved Kook'n visual and copy redesign
+supersedes the earlier “no public rebrand” sentence, but it does not activate a paid product or change the public
+record, play gates or delivery rules.
 
 ## What the established products sell
 
@@ -41,8 +43,8 @@ Product pages reviewed October 4, with the additional October 5 observations abo
 
 ## Where Kook'n can win
 
-- A clear **Best lines** fast lane instead of making a user build filters before seeing anything useful.
-- Official plays, model references and fun tickets kept visibly separate.
+- A clear sortable **Research** board instead of making a user build several line/trend tabs before seeing anything useful.
+- Best bets, research references and fun tickets kept visibly separate.
 - A permanent public record, including losses and the original posted price.
 - Game pages that combine projected score, game lines, player props, injuries, depth changes, red-zone work, team strength and trends.
 - Plain language and strong mobile design instead of a professional trading terminal.
@@ -63,11 +65,11 @@ Those require licensed data, significantly more infrastructure and customer supp
 
 | Main destination | User job |
 |---|---|
-| Today | Current published POTD, active Climb, straights and parlays; compact official results; research below. |
+| Today | Current published POTD, active Climb, best bets and fun tickets; compact results and useful context. |
+| Research | One sortable board for player props, game lines and trends; main lines and value rank first. |
 | Games | Upcoming / Live / Final, matchups, projections, ranks, news/weather and relevant research. Old Scores links work here. |
-| Charts | Player/team/market search, charts, main-line defaults, trends, optional alternates/milestones and contextual Saved. |
 | Record | Published straights, parlays, Climb dollars, model accuracy and prospective trials, visibly separated. |
-| Tools | Arb calculator, Lab, Saved, Digest, schedule, help and community. |
+| More | Arb calculator, Lab, Saved, Digest, schedule, help and community. |
 
 The same selected sport stays active across sections. Player/game detail links remain stable. Research selections,
 official published plays and ticket-building actions have distinct labels and records. Confidence only appears
@@ -115,7 +117,9 @@ Before charging:
 7. Provide appropriately scoped account deletion/export, support access, recovery, backups and an outage/revocation
    path. Test authorization failures. Keep public results independent of login/billing and never expose the Mac.
 
-A lightweight future stack could use Cloudflare Pages/Workers with D1 or an equivalent managed auth/database service. The choice should be made at launch time; no paid vendor or additional request budget is needed during the free validation phase.
+Cloudflare Pages/Workers with D1 and Whop are candidates for a later costed comparison, not approved vendors or
+active integrations. The choice belongs to the launch gate after rights, retention, processor eligibility and the
+complete billing lifecycle are reviewed; no paid vendor or additional request budget is needed during free validation.
 
 ## What to prove before charging
 

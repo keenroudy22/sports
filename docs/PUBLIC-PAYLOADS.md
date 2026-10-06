@@ -9,6 +9,7 @@ network calls and changes nothing. New file families require a reviewed allowlis
 | Family | Public purpose |
 |---|---|
 | Site HTML, CSS, JavaScript and approved brand assets | The application itself; contains no authenticated premium boundary. |
+| `next/index.html`, `next/app.css`, `next/app.js` | Owner-review redesign preview only: noindex, canonical `/sports/`, relative shared runtime/data, and no private payload. Remove its narrow allowlist entry at the owner-approved live swap. |
 | `data/research.json`, `forecasts.json`, scoreboards | Published selections, original forecasts, corrections and honest performance evidence. Preserve them. |
 | Schedule, sports, line catalog, histories, identities, depth and research context | Existing public factual research and provenance; commercial permissions remain in SOURCE-RIGHTS.md. |
 | `data/desk-notes.json` | Already-validated, bounded homepage research notes. Not the private operating desk. |

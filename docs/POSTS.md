@@ -5,14 +5,32 @@ plus, for plays and house posts, an image card. This page is the complete spec: 
 goes out, and the code that makes it. Examples of the cards are in `docs/examples/`. What the accounts we follow post
 and what gets saved is in `docs/X-NOTES.md`.
 
-## October 5 effective creative policy
+## October 6 approved redesign direction
+
+The owner approved the casino-felt identity for the website and future card cutover: felt night `#07120D`, felt
+`#0E2219`, chalk `#F2F7F4`, dim `#A9C0B3`, Kook'n green `#20C774`, chip-red fills `#F2414E` and red text
+`#FF6B75`. Brown, tan and amber remain banned. Green means a hit or support, red means a miss and gray means unknown;
+every use also carries a symbol or word. Brand green alone never implies that an open play won.
+
+“Best bets” is the public name for the existing official-play set. It changes no gates, caps, prices, grading or
+record. Public copy retires “Best lines”, “official card”, “plate”, “Served at” and “desk”. Keep captions short and
+human: the exact play and price first, one strongest reason, one clear action. Do not explain the model or repeat
+generic disclaimers in the caption; the page and card retain the required 21+ and entertainment-only wording.
+
+Player photos and team logos stay, with team-color badges as fallback. Do not redraw a published attachment. The
+felt social templates remain owner-gated under P21 and are not activated by the website preview; until that separate
+cutover, the current renderers remain the production contract. Existing post categories, caps, filenames, dimensions,
+Discord size limit, Buffer-only delivery and X/Discord schedule do not change.
+
+## October 5 effective creative policy (superseded where stated above)
 
 The owner approved tested original layout/color/short-copy variants within already-approved post categories and
 their existing caps. This is not approval for a new category, extra post volume or broader automation. Exact
 selection, price/book, historical counts/windows and result facts remain source-bound and pass the existing guards.
 Green means hit/support for the selected side, including an under; red means miss/against that side; gray means
-unknown/inactive. Pair color with text or symbols. Keep the chef/name and navy/mint/cyan identity; no public avatar
-replacement or brown/tan/amber house palette. Existing posted attachments remain untouched.
+unknown/inactive. Pair color with text or symbols. The October 6 felt palette supersedes the navy/mint/cyan identity
+for new releases; no public avatar change is implied. Brown/tan/amber remain banned and existing posted attachments
+remain untouched.
 
 Evaluation/release windows are checks, not quotas: qualified, no-play, held, queued and delivered are distinct
 states. A caption bug gets a bounded factual fallback, never a lower evidence threshold. Rotate a small stable set

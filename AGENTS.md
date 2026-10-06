@@ -187,6 +187,39 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Casino-felt palette (2026-10-06, owner approved):** Kook'n site and new card art use felt night `#07120D`,
+  felt `#0E2219`, chalk `#F2F7F4`, dim `#A9C0B3`, Kook'n green `#20C774` and chip red `#F2414E` (fills only;
+  `#FF6B75` for red text). This replaces the navy/mint/cyan foundation of Oct 1/2/5. Green means hit or support,
+  red means miss and gray means unknown, always with a symbol or word. Brand green never implies a result on an
+  open play. Text stays at WCAG AA; dark ink goes on green and red fills. Brown/tan/amber stay banned. Cards choose
+  their theme by publication time; posted attachments never change.
+- **Kook'n best bets (2026-10-06, owner approved):** “Best bets” is the public name for official plays, with the
+  same set, gates, caps, grading and record. It is never advice. The research “Best lines” label is retired. Public
+  copy drops “official card”, “plate”, “Served at” and “desk”. Internal names are unchanged. Entertainment-only
+  and 21+ wording stays on every page and card. This supersedes “no public rebrand” in `SUBSCRIPTION-PLAN.md`.
+- **Website redesign (2026-10-06, owner approved; supersedes the Oct 5 navigation once swapped):** the main
+  navigation is Today · Research · Games · Record · More. Today shows beginner-first best-bet tickets with the
+  published price/book, stored calibrated chance versus break-even, fair price, edge, why, one visible counterpoint
+  and a hit chart. One sortable Research board replaces the line and trend tabs. It ships first as a noindex preview
+  at `/sports/next/` and swaps only after owner sign-off. Every existing hash, `#pick/<id>` and shared research link
+  keeps opening its equivalent view. Confidence badges are removed; value rank (edge) is the default sort. Thin,
+  stale, unpriced and uncalibrated rows get no rank. Main lines stay the default, with the four-hour freshness limit
+  and three-game minimum. Record math reuses `core.js` unchanged.
+- **Share cards and X (2026-10-06, owner approved):** existing categories are restyled only. Filenames, dimensions
+  and Discord's 8 MB limit are unchanged. Captions keep the Sep 26 shape; chance and break-even live on the card.
+  No new post type, slot, frequency, Playbook use or automation is approved. The owner sets the bio, pinned post and
+  banner and writes replies by hand. Claude may upload the new banner once, attended. ESPN player photos and team
+  logos stay on the site and card art; team-color badges are the fallback.
+- **Results proposals stay in shadow (2026-10-06, owner approved process):** R0–R7 run as silent, logged shadows.
+  They make no new metered requests and change no play, card or record. Each needs its own owner yes with before/after
+  counts. The NFL-totals pause would override the Oct 4 “not a veto” rule only on that yes.
+- **Redesign boundaries (2026-10-06):** each new public file type gets a narrow guard entry, test fixtures and a
+  `PUBLIC-PAYLOADS.md` line; never a wildcard. New built data only adds files under `site/data/app/`. Tracked schemas,
+  `record_audit.py` and integrity checks do not change. The RSS feed is renamed “Kook'n” and keeps its item IDs.
+  Not approved: analytics, domain purchase, homepage edits, Cloudflare, Whop, payments or referral links.
+- **Logos and photos stay (2026-10-06, owner approved):** keep ESPN team logos and player headshots on the website
+  and cards, with team-color badges as the fallback. `SOURCE-RIGHTS.md` stays open; revisit before any paid launch
+  under P08.
 - **Short research-post voice (2026-10-06, owner approved):** research captions lead with the exact line and one
   useful proof point. Keep them short and natural. Do not append boilerplate such as “history does not predict the
   next game,” repeat “not an official play” in the caption, or add a generic “save this” request. The graphic keeps

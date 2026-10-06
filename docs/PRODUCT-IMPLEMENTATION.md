@@ -11,6 +11,20 @@ quote states; coherent research filters; private operating visibility; bounded c
 Current sources, free budgets and approved release categories only. Full plan: owner's local
 `kookn-product-plan-2026-10-05.html` (dated audit baseline, not a deployment receipt).
 
+## October 6 redesign handoff
+
+The owner approved a casino-felt redesign and a staged release. The new navigation is Today / Research / Games /
+Record / More, but the current `/sports/` application remains authoritative until the owner approves the separate
+C3 swap. C0 records the rules and queue, C1 publishes a noindex preview at `/sports/next/`, and C2 adds parity tests.
+The preview reuses the current public data and unchanged `core.js` record math; it changes no pick, result, feed,
+post, card or pipeline rule.
+
+Hard owner gates remain explicit: no live-site swap, felt-card cutover, R0–R7 result/pipeline change, public CLV or
+ROI headline, R5 trend default, X/Discord post or delivery change. The owner must review the preview on a phone
+before P19 can move. The local redesign audit stays excluded from the public repository pending an owner decision
+about its X analytics figures; the remaining redesign source and strategy files are retained as implementation
+evidence under `redesign/`.
+
 The finite follow-through queue is `docs/product-status.json`. Read it before continuing work. Each item has an
 owner, next action, completion condition and dated evidence. The existing weekly review carries its open items
 without relying on the local model to remember them. A model switch does not reset this queue. Its statuses are

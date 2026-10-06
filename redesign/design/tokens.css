@@ -1,0 +1,53 @@
+/* Kook'n design tokens: "casino felt" (owner approved 2026-10-06).
+   Source of truth for the site (site/app.css copies these) and the social cards (social/felt.py mirrors them).
+   Green means a hit or support for the selected side. Red means a miss. Gray means unknown or pending.
+   Color is never the only signal: pair it with a ✓ / ✗ / – symbol or a word. */
+:root {
+  /* felt surfaces */
+  --felt-night: #07120D;   /* page */
+  --felt: #0E2219;         /* cards */
+  --felt-raised: #15301F;  /* raised controls, hover */
+  --felt-high: #1B3B27;    /* selected */
+  --line: #21412F;         /* decorative dividers only (1.5:1) */
+  --line-strong: #3D7356;  /* input and chip borders (3.0:1 on felt) */
+
+  /* chalk text */
+  --chalk: #F2F7F4;        /* 15.4:1 on felt */
+  --dim: #A9C0B3;          /* 8.6:1 on felt: secondary text */
+
+  /* results */
+  --kookd: #20C774;        /* brand + hit (7.5:1 on felt) */
+  --kookd-ink: #062B1C;    /* text on green fills (6.9:1) */
+  --burnt: #F2414E;        /* miss: fills and icons only (4.47:1 on felt fails AA for text) */
+  --burnt-text: #FF6B75;   /* miss text (6.0:1 on felt) */
+  --burnt-ink: #07120D;    /* text on red fills (5.1:1) */
+  --push: #9CB3A6;
+
+  /* paper tickets */
+  --ticket: #F2F7F4;
+  --ticket-ink: #07120D;
+  --ticket-dim: #3D5447;   /* 7.9:1 on ticket */
+  --ticket-green: #0B6B3E; /* green text on paper (6.4:1) */
+  --ticket-red: #B4232F;   /* red text on paper (6.1:1) */
+  --ticket-rule: #C9D8D0;
+
+  /* type */
+  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-body: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --text-xs: 13px;   /* floor for labels */
+  --text-sm: 14px;   /* floor for meta */
+  --text-md: 16px;   /* body */
+  --text-lg: 18px;
+  --text-xl: 24px;
+  --text-2xl: 32px;
+  --text-3xl: 44px;
+
+  /* shape and space */
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --gutter: 16px;
+  --tap: 44px;
+  --tabbar: 64px;
+  --max: 1180px;
+}
