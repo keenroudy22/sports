@@ -187,6 +187,14 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Matchup-trend context (2026-10-06, owner approved):** game pages may combine a fresh exact main-line player
+  trend with the opponent's allowed-by-position/stat rank and the stored projected score. This is visible research,
+  not a required input to the official-play formula and never creates, removes or upgrades a play. In CFB, a player
+  whose team is projected to lose by at least 14 points carries a game-script caution and ranks below otherwise
+  comparable matchup research because normal usage may not hold. Do not hide the line or pretend the caution proves
+  an over or under. The existing optional Matchup research post may feature the strongest defense-supported main
+  lines under the existing one-research-post cap, four-hour quote freshness and five-game history minimum; it adds
+  no post slot, alternate line, paid call or Playbook tag.
 - **Season and postseason record lifecycle (2026-10-06, owner approved):** every official published record keeps
   provider season and stage metadata. The default Record view is each selected sport's current season and current
   stage; the first postseason play starts a separate playoff view, and the first play of a new season starts a new

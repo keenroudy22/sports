@@ -788,6 +788,16 @@
   const defenseMatchupText = (line, matchup) => matchup
     ? `${line.opponentAbbr || 'Opponent'} allows ${fixed(matchup.value)} ${(C.LABEL[matchup.stat] || line.market || matchup.stat).toLowerCase()}/game to ${matchup.pos}s · ${ordinal(matchup.rank)} of ${matchup.of} (1st allows least) · ${matchup.games} games`
     : '';
+  const gameScriptContext = (card, line) => {
+    if(card?.league!=='CFB' || !line?.team || !card?.v2) return null;
+    const away=Number(card.v2.away), home=Number(card.v2.home);
+    if(!Number.isFinite(away) || !Number.isFinite(home)) return null;
+    const team=String(line.team), awayId=String(card.away?.id || ''), homeId=String(card.home?.id || '');
+    const margin=team===awayId ? away-home : team===homeId ? home-away : null;
+    if(!Number.isFinite(margin) || margin>-14) return null;
+    const abbr=line.teamAbbr || (team===awayId ? card.away?.abbr : card.home?.abbr) || 'This team';
+    return {margin, text:`Our score projects ${abbr} behind by ${fixed(Math.abs(margin))} points. College usage can change in a lopsided game.`};
+  };
 
   const modelReadsSection = (card, detail, teams) => {
     if (!detail) return '';
@@ -796,6 +806,7 @@
     if (!reads.length) return '';
     const render = line => {
       const history = line.history && line.history.season;
+      const script = gameScriptContext(card,line);
       const fresh = Date.now() - Date.parse(line.observedAt) >= 0 && Date.now() - Date.parse(line.observedAt) <= 4 * 3600000;
       const price = archived ? 'Pregame comparison · not a live line' : fresh && line.odds != null ? `${C.odds(line.odds)} ${line.book || ''}` : 'Check current price';
       const warnings = line.warnings || [];
@@ -804,6 +815,7 @@
         <p class="model-read-comparison">${esc(line.comparison)}</p>
         <p class="row-meta">${esc(price)} · ${esc(ago(line.observedAt))}</p>
         ${history ? `<p class="row-meta">${history.hits}/${history.games} this season at this line${history.games < 5 ? ' · small sample' : ''}</p>` : ''}
+        ${script ? `<p class="row-meta model-read-caution">${esc(script.text)}</p>` : ''}
         ${warnings.length ? `<p class="row-meta model-read-caution">${esc(warnings[0])}</p>` : ''}
         ${warnings.length > 1 ? `<details><summary>More context</summary>${warnings.slice(1).map(w => `<p class="row-meta">${esc(w)}</p>`).join('')}</details>` : ''}</article>`;
     };
@@ -812,14 +824,14 @@
 
     const favoriteIds=new Set((detail.favoriteLines || []).map(line=>line.sourceId));
     const ranked=reads.map(line=>{
-      const history=line.history?.season, matchup=defenseMatchup(line,teams);
+      const history=line.history?.season, matchup=defenseMatchup(line,teams), script=gameScriptContext(card,line);
       const trend=Boolean(history && history.games>=3 && history.rate>=70);
       const current=line.odds!=null && Date.now()-Date.parse(line.observedAt)>=0 && Date.now()-Date.parse(line.observedAt)<=4*3600000;
       const thin=(line.warnings || []).some(w=>/small sample/i.test(w));
       const signals=1+Number(trend)+Number(Boolean(matchup?.supports));
-      return {line,history,matchup,trend,current,thin,signals};
+      return {line,history,matchup,script,trend,current,thin,signals};
     }).filter(item=>item.line.kind==='player' && item.current && !item.thin && !favoriteIds.has(item.line.sourceId) && item.signals>=2)
-      .sort((a,b)=>b.signals-a.signals || Number(b.matchup?.supports)-Number(a.matchup?.supports) || (b.history?.rate || 0)-(a.history?.rate || 0) || String(a.line.title).localeCompare(String(b.line.title)))
+      .sort((a,b)=>Number(Boolean(a.script))-Number(Boolean(b.script)) || b.signals-a.signals || Number(b.matchup?.supports)-Number(a.matchup?.supports) || (b.history?.rate || 0)-(a.history?.rate || 0) || String(a.line.title).localeCompare(String(b.line.title)))
       .slice(0,4);
     const edgeIds=new Set(ranked.map(item=>item.line.id));
     const edgeCard=item=>{
@@ -828,15 +840,17 @@
       if(item.trend) chips.push([`${history.rate}% trend`,'']);
       if(matchup?.supports) chips.push(['Matchup','']);
       else if(matchup?.opposes) chips.push(['Defense disagrees','edge-against']);
+      if(item.script) chips.push(['Game-script caution','edge-against']);
       return `<article class="card matchup-edge"><div class="matchup-edge-top"><span class="pill pill-ours">${signals}/3 signals</span><span class="row-price"><span class="row-odds num">${esc(C.odds(line.odds))}</span><span class="row-book">${esc(line.book || '')}</span></span></div>
         <h3><a href="#player/${esc(card.league)}/${esc(line.athleteId)}">${esc(line.title)} →</a></h3>
         <p class="model-read-comparison">${esc(line.comparison)}</p>
         <div class="edge-signals">${chips.map(([chip,tone])=>`<span class="${tone}">${esc(chip)}</span>`).join('')}</div>
         ${history ? `<p class="row-meta"><b>${history.hits}/${history.games}</b> this season at this line</p>` : ''}
         ${matchup ? `<p class="row-meta">${esc(defenseMatchupText(line,matchup))}</p>` : ''}
+        ${item.script ? `<p class="row-meta model-read-caution">${esc(item.script.text)}</p>` : ''}
         <p class="row-meta">Checked ${esc(ago(line.observedAt))}</p></article>`;
     };
-    const edgeSection=ranked.length ? section('Matchup edges', `<p class="row-meta matchup-edge-note">Projection, hit rate and opponent defense in one view.</p><div class="matchup-edge-grid">${ranked.map(edgeCard).join('')}</div>`, '<span>Research, not posted plays</span>') : '';
+    const edgeSection=ranked.length ? section('Matchup edges', `<p class="row-meta matchup-edge-note">Projection, exact-line hit rate and opponent defense in one view. CFB mismatch cautions rank lower here; they do not change official-play selection.</p><div class="matchup-edge-grid">${ranked.map(edgeCard).join('')}</div>`, '<span>Research, not posted plays</span>') : '';
     const others=reads.filter(line=>!favoriteIds.has(line.sourceId) && !edgeIds.has(line.id));
     const preview=ranked.length ? 2 : 4;
     const otherSection=others.length ? section('All other lines', `<div class="model-read-grid">${others.slice(0,preview).map(render).join('')}</div>` +
@@ -871,10 +885,11 @@
       const historyText = [rate(`last ${history.last ? history.last.games : 0}`, history.last), rate('this season', history.season)]
         .filter(Boolean).join(' · ');
       const matchup=player ? defenseMatchup(line,teams) : null;
+      const script=player ? gameScriptContext(card,line) : null;
       const confidence = line.confidenceRank && line.confidenceRank <= 5 ? (line.confidenceRank === 1 ? 'Highest confidence' : `#${line.confidenceRank} confidence`) : '';
       return `<div class="row favorite-line" style="cursor:default"><span class="row-rail" style="background:var(--mint)"></span>
         <span class="row-main"><span class="row-top"><span class="pill pill-ours">#${i + 1} value</span>${confidence ? `<span class="pill pill-confidence">${esc(confidence)}</span>` : ''}<span class="row-name">${esc(line.title)}</span>${line.teamAbbr ? `<span class="row-meta">${esc(line.teamAbbr)}</span>` : ''}${line.alternate ? '<span class="pill pill-reference">Alternate</span>' : ''}</span>
-        <span class="row-market">${esc(detailText)}</span>${historyText ? `<span class="row-meta favorite-history">${esc(historyText)}</span>` : ''}${matchup ? `<span class="row-meta favorite-matchup">${esc(defenseMatchupText(line,matchup))}</span>` : ''}<span class="row-meta">Updated ${esc(ago(line.observedAt))}</span></span>
+        <span class="row-market">${esc(detailText)}</span>${historyText ? `<span class="row-meta favorite-history">${esc(historyText)}</span>` : ''}${matchup ? `<span class="row-meta favorite-matchup">${esc(defenseMatchupText(line,matchup))}</span>` : ''}${script ? `<span class="row-meta model-read-caution">${esc(script.text)}</span>` : ''}<span class="row-meta">Updated ${esc(ago(line.observedAt))}</span></span>
         <span class="row-price"><span class="row-odds num">${esc(C.odds(line.odds))}</span><span class="row-book">${esc(line.book)}</span></span></div>`;
     };
     const groups = [['Spreads', favorites.filter(l => l.market === 'point spread')],

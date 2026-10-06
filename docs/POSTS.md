@@ -93,7 +93,7 @@ prevents duplicates, and the normal queue limits apply. These are updates, not p
 | **Morning receipt** | 9 AM the day after a game day | `Saturday: 5-3` then `✅ Iowa/Michigan over 38.5` per play; a fun ticket adds `0.25u · 2/3 legs hit · missed by one leg` when the stored settlement supports it; a raw losing player prop waits for its injury/return review until 12 hours after kickoff, then uses the official stats if no different official book settlement is known; a verified injury adds `injured in-game · checked before grading`; `Today: 3 plays.`, tags | the tall navy/mint report card (W/L per play, finals, parlay sweat, the chef) | `receipts.day_receipt`, `with_menu`, `pick_card.receipt_svg` |
 | **Week's receipt** | Wednesday 9 AM | `The week (Sep 23 to Sep 29): 12-9` then the record by kind; fun parlays show their smaller stake | receipt report card | `receipts.week_receipt` |
 | **Save this projection sheet** | 10 AM college Saturday and NFL Sunday | full NFL slate or 16 college games / exact line, odds and book / up to four price-qualified mint rings / save ask / tag | 1080x1350 compact projection grid | `sheet.py` |
-| **Research card** | At most one per football slate, targeted for 10:30 AM | Fresh outright Underdog Watch first; otherwise a priced underdog cover, exact-line Matchup Menu, or End-zone Work. Every version says research, not an official play, and tells readers to check current prices | 1080x1350 navy/mint/cyan card with large lines and team/player art | `research_posts.py` |
+| **Research card** | At most one per football slate, targeted for 10:30 AM | Fresh outright Underdog Watch first; otherwise a priced underdog cover, defense-supported exact-line Matchup Trend, or End-zone Work. CFB players projected to trail by 14+ are ranked down and carry game-script context. Every version says research, not an official play, and tells readers to check current prices | Compact 1200x675 navy/mint/cyan card with large lines and team/player art | `research_posts.py` |
 
 Confirmed official plays, the Pick of the Day and fun/challenge tickets use the same copy and card in Discord about
 10-15 minutes before their X time. Receipts, injury angles and conversation prompts mirror after X. Public promotion
@@ -118,7 +118,7 @@ as the largest element, and separate book/price and projection blocks. Mint/cyan
 through the existing themes. Kook’n and the chef remain the brand; the wordmark leads data-heavy graphics.
 Parlay and ladder templates retain their specialized layouts. Existing published attachments stay untouched.
 
-Research assets use `research_art.svg`: portrait header, clean rows, exact sample counts and expanding row heights
+Research assets use `research_art.svg`: compact landscape header, clean rows, exact sample counts and expanding row heights
 for longer fields. Use only selected verified evidence, not statistics transcribed from inspiration screenshots.
 Keep historical trends distinct from official plays; do not call a mixed-rate sheet “100%.” This changes artwork,
 not candidate selection, automatic release times, X/Discord limits, injury checks or data budgets.

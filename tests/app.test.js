@@ -90,8 +90,8 @@ test('research scope, side labels and primary Tools destinations are unambiguous
 test('game research is independent of posted plays and shows exact comparisons with cautions', () => {
   const source = fs.readFileSync('site/app.js', 'utf8');
   const body = source.match(/const modelReadsSection = \(card, detail, teams\) => \{([\s\S]*?)\n  \};/)[1];
-  const render = new Function('C', 'esc', 'ago', 'whenShort', 'section', 'defenseMatchup', 'defenseMatchupText', 'card', 'detail', 'teams', body);
-  const html = render(C, C.esc, C.ago, C.whenShort, (title, text) => title + text, () => null, () => '',
+  const render = new Function('C', 'esc', 'ago', 'whenShort', 'section', 'defenseMatchup', 'defenseMatchupText', 'gameScriptContext', 'card', 'detail', 'teams', body);
+  const html = render(C, C.esc, C.ago, C.whenShort, (title, text) => title + text, () => null, () => '', () => null,
     { league: 'NFL', state: 'pre', kickoff: '2099-10-05T00:20:00Z' },
     { favoriteLines: [], picks: [], modelReads: [{ title: 'Player over 25.5 receiving yards', athleteId: '1',
       kind: 'player', comparison: 'We project 35 vs 25.5', performanceCaution: true, warnings: ['Higher bar'],
@@ -104,6 +104,22 @@ test('game research is independent of posted plays and shows exact comparisons w
   assert.match(html, /#player\/NFL\/1/);
   assert.match(source, /C.filterTrends\(detail.seasonTrends/);
   assert.doesNotMatch(source, /No qualifying streak sheet/);
+});
+
+test('CFB projected blowout context is visible research and does not erase the line', () => {
+  const source=fs.readFileSync('site/app.js','utf8');
+  const body=source.match(/const gameScriptContext = \(card, line\) => \{([\s\S]*?)\n  \};/)[1];
+  const context=new Function('fixed','card','line',body);
+  const card={league:'CFB',away:{id:'1',abbr:'DOG'},home:{id:'2',abbr:'FAV'},v2:{away:10,home:35}};
+  const line={team:'1',teamAbbr:'DOG',title:'Runner over 55.5 rushing yards'};
+  const warning=context(value=>Number(value).toFixed(1).replace(/\.0$/,''),card,line);
+  assert.equal(warning.margin,-25);
+  assert.match(warning.text,/DOG behind by 25 points/);
+  assert.match(warning.text,/usage can change in a lopsided game/);
+  assert.equal(context(value=>String(value),{...card,v2:{away:24,home:35}},line),null,
+    'an ordinary projected margin does not get a blowout warning');
+  assert.match(source,/CFB mismatch cautions rank lower here; they do not change official-play selection/);
+  assert.match(source,/Game-script caution/);
 });
 
 test('a qualifying Upset Watch renders percentages without relying on another view’s local helpers', () => {
@@ -225,7 +241,7 @@ test('game pages put favorites before secondary model reads and do not publish m
   assert.doesNotMatch(game, /Why the model says this|Forecast history/);
   assert.doesNotMatch(source, /How we calculated it/);
   assert.match(source, /Matchup edges/);
-  assert.match(source, /Projection, hit rate and opponent defense in one view/);
+  assert.match(source, /Projection, exact-line hit rate and opponent defense in one view/);
   assert.match(source, /Research, not posted plays/);
   assert.match(source, /Defense disagrees/);
 });

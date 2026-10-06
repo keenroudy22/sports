@@ -3,7 +3,7 @@
 This is editorial packaging, never candidate selection. It reads the same built
 page payloads visitors see and refuses stale prices. The public priority is:
 fresh outright underdogs, priced underdog spreads, fresh main-line season trends,
-exact-line matchup history, then observed end-zone work. A missing view produces
+exact-line trends supported by opponent defense, then observed end-zone work. A missing view produces
 no post; nothing is invented to fill a calendar.
 """
 import html
@@ -19,11 +19,16 @@ ROOT = Path(__file__).resolve().parents[1]
 TODAY = ROOT / 'site' / 'data' / 'app' / 'today.json'
 LINES = ROOT / 'site' / 'data' / 'app' / 'lines.json'
 DETAILS = ROOT / 'site' / 'data' / 'app' / 'games'
+TEAMS = ROOT / 'site' / 'data' / 'app' / 'teams'
 PUBLIC_BOOKS = {'DraftKings', 'FanDuel', 'BetMGM', 'ESPN BET', 'Caesars', 'BetRivers', 'Fanatics'}
 POST_AT, POST_UNTIL = (10, 30), (14, 0)
 WIDTH, HEIGHT = 1080, 1350
 BG, PANEL, LINE = '#071018', '#102330', '#294657'
 TEXT, DIM, MINT, CYAN, VIOLET = '#f5faff', '#a7c1cf', '#5eeaa4', '#6adfff', '#c2a2ff'
+POS_GROUP = {'QB': 'QB', 'RB': 'RB', 'FB': 'RB', 'WR': 'WR', 'TE': 'TE'}
+STAT_LABEL = {'passYds': 'pass yds', 'att': 'pass attempts', 'cmp': 'completions',
+              'rushYds': 'rush yds', 'car': 'carries', 'recYds': 'rec yds',
+              'rec': 'receptions', 'targets': 'targets'}
 
 
 def when(value):
@@ -43,6 +48,11 @@ def load(path, fallback):
 
 def details_for(cards, root=DETAILS):
     return {card['id']: load(Path(root) / f"{card['id']}.json", {}) for card in cards}
+
+
+def teams_for(cards, root=TEAMS):
+    return {league: load(Path(root) / f'{league}.json', {})
+            for league in {card.get('league') for card in cards if card.get('league')}}
 
 
 def current(value, now, age):
@@ -148,30 +158,96 @@ def spread_dog_candidate(games, lines, now):
                                              *copy, '', 'Cover research, not an upset call or official play. Check current prices.', tags(shown)])}
 
 
-def matchup_candidate(games, details, now):
+def defense_context(line, payload):
+    """Return sourced opponent-by-position context using the site's defense table."""
+    rows = (((payload or {}).get('defense') or {}).get('rows') or {})
+    opponent, pos, stat = str(line.get('opponent') or ''), POS_GROUP.get(line.get('position')), line.get('stat')
+    direction = line.get('direction')
+    if not opponent or not pos or not stat or direction not in ('over', 'under'):
+        return None
+    row = rows.get(opponent) or {}
+    value = (row.get(pos) or {}).get(stat)
+    games = ((row.get('coverage') or {}).get(pos) or {}).get(stat, row.get('g', 0))
+    if not isinstance(value, (int, float)) or not isinstance(games, (int, float)) or games < 3:
+        return None
+    ranked = []
+    for team, defense in rows.items():
+        observed = (((defense or {}).get('coverage') or {}).get(pos) or {}).get(stat, (defense or {}).get('g', 0))
+        allowed = ((defense or {}).get(pos) or {}).get(stat)
+        if isinstance(observed, (int, float)) and observed >= 1 and isinstance(allowed, (int, float)):
+            ranked.append((allowed, str(team)))
+    ranked.sort()
+    if not ranked:
+        return None
+    rank = 1 + sum(1 for allowed, _team in ranked if allowed < value)
+    total = len(ranked)
+    tone = 'soft' if rank > total * 2 / 3 else 'tough' if rank <= total / 3 else 'neutral'
+    supports = (direction == 'over' and tone == 'soft') or (direction == 'under' and tone == 'tough')
+    opposes = (direction == 'over' and tone == 'tough') or (direction == 'under' and tone == 'soft')
+    return {'rank': rank, 'of': total, 'value': value, 'games': int(games), 'pos': pos, 'stat': stat,
+            'supports': supports, 'opposes': opposes}
+
+
+def projected_team_margin(game, line):
+    """Projected margin for the player's team; descriptive CFB context, never a play input."""
+    v2, team = game.get('v2') or {}, str(line.get('team') or '')
+    away, home = game.get('away') or {}, game.get('home') or {}
+    if not team or not isinstance(v2.get('away'), (int, float)) or not isinstance(v2.get('home'), (int, float)):
+        return None
+    if team == str(away.get('id')):
+        return v2['away'] - v2['home']
+    if team == str(home.get('id')):
+        return v2['home'] - v2['away']
+    return None
+
+
+def matchup_candidate(games, details, now, teams=None):
     rows = []
     for game in games:
-        for line in (details.get(game['id']) or {}).get('favoriteLines') or []:
-            history = (line.get('history') or {}).get('last') or {}
-            if history.get('games', 0) < 5 or history.get('rate', 0) < 80 \
-                    or not current(line.get('observedAt'), now, timedelta(hours=12)) \
-                    or line.get('book') not in PUBLIC_BOOKS:
+        detail = details.get(game['id']) or {}
+        candidates, used = [], set()
+        for line in [*(detail.get('favoriteLines') or []), *(detail.get('modelReads') or [])]:
+            key = line.get('sourceId') or line.get('id')
+            if key in used:
                 continue
+            used.add(key)
+            candidates.append(line)
+        for line in candidates:
+            history = (line.get('history') or {}).get('last') or {}
+            matchup = defense_context(line, (teams or {}).get(game.get('league')))
+            if line.get('kind') not in (None, 'player') or line.get('alternate') \
+                    or history.get('games', 0) < 5 or history.get('rate', 0) < 80 \
+                    or not isinstance(line.get('odds'), (int, float)) \
+                    or not current(line.get('observedAt'), now, timedelta(hours=4)) \
+                    or line.get('book') not in PUBLIC_BOOKS or not matchup or not matchup['supports']:
+                continue
+            margin = projected_team_margin(game, line)
+            script_risk = game.get('league') == 'CFB' and isinstance(margin, (int, float)) and margin <= -14
+            opponent = line.get('opponentAbbr') or 'Opponent'
+            stat = STAT_LABEL.get(matchup['stat'], str(line.get('market') or matchup['stat']).lower())
+            detail_text = f"{opponent} allows {matchup['value']:g} {stat}/game to {matchup['pos']}s · #{matchup['rank']} of {matchup['of']}"
+            if script_risk:
+                detail_text += f" · {line.get('teamAbbr') or 'team'} projected {abs(margin):g}-pt dog"
             rows.append({'league': game.get('league'), 'gameId': game['id'], 'kickoff': game['kickoff'],
                          'title': line.get('title'), 'team': None, 'athleteId': line.get('athleteId'),
                          'price': f"{price(line.get('odds'))} {book_short(line.get('book'))}",
-                         'book': line.get('book'), 'metric': f"{history['hits']}/{history['games']} last games",
-                         'detail': f"Projection {line.get('projection'):g} | exact main line",
+                         'book': line.get('book'), 'metric': f"{history['hits']}/{history['games']} exact-line trend",
+                         'detail': detail_text,
                          'hits': history['hits'], 'games': history['games'], 'pushes': history.get('pushes', 0),
-                         'score': (history.get('rate', 0), line.get('edge') or 0), 'observedAt': line.get('observedAt')})
-    rows.sort(key=lambda row: (-row['score'][0], -row['score'][1], row['title']))
+                         'scriptRisk': script_risk, 'projectedMargin': margin, 'matchup': matchup,
+                         'score': (history.get('rate', 0), history.get('games', 0), line.get('edge') or 0),
+                         'observedAt': line.get('observedAt')})
+    rows.sort(key=lambda row: (row['scriptRisk'], -row['score'][0], -row['score'][1],
+                               -row['score'][2], row['title']))
     if not rows:
         return None
-    shown = rows[:4]
-    lines = [f"{row['title']} | {row['metric']} | {row['price']}" for row in shown]
-    return {'kind': 'matchup', 'title': 'MATCHUP MENU', 'kicker': 'EXACT-LINE HISTORY', 'accent': CYAN,
-            'rows': shown, 'text': '\n'.join(['📊 MATCHUP MENU', "Historical results at today's exact main lines:",
-                                             *lines, '', 'History does not predict the next game. Research, not official plays. Save this.', tags(shown)])}
+    shown = rows[:3]
+    lines = [f"{row['title']} | {row['hits']}/{row['games']} | {row['detail']}" for row in shown]
+    caution = ['CFB big-underdog usage is ranked down.' if any(row['scriptRisk'] for row in shown) else None,
+               'Trend + defense context, not a prediction or official play.']
+    return {'kind': 'matchup', 'title': 'MATCHUP TRENDS', 'kicker': 'EXACT LINE + OPPONENT DEFENSE', 'accent': CYAN,
+            'rows': shown, 'text': '\n'.join(['📊 MATCHUP TRENDS', 'Strong exact-line history supported by the opponent matchup:',
+                                             *lines, '', *[row for row in caution if row], tags(shown)])}
 
 
 def scorer_candidate(games, details, now):
@@ -253,7 +329,7 @@ def bounded_caption(choice):
     families = {
         'upset': ('UNDERDOG WATCH', 'Raw-model research, not official plays. Check current prices.'),
         'spread-dog': ('UNDERDOG SPREAD WATCH', 'Cover research, not an upset call or official play. Check current prices.'),
-        'matchup': ('MATCHUP MENU', 'History, not a prediction or official play. Check current prices.'),
+        'matchup': ('MATCHUP TRENDS', 'Trend + defense context, not a prediction or official play. Check current prices.'),
         'season': (choice['title'], 'History, not a prediction or official play. Check current prices.'),
         'end-zone': ('END-ZONE WORK', 'Opportunity, not TD probability or an official play.'),
     }
@@ -276,7 +352,7 @@ def bounded_caption(choice):
     return '\n'.join([heading, *preview, '', footer])
 
 
-def select(data, details, now, lines=None):
+def select(data, details, now, lines=None, teams=None):
     games = slate_games(data, now)
     if not games:
         return None
@@ -284,7 +360,7 @@ def select(data, details, now, lines=None):
     # Alternate days share the existing editorial slot; never add another daily post.
     chosen = (season if eastern_date(now).day % 2 == 0 else None) or (
         upset_candidate(games, now) or spread_dog_candidate(games, lines, now)
-        or matchup_candidate(games, details, now) or season or scorer_candidate(games, details, now))
+        or matchup_candidate(games, details, now, teams) or season or scorer_candidate(games, details, now))
     if not chosen:
         return None
     day = eastern_date(now)
@@ -300,12 +376,13 @@ def at(day, hm):
 
 def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES):
     data = load(data_path, {'games': []})
-    choice = select(data, details_for(data.get('games') or [], detail_root), now,
-                    (load(lines_path, {'lines': []}) or {}).get('lines') or [])
+    cards = data.get('games') or []
+    choice = select(data, details_for(cards, detail_root), now,
+                    (load(lines_path, {'lines': []}) or {}).get('lines') or [], teams_for(cards))
     if not choice:
         return None
     stale = min(at(choice['day'], POST_UNTIL), choice['firstKickoff'] - timedelta(minutes=45))
-    if choice['kind'] == 'season':
+    if choice['kind'] in ('season', 'matchup'):
         stale = min(stale, *(when(r['observedAt']) + timedelta(hours=4) for r in choice['rows']))
     if now >= stale:
         return None
@@ -372,8 +449,9 @@ def legacy_svg(choice, art=None):
 
 def render_due(now, folder, data_path=TODAY, detail_root=DETAILS, lines_path=LINES, fetch=None, log=print):
     data = load(data_path, {'games': []})
-    choice = select(data, details_for(data.get('games') or [], detail_root), now,
-                    (load(lines_path, {'lines': []}) or {}).get('lines') or [])
+    cards = data.get('games') or []
+    choice = select(data, details_for(cards, detail_root), now,
+                    (load(lines_path, {'lines': []}) or {}).get('lines') or [], teams_for(cards))
     if not choice:
         return {}
     fetch = fetch or pick_card.fetch_data_uri

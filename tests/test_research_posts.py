@@ -70,21 +70,59 @@ class ResearchPostTests(unittest.TestCase):
         self.assertEqual(receipts.guard(post), [])
 
     def test_matchup_and_end_zone_are_fallbacks_not_streak_guarantees(self):
-        detail = {'favoriteLines': [{'title': 'Runner over 55.5 rushing yards', 'athleteId': '7',
+        detail = {'favoriteLines': [{'id': 'runner', 'sourceId': 'runner', 'kind': 'player',
+                                     'title': 'Runner over 55.5 rushing yards', 'athleteId': '7',
                                      'book': 'FanDuel', 'odds': -110, 'projection': 70,
+                                     'team': '1', 'teamAbbr': 'FAV', 'opponent': '2', 'opponentAbbr': 'DOG',
+                                     'position': 'RB', 'stat': 'rushYds', 'direction': 'over',
                                      'edge': 3.0, 'observedAt': '2026-10-03T13:00:00Z',
                                      'history': {'last': {'hits': 8, 'games': 10, 'rate': 80}}}],
                   'scorerResearch': [{'player': 'Runner', 'athleteId': '7', 'games': 4, 'teamGames': 4,
                                       'redZone': 12, 'inside10': 7, 'touchdowns': 3,
                                       'roleSnapshotAt': '2026-10-02T12:00:00Z'}]}
-        choice = R.select({'games': [game()]}, {'CFB-1': detail}, NOW)
+        teams = {'CFB': {'defense': {'rows': {
+            '2': {'RB': {'rushYds': 200}, 'coverage': {'RB': {'rushYds': 4}}, 'g': 4},
+            '3': {'RB': {'rushYds': 100}, 'coverage': {'RB': {'rushYds': 4}}, 'g': 4},
+            '4': {'RB': {'rushYds': 50}, 'coverage': {'RB': {'rushYds': 4}}, 'g': 4},
+        }}}}
+        choice = R.select({'games': [game()]}, {'CFB-1': detail}, NOW, teams=teams)
         self.assertEqual(choice['kind'], 'matchup')
-        self.assertIn('History does not predict the next game', choice['text'])
+        self.assertIn('Strong exact-line history supported by the opponent matchup', choice['text'])
+        self.assertIn('DOG allows 200 rush yds/game to RBs', choice['text'])
+        self.assertEqual(choice['title'], 'MATCHUP TRENDS')
         self.assertEqual(receipts.guard({'text': choice['text']}), [])
         detail['favoriteLines'][0]['history']['last']['rate'] = 70
-        choice = R.select({'games': [game()]}, {'CFB-1': detail}, NOW)
+        choice = R.select({'games': [game()]}, {'CFB-1': detail}, NOW, teams=teams)
         self.assertEqual(choice['kind'], 'end-zone')
         self.assertIn('not TD probability', choice['text'])
+
+    def test_matchup_trends_rank_cfb_blowout_context_down_without_changing_the_line(self):
+        safe = game()
+        safe['id'] = 'CFB-safe'
+        safe['v2'] = {'away': 27, 'home': 24}
+        risk = game()
+        risk['id'] = 'CFB-risk'
+        risk['v2'] = {'away': 10, 'home': 35}
+        def line(name, source, game_id, hits):
+            return {'id': source, 'sourceId': source, 'kind': 'player', 'title': name,
+                    'athleteId': source, 'book': 'FanDuel', 'odds': -110, 'projection': 70,
+                    'team': '1', 'teamAbbr': 'FAV', 'opponent': '2', 'opponentAbbr': 'DOG',
+                    'position': 'RB', 'stat': 'rushYds', 'direction': 'over', 'edge': 3.0,
+                    'observedAt': '2026-10-03T13:00:00Z',
+                    'history': {'last': {'hits': hits, 'games': 10, 'rate': hits * 10}}}
+        details = {'CFB-safe': {'favoriteLines': [line('Safe over 55.5 rushing yards', 'safe', 'CFB-safe', 8)]},
+                   'CFB-risk': {'favoriteLines': [line('Risk over 55.5 rushing yards', 'risk', 'CFB-risk', 10)]}}
+        teams = {'CFB': {'defense': {'rows': {
+            '2': {'RB': {'rushYds': 200}, 'coverage': {'RB': {'rushYds': 4}}, 'g': 4},
+            '3': {'RB': {'rushYds': 100}, 'coverage': {'RB': {'rushYds': 4}}, 'g': 4},
+            '4': {'RB': {'rushYds': 50}, 'coverage': {'RB': {'rushYds': 4}}, 'g': 4},
+        }}}}
+        choice = R.matchup_candidate([risk, safe], details, NOW, teams)
+        self.assertEqual([row['title'] for row in choice['rows']],
+                         ['Safe over 55.5 rushing yards', 'Risk over 55.5 rushing yards'])
+        self.assertTrue(choice['rows'][1]['scriptRisk'])
+        self.assertIn('FAV projected 25-pt dog', choice['rows'][1]['detail'])
+        self.assertIn('CFB big-underdog usage is ranked down', choice['text'])
 
     def test_spread_dogs_are_cover_watches_not_upset_calls(self):
         line = {'gameId': 'CFB-1', 'gameMarket': True, 'market': 'point spread', 'state': 'open',
