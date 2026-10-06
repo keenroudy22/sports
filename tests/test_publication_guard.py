@@ -16,7 +16,8 @@ class PublicationGuardTests(unittest.TestCase):
                      'data/app/players/NFL/3.json', 'data/app/player-charts/CFB.json',
                      'data/app/teams/NFL/12.json', 'data/app/teams/NFL.json',
                      'data/app/games/NFL-401872979.json', 'data/cards/research-2026-10-05.png',
-                     'img/wins/personal-win.jpg', 'data/feed.xml'):
+                     'img/wins/personal-win.jpg', 'data/feed.xml', 'next/index.html',
+                     'next/app.css', 'next/app.js'):
             self.assertTrue(guard.allowed_path(Path(path)), path)
 
     def test_unreviewed_and_private_artifacts_fail_closed(self):
@@ -24,6 +25,10 @@ class PublicationGuardTests(unittest.TestCase):
                      'data/x-posted.json', 'data/app/policy.json', 'data/app/status.json',
                      'data/app/teams/NFL/../../private.json', 'data/cards/private.zip',
                      'img/.config/card.png', 'data/new-feed.json', 'archive/review-packet.md'):
+            self.assertFalse(guard.allowed_path(Path(path)), path)
+
+    def test_preview_allowlist_is_exact_and_does_not_create_a_public_subtree(self):
+        for path in ('next/data.json', 'next/AUDIT.md', 'next/nested/app.js', 'next/.env'):
             self.assertFalse(guard.allowed_path(Path(path)), path)
 
     def test_public_facts_and_source_links_are_not_credentials(self):
