@@ -1,0 +1,46 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-10-06T03:30:06Z",
+  "targetWeek": 5,
+  "summary": "11:30 PM ET run, published at 11:30 PM ET. Settled 1: Falcons at Saints under 48 loss. Nothing to close. Nothing published. Screened and passed on 3: Buccaneers at Cowboys over 47.5 (lean_nothing_against); Raiders at Patriots under 45 (lean_edge); Vikings at Saints under 42 (lean_edge). odds_api.py: CFB: skipped (3 captures already today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "gamePicks": [
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 48.0,
+      "direction": "under",
+      "gameIds": [
+        "NFL-401872979"
+      ],
+      "book": "BetRivers",
+      "odds": -108,
+      "projection": 43.4,
+      "edge": "v2 total 43.4 (80% range 27 to 59.8). Chance of under 48: 55.2% (v2's raw 62.5% shrunk by its 2024-25 record against the close), push 2.9%, against 51.9% break-even at -108: +3.3 points, +0.093u per unit.",
+      "cutoff": "UNDER 48 at -108 or better. Closed to new entries at 46.5 or lower, or at -123 or worse at 48.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-09-30T19:13:51Z",
+      "quotedAt": "2026-09-30T19:14:41Z",
+      "quoteType": "capture",
+      "quoteNote": "BetRivers's number and price from the 3:14 PM ET capture across 6 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-01T03:30:00Z",
+      "title": "Falcons at Saints under 48",
+      "id": "NFL-2026-W4-atl-no-under-48-br",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401872979",
+        "https://www.atlantafalcons.com/news/michael-penix-jr-resiliency-falcons-win-thursday-night-football-packers"
+      ],
+      "why": "Our number is 43.4 for the under 48. The chance of under 48 is 55.2% after the raw 62.5% is adjusted for the model's record against the close. The line is -108, which breaks even at 51.9%. The edge is +3.3 points and +0.093 units per unit. Nothing in the data argues against this. The total opened at 45.5 and is now 47.5 at DraftKings, moving 2 points toward the over. Six books have totals from 47.5 to 48.5, with the middle at 47.75. Our spread gap of 0.3 points is at the 4th percentile of the model's gaps. Gaps this large went 563-525 against the close in 1132 graded games. Our total gap of 4.1 points is at the 83rd percentile of the model's gaps. Gaps this large went 101-93 against the close in 1134 graded games. Checked before publishing: Michael Penix Jr. started for Atlanta against Green Bay on September 24 after Cooper Rush started the Falcons' first two games. The Falcons have not yet published a game-week injury designation for Penix.",
+      "risk": "Our number is 43.4. The closing line is higher. A gap this large is more often our error than the market's. Confidence 3 of 10.",
+      "result": "loss",
+      "actual": "Falcons 45, Saints 24",
+      "settledAt": "2026-10-06T03:30:06Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401872979",
+      "actualValue": 69,
+      "units": -1
+    }
+  ]
+}
