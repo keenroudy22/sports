@@ -367,6 +367,32 @@ missing when neither component was recorded, so the page does not turn absent da
 - Live 375 px Chrome checks passed on CFB Best Lines and `#game/CFB-401871090`: page width equaled viewport width,
   the slate totals and Matchup edges were present, and the browser reported no script or console errors.
 
+## October 6 defense-supported trends and CFB game-script release
+
+- Game-page research now pairs each qualifying exact line with the opponent's allowed production and defensive
+  rank for the matching position/stat. Supporting and disagreeing defense evidence remains visible instead of
+  being hidden to make a trend look stronger.
+- A CFB player on a team projected to lose by at least 14 points receives a visible game-script caution and ranks
+  below otherwise comparable research rows. The caution is context only: it does not change gates, projections,
+  official-play selection, records or suggested stakes.
+- The existing Matchup Trend social candidate now requires a public, priced main line observed within four hours,
+  at least five exact-line games, an 80% or better hit rate and opponent-defense support for the selected side.
+  It keeps the existing research slot and daily cap, shows no Playbook tag and never forces a post. CFB mismatch
+  candidates remain eligible only as visibly cautioned, lower-ranked research.
+- Verification passed 880 Python tests (two intentionally skipped), 130 frontend tests, the complete stored-site
+  build, public-file boundary and an isolated slot-1145 rehearsal. The actual current Landry Lyddy research card
+  rendered at 1200×675 with his exact-line history and Troy's matching QB passing-yards defense context.
+
+### Verified release receipt
+
+- Production revision: `0425f07e113641c9ab244cba0fb065f057050dfe`.
+- [Publish run 37487457842](https://github.com/keenroudy22/sports/actions/runs/37487457842) succeeded on October 6
+  after hosted record reconciliation and the public artifact boundary passed. Live assets app 116 and CSS 77 were
+  confirmed.
+- The live 375 px check on `#game/CFB-401871090` reported page width 375, scroll width 375, no clipped or overflowing
+  elements, no load failure and no browser errors. The page visibly showed exact-line history, opponent defense
+  context and the research-only selection boundary. No new paid service or API call was introduced.
+
 ## External and elapsed-time gates
 
 | Gate | What remains | Authority/state |
