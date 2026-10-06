@@ -288,6 +288,13 @@ class GradeTests(unittest.TestCase):
                          ['Player Ten over 55.5 receiving yards', 'Player Ten over 5.5 receptions'])
         self.assertEqual(rows[0]['line'], 55.5, 'the listed favorite is the main value line, not an alternate')
         self.assertFalse(rows[0]['alternate'])
+        self.assertEqual(rows[0]['sourceId'], 'prop-1')
+        self.assertEqual(rows[0]['team'], '1')
+        self.assertEqual(rows[0]['teamAbbr'], 'ATL')
+        self.assertEqual(rows[0]['opponent'], '2')
+        self.assertEqual(rows[0]['opponentAbbr'], 'CAR')
+        self.assertEqual(rows[0]['position'], 'WR')
+        self.assertEqual(rows[0]['stat'], 'recYds')
         self.assertEqual(rows[0]['history'], {'last': {'hits': 2, 'games': 3, 'rate': 67},
                                               'season': {'hits': 2, 'games': 3, 'rate': 67}})
 

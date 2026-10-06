@@ -162,6 +162,7 @@ def matchup_candidate(games, details, now):
                          'price': f"{price(line.get('odds'))} {book_short(line.get('book'))}",
                          'book': line.get('book'), 'metric': f"{history['hits']}/{history['games']} last games",
                          'detail': f"Projection {line.get('projection'):g} | exact main line",
+                         'hits': history['hits'], 'games': history['games'], 'pushes': history.get('pushes', 0),
                          'score': (history.get('rate', 0), line.get('edge') or 0), 'observedAt': line.get('observedAt')})
     rows.sort(key=lambda row: (-row['score'][0], -row['score'][1], row['title']))
     if not rows:

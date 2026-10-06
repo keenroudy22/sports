@@ -38,7 +38,15 @@
   const savePreferences = () => {saved.set('research-preferences', preferences());rememberContext();};
   const changeLeague = league => {
     const next=P.league(league);
-    if(next!==state.league) state.chartOpponent='all'; // Team IDs are league-specific, not portable filters.
+    if(next!==state.league) {
+      // Team IDs and free-text player/team searches are not portable between sports.
+      state.chartOpponent='all';
+      state.researchQuery='';
+      state.gamesQuery='';
+      state.chartQuery='';
+      state.boardQuery='';
+      state.trendQuery='';
+    }
     state.league=next; saved.set('league',next); savePreferences();
   };
   state.watchlist = Array.isArray(state.watchlist) ? state.watchlist.filter(r => r && typeof r.key === 'string' && /^#(player|game)\//.test(r.href)).slice(0,100) : [];
@@ -766,7 +774,22 @@
 
   /* ---------- one game ---------- */
 
-  const modelReadsSection = (card, detail) => {
+  const defenseMatchup = (line, teams) => {
+    const rows=(teams?.defense || {}).rows || {}, pos=C.POS_GROUP[line.position], stat=C.marketKey(line);
+    if(!line.opponent || !pos || !stat || !['over','under'].includes(line.direction)) return null;
+    const rank=C.rankOf(rows,line.opponent,pos,stat);
+    if(!rank) return null;
+    const games=rows[line.opponent]?.coverage?.[pos]?.[stat] ?? rows[line.opponent]?.g ?? 0;
+    const tone=C.rankTone(rank.rank,rank.of);
+    return {...rank,games,pos,stat,tone,
+      supports:games>=3 && ((line.direction==='over' && tone==='soft') || (line.direction==='under' && tone==='tough')),
+      opposes:games>=3 && ((line.direction==='over' && tone==='tough') || (line.direction==='under' && tone==='soft'))};
+  };
+  const defenseMatchupText = (line, matchup) => matchup
+    ? `${line.opponentAbbr || 'Opponent'} allows ${fixed(matchup.value)} ${(C.LABEL[matchup.stat] || line.market || matchup.stat).toLowerCase()}/game to ${matchup.pos}s · ${ordinal(matchup.rank)} of ${matchup.of} (1st allows least) · ${matchup.games} games`
+    : '';
+
+  const modelReadsSection = (card, detail, teams) => {
     if (!detail) return '';
     const archived = card.completed || card.state !== 'pre' || Date.parse(card.kickoff) <= Date.now();
     const reads = detail.modelReads || [];
@@ -784,11 +807,44 @@
         ${warnings.length ? `<p class="row-meta model-read-caution">${esc(warnings[0])}</p>` : ''}
         ${warnings.length > 1 ? `<details><summary>More context</summary>${warnings.slice(1).map(w => `<p class="row-meta">${esc(w)}</p>`).join('')}</details>` : ''}</article>`;
     };
-    return section(archived ? 'Saved pregame lines' : 'More lines', `<div class="model-read-grid">${reads.slice(0, 2).map(render).join('')}</div>` +
-      (reads.length > 2 ? `<details class="model-read-more"><summary>See ${reads.length - 2} more</summary><div class="model-read-grid">${reads.slice(2).map(render).join('')}</div></details>` : ''));
+    if(archived) return section('Saved pregame lines', `<div class="model-read-grid">${reads.slice(0,2).map(render).join('')}</div>` +
+      (reads.length>2 ? `<details class="model-read-more"><summary>See ${reads.length-2} more</summary><div class="model-read-grid">${reads.slice(2).map(render).join('')}</div></details>` : ''));
+
+    const favoriteIds=new Set((detail.favoriteLines || []).map(line=>line.sourceId));
+    const ranked=reads.map(line=>{
+      const history=line.history?.season, matchup=defenseMatchup(line,teams);
+      const trend=Boolean(history && history.games>=3 && history.rate>=70);
+      const current=line.odds!=null && Date.now()-Date.parse(line.observedAt)>=0 && Date.now()-Date.parse(line.observedAt)<=4*3600000;
+      const thin=(line.warnings || []).some(w=>/small sample/i.test(w));
+      const signals=1+Number(trend)+Number(Boolean(matchup?.supports));
+      return {line,history,matchup,trend,current,thin,signals};
+    }).filter(item=>item.line.kind==='player' && item.current && !item.thin && !favoriteIds.has(item.line.sourceId) && item.signals>=2)
+      .sort((a,b)=>b.signals-a.signals || Number(b.matchup?.supports)-Number(a.matchup?.supports) || (b.history?.rate || 0)-(a.history?.rate || 0) || String(a.line.title).localeCompare(String(b.line.title)))
+      .slice(0,4);
+    const edgeIds=new Set(ranked.map(item=>item.line.id));
+    const edgeCard=item=>{
+      const {line,history,matchup,signals}=item;
+      const chips=[['Model','']];
+      if(item.trend) chips.push([`${history.rate}% trend`,'']);
+      if(matchup?.supports) chips.push(['Matchup','']);
+      else if(matchup?.opposes) chips.push(['Defense disagrees','edge-against']);
+      return `<article class="card matchup-edge"><div class="matchup-edge-top"><span class="pill pill-ours">${signals}/3 signals</span><span class="row-price"><span class="row-odds num">${esc(C.odds(line.odds))}</span><span class="row-book">${esc(line.book || '')}</span></span></div>
+        <h3><a href="#player/${esc(card.league)}/${esc(line.athleteId)}">${esc(line.title)} →</a></h3>
+        <p class="model-read-comparison">${esc(line.comparison)}</p>
+        <div class="edge-signals">${chips.map(([chip,tone])=>`<span class="${tone}">${esc(chip)}</span>`).join('')}</div>
+        ${history ? `<p class="row-meta"><b>${history.hits}/${history.games}</b> this season at this line</p>` : ''}
+        ${matchup ? `<p class="row-meta">${esc(defenseMatchupText(line,matchup))}</p>` : ''}
+        <p class="row-meta">Checked ${esc(ago(line.observedAt))}</p></article>`;
+    };
+    const edgeSection=ranked.length ? section('Matchup edges', `<p class="row-meta matchup-edge-note">Projection, hit rate and opponent defense in one view.</p><div class="matchup-edge-grid">${ranked.map(edgeCard).join('')}</div>`, '<span>Research, not posted plays</span>') : '';
+    const others=reads.filter(line=>!favoriteIds.has(line.sourceId) && !edgeIds.has(line.id));
+    const preview=ranked.length ? 2 : 4;
+    const otherSection=others.length ? section('All other lines', `<div class="model-read-grid">${others.slice(0,preview).map(render).join('')}</div>` +
+      (others.length>preview ? `<details class="model-read-more"><summary>See ${others.length-preview} more</summary><div class="model-read-grid">${others.slice(preview).map(render).join('')}</div></details>` : '')) : '';
+    return edgeSection+otherSection;
   };
 
-  const favoriteLinesSection = (card, detail) => {
+  const favoriteLinesSection = (card, detail, teams) => {
     if (card.completed || !detail) return '';
     const favorites = C.rankConfidence((detail.favoriteLines || []).filter(line=>C.quoteStatus({...line,state:line.state || 'open'},card.kickoff).current));
     if (!favorites.length) return section('Lines we like', '<p class="row-meta compact-note">No highlighted line at the current price. More lines are below.</p>');
@@ -814,10 +870,11 @@
       const rate = (label, value) => value && value.games ? `${value.hits}/${value.games} (${value.rate}%) ${label}` : '';
       const historyText = [rate(`last ${history.last ? history.last.games : 0}`, history.last), rate('this season', history.season)]
         .filter(Boolean).join(' · ');
+      const matchup=player ? defenseMatchup(line,teams) : null;
       const confidence = line.confidenceRank && line.confidenceRank <= 5 ? (line.confidenceRank === 1 ? 'Highest confidence' : `#${line.confidenceRank} confidence`) : '';
       return `<div class="row favorite-line" style="cursor:default"><span class="row-rail" style="background:var(--mint)"></span>
-        <span class="row-main"><span class="row-top"><span class="pill pill-ours">#${i + 1} value</span>${confidence ? `<span class="pill pill-confidence">${esc(confidence)}</span>` : ''}<span class="row-name">${esc(line.title)}</span>${line.team ? `<span class="row-meta">${esc(line.team)}</span>` : ''}${line.alternate ? '<span class="pill pill-reference">Alternate</span>' : ''}</span>
-        <span class="row-market">${esc(detailText)}</span>${historyText ? `<span class="row-meta favorite-history">${esc(historyText)}</span>` : ''}<span class="row-meta">Updated ${esc(ago(line.observedAt))}</span></span>
+        <span class="row-main"><span class="row-top"><span class="pill pill-ours">#${i + 1} value</span>${confidence ? `<span class="pill pill-confidence">${esc(confidence)}</span>` : ''}<span class="row-name">${esc(line.title)}</span>${line.teamAbbr ? `<span class="row-meta">${esc(line.teamAbbr)}</span>` : ''}${line.alternate ? '<span class="pill pill-reference">Alternate</span>' : ''}</span>
+        <span class="row-market">${esc(detailText)}</span>${historyText ? `<span class="row-meta favorite-history">${esc(historyText)}</span>` : ''}${matchup ? `<span class="row-meta favorite-matchup">${esc(defenseMatchupText(line,matchup))}</span>` : ''}<span class="row-meta">Updated ${esc(ago(line.observedAt))}</span></span>
         <span class="row-price"><span class="row-odds num">${esc(C.odds(line.odds))}</span><span class="row-book">${esc(line.book)}</span></span></div>`;
     };
     const groups = [['Spreads', favorites.filter(l => l.market === 'point spread')],
@@ -848,8 +905,8 @@
       : card.state === 'in' ? `${esc(card.status)} · ${esc(card.away.abbr)} ${card.away.score ?? DASH}–${card.home.score ?? DASH} ${esc(card.home.abbr)}` : esc(when(card.kickoff));
     const win = v2 ? (v2.winProb >= 0.5 ? `${card.home.abbr} ${Math.round(100 * v2.winProb)}%` : `${card.away.abbr} ${Math.round(100 * (1 - v2.winProb))}%`) : DASH;
     let html = `${head(title, `${status}${card.neutral ? ' · neutral site' : ''} · ${esc(leagueName(league))}`, back)}${watchButton({type:'game',key:'game:'+card.id,title,league,href:'#game/'+card.id,kickoff:card.kickoff})}${liveStamp(liveNow.refreshed)}
-      ${favoriteLinesSection(card, detail)}
-      ${modelReadsSection(card, detail)}
+      ${favoriteLinesSection(card, detail, teams)}
+      ${modelReadsSection(card, detail, teams)}
       ${!card.completed && C.modelCaution(card) ? `<div class="notice">${esc(C.modelCaution(card))}</div>` : ''}
       <div class="stats">
         ${stat('Our score', v2 ? `${fixed(v2.away, 0)}–${fixed(v2.home, 0)}` : DASH, v2 ? `${esc(card.away.abbr)} ${fixed(v2.away)}, ${esc(card.home.abbr)} ${fixed(v2.home)}` : 'no number yet')}
@@ -1577,6 +1634,16 @@
       const status=C.quoteStatus(row);
       return status.current?row:{...row,state:status.kind==='started'?'closed':'stale'};
     });
+    const currentSlate=all.filter(line=>line.state==='open' && Date.parse(line.kickoff)>Date.now());
+    const slateFavorites=currentSlate.filter(line=>line.odds!=null && line.grade?.calibrated && ['lean','strong'].includes(C.tierOf(line.grade)));
+    const slateProps=currentSlate.filter(line=>Boolean(line.athleteId));
+    const slateGames=new Set(currentSlate.map(line=>line.gameId).filter(Boolean));
+    const slateGameLines=currentSlate.filter(line=>!line.athleteId);
+    const coverage=`<div class="slate-coverage" aria-label="Current board coverage">
+      <span class="slate-coverage-title"><small>Current ${state.league==='ALL'?'football':leagueName(state.league)} board</small><b>${slateGames.size} matchup${slateGames.size===1?'':'s'}</b></span>
+      <a href="#board/favorites"><b>${slateFavorites.length}</b><small>Best lines</small></a>
+      <a href="#board/props"><b>${slateProps.length}</b><small>Player props</small></a>
+      <a href="#board"><b>${slateGameLines.length}</b><small>Game lines</small></a></div>`;
     const favorites = state.boardMode === 'favorites';
     const props = state.boardMode === 'props';
     const query = state.researchQuery ?? state.boardQuery;
@@ -1622,12 +1689,14 @@
         : `<div class="card"><div class="rows">${shown.slice(0, 250).map(lineRow).join('')}</div></div>`;
     return `${head(favorites ? 'Best lines' : props ? 'Player props' : 'Game lines', intro)}
       ${boardTabs(favorites ? 'favorites' : props ? 'props' : 'lines')}
+      ${coverage}
       <div class="toolbar">${seg('boardDay', [['today', 'Today'], ['week', 'This week']], state.boardDay)}${seg('boardSort', [['best', 'Best value'], ['confidence', 'Confidence'], ['time', 'By kickoff']], state.boardSort)}${seg('boardScope', [['open', 'Upcoming'], ['settled', 'Started']], state.boardScope)}</div>
       ${props ? `<div class="toolbar">${seg('propMarket', PROP_MARKETS, state.propMarket)}</div>` : ''}
       <p class="row-meta"><a href="#today">Official plays →</a> ${favorites ? 'These are the strongest current references, not posted plays.' : 'Everything below is for reference unless labeled as a play.'}</p>
       ${dayNote ? `<p class="row-meta" style="margin:0 0 8px">${esc(dayNote)}</p>` : ''}
       <details class="explainer"><summary>How to read the board</summary>
       <p class="row-meta" style="margin:8px 0 10px">Green rows are lines we like at the shown price. Confidence ranks the chance of winning; value ranks the difference between our estimate and the price. Tap a player for history and matchup. Nothing is official unless it is labeled as a play.</p></details>
+      ${query ? `<div class="active-search"><span>Filtering for <b>${esc(query)}</b></span><button class="btn" type="button" data-clear-research>Clear search</button></div>` : ''}
       <div class="filter-search"><input class="search" type="search" data-input="researchQuery" maxlength="160" placeholder="Player, team or market" value="${esc(query)}" aria-label="Search research">${resetFilters('lines')}</div>
       <div id="board-rows">${body}</div>
       <p class="row-meta" style="margin-top:10px">☆ Save keeps research in your watchlist. + adds a line to your personal ticket.</p>`;
@@ -1953,7 +2022,11 @@
 
   /* ---------- a player line in context ---------- */
 
-  const ordinal = n => n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3rd' : `${n}th`;
+  const ordinal = n => {
+    const value=Math.abs(Number(n)), mod100=value%100;
+    if(mod100>=11 && mod100<=13) return `${n}th`;
+    return `${n}${value%10===1?'st':value%10===2?'nd':value%10===3?'rd':'th'}`;
+  };
   const newestFirst = rows => [...rows].sort((a, b) => String(b[1]).localeCompare(String(a[1])));
 
   /* Everything a person wants beside a player line: the last ten games against the number, where the
@@ -2219,6 +2292,8 @@
 
   document.addEventListener('click', event => {
     const target = event.target;
+    const clearResearch=target.closest('[data-clear-research]');
+    if(clearResearch) {state.researchQuery='';savePreferences();render(true);return;}
     const copyResearch=target.closest('[data-copy-research]');
     if(copyResearch) {
       const url=new URL(location.href); url.search=''; url.hash=C.researchHash(location.hash,state);

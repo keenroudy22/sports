@@ -34,38 +34,49 @@ def svg(choice, art=None):
         words=wrapped(value,width,size)
         return ''.join(f'<text x="{x}" y="{y+i*(size+8)}" font-size="{size}" fill="{color}" font-weight="{weight}">{esc(line)}</text>' for i,line in enumerate(words))
     hero = next((uri for uri in art.values() if uri),None)
-    header_art = f'<image href="{esc(hero)}" x="635" y="112" width="410" height="300" opacity=".55" preserveAspectRatio="xMidYMax meet"/>' if hero else ''
-    rows=choice['rows']
+    hero_art = f'<image href="{esc(hero)}" x="838" y="126" width="350" height="438" opacity=".82" preserveAspectRatio="xMidYMax meet"/>' if hero else ''
+    rows=choice['rows'][:4]
     blocks=[]
-    y=445
+    top, bottom, gap = 226, 558, 10
+    row_h=(bottom-top-gap*(len(rows)-1))/max(1,len(rows))
     for i,row in enumerate(rows):
+        y=top+i*(row_h+gap)
         content=[]
-        baseline=y+45
-        for field,size,color,weight in [('title',30,'#f5faff',700),('price',32,accent,850),('metric',24,'#f5faff',700),('detail',20,'#a7bdca',500)]:
-            content.append(text(row[field],72,baseline,748,size,color,weight))
-            baseline += max(1,len(wrapped(row[field],748,size)))*(size+8)+14
-        historical = history_strip(row, 72, baseline - 1)
-        if historical:
-            content.append(historical)
-            baseline += 54
-        row_h=max(230,baseline-y+8)
-        image=f'<image href="{esc(art[i])}" x="845" y="{y+34}" width="160" height="160" preserveAspectRatio="xMidYMid meet"/>' if art.get(i) else ''
-        blocks.append(f'<g data-row="{i}"><rect x="44" y="{y}" width="992" height="{row_h}" rx="18" fill="#10212e" stroke="#2a424f"/>'
-          +f'<rect x="44" y="{y+24}" width="4" height="{row_h-48}" rx="2" fill="{accent}"/>'
-          +''.join(content)+image+'</g>')
-        y += row_h+16
-    height=max(1350,y+150)
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="{height}" viewBox="0 0 1080 {height}" font-family="Helvetica Neue,Helvetica,Arial,sans-serif">
+        if len(rows)==1:
+            title_size=40
+            title_lines=wrapped(row['title'],700,title_size)
+            baseline=y+55
+            content.append(text(row['title'],70,baseline,700,title_size,'#f5faff',850))
+            baseline += len(title_lines)*(title_size+8)+10
+            content.append(text(row['price'],70,baseline,700,50,accent,900))
+            baseline += max(1,len(wrapped(row['price'],700,50)))*58+8
+            content.append(text(row['metric'],70,baseline,700,27,'#f5faff',750))
+            baseline += max(1,len(wrapped(row['metric'],700,27)))*35+5
+            content.append(text(row['detail'],70,baseline,700,20,'#a7bdca',500))
+            history_y=min(y+row_h-48,baseline+32)
+            historical=history_strip(row,70,history_y,700)
+            if historical:
+                content.append(historical)
+        else:
+            title_size=max(17,min(25,int(500/max(1,.57*len(str(row['title']))))))
+            content.append(f'<text x="70" y="{y+32}" fill="#f5faff" font-size="{title_size}" font-weight="800">{esc(row["title"])}</text>')
+            content.append(f'<text x="800" y="{y+32}" text-anchor="end" fill="{accent}" font-size="27" font-weight="900">{esc(row["price"])}</text>')
+            content.append(f'<text x="70" y="{y+60}" fill="#f5faff" font-size="18" font-weight="700">{esc(row["metric"])}</text>')
+            if row_h>=100:
+                content.append(f'<text x="800" y="{y+60}" text-anchor="end" fill="#a7bdca" font-size="16">{esc(row["detail"])}</text>')
+        blocks.append(f'<g data-row="{i}"><rect x="44" y="{y:.1f}" width="780" height="{row_h:.1f}" rx="16" fill="#10212e" stroke="#2a424f"/>'
+          +f'<rect x="44" y="{y+18:.1f}" width="5" height="{max(24,row_h-36):.1f}" rx="3" fill="{accent}"/>'
+          +''.join(content)+'</g>')
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" font-family="Helvetica Neue,Helvetica,Arial,sans-serif">
 <defs><linearGradient id="research-bg" x2="1" y2="1"><stop stop-color="#070e16"/><stop offset="1" stop-color="#112b39"/></linearGradient></defs>
-<rect width="1080" height="{height}" fill="url(#research-bg)"/><path d="M850 0H1080V410H630Z" fill="{accent}" opacity=".07"/>
+<rect width="1200" height="675" fill="url(#research-bg)"/><path d="M980 0H1200V585H790Z" fill="{accent}" opacity=".08"/>
 <circle cx="61" cy="70" r="14" fill="none" stroke="{accent}" stroke-width="4"/><path d="M75 70h28" stroke="{accent}" stroke-width="4"/>
 <text x="117" y="83" fill="#f5faff" font-size="32" font-weight="850" letter-spacing="5">KOOK’N</text>
-<text x="1034" y="80" text-anchor="end" fill="#a7bdca" font-size="19" letter-spacing="2">RESEARCH · NOT A PLAY</text>
-{header_art}
-{text(choice['title'],44,192,625,60,'#f5faff',850)}
-{text(choice['kicker'],46,362,970,21,accent)}
+<text x="1156" y="80" text-anchor="end" fill="#a7bdca" font-size="18" letter-spacing="2">RESEARCH · NOT A PLAY</text>
+{hero_art}
+{text(choice['title'],44,154,745,52,'#f5faff',850)}
+{text(choice['kicker'],46,204,745,19,accent)}
 {''.join(blocks)}
-<text x="44" y="{height-98}" fill="{accent}" font-size="27" font-weight="750">Explore the numbers → keenroudy.com/sports</text>
-<text x="44" y="{height-56}" fill="#a7bdca" font-size="21">Historical evidence, not guaranteed outcomes. Check current prices.</text>
-<text x="44" y="{height-24}" fill="#a7bdca" font-size="18">Entertainment only.</text>
+<text x="44" y="622" fill="{accent}" font-size="23" font-weight="750">keenroudy.com/sports</text>
+<text x="1156" y="622" text-anchor="end" fill="#a7bdca" font-size="16">Historical, not guaranteed · Check current prices · Entertainment only</text>
 </svg>'''

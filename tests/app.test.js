@@ -33,16 +33,16 @@ test('chart cards and singular counts use the history left by matchup filters, n
   assert.equal(JSON.stringify(data),original,'a view never changes source rows or saved odds');
 });
 
-test('switching sports clears only the league-specific opponent filter', () => {
+test('switching sports clears league-specific team and player searches but keeps useful controls', () => {
   const source=fs.readFileSync('site/app.js','utf8');
   const body=source.match(/const changeLeague = league => \{([\s\S]*?)\n  \};/)[1];
   const change=new Function('P','state','saved','savePreferences','league',body);
-  const state={league:'NFL',chartOpponent:'11',chartWindow:'last5',chartQuery:'yards'};
+  const state={league:'NFL',chartOpponent:'11',chartWindow:'last5',researchQuery:'Bijan carries',gamesQuery:'Falcons',chartQuery:'yards',boardQuery:'Bijan',trendQuery:'Bijan'};
   let saves=0;
   change({league:v=>v},state,{set(){}},()=>saves++,'NFL');
   assert.equal(state.chartOpponent,'11');
   change({league:v=>v},state,{set(){}},()=>saves++,'CFB');
-  assert.deepEqual(state,{league:'CFB',chartOpponent:'all',chartWindow:'last5',chartQuery:'yards'});
+  assert.deepEqual(state,{league:'CFB',chartOpponent:'all',chartWindow:'last5',researchQuery:'',gamesQuery:'',chartQuery:'',boardQuery:'',trendQuery:''});
   assert.equal(saves,2);
 });
 
@@ -89,14 +89,14 @@ test('research scope, side labels and primary Tools destinations are unambiguous
 
 test('game research is independent of posted plays and shows exact comparisons with cautions', () => {
   const source = fs.readFileSync('site/app.js', 'utf8');
-  const body = source.match(/const modelReadsSection = \(card, detail\) => \{([\s\S]*?)\n  \};/)[1];
-  const render = new Function('C', 'esc', 'ago', 'whenShort', 'section', 'card', 'detail', body);
-  const html = render(C, C.esc, C.ago, C.whenShort, (title, text) => title + text,
+  const body = source.match(/const modelReadsSection = \(card, detail, teams\) => \{([\s\S]*?)\n  \};/)[1];
+  const render = new Function('C', 'esc', 'ago', 'whenShort', 'section', 'defenseMatchup', 'defenseMatchupText', 'card', 'detail', 'teams', body);
+  const html = render(C, C.esc, C.ago, C.whenShort, (title, text) => title + text, () => null, () => '',
     { league: 'NFL', state: 'pre', kickoff: '2099-10-05T00:20:00Z' },
     { favoriteLines: [], picks: [], modelReads: [{ title: 'Player over 25.5 receiving yards', athleteId: '1',
-      comparison: 'We project 35 vs 25.5', performanceCaution: true, warnings: ['Higher bar'],
+      kind: 'player', comparison: 'We project 35 vs 25.5', performanceCaution: true, warnings: ['Higher bar'],
       observedAt: new Date().toISOString(), snapshotAt: new Date().toISOString(), odds: -110, book: 'FanDuel',
-      history: { season: { hits: 3, games: 4 } } }] });
+      history: { season: { hits: 3, games: 4 } } }] }, null);
   assert.match(html, /Player over 25.5/);
   assert.match(html, /We project 35 vs 25.5/);
   assert.match(html, /3\/4 this season/);
@@ -195,6 +195,9 @@ test('board navigation highlights the selected line view and offers a fast favor
   assert.match(source, /href="#board\/props" \$\{active === 'props' \? 'aria-current="page"'/);
   assert.match(source, /boardTabs\(favorites \? 'favorites' : props \? 'props' : 'lines'\)/);
   assert.match(source, /No best line right now/);
+  assert.match(source, /class="slate-coverage"/);
+  assert.match(source, /Current \$\{state\.league==='ALL'\?'football':leagueName\(state\.league\)\} board/);
+  assert.match(source, /data-clear-research/);
 });
 
 test('Tools leads with saved work and the digest while experiments stay secondary', () => {
@@ -221,6 +224,10 @@ test('game pages put favorites before secondary model reads and do not publish m
   assert.ok(game.indexOf('favoriteLinesSection') < game.indexOf('modelReadsSection'));
   assert.doesNotMatch(game, /Why the model says this|Forecast history/);
   assert.doesNotMatch(source, /How we calculated it/);
+  assert.match(source, /Matchup edges/);
+  assert.match(source, /Projection, hit rate and opponent defense in one view/);
+  assert.match(source, /Research, not posted plays/);
+  assert.match(source, /Defense disagrees/);
 });
 
 test('Games shows compact current model offense and defense ranks for both teams', () => {

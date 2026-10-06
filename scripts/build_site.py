@@ -1330,6 +1330,24 @@ def favorite_hit_rates(game, row, player_logs):
     return {'last': last, 'season': season} if last or season else None
 
 
+def player_matchup_context(game, snapshot, row):
+    """Team/opponent context for one projected player, using only this game's stored snapshot."""
+    athlete = str(row.get('athleteId') or '')
+    position = row.get('position')
+    for side in ('home', 'away'):
+        players = ((((snapshot or {}).get('players') or {}).get(side) or {}).get('players') or [])
+        player = next((candidate for candidate in players if str(candidate.get('id')) == athlete), None)
+        if not player:
+            continue
+        other = 'away' if side == 'home' else 'home'
+        return {'team': str(game[side].get('id') or ''),
+                'teamAbbr': game[side].get('abbreviation'),
+                'opponent': str(game[other].get('id') or ''),
+                'opponentAbbr': game[other].get('abbreviation'),
+                'position': position or player.get('pos')}
+    return {'position': position}
+
+
 def archived_model_reads(game, snapshot, captures, names, now, player_logs=None):
     """Reconstruct comparisons only from pregame captures, never live offers or postgame stats."""
     cutoff = features.when(game['kickoff'])
@@ -1403,9 +1421,13 @@ def model_reads(game, snapshot, lines, now, player_logs=None, archived=False):
             warnings.append('Older or unverified line snapshot; check the current line at your book.')
         elif not priced:
             warnings.append('Line captured without a verified price; value cannot be assessed.')
-        out.append({'id': f"read-{row['id']}", 'title': row['title'],
+        context = player_matchup_context(game, snapshot, row) if row.get('athleteId') else {}
+        out.append({'id': f"read-{row['id']}", 'sourceId': row['id'], 'title': row['title'],
                     'kind': 'game' if row.get('gameMarket') else 'player',
-                    'athleteId': row.get('athleteId'), 'market': row.get('market'),
+                    'athleteId': row.get('athleteId'), 'market': row.get('market'), 'stat': row.get('stat'),
+                    'direction': row.get('direction'), 'position': context.get('position'),
+                    'team': context.get('team'), 'teamAbbr': context.get('teamAbbr'),
+                    'opponent': context.get('opponent'), 'opponentAbbr': context.get('opponentAbbr'),
                     'line': line, 'projection': mean, 'comparison': comparison,
                     'book': row.get('book'), 'odds': row.get('odds') if priced else None,
                     'observedAt': row.get('observedAt'), 'snapshotAt': snapshot['publishedAt'],
@@ -1433,9 +1455,12 @@ def favorite_lines(game, snapshot, lines, now, player_logs=None):
                 or not isinstance(row.get('odds'), (int, float)) or seen is None or now - seen > ODDS_FRESH:
             continue
         history = None if row.get('gameMarket') else favorite_hit_rates(game, row, player_logs)
-        out.append({'id': f"favorite-{row['id']}", 'kind': 'game' if row.get('gameMarket') else 'player',
+        context = player_matchup_context(game, snapshot, row) if row.get('athleteId') else {}
+        out.append({'id': f"favorite-{row['id']}", 'sourceId': row['id'], 'kind': 'game' if row.get('gameMarket') else 'player',
                     'title': row['title'], 'player': row.get('player'), 'athleteId': row.get('athleteId'),
-                    'position': row.get('position'),
+                    'position': context.get('position'), 'stat': row.get('stat'),
+                    'team': context.get('team'), 'teamAbbr': context.get('teamAbbr'),
+                    'opponent': context.get('opponent'), 'opponentAbbr': context.get('opponentAbbr'),
                     'book': row['book'], 'odds': int(row['odds']), 'line': row.get('line'),
                     'market': row.get('market'), 'direction': row.get('direction'), 'side': row.get('side'),
                     'chance': grade.get('chance'), 'needs': grade.get('needs'), 'edge': grade.get('edge'),
