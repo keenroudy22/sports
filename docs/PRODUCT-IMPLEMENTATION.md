@@ -175,8 +175,20 @@ copy fix above preserves such counterpoints. The owner approved the recommended 
 The implementation requires every first designation to pair each open official single with a matching fresh board
 market from that run and rank the official choices at the current calibrated edge. A market that was not admitted
 cannot become POTD or create another play, and an old official play with no fresh match receives no POTD label yet.
-The label stays fixed after designation unless the existing pre-post pull rule applies. Production evidence belongs
-to P12 in the finite queue; this paragraph alone is not a deployment receipt.
+The label stays fixed after designation unless the existing pre-post pull rule applies. The verified production
+receipt is recorded below and in P12 of the finite queue.
+
+### Verified fresh-comparison and private-delivery receipt
+
+- Production revision: `3848fdd1d2df0a2f24b01931559bb27fb45eae37`.
+- [Publish run 37393941544](https://github.com/keenroudy22/sports/actions/runs/37393941544) succeeded on
+  `2026-10-06`. All workflow refresh, record-boundary and deploy steps passed.
+- Verification passed with 873 Python tests (two intentionally skipped), 128 frontend tests, the stored-site build,
+  publication guard and isolated slot-2000 rehearsal. The live 375 px Today audit reported zero layout issues and
+  zero browser errors.
+- The owner-only `#weekly-growth-report` destination visibly states that only the owner can see it. A dedicated
+  `Kook'n Private Desk` webhook delivered the verification message there at 8:22 PM ET on October 5. The guarded
+  delivery has no public fallback.
 
 ## Follow-up: current-season player history and readable thresholds
 
@@ -227,7 +239,7 @@ increase caps or claim a configured integration is working. Existing append-only
 | New sports and futures | Supported website research, prospective trials and paper tracking. | No official new-sport release without forward evidence and separate approval. | Existing supported stores; P11. |
 | Private review / follow-through | Existing Monday 9:30 AM review; local/phone delivery; deterministic queue integration shipped in 4660ba13. | Dedicated owner-only Discord delivery verified October 5; no public fallback or new job. | scripts/review.py; P03 and P05. |
 | Paid access, tips, referrals | Readiness design only, not active. | Real reliability/retention, source rights, processor eligibility, terms and explicit launch approval first. | docs/SUBSCRIPTION-PLAN.md; P06–P09. |
-| POTD comparison | Owner approved a fresh comparison among official singles using current-board markets from the designation run. | Never creates an extra pick, bypasses the card cap or promotes an unadmitted market. Production receipt tracked in P12. | Dated POTD audit above; P12; AGENTS current rule. |
+| POTD comparison | Fresh comparison among official singles using current-board markets from the designation run is shipped. | Never creates an extra pick, bypasses the card cap or promotes an unadmitted market. | Dated POTD audit and verified receipt above; P12; AGENTS current rule. |
 
 ## Shipped closeout verification · October 5
 
@@ -303,7 +315,7 @@ missing when neither component was recorded, so the page does not turn absent da
 | Processor and business terms | Accurate eligibility review, cancellation/refund/privacy/support and costed offer. | Pending external checks and separate launch approval. |
 | Accounts and paid access | Optional free sync first; server-side premium authorization, tested billing lifecycle later. | Not active. Public JSON is not a paywall. |
 | Creator referrals/tips | Clearly disclosed, processor-approved, costed pilot after retention. | No outreach, billing or tip jar activated. |
-| Discord guide/private review | Verify actual owner-only destination and confirmed delivery/permissions; use approved existing channels. | Public guide mutation and any new destination still need the applicable owner confirmation. |
+| Discord guide/private review | Dedicated owner-only destination and confirmed private delivery are verified. | Preserve no-public-fallback behavior; public guide mutation and any additional destination still need applicable owner confirmation. |
 | Live-progress X | Review the bounded Discord pilot's actual attempts and meet the separate release checkpoint. | X remains off. No blanket automation expansion. |
 | Alternate/milestone social sheets | Separate category, labeling and release approval. | Not activated. Existing social trend posts remain fresh main lines with at least five games. |
 | New sports/futures | Collection, prospective trial, measured evidence and release approval for each sport/market. | Website research/trials only at their actual supported stage; no invented edge. |
