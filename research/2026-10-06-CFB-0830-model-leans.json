@@ -1,0 +1,56 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-10-06T12:30:06Z",
+  "targetWeek": 6,
+  "summary": "8:30 AM ET run, published at 8:30 AM ET. Nothing to settle. Nothing to close. Published 1: Arizona at West Virginia under 61 -109 at BetRivers. Screened and passed on 17: JJ Kohl UNDER 274.5 passing yards (one_book); Adam Damante UNDER 216.5 passing yards (one_book); Iowa at Washington over 41.5 (not_duplicate); Louisiana at Louisiana Tech over 48.5 (lean_nothing_against); Landry Lyddy UNDER 215.5 passing yards (one_book); Washington State at Utah State over 43.5 (card_cap); Duke at Georgia Tech over 50 (card_cap); JJ Kohl OVER 7.5 rushing yards (one_book); and 9 more. odds_api.py: CFB: skipped (captured 2026-10-06T10:45:07Z, inside the gap) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "gamePicks": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 61.0,
+      "direction": "under",
+      "gameIds": [
+        "CFB-401856823"
+      ],
+      "book": "BetRivers",
+      "odds": -109,
+      "projection": 55.9,
+      "edge": "v2 total 55.9 (80% range 35.2 to 76.6). Chance of under 61: 54.0% (v2's raw 61.2% shrunk by its 2024-25 record against the close), push 2.3%, against 52.2% break-even at -109: +1.9 points, +0.059u per unit.",
+      "cutoff": "UNDER 61 at -109 or better. Closed to new entries at 59.5 or lower, or at -124 or worse at 61.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-10-04T09:58:47Z",
+      "quotedAt": "2026-10-06T10:45:07Z",
+      "quoteType": "capture",
+      "quoteNote": "BetRivers's number and price from the 6:45 AM ET capture across 6 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-06T15:45:00Z",
+      "probabilityAtPublication": {
+        "rawChance": 0.612,
+        "chance": 0.54,
+        "calibrated": true,
+        "calibration": 0.36,
+        "calibrationN": null,
+        "push": 0.023,
+        "breakEven": 0.522,
+        "edgePoints": 1.9,
+        "evPerUnit": 0.059,
+        "snapshotAt": "2026-10-04T09:58:47Z",
+        "evaluatedAt": "2026-10-06T12:30:06Z"
+      },
+      "title": "Arizona at West Virginia under 61",
+      "id": "CFB-2026-W6-ariz-wvu-under-61-br",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401856823",
+        "https://wvusports.com/sports/football/stats/2026",
+        "https://www.azdesertswarm.com/football/83984/arizona-wildcats-football-tre-spivey-foot-injury-surgery-cincinnati-west-virginia-brent-brennan-big12-2026",
+        "https://arizonawildcats.com/news/2026/10/5/football-arizona-continues-big-12-play-at-west-virginia"
+      ],
+      "why": "Model lean, published on our number alone. Our total is 55.9 against 61: the under reads 54.0% after the raw 61.2% is shrunk by the model's record against the close, +1.9 points clear of the 52.2% that -109 needs. The projection is the reason for this lean. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Michael Hawkins Jr. has played quarterback in all five of West Virginia's games this season. Checked before publishing: Arizona coach Brent Brennan confirmed that starting receiver Tre Spivey will miss the rest of the season with a foot injury. The market: The spread opened +3 and is +3.5 at DraftKings, a move of 0.5 toward the away. The total opened 58.5 and is 61.5 at DraftKings, 3 toward the over. 6 books span 3 to 3.5 on the spread; the middle is 3.5. 6 books span 61 to 61.5 on the total; the middle is 61.5. Our spread gap of 0.2 points is at the 1th percentile of the model's gaps; gaps this large went 1767-1759 against the close in 3584 graded games. Our total gap of 5.6 points is at the 84th percentile of the model's gaps; gaps this large went 329-243 against the close in 3602 graded games.",
+      "risk": "Statistical counterpoint: Arizona says its offense has converted third downs at a 57.8% rate this season. Historical stats remain context, not a separate injury or availability hold. It rests on the model alone, and the closing line beats our number on average, so a gap this size is more often our error than the market's. Confidence 2 of 10.",
+      "jurisdictionVerified": true
+    }
+  ]
+}
