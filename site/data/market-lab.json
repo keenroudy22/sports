@@ -2,35 +2,47 @@
  "leagues": {
   "MLB": {
    "gamesGraded": 13,
-   "gamesQuoted": 15,
-   "moneylineSnapshots": 54,
+   "gamesQuoted": 17,
+   "moneylineSnapshots": 58,
    "seasons": [
     {
      "gamesGraded": 13,
      "gamesQuoted": 15,
      "phase": "unclassified",
      "season": 2026
+    },
+    {
+     "gamesGraded": 0,
+     "gamesQuoted": 4,
+     "phase": "playoffs",
+     "season": 2026
     }
    ],
-   "snapshots": 54,
+   "snapshots": 58,
    "status": "capturing",
-   "totalSnapshots": 54
+   "totalSnapshots": 58
   },
   "NHL": {
    "gamesGraded": 39,
-   "gamesQuoted": 48,
-   "moneylineSnapshots": 183,
+   "gamesQuoted": 51,
+   "moneylineSnapshots": 193,
    "seasons": [
     {
      "gamesGraded": 39,
      "gamesQuoted": 48,
      "phase": "unclassified",
      "season": 2027
+    },
+    {
+     "gamesGraded": 0,
+     "gamesQuoted": 10,
+     "phase": "regular",
+     "season": 2027
     }
    ],
-   "snapshots": 183,
+   "snapshots": 193,
    "status": "capturing",
-   "totalSnapshots": 183
+   "totalSnapshots": 193
   }
  },
  "recentResults": [
@@ -1335,5 +1347,5 @@
    "type": "grade"
   }
  ],
- "updatedAt": "2026-10-06T15:36:03Z"
+ "updatedAt": "2026-10-06T15:45:05Z"
 }
