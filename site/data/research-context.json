@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-06T14:04:32Z",
+  "updatedAt": "2026-10-06T14:15:00Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -467,6 +467,15 @@
           "name": "Baltimore Ravens",
           "players": [
             {
+              "id": "2576581",
+              "name": "Chris Moore",
+              "position": "WR",
+              "status": "Out",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-06T14:00Z",
+              "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
+            },
+            {
               "id": "3916387",
               "name": "Lamar Jackson",
               "position": "QB",
@@ -474,15 +483,6 @@
               "injury": "Ankle",
               "reportedAt": "2026-10-06T13:11Z",
               "source": "https://www.espn.com/nfl/player/_/id/3916387/lamar-jackson"
-            },
-            {
-              "id": "2576581",
-              "name": "Chris Moore",
-              "position": "WR",
-              "status": "Out",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-06T13:00Z",
-              "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
               "id": "4696882",
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-06T13:00Z",
+              "reportedAt": "2026-10-06T14:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "25",
-          "name": "Ephesians Prysock",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-05T20:08:46Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4685523/ephesians-prysock"
-        },
-        {
-          "teamId": "25",
           "name": "Kurtis Rourke",
           "from": "Out",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-06T03:32:33Z",
           "source": "https://www.espn.com/nfl/player/_/id/3043168/zadarius-smith"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-06T14:15:00Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-06T14:04:32Z",
-      "lastAttemptAt": "2026-10-06T14:04:32Z",
+      "checkedAt": "2026-10-06T14:15:00Z",
+      "lastAttemptAt": "2026-10-06T14:15:00Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-06T14:04:32Z",
-      "lastAttemptAt": "2026-10-06T14:04:32Z",
+      "checkedAt": "2026-10-06T14:15:00Z",
+      "lastAttemptAt": "2026-10-06T14:15:00Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
