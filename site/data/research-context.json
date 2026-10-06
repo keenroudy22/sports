@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-06T15:01:00Z",
+  "updatedAt": "2026-10-06T15:26:57Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -242,7 +242,7 @@
               "position": "LB",
               "status": "Out",
               "injury": "Coach's Decision",
-              "reportedAt": "2026-10-06T14:35Z",
+              "reportedAt": "2026-10-06T15:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4605478/jared-ivey"
             },
             {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Out",
               "injury": "Ankle",
-              "reportedAt": "2026-10-06T14:35Z",
+              "reportedAt": "2026-10-06T15:19Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-06T14:35Z",
+              "reportedAt": "2026-10-06T15:19Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1856,15 +1856,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/5083754/ryan-flournoy"
             },
             {
-              "id": "4568652",
-              "name": "Tyler Smith",
-              "position": "G",
-              "status": "Injured Reserve",
-              "injury": "Thumb",
-              "reportedAt": "2026-10-06T01:04Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4568652/tyler-smith"
-            },
-            {
               "id": "4362088",
               "name": "DeMarvion Overshown",
               "position": "LB",
@@ -1890,6 +1881,15 @@
               "injury": "Hamstring",
               "reportedAt": "2026-10-05T22:29Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685554/drew-shelton"
+            },
+            {
+              "id": "4568652",
+              "name": "Tyler Smith",
+              "position": "G",
+              "status": "Injured Reserve",
+              "injury": "Thumb",
+              "reportedAt": "2026-10-05T21:31Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4568652/tyler-smith"
             },
             {
               "id": "4696203",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "25",
-          "name": "Kurtis Rourke",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-05T20:08:46Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4430431/kurtis-rourke"
-        },
-        {
-          "teamId": "25",
           "name": "Jordan James",
           "from": "Out",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Injured Reserve",
           "observedAt": "2026-10-06T14:15:00Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-10-06T15:26:57Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-06T15:01:00Z",
-      "lastAttemptAt": "2026-10-06T15:01:00Z",
+      "checkedAt": "2026-10-06T15:26:57Z",
+      "lastAttemptAt": "2026-10-06T15:26:57Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-06T15:01:00Z",
-      "lastAttemptAt": "2026-10-06T15:01:00Z",
+      "checkedAt": "2026-10-06T15:26:57Z",
+      "lastAttemptAt": "2026-10-06T15:26:57Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
