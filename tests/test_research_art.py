@@ -37,6 +37,8 @@ class ResearchArtTests(unittest.TestCase):
         self.assertEqual((int(root.get('width')), int(root.get('height'))), (1200, 675))
         self.assertEqual(svg.count('<image'), 1, 'one portrait is a hero, never repeated beside the same line')
         self.assertIn('Under 40.5 receiving yards', svg)
+        self.assertIn('SLATE RESEARCH', svg)
+        self.assertNotIn('NOT A PLAY', svg)
 
     def test_single_line_is_the_visual_hero_and_retains_aggregate_history(self):
         row = {'title': 'Landry Lyddy under 215.5 passing yards', 'price': '-114 FD',

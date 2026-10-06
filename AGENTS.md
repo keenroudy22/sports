@@ -187,6 +187,11 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Short research-post voice (2026-10-06, owner approved):** research captions lead with the exact line and one
+  useful proof point. Keep them short and natural. Do not append boilerplate such as “history does not predict the
+  next game,” repeat “not an official play” in the caption, or add a generic “save this” request. The graphic keeps
+  a compact positive research-category label so it remains distinct from an official play. This is a copy/layout
+  change inside the existing research category; it adds no post, play, tag, price, market or selection rule.
 - **Matchup-trend context (2026-10-06, owner approved):** game pages may combine a fresh exact main-line player
   trend with the opponent's allowed-by-position/stat rank and the stored projected score. This is visible research,
   not a required input to the official-play formula and never creates, removes or upgrades a play. In CFB, a player

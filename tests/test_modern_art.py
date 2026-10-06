@@ -16,10 +16,12 @@ class ModernArtTests(unittest.TestCase):
         self.assertNotIn('Served at',card)
         self.assertEqual(P.svg_size(card),(1080,1350))
 
-    def test_research_keeps_counts_and_cautions(self):
+    def test_research_keeps_counts_and_positive_category_label(self):
         card=R.svg({'title':'80%+ TREND BOARD','kicker':'FULL SEASON','accent':'#5eeaa4','rows':[{'title':'Player','price':'Over 4.5 receptions','metric':'4/5 this season','detail':'-110 FanDuel'}]})
         ET.fromstring(card)
-        for word in ('4/5','RESEARCH · NOT A PLAY','80%+','not guaranteed'): self.assertIn(word,card)
+        for word in ('4/5','SLATE RESEARCH','80%+','DATA + CONTEXT'): self.assertIn(word,card)
+        self.assertNotIn('NOT A PLAY',card)
+        self.assertNotIn('not guaranteed',card)
         self.assertNotIn('100%',card)
 
 if __name__=='__main__':unittest.main()

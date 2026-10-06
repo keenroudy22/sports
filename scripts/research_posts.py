@@ -233,6 +233,7 @@ def matchup_candidate(games, details, now, teams=None):
                          'price': f"{price(line.get('odds'))} {book_short(line.get('book'))}",
                          'book': line.get('book'), 'metric': f"{history['hits']}/{history['games']} exact-line trend",
                          'detail': detail_text,
+                         'opponentAbbr': opponent, 'statLabel': stat,
                          'hits': history['hits'], 'games': history['games'], 'pushes': history.get('pushes', 0),
                          'scriptRisk': script_risk, 'projectedMargin': margin, 'matchup': matchup,
                          'score': (history.get('rate', 0), history.get('games', 0), line.get('edge') or 0),
@@ -316,40 +317,52 @@ def already_posted(log_book, day):
 
 
 def bounded_caption(choice):
-    """Keep exact evidence on the attached graphic; shorten copy without truncating a fact.
-
-    Existing short captions are unchanged. A long sheet gets whole, exact preview
-    rows that fit plus a family-specific research caution. No row on the graphic,
-    eligibility rule, category or posting limit changes.
-    """
+    """Write a short, evidence-first caption while the card carries the full detail."""
     from x_post import LIMIT, tweet_length
-    original = choice['text']
-    if tweet_length(original) <= LIMIT:
-        return original
-    families = {
-        'upset': ('UNDERDOG WATCH', 'Raw-model research, not official plays. Check current prices.'),
-        'spread-dog': ('UNDERDOG SPREAD WATCH', 'Cover research, not an upset call or official play. Check current prices.'),
-        'matchup': ('MATCHUP TRENDS', 'Trend + defense context, not a prediction or official play. Check current prices.'),
-        'season': (choice['title'], 'History, not a prediction or official play. Check current prices.'),
-        'end-zone': ('END-ZONE WORK', 'Opportunity, not TD probability or an official play.'),
-    }
-    heading, caution = families[choice['kind']]
-    # Season's title contains a computed bucket, not provider-controlled prose.
-    if tweet_length(heading) > 60:
-        heading = 'KOOK\'N RESEARCH'
-    footer = '\n'.join(['Full details and samples on the graphic.', caution, tags(choice['rows'])])
-    preview = []
-    for row in choice['rows']:
-        fields = [str(row['title']), str(row['price'])]
-        if choice['kind'] in ('matchup', 'season'):
-            fields.append(str(row['metric']))
-        elif choice['kind'] in ('upset', 'spread-dog'):
-            fields.append(book_short(row['book']))
-        exact = ' | '.join(fields)
-        proposed = '\n'.join([heading, *preview, exact, '', footer])
-        if tweet_length(proposed) <= LIMIT:
-            preview.append(exact)
-    return '\n'.join([heading, *preview, '', footer])
+    rows, kind = choice.get('rows') or [], choice.get('kind')
+    if not rows or kind not in ('upset', 'spread-dog', 'matchup', 'season', 'end-zone'):
+        return choice['text']
+    row = rows[0]
+    headings = {'upset': '🐕 UNDERDOG WATCH', 'spread-dog': '🐕 SPREAD WATCH',
+                'matchup': '📊 MATCHUP TREND', 'season': '📈 TREND BOARD',
+                'end-zone': '🎯 END-ZONE WORK'}
+    headline = str(row.get('title') or '').strip()
+    evidence = ''
+    if kind == 'matchup':
+        matchup = row.get('matchup') or {}
+        count = f"{row.get('hits')}/{row.get('games')} at this line"
+        if isinstance(matchup.get('rank'), int) and isinstance(matchup.get('of'), int):
+            count += (f" · {row.get('opponentAbbr') or 'Opponent'} #{matchup['rank']}/{matchup['of']}"
+                      f" vs {matchup.get('pos') or ''} {row.get('statLabel') or ''}").rstrip()
+        evidence = count
+    elif kind == 'season':
+        headline = f"{headline} · {row.get('price') or ''}".rstrip(' ·')
+        evidence = str(row.get('metric') or '')
+    elif kind == 'end-zone':
+        evidence = ' · '.join(value for value in (str(row.get('metric') or ''), str(row.get('price') or '')) if value)
+    elif kind == 'upset':
+        headline = f"{headline} {row.get('price') or ''} ({book_short(row.get('book'))})".strip()
+        evidence = str(row.get('copyMetric') or row.get('metric') or '')
+    else:
+        headline = f"{headline} {row.get('price') or ''} {book_short(row.get('book'))}".strip()
+        evidence = str(row.get('metric') or '')
+    league_tags = tags(rows)
+    if tweet_length(headline) > 200:
+        return '\n'.join([headings[kind], 'Details on the card', *([league_tags] if league_tags else [])])
+    lines = [headings[kind], headline, evidence]
+    if row.get('price') and kind in ('matchup',):
+        lines.append(str(row['price']))
+    if len(rows) > 1:
+        lines.append(f"+{len(rows) - 1} more on the card")
+    if league_tags:
+        lines.append(league_tags)
+    lines = [line for line in lines if line]
+    while len(lines) > 2 and tweet_length('\n'.join(lines)) > LIMIT:
+        # Drop the optional count, then evidence, but never cut a name or line in half.
+        lines.pop(-2 if league_tags and lines[-1] == league_tags else -1)
+    if tweet_length('\n'.join(lines)) > LIMIT:
+        lines = [headings[kind], 'Details on the card', *([league_tags] if league_tags else [])]
+    return '\n'.join(lines)
 
 
 def select(data, details, now, lines=None, teams=None):
@@ -437,13 +450,13 @@ def legacy_svg(choice, art=None):
 <rect width="1080" height="1350" fill="url(#bg)"/><rect x="0" y="0" width="1080" height="10" fill="{accent}"/>
 <circle cx="62" cy="74" r="14" fill="none" stroke="{accent}" stroke-width="5"/><circle cx="62" cy="74" r="5" fill="{accent}"/><path d="M76 74h28" stroke="{accent}" stroke-width="5" stroke-linecap="round"/>
 <text x="118" y="92" fill="{TEXT}" font-size="35" font-weight="850" letter-spacing="5">KOOK’N</text>
-<text x="1032" y="89" text-anchor="end" fill="{DIM}" font-size="20" font-weight="750" letter-spacing="3">RESEARCH · NOT A PLAY</text>
+<text x="1032" y="89" text-anchor="end" fill="{DIM}" font-size="20" font-weight="750" letter-spacing="3">SLATE RESEARCH</text>
 <text x="44" y="165" fill="{accent}" font-size="22" font-weight="850" letter-spacing="4">{esc(choice['kicker'])}</text>
 <text x="44" y="247" fill="{TEXT}" font-size="67" font-weight="950">{esc(choice['title'])}</text>
 {''.join(blocks)}
-<text x="44" y="{footer}" fill="{TEXT}" font-size="25" font-weight="800">THE PRICE AND THE UNCERTAINTY BOTH MATTER.</text>
+<text x="44" y="{footer}" fill="{TEXT}" font-size="25" font-weight="800">DATA WORTH A CLOSER LOOK.</text>
 <text x="44" y="{footer + 42}" fill="{accent}" font-size="24" font-weight="750">keenroudy.com/sports</text>
-<text x="1036" y="{footer + 42}" text-anchor="end" fill="{DIM}" font-size="19">Entertainment only. Check current prices.</text>
+<text x="1036" y="{footer + 42}" text-anchor="end" fill="{DIM}" font-size="19">DATA + CONTEXT</text>
 </svg>'''
 
 

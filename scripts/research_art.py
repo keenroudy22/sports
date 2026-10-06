@@ -34,6 +34,9 @@ def svg(choice, art=None):
         words=wrapped(value,width,size)
         return ''.join(f'<text x="{x}" y="{y+i*(size+8)}" font-size="{size}" fill="{color}" font-weight="{weight}">{esc(line)}</text>' for i,line in enumerate(words))
     hero = next((uri for uri in art.values() if uri),None)
+    label = {'upset': 'UNDERDOG RESEARCH', 'spread-dog': 'SPREAD RESEARCH',
+             'matchup': 'MATCHUP RESEARCH', 'season': 'TREND RESEARCH',
+             'end-zone': 'SCORER RESEARCH'}.get(choice.get('kind'), 'SLATE RESEARCH')
     hero_art = f'<image href="{esc(hero)}" x="838" y="126" width="350" height="438" opacity=".82" preserveAspectRatio="xMidYMax meet"/>' if hero else ''
     rows=choice['rows'][:4]
     blocks=[]
@@ -72,11 +75,11 @@ def svg(choice, art=None):
 <rect width="1200" height="675" fill="url(#research-bg)"/><path d="M980 0H1200V585H790Z" fill="{accent}" opacity=".08"/>
 <circle cx="61" cy="70" r="14" fill="none" stroke="{accent}" stroke-width="4"/><path d="M75 70h28" stroke="{accent}" stroke-width="4"/>
 <text x="117" y="83" fill="#f5faff" font-size="32" font-weight="850" letter-spacing="5">KOOK’N</text>
-<text x="1156" y="80" text-anchor="end" fill="#a7bdca" font-size="18" letter-spacing="2">RESEARCH · NOT A PLAY</text>
+<text x="1156" y="80" text-anchor="end" fill="#a7bdca" font-size="18" letter-spacing="2">{label}</text>
 {hero_art}
 {text(choice['title'],44,154,745,52,'#f5faff',850)}
 {text(choice['kicker'],46,204,745,19,accent)}
 {''.join(blocks)}
 <text x="44" y="622" fill="{accent}" font-size="23" font-weight="750">keenroudy.com/sports</text>
-<text x="1156" y="622" text-anchor="end" fill="#a7bdca" font-size="16">Historical, not guaranteed · Check current prices · Entertainment only</text>
+<text x="1156" y="622" text-anchor="end" fill="#a7bdca" font-size="16">DATA + CONTEXT</text>
 </svg>'''

@@ -100,3 +100,31 @@ than causal comparisons.
 The useful lesson is not to copy “locks” or force seven bets. Kook'n should show up daily with a recognizable series:
 the 80/20 Climb, complete receipts, a saveable watchlist or a factual slate/news post. The quiet-day book remains the
 floor. More volume is earned by useful information; official plays still have to clear the model and price gates.
+
+## Follow-up read, Oct 6
+
+The owner's Following feed and Kook'n's own recent posts were checked again, read-only. These are snapshots at
+different post ages and from very different audience sizes, so they guide the creative—not the pick rules.
+
+| Post shape | Example seen | Views at review |
+|---|---|---:|
+| Casual slate question | Cody Brown: three boosts and “Anyone want an early TNF flyer?” | 26,280 |
+| Result first | Harry Lock Picks: `$20 → $5,000` and `$10 → $1,300` | 10,560 |
+| Short POTD plus quoted preview | Dan's AI Sports Picks | 18,106 |
+| Short parlay card | Splash Bets: MLB postseason parlay | 14,041 |
+| Short scorer card | Splash Bets: NHL goal scorers | 6,016 |
+| Kook'n boosted FanDuel ticket | Exact ticket and price | 419 |
+| Kook'n End-zone Work | Research graphic | 108 |
+| Kook'n Lyddy matchup research | Long caveat-led caption | 87 |
+| Kook'n Monday receipt | `0–1` result | 14 |
+
+What changes:
+
+1. Let the picture carry the detail. A research caption is the category, exact line, one proof point and price.
+2. Drop generic closing copy such as “history does not predict,” repeated “not an official play,” and “save this.”
+   A positive research label keeps the category clear without sounding defensive or generated.
+3. Start official-play posts with the play and research posts with the useful finding. Do not bury either under a
+   description of the process.
+4. Tickets are the account's strongest recent view signal. Keep their graphic clean and readable, but do not add a
+   posting slot, force a parlay or weaken a gate because one ticket drew more views.
+5. Questions work when they sound like a person and refer to a real ready slate. Avoid empty engagement bait.

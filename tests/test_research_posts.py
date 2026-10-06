@@ -34,8 +34,10 @@ class ResearchPostTests(unittest.TestCase):
         choice = {'kind': 'end-zone', 'title': 'END-ZONE WORK', 'text': 'x' * 352, 'rows': rows}
         text = R.bounded_caption(choice)
         self.assertLessEqual(x_post.tweet_length(text), 280)
-        self.assertIn('Bijan Robinson | 3 inside the 10', text)
-        self.assertIn('not TD probability', text)
+        self.assertIn('Bijan Robinson', text)
+        self.assertIn('8 red-zone opportunities · 3 inside the 10', text)
+        self.assertNotIn('not official', text.lower())
+        self.assertNotIn('save this', text.lower())
         self.assertEqual(choice['rows'], original)
         self.assertEqual(receipts.guard({'text': text}), [])
 
@@ -48,8 +50,9 @@ class ResearchPostTests(unittest.TestCase):
                                     'metric': '9/10 this season', 'book': 'FanDuel', 'league': 'NFL'}]}
                 text = R.bounded_caption(choice)
                 self.assertLessEqual(x_post.tweet_length(text), 280)
-                self.assertNotIn('Very Long', text, 'never slice an exact player/line in half')
-                self.assertIn('graphic', text)
+                self.assertNotIn('Very Long', text, 'never slice an impossible exact line in half')
+                self.assertIn('Details on the card', text)
+                self.assertNotIn('not official', text.lower())
                 self.assertEqual(receipts.guard({'text': text}), [])
         self.assertEqual(R.bounded_caption({'text': 'Already short.'}), 'Already short.')
 
@@ -61,8 +64,9 @@ class ResearchPostTests(unittest.TestCase):
                  'reasons': ['Our score has Underdog by 4', "Underdog's offense rates 2.1 points above average"]}
         choice = R.select({'games': [game(watch)]}, {'CFB-1': {}}, NOW)
         self.assertEqual(choice['kind'], 'upset')
-        self.assertIn('Underdog +160 ML (DK) | model 60% | market 37%', choice['text'])
-        self.assertIn('Research only, not official plays.', choice['text'])
+        self.assertIn('Underdog +160 ML (DK)', choice['text'])
+        self.assertIn('Model 60% | market 37%', choice['text'])
+        self.assertNotIn('not official', choice['text'].lower())
         self.assertEqual(choice['rows'][0]['metric'], 'Our score DOG 27–23 FAV')
         self.assertIn('7.5-pt gap vs spread', choice['rows'][0]['detail'])
         self.assertIn("offense rates 2.1 points above average", choice['rows'][0]['reason'])
@@ -87,14 +91,14 @@ class ResearchPostTests(unittest.TestCase):
         }}}}
         choice = R.select({'games': [game()]}, {'CFB-1': detail}, NOW, teams=teams)
         self.assertEqual(choice['kind'], 'matchup')
-        self.assertIn('Strong exact-line history supported by the opponent matchup', choice['text'])
-        self.assertIn('DOG allows 200 rush yds/game to RBs', choice['text'])
+        self.assertIn('Runner over 55.5 rushing yards', choice['text'])
+        self.assertIn('8/10 at this line · DOG #3/3 vs RB rush yds', choice['text'])
         self.assertEqual(choice['title'], 'MATCHUP TRENDS')
         self.assertEqual(receipts.guard({'text': choice['text']}), [])
         detail['favoriteLines'][0]['history']['last']['rate'] = 70
         choice = R.select({'games': [game()]}, {'CFB-1': detail}, NOW, teams=teams)
         self.assertEqual(choice['kind'], 'end-zone')
-        self.assertIn('not TD probability', choice['text'])
+        self.assertIn('12 red-zone opportunities · 7 inside the 10', choice['text'])
 
     def test_matchup_trends_rank_cfb_blowout_context_down_without_changing_the_line(self):
         safe = game()
@@ -131,7 +135,8 @@ class ResearchPostTests(unittest.TestCase):
                 'grade': {'tier': 'lean', 'chance': .54, 'needs': .512, 'edge': 2.8, 'projection': 1.0}}
         choice = R.select({'games': [game()]}, {'CFB-1': {}}, NOW, [line])
         self.assertEqual(choice['kind'], 'spread-dog')
-        self.assertIn('Cover research, not an upset call', choice['text'])
+        self.assertIn('Underdog +8.5 (-105) ESPN', choice['text'])
+        self.assertNotIn('not an upset', choice['text'].lower())
         self.assertIn('Underdog +8.5 (-105)', choice['text'])
 
     def test_post_window_and_card_are_stale_safe(self):
@@ -149,7 +154,8 @@ class ResearchPostTests(unittest.TestCase):
             choice = R.select({'games': [game(watch)]}, {'CFB-1': {}}, NOW)
             card = R.svg(choice)
             self.assertIn('UNDERDOG WATCH', card)
-            self.assertIn('RESEARCH · NOT A PLAY', card)
+            self.assertIn('UNDERDOG RESEARCH', card)
+            self.assertNotIn('NOT A PLAY', card)
             for ugly in ('#8b4513', '#a0522d', '#cd853f'):
                 self.assertNotIn(ugly, card.lower())
 
