@@ -102,6 +102,8 @@ test('the first paint shows today, else the next game day still on the card, nev
   assert.equal(today.today, true);
   assert.deepEqual(today.rows.map(r => r.id), [prop.id, total.id]);
   assert.deepEqual(M.heroBets(HERO, NOW, 'CFB').rows.map(r => r.id), [total.id]);
+  assert.deepEqual(M.heroBets({ bets: [laterOff, total] }, NOW).rows.map(r => r.id), [total.id],
+    'an off-the-card play never appears as a best bet on the first paint');
   const nextOnly = { bets: [laterOff, laterOpen, { ...laterOpen, id: 'later-day', kickoff: '2026-10-14T00:15:00Z' }] };
   const next = M.heroBets(nextOnly, NOW);
   assert.equal(next.today, false);
@@ -195,7 +197,7 @@ test('Today shows the Climb, the last game day and the first best bet together, 
   const off = page.slice(at('data-box="off-card"'), page.indexOf('</details>', at('data-box="off-card"')));
   assert.match(off, /Off the card · 1/);
   assert.match(off, /Moved Line at Elsewhere/);
-  assert.match(off, /graded at the price we posted/);
+  assert.match(off, /graded at its posted price/);
   const foldAt = at('<details class="today-more"');
   const fold = page.slice(foldAt);
   assert.match(fold, /^<details class="today-more" data-box="today-more"><summary>More for today/, 'the fold starts collapsed');

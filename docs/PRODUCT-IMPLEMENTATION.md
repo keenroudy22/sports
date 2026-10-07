@@ -896,3 +896,23 @@ including rows already refused by other rules; they are not new win rates or a r
 The post-build record audit still matches all 92 public pick IDs. The root projection changes and
 Reasoned-edges log remain separately tracked as silent shadows (P57/P58), with no owner-approved
 promotion or new public panel.
+
+## October 7 Vegas, Today and direction integration — locally gated, not live
+
+The owner-delegated Claude series was applied to dev after the A-24 safety commit: Vegas vs reality
+(`f529fc40`), 10-second Today (`5230497e`), and bounded results-led direction (`45cc8263`).
+The asset-version-only fourth patch was already superseded by the dev shell version; no lower version
+was introduced. The conflict fix-up preserves the removed free-site helpline/Responsible page and
+plain-language copy. It also removes the old duplicate Today hint, keeps one early hero request,
+and prevents an off-the-card line from appearing as a best bet during first paint. The direction
+rule is documented in `docs/DIRECTION-RULES.md` with the owner's delegated clarifications.
+
+The integrated tree passed 1,101 Python tests (2 skipped), 169 Node tests and both suites again
+from a clean export; built 441 page files; publication guard checked 502 files with no issues;
+payload budget and asset fingerprint checks passed; record audit matched all 92 public picks.
+The isolated 17:30 rehearsal returned `ok` with no outside writes or private reads. Local Chrome
+checked 24 Today, Record, Vegas, Games, Research, More, Start and legacy-route views across 375
+and 1440 pixels with no overflow, caught load-error state or console exception. None of these
+local checks proves a hosted publish or a live release. Next: locked deploy in the next routine
+quiet window, watch its hosted run, then verify the live payload and both widths before marking
+P46/P47 or the bundled safety items shipped.

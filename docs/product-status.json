@@ -412,18 +412,18 @@
       "title": "Results-led direction and 10-second Today",
       "status": "ready",
       "owner": "agent",
-      "next": "After higher-priority releases, review Claude's tested direction-rules and today-10-second patches in /Users/keen/Projects/kookn-patches/patches/ when they land; apply through normal gates, then measure a cold 375-pixel Today visit.",
+      "next": "At the next routine quiet window, deploy the reviewed direction and 10-second Today release with the locked script; watch the hosted run, then measure cold-phone Today and verify live 375/1440-pixel routes before marking shipped.",
       "doneWhen": "Trigger and undo fixtures pass, no gate loosens below the October 7 baseline, every move logs evidence, the Monday packet explains changes and reversals, and a cold phone visit meets the documented 10-second budget.",
-      "evidence": "Owner-delegated standing approval in DIRECTION-RULES.md on October 7; no automatic moves have been enabled yet."
+      "evidence": "Owner-delegated standing approval in DIRECTION-RULES.md on October 7. Claude's patch series is integrated locally in 5230497e and 45cc8263 plus a Codex fix-up; no automatic move triggers on Oct 7 stored evidence. Local gates: 1101 Python (2 skipped), 169 Node, clean export, build, guard, budget, record audit, isolated 17:30 rehearsal and 24 browser routes without issues. Not live until hosted and live verification."
     },
     {
       "id": "P47",
       "title": "Vegas vs reality site panel",
       "status": "ready",
       "owner": "agent",
-      "next": "After higher-priority releases, review Claude's tested vegas-panel patch in /Users/keen/Projects/kookn-patches/patches/ when it lands; apply through normal gates and compare to VEGAS-SCORECARD-detail.json in tests.",
+      "next": "At the next routine quiet window, deploy the locally gated Vegas panel, watch the hosted publish and verify the live league pages and payload at 375/1440 pixels before marking shipped.",
       "doneWhen": "Sport rows and calibration bins match the independent reference within stated tolerances, the site clearly labels coverage and caveats, and no new request or record mutation occurs.",
-      "evidence": "Owner approved on October 7 in OWNER-DECISIONS-2026-10-07.md; independently checked references supplied by Claude."
+      "evidence": "Owner approved October 7. Claude's independently checked reference is tested by commit f529fc40. Local combined gates passed 1101 Python (2 skipped), 169 Node, clean export, build, guard, budget, record audit, isolated rehearsal and 24 browser routes. Not live until hosted and live verification."
     },
     {
       "id": "P48",

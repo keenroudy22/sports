@@ -271,6 +271,9 @@ Handy commands (from `~/Projects/sports`):
   warns when the key matches nothing in force) and deploys. A failed direction step is reported and never stops the
   rest of the weekly learning.
   This replaces "each needs its own owner yes" for these listed moves only; R0-R7 stay in shadow.
+  The retired 0.86/two-book Climb variant built 0 of 26 stored rungs. Today may place only its two compact
+  Climb and Last game day status rows above the first ticket, superseding the October 5 selection-first order
+  for those rows alone. The full limits and undo path are in `docs/DIRECTION-RULES.md`.
 
 - **Sports focus and X twist (2026-10-07, owner decision delegated to Claude):** finish P0/P1/the twist,
   then NBA by October 20, EPL/UCL for October 24–25 where data supports them, CBB early November, WNBA/MLS

@@ -58,10 +58,12 @@
   /* Today's first paint: today's bets, else the next game day's still on the card, as the full card chooses them. */
   const heroBets = (hero, now = Date.now(), league = 'ALL') => {
     const today = C.dayOf(new Date(now).toISOString());
-    const mine = ((hero || {}).bets || []).filter(b => b && b.id && C.dayOf(b.kickoff) >= today && (league === 'ALL' || b.league === league));
+    const mine = ((hero || {}).bets || []).filter(b => b && b.id && C.dayOf(b.kickoff) >= today &&
+      !['Line moved', 'Price expired'].includes(C.pickState(b, now).word) &&
+      (league === 'ALL' || b.league === league));
     const todays = mine.filter(b => C.dayOf(b.kickoff) === today);
     if (todays.length) return { today: true, rows: todays };
-    const later = mine.filter(b => C.pickState(b, now).word !== 'Line moved'), first = later.map(b => C.dayOf(b.kickoff)).sort()[0];
+    const later = mine, first = later.map(b => C.dayOf(b.kickoff)).sort()[0];
     return { today: false, rows: later.filter(b => C.dayOf(b.kickoff) === first) };
   };
 
@@ -2122,7 +2124,7 @@
   /* Record, More and team pages are not part of the first paint. */
   const MORE_VIEW_NAMES = ['team', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
-  const MORE_ASSET = 'app-more.js?v=sha256-18f87df6420d';
+  const MORE_ASSET = 'app-more.js?v=sha256-2d4bb9426c93';
   let moreViews = null, moreLoading = null;
   const moreContext = (overrides = {}) => ({ C, P, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,

@@ -28,13 +28,14 @@ class TodayHeroTests(unittest.TestCase):
              'book': 'DraftKings', 'odds': -102, 'featured': True},
             {'id': 'old', 'title': 'Already graded', 'result': 'win', 'kickoff': '2026-10-07T22:00:00Z'},
             {'id': 'expired', 'title': 'Expired quote', 'expiresAt': '2026-10-06T21:30:00Z',
+             'entryNote': 'Closed to new entries after the line moved.',
              'kickoff': '2026-10-07T22:00:00Z'},
         ]
         hero = build_site.today_hero(rows, now)
-        self.assertEqual(hero['pick']['href'], '#pick/best')
-        self.assertEqual(hero['pick']['label'], "Today's best bet")
-        self.assertEqual(hero['pick']['odds'], -102)
-        self.assertLess(len(json.dumps(hero)), 1024)
+        self.assertEqual([p['id'] for p in hero['bets']], ['best', 'expired'])
+        self.assertEqual(hero['bets'][1]['entryNote'], 'Closed to new entries after the line moved.')
+        self.assertEqual(hero['bets'][0]['odds'], -102)
+        self.assertLess(len(json.dumps(hero)), build_site.HERO_BYTES)
 
 
 class ModelReadTests(unittest.TestCase):

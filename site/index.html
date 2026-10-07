@@ -24,7 +24,7 @@
 <script src="core.js?v=71" defer></script>
 <script src="live.js?v=1" defer></script>
 <script src="personal.js?v=1" defer></script>
-<script src="app.js?v=129" defer></script>
+<script src="app.js?v=130" defer></script>
 </head>
 <body>
 <noscript><p class="loading">Kook'n needs JavaScript to show today's card, live scores and research.</p></noscript>
@@ -40,24 +40,6 @@
   </div>
 </header>
 <main id="view" tabindex="-1"><p class="loading">Loading today's slate…</p></main>
-<script>
-/* A small, public first-paint hint. The full app replaces it; it never overrides a rendered route. */
-if (!location.hash || location.hash === '#today') {
-  fetch('data/app/today-hero.json').then(r => r.ok ? r.json() : null).then(data => {
-    const view = document.getElementById('view');
-    const pick = data && data.pick;
-    if (!pick || !view.querySelector('.loading') || !String(pick.href).startsWith('#pick/') ||
-        Date.now() - Date.parse(data.generatedAt) > 3 * 60 * 60 * 1000) return;
-    const box = document.createElement('a');
-    box.className = 'fast-hero'; box.href = pick.href;
-    const label = document.createElement('small'); label.textContent = pick.label;
-    const title = document.createElement('strong'); title.textContent = pick.title;
-    const price = document.createElement('span'); price.textContent =
-      [pick.odds > 0 ? '+' + pick.odds : pick.odds, pick.book].filter(Boolean).join(' · ');
-    box.append(label, title, price); view.replaceChildren(box);
-  }).catch(() => {});
-}
-</script>
 <footer class="footer">
   <p><b>For entertainment only.</b> Not betting advice. 21+ where legal. Nothing here is a guarantee. Every best bet is graded at the price and book we posted. Fun tickets and the 80/20 Climb are tracked separately. Times are Eastern.</p>
   <p>This site uses Cloudflare Web Analytics.</p>
