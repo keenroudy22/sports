@@ -1,12 +1,12 @@
 {
- "at": "2026-10-07T01:12:40Z",
+ "at": "2026-10-07T01:30:43Z",
  "confirmed": {
-  "CFB-401862794": "2026-10-07T01:12:40Z",
-  "CFB-401869933": "2026-10-07T01:12:40Z",
-  "CFB-401871051": "2026-10-07T01:12:40Z",
-  "CFB-401871052": "2026-10-07T01:12:40Z",
-  "CFB-401871066": "2026-10-07T01:12:40Z",
-  "NFL-401872980": "2026-10-07T01:12:40Z"
+  "CFB-401862794": "2026-10-07T01:30:43Z",
+  "CFB-401869933": "2026-10-07T01:30:43Z",
+  "CFB-401871051": "2026-10-07T01:30:43Z",
+  "CFB-401871052": "2026-10-07T01:30:43Z",
+  "CFB-401871066": "2026-10-07T01:30:43Z",
+  "NFL-401872980": "2026-10-07T01:30:43Z"
  },
  "leagues": {
   "CFB": {
@@ -186,7 +186,8 @@
       "smarkets": "45340798",
       "sportzino": "sz-17714567",
       "sx_bet": "L20378221",
-      "thescorebet": "StandardEvent:2fcf8f00-b061-4cd7-9c4c-6d27a4e8361b"
+      "thescorebet": "StandardEvent:2fcf8f00-b061-4cd7-9c4c-6d27a4e8361b",
+      "thrillzz": "888232410"
      },
      "home": "Washington",
      "sample": {
@@ -224,6 +225,11 @@
        "match_result_both_teams_to_score",
        "moneyline",
        "outright",
+       "player_passing_touchdowns",
+       "player_passing_yards",
+       "player_receiving_yards",
+       "player_receptions",
+       "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
@@ -926,7 +932,7 @@
       "gemini": "NCAAF-2610102000-TAM-MIZ-T",
       "goldrush": "31132199",
       "hardrock": "8518474202540540311",
-      "kalshi": "KXNCAAF1HSPREAD-26OCT10TXAMMIZZ",
+      "kalshi": "KXNCAAF1HTEAMTOTAL-26OCT10TXAMMIZZ",
       "ladbrokes": "d31631d1-0397-48f3-9fcd-f4ed61848b39",
       "ladbrokes_uk": "lduk-258949369",
       "matchbook": "mb-34499033670000023",
@@ -1043,7 +1049,7 @@
       "gemini": "NCAAF-2610102000-WAK-NCS-M",
       "goldrush": "31132218",
       "hardrock": "8726836054050603413",
-      "kalshi": "KXNCAAF1HSPREAD-26OCT10WAKENCST",
+      "kalshi": "KXNCAAF1HTOTAL-26OCT10WAKENCST",
       "ladbrokes": "ec8840a4-a429-42d0-9138-5bdffd4a2673",
       "ladbrokes_uk": "lduk-258951158",
       "novig": "01a0fd5a-e97d-7422-aaca-19df878469fc",
@@ -1220,7 +1226,7 @@
   "NFL": {
    "books": {
     "draftkings": 134,
-    "fanduel": 336
+    "fanduel": 339
    },
    "eventsListed": 30,
    "eventsMatched": 1,
@@ -1233,16 +1239,16 @@
     "player_passing_+_rushing_yards": 4,
     "player_passing_attempts": 4,
     "player_passing_completions": 4,
-    "player_passing_touchdowns": 14,
+    "player_passing_touchdowns": 13,
     "player_passing_yards": 27,
-    "player_receiving_yards": 169,
-    "player_receptions": 112,
+    "player_receiving_yards": 172,
+    "player_receptions": 113,
     "player_rushing_+_receiving_yards": 12,
     "player_rushing_attempts": 6,
     "player_rushing_yards": 76
    },
    "requestsLeft": 0,
-   "rows": 470,
+   "rows": 473,
    "slateGames": [
     "Tampa Bay Buccaneers at Dallas Cowboys 2026-10-09T00:15Z"
    ],
@@ -1271,7 +1277,7 @@
       "gemini": "NFL-2610111330-PHI-JAX-T",
       "goldrush": "29767421",
       "hardrock": "5999335051995775400",
-      "kalshi": "KXNFLRECYDS-26OCT11PHIJAC-JACJCAMERON19-25",
+      "kalshi": "KXNFL1H-26OCT11PHIJAC",
       "ladbrokes": "72888c26-b63d-40db-9707-210f01c283e0",
       "ladbrokes_uk": "lduk-258966891",
       "matchbook": "mb-33272970854400023",
@@ -1572,7 +1578,7 @@
       "gemini": "NFL-2610111700-CIN-MIA-TT",
       "goldrush": "31065427",
       "hardrock": "4605470967324606870",
-      "kalshi": "KXNFL2QSPREAD-26OCT11CINMIA",
+      "kalshi": "KXNFL1HTOTAL-26OCT11CINMIA",
       "ladbrokes": "162f799d-bef6-4f0b-bac6-ec10bba89223",
       "ladbrokes_uk": "lduk-258967565",
       "matchbook": "mb-33321703478700023",
@@ -1727,6 +1733,7 @@
       "stake": "fe39230e-dc1d-47c8-97a5-89feac12bd4d",
       "sx_bet": "L19431504",
       "thescorebet": "StandardEvent:4ea568cd-2f64-4845-9a7d-1b1ff0c1824c",
+      "thrillzz": "88859326",
       "underdog": "underdog_178869"
      },
      "home": "New York Jets",
@@ -1860,7 +1867,7 @@
       "gemini": "NFL-2610111700-IND-PIT-T",
       "goldrush": "31065438",
       "hardrock": "2644153329604755876",
-      "kalshi": "KXNFL1H-26OCT11INDPIT",
+      "kalshi": "KXNFL2H-26OCT11INDPIT",
       "ladbrokes": "c15ae67e-bd67-4b35-bf26-80109a10cb65",
       "ladbrokes_uk": "lduk-258966921",
       "matchbook": "mb-33321748682800023",
@@ -2145,7 +2152,7 @@
       "gemini": "NFL-2610111700-LV-NE-T",
       "goldrush": "31065426",
       "hardrock": "1263289870420410795",
-      "kalshi": "KXNFL1H-26OCT11LVNE",
+      "kalshi": "KXNFL2H-26OCT11LVNE",
       "ladbrokes": "37d3e40f-f77b-4c96-a3fc-05ac0252bc0e",
       "ladbrokes_uk": "lduk-258967042",
       "matchbook": "mb-33321713272900023",
@@ -2447,6 +2454,7 @@
       "stake": "1552de63-5091-45ab-ace5-c9ba0e12c11d",
       "sx_bet": "L19431496",
       "thescorebet": "StandardEvent:7082fd77-c4af-4e43-9db2-360ad66132dc",
+      "thrillzz": "88859318",
       "underdog": "underdog_178918"
      },
      "home": "Tennessee Titans",
@@ -2514,7 +2522,6 @@
        "moneyline",
        "outright",
        "player_extra_points_made",
-       "player_field_goals_made",
        "player_interceptions",
        "player_kicking_points",
        "player_longest_passing_completion",
