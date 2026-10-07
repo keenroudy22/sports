@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Kitchen Ticket SVG builders; data is mapped from the stored record by ticket_card."""
+import re
 import ticket_kit as kit
 from ticket_kit import (CAP, CHALK, CHARCOAL, CHECK, CROSS, COL_MAX, COL_X, DIM, GREEN, GREEN_INK, HOUSE, INK, INK_SOFT,
                  MINUS, PANEL_TOP, PANEL_X1, PANEL_X2, RED, RULE, W, X1, X2, fit, width)
@@ -446,12 +447,15 @@ def final_card(p):
         unit_text = str(r.get('unit_text') or '—')
         detail = str(r['detail'])
         unit_x = X2 - 194
+        # The unit column needs a generous visual gutter. Font advance widths
+        # understate the painted DM Sans ink in exported PNGs, especially the
+        # margin suffix, so keep only short margins on this compact receipt.
         detail_room = unit_x - X1 - 28
         detail_size = 40
-        while detail_size > 24 and width(detail, detail_size) > detail_room:
-            detail_size -= 2
-        if width(detail, detail_size) > detail_room:
-            raise ValueError(f'Final detail will not fit: {detail}')
+        if width(detail, detail_size, 'd', 500) > min(detail_room, 440):
+            detail = re.sub(r' · (?:cleared|missed) by \d+(?:\.\d+)?$', '', detail)
+        if width(detail, detail_size, 'd', 500) > detail_room:
+            raise ValueError(f'Final detail will not fit at 40px: {detail}')
         inner += card.text(X1, y + 96, detail, detail_size, INK_SOFT, 'd', 500)
         inner += card.text(unit_x, y + 99, unit_text, 40, INK if unit_text.startswith('+') else RED if unit_text.startswith('-') else INK_SOFT, anchor='end')
         inner += kit.result_stamp(card, X2, y + row / 2, r['result'])

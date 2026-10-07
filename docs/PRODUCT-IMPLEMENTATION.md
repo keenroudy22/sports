@@ -813,6 +813,11 @@ Cooked player prop, the Oct 3 Final with every straight result and record-equiva
 no-headshot simulation of a real pick. No preview was posted or used to replace existing cards.
 `TICKET_FROM` is unset pending Claude's review and the owner's approved cutover gate.
 
+Claude's October 7 round-two review (`CARDS-V2-REVIEW-2.md`) approved the Kitchen Ticket preview set for
+cutover. The two requested copy details—consistent final-stat/margin wording where it fits, and no doubled
+space in a game title—were fixed in the private rerender. That approval does not itself activate
+`TICKET_FROM`; the green 11:30 PM run and locked quiet-window release still govern.
+
 ## October 7 systems-check release receipts and next green batch
 
 A-20261007-12 is verified live before the felt cutover: revision `448edec1` removed both season-record

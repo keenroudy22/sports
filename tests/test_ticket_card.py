@@ -116,17 +116,27 @@ class TicketCardTests(unittest.TestCase):
         self.assertNotIn('SEASON', svg)
 
     def test_final_has_every_result_and_same_units_as_record(self):
-        rows = [dict(PROP, result='win', actual='TK King: 64 receiving yards', odds=100, units=1.0),
+        rows = [dict(PROP, marketType='prop', result='win', actual='TK King: 64 receiving yards', odds=100, units=1.0),
                 dict(PROP, id='other', title='Other Player UNDER 4.5 receptions', result='loss',
-                     actual='Other Player: 6 receptions', units=-1.0)]
+                     marketType='prop', market='rec', line=4.5, actual='Other Player: 6 receptions', units=-1.0)]
         data = ticket_card.final_data(rows, '2026-10-03')
         self.assertEqual(data['headline'], '1-1')
         self.assertEqual([row['unit_text'] for row in data['rows']], ['+1.00u', '-1.00u'])
         self.assertEqual(data['net_units'], 0)
+        self.assertEqual(data['rows'][0]['detail'], '64 rec yds · cleared by 14.5')
+        self.assertEqual(data['rows'][1]['detail'], '6 recs · missed by 1.5')
         svg = ticket_card.final_svg(rows, '2026-10-03')
         self.assertIn('HIT', svg)
         self.assertIn('MISS', svg)
         self.assertIn('NET +0.00u', svg)
+
+    def test_final_total_detail_has_score_and_margin_without_double_space(self):
+        pick = {'id': 'navy-total', 'title': 'Navy at Air Force over 46.5', 'marketType': 'total',
+                'line': 46.5, 'direction': 'over', 'result': 'loss', 'actual': 'Navy 9, Air Force 14',
+                'units': -1.0}
+        row = ticket_card.final_data([pick], '2026-10-03')['rows'][0]
+        self.assertEqual(row['detail'], 'Final: Navy 9, Air Force 14 · missed by 23.5')
+        self.assertNotIn('  ', row['title'])
 
     def test_missing_espn_photo_retries_then_warns_in_desk_log(self):
         calls = []

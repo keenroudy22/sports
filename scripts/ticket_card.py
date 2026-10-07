@@ -225,6 +225,33 @@ def cooked_svg(pick, game, **kwargs):
     return card.svg()
 
 
+def final_detail(pick):
+    """A final stat and exact-line margin, only when the stored result supports the arithmetic."""
+    import receipts
+    actual = str(pick.get('actual') or '').strip()
+    market = str(pick.get('market') or '')
+    market_type = str(pick.get('marketType') or '')
+    value = pick.get('actualValue')
+    if market_type == 'prop':
+        match = re.search(r':\s*(-?\d+(?:\.\d+)?)\b', actual)
+        value = float(match.group(1)) if match else value
+        stat = {'recYds': 'rec yds', 'rec': 'recs', 'passYds': 'pass yds', 'rushYds': 'rush yds',
+                'passTD': 'pass TDs', 'rushTD': 'rush TDs', 'recTD': 'rec TDs', 'car': 'carries',
+                'att': 'attempts', 'cmp': 'completions', 'targets': 'targets'}.get(market)
+        base = f'{float(value):g} {stat}' if isinstance(value, (int, float)) and stat else receipts.result_detail(pick)
+    elif market_type == 'total':
+        scores = re.findall(r'\b\d+\b', actual)
+        if len(scores) == 2:
+            value = sum(map(int, scores))
+        base = f'Final: {actual}' if actual else receipts.result_detail(pick)
+    else:
+        base = re.sub(r'^Final: [^:]+: ', 'Final: ', receipts.result_detail(pick))
+    line = pick.get('line')
+    if pick.get('result') in ('win', 'loss') and isinstance(value, (int, float)) and isinstance(line, (int, float)):
+        return f"{base} · {'cleared' if pick['result'] == 'win' else 'missed'} by {abs(float(value) - float(line)):g}"
+    return base
+
+
 def final_data(rows, day):
     """One settled day, best bets only; fun tickets and Climb are tracked apart."""
     import receipts
@@ -235,8 +262,8 @@ def final_data(rows, day):
     losses = sum(pick['result'] == 'loss' for pick in straight)
     result_names = {'win': 'hit', 'loss': 'miss', 'push': 'push', 'void': 'void'}
     net = sum(x_post.units_for(pick) or 0 for pick in straight)
-    body = [{'result': result_names[pick['result']], 'title': receipts.label(pick),
-             'detail': re.sub(r'^Final: [^:]+: ', 'Final: ', receipts.result_detail(pick)), 'unit_text':
+    body = [{'result': result_names[pick['result']], 'title': re.sub(r'\s+', ' ', receipts.label(pick)).strip(),
+             'detail': final_detail(pick), 'unit_text':
              (f"{x_post.units_for(pick):+.2f}u" if x_post.units_for(pick) is not None else '—')}
             for pick in straight]
     return {'headline': f'{wins}-{losses}', 'day': day, 'rows': body, 'net_units': net}
