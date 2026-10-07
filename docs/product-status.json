@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-07T16:03:00Z",
+  "updatedAt": "2026-10-07T16:46:26Z",
   "items": [
     {
       "id": "P01",
@@ -392,20 +392,38 @@
     {
       "id": "P44",
       "title": "Permanent Discord invite and free-plan assurance",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Publish the five invite replacements, add the daily validity check, free-plan guard and usage reporting; watch the release and verify the live link.",
+      "next": "Keep the daily invite and free-plan usage checks running; review any 80% alert without upgrading a service.",
       "doneWhen": "Live link opens the Kook'n server, heartbeat detects expiry, 80% alerts and free-plan stop tests pass, and Monday packet names observed usage and unknowns.",
-      "evidence": "Owner decision October 7; AUDIT-INBOX A-20261007-8. Latest known Odds API 194/500 with reservations through 196; Buffer/Sharp counters cover only time since installation."
+      "evidence": "Owner decision October 7; AUDIT-INBOX A-20261007-8. Revision e71ad86b passed hosted publish run 37650607744. Live app.js?v=125 had no caught load errors or overflow at 375/1440 across 12 routes; the new invite resolves to guild 1554298777169297449 with no expiry. Free-plan stop, 80% alerts, invite heartbeat and Monday usage section have tests. Provider usage counters remain partial where stated."
     },
     {
       "id": "P45",
       "title": "Kitchen Ticket card art v2",
+      "status": "gated",
+      "owner": "agent",
+      "next": "Have Claude review the completed real-data set in /tmp/kookn-kitchen-ticket-review-2026-10-07, then fix any feedback and set TICKET_FROM only after final approval.",
+      "doneWhen": "Real reviewed renders have record-equivalent units, no season or helpline strip, fit and size checks pass, and an explicit-offset cutover preserves posted art.",
+      "evidence": "Owner approved CARDS-V2-HANDOFF.md October 7; CHEF_CLIP and ORDER_UP on. Round 1 changes (HOT PLATE chip, supportive WHY only) are reflected in previews. Cooked, Final with per-row/net units, Climb map and labeled no-headshot simulation are rendered privately. TICKET_FROM remains unset."
+    },
+    {
+      "id": "P46",
+      "title": "Results-led direction and 10-second Today",
       "status": "ready",
       "owner": "agent",
-      "next": "Build the approved direction B with the handoff changes, render first real cards for Claude review, then set TICKET_FROM only after that review.",
-      "doneWhen": "Real reviewed renders have record-equivalent units, no season or helpline strip, fit and size checks pass, and an explicit-offset cutover preserves posted art.",
-      "evidence": "Owner approved CARDS-V2-HANDOFF.md October 7; CHEF_CLIP and ORDER_UP on."
+      "next": "Implement DIRECTION-RULES.md as pure bounded triggers and undo conditions in weekly learning, plus Monday reporting; measure the cold-phone Today budget before any site change.",
+      "doneWhen": "Trigger and undo fixtures pass, no gate loosens below the October 7 baseline, every move logs evidence, and the Monday packet explains changes and reversals.",
+      "evidence": "Owner-delegated standing approval in DIRECTION-RULES.md on October 7; no automatic moves have been enabled yet."
+    },
+    {
+      "id": "P47",
+      "title": "Vegas vs reality site panel",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Compute the free panel at build time from stored closes and finals, excluding early-2023 odds-as-lines at read time, then compare to VEGAS-SCORECARD-detail.json in tests.",
+      "doneWhen": "Sport rows and calibration bins match the independent reference within stated tolerances, the site clearly labels coverage and caveats, and no new request or record mutation occurs.",
+      "evidence": "Owner approved on October 7 in OWNER-DECISIONS-2026-10-07.md; independently checked references supplied by Claude."
     }
   ]
 }

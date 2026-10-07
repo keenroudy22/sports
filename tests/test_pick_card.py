@@ -53,7 +53,15 @@ class CardTests(unittest.TestCase):
         self.assertEqual(len(spread['uris']), 1, "a spread wears its side's logo")
         self.assertIn('/ncaa/500/', asked[-1])
         self.assertIsNone(pick_card.artwork({'legs': [{'title': 'x'}], 'parlayType': 'longshot'}, nfl, fetch), 'a parlay keeps the chef')
-        self.assertIsNone(pick_card.artwork(prop, nfl, lambda url: None), 'a failed fetch keeps the chef')
+        failed = []
+        self.assertIsNone(pick_card.artwork(prop, nfl, lambda url: failed.append(url) or None),
+                          'after a retry and unavailable badge, rendering uses the existing fallback')
+        self.assertEqual(failed[:2], [pick_card.HEADSHOT.format(sport='nfl', athlete='4241389')] * 2)
+        badge = pick_card.artwork(prop, nfl, lambda url: None if 'headshots' in url else 'data:image/png;base64,BADGE',
+                                  player_side='away')
+        self.assertEqual(badge, {'kind': 'logos', 'uris': ['data:image/png;base64,BADGE'], 'fallback': 'no-headshot'})
+        self.assertIsNone(pick_card.artwork(prop, nfl, lambda url: None if 'headshots' in url else 'data:image/png;base64,BADGE'),
+                          'unknown player team must never display the opponent badge')
         with mock.patch.object(pick_card, 'CARD_ART', False):
             self.assertIsNone(pick_card.artwork(prop, nfl, fetch), 'the switch turns every picture off')
         photo = pick_card.svg(prop, nfl, art={'kind': 'photo', 'uri': 'data:image/png;base64,PHOTO'})

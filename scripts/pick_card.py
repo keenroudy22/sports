@@ -246,18 +246,29 @@ def logo_url(team, league):
     return None
 
 
-def artwork(pick, game, fetch=None):
+def artwork(pick, game, fetch=None, player_side=None):
     """{'kind': 'photo', 'uri'} for an NFL/college player prop, {'kind': 'logos', 'uris'} for a game line (the side's logo
     on a spread, both teams' on a total), or None for the chef: a parlay, a failed fetch, or the switch off."""
-    if not CARD_ART or not game or play_kind(pick) in ('parlay', 'ladder'):
+    if not CARD_ART or play_kind(pick) in ('parlay', 'ladder'):
         return None
     fetch = fetch or fetch_data_uri
-    league = game.get('league') or str(pick.get('id', '')).split('-')[0]
+    league = (game or {}).get('league') or str(pick.get('id', '')).split('-')[0]
     if play_kind(pick) == 'player':
         if league not in ('NFL', 'CFB') or not pick.get('athleteId'):
             return None
-        uri = fetch(HEADSHOT.format(sport='nfl' if league == 'NFL' else 'college-football', athlete=pick['athleteId']))
-        return {'kind': 'photo', 'uri': uri} if uri else None
+        url = HEADSHOT.format(sport='nfl' if league == 'NFL' else 'college-football', athlete=pick['athleteId'])
+        uri = fetch(url) or fetch(url)
+        if uri:
+            return {'kind': 'photo', 'uri': uri}
+        if game and player_side in ('home', 'away'):
+            side = player_side
+            team_url = logo_url(game.get(side) or {}, league) if side else None
+            badge = fetch(team_url) if team_url else None
+            if badge:
+                return {'kind': 'logos', 'uris': [badge], 'fallback': 'no-headshot'}
+        return None
+    if not game:
+        return None
     direction = str(pick.get('direction') or '').lower()
     sides = [direction] if pick.get('marketType') == 'spread' and direction in ('home', 'away') else ['away', 'home']
     urls = [logo_url(game.get(side) or {}, league) for side in sides]

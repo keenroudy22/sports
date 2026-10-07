@@ -276,6 +276,18 @@ Handy commands (from `~/Projects/sports`):
   Cooked the record-equivalent won units, and Final each settled row and slate net units. Captions keep their
   existing unit rule. Claude reviews real renders before `TICKET_FROM` is set with an explicit Eastern offset;
   posted art remains unchanged.
+- **Results-led direction (owner-delegated to Claude, 2026-10-07):** `DIRECTION-RULES.md` is standing approval
+  for its bounded, evidence-triggered tightenings, pauses, existing-category reweighting and restorations in
+  `learn.weekly` and the Monday task. Log trigger numbers and undo conditions; report each move in the weekly
+  Direction changes box and owner ping. Never loosen below the October 7 baseline, add a market/sport/category/
+  slot/service, change grading, or edit a published play. Every other results proposal still needs owner approval.
+  Keep Today usable in ten seconds at 375 px and its best bets visible within the approved cold-load budget.
+- **Vegas vs reality and Climb map (owner-delegated to Claude, 2026-10-07):** the owner approved a free,
+  build-time market-accuracy panel from stored closing lines and finals. Match `VEGAS-SCORECARD.md` and its
+  detail fixture in tests; exclude malformed early-2023 odds-as-lines at read time without editing the store.
+  The 80/20 Climb may run on any day with two or more games left in one league, without forcing a rung.
+  Its map shows recorded steps and lifetime bank plus clearly labeled future steps at a stated typical price;
+  this map alone may estimate future returns. Use the ledger for all real values.
 - **Permanent invite and free plans (owner, 2026-10-07):** the public Discord invite is
   `discord.gg/ZnjubjsBPM`. Check its server and expiry in the daily heartbeat. Every provider stays on its
   free plan. Do not upgrade, start a trial, add a payment method or buy extra credits. Odds API confirms the

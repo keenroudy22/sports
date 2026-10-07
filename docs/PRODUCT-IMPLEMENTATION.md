@@ -796,3 +796,19 @@ request stops and 80% alerts are part of P44. As of the last available October 7
 reported 194/500; local reservations reach 196. Count-only Buffer and SharpAPI journals begin at their October 7
 installation, so their counts are not whole-month provider totals. The Monday packet reports those limits and
 explicitly marks services whose usage is not accessible.
+
+## October 7 verified invite release and Kitchen Ticket review gate
+
+P44 is live: revision `e71ad86b` passed hosted run `37650607744`. The live `app.js?v=125` check covered
+12 routes at 375 and 1440 px with no overflow, console errors or caught `did not load` state. The public
+invite resolves to the Kook'n guild (`1554298777169297449`) without an expiry. The tested free-plan stops,
+80% alerts, invite heartbeat and Monday usage section remain active. Buffer and SharpAPI local counts are
+partial-month observations, not claimed provider totals.
+
+P45 is not public. The first review requested a HOT PLATE (POTD) label and no WHY line when the saved
+evidence does not support the selected side; both are implemented and tested. A second private review set
+at `/tmp/kookn-kitchen-ticket-review-2026-10-07/` contains real open best bets, the Oct 4 Chef's Special,
+Oct 3 Climb step, a ledger-derived Climb map with future steps labeled as a typical-price plan, a settled
+Cooked player prop, the Oct 3 Final with every straight result and record-equivalent units, and a labeled
+no-headshot simulation of a real pick. No preview was posted or used to replace existing cards.
+`TICKET_FROM` is unset pending Claude's review and the owner's approved cutover gate.

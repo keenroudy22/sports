@@ -189,7 +189,11 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None):
                     pick_card.render(pick_card.receipt_svg(item['receipt']), path)
                 else:
                     art = (pick_card.ticket_art(item['pick'], games, player_team) if pick_card.play_kind(item['pick']) == 'parlay'
-                           else pick_card.artwork(item['pick'], item['game']))
+                           else pick_card.artwork(item['pick'], item['game'], player_side=item.get('side')))
+                    if (pick_card.play_kind(item['pick']) == 'player' and item['pick'].get('athleteId')
+                            and (art or {}).get('kind') != 'photo'):
+                        fallback = 'team badge fallback' if (art or {}).get('kind') == 'logos' else 'no verified team badge'
+                        log(f"WARNING: ESPN headshot unavailable after retry for player-prop card {item['pick'].get('id')}; {fallback}")
                     pick_card.render(pick_card.modern_svg(item['pick'], item['game'], record=item.get('record'),
                                                          player_side=item.get('side'), featured=item.get('featured', False), art=art), path)
             out[item['guid']] = path
