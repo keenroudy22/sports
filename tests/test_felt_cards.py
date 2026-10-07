@@ -140,6 +140,15 @@ class FeltCardTests(unittest.TestCase):
         self.assertIsNotNone(label)
         self.assertLessEqual(float(label.attrib['font-size']), 24)
 
+    def test_play_card_wraps_a_long_manual_selection_without_dropping_words(self):
+        title = 'San Diego State +7.5 vs Oregon State in Corvallis'
+        with self.felt():
+            card = pick_card.modern_svg(dict(PICK, displayTitle=title, title=title), GAME)
+        self.valid(card)
+        for word in title.upper().split():
+            self.assertIn(word, card)
+        self.assertNotIn('…', card)
+
     def test_research_climb_and_longshot_preserve_public_rules(self):
         ticket = {'id': 't', 'parlayType': 'longshot', 'odds': 700, 'book': 'FanDuel',
                   'gameIds': ['g', 'g2', 'g3', 'g4', 'g5'],
@@ -238,6 +247,26 @@ class FeltCardTests(unittest.TestCase):
         self.assertEqual(card.count('STEP 1'), 1)
         self.assertEqual(card.count('STEP 2'), 1)
 
+    def test_daily_receipt_fits_long_cfb_titles_and_final_scores_without_cutting(self):
+        title = 'Appalachian State/Coastal Carolina under 61.5'
+        detail = 'Final: Appalachian State 31, Coastal Carolina 28'
+        rows = [('loss', title, detail, 'team'),
+                ('win', 'Short result one', 'Final: 24–17', 'team'),
+                ('loss', 'Short result two', 'Final: 21–28', 'team'),
+                ('win', 'Short result three', 'Final: 31–10', 'team')]
+        with self.felt():
+            card = pick_card.receipt_svg({'title': '2-2', 'when': 'Sunday, Oct 11',
+                                          'season': '37–37', 'rows': rows})
+        self.valid(card)
+        root = ET.fromstring(card)
+        namespace = {'s': 'http://www.w3.org/2000/svg'}
+        title_groups = root.findall(".//s:g[@data-zone='receipt-title']", namespace)
+        detail_groups = root.findall(".//s:g[@data-zone='receipt-detail']", namespace)
+        self.assertEqual(title, ' '.join(node.text for node in title_groups[0]))
+        self.assertEqual(detail, ' '.join(node.text for node in detail_groups[0]))
+        self.assertNotIn('…', ''.join(node.text or '' for node in title_groups[0]))
+        self.assertNotIn('…', ''.join(node.text or '' for node in detail_groups[0]))
+
     def test_daily_receipt_without_best_bets_uses_the_matching_public_label(self):
         with self.felt():
             fun = pick_card.receipt_svg({
@@ -293,19 +322,40 @@ class FeltCardTests(unittest.TestCase):
     def test_multi_row_research_never_silently_slices_public_copy(self):
         rows = []
         for index in range(3):
-            rows.append({'title': f'Full player number {index} under 38.5 receiving yards',
+            title = ("Marvin Harrison Jr. over 64.5 receiving yards" if index == 0 else
+                     f'Full player number {index} under 38.5 receiving yards')
+            rows.append({'title': title,
                          'price': f'−114 theScore Bet row {index}',
                          'metric': f'8/10 exact-line trend over the complete last 10 games row {index}',
-                         'detail': f'Opponent allows 37.25 receiving yards a game to tight ends, 4th of 134 row {index}'})
+                         'hits': 8, 'games': 10,
+                         'opponentAbbr': 'GAST' if index == 0 else 'Opponent',
+                         'statLabel': 'receiving yards',
+                         'matchup': {'value': 37.25, 'rank': 4, 'of': 134,
+                                     'pos': 'TE', 'stat': 'receiving yards'},
+                         'scriptRisk': index == 0, 'projectedMargin': -17.5 if index == 0 else 3,
+                         'detail': (f'Opponent allows 37.25 receiving yards a game to tight ends, 4th of 134 row {index}'
+                                    + (' · GAST projected 17.5-pt dog' if index == 0 else ''))})
         choice = {'kind': 'matchup', 'title': 'MATCHUP TRENDS', 'rows': rows}
         with self.felt():
             card = research_art.svg(choice)
         self.valid(card)
         for row in rows:
-            for field in ('title', 'price', 'metric', 'detail'):
-                self.assertIn(row[field], card)
+            for word in row['title'].split():
+                self.assertIn(word, card)
+            self.assertIn(row['price'], card)
         self.assertEqual(card.count('data-zone="research-title"'), 3)
         self.assertEqual(card.count('data-zone="research-price"'), 3)
+        self.assertIn('Over 64.5 in 8 of his last 10 games', card)
+        self.assertIn('Under 38.5 in 8 of his last 10 games', card)
+        self.assertNotIn('exact-line trend', card)
+        self.assertIn('GAME-SCRIPT CAUTION · GAST projected 17.5-pt dog', card)
+        root = ET.fromstring(card)
+        namespace = {'s': 'http://www.w3.org/2000/svg'}
+        titles = root.findall(".//s:g[@data-zone='research-title']/s:text", namespace)
+        self.assertTrue(all(float(node.attrib['font-size']) >= 32 for node in titles))
+        cautions = root.findall(".//s:g[@data-zone='research-detail']/s:text", namespace)
+        self.assertEqual(['GAME-SCRIPT CAUTION · GAST projected 17.5-pt dog'],
+                         [node.text for node in cautions])
 
     def test_single_row_research_keeps_full_title_caution_and_fits_defense(self):
         title = "Marvin Harrison Jr. over 64.5 receiving yards"
@@ -424,6 +474,21 @@ class FeltCardTests(unittest.TestCase):
             self.assertGreater(geometry['total'], geometry['spread'])
             self.assertLessEqual(geometry['total'] + 8, card_h)
             self.assertLessEqual(geometry['caution'] + geometry['cautionSize'], card_h)
+
+    def test_projection_sheet_geometry_stays_inside_tiles_for_every_supported_row_count(self):
+        for rows in range(1, 9):
+            gap = 4 if rows >= 7 else 12
+            card_h = (1198 - 250) / rows - gap
+            with self.subTest(rows=rows, card_h=card_h):
+                geometry = felt_cards.sheet_row_geometry(card_h, True)
+                self.assertLessEqual(geometry['total'], card_h - 8)
+                self.assertGreater(geometry['total'], geometry['spread'])
+                if geometry['caution'] < geometry['spread']:
+                    self.assertGreaterEqual(geometry['spread'] - geometry['caution'],
+                                            geometry['cautionSize'] + 7)
+                else:
+                    self.assertGreaterEqual(geometry['caution'] - geometry['total'], 20)
+                    self.assertLessEqual(geometry['caution'] + geometry['cautionSize'], card_h)
 
     def test_four_letter_team_fallback_fits_its_badge(self):
         chip = felt_cards.team_chip(40, 40, {'abbr': 'NMSU'}, 34)

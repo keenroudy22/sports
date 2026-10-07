@@ -619,6 +619,21 @@ what was claimed at the time.
   frontend tests under both Node invocations, a 447-page build, the size budget, 92-pick record audit, 507-file
   publication guard and isolated slot-2330 rehearsal. `FELT_FROM` remains unset, so the legacy cards stay live.
 
+### C5 round-seven review candidate
+
+- Projection-sheet geometry is now bounded for every supported layout from one through eight rows. The expanded
+  review set includes the real 13-game Sunday NFL slate; every total and numbered LIKE line stays above its tile's
+  lower edge instead of being painted over by the next row.
+- Three-row matchup research gives each exact wager a full-width row at 32 pixels or larger, replaces internal
+  fraction shorthand with plain last-games proof, and reserves a separate red, labeled zone for the stored CFB
+  game-script caution. The current stored review slate has no 14-point underdog, so that caution is covered by a
+  production-shaped deterministic fixture rather than a fabricated owner-facing fact.
+- Daily receipts and best-bet cards shrink and wrap complete wording instead of silently slicing long matchups,
+  lines or final scores. The review folder now contains 19 PNGs. Verification passed 947 Python tests (2 skipped),
+  143 frontend tests under both Node invocations, the clean-export gate, a 447-page build, the warning-only size
+  budget, 92-pick record audit, 507-file publication guard and isolated slot-2330 rehearsal. `FELT_FROM` remains
+  unset, so legacy cards stay live until the owner approves the full set.
+
 ### C6 first live shadow receipt
 
 - The October 6 11:30 PM desk run completed normally with no forced publication and wrote exactly eight private

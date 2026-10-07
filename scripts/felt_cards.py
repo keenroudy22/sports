@@ -177,6 +177,26 @@ def wrap_fit(text, maximum, width, max_lines=3, minimum=36, family_ratio=.4):
     return lines, size
 
 
+def shrink_then_wrap(text, maximum, width, max_lines=2, minimum=24, family_ratio=.4):
+    """Prefer one complete line, then wrap complete words without slicing copy."""
+    value = str(text or '').strip()
+    if not value:
+        return [], float(maximum)
+    size = float(maximum)
+    while size >= minimum:
+        lines = wrap(value, size, width, family_ratio)
+        if len(lines) == 1:
+            return lines, size
+        size -= 1
+    size = float(maximum)
+    while size >= minimum:
+        lines = wrap(value, size, width, family_ratio)
+        if len(lines) <= max_lines:
+            return lines, size
+        size -= 1
+    return wrap(value, minimum, width, family_ratio), float(minimum)
+
+
 def meter(x, y, w, chance, needs, on_paper=True):
     track = '#D5E2DA' if on_paper else LINE
     tick = TICKET_INK if on_paper else CHALK
@@ -214,13 +234,17 @@ def play_card(pick, game=None, record=None, featured=False, art=None):
     if (art or {}).get('kind') == 'photo' and art.get('uri'):
         body += photo(W - 150, 205, 86, art['uri'])
     if player:
-        for line in wrap(player.upper(), 72, W - 128)[:2]:
-            body += t(64, y, line, 72, CHALK, DISPLAY, 700, spacing=1)
-            y += 80
+        player_lines, player_size = wrap_fit(player.upper(), 72, W - 128,
+                                             max_lines=2, minimum=48)
+        for line in player_lines:
+            body += t(64, y, line, f'{player_size:.1f}', CHALK, DISPLAY, 700, spacing=1)
+            y += player_size + 8
         y += 32
-    for line in wrap(selection, 120, W - 128)[:2]:
-        body += t(64, y, line, 120, KOOKD, DISPLAY, 700)
-        y += 118
+    selection_lines, selection_size = wrap_fit(selection, 120, W - 128,
+                                               max_lines=3, minimum=60)
+    for line in selection_lines:
+        body += t(64, y, line, f'{selection_size:.1f}', KOOKD, DISPLAY, 700)
+        y += selection_size * .98
     top = max(y + 30, 520)
     ticket_h = 360
     body += f'<rect x="64" y="{top}" width="{W - 128}" height="{ticket_h}" rx="28" fill="{TICKET}"/>'
@@ -353,7 +377,7 @@ def receipt_card(day_label, rows, headline, season=None):
         shown = best + tracked
     else:
         shown = best[:5]
-    tall = 140 if len(shown) <= 3 else 112
+    tall = 140 if len(shown) <= 3 else 116
     crossed_into_tracked = False
     for r in shown:
         is_tracked = receipt_tracked(r)
@@ -378,13 +402,31 @@ def receipt_card(day_label, rows, headline, season=None):
         title = str(r.get('displayTitle') or r.get('title') or '')
         kind = str(r.get('_kind') or 'best bet').replace('player', 'best bet').replace('team', 'best bet')
         kind = 'FUN' if 'parlay' in kind or 'lotto' in kind else 'CLIMB' if 'ladder' in kind or 'climb' in kind else 'BEST BET'
-        body += t(96, y + 27, kind, 23, TICKET_DIM, BODY, 800, spacing=1.5)
-        body += t(96, y + (77 if tall > 120 else 67), truncate(title, 42), 44 if tall > 120 else 36, TICKET_INK, DISPLAY, 700)
+        body += t(96, y + (27 if tall > 120 else 22), kind,
+                  23 if tall > 120 else 20, TICKET_DIM, BODY, 800, spacing=1.5)
+        title_lines, title_size = shrink_then_wrap(
+            title, 42 if tall > 120 else 34, 710, max_lines=2,
+            minimum=28 if tall > 120 else 24)
+        title_start = y + (68 if tall > 120 else 52)
+        if len(title_lines) > 1:
+            title_start -= (title_size + 1) / 2
+        body += '<g data-zone="receipt-title">'
+        for line_index, line in enumerate(title_lines):
+            body += t(96, title_start + line_index * (title_size + 1), line,
+                      f'{title_size:.1f}', TICKET_INK, DISPLAY, 700)
+        body += '</g>'
         detail = f"{odds(r.get('odds'))} {r.get('book') or ''}  {r.get('_final') or ''}".strip()
         if detail:
-            detail_lines = wrap(detail, 24 if tall <= 120 else 27, 670, .52)
-            detail_text = detail_lines[0] + (' …' if len(detail_lines) > 1 else '')
-            body += t(96, y + tall - 12, detail_text, 24 if tall <= 120 else 27, TICKET_DIM, BODY, 600)
+            detail_lines, detail_size = shrink_then_wrap(
+                detail, 27 if tall > 120 else 20, 710, max_lines=2,
+                minimum=19 if tall > 120 else 16, family_ratio=.52)
+            detail_step = detail_size + 1
+            detail_start = y + tall - 9 - (len(detail_lines) - 1) * detail_step
+            body += '<g data-zone="receipt-detail">'
+            for line_index, line in enumerate(detail_lines):
+                body += t(96, detail_start + line_index * detail_step, line,
+                          f'{detail_size:.1f}', TICKET_DIM, BODY, 600)
+            body += '</g>'
         y += tall + 14
     if not summaries:
         hidden_best = best[len([row for row in shown if not receipt_tracked(row)]):]
@@ -469,6 +511,9 @@ def sheet_row_geometry(card_h, caution=False):
     if card_h < 122:
         return {'spread': 79, 'total': 100, 'caution': 58 if caution else None,
                 'cautionSize': 14}
+    if card_h < 140:
+        return {'spread': 88, 'total': min(119, card_h - 9),
+                'caution': 65 if caution else None, 'cautionSize': 14}
     if card_h < 180:
         return {'spread': 101, 'total': 132, 'caution': 70 if caution else None,
                 'cautionSize': 16}
@@ -704,12 +749,46 @@ def research_choice_card(choice, art=None):
     """The existing research category in the felt system; exact rows remain the source of truth."""
     art = art or {}
     rows = (choice.get('rows') or [])[:4]
+
+    def proof_text(row, title):
+        selection = re.search(r'\b(over|under)\s+([0-9.]+)', title, re.I)
+        hits, games = row.get('hits'), row.get('games')
+        if not (isinstance(hits, int) and isinstance(games, int)):
+            found = re.search(r'\b(\d+)\s*/\s*(\d+)\b', str(row.get('metric') or ''))
+            if found:
+                hits, games = int(found.group(1)), int(found.group(2))
+        if selection and isinstance(hits, int) and isinstance(games, int):
+            return f'{selection.group(1).title()} {selection.group(2)} in {hits} of his last {games} games'
+        return str(row.get('metric') or '')
+
+    def defense_text(row, raw_detail):
+        matchup = row.get('matchup') or {}
+        if isinstance(matchup.get('rank'), int) and isinstance(matchup.get('of'), int):
+            rank = int(matchup['rank'])
+            suffix = 'th' if 10 <= rank % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(rank % 10, 'th')
+            stat = str(row.get('statLabel') or matchup.get('stat') or 'this stat').replace('rush attempts', 'carries')
+            allowed = matchup.get('value')
+            if isinstance(allowed, (int, float)):
+                return (f"{row.get('opponentAbbr') or 'Opponent'} allows {allowed:g} {stat} a game "
+                        f"to {matchup.get('pos') or 'position'}s, {rank}{suffix} of {matchup['of']}")
+            return (f"{row.get('opponentAbbr') or 'Opponent'}: {rank}{suffix} of {matchup['of']} "
+                    f"vs {matchup.get('pos') or 'position'}s")
+        if row.get('scriptRisk') and ' · ' in raw_detail:
+            return raw_detail.rsplit(' · ', 1)[0]
+        return raw_detail
+
+    def caution_text(row, raw_detail):
+        if row.get('scriptRisk'):
+            caution = raw_detail.rsplit(' · ', 1)[-1] if raw_detail else ''
+            return f'GAME-SCRIPT CAUTION · {caution}' if caution else 'GAME-SCRIPT CAUTION'
+        return raw_detail if 'caution' in raw_detail.lower() else ''
+
     body = t(64, 225, str(choice.get('title') or 'RESEARCH').upper(), 58, CHALK, DISPLAY, 700)
     hero = next((uri for uri in art.values() if uri), None)
     if hero and len(rows) == 1:
         body += photo(900, 238, 82, hero)
     top = 300
-    row_h = 360 if len(rows) == 1 else min(182, 700 / max(1, len(rows)))
+    row_h = 360 if len(rows) == 1 else min(250, 760 / max(1, len(rows)))
     for index, row in enumerate(rows):
         if len(rows) == 1:
             title = str(row.get('title') or '')
@@ -727,31 +806,11 @@ def research_choice_card(choice, art=None):
                 body += fit_t(64, y, price, 56, W - 128, CHALK, DISPLAY, 700, minimum=36)
                 y += 82
             hits, games = row.get('hits'), row.get('games')
-            selection = re.search(r'\b(over|under)\s+([0-9.]+)', title, re.I)
-            if selection and isinstance(hits, int) and isinstance(games, int):
-                proof = f'{selection.group(1).title()} {selection.group(2)} in {hits} of his last {games} games'
-            else:
-                proof = str(row.get('metric') or '')
+            proof = proof_text(row, title)
             raw_detail = str(row.get('detail') or '').strip()
             matchup = row.get('matchup') or {}
-            if isinstance(matchup.get('rank'), int) and isinstance(matchup.get('of'), int):
-                rank = int(matchup['rank'])
-                suffix = 'th' if 10 <= rank % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(rank % 10, 'th')
-                stat = str(row.get('statLabel') or matchup.get('stat') or 'this stat').replace('rush attempts', 'carries')
-                allowed = matchup.get('value')
-                defense = ((f"{row.get('opponentAbbr') or 'Opponent'} allows {allowed:g} {stat} a game "
-                            f"to {matchup.get('pos') or 'position'}s, {rank}{suffix} of {matchup['of']}")
-                           if isinstance(allowed, (int, float)) else
-                           f"{row.get('opponentAbbr') or 'Opponent'}: {rank}{suffix} of {matchup['of']} vs {matchup.get('pos') or 'position'}s")
-            else:
-                defense = raw_detail
-            extra_detail = ''
-            if isinstance(matchup.get('rank'), int) and isinstance(matchup.get('of'), int):
-                if row.get('scriptRisk'):
-                    caution = raw_detail.rsplit(' · ', 1)[-1] if raw_detail else ''
-                    extra_detail = f'GAME-SCRIPT CAUTION · {caution}' if caution else 'GAME-SCRIPT CAUTION'
-                elif 'caution' in raw_detail.lower():
-                    extra_detail = raw_detail
+            defense = defense_text(row, raw_detail)
+            extra_detail = caution_text(row, raw_detail)
             defense_lines, defense_size = wrap_fit(defense, 36, W - 192,
                                                    max_lines=2, minimum=24,
                                                    family_ratio=.54)
@@ -836,6 +895,43 @@ def research_choice_card(choice, art=None):
                 body += (f'<g data-zone="research-detail">'
                          + fit_t(98, y + 163, detail, 24, W - 196, DIM,
                                  BODY, 600, minimum=19)
+                         + '</g>')
+            continue
+        if choice.get('kind') == 'matchup' and len(rows) > 1:
+            raw_detail = detail.strip()
+            title_lines, title_size = wrap_fit(title, 44, W - 196,
+                                               max_lines=2, minimum=32)
+            title_y = y + 46
+            body += '<g data-zone="research-title">'
+            for line_index, line in enumerate(title_lines):
+                body += t(98, title_y + line_index * (title_size + 4), line,
+                          f'{title_size:.1f}', CHALK, DISPLAY, 700)
+            body += '</g>'
+            cursor = title_y + max(0, len(title_lines) - 1) * (title_size + 4)
+            if price:
+                body += (f'<g data-zone="research-price">'
+                         + fit_t(98, cursor + 40, price, 36, W - 196, KOOKD,
+                                 DISPLAY, 700, minimum=28)
+                         + '</g>')
+            proof = proof_text(row, title)
+            body += (f'<g data-zone="research-metric">'
+                     + fit_t(98, cursor + 76, proof, 28, W - 196, CHALK,
+                             BODY, 700, minimum=22)
+                     + '</g>')
+            defense = defense_text(row, raw_detail)
+            defense_lines, defense_size = wrap_fit(defense, 22, W - 196,
+                                                   max_lines=2, minimum=18,
+                                                   family_ratio=.54)
+            body += '<g data-zone="research-defense">'
+            for line_index, line in enumerate(defense_lines):
+                body += t(98, cursor + 110 + line_index * (defense_size + 3), line,
+                          f'{defense_size:.1f}', DIM, BODY, 600)
+            body += '</g>'
+            caution = caution_text(row, raw_detail)
+            if caution:
+                body += (f'<g data-zone="research-detail">'
+                         + fit_t(98, y + row_h - 16, caution, 22, W - 196,
+                                 BURNT_TEXT, BODY, 750, minimum=18)
                          + '</g>')
             continue
         title_size = 54 if len(rows) == 1 else 42

@@ -50,12 +50,21 @@ def review_matchup_choice(games, details, teams):
                 continue
             used.add(key)
             stat = research_posts.STAT_LABEL.get(matchup['stat'], str(matchup['stat']))
+            margin = research_posts.projected_team_margin(game, line)
+            script_risk = (game.get('league') == 'CFB' and isinstance(margin, (int, float))
+                           and margin <= -14)
+            detail = (f"{line.get('opponentAbbr') or 'Opponent'} allows {matchup['value']:g} "
+                      f"{stat}/game to {matchup['pos']}s · #{matchup['rank']} of {matchup['of']}")
+            if script_risk:
+                detail += f" · {line.get('teamAbbr') or 'team'} projected {abs(margin):g}-pt dog"
             rows.append({'league': game.get('league'), 'gameId': game['id'],
                          'title': line.get('title'), 'athleteId': line.get('athleteId'),
                          'price': f"{research_posts.price(line.get('odds'))} {research_posts.book_short(line.get('book'))}",
                          'metric': f"{history.get('hits', 0)}/{history['games']} exact-line trend",
-                         'detail': (f"{line.get('opponentAbbr') or 'Opponent'} allows {matchup['value']:g} "
-                                    f"{stat}/game to {matchup['pos']}s · #{matchup['rank']} of {matchup['of']}"),
+                         'detail': detail, 'hits': history.get('hits', 0), 'games': history['games'],
+                         'opponentAbbr': line.get('opponentAbbr') or 'Opponent',
+                         'statLabel': stat, 'matchup': matchup,
+                         'scriptRisk': script_risk, 'projectedMargin': margin,
                          'score': (history.get('rate', 0), history['games'])})
     rows.sort(key=lambda row: (-row['score'][0], -row['score'][1], row['title']))
     return {'kind': 'matchup', 'title': 'MATCHUP TRENDS',
@@ -200,6 +209,28 @@ def render(out):
     sheet_now = max(observed) + timedelta(minutes=1) if observed else now
     save('projection-sheet.png', sheet.svg(sheet_games, 'CFB', sheet_day,
                                             sheet_games[0].get('week') if sheet_games else None, logos, sheet_now))
+    nfl_dates = sorted({eastern_date(gates.when(row['kickoff'])) for row in today.get('games') or []
+                        if row.get('league') == 'NFL' and row.get('state', 'pre') == 'pre'})
+    thirteen = next(((day, sheet.pick_games(today.get('games') or [], 'NFL', day))
+                     for day in nfl_dates
+                     if len(sheet.pick_games(today.get('games') or [], 'NFL', day)) == 13), None)
+    if not thirteen:
+        raise RuntimeError('the current stored slate has no real 13-game NFL sheet for geometry review')
+    thirteen_day, thirteen_games = thirteen
+    thirteen_logos = {}
+    for row in thirteen_games:
+        for side in ('away', 'home'):
+            uri = sheet.logo_uri(row, side)
+            if uri:
+                thirteen_logos[row['id'], side] = uri
+    thirteen_observed = [gates.when(value['observedAt'])
+                         for row in thirteen_games for value in (row.get('value') or {}).values()
+                         if value.get('observedAt')]
+    thirteen_now = max(thirteen_observed) + timedelta(minutes=1) if thirteen_observed else now
+    save('projection-sheet-13-games.png', sheet.svg(
+        thirteen_games, 'NFL', thirteen_day,
+        thirteen_games[0].get('week') if thirteen_games else None,
+        thirteen_logos, thirteen_now))
     caution_game = next((row for row in sheet_games
                          if (row.get('away') or {}).get('abbr') == 'UNC'
                          and (row.get('home') or {}).get('abbr') == 'PITT'), None)
