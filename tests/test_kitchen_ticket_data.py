@@ -42,6 +42,13 @@ class TicketWordsTests(unittest.TestCase):
         self.assertEqual(build_site.ticket_why(qb), 'I project 31 pass attempts.')
         labeled = {**KING, 'reasoning': {'context': ['Defense: FIU allows 133 receiving yards a game to WRs.']}}
         self.assertEqual(build_site.ticket_why(labeled), 'FIU allows 133 receiving yards a game to WRs.')
+        against = {**KING, 'reasoning': {'context': labeled['reasoning']['context'], 'cautions': KING['reasoning']['cautions']}}
+        self.assertIsNone(build_site.ticket_why(against),
+                          'a Defense line the saved caution says points against the side is never the WHY')
+        later = {**KING, 'reasoning': {'context': ['', 'Defense: FIU allows 133 receiving yards a game to WRs.'],
+                                       'cautions': ['FIU is allowing 14.5 points per game.']}}
+        self.assertEqual(build_site.ticket_why(later), 'FIU allows 133 receiving yards a game to WRs.',
+                         'blank context lines are skipped; the first real one is context[0]')
         for empty in ({'reasoning': {}}, {'reason': '  ', 'reasoning': {'context': []}}, {}):
             self.assertIsNone(build_site.ticket_why(empty))
 
@@ -386,8 +393,9 @@ class TicketQuoteAndHoldTests(unittest.TestCase):
         self.assertEqual(king['ticketWhy'], "I project 7.3 targets, NMSU's top WR.")
         out = self.run_([held], king)
         self.assertEqual(out['held'], {'kind': 'qb'})
-        self.assertEqual(out['ticketWhy'], 'FIU allows 133 receiving yards a game to WRs, 55 of 235 this season (1 is stingiest).',
-                         'the next saved context line that is not a projection, word for word')
+        self.assertIsNone(out['ticketWhy'], 'the first saved line is the projection under review: the row is left off, '
+                          'never replaced by a later line (here the Defense line the BUT says points against the over)')
+        self.assertIsNone(build_site.ticket_why(KING, held=True))
         self.assertEqual(out['ticketBut'], "FIU's WR defense points against the over.", 'a counterpoint without a projection stays')
         only_role = {**king, 'reasoning': {'context': [KING['reasoning']['context'][0], 'Usage: our model has him at 62% of snaps.'],
                                            'cautions': []},
@@ -396,7 +404,10 @@ class TicketQuoteAndHoldTests(unittest.TestCase):
         self.assertIsNone(out['ticketWhy'], 'no saved line without a projection: the row is left off')
         self.assertIsNone(out['ticketBut'], 'a projection counterpoint is dropped too')
         reasoned = {**king, 'reason': 'I project 81 yards.', 'ticketWhy': 'I project 81 yards.'}
-        self.assertNotIn('project', self.run_([held], reasoned)['ticketWhy'], 'a saved reason with a projection is skipped too')
+        self.assertIsNone(self.run_([held], reasoned)['ticketWhy'], 'a saved reason with a projection is left off too')
+        safe = {**king, 'reason': 'Over 3.5 in 9 of his last 10 games.', 'ticketWhy': 'Over 3.5 in 9 of his last 10 games.'}
+        self.assertEqual(self.run_([held], safe)['ticketWhy'], 'Over 3.5 in 9 of his last 10 games.',
+                         'a held play keeps a saved reason that quotes no projection')
         clean = self.run_([self.row], king)
         self.assertEqual(clean['ticketWhy'], "I project 7.3 targets, NMSU's top WR.", 'an unheld play keeps its saved WHY')
         for text in ("I project 7.3 targets, NMSU's top WR.", 'Our chance is 56%.', 'Role: projected for 14.2 carries a game.'):

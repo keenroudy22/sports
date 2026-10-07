@@ -1115,32 +1115,36 @@ def held_text(text):
 
 
 def ticket_why(pick, held=False):
-    """WHY: the play's saved reason, else the first saved context line, else nothing (decision 8). A held play
-    (decision 9) skips any saved line built on a projection, chance or edge and uses the next saved one, else none."""
+    """WHY: the play's saved reason, else the first saved context line, else nothing (decision 8). Never a later line.
+    The row is left off when that line is a projection, chance or edge on a held play (decision 9), or when it is the
+    saved Defense line and a saved caution says that same positional allowance points against the side: opposing
+    evidence never becomes support."""
     reasoning = pick.get('reasoning') if isinstance(pick.get('reasoning'), dict) else {}
     reason = pick.get('reason')
-    sources = [reason] if isinstance(reason, str) and reason.strip() else []
-    sources += [c for c in reasoning.get('context') or [] if isinstance(c, str) and c.strip()]
-    for source in sources if held else sources[:1]:
-        text = ' '.join(source.split())
-        if held and held_text(text):
-            continue
-        ranked, plain = ROLE_RANKED.match(text), ROLE_PLAIN.match(text)
-        if ranked:
-            rank, team, position, volume, value = ranked.groups()
-            place = f"{team}'s top {position}" if rank == '1' else f'No. {rank} among {team} {position}s'
-            text = f'I project {float(value):g} {VOLUME_WORDS.get(volume, volume)}, {place}.'
-        elif plain:
-            value, volume = plain.groups()
-            text = f'I project {float(value):g} {VOLUME_WORDS.get(volume, volume)}.'
-        else:
-            text = LABEL_PREFIX.sub('', text)
-        out = ticket_safe(fit_ticket_text(text))
-        if not held:
-            return out
-        if out and not held_text(out):
-            return out
-    return None
+    if isinstance(reason, str) and reason.strip():
+        source = reason
+    else:
+        source = next((c for c in reasoning.get('context') or [] if isinstance(c, str) and c.strip()), None)
+    if not source:
+        return None
+    text = ' '.join(source.split())
+    if held and held_text(text):
+        return None
+    cautions = [' '.join(c.split()) for c in reasoning.get('cautions') or [] if isinstance(c, str)]
+    if text.startswith('Defense: ') and any(POSITION_AGAINST.match(c) for c in cautions):
+        return None
+    ranked, plain = ROLE_RANKED.match(text), ROLE_PLAIN.match(text)
+    if ranked:
+        rank, team, position, volume, value = ranked.groups()
+        place = f"{team}'s top {position}" if rank == '1' else f'No. {rank} among {team} {position}s'
+        text = f'I project {float(value):g} {VOLUME_WORDS.get(volume, volume)}, {place}.'
+    elif plain:
+        value, volume = plain.groups()
+        text = f'I project {float(value):g} {VOLUME_WORDS.get(volume, volume)}.'
+    else:
+        text = LABEL_PREFIX.sub('', text)
+    out = ticket_safe(fit_ticket_text(text))
+    return None if held and held_text(out) else out
 
 
 def ticket_but(pick, teams=None):
@@ -1425,7 +1429,7 @@ def spread_side(row, game):
 
 def held_words(pick):
     """Decision 9 on the ticket's saved words: a held play's WHY and BUT never quote the projection, chance or edge
-    the hold questions. WHY falls to the next saved line that does not; BUT is dropped."""
+    the hold questions. Such a WHY or BUT is left off; WHY never falls through to a later saved line."""
     if 'ticketWhy' in pick:
         pick['ticketWhy'] = ticket_why(pick, held=True)
         if pick.get('hitStrip') and LAST_N.search(pick.get('ticketWhy') or ''):

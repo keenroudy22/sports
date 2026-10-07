@@ -366,6 +366,7 @@ test('the held Hot Plate reads Under review on the first paint and the full card
     assert.match(t, /class="kt-order[^"]*is-held/);
     for (const banned of ['Still good', 'I have it', 'I had it', 'kt-chance', 'kt-orderup', 'Now −', '56.0%', 'I project', '7.3 targets']) assert.ok(!t.includes(banned), banned);
     assert.match(t, /<span class="kt-tag">BUT<\/span><span>HOM&#39;s WR defense points against the over\.<\/span>/, 'a counterpoint with no projection stays');
+    assert.ok(!t.includes('<span class="kt-tag">WHY</span>'), 'the projection WHY is left off, never swapped for a later saved line');
     assert.match(t, /−110<\/b><i><\/i><b class="kt-book">FanDuel/, 'the posted price and book stay');
   }
   assert.equal(first, firstTicket(full), 'both paints say the same thing');
