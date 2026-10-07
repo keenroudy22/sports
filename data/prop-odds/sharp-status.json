@@ -1,38 +1,38 @@
 {
- "at": "2026-10-07T17:05:51Z",
+ "at": "2026-10-07T17:14:20Z",
  "confirmed": {
-  "CFB-401862794": "2026-10-07T17:05:51Z",
-  "CFB-401869933": "2026-10-07T17:05:51Z",
-  "CFB-401871051": "2026-10-07T17:05:51Z",
-  "CFB-401871052": "2026-10-07T17:05:51Z",
-  "CFB-401871066": "2026-10-07T17:05:51Z",
-  "NFL-401872980": "2026-10-07T17:05:51Z"
+  "CFB-401862794": "2026-10-07T17:14:20Z",
+  "CFB-401869933": "2026-10-07T17:14:20Z",
+  "CFB-401871051": "2026-10-07T17:14:20Z",
+  "CFB-401871052": "2026-10-07T17:14:20Z",
+  "CFB-401871066": "2026-10-07T17:14:20Z",
+  "NFL-401872980": "2026-10-07T17:14:20Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1080,
+    "draftkings": 1084,
     "fanduel": 545
    },
-   "eventsListed": 66,
+   "eventsListed": 69,
    "eventsMatched": 6,
    "games": 6,
    "marketTypes": {
     "player_longest_passing_completion": 7,
     "player_longest_reception": 31,
     "player_longest_rush": 14,
-    "player_passing_+_rushing_yards": 69,
-    "player_passing_attempts": 45,
+    "player_passing_+_rushing_yards": 70,
+    "player_passing_attempts": 46,
     "player_passing_completions": 39,
-    "player_passing_touchdowns": 50,
-    "player_passing_yards": 249,
+    "player_passing_touchdowns": 51,
+    "player_passing_yards": 250,
     "player_receiving_yards": 602,
-    "player_receptions": 129,
+    "player_receptions": 128,
     "player_rushing_attempts": 29,
-    "player_rushing_yards": 361
+    "player_rushing_yards": 362
    },
    "requestsLeft": 2,
-   "rows": 1625,
+   "rows": 1629,
    "slateGames": [
     "Jacksonville State Gamecocks at Kennesaw State Owls 2026-10-07T23:00Z",
     "New Mexico State Aggies at Florida International Panthers 2026-10-07T23:30Z",
@@ -374,7 +374,7 @@
      "type": "fixture"
     },
     {
-     "away": "Washington State Cougars",
+     "away": "Washington State",
      "external": {
       "ballybet": "1027508063",
       "betmgm": "6:46301",
@@ -407,10 +407,10 @@
       "sx_bet": "L20405816",
       "thescorebet": "StandardEvent:7e8b1257-c959-47b3-9c10-9689d574c894"
      },
-     "home": "Utah State Aggies",
+     "home": "Utah State",
      "sample": {
-      "away_team": "Washington State Cougars",
-      "home_team": "Utah State Aggies",
+      "away_team": "Washington State",
+      "home_team": "Utah State",
       "markets": [
        "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
@@ -586,7 +586,7 @@
      "type": "fixture"
     },
     {
-     "away": "Arizona Wildcats",
+     "away": "Arizona",
      "external": {
       "ballybet": "1027553017",
       "betmgm": "6:46371",
@@ -603,7 +603,7 @@
       "fliff": "fobj__conflict_event__417546",
       "gemini": "NCAAF-2610102000-ARI-WVU-S",
       "goldrush": "31132174",
-      "kalshi": "KXNCAAF1QTOTAL-26OCT10ARIZWVU",
+      "kalshi": "KXNCAAF2H-26OCT10ARIZWVU",
       "ladbrokes": "636e2414-b5b1-4675-b814-2cf726b1d5af",
       "ladbrokes_uk": "lduk-258952274",
       "matchbook": "mb-34514879302300023",
@@ -620,10 +620,10 @@
       "thescorebet": "StandardEvent:21870df6-730f-4e54-84a7-ab598b45eae9",
       "underdog": "underdog_230523"
      },
-     "home": "West Virginia Mountaineers",
+     "home": "West Virginia",
      "sample": {
-      "away_team": "Arizona Wildcats",
-      "home_team": "West Virginia Mountaineers",
+      "away_team": "Arizona",
+      "home_team": "West Virginia",
       "markets": [
        "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
@@ -646,6 +646,7 @@
        "1st_quarter_team_total",
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
+       "2nd_half_moneyline",
        "2nd_half_total_points",
        "2nd_quarter_moneyline",
        "2nd_quarter_moneyline_3-way",
@@ -865,7 +866,7 @@
       "fliff": "fobj__conflict_event__416849",
       "gemini": "NCAAF-2610102000-IND-NEB-S",
       "goldrush": "31132192",
-      "kalshi": "KXNCAAF1QTOTAL-26OCT10INDNEB",
+      "kalshi": "KXNCAAF2H-26OCT10INDNEB",
       "ladbrokes": "09903a90-c2f3-4735-a322-9d2a6e3ad103",
       "ladbrokes_uk": "lduk-258949244",
       "matchbook": "mb-34488139039100081",
@@ -905,6 +906,7 @@
        "1st_quarter_team_total",
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
+       "2nd_half_moneyline",
        "2nd_half_point_spread",
        "2nd_quarter_moneyline",
        "2nd_quarter_point_spread",
@@ -944,6 +946,7 @@
        "player_rushing_attempts",
        "player_rushing_touchdowns",
        "player_rushing_yards",
+       "player_touchdowns",
        "point_spread",
        "team_total",
        "total_points",
@@ -975,7 +978,7 @@
       "fliff": "fobj__conflict_event__417036",
       "gemini": "NCAAF-2610102000-TAM-MIZ-S",
       "goldrush": "31132199",
-      "kalshi": "KXNCAAF1HTEAMTOTAL-26OCT10TXAMMIZZ",
+      "kalshi": "KXNCAAF2H-26OCT10TXAMMIZZ",
       "ladbrokes": "d31631d1-0397-48f3-9fcd-f4ed61848b39",
       "ladbrokes_uk": "lduk-258949369",
       "matchbook": "mb-34499033670000023",
@@ -1015,6 +1018,7 @@
        "1st_quarter_team_total",
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
+       "2nd_half_moneyline",
        "2nd_quarter_moneyline",
        "2nd_quarter_point_spread",
        "2nd_quarter_total_points",
@@ -1069,7 +1073,7 @@
      "type": "fixture"
     },
     {
-     "away": "Wake Forest Demon Deacons",
+     "away": "Wake Forest",
      "external": {
       "ballybet": "1027552994",
       "betmgm": "6:46136",
@@ -1086,7 +1090,7 @@
       "fliff": "417525_c_p_209_prematch",
       "gemini": "NCAAF-2610102000-WAK-NCS-S",
       "goldrush": "31132218",
-      "kalshi": "KXNCAAF2QTOTAL-26OCT10WAKENCST",
+      "kalshi": "KXNCAAF4QSPREAD-26OCT10WAKENCST",
       "ladbrokes": "ec8840a4-a429-42d0-9138-5bdffd4a2673",
       "ladbrokes_uk": "lduk-258951158",
       "matchbook": "mb-34517057561800023",
@@ -1102,10 +1106,10 @@
       "thescorebet": "StandardEvent:a0272ad2-e50e-41f1-8a13-d8ed3d6ccf63",
       "underdog": "underdog_230517"
      },
-     "home": "North Carolina State Wolfpack",
+     "home": "NC State",
      "sample": {
-      "away_team": "Wake Forest Demon Deacons",
-      "home_team": "North Carolina State Wolfpack",
+      "away_team": "Wake Forest",
+      "home_team": "NC State",
       "markets": [
        "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
@@ -1126,6 +1130,7 @@
        "1st_quarter_team_total",
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
+       "2nd_half_moneyline",
        "2nd_quarter_moneyline",
        "2nd_quarter_point_spread",
        "2nd_quarter_total_points",
@@ -1185,7 +1190,7 @@
       "fliff": "417535_c_p_209_prematch",
       "gemini": "NCAAF-2610102000-UNC-PIT-M",
       "goldrush": "31132222",
-      "kalshi": "KXNCAAF2QTOTAL-26OCT10UNCPITT",
+      "kalshi": "KXNCAAF2H-26OCT10UNCPITT",
       "ladbrokes": "0b863db0-94e3-4f99-b6ad-690ac7d5049c",
       "ladbrokes_uk": "lduk-258958848",
       "matchbook": "mb-34515310606500023",
@@ -1228,6 +1233,7 @@
        "1st_quarter_team_total",
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
+       "2nd_half_moneyline",
        "2nd_half_point_spread",
        "2nd_half_total_points",
        "2nd_quarter_moneyline",
@@ -1327,7 +1333,7 @@
       "galera": "21085966",
       "gemini": "NFL-2610111330-PHI-JAX-S",
       "goldrush": "29767421",
-      "kalshi": "KXNFLRSHYDS-26OCT11PHIJAC-PHIJHURTS1-20",
+      "kalshi": "KXNFL4QSPREAD-26OCT11PHIJAC",
       "ladbrokes": "72888c26-b63d-40db-9707-210f01c283e0",
       "ladbrokes_uk": "lduk-258966891",
       "matchbook": "mb-33272970854400023",
@@ -2286,7 +2292,7 @@
       "fliff": "fobj__conflict_event__399980",
       "gemini": "NFL-2610111700-MIN-NO-T",
       "goldrush": "31065448",
-      "kalshi": "KXNFLRECYDS-26OCT11MINNO-NODVELE14-80",
+      "kalshi": "KXNFLRECYDS-26OCT11MINNO-MINAJONES33-40",
       "ladbrokes": "2abe0e5d-fb32-4186-b066-bb69c9f124e1",
       "ladbrokes_uk": "lduk-258966927",
       "matchbook": "mb-33515161622300023",
@@ -2563,7 +2569,7 @@
       "galera": "21085954",
       "gemini": "NFL-2610112005-DEN-LAC-T",
       "goldrush": "31065450",
-      "kalshi": "KXNFL4QSPREAD-26OCT11DENLAC",
+      "kalshi": "KXNFL4QTOTAL-26OCT11DENLAC",
       "ladbrokes": "402484a2-1507-4e6c-b1ae-d232203829cc",
       "ladbrokes_uk": "lduk-258966925",
       "matchbook": "mb-33321779942800023",
@@ -2701,7 +2707,7 @@
       "galera": "21085964",
       "gemini": "NFL-2610112025-SF-SEA-S",
       "goldrush": "31065447",
-      "kalshi": "KXNFLRECYDS-26OCT11SFSEA-SEAJSMITHNJIGBA11-110",
+      "kalshi": "KXNFL4QTOTAL-26OCT11SFSEA",
       "ladbrokes": "064e03ea-015d-49c7-9b05-45edabf03837",
       "ladbrokes_uk": "lduk-258966912",
       "matchbook": "mb-33322093751800023",
@@ -2836,9 +2842,9 @@
       "fanduel": "36132647",
       "fliff": "fobj__conflict_event__399986",
       "galera": "21085965",
-      "gemini": "NFL-2610112025-DET-ARI-T",
+      "gemini": "NFL-2610112025-DET-ARI-TT",
       "goldrush": "31065439",
-      "kalshi": "KXNFLPASSYDS-26OCT11DETARI-ARIJBRISSETT7-300",
+      "kalshi": "KXNFL4QTOTAL-26OCT11DETARI",
       "ladbrokes": "124657b5-17cd-4561-bca6-543d8744bce9",
       "ladbrokes_uk": "lduk-258966917",
       "matchbook": "mb-33322067171500023",
