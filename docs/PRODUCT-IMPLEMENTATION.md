@@ -565,6 +565,20 @@ missing when neither component was recorded, so the page does not turn absent da
   a weekly receipt, days with no best bets, per-leg Climb results and a fresh 16-game ring/caution fixture.
   `FELT_FROM` remains unset; legacy cards remain live until the owner approves every category.
 
+### C5 sixth-round owner review candidate
+
+- Climb wins now understand the stored `all 2 legs won` settlement, mark every winning leg, show the next stake,
+  and restore a distinct completion state with the final bank, $1,000 goal and next $50 climb. Review fixtures cover
+  a real winning rung plus completed and pushed states.
+- Daily receipts keep hidden best-bet outcomes in the headline record, map voids to `VOID`, and place fun tickets
+  and the 80/20 Climb below a visible tracked-apart divider. Weekly category rows keep that same separation.
+- Best-bet chance labels fit their neutral stubs. Multi-row research cards fit the complete stored title, price,
+  metric and detail instead of silently slicing them. The review set now includes real three-row matchup and season
+  boards, a six-best-bet day, a historical void and a compact sheet fixture with the college-gap caution in its own
+  measured lane.
+- `FELT_FROM` remains unset. All changes in this round are inactive renderer and review-fixture changes; legacy
+  cards stay live until the owner approves the complete set.
+
 ### C6 first live shadow receipt
 
 - The October 6 11:30 PM desk run completed normally with no forced publication and wrote exactly eight private

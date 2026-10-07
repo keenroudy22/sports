@@ -130,9 +130,15 @@ class FeltCardTests(unittest.TestCase):
         self.assertIn('>BEST BETS<', receipt)
         self.assertIn('>2–3<', receipt)
         self.assertIn('SEASON 35–35', receipt)
-        self.assertIn('FUN TICKETS 0–1 · CLIMB STEP 2 ✓ · TRACKED APART', receipt)
+        self.assertIn('TRACKED APART · FUN TICKETS 0–1 · CLIMB STEP 2 ✓', receipt)
+        self.assertIn('data-zone="tracked-divider"', receipt)
         self.assertNotIn('+2 MORE ON THE PUBLIC RECORD', receipt)
         self.assertNotIn('SEASON 2-3', receipt)
+        root = ET.fromstring(play)
+        namespace = {'s': 'http://www.w3.org/2000/svg'}
+        label = root.find(".//s:g[@data-zone='chance-label']/s:text", namespace)
+        self.assertIsNotNone(label)
+        self.assertLessEqual(float(label.attrib['font-size']), 24)
 
     def test_research_climb_and_longshot_preserve_public_rules(self):
         ticket = {'id': 't', 'parlayType': 'longshot', 'odds': 700, 'book': 'FanDuel',
@@ -193,8 +199,29 @@ class FeltCardTests(unittest.TestCase):
         self.assertIn('>GAME LINES<', card)
         self.assertIn('>FUN TICKETS<', card)
         self.assertIn('>80/20 CLIMB<', card)
+        self.assertIn('TRACKED APART FROM BEST BETS', card)
+        self.assertIn('data-zone="tracked-divider"', card)
         self.assertNotIn('PUSH', card)
         self.assertNotIn('>LADDER<', card)
+
+    def test_daily_receipt_keeps_hidden_best_bet_outcomes_and_void_is_not_a_push(self):
+        rows = [('win', f'Best bet {index}', f'Final {index}', 'player') for index in range(5)]
+        rows += [('loss', 'Sixth best bet', 'Final miss', 'team'),
+                 ('void', 'Void best bet', 'Did not participate', 'team'),
+                 ('loss', 'Three-leg ticket', '2/3 legs hit', 'parlay')]
+        with self.felt():
+            card = pick_card.receipt_svg({'title': '5-1', 'when': 'Saturday, Oct 3', 'rows': rows})
+        self.assertIn('+2 BEST BETS · 1 MISSED · 1 VOID', card)
+        self.assertIn('TRACKED APART · FUN TICKETS 0–1', card)
+        self.assertNotIn('MORE RESULT', card)
+        self.assertNotIn('RESULT · TRACKED APART', card)
+
+        with self.felt():
+            void = pick_card.receipt_svg({'title': '0-0', 'when': 'Sunday, Oct 4',
+                                          'rows': [('void', 'Brock Bowers over 60 receiving yards',
+                                                    'Inactive scratch', 'player')]})
+        self.assertIn('– VOID', void)
+        self.assertNotIn('– PUSH', void)
 
     def test_daily_receipt_without_best_bets_uses_the_matching_public_label(self):
         with self.felt():
@@ -213,6 +240,41 @@ class FeltCardTests(unittest.TestCase):
         self.assertIn('>1–2<', climb)
         self.assertNotIn('>BEST BETS<', climb)
         self.assertNotIn('>LADDER<', climb)
+
+    def test_winning_and_complete_climb_cards_keep_leg_marks_and_next_money(self):
+        rung = {'id': 'c', 'parlayType': 'ladder', 'result': 'win', 'actual': 'all 2 legs won',
+                '_allClimbsBanked': 42,
+                'legs': [{'title': 'Pitt +10.5'}, {'title': 'Northwestern +12.5'}],
+                'ladder': {'run': 1, 'step': 2, 'stake': 75, 'payout': 117, 'banked': 19,
+                           'bankThisWin': 23, 'bankedAfter': 42, 'nextStake': 94, 'totalAfter': 136,
+                           'start': 50, 'goal': 1000}}
+        with self.felt():
+            win = pick_card.ladder_result_svg(rung)
+            complete = pick_card.ladder_result_svg(dict(
+                rung, ladder=dict(rung['ladder'], step=5, stake=675, payout=850, banked=150,
+                                  bankThisWin=170, bankedAfter=320, nextStake=680, totalAfter=1000)))
+        self.assertEqual(win.count('data-zone="leg-mark" data-result="win"'), 2)
+        self.assertNotIn('data-zone="leg-mark" data-result="unknown"', win)
+        self.assertIn('STEP 3 · $94 RIDES', win)
+        for value in ('CLIMB COMPLETE', '$50 → $1,000', 'FINAL BANK $320', 'NEXT $50 CLIMB'):
+            self.assertIn(value, complete)
+
+    def test_multi_row_research_never_silently_slices_public_copy(self):
+        rows = []
+        for index in range(3):
+            rows.append({'title': f'Full player number {index} under 38.5 receiving yards',
+                         'price': f'−114 theScore Bet row {index}',
+                         'metric': f'8/10 exact-line trend over the complete last 10 games row {index}',
+                         'detail': f'Opponent allows 37.25 receiving yards a game to tight ends, 4th of 134 row {index}'})
+        choice = {'kind': 'matchup', 'title': 'MATCHUP TRENDS', 'rows': rows}
+        with self.felt():
+            card = research_art.svg(choice)
+        self.valid(card)
+        for row in rows:
+            for field in ('title', 'price', 'metric', 'detail'):
+                self.assertIn(row[field], card)
+        self.assertEqual(card.count('data-zone="research-title"'), 3)
+        self.assertEqual(card.count('data-zone="research-price"'), 3)
 
     def test_felt_projection_sheet_is_native_and_uses_the_real_date(self):
         game = {'id': 'g', 'league': 'CFB', 'week': 6,
@@ -264,13 +326,16 @@ class FeltCardTests(unittest.TestCase):
                              now=datetime(2026, 10, 10, 14, tzinfo=timezone.utc))
         self.valid(card)
         self.assertIn('LIKE #1  PITT -3.5 −105 theScore Bet', card)
-        self.assertIn('11.1-PT COLLEGE GAP · CAUTION', card)
+        self.assertIn('11.1-PT GAP · CAUTION', card)
         self.assertIn(f'fill="{felt_cards.KOOKD}"', card)
         self.assertIn(f'>19.2–31.1</text>', card)
         self.assertNotIn('>SCORE<', card)
         self.assertNotIn('>BR<', card)
         self.assertLessEqual(felt_cards.fit_size('SPREAD  OUR PITT −11.9  ·  MARKET PITT -3.5 −105 theScore Bet',
                                                  23, 430), 23)
+        geometry = felt_cards.sheet_row_geometry((1198 - 250) / 8 - 12, True)
+        self.assertGreaterEqual(geometry['spread'] - geometry['caution'], geometry['cautionSize'] + 7)
+        self.assertGreaterEqual(geometry['total'] - geometry['spread'], 21)
 
     def test_four_letter_team_fallback_fits_its_badge(self):
         chip = felt_cards.team_chip(40, 40, {'abbr': 'NMSU'}, 34)

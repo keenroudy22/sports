@@ -82,6 +82,13 @@ def pct1(x):
     return f'{100 * x:.1f}%' if isinstance(x, (int, float)) else ''
 
 
+def dollars(value):
+    try:
+        return f'${int(value):,}'
+    except (TypeError, ValueError):
+        return '$0'
+
+
 def luminance(hex_color):
     try:
         r, g, b = (int(hex_color.lstrip('#')[i:i + 2], 16) / 255 for i in (0, 2, 4))
@@ -203,7 +210,11 @@ def play_card(pick, game=None, record=None, featured=False, art=None):
         edge = round(100 * (chance - needs), 1)
         body += t(104, top + 282, 'FAIR PRICE', 30, TICKET_DIM, BODY, 700, spacing=1) + t(104, top + 338, odds(fair), 58, TICKET_INK, DISPLAY, 700)
         body += t(420, top + 282, 'EDGE', 30, TICKET_DIM, BODY, 700, spacing=1) + t(420, top + 338, f'+{edge} pts' if edge > 0 else f'{edge} pts', 54, TICKET_INK, DISPLAY, 700)
-        body += t(W - 64 - stub_w / 2, top + 190, pct1(chance), 60, KOOKD, DISPLAY, 700, 'middle') + t(W - 64 - stub_w / 2, top + 235, 'OUR CHANCE', 30, CHALK, BODY, 700, 'middle')
+        body += t(W - 64 - stub_w / 2, top + 190, pct1(chance), 60, KOOKD, DISPLAY, 700, 'middle')
+        body += (f'<g data-zone="chance-label">'
+                 + fit_t(W - 64 - stub_w / 2, top + 235, 'OUR CHANCE', 24, stub_w - 40,
+                         CHALK, BODY, 700, 'middle', minimum=18)
+                 + '</g>')
     else:
         body += t(104, top + 170, str(pick.get('_number') or ''), 42, TICKET_INK, BODY, 600)
     if record:
@@ -238,6 +249,56 @@ def public_receipt_kind(value):
     return str(value or 'BEST BET').upper()
 
 
+def receipt_tracked(row):
+    kind = str(row.get('_kind') or row.get('title') or '').lower()
+    return any(word in kind for word in ('parlay', 'lotto', 'fun', 'ladder', 'climb'))
+
+
+def receipt_outcome(result, words=True):
+    result = str(result or '').lower()
+    if result == 'win':
+        return ('✓ HIT' if words else '✓'), KOOKD, KOOKD_INK
+    if result == 'loss':
+        return ('✗ MISS' if words else '✗'), BURNT, TICKET_INK
+    if result == 'void':
+        return ('– VOID' if words else '– VOID'), '#C9D8D0', TICKET_INK
+    return ('– PUSH' if words else '– PUSH'), '#C9D8D0', TICKET_INK
+
+
+def receipt_hidden_best(rows):
+    if not rows:
+        return ''
+    if len(rows) == 1:
+        mark_text, _color, _ink = receipt_outcome(rows[0].get('result'), words=False)
+        return f'+1 BEST BET {mark_text}'
+    labels = []
+    for result, label in (('win', 'HIT'), ('loss', 'MISSED'), ('push', 'PUSH'), ('void', 'VOID')):
+        count = sum(row.get('result') == result for row in rows)
+        if count:
+            labels.append(f'{count} {label}')
+    return f'+{len(rows)} BEST BETS' + (f" · {' · '.join(labels)}" if labels else '')
+
+
+def receipt_tracked_summary(rows):
+    fun = [row for row in rows if any(word in str(row.get('_kind') or row.get('title') or '').lower()
+                                      for word in ('parlay', 'lotto', 'fun'))]
+    climb = [row for row in rows if any(word in str(row.get('_kind') or row.get('title') or '').lower()
+                                        for word in ('ladder', 'climb'))]
+    labels = []
+    if fun:
+        wins = sum(row.get('result') == 'win' for row in fun)
+        losses = sum(row.get('result') == 'loss' for row in fun)
+        pushes = sum(row.get('result') == 'push' for row in fun)
+        voids = sum(row.get('result') == 'void' for row in fun)
+        record = f'{wins}–{losses}' + (f'–{pushes}' if pushes else '')
+        labels.append(f'FUN TICKETS {record}' + (f' · {voids} VOID' if voids else ''))
+    for row in climb[:1]:
+        step = re.search(r'\bstep\s*(\d+)\b', str(row.get('title') or ''), re.I)
+        mark_text, _color, _ink = receipt_outcome(row.get('result'), words=False)
+        labels.append(f'CLIMB STEP {step.group(1) if step else ""} {mark_text}'.replace('  ', ' '))
+    return ' · '.join(labels)
+
+
 def receipt_card(day_label, rows, headline, season=None):
     """Morning receipt. Port target: pick_card.receipt_svg (receipt-day-<date>)."""
     category, hero = receipt_scope(headline)
@@ -245,10 +306,28 @@ def receipt_card(day_label, rows, headline, season=None):
     body = (t(64, 220, day_label.upper(), 44, DIM, BODY, 700, spacing=2)
             + t(64, 286, category, 34, DIM, BODY, 800, spacing=2)
             + t(64, 400, hero.upper(), min(hero_size, 142), CHALK, DISPLAY, 700))
-    shown = rows[:5]
     y = 430
+    summaries = [row for row in rows if row.get('_summaryRow')]
+    best = [row for row in rows if not row.get('_summaryRow') and not receipt_tracked(row)]
+    tracked = [row for row in rows if not row.get('_summaryRow') and receipt_tracked(row)]
+    best_summaries = [row for row in summaries if not receipt_tracked(row)]
+    tracked_summaries = [row for row in summaries if receipt_tracked(row)]
+    if summaries:
+        shown = best_summaries + tracked_summaries
+    elif len(best) + len(tracked) <= 5:
+        shown = best + tracked
+    else:
+        shown = best[:5]
     tall = 140 if len(shown) <= 3 else 112
+    crossed_into_tracked = False
     for r in shown:
+        is_tracked = receipt_tracked(r)
+        if is_tracked and not crossed_into_tracked:
+            body += (f'<line data-zone="tracked-divider" x1="64" y1="{y + 4}" x2="{W - 64}" y2="{y + 4}" '
+                     f'stroke="{LINE}" stroke-width="2"/>'
+                     + t(64, y + 37, 'TRACKED APART FROM BEST BETS', 25, DIM, BODY, 800, spacing=1.2))
+            y += 52
+            crossed_into_tracked = True
         if r.get('_summaryRow'):
             title = public_receipt_kind(r.get('_kind') or r.get('title'))
             record = re.search(r'\b\d+[\-\u2013]\d+(?:[\-\u2013]\d+)?\b', str(r.get('title') or ''))
@@ -258,9 +337,7 @@ def receipt_card(day_label, rows, headline, season=None):
                      + t(W - 96, y + tall / 2 + 15, record_text, 56, CHALK, DISPLAY, 700, 'end'))
             y += tall + 14
             continue
-        hit = r.get('result') == 'win'
-        miss = r.get('result') == 'loss'
-        color, mark_text, ink = (KOOKD, '✓ HIT', KOOKD_INK) if hit else (BURNT, '✗ MISS', TICKET_INK) if miss else ('#C9D8D0', '– PUSH', TICKET_INK)
+        mark_text, color, ink = receipt_outcome(r.get('result'))
         body += f'<rect x="64" y="{y}" width="{W - 128}" height="{tall}" rx="22" fill="{TICKET}"/><rect x="{W - 64 - 190}" y="{y}" width="190" height="{tall}" rx="22" fill="{color}"/><rect x="{W - 64 - 190}" y="{y}" width="30" height="{tall}" fill="{color}"/>'
         body += t(W - 64 - 95, y + tall / 2 + 11, mark_text, 34, ink, BODY, 700, 'middle')
         title = str(r.get('displayTitle') or r.get('title') or '')
@@ -274,24 +351,21 @@ def receipt_card(day_label, rows, headline, season=None):
             detail_text = detail_lines[0] + (' …' if len(detail_lines) > 1 else '')
             body += t(96, y + tall - 12, detail_text, 24 if tall <= 120 else 27, TICKET_DIM, BODY, 600)
         y += tall + 14
-    if len(rows) > len(shown):
-        hidden = rows[len(shown):]
-        fun = [row for row in hidden if any(word in str(row.get('_kind') or '').lower() for word in ('parlay', 'lotto', 'fun'))]
-        climb = [row for row in hidden if any(word in str(row.get('_kind') or '').lower() for word in ('ladder', 'climb'))]
-        labels = []
-        if fun:
-            wins = sum(row.get('result') == 'win' for row in fun)
-            losses = sum(row.get('result') == 'loss' for row in fun)
-            labels.append(f'FUN TICKETS {wins}–{losses}')
-        for row in climb[:1]:
-            step = re.search(r'\bstep\s*(\d+)\b', str(row.get('title') or ''), re.I)
-            mark_text = '✓' if row.get('result') == 'win' else '✗' if row.get('result') == 'loss' else '–'
-            labels.append(f'CLIMB STEP {step.group(1) if step else ""} {mark_text}'.replace('  ', ' '))
-        other = len(hidden) - len(fun) - len(climb)
-        if other:
-            labels.append(f'{other} MORE RESULT' + ('S' if other != 1 else ''))
-        labels.append('TRACKED APART')
-        body += t(64, min(y + 28, 1138), ' · '.join(labels), 31, DIM, DISPLAY, 700, spacing=.5)
+    if not summaries:
+        hidden_best = best[len([row for row in shown if not receipt_tracked(row)]):]
+        hidden_label = receipt_hidden_best(hidden_best)
+        if hidden_label:
+            body += fit_t(64, min(y + 26, 1092), hidden_label, 31, W - 128, CHALK,
+                          DISPLAY, 700, minimum=24)
+            y += 42
+        hidden_tracked = tracked if not any(receipt_tracked(row) for row in shown) else tracked[len([row for row in shown if receipt_tracked(row)]):]
+        tracked_label = receipt_tracked_summary(hidden_tracked)
+        if tracked_label:
+            divider_y = min(y + 4, 1110)
+            body += (f'<line data-zone="tracked-divider" x1="64" y1="{divider_y}" x2="{W - 64}" '
+                     f'y2="{divider_y}" stroke="{LINE}" stroke-width="2"/>')
+            body += fit_t(64, min(divider_y + 36, 1146), f'TRACKED APART · {tracked_label}', 30,
+                          W - 128, DIM, DISPLAY, 700, minimum=22)
     if season:
         body += t(64, 1188, f'SEASON {season}  ·  THE MISSES STAY ON THE RECORD', 38, CHALK, DISPLAY, 700, spacing=1.2)
     return frame('Receipt', body, chip_color=FELT_RAISED, chip_ink=CHALK)
@@ -353,6 +427,15 @@ def research_card(row):
     body += t(64, 1080, f"{row.get('hits')} of {row.get('games')} this season" + (f' · price needs {pct(need)}' if need else ''), 44, CHALK, BODY, 700)
     body += t(64, 1150, f"{odds(row.get('odds'))} {row.get('book') or ''}  ·  history, not a probability", 34, DIM, BODY, 600)
     return frame('Research', body, chip_color=FELT_RAISED, chip_ink=CHALK)
+
+
+def sheet_row_geometry(card_h, caution=False):
+    """Return non-overlapping baselines for both compact and roomy projection tiles."""
+    if card_h < 132:
+        return {'spread': 82, 'total': 103, 'caution': 62 if caution else None,
+                'cautionSize': 13}
+    return {'spread': 88, 'total': 128, 'caution': 168 if caution else None,
+            'cautionSize': 18}
 
 
 def projection_sheet(games, league, day, week=None, logos=None, watches=None):
@@ -428,26 +511,26 @@ def projection_sheet(games, league, day, week=None, logos=None, watches=None):
         body += t(x + card_w - 18, y + 43, score, info_size + 2, CHALK, DISPLAY, 700, 'end')
         ours_spread = spread(card, v2.get('margin'))
         ours_total = num(v2.get('total'))
-        sy = y + (88 if card_h >= 132 else 72)
-        ty = y + (128 if card_h >= 132 else 103)
+        caution = watch and watch[3].get('collegeGapCaution')
+        geometry = sheet_row_geometry(card_h, bool(caution))
+        sy, ty = y + geometry['spread'], y + geometry['total']
         spread_line = f'SPREAD  OUR {ours_spread}  ·  MARKET {price(card, "spread")}'
         total_line = f'TOTAL  OUR {ours_total}  ·  MARKET {price(card, "total")}'
         if watch and watch[1] == 'spread':
             spread_line = f'LIKE #{watch[0]}  {watch[2]} {odds(watch[3].get("odds"))} {public_book(watch[3].get("book"))}'
         if watch and watch[1] == 'total':
             total_line = f'LIKE #{watch[0]}  {watch[2]} {odds(watch[3].get("odds"))} {public_book(watch[3].get("book"))}'
-        caution = watch and watch[3].get('collegeGapCaution')
-        if caution and card_h < 132:
-            sy, ty = y + 77, y + 101
-            body += fit_t(x + card_w - 18, y + 62, f'{caution:g}-PT COLLEGE GAP · CAUTION', 16, card_w - 36,
-                          DIM, BODY, 700, 'end', minimum=13)
+        if caution:
+            caution_text = (f'{caution:g}-PT GAP · CAUTION' if card_h < 132 else
+                            f'{caution:g}-PT COLLEGE GAP · CAUTION')
+            body += (f'<g data-zone="college-gap-caution">'
+                     + fit_t(x + card_w - 18, y + geometry['caution'], caution_text,
+                             geometry['cautionSize'], card_w - 36, DIM, BODY, 700, 'end', minimum=12)
+                     + '</g>')
         body += fit_t(x + 18, sy, spread_line, info_size, card_w - 36,
                       KOOKD if watch and watch[1] == 'spread' else CHALK, DISPLAY, 700, minimum=15)
         body += fit_t(x + 18, ty, total_line, info_size, card_w - 36,
                       KOOKD if watch and watch[1] == 'total' else CHALK, DISPLAY, 700, minimum=15)
-        if caution and card_h >= 132:
-            body += fit_t(x + card_w - 18, ty, f'{caution:g}-PT COLLEGE GAP · CAUTION', 18, card_w - 36,
-                          DIM, BODY, 700, 'end', minimum=14)
     body += f'<line x1="64" y1="1228" x2="{W - 64}" y2="1228" stroke="{LINE}" stroke-width="2"/>'
     body += t(64, 1270, FOOTER, 26, DIM) + t(64, 1310, SITE, 26, KOOKD, BODY, 700)
     return body + '</svg>'
@@ -483,7 +566,8 @@ def climb_card(pick, run, step, stake, payout, banked):
     body += t(64, 400, f'${stake} → ${payout}', 150, CHALK, DISPLAY, 700)
     all_banked = int(pick.get('_allClimbsBanked') if pick.get('_allClimbsBanked') is not None else banked)
     body += t(64, 470, f'{odds(pick.get("odds"))} {pick.get("book") or ""}', 40, DIM, BODY, 600)
-    body += t(64, 520, f'THIS CLIMB  ${banked} BANKED  ·  ALL CLIMBS  ${all_banked} BANKED', 34, KOOKD, DISPLAY, 700, spacing=.8)
+    body += t(64, 520, f'THIS CLIMB  ${banked} BANKED', 34, CHALK, DISPLAY, 700, spacing=.8)
+    body += t(442, 520, f'·  ALL CLIMBS  ${all_banked} BANKED', 34, KOOKD, DISPLAY, 700, spacing=.8)
     y = 565
     for leg in legs[:3]:
         text = str(leg.get('title') or leg.get('displayTitle') or '')
@@ -517,22 +601,38 @@ def receipt_from_existing(receipt):
 def climb_result_card(pick):
     info = pick.get('ladder') or {}
     result = str(pick.get('result') or 'push').lower()
-    tone, verdict, ink = ((KOOKD, '✓ HIT', KOOKD_INK) if result == 'win' else
+    stake, payout = info.get('stake', 0), info.get('payout', 0)
+    start, goal = int(info.get('start') or 50), int(info.get('goal') or 1000)
+    bank_this = int(info.get('bankThisWin') if info.get('bankThisWin') is not None else round(float(payout or 0) * .20))
+    banked_after = int(info.get('bankedAfter') if info.get('bankedAfter') is not None else int(info.get('banked') or 0) + bank_this)
+    next_stake = int(info.get('nextStake') if info.get('nextStake') is not None else int(payout or 0) - bank_this)
+    total = int(info.get('totalAfter') if info.get('totalAfter') is not None else banked_after + next_stake)
+    complete = result == 'win' and total >= goal
+    tone, verdict, ink = ((KOOKD, 'CLIMB COMPLETE' if complete else '✓ HIT', KOOKD_INK) if result == 'win' else
                            (BURNT, '✗ MISS', TICKET_INK) if result == 'loss' else
                            (TICKET_RULE, '– PUSH', TICKET_INK))
-    stake, payout = info.get('stake', 0), info.get('payout', 0)
     this_climb = info.get('bankedAfter', info.get('banked', 0)) if result == 'win' else info.get('banked', 0)
     all_banked = int(pick.get('_allClimbsBanked') if pick.get('_allClimbsBanked') is not None else this_climb or 0)
     body = t(64, 240, f"CLIMB #{info.get('run', 1)} · STEP {info.get('step', 1)}", 56, DIM, DISPLAY, 700, spacing=2)
     body += f'<rect x="64" y="300" width="{W - 128}" height="210" rx="28" fill="{tone}"/>'
     body += t(104, 390, verdict, 64, ink, DISPLAY, 700)
-    result_line = f'${stake} → ${payout}' if result == 'win' else f'NEXT  ${info.get("start", 50)} RESTART' if result == 'loss' else f'${stake} RETURNS'
+    result_line = (f'{dollars(start)} → {dollars(total)}' if complete else
+                   f'{dollars(stake)} → {dollars(payout)}' if result == 'win' else
+                   f'NEXT  {dollars(start)} RESTART' if result == 'loss' else f'{dollars(stake)} RETURNS')
     body += t(104, 472, result_line, 82, ink, DISPLAY, 700)
+    if complete:
+        body += fit_t(W - 100, 390, f'FINAL BANK {dollars(banked_after)}  ·  NEXT {dollars(start)} CLIMB',
+                      36, 470, ink, DISPLAY, 700, 'end', minimum=26)
+    elif result == 'win':
+        body += fit_t(W - 100, 390, f'STEP {int(info.get("step") or 1) + 1} · {dollars(next_stake)} RIDES',
+                      40, 410, ink, DISPLAY, 700, 'end', minimum=28)
     leg_results = []
     actual = str(pick.get('actual') or '')
     match = re.search(r'\blegs:\s*([^;]+)', actual, re.I)
     if match:
         leg_results = [value.strip().lower() for value in match.group(1).split(',')]
+    elif result == 'win' and re.fullmatch(r'all\s+\d+\s+legs?\s+won', actual.strip(), re.I):
+        leg_results = ['win'] * len(pick.get('legs') or [])
     y = 550
     for index, leg in enumerate((pick.get('legs') or [])[:3]):
         leg_result = leg_results[index] if index < len(leg_results) else ''
@@ -541,16 +641,16 @@ def climb_result_card(pick):
         leg_color = KOOKD if leg_hit else BURNT_TEXT if leg_miss else DIM
         leg_mark = '✓' if leg_hit else '✗' if leg_miss else '–'
         body += f'<rect x="64" y="{y}" width="{W - 128}" height="92" rx="20" fill="{FELT_RAISED}"/>'
-        body += t(100, y + 61, leg_mark, 48, leg_color, BODY, 800)
+        body += f'<g data-zone="leg-mark" data-result="{leg_result or "unknown"}">' + t(100, y + 61, leg_mark, 48, leg_color, BODY, 800) + '</g>'
         body += fit_t(155, y + 61, truncate(leg.get('title'), 52), 48, W - 275, CHALK, DISPLAY, 700, minimum=35)
         y += 106
     if result == 'win':
-        progress = int(info.get('totalAfter') or (int(this_climb or 0) + int(info.get('nextStake') or 0)))
+        progress = total
     elif result == 'loss':
         progress = int(info.get('start') or 50)
     else:
         progress = int(info.get('banked') or 0) + int(stake or 0)
-    body += climb_path(max(50, progress), 926, 'NEXT' if result == 'loss' else 'NOW')
+    body += climb_path(max(50, progress), 926, 'NEXT' if result == 'loss' else 'DONE' if complete else 'NOW')
     body += t(64, 1096, f'THIS CLIMB  ${int(this_climb or 0)} BANKED', 36, CHALK, DISPLAY, 700, spacing=1)
     body += t(64, 1148, f'ALL CLIMBS  ${all_banked} BANKED  ·  EVERY STEP STAYS PUBLIC', 34, KOOKD, DISPLAY, 700, spacing=.8)
     return frame('Climb result', body, chip_color=tone, chip_ink=ink)
@@ -646,11 +746,24 @@ def research_choice_card(choice, art=None):
         metric = str(row.get('metric') or '')
         detail = str(row.get('detail') or '')
         title_size = 54 if len(rows) == 1 else 42
-        body += t(98, y + 72, title[:46], title_size, CHALK, DISPLAY, 700)
-        body += t(W - 96, y + 72, price[:24], 48 if len(rows) == 1 else 40, CHALK, DISPLAY, 700, 'end')
-        body += t(98, y + (160 if len(rows) == 1 else 108), metric[:52], 42 if len(rows) == 1 else 32, CHALK, BODY, 700)
+        title_width = W - 98 - 96 if not price else 600
+        body += (f'<g data-zone="research-title">'
+                 + fit_t(98, y + 62, title, title_size, title_width, CHALK, DISPLAY, 700, minimum=22)
+                 + '</g>')
+        if price:
+            body += (f'<g data-zone="research-price">'
+                     + fit_t(W - 96, y + 62, price, 48 if len(rows) == 1 else 40, 250,
+                             KOOKD, DISPLAY, 700, 'end', minimum=20)
+                     + '</g>')
+        body += (f'<g data-zone="research-metric">'
+                 + fit_t(98, y + (160 if len(rows) == 1 else 108), metric,
+                         42 if len(rows) == 1 else 32, W - 196, CHALK, BODY, 700, minimum=20)
+                 + '</g>')
         if row_h >= 160:
-            body += t(98, y + (226 if len(rows) == 1 else 148), detail[:70], 34 if len(rows) == 1 else 26, DIM, BODY, 600)
+            body += (f'<g data-zone="research-detail">'
+                     + fit_t(98, y + (226 if len(rows) == 1 else 151), detail,
+                             34 if len(rows) == 1 else 26, W - 196, DIM, BODY, 600, minimum=18)
+                     + '</g>')
         if len(rows) == 1:
             proof_number = metric.split(' ', 1)[0]
             body += t(98, y + 326, proof_number, 96, KOOKD, DISPLAY, 700)
