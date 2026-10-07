@@ -13,8 +13,10 @@ import publication_guard as guard
 class PublicationGuardTests(unittest.TestCase):
     def test_reviewed_paths_and_old_public_evidence_remain_allowed(self):
         for path in ('.nojekyll', 'index.html', 'data/research.json', 'data/forecasts.json', 'data/app/today.json',
+                     'data/app/record.json', 'data/app/trends/index.json',
+                     'data/app/trends/NFL-2026-10-08.json', 'data/app/trends/CFB-2026-10-10-milestones.json',
                      'data/app/players/NFL/3.json', 'data/app/player-charts/CFB.json',
-                     'data/app/teams/NFL/12.json', 'data/app/teams/NFL.json',
+                     'data/app/teams/NFL/12.json', 'data/app/teams/NFL.json', 'data/app/teams/CFB-defense.json',
                      'data/app/games/NFL-401872979.json', 'data/cards/research-2026-10-05.png',
                      'img/wins/personal-win.jpg', 'data/feed.xml'):
             self.assertTrue(guard.allowed_path(Path(path)), path)
@@ -23,7 +25,8 @@ class PublicationGuardTests(unittest.TestCase):
         for path in ('env', '.env', 'data/desk-health.json', 'data/desk-reliability.json',
                      'data/x-posted.json', 'data/app/policy.json', 'data/app/status.json',
                      'data/app/teams/NFL/../../private.json', 'data/cards/private.zip',
-                     'img/.config/card.png', 'data/new-feed.json', 'archive/review-packet.md'):
+                     'img/.config/card.png', 'data/new-feed.json', 'data/app/trends.json',
+                     'data/app/trends/NBA-2026-10-08.json', 'data/app/trends/NFL-all.json', 'archive/review-packet.md'):
             self.assertFalse(guard.allowed_path(Path(path)), path)
 
     def test_retired_preview_paths_are_not_public(self):

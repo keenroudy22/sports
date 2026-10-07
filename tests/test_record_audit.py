@@ -7,6 +7,10 @@ import record_audit
 
 
 class RecordAuditTests(unittest.TestCase):
+    def test_hosted_reconciliation_reads_the_full_split_record(self):
+        workflow = (Path(__file__).resolve().parents[1] / '.github/workflows/publish.yml').read_text()
+        self.assertIn('python scripts/record_audit.py --today site/data/app/record.json', workflow)
+
     reports = [{'league': 'NFL', 'publishedAt': '2026-09-01T12:00:00Z', 'props': [
         {'id': 'official', 'gameIds': ['NFL-1'], 'odds': -110}]},
         {'league': 'NFL', 'publishedAt': '2026-09-02T12:00:00Z', 'props': [

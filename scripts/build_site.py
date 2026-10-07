@@ -3,7 +3,8 @@
 Each page loads only what it shows:
 
   app/today.json              games from three days back to eight ahead, with the
-                              market, v1 and the latest v2 forecast; picks; record
+                              market, v1 and the latest v2 forecast; recent/open picks
+  app/record.json             the complete public pick history
   app/lines.json              the line catalog and current game markets (the board)
   app/games/<id>.json         one game: forecast history, player projections next
                               to DraftKings lines, both teams' form and defense
@@ -11,7 +12,8 @@ Each page loads only what it shows:
   app/players/<L>.json        player directory for a league
   app/players/<L>/<n>.json    game logs, sharded by athlete ID
   app/player-charts/<L>.json  compact upcoming-matchup player charts
-  app/teams/<L>.json          teams and what each defense allows by position
+  app/teams/<L>.json          team metadata (NFL also carries its defense table)
+  app/teams/CFB-defense.json  the college defense table
   app/teams/<L>/<id>.json     one team's games, defense log and roster usage
   app/research.json           injury report, status changes, analyst notes
 
@@ -104,6 +106,57 @@ def instant(value):
     return moment if moment is None or moment.tzinfo else moment.replace(tzinfo=timezone.utc)
 
 
+def display_book(value):
+    """Public-facing book name, or None when a capture did not identify a book."""
+    name = str(value or '').strip()
+    if not name or name.casefold() == 'book unavailable':
+        return None
+    return 'theScore Bet' if name.casefold() == 'espn bet' else name
+
+
+def fair_american(chance):
+    if not isinstance(chance, (int, float)) or not 0 < chance < 1:
+        return None
+    return round(-100 * chance / (1 - chance)) if chance >= .5 else round(100 * (1 - chance) / chance)
+
+
+COMPARISON_ONLY_BOOKS = {'hardrockbet'}
+
+
+def public_lines(rows, now):
+    """Add quote-age and exact-line shopping fields, and omit rows without a named book."""
+    out = []
+    for source in rows:
+        book = display_book(source.get('book'))
+        if not book:
+            continue
+        row = dict(source, book=book)
+        quotes = []
+        for quote in source.get('books') or []:
+            named = display_book(quote.get('book'))
+            if named:
+                quotes.append({**quote, 'book': named})
+        if 'books' in source:
+            row['books'] = quotes
+        observed = instant(row.get('observedAt'))
+        age = max(0, round((now - observed).total_seconds() / 60)) if observed and observed <= now else None
+        row['ageMinutes'] = age
+        row['freshness'] = ('fresh' if age is not None and age <= 60 else
+                            'aging' if age is not None and age <= 240 else 'stale')
+        same = [{'book': row['book'], 'odds': row.get('odds')}]
+        same += [{'book': q['book'], 'odds': q.get('odds')} for q in quotes
+                 if number(q.get('line')) == number(row.get('line'))]
+        same = [q for q in same if american(q.get('odds')) is not None
+                and re.sub(r'[^a-z0-9]', '', q['book'].casefold()) not in COMPARISON_ONLY_BOOKS]
+        if same:
+            best = max(same, key=lambda q: american(q['odds']))
+            row['bestSameLine'] = {'book': best['book'], 'odds': american(best['odds'])}
+        else:
+            row['bestSameLine'] = None
+        out.append(row)
+    return out
+
+
 # Primary team colours, used only for accents. College colours come from the followed-player identities.
 NFL_COLORS = {
     'ARI': '#97233F', 'ATL': '#A71930', 'BAL': '#241773', 'BUF': '#00338D', 'CAR': '#0085CA', 'CHI': '#0B162A',
@@ -115,7 +168,7 @@ NFL_COLORS = {
 NEUTRAL = '#64748B'
 # Provider names as the feed spells them, mapped to the books' own spelling.
 BOOKS = {'Draft Kings': 'DraftKings', 'DraftKings': 'DraftKings', 'Fan Duel': 'FanDuel', 'FanDuel': 'FanDuel',
-         'Bet MGM': 'BetMGM', 'BetMGM': 'BetMGM', 'ESPN BET': 'ESPN BET'}
+         'Bet MGM': 'BetMGM', 'BetMGM': 'BetMGM', 'ESPN BET': 'theScore Bet', 'theScore Bet': 'theScore Bet'}
 
 
 def identity_colors(identity):
@@ -731,6 +784,45 @@ def build_teams(league, records, team_logs, defense_logs, teams_meta, identities
     return {'teams': directory, 'defense': table}, files
 
 
+def trend_payload(rows):
+    """One history and one player/game context per player/stat; threshold rows point to them."""
+    histories, contexts, compact = {}, {}, []
+    shared = ('league', 'season', 'athleteId', 'player', 'team', 'gameId', 'kickoff', 'matchup',
+              'teamGames', 'rosterAsOf', 'injuryStatus', 'stat')
+    for source in rows:
+        row = dict(source)
+        key = '|'.join(str(row.get(name) or '') for name in ('league', 'season', 'athleteId', 'stat'))
+        if key not in histories:
+            histories[key] = row.get('history') or []
+        contexts.setdefault(key, {name: row.get(name) for name in shared if row.get(name) is not None})
+        row.pop('history', None)
+        for name in shared:
+            row.pop(name, None)
+        row['contextKey'] = key
+        compact.append(row)
+    return {'rows': compact, 'contexts': contexts, 'histories': histories}
+
+
+def write_trends(rows, now):
+    grouped = defaultdict(list)
+    for row in rows:
+        grouped[(row['league'], day(row['kickoff']), row.get('kind') == 'milestone')].append(row)
+    files = []
+    for (league, game_day, milestones), values in sorted(grouped.items()):
+        suffix = '-milestones' if milestones else ''
+        name = f'{league}-{game_day}{suffix}.json'
+        write(OUT / 'trends' / name, {'generatedAt': stamp(now), **trend_payload(values)})
+        files.append({'league': league, 'date': game_day, 'kind': 'milestone' if milestones else 'priced',
+                      'file': name, 'rows': len(values)})
+    write(OUT / 'trends' / 'index.json', {'generatedAt': stamp(now), 'files': files})
+
+
+def recent_picks(picks, now):
+    cutoff = now - timedelta(hours=72)
+    return [pick for pick in picks if not pick.get('result') or
+            (instant(pick.get('settledAt') or pick.get('publishedAt')) or datetime.min.replace(tzinfo=timezone.utc)) >= cutoff]
+
+
 # ------------------------------------------------------------------ research
 
 def build_research(context, reports, now):
@@ -858,7 +950,6 @@ def build(now=None):
             if (line['grade'].get('edge') or 0) < 3.0:
                 line['grade']['tier'] = 'pass'
         line['gradeNote'] = 'FBS vs FCS: v2 is not reliable here' if fcs and line.get('state') == 'open' else None
-    values = sheet_values(lines, now)
     prop_store = load_store('prop-odds')
     prop_prices = {gid: rows[-1] for gid, rows in prop_store.items()}
     # College players have no ESPN feed of main lines: their board rows come from the priced feed's own main numbers.
@@ -882,11 +973,13 @@ def build(now=None):
                 if (row['grade'].get('edge') or 0) < 5.0:
                     row['grade']['tier'] = 'pass'
                     row['grade']['view'] = 'pass'
+    lines = public_lines(lines, now)
+    values = sheet_values(lines, now)
     trend_injuries = {league: {team: block.get('players', []) for team, block in
                       ((context.get('leagues') or {}).get(league, {}).get('teams') or {}).items()}
                       for league in ('NFL', 'CFB')}
     trends = season_trends.build(window, league_data, lines, prop_prices, now, trend_injuries)
-    write(OUT / 'trends.json', {'generatedAt': stamp(now), 'rows': trends})
+    write_trends(trends, now)
     gap_rows = market_read.load_rows()
     for game in sorted(window, key=lambda g: (g['kickoff'], g['id'])):
         snaps_for = pregame(forecasts.get(game['id'], []), game['kickoff'])
@@ -917,8 +1010,9 @@ def build(now=None):
                  'injuries': ((context.get('leagues') or {}).get('NFL') or {}).get('checkedAt'),
                  'props': max((c['retrievedAt'] for rows in captures.values() for c in rows), default=None)}
     write(OUT / 'today.json', {'generatedAt': stamp(now), 'freshness': freshness,
-                               'health': research_views.health(freshness, now), 'games': cards, 'picks': picks,
-                               'model': summary})
+                               'health': research_views.health(freshness, now), 'games': cards,
+                               'picks': recent_picks(picks, now), 'historyFile': 'record.json', 'model': summary})
+    write(OUT / 'record.json', {'generatedAt': stamp(now), 'picks': picks})
     write(OUT / 'lines.json', {'generatedAt': stamp(now), 'lines': lines})
     for league in ('NFL', 'CFB'):
         info = league_data[league]
@@ -931,6 +1025,10 @@ def build(now=None):
             write(OUT / 'players' / league / f'{shard}.json', {'keys': list(LOG_KEYS), 'players': players})
         directory, files = build_teams(league, info['records'], info['team_logs'], info['defense_logs'], teams_meta,
                                        identities, info['current'])
+        if league == 'CFB':
+            defense = directory.pop('defense')
+            directory['defenseFile'] = 'teams/CFB-defense.json'
+            write(OUT / 'teams' / 'CFB-defense.json', {'generatedAt': stamp(now), 'defense': defense})
         write(OUT / 'teams' / f'{league}.json', directory)
         for team, payload in files.items():
             write(OUT / 'teams' / league / f'{team}.json', payload)
@@ -956,6 +1054,42 @@ def public_delivery(entry):
     return {'discordAt': discord.get('sentAt') if discord.get('state') == 'sent' else None,
             'xAt': entry.get('sentAt'), 'xDue': None if cancelled or entry.get('error') else entry.get('dueAt'),
             'restoredAt': entry.get('restoredAt'), 'cancelled': cancelled, 'failed': bool(entry.get('error'))}
+
+
+def public_sentences(*values, limit=4):
+    """Small structured display lists from already-published prose; never generates a new claim."""
+    out = []
+    for value in values:
+        if isinstance(value, list):
+            pieces = value
+        else:
+            pieces = re.split(r'(?<=[.!?])\s+(?=[A-Z0-9"“])|[\r\n]+', str(value or ''))
+        for piece in pieces:
+            text = re.sub(r'^\s*[-•]\s*', '', str(piece)).strip()
+            if text and text not in out:
+                out.append(text)
+            if len(out) >= limit:
+                return out
+    return out
+
+
+def pick_market_type(pick, recent):
+    current = pick.get('marketType') or recent.get('marketType')
+    if current:
+        return current
+    if pick.get('athleteId'):
+        return 'prop'
+    text = f"{pick.get('market') or ''} {pick.get('title') or ''}".lower()
+    direction = str(first_of(pick, recent, 'direction') or '').lower()
+    if 'team total' in text:
+        return 'teamTotal'
+    if 'total' in text or direction in ('over', 'under'):
+        return 'total'
+    if 'spread' in text or re.search(r'\b[+-]\d', text):
+        return 'spread'
+    if 'moneyline' in text or ' winner' in text:
+        return 'moneyline'
+    return None
 
 
 def board_picks(first, latest, by_id, identities):
@@ -997,6 +1131,12 @@ def board_picks(first, latest, by_id, identities):
         restored = bool(delivery and delivery.get('restoredAt') and not recent.get('result'))
         entry_note = None if restored else recent.get('entryNote') or pick.get('entryNote')
         status = 'active' if restored else recent.get('status') or pick.get('status')
+        reasoning = pick.get('reasoning') if isinstance(pick.get('reasoning'), dict) else {}
+        probability = pick.get('probabilityAtPublication') or {}
+        published_at = instant(pick.get('publishedAt'))
+        quoted_at = instant(pick.get('quotedAt'))
+        chance = probability.get('chance') if isinstance(probability, dict) else None
+        calibrated = probability.get('calibrated') is not False if isinstance(probability, dict) else False
         rows.append({'id': key, 'league': pick.get('league'), 'kind': pick.get('kind'), 'title': pick.get('title'),
                      # The same title and one-line reason the play's X post carries, so the site reads like the post.
                      'displayTitle': pick_card.display_title(pick, game) if game else pick.get('title'),
@@ -1014,15 +1154,21 @@ def board_picks(first, latest, by_id, identities):
                      'gameId': game_ids[0] if game_ids else None, 'gameIds': game_ids,
                      'season': season, 'seasonType': common('seasonType'), 'week': common('week'),
                      'line': first_of(pick, recent, 'line'),
-                     'direction': first_of(pick, recent, 'direction'), 'book': pick.get('book'), 'odds': first_of(pick, recent, 'odds'),
+                     'direction': first_of(pick, recent, 'direction'), 'book': display_book(pick.get('book')), 'odds': first_of(pick, recent, 'odds'),
                      'priceAssumed': pick.get('odds') is None and recent.get('priceAssumed') is True,
                      'priceNote': recent.get('priceNote') if pick.get('odds') is None else None,
                      'priceEstimated': pick.get('priceEstimated') is True,
                      'probabilityAtPublication': pick.get('probabilityAtPublication'),
                      'reasoning': pick.get('reasoning'),
+                     'reasons': public_sentences(reasons.get(key) if isinstance(reasons, dict) else None,
+                                                 reasoning.get('context'), pick.get('why'), limit=4),
+                     'cautions': public_sentences(reasoning.get('cautions'), pick.get('risk'), limit=4),
+                     'fairOddsAtPublication': fair_american(chance) if calibrated else None,
+                     'quoteAgeMinutes': (max(0, round((published_at - quoted_at).total_seconds() / 60))
+                                         if published_at and quoted_at and quoted_at <= published_at else None),
                      'projection': pick.get('projection'), 'confidence': pick.get('confidence'),
                      'favorite': pick.get('favorite') is True or key in FAVORITES_BEFORE_FLAG,
-                     'marketType': pick.get('marketType'), 'parlayType': pick.get('parlayType'),
+                     'marketType': pick_market_type(pick, recent), 'parlayType': pick.get('parlayType'),
                      'ladder': pick.get('ladder'),                         # a ladder rung's run, step and dollars (scripts/ladder.py)
                      'cutoff': pick.get('cutoff'), 'why': pick.get('why'),
                      'risk': pick.get('risk'), 'edge': pick.get('edge'), 'quotedAt': pick.get('quotedAt'),
@@ -1039,6 +1185,18 @@ def board_picks(first, latest, by_id, identities):
                      'kickoff': game.get('kickoff'),
                      'color': color(pick.get('league'), (game.get('home') or {}).get('abbreviation'), identities)})
     rows.sort(key=lambda p: p.get('publishedAt') or '', reverse=True)
+    for row in rows:
+        at = instant(row.get('publishedAt'))
+        settled = [other for other in rows if other['id'] != row['id'] and not other.get('historicalImport')
+                   and not other.get('legs') and not other.get('parlayType')
+                   and other.get('result') in ('win', 'loss', 'push', 'void')
+                   and instant(other.get('settledAt')) and at and instant(other['settledAt']) <= at]
+        row['recordAsOfPublication'] = {
+            'wins': sum(p['result'] == 'win' for p in settled),
+            'losses': sum(p['result'] == 'loss' for p in settled),
+            'pushes': sum(p['result'] == 'push' for p in settled),
+            'voids': sum(p['result'] == 'void' for p in settled),
+        }
     return rows
 
 
@@ -1064,10 +1222,13 @@ def grade_line(line, snapshot, thin):
         p = pricing.price(snapshot, market, side, float(line['line']), int(odds), athlete)
     except ValueError:  # no projection for this player or market
         return None
+    chance_display = p['chance'] if p['calibrated'] and not thin and not line.get('limited') else None
     return {'chance': p['chance'], 'raw': p['rawChance'], 'calibrated': p['calibrated'], 'push': p['push'],
             'needs': p['breakEven'], 'edge': p['edgePoints'],
             'projection': p['projection'], 'thin': thin, 'tier': pricing.tier(p['edgePoints'], thin),
-            'model': p['model'], 'snapshotAt': p['snapshotAt']}
+            'model': p['model'], 'snapshotAt': p['snapshotAt'], 'fairOdds': fair_american(p['chance']) if p['calibrated'] else None,
+            'ev': round(p['chance'] * (1 + pricing.payout(int(odds))) - 1, 3), 'chanceDisplay': chance_display,
+            'range80': p.get('range80')}
 
 
 def sheet_values(lines, now=None):
@@ -1284,9 +1445,14 @@ def prop_rows(captures, by_id, forecasts, names, appearances, identities, now, p
                             k, need = calibration.get(game['league']) or (None, 0.0)
                             p = pricing.calibrated_prop(p, {'k': k})
                             chance, edge = p['chance'], p['edgePoints']
-                            row['grade'] = {'chance': chance, 'raw': p['rawChance'], 'calibrated': p['calibrated'] or k is not None,
+                            calibrated = p['calibrated'] or k is not None
+                            row['grade'] = {'chance': chance, 'raw': p['rawChance'], 'calibrated': calibrated,
                                             'push': p['push'], 'needs': p['breakEven'], 'edge': edge,
                                             'projection': p['projection'], 'thin': not settled, 'limited': limited,
+                                            'fairOdds': fair_american(chance) if calibrated else None,
+                                            'ev': round(chance * (1 + pricing.payout(int(odds))) - 1, 3),
+                                            'chanceDisplay': chance if calibrated and settled and not limited else None,
+                                            'range80': p.get('range80'),
                                             'games': appearances[str(athlete)],
                                             'rawTier': 'lean' if p['rawChance'] >= 0.6 and settled and not limited else 'pass',
                                             # Raw candidates still reach the gates for an auditable refusal.

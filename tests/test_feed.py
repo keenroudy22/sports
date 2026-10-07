@@ -24,6 +24,18 @@ def pick(key, **over):
 
 
 class FeedTests(unittest.TestCase):
+    def test_rolling_feed_keeps_first_publications_for_30_days_without_changing_postability(self):
+        games = dict(GAMES)
+        games['g-old'] = {'id': 'g-old', 'league': 'NFL', 'kickoff': '2026-09-10T17:00Z',
+                          'home': {'short': 'Jets'}, 'away': {'short': 'Giants'}}
+        first = {'inside': pick('inside', gameIds=['g-old'], modelLean=False, favorite=False,
+                                publishedAt='2026-09-10T12:00:00Z'),
+                 'outside': pick('outside', gameIds=['g-old'], publishedAt='2026-08-01T12:00:00Z')}
+        items = feed.publication_items(first, games, NOW)
+        self.assertEqual([item['guid'] for item in items], ['inside'])
+        self.assertFalse(feed.postable(first['inside']), 'archival RSS does not expand Buffer categories')
+        self.assertEqual(feed.TITLE, "Kook'n")
+
     def test_only_live_postable_plays_become_items(self):
         first = {'lean': pick('lean'),
                  'fav': pick('fav', favorite=True, modelLean=False, title='Bills at Lions under 44.5', direction='under'),

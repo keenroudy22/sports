@@ -128,8 +128,10 @@ jobs:
         run: python scripts/market_lines.py
       - name: Build the page payloads (site/data/app, not committed)
         run: python scripts/build_site.py
+      - name: Enforce phone-first payload budgets
+        run: python scripts/payload_budget.py
       - name: Reconcile the public record with official publications
-        run: python scripts/record_audit.py
+        run: python scripts/record_audit.py --today site/data/app/record.json
       - name: Build the plays feed and its cards (site/data/feed.xml and cards, not committed)
         run: python scripts/feed.py
       - name: Preserve the public record

@@ -12,7 +12,7 @@ network calls and changes nothing. New file families require a reviewed allowlis
 | `data/research.json`, `forecasts.json`, scoreboards | Published selections, original forecasts, corrections and honest performance evidence. Preserve them. |
 | Schedule, sports, line catalog, histories, identities, depth and research context | Existing public factual research and provenance; commercial permissions remain in SOURCE-RIGHTS.md. |
 | `data/desk-notes.json` | Already-validated, bounded homepage research notes. Not the private operating desk. |
-| `data/app/` reviewed routes | Derived page data with projections, histories, quotes, sample and freshness information. |
+| `data/app/` reviewed routes | Derived page data with projections, histories, quotes, sample and freshness information. This includes the full `record.json`, dated NFL/CFB trend shards plus their index, and the separate CFB defense table. |
 | `data/feed.xml`, `data/cards/`, `img/` | Approved public feed and artwork. Do not rewrite published images merely for a new look. |
 
 The check rejects unknown paths, symlinks, known owner-only files, credential-bearing JSON fields and selected

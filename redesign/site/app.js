@@ -102,6 +102,10 @@
   const WATCH_SKIP = /not a guarantee|does not take the field|confidence \d+ of 10|games? this season\.?$|voided|in-game injury|handful of touches|estimated chance/i;
   const whyLines = pick => {
     const out = [];
+    for (const value of (pick && pick.reasons) || []) {
+      if (out.length >= 2) break;
+      if (!HISTORY_SENTENCE.test(value) && !NEVER_WHY.test(value) && !WHY_SKIP.test(value)) out.push(String(value).trim());
+    }
     if (pick && pick.reason && !/against this side/i.test(pick.reason) && !HISTORY_SENTENCE.test(pick.reason) && !NEVER_WHY.test(pick.reason)) out.push(String(pick.reason).trim());
     for (const s of sentences(pick && pick.why)) {
       if (out.length >= 2) break;
@@ -116,7 +120,7 @@
     || (pick && pick.reason && /\b\d+ of (his|her|their|its)?\s*last \d+\b|\bin \d+ of (his|her|their|its) last \d+/i.test(pick.reason) ? String(pick.reason).trim() : null)
     || ((pick && pick.reasoning && pick.reasoning.history) || null);
   const watchLine = pick => {
-    const list = [...sentences(pick && pick.risk), ...((pick && pick.reasoning && pick.reasoning.cautions) || [])];
+    const list = [...((pick && pick.cautions) || []), ...sentences(pick && pick.risk), ...((pick && pick.reasoning && pick.reasoning.cautions) || [])];
     const hit = list.find(s => !WATCH_SKIP.test(s) && !/^Our (number|projection) is [\d.]+\.?$/i.test(s));
     return hit ? hit.replace(/^Statistical counterpoint:\s*/i, '') : null;
   };
@@ -191,7 +195,7 @@
     const chance = isNum(g.chance) ? g.chance : null;
     const sameLine = (row.books || []).filter(b => Number(b.line) === Number(row.line) && bookLabel(b.book) && isNum(Number(b.odds)) && !/hard ?rock/i.test(b.book));
     const others = (row.books || []).filter(b => Number(b.line) !== Number(row.line) && bookLabel(b.book));
-    const best = sameLine.slice().sort((a, b) => Number(b.odds) - Number(a.odds))[0];
+    const best = row.bestSameLine || sameLine.slice().sort((a, b) => Number(b.odds) - Number(a.odds))[0];
     const age = quoteAge(row.observedAt, row.kickoff, now, { odds: row.odds, state: row.state, expiresAt: row.expiresAt });
     return {
       id: row.id, title: niceTitle(row.title), league: row.league, gameId: row.gameId, athleteId: row.athleteId || null,
@@ -199,7 +203,7 @@
       line: row.line, odds: row.odds, book: bookLabel(row.book), kickoff: row.kickoff, state: row.state,
       bestOdds: best ? Number(best.odds) : null, bestBook: best ? bookLabel(best.book) : null, booksCount: sameLine.length,
       otherLines: others.map(b => ({ book: bookLabel(b.book), line: b.line, odds: b.odds })),
-      chance, needs, edge: isNum(g.edge) ? round1(g.edge) : edgePoints(chance, needs), fair: fairAmerican(chance),
+      chance: isNum(g.chanceDisplay) ? g.chanceDisplay : chance, needs, edge: isNum(g.edge) ? round1(g.edge) : edgePoints(chance, needs), fair: isNum(g.fairOdds) ? g.fairOdds : fairAmerican(chance),
       position: row.position || null, tier: g.view || g.tier || 'none', thin: Boolean(g.thin), limited: Boolean(g.limited), calibrated: g.calibrated === true,
       caution: Boolean(g.performanceCaution), age, raw: g.raw, projection: g.projection, isProp: Boolean(row.athleteId || row.player),
       key: officialKey(row), opened: isNum(row.opened) ? row.opened : isNum(row.move) && isNum(row.line) ? round1(row.line - row.move) : null, src: row,
@@ -440,6 +444,13 @@
     const byId = new Map(record.picks.map(p => [p.id, p]));
     (today.picks || []).forEach(p => byId.set(p.id, p));
     return [...byId.values()];
+  };
+  const teamDirectory = async league => {
+    const teams = await maybe(`app/teams/${league}.json`);
+    if (!teams || teams.defense || !teams.defenseFile) return teams;
+    const file = String(teams.defenseFile).replace(/[^a-z0-9/_-]/gi, '');
+    const payload = await maybe(`app/${file}`);
+    return payload && payload.defense ? { ...teams, defense: payload.defense } : teams;
   };
 
   const inLeague = row => state.league === 'ALL' || row.league === state.league;
@@ -721,6 +732,15 @@
       <p class="small red" style="margin-top:2px">${esc((w.warnings || [w.caution || 'Raw winner estimate, not a calibrated moneyline edge.']).join(' · '))}</p></a>`;
   };
   const communityCard = () => `<aside class="card on-felt community" aria-label="Join the Kook'n Discord"><div><p class="eyebrow green">Free Kook'n Discord</p><p style="margin-top:4px"><b>Best bets land here about 10–15 minutes before X.</b> Time-sensitive arb candidates stay in Discord. Every result stays public here.</p></div><a class="btn primary" href="https://discord.gg/CvNTUUSnNz" target="_blank" rel="noopener">Join the free Discord ↗</a></aside>`;
+  let todayExtras = null, todayExtrasLoading = false;
+  const queueTodayExtras = () => {
+    if (todayExtras || todayExtrasLoading) return;
+    todayExtrasLoading = true;
+    Promise.all([maybe('scoreboard.json'), maybe('app/lines.json'), maybe('sports.json'), allPicks()])
+      .then(([board, lines, sports, every]) => { todayExtras = { board, lines, sports, every }; })
+      .catch(() => { todayExtras = {}; })
+      .finally(() => { todayExtrasLoading = false; if (C.routePath(location.hash).view === 'today') render(true); });
+  };
   /* Sports without best bets get their own honest Today: scores and their trial, never football substituted. */
   const sportToday = async () => {
     const [lab, trials] = await Promise.all([maybe('market-lab.json'), maybe('app/sport-research.json')]);
@@ -737,7 +757,9 @@
   VIEWS.today = async route => {
     if (route && route.league && location.hash !== appliedHash) { appliedHash = location.hash; setLeague(route.league); }
     if (!FOOTBALL.includes(state.league) && state.league !== 'ALL') return sportToday();
-    const [today, board, notes, lines, sports, every] = await Promise.all([get('app/today.json'), maybe('scoreboard.json'), maybe('desk-notes.json'), maybe('app/lines.json'), state.league === 'ALL' ? maybe('sports.json') : null, allPicks()]);
+    const [today, notes] = await Promise.all([get('app/today.json'), maybe('desk-notes.json')]);
+    queueTodayExtras();
+    const { board = null, lines = null, sports = null, every = today.picks || [] } = todayExtras || {};
     indexGames(today);
     const now = Date.now();
     const all = every;
@@ -1052,7 +1074,7 @@
   /* The player's own stored games this season against a line, plus the opponent's defense. For a game already
      played, only games before it count, so the picture is what was known at kickoff. */
   const propHistory = async (league, athlete, stat, line, dir, gameId, before = null, projection = null) => {
-    const [index, teams, today] = await Promise.all([get(`app/players/${league}.json`), maybe(`app/teams/${league}.json`), get('app/today.json')]);
+    const [index, teams, today] = await Promise.all([get(`app/players/${league}.json`), teamDirectory(league), get('app/today.json')]);
     const shard = await get(`app/players/${league}/${C.shardOf(athlete, index.shards)}.json`);
     const data = (shard.players || {})[athlete];
     const g = (today.games || []).find(x => x.id === gameId);
@@ -1100,10 +1122,21 @@
   };
 
   const TREND_STATS = [['all', 'All stats'], ['rec', 'Receptions'], ['recYds', 'Receiving yards'], ['rushYds', 'Rushing yards'], ['passYds', 'Passing yards'], ['car', 'Carries'], ['att', 'Pass attempts'], ['cmp', 'Completions']];
+  const loadTrends = async (route, kind, dayFilter) => {
+    const index = await get('app/trends/index.json');
+    const wanted = (index.files || []).filter(file =>
+      (state.league === 'ALL' || file.league === state.league) &&
+      (kind === 'milestone' ? file.kind === 'milestone' : file.kind === 'priced') &&
+      (route.game || dayFilter !== 'today' || file.date === etDay()));
+    const payloads = await Promise.all(wanted.map(file => get(`app/trends/${file.file}`)));
+    return payloads.reduce((all, payload) => ({ rows: all.rows.concat((payload.rows || []).map(row => ({
+        ...((payload.contexts || {})[row.contextKey] || {}), ...row, historyKey: row.contextKey }))),
+      histories: { ...all.histories, ...(payload.histories || {}) } }), { rows: [], histories: {} });
+  };
   const researchTrends = async route => {
-    const data = await get('app/trends.json');
     const t = state.trends;
-    let rows = C.trendWindow(C.bestTrendPrices((data.rows || []).map(r => r.team && !r.team.abbr && r.team.abbreviation ? { ...r, team: { ...r.team, abbr: r.team.abbreviation } } : r)), t.window);
+    const data = await loadTrends(route, t.kind, t.day || 'all');
+    let rows = C.trendWindow(C.bestTrendPrices((data.rows || []).map(r => r.team && !r.team.abbr && r.team.abbreviation ? { ...r, team: { ...r.team, abbr: r.team.abbreviation } } : r)), t.window, data.histories);
     rows = C.filterTrends(rows, { min: 3, rate: t.rate, league: state.league, stat: t.stat || 'all', kind: t.kind, day: route.game ? 'all' : (t.day || 'all'), game: route.game || null, query: state.q });
     const heavyCount = rows.filter(r => heavyFavorite(r.odds)).length;
     if (!t.heavy) rows = rows.filter(r => !heavyFavorite(r.odds));
@@ -1204,7 +1237,7 @@
     const subTabs = seg('psub', [['matchup', 'By matchup'], ['search', 'Search'], ['defense', 'Defenses'], ['teams', 'Teams']], p.sub);
     const intro = `<p class="small muted" style="margin:10px 0">Showing ${league === 'CFB' ? 'college football' : 'NFL'}. Switch sport at the top.</p>`;
     if (p.sub === 'matchup') return `<div class="toolbar">${subTabs}</div>${intro}${await matchupCharts(league)}`;
-    const [index, teams] = await Promise.all([get(`app/players/${league}.json`), maybe(`app/teams/${league}.json`)]);
+    const [index, teams] = await Promise.all([get(`app/players/${league}.json`), teamDirectory(league)]);
     const teamOf = id => ((teams || {}).teams || {})[id] || {};
     if (p.sub === 'teams') {
       const list = Object.entries((teams || {}).teams || {}).filter(([, t]) => league === 'NFL' || t.fbs)
@@ -1462,7 +1495,7 @@
     try { detail = await get(`app/games/${route.id}.json`); } catch (e) {
       return head('', 'Game page not available', 'Game pages cover NFL and college football for games from about three days back to eight days ahead. <a href="#games/live">Live scores</a> cover every sport.', back);
     }
-    const [today, teams] = await Promise.all([get('app/today.json'), maybe(`app/teams/${detail.league}.json`)]);
+    const [today, teams] = await Promise.all([get('app/today.json'), teamDirectory(detail.league)]);
     indexGames(today);
     const now = Date.now();
     const fromSlate = (today.games || []).find(x => x.id === detail.id) || {};
@@ -1684,7 +1717,7 @@
     const index = await get(`app/players/${league}.json`);
     const entry = (index.players || []).find(p => String(p[0]) === String(route.id));
     if (!entry) return head('', 'Player not found', 'No stored games for this player in this league.', back);
-    const [shard, teams, today, lines] = await Promise.all([get(`app/players/${league}/${C.shardOf(route.id, index.shards)}.json`), maybe(`app/teams/${league}.json`), get('app/today.json'), maybe('app/lines.json')]);
+    const [shard, teams, today, lines] = await Promise.all([get(`app/players/${league}/${C.shardOf(route.id, index.shards)}.json`), teamDirectory(league), get('app/today.json'), maybe('app/lines.json')]);
     const data = shard.players[route.id];
     const keys = shard.keys, rows = data.rows, pos = data.pos;
     const read = (row, stat) => C.observedStat(row, keys, stat);
@@ -1779,7 +1812,7 @@
   VIEWS.team = async route => {
     const league = route.league;
     const back = `<a class="back" href="#research/players?view=teams&sport=${esc(league)}">← Teams</a>`;
-    const [teams, detail, today, index] = await Promise.all([maybe(`app/teams/${league}.json`), maybe(`app/teams/${league}/${route.id}.json`), get('app/today.json'), maybe(`app/players/${league}.json`)]);
+    const [teams, detail, today, index] = await Promise.all([teamDirectory(league), maybe(`app/teams/${league}/${route.id}.json`), get('app/today.json'), maybe(`app/players/${league}.json`)]);
     indexGames(today);
     const team = detail || ((teams || {}).teams || {})[route.id];
     if (!team) return head('', 'Team not found', 'No stored games for this team.', back);
@@ -2345,7 +2378,7 @@
       if ('moreTrends' in d) { state.trends.limit = (state.trends.limit || 40) + 40; render(true); return; }
       if ('allGames' in d) { state.games.all = true; render(true); return; }
       if ('clearQ' in d) { state.q = ''; render(true); return; }
-      if ('retry' in d) { cache.clear(); missing.clear(); if (liveCache.rows) liveCache.rows.clear(); render(); return; }
+      if ('retry' in d) { cache.clear(); missing.clear(); todayExtras = null; if (liveCache.rows) liveCache.rows.clear(); render(); return; }
       if ('dismissOnboard' in d) { saved.set('onboarded', true); render(true); return; }
       if (d.watch) { toggleWatch(watchCandidates.get(d.watch)); return; }
       if (d.watchPick) {

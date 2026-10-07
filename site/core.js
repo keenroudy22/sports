@@ -642,10 +642,10 @@
     return research ? {...route,research} : route;
   };
 
-  const trendWindow = (rows, window = 'season') => {
+  const trendWindow = (rows, window = 'season', histories = {}) => {
     const size = window === 'last5' ? 5 : window === 'last10' ? 10 : null;
     return rows.map(row => {
-      const all = Array.isArray(row.history) ? row.history : [];
+      const all = Array.isArray(row.history) ? row.history : Array.isArray(histories[row.historyKey]) ? histories[row.historyKey] : [];
       const history = size ? all.slice(-size) : all.slice();
       if (!history.length) return { ...row, history, hits: 0, games: 0, pushes: 0, rate: 0, window };
       const hit = value => row.direction === 'at-least' ? value >= row.line

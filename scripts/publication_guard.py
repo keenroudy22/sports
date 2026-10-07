@@ -16,7 +16,7 @@ DATA_FILES = {'slate.json', 'research-context.json', 'desk-notes.json', 'sports.
               'research.json', 'scoreboard.json', 'player-history.json', 'opponent-history.json',
               'market-lab.json', 'market-lines.json', 'depth-charts.json', 'player-identity.json',
               'scoreboard-games.json', 'forecasts.json', 'feed.xml'}
-APP_FILES = {'today.json', 'lines.json', 'research.json', 'sport-research.json', 'trends.json'}
+APP_FILES = {'today.json', 'record.json', 'lines.json', 'research.json', 'sport-research.json'}
 PRIVATE_NAMES = {'env', '.env', 'desk-health.html', 'desk-health.json', 'desk-health-state.json',
                  'desk-reliability.json', 'reliability-history.json', 'live-watch.json',
                  'live-progress.json', 'x-posted.json', 'status.json', 'policy.json',
@@ -56,7 +56,9 @@ def allowed_path(relative):
     if len(parts) == 3:
         return parts[2] in APP_FILES
     return bool(re.fullmatch(r'data/app/(?:games/(?:NFL|CFB)-[A-Za-z0-9_-]+|'
-                             r'player-charts/(?:NFL|CFB)|(?:players|teams)/(?:NFL|CFB)(?:/\d+)?)\.json', value))
+                             r'player-charts/(?:NFL|CFB)|players/(?:NFL|CFB)(?:/\d+)?|'
+                             r'teams/(?:NFL|CFB)(?:/\d+)?|teams/CFB-defense|'
+                             r'trends/(?:index|(?:NFL|CFB)-\d{4}-\d{2}-\d{2}(?:-milestones)?))\.json', value))
 
 
 def contains_private_key(value):

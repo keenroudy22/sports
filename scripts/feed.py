@@ -1,8 +1,7 @@
 """The plays as an RSS feed: the public record of what goes to @keenkooks, and a source for any relay. Stdlib only.
 
-The site publishes site/data/feed.xml: one item per play the desk posts, in the same words
-scripts/x_post.py drafts (the kind of play, the play at its price, our number, one plain reason). X gets
-plays only: player props, game lines and the day's fun parlay. Every open play gets its card as soon as
+The site publishes site/data/feed.xml: a rolling 30-day public record of first publications and daily receipts.
+X still gets only the existing postable categories through Buffer; it does not consume this feed. Every open play gets its card as soon as
 it is published, rendered by the machine's browser into site/data/cards/ (GitHub's runners have Chrome;
 the Mac has Chrome), so the desk can attach it the moment it schedules the post. Neither the feed nor the
 cards are committed; the hosted workflow builds and deploys them with the rest of the page payloads.
@@ -32,8 +31,8 @@ CARDS = ROOT / 'site' / 'data' / 'cards'
 SITE = x_post.SITE
 WINDOW_OPENS = (9, 0)                # Eastern: no plays before 9:00 AM on game day
 LEAD = timedelta(minutes=45)         # and none inside 45 minutes of kickoff
-RECAP_DAYS = 3
-TITLE = 'KeenRoudy Sports plays'
+RECAP_DAYS = 30
+TITLE = "Kook'n"
 ABOUT = 'Player props, game lines and fun parlays from keenroudy.com/sports, graded in public. Entertainment only.'
 
 
@@ -88,6 +87,28 @@ def pick_items(first, latest, games, now, player_team=None):
         items.append({'guid': key, 'title': x_post.kind_label(merged) + ': ' + str(merged.get('title')),
                       'text': text, 'link': f'{SITE}#pick/{key}', 'pubDate': max(gates.when(published), opened),
                       'pick': merged, 'game': game, 'side': player_side(merged, game, player_team)})
+    return items
+
+
+def publication_items(first, games, now):
+    """Every official first publication from the rolling 30-day public record, with its original guid."""
+    cutoff = now - timedelta(days=30)
+    items, reasons = [], x_post.load_reasons()
+    for key, pick in first.items():
+        published = pick.get('publishedAt')
+        at = gates.when(published) if published else None
+        game = games.get((pick.get('gameIds') or [pick.get('gameId')])[0])
+        if pick.get('historicalImport') or not at or not cutoff <= at <= now or not game:
+            continue
+        public_pick = dict(pick)
+        if public_pick.get('legs'):
+            public_pick['legs'] = [{'title': leg} if isinstance(leg, str) else leg for leg in public_pick['legs']]
+        text = x_post.draft(public_pick, game)
+        if x_post.guard(text, public_pick, reasons.get(key)):
+            continue
+        items.append({'guid': key, 'title': x_post.kind_label(pick) + ': ' + str(pick.get('title')),
+                      'text': text, 'link': f'{SITE}#pick/{key}', 'pubDate': at,
+                      'pick': public_pick, 'game': game})
     return items
 
 
@@ -196,8 +217,8 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
     now = now or datetime.now(timezone.utc)
     stores = gates.Stores()
     ctx = stores.as_of(now)
-    # X gets plays only (the owner's call, 2026-09-23), so the feed that mirrors it does too.
-    items = pick_items(ctx.first, ctx.latest, ctx.games, now, ctx.player_team)
+    # The feed is archival. Buffer independently uses postable(), so this does not expand X delivery.
+    items = publication_items(ctx.first, ctx.games, now) + recap_items(ctx.first, ctx.latest, ctx.games, now)
     # A card for every open play as soon as it is published, not only inside its posting window: the desk
     # schedules the post the moment the card is live, and never posts without one.
     import receipts

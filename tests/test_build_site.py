@@ -129,6 +129,21 @@ class PickTests(unittest.TestCase):
         self.assertEqual(rows[0]['publishedAt'], '2026-09-01T12:00:00Z')
         self.assertEqual(rows[0]['kickoff'], '2026-09-03T17:00:00Z')
 
+    def test_board_rows_publish_frozen_display_fields_and_structured_copy(self):
+        pick = {'id': 'x', 'league': 'NFL', 'title': 'Bills at Lions over 44.5', 'direction': 'over',
+                'gameIds': ['NFL-1'], 'book': 'ESPN BET', 'odds': -110,
+                'quotedAt': '2026-09-01T11:45:00Z', 'publishedAt': '2026-09-01T12:00:00Z',
+                'probabilityAtPublication': {'chance': .55, 'calibrated': True},
+                'why': 'Weather: calm indoors. Projection supports the over.', 'risk': 'A slow pace can hurt.'}
+        [row] = build_site.board_picks({'x': pick}, {}, {'NFL-1': {'kickoff': '2026-09-03T17:00:00Z'}}, {})
+        self.assertEqual(row['book'], 'theScore Bet')
+        self.assertEqual(row['marketType'], 'total')
+        self.assertEqual(row['quoteAgeMinutes'], 15)
+        self.assertEqual(row['fairOddsAtPublication'], -122)
+        self.assertEqual(row['reasons'], ['Weather: calm indoors.', 'Projection supports the over.'])
+        self.assertEqual(row['cautions'], ['A slow pace can hurt.'])
+        self.assertEqual(row['recordAsOfPublication'], {'wins': 0, 'losses': 0, 'pushes': 0, 'voids': 0})
+
     def test_board_rows_keep_season_stage_and_week_for_the_record_archive(self):
         pick = {'id': 'NFL-2026-W19-playoff', 'league': 'NFL', 'gameIds': ['NFL-1'],
                 'publishedAt': '2027-01-10T12:00:00Z'}
@@ -246,6 +261,22 @@ class GradeTests(unittest.TestCase):
         self.assertGreater(spread['chance'], 0.5, 'v2 has the home side by 5 against -2.5')
         self.assertLess(grade['chance'], grade['raw'], 'the shown chance is the calibrated one')
         self.assertTrue(grade['calibrated'])
+        self.assertEqual(grade['fairOdds'], build_site.fair_american(grade['chance']))
+        self.assertAlmostEqual(grade['ev'], grade['chance'] * (1 + 100 / 110) - 1, places=3)
+        self.assertEqual(grade['chanceDisplay'], grade['chance'])
+        self.assertEqual(grade['range80'], [25.6, 56.4])
+
+    def test_public_line_fields_drop_unknown_books_and_exclude_comparison_only_prices(self):
+        now = datetime(2026, 9, 19, 13, tzinfo=timezone.utc)
+        rows = build_site.public_lines([
+            {'id': 'missing', 'book': 'Book unavailable'},
+            {'id': 'x', 'book': 'ESPN BET', 'line': 44.5, 'odds': -110, 'observedAt': '2026-09-19T12:30:00Z',
+             'books': [{'book': 'Hard Rock Bet', 'line': 44.5, 'odds': 105},
+                       {'book': 'FanDuel', 'line': 44.5, 'odds': -105}]},
+        ], now)
+        self.assertEqual([row['id'] for row in rows], ['x'])
+        self.assertEqual((rows[0]['book'], rows[0]['ageMinutes'], rows[0]['freshness']), ('theScore Bet', 30, 'fresh'))
+        self.assertEqual(rows[0]['bestSameLine'], {'book': 'FanDuel', 'odds': -105})
 
     def test_an_away_spread_row_is_graded_as_the_away_side(self):
         home = build_site.grade_line(self.line(market='point spread', line=-2.5, direction=None), self.snapshot, False)
@@ -657,6 +688,25 @@ class TableTests(unittest.TestCase):
         self.assertEqual(history[0]['stats'], {'recYds': -1})
         self.assertEqual(history[1]['stats'], {'recYds': 0})
         self.assertEqual(history[-1]['stats'], {'recYds': 20})
+
+class PayloadSplitTests(unittest.TestCase):
+    def test_trend_history_is_stored_once_per_player_stat(self):
+        history = [{'date': '2026-09-01', 'value': 10}]
+        payload = build_site.trend_payload([
+            {'league': 'NFL', 'season': 2026, 'athleteId': '1', 'stat': 'rec', 'line': 2.5, 'history': history},
+            {'league': 'NFL', 'season': 2026, 'athleteId': '1', 'stat': 'rec', 'line': 3.5, 'history': history},
+        ])
+        self.assertEqual(len(payload['histories']), 1)
+        self.assertEqual(payload['rows'][0]['contextKey'], payload['rows'][1]['contextKey'])
+        self.assertEqual(payload['contexts'][payload['rows'][0]['contextKey']]['stat'], 'rec')
+        self.assertNotIn('history', payload['rows'][0])
+
+    def test_today_keeps_open_and_last_72_hours(self):
+        now = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+        rows = [{'id': 'open'},
+                {'id': 'recent', 'result': 'win', 'settledAt': '2026-10-04T12:00:00Z'},
+                {'id': 'old', 'result': 'loss', 'settledAt': '2026-10-01T12:00:00Z'}]
+        self.assertEqual([row['id'] for row in build_site.recent_picks(rows, now)], ['open', 'recent'])
 
 
 if __name__ == '__main__':

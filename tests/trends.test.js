@@ -32,6 +32,9 @@ test('history windows recalculate exact hit rates from the newest games', () => 
   assert.deepEqual([under.hits, under.pushes], [2, 1]);
   const milestone = C.trendWindow([{...base, direction:'at-least', line:11}], 'season')[0];
   assert.deepEqual([milestone.hits, milestone.pushes], [4, 0]);
+  const split = C.trendWindow([{...base, history:undefined, historyKey:'NFL|2026|1|rec'}], 'last5',
+    {'NFL|2026|1|rec':base.history})[0];
+  assert.deepEqual([split.hits, split.games, split.rate], [4, 5, 80], 'split histories use the shard lookup');
 });
 test('duplicate book offers collapse to the best current price', () => {
   const offers = [{...row, athleteId:'1', stat:'rec', direction:'over', line:3.5, kind:'main', odds:-115, book:'FanDuel'},
