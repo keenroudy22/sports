@@ -1,38 +1,38 @@
 {
- "at": "2026-10-07T15:55:23Z",
+ "at": "2026-10-07T16:05:50Z",
  "confirmed": {
-  "CFB-401862794": "2026-10-07T15:55:23Z",
-  "CFB-401869933": "2026-10-07T15:55:23Z",
-  "CFB-401871051": "2026-10-07T15:55:23Z",
-  "CFB-401871052": "2026-10-07T15:55:23Z",
-  "CFB-401871066": "2026-10-07T15:55:23Z",
-  "NFL-401872980": "2026-10-07T15:55:23Z"
+  "CFB-401862794": "2026-10-07T16:05:50Z",
+  "CFB-401869933": "2026-10-07T16:05:50Z",
+  "CFB-401871051": "2026-10-07T16:05:50Z",
+  "CFB-401871052": "2026-10-07T16:05:50Z",
+  "CFB-401871066": "2026-10-07T16:05:50Z",
+  "NFL-401872980": "2026-10-07T16:05:50Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 997,
-    "fanduel": 528
+    "draftkings": 1055,
+    "fanduel": 530
    },
-   "eventsListed": 66,
+   "eventsListed": 69,
    "eventsMatched": 6,
    "games": 6,
    "marketTypes": {
     "player_longest_passing_completion": 7,
     "player_longest_reception": 31,
     "player_longest_rush": 14,
-    "player_passing_+_rushing_yards": 69,
-    "player_passing_attempts": 37,
-    "player_passing_completions": 31,
+    "player_passing_+_rushing_yards": 68,
+    "player_passing_attempts": 38,
+    "player_passing_completions": 33,
     "player_passing_touchdowns": 50,
     "player_passing_yards": 250,
-    "player_receiving_yards": 572,
-    "player_receptions": 98,
-    "player_rushing_attempts": 30,
-    "player_rushing_yards": 336
+    "player_receiving_yards": 601,
+    "player_receptions": 99,
+    "player_rushing_attempts": 29,
+    "player_rushing_yards": 365
    },
-   "requestsLeft": 3,
-   "rows": 1525,
+   "requestsLeft": 2,
+   "rows": 1585,
    "slateGames": [
     "Jacksonville State Gamecocks at Kennesaw State Owls 2026-10-07T23:00Z",
     "New Mexico State Aggies at Florida International Panthers 2026-10-07T23:30Z",
@@ -180,7 +180,7 @@
       "fliff": "fobj__conflict_event__416970",
       "gemini": "NCAAF-2610100100-IOW-WAS-S",
       "goldrush": "31132229",
-      "kalshi": "KXNCAAF2HSPREAD-26OCT09IOWAWASH",
+      "kalshi": "KXNCAAF4QSPREAD-26OCT09IOWAWASH",
       "ladbrokes": "240fd9bf-6140-4a43-b36f-f04bcee86501",
       "ladbrokes_uk": "lduk-258958797",
       "matchbook": "mb-34490017013900023",
@@ -938,6 +938,7 @@
        "player_receiving_yards",
        "player_receptions",
        "player_rushing_+_receiving_touchdowns",
+       "player_rushing_+_receiving_yards",
        "player_rushing_attempts",
        "player_rushing_touchdowns",
        "player_rushing_yards",
@@ -1066,7 +1067,7 @@
      "type": "fixture"
     },
     {
-     "away": "Wake Forest",
+     "away": "Wake Forest Demon Deacons",
      "external": {
       "ballybet": "1027552994",
       "betmgm": "6:46136",
@@ -1099,10 +1100,10 @@
       "thescorebet": "StandardEvent:a0272ad2-e50e-41f1-8a13-d8ed3d6ccf63",
       "underdog": "underdog_230517"
      },
-     "home": "NC State",
+     "home": "North Carolina State Wolfpack",
      "sample": {
-      "away_team": "Wake Forest",
-      "home_team": "NC State",
+      "away_team": "Wake Forest Demon Deacons",
+      "home_team": "North Carolina State Wolfpack",
       "markets": [
        "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
@@ -1185,6 +1186,7 @@
       "kalshi": "KXNCAAF1HSPREAD-26OCT10UNCPITT",
       "ladbrokes": "0b863db0-94e3-4f99-b6ad-690ac7d5049c",
       "ladbrokes_uk": "lduk-258958848",
+      "matchbook": "mb-34515310606500023",
       "novig": "01a0fd5a-ebad-7060-a427-a6e95c2c039b",
       "onexbet": "758559748",
       "pinnacle": "1637330324",
@@ -1252,6 +1254,7 @@
        "player_longest_rush",
        "player_passing_touchdowns",
        "player_passing_yards",
+       "player_points",
        "player_receiving_yards",
        "player_rushing_+_receiving_yards",
        "player_rushing_yards",
@@ -1277,7 +1280,7 @@
   "NFL": {
    "books": {
     "draftkings": 152,
-    "fanduel": 248
+    "fanduel": 48
    },
    "eventsListed": 30,
    "eventsMatched": 1,
@@ -1296,14 +1299,14 @@
     "player_passing_completions": 4,
     "player_passing_touchdowns": 13,
     "player_passing_yards": 27,
-    "player_receiving_yards": 170,
-    "player_receptions": 87,
+    "player_receiving_yards": 33,
+    "player_receptions": 24,
     "player_rushing_+_receiving_yards": 6,
     "player_rushing_attempts": 6,
     "player_rushing_yards": 12
    },
    "requestsLeft": 0,
-   "rows": 400,
+   "rows": 200,
    "slateGames": [
     "Tampa Bay Buccaneers at Dallas Cowboys 2026-10-09T00:15Z"
    ],
@@ -1328,7 +1331,7 @@
       "galera": "21085966",
       "gemini": "NFL-2610111330-PHI-JAX-S",
       "goldrush": "29767421",
-      "kalshi": "KXNFL1HTEAMTOTAL-26OCT11PHIJAC",
+      "kalshi": "KXNFL2QTOTAL-26OCT11PHIJAC",
       "ladbrokes": "72888c26-b63d-40db-9707-210f01c283e0",
       "ladbrokes_uk": "lduk-258966891",
       "matchbook": "mb-33272970854400023",
@@ -1426,6 +1429,7 @@
        "player_passing_completions",
        "player_passing_touchdowns",
        "player_passing_yards",
+       "player_points",
        "player_receiving_yards",
        "player_receptions",
        "player_rushing_+_receiving_touchdowns",
@@ -1611,7 +1615,7 @@
       "galera": "21085958",
       "gemini": "NFL-2610111700-CIN-MIA-S",
       "goldrush": "31065427",
-      "kalshi": "KXNFL1HTEAMTOTAL-26OCT11CINMIA",
+      "kalshi": "KXNFL4QTOTAL-26OCT11CINMIA",
       "ladbrokes": "162f799d-bef6-4f0b-bac6-ec10bba89223",
       "ladbrokes_uk": "lduk-258967565",
       "matchbook": "mb-33321703478700023",
@@ -1738,7 +1742,7 @@
       "galera": "21085967",
       "gemini": "NFL-2610111700-CLE-NYJ-S",
       "goldrush": "31065449",
-      "kalshi": "KXNFLRECYDS-26OCT11CLENYJ-CLEKCONCEPCION1-15",
+      "kalshi": "KXNFL4QTOTAL-26OCT11CLENYJ",
       "ladbrokes": "d702b28a-3064-44a8-b754-f8ac292006ec",
       "ladbrokes_uk": "lduk-258966932",
       "matchbook": "mb-33321738280600023",
@@ -2017,7 +2021,7 @@
       "galera": "21085956",
       "gemini": "NFL-2610111700-NYG-WAS-S",
       "goldrush": "31065452",
-      "kalshi": "KXNFL1HTEAMTOTAL-26OCT11NYGWAS",
+      "kalshi": "KXNFL4QTOTAL-26OCT11NYGWAS",
       "ladbrokes": "51b2b68a-f914-47bb-bd3d-0ec1f4252f01",
       "ladbrokes_uk": "lduk-258966947",
       "matchbook": "mb-33321764048800023",
@@ -2147,7 +2151,7 @@
       "galera": "21085968",
       "gemini": "NFL-2610111700-LV-NE-S",
       "goldrush": "31065426",
-      "kalshi": "KXNFL4QTOTAL-26OCT11LVNE",
+      "kalshi": "KXNFL2QTOTAL-26OCT11LVNE",
       "ladbrokes": "37d3e40f-f77b-4c96-a3fc-05ac0252bc0e",
       "ladbrokes_uk": "lduk-258967042",
       "matchbook": "mb-33321713272900023",
@@ -2558,7 +2562,7 @@
       "galera": "21085954",
       "gemini": "NFL-2610112005-DEN-LAC-S",
       "goldrush": "31065450",
-      "kalshi": "KXNFL1HTEAMTOTAL-26OCT11DENLAC",
+      "kalshi": "KXNFLRECYDS-26OCT11DENLAC-DENEENGRAM1-15",
       "ladbrokes": "402484a2-1507-4e6c-b1ae-d232203829cc",
       "ladbrokes_uk": "lduk-258966925",
       "matchbook": "mb-33321779942800023",
@@ -2683,7 +2687,7 @@
       "galera": "21085964",
       "gemini": "NFL-2610112025-SF-SEA-S",
       "goldrush": "31065447",
-      "kalshi": "KXNFL1HTEAMTOTAL-26OCT11SFSEA",
+      "kalshi": "KXNFL4QTOTAL-26OCT11SFSEA",
       "ladbrokes": "064e03ea-015d-49c7-9b05-45edabf03837",
       "ladbrokes_uk": "lduk-258966912",
       "matchbook": "mb-33322093751800023",
@@ -2820,7 +2824,7 @@
       "galera": "21085965",
       "gemini": "NFL-2610112025-DET-ARI-S",
       "goldrush": "31065439",
-      "kalshi": "KXNFLRECYDS-26OCT11DETARI-ARITMCBRIDE85-120",
+      "kalshi": "KXNFL4QTOTAL-26OCT11DETARI",
       "ladbrokes": "124657b5-17cd-4561-bca6-543d8744bce9",
       "ladbrokes_uk": "lduk-258966917",
       "matchbook": "mb-33322067171500023",
