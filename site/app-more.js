@@ -5,7 +5,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function (ctx) {
   const { C, P, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
-    dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, tableOf, weekLabel, MODEL_NAME,
+    dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, tableOf, weekLabel, MODEL_NAME,
     rec3, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, unitsChart,
     ticketRows, ticketSummary, arbFor, arbSummary, moreGroup, officialKey, isNum, inLeague, pickVM, meter } = ctx;
   const views = {};

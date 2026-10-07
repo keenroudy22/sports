@@ -29,6 +29,17 @@ class SlotTests(unittest.TestCase):
         self.assertEqual(run.slot_for(datetime(2026, 9, 27, 14, 0, tzinfo=timezone.utc), '1145').strftime('%H%M'), '1145')
 
 
+class CandidateCatalogTests(unittest.TestCase):
+    def test_invalid_strict_catalog_logs_and_skips_selection(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'lines.json'
+            path.write_text(json.dumps({'count': 2, 'files': {'NFL': 'lines-NFL.json'}}))
+            (path.parent / 'lines-NFL.json').write_text(json.dumps({'league': 'NFL', 'lines': []}))
+            messages = []
+            self.assertEqual(run.load_candidate_lines(path, messages.append), [])
+            self.assertIn('official selection skipped', messages[0])
+
+
 class GradingTests(unittest.TestCase):
     GAME = {'id': 'NFL-1', 'league': 'NFL', 'kickoff': '2026-09-27T17:00:00Z',
             'home': {'short': 'Lions', 'abbreviation': 'DET', 'score': 27},

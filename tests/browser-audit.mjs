@@ -44,7 +44,9 @@ for (const width of widths) {
         }
         return false;
       }).map(e=>e.textContent.slice(0,80));
-      return {width:innerWidth,scrollWidth:document.documentElement.scrollWidth,bad,clipped,title:document.querySelector('h1')?.textContent,error:document.querySelector('#view')?.textContent.includes('Could not load this page')};
+      const text=document.querySelector('#view')?.textContent || '';
+      const error=['Could not load this page','Something did not load','The data for this page is unavailable right now'].some(message=>text.includes(message));
+      return {width:innerWidth,scrollWidth:document.documentElement.scrollWidth,bad,clipped,title:document.querySelector('h1')?.textContent,error};
     })()`);
     results.push({route,...result});
     if(['today','schedule','scores/MLB','stats','trends'].includes(route) && [375,1440].includes(width)) {

@@ -14,7 +14,7 @@ test('production JavaScript parses as a standalone browser script', () => {
 test('secondary pages load on demand and stay out of the first-load shell', () => {
   const html = fs.readFileSync('site/index.html', 'utf8');
   assert.doesNotMatch(html, /<script[^>]+app-more\.js/);
-  assert.match(source, /script\.src = 'app-more\.js\?v=1'/);
+  assert.match(source, /script\.src = 'app-more\.js\?v=2'/);
   assert.match(source, /MORE_VIEW_NAMES\.forEach/);
   assert.match(moreSource, /views\.record = async/);
   assert.match(moreSource, /views\.team = async/);

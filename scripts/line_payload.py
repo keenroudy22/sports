@@ -15,22 +15,16 @@ def read(path):
     return json.loads(Path(path).read_text(encoding='utf-8'))
 
 
-def load(path, strict=True):
-    """Return every line row from a monolith or the reviewed league shards."""
+def _load(path):
     path = Path(path)
-    try:
-        payload = read(path)
-    except (OSError, json.JSONDecodeError, TypeError):
-        if strict:
-            raise
-        return []
+    payload = read(path)
+    if not isinstance(payload, dict):
+        raise ValueError(f'{path}: line payload is not an object')
     if isinstance(payload.get('lines'), list):
         return payload['lines']
     files = payload.get('files')
     if not isinstance(files, dict):
-        if strict:
-            raise ValueError(f'{path}: line payload has no rows or shard manifest')
-        return []
+        raise ValueError(f'{path}: line payload has no rows or shard manifest')
     rows = []
     for league in LEAGUES:
         expected = f'lines-{league}.json'
@@ -39,12 +33,7 @@ def load(path, strict=True):
             continue
         if name != expected:
             raise ValueError(f'{path}: unexpected {league} line shard {name!r}')
-        try:
-            shard = read(path.with_name(name))
-        except (OSError, json.JSONDecodeError, TypeError):
-            if strict:
-                raise
-            return []
+        shard = read(path.with_name(name))
         if shard.get('league') != league or not isinstance(shard.get('lines'), list):
             raise ValueError(f'{name}: invalid line shard')
         if any(row.get('league') != league for row in shard['lines']):
@@ -54,6 +43,18 @@ def load(path, strict=True):
     if isinstance(count, int) and count != len(rows):
         raise ValueError(f'{path}: manifest says {count} rows but shards contain {len(rows)}')
     return rows
+
+
+def load(path, strict=True, log=None):
+    """Return every line row, or an explicit empty optional catalog on any invalid payload."""
+    try:
+        return _load(path)
+    except (OSError, json.JSONDecodeError, TypeError, ValueError, AttributeError) as exc:
+        if strict:
+            raise
+        if callable(log):
+            log(f'line catalog unavailable; optional use skipped: {exc}')
+        return []
 
 
 def manifest(rows, generated_at):

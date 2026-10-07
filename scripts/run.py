@@ -642,6 +642,15 @@ def candidates(lines, games, now):
     return out
 
 
+def load_candidate_lines(path, logger=log):
+    """Fail closed without taking settlement, cards, or the rest of the desk run down."""
+    try:
+        return line_payload.load(path)
+    except (OSError, TypeError, ValueError, AttributeError) as exc:
+        logger(f'line catalog unavailable; official selection skipped: {exc}')
+        return []
+
+
 CARD_PROP_PRICES = (-200, 120)     # a prop on the card is priced like a main line: past +120, shrinking our chance
                                    # toward 50% (the calibration) overstates a plus-money over the market prices at 42%
 PROVISIONAL_K = 0.2                # a league's player chances before learning has calibrated them (the NFL's is 0.13)
@@ -1683,7 +1692,7 @@ def _run(args, now, slot, kinds, status):
     absorb(ctx, settled + closed)
 
     build_site.build(now)
-    lines = line_payload.load(build_site.OUT / 'lines.json')
+    lines = load_candidate_lines(build_site.OUT / 'lines.json')
     wanted = rank_card(candidates(lines, games, now), ctx)
     log(f'{len(wanted)} candidates on the board')
     decided = []          # every decision this run made, for the learning record
@@ -1938,7 +1947,7 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         # Posting tests and recovery tools can call this helper without a built
         # site. The primary candidate path above remains strict; optional news
         # enrichment keeps its historical empty-catalog fallback.
-        lines = line_payload.load(build_site.OUT / 'lines.json', strict=False)
+        lines = line_payload.load(build_site.OUT / 'lines.json', strict=False, log=log)
         news = news_posts.candidates(ctx, features.load(), lines, now, log_book, games=games)
         plans = buffer_post.plan(ctx.first, ctx.latest, games, now, log_book, ctx.player_team, quotes=quotes,
                                  refused=refused, news=news)

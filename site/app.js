@@ -1989,11 +1989,12 @@
   const MORE_VIEW_NAMES = ['team', 'record', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback', 'responsible'];
   let moreViews = null, moreLoading = null;
-  const moreContext = () => ({ C, P, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
+  const moreContext = (overrides = {}) => ({ C, P, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
-    dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, tableOf, weekLabel, MODEL_NAME,
+    dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, tableOf, weekLabel, MODEL_NAME,
     rec3, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, unitsChart,
-    ticketRows, ticketSummary, arbFor, arbSummary, moreGroup, officialKey, isNum, inLeague, pickVM, meter });
+    ticketRows, ticketSummary, arbFor, arbSummary, moreGroup, officialKey, isNum, inLeague, pickVM, meter,
+    ...overrides });
   const ensureMore = () => {
     if (moreViews) return Promise.resolve(moreViews);
     if (moreLoading) return moreLoading;
@@ -2005,7 +2006,7 @@
       };
       if (typeof window.KRMore === 'function') { finish(); return; }
       const script = document.createElement('script');
-      script.src = 'app-more.js?v=1'; script.async = true;
+      script.src = 'app-more.js?v=2'; script.async = true;
       script.onload = finish;
       script.onerror = () => { moreLoading = null; rejectMore(new Error('More pages did not load')); };
       document.head.appendChild(script);
@@ -2276,5 +2277,5 @@
     render();
   }
 
-  return { model, boot };
+  return { model, boot, moreContext };
 });

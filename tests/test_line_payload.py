@@ -43,9 +43,24 @@ class LinePayloadTests(unittest.TestCase):
     def test_optional_reader_keeps_the_prebuild_empty_catalog_fallback(self):
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / 'lines.json'
-            self.assertEqual(line_payload.load(path, strict=False), [])
+            messages = []
+            self.assertEqual(line_payload.load(path, strict=False, log=messages.append), [])
+            self.assertIn('optional use skipped', messages[0])
             with self.assertRaises(FileNotFoundError):
                 line_payload.load(path)
+
+    def test_optional_reader_falls_back_on_bad_shard_and_count(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'lines.json'
+            path.write_text(json.dumps({'count': 2, 'files': {'NFL': 'lines-NFL.json'}}))
+            (path.parent / 'lines-NFL.json').write_text(json.dumps({'league': 'NFL', 'lines': [{'id': 'n1', 'league': 'CFB'}]}))
+            messages = []
+            self.assertEqual(line_payload.load(path, strict=False, log=messages.append), [])
+            self.assertIn('row outside NFL', messages[0])
+            (path.parent / 'lines-NFL.json').write_text(json.dumps({'league': 'NFL', 'lines': [{'id': 'n1', 'league': 'NFL'}]}))
+            messages.clear()
+            self.assertEqual(line_payload.load(path, strict=False, log=messages.append), [])
+            self.assertIn('manifest says 2 rows', messages[0])
 
 
 if __name__ == '__main__':
