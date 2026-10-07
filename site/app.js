@@ -55,16 +55,119 @@
     : s.last && s.last.result === 'win' ? `Step ${s.last.step || s.step - 1} cashed · Step ${s.step} is being checked · not posted yet`
       : s.last && s.last.result === 'loss' ? 'New $50 climb · Step 1 is being checked · not posted yet'
         : s.settled ? `Step ${s.step} is being checked · not posted yet` : 'The first step waits for two clean games';
-  /* Today's first paint: today's bets, else the next game day's still on the card, as the full card chooses them. */
+  /* Today's first paint: today's bets on the rail (a play off the card or pulled never hangs there), else the next
+     game day's still on the card, as the full card chooses them. */
+  const OFF_RAIL = ['Line moved', 'Pulled', 'Withdrawn'];
   const heroBets = (hero, now = Date.now(), league = 'ALL') => {
     const today = C.dayOf(new Date(now).toISOString());
-    const mine = ((hero || {}).bets || []).filter(b => b && b.id && C.dayOf(b.kickoff) >= today &&
-      !['Line moved', 'Price expired'].includes(C.pickState(b, now).word) &&
-      (league === 'ALL' || b.league === league));
+    const mine = ((hero || {}).bets || []).filter(b => b && b.id && C.dayOf(b.kickoff) >= today && (league === 'ALL' || b.league === league)
+      && !OFF_RAIL.includes(C.pickState(b, now).word));
     const todays = mine.filter(b => C.dayOf(b.kickoff) === today);
     if (todays.length) return { today: true, rows: todays };
-    const later = mine, first = later.map(b => C.dayOf(b.kickoff)).sort()[0];
-    return { today: false, rows: later.filter(b => C.dayOf(b.kickoff) === first) };
+    const first = mine.map(b => C.dayOf(b.kickoff)).sort()[0];
+    return { today: false, rows: mine.filter(b => C.dayOf(b.kickoff) === first) };
+  };
+
+  /* ---------- Kitchen Ticket model (OWNER-DECISIONS 2026-10-07 item 22) ---------- */
+  /* kit.team_panel (SPEC 5.4), ported exactly: banned gold/orange/brown primaries use the alternate, light ones the
+     alternate or charcoal, reds darken x0.78, team greens darken until they can't pass for Kook'n green, and chalk
+     text keeps 4.5:1. Returns [top, bottom, glow]. */
+  const CHALK = '#F2F7F4', CHARCOAL = '#2A2F33', HOUSE = ['#173A2A', '#0A1B13', CHALK];
+  const rgbOf = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16));
+  const pyRound = x => { const f = Math.floor(x), d = x - f; return d > .5 ? f + 1 : d < .5 ? f : f % 2 ? f + 1 : f; };
+  const shade = (c, f) => '#' + rgbOf(c).map(v => Math.max(0, Math.min(255, pyRound(f <= 1 ? v * f : v + (255 - v) * (f - 1)))).toString(16).padStart(2, '0')).join('').toUpperCase();
+  const lum = c => { const [r, g, b] = rgbOf(c).map(v => (v /= 255) <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4); return .2126 * r + .7152 * g + .0722 * b; };
+  const contrast = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + .05) / (y + .05); };
+  const hls = c => {
+    const [r, g, b] = rgbOf(c).map(v => v / 255), mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, d = mx - mn;
+    if (!d) return [0, l, 0];
+    const h = r === mx ? (mx - b) / d - (mx - g) / d : g === mx ? 2 + (mx - r) / d - (mx - b) / d : 4 + (mx - g) / d - (mx - r) / d;
+    return [((h / 6) % 1 + 1) % 1, l, l <= .5 ? d / (mx + mn) : d / (2 - mx - mn)];
+  };
+  const banned = c => { const [h, l, s] = hls(c); return h >= 8 / 360 && h <= 58 / 360 && s >= .22 && l >= .08 && l <= .9; };
+  const hexOf = c => /^#?[0-9a-f]{6}$/i.test(String(c || '').trim()) ? '#' + String(c).trim().replace('#', '').toLowerCase() : null;
+  const teamPanel = (primary, alternate) => {
+    let color = hexOf(primary) || CHARCOAL;
+    const alt = hexOf(alternate);
+    if (banned(color)) color = alt && !banned(alt) ? alt : CHARCOAL;
+    if (lum(color) > .6) color = alt && lum(alt) < .4 && !banned(alt) ? alt : CHARCOAL;
+    if (lum(color) < .012) return ['#1C1F23', '#060708', CHALK];
+    const [h, , s] = hls(color);
+    let top = (h < 15 / 360 || h > 335 / 360) && s >= .35 && lum(color) > .07 ? shade(color, .78) : color;
+    while (contrast(CHALK, top) < 4.5) top = shade(top, .92);
+    for (let g = hls(top); g[0] >= 85 / 360 && g[0] <= 175 / 360 && g[2] >= .3 && lum(top) > .06; g = hls(top)) top = shade(top, .9);
+    return [top, shade(top, .34), lum(color) < lum('#0E2219') * 1.6 ? CHALK : color];
+  };
+  /* SPEC 5.1: the stacked unit beside the bet. */
+  const STAT_UNITS = { recYds: ['REC', 'YDS'], rushYds: ['RUSH', 'YDS'], passYds: ['PASS', 'YDS'], passTD: ['PASS', 'TDS'], rec: ['RECS'],
+    car: ['CARRIES'], cmp: ['COMP'], att: ['PASS', 'ATT'], rushRecYds: ['RUSH+REC', 'YDS'], total: ['TOTAL', 'PTS'] };
+  const minus = s => String(s).replace(/(^|[\s(])-(?=\d)/g, '$1−');
+  /* What the ticket prints: the player's name and "OVER 49.5" + unit, a total's side, or a spread's team and number. */
+  const betParts = (pick, game = null) => {
+    const title = String(pick.displayTitle || pick.title || ''), dir = String(pick.direction || '').toLowerCase();
+    const line = pick.line != null && isNum(Number(pick.line)) ? Number(pick.line) : null;
+    const m = title.match(/^(.*?)\s+(over|under)\s+([\d.]+)/i);
+    if (pick.athleteId || pick.kind === 'props' || pick.kind === 'riskyProps') {
+      const name = String(pick.player || (m ? m[1] : title.replace(/\s+anytime.*$/i, ''))).trim();
+      const side = ['over', 'under'].includes(dir) ? dir : m ? m[2].toLowerCase() : '';
+      const n = line != null ? line : m ? Number(m[3]) : null;
+      return side && n != null ? { kind: 'prop', name, bet: `${side.toUpperCase()} ${n}`, unit: STAT_UNITS[C ? C.marketKey(pick) : pick.market] || [] }
+        : { kind: 'prop', name, bet: /anytime/i.test(title) ? 'ANYTIME TD' : title.slice(name.length).trim().toUpperCase(), unit: [] };
+    }
+    if (pick.marketType === 'spread' && line != null) {
+      const team = game && game[dir] && game[dir].abbr ? game[dir].abbr : title.split(/\s+[+−-]?\d/)[0];
+      return { kind: 'spread', name: title.replace(/\s+[+−-]?[\d.]+(\s|$)/, ' ').trim(), bet: minus(`${team} ${line > 0 ? '+' : ''}${line}`), unit: [] };
+    }
+    if (m || pick.marketType === 'total') {
+      const side = ['over', 'under'].includes(dir) ? dir : m ? m[2].toLowerCase() : '';
+      return { kind: 'total', name: m ? m[1] : title, bet: `${side.toUpperCase()} ${line != null ? line : m ? m[3] : ''}`.trim(), unit: STAT_UNITS.total };
+    }
+    return { kind: 'other', name: title, bet: title.toUpperCase(), unit: [] };
+  };
+  /* Font sizes that fit a 375 px ticket: one-line names to 46 px, else two lines at most 27 px; the bet to 68 px. */
+  const nameSize = (name, max = 46) => {
+    const one = Math.floor(205 / (Math.max(1, name.length) * .42));
+    return one >= 34 ? Math.min(max, one) : Math.max(22, Math.min(27, Math.floor(205 / (Math.max(...name.split(/\s+/).map(w => w.length), 1) * .42))));
+  };
+  const betSize = (parts, cap = 68) => Math.max(34, Math.min(cap, Math.floor(306 / (parts.bet.length * .41 + Math.max(0, ...parts.unit.map(u => u.length)) * .18))));
+  const ET_PARTS = (iso, opts) => new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', ...opts }).format(new Date(iso));
+  const etHour = iso => Number(ET_PARTS(iso, { hour: 'numeric', hourCycle: 'h23' })) % 24;
+  const weekday = iso => ET_PARTS(iso, { weekday: 'long' });
+  const COUNT = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'];
+  /* The chef's line over the rail: "One for tonight.", "Three for today.", or the next game day's count. */
+  const ledeTitle = (rows, today) => !rows.length ? 'Nothing on the rail yet.'
+    : `${COUNT[rows.length] || rows.length} for ${!today ? weekday(rows[0].kickoff) : rows.every(r => etHour(r.kickoff) >= 18) ? 'tonight' : 'today'}.`;
+  /* "Wednesday, Oct 7. Monday went 0-1." The last game day's W-L comes from the build (lastSlate). */
+  const dateLine = (nowIso, last) => {
+    const lastDay = last && last.day ? `${last.day}T16:00:00Z` : null;
+    const gap = lastDay ? (Date.parse(C.dayOf(nowIso) + 'T16:00:00Z') - Date.parse(lastDay)) / 86400000 : 99;
+    const wl = last ? `${last.wins}-${last.losses}${last.pushes ? `-${last.pushes}` : ''}` : '';
+    return `${C.dayLabel(nowIso)}.${last ? ` ${gap <= 6 ? weekday(lastDay) : C.dayLabel(lastDay)} went ${wl}.` : ''}`;
+  };
+  /* The next scheduled desk run (Eastern) from the launchd times the build copied into deskRuns. */
+  const nextRun = (runs, now = Date.now()) => {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const clock = new Date(now).toLocaleString('en-US', { timeZone: 'America/New_York' }), et = new Date(clock);
+    const mins = et.getHours() * 60 + et.getMinutes();
+    for (let d = 0; d < 8; d++) {
+      const wd = (et.getDay() + d) % 7;
+      const hit = (runs || []).filter(r => isNum(r.h) && isNum(r.m) && (r.wd == null || r.wd === wd) && (d || r.h * 60 + r.m > mins))
+        .sort((a, b) => a.h * 60 + a.m - (b.h * 60 + b.m))[0];
+      if (hit) return `${(hit.h + 11) % 12 + 1}:${String(hit.m).padStart(2, '0')} ${hit.h < 12 ? 'AM' : 'PM'}${d === 1 ? ' tomorrow' : d > 1 ? ` ${days[wd]}` : ''}`;
+    }
+    return null;
+  };
+  /* A settled slip's detail: "Final 45-24, missed by 21." from the saved actual. The margin prints only when it agrees
+     with the graded result (a book settlement can differ from the box score). */
+  const resultLine = pick => {
+    const a = String(pick.actual || ''), line = Number(pick.line), dir = String(pick.direction || '').toLowerCase();
+    const score = a.match(/^(.+?) (\d+), (.+?) (\d+)$/), stat = a.match(/:\s*([\d.]+)\s/);
+    const lead = score ? `Final ${score[2]}-${score[4]}` : stat ? `Had ${stat[1]}` : '';
+    const value = score ? (pick.athleteId || pick.marketType !== 'total' ? null : Number(score[2]) + Number(score[4])) : stat ? Number(stat[1]) : null;
+    if (!lead) return '';
+    if (value == null || !isNum(line) || !['over', 'under'].includes(dir) || !['win', 'loss'].includes(pick.result)) return `${lead}.`;
+    const cleared = dir === 'over' ? value > line : value < line, by = Math.abs(value - line);
+    return cleared === (pick.result === 'win') && by ? `${lead}, ${cleared ? 'cleared' : 'missed'} by ${+by.toFixed(1)}.` : `${lead}.`;
   };
 
   /* What a price needs to break even (no vig removed: this is the bettor's real bar). */
@@ -403,7 +506,8 @@
 
   const model = { goodTo, latestPickQuote, priceMatch, averageGap, researchPrice, matchupSignals, breakEven, fairAmerican, edgePoints, pctText, pctOne, oddsText, upsetChanceLine, quoteAge, bookLabel, postedBook, marketLabel, niceTitle, sentences,
     whyLines, watchLine, historyLine, howWeGotIt, pickVM, lineVM, officialKey, onBoard, hasValue, defenseVerdict, collapse, SORTS, heavyFavorite, trendText, gapScore,
-    cumulativeUnits, clvSummary, parseHash, resolve, canonical, TAB_OF, MORE_PAGES, isParlayLike, climbWords, heroBets };
+    cumulativeUnits, clvSummary, parseHash, resolve, canonical, TAB_OF, MORE_PAGES, isParlayLike, climbWords, heroBets,
+    teamPanel, STAT_UNITS, betParts, nameSize, betSize, ledeTitle, dateLine, nextRun, resultLine, minus };
 
   if (typeof document === 'undefined') return { model };
 
@@ -537,13 +641,9 @@
 
   /* ---------- fragments ---------- */
   const ICON = {
-    today: '<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
     research: '<path d="M4 19V11"/><path d="M10 19V5"/><path d="M16 19v-7"/><path d="M22 19H2"/>',
     games: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M12 5v14M3 12h18"/>',
-    record: '<path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/>',
-    more: '<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>',
     clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
-    hat: '<path d="M7 18h10v-4H7z"/><path d="M7 14c-2.5 0-4-1.8-4-4a4 4 0 0 1 5-3.9A4.5 4.5 0 0 1 16 6a4 4 0 0 1 5 4c0 2.2-1.5 4-4 4"/>',
     check: '<path d="M5 12l5 5 9-10"/>',
   };
   const svg = (name, size = 22) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[name]}</svg>`;
@@ -618,60 +718,157 @@
   const onTicket = id => state.ticket.some(r => r.id === id);
   const ticketButton = (id, title) => `<button type="button" class="btn small" data-add-line="${esc(id)}" aria-pressed="${onTicket(id)}" aria-label="${onTicket(id) ? 'Remove from' : 'Add to'} my ticket: ${esc(title || 'line')}">${onTicket(id) ? '✓ On ticket' : '+ Ticket'}</button>`;
 
-  /* The ticket: the hero of Today. */
-  const watchKey = vm => 'pick:' + vm.id;
-  const countdown = iso => {
-    const ms = Date.parse(iso) - Date.now();
-    if (!(ms > 0) || ms > 24 * 3600000) return '';
-    if (ms < 60000) return 'kicks off in under a minute';
-    const mins = Math.ceil(ms / 60000), h = Math.floor(mins / 60), m = mins % 60;
-    return `kicks off in ${h ? `${h}h ` : ''}${m}m`;
+  /* ---------- the Kitchen Ticket (design/site, NOTES.md section 4) ---------- */
+  const FLAME = '<svg viewBox="0 0 14 18" aria-hidden="true"><path fill="#F2F7F4" d="M7 0C8 4 13 6 13 11.5 13 15.5 10.3 18 7 18 3.7 18 1 15.5 1 12 1 9 3 7.5 4 6c.2 2 1 3 2.2 3.5C6 6 5 3 7 0z"/></svg>';
+  const CHEF = '<img class="kt-clip" src="kookn-chef-clip.png" alt="" width="54" height="54">';
+  const MARK = { hit: '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.4 3.4L12 3.5" fill="none" stroke="#062B1C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    miss: '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="#07120D" stroke-width="3" stroke-linecap="round"/></svg>',
+    hold: '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10" stroke="#07120D" stroke-width="3" stroke-linecap="round"/></svg>' };
+  const stampFor = result => result === 'win' ? `<span class="kt-stamp hit" aria-hidden="true">${MARK.hit}HIT</span>`
+    : result === 'loss' ? `<span class="kt-stamp miss" aria-hidden="true">${MARK.miss}MISS</span>`
+      : result ? `<span class="kt-stamp hold" aria-hidden="true">${MARK.hold}${result === 'void' ? 'VOID' : 'PUSH'}</span>` : '';
+  const RESULT_WORD = { win: 'Hit', loss: 'Miss', push: 'Push', void: 'Void' };
+  const clock = iso => ET_PARTS(iso, { hour: 'numeric', minute: '2-digit' });
+  const ticketWhen = iso => {
+    if (!iso) return '';
+    const days = (Date.parse(C.dayOf(iso) + 'T16:00:00Z') - Date.parse(etDay() + 'T16:00:00Z')) / 86400000;
+    return days === 0 ? `${etHour(iso) >= 17 ? 'Tonight' : 'Today'} ${clock(iso)}` : days > 0 && days < 7 ? `${ET_PARTS(iso, { weekday: 'short' })} ${clock(iso)}` : whenShort(iso);
   };
-  /* Whole percents, unless rounding would make our chance and the price's need look equal. */
-  const pctPair = (a, b) => Math.abs(Math.round(100 * a) - Math.round(100 * b)) >= 2 ? [pctText(a), pctText(b)] : [`${(100 * a).toFixed(1)}%`, `${(100 * b).toFixed(1)}%`];
+  const logoImg = (team, league) => { const src = logoUrl(team, league); return src ? `<img src="${esc(src)}" alt="" loading="lazy">` : ''; };
+  const disc = (team, league) => team ? `<span class="kt-disc">${logoImg(team, league)}</span>` : '';
+  const panelVars = ([top, bottom, glow]) => `--team:${top};--team-deep:${bottom};--glow:${glow}`;
+  const odd = x => minus(oddsText(x));
+  /* The game a play belongs to: today.json's card, else the teams the hero row carries for the first paint. */
+  const gameOf = pick => GAMES.get(pick.gameId) || (pick.teams ? { league: pick.league, ...pick.teams } : null);
+  const legParts = leg => { const t = niceTitle(typeof leg === 'string' ? leg : leg.title || leg.displayTitle || leg.selection || leg.player || '');
+    const m = t.match(/^(.*?)\s+((?:over|under)\s+[\d.]+.*|[\d.]+\+.*|[+−-][\d.]+|anytime touchdown)$/i);
+    return m ? [m[1], minus(m[2].replace(/anytime touchdown/i, 'anytime TD')).toUpperCase()] : [t, '']; };
+  /* The compact hit strip: five bars on a 34 px plot, values under the bars, the line labelled at the end. */
+  const strip = (h, line, dir) => {
+    if (!h || !(h.v || []).length || !isNum(Number(line))) return '';
+    const max = Math.max(...h.v, Number(line)) || 1, px = v => Math.max(2, 34 * Math.max(0, v) / max);
+    const res = v => C.thresholdResult(v, Number(line), dir === 'under' ? 'under' : 'over', false);
+    const cap = `${h.season[0]} of ${h.season[1]} this season`;
+    return `<figure class="kt-strip" role="img" aria-label="This season: ${esc(h.v.join(', '))} against the ${esc(line)} line. ${esc(cap)}.">
+      <div class="kt-bars" aria-hidden="true">${h.v.map(v => `<div class="col"><div class="bar ${res(v)}" style="height:${px(v).toFixed(1)}px"></div><b class="v ${res(v)}">${esc(v)}</b></div>`).join('')}
+      <div class="line" style="bottom:${px(Number(line)).toFixed(1)}px"><span>${esc(line)}</span></div></div>
+      <figcaption><b>${esc(cap)}</b>${h.last10 && h.last10[1] >= 6 ? `${esc(h.last10[0])} of his last ${esc(h.last10[1])}` : ''}</figcaption></figure>`;
+  };
+  /* The order ticket: chip, name and photo on the team panel, the bet, price and book, my chance against what the
+     price needs, WHY and BUT (saved strings chosen at build time), the hit strip and the season record on the stub.
+     opts: strip (show the hit strip), compact (smaller bet), season ({wins, losses, pushes}), lines (current quotes),
+     onPage (the play page: h1 name, no link). */
   const ticket = (pick, opts = {}) => {
-    const vm = pickVM(pick);
-    const compact = opts.compact;
-    const latest = !pick.result && !isParlayLike(pick) ? latestPickQuote(pick, opts.lines || todayExtras?.lines?.lines) : null;
-    const latestText = latest ? `Latest we saw: ${niceTitle(latest.current.title)} ${oddsText(latest.current.odds)} ${bookLabel(latest.current.book)} · ${ago(latest.current.observedAt)} · ${latest.inside ? 'still at our price' : 'price moved too far'}` : '';
-    const tag = vm.featured ? 'Pick of the Day' : vm.kind === 'climb' ? '80/20 Climb' : vm.kind === 'fun' ? (vm.lotto ? 'Fun ticket · Lotto' : 'Fun ticket') : 'Best bet';
-    const priced = vm.kind === 'best' && vm.chance != null && vm.needs != null && vm.calibrated;
-    const [c, n] = priced ? pctPair(vm.chance, vm.needs) : ['', ''];
-    const plain = priced && vm.mode === 'open'
-      ? `<p class="plain">We think this hits <strong>${c}</strong> of the time. At ${esc(oddsText(vm.odds))} you only need ${n}.</p>${meter(vm.chance, vm.needs)}`
-      : priced && vm.mode === 'expired' && !compact ? `<p class="plain">We had this at <strong>${c}</strong> when we posted it at ${esc(oddsText(vm.odds))}. That price needed ${n}.</p>${meter(vm.chance, vm.needs)}`
-        : vm.legs.length ? `<p class="plain">${vm.legs.length} legs · ${vm.kind === 'climb' ? 'tracked in dollars, apart from the best-bet record' : 'tracked apart from the best-bet record'}.</p>` : '';
-    const facts = vm.kind === 'best' && !compact && vm.fair != null && vm.mode !== 'closed'
-      ? `<div class="facts"><div><small>Price matching our chance</small><b class="num">${esc(oddsText(vm.fair))}</b></div><div><small>Chance vs price's need</small><b class="num">${vm.edge > 0 ? '+' : ''}${esc(vm.edge)} pts</b></div></div>` : '';
-    const why = !compact && vm.mode !== 'closed' && (vm.why.length || vm.watch) ? `<ul class="why">${vm.why.map(x => `<li${CONTEXT.test(x) ? ' class="ctx"' : ''}>${esc(x)}</li>`).join('')}${vm.watch ? `<li class="watch">${esc(vm.watch)}</li>` : ''}</ul>` : '';
-    /* The hit chart counts only games before this one once it has kicked off, so a receipt shows what was known. */
-    const started = Date.parse(pick.kickoff) <= Date.now();
-    const chart = !compact && vm.kind === 'best' && pick.athleteId && FOOTBALL.includes(pick.league) && C.marketKey(pick) ? `<div class="ticket-chart" data-prop-history data-league="${esc(pick.league)}" data-athlete="${esc(pick.athleteId)}" data-stat="${esc(C.marketKey(pick))}" data-line="${esc(pick.line)}" data-dir="${esc(pick.direction || 'over')}" data-game="${esc(pick.gameId || '')}" data-before="${pick.result || started ? esc(C.dayOf(pick.kickoff) || '') : ''}"></div>` : '';
-    const hist = !compact && !chart && vm.history ? `<p class="meta"><b>History:</b> ${esc(vm.history.replace(/^Last (\d+) games?:/i, 'last $1 games (can include last season):').replace(/^(This season|Season):/i, 'this season:'))} ${esc((pick.reasoning || {}).historyNote || 'History, not a probability.')}</p>` : '';
-    const legs = !compact && vm.legs.length ? `<ul class="why legs">${vm.legs.slice(0, 8).map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '';
-    const isSaved = state.watchlist.some(r => r.key === watchKey(vm));
-    const clock = countdown(vm.kickoff);
-    /* What the Details fold holds, in a few words, so a reader knows whether to open it. */
-    const moreHint = [why ? 'why' : '', chart ? 'hit chart' : hist ? 'history' : '', facts ? 'our price' : '', legs ? 'legs' : '', !facts && !why && !legs ? 'status' : ''].filter(Boolean).join(' · ');
-    return `<article class="ticket${compact ? ' compact' : ''}${vm.mode === 'closed' ? ' is-closed' : ''}" aria-label="${esc(tag)}: ${esc(vm.title)}">
-      <div class="ticket-body">
-        <div class="ticket-top"><span class="tag${vm.kind !== 'best' ? ' fun' : ''}">${esc(tag)}</span><span>${esc(clock || whenShort(vm.kickoff))}</span></div>
-        <div class="ticket-rule"></div>
-        <div class="t-head">${artFor(pick, compact ? '' : 'md')}<div>${opts.onPage ? `<h1 class="t-title">${esc(vm.title)}</h1>` : `<h3><a href="${esc(vm.href)}">${esc(vm.title)}</a></h3>`}
-        <p class="market">${esc(vm.market)}${vm.league ? ` · ${esc(vm.league === 'CFB' ? 'College' : vm.league)}` : ''}</p></div></div>
-        <div class="price"><b class="num">${esc(oddsText(vm.odds))}</b><span>${vm.estimated ? 'est. · ' : ''}${esc(vm.book || '')}${vm.mode !== 'open' && !vm.result && !vm.statusShort ? ' · posted price' : ''}</span></div>
-        ${plain}${vm.statusShort ? `<p class="meta${vm.mode === 'closed' ? ' strong' : ''}">${esc(vm.statusShort)}</p>` : ''}
-        ${vm.mode === 'open' && goodTo(pick) ? `<p class="meta">${esc(goodTo(pick))}</p>` : ''}${latestText ? `<p class="meta">${esc(latestText)}</p>` : ''}
-        ${opts.card && /^data\/cards\/[\w.-]+\.png$/.test(opts.card) ? `<p class="meta"><a class="card-link" href="${esc(opts.card)}" target="_blank" rel="noopener">See the card ↗</a></p>` : ''}
-        ${compact ? '' : `<details class="t-more" data-box="t:${esc(pick.id)}"${opts.onPage ? ' open' : ''}><summary>Details<span>${esc(moreHint)}</span></summary>
-          ${facts}${why}${hist}${chart}${legs}
-      ${vm.estimated ? '<p class="meta">Combined odds are estimated from the leg prices we saw. Check the real ticket price at your book.</p>' : ''}
-          ${opts.onPage ? '' : `<p class="meta"><a href="${esc(vm.href)}">Full breakdown →</a></p>`}${vm.statusNote ? `<p class="meta${vm.mode === 'closed' ? ' strong' : ''}">${esc(vm.statusNote)}</p>` : ''}<p class="meta">${esc(C.deliveryText(pick) || '')}</p></details>
-        <div class="actions"><button type="button" class="btn small" data-watch-pick="${esc(pick.id)}" aria-pressed="${isSaved}" aria-label="${isSaved ? 'Unsave' : 'Save'} ${esc(vm.title)}">${isSaved ? '★ Saved' : '☆ Save'}</button></div>`}
-      </div>
-      <div class="stub ${esc(vm.stub.cls)}" role="img" aria-label="${esc(vm.stub.small)}${vm.stub.big && vm.stub.big.length > 1 ? ' ' + esc(vm.stub.big) : ''}"><b aria-hidden="true">${esc(vm.stub.big)}</b><small aria-hidden="true">${esc(vm.stub.small)}</small></div>
-    </article>`;
+    const vm = pickVM(pick), g = gameOf(pick), parts = betParts(pick, g), league = pick.league || String(pick.gameId || '').split('-')[0];
+    const climb = vm.kind === 'climb', fun = vm.kind === 'fun', best = vm.kind === 'best', info = pick.ladder || {};
+    const chip = vm.featured ? 'Hot Plate (POTD)' : climb ? `80/20 Climb${info.run ? ` #${info.run}` : ''}` : fun ? (vm.lotto ? 'Fun ticket · Lotto' : 'Fun ticket') : 'Best bet';
+    const chipHtml = `<p class="kt-chip">${vm.featured ? FLAME : ''}${esc(chip)}</p>`;
+    const when = ticketWhen(pick.kickoff), matchup = g && g.away && g.home ? `${g.away.abbr} at ${g.home.abbr}` : '';
+    const nameText = climb ? `Step ${info.step || ''}`.trim() : fun ? `${vm.legs.length} legs` : parts.name;
+    const nameTag = opts.onPage ? 'h1' : 'h3', nameIn = opts.onPage || opts.sample ? esc(nameText) : `<a href="${esc(vm.href)}">${esc(nameText)}</a>`;
+    const nameHtml = `<${nameTag} class="kt-name" style="--name-size:${nameSize(nameText)}px">${nameIn}</${nameTag}>`;
+    const side = g && pick.side && g[pick.side] ? g[pick.side] : null;
+    const photo = best && parts.kind === 'prop' && pick.athleteId && HEADSHOT[league] ? HEADSHOT[league](pick.athleteId) : null;
+    let panel, style, after = '';
+    if (best && parts.kind !== 'prop' && g && g.away && g.home) {
+      style = `--team-a:${teamPanel(g.away.color, g.away.alt)[0]};--team-b:${teamPanel(g.home.color, g.home.alt)[0]}`;
+      panel = `<div class="kt-panel kt-split">${chipHtml}<p class="kt-when">${esc(when)}</p>
+        <span class="kt-half">${disc(g.away, league)}<b>${esc(g.away.name || g.away.abbr)}</b></span><span class="kt-at" aria-hidden="true">AT</span>
+        <span class="kt-half">${disc(g.home, league)}<b>${esc(g.home.name || g.home.abbr)}</b></span>${opts.onPage ? `<h1 class="sr">${esc(vm.title)}</h1>` : `<h3 class="sr"><a href="${esc(vm.href)}">${esc(vm.title)}</a></h3>`}</div>`;
+    } else {
+      style = panelVars(side ? teamPanel(side.color, side.alt) : HOUSE);
+      const img = photo ? `<img src="${esc(photo)}" alt="">` : '';
+      panel = `<div class="kt-panel">${photo ? `<div class="kt-ph" aria-hidden="true">${img}</div>` : ''}${side ? `<span class="kt-logo" aria-hidden="true">${logoImg(side, league)}</span>` : ''}
+        ${chipHtml}${nameHtml}<p class="kt-meta">${g && g.away ? `<span class="kt-discs">${disc(g.away, league)}${disc(g.home, league)}</span>` : ''}<span><b>${esc(matchup || (climb || fun ? vm.book || '' : ''))}</b>${esc(when)}</span></p></div>`;
+      if (photo) after = `<div class="kt-ph kt-photo" aria-hidden="true">${img}</div>`;
+    }
+    /* The now line: the latest same-book quote and how far the posted price may go. An expired or moved quote never
+       reads as open: closed plays show their state words instead. */
+    const latest = !pick.result && !climb && !fun ? latestPickQuote(pick, opts.lines || todayExtras?.lines?.lines) : null;
+    const good = isNum(pick.cutoffOdds) ? `Still good to ${odd(pick.cutoffOdds)}.` : '';
+    const nowLine = pick.result ? resultLine(pick)
+      : climb ? (isNum(Number(info.stake)) && isNum(Number(info.payout)) && info.payout ? `${money(info.stake)} → ${money(info.payout)} if it cashes.` : '')
+        : ['open', 'expired'].includes(vm.mode) && latest ? `Now ${odd(latest.current.odds)} at ${clock(latest.current.observedAt)}. ${latest.inside ? good : `Past my ${odd(pick.cutoffOdds)} limit.`}`
+          : vm.mode === 'open' ? good : vm.mode === 'expired' ? 'Posted price may be gone. Check your book.' : vm.statusShort || vm.status || '';
+    const tense = vm.mode === 'open' || (vm.mode === 'expired' && latest && latest.inside);
+    const chance = best && vm.calibrated && vm.chance != null && vm.needs != null
+      ? `<p class="kt-lead kt-chance"><span>I ${tense ? 'have' : 'had'} it at<b class="num">${pctOne(vm.chance)}</b></span><i></i><span>the price ${tense ? 'needs' : 'needed'}<b class="num">${pctOne(vm.needs)}</b></span></p>` : '';
+    const say = (tag, text, cls = '') => text ? `<p class="kt-say${cls}"><span class="kt-tag">${tag}</span><span>${esc(text)}</span></p>` : '';
+    const legs = (climb || fun) && vm.legs.length ? `<ul class="kt-legs">${(pick.legs || []).slice(0, 8).map(l => { const [a, b] = legParts(l); return `<li><span>${esc(a)}</span>${b ? `<b>${esc(b)}</b>` : ''}</li>`; }).join('')}</ul>` : '';
+    const bet = climb || fun ? legs : `<p class="kt-bet num" style="--bet-size:${betSize(parts, opts.compact ? 60 : 68)}px">${esc(parts.bet)}${parts.unit.length ? `<span class="kt-unit">${parts.unit.map(esc).join('<br>')}</span>` : ''}</p>`;
+    const s = opts.season, record = s ? `${s.wins}-${s.losses}${s.pushes ? `-${s.pushes}` : ''}` : '';
+    const stub = best ? (record ? `<p class="kt-season">Best bets ${s.playoffs ? 'these playoffs' : 'this season'}<b class="num">${esc(record)}</b></p>` : '<p class="kt-season">Best bet</p>')
+      : climb ? `<p class="kt-season">Banked this climb<b class="num">${money(info.banked)}</b></p>` : '<p class="kt-season">Tracked apart from best bets</p>';
+    const label = `${chip}: ${vm.title}, ${oddsText(vm.odds)}${vm.book ? ` at ${vm.book}` : ''}${pick.result ? `. ${RESULT_WORD[pick.result] || ''}` : ''}`;
+    return `<article class="kt-order${opts.compact ? ' compact' : ''}${vm.mode === 'closed' ? ' is-closed' : ''}" style="${style}" aria-label="${esc(label)}">
+      <div class="kt-shade"><div class="kt-paper">${panel}${bet}<div class="kt-cut"></div>
+        <p class="kt-lead kt-price"><b class="kt-odds num">${esc(odd(vm.odds))}</b><i></i><b class="kt-book">${esc(vm.estimated ? `est. ${vm.book || ''}` : vm.book || '')}</b></p>
+        <p class="kt-now">${esc(nowLine)}</p>${chance}${best ? say('WHY', pick.ticketWhy) + say('BUT', pick.ticketBut, ' kt-but') : ''}
+        ${opts.strip && best ? strip(pick.hitStrip, pick.line, String(pick.direction || '').toLowerCase()) : ''}
+        <div class="kt-perf"></div><div class="kt-stubrow">${stub}${best && !pick.result ? '<span class="kt-orderup" aria-hidden="true">ORDER UP</span>' : ''}</div></div></div>
+      ${after}${opts.clip ? CHEF : ''}${stampFor(pick.result)}</article>`;
   };
+  const rail = (rows, opts = {}) => `<section class="kt-pass" aria-label="${rows.length === 1 ? 'Today\'s best bet' : 'Best bets on the rail'}"><div class="kt-rail" aria-hidden="true"></div>
+    <div class="kt-tickets">${rows.map((p, i) => ticket(p, { ...opts, clip: i === 0, strip: i === 0 && !opts.more, compact: (i > 0 || opts.more) && !C.isLadder(p) })).join('')}</div></section>`;
+  const HOOK = '<svg class="kt-hook h%" viewBox="0 0 26 22" aria-hidden="true"><path d="M7 0v8M19 0v8" stroke="#8C9892" stroke-width="2"/><rect x="1" y="6" width="24" height="13" rx="2.5" fill="#A3AEA8"/><rect x="3" y="15.5" width="20" height="2" rx="1" fill="#1E2622"/></svg>';
+  const emptyRail = note => `<section class="kt-pass" aria-label="No best bet yet"><div class="kt-rail" aria-hidden="true"></div><div class="kt-hooks" aria-hidden="true">${HOOK.replace('%', '1')}${HOOK.replace('%', '2')}${CHEF}</div></section><p class="kt-blank">${note}</p>`;
+  const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+  /* The 80/20 Climb stub: the chip carries the real stake; done steps get a check, the current one is outlined, the
+     $1,000 flag stays visible. Never a guessed return or a promised step count. */
+  const climbStub = (c, past = []) => {
+    if (!c || !isNum(c.riding)) return '';
+    const done = Math.max(0, Math.min(4, (c.step || 1) - 1));
+    const state = c.open ? `Step ${c.open.step || c.step} is live` : 'Being checked · not posted yet';
+    const n = c.settled || 0;
+    const aside = `${c.last && c.last.result === 'win' && !c.open ? `Step ${c.last.step || c.step - 1} cashed. ` : ''}${c.saved ? `<strong>${money(c.saved)} banked.</strong> ` : ''}${n ? `Net ${signedMoney(c.net)} over ${WORDS[n] || n} step${n === 1 ? '' : 's'}. ` : ''}<a href="#record/climb">${n ? `All ${WORDS[n] || n} step${n === 1 ? '' : 's'} ›` : 'How the Climb works ›'}</a>`;
+    return `<section class="kt-sec kt-climb" aria-labelledby="climb-h"><h2 class="sr" id="climb-h">The 80/20 Climb</h2>
+      <a class="kt-stub" href="#record/climb" aria-label="80/20 Climb number ${esc(c.run)}, step ${esc(c.step)}, ${esc(money(c.riding))}. ${esc(state)}.">
+      <span class="kt-stub-chip"><span class="kt-pchip"><b>${money(c.riding)}</b></span></span><span class="kt-stub-main"><span class="kt-stub-e">80/20 Climb #${esc(c.run)}</span>
+      <span class="kt-stub-k">Step ${esc(c.open ? c.open.step || c.step : c.step)}</span><span class="kt-stub-s">${esc(state)}</span>
+      <span class="kt-route" aria-hidden="true">${'<span class="kt-node done">✓</span>'.repeat(done)}<span class="kt-node">${esc(c.step)}</span><span class="kt-trail"></span><span class="kt-flag"><svg viewBox="0 0 16 18"><path d="M2 1v16" stroke="#07120D" stroke-width="2.4" stroke-linecap="round"/><path d="M3 2h11l-3 3.5 3 3.5H3z" fill="#07120D"/></svg>$1,000</span></span></span></a>
+      <p class="kt-aside">${aside}</p>${past.length ? `<details class="plain-fold" data-box="climb-past"><summary>Past steps · ${past.length}</summary><div class="receipts">${past.slice().reverse().map(climbRow).join('')}</div></details>` : ''}</section>`;
+  };
+  /* A slip: settled plays on the spike (with an equal-size stamp), open ones in the fold. */
+  const slipTitle = (p, g) => { const parts = betParts(p, g);
+    return isParlayLike(p) ? `<span>${esc(marketLabel(p))}</span> ${esc(odd(p.odds))}` : `<span>${esc(parts.kind === 'spread' ? '' : parts.name)}</span> ${esc(parts.bet)}${parts.kind === 'prop' && parts.unit.length ? ` ${esc(parts.unit.join(' '))}` : ''}`; };
+  const slip = (p, opts = {}) => {
+    const vm = pickVM(p), g = gameOf(p), kicker = `${vm.featured ? 'Hot Plate (POTD)' : vm.kind === 'fun' ? 'Fun ticket' : vm.kind === 'climb' ? '80/20 Climb' : 'Best bet'}${opts.when ? ` · ${ticketWhen(p.kickoff)}` : ''}`;
+    const price = `${odd(p.odds)} ${vm.book || ''}`.trim();
+    const detail = p.result ? `${resultLine(p)} ${price}.` : opts.waiting ? `${price}.` : `${price}. ${vm.statusShort || (vm.mode === 'open' && vm.calibrated && vm.chance != null ? `I have it at ${pctOne(vm.chance)}.` : '')}`;
+    const body = `<a class="kt-slip" href="${esc(vm.href)}" aria-label="${esc(`${p.result ? `${RESULT_WORD[p.result]}: ` : ''}${vm.title}, ${oddsText(p.odds)}${vm.book ? ` at ${vm.book}` : ''}`)}"><p class="kt-slip-k">${esc(kicker)}</p><p class="kt-slip-t">${slipTitle(p, g)}</p><p class="kt-slip-d">${esc(detail.trim())}</p>${opts.waiting ? '<span class="kt-waiting">WAITING ON THE FINAL</span>' : ''}</a>`;
+    return opts.spike ? `<div class="kt-spiked"><span class="kt-spike" aria-hidden="true"></span>${body}${stampFor(p.result)}</div>` : body;
+  };
+  /* Leftovers: up to five settled slips, never dropping a miss while a hit stays, then "+N more on the record". */
+  const leftovers = (settled, waiting, last) => {
+    if (!settled.length && !waiting.length) return '';
+    const misses = settled.filter(p => p.result === 'loss'), rest = settled.filter(p => p.result !== 'loss');
+    const shown = [...misses, ...rest].slice(0, 5).sort((a, b) => String(b.kickoff).localeCompare(String(a.kickoff)));
+    const more = settled.length - shown.length;
+    const t = last || (settled.length ? { day: C.dayOf(settled[0].kickoff), wins: settled.filter(p => p.result === 'win').length, losses: misses.length, pushes: settled.filter(p => p.result === 'push').length } : null);
+    const head = t ? `${weekday(`${t.day}T16:00:00Z`)} went ${t.wins}-${t.losses}${t.pushes ? `-${t.pushes}` : ''}.` : 'Waiting on the final.';
+    return `<section class="kt-sec kt-left" aria-labelledby="left-h"><h2 class="kt-head" id="left-h">${esc(head)}</h2>
+      ${waiting.map(p => slip(p, { spike: true, waiting: true })).join('')}${shown.map(p => slip(p, { spike: true })).join('')}
+      <a class="kt-quiet" href="#record">${more > 0 ? `+${more} more on the record ›` : 'The full record ›'}</a></section>`;
+  };
+  const STAT_SHORT = { recYds: 'rec yds', rushYds: 'rush yds', passYds: 'pass yds', rec: 'receptions', car: 'carries', cmp: 'completions', att: 'pass attempts', passTD: 'pass TDs' };
+  /* The Prep List: rows the build chose (today.json prep), chalked on the felt with the one tape label. */
+  const prepList = (prep, notes, now) => {
+    const blocks = Object.values(prep || {}).filter(b => b && (b.rows || []).length && (state.league === 'ALL' || b.rows[0].league === state.league));
+    const day = blocks.map(b => b.day).sort()[0];
+    const rows = blocks.filter(b => b.day === day).flatMap(b => b.rows).filter(r => Date.parse(r.kickoff) > now)
+      .sort((a, b) => b.hits / b.games - a.hits / a.games || b.games - a.games).slice(0, 3);
+    if (!rows.length && !notes.length) return '';
+    const kind = !rows.length ? 'Research notes' : day === etDay() ? `Research for ${rows.every(r => etHour(r.kickoff) >= 17) ? 'tonight' : 'today'}` : `Research for ${weekday(`${day}T16:00:00Z`)}`;
+    return `<section class="kt-sec kt-prep" aria-labelledby="prep-h"><div class="kt-sec-head"><h2 class="kt-tape" id="prep-h">Prep List</h2><span class="kt-kind">${esc(kind)}</span></div>
+      ${rows.length ? `<ol class="kt-rows">${rows.map(r => `<li><span class="kt-face" style="--tc:${esc(hexOf(r.teamColor) || '#15301F')}">${HEADSHOT[r.league] ? `<img src="${esc(HEADSHOT[r.league](r.athleteId))}" alt="" loading="lazy">` : ''}</span>
+        <div><p class="kt-who"><a class="plain-link" href="#player/${esc(r.league)}/${esc(r.athleteId)}?stat=${esc(r.stat)}"><b>${esc(r.player)}</b></a> <span>${esc([r.team, r.pos].filter(Boolean).join(' '))}</span></p>
+        <p class="kt-pline">${esc(`${r.direction === 'under' ? 'Under' : 'Over'} ${r.line} ${STAT_SHORT[r.stat] || r.stat}`)}</p><p class="kt-px">${esc(odd(r.odds))} ${esc(bookLabel(r.book) || '')}${r.clears ? '<span class="ok">✓ clears my price</span>' : ''}</p></div>
+        <p class="kt-hits"><b class="num">${esc(r.hits)}</b>of ${esc(r.games)}</p></li>`).join('')}</ol>` : ''}
+      ${notes.slice(0, 3).map(n => `<p class="kt-note"><a href="${esc(n.href)}"><b>${esc(n.title)}</b></a> ${esc(n.text)}</p>`).join('')}
+      <a class="kt-more-link" href="#research/trends">${day === etDay() ? 'Tonight\'s' : 'More'} other lines ›</a></section>`;
+  };
+  const foldRow = (box, title, sub, inner) => `<details class="kt-fold-row" data-box="${esc(box)}"><summary><b>${esc(title)}</b><span>${esc(sub)}</span></summary><div>${inner}</div></details>`;
+  const foldLink = (href, title, sub, ext = false) => `<a href="${esc(href)}"${ext ? ' target="_blank" rel="noopener"' : ''}><b>${esc(title)}</b><span>${esc(sub)}</span></a>`;
 
   /* ROI at posted prices: units over plays staked (one unit each), only once ten priced plays are graded. */
   const roiOf = cap => cap.priced >= 10 && cap.staked > 0 && isNum(cap.units) ? 100 * cap.units / cap.staked : null;
@@ -773,38 +970,9 @@
 
   const VIEWS = {};
 
-  /* ---------- Today (A: plain English) ---------- */
+  /* ---------- Today: the Kitchen Ticket (OWNER-DECISIONS 2026-10-07 item 22) ---------- */
   const money = n => `$${Math.round(Number(n) || 0).toLocaleString('en-US')}`;
   const signedMoney = n => { const v = Math.round(Number(n) || 0); return `${v > 0 ? '+' : v < 0 ? '−' : ''}$${Math.abs(v).toLocaleString('en-US')}`; };
-  /* The Climb in one compact block: what cashed, what's next, the ledger and every past step's exact lines. */
-  /* The Climb in today-hero.json's shape (build_site.hero_climb), so both Today paints word and count it alike. */
-  const climbSummary = lad => {
-    const last = lad.history[lad.history.length - 1], info = (lad.open && lad.open.ladder) || {};
-    return { open: lad.open && { step: info.step }, step: lad.step, settled: lad.history.length,
-      last: last && { result: last.result, step: (last.ladder || {}).step },
-      riding: lad.open ? Number(info.stake) || lad.stake : lad.stake,
-      banked: lad.open && info.banked != null && isNum(Number(info.banked)) ? Number(info.banked) : lad.banked };
-  };
-  const climbStatus = lad => climbWords(climbSummary(lad));
-  const climbStrip = (lad, opts = {}) => {
-    const open = lad.open, info = (open && open.ladder) || {};
-    const riding = Number(open ? info.stake : lad.stake) || 50, banked = Number(open ? info.banked : lad.banked) || 0;
-    const a = lad.accounting || {};
-    const pct = n => Math.max(3, Math.min(100, 100 * Math.log(Math.max(50, Number(n) || 50) / 50) / Math.log(20)));
-    const past = lad.history.slice().reverse().map(r => {
-      const i = r.ladder || {}, total = r.ladderTotal || {};
-      const paid = r.result === 'win' ? money(i.payout) : r.result === 'loss' ? '$0' : money(i.stake);
-      return `<div class="receipt"><span class="r-mark ${r.result === 'win' ? 'hit' : r.result === 'loss' ? 'miss' : 'push'}" aria-hidden="true">${r.result === 'win' ? '✓' : r.result === 'loss' ? '✗' : '–'}</span><div><b><span class="sr">${r.result === 'win' ? 'Hit' : r.result === 'loss' ? 'Miss' : 'Push'}: </span><a class="plain-link" href="#pick/${esc(encodeURIComponent(r.id))}">Step ${esc(i.step || '')}</a> · ${esc(whenShort(r.kickoff || r.publishedAt))}</b><span>${esc((r.legs || []).map(l => typeof l === 'string' ? l : l.title).filter(Boolean).map(niceTitle).join(' · '))}</span></div>
-        <span class="u ${r.result === 'win' ? 'green' : r.result === 'loss' ? 'red' : 'muted'}">${esc(money(i.stake))} → ${esc(paid)}<br><span class="tiny muted">running ${esc(signedMoney(total.net))}</span></span></div>`;
-    }).join('');
-    return `${opts.flat ? '<div class="climb-flat">' : `<div class="card on-felt climb"><p class="eyebrow green">80/20 Climb · climb #${esc(lad.run)}</p>`}
-      <p style="margin-top:4px"><b class="num" style="font-size:${opts.flat ? 24 : 28}px">${money(riding)}</b> <span class="small">${opts.flat ? `riding · ${money(banked)} banked this climb · climb #${esc(lad.run)}` : `${esc(climbStatus(lad))} · ${money(banked)} banked this climb`}</span></p>
-      <div class="ladder" role="img" aria-label="${esc(money(banked + riding))} of $1,000"><i style="width:${pct(banked + riding).toFixed(1)}%"></i></div>
-      <div class="ladder-ends"><span>$50 start</span><span>${money(banked + riding)} now</span><span>$1,000 goal</span></div>
-      <p class="small muted" style="margin-top:8px">Steps ${esc(a.wins || 0)}–${esc(a.losses || 0)} · settled stake ${money(a.wagered)} · returned ${money(a.returned)} · net <span class="${a.net < 0 ? 'red' : a.net > 0 ? 'green' : ''}">${esc(signedMoney(a.net))}</span>${a.atRisk ? ` · live now ${money(a.atRisk)}` : ''}</p>
-      ${past ? `<details class="${opts.flat ? 'plain-fold' : 'more-box'}" style="margin-top:10px"><summary>Past steps · ${lad.history.length} · ${esc(signedMoney(a.net))} overall</summary><div class="receipts">${past}</div></details>` : ''}
-      <p class="small muted" style="margin-top:8px">Win: bank 20%, ride 80%. A miss starts a new $50 climb; banked money stays banked. <a href="#record/climb">Climb history →</a></p></div>`;
-  };
   const currentUpset = (g, now) => g.upsetWatch && g.state === 'pre' && !g.completed && Date.parse(g.kickoff) > now
     && now >= Date.parse(g.upsetWatch.observedAt) && now - Date.parse(g.upsetWatch.observedAt) <= 4 * 3600000;
   const upsetRow = (g, rank) => {
@@ -816,7 +984,6 @@
       <details class="plain-fold upset-why" data-box="upset:${esc(g.id)}"><summary>Why it's flagged</summary>${(w.reasons || []).length > 1 ? `<ul class="fa">${w.reasons.slice(1, 4).map(r => `<li class="for">${esc(r)}</li>`).join('')}</ul>` : ''}
       <p class="small red" style="margin-top:4px">${esc((w.warnings || [w.caution || 'Our winner estimate has not yet proved more accurate than the book.']).join(' · '))}</p></details></div>`;
   };
-  const communityCard = () => `<aside class="card on-felt community" aria-label="Join the Kook'n Discord"><div><p class="eyebrow green">Free Kook'n Discord</p><p style="margin-top:4px"><b>Best bets land here about 10–15 minutes before X.</b> Arb alerts stay in Discord. Every result stays public on this site.</p></div><div class="community-cta"><a class="btn primary" href="https://discord.gg/ZnjubjsBPM" target="_blank" rel="noopener">Join the free Discord ↗</a><a class="small" href="https://x.com/keenkooks" target="_blank" rel="noopener">or follow @keenkooks on X ↗</a></div></aside>`;
   const DATA_TTL = 300000;
   let todayExtras = null, todayExtrasAt = 0, todayExtrasLoading = false;
   const queueTodayExtras = () => {
@@ -827,8 +994,7 @@
       .catch(() => { todayExtras = {}; todayExtrasAt = Date.now(); })
       .finally(() => { todayExtrasLoading = false; if (C.parseRoute(location.hash).view === 'today') render(true); });
   };
-  /* Today's first paint: today-hero.json (about 1 KB, requested by index.html as the page starts) shows the bet with
-     its price, book, kickoff and card, the Climb and the last game day while the full today.json is still loading. */
+  /* Today's first paint: today-hero.json (a few kilobytes, requested by index.html as the page starts). */
   let heroLoaded = null, todayLanded = false;
   const heroFetch = () => {
     const early = window.krHero;
@@ -836,31 +1002,24 @@
     return maybe('app/today-hero.json').catch(() => null)
       .then(hero => { if (hero && Array.isArray(hero.bets)) heroLoaded = hero; return heroLoaded; });
   };
-  /* Two compact rows under Today's heading, the same on the first paint and the full card (DIRECTION-RULES
-     section 5): the Climb's step, stake and bank, and the last game day's W-L. They sit above the first ticket so a
-     375 px phone shows them with the bet and no taps. On the full card each opens its ledger or receipts in one tap. */
-  const statusRows = (c, last, body = {}) => {
-    const row = (box, label, text, inside) => inside
-      ? `<details class="status-row" data-box="${box}"><summary><span><b>${label}</b> · ${text}</span></summary><div class="status-body">${inside}</div></details>`
-      : `<div class="status-row"><p><span><b>${label}</b> · ${text}</span></p></div>`;
-    const climb = c && isNum(c.riding) ? row('climb-status', '80/20 Climb', `${esc(climbWords(c))} · ${money(c.riding)} riding · ${money(c.banked)} banked`, body.climb) : '';
-    const day = last ? row('last-day', 'Last game day', `${esc(dayLabel(last.kickoff))} · ${esc(wl(last))}${isNum(last.units) ? ` · ${esc(units(last.units))}` : ''}`, body.last) : '';
-    return climb || day ? `<div class="today-status">${climb}${day}</div>` : '';
-  };
   const LOADING = '<p class="loading muted" role="status">Loading…</p>';
   /* A painted hero belongs to football Today in the league it was painted for; anything else clears it at once. */
   const dropHero = () => { const view = $('#view'); if (view && view.querySelector('.hero-first')) view.innerHTML = LOADING; };
+  /* The top of Today, the same on the first paint and the full card, so nothing moves when today.json lands: the
+     chef's line with the last game day's W-L, the first ticket on the rail, the Climb stub (inside the first screen
+     at 375 x 812, DIRECTION-RULES section 5 as updated by decision 10), then the rest of the rail. */
+  const todayTop = ({ rows, today, last, season, climb, runs, lines, more = [], past = [] }) => {
+    const run = rows.length ? null : nextRun(runs);
+    return `<section class="kt-lede"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1>${esc(ledeTitle(rows, today))}</h1></section>
+      ${rows.length ? rail(rows.slice(0, 1), { season, lines }) : emptyRail(`${run ? `I look again at ${esc(run)}. ` : ''}<a href="#research/trends">Tonight's research ›</a>`)}
+      ${climbStub(climb, past)}${rows.length > 1 || more.length ? `<div class="kt-sec" style="margin-top:28px">${rail([...more, ...rows.slice(1)], { season, lines, more: true })}</div>` : ''}`;
+  };
   const firstPaint = (hero, now = Date.now()) => {
-    const { today, rows } = heroBets(hero, now, state.league), n = rows.length;
-    /* A saved league with nothing in the hero waits for the full card instead of painting an empty heading. */
-    if (!n && ((hero || {}).bets || []).length) return '';
-    const title = n && !today ? `Next best bet · ${whenShort(rows[0].kickoff)}` : "Today's best bets";
-    const sub = n ? `${n} best bet${n === 1 ? '' : 's'} ${today ? 'today' : `for ${esc(dayLabel(rows[0].kickoff))}`}${state.league !== 'ALL' ? ` in ${esc(LEAGUE_NAME[state.league])}` : ''}.`
-      : 'Free picks, each with the price and the chance we give it.';
-    return `${head(`Today · ${dayLabel(todayISO())}`, title, sub)}${statusRows(hero.climb, (hero.last || {})[state.league])}
-      <section class="section today-bets hero-first" aria-busy="true">
-      ${n ? `<div class="tickets wide">${rows.map(p => ticket(p, { compact: true, card: p.card })).join('')}</div>` : ''}
-      <p class="loading muted" role="status">Loading the rest of today…</p></section>`;
+    const { today, rows } = heroBets(hero, now, state.league);
+    /* A saved league with nothing in the hero waits for the full card instead of painting an empty rail. */
+    if (!rows.length && ((hero || {}).bets || []).length) return '';
+    return `<div class="hero-first kt-today" aria-busy="true"><div>${todayTop({ rows, today, last: (hero.last || {})[state.league], season: (hero.season || {})[state.league],
+      climb: hero.climb, runs: hero.deskRuns })}</div><div><p class="loading muted" role="status">Loading the rest of today…</p></div></div>`;
   };
   /* Painted only while today.json is still on its way, and only if no newer render or route has started. */
   const paintHero = (heroP, todayP) => {
@@ -874,7 +1033,8 @@
       if (html) view.innerHTML = html; else dropHero();
     });
   };
-  /* Sports without best bets get their own honest Today: scores and their trial, never football substituted. */
+  /* Sports without best bets get their own honest Today: the same chef's line over an empty rail, then that sport's
+     trial and scores. Never football substituted. */
   const sportToday = async () => {
     const [lab, trials] = await Promise.all([maybe('market-lab.json'), maybe('app/sport-research.json')]);
     const lg = state.league;
@@ -882,148 +1042,78 @@
     const scores = await gamesLive({ day: etDay() });
     const hasTrial = ((trials || {}).leagues || {})[lg], hasLab = ((lab || {}).leagues || {})[lg];
     const status = hasTrial ? 'in a paper trial, not official picks' : hasLab ? 'collecting data for a future model, not picks' : 'scores only for now: no picks or research yet';
-    return `${head(dayLabel(todayISO()), `${LEAGUE_NAME[lg]} · Today`, hasTrial || hasLab ? 'No best bets in this sport. Scores and research are below.' : 'No best bets in this sport. Scores are below.')}
-      <div class="card on-felt" style="margin-bottom:14px"><p class="small"><b>${esc(LEAGUE_NAME[lg])} is ${esc(status)}.</b> <a href="#record/trials">All sports' status →</a></p></div>
-      <div style="margin-bottom:14px">${card}</div>
-      ${scores}<p class="small" style="margin-top:12px"><a href="#games/live">All scores →</a></p>`;
+    return `<section class="kt-lede"><p class="date">${esc(C.dayLabel(todayISO()))}. ${esc(LEAGUE_NAME[lg])}.</p><h1>Nothing on the rail yet.</h1></section>
+      ${emptyRail(`No best bets in this sport. ${esc(LEAGUE_NAME[lg])} is ${esc(status)}. <a href="#record/trials">All sports' status ›</a>`)}
+      <div class="kt-page-sec">${card}</div><div class="kt-page-sec">${scores}<p class="small" style="margin-top:12px"><a href="#games/live">All scores →</a></p></div>`;
   };
+  /* Today in the owner's order: rail -> Climb -> Leftovers -> Prep List -> the closed "More for today" fold. */
   VIEWS.today = async route => {
     if (route && route.league && location.hash !== appliedHash) { appliedHash = location.hash; setLeague(route.league); }
     if (!FOOTBALL.includes(state.league) && state.league !== 'ALL') { dropHero(); return sportToday(); }
     const todayP = get('app/today.json'), heroP = heroFetch();
     /* Until the full card has landed once, each Today render (a league change too) repaints the hero for its league. */
     if (!todayLanded) paintHero(heroP, todayP);
-    /* The hero is a kilobyte and already on its way; waiting for it keeps the card links on the first full render. */
     const [today, notes] = await Promise.all([todayP, maybe('desk-notes.json'), heroP]);
     todayLanded = true;
     queueTodayExtras();
     const { board = null, lines = null, sports = null, every = today.picks || [] } = todayExtras || {};
     indexGames(today);
-    const now = Date.now();
-    const all = every;
-    const picks = all.filter(inLeague);
-    const sched = C.cardSchedule(picks, now);
+    const now = Date.now(), all = every, picks = all.filter(inLeague), sched = C.cardSchedule(picks, now);
     const pulled = p => p.status === 'withdrawn' || /before its post went out/.test(p.entryNote || '');
-    const offCard = p => ['Line moved', 'Price expired'].includes(C.pickState(p, now).word);
+    /* Off the card: the desk closed it after the line moved. It never hangs on the rail; it stays graded. A play whose
+       saved quote only aged out is still on the card and hangs there with "Posted price may be gone". */
+    const offCard = p => C.pickState(p, now).word === 'Line moved';
     const order = (a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)) || String(a.kickoff).localeCompare(String(b.kickoff));
-    const cards = new Map(((heroLoaded || {}).bets || []).map(b => [b.id, b.card]));
-    const bets = sched.today.filter(p => !C.isParlay(p) && !pulled(p) && !offCard(p)).sort(order);
-    const later = sched.upcoming.filter(p => !C.isParlay(p) && !pulled(p)).sort(order);
-    const upcoming = later.filter(p => !offCard(p)), off = [...sched.today, ...later].filter(p => !C.isParlay(p) && !pulled(p) && offCard(p));
+    const straight = p => !C.isParlay(p) && !pulled(p);
+    const todays = sched.today.filter(p => straight(p) && !offCard(p)).sort(order);
+    const later = sched.upcoming.filter(p => straight(p) && !offCard(p)).sort(order);
+    const off = [...sched.today, ...sched.upcoming].filter(p => straight(p) && offCard(p)).sort(order);
     const gone = [...sched.today, ...sched.upcoming, ...sched.awaiting].filter(p => !C.isLadder(p) && pulled(p));
     const awaiting = sched.awaiting.filter(p => !C.isLadder(p) && !pulled(p));
     const fun = [...sched.today, ...sched.upcoming].filter(p => C.isParlay(p) && !C.isLadder(p) && !pulled(p));
+    /* With nothing today, the next game day's plays still on the card hang on the rail, as the first paint does. */
+    const firstDay = later.map(p => C.dayOf(p.kickoff))[0];
+    const rows = todays.length ? todays : later.filter(p => C.dayOf(p.kickoff) === firstDay);
+    const rest = later.filter(p => !rows.includes(p));
     const ladder = C.theLadder(all);
+    const rungHere = ladder.open && (state.league === 'ALL' || ladder.open.league === state.league) ? [ladder.open] : [];
+    const climb = { run: ladder.run, step: ladder.step, riding: ladder.open ? Number((ladder.open.ladder || {}).stake) || ladder.stake : ladder.stake,
+      open: ladder.open && { step: (ladder.open.ladder || {}).step }, settled: ladder.history.length, saved: ladder.saved, net: ladder.accounting.net,
+      last: ladder.history.length ? { result: ladder.history[ladder.history.length - 1].result, step: (ladder.history[ladder.history.length - 1].ladder || {}).step } : null };
     const games = (today.games || []).filter(inLeague);
-    const todays = games.filter(g => C.dayOf(g.kickoff) === etDay());
-    const k = kpiStrip(all.filter(inLeague), board);
-
-    const onboarded = saved.get('onboarded', false);
-    const onboard = onboarded ? '' : `<div class="onboard" role="note"><p>New here? Best bets are our official picks, graded in public, win or lose. <a href="#start">How to read one →</a></p><button type="button" class="onboard-x" data-dismiss-onboard aria-label="Dismiss">×</button></div>`;
-
-    const et = Number(new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: 'numeric', hourCycle: 'h23' }).format(new Date(now)));
-    const reason = !todays.length ? 'No covered games today' : todays.every(g => Date.parse(g.kickoff) <= now) ? "Today's games have started"
-      : 'Nothing for today has cleared our price checks yet';
-    const nextGame = games.filter(g => Date.parse(g.kickoff) > now && C.dayOf(g.kickoff) > etDay()).sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0];
-    const nextWindow = et < 12 && todays.some(g => Date.parse(g.kickoff) > now) ? 'The next release window is around noon ET, about two hours before the earliest kickoff.'
-      : nextGame ? `The next release window is around noon ET on ${dayLabel(nextGame.kickoff)}, or about two hours before an earlier kickoff.` : 'No covered games are scheduled yet.';
-    const byDay = new Map();
-    upcoming.forEach(p => { const d = C.dayOf(p.kickoff); if (!byDay.has(d)) byDay.set(d, []); byDay.get(d).push(p); });
-    const days = [...byDay.entries()];
-    const climb = climbStrip(ladder);
-    const rungHere = ladder.open && (state.league === 'ALL' || ladder.open.league === state.league);
-    const climbOpen = rungHere ? `<div class="tickets">${ticket(ladder.open)}</div>` : '';
-    /* Order on the card: Pick of the Day, then a live Climb step, then the rest (the owner's phone-first rule).
-       An unposted Climb is the small status row under the heading, never the hero. */
-    const heroList = list => { const potd = list.filter(p => p.featured), rest = list.filter(p => !p.featured);
-      return `${potd.length ? `<div class="tickets wide">${potd.map(p => ticket(p, { card: cards.get(p.id) })).join('')}</div>` : ''}${rungHere ? `<div style="margin:14px 0">${climbOpen}${climb}</div>` : ''}${rest.length ? `<div class="tickets wide"${potd.length ? ' style="margin-top:14px"' : ''}>${rest.map(p => ticket(p, { card: cards.get(p.id) })).join('')}</div>` : ''}`; };
     const graded = picks.filter(p => p.result && !p.historicalImport && !C.isParlay(p) && C.dayOf(p.kickoff));
     const lastDay = graded.map(p => C.dayOf(p.kickoff)).filter(d => d < etDay()).sort().pop();
-    const recent = lastDay ? graded.filter(p => C.dayOf(p.kickoff) === lastDay).sort((a, b) => String(b.kickoff).localeCompare(String(a.kickoff))) : [];
-    const gradedToday = graded.filter(p => C.dayOf(p.kickoff) === etDay());
-    let heroTitle, heroSub, heroHtml, laterHtml = '';
-    if (bets.length) {
-      heroTitle = "Today's best bets";
-      heroSub = `${bets.length} best bet${bets.length === 1 ? '' : 's'} today${state.league !== 'ALL' ? ` in ${esc(LEAGUE_NAME[state.league])}` : ''}.`;
-      heroHtml = heroList(bets) + (gradedToday.length ? `<p class="eyebrow" style="margin:16px 0 8px">Already graded today</p><div class="receipts">${gradedToday.map(p => receipt(p, new Map(((board || {}).picks || {}).rows?.map(r => [r.id, r.clv]) || []))).join('')}</div>` : '');
-      laterHtml = days.map(([, list]) => `<p class="eyebrow" style="margin:14px 0 8px">${esc(dayLabel(list[0].kickoff))}</p><div class="tickets wide">${list.map(p => ticket(p, { compact: true })).join('')}</div>`).join('');
-    } else if (gradedToday.length) {
-      const gsum = C.summaryOf(gradedToday.filter(p => !C.isUnpricedImport(p)), 1);
-      heroTitle = "Today's best bets · graded";
-      heroSub = `${gradedToday.length} best bet${gradedToday.length === 1 ? '' : 's'} today, already graded: ${esc(wl(gsum))} · ${esc(units(gsum.units))}.${days.length ? ` The next ${days[0][1].length === 1 ? 'one is' : 'ones are'} posted for ${esc(dayLabel(days[0][1][0].kickoff))}.` : ''}`;
-      heroHtml = `<div class="receipts">${gradedToday.map(p => receipt(p, new Map(((board || {}).picks || {}).rows?.map(r => [r.id, r.clv]) || []))).join('')}</div>${days.length ? `<div class="tickets wide" style="margin-top:14px">${days[0][1].map(p => ticket(p, { card: cards.get(p.id) })).join('')}</div>` : ''}${rungHere ? `<div style="margin-top:14px">${climbOpen}${climb}</div>` : ''}`;
-      laterHtml = days.slice(1).map(([, list]) => `<p class="eyebrow" style="margin:14px 0 8px">${esc(dayLabel(list[0].kickoff))}</p><div class="tickets wide">${list.map(p => ticket(p, { compact: true })).join('')}</div>`).join('');
-    } else if (days.length) {
-      const [, first] = days[0];
-      heroTitle = `Next best bet · ${whenShort(first[0].kickoff)}`;
-      heroSub = `${upcoming.length} open best bet${upcoming.length === 1 ? '' : 's'} through ${dayLabel(upcoming[upcoming.length - 1].kickoff)}.`;
-      heroHtml = heroList(first);
-      laterHtml = days.slice(1).map(([, list]) => `<p class="eyebrow" style="margin:14px 0 8px">${esc(dayLabel(list[0].kickoff))}</p><div class="tickets wide">${list.map(p => ticket(p, { compact: true })).join('')}</div>`).join('');
-    } else {
-      heroTitle = "Today's best bets";
-      heroSub = 'Free picks, each with the price and the chance we give it.';
-      heroHtml = `${empty('No best bet yet', `${esc(reason)}. ${esc(nextWindow)} <a href="#research/lines">See the research board →</a> · <a href="#schedule">Release schedule</a>`)}${rungHere ? `<div style="margin-top:14px">${climbOpen}${climb}</div>` : ''}`;
-    }
-
-    /* Last game day: its hits and misses, a status row under the heading that opens to the receipts. */
-    const clvById = new Map(((board || {}).picks || {}).rows?.map(r => [r.id, r.clv]) || []);
-    const recentSum = C.summaryOf(recent.filter(p => !C.isUnpricedImport(p)), 1);
-    const status = statusRows(climbSummary(ladder), recent.length ? { ...recentSum, kickoff: recent[0].kickoff } : null, {
-      climb: rungHere ? '' : climbStrip(ladder, { flat: true }),
-      last: recent.length ? `<div class="receipts">${recent.map(p => receipt(p, clvById)).join('')}</div><p class="small" style="margin-top:8px"><a href="#record">Full record →</a></p>` : '' });
-
-    /* Anything already on the card (open or not) stays out of "Worth a look". */
-    const official = new Set(picks.filter(p => !p.result && !p.historicalImport && !C.isParlay(p)).map(officialKey));
-    const gameIndex = new Map((today.games || []).map(g => [g.id, g]));
-    const withGame = vm => { const g = gameIndex.get(vm.gameId); vm.matchup = g ? `${g.away.abbr} at ${g.home.abbr}` : null; return vm; };
-    const current = vm => vm.age.kind === 'fresh' || vm.age.kind === 'aging';
-    const lineRows = lines ? (lines.lines || []).map(r => withGame(lineVM(r, now))).filter(vm => inLeague(vm) && onBoard(vm, now) && current(vm)) : [];
-    const research = collapse(lineRows.filter(vm => hasValue(vm) && !official.has(vm.key))).sort(SORTS.edge).slice(0, 3);
+    const recent = graded.filter(p => C.dayOf(p.kickoff) === lastDay || C.dayOf(p.kickoff) === etDay());
+    const k = kpiStrip(all.filter(inLeague), board);
     const notesList = C.deskNotes(notes, state.league, now, today.games || []);
-    const worth = research.length || notesList.length ? `${research.length ? `<div class="board">${research.map(vm => boardRow(vm, false)).join('')}</div>` : ''}
-      ${notesList.length ? `<div class="grid two" style="margin-top:10px">${notesList.map(n => { const g = gameIndex.get(n.gameId);
-        return `<details class="more-box"><summary>${esc(n.label || 'Research note')} · ${esc(n.title)}</summary><div><p class="small">${esc(n.text)}</p><p class="small muted" style="margin-top:6px">${g ? `${esc(g.away.abbr)} at ${esc(g.home.abbr)} · ` : ''}${esc(whenShort(n.kickoff))} · as of ${esc(ago(n.observedAt))}</p><p class="small" style="margin-top:6px"><a href="${esc(n.href)}">Explore →</a></p></div></details>`; }).join('')}</div>` : ''}`
-      : empty('Nothing worth a look right now', 'Nothing on the board is worth the current price. Check back closer to kickoff.', 'research');
-
     /* Underdog watch: fresh outright candidates (both moneylines within four hours), and spread covers kept apart. */
+    const current = vm => vm.age.kind === 'fresh' || vm.age.kind === 'aging';
+    const lineRows = lines ? (lines.lines || []).map(r => lineVM(r, now)).filter(vm => inLeague(vm) && onBoard(vm, now) && current(vm)) : [];
     const upsets = games.filter(g => currentUpset(g, now)).sort((a, b) => (b.upsetWatch.modelChance - b.upsetWatch.marketChanceNoVig) - (a.upsetWatch.modelChance - a.upsetWatch.marketChanceNoVig)).slice(0, 4);
     const dogSpreads = lineRows.filter(vm => !vm.isProp && /spread/i.test(vm.market) && Number(vm.line) > 0 && hasValue(vm));
-    const firstDay = dogSpreads.length ? C.dayOf(dogSpreads.slice().sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0].kickoff) : null;
-    const spreadRows = dogSpreads.filter(vm => C.dayOf(vm.kickoff) === firstDay).sort(SORTS.edge).slice(0, 4);
+    const dogDay = dogSpreads.length ? C.dayOf(dogSpreads.slice().sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0].kickoff) : null;
+    const spreadRows = dogSpreads.filter(vm => C.dayOf(vm.kickoff) === dogDay).sort(SORTS.edge).slice(0, 4);
     const upsetHtml = upsets.length || spreadRows.length ? `<p class="eyebrow" style="margin-bottom:8px">Outright upset candidates</p>${upsets.length ? `<div class="grid two">${upsets.map((g, i) => upsetRow(g, i + 1)).join('')}</div>` : '<p class="muted small">No fresh outright candidate.</p>'}
       ${spreadRows.length ? `<p class="eyebrow" style="margin:16px 0 4px">Underdog spread value</p><p class="small muted" style="margin-bottom:8px">Covering does not mean winning outright.</p><div class="board">${spreadRows.map(vm => boardRow(vm, false)).join('')}</div>` : '<p class="muted small" style="margin-top:10px">Underdog spreads: none highlighted right now.</p>'}`
       : '<p class="muted small">No current outright-upset or underdog-spread highlight.</p>';
-
-    /* Today's games: what's live first, with scores refreshed from the free scoreboard. */
-    const liveToday = withLive(games.filter(g => C.dayOf(g.kickoff) === etDay() || (!g.completed && (g.state === 'in' || C.dayOf(g.kickoff) === etDay(-1)))));
-    liveToday.games = liveToday.games.filter(g => C.dayOf(g.kickoff) === etDay() || g.state === 'in');
-    const rank = g => g.state === 'in' ? 0 : !g.completed ? 1 : 2;
-    const tonight = liveToday.games.slice().sort((a, b) => rank(a) - rank(b) || String(a.kickoff).localeCompare(String(b.kickoff))).slice(0, 6);
-    const tonightHtml = tonight.length ? `${liveStamp(liveToday.refreshed)}<div class="projs">${tonight.map(g => projCard(g, { ranks: false })).join('')}</div>${liveToday.games.length > tonight.length ? `<p class="small" style="margin-top:10px"><a href="#games">All ${liveToday.games.length} games today →</a></p>` : ''}` : `<p class="muted small">No covered football games today. <a href="#games/live">Scores for every sport</a></p>`;
-    const sportsHtml = state.league === 'ALL' ? `<details class="more-box"><summary>More sports · scores and research for nine leagues</summary><div class="pill-row" style="padding-top:4px">${Object.keys(LIVE).map(key => { const n = ((((sports || {}).leagues || {})[key] || {}).games || []).filter(g => g.date === etDay()).length;
-      return `<a class="pill" href="#today?sport=${esc(key)}">${esc(LEAGUE_NAME[key])}${FOOTBALL.includes(key) ? '' : ` · ${n} today`} →</a>`; }).join('')}</div></details>` : '';
-
+    const tonight = games.filter(g => C.dayOf(g.kickoff) === etDay()).sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
+    const slips = list => `<div class="kt-slips">${list.map(p => slip(p, { when: true })).join('')}</div>`;
+    const span = list => { const d = [...new Set(list.map(p => weekday(p.kickoff)))]; return d.length > 1 ? `${d[0]} to ${d[d.length - 1]}` : d[0] || ''; };
     const u = k.rec.captured.units;
-    const gameCount = liveToday.games.length;
-    /* The owner's 10-second Today: two compact status rows (Climb, last game day), the card, then the season line
-       and the welcome note. The rows match the first paint, so the first ticket does not move when the card lands.
-       Underdog watch is one tap away in "More for today": DIRECTION-RULES section 5 supersedes the Oct 2
-       "Today always shows Underdog Watch" placement; its honest empty state is unchanged inside the fold. */
-    return `${head(`Today · ${dayLabel(todayISO())}`, heroTitle, heroSub)}${status}
-      <section class="section today-bets">${heroHtml}</section>
-      <p class="proof"><a class="proof-line" href="#record">${esc(k.label === 'Season record' ? 'Season' : k.label === 'Playoff record' ? 'Playoffs' : 'This stage')} <b class="num">${esc(wl(k.rec.all))}</b>${isNum(u) ? ` · <span class="${u < 0 ? 'red' : u > 0 ? 'green' : ''}">${esc(units(u).replace(/u$/, ' units'))}</span> at posted prices` : ''}<span class="go">Every result →</span></a>${OWNER_FLAGS.clvHeadline && k.clv.measured ? `<a class="pill" href="#record/model">Beat the closing line ${k.clv.beat} of ${k.clv.measured}</a>` : ''}</p>
-      ${onboard}
-      ${laterHtml ? section('More best bets', laterHtml, '', 'Already posted. Check your book; prices move.') : ''}
-      ${off.length ? `<details class="more-box" data-box="off-card"><summary>Off the card · ${off.length}</summary><p class="small muted">The line moved or the saved price expired. Each posted play still counts and is graded at its posted price.</p><div class="tickets" style="padding:6px 0 14px">${off.map(p => ticket(p, { compact: true })).join('')}</div></details>` : ''}
-      ${awaiting.length ? section('Waiting on results', `<div class="tickets">${awaiting.map(p => ticket(p, { compact: true })).join('')}</div>`, '', 'Games are over or running late; grading follows the final.') : ''}
-      ${gone.length ? `<details class="more-box"><summary>Pulled before kickoff · ${gone.length}</summary><div class="tickets" style="padding-top:6px">${gone.map(p => ticket(p, { compact: true })).join('')}</div></details>` : ''}
-      ${communityCard()}
-      ${fun.length ? section('Fun tickets', `<div class="tickets">${fun.map(p => ticket(p)).join('')}</div>`, '', 'For fun at a smaller stake. Tracked separately, never in the best-bet record.') : ''}
-      ${section('Research worth a look', worth, '<a class="more" href="#research/lines">See every line →</a>', 'Research, not best bets. Current prices that pass our price check.')}
-      <details class="today-more" data-box="today-more"><summary>More for today<small>Underdog watch · ${gameCount} game${gameCount === 1 ? '' : 's'} today</small></summary>
-      ${section('Underdog watch', upsetHtml, '', 'Outright upset research: our raw winner estimate against the market. Not a best bet.')}
-      ${section('Today\'s games', tonightHtml, '<a class="more" href="#games/live">Live scores →</a>')}</details>
-      ${sportsHtml}`;
+    const fold = `<details class="kt-sec kt-fold" data-box="today-more"><summary><b>More for today</b><span>${rest.length ? `${rest.length} more best bet${rest.length === 1 ? '' : 's'} later this week` : 'Games, underdogs and every result'}</span></summary>
+      ${rest.length ? foldRow('later', 'Later this week', `${rest.length} more best bet${rest.length === 1 ? '' : 's'}, ${span(rest)}`, slips(rest)) : ''}
+      ${off.length ? foldRow('off-card', `Off the card · ${off.length}`, 'The line moved; each still counts at the price we posted', slips(off)) : ''}
+      ${gone.length ? foldRow('pulled', `Pulled before kickoff · ${gone.length}`, 'Pulled over news; each still counts', slips(gone)) : ''}
+      ${fun.length ? foldRow('fun', 'Fun tickets', `${fun.length} at a smaller stake, apart from best bets`, slips(fun)) : ''}
+      ${foldLink('#games', "Tonight's games", tonight.length ? tonight.slice(0, 4).map(g => `${g.away.abbr} at ${g.home.abbr} ${clock(g.kickoff).replace(/ [AP]M$/, '')}`).join(', ') : 'Scores and projections for every game')}
+      ${foldRow('upsets', 'Underdog watch', 'Upset research, not best bets', upsetHtml)}
+      ${foldLink('#record', 'Every result', `${wl(k.rec.all).replace(/–/g, '-')}${isNum(u) ? `, ${units(u).replace(/u$/, ' units')} at posted prices` : ''}`)}
+      ${foldLink('https://discord.gg/ZnjubjsBPM', 'Free Discord', 'Best bets land there about 10–15 minutes before X', true)}
+      ${state.league === 'ALL' ? foldRow('sports', 'More sports', 'Scores and research for nine leagues', `<div class="pill-row">${Object.keys(LIVE).map(key => { const n = ((((sports || {}).leagues || {})[key] || {}).games || []).filter(g => g.date === etDay()).length;
+        return `<a class="pill" href="#today?sport=${esc(key)}">${esc(LEAGUE_NAME[key])}${FOOTBALL.includes(key) ? '' : ` · ${n} today`} →</a>`; }).join('')}</div>`) : ''}</details>`;
+    return `<div class="kt-today"><div>${todayTop({ rows, today: Boolean(todays.length), last: (today.lastSlate || {})[state.league], season: (today.season || {})[state.league],
+      climb, runs: today.deskRuns, lines: lines && lines.lines, more: rungHere, past: ladder.history })}</div>
+      <div>${leftovers(recent, awaiting, (today.lastSlate || {})[state.league])}${prepList(today.prep, notesList, now)}${fold}</div></div>`;
   };
 
   /* ---------- a single best bet ---------- */
@@ -1032,7 +1122,7 @@
     indexGames(today);
     let pick = (today.picks || []).find(p => p.id === route.id);
     if (!pick) pick = (await allPicks()).find(p => p.id === route.id);
-    const back = '<a class="back" href="#today">← Today</a>';
+    const back = '<a class="kt-back" href="#today">‹ Today</a>';
     if (!pick) return head('', 'Play not found', 'This play is not in the current window. Every published play stays on the <a href="#record">record</a>.', back);
     const vm = pickVM(pick);
     const how = howWeGotIt(pick);
@@ -1052,20 +1142,29 @@
     const chanceTitle = vm.chance != null ? `How we got ${pctText(vm.chance)}` : 'How we got this';
     const projected = game && !C.isParlay(pick) && !pick.athleteId ? section('Our projected score now', `<p class="small muted" style="margin-bottom:8px">When posted: our number ${isNum(pick.projection) ? esc(C.fixed(pick.projection)) : '–'} against the ${esc(pick.line ?? '–')} line${vm.chance != null ? ` (${pctText(vm.chance)} our chance)` : ''}. The card below is today's model and market.</p>${projCard(game, { link: true, sideLabel: 'Current lean' })}`) : '';
     const sameGame = research === `#game/${pick.gameId}`;
-    return `${back}<div class="page-head"><p class="eyebrow">${esc(when(vm.kickoff))}</p>${pick.quotedAt && vm.mode === 'open' ? `<p class="sub">Price quoted ${esc(ago(pick.quotedAt))}</p>` : ''}</div>
-      <div class="tickets">${ticket(pick, { onPage: true, lines: catalog?.lines })}</div>
-      ${result ? section('Result', result) : ''}
+    const isSaved = state.watchlist.some(r => r.key === 'pick:' + pick.id);
+    const tape = (title, body) => `<section class="kt-page-sec"><h2 class="kt-tape">${esc(title)}</h2>${body}</section>`;
+    /* Fair price and edge live here, one tap from Today (decision 2). */
+    const price = vm.kind === 'best' && vm.fair != null && vm.calibrated && vm.mode !== 'closed'
+      ? tape('My price', `<div class="kt-figs"><p><b class="num">${esc(minus(oddsText(vm.fair)))}</b>Price matching our chance</p><p><b class="num">${vm.edge > 0 ? '+' : ''}${esc(vm.edge)} pts</b>Chance vs price's need</p></div>`) : '';
+    const started = Date.parse(pick.kickoff) <= Date.now();
+    const chart = vm.kind === 'best' && pick.athleteId && FOOTBALL.includes(pick.league) && C.marketKey(pick)
+      ? tape('Hit history', `<div data-prop-history data-league="${esc(pick.league)}" data-athlete="${esc(pick.athleteId)}" data-stat="${esc(C.marketKey(pick))}" data-line="${esc(pick.line)}" data-dir="${esc(pick.direction || 'over')}" data-game="${esc(pick.gameId || '')}" data-before="${pick.result || started ? esc(C.dayOf(pick.kickoff) || '') : ''}"></div>`)
+      : vm.history ? tape('Hit history', `<p class="small">${esc(vm.history)} ${esc((pick.reasoning || {}).historyNote || 'History, not a probability.')}</p>`) : '';
+    return `${back}<p class="small muted">${esc(when(vm.kickoff))}${pick.quotedAt && vm.mode === 'open' ? ` · price quoted ${esc(ago(pick.quotedAt))}` : ''}</p>
+      <div class="kt-page"><div style="margin-top:14px">${rail([pick], { onPage: true, lines: catalog?.lines, season: (today.season || {})[state.league] })}</div>
+      ${result ? tape('Result', result) : ''}${price}
       ${notices.length ? `<div class="card on-felt" style="margin-top:14px;display:grid;gap:8px">${notices.map(n => `<p class="small">${n}</p>`).join('')}</div>` : ''}
-      ${how.length ? section(chanceTitle, `<div class="card"><ol class="steps">${how.map(x => `<li>${esc(x)}</li>`).join('')}</ol>${vm.chance != null ? `<p class="small muted" style="margin-top:6px">When we posted: we gave it ${(100 * vm.chance).toFixed(1)}% to win. At ${esc(oddsText(vm.odds))}, the price needed ${vm.needs != null ? `${(100 * vm.needs).toFixed(1)}%` : 'an unknown chance'} to win often enough.</p>` : ''}</div>`)
-        : vm.kind === 'best' && isNum(pick.projection) ? section('Our number', `<div class="card"><p>We project ${esc(C.fixed(pick.projection))} against the ${esc(pick.line)} line. No chance estimate checked against results was saved for this play.</p></div>`) : ''}
-      ${projected}
-      ${vm.legs.length ? section('Legs', `<div class="card"><ul class="fa">${vm.legs.map(l => `<li>${esc(l)}</li>`).join('')}</ul>${pick.correlation ? `<p class="small muted" style="margin-top:8px"><b>How the legs relate:</b> ${esc(prose(pick.correlation))}</p>` : ''}</div>`) : ''}
-      ${pick.why || pick.risk ? `<details class="more-box" data-box="fullread" style="margin-top:14px"><summary>Our notes when we posted it</summary><div class="grid two"><div class="card"><p class="eyebrow green">Why</p><p style="margin-top:6px">${esc(prose(pick.why))}</p>${(pick.reasoning || {}).historyNote ? `<p class="small muted" style="margin-top:6px">${esc(pick.reasoning.historyNote)}</p>` : ''}</div><div class="card"><p class="eyebrow">What could go wrong</p><p style="margin-top:6px">${esc(prose(pick.risk))}</p></div></div></details>` : ''}
-      ${pick.cutoff ? section(vm.mode === 'open' ? 'Price we would still play' : vm.kind === 'best' ? 'Posted cutoff' : 'Entry rule', `<div class="card"><p>${esc(prose(pick.cutoff))}</p></div>`) : ''}
-      <div class="btn-row" style="margin-top:14px">${research ? `<a class="btn" href="${esc(research)}">${pick.athleteId ? 'Player page' : 'Matchup research'}</a>` : ''}${pick.gameId && game && !sameGame ? `<a class="btn" href="#game/${esc(pick.gameId)}">Game page</a>` : ''}<a class="btn" href="#record">Every result</a></div>
-      ${communityCard()}
+      ${how.length ? tape(chanceTitle, `<div class="card"><ol class="steps">${how.map(x => `<li>${esc(x)}</li>`).join('')}</ol>${vm.chance != null ? `<p class="small muted" style="margin-top:6px">When we posted: we gave it ${(100 * vm.chance).toFixed(1)}% to win. At ${esc(oddsText(vm.odds))}, the price needed ${vm.needs != null ? `${(100 * vm.needs).toFixed(1)}%` : 'an unknown chance'} to win often enough.</p>` : ''}</div>`)
+        : vm.kind === 'best' && isNum(pick.projection) ? tape('Our number', `<div class="card"><p>We project ${esc(C.fixed(pick.projection))} against the ${esc(pick.line)} line. No chance estimate checked against results was saved for this play.</p></div>`) : ''}
+      ${chart}${projected}
+      ${vm.legs.length ? tape('Legs', `<div class="card"><ul class="fa">${vm.legs.map(l => `<li>${esc(l)}</li>`).join('')}</ul>${pick.correlation ? `<p class="small muted" style="margin-top:8px"><b>How the legs relate:</b> ${esc(prose(pick.correlation))}</p>` : ''}</div>`) : ''}
+      ${pick.why || pick.risk ? `<details class="more-box" data-box="fullread" style="margin-top:20px"><summary>Our notes when we posted it</summary><div class="grid two"><div class="card"><p class="eyebrow green">Why</p><p style="margin-top:6px">${esc(prose(pick.why))}</p>${(pick.reasoning || {}).historyNote ? `<p class="small muted" style="margin-top:6px">${esc(pick.reasoning.historyNote)}</p>` : ''}</div><div class="card"><p class="eyebrow">What could go wrong</p><p style="margin-top:6px">${esc(prose(pick.risk))}</p></div></div></details>` : ''}
+      ${pick.cutoff ? tape(vm.mode === 'open' ? 'Price we would still play' : vm.kind === 'best' ? 'Posted cutoff' : 'Entry rule', `<p>${esc(prose(pick.cutoff))}</p>${vm.mode === 'open' && goodTo(pick) ? `<p class="small muted" style="margin-top:4px">${esc(goodTo(pick))}</p>` : ''}`) : ''}
+      ${tape('Where it stands', `${vm.statusNote ? `<p class="small">${esc(vm.statusNote)}</p>` : ''}<p class="small muted" style="margin-top:4px">${esc(C.deliveryText(pick) || 'No delivery evidence recorded.')}</p>`)}
+      <div class="btn-row" style="margin-top:18px">${research ? `<a class="btn" href="${esc(research)}">${pick.athleteId ? 'Player page' : 'Matchup research'}</a>` : ''}${pick.gameId && game && !sameGame ? `<a class="btn" href="#game/${esc(pick.gameId)}">Game page</a>` : ''}<a class="btn" href="#record">Every result</a><button type="button" class="btn" data-watch-pick="${esc(pick.id)}" aria-pressed="${isSaved}" aria-label="${isSaved ? 'Unsave' : 'Save'} ${esc(vm.title)}">${isSaved ? '★ Saved' : '☆ Save'}</button></div>
       ${sources.length ? `<p class="small muted" style="margin-top:14px">Sources: ${sources.map((x, i) => `<a href="${esc(x)}" target="_blank" rel="noopener noreferrer">${esc(host(x, i))} ↗</a>`).join(' · ')}</p>` : ''}
-      <p class="small muted" style="margin-top:10px">${C.isParlay(pick) ? (C.isLadder(pick) ? 'A Climb step, tracked in dollars apart from the best-bet record.' : 'A fun ticket at a smaller stake, kept out of the best-bet record.') : pick.priceAssumed ? 'Graded at one unit at an assumed −115; no price was recorded when it was posted.' : 'Graded at one unit, at the line and price we posted.'} The posted price is kept for grading even after the line moves.</p>`;
+      <p class="small muted" style="margin-top:10px">${C.isParlay(pick) ? (C.isLadder(pick) ? 'A Climb step, tracked in dollars apart from the best-bet record.' : 'A fun ticket at a smaller stake, kept out of the best-bet record.') : pick.priceAssumed ? 'Graded at one unit at an assumed −115; no price was recorded when it was posted.' : 'Graded at one unit, at the line and price we posted.'} The posted price is kept for grading even after the line moves.</p></div>`;
   };
 
   /* ---------- Research (B: one pro board) ---------- */
@@ -1911,113 +2010,6 @@
       ${injuryHtml}${tdHtml}`;
   };
 
-  /* ---------- player page ---------- */
-  const LOG_COLS = { QB: ['cmp', 'att', 'passYds', 'passTD', 'int', 'car', 'rushYds', 'rushTD'],
-    RB: ['car', 'rushYds', 'anyTD', 'targets', 'rec', 'recYds', 'rzCar'], FB: ['car', 'rushYds', 'anyTD', 'targets', 'rec', 'recYds', 'rzCar'],
-    WR: ['targets', 'rec', 'recYds', 'anyTD', 'recLong', 'rzTgt'], TE: ['targets', 'rec', 'recYds', 'anyTD', 'recLong', 'rzTgt'], PK: ['fgm', 'fga', 'xpm', 'kPts'] };
-  const PROJ_KEY = { rec: 'receptions', car: 'carries' };
-  VIEWS.player = async route => {
-    const league = route.league;
-    const back = `<a class="back" href="#research/players?pl=${esc(league)}">← Players</a>`;
-    const index = await get(`app/players/${league}.json`);
-    const entry = (index.players || []).find(p => String(p[0]) === String(route.id));
-    if (!entry) return head('', 'Player not found', 'No stored games for this player in this league.', back);
-    const [shard, teams, today, lines] = await Promise.all([get(`app/players/${league}/${C.shardOf(route.id, index.shards)}.json`), teamDirectory(league), get('app/today.json'), lineData(league)]);
-    const data = shard.players[route.id];
-    const keys = shard.keys, rows = data.rows, pos = data.pos;
-    const read = (row, stat) => C.observedStat(row, keys, stat);
-    /* A new player starts fresh, unless the link carried a stat, season or sample. */
-    const pkey = `${league}:${route.id}`;
-    const carries = route.stat || route.season || route.sample;
-    if (state.player.key !== pkey || (carries && state.player.hash !== location.hash)) {
-      state.player.key = pkey;
-      state.player.hash = location.hash;
-      state.player.stat = route.stat || null;
-      state.player.season = route.season || 'current';
-      state.player.window = ['all', 'last5', 'last10', 'last20'].includes(route.sample) ? route.sample : 'all';
-    }
-    const options = [...new Set([...(C.POSITION_STATS[pos] || C.POSITION_STATS.WR), 'snapPct'])].filter(stat => rows.some(r => isNum(read(r, stat))));
-    if (state.player.stat && C.LABEL[state.player.stat] && !options.includes(state.player.stat)) options.push(state.player.stat);
-    const stat = options.includes(state.player.stat) ? state.player.stat : options[0] || (C.POSITION_STATS[pos] || C.POSITION_STATS.WR)[0];
-    const team = ((teams || {}).teams || {})[entry[3]] || { name: entry[4] };
-    const abbr = id => (((teams || {}).teams || {})[id] || {}).abbr || id;
-    const now = Date.now();
-    const next = (today.games || []).filter(g => g.league === league && !g.completed && Date.parse(g.kickoff) > now && [g.home.id, g.away.id].includes(String(entry[3])))
-      .sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0];
-    const side = next ? (String(next.home.id) === String(entry[3]) ? 'home' : 'away') : null;
-    const nextDetail = next ? await maybe(`app/games/${next.id}.json`) : null;
-
-    /* Season and sample: Last 5/10/20 always count inside the chosen season. */
-    const currentSeason = (next && next.season) || index.season || ((teams || {}).defense || {}).season;
-    const seasons = [...new Set(rows.filter(r => r[4] === 2).map(r => Number(r[2])))].sort((a, b) => b - a);
-    if (!['current', 'all'].includes(state.player.season) && !seasons.includes(Number(state.player.season))) state.player.season = 'current';
-    const scope = state.player.season, win = state.player.window;
-    const scopeLabel = scope === 'all' ? 'All seasons' : `${scope === 'current' ? currentSeason : scope} season`;
-    const recent = C.playerHistory(rows, currentSeason, scope, win);
-    const thisSeason = C.playerHistory(rows, currentSeason);
-    const values = recent.map(r => read(r, stat));
-
-    /* The line: the board's priced quote first, else the captured reference line from the game feed. */
-    const pricedRows = next && lines ? (lines.lines || []).filter(r => String(r.athleteId) === String(route.id) && r.gameId === next.id && C.marketKey(r) === stat) : [];
-    const priced = pricedRows.filter(r => !r.roleSuspect && !r.priceSuspect).map(r => lineVM(r, now)).filter(vm => onBoard(vm, now) && (vm.age.kind === 'fresh' || vm.age.kind === 'aging')).sort((a, b) => (b.edge ?? -99) - (a.edge ?? -99))[0] || null;
-    const latest = pricedRows.slice().sort((a, b) => Date.parse(b.observedAt) - Date.parse(a.observedAt))[0];
-    const captured = (((nextDetail || {}).props || {}).lines || {})[route.id];
-    const refLine = captured && isNum((captured[stat] || [])[0]) ? captured[stat][0] : null;
-    const quote = priced ? priced.src : latest || (refLine != null ? { line: refLine, state: 'reference', book: (((nextDetail || {}).props) || {}).provider || null, observedAt: (((nextDetail || {}).props) || {}).capturedAt || null } : null);
-    const line = quote && isNum(Number(quote.line)) ? Number(quote.line) : null;
-    const lineStatus = next ? C.quoteStatus(quote, next.kickoff) : null;
-    const dir = String((quote || {}).direction || 'over').toLowerCase() === 'under' ? 'under' : 'over';
-    const h = line != null ? C.hits(values, line) : null;
-
-    const opp = next ? (side === 'home' ? next.away : next.home) : null;
-    const group = C.POS_GROUP[pos];
-    const dRows = teams ? defenseRows(teams, league) : {};
-    const allow = opp && group && teams ? C.rankOf(dRows, opp.id, group, stat) : null;
-    const tone = allow ? toneFor(allow.rank, allow.of, stat) : 'neutral';
-    const verdict = allow && line != null ? defenseVerdict(C.rankTone(allow.rank, allow.of), dir, defGames(dRows, opp.id, group, stat)) : null;
-    const vs = opp ? C.splits(recent, keys, stat, opp.id, (row, k, s2) => read(row, s2)).vs : null;
-    const proj = side && nextDetail && nextDetail.forecast ? ((((nextDetail.forecast.players || {})[side] || {}).players || []).find(p => String(p.id) === String(route.id)) || null) : null;
-    const projectionField = PROJ_KEY[stat] || stat;
-    const projectionReview = Boolean(proj && (proj.underReview || []).includes(projectionField));
-    const projV = proj && !projectionReview ? proj[projectionField] : null;
-    const summary = C.summarize(values);
-    const split = C.splits(recent, keys, stat, null, (row, k, s2) => read(row, s2));
-    const valueText = v => C.statValue(v, stat);
-    const rangeText = v => C.statValue(stat === 'snapPct' ? v : Math.round(v), stat);
-    const word = (C.LABEL[stat] || stat).toLowerCase();
-
-    const nextCard = next ? `<div class="card" style="margin-bottom:16px"><p><b>Next: ${side === 'home' ? 'vs' : 'at'} ${esc(opp.name)}</b> · ${esc(when(next.kickoff))} · <a href="#game/${esc(next.id)}">Game page →</a></p>
-      <div class="kpis" style="margin-top:10px">
-        <div class="kpi"><small>Our average</small><b class="num">${projectionReview ? 'Under review' : Array.isArray(projV) ? esc(valueText(projV[0])) : '–'}</b><span>${projectionReview ? 'Projection under review' : Array.isArray(projV) ? `Usually between ${esc(rangeText(projV[1]))} and ${esc(rangeText(projV[2]))}` : `none for ${esc(word)}`}</span></div>
-        <div class="kpi"><small>${esc(lineStatus && lineStatus.current ? 'Line' : 'Reference line')}</small><b class="num">${line != null ? `${dir === 'under' ? 'Under' : 'Over'} ${esc(valueText(line))}` : '–'}</b><span>${line == null ? 'no line recorded' : h && h.n ? `${h[dir]} of ${h.n} ${dir} in the games shown` : 'no recorded games in the games shown'}</span></div>
-        <div class="kpi"><small>${esc(opp.abbr || 'Opponent')} vs ${esc(group || pos || '')}s</small><b class="num ${verdict === 'supports' ? 'green' : verdict === 'opposes' ? 'red' : ''}">${allow ? esc(valueText(allow.value)) : '–'}</b><span>${allow ? `${esc(word)} a game · ${allow.rank} of ${allow.of}${tone === 'soft' ? ' · soft matchup' : tone === 'tough' ? ' · tough matchup' : ''}${verdict ? ` · ${verdict === 'supports' ? 'supports' : 'works against'} the ${dir}` : ''}` : 'not tracked by position'}</span></div>
-        <div class="kpi"><small>Vs ${esc(opp.abbr || 'this opponent')}</small><b class="num">${vs && vs.summary ? esc(valueText(vs.summary.avg)) : '–'}</b><span>${vs && vs.summary ? `${vs.summary.n} meeting${vs.summary.n === 1 ? '' : 's'} in the games shown` : 'no meetings in the games shown'}</span></div></div>
-      ${priced ? `<p class="small" style="margin-top:10px">${esc(priced.title)} · <b>${esc(oddsText(priced.odds))}</b> ${esc(priced.book || '')} · we give it ${pctText(priced.chance)}; this price needs ${pctText(priced.needs)} to win often enough${priced.thin ? ' · few games' : ''}${!priced.calibrated ? ' · chance not checked against results yet' : ''}</p>${meter(priced.chance, priced.needs, true)}` : ''}
-      ${lineStatus ? `<p class="small muted" style="margin-top:6px">${esc(lineStatus.label)}${quote && quote.book && bookLabel(quote.book) ? ` · ${esc(bookLabel(quote.book))}` : ''}${quote && quote.observedAt ? ` · ${esc(ago(quote.observedAt))}` : ''}${!priced && line != null && !/reference/i.test(lineStatus.label) ? ' · a reference line, not a price' : ''}</p>` : ''}</div>` : '';
-
-    const seasonSelect = `<label class="sr" for="psea">Season</label><select id="psea" class="select" data-select="playerSeason"><option value="current"${scope === 'current' ? ' selected' : ''}>This season · ${esc(currentSeason ?? '')}</option>${seasons.filter(x => x !== Number(currentSeason)).map(x => `<option value="${x}"${String(x) === String(scope) ? ' selected' : ''}>${x}</option>`).join('')}<option value="all"${scope === 'all' ? ' selected' : ''}>All seasons</option></select>`;
-    const showing = `${scopeLabel} · ${recent.length} game${recent.length === 1 ? '' : 's'}${win === 'all' ? '' : ` · last ${win.replace('last', '')}`} · ${C.LABEL[stat] || stat}`;
-    const cols = [...(LOG_COLS[pos] || LOG_COLS.WR), ...(keys.includes('snapPct') && rows.some(r => C.observedCell(r, keys, 'snapPct') != null) ? ['snapPct'] : [])];
-    const log = recent.slice().sort((a, b) => String(b[1]).localeCompare(String(a[1])));
-    const where = r => r[7] === 0 ? '@' : r[7] === -1 ? 'vs (neutral)' : 'vs';
-    const shareHref = `#player/${league}/${encodeURIComponent(route.id)}?stat=${encodeURIComponent(stat)}${scope !== 'current' ? `&season=${encodeURIComponent(scope)}` : ''}${win !== 'all' ? `&sample=${win}` : ''}`;
-
-    return `${back}<div class="page-head" style="display:flex;gap:14px;align-items:center">${headshot(league, route.id, 'xl', team, pos || '')}<div><p class="eyebrow">${esc(pos || '')} · <a href="#team/${esc(league)}/${esc(entry[3])}">${esc(team.name || entry[4] || '')}</a> · ${thisSeason.length} game${thisSeason.length === 1 ? '' : 's'} this season</p><h1>${esc(data.name)}</h1></div></div>
-      <div class="btn-row" style="margin-bottom:14px">${watchButton({ type: 'player', key: `player:${league}:${route.id}`, title: data.name, league, href: `#player/${league}/${route.id}` })}<a class="btn small" href="${esc(shareHref)}" data-copy-link>Copy link</a></div>
-      ${nextCard}
-      <div class="toolbar"><div class="chip-scroll">${seg('pstat', options.map(k => [k, C.LABEL[k] || k]), stat)}</div></div>
-      <div class="toolbar">${seasonSelect}${seg('pwin', [['all', 'All games'], ['last5', 'Last 5'], ['last10', 'Last 10'], ['last20', 'Last 20']], win)}</div>
-      <p class="small muted" style="margin:-4px 0 10px">Showing ${esc(showing)}</p>
-      ${recent.length ? `<div class="card">${historyChart(values, recent.map(r => `${new Set(recent.map(x => x[2])).size > 1 ? `'${String(r[1]).slice(2, 4)} ` : ''}${String(r[1]).slice(5)}\n${r[7] === 0 ? '@' : ''}${abbr(r[6])}`), line, dir, { titles: recent.map(r => `${r[1]} ${where(r)} ${abbr(r[6])}`), format: v => C.statValue(v, stat, Number.isInteger(v) ? 0 : 1) })}</div>`
-        : `<div class="card">${empty('No games to show', 'No stored games this season yet. Earlier seasons are below.', 'research')}<p class="btn-row" style="margin-top:8px">${seasons.filter(x => x !== Number(currentSeason)).slice(0, 1).map(x => `<button type="button" class="btn small" data-set="pseason:${x}">Show ${x}</button>`).join('')}<button type="button" class="btn small" data-set="pseason:all">All seasons</button></p></div>`}
-      <div class="kpis" style="margin-top:14px"><div class="kpi"><small>Average</small><b class="num">${esc(summary ? valueText(summary.avg) : '–')}</b><span>${esc(C.LABEL[stat] || stat)}</span></div><div class="kpi"><small>Median</small><b class="num">${esc(summary ? valueText(summary.median) : '–')}</b><span>selected games</span></div>
-        <div class="kpi"><small>Hit count</small><b class="num">${h && h.n ? `${h[dir]}/${h.n}` : '–'}</b><span>${line == null ? 'no line recorded' : `${dir} ${esc(valueText(line))}${h && h.push ? ` · ${h.push} tied` : ''}`}</span></div>
-        <div class="kpi"><small>Games</small><b class="num">${recent.length}</b><span>${summary && summary.n < recent.length ? `${summary.n} with this stat recorded` : esc(scopeLabel)}</span></div></div>
-      ${section('Splits', `<div class="kpis"><div class="kpi"><small>Home</small><b class="num">${esc(split.home ? valueText(split.home.avg) : '–')}</b><span>${split.home ? split.home.n : 0} game${split.home && split.home.n === 1 ? '' : 's'}</span></div><div class="kpi"><small>Away</small><b class="num">${esc(split.away ? valueText(split.away.avg) : '–')}</b><span>${split.away ? split.away.n : 0} game${split.away && split.away.n === 1 ? '' : 's'}</span></div>${split.neutral ? `<div class="kpi"><small>Neutral site</small><b class="num">${esc(valueText(split.neutral.avg))}</b><span>${split.neutral.n} game${split.neutral.n === 1 ? '' : 's'}</span></div>` : ''}</div>`)}
-      ${section('Game log', log.length ? `<div class="table-wrap"><table class="t"><thead><tr><th>Game</th>${cols.map(k => `<th class="n">${esc(C.LABEL[k] || k)}</th>`).join('')}</tr></thead><tbody>${log.map(r =>
-        `<tr><td><a href="#game/${esc(league)}-${esc(r[0])}">${esc(r[1])}</a><br><span class="tiny muted">${esc(where(r))} ${esc(abbr(r[6]))}${r[4] === 3 ? ' · postseason' : ''}</span></td>${cols.map(k => { const v = C.observedStat(r, keys, k); return `<td class="n">${v == null ? '<span class="muted">–</span>' : k === 'snapPct' ? Math.round(100 * v) + '%' : esc(v)}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div>` : '<p class="muted small">No games to show.</p>', '', 'Regular season. A dash means not recorded, never zero.')}`;
-  };
-
   /* ---------- team page ---------- */
   /* ---------- Record ---------- */
   const unitsChart = points => {
@@ -2122,16 +2114,16 @@
   /* ---------- More ---------- */
   const moreGroup = (title, links) => `<p class="eyebrow more-group">${title}</p><div class="list-links">${links}</div>`;
   /* Record, More and team pages are not part of the first paint. */
-  const MORE_VIEW_NAMES = ['team', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
+  const MORE_VIEW_NAMES = ['player', 'team', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
-  const MORE_ASSET = 'app-more.js?v=sha256-2d4bb9426c93';
+  const MORE_ASSET = 'app-more.js?v=sha256-e70f76c03f35';
   let moreViews = null, moreLoading = null;
   const moreContext = (overrides = {}) => ({ C, P, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, tableOf, weekLabel, MODEL_NAME,
     rec3, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, unitsChart,
     ticketRows, ticketSummary, arbFor, arbSummary, moreGroup, officialKey, isNum, inLeague, pickVM, meter,
-    ...overrides });
+    GAMES, HEADSHOT, MARK, STAT_UNITS, clock, defGames, defenseVerdict, disc, filtersFold, hasValue, lineVM, logoImg, minus, nameSize, odd, onBoard, panelVars, pctOne, teamPanel, ticketWhen, toneFor, watchButton, HOUSE, rail, ...overrides });
   const ensureMore = () => {
     if (moreViews) return Promise.resolve(moreViews);
     if (moreLoading) return moreLoading;
@@ -2169,9 +2161,10 @@
   const chrome = route => {
     const active = TAB_OF[route.view] || 'today';
     const tabHref = key => key === 'research' ? '#research/lines' : `#${key}`;
-    const links = TABS.map(([key, label]) => `<a href="${tabHref(key)}" ${key === active ? 'aria-current="page"' : ''}>${svg(key)}<span>${esc(label)}</span></a>`).join('');
+    /* Text-only tabs (Kitchen Ticket): the same links in the phone tab bar and the desktop header. */
+    const links = TABS.map(([key, label]) => `<a href="${tabHref(key)}" ${key === active ? 'aria-current="page"' : ''}>${esc(label)}</a>`).join('');
     $('#tabbar').innerHTML = links;
-    $('#top-tabs').innerHTML = TABS.map(([key, label]) => `<a href="${tabHref(key)}" ${key === active ? 'aria-current="page"' : ''}>${esc(label)}</a>`).join('');
+    $('#top-tabs').innerHTML = links;
     const sel = $('#league');
     if (!sel.options.length) { const opt = k => `<option value="${k}">${esc(LEAGUE_NAME[k])}</option>`;
       sel.innerHTML = `${opt('ALL')}<optgroup label="Best bets and research">${FOOTBALL.map(opt).join('')}</optgroup><optgroup label="Scores and trials">${Object.keys(LEAGUE_NAME).filter(k => k !== 'ALL' && !FOOTBALL.includes(k)).map(opt).join('')}</optgroup>`; }
@@ -2208,6 +2201,8 @@
   };
   /* A newer render always wins: a slow fetch from an older one never paints over it. */
   let renderToken = 0, rendering = false;
+  /* Folds the reader opened or closed this visit (More for today starts closed, then remembers). */
+  const boxMemory = new Map();
   async function render(soft = false) {
     const token = ++renderToken;
     const savedY = (history.state || {}).scroll;
@@ -2248,7 +2243,7 @@
     if (focusKey) { const el = document.querySelector(`[data-input="${focusKey}"]`); if (el) { el.focus(); try { el.setSelectionRange(caret, caret); } catch (_) { /* number inputs */ } } }
     if (sideScroll.length) [...document.querySelectorAll('#view .chart-wrap, #view .table-wrap, #view .chip-scroll')].forEach((e, i) => { if (sideScroll[i]) e.scrollLeft = sideScroll[i]; });
     if (focusSel) { const el = document.querySelector(focusSel); if (el) { el.focus({ preventScroll: true }); if (el.closest('.chip-scroll')) el.scrollIntoView({ block: 'nearest', inline: 'nearest' }); } }
-    for (const d of document.querySelectorAll('details[data-box]')) if (boxes.has(d.dataset.box)) d.open = boxes.get(d.dataset.box);
+    for (const d of document.querySelectorAll('details[data-box]')) if (boxes.has(d.dataset.box)) d.open = boxes.get(d.dataset.box); else if (boxMemory.has(d.dataset.box)) d.open = boxMemory.get(d.dataset.box);
     if (openBoxes.length) for (const sum of document.querySelectorAll('details:not([data-row]):not([data-box]) > summary')) { if (openBoxes.includes(sum.textContent.trim())) sum.parentElement.open = true; }
     const h1 = view.querySelector('h1');
     document.title = `${h1 ? h1.textContent : 'Kook\'n'} · Kook'n`;
@@ -2296,6 +2291,9 @@
     document.addEventListener('error', event => {
       const img = event.target;
       if (img instanceof HTMLImageElement && img.closest('.tm, .ava')) { const box = img.parentElement; img.remove(); box.classList.remove('has-logo'); box.classList.add('no-img'); }
+      /* A missing ESPN cutout: the ticket or player hero shows the team's logo disc instead (SPEC 5.3), no breakout. */
+      if (img instanceof HTMLImageElement && img.closest('.kt-ph')) { const order = img.closest('.kt-order'); if (order) order.classList.add('no-photo'); }
+      if (img instanceof HTMLImageElement && img.closest('.kt-face, .kt-disc, .kt-logo')) img.remove();
     }, true);
     window.addEventListener('hashchange', () => { appliedHash = null; state.player.hash = null; render(); });
     const skip = document.querySelector('.skip');
@@ -2330,7 +2328,6 @@
       if ('allGames' in d) { state.games.all = true; render(true); return; }
       if ('clearQ' in d) { state.q = ''; render(true); return; }
       if ('retry' in d) { cache.clear(); missing.clear(); todayExtras = null; todayExtrasAt = 0; if (liveCache.rows) liveCache.rows.clear(); render(); return; }
-      if ('dismissOnboard' in d) { saved.set('onboarded', true); render(true); return; }
       if (d.watch) { toggleWatch(watchCandidates.get(d.watch)); return; }
       if (d.watchPick) {
         const pick = (await allPicks()).find(p => p.id === d.watchPick);
@@ -2386,9 +2383,9 @@
     });
     document.addEventListener('toggle', event => {
       const el = event.target;
+      if (el.matches && el.matches('details[data-box="today-more"]') && !rendering) boxMemory.set('today-more', el.open);
       if (!el.matches || !el.open) return;
       if (el.matches('details[data-row]')) loadRowDetail(el);
-      if (el.matches('details.t-more')) el.querySelectorAll('[data-prop-history]').forEach(loadPropBox);
     }, true);
     document.addEventListener('input', event => {
       const el = event.target;
