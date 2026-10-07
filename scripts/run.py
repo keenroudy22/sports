@@ -43,6 +43,7 @@ import parlay
 import pick_card
 import post_windows
 import pricing
+import role_sanity
 import refresh
 import researcher
 import scoreboard
@@ -781,9 +782,13 @@ def price(candidate, ctx, now):
     for book, line, odds in candidate.get('_quotes') or []:
         if not isinstance(odds, (int, float)) or abs(odds) < 100:
             continue
+        if candidate.get('athleteId') and (odds < -400 or odds > 400):
+            continue
         try:
             p = gates.calibrated_desk(pricing.price(snapshot, market, side, float(line), int(odds), candidate.get('athleteId')), candidate, ctx)
         except (ValueError, KeyError):
+            continue
+        if candidate.get('athleteId') and role_sanity.price_suspect(odds, p.get('chance') if p.get('calibrated') else None):
             continue
         priced.append((p['evPerUnit'], book, float(line), int(odds), p))
     if not priced:
@@ -2082,7 +2087,7 @@ def mirror(args):
         except Exception as error:
             # Shadow evidence can never interrupt official delivery.
             log(f'live shadow unavailable ({type(error).__name__})')
-    if not os.environ.get('BUFFER_TOKEN', '').strip() or not discord_post.webhook():
+    if not os.environ.get('BUFFER_TOKEN', '').strip() or not (discord_post.webhook() or discord_post.wins_webhook()):
         return 0
     if not mirror_due(x_post.load_log(), now):
         return 0

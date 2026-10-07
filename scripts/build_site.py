@@ -46,6 +46,7 @@ import pricing
 import record_scope
 import sharp_odds
 import research_views
+import role_sanity
 import season_trends
 import sport_research
 from sports_refresh import eastern_date
@@ -767,10 +768,15 @@ def build_player_charts(league, games, forecasts, player_logs, season, lines, no
                 # control must never silently shorten the Season sample.
                 history.sort(key=lambda row: row['date'])
                 projections = {}
+                under_review = []
                 for source, key in projection_key.items():
                     value = forecast.get(source)
                     if isinstance(value, (list, tuple)) and value and isinstance(value[0], (int, float)):
-                        projections[key] = round(value[0], 1)
+                        caution = role_sanity.assess(forecast, log_rows, team, key, season)
+                        if caution:
+                            under_review.append(key)
+                        else:
+                            projections[key] = round(value[0], 1)
                 player_lines = {}
                 for key in LOG_KEYS:
                     row = current_lines.get((game['id'], pid, key))
@@ -786,7 +792,8 @@ def build_player_charts(league, games, forecasts, player_logs, season, lines, no
                     or (quote or {}).get('position')
                 out_players.append({'id': pid, 'name': name, 'pos': pos,
                                     'team': team, 'opp': opponent, 'gameId': game['id'], 'side': side,
-                                    'rows': history, 'projection': projections, 'lines': player_lines})
+                                    'rows': history, 'projection': projections, 'underReview': under_review,
+                                    'lines': player_lines})
     return {'generatedAt': stamp(now), 'season': season, 'keys': list(LOG_KEYS),
             'games': out_games, 'players': out_players}
 
@@ -1062,6 +1069,19 @@ def build(now=None):
                 if (row['grade'].get('edge') or 0) < 5.0:
                     row['grade']['tier'] = 'pass'
                     row['grade']['view'] = 'pass'
+    guard_player_lines(lines, by_id, forecasts, league_data, now)
+    for row in lines:
+        if not row.get('roleSuspect'):
+            continue
+        game = by_id.get(row.get('gameId')) or {}
+        snapshots = pregame(forecasts.get(row.get('gameId'), []), game.get('kickoff')) if game else []
+        _, player = pricing.player_line(snapshots[-1], row.get('athleteId')) if snapshots else (None, None)
+        role = role_sanity.VOLUME.get(row.get('stat'))
+        if player and role:
+            for stat, volume in role_sanity.VOLUME.items():
+                field = pricing.PROJECTED.get(stat)
+                if volume == role and field and field not in player.setdefault('underReview', []):
+                    player['underReview'].append(field)
     lines = public_lines(lines, now)
     for row in lines:
         if row.get('athleteId') and row.get('stat') in ('passYds', 'att', 'cmp', 'recYds', 'rec'):
@@ -1080,6 +1100,9 @@ def build(now=None):
     for row in trends:
         matched = line_lookup.get((row.get('gameId'), str(row.get('athleteId')), row.get('stat'), row.get('direction'),
                                    row.get('line'), row.get('book'), row.get('odds')))
+        if matched and (matched.get('roleSuspect') or matched.get('priceSuspect')):
+            row['roleSuspect'] = bool(matched.get('roleSuspect'))
+            row['priceSuspect'] = bool(matched.get('priceSuspect'))
         grade = (matched or {}).get('grade') or {}
         if isinstance(grade.get('projection'), (int, float)):
             row['projection'] = grade['projection']
@@ -1338,6 +1361,37 @@ def grade_line(line, snapshot, thin):
             'range80': p.get('range80')}
 
 
+def guard_player_lines(lines, games, forecasts, league_data, now, logger=print):
+    """Withhold misleading player grades without changing forecasts or history."""
+    for row in lines:
+        athlete = str(row.get('athleteId') or '')
+        if not athlete:
+            continue
+        game = games.get(row.get('gameId')) or {}
+        snapshots = pregame(forecasts.get(row.get('gameId'), []), game.get('kickoff')) if game else []
+        snapshot = snapshots[-1] if snapshots else None
+        side, forecast = pricing.player_line(snapshot, athlete) if snapshot else (None, None)
+        team = (game.get(side) or {}).get('id') if side else None
+        league = game.get('league')
+        market = row.get('stat') or pricing.market_of(row)
+        logs = (league_data.get(league) or {}).get('player_logs', {}).get(athlete, [])
+        caution = role_sanity.assess(forecast, logs, team, market, game.get('season'))
+        grade = row.get('grade') or {}
+        chance = grade.get('chance') if grade.get('calibrated') else None
+        bad_price = role_sanity.price_suspect(row.get('odds'), chance)
+        if caution:
+            row['roleSuspect'] = True
+            row['grade'] = None
+            row['gradeNote'] = 'Projection under review'
+            logger(f"role-sanity: {row.get('id') or row.get('title')}: {caution['projected']:g} "
+                   f"{caution['volume']} vs {caution['recentFullAverage']:g} last-three full-game average")
+        if bad_price:
+            row['priceSuspect'] = True
+            row['grade'] = None
+            row['gradeNote'] = 'Price under review' if not caution else 'Projection and price under review'
+            logger(f"price-sanity: {row.get('id') or row.get('title')}: {row.get('odds')} outside main-line check")
+
+
 def sheet_values(lines, now=None):
     """game -> best priced side for its spread and total, using the already graded Board rows.
 
@@ -1396,6 +1450,13 @@ def price_quotes(record, market, name, anchor=None):
             rung = next((a for a in match.get('alternates') or [] if a.get('line') == anchor), None)
             if rung:
                 match = rung
+        over, under = match.get('over'), match.get('under')
+        if any(role_sanity.price_suspect(odds, None) for odds in (over, under)
+               if isinstance(odds, (int, float))):
+            continue
+        if isinstance(over, (int, float)) and isinstance(under, (int, float)) \
+                and not .9 <= pricing.break_even(over) + pricing.break_even(under) <= 1.4:
+            continue
         out.append((book, match['line'], match.get('over'), match.get('under')))
     return out
 

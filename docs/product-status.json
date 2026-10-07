@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-07T18:20:12Z",
+  "updatedAt": "2026-10-07T18:50:41Z",
   "items": [
     {
       "id": "P01",
@@ -383,9 +383,9 @@
     {
       "id": "P43",
       "title": "Posting playbook v3 and app autopilot",
-      "status": "ready",
+      "status": "gated",
       "owner": "agent",
-      "next": "After the urgent release and P1, implement v3 routing/cadence/results/Prep Lists, sample cards and the three app tasks; review with Claude before first new output.",
+      "next": "Finish gated Prep List selection and card review, bad-beat delivery and Final/Leftovers cadence; verify menu retirement and the 6 PM night window in a quiet-window release. Preserve the three app tasks.",
       "doneWhen": "Playbook tests, Claude sample receipts, schedule creation and live delivery checks pass; seasonal evidence remains observed separately.",
       "evidence": "Owner approved POSTING-PLAYBOOK.md and AUTOPILOT.md October 7, including chef avatar and Cloudflare disclosure."
     },
@@ -457,7 +457,7 @@
       "title": "Separate owner wins and bad-beats delivery",
       "status": "ready",
       "owner": "agent",
-      "next": "Route posted plays only to Plays & Results and verified wins/near-miss bad beats through DISCORD_WINS_WEBHOOK_URL; classify owner tickets as community.",
+      "next": "The local send-time allowlist routes only posted plays to Plays & Results and win/community entries to wins; add precisely graded bad beats, replay tests, then verify distinct live receipts when the wins webhook exists.",
       "doneWhen": "Routing and replay tests pass, no loss or community ticket reaches Plays & Results, and live receipts confirm the distinct channel.",
       "evidence": "Owner-delegated to Claude, 2026-10-07; AUDIT-INBOX A-20261007-14 and A-20261007-19. P46/P47 IDs were already assigned, so this work keeps stable IDs rather than reusing them."
     },
@@ -469,6 +469,15 @@
       "next": "After Kitchen Ticket and the posting plan, add chef-wins/ intake to the five-minute Discord job, using a git-ignored work/ seen-file and the exact caption. If the wins webhook is unset, hold and alert once.",
       "doneWhen": "Tests prove one post per image hash, a three-per-day cap, non-image rejection and one missing-webhook alert. No image reaches X, Plays & Results, the record or Git; verify a live wins-channel receipt.",
       "evidence": "Owner rule dated 2026-10-07, OWNER-DECISIONS-2026-10-07.md item 18. Folder exists; intake is not implemented or live."
+    },
+    {
+      "id": "P53",
+      "title": "Current-team player role and main-price sanity",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Release the tightening guard at the next quiet window after all gates; then review Claude's projection-root patch for current-team role weighting, partial games and stale snapshots without rewriting stored forecasts.",
+      "doneWhen": "Kohl's real FIU logs hold the suspect passing grade, Egbuka's +1800 quote cannot rank, all site and selection paths agree, tonight/TNF catches are listed and hosted/live checks pass.",
+      "evidence": "Owner urgency October 7, AUDIT-INBOX A-20261007-22 and -23. A local build caught JJ Kohl, Javon Rogers and Jojo Stone tonight, Joshua Porter Thursday and Bucky Irving's two TNF markets; no production release claimed yet."
     }
   ]
 }

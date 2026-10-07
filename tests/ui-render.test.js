@@ -76,6 +76,13 @@ test('replacement UI keeps the owner-mandated wording and shared labels', () => 
   assert.match(source, /C\.quoteStatus\(/);
 });
 
+test('suspect player projections and prices have no ranked board row or profile chance', () => {
+  assert.match(source, /filter\(r => !r\.roleSuspect && !r\.priceSuspect\)/);
+  assert.match(source, /Lines under review/);
+  assert.match(source, /projectionReview \? 'Under review'/);
+  assert.match(source, /Projection under review/);
+});
+
 test('every rendered view preserves the browser-audit page contract', () => {
   const html = fs.readFileSync('site/index.html', 'utf8');
   const audit = fs.readFileSync('tests/browser-audit.mjs', 'utf8');

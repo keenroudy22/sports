@@ -1073,7 +1073,7 @@
     const now = Date.now();
     const posted = new Map((today.picks || []).filter(p => !p.result && !p.historicalImport && !C.isParlay(p)).map(p => [officialKey(p), p]));
     const b = state.board;
-    let rows = (lines.lines || []).map(r => lineVM(r, now)).filter(vm => onBoard(vm, now) && inLeague(vm));
+    let rows = (lines.lines || []).filter(r => !r.roleSuspect && !r.priceSuspect).map(r => lineVM(r, now)).filter(vm => onBoard(vm, now) && inLeague(vm));
     const gameIndex = new Map((today.games || []).map(g => [g.id, g]));
     rows.forEach(vm => { const pk = posted.get(vm.key); vm.official = Boolean(pk && C.isOpen(pk)); vm.officialLine = pk ? pk.line : null; vm.onCard = pk && !vm.official ? pk : null; const g = gameIndex.get(vm.gameId); vm.matchup = g ? `${g.away.abbr} at ${g.home.abbr}` : null; vm.teams = g ? [g.away.name, g.home.name, g.away.abbr, g.home.abbr] : []; });
     if (b.type === 'props') rows = rows.filter(vm => vm.isProp);
@@ -1091,6 +1091,8 @@
     /* Player lines the book has posted without a price we captured: research only, listed apart, never ranked. */
     const unpriced = b.show === 'value' || b.type === 'games' ? [] : (lines.lines || []).filter(r => r.state === 'unpriced' && (r.athleteId || r.player) && isNum(Number(r.line)) && r.line !== null && Date.parse(r.kickoff) > now && inLeague(r)
       && (!state.q || C.researchMatches(state.q, r.title, r.player, r.market, r.league)));
+    const underReview = (lines.lines || []).filter(r => (r.roleSuspect || r.priceSuspect) && Date.parse(r.kickoff) > now && inLeague(r)
+      && (!state.q || C.researchMatches(state.q, r.title, r.player, r.market, r.league)));
     const list = shown.length ? `<div class="board"><div class="board-head"><span>Line</span><span>Best price</span><span>Our chance vs needed</span><span>Edge</span><span>Fair</span></div>${grouped}</div>
       ${rows.length > shown.length ? `<p style="margin-top:12px"><button type="button" class="btn" data-more-rows>Show ${Math.min(40, rows.length - shown.length)} more</button></p>` : ''}`
       : empty('No lines match', b.show === 'value' ? 'Nothing clears our bar right now. Tap "Every current line" to see every current price.' : 'Try another sport or clear the search.', 'research');
@@ -1101,7 +1103,8 @@
       <p class="small muted" style="margin-bottom:10px">${shown.length} of ${rows.length} lines${older ? ` · ${older} older prices hidden` : ''} · ✓ clears our bar · ${shareLink('lines', route)}</p>
       ${list}
       ${b.show === 'value' && rows.length < 5 && nAll > rows.length ? `<p class="small" style="margin-top:10px"><button type="button" class="linkish" data-set="show:all">See all ${nAll} current lines →</button></p>` : ''}
-      ${unpriced.length ? `<details class="more-box" data-box="unpriced" style="margin-top:12px"><summary>Player lines with no price yet · ${unpriced.length}</summary><div class="receipts">${unpriced.slice(0, 60).map(r => `<div class="receipt" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${r.athleteId ? `<a class="plain-link" href="#player/${esc(r.league)}/${esc(r.athleteId)}?stat=${esc(C.marketKey(r) || '')}">${esc(niceTitle(r.title))}</a>` : esc(niceTitle(r.title))}</b><span>${esc(marketLabel(r))} · ${esc(whenShort(r.kickoff))}${isNum((r.grade || {}).projection) ? ` · our middle estimate ${esc(C.fixed(r.grade.projection))}` : ''}</span></div><span class="small muted">No price yet</span></div>`).join('')}</div><p class="small muted" style="margin-top:8px">The book lists these lines, but we have not captured a price, so there is no chance, edge or fair price yet.</p></details>` : ''}`;
+      ${unpriced.length ? `<details class="more-box" data-box="unpriced" style="margin-top:12px"><summary>Player lines with no price yet · ${unpriced.length}</summary><div class="receipts">${unpriced.slice(0, 60).map(r => `<div class="receipt" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${r.athleteId ? `<a class="plain-link" href="#player/${esc(r.league)}/${esc(r.athleteId)}?stat=${esc(C.marketKey(r) || '')}">${esc(niceTitle(r.title))}</a>` : esc(niceTitle(r.title))}</b><span>${esc(marketLabel(r))} · ${esc(whenShort(r.kickoff))}${isNum((r.grade || {}).projection) ? ` · our middle estimate ${esc(C.fixed(r.grade.projection))}` : ''}</span></div><span class="small muted">No price yet</span></div>`).join('')}</div><p class="small muted" style="margin-top:8px">The book lists these lines, but we have not captured a price, so there is no chance, edge or fair price yet.</p></details>` : ''}
+      ${underReview.length ? `<details class="more-box" data-box="under-review" style="margin-top:12px"><summary>Lines under review · ${underReview.length}</summary><div class="receipts">${underReview.slice(0, 60).map(r => `<div class="receipt"><b><a class="plain-link" href="#player/${esc(r.league)}/${esc(r.athleteId)}?stat=${esc(C.marketKey(r) || '')}">${esc(niceTitle(r.title))}</a></b><span>${esc(r.gradeNote || 'Projection under review')} · no grade or ranking</span></div>`).join('')}</div></details>` : ''}`;
   };
 
   /* Bars against the line. Every game in the selection is drawn (the strip scrolls sideways on a phone), negative
@@ -1256,7 +1259,7 @@
      defense-vs-position. Same data as the old Charts page (player-charts/<L>.json). */
   const CHART_STATS = [['recYds', 'Rec yds'], ['rec', 'Receptions'], ['targets', 'Targets'], ['rushYds', 'Rush yds'], ['car', 'Carries'],
     ['passYds', 'Pass yds'], ['cmp', 'Completions'], ['att', 'Pass att'], ['passTD', 'Pass TD'], ['rushTD', 'Rush TD'], ['recTD', 'Rec TD'], ['recLong', 'Long rec'], ['rushLong', 'Long rush'], ['kPts', 'Kick pts']];
-  const chartHas = (pl, key) => Object.prototype.hasOwnProperty.call(pl.projection || {}, key) || Object.prototype.hasOwnProperty.call(pl.lines || {}, key)
+  const chartHas = (pl, key) => Object.prototype.hasOwnProperty.call(pl.projection || {}, key) || Object.prototype.hasOwnProperty.call(pl.lines || {}, key) || (pl.underReview || []).includes(key)
     || (pl.rows || []).some(r => Object.prototype.hasOwnProperty.call(r.stats || {}, key));
   const matchupCharts = async league => {
     const [data, catalog] = await Promise.all([maybe(`app/player-charts/${league}.json`), lineData(league)]);
@@ -1302,11 +1305,11 @@
           const line = cur && isNum(cur.line) ? cur.line : null;
           const dir = cur && cur.direction === 'under' ? 'under' : 'over';
           const status = C.quoteStatus(cur, g.kickoff);
-          const proj = (pl.projection || {})[key];
+          const proj = (pl.projection || {})[key], review = (pl.underReview || []).includes(key);
           const matched = priceMatch({ gameId: g.id, athleteId: pl.id, stat: key, direction: dir, line, odds: cur?.odds, book: cur?.book }, catalog?.lines);
           const gap = averageGap(proj, values);
           return `<a class="card" style="color:inherit;display:block" href="#player/${esc(league)}/${esc(pl.id)}?stat=${esc(key)}"><div class="with-art">${headshot(league, pl.id, 'sm', null, pl.pos)}<div><b>${esc(pl.name)}</b> <span class="muted small">${esc(pl.pos || '')}</span></div></div>
-            <p class="small" style="margin:8px 0 4px">${status.current ? 'Line' : 'Reference line'} <b>${line == null ? '–' : esc(C.statValue(line, key))} ${esc(dir)}</b> · Our average <b>${esc(C.statValue(proj, key))}</b> · Hits <b>${line == null ? '–' : `${values.filter(v => C.thresholdResult(v, line, dir) === 'hit').length}/${values.length}`}</b> (${values.length} games)</p>
+            <p class="small" style="margin:8px 0 4px">${status.current ? 'Line' : 'Reference line'} <b>${line == null ? '–' : esc(C.statValue(line, key))} ${esc(dir)}</b> · Our average <b>${review ? 'Projection under review' : esc(C.statValue(proj, key))}</b> · Hits <b>${line == null ? '–' : `${values.filter(v => C.thresholdResult(v, line, dir) === 'hit').length}/${values.length}`}</b> (${values.length} games)</p>
             <p class="tiny muted">${esc(status.label)}${cur && cur.book ? ` · ${esc(bookLabel(cur.book) || cur.book)}` : ''}${cur && isNum(cur.odds) ? ` ${esc(oddsText(cur.odds))}` : ''}${cur && cur.observedAt ? ` · ${esc(ago(cur.observedAt))}` : ''}</p>
             <p class="small">${esc(researchPrice(matched || {}))}</p>${gap ? `<p class="small red">${esc(gap)}</p>` : ''}
             ${matched?.qbNews ? `<p class=caution>QB news: ${esc(matched.qbNews)}</p>` : ''}
@@ -1770,6 +1773,7 @@
       return `<div class="table-wrap"><table class="t"><caption class="small muted" style="text-align:left;padding-bottom:6px">${esc(g[side].abbr)}${isNum(vol.plays) ? ` · ${C.fixed(vol.plays, 0)} plays, ${Math.round(100 * (vol.passRate || 0))}% pass` : ''}</caption>
         <thead><tr><th>Player</th>${cols.map(([, l]) => `<th class="n">${esc(l)}</th>`).join('')}</tr></thead><tbody>${list.map(p => `<tr><td><span class="with-art">${headshot(g.league, p.id, 'sm')}<span><a href="#player/${esc(g.league)}/${esc(p.id)}">${esc(p.name)}</a> <span class="muted tiny">${esc(p.pos)}</span></span></span></td>${cols.map(([k]) => {
           const v = p[k];
+          if ((p.underReview || []).includes(k)) return '<td class="n muted">Projection under review</td>';
           if (!Array.isArray(v)) return '<td class="n muted">–</td>';
           const market = (lines[p.id] || {})[C.PROJECTION_MARKET[k]];
           const gapV = market ? v[0] - market[0] : null;
@@ -1874,7 +1878,7 @@
 
     /* The line: the board's priced quote first, else the captured reference line from the game feed. */
     const pricedRows = next && lines ? (lines.lines || []).filter(r => String(r.athleteId) === String(route.id) && r.gameId === next.id && C.marketKey(r) === stat) : [];
-    const priced = pricedRows.map(r => lineVM(r, now)).filter(vm => onBoard(vm, now) && (vm.age.kind === 'fresh' || vm.age.kind === 'aging')).sort((a, b) => (b.edge ?? -99) - (a.edge ?? -99))[0] || null;
+    const priced = pricedRows.filter(r => !r.roleSuspect && !r.priceSuspect).map(r => lineVM(r, now)).filter(vm => onBoard(vm, now) && (vm.age.kind === 'fresh' || vm.age.kind === 'aging')).sort((a, b) => (b.edge ?? -99) - (a.edge ?? -99))[0] || null;
     const latest = pricedRows.slice().sort((a, b) => Date.parse(b.observedAt) - Date.parse(a.observedAt))[0];
     const captured = (((nextDetail || {}).props || {}).lines || {})[route.id];
     const refLine = captured && isNum((captured[stat] || [])[0]) ? captured[stat][0] : null;
@@ -1892,7 +1896,9 @@
     const verdict = allow && line != null ? defenseVerdict(C.rankTone(allow.rank, allow.of), dir, defGames(dRows, opp.id, group, stat)) : null;
     const vs = opp ? C.splits(recent, keys, stat, opp.id, (row, k, s2) => read(row, s2)).vs : null;
     const proj = side && nextDetail && nextDetail.forecast ? ((((nextDetail.forecast.players || {})[side] || {}).players || []).find(p => String(p.id) === String(route.id)) || null) : null;
-    const projV = proj ? proj[PROJ_KEY[stat] || stat] : null;
+    const projectionField = PROJ_KEY[stat] || stat;
+    const projectionReview = Boolean(proj && (proj.underReview || []).includes(projectionField));
+    const projV = proj && !projectionReview ? proj[projectionField] : null;
     const summary = C.summarize(values);
     const split = C.splits(recent, keys, stat, null, (row, k, s2) => read(row, s2));
     const valueText = v => C.statValue(v, stat);
@@ -1900,7 +1906,7 @@
 
     const nextCard = next ? `<div class="card" style="margin-bottom:16px"><p><b>Next: ${side === 'home' ? 'vs' : 'at'} ${esc(opp.name)}</b> · ${esc(when(next.kickoff))} · <a href="#game/${esc(next.id)}">Game page →</a></p>
       <div class="kpis" style="margin-top:10px">
-        <div class="kpi"><small>Our average</small><b class="num">${Array.isArray(projV) ? esc(valueText(projV[0])) : '–'}</b><span>${Array.isArray(projV) ? `80%: ${esc(valueText(projV[1]))} to ${esc(valueText(projV[2]))}` : `none for ${esc(word)}`}</span></div>
+        <div class="kpi"><small>Our average</small><b class="num">${projectionReview ? 'Under review' : Array.isArray(projV) ? esc(valueText(projV[0])) : '–'}</b><span>${projectionReview ? 'Projection under review' : Array.isArray(projV) ? `80%: ${esc(valueText(projV[1]))} to ${esc(valueText(projV[2]))}` : `none for ${esc(word)}`}</span></div>
         <div class="kpi"><small>${esc(lineStatus && lineStatus.current ? 'Line' : 'Reference line')}</small><b class="num">${line != null ? `${dir === 'under' ? 'Under' : 'Over'} ${esc(valueText(line))}` : '–'}</b><span>${line == null ? 'none captured' : h && h.n ? `${h[dir]} of ${h.n} ${dir} in this selection` : 'no recorded games in this selection'}</span></div>
         <div class="kpi"><small>${esc(opp.abbr || 'Opponent')} vs ${esc(group || pos || '')}s</small><b class="num ${verdict === 'supports' ? 'green' : verdict === 'opposes' ? 'red' : ''}">${allow ? esc(valueText(allow.value)) : '–'}</b><span>${allow ? `${esc(word)} a game · ${allow.rank} of ${allow.of}${tone === 'soft' ? ' · soft matchup' : tone === 'tough' ? ' · tough matchup' : ''}${verdict ? ` · ${verdict === 'supports' ? 'supports' : 'works against'} the ${dir}` : ''}` : 'not tracked by position'}</span></div>
         <div class="kpi"><small>Vs ${esc(opp.abbr || 'this opponent')}</small><b class="num">${vs && vs.summary ? esc(valueText(vs.summary.avg)) : '–'}</b><span>${vs && vs.summary ? `${vs.summary.n} meeting${vs.summary.n === 1 ? '' : 's'} in this selection` : 'no meetings in this selection'}</span></div></div>

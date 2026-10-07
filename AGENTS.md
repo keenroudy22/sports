@@ -241,6 +241,14 @@ Handy commands (from `~/Projects/sports`):
   stays website-only; fold an idle weekend Climb check-in into the morning receipt. Plays & Results receives
   posted plays only, wins-and-bad-beats receives wins and the precisely defined bad beats, and X losses appear
   only in Final/Leftovers. Arb Radar/live-pilot rules remain. Missing wins webhook skips quietly with one status note.
+- **Player role and price sanity (owner, 2026-10-07; audit A-22/A-23):** before a player market receives a
+  grade, rank or official admission, compare its projected attempts/targets/carries with the last three full
+  current-team games; a full game has at least 60% of the current-team median, and a projection below 70% of
+  those three full games' average is under review. Main player prices outside -400..+400 or more than 25
+  percentage points from the calibrated chance are under review too. Exclude these rows from picks, Prep List,
+  Early Look, sheets and Climb; show a plain under-review state on the site and log each row. Preserve raw
+  forecasts and the append-only record. Current-team role fitting, partial-game handling and stale-snapshot
+  refresh are a separately tested root fix, not a reason to loosen the hold.
 - **Playbook voice and series (owner-delegated to Claude, 2026-10-07):** captions use I and the Sep 26
   shape plus one numbered supporting reason. Keep chance/break-even on art. Hot Plate (POTD) is the plate
   exception; Chef's Special, Prep List, Burnt and Leftovers are approved series labels; new rungs close with

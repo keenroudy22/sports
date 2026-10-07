@@ -61,6 +61,12 @@ class MappingTests(unittest.TestCase):
 class QuoteTests(unittest.TestCase):
     slate = [game('NFL-1', '2026-09-20T20:05Z', 'Los Angeles Chargers', 'Las Vegas Raiders')]
 
+    def test_incoherent_two_sided_main_price_is_not_promoted(self):
+        g = self.slate[0]
+        bad = [(g, row('draftkings', 'player_receiving_yards', 'Emeka Egbuka', 'over', 34.5, 1800)),
+               (g, row('draftkings', 'player_receiving_yards', 'Emeka Egbuka', 'under', 34.5, -114))]
+        self.assertNotIn('draftkings', sharp_odds.quotes_from(bad).get('NFL-1', {}))
+
     def rows(self):
         g = self.slate[0]
         return [(g, row('draftkings', 'player_rushing_yards', 'Ashton Jeanty', 'over', 66.5, -115)),

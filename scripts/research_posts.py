@@ -315,6 +315,7 @@ def season_candidate(games, details, now):
     for game in games:
         for row in (details.get(game['id']) or {}).get('seasonTrends') or []:
             if (row.get('kind') != 'main' or row.get('games', 0) < 5
+                    or row.get('roleSuspect') or row.get('priceSuspect')
                     or row.get('injuryStatus')
                     or row.get('hits', 0) * 100 < row['games'] * 80 or row.get('book') not in PUBLIC_BOOKS
                     or not current(row.get('observedAt'), now, timedelta(hours=4))):

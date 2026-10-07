@@ -196,6 +196,7 @@ def events(league, key, fetch=fetch, log=print):
 
 def quotes_from(rows):
     """gameId -> book -> projection key -> player -> {line, over, under, alternates}."""
+    implied = lambda odds: -odds / (100 - odds) if odds < 0 else 100 / (100 + odds)
     out = {}
     for game, row in rows:
         key = market_key(row.get('market_type'))
@@ -218,9 +219,16 @@ def quotes_from(rows):
             for market_key_, market in list(book.items()):
                 for name, ladder in list(market.items()):
                     rungs = sorted(ladder.values(), key=lambda r: r['line'])
-                    two_sided = [r for r in rungs if 'over' in r and 'under' in r]
+                    # A main line with +1800 over and -114 under is not a
+                    # real two-sided market (the pair totals just 59% implied).
+                    # The Oct 7 Egbuka DK capture had exactly this shape.
+                    # Leave it out rather than promoting a mislabeled rung.
+                    two_sided = [r for r in rungs if 'over' in r and 'under' in r
+                                 and -400 <= r['over'] <= 400 and -400 <= r['under'] <= 400
+                                 and .9 <= implied(r['over']) + implied(r['under']) <= 1.4]
                     main = (min(two_sided, key=lambda r: abs(pricing_cents(r['over']) - pricing_cents(r['under']))) if two_sided
-                            else next((r for r in rungs if r['flagged']), None))
+                            else next((r for r in rungs if r['flagged'] and len({'over', 'under'} & r.keys()) == 1
+                                       and -400 <= next(r[k] for k in ('over', 'under') if k in r) <= 400), None))
                     if main is None:
                         del market[name]
                         continue

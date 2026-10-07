@@ -41,6 +41,7 @@ import easy_parlay
 import gates
 import parlay
 import pricing
+import role_sanity
 import sharp_odds
 from sports_refresh import eastern_date
 
@@ -230,6 +231,9 @@ def legs_for_game(game, record, ctx, now, confirmed=None):
                 side, player = pricing.player_line(snapshot, athlete) if athlete else (None, None)
                 projected = (player or {}).get(pricing.PROJECTED[stat])
                 if not projected or player.get('limited') or not side:
+                    continue
+                if role_sanity.assess(player, getattr(ctx, 'player_logs', {}).get(str(athlete)),
+                                      game[side]['id'], stat, game.get('season')):
                     continue
                 if not stable_role(ctx, athlete, game[side]['id'], game['league'], stat):
                     continue

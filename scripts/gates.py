@@ -37,6 +37,7 @@ import features
 import integrity
 import learning
 import pricing
+import role_sanity
 from desk import current as current_snapshot
 from sports_refresh import eastern_date
 
@@ -104,6 +105,7 @@ class Context:
     established: set = field(default_factory=set)     # (athleteId, teamId) with 8+ games last season
     names: dict = field(default_factory=dict)          # athleteId -> name
     player_team: dict = field(default_factory=dict)    # athleteId -> teamId in the latest stored game
+    player_logs: dict = field(default_factory=dict)    # athleteId -> stored game logs, never a live lookup
     starters: dict = field(default_factory=dict)       # "LEAGUE-teamId" -> usual starting quarterback (most starts of the last four)
     passers: dict = field(default_factory=dict)        # "LEAGUE-teamId" -> this season's starting passers, game by game
     flags: dict = field(default_factory=lambda: dict(FLAGS))
@@ -265,6 +267,27 @@ def desk_for(candidate, ctx):
                              candidate.get('athleteId')), candidate, ctx)
     except (ValueError, KeyError):
         return None
+
+
+def player_projection_sanity(candidate, ctx):
+    """A suspect current-team role or main price is never an official candidate."""
+    athlete = str(candidate.get('athleteId') or '')
+    if not athlete:
+        return Decision(True, 'player_projection_sanity', 'game market')
+    game = game_of(candidate, ctx) or {}
+    snapshot = ctx.snapshot(game.get('id')) if game else None
+    side, forecast = pricing.player_line(snapshot, athlete) if snapshot else (None, None)
+    team = (game.get(side) or {}).get('id') if side else None
+    caution = role_sanity.assess(forecast, ctx.player_logs.get(athlete), team,
+                                 market_key(candidate), game.get('season'))
+    if caution:
+        return Decision(False, 'player_projection_sanity',
+                        f"projected {caution['projected']:g} {caution['volume']} below 70% of "
+                        f"{caution['recentFullAverage']:g} in the last three full current-team games")
+    desk = desk_for(candidate, ctx)
+    if role_sanity.price_suspect(candidate.get('odds'), desk.get('chance') if desk and desk.get('calibrated') else None):
+        return Decision(False, 'player_projection_sanity', 'main player price is under review')
+    return Decision(True, 'player_projection_sanity', 'role and main price pass')
 
 
 def calibrated_desk(value, candidate, ctx):
@@ -916,7 +939,7 @@ def revision_frozen(candidate, ctx):
 
 # ------------------------------------------------------------------ running the rules
 
-COMMON = (not_started, x_window, expiry_ok, fresh_quote, price_present, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction, player_overlap)
+COMMON = (not_started, x_window, expiry_ok, fresh_quote, price_present, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction, player_overlap, player_projection_sanity)
 SHOP = (one_book, best_quote_by_ev)
 RULES = {
     # Caps are ceilings, not quotas. Performance cautions raise the edge requirement; negative value still fails.
@@ -1037,6 +1060,7 @@ def context(now, stores, flags=None):
                    snapshots=stores.snapshots, injuries=injuries_by_team(stores.context_file),
                    scoreboard=stores.scoreboard, first=first, latest=latest, appearances=appearances,
                    established=established, names=names, player_team=player_team, starters=starters, passers=passers,
+                   player_logs=features.player_logs(stores.records, before=now),
                    flags=dict(FLAGS, **(flags or {})), policy=learning.load_policy(stores.root / 'data' / 'learning' / 'policy.json'))
 
 
