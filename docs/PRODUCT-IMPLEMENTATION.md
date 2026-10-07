@@ -916,3 +916,25 @@ and 1440 pixels with no overflow, caught load-error state or console exception. 
 local checks proves a hosted publish or a live release. Next: locked deploy in the next routine
 quiet window, watch its hosted run, then verify the live payload and both widths before marking
 P46/P47 or the bundled safety items shipped.
+
+## October 7 release receipt and content exception
+
+Revision `480a22ac` was locked-deployed under the owner's one-night exception. Hosted publish run
+`37695705262` succeeded, and the live site served app.js?v=130 and app.css?v=80. The 375- and
+1440-pixel route checks had no sideways scrolling, browser exceptions or caught load-error state.
+That is not a complete content pass: Today said “No best bet yet” even though TK King's POTD had
+already reached X and Discord. The stored quote's old `expiresAt` appears to send the play through
+the off-card filter. This must be reproduced and fixed without showing an expired quote as a fresh
+bet; P60 tracks it. The bundled release is therefore not marked fully verified in the queue.
+
+## October 7 80/20 Climb route preview
+
+P59 is review-gated. The repo builder reads `ladder.state` over `gates.Stores().as_of(now)` and the
+stored football slate, not the incomplete Today ladder summary. It prints real current-run rung
+money and leg times, then explicitly labeled future windows at typical −160. One-league windows
+need two or more confirmed games within 90 minutes and a scan more than 90 minutes before kickoff;
+later windows wait for the prior last kickoff plus a 3.5-hour planning allowance. The first real
+render is `/Users/keen/Projects/kookn-patches/design/final/codex-climb-route.png`. Three watermark-
+labeled fixtures cover mid-climb, restart and an open rung with its true −173 price. Route posting
+and site placement remain off until the owner/Claude review and a separate gated release. The
+existing 11:45 PM Kitchen Ticket cutover is unchanged.

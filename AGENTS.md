@@ -204,6 +204,12 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **80/20 Climb route card (owner, 2026-10-07; OWNER-DECISIONS item 23):** the dated version of the
+  explicitly labeled Climb map. It ties each step to a real 2+ game, one-league window at existing scans,
+  shows real ledger rows, and shows future rows only as the plan at a typical −160. One route post per new
+  Climb plus the route as a second image on later rung posts, inside existing caps; Discord gets rung posts
+  only. Never forces a rung or changes the record. Claude reviews the first real repo render before route
+  delivery is enabled; posted attachments remain unchanged.
 - **Exact-line price sanity (owner, 2026-10-07; audit A-24):** new official straight plays require
   both sides priced at the listed book's exact line. A one-sided player number may remain labeled
   research, never a best bet. A two-sided price pair's implied chances must sum to 0.99–1.15;
