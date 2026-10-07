@@ -239,10 +239,15 @@ def play_card(pick, game=None, record=None, featured=False, art=None):
         body += team_chip(170, 196, game.get('home'), logo=(logos or [None, None])[-1] if logos and len(logos) == 2 else None)
         body += t(222, 210, f"{game['away'].get('abbr')} at {game['home'].get('abbr')} · {pick.get('_when', '')}", 36, DIM, BODY, 600)
     y = 330
-    if (art or {}).get('kind') == 'photo' and art.get('uri'):
-        body += photo(W - 150, 205, 86, art['uri'])
+    has_photo = (art or {}).get('kind') == 'photo' and art.get('uri')
+    if has_photo:
+        body += '<g data-zone="player-photo">' + photo(W - 150, 205, 86, art['uri']) + '</g>'
     if player:
-        player_lines, player_size = wrap_fit(player.upper(), 72, W - 128,
+        # The portrait ring occupies the upper-right corner through y=294. A
+        # player's first headline line rises into that zone, so reserve the
+        # ring instead of treating the whole card as available text width.
+        subject_width = 760 if has_photo else W - 128
+        player_lines, player_size = wrap_fit(player.upper(), 72, subject_width,
                                              max_lines=2, minimum=48,
                                              family_ratio=.47)
         body += '<g data-zone="play-subject">'
@@ -253,7 +258,7 @@ def play_card(pick, game=None, record=None, featured=False, art=None):
         y += 32
     selection_lines, selection_size = wrap_fit(keep_spread_with_team(selection), 120, W - 128,
                                                max_lines=3, minimum=60,
-                                               family_ratio=.46)
+                                               family_ratio=.40)
     body += '<g data-zone="play-selection">'
     for line in selection_lines:
         body += t(64, y, line, f'{selection_size:.1f}', KOOKD, DISPLAY, 700)
@@ -261,7 +266,7 @@ def play_card(pick, game=None, record=None, featured=False, art=None):
     body += '</g>'
     top = max(y + 30, 520)
     ticket_h = 360
-    body += f'<rect x="64" y="{top}" width="{W - 128}" height="{ticket_h}" rx="28" fill="{TICKET}"/>'
+    body += f'<rect data-zone="play-ticket" x="64" y="{top}" width="{W - 128}" height="{ticket_h}" rx="28" fill="{TICKET}"/>'
     # An open ticket is neutral. Brand green carries the read, never a result-colored fill.
     stub_w = 190
     body += f'<rect data-zone="open-stub" x="{W - 64 - stub_w}" y="{top}" width="{stub_w}" height="{ticket_h}" rx="28" fill="{FELT_RAISED}"/><rect x="{W - 64 - stub_w}" y="{top}" width="40" height="{ticket_h}" fill="{FELT_RAISED}"/>'
@@ -283,7 +288,10 @@ def play_card(pick, game=None, record=None, featured=False, art=None):
     else:
         body += t(104, top + 170, str(pick.get('_number') or ''), 42, TICKET_INK, BODY, 600)
     if record:
-        body += t(64, min(1170, top + 440), f"SEASON {record}  ·  EVERY PLAY GRADED", 40, CHALK, DISPLAY, 700, spacing=1.5)
+        body += ('<g data-zone="season-strip">'
+                 + t(64, min(1170, top + 440), f"SEASON {record}  ·  EVERY PLAY GRADED",
+                     40, CHALK, DISPLAY, 700, spacing=1.5)
+                 + '</g>')
     return frame('Pick of the day' if featured else 'Best bet', body)
 
 

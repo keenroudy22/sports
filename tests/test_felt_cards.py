@@ -160,29 +160,57 @@ class FeltCardTests(unittest.TestCase):
                         'a spread number must stay with its team instead of sitting alone')
 
     @unittest.skipUnless(pick_card.chrome_path(), 'needs a browser to measure the embedded card font')
-    def test_play_card_subjects_finish_inside_the_right_margin_with_the_real_font(self):
-        subjects = ('James Madison at Georgia Southern',
-                    'Sacramento State at Bowling Green',
-                    'Oklahoma State at West Virginia')
+    def test_play_card_text_zones_fit_real_matchups_and_clear_a_player_photo(self):
+        matchups = (('James Madison', 'Georgia Southern', 'JMU', 'GASO'),
+                    ('Sacramento State', 'Bowling Green', 'SAC', 'BGSU'),
+                    ('Oklahoma State', 'West Virginia', 'OKST', 'WVU'))
         cards = []
         with self.felt():
-            for subject in subjects:
+            for index, (away, home, away_abbr, home_abbr) in enumerate(matchups, 1):
+                subject = f'{away} at {home}'
                 title = f'{subject} under 54.5'
-                cards.append(pick_card.modern_svg(dict(PICK, displayTitle=title, title=title,
-                                                        athleteId=None, player=None), GAME))
-            player = 'Christopher Brooks-Washington'
-            cards.append(pick_card.modern_svg(dict(PICK, displayTitle=f'{player} over 64.5 receiving yards',
-                                                    title=f'{player} over 64.5 receiving yards',
-                                                    athleteId='long-player', player=player), GAME))
+                game = {
+                    'league': 'CFB', 'kickoff': '2026-10-10T16:00:00Z',
+                    'away': {'id': f'a{index}', 'school': away, 'short': away,
+                             'abbreviation': away_abbr, 'color': '#111111'},
+                    'home': {'id': f'h{index}', 'school': home, 'short': home,
+                             'abbreviation': home_abbr, 'color': '#222222'},
+                }
+                pick = dict(PICK, id=f'CFB-{index}-total', title=title, displayTitle=title,
+                            athleteId=None, player=None)
+                cards.append(pick_card.modern_svg(pick, game, record={'wins': 35, 'losses': 35}))
+            player = "Na'eem Abdul-Rahim Gladding"
+            title = f'{player} over 64.5 receiving yards'
+            cards.append(pick_card.modern_svg(
+                dict(PICK, id='CFB-long-player', title=title, displayTitle=title,
+                     marketType='receiving_yards', direction='over', athleteId='long-player', player=player),
+                GAME, record={'wins': 35, 'losses': 35},
+                art={'kind': 'photo', 'uri': 'data:image/png;base64,AA'}))
+            passer = 'Christopher Brooks-Washington'
+            pass_title = f'{passer} over 249.5 passing yards'
+            cards.append(pick_card.modern_svg(
+                dict(PICK, id='CFB-long-passer', title=pass_title, displayTitle=pass_title,
+                     marketType='passing_yards', direction='over', athleteId='long-passer', player=passer),
+                GAME, record={'wins': 35, 'losses': 35},
+                art={'kind': 'photo', 'uri': 'data:image/png;base64,AA'}))
 
         with tempfile.TemporaryDirectory() as folder:
             page = Path(folder) / 'measure.html'
             script = """
 <script>
 document.fonts.ready.then(() => {
-  const rows = [...document.querySelectorAll('[data-zone="play-subject"] text')].map((node) => {
-    const box = node.getBBox();
-    return {text: node.textContent, right: box.x + box.width};
+  const box = (node) => {
+    const value = node.getBBox();
+    return {text: node.textContent, left: value.x, top: value.y,
+            right: value.x + value.width, bottom: value.y + value.height};
+  };
+  const rows = [...document.querySelectorAll('body > svg')].map((card) => {
+    const subject = [...card.querySelectorAll('[data-zone="play-subject"] text')].map(box);
+    const selection = [...card.querySelectorAll('[data-zone="play-selection"] text')].map(box);
+    const season = card.querySelector('[data-zone="season-strip"] text');
+    const ticket = card.querySelector('[data-zone="play-ticket"]');
+    return {photo: !!card.querySelector('[data-zone="player-photo"]'), subject, selection,
+            season: season && box(season), ticket: ticket && box(ticket)};
   });
   document.body.textContent = JSON.stringify(rows);
   document.body.dataset.measured = '1';
@@ -198,9 +226,20 @@ document.fonts.ready.then(() => {
         match = re.search(r'<body data-measured="1">(.*?)</body>', result.stdout, re.S)
         self.assertIsNotNone(match, result.stdout[-500:])
         measured = json.loads(html.unescape(match.group(1)))
-        self.assertTrue(measured)
-        for row in measured:
-            self.assertLessEqual(row['right'], 1016, row)
+        self.assertEqual(len(measured), 5)
+        for card in measured:
+            self.assertTrue(card['subject'], card)
+            self.assertTrue(card['selection'], card)
+            self.assertIsNotNone(card['season'], card)
+            self.assertIsNotNone(card['ticket'], card)
+            for row in card['subject'] + card['selection'] + [card['season']]:
+                self.assertLessEqual(row['right'], 1016, row)
+            self.assertGreaterEqual(card['season']['top'], card['ticket']['bottom'], card)
+        for card in measured:
+            if card['photo']:
+                self.assertLessEqual(card['subject'][0]['right'], 830, card)
+        self.assertEqual(len(measured[-1]['selection']), 1,
+                         'OVER 249.5 PASS YDS should not orphan YDS on a second line')
 
     def test_last_climb_checkpoint_moves_now_and_again_clear_of_the_goal_flag(self):
         open_rung = {'id': 'near-goal', 'parlayType': 'ladder', 'odds': -110, 'book': 'FanDuel',

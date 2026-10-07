@@ -648,6 +648,20 @@ what was claimed at the time.
   92-pick record audit, 507-file publication guard and isolated slot-2330 rehearsal. `FELT_FROM` remains unset, so
   these are still review candidates and legacy cards remain live pending the owner's final approval.
 
+### C5 round-nine review candidate
+
+- A player portrait now reserves the upper-right headline lane instead of letting a long prop subject paint through
+  the photo ring. The deterministic browser fixture uses the real Na'eem Abdul-Rahim Gladding name with a portrait
+  and requires the first line to finish left of the ring.
+- Prop selection sizing is back on the narrower measured ratio, so wording such as `OVER 249.5 PASS YDS` remains a
+  single readable line. The browser geometry check now uses matching James Madison/Georgia Southern, Sacramento
+  State/Bowling Green and Oklahoma State/West Virginia CFB fixtures, and measures every subject, selection, ticket
+  and season strip instead of accidentally rebuilding each total as Bills/Rams.
+- All 19 owner-facing PNGs were refreshed in `card-review-2026-10-06`. Verification passed 949 Python tests (2
+  skipped), 143 frontend tests in the worktree and clean export, a 447-page build, warning-only size budget,
+  92-pick record audit, 507-file publication guard and isolated slot-2330 rehearsal. `FELT_FROM` remains unset;
+  legacy cards remain live until the owner approves the complete set.
+
 ### C6 first live shadow receipt
 
 - The October 6 11:30 PM desk run completed normally with no forced publication and wrote exactly eight private
