@@ -443,6 +443,15 @@ missing when neither component was recorded, so the page does not turn absent da
   same post category and mark fewer than eight settled posts as a small sample. They never cut over a theme,
   change a post category or move selection rules automatically.
 
+### C6 verified release receipt
+
+- Production revision: `d5ab6ed6`; [publish run 37558807025](https://github.com/keenroudy22/sports/actions/runs/37558807025)
+  succeeded on October 6. The live audit covered 36 route/width combinations at 375 and 1440 px with no overflow,
+  clipping, load failure or repeatable console error.
+- Release gates passed 899 Python tests (2 skipped), 130 frontend tests under both Node runtimes, the 92-pick
+  archive audit, payload budget, public guard and isolated slot-2100 rehearsal. The first real 11:30 PM shadow
+  write remains an observation gate; no result policy, public play, card or post changed.
+
 ### C4 verified release receipt
 
 - Production revision: `3bac89df`; [publish run 37555731984](https://github.com/keenroudy22/sports/actions/runs/37555731984)
@@ -464,6 +473,19 @@ missing when neither component was recorded, so the page does not turn absent da
   rehearsal with zero outside writes or private reads.
 - The remaining gate is human approval of all category renders. After approval, cutover may occur only after a
   green 11:30 PM run and before the 8:45 AM menu. Without approval by 6:30 AM, legacy cards stay live.
+
+### C5 second-round owner review
+
+- The eight files were re-rendered in the same owner review folder after correcting the public facts and owner
+  rules: the site's current-season straight record now drives play and receipt proof, receipt headlines no longer
+  recount fun tickets or Climb steps, overflow is explicit, and result rows identify their category.
+- Climb art retains the dollar checkpoints, completed/current/future states, $1,000 flag, restart amount and
+  separate this-climb versus all-climbs bank. Research art is built from a real stored choice and proof point.
+  Projection sheets now use the real slate date and a native phone-readable felt layout.
+- Open-play stubs are neutral, longshots use the felt palette, game totals carry both team marks, four-letter badges
+  fit, and empty bands are tighter. `FELT_FROM` is still unset; these are review candidates, not live card changes.
+- During fresh-cache phone/desktop QA, the Today extras callback exposed a private `routePath` call. The release
+  candidate now uses the exported route parser, has a regression test and serves app version 119.
 
 | Gate | What remains | Authority/state |
 |---|---|---|

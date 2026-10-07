@@ -156,6 +156,22 @@ def state(first, latest):
             'accounting': accounting}
 
 
+def saved_through(first, latest, target):
+    """Lifetime protected dollars immediately after one rung, for immutable result artwork."""
+    saved = 0
+    for rung in rungs(first, latest):
+        if not played(rung):
+            continue
+        info = rung.get('ladder') or {}
+        if rung.get('result') == 'win':
+            before = int(info.get('banked') or 0)
+            after = int(info.get('bankedAfter') if info.get('bankedAfter') is not None else before)
+            saved += max(0, after - before)
+        if rung.get('id') == target:
+            break
+    return saved
+
+
 def payout(stake, odds):
     return int(round(stake * parlay.decimal(odds)))
 

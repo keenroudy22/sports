@@ -188,7 +188,8 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None):
                 else:
                     art = (pick_card.ticket_art(item['pick'], games, player_team) if pick_card.play_kind(item['pick']) == 'parlay'
                            else pick_card.artwork(item['pick'], item['game']))
-                    pick_card.render(pick_card.modern_svg(item['pick'], item['game'], player_side=item.get('side'), featured=item.get('featured', False), art=art), path)
+                    pick_card.render(pick_card.modern_svg(item['pick'], item['game'], record=item.get('record'),
+                                                         player_side=item.get('side'), featured=item.get('featured', False), art=art), path)
             out[item['guid']] = path
         except Exception as error:
             log(f"card for {item['guid']} not rendered: {error}")
@@ -225,7 +226,10 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
     # Keep recent receipt images in every build. Discord normally uploads a permanent copy, but retaining these
     # URLs repairs old embeds and gives a failed delivery several days to retry without losing its card.
     ready = [{'guid': r['card'], 'receipt': r} for r in receipts.card_history(ctx.first, ctx.latest, ctx.games, now)]
-    ready += [{'guid': r['card'], 'ladderResult': r['pick']}
+    import ladder
+    climb = ladder.state(ctx.first, ctx.latest)
+    ready += [{'guid': r['card'], 'ladderResult': dict(r['pick'],
+               _allClimbsBanked=ladder.saved_through(ctx.first, ctx.latest, r['pick']['id']))}
               for r in receipts.ladder_result_cards(ctx.first, ctx.latest, now)]
     try:
         post_log = x_post.load_log()
@@ -234,6 +238,10 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
     except (OSError, ValueError):
         restored = set()
     plays = card_items(ctx.first, ctx.latest, ctx.games, now, ctx.player_team, restored)
+    for item in plays:
+        item['record'] = receipts.season_as_of(ctx.first, ctx.latest, item['pick'].get('publishedAt') or now)
+        if item['pick'].get('parlayType') == 'ladder':
+            item['pick'] = dict(item['pick'], _allClimbsBanked=climb['saved'])
     import featured
     potd = featured.of_day(eastern_date(now).isoformat())
     # The Pick of the Day gets a card of its own, under its own name, so a post can never carry a stale copy.

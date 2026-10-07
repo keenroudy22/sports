@@ -739,7 +739,7 @@
     Promise.all([maybe('scoreboard.json'), maybe('app/lines.json'), maybe('sports.json'), allPicks()])
       .then(([board, lines, sports, every]) => { todayExtras = { board, lines, sports, every }; })
       .catch(() => { todayExtras = {}; })
-      .finally(() => { todayExtrasLoading = false; if (C.routePath(location.hash).view === 'today') render(true); });
+      .finally(() => { todayExtrasLoading = false; if (C.parseRoute(location.hash).view === 'today') render(true); });
   };
   /* Sports without best bets get their own honest Today: scores and their trial, never football substituted. */
   const sportToday = async () => {

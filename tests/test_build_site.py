@@ -144,6 +144,19 @@ class PickTests(unittest.TestCase):
         self.assertEqual(row['cautions'], ['A slow pace can hurt.'])
         self.assertEqual(row['recordAsOfPublication'], {'wins': 0, 'losses': 0, 'pushes': 0, 'voids': 0})
 
+    def test_card_record_includes_priced_week_one_imports_like_the_site_headline(self):
+        old = {'id': 'NFL-2026-W1-import', 'league': 'NFL', 'title': 'Old line', 'gameIds': [],
+               'historicalImport': True, 'priceAssumed': True, 'odds': -115, 'result': 'win',
+               'season': 2026, 'seasonType': 2, 'publishedAt': '2026-09-26T12:00:00Z'}
+        new = {'id': 'NFL-2026-W4-new', 'league': 'NFL', 'title': 'Bills at Lions over 44.5',
+               'gameIds': ['NFL-1'], 'odds': -110, 'season': 2026, 'seasonType': 2,
+               'publishedAt': '2026-09-28T12:00:00Z'}
+        rows = {row['id']: row for row in build_site.board_picks(
+            {old['id']: old, new['id']: new}, {old['id']: {'result': 'win'}}, {'NFL-1': {'kickoff': '2026-09-29T00:00:00Z',
+                                                              'league': 'NFL', 'season': 2026, 'seasonType': 2}}, {})}
+        self.assertEqual(rows[new['id']]['recordAsOfPublication'],
+                         {'wins': 1, 'losses': 0, 'pushes': 0, 'voids': 0})
+
     def test_board_rows_keep_season_stage_and_week_for_the_record_archive(self):
         pick = {'id': 'NFL-2026-W19-playoff', 'league': 'NFL', 'gameIds': ['NFL-1'],
                 'publishedAt': '2027-01-10T12:00:00Z'}

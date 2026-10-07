@@ -22,6 +22,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import gates
 import pick_card
+import record_scope
 import x_post
 from sports_refresh import eastern_date
 
@@ -142,6 +143,11 @@ def record_text(summary):
     return f"{summary['win']}-{summary['loss']}" + (f"-{summary['push']}" if summary['push'] else '')
 
 
+def season_as_of(first, latest, at):
+    """The same current-season/current-stage straight headline the website showed at ``at``."""
+    return record_scope.merged_summary(first, latest, at)
+
+
 def accounting(rows):
     """Price provenance, without changing outcomes or advertising straight stakes on X."""
     straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder')]
@@ -226,7 +232,7 @@ def fit(lines, head, tail, head_sep='\n\n'):
         rows.pop()
 
 
-def day_receipt(day, first, latest, games, ids):
+def day_receipt(day, first, latest, games, ids, as_of=None):
     rows = plays_between(first, latest, games, ids, day, day)
     if not settled(rows):
         return None
@@ -236,17 +242,19 @@ def day_receipt(day, first, latest, games, ids):
     text = fit([result_line(r, games) for r in rows], head, tail.strip(), head_sep='\n')
     straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder')]
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
+    due = morning(day + timedelta(days=1))
     return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}', 'kind': 'receipt',
             'title': headline(rows), 'label': 'YESTERDAY’S PLATES', 'when': f'{day:%A, %b %-d}',
+            'season': record_scope.text(season_as_of(first, latest, as_of or due)),
             'summary': {'straight': record_text(x_post.summarize(straight)) if straight else None,
                         'fun': record_text(x_post.summarize(fun)) if fun else None},
             'accounting': accounting(rows),
-            'rows': [(r['result'], label(r, games), result_detail(r)) for r in rows], 'text': text,
-            'due': morning(day + timedelta(days=1)),
+            'rows': [(r['result'], label(r, games), result_detail(r), pick_card.play_kind(r)) for r in rows], 'text': text,
+            'due': due,
             'stale': datetime(day.year, day.month, day.day, LATEST[0], LATEST[1], tzinfo=gates.EASTERN).astimezone(timezone.utc) + timedelta(days=1)}
 
 
-def week_receipt(wednesday, first, latest, games, ids):
+def week_receipt(wednesday, first, latest, games, ids, as_of=None):
     start, end = wednesday - timedelta(days=7), wednesday - timedelta(days=1)
     rows = plays_between(first, latest, games, ids, start, end)
     if not settled(rows):
@@ -259,12 +267,14 @@ def week_receipt(wednesday, first, latest, games, ids):
     text = fit(detail_rows if len(kinds) > 1 else [], head, tail.strip(), head_sep='\n')
     straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder')]
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
+    due = morning(wednesday)
     return {'key': f'receipt:week:{end.isoformat()}', 'card': f'receipt-week-{end.isoformat()}', 'kind': 'receipt',
             'title': headline(rows), 'label': 'THIS WEEK’S PLATES', 'when': f'{start:%b %-d} to {end:%b %-d}',
+            'season': record_scope.text(season_as_of(first, latest, as_of or due)),
             'summary': {'straight': record_text(x_post.summarize(straight)) if straight else None,
                         'fun': record_text(x_post.summarize(fun)) if fun else None},
             'accounting': accounting(rows),
-            'rows': [(None, kind_line(name, rec, rows), '') for name, rec in kinds], 'text': text, 'due': morning(wednesday),
+            'rows': [(None, kind_line(name, rec, rows), '', name.lower()) for name, rec in kinds], 'text': text, 'due': due,
             'stale': datetime(wednesday.year, wednesday.month, wednesday.day, LATEST[0], LATEST[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)}
 
 
@@ -277,11 +287,11 @@ def ready(first, latest, games, log_book, now):
     today = eastern_date(now)
     out = []
     for back in (2, 1):
-        receipt = day_receipt(today - timedelta(days=back), first, latest, games, ids)
+        receipt = day_receipt(today - timedelta(days=back), first, latest, games, ids, now)
         if receipt:
             out.append(receipt)
     if today.weekday() == WEEKDAY:
-        receipt = week_receipt(today, first, latest, games, ids)
+        receipt = week_receipt(today, first, latest, games, ids, now)
         if receipt:
             out.append(receipt)
     return [r for r in out if r['stale'] > now]
@@ -298,11 +308,11 @@ def card_history(first, latest, games, now, days=CARD_HISTORY_DAYS):
     out = []
     for back in range(days + 1):
         day = today - timedelta(days=back)
-        receipt = day_receipt(day, first, latest, games, ids)
+        receipt = day_receipt(day, first, latest, games, ids, now)
         if receipt:
             out.append(receipt)
         if day.weekday() == WEEKDAY:
-            receipt = week_receipt(day, first, latest, games, ids)
+            receipt = week_receipt(day, first, latest, games, ids, now)
             if receipt:
                 out.append(receipt)
     return out

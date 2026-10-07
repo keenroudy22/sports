@@ -9,6 +9,11 @@ test('production JavaScript parses as a standalone browser script', () => {
   assert.doesNotThrow(() => new vm.Script(source, { filename: 'site/app.js' }));
 });
 
+test('Today extras rerender through the exported route parser', () => {
+  assert.match(source, /C\.parseRoute\(location\.hash\)\.view === 'today'/);
+  assert.doesNotMatch(source, /C\.routePath\(/);
+});
+
 test('replacement UI keeps the owner-mandated wording and shared labels', () => {
   for (const wording of [
     'being checked · not posted yet',

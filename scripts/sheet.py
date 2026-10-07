@@ -245,6 +245,9 @@ def svg(games, league, day, week=None, logos=None):
     """The sheet: a header with the ask, two columns of game cards, the house line at the foot."""
     esc = pick_card.esc
     logos = logos or {}
+    if pick_card.felt_enabled({'day': day}, day):
+        import felt_cards
+        return felt_cards.projection_sheet(games, league, day, week, logos, watches(games))
     rows = (len(games) + 1) // 2
     top, foot, gap = 196, 96, 12
     pitch = (HEIGHT - top - foot) / max(rows, 1)
@@ -272,15 +275,6 @@ def svg(games, league, day, week=None, logos=None):
               f'Mint: the labeled line clears its captured price. Entertainment only.</text>',
               '</svg>']
     output = '\n'.join(parts)
-    if pick_card.felt_enabled({'day': day}, day):
-        import felt_cards
-        for old, new in ((BG, felt_cards.FELT_NIGHT), (CARD, felt_cards.FELT_RAISED),
-                         (LINE, felt_cards.LINE), (TEXT, felt_cards.CHALK),
-                         (DIM, felt_cards.DIM), (ACCENT, felt_cards.KOOKD)):
-            output = output.replace(old, new)
-        output = output.replace('font-family="Helvetica Neue, Helvetica, Arial, sans-serif"',
-                                'font-family="DM Sans, Arial, sans-serif"')
-        output = output.replace('>', '>' + felt_cards.font_face(), 1)
     return output
 
 

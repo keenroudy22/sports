@@ -39,6 +39,7 @@ import market_read
 import model_v2
 import odds_api
 import pricing
+import record_scope
 import sharp_odds
 import research_views
 import season_trends
@@ -1186,17 +1187,7 @@ def board_picks(first, latest, by_id, identities):
                      'color': color(pick.get('league'), (game.get('home') or {}).get('abbreviation'), identities)})
     rows.sort(key=lambda p: p.get('publishedAt') or '', reverse=True)
     for row in rows:
-        at = instant(row.get('publishedAt'))
-        settled = [other for other in rows if other['id'] != row['id'] and not other.get('historicalImport')
-                   and not other.get('legs') and not other.get('parlayType')
-                   and other.get('result') in ('win', 'loss', 'push', 'void')
-                   and instant(other.get('settledAt')) and at and instant(other['settledAt']) <= at]
-        row['recordAsOfPublication'] = {
-            'wins': sum(p['result'] == 'win' for p in settled),
-            'losses': sum(p['result'] == 'loss' for p in settled),
-            'pushes': sum(p['result'] == 'push' for p in settled),
-            'voids': sum(p['result'] == 'void' for p in settled),
-        }
+        row['recordAsOfPublication'] = record_scope.summary(rows, row.get('publishedAt'))
     return rows
 
 

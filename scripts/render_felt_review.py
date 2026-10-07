@@ -3,13 +3,20 @@ import argparse
 import json
 import os
 import sys
-from datetime import date
+from collections import Counter
+from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import pick_card
+import gates
+import ladder
+import receipts
+import record_scope
 import research_art
+import research_posts
 import sheet
+from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -29,6 +36,7 @@ def game_shape(game):
 def render(out):
     os.environ['KEENROUDY_CARD_THEME'] = 'felt'
     today, record = load('today.json'), load('record.json')
+    now = datetime.fromisoformat(str(today.get('generatedAt')).replace('Z', '+00:00')) if today.get('generatedAt') else datetime.now(timezone.utc)
     games = {row['id']: game_shape(row) for row in today.get('games') or []}
     picks = today.get('picks') or []
     straight = [row for row in picks if not row.get('legs')]
@@ -47,42 +55,51 @@ def render(out):
     for name, row, featured in (('best-bet-player-prop.png', prop, True),
                                 ('best-bet-game-line.png', game_pick, False)):
         game = games.get(row.get('gameId'))
-        save(name, pick_card.modern_svg(row, game, record=row.get('recordAsOfPublication'),
+        season = record_scope.summary(record.get('picks') or [], row.get('publishedAt') or now)
+        save(name, pick_card.modern_svg(row, game, record=season,
                                         featured=featured, art=pick_card.artwork(row, game)))
 
     save('fun-ticket.png', pick_card.ticket_svg(
         ticket, games.get(ticket.get('gameId')), art=pick_card.ticket_art(ticket, games)))
-    save('climb-open.png', pick_card.ladder_svg(dict(climb, result=None)))
-    save('climb-result.png', pick_card.ladder_result_svg(climb))
+    ctx = gates.Stores().as_of(now)
+    climb_state = ladder.state(ctx.first, ctx.latest)
+    save('climb-open.png', pick_card.ladder_svg(dict(climb, result=None,
+                                                     _allClimbsBanked=climb_state['saved'])))
+    save('climb-result.png', pick_card.ladder_result_svg(dict(climb,
+                                                              _allClimbsBanked=ladder.saved_through(ctx.first, ctx.latest, climb['id']))))
 
-    settled = sorted((row for row in record.get('picks') or [] if row.get('result') in ('win', 'loss', 'push')),
-                     key=lambda row: row.get('settledAt') or '', reverse=True)[:4]
-    receipt = {'key': 'receipt:day:review', 'due': '2099-01-01T14:00:00Z',
-               'title': f"{sum(r['result'] == 'win' for r in settled)}-{sum(r['result'] == 'loss' for r in settled)}",
-               'when': 'Latest graded card',
-               'rows': [(row['result'], row.get('displayTitle') or row.get('title'),
-                         str(row.get('actual') or 'Final on the public record')) for row in settled]}
+    history = receipts.card_history(ctx.first, ctx.latest, ctx.games, now)
+    receipt = max(history, key=lambda row: (len(row.get('rows') or []), row.get('when') or ''))
     save('receipt.png', pick_card.receipt_svg(receipt))
 
-    choice = {'day': '2099-01-01', 'title': 'MATCHUP RESEARCH', 'kicker': 'EXACT MAIN LINE',
-              'kind': 'matchup', 'accent': '#20C774',
-              'rows': [{'title': prop.get('displayTitle') or prop['title'],
-                        'price': f"{prop['odds']:+d} {prop['book']}",
-                        'metric': 'Current-season history plus opponent context',
-                        'detail': 'Research category · current price'}]}
-    prop_art = pick_card.artwork(prop, games.get(prop.get('gameId'))) or {}
-    save('research.png', research_art.svg(choice, {0: prop_art.get('uri')} if prop_art.get('uri') else {}))
+    cards = list(games.values())
+    details = research_posts.details_for(cards)
+    teams = research_posts.teams_for(cards)
+    choice = (research_posts.matchup_candidate(cards, details, now, teams)
+              or research_posts.season_candidate(cards, details, now)
+              or research_posts.scorer_candidate(cards, details, now))
+    if not choice:
+        raise RuntimeError('no real stored research choice is available for the card review')
+    choice.update(day=eastern_date(now))
+    research_artwork = {}
+    for index, row in enumerate(choice.get('rows') or []):
+        game = games.get(row.get('gameId'))
+        art = pick_card.artwork({'athleteId': row.get('athleteId'), 'league': row.get('league')}, game) if row.get('athleteId') else None
+        if art and art.get('uri'):
+            research_artwork[index] = art['uri']
+    save('research.png', research_art.svg(choice, research_artwork))
 
-    sheet_games = [row for row in today.get('games') or []
-                   if row.get('league') == 'CFB' and row.get('v2') and (row.get('market') or {}).get('total') is not None
-                   and not row.get('fcs')][:6]
+    dates = Counter(eastern_date(gates.when(row['kickoff'])) for row in today.get('games') or []
+                    if row.get('league') == 'CFB' and row.get('state', 'pre') == 'pre')
+    sheet_day = max(dates, key=lambda day: (len(sheet.pick_games(today.get('games') or [], 'CFB', day)), day))
+    sheet_games = sheet.pick_games(today.get('games') or [], 'CFB', sheet_day)
     logos = {}
     for row in sheet_games:
         for side in ('away', 'home'):
             uri = sheet.logo_uri(row, side)
             if uri:
                 logos[row['id'], side] = uri
-    save('projection-sheet.png', sheet.svg(sheet_games, 'CFB', date(2099, 1, 3),
+    save('projection-sheet.png', sheet.svg(sheet_games, 'CFB', sheet_day,
                                             sheet_games[0].get('week') if sheet_games else None, logos))
     return made
 
