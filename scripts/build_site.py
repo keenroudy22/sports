@@ -107,12 +107,26 @@ def instant(value):
     return moment if moment is None or moment.tzinfo else moment.replace(tzinfo=timezone.utc)
 
 
-def display_book(value):
-    """Public-facing book name, or None when a capture did not identify a book."""
+PROVIDER_BOOKS = {
+    'draft kings': 'DraftKings', 'draftkings': 'DraftKings',
+    'fan duel': 'FanDuel', 'fanduel': 'FanDuel',
+    'bet mgm': 'BetMGM', 'betmgm': 'BetMGM',
+    'espn bet': 'ESPN BET', 'thescore bet': 'ESPN BET',
+}
+
+
+def provider_book(value):
+    """Canonical provider identity used by gates, selection and stable ids."""
     name = str(value or '').strip()
     if not name or name.casefold() == 'book unavailable':
         return None
-    return 'theScore Bet' if name.casefold() == 'espn bet' else name
+    return PROVIDER_BOOKS.get(name.casefold(), name)
+
+
+def display_book(value):
+    """Public-facing book name, kept separate from the provider identity."""
+    name = provider_book(value)
+    return 'theScore Bet' if name == 'ESPN BET' else name
 
 
 def fair_american(chance):
@@ -125,18 +139,18 @@ COMPARISON_ONLY_BOOKS = {'hardrockbet'}
 
 
 def public_lines(rows, now):
-    """Add quote-age and exact-line shopping fields, and omit rows without a named book."""
+    """Add display, quote-age and exact-line shopping fields without changing provider identity."""
     out = []
     for source in rows:
-        book = display_book(source.get('book'))
+        book = provider_book(source.get('book'))
         if not book:
             continue
-        row = dict(source, book=book)
+        row = dict(source, book=book, displayBook=display_book(book))
         quotes = []
         for quote in source.get('books') or []:
-            named = display_book(quote.get('book'))
+            named = provider_book(quote.get('book'))
             if named:
-                quotes.append({**quote, 'book': named})
+                quotes.append({**quote, 'book': named, 'displayBook': display_book(named)})
         if 'books' in source:
             row['books'] = quotes
         observed = instant(row.get('observedAt'))
@@ -144,14 +158,15 @@ def public_lines(rows, now):
         row['ageMinutes'] = age
         row['freshness'] = ('fresh' if age is not None and age <= 60 else
                             'aging' if age is not None and age <= 240 else 'stale')
-        same = [{'book': row['book'], 'odds': row.get('odds')}]
-        same += [{'book': q['book'], 'odds': q.get('odds')} for q in quotes
+        same = [{'book': row['book'], 'displayBook': row['displayBook'], 'odds': row.get('odds')}]
+        same += [{'book': q['book'], 'displayBook': q['displayBook'], 'odds': q.get('odds')} for q in quotes
                  if number(q.get('line')) == number(row.get('line'))]
         same = [q for q in same if american(q.get('odds')) is not None
                 and re.sub(r'[^a-z0-9]', '', q['book'].casefold()) not in COMPARISON_ONLY_BOOKS]
         if same:
             best = max(same, key=lambda q: american(q['odds']))
-            row['bestSameLine'] = {'book': best['book'], 'odds': american(best['odds'])}
+            row['bestSameLine'] = {'book': best['book'], 'displayBook': best['displayBook'],
+                                   'odds': american(best['odds'])}
         else:
             row['bestSameLine'] = None
         out.append(row)
@@ -169,7 +184,7 @@ NFL_COLORS = {
 NEUTRAL = '#64748B'
 # Provider names as the feed spells them, mapped to the books' own spelling.
 BOOKS = {'Draft Kings': 'DraftKings', 'DraftKings': 'DraftKings', 'Fan Duel': 'FanDuel', 'FanDuel': 'FanDuel',
-         'Bet MGM': 'BetMGM', 'BetMGM': 'BetMGM', 'ESPN BET': 'theScore Bet', 'theScore Bet': 'theScore Bet'}
+         'Bet MGM': 'BetMGM', 'BetMGM': 'BetMGM', 'ESPN BET': 'ESPN BET', 'theScore Bet': 'ESPN BET'}
 
 
 def identity_colors(identity):
@@ -378,7 +393,8 @@ def market(game):
     if not raw:
         return None
     spread, opened = number(raw.get('spread')), number(raw.get('spreadOpen'))
-    return {'book': BOOKS.get((raw.get('provider') or '').strip(), raw.get('provider')), 'spread': spread,
+    book = provider_book(BOOKS.get((raw.get('provider') or '').strip(), raw.get('provider')))
+    return {'book': book, 'displayBook': display_book(book), 'spread': spread,
             'spreadOpen': opened, 'spreadMove': round(spread - opened, 1) if spread is not None and opened is not None
             else None, 'total': number(raw.get('total')), 'totalOpen': number(str(raw.get('totalOpen') or '').lstrip('ou')),
             'spreadOdds': american(raw.get('spreadOdds')), 'overOdds': american(raw.get('overOdds')),
@@ -1155,7 +1171,8 @@ def board_picks(first, latest, by_id, identities):
                      'gameId': game_ids[0] if game_ids else None, 'gameIds': game_ids,
                      'season': season, 'seasonType': common('seasonType'), 'week': common('week'),
                      'line': first_of(pick, recent, 'line'),
-                     'direction': first_of(pick, recent, 'direction'), 'book': display_book(pick.get('book')), 'odds': first_of(pick, recent, 'odds'),
+                     'direction': first_of(pick, recent, 'direction'), 'book': provider_book(pick.get('book')),
+                     'displayBook': display_book(pick.get('book')), 'odds': first_of(pick, recent, 'odds'),
                      'priceAssumed': pick.get('odds') is None and recent.get('priceAssumed') is True,
                      'priceNote': recent.get('priceNote') if pick.get('odds') is None else None,
                      'priceEstimated': pick.get('priceEstimated') is True,

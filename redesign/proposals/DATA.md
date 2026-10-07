@@ -18,7 +18,7 @@ the math in one tested place and makes the payloads self-explanatory.
 | line rows | `ageMinutes`, `freshness` | fresh ≤ 60 min, aging ≤ 4 h, stale beyond (the same 4-hour limit as `C.quoteStatus`) |
 | line rows | `bestSameLine` | best odds among books quoting the same line, excluding comparison-only books |
 | `board_picks` (L961) | `fairOddsAtPublication`, `quoteAgeMinutes`, `recordAsOfPublication` | Frozen at publication |
-| books | display names | "ESPN BET" → "theScore Bet" (rebranded 2025-12-01); "Book unavailable" rows dropped from public lines |
+| books | provider + display names | Keep `book: "ESPN BET"` for selection, jurisdiction gates and stable ids; add `displayBook: "theScore Bet"` for the site (rebranded 2025-12-01). Drop "Book unavailable" rows from public lines. |
 
 Also fix at the source:
 - Game totals reach the site with no market type, so the old UI called them "Team prop".

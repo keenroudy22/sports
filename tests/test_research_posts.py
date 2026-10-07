@@ -24,6 +24,17 @@ def game(watch=None):
 
 
 class ResearchPostTests(unittest.TestCase):
+    def test_split_college_defense_payload_is_followed_safely(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder) / 'teams'
+            root.mkdir()
+            (root / 'CFB.json').write_text('{"teams":{},"defenseFile":"teams/CFB-defense.json"}')
+            (root / 'CFB-defense.json').write_text('{"defense":{"rows":{"2":{"RB":{"rushYds":200}}}}}')
+            payload = R.teams_for([{'league': 'CFB'}], root)['CFB']
+            self.assertEqual(payload['defense']['rows']['2']['RB']['rushYds'], 200)
+            (root / 'CFB.json').write_text('{"teams":{},"defenseFile":"../../private.json"}')
+            self.assertNotIn('defense', R.teams_for([{'league': 'CFB'}], root)['CFB'])
+
     def test_long_captions_keep_whole_exact_preview_rows_and_all_graphic_evidence(self):
         from copy import deepcopy
         import x_post
@@ -140,6 +151,11 @@ class ResearchPostTests(unittest.TestCase):
         self.assertIn('Underdog +8.5 (-105) ESPN', choice['text'])
         self.assertNotIn('not an upset', choice['text'].lower())
         self.assertIn('Underdog +8.5 (-105)', choice['text'])
+
+        line['book'] = 'theScore Bet'
+        choice = R.select({'games': [game()]}, {'CFB-1': {}}, NOW, [line])
+        self.assertEqual(choice['kind'], 'spread-dog')
+        self.assertIn('Underdog +8.5 (-105) ESPN', choice['text'])
 
     def test_post_window_and_card_are_stale_safe(self):
         watch = {'side': 'home', 'team': 'Underdog', 'odds': 160, 'opponentOdds': -192,

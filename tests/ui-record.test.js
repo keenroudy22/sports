@@ -35,3 +35,11 @@ test('season chart ends at captured-price units exactly', () => {
   assert.match(recordView, /unitsChart\(points\)/);
   assert.match(recordView, /units\(rec\.captured\.units\)/);
 });
+
+test('Model restores projected-winner and fun-ticket scorecard tiles', () => {
+  const modelView = source.slice(source.indexOf("if (tab === 'model')"), source.indexOf('/* Trials:', source.indexOf("if (tab === 'model')")));
+  assert.match(modelView, /<small>Projected winners<\/small>/);
+  assert.match(modelView, /card\.moneyline/);
+  assert.match(modelView, /<small>Fun tickets<\/small>/);
+  assert.match(modelView, /card\.parlays/);
+});

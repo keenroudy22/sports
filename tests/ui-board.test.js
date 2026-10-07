@@ -24,6 +24,17 @@ test('best price compares books at the exact same line only', () => {
   assert.deepEqual(vm.otherLines, [{ book: 'theScore Bet', line: 199.5, odds: 120 }]);
 });
 
+test('provider identity stays internal while the board uses the separate display name', () => {
+  const row = { id: 'r2', title: 'A at B over 50.5', gameId: 'CFB-2', market: 'total points', direction: 'over', line: 50.5,
+    odds: -110, book: 'ESPN BET', displayBook: 'theScore Bet', state: 'open', kickoff: '2099-01-01T00:00:00Z', observedAt: new Date().toISOString(),
+    books: [{ book: 'ESPN BET', displayBook: 'theScore Bet', line: 50.5, odds: -110 }],
+    bestSameLine: { book: 'ESPN BET', displayBook: 'theScore Bet', odds: -110 }, grade: {} };
+  const vm = M.lineVM(row);
+  assert.equal(vm.book, 'theScore Bet');
+  assert.equal(vm.bestBook, 'theScore Bet');
+  assert.equal(vm.src.book, 'ESPN BET');
+});
+
 test('Best bet matching requires the same game, player, stat and side', () => {
   const pick = { gameId: 'NFL-1', athleteId: '9', market: 'rec', direction: 'over' };
   assert.equal(M.officialKey(pick), M.officialKey({ gameId: 'NFL-1', athleteId: '9', market: 'receptions', direction: 'OVER' }));

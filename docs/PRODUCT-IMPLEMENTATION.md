@@ -477,6 +477,14 @@ missing when neither component was recorded, so the page does not turn absent da
   sideways scroll, load failure or console error.
 - Tracked schemas, `record_audit.py` and integrity checks were not changed.
 
+### Rollback boundary after C4
+
+- `8eda349533167f202fbcfa0a0bda4e6c390c58f1` is the pre-redesign reference, but it is no longer a safe
+  front-end-only rollback. The older shell expects the former monolithic trends payload and inline CFB defense
+  table. Any rollback that far must revert the front end together with the C4 builder and publication-guard
+  changes, then rebuild and pass the normal record, payload, guard, rehearsal and locked-deploy gates. Never copy
+  only the old site files onto the current split payloads.
+
 ## October 6 C5 felt-card review candidate
 
 - The felt renderers cover straight player and game plays, fun tickets, open and settled Climb cards, receipts,

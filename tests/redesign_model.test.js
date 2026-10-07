@@ -223,7 +223,7 @@ test('every legacy link lands on its new screen', () => {
 });
 
 test('legacy links rewrite to the new address; deep links never change', () => {
-  assert.equal(M.canonical(M.resolve('#board/props')), '#research?type=props');
+  assert.equal(M.canonical(M.resolve('#board/props')), '#research/lines?type=props');
   assert.equal(M.canonical(M.resolve('#trends')), '#research/trends');
   assert.equal(M.canonical(M.resolve('#scores/NHL')), '#games/live?sport=NHL');
   assert.equal(M.canonical(M.resolve('#model')), '#record/model');

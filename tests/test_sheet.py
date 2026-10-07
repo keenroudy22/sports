@@ -29,6 +29,9 @@ RENDERED_AT = datetime(2026, 9, 27, 14, tzinfo=timezone.utc)
 
 
 class PickTests(unittest.TestCase):
+    def test_public_rebrand_never_falls_back_to_thesc(self):
+        self.assertEqual(sheet.book_short('theScore Bet'), 'ESPN')
+
     def test_the_nfl_sheet_is_the_strongest_sunday_games_in_kickoff_order(self):
         cards = [card('late', '2026-09-27T20:25Z', gap=4), card('early', '2026-09-27T17:00Z', gap=5), card('mon', '2026-09-29T00:15Z'),
                  card('nov2', '2026-09-27T17:00Z', v2=None), card('started', '2026-09-27T17:00Z', state='in')]

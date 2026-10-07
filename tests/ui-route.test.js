@@ -25,9 +25,16 @@ test('shared legacy filters survive route resolution', () => {
     { stat: 'rushYds', sample: 'last10', day: 'today', rate: '90', kind: 'main', q: 'Henry' });
 });
 
+test('bare Research preserves the old news desk and legacy player searches land on Search', () => {
+  assert.equal(M.resolve('#research').mode, 'news');
+  assert.equal(M.resolve('#research/lines').mode, 'lines');
+  assert.equal(M.resolve('#stats/search').sub, 'search');
+  assert.equal(M.resolve('#stats/players').sub, 'search');
+});
+
 test('canonical table rewrites legacy pages and never rewrites public deep links', () => {
   const table = [
-    ['#board/props', '#research?type=props'], ['#board/favorites', '#research?sort=edge'],
+    ['#board/props', '#research/lines?type=props'], ['#board/favorites', '#research/lines?sort=edge'],
     ['#trends', '#research/trends'], ['#scores/NHL', '#games/live?sport=NHL'],
     ['#results', '#record'], ['#model', '#record/model'],
   ];

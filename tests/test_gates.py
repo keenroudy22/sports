@@ -6,6 +6,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import gates
+import build_site
 from gates import Context
 
 NOW = datetime(2026, 9, 27, 13, 0, tzinfo=timezone.utc)          # Sunday 9:00 ET, four hours before kickoff
@@ -171,6 +172,14 @@ class CommonRuleTests(unittest.TestCase):
         self.assertFalse(gates.cfb_jurisdiction(total_lean(league='CFB', gameIds=['CFB-1'], book='Bovada'), ctx).ok)
         self.assertTrue(gates.cfb_jurisdiction(prop_lean(league='CFB', gameIds=['CFB-1']), ctx).ok,
                         'pregame college player props are legal in Indiana (the Gaming Commission kept them on 2026-09-24)')
+
+    def test_cfb_jurisdiction_uses_provider_identity_not_the_public_rebrand(self):
+        [line] = build_site.public_lines([{'id': 'game-CFB-1-over', 'book': 'theScore Bet', 'line': 52.5,
+                                           'odds': -110, 'observedAt': NOW.isoformat()}], NOW)
+        self.assertEqual((line['book'], line['displayBook']), ('ESPN BET', 'theScore Bet'))
+        ctx = context(games={'CFB-1': dict(GAME, id='CFB-1', league='CFB')})
+        pick = total_lean(league='CFB', gameIds=['CFB-1'], book=line['book'], displayBook=line['displayBook'])
+        self.assertTrue(gates.cfb_jurisdiction(pick, ctx).ok)
 
 
 class ShoppingRuleTests(unittest.TestCase):

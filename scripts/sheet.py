@@ -106,7 +106,8 @@ def watches(games, now=None):
 
 def book_short(name):
     return {'BetMGM': 'MGM', 'BetRivers': 'BR', 'DraftKings': 'DK', 'ESPN BET': 'ESPN',
-            'FanDuel': 'FD', 'Fanatics': 'FAN', 'Caesars': 'CZR'}.get(name, str(name or '')[:5].upper())
+            'theScore Bet': 'ESPN', 'FanDuel': 'FD', 'Fanatics': 'FAN',
+            'Caesars': 'CZR'}.get(name, str(name or '')[:5].upper())
 
 
 def priced_text(card, market):

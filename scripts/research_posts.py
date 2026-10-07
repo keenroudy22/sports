@@ -8,6 +8,7 @@ no post; nothing is invented to fill a calendar.
 """
 import html
 import json
+import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -20,7 +21,7 @@ TODAY = ROOT / 'site' / 'data' / 'app' / 'today.json'
 LINES = ROOT / 'site' / 'data' / 'app' / 'lines.json'
 DETAILS = ROOT / 'site' / 'data' / 'app' / 'games'
 TEAMS = ROOT / 'site' / 'data' / 'app' / 'teams'
-PUBLIC_BOOKS = {'DraftKings', 'FanDuel', 'BetMGM', 'ESPN BET', 'Caesars', 'BetRivers', 'Fanatics'}
+PUBLIC_BOOKS = {'DraftKings', 'FanDuel', 'BetMGM', 'ESPN BET', 'theScore Bet', 'Caesars', 'BetRivers', 'Fanatics'}
 POST_AT, POST_UNTIL = (10, 30), (14, 0)
 WIDTH, HEIGHT = 1080, 1350
 BG, PANEL, LINE = '#071018', '#102330', '#294657'
@@ -51,7 +52,26 @@ def details_for(cards, root=DETAILS):
 
 
 def teams_for(cards, root=TEAMS):
-    return {league: load(Path(root) / f'{league}.json', {})
+    root = Path(root)
+    base = root.parent.resolve()
+
+    def payload_for(league):
+        payload = load(root / f'{league}.json', {})
+        ref = payload.get('defenseFile') if isinstance(payload, dict) else None
+        safe = re.sub(r'[^a-zA-Z0-9/_.-]|\.\.', '', str(ref or ''))
+        if not safe:
+            return payload
+        candidate = (base / safe).resolve()
+        try:
+            candidate.relative_to(base)
+        except ValueError:
+            return payload
+        split = load(candidate, {})
+        if isinstance(split.get('defense'), dict):
+            payload = {**payload, 'defense': split['defense']}
+        return payload
+
+    return {league: payload_for(league)
             for league in {card.get('league') for card in cards if card.get('league')}}
 
 
@@ -76,7 +96,7 @@ def price(odds):
 
 
 def book_short(book):
-    return {'DraftKings': 'DK', 'FanDuel': 'FD', 'BetMGM': 'MGM', 'ESPN BET': 'ESPN',
+    return {'DraftKings': 'DK', 'FanDuel': 'FD', 'BetMGM': 'MGM', 'ESPN BET': 'ESPN', 'theScore Bet': 'ESPN',
             'Caesars': 'CZR', 'BetRivers': 'BR', 'Fanatics': 'FAN'}.get(book, str(book or ''))
 
 

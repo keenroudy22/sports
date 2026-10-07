@@ -136,7 +136,8 @@ class PickTests(unittest.TestCase):
                 'probabilityAtPublication': {'chance': .55, 'calibrated': True},
                 'why': 'Weather: calm indoors. Projection supports the over.', 'risk': 'A slow pace can hurt.'}
         [row] = build_site.board_picks({'x': pick}, {}, {'NFL-1': {'kickoff': '2026-09-03T17:00:00Z'}}, {})
-        self.assertEqual(row['book'], 'theScore Bet')
+        self.assertEqual(row['book'], 'ESPN BET')
+        self.assertEqual(row['displayBook'], 'theScore Bet')
         self.assertEqual(row['marketType'], 'total')
         self.assertEqual(row['quoteAgeMinutes'], 15)
         self.assertEqual(row['fairOddsAtPublication'], -122)
@@ -288,8 +289,10 @@ class GradeTests(unittest.TestCase):
                        {'book': 'FanDuel', 'line': 44.5, 'odds': -105}]},
         ], now)
         self.assertEqual([row['id'] for row in rows], ['x'])
-        self.assertEqual((rows[0]['book'], rows[0]['ageMinutes'], rows[0]['freshness']), ('theScore Bet', 30, 'fresh'))
-        self.assertEqual(rows[0]['bestSameLine'], {'book': 'FanDuel', 'odds': -105})
+        self.assertEqual((rows[0]['book'], rows[0]['displayBook'], rows[0]['ageMinutes'], rows[0]['freshness']),
+                         ('ESPN BET', 'theScore Bet', 30, 'fresh'))
+        self.assertEqual(rows[0]['bestSameLine'], {'book': 'FanDuel', 'displayBook': 'FanDuel', 'odds': -105})
+        self.assertEqual(rows[0]['books'][0]['displayBook'], 'Hard Rock Bet')
 
     def test_an_away_spread_row_is_graded_as_the_away_side(self):
         home = build_site.grade_line(self.line(market='point spread', line=-2.5, direction=None), self.snapshot, False)
