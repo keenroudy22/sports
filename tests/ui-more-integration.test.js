@@ -63,12 +63,14 @@ test('the real app shared interface renders every lazy view with fixture data', 
     ['schedule', views.schedule, {}],
     ['status', views.status, {}],
     ['feedback', views.feedback, {}],
-    ['responsible', views.responsible, {}],
     ['team', views.team, { league: 'CFB', id: '1' }],
     ['more', views.more, {}],
     ['glossary', views.glossary, {}],
     ['lab', views.lab, {}],
   ];
+  assert.equal(views.responsible, undefined);
+  const moreHtml = await views.more({});
+  assert.doesNotMatch(moreHtml, /Responsible gaming|#responsible/);
   for (const [name, render, route] of cases) {
     const html = await render(route);
     assert.equal(typeof html, 'string', name);

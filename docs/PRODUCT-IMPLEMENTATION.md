@@ -850,3 +850,12 @@ list and spotlight previews use real October 7 stored TB–DAL prices and ESPN p
 for the 7 PM post and the previews are local-only in `work/tnf-early-review/`. The scheduler switch remains
 off pending Claude's first-real-render review and a gated release before a later Wednesday. No TNF Early
 Look was queued or published October 7.
+
+## October 7 later owner correction — Responsible gaming page removal, not live
+
+The owner's subsequent direct instruction supersedes the page-retention sentence above: remove the More ›
+Responsible gaming page, its menu entry, and any Start here links, together with the footer helpline/link change.
+Legacy `#responsible` should quietly open More. Preserve the free site's entertainment-only and 21+ footer
+disclosure, posted-price grading, Eastern-time and Cloudflare lines, and the cards' `21+ · Entertainment only`.
+Revisit the page and helplines in `PAID-TIER-PLAN`'s legal checklist before any paid launch. This is a prepared
+change, not a claim that the live site has changed; P54 remains open until the normal release and live checks.

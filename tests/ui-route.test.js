@@ -10,7 +10,7 @@ test('legacy route table lands on an equivalent preview view', () => {
     ['#board/favorites', 'research'], ['#lines', 'research'], ['#props', 'research'], ['#trends', 'research'],
     ['#stats', 'research'], ['#stats/defense', 'research'], ['#charts', 'research'], ['#players', 'research'],
     ['#defense', 'research'], ['#games', 'games'], ['#scores/NHL', 'games'], ['#sport/NBA', 'games'],
-    ['#results', 'record'], ['#model', 'record'], ['#tools', 'more'], ['#parlays', 'ticket'],
+    ['#results', 'record'], ['#model', 'record'], ['#tools', 'more'], ['#responsible', 'more'], ['#parlays', 'ticket'],
   ];
   for (const [hash, view] of table) assert.equal(M.resolve(hash).view, view, hash);
 });
@@ -40,7 +40,7 @@ test('canonical table rewrites legacy pages and never rewrites public deep links
   const table = [
     ['#board/props', '#research/lines?type=props'], ['#board/favorites', '#research/lines?sort=edge'],
     ['#trends', '#research/trends'], ['#scores/NHL', '#games/live?sport=NHL'],
-    ['#results', '#record'], ['#model', '#record/model'],
+    ['#results', '#record'], ['#model', '#record/model'], ['#responsible', '#more'],
   ];
   for (const [oldHash, nextHash] of table) assert.equal(M.canonical(M.resolve(oldHash)), nextHash, oldHash);
   for (const hash of ['#pick/a/b', '#game/CFB-1', '#player/NFL/9', '#team/CFB/3']) assert.equal(M.canonical(M.resolve(hash)), null, hash);

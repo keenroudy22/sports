@@ -308,7 +308,7 @@
   };
 
   /* Routes. New grammar first; every old link (core.js routePath/LEGACY) lands on its new screen. */
-  const MORE_PAGES = ['start', 'saved', 'arbs', 'lab', 'schedule', 'feedback', 'status', 'responsible', 'glossary'];
+  const MORE_PAGES = ['start', 'saved', 'arbs', 'lab', 'schedule', 'feedback', 'status', 'glossary'];
   const parseHash = hash => {
     const raw = String(hash || '').replace(/^#\/?/, '');
     const cut = raw.indexOf('?');
@@ -353,6 +353,7 @@
       case 'results': return { view: 'record', tab: 'official', legacy: true };
       case 'model': return { view: 'record', tab: 'model', legacy: true };
       case 'more': case 'tools': return { view: 'more' };
+      case 'responsible': return { view: 'more', legacy: true };
       case 'ticket': case 'parlays': return { view: 'ticket' };
       default: return MORE_PAGES.includes(v) ? { view: v } : { view: 'today' };
     }
@@ -373,6 +374,7 @@
     }
     if (route.view === 'games') return `#games/live${route.league && route.league !== 'ALL' ? '?sport=' + route.league : ''}`;
     if (route.view === 'record') return route.tab === 'official' ? '#record' : `#record/${route.tab}`;
+    if (route.view === 'more') return '#more';
     return null;
   };
   const TAB_OF = { today: 'today', pick: 'today', research: 'research', games: 'games', game: 'games', team: 'games', player: 'research',
@@ -2041,8 +2043,8 @@
   const moreGroup = (title, links) => `<p class="eyebrow more-group">${title}</p><div class="list-links">${links}</div>`;
   /* Record, More and team pages are not part of the first paint. */
   const MORE_VIEW_NAMES = ['team', 'record', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
-    'schedule', 'status', 'feedback', 'responsible'];
-  const MORE_ASSET = 'app-more.js?v=sha256-00becf9144e0';
+    'schedule', 'status', 'feedback'];
+  const MORE_ASSET = 'app-more.js?v=sha256-bac4f5ca1df0';
   let moreViews = null, moreLoading = null;
   const moreContext = (overrides = {}) => ({ C, P, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,

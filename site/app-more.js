@@ -177,8 +177,7 @@
     ${moreGroup('Tools', `<a href="#arbs"><span><b>Arb calculator</b><br><span class="small muted">Exact two-book stake math</span></span><small>→</small></a>
       <a href="#schedule"><span><b>Release schedule</b><br><span class="small muted">When best bets, research and results post</span></span><small>→</small></a>
       <a href="#status"><span><b>Data status</b><br><span class="small muted">How fresh prices and scores are</span></span><small>→</small></a>`)}
-    ${moreGroup('Help', `<a href="#feedback"><span><b>Feedback</b></span><small>→</small></a>
-      <a href="#responsible"><span><b>Responsible gaming</b></span><small>→</small></a>`)}`;
+    ${moreGroup('Help', `<a href="#feedback"><span><b>Feedback</b></span><small>→</small></a>`)}`;
   views.glossary = async () => views.start();
   views.start = async () => `<a class="back" href="#more">← More</a>${head('Start here', 'How to read a best bet', 'Thirty seconds, then you know everything on the page.')}
     <div class="tickets"><article class="ticket"><div class="ticket-body"><div class="ticket-top"><span class="tag">Best bet</span><span>Example</span></div><div class="ticket-rule"></div><h3>Player over 49.5 receiving yards</h3><p class="market">Player prop · receiving yards</p><div class="price"><b>−110</b><span>DraftKings</span></div>
@@ -301,12 +300,5 @@
       <div class="btn-row" style="margin-top:10px"><button type="button" class="btn primary" data-prepare-feedback>Prepare message</button></div>
       <p class="small muted" style="margin-top:8px">Counts stay in this browser and contain no player names, searches or account details. Don't include account or payment details.</p>
       <div id="fb-out" aria-live="polite" style="margin-top:10px"></div></div>`;
-  views.responsible = async () => `<a class="back" href="#more">← More</a>${head('Responsible gaming', 'Play for fun, play within limits', '')}
-    <div class="card" style="display:grid;gap:10px"><p><b>21+ where legal.</b> Kook'n is research and entertainment. Nothing here is betting advice or a guarantee, and no pick is ever certain.</p>
-      <p>Set a budget before you play and treat it as the cost of entertainment. Never chase losses.</p>
-      <p><b>Gambling problem? Call 1-800-MY-RESET</b> (1-800-697-3738), the National Problem Gambling Helpline. It's free, confidential and open 24/7. 1-800-522-4700 also works.</p>
-      <p class="small muted">Kook'n is not a sportsbook and never places bets. Prices shown are snapshots from licensed books and can change at any time.</p></div>`;
-
-
   return views;
 });

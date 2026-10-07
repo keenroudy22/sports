@@ -481,12 +481,12 @@
     },
     {
       "id": "P54",
-      "title": "Remove website-footer gambling helpline",
+      "title": "Remove free-site helpline and Responsible gaming page",
       "status": "ready",
       "owner": "agent",
-      "next": "Release the owner-approved footer copy after P53 passes its live role/price checks, then verify the footer at phone and desktop widths. Keep More's Responsible gaming page available.",
-      "doneWhen": "Live footer has no helpline or Responsible gaming link and retains entertainment-only, grading, Eastern-time and Cloudflare lines; tests and full deployment gates pass.",
-      "evidence": "Owner decision October 7, OWNER-DECISIONS item 20. The direct latest instruction keeps the More page one tap away, superseding item 21's older removal request. Local code and a static test are prepared; no live release claimed."
+      "next": "Release the owner-approved footer and page removal after P53 passes its live role/price checks, then verify both widths and legacy #responsible redirect.",
+      "doneWhen": "Live footer has no helpline or Responsible gaming link, the More page and Start here links are absent, #responsible opens More, and entertainment-only, grading, Eastern-time and Cloudflare lines remain; tests and full deployment gates pass.",
+      "evidence": "Owner follow-up October 7 explicitly removed the More Responsible gaming page. Local code and tests are prepared; no live release claimed. Revisit page and helplines in PAID-TIER-PLAN legal checklist before paid launch."
     },
     {
       "id": "P55",

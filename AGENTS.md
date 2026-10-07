@@ -204,11 +204,14 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
-- **Footer and TNF Early Look (owner, 2026-10-07):** the website footer has no gambling helpline or
-  Responsible gaming link. Keep its entertainment-only/21+, posted-price grading, Eastern-times and
-  Cloudflare lines; the More › Responsible gaming page remains available. This explicitly supersedes the
-  older site-helpline instruction below and the 1-800-MY-RESET plan text. Card footers also have no
-  helpline. A future paid sportsbook-referral post needs separate legal review, not an assumed exception.
+- **Free-site footer and Responsible gaming removal (owner, 2026-10-07):** the website footer has no
+  gambling helpline or Responsible gaming link, and the More › Responsible gaming page and all Start here
+  links to it are removed. Legacy `#responsible` quietly opens More. Keep the entertainment-only/21+,
+  posted-price grading, Eastern-times and Cloudflare lines. Card footers keep `21+ · Entertainment only`
+  with no helpline. This supersedes the older site-helpline and page-retention instructions and the
+  1-800-MY-RESET plan text. Revisit the page and helplines in `PAID-TIER-PLAN`'s legal checklist before
+  any paid launch; any paid sportsbook-referral post needs separate legal review, not an assumed exception.
+- **TNF Early Look (owner, 2026-10-07):**
   Wednesday at 7 PM Eastern, a TNF Early Look may use the existing research category: at most four
   fresh main lines for Thursday's NFL game, ranked by calibrated value at public books. Apply the
   price- and role-sanity holds, omit @Playbook, and skip if fewer than two rows qualify. It counts as
@@ -219,7 +222,7 @@ Handy commands (from `~/Projects/sports`):
   1. Captions use `I have it at 47.`, `🍳 Hot Plate (POTD): ` and `🎰 +ODDS Chef's Special: `; Climb ends
      `Still climbing? ❤️`. Never use `Plated.`; at most one `!`, for a win only.
   2. Card images show record-equivalent units. Straight-play captions show neither units nor dollars.
-  3. Card images show no season record or helpline; the site footer keeps the helpline.
+  3. Card images show no season record or helpline; the free-site footer and More page also have no helpline under the owner's later October 7 removal rule above.
   4. Only the explicitly labeled Climb map may show planned future steps, at a stated typical -160 price.
   5. On X, retire the 8:45 menu, defer teasers until 1,000 followers, keep Save this sheet on the site only,
      omit the 11:45 weekend Climb check-in, and put the 9:30 Prep List first.
