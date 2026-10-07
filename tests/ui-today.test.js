@@ -70,10 +70,10 @@ const element = () => ({ innerHTML: '', options: [], value: '', hidden: false, d
   querySelector: () => null, querySelectorAll: () => [], setAttribute() {}, focus() {} });
 /* The real app.js in a browser-shaped sandbox. Each JSON file can be held back to test the first paint; `stored`
    is the visitor's saved browser state (a saved league filter, for example). */
-const loadApp = (hash, held = {}, { hero = HERO, today = TODAY, stored = {} } = {}) => {
+const loadApp = (hash, held = {}, { hero = HERO, today = TODAY, stored = {}, extra = {} } = {}) => {
   const view = element();
   view.querySelector = s => (s === '.hero-first' && view.innerHTML.includes('hero-first') ? element() : null);
-  const files = { 'data/app/today.json': today, 'data/app/today-hero.json': hero };
+  const files = { 'data/app/today.json': today, 'data/app/today-hero.json': hero, ...extra };
   const sandbox = {
     module: { exports: {} }, exports: {}, KRCore: C, KRLive: L, KRPersonal: P,
     location: { hash, origin: 'http://localhost', pathname: '/' }, history: { state: null, replaceState() {} },
@@ -95,7 +95,7 @@ const loadApp = (hash, held = {}, { hero = HERO, today = TODAY, stored = {} } = 
 const settle = async () => { for (let i = 0; i < 20; i++) await new Promise(r => setTimeout(r, 0)); };
 const wait = ms => new Promise(r => setTimeout(r, ms));
 /* The top of Today: the chef's line, the first ticket and the Climb stub, up to the stub's aside. */
-const top = page => page.slice(page.indexOf('<section class="kt-lede">'), page.indexOf('<p class="kt-aside">'));
+const top = page => page.slice(page.indexOf('<section class="kt-lede'), page.indexOf('<p class="kt-aside">'));
 const mondayNfl = { ...prop, id: 'NFL-2026-W6-monday-total-dk', kind: 'gamePicks', athleteId: null, market: null, marketType: 'total',
   displayTitle: 'Monday Visitors at Hosts under 54.5', featured: false, kickoff: '2026-10-13T00:15:00Z', expiresAt: '2026-10-12T23:00:00Z' };
 const cfbOnly = { ...HERO, bets: [HERO.bets[1]] };
@@ -147,7 +147,7 @@ test('Today runs rail, Climb, Leftovers, Prep List, then a closed More fold; Off
   const { api } = loadApp('#record');
   const page = await api.views.today({ view: 'today' });
   const at = text => { const i = page.indexOf(text); assert.ok(i >= 0, `missing ${text}`); return i; };
-  const order = ['class="kt-lede"', 'class="kt-pass"', 'class="kt-sec kt-climb"', 'class="kt-sec kt-left"', 'class="kt-sec kt-prep"', 'class="kt-sec kt-fold"'].map(at);
+  const order = ['class="kt-lede', 'class="kt-pass"', 'class="kt-sec kt-climb"', 'class="kt-sec kt-left"', 'class="kt-sec kt-prep"', 'class="kt-sec kt-fold"'].map(at);
   assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'rail -> Climb -> Leftovers -> Prep List -> fold');
   assert.match(page, /<details class="kt-sec kt-fold" data-box="today-more"><summary>/, 'the fold starts closed');
   const rails = page.slice(0, at('class="kt-sec kt-left"'));
@@ -170,7 +170,8 @@ test('the Prep List shows only the rows the build chose, with the price check on
   const prep = page.slice(page.indexOf('class="kt-sec kt-prep"'), page.indexOf('class="kt-sec kt-fold"'));
   assert.match(prep, /<h2 class="kt-tape" id="prep-h">Prep List<\/h2><span class="kt-kind">Research for tonight<\/span>/);
   assert.match(prep, /Prep Player[\s\S]*Over 54\.5 rec yds[\s\S]*−114 FanDuel<span class="ok">✓ clears my price<\/span>/);
-  assert.match(prep, /History Only[\s\S]*−110 DraftKings<\/p>/);
+  assert.match(prep, /History Only[\s\S]*−110 DraftKings<span class="no">History only · no edge at this price<\/span><\/p>/, 'the playbook label on a row that does not clear');
+  assert.match(prep, /<p class="kt-note">College injury news is thin\.<\/p>/, 'college rows carry the playbook note');
   assert.equal((prep.match(/✓ clears my price/g) || []).length, 1);
   const none = loadApp('#record', {}, { today: { ...TODAY, prep: {} } });
   assert.doesNotMatch(await none.api.views.today({ view: 'today' }), /kt-prep/, 'no rows from the build, no Prep List');
@@ -316,8 +317,8 @@ test('Leftovers never drop a miss while a hit stays, and count the rest', async 
   const page = await api.views.today({ view: 'today' });
   const left = page.slice(page.indexOf('class="kt-sec kt-left"'), page.indexOf('class="kt-sec kt-prep"'));
   assert.equal((left.match(/kt-stamp miss/g) || []).length, 2, 'both misses stay');
-  assert.equal((left.match(/class="kt-spiked"/g) || []).length, 5);
-  assert.match(left, /\+2 more on the record ›/);
+  assert.equal((left.match(/class="kt-spiked"/g) || []).length, 3, 'three slips, so the Prep List stays one short scroll away');
+  assert.match(left, /\+4 more on the record ›/);
   assert.match(left, /Friday went 5-2\./);
 });
 
@@ -327,4 +328,123 @@ test('HIT, MISS and push stamps share one size; results never rely on colour alo
   assert.match(source, /HIT<\/span>/);
   assert.match(source, /MISS<\/span>/);
   assert.match(source, /'VOID' : 'PUSH'/);
+});
+
+/* TK King, Oct 7: the Hot Plate's market was on a QB-change hold with a failed price check, while a fresh same-book
+   row said −104. Nothing may call that play still good, give its chance, or show its fair price and edge. */
+const KING_HOLD = { kind: 'qb' };
+const heldProp = { ...prop, expiresAt: '2026-10-09T21:30:00Z', held: KING_HOLD };
+const kingRow = { id: 'prop-NFL-1-9-recYds', gameId: 'NFL-1', athleteId: '9', stat: 'recYds', market: 'receiving yards', direction: 'over', line: 49.5,
+  odds: -104, book: 'FanDuel', state: 'open', observedAt: '2026-10-10T13:37:35Z', kickoff: prop.kickoff, roleSuspect: true, priceSuspect: true, roleHold: 'qb', grade: null };
+const linesFor = rows => ({ 'data/app/lines.json': { files: { NFL: 'lines-NFL.json', CFB: 'lines-CFB.json' } },
+  'data/app/lines-NFL.json': { league: 'NFL', lines: rows }, 'data/app/lines-CFB.json': { league: 'CFB', lines: [] } });
+const firstTicket = page => page.slice(page.indexOf('<article class="kt-order'), page.indexOf('</article>'));
+
+test('a held market never yields a quote, and its hold comes from the build or from any of its rows', () => {
+  assert.equal(M.latestPickQuote({ ...prop, held: KING_HOLD }, [{ ...kingRow, roleSuspect: false, priceSuspect: false, roleHold: null }], NOW), null);
+  assert.equal(M.latestPickQuote(prop, [kingRow], NOW), null, 'a held same-book row is never a live quote');
+  assert.deepEqual(M.pickHold(prop, [kingRow]), { kind: 'qb' }, 'no build field: the board rows hold it');
+  assert.deepEqual(M.pickHold(prop, [{ ...kingRow, book: 'DraftKings', direction: 'under' }]), { kind: 'qb' }, 'any book, either side');
+  assert.equal(M.pickHold({ ...prop, result: 'win' }, [kingRow]), null, 'a settled play is graded, not held');
+});
+
+test('the held Hot Plate reads Under review on the first paint and the full card, with no chance and no ORDER UP', async () => {
+  let release;
+  const gate = new Promise(r => { release = r; });
+  const hero = { ...HERO, bets: [{ ...heldProp, teams: HERO.bets[0].teams }, HERO.bets[1]] };
+  const today = { ...TODAY, picks: [heldProp, total, laterOpen, laterOff, yesterday, ...rungs] };
+  const { api, view } = loadApp('#today', { 'data/app/today.json': gate }, { hero, today, extra: linesFor([{ ...kingRow, roleSuspect: false, priceSuspect: false, roleHold: null }]) });
+  const pending = api.views.today({ view: 'today' });
+  await settle();
+  const first = firstTicket(view.innerHTML);
+  release();
+  const full = await pending;
+  await settle();
+  const again = firstTicket(await api.views.today({ view: 'today' }));     // after the board rows land
+  for (const t of [first, firstTicket(full), again]) {
+    assert.match(t, /<p class="kt-now">Under review · checking his role first\.<\/p>/);
+    assert.match(t, /class="kt-order[^"]*is-held/);
+    for (const banned of ['Still good', 'I have it', 'I had it', 'kt-chance', 'kt-orderup', 'Now −', '56.0%']) assert.ok(!t.includes(banned), banned);
+    assert.match(t, /−110<\/b><i><\/i><b class="kt-book">FanDuel/, 'the posted price and book stay');
+  }
+  assert.equal(first, firstTicket(full), 'both paints say the same thing');
+});
+
+test('an expired saved quote with a fresh same-book price reads the same on both paints', async () => {
+  const aged = { ...prop, expiresAt: '2026-10-10T12:00:00Z', quote: { odds: -115, line: 49.5, observedAt: '2026-10-10T13:20:00Z' } };
+  let release;
+  const gate = new Promise(r => { release = r; });
+  const hero = { ...HERO, bets: [{ ...aged, teams: HERO.bets[0].teams }, HERO.bets[1]] };
+  const { api, view } = loadApp('#today', { 'data/app/today.json': gate }, { hero, today: { ...TODAY, picks: [aged, total, ...rungs] } });
+  const pending = api.views.today({ view: 'today' });
+  await settle();
+  const first = firstTicket(view.innerHTML);
+  release();
+  const full = firstTicket(await pending);
+  await settle();
+  assert.match(first, /Now −115 at 9:20 AM\. Still good to −124\./);
+  assert.match(first, /I have it at/);
+  assert.equal(first, full);
+  const stale = { ...aged, quote: { ...aged.quote, observedAt: '2026-10-10T09:00:00Z' } };
+  const { api: a2 } = loadApp('#record', {}, { today: { ...TODAY, picks: [stale, ...rungs] } });
+  const t = firstTicket(await a2.views.today({ view: 'today' }));
+  assert.match(t, /Posted price may be gone\. Check your book\./, 'older than four hours at view time: the browser drops it');
+  assert.match(t, /I had it at/);
+});
+
+test('a settled ticket never wears ORDER UP', async () => {
+  const { api } = loadApp('#record', {}, { today: TODAY, extra: {} });
+  const page = await api.views.pick({ id: yesterday.id });
+  assert.match(page, /kt-stamp hit/);
+  assert.doesNotMatch(page, /kt-orderup|ORDER UP/);
+  const open = await loadApp('#record').api.views.pick({ id: prop.id });
+  assert.match(open, /ORDER UP/, 'an open best bet does');
+});
+
+test('the play page under review shows no fair price, edge, chance or projection, and keeps the posted price', async () => {
+  const king = { ...prop, held: KING_HOLD, projection: 68.2, cutoff: 'Good to −124 at 49.5.', why: 'Our model projects 68.2.',
+    probabilityAtPublication: { chance: 0.537, rawChance: 0.659, calibration: 0.23, calibrationN: 398, breakEven: 0.505, edgePoints: 3.2, calibrated: true } };
+  const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [king, ...rungs] }, extra: linesFor([kingRow]) });
+  const page = await api.views.pick({ id: king.id });
+  assert.match(page, /<h2 class="kt-tape">The hold<\/h2>/);
+  assert.match(page, /UNDER REVIEW/);
+  assert.match(page, /His team&#39;s quarterback picture changed, so I&#39;m checking his role first\./);
+  assert.match(page, /graded at −110 at FanDuel, the price we posted/);
+  for (const banned of ['My price', 'How we got', 'projects', '68.2', '53.7%', '65.9%', '+3.2', '−116', 'Still good', 'Still a bet down to', 'I have it', 'Price we would still play', 'Our notes when we posted'])
+    assert.ok(!page.includes(banned), banned);
+  assert.match(page, /data-held="1"/, 'the history box drops its defense verdict too');
+  const clean = await loadApp('#record', {}, { today: { ...TODAY, picks: [{ ...king, held: undefined }, ...rungs] } }).api.views.pick({ id: king.id });
+  assert.match(clean, /How we got 53\.7%/, 'one decimal, matching the ticket');
+  assert.match(clean, /My price/);
+});
+
+test('a Climb step page keeps its saved stake and return, and every play page links the Discord and X', async () => {
+  const step = { ...rungs[1], reason: 'Ladder step 1 of the climb. $50 rides with $0 banked. A win returns $94: bank $19 and ride $75 on the next step.' };
+  const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [prop, step, rungs[0], rungs[2]] } });
+  const page = await api.views.pick({ id: step.id });
+  assert.match(page, /<h2 class="kt-tape">The stake<\/h2><p>Ladder step 1 of the climb\. \$50 rides with \$0 banked\. A win returns \$94/);
+  assert.match(page, /discord\.gg\/ZnjubjsBPM/);
+  assert.match(page, /x\.com\/keenkooks/);
+  assert.match(page, /<section class="kt-pass on-page" aria-label="Best bet">/, 'a play page for another day is not labelled today\'s');
+});
+
+test('Today headings run h1, then h2 for each ticket and section', async () => {
+  const { api } = loadApp('#record');
+  const page = await api.views.today({ view: 'today' });
+  const levels = [...page.matchAll(/<h([1-6])[ >]/g)].map(m => Number(m[1]));
+  assert.equal(levels[0], 1);
+  for (let i = 1; i < levels.length; i++) assert.ok(levels[i] <= levels[i - 1] + 1, `h${levels[i - 1]} then h${levels[i]}`);
+  assert.match(page, /<h2 class="kt-name"/);
+});
+
+test('WHY and BUT print the saved words whole: clamped on the Today rail only, never cut in the markup', async () => {
+  const long = 'Bowling Green cornerback JoJo Johnson, who had 13 pass breakups last season, missed the Iowa State game due to injury.';
+  const pick = { ...prop, ticketWhy: long };
+  const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [pick, ...rungs] } });
+  const today = await api.views.today({ view: 'today' });
+  assert.ok(today.includes(long.replace("'", '&#39;')), 'the full sentence is in the Today ticket');
+  assert.match(css, /\.kt-pass:not\(\.on-page\) \.kt-say > span:last-child \{[^}]*-webkit-line-clamp: 2/);
+  const page = await api.views.pick({ id: pick.id });
+  assert.match(page, /<section class="kt-pass on-page"/, 'the play page is exempt from the clamp');
+  assert.ok(page.includes(long));
 });

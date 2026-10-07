@@ -90,8 +90,9 @@ const playerFiles = (held = true) => {
     'data/app/games/CFB-1.json': { forecast: { players: { home: { players: [{ id: athlete, att: [23.7, 15, 32], passYds: [167.1, 110, 230], ...(held ? { underReview: ['att', 'passYds', 'cmp'] } : {}) }] } } } },
   };
 };
-const playerPage = async held => {
+const playerPage = async (held, change = null) => {
   const files = playerFiles(held);
+  if (change) change(files);
   const el = () => ({ innerHTML: '', options: [], value: '', dataset: {}, classList: { toggle() {}, add() {}, remove() {} }, querySelector: () => null, querySelectorAll: () => [], setAttribute() {}, focus() {} });
   class FixedDate extends Date { constructor(...a) { super(...(a.length ? a : [Date.parse('2026-10-07T18:00:00Z')])); } static now() { return Date.parse('2026-10-07T18:00:00Z'); } }
   const sandbox = { module: { exports: {} }, exports: {}, KRCore: C, KRLive: require('../site/live.js'), KRPersonal: require('../site/personal.js'),
@@ -123,4 +124,63 @@ test('a player line with no hold keeps its price check and the projection senten
   assert.doesNotMatch(page, /UNDER REVIEW|No grade from me/);
   assert.match(page, /I have over at<b class="num">57\.0%<\/b>/);
   assert.match(page, /My average for this game: <b class="num">167\.1<\/b>/);
+});
+
+/* A soft pass defense for NMSU (rank 3 of 3), so an unheld over reads "supports the over". */
+const softDefense = files => {
+  files['data/app/teams/CFB.json'].teams['2'] = { abbr: 'XYZ', name: 'Other', fbs: true };
+  files['data/app/teams/CFB.json'].defense = { rows: { 166: { g: 5, QB: { passYds: 300 } }, 2229: { g: 5, QB: { passYds: 200 } }, 2: { g: 5, QB: { passYds: 150 } } } };
+};
+
+test('Under review carries no directional verdict and never one side\'s price alone', async () => {
+  const clean = await playerPage(false, softDefense);
+  assert.match(clean, /NMSU allows 300 pass yds a game<\/b>[\s\S]*That supports the over\./, 'the fixture does produce a verdict when nothing is held');
+  const held = await playerPage(true, files => {
+    softDefense(files);
+    files['data/app/lines-CFB.json'].lines[0].priceSuspect = true;      // the over's price failed: only the under is left
+  });
+  assert.match(held, /NMSU allows 300 pass yds a game/, 'the matchup fact stays');
+  assert.doesNotMatch(held, /supports|works against/);
+  assert.match(held, /Main line <b class="num">261\.5<\/b> at FanDuel\./);
+  assert.doesNotMatch(held, /Under <b class="num">/, 'one side alone would read as a lean');
+});
+
+test('held words are shared by the Today ticket, the play page and the player page', () => {
+  assert.equal(M.heldWords({ kind: 'qb' }), "His team's quarterback picture changed, so I'm checking his role first.");
+  assert.equal(M.heldWords({ kind: 'workload', recentFull: [9, 7, 8], volume: 'targets' }),
+    'My workload number for him is far below his last three full games (9, 7 and 8 targets), so I\'m checking his role first.');
+  assert.equal(M.heldWords({ kind: 'price' }), "That price failed my sanity check, so I'm checking it first.");
+  assert.match(M.heldWords({ kind: 'role' }), /doesn't match his recent full games/);
+  assert.equal(M.heldShort({ kind: 'qb' }), 'Under review · checking his role first.');
+  assert.deepEqual(M.holdOf([{ roleSuspect: true, priceSuspect: true, roleHold: 'qb' }]), { kind: 'qb' });
+  assert.deepEqual(M.holdOf([{ priceSuspect: true }]), { kind: 'price' });
+  assert.equal(M.holdOf([{ odds: -110 }]), null);
+  assert.match(moreSource, /heldWords\(holdOf\(pricedRows\)/, 'the player page uses the same words');
+});
+
+test('the split panel never draws two teams of one hue as one slab', () => {
+  const [a, b] = M.splitColours({ away: { color: '#00338d', alt: '#c60c30' }, home: { color: '#003594', alt: '#ffd100' } });
+  const gap = (x, y) => Math.hypot(...[1, 3, 5].map(i => parseInt(x.slice(i, i + 2), 16) - parseInt(y.slice(i, i + 2), 16)));
+  assert.ok(gap(a, b) >= 72, `${a} vs ${b}`);
+  assert.deepEqual(M.splitColours({ away: { color: '#cc0033', alt: '#003366' }, home: { color: '#eaaa00', alt: '#002855' } }).map(c => c.toUpperCase()),
+    ['#9F0028', '#002855'], 'distinct teams keep their own panels');
+});
+
+test("every chef's line with a photo ticket stays clear of the breakout head", () => {
+  const css = fs.readFileSync('site/app.css', 'utf8');
+  assert.match(css, /\.kt-lede\.with-photo h1 \{ max-width: 196px; \}/, 'the width cap wraps anything the estimate misses');
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'today', 'tonight'];
+  for (const n of ['One', 'Two', 'Three', 'Four', 'Five', 'Six'])
+    for (const day of days) {
+      const title = `${n} for ${day}.`, size = M.ledeSize(title) || 32;
+      /* Barlow Condensed 700 runs about 0.37 em a character (0.40 with wide letters such as W); measured at 32 px,
+         "Three for Wednesday." is 256 px and "One for tonight." 182 px. */
+      assert.ok(title.length * 0.40 * size <= 200 || (size === 32 && title.length * 0.37 * size <= 196), `${title} at ${size}px`);
+    }
+});
+
+test('long two-line names stay at 24 px or less so they clear the matchup row', () => {
+  assert.ok(M.nameSize('Marvin Harrison-Washington') <= 24);
+  assert.ok(M.nameSize('Marcellous Hawkins Jr.') <= 24);
+  assert.equal(M.nameSize('TK King'), 46);
 });
