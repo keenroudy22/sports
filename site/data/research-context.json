@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-07T04:01:02Z",
+  "updatedAt": "2026-10-07T04:27:55Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-10-07T02:45Z",
+              "reportedAt": "2026-10-07T04:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -1157,6 +1157,15 @@
           "name": "Chicago Bears",
           "players": [
             {
+              "id": "4361748",
+              "name": "Anthony Johnson Jr.",
+              "position": "S",
+              "status": "Injured Reserve",
+              "injury": "Undisclosed",
+              "reportedAt": "2026-10-07T04:01Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+            },
+            {
               "id": "4954445",
               "name": "Dillon Thieneman",
               "position": "S",
@@ -1164,15 +1173,6 @@
               "injury": null,
               "reportedAt": "2026-10-07T02:49Z",
               "source": "https://www.espn.com/nfl/player/_/id/4954445/dillon-thieneman"
-            },
-            {
-              "id": "4361748",
-              "name": "Anthony Johnson Jr.",
-              "position": "S",
-              "status": "Out",
-              "injury": "Undisclosed",
-              "reportedAt": "2026-10-07T02:45Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
               "id": "3916577",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "4",
-          "name": "Kyle Dugger",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-06T20:01:41Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4401811/kyle-dugger"
-        },
-        {
-          "teamId": "4",
           "name": "B.J. Hill",
           "from": "Out",
           "to": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-07T00:01:31Z",
           "source": "https://www.espn.com/nfl/player/_/id/3123075/braxton-berrios"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-07T04:27:55Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-07T04:01:02Z",
-      "lastAttemptAt": "2026-10-07T04:01:02Z",
+      "checkedAt": "2026-10-07T04:27:55Z",
+      "lastAttemptAt": "2026-10-07T04:27:55Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-07T04:01:02Z",
-      "lastAttemptAt": "2026-10-07T04:01:02Z",
+      "checkedAt": "2026-10-07T04:27:55Z",
+      "lastAttemptAt": "2026-10-07T04:27:55Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
