@@ -378,6 +378,35 @@ class TicketQuoteAndHoldTests(unittest.TestCase):
         build_site.annotate_quotes([out], spreads, game, NOW)
         self.assertEqual(out['quote']['odds'], -108, 'a spread row without a side is matched by its team, as the browser does')
 
+    def test_a_held_play_never_quotes_the_projection_the_hold_questions(self):
+        """Decision 9: TK King's QB-change hold read Under review while WHY still said 'I project 7.3 targets'."""
+        held = {**self.row, 'roleSuspect': True, 'priceSuspect': True, 'roleHold': 'qb'}
+        king = {**self.pick, **{k: KING[k] for k in ('reason', 'reasoning', 'position', 'side')},
+                'ticketWhy': build_site.ticket_why(KING), 'ticketBut': "FIU's WR defense points against the over."}
+        self.assertEqual(king['ticketWhy'], "I project 7.3 targets, NMSU's top WR.")
+        out = self.run_([held], king)
+        self.assertEqual(out['held'], {'kind': 'qb'})
+        self.assertEqual(out['ticketWhy'], 'FIU allows 133 receiving yards a game to WRs, 55 of 235 this season (1 is stingiest).',
+                         'the next saved context line that is not a projection, word for word')
+        self.assertEqual(out['ticketBut'], "FIU's WR defense points against the over.", 'a counterpoint without a projection stays')
+        only_role = {**king, 'reasoning': {'context': [KING['reasoning']['context'][0], 'Usage: our model has him at 62% of snaps.'],
+                                           'cautions': []},
+                     'ticketBut': 'I project him under 5 targets if the backup starts.'}
+        out = self.run_([held], only_role)
+        self.assertIsNone(out['ticketWhy'], 'no saved line without a projection: the row is left off')
+        self.assertIsNone(out['ticketBut'], 'a projection counterpoint is dropped too')
+        reasoned = {**king, 'reason': 'I project 81 yards.', 'ticketWhy': 'I project 81 yards.'}
+        self.assertNotIn('project', self.run_([held], reasoned)['ticketWhy'], 'a saved reason with a projection is skipped too')
+        clean = self.run_([self.row], king)
+        self.assertEqual(clean['ticketWhy'], "I project 7.3 targets, NMSU's top WR.", 'an unheld play keeps its saved WHY')
+        for text in ("I project 7.3 targets, NMSU's top WR.", 'Our chance is 56%.', 'Role: projected for 14.2 carries a game.'):
+            self.assertTrue(build_site.held_text(text), text)
+        self.assertFalse(build_site.held_text('Over 3.5 in 9 of his last 10 games.'))
+
+    def test_the_build_writes_held_words_before_today_and_the_hero(self):
+        import inspect
+        self.assertIn('held_words(pick)', inspect.getsource(build_site.annotate_quotes))
+
     def test_the_hero_carries_the_same_quote_and_hold(self):
         pick = {**self.pick, 'status': 'active', 'displayTitle': 'TK King OVER 49.5 receiving yards', 'held': {'kind': 'qb'}}
         bet = build_site.today_hero([pick], NOW, runs=[])['bets'][0]

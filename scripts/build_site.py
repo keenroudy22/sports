@@ -1088,6 +1088,7 @@ FEW_HITS = re.compile(r'^Only (\d+) of the last (\d+) games cleared this side of
 THIN_HISTORY = 'Fewer than five stored games at this line; history is limited.'
 LAST_N = re.compile(r'\bof (?:his|their|the) last \d+\b', re.I)
 NOT_TICKET_TEXT = re.compile(r'guarantee|\block\b|\d+(?:\.\d+)?% likely|uncalibrated|breaks even at', re.I)
+HELD_WORDS = re.compile(r'\bproject|\bchance\b|\bedge\b|\bmodel\b|\bfair\b|\d%', re.I)
 
 
 def first_sentence_of(text):
@@ -1108,25 +1109,38 @@ def ticket_safe(text):
     return text if text and not voice.lint(text) and not NOT_TICKET_TEXT.search(text) else None
 
 
-def ticket_why(pick):
-    """WHY: the play's saved reason, else the first saved context line, else nothing (decision 8)."""
+def held_text(text):
+    """A held play's words may not carry the number the hold questions: no projection, chance, edge or model figure."""
+    return bool(text) and bool(ROLE_RANKED.match(text) or ROLE_PLAIN.match(text) or HELD_WORDS.search(text))
+
+
+def ticket_why(pick, held=False):
+    """WHY: the play's saved reason, else the first saved context line, else nothing (decision 8). A held play
+    (decision 9) skips any saved line built on a projection, chance or edge and uses the next saved one, else none."""
     reasoning = pick.get('reasoning') if isinstance(pick.get('reasoning'), dict) else {}
     reason = pick.get('reason')
-    source = reason if isinstance(reason, str) and reason.strip() else next(iter(reasoning.get('context') or []), None)
-    if not isinstance(source, str) or not source.strip():
-        return None
-    text = ' '.join(source.split())
-    ranked, plain = ROLE_RANKED.match(text), ROLE_PLAIN.match(text)
-    if ranked:
-        rank, team, position, volume, value = ranked.groups()
-        place = f"{team}'s top {position}" if rank == '1' else f'No. {rank} among {team} {position}s'
-        text = f'I project {float(value):g} {VOLUME_WORDS.get(volume, volume)}, {place}.'
-    elif plain:
-        value, volume = plain.groups()
-        text = f'I project {float(value):g} {VOLUME_WORDS.get(volume, volume)}.'
-    else:
-        text = LABEL_PREFIX.sub('', text)
-    return ticket_safe(fit_ticket_text(text))
+    sources = [reason] if isinstance(reason, str) and reason.strip() else []
+    sources += [c for c in reasoning.get('context') or [] if isinstance(c, str) and c.strip()]
+    for source in sources if held else sources[:1]:
+        text = ' '.join(source.split())
+        if held and held_text(text):
+            continue
+        ranked, plain = ROLE_RANKED.match(text), ROLE_PLAIN.match(text)
+        if ranked:
+            rank, team, position, volume, value = ranked.groups()
+            place = f"{team}'s top {position}" if rank == '1' else f'No. {rank} among {team} {position}s'
+            text = f'I project {float(value):g} {VOLUME_WORDS.get(volume, volume)}, {place}.'
+        elif plain:
+            value, volume = plain.groups()
+            text = f'I project {float(value):g} {VOLUME_WORDS.get(volume, volume)}.'
+        else:
+            text = LABEL_PREFIX.sub('', text)
+        out = ticket_safe(fit_ticket_text(text))
+        if not held:
+            return out
+        if out and not held_text(out):
+            return out
+    return None
 
 
 def ticket_but(pick, teams=None):
@@ -1409,6 +1423,17 @@ def spread_side(row, game):
     return None
 
 
+def held_words(pick):
+    """Decision 9 on the ticket's saved words: a held play's WHY and BUT never quote the projection, chance or edge
+    the hold questions. WHY falls to the next saved line that does not; BUT is dropped."""
+    if 'ticketWhy' in pick:
+        pick['ticketWhy'] = ticket_why(pick, held=True)
+        if pick.get('hitStrip') and LAST_N.search(pick.get('ticketWhy') or ''):
+            pick['hitStrip'].pop('last10', None)
+    if held_text(pick.get('ticketBut')):
+        pick['ticketBut'] = None
+
+
 def annotate_quotes(picks, lines, games, now):
     """held and quote on each open straight play. A play whose market is under review gets held and no quote, so
     no page can call it still good; otherwise quote is the latest fresh same-book row for its market and side."""
@@ -1427,6 +1452,7 @@ def annotate_quotes(picks, lines, games, now):
                 volume and role_sanity.VOLUME.get(line_market(r)) == volume and r.get('roleSuspect'))])
             if hold:
                 pick['held'] = hold
+                held_words(pick)
                 continue
             same = [r for r in mine if line_market(r) == market
                     and str(r.get('direction') or '').lower() == str(pick.get('direction') or '').lower()]

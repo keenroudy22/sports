@@ -364,10 +364,26 @@ test('the held Hot Plate reads Under review on the first paint and the full card
   for (const t of [first, firstTicket(full), again]) {
     assert.match(t, /<p class="kt-now">Under review · checking his role first\.<\/p>/);
     assert.match(t, /class="kt-order[^"]*is-held/);
-    for (const banned of ['Still good', 'I have it', 'I had it', 'kt-chance', 'kt-orderup', 'Now −', '56.0%']) assert.ok(!t.includes(banned), banned);
+    for (const banned of ['Still good', 'I have it', 'I had it', 'kt-chance', 'kt-orderup', 'Now −', '56.0%', 'I project', '7.3 targets']) assert.ok(!t.includes(banned), banned);
+    assert.match(t, /<span class="kt-tag">BUT<\/span><span>HOM&#39;s WR defense points against the over\.<\/span>/, 'a counterpoint with no projection stays');
     assert.match(t, /−110<\/b><i><\/i><b class="kt-book">FanDuel/, 'the posted price and book stay');
   }
   assert.equal(first, firstTicket(full), 'both paints say the same thing');
+});
+
+test('a play held only by its board rows drops a projection WHY on Today and the play page (the game page draws the same ticket)', async () => {
+  const today = { ...TODAY, picks: [prop, total, ...rungs] };
+  const { api } = loadApp('#record', {}, { today, extra: linesFor([kingRow]) });
+  await api.views.today({ view: 'today' });
+  await settle();
+  const pages = [firstTicket(await api.views.today({ view: 'today' })), await api.views.pick({ id: prop.id })];
+  for (const page of pages) {
+    assert.match(page, /Under review · checking his role first\./);
+    assert.ok(!page.includes('I project'), 'no held projection in WHY');
+    assert.ok(!page.includes('7.3 targets'));
+  }
+  const clean = await loadApp('#record', {}, { today }).api.views.pick({ id: prop.id });
+  assert.match(clean, /<span class="kt-tag">WHY<\/span><span>I project 7\.3 targets/, 'an unheld play keeps its saved WHY');
 });
 
 test('an expired saved quote with a fresh same-book price reads the same on both paints', async () => {
@@ -410,7 +426,7 @@ test('the play page under review shows no fair price, edge, chance or projection
   assert.match(page, /UNDER REVIEW/);
   assert.match(page, /His team&#39;s quarterback picture changed, so I&#39;m checking his role first\./);
   assert.match(page, /graded at −110 at FanDuel, the price we posted/);
-  for (const banned of ['My price', 'How we got', 'projects', '68.2', '53.7%', '65.9%', '+3.2', '−116', 'Still good', 'Still a bet down to', 'I have it', 'Price we would still play', 'Our notes when we posted'])
+  for (const banned of ['My price', 'How we got', 'projects', 'I project', '7.3 targets', '68.2', '53.7%', '65.9%', '+3.2', '−116', 'Still good', 'Still a bet down to', 'I have it', 'Price we would still play', 'Our notes when we posted'])
     assert.ok(!page.includes(banned), banned);
   assert.match(page, /data-held="1"/, 'the history box drops its defense verdict too');
   const clean = await loadApp('#record', {}, { today: { ...TODAY, picks: [{ ...king, held: undefined }, ...rungs] } }).api.views.pick({ id: king.id });

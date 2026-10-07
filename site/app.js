@@ -68,6 +68,7 @@
         : hold.kind === 'price' ? "That price failed my sanity check, so I'm checking it first."
           : "My workload number for him doesn't match his recent full games, so I'm checking his role first.";
   /* One short line for the Today ticket. */
+  const HELD_WORDS = /\bproject|\bchance\b|\bedge\b|\bmodel\b|\bfair\b|\d%|^Role: /i;
   const heldShort = hold => hold.kind === 'price' ? 'Under review · checking that price first.' : 'Under review · checking his role first.';
   /* The latest fresh same-book quote for a play: the build's own (pick.quote, on the first paint and the full card
      alike), or a current board row for the same market and side. A held market has none. */
@@ -847,6 +848,9 @@
     const tense = vm.mode === 'open' || (vm.mode === 'expired' && latest && latest.inside);
     const chance = best && !hold && vm.calibrated && vm.chance != null && vm.needs != null
       ? `<p class="kt-lead kt-chance"><span>I ${tense ? 'have' : 'had'} it at<b class="num">${pctOne(vm.chance)}</b></span><i></i><span>the price ${tense ? 'needs' : 'needed'}<b class="num">${pctOne(vm.needs)}</b></span></p>` : '';
+    /* The build already chose held-safe words (build_site.held_words); when the hold comes only from the board rows,
+       a saved line that quotes a projection, chance or edge is left off, never reworded. */
+    const heldSafe = (text, held) => held && HELD_WORDS.test(text || '') ? null : text;
     const say = (tag, text, cls = '') => text ? `<p class="kt-say${cls}"><span class="kt-tag">${tag}</span><span>${esc(text)}</span></p>` : '';
     const legs = (climb || fun) && vm.legs.length ? `<ul class="kt-legs">${(pick.legs || []).slice(0, 8).map(l => { const [a, b] = legParts(l); return `<li><span>${esc(a)}</span>${b ? `<b>${esc(b)}</b>` : ''}</li>`; }).join('')}</ul>` : '';
     const fit = betSize(parts, opts.compact ? 60 : 68);
@@ -858,7 +862,7 @@
     return `<article class="kt-order${opts.compact ? ' compact' : ''}${vm.mode === 'closed' ? ' is-closed' : ''}${hold ? ' is-held' : ''}" style="${style}" aria-label="${esc(label)}">
       <div class="kt-shade"><div class="kt-paper">${panel}${bet}<div class="kt-cut"></div>
         <p class="kt-lead kt-price"><b class="kt-odds num">${esc(odd(vm.odds))}</b><i></i><b class="kt-book">${esc(vm.estimated ? `est. ${vm.book || ''}` : vm.book || '')}</b></p>
-        <p class="kt-now">${esc(nowLine)}</p>${chance}${best ? say('WHY', pick.ticketWhy) + say('BUT', pick.ticketBut, ' kt-but') : ''}
+        <p class="kt-now">${esc(nowLine)}</p>${chance}${best ? say('WHY', heldSafe(pick.ticketWhy, hold)) + say('BUT', heldSafe(pick.ticketBut, hold), ' kt-but') : ''}
         ${opts.strip && best ? strip(pick.hitStrip, pick.line, String(pick.direction || '').toLowerCase()) : ''}
         <div class="kt-perf"></div><div class="kt-stubrow">${stub}${best && !pick.result && !hold ? '<span class="kt-orderup" aria-hidden="true">ORDER UP</span>' : ''}</div></div></div>
       ${after}${opts.clip ? CHEF : ''}${stampFor(pick.result)}</article>`;

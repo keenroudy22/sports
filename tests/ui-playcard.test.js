@@ -45,7 +45,9 @@ test('the raw projection, fair price and edge stay off the ticket', () => {
 });
 
 test('WHY and BUT are the build\'s saved strings, printed as they are', () => {
-  assert.match(ticketBody, /say\('WHY', pick\.ticketWhy\) \+ say\('BUT', pick\.ticketBut, ' kt-but'\)/);
+  assert.match(ticketBody, /say\('WHY', heldSafe\(pick\.ticketWhy, hold\)\) \+ say\('BUT', heldSafe\(pick\.ticketBut, hold\), ' kt-but'\)/);
+  assert.match(ticketBody, /const heldSafe = \(text, held\) => held && HELD_WORDS\.test\(text \|\| ''\) \? null : text;/,
+    'a held play only ever drops a saved line; it never rewrites one');
   assert.doesNotMatch(ticketBody, /whyLines|watchLine|reasoning\.|cautions/);
 });
 
