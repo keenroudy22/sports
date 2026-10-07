@@ -144,6 +144,25 @@ class ReviewTests(unittest.TestCase):
         self.assertEqual(reach['all'], {'posts': 3, 'impressions': 450, 'engagementRate': 2.89})
         self.assertEqual(reach['play'], {'posts': 2, 'impressions': 400, 'engagementRate': 2.5})
         self.assertEqual(reach['receipt'], {'posts': 1, 'impressions': 50, 'engagementRate': 6.0})
+        themed = review.post_theme_metrics(log_book, date(2026, 9, 21), date(2026, 9, 28))
+        self.assertEqual([(r['category'], r['theme'], r['posts']) for r in themed],
+                         [('play', 'legacy', 2), ('receipt', 'legacy', 1)])
+        self.assertTrue(all(r['smallSample'] for r in themed))
+
+    def test_learning_packet_carries_latest_theme_and_silent_shadow_status(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            report = root / 'report.json'
+            report.write_text(json.dumps({'at': '2026-10-06T12:30:00Z', 'changes': [], 'candidates': 10,
+                                          'distinctCandidates': 7, 'cardThemes': [
+                                              {'category': 'play', 'theme': 'felt', 'posts': 2,
+                                               'perThousand': 12.5, 'smallSample': True}]}))
+            (root / 'shadow-2026.jsonl').write_text(json.dumps({
+                'id': 's', 'at': '2026-10-07T03:30:00Z', 'proposal': 'R0'}) + '\n')
+            text = review.learning_packet(report, root)
+        self.assertIn('10 raw; 7 distinct', text)
+        self.assertIn('play / felt: 2 posts', text)
+        self.assertIn('proposals R0; no public effects', text)
 
     def test_codex_reads_only(self):
         seen = {}

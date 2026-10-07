@@ -54,6 +54,7 @@ def default_policy():
             'calibration': {},                   # "NFL/prop": {"k": 0.13, "n": 538, "heldOut": {...}}
             'reasonWeights': {kind: 1.0 for kind in REASON_KINDS},
             'researcher': {'preferDomains': [], 'avoidDomains': []},
+            'shadows': {f'R{i}': False for i in range(8)},
             'history': []}
 
 
@@ -68,7 +69,7 @@ def load_policy(path=POLICY):
         if name in policy['knobs'] and isinstance(knob, dict) and isinstance(knob.get('value'), (int, float)):
             base = policy['knobs'][name]
             base['value'] = min(max(float(knob['value']), base['floor']), base['cap'])
-    for key in ('segments', 'calibration', 'reasonWeights', 'researcher'):
+    for key in ('segments', 'calibration', 'reasonWeights', 'researcher', 'shadows'):
         if isinstance(stored.get(key), dict):
             policy[key].update(stored[key])
     policy['history'] = list(stored.get('history') or [])

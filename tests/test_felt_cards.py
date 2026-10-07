@@ -54,6 +54,9 @@ class FeltCardTests(unittest.TestCase):
         with self.felt():
             self.assertTrue(pick_card.felt_enabled({}))
         self.assertIsNone(pick_card.FELT_FROM, 'renders are review-only until the dated cutover is approved')
+        self.assertEqual(pick_card.card_theme(PICK['publishedAt']), 'legacy')
+        with mock.patch.object(pick_card, 'FELT_FROM', '2026-10-07T04:00:00Z'):
+            self.assertEqual(pick_card.card_theme(PICK['publishedAt']), 'felt')
 
     def test_every_felt_builder_renders_with_embedded_ofl_fonts(self):
         ticket = {

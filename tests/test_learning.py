@@ -18,6 +18,7 @@ class PolicyTests(unittest.TestCase):
         self.assertEqual(learning.threshold(policy, 'prop.minEdge', 'NFL/prop:rec'), 5.0)
         self.assertEqual(learning.threshold(policy, 'prop.minRaw', 'NFL/prop:rec'), 0.60)
         self.assertFalse(learning.paused(policy, 'NFL/prop:rec'))
+        self.assertEqual(policy['shadows'], {f'R{i}': False for i in range(8)})
 
     def test_moves_stay_between_the_written_floor_and_the_cap_and_are_recorded(self):
         policy = learning.default_policy()

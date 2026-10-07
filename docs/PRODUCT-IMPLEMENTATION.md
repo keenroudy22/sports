@@ -428,6 +428,21 @@ missing when neither component was recorded, so the page does not turn absent da
 
 ## External and elapsed-time gates
 
+## October 6 C6 silent results and creative-learning candidate
+
+- R0 now counts each segment, game, side and athlete once for learning, keeping a published decision or otherwise
+  the earliest observation. The weekly report shows raw and distinct counts before any later decision.
+- R1 through R7 are enabled only as silent evidence snapshots. They use stored candidates, prices, grades, trends
+  and projections, write append-only `shadow-<season>.jsonl` rows, make zero metered requests and explicitly record
+  zero public effects. NFL totals remain governed by the existing rule; the trends default and closing-line
+  headline remain unchanged.
+- Future learning rows retain their quote time so the stale-price shadow can measure real age. This adds evidence
+  to the learning store, not a tracked public schema or record-count change.
+- Every newly scheduled X post records `cardTheme` from its scheduled publication time. Missing historical labels
+  count as legacy. The Tuesday learning report and Monday owner review compare felt versus legacy only within the
+  same post category and mark fewer than eight settled posts as a small sample. They never cut over a theme,
+  change a post category or move selection rules automatically.
+
 ### C4 verified release receipt
 
 - Production revision: `3bac89df`; [publish run 37555731984](https://github.com/keenroudy22/sports/actions/runs/37555731984)

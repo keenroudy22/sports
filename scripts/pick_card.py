@@ -70,6 +70,11 @@ def felt_enabled(item=None, moment=None):
     return bool(when and start and when >= start)
 
 
+def card_theme(moment=None, item=None):
+    """Stable label saved with each post so weekly learning compares like categories."""
+    return 'felt' if felt_enabled(item, moment) else 'legacy'
+
+
 def felt_game(game):
     if not game:
         return None

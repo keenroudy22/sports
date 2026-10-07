@@ -138,6 +138,28 @@ def joined(root=learning.STORE):
     return list(out.values())
 
 
+def distinct(rows):
+    """One learning row per segment, game, side and athlete.
+
+    A published decision wins. Otherwise the earliest observation wins. This
+    only fixes learning denominators; it never changes the public record.
+    """
+    chosen = {}
+    for row in rows:
+        games = tuple(row.get('gameIds') or ())
+        key = (row.get('segment'), games[0] if games else row.get('id'),
+               row.get('direction') or row.get('side'), row.get('athleteId'))
+        old = chosen.get(key)
+        if old is None:
+            chosen[key] = row
+            continue
+        rank = (0 if row.get('decision') == 'published' else 1, row.get('decidedAt') or '')
+        old_rank = (0 if old.get('decision') == 'published' else 1, old.get('decidedAt') or '')
+        if rank < old_rank:
+            chosen[key] = row
+    return list(chosen.values())
+
+
 def record_of(rows):
     counts = {'win': 0, 'loss': 0, 'push': 0}
     units = 0.0
@@ -170,6 +192,7 @@ def since(policy, segment):
 def learn_segments(policy, rows, now, dry=False):
     """One step at most per segment per week, each judged only on what happened since its last change."""
     findings, changes = [], []
+    rows = distinct(rows)
     by_segment = defaultdict(list)
     for row in rows:
         if row.get('segment') and not row['segment'].endswith('/parlay'):
@@ -386,6 +409,38 @@ def post_times(log_book):
     return {'byKind': dict(sorted(table(kinds).items())), 'byHour': dict(sorted(table(hours).items(), key=lambda kv: order.index(kv[0])))}
 
 
+def post_themes(log_book):
+    """Settled engagement by post category and recorded card theme; missing legacy rows stay legacy."""
+    groups = defaultdict(list)
+    for entry in log_book.get('posts', []):
+        rate = engagement(entry)
+        if rate is None or not str(entry.get('kind') or '').startswith('buffer:'):
+            continue
+        kind = entry['kind'].split(':', 1)[1]
+        theme = entry.get('cardTheme') if entry.get('cardTheme') in ('legacy', 'felt') else 'legacy'
+        groups[(kind, theme)].append(rate)
+    return [{'category': kind, 'theme': theme, 'posts': len(values),
+             'perThousand': round(sum(values) / len(values), 2),
+             'smallSample': len(values) < ENGAGE_MIN}
+            for (kind, theme), values in sorted(groups.items())]
+
+
+def shadow_step(now=None, root=learning.STORE, policy=None, games=None, captures=None):
+    """Append one silent daily R0-R7 snapshot when its policy flags are on."""
+    import results_shadows
+    now = now or learning.now_utc()
+    policy = policy or learning.load_policy(Path(root) / 'policy.json')
+    if not any((policy.get('shadows') or {}).values()):
+        return 0
+    raw = joined(root)
+    unique = distinct(raw)
+    games = games if games is not None else store_games()
+    captures = captures if captures is not None else {**scoreboard.feed_lines(games), **scoreboard.captured_lines(games)}
+    _, snapshots = scoreboard.v2_rows(games)
+    props = prop_rows(games, snapshots, captures)
+    return results_shadows.append(results_shadows.snapshots(policy, raw, unique, props, now), now, root)
+
+
 def model_findings():
     board = json.loads((ROOT / 'site' / 'data' / 'scoreboard.json').read_text(encoding='utf-8')) if (ROOT / 'site' / 'data' / 'scoreboard.json').exists() else {}
     out = {}
@@ -421,11 +476,16 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
     changes += moved
     reasons, moved = learn_reasons(policy, log_book, now, dry)
     changes += moved
-    report = {'at': learning.stamp(now), 'candidates': len(rows), 'graded': sum(1 for r in rows if r.get('result')),
+    import results_shadows
+    shadow_rows = results_shadows.snapshots(policy, rows, distinct(rows), historical_props, now)
+    report = {'at': learning.stamp(now), 'candidates': len(rows), 'distinctCandidates': len(distinct(rows)),
+              'graded': sum(1 for r in rows if r.get('result')),
               'segments': segments, 'calibration': calibration, 'gates': by_rule(rows), 'judge': judge_findings(rows),
-              'researcher': domains, 'posts': reasons, 'postTimes': post_times(log_book), 'model': model_findings(), 'changes': changes,
-              'marketReview': market_review.audit(historical_props)}
+              'researcher': domains, 'posts': reasons, 'postTimes': post_times(log_book),
+              'cardThemes': post_themes(log_book), 'model': model_findings(), 'changes': changes,
+              'marketReview': market_review.audit(historical_props), 'resultsShadows': shadow_rows}
     if not dry:
+        results_shadows.append(shadow_rows, now, root)
         learning.save_policy(policy, policy_path)
         boxscores.write_json(Path(root) / 'report.json', report)
         (Path(root) / 'REPORT.md').write_text(markdown(report), encoding='utf-8')
@@ -442,7 +502,9 @@ def fmt_summary(s):
 
 def markdown(report):
     lines = [f"# What the kitchen learned, {report['at'][:10]}", '',
-             f"{report['candidates']} candidates on record, {report['graded']} graded. Closing line value is how far the "
+             f"{report['candidates']} recorded candidate rows, "
+             f"{report.get('distinctCandidates', report['candidates'])} distinct game/side/player observations, "
+             f"{report['graded']} graded. Closing line value is how far the "
              "market moved toward our side by kickoff; it is the first thing learning trusts.", '']
     lines += ['## Changes this week', '']
     if report['changes']:
@@ -482,12 +544,32 @@ def markdown(report):
             lines.append(f"- {kind}: {t['posts']} posts, {t['perThousand']} engagements per thousand views")
         for hour, t in (times.get('byHour') or {}).items():
             lines.append(f"- {hour}: {t['posts']} posts, {t['perThousand']} engagements per thousand views")
+    if report.get('cardThemes'):
+        lines += ['', '## Card themes by the same post category', '']
+        for row in report['cardThemes']:
+            caveat = ' (small sample)' if row['smallSample'] else ''
+            lines.append(f"- {row['category']} / {row['theme']}: {row['posts']} posts, "
+                         f"{row['perThousand']} engagements per thousand views{caveat}")
     if report['model']:
         lines += ['', '## The number against the close (season to date)', '']
         for key, m in report['model'].items():
             lines.append(f"- {key}: {m['games']} games, total miss {m['ourTotalMiss']} vs the close's {m['closeTotalMiss']}")
     if report.get('marketReview'):
         lines += ['', market_review.markdown(report['marketReview'])]
+    if report.get('resultsShadows'):
+        lines += ['', '## Silent results shadows', '',
+                  '- These observations changed no play, card, post, record, gate or request budget.']
+        for row in report['resultsShadows']:
+            evidence = row.get('evidence') or {}
+            if row['proposal'] == 'R0':
+                detail = f"{evidence.get('before')} raw rows, {evidence.get('after')} distinct"
+            elif row['proposal'] == 'R3':
+                detail = f"{len(evidence.get('markets') or [])} prop markets observed"
+            elif row['proposal'] == 'R5':
+                detail = f"{evidence.get('wouldHide', 0)} heavy alternates observed; default unchanged"
+            else:
+                detail = 'observation active; public behavior unchanged'
+            lines.append(f"- {row['proposal']}: {detail}")
     return '\n'.join(lines) + '\n'
 
 

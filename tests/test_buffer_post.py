@@ -274,6 +274,7 @@ class ScheduleTests(unittest.TestCase):
         self.assertEqual([p['id'] for p in log_book['posts']], ['a'], 'b waits for its card')
         self.assertTrue(log_book['posts'][0]['card'])
         self.assertEqual(log_book['posts'][0]['kind'], 'buffer:play')
+        self.assertEqual(log_book['posts'][0]['cardTheme'], 'legacy')
         self.assertEqual(log_book['posts'][0]['discord'], {
             'state': 'pending', 'text': 'text a', 'readyAt': '2026-09-26T13:15:00Z',
             'image': 'https://keenroudy.com/sports/data/cards/a.png'})

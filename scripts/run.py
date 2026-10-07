@@ -1012,6 +1012,7 @@ def decision_record(candidate, league, decision, rules, reason, now, ctx):
             'breakEven': desk.get('breakEven'), 'edgePoints': desk.get('edgePoints'), 'evPerUnit': desk.get('evPerUnit'),
             'confidence': candidate.get('confidence'), 'favorite': candidate.get('favorite') is True,
             'decision': decision, 'rules': list(rules), 'reason': reason, 'decidedAt': stamp(now),
+            'quotedAt': candidate.get('quotedAt'),
             'facts': {'for': sum(1 for f in facts if f.get('direction') == 'for'),
                       'against': sum(1 for f in facts if f.get('direction') == 'against'),
                       'kinds': sorted({str(f.get('kind')) for f in facts if f.get('kind')})},
@@ -1077,6 +1078,11 @@ def remember(decided, now, slot, status):
         graded = learn.grade_pending(now)
         status['learning'] = {'recorded': recorded, 'graded': graded}
         log(f'learning: {recorded} decisions recorded, {graded} candidates graded')
+        if slot.hour == 23 and slot.minute == 30:
+            shadowed = learn.shadow_step(now)
+            if shadowed:
+                status['learning']['shadows'] = shadowed
+                log(f'learning: {shadowed} silent results shadows recorded')
         if slot.weekday() == 1 and slot.hour == 8:
             report = learn.weekly(now)
             status['learning']['changes'] = len(report['changes'])

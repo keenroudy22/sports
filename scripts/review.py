@@ -218,6 +218,61 @@ def post_metrics(log_book, first, last):
     return {kind: summarize(rows) for kind, rows in groups.items() if rows}
 
 
+def post_theme_metrics(log_book, first, last):
+    """Compare creative themes only inside the same settled Buffer post category."""
+    groups = {}
+    for entry in log_book.get('posts', []):
+        sent, metrics = entry.get('sentAt'), entry.get('metrics') or {}
+        if not sent or not first <= eastern_date(gates.when(sent)) <= last:
+            continue
+        views = metrics.get('impressions') or metrics.get('views') or 0
+        if not views:
+            continue
+        category = str(entry.get('kind') or 'unknown').removeprefix('buffer:')
+        theme = entry.get('cardTheme') if entry.get('cardTheme') in ('legacy', 'felt') else 'legacy'
+        groups.setdefault((category, theme), []).append((views, metrics.get('engagementRate')))
+    out = []
+    for (category, theme), rows in sorted(groups.items()):
+        views = sum(row[0] for row in rows)
+        rated = [(v, r) for v, r in rows if isinstance(r, (int, float))]
+        rate = round(sum(v * r for v, r in rated) / sum(v for v, _ in rated), 2) if rated else None
+        out.append({'category': category, 'theme': theme, 'posts': len(rows), 'impressions': views,
+                    'engagementRate': rate, 'smallSample': len(rows) < 8})
+    return out
+
+
+def learning_packet(report_path=None, shadow_root=None):
+    """Latest local weekly-learning and silent-shadow evidence for the Monday packet."""
+    report_path = Path(report_path or ROOT / 'data/learning/report.json')
+    shadow_root = Path(shadow_root or ROOT / 'data/learning')
+    lines = ['', '## Learning and silent results shadows']
+    try:
+        report = json.loads(report_path.read_text(encoding='utf-8'))
+        lines.append(f"- latest calibration/learning update: {report.get('at') or 'unknown'}; "
+                     f"{len(report.get('changes') or [])} threshold/calibration changes")
+        lines.append(f"- candidates: {report.get('candidates', 0)} raw; "
+                     f"{report.get('distinctCandidates', report.get('candidates', 0))} distinct")
+        for row in report.get('cardThemes') or []:
+            note = ' (small sample)' if row.get('smallSample') else ''
+            lines.append(f"  - {row.get('category')} / {row.get('theme')}: {row.get('posts')} posts, "
+                         f"{row.get('perThousand')} engagements per thousand views{note}")
+    except (OSError, ValueError, AttributeError):
+        lines.append('- latest learning report unavailable')
+    shadows = []
+    for path in sorted(shadow_root.glob('shadow-*.jsonl')):
+        try:
+            shadows += [json.loads(line) for line in path.read_text(encoding='utf-8').splitlines() if line.strip()]
+        except (OSError, ValueError):
+            continue
+    if shadows:
+        latest = max(str(row.get('at') or '') for row in shadows)
+        proposals = sorted(row.get('proposal') for row in shadows if row.get('at') == latest and row.get('proposal'))
+        lines.append(f"- latest silent shadow: {latest}; proposals {', '.join(proposals) or 'none'}; no public effects")
+    else:
+        lines.append('- no silent results shadow has completed yet')
+    return '\n'.join(lines) + '\n'
+
+
 def record(first_picks, latest, first, last):
     """The week's settled plays in the one-record terms: straight plays, fun parlays and ladder rungs apart."""
     import x_post
@@ -301,7 +356,7 @@ def timing(first, runner=subprocess.run):
         return ''
 
 
-def packet(first, last, runs, posts, week, hosted, line_timing, ladder_now, alert_file, reach=None):
+def packet(first, last, runs, posts, week, hosted, line_timing, ladder_now, alert_file, reach=None, theme_reach=None):
     straight, fun, rungs, lines = week
     out = [f'# Week of {first:%b %-d} to {last:%b %-d}, {last.year}', '', '## Desk runs (from the run logs, times UTC)']
     for day, info in sorted(runs.items()):
@@ -328,6 +383,16 @@ def packet(first, last, runs, posts, week, hosted, line_timing, ladder_now, aler
             rate = result.get('engagementRate')
             out.append(f"  - {kind}: {result['posts']} posts, {result['impressions']} impressions, "
                        f"{f'{rate:.2f}%' if rate is not None else 'rate not available'}")
+    out += ['', '## Card creative by post category']
+    if not theme_reach:
+        out.append('- no settled theme sample in this period')
+    else:
+        for result in theme_reach:
+            rate = result.get('engagementRate')
+            caveat = ' (small sample)' if result.get('smallSample') else ''
+            out.append(f"- {result['category']} / {result['theme']}: {result['posts']} posts, "
+                       f"{result['impressions']} impressions, "
+                       f"{f'{rate:.2f}%' if rate is not None else 'rate not available'}{caveat}")
     if hosted is None:
         out += ['', '## GitHub publish runs', '- could not be read (gh)']
     else:
@@ -370,7 +435,8 @@ def main(argv=None):
     log_book = x_post.load_log()
     text = packet(first, last, run_lines(first, last), post_rows(log_book, first, last),
                   record(ctx.first, ctx.latest, first, last), hosted_runs(first), timing(first), ladder_now,
-                  LOGS / 'ALERT.txt', post_metrics(log_book, first, last))
+                  LOGS / 'ALERT.txt', post_metrics(log_book, first, last), post_theme_metrics(log_book, first, last))
+    text += learning_packet()
     import desk_health
     # Put current verified operational facts into the same bounded local brief;
     # this adds no model call and reads no secrets or provider endpoints.

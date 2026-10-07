@@ -203,7 +203,8 @@ def text_hash(text):
 
 
 def record(log, key, text, tweet_id, kind, now):
-    log['posts'].append({'id': key, 'postedAt': gates.stamp(now), 'tweetId': tweet_id, 'textHash': text_hash(text), 'kind': kind})
+    log['posts'].append({'id': key, 'postedAt': gates.stamp(now), 'tweetId': tweet_id, 'textHash': text_hash(text),
+                         'kind': kind, 'cardTheme': pick_card.card_theme(now)})
     return log
 
 

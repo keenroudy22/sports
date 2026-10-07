@@ -13,6 +13,7 @@ import buffer_post
 import gates
 import learn
 import learning
+import results_shadows
 import researcher
 import run
 import x_post
@@ -59,6 +60,17 @@ class GradeTests(unittest.TestCase):
 
 
 class SegmentTests(unittest.TestCase):
+    def test_learning_counts_each_game_side_and_player_once(self):
+        base = row(1, decision='refused', gameIds=['NFL-1'], direction='over', decidedAt='2026-09-20T12:00:00Z')
+        later = dict(base, id='other-line', line=45.5, decidedAt='2026-09-20T13:00:00Z')
+        published = dict(base, id='published', decision='published', decidedAt='2026-09-20T14:00:00Z')
+        unique = learn.distinct([base, later, published])
+        self.assertEqual([item['id'] for item in unique], ['published'])
+        repeated = [dict(base, id=f'c{i}', decision='published') for i in range(30)]
+        findings, changes = learn.learn_segments(learning.default_policy(), repeated, NOW)
+        self.assertEqual(findings[0]['published']['graded'], 1)
+        self.assertEqual(changes, [], 'one game cannot manufacture the 30-play learning minimum')
+
     def test_losing_to_the_close_makes_a_segment_pickier_then_pauses_it(self):
         policy = learning.default_policy()
         losing = [row(i, clv=-1.0 + 0.1 * (i % 3)) for i in range(30)]
@@ -162,6 +174,33 @@ class OtherLearningTests(unittest.TestCase):
         self.assertIn('## Which posts and which hours', learn.markdown(shell))
         self.assertIn('- cashed: 1 posts, 20.0 engagements per thousand views', learn.markdown(shell))
 
+    def test_card_theme_learning_compares_only_inside_the_same_category(self):
+        posts = [
+            {'kind': 'buffer:play', 'cardTheme': 'felt', 'metrics': {'impressions': 100, 'likes': 5}},
+            {'kind': 'buffer:play', 'metrics': {'impressions': 200, 'likes': 2}},
+            {'kind': 'buffer:receipt', 'cardTheme': 'felt', 'metrics': {'impressions': 50, 'likes': 1}},
+        ]
+        table = learn.post_themes({'posts': posts})
+        self.assertEqual([(r['category'], r['theme']) for r in table],
+                         [('play', 'felt'), ('play', 'legacy'), ('receipt', 'felt')])
+        self.assertTrue(all(r['smallSample'] for r in table))
+
+    def test_all_results_proposals_log_silently_without_public_effects(self):
+        policy = learning.default_policy()
+        policy['shadows'] = {f'R{i}': True for i in range(8)}
+        raw = [row(1, gameIds=['CFB-1'], segment='CFB/total', direction='over'),
+               row(2, gameIds=['CFB-1'], segment='CFB/total', direction='over')]
+        snapshots = results_shadows.snapshots(policy, raw, learn.distinct(raw), [], NOW,
+                                              trends_dir=Path('/nonexistent'))
+        self.assertEqual([r['proposal'] for r in snapshots], [f'R{i}' for i in range(8)])
+        self.assertTrue(all(r['mode'] == 'silent' and r['publicEffects'] == 0 and r['meteredRequests'] == 0
+                            for r in snapshots))
+        self.assertEqual(snapshots[0]['evidence']['duplicatesRemoved'], 1)
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            self.assertEqual(results_shadows.append(snapshots, NOW, root), 8)
+            self.assertEqual(results_shadows.append(snapshots, NOW, root), 0)
+
     def test_the_week_writes_the_policy_and_a_plain_report(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
@@ -233,6 +272,18 @@ class RecordTests(unittest.TestCase):
             status = {'errors': []}
             run.remember([rec], NOW, slot, status)
         self.assertIn('learning: OSError', status['errors'][0])
+
+    def test_the_1130_pm_run_records_silent_results_shadows(self):
+        rec = {'id': 'a', 'season': 2026, 'decision': 'refused', 'rules': ['lean_edge']}
+        slot = datetime(2026, 10, 6, 23, 30, tzinfo=gates.EASTERN)
+        with mock.patch.object(learning, 'read', return_value=[]), \
+                mock.patch.object(learning, 'append', return_value=1), \
+                mock.patch.object(learn, 'grade_pending', return_value=0), \
+                mock.patch.object(learn, 'shadow_step', return_value=8) as shadow:
+            status = {'errors': []}
+            run.remember([rec], NOW, slot, status)
+        shadow.assert_called_once_with(NOW)
+        self.assertEqual(status['learning']['shadows'], 8)
 
 
 class PostTests(unittest.TestCase):

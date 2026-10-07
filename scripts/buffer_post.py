@@ -406,7 +406,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             log(f'buffer: {guid} not scheduled: {error}')
             continue
         entry = {'id': guid, 'postedAt': gates.stamp(now), 'dueAt': gates.stamp(due), 'bufferPostId': post_id,
-                 'textHash': x_post.text_hash(text), 'kind': f'buffer:{kind}', 'card': bool(image)}
+                 'textHash': x_post.text_hash(text), 'kind': f'buffer:{kind}', 'card': bool(image),
+                 'cardTheme': pick_card.card_theme(due)}
         # Only entries scheduled after Discord mirroring was introduced carry this payload. That prevents enabling
         # the webhook from replaying the account's older X history into a new server.
         entry['discord'] = {'state': 'pending', 'text': without_playbook(text)}

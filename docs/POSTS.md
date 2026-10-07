@@ -22,6 +22,12 @@ felt website is live. Social templates remain separately gated under P21; until 
 current renderers remain the production contract. Existing post categories, caps, filenames, dimensions,
 Discord size limit, Buffer-only delivery and X/Discord schedule do not change.
 
+Creative learning compares felt and legacy only within the same existing post category. Every newly scheduled
+post records `cardTheme` in `data/x-posted.json`; older rows without the field count as `legacy`. The Tuesday
+learning report and Monday owner review show each category/theme separately, mark fewer than eight settled posts
+as a small sample, and never move selection gates, post frequency or theme automatically. A human owner decision
+is still required for a later creative cutover.
+
 ## October 5 effective creative policy (superseded where stated above)
 
 The owner approved tested original layout/color/short-copy variants within already-approved post categories and
