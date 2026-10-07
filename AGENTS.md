@@ -211,13 +211,13 @@ Handy commands (from `~/Projects/sports`):
   only. Never forces a rung or changes the record. Claude reviews the first real repo render before route
   delivery is enabled; posted attachments remain unchanged.
 - **Kitchen Ticket website (owner, 2026-10-07; OWNER-DECISIONS item 22):** Today, the play page and the player page
-  use the approved design/site mockups (rail, hanging ticket, Climb stub, spike, Prep List, text tabs). Fair price and
-  edge live on `#pick/<id>`; the Today ticket keeps price and book, my chance vs what the price needs (one decimal,
-  hidden when uncalibrated), the now/good-to line, WHY, BUT, the hit strip and the season record. "More for today"
-  starts closed. WHY/BUT, Prep List rows (playbook section 7 plus every role/price/QB hold), recentFull, the last
-  game day's W-L and desk run times are chosen in `build_site.py`, never in the browser. Under review shows no
-  projection, chance or edge. No streak line; core.js record math unchanged. At 375x812 with no scroll: the whole
-  first best bet, the Climb stub and the date line's W-L (replacing the two status rows); Prep List one scroll below.
+  use the approved design/site mockups. Fair price and edge live on `#pick/<id>`; the Today ticket keeps price and
+  book, my chance vs what the price needs (one decimal, hidden when uncalibrated), the now/good-to line, WHY, BUT, the
+  hit strip and the season record. "More for today" starts closed. WHY/BUT (saved words, verbatim or a named template),
+  Prep List rows (playbook section 7 plus every hold), recentFull, the date line's W-L, desk run times and each play's
+  hold and quote are chosen in `build_site.py`. A held market reads Under review everywhere: no now/good-to line,
+  projection, chance or edge. No streak line; core.js record math unchanged. At 375x812 with no scroll: the first
+  best bet, the Climb stub and the last game day's W-L; Prep List one scroll below.
 - **Exact-line price sanity (owner, 2026-10-07; audit A-24):** new official straight plays require
   both sides priced at the listed book's exact line. A one-sided player number may remain labeled
   research, never a best bet. A two-sided price pair's implied chances must sum to 0.99–1.15;
