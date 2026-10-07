@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-07T14:02:01Z",
+  "updatedAt": "2026-10-07T14:32:16Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-10-07T13:00Z",
+              "reportedAt": "2026-10-07T14:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-07T13:00Z",
+              "reportedAt": "2026-10-07T14:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5527,6 +5527,15 @@
           "name": "New York Jets",
           "players": [
             {
+              "id": "4429005",
+              "name": "Braiden McGregor",
+              "position": "DE",
+              "status": "Injured Reserve",
+              "injury": "Pectoral",
+              "reportedAt": "2026-10-07T14:03Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4429005/braiden-mcgregor"
+            },
+            {
               "id": "4808766",
               "name": "Mason Taylor",
               "position": "TE",
@@ -5588,15 +5597,6 @@
               "injury": null,
               "reportedAt": "2026-10-06T01:05Z",
               "source": "https://www.espn.com/nfl/player/_/id/4695404/isaiah-davis"
-            },
-            {
-              "id": "4429005",
-              "name": "Braiden McGregor",
-              "position": "DE",
-              "status": "Out",
-              "injury": "Pectoral",
-              "reportedAt": "2026-10-06T00:30Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4429005/braiden-mcgregor"
             },
             {
               "id": "4426817",
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "5",
-          "name": "Elgton Jenkins",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-06T20:01:41Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3115485/elgton-jenkins"
-        },
-        {
-          "teamId": "5",
-          "name": "Teven Jenkins",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-06T20:01:41Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4038457/teven-jenkins"
-        },
-        {
           "teamId": "34",
           "name": "Azeez Al-Shaair",
           "from": "Out",
@@ -7764,11 +7748,27 @@
           "to": "Out",
           "observedAt": "2026-10-07T13:35:41Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-07T14:32:16Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "20",
+          "name": "Braiden McGregor",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-07T14:32:16Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4429005/braiden-mcgregor"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-07T14:02:01Z",
-      "lastAttemptAt": "2026-10-07T14:02:01Z",
+      "checkedAt": "2026-10-07T14:32:16Z",
+      "lastAttemptAt": "2026-10-07T14:32:16Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-07T14:02:01Z",
-      "lastAttemptAt": "2026-10-07T14:02:01Z",
+      "checkedAt": "2026-10-07T14:32:16Z",
+      "lastAttemptAt": "2026-10-07T14:32:16Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
