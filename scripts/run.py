@@ -41,6 +41,7 @@ import llm_tasks
 import market_read
 import parlay
 import pick_card
+import post_windows
 import pricing
 import refresh
 import researcher
@@ -63,6 +64,7 @@ VOLUME = {'recYds': 'targets', 'rec': 'targets', 'rushYds': 'carries', 'car': 'c
           'passYds': 'att', 'cmp': 'att', 'att': 'att'}
 SKILL = {'QB', 'RB', 'FB', 'WR', 'TE', 'OT', 'OG', 'C', 'G', 'T', 'OL'}
 LONGSHOT_TARGET = 500
+REPLACEMENT_REVIEW_LEAD = timedelta(minutes=45)  # leave one scheduled last look before a replacement can post
 SETTLEMENT_REVIEW_WINDOW = timedelta(hours=12)  # through the next morning for injury news/book notices to catch up
 
 
@@ -597,11 +599,37 @@ def longshot_exclusions(ctx, screened, closing=()):
     """Game ids a fun parlay leaves off: games where the desk closed a single play, and games this run found a
     sourced reason against (weather, a quarterback, verified reporting)."""
     out = {(pick.get('gameIds') or [None])[0] for pick, _ in closed_singles(ctx, closing)}
+    # A precheck can pull one parlay leg without closing a corresponding single.
+    # Keep that game's line out of every replacement; the Oct 4 QB-out ticket
+    # otherwise selected the same Packers/Buccaneers total a second time.
+    for key, original in ctx.first.items():
+        out.update(flagged_parlay_leg_games(dict(original, **ctx.latest.get(key, {}))))
+    for revision in closing:
+        out.update(flagged_parlay_leg_games(revision))
     for row in screened:
         rule, reason = row.get('rule'), str(row.get('reason') or '')
         if rule in AGAINST_RULES or (rule == 'held' and not reason.startswith(UNCONFIRMED)):
             out.add(row.get('gameId'))
     return {g for g in out if g}
+
+
+def flagged_parlay_leg_games(pick):
+    """Games of specifically named legs pulled by a sourced last-look note."""
+    if not pick.get('legs') or not pick.get('entryNote'):
+        return set()
+    note = closed_reason(pick['entryNote'])
+    match = re.search(r'\bits\s+(.+?)\s+leg(?:\s+was\s+pulled\b|\s*:)', note, re.I)
+    if not match:
+        return set()
+    wanted = ' '.join(match.group(1).lower().split())
+    return {leg.get('gameId') for leg in pick['legs']
+            if ' '.join(str(leg.get('title') or '').lower().split()) == wanted and leg.get('gameId')}
+
+
+def replacement_has_last_look(ticket, games, now):
+    """A replacement needs room for a scheduled precheck and the 45-minute kickoff cutoff."""
+    starts = [gates.when(games[game_id]['kickoff']) for game_id in ticket.get('gameIds') or [] if game_id in games]
+    return bool(starts and now + REPLACEMENT_REVIEW_LEAD <= min(starts) - post_windows.LEAD)
 
 
 # ------------------------------------------------------------------ steps 4 to 7: candidates, prices, facts
@@ -1789,6 +1817,13 @@ def _run(args, now, slot, kinds, status):
                 log(f'{league} longshot: {reason}')
                 continue
             if gates.pulled_before_post(ticket['id'], ctx):
+                if not replacement_has_last_look(ticket, games, now):
+                    log(f"{league} longshot: replacement has no last-look X window; not publishing")
+                    screened.append({'league': league, 'gameId': (ticket.get('gameIds') or [None])[0],
+                                     'title': ticket['title'], 'rule': 'replacement_window',
+                                     'reason': 'a replacement needs one last look and must post before kickoff minus 45 minutes'})
+                    continue
+                ticket['replacementOf'] = ticket['id']
                 ticket['id'] = gates.fresh_id(ticket['id'], ctx)       # the day's first was pulled before its post
             write_prose(ticket, ctx, records)
             ok, decisions = gates.admit(dict(ticket, league=league), ctx)

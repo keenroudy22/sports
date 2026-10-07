@@ -724,6 +724,18 @@ class ParlayGuardTests(unittest.TestCase):
                     {'gameId': 'book', 'rule': 'one_book', 'reason': 'only DraftKings'}]
         self.assertEqual(run.longshot_exclusions(ctx, screened), {'navy', 'wind', 'qb'})
 
+    def test_october_four_pulled_leg_cannot_reappear_in_a_rushed_replacement(self):
+        pulled = {'id': 'NFL-2026-W4-longshot-1004-fd', 'gameIds': ['NFL-401872968', 'other'],
+                  'legs': [{'title': 'Packers at Buccaneers over 38.5', 'gameId': 'NFL-401872968'},
+                           {'title': 'Other leg', 'gameId': 'other'}]}
+        note = '2026-10-04 11:45 ET: its Packers at Buccaneers over 38.5 leg was pulled: quarterback out. Stays in the record.'
+        ctx = SimpleNamespace(first={pulled['id']: pulled}, latest={pulled['id']: dict(pulled, status='expired', entryNote=note)})
+        self.assertEqual(run.longshot_exclusions(ctx, []), {'NFL-401872968'})
+        games = {'other': {'kickoff': '2026-10-04T17:00:00Z'}}
+        replacement = {'gameIds': ['other']}
+        self.assertFalse(run.replacement_has_last_look(replacement, games, datetime(2026, 10, 4, 15, 45, 5, tzinfo=timezone.utc)))
+        self.assertTrue(run.replacement_has_last_look(replacement, games, datetime(2026, 10, 4, 15, 0, tzinfo=timezone.utc)))
+
     def test_the_last_look_checks_every_leg(self):
         ctx, _, ticket, _ = self.world(closed=False)
         looked = []

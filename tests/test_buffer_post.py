@@ -112,6 +112,21 @@ TICKET = dict(legs=[{'title': 'Iowa at Michigan over 38.5'}, {'title': 'Oklahoma
 
 
 class PlanTests(unittest.TestCase):
+    def test_replacement_ticket_waits_for_last_look_or_is_refused(self):
+        original = pick('replacement', 'late', **TICKET)
+        original['replacementOf'] = 'pulled-original'
+        first = {'replacement': original}
+        latest = {'replacement': dict(original)}
+        early = datetime(2026, 9, 26, 18, 0, tzinfo=timezone.utc)
+        rows = bp.plan(first, latest, GAMES, early, {'posts': []})
+        ticket = next(row for row in rows if row[0] == 'replacement')
+        self.assertGreaterEqual(ticket[3], early + timedelta(minutes=45))
+        late = datetime(2026, 9, 26, 22, 20, tzinfo=timezone.utc)
+        refused = []
+        rows = bp.plan(first, latest, GAMES, late, {'posts': []}, refused=refused)
+        self.assertNotIn('replacement', [row[0] for row in rows])
+        self.assertIn(('replacement', ['replacement has no last-look window']), refused)
+
     def test_plays_post_around_noon_or_two_hours_before_an_early_kickoff_players_then_teams_then_the_parlay(self):
         first = {'a': pick('a'), 'd': pick('d', title='Iowa at Michigan under 38.5', direction='under'),
                  'p': pick('p', **PROP), 'x': pick('x', gameIds=['noon', 'late'], **TICKET),

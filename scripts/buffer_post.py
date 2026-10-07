@@ -343,8 +343,18 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
             if refused is not None:
                 refused.append((key, problems))
             continue
-        plays.append((post_windows.target(league, kickoff), -1 if key == potd else ORDER[pick_card.play_kind(merged)],
-                      kickoff - feed.LEAD, key, text, 'play', f'{key}-potd' if key == potd else key))
+        target = post_windows.target(league, kickoff)
+        deadline = kickoff - feed.LEAD
+        if merged.get('replacementOf'):
+            # A replacement needs a fresh last look; never rush it out shortly
+            # before kickoff just because its normal publication slot passed.
+            target = max(target, now + timedelta(minutes=45))
+            if target > deadline:
+                if refused is not None:
+                    refused.append((key, ['replacement has no last-look window']))
+                continue
+        plays.append((target, -1 if key == potd else ORDER[pick_card.play_kind(merged)],
+                      deadline, key, text, 'play', f'{key}-potd' if key == potd else key))
     order = {'menu': -2, 'receipt': -1, 'book': -1, 'sheet': 0, 'research': 1, 'cashed': 2, 'sports': 3}
     for post in receipts.house_posts(first, latest, games, log_book, now):
         if set(post['key'].split('+')) & posted:
