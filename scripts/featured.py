@@ -17,6 +17,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import gates
+import post_windows
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -56,6 +57,8 @@ def todays_plays(first, latest, games, day, now):
             continue
         starts = sorted(games[g]['kickoff'] for g in (merged.get('gameIds') or []) if g in games)
         if not starts or eastern_date(gates.when(starts[0])) != day or gates.when(starts[0]) <= now:
+            continue
+        if not post_windows.reachable(pick.get('league') or (games.get((pick.get('gameIds') or [None])[0]) or {}).get('league'), starts[0], now):
             continue
         out.append((key, merged, gates.when(starts[0])))
     return out

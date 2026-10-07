@@ -310,7 +310,11 @@ class ScheduleTests(unittest.TestCase):
         full = {'posts': queued + [{'id': 'last', 'bufferPostId': 'last', 'dueAt': (NOW + timedelta(hours=2)).isoformat()}]}
         stats = {}
         bp.schedule(plans, 'x', full, NOW, key='t', send=fake, stats=stats, log=lambda *_: None)
-        self.assertEqual(stats['officialNotScheduled'], 1)
+        self.assertEqual(stats['officialNotScheduled'], 0, 'future deferral is not a missed target')
+        stats = {}
+        bp.schedule(plans, 'x', full, NOW + timedelta(minutes=35), key='t', send=fake, stats=stats,
+                    items={'official': {'league': 'CFB', 'kickoff': '2026-09-26T14:00:00Z'}}, log=lambda *_: None)
+        self.assertEqual(stats['officialNotScheduled'], 1, 'the original target has now passed')
 
     def test_theme_label_uses_the_artifacts_publication(self):
         with mock.patch.object(bp.pick_card, 'FELT_FROM', '2026-09-26T08:00:00-04:00'):

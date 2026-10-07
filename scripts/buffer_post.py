@@ -33,6 +33,7 @@ import feed
 import gates
 import pick_card
 import quota
+import post_windows
 import receipts
 import x_post
 from social_copy import without_playbook
@@ -48,9 +49,10 @@ SOON = timedelta(minutes=2)          # a post scheduled "now" goes out this far 
 ORDER = {'player': 0, 'team': 1, 'ladder': 2, 'parlay': 3}   # inside one kickoff: player props, game lines, the ladder, the parlay
 MAX_PER_DAY = 20                     # our ceiling; Buffer's free queue holds only 10 scheduled posts at once
 BUFFER_QUEUE = 10
+BUFFER_NORMAL_LIMIT = 9              # keep the tenth place free for relabels and reschedules
 BUFFER_RESERVED = 3                  # preserve the final places for plays, relabels/reschedules and receipts
 BUFFER_OPTIONAL_AT = BUFFER_QUEUE - BUFFER_RESERVED
-BUFFER_ESSENTIAL = frozenset(('play', 'receipt'))
+BUFFER_ESSENTIAL = frozenset(('play', 'receipt', 'cashed'))
 DISCORD_PLAY_LEAD = timedelta(minutes=15)  # the five-minute delivery job makes plays land about 10-15 minutes before X
 CONVERSATION = (
     "First play is out. What are you riding today? 👀",
@@ -323,6 +325,12 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
         if not starts or eastern_date(gates.when(starts[0])) != today:
             continue
         game = games.get((merged.get('gameIds') or [None])[0])
+        kickoff = gates.when(starts[0])
+        league = merged.get('league') or (game or {}).get('league')
+        if not post_windows.reachable(league, kickoff, now):
+            if refused is not None:
+                refused.append((key, ['has no X window']))
+            continue
         now_quote = (quotes or {}).get(key)
         text = x_post.draft(merged, game, weights, now_quote=now_quote, featured=key == potd)
         problems = x_post.guard(text, merged, x_post.load_reasons().get(key), now_quote)
@@ -330,9 +338,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
             if refused is not None:
                 refused.append((key, problems))
             continue
-        kickoff = gates.when(starts[0])
-        noon = datetime(today.year, today.month, today.day, POST_AT[0], POST_AT[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)
-        plays.append((max(min(noon, kickoff - EARLY_LEAD), opens), -1 if key == potd else ORDER[pick_card.play_kind(merged)],
+        plays.append((post_windows.target(league, kickoff), -1 if key == potd else ORDER[pick_card.play_kind(merged)],
                       kickoff - feed.LEAD, key, text, 'play', f'{key}-potd' if key == potd else key))
     order = {'menu': -2, 'receipt': -1, 'book': -1, 'sheet': 0, 'research': 1, 'cashed': 2, 'sports': 3}
     for post in receipts.house_posts(first, latest, games, log_book, now):
@@ -382,6 +388,8 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
             due = max(due, last + SPACING)
         due = free_slot(due, busy)
         if due > deadline:
+            if kind == 'play' and refused is not None:
+                refused.append((key, ['has no X window']))
             continue                    # this one's window has passed; a later one may still fit
         day = eastern_date(due)
         counts.setdefault(day, day_count(log_book, day))
@@ -423,17 +431,25 @@ def theme_moment(guid, kind, due, items=None):
     return due
 
 
+def missed_target(guid, due, now, items=None):
+    item = (items or {}).get(guid) or {}
+    target = post_windows.target(item.get('league'), item['kickoff']) if item.get('kickoff') else due
+    return now >= target
+
+
 def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=None, log=print, stats=None, items=None):
     """Create the planned posts in Buffer and record each in the log; a play whose card is not live yet is left
     for the next run, never posted bare. Returns the log."""
     stats = stats if stats is not None else {}
     stats.setdefault('officialNotScheduled', 0)
     pending = pending_scheduled(log_book, now)
+    if pending + len(plans) >= BUFFER_OPTIONAL_AT:
+        plans = sorted(plans, key=lambda plan: (plan[1] not in BUFFER_ESSENTIAL, plan[3], plan[0]))
     for guid, kind, text, due, card_key in plans:
-        if pending >= BUFFER_QUEUE or (pending >= BUFFER_OPTIONAL_AT and kind not in BUFFER_ESSENTIAL):
-            if kind == 'play':
+        if pending >= BUFFER_NORMAL_LIMIT or (pending >= BUFFER_OPTIONAL_AT and kind not in BUFFER_ESSENTIAL):
+            if kind == 'play' and missed_target(guid, due, now, items):
                 stats['officialNotScheduled'] += 1
-            reason = 'the free Buffer queue is full' if pending >= BUFFER_QUEUE else 'the final three Buffer places are reserved'
+            reason = 'the tenth Buffer place is reserved' if pending >= BUFFER_NORMAL_LIMIT else 'the final three Buffer places are reserved'
             log(f'buffer: {guid} deferred: {reason} ({pending}/{BUFFER_QUEUE} scheduled)')
             continue
         if kind != 'play':
@@ -443,7 +459,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             url = card_url(card_key)
             image = url if reachable(url, opener) else None
             if not image:
-                if kind == 'play':
+                if kind == 'play' and missed_target(guid, due, now, items):
                     stats['officialNotScheduled'] += 1
                 log(f'buffer: {guid} waits: its card is not live yet (every post carries its card)')
                 continue
@@ -461,7 +477,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         try:
             post_id = create_post(text, channel_id, due, image, key=key, send=send)
         except BufferError as error:
-            if kind == 'play':
+            if kind == 'play' and missed_target(guid, due, now, items):
                 stats['officialNotScheduled'] += 1
             log(f'buffer: {guid} not scheduled: {error}')
             continue

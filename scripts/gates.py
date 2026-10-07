@@ -364,6 +364,28 @@ def expiry_ok(candidate, ctx):
     return Decision(True, 'expiry_ok', f'expires {stamp(expires)}, limit {stamp(limit)}')
 
 
+def x_window(candidate, ctx):
+    """Do not publish a new play that cannot reach its X deadline."""
+    import post_windows
+    starts = kickoffs(candidate, ctx)
+    if not starts:
+        return Decision(False, 'x_window', 'has no X window: missing kickoff')
+    kickoff = min(starts)
+    league = candidate.get('league') or (ctx.games.get((candidate.get('gameIds') or [None])[0]) or {}).get('league')
+    occupied = 0
+    if post_windows.international(league, kickoff):
+        for key, pick in getattr(ctx, 'first', {}).items():
+            if key == candidate.get('id') or pick.get('historicalImport'):
+                continue
+            current = dict(pick, **getattr(ctx, 'latest', {}).get(key, {}))
+            other = kickoffs(current, ctx)
+            if other and min(other) == kickoff and not current.get('result') and not current.get('entryNote') \
+                    and (current.get('status') or 'active') == 'active':
+                occupied += 1
+    ok = post_windows.reachable(league, kickoff, ctx.now, occupied)
+    return Decision(ok, 'x_window', 'reachable X window' if ok else 'has no X window before kickoff')
+
+
 def price_present(candidate, ctx):
     """A named book, American odds and a quote time; nothing is published without a price."""
     odds = candidate.get('odds')
@@ -894,7 +916,7 @@ def revision_frozen(candidate, ctx):
 
 # ------------------------------------------------------------------ running the rules
 
-COMMON = (not_started, expiry_ok, fresh_quote, price_present, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction, player_overlap)
+COMMON = (not_started, x_window, expiry_ok, fresh_quote, price_present, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction, player_overlap)
 SHOP = (one_book, best_quote_by_ev)
 RULES = {
     # Caps are ceilings, not quotas. Performance cautions raise the edge requirement; negative value still fails.
@@ -903,8 +925,8 @@ RULES = {
                                  prop_not_in_longshot, prop_injury_clear, card_cap, lean_nothing_against),
     'favorite': COMMON + SHOP + (learned_pause, straight_value, prop_market_not_trailing, favorite_needs_reason, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
     'researched': COMMON + SHOP + (learned_pause, straight_value, prop_market_not_trailing, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
-    'longshot': (not_started, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, longshot_one_per_day, player_overlap, alternate_parlay_frequency),
-    'ladder': (not_started, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, ladder_one_rung, player_overlap),
+    'longshot': (not_started, x_window, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, longshot_one_per_day, player_overlap, alternate_parlay_frequency),
+    'ladder': (not_started, x_window, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, ladder_one_rung, player_overlap),
     'revision': (revision_frozen,),
 }
 

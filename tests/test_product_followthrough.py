@@ -36,6 +36,11 @@ def fixture():
 
 
 class ProductFollowthroughTests(unittest.TestCase):
+    def test_current_checked_in_owner_queue_is_valid(self):
+        result = product.read_status(now=datetime.now(timezone.utc))
+        self.assertNotEqual(result['state'], 'unavailable', result)
+        self.assertTrue(any(row['id'] == 'P43' for row in result['items']))
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
@@ -120,14 +125,14 @@ class ProductFollowthroughTests(unittest.TestCase):
     def test_size_count_and_string_bounds_preserve_all_actions_in_private_excerpt(self):
         value = fixture()
         value['items'] = [dict(value['items'][i % 5], id='P' + str(i), title='T' * 240,
-                               next='N' * 240, doneWhen='D' * 240, evidence='E' * 500) for i in range(40)]
+                               next='N' * 240, doneWhen='D' * 240, evidence='E' * 500) for i in range(product.MAX_ITEMS)]
         status = self.read(value, now=NOW + timedelta(days=10))
         self.assertEqual(status['state'], 'stale')
         brief = product.brief(status)
         self.assertLessEqual(len(brief), product.BRIEF_LIMIT)
         self.assertIn('Next ready: P1', brief)
         self.assertIn('Owner action: P2', brief)
-        value['items'].append(dict(value['items'][0], id='P40'))
+        value['items'].append(dict(value['items'][0], id='P' + str(product.MAX_ITEMS)))
         self.assertEqual(self.read(value)['state'], 'unavailable')
         self.path.write_bytes(b' ' * (product.MAX_BYTES + 1))
         self.assertEqual(self.read()['state'], 'unavailable')

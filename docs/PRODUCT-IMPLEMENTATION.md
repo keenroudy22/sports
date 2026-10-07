@@ -713,6 +713,26 @@ what was claimed at the time.
 
 ## Constraints deliberately retained
 
+### October 7 urgent delivery candidate and new owner decisions
+
+- P0 revision a7a6b7bb shipped in successful run 37624845039. It passed 959 Python tests (two skipped),
+  143 frontend tests under both Node runtimes/clean export and eighteen live 375/1440 route checks. The ticket
+  mark returned 200 and Saturday's complete 2,676 milestone rows were indexed in two smaller files.
+- The owner subsequently approved the focused basketball/soccer roadmap, kitchen twist, posting playbook v3,
+  app autopilot, supplied clay-chef Discord avatar and existing Cloudflare analytics with a disclosure. These
+  decisions are recorded in AGENTS and retained source documents. They do not imply unbuilt phases are live.
+- Urgent A-20261007-3/4 now use one shared international target: 9:30 AM NFL games post at 8:30 AM.
+  New-play admission, ticket admission, POTD eligibility, Buffer planning and RSS eligibility share the window.
+  Admission also refuses a third simultaneous international play when ten-minute spacing leaves two places.
+  Missing windows are named/counted rather than silently discarded.
+- Queue pressure admits plays, receipts and cashed/Climb results first; ordinary creates stop at nine pending,
+  leaving the tenth place for relabels/reschedules. Future deferrals do not become missed targets early.
+- The owner-supplied 512-pixel chef replaces the publisher avatar. The ticket server icon and kookn.jpg remain.
+  The site adds one Cloudflare Web Analytics disclosure. Prior P1 work is preserved in the named Git stash while
+  this urgent candidate is verified; the full P1, twist and playbook are still in the finite queue.
+- The queue's pre-existing overlong P20/P29 text is summarized with full-source links, and its local item bound
+  covers the newly approved work. A test now validates the actual checked-in queue.
+
 ### October 7 approved work order and P0 candidate
 
 - Owner approved the complete CODEX-WORK-ORDER and Claude's delegated decisions, dated

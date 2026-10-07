@@ -41,13 +41,14 @@ def postable(pick):
     return pick.get('favorite') is True or bool(pick.get('modelLean')) or bool(pick.get('legs')) or pick.get('parlayType') == 'longshot'
 
 
-def in_window(kickoff, now):
+def in_window(kickoff, now, league=None):
     """Game day, Eastern, from 9:00 AM until 45 minutes before kickoff."""
     start = gates.when(kickoff)
     local = now.astimezone(gates.EASTERN)
     if eastern_date(start) != local.date():
         return False
-    opens = local.replace(hour=WINDOW_OPENS[0], minute=WINDOW_OPENS[1], second=0, microsecond=0)
+    import post_windows
+    opens = post_windows.opens(league, kickoff).astimezone(gates.EASTERN)
     return local >= opens and start - now >= LEAD
 
 
@@ -75,7 +76,7 @@ def pick_items(first, latest, games, now, player_team=None):
         # A ticket spans several games; its window follows the first kickoff.
         starts = sorted(games[g]['kickoff'] for g in (pick.get('gameIds') or []) if g in games)
         game = games.get((pick.get('gameIds') or [None])[0])
-        if not published or not game or not starts or not in_window(starts[0], now):
+        if not published or not game or not starts or not in_window(starts[0], now, pick.get('league') or game.get('league')):
             continue
         if merged.get('expiresAt') and gates.when(merged['expiresAt']) <= now - timedelta(hours=12):
             continue        # a quote that expired half a day ago is not this morning's play
@@ -83,7 +84,8 @@ def pick_items(first, latest, games, now, player_team=None):
         if x_post.guard(text, merged, x_post.load_reasons().get(key)):
             continue
         local = now.astimezone(gates.EASTERN)
-        opened = local.replace(hour=WINDOW_OPENS[0], minute=WINDOW_OPENS[1], second=0, microsecond=0).astimezone(timezone.utc)
+        import post_windows
+        opened = post_windows.opens(pick.get('league') or game.get('league'), starts[0])
         items.append({'guid': key, 'title': x_post.kind_label(merged) + ': ' + str(merged.get('title')),
                       'text': text, 'link': f'{SITE}#pick/{key}', 'pubDate': max(gates.when(published), opened),
                       'pick': merged, 'game': game, 'side': player_side(merged, game, player_team)})

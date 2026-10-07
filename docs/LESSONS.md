@@ -1,5 +1,17 @@
 # Operating lessons
 
+### L-2026-10-07-3 · International morning plays had no delivery window
+- What: a 9:30 AM NFL play targeted 9 AM while its 45-minute deadline was 8:45; planning silently skipped it.
+- Why missed: schedule fixtures covered noon/night games but no international kickoff or admission-window check.
+- Guard: `tests/test_post_windows.py::test_international_best_bet_and_ticket_have_the_eight_thirty_window` and `test_unreachable_window_is_refused_at_admission_and_named_in_the_plan` cover the shared target, admission, POTD and feed.
+- State: guarded.
+
+### L-2026-10-07-4 · Optional items and results competed for the free Buffer reserve
+- What: ordinary scheduling could fill all ten places and did not protect cashed/Climb results.
+- Why missed: the reserve test checked optional deferral but not essential creation order or a free reschedule place.
+- Guard: `tests/test_post_windows.py::test_buffer_results_are_essential_and_tenth_slot_stays_free` and the ten-pending fixture protect results and the ninth-place ceiling.
+- State: guarded.
+
 ### L-2026-10-04-1 · Buffer queue capacity blocked published plays
 - What: six free-queue refusals on October 3–4 included the KC–LV official total, a POTD relabel and rescheduling.
 - Why missed: the code described fifty scheduled slots and tested only the twenty-post daily ceiling.

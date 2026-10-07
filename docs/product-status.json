@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-07T13:00:00Z",
+  "updatedAt": "2026-10-07T13:32:00Z",
   "items": [
     {
       "id": "P01",
@@ -180,14 +180,14 @@
       "owner": "agent",
       "next": "Preserve canonical provider names for gates and pricing, keep display renames in the browser only, and retain the split-payload, strict desk-loader and warning-only data-budget tests.",
       "doneWhen": "record_audit and publication_guard pass without tracked-schema or integrity changes.",
-      "evidence": "C4 revision 3bac89df shipped in run 37555731984. Repair e65695a1 shipped in run 37571505718. Weekend-resilience revisions 81b598e1 and 88f9c065 shipped in run 37576340750 on 2026-10-07: the live 520-line catalog is a manifest plus 259 NFL and 261 CFB rows, contains zero displayBook fields and preserves canonical ESPN BET sources. App 122, 928 Python tests (2 skipped), 141 frontend tests, 23 parity tests under both Node runtimes, record/guard/slot-2330 gates and 38 live 375/1440 route checks passed. Records, plays, social delivery and felt settings did not change."
+      "evidence": "C4 3bac89df, repair e65695a1, weekend payload 81b598e1/88f9c065 shipped in runs 37555731984, 37571505718 and 37576340750. Canonical ESPN BET restored; complete league shards and warning-only data budgets passed. Full counts, rollback boundary and the app122 correction remain in docs/PRODUCT-IMPLEMENTATION.md."
     },
     {
       "id": "P21",
       "title": "Felt share cards",
       "status": "ready",
       "owner": "agent",
-      "next": "After the next green 11:30 PM run, set an explicit Eastern FELT_FROM cutover, pass deployment gates and verify new cards; preserve posted attachments.",
+      "next": "11:45 PM ET automation finish-approved-felt-card-cutover checks the green 11:30 PM run and completes the explicit-offset cutover through all deployment gates.",
       "doneWhen": "Owner approves every category render and the quiet-window cutover preserves old attachments.",
       "evidence": "Owner approved the reviewed felt cards on October 7 (owner-delegated to Claude, 2026-10-06). Quiet-window execution pending."
     },
@@ -259,18 +259,18 @@
       "title": "Felt-card post-approval hardening",
       "status": "ready",
       "owner": "agent",
-      "next": "In one bounded follow-up, replace ratio-only fitting with embedded-TTF cmap/hmtx advance widths plus letter spacing; add long-school straight-spread browser fixtures before that inactive path returns; lower the photo ring 8-10 pixels; derive the push/void review fixture's all-Climbs bank from fixture state; and clean up the climb-open, six-best-bet and minus-sign spacing nits without changing public facts, categories or the cutover decision.",
-      "doneWhen": "Every renderer uses measured line widths, the longest stored straight spreads fit before that path is re-enabled, photo and brand rings remain visually separate without new ink collisions, review climb totals derive from fixture state, and the listed cosmetic browser fixtures pass.",
+      "next": "Apply the final card review follow-ups in docs/CARD-REVIEW-FINAL.md: real font widths/spreads, photo gap, derived fixture bank and cosmetics. Preserve public facts and attachment history.",
+      "doneWhen": "Real-font and spread browser tests pass; photo rings stay separate, fixture banks derive from state and listed cosmetics are checked.",
       "evidence": "Nonblocking follow-ups from Claude's final review of revision 2e47b238, recorded after the complete 19-card set passed. The dormant straight-spread risk and real-font requirement also remain documented in docs/LESSONS.md; none of these follow-ups activates FELT_FROM or changes a play, post, record or public category."
     },
     {
       "id": "P30",
       "title": "P0 free-plan protection",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Verify and release Buffer reserve, football budget trim/rollover/counters, avatar, C6 isolation and trend split.",
+      "next": "Preserve free-plan guards and observe the first real counters/delivery counts. Felt execution remains P21.",
       "doneWhen": "Watched publish and 375/1440 checks pass; Saturday payload complete and within budget.",
-      "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
+      "evidence": "a7a6b7bb; publish 37624845039 succeeded Oct 7; 959 Python (2 skipped), 143 frontend in both Node runtimes/clean export, build/92-record/guard/rehearsal and 18 live 375/1440 checks passed."
     },
     {
       "id": "P31",
@@ -319,21 +319,21 @@
     },
     {
       "id": "P36",
-      "title": "P2 ESPN capture foundation",
+      "title": "NBA-first ESPN capture foundation",
       "status": "ready",
       "owner": "agent",
-      "next": "Implement registry, verified prop sides and NHL/NBA box/injury stores.",
+      "next": "After P0/P1/twist, build NBA registry, verified ESPN prop sides and basketball box/injury stores. Exclude NHL/MLB expansion.",
       "doneWhen": "Two days of four-slot captures with zero late boards/contradictions and zero metered other-sport calls.",
       "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
     },
     {
       "id": "P37",
-      "title": "P2 NHL resource",
-      "status": "ready",
-      "owner": "agent",
-      "next": "Build lazy NHL views and collect actual three-game history.",
-      "doneWhen": "Live lines/charts/game/player/defense pass at 375/1440 and capabilities reflect evidence.",
-      "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
+      "title": "Superseded NHL expansion",
+      "status": "gated",
+      "owner": "owner",
+      "next": "No NHL build work under the October 7 focus. Preserve existing scores, market-lab captures and lab status.",
+      "doneWhen": "No new NHL pages, props, models or social posts are introduced.",
+      "evidence": "SPORTS-FOCUS.md supersedes the October 6 NHL-first order; owner decision October 7."
     },
     {
       "id": "P38",
@@ -355,12 +355,39 @@
     },
     {
       "id": "P40",
-      "title": "P2 seasonal roadmap",
+      "title": "Soccer and basketball seasonal roadmap",
       "status": "ready",
       "owner": "agent",
-      "next": "Follow MULTI-SPORT-PLAN for EPL October 17, CBB November, MLB Opening Day and silent models/calibration.",
+      "next": "EPL/UCL research for October 24–25, CBB early November, WNBA/MLS summer. Preserve existing NHL/MLB coverage without expansion.",
       "doneWhen": "Actual seasonal/trial evidence and a separate P11 decision precede official new-sport picks.",
       "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
+    },
+    {
+      "id": "P41",
+      "title": "Owner-approved X kitchen twist",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Build CODEX-TWIST alongside P1-11, render caption/card samples and obtain Claude review before first live output.",
+      "doneWhen": "Named series, first-person caption variants, win cards/payouts and narrow guards pass; Claude sample review is recorded; four-week outcomes observed separately.",
+      "evidence": "Owner explicitly approved October 7. Spec docs/CODEX-TWIST.md; notes docs/X-NOTES-harry.md."
+    },
+    {
+      "id": "P42",
+      "title": "International X windows and Buffer essential ordering",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Ship A-20261007-3/4 through all gates and verify 8:30 AM targets, no-window admission refusal and ninth-slot ceiling.",
+      "doneWhen": "Hosted release and live checks pass; international, ticket/POTD, crowded queue and missing-window counters have regression tests.",
+      "evidence": "Urgent owner-delegated playbook decisions October 7; P1 work preserved while this fix ships."
+    },
+    {
+      "id": "P43",
+      "title": "Posting playbook v3 and app autopilot",
+      "status": "ready",
+      "owner": "agent",
+      "next": "After the urgent release and P1, implement v3 routing/cadence/results/Prep Lists, sample cards and the three app tasks; review with Claude before first new output.",
+      "doneWhen": "Playbook tests, Claude sample receipts, schedule creation and live delivery checks pass; seasonal evidence remains observed separately.",
+      "evidence": "Owner approved POSTING-PLAYBOOK.md and AUTOPILOT.md October 7, including chef avatar and Cloudflare disclosure."
     }
   ]
 }

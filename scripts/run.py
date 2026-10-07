@@ -1948,8 +1948,11 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         plans = buffer_post.plan(ctx.first, ctx.latest, games, now, log_book, ctx.player_team, quotes=quotes,
                                  refused=refused, news=news)
         for key, problems in refused:
-            log(f"buffer: {key} held back, its text fails the post check: {'; '.join(problems)}")
-            alert('KeenRoudy post held back', f"{key}: {'; '.join(problems)}")
+            if 'has no X window' in problems:
+                log(f'buffer: {key} has no X window')
+            else:
+                log(f"buffer: {key} held back, its text fails the post check: {'; '.join(problems)}")
+                alert('KeenRoudy post held back', f"{key}: {'; '.join(problems)}")
         upgrades = pending_ladder_result_cards(log_book, ctx, now)
         if deploying and (plans or upgrades):
             waiting = [card for *_, card in plans if card] + list(upgrades.values())
@@ -1970,9 +1973,13 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         before = len(log_book.get('posts', []))
         schedule_stats = {}
         theme_items = {key: dict(value, **ctx.latest.get(key, {})) for key, value in ctx.first.items()}
+        for item in theme_items.values():
+            starts = [games[gid]['kickoff'] for gid in item.get('gameIds') or [] if gid in games]
+            if starts:
+                item['kickoff'] = min(starts)
         buffer_post.schedule(plans, channel['id'], log_book, now, log=log, stats=schedule_stats, items=theme_items)
         status['x']['posted'] = len(log_book.get('posts', [])) - before
-        status['x']['officialUnscheduled'] = schedule_stats.get('officialNotScheduled', 0)
+        status['x']['officialUnscheduled'] = schedule_stats.get('officialNotScheduled', 0) + len({key for key, problems in refused if 'has no X window' in problems})
         scheduled = {entry['id'] for entry in log_book.get('posts', [])[before:]}
         for title, message in ladder_schedule_pings([p for p in plans if p[0] in scheduled], ctx, games):
             alert(title, message, click='https://keenroudy.com/sports/#ladder')

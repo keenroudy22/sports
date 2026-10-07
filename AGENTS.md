@@ -191,6 +191,55 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Sports focus and X twist (2026-10-07, owner decision delegated to Claude):** finish P0/P1/the twist,
+  then NBA by October 20, EPL/UCL for October 24–25 where data supports them, CBB early November, WNBA/MLS
+  in summer. This supersedes NHL-first/MLB expansion; preserve their existing scores and captures unchanged.
+  Non-football remains ESPN-only and P11-gated for best bets. Build the named X series, first-person captions,
+  win reactions and ticket payout examples under CODEX-TWIST and the newer playbook v3, with Claude sample
+  review before first output. The owner/attended Claude handles the X avatar; no browser X automation.
+
+- **International delivery and queue reserve (owner-delegated to Claude, 2026-10-07):** NFL 9:30 AM Eastern
+  games post at 8:30 AM, scheduled by the 6:45 run. This is the exception to the 9 AM floor. A new play,
+  ticket or POTD must have a reachable X window; missing windows are named and counted. Under queue pressure,
+  create essentials first: plays/tickets/Climb rungs, receipts, cashed posts and Climb results. Ordinary scheduling
+  stops at nine pending so the tenth Buffer place stays free for relabels/reschedules. A future deferred play is
+  not a missed target until its target passes.
+- **Posting playbook v3 (owner-delegated to Claude, 2026-10-07):** implement the full contract in
+  `docs/POSTING-PLAYBOOK.md`, with sample review before new card/category output. Retire the 8:45 menu and
+  merged Today-count line; X teasers/conversation stay off until 1,000 followers; the weekend projection sheet
+  stays website-only; fold an idle weekend Climb check-in into the morning receipt. Plays & Results receives
+  posted plays only, wins-and-bad-beats receives wins and the precisely defined bad beats, and X losses appear
+  only in Final/Leftovers. Arb Radar/live-pilot rules remain. Missing wins webhook skips quietly with one status note.
+- **Playbook voice and series (owner-delegated to Claude, 2026-10-07):** captions use I and the Sep 26
+  shape plus one numbered supporting reason. Keep chance/break-even on art. Hot Plate (POTD) is the plate
+  exception; Chef's Special, Prep List, Burnt and Leftovers are approved series labels; new rungs close with
+  Still climbing? ❤️. One exclamation may accompany a win, never a pick or consecutive posts. No invented
+  personal moments, guarantee language, honesty slogans, artificial urgency or like-to-unlock. Preserve parsed markers.
+- **Research and timing (owner-delegated to Claude, 2026-10-07):** Prep List is first-choice research on
+  football game days under the playbook's history/role/floor/price/injury/rotation/open-play exclusions; fewer
+  than three rows falls through to the existing research chain. Save it for kickoff 📌 is approved. TNF/MNF
+  get one-game Prep Lists; Tuesday 10:45 Early Look is approved within the one-research-post cap. Night-game
+  plays (7 PM or later) target 6 PM; POTD leads its appropriate batch. One rotating other-sport Prep List/day.
+- **Result cards and volume (owner-delegated to Claude, 2026-10-07):** Cooked win cards, Final/Leftovers,
+  Prep List and the one-time pinned series card require Claude sample review before first post. Only tickets/
+  Climb may show computed posted-price payout examples; straight plays have no X dollars/units. Final gives
+  misses equal rows, removes margins before rows and never removes a miss while retaining a win. Add free
+  settle-only work to the existing half-hour precheck, retaining injury review and result quiet hours. Typical/
+  maximum posts: weekend 8/12 (nine before 1 PM), TNF/MNF 3–4/5, quiet weekday 2/3, other sports one total.
+  MAX_PER_DAY=20 remains the safety ceiling. Keep projected Buffer requests below 2,700/month.
+- **Autopilot and measurement (owner-delegated to Claude, 2026-10-07):** create daily 7:45 AM health/fix,
+  Monday 10:30 AM improvement and 1st/15th 8 AM season tasks per `docs/AUTOPILOT.md`. Read Claude's audit
+  inbox; preserve its entries and append seen/fixed receipts only. Routine healthy work is quiet; write a short
+  local status. Batch ordinary owner decisions weekly; urgent unfixed delivery/record issues may notify sooner.
+  Build guarded local placeholder proposals and code-filled variant rotation with bounded exploration, eight-
+  post minimums, opening/player/layout repeat limits and a weekly series scorecard. Engagement may pause optional
+  research only under its four-week rule, never plays/results/Climb. R0–R7 and P11 promotions still need owner yes.
+- **Chef and analytics (2026-10-07, owner decision):** the Discord publisher uses the supplied clay chef
+  `kookn-chef.png`; preserve `kookn.jpg` for legacy art and keep the server's ticket mark. Cloudflare Web
+  Analytics is approved to remain on; add one factual site disclosure. This supersedes the undecided analytics
+  and publisher-mark choice, and adds no new tracker or paid service. SharpAPI remains Free, no monthly cap,
+  twelve requests/minute, DraftKings/FanDuel only and sixty-second delay; never start a paid trial.
+
 - **Free queue protection (owner-delegated to Claude, 2026-10-06):** Buffer holds ten scheduled posts.
   At seven pending posts, reserve the last three places for best bets, POTD relabels, reschedules and receipts.
   Optional research, news, conversation, menus, sheets and other-sport posts defer. Every health and Monday
