@@ -21,6 +21,15 @@ LIMITS = {
     'cfb-defense': 512 * 1024,
 }
 SHELL_FILES = ('index.html', 'app.css', 'app.js')
+NEAR_FRACTION = .90
+
+
+def size_warning(name, size, limit):
+    if size > limit:
+        return f'{name}:{size}>{limit}'
+    if size >= int(limit * NEAR_FRACTION):
+        return f'{name}:{size}/{limit}:near'
+    return None
 
 
 def check(site=SITE):
@@ -41,8 +50,9 @@ def check(site=SITE):
         warnings.append('lazy-more-gzip:missing')
     else:
         lazy_more = len(gzip.compress(more.read_bytes(), mtime=0))
-        if lazy_more > LIMITS['lazy-more-gzip']:
-            warnings.append(f'lazy-more-gzip:{lazy_more}>{LIMITS["lazy-more-gzip"]}')
+        warning = size_warning('lazy-more-gzip', lazy_more, LIMITS['lazy-more-gzip'])
+        if warning:
+            warnings.append(warning)
     files = {
         'today': site / 'data/app/today.json',
         'lines-NFL': site / 'data/app/lines-NFL.json',
@@ -54,8 +64,10 @@ def check(site=SITE):
         limit = LIMITS['lines'] if name.startswith('lines-') else LIMITS[name]
         if not path.is_file():
             warnings.append(f'{name}:missing')
-        elif path.stat().st_size > limit:
-            warnings.append(f'{name}:{path.stat().st_size}>{limit}')
+        else:
+            warning = size_warning(name, path.stat().st_size, limit)
+            if warning:
+                warnings.append(warning)
     trends = site / 'data/app/trends'
     index = trends / 'index.json'
     if not index.is_file():
@@ -63,8 +75,10 @@ def check(site=SITE):
     if (site / 'data/app/trends.json').exists():
         warnings.append('trends-monolith:present')
     for path in trends.glob('*.json') if trends.is_dir() else ():
-        if path.name != 'index.json' and path.stat().st_size > LIMITS['trend-shard']:
-            warnings.append(f'trend-shard:{path.name}:{path.stat().st_size}>{LIMITS["trend-shard"]}')
+        if path.name != 'index.json':
+            warning = size_warning(f'trend-shard:{path.name}', path.stat().st_size, LIMITS['trend-shard'])
+            if warning:
+                warnings.append(warning)
     return {'shellGzip': shell, 'lazyMoreGzip': lazy_more, 'issues': issues, 'warnings': warnings}
 
 

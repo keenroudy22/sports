@@ -37,6 +37,15 @@ def stage(root, workspace):
         shutil.copytree(root / name, snapshot / name, ignore=ignore)
     shutil.copytree(root / 'site' / 'data', snapshot / 'site' / 'data',
                     ignore=shutil.ignore_patterns('app', 'cards', '__pycache__', '.DS_Store'))
+    # The site build verifies the lazy-bundle content fingerprint before writing
+    # generated payloads.  Stage the two source files that establish that
+    # contract without copying any generated app data.
+    for name in ('app.js', 'app-more.js'):
+        source = root / 'site' / name
+        if source.is_file():
+            target = snapshot / 'site' / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, target)
     (workspace / 'offline-rehearsal.json').write_text(json.dumps({'source': str(root.resolve())}) + '\n')
     return snapshot
 

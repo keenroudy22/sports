@@ -511,6 +511,13 @@ missing when neither component was recorded, so the page does not turn absent da
   combinations at 375 and 1440 px with no overflow, load failure or console error. The live site serves app 122.
   Records, play selection, social delivery and the unset felt-card cutover did not change.
 
+**Correction · 2026-10-07:** The preceding live-check claim was too broad. App 122 caught a missing lazy-bundle
+helper and rendered its fallback error panel on `#record` and `#record/fun`; the audit saw no console error or
+overflow and incorrectly counted those pages as loaded. App 123 exported the complete shared helper interface and
+added a real-app integration test for every moved view. The browser audit now treats any visible `did not load`
+state as a failure. This correction is append-only; the original release receipt remains above as the record of
+what was claimed at the time.
+
 ### Rollback boundary after C4
 
 - `8eda349533167f202fbcfa0a0bda4e6c390c58f1` is the pre-redesign reference, but it is no longer a safe

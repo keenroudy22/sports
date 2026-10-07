@@ -113,10 +113,13 @@ Handy commands (from `~/Projects/sports`):
 
 1. Work in `~/Projects/sports-dev` on branch `dev`. First bring it up to date:
    `git -C ~/Projects/sports-dev fetch -q origin && git -C ~/Projects/sports-dev rebase origin/main`.
-2. Change the code, add or update tests, and pass both suites in the development worktree:
+2. Change the code, add or update tests, and pass both suites in the development worktree, then repeat them from
+   a clean export that contains the current Git-visible files but no generated `site/data/app/`:
    `cd ~/Projects/sports-dev && /opt/homebrew/bin/python3 -m unittest discover -s tests` and
-   `cd ~/Projects/sports-dev && node --test tests/*.test.js`. Do not use `run.sh py` for these: that wrapper deliberately
-   changes into the production checkout.
+   `cd ~/Projects/sports-dev && node --test tests/*.test.js`, then
+   `cd ~/Projects/sports-dev && /opt/homebrew/bin/python3 scripts/clean_export_tests.py`. Do not use `run.sh py` for
+   these: that wrapper deliberately changes into the production checkout. The clean-export gate catches hidden
+   dependencies on ignored build output before a fresh hosted checkout does.
    After building the site, run `python3 scripts/publication_guard.py`. The hosted workflow also checks the exact
    upload folder before publishing. Unknown file families and known private artifacts/credential fields stop the
    upload; never weaken the guard just to copy owner-only evidence into the site. `docs/PUBLIC-PAYLOADS.md` lists
@@ -171,6 +174,7 @@ Handy commands (from `~/Projects/sports`):
    if not node_tests:
        raise SystemExit('No frontend tests found; refusing deployment')
    command(['node', '--test', *node_tests], dev)
+   command(['/opt/homebrew/bin/python3', 'scripts/clean_export_tests.py'], dev)
    clean(prod)
    clean(dev)
    command(['git', 'merge', '-q', '--ff-only', 'dev'], prod)
@@ -183,7 +187,7 @@ Handy commands (from `~/Projects/sports`):
    left by a stopped run", preserving unrelated edits. If a rebase stops on a store, `python3 scripts/merge_store.py`
    resolves it, then `git rebase --continue`. Never discard data or force the merge.
 6. Watch the publish run until it passes (`gh run watch <id> --exit-status`), then check the live site at phone
-   width (375 px): no sideways scroll, no console errors.
+   width (375 px): no sideways scroll, no console errors, and no rendered `did not load` error state.
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 

@@ -1988,6 +1988,7 @@
   /* Record, More and team pages are not part of the first paint. */
   const MORE_VIEW_NAMES = ['team', 'record', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback', 'responsible'];
+  const MORE_ASSET = 'app-more.js?v=sha256-7f07e14d3cdd';
   let moreViews = null, moreLoading = null;
   const moreContext = (overrides = {}) => ({ C, P, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
@@ -1999,16 +2000,25 @@
     if (moreViews) return Promise.resolve(moreViews);
     if (moreLoading) return moreLoading;
     moreLoading = new Promise((resolveMore, rejectMore) => {
+      const fail = error => {
+        moreLoading = null;
+        rejectMore(error instanceof Error ? error : new Error(error && error.message ? error.message : 'More pages did not load'));
+      };
       const finish = () => {
-        if (typeof window.KRMore !== 'function') { moreLoading = null; rejectMore(new Error('More pages did not load')); return; }
-        moreViews = window.KRMore(moreContext());
-        resolveMore(moreViews);
+        try {
+          if (typeof window.KRMore !== 'function') throw new Error('More pages did not load');
+          moreViews = window.KRMore(moreContext());
+          if (!moreViews || typeof moreViews !== 'object') throw new Error('More pages did not load');
+          resolveMore(moreViews);
+        } catch (error) {
+          fail(error);
+        }
       };
       if (typeof window.KRMore === 'function') { finish(); return; }
       const script = document.createElement('script');
-      script.src = 'app-more.js?v=2'; script.async = true;
+      script.src = MORE_ASSET; script.async = true;
       script.onload = finish;
-      script.onerror = () => { moreLoading = null; rejectMore(new Error('More pages did not load')); };
+      script.onerror = () => fail(new Error('More pages did not load'));
       document.head.appendChild(script);
     });
     return moreLoading;
@@ -2277,5 +2287,5 @@
     render();
   }
 
-  return { model, boot, moreContext };
+  return { model, boot, moreContext, ensureMore };
 });

@@ -33,7 +33,8 @@ class CandidateCatalogTests(unittest.TestCase):
     def test_invalid_strict_catalog_logs_and_skips_selection(self):
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / 'lines.json'
-            path.write_text(json.dumps({'count': 2, 'files': {'NFL': 'lines-NFL.json'}}))
+            path.write_text(json.dumps({'count': 2, 'counts': {'NFL': 0, 'CFB': 2},
+                                        'files': {'NFL': 'lines-NFL.json', 'CFB': 'lines-CFB.json'}}))
             (path.parent / 'lines-NFL.json').write_text(json.dumps({'league': 'NFL', 'lines': []}))
             messages = []
             self.assertEqual(run.load_candidate_lines(path, messages.append), [])
@@ -1054,6 +1055,26 @@ if __name__ == '__main__':
 
 
 class CardRankTests(unittest.TestCase):
+    def test_equal_edges_use_line_id_regardless_of_manifest_order(self):
+        from tests.test_gates import context
+        now = datetime(2026, 10, 4, 12, 0, tzinfo=timezone.utc)
+        game = {'id': 'NFL-1', 'league': 'NFL', 'season': 2026, 'week': 4,
+                'state': 'pre', 'kickoff': '2026-10-04T20:00:00Z'}
+        rows = [
+            {'id': 'z-line', 'league': 'NFL', 'gameId': 'NFL-1', 'state': 'open',
+             'gameMarket': True, 'market': 'total points', 'direction': 'over', 'line': 44.5,
+             'book': 'FanDuel', 'odds': -110, 'grade': {'tier': 'lean', 'edge': 3.0}},
+            {'id': 'a-line', 'league': 'NFL', 'gameId': 'NFL-1', 'state': 'open',
+             'gameMarket': True, 'market': 'total points', 'direction': 'under', 'line': 45.5,
+             'book': 'DraftKings', 'odds': -110, 'grade': {'tier': 'lean', 'edge': 3.0}},
+        ]
+        first = run.candidates(rows, {'NFL-1': game}, now)
+        second = run.candidates(list(reversed(rows)), {'NFL-1': game}, now)
+        self.assertEqual([row['_row']['id'] for row in first], ['a-line', 'z-line'])
+        self.assertEqual([row['_row']['id'] for row in second], ['a-line', 'z-line'])
+        ctx = context()
+        self.assertEqual([row['_row']['id'] for row in run.rank_card(first, ctx)], ['a-line', 'z-line'])
+
     def test_the_card_orders_by_edge_when_performance_cautions_still_clear_the_higher_bar(self):
         import learning
         sys.path.insert(0, str(Path(__file__).resolve().parent))

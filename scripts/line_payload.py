@@ -25,6 +25,17 @@ def _load(path):
     files = payload.get('files')
     if not isinstance(files, dict):
         raise ValueError(f'{path}: line payload has no rows or shard manifest')
+    if set(files) != set(LEAGUES):
+        raise ValueError(f'{path}: line manifest must name exactly {", ".join(LEAGUES)}')
+    count = payload.get('count')
+    counts = payload.get('counts')
+    if not isinstance(count, int) or isinstance(count, bool) or count < 0:
+        raise ValueError(f'{path}: line manifest count is not a non-negative integer')
+    if not isinstance(counts, dict) or set(counts) != set(LEAGUES):
+        raise ValueError(f'{path}: line manifest must carry counts for exactly {", ".join(LEAGUES)}')
+    if any(not isinstance(counts[league], int) or isinstance(counts[league], bool) or counts[league] < 0
+           for league in LEAGUES):
+        raise ValueError(f'{path}: line manifest league counts are not non-negative integers')
     rows = []
     for league in LEAGUES:
         expected = f'lines-{league}.json'
@@ -38,9 +49,10 @@ def _load(path):
             raise ValueError(f'{name}: invalid line shard')
         if any(row.get('league') != league for row in shard['lines']):
             raise ValueError(f'{name}: row outside {league}')
+        if counts[league] != len(shard['lines']):
+            raise ValueError(f'{name}: manifest says {counts[league]} rows but shard contains {len(shard["lines"])}')
         rows.extend(shard['lines'])
-    count = payload.get('count')
-    if isinstance(count, int) and count != len(rows):
+    if count != len(rows) or count != sum(counts.values()):
         raise ValueError(f'{path}: manifest says {count} rows but shards contain {len(rows)}')
     return rows
 

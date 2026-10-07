@@ -27,6 +27,16 @@ DELIVERY_FIELDS = ('queued', 'xOverdue', 'xFailed', 'discordOverdue', 'discordFa
                    'withheld', 'xConfirmed', 'discordConfirmed', 'heldCaptions')
 COHORT_OUTCOMES = ('confirmed', 'recordedFailure', 'overdueUnconfirmed', 'pending', 'unknown')
 COHORT_EXCLUSIONS = ('withheld', 'cancelled', 'unknownEligibility')
+PAYLOAD_PATHS = {
+    'lazy-more-gzip': 'site/app-more.js',
+    'today': 'site/data/app/today.json',
+    'lines-NFL': 'site/data/app/lines-NFL.json',
+    'lines-CFB': 'site/data/app/lines-CFB.json',
+    'cfb-teams': 'site/data/app/teams/CFB.json',
+    'cfb-defense': 'site/data/app/teams/CFB-defense.json',
+    'trends-index': 'site/data/app/trends/index.json',
+    'trends-monolith': 'site/data/app/trends.json',
+}
 
 
 def read(path):
@@ -54,6 +64,17 @@ def stamp(value):
 
 def number(value):
     return value if isinstance(value, (int, float)) and not isinstance(value, bool) and 0 <= value <= 10**9 else None
+
+
+def payload_path(detail):
+    parts = str(detail).split(':')
+    if parts[0] == 'trend-shard' and len(parts) > 1:
+        return f'site/data/app/trends/{parts[1]}'
+    if parts[0] == 'shell' and len(parts) > 1:
+        return f'site/{parts[1]}'
+    if parts[0] == 'shell-gzip':
+        return 'hosted shell (site/index.html + site/app.css + site/app.js)'
+    return PAYLOAD_PATHS.get(parts[0], parts[0])
 
 
 def source(name, observed, now, hours, required=False, failed=False):
@@ -432,8 +453,12 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     if (root / 'site/data/app').is_dir():
         try:
             payload = payload_budget.check(root / 'site')
-            if payload['warnings']:
-                issue('payload-budget', 'A public data payload is above its phone-first budget; publishing remains available.')
+            for warning in payload['warnings']:
+                issue('payload-budget', f'{payload_path(warning)} is near or over its phone-first budget '
+                      f'({warning}); publishing remains available.')
+            for failure in payload['issues']:
+                issue('payload-budget-hosted-shell', f'{payload_path(failure)} fails the hosted publish budget '
+                      f'({failure}); the next deployment would stop.')
         except (OSError, ValueError, TypeError):
             issue('payload-budget-unknown', 'Public payload sizes could not be checked from the cached site build.')
     published = number(state.get('published')) if state.get('outcome') == 'ok' else None

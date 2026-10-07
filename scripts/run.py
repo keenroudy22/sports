@@ -638,7 +638,8 @@ def candidates(lines, games, now):
                         'line': row['line'], 'direction': row['direction'], 'gameIds': [game['id']],
                         '_league': game['league'], '_player': row.get('player'), '_row': row, '_quotes': books})
     # The strongest reads first, so a daily cap admits the best of them.
-    out.sort(key=lambda c: -((c['_row'].get('grade') or {}).get('edge') or 0))
+    out.sort(key=lambda c: (-((c['_row'].get('grade') or {}).get('edge') or 0),
+                            str(c['_row'].get('id') or '')))
     return out
 
 
@@ -677,7 +678,8 @@ def rank_card(wanted, ctx):
         need = gates.PERFORMANCE_PROP_EDGE if c.get('athleteId') and cautious else \
                gates.PERFORMANCE_GAME_EDGE if cautious else 0
         c['_rank'] = {'edge': round(edge, 1), 'performanceCaution': cautious, 'requiredEdge': need}
-        return (bool(edge <= 0 or edge < need), -edge)
+        return (bool(edge <= 0 or edge < need), -edge,
+                str(c.get('id') or row.get('id') or ''))
     kept = [c for c in wanted if not c.get('athleteId')
             or isinstance(c['_row'].get('odds'), (int, float)) and CARD_PROP_PRICES[0] <= c['_row']['odds'] <= CARD_PROP_PRICES[1]]
     return sorted(kept, key=score)

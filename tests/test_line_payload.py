@@ -29,10 +29,33 @@ class LinePayloadTests(unittest.TestCase):
     def test_missing_or_incomplete_shard_fails_closed_for_candidate_readers(self):
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / 'lines.json'
-            path.write_text(json.dumps({'count': 1, 'files': {'NFL': 'lines-NFL.json', 'CFB': 'lines-CFB.json'}}))
+            path.write_text(json.dumps({'count': 1, 'counts': {'NFL': 0, 'CFB': 1},
+                                        'files': {'NFL': 'lines-NFL.json', 'CFB': 'lines-CFB.json'}}))
             (path.parent / 'lines-NFL.json').write_text(json.dumps({'league': 'NFL', 'lines': []}))
             with self.assertRaises(FileNotFoundError):
                 line_payload.load(path)
+
+    def test_manifest_requires_both_leagues_integer_totals_and_matching_league_counts(self):
+        valid_files = {'NFL': 'lines-NFL.json', 'CFB': 'lines-CFB.json'}
+        valid_counts = {'NFL': 1, 'CFB': 0}
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / 'lines-NFL.json').write_text(json.dumps({
+                'league': 'NFL', 'lines': [{'id': 'n1', 'league': 'NFL'}]}))
+            (root / 'lines-CFB.json').write_text(json.dumps({'league': 'CFB', 'lines': []}))
+            path = root / 'lines.json'
+            invalid = [
+                {'count': 1, 'counts': valid_counts, 'files': {'NFL': 'lines-NFL.json'}},
+                {'counts': valid_counts, 'files': valid_files},
+                {'count': '1', 'counts': valid_counts, 'files': valid_files},
+                {'count': 1, 'counts': {'NFL': 0, 'CFB': 1}, 'files': valid_files},
+                {'count': 2, 'counts': valid_counts, 'files': valid_files},
+            ]
+            for payload in invalid:
+                with self.subTest(payload=payload):
+                    path.write_text(json.dumps(payload))
+                    with self.assertRaises(ValueError):
+                        line_payload.load(path)
 
     def test_legacy_monolith_remains_readable_for_old_fixtures(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -52,8 +75,10 @@ class LinePayloadTests(unittest.TestCase):
     def test_optional_reader_falls_back_on_bad_shard_and_count(self):
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / 'lines.json'
-            path.write_text(json.dumps({'count': 2, 'files': {'NFL': 'lines-NFL.json'}}))
+            path.write_text(json.dumps({'count': 2, 'counts': {'NFL': 2, 'CFB': 0},
+                                        'files': {'NFL': 'lines-NFL.json', 'CFB': 'lines-CFB.json'}}))
             (path.parent / 'lines-NFL.json').write_text(json.dumps({'league': 'NFL', 'lines': [{'id': 'n1', 'league': 'CFB'}]}))
+            (path.parent / 'lines-CFB.json').write_text(json.dumps({'league': 'CFB', 'lines': []}))
             messages = []
             self.assertEqual(line_payload.load(path, strict=False, log=messages.append), [])
             self.assertIn('row outside NFL', messages[0])

@@ -42,6 +42,14 @@ class PayloadBudgetTests(unittest.TestCase):
             self.assertIn('trends-monolith:present', result['warnings'])
             self.assertEqual(payload_budget.main(root), 0)
 
+    def test_data_files_warn_before_they_exhaust_their_budget(self):
+        with tempfile.TemporaryDirectory() as folder:
+            size = int(payload_budget.LIMITS['today'] * .91)
+            root = self.site(folder, b'x' * size)
+            result = payload_budget.check(root)
+            self.assertIn(f'today:{size}/{payload_budget.LIMITS["today"]}:near', result['warnings'])
+            self.assertEqual(result['issues'], [])
+
     def test_shell_breach_still_stops_the_publish(self):
         with tempfile.TemporaryDirectory() as folder:
             root = self.site(folder)

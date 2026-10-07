@@ -66,6 +66,20 @@ class DeskHealthTests(unittest.TestCase):
             codes = {row['code'] for row in result['issues']}
             self.assertIn('payload-budget', codes)
             self.assertNotIn('publish-failed', codes)
+            messages = [row['message'] for row in result['issues'] if row['code'] == 'payload-budget']
+            self.assertTrue(any('site/data/app/today.json' in message for message in messages))
+
+    def test_hosted_shell_budget_failure_is_surfaced_by_name(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            self.fixture(root)
+            (root / 'site/data/app').mkdir(parents=True)
+            with mock.patch.object(H.payload_budget, 'check', return_value={
+                    'warnings': [], 'issues': ['shell-gzip:95000>94208']}):
+                result = H.summary(root, root / 'private', root, NOW)
+            problem = next(row for row in result['issues'] if row['code'] == 'payload-budget-hosted-shell')
+            self.assertIn('site/index.html + site/app.css + site/app.js', problem['message'])
+            self.assertIn('next deployment would stop', problem['message'])
 
     def test_old_cancelled_and_future_posts_do_not_become_delivery_failures(self):
         posts = [

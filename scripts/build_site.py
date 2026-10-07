@@ -36,6 +36,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import boxscores
+import asset_versions
 import features
 import line_payload
 import market_read
@@ -888,6 +889,7 @@ def build_research(context, reports, now):
 # ------------------------------------------------------------------ build
 
 def build(now=None):
+    asset_versions.sync(ROOT / 'site', check=True)
     now = now or datetime.now(timezone.utc)
     slate = read(DATA / 'slate.json', {'games': []})
     reports = read(DATA / 'research.json', [])
