@@ -528,6 +528,15 @@ missing when neither component was recorded, so the page does not turn absent da
 - `FELT_FROM` remains unset. These corrected renders are still owner-review candidates; legacy cards remain live,
   no existing attachment changes and no social category, cadence or selection rule changes.
 
+### C6 first live shadow receipt
+
+- The October 6 11:30 PM desk run completed normally with no forced publication and wrote exactly eight private
+  append-only observations, one for each R0–R7 proposal. Every row is marked silent and records zero public effects
+  and zero metered requests.
+- R0 observed 1,663 raw rows and 917 distinct rows without changing the live learning denominator. R5 explicitly
+  recorded no main-line or trends-default change. The remaining gate is four prospective weeks of evidence followed
+  by a separate owner decision for each proposal.
+
 | Gate | What remains | Authority/state |
 |---|---|---|
 | Four-week reliability | Four consecutive observed weeks, measured eligible freshness denominator, delivery metrics and grading reconciliation. | Prospective local sampling implemented in the follow-up above; four-week evidence, incident review and reconciliation remain pending. Cannot backfill success or treat missing windows as healthy. |
