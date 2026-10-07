@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-07T15:48:35Z",
+  "updatedAt": "2026-10-07T15:54:34Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-07T15:42Z",
+              "reportedAt": "2026-10-07T15:26Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -6677,6 +6677,15 @@
           "name": "Tampa Bay Buccaneers",
           "players": [
             {
+              "id": "3150744",
+              "name": "Chase McLaughlin",
+              "position": "PK",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-07T15:41Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3150744/chase-mclaughlin"
+            },
+            {
               "id": "4429511",
               "name": "SirVocea Dennis",
               "position": "LB",
@@ -6729,15 +6738,6 @@
               "injury": null,
               "reportedAt": "2026-10-06T21:32Z",
               "source": "https://www.espn.com/nfl/player/_/id/4870998/josiah-trotter"
-            },
-            {
-              "id": "3150744",
-              "name": "Chase McLaughlin",
-              "position": "PK",
-              "status": "Questionable",
-              "injury": "Groin",
-              "reportedAt": "2026-10-06T21:08Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3150744/chase-mclaughlin"
             },
             {
               "id": "3894856",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "30",
-          "name": "Christian Braswell",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-06T20:01:41Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4257580/christian-braswell"
-        },
-        {
-          "teamId": "30",
           "name": "Montaric Brown",
           "from": "Out",
           "to": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-07T15:38:29Z",
           "source": "https://www.espn.com/nfl/player/_/id/4816107/benjamin-morrison"
+        },
+        {
+          "teamId": "27",
+          "name": "Chase McLaughlin",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-07T15:54:34Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3150744/chase-mclaughlin"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-07T15:48:35Z",
-      "lastAttemptAt": "2026-10-07T15:48:35Z",
+      "checkedAt": "2026-10-07T15:54:34Z",
+      "lastAttemptAt": "2026-10-07T15:54:34Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-07T15:48:35Z",
-      "lastAttemptAt": "2026-10-07T15:48:35Z",
+      "checkedAt": "2026-10-07T15:54:34Z",
+      "lastAttemptAt": "2026-10-07T15:54:34Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
