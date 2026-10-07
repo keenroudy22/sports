@@ -676,6 +676,19 @@ what was claimed at the time.
   budget, 92-pick record audit, 507-file publication guard and isolated slot-2330 rehearsal with no outside writes
   or private reads. `FELT_FROM` remains unset; legacy cards remain live until the owner approves the complete set.
 
+### C5 round-eleven review candidate
+
+- The play-card one-line estimate now allows for Barlow Condensed's wider capitals before choosing a font size or
+  wrap. Real-font Chrome coverage includes `UNDER 2.5 RECEPTIONS` and `OVER 22.5 COMPLETIONS` beneath two-line CFB
+  player names and a real-size portrait; every measured subject, selection and season line finishes inside the
+  1016-pixel content margin while common passing- and rushing-yard selections keep their compact treatment.
+- The future straight-spread edge case is recorded in `docs/LESSONS.md`: before that currently inactive path can
+  return, replace character ratios with embedded-TTF advance-width measurement and assert every returned line fits.
+- All 19 owner-facing PNGs were refreshed in `card-review-2026-10-06`. Verification passed 949 Python tests (2
+  skipped), 143 frontend tests in both Node invocations and clean export, a 447-page build, warning-only size budget,
+  92-pick record audit, 507-file publication guard and isolated slot-2330 rehearsal with no outside writes or
+  private reads. `FELT_FROM` remains unset; legacy cards remain live until the owner approves the complete set.
+
 ### C6 first live shadow receipt
 
 - The October 6 11:30 PM desk run completed normally with no forced publication and wrote exactly eight private

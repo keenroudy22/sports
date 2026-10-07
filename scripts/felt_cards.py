@@ -273,7 +273,7 @@ def play_card(pick, game=None, record=None, featured=False, art=None):
                                                max_lines=3, minimum=60,
                                                family_ratio=.40,
                                                single_line_minimum=108,
-                                               single_line_ratio=.41)
+                                               single_line_ratio=.43)
     body += '<g data-zone="play-selection">'
     for line in selection_lines:
         body += t(64, y, line, f'{selection_size:.1f}', KOOKD, DISPLAY, 700)

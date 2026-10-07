@@ -1,5 +1,13 @@
 # Closed operating lessons
 
+## 2026-10-07 · SVG text fitting must use the embedded font's real widths
+
+Character-count estimates can understate Barlow Condensed capitals and let otherwise realistic selections cross a
+card's safe margin. The felt-card browser test now measures long CFB names and short receptions/completions markets
+with the embedded font before release. Straight spreads are not currently generated, but their longer single-token
+school names need the durable version before that path returns: read the embedded TTF `cmap`/`hmtx` advances with
+the standard library, include letter spacing, and assert every returned line fits instead of trusting a family ratio.
+
 ## 2026-10-07 · Provider identity must not use a public display name
 
 Three append-only learning rows were written during the C4 display-name regression with `-thescore-bet` IDs.

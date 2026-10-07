@@ -236,6 +236,20 @@ class FeltCardTests(unittest.TestCase):
                      player=receiver),
                 game, record={'wins': 35, 'losses': 35},
                 art={'kind': 'photo', 'uri': PHOTO_URI}))
+            receptions_title = f'{receiver} under 2.5 receptions'
+            cards.append(pick_card.modern_svg(
+                dict(PICK, id='CFB-long-receptions', title=receptions_title,
+                     displayTitle=receptions_title, marketType='receptions', direction='under',
+                     athleteId='long-receptions', player=receiver),
+                game, record={'wins': 35, 'losses': 35},
+                art={'kind': 'photo', 'uri': PHOTO_URI}))
+            completions_title = f'{passer} over 22.5 completions'
+            cards.append(pick_card.modern_svg(
+                dict(PICK, id='CFB-long-completions', title=completions_title,
+                     displayTitle=completions_title, marketType='completions', direction='over',
+                     athleteId='long-completions', player=passer),
+                game, record={'wins': 35, 'losses': 35},
+                art={'kind': 'photo', 'uri': PHOTO_URI}))
 
         with tempfile.TemporaryDirectory() as folder:
             page = Path(folder) / 'measure.html'
@@ -265,7 +279,7 @@ document.fonts.ready.then(() => {
         match = re.search(r'<body data-measured="1">(.*?)</body>', dom, re.S)
         self.assertIsNotNone(match, dom[-500:])
         measured = json.loads(html.unescape(match.group(1)))
-        self.assertEqual(len(measured), 6)
+        self.assertEqual(len(measured), 8)
         for card in measured:
             self.assertTrue(card['subject'], card)
             self.assertTrue(card['selection'], card)
@@ -277,10 +291,13 @@ document.fonts.ready.then(() => {
         for card in measured:
             if card['photo']:
                 self.assertLessEqual(card['subject'][0]['right'], 830, card)
-        self.assertEqual(len(measured[-2]['selection']), 1,
+        self.assertEqual(len(measured[-4]['selection']), 1,
                          'UNDER 249.5 PASS YDS should fit one line before wrapping')
-        self.assertEqual(len(measured[-1]['selection']), 2,
+        self.assertEqual(len(measured[-3]['selection']), 2,
                          'the strip clearance must also cover a genuinely two-line selection')
+        for card in measured[-2:]:
+            self.assertEqual(len(card['subject']), 2,
+                             'the market-width regression must use a two-line CFB name')
 
     def test_last_climb_checkpoint_moves_now_and_again_clear_of_the_goal_flag(self):
         open_rung = {'id': 'near-goal', 'parlayType': 'ladder', 'odds': -110, 'book': 'FanDuel',
