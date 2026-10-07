@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-07T22:36:52Z",
+  "updatedAt": "2026-10-07T23:03:34Z",
   "items": [
     {
       "id": "P01",
@@ -527,20 +527,29 @@
     {
       "id": "P59",
       "title": "Dated 80/20 Climb route card",
-      "status": "gated",
+      "status": "ready",
       "owner": "agent",
-      "next": "Get Claude and owner review of the first real repo-builder render; then separately gate the Climb-page placement and route delivery inside existing post limits. Do not enable route posts before review.",
+      "next": "Claude approved the first real render. Wire the Climb-page placement and route delivery under the handoff's one-start-post and later-rung second-image rules, inside existing caps; run separate gates before any post.",
       "doneWhen": "Reviewed real route shows ledger money and dated 2+ game windows; page and X route delivery pass full gates, live verification and first-post receipts without changing Climb selection or the record.",
-      "evidence": "Owner October 7 decision item 23 and CLIMB-ROUTE-HANDOFF.md. Repo preview builder and fixture tests prepared; first real render saved privately at design/final/codex-climb-route.png. No route post enabled."
+      "evidence": "Owner October 7 decision item 23 and CLIMB-ROUTE-HANDOFF.md. Repo builder and fixture tests committed at 87ae3c9e; first real render saved at design/final/codex-climb-route.png. Claude approved it in CLIMB-ROUTE-REVIEW.md. Delivery wiring is not yet enabled."
     },
     {
       "id": "P60",
       "title": "Today best-bet hero expires a delivered pick too early",
       "status": "ready",
       "owner": "agent",
-      "next": "Reproduce the live TK King Today state against stored quote expiry and delivered-post status, fix the hero without reviving stale betting prices, then run the full release and live checks in a normal window.",
+      "next": "Verify the Kitchen Ticket fix on the live site: TK King stays visible after the quote expires, with old-price wording and no actionable current-price badge.",
       "doneWhen": "A delivered play remains visible as a posted play with expired-price context; no stale price is presented as a current actionable quote; 375 and 1440 live Today checks pass.",
-      "evidence": "October 7 publish run 37695705262 succeeded for 480a22ac, but live Today showed 'No best bet yet' after TK King's X and Discord delivery. This content gate prevents marking the bundled P46/P47/P53/P54/P56 release fully verified."
+      "evidence": "October 7 publish run 37695705262 succeeded for 480a22ac, but live Today showed 'No best bet yet' after TK King's X and Discord delivery. The Kitchen Ticket website series includes a fix, but it remains unverified until hosted and live checks pass."
+    },
+    {
+      "id": "P61",
+      "title": "Kitchen Ticket website for Today, plays and players",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Run the full gates and rehearsal on the applied site-v2 series, locked-deploy under the October 7 one-night exception before 11:15 PM if safe, watch hosted publish, then check 375 and 1440 live Today, play, player and legacy routes.",
+      "doneWhen": "Hosted publish passes and the live phone and desktop checks show the whole Today ticket and Climb stub, held-play protections, expired-price wording, working legacy routes and no overflow, console errors or caught load state.",
+      "evidence": "Owner approved October 7. Claude's 11-patch site-v2 mbox applied cleanly to dev 87ae3c9e. Local gates: 1138 Python (2 skipped), 196 frontend, clean export, build, record audit 92 picks, budget and guard; 17:30 rehearsal ok; 375/1440 browser routes clean. Hosted and live verification pending."
     }
   ]
 }
