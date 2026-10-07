@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-07T16:46:26Z",
+  "updatedAt": "2026-10-07T18:20:12Z",
   "items": [
     {
       "id": "P01",
@@ -412,7 +412,7 @@
       "title": "Results-led direction and 10-second Today",
       "status": "ready",
       "owner": "agent",
-      "next": "Implement bounded direction triggers and undo conditions in weekly learning/Monday review. Measure a cold 375-pixel Today visit, trim today.json to current/open plays, then self-host fonts if needed.",
+      "next": "After higher-priority releases, review Claude's tested direction-rules and today-10-second patches in /Users/keen/Projects/kookn-patches/patches/ when they land; apply through normal gates, then measure a cold 375-pixel Today visit.",
       "doneWhen": "Trigger and undo fixtures pass, no gate loosens below the October 7 baseline, every move logs evidence, the Monday packet explains changes and reversals, and a cold phone visit meets the documented 10-second budget.",
       "evidence": "Owner-delegated standing approval in DIRECTION-RULES.md on October 7; no automatic moves have been enabled yet."
     },
@@ -421,7 +421,7 @@
       "title": "Vegas vs reality site panel",
       "status": "ready",
       "owner": "agent",
-      "next": "Compute the free panel at build time from stored closes and finals, excluding early-2023 odds-as-lines at read time, then compare to VEGAS-SCORECARD-detail.json in tests.",
+      "next": "After higher-priority releases, review Claude's tested vegas-panel patch in /Users/keen/Projects/kookn-patches/patches/ when it lands; apply through normal gates and compare to VEGAS-SCORECARD-detail.json in tests.",
       "doneWhen": "Sport rows and calibration bins match the independent reference within stated tolerances, the site clearly labels coverage and caveats, and no new request or record mutation occurs.",
       "evidence": "Owner approved on October 7 in OWNER-DECISIONS-2026-10-07.md; independently checked references supplied by Claude."
     },
@@ -460,6 +460,15 @@
       "next": "Route posted plays only to Plays & Results and verified wins/near-miss bad beats through DISCORD_WINS_WEBHOOK_URL; classify owner tickets as community.",
       "doneWhen": "Routing and replay tests pass, no loss or community ticket reaches Plays & Results, and live receipts confirm the distinct channel.",
       "evidence": "Owner-delegated to Claude, 2026-10-07; AUDIT-INBOX A-20261007-14 and A-20261007-19. P46/P47 IDs were already assigned, so this work keeps stable IDs rather than reusing them."
+    },
+    {
+      "id": "P52",
+      "title": "Owner FanDuel winning slips in wins Discord channel",
+      "status": "ready",
+      "owner": "agent",
+      "next": "After Kitchen Ticket and the posting plan, add chef-wins/ intake to the five-minute Discord job, using a git-ignored work/ seen-file and the exact caption. If the wins webhook is unset, hold and alert once.",
+      "doneWhen": "Tests prove one post per image hash, a three-per-day cap, non-image rejection and one missing-webhook alert. No image reaches X, Plays & Results, the record or Git; verify a live wins-channel receipt.",
+      "evidence": "Owner rule dated 2026-10-07, OWNER-DECISIONS-2026-10-07.md item 18. Folder exists; intake is not implemented or live."
     }
   ]
 }

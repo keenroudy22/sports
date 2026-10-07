@@ -82,6 +82,13 @@ this file remains the authority when a summary and rule disagree.
   hard-news pull before X gets a Discord update and cancels X, but never erases the play. The webhook stays in
   `~/.config/keenroudy/env`, never the repo or a log. Arb alerts are explicitly not official plays and may go only
   to Discord under the separate Arb Radar rule.
+- **Owner FanDuel wins (owner, 2026-10-07; OWNER-DECISIONS item 18):** after the Kitchen Ticket cutover
+  and posting-plan work, the existing five-minute Discord job may post new winning-slip screenshots that the
+  owner places in `/Users/keen/Documents/ChatGPT/Kook'n/chef-wins/` to #wins-and-bad-beats through
+  `DISCORD_WINS_WEBHOOK_URL`, with exactly `🧑‍🍳 The chef's own ticket cashed ✅ Personal ticket, not a Kook'n best bet. 21+`.
+  Post each image once, at most three per day; deduplicate by file hash, skip non-images, and keep the seen-file
+  in git-ignored `work/`. Never commit the images or post them to X, Plays & Results or the public record. If
+  the wins webhook is unset, hold the files and alert the owner once. Add replay and routing tests before enabling.
 - **Deploy only while holding the run lock** `~/.config/keenroudy/run.lock` (below), never mid-run.
 - **Quiet deploy windows (2026-10-07, owner-delegated to Claude):** Routine site/code releases occur only
   8:35–9:45 AM or 12:15–1:15 PM Eastern, under the lock and full gates. The separately approved
