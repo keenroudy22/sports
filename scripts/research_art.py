@@ -25,6 +25,10 @@ def history_strip(row, x, y, width=720):
 
 
 def svg(choice, art=None):
+    import pick_card
+    if pick_card.felt_enabled(choice, choice.get('day')):
+        import felt_cards
+        return felt_cards.research_choice_card(choice, art)
     art = art or {}
     esc = lambda value: html.escape(str(value or ''), quote=True)
     accent = choice['accent']

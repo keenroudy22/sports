@@ -428,6 +428,28 @@ missing when neither component was recorded, so the page does not turn absent da
 
 ## External and elapsed-time gates
 
+### C4 verified release receipt
+
+- Production revision: `3bac89df`; [publish run 37555731984](https://github.com/keenroudy22/sports/actions/runs/37555731984)
+  succeeded on October 6. The live site serves app 118, core 70 and CSS 78.
+- The hosted build reconciled all 92 official picks. The split trends index, CFB defense file, complete record
+  archive and 78-item rolling RSS feed were present. Live checks across 20 routes at 375 and 1440 px found no
+  sideways scroll, load failure or console error.
+- Tracked schemas, `record_audit.py` and integrity checks were not changed.
+
+## October 6 C5 felt-card review candidate
+
+- The felt renderers cover straight player and game plays, fun tickets, open and settled Climb cards, receipts,
+  research cards and projection sheets. They embed the checked-in OFL fonts and retain ESPN photos/logos, filenames,
+  dimensions and the 8 MB delivery ceiling.
+- Theme choice is by publication time. `FELT_FROM` remains unset, so every production render still uses the legacy
+  template and already-posted attachments cannot change. The private preview override exists only for local review.
+- Eight review PNGs are in the owner-facing `card-review-2026-10-06` folder. Local gates passed 894 Python tests
+  (two skipped), 130 frontend tests, a 92-pick archive reconciliation, 509-file public guard and isolated slot-2100
+  rehearsal with zero outside writes or private reads.
+- The remaining gate is human approval of all category renders. After approval, cutover may occur only after a
+  green 11:30 PM run and before the 8:45 AM menu. Without approval by 6:30 AM, legacy cards stay live.
+
 | Gate | What remains | Authority/state |
 |---|---|---|
 | Four-week reliability | Four consecutive observed weeks, measured eligible freshness denominator, delivery metrics and grading reconciliation. | Prospective local sampling implemented in the follow-up above; four-week evidence, incident review and reconciliation remain pending. Cannot backfill success or treat missing windows as healthy. |

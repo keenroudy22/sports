@@ -271,7 +271,17 @@ def svg(games, league, day, week=None, logos=None):
               f'<text x="36" y="{HEIGHT - 22}" fill="{DIM}" font-size="17">Not picks: our plays go out on their own. '
               f'Mint: the labeled line clears its captured price. Entertainment only.</text>',
               '</svg>']
-    return '\n'.join(parts)
+    output = '\n'.join(parts)
+    if pick_card.felt_enabled({'day': day}, day):
+        import felt_cards
+        for old, new in ((BG, felt_cards.FELT_NIGHT), (CARD, felt_cards.FELT_RAISED),
+                         (LINE, felt_cards.LINE), (TEXT, felt_cards.CHALK),
+                         (DIM, felt_cards.DIM), (ACCENT, felt_cards.KOOKD)):
+            output = output.replace(old, new)
+        output = output.replace('font-family="Helvetica Neue, Helvetica, Arial, sans-serif"',
+                                'font-family="DM Sans, Arial, sans-serif"')
+        output = output.replace('>', '>' + felt_cards.font_face(), 1)
+    return output
 
 
 def load_cards(path=TODAY):

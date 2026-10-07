@@ -27,6 +27,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import pricing
+import felt_cards
 
 ROOT = Path(__file__).resolve().parents[1]
 WIDTH, HEIGHT = 1200, 675
@@ -35,6 +36,60 @@ CREAM, INK = '#f6f1e6', '#141414'
 CHROME_CANDIDATES = ('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
                      '/Applications/Chromium.app/Contents/MacOS/Chromium', 'google-chrome', 'google-chrome-stable',
                      'chromium', 'chromium-browser')
+
+# Set only after the owner approves the rendered set. The environment override is for isolated previews and rollback.
+FELT_FROM = None
+
+
+def _theme_time(value):
+    if isinstance(value, datetime):
+        return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+    if hasattr(value, 'year') and hasattr(value, 'month') and hasattr(value, 'day'):
+        return datetime(value.year, value.month, value.day, tzinfo=timezone.utc)
+    try:
+        return datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+    except (TypeError, ValueError):
+        return None
+
+
+def felt_enabled(item=None, moment=None):
+    """Theme by publication time. The explicit preview switch never changes a published record."""
+    forced = os.environ.get('KEENROUDY_CARD_THEME', '').lower()
+    if forced in ('felt', 'legacy'):
+        return forced == 'felt'
+    cutover = os.environ.get('KEENROUDY_FELT_FROM') or FELT_FROM
+    if not cutover:
+        return False
+    source = moment
+    if source is None and isinstance(item, dict):
+        source = next((item.get(key) for key in ('publishedAt', 'settledAt', 'due', 'day', 'capturedAt')
+                       if item.get(key)), None)
+        if source is None:
+            source = str(item.get('key') or item.get('card') or '').rsplit(':', 1)[-1]
+    when, start = _theme_time(source), _theme_time(cutover)
+    return bool(when and start and when >= start)
+
+
+def felt_game(game):
+    if not game:
+        return None
+    def team(row):
+        row = dict(row or {})
+        row.setdefault('abbr', row.get('abbreviation'))
+        return row
+    return dict(game, away=team(game.get('away')), home=team(game.get('home')))
+
+
+def felt_when(game):
+    if not (game or {}).get('kickoff'):
+        return ''
+    try:
+        from zoneinfo import ZoneInfo
+        local = datetime.fromisoformat(game['kickoff'].replace('Z', '+00:00')).astimezone(
+            ZoneInfo('America/Indiana/Indianapolis'))
+        return f'{local:%a %-I:%M %p} ET'
+    except (ValueError, TypeError):
+        return ''
 
 
 def chrome_path():
@@ -467,6 +522,8 @@ def ticket_leg_art(index, art, y, height, accent):
 
 def ticket_svg(pick, game=None, avatar=None, art=None, style=None):
     """Phone-first fun tickets: full-width legs, no truncated wagers or oversized artwork."""
+    if felt_enabled(pick):
+        return felt_cards.fun_ticket_card(pick, play_label(pick).title(), art)
     legs = pick.get('legs') or []
     art = art or []
     colors = ticket_style(pick, style)
@@ -561,6 +618,9 @@ def ladder_track(step, completed, goal, complete=False):
 def ladder_svg(pick, avatar=None):
     """The open rung: the whole climb is visible, prior rungs are checked, and the wager dominates."""
     info = pick.get('ladder') or {}
+    if felt_enabled(pick):
+        return felt_cards.climb_card(pick, info.get('run', 1), info.get('step', 1),
+                                     info.get('stake', 0), info.get('payout', 0), info.get('banked', 0))
     legs = [short_leg(l.get('title')) for l in (pick.get('legs') or []) if l.get('title')]
     chef = avatar_uri(CHEF) if avatar is None else avatar
     run, step = int(info.get('run') or 1), int(info.get('step') or 1)
@@ -597,6 +657,8 @@ def ladder_svg(pick, avatar=None):
 
 def ladder_result_svg(pick, avatar=None):
     """The same climb after settlement: prior rungs stay checked and the next rung is obvious."""
+    if felt_enabled(pick):
+        return felt_cards.climb_result_card(pick)
     info = pick.get('ladder') or {}
     result = str(pick.get('result') or 'win').lower()
     run, step = int(info.get('run') or 1), int(info.get('step') or 1)
@@ -776,6 +838,15 @@ def modern_svg(pick, game=None, record=None, when=None, player_side=None, identi
     """2026-10 visual system: full portraits, exact big lines, generous fixed zones. No new facts."""
     if play_kind(pick) in ('ladder', 'parlay'):
         return svg(pick, game, record, when, player_side, identities, avatar, featured, art)
+    if felt_enabled(pick, when):
+        display = dict(pick, displayTitle=display_title(pick, game), _when=felt_when(game), _number=number_line(pick))
+        if isinstance(record, dict):
+            season = f"{record.get('wins', 0)}–{record.get('losses', 0)}"
+            if record.get('pushes'):
+                season += f"–{record['pushes']}"
+        else:
+            season = record
+        return felt_cards.play_card(display, felt_game(game), season, featured, art)
     theme = ticket_style(pick)
     accent, ink, dim = theme['accent'], '#f5faff', '#aac0cf'
     name, selection, market = ticket_leg_parts(display_title(pick, game))
@@ -830,6 +901,8 @@ def modern_svg(pick, game=None, record=None, when=None, player_side=None, identi
 
 def receipt_svg(receipt, avatar=None):
     """A tall, shareable result report: the record leads, then every play gets room for its final or parlay sweat."""
+    if felt_enabled(receipt):
+        return felt_cards.receipt_from_existing(receipt)
     chef = avatar_uri(CHEF) if avatar is None else avatar
     primary, other, accent = HOUSE
     ink, soft, raised = CREAM, '#9eb1bf', '#102330'
