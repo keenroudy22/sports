@@ -284,6 +284,10 @@ def player_projection_sanity(candidate, ctx):
         return Decision(False, 'player_projection_sanity',
                         f"projected {caution['projected']:g} {caution['volume']} below 70% of "
                         f"{caution['recentFullAverage']:g} in the last three full current-team games")
+    players = (((snapshot or {}).get('players') or {}).get(side) or {}).get('players') or []
+    qb_change = role_sanity.quarterback_change(players, ctx.player_logs, team, game.get('season'), game.get('league'), game.get('kickoff'))
+    if forecast and role_sanity.affected_by_qb_change(athlete, forecast.get('pos'), market_key(candidate), qb_change):
+        return Decision(False, 'player_projection_sanity', f"QB-change role under review: {qb_change['reason']}")
     desk = desk_for(candidate, ctx)
     if role_sanity.price_suspect(candidate.get('odds'), desk.get('chance') if desk and desk.get('calibrated') else None):
         return Decision(False, 'player_projection_sanity', 'main player price is under review')

@@ -171,7 +171,7 @@ test('official card separates Eastern dates and keeps ungraded older plays visib
 });
 
 test('college disagreement caution uses home-margin sign and is not a selection', () => {
-  assert.match(C.modelCaution({league:'CFB', v2:{margin:6}, market:{spread:7}}), /not an automatic edge/);
+  assert.match(C.modelCaution({league:'CFB', v2:{margin:6}, market:{spread:7}}), /not automatically a good price/);
   assert.equal(C.modelCaution({league:'CFB', v2:{margin:6}, market:{spread:-7}}), '');
   assert.equal(C.modelCaution({league:'NFL', v2:{margin:6}, market:{spread:7}}), '');
   assert.equal(C.modelCaution({league:'CFB', v2:{margin:6}, market:{}}), '');
@@ -444,13 +444,13 @@ test('a pick says where it stands in words, and red is only for a loss', () => {
 
 test('a board line leads with a plain word and backs it with its numbers', () => {
   assert.deepEqual(C.gradeOf({ tier: 'strong', chance: 0.61, push: 0, needs: 0.524, edge: 8.6, thin: false }),
-    { tier: 'strong', word: 'Good value', detail: '61% our chance · 52% to break even · +8.6 point edge' });
+    { tier: 'strong', word: 'Good value', detail: '61% our chance · this price needs 52% to win often enough · 8.6 points above what this price needs' });
   assert.equal(C.gradeOf({ tier: 'lean', chance: 0.7, push: 0.03, needs: 0.5, edge: 20, thin: true }).detail,
-    '70% our chance, 3% push · 50% to break even · +20.0 point edge · few games so far');
+    '70% our chance, 3% chance of a tie · this price needs 50% to win often enough · 20.0 points above what this price needs · few games so far');
   assert.deepEqual(C.gradeOf(null), { tier: 'none', word: 'No model read', detail: '' });
   assert.equal(C.gradeOf({ tier: 'lean', chance: 0.6, push: 0, needs: 0.524, edge: 7.6, calibrated: false }).detail,
-    '60% our chance · 52% to break even · +7.6 point edge · raw number');
-  assert.equal(C.gradeOf({ tier: 'lean', chance: 0.62, push: 0, needs: null, calibrated: false }).detail, '62% our chance · no price yet · raw number');
+    '60% our chance · this price needs 52% to win often enough · 7.6 points above what this price needs · not yet checked against results');
+  assert.equal(C.gradeOf({ tier: 'lean', chance: 0.62, push: 0, needs: null, calibrated: false }).detail, '62% our chance · no price yet · not yet checked against results');
   const lines = [{ id: 'a', grade: { tier: 'pass', edge: -2 } }, { id: 'b' }, { id: 'c', grade: { tier: 'strong', edge: 6 } },
     { id: 'd', grade: { tier: 'strong', edge: 9 } }, { id: 'e', grade: { tier: 'lean', edge: 3 } }];
   assert.deepEqual(lines.sort(C.byGrade).map(l => l.id), ['d', 'c', 'e', 'a', 'b']);
@@ -513,7 +513,7 @@ test('a performance caution explains the higher bar without erasing a qualifying
   const cautious = C.gradeOf({ tier: 'strong', chance: 0.58, needs: 0.52, edge: 6,
     performanceCaution: true, performanceNeed: 5 });
   assert.deepEqual([cautious.tier, cautious.word], ['strong', 'Good value']);
-  assert.match(cautious.detail, /raised the required edge to 5 points/);
+  assert.match(cautious.detail, /need at least 5 points above what this price needs/);
   const shrunk = C.gradeOf({ tier: 'lean', view: 'pass', chance: 0.52, needs: 0.53, edge: -1 });
   assert.deepEqual([shrunk.tier, shrunk.word], ['pass', 'No value']);
   assert.equal(C.tierOf({ tier: 'lean' }), 'lean');

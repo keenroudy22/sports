@@ -17,7 +17,7 @@ test('Good-to prices and current quotes retain the published cutoff', () => {
   const pick={gameId:'NFL-1',market:'total points',direction:'over',line:49.5,odds:-110,book:'FanDuel',
     cutoffOdds:-119,cutoffLine:49.5,cutoffBoundary:51.5,kickoff:'2026-10-08T00:00:00Z'};
   const row={...pick,state:'open',observedAt:'2026-10-07T11:30:00Z'};
-  assert.equal(M.goodTo(pick),'Good to -119 at 49.5');
+  assert.equal(M.goodTo(pick),'Still a bet down to -119 at 49.5');
   assert.equal(M.latestPickQuote(pick,[row],now).inside,true);
   assert.equal(M.latestPickQuote(pick,[{...row,odds:-120}],now).inside,false);
   assert.equal(M.latestPickQuote(pick,[{...row,line:51.5}],now).inside,false);
@@ -29,9 +29,16 @@ test('history and defense cannot manufacture Model support below the price bar',
   const hurst = { chance: .52, needs: .533, edge: -1.3, clearsPrice: false };
   assert.equal(M.matchupSignals(hurst, true, true), 2);
   assert.equal(M.matchupSignals({...hurst, clearsPrice:true}, true, true), 3);
-  assert.match(M.researchPrice(hurst), /52% vs 53% needed.*no edge/);
+  assert.match(M.researchPrice(hurst), /We give it 52%\. This price needs 53%.*not high enough/);
   assert.match(source, /x\.r\.clearsPrice === true/);
-  assert.match(source, /History only · no edge at this price/);
+  assert.match(source, /History only · our chance does not beat this price/);
+});
+
+test('Upset Watch explains the book cut and computes the price threshold', () => {
+  assert.equal(M.upsetChanceLine({ modelChance: .57, marketChanceNoVig: .45, odds: 114 }),
+    "We give them 57% to win. Vegas has them at 45% once you take out the book's cut. At +114 you need 46.7% to profit.");
+  assert.equal(M.upsetChanceLine({ modelChance: .55, marketChanceNoVig: .5, odds: -110 }).split('At -110 ')[1],
+    'you need 52.4% to profit.');
 });
 
 test('a research price check matches the exact market, side, number, book and fresh quote', () => {

@@ -859,3 +859,23 @@ Legacy `#responsible` should quietly open More. Preserve the free site's enterta
 disclosure, posted-price grading, Eastern-time and Cloudflare lines, and the cards' `21+ · Entertainment only`.
 Revisit the page and helplines in `PAID-TIER-PLAN`'s legal checklist before any paid launch. This is a prepared
 change, not a claim that the live site has changed; P54 remains open until the normal release and live checks.
+
+## October 7 plain-language and QB-change preparation — not live
+
+The owner asked for site copy that explains the price's required win rate in words, with every threshold
+calculated from the actual quote. Upset Watch, line summaries, profile ranges and explanations have local
+copy changes and tests. These are queued with P54; no live release is claimed (P56).
+
+The owner also identified starter-change artifacts beyond Kohl. A conservative local guard now compares
+the forecast quarterback with the recent full-game starter and holds suspect QB and receiving-teammate
+markets from ranking and official selection. Replays cover Damante/TK King, Daniels and Bucky Irving.
+This guard does not repair the underlying forecast or Javonte Williams's older receiving rate. Current-team,
+same-QB and partial-game weighting plus snapshot refresh remain a separate root-fix item (P57), pending
+review of the tested projection patch. No stored forecast or public record was rewritten.
+
+Local checks for this prepared batch: 1,018 Python tests passed (two skipped), 152 frontend tests passed,
+the clean-export tests passed, build and payload budget passed, record audit found all 92 published picks,
+publication guard inspected 501 public files with no issues, and the isolated 11:45 rehearsal returned `ok`
+with no outside writes. Real Chrome checked Today, Record, More, best lines, Trends and Games at 375 and
+1440 pixels: 12 views, no sideways scroll, caught load-error state or console exception. This is local
+verification, not hosted or live completion.

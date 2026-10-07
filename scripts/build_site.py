@@ -744,6 +744,7 @@ def build_player_charts(league, games, forecasts, player_logs, season, lines, no
             team = str(game[side]['id'])
             opponent = str(game['home' if side == 'away' else 'away']['id'])
             projected = (((snapshot.get('players') or {}).get(side) or {}).get('players') or [])
+            qb_change = role_sanity.quarterback_change(projected, player_logs, team, season, league, game['kickoff'])
             projected_ids = {str(player.get('id')) for player in projected}
             active = list(projected) + [player for player in roster.get(team, []) if str(player.get('id')) not in projected_ids]
             for forecast in active:
@@ -773,7 +774,7 @@ def build_player_charts(league, games, forecasts, player_logs, season, lines, no
                     value = forecast.get(source)
                     if isinstance(value, (list, tuple)) and value and isinstance(value[0], (int, float)):
                         caution = role_sanity.assess(forecast, log_rows, team, key, season)
-                        if caution:
+                        if caution or role_sanity.affected_by_qb_change(pid, forecast.get('pos'), key, qb_change):
                             under_review.append(key)
                         else:
                             projections[key] = round(value[0], 1)
@@ -1363,6 +1364,7 @@ def grade_line(line, snapshot, thin):
 
 def guard_player_lines(lines, games, forecasts, league_data, now, logger=print):
     """Withhold misleading player grades without changing forecasts or history."""
+    qb_changes = {}
     for row in lines:
         athlete = str(row.get('athleteId') or '')
         if not athlete:
@@ -1374,21 +1376,28 @@ def guard_player_lines(lines, games, forecasts, league_data, now, logger=print):
         team = (game.get(side) or {}).get('id') if side else None
         league = game.get('league')
         market = row.get('stat') or pricing.market_of(row)
-        logs = (league_data.get(league) or {}).get('player_logs', {}).get(athlete, [])
+        all_logs = (league_data.get(league) or {}).get('player_logs', {})
+        logs = all_logs.get(athlete, [])
         caution = role_sanity.assess(forecast, logs, team, market, game.get('season'))
+        qb_key = (row.get('gameId'), side)
+        if qb_key not in qb_changes:
+            players = (((snapshot or {}).get('players') or {}).get(side) or {}).get('players') or []
+            qb_changes[qb_key] = role_sanity.quarterback_change(players, all_logs, team, game.get('season'), league, game.get('kickoff'))
+        qb_caution = qb_changes[qb_key] if forecast and role_sanity.affected_by_qb_change(athlete, forecast.get('pos'), market, qb_changes[qb_key]) else None
         grade = row.get('grade') or {}
         chance = grade.get('chance') if grade.get('calibrated') else None
         bad_price = role_sanity.price_suspect(row.get('odds'), chance)
-        if caution:
+        if caution or qb_caution:
             row['roleSuspect'] = True
             row['grade'] = None
             row['gradeNote'] = 'Projection under review'
-            logger(f"role-sanity: {row.get('id') or row.get('title')}: {caution['projected']:g} "
-                   f"{caution['volume']} vs {caution['recentFullAverage']:g} last-three full-game average")
+            reason = (f"{caution['projected']:g} {caution['volume']} vs "
+                      f"{caution['recentFullAverage']:g} last-three full-game average") if caution else qb_caution['reason']
+            logger(f"role-sanity: {row.get('id') or row.get('title')}: {reason}")
         if bad_price:
             row['priceSuspect'] = True
             row['grade'] = None
-            row['gradeNote'] = 'Price under review' if not caution else 'Projection and price under review'
+            row['gradeNote'] = 'Price under review' if not (caution or qb_caution) else 'Projection and price under review'
             logger(f"price-sanity: {row.get('id') or row.get('title')}: {row.get('odds')} outside main-line check")
 
 

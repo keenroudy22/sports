@@ -204,6 +204,16 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Plain-English site copy (owner, 2026-10-07):** explain prices and probabilities in ordinary words,
+  including what a quoted price needs to win often enough; compute every threshold from the actual odds.
+  Avoid unexplained `vig removed`, `implied`, `break-even`, `edge`, `captured`, `selection`, and internal
+  limit language on public pages. Show ranges as "Usually between" rounded endpoints. Copy changes do
+  not alter price, role, publication or grading guards.
+- **QB-change role sanity (owner, 2026-10-07):** a new starter's attempts and teammates' receiving usage
+  can invalidate older-role forecasts even when a player's own prior full games look normal. Hold grades,
+  ranks and official selection for suspect QB/teammate markets; show "projection under review". Follow
+  with current-team and same-QB weighting, partial-game handling, and fresh snapshots as a separately
+  tested root fix. Do not present a held projection as value.
 - **Free-site footer and Responsible gaming removal (owner, 2026-10-07):** the website footer has no
   gambling helpline or Responsible gaming link, and the More › Responsible gaming page and all Start here
   links to it are removed. Legacy `#responsible` quietly opens More. Keep the entertainment-only/21+,

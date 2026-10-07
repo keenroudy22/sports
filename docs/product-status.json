@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-07T19:01:02Z",
+  "updatedAt": "2026-10-07T19:31:10Z",
   "items": [
     {
       "id": "P01",
@@ -475,9 +475,9 @@
       "title": "Current-team player role and main-price sanity",
       "status": "ready",
       "owner": "agent",
-      "next": "Release the tightening guard at the next quiet window after all gates; then review Claude's projection-root patch for current-team role weighting, partial games and stale snapshots without rewriting stored forecasts.",
-      "doneWhen": "Kohl's real FIU logs hold the suspect passing grade, Egbuka's +1800 quote cannot rank, all site and selection paths agree, tonight/TNF catches are listed and hosted/live checks pass.",
-      "evidence": "Owner urgency October 7, AUDIT-INBOX A-20261007-22 and -23. A local build caught JJ Kohl, Javon Rogers and Jojo Stone tonight, Joshua Porter Thursday and Bucky Irving's two TNF markets; no production release claimed yet."
+      "next": "Release the tightening guard, including QB-change holds for new starters and receiving teammates, at the next quiet window after all gates; then review Claude's projection-root patch without rewriting stored forecasts.",
+      "doneWhen": "Kohl's real FIU logs and the QB-change replay hold suspect grades, Egbuka's +1800 quote cannot rank, all site and selection paths agree, tonight/TNF catches are listed and hosted/live checks pass.",
+      "evidence": "Owner urgency October 7, AUDIT-INBOX A-20261007-22 and -23 plus QB-change examples. Local guard tests cover Damante/TK King, Daniels and Bucky; build, 1018 Python tests (2 skipped), 152 Node tests, clean export, record audit, guard, rehearsal and 12 browser views at 375/1440 pass. Not live. Javonte remains root-fix work."
     },
     {
       "id": "P54",
@@ -496,6 +496,24 @@
       "next": "Have Claude review the two real Kitchen Ticket previews, then enable the Wednesday 7 PM selector in a separately gated release before next Wednesday; skip unless two current, sane main lines qualify.",
       "doneWhen": "A reviewed list and spotlight render match stored facts, tests cover four-hour freshness, role/price sanity and Thursday's one-research-post cap, and the first eligible live post is verified without @Playbook.",
       "evidence": "Owner approval October 7, OWNER-DECISIONS item 19. Selector, caption, research card layouts and tests are prepared behind ENABLED=false; saved Oct 7 quotes are stale for the 7 PM target, so no post tonight. Review previews are local-only in work/tnf-early-review/."
+    },
+    {
+      "id": "P56",
+      "title": "Plain-English prices and ranges across site",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Bundle the tested copy update with the P53/P54 quiet-window release; verify Upset Watch odds thresholds and public routes at 375 and 1440 pixels.",
+      "doneWhen": "Upset Watch calculates price-needed probability from each quote, jargon is replaced on main site surfaces without changing guards, and hosted/live checks pass.",
+      "evidence": "Owner wording request October 7. Local +114 and -110 threshold tests and 12 real-Chrome route checks at 375/1440 passed; not yet live."
+    },
+    {
+      "id": "P57",
+      "title": "Current-team and same-QB projection root fix",
+      "status": "gated",
+      "owner": "agent",
+      "next": "Review Claude's tested projection patch when delivered; fix current-team weights, same-QB teammate usage, partial games and stale snapshots. Replay Kohl, Damante, TK King, Daniels, Javonte and Bucky without rewriting records.",
+      "doneWhen": "Current-team and same-QB replay forecasts no longer inherit backup, cameo or prior-quarterback rates; all gates and live checks pass without adding requests or changing the record.",
+      "evidence": "Owner October 7 QB-change examples. Conservative hold is in P53; the root projection change is not implemented or released."
     }
   ]
 }

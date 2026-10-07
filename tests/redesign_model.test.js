@@ -172,8 +172,8 @@ test('collapse keeps the strongest edge per player, stat and side', () => {
 test('heavy favorites are flagged and trends read as counts, never a bare 100%', () => {
   assert.equal(M.heavyFavorite(-900), true);
   assert.equal(M.heavyFavorite(-250), false);
-  assert.equal(M.trendText({ hits: 4, games: 4, odds: -900 }), '4 of 4 · price needs 90%');
-  assert.equal(M.trendText({ hits: 3, games: 4, odds: null }), '3 of 4 · no price captured');
+  assert.equal(M.trendText({ hits: 4, games: 4, odds: -900 }), '4 of 4 · this price needs 90% to win often enough');
+  assert.equal(M.trendText({ hits: 3, games: 4, odds: null }), '3 of 4 · no price recorded');
 });
 
 test('games rank by gap percentile and demote FCS or missing markets', () => {

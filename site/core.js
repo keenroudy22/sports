@@ -336,7 +336,7 @@
   const gradeOf = (g, note = '', row = null) => {
     if (!g) return { tier: 'none', word: 'No model read', detail: note || '' };
     const pct = x => `${Math.round(100 * x)}%`;
-    if (g.unproven) return { tier: 'pass', word: 'Grading first', detail: `our number ${g.projection} · ${pct(g.chance)} on the raw curve · college player numbers get graded against the line before we play them` };
+    if (g.unproven) return { tier: 'pass', word: 'Grading first', detail: `our number ${g.projection} · model estimate ${pct(g.chance)} · college player numbers get graded against the line before we play them` };
     const tier = tierOf(g);
     /* A player line carries no price, so there is no edge to state: show the projection against
        the number, which side that favours, and how little history it rests on. */
@@ -348,13 +348,13 @@
       return { tier, word: tier === 'lean' ? 'Leans our way' : g.limited ? 'Questionable' : g.thin ? 'Too early to tell' : 'Close to the line',
         detail: parts.join(' · ') };
     }
-    const parts = [`${pct(g.chance)} our chance${g.push >= 0.01 ? `, ${pct(g.push)} push` : ''}`,
-      g.needs == null ? 'no price yet' : `${pct(g.needs)} to break even`];
-    if (typeof g.edge === 'number') parts.push(`${g.edge >= 0 ? '+' : ''}${Number(g.edge).toFixed(1)} point edge`);
-    if (g.performanceCaution) parts.push(`recent results raised the required edge to ${Number(g.performanceNeed || 5).toFixed(0)} points`);
+    const parts = [`${pct(g.chance)} our chance${g.push >= 0.01 ? `, ${pct(g.push)} chance of a tie` : ''}`,
+      g.needs == null ? 'no price yet' : `this price needs ${pct(g.needs)} to win often enough`];
+    if (typeof g.edge === 'number') parts.push(`${Math.abs(Number(g.edge)).toFixed(1)} points ${g.edge >= 0 ? 'above' : 'below'} what this price needs`);
+    if (g.performanceCaution) parts.push(`recent results mean we need at least ${Number(g.performanceNeed || 5).toFixed(0)} points above what this price needs`);
     if (g.thin) parts.push('few games so far');
     if (g.limited) parts.push('questionable on the report');
-    if (g.calibrated === false) parts.push('raw number');
+    if (g.calibrated === false) parts.push('not yet checked against results');
     /* A thin sample with a real gap is not "no value": it is a read we will not trust on one or two games. */
     const word = tier === 'pass' && g.thin && g.edge != null && g.edge >= 2 ? 'Too early to tell' : GRADE_WORD[tier] || GRADE_WORD.pass;
     return { tier, word, detail: parts.join(' · ') };
@@ -451,7 +451,7 @@
       games: live.reduce((sum, row) => sum + Number((row.summary || {}).games || 0), 0),
       updatedThrough: updated.at(-1) || (board || {}).updatedThrough || null,
       /* The projection scoreboard's captured player-line comparison is NFL-only today. */
-      propsNote: league === 'CFB' ? 'not graded here yet' : 'vs captured line',
+      propsNote: league === 'CFB' ? 'not graded here yet' : 'vs the line we saw',
     };
   };
   /* The one record, the same on the site and on X: every play we publish, graded win or lose. The record is the
@@ -481,7 +481,7 @@
     const margin = game?.v2?.margin, spread = game?.market?.spread;
     if (game?.league !== 'CFB' || typeof margin !== 'number' || typeof spread !== 'number'
       || Math.abs(margin + spread) < 7) return '';
-    return 'Large model / market gap. College schedule strength, blowouts and changing roles can distort this estimate—not an automatic edge.';
+    return 'Our number is far from the book line. College schedule strength, blowouts and changing roles can distort it; this is not automatically a good price.';
   };
   /* The Kook'n 80/20 Climb (scripts/ladder.py): bank 20% of every winning return and ride 80% on the next rung.
      The current climb reaches $1,000 on bank plus ride; a miss starts a new $50 climb but cannot take the saved bank.
@@ -813,7 +813,7 @@
     return (direction === 'under' ? value < line : value > line) ? 'hit' : 'miss';
   };
   const quoteStatus = (row, kickoff = null, now = Date.now()) => {
-    if (!row) return {kind:'missing', label:'No captured line', current:false};
+    if (!row) return {kind:'missing', label:'No line recorded', current:false};
     const at = Date.parse(row.observedAt || row.quotedAt), age = now - at;
     const started = Date.parse(kickoff || row.kickoff) <= now;
     if (started || row.state === 'closed') return {kind:'started', label:'Saved pregame line', current:false};
@@ -821,7 +821,7 @@
       return {kind:'reference', label:'Reference line · price unverified', current:false};
     if (!Number.isFinite(age) || age < 0 || age > 4 * 3600000 || Date.parse(row.expiresAt) <= now || row.state !== 'open')
       return {kind:'stale', label:'Earlier quote · recheck price', current:false};
-    return {kind:'current', label:'Current captured line', current:true};
+    return {kind:'current', label:'Current line we checked', current:true};
   };
   const shardOf = (id, shards) => Number(id) % shards;
 
