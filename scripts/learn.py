@@ -189,10 +189,13 @@ def since(policy, segment):
     return ((policy.get('segments') or {}).get(segment) or {}).get('since') or ''
 
 
-def learn_segments(policy, rows, now, dry=False):
-    """One step at most per segment per week, each judged only on what happened since its last change."""
+def learn_segments(policy, rows, now, dry=False, apply_r0=False):
+    """One step at most per segment per week, each judged only on what happened since its last change.
+
+    R0 remains an observation unless a caller explicitly applies it after owner approval. When that day comes,
+    deduplication happens inside each segment's post-change window so an older held row cannot erase newer evidence.
+    """
     findings, changes = [], []
-    rows = distinct(rows)
     by_segment = defaultdict(list)
     for row in rows:
         if row.get('segment') and not row['segment'].endswith('/parlay'):
@@ -200,6 +203,8 @@ def learn_segments(policy, rows, now, dry=False):
     for segment, seg_rows in sorted(by_segment.items()):
         start = since(policy, segment)
         fresh = [r for r in seg_rows if (r.get('decidedAt') or '') >= start and r.get('result')]
+        if apply_r0:
+            fresh = distinct(fresh)
         published = [r for r in fresh if r['decision'] == 'published']
         near = [r for r in fresh if r['decision'] == 'refused' and r.get('rules') and set(r['rules']) <= THRESHOLD_RULES]
         pub, miss = summary(published), summary(near)
@@ -410,13 +415,15 @@ def post_times(log_book):
 
 
 def post_themes(log_book):
-    """Settled engagement by post category and recorded card theme; missing legacy rows stay legacy."""
+    """Settled engagement by post category and recorded image theme; text-only rows are excluded."""
     groups = defaultdict(list)
     for entry in log_book.get('posts', []):
         rate = engagement(entry)
         if rate is None or not str(entry.get('kind') or '').startswith('buffer:'):
             continue
         kind = entry['kind'].split(':', 1)[1]
+        if entry.get('cardTheme') == 'none' or entry.get('card') is False:
+            continue
         theme = entry.get('cardTheme') if entry.get('cardTheme') in ('legacy', 'felt') else 'legacy'
         groups[(kind, theme)].append(rate)
     return [{'category': kind, 'theme': theme, 'posts': len(values),

@@ -58,6 +58,12 @@ class FeltCardTests(unittest.TestCase):
         self.assertEqual(pick_card.card_theme(PICK['publishedAt']), 'legacy')
         with mock.patch.object(pick_card, 'FELT_FROM', '2026-10-07T04:00:00Z'):
             self.assertEqual(pick_card.card_theme(PICK['publishedAt']), 'felt')
+        with mock.patch.object(pick_card, 'FELT_FROM', '2026-10-07'):
+            self.assertTrue(pick_card.felt_enabled(PICK), 'a date-only cutover is timezone-safe')
+            self.assertEqual(pick_card.card_theme(PICK['publishedAt']), 'felt')
+        with mock.patch.dict(os.environ, {'KEENROUDY_FELT_FROM': '2026-10-01'}, clear=False):
+            self.assertEqual(pick_card.card_theme(PICK['publishedAt']), 'legacy',
+                             'a Mac-only override cannot relabel the hosted renderer')
 
     def test_every_felt_builder_renders_with_embedded_ofl_fonts(self):
         ticket = {

@@ -229,6 +229,8 @@ def post_theme_metrics(log_book, first, last):
         if not views:
             continue
         category = str(entry.get('kind') or 'unknown').removeprefix('buffer:')
+        if entry.get('cardTheme') == 'none' or entry.get('card') is False:
+            continue
         theme = entry.get('cardTheme') if entry.get('cardTheme') in ('legacy', 'felt') else 'legacy'
         groups.setdefault((category, theme), []).append((views, metrics.get('engagementRate')))
     out = []
@@ -249,7 +251,7 @@ def learning_packet(report_path=None, shadow_root=None):
     try:
         report = json.loads(report_path.read_text(encoding='utf-8'))
         lines.append(f"- latest calibration/learning update: {report.get('at') or 'unknown'}; "
-                     f"{len(report.get('changes') or [])} threshold/calibration changes")
+                     f"{len(report.get('changes') or [])} learning-policy changes")
         lines.append(f"- candidates: {report.get('candidates', 0)} raw; "
                      f"{report.get('distinctCandidates', report.get('candidates', 0))} distinct")
         for row in report.get('cardThemes') or []:

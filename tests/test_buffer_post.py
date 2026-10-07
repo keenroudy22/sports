@@ -3,6 +3,7 @@ import sys
 import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import buffer_post as bp
@@ -285,7 +286,18 @@ class ScheduleTests(unittest.TestCase):
         self.assertTrue(any('b waits' in line for line in seen))
         text_only = bp.schedule([('r', 'recap', 'text r', NOW + timedelta(hours=1), None)], 'ch-x', {'posts': []}, NOW, key='t', send=FakeBuffer(), log=lambda *_: None)
         self.assertEqual([p['id'] for p in text_only['posts']], ['r'], 'a post with no card key at all (by hand) still goes')
+        self.assertEqual(text_only['posts'][0]['cardTheme'], 'none')
         self.assertEqual(text_only['posts'][0]['discord'], {'state': 'pending', 'text': 'text r'})
+
+    def test_card_theme_is_resolved_before_buffer_accepts_the_post(self):
+        fake = FakeBuffer()
+        plan = [('a', 'play', 'text', NOW + timedelta(hours=1), 'a')]
+        with mock.patch.object(bp.pick_card, 'card_theme', side_effect=ValueError('bad theme')):
+            with self.assertRaises(ValueError):
+                bp.schedule(plan, 'ch-x', {'posts': []}, NOW, key='t', send=fake,
+                            opener=lambda *_: True, log=lambda *_: None)
+        self.assertFalse([call for call in fake.calls if 'createPost' in call['query']],
+                         'a labeling error cannot leave an unlogged post in Buffer')
 
     def test_community_receipts_are_routed_to_the_wins_channel(self):
         result = bp.schedule([('community:model-slip', 'community', 'MODEL COOKED',

@@ -60,16 +60,28 @@ class GradeTests(unittest.TestCase):
 
 
 class SegmentTests(unittest.TestCase):
-    def test_learning_counts_each_game_side_and_player_once(self):
+    def test_r0_stays_shadow_only_until_a_caller_explicitly_applies_it(self):
         base = row(1, decision='refused', gameIds=['NFL-1'], direction='over', decidedAt='2026-09-20T12:00:00Z')
         later = dict(base, id='other-line', line=45.5, decidedAt='2026-09-20T13:00:00Z')
         published = dict(base, id='published', decision='published', decidedAt='2026-09-20T14:00:00Z')
         unique = learn.distinct([base, later, published])
         self.assertEqual([item['id'] for item in unique], ['published'])
         repeated = [dict(base, id=f'c{i}', decision='published') for i in range(30)]
-        findings, changes = learn.learn_segments(learning.default_policy(), repeated, NOW)
-        self.assertEqual(findings[0]['published']['graded'], 1)
-        self.assertEqual(changes, [], 'one game cannot manufacture the 30-play learning minimum')
+        policy = learning.default_policy()
+        policy['shadows']['R0'] = True
+        live, _ = learn.learn_segments(policy, repeated, NOW, dry=True)
+        shadow, _ = learn.learn_segments(policy, repeated, NOW, dry=True, apply_r0=True)
+        self.assertEqual(live[0]['published']['graded'], 30, 'the R0 shadow flag cannot change live learning')
+        self.assertEqual(shadow[0]['published']['graded'], 1, 'the explicit simulation shows the proposed denominator')
+
+    def test_an_r0_simulation_deduplicates_inside_the_since_window(self):
+        policy = learning.default_policy()
+        policy['segments']['NFL/total'] = {'since': '2026-10-01T00:00:00Z'}
+        older = row(1, result='loss', gameIds=['NFL-1'], direction='over', at='2026-09-20T12:00:00Z')
+        newer = row(2, result='win', gameIds=['NFL-1'], direction='over', at='2026-10-05T12:00:00Z')
+        findings, _ = learn.learn_segments(policy, [older, newer], NOW, dry=True, apply_r0=True)
+        self.assertEqual(findings[0]['published']['record']['win'], 1)
+        self.assertEqual(findings[0]['published']['record']['loss'], 0)
 
     def test_losing_to_the_close_makes_a_segment_pickier_then_pauses_it(self):
         policy = learning.default_policy()
@@ -179,6 +191,8 @@ class OtherLearningTests(unittest.TestCase):
             {'kind': 'buffer:play', 'cardTheme': 'felt', 'metrics': {'impressions': 100, 'likes': 5}},
             {'kind': 'buffer:play', 'metrics': {'impressions': 200, 'likes': 2}},
             {'kind': 'buffer:receipt', 'cardTheme': 'felt', 'metrics': {'impressions': 50, 'likes': 1}},
+            {'kind': 'buffer:cashed', 'cardTheme': 'none', 'card': False,
+             'metrics': {'impressions': 500, 'likes': 50}},
         ]
         table = learn.post_themes({'posts': posts})
         self.assertEqual([(r['category'], r['theme']) for r in table],

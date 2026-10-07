@@ -202,9 +202,9 @@ def text_hash(text):
     return hashlib.sha256(text.strip().encode('utf-8')).hexdigest()[:16]
 
 
-def record(log, key, text, tweet_id, kind, now):
+def record(log, key, text, tweet_id, kind, now, card_theme='none'):
     log['posts'].append({'id': key, 'postedAt': gates.stamp(now), 'tweetId': tweet_id, 'textHash': text_hash(text),
-                         'kind': kind, 'cardTheme': pick_card.card_theme(now)})
+                         'kind': kind, 'cardTheme': card_theme if card_theme in ('legacy', 'felt') else 'none'})
     return log
 
 
@@ -623,8 +623,9 @@ def main(argv=None):
                 refuse(pick, game, log, now, text)
                 creds = credentials()
                 media = [upload_media(card.read_bytes(), creds)] if card else None
+                theme = pick_card.card_theme(item=pick) if card else 'none'
                 tweet_id = post_tweet(text, creds, media_ids=media)
-                save_log(record(log, pick['id'], text, tweet_id, 'pick', now))
+                save_log(record(log, pick['id'], text, tweet_id, 'pick', now, theme))
                 print(f'\nposted: {tweet_id}; logged in {LOG.relative_to(ROOT)}')
         elif args.command in ('recap', 'scoreboard'):
             day = args.day or eastern_date(now).isoformat()

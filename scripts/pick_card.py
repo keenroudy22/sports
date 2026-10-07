@@ -47,7 +47,8 @@ def _theme_time(value):
     if hasattr(value, 'year') and hasattr(value, 'month') and hasattr(value, 'day'):
         return datetime(value.year, value.month, value.day, tzinfo=timezone.utc)
     try:
-        return datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+        result = datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+        return result if result.tzinfo else result.replace(tzinfo=timezone.utc)
     except (TypeError, ValueError):
         return None
 
@@ -71,8 +72,17 @@ def felt_enabled(item=None, moment=None):
 
 
 def card_theme(moment=None, item=None):
-    """Stable label saved with each post so weekly learning compares like categories."""
-    return 'felt' if felt_enabled(item, moment) else 'legacy'
+    """Production-renderer label saved with each image post for like-category comparisons.
+
+    Preview and Mac-only environment overrides do not relabel hosted art. The production cutover constant is the
+    renderer's shared decision, and the supplied moment is when that artifact entered the publishing flow.
+    """
+    source = moment
+    if source is None and isinstance(item, dict):
+        source = next((item.get(key) for key in ('publishedAt', 'settledAt', 'due', 'day', 'capturedAt')
+                       if item.get(key)), None)
+    when, start = _theme_time(source), _theme_time(FELT_FROM)
+    return 'felt' if when and start and when >= start else 'legacy'
 
 
 def felt_game(game):

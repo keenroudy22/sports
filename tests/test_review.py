@@ -163,6 +163,7 @@ class ReviewTests(unittest.TestCase):
         self.assertIn('10 raw; 7 distinct', text)
         self.assertIn('play / felt: 2 posts', text)
         self.assertIn('proposals R0; no public effects', text)
+        self.assertIn('learning-policy changes', text)
 
     def test_codex_reads_only(self):
         seen = {}

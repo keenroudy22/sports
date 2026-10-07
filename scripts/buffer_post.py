@@ -400,6 +400,10 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             if not image:
                 log(f'buffer: {guid} waits: its card is not live yet (every post carries its card)')
                 continue
+        # Resolve every fallible field before Buffer accepts the post. Otherwise a
+        # local labeling error after createPost could leave an unlogged post that a
+        # later run schedules again. Text-only posts do not enter card comparisons.
+        card_theme = pick_card.card_theme(now) if image else 'none'
         try:
             post_id = create_post(text, channel_id, due, image, key=key, send=send)
         except BufferError as error:
@@ -407,7 +411,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             continue
         entry = {'id': guid, 'postedAt': gates.stamp(now), 'dueAt': gates.stamp(due), 'bufferPostId': post_id,
                  'textHash': x_post.text_hash(text), 'kind': f'buffer:{kind}', 'card': bool(image),
-                 'cardTheme': pick_card.card_theme(due)}
+                 'cardTheme': card_theme}
         # Only entries scheduled after Discord mirroring was introduced carry this payload. That prevents enabling
         # the webhook from replaying the account's older X history into a new server.
         entry['discord'] = {'state': 'pending', 'text': without_playbook(text)}

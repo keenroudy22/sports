@@ -206,6 +206,7 @@ class PostTests(unittest.TestCase):
             self.assertEqual(again['posts'][0]['id'], 'p1')
             self.assertEqual(again['posts'][0]['tweetId'], '12345')
             self.assertEqual(again['posts'][0]['textHash'], x_post.text_hash('hello'))
+            self.assertEqual(again['posts'][0]['cardTheme'], 'none')
 
     def test_duplicate_and_errors_are_refused(self):
         creds = {'consumer_key': 'a', 'consumer_secret': 'b', 'token': 'c', 'token_secret': 'd'}
