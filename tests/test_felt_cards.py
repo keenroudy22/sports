@@ -126,22 +126,31 @@ class FeltCardTests(unittest.TestCase):
 
     def test_research_climb_and_longshot_preserve_public_rules(self):
         ticket = {'id': 't', 'parlayType': 'longshot', 'odds': 700, 'book': 'FanDuel',
+                  'gameIds': ['g', 'g2', 'g3', 'g4', 'g5'],
                   'legs': [{'title': 'Game over 40.5'}]}
         choice = {'kind': 'matchup', 'title': 'MATCHUP TRENDS', 'kicker': 'EXACT LINE + OPPONENT DEFENSE',
                   'rows': [{'title': 'Bucky Irving over 13.5 carries', 'price': '-107 DK',
-                            'metric': '8/10 exact-line trend', 'detail': 'DAL allows 24.2 carries/game to RBs'}]}
+                            'metric': '8/10 exact-line trend', 'detail': 'DAL allows 24.2 carries/game to RBs',
+                            'kickoff': '2026-10-09T00:15:00Z', 'matchupLabel': 'TB at DAL',
+                            'opponentAbbr': 'DAL', 'hits': 8, 'games': 10,
+                            'matchup': {'rank': 23, 'of': 32, 'pos': 'RB', 'supports': True}}]}
         climb = {'id': 'c', 'parlayType': 'ladder', 'odds': -173, 'book': 'FanDuel',
                  '_allClimbsBanked': 42, 'legs': [{'title': 'One 10+ yards'}, {'title': 'Two 10+ yards'}],
                  'ladder': {'run': 3, 'step': 1, 'stake': 50, 'payout': 79, 'banked': 0, 'start': 50},
                  'result': 'loss'}
         with self.felt():
-            longshot = pick_card.ticket_svg(ticket, art=[{'kind': 'logos', 'uris': ['data:image/png;base64,AA', 'data:image/png;base64,BB']}])
+            longshot = pick_card.ticket_svg(ticket, GAME, art=[{'kind': 'logos', 'uris': ['data:image/png;base64,AA', 'data:image/png;base64,BB']}])
             research = research_art.svg(choice)
             open_climb = pick_card.ladder_svg(dict(climb, result=None))
             result = pick_card.ladder_result_svg(climb)
         self.assertNotIn('#B49BE0', longshot)
         self.assertEqual(longshot.count('<image href="data:image/png;base64,'), 2)
-        self.assertIn('PROOF POINT  ·  8/10 exact-line trend', research)
+        self.assertIn('5 games · Wed Oct 7', longshot)
+        self.assertIn('Over 13.5 in 8 of the last 10', research)
+        self.assertIn('DAL: 23rd of 32 vs RBs (soft)', research)
+        self.assertEqual(research.count('8/10'), 0)
+        self.assertNotIn('EXACT-LINE PROOF', research)
+        self.assertNotIn('PROOF POINT', research)
         self.assertNotIn('POSITIVE RESEARCH LABEL', research)
         self.assertIn('ALL CLIMBS  $42 BANKED', open_climb)
         self.assertIn('NEXT  $50 RESTART', result)
@@ -151,13 +160,19 @@ class FeltCardTests(unittest.TestCase):
         game = {'id': 'g', 'league': 'CFB', 'week': 6,
                 'away': {'abbr': 'NMSU'}, 'home': {'abbr': 'FIU'},
                 'v2': {'away': 20.1, 'home': 27.3, 'margin': 7.2, 'total': 47.4},
-                'market': {'spread': -6.5, 'total': 48.5}, 'value': {}}
+                'market': {'spread': -6.5, 'total': 48.5},
+                'value': {'spread': {'side': 'home', 'line': -3.5, 'odds': 100,
+                                     'book': 'theScore Bet', 'edge': 3.8, 'chance': .538, 'needs': .5,
+                                     'tier': 'lean', 'thin': False}}}
         from datetime import date
         with self.felt():
             card = sheet.svg([game], 'CFB', date(2026, 10, 10), 6)
         self.valid(card)
         self.assertIn('Saturday, October 10', card)
         self.assertIn('SPREAD  OUR FIU −7.2', card)
+        self.assertIn('#1 FIU -3.5', card)
+        self.assertIn('SCORE', card)
+        self.assertNotIn('ESPN', card)
         self.assertNotIn('Mint:', card)
         self.assertNotIn('January 3', card)
 

@@ -113,6 +113,13 @@ class StateTests(unittest.TestCase):
         self.assertEqual(ladder.split_return(94), (19, 75))
         self.assertEqual(ladder.split_return(89), (18, 71))
 
+    def test_saved_through_reconstructs_a_legacy_win_without_bank_fields(self):
+        first, latest = book_of(rung('legacy', '2026-09-27T12:30:00Z', 1, 50, 94, 'win'),
+                                rung('current', '2026-10-03T12:30:00Z', 1, 50, 114, 'win', run=2,
+                                     ladder_info={'banked': 0, 'bankedAfter': 23}))
+        self.assertEqual(ladder.saved_through(first, latest, 'legacy'), 19)
+        self.assertEqual(ladder.saved_through(first, latest, 'current'), 42)
+
 
 class LegTests(unittest.TestCase):
     def test_only_the_main_lines_own_ladder_at_a_sane_price_for_a_settled_healthy_player(self):

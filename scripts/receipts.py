@@ -128,7 +128,7 @@ def result_detail(pick):
                 pieces.append('clean sweep')
         return ' · '.join(pieces)
     actual = str(pick.get('actual') or '').strip()
-    return ' · '.join(part for part in (injury, f'Final: {actual}' if actual else '') if part)
+    return ' · '.join(part for part in (f'Final: {actual}' if actual else '', injury) if part)
 
 
 def result_line(pick, games=None):
@@ -245,7 +245,9 @@ def day_receipt(day, first, latest, games, ids, as_of=None):
     due = morning(day + timedelta(days=1))
     return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}', 'kind': 'receipt',
             'title': headline(rows), 'label': 'YESTERDAY’S PLATES', 'when': f'{day:%A, %b %-d}',
-            'season': record_scope.text(season_as_of(first, latest, as_of or due)),
+            # Retained art keeps the record followers saw when the receipt became
+            # due, even when its image is rebuilt several days later.
+            'season': record_scope.text(season_as_of(first, latest, due)),
             'summary': {'straight': record_text(x_post.summarize(straight)) if straight else None,
                         'fun': record_text(x_post.summarize(fun)) if fun else None},
             'accounting': accounting(rows),
@@ -270,7 +272,7 @@ def week_receipt(wednesday, first, latest, games, ids, as_of=None):
     due = morning(wednesday)
     return {'key': f'receipt:week:{end.isoformat()}', 'card': f'receipt-week-{end.isoformat()}', 'kind': 'receipt',
             'title': headline(rows), 'label': 'THIS WEEK’S PLATES', 'when': f'{start:%b %-d} to {end:%b %-d}',
-            'season': record_scope.text(season_as_of(first, latest, as_of or due)),
+            'season': record_scope.text(season_as_of(first, latest, due)),
             'summary': {'straight': record_text(x_post.summarize(straight)) if straight else None,
                         'fun': record_text(x_post.summarize(fun)) if fun else None},
             'accounting': accounting(rows),

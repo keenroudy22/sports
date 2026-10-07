@@ -165,7 +165,14 @@ def saved_through(first, latest, target):
         info = rung.get('ladder') or {}
         if rung.get('result') == 'win':
             before = int(info.get('banked') or 0)
-            after = int(info.get('bankedAfter') if info.get('bankedAfter') is not None else before)
+            if info.get('bankedAfter') is not None:
+                after = int(info['bankedAfter'])
+            else:
+                # Early rungs predate the explicit bank fields. Reconstruct the same
+                # whole-dollar 80/20 split used by state() so immutable result art and
+                # the live feed retain the lifetime bank from those wins.
+                cut, _ = split_return(info.get('payout') or info.get('stake') or 0)
+                after = before + cut
             saved += max(0, after - before)
         if rung.get('id') == target:
             break

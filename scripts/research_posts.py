@@ -228,7 +228,11 @@ def matchup_candidate(games, details, now, teams=None):
             detail_text = f"{opponent} allows {matchup['value']:g} {stat}/game to {matchup['pos']}s · #{matchup['rank']} of {matchup['of']}"
             if script_risk:
                 detail_text += f" · {line.get('teamAbbr') or 'team'} projected {abs(margin):g}-pt dog"
+            away, home = game.get('away') or {}, game.get('home') or {}
+            matchup_label = (f"{away.get('abbr') or away.get('abbreviation') or away.get('short') or '?'} at "
+                               f"{home.get('abbr') or home.get('abbreviation') or home.get('short') or '?'}")
             rows.append({'league': game.get('league'), 'gameId': game['id'], 'kickoff': game['kickoff'],
+                         'matchupLabel': matchup_label,
                          'title': line.get('title'), 'team': None, 'athleteId': line.get('athleteId'),
                          'price': f"{price(line.get('odds'))} {book_short(line.get('book'))}",
                          'book': line.get('book'), 'metric': f"{history['hits']}/{history['games']} exact-line trend",

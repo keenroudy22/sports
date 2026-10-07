@@ -528,7 +528,18 @@ def ticket_leg_art(index, art, y, height, accent):
 def ticket_svg(pick, game=None, avatar=None, art=None, style=None):
     """Phone-first fun tickets: full-width legs, no truncated wagers or oversized artwork."""
     if felt_enabled(pick):
-        return felt_cards.fun_ticket_card(pick, play_label(pick).title(), art)
+        display = dict(pick)
+        context = f"{len(set(pick.get('gameIds') or [])) or len(pick.get('legs') or [])} games"
+        if (game or {}).get('kickoff'):
+            try:
+                from zoneinfo import ZoneInfo
+                local = datetime.fromisoformat(game['kickoff'].replace('Z', '+00:00')).astimezone(
+                    ZoneInfo('America/New_York'))
+                context += f' · {local:%a %b %-d}'
+            except (ValueError, TypeError):
+                pass
+        display['_timing'] = context
+        return felt_cards.fun_ticket_card(display, play_label(pick).title(), art)
     legs = pick.get('legs') or []
     art = art or []
     colors = ticket_style(pick, style)

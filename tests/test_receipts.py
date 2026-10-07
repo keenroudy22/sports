@@ -142,6 +142,19 @@ class ReceiptTests(unittest.TestCase):
         self.assertIn('receipt-day-2026-09-27', cards)
         self.assertIn('receipt-week-2026-09-29', cards)
 
+    def test_retained_receipt_keeps_the_season_record_from_its_due_time(self):
+        first = {
+            'early': pick('early', 'sun', publishedAt='2026-09-27T12:00:00Z'),
+            'late': pick('late', 'sun', publishedAt='2026-09-27T12:05:00Z'),
+        }
+        latest = {
+            'early': {'result': 'win', 'settledAt': '2026-09-28T12:30:00Z'},
+            'late': {'result': 'loss', 'settledAt': '2026-09-28T14:00:00Z'},
+        }
+        receipt = receipts.day_receipt(datetime(2026, 9, 27).date(), first, latest, GAMES,
+                                       set(first), datetime(2026, 10, 6, tzinfo=timezone.utc))
+        self.assertEqual(receipt['season'], '1–0', 'a later rebuild cannot advance the retained season headline')
+
     def test_the_receipt_card_is_the_same_frame(self):
         first, latest, log = world()
         card = pick_card.receipt_svg(receipts.ready(first, latest, GAMES, log, MONDAY_MORNING)[0], avatar='data:image/png;base64,AAAA')
@@ -162,7 +175,7 @@ class ReceiptTests(unittest.TestCase):
         straight = pick('hurt', 'sun', result='loss', actual='Player Seven: 12 receiving yards',
                         injuryPlayers=['Player Seven'])
         self.assertEqual(receipts.result_detail(straight),
-                         'injured in-game · checked before grading · Final: Player Seven: 12 receiving yards')
+                         'Final: Player Seven: 12 receiving yards · injured in-game · checked before grading')
         ticket = pick('hurt-parlay', 'sun', parlayType='easyProps', result='loss', riskUnits=0.25,
                       actual='legs: win, loss, win', injuryPlayers=['Player Seven'])
         self.assertEqual(receipts.result_detail(ticket),
@@ -170,7 +183,7 @@ class ReceiptTests(unittest.TestCase):
         card = pick_card.receipt_svg({'title': '0-1', 'when': 'Sunday, Sep 27', 'label': 'YESTERDAY\'S PLATES',
                                       'rows': [('loss', 'Player Seven over 49.5 receiving yards',
                                                 receipts.result_detail(straight))]}, avatar='')
-        self.assertIn('injured in-game · checked before grading', card)
+        self.assertIn('Final: Player Seven: 12 receiving yards · injured in-g…', card)
 
     def test_a_receipt_keeps_a_long_game_total_readable(self):
         receipt = {'title': '5-5', 'when': 'Saturday, Sep 26', 'label': 'YESTERDAY\'S PLATES',

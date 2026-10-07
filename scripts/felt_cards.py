@@ -11,9 +11,12 @@ same SVG-string approach, rasterized by pick_card.render (headless Chrome). Rule
   * no dashes as punctuation, no "!", no "lock", no units on straight plays (POSTS.md voice rules)
 """
 import base64
+import re
 from html import escape
 from functools import lru_cache
 from pathlib import Path
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 W, H = 1080, 1350
 FELT_NIGHT, FELT, FELT_RAISED, LINE = '#07120D', '#0E2219', '#15301F', '#21412F'
@@ -190,7 +193,7 @@ def receipt_card(day_label, rows, headline, season=None):
     body = t(64, 220, day_label.upper(), 44, DIM, BODY, 700, spacing=2) + t(64, 365, headline.upper(), hero_size, CHALK, DISPLAY, 700)
     shown = rows[:5]
     y = 430
-    tall = 140 if len(shown) <= 3 else 104
+    tall = 140 if len(shown) <= 3 else 112
     for r in shown:
         hit = r.get('result') == 'win'
         miss = r.get('result') == 'loss'
@@ -200,13 +203,13 @@ def receipt_card(day_label, rows, headline, season=None):
         title = str(r.get('displayTitle') or r.get('title') or '')
         kind = str(r.get('_kind') or 'best bet').replace('player', 'best bet').replace('team', 'best bet')
         kind = 'FUN' if 'parlay' in kind or 'lotto' in kind else 'CLIMB' if 'ladder' in kind or 'climb' in kind else 'BEST BET'
-        body += t(96, y + 28, kind, 23, KOOKD if kind == 'BEST BET' else TICKET_DIM, BODY, 800, spacing=1.5)
-        body += t(96, y + (77 if tall > 120 else 65), title[:42], 44 if tall > 120 else 38, TICKET_INK, DISPLAY, 700)
+        body += t(96, y + 27, kind, 23, TICKET_DIM, BODY, 800, spacing=1.5)
+        body += t(96, y + (77 if tall > 120 else 67), title[:42], 44 if tall > 120 else 36, TICKET_INK, DISPLAY, 700)
         detail = f"{odds(r.get('odds'))} {r.get('book') or ''}  {r.get('_final') or ''}".strip()
         if detail:
-            detail_lines = wrap(detail, 27, 670, .52)
+            detail_lines = wrap(detail, 24 if tall <= 120 else 27, 670, .52)
             detail_text = detail_lines[0] + (' …' if len(detail_lines) > 1 else '')
-            body += t(96, y + tall - 18, detail_text, 27, TICKET_DIM, BODY, 600)
+            body += t(96, y + tall - 12, detail_text, 24 if tall <= 120 else 27, TICKET_DIM, BODY, 600)
         y += tall + 14
     if len(rows) > len(shown):
         body += t(64, min(y + 28, 1138), f'+{len(rows) - len(shown)} MORE ON THE PUBLIC RECORD', 34, KOOKD, DISPLAY, 700, spacing=1)
@@ -218,8 +221,11 @@ def receipt_card(day_label, rows, headline, season=None):
 def fun_ticket_card(pick, label='Fun ticket', art=None):
     """Longshot / lotto ticket. Port target: pick_card.ticket_svg (keep the sha256(id) % 3 style rotation)."""
     legs = pick.get('legs') or []
-    body = t(64, 300, odds(pick.get('odds')), 190, KOOKD, DISPLAY, 700) + t(64, 380, str(pick.get('_hook') or label).upper(), 64, CHALK, DISPLAY, 700, spacing=1)
-    y = 470
+    body = t(64, 285, odds(pick.get('odds')), 178, KOOKD, DISPLAY, 700) + t(64, 365, str(pick.get('_hook') or label).upper(), 60, CHALK, DISPLAY, 700, spacing=1)
+    timing = str(pick.get('_timing') or '').strip()
+    if timing:
+        body += t(64, 412, timing, 34, DIM, BODY, 650)
+    y = 450
     art = art or []
     for index, leg in enumerate(legs[:6]):
         text = str(leg.get('title') or leg.get('displayTitle') or leg.get('selection') or '')
@@ -284,7 +290,7 @@ def projection_sheet(games, league, day, week=None, logos=None, watches=None):
 
     def short_book(name):
         return {'DraftKings': 'DK', 'FanDuel': 'FD', 'BetMGM': 'MGM', 'ESPN BET': 'ESPN',
-                'theScore Bet': 'ESPN', 'Caesars': 'CZR', 'BetRivers': 'BR', 'Fanatics': 'FAN'}.get(str(name or ''), str(name or '')[:5].upper())
+                'theScore Bet': 'SCORE', 'Caesars': 'CZR', 'BetRivers': 'BR', 'Fanatics': 'FAN'}.get(str(name or ''), str(name or '')[:5].upper())
 
     def num(value):
         return f'{float(value):g}' if isinstance(value, (int, float)) else '–'
@@ -330,18 +336,23 @@ def projection_sheet(games, league, day, week=None, logos=None, watches=None):
         aw, hm = logos.get((card.get('id'), 'away')), logos.get((card.get('id'), 'home'))
         logo_y = y + 14
         if aw:
+            body += f'<circle cx="{x + 35}" cy="{logo_y + 19:.0f}" r="20" fill="{CHALK}" opacity=".9"/>'
             body += f'<image href="{aw}" x="{x + 16}" y="{logo_y:.0f}" width="38" height="38" preserveAspectRatio="xMidYMid meet"/>'
         if hm:
+            body += f'<circle cx="{x + 79}" cy="{logo_y + 19:.0f}" r="20" fill="{CHALK}" opacity=".9"/>'
             body += f'<image href="{hm}" x="{x + 60}" y="{logo_y:.0f}" width="38" height="38" preserveAspectRatio="xMidYMid meet"/>'
         team_x = x + (108 if aw or hm else 20)
         matchup = f"{away.get('abbr') or away.get('abbreviation') or '?'} @ {home.get('abbr') or home.get('abbreviation') or '?'}"
         body += t(team_x, y + 45, matchup, team_size, CHALK, DISPLAY, 700)
         v2 = card.get('v2') or {}
         score = f"{num(v2.get('away'))}–{num(v2.get('home'))}"
-        body += t(x + card_w - 18, y + 43, score, info_size + 2, KOOKD, DISPLAY, 700, 'end')
+        if not watch:
+            body += t(x + card_w - 18, y + 43, score, info_size + 2, KOOKD, DISPLAY, 700, 'end')
         if watch:
-            body += f'<circle cx="{x + card_w - 24}" cy="{y + card_h - 24:.0f}" r="18" fill="{KOOKD}"/>'
-            body += t(x + card_w - 24, y + card_h - 16, f'#{watch[0]}', 20, KOOKD_INK, BODY, 800, 'middle')
+            badge = f'#{watch[0]} {watch[2]}'
+            badge_w = min(214, max(118, 18 + len(badge) * 10))
+            body += f'<rect x="{x + card_w - badge_w - 12:.0f}" y="{y + 5:.0f}" width="{badge_w}" height="28" rx="14" fill="{FELT_NIGHT}" stroke="{KOOKD}" stroke-width="2"/>'
+            body += t(x + card_w - 22, y + 26, badge, 19, KOOKD, BODY, 800, 'end')
         ours_spread = spread(card, v2.get('margin'))
         ours_total = num(v2.get('total'))
         sy = y + (88 if card_h >= 132 else 72)
@@ -356,7 +367,7 @@ def projection_sheet(games, league, day, week=None, logos=None, watches=None):
 def climb_path(progress, y=984):
     """Persistent dollar checkpoints without guessing the number or price of future rungs."""
     checkpoints = (50, 100, 250, 500, 1000)
-    xs = (104, 306, 540, 774, 976)
+    xs = (104, 306, 520, 730, 925)
     body = f'<line x1="{xs[0]}" y1="{y}" x2="{xs[-1]}" y2="{y}" stroke="{LINE}" stroke-width="12" stroke-linecap="round"/>'
     current_set = False
     for index, (amount, x) in enumerate(zip(checkpoints, xs)):
@@ -370,7 +381,7 @@ def climb_path(progress, y=984):
             body += t(x, y + 12, '✓', 40, KOOKD_INK, BODY, 800, 'middle')
         body += t(x, y + 76, f'${amount:,}', 29, CHALK if done or current else DIM, DISPLAY, 700, 'middle')
         if index == len(checkpoints) - 1:
-            body += f'<path d="M{x + 37} {y - 62}v-46h52l-13 17 13 17h-52" fill="{KOOKD}" stroke="{CHALK}" stroke-width="3"/>'
+            body += f'<path d="M{x} {y - 31}V{y - 108}h52l-13 17 13 17h-52" fill="{KOOKD}" stroke="{CHALK}" stroke-width="3"/>'
     return body
 
 
@@ -439,14 +450,56 @@ def research_choice_card(choice, art=None):
     """The existing research category in the felt system; exact rows remain the source of truth."""
     art = art or {}
     rows = (choice.get('rows') or [])[:4]
-    body = t(64, 230, str(choice.get('title') or 'RESEARCH').upper(), 72, CHALK, DISPLAY, 700)
-    body += t(64, 286, str(choice.get('kicker') or 'DATA + CONTEXT').upper(), 34, KOOKD, BODY, 700, spacing=2)
+    body = t(64, 225, str(choice.get('title') or 'RESEARCH').upper(), 58, CHALK, DISPLAY, 700)
     hero = next((uri for uri in art.values() if uri), None)
     if hero and len(rows) == 1:
-        body += photo(900, 248, 92, hero)
-    top = 350
+        body += photo(900, 238, 82, hero)
+    top = 300
     row_h = 360 if len(rows) == 1 else min(182, 700 / max(1, len(rows)))
     for index, row in enumerate(rows):
+        if len(rows) == 1:
+            title = str(row.get('title') or '')
+            title_lines = wrap(title, 76, 760 if hero else W - 192, .53)[:2]
+            y = top
+            for line_index, line in enumerate(title_lines):
+                body += t(64, y + line_index * 82, line, 76, CHALK, DISPLAY, 700)
+            y += max(1, len(title_lines)) * 82 + 18
+            price = str(row.get('price') or '')
+            if price:
+                body += t(64, y, price, 56, KOOKD, DISPLAY, 700)
+                y += 82
+            hits, games = row.get('hits'), row.get('games')
+            selection = re.search(r'\b(over|under)\s+([0-9.]+)', title, re.I)
+            if selection and isinstance(hits, int) and isinstance(games, int):
+                proof = f'{selection.group(1).title()} {selection.group(2)} in {hits} of the last {games}'
+            else:
+                proof = str(row.get('metric') or '')
+            body += f'<rect x="64" y="{y - 48}" width="{W - 128}" height="238" rx="24" fill="{FELT_RAISED}" stroke="{LINE}"/>'
+            body += t(96, y + 20, proof, 44, CHALK, BODY, 750)
+            matchup = row.get('matchup') or {}
+            if isinstance(matchup.get('rank'), int) and isinstance(matchup.get('of'), int):
+                rank = int(matchup['rank'])
+                suffix = 'th' if 10 <= rank % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(rank % 10, 'th')
+                tone = 'soft' if matchup.get('supports') else 'tough' if matchup.get('opposes') else 'neutral'
+                defense = f"{row.get('opponentAbbr') or 'Opponent'}: {rank}{suffix} of {matchup['of']} vs {matchup.get('pos') or 'position'}s ({tone})"
+            else:
+                defense = str(row.get('detail') or '')
+            body += t(96, y + 88, defense, 36, DIM, BODY, 650)
+            timing = str(row.get('matchupLabel') or '').upper()
+            try:
+                local = datetime.fromisoformat(str(row.get('kickoff')).replace('Z', '+00:00')).astimezone(
+                    ZoneInfo('America/Indiana/Indianapolis'))
+                timing += ('  ·  ' if timing else '') + f'{local:%a %b %-d · %-I:%M %p ET}'
+            except (TypeError, ValueError):
+                pass
+            if timing:
+                body += t(96, y + 154, timing, 31, KOOKD, BODY, 700)
+            if isinstance(hits, int) and isinstance(games, int) and games > 0:
+                bar_x, bar_y, bar_w = 64, y + 232, W - 128
+                body += f'<rect x="{bar_x}" y="{bar_y}" width="{bar_w}" height="22" rx="11" fill="{LINE}"/>'
+                body += f'<rect x="{bar_x}" y="{bar_y}" width="{bar_w * hits / games:.1f}" height="22" rx="11" fill="{KOOKD}"/>'
+                body += t(64, bar_y + 68, f'{hits} HIT  ·  {games - hits} MISSED', 30, DIM, BODY, 700, spacing=.7)
+            continue
         y = top + index * (row_h + 18)
         body += f'<rect x="64" y="{y:.0f}" width="{W - 128}" height="{row_h:.0f}" rx="22" fill="{FELT_RAISED}" stroke="{LINE}"/>'
         body += f'<rect x="64" y="{y + 20:.0f}" width="6" height="{max(30, row_h - 40):.0f}" rx="3" fill="{KOOKD}"/>'
@@ -464,9 +517,6 @@ def research_choice_card(choice, art=None):
             proof_number = metric.split(' ', 1)[0]
             body += t(98, y + 326, proof_number, 96, KOOKD, DISPLAY, 700)
             body += t(295, y + 318, 'EXACT-LINE PROOF', 32, DIM, DISPLAY, 700, spacing=1)
-    proof = str((rows[0] if rows else {}).get('metric') or '')
-    if proof:
-        body += t(64, 1150, f'PROOF POINT  ·  {proof}'[:74], 32, DIM, DISPLAY, 700, spacing=.7)
     label = {'upset': 'Underdog research', 'spread-dog': 'Spread research',
              'matchup': 'Matchup research', 'season': 'Trend research',
              'end-zone': 'Scorer research'}.get(choice.get('kind'), 'Slate research')
