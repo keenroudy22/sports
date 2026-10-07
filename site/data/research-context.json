@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-07T17:13:35Z",
+  "updatedAt": "2026-10-07T17:32:18Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,8 +472,17 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-10-07T16:57Z",
+              "reportedAt": "2026-10-07T17:24Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
+            },
+            {
+              "id": "3916387",
+              "name": "Lamar Jackson",
+              "position": "QB",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-07T17:19Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3916387/lamar-jackson"
             },
             {
               "id": "3915189",
@@ -492,15 +501,6 @@
               "injury": null,
               "reportedAt": "2026-10-07T00:59Z",
               "source": "https://www.espn.com/nfl/player/_/id/4430831/trenton-simpson"
-            },
-            {
-              "id": "3916387",
-              "name": "Lamar Jackson",
-              "position": "QB",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-06T20:50Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3916387/lamar-jackson"
             },
             {
               "id": "3052743",
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-07T16:57Z",
+              "reportedAt": "2026-10-07T17:24Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1387,6 +1387,15 @@
           "name": "Cincinnati Bengals",
           "players": [
             {
+              "id": "4239993",
+              "name": "Tee Higgins",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Groin",
+              "reportedAt": "2026-10-07T17:21Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4239993/tee-higgins"
+            },
+            {
               "id": "4427729",
               "name": "Demetrius Knight Jr.",
               "position": "LB",
@@ -1466,15 +1475,6 @@
               "injury": null,
               "reportedAt": "2026-10-06T01:17Z",
               "source": "https://www.espn.com/nfl/player/_/id/3116389/samaje-perine"
-            },
-            {
-              "id": "4239993",
-              "name": "Tee Higgins",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Groin",
-              "reportedAt": "2026-10-05T19:16Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4239993/tee-higgins"
             },
             {
               "id": "4429000",
@@ -4837,6 +4837,15 @@
           "name": "New England Patriots",
           "players": [
             {
+              "id": "4569173",
+              "name": "Rhamondre Stevenson",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Undisclosed",
+              "reportedAt": "2026-10-07T17:24Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4569173/rhamondre-stevenson"
+            },
+            {
               "id": "4686772",
               "name": "Christian Gonzalez",
               "position": "CB",
@@ -4952,15 +4961,6 @@
               "injury": null,
               "reportedAt": "2026-10-04T22:48Z",
               "source": "https://www.espn.com/nfl/player/_/id/4432710/treveyon-henderson"
-            },
-            {
-              "id": "4569173",
-              "name": "Rhamondre Stevenson",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-04T22:43Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4569173/rhamondre-stevenson"
             },
             {
               "id": "4431452",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "24",
-          "name": "Dalvin Tomlinson",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-06T20:01:41Z",
-          "source": "https://www.espn.com/nfl/player/_/id/2979860/dalvin-tomlinson"
-        },
-        {
-          "teamId": "24",
           "name": "Derwin James Jr.",
           "from": "Out",
           "to": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-07T17:04:51Z",
           "source": "https://www.espn.com/nfl/player/_/id/4808766/mason-taylor"
+        },
+        {
+          "teamId": "17",
+          "name": "Rhamondre Stevenson",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-07T17:32:18Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4569173/rhamondre-stevenson"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-07T17:13:35Z",
-      "lastAttemptAt": "2026-10-07T17:13:35Z",
+      "checkedAt": "2026-10-07T17:32:18Z",
+      "lastAttemptAt": "2026-10-07T17:32:18Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-07T17:13:35Z",
-      "lastAttemptAt": "2026-10-07T17:13:35Z",
+      "checkedAt": "2026-10-07T17:32:18Z",
+      "lastAttemptAt": "2026-10-07T17:32:18Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
