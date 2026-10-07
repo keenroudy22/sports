@@ -15666,5 +15666,61 @@
         "entryNote": "Closed to new entries at 11:45 AM ET: total moved 3 against, from 56.5 to 53.5. Published cutoff: UNDER 56.5 at -110 or better. Closed to new entries at 55 or lower, or at -125 or worse at 56.5.. Stays in the record at 56.5 and -110 and is graded as posted."
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-07T21:30:05Z",
+    "targetWeek": 6,
+    "summary": "5:30 PM ET run, published at 5:30 PM ET. Nothing to settle. Closed 1: San Diego State at Oregon State under 56.5. Nothing published. Screened and passed on 28: Duke at Georgia Tech over 44.5 (one_book); Skyler Locklear UNDER 238.5 passing yards (one_book); JJ Kohl UNDER 261.5 passing yards (card_cap); Adam Damante UNDER 206.5 passing yards (card_cap); Louisiana at Louisiana Tech over 47.5 (one_book); Indiana at Nebraska over 49.5 (one_book); Deshawn Purdie UNDER 212.5 passing yards (one_book); North Carolina at Pittsburgh over 47.5 (one_book); and 20 more. odds_api.py: CFB: skipped (8 game-line credits already scheduled today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "expired",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 56.5,
+        "direction": "under",
+        "gameIds": [
+          "CFB-401860902"
+        ],
+        "book": "FanDuel",
+        "odds": -110,
+        "projection": 51.1,
+        "edge": "v2 total 51.1 (80% range 30.4 to 71.9). Chance of under 56.5: 54.7% (v2's raw 63.0% shrunk by its 2024-25 record against the close), against 52.4% break-even at -110: +2.3 points, +0.044u per unit.",
+        "cutoff": "UNDER 56.5 at -110 or better. Closed to new entries at 55 or lower, or at -125 or worse at 56.5.",
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-10-05T03:32:35Z",
+        "quotedAt": "2026-10-05T09:15:15Z",
+        "quoteType": "capture",
+        "quoteNote": "FanDuel's number and price from the 5:15 AM ET capture across 6 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-10-05T15:45:00Z",
+        "probabilityAtPublication": {
+          "rawChance": 0.63,
+          "chance": 0.547,
+          "calibrated": true,
+          "calibration": 0.36,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.524,
+          "edgePoints": 2.3,
+          "evPerUnit": 0.044,
+          "snapshotAt": "2026-10-05T03:32:35Z",
+          "evaluatedAt": "2026-10-05T12:30:05Z"
+        },
+        "title": "San Diego State at Oregon State under 56.5",
+        "id": "CFB-2026-W6-sdsu-orst-under-56-5-fd",
+        "confidence": 3,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401860902",
+          "https://goaztecs.com/news/2026/10/4/san-diego-state-hits-the-road-for-pac-12-play-with-saturday-game-at-oregon-state",
+          "https://goaztecs.com/news/2026/10/4/spirited-second-half-comeback-propels-aztecs-past-texas-state-in-pac-12-opener-31-29"
+        ],
+        "why": "Model lean, published on our number alone. Our total is 51.1 against 56.5: the under reads 54.7% after the raw 63.0% is shrunk by the model's record against the close, +2.3 points clear of the 52.4% that -110 needs. Nothing sourced argues against it; the number is the reason. Checked before publishing: Jayden Denegal started San Diego State's October 3 game against Texas State and remains listed as the team's starting quarterback in its October 4 game notes for Oregon State; the notes do not give a game-week health designation. Checked before publishing: Josiah Lucas made his first collegiate start against Texas State and ran for 111 yards on 21 attempts. The market: The spread opened -13.5 and is -14 at DraftKings, a move of 0.5 toward the home. The total opened 57.5 and is 56.5 at DraftKings, 1 toward the under. 6 books span -14.5 to -13.5 on the spread; the middle is -13.75. 6 books span 56.5 to 57.5 on the total; the middle is 56.5. Our spread gap of 2.8 points is at the 44th percentile of the model's gaps; gaps this large went 1014-1005 against the close in 3584 graded games. Our total gap of 5.4 points is at the 79th percentile of the model's gaps; gaps this large went 411-338 against the close in 3602 graded games.",
+        "risk": "It rests on the model alone, and the closing line beats our number on average, so a gap this size is more often our error than the market's. Confidence 3 of 10.",
+        "jurisdictionVerified": true,
+        "entryNote": "Closed to new entries at 5:30 PM ET: total moved 3 against, from 56.5 to 53.5. Published cutoff: UNDER 56.5 at -110 or better. Closed to new entries at 55 or lower, or at -125 or worse at 56.5.. Stays in the record at 56.5 and -110 and is graded as posted."
+      }
+    ]
   }
 ]
