@@ -77,10 +77,11 @@ test('replacement UI keeps the owner-mandated wording and shared labels', () => 
 });
 
 test('suspect player projections and prices have no ranked board row or profile chance', () => {
+  const more = fs.readFileSync('site/app-more.js', 'utf8');
   assert.match(source, /filter\(r => !r\.roleSuspect && !r\.priceSuspect\)/);
   assert.match(source, /Lines under review/);
-  assert.match(source, /projectionReview \? 'Under review'/);
-  assert.match(source, /Projection under review/);
+  assert.match(more, /const held = projectionReview \|\| Boolean\(heldRow\)/);
+  assert.match(more, /UNDER REVIEW/);
 });
 
 test('every rendered view preserves the browser-audit page contract', () => {

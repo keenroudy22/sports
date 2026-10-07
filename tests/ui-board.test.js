@@ -22,7 +22,7 @@ test('Good-to prices and current quotes retain the published cutoff', () => {
   assert.equal(M.latestPickQuote(pick,[{...row,odds:-120}],now).inside,false);
   assert.equal(M.latestPickQuote(pick,[{...row,line:51.5}],now).inside,false);
   assert.equal(M.latestPickQuote(pick,[{...row,observedAt:'2026-10-06T00:00:00Z'}],now),null);
-  assert.match(source,/ago\(latest.current.observedAt\)/);
+  assert.match(source,/Now \$\{odd\(latest\.current\.odds\)\} at \$\{clock\(latest\.current\.observedAt\)\}/);
 });
 
 test('history and defense cannot manufacture Model support below the price bar', () => {
