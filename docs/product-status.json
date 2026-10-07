@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-07T23:03:34Z",
+  "updatedAt": "2026-10-07T23:13:54Z",
   "items": [
     {
       "id": "P01",
@@ -412,18 +412,18 @@
       "title": "Results-led direction and 10-second Today",
       "status": "ready",
       "owner": "agent",
-      "next": "At the next routine quiet window, deploy the reviewed direction and 10-second Today release with the locked script; watch the hosted run, then measure cold-phone Today and verify live 375/1440-pixel routes before marking shipped.",
+      "next": "Measure a cold phone visit against the documented 10-second speed budget and observe the next weekly direction packet; keep bounded moves off until their logged evidence meets the existing rules.",
       "doneWhen": "Trigger and undo fixtures pass, no gate loosens below the October 7 baseline, every move logs evidence, the Monday packet explains changes and reversals, and a cold phone visit meets the documented 10-second budget.",
-      "evidence": "Owner-delegated standing approval in DIRECTION-RULES.md on October 7. Claude's patch series is integrated locally in 5230497e and 45cc8263 plus a Codex fix-up; no automatic move triggers on Oct 7 stored evidence. Local gates: 1101 Python (2 skipped), 169 Node, clean export, build, guard, budget, record audit, isolated 17:30 rehearsal and 24 browser routes without issues. Not live until hosted and live verification."
+      "evidence": "Direction and Today code is live in release 48e57391, run 37700211419, app133/CSS82. At 375/1440 Today showed TK King and the Climb stub without overflow or browser errors. Cold-phone speed and the first weekly direction packet are not yet observed, so this stays open."
     },
     {
       "id": "P47",
       "title": "Vegas vs reality site panel",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "At the next routine quiet window, deploy the locally gated Vegas panel, watch the hosted publish and verify the live league pages and payload at 375/1440 pixels before marking shipped.",
+      "next": "Preserve the independently checked stored-line calculations and review coverage caveats as new seasons accumulate.",
       "doneWhen": "Sport rows and calibration bins match the independent reference within stated tolerances, the site clearly labels coverage and caveats, and no new request or record mutation occurs.",
-      "evidence": "Owner approved October 7. Claude's independently checked reference is tested by commit f529fc40. Local combined gates passed 1101 Python (2 skipped), 169 Node, clean export, build, guard, budget, record audit, isolated rehearsal and 24 browser routes. Not live until hosted and live verification."
+      "evidence": "Owner approved October 7; reference numbers tested by f529fc40. Release 48e57391, hosted run 37700211419 succeeded. Live #vegas showed NFL 67.8% of 890 favorites winning, 50.1% of 867 favorites covering and 51.5% of 868 overs, with coverage labels; 375/1440 had no overflow or errors."
     },
     {
       "id": "P48",
@@ -477,16 +477,16 @@
       "owner": "agent",
       "next": "Release role, exact two-sided price and cross-book guards at the next safe window after all gates; verify Damante, TK King, Kohl and Egbuka on the live board without rewriting forecasts.",
       "doneWhen": "Kohl/Damante/TK King holds, Egbuka and five corrupted DK prices refused, 0.99–1.15 pair band and two-sided exact-line check agree across board and selection; hosted/live checks pass.",
-      "evidence": "A-22 to A-24, October 7. Prior local batch passed 1018 Python/152 Node, clean export, record, guard, rehearsal and 12 browser views, but is not live. The new 14-day candidate/day replay is player 1741→1603, game 210→181 under exact-line quote check; these are attempts, not record changes."
+      "evidence": "A-22 to A-24 safeguards are live in 48e57391, hosted run 37700211419. Local tests replay the five bad DK prices, two-sided exact-line band and QB-change holds; live TK King and JJ Kohl say Under review with no chance or grade. The 14-day candidate/day replay is player 1741→1603, game 210→181; attempts, not a revised record. Damante/Egbuka live recheck remains."
     },
     {
       "id": "P54",
       "title": "Remove free-site helpline and Responsible gaming page",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Release the owner-approved footer and page removal after P53 passes its live role/price checks, then verify both widths and legacy #responsible redirect.",
+      "next": "Keep the free-site footer and legacy #responsible redirect; revisit legal requirements before any paid launch.",
       "doneWhen": "Live footer has no helpline or Responsible gaming link, the More page and Start here links are absent, #responsible opens More, and entertainment-only, grading, Eastern-time and Cloudflare lines remain; tests and full deployment gates pass.",
-      "evidence": "Owner follow-up October 7 explicitly removed the More Responsible gaming page. Local code and tests are prepared; no live release claimed. Revisit page and helplines in PAID-TIER-PLAN legal checklist before paid launch."
+      "evidence": "Owner rule October 7. Release 48e57391, hosted run 37700211419 succeeded. Live footer at 375/1440 retains entertainment-only, grading, Eastern and Cloudflare text without helplines; #responsible opens More. Paid-tier legal review remains separate."
     },
     {
       "id": "P55",
@@ -502,9 +502,9 @@
       "title": "Plain-English prices and ranges across site",
       "status": "ready",
       "owner": "agent",
-      "next": "Bundle the tested copy update with the P53/P54 quiet-window release; verify Upset Watch odds thresholds and public routes at 375 and 1440 pixels.",
+      "next": "Verify the live Upset Watch threshold sentences against current prices and sweep the remaining public copy for technical wording before marking this fully shipped.",
       "doneWhen": "Upset Watch calculates price-needed probability from each quote, jargon is replaced on main site surfaces without changing guards, and hosted/live checks pass.",
-      "evidence": "Owner wording request October 7. Local +114 and -110 threshold tests and 12 real-Chrome route checks at 375/1440 passed; not yet live."
+      "evidence": "Owner wording request October 7. Copy is live in 48e57391, run 37700211419; local +114/-110 tests and live main routes at 375/1440 passed. Upset Watch live threshold and remaining copy sweep are still open."
     },
     {
       "id": "P57",
@@ -536,20 +536,20 @@
     {
       "id": "P60",
       "title": "Today best-bet hero expires a delivered pick too early",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Verify the Kitchen Ticket fix on the live site: TK King stays visible after the quote expires, with old-price wording and no actionable current-price badge.",
-      "doneWhen": "A delivered play remains visible as a posted play with expired-price context; no stale price is presented as a current actionable quote; 375 and 1440 live Today checks pass.",
-      "evidence": "October 7 publish run 37695705262 succeeded for 480a22ac, but live Today showed 'No best bet yet' after TK King's X and Discord delivery. The Kitchen Ticket website series includes a fix, but it remains unverified until hosted and live checks pass."
+      "next": "Preserve the delivered-play rail and distinguish posted prices from current actionable quotes on future changes.",
+      "doneWhen": "A delivered play remains visible after its quote expires; role-held plays show Under review, other expired quotes say the posted price may be gone, and no stale quote receives a current-good badge.",
+      "evidence": "Release 48e57391, hosted run 37700211419. Live all-sports Today at 375/1440 again showed delivered TK King; his role hold says Under review with no chance or ORDER UP. The old Bills-Rams quote says 'Posted price may be gone' and 'I had it at'; no current-good badge. No overflow or browser errors."
     },
     {
       "id": "P61",
       "title": "Kitchen Ticket website for Today, plays and players",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Run the full gates and rehearsal on the applied site-v2 series, locked-deploy under the October 7 one-night exception before 11:15 PM if safe, watch hosted publish, then check 375 and 1440 live Today, play, player and legacy routes.",
+      "next": "Preserve the live Today, play and player layouts; keep the 11:45 PM Kitchen Ticket card cutover separate.",
       "doneWhen": "Hosted publish passes and the live phone and desktop checks show the whole Today ticket and Climb stub, held-play protections, expired-price wording, working legacy routes and no overflow, console errors or caught load state.",
-      "evidence": "Owner approved October 7. Claude's 11-patch site-v2 mbox applied cleanly to dev 87ae3c9e. Local gates: 1138 Python (2 skipped), 196 frontend, clean export, build, record audit 92 picks, budget and guard; 17:30 rehearsal ok; 375/1440 browser routes clean. Hosted and live verification pending."
+      "evidence": "Owner approved October 7. Claude's 11-patch series shipped in 48e57391; hosted run 37700211419 succeeded. Gates: 1138 Python (2 skipped), 196 frontend, clean export, build, 92-pick audit, budget, guard and 17:30 rehearsal. Live app133/CSS82: 375/1440 Today, held play, Kohl player, old quote and legacy routes had no overflow, caught load state or console errors."
     }
   ]
 }

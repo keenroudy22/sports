@@ -938,3 +938,32 @@ render is `/Users/keen/Projects/kookn-patches/design/final/codex-climb-route.png
 labeled fixtures cover mid-climb, restart and an open rung with its true −173 price. Route posting
 and site placement remain off until the owner/Claude review and a separate gated release. The
 existing 11:45 PM Kitchen Ticket cutover is unchanged.
+
+## October 7 Kitchen Ticket website release — verified live
+
+The owner approved applying Claude's 11-patch `site-v2-2026-10-07.mbox` tonight as a one-night
+exception. The mbox hash matched its handoff, it applied without conflicts to dev `87ae3c9e`,
+and the result matched Claude's tested tree before the queue receipt commit. The lock-holding
+deploy pushed `48e573914f1431210e1f50999bce4c3bbad6a9c0` to main. Hosted publish run
+`37700211419` succeeded, including the public record, payload-budget and artifact checks.
+
+On the final tree, 1,138 Python tests passed (two skipped), 196 frontend tests passed, both
+suites passed again from a clean export, the site built, the publication guard found no issues,
+the record audit matched 92 picks, the asset fingerprint was current, and the isolated 17:30
+rehearsal returned `ok` with no outside writes or private reads. Local browser checks at 375 and
+1440 pixels found no overflow, caught load-error state or console exception on Today, the play
+and player pages, Record, Vegas, Games, Research and legacy links.
+
+Live `https://keenroudy.com/sports/` served app.js?v=133 and app.css?v=82. With All sports
+selected, Today showed delivered TK King and the Climb stub at 375 and 1440 pixels. The TK King
+play showed its role hold with no chance or ORDER UP; JJ Kohl's player page showed Under review
+and his real full-game attempt counts. The older Bills–Rams play said “Posted price may be gone”
+and “I had it at”, not a fresh-price badge. The Vegas panel displayed stored-line samples and
+coverage; Record, Games, Research and `#responsible` (to More) opened. No sideways scroll,
+rendered load failure or console error appeared. This clears P47, P54, P60 and P61. P46 still
+needs a cold-phone speed measurement and its first weekly direction packet; P53 still needs the
+Damante/Egbuka live recheck; P56 still needs the Upset Watch live threshold check and copy sweep.
+
+Claude approved the separate Climb route preview in `CLIMB-ROUTE-REVIEW.md`; this website release
+does not enable route delivery or change the 11:45 PM Kitchen Ticket card cutover. P59 tracks
+that separately.
