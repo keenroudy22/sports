@@ -94,13 +94,15 @@ def priced_ticket(book, legs):
             'firstKickoff': min(l['kickoff'] for l in chosen)}
 
 
-def build(rows, now, day=None, target=500, league=None, exclude=(), extra_legs=()):
+def build(rows, now, day=None, target=500, league=None, exclude=(), extra_legs=(), max_legs=MAX_LEGS, price_range=None):
     """The best ticket on the board for the day: None with a reason when there is none.
 
     exclude: game ids the research run has a sourced reason to leave off, such as weather.
     extra_legs: already-vetted, feed-priced alternate player lines. They may mix with the board, but a ticket still
     has one book and at most one leg from any game.
+    max_legs, price_range: a narrower shape (the direction rules' shorter fun tickets); never wider than the default.
     """
+    max_legs = min(max(int(max_legs), MIN_LEGS), MAX_LEGS)
     day = day or eastern_date(now).isoformat()
     picks = [r for r in rows if eligible(r, now, day, league) and r['gameId'] not in set(exclude)]
     best_per_game = {}
@@ -127,7 +129,7 @@ def build(rows, now, day=None, target=500, league=None, exclude=(), extra_legs=(
                               'alternate': False})
         board.sort(key=lambda l: -l['chance'])
         # Preserve the board-only candidates exactly; alternates are additional choices, not a new requirement.
-        for count in range(MIN_LEGS, min(MAX_LEGS, len(board)) + 1):
+        for count in range(MIN_LEGS, min(max_legs, len(board)) + 1):
             tickets.append(priced_ticket(book, board[:count]))
 
         # Search a bounded set of the strongest games. Each game contributes at most its best board leg and best
@@ -143,13 +145,17 @@ def build(rows, now, day=None, target=500, league=None, exclude=(), extra_legs=(
             if old is None or (edge, leg['chance']) > (old_edge, old['chance']):
                 choices['alternate'] = leg
         groups = sorted(by_game.values(), key=lambda choices: -max(l['chance'] for l in choices.values()))[:ALT_GAME_POOL]
-        for count in range(MIN_LEGS, min(MAX_LEGS, len(groups)) + 1):
+        for count in range(MIN_LEGS, min(max_legs, len(groups)) + 1):
             for selected in combinations(groups, count):
                 for chosen in product(*(tuple(group.values()) for group in selected)):
                     if any(l.get('alternate') for l in chosen):
                         tickets.append(priced_ticket(book, chosen))
     if not tickets:
         return None, 'no book carries three of those lines at the graded numbers'
+    if price_range:
+        tickets = [t for t in tickets if price_range[0] <= t['odds'] <= price_range[1]]
+        if not tickets:
+            return None, f'no {MIN_LEGS}-{max_legs} leg ticket prices {price_range[0]:+d} to {price_range[1]:+d}'
     reaching = [t for t in tickets if t['odds'] >= target]
     pool = reaching or tickets
     # The best expected value at the fewest legs that reach the target; failing the target, the longest price.

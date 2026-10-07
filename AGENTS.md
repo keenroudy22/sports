@@ -253,6 +253,24 @@ Handy commands (from `~/Projects/sports`):
   The October 7 `POSTING-PLAYBOOK.md` is the approved detailed posting specification. Earlier references to
   mirrored menus/receipts/news, weekend-only Climb check-ins, no estimated future step and owner-written posts
   below are superseded, not permission to resurrect them.
+- **Direction rules (2026-10-07, owner standing approval):** "if trends / bets aren't hitting at the rate we want we
+  change directions after x." `scripts/direction.py`, run by Tuesday's `learn.weekly`, may only tighten, pause, shift
+  weight between approved categories, or restore what it tightened: a segment's edge bar +2 (to +6) after 20 graded
+  at least 5 points under break-even with CLV at or under 0, stepping back after 20 at or above break-even with CLV
+  at or over 0; a best-bet pause after 30 at -5u or worse with negative CLV (board and shadow continue; 30 shadow
+  plays at or above break-even with positive CLV restore it at a raised bar); first rank inside the caps at +3u over
+  30 with CLV at or over 0; a 3-play weekend card for two weeks after -8u over the last 60; shorter fun tickets
+  (+300 to +800, 3-4 legs; no longshot or easy-parlay leg from a paused segment) for two weeks after no win in 12 or
+  -3u over 20; the stricter Climb pool (no leg from a paused or raised segment, same 0.83 leg chance and -180 to -130
+  ticket; it ends when a climb reaches step 3) after two climbs in a row lose at step 1 or 2; Prep List
+  threshold/floor/stat moves. It never loosens below the Oct 7 baseline, adds a market, sport, category, slot or paid
+  service, changes how the record counts or touches a published play. It writes only `data/learning/policy.json`
+  (dated `history`; public in the GitHub repo like the existing learning policy and REPORT.md, not in the site
+  upload), pings the owner one line per change naming its key, and fills the Monday review's "Direction changes"
+  box. The ntfy ping cannot take a reply: the owner says "undo KEY" to Codex, which runs `direction.py veto KEY` (it
+  warns when the key matches nothing in force) and deploys. A failed direction step is reported and never stops the
+  rest of the weekly learning.
+  This replaces "each needs its own owner yes" for these listed moves only; R0-R7 stay in shadow.
 
 - **Sports focus and X twist (2026-10-07, owner decision delegated to Claude):** finish P0/P1/the twist,
   then NBA by October 20, EPL/UCL for October 24–25 where data supports them, CBB early November, WNBA/MLS

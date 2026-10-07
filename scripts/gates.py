@@ -33,6 +33,7 @@ from zoneinfo import ZoneInfo
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_site
+import direction
 import features
 import integrity
 import learning
@@ -317,14 +318,17 @@ def straight_value(candidate, ctx):
     if candidate.get('athleteId'):
         return prop_calibrated_value(candidate, ctx)
     desk = desk_for(candidate, ctx)
-    cautious = kind_of(candidate) != 'modelLean' and learning.paused(ctx.policy, learning.segment_of(candidate))
-    need = PERFORMANCE_GAME_EDGE if cautious else 0.0
+    segment = learning.segment_of(candidate)
+    cautious = kind_of(candidate) != 'modelLean' and learning.paused(ctx.policy, segment)
+    lift = direction.edge_raise(ctx.policy, segment, ctx.now)
+    need = (PERFORMANCE_GAME_EDGE if cautious else 0.0) + lift
     edge = desk.get('edgePoints', 0) if desk else 0
     ok = bool(desk and desk.get('calibrated') and edge > 0 and edge >= need)
+    why = 'recent performance' if cautious else 'the direction rules'
     reason = (f'adjusted chance clears the price by {edge:+.1f} points' +
-              (f'; recent performance raised the bar to {need:+.0f}' if cautious else '')) if ok else \
-             (f'{edge:+.1f} points against the price; recent performance requires {need:+.0f}' if cautious
-              else 'no positive calibrated edge at this price')
+              (f'; {why} raised the bar to {need:+.0f}' if cautious or lift else '')) if ok else \
+             (f"{edge:+.1f} points against the price; {why} {'requires' if cautious else 'require'} {need:+.0f}"
+              if cautious or lift else 'no positive calibrated edge at this price')
     return Decision(ok, 'straight_value', reason)
 
 
@@ -599,7 +603,8 @@ def lean_edge(candidate, ctx):
         return Decision(False, 'lean_edge', 'the chance is uncalibrated; a model lean needs a calibrated chance')
     segment = learning.segment_of(candidate)
     need = max(LEAN_EDGE, learning.threshold(ctx.policy, 'lean.minEdge', segment),
-               PERFORMANCE_GAME_EDGE if learning.paused(ctx.policy, segment) else 0)
+               PERFORMANCE_GAME_EDGE if learning.paused(ctx.policy, segment) else 0) \
+        + direction.edge_raise(ctx.policy, segment, ctx.now)
     if desk['edgePoints'] < need:
         return Decision(False, 'lean_edge', f"{desk['edgePoints']:+.1f} points against break-even; needs {need:+.1f}")
     return Decision(True, 'lean_edge', f"{desk['edgePoints']:+.1f} points clear of break-even", {'edgePoints': desk['edgePoints']})
@@ -640,12 +645,13 @@ def fresh_id(base, ctx):
 def card_cap(candidate, ctx):
     """The day's card: CARD['weekend'] straight plays on a Saturday or a Sunday, CARD_KIND_MAX team plays or player props
     at most, and CARD['weekday'] on any other day, the NFL game's when the day has one. It counts the plays whose games
-    fall on that Eastern day, whenever they were published, apart from one pulled before its post went out."""
+    fall on that Eastern day, whenever they were published, apart from one pulled before its post went out. While the
+    direction rules have cut the weekend card (owner, 2026-10-07), its ceiling is 3; it never rises above CARD."""
     day = slate_day(candidate, ctx)
     if day is None:
         return Decision(False, 'card_cap', 'game not in the slate')
     weekend = day.weekday() in (5, 6)
-    size = CARD['weekend' if weekend else 'weekday']
+    size = direction.weekend_cap(ctx.policy, ctx.now, CARD['weekend']) if weekend else CARD['weekday']
     kind = 'player' if candidate.get('athleteId') else 'team'
     count = {'team': 0, 'player': 0}
     family_count = 0
@@ -740,8 +746,14 @@ def prop_raw_edge(candidate, ctx):
 
 
 def learned_pause(candidate, ctx):
-    """Past underperformance is a caution and higher threshold, never a veto by itself."""
+    """Past underperformance is a caution and higher threshold, never a veto by itself. The one exception is the
+    owner's direction rules (2026-10-07): a segment they paused as a best bet stays on the board as research and
+    keeps running in shadow, but publishes no official play until its shadow record restores it."""
     segment = learning.segment_of(candidate)
+    since = direction.pause_since(ctx.policy, segment, ctx.now)
+    if since:
+        return Decision(False, 'learned_pause', f'{segment} is paused as a best bet since {since} by the direction rules; '
+                        f'it stays on the board as research', {'directionPause': True})
     if learning.paused(ctx.policy, segment):
         since = ((ctx.policy.get('segments') or {}).get(segment) or {}).get('since')
         return Decision(True, 'learned_pause', f'{segment} has a performance caution since {since}; a stronger edge is required',
@@ -780,14 +792,16 @@ def prop_calibrated_value(candidate, ctx):
     edge = 100 * (chance - pricing.break_even(candidate['odds']))
     segment = learning.segment_of(candidate)
     cautious = learning.paused(ctx.policy, segment) or trailing_prop_market(candidate, ctx) is not None
+    lift = direction.edge_raise(ctx.policy, segment, ctx.now)
     need = max(learning.threshold(ctx.policy, 'prop.minCalibratedEdge', segment),
-               PERFORMANCE_PROP_EDGE if cautious else 0)
+               PERFORMANCE_PROP_EDGE if cautious else 0) + lift
     if edge <= 0 or edge < need:
         return Decision(False, 'prop_calibrated_value',
                         f"calibrated {100 * chance:.1f}% (raw {100 * desk['rawChance']:.1f}% shrunk by k {k:g}, learned from "
                         f"{cal.get('n')} graded projections) is {edge:+.1f} points against the price; needs {need:+.0f}")
     return Decision(True, 'prop_calibrated_value', f'calibrated {100 * chance:.1f}%, {edge:+.1f} points'
-                    + (f'; recent performance raised the bar to {need:+.0f}' if cautious else ''),
+                    + (f'; recent performance raised the bar to {need:+.0f}' if cautious else
+                       f'; the direction rules raised the bar to {need:+.0f}' if lift else ''),
                     {'calibratedChance': round(chance, 3), 'performanceCaution': cautious})
 
 

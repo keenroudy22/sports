@@ -271,10 +271,17 @@ def legs_for_game(game, record, ctx, now, confirmed=None):
     return out
 
 
-def build(legs):
-    """The rung: two legs from different games at one book, priced inside TARGET, with the best joint chance on our
-    numbers (the higher price breaks a tie). None with a reason when no pair fits."""
-    best = None
+def strict_legs(legs, policy, now, league):
+    """The stricter Climb pool (direction rules, owner 2026-10-07): only the legs whose segment is neither paused nor
+    carrying a raised edge bar (`direction.flagged`). The leg chance, leg prices and TARGET are unchanged, so it can
+    only remove legs, never add or loosen one, and it lets a segment back in as soon as its own flag clears."""
+    import direction
+    return [leg for leg in legs if not direction.flagged(policy, direction.leg_segment(leg, league), now)]
+
+
+def pairs(legs):
+    """Every eligible rung: (book, leg, leg, decimal, price) for two legs from different games at one book whose
+    price multiplies inside TARGET."""
     for book in sorted({leg['book'] for leg in legs}):
         mine = [l for l in legs if l['book'] == book]
         for a, b in combinations(mine, 2):
@@ -282,14 +289,21 @@ def build(legs):
                 continue
             dec = parlay.decimal(a['odds']) * parlay.decimal(b['odds'])
             price = parlay.american(dec)
-            if not TARGET[0] <= price <= TARGET[1]:
-                continue
-            key = (round(a['chance'] * b['chance'], 4), price)
-            if best is None or key > best[0]:
-                pair = sorted((a, b), key=lambda l: (l['kickoff'], l['title']))
-                best = (key, {'book': book, 'legs': pair, 'odds': price, 'decimal': round(dec, 3),
-                              'gameIds': [l['gameId'] for l in pair], 'quotedAt': min(l['observedAt'] for l in pair),
-                              'firstKickoff': min(l['kickoff'] for l in pair), 'chance': key[0]})
+            if TARGET[0] <= price <= TARGET[1]:
+                yield book, a, b, dec, price
+
+
+def build(legs):
+    """The rung: two legs from different games at one book, priced inside TARGET, with the best joint chance on our
+    numbers (the higher price breaks a tie). None with a reason when no pair fits."""
+    best = None
+    for book, a, b, dec, price in pairs(legs):
+        key = (round(a['chance'] * b['chance'], 4), price)
+        if best is None or key > best[0]:
+            pair = sorted((a, b), key=lambda l: (l['kickoff'], l['title']))
+            best = (key, {'book': book, 'legs': pair, 'odds': price, 'decimal': round(dec, 3),
+                          'gameIds': [l['gameId'] for l in pair], 'quotedAt': min(l['observedAt'] for l in pair),
+                          'firstKickoff': min(l['kickoff'] for l in pair), 'chance': key[0]})
     if not best:
         return None, f'no book has two games with easier lines our numbers clear comfortably that pay {TARGET[0]:+d} to {TARGET[1]:+d} together'
     return best[1], None
@@ -417,6 +431,11 @@ def candidate(ctx, games, now, exclude=()):
     where = state(ctx.first, ctx.latest)
     if where['open']:
         return None, f"{where['open']['id']} is still open; the next rung waits for its result"
+    import direction
+    # Two climbs in a row lost at step 1 or 2: the next climb takes the stricter pool (owner, 2026-10-07): no leg from
+    # a segment that is paused or has a raised edge bar, with the same leg chance, leg prices and TARGET.
+    policy = getattr(ctx, 'policy', None)
+    strict = direction.climb_rules(policy, now)
     reasons = []
     for league in ('NFL', 'CFB'):
         # College legs wait for the same thing college props do: player numbers calibrated against that league's lines
@@ -430,9 +449,11 @@ def candidate(ctx, games, now, exclude=()):
             continue
         seen = confirmed_at()
         legs = [leg for g in today for leg in legs_for_game(g, ctx.prop_odds.get(g['id']), ctx, now, seen)]
+        if strict:
+            legs = strict_legs(legs, policy, now, league)
         ticket, reason = build(gates.without_straight_players(legs, ctx))
         if not ticket:
-            reasons.append(f'{league}: {reason}')
+            reasons.append(f'{league}: {reason}' + ('; the stricter Climb pool is on' if strict else ''))
             continue
         return ticket_pick(ticket, league, where, now, games), None
     return None, '; '.join(reasons) or 'no games today'

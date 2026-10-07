@@ -13,6 +13,10 @@ Every run records what it considered (scripts/learning.py). This module closes t
                         against the DraftKings line and the box score). A calibration ships only when it
                         predicts the later part of the record better than the raw chances do; then a prop must
                         also clear its price on the calibrated chance.
+           - direction  the owner's bounded course corrections (scripts/direction.py, 2026-10-07): segment edge bars
+                        and pauses, the winning-segment ranking, the weekend card ceiling, shorter fun tickets, the
+                        stricter Climb pool and the Prep List thresholds. They only tighten, pause, shift weight or
+                        restore, never below the Oct 7 baseline, and the owner can veto each one.
            - gates, judge, researcher, posts, the number: measured and reported; the researcher is told which
              sites keep checking out and which do not, and the post's reason ranking leans toward the kinds
              of reasons people engage with, within bounds, once engagement numbers exist.
@@ -24,6 +28,7 @@ Every run records what it considered (scripts/learning.py). This module closes t
   python scripts/learn.py weekly [--dry]   the weekly step (--dry: report only, change nothing)
 """
 import argparse
+import copy
 import json
 import math
 import sys
@@ -475,7 +480,37 @@ def model_findings():
 
 # ------------------------------------------------------------------ the week
 
-def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=None, games=None):
+def official_record(now):
+    """(first, latest) publications from research/ as of now, for the direction rules' fun-ticket and Climb windows."""
+    try:
+        import gates
+        ctx = gates.Stores().as_of(now)
+        return ctx.first, ctx.latest
+    except Exception:
+        return {}, {}
+
+
+def learn_direction(policy, rows, now, games, props, record=None, dry=False):
+    """The direction rules' weekly step: (report section, applied changes, error). Never touches the record, and
+    never aborts the weekly step: the moves are worked out on a copy of the policy and only a step that finishes
+    is kept, so a failure leaves the policy as it was and every other learning change is still saved."""
+    try:
+        import direction
+        trial = copy.deepcopy(policy)
+        first, latest = record if record is not None else official_record(now)
+        evidence = direction.evidence(rows, first, latest, list((games or {}).values()), props, policy=trial, now=now)
+        moves, applied = direction.step(trial, evidence, now, dry)
+        section = {'moves': moves, 'applied': applied, 'ping': direction.ping(applied),
+                   'standing': direction.standing(trial, now), 'dry': bool(dry)}
+    except Exception as error:          # reported in the report, REPORT.md and the run status; learning goes on
+        return None, [], type(error).__name__
+    if not dry:
+        policy['direction'] = trial.get('direction', {})
+        policy['history'] = trial.get('history', [])
+    return section, applied, None
+
+
+def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=None, games=None, record=None):
     now = now or learning.now_utc()
     policy_path = policy_path or Path(root) / 'policy.json'
     policy = learning.load_policy(policy_path)
@@ -498,6 +533,8 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
     changes += moved
     reasons, moved = learn_reasons(policy, log_book, now, dry)
     changes += moved
+    direction_report, moved, direction_error = learn_direction(policy, rows, now, games, historical_props, record, dry)
+    changes += moved
     import results_shadows
     shadow_raw = shadow_window(policy, rows)
     shadow_rows = []
@@ -511,9 +548,12 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
               'segments': segments, 'calibration': calibration, 'gates': by_rule(rows), 'judge': judge_findings(rows),
               'researcher': domains, 'posts': reasons, 'postTimes': post_times(log_book),
               'cardThemes': post_themes(log_book), 'model': model_findings(), 'changes': changes,
-              'marketReview': market_review.audit(historical_props), 'resultsShadows': shadow_rows}
+              'marketReview': market_review.audit(historical_props), 'resultsShadows': shadow_rows,
+              'direction': direction_report}
     if shadow_error:
         report['resultsShadowError'] = shadow_error
+    if direction_error:
+        report['directionError'] = direction_error
     if not dry:
         learning.save_policy(policy, policy_path)
         try:
@@ -542,9 +582,22 @@ def markdown(report):
     lines += ['## Changes this week', '']
     if report['changes']:
         for c in report['changes']:
-            lines.append(f"- **{c['segment']}** {c['knob']}: {c['from']} to {c['to']}. {c['why'][0].upper() + c['why'][1:]}.")
+            why = c['why'].rstrip('.')
+            lines.append(f"- **{c['segment']}** {c['knob']}: {c['from']} to {c['to']}. {why[0].upper() + why[1:]}.")
     else:
         lines.append('- None. Not enough new evidence moved anything.')
+    section = report.get('direction')
+    if report.get('directionError'):
+        lines += ['', '## Direction changes', '',
+                  f"- The direction step failed this week ({report['directionError']}), so nothing changed direction. "
+                  'Every other change above was still saved; the next weekly run tries again.']
+    elif section is not None:
+        import direction
+        moves = section.get('moves') or []
+        lines += ['', direction.markdown(section.get('applied') or [],
+                                         [m for m in moves if not m.get('reportOnly')] if section.get('dry') else None,
+                                         section.get('standing') or [],
+                                         [m for m in moves if m.get('reportOnly')]).rstrip('\n')]
     lines += ['', '## Segments (published since their last change)', '']
     for s in report['segments']:
         state = 'higher-bar caution' if s['paused'] else f"min edge {s['minEdge']:g}"

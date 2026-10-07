@@ -275,6 +275,31 @@ def learning_packet(report_path=None, shadow_root=None):
     return '\n'.join(lines) + '\n'
 
 
+def direction_packet(now, first, last, record=None, games=(), policy=None, rows=None):
+    """The "Direction changes" box and the owner ping lines (owner, 2026-10-07). Read-only: it lists the moves the
+    weekly learning run applied in the period, previews what the next run would change on today's evidence, and
+    never applies anything."""
+    import direction
+    import learning
+    policy = policy if policy is not None else learning.load_policy()
+    applied = [e for e in policy.get('history') or [] if e.get('engine') == 'direction' and e.get('at')
+               and first <= eastern_date(gates.when(e['at'])) <= last]
+    notes, preview = [], []
+    try:
+        if rows is None:
+            import learn
+            rows = learn.joined()
+        first_picks, latest = record or ({}, {})
+        found = direction.evaluate(policy, direction.evidence(rows, first_picks, latest, games, None,
+                                                              policy=policy, now=now), now)
+        preview = [m for m in found if not m.get('reportOnly')]
+        notes = [m for m in found if m.get('reportOnly')]
+    except Exception as error:          # the review still stands; it says the preview is missing
+        notes = [{'sentence': f'Direction preview unavailable: {type(error).__name__}.'}]
+    text = direction.markdown(applied, preview, direction.standing(policy, now), notes)
+    return text, direction.ping(applied)
+
+
 def record(first_picks, latest, first, last):
     """The week's settled plays in the one-record terms: straight plays, fun parlays and ladder rungs apart."""
     import x_post
@@ -431,7 +456,8 @@ def main(argv=None):
     first, last = period(now, args.since)
     import ladder
     import x_post
-    ctx = gates.Stores().as_of(now)
+    stores = gates.Stores()
+    ctx = stores.as_of(now)
     where = ladder.state(ctx.first, ctx.latest)
     ladder_now = f"climb {where['run']}, step {where['step']}, ${where['stake']} riding" + (f", open {where['open']['id']}" if where['open'] else '')
     log_book = x_post.load_log()
@@ -439,6 +465,8 @@ def main(argv=None):
                   record(ctx.first, ctx.latest, first, last), hosted_runs(first), timing(first), ladder_now,
                   LOGS / 'ALERT.txt', post_metrics(log_book, first, last), post_theme_metrics(log_book, first, last))
     text += learning_packet()
+    direction_text, direction_ping = direction_packet(now, first, last, (ctx.first, ctx.latest), stores.records)
+    text += '\n' + direction_text
     import desk_health
     # Put current verified operational facts into the same bounded local brief;
     # this adds no model call and reads no secrets or provider endpoints.
@@ -484,6 +512,8 @@ def main(argv=None):
     # The model may choose other operational highlights, but cannot omit pending
     # work from the saved review or either existing private notification excerpt.
     review = f"Official plays not scheduled: {health.get('officialUnscheduled', 0)}\n\n" + product_followthrough.brief(product_status) + '\n\n' + review
+    if direction_ping:      # one line per change and a single link, ahead of anything the model chose
+        review = 'Direction changes this week:\n' + direction_ping + '\n\n' + review
     review_path.write_text(review + '\n\n' + text, encoding='utf-8')
     (LOGS / f'review-routing-{last.isoformat()}.json').write_text(json.dumps({
         'engine': 'codex' if args.codex else 'local', 'localCalls': llm.call_stats(),

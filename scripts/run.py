@@ -689,7 +689,10 @@ PROVISIONAL_K = 0.2                # a league's player chances before learning h
 def rank_card(wanted, ctx):
     """The card's candidates, best first: by our calibrated number against the price (a player's chance shrunk by the
     league's learned k, or PROVISIONAL_K before there is one). Recent underperformance raises the required edge;
-    it does not automatically remove a line. Card size is a ceiling, never a quota."""
+    it does not automatically remove a line. Card size is a ceiling, never a quota. The direction rules (owner,
+    2026-10-07) add their raised bar, send a segment paused as a best bet to the back, and let a winning segment
+    rank first among the lines that clear their bar, inside the same caps."""
+    import direction
     import learning
     def score(c):
         row, league = c['_row'], c['_league']
@@ -703,11 +706,15 @@ def rank_card(wanted, ctx):
             behind = gates.trailing_prop_market(pick, ctx) is not None
         else:
             edge, behind = float(grade.get('edge') or -99.0), False
-        cautious = learning.paused(ctx.policy, learning.segment_of(pick)) or behind
+        segment = learning.segment_of(pick)
+        cautious = learning.paused(ctx.policy, segment) or behind
         need = gates.PERFORMANCE_PROP_EDGE if c.get('athleteId') and cautious else \
                gates.PERFORMANCE_GAME_EDGE if cautious else 0
+        need += direction.edge_raise(ctx.policy, segment, ctx.now)
+        stopped = direction.paused(ctx.policy, segment, ctx.now)
+        first = direction.priority(ctx.policy, segment, ctx.now)
         c['_rank'] = {'edge': round(edge, 1), 'performanceCaution': cautious, 'requiredEdge': need}
-        return (bool(edge <= 0 or edge < need), -edge,
+        return (bool(stopped or edge <= 0 or edge < need), not first, -edge,
                 str(c.get('id') or row.get('id') or ''))
     kept = [c for c in wanted if not c.get('athleteId')
             or isinstance(c['_row'].get('odds'), (int, float)) and CARD_PROP_PRICES[0] <= c['_row']['odds'] <= CARD_PROP_PRICES[1]]
@@ -744,10 +751,21 @@ def longshot_alternates(ctx, games, now, league, exclude=()):
 def longshot_candidate(lines, games, now, league, exclude=(), ctx=None):
     # Main lines first. Remove player exposure before ranking, so another eligible leg can replace it.
     lines = gates.without_straight_players(lines, ctx) if ctx is not None else lines
-    ticket, reason = parlay.build(lines, now, None, LONGSHOT_TARGET, league, exclude)
+    import direction
+    # After a cold run of fun tickets the direction rules ask for shorter tickets for two weeks (owner, 2026-10-07):
+    # +300 to +800, 3-4 legs, no leg from a segment paused as a best bet. None that fits means none that day.
+    policy = getattr(ctx, 'policy', None)
+    shape = direction.fun_shape(policy, now) if ctx is not None else None
+    target, options = LONGSHOT_TARGET, {}
+    if shape:
+        target, options = shape['odds'][0], {'max_legs': shape['legs'][1], 'price_range': shape['odds']}
+        lines = direction.fun_legs(policy, lines, now, league)
+    ticket, reason = parlay.build(lines, now, None, target, league, exclude, **options)
     if not ticket and ctx is not None and gates.alternate_parlay_frequency({'league': league, 'parlayType': 'easyProps'}, ctx).ok:
         alternates = gates.without_straight_players(longshot_alternates(ctx, games, now, league, exclude), ctx)
-        ticket, reason = parlay.build(lines, now, None, LONGSHOT_TARGET, league, exclude, alternates)
+        if shape:
+            alternates = direction.fun_legs(policy, alternates, now, league)
+        ticket, reason = parlay.build(lines, now, None, target, league, exclude, alternates, **options)
     if not ticket:
         return None, reason
     for leg in ticket['legs']:
@@ -1137,6 +1155,14 @@ def remember(decided, now, slot, status):
             report = learn.weekly(now)
             status['learning']['changes'] = len(report['changes'])
             log(f"learning: weekly step, {len(report['changes'])} changes; see data/learning/REPORT.md")
+            if report.get('directionError'):        # the rest of the week's learning was still saved
+                status['learning']['directionError'] = report['directionError']
+                status['errors'].append(f"learning: direction rules: {report['directionError']}")
+                log(f"learning: direction rules skipped this week ({report['directionError']}); nothing changed direction")
+            note = (report.get('direction') or {}).get('ping')
+            if note:            # the owner's weekly "what changed direction and why", one line per change
+                import direction
+                alert("Kook'n changed direction", note, priority='default', click=direction.REPORT_LINK)
     except Exception as error:          # the record is worth keeping, never worth a failed run
         status['errors'].append(f'learning: {type(error).__name__}: {error}')
         log(f'learning: {type(error).__name__}: {error}')

@@ -212,7 +212,7 @@ def candidate(ctx, games, now, key=None, get=None, cache=None, remaining=None, l
         return None, f'only {len(today)} NFL games left today; a ticket needs {LEGS}'
     fetched = fetch_day(today, now, key, get, cache, remaining, log, spend)
     legs = [leg for game in today for leg in legs_for_game(game, fetched.get(game['id']) or [], ctx, now)]
-    ticket, reason = build(gates.without_straight_players(legs, ctx))
+    ticket, reason = build(gates.without_straight_players(fun_legs(legs, ctx, now, 'NFL'), ctx))
     if not ticket:
         return None, reason
     return ticket_pick(ticket, games, now, 'NFL', SOURCE), None
@@ -233,10 +233,17 @@ def sharp_candidate(ctx, games, now, league='CFB', exclude=()):
         return None, f'only {len(today)} {league} games left today; a ticket needs {LEGS}'
     seen = ladder.confirmed_at()
     legs = [leg for g in today for leg in ladder.legs_for_game(g, ctx.prop_odds.get(g['id']), ctx, now, seen)]
-    ticket, reason = build(gates.without_straight_players(legs, ctx))
+    ticket, reason = build(gates.without_straight_players(fun_legs(legs, ctx, now, league), ctx))
     if not ticket:
         return None, reason
     return ticket_pick(ticket, games, now, league, 'https://sharpapi.io/'), None
+
+
+def fun_legs(legs, ctx, now, league):
+    """While the direction rules have fun tickets on their shorter two-week shape (owner, 2026-10-07), an easy parlay
+    takes no leg from a segment paused as a best bet, as the longshot does. Its own shape is unchanged."""
+    import direction
+    return direction.fun_legs(getattr(ctx, 'policy', None), legs, now, league)
 
 
 def ticket_pick(ticket, games, now, league, source):
