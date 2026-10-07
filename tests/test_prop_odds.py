@@ -25,6 +25,11 @@ class BudgetTests(unittest.TestCase):
     slate = {'games': [game('NFL-1', '2026-09-20T17:00Z'), game('NFL-2', '2026-09-20T20:05Z'),
                        game('NFL-3', '2026-09-20T17:00Z'), game('NFL-4', '2026-09-21T00:20Z')]}
 
+    def test_rollover_drops_old_reserve_and_weekdays_do_not_spend_in_october(self):
+        self.assertTrue(prop_odds.wanted(self.slate, {'usage': {'at': '2026-08-31T23:59:00Z', 'remaining': 24}}, NOW))
+        weekday = NOW + timedelta(days=1)
+        self.assertEqual(prop_odds.wanted({'games': [game('NFL-1', '2026-09-21T17:00Z')]}, {}, weekday), [])
+
     def test_games_closest_to_kickoff_come_first_and_the_day_has_a_ceiling(self):
         picks = prop_odds.wanted(self.slate, {}, NOW)
         self.assertEqual([g['id'] for g in picks], ['NFL-1', 'NFL-3', 'NFL-2'], 'the 8:20 PM game is outside the window')
@@ -37,7 +42,7 @@ class BudgetTests(unittest.TestCase):
         self.assertEqual([g['id'] for g in prop_odds.wanted(self.slate, recent, NOW)], ['NFL-3', 'NFL-2'])
         old = {'events': {'NFL-1': prop_odds.boxscores.stamp(NOW - timedelta(hours=4))}}
         self.assertIn('NFL-1', [g['id'] for g in prop_odds.wanted(self.slate, old, NOW)])
-        broke = {'usage': {'remaining': prop_odds.RESERVE + 1}}
+        broke = {'usage': {'remaining': prop_odds.RESERVE + 1, 'at': NOW.isoformat()}}
         self.assertEqual(prop_odds.wanted(self.slate, broke, NOW), [], 'the reserve is never spent')
 
     def test_a_started_game_is_never_priced(self):

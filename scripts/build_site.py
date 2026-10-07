@@ -838,10 +838,29 @@ def write_trends(rows, now):
     files = []
     for (league, game_day, milestones), values in sorted(grouped.items()):
         suffix = '-milestones' if milestones else ''
-        name = f'{league}-{game_day}{suffix}.json'
-        write(OUT / 'trends' / name, {'generatedAt': stamp(now), **trend_payload(values)})
-        files.append({'league': league, 'date': game_day, 'kind': 'milestone' if milestones else 'priced',
-                      'file': name, 'rows': len(values)})
+        # Split complete player/stat groups before the two-megabyte warning.
+        # No threshold or history is dropped, and the index already supports many files per day.
+        groups = defaultdict(list)
+        for row in values:
+            groups[(row.get('athleteId'), row.get('stat'))].append(row)
+        chunks, chunk = [], []
+        for group in groups.values():
+            trial = chunk + group
+            size = len(json.dumps({'generatedAt': stamp(now), **trend_payload(trial)}, separators=(',', ':'),
+                                  sort_keys=True, ensure_ascii=False).encode('utf-8')) + 1
+            if chunk and size > 1024 * 1024:
+                chunks.append(chunk)
+                chunk = list(group)
+            else:
+                chunk = trial
+        if chunk:
+            chunks.append(chunk)
+        for index, chunk in enumerate(chunks, 1):
+            part = f'-part-{index}' if len(chunks) > 1 else ''
+            name = f'{league}-{game_day}{suffix}{part}.json'
+            write(OUT / 'trends' / name, {'generatedAt': stamp(now), **trend_payload(chunk)})
+            files.append({'league': league, 'date': game_day, 'kind': 'milestone' if milestones else 'priced',
+                          'file': name, 'rows': len(chunk)})
     write(OUT / 'trends' / 'index.json', {'generatedAt': stamp(now), 'files': files})
 
 

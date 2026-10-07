@@ -32,6 +32,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import feed
 import gates
 import pick_card
+import quota
 import receipts
 import x_post
 from social_copy import without_playbook
@@ -45,7 +46,11 @@ EARLY_LEAD = timedelta(hours=2)      # a game before 2 PM posts two hours ahead 
 SPACING = timedelta(minutes=10)      # between two posts
 SOON = timedelta(minutes=2)          # a post scheduled "now" goes out this far ahead
 ORDER = {'player': 0, 'team': 1, 'ladder': 2, 'parlay': 3}   # inside one kickoff: player props, game lines, the ladder, the parlay
-MAX_PER_DAY = 20                     # our own ceiling for a day's posts, counting those already scheduled; Buffer allows 50
+MAX_PER_DAY = 20                     # our ceiling; Buffer's free queue holds only 10 scheduled posts at once
+BUFFER_QUEUE = 10
+BUFFER_RESERVED = 3                  # preserve the final places for plays, relabels/reschedules and receipts
+BUFFER_OPTIONAL_AT = BUFFER_QUEUE - BUFFER_RESERVED
+BUFFER_ESSENTIAL = frozenset(('play', 'receipt'))
 DISCORD_PLAY_LEAD = timedelta(minutes=15)  # the five-minute delivery job makes plays land about 10-15 minutes before X
 CONVERSATION = (
     "First play is out. What are you riding today? 👀",
@@ -92,6 +97,8 @@ def http_send(url, body, headers):
 def graphql(query, variables=None, key=None, send=http_send):
     """One GraphQL call. Raises BufferError on transport or GraphQL errors; returns the data object."""
     key = key or token()
+    if send is http_send:
+        quota.count_request('buffer')
     status, raw = send(API, {'query': query, 'variables': variables or {}}, {'Authorization': f'Bearer {key}'})
     if status == 429:
         raise BufferError('Buffer rate limit reached (HTTP 429)')
@@ -387,10 +394,48 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     return out
 
 
-def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=None, log=print):
+def pending_scheduled(log_book, now):
+    """Known posts still occupying one of Buffer's ten free scheduled places."""
+    count = 0
+    for entry in log_book.get('posts') or []:
+        if not entry.get('bufferPostId') or entry.get('sentAt') or entry.get('cancelledAt') \
+                or entry.get('deletedAt') or entry.get('error') or not entry.get('dueAt'):
+            continue
+        try:
+            future = gates.when(entry['dueAt']) > now
+        except (TypeError, ValueError):
+            future = False
+        count += int(future)
+    return count
+
+
+def theme_moment(guid, kind, due, items=None):
+    """Use the same stored moment the hosted renderer uses for this artifact."""
+    source_id = guid
+    if kind == 'cashed':
+        source_id = next((guid[len(prefix):] for prefix in ('cashed:', 'ladder-loss:', 'ladder-push:', 'ladder-void:')
+                          if guid.startswith(prefix)), guid)
+    item = (items or {}).get(source_id) or {}
+    if kind == 'play':
+        return next((item.get(field) for field in ('publishedAt', 'settledAt', 'day') if item.get(field)), due)
+    if kind == 'cashed':
+        return next((item.get(field) for field in ('settledAt', 'publishedAt', 'day') if item.get(field)), due)
+    return due
+
+
+def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=None, log=print, stats=None, items=None):
     """Create the planned posts in Buffer and record each in the log; a play whose card is not live yet is left
     for the next run, never posted bare. Returns the log."""
+    stats = stats if stats is not None else {}
+    stats.setdefault('officialNotScheduled', 0)
+    pending = pending_scheduled(log_book, now)
     for guid, kind, text, due, card_key in plans:
+        if pending >= BUFFER_QUEUE or (pending >= BUFFER_OPTIONAL_AT and kind not in BUFFER_ESSENTIAL):
+            if kind == 'play':
+                stats['officialNotScheduled'] += 1
+            reason = 'the free Buffer queue is full' if pending >= BUFFER_QUEUE else 'the final three Buffer places are reserved'
+            log(f'buffer: {guid} deferred: {reason} ({pending}/{BUFFER_QUEUE} scheduled)')
+            continue
         if kind != 'play':
             text = without_playbook(text)
         image = None
@@ -398,15 +443,26 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             url = card_url(card_key)
             image = url if reachable(url, opener) else None
             if not image:
+                if kind == 'play':
+                    stats['officialNotScheduled'] += 1
                 log(f'buffer: {guid} waits: its card is not live yet (every post carries its card)')
                 continue
         # Resolve every fallible field before Buffer accepts the post. Otherwise a
         # local labeling error after createPost could leave an unlogged post that a
         # later run schedules again. Text-only posts do not enter card comparisons.
-        card_theme = pick_card.card_theme(now) if image else 'none'
+        if image:
+            try:
+                card_theme = pick_card.card_theme(theme_moment(guid, kind, due, items))
+            except (TypeError, ValueError):
+                card_theme = 'legacy'
+                log(f'buffer: {guid} card theme label fell back to legacy')
+        else:
+            card_theme = 'none'
         try:
             post_id = create_post(text, channel_id, due, image, key=key, send=send)
         except BufferError as error:
+            if kind == 'play':
+                stats['officialNotScheduled'] += 1
             log(f'buffer: {guid} not scheduled: {error}')
             continue
         entry = {'id': guid, 'postedAt': gates.stamp(now), 'dueAt': gates.stamp(due), 'bufferPostId': post_id,
@@ -432,6 +488,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         if kind == 'play':
             entry['reasonKind'] = x_post.reason_kind(x_post.reason_in(text))      # what learning compares engagement by
         log_book.setdefault('posts', []).append(entry)
+        pending += 1
         log(f"buffer: {guid} scheduled for {due.astimezone(gates.EASTERN):%a %-I:%M %p} ET" + (' with card' if image else ''))
     return log_book
 

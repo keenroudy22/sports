@@ -160,6 +160,11 @@ def distinct(rows):
     return list(chosen.values())
 
 
+def shadow_window(policy, rows):
+    """Filter each segment's observation window before shadow deduplication."""
+    return [row for row in rows if (row.get('decidedAt') or '') >= since(policy, row.get('segment'))]
+
+
 def record_of(rows):
     counts = {'win': 0, 'loss': 0, 'push': 0}
     units = 0.0
@@ -449,7 +454,7 @@ def shadow_step(now=None, root=learning.STORE, policy=None, games=None, captures
     policy = policy or learning.load_policy(Path(root) / 'policy.json')
     if not any((policy.get('shadows') or {}).values()):
         return 0
-    raw = joined(root)
+    raw = shadow_window(policy, joined(root))
     unique = distinct(raw)
     games = games if games is not None else store_games()
     captures = captures if captures is not None else {**scoreboard.feed_lines(games), **scoreboard.captured_lines(games)}
@@ -494,16 +499,27 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
     reasons, moved = learn_reasons(policy, log_book, now, dry)
     changes += moved
     import results_shadows
-    shadow_rows = results_shadows.snapshots(policy, rows, distinct(rows), historical_props, now)
+    shadow_raw = shadow_window(policy, rows)
+    shadow_rows = []
+    shadow_error = None
+    try:
+        shadow_rows = results_shadows.snapshots(policy, shadow_raw, distinct(shadow_raw), historical_props, now)
+    except Exception as error:
+        shadow_error = type(error).__name__
     report = {'at': learning.stamp(now), 'candidates': len(rows), 'distinctCandidates': len(distinct(rows)),
               'graded': sum(1 for r in rows if r.get('result')),
               'segments': segments, 'calibration': calibration, 'gates': by_rule(rows), 'judge': judge_findings(rows),
               'researcher': domains, 'posts': reasons, 'postTimes': post_times(log_book),
               'cardThemes': post_themes(log_book), 'model': model_findings(), 'changes': changes,
               'marketReview': market_review.audit(historical_props), 'resultsShadows': shadow_rows}
+    if shadow_error:
+        report['resultsShadowError'] = shadow_error
     if not dry:
-        results_shadows.append(shadow_rows, now, root)
         learning.save_policy(policy, policy_path)
+        try:
+            results_shadows.append(shadow_rows, now, root)
+        except Exception as error:
+            report['resultsShadowError'] = type(error).__name__
         boxscores.write_json(Path(root) / 'report.json', report)
         (Path(root) / 'REPORT.md').write_text(markdown(report), encoding='utf-8')
     return report

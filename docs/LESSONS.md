@@ -1,4 +1,16 @@
-# Closed operating lessons
+# Operating lessons
+
+### L-2026-10-04-1 · Buffer queue capacity blocked published plays
+- What: six free-queue refusals on October 3–4 included the KC–LV official total, a POTD relabel and rescheduling.
+- Why missed: the code described fifty scheduled slots and tested only the twenty-post daily ceiling.
+- Guard: `tests/test_buffer_post.py::test_free_queue_preserves_three_places_and_defers_at_ten` verifies the ten-slot queue and three-slot reserve.
+- State: guarded.
+
+### L-2026-10-07-1 · Shadow failures must preserve weekly learning
+- What: silent snapshot generation and append preceded the live policy save.
+- Why missed: happy-path tests did not simulate a failing private evidence writer.
+- Guard: `tests/test_learn.py::test_shadow_failure_cannot_lose_live_weekly_policy` and `test_shadow_dedupe_keeps_post_pause_near_miss` verify save isolation and window-before-dedupe.
+- State: guarded.
 
 ## 2026-10-07 · SVG text fitting must use the embedded font's real widths
 

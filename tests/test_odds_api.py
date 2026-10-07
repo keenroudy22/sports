@@ -92,13 +92,19 @@ class ParseTests(unittest.TestCase):
 
 
 class BudgetTests(unittest.TestCase):
+    def test_stale_month_reserve_reaches_guarded_fetch_and_november_cap_holds(self):
+        self.assertIsNone(odds_api.due('CFB', SLATE, {'usage': {'remaining': 24, 'at': '2026-08-31T23:59:00Z'}}, NOW))
+        november = NOW.replace(month=11, day=1)
+        games = [dict(SLATE[1], kickoff='2026-11-01T22:00:00Z')]
+        status = {'leagues': {'NFL': {'month': '2026-11', 'monthCredits': 70}}}
+        self.assertIn('monthly', odds_api.due('NFL', games, status, november))
     def test_last_daily_capture_waits_for_evening_without_raising_budget(self):
         games=[game('CFB-late','CFB','2026-09-20T02:00:00Z','Home','Away')]
-        status={'leagues':{'CFB':{'day':'2026-09-19','count':3}}}
+        status={'leagues':{'CFB':{'day':'2026-09-19','count':2}}}
         self.assertIn('evening',odds_api.due('CFB',games,status,NOW))
         self.assertIsNone(odds_api.due('CFB',games,status,datetime(2026,9,19,20,tzinfo=timezone.utc)))
         status['leagues']['CFB']['count']=4
-        self.assertIn('already today',odds_api.due('CFB',games,status,datetime(2026,9,19,20,tzinfo=timezone.utc)))
+        self.assertIn('already scheduled today',odds_api.due('CFB',games,status,datetime(2026,9,19,20,tzinfo=timezone.utc)))
     def test_college_is_captured_once_a_day_while_its_games_are_a_week_out(self):
         early = NOW - timedelta(days=5)
         self.assertIsNone(odds_api.due('CFB', SLATE, {}, early), 'lines just opened: capture')
@@ -111,14 +117,14 @@ class BudgetTests(unittest.TestCase):
         self.assertIsNone(odds_api.due('CFB', SLATE, {}, NOW))
         self.assertIsNone(odds_api.due('CFB', SLATE, {}, NOW - timedelta(days=3)), 'three days out: the early daily capture')
         self.assertIn('no game', odds_api.due('CFB', SLATE, {}, NOW - timedelta(days=9)))
-        status = {'usage': {'remaining': 25}}
+        status = {'usage': {'remaining': 25, 'at': NOW.isoformat()}}
         self.assertIn('reserve', odds_api.due('CFB', SLATE, status, NOW))
         status = {'leagues': {'CFB': {'lastAt': '2026-09-19T12:00:00Z'}}}
         self.assertIn('gap', odds_api.due('CFB', SLATE, status, NOW))
         status = {'leagues': {'CFB': {'lastAt': '2026-09-19T06:00:00Z', 'day': '2026-09-19', 'count': 4}}}
-        self.assertIn('already today', odds_api.due('CFB', SLATE, status, NOW), 'four on a Saturday')
+        self.assertIn('already scheduled today', odds_api.due('CFB', SLATE, status, NOW))
         status = {'leagues': {'NFL': {'lastAt': '2026-09-19T06:00:00Z', 'day': '2026-09-19', 'count': 3}}}
-        self.assertIn('already today', odds_api.due('NFL', SLATE, status, NOW), 'three on any other day')
+        self.assertIn('already scheduled today', odds_api.due('NFL', SLATE, status, NOW))
 
     def test_capture_appends_only_changes_and_never_logs_the_key(self):
         folder = tempfile.TemporaryDirectory()
@@ -141,7 +147,7 @@ class BudgetTests(unittest.TestCase):
         again = odds_api.capture({'games': SLATE}, NOW + timedelta(hours=4), 'SECRET-KEY', status, fetch=fake, root=root,
                                  log=logs.append)
         self.assertEqual(len([l for p in root.glob('*.jsonl') for l in boxscores.read_store(p)]), 1, 'unchanged books are not appended')
-        self.assertEqual(again['leagues']['CFB']['count'], 2)
+        self.assertEqual(sum(r['count'] for r in again['leagues'].values()), 3, 'shared weekend ceiling is six credits')
 
 
 if __name__ == '__main__':

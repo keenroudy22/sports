@@ -191,6 +191,46 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Free queue protection (owner-delegated to Claude, 2026-10-06):** Buffer holds ten scheduled posts.
+  At seven pending posts, reserve the last three places for best bets, POTD relabels, reschedules and receipts.
+  Optional research, news, conversation, menus, sheets and other-sport posts defer. Every health and Monday
+  report starts with the count of official plays not scheduled.
+- **Football free-credit plan (owner-delegated to Claude, 2026-10-06):** use Option A. Game-line captures
+  average about eight credits daily, Odds API props run on weekends only at twelve credits daily, and easy
+  parlays use existing SharpAPI alternates with zero Odds API credits. Preserve the 24-credit reserve, repair
+  monthly rollover, warn above a projected 450 credits and count SharpAPI/Buffer requests privately. From
+  November, cap each football league's game lines at seventy credits and props at one hundred monthly.
+  SharpAPI Free has no monthly cap, twelve requests/minute, two books and a sixty-second delay. No paid trial.
+- **Publisher mark and felt cutover (owner-delegated to Claude, 2026-10-06):** use `kookn-mark.png` for the
+  Discord publisher and retain `kookn.jpg` for legacy cards. The reviewed felt cards are approved. Set the
+  cutover with an explicit -04:00 offset only after a green 11:30 PM run and before the next 8:45 AM menu.
+  Preserve posted attachments. Track the final review's nonblocking hardening separately.
+- **Resource and voice work order (owner-delegated to Claude, 2026-10-06):** implement the approved P1 order
+  in `docs/CODEX-WORK-ORDER.md`: price checks on research, Good-to/latest quotes, human copy and universal
+  send guards, QB news, combined hit windows/search/presets, player custom-line tools, game changes/history/books,
+  publication proof/share pages, record market splits/calibration, research upset demotion, approved heart variants,
+  website live progress, every-game research lists and factual result margins/line moves. One natural exclamation
+  is allowed on cashed and receipt wins, never consecutive or on a pick. Record counting remains unchanged.
+- **Learning loop (owner-delegated to Claude, 2026-10-06):** lessons are append-only and close with named
+  deterministic tests. Read open lessons, the latest Monday review, benchmark and voice before product/copy work.
+  Verification includes revision, successful checks, fresh-cache positive content and source-number comparison.
+  Local Qwen selects IDs, tags feedback and flags copy from supplied evidence; code supplies numbers and public
+  sentences. No cloud fallback. Monday packets carry delivery misses, lessons, voice hits, record/line movements,
+  learning preview, judge/researcher counts, category/theme/copy results (no winner below eight posts), owner-entered
+  audience deltas, health, payloads and local/cloud use. Proposals are tagged fix, shadow or owner-yes.
+- **Other sports rollout (owner-delegated to Claude, 2026-10-06):** ESPN free feeds only; zero Odds API,
+  SharpAPI or SportsGameOdds calls outside football. NHL first, NBA by October 20, EPL from October 17, CBB
+  in November and MLB at Opening Day. Use lazy `sports.js`. Resume the existing slate card, add one rotating
+  trend board daily and a weekly paper-trial receipt, subject to first-category render review by Claude.
+  Other-sport caps are three weekdays/two weekends and one per league, dropped first under shared caps.
+  Discord mirrors after X in Plays & Results with the league first. Trends require five current-season games,
+  verified exact sides/prices no shorter than -200, no goalie saves and listed probable pitchers only.
+  Last-season charts are separately labeled website-only until ten current games. ESPN data/art risk is
+  accepted for free use and revisited before payment. Official new-sport releases still require P11.
+- **Undecided choices retained (owner-delegated to Claude, 2026-10-06):** Cloudflare analytics disposition,
+  R2 NFL-total pause, POTD-missed posts, primetime prop sheets, locked Climb phrase, dollar line under Units,
+  owner biography and deletion of unused local models remain undecided. R0-R7 stay silent shadows.
+
 - **Casino-felt palette (2026-10-06, owner approved):** Kook'n site and new card art use felt night `#07120D`,
   felt `#0E2219`, chalk `#F2F7F4`, dim `#A9C0B3`, Kook'n green `#20C774` and chip red `#F2414E` (fills only;
   `#FF6B75` for red text). This replaces the navy/mint/cyan foundation of Oct 1/2/5. Green means hit or support,

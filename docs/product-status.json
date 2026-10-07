@@ -1,35 +1,366 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-07T10:06:14Z",
+  "updatedAt": "2026-10-07T13:00:00Z",
   "items": [
-    {"id":"P01","title":"Free product foundation and current-season charts","status":"shipped","owner":"agent","next":"Preserve verified navigation, charts, records and private health during subsequent changes.","doneWhen":"Published releases and live phone checks recorded.","evidence":"docs/PRODUCT-IMPLEMENTATION.md; 0e40d6deec54ee135e4b593ffd3ba18acea5a90c; publish run 37346323493 succeeded 2026-10-05T17:13:11Z. Player pages now expose observed Any TD plus common position stats without inventing prices or projections; live 375/1440 checks passed."},
-    {"id":"P02","title":"Shareable research context and consistent search","status":"shipped","owner":"agent","next":"Preserve tested share/search/Back behavior. Legacy directory and defense controls are not offered as shareable filters.","doneWhen":"Shared links preserve allowed filters and selected stat/sample; main research searches match player/team/market; no private ticket state is shared.","evidence":"4660ba1387a78b0686c2e74670388f26a983656c; publish 37333009159 succeeded 2026-10-05T15:30:45Z. Live phone Carries/Last 5 drill-down verified; app109/core66/CSS73. 867 Python tests (2 skipped), 123 frontend tests passed."},
-    {"id":"P03","title":"Product queue in weekly review and current policy summary","status":"shipped","owner":"agent","next":"Keep this dated queue current as work changes. Existing weekly review surfaces it; it does not execute new product work.","doneWhen":"Existing weekly packet and review retain bounded next actions even without local-model output; no new calls or jobs.","evidence":"4660ba13 published in run 37333009159. Ten new follow-through tests plus eight prior review tests pass, including fallback/packet-only wiring. No real extra notification or model call was used for verification."},
-    {"id":"P04","title":"Technical enlarged-text and keyboard verification","status":"shipped","owner":"agent","next":"Retain these regression checks and collect the separate real-user evidence under P07.","doneWhen":"Actual test conditions and remaining limitations recorded; not represented as human usability or full accessibility certification.","evidence":"docs/PRODUCT-IMPLEMENTATION.md closeout checks: genuine Chrome 200% zoom, 320/375/1440 layout, keyboard details/dialog/filter/Save/ticket and internal chart scrolling. Live phone check passed after run 37333009159; no browser errors observed."},
-    {"id":"P05","title":"Owner-only Discord weekly report destination","status":"shipped","owner":"agent","next":"Preserve the dedicated private destination and guarded no-public-fallback behavior.","doneWhen":"Verified private destination and confirmed delivery receipt; no public fallback.","evidence":"On 2026-10-05 the channel visibly stated Only you can see this channel. A dedicated Kook'n Private Desk webhook was created for channel 1555684007285489805, stored privately, and private_weekly_delivery returned sent; the verification message visibly appeared at 8:22 PM ET."},
-    {"id":"P06","title":"Four genuine weeks of operating evidence","status":"observing","owner":"desk","next":"Continue existing half-hour evidence sampling; review gaps, display incidents, delivery cohorts and grading reconciliation weekly.","doneWhen":"Four observed weeks reviewed against membership gates; unknown/missing checks never count as success.","evidence":"Private reliability collection began 2026-10-05T14:33:41Z. Earliest four-week review November 2 if collection continues, not automatic approval."},
-    {"id":"P07","title":"Volunteer usability and retention evidence","status":"owner-needed","owner":"owner","next":"Recruit 10–20 consenting testers across four slates and collect task completion plus five priced-concept choices.","doneWhen":"Document real user feedback, 8/10 usability target and retention evidence; no synthetic users counted.","evidence":"docs/SUBSCRIPTION-PLAN.md; automated/browser checks are technical QA only."},
-    {"id":"P08","title":"Data and image commercial rights","status":"gated","owner":"provider","next":"Obtain written rights/tier clarification for register questions before commercial reuse or expansion.","doneWhen":"Required data, history, comparison and image rights documented for the proposed paid offer.","evidence":"docs/SOURCE-RIGHTS.md; no new licenses or outreach authorized by coding approval."},
-    {"id":"P09","title":"Paid membership, referrals and tips","status":"gated","owner":"owner","next":"After reliability, retention and rights review, compare Whop and Cloudflare as candidates, then approve a costed offer, processor eligibility and terms.","doneWhen":"Separate launch approval, server-side entitlements and tested billing lifecycle; not a paywall on public JSON.","evidence":"docs/SUBSCRIPTION-PLAN.md; no accounts, billing, referral outreach or tip jar activated."},
-    {"id":"P10","title":"Review actual live-progress pilot attempts","status":"observing","owner":"desk","next":"Review the first three real bounded Discord attempts and their accuracy before proposing any X release.","doneWhen":"Actual attempt evidence reviewed; separate approval for X or wider cadence.","evidence":"October 5 audit found zero recorded attempts. Existing caps remain two per day, 45-minute spacing, one per ticket; X stays off."},
-    {"id":"P11","title":"Alternate trend sheets and other-sport official releases","status":"gated","owner":"owner","next":"Collect supported prospective research/trial evidence; present a specific sport/market or alternate-sheet category for separate release approval.","doneWhen":"Evidence and category rules approved; no invented edge or automatic new-sport social promotion.","evidence":"Existing social trend sheets are main lines with at least five games. New-sport research and futures paper tracking remain distinct from official plays."},
-    {"id":"P12","title":"Fresh comparative POTD selection review","status":"shipped","owner":"agent","next":"Preserve the prospective fresh-comparison rule and review real designations without changing caps or forcing a play.","doneWhen":"Every first POTD designation compares open official singles using matching fresh current-board markets; no extra play, cap bypass or weakened gate; production release verified.","evidence":"Revision 3848fdd1d2df0a2f24b01931559bb27fb45eae37 shipped in publish run 37393941544 on 2026-10-06. It passed 873 Python tests (2 skipped), 128 frontend tests, build/publication guard, isolated slot-2000 rehearsal and a live 375 px Today check with zero issues or browser errors."},
-    {"id":"P13","title":"Season and postseason record archives","status":"shipped","owner":"agent","next":"Preserve hosted reconciliation and prospective season/stage capture; do not rewrite historical records.","doneWhen":"Official records default per sport to the active season/stage, prior seasons remain selectable, personal tickets are excluded, trial coverage stays separate, and hosted reconciliation plus live checks pass.","evidence":"Revision 80b40b4303bb2ab9b3884242ef1d3d194173c7b1; publish run 37475297200 succeeded 2026-10-06; hosted reconciliation checked 90 official entries; live 375 px Record and Trials passed without overflow, clipping, load failures or browser errors; no historical pick or result was rewritten."},
-    {"id":"P14","title":"CFB board visibility and matchup edge view","status":"shipped","owner":"agent","next":"Preserve the coverage summary, cross-sport search reset and evidence labels; review real use before changing the ranking formula.","doneWhen":"Sport changes clear stale searches; CFB coverage stays visible; game pages combine model, exact-line history and defense as research; phone and desktop checks pass.","evidence":"Revision a7d9038138e5e9f9808c27a0e9888d0bffd0e138 shipped in publish run 37482789725 on 2026-10-06. It passed 879 Python tests (2 skipped), 129 frontend tests, build/publication guard, isolated slot-1000 rehearsal, local 375/1440 checks and live 375 px Best Lines/game checks with zero overflow, missing sections or browser errors. Live app 115 and CSS 77 confirmed."},
-    {"id":"P15","title":"Defense-supported trends and CFB game-script context","status":"shipped","owner":"agent","next":"Preserve the visible research-only boundary, four-hour price freshness, five-game social minimum, existing research-post cap and 14-point CFB caution while prospective results accumulate.","doneWhen":"Fresh main-line trends show defense context; CFB 14+ point underdogs are cautioned and ranked down without changing official picks; current social caps and live checks remain green.","evidence":"Revision 0425f07e113641c9ab244cba0fb065f057050dfe shipped in publish run 37487457842 on 2026-10-06. It passed 880 Python tests (2 skipped), 130 frontend tests, build/publication guard, isolated slot-1145 rehearsal and a live 375 px CFB game-page check with zero overflow, clipping, load failures or browser errors. Live app 116 and CSS 77 confirmed. No new feed, paid call, social slot or official-play selection rule was added."},
-    {"id":"P16","title":"Redesign rules and docs","status":"shipped","owner":"agent","next":"Keep the dated redesign rules and approved handoff assets as the source of truth for later gated phases.","doneWhen":"Released; read_status() lists the new queue without validation errors.","evidence":"Released in c2024606; publish run 37545361462 passed on 2026-10-06. read_status() validated all 28 queue items. redesign/AUDIT.md remains local-only."},
-    {"id":"P17","title":"Felt preview at /sports/next/","status":"shipped","owner":"agent","next":"Preserve the historical preview receipt; the preview files and temporary allowlist are retired by the approved P19 swap.","doneWhen":"Live preview passes G4; /sports/ is unchanged.","evidence":"Revision fae667cf2d9d5cf1340eb30d88e4355e57d272c5 shipped in publish run 37546369157 on 2026-10-06. The noindex preview passed live 375/1440 checks on 36 routes with zero issues or browser errors, then was retired after owner approval of C3."},
-    {"id":"P18","title":"Route and record parity tests","status":"shipped","owner":"agent","next":"Retain the 44-test replacement contract against the live root application and preserve the legacy-route table.","doneWhen":"Green with the default Node and the launchd Node binary.","evidence":"C2 ported the 23 prototype model tests plus play-card, board, record, render, contrast and route checks. C3 retired 44 superseded view tests and keeps an exact 44-test replacement contract; the full suite now passes 130 tests under both the default Node and launchd Node 22.16.0. The hosted workflow pins Node 22."},
-    {"id":"P19","title":"Front-end swap","status":"shipped","owner":"agent","next":"Preserve the redesign routes, compact tickets and rollback receipt through later phases. Treat 8eda3495 as a full pre-C4 stack rollback, never a site-only file copy.","doneWhen":"Swapped, versions bumped, live checks pass, next desk run is green and rollback SHA is recorded.","evidence":"Revision 920df980923bd1de5990008e55d32174913895fe shipped in publish run 37552971911 on 2026-10-06. Rollback SHA: 8eda349533167f202fbcfa0a0bda4e6c390c58f1. Live 375/1440 checks passed with app 117/CSS 78, and the next scheduled 9:00 PM ET desk run completed green at 21:03 ET with one published play, one closure and no run errors. After C4, that SHA also requires the matching pre-C4 builder and guard because the current payloads are split."},
-    {"id":"P20","title":"Additive display data","status":"shipped","owner":"agent","next":"Preserve canonical provider names for gates and pricing, keep display renames in the browser only, and retain the split-payload, strict desk-loader and warning-only data-budget tests.","doneWhen":"record_audit and publication_guard pass without tracked-schema or integrity changes.","evidence":"C4 revision 3bac89df shipped in run 37555731984. Repair e65695a1 shipped in run 37571505718. Weekend-resilience revisions 81b598e1 and 88f9c065 shipped in run 37576340750 on 2026-10-07: the live 520-line catalog is a manifest plus 259 NFL and 261 CFB rows, contains zero displayBook fields and preserves canonical ESPN BET sources. App 122, 928 Python tests (2 skipped), 141 frontend tests, 23 parity tests under both Node runtimes, record/guard/slot-2330 gates and 38 live 375/1440 route checks passed. Records, plays, social delivery and felt settings did not change."},
-    {"id":"P21","title":"Felt share cards","status":"owner-needed","owner":"owner","next":"Approve or decline the felt-card cutover. On an explicit yes, set FELT_FROM to an aware Eastern timestamp with an explicit -04:00 offset only after a green 11:30 PM run and before the 8:45 AM menu; otherwise wait for the next night's quiet window. Until then leave FELT_FROM unset and legacy cards live.","doneWhen":"Owner approves every category render and the quiet-window cutover preserves old attachments.","evidence":"Claude's final review of revision 2e47b238 and the 19-image 05:36 render set passed with nits: 92 card tests passed (1 skipped), 3,956 selection lines were measured in real-font Chrome with every realistic line inside the content margin, 1,476 long-name/photo stress cards had zero ring ink and at least 14 pixels of season-strip clearance, and all 19 PNGs matched the public record. Publish run 37602200339 succeeded and the live 375/1440 audit found no overflow, load failure or console error. FELT_FROM remains unset, so legacy cards stay live pending the owner's explicit decision."},
-    {"id":"P22","title":"RSS fix and rename","status":"shipped","owner":"agent","next":"Preserve the rolling 30-day feed and stable item IDs independently of the current posting window.","doneWhen":"Released feed contains items on a no-play day and keeps existing IDs.","evidence":"Revision 3bac89df shipped in publish run 37555731984 on 2026-10-06. The live feed is named Kook'n, contains 78 rolling-window items and retains existing GUIDs; Buffer eligibility remains independent."},
-    {"id":"P23","title":"Results shadows","status":"observing","owner":"desk","next":"Collect four prospective weeks and report distinct-game counts plus each R0-R7 success bar before separate owner decisions.","doneWhen":"Four weeks of before-and-after counts exist for each proposal without changing public plays or records.","evidence":"Revision b1b301f1 shipped in run 37563572847. The first real 11:30 PM run wrote eight silent R0-R7 rows at 2026-10-07T03:30:04Z with no public effects or metered requests. R0 observed 1,663 raw versus 917 distinct rows without changing the live learning denominator; its comparison dedupes only after the learning-window filter. R5 kept every default unchanged. Tuesday summaries and four prospective weeks remain."},
-    {"id":"P24","title":"Results decisions","status":"gated","owner":"owner","next":"Review each proposal's before-and-after counts and approve or decline it separately.","doneWhen":"Every R0-R7 proposal has its own dated owner decision.","evidence":"Owner approved 2026-10-06; plan in owner's local redesign/ folder. Results policy remains unchanged."},
-    {"id":"P25","title":"Separate domain","status":"owner-needed","owner":"owner","next":"Choose and buy a domain only after a separate cost and migration decision.","doneWhen":"Redirects preserve query and hash, and Buffer and Discord links are verified.","evidence":"Owner approved 2026-10-06; plan in owner's local redesign/ folder. Domain purchase is not approved."},
-    {"id":"P26","title":"SEO pages, sitemap and OG images","status":"gated","owner":"agent","next":"Start only after P25 and a separate release decision.","doneWhen":"The narrow guard passes and the owner submits the sitemap.","evidence":"Owner approved 2026-10-06; plan in owner's local redesign/ folder. SEO expansion is not in C0-C2."},
-    {"id":"P27","title":"X profile refresh","status":"owner-needed","owner":"owner","next":"Banner and bio are complete; decide and publish the pinned Start here post manually.","doneWhen":"Owner confirms the pinned post and profile presentation.","evidence":"Owner approved 2026-10-06; plan in owner's local redesign/ folder. Claude updated banner and bio once with owner approval; no further X action is authorized."},
-    {"id":"P28","title":"Image rights before paid launch","status":"gated","owner":"owner","next":"Keep current free-site images; before paid launch decide under P08 whether to license, replace with owned art or remove.","doneWhen":"The commercial image-rights decision is recorded before any paid release.","evidence":"Owner approved 2026-10-06; plan in owner's local redesign/ folder. ESPN logos and photos remain on the free site; P08 stays open."},
-    {"id":"P29","title":"Felt-card post-approval hardening","status":"ready","owner":"agent","next":"In one bounded follow-up, replace ratio-only fitting with embedded-TTF cmap/hmtx advance widths plus letter spacing; add long-school straight-spread browser fixtures before that inactive path returns; lower the photo ring 8-10 pixels; derive the push/void review fixture's all-Climbs bank from fixture state; and clean up the climb-open, six-best-bet and minus-sign spacing nits without changing public facts, categories or the cutover decision.","doneWhen":"Every renderer uses measured line widths, the longest stored straight spreads fit before that path is re-enabled, photo and brand rings remain visually separate without new ink collisions, review climb totals derive from fixture state, and the listed cosmetic browser fixtures pass.","evidence":"Nonblocking follow-ups from Claude's final review of revision 2e47b238, recorded after the complete 19-card set passed. The dormant straight-spread risk and real-font requirement also remain documented in docs/LESSONS.md; none of these follow-ups activates FELT_FROM or changes a play, post, record or public category."}
+    {
+      "id": "P01",
+      "title": "Free product foundation and current-season charts",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Preserve verified navigation, charts, records and private health during subsequent changes.",
+      "doneWhen": "Published releases and live phone checks recorded.",
+      "evidence": "docs/PRODUCT-IMPLEMENTATION.md; 0e40d6deec54ee135e4b593ffd3ba18acea5a90c; publish run 37346323493 succeeded 2026-10-05T17:13:11Z. Player pages now expose observed Any TD plus common position stats without inventing prices or projections; live 375/1440 checks passed."
+    },
+    {
+      "id": "P02",
+      "title": "Shareable research context and consistent search",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Preserve tested share/search/Back behavior. Legacy directory and defense controls are not offered as shareable filters.",
+      "doneWhen": "Shared links preserve allowed filters and selected stat/sample; main research searches match player/team/market; no private ticket state is shared.",
+      "evidence": "4660ba1387a78b0686c2e74670388f26a983656c; publish 37333009159 succeeded 2026-10-05T15:30:45Z. Live phone Carries/Last 5 drill-down verified; app109/core66/CSS73. 867 Python tests (2 skipped), 123 frontend tests passed."
+    },
+    {
+      "id": "P03",
+      "title": "Product queue in weekly review and current policy summary",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Keep this dated queue current as work changes. Existing weekly review surfaces it; it does not execute new product work.",
+      "doneWhen": "Existing weekly packet and review retain bounded next actions even without local-model output; no new calls or jobs.",
+      "evidence": "4660ba13 published in run 37333009159. Ten new follow-through tests plus eight prior review tests pass, including fallback/packet-only wiring. No real extra notification or model call was used for verification."
+    },
+    {
+      "id": "P04",
+      "title": "Technical enlarged-text and keyboard verification",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Retain these regression checks and collect the separate real-user evidence under P07.",
+      "doneWhen": "Actual test conditions and remaining limitations recorded; not represented as human usability or full accessibility certification.",
+      "evidence": "docs/PRODUCT-IMPLEMENTATION.md closeout checks: genuine Chrome 200% zoom, 320/375/1440 layout, keyboard details/dialog/filter/Save/ticket and internal chart scrolling. Live phone check passed after run 37333009159; no browser errors observed."
+    },
+    {
+      "id": "P05",
+      "title": "Owner-only Discord weekly report destination",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Preserve the dedicated private destination and guarded no-public-fallback behavior.",
+      "doneWhen": "Verified private destination and confirmed delivery receipt; no public fallback.",
+      "evidence": "On 2026-10-05 the channel visibly stated Only you can see this channel. A dedicated Kook'n Private Desk webhook was created for channel 1555684007285489805, stored privately, and private_weekly_delivery returned sent; the verification message visibly appeared at 8:22 PM ET."
+    },
+    {
+      "id": "P06",
+      "title": "Four genuine weeks of operating evidence",
+      "status": "observing",
+      "owner": "desk",
+      "next": "Continue existing half-hour evidence sampling; review gaps, display incidents, delivery cohorts and grading reconciliation weekly.",
+      "doneWhen": "Four observed weeks reviewed against membership gates; unknown/missing checks never count as success.",
+      "evidence": "Private reliability collection began 2026-10-05T14:33:41Z. Earliest four-week review November 2 if collection continues, not automatic approval."
+    },
+    {
+      "id": "P07",
+      "title": "Volunteer usability and retention evidence",
+      "status": "owner-needed",
+      "owner": "owner",
+      "next": "Recruit 10–20 consenting testers across four slates and collect task completion plus five priced-concept choices.",
+      "doneWhen": "Document real user feedback, 8/10 usability target and retention evidence; no synthetic users counted.",
+      "evidence": "docs/SUBSCRIPTION-PLAN.md; automated/browser checks are technical QA only."
+    },
+    {
+      "id": "P08",
+      "title": "Data and image commercial rights",
+      "status": "gated",
+      "owner": "provider",
+      "next": "Obtain written rights/tier clarification for register questions before commercial reuse or expansion.",
+      "doneWhen": "Required data, history, comparison and image rights documented for the proposed paid offer.",
+      "evidence": "docs/SOURCE-RIGHTS.md; no new licenses or outreach authorized by coding approval."
+    },
+    {
+      "id": "P09",
+      "title": "Paid membership, referrals and tips",
+      "status": "gated",
+      "owner": "owner",
+      "next": "After reliability, retention and rights review, compare Whop and Cloudflare as candidates, then approve a costed offer, processor eligibility and terms.",
+      "doneWhen": "Separate launch approval, server-side entitlements and tested billing lifecycle; not a paywall on public JSON.",
+      "evidence": "docs/SUBSCRIPTION-PLAN.md; no accounts, billing, referral outreach or tip jar activated."
+    },
+    {
+      "id": "P10",
+      "title": "Review actual live-progress pilot attempts",
+      "status": "observing",
+      "owner": "desk",
+      "next": "Review the first three real bounded Discord attempts and their accuracy before proposing any X release.",
+      "doneWhen": "Actual attempt evidence reviewed; separate approval for X or wider cadence.",
+      "evidence": "October 5 audit found zero recorded attempts. Existing caps remain two per day, 45-minute spacing, one per ticket; X stays off."
+    },
+    {
+      "id": "P11",
+      "title": "Alternate trend sheets and other-sport official releases",
+      "status": "gated",
+      "owner": "owner",
+      "next": "Collect supported prospective research/trial evidence; present a specific sport/market or alternate-sheet category for separate release approval.",
+      "doneWhen": "Evidence and category rules approved; no invented edge or automatic new-sport social promotion.",
+      "evidence": "Existing social trend sheets are main lines with at least five games. New-sport research and futures paper tracking remain distinct from official plays."
+    },
+    {
+      "id": "P12",
+      "title": "Fresh comparative POTD selection review",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Preserve the prospective fresh-comparison rule and review real designations without changing caps or forcing a play.",
+      "doneWhen": "Every first POTD designation compares open official singles using matching fresh current-board markets; no extra play, cap bypass or weakened gate; production release verified.",
+      "evidence": "Revision 3848fdd1d2df0a2f24b01931559bb27fb45eae37 shipped in publish run 37393941544 on 2026-10-06. It passed 873 Python tests (2 skipped), 128 frontend tests, build/publication guard, isolated slot-2000 rehearsal and a live 375 px Today check with zero issues or browser errors."
+    },
+    {
+      "id": "P13",
+      "title": "Season and postseason record archives",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Preserve hosted reconciliation and prospective season/stage capture; do not rewrite historical records.",
+      "doneWhen": "Official records default per sport to the active season/stage, prior seasons remain selectable, personal tickets are excluded, trial coverage stays separate, and hosted reconciliation plus live checks pass.",
+      "evidence": "Revision 80b40b4303bb2ab9b3884242ef1d3d194173c7b1; publish run 37475297200 succeeded 2026-10-06; hosted reconciliation checked 90 official entries; live 375 px Record and Trials passed without overflow, clipping, load failures or browser errors; no historical pick or result was rewritten."
+    },
+    {
+      "id": "P14",
+      "title": "CFB board visibility and matchup edge view",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Preserve the coverage summary, cross-sport search reset and evidence labels; review real use before changing the ranking formula.",
+      "doneWhen": "Sport changes clear stale searches; CFB coverage stays visible; game pages combine model, exact-line history and defense as research; phone and desktop checks pass.",
+      "evidence": "Revision a7d9038138e5e9f9808c27a0e9888d0bffd0e138 shipped in publish run 37482789725 on 2026-10-06. It passed 879 Python tests (2 skipped), 129 frontend tests, build/publication guard, isolated slot-1000 rehearsal, local 375/1440 checks and live 375 px Best Lines/game checks with zero overflow, missing sections or browser errors. Live app 115 and CSS 77 confirmed."
+    },
+    {
+      "id": "P15",
+      "title": "Defense-supported trends and CFB game-script context",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Preserve the visible research-only boundary, four-hour price freshness, five-game social minimum, existing research-post cap and 14-point CFB caution while prospective results accumulate.",
+      "doneWhen": "Fresh main-line trends show defense context; CFB 14+ point underdogs are cautioned and ranked down without changing official picks; current social caps and live checks remain green.",
+      "evidence": "Revision 0425f07e113641c9ab244cba0fb065f057050dfe shipped in publish run 37487457842 on 2026-10-06. It passed 880 Python tests (2 skipped), 130 frontend tests, build/publication guard, isolated slot-1145 rehearsal and a live 375 px CFB game-page check with zero overflow, clipping, load failures or browser errors. Live app 116 and CSS 77 confirmed. No new feed, paid call, social slot or official-play selection rule was added."
+    },
+    {
+      "id": "P16",
+      "title": "Redesign rules and docs",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Keep the dated redesign rules and approved handoff assets as the source of truth for later gated phases.",
+      "doneWhen": "Released; read_status() lists the new queue without validation errors.",
+      "evidence": "Released in c2024606; publish run 37545361462 passed on 2026-10-06. read_status() validated all 28 queue items. redesign/AUDIT.md remains local-only."
+    },
+    {
+      "id": "P17",
+      "title": "Felt preview at /sports/next/",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Preserve the historical preview receipt; the preview files and temporary allowlist are retired by the approved P19 swap.",
+      "doneWhen": "Live preview passes G4; /sports/ is unchanged.",
+      "evidence": "Revision fae667cf2d9d5cf1340eb30d88e4355e57d272c5 shipped in publish run 37546369157 on 2026-10-06. The noindex preview passed live 375/1440 checks on 36 routes with zero issues or browser errors, then was retired after owner approval of C3."
+    },
+    {
+      "id": "P18",
+      "title": "Route and record parity tests",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Retain the 44-test replacement contract against the live root application and preserve the legacy-route table.",
+      "doneWhen": "Green with the default Node and the launchd Node binary.",
+      "evidence": "C2 ported the 23 prototype model tests plus play-card, board, record, render, contrast and route checks. C3 retired 44 superseded view tests and keeps an exact 44-test replacement contract; the full suite now passes 130 tests under both the default Node and launchd Node 22.16.0. The hosted workflow pins Node 22."
+    },
+    {
+      "id": "P19",
+      "title": "Front-end swap",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Preserve the redesign routes, compact tickets and rollback receipt through later phases. Treat 8eda3495 as a full pre-C4 stack rollback, never a site-only file copy.",
+      "doneWhen": "Swapped, versions bumped, live checks pass, next desk run is green and rollback SHA is recorded.",
+      "evidence": "Revision 920df980923bd1de5990008e55d32174913895fe shipped in publish run 37552971911 on 2026-10-06. Rollback SHA: 8eda349533167f202fbcfa0a0bda4e6c390c58f1. Live 375/1440 checks passed with app 117/CSS 78, and the next scheduled 9:00 PM ET desk run completed green at 21:03 ET with one published play, one closure and no run errors. After C4, that SHA also requires the matching pre-C4 builder and guard because the current payloads are split."
+    },
+    {
+      "id": "P20",
+      "title": "Additive display data",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Preserve canonical provider names for gates and pricing, keep display renames in the browser only, and retain the split-payload, strict desk-loader and warning-only data-budget tests.",
+      "doneWhen": "record_audit and publication_guard pass without tracked-schema or integrity changes.",
+      "evidence": "C4 revision 3bac89df shipped in run 37555731984. Repair e65695a1 shipped in run 37571505718. Weekend-resilience revisions 81b598e1 and 88f9c065 shipped in run 37576340750 on 2026-10-07: the live 520-line catalog is a manifest plus 259 NFL and 261 CFB rows, contains zero displayBook fields and preserves canonical ESPN BET sources. App 122, 928 Python tests (2 skipped), 141 frontend tests, 23 parity tests under both Node runtimes, record/guard/slot-2330 gates and 38 live 375/1440 route checks passed. Records, plays, social delivery and felt settings did not change."
+    },
+    {
+      "id": "P21",
+      "title": "Felt share cards",
+      "status": "ready",
+      "owner": "agent",
+      "next": "After the next green 11:30 PM run, set an explicit Eastern FELT_FROM cutover, pass deployment gates and verify new cards; preserve posted attachments.",
+      "doneWhen": "Owner approves every category render and the quiet-window cutover preserves old attachments.",
+      "evidence": "Owner approved the reviewed felt cards on October 7 (owner-delegated to Claude, 2026-10-06). Quiet-window execution pending."
+    },
+    {
+      "id": "P22",
+      "title": "RSS fix and rename",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Preserve the rolling 30-day feed and stable item IDs independently of the current posting window.",
+      "doneWhen": "Released feed contains items on a no-play day and keeps existing IDs.",
+      "evidence": "Revision 3bac89df shipped in publish run 37555731984 on 2026-10-06. The live feed is named Kook'n, contains 78 rolling-window items and retains existing GUIDs; Buffer eligibility remains independent."
+    },
+    {
+      "id": "P23",
+      "title": "Results shadows",
+      "status": "observing",
+      "owner": "desk",
+      "next": "Collect four prospective weeks and report distinct-game counts plus each R0-R7 success bar before separate owner decisions.",
+      "doneWhen": "Four weeks of before-and-after counts exist for each proposal without changing public plays or records.",
+      "evidence": "Revision b1b301f1 shipped in run 37563572847. The first real 11:30 PM run wrote eight silent R0-R7 rows at 2026-10-07T03:30:04Z with no public effects or metered requests. R0 observed 1,663 raw versus 917 distinct rows without changing the live learning denominator; its comparison dedupes only after the learning-window filter. R5 kept every default unchanged. Tuesday summaries and four prospective weeks remain."
+    },
+    {
+      "id": "P24",
+      "title": "Results decisions",
+      "status": "gated",
+      "owner": "owner",
+      "next": "Review each proposal's before-and-after counts and approve or decline it separately.",
+      "doneWhen": "Every R0-R7 proposal has its own dated owner decision.",
+      "evidence": "Owner approved 2026-10-06; plan in owner's local redesign/ folder. Results policy remains unchanged."
+    },
+    {
+      "id": "P25",
+      "title": "Separate domain",
+      "status": "owner-needed",
+      "owner": "owner",
+      "next": "Choose and buy a domain only after a separate cost and migration decision.",
+      "doneWhen": "Redirects preserve query and hash, and Buffer and Discord links are verified.",
+      "evidence": "Owner approved 2026-10-06; plan in owner's local redesign/ folder. Domain purchase is not approved."
+    },
+    {
+      "id": "P26",
+      "title": "SEO pages, sitemap and OG images",
+      "status": "gated",
+      "owner": "agent",
+      "next": "Start only after P25 and a separate release decision.",
+      "doneWhen": "The narrow guard passes and the owner submits the sitemap.",
+      "evidence": "Owner approved 2026-10-06; plan in owner's local redesign/ folder. SEO expansion is not in C0-C2."
+    },
+    {
+      "id": "P27",
+      "title": "X profile refresh",
+      "status": "owner-needed",
+      "owner": "owner",
+      "next": "Banner and bio are complete; decide and publish the pinned Start here post manually.",
+      "doneWhen": "Owner confirms the pinned post and profile presentation.",
+      "evidence": "Owner approved 2026-10-06; plan in owner's local redesign/ folder. Claude updated banner and bio once with owner approval; no further X action is authorized."
+    },
+    {
+      "id": "P28",
+      "title": "Image rights before paid launch",
+      "status": "gated",
+      "owner": "owner",
+      "next": "Keep current free-site images; before paid launch decide under P08 whether to license, replace with owned art or remove.",
+      "doneWhen": "The commercial image-rights decision is recorded before any paid release.",
+      "evidence": "Owner approved 2026-10-06; plan in owner's local redesign/ folder. ESPN logos and photos remain on the free site; P08 stays open."
+    },
+    {
+      "id": "P29",
+      "title": "Felt-card post-approval hardening",
+      "status": "ready",
+      "owner": "agent",
+      "next": "In one bounded follow-up, replace ratio-only fitting with embedded-TTF cmap/hmtx advance widths plus letter spacing; add long-school straight-spread browser fixtures before that inactive path returns; lower the photo ring 8-10 pixels; derive the push/void review fixture's all-Climbs bank from fixture state; and clean up the climb-open, six-best-bet and minus-sign spacing nits without changing public facts, categories or the cutover decision.",
+      "doneWhen": "Every renderer uses measured line widths, the longest stored straight spreads fit before that path is re-enabled, photo and brand rings remain visually separate without new ink collisions, review climb totals derive from fixture state, and the listed cosmetic browser fixtures pass.",
+      "evidence": "Nonblocking follow-ups from Claude's final review of revision 2e47b238, recorded after the complete 19-card set passed. The dormant straight-spread risk and real-font requirement also remain documented in docs/LESSONS.md; none of these follow-ups activates FELT_FROM or changes a play, post, record or public category."
+    },
+    {
+      "id": "P30",
+      "title": "P0 free-plan protection",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Verify and release Buffer reserve, football budget trim/rollover/counters, avatar, C6 isolation and trend split.",
+      "doneWhen": "Watched publish and 375/1440 checks pass; Saturday payload complete and within budget.",
+      "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
+    },
+    {
+      "id": "P31",
+      "title": "P1 research price and tickets",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Implement price checks, Good-to/latest quotes, after-slate heading and QB chips.",
+      "doneWhen": "Research price fixtures and live source comparisons pass.",
+      "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
+    },
+    {
+      "id": "P32",
+      "title": "P1 human voice",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Apply VOICE.md copy and send guards, seed lessons and named tests.",
+      "doneWhen": "All new cards carry 21+ and all send paths enforce approved voice.",
+      "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
+    },
+    {
+      "id": "P33",
+      "title": "P1 resource tools",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Implement hit strips/search/presets, custom player lines and game changes/history/books.",
+      "doneWhen": "Exact-price, freshness and full-history fixtures plus live checks pass.",
+      "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
+    },
+    {
+      "id": "P34",
+      "title": "P1 proof and record",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Implement post links/share pages, market splits and calibration buckets.",
+      "doneWhen": "Display totals equal existing record and narrow public guard passes.",
+      "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
+    },
+    {
+      "id": "P35",
+      "title": "P1 local learning loop",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Implement LOCAL-LLM.md judge/editor fixes, Monday copy/feedback and caption bank.",
+      "doneWhen": "Measured local calls with deterministic fallback and no live model-written text.",
+      "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
+    },
+    {
+      "id": "P36",
+      "title": "P2 ESPN capture foundation",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Implement registry, verified prop sides and NHL/NBA box/injury stores.",
+      "doneWhen": "Two days of four-slot captures with zero late boards/contradictions and zero metered other-sport calls.",
+      "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
+    },
+    {
+      "id": "P37",
+      "title": "P2 NHL resource",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Build lazy NHL views and collect actual three-game history.",
+      "doneWhen": "Live lines/charts/game/player/defense pass at 375/1440 and capabilities reflect evidence.",
+      "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
+    },
+    {
+      "id": "P38",
+      "title": "P2 NBA opening",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Build NBA views by October 20, with labeled last-season charts.",
+      "doneWhen": "Current-season history gates and all live route checks pass.",
+      "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
+    },
+    {
+      "id": "P39",
+      "title": "P2 social research",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Resume slate; render trend/trial samples for Claude before first post.",
+      "doneWhen": "Reviewed samples, caps/drop-order tests and real X/Discord confirmation; eight posts/category then two-week review.",
+      "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
+    },
+    {
+      "id": "P40",
+      "title": "P2 seasonal roadmap",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Follow MULTI-SPORT-PLAN for EPL October 17, CBB November, MLB Opening Day and silent models/calibration.",
+      "doneWhen": "Actual seasonal/trial evidence and a separate P11 decision precede official new-sport picks.",
+      "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
+    }
   ]
 }

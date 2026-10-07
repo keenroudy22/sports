@@ -76,6 +76,19 @@ class LegTests(unittest.TestCase):
 
 
 class CandidateTests(unittest.TestCase):
+    def test_credit_balance_rollover_and_live_step_use_stored_sharp_alternates(self):
+        import json
+        import run
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'data/odds/status.json'
+            path.parent.mkdir(parents=True)
+            path.write_text(json.dumps({'usage': {'at': '2026-08-31T23:00:00Z', 'remaining': 24}}))
+            self.assertIsNone(easy_parlay.credits_left(Path(folder), NOW))
+        with mock.patch.object(easy_parlay, 'candidate', side_effect=AssertionError('metered alternate request')), \
+                mock.patch.object(easy_parlay, 'sharp_candidate', return_value=(None, 'no stored ticket')) as sharp:
+            run.easy_parlay_step(ctx(), GAMES, NOW, [], [], [], [])
+        self.assertEqual(sharp.call_args.kwargs['league'], 'NFL')
     def test_quota_stop_does_not_abort_desk_or_retry_other_games(self):
         calls = []
         base = self.fake_get(calls)

@@ -23,6 +23,58 @@ class QuotaBlocked(RuntimeError):
     pass
 
 
+def current_month_usage(value, now=None):
+    """A stored provider balance only applies to the UTC month that produced it.
+
+    Returning an empty mapping makes callers fall through to the live, fail-closed
+    usage probe after a month rolls over instead of carrying the old reserve into
+    the new allowance.
+    """
+    now = now or datetime.now(timezone.utc)
+    if not isinstance(value, dict) or not value.get('at'):
+        return {}
+    try:
+        observed = datetime.fromisoformat(str(value['at']).replace('Z', '+00:00'))
+        if observed.tzinfo is None:
+            observed = observed.replace(tzinfo=timezone.utc)
+    except (TypeError, ValueError):
+        return {}
+    return value if observed.astimezone(timezone.utc).strftime('%Y-%m') == now.astimezone(timezone.utc).strftime('%Y-%m') else {}
+
+
+def count_request(provider, root=STATE, now=None):
+    """Append one count-only row for an unmetered/free-plan API request."""
+    if provider not in ('sharp', 'buffer'):
+        raise ValueError('unknown free-plan request counter')
+    now = now or datetime.now(timezone.utc)
+    root = Path(root)
+    root.mkdir(parents=True, exist_ok=True)
+    with (root / f'{provider}.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        with (root / f'{provider}.jsonl').open('a', encoding='utf-8') as handle:
+            handle.write(json.dumps({'month': now.astimezone(timezone.utc).strftime('%Y-%m'),
+                                     'at': now.astimezone(timezone.utc).isoformat(),
+                                     'provider': provider, 'count': 1}, sort_keys=True) + '\n')
+            handle.flush()
+            os.fsync(handle.fileno())
+
+
+def monthly_counts(root=STATE, now=None):
+    """Current UTC-month request totals. Corrupt rows are unknown, never secrets."""
+    now = now or datetime.now(timezone.utc)
+    month = now.astimezone(timezone.utc).strftime('%Y-%m')
+    out = {'sharp': 0, 'buffer': 0}
+    for provider in out:
+        path = Path(root) / f'{provider}.jsonl'
+        try:
+            rows = [json.loads(line) for line in path.read_text(encoding='utf-8').splitlines() if line.strip()]
+        except (OSError, ValueError, TypeError):
+            continue
+        out[provider] = sum(int(row.get('count') or 0) for row in rows
+                            if isinstance(row, dict) and row.get('provider') == provider and row.get('month') == month)
+    return out
+
+
 def usage(headers):
     try:
         used = int(headers['x-requests-used'])

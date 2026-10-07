@@ -61,13 +61,19 @@ def spend(status, now):
 
 def wanted(slate, status, now, limit=RUN_EVENTS):
     """The games worth pricing now: closest to kickoff first, inside the budget."""
+    allowed_days = (3, 4, 5, 6, 0) if now.strftime('%Y-%m') >= '2026-11' else (5, 6)
+    if eastern_date(now).weekday() not in allowed_days:
+        return []                         # The Odds API props are weekend-only; SharpAPI covers the full slate.
     games = [g for g in slate.get('games', []) if g.get('league') in odds_api.SPORTS and g.get('state') == 'pre'
              and now + LEAD < features.when(g['kickoff']) <= now + WINDOW]
     seen = status.get('events') or {}
     fresh = [g for g in games if not seen.get(g['id']) or now - features.when(seen[g['id']]) >= GAP]
     fresh.sort(key=lambda g: g['kickoff'])
     room = (DAY_CREDITS - spend(status, now)) // COST
-    usage = status.get('usage') or {}
+    if now.strftime('%Y-%m') >= '2026-11':
+        monthly = int(status.get('monthCredits') or 0) if status.get('month') == now.strftime('%Y-%m') else 0
+        room = min(room, (100 - monthly) // COST)
+    usage = quota.current_month_usage(status.get('usage'), now)
     if usage.get('remaining') is not None:
         room = min(room, (usage['remaining'] - RESERVE) // COST)
     return fresh[:max(0, min(limit, room))]
@@ -167,6 +173,9 @@ def capture(slate, now, key, status, events=fetch_events, odds=fetch_odds, root=
         if usage:
             status['usage'] = {**usage, 'at': boxscores.stamp(now)}
         status['day'], status['spent'] = today, spend(status, now) + (usage.get('last') or COST)
+        month = now.strftime('%Y-%m')
+        monthly = int(status.get('monthCredits') or 0) if status.get('month') == month else 0
+        status.update(month=month, monthCredits=monthly + (usage.get('last') or COST))
         status['events'][game['id']] = boxscores.stamp(now)
         books = quotes_of(payload)
         if not books:

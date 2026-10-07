@@ -59,9 +59,11 @@ def http_get(url):
         return json.load(response), headers
 
 
-def credits_left(root=ROOT):
+def credits_left(root=ROOT, now=None):
     try:
-        return int(json.loads((root / 'data' / 'odds' / 'status.json').read_text())['usage']['remaining'])
+        usage = json.loads((root / 'data' / 'odds' / 'status.json').read_text())['usage']
+        usage = quota.current_month_usage(usage, now or datetime.now(timezone.utc))
+        return int(usage['remaining']) if usage else None
     except (OSError, ValueError, KeyError, TypeError):
         return None
 

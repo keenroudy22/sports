@@ -17,6 +17,16 @@ class Response(io.StringIO):
 
 
 class QuotaTests(unittest.TestCase):
+    def test_month_rollover_discards_old_reserve_and_counters_store_counts_only(self):
+        now = datetime(2026, 11, 1, tzinfo=timezone.utc)
+        self.assertEqual(quota.current_month_usage({'at': '2026-10-31T23:00:00Z', 'remaining': 24}, now), {})
+        self.assertEqual(quota.current_month_usage({'at': now.isoformat(), 'remaining': 24}, now)['remaining'], 24)
+        with tempfile.TemporaryDirectory() as root:
+            quota.count_request('sharp', root, now)
+            quota.count_request('buffer', root, now)
+            self.assertEqual(quota.monthly_counts(root, now), {'sharp': 1, 'buffer': 1})
+            row = json.loads((Path(root) / 'sharp.jsonl').read_text())
+            self.assertEqual(set(row), {'at', 'month', 'provider', 'count'})
     def test_failed_metered_call_keeps_reservation(self):
         with tempfile.TemporaryDirectory() as root:
             def opener(request, **kwargs):

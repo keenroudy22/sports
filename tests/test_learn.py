@@ -35,6 +35,24 @@ def row(i, segment='NFL/total', decision='published', clv=-1.0, result='loss', r
 
 
 class GradeTests(unittest.TestCase):
+    def test_shadow_dedupe_keeps_post_pause_near_miss(self):
+        policy = learning.default_policy()
+        policy['segments']['NFL/total'] = {'since': '2026-10-01T00:00:00Z'}
+        rows = [row(1, decision='held', gameIds=['NFL-1'], direction='under'),
+                row(2, decision='refused', gameIds=['NFL-1'], direction='under', at='2026-10-04T12:00:00Z')]
+        self.assertEqual([r['id'] for r in learn.distinct(learn.shadow_window(policy, rows))], ['c2'])
+
+    def test_shadow_failure_cannot_lose_live_weekly_policy(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            with mock.patch.object(results_shadows, 'snapshots', side_effect=RuntimeError('shadow unavailable')):
+                report = learn.weekly(NOW, root=root, log_book={'posts': []}, games={})
+            self.assertTrue((root / 'policy.json').exists())
+            self.assertEqual(report['resultsShadowError'], 'RuntimeError')
+            expected = learning.default_policy()
+            actual = learning.load_policy(root / 'policy.json')
+            self.assertEqual(actual['segments'], expected['segments'])
+
     def test_a_total_a_spread_and_a_prop_grade_against_the_box_score_and_the_close(self):
         total = learn.grade_row({'marketType': 'total', 'direction': 'over', 'line': 44.5, 'gameIds': ['NFL-1']}, GAMES, CAPTURES)
         self.assertEqual((total['result'], total['value'], total['close'], total['clv']), ('win', 47, 46.5, 2.0))

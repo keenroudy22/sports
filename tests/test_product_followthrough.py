@@ -234,7 +234,8 @@ class ReviewProductWiringTests(unittest.TestCase):
                 self.assertFalse((logs / 'review-2026-10-05.md').exists())
             else:
                 saved = (logs / 'review-2026-10-05.md').read_text(encoding='utf-8')
-                self.assertTrue(saved.startswith('Product follow-through\n'))
+                self.assertTrue(saved.startswith('Official plays not scheduled: 0\n'))
+                self.assertIn('Product follow-through\n', saved)
                 if mode == 'fallback':
                     self.assertIn('The summary was unavailable', saved)
                 if mode == 'cloud':

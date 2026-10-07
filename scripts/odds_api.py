@@ -50,6 +50,8 @@ MIN_GAP = timedelta(hours=3, minutes=30)  # between captures of one league
 DAILY_CAP = {'NFL': {6: 4}, 'CFB': {5: 4}}  # weekday -> cap on the league's big day; else 3
 DEFAULT_CAP = 3
 RESERVE = 24                              # credits kept back for the month's last days
+DAILY_CREDITS = 8                         # weekday ceiling across football
+WEEKEND_CREDITS = 6                       # SharpAPI supplies broad weekend prop coverage
 
 
 def normal(name):
@@ -175,14 +177,23 @@ def due(league, games, status, now):
     early = [g for g in upcoming if features.when(g['kickoff']) <= now + EARLY.get(league, WINDOW)]
     if not early:
         return 'no game inside two days' if league not in EARLY else 'no game inside a week'
-    usage = status.get('usage') or {}
+    usage = quota.current_month_usage(status.get('usage'), now)
     if usage.get('remaining') is not None and usage['remaining'] - COST < RESERVE:
         return f"only {usage['remaining']} credits left; keeping the reserve"
     mine = status.get('leagues', {}).get(league, {})
+    if now.strftime('%Y-%m') >= '2026-11' and mine.get('month') == now.strftime('%Y-%m') \
+            and int(mine.get('monthCredits') or 0) + COST > 70:
+        return '70 monthly game-line credits already used for this league'
     if mine.get('lastAt') and now - features.when(mine['lastAt']) < MIN_GAP:
         return f"captured {mine['lastAt']}, inside the gap"
     today = eastern_date(now)
+    spent_today = sum(int(row.get('count') or 0) * COST for row in (status.get('leagues') or {}).values()
+                      if row.get('day') == today.isoformat())
+    credit_cap = WEEKEND_CREDITS if today.weekday() in (5, 6) else DAILY_CREDITS
+    if spent_today + COST > credit_cap:
+        return f'{credit_cap} game-line credits already scheduled today'
     cap = DAILY_CAP[league].get(today.weekday(), DEFAULT_CAP) if soon else EARLY_CAP
+    cap = min(cap, credit_cap // COST)
     late = any(eastern_date(features.when(g['kickoff'])) == today and
                features.when(g['kickoff']).astimezone(ZoneInfo('America/New_York')).hour >= 18 for g in soon)
     if late and now.astimezone(ZoneInfo('America/New_York')).hour < 16 \
@@ -222,7 +233,10 @@ def capture(slate, now, key, status, fetch=fetch, root=STORE, log=print):
         status['usage'] = {**usage, 'at': boxscores.stamp(now)}
         today = eastern_date(now).isoformat()
         mine = status['leagues'].setdefault(league, {})
+        month = now.strftime('%Y-%m')
+        month_credits = int(mine.get('monthCredits') or 0) if mine.get('month') == month else 0
         mine.update(lastAt=boxscores.stamp(now), day=today, count=(mine.get('count', 0) if mine.get('day') == today else 0) + 1)
+        mine.update(month=month, monthCredits=month_credits + COST)
         pairs, unmatched = match(events, [g for g in games if g['league'] == league])
         written = []
         for event, game in pairs:

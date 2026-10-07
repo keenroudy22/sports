@@ -1,0 +1,24 @@
+# Local model routing
+
+RULE: the local model only selects, tags and flags, working on text that code supplies. Code writes every number and every public sentence. Cloud Codex is kept only where live web access or code work is required.
+
+STAYS ON CLOUD CODEX (gpt-6-sol, low reasoning): live web research for plays and pre-post checks (researcher.research), the postgame injury check on raw prop losses (settlement_injury), all code changes, and review.py --codex only when someone asks for it. The local model cannot browse, so none of these can move.
+
+ALREADY LOCAL, KEEP (qwen3.8:27b via scripts/llm.py, one non-blocking lock, 12 h keep-alive): judge_against and judge_for, the homepage editor, the live-progress picker and the Monday brief.
+
+FIX FIRST (no approval needed; no public change):
+1. Judge availability. Log why the judge was unavailable (lock busy, timeout or malformed reply) on every pre-post line, and count fallback decisions in status.json. Let the pre-post check alone wait up to 90 s for the lock, since its window is 15 to 45 minutes. On Oct 3, three plays were pulled by the blunt fallback rule (showers and 71 degrees, offensive linemen out, 'upgraded from doubtful') while the model was running. Learning shows the judge's holds have avoided losses.
+2. Homepage editor. Fingerprint on identity only (gameId, player, market, label). Reuse the previous selection when that set is unchanged and refresh only the displayed text. This cuts about 11 calls per 20 runs to about 2 to 3 a day and frees the lock for the judge.
+3. Config drift. run.sh doctor and desk_health flag any configured KEENROUDY_LLM_* model that is missing from /api/tags (name and installed true/false, never env values). qwen3.5:9b-mlx is configured but not installed. Keep caption polish off: templates are the live prose, and that is the least-AI choice.
+
+ADD ON LOCAL (private, bounded, with deterministic fallbacks; no cloud fallback):
+4. Copy check inside the existing single 180 s Monday brief call. Code supplies the week's published sentences (captions, receipts, why/risk text, built site strings), each with an ID, plus the deterministic lint hits. The model returns up to 3 IDs it finds robotic or contradictory, plus one sentence on which copy variant to retire. This is advisory and never rewrites anything. The real gate is the regex lint in tests/test_voice.py.
+5. Feedback tagging in the same call. The owner pastes replies or Discord comments into ~/.config/keenroudy/feedback.txt. The model tags each line from a fixed list (bug, confusing, data-wrong, request, praise) and quotes exact substrings, which code checks verbatim. It stays private and adds no tracking.
+6. Caption variant drafting, run by hand or weekly through scripts/caption_bank.py draft --category. The model proposes phrasings with placeholders only ({player} {line} {odds} {book} {our}). Code rejects any digit, style-guard or lint failure, or overlength draft, and writes survivors to a private review file. Codex or the owner moves approved lines into a checked-in VARIANTS table. buffer_post rotates them by post ID and logs copyVariant and cardStyle next to cardTheme. This replaces cloud drafting of copy, and the model never writes a live post.
+7. Source check, shadow only. llm_tasks.entails(fact, windows) reads code-extracted text around the player's name, only for facts that would count as 'against' or 'hard' (a handful a day, 45 s timeout). It returns yes, no or unclear plus an exact quote that code verifies. Log it for 4 weeks against judge outcomes. It becomes a drop filter only with the owner's yes.
+
+CLOUD SAVINGS (shadow first): a researcher reuse window. When a pre-post check runs within 90 minutes of a verified research pass on the same game, market and player, and ESPN's injury list has not changed (a deterministic diff), log 'would reuse' but still make the call. If 4 weeks show those repeat calls never found new hard news, propose reuse to the owner. It is a pull-safety change, so it needs their yes.
+
+NEVER A MODEL: prices, stats, record and bank figures, outgoing captions, card text, line-move explanations, and alt text. Build Discord attachment descriptions and chart aria-labels from the card's own fields in code.
+
+EXPECTED EFFECT: today the desk makes about 40 to 60 Codex research calls a week at 60 to 70 s each. The reuse window targets the roughly 20 pre-post repeats a week, which is up to about a third of cloud research time if the shadow supports it. Copy QA, variant drafting and feedback tagging run locally with zero metered cost and add no cloud calls. Fewer editor calls mean the judge gets the lock when it matters. The weekly packet reports local calls, seconds and failures, and Codex calls asked, verified and dropped, so the savings are measured rather than assumed. Ask the owner before deleting the unused qwen3:32b and qwen3:8b (about 25 GB).

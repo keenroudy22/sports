@@ -13,6 +13,7 @@ from pathlib import Path
 
 import gates
 import payload_budget
+import quota
 
 ROOT = Path(__file__).resolve().parents[1]
 CONF = Path.home() / '.config/keenroudy'
@@ -450,6 +451,18 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     verified = used is not None and remaining is not None and used + remaining == 500
     if verified and remaining <= 48:
         issue('odds-reserve', 'The stored Odds API balance is near the protected free reserve.')
+    start = now.astimezone(timezone.utc).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    following = (start.replace(day=28) + timedelta(days=4)).replace(day=1)
+    fraction = max((now - start).total_seconds() / (following - start).total_seconds(), 1 / 31)
+    projected = round(used / fraction) if verified and quota.current_month_usage(usage, now) else None
+    if projected is not None and projected > 450:
+        issue('odds-pace', 'The stored Odds API pace projects past 450 free credits this month.')
+    request_counts = quota.monthly_counts(root / 'work/quota', now)
+    if request_counts['buffer'] >= 2700:
+        issue('buffer-api-pace', 'Buffer requests are near the free 3,000-request monthly limit.')
+    official_unscheduled = int((state.get('x') or {}).get('officialUnscheduled') or 0)
+    if official_unscheduled:
+        issue('official-unscheduled', f'{official_unscheduled} official plays were not scheduled in the last run.')
     if (root / 'site/data/app').is_dir():
         try:
             payload = payload_budget.check(root / 'site')
@@ -474,7 +487,8 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
             'sources': checks, 'deliveriesLast48h': counts,
             'deliveryLogState': 'available' if isinstance(post_book.get('posts'), list) else 'unknown',
             'deliveryCohorts': delivery_cohorts(post_book, now),
-            'oddsBudget': {'observedAt': stamp(usage.get('at')), 'used': used if verified else None,
+            'officialUnscheduled': official_unscheduled, 'requestCounts': request_counts,
+            'oddsBudget': {'observedAt': stamp(usage.get('at')), 'used': used if verified else None, 'projectedMonth': projected,
                            'remaining': remaining if verified else None, 'verifiedFromStoredSnapshot': verified},
             'localModel': {'usedLastRun': (state.get('llm') or {}).get('used') is True,
                            'calls': number(((state.get('llm') or {}).get('calls') or {}).get('calls')),
@@ -485,7 +499,7 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
 
 
 def markdown(data):
-    lines = ['## Private desk health', '', f"Cached evidence checked {data['checkedAt']}. No new feed calls."]
+    lines = [f"Official plays not scheduled: {data.get('officialUnscheduled', 0)}", '', '## Private desk health', '', f"Cached evidence checked {data['checkedAt']}. No new feed calls."]
     lines += ['PROBLEM: ' + row['message'] for row in data['issues']]
     if not data['issues']:
         lines.append('No actionable issue found in the available cached checks; this is not a live service guarantee.')
@@ -512,6 +526,8 @@ def markdown(data):
                      'No-new-play is not a delivery event; missing records cannot establish complete coverage.')
     budget = data['oddsBudget']
     lines.append(f"Stored Odds API budget: {budget['used']} used, {budget['remaining']} remaining; observed {budget['observedAt'] or 'unknown'}.")
+    lines.append(f"Projected month: {budget.get('projectedMonth') or 'unknown'} credits. Counted free-plan requests this month: "
+                 f"SharpAPI {(data.get('requestCounts') or {}).get('sharp', 0)}, Buffer {(data.get('requestCounts') or {}).get('buffer', 0)}.")
     llm = data['localModel']
     lines.append(f"Local model last run: {llm['calls']} calls, {llm['failures']} failures; {llm['homepageStories']} homepage stories.")
     lines.append(f"Live Discord pilot: {data['livePilot']['state']}; {data['livePilot']['attempts']} attempts. X remains off.")

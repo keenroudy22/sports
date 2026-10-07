@@ -24,6 +24,7 @@ import tempfile
 import textwrap
 from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import pricing
@@ -43,14 +44,23 @@ FELT_FROM = None
 
 def _theme_time(value):
     if isinstance(value, datetime):
-        return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+        return value if value.tzinfo else value.replace(tzinfo=ZoneInfo('America/New_York'))
     if hasattr(value, 'year') and hasattr(value, 'month') and hasattr(value, 'day'):
-        return datetime(value.year, value.month, value.day, tzinfo=timezone.utc)
+        return datetime(value.year, value.month, value.day, tzinfo=ZoneInfo('America/New_York'))
     try:
         result = datetime.fromisoformat(str(value).replace('Z', '+00:00'))
-        return result if result.tzinfo else result.replace(tzinfo=timezone.utc)
+        return result if result.tzinfo else result.replace(tzinfo=ZoneInfo('America/New_York'))
     except (TypeError, ValueError):
         return None
+
+
+def _cutover_time(value):
+    """A production switch requires an explicit timezone offset."""
+    try:
+        result = datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+    except (TypeError, ValueError):
+        return None
+    return result if result.tzinfo is not None else None
 
 
 def felt_enabled(item=None, moment=None):
@@ -67,7 +77,7 @@ def felt_enabled(item=None, moment=None):
                        if item.get(key)), None)
         if source is None:
             source = str(item.get('key') or item.get('card') or '').rsplit(':', 1)[-1]
-    when, start = _theme_time(source), _theme_time(cutover)
+    when, start = _theme_time(source), _cutover_time(cutover)
     return bool(when and start and when >= start)
 
 
@@ -81,7 +91,7 @@ def card_theme(moment=None, item=None):
     if source is None and isinstance(item, dict):
         source = next((item.get(key) for key in ('publishedAt', 'settledAt', 'due', 'day', 'capturedAt')
                        if item.get(key)), None)
-    when, start = _theme_time(source), _theme_time(FELT_FROM)
+    when, start = _theme_time(source), _cutover_time(FELT_FROM)
     return 'felt' if when and start and when >= start else 'legacy'
 
 

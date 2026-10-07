@@ -35,6 +35,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import boxscores
 import features
 import odds_api
+import quota
 
 ROOT = Path(__file__).resolve().parents[1]
 STORE = ROOT / 'data' / 'prop-odds'
@@ -139,6 +140,8 @@ def fetch(path, key, opener=urllib.request.urlopen, sleep=time.sleep, **params):
     request = urllib.request.Request(f'{BASE}{path}?{query}', headers={'X-API-Key': key, 'User-Agent': 'keenroudy-sports'})
     for attempt in (1, 2):
         try:
+            if opener is urllib.request.urlopen:
+                quota.count_request('sharp')
             with opener(request, timeout=60) as response:
                 return json.load(response)
         except urllib.error.HTTPError as error:

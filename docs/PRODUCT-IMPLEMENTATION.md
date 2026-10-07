@@ -713,6 +713,33 @@ what was claimed at the time.
 
 ## Constraints deliberately retained
 
+### October 7 approved work order and P0 candidate
+
+- Owner approved the complete CODEX-WORK-ORDER and Claude's delegated decisions, dated
+  `owner-delegated to Claude, 2026-10-06`. The retained work order, benchmark, voice, local routing and
+  multi-sport plan are in docs. P30–P40 track the implementation and genuine observation gates.
+- Buffer's actual ten-slot free queue replaces the erroneous fifty-slot assumption. Optional items defer
+  at seven pending; best bets and receipts retain three places. Health and Monday outputs lead with
+  unscheduled-official counts. This prospective fix cannot deliver the already-missed KC–LV post retroactively.
+- Before: each league allowed three game-line captures daily, four on its big day; Odds API props could spend
+  twelve credits any day and the easy ticket could fetch additional alternate markets. After: football shares
+  eight weekday/six weekend game-line credits; Odds API props are weekend-only through October, twelve/day;
+  easy tickets use stored SharpAPI alternates. October 7–31 maximum is about 280 additional credits, close to
+  the approved 276 target; absent slates and existing October 7 captures reduce actual use. November caps are
+  seventy per league for game lines and one hundred for props (Thursday through Monday), easy tickets zero.
+- UTC-month rollover ignores stale stored balances and reaches the existing free allowance probe. Stored
+  pace warns above 450 projected credits. Private count-only SharpAPI/Buffer journals contain no keys or URLs.
+- Discord uses the approved 512-pixel ticket mark. Legacy cards retain kookn.jpg. Felt approval is recorded;
+  execution waits for the next green 11:30 PM run and before the following menu.
+- C6 failures cannot prevent live weekly learning from saving, and shadow deduplication follows each segment's
+  since window. Theme labels resolve before external posting and use artifact publication/settlement time;
+  invalid labels fall back safely. Cutover strings require an explicit offset; day-only artifact dates use Eastern.
+- Saturday's 1,913,566-byte milestone file splits into complete player/stat groups at one megabyte with all rows
+  retained through the existing index. Built budget and public boundary checks pass without warnings.
+- Candidate checks: 956 Python tests (two skipped), 143 frontend tests under both Node runtimes, clean export,
+  92-pick reconciliation, 509-file public boundary, isolated 0830 rehearsal and eighteen fresh-cache local route/
+  width checks at 375/1440 passed. Final added budget-path fixtures and release verification follow.
+
 No forced plays, missing/stale price bypass, weakened calibration or availability checks, rewritten record,
 straight/parlay player stacking, new API spend, public private-arb payloads, automatic X replies/likes/follows,
 unreviewed new social categories, hidden tracking, account signup or payments. Evaluation windows do not become

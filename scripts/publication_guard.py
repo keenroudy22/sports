@@ -11,7 +11,7 @@ import re
 from pathlib import Path
 
 ROOT_FILES = {'.nojekyll', 'index.html', 'app.css', 'app.js', 'app-more.js', 'core.js', 'live.js', 'personal.js',
-              'favicon.svg', 'kookn-chef.png', 'kookn.jpg'}
+              'favicon.svg', 'kookn-chef.png', 'kookn.jpg', 'kookn-mark.png'}
 DATA_FILES = {'slate.json', 'research-context.json', 'desk-notes.json', 'sports.json',
               'research.json', 'scoreboard.json', 'player-history.json', 'opponent-history.json',
               'market-lab.json', 'market-lines.json', 'depth-charts.json', 'player-identity.json',
@@ -59,7 +59,7 @@ def allowed_path(relative):
     return bool(re.fullmatch(r'data/app/(?:games/(?:NFL|CFB)-[A-Za-z0-9_-]+|'
                              r'player-charts/(?:NFL|CFB)|players/(?:NFL|CFB)(?:/\d+)?|'
                              r'teams/(?:NFL|CFB)(?:/\d+)?|teams/CFB-defense|'
-                             r'trends/(?:index|(?:NFL|CFB)-\d{4}-\d{2}-\d{2}(?:-milestones)?))\.json', value))
+                             r'trends/(?:index|(?:NFL|CFB)-\d{4}-\d{2}-\d{2}(?:-milestones)?(?:-part-[1-9]\d*)?))\.json', value))
 
 
 def contains_private_key(value):

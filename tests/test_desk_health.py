@@ -13,6 +13,15 @@ NOW = datetime(2026, 10, 5, 14, 0, tzinfo=timezone.utc)
 
 
 class DeskHealthTests(unittest.TestCase):
+    def test_pace_warning_and_official_delivery_count_head_the_report(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            self.fixture(root)
+            self.write(root, 'private/status.json', {'outcome': 'ok', 'finishedAt': NOW.isoformat(),
+                       'x': {'officialUnscheduled': 2}})
+            data = H.summary(root, root / 'private', root, NOW)
+            self.assertIn('odds-pace', {r['code'] for r in data['issues']})
+            self.assertTrue(H.markdown(data).startswith('Official plays not scheduled: 2'))
     def write(self, root, name, value):
         path = root / name
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -105,7 +114,7 @@ class DeskHealthTests(unittest.TestCase):
             self.fixture(root)
             data = H.summary(root, root / 'private', root, NOW)
             self.assertEqual(data['livePilot']['state'], 'not-exercised')
-            self.assertFalse(data['issues'])
+            self.assertEqual({r['code'] for r in data['issues']}, {'odds-pace'})
             self.write(root, 'private/live-progress.json', {'attempts': [{'state': 'sending', 'text': 'secret'}]})
             data = H.summary(root, root / 'private', root, NOW)
             self.assertEqual(data['livePilot']['state'], 'review-required')

@@ -1454,16 +1454,10 @@ def allowed(path):
 
 
 def easy_parlay_step(ctx, games, now, records, published, decided, screened, spend=True, exclude=(), league='NFL'):
-    """The day's easy player-prop parlay (scripts/easy_parlay.py): the NFL's from The Odds API's alternate lines on a day
-    with three games or more, college's from the prop feed's alternates on a Saturday; through the same gates as the
-    longshot, leaving off the games in `exclude`. A ticket pulled before its post is replaced under a new id. Never
-    fails a run."""
+    """The day's easy player-prop parlay from stored SharpAPI alternates, with no Odds API spend."""
     import easy_parlay
     try:
-        if league == 'NFL':
-            ticket, reason = easy_parlay.candidate(ctx, games, now, log=log, spend=spend, exclude=exclude)
-        else:
-            ticket, reason = easy_parlay.sharp_candidate(ctx, games, now, league=league, exclude=exclude)
+        ticket, reason = easy_parlay.sharp_candidate(ctx, games, now, league=league, exclude=exclude)
     except Exception as error:
         log(f'{league} easy parlay skipped ({type(error).__name__}: {error})')
         return
@@ -1974,8 +1968,11 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             log(f"buffer: the channel can take {limit['remaining']} more posts today; scheduling that many")
             plans = buffer_post.fit_limit(plans, limit['remaining'])
         before = len(log_book.get('posts', []))
-        buffer_post.schedule(plans, channel['id'], log_book, now, log=log)
+        schedule_stats = {}
+        theme_items = {key: dict(value, **ctx.latest.get(key, {})) for key, value in ctx.first.items()}
+        buffer_post.schedule(plans, channel['id'], log_book, now, log=log, stats=schedule_stats, items=theme_items)
         status['x']['posted'] = len(log_book.get('posts', [])) - before
+        status['x']['officialUnscheduled'] = schedule_stats.get('officialNotScheduled', 0)
         scheduled = {entry['id'] for entry in log_book.get('posts', [])[before:]}
         for title, message in ladder_schedule_pings([p for p in plans if p[0] in scheduled], ctx, games):
             alert(title, message, click='https://keenroudy.com/sports/#ladder')

@@ -709,6 +709,21 @@ class TableTests(unittest.TestCase):
         self.assertEqual(history[-1]['stats'], {'recYds': 20})
 
 class PayloadSplitTests(unittest.TestCase):
+    def test_large_trend_day_splits_without_losing_rows_or_history(self):
+        import tempfile
+        from unittest import mock
+        rows = [{'league': 'CFB', 'season': 2026, 'athleteId': str(i), 'stat': 'recYds',
+                 'kickoff': '2026-10-10T16:00:00Z', 'kind': 'milestone', 'line': 10,
+                 'history': [{'date': '2026-09-01', 'value': 10, 'proof': 'x' * 4000}]} for i in range(600)]
+        with tempfile.TemporaryDirectory() as folder, mock.patch.object(build_site, 'OUT', Path(folder)):
+            build_site.write_trends(rows, datetime(2026, 10, 7, tzinfo=timezone.utc))
+            index = json.loads((Path(folder) / 'trends/index.json').read_text())
+            self.assertGreater(len(index['files']), 1)
+            payloads = [json.loads((Path(folder) / 'trends' / f['file']).read_text()) for f in index['files']]
+            self.assertEqual(sum(len(p['rows']) for p in payloads), 600)
+            self.assertEqual(sum(len(p['histories']) for p in payloads), 600)
+            self.assertTrue(all((Path(folder) / 'trends' / f['file']).stat().st_size <= 1024 * 1024 for f in index['files']))
+
     def test_trend_history_is_stored_once_per_player_stat(self):
         history = [{'date': '2026-09-01', 'value': 10}]
         payload = build_site.trend_payload([
