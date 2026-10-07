@@ -21,34 +21,41 @@ PHOTO_URI = ('data:image/png;base64,'
              + base64.b64encode((ROOT / 'site' / 'kookn-chef.png').read_bytes()).decode('ascii'))
 
 
-def chrome_dump(page, profile, timeout=20):
-    """Return dump-dom output even when macOS Chrome stays alive afterward."""
-    output_path = page.with_suffix('.dom.html')
-    with output_path.open('w', encoding='utf-8') as output:
-        process = subprocess.Popen(
-            [pick_card.chrome_path(), '--headless', '--disable-gpu', '--no-sandbox',
-             '--disable-extensions', '--no-first-run', '--virtual-time-budget=3000',
-             f'--user-data-dir={profile}', '--dump-dom', page.as_uri()],
-            stdout=output, stderr=subprocess.DEVNULL, text=True)
-        deadline, last_size, stable = time.time() + timeout, -1, 0
-        try:
-            while time.time() < deadline:
-                output.flush()
-                size = output_path.stat().st_size if output_path.exists() else -1
-                stable = stable + 1 if size > 0 and size == last_size else 0
-                last_size = size
-                if process.poll() is not None or stable >= 3:
-                    break
-                time.sleep(.25)
-        finally:
-            if process.poll() is None:
-                process.terminate()
-                try:
-                    process.wait(timeout=5)
-                except subprocess.TimeoutExpired:
-                    process.kill()
-                    process.wait(timeout=5)
-    return output_path.read_text(encoding='utf-8')
+def chrome_dump(page, profile, timeout=45):
+    """Return a measured DOM, retrying a transient hosted Chrome startup failure once."""
+    failures = []
+    for attempt in range(2):
+        output_path = page.with_suffix(f'.dom-{attempt}.html')
+        error_path = page.with_suffix(f'.chrome-{attempt}.log')
+        with output_path.open('w', encoding='utf-8') as output, error_path.open('w', encoding='utf-8') as errors:
+            process = subprocess.Popen(
+                [pick_card.chrome_path(), '--headless', '--disable-gpu', '--no-sandbox',
+                 '--disable-dev-shm-usage', '--disable-extensions', '--no-first-run',
+                 '--virtual-time-budget=10000', f'--user-data-dir={profile}-{attempt}',
+                 '--dump-dom', page.as_uri()], stdout=output, stderr=errors, text=True)
+            deadline, last_size, stable = time.time() + timeout, -1, 0
+            try:
+                while time.time() < deadline:
+                    output.flush()
+                    size = output_path.stat().st_size if output_path.exists() else -1
+                    stable = stable + 1 if size > 0 and size == last_size else 0
+                    last_size = size
+                    if process.poll() is not None or stable >= 3:
+                        break
+                    time.sleep(.25)
+            finally:
+                if process.poll() is None:
+                    process.terminate()
+                    try:
+                        process.wait(timeout=5)
+                    except subprocess.TimeoutExpired:
+                        process.kill()
+                        process.wait(timeout=5)
+        dom = output_path.read_text(encoding='utf-8')
+        if 'data-measured="1"' in dom:
+            return dom
+        failures.append(f'attempt {attempt + 1}: exit {process.returncode}; {error_path.read_text(encoding="utf-8")[-400:]}')
+    return '\n'.join(failures)
 
 import felt_cards
 import pick_card
