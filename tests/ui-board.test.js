@@ -34,3 +34,27 @@ test('Best bet matching requires the same game, player, stat and side', () => {
     { gameId: 'NFL-1', athleteId: '9', market: 'rec', direction: 'under' },
   ]) assert.notEqual(M.officialKey(pick), M.officialKey(row));
 });
+
+test('a defense rank colors only when it supports or works against the side of the bet', () => {
+  assert.equal(M.defenseVerdict('soft', 'under', 4), 'opposes');
+  assert.equal(M.defenseVerdict('tough', 'under', 4), 'supports');
+  assert.equal(M.defenseVerdict('soft', 'OVER', 4), 'supports');
+  assert.equal(M.defenseVerdict('tough', 'over', 4), 'opposes');
+  assert.equal(M.defenseVerdict('soft', 'over', 2), null, 'three games minimum');
+  assert.equal(M.defenseVerdict('neutral', 'over', 9), null);
+  assert.match(source, /defenseWords\(teams, opp\.id, data\.pos, stat, league, side\)/, 'ticket hit charts pass the bet side');
+});
+
+test('every core helper the page calls exists, so Today redraws once the full record loads', () => {
+  const missing = [...new Set([...source.matchAll(/(?<![\w.$])C\.([A-Za-z_$][\w$]*)/g)].map(m => m[1]))].filter(n => !(n in globalThis.KRCore));
+  assert.deepEqual(missing, []);
+  assert.match(source, /if \(C\.parseRoute\(location\.hash\)\.view === 'today'\) render\(true\)/);
+});
+
+test('the college defense file name keeps its .json extension and cannot climb directories', () => {
+  const m = source.match(/String\(teams\.defenseFile\)\.replace\((\/.+?\/gi), ''\)/);
+  assert.ok(m, 'defense file sanitizer present');
+  const re = eval(m[1]);
+  assert.equal('teams/CFB-defense.json'.replace(re, ''), 'teams/CFB-defense.json');
+  assert.ok(!'../../x.json'.replace(re, '').includes('..'));
+});
