@@ -4,6 +4,8 @@ Each page loads only what it shows:
 
   app/today.json              games from three days back to eight ahead, with the
                               market, v1 and the latest v2 forecast; recent/open picks
+  app/today-hero.json         Today's first paint (under 4 KB): today's best bets with
+                              price, book, kickoff and card, the Climb status, last W-L
   app/record.json             the complete public pick history
   app/lines.json              small line-catalog manifest
   app/lines-NFL.json          NFL line catalog and current game markets
@@ -922,6 +924,165 @@ def qb_news(injuries):
                      and re.search(r'out|doubtful|questionable|inactive', str(row.get('status') or ''), re.I))
 
 
+# ------------------------------------------------------------------ Today's first paint
+
+HERO_BYTES = 3584          # the hero stays a few kilobytes so a cold phone paints the bet before today.json arrives
+HERO_ROWS = 6              # the weekend card cap is five straight plays; one spare covers a late addition
+HERO_FIELDS = ('id', 'league', 'kind', 'displayTitle', 'market', 'marketType', 'athleteId', 'position', 'line',
+               'direction', 'odds', 'book', 'kickoff', 'featured', 'status', 'entryNote', 'expiresAt',
+               'cutoffOdds', 'cutoffLine')
+
+
+def hero_parlay(pick):
+    return pick.get('kind') == 'parlays' or bool(pick.get('legs')) or bool(pick.get('parlayType'))
+
+
+def hero_pulled(pick):
+    """Withdrawn, or pulled over news before its post went out (the same test as Today's "Pulled before kickoff")."""
+    return pick.get('status') == 'withdrawn' or 'before its post went out' in str(pick.get('entryNote') or '')
+
+
+def hero_card(pick, now, potd=None):
+    """The share card the hosted feed draws for this play (feed.card_items), or None when it draws none.
+
+    feed.py runs after this build, so this is the card's published path, not proof the image exists yet."""
+    postable = (pick.get('favorite') is True or bool(pick.get('modelLean')) or bool(pick.get('legs'))
+                or pick.get('parlayType') == 'longshot')
+    kickoff = instant(pick.get('kickoff'))
+    if (not postable or pick.get('historicalImport') or pick.get('result') or pick.get('entryNote')
+            or (pick.get('status') or 'active') != 'active' or not kickoff or kickoff <= now):
+        return None
+    if not re.fullmatch(r'[A-Za-z0-9_.-]+', str(pick.get('id') or '')):
+        return None
+    return f"data/cards/{pick['id']}{'-potd' if pick['id'] == potd else ''}.png"
+
+
+def hero_bet(pick, now, potd=None):
+    row = {key: pick.get(key) for key in HERO_FIELDS}
+    row['displayTitle'] = pick.get('displayTitle') or pick.get('title')
+    row['featured'] = pick.get('featured') is True or None
+    row['status'] = None if (pick.get('status') or 'active') == 'active' else pick.get('status')
+    probability = pick.get('probabilityAtPublication') if isinstance(pick.get('probabilityAtPublication'), dict) else {}
+    chance = {key: probability.get(key) for key in ('chance', 'breakEven')
+              if isinstance(probability.get(key), (int, float))}
+    if chance:
+        if probability.get('calibrated') is False:
+            chance['calibrated'] = False
+        row['probabilityAtPublication'] = chance
+    row['card'] = hero_card(pick, now, potd)
+    return {key: value for key, value in row.items() if value is not None}
+
+
+def hero_units(pick):
+    """Units as core.js unitsFor counts them: saved units stand; older plays are summed at the posted price."""
+    odds = pick.get('odds')
+    if not isinstance(odds, (int, float)) or not odds or pick.get('result') not in ('win', 'loss', 'push'):
+        return None
+    if isinstance(pick.get('units'), (int, float)) and not pick.get('earlyExit'):
+        return pick['units']
+    risk = pick.get('riskUnits')
+    stake = risk if isinstance(risk, (int, float)) and risk > 0 else 1
+    if pick['result'] == 'win':
+        return stake * (odds / 100 if odds > 0 else 100 / abs(odds))
+    if pick['result'] == 'loss':
+        return 0 if pick.get('earlyExit') else -stake
+    return 0
+
+
+def hero_last_slate(picks, today):
+    """The most recent graded game day before today: straight best bets only, as Today's "Last game day" counts."""
+    graded = [p for p in picks if p.get('result') and not p.get('historicalImport') and not hero_parlay(p)
+              and p.get('kickoff') and day(p['kickoff']) < today]
+    if not graded:
+        return None
+    last = max(day(p['kickoff']) for p in graded)
+    rows = [p for p in graded if day(p['kickoff']) == last]
+    priced = [u for u in (hero_units(p) for p in rows) if u is not None]
+    return {'day': last, 'kickoff': max(str(p['kickoff']) for p in rows), 'wins': sum(p['result'] == 'win' for p in rows),
+            'losses': sum(p['result'] == 'loss' for p in rows), 'pushes': sum(p['result'] == 'push' for p in rows),
+            'units': round(sum(priced), 4) if priced else None}
+
+
+def hero_climb(picks):
+    """Where the 80/20 Climb stands, walked from the rungs exactly as ladder.state and core.js theLadder walk them."""
+    def counts(rung):
+        if rung.get('result') or 'before its post went out' in str(rung.get('entryNote') or ''):
+            return True
+        return not rung.get('entryNote') and (rung.get('status') or 'active') == 'active'
+    rungs = sorted((p for p in picks if p.get('parlayType') == 'ladder' and counts(p)),
+                   key=lambda p: (str(p.get('publishedAt') or ''), str(p.get('id'))))
+    start, goal = 50, 1000
+    run, step, stake, banked, open_rung, last, settled = 1, 1, start, 0, None, None, 0
+    for rung in rungs:
+        info = rung.get('ladder') or {}
+        if not rung.get('result'):
+            open_rung = rung
+            continue
+        settled += 1
+        last = {'result': rung['result'], 'step': info.get('step') or step}
+        if rung['result'] == 'win':
+            returned = int(info.get('payout') or stake)
+            cut = int(round(returned * .2))
+            before = int(info['banked']) if info.get('banked') is not None else banked
+            banked = int(info['bankedAfter']) if info.get('bankedAfter') is not None else before + cut
+            stake = int(info['nextStake']) if info.get('nextStake') is not None else returned - cut
+            step += 1
+            if banked + stake >= goal:
+                run, step, stake, banked = run + 1, 1, start, 0
+        elif rung['result'] == 'loss':
+            run, step, stake, banked = run + 1, 1, start, 0
+    info = (open_rung or {}).get('ladder') or {}
+    out = {'run': run, 'step': step, 'riding': stake, 'banked': banked, 'settled': settled, 'last': last}
+    if open_rung:
+        out['open'] = {'step': info.get('step') or step, 'league': open_rung.get('league')}
+        out['riding'] = int(info.get('stake') or stake)
+        out['banked'] = int(info['banked']) if info.get('banked') is not None else banked
+    return {key: value for key, value in out.items() if value is not None}
+
+
+def hero_next_day(rows):
+    """The earliest later game day's plays still on the card (a play closed after its line moved is off it)."""
+    on_card = [p for p in rows if not p.get('entryNote')]
+    first = min((day(p['kickoff']) for p in on_card), default=None)
+    return [p for p in on_card if day(p['kickoff']) == first]
+
+
+def today_hero(picks, now, potd=None):
+    """app/today-hero.json: the few facts Today paints first, while the full today.json is still loading.
+
+    Today's unsettled best bets (or, with none today, the next game day's still-on-the-card ones), the Climb's
+    status and the last graded game day's W-L. A league with no bet today also gets its own next game day, so a
+    visitor whose saved filter is NFL or CFB sees the same play the full card leads with. Everything is copied from
+    the published rows; nothing is new."""
+    today = eastern_date(now).isoformat()
+    straight = [p for p in picks if not p.get('result') and not p.get('historicalImport') and not hero_parlay(p)
+                and not hero_pulled(p) and p.get('kickoff') and day(p['kickoff']) >= today]
+    order = lambda p: (not p.get('featured'), str(p.get('kickoff')), str(p.get('id')))
+    bets = sorted((p for p in straight if day(p['kickoff']) == today), key=order)
+    later = [p for p in straight if day(p['kickoff']) > today]
+    extra = [] if bets else hero_next_day(later)
+    for league in ('NFL', 'CFB'):
+        if not any(p.get('league') == league for p in bets):
+            seen = {p.get('id') for p in extra}
+            extra += [p for p in hero_next_day([p for p in later if p.get('league') == league]) if p.get('id') not in seen]
+    extra.sort(key=order)
+    # Today's plays come first, so a size trim drops another day's play before any of today's.
+    chosen = bets[:HERO_ROWS] + extra[:HERO_ROWS]
+    rows = [hero_bet(p, now, potd) for p in chosen]
+    payload = {'generatedAt': stamp(now), 'day': today, 'bets': rows, 'more': len(bets) + len(extra) - len(rows),
+               'climb': hero_climb(picks), 'last': {}}
+    for league in ('ALL', 'NFL', 'CFB'):
+        slate = hero_last_slate([p for p in picks if league == 'ALL' or p.get('league') == league], today)
+        if slate:
+            payload['last'][league] = slate
+    # Never let a crowded slate grow the first paint: the full card still lists every play.
+    while payload['bets'] and len(json.dumps(payload, separators=(',', ':'), sort_keys=True,
+                                             ensure_ascii=False).encode('utf-8')) > HERO_BYTES:
+        payload['bets'].pop()
+        payload['more'] += 1
+    return payload
+
+
 # ------------------------------------------------------------------ research
 
 def build_research(context, reports, now):
@@ -1149,7 +1310,8 @@ def build(now=None):
     write(OUT / 'today.json', {'generatedAt': stamp(now), 'freshness': freshness,
                                'health': research_views.health(freshness, now), 'games': cards,
                                'picks': recent_picks(picks, now), 'historyFile': 'record.json', 'model': summary})
-    write(OUT / 'today-hero.json', today_hero(picks, now))
+    import featured as featured_store     # the day's Pick of the Day, whose card feed.py draws under its -potd name
+    write(OUT / 'today-hero.json', today_hero(picks, now, featured_store.of_day(eastern_date(now).isoformat())))
     write(OUT / 'record.json', {'generatedAt': stamp(now), 'picks': picks})
     generated = stamp(now)
     line_index = line_payload.manifest(lines, generated)

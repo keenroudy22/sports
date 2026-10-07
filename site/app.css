@@ -67,6 +67,8 @@ p { margin: 0; }
 .tabbar a:hover { text-decoration: none; }
 .tabbar svg { width: 22px; height: 22px; }
 main { max-width: var(--max); margin: 0 auto; padding: 18px var(--gutter) 0; }
+/* The view holds a full screen from the first paint, so the footer never jumps when a page lands (layout shift). */
+#view { min-height: 100vh; }
 @media (min-width: 900px) {
   .top-tabs { display: flex; }
   .tabbar { display: none; }
@@ -297,7 +299,7 @@ table.t td.n, table.t th.n { text-align: right; font-variant-numeric: tabular-nu
 .week-head b { color: var(--chalk); }
 
 /* ---------- misc ---------- */
-.onboard { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line-strong); border-radius: var(--radius); padding: 2px 2px 2px 14px; margin: -8px 0 14px; font-size: 14px; color: var(--dim); }
+.onboard { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line-strong); border-radius: var(--radius); padding: 2px 2px 2px 14px; margin: 12px 0 0; font-size: 14px; color: var(--dim); }
 .onboard p { flex: 1; }
 .onboard-x { flex: none; min-width: var(--tap); min-height: var(--tap); border: 0; background: transparent; color: var(--dim); font-size: 22px; cursor: pointer; }
 .list-links { display: grid; gap: 8px; }
@@ -482,3 +484,26 @@ details.filters > summary span { font-weight: 500; color: var(--dim); overflow: 
 details.filters > summary::after { content: '▾'; margin-left: auto; color: var(--dim); }
 details.filters[open] > summary::after { content: '▴'; }
 details.filters > .toolbar { margin-top: 4px; }
+/* Today, the 10-second visit: the bet first, then the record line, then one fold for everything else. */
+.today-bets { margin-top: 10px; margin-bottom: 16px; }
+.hero-first .loading { padding: 16px 0; }
+/* The Climb and last game day: two compact status rows under the heading, shown with the first ticket at 375 px. */
+.today-status { margin-top: -8px; padding: 0 12px; background: var(--felt); border: 1px solid var(--line); border-radius: var(--radius); }
+.status-row { margin: 0; font-size: 13px; line-height: 1.4; color: var(--dim); }
+.status-row + .status-row { border-top: 1px solid var(--line); }
+.status-row b { color: var(--chalk); font-weight: 600; }
+.status-row > p, .status-row > summary { display: flex; align-items: center; gap: 8px; min-height: var(--tap); padding: 5px 0; margin: 0; }
+.status-row > summary { list-style: none; cursor: pointer; }
+.status-row > summary::-webkit-details-marker { display: none; }
+.status-row > summary::after { content: '▾'; margin-left: auto; color: var(--dim); }
+.status-row[open] > summary::after { content: '▴'; }
+.status-body { padding: 2px 0 12px; }
+.ticket .meta a { color: var(--ticket-green); font-weight: 600; }
+@media (pointer: coarse) { .ticket .card-link { display: inline-flex; align-items: center; min-height: 44px; } }
+details.today-more { margin: 28px 0; border-top: 1px solid var(--line); }
+details.today-more > summary { list-style: none; cursor: pointer; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; min-height: var(--tap); padding: 14px 24px 6px 0; position: relative; font: 700 24px/1.1 var(--font-display); letter-spacing: .4px; }
+details.today-more > summary::-webkit-details-marker { display: none; }
+details.today-more > summary::after { content: '▾'; position: absolute; right: 0; top: 16px; font: 400 18px/1 var(--font-body); color: var(--dim); }
+details.today-more[open] > summary::after { content: '▴'; }
+details.today-more > summary small { font: 500 14px/1.3 var(--font-body); letter-spacing: 0; color: var(--dim); }
+details.today-more > .section:first-of-type { margin-top: 14px; }

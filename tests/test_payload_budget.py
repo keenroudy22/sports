@@ -21,7 +21,7 @@ class PayloadBudgetTests(unittest.TestCase):
         (app / 'teams').mkdir(parents=True)
         (app / 'trends').mkdir()
         (app / 'today.json').write_bytes(today)
-        (app / 'today-hero.json').write_bytes(b'{"pick":null}')
+        (app / 'today-hero.json').write_bytes(b'{}')
         (app / 'lines.json').write_text(json.dumps({'count': 0, 'files': {'NFL': 'lines-NFL.json', 'CFB': 'lines-CFB.json'}}))
         (app / 'lines-NFL.json').write_bytes(b'{}')
         (app / 'lines-CFB.json').write_bytes(b'{}')
@@ -64,6 +64,17 @@ class PayloadBudgetTests(unittest.TestCase):
             self.assertEqual(result['issues'], [])
             (root / 'data/app/vegas.json').unlink()
             self.assertIn('vegas:missing', payload_budget.check(root)['warnings'])
+
+    def test_today_hero_has_its_own_small_budget_and_warns_without_blocking(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = self.site(folder)
+            self.assertLessEqual(payload_budget.LIMITS['today-hero'], 4 * 1024)
+            (root / 'data/app/today-hero.json').write_bytes(b'x' * (payload_budget.LIMITS['today-hero'] + 1))
+            result = payload_budget.check(root)
+            self.assertTrue(any(x.startswith('today-hero:') for x in result['warnings']))
+            self.assertEqual(result['issues'], [])
+            (root / 'data/app/today-hero.json').unlink()
+            self.assertIn('today-hero:missing', payload_budget.check(root)['warnings'])
 
     def test_shell_breach_still_stops_the_publish(self):
         with tempfile.TemporaryDirectory() as folder:

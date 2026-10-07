@@ -50,6 +50,20 @@
     const pastLine = isNum(pick.cutoffBoundary) && (pick.direction === 'under' ? current.line <= pick.cutoffBoundary : current.line >= pick.cutoffBoundary);
     return { current, inside: isNum(pick.cutoffOdds) && !pastPrice && !pastLine };
   };
+  /* The Climb's status words, from the full rung ledger or today-hero.json's summary of it. */
+  const climbWords = s => s.open ? `Step ${s.open.step || s.step} is live`
+    : s.last && s.last.result === 'win' ? `Step ${s.last.step || s.step - 1} cashed · Step ${s.step} is being checked · not posted yet`
+      : s.last && s.last.result === 'loss' ? 'New $50 climb · Step 1 is being checked · not posted yet'
+        : s.settled ? `Step ${s.step} is being checked · not posted yet` : 'The first step waits for two clean games';
+  /* Today's first paint: today's bets, else the next game day's still on the card, as the full card chooses them. */
+  const heroBets = (hero, now = Date.now(), league = 'ALL') => {
+    const today = C.dayOf(new Date(now).toISOString());
+    const mine = ((hero || {}).bets || []).filter(b => b && b.id && C.dayOf(b.kickoff) >= today && (league === 'ALL' || b.league === league));
+    const todays = mine.filter(b => C.dayOf(b.kickoff) === today);
+    if (todays.length) return { today: true, rows: todays };
+    const later = mine.filter(b => C.pickState(b, now).word !== 'Line moved'), first = later.map(b => C.dayOf(b.kickoff)).sort()[0];
+    return { today: false, rows: later.filter(b => C.dayOf(b.kickoff) === first) };
+  };
 
   /* What a price needs to break even (no vig removed: this is the bettor's real bar). */
   const breakEven = odds => {
@@ -387,7 +401,7 @@
 
   const model = { goodTo, latestPickQuote, priceMatch, averageGap, researchPrice, matchupSignals, breakEven, fairAmerican, edgePoints, pctText, pctOne, oddsText, upsetChanceLine, quoteAge, bookLabel, postedBook, marketLabel, niceTitle, sentences,
     whyLines, watchLine, historyLine, howWeGotIt, pickVM, lineVM, officialKey, onBoard, hasValue, defenseVerdict, collapse, SORTS, heavyFavorite, trendText, gapScore,
-    cumulativeUnits, clvSummary, parseHash, resolve, canonical, TAB_OF, MORE_PAGES, isParlayLike };
+    cumulativeUnits, clvSummary, parseHash, resolve, canonical, TAB_OF, MORE_PAGES, isParlayLike, climbWords, heroBets };
 
   if (typeof document === 'undefined') return { model };
 
@@ -646,6 +660,7 @@
         <div class="price"><b class="num">${esc(oddsText(vm.odds))}</b><span>${vm.estimated ? 'est. · ' : ''}${esc(vm.book || '')}${vm.mode !== 'open' && !vm.result && !vm.statusShort ? ' · posted price' : ''}</span></div>
         ${plain}${vm.statusShort ? `<p class="meta${vm.mode === 'closed' ? ' strong' : ''}">${esc(vm.statusShort)}</p>` : ''}
         ${vm.mode === 'open' && goodTo(pick) ? `<p class="meta">${esc(goodTo(pick))}</p>` : ''}${latestText ? `<p class="meta">${esc(latestText)}</p>` : ''}
+        ${opts.card && /^data\/cards\/[\w.-]+\.png$/.test(opts.card) ? `<p class="meta"><a class="card-link" href="${esc(opts.card)}" target="_blank" rel="noopener">See the card ↗</a></p>` : ''}
         ${compact ? '' : `<details class="t-more" data-box="t:${esc(pick.id)}"${opts.onPage ? ' open' : ''}><summary>Details<span>${esc(moreHint)}</span></summary>
           ${facts}${why}${hist}${chart}${legs}
       ${vm.estimated ? '<p class="meta">Combined odds are estimated from the leg prices we saw. Check the real ticket price at your book.</p>' : ''}
@@ -760,13 +775,15 @@
   const money = n => `$${Math.round(Number(n) || 0).toLocaleString('en-US')}`;
   const signedMoney = n => { const v = Math.round(Number(n) || 0); return `${v > 0 ? '+' : v < 0 ? '−' : ''}$${Math.abs(v).toLocaleString('en-US')}`; };
   /* The Climb in one compact block: what cashed, what's next, the ledger and every past step's exact lines. */
-  const climbStatus = lad => {
-    const open = lad.open, info = (open && open.ladder) || {}, last = lad.history[lad.history.length - 1];
-    if (open) return `Step ${info.step || lad.step} is live`;
-    if (last && last.result === 'win') return `Step ${(last.ladder || {}).step || lad.step - 1} cashed · Step ${lad.step} is being checked · not posted yet`;
-    if (last && last.result === 'loss') return 'New $50 climb · Step 1 is being checked · not posted yet';
-    return lad.history.length ? `Step ${lad.step} is being checked · not posted yet` : 'The first step waits for two clean games';
+  /* The Climb in today-hero.json's shape (build_site.hero_climb), so both Today paints word and count it alike. */
+  const climbSummary = lad => {
+    const last = lad.history[lad.history.length - 1], info = (lad.open && lad.open.ladder) || {};
+    return { open: lad.open && { step: info.step }, step: lad.step, settled: lad.history.length,
+      last: last && { result: last.result, step: (last.ladder || {}).step },
+      riding: lad.open ? Number(info.stake) || lad.stake : lad.stake,
+      banked: lad.open && info.banked != null && isNum(Number(info.banked)) ? Number(info.banked) : lad.banked };
   };
+  const climbStatus = lad => climbWords(climbSummary(lad));
   const climbStrip = (lad, opts = {}) => {
     const open = lad.open, info = (open && open.ladder) || {};
     const riding = Number(open ? info.stake : lad.stake) || 50, banked = Number(open ? info.banked : lad.banked) || 0;
@@ -808,6 +825,53 @@
       .catch(() => { todayExtras = {}; todayExtrasAt = Date.now(); })
       .finally(() => { todayExtrasLoading = false; if (C.parseRoute(location.hash).view === 'today') render(true); });
   };
+  /* Today's first paint: today-hero.json (about 1 KB, requested by index.html as the page starts) shows the bet with
+     its price, book, kickoff and card, the Climb and the last game day while the full today.json is still loading. */
+  let heroLoaded = null, todayLanded = false;
+  const heroFetch = () => {
+    const early = window.krHero;
+    if (early) { window.krHero = null; cache.set('app/today-hero.json', { at: Date.now(), promise: early }); }
+    return maybe('app/today-hero.json').catch(() => null)
+      .then(hero => { if (hero && Array.isArray(hero.bets)) heroLoaded = hero; return heroLoaded; });
+  };
+  /* Two compact rows under Today's heading, the same on the first paint and the full card (DIRECTION-RULES
+     section 5): the Climb's step, stake and bank, and the last game day's W-L. They sit above the first ticket so a
+     375 px phone shows them with the bet and no taps. On the full card each opens its ledger or receipts in one tap. */
+  const statusRows = (c, last, body = {}) => {
+    const row = (box, label, text, inside) => inside
+      ? `<details class="status-row" data-box="${box}"><summary><span><b>${label}</b> · ${text}</span></summary><div class="status-body">${inside}</div></details>`
+      : `<div class="status-row"><p><span><b>${label}</b> · ${text}</span></p></div>`;
+    const climb = c && isNum(c.riding) ? row('climb-status', '80/20 Climb', `${esc(climbWords(c))} · ${money(c.riding)} riding · ${money(c.banked)} banked`, body.climb) : '';
+    const day = last ? row('last-day', 'Last game day', `${esc(dayLabel(last.kickoff))} · ${esc(wl(last))}${isNum(last.units) ? ` · ${esc(units(last.units))}` : ''}`, body.last) : '';
+    return climb || day ? `<div class="today-status">${climb}${day}</div>` : '';
+  };
+  const LOADING = '<p class="loading muted" role="status">Loading…</p>';
+  /* A painted hero belongs to football Today in the league it was painted for; anything else clears it at once. */
+  const dropHero = () => { const view = $('#view'); if (view && view.querySelector('.hero-first')) view.innerHTML = LOADING; };
+  const firstPaint = (hero, now = Date.now()) => {
+    const { today, rows } = heroBets(hero, now, state.league), n = rows.length;
+    /* A saved league with nothing in the hero waits for the full card instead of painting an empty heading. */
+    if (!n && ((hero || {}).bets || []).length) return '';
+    const title = n && !today ? `Next best bet · ${whenShort(rows[0].kickoff)}` : "Today's best bets";
+    const sub = n ? `${n} best bet${n === 1 ? '' : 's'} ${today ? 'today' : `for ${esc(dayLabel(rows[0].kickoff))}`}${state.league !== 'ALL' ? ` in ${esc(LEAGUE_NAME[state.league])}` : ''}.`
+      : 'Free picks, each with the price and the chance we give it.';
+    return `${head(`Today · ${dayLabel(todayISO())}`, title, sub)}${statusRows(hero.climb, (hero.last || {})[state.league])}
+      <section class="section today-bets hero-first" aria-busy="true">
+      ${n ? `<div class="tickets wide">${rows.map(p => ticket(p, { compact: true, card: p.card })).join('')}</div>` : ''}
+      <p class="loading muted" role="status">Loading the rest of today…</p></section>`;
+  };
+  /* Painted only while today.json is still on its way, and only if no newer render or route has started. */
+  const paintHero = (heroP, todayP) => {
+    const token = renderToken;
+    let landed = false;
+    todayP.then(() => { landed = true; }, () => { landed = true; });
+    heroP.then(hero => {
+      const view = $('#view');
+      if (!hero || landed || token !== renderToken || !view || C.parseRoute(location.hash).view !== 'today') return;
+      const html = firstPaint(hero);
+      if (html) view.innerHTML = html; else dropHero();
+    });
+  };
   /* Sports without best bets get their own honest Today: scores and their trial, never football substituted. */
   const sportToday = async () => {
     const [lab, trials] = await Promise.all([maybe('market-lab.json'), maybe('app/sport-research.json')]);
@@ -823,8 +887,13 @@
   };
   VIEWS.today = async route => {
     if (route && route.league && location.hash !== appliedHash) { appliedHash = location.hash; setLeague(route.league); }
-    if (!FOOTBALL.includes(state.league) && state.league !== 'ALL') return sportToday();
-    const [today, notes] = await Promise.all([get('app/today.json'), maybe('desk-notes.json')]);
+    if (!FOOTBALL.includes(state.league) && state.league !== 'ALL') { dropHero(); return sportToday(); }
+    const todayP = get('app/today.json'), heroP = heroFetch();
+    /* Until the full card has landed once, each Today render (a league change too) repaints the hero for its league. */
+    if (!todayLanded) paintHero(heroP, todayP);
+    /* The hero is a kilobyte and already on its way; waiting for it keeps the card links on the first full render. */
+    const [today, notes] = await Promise.all([todayP, maybe('desk-notes.json'), heroP]);
+    todayLanded = true;
     queueTodayExtras();
     const { board = null, lines = null, sports = null, every = today.picks || [] } = todayExtras || {};
     indexGames(today);
@@ -835,9 +904,10 @@
     const pulled = p => p.status === 'withdrawn' || /before its post went out/.test(p.entryNote || '');
     const offCard = p => ['Line moved', 'Price expired'].includes(C.pickState(p, now).word);
     const order = (a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)) || String(a.kickoff).localeCompare(String(b.kickoff));
+    const cards = new Map(((heroLoaded || {}).bets || []).map(b => [b.id, b.card]));
     const bets = sched.today.filter(p => !C.isParlay(p) && !pulled(p) && !offCard(p)).sort(order);
-    const upcoming = sched.upcoming.filter(p => !C.isParlay(p) && !pulled(p) && !offCard(p)).sort(order);
-    const expired = [...sched.today, ...sched.upcoming].filter(p => !C.isParlay(p) && !pulled(p) && offCard(p));
+    const later = sched.upcoming.filter(p => !C.isParlay(p) && !pulled(p)).sort(order);
+    const upcoming = later.filter(p => !offCard(p)), off = [...sched.today, ...later].filter(p => !C.isParlay(p) && !pulled(p) && offCard(p));
     const gone = [...sched.today, ...sched.upcoming, ...sched.awaiting].filter(p => !C.isLadder(p) && pulled(p));
     const awaiting = sched.awaiting.filter(p => !C.isLadder(p) && !pulled(p));
     const fun = [...sched.today, ...sched.upcoming].filter(p => C.isParlay(p) && !C.isLadder(p) && !pulled(p));
@@ -861,11 +931,10 @@
     const climb = climbStrip(ladder);
     const rungHere = ladder.open && (state.league === 'ALL' || ladder.open.league === state.league);
     const climbOpen = rungHere ? `<div class="tickets">${ticket(ladder.open)}</div>` : '';
-    /* Order on the card: Pick of the Day, then the Climb, then the rest (the owner's phone-first rule). */
-    /* Pick of the Day, then a live Climb step, then the rest. An unposted Climb is a small status after the card. */
-    const climbStatusBox = `<details class="more-box climb-status" data-box="climb-status"><summary>80/20 Climb ($50 → $1,000) · ${esc(climbStatus(ladder))}</summary>${climbStrip(ladder, { flat: true })}</details>`;
+    /* Order on the card: Pick of the Day, then a live Climb step, then the rest (the owner's phone-first rule).
+       An unposted Climb is the small status row under the heading, never the hero. */
     const heroList = list => { const potd = list.filter(p => p.featured), rest = list.filter(p => !p.featured);
-      return `${potd.length ? `<div class="tickets wide">${potd.map(p => ticket(p)).join('')}</div>` : ''}${rungHere ? `<div style="margin:14px 0">${climbOpen}${climb}</div>` : ''}${rest.length ? `<div class="tickets wide"${potd.length ? ' style="margin-top:14px"' : ''}>${rest.map(p => ticket(p)).join('')}</div>` : ''}${rungHere ? '' : `<div style="margin-top:14px">${climbStatusBox}</div>`}`; };
+      return `${potd.length ? `<div class="tickets wide">${potd.map(p => ticket(p, { card: cards.get(p.id) })).join('')}</div>` : ''}${rungHere ? `<div style="margin:14px 0">${climbOpen}${climb}</div>` : ''}${rest.length ? `<div class="tickets wide"${potd.length ? ' style="margin-top:14px"' : ''}>${rest.map(p => ticket(p, { card: cards.get(p.id) })).join('')}</div>` : ''}`; };
     const graded = picks.filter(p => p.result && !p.historicalImport && !C.isParlay(p) && C.dayOf(p.kickoff));
     const lastDay = graded.map(p => C.dayOf(p.kickoff)).filter(d => d < etDay()).sort().pop();
     const recent = lastDay ? graded.filter(p => C.dayOf(p.kickoff) === lastDay).sort((a, b) => String(b.kickoff).localeCompare(String(a.kickoff))) : [];
@@ -880,7 +949,7 @@
       const gsum = C.summaryOf(gradedToday.filter(p => !C.isUnpricedImport(p)), 1);
       heroTitle = "Today's best bets · graded";
       heroSub = `${gradedToday.length} best bet${gradedToday.length === 1 ? '' : 's'} today, already graded: ${esc(wl(gsum))} · ${esc(units(gsum.units))}.${days.length ? ` The next ${days[0][1].length === 1 ? 'one is' : 'ones are'} posted for ${esc(dayLabel(days[0][1][0].kickoff))}.` : ''}`;
-      heroHtml = `<div class="receipts">${gradedToday.map(p => receipt(p, new Map(((board || {}).picks || {}).rows?.map(r => [r.id, r.clv]) || []))).join('')}</div>${days.length ? `<div class="tickets wide" style="margin-top:14px">${days[0][1].map(p => ticket(p)).join('')}</div>` : ''}<div style="margin-top:14px">${rungHere ? climbOpen + climb : climbStatusBox}</div>`;
+      heroHtml = `<div class="receipts">${gradedToday.map(p => receipt(p, new Map(((board || {}).picks || {}).rows?.map(r => [r.id, r.clv]) || []))).join('')}</div>${days.length ? `<div class="tickets wide" style="margin-top:14px">${days[0][1].map(p => ticket(p, { card: cards.get(p.id) })).join('')}</div>` : ''}${rungHere ? `<div style="margin-top:14px">${climbOpen}${climb}</div>` : ''}`;
       laterHtml = days.slice(1).map(([, list]) => `<p class="eyebrow" style="margin:14px 0 8px">${esc(dayLabel(list[0].kickoff))}</p><div class="tickets wide">${list.map(p => ticket(p, { compact: true })).join('')}</div>`).join('');
     } else if (days.length) {
       const [, first] = days[0];
@@ -891,13 +960,15 @@
     } else {
       heroTitle = "Today's best bets";
       heroSub = 'Free picks, each with the price and the chance we give it.';
-      heroHtml = `${empty('No best bet yet', `${esc(reason)}. ${esc(nextWindow)} <a href="#research/lines">See the research board →</a> · <a href="#schedule">Release schedule</a>`)}<div style="margin-top:14px">${rungHere ? climbOpen + climb : climbStatusBox}</div>`;
+      heroHtml = `${empty('No best bet yet', `${esc(reason)}. ${esc(nextWindow)} <a href="#research/lines">See the research board →</a> · <a href="#schedule">Release schedule</a>`)}${rungHere ? `<div style="margin-top:14px">${climbOpen}${climb}</div>` : ''}`;
     }
 
-    /* Last game day: yesterday's hits and misses, right under the card. */
+    /* Last game day: its hits and misses, a status row under the heading that opens to the receipts. */
     const clvById = new Map(((board || {}).picks || {}).rows?.map(r => [r.id, r.clv]) || []);
     const recentSum = C.summaryOf(recent.filter(p => !C.isUnpricedImport(p)), 1);
-    const recentHtml = recent.length ? `<details class="more-box"><summary>Last game day · ${esc(dayLabel(recent[0].kickoff))} · ${esc(wl(recentSum))} · ${esc(units(recentSum.units))}</summary><div class="receipts">${recent.map(p => receipt(p, clvById)).join('')}</div><p class="small" style="margin-top:8px"><a href="#record">Full record →</a></p></details>` : '';
+    const status = statusRows(climbSummary(ladder), recent.length ? { ...recentSum, kickoff: recent[0].kickoff } : null, {
+      climb: rungHere ? '' : climbStrip(ladder, { flat: true }),
+      last: recent.length ? `<div class="receipts">${recent.map(p => receipt(p, clvById)).join('')}</div><p class="small" style="margin-top:8px"><a href="#record">Full record →</a></p>` : '' });
 
     /* Anything already on the card (open or not) stays out of "Worth a look". */
     const official = new Set(picks.filter(p => !p.result && !p.historicalImport && !C.isParlay(p)).map(officialKey));
@@ -931,22 +1002,25 @@
       return `<a class="pill" href="#today?sport=${esc(key)}">${esc(LEAGUE_NAME[key])}${FOOTBALL.includes(key) ? '' : ` · ${n} today`} →</a>`; }).join('')}</div></details>` : '';
 
     const u = k.rec.captured.units;
-    return `${head(`Today · ${dayLabel(todayISO())}`, heroTitle, heroSub)}
-      <section class="section">${heroHtml}</section>
-      ${onboard}
+    const gameCount = liveToday.games.length;
+    /* The owner's 10-second Today: two compact status rows (Climb, last game day), the card, then the season line
+       and the welcome note. The rows match the first paint, so the first ticket does not move when the card lands.
+       Underdog watch is one tap away in "More for today": DIRECTION-RULES section 5 supersedes the Oct 2
+       "Today always shows Underdog Watch" placement; its honest empty state is unchanged inside the fold. */
+    return `${head(`Today · ${dayLabel(todayISO())}`, heroTitle, heroSub)}${status}
+      <section class="section today-bets">${heroHtml}</section>
       <p class="proof"><a class="proof-line" href="#record">${esc(k.label === 'Season record' ? 'Season' : k.label === 'Playoff record' ? 'Playoffs' : 'This stage')} <b class="num">${esc(wl(k.rec.all))}</b>${isNum(u) ? ` · <span class="${u < 0 ? 'red' : u > 0 ? 'green' : ''}">${esc(units(u).replace(/u$/, ' units'))}</span> at posted prices` : ''}<span class="go">Every result →</span></a>${OWNER_FLAGS.clvHeadline && k.clv.measured ? `<a class="pill" href="#record/model">Beat the closing line ${k.clv.beat} of ${k.clv.measured}</a>` : ''}</p>
+      ${onboard}
       ${laterHtml ? section('More best bets', laterHtml, '', 'Already posted. Check your book; prices move.') : ''}
-      ${expired.length ? `<details class="more-box"><summary>Off the card · ${expired.length}</summary><div class="tickets" style="padding-top:6px">${expired.map(p => ticket(p, { compact: true })).join('')}</div></details>` : ''}
+      ${off.length ? `<details class="more-box" data-box="off-card"><summary>Off the card · ${off.length}</summary><p class="small muted">The line moved or the saved price expired. Each posted play still counts and is graded at its posted price.</p><div class="tickets" style="padding:6px 0 14px">${off.map(p => ticket(p, { compact: true })).join('')}</div></details>` : ''}
       ${awaiting.length ? section('Waiting on results', `<div class="tickets">${awaiting.map(p => ticket(p, { compact: true })).join('')}</div>`, '', 'Games are over or running late; grading follows the final.') : ''}
       ${gone.length ? `<details class="more-box"><summary>Pulled before kickoff · ${gone.length}</summary><div class="tickets" style="padding-top:6px">${gone.map(p => ticket(p, { compact: true })).join('')}</div></details>` : ''}
-      ${recentHtml ? `<section class="section">${recentHtml}</section>` : ''}
       ${communityCard()}
       ${fun.length ? section('Fun tickets', `<div class="tickets">${fun.map(p => ticket(p)).join('')}</div>`, '', 'For fun at a smaller stake. Tracked separately, never in the best-bet record.') : ''}
       ${section('Research worth a look', worth, '<a class="more" href="#research/lines">See every line →</a>', 'Research, not best bets. Current prices that pass our price check.')}
-      <details class="more-box more-today"><summary>More for today · Underdogs and games</summary>
-        ${section('Underdog watch', upsetHtml, '', 'Outright upset research: our raw winner estimate against the market. Not a best bet.')}
-        ${section('Today\'s games', tonightHtml, '<a class="more" href="#games/live">Live scores →</a>')}
-      </details>
+      <details class="today-more" data-box="today-more"><summary>More for today<small>Underdog watch · ${gameCount} game${gameCount === 1 ? '' : 's'} today</small></summary>
+      ${section('Underdog watch', upsetHtml, '', 'Outright upset research: our raw winner estimate against the market. Not a best bet.')}
+      ${section('Today\'s games', tonightHtml, '<a class="more" href="#games/live">Live scores →</a>')}</details>
       ${sportsHtml}`;
   };
 
@@ -2152,7 +2226,8 @@
     const sideScroll = soft ? [...document.querySelectorAll('#view .chart-wrap, #view .table-wrap, #view .chip-scroll')].map(e => e.scrollLeft) : [];
     const boxes = soft ? new Map([...document.querySelectorAll('details[data-box]')].map(d => [d.dataset.box, d.open])) : new Map();
     const openBoxes = soft ? [...document.querySelectorAll('details[open]:not([data-row]):not([data-box]) > summary')].map(x => x.textContent.trim()) : [];
-    const slow = soft ? null : setTimeout(() => { if (token === renderToken) view.innerHTML = '<p class="loading muted" role="status">Loading…</p>'; }, 150);
+    /* A painted Today hero stays while Today loads; any other page gets the placeholder, never Today's hero. */
+    const slow = soft ? null : setTimeout(() => { if (token === renderToken && !(route.view === 'today' && view.querySelector('.hero-first'))) view.innerHTML = LOADING; }, 150);
     let html;
     try {
       html = await (VIEWS[route.view] || VIEWS.today)(route);
@@ -2348,5 +2423,5 @@
     render();
   }
 
-  return { model, boot, moreContext, ensureMore };
+  return { model, boot, moreContext, ensureMore, firstPaint, render, views: VIEWS };
 });

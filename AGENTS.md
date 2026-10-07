@@ -663,7 +663,9 @@ Handy commands (from `~/Projects/sports`):
   10:30 AM research graphic may publish per football slate: a fresh outright underdog first, then a priced spread
   dog, exact-line Matchup Menu, or End-zone Work. Every card and post says research, not an official play; it uses
   only current stored prices/evidence, becomes optional before queue limits, and mirrors to Discord only after X.
-  Hard Rock remains comparison-only and never appears on the editorial research post.
+  Hard Rock remains comparison-only and never appears on the editorial research post. *(Placement superseded
+  2026-10-07 by DIRECTION-RULES section 5: Underdog Watch now sits one tap away in Today's "More for today"
+  fold, empty state included.)*
 - **Live progress shadow (2026-10-02):** the five-minute mirror job silently observes already-public football
   plays with one free ESPN summary per game. It is capped at eight games, records source time, early crossings,
   close calls, corrections and finals in `~/.config/keenroudy/live-watch.json`, and makes no odds or model call.

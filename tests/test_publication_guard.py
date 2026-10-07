@@ -29,7 +29,8 @@ class PublicationGuardTests(unittest.TestCase):
                      'data/app/teams/NFL/../../private.json', 'data/cards/private.zip',
                      'img/.config/card.png', 'data/new-feed.json', 'data/app/trends.json',
                      'data/app/trends/NBA-2026-10-08.json', 'data/app/trends/NFL-all.json', 'archive/review-packet.md',
-                     'data/vegas.json', 'data/app/vegas/NFL.json'):
+                     'data/vegas.json', 'data/app/vegas/NFL.json',
+                     'data/app/today-hero-full.json', 'data/app/hero/today.json'):
             self.assertFalse(guard.allowed_path(Path(path)), path)
 
     def test_retired_preview_paths_are_not_public(self):

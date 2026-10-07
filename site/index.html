@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<script>if(/^(#today\b.*|#?)$/.test(location.hash))window.krHero=fetch('data/app/today-hero.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).catch(()=>null)</script>
 <title>Kook'n · Today's best bets</title>
 <meta name="description" content="Kook'n: free daily best bets, sortable research and live scores. Every play graded in public, win or lose. 21+. Entertainment only.">
 <meta name="theme-color" content="#07120D">
