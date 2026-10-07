@@ -65,13 +65,14 @@ These are already in AUTOPILOT section 3: variants retire after 8 posts below th
 
 **The owner's 10-second Today: above the fold at 375 px, with no taps**
 
-The compact Climb and Last game day status rows sit above the first ticket; this is the only
-exception to the October 5 selection-first order. The 0.86/two-book Climb variant is retired:
-it built no rung in 26 stored opportunities.
-- today's best bets: pick, price, book, the card and kickoff;
-- Climb status: the current step, the bet and the bank;
-- last slate's result: W-L plus the margin rows;
-- the top 3 Prep List lines.
+Kitchen Ticket update (owner, 2026-10-07; OWNER-DECISIONS item 22): the first best bet hangs on
+the rail with its price, book and kickoff, the Climb stub sits directly under it, and the last game
+day's W-L rides in the date line above it. The two compact status rows are retired. The 0.86/two-book
+Climb variant is retired: it built no rung in 26 stored opportunities.
+- today's best bets: the whole first ticket (pick, price, book, kickoff) with no scroll at 375 x 812;
+- Climb status: "80/20 Climb #N", the step and its state line, with no scroll;
+- last slate's result: W-L in the date line, then the slips with margins on the spike;
+- the top 3 Prep List lines: one short scroll down.
 
 Everything else is one tap away. The Codex weekly improvement task gets two jobs:
 - **It ships one small site tweak a week aimed at this,** verified at 375 and 1440 px.
