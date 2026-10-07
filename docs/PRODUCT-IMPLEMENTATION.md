@@ -477,6 +477,21 @@ missing when neither component was recorded, so the page does not turn absent da
   sideways scroll, load failure or console error.
 - Tracked schemas, `record_audit.py` and integrity checks were not changed.
 
+### C4 regression-repair receipt
+
+- Production revision `e65695a1` shipped in [publish run 37571505718](https://github.com/keenroudy22/sports/actions/runs/37571505718)
+  on October 7. The source/display boundary is restored: the live 520-line catalog contains no `theScore Bet`
+  provider rows, retains 52 canonical `ESPN BET` rows for selection and jurisdiction checks, and exposes the
+  public rename only through `displayBook`. The Georgia at Alabama and Hawai'i at Arizona State totals that the
+  prior build rejected now both retain `ESPN BET` as their source book.
+- The release also repairs split-file CFB defense loading for matchup research, refreshes Today data in an open
+  tab, and restores the documented legacy routes, player/team chart search, MLB/NHL recent-results fold, Model
+  tiles and no-script fallback. The live site serves app 121 and the split CFB defense payload returns 200.
+- Gates passed 917 Python tests (2 skipped), 139 frontend tests and 23 prototype parity tests under both Node
+  runtimes, the 92-pick record audit, payload budget, 504-file public guard and isolated slot-0645 rehearsal.
+  Local and live audits each covered the repaired routes at 375 and 1440 px with no overflow, clipping, load
+  failure or console error. No tracked schema, record, social-delivery or felt-cutover setting changed.
+
 ### Rollback boundary after C4
 
 - `8eda349533167f202fbcfa0a0bda4e6c390c58f1` is the pre-redesign reference, but it is no longer a safe
