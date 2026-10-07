@@ -173,10 +173,11 @@ class FeltCardTests(unittest.TestCase):
         self.assertIn('data-zone="open-stub"', play)
         self.assertIn(f'data-zone="open-stub" x="826"', play)
         self.assertIn(f'fill="{felt_cards.FELT_RAISED}"', play)
-        self.assertIn('SEASON 35–35', play)
+        self.assertNotIn('SEASON 35–35', play)
+        self.assertNotIn('data-zone="season-strip"', play)
         self.assertIn('>BEST BETS<', receipt)
         self.assertIn('>2–3<', receipt)
-        self.assertIn('SEASON 35–35', receipt)
+        self.assertNotIn('SEASON 35–35', receipt)
         self.assertIn('TRACKED APART · FUN TICKETS 0–1 · CLIMB STEP 2 ✓', receipt)
         self.assertIn('data-zone="tracked-divider"', receipt)
         self.assertNotIn('+2 MORE ON THE PUBLIC RECORD', receipt)
@@ -271,10 +272,9 @@ document.fonts.ready.then(() => {
   const rows = [...document.querySelectorAll('body > svg')].map((card) => {
     const subject = [...card.querySelectorAll('[data-zone="play-subject"] text')].map(box);
     const selection = [...card.querySelectorAll('[data-zone="play-selection"] text')].map(box);
-    const season = card.querySelector('[data-zone="season-strip"] text');
     const ticket = card.querySelector('[data-zone="play-ticket"]');
     return {photo: !!card.querySelector('[data-zone="player-photo"]'), subject, selection,
-            season: season && box(season), ticket: ticket && box(ticket)};
+            ticket: ticket && box(ticket), season: !!card.querySelector('[data-zone="season-strip"]')};
   });
   document.body.textContent = JSON.stringify(rows);
   document.body.dataset.measured = '1';
@@ -290,18 +290,17 @@ document.fonts.ready.then(() => {
         for card in measured:
             self.assertTrue(card['subject'], card)
             self.assertTrue(card['selection'], card)
-            self.assertIsNotNone(card['season'], card)
+            self.assertFalse(card['season'], card)
             self.assertIsNotNone(card['ticket'], card)
-            for row in card['subject'] + card['selection'] + [card['season']]:
+            for row in card['subject'] + card['selection']:
                 self.assertLessEqual(row['right'], 1016, row)
-            self.assertGreaterEqual(card['season']['top'], card['ticket']['bottom'] + 12, card)
         for card in measured:
             if card['photo']:
                 self.assertLessEqual(card['subject'][0]['right'], 830, card)
         self.assertEqual(len(measured[-4]['selection']), 1,
                          'UNDER 249.5 PASS YDS should fit one line before wrapping')
         self.assertEqual(len(measured[-3]['selection']), 2,
-                         'the strip clearance must also cover a genuinely two-line selection')
+                         'a genuinely two-line selection must remain readable without a season strip')
         for card in measured[-2:]:
             self.assertEqual(len(card['subject']), 2,
                              'the market-width regression must use a two-line CFB name')

@@ -302,15 +302,6 @@ def play_card(pick, game=None, record=None, featured=False, art=None):
                  + '</g>')
     else:
         body += t(104, top + 170, str(pick.get('_number') or ''), 42, TICKET_INK, BODY, 600)
-    if record:
-        # Barlow Condensed's 40 px caps rise roughly 40 px above the baseline.
-        # A 54 px baseline offset leaves a measured 14 px air gap after the
-        # ticket even in the two-line-name + two-line-selection stress case.
-        season_y = max(min(1170, top + 440), top + ticket_h + 54)
-        body += ('<g data-zone="season-strip">'
-                 + t(64, season_y, f"SEASON {record}  ·  EVERY PLAY GRADED",
-                     40, CHALK, DISPLAY, 700, spacing=1.5)
-                 + '</g>')
     return frame('Pick of the day' if featured else 'Best bet', body)
 
 
@@ -484,8 +475,6 @@ def receipt_card(day_label, rows, headline, season=None):
                      f'y2="{divider_y}" stroke="{LINE}" stroke-width="2"/>')
             body += fit_t(64, min(divider_y + 36, 1146), f'TRACKED APART · {tracked_label}', 30,
                           W - 128, DIM, DISPLAY, 700, minimum=22)
-    if season:
-        body += t(64, 1188, f'SEASON {season}  ·  THE MISSES STAY ON THE RECORD', 38, CHALK, DISPLAY, 700, spacing=1.2)
     return frame('Receipt', body, chip_color=FELT_RAISED, chip_ink=CHALK)
 
 
