@@ -426,6 +426,10 @@ test('a Climb step page keeps its saved stake and return, and every play page li
   assert.match(page, /discord\.gg\/ZnjubjsBPM/);
   assert.match(page, /x\.com\/keenkooks/);
   assert.match(page, /<section class="kt-pass on-page" aria-label="Best bet">/, 'a play page for another day is not labelled today\'s');
+  const settled = { ...rungs[2], why: 'Ladder step 2: two easier player lines. $75 rides with $19 banked. A win returns $117.' };
+  const page2 = await loadApp('#record', {}, { today: { ...TODAY, picks: [prop, rungs[0], rungs[1], settled] } }).api.views.pick({ id: settled.id });
+  assert.match(page2, /<h2 class="kt-tape">The stake<\/h2><p>Ladder step 2: two easier player lines\. \$75 rides with \$19 banked\. A win returns \$117\./,
+    'a settled rung whose words were saved as why keeps them too');
 });
 
 test('Today headings run h1, then h2 for each ticket and section', async () => {
