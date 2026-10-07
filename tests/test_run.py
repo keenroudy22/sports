@@ -915,6 +915,51 @@ class AbsorbTests(unittest.TestCase):
 class BufferPostsTests(unittest.TestCase):
     """After a push the run waits for the new cards to go live, then plans again and schedules."""
 
+    def assert_optional_line_catalog_does_not_block_play(self, prepare):
+        import buffer_post
+        import news_posts
+        import x_post
+        from unittest import mock
+        now = datetime(2026, 9, 27, 12, 40, tzinfo=timezone.utc)
+        ctx = type('Ctx', (), {'first': {}, 'latest': {}, 'player_team': {}})()
+        plans = [('a', 'play', 'text', now, 'a')]
+        status = {'errors': [], 'x': {}}
+        with tempfile.TemporaryDirectory() as folder:
+            out = Path(folder)
+            prepare(out)
+            messages = []
+            with mock.patch.dict(os.environ, {'BUFFER_TOKEN': 't'}), \
+                    mock.patch.object(run.build_site, 'OUT', out), \
+                    mock.patch.object(run, 'log', side_effect=messages.append), \
+                    mock.patch.object(x_post, 'load_log', return_value={'posts': []}), \
+                    mock.patch.object(x_post, 'save_log'), \
+                    mock.patch.object(buffer_post, 'x_channel', return_value={'id': 'ch'}), \
+                    mock.patch.object(buffer_post, 'reconcile', return_value=[]), \
+                    mock.patch.object(buffer_post, 'plan', return_value=plans), \
+                    mock.patch.object(buffer_post, 'daily_limit', return_value=None), \
+                    mock.patch.object(news_posts, 'candidates', return_value=[]) as news, \
+                    mock.patch.object(buffer_post, 'schedule') as schedule:
+                run.buffer_posts(now, ctx, {}, [], status, deploying=False,
+                                 sleep=lambda _seconds: self.fail('slept'))
+        schedule.assert_called_once()
+        self.assertEqual(schedule.call_args[0][0], plans)
+        self.assertEqual(status['x']['posted'], 0)
+        self.assertEqual(news.call_args.args[2], [])
+        self.assertTrue(any('optional use skipped' in message for message in messages))
+
+    def test_missing_prebuild_lines_never_blocks_play_scheduling(self):
+        self.assert_optional_line_catalog_does_not_block_play(lambda _out: None)
+
+    def test_broken_line_shard_never_blocks_play_scheduling(self):
+        def broken(out):
+            (out / 'lines.json').write_text(json.dumps({
+                'count': 1,
+                'files': {'NFL': 'lines-NFL.json'},
+            }))
+            (out / 'lines-NFL.json').write_text('{broken json')
+
+        self.assert_optional_line_catalog_does_not_block_play(broken)
+
     def test_waits_for_the_deployed_cards_then_schedules(self):
         import buffer_post
         import x_post
