@@ -1,0 +1,54 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-10-07T01:00:00Z",
+  "targetWeek": 5,
+  "summary": "9:00 PM ET run, published at 9:00 PM ET. Nothing to settle. Nothing to close. Published 1: Bills at Rams under 54.5 -102 at DraftKings. Screened and passed on 16: Ravens at Falcons over 44 (lean_edge); Raiders at Patriots under 45 (lean_edge); Javonte Williams UNDER 17.5 carries (one_book); Jake Ferguson UNDER 27.5 receiving yards (prop_calibrated_value); Jake Ferguson UNDER 3.5 receptions (prop_calibrated_value); Cade Otton OVER 28.5 receiving yards (prop_calibrated_value); Bucky Irving OVER 13.5 carries (one_book); Bucky Irving OVER 12.5 receiving yards (prop_calibrated_value); and 8 more. odds_api.py: CFB: skipped (3 captures already today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "gamePicks": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 54.5,
+      "direction": "under",
+      "gameIds": [
+        "NFL-401872994"
+      ],
+      "book": "DraftKings",
+      "odds": -102,
+      "projection": 50.8,
+      "edge": "v2 total 50.8 (80% range 34.4 to 67.2). Chance of under 54.5: 54.8% (v2's raw 61.4% shrunk by its 2024-25 record against the close), against 50.5% break-even at -102: +4.3 points, +0.085u per unit.",
+      "cutoff": "UNDER 54.5 at -102 or better. Closed to new entries at 53 or lower, or at -117 or worse at 54.5.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-10-06T20:01:45Z",
+      "quotedAt": "2026-10-07T00:39:29Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 8:39 PM ET capture across 6 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-07T03:30:00Z",
+      "probabilityAtPublication": {
+        "rawChance": 0.614,
+        "chance": 0.548,
+        "calibrated": true,
+        "calibration": 0.42,
+        "calibrationN": null,
+        "push": 0.0,
+        "breakEven": 0.505,
+        "edgePoints": 4.3,
+        "evPerUnit": 0.085,
+        "snapshotAt": "2026-10-06T20:01:45Z",
+        "evaluatedAt": "2026-10-07T01:00:00Z"
+      },
+      "title": "Bills at Rams under 54.5",
+      "id": "NFL-2026-W5-buf-lar-under-54-5-dk",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401872994",
+        "https://www.therams.com/news/first-look-rams-host-bills-on-monday-night-football-in-week-5-2026",
+        "https://www.therams.com/news/game-recap-rams-rally-for-24-20-road-win-over-eagles-in-philadelphia"
+      ],
+      "why": "Model lean, published on our number alone. Our total is 50.8 against 54.5: the under reads 54.8% after the raw 61.4% is shrunk by the model's record against the close, +4.3 points clear of the 50.5% that -102 needs. The projection is the reason for this lean. Checked before publishing: Josh Allen started for Buffalo in Week 4, and the Rams identify him as the Bills quarterback for their Week 5 matchup. Checked before publishing: Matthew Stafford played quarterback for the Rams in their Week 4 win over Philadelphia. The market: The total opened 53.5 and is 54.5 at DraftKings, 1 toward the over. 6 books span -3.5 to -3 on the spread; the middle is -3. 6 books span 54 to 54.5 on the total; the middle is 54.5. Our spread gap of 1.6 points is at the 45th percentile of the model's gaps; gaps this large went 311-309 against the close in 1132 graded games. Our total gap of 3.7 points is at the 82th percentile of the model's gaps; gaps this large went 109-99 against the close in 1134 graded games.",
+      "risk": "It rests on the model alone, and the closing line beats our number on average, so a gap this size is more often our error than the market's. Confidence 3 of 10."
+    }
+  ]
+}
