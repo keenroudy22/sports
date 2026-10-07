@@ -1,3 +1,4 @@
+import copy
 import os
 import sys
 import unittest
@@ -127,7 +128,7 @@ class FeltCardTests(unittest.TestCase):
         self.assertIn(f'fill="{felt_cards.FELT_RAISED}"', play)
         self.assertIn('SEASON 35–35', play)
         self.assertIn('>BEST BETS<', receipt)
-        self.assertIn('>2-3<', receipt)
+        self.assertIn('>2–3<', receipt)
         self.assertIn('SEASON 35–35', receipt)
         self.assertIn('FUN TICKETS 0–1 · CLIMB STEP 2 ✓ · TRACKED APART', receipt)
         self.assertNotIn('+2 MORE ON THE PUBLIC RECORD', receipt)
@@ -149,7 +150,7 @@ class FeltCardTests(unittest.TestCase):
         climb = {'id': 'c', 'parlayType': 'ladder', 'odds': -173, 'book': 'FanDuel',
                  '_allClimbsBanked': 42, 'legs': [{'title': 'One 10+ yards'}, {'title': 'Two 10+ yards'}],
                  'ladder': {'run': 3, 'step': 1, 'stake': 50, 'payout': 79, 'banked': 0, 'start': 50},
-                 'result': 'loss'}
+                 'result': 'loss', 'actual': 'legs: loss, win'}
         with self.felt():
             longshot = pick_card.ticket_svg(ticket, GAME, art=[{'kind': 'logos', 'uris': ['data:image/png;base64,AA', 'data:image/png;base64,BB']}])
             research = research_art.svg(choice)
@@ -171,6 +172,47 @@ class FeltCardTests(unittest.TestCase):
         self.assertIn('ALL CLIMBS  $42 BANKED', open_climb)
         self.assertIn('NEXT  $50 RESTART', result)
         self.assertIn('$1,000', result)
+        self.assertIn('>✗<', result)
+        self.assertIn('>✓<', result)
+
+    def test_weekly_receipt_uses_category_records_without_push_badges(self):
+        weekly = {
+            'title': '7-7', 'when': 'Sep 30 to Oct 6', 'season': '35–35',
+            'rows': [(None, 'Player props 6-2', '', 'player'),
+                     (None, 'Game lines 1-5', '', 'team'),
+                     (None, 'Fun parlays 0-5', '', 'parlay'),
+                     (None, 'Ladder 1-2', '', 'ladder')],
+        }
+        with self.felt():
+            card = pick_card.receipt_svg(weekly)
+        self.valid(card)
+        self.assertIn('>BEST BETS<', card)
+        self.assertIn('>7–7<', card)
+        self.assertEqual(card.count('data-zone="category-record"'), 4)
+        self.assertIn('>PLAYER PROPS<', card)
+        self.assertIn('>GAME LINES<', card)
+        self.assertIn('>FUN TICKETS<', card)
+        self.assertIn('>80/20 CLIMB<', card)
+        self.assertNotIn('PUSH', card)
+        self.assertNotIn('>LADDER<', card)
+
+    def test_daily_receipt_without_best_bets_uses_the_matching_public_label(self):
+        with self.felt():
+            fun = pick_card.receipt_svg({
+                'title': 'Fun parlays 0-3', 'when': 'Monday, Oct 5',
+                'rows': [('loss', 'Three-leg ticket', '2/3 legs hit', 'parlay')],
+            })
+            climb = pick_card.receipt_svg({
+                'title': 'Ladder 1-2', 'when': 'Monday, Oct 5',
+                'rows': [('loss', '80/20 Climb step 1', 'One leg hit', 'ladder')],
+            })
+        self.assertIn('>FUN TICKETS<', fun)
+        self.assertIn('>0–3<', fun)
+        self.assertNotIn('>BEST BETS<', fun)
+        self.assertIn('>80/20 CLIMB<', climb)
+        self.assertIn('>1–2<', climb)
+        self.assertNotIn('>BEST BETS<', climb)
+        self.assertNotIn('>LADDER<', climb)
 
     def test_felt_projection_sheet_is_native_and_uses_the_real_date(self):
         game = {'id': 'g', 'league': 'CFB', 'week': 6,
@@ -187,13 +229,48 @@ class FeltCardTests(unittest.TestCase):
                              now=datetime(2026, 10, 10, 14, tzinfo=timezone.utc))
         self.valid(card)
         self.assertIn('Saturday, October 10', card)
-        self.assertIn('LIKE #1  FIU -3.5 +100 SCORE', card)
+        self.assertIn('LIKE #1  FIU -3.5 +100 theScore Bet', card)
         self.assertIn('20.1–27.3', card)
         self.assertIn('rings name the lines we like · watches, not picks', card)
-        self.assertIn('SCORE', card)
+        self.assertIn('theScore Bet', card)
         self.assertNotIn('ESPN', card)
         self.assertNotIn('Mint:', card)
         self.assertNotIn('January 3', card)
+        self.assertIn(f'fill="{felt_cards.CHALK}"', card)
+
+    def test_compact_projection_sheet_keeps_ring_caution_and_text_inside_tiles(self):
+        from datetime import date
+        template = {'league': 'CFB', 'week': 6,
+                    'away': {'abbr': 'UNC'}, 'home': {'abbr': 'PITT'},
+                    'v2': {'away': 19.2, 'home': 31.1, 'margin': 11.9, 'total': 50.3},
+                    'lean': {'spread': 11.1},
+                    'market': {'spread': -3.5, 'total': 49.5},
+                    'value': {}}
+        games = []
+        for index in range(16):
+            row = copy.deepcopy(template)
+            row['id'] = f'g{index}'
+            row['away']['abbr'] = 'HAW' if index == 15 else f'A{index}'
+            row['home']['abbr'] = 'ASU' if index == 15 else f'H{index}'
+            games.append(row)
+        games[0]['away']['abbr'] = 'UNC'
+        games[0]['home']['abbr'] = 'PITT'
+        games[0]['value']['spread'] = {'side': 'home', 'line': -3.5, 'odds': -105,
+                                             'book': 'theScore Bet', 'edge': 4.2, 'chance': .552,
+                                             'needs': .512, 'tier': 'lean', 'thin': False,
+                                             'observedAt': '2026-10-10T13:00:00Z'}
+        with self.felt():
+            card = sheet.svg(games, 'CFB', date(2026, 10, 10), 6,
+                             now=datetime(2026, 10, 10, 14, tzinfo=timezone.utc))
+        self.valid(card)
+        self.assertIn('LIKE #1  PITT -3.5 −105 theScore Bet', card)
+        self.assertIn('11.1-PT COLLEGE GAP · CAUTION', card)
+        self.assertIn(f'fill="{felt_cards.KOOKD}"', card)
+        self.assertIn(f'>19.2–31.1</text>', card)
+        self.assertNotIn('>SCORE<', card)
+        self.assertNotIn('>BR<', card)
+        self.assertLessEqual(felt_cards.fit_size('SPREAD  OUR PITT −11.9  ·  MARKET PITT -3.5 −105 theScore Bet',
+                                                 23, 430), 23)
 
     def test_four_letter_team_fallback_fits_its_badge(self):
         chip = felt_cards.team_chip(40, 40, {'abbr': 'NMSU'}, 34)

@@ -528,6 +528,20 @@ missing when neither component was recorded, so the page does not turn absent da
 - `FELT_FROM` remains unset. These corrected renders are still owner-review candidates; legacy cards remain live,
   no existing attachment changes and no social category, cadence or selection rule changes.
 
+### C5 fifth-round owner review candidate
+
+- Weekly receipts now render their stored category records as neutral rows instead of manufacturing push badges.
+  A daily receipt with only fun tickets or only a Climb uses `FUN TICKETS` or `80/20 CLIMB` as its hero label;
+  `Ladder` remains an internal name. The imminent Sep 30–Oct 6 review image shows best bets 7–7, player props
+  6–2, game lines 1–5, fun tickets 0–5 and the 80/20 Climb 1–2 from the existing receipt record.
+- Settled Climb cards mark each leg from the immutable `actual` result. Projection-sheet tiles measure and shrink
+  long text to remain inside their frames, keep projected scores chalk, spell out public book names, and show the
+  college-gap caution at the compact 16-game height. The review sheet is rendered at the stored snapshot's newest
+  observation time, so its numbered green rings verify real captured prices without changing or inventing one.
+- The same eight owner-facing PNGs were refreshed in `card-review-2026-10-06`. Deterministic coverage now includes
+  a weekly receipt, days with no best bets, per-leg Climb results and a fresh 16-game ring/caution fixture.
+  `FELT_FROM` remains unset; legacy cards remain live until the owner approves every category.
+
 ### C6 first live shadow receipt
 
 - The October 6 11:30 PM desk run completed normally with no forced publication and wrote exactly eight private

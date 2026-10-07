@@ -46,6 +46,26 @@ def t(x, y, text, size, color=CHALK, family=BODY, weight=600, anchor='start', sp
             f'text-anchor="{anchor}" letter-spacing="{spacing}">{escape(str(text))}</text>')
 
 
+def truncate(text, limit):
+    """Shorten display copy without making a clipped word look complete."""
+    value = str(text or '')
+    return value if len(value) <= limit else value[:max(1, limit - 1)].rstrip() + '…'
+
+
+def fit_size(text, maximum, width, ratio=.5, minimum=16):
+    """Conservatively fit one line inside a known SVG tile width."""
+    value = str(text or '')
+    if not value:
+        return maximum
+    return max(minimum, min(maximum, width / (len(value) * ratio)))
+
+
+def fit_t(x, y, text, maximum, width, color=CHALK, family=DISPLAY, weight=700,
+          anchor='start', spacing=0, minimum=16):
+    size = fit_size(text, maximum, width, .5 if family == DISPLAY else .54, minimum)
+    return t(x, y, text, f'{size:.1f}', color, family, weight, anchor, spacing)
+
+
 def odds(value):
     try:
         n = int(value)
@@ -182,8 +202,8 @@ def play_card(pick, game=None, record=None, featured=False, art=None):
         fair = round(-100 * chance / (1 - chance)) if chance >= 0.5 else round(100 * (1 - chance) / chance)
         edge = round(100 * (chance - needs), 1)
         body += t(104, top + 282, 'FAIR PRICE', 30, TICKET_DIM, BODY, 700, spacing=1) + t(104, top + 338, odds(fair), 58, TICKET_INK, DISPLAY, 700)
-        body += t(420, top + 282, 'EDGE', 30, TICKET_DIM, BODY, 700, spacing=1) + t(420, top + 338, f'+{edge}% pts' if edge > 0 else f'{edge}% pts', 54, TICKET_INK, DISPLAY, 700)
-        body += t(W - 64 - stub_w / 2, top + 190, pct1(chance), 60, KOOKD, DISPLAY, 700, 'middle') + t(W - 64 - stub_w / 2, top + 235, 'OUR CHANCE', 28, CHALK, BODY, 700, 'middle')
+        body += t(420, top + 282, 'EDGE', 30, TICKET_DIM, BODY, 700, spacing=1) + t(420, top + 338, f'+{edge} pts' if edge > 0 else f'{edge} pts', 54, TICKET_INK, DISPLAY, 700)
+        body += t(W - 64 - stub_w / 2, top + 190, pct1(chance), 60, KOOKD, DISPLAY, 700, 'middle') + t(W - 64 - stub_w / 2, top + 235, 'OUR CHANCE', 30, CHALK, BODY, 700, 'middle')
     else:
         body += t(104, top + 170, str(pick.get('_number') or ''), 42, TICKET_INK, BODY, 600)
     if record:
@@ -191,17 +211,53 @@ def play_card(pick, game=None, record=None, featured=False, art=None):
     return frame('Pick of the day' if featured else 'Best bet', body)
 
 
+def receipt_scope(headline):
+    """Return the public receipt category and the record used as its hero."""
+    value = str(headline or 'RESULTS').strip()
+    record = re.search(r'\b\d+[\-\u2013]\d+(?:[\-\u2013]\d+)?\b', value)
+    hero = record.group(0).replace('-', '\u2013') if record else value
+    lower = value.lower()
+    if lower.startswith('fun parlay') or lower.startswith('fun ticket'):
+        return 'FUN TICKETS', hero
+    if lower.startswith('ladder') or lower.startswith('80/20 climb') or lower.startswith('climb'):
+        return '80/20 CLIMB', hero
+    return 'BEST BETS', hero
+
+
+def public_receipt_kind(value):
+    """Translate internal receipt families to owner-approved public labels."""
+    lower = str(value or '').lower()
+    if 'player' in lower:
+        return 'PLAYER PROPS'
+    if 'team' in lower or 'game' in lower:
+        return 'GAME LINES'
+    if any(word in lower for word in ('parlay', 'lotto', 'fun')):
+        return 'FUN TICKETS'
+    if any(word in lower for word in ('ladder', 'climb')):
+        return '80/20 CLIMB'
+    return str(value or 'BEST BET').upper()
+
+
 def receipt_card(day_label, rows, headline, season=None):
     """Morning receipt. Port target: pick_card.receipt_svg (receipt-day-<date>)."""
-    headline = str(headline or 'RESULTS')
-    hero_size = 170 if len(headline) <= 7 else 112
+    category, hero = receipt_scope(headline)
+    hero_size = 170 if len(hero) <= 7 else 112
     body = (t(64, 220, day_label.upper(), 44, DIM, BODY, 700, spacing=2)
-            + t(64, 286, 'BEST BETS', 34, DIM, BODY, 800, spacing=2)
-            + t(64, 400, headline.upper(), min(hero_size, 142), CHALK, DISPLAY, 700))
+            + t(64, 286, category, 34, DIM, BODY, 800, spacing=2)
+            + t(64, 400, hero.upper(), min(hero_size, 142), CHALK, DISPLAY, 700))
     shown = rows[:5]
     y = 430
     tall = 140 if len(shown) <= 3 else 112
     for r in shown:
+        if r.get('_summaryRow'):
+            title = public_receipt_kind(r.get('_kind') or r.get('title'))
+            record = re.search(r'\b\d+[\-\u2013]\d+(?:[\-\u2013]\d+)?\b', str(r.get('title') or ''))
+            record_text = record.group(0).replace('-', '\u2013') if record else '\u2014'
+            body += (f'<rect data-zone="category-record" x="64" y="{y}" width="{W - 128}" height="{tall}" rx="22" fill="{FELT_RAISED}" stroke="{LINE}"/>'
+                     + t(96, y + tall / 2 + 12, title, 38, CHALK, DISPLAY, 700)
+                     + t(W - 96, y + tall / 2 + 15, record_text, 56, CHALK, DISPLAY, 700, 'end'))
+            y += tall + 14
+            continue
         hit = r.get('result') == 'win'
         miss = r.get('result') == 'loss'
         color, mark_text, ink = (KOOKD, '✓ HIT', KOOKD_INK) if hit else (BURNT, '✗ MISS', TICKET_INK) if miss else ('#C9D8D0', '– PUSH', TICKET_INK)
@@ -211,7 +267,7 @@ def receipt_card(day_label, rows, headline, season=None):
         kind = str(r.get('_kind') or 'best bet').replace('player', 'best bet').replace('team', 'best bet')
         kind = 'FUN' if 'parlay' in kind or 'lotto' in kind else 'CLIMB' if 'ladder' in kind or 'climb' in kind else 'BEST BET'
         body += t(96, y + 27, kind, 23, TICKET_DIM, BODY, 800, spacing=1.5)
-        body += t(96, y + (77 if tall > 120 else 67), title[:42], 44 if tall > 120 else 36, TICKET_INK, DISPLAY, 700)
+        body += t(96, y + (77 if tall > 120 else 67), truncate(title, 42), 44 if tall > 120 else 36, TICKET_INK, DISPLAY, 700)
         detail = f"{odds(r.get('odds'))} {r.get('book') or ''}  {r.get('_final') or ''}".strip()
         if detail:
             detail_lines = wrap(detail, 24 if tall <= 120 else 27, 670, .52)
@@ -252,7 +308,7 @@ def fun_ticket_card(pick, label='Fun ticket', art=None):
     art = art or []
     for index, leg in enumerate(legs[:6]):
         text = str(leg.get('title') or leg.get('displayTitle') or leg.get('selection') or '')
-        body += f'<rect x="64" y="{y}" width="{W - 128}" height="96" rx="20" fill="{FELT_RAISED}"/>' + t(100, y + 62, text[:46], 42, CHALK, DISPLAY, 700)
+        body += f'<rect x="64" y="{y}" width="{W - 128}" height="96" rx="20" fill="{FELT_RAISED}"/>' + fit_t(100, y + 64, truncate(text, 52), 49, 720, CHALK, DISPLAY, 700, minimum=37)
         item = art[index] if index < len(art) else None
         uris = ([item.get('uri')] if item and item.get('kind') == 'photo' else
                 (item or {}).get('uris') or [])
@@ -311,9 +367,8 @@ def projection_sheet(games, league, day, week=None, logos=None, watches=None):
     team_size = 40 if rows <= 6 else 32
     info_size = 30 if rows <= 6 else 23
 
-    def short_book(name):
-        return {'DraftKings': 'DK', 'FanDuel': 'FD', 'BetMGM': 'MGM', 'ESPN BET': 'ESPN',
-                'theScore Bet': 'SCORE', 'Caesars': 'CZR', 'BetRivers': 'BR', 'Fanatics': 'FAN'}.get(str(name or ''), str(name or '')[:5].upper())
+    def public_book(name):
+        return {'ESPN BET': 'theScore Bet', 'theScore': 'theScore Bet'}.get(str(name or ''), str(name or ''))
 
     def num(value):
         return f'{float(value):g}' if isinstance(value, (int, float)) else '–'
@@ -340,7 +395,7 @@ def projection_sheet(games, league, day, week=None, logos=None, watches=None):
             read = f"{team.get('abbr') or team.get('abbreviation') or ''} {line:+g}"
         else:
             read = f"{str(side or '').upper()} {line:g}"
-        return f'{read} {odds(price_value)} {short_book(value.get("book"))}'
+        return f'{read} {odds(price_value)} {public_book(value.get("book"))}'
 
     body = (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">'
             + font_face() + f'<rect width="{W}" height="{H}" fill="{FELT_NIGHT}"/>'
@@ -366,10 +421,11 @@ def projection_sheet(games, league, day, week=None, logos=None, watches=None):
             body += f'<image href="{hm}" x="{x + 60}" y="{logo_y:.0f}" width="38" height="38" preserveAspectRatio="xMidYMid meet"/>'
         team_x = x + (108 if aw or hm else 20)
         matchup = f"{away.get('abbr') or away.get('abbreviation') or '?'} @ {home.get('abbr') or home.get('abbreviation') or '?'}"
-        body += t(team_x, y + 45, matchup, team_size, CHALK, DISPLAY, 700)
+        team_width = max(100, x + card_w - 86 - team_x)
+        body += fit_t(team_x, y + 45, matchup, team_size, team_width, CHALK, DISPLAY, 700, minimum=22)
         v2 = card.get('v2') or {}
         score = f"{num(v2.get('away'))}–{num(v2.get('home'))}"
-        body += t(x + card_w - 18, y + 43, score, info_size + 2, KOOKD, DISPLAY, 700, 'end')
+        body += t(x + card_w - 18, y + 43, score, info_size + 2, CHALK, DISPLAY, 700, 'end')
         ours_spread = spread(card, v2.get('margin'))
         ours_total = num(v2.get('total'))
         sy = y + (88 if card_h >= 132 else 72)
@@ -377,13 +433,21 @@ def projection_sheet(games, league, day, week=None, logos=None, watches=None):
         spread_line = f'SPREAD  OUR {ours_spread}  ·  MARKET {price(card, "spread")}'
         total_line = f'TOTAL  OUR {ours_total}  ·  MARKET {price(card, "total")}'
         if watch and watch[1] == 'spread':
-            spread_line = f'LIKE #{watch[0]}  {watch[2]} {odds(watch[3].get("odds"))} {short_book(watch[3].get("book"))}'
+            spread_line = f'LIKE #{watch[0]}  {watch[2]} {odds(watch[3].get("odds"))} {public_book(watch[3].get("book"))}'
         if watch and watch[1] == 'total':
-            total_line = f'LIKE #{watch[0]}  {watch[2]} {odds(watch[3].get("odds"))} {short_book(watch[3].get("book"))}'
-        body += t(x + 18, sy, spread_line, info_size, KOOKD if watch and watch[1] == 'spread' else CHALK, DISPLAY, 700)
-        body += t(x + 18, ty, total_line, info_size, KOOKD if watch and watch[1] == 'total' else CHALK, DISPLAY, 700)
-        if watch and watch[3].get('collegeGapCaution') and card_h >= 132:
-            body += t(x + card_w - 18, ty, f"{watch[3]['collegeGapCaution']:g}-PT COLLEGE GAP · CAUTION", 18, DIM, BODY, 700, 'end')
+            total_line = f'LIKE #{watch[0]}  {watch[2]} {odds(watch[3].get("odds"))} {public_book(watch[3].get("book"))}'
+        caution = watch and watch[3].get('collegeGapCaution')
+        if caution and card_h < 132:
+            sy, ty = y + 77, y + 101
+            body += fit_t(x + card_w - 18, y + 62, f'{caution:g}-PT COLLEGE GAP · CAUTION', 16, card_w - 36,
+                          DIM, BODY, 700, 'end', minimum=13)
+        body += fit_t(x + 18, sy, spread_line, info_size, card_w - 36,
+                      KOOKD if watch and watch[1] == 'spread' else CHALK, DISPLAY, 700, minimum=15)
+        body += fit_t(x + 18, ty, total_line, info_size, card_w - 36,
+                      KOOKD if watch and watch[1] == 'total' else CHALK, DISPLAY, 700, minimum=15)
+        if caution and card_h >= 132:
+            body += fit_t(x + card_w - 18, ty, f'{caution:g}-PT COLLEGE GAP · CAUTION', 18, card_w - 36,
+                          DIM, BODY, 700, 'end', minimum=14)
     body += f'<line x1="64" y1="1228" x2="{W - 64}" y2="1228" stroke="{LINE}" stroke-width="2"/>'
     body += t(64, 1270, FOOTER, 26, DIM) + t(64, 1310, SITE, 26, KOOKD, BODY, 700)
     return body + '</svg>'
@@ -405,8 +469,8 @@ def climb_path(progress, y=984, current_label='NOW'):
         if done:
             body += t(x, y + 12, '✓', 40, KOOKD_INK, BODY, 800, 'middle')
         elif current:
-            body += t(x, y - 50, current_label, 22, KOOKD, BODY, 800, 'middle', 1)
-        body += t(x, y + 76, f'${amount:,}', 29, CHALK if done or current else DIM, DISPLAY, 700, 'middle')
+            body += t(x, y - 50, current_label, 30, KOOKD, BODY, 800, 'middle', 1)
+        body += t(x, y + 76, f'${amount:,}', 30, CHALK if done or current else DIM, DISPLAY, 700, 'middle')
         if index == len(checkpoints) - 1:
             body += f'<path d="M{x} {y - 31}V{y - 108}h52l-13 17 13 17h-52" fill="{KOOKD}" stroke="{CHALK}" stroke-width="3"/>'
     return body
@@ -423,7 +487,7 @@ def climb_card(pick, run, step, stake, payout, banked):
     y = 565
     for leg in legs[:3]:
         text = str(leg.get('title') or leg.get('displayTitle') or '')
-        body += f'<rect x="64" y="{y}" width="{W - 128}" height="94" rx="20" fill="{FELT_RAISED}"/>' + t(100, y + 61, text[:46], 42, CHALK, DISPLAY, 700)
+        body += f'<rect x="64" y="{y}" width="{W - 128}" height="94" rx="20" fill="{FELT_RAISED}"/>' + fit_t(100, y + 63, truncate(text, 52), 50, W - 240, CHALK, DISPLAY, 700, minimum=37)
         y += 108
     body += climb_path(max(50, int(banked or 0) + int(stake or 0)), 956, 'NOW')
     body += t(64, 1168, 'BANK 20%  ·  RIDE 80%  ·  EVERY STEP STAYS PUBLIC', 34, CHALK, DISPLAY, 700, spacing=1)
@@ -439,9 +503,14 @@ def receipt_from_existing(receipt):
         player = re.split(r'\s+(?:over|under)\s+', str(title), maxsplit=1, flags=re.I)[0]
         detail = re.sub(rf'^(Final:\s*){re.escape(player)}:\s*', r'\1', str(detail), flags=re.I)
         detail = re.sub(r'\b1 receptions\b', '1 reception', detail, flags=re.I)
+        detail = re.sub(r'\b1 carries\b', '1 carry', detail, flags=re.I)
+        detail = re.sub(r'\b1 targets\b', '1 target', detail, flags=re.I)
         kind = row[3] if len(row) > 3 else ('ladder' if 'climb' in str(title).lower() else
                                            'parlay' if any(word in str(title).lower() for word in ('parlay', 'lotto')) else 'best bet')
-        rows.append({'result': result, 'title': title, '_final': detail, '_kind': kind})
+        title = re.sub(r'^Fun parlays?\b', 'Fun tickets', str(title), flags=re.I)
+        title = re.sub(r'^Ladder\b', '80/20 Climb', title, flags=re.I)
+        rows.append({'result': result, 'title': title, '_final': detail, '_kind': kind,
+                     '_summaryRow': result is None})
     return receipt_card(receipt.get('when') or 'Results', rows, receipt.get('title'), receipt.get('season'))
 
 
@@ -459,10 +528,21 @@ def climb_result_card(pick):
     body += t(104, 390, verdict, 64, ink, DISPLAY, 700)
     result_line = f'${stake} → ${payout}' if result == 'win' else f'NEXT  ${info.get("start", 50)} RESTART' if result == 'loss' else f'${stake} RETURNS'
     body += t(104, 472, result_line, 82, ink, DISPLAY, 700)
+    leg_results = []
+    actual = str(pick.get('actual') or '')
+    match = re.search(r'\blegs:\s*([^;]+)', actual, re.I)
+    if match:
+        leg_results = [value.strip().lower() for value in match.group(1).split(',')]
     y = 550
-    for leg in (pick.get('legs') or [])[:3]:
+    for index, leg in enumerate((pick.get('legs') or [])[:3]):
+        leg_result = leg_results[index] if index < len(leg_results) else ''
+        leg_hit = leg_result in ('win', 'hit')
+        leg_miss = leg_result in ('loss', 'miss')
+        leg_color = KOOKD if leg_hit else BURNT_TEXT if leg_miss else DIM
+        leg_mark = '✓' if leg_hit else '✗' if leg_miss else '–'
         body += f'<rect x="64" y="{y}" width="{W - 128}" height="92" rx="20" fill="{FELT_RAISED}"/>'
-        body += t(100, y + 59, str(leg.get('title') or '')[:46], 40, CHALK, DISPLAY, 700)
+        body += t(100, y + 61, leg_mark, 48, leg_color, BODY, 800)
+        body += fit_t(155, y + 61, truncate(leg.get('title'), 52), 48, W - 275, CHALK, DISPLAY, 700, minimum=35)
         y += 106
     if result == 'win':
         progress = int(info.get('totalAfter') or (int(this_climb or 0) + int(info.get('nextStake') or 0)))

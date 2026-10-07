@@ -4,7 +4,7 @@ import json
 import os
 import sys
 from collections import Counter
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -69,7 +69,11 @@ def render(out):
                                                               _allClimbsBanked=ladder.saved_through(ctx.first, ctx.latest, climb['id']))))
 
     history = receipts.card_history(ctx.first, ctx.latest, ctx.games, now)
-    receipt = max(history, key=lambda row: (len(row.get('rows') or []), row.get('when') or ''))
+    next_day = eastern_date(now) + timedelta(days=1)
+    weekly = (receipts.week_receipt(next_day, ctx.first, ctx.latest, ctx.games,
+                                    receipts.counted(ctx.first, ctx.latest), now)
+              if next_day.weekday() == receipts.WEEKDAY else None)
+    receipt = weekly or max(history, key=lambda row: (len(row.get('rows') or []), row.get('when') or ''))
     save('receipt.png', pick_card.receipt_svg(receipt))
 
     cards = list(games.values())
@@ -99,8 +103,16 @@ def render(out):
             uri = sheet.logo_uri(row, side)
             if uri:
                 logos[row['id'], side] = uri
+    # Review the stored board as it existed when its newest quote was captured.
+    # That verifies the ring treatment without changing or inventing a price.
+    observed = []
+    for row in sheet_games:
+        for value in (row.get('value') or {}).values():
+            if value.get('observedAt'):
+                observed.append(gates.when(value['observedAt']))
+    sheet_now = max(observed) + timedelta(minutes=1) if observed else now
     save('projection-sheet.png', sheet.svg(sheet_games, 'CFB', sheet_day,
-                                            sheet_games[0].get('week') if sheet_games else None, logos, now))
+                                            sheet_games[0].get('week') if sheet_games else None, logos, sheet_now))
     return made
 
 
