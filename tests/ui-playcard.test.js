@@ -3,8 +3,8 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 globalThis.KRCore = require('../site/core.js');
-const { model: M } = require('../site/next/app.js');
-const source = fs.readFileSync('site/next/app.js', 'utf8');
+const { model: M } = require('../site/app.js');
+const source = fs.readFileSync('site/app.js', 'utf8');
 
 const base = {
   id: 'x', kind: 'props', league: 'NFL', gameId: 'NFL-1', athleteId: '9', market: 'recYds',
@@ -49,4 +49,41 @@ test('the raw projection stays off the ticket and inside How we got this', () =>
   assert.doesNotMatch(ticketBody, /pick\.projection|vm\.projection/);
   assert.match(explanation, /pick && pick\.projection/);
   assert.match(M.howWeGotIt({ projection: 61.2, line: 49.5, odds: -110, probabilityAtPublication: { chance: 0.56 } }).join(' '), /61\.2 against the 49\.5 line/);
+});
+
+test('best-bet tickets keep the decision on the face and details in a fold', () => {
+  const ticketBody = source.slice(source.indexOf('const ticket ='), source.indexOf('/* ROI at posted prices'));
+  assert.match(ticketBody, /<details class="t-more"/);
+  assert.match(ticketBody, /opts\.onPage \? ' open' : ''/, 'a dedicated pick page opens Details by default');
+  assert.match(ticketBody, /<summary>Details/);
+  assert.match(ticketBody, /\$\{plain\}\$\{vm\.statusShort/, 'chance and status stay on the compact face');
+  assert.ok(ticketBody.indexOf('${facts}${why}${hist}${chart}${legs}') > ticketBody.indexOf('<summary>Details'));
+  assert.doesNotMatch(ticketBody, /meter-labels/, 'the redundant 0 / needs / 100 row is gone');
+});
+
+test('ticket hit charts wait for an open Details fold', () => {
+  assert.match(source, /if \(!box\.closest\('details:not\(\[open\]\)'\)\) loadPropBox\(box\)/);
+  assert.match(source, /el\.matches\('details\.t-more'\).*querySelectorAll\('\[data-prop-history\]'\)\.forEach\(loadPropBox\)/s);
+  assert.match(source, /if \(box\.dataset\.loaded\) return;/, 'opening the fold twice does not reload history');
+});
+
+test('compact list tickets never render a second detail body', () => {
+  const ticketBody = source.slice(source.indexOf('const ticket ='), source.indexOf('/* ROI at posted prices'));
+  assert.match(ticketBody, /\$\{compact \? '' : `<details class="t-more"/);
+  assert.match(ticketBody, /\$\{compact \? '' : `<details class="t-more"[\s\S]*?<div class="actions">[\s\S]*?<\/div>`\}/,
+    'the same compact branch skips both details and deep-link actions');
+});
+
+test('delivery detail stays inside the expandable section', () => {
+  const ticketBody = source.slice(source.indexOf('const ticket ='), source.indexOf('/* ROI at posted prices'));
+  const fold = ticketBody.indexOf('<details class="t-more"');
+  const delivery = ticketBody.indexOf('C.deliveryText(pick)');
+  const close = ticketBody.indexOf('</details>', fold);
+  assert.ok(fold >= 0 && delivery > fold && close > delivery);
+});
+
+test('ticket Details controls meet the shared tap target', () => {
+  const css = fs.readFileSync('site/app.css', 'utf8');
+  assert.match(css, /\.ticket \.t-more > summary[^}]*min-height: var\(--tap\)/);
+  assert.match(css, /\.ticket \.t-more\[open\] > summary::after \{ content: '▴'; \}/);
 });

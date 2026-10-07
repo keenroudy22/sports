@@ -3,10 +3,10 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
-const source = fs.readFileSync('site/next/app.js', 'utf8');
+const source = fs.readFileSync('site/app.js', 'utf8');
 
-test('preview JavaScript parses as a standalone browser script', () => {
-  assert.doesNotThrow(() => new vm.Script(source, { filename: 'site/next/app.js' }));
+test('production JavaScript parses as a standalone browser script', () => {
+  assert.doesNotThrow(() => new vm.Script(source, { filename: 'site/app.js' }));
 });
 
 test('replacement UI keeps the owner-mandated wording and shared labels', () => {
@@ -21,7 +21,7 @@ test('replacement UI keeps the owner-mandated wording and shared labels', () => 
 });
 
 test('every rendered view preserves the browser-audit page contract', () => {
-  const html = fs.readFileSync('site/next/index.html', 'utf8');
+  const html = fs.readFileSync('site/index.html', 'utf8');
   assert.match(html, /<main id="view"/);
   assert.match(source, /<h1/);
   assert.match(source, /const h1 = view\.querySelector\('h1'\)/, 'the renderer keeps one page-heading focus target');

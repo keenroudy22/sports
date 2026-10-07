@@ -430,3 +430,13 @@ details.week[open] > summary::after { content: '▴'; }
 @media (min-width: 760px) { .row-main .lbl { display: inline; position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } }
 .board-group { padding: 8px 14px; font-size: 13px; font-weight: 600; color: var(--dim); background: var(--felt-night); border-bottom: 1px solid var(--line); }
 .fa li.ctx::before { content: '•'; color: var(--dim); }
+
+/* Compact tickets: the face shows the play; Details holds the rest. */
+.ticket .t-more { margin-top: 10px; border-top: 1px dashed var(--ticket-rule); }
+.ticket .t-more > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; min-height: var(--tap); font-weight: 700; color: var(--ticket-green); }
+.ticket .t-more > summary::-webkit-details-marker { display: none; }
+.ticket .t-more > summary::after { content: '▾'; margin-left: auto; color: var(--ticket-dim); }
+.ticket .t-more[open] > summary::after { content: '▴'; }
+.ticket .t-more > summary span { font-weight: 500; font-size: 13px; color: var(--ticket-dim); }
+.ticket .t-more[open] { padding-bottom: 4px; }
+.ticket .actions { margin-top: 8px; }

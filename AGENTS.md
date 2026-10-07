@@ -197,11 +197,11 @@ Handy commands (from `~/Projects/sports`):
   same set, gates, caps, grading and record. It is never advice. The research “Best lines” label is retired. Public
   copy drops “official card”, “plate”, “Served at” and “desk”. Internal names are unchanged. Entertainment-only
   and 21+ wording stays on every page and card. This supersedes “no public rebrand” in `SUBSCRIPTION-PLAN.md`.
-- **Website redesign (2026-10-06, owner approved; supersedes the Oct 5 navigation once swapped):** the main
+- **Website redesign (2026-10-06, owner approved and live; supersedes the Oct 5 navigation):** the main
   navigation is Today · Research · Games · Record · More. Today shows beginner-first best-bet tickets with the
   published price/book, stored calibrated chance versus break-even, fair price, edge, why, one visible counterpoint
-  and a hit chart. One sortable Research board replaces the line and trend tabs. It ships first as a noindex preview
-  at `/sports/next/` and swaps only after owner sign-off. Every existing hash, `#pick/<id>` and shared research link
+  and a hit chart. One sortable Research board replaces the line and trend tabs. The noindex preview passed review;
+  production now uses this navigation. Every existing hash, `#pick/<id>` and shared research link
   keeps opening its equivalent view. Confidence badges are removed; value rank (edge) is the default sort. Thin,
   stale, unpriced and uncalibrated rows get no rank. Main lines stay the default, with the four-hour freshness limit
   and three-game minimum. Record math reuses `core.js` unchanged.
@@ -247,8 +247,9 @@ Handy commands (from `~/Projects/sports`):
   admitted as an official play cannot become POTD, create an extra pick, bypass the daily card cap or weaken any
   price, availability, overlap, calibration, performance or news gate. Once named, POTD remains fixed unless the
   pre-post check pulls it; the existing replacement rule then uses the best remaining fresh official single.
-- **Product implementation approval (2026-10-05):** implement the approved product plan in small, verified
-  releases. The effective main navigation is **Today / Games / Charts / Record / Tools**. Games includes Upcoming,
+- **Product implementation approval (2026-10-05; navigation superseded 2026-10-06):** implement the approved
+  product plan in small, verified releases. The live main navigation is now **Today / Research / Games / Record / More**.
+  Games includes Upcoming,
   Live and Final; `#scores` remains an alias into the Live view, not a competing main tab. Preserve `#board`,
   `#stats`, trends, player/game deep links, sport context and back navigation. Each sport retains its own Today;
   unsupported capabilities are explicit. Today puts compact actual published selections first (POTD then an

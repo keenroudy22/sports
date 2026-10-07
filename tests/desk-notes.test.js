@@ -1,6 +1,5 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const fs = require('node:fs');
 const C = require('../site/core.js');
 const now = Date.parse('2026-10-05T12:00:00Z');
 const row = {gameId:'NFL-1',league:'NFL',title:'Player',text:'3/4 recorded games',
@@ -18,16 +17,4 @@ test('homepage notes hide expired, started, missing, future, wrong-league and un
   assert.equal(C.deskNotes(data([row]),'ALL',now,[{...game,state:'in'}]).length,0);
   assert.equal(C.deskNotes(null,'ALL',now,[game]).length,0);
   assert.equal(C.deskNotes(data([{...row,league:'CBB',href:'#scores/CBB'}]),'ALL',now,[]).length,1);
-});
-test('notes escape source text and stay below official plays without an empty filler card', () => {
-  const source = fs.readFileSync('site/app.js','utf8');
-  const body = source.match(/const deskNotesSection = \(data, games, league\) => \{([\s\S]*?)\n  \};/)[1];
-  const render = new Function('C','esc','whenShort','section','data','games','league',body);
-  const core = {...C,deskNotes: () => [{...row,title:'<script>x</script>',label:'Season trend'}]};
-  const html = render(core,C.esc,C.whenShort,(title,body,aside)=>title+body+aside,{},[],'ALL');
-  assert.match(html,/&lt;script&gt;/);
-  assert.doesNotMatch(html,/<script>/);
-  assert.match(html,/Research, not posted plays/);
-  assert.equal(render({...C,deskNotes:()=>[]},C.esc,C.whenShort,()=>'',{},[],'ALL'),'');
-  assert.ok(source.indexOf('section("Today\'s plays"') < source.indexOf('deskNotesSection(notes, games'));
 });

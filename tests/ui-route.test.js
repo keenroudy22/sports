@@ -2,7 +2,7 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 globalThis.KRCore = require('../site/core.js');
-const { model: M } = require('../site/next/app.js');
+const { model: M } = require('../site/app.js');
 
 test('legacy route table lands on an equivalent preview view', () => {
   const table = [

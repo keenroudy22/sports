@@ -17,7 +17,6 @@ DATA_FILES = {'slate.json', 'research-context.json', 'desk-notes.json', 'sports.
               'market-lab.json', 'market-lines.json', 'depth-charts.json', 'player-identity.json',
               'scoreboard-games.json', 'forecasts.json', 'feed.xml'}
 APP_FILES = {'today.json', 'lines.json', 'research.json', 'sport-research.json', 'trends.json'}
-NEXT_FILES = {'index.html', 'app.css', 'app.js'}
 PRIVATE_NAMES = {'env', '.env', 'desk-health.html', 'desk-health.json', 'desk-health-state.json',
                  'desk-reliability.json', 'reliability-history.json', 'live-watch.json',
                  'live-progress.json', 'x-posted.json', 'status.json', 'policy.json',
@@ -50,8 +49,6 @@ def allowed_path(relative):
         return relative.suffix.lower() in {'.png', '.jpg', '.jpeg', '.webp', '.svg'}
     if len(parts) == 2 and parts[0] == 'data':
         return parts[1] in DATA_FILES
-    if len(parts) == 2 and parts[0] == 'next':
-        return parts[1] in NEXT_FILES
     if len(parts) == 3 and parts[:2] == ('data', 'cards'):
         return bool(re.fullmatch(r'[A-Za-z0-9_.-]+\.(png|svg)', parts[2]))
     if parts[:2] != ('data', 'app'):

@@ -3,8 +3,8 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 globalThis.KRCore = require('../site/core.js');
-const { model: M } = require('../site/next/app.js');
-const source = fs.readFileSync('site/next/app.js', 'utf8');
+const { model: M } = require('../site/app.js');
+const source = fs.readFileSync('site/app.js', 'utf8');
 
 test('the research board admits only current open priced rows before kickoff', () => {
   const now = Date.parse('2026-10-06T20:00:00Z');

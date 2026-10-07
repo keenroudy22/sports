@@ -2,7 +2,7 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
-const css = fs.readFileSync('site/next/app.css', 'utf8');
+const css = fs.readFileSync('site/app.css', 'utf8');
 const root = css.match(/:root\s*\{([\s\S]*?)\}/)[1];
 const colors = Object.fromEntries([...root.matchAll(/--([a-z0-9-]+):\s*(#[0-9A-Fa-f]{6})/g)].map(m => [m[1], m[2]]));
 const luminance = hex => {

@@ -278,16 +278,6 @@ test('missing play-by-play counts stay unknown instead of becoming zeros', () =>
   assert.equal(C.injurySleeperSignal(role, 10), null);
 });
 
-test('game pages show next-up depth after hard injuries without exposing implementation detail', () => {
-  const source = require('node:fs').readFileSync('site/app.js', 'utf8');
-  assert.match(source, /Next up after injuries/);
-  assert.match(source, /moves from/);
-  assert.match(source, /actual role this season/);
-  assert.match(source, /depth-sleeper/);
-  assert.match(source, /Depth chart and recent usage/);
-  assert.doesNotMatch(source, /ties use snap count/);
-});
-
 test('injury sleeper labels require an established role plus current opportunity', () => {
   const role = { group: 'RB', roleUsage: { games: 3, snapPct: .23, volume: { car: 6, tgt: 2.7 }, redZone: 1 } };
   assert.deepEqual(C.injurySleeperSignal(role, 1.7),
@@ -541,31 +531,6 @@ test('an early exit credit is a loss on the record and zero in units', () => {
   assert.equal(C.unitsFor(credited), 0, 'the stake came back');
   assert.ok(Math.abs(r.units - 0.909) < 0.001, 'only the winner moves the units');
   assert.equal(C.unitsFor({ ...credited, earlyExit: false }), -1, 'without the credit it is a full unit');
-});
-
-// app.js runs in the browser, so nothing here loads it. Parsing it catches a broken
-// edit before it reaches the page, where the only symptom is a stuck "Loading" screen.
-test('app.js parses', () => {
-  const vm = require('node:vm');
-  const fs = require('node:fs');
-  const path = require('node:path');
-  const source = fs.readFileSync(path.join(__dirname, '..', 'site', 'app.js'), 'utf8');
-  assert.doesNotThrow(() => new vm.Script(source), 'site/app.js has a syntax error');
-  assert.match(source, /Join the free Discord/);
-  assert.match(source, /community-card-compact/);
-  assert.match(source, /communityCard\(true\)/);
-  assert.match(source, /Projected winners/);
-  assert.match(source, /Projected winner/);
-  assert.match(source, /Winner, spread and total results use the final pregame forecast/);
-  assert.match(source, /about 10–15 minutes before X/);
-  assert.match(source, /Time-sensitive Arb Radar candidates stay in Discord/);
-  assert.match(source, /href="#record">See every result/);
-  assert.match(source, /Pregame lines and final scores are being collected for a future launch/);
-  assert.match(source, /Lines we like/);
-  assert.match(source, /No highlighted line at the current price/);
-  assert.match(source, /Line .*Projection .*higher/);
-  assert.match(source, />Hit rate</);
-  assert.match(source, /Fresh prices/);
 });
 
 test('one record: the straight plays in wins and losses and units, the side records apart', () => {

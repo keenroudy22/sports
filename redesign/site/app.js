@@ -217,7 +217,7 @@
     const m = String(row.marketType || row.market || '').toLowerCase();
     return [/spread/.test(m) ? 'spread' : /total/.test(m) ? 'total' : /money|winner/.test(m) ? 'ml' : m, row.gameId, dir].join('|');
   };
-  const onBoard = (vm, now = Date.now()) => vm.state === 'open' && isNum(Number(vm.odds)) && vm.book && Date.parse(vm.kickoff) > now;
+  const onBoard = (vm, now = Date.now()) => vm.state === 'open' && isNum(Number(vm.odds)) && Math.abs(Number(vm.odds)) >= 100 && vm.book && Date.parse(vm.kickoff) > now;
   const hasValue = vm => vm.calibrated && ['lean', 'strong'].includes(vm.tier) && !vm.thin && !vm.limited && isNum(vm.edge) && vm.edge > 0;
   /* One row per player, stat and side (or game market and side): keep the strongest edge, count the rest. */
   const collapse = rows => {
@@ -547,7 +547,7 @@
     const priced = vm.kind === 'best' && vm.chance != null && vm.needs != null && vm.calibrated;
     const [c, n] = priced ? pctPair(vm.chance, vm.needs) : ['', ''];
     const plain = priced && vm.mode === 'open'
-      ? `<p class="plain">We think this hits <strong>${c}</strong> of the time. At ${esc(oddsText(vm.odds))} you only need ${n}.</p>${meter(vm.chance, vm.needs)}<div class="meter-labels"><span>0%</span><span>needs ${n}</span><span>100%</span></div>`
+      ? `<p class="plain">We think this hits <strong>${c}</strong> of the time. At ${esc(oddsText(vm.odds))} you only need ${n}.</p>${meter(vm.chance, vm.needs)}`
       : priced && vm.mode === 'expired' && !compact ? `<p class="plain">When we posted it at ${esc(oddsText(vm.odds))}, we had this at <strong>${c}</strong>. That price needed ${n}.</p>${meter(vm.chance, vm.needs)}`
         : vm.legs.length ? `<p class="plain">${vm.legs.length} legs · ${vm.kind === 'climb' ? 'tracked in dollars, apart from the best-bet record' : 'tracked apart from the best-bet record'}.</p>` : '';
     const facts = vm.kind === 'best' && !compact && vm.fair != null && vm.mode !== 'closed'
@@ -560,6 +560,8 @@
     const legs = !compact && vm.legs.length ? `<ul class="why legs">${vm.legs.slice(0, 8).map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '';
     const isSaved = state.watchlist.some(r => r.key === watchKey(vm));
     const clock = countdown(vm.kickoff);
+    /* What the Details fold holds, in a few words, so a reader knows whether to open it. */
+    const moreHint = [why ? 'why' : '', chart ? 'hit chart' : hist ? 'history' : '', facts ? 'fair price' : '', legs ? 'legs' : '', !facts && !why && !legs ? 'status' : ''].filter(Boolean).join(' · ');
     return `<article class="ticket${compact ? ' compact' : ''}${vm.mode === 'closed' ? ' is-closed' : ''}" aria-label="${esc(tag)}: ${esc(vm.title)}">
       <div class="ticket-body">
         <div class="ticket-top"><span class="tag${vm.kind !== 'best' ? ' fun' : ''}">${esc(tag)}</span><span>${esc(clock || whenShort(vm.kickoff))}</span></div>
@@ -567,10 +569,12 @@
         <div class="t-head">${artFor(pick, compact ? '' : 'md')}<div><h3>${opts.onPage ? esc(vm.title) : `<a href="${esc(vm.href)}">${esc(vm.title)}</a>`}</h3>
         <p class="market">${esc(vm.market)}${vm.league ? ` · ${esc(vm.league === 'CFB' ? 'College' : vm.league)}` : ''}</p></div></div>
         <div class="price"><b class="num">${esc(oddsText(vm.odds))}</b><span>${vm.estimated ? 'est. · ' : ''}${esc(vm.book || '')}${vm.mode !== 'open' && !vm.result ? ' · posted price' : ''}</span></div>
-        ${plain}${facts}${why}${hist}${chart}${legs}
-        ${vm.estimated && !compact ? '<p class="meta">Combined odds are estimated from the captured leg prices. Check the real ticket price at your book.</p>' : ''}
-        ${compact ? (vm.statusShort ? `<p class="meta strong">${esc(vm.statusShort)}</p>` : '') : vm.statusNote ? `<p class="meta${vm.mode === 'closed' ? ' strong' : ''}">${esc(vm.statusNote)}</p>` : ''}<p class="meta">${esc(C.deliveryText(pick) || '')}</p>
-        ${compact ? '' : `<div class="actions">${opts.onPage ? '' : `<a class="btn" href="${esc(vm.href)}">How we got this</a>`}<button type="button" class="btn" data-watch-pick="${esc(pick.id)}" aria-pressed="${isSaved}" aria-label="${isSaved ? 'Unsave' : 'Save'} ${esc(vm.title)}">${isSaved ? '★ Saved' : '☆ Save'}</button></div>`}
+        ${plain}${vm.statusShort ? `<p class="meta strong">${esc(vm.statusShort)}</p>` : ''}
+        ${compact ? '' : `<details class="t-more" data-box="t:${esc(pick.id)}"${opts.onPage ? ' open' : ''}><summary>Details<span>${esc(moreHint)}</span></summary>
+          ${facts}${why}${hist}${chart}${legs}
+          ${vm.estimated ? '<p class="meta">Combined odds are estimated from the captured leg prices. Check the real ticket price at your book.</p>' : ''}
+          ${vm.statusNote ? `<p class="meta${vm.mode === 'closed' ? ' strong' : ''}">${esc(vm.statusNote)}</p>` : ''}<p class="meta">${esc(C.deliveryText(pick) || '')}</p></details>
+        <div class="actions">${opts.onPage ? '' : `<a class="btn small" href="${esc(vm.href)}">How we got this</a>`}<button type="button" class="btn small" data-watch-pick="${esc(pick.id)}" aria-pressed="${isSaved}" aria-label="${isSaved ? 'Unsave' : 'Save'} ${esc(vm.title)}">${isSaved ? '★ Saved' : '☆ Save'}</button></div>`}
       </div>
       <div class="stub ${esc(vm.stub.cls)}" role="img" aria-label="${esc(vm.stub.small)}${vm.stub.big && vm.stub.big.length > 1 ? ' ' + esc(vm.stub.big) : ''}"><b aria-hidden="true">${esc(vm.stub.big)}</b><small aria-hidden="true">${esc(vm.stub.small)}</small></div>
     </article>`;
@@ -2211,6 +2215,14 @@
       if (c.researchQuery) state.q = c.researchQuery;
     }
   };
+  /* A ticket's hit chart, loaded once, when it is first visible. */
+  const loadPropBox = box => {
+    if (box.dataset.loaded) return;
+    box.dataset.loaded = '1';
+    const d = box.dataset;
+    box.innerHTML = '<p class="small muted">Loading history…</p>';
+    propHistory(d.league, d.athlete, d.stat, Number(d.line), d.dir, d.game, d.before || null).then(html => { box.innerHTML = html; }).catch(() => { box.innerHTML = '<p class="small muted">History unavailable right now.</p>'; });
+  };
   /* A newer render always wins: a slow fetch from an older one never paints over it. */
   let renderToken = 0, rendering = false;
   async function render(soft = false) {
@@ -2248,10 +2260,7 @@
     if ($('#league').value !== state.league) $('#league').value = state.league;
     if (navigated) countVisit(route.view);
     for (const id of openRows) { const d = document.querySelector(`details[data-row="${CSS.escape(id)}"]`); if (d) { d.open = true; loadRowDetail(d); } }
-    for (const box of document.querySelectorAll('[data-prop-history]')) {
-      const d = box.dataset;
-      propHistory(d.league, d.athlete, d.stat, Number(d.line), d.dir, d.game, d.before || null).then(html => { box.innerHTML = html; }).catch(() => { box.innerHTML = '<p class="small muted">History unavailable right now.</p>'; });
-    }
+    for (const box of document.querySelectorAll('[data-prop-history]')) if (!box.closest('details:not([open])')) loadPropBox(box);
     if (focusKey) { const el = document.querySelector(`[data-input="${focusKey}"]`); if (el) { el.focus(); try { el.setSelectionRange(caret, caret); } catch (_) { /* number inputs */ } } }
     if (sideScroll.length) [...document.querySelectorAll('#view .chart-wrap, #view .table-wrap, #view .chip-scroll')].forEach((e, i) => { if (sideScroll[i]) e.scrollLeft = sideScroll[i]; });
     if (focusSel) { const el = document.querySelector(focusSel); if (el) { el.focus({ preventScroll: true }); if (el.closest('.chip-scroll')) el.scrollIntoView({ block: 'nearest', inline: 'nearest' }); } }
@@ -2391,7 +2400,12 @@
       const url = `${location.origin}${location.pathname}${link.getAttribute('href')}`;
       try { await navigator.clipboard.writeText(url); toast('Link copied'); } catch (_) { window.prompt('Copy this link:', url); }
     });
-    document.addEventListener('toggle', event => { const el = event.target; if (el.matches && el.matches('details[data-row]') && el.open) loadRowDetail(el); }, true);
+    document.addEventListener('toggle', event => {
+      const el = event.target;
+      if (!el.matches || !el.open) return;
+      if (el.matches('details[data-row]')) loadRowDetail(el);
+      if (el.matches('details.t-more')) el.querySelectorAll('[data-prop-history]').forEach(loadPropBox);
+    }, true);
     document.addEventListener('input', event => {
       const el = event.target;
       if (el.dataset.input) {

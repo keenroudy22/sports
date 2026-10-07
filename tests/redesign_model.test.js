@@ -7,7 +7,7 @@ const path = require('node:path');
 
 const find = (...candidates) => candidates.map(p => path.resolve(__dirname, p)).find(p => fs.existsSync(p));
 globalThis.KRCore = require(find('../site/core.js', '../../site/core.js'));
-const { model: M } = require(find('../site/next/app.js', '../redesign/site/app.js'));
+const { model: M } = require(find('../site/app.js', '../redesign/site/app.js'));
 
 test('break-even matches the price', () => {
   assert.equal(Math.round(M.breakEven(-110) * 1000), 524);
@@ -234,12 +234,12 @@ test('legacy links rewrite to the new address; deep links never change', () => {
 });
 
 test('no hype words in the new UI copy', () => {
-  const source = fs.readFileSync(find('../site/next/app.js', '../redesign/site/app.js'), 'utf8');
+  const source = fs.readFileSync(find('../site/app.js', '../redesign/site/app.js'), 'utf8');
   assert.ok(!/\block\b|guarantee[sd]? (?:win|profit)|can't lose|risk-free|highest confidence/i.test(source));
 });
 
 test('css keeps text at readable sizes', () => {
-  const css = fs.readFileSync(find('../site/next/app.css', '../redesign/site/app.css'), 'utf8');
+  const css = fs.readFileSync(find('../site/app.css', '../redesign/site/app.css'), 'utf8');
   const sizes = [...css.matchAll(/font(?:-size)?:\s*(?:\d+\s+)?(\d+)px/g)].map(m => Number(m[1]));
   const tooSmall = sizes.filter(px => px < 12);
   assert.ok(tooSmall.every(px => px >= 10), `found ${tooSmall}`);
@@ -247,4 +247,3 @@ test('css keeps text at readable sizes', () => {
   assert.match(css, /prefers-reduced-motion/);
   assert.match(css, /--burnt-text/);
 });
-

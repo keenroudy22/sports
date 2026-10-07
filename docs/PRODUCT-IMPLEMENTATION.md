@@ -6,22 +6,23 @@ is deployed. The existing append-only reports and public record remain unchanged
 
 ## Effective scope
 
-Today / Games / Charts / Record / Tools; compact published selections first; shared correct chart geometry and
+Today / Research / Games / Record / More; compact published selections first; shared correct chart geometry and
 quote states; coherent research filters; private operating visibility; bounded captions and tested creative variants.
 Current sources, free budgets and approved release categories only. Full plan: owner's local
 `kookn-product-plan-2026-10-05.html` (dated audit baseline, not a deployment receipt).
 
 ## October 6 redesign handoff
 
-The owner approved a casino-felt redesign and a staged release. The new navigation is Today / Research / Games /
-Record / More, but the current `/sports/` application remains authoritative until the owner approves the separate
-C3 swap. C0 records the rules and queue, C1 publishes a noindex preview at `/sports/next/`, and C2 adds parity tests.
-The preview reuses the current public data and unchanged `core.js` record math; it changes no pick, result, feed,
-post, card or pipeline rule.
+The owner approved a casino-felt redesign and staged release. The live navigation is Today / Research / Games /
+Record / More. C0 recorded the rules and queue, C1 published a noindex preview at `/sports/next/`, C2 added parity
+tests, and the owner approved C3 on October 6. C3 replaces only the presentation shell, retires the preview and
+reuses the current public data and unchanged `core.js` record math; it changes no pick, result, feed, post, card or
+pipeline rule.
 
-Hard owner gates remain explicit: no live-site swap, felt-card cutover, R0–R7 result/pipeline change, public CLV or
-ROI headline, R5 trend default, X/Discord post or delivery change. The owner must review the preview on a phone
-before P19 can move. The local redesign audit stays excluded from the public repository pending an owner decision
+Remaining owner-choice defaults stay explicit: no public CLV or ROI headline, no R5 trend default, no new post
+types, slots or frequency, no Playbook change, no browser automation on X and no paid service. Felt-card cutover
+still requires approved renders and the quiet-window gate. R0–R7 may run only as silent logged shadows with no
+public-output effect. The local redesign audit stays excluded from the public repository pending an owner decision
 about its X analytics figures; the remaining redesign source and strategy files are retained as implementation
 evidence under `redesign/`.
 
@@ -242,7 +243,7 @@ increase caps or claim a configured integration is working. Existing append-only
 
 | Feature | Current state and scope | Limits / release condition | Evidence / authority |
 |---|---|---|---|
-| Website | Free Today / Games / Charts / Record / Tools; sport-specific Today; Scores aliases Games Live. | Posted plays first; research/model records clearly separate. No subscription or hidden premium gate. | Release receipts above; AGENTS product approval. |
+| Website | Free Today / Research / Games / Record / More; sport-specific Today; legacy routes preserved. | Posted plays first; research/model records clearly separate. No subscription or hidden premium gate. | Release receipts above; AGENTS product approval. |
 | Scores, stats and odds | Current supported sources on existing refresh schedules; visible capture ages. | Not FanDuel-speed odds. No added paid feed, scraping or metered-budget increase. | AGENTS free stack; existing capture/build jobs. |
 | Official plays and Climb | Scheduled evaluation windows, not promised picks. One real Climb rung at a time; may advance after settlement on a later qualified scan. | Preserve price, availability, overlap, calibration and record gates; no forced quota. | AGENTS; existing run/ladder jobs. |
 | Delivery | X through Buffer; official Discord leads X about 10–15 minutes, other types follow confirmed X. | Playbook tag on new X plays only; no automatic replies/likes/follows. A queue entry is not a delivery receipt. | AGENTS and stored channel receipts. |

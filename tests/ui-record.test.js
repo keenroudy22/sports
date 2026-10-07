@@ -4,8 +4,8 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const C = require('../site/core.js');
 globalThis.KRCore = C;
-const { model: M } = require('../site/next/app.js');
-const source = fs.readFileSync('site/next/app.js', 'utf8');
+const { model: M } = require('../site/app.js');
+const source = fs.readFileSync('site/app.js', 'utf8');
 
 const picks = [
   { id: 'a', kind: 'props', odds: -110, result: 'win', settledAt: '2026-09-01T01:00:00Z' },

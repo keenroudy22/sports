@@ -18,8 +18,8 @@ human: the exact play and price first, one strongest reason, one clear action. D
 generic disclaimers in the caption; the page and card retain the required 21+ and entertainment-only wording.
 
 Player photos and team logos stay, with team-color badges as fallback. Do not redraw a published attachment. The
-felt social templates remain owner-gated under P21 and are not activated by the website preview; until that separate
-cutover, the current renderers remain the production contract. Existing post categories, caps, filenames, dimensions,
+felt website is live. Social templates remain separately gated under P21; until that quiet-window cutover, the
+current renderers remain the production contract. Existing post categories, caps, filenames, dimensions,
 Discord size limit, Buffer-only delivery and X/Discord schedule do not change.
 
 ## October 5 effective creative policy (superseded where stated above)
