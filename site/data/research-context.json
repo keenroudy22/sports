@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-07T14:32:16Z",
+  "updatedAt": "2026-10-07T15:38:29Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-10-07T14:03Z",
+              "reportedAt": "2026-10-07T15:26Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -927,6 +927,15 @@
           "name": "Carolina Panthers",
           "players": [
             {
+              "id": "4695883",
+              "name": "Jalen Coker",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Quadriceps",
+              "reportedAt": "2026-10-07T14:53Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4695883/jalen-coker"
+            },
+            {
               "id": "4243256",
               "name": "Devin Lloyd",
               "position": "LB",
@@ -961,15 +970,6 @@
               "injury": "Elbow",
               "reportedAt": "2026-10-06T18:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/4362647/damien-lewis"
-            },
-            {
-              "id": "4695883",
-              "name": "Jalen Coker",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Quadriceps",
-              "reportedAt": "2026-10-06T18:21Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4695883/jalen-coker"
             },
             {
               "id": "4372780",
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-07T14:03Z",
+              "reportedAt": "2026-10-07T15:26Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -6677,6 +6677,15 @@
           "name": "Tampa Bay Buccaneers",
           "players": [
             {
+              "id": "4429511",
+              "name": "SirVocea Dennis",
+              "position": "LB",
+              "status": "Out",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-07T15:26Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4429511/sirvocea-dennis"
+            },
+            {
               "id": "4428522",
               "name": "Tykee Smith",
               "position": "S",
@@ -6698,7 +6707,7 @@
               "id": "4816107",
               "name": "Benjamin Morrison",
               "position": "CB",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Quadriceps",
               "reportedAt": "2026-10-06T21:48Z",
               "source": "https://www.espn.com/nfl/player/_/id/4816107/benjamin-morrison"
@@ -6765,15 +6774,6 @@
               "injury": null,
               "reportedAt": "2026-10-06T01:20Z",
               "source": "https://www.espn.com/nfl/player/_/id/4430871/sean-tucker"
-            },
-            {
-              "id": "4429511",
-              "name": "SirVocea Dennis",
-              "position": "LB",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-06T00:51Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4429511/sirvocea-dennis"
             },
             {
               "id": "4243331",
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "34",
-          "name": "Azeez Al-Shaair",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-06T20:01:41Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3919117/azeez-al-shaair"
-        },
-        {
-          "teamId": "11",
-          "name": "Keenan Allen",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-06T20:01:41Z",
-          "source": "https://www.espn.com/nfl/player/_/id/15818/keenan-allen"
-        },
-        {
           "teamId": "30",
           "name": "Christian Braswell",
           "from": "Out",
@@ -7764,11 +7748,27 @@
           "to": "Injured Reserve",
           "observedAt": "2026-10-07T14:32:16Z",
           "source": "https://www.espn.com/nfl/player/_/id/4429005/braiden-mcgregor"
+        },
+        {
+          "teamId": "27",
+          "name": "SirVocea Dennis",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-07T15:38:29Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4429511/sirvocea-dennis"
+        },
+        {
+          "teamId": "27",
+          "name": "Benjamin Morrison",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-07T15:38:29Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4816107/benjamin-morrison"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-07T14:32:16Z",
-      "lastAttemptAt": "2026-10-07T14:32:16Z",
+      "checkedAt": "2026-10-07T15:38:29Z",
+      "lastAttemptAt": "2026-10-07T15:38:29Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-07T14:32:16Z",
-      "lastAttemptAt": "2026-10-07T14:32:16Z",
+      "checkedAt": "2026-10-07T15:38:29Z",
+      "lastAttemptAt": "2026-10-07T15:38:29Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
