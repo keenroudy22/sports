@@ -36,6 +36,10 @@ class WorkflowTests(unittest.TestCase):
     def test_the_step_that_broke_the_first_deploy_is_gone(self):
         self.assertNotIn('review.cjs', WORKFLOW)
 
+    def test_hosted_frontend_checks_pin_the_launchd_node_major(self):
+        self.assertRegex(WORKFLOW, r'uses:\s*actions/setup-node@v\d+')
+        self.assertRegex(WORKFLOW, r"node-version:\s*['\"]22['\"]")
+
 
 if __name__ == '__main__':
     unittest.main()
