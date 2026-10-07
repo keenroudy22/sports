@@ -66,6 +66,22 @@ def decision(rule, candidate, ctx):
     return rule(candidate, ctx)
 
 
+class TwoSidedPriceTests(unittest.TestCase):
+    def test_player_straight_requires_both_sides_at_exact_book_and_line(self):
+        self.assertTrue(gates.two_sided_straight(prop_lean(), context()).ok)
+        one_sided = {'NFL-1': {'books': {'draftkings': {'markets': {
+            'recYds': {'Player Seven': {'line': 49.5, 'over': -115}}}}}}}
+        self.assertFalse(gates.two_sided_straight(prop_lean(), context(prop_odds=one_sided)).ok)
+        wrong_line = {'NFL-1': {'books': {'draftkings': {'markets': {
+            'recYds': {'Player Seven': {'line': 50.5, 'over': -115, 'under': -105}}}}}}}
+        self.assertFalse(gates.two_sided_straight(prop_lean(), context(prop_odds=wrong_line)).ok)
+
+    def test_game_straight_requires_both_prices_too(self):
+        self.assertTrue(gates.two_sided_straight(total_lean(), context()).ok)
+        one_sided = {'NFL-1': {'books': {'draftkings': {'total': {'line': 44.5, 'over': -110}}}}}
+        self.assertFalse(gates.two_sided_straight(total_lean(), context(odds=one_sided)).ok)
+
+
 class KindTests(unittest.TestCase):
     def test_kinds(self):
         self.assertEqual(gates.kind_of(total_lean()), 'modelLean')
@@ -485,7 +501,7 @@ class AdmitTests(unittest.TestCase):
         # One book, a price past the floor, a market the scoreboard has closed, an edge that -250 eats,
         # and a better quote (-115) sitting in the capture: every one of them is named.
         self.assertEqual({d.rule for d in gates.refusals(decisions)},
-                         {'one_book', 'prop_price_floor', 'prop_raw_edge', 'best_quote_by_ev',
+                         {'one_book', 'two_sided_straight', 'prop_price_floor', 'prop_raw_edge', 'best_quote_by_ev',
                           'prop_calibrated_value'})
 
     def test_underperforming_segment_raises_the_bar_but_does_not_veto_a_strong_price(self):

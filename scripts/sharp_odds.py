@@ -225,7 +225,7 @@ def quotes_from(rows):
                     # Leave it out rather than promoting a mislabeled rung.
                     two_sided = [r for r in rungs if 'over' in r and 'under' in r
                                  and -400 <= r['over'] <= 400 and -400 <= r['under'] <= 400
-                                 and .9 <= implied(r['over']) + implied(r['under']) <= 1.4]
+                                 and .99 <= implied(r['over']) + implied(r['under']) <= 1.15]
                     main = (min(two_sided, key=lambda r: abs(pricing_cents(r['over']) - pricing_cents(r['under']))) if two_sided
                             else next((r for r in rungs if r['flagged'] and len({'over', 'under'} & r.keys()) == 1
                                        and -400 <= next(r[k] for k in ('over', 'under') if k in r) <= 400), None))

@@ -1070,7 +1070,7 @@ def build(now=None):
                 if (row['grade'].get('edge') or 0) < 5.0:
                     row['grade']['tier'] = 'pass'
                     row['grade']['view'] = 'pass'
-    guard_player_lines(lines, by_id, forecasts, league_data, now)
+    guard_player_lines(lines, by_id, forecasts, league_data, now, prop_prices=prop_prices)
     for row in lines:
         if not row.get('roleSuspect'):
             continue
@@ -1362,7 +1362,7 @@ def grade_line(line, snapshot, thin):
             'range80': p.get('range80')}
 
 
-def guard_player_lines(lines, games, forecasts, league_data, now, logger=print):
+def guard_player_lines(lines, games, forecasts, league_data, now, logger=print, prop_prices=None):
     """Withhold misleading player grades without changing forecasts or history."""
     qb_changes = {}
     for row in lines:
@@ -1387,6 +1387,11 @@ def guard_player_lines(lines, games, forecasts, league_data, now, logger=print):
         grade = row.get('grade') or {}
         chance = grade.get('chance') if grade.get('calibrated') else None
         bad_price = role_sanity.price_suspect(row.get('odds'), chance)
+        quote_problem = None
+        if row.get('state') == 'open' and prop_prices is not None:
+            quotes = price_quotes(prop_prices.get(row.get('gameId')), market, row.get('player'), row.get('line'))
+            quote_problem = role_sanity.quote_issue(quotes, row.get('book'), row.get('line'),
+                                                    row.get('direction'), row.get('odds'))
         if caution or qb_caution:
             row['roleSuspect'] = True
             row['grade'] = None
@@ -1394,11 +1399,12 @@ def guard_player_lines(lines, games, forecasts, league_data, now, logger=print):
             reason = (f"{caution['projected']:g} {caution['volume']} vs "
                       f"{caution['recentFullAverage']:g} last-three full-game average") if caution else qb_caution['reason']
             logger(f"role-sanity: {row.get('id') or row.get('title')}: {reason}")
-        if bad_price:
+        if bad_price or quote_problem:
             row['priceSuspect'] = True
             row['grade'] = None
-            row['gradeNote'] = 'Price under review' if not (caution or qb_caution) else 'Projection and price under review'
-            logger(f"price-sanity: {row.get('id') or row.get('title')}: {row.get('odds')} outside main-line check")
+            row['gradeNote'] = 'Price check failed' if not (caution or qb_caution) else 'Projection and price under review'
+            logger(f"price-sanity: {row.get('id') or row.get('title')}: "
+                   f"{quote_problem or str(row.get('odds')) + ' outside main-line check'}")
 
 
 def sheet_values(lines, now=None):
@@ -1464,7 +1470,7 @@ def price_quotes(record, market, name, anchor=None):
                if isinstance(odds, (int, float))):
             continue
         if isinstance(over, (int, float)) and isinstance(under, (int, float)) \
-                and not .9 <= pricing.break_even(over) + pricing.break_even(under) <= 1.4:
+                and not .99 <= pricing.break_even(over) + pricing.break_even(under) <= 1.15:
             continue
         out.append((book, match['line'], match.get('over'), match.get('under')))
     return out

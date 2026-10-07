@@ -879,3 +879,20 @@ publication guard inspected 501 public files with no issues, and the isolated 11
 with no outside writes. Real Chrome checked Today, Record, More, best lines, Trends and Games at 375 and
 1440 pixels: 12 views, no sideways scroll, caught load-error state or console exception. This is local
 verification, not hosted or live completion.
+
+## October 7 A-24 price and projection follow-through — prepared, not live
+
+The pre-release guard now also checks a recent QB rotation and projected attempt share, including Adam
+Damante's under and the NMSU receivers. A book's two sides at the exact line must imply a combined
+0.99–1.15 chance; a one-sided line can remain research but cannot become an official straight play.
+The same-line price from another book also holds a main player row when its no-cut chance differs by
+at least 15 percentage points. The five anomalous Sep 26–27 DraftKings prices (+700 to +1500) are
+replayed in tests and refused. None of this changes a published pick or its result.
+
+In the 14 stored UTC dates Sep 24–Oct 7, counting each distinct straight candidate ID once per date,
+the added exact-line two-sided check retains 1,603 of 1,741 player candidate/day attempts and 181 of
+210 game candidate/day attempts (1,784 of 1,951 overall). Those are historical candidate attempts,
+including rows already refused by other rules; they are not new win rates or a revised public record.
+The post-build record audit still matches all 92 public pick IDs. The root projection changes and
+Reasoned-edges log remain separately tracked as silent shadows (P57/P58), with no owner-approved
+promotion or new public panel.

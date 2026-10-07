@@ -1,4 +1,5 @@
 """Real current-team evidence for the October 7 projection/price hold."""
+import json
 import sys
 import unittest
 from datetime import datetime, timezone
@@ -56,6 +57,55 @@ class RoleSanityTests(unittest.TestCase):
             'fanduel': {'markets': {'recYds': {'Emeka Egbuka': {'line': 33.5, 'over': -114, 'under': -114}}}}}}
         self.assertEqual(build_site.price_quotes(capture, 'recYds', 'Emeka Egbuka'),
                          [('fanduel', 33.5, -114, -114)])
+
+    def test_exact_two_sided_price_and_other_book_check(self):
+        pair = [('draftkings', 49.5, -105, -105)]
+        self.assertIsNone(role_sanity.quote_issue(pair, 'DraftKings', 49.5, 'over', -105))
+        self.assertIn('two-sided', role_sanity.quote_issue([('draftkings', 49.5, -102, None)],
+                                                          'DraftKings', 49.5, 'over', -102))
+        self.assertIn('exact line', role_sanity.quote_issue(pair, 'DraftKings', 50.5, 'over', -105))
+        self.assertIn('another book', role_sanity.quote_issue(
+            pair + [('fanduel', 49.5, +180, -230)], 'DraftKings', 49.5, 'over', -105))
+        self.assertIsNone(role_sanity.quote_issue(
+            pair + [('fanduel', 49.5, -110, -110)], 'DraftKings', 49.5, 'over', -105))
+
+    def test_damante_under_is_held_with_split_attempts(self):
+        logs = features.player_logs(features.load(seasons={2026}))
+        players = [{'id': '5152503', 'pos': 'QB', 'att': [30]},
+                   {'id': 'hed', 'pos': 'QB', 'att': [16]},
+                   {'id': '4869443', 'pos': 'WR', 'targets': [8]}]
+        changed = role_sanity.quarterback_change(players, logs, '166', 2026, 'CFB',
+                                                 '2026-10-08T23:00:00Z')
+        self.assertIsNotNone(changed)
+        self.assertTrue(role_sanity.affected_by_qb_change('5152503', 'QB', 'passYds', changed))
+        self.assertTrue(role_sanity.affected_by_qb_change('4869443', 'WR', 'recYds', changed))
+        now = datetime(2026, 10, 7, 18, tzinfo=timezone.utc)
+        game = {'id': 'CFB-nmsu', 'league': 'CFB', 'season': 2026,
+                'kickoff': '2026-10-08T23:00:00Z', 'home': {'id': '166'}, 'away': {'id': '1'}}
+        snap = {'gameId': game['id'], 'publishedAt': '2026-10-07T17:00:00Z',
+                'players': {'home': {'players': players}, 'away': {'players': []}}}
+        ctx = gates.Context(now=now, games={game['id']: game}, snapshots={game['id']: [snap]},
+                            player_logs=logs)
+        damante_under = {'athleteId': '5152503', 'market': 'passYds', 'gameIds': [game['id']],
+                         'line': 206.5, 'odds': -110, 'direction': 'under'}
+        self.assertFalse(gates.player_projection_sanity(damante_under, ctx).ok)
+
+    def test_five_corrupted_september_draftkings_quotes_fail_price_guard(self):
+        source = Path(__file__).resolve().parents[1] / 'data/learning/candidates-2026.jsonl'
+        found = {}
+        with source.open(encoding='utf-8') as stream:
+            for raw in stream:
+                row = json.loads(raw)
+                if row.get('book') != 'DraftKings' or row.get('decidedAt', '')[:10] not in ('2026-09-26', '2026-09-27'):
+                    continue
+                if row.get('kind') == 'player' and row.get('odds') in (1200, 1500, 1300, 950, 700):
+                    found[row['odds']] = row
+        self.assertEqual(set(found), {1200, 1500, 1300, 950, 700})
+        for odds, row in found.items():
+            with self.subTest(odds=odds, title=row['title']):
+                self.assertTrue(role_sanity.price_suspect(row['odds'], row.get('chance')))
+                self.assertIn('two-sided', role_sanity.quote_issue([], row['book'], row['line'],
+                                                                  row['direction'], row['odds']))
 
     def test_build_marks_suspect_player_lines_and_logs_once_per_row(self):
         now = datetime(2026, 10, 7, 18, tzinfo=timezone.utc)

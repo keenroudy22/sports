@@ -67,6 +67,14 @@ class QuoteTests(unittest.TestCase):
                (g, row('draftkings', 'player_receiving_yards', 'Emeka Egbuka', 'under', 34.5, -114))]
         self.assertNotIn('draftkings', sharp_odds.quotes_from(bad).get('NFL-1', {}))
 
+    def test_main_pair_requires_normal_book_cut(self):
+        g = self.slate[0]
+        def pair(over, under):
+            return [(g, row('draftkings', 'player_receptions', 'Tester', 'over', 4.5, over)),
+                    (g, row('draftkings', 'player_receptions', 'Tester', 'under', 4.5, under))]
+        self.assertIn('draftkings', sharp_odds.quotes_from(pair(-105, -105))['NFL-1'])
+        self.assertNotIn('draftkings', sharp_odds.quotes_from(pair(+105, +105)).get('NFL-1', {}))
+
     def rows(self):
         g = self.slate[0]
         return [(g, row('draftkings', 'player_rushing_yards', 'Ashton Jeanty', 'over', 66.5, -115)),

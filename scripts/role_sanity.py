@@ -5,6 +5,7 @@ current-team role can be reviewed; missing usage evidence is not treated as a
 zero or as proof of a problem.
 """
 import statistics
+import re
 
 
 VOLUME = {'passYds': ('att', 'att'), 'att': ('att', 'att'), 'cmp': ('att', 'att'),
@@ -28,8 +29,6 @@ def quarterback_change(players, player_logs, team, season, league, before=None):
         return None
     expected, projected = max(qbs, key=lambda item: (item[1], item[0]))
     total = sum(max(0, attempts) for _, attempts in qbs)
-    if total > 0 and projected / total < .85:
-        return {'expectedQB': expected, 'reason': 'projected QB attempts are split below 85%'}
     games = {}
     for athlete, logs in player_logs.items():
         for row in logs:
@@ -43,6 +42,12 @@ def quarterback_change(players, player_logs, team, season, league, before=None):
             key = row.get('eventId')
             if key:
                 games.setdefault(key, {'kickoff': row.get('kickoff') or '', 'qbs': []})['qbs'].append((str(athlete), attempts))
+    recent = sorted(games.values(), key=lambda item: item['kickoff'])[-3:]
+    if total > 0 and projected / total < .85:
+        reason = ('recent QB rotation and projected attempt share below 85%'
+                  if any(len(game['qbs']) >= 2 for game in recent)
+                  else 'projected QB attempts are split below 85%')
+        return {'expectedQB': expected, 'reason': reason}
     starters = []
     for game in sorted(games.values(), key=lambda item: item['kickoff']):
         athlete, attempts = max(game['qbs'], key=lambda item: (item[1], item[0]))
@@ -99,3 +104,42 @@ def price_suspect(odds, chance, player=True):
         return False
     implied = -odds / (-odds + 100) if odds < 0 else 100 / (odds + 100)
     return abs(chance - implied) > .25
+
+
+def book_key(book):
+    return re.sub(r'[^a-z0-9]', '', str(book or '').lower())
+
+
+def implied(odds):
+    if not isinstance(odds, (int, float)) or abs(odds) < 100:
+        return None
+    return -odds / (100 - odds) if odds < 0 else 100 / (100 + odds)
+
+
+def quote_issue(quotes, book, line, side, odds):
+    """Why an official player price cannot be trusted at this exact book and line.
+
+    `quotes` are (book, line, over, under) from the stored capture, not a
+    sportsbook scrape. One-sided quotes remain research but never a straight.
+    """
+    if side not in ('over', 'under') or not isinstance(line, (int, float)):
+        return 'no two-sided exact line at the listed book'
+    opposite = 'under' if side == 'over' else 'over'
+    same = [(b, l, o, u) for b, l, o, u in quotes or [] if l == line and book_key(b) == book_key(book)]
+    if not same:
+        return 'no two-sided exact line at the listed book'
+    selected = same[0]
+    price = {'over': selected[2], 'under': selected[3]}
+    a, b = implied(price.get(side)), implied(price.get(opposite))
+    if a is None or b is None or price[side] != odds or not .99 <= a + b <= 1.15:
+        return 'no valid two-sided exact line at the listed book'
+    for other_book, other_line, over, under in quotes or []:
+        if other_line != line or book_key(other_book) == book_key(book):
+            continue
+        other_side, other_opposite = (over, under) if side == 'over' else (under, over)
+        x, y = implied(other_side), implied(other_opposite)
+        if x is None or y is None or not .99 <= x + y <= 1.15:
+            continue
+        if abs(a - x / (x + y)) >= .15:
+            return 'listed price differs by 15+ points from another book at the same line'
+    return None

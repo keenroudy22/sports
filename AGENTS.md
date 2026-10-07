@@ -204,6 +204,15 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Exact-line price sanity (owner, 2026-10-07; audit A-24):** new official straight plays require
+  both sides priced at the listed book's exact line. A one-sided player number may remain labeled
+  research, never a best bet. A two-sided price pair's implied chances must sum to 0.99–1.15;
+  a main player side 15 or more percentage points from another book's no-cut chance at that
+  same line is under review. Hold a new or split QB and teammates' receiving markets while the
+  recent rotation and projected attempt share fail the 0.85 role check. These rules only remove
+  suspect future plays, leave published records untouched, and supersede the earlier wide
+  0.90–1.40 pair band. Projection refits and Reasoned-edges remain silent shadows; promotion
+  requires a separate owner yes with forward evidence.
 - **Plain-English site copy (owner, 2026-10-07):** explain prices and probabilities in ordinary words,
   including what a quoted price needs to win often enough; compute every threshold from the actual odds.
   Avoid unexplained `vig removed`, `implied`, `break-even`, `edge`, `captured`, `selection`, and internal

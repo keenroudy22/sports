@@ -427,6 +427,40 @@ def price_present(candidate, ctx):
     return Decision(True, 'price_present', f"{candidate['book']} {odds:+d}")
 
 
+def two_sided_straight(candidate, ctx):
+    """A new straight needs both actual prices at its book and exact line."""
+    game_id = (candidate.get('gameIds') or [None])[0]
+    book = candidate.get('book')
+    line = candidate.get('line')
+    odds = candidate.get('odds')
+    side = side_of(candidate)
+    if candidate.get('athleteId'):
+        record = ctx.prop_odds.get(game_id)
+        quotes = build_site.price_quotes(record, market_key(candidate), player_name(candidate, ctx), line)
+        issue = role_sanity.quote_issue(quotes, book, line, side, odds)
+    else:
+        record = ctx.odds.get(game_id) or {}
+        named = next((entry for name, entry in (record.get('books') or {}).items()
+                      if role_sanity.book_key(BOOK_NAMES.get(name, name)) == role_sanity.book_key(book)), None)
+        market = market_key(candidate)
+        offer = (named or {}).get('total' if market == 'total' else 'spread') or {}
+        if market == 'total':
+            same_line = offer.get('line') == line
+            pair = (offer.get('over'), offer.get('under'))
+            selected = offer.get(side)
+        elif market == 'spread':
+            home_line = offer.get('home')
+            same_line = isinstance(home_line, (int, float)) and line == (home_line if side == 'home' else -home_line)
+            pair = (offer.get('homePrice'), offer.get('awayPrice'))
+            selected = offer.get('homePrice' if side == 'home' else 'awayPrice')
+        else:
+            same_line, pair, selected = False, (None, None), None
+        a, b = (role_sanity.implied(value) for value in pair)
+        issue = None if same_line and selected == odds and a is not None and b is not None \
+            and .99 <= a + b <= 1.15 else 'no valid two-sided exact line at the listed book'
+    return Decision(not issue, 'two_sided_straight', issue or 'both prices verified at the listed book and line')
+
+
 def data_sanity(candidate, ctx):
     """A line the game cannot produce is a data error, not an edge."""
     line, market = candidate.get('line'), market_key(candidate)
@@ -943,7 +977,7 @@ def revision_frozen(candidate, ctx):
 
 # ------------------------------------------------------------------ running the rules
 
-COMMON = (not_started, x_window, expiry_ok, fresh_quote, price_present, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction, player_overlap, player_projection_sanity)
+COMMON = (not_started, x_window, expiry_ok, fresh_quote, price_present, two_sided_straight, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction, player_overlap, player_projection_sanity)
 SHOP = (one_book, best_quote_by_ev)
 RULES = {
     # Caps are ceilings, not quotas. Performance cautions raise the edge requirement; negative value still fails.

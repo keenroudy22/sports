@@ -784,6 +784,11 @@ def price(candidate, ctx, now):
             continue
         if candidate.get('athleteId') and (odds < -400 or odds > 400):
             continue
+        if candidate.get('athleteId'):
+            record = ctx.prop_odds.get(game['id'])
+            quotes = build_site.price_quotes(record, market, candidate.get('_player') or gates.player_name(candidate, ctx), line)
+            if role_sanity.quote_issue(quotes, book, line, side, odds):
+                continue
         try:
             p = gates.calibrated_desk(pricing.price(snapshot, market, side, float(line), int(odds), candidate.get('athleteId')), candidate, ctx)
         except (ValueError, KeyError):
