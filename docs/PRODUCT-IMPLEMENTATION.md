@@ -834,3 +834,19 @@ The next batch addresses rule conflicts, the anchored precheck clock, lock-wait 
 pace, owner-ticket community routing, requote mentions and the ten-second Today. It has passed local
 tests/build/record/guard/rehearsal and local phone/desktop browser checks, but is **not shipped** until a
 quiet-window locked deploy, hosted success and fresh live checks are recorded.
+
+## October 7 footer override and TNF Early Look preparation — not live
+
+The owner removed the website-footer helpline and its Responsible gaming link. The entertainment-only,
+21+, posted-price grading, Eastern-time and Cloudflare disclosures remain. The More › Responsible gaming
+page remains reachable under the owner's latest direct wording; paid referral posts need separate legal
+review rather than an assumed informational-site exception. The static footer test passes, but no live
+footer change is claimed before a successful locked release and live width checks.
+
+The owner also approved a Wednesday 7 PM TNF Early Look within the existing research category, counted
+against Thursday's research slot. A stored-data selector now requires two to four positive-value, calibrated,
+fresh main lines at public books, after the role/price sanity holds. It adds no odds requests. Kitchen Ticket
+list and spotlight previews use real October 7 stored TB–DAL prices and ESPN photos; those quotes are too old
+for the 7 PM post and the previews are local-only in `work/tnf-early-review/`. The scheduler switch remains
+off pending Claude's first-real-render review and a gated release before a later Wednesday. No TNF Early
+Look was queued or published October 7.

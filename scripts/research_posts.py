@@ -426,6 +426,17 @@ def at(day, hm):
 
 def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES):
     data = load(data_path, {'games': []})
+    import tnf_early_look
+    if tnf_early_look.ENABLED:
+        early = tnf_early_look.select(data, load_lines(lines_path), now)
+        if early:
+            caption = tnf_early_look.caption(early)
+            if caption:
+                return {'key': early['key'], 'kind': 'research',
+                        'card': f"tnf-early-look-{early['researchDay'].isoformat()}",
+                        'text': caption, 'due': early['due'].astimezone(timezone.utc),
+                        'stale': early['stale'].astimezone(timezone.utc),
+                        'countsFor': early['researchDay']}
     cards = data.get('games') or []
     choice = select(data, details_for(cards, detail_root), now,
                     load_lines(lines_path), teams_for(cards))
@@ -499,11 +510,21 @@ def legacy_svg(choice, art=None):
 
 def render_due(now, folder, data_path=TODAY, detail_root=DETAILS, lines_path=LINES, fetch=None, log=print):
     data = load(data_path, {'games': []})
+    import tnf_early_look
+    early_cards = {}
+    if tnf_early_look.ENABLED:
+        early = tnf_early_look.select(data, load_lines(lines_path), now)
+        if early:
+            try:
+                path = tnf_early_look.render(early, folder, fetch=fetch)
+                early_cards[path.stem] = path
+            except Exception as error:
+                log(f"TNF Early Look card not drawn: {error}")
     cards = data.get('games') or []
     choice = select(data, details_for(cards, detail_root), now,
                     load_lines(lines_path), teams_for(cards))
     if not choice:
-        return {}
+        return early_cards
     fetch = fetch or pick_card.fetch_data_uri
     games = {g['id']: g for g in data.get('games') or []}
     images = {i: art_for(row, games.get(row['gameId']) or {}, fetch) for i, row in enumerate(choice['rows'])}
@@ -512,5 +533,5 @@ def render_due(now, folder, data_path=TODAY, detail_root=DETAILS, lines_path=LIN
         pick_card.render(svg(choice, images), path)
     except Exception as error:
         log(f"research card {choice['key']} not drawn: {error}")
-        return {}
-    return {choice['key']: path}
+        return early_cards
+    return {**early_cards, choice['key']: path}

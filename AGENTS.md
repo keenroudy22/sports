@@ -204,6 +204,16 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Footer and TNF Early Look (owner, 2026-10-07):** the website footer has no gambling helpline or
+  Responsible gaming link. Keep its entertainment-only/21+, posted-price grading, Eastern-times and
+  Cloudflare lines; the More › Responsible gaming page remains available. This explicitly supersedes the
+  older site-helpline instruction below and the 1-800-MY-RESET plan text. Card footers also have no
+  helpline. A future paid sportsbook-referral post needs separate legal review, not an assumed exception.
+  Wednesday at 7 PM Eastern, a TNF Early Look may use the existing research category: at most four
+  fresh main lines for Thursday's NFL game, ranked by calibrated value at public books. Apply the
+  price- and role-sanity holds, omit @Playbook, and skip if fewer than two rows qualify. It counts as
+  Thursday's one research post; do not add a second Thursday research post. No Friday/Saturday
+  extension is approved. Do not publish its new cards before reviewed real renders and normal gates.
 - **Which rule wins (2026-10-07; owner-delegated to Claude):** This block supersedes conflicting older lines here
   and in `docs/`. Keep the undecided owner choices gated.
   1. Captions use `I have it at 47.`, `🍳 Hot Plate (POTD): ` and `🎰 +ODDS Chef's Special: `; Climb ends

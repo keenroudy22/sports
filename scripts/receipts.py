@@ -593,7 +593,10 @@ def house_posts(first, latest, games, log_book, now):
     out += cashed(first, latest, games, log_book, now)
     import research_posts
     research = research_posts.post(games, now)  # one stale-safe editorial research card at most
-    research_already = research_posts.already_posted(log_book, eastern_date(now))
+    # The Wednesday-night TNF preview consumes Thursday's research slot, not
+    # Wednesday's ordinary slate research slot.
+    research_already = research_posts.already_posted(log_book, research.get('countsFor', eastern_date(now))
+                                                     if research else eastern_date(now))
     if research and research['stale'] > now and not research_already:
         out.append(research)
     import sports_posts
