@@ -414,15 +414,16 @@ missing when neither component was recorded, so the page does not turn absent da
   freshness and exact-line best price. Picks carry frozen fair price, quote age, record-at-publication and bounded
   structured reasons/cautions. Game totals are typed as totals. Unnamed books do not reach public line rows and the
   public display uses theScore Bet; internal capture and shopping logic retains its source name.
-- `today.json` keeps open picks and 72 hours of results; `record.json` holds all 91 official publications. Trends
+- `today.json` keeps open picks and 72 hours of results; `record.json` holds the complete official history. Trends
   are dated NFL/CFB priced and milestone shards with histories and player context stored once. The CFB defense table
   is separate from team metadata. The unchanged record auditor reads the full split record through its command-line
   input. Narrow guard entries and hosted payload budgets cover each new public family.
 - The RSS title is now Kook'n. It rolls 30 days with original pick GUIDs and daily receipt GUIDs; Buffer still uses
   `postable()` directly, so the archival feed changes no X category, slot or frequency.
-- Release-candidate gates: 890 Python tests (2 skipped), 130 frontend tests under both Node runtimes, 91 reconciled
-  picks, 509 guarded public files, and an isolated slot-2100 rehearsal with zero outside writes/private reads.
-  Browser QA covered 126 responsive pages across 320/375/390/430/768/1280/1440, 54 pages at 1.3x text, and 16
+- Release-candidate gates: 891 Python tests (2 skipped), 130 frontend tests under both Node runtimes, 91 reconciled
+  committed-snapshot picks (the 9:00 PM source store then advanced to 92 for the hosted refresh), 509 guarded public
+  files, and an isolated slot-2100 rehearsal with zero outside writes/private reads. Browser QA covered 126 responsive
+  pages across 320/375/390/430/768/1280/1440, 54 pages at 1.3x text, and 16
   deep-link pages at 375/1440; all had zero overflow, clipping, load failure or browser errors.
 
 ## External and elapsed-time gates
