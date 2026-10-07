@@ -492,6 +492,25 @@ missing when neither component was recorded, so the page does not turn absent da
   Local and live audits each covered the repaired routes at 375 and 1440 px with no overflow, clipping, load
   failure or console error. No tracked schema, record, social-delivery or felt-cutover setting changed.
 
+### Weekend payload-resilience receipt
+
+- Revisions `81b598e1` and `88f9c065` shipped in [publish run 37576340750](https://github.com/keenroudy22/sports/actions/runs/37576340750)
+  on October 7. The first attempt, run 37576121536, stopped safely in the publication-rule check before card
+  rendering or deployment; the follow-up restored the intentional pre-build empty-line fallback while keeping
+  candidate and parlay loading strict.
+- `lines.json` is now a 138-byte manifest for complete NFL and CFB shards. The verified live build contains 520
+  rows (259 NFL and 261 CFB), zero `displayBook` fields and canonical `ESPN BET` provider rows. The browser maps
+  presentation names without changing the source book used by jurisdiction, pricing, run or parlay logic.
+- Historical replay measured the October 3 4:00 PM ET catalog at 972,440 bytes across shards versus the former
+  1,068,624-byte monolith, and October 4 12:48 PM ET at 873,875 versus 970,119 bytes. Each individual league shard
+  stayed below 786,432 bytes. Oversized data is now a private health warning, while the reviewed initial shell
+  remains the only hard payload gate; cards and deployment cannot be stalled by a large slate.
+- Secondary routes load through `app-more.js`; the initial shell is 80,577 gzip bytes. The release passed 928
+  Python tests (2 skipped), 141 frontend tests and 23 prototype tests under both Node runtimes, a 447-page build,
+  the 92-pick record audit, public guard and isolated slot-2330 rehearsal. Live checks covered 38 route/viewport
+  combinations at 375 and 1440 px with no overflow, load failure or console error. The live site serves app 122.
+  Records, play selection, social delivery and the unset felt-card cutover did not change.
+
 ### Rollback boundary after C4
 
 - `8eda349533167f202fbcfa0a0bda4e6c390c58f1` is the pre-redesign reference, but it is no longer a safe
