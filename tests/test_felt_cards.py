@@ -1,3 +1,4 @@
+import base64
 import copy
 import html
 import json
@@ -6,6 +7,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
@@ -14,6 +16,39 @@ from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
+
+PHOTO_URI = ('data:image/png;base64,'
+             + base64.b64encode((ROOT / 'site' / 'kookn-chef.png').read_bytes()).decode('ascii'))
+
+
+def chrome_dump(page, profile, timeout=20):
+    """Return dump-dom output even when macOS Chrome stays alive afterward."""
+    output_path = page.with_suffix('.dom.html')
+    with output_path.open('w', encoding='utf-8') as output:
+        process = subprocess.Popen(
+            [pick_card.chrome_path(), '--headless', '--disable-gpu', '--no-sandbox',
+             '--disable-extensions', '--no-first-run', '--virtual-time-budget=3000',
+             f'--user-data-dir={profile}', '--dump-dom', page.as_uri()],
+            stdout=output, stderr=subprocess.DEVNULL, text=True)
+        deadline, last_size, stable = time.time() + timeout, -1, 0
+        try:
+            while time.time() < deadline:
+                output.flush()
+                size = output_path.stat().st_size if output_path.exists() else -1
+                stable = stable + 1 if size > 0 and size == last_size else 0
+                last_size = size
+                if process.poll() is not None or stable >= 3:
+                    break
+                time.sleep(.25)
+        finally:
+            if process.poll() is None:
+                process.terminate()
+                try:
+                    process.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    process.wait(timeout=5)
+    return output_path.read_text(encoding='utf-8')
 
 import felt_cards
 import pick_card
@@ -184,15 +219,23 @@ class FeltCardTests(unittest.TestCase):
             cards.append(pick_card.modern_svg(
                 dict(PICK, id='CFB-long-player', title=title, displayTitle=title,
                      marketType='receiving_yards', direction='over', athleteId='long-player', player=player),
-                GAME, record={'wins': 35, 'losses': 35},
-                art={'kind': 'photo', 'uri': 'data:image/png;base64,AA'}))
-            passer = 'Christopher Brooks-Washington'
-            pass_title = f'{passer} over 249.5 passing yards'
+                game, record={'wins': 35, 'losses': 35},
+                art={'kind': 'photo', 'uri': PHOTO_URI}))
+            passer = 'Jaron-Keawe Sagapolutele'
+            pass_title = f'{passer} under 249.5 passing yards'
             cards.append(pick_card.modern_svg(
                 dict(PICK, id='CFB-long-passer', title=pass_title, displayTitle=pass_title,
-                     marketType='passing_yards', direction='over', athleteId='long-passer', player=passer),
-                GAME, record={'wins': 35, 'losses': 35},
-                art={'kind': 'photo', 'uri': 'data:image/png;base64,AA'}))
+                     marketType='passing_yards', direction='under', athleteId='long-passer', player=passer),
+                game, record={'wins': 35, 'losses': 35},
+                art={'kind': 'photo', 'uri': PHOTO_URI}))
+            receiver = 'Kamaehu Kopa-Kaawalauole'
+            long_title = f'{receiver} under 249.5 passing attempts'
+            cards.append(pick_card.modern_svg(
+                dict(PICK, id='CFB-two-line-ticket', title=long_title, displayTitle=long_title,
+                     marketType='passing_attempts', direction='under', athleteId='long-receiver',
+                     player=receiver),
+                game, record={'wins': 35, 'losses': 35},
+                art={'kind': 'photo', 'uri': PHOTO_URI}))
 
         with tempfile.TemporaryDirectory() as folder:
             page = Path(folder) / 'measure.html'
@@ -218,15 +261,11 @@ document.fonts.ready.then(() => {
 </script>"""
             page.write_text('<!doctype html><meta charset="utf-8"><body>'
                             + ''.join(cards) + script + '</body>', encoding='utf-8')
-            result = subprocess.run(
-                [pick_card.chrome_path(), '--headless', '--disable-gpu', '--no-sandbox',
-                 '--disable-extensions', '--no-first-run', '--virtual-time-budget=3000',
-                 '--dump-dom', page.as_uri()], capture_output=True, text=True,
-                timeout=20, check=True)
-        match = re.search(r'<body data-measured="1">(.*?)</body>', result.stdout, re.S)
-        self.assertIsNotNone(match, result.stdout[-500:])
+            dom = chrome_dump(page, Path(folder) / 'chrome-profile')
+        match = re.search(r'<body data-measured="1">(.*?)</body>', dom, re.S)
+        self.assertIsNotNone(match, dom[-500:])
         measured = json.loads(html.unescape(match.group(1)))
-        self.assertEqual(len(measured), 5)
+        self.assertEqual(len(measured), 6)
         for card in measured:
             self.assertTrue(card['subject'], card)
             self.assertTrue(card['selection'], card)
@@ -234,12 +273,14 @@ document.fonts.ready.then(() => {
             self.assertIsNotNone(card['ticket'], card)
             for row in card['subject'] + card['selection'] + [card['season']]:
                 self.assertLessEqual(row['right'], 1016, row)
-            self.assertGreaterEqual(card['season']['top'], card['ticket']['bottom'], card)
+            self.assertGreaterEqual(card['season']['top'], card['ticket']['bottom'] + 12, card)
         for card in measured:
             if card['photo']:
                 self.assertLessEqual(card['subject'][0]['right'], 830, card)
-        self.assertEqual(len(measured[-1]['selection']), 1,
-                         'OVER 249.5 PASS YDS should not orphan YDS on a second line')
+        self.assertEqual(len(measured[-2]['selection']), 1,
+                         'UNDER 249.5 PASS YDS should fit one line before wrapping')
+        self.assertEqual(len(measured[-1]['selection']), 2,
+                         'the strip clearance must also cover a genuinely two-line selection')
 
     def test_last_climb_checkpoint_moves_now_and_again_clear_of_the_goal_flag(self):
         open_rung = {'id': 'near-goal', 'parlayType': 'ladder', 'odds': -110, 'book': 'FanDuel',
@@ -479,7 +520,7 @@ document.fonts.ready.then(() => {
                          [node.text for node in cautions])
 
     def test_single_row_research_keeps_full_title_caution_and_fits_defense(self):
-        title = "Marvin Harrison Jr. over 64.5 receiving yards"
+        title = 'Khijohnn Cummings-Coleman over 64.5 receiving yards'
         detail = 'GAME-SCRIPT CAUTION · projected to lose by 18 points'
         defense = {'rank': 134, 'of': 134, 'pos': 'WR', 'stat': 'pass attempts',
                    'value': 47.2, 'supports': True}
@@ -489,7 +530,7 @@ document.fonts.ready.then(() => {
                             'statLabel': 'pass attempts', 'matchup': defense,
                             'matchupLabel': 'ARIZONA at SOUTHERN MISSISSIPPI'}]}
         with self.felt():
-            card = research_art.svg(choice)
+            card = research_art.svg(choice, {0: PHOTO_URI})
         self.valid(card)
         for word in title.split():
             self.assertIn(word, card)
@@ -504,6 +545,33 @@ document.fonts.ready.then(() => {
         title_nodes = root.findall(".//s:g[@data-zone='research-title']/s:text", namespace)
         self.assertLessEqual(len(title_nodes), 3)
         self.assertEqual(' '.join(node.text for node in title_nodes), title)
+        self.assertIn('data-zone="research-photo"', card)
+
+        with tempfile.TemporaryDirectory() as folder:
+            page = Path(folder) / 'measure-research.html'
+            page.write_text('''<!doctype html><meta charset="utf-8"><body>''' + card + '''
+<script>
+document.fonts.ready.then(() => {
+  const ring = document.querySelector('[data-zone="research-photo"] circle:last-child').getBBox();
+  const title = [...document.querySelectorAll('[data-zone="research-title"] text')].map((node) => {
+    const box = node.getBBox();
+    return {text: node.textContent, left: box.x, top: box.y,
+            right: box.x + box.width, bottom: box.y + box.height};
+  });
+  document.body.textContent = JSON.stringify({ring: {left: ring.x, top: ring.y,
+    right: ring.x + ring.width, bottom: ring.y + ring.height}, title});
+  document.body.dataset.measured = '1';
+});
+</script></body>''', encoding='utf-8')
+            dom = chrome_dump(page, Path(folder) / 'chrome-profile')
+        match = re.search(r'<body data-measured="1">(.*?)</body>', dom, re.S)
+        self.assertIsNotNone(match, dom[-500:])
+        measured = json.loads(html.unescape(match.group(1)))
+        for row in measured['title']:
+            vertically_overlaps = (row['top'] < measured['ring']['bottom']
+                                   and row['bottom'] > measured['ring']['top'])
+            if vertically_overlaps:
+                self.assertLessEqual(row['right'], measured['ring']['left'] - 10, measured)
 
     def test_season_board_gives_exact_lines_a_readable_full_width_row(self):
         rows = [{'title': name, 'price': line, 'metric': '3/3 this season',

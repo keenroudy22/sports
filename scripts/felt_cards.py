@@ -152,7 +152,8 @@ def wrap(text, size, width, family_ratio=0.46):
     return lines + ([line] if line else [])
 
 
-def wrap_fit(text, maximum, width, max_lines=3, minimum=36, family_ratio=.4):
+def wrap_fit(text, maximum, width, max_lines=3, minimum=36, family_ratio=.4,
+             single_line_minimum=None, single_line_ratio=None):
     """Wrap every word at the largest useful display size.
 
     Barlow Condensed is materially narrower than the generic fallback estimate
@@ -163,6 +164,18 @@ def wrap_fit(text, maximum, width, max_lines=3, minimum=36, family_ratio=.4):
     value = str(text or '').strip()
     if not value:
         return [], float(maximum)
+    if single_line_minimum is not None:
+        # Wager lines read faster when they stay intact.  Give a slightly
+        # smaller one-line treatment a chance before accepting a large,
+        # awkward two-line split such as ``UNDER 249.5 PASS / YDS``.
+        one_line_floor = max(float(minimum), float(single_line_minimum))
+        one_line_ratio = float(single_line_ratio or family_ratio)
+        size = float(maximum)
+        while size >= one_line_floor:
+            lines = wrap(value, size, width, one_line_ratio)
+            if len(lines) == 1:
+                return lines, size
+            size -= 2
     preferred_lines = min(2, max_lines)
     for wanted_lines in (preferred_lines, max_lines):
         size = float(maximum)
@@ -258,7 +271,9 @@ def play_card(pick, game=None, record=None, featured=False, art=None):
         y += 32
     selection_lines, selection_size = wrap_fit(keep_spread_with_team(selection), 120, W - 128,
                                                max_lines=3, minimum=60,
-                                               family_ratio=.40)
+                                               family_ratio=.40,
+                                               single_line_minimum=108,
+                                               single_line_ratio=.41)
     body += '<g data-zone="play-selection">'
     for line in selection_lines:
         body += t(64, y, line, f'{selection_size:.1f}', KOOKD, DISPLAY, 700)
@@ -288,8 +303,12 @@ def play_card(pick, game=None, record=None, featured=False, art=None):
     else:
         body += t(104, top + 170, str(pick.get('_number') or ''), 42, TICKET_INK, BODY, 600)
     if record:
+        # Barlow Condensed's 40 px caps rise roughly 40 px above the baseline.
+        # A 54 px baseline offset leaves a measured 14 px air gap after the
+        # ticket even in the two-line-name + two-line-selection stress case.
+        season_y = max(min(1170, top + 440), top + ticket_h + 54)
         body += ('<g data-zone="season-strip">'
-                 + t(64, min(1170, top + 440), f"SEASON {record}  ·  EVERY PLAY GRADED",
+                 + t(64, season_y, f"SEASON {record}  ·  EVERY PLAY GRADED",
                      40, CHALK, DISPLAY, 700, spacing=1.5)
                  + '</g>')
     return frame('Pick of the day' if featured else 'Best bet', body)
@@ -815,13 +834,13 @@ def research_choice_card(choice, art=None):
     body = t(64, 225, str(choice.get('title') or 'RESEARCH').upper(), 58, CHALK, DISPLAY, 700)
     hero = next((uri for uri in art.values() if uri), None)
     if hero and len(rows) == 1:
-        body += photo(900, 238, 82, hero)
+        body += '<g data-zone="research-photo">' + photo(900, 238, 82, hero) + '</g>'
     top = 300
     row_h = 360 if len(rows) == 1 else min(250, 760 / max(1, len(rows)))
     for index, row in enumerate(rows):
         if len(rows) == 1:
             title = str(row.get('title') or '')
-            title_lines, title_size = wrap_fit(title, 76, 760 if hero else W - 192,
+            title_lines, title_size = wrap_fit(title, 76, 700 if hero else W - 192,
                                                max_lines=3, minimum=46)
             y = top
             body += '<g data-zone="research-title">'

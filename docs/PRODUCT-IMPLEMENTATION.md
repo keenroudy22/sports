@@ -662,6 +662,20 @@ what was claimed at the time.
   92-pick record audit, 507-file publication guard and isolated slot-2330 rehearsal. `FELT_FROM` remains unset;
   legacy cards remain live until the owner approves the complete set.
 
+### C5 round-ten review candidate
+
+- Prop selections try a measured single-line treatment down to 108 pixels before accepting a two-line split, so
+  common wording such as `UNDER 249.5 PASS YDS` stays intact without changing the fallback ratio used by other
+  selections. When a genuinely long selection still needs two lines, the season strip now follows the ticket and
+  retains at least 12 measured pixels of clearance.
+- Single-row research cards reserve the portrait lane for long player names. Browser fixtures use real-size image
+  data and the real Jaron-Keawe Sagapolutele, Kamaehu Kopa-Kaawalauole and Khijohnn Cummings-Coleman names to
+  measure the subject, selection, ticket, season strip and portrait ring with the embedded production fonts.
+- All 19 owner-facing PNGs were refreshed in `card-review-2026-10-06`. Verification passed 949 Python tests (2
+  skipped), 143 frontend tests in both Node invocations and clean export, a 447-page build, warning-only size
+  budget, 92-pick record audit, 507-file publication guard and isolated slot-2330 rehearsal with no outside writes
+  or private reads. `FELT_FROM` remains unset; legacy cards remain live until the owner approves the complete set.
+
 ### C6 first live shadow receipt
 
 - The October 6 11:30 PM desk run completed normally with no forced publication and wrote exactly eight private
