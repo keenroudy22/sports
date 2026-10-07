@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-07T16:16:37Z",
+  "updatedAt": "2026-10-07T16:28:30Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-10-07T16:01Z",
+              "reportedAt": "2026-10-07T16:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-07T16:01Z",
+              "reportedAt": "2026-10-07T16:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1617,6 +1617,15 @@
           "name": "Cleveland Browns",
           "players": [
             {
+              "id": "4873232",
+              "name": "Mason Graham",
+              "position": "DT",
+              "status": "Doubtful",
+              "injury": "Knee - MCL",
+              "reportedAt": "2026-10-07T16:12Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4873232/mason-graham"
+            },
+            {
               "id": "4243541",
               "name": "Kalia Davis",
               "position": "DT",
@@ -1750,15 +1759,6 @@
               "injury": null,
               "reportedAt": "2026-10-02T22:16Z",
               "source": "https://www.espn.com/nfl/player/_/id/4722893/jaleel-mclaughlin"
-            },
-            {
-              "id": "4873232",
-              "name": "Mason Graham",
-              "position": "DT",
-              "status": "Questionable",
-              "injury": "Knee",
-              "reportedAt": "2026-10-02T19:22Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4873232/mason-graham"
             },
             {
               "id": "4870653",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "13",
-          "name": "Jackson Powers-Johnson",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-06T20:01:41Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4875295/jackson-powers-johnson"
-        },
-        {
           "teamId": "24",
           "name": "Brenen Thompson",
           "from": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-07T16:16:37Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "5",
+          "name": "Mason Graham",
+          "from": "Questionable",
+          "to": "Doubtful",
+          "observedAt": "2026-10-07T16:28:30Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4873232/mason-graham"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-07T16:16:37Z",
-      "lastAttemptAt": "2026-10-07T16:16:37Z",
+      "checkedAt": "2026-10-07T16:28:30Z",
+      "lastAttemptAt": "2026-10-07T16:28:30Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-07T16:16:37Z",
-      "lastAttemptAt": "2026-10-07T16:16:37Z",
+      "checkedAt": "2026-10-07T16:28:30Z",
+      "lastAttemptAt": "2026-10-07T16:28:30Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
