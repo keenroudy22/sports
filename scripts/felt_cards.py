@@ -150,6 +150,33 @@ def wrap(text, size, width, family_ratio=0.46):
     return lines + ([line] if line else [])
 
 
+def wrap_fit(text, maximum, width, max_lines=3, minimum=36, family_ratio=.4):
+    """Wrap every word at the largest useful display size.
+
+    Barlow Condensed is materially narrower than the generic fallback estimate
+    used by :func:`fit_size`.  Trying the embedded font's conservative ratio at
+    successively smaller sizes keeps full wager wording on the card without the
+    former ``[:2]`` data loss.
+    """
+    value = str(text or '').strip()
+    if not value:
+        return [], float(maximum)
+    preferred_lines = min(2, max_lines)
+    for wanted_lines in (preferred_lines, max_lines):
+        size = float(maximum)
+        while size >= minimum:
+            lines = wrap(value, size, width, family_ratio)
+            if len(lines) <= wanted_lines:
+                return lines, size
+            size -= 2
+    size = float(minimum)
+    lines = wrap(value, size, width, family_ratio)
+    while len(lines) > max_lines and size > 18:
+        size -= 1
+        lines = wrap(value, size, width, family_ratio)
+    return lines, size
+
+
 def meter(x, y, w, chance, needs, on_paper=True):
     track = '#D5E2DA' if on_paper else LINE
     tick = TICKET_INK if on_paper else CHALK
@@ -292,10 +319,18 @@ def receipt_tracked_summary(rows):
         voids = sum(row.get('result') == 'void' for row in fun)
         record = f'{wins}–{losses}' + (f'–{pushes}' if pushes else '')
         labels.append(f'FUN TICKETS {record}' + (f' · {voids} VOID' if voids else ''))
-    for row in climb[:1]:
+    previous_run = None
+    for row in climb:
+        title = str(row.get('title') or '')
+        run = re.search(r'\bclimb\s*#?\s*(\d+)\b', title, re.I)
         step = re.search(r'\bstep\s*(\d+)\b', str(row.get('title') or ''), re.I)
         mark_text, _color, _ink = receipt_outcome(row.get('result'), words=False)
-        labels.append(f'CLIMB STEP {step.group(1) if step else ""} {mark_text}'.replace('  ', ' '))
+        run_number = run.group(1) if run else None
+        prefix = '' if run_number and run_number == previous_run else 'CLIMB'
+        if prefix and run_number:
+            prefix += f' #{run_number}'
+        labels.append(f'{prefix} STEP {step.group(1) if step else ""} {mark_text}'.strip().replace('  ', ' '))
+        previous_run = run_number
     return ' · '.join(labels)
 
 
@@ -431,9 +466,12 @@ def research_card(row):
 
 def sheet_row_geometry(card_h, caution=False):
     """Return non-overlapping baselines for both compact and roomy projection tiles."""
-    if card_h < 132:
-        return {'spread': 82, 'total': 103, 'caution': 62 if caution else None,
-                'cautionSize': 13}
+    if card_h < 122:
+        return {'spread': 79, 'total': 100, 'caution': 58 if caution else None,
+                'cautionSize': 14}
+    if card_h < 180:
+        return {'spread': 101, 'total': 132, 'caution': 70 if caution else None,
+                'cautionSize': 16}
     return {'spread': 88, 'total': 128, 'caution': 168 if caution else None,
             'cautionSize': 18}
 
@@ -443,7 +481,8 @@ def projection_sheet(games, league, day, week=None, logos=None, watches=None):
     logos, watches = logos or {}, watches or {}
     title = f"WEEK {week} {'COLLEGE' if league == 'CFB' else league} PROJECTIONS" if week else f"{'COLLEGE' if league == 'CFB' else league} PROJECTIONS"
     rows = max(1, (len(games) + 1) // 2)
-    top, bottom, gap = 250, 1198, 12
+    top, bottom = 250, 1198
+    gap = 4 if rows >= 7 else 12
     pitch = (bottom - top) / rows
     card_h = pitch - gap
     card_w = 466
@@ -521,7 +560,7 @@ def projection_sheet(games, league, day, week=None, logos=None, watches=None):
         if watch and watch[1] == 'total':
             total_line = f'LIKE #{watch[0]}  {watch[2]} {odds(watch[3].get("odds"))} {public_book(watch[3].get("book"))}'
         if caution:
-            caution_text = (f'{caution:g}-PT GAP · CAUTION' if card_h < 132 else
+            caution_text = (f'{caution:g}-PT GAP · CAUTION' if card_h < 122 else
                             f'{caution:g}-PT COLLEGE GAP · CAUTION')
             body += (f'<g data-zone="college-gap-caution">'
                      + fit_t(x + card_w - 18, y + geometry['caution'], caution_text,
@@ -610,7 +649,7 @@ def climb_result_card(pick):
     complete = result == 'win' and total >= goal
     tone, verdict, ink = ((KOOKD, 'CLIMB COMPLETE' if complete else '✓ HIT', KOOKD_INK) if result == 'win' else
                            (BURNT, '✗ MISS', TICKET_INK) if result == 'loss' else
-                           (TICKET_RULE, '– PUSH', TICKET_INK))
+                           (TICKET_RULE, '– VOID' if result == 'void' else '– PUSH', TICKET_INK))
     this_climb = info.get('bankedAfter', info.get('banked', 0)) if result == 'win' else info.get('banked', 0)
     all_banked = int(pick.get('_allClimbsBanked') if pick.get('_allClimbsBanked') is not None else this_climb or 0)
     body = t(64, 240, f"CLIMB #{info.get('run', 1)} · STEP {info.get('step', 1)}", 56, DIM, DISPLAY, 700, spacing=2)
@@ -626,6 +665,9 @@ def climb_result_card(pick):
     elif result == 'win':
         body += fit_t(W - 100, 390, f'STEP {int(info.get("step") or 1) + 1} · {dollars(next_stake)} RIDES',
                       40, 410, ink, DISPLAY, 700, 'end', minimum=28)
+    elif result in ('push', 'void'):
+        body += fit_t(W - 100, 390, f'STEP {int(info.get("step") or 1)} AGAIN · {dollars(stake)} RIDES',
+                      40, 420, ink, DISPLAY, 700, 'end', minimum=27)
     leg_results = []
     actual = str(pick.get('actual') or '')
     match = re.search(r'\blegs:\s*([^;]+)', actual, re.I)
@@ -650,7 +692,9 @@ def climb_result_card(pick):
         progress = int(info.get('start') or 50)
     else:
         progress = int(info.get('banked') or 0) + int(stake or 0)
-    body += climb_path(max(50, progress), 926, 'NEXT' if result == 'loss' else 'DONE' if complete else 'NOW')
+    path_label = ('NEXT' if result == 'loss' else 'DONE' if complete else
+                  'AGAIN' if result in ('push', 'void') else 'NOW')
+    body += climb_path(max(50, progress), 926, path_label)
     body += t(64, 1096, f'THIS CLIMB  ${int(this_climb or 0)} BANKED', 36, CHALK, DISPLAY, 700, spacing=1)
     body += t(64, 1148, f'ALL CLIMBS  ${all_banked} BANKED  ·  EVERY STEP STAYS PUBLIC', 34, KOOKD, DISPLAY, 700, spacing=.8)
     return frame('Climb result', body, chip_color=tone, chip_ink=ink)
@@ -669,14 +713,18 @@ def research_choice_card(choice, art=None):
     for index, row in enumerate(rows):
         if len(rows) == 1:
             title = str(row.get('title') or '')
-            title_lines = wrap(title, 76, 760 if hero else W - 192, .53)[:2]
+            title_lines, title_size = wrap_fit(title, 76, 760 if hero else W - 192,
+                                               max_lines=3, minimum=46)
             y = top
+            body += '<g data-zone="research-title">'
             for line_index, line in enumerate(title_lines):
-                body += t(64, y + line_index * 82, line, 76, CHALK, DISPLAY, 700)
-            y += max(1, len(title_lines)) * 82 + 18
+                body += t(64, y + line_index * (title_size + 6), line, f'{title_size:.1f}',
+                          CHALK, DISPLAY, 700)
+            body += '</g>'
+            y += max(1, len(title_lines)) * (title_size + 6) + 18
             price = str(row.get('price') or '')
             if price:
-                body += t(64, y, price, 56, CHALK, DISPLAY, 700)
+                body += fit_t(64, y, price, 56, W - 128, CHALK, DISPLAY, 700, minimum=36)
                 y += 82
             hits, games = row.get('hits'), row.get('games')
             selection = re.search(r'\b(over|under)\s+([0-9.]+)', title, re.I)
@@ -684,8 +732,7 @@ def research_choice_card(choice, art=None):
                 proof = f'{selection.group(1).title()} {selection.group(2)} in {hits} of his last {games} games'
             else:
                 proof = str(row.get('metric') or '')
-            body += f'<rect x="64" y="{y - 48}" width="{W - 128}" height="238" rx="24" fill="{FELT_RAISED}" stroke="{LINE}"/>'
-            body += t(96, y + 20, proof, 44, CHALK, BODY, 750)
+            raw_detail = str(row.get('detail') or '').strip()
             matchup = row.get('matchup') or {}
             if isinstance(matchup.get('rank'), int) and isinstance(matchup.get('of'), int):
                 rank = int(matchup['rank'])
@@ -697,8 +744,32 @@ def research_choice_card(choice, art=None):
                            if isinstance(allowed, (int, float)) else
                            f"{row.get('opponentAbbr') or 'Opponent'}: {rank}{suffix} of {matchup['of']} vs {matchup.get('pos') or 'position'}s")
             else:
-                defense = str(row.get('detail') or '')
-            body += t(96, y + 88, defense, 36, DIM, BODY, 650)
+                defense = raw_detail
+            extra_detail = ''
+            if isinstance(matchup.get('rank'), int) and isinstance(matchup.get('of'), int):
+                if row.get('scriptRisk'):
+                    caution = raw_detail.rsplit(' · ', 1)[-1] if raw_detail else ''
+                    extra_detail = f'GAME-SCRIPT CAUTION · {caution}' if caution else 'GAME-SCRIPT CAUTION'
+                elif 'caution' in raw_detail.lower():
+                    extra_detail = raw_detail
+            defense_lines, defense_size = wrap_fit(defense, 36, W - 192,
+                                                   max_lines=2, minimum=24,
+                                                   family_ratio=.54)
+            extra_height = 38 if extra_detail else 0
+            panel_h = 238 + max(0, len(defense_lines) - 1) * 40 + extra_height
+            body += f'<rect x="64" y="{y - 48}" width="{W - 128}" height="{panel_h}" rx="24" fill="{FELT_RAISED}" stroke="{LINE}"/>'
+            body += fit_t(96, y + 20, proof, 44, W - 192, CHALK, BODY, 750, minimum=28)
+            body += '<g data-zone="research-defense">'
+            for line_index, line in enumerate(defense_lines):
+                body += t(96, y + 86 + line_index * 40, line, f'{defense_size:.1f}', DIM, BODY, 650)
+            body += '</g>'
+            context_y = y + 86 + max(1, len(defense_lines)) * 40
+            if extra_detail:
+                body += (f'<g data-zone="research-detail">'
+                         + fit_t(96, context_y, extra_detail, 31, W - 192,
+                                 BURNT_TEXT if 'caution' in extra_detail.lower() else DIM,
+                                 BODY, 700, minimum=22)
+                         + '</g>')
             timing = str(row.get('matchupLabel') or '').upper()
             try:
                 local = datetime.fromisoformat(str(row.get('kickoff')).replace('Z', '+00:00')).astimezone(
@@ -707,12 +778,19 @@ def research_choice_card(choice, art=None):
             except (TypeError, ValueError):
                 pass
             if timing:
-                body += t(96, y + 154, timing, 31, KOOKD, BODY, 700)
+                timing_y = context_y + (48 if extra_detail else 28)
+                body += fit_t(96, timing_y, timing, 31,
+                              W - 192, KOOKD, BODY, 700, minimum=24)
             if isinstance(hits, int) and isinstance(games, int) and games > 0:
-                bar_x, bar_y, bar_w = 64, y + 232, W - 128
+                bar_x, bar_y, bar_w = 64, y + panel_h - 6, W - 128
                 body += f'<rect x="{bar_x}" y="{bar_y}" width="{bar_w}" height="22" rx="11" fill="{LINE}"/>'
                 body += f'<rect x="{bar_x}" y="{bar_y}" width="{bar_w * hits / games:.1f}" height="22" rx="11" fill="{KOOKD}"/>'
                 body += t(64, bar_y + 68, f'{hits} HIT  ·  {games - hits} MISSED', 30, DIM, BODY, 700, spacing=.7)
+                season_hits = row.get('seasonHits')
+                season_games = row.get('seasonGames')
+                if isinstance(season_hits, int) and isinstance(season_games, int) and season_games > 0:
+                    body += t(W - 64, bar_y + 68, f'{season_hits} of {season_games} this season',
+                              30, CHALK, BODY, 750, 'end')
             values = [value for value in (row.get('historyValues') or [])[-10:] if isinstance(value, (int, float))]
             line_match = re.search(r'\b(?:over|under)\s+([0-9.]+)', title, re.I)
             if values and line_match:
@@ -721,7 +799,7 @@ def research_choice_card(choice, art=None):
                 # Keep the game-by-game proof visually separate from the aggregate
                 # hit strip above it; both are useful, but they must scan as two
                 # distinct evidence blocks on a phone.
-                chart_top, chart_base, left, width = 940, 1098, 64, W - 128
+                chart_top, chart_base, left, width = max(940, bar_y + 150), 1120, 64, W - 128
                 high = max(values + [line_value]) * 1.12 or 1
                 bw = width / len(values)
                 body += t(left, chart_top - 28, f'LAST {len(values)} GAMES', 28, DIM, BODY, 800, spacing=1.4)
@@ -733,10 +811,6 @@ def research_choice_card(choice, art=None):
                     body += t(left + game_index * bw + bw / 2, chart_base + 35, f'{value:g}', 23, CHALK, DISPLAY, 700, 'middle')
                 line_y = chart_base - (chart_base - chart_top) * line_value / high
                 body += f'<line x1="{left}" y1="{line_y:.1f}" x2="{left + width}" y2="{line_y:.1f}" stroke="{CHALK}" stroke-width="3" stroke-dasharray="12 10"/>'
-                season_hits = row.get('seasonHits')
-                season_games = row.get('seasonGames')
-                if isinstance(season_hits, int) and isinstance(season_games, int) and season_games > 0:
-                    body += t(left, 1172, f'{season_hits} of {season_games} this season', 38, CHALK, BODY, 750)
             continue
         y = top + index * (row_h + 18)
         body += f'<rect x="64" y="{y:.0f}" width="{W - 128}" height="{row_h:.0f}" rx="22" fill="{FELT_RAISED}" stroke="{LINE}"/>'
@@ -745,6 +819,25 @@ def research_choice_card(choice, art=None):
         price = str(row.get('price') or '')
         metric = str(row.get('metric') or '')
         detail = str(row.get('detail') or '')
+        if choice.get('kind') == 'season' and price:
+            body += (f'<g data-zone="research-title">'
+                     + fit_t(98, y + 46, title, 40, W - 196, CHALK,
+                             DISPLAY, 700, minimum=30)
+                     + '</g>')
+            body += (f'<g data-zone="research-price">'
+                     + fit_t(98, y + 90, price, 38, W - 196, KOOKD,
+                             DISPLAY, 700, minimum=32)
+                     + '</g>')
+            body += (f'<g data-zone="research-metric">'
+                     + fit_t(98, y + 130, metric, 29, W - 196, CHALK,
+                             BODY, 700, minimum=22)
+                     + '</g>')
+            if row_h >= 160:
+                body += (f'<g data-zone="research-detail">'
+                         + fit_t(98, y + 163, detail, 24, W - 196, DIM,
+                                 BODY, 600, minimum=19)
+                         + '</g>')
+            continue
         title_size = 54 if len(rows) == 1 else 42
         title_width = W - 98 - 96 if not price else 600
         body += (f'<g data-zone="research-title">'

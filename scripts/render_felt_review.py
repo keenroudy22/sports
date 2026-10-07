@@ -117,6 +117,11 @@ def render(out):
     climb_win = next(row for row in climb_wins if row.get('actual') == 'all 2 legs won')
     save('climb-result.png', pick_card.ladder_result_svg(dict(
         climb_win, _allClimbsBanked=ladder.saved_through(ctx.first, ctx.latest, climb_win['id']))))
+    climb_loss = max((row for row in record.get('picks') or []
+                      if row.get('parlayType') == 'ladder' and row.get('result') == 'loss'),
+                     key=lambda row: row.get('publishedAt') or '')
+    save('climb-loss.png', pick_card.ladder_result_svg(dict(
+        climb_loss, _allClimbsBanked=ladder.saved_through(ctx.first, ctx.latest, climb_loss['id']))))
     completed = copy.deepcopy(climb_win)
     completed['ladder'].update(step=5, stake=675, payout=850, banked=150,
                                bankThisWin=170, bankedAfter=320, nextStake=680, totalAfter=1000)
@@ -125,14 +130,24 @@ def render(out):
     pushed = copy.deepcopy(climb_win)
     pushed.update(result='push', actual='legs: push, push', _allClimbsBanked=42)
     save('climb-push.png', pick_card.ladder_result_svg(pushed))
+    voided = copy.deepcopy(pushed)
+    voided.update(result='void', actual='legs: void, void')
+    save('climb-void.png', pick_card.ladder_result_svg(voided))
 
     history = receipts.card_history(ctx.first, ctx.latest, ctx.games, now)
-    next_day = eastern_date(now) + timedelta(days=1)
-    weekly = (receipts.week_receipt(next_day, ctx.first, ctx.latest, ctx.games,
-                                    receipts.counted(ctx.first, ctx.latest), now)
-              if next_day.weekday() == receipts.WEEKDAY else None)
-    receipt = weekly or max(history, key=lambda row: (len(row.get('rows') or []), row.get('when') or ''))
+    receipt = max((row for row in history if str(row.get('key') or '').startswith('receipt:day:')),
+                  key=lambda row: (len(row.get('rows') or []), row.get('when') or ''))
     save('receipt.png', pick_card.receipt_svg(receipt))
+    weekly = next((row for row in history
+                   if str(row.get('key') or '').startswith('receipt:week:')), None)
+    if weekly is None:
+        review_day = eastern_date(now)
+        wednesday = review_day + timedelta(days=(receipts.WEEKDAY - review_day.weekday()) % 7)
+        weekly = receipts.week_receipt(wednesday, ctx.first, ctx.latest, ctx.games,
+                                       receipts.counted(ctx.first, ctx.latest), now)
+    if not weekly:
+        raise RuntimeError('the current stored data could not supply the weekly receipt review')
+    save('receipt-weekly.png', pick_card.receipt_svg(weekly))
     six_best = next(row for row in history
                     if sum((len(item) < 4 or item[3] in ('player', 'team')) for item in row.get('rows') or []) >= 6)
     save('receipt-six-best-bets.png', pick_card.receipt_svg(six_best))

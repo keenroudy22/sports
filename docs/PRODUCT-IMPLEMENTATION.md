@@ -598,6 +598,20 @@ missing when neither component was recorded, so the page does not turn absent da
 - `FELT_FROM` remains unset. All changes in this round are inactive renderer and review-fixture changes; legacy
   cards stay live until the owner approves the complete set.
 
+### C5 round-six follow-up review candidate
+
+- Daily receipts now preserve every same-day 80/20 Climb rung instead of displaying only the first one. The review
+  set also includes the real weekly receipt. A pushed or voided rung says the same step and stake ride again, while
+  a void is labeled `VOID`; a loss still shows only the next $50 restart.
+- Single-row research art keeps the complete wager wording, adds the stored CFB game-script caution and fits long
+  defense context without slicing words. Season boards give the exact line its own full-width row at 32 pixels or
+  larger. Projection-sheet geometry keeps numbered lines away from their rings and keeps cautions inside compact,
+  11/12-game and 16-game tiles.
+- The owner-facing review folder now contains 18 PNGs, including weekly receipt, real loss, push/void, single- and
+  multi-row research, season-board and sheet-geometry cases. Verification passed 935 Python tests (2 skipped), 142
+  frontend tests under both Node invocations, a 447-page build, the size budget, 92-pick record audit, 507-file
+  publication guard and isolated slot-2330 rehearsal. `FELT_FROM` remains unset, so the legacy cards stay live.
+
 ### C6 first live shadow receipt
 
 - The October 6 11:30 PM desk run completed normally with no forced publication and wrote exactly eight private

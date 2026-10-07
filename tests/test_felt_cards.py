@@ -166,7 +166,11 @@ class FeltCardTests(unittest.TestCase):
         self.assertEqual(longshot.count('<image href="data:image/png;base64,'), 2)
         self.assertIn('5 games · Wed Oct 7', longshot)
         self.assertIn('Over 13.5 in 8 of his last 10 games', research)
-        self.assertIn('DAL allows 24.2 carries a game to RBs, 23rd of 32', research)
+        root = ET.fromstring(research)
+        namespace = {'s': 'http://www.w3.org/2000/svg'}
+        defense = root.findall(".//s:g[@data-zone='research-defense']/s:text", namespace)
+        self.assertEqual(' '.join(node.text for node in defense),
+                         'DAL allows 24.2 carries a game to RBs, 23rd of 32')
         self.assertIn('LAST 10 GAMES', research)
         self.assertIn('fill="' + felt_cards.BURNT + '"', research)
         self.assertIn('3 of 4 this season', research)
@@ -177,6 +181,7 @@ class FeltCardTests(unittest.TestCase):
         self.assertNotIn('POSITIVE RESEARCH LABEL', research)
         self.assertIn('ALL CLIMBS  $42 BANKED', open_climb)
         self.assertIn('NEXT  $50 RESTART', result)
+        self.assertNotIn('AGAIN', result)
         self.assertIn('$1,000', result)
         self.assertIn('>✗<', result)
         self.assertIn('>✓<', result)
@@ -223,6 +228,16 @@ class FeltCardTests(unittest.TestCase):
         self.assertIn('– VOID', void)
         self.assertNotIn('– PUSH', void)
 
+    def test_daily_receipt_keeps_every_same_day_climb_rung(self):
+        rows = [('win', f'Best bet {index}', f'Final {index}', 'player') for index in range(5)]
+        rows += [('win', '80/20 Climb #2 step 1', '$50 → $79', 'ladder'),
+                 ('loss', '80/20 Climb #2 step 2', 'One leg missed', 'ladder')]
+        with self.felt():
+            card = pick_card.receipt_svg({'title': '5-0', 'when': 'Sunday, Oct 4', 'rows': rows})
+        self.assertIn('TRACKED APART · CLIMB #2 STEP 1 ✓ · STEP 2 ✗', card)
+        self.assertEqual(card.count('STEP 1'), 1)
+        self.assertEqual(card.count('STEP 2'), 1)
+
     def test_daily_receipt_without_best_bets_uses_the_matching_public_label(self):
         with self.felt():
             fun = pick_card.receipt_svg({
@@ -259,6 +274,22 @@ class FeltCardTests(unittest.TestCase):
         for value in ('CLIMB COMPLETE', '$50 → $1,000', 'FINAL BANK $320', 'NEXT $50 CLIMB'):
             self.assertIn(value, complete)
 
+    def test_push_and_void_climb_cards_keep_the_same_step_and_stake(self):
+        rung = {'id': 'c', 'parlayType': 'ladder', 'actual': 'legs: push, push',
+                '_allClimbsBanked': 42,
+                'legs': [{'title': 'Pitt +10.5'}, {'title': 'Northwestern +12.5'}],
+                'ladder': {'run': 2, 'step': 2, 'stake': 75, 'payout': 75, 'banked': 19,
+                           'start': 50, 'goal': 1000}}
+        with self.felt():
+            push = pick_card.ladder_result_svg(dict(rung, result='push'))
+            void = pick_card.ladder_result_svg(dict(rung, result='void', actual='legs: void, void'))
+        self.assertIn('– PUSH', push)
+        self.assertIn('STEP 2 AGAIN · $75 RIDES', push)
+        self.assertIn('$75 RETURNS', push)
+        self.assertIn('– VOID', void)
+        self.assertNotIn('– PUSH', void)
+        self.assertIn('STEP 2 AGAIN · $75 RIDES', void)
+
     def test_multi_row_research_never_silently_slices_public_copy(self):
         rows = []
         for index in range(3):
@@ -275,6 +306,51 @@ class FeltCardTests(unittest.TestCase):
                 self.assertIn(row[field], card)
         self.assertEqual(card.count('data-zone="research-title"'), 3)
         self.assertEqual(card.count('data-zone="research-price"'), 3)
+
+    def test_single_row_research_keeps_full_title_caution_and_fits_defense(self):
+        title = "Marvin Harrison Jr. over 64.5 receiving yards"
+        detail = 'GAME-SCRIPT CAUTION · projected to lose by 18 points'
+        defense = {'rank': 134, 'of': 134, 'pos': 'WR', 'stat': 'pass attempts',
+                   'value': 47.2, 'supports': True}
+        choice = {'kind': 'matchup', 'title': 'MATCHUP TRENDS',
+                  'rows': [{'title': title, 'price': '−110 FanDuel', 'hits': 8, 'games': 10,
+                            'detail': detail, 'opponentAbbr': 'SOUTHERN MISSISSIPPI',
+                            'statLabel': 'pass attempts', 'matchup': defense,
+                            'matchupLabel': 'ARIZONA at SOUTHERN MISSISSIPPI'}]}
+        with self.felt():
+            card = research_art.svg(choice)
+        self.valid(card)
+        for word in title.split():
+            self.assertIn(word, card)
+        self.assertIn(detail, card)
+        self.assertIn('data-zone="research-defense"', card)
+        self.assertIn('data-zone="research-detail"', card)
+        root = ET.fromstring(card)
+        namespace = {'s': 'http://www.w3.org/2000/svg'}
+        defense_nodes = root.findall(".//s:g[@data-zone='research-defense']/s:text", namespace)
+        self.assertEqual(' '.join(node.text for node in defense_nodes),
+                         'SOUTHERN MISSISSIPPI allows 47.2 pass attempts a game to WRs, 134th of 134')
+        title_nodes = root.findall(".//s:g[@data-zone='research-title']/s:text", namespace)
+        self.assertLessEqual(len(title_nodes), 3)
+        self.assertEqual(' '.join(node.text for node in title_nodes), title)
+
+    def test_season_board_gives_exact_lines_a_readable_full_width_row(self):
+        rows = [{'title': name, 'price': line, 'metric': '3/3 this season',
+                 'detail': '−110 FanDuel · 2026 regular season'}
+                for name, line in (('Adam Damante', 'Under 211.5 passing yards'),
+                                   ('Ted Hurst III', 'Over 21.5 receiving yards'),
+                                   ('Ja\'Marr Chase', 'Over 84.5 receiving yards'))]
+        with self.felt():
+            card = research_art.svg({'kind': 'season', 'title': 'TREND BOARD', 'rows': rows})
+        self.valid(card)
+        root = ET.fromstring(card)
+        namespace = {'s': 'http://www.w3.org/2000/svg'}
+        prices = root.findall(".//s:g[@data-zone='research-price']/s:text", namespace)
+        self.assertEqual(len(prices), 3)
+        self.assertTrue(all(float(node.attrib['font-size']) >= 32 for node in prices))
+        self.assertTrue(all(node.attrib['x'] == '98' for node in prices))
+        for row in rows:
+            self.assertIn(row['price'], card)
 
     def test_felt_projection_sheet_is_native_and_uses_the_real_date(self):
         game = {'id': 'g', 'league': 'CFB', 'week': 6,
@@ -333,9 +409,21 @@ class FeltCardTests(unittest.TestCase):
         self.assertNotIn('>BR<', card)
         self.assertLessEqual(felt_cards.fit_size('SPREAD  OUR PITT −11.9  ·  MARKET PITT -3.5 −105 theScore Bet',
                                                  23, 430), 23)
-        geometry = felt_cards.sheet_row_geometry((1198 - 250) / 8 - 12, True)
+        card_h = (1198 - 250) / 8 - 4
+        geometry = felt_cards.sheet_row_geometry(card_h, True)
         self.assertGreaterEqual(geometry['spread'] - geometry['caution'], geometry['cautionSize'] + 7)
         self.assertGreaterEqual(geometry['total'] - geometry['spread'], 21)
+        self.assertLessEqual(geometry['total'] + 8, card_h)
+
+    def test_eleven_and_twelve_game_sheet_cautions_stay_inside_their_tiles(self):
+        for games in (11, 12):
+            rows = (games + 1) // 2
+            card_h = (1198 - 250) / rows - 12
+            geometry = felt_cards.sheet_row_geometry(card_h, True)
+            self.assertGreater(geometry['spread'], geometry['caution'])
+            self.assertGreater(geometry['total'], geometry['spread'])
+            self.assertLessEqual(geometry['total'] + 8, card_h)
+            self.assertLessEqual(geometry['caution'] + geometry['cautionSize'], card_h)
 
     def test_four_letter_team_fallback_fits_its_badge(self):
         chip = felt_cards.team_chip(40, 40, {'abbr': 'NMSU'}, 34)
