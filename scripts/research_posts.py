@@ -213,7 +213,9 @@ def matchup_candidate(games, details, now, teams=None):
             used.add(key)
             candidates.append(line)
         for line in candidates:
-            history = (line.get('history') or {}).get('last') or {}
+            all_history = line.get('history') or {}
+            history = all_history.get('last') or {}
+            season_history = all_history.get('season') or {}
             matchup = defense_context(line, (teams or {}).get(game.get('league')))
             if line.get('kind') not in (None, 'player') or line.get('alternate') \
                     or history.get('games', 0) < 5 or history.get('rate', 0) < 80 \
@@ -240,6 +242,7 @@ def matchup_candidate(games, details, now, teams=None):
                          'opponentAbbr': opponent, 'statLabel': stat,
                          'hits': history['hits'], 'games': history['games'], 'pushes': history.get('pushes', 0),
                          'historyValues': list(history.get('values') or []),
+                         'seasonHits': season_history.get('hits'), 'seasonGames': season_history.get('games'),
                          'scriptRisk': script_risk, 'projectedMargin': margin, 'matchup': matchup,
                          'score': (history.get('rate', 0), history.get('games', 0), line.get('edge') or 0),
                          'observedAt': line.get('observedAt')})

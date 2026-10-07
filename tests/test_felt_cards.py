@@ -142,6 +142,7 @@ class FeltCardTests(unittest.TestCase):
                             'metric': '8/10 exact-line trend', 'detail': 'DAL allows 24.2 carries/game to RBs',
                             'kickoff': '2026-10-09T00:15:00Z', 'matchupLabel': 'TB at DAL',
                             'opponentAbbr': 'DAL', 'statLabel': 'carries', 'hits': 8, 'games': 10,
+                            'seasonHits': 3, 'seasonGames': 4,
                             'historyValues': [16, 18, 12, 20, 15, 22, 14, 19, 8, 17],
                             'matchup': {'rank': 23, 'of': 32, 'pos': 'RB', 'stat': 'car',
                                         'value': 24.2, 'supports': True}}]}
@@ -161,7 +162,8 @@ class FeltCardTests(unittest.TestCase):
         self.assertIn('DAL allows 24.2 carries a game to RBs, 23rd of 32', research)
         self.assertIn('LAST 10 GAMES', research)
         self.assertIn('fill="' + felt_cards.BURNT + '"', research)
-        self.assertIn('8 of 10 this season', research)
+        self.assertIn('3 of 4 this season', research)
+        self.assertNotIn('8 of 10 this season', research)
         self.assertEqual(research.count('8/10'), 0)
         self.assertNotIn('EXACT-LINE PROOF', research)
         self.assertNotIn('PROOF POINT', research)

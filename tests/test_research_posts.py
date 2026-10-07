@@ -113,7 +113,8 @@ class ResearchPostTests(unittest.TestCase):
                     'team': '1', 'teamAbbr': 'FAV', 'opponent': '2', 'opponentAbbr': 'DOG',
                     'position': 'RB', 'stat': 'rushYds', 'direction': 'over', 'edge': 3.0,
                     'observedAt': '2026-10-03T13:00:00Z',
-                    'history': {'last': {'hits': hits, 'games': 10, 'rate': hits * 10}}}
+                    'history': {'last': {'hits': hits, 'games': 10, 'rate': hits * 10},
+                                'season': {'hits': 3, 'games': 4, 'rate': 75}}}
         details = {'CFB-safe': {'favoriteLines': [line('Safe over 55.5 rushing yards', 'safe', 'CFB-safe', 8)]},
                    'CFB-risk': {'favoriteLines': [line('Risk over 55.5 rushing yards', 'risk', 'CFB-risk', 10)]}}
         teams = {'CFB': {'defense': {'rows': {
@@ -125,6 +126,7 @@ class ResearchPostTests(unittest.TestCase):
         self.assertEqual([row['title'] for row in choice['rows']],
                          ['Safe over 55.5 rushing yards', 'Risk over 55.5 rushing yards'])
         self.assertTrue(choice['rows'][1]['scriptRisk'])
+        self.assertEqual((choice['rows'][0]['seasonHits'], choice['rows'][0]['seasonGames']), (3, 4))
         self.assertIn('FAV projected 25-pt dog', choice['rows'][1]['detail'])
         self.assertIn('CFB big-underdog usage is ranked down', choice['text'])
 

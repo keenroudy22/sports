@@ -553,9 +553,10 @@ def research_choice_card(choice, art=None):
                     body += t(left + game_index * bw + bw / 2, chart_base + 35, f'{value:g}', 23, CHALK, DISPLAY, 700, 'middle')
                 line_y = chart_base - (chart_base - chart_top) * line_value / high
                 body += f'<line x1="{left}" y1="{line_y:.1f}" x2="{left + width}" y2="{line_y:.1f}" stroke="{CHALK}" stroke-width="3" stroke-dasharray="12 10"/>'
-                season_hits = int(hits) if isinstance(hits, int) else sum((value < line_value) if under else (value > line_value) for value in values)
-                season_games = int(games) if isinstance(games, int) else len(values)
-                body += t(left, 1172, f'{season_hits} of {season_games} this season', 38, CHALK, BODY, 750)
+                season_hits = row.get('seasonHits')
+                season_games = row.get('seasonGames')
+                if isinstance(season_hits, int) and isinstance(season_games, int) and season_games > 0:
+                    body += t(left, 1172, f'{season_hits} of {season_games} this season', 38, CHALK, BODY, 750)
             continue
         y = top + index * (row_h + 18)
         body += f'<rect x="64" y="{y:.0f}" width="{W - 128}" height="{row_h:.0f}" rx="22" fill="{FELT_RAISED}" stroke="{LINE}"/>'
