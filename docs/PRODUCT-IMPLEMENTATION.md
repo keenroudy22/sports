@@ -430,15 +430,19 @@ missing when neither component was recorded, so the page does not turn absent da
 
 ## October 6 C6 silent results and creative-learning candidate
 
-- R0 now counts each segment, game, side and athlete once for learning, keeping a published decision or otherwise
-  the earliest observation. The weekly report shows raw and distinct counts before any later decision.
+- R0 measures each segment, game, side and athlete once only in its silent comparison. Live learning continues to
+  use the unchanged raw historical rows until the owner separately approves R0. A future approved deduplication
+  would first apply the learning window and then deduplicate inside that window, so an older pre-window row cannot
+  erase recent evidence. The weekly report shows raw and distinct counts before any later decision.
 - R1 through R7 are enabled only as silent evidence snapshots. They use stored candidates, prices, grades, trends
   and projections, write append-only `shadow-<season>.jsonl` rows, make zero metered requests and explicitly record
   zero public effects. NFL totals remain governed by the existing rule; the trends default and closing-line
   headline remain unchanged.
 - Future learning rows retain their quote time so the stale-price shadow can measure real age. This adds evidence
   to the learning store, not a tracked public schema or record-count change.
-- Every newly scheduled X post records `cardTheme` from its scheduled publication time. Missing historical labels
+- Every newly scheduled card post records `cardTheme` from the renderer's current production theme before the
+  external post is created; text-only posts record `none`. Theme timestamps are always timezone-aware, so a
+  date-only cutover cannot create an unlogged duplicate after Buffer accepts a post. Missing historical labels
   count as legacy. The Tuesday learning report and Monday owner review compare felt versus legacy only within the
   same post category and mark fewer than eight settled posts as a small sample. They never cut over a theme,
   change a post category or move selection rules automatically.
@@ -451,6 +455,18 @@ missing when neither component was recorded, so the page does not turn absent da
 - Release gates passed 899 Python tests (2 skipped), 130 frontend tests under both Node runtimes, the 92-pick
   archive audit, payload budget, public guard and isolated slot-2100 rehearsal. The first real 11:30 PM shadow
   write remains an observation gate; no result policy, public play, card or post changed.
+
+### C6 corrective release receipt
+
+- Production revision `b1b301f1` shipped in [publish run 37563572847](https://github.com/keenroudy22/sports/actions/runs/37563572847)
+  on October 6. It restores the unchanged live learning denominators, confines R0 deduplication to the silent
+  comparison, applies its time window before any future deduplication, and makes card-theme logging safe before an
+  external post is created. R0-R7 still have zero public effects and make zero new metered requests.
+- The same release carries the approved UX cleanup and CFB-defense filename fix. Gates passed 910 Python tests
+  (2 skipped), 134 frontend tests and 23 prototype parity tests under both Node runtimes, the 92-pick record audit,
+  payload budget, 506-file public guard and isolated slot-2100 rehearsal. Local and live checks covered 42
+  route/width combinations at 375 and 1440 px with no overflow, clipping, load failure or console error. The live
+  CFB-defense payload returned successfully. The 11:30 PM shadow write remains the next observation gate.
 
 ### C4 verified release receipt
 
@@ -486,6 +502,17 @@ missing when neither component was recorded, so the page does not turn absent da
   fit, and empty bands are tighter. `FELT_FROM` is still unset; these are review candidates, not live card changes.
 - During fresh-cache phone/desktop QA, the Today extras callback exposed a private `routePath` call. The release
   candidate now uses the exported route parser, has a regression test and serves app version 119.
+
+### C5 third-round owner review
+
+- The eight review files were rendered again after correcting the legacy Climb bank reconstruction, receipt season
+  cutoff, receipt hierarchy, final-stat ordering, Climb flag position, fun-ticket timing, research hierarchy and
+  projection-sheet labels. The projection sheet names each wager, keeps the line green, displays theScore Bet as
+  SCORE and prevents badges from covering text. The true all-climbs bank is $42 and receipts use their due-time
+  season record.
+- Production revision `b1b301f1` includes the corrected inactive renderers, but `FELT_FROM` remains unset. Legacy
+  cards therefore remain live and already-posted attachments are unchanged. Owner approval of all eight PNGs and
+  the quiet-window cutover are still required.
 
 | Gate | What remains | Authority/state |
 |---|---|---|
