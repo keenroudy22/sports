@@ -1,6 +1,11 @@
 import copy
+import html
+import json
 import os
+import re
+import subprocess
 import sys
+import tempfile
 import unittest
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
@@ -148,6 +153,83 @@ class FeltCardTests(unittest.TestCase):
         for word in title.upper().split():
             self.assertIn(word, card)
         self.assertNotIn('…', card)
+        root = ET.fromstring(card)
+        namespace = {'s': 'http://www.w3.org/2000/svg'}
+        lines = [node.text for node in root.findall(".//s:g[@data-zone='play-selection']/s:text", namespace)]
+        self.assertTrue(any('STATE\u00a0+7.5' in line for line in lines),
+                        'a spread number must stay with its team instead of sitting alone')
+
+    @unittest.skipUnless(pick_card.chrome_path(), 'needs a browser to measure the embedded card font')
+    def test_play_card_subjects_finish_inside_the_right_margin_with_the_real_font(self):
+        subjects = ('James Madison at Georgia Southern',
+                    'Sacramento State at Bowling Green',
+                    'Oklahoma State at West Virginia')
+        cards = []
+        with self.felt():
+            for subject in subjects:
+                title = f'{subject} under 54.5'
+                cards.append(pick_card.modern_svg(dict(PICK, displayTitle=title, title=title,
+                                                        athleteId=None, player=None), GAME))
+            player = 'Christopher Brooks-Washington'
+            cards.append(pick_card.modern_svg(dict(PICK, displayTitle=f'{player} over 64.5 receiving yards',
+                                                    title=f'{player} over 64.5 receiving yards',
+                                                    athleteId='long-player', player=player), GAME))
+
+        with tempfile.TemporaryDirectory() as folder:
+            page = Path(folder) / 'measure.html'
+            script = """
+<script>
+document.fonts.ready.then(() => {
+  const rows = [...document.querySelectorAll('[data-zone="play-subject"] text')].map((node) => {
+    const box = node.getBBox();
+    return {text: node.textContent, right: box.x + box.width};
+  });
+  document.body.textContent = JSON.stringify(rows);
+  document.body.dataset.measured = '1';
+});
+</script>"""
+            page.write_text('<!doctype html><meta charset="utf-8"><body>'
+                            + ''.join(cards) + script + '</body>', encoding='utf-8')
+            result = subprocess.run(
+                [pick_card.chrome_path(), '--headless', '--disable-gpu', '--no-sandbox',
+                 '--disable-extensions', '--no-first-run', '--virtual-time-budget=3000',
+                 '--dump-dom', page.as_uri()], capture_output=True, text=True,
+                timeout=20, check=True)
+        match = re.search(r'<body data-measured="1">(.*?)</body>', result.stdout, re.S)
+        self.assertIsNotNone(match, result.stdout[-500:])
+        measured = json.loads(html.unescape(match.group(1)))
+        self.assertTrue(measured)
+        for row in measured:
+            self.assertLessEqual(row['right'], 1016, row)
+
+    def test_last_climb_checkpoint_moves_now_and_again_clear_of_the_goal_flag(self):
+        open_rung = {'id': 'near-goal', 'parlayType': 'ladder', 'odds': -110, 'book': 'FanDuel',
+                     'legs': [{'title': 'One 10+ yards'}, {'title': 'Two 10+ yards'}],
+                     'ladder': {'run': 3, 'step': 5, 'stake': 75, 'payout': 146,
+                                'banked': 600, 'start': 50, 'goal': 1000}}
+        result_rung = dict(open_rung, actual='all 2 legs won')
+        cards = []
+        with self.felt():
+            cards.append(pick_card.ladder_svg(open_rung))
+            cards.append(pick_card.ladder_result_svg(dict(
+                result_rung, result='win',
+                ladder=dict(open_rung['ladder'], bankedAfter=650, nextStake=100,
+                            totalAfter=750))))
+            for result in ('push', 'void'):
+                cards.append(pick_card.ladder_result_svg(dict(
+                    result_rung, result=result, actual=f'legs: {result}, {result}')))
+
+        namespace = {'s': 'http://www.w3.org/2000/svg'}
+        for card in cards:
+            root = ET.fromstring(card)
+            label = root.find(".//s:g[@data-zone='climb-current-label'][@data-checkpoint='1000']/s:text",
+                              namespace)
+            flag = root.find(".//s:path[@data-zone='climb-goal-flag']", namespace)
+            self.assertIsNotNone(label)
+            self.assertIsNotNone(flag)
+            pole_x = float(re.match(r'M([0-9.]+)', flag.attrib['d']).group(1))
+            self.assertEqual(label.attrib.get('text-anchor'), 'end')
+            self.assertLessEqual(float(label.attrib['x']), pole_x - 52)
 
     def test_research_climb_and_longshot_preserve_public_rules(self):
         ticket = {'id': 't', 'parlayType': 'longshot', 'odds': 700, 'book': 'FanDuel',

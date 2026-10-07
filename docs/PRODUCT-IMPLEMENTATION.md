@@ -634,6 +634,20 @@ what was claimed at the time.
   budget, 92-pick record audit, 507-file publication guard and isolated slot-2330 rehearsal. `FELT_FROM` remains
   unset, so legacy cards stay live until the owner approves the full set.
 
+### C5 round-eight review candidate
+
+- Best-bet subject lines now use a conservative embedded-font width for uppercase Barlow Condensed plus letter
+  spacing. The Oct 10 James Madison/Georgia Southern and Sacramento State/Bowling Green pairings, Oklahoma
+  State/West Virginia and Christopher Brooks-Washington all finish inside the 1016-pixel content margin when
+  measured by headless Chrome. A signed spread also stays attached to the final word of its team name.
+- At the $1,000 checkpoint, `NOW` and `AGAIN` are right-aligned left of the goal pole instead of sharing its x
+  coordinate. Deterministic coverage exercises an open rung plus win, push and void results in the $501-$999
+  stretch.
+- All 19 owner-facing PNGs were refreshed in `card-review-2026-10-06`. Verification passed 949 Python tests (2
+  skipped), 143 frontend tests in the worktree and clean export, a 447-page build, warning-only size budget,
+  92-pick record audit, 507-file publication guard and isolated slot-2330 rehearsal. `FELT_FROM` remains unset, so
+  these are still review candidates and legacy cards remain live pending the owner's final approval.
+
 ### C6 first live shadow receipt
 
 - The October 6 11:30 PM desk run completed normally with no forced publication and wrote exactly eight private

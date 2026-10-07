@@ -139,7 +139,9 @@ def frame(chip, body, chip_color=KOOKD, chip_ink=KOOKD_INK):
 
 def wrap(text, size, width, family_ratio=0.46):
     """Greedy word wrap for condensed display type (about 0.46em per character)."""
-    words, lines, line = str(text).split(), [], ''
+    # Split only on ordinary spaces so a non-breaking space can keep a team's
+    # signed spread attached to the last word of its name.
+    words, lines, line = [word for word in str(text).split(' ') if word], [], ''
     for word in words:
         trial = f'{line} {word}'.strip()
         if len(trial) * size * family_ratio > width and line:
@@ -197,6 +199,12 @@ def shrink_then_wrap(text, maximum, width, max_lines=2, minimum=24, family_ratio
     return wrap(value, minimum, width, family_ratio), float(minimum)
 
 
+def keep_spread_with_team(text):
+    """Keep a signed spread with the team word immediately before it."""
+    return re.sub(r'(\S)\s+([+\-\u2212]\d+(?:\.\d+)?)\b',
+                  lambda found: f'{found.group(1)}\u00a0{found.group(2)}', str(text or ''))
+
+
 def meter(x, y, w, chance, needs, on_paper=True):
     track = '#D5E2DA' if on_paper else LINE
     tick = TICKET_INK if on_paper else CHALK
@@ -235,16 +243,22 @@ def play_card(pick, game=None, record=None, featured=False, art=None):
         body += photo(W - 150, 205, 86, art['uri'])
     if player:
         player_lines, player_size = wrap_fit(player.upper(), 72, W - 128,
-                                             max_lines=2, minimum=48)
+                                             max_lines=2, minimum=48,
+                                             family_ratio=.47)
+        body += '<g data-zone="play-subject">'
         for line in player_lines:
             body += t(64, y, line, f'{player_size:.1f}', CHALK, DISPLAY, 700, spacing=1)
             y += player_size + 8
+        body += '</g>'
         y += 32
-    selection_lines, selection_size = wrap_fit(selection, 120, W - 128,
-                                               max_lines=3, minimum=60)
+    selection_lines, selection_size = wrap_fit(keep_spread_with_team(selection), 120, W - 128,
+                                               max_lines=3, minimum=60,
+                                               family_ratio=.46)
+    body += '<g data-zone="play-selection">'
     for line in selection_lines:
         body += t(64, y, line, f'{selection_size:.1f}', KOOKD, DISPLAY, 700)
         y += selection_size * .98
+    body += '</g>'
     top = max(y + 30, 520)
     ticket_h = 360
     body += f'<rect x="64" y="{top}" width="{W - 128}" height="{ticket_h}" rx="28" fill="{TICKET}"/>'
@@ -636,10 +650,17 @@ def climb_path(progress, y=984, current_label='NOW'):
         if done:
             body += t(x, y + 12, '✓', 40, KOOKD_INK, BODY, 800, 'middle')
         elif current:
-            body += t(x, y - 50, current_label, 30, KOOKD, BODY, 800, 'middle', 1)
+            last = index == len(checkpoints) - 1
+            label_x = x - 52 if last else x
+            label_anchor = 'end' if last else 'middle'
+            body += (f'<g data-zone="climb-current-label" data-checkpoint="{amount}">'
+                     + t(label_x, y - 50, current_label, 30, KOOKD, BODY, 800,
+                         label_anchor, 1)
+                     + '</g>')
         body += t(x, y + 76, f'${amount:,}', 30, CHALK if done or current else DIM, DISPLAY, 700, 'middle')
         if index == len(checkpoints) - 1:
-            body += f'<path d="M{x} {y - 31}V{y - 108}h52l-13 17 13 17h-52" fill="{KOOKD}" stroke="{CHALK}" stroke-width="3"/>'
+            body += (f'<path data-zone="climb-goal-flag" d="M{x} {y - 31}V{y - 108}h52l-13 17 13 17h-52" '
+                     f'fill="{KOOKD}" stroke="{CHALK}" stroke-width="3"/>')
     return body
 
 
