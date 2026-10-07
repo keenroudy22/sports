@@ -909,7 +909,8 @@ HERO_BYTES = 3584          # the hero stays a few kilobytes so a cold phone pain
 HERO_ROWS = 6              # the weekend card cap is five straight plays; one spare covers a late addition
 HERO_FIELDS = ('id', 'league', 'kind', 'displayTitle', 'market', 'marketType', 'athleteId', 'position', 'line',
                'direction', 'odds', 'book', 'kickoff', 'featured', 'status', 'entryNote', 'expiresAt',
-               'cutoffOdds', 'cutoffLine', 'gameId', 'side', 'ticketWhy', 'ticketBut', 'hitStrip')
+               'cutoffOdds', 'cutoffLine', 'gameId', 'side', 'ticketWhy', 'ticketBut', 'hitStrip', 'held',
+               'quote')
 
 
 def hero_parlay(pick):
@@ -1074,7 +1075,6 @@ def today_hero(picks, now, potd=None, teams=None, runs=None):
 # fields. The browser lays it out; it never writes a reason, picks a research row or re-implements a hold.
 
 RUN_PLIST = ROOT / 'deployment' / 'mac' / 'com.keenroudy.sports.run.plist'
-TICKET_TEXT = 84           # about two lines beside the WHY/BUT tag on a 375 px ticket
 VOLUME_WORDS = {'targets': 'targets', 'carries': 'carries', 'att': 'pass attempts'}
 ROLE_RANKED = re.compile(r'^Role: (\d+)(?:st|nd|rd|th) of \d+ (\S+) (QB|RB|FB|WR|TE)s by projected (\w+), ([\d.]+) a game\.$')
 ROLE_PLAIN = re.compile(r'^Role: projected for ([\d.]+) (\w+) a game\.$')
@@ -1086,6 +1086,7 @@ NO_MORE_THAN = re.compile(r'^(.+?) is allowing [\d.]+ points per game and has no
                           r'in a game this season\.$')
 FEW_HITS = re.compile(r'^Only (\d+) of the last (\d+) games cleared this side of the line; recent results oppose it\.$')
 THIN_HISTORY = 'Fewer than five stored games at this line; history is limited.'
+LAST_N = re.compile(r'\bof (?:his|their|the) last \d+\b', re.I)
 NOT_TICKET_TEXT = re.compile(r'guarantee|\block\b|\d+(?:\.\d+)?% likely|uncalibrated|breaks even at', re.I)
 
 
@@ -1094,19 +1095,11 @@ def first_sentence_of(text):
     return parts[0] if parts and parts[0] else ''
 
 
-def fit_ticket_text(text, limit=TICKET_TEXT):
-    """The saved words as they are, else their first clause (the card's WHY rule, SPEC 5.1); never cut mid-word."""
+def fit_ticket_text(text):
+    """The saved words exactly as written (whitespace collapsed). Free text is never cut: the Today ticket clamps it
+    on screen and the play page prints it whole. Only the named templates below are ever reworded."""
     text = ' '.join(str(text or '').split())
-    if not text:
-        return None
-    if len(text) <= limit:
-        return text
-    for sep in (', and ', '; ', ' and ', ', '):
-        if sep in text:
-            head = text.split(sep, 1)[0].rstrip(' .,;')
-            if 20 <= len(head) < limit:
-                return head + '.'
-    return None
+    return text or None
 
 
 def ticket_safe(text):
@@ -1159,7 +1152,7 @@ def ticket_but(pick, teams=None):
     elif text == THIN_HISTORY:
         text = 'Fewer than five games at this line.'
     else:
-        text = first_sentence_of(LABEL_PREFIX.sub('', text))
+        text = LABEL_PREFIX.sub('', text)
     return ticket_safe(fit_ticket_text(text))
 
 
@@ -1187,16 +1180,18 @@ def player_side(pick, game, forecasts, player_logs):
 
 def hit_strip(pick, game, logs):
     """The ticket's compact hit strip: the last five current-season regular-season values before kickoff, plus
-    the season and last-ten counts against the posted line. Stored box scores only; None when unknown."""
+    the season count and the last-ten count (playoffs included) against the posted line. Stored box scores only."""
     words = {word: key for key, word in pricing.WORDS.items()}
     market = pick.get('market') if pick.get('market') in LOG_KEYS else words.get(str(pick.get('market') or '').lower())
     line, side = number(pick.get('line')), str(pick.get('direction') or '').lower()
     kickoff = str(pick.get('kickoff') or game.get('kickoff') or '')
     if not market or line is None or side not in ('over', 'under') or not kickoff:
         return None
-    rows = sorted((r for r in logs if r.get('seasonType') == 2 and str(r.get('kickoff') or '') < kickoff
+    # Regular season and postseason games before kickoff (never preseason). The bars and the season count are this
+    # regular season; the last-ten count includes the playoffs, as the desk's saved "in 8 of his last 10" reason does.
+    rows = sorted((r for r in logs if r.get('seasonType') in (2, 3) and str(r.get('kickoff') or '') < kickoff
                    and isinstance((r.get('stats') or {}).get(market), (int, float))), key=lambda r: r.get('kickoff') or '')
-    season = [r['stats'][market] for r in rows if r.get('season') == game.get('season')]
+    season = [r['stats'][market] for r in rows if r.get('season') == game.get('season') and r.get('seasonType') == 2]
     if not season:
         return None
     hit = lambda v: v > line if side == 'over' else v < line
@@ -1221,6 +1216,10 @@ def annotate_tickets(picks, by_id, forecasts, league_data, identities):
             pick['side'] = pick['direction']
         pick['ticketWhy'] = ticket_why(pick)
         pick['ticketBut'] = ticket_but(pick, teams.get(pick.get('gameId')))
+        # The desk counts a game with no catch as a zero; the site's stored logs leave it unrecorded. When WHY already
+        # quotes the desk's last-N count, the strip drops its own last-ten line so one ticket never shows two counts.
+        if pick.get('hitStrip') and LAST_N.search(pick.get('ticketWhy') or ''):
+            pick['hitStrip'].pop('last10', None)
     return teams
 
 
@@ -1300,16 +1299,11 @@ def prep_role_ok(athlete, team, league_info, season, kickoff):
                   for r in rows]
         return all(v is not None for v in values) and sum(values) / 3 >= floor
     if position == 'QB':
-        # The usual starter: the team's top passer in at least two of its last three games before this one.
-        games = defaultdict(list)
-        for player, player_rows in logs.items():
-            for r in player_rows:
-                attempts = (r.get('stats') or {}).get('att')
-                if (str(r.get('team')) == str(team) and r.get('seasonType') == 2 and r.get('season') == season
-                        and str(r.get('kickoff') or '') < str(kickoff) and isinstance(attempts, (int, float)) and attempts > 0):
-                    games[(r.get('kickoff'), r.get('eventId'))].append((attempts, str(player)))
-        recent = [max(games[key])[1] for key in sorted(games)[-3:]]
-        return len(recent) == 3 and recent.count(str(athlete)) >= 2
+        # The usual starter (starters.py): the modal top passer over the team's last four games before kickoff.
+        import starters
+        cutoff = instant(kickoff)
+        records = league_info.get('records') or []
+        return bool(cutoff and records) and starters.usual_starter(records, team, cutoff) == str(athlete)
     return False
 
 
@@ -1379,6 +1373,80 @@ def prep_list(trends, lines, picks, league_data, now, rules=None):
                 chosen.append(row)
         out[league] = {'day': first, 'rows': chosen[:PREP_ROWS]}
     return out
+
+
+# The ticket's quote and hold (decision 9, the A-22/A-23 hold rule), chosen here so the first paint, the full card
+# and the play page all say the same thing. The browser still applies the four-hour window and the cutoff.
+QUOTE_FRESH = timedelta(hours=4)
+
+
+def line_market(row):
+    return row.get('stat') or pricing.market_of(row)
+
+
+def ticket_hold(rows):
+    """The hold on a player market from its board rows (any book, either side), as the player page words it:
+    a workload hold with its three real full-game volumes, a quarterback change, a role hold, or a price hold."""
+    held = [r for r in rows if r.get('roleSuspect') or r.get('priceSuspect') or r.get('roleHold')]
+    if not held:
+        return None
+    work = next((r for r in held if r.get('roleHold') == 'workload' and len(r.get('recentFull') or []) == 3), None)
+    if work:
+        return {'kind': 'workload', 'recentFull': work['recentFull'], 'volume': work.get('recentVolume')}
+    if any(r.get('roleHold') == 'qb' for r in held):
+        return {'kind': 'qb'}
+    return {'kind': 'role' if any(r.get('roleSuspect') or r.get('roleHold') for r in held) else 'price'}
+
+
+def spread_side(row, game):
+    side = row.get('side')
+    if side in ('home', 'away'):
+        return side
+    team = str(row.get('title') or '').strip().split(' ')[0]
+    for key in ('home', 'away'):
+        if team and team == ((game or {}).get(key) or {}).get('abbreviation'):
+            return key
+    return None
+
+
+def annotate_quotes(picks, lines, games, now):
+    """held and quote on each open straight play. A play whose market is under review gets held and no quote, so
+    no page can call it still good; otherwise quote is the latest fresh same-book row for its market and side."""
+    for pick in picks:
+        pick.pop('held', None)
+        pick.pop('quote', None)
+        kickoff = instant(pick.get('kickoff'))
+        if pick.get('result') or hero_parlay(pick) or not kickoff or kickoff <= now:
+            continue
+        game_rows = [r for r in lines if r.get('gameId') == pick.get('gameId')]
+        if pick.get('athleteId'):
+            market = pricing.market_of(pick)
+            volume = role_sanity.VOLUME.get(market)
+            mine = [r for r in game_rows if str(r.get('athleteId')) == str(pick['athleteId'])]
+            hold = ticket_hold([r for r in mine if line_market(r) == market or (
+                volume and role_sanity.VOLUME.get(line_market(r)) == volume and r.get('roleSuspect'))])
+            if hold:
+                pick['held'] = hold
+                continue
+            same = [r for r in mine if line_market(r) == market
+                    and str(r.get('direction') or '').lower() == str(pick.get('direction') or '').lower()]
+        elif pick.get('marketType') == 'total':
+            same = [r for r in game_rows if not r.get('athleteId') and r.get('market') == 'total points'
+                    and str(r.get('direction') or '').lower() == str(pick.get('direction') or '').lower()]
+        elif pick.get('marketType') == 'spread':
+            game = games.get(pick.get('gameId'))
+            same = [r for r in game_rows if not r.get('athleteId') and r.get('market') == 'point spread'
+                    and spread_side(r, game) == pick.get('direction')]
+        else:
+            continue
+        book = provider_book(pick.get('book'))
+        fresh = [r for r in same if r.get('state') == 'open' and provider_book(r.get('book')) == book and book
+                 and isinstance(r.get('odds'), (int, float)) and instant(r.get('observedAt'))
+                 and now - QUOTE_FRESH <= instant(r['observedAt']) <= now
+                 and not (r.get('roleSuspect') or r.get('priceSuspect') or r.get('roleHold'))]
+        if fresh:
+            best = max(fresh, key=lambda r: (instant(r['observedAt']), number(r.get('line')) == number(pick.get('line'))))
+            pick['quote'] = {'odds': best['odds'], 'line': best.get('line'), 'observedAt': best['observedAt']}
 
 
 # ------------------------------------------------------------------ research
@@ -1607,6 +1675,7 @@ def build(now=None):
                  'forecasts': max((s['publishedAt'] for rows in forecasts.values() for s in rows), default=None),
                  'injuries': ((context.get('leagues') or {}).get('NFL') or {}).get('checkedAt'),
                  'props': max((c['retrievedAt'] for rows in captures.values() for c in rows), default=None)}
+    annotate_quotes(picks, lines, by_id, now)
     runs = desk_runs()
     write(OUT / 'today.json', {'generatedAt': stamp(now), 'freshness': freshness,
                                'health': research_views.health(freshness, now), 'games': cards,

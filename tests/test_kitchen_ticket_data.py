@@ -45,12 +45,20 @@ class TicketWordsTests(unittest.TestCase):
         for empty in ({'reasoning': {}}, {'reason': '  ', 'reasoning': {'context': []}}, {}):
             self.assertIsNone(build_site.ticket_why(empty))
 
-    def test_long_reasons_keep_the_first_clause_and_never_cut_a_word(self):
-        long = ('Bills defensive lineman Ed Oliver left the Patriots game with a knee injury, and cornerback Dee '
-                'Alford left with an ankle injury.')
-        self.assertEqual(build_site.ticket_why({'reason': long}),
-                         'Bills defensive lineman Ed Oliver left the Patriots game with a knee injury.')
-        self.assertIsNone(build_site.ticket_why({'reason': 'x' * 120}), 'no clause boundary: the row is left off')
+    def test_free_text_is_verbatim_never_cut_into_a_clause(self):
+        """Decision 8: free text is printed as saved; only the named templates are reworded."""
+        cases = ['Bowling Green cornerback JoJo Johnson, who had 13 pass breakups last season, missed the Iowa State '
+                 'game due to injury.',
+                 'Bills defensive lineman Ed Oliver left the Patriots game with a knee injury, and cornerback Dee '
+                 'Alford left with an ankle injury.',
+                 'Arizona and West Virginia both rank in the bottom third in plays per minute; the forecast has '
+                 'both offenses under their season scoring averages.']
+        for text in cases:
+            self.assertEqual(build_site.ticket_why({'reason': text}), text, 'the saved reason, word for word')
+            self.assertEqual(build_site.ticket_but({'reasoning': {'cautions': [text]}}), text)
+        self.assertEqual(build_site.ticket_why({'reason': '  Two   spaces\nand a break.  '}), 'Two spaces and a break.',
+                         'only whitespace is normalized')
+        self.assertEqual(build_site.ticket_why({'reason': 'x' * 300}), 'x' * 300, 'length never drops the saved reason')
 
     def test_ticket_words_pass_the_public_copy_guard_or_are_left_off(self):
         for bad in ("Here's the desk insight: this one is a lock.", 'This is a guarantee.', 'Our model says 61% likely.'):
@@ -71,9 +79,25 @@ class TicketWordsTests(unittest.TestCase):
         thin = {'reasoning': {'cautions': ['Fewer than five stored games at this line; history is limited.']}}
         self.assertEqual(build_site.ticket_but(thin), 'Fewer than five games at this line.')
         stat = {'reasoning': {'cautions': ['Statistical counterpoint: Arizona converted 57.8% of third downs. More text.']}}
-        self.assertEqual(build_site.ticket_but(stat), 'Arizona converted 57.8% of third downs.')
+        self.assertEqual(build_site.ticket_but(stat), 'Arizona converted 57.8% of third downs. More text.',
+                         'a label prefix comes off; the free text after it stays whole')
         self.assertIsNone(build_site.ticket_but({'risk': 'Only prose, no saved counterpoint.'}),
                           'BUT never falls back to the risk paragraph')
+
+    def test_a_why_that_quotes_a_last_n_count_drops_the_strips_own_last_ten(self):
+        """Tuten (NFL-2026-W4-tuten-under-1-5-rec-dk): WHY "Under 1.5 in 8 of his last 10 games." sat over a strip of
+        "7 of his last 10", because the desk counts a no-catch game as zero and the site's stored log leaves it blank."""
+        game = {'id': 'NFL-1', 'league': 'NFL', 'kickoff': '2026-10-04T17:00Z', 'season': 2026,
+                'away': {'id': '30', 'abbreviation': 'JAX'}, 'home': {'id': '11', 'abbreviation': 'IND'}}
+        logs = [log(f'e{i}', f'2026-09-{10 + 7 * i}T17:00Z', team='30', pos='RB', rec=v) for i, v in enumerate((1, 2, 2))]
+        tuten = {'id': 'NFL-2026-W4-tuten-under-1-5-rec-dk', 'gameId': 'NFL-1', 'athleteId': '4882093', 'market': 'rec',
+                 'direction': 'under', 'line': 1.5, 'kickoff': game['kickoff'], 'reason': 'Under 1.5 in 8 of his last 10 games.'}
+        plain = {**tuten, 'id': 'x', 'reason': None, 'reasoning': {'context': ['Role: projected for 9.0 carries a game.']}}
+        build_site.annotate_tickets([tuten, plain], {'NFL-1': game}, {}, {'NFL': {'player_logs': {'4882093': logs}}}, {})
+        self.assertEqual(tuten['ticketWhy'], 'Under 1.5 in 8 of his last 10 games.')
+        self.assertNotIn('last10', tuten['hitStrip'], 'one count on the ticket, the desk\'s own')
+        self.assertEqual(tuten['hitStrip']['season'], [1, 3])
+        self.assertIn('last10', plain['hitStrip'], 'without a quoted count the strip keeps its last-ten line')
 
     def test_annotate_sets_side_and_words_and_returns_the_game_teams(self):
         game = {'id': 'CFB-401871066', 'league': 'CFB', 'kickoff': '2026-10-07T23:30Z',
@@ -193,12 +217,18 @@ class PrepListTests(unittest.TestCase):
         self.logs['7'] = self.logs['7'][:2]
         self.assertEqual(self.build([self.row]), {}, 'fewer than three current-team games: unknown, so off')
         qb_row = {**self.row, 'athleteId': '9', 'stat': 'cmp', 'line': 16.5, 'player': 'Caden Creel'}
-        starter = [log(f'g{i}', f'2026-09-{10 + i}T20:00Z', pos='QB', att=30) for i in range(3)]
-        backup = [log('g2', '2026-09-12T20:00Z', pos='QB', att=40)]
-        self.logs.update({'9': starter, '10': backup})
-        self.assertEqual(len(self.build([qb_row])['CFB']['rows']), 1, 'the usual starter: top passer in 2 of 3')
-        self.logs['10'] = [log('g1', '2026-09-11T20:00Z', pos='QB', att=40), log('g2', '2026-09-12T20:00Z', pos='QB', att=40)]
-        self.assertEqual(self.build([qb_row]), {}, 'a backup who started two of three is the usual starter instead')
+        self.logs['9'] = [log(f'g{i}', f'2026-09-{10 + i}T20:00Z', pos='QB', att=30) for i in range(3)]
+        game = lambda i, passers: {'eventId': f'g{i}', 'kickoff': f'2026-09-{10 + i}T20:00Z', 'home': {'id': '2229'},
+                                   'away': {'id': '99'}, 'players': [{'id': pid, 'team': '2229', 'att': att} for pid, att in passers]}
+        records = [game(0, [('9', 30)]), game(1, [('9', 30), ('10', 2)]), game(2, [('10', 40), ('9', 12)]), game(3, [('9', 31)])]
+        self.league['CFB']['records'] = records
+        self.assertEqual(len(self.build([qb_row])['CFB']['rows']), 1, 'the usual starter: modal top passer, last four games')
+        self.league['CFB']['records'] = records[:3] + [game(3, [('10', 33)]), game(4, [('10', 35)])]
+        self.assertEqual(self.build([qb_row]), {}, 'a backup who started the most of the last four is the usual starter')
+        self.league['CFB']['records'] = []
+        self.assertEqual(self.build([qb_row]), {}, 'no stored games: unknown, so off')
+        import starters
+        self.assertEqual(starters.RECENT, 4, "starters.py's own window decides the usual starter")
 
     def test_order_one_row_per_player_and_the_next_game_day(self):
         perfect = {**self.row, 'athleteId': '8', 'player': 'Maguire Anderson',
@@ -269,3 +299,93 @@ class HitStripTests(unittest.TestCase):
         self.assertIsNone(build_site.hit_strip({'market': 'recYds', 'line': None, 'direction': 'over'}, game, logs))
         self.assertIsNone(build_site.hit_strip({'market': 'recYds', 'line': 49.5, 'direction': 'over',
                                                 'kickoff': game['kickoff']}, {'season': 2027}, logs))
+
+    def test_last_ten_counts_the_playoffs_like_the_desk_and_never_preseason(self):
+        game = {'season': 2026, 'kickoff': '2026-10-07T23:30Z'}
+        old = [log(f'o{i}', f'2025-1{i // 5}-{10 + i % 5}T20:00Z', rec=v) for i, v in enumerate((0, 1, 0, 0, 1, 0))]
+        for row in old:
+            row['season'] = 2025
+        wild_card = {**log('wc', '2026-01-11T20:00Z', rec=0), 'season': 2025, 'seasonType': 3}
+        preseason = {**log('pre', '2026-08-20T20:00Z', rec=5), 'seasonType': 1}
+        logs = old + [wild_card, preseason] + [log(f'e{i}', f'2026-09-0{i + 1}T20:00Z', rec=v) for i, v in enumerate((1, 0, 3, 0))]
+        strip = build_site.hit_strip({'market': 'rec', 'line': 1.5, 'direction': 'under', 'kickoff': game['kickoff']}, game, logs)
+        self.assertEqual(strip['v'], [1, 0, 3, 0], 'the bars are this regular season only')
+        self.assertEqual(strip['season'], [3, 4])
+        self.assertEqual(strip['last10'], [9, 10], 'the wild-card game counts in the last ten; the preseason game never does')
+        reason_style = [r['stats']['rec'] for r in sorted((r for r in logs if r['seasonType'] != 1), key=lambda r: r['kickoff'])[-10:]]
+        self.assertEqual(strip['last10'][0], sum(v < 1.5 for v in reason_style))
+
+
+class TicketQuoteAndHoldTests(unittest.TestCase):
+    """The A-22/A-23 hold on a published play's market, and the one quote every page shows (decision 9)."""
+    def setUp(self):
+        self.pick = {'id': 'k', 'league': 'CFB', 'gameId': 'CFB-401871066', 'athleteId': '4869443', 'market': 'recYds',
+                     'direction': 'over', 'line': 49.5, 'odds': -102, 'book': 'DraftKings', 'kickoff': '2026-10-07T23:30Z'}
+        self.row = {'gameId': 'CFB-401871066', 'athleteId': '4869443', 'stat': 'recYds', 'market': 'receiving yards',
+                    'direction': 'over', 'line': 49.5, 'odds': -104, 'book': 'DraftKings', 'state': 'open',
+                    'observedAt': '2026-10-07T17:37:35Z'}
+
+    def run_(self, rows, pick=None):
+        pick = dict(pick or self.pick)
+        build_site.annotate_quotes([pick], rows, {}, NOW)
+        return pick
+
+    def test_a_clean_market_gets_the_latest_fresh_same_book_quote(self):
+        older = {**self.row, 'odds': -110, 'observedAt': '2026-10-07T15:00:00Z'}
+        other_book = {**self.row, 'book': 'FanDuel', 'odds': 100}
+        out = self.run_([older, self.row, other_book])
+        self.assertEqual(out['quote'], {'odds': -104, 'line': 49.5, 'observedAt': '2026-10-07T17:37:35Z'})
+        self.assertNotIn('held', out)
+        self.assertNotIn('quote', self.run_([{**self.row, 'observedAt': '2026-10-07T13:00:00Z'}]), 'older than four hours')
+        self.assertNotIn('quote', self.run_([{**self.row, 'state': 'stale'}]))
+        self.assertNotIn('quote', self.run_([{**self.row, 'direction': 'under'}]), 'the other side is never the quote')
+        self.assertNotIn('quote', self.run_([self.row], {**self.pick, 'result': 'win'}), 'settled plays carry none')
+
+    def test_tk_king_a_qb_hold_with_a_failed_price_holds_the_play_and_drops_its_quote(self):
+        held = {**self.row, 'roleSuspect': True, 'priceSuspect': True, 'roleHold': 'qb', 'grade': None,
+                'gradeNote': 'Projection and price under review'}
+        out = self.run_([held])
+        self.assertEqual(out['held'], {'kind': 'qb'})
+        self.assertNotIn('quote', out, 'a held row can never say "Still good to"')
+
+    def test_any_book_either_side_or_a_sibling_volume_market_holds_it(self):
+        self.assertEqual(self.run_([self.row, {**self.row, 'book': 'FanDuel', 'priceSuspect': True}])['held'], {'kind': 'price'})
+        self.assertEqual(self.run_([self.row, {**self.row, 'direction': 'under', 'roleSuspect': True}])['held'], {'kind': 'role'})
+        sibling = {**self.row, 'stat': 'rec', 'market': 'receptions', 'line': 3.5, 'roleSuspect': True, 'roleHold': 'workload',
+                   'recentFull': [9, 7, 8], 'recentVolume': 'targets'}
+        self.assertEqual(self.run_([self.row, sibling])['held'], {'kind': 'workload', 'recentFull': [9, 7, 8], 'volume': 'targets'},
+                         'targets drive both receiving markets, as the player page marks them')
+        price_only_sibling = {**sibling, 'roleSuspect': None, 'roleHold': None, 'priceSuspect': True}
+        self.assertNotIn('held', self.run_([self.row, price_only_sibling]), "another market's price check is its own")
+        other_player = {**self.row, 'athleteId': '1', 'roleSuspect': True}
+        self.assertNotIn('held', self.run_([self.row, other_player]))
+
+    def test_game_lines_get_their_quote_by_side(self):
+        total = {'id': 't', 'gameId': 'NFL-1', 'marketType': 'total', 'direction': 'under', 'line': 54.5, 'odds': -102,
+                 'book': 'DraftKings', 'kickoff': '2026-10-13T00:15Z'}
+        rows = [{'gameId': 'NFL-1', 'market': 'total points', 'direction': 'over', 'line': 54.5, 'odds': -118, 'book': 'DraftKings',
+                 'state': 'open', 'observedAt': '2026-10-07T16:00:00Z'},
+                {'gameId': 'NFL-1', 'market': 'total points', 'direction': 'under', 'line': 54.5, 'odds': -105, 'book': 'DraftKings',
+                 'state': 'open', 'observedAt': '2026-10-07T16:00:00Z'}]
+        self.assertEqual(self.run_(rows, total)['quote']['odds'], -105)
+        spread = {**total, 'id': 's', 'marketType': 'spread', 'direction': 'home', 'line': -3}
+        game = {'NFL-1': {'home': {'abbreviation': 'LAR'}, 'away': {'abbreviation': 'BUF'}}}
+        spreads = [{'gameId': 'NFL-1', 'market': 'point spread', 'title': 'BUF +3', 'line': 3, 'odds': -110, 'book': 'DraftKings',
+                    'state': 'open', 'observedAt': '2026-10-07T16:00:00Z'},
+                   {'gameId': 'NFL-1', 'market': 'point spread', 'title': 'LAR -3', 'line': -3, 'odds': -108, 'book': 'DraftKings',
+                    'state': 'open', 'observedAt': '2026-10-07T16:00:00Z'}]
+        out = dict(spread)
+        build_site.annotate_quotes([out], spreads, game, NOW)
+        self.assertEqual(out['quote']['odds'], -108, 'a spread row without a side is matched by its team, as the browser does')
+
+    def test_the_hero_carries_the_same_quote_and_hold(self):
+        pick = {**self.pick, 'status': 'active', 'displayTitle': 'TK King OVER 49.5 receiving yards', 'held': {'kind': 'qb'}}
+        bet = build_site.today_hero([pick], NOW, runs=[])['bets'][0]
+        self.assertEqual(bet['held'], {'kind': 'qb'})
+        clean = {**self.pick, 'status': 'active', 'quote': {'odds': -104, 'line': 49.5, 'observedAt': '2026-10-07T17:37:35Z'}}
+        self.assertEqual(build_site.today_hero([clean], NOW, runs=[])['bets'][0]['quote'], clean['quote'])
+
+    def test_the_build_annotates_before_writing_today_and_the_record(self):
+        import inspect
+        body = inspect.getsource(build_site.build)
+        self.assertLess(body.index('annotate_quotes(picks, lines, by_id, now)'), body.index("write(OUT / 'today.json'"))
