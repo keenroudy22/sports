@@ -90,8 +90,11 @@ def assess(forecast, logs, team, market, season=None):
     reference = sum(full[-3:]) / 3
     if reference <= 0 or projection[0] >= .7 * reference:
         return None
+    # recentFull: the three full-game volumes behind the average, oldest first, so a page can quote the real
+    # games instead of re-implementing this rule in the browser.
     return {'volume': pair[0], 'projected': round(projection[0], 1),
-            'recentFullAverage': round(reference, 1), 'fullGames': 3}
+            'recentFullAverage': round(reference, 1), 'fullGames': 3,
+            'recentFull': [round(value, 1) if isinstance(value, float) else value for value in full[-3:]]}
 
 
 def price_suspect(odds, chance, player=True):

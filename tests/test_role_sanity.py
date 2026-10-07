@@ -44,7 +44,8 @@ class RoleSanityTests(unittest.TestCase):
         logs = features.player_logs(features.load())['4870883']
         found = role_sanity.assess({'att': [23.7, 6.7, 40.7]}, logs, '2229', 'passYds', 2026)
         self.assertEqual(found, {'volume': 'att', 'projected': 23.7,
-                                 'recentFullAverage': 43.0, 'fullGames': 3})
+                                 'recentFullAverage': 43.0, 'fullGames': 3,
+                                 'recentFull': [50, 36, 43]})
         self.assertIsNone(role_sanity.assess({'att': [34.0, 20.0, 48.0]}, logs, '2229', 'passYds', 2026))
 
     def test_egbuka_plus_1800_main_price_cannot_receive_a_grade(self):

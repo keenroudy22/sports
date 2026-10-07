@@ -491,11 +491,8 @@ def game_card(game, forecasts_v1, snapshot, names, identities, market_block=None
 
     def side(key):
         team = game[key]
-        colours = team_colours(league, team)
-        team_id = str(team['id'])
-        return {'id': team_id, 'abbr': team.get('abbreviation'), 'name': team.get('short') or team.get('name'),
-                'color': colours[0] or color(league, team.get('abbreviation'), identities), 'alt': colours[1],
-                'score': team.get('score'), 'strength': (strength or {}).get(team_id)}
+        return {**card_side(league, team, identities), 'score': team.get('score'),
+                'strength': (strength or {}).get(str(team['id']))}
 
     v1 = forecasts_v1.get(game['id'])
     mkt = market(game)
@@ -912,7 +909,7 @@ HERO_BYTES = 3584          # the hero stays a few kilobytes so a cold phone pain
 HERO_ROWS = 6              # the weekend card cap is five straight plays; one spare covers a late addition
 HERO_FIELDS = ('id', 'league', 'kind', 'displayTitle', 'market', 'marketType', 'athleteId', 'position', 'line',
                'direction', 'odds', 'book', 'kickoff', 'featured', 'status', 'entryNote', 'expiresAt',
-               'cutoffOdds', 'cutoffLine')
+               'cutoffOdds', 'cutoffLine', 'gameId', 'side', 'ticketWhy', 'ticketBut', 'hitStrip')
 
 
 def hero_parlay(pick):
@@ -939,8 +936,10 @@ def hero_card(pick, now, potd=None):
     return f"data/cards/{pick['id']}{'-potd' if pick['id'] == potd else ''}.png"
 
 
-def hero_bet(pick, now, potd=None):
+def hero_bet(pick, now, potd=None, teams=None):
     row = {key: pick.get(key) for key in HERO_FIELDS}
+    # Both teams' names and colours, as the game card carries them, so the first paint draws the same team panel.
+    row['teams'] = (teams or {}).get(pick.get('gameId'))
     row['displayTitle'] = pick.get('displayTitle') or pick.get('title')
     row['featured'] = pick.get('featured') is True or None
     row['status'] = None if (pick.get('status') or 'active') == 'active' else pick.get('status')
@@ -995,6 +994,7 @@ def hero_climb(picks):
                    key=lambda p: (str(p.get('publishedAt') or ''), str(p.get('id'))))
     start, goal = 50, 1000
     run, step, stake, banked, open_rung, last, settled = 1, 1, start, 0, None, None, 0
+    wagered = paid = saved = 0       # lifetime dollars, as core.js theLadder's accounting counts them
     for rung in rungs:
         info = rung.get('ladder') or {}
         if not rung.get('result'):
@@ -1002,19 +1002,25 @@ def hero_climb(picks):
             continue
         settled += 1
         last = {'result': rung['result'], 'step': info.get('step') or step}
+        wagered += number(info.get('stake')) or stake
         if rung['result'] == 'win':
             returned = int(info.get('payout') or stake)
+            paid += number(info.get('payout')) or stake
             cut = int(round(returned * .2))
             before = int(info['banked']) if info.get('banked') is not None else banked
             banked = int(info['bankedAfter']) if info.get('bankedAfter') is not None else before + cut
+            saved += max(0, banked - before)
             stake = int(info['nextStake']) if info.get('nextStake') is not None else returned - cut
             step += 1
             if banked + stake >= goal:
                 run, step, stake, banked = run + 1, 1, start, 0
         elif rung['result'] == 'loss':
             run, step, stake, banked = run + 1, 1, start, 0
+        elif rung['result'] in ('push', 'void'):
+            paid += number(info.get('stake')) or stake
     info = (open_rung or {}).get('ladder') or {}
-    out = {'run': run, 'step': step, 'riding': stake, 'banked': banked, 'settled': settled, 'last': last}
+    out = {'run': run, 'step': step, 'riding': stake, 'banked': banked, 'settled': settled, 'last': last,
+           'saved': round(saved), 'net': round(paid - wagered)}
     if open_rung:
         out['open'] = {'step': info.get('step') or step, 'league': open_rung.get('league')}
         out['riding'] = int(info.get('stake') or stake)
@@ -1029,7 +1035,7 @@ def hero_next_day(rows):
     return [p for p in on_card if day(p['kickoff']) == first]
 
 
-def today_hero(picks, now, potd=None):
+def today_hero(picks, now, potd=None, teams=None, runs=None):
     """app/today-hero.json: the few facts Today paints first, while the full today.json is still loading.
 
     Today's unsettled best bets (or, with none today, the next game day's still-on-the-card ones), the Climb's
@@ -1050,19 +1056,329 @@ def today_hero(picks, now, potd=None):
     extra.sort(key=order)
     # Today's plays come first, so a size trim drops another day's play before any of today's.
     chosen = bets[:HERO_ROWS] + extra[:HERO_ROWS]
-    rows = [hero_bet(p, now, potd) for p in chosen]
+    rows = [hero_bet(p, now, potd, teams) for p in chosen]
     payload = {'generatedAt': stamp(now), 'day': today, 'bets': rows, 'more': len(bets) + len(extra) - len(rows),
-               'climb': hero_climb(picks), 'last': {}}
-    for league in ('ALL', 'NFL', 'CFB'):
-        slate = hero_last_slate([p for p in picks if league == 'ALL' or p.get('league') == league], today)
-        if slate:
-            payload['last'][league] = slate
+               'climb': hero_climb(picks), 'last': last_slates(picks, today), 'season': season_records(picks, now),
+               'deskRuns': runs if runs is not None else desk_runs()}
     # Never let a crowded slate grow the first paint: the full card still lists every play.
     while payload['bets'] and len(json.dumps(payload, separators=(',', ':'), sort_keys=True,
                                              ensure_ascii=False).encode('utf-8')) > HERO_BYTES:
         payload['bets'].pop()
         payload['more'] += 1
     return payload
+
+
+# ------------------------------------------------------------------ Kitchen Ticket fields (OWNER-DECISIONS item 22)
+#
+# Everything the Today ticket, the Prep List and the date line need is chosen here, at build time, from saved
+# fields. The browser lays it out; it never writes a reason, picks a research row or re-implements a hold.
+
+RUN_PLIST = ROOT / 'deployment' / 'mac' / 'com.keenroudy.sports.run.plist'
+TICKET_TEXT = 84           # about two lines beside the WHY/BUT tag on a 375 px ticket
+VOLUME_WORDS = {'targets': 'targets', 'carries': 'carries', 'att': 'pass attempts'}
+ROLE_RANKED = re.compile(r'^Role: (\d+)(?:st|nd|rd|th) of \d+ (\S+) (QB|RB|FB|WR|TE)s by projected (\w+), ([\d.]+) a game\.$')
+ROLE_PLAIN = re.compile(r'^Role: projected for ([\d.]+) (\w+) a game\.$')
+LABEL_PREFIX = re.compile(r'^(?:Defense|Matchup|Weather|Usage|Volume|Injury|Checked before publishing|'
+                          r'Statistical counterpoint|Prop lean): ')
+POSITION_AGAINST = re.compile(r"^(?:The opponent's positional allowance points against this side|"
+                              r'The defense leans against this side)\b')
+NO_MORE_THAN = re.compile(r'^(.+?) is allowing [\d.]+ points per game and has not allowed more than (\d+) points '
+                          r'in a game this season\.$')
+FEW_HITS = re.compile(r'^Only (\d+) of the last (\d+) games cleared this side of the line; recent results oppose it\.$')
+THIN_HISTORY = 'Fewer than five stored games at this line; history is limited.'
+NOT_TICKET_TEXT = re.compile(r'guarantee|\block\b|\d+(?:\.\d+)?% likely|uncalibrated|breaks even at', re.I)
+
+
+def first_sentence_of(text):
+    parts = re.split(r'(?<=[.!?])\s+(?=[A-Z0-9"“])', ' '.join(str(text or '').split()), maxsplit=1)
+    return parts[0] if parts and parts[0] else ''
+
+
+def fit_ticket_text(text, limit=TICKET_TEXT):
+    """The saved words as they are, else their first clause (the card's WHY rule, SPEC 5.1); never cut mid-word."""
+    text = ' '.join(str(text or '').split())
+    if not text:
+        return None
+    if len(text) <= limit:
+        return text
+    for sep in (', and ', '; ', ' and ', ', '):
+        if sep in text:
+            head = text.split(sep, 1)[0].rstrip(' .,;')
+            if 20 <= len(head) < limit:
+                return head + '.'
+    return None
+
+
+def ticket_safe(text):
+    """The public-copy guard every caption passes (scripts/voice.py), plus no chance claims on the ticket."""
+    import voice
+    return text if text and not voice.lint(text) and not NOT_TICKET_TEXT.search(text) else None
+
+
+def ticket_why(pick):
+    """WHY: the play's saved reason, else the first saved context line, else nothing (decision 8)."""
+    reasoning = pick.get('reasoning') if isinstance(pick.get('reasoning'), dict) else {}
+    reason = pick.get('reason')
+    source = reason if isinstance(reason, str) and reason.strip() else next(iter(reasoning.get('context') or []), None)
+    if not isinstance(source, str) or not source.strip():
+        return None
+    text = ' '.join(source.split())
+    ranked, plain = ROLE_RANKED.match(text), ROLE_PLAIN.match(text)
+    if ranked:
+        rank, team, position, volume, value = ranked.groups()
+        place = f"{team}'s top {position}" if rank == '1' else f'No. {rank} among {team} {position}s'
+        text = f'I project {float(value):g} {VOLUME_WORDS.get(volume, volume)}, {place}.'
+    elif plain:
+        value, volume = plain.groups()
+        text = f'I project {float(value):g} {VOLUME_WORDS.get(volume, volume)}.'
+    else:
+        text = LABEL_PREFIX.sub('', text)
+    return ticket_safe(fit_ticket_text(text))
+
+
+def ticket_but(pick, teams=None):
+    """BUT: the first saved counterpoint (reasoning.cautions[0]), else nothing (decision 8)."""
+    reasoning = pick.get('reasoning') if isinstance(pick.get('reasoning'), dict) else {}
+    source = next(iter(reasoning.get('cautions') or []), None)
+    if not isinstance(source, str) or not source.strip():
+        return None
+    text = ' '.join(source.split())
+    side = pick.get('side')
+    opponent = ((teams or {}).get('away' if side == 'home' else 'home') or {}).get('abbr') if side in ('home', 'away') else None
+    direction = str(pick.get('direction') or '').lower()
+    if POSITION_AGAINST.match(text):
+        if opponent and pick.get('position') and direction in ('over', 'under'):
+            return ticket_safe(f"{opponent}'s {pick['position']} defense points against the {direction}.")
+        text = first_sentence_of(text)
+    elif NO_MORE_THAN.match(text):
+        team, most = NO_MORE_THAN.match(text).groups()
+        text = f'No team has scored over {most} on {team}.'
+    elif FEW_HITS.match(text):
+        hits, games = FEW_HITS.match(text).groups()
+        text = f'Only {hits} of his last {games} games cleared this line.'
+    elif text == THIN_HISTORY:
+        text = 'Fewer than five games at this line.'
+    else:
+        text = first_sentence_of(LABEL_PREFIX.sub('', text))
+    return ticket_safe(fit_ticket_text(text))
+
+
+def card_side(league, team, identities):
+    """One team as the game card names and colours it (shared by today.json games and the hero rows)."""
+    colours = team_colours(league, team)
+    return {'id': str(team.get('id')), 'abbr': team.get('abbreviation'), 'name': team.get('short') or team.get('name'),
+            'color': colours[0] or color(league, team.get('abbreviation'), identities), 'alt': colours[1]}
+
+
+def player_side(pick, game, forecasts, player_logs):
+    """'home' or 'away' for a prop: the latest pregame forecast's roster, else the player's last stored team."""
+    snapshots = pregame(forecasts.get(game['id'], []), game['kickoff'])
+    if snapshots:
+        side, _ = pricing.player_line(snapshots[-1], pick['athleteId'])
+        if side:
+            return side
+    last = next((r for r in reversed(player_logs.get(str(pick['athleteId']), [])) if r.get('team') is not None), None)
+    if last:
+        for side in ('home', 'away'):
+            if str((game.get(side) or {}).get('id')) == str(last['team']):
+                return side
+    return None
+
+
+def hit_strip(pick, game, logs):
+    """The ticket's compact hit strip: the last five current-season regular-season values before kickoff, plus
+    the season and last-ten counts against the posted line. Stored box scores only; None when unknown."""
+    words = {word: key for key, word in pricing.WORDS.items()}
+    market = pick.get('market') if pick.get('market') in LOG_KEYS else words.get(str(pick.get('market') or '').lower())
+    line, side = number(pick.get('line')), str(pick.get('direction') or '').lower()
+    kickoff = str(pick.get('kickoff') or game.get('kickoff') or '')
+    if not market or line is None or side not in ('over', 'under') or not kickoff:
+        return None
+    rows = sorted((r for r in logs if r.get('seasonType') == 2 and str(r.get('kickoff') or '') < kickoff
+                   and isinstance((r.get('stats') or {}).get(market), (int, float))), key=lambda r: r.get('kickoff') or '')
+    season = [r['stats'][market] for r in rows if r.get('season') == game.get('season')]
+    if not season:
+        return None
+    hit = lambda v: v > line if side == 'over' else v < line
+    recent = [r['stats'][market] for r in rows[-10:]]
+    return {'v': season[-5:], 'season': [sum(map(hit, season)), len(season)], 'last10': [sum(map(hit, recent)), len(recent)]}
+
+
+def annotate_tickets(picks, by_id, forecasts, league_data, identities):
+    """side, ticketWhy and ticketBut on each straight play; returns {gameId: teams} for the first paint."""
+    teams = {}
+    for pick in picks:
+        if hero_parlay(pick):
+            continue
+        game = by_id.get(pick.get('gameId'))
+        if game and game.get('home') and game.get('away') and pick.get('gameId') not in teams:
+            teams[pick['gameId']] = {key: card_side(game.get('league'), game[key], identities) for key in ('away', 'home')}
+        if pick.get('athleteId') and game:
+            logs = (league_data.get(game.get('league')) or {}).get('player_logs', {})
+            pick['side'] = player_side(pick, game, forecasts, logs)
+            pick['hitStrip'] = hit_strip(pick, game, logs.get(str(pick['athleteId']), []))
+        elif pick.get('marketType') == 'spread' and pick.get('direction') in ('home', 'away'):
+            pick['side'] = pick['direction']
+        pick['ticketWhy'] = ticket_why(pick)
+        pick['ticketBut'] = ticket_but(pick, teams.get(pick.get('gameId')))
+    return teams
+
+
+def last_slates(picks, today):
+    """The last graded game day's W-L for the date line, for all sports and each football league."""
+    out = {}
+    for league in ('ALL', 'NFL', 'CFB'):
+        slate = hero_last_slate([p for p in picks if league == 'ALL' or p.get('league') == league], today)
+        if slate:
+            out[league] = slate
+    return out
+
+
+def season_records(picks, now=None):
+    """The stub's best-bet record: the site's current-season, current-stage headline (record_scope mirrors core.js)."""
+    out = {}
+    for league in ('ALL', 'NFL', 'CFB'):
+        rows = [p for p in picks if league == 'ALL' or p.get('league') == league]
+        # No as-of cut: the stub shows the record as the site's Record page counts it now.
+        summary = record_scope.summary(rows, None)
+        phases = {record_scope.phase_of(p) for p in record_scope.current_rows(rows, None)}
+        out[league] = {key: summary.get(key, 0) for key in ('wins', 'losses', 'pushes')}
+        out[league]['playoffs'] = phases == {'playoffs'}
+    return out
+
+
+def desk_runs(path=RUN_PLIST):
+    """The desk run times (Eastern) from the launchd job itself, for "I look again at ..." on an empty rail.
+
+    Read with a narrow pattern, not plistlib: launchd accepts the file's comments, which a strict XML parser rejects."""
+    try:
+        text = Path(path).read_text(encoding='utf-8')
+    except OSError:
+        return []
+    block = re.search(r'<key>StartCalendarInterval</key>\s*<array>(.*?)</array>', re.sub(r'<!--.*?-->', '', text, flags=re.S), re.S)
+    runs = []
+    for item in re.findall(r'<dict>(.*?)</dict>', block.group(1) if block else '', re.S):
+        values = dict((key, int(value)) for key, value in re.findall(r'<key>(\w+)</key>\s*<integer>(\d+)</integer>', item))
+        if 'Hour' in values and 'Minute' in values:
+            runs.append({'h': values['Hour'], 'm': values['Minute'], **({'wd': values['Weekday']} if 'Weekday' in values else {})})
+    return sorted(runs, key=lambda r: (r['h'], r['m'], r.get('wd', -1)))
+
+
+# The Prep List on the site (decision 6): the playbook's section 7 exclusions plus the role and price holds.
+PREP_ROLE = {'WR': (('pbpTgt', 'targets'), 5), 'TE': (('pbpTgt', 'targets'), 5), 'RB': (('car',), 12), 'FB': (('car',), 12)}
+PREP_ROWS = 6
+PREP_PRICE_FLOOR = -200
+
+
+def prep_history_ok(row, rules):
+    """5-9 games at the short-sample rate; 10 or more at the last-ten count and the season rate."""
+    values = [h.get('value') for h in row.get('history') or [] if isinstance(h.get('value'), (int, float))]
+    line, side = row.get('line'), row.get('direction')
+    if len(values) < 5 or not isinstance(line, (int, float)) or side not in ('over', 'under'):
+        return False
+    hit = [(v > line) if side == 'over' else (v < line) for v in values]
+    if len(values) < 10:
+        return sum(hit) >= rules['short'] * len(values)
+    return sum(hit[-10:]) >= rules['lastTen'] and sum(hit) >= rules['season'] * len(values)
+
+
+def prep_role_ok(athlete, team, league_info, season, kickoff):
+    """The playbook's role floor from stored box scores; missing usage is unknown, so the row stays off."""
+    logs = league_info.get('player_logs', {})
+    rows = sorted((r for r in logs.get(str(athlete), []) if str(r.get('team')) == str(team) and r.get('seasonType') == 2
+                   and r.get('season') == season and str(r.get('kickoff') or '') < str(kickoff)),
+                  key=lambda r: r.get('kickoff') or '')[-3:]
+    if len(rows) < 3:
+        return False
+    position = rows[-1].get('pos')
+    snaps = [(r.get('stats') or {}).get('snapPct') for r in rows]
+    if all(isinstance(v, (int, float)) for v in snaps) and sum(snaps) / 3 < 0.6:
+        return False
+    if position in PREP_ROLE:
+        keys, floor = PREP_ROLE[position]
+        values = [next((r['stats'][k] for k in keys if isinstance((r.get('stats') or {}).get(k), (int, float))), None)
+                  for r in rows]
+        return all(v is not None for v in values) and sum(values) / 3 >= floor
+    if position == 'QB':
+        # The usual starter: the team's top passer in at least two of its last three games before this one.
+        games = defaultdict(list)
+        for player, player_rows in logs.items():
+            for r in player_rows:
+                attempts = (r.get('stats') or {}).get('att')
+                if (str(r.get('team')) == str(team) and r.get('seasonType') == 2 and r.get('season') == season
+                        and str(r.get('kickoff') or '') < str(kickoff) and isinstance(attempts, (int, float)) and attempts > 0):
+                    games[(r.get('kickoff'), r.get('eventId'))].append((attempts, str(player)))
+        recent = [max(games[key])[1] for key in sorted(games)[-3:]]
+        return len(recent) == 3 and recent.count(str(athlete)) >= 2
+    return False
+
+
+def prep_list(trends, lines, picks, league_data, now, rules=None):
+    """{league: {'day', 'rows'}}: up to six Prep List rows on the next football game day that has any.
+
+    Every row is a fresh main line already in the trend shards, so no request or price is new."""
+    import research_posts
+    if rules is None:
+        try:
+            import direction
+            import learning
+            rules = direction.prep_rules(learning.load_policy(), now)
+        except Exception:                                  # a missing or unreadable policy keeps the baseline
+            import direction
+            rules = dict(direction.PREP_BASE, dropped=[], clearsOnly=False)
+    floors, dropped = rules.get('floors') or {}, set(rules.get('dropped') or [])
+    held = {(r.get('gameId'), str(r.get('athleteId')), r.get('stat')) for r in lines
+            if r.get('athleteId') and (r.get('roleSuspect') or r.get('priceSuspect'))}
+    graded = {(r.get('gameId'), str(r.get('athleteId')), r.get('stat'), r.get('direction'), r.get('line'),
+               r.get('book'), r.get('odds')): r.get('grade') or {} for r in lines if r.get('athleteId')}
+    words = {word: key for key, word in pricing.WORDS.items()}
+    on_card = {(p.get('gameId'), str(p.get('athleteId')), p.get('market') if p.get('market') in pricing.WORDS
+                else words.get(str(p.get('market') or '').lower()))
+               for p in picks if p.get('athleteId') and not p.get('result') and not p.get('historicalImport')
+               and not hero_parlay(p) and not hero_pulled(p)}
+    today = eastern_date(now).isoformat()
+    by_league = defaultdict(list)
+    for row in trends:
+        athlete, stat, line, odds = str(row.get('athleteId')), row.get('stat'), row.get('line'), row.get('odds')
+        seen, kickoff = instant(row.get('observedAt')), instant(row.get('kickoff'))
+        team = (row.get('team') or {}).get('id')
+        key = (row.get('gameId'), athlete, stat)
+        if (row.get('kind') != 'main' or row.get('league') not in ('NFL', 'CFB') or not kickoff or kickoff <= now
+                or day(row['kickoff']) < today or row.get('roleSuspect') or row.get('priceSuspect') or key in held
+                or row.get('injuryStatus') or key in on_card or stat in dropped
+                or not isinstance(line, (int, float)) or line == 0.5 or line < floors.get(stat, 0)
+                or not isinstance(odds, (int, float)) or abs(odds) < 100 or odds < PREP_PRICE_FLOOR
+                or row.get('book') not in research_posts.PUBLIC_BOOKS
+                or not seen or seen > now or now - seen > timedelta(hours=4)
+                or not prep_history_ok(row, rules)
+                or not prep_role_ok(athlete, team, league_data.get(row['league'], {}), row.get('season'), row['kickoff'])):
+            continue
+        grade = graded.get((row.get('gameId'), athlete, stat, row.get('direction'), line, row.get('book'), odds)) or {}
+        clears = (grade.get('calibrated') is True and (grade.get('view') or grade.get('tier')) in ('lean', 'strong')
+                  and not grade.get('thin') and not grade.get('limited') and (grade.get('edge') or 0) > 0)
+        if rules.get('clearsOnly') and not clears:
+            continue
+        logs = (league_data.get(row['league']) or {}).get('player_logs', {}).get(athlete, [])
+        position = next((r.get('pos') for r in reversed(logs) if r.get('pos')), None)
+        values = [h['value'] for h in row.get('history') or [] if isinstance(h.get('value'), (int, float))]
+        hits = sum(1 for v in values if (v > line if row['direction'] == 'over' else v < line))
+        by_league[row['league']].append({
+            'league': row['league'], 'gameId': row.get('gameId'), 'kickoff': row['kickoff'], 'athleteId': athlete,
+            'player': row.get('player'), 'team': (row.get('team') or {}).get('abbreviation'),
+            'teamColor': (row.get('team') or {}).get('color'), 'pos': position, 'stat': stat,
+            'direction': row['direction'], 'line': line, 'odds': odds, 'book': row.get('book'),
+            'observedAt': row.get('observedAt'), 'hits': hits, 'games': len(values), 'clears': clears})
+    out = {}
+    for league, rows in by_league.items():
+        first = min(day(r['kickoff']) for r in rows)
+        chosen, players = [], set()
+        for row in sorted((r for r in rows if day(r['kickoff']) == first),
+                          key=lambda r: (-r['hits'] / r['games'], -r['games'], str(r['player']), -r['odds'])):
+            if row['athleteId'] not in players:
+                players.add(row['athleteId'])
+                chosen.append(row)
+        out[league] = {'day': first, 'rows': chosen[:PREP_ROWS]}
+    return out
 
 
 # ------------------------------------------------------------------ research
@@ -1157,6 +1473,7 @@ def build(now=None):
                                'defense': defense_table(league, defense_logs, current),
                                'defense_logs': defense_logs, 'strength': strength,
                                'current': current, 'records': league_records}
+    ticket_teams = annotate_tickets(picks, by_id, forecasts, league_data, identities)
     injuries = {}
     for league in ('NFL', 'CFB'):
         block = ((context.get('leagues') or {}).get(league) or {}).get('teams') or {}
@@ -1259,6 +1576,7 @@ def build(now=None):
         if row.get('stat') in ('passYds', 'att', 'cmp', 'recYds', 'rec'):
             team = str((row.get('team') or {}).get('id') or '')
             row['qbNews'] = qb_news(trend_injuries.get(row['league'], {}).get(team, [])) or None
+    prep = prep_list(trends, lines, picks, league_data, now)
     write_trends(trends, now)
     gap_rows = market_read.load_rows()
     for game in sorted(window, key=lambda g: (g['kickoff'], g['id'])):
@@ -1289,11 +1607,17 @@ def build(now=None):
                  'forecasts': max((s['publishedAt'] for rows in forecasts.values() for s in rows), default=None),
                  'injuries': ((context.get('leagues') or {}).get('NFL') or {}).get('checkedAt'),
                  'props': max((c['retrievedAt'] for rows in captures.values() for c in rows), default=None)}
+    runs = desk_runs()
     write(OUT / 'today.json', {'generatedAt': stamp(now), 'freshness': freshness,
                                'health': research_views.health(freshness, now), 'games': cards,
-                               'picks': recent_picks(picks, now), 'historyFile': 'record.json', 'model': summary})
+                               'picks': recent_picks(picks, now), 'historyFile': 'record.json', 'model': summary,
+                               # Kitchen Ticket Today (decision 22): Prep List rows, the date line's last W-L, the
+                               # stub's season record and the desk run times, all chosen here, never in the browser.
+                               'prep': prep, 'lastSlate': last_slates(picks, eastern_date(now).isoformat()),
+                               'season': season_records(picks, now), 'deskRuns': runs})
     import featured as featured_store     # the day's Pick of the Day, whose card feed.py draws under its -potd name
-    write(OUT / 'today-hero.json', today_hero(picks, now, featured_store.of_day(eastern_date(now).isoformat())))
+    write(OUT / 'today-hero.json', today_hero(picks, now, featured_store.of_day(eastern_date(now).isoformat()),
+                                              ticket_teams, runs))
     write(OUT / 'record.json', {'generatedAt': stamp(now), 'picks': picks})
     generated = stamp(now)
     line_index = line_payload.manifest(lines, generated)
@@ -1556,6 +1880,11 @@ def guard_player_lines(lines, games, forecasts, league_data, now, logger=print, 
             row['roleSuspect'] = True
             row['grade'] = None
             row['gradeNote'] = 'Projection under review'
+            # Which hold, and for a workload hold the real recent full-game volumes (never the held projection).
+            row['roleHold'] = 'workload' if caution else 'qb'
+            if caution:
+                row['recentFull'] = caution['recentFull']
+                row['recentVolume'] = caution['volume']
             reason = (f"{caution['projected']:g} {caution['volume']} vs "
                       f"{caution['recentFullAverage']:g} last-three full-game average") if caution else qb_caution['reason']
             logger(f"role-sanity: {row.get('id') or row.get('title')}: {reason}")
