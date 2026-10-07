@@ -17,6 +17,7 @@ network calls and changes nothing. New file families require a reviewed allowlis
 | `data/desk-notes.json` | Already-validated, bounded homepage research notes. Not the private operating desk. |
 | `data/app/` reviewed routes | Derived page data with projections, histories, quotes, sample and freshness information. This includes the full `record.json`, a tiny `today-hero.json` first-paint hint with only one public play, the small `lines.json` manifest with `lines-NFL.json` and `lines-CFB.json`, dated NFL/CFB trend shards plus their index, and the separate CFB defense table. |
 | `data/feed.xml`, `data/cards/`, `img/` | Approved public feed and artwork. Do not rewrite published images merely for a new look. |
+| `data/app/vegas.json` | Vegas vs reality (owner approved Oct 7): closing-line accuracy by league, computed at build time by `scripts/vegas.py` from the committed football, basketball and soccer stores. Counts, rates, average misses, seasons, sources and computed facts only; no picks, live prices or private fields. Exactly this one path; 64 KB warning budget. |
 
 The check rejects unknown paths, symlinks, known owner-only files, credential-bearing JSON fields and selected
 recognizable token/webhook patterns. It reports only file paths and reason codes, never matched values. Private

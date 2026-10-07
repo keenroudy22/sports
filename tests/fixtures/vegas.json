@@ -1,0 +1,854 @@
+{
+ "breakEven110": 52.4,
+ "generatedAt": "2026-10-07T16:00:00Z",
+ "label": "Closing lines",
+ "leagues": [
+  {
+   "bySeason": [
+    {
+     "cover": null,
+     "favorite": {
+      "decided": 1,
+      "pct": 100.0,
+      "won": 1
+     },
+     "games": 1,
+     "over": null,
+     "season": "2023"
+    },
+    {
+     "cover": {
+      "favorite": 5,
+      "n": 8,
+      "pct": 62.5
+     },
+     "favorite": {
+      "decided": 7,
+      "pct": 85.7,
+      "won": 6
+     },
+     "games": 10,
+     "over": {
+      "n": 9,
+      "over": 1,
+      "pct": 11.1
+     },
+     "season": "2025"
+    }
+   ],
+   "calibration": [
+    {
+     "high": 60,
+     "low": 50,
+     "n": 3,
+     "priced": 57.8,
+     "wins": 3,
+     "won": 100.0
+    },
+    {
+     "high": 70,
+     "low": 60,
+     "n": 1,
+     "priced": 61.4,
+     "wins": 1,
+     "won": 100.0
+    },
+    {
+     "high": 80,
+     "low": 70,
+     "n": 2,
+     "priced": 74.7,
+     "wins": 1,
+     "won": 50.0
+    },
+    {
+     "high": 90,
+     "low": 80,
+     "n": 2,
+     "priced": 80.0,
+     "wins": 2,
+     "won": 100.0
+    }
+   ],
+   "facts": [
+    "3 points is the most common NFL final margin: 4 of 11 games (36.4%).",
+    "Underdogs at +300 or longer won 1 of 3 NFL games (33.3%)."
+   ],
+   "favorite": {
+    "basis": "moneyline",
+    "decided": 8,
+    "lost": 1,
+    "n": 9,
+    "pct": 87.5,
+    "priced": 68.0,
+    "tied": 1,
+    "won": 7
+   },
+   "games": 11,
+   "league": "NFL",
+   "meaning": "The closing moneyline favorite won 87.5% of 8 games. With the book's cut removed, its closing odds said 68.0%. Against the spread and on totals, the favorite covered 62.5% of 8 games, and the over hit 11.1% of 9 games. At −110 you need 52.4% just to break even. Some of these samples are small, so read those rates loosely.",
+   "name": "NFL",
+   "notes": [
+    "Left out: 1 games whose stored line is really an odds price, 1 exact 50/50 moneylines (no favorite).",
+    "1 games have no closing moneyline; the spread and total tables still use them when their lines are there. A tie stays out of the win rate.",
+    "Pushes are rare because most stored lines are half points, which cannot push."
+   ],
+   "seasons": {
+    "count": 2,
+    "first": "2023",
+    "label": "2023 to 2025",
+    "last": "2025"
+   },
+   "sizes": [
+    {
+     "coverPct": 50.0,
+     "covered": 1,
+     "dog": 0,
+     "label": "Up to 3",
+     "lost": 0,
+     "n": 2,
+     "push": 1,
+     "tied": 0,
+     "won": 2,
+     "wonPct": 100.0
+    },
+    {
+     "coverPct": 66.7,
+     "covered": 2,
+     "dog": 1,
+     "label": "3.5 to 7",
+     "lost": 0,
+     "n": 3,
+     "push": 0,
+     "tied": 1,
+     "won": 2,
+     "wonPct": 100.0
+    },
+    {
+     "coverPct": 66.7,
+     "covered": 2,
+     "dog": 1,
+     "label": "7.5 to 14",
+     "lost": 1,
+     "n": 3,
+     "push": 0,
+     "tied": 0,
+     "won": 2,
+     "wonPct": 66.7
+    }
+   ],
+   "sources": [
+    [
+     "ESPN BET",
+     10
+    ]
+   ],
+   "sport": "football",
+   "spread": {
+    "dog": 2,
+    "dogPct": 25.0,
+    "favorite": 5,
+    "favoritePct": 62.5,
+    "mae": 5.3,
+    "missN": 9,
+    "n": 8,
+    "push": 1,
+    "pushPct": 12.5,
+    "unit": "points",
+    "within": [
+     {
+      "pct": 55.6,
+      "within": 3
+     },
+     {
+      "pct": 66.7,
+      "within": 7
+     }
+    ]
+   },
+   "through": "2025-10-05",
+   "total": {
+    "line": null,
+    "mae": 6.2,
+    "n": 9,
+    "over": 1,
+    "overPct": 11.1,
+    "priced": null,
+    "push": 0,
+    "pushPct": 0.0,
+    "under": 8,
+    "underPct": 88.9,
+    "unit": "points",
+    "within": [
+     {
+      "pct": 11.1,
+      "within": 3
+     },
+     {
+      "pct": 77.8,
+      "within": 7
+     }
+    ]
+   }
+  },
+  {
+   "bySeason": [
+    {
+     "cover": {
+      "favorite": 1,
+      "n": 2,
+      "pct": 50.0
+     },
+     "favorite": {
+      "decided": 1,
+      "pct": 0.0,
+      "won": 0
+     },
+     "games": 3,
+     "over": {
+      "n": 2,
+      "over": 1,
+      "pct": 50.0
+     },
+     "season": "2025"
+    }
+   ],
+   "calibration": [
+    {
+     "high": 70,
+     "low": 60,
+     "n": 1,
+     "priced": 60.7,
+     "wins": 0,
+     "won": 0.0
+    }
+   ],
+   "facts": [
+    "3 points is the most common college football final margin: 1 of 3 games (33.3%).",
+    "College football favorites of 30+ points won all 1 straight up, but covered only 1 (100.0%)."
+   ],
+   "favorite": {
+    "basis": "moneyline",
+    "decided": 1,
+    "lost": 1,
+    "n": 1,
+    "pct": 0.0,
+    "priced": 60.7,
+    "tied": 0,
+    "won": 0
+   },
+   "games": 3,
+   "league": "CFB",
+   "meaning": "The closing moneyline favorite won 0.0% of 1 game. With the book's cut removed, its closing odds said 60.7%. Against the spread and on totals, the favorite covered 50.0% of 2 games, and the over hit 50.0% of 2 games. At −110 you need 52.4% just to break even. Some of these samples are small, so read those rates loosely.",
+   "name": "College football",
+   "notes": [
+    "Left out: 1 rows from a projections service, not a sportsbook.",
+    "2 games have no closing moneyline; the spread and total tables still use them when their lines are there. A tie stays out of the win rate.",
+    "Pushes are rare because most stored lines are half points, which cannot push."
+   ],
+   "seasons": {
+    "count": 1,
+    "first": "2025",
+    "label": "2025",
+    "last": "2025"
+   },
+   "sizes": [
+    {
+     "coverPct": 0.0,
+     "covered": 0,
+     "dog": 1,
+     "label": "3.5 to 7",
+     "lost": 1,
+     "n": 1,
+     "push": 0,
+     "tied": 0,
+     "won": 0,
+     "wonPct": 0.0
+    },
+    {
+     "coverPct": 100.0,
+     "covered": 1,
+     "dog": 0,
+     "label": "14.5 or more",
+     "lost": 0,
+     "n": 1,
+     "push": 0,
+     "tied": 0,
+     "won": 1,
+     "wonPct": 100.0
+    }
+   ],
+   "sources": [
+    [
+     "ESPN BET",
+     2
+    ]
+   ],
+   "sport": "football",
+   "spread": {
+    "dog": 1,
+    "dogPct": 50.0,
+    "favorite": 1,
+    "favoritePct": 50.0,
+    "mae": 6.8,
+    "missN": 2,
+    "n": 2,
+    "push": 0,
+    "pushPct": 0.0,
+    "unit": "points",
+    "within": [
+     {
+      "pct": 0.0,
+      "within": 3
+     },
+     {
+      "pct": 100.0,
+      "within": 7
+     }
+    ]
+   },
+   "through": "2025-10-05",
+   "total": {
+    "line": null,
+    "mae": 5.5,
+    "n": 2,
+    "over": 1,
+    "overPct": 50.0,
+    "priced": null,
+    "push": 0,
+    "pushPct": 0.0,
+    "under": 1,
+    "underPct": 50.0,
+    "unit": "points",
+    "within": [
+     {
+      "pct": 0.0,
+      "within": 3
+     },
+     {
+      "pct": 50.0,
+      "within": 7
+     }
+    ]
+   }
+  },
+  {
+   "bySeason": [
+    {
+     "cover": {
+      "favorite": 2,
+      "n": 4,
+      "pct": 50.0
+     },
+     "favorite": {
+      "decided": 4,
+      "pct": 100.0,
+      "won": 4
+     },
+     "games": 5,
+     "over": {
+      "n": 3,
+      "over": 1,
+      "pct": 33.3
+     },
+     "season": "2024-25"
+    }
+   ],
+   "calibration": [],
+   "facts": [
+    "NBA favorites of 18+ points won all 1 straight up, but covered only 0 (0.0%)."
+   ],
+   "favorite": {
+    "basis": "spread",
+    "decided": 4,
+    "lost": 0,
+    "n": 4,
+    "pct": 100.0,
+    "priced": null,
+    "tied": 0,
+    "won": 4
+   },
+   "games": 5,
+   "league": "NBA",
+   "meaning": "The closing spread favorite won 100.0% of 4 games. Against the spread and on totals, the favorite covered 50.0% of 4 games, and the over hit 33.3% of 3 games. At −110 you need 52.4% just to break even. Some of these samples are small, so read those rates loosely.",
+   "name": "NBA",
+   "notes": [
+    "No basketball moneylines are stored, so the favorite is the spread favorite and there is no priced-chance table.",
+    "1 games with no closing spread are left out of the spread numbers.",
+    "Pushes are rare because most stored lines are half points, which cannot push."
+   ],
+   "seasons": {
+    "count": 1,
+    "first": "2024-25",
+    "label": "2024-25",
+    "last": "2024-25"
+   },
+   "sizes": [
+    {
+     "coverPct": 50.0,
+     "covered": 1,
+     "dog": 0,
+     "label": "Up to 3",
+     "lost": 0,
+     "n": 2,
+     "push": 1,
+     "tied": 0,
+     "won": 2,
+     "wonPct": 100.0
+    },
+    {
+     "coverPct": 100.0,
+     "covered": 1,
+     "dog": 0,
+     "label": "3.5 to 7",
+     "lost": 0,
+     "n": 1,
+     "push": 0,
+     "tied": 0,
+     "won": 1,
+     "wonPct": 100.0
+    },
+    {
+     "coverPct": 0.0,
+     "covered": 0,
+     "dog": 1,
+     "label": "14.5 or more",
+     "lost": 0,
+     "n": 1,
+     "push": 0,
+     "tied": 0,
+     "won": 1,
+     "wonPct": 100.0
+    }
+   ],
+   "sources": [
+    [
+     "One book",
+     3
+    ],
+    [
+     "Multi-book consensus",
+     1
+    ]
+   ],
+   "sport": "basketball",
+   "spread": {
+    "dog": 1,
+    "dogPct": 25.0,
+    "favorite": 2,
+    "favoritePct": 50.0,
+    "mae": 3.4,
+    "missN": 4,
+    "n": 4,
+    "push": 1,
+    "pushPct": 25.0,
+    "unit": "points",
+    "within": [
+     {
+      "pct": 75.0,
+      "within": 5
+     },
+     {
+      "pct": 100.0,
+      "within": 10
+     }
+    ]
+   },
+   "through": "2025-01-09",
+   "total": {
+    "line": null,
+    "mae": 11.3,
+    "n": 3,
+    "over": 1,
+    "overPct": 33.3,
+    "priced": null,
+    "push": 0,
+    "pushPct": 0.0,
+    "under": 2,
+    "underPct": 66.7,
+    "unit": "points",
+    "within": [
+     {
+      "pct": 33.3,
+      "within": 5
+     },
+     {
+      "pct": 33.3,
+      "within": 10
+     }
+    ]
+   }
+  },
+  {
+   "bySeason": [
+    {
+     "cover": {
+      "favorite": 0,
+      "n": 2,
+      "pct": 0.0
+     },
+     "favorite": {
+      "decided": 2,
+      "pct": 50.0,
+      "won": 1
+     },
+     "games": 2,
+     "over": {
+      "n": 2,
+      "over": 0,
+      "pct": 0.0
+     },
+     "season": "2023-24"
+    }
+   ],
+   "calibration": [],
+   "facts": [
+    "College basketball favorites of 30+ points won all 1 straight up, but covered only 0 (0.0%).",
+    "Biggest upset in the stored lines: Southern (+26) won 60-59 at Mississippi State on Dec 3, 2023."
+   ],
+   "favorite": {
+    "basis": "spread",
+    "decided": 2,
+    "lost": 1,
+    "n": 2,
+    "pct": 50.0,
+    "priced": null,
+    "tied": 0,
+    "won": 1
+   },
+   "games": 2,
+   "league": "CBB",
+   "meaning": "The closing spread favorite won 50.0% of 2 games. Against the spread and on totals, the favorite covered 0.0% of 2 games, and the over hit 0.0% of 2 games. At −110 you need 52.4% just to break even. Some of these samples are small, so read those rates loosely.",
+   "name": "College basketball",
+   "notes": [
+    "No basketball moneylines are stored, so the favorite is the spread favorite and there is no priced-chance table.",
+    "Pushes are rare because most stored lines are half points, which cannot push."
+   ],
+   "seasons": {
+    "count": 1,
+    "first": "2023-24",
+    "label": "2023-24",
+    "last": "2023-24"
+   },
+   "sizes": [
+    {
+     "coverPct": 0.0,
+     "covered": 0,
+     "dog": 1,
+     "label": "14.5 or more",
+     "lost": 1,
+     "n": 2,
+     "push": 1,
+     "tied": 0,
+     "won": 1,
+     "wonPct": 50.0
+    }
+   ],
+   "sources": [
+    [
+     "One book",
+     2
+    ]
+   ],
+   "sport": "basketball",
+   "spread": {
+    "dog": 1,
+    "dogPct": 50.0,
+    "favorite": 0,
+    "favoritePct": 0.0,
+    "mae": 13.5,
+    "missN": 2,
+    "n": 2,
+    "push": 1,
+    "pushPct": 50.0,
+    "unit": "points",
+    "within": [
+     {
+      "pct": 50.0,
+      "within": 5
+     },
+     {
+      "pct": 50.0,
+      "within": 10
+     }
+    ]
+   },
+   "through": "2025-01-09",
+   "total": {
+    "line": null,
+    "mae": 11.0,
+    "n": 2,
+    "over": 0,
+    "overPct": 0.0,
+    "priced": null,
+    "push": 0,
+    "pushPct": 0.0,
+    "under": 2,
+    "underPct": 100.0,
+    "unit": "points",
+    "within": [
+     {
+      "pct": 0.0,
+      "within": 5
+     },
+     {
+      "pct": 0.0,
+      "within": 10
+     }
+    ]
+   }
+  },
+  {
+   "bySeason": [
+    {
+     "cover": null,
+     "favorite": {
+      "decided": 1,
+      "pct": 100.0,
+      "won": 1
+     },
+     "games": 1,
+     "over": null,
+     "season": "2016-17"
+    },
+    {
+     "cover": {
+      "favorite": 1,
+      "n": 3,
+      "pct": 33.3
+     },
+     "favorite": {
+      "decided": 3,
+      "pct": 33.3,
+      "won": 1
+     },
+     "games": 4,
+     "over": {
+      "n": 4,
+      "over": 2,
+      "pct": 50.0
+     },
+     "season": "2024-25"
+    }
+   ],
+   "calibration": [
+    {
+     "high": 50,
+     "low": 40,
+     "n": 1,
+     "priced": 45.4,
+     "wins": 0,
+     "won": 0.0
+    },
+    {
+     "high": 60,
+     "low": 50,
+     "n": 1,
+     "priced": 57.4,
+     "wins": 1,
+     "won": 100.0
+    },
+    {
+     "high": 70,
+     "low": 60,
+     "n": 1,
+     "priced": 63.0,
+     "wins": 1,
+     "won": 100.0
+    },
+    {
+     "high": 90,
+     "low": 80,
+     "n": 1,
+     "priced": 85.1,
+     "wins": 0,
+     "won": 0.0
+    }
+   ],
+   "facts": [
+    "Premier League favorites of 1.75+ goals won 0 of 1 straight up, but covered only 0 (0.0%).",
+    "Draws were priced at 22.8% and happened 20.0% of the time (1 of 5).",
+    "Biggest upset in the stored prices: Norwich beat Man City 3-2 on Sep 14, 2019. The closing price gave Norwich a 4.6% chance to win."
+   ],
+   "favorite": {
+    "basis": "1x2",
+    "decided": 4,
+    "drew": 1,
+    "lost": 1,
+    "n": 4,
+    "pct": 50.0,
+    "priced": 62.7,
+    "won": 2
+   },
+   "games": 5,
+   "league": "EPL",
+   "meaning": "The closing favorite won 50.0% of 4 games, a draw counting as not won. With the book's cut removed, its closing odds said 62.7%. Against the handicap the favorite covered 33.3% of 3 games, a half win counting as a cover. Over 2.5 goals hit 50.0% of 4 games; the closing prices said 52.9%. Some of these samples are small, so read those rates loosely.",
+   "name": "Premier League",
+   "notes": [
+    "Handicap and total prices are stored for 4 games. Quarter-goal handicaps split the stake, so a half win counts as a cover and a half loss as a miss.",
+    "The 2.5-goal total is a fixed line, not a predicted score, so it has no average miss.",
+    "Win rates count draws as games the favorite did not win."
+   ],
+   "seasons": {
+    "count": 2,
+    "first": "2016-17",
+    "label": "2016-17 to 2024-25",
+    "last": "2024-25"
+   },
+   "sizes": [
+    {
+     "coverPct": 0.0,
+     "covered": 0,
+     "dog": 1,
+     "drew": 1,
+     "label": "¼ to ½ goal",
+     "lost": 0,
+     "n": 1,
+     "push": 0,
+     "won": 0,
+     "wonPct": 0.0
+    },
+    {
+     "coverPct": 100.0,
+     "covered": 1,
+     "dog": 0,
+     "drew": 0,
+     "label": "¾ to 1 goal",
+     "lost": 0,
+     "n": 1,
+     "push": 0,
+     "won": 1,
+     "wonPct": 100.0
+    },
+    {
+     "coverPct": 0.0,
+     "covered": 0,
+     "dog": 1,
+     "drew": 0,
+     "label": "1¾ goals or more",
+     "lost": 1,
+     "n": 1,
+     "push": 0,
+     "won": 0,
+     "wonPct": 0.0
+    }
+   ],
+   "sources": [
+    [
+     "Pinnacle",
+     5
+    ]
+   ],
+   "sport": "soccer",
+   "spread": {
+    "dog": 2,
+    "dogPct": 66.7,
+    "favorite": 1,
+    "favoritePct": 33.3,
+    "mae": 1.4,
+    "missN": 4,
+    "n": 3,
+    "push": 0,
+    "pushPct": 0.0,
+    "unit": "goals",
+    "within": [
+     {
+      "pct": 75.0,
+      "within": 1
+     },
+     {
+      "pct": 75.0,
+      "within": 2
+     }
+    ]
+   },
+   "through": "2024-09-14",
+   "total": {
+    "line": 2.5,
+    "mae": null,
+    "n": 4,
+    "over": 2,
+    "overPct": 50.0,
+    "priced": 52.9,
+    "push": 0,
+    "pushPct": 0.0,
+    "under": 2,
+    "underPct": 50.0,
+    "unit": "goals",
+    "within": []
+   }
+  },
+  {
+   "bySeason": [
+    {
+     "cover": null,
+     "favorite": {
+      "decided": 2,
+      "pct": 50.0,
+      "won": 1
+     },
+     "games": 2,
+     "over": null,
+     "season": "2025"
+    }
+   ],
+   "calibration": [
+    {
+     "high": 50,
+     "low": 40,
+     "n": 1,
+     "priced": 42.8,
+     "wins": 0,
+     "won": 0.0
+    },
+    {
+     "high": 60,
+     "low": 50,
+     "n": 1,
+     "priced": 53.7,
+     "wins": 1,
+     "won": 100.0
+    }
+   ],
+   "facts": [
+    "Draws were priced at 26.3% and happened 50.0% of the time (1 of 2).",
+    "Home teams won 50.0% of 2 games; away teams won 0.0%."
+   ],
+   "favorite": {
+    "basis": "1x2",
+    "decided": 2,
+    "drew": 1,
+    "lost": 0,
+    "n": 2,
+    "pct": 50.0,
+    "priced": 48.3,
+    "won": 1
+   },
+   "games": 2,
+   "league": "MLS",
+   "meaning": "The closing favorite won 50.0% of 2 games, a draw counting as not won. With the book's cut removed, its closing odds said 48.3%. Some of these samples are small, so read those rates loosely.",
+   "name": "MLS",
+   "notes": [
+    "Only win/draw/loss prices are stored for this league: no handicap or total.",
+    "Win rates count draws as games the favorite did not win."
+   ],
+   "seasons": {
+    "count": 1,
+    "first": "2025",
+    "label": "2025",
+    "last": "2025"
+   },
+   "sizes": [],
+   "sources": [
+    [
+     "Pinnacle",
+     2
+    ]
+   ],
+   "sport": "soccer",
+   "spread": null,
+   "through": "2025-05-10",
+   "total": null
+  }
+ ]
+}

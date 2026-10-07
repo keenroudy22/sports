@@ -67,6 +67,7 @@ test('the real app shared interface renders every lazy view with fixture data', 
     ['more', views.more, {}],
     ['glossary', views.glossary, {}],
     ['lab', views.lab, {}],
+    ['vegas', views.vegas, {}],
   ];
   assert.equal(views.responsible, undefined);
   const moreHtml = await views.more({});

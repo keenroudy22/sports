@@ -8,6 +8,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import payload_budget
 
+VEGAS = (Path(__file__).resolve().parent / 'fixtures' / 'vegas.json').read_bytes()
+
 
 class PayloadBudgetTests(unittest.TestCase):
     def site(self, root, today=b'{}'):
@@ -26,6 +28,7 @@ class PayloadBudgetTests(unittest.TestCase):
         (app / 'teams/CFB.json').write_bytes(b'{}')
         (app / 'teams/CFB-defense.json').write_bytes(b'{}')
         (app / 'trends/index.json').write_text(json.dumps({'files': []}))
+        (app / 'vegas.json').write_bytes(VEGAS)
         return root
 
     def test_split_payloads_under_limits_pass(self):
@@ -50,6 +53,17 @@ class PayloadBudgetTests(unittest.TestCase):
             result = payload_budget.check(root)
             self.assertIn(f'today:{size}/{payload_budget.LIMITS["today"]}:near', result['warnings'])
             self.assertEqual(result['issues'], [])
+
+    def test_vegas_panel_payload_has_its_own_warning_budget(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = self.site(folder)
+            self.assertLess(len(VEGAS), payload_budget.LIMITS['vegas'])
+            (root / 'data/app/vegas.json').write_bytes(b'x' * (payload_budget.LIMITS['vegas'] + 1))
+            result = payload_budget.check(root)
+            self.assertTrue(any(x.startswith('vegas:') for x in result['warnings']))
+            self.assertEqual(result['issues'], [])
+            (root / 'data/app/vegas.json').unlink()
+            self.assertIn('vegas:missing', payload_budget.check(root)['warnings'])
 
     def test_shell_breach_still_stops_the_publish(self):
         with tempfile.TemporaryDirectory() as folder:

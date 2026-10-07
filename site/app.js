@@ -354,6 +354,7 @@
       case 'record': return { view: 'record', tab: ['fun', 'climb', 'model', 'trials'].includes(a) ? a : 'official' };
       case 'results': return { view: 'record', tab: 'official', legacy: true };
       case 'model': return { view: 'record', tab: 'model', legacy: true };
+      case 'vegas': return { view: 'vegas', league: a ? a.toUpperCase() : null };
       case 'more': case 'tools': return { view: 'more' };
       case 'responsible': return { view: 'more', legacy: true };
       case 'ticket': case 'parlays': return { view: 'ticket' };
@@ -380,7 +381,7 @@
     return null;
   };
   const TAB_OF = { today: 'today', pick: 'today', research: 'research', games: 'games', game: 'games', team: 'games', player: 'research',
-    record: 'record', more: 'more', ticket: 'more' };
+    record: 'record', vegas: 'record', more: 'more', ticket: 'more' };
   MORE_PAGES.forEach(p => { TAB_OF[p] = 'more'; });
   TAB_OF.lab = 'record';
 
@@ -2045,7 +2046,7 @@
   /* ---------- More ---------- */
   const moreGroup = (title, links) => `<p class="eyebrow more-group">${title}</p><div class="list-links">${links}</div>`;
   /* Record, More and team pages are not part of the first paint. */
-  const MORE_VIEW_NAMES = ['team', 'record', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
+  const MORE_VIEW_NAMES = ['team', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const MORE_ASSET = 'app-more.js?v=sha256-18f87df6420d';
   let moreViews = null, moreLoading = null;
@@ -2189,6 +2190,7 @@
     if (route.view === 'player') return '#research/players';
     if (route.view === 'today' && route.league) return '#today';
     if (route.view === 'research' && (route.league || route.game)) return `#research/${route.mode}`;
+    if (route.view === 'vegas' && route.league) return '#vegas';
     return null;
   };
   /* Background refresh: live pages only, never while someone is typing or picking. Data keeps its 5-minute cache;

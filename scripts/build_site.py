@@ -18,6 +18,8 @@ Each page loads only what it shows:
   app/teams/CFB-defense.json  the college defense table
   app/teams/<L>/<id>.json     one team's games, defense log and roster usage
   app/research.json           injury report, status changes, analyst notes
+  app/vegas.json              Vegas vs reality: closing lines against finals, by league
+                              (football, basketball and soccer stores; scripts/vegas.py)
 
 Everything is derived from committed data, so site/data/app/ is not committed;
 the hosted workflow rebuilds it before each deploy.
@@ -49,6 +51,7 @@ import research_views
 import role_sanity
 import season_trends
 import sport_research
+import vegas
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -1174,7 +1177,20 @@ def build(now=None):
             write(OUT / 'teams' / league / f'{team}.json', payload)
     write(OUT / 'research.json', {'generatedAt': stamp(now), **build_research(context, reports, now)})
     write(OUT / 'sport-research.json', sport_research.build(now))
+    write_vegas(now, records)
     return len(cards)
+
+
+def write_vegas(now, records):
+    """Vegas vs reality is one optional history panel. A failure drops only its file, so payload_budget reports
+    vegas:missing and the view shows its retry state; it never blocks the publish of the record and the site."""
+    try:
+        payload = vegas.build(now, football=records)
+    except Exception as error:
+        print(f'Vegas vs reality skipped: {type(error).__name__}: {error}', file=sys.stderr)
+        return False
+    write(OUT / 'vegas.json', payload)
+    return True
 
 
 # Week 1's "My final five", from the screenshot import, which predates the favorite flag. The report is

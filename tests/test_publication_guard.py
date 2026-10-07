@@ -20,7 +20,7 @@ class PublicationGuardTests(unittest.TestCase):
                      'data/app/players/NFL/3.json', 'data/app/player-charts/CFB.json',
                      'data/app/teams/NFL/12.json', 'data/app/teams/NFL.json', 'data/app/teams/CFB-defense.json',
                      'data/app/games/NFL-401872979.json', 'data/cards/research-2026-10-05.png',
-                     'img/wins/personal-win.jpg', 'data/feed.xml'):
+                     'img/wins/personal-win.jpg', 'data/feed.xml', 'data/app/vegas.json'):
             self.assertTrue(guard.allowed_path(Path(path)), path)
 
     def test_unreviewed_and_private_artifacts_fail_closed(self):
@@ -28,7 +28,8 @@ class PublicationGuardTests(unittest.TestCase):
                      'data/x-posted.json', 'data/app/policy.json', 'data/app/status.json',
                      'data/app/teams/NFL/../../private.json', 'data/cards/private.zip',
                      'img/.config/card.png', 'data/new-feed.json', 'data/app/trends.json',
-                     'data/app/trends/NBA-2026-10-08.json', 'data/app/trends/NFL-all.json', 'archive/review-packet.md'):
+                     'data/app/trends/NBA-2026-10-08.json', 'data/app/trends/NFL-all.json', 'archive/review-packet.md',
+                     'data/vegas.json', 'data/app/vegas/NFL.json'):
             self.assertFalse(guard.allowed_path(Path(path)), path)
 
     def test_retired_preview_paths_are_not_public(self):

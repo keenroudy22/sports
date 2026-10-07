@@ -20,6 +20,7 @@ LIMITS = {
     'trend-shard': 2 * 1024 * 1024,
     'cfb-teams': 256 * 1024,
     'cfb-defense': 512 * 1024,
+    'vegas': 64 * 1024,
 }
 SHELL_FILES = ('index.html', 'app.css', 'app.js')
 NEAR_FRACTION = .90
@@ -61,6 +62,7 @@ def check(site=SITE):
         'lines-CFB': site / 'data/app/lines-CFB.json',
         'cfb-teams': site / 'data/app/teams/CFB.json',
         'cfb-defense': site / 'data/app/teams/CFB-defense.json',
+        'vegas': site / 'data/app/vegas.json',
     }
     for name, path in files.items():
         limit = LIMITS['lines'] if name.startswith('lines-') else LIMITS[name]

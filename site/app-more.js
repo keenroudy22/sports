@@ -137,7 +137,7 @@
         ${section('Past steps', `<div class="receipts">${lad.history.slice().reverse().map(climbRow).join('') || '<p class="muted">No settled steps yet.</p>'}</div>`, '', `The Climb keeps its own run history and spans NFL and college legs, so it is shown whole; changing the season view does not change an active run.${lad.climbs.length ? ` Climbs finished: ${lad.climbs.length}.` : ''}`)}`;
     }
     if (tab === 'model') {
-      if (!FOOTBALL.includes(state.league) && state.league !== 'ALL') return `${top}${tabs}${empty(`${LEAGUE_NAME[state.league]} is in research, not official picks yet`, '<a href="#record/trials">See its trial →</a>', 'research')}`;
+      if (!FOOTBALL.includes(state.league) && state.league !== 'ALL') return `${top}${tabs}${empty(`${LEAGUE_NAME[state.league]} is in research, not official picks yet`, `<a href="#record/trials">See its trial →</a> · <a href="#vegas/${esc(state.league)}">Vegas vs reality →</a>`, 'research')}`;
       const card = C.projectionScorecard(board, every, FOOTBALL.includes(state.league) ? state.league : 'ALL');
       const live = ((board || {}).live || []).filter(inLeague);
       const back = ((board || {}).backtest || []).filter(inLeague);
@@ -151,6 +151,7 @@
       const weeksTable = list => list.filter(r => (r.weeks || []).length).map(r => `<details class="more-box" style="margin-top:8px"><summary>${esc(r.league === 'CFB' ? 'College' : r.league)} · ${esc(MODEL_NAME[r.model] || r.model)} · ${esc(r.season)} by week</summary><div class="table-wrap"><table class="t"><thead><tr><th>Week</th><th class="n">Games</th><th class="n">Winner</th><th class="n">Spread vs close</th><th class="n">Margin miss</th><th class="n">Close miss</th><th class="n">Totals vs close</th></tr></thead><tbody>${r.weeks.map(w =>
         `<tr><td>${esc(w.week === 'post' ? 'Postseason' : 'Week ' + w.week)}</td><td class="n">${esc(w.games)}</td><td class="n">${esc(rec3(w.winner))} <span class="tiny muted">${rate(w.winner)}</span></td><td class="n">${esc(rec3(w.side))}</td><td class="n">${esc(C.fixed(w.marginMiss))}</td><td class="n">${esc(C.fixed(w.closeMarginMiss))}</td><td class="n">${esc(rec3(w.ou))}</td></tr>`).join('')}</tbody></table></div></details>`).join('');
       return `${top}${tabs}<p class="muted small" style="margin-bottom:12px">How the model's final pregame calls did against the closing line. This is model accuracy, not betting profit. At −110, a bet must win more than 52.4% of the time to profit. Official plays are graded separately.</p>
+        <p class="small" style="margin:-4px 0 12px"><a href="#vegas">Vegas vs reality: how often the closing line is right →</a></p>
         <div class="kpis"><div class="kpi"><small>Spread vs close</small><b class="num">${esc(rate(card.spread))}</b><span>${esc(card.spread.join('–'))}</span></div><div class="kpi"><small>Projected winners</small><b class="num">${esc(rate(card.moneyline))}</b><span>${esc(card.moneyline.join('–'))} · no price</span></div><div class="kpi"><small>Totals vs close</small><b class="num">${esc(rate(card.total))}</b><span>${esc(card.total.join('–'))}</span></div><div class="kpi"><small>Player props vs line</small><b class="num">${esc(rate(card.props))}</b><span>${esc(card.props.join('–'))} · ${esc(card.propsNote)}</span></div><div class="kpi"><small>Fun tickets</small><b class="num">${esc(rate(card.parlays))}</b><span>${esc(card.parlays.join('–'))} · tracked apart</span></div><div class="kpi"><small>Picks beat the close</small><b class="num">${clv.measured ? `${clv.beat}/${clv.measured}` : '–'}</b><span>${clv.measured ? `${clv.tied} tied · ${clv.lost} lost` : ''}</span></div></div>
         <p class="small muted" style="margin-top:8px">${esc(card.games)} graded games · through ${esc(card.updatedThrough ? dayLabel(card.updatedThrough) : '–')} · final pregame forecast. Projected winners are accuracy only, not a betting result, since there is no price and favorites usually win. Fun tickets are published results, tracked separately from best bets.</p>
         ${live.length ? section('Live record, by league', modelTable(live) + weeksTable(live), '', 'Published before kickoff. Miss = average points off the final. When the close misses by less, the market was the better forecast.') : ''}
@@ -166,6 +167,63 @@
     const cards = leagues.map(lg => trialCard(lg, lab, trials)).join('');
     return `${top}${tabs}<p class="muted small" style="margin-bottom:12px">New sports run as paper trials first. Nothing here is a best bet, and nothing joins the public card or socials without a full trial and the owner's approval.</p>
       <div class="grid two">${cards || (lab || trials ? '' : '<p class="muted">Trial data did not load. <button type="button" class="btn small" data-retry>Try again</button></p>')}</div>`;
+  };
+
+  /* Vegas vs reality: how often the closing line was right, built from stored closing lines and finals.
+     Every number arrives computed with its sample; this view only lays it out. History, never advice. */
+  views.vegas = async route => {
+    const back = '<a class="back" href="#record/model">← Model</a>';
+    const top = head('Record', 'Vegas vs reality', 'How often the betting market got it right, from stored closing lines and final scores. Every number shows how many games it comes from.', back);
+    const data = await maybe('app/vegas.json');
+    const leagues = ((data || {}).leagues || []).filter(l => l && l.league && l.favorite);
+    if (!leagues.length) return `${top}${empty('Vegas numbers did not load', 'The closing-line file is unavailable right now. <button type="button" class="btn small" data-retry>Try again</button>', 'research')}`;
+    const want = String(route.league || state.league || '').toUpperCase();
+    const lg = leagues.find(l => l.league === want) || leagues[0];
+    /* Say so when the requested sport has no stored closing lines, rather than silently showing another. */
+    const fallback = want && want !== 'ALL' && lg.league !== want ? `<p class="small muted" style="margin:-4px 0 12px">${esc(LEAGUE_NAME[want] || want)} has no stored closing lines here; showing ${esc(lg.name)}.</p>` : '';
+    const n = v => isNum(v) ? Number(v).toLocaleString('en-US') : '–';
+    const p = v => isNum(v) ? `${Number(v).toFixed(1)}%` : '–';
+    const soccer = lg.sport === 'soccer', f = lg.favorite, s = lg.spread, t = lg.total;
+    const unit = s ? (s.unit === 'goals' ? 'goals' : 'pts') : 'pts';
+    const ats = soccer ? 'handicap' : 'spread';
+    const date = v => { const d = new Date(`${v}T12:00:00Z`); return isNaN(d) ? '' : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }); };
+    const rec = x => soccer ? `${n(x.won)} won · ${n(x.drew)} drew · ${n(x.lost)} lost` : `${n(x.won)}–${n(x.lost)}`;
+    const basis = { moneyline: 'by closing moneyline', spread: 'the spread favorite', '1x2': 'by win/draw/loss price' }[f.basis] || '';
+    const kpi = (label, value, note) => `<div class="kpi"><small>${esc(label)}</small><b class="num">${esc(value)}</b><span>${esc(note)}</span></div>`;
+    const per = v => Number(v) === 1 ? (unit === 'goals' ? 'goal' : 'pt') : unit;
+    const within = list => (list || []).map((w, i) => i ? `within ${n(w.within)} ${per(w.within)} ${p(w.pct)}` : `within ${n(w.within)} ${per(w.within)} of the line ${p(w.pct)} of the time`).join(', and ');
+    const chips = `<div class="toolbar">${segLinks(leagues.map(l => [`#vegas/${l.league}`, l.name, l.league]), lg.league)}</div>`;
+    /* Built per league from that league's own numbers (scripts/vegas.py meaning). */
+    const meaning = lg.meaning ? `<div class="card on-felt" style="margin-bottom:14px"><p><b>What this means:</b> ${esc(lg.meaning)}</p></div>` : '';
+    const sources = (lg.sources || []).map(([name, games]) => `${name} ${n(games)}`).join(' · ');
+    const scope = `<p class="small muted" style="margin:-4px 0 12px">${esc(lg.name)} · closing lines · ${esc((lg.seasons || {}).label || '')} · through ${esc(date(lg.through))} · ${n(lg.games)} final games stored</p>`;
+    const kpis = `<div class="kpis">${kpi('Favorite won', p(f.pct), `${rec(f)} · n=${n(f.decided)}${f.tied ? ` · ${n(f.tied)} tie left out` : ''} · ${basis}`)}
+      ${isNum(f.priced) ? kpi('Priced at', p(f.priced), `the odds' chance, book's cut removed · n=${n(f.decided)}`) : ''}
+      ${s ? kpi('Favorite covered', p(s.favoritePct), `${n(s.favorite)} of ${n(s.n)} · ${n(s.push)} push${s.push === 1 ? '' : 'es'}`) : ''}
+      ${t ? kpi(soccer ? 'Over 2.5 goals' : 'Over hit', p(t.overPct), `${n(t.over)} of ${n(t.n)}${isNum(t.priced) ? ` · priced ${p(t.priced)}` : ''}`) : ''}
+      ${s && isNum(s.mae) ? kpi(`Avg ${ats} miss`, `${Number(s.mae).toFixed(1)} ${unit}`, `n=${n(s.missN)}`) : ''}
+      ${t && isNum(t.mae) ? kpi('Avg total miss', `${Number(t.mae).toFixed(1)} ${unit}`, `n=${n(t.n)}`) : ''}</div>`;
+    const sizes = (lg.sizes || []).length ? section('Picking winners by favorite size', `<div class="table-wrap"><table class="t"><thead><tr><th>Favored by</th><th class="n">Won</th><th class="n">Covered</th></tr></thead><tbody>${lg.sizes.map(b =>
+      `<tr><td>${esc(b.label)}</td><td class="n">${p(b.wonPct)}<br><span class="tiny muted">${soccer ? `${n(b.won)}–${n(b.drew)}–${n(b.lost)}` : `${n(b.won)}–${n(b.lost)}`}</span></td><td class="n">${p(b.coverPct)}<br><span class="tiny muted">${n(b.covered)} of ${n(b.n)}</span></td></tr>`).join('')}</tbody></table></div>`, '',
+      `Size is the closing ${soccer ? 'Asian handicap, in goals; won counts a draw as not won' : 'spread, in points'}. Covered counts pushes as not covered.`) : '';
+    const cal = (lg.calibration || []).length ? section(`When Vegas says 70%, how often does it happen?`, `<div class="table-wrap"><table class="t"><thead><tr><th>Vegas said</th><th class="n">Priced</th><th class="n">Won</th></tr></thead><tbody>${lg.calibration.map(b =>
+      `<tr><td>${b.low === 0 ? `Under ${n(b.high)}%` : b.high >= 100 ? `${n(b.low)}%+` : `${n(b.low)}–${n(b.high)}%`}</td><td class="n">${p(b.priced)}</td><td class="n">${p(b.won)}<br><span class="tiny muted">${n(b.wins)} of ${n(b.n)}${b.n < 30 ? '<br>too few to read' : ''}</span></td></tr>`).join('')}</tbody></table></div>`, '',
+      'The favorite\'s chance from the closing odds with the book\'s cut removed, against how often it actually won.') : '';
+    const atsBody = s ? `<div class="table-wrap"><table class="t"><tbody><tr><td>Favorite covered</td><td class="n">${p(s.favoritePct)}</td><td class="n muted">${n(s.favorite)}</td></tr><tr><td>Underdog covered</td><td class="n">${p(s.dogPct)}</td><td class="n muted">${n(s.dog)}</td></tr><tr><td>Push</td><td class="n">${p(s.pushPct)}</td><td class="n muted">${n(s.push)}</td></tr></tbody></table></div>
+      <p class="small" style="margin-top:8px">The closing ${ats} missed the final margin by ${esc(isNum(s.mae) ? Number(s.mae).toFixed(1) : '–')} ${unit} on average (n=${n(s.missN)}). The margin landed ${esc(within(s.within))}.</p>` : '';
+    const atsSec = s ? section(soccer ? 'Against the handicap' : 'Against the spread', atsBody, '', `n=${n(s.n)} games with a favorite.${soccer ? ' A half win counts as a cover and a half loss as a miss.' : ''}`) : '';
+    const totSec = !t ? '' : section(soccer ? 'Over 2.5 goals' : 'Totals', soccer
+      ? `<p>Over 2.5 goals hit ${esc(p(t.overPct))} of ${n(t.n)} games. The closing prices said ${esc(p(t.priced))}.</p>`
+      : `<div class="table-wrap"><table class="t"><tbody><tr><td>Over</td><td class="n">${p(t.overPct)}</td><td class="n muted">${n(t.over)}</td></tr><tr><td>Under</td><td class="n">${p(t.underPct)}</td><td class="n muted">${n(t.under)}</td></tr><tr><td>Push</td><td class="n">${p(t.pushPct)}</td><td class="n muted">${n(t.push)}</td></tr></tbody></table></div>
+        <p class="small" style="margin-top:8px">The closing total missed the final points by ${esc(isNum(t.mae) ? Number(t.mae).toFixed(1) : '–')} ${unit} on average (n=${n(t.n)}). The final landed ${esc(within(t.within))}.</p>`, '', `n=${n(t.n)} games with a closing total.`);
+    const facts = (lg.facts || []).length ? section('Fun facts', `<ul class="small" style="display:grid;gap:6px;padding-left:18px">${lg.facts.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`) : '';
+    const seasons = (lg.bySeason || []).length ? (() => { const td = 'class="n" style="padding:8px 5px"', cell = (rate, hit, of) => `<td ${td}>${p(rate)}<br><span class="tiny muted">${n(hit)}/${n(of)}</span></td>`,
+        hasCover = lg.bySeason.some(r => r.cover), hasOver = lg.bySeason.some(r => r.over);
+      return `<details class="more-box" data-box="vegas-seasons" style="margin-top:12px"><summary>Season by season</summary><p class="small muted" style="margin-bottom:6px">Favorite means the favorite won straight up. Each cell shows the rate, then hits/games.</p><div class="table-wrap"><table class="t" style="font-size:13px"><thead><tr><th style="padding:8px 5px">Season</th><th ${td}>Favorite</th>${hasCover ? `<th ${td}>Covered</th>` : ''}${hasOver ? `<th ${td}>Over</th>` : ''}</tr></thead><tbody>${lg.bySeason.map(r =>
+        `<tr><td style="padding:8px 5px;white-space:nowrap">${esc(r.season)}</td>${cell((r.favorite || {}).pct, (r.favorite || {}).won, (r.favorite || {}).decided)}${!hasCover ? '' : r.cover ? cell(r.cover.pct, r.cover.favorite, r.cover.n) : `<td ${td}>–</td>`}${!hasOver ? '' : r.over ? cell(r.over.pct, r.over.over, r.over.n) : `<td ${td}>–</td>`}</tr>`).join('')}</tbody></table></div></details>`; })() : '';
+    const counted = `<details class="more-box" data-box="vegas-notes" style="margin-top:12px"><summary>How this is counted</summary><div class="small" style="display:grid;gap:6px">${(lg.notes || []).map(x => `<p>${esc(x)}</p>`).join('')}${sources ? `<p class="muted">Closing lines from: ${esc(sources)} games.</p>` : ''}<p class="muted">Computed when the site is built, from the same stored finals and closing lines the desk grades with. Nothing here changes a play, a gate or the record.</p></div></details>`;
+    return `${top}${chips}${fallback}${scope}${meaning}${kpis}${sizes}${cal}${atsSec}${totSec}${facts}${seasons}${counted}
+      <p class="small muted" style="margin-top:14px">Entertainment only, 21+. This describes past games. It is not betting advice, and no pick is ever certain.</p>`;
   };
 
   views.more = async () => `${head('More', 'Tools and help', '')}

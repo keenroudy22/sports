@@ -633,6 +633,8 @@
     /* Scores keeps its deep links as the live view inside Games. */
     if (view === 'scores') return { view: 'scores', league: (rest[0] || 'ALL').toUpperCase() };
     if (view === 'record' && rest[0] === 'trials') return {view:'record',tab:'trials'};
+    /* Vegas vs reality: #vegas or #vegas/<league>; an unknown league falls back inside the view. */
+    if (view === 'vegas') return rest[0] ? { view: 'vegas', league: rest[0].toUpperCase() } : { view: 'vegas' };
     const known = ['today', 'games', 'stats', 'model', 'record', 'board', 'ticket', 'research', 'arbs', 'lab', 'schedule', 'more', 'saved', 'digest', 'start', 'feedback'];
     if (known.includes(view)) return { view };
     return { view: LEGACY[view] || 'today' };
