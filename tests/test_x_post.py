@@ -48,6 +48,12 @@ PROP = {'id': 'NFL-2026-W4-p7-over-4-5-rec-dk', 'title': 'Player Seven over 4.5 
 
 
 class DraftTests(unittest.TestCase):
+    def test_night_football_caption_names_the_window(self):
+        saturday = dict(GAME, kickoff='2026-10-11T00:15:00Z')
+        self.assertTrue(x_post.draft(PICK, saturday).startswith('Saturday night: '))
+        sunday = dict(GAME, league='NFL', kickoff='2026-10-12T00:20:00Z')
+        self.assertTrue(x_post.draft(dict(PICK, id='NFL-night'), sunday).startswith('SNF: '))
+
     def test_every_post_is_the_play_the_price_and_our_number_in_a_few_words(self):
         team = x_post.draft(dict(PICK, favorite=False, modelLean=True, projection=31.2), GAME)
         self.assertEqual(team, "Iowa/Michigan under 38.5 (-105, FanDuel)\nWe have it at 31.\n\n❤️ if you're tailing\n@Playbook #CFB")

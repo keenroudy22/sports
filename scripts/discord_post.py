@@ -160,12 +160,32 @@ def mirror_sent(log_book, now, url=None, wins_url=None, send=http_send, fetch=do
     failed = []
     for entry in log_book.get('posts', []):
         mirror = entry.get('discord') or {}
+        kind = entry.get('kind')
+        destination = mirror.get('destination')
+        allowed = ((kind == 'buffer:play' and destination != 'wins')
+                   or (kind == 'buffer:cashed' and str(entry.get('id') or '').startswith('cashed:')
+                       and destination == 'wins')
+                   or (kind == 'buffer:community' and destination == 'wins'))
+        if not allowed:
+            # Older queue entries may still carry a pending mirror payload.
+            # The latest plays-only rule wins at send time too.
+            if mirror.get('state') == 'pending':
+                mirror['state'] = 'skipped'
+                mirror['reason'] = 'not an approved Discord category'
+                entry['discord'] = mirror
+            continue
         ready = mirror.get('readyAt') and gates.when(mirror['readyAt']) <= now
         if mirror.get('state') != 'pending' or not (ready or entry.get('sentAt')) \
                 or entry.get('cancelledAt') or entry.get('deletedAt'):
             continue
-        target = wins_url if mirror.get('destination') == 'wins' else url
+        target = wins_url if destination == 'wins' else url
         if not target:
+            if destination == 'wins' and kind == 'buffer:cashed':
+                mirror['state'] = 'skipped'
+                mirror['reason'] = 'wins webhook not configured'
+                entry['discord'] = mirror
+                log('discord: wins webhook not configured; win mirror skipped')
+                continue
             message = 'Discord destination is not configured'
             changed = mirror.get('error') != message
             mirror['error'] = message
@@ -200,6 +220,8 @@ def mirror_sent(log_book, now, url=None, wins_url=None, send=http_send, fetch=do
         mirror = entry.get('discord') or {}
         followup = mirror.get('followup') or {}
         if followup.get('state') != 'pending':
+            continue
+        if entry.get('kind') not in ('buffer:play', 'buffer:community') or mirror.get('state') != 'sent':
             continue
         target = wins_url if mirror.get('destination') == 'wins' else url
         if not target:

@@ -14,7 +14,7 @@ NOW = datetime(2026, 9, 28, 16, 0, tzinfo=timezone.utc)
 class DiscordPostTests(unittest.TestCase):
     def test_playbook_is_removed_at_delivery_even_for_an_old_pending_mirror(self):
         text = 'Player over 4.5 (-110)\n\n@Playbook #NFL'
-        entry = {'id': 'play', 'sentAt': '2026-09-28T15:59:00Z',
+        entry = {'id': 'play', 'kind': 'buffer:play', 'sentAt': '2026-09-28T15:59:00Z',
                  'discord': {'state': 'pending', 'text': text}}
         sent = []
         send = lambda url, body, headers: (sent.append(body) or (204, b''))
@@ -31,7 +31,7 @@ class DiscordPostTests(unittest.TestCase):
     def test_only_new_eligible_sent_posts_are_mirrored_once_with_the_same_card(self):
         sent = []
         log_book = {'posts': [
-            {'id': 'new', 'sentAt': '2026-09-28T15:59:00Z',
+            {'id': 'new', 'kind': 'buffer:play', 'sentAt': '2026-09-28T15:59:00Z',
              'discord': {'state': 'pending', 'text': 'The play', 'image': 'https://example.com/card.png'}},
             {'id': 'old', 'sentAt': '2026-09-28T12:00:00Z'},
             {'id': 'waiting', 'discord': {'state': 'pending', 'text': 'Not on X yet'}},
@@ -63,7 +63,7 @@ class DiscordPostTests(unittest.TestCase):
         self.assertEqual(sent[0][1]['Content-Type'], 'application/json')
 
     def test_a_failure_retries_but_only_reports_a_changed_error(self):
-        entry = {'id': 'a', 'sentAt': '2026-09-28T15:59:00Z', 'discord': {'state': 'pending', 'text': 'Play'}}
+        entry = {'id': 'a', 'kind': 'buffer:play', 'sentAt': '2026-09-28T15:59:00Z', 'discord': {'state': 'pending', 'text': 'Play'}}
         fail = lambda *a: (429, b'rate limited')
         first = discord_post.mirror_sent({'posts': [entry]}, NOW, url='secret', send=fail, log=lambda *_: None)
         second = discord_post.mirror_sent({'posts': [entry]}, NOW, url='secret', send=fail, log=lambda *_: None)
@@ -75,20 +75,20 @@ class DiscordPostTests(unittest.TestCase):
     def test_a_due_play_posts_before_x_but_other_copy_still_waits(self):
         sent = []
         log_book = {'posts': [
-            {'id': 'play', 'dueAt': '2026-09-28T16:15:00Z',
+            {'id': 'play', 'kind': 'buffer:play', 'dueAt': '2026-09-28T16:15:00Z',
              'discord': {'state': 'pending', 'readyAt': '2026-09-28T16:00:00Z', 'text': 'The play'}},
-            {'id': 'later', 'discord': {'state': 'pending', 'readyAt': '2026-09-28T16:01:00Z', 'text': 'Too soon'}},
+            {'id': 'later', 'kind': 'buffer:play', 'discord': {'state': 'pending', 'readyAt': '2026-09-28T16:01:00Z', 'text': 'Too soon'}},
             {'id': 'house', 'discord': {'state': 'pending', 'text': 'Wait for X'}},
         ]}
         send = lambda url, body, headers: (sent.append(body) or (204, b''))
         discord_post.mirror_sent(log_book, NOW, url='secret', send=send, log=lambda *_: None)
         self.assertEqual([body['content'] for body in sent], ['The play'])
         self.assertTrue(log_book['posts'][0]['discord']['beforeX'])
-        self.assertEqual(log_book['posts'][2]['discord']['state'], 'pending')
+        self.assertEqual(log_book['posts'][2]['discord']['state'], 'skipped', 'old house copy never mirrors')
 
     def test_a_pull_followup_is_sent_once(self):
         sent = []
-        entry = {'id': 'a', 'cancelledAt': '2026-09-28T16:00:00Z', 'discord': {
+        entry = {'id': 'a', 'kind': 'buffer:play', 'cancelledAt': '2026-09-28T16:00:00Z', 'discord': {
             'state': 'sent', 'followup': {'state': 'pending', 'text': 'Pulled after confirmed news'}}}
         send = lambda url, body, headers: (sent.append(body) or (204, b''))
         discord_post.mirror_sent({'posts': [entry]}, NOW, url='secret', send=send, log=lambda *_: None)
@@ -97,7 +97,7 @@ class DiscordPostTests(unittest.TestCase):
         self.assertEqual(entry['discord']['followup']['state'], 'sent')
 
     def test_no_webhook_is_a_quiet_noop(self):
-        entry = {'id': 'a', 'sentAt': '2026-09-28T15:59:00Z', 'discord': {'state': 'pending', 'text': 'Play'}}
+        entry = {'id': 'a', 'kind': 'buffer:play', 'sentAt': '2026-09-28T15:59:00Z', 'discord': {'state': 'pending', 'text': 'Play'}}
         self.assertEqual(discord_post.mirror_sent({'posts': [entry]}, NOW, url='', log=lambda *_: None), [])
         self.assertEqual(entry['discord']['state'], 'pending')
 
@@ -126,7 +126,7 @@ class DiscordPostTests(unittest.TestCase):
 
     def test_community_win_uses_dedicated_destination_without_public_fallback(self):
         sent = []
-        entry = {'id': 'community:win', 'sentAt': '2026-09-28T15:59:00Z',
+        entry = {'id': 'community:win', 'kind': 'buffer:community', 'sentAt': '2026-09-28T15:59:00Z',
                  'discord': {'state': 'pending', 'destination': 'wins', 'text': 'MODEL COOKED'}}
         send = lambda url, body, headers: (sent.append((url, body)) or (204, b''))
         self.assertEqual(discord_post.mirror_sent({'posts': [entry]}, NOW, url='plays', wins_url='wins',
@@ -134,7 +134,7 @@ class DiscordPostTests(unittest.TestCase):
         self.assertEqual(sent[0][0], 'wins')
         self.assertEqual(sent[0][1]['content'], 'MODEL COOKED')
 
-        held = {'id': 'community:held', 'sentAt': '2026-09-28T15:59:00Z',
+        held = {'id': 'community:held', 'kind': 'buffer:community', 'sentAt': '2026-09-28T15:59:00Z',
                 'discord': {'state': 'pending', 'destination': 'wins', 'text': 'WIN'}}
         failures = discord_post.mirror_sent({'posts': [held]}, NOW, url='plays', wins_url='',
                                             send=send, log=lambda *_: None)
@@ -145,6 +145,32 @@ class DiscordPostTests(unittest.TestCase):
     def test_wins_webhook_never_falls_back(self):
         self.assertEqual(discord_post.wins_webhook({'DISCORD_WINS_WEBHOOK_URL': 'wins'}), 'wins')
         self.assertEqual(discord_post.wins_webhook({'DISCORD_WEBHOOK_URL': 'plays'}), '')
+
+    def test_only_play_reaches_plays_and_win_reaches_wins_even_for_old_pending_rows(self):
+        sent = []
+        rows = [
+            {'id': 'play', 'kind': 'buffer:play', 'sentAt': '2026-09-28T15:59:00Z',
+             'discord': {'state': 'pending', 'text': 'The play'}},
+            {'id': 'cashed:play', 'kind': 'buffer:cashed', 'sentAt': '2026-09-28T15:59:00Z',
+             'discord': {'state': 'pending', 'destination': 'wins', 'text': 'Cooked'}},
+            {'id': 'ladder-loss:play', 'kind': 'buffer:cashed', 'sentAt': '2026-09-28T15:59:00Z',
+             'discord': {'state': 'pending', 'text': 'A miss'}},
+            {'id': 'receipt:day:test', 'kind': 'buffer:receipt', 'sentAt': '2026-09-28T15:59:00Z',
+             'discord': {'state': 'pending', 'text': 'Old receipt'}},
+            {'id': 'research:test', 'kind': 'buffer:research', 'sentAt': '2026-09-28T15:59:00Z',
+             'discord': {'state': 'pending', 'text': 'Old research'}},
+        ]
+        send = lambda url, body, headers: (sent.append((url, body['content'])) or (204, b''))
+        discord_post.mirror_sent({'posts': rows}, NOW, url='plays', wins_url='wins', send=send, log=lambda *_: None)
+        self.assertEqual(sent, [('plays', 'The play'), ('wins', 'Cooked')])
+        self.assertTrue(all(row['discord']['state'] == 'skipped' for row in rows[2:]))
+
+    def test_missing_wins_webhook_skips_cooked_without_leaking_to_plays(self):
+        row = {'id': 'cashed:play', 'kind': 'buffer:cashed', 'sentAt': '2026-09-28T15:59:00Z',
+               'discord': {'state': 'pending', 'destination': 'wins', 'text': 'Cooked'}}
+        self.assertEqual(discord_post.mirror_sent({'posts': [row]}, NOW, url='plays', wins_url='',
+                                                  send=lambda *args: self.fail('must not send'), log=lambda *_: None), [])
+        self.assertEqual(row['discord']['state'], 'skipped')
 
 
 if __name__ == '__main__':

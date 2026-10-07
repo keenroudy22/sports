@@ -299,7 +299,7 @@ def fit_limit(plans, remaining):
 def plan(first, latest, games, now, log_book, player_team=None, soon=None, quotes=None, refused=None, news=None):
     """The posts the run should schedule now: [(key, kind, text, due_at, card_key)].
 
-    X gets plays, their receipts and one short prompt between the first two plays of a multi-play card. Player props,
+    X gets plays and their receipts. Player props,
     game lines and the day's fun parlay use the same shape every time and always carry the card; the morning after,
     the receipt (scripts/receipts.py) goes at 9:00 AM ET,
     ahead of that morning's plays; on Wednesday the week's receipt too. Plays go out around noon Eastern on game
@@ -312,8 +312,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     soon = soon if soon is not None else SOON
     import learning
     weights = learning.load_policy().get('reasonWeights')
-    # A post can stand for two (the morning receipt that carries the menu is keyed "receipt:...+menu:..."): neither
-    # goes out again on its own.
+    # Legacy merged receipt/menu ids remain recognized, but no new menu is made.
     posted = {part for p in log_book.get('posts', []) for part in str(p['id']).split('+')}
     today = eastern_date(now)
     import featured as featured_store
@@ -355,7 +354,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
                 continue
         plays.append((target, -1 if key == potd else ORDER[pick_card.play_kind(merged)],
                       deadline, key, text, 'play', f'{key}-potd' if key == potd else key))
-    order = {'menu': -2, 'receipt': -1, 'book': -1, 'sheet': 0, 'research': 1, 'cashed': 2, 'sports': 3}
+    order = {'receipt': -1, 'book': -1, 'research': 1, 'cashed': 2, 'sports': 3}
     for post in receipts.house_posts(first, latest, games, log_book, now):
         if set(post['key'].split('+')) & posted:
             continue
@@ -372,19 +371,9 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     for item in (news or [])[:news_room]:
         if item['key'] not in posted:
             plays.append((item['target'], -3, item['deadline'], item['key'], item['text'], 'news', None))
-    # Informational Climb check-ins must never delay the official card or its normal conversation slot.
-    plays.sort(key=lambda row: (row[3].startswith('climb:checkin:'), row))
-    play_rows = [row for row in plays if row[5] == 'play']
-    conversation_key = f'conversation:day:{today.isoformat()}'
-    planned_today = sum(1 for row in plays if eastern_date(row[0]) == today)
-    room_for_prompt = day_count(log_book, today) + planned_today < MAX_PER_DAY
-    if conversation_key not in posted and len(play_rows) >= 2 and room_for_prompt:
-        first_index = next(i for i, row in enumerate(plays) if row is play_rows[0])
-        prompt = (play_rows[0][0], play_rows[0][1], min(play_rows[0][2], play_rows[1][2]), conversation_key,
-                  conversation_text(today, play_rows, first, games), 'conversation', None)
-        plays.insert(first_index + 1, prompt)
+    plays.sort(key=lambda row: row)
     # The desk's own ceiling gets the same protection as Buffer's allowance. A research card is useful, but never
-    # at the cost of a play, receipt, sheet, menu or record post.
+    # at the cost of a play, receipt or record post.
     room = max(0, MAX_PER_DAY - day_count(log_book, today))
     todays = [row for row in plays if eastern_date(row[0]) == today]
     overflow = max(0, len(todays) - room)
@@ -503,18 +492,22 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         entry = {'id': guid, 'postedAt': gates.stamp(now), 'dueAt': gates.stamp(due), 'bufferPostId': post_id,
                  'textHash': x_post.text_hash(text), 'kind': f'buffer:{kind}', 'card': bool(image),
                  'cardTheme': card_theme}
-        # Only entries scheduled after Discord mirroring was introduced carry this payload. That prevents enabling
-        # the webhook from replaying the account's older X history into a new server.
-        entry['discord'] = {'state': 'pending', 'text': without_playbook(text)}
+        # Only posted plays enter Plays & Results. Wins and owner community
+        # tickets have a separate destination; research, receipts and losses
+        # have no Discord mirror payload at all.
+        if kind in ('play', 'community') or (kind == 'cashed' and guid.startswith('cashed:')):
+            entry['discord'] = {'state': 'pending', 'text': without_playbook(text)}
         if kind == 'community':
             # Owner-submitted model-assisted slips belong in the community wins feed, not the official-play feed.
             # Its dedicated webhook has no public-channel fallback, so a missing destination holds the receipt.
+            entry['discord']['destination'] = 'wins'
+        elif kind == 'cashed' and guid.startswith('cashed:'):
             entry['discord']['destination'] = 'wins'
         if kind == 'play':
             # A confirmed play is the reason to join Discord. Schedule it first; the lightweight delivery job runs
             # every five minutes, so a 15-minute target gives members roughly 10-15 minutes before the X post.
             entry['discord']['readyAt'] = gates.stamp(max(now, due - DISCORD_PLAY_LEAD))
-        if image:
+        if image and 'discord' in entry:
             entry['discord']['image'] = image
         if image and card_key and card_key != guid:
             entry['cardKey'] = card_key            # a Pick of the Day's own card; a requote keeps it

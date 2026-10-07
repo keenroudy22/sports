@@ -43,6 +43,18 @@ MONDAY_MORNING = datetime(2026, 9, 28, 12, 30, tzinfo=timezone.utc)       # Mon 
 
 
 class ReceiptTests(unittest.TestCase):
+    def test_long_leftovers_keep_losses_before_wins(self):
+        rows = [pick(f'w{i}', 'sun', title=f'Long School Name Number {i} over 149.5 passing yards',
+                     athleteId=str(i), market='pass_yds', result='win')
+                for i in range(5)]
+        rows += [pick('loss', 'sun', title='Long School Name Number Six under 149.5 passing yards',
+                      athleteId='six', market='pass_yds', result='loss')]
+        text = receipts.fit_result_rows(rows, 'Leftovers: Saturday: 5-1', '#CFB', GAMES)
+        self.assertIn('❌ Long School Name Number Six', text)
+        self.assertNotIn('✅ Long School Name Number 4', text)
+        self.assertIn('wins, 0 losses on card', text)
+        self.assertLessEqual(receipts.x_post.tweet_length(text), receipts.x_post.LIMIT)
+
     def test_climb_checkin_is_weekend_only_and_not_queued_hours_early(self):
         sat = datetime(2026, 10, 3, 15, 45, tzinfo=timezone.utc)
         post = receipts.climb_checkin({}, {}, {}, sat)
@@ -200,21 +212,17 @@ class ReceiptTests(unittest.TestCase):
         log['posts'] = [e for e in log['posts'] if e['id'] != 'NFL-2026-W4-m']         # tonight's play has not gone out yet
         plans = buffer_post.plan(first, latest, dict(GAMES, **noon), MONDAY_MORNING, log)
         got = [(p[0], p[1], p[3].astimezone(gates.EASTERN).strftime('%H:%M'), p[4]) for p in plans]
-        self.assertEqual(got[0], ('receipt:day:2026-09-27+menu:day:2026-09-28', 'receipt', '09:00', 'receipt-day-2026-09-27'),
-                         'one morning post: the receipt carries the menu')
-        self.assertIn('\n\nToday: 2 plays.\n#NFL', plans[0][2])
+        self.assertEqual(got[0], ('receipt:day:2026-09-27', 'receipt', '09:00', 'receipt-day-2026-09-27'))
+        self.assertNotIn('Today:', plans[0][2])
         self.assertTrue(plans[0][2].startswith('Sunday: 2-1\n✅ Player Seven'), plans[0][2])
         self.assertEqual(plans[0][2].count('Player Seven'), 1, 'each play once')
         self.assertEqual(got[1][:3], ('NFL-2026-W4-n', 'play', '10:00'), 'a noon kickoff posts two hours ahead')
-        self.assertEqual(got[2][:3], ('conversation:day:2026-09-28', 'conversation', '10:10'),
-                         'the one conversation prompt follows the first play')
-        self.assertEqual(got[3][:3], ('NFL-2026-W4-m', 'play', '12:00'), 'the Monday night play goes out at midday')
-        log['posts'].append({'id': 'receipt:day:2026-09-27+menu:day:2026-09-28', 'kind': 'buffer:receipt'})
+        self.assertEqual(got[2][:3], ('NFL-2026-W4-m', 'play', '18:00'), 'the Monday night play waits for 6 PM')
+        log['posts'].append({'id': 'receipt:day:2026-09-27', 'kind': 'buffer:receipt'})
         again = [p[0] for p in buffer_post.plan(first, latest, dict(GAMES, **noon), MONDAY_MORNING, log)]
         self.assertFalse([k for k in again if k.startswith(('receipt:', 'menu:'))], 'neither goes out again on its own')
-        log['posts'][-1] = {'id': 'receipt:day:2026-09-27', 'kind': 'buffer:receipt'}
         alone = [p[:2] for p in buffer_post.plan(first, latest, dict(GAMES, **noon), MONDAY_MORNING, log)]
-        self.assertIn(('menu:day:2026-09-28', 'menu'), alone, 'a receipt that already went out leaves the menu to go alone')
+        self.assertFalse(any(kind == 'menu' for _, kind in alone), 'no standalone menu remains')
 
 
 class CashedTests(unittest.TestCase):
@@ -299,7 +307,7 @@ class LadderReceiptTests(unittest.TestCase):
         self.assertEqual(card['card'], post['card'])
         self.assertEqual(card['pick']['result'], 'win')
 
-    def test_a_ladder_loss_gets_its_own_short_honest_result_and_restart(self):
+    def test_a_ladder_loss_waits_for_final_or_leftovers(self):
         rung = pick('ladder', 'sun', **self.RUNG)
         rung['id'] = 'NFL-2026-W4-ladder-loss'
         first = {rung['id']: rung}
@@ -307,14 +315,7 @@ class LadderReceiptTests(unittest.TestCase):
                                'settledAt': '2026-09-28T01:00:00Z'}}
         log = {'posts': [{'id': rung['id'], 'kind': 'buffer:play', 'tweetId': '123'}]}
         now = datetime(2026, 9, 28, 1, 15, tzinfo=timezone.utc)
-        [post] = receipts.cashed(first, latest, GAMES, log, now)
-        self.assertEqual(post['key'], 'ladder-loss:NFL-2026-W4-ladder-loss')
-        self.assertEqual(post['card'], 'ladder-result-NFL-2026-W4-ladder-loss')
-        self.assertIn('step 2 missed', post['text'])
-        self.assertIn('A 40+ rec yds ✅', post['text'])
-        self.assertIn('B 50+ rush yds ❌', post['text'])
-        self.assertIn('$19 stays banked. Climb 2 starts at $50.', post['text'])
-        self.assertEqual(receipts.guard(post), [])
+        self.assertEqual(receipts.cashed(first, latest, GAMES, log, now), [])
 
 
 class DailyTests(unittest.TestCase):

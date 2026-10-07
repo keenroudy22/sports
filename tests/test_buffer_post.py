@@ -134,26 +134,18 @@ class PlanTests(unittest.TestCase):
         latest = {k: dict(v) for k, v in first.items()}
         plans = bp.plan(first, latest, GAMES, NOW, {'posts': []})
         self.assertEqual([(p[0], et(p[3])) for p in plans],
-                         [('menu:day:2026-09-26', '08:45'), ('p', '10:00'), ('conversation:day:2026-09-26', '10:10'),
-                          ('a', '10:20'), ('d', '10:30'), ('x', '10:40'), ('b', '12:00')],
-                         'the menu first; one conversation prompt follows the first play, then the card continues; tomorrow waits')
-        self.assertEqual(plans[0][4], 'https://keenroudy.com/sports/img/kitchen-menu-approved.png')
+                         [('p', '10:00'), ('a', '10:10'), ('d', '10:20'), ('x', '10:30'), ('b', '18:00')],
+                         'no menu or teaser; night games wait for the 6 PM window')
         plans = [p for p in plans if p[1] == 'play']
         self.assertTrue(all(p[4] == p[0] for p in plans), 'each play with its own card')
         self.assertTrue(plans[0][2].startswith('Player Seven over 4.5 receptions (-115, '), plans[0][2])
         self.assertTrue(plans[3][2].startswith('🎯 +'), 'a fun parlay leads with its price')
 
-    def test_one_prompt_sits_between_plays_once_but_a_single_play_gets_no_filler(self):
+    def test_no_prompt_sits_between_plays_even_on_a_multi_play_day(self):
         first = {'a': pick('a'), 'b': pick('b', 'late', title='Oklahoma at Georgia under 44.5', direction='under')}
         latest = {k: dict(v) for k, v in first.items()}
         plans = bp.plan(first, latest, GAMES, NOW, {'posts': []})
-        prompt = next(p for p in plans if p[1] == 'conversation')
-        self.assertEqual(prompt[0], 'conversation:day:2026-09-26')
-        self.assertIn(prompt[2].split('\n\n')[0], bp.CONVERSATION)
-        self.assertTrue(prompt[2].endswith('#CFB'))
-        self.assertIsNone(prompt[4], 'a conversational post is intentionally text-only')
-        already = {'posts': [{'id': prompt[0], 'dueAt': prompt[3].isoformat(), 'kind': 'buffer:conversation'}]}
-        self.assertNotIn('conversation', {p[1] for p in bp.plan(first, latest, GAMES, NOW, already)})
+        self.assertNotIn('conversation', {p[1] for p in plans})
         single = {'a': first['a']}
         self.assertNotIn('conversation', {p[1] for p in bp.plan(single, {'a': latest['a']}, GAMES, NOW, {'posts': []})})
 
@@ -175,8 +167,9 @@ class PlanTests(unittest.TestCase):
         self.assertEqual([p[0] for p in bp.plan(first, latest, GAMES, late_now, {'posts': []})], ['b'])
         evening = datetime(2026, 9, 26, 21, 0, tzinfo=timezone.utc)         # 5:00 PM ET, after the 4:30 PM slot
         plans = bp.plan(first, latest, GAMES, evening, {'posts': []})
-        self.assertEqual([(p[0], p[3]) for p in plans], [('b', evening + bp.SOON)])
-        self.assertEqual(bp.plan(first, latest, GAMES, evening, {'posts': []}, soon=timedelta(minutes=20))[0][3], evening + timedelta(minutes=20))
+        self.assertEqual([(p[0], p[3]) for p in plans], [('b', datetime(2026, 9, 26, 22, tzinfo=timezone.utc))])
+        self.assertEqual(bp.plan(first, latest, GAMES, evening, {'posts': []}, soon=timedelta(minutes=20))[0][3],
+                         datetime(2026, 9, 26, 22, tzinfo=timezone.utc))
 
     def test_a_play_whose_stored_reason_has_numbers_is_still_scheduled(self):
         import tempfile
@@ -230,13 +223,11 @@ class SpacingTests(unittest.TestCase):
         latest = {k: dict(v) for k, v in first.items()}
         eleven = datetime(2026, 9, 26, 15, 58, tzinfo=timezone.utc)       # 11:58 AM ET
         plans = bp.plan(first, latest, GAMES, eleven, {'posts': queued})
-        self.assertEqual([(p[0], et(p[3])) for p in plans],
-                         [('a', '13:00'), ('conversation:day:2026-09-26', '13:10'), ('b', '13:20'),
-                          ('climb:checkin:2026-09-26', '13:30')],
-                         'after the queue, every play and the between-play prompt stay ten minutes apart')
+        self.assertEqual([(p[0], et(p[3])) for p in plans], [('a', '18:00'), ('b', '18:10')],
+                         'the queue and retired extras do not move night plays before six')
         cancelled = [dict(q, cancelledAt='2026-09-26T14:00:00Z') if q['id'] == 'q2' else q for q in queued]
         plans = bp.plan(first, latest, GAMES, eleven, {'posts': cancelled})
-        self.assertEqual([et(p[3]) for p in plans], ['12:20', '13:00', '13:10', '13:20'], 'a cancelled post frees its slot')
+        self.assertEqual([et(p[3]) for p in plans], ['18:00', '18:10'], 'a cancelled post does not pull night plays earlier')
         already = queued + [{'id':'climb:checkin:2026-09-26', 'kind':'buffer:book', 'dueAt':'2026-09-26T15:50:00Z'}]
         self.assertFalse(any(p[0].startswith('climb:checkin:') for p in bp.plan(first, latest, GAMES, eleven, {'posts':already})))
 
@@ -280,7 +271,8 @@ class ScheduleTests(unittest.TestCase):
         texts = [c['variables']['input']['text'] for c in fake.calls if 'createPost' in c['query']]
         self.assertIn('@Playbook', texts[0])
         self.assertTrue(all('@Playbook' not in t for t in texts[1:]))
-        self.assertTrue(all('@Playbook' not in p['discord']['text'] for p in result['posts']))
+        self.assertTrue(all('@Playbook' not in p['discord']['text'] for p in result['posts'] if 'discord' in p))
+        self.assertTrue(all('discord' not in p for p in result['posts'] if p['kind'] not in ('buffer:play',)))
 
     def test_schedule_never_posts_a_play_without_its_card(self):
         fake = FakeBuffer()
@@ -302,7 +294,20 @@ class ScheduleTests(unittest.TestCase):
         text_only = bp.schedule([('r', 'recap', 'text r', NOW + timedelta(hours=1), None)], 'ch-x', {'posts': []}, NOW, key='t', send=FakeBuffer(), log=lambda *_: None)
         self.assertEqual([p['id'] for p in text_only['posts']], ['r'], 'a post with no card key at all (by hand) still goes')
         self.assertEqual(text_only['posts'][0]['cardTheme'], 'none')
-        self.assertEqual(text_only['posts'][0]['discord'], {'state': 'pending', 'text': 'text r'})
+        self.assertNotIn('discord', text_only['posts'][0])
+
+    def test_schedule_routes_only_play_and_win_and_keeps_community_apart(self):
+        due = NOW + timedelta(hours=1)
+        plans = [('p', 'play', 'Play', due, None), ('cashed:p', 'cashed', 'Win', due + bp.SPACING, None),
+                 ('ladder-loss:p', 'cashed', 'Loss', due + 2 * bp.SPACING, None),
+                 ('r', 'research', 'Research', due + 3 * bp.SPACING, None),
+                 ('community:owner', 'play', 'Owner ticket', due + 4 * bp.SPACING, None)]
+        rows = bp.schedule(plans, 'ch-x', {'posts': []}, NOW, key='t', send=FakeBuffer(), log=lambda *_: None)['posts']
+        self.assertEqual(rows[0]['discord'].get('destination'), None)
+        self.assertEqual(rows[1]['discord']['destination'], 'wins')
+        self.assertNotIn('discord', rows[2])
+        self.assertNotIn('discord', rows[3])
+        self.assertEqual((rows[4]['kind'], rows[4]['discord']['destination']), ('buffer:community', 'wins'))
 
     def test_card_theme_is_resolved_before_buffer_accepts_the_post(self):
         fake = FakeBuffer()

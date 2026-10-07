@@ -385,6 +385,12 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
     tail = ' '.join(x for x in (PLAYBOOK, TAGS.get(league, '')) if x)
     kind = pick_card.play_kind(pick)
     legs = [pick_card.short_leg(l.get('title')) for l in pick.get('legs') or [] if l.get('title')]
+    night = False
+    if (game or {}).get('kickoff'):
+        try:
+            night = gates.when(game['kickoff']).astimezone(gates.EASTERN).hour >= 19
+        except (TypeError, ValueError):
+            pass
     if kind == 'ladder':
         head, money, bank = ladder_text(pick)
         top = '\n'.join([head, money, bank, *legs])
@@ -393,7 +399,10 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
         top = '\n'.join([f"{parlay_head(pick, league)} ({pick.get('book')})", *legs])
         options = ([top, f'{ASK}\n{tail}'], [top, tail])
     else:
-        play = f"{'POTD: ' if featured else ''}{pick_card.short_title(pick, game)} ({int(pick['odds']):+d}, {pick.get('book')})"
+        prefix = ('SNF: ' if league == 'NFL' and gates.when(game['kickoff']).astimezone(gates.EASTERN).weekday() == 6
+                  else 'TNF: ' if league == 'NFL' and gates.when(game['kickoff']).astimezone(gates.EASTERN).weekday() == 3
+                  else 'Saturday night: ' if night and league == 'CFB' else '') if night else ''
+        play = f"{prefix}{'POTD: ' if featured else ''}{pick_card.short_title(pick, game)} ({int(pick['odds']):+d}, {pick.get('book')})"
         now = now_line(pick, now_quote)
         number = pick_card.our_number(pick, game)
         reason = reason if reason is not None else load_reasons().get(pick.get('id'))

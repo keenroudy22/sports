@@ -16,7 +16,7 @@ receipt so nobody mistakes a 0.25u parlay for a full-unit straight play.
 """
 import argparse
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -235,19 +235,42 @@ def fit(lines, head, tail, head_sep='\n\n'):
         rows.pop()
 
 
+def fit_result_rows(rows, head, tail, games=None):
+    """Keep every miss visible before shortening a win on a daily recap."""
+    full = [result_line(row, games) for row in rows]
+    text = '\n'.join((head, *full)) + ('\n\n' + tail if tail else '')
+    if x_post.tweet_length(text) <= x_post.LIMIT:
+        return text
+    # Margins and explanatory detail go first. The attached receipt still holds
+    # every full row; X never shows a win while concealing a loss for length.
+    short = [f"{MARKS[row['result']]} {label(row, games)}" for row in rows]
+    kept = list(range(len(rows)))
+    while True:
+        omitted = [rows[index]['result'] for index in range(len(rows)) if index not in kept]
+        suffix = []
+        if omitted:
+            suffix.append(f"+{omitted.count('win')} wins, {omitted.count('loss')} losses on card")
+        text = '\n'.join((head, *(short[index] for index in kept), *suffix)) + ('\n\n' + tail if tail else '')
+        if x_post.tweet_length(text) <= x_post.LIMIT or not kept:
+            return text
+        wins = [index for index in kept if rows[index]['result'] == 'win']
+        kept.remove(wins[-1] if wins else kept[-1])
+
+
 def day_receipt(day, first, latest, games, ids, as_of=None):
     rows = plays_between(first, latest, games, ids, day, day)
     if not settled(rows):
         return None
     name = f'{day:%A}'
-    head = f"{name}: {headline(rows)}"
+    head = f"{'Leftovers: ' if day >= date(2026, 10, 7) else ''}{name}: {headline(rows)}"
     tail = leagues(rows)
-    text = fit([result_line(r, games) for r in rows], head, tail.strip(), head_sep='\n')
+    text = fit_result_rows(rows, head, tail.strip(), games)
     straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder')]
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
     due = morning(day + timedelta(days=1))
     return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}', 'kind': 'receipt',
-            'title': headline(rows), 'label': 'YESTERDAY', 'when': f'{day:%A, %b %-d}',
+            'title': headline(rows), 'label': 'LEFTOVERS' if day >= date(2026, 10, 7) else 'YESTERDAY',
+            'when': f'{day:%A, %b %-d}',
             # Retained art keeps the record followers saw when the receipt became
             # due, even when its image is rebuilt several days later.
             'season': record_scope.text(season_as_of(first, latest, due)),
@@ -458,7 +481,9 @@ def cashed(first, latest, games, log_book, now):
         pick = dict(first[key], **latest.get(key, {}))
         result = str(pick.get('result') or '').lower()
         ladder = pick_card.play_kind(pick) == 'ladder'
-        if not pick.get('settledAt') or (result != 'win' and not ladder):
+        # A miss belongs only in the end-of-slate Final or the next 9 AM
+        # Leftovers, including a lost Climb rung. Never make a standalone loss.
+        if not pick.get('settledAt') or result == 'loss' or (result != 'win' and not ladder):
             continue
         settled_at = gates.when(pick['settledAt'])
         fresh = LADDER_CASHED_FRESH if ladder else CASHED_FRESH
@@ -560,31 +585,12 @@ def climb_checkin(first, latest, games, now):
 
 
 def house_posts(first, latest, games, log_book, now):
-    """Everything the kitchen posts besides the plays: receipts, the game-day menu (riding on the morning's receipt when
-    there is one), the book on an empty day, a cashed post for each winning play as it settles, and the weekly
-    projections sheet (scripts/sheet.py) on college Saturday and NFL Sunday."""
+    """Approved house posts. Menu, teasers, weekend X sheet and idle Climb check-in are retired."""
     out = [dict(r, kind='receipt') for r in ready(first, latest, games, log_book, now)]
-    today = eastern_date(now)
-    posted = {part for p in log_book.get('posts', []) for part in str(p.get('id')).split('+')}
-    post = menu(first, latest, games, log_book, now)
-    if post and post['stale'] > now:
-        morning_receipt = next((i for i, r in enumerate(out) if r['key'].startswith('receipt:day:') and r['key'] not in posted
-                                and eastern_date(r['due']) == today), None)
-        if morning_receipt is not None:
-            out[morning_receipt] = with_menu(out[morning_receipt], post, todays_plays(first, latest, games, now))
-        else:
-            out.append(post)
     extra = book(first, latest, games, log_book, now)
     if extra and extra['stale'] > now:
         out.append(extra)
     out += cashed(first, latest, games, log_book, now)
-    climb = climb_checkin(first, latest, games, now)
-    if climb:
-        out.append(climb)
-    import sheet
-    weekly = sheet.post(games, now)          # the weekly projections sheet, on its league's day
-    if weekly and weekly['stale'] > now:
-        out.append(weekly)
     import research_posts
     research = research_posts.post(games, now)  # one stale-safe editorial research card at most
     research_already = research_posts.already_posted(log_book, eastern_date(now))

@@ -27,6 +27,9 @@ def target(league, kickoff):
     start = instant(kickoff)
     if international(league, start):
         return opens(league, start)
+    local = start.astimezone(EASTERN)
+    if local.hour >= 19:
+        return local.replace(hour=18, minute=0, second=0, microsecond=0).astimezone(timezone.utc)
     noon = start.astimezone(EASTERN).replace(hour=12, minute=0, second=0, microsecond=0)
     return max(min(noon.astimezone(timezone.utc), start - timedelta(hours=2)), opens(league, start))
 
