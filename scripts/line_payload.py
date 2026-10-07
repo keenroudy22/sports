@@ -18,7 +18,12 @@ def read(path):
 def load(path, strict=True):
     """Return every line row from a monolith or the reviewed league shards."""
     path = Path(path)
-    payload = read(path)
+    try:
+        payload = read(path)
+    except (OSError, json.JSONDecodeError, TypeError):
+        if strict:
+            raise
+        return []
     if isinstance(payload.get('lines'), list):
         return payload['lines']
     files = payload.get('files')
@@ -34,7 +39,12 @@ def load(path, strict=True):
             continue
         if name != expected:
             raise ValueError(f'{path}: unexpected {league} line shard {name!r}')
-        shard = read(path.with_name(name))
+        try:
+            shard = read(path.with_name(name))
+        except (OSError, json.JSONDecodeError, TypeError):
+            if strict:
+                raise
+            return []
         if shard.get('league') != league or not isinstance(shard.get('lines'), list):
             raise ValueError(f'{name}: invalid line shard')
         if any(row.get('league') != league for row in shard['lines']):

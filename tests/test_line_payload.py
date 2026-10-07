@@ -40,6 +40,13 @@ class LinePayloadTests(unittest.TestCase):
             path.write_text(json.dumps({'lines': [{'id': 'old', 'league': 'NFL'}]}))
             self.assertEqual(line_payload.load(path)[0]['id'], 'old')
 
+    def test_optional_reader_keeps_the_prebuild_empty_catalog_fallback(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'lines.json'
+            self.assertEqual(line_payload.load(path, strict=False), [])
+            with self.assertRaises(FileNotFoundError):
+                line_payload.load(path)
+
 
 if __name__ == '__main__':
     unittest.main()

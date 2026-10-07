@@ -1935,7 +1935,10 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         quotes = now_quotes(ctx, games, now)
         refused = []
         import news_posts
-        lines = line_payload.load(build_site.OUT / 'lines.json')
+        # Posting tests and recovery tools can call this helper without a built
+        # site. The primary candidate path above remains strict; optional news
+        # enrichment keeps its historical empty-catalog fallback.
+        lines = line_payload.load(build_site.OUT / 'lines.json', strict=False)
         news = news_posts.candidates(ctx, features.load(), lines, now, log_book, games=games)
         plans = buffer_post.plan(ctx.first, ctx.latest, games, now, log_book, ctx.player_team, quotes=quotes,
                                  refused=refused, news=news)
