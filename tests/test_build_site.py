@@ -339,8 +339,10 @@ class GradeTests(unittest.TestCase):
         self.assertEqual(rows[0]['opponentAbbr'], 'CAR')
         self.assertEqual(rows[0]['position'], 'WR')
         self.assertEqual(rows[0]['stat'], 'recYds')
-        self.assertEqual(rows[0]['history'], {'last': {'hits': 2, 'games': 3, 'rate': 67},
-                                              'season': {'hits': 2, 'games': 3, 'rate': 67}})
+        self.assertEqual(rows[0]['history'], {'last': {'hits': 2, 'games': 3, 'rate': 67,
+                                                       'values': [40, 60, 70]},
+                                              'season': {'hits': 2, 'games': 3, 'rate': 67,
+                                                         'values': [40, 60, 70]}})
 
     def test_favorites_do_not_force_a_thin_role_or_an_unpriced_read(self):
         now = datetime(2026, 9, 19, 13, tzinfo=timezone.utc)

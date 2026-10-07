@@ -58,6 +58,10 @@ def pct(x):
     return f'{int(100 * x + 0.5)}%' if isinstance(x, (int, float)) else ''
 
 
+def pct1(x):
+    return f'{100 * x:.1f}%' if isinstance(x, (int, float)) else ''
+
+
 def luminance(hex_color):
     try:
         r, g, b = (int(hex_color.lstrip('#')[i:i + 2], 16) / 255 for i in (0, 2, 4))
@@ -69,7 +73,7 @@ def luminance(hex_color):
 
 def team_chip(x, y, team, r=34, logo=None):
     if logo:
-        return (f'<circle cx="{x}" cy="{y}" r="{r}" fill="{FELT_RAISED}" stroke="rgba(255,255,255,.18)" stroke-width="3"/>'
+        return (f'<circle cx="{x}" cy="{y}" r="{r}" fill="{CHALK}" opacity=".94" stroke="{LINE}" stroke-width="3"/>'
                 f'<image href="{logo}" x="{x - r * 0.78:.0f}" y="{y - r * 0.78:.0f}" width="{r * 1.56:.0f}" height="{r * 1.56:.0f}" preserveAspectRatio="xMidYMid meet"/>')
     color = (team or {}).get('color') or '#3D5447'
     ink = TICKET_INK if luminance(color) > 0.45 else '#FFFFFF'
@@ -167,18 +171,19 @@ def play_card(pick, game=None, record=None, featured=False, art=None):
     ticket_h = 360
     body += f'<rect x="64" y="{top}" width="{W - 128}" height="{ticket_h}" rx="28" fill="{TICKET}"/>'
     # An open ticket is neutral. Brand green carries the read, never a result-colored fill.
-    body += f'<rect data-zone="open-stub" x="{W - 64 - 170}" y="{top}" width="170" height="{ticket_h}" rx="28" fill="{FELT_RAISED}"/><rect x="{W - 64 - 170}" y="{top}" width="40" height="{ticket_h}" fill="{FELT_RAISED}"/>'
-    body += f'<line x1="{W - 64 - 170}" y1="{top + 20}" x2="{W - 64 - 170}" y2="{top + ticket_h - 20}" stroke="{TICKET_RULE}" stroke-width="5" stroke-dasharray="14 12"/>'
+    stub_w = 190
+    body += f'<rect data-zone="open-stub" x="{W - 64 - stub_w}" y="{top}" width="{stub_w}" height="{ticket_h}" rx="28" fill="{FELT_RAISED}"/><rect x="{W - 64 - stub_w}" y="{top}" width="40" height="{ticket_h}" fill="{FELT_RAISED}"/>'
+    body += f'<line x1="{W - 64 - stub_w}" y1="{top + 20}" x2="{W - 64 - stub_w}" y2="{top + ticket_h - 20}" stroke="{TICKET_RULE}" stroke-width="5" stroke-dasharray="14 12"/>'
     body += f'<circle cx="64" cy="{top + ticket_h / 2}" r="20" fill="{FELT}"/><circle cx="{W - 64}" cy="{top + ticket_h / 2}" r="20" fill="{FELT}"/>'
     body += t(104, top + 92, odds(pick.get('odds')), 88, TICKET_INK, DISPLAY, 700) + t(104 + 52 * len(odds(pick.get('odds'))), top + 92, str(pick.get('book') or '').upper(), 40, TICKET_DIM, BODY, 700)
     if isinstance(chance, (int, float)) and isinstance(needs, (int, float)) and pap.get('calibrated', True):
-        body += t(104, top + 170, f'We make it {pct(chance)}. Price needs {pct(needs)}.', 42, TICKET_INK, BODY, 600)
-        body += meter(104, top + 206, W - 128 - 170 - 80, chance, needs)
+        body += t(104, top + 170, f'We make it {pct1(chance)}. Price needs {pct1(needs)}.', 42, TICKET_INK, BODY, 600)
+        body += meter(104, top + 206, W - 128 - stub_w - 80, chance, needs)
         fair = round(-100 * chance / (1 - chance)) if chance >= 0.5 else round(100 * (1 - chance) / chance)
         edge = round(100 * (chance - needs), 1)
         body += t(104, top + 282, 'FAIR PRICE', 30, TICKET_DIM, BODY, 700, spacing=1) + t(104, top + 338, odds(fair), 58, TICKET_INK, DISPLAY, 700)
-        body += t(420, top + 282, 'EDGE', 30, TICKET_DIM, BODY, 700, spacing=1) + t(420, top + 338, f'+{edge} pts' if edge > 0 else f'{edge} pts', 58, TICKET_INK, DISPLAY, 700)
-        body += t(W - 64 - 85, top + 190, pct(chance), 64, KOOKD, DISPLAY, 700, 'middle') + t(W - 64 - 85, top + 233, 'OUR CHANCE', 24, CHALK, BODY, 700, 'middle')
+        body += t(420, top + 282, 'EDGE', 30, TICKET_DIM, BODY, 700, spacing=1) + t(420, top + 338, f'+{edge}% pts' if edge > 0 else f'{edge}% pts', 54, TICKET_INK, DISPLAY, 700)
+        body += t(W - 64 - stub_w / 2, top + 190, pct1(chance), 60, KOOKD, DISPLAY, 700, 'middle') + t(W - 64 - stub_w / 2, top + 235, 'OUR CHANCE', 28, CHALK, BODY, 700, 'middle')
     else:
         body += t(104, top + 170, str(pick.get('_number') or ''), 42, TICKET_INK, BODY, 600)
     if record:
@@ -190,7 +195,9 @@ def receipt_card(day_label, rows, headline, season=None):
     """Morning receipt. Port target: pick_card.receipt_svg (receipt-day-<date>)."""
     headline = str(headline or 'RESULTS')
     hero_size = 170 if len(headline) <= 7 else 112
-    body = t(64, 220, day_label.upper(), 44, DIM, BODY, 700, spacing=2) + t(64, 365, headline.upper(), hero_size, CHALK, DISPLAY, 700)
+    body = (t(64, 220, day_label.upper(), 44, DIM, BODY, 700, spacing=2)
+            + t(64, 286, 'BEST BETS', 34, DIM, BODY, 800, spacing=2)
+            + t(64, 400, headline.upper(), min(hero_size, 142), CHALK, DISPLAY, 700))
     shown = rows[:5]
     y = 430
     tall = 140 if len(shown) <= 3 else 112
@@ -212,7 +219,23 @@ def receipt_card(day_label, rows, headline, season=None):
             body += t(96, y + tall - 12, detail_text, 24 if tall <= 120 else 27, TICKET_DIM, BODY, 600)
         y += tall + 14
     if len(rows) > len(shown):
-        body += t(64, min(y + 28, 1138), f'+{len(rows) - len(shown)} MORE ON THE PUBLIC RECORD', 34, KOOKD, DISPLAY, 700, spacing=1)
+        hidden = rows[len(shown):]
+        fun = [row for row in hidden if any(word in str(row.get('_kind') or '').lower() for word in ('parlay', 'lotto', 'fun'))]
+        climb = [row for row in hidden if any(word in str(row.get('_kind') or '').lower() for word in ('ladder', 'climb'))]
+        labels = []
+        if fun:
+            wins = sum(row.get('result') == 'win' for row in fun)
+            losses = sum(row.get('result') == 'loss' for row in fun)
+            labels.append(f'FUN TICKETS {wins}–{losses}')
+        for row in climb[:1]:
+            step = re.search(r'\bstep\s*(\d+)\b', str(row.get('title') or ''), re.I)
+            mark_text = '✓' if row.get('result') == 'win' else '✗' if row.get('result') == 'loss' else '–'
+            labels.append(f'CLIMB STEP {step.group(1) if step else ""} {mark_text}'.replace('  ', ' '))
+        other = len(hidden) - len(fun) - len(climb)
+        if other:
+            labels.append(f'{other} MORE RESULT' + ('S' if other != 1 else ''))
+        labels.append('TRACKED APART')
+        body += t(64, min(y + 28, 1138), ' · '.join(labels), 31, DIM, DISPLAY, 700, spacing=.5)
     if season:
         body += t(64, 1188, f'SEASON {season}  ·  THE MISSES STAY ON THE RECORD', 38, CHALK, DISPLAY, 700, spacing=1.2)
     return frame('Receipt', body, chip_color=FELT_RAISED, chip_ink=CHALK)
@@ -221,7 +244,7 @@ def receipt_card(day_label, rows, headline, season=None):
 def fun_ticket_card(pick, label='Fun ticket', art=None):
     """Longshot / lotto ticket. Port target: pick_card.ticket_svg (keep the sha256(id) % 3 style rotation)."""
     legs = pick.get('legs') or []
-    body = t(64, 285, odds(pick.get('odds')), 178, KOOKD, DISPLAY, 700) + t(64, 365, str(pick.get('_hook') or label).upper(), 60, CHALK, DISPLAY, 700, spacing=1)
+    body = t(64, 285, odds(pick.get('odds')), 178, CHALK, DISPLAY, 700) + t(64, 365, str(pick.get('_hook') or label).upper(), 60, CHALK, DISPLAY, 700, spacing=1)
     timing = str(pick.get('_timing') or '').strip()
     if timing:
         body += t(64, 412, timing, 34, DIM, BODY, 650)
@@ -325,7 +348,7 @@ def projection_sheet(games, league, day, week=None, logos=None, watches=None):
             + mark(56, 34, .8) + t(170, 98, 'KOOK’N', 52, CHALK, DISPLAY, 700, spacing=3)
             + t(1016, 94, 'SAVE THIS', 28, KOOKD, BODY, 800, 'end', 2)
             + t(64, 176, title, 58, CHALK, DISPLAY, 700, spacing=.8)
-            + t(64, 218, f'{day:%A, %B} {day.day}  ·  green outline = current priced line clears the check', 27, DIM, BODY, 600))
+            + t(64, 218, f'{day:%A, %B} {day.day}  ·  rings name the lines we like · watches, not picks', 27, DIM, BODY, 600))
     for index, card in enumerate(games):
         col, row = index % 2, index // 2
         x, y = 64 + col * (card_w + 20), top + row * pitch
@@ -346,25 +369,27 @@ def projection_sheet(games, league, day, week=None, logos=None, watches=None):
         body += t(team_x, y + 45, matchup, team_size, CHALK, DISPLAY, 700)
         v2 = card.get('v2') or {}
         score = f"{num(v2.get('away'))}–{num(v2.get('home'))}"
-        if not watch:
-            body += t(x + card_w - 18, y + 43, score, info_size + 2, KOOKD, DISPLAY, 700, 'end')
-        if watch:
-            badge = f'#{watch[0]} {watch[2]}'
-            badge_w = min(214, max(118, 18 + len(badge) * 10))
-            body += f'<rect x="{x + card_w - badge_w - 12:.0f}" y="{y + 5:.0f}" width="{badge_w}" height="28" rx="14" fill="{FELT_NIGHT}" stroke="{KOOKD}" stroke-width="2"/>'
-            body += t(x + card_w - 22, y + 26, badge, 19, KOOKD, BODY, 800, 'end')
+        body += t(x + card_w - 18, y + 43, score, info_size + 2, KOOKD, DISPLAY, 700, 'end')
         ours_spread = spread(card, v2.get('margin'))
         ours_total = num(v2.get('total'))
         sy = y + (88 if card_h >= 132 else 72)
         ty = y + (128 if card_h >= 132 else 103)
-        body += t(x + 18, sy, f'SPREAD  OUR {ours_spread}  ·  MARKET {price(card, "spread")}', info_size, CHALK, DISPLAY, 700)
-        body += t(x + 18, ty, f'TOTAL  OUR {ours_total}  ·  MARKET {price(card, "total")}', info_size, CHALK, DISPLAY, 700)
+        spread_line = f'SPREAD  OUR {ours_spread}  ·  MARKET {price(card, "spread")}'
+        total_line = f'TOTAL  OUR {ours_total}  ·  MARKET {price(card, "total")}'
+        if watch and watch[1] == 'spread':
+            spread_line = f'LIKE #{watch[0]}  {watch[2]} {odds(watch[3].get("odds"))} {short_book(watch[3].get("book"))}'
+        if watch and watch[1] == 'total':
+            total_line = f'LIKE #{watch[0]}  {watch[2]} {odds(watch[3].get("odds"))} {short_book(watch[3].get("book"))}'
+        body += t(x + 18, sy, spread_line, info_size, KOOKD if watch and watch[1] == 'spread' else CHALK, DISPLAY, 700)
+        body += t(x + 18, ty, total_line, info_size, KOOKD if watch and watch[1] == 'total' else CHALK, DISPLAY, 700)
+        if watch and watch[3].get('collegeGapCaution') and card_h >= 132:
+            body += t(x + card_w - 18, ty, f"{watch[3]['collegeGapCaution']:g}-PT COLLEGE GAP · CAUTION", 18, DIM, BODY, 700, 'end')
     body += f'<line x1="64" y1="1228" x2="{W - 64}" y2="1228" stroke="{LINE}" stroke-width="2"/>'
     body += t(64, 1270, FOOTER, 26, DIM) + t(64, 1310, SITE, 26, KOOKD, BODY, 700)
     return body + '</svg>'
 
 
-def climb_path(progress, y=984):
+def climb_path(progress, y=984, current_label='NOW'):
     """Persistent dollar checkpoints without guessing the number or price of future rungs."""
     checkpoints = (50, 100, 250, 500, 1000)
     xs = (104, 306, 520, 730, 925)
@@ -379,6 +404,8 @@ def climb_path(progress, y=984):
         body += f'<circle cx="{x}" cy="{y}" r="31" fill="{fill}" stroke="{stroke}" stroke-width="{7 if current else 4}"/>'
         if done:
             body += t(x, y + 12, '✓', 40, KOOKD_INK, BODY, 800, 'middle')
+        elif current:
+            body += t(x, y - 50, current_label, 22, KOOKD, BODY, 800, 'middle', 1)
         body += t(x, y + 76, f'${amount:,}', 29, CHALK if done or current else DIM, DISPLAY, 700, 'middle')
         if index == len(checkpoints) - 1:
             body += f'<path d="M{x} {y - 31}V{y - 108}h52l-13 17 13 17h-52" fill="{KOOKD}" stroke="{CHALK}" stroke-width="3"/>'
@@ -398,7 +425,7 @@ def climb_card(pick, run, step, stake, payout, banked):
         text = str(leg.get('title') or leg.get('displayTitle') or '')
         body += f'<rect x="64" y="{y}" width="{W - 128}" height="94" rx="20" fill="{FELT_RAISED}"/>' + t(100, y + 61, text[:46], 42, CHALK, DISPLAY, 700)
         y += 108
-    body += climb_path(max(50, int(banked or 0) + int(stake or 0)), 956)
+    body += climb_path(max(50, int(banked or 0) + int(stake or 0)), 956, 'NOW')
     body += t(64, 1168, 'BANK 20%  ·  RIDE 80%  ·  EVERY STEP STAYS PUBLIC', 34, CHALK, DISPLAY, 700, spacing=1)
     return frame('80/20 Climb', body, chip_color=FELT_RAISED, chip_ink=CHALK)
 
@@ -409,6 +436,9 @@ def receipt_from_existing(receipt):
     for row in receipt.get('rows') or []:
         result, title = row[:2]
         detail = row[2] if len(row) > 2 else ''
+        player = re.split(r'\s+(?:over|under)\s+', str(title), maxsplit=1, flags=re.I)[0]
+        detail = re.sub(rf'^(Final:\s*){re.escape(player)}:\s*', r'\1', str(detail), flags=re.I)
+        detail = re.sub(r'\b1 receptions\b', '1 reception', detail, flags=re.I)
         kind = row[3] if len(row) > 3 else ('ladder' if 'climb' in str(title).lower() else
                                            'parlay' if any(word in str(title).lower() for word in ('parlay', 'lotto')) else 'best bet')
         rows.append({'result': result, 'title': title, '_final': detail, '_kind': kind})
@@ -440,7 +470,7 @@ def climb_result_card(pick):
         progress = int(info.get('start') or 50)
     else:
         progress = int(info.get('banked') or 0) + int(stake or 0)
-    body += climb_path(max(50, progress), 926)
+    body += climb_path(max(50, progress), 926, 'NEXT' if result == 'loss' else 'NOW')
     body += t(64, 1096, f'THIS CLIMB  ${int(this_climb or 0)} BANKED', 36, CHALK, DISPLAY, 700, spacing=1)
     body += t(64, 1148, f'ALL CLIMBS  ${all_banked} BANKED  ·  EVERY STEP STAYS PUBLIC', 34, KOOKD, DISPLAY, 700, spacing=.8)
     return frame('Climb result', body, chip_color=tone, chip_ink=ink)
@@ -466,12 +496,12 @@ def research_choice_card(choice, art=None):
             y += max(1, len(title_lines)) * 82 + 18
             price = str(row.get('price') or '')
             if price:
-                body += t(64, y, price, 56, KOOKD, DISPLAY, 700)
+                body += t(64, y, price, 56, CHALK, DISPLAY, 700)
                 y += 82
             hits, games = row.get('hits'), row.get('games')
             selection = re.search(r'\b(over|under)\s+([0-9.]+)', title, re.I)
             if selection and isinstance(hits, int) and isinstance(games, int):
-                proof = f'{selection.group(1).title()} {selection.group(2)} in {hits} of the last {games}'
+                proof = f'{selection.group(1).title()} {selection.group(2)} in {hits} of his last {games} games'
             else:
                 proof = str(row.get('metric') or '')
             body += f'<rect x="64" y="{y - 48}" width="{W - 128}" height="238" rx="24" fill="{FELT_RAISED}" stroke="{LINE}"/>'
@@ -480,8 +510,12 @@ def research_choice_card(choice, art=None):
             if isinstance(matchup.get('rank'), int) and isinstance(matchup.get('of'), int):
                 rank = int(matchup['rank'])
                 suffix = 'th' if 10 <= rank % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(rank % 10, 'th')
-                tone = 'soft' if matchup.get('supports') else 'tough' if matchup.get('opposes') else 'neutral'
-                defense = f"{row.get('opponentAbbr') or 'Opponent'}: {rank}{suffix} of {matchup['of']} vs {matchup.get('pos') or 'position'}s ({tone})"
+                stat = str(row.get('statLabel') or matchup.get('stat') or 'this stat').replace('rush attempts', 'carries')
+                allowed = matchup.get('value')
+                defense = ((f"{row.get('opponentAbbr') or 'Opponent'} allows {allowed:g} {stat} a game "
+                            f"to {matchup.get('pos') or 'position'}s, {rank}{suffix} of {matchup['of']}")
+                           if isinstance(allowed, (int, float)) else
+                           f"{row.get('opponentAbbr') or 'Opponent'}: {rank}{suffix} of {matchup['of']} vs {matchup.get('pos') or 'position'}s")
             else:
                 defense = str(row.get('detail') or '')
             body += t(96, y + 88, defense, 36, DIM, BODY, 650)
@@ -499,6 +533,29 @@ def research_choice_card(choice, art=None):
                 body += f'<rect x="{bar_x}" y="{bar_y}" width="{bar_w}" height="22" rx="11" fill="{LINE}"/>'
                 body += f'<rect x="{bar_x}" y="{bar_y}" width="{bar_w * hits / games:.1f}" height="22" rx="11" fill="{KOOKD}"/>'
                 body += t(64, bar_y + 68, f'{hits} HIT  ·  {games - hits} MISSED', 30, DIM, BODY, 700, spacing=.7)
+            values = [value for value in (row.get('historyValues') or [])[-10:] if isinstance(value, (int, float))]
+            line_match = re.search(r'\b(?:over|under)\s+([0-9.]+)', title, re.I)
+            if values and line_match:
+                line_value = float(line_match.group(1))
+                under = bool(re.search(r'\bunder\b', title, re.I))
+                # Keep the game-by-game proof visually separate from the aggregate
+                # hit strip above it; both are useful, but they must scan as two
+                # distinct evidence blocks on a phone.
+                chart_top, chart_base, left, width = 940, 1098, 64, W - 128
+                high = max(values + [line_value]) * 1.12 or 1
+                bw = width / len(values)
+                body += t(left, chart_top - 28, f'LAST {len(values)} GAMES', 28, DIM, BODY, 800, spacing=1.4)
+                for game_index, value in enumerate(values):
+                    height = max(5, (chart_base - chart_top) * value / high)
+                    hit = value < line_value if under else value > line_value
+                    body += (f'<rect x="{left + game_index * bw + 7:.1f}" y="{chart_base - height:.1f}" '
+                             f'width="{max(10, bw - 14):.1f}" height="{height:.1f}" rx="7" fill="{KOOKD if hit else BURNT}"/>')
+                    body += t(left + game_index * bw + bw / 2, chart_base + 35, f'{value:g}', 23, CHALK, DISPLAY, 700, 'middle')
+                line_y = chart_base - (chart_base - chart_top) * line_value / high
+                body += f'<line x1="{left}" y1="{line_y:.1f}" x2="{left + width}" y2="{line_y:.1f}" stroke="{CHALK}" stroke-width="3" stroke-dasharray="12 10"/>'
+                season_hits = int(hits) if isinstance(hits, int) else sum((value < line_value) if under else (value > line_value) for value in values)
+                season_games = int(games) if isinstance(games, int) else len(values)
+                body += t(left, 1172, f'{season_hits} of {season_games} this season', 38, CHALK, BODY, 750)
             continue
         y = top + index * (row_h + 18)
         body += f'<rect x="64" y="{y:.0f}" width="{W - 128}" height="{row_h:.0f}" rx="22" fill="{FELT_RAISED}" stroke="{LINE}"/>'
@@ -509,7 +566,7 @@ def research_choice_card(choice, art=None):
         detail = str(row.get('detail') or '')
         title_size = 54 if len(rows) == 1 else 42
         body += t(98, y + 72, title[:46], title_size, CHALK, DISPLAY, 700)
-        body += t(W - 96, y + 72, price[:24], 48 if len(rows) == 1 else 40, KOOKD, DISPLAY, 700, 'end')
+        body += t(W - 96, y + 72, price[:24], 48 if len(rows) == 1 else 40, CHALK, DISPLAY, 700, 'end')
         body += t(98, y + (160 if len(rows) == 1 else 108), metric[:52], 42 if len(rows) == 1 else 32, CHALK, BODY, 700)
         if row_h >= 160:
             body += t(98, y + (226 if len(rows) == 1 else 148), detail[:70], 34 if len(rows) == 1 else 26, DIM, BODY, 600)

@@ -2,6 +2,7 @@ import os
 import sys
 import unittest
 import xml.etree.ElementTree as ET
+from datetime import datetime, timezone
 from pathlib import Path
 from unittest import mock
 
@@ -122,12 +123,14 @@ class FeltCardTests(unittest.TestCase):
                          ('loss', '3-leg parlay', '2/3 legs hit', 'parlay')],
             })
         self.assertIn('data-zone="open-stub"', play)
-        self.assertIn(f'data-zone="open-stub" x="846"', play)
+        self.assertIn(f'data-zone="open-stub" x="826"', play)
         self.assertIn(f'fill="{felt_cards.FELT_RAISED}"', play)
         self.assertIn('SEASON 35–35', play)
+        self.assertIn('>BEST BETS<', receipt)
         self.assertIn('>2-3<', receipt)
         self.assertIn('SEASON 35–35', receipt)
-        self.assertIn('+2 MORE ON THE PUBLIC RECORD', receipt)
+        self.assertIn('FUN TICKETS 0–1 · CLIMB STEP 2 ✓ · TRACKED APART', receipt)
+        self.assertNotIn('+2 MORE ON THE PUBLIC RECORD', receipt)
         self.assertNotIn('SEASON 2-3', receipt)
 
     def test_research_climb_and_longshot_preserve_public_rules(self):
@@ -138,8 +141,10 @@ class FeltCardTests(unittest.TestCase):
                   'rows': [{'title': 'Bucky Irving over 13.5 carries', 'price': '-107 DK',
                             'metric': '8/10 exact-line trend', 'detail': 'DAL allows 24.2 carries/game to RBs',
                             'kickoff': '2026-10-09T00:15:00Z', 'matchupLabel': 'TB at DAL',
-                            'opponentAbbr': 'DAL', 'hits': 8, 'games': 10,
-                            'matchup': {'rank': 23, 'of': 32, 'pos': 'RB', 'supports': True}}]}
+                            'opponentAbbr': 'DAL', 'statLabel': 'carries', 'hits': 8, 'games': 10,
+                            'historyValues': [16, 18, 12, 20, 15, 22, 14, 19, 8, 17],
+                            'matchup': {'rank': 23, 'of': 32, 'pos': 'RB', 'stat': 'car',
+                                        'value': 24.2, 'supports': True}}]}
         climb = {'id': 'c', 'parlayType': 'ladder', 'odds': -173, 'book': 'FanDuel',
                  '_allClimbsBanked': 42, 'legs': [{'title': 'One 10+ yards'}, {'title': 'Two 10+ yards'}],
                  'ladder': {'run': 3, 'step': 1, 'stake': 50, 'payout': 79, 'banked': 0, 'start': 50},
@@ -152,8 +157,11 @@ class FeltCardTests(unittest.TestCase):
         self.assertNotIn('#B49BE0', longshot)
         self.assertEqual(longshot.count('<image href="data:image/png;base64,'), 2)
         self.assertIn('5 games · Wed Oct 7', longshot)
-        self.assertIn('Over 13.5 in 8 of the last 10', research)
-        self.assertIn('DAL: 23rd of 32 vs RBs (soft)', research)
+        self.assertIn('Over 13.5 in 8 of his last 10 games', research)
+        self.assertIn('DAL allows 24.2 carries a game to RBs, 23rd of 32', research)
+        self.assertIn('LAST 10 GAMES', research)
+        self.assertIn('fill="' + felt_cards.BURNT + '"', research)
+        self.assertIn('8 of 10 this season', research)
         self.assertEqual(research.count('8/10'), 0)
         self.assertNotIn('EXACT-LINE PROOF', research)
         self.assertNotIn('PROOF POINT', research)
@@ -169,14 +177,17 @@ class FeltCardTests(unittest.TestCase):
                 'market': {'spread': -6.5, 'total': 48.5},
                 'value': {'spread': {'side': 'home', 'line': -3.5, 'odds': 100,
                                      'book': 'theScore Bet', 'edge': 3.8, 'chance': .538, 'needs': .5,
-                                     'tier': 'lean', 'thin': False}}}
+                                     'tier': 'lean', 'thin': False,
+                                     'observedAt': '2026-10-10T13:00:00Z'}}}
         from datetime import date
         with self.felt():
-            card = sheet.svg([game], 'CFB', date(2026, 10, 10), 6)
+            card = sheet.svg([game], 'CFB', date(2026, 10, 10), 6,
+                             now=datetime(2026, 10, 10, 14, tzinfo=timezone.utc))
         self.valid(card)
         self.assertIn('Saturday, October 10', card)
-        self.assertIn('SPREAD  OUR FIU −7.2', card)
-        self.assertIn('#1 FIU -3.5', card)
+        self.assertIn('LIKE #1  FIU -3.5 +100 SCORE', card)
+        self.assertIn('20.1–27.3', card)
+        self.assertIn('rings name the lines we like · watches, not picks', card)
         self.assertIn('SCORE', card)
         self.assertNotIn('ESPN', card)
         self.assertNotIn('Mint:', card)

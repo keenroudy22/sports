@@ -100,7 +100,7 @@ def render(out):
             if uri:
                 logos[row['id'], side] = uri
     save('projection-sheet.png', sheet.svg(sheet_games, 'CFB', sheet_day,
-                                            sheet_games[0].get('week') if sheet_games else None, logos))
+                                            sheet_games[0].get('week') if sheet_games else None, logos, now))
     return made
 
 

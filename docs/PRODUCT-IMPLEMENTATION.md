@@ -514,6 +514,20 @@ missing when neither component was recorded, so the page does not turn absent da
   cards therefore remain live and already-posted attachments are unchanged. Owner approval of all eight PNGs and
   the quiet-window cutover are still required.
 
+### C5 fourth-round owner review
+
+- The same eight review files were rendered again from the current stored data after the final factual and
+  legibility pass. Receipts now label the headline as best bets and identify hidden fun-ticket and Climb misses in
+  neutral ink. Research cards use real game-by-game values, red misses, the plain history window and the named
+  defense stat. Play cards use a wider neutral open stub, one-decimal probability proof and an explicit percentage-
+  point edge.
+- Projection sheets keep every projected score, use plain public copy and only ring a price captured within four
+  hours. A watched college spread with a model/market gap of at least seven points carries the required caution.
+  The current review sheet correctly shows no rings because its stored prices are older than four hours; the fresh-
+  quote and college-caution paths are covered by deterministic tests.
+- `FELT_FROM` remains unset. These corrected renders are still owner-review candidates; legacy cards remain live,
+  no existing attachment changes and no social category, cadence or selection rule changes.
+
 | Gate | What remains | Authority/state |
 |---|---|---|
 | Four-week reliability | Four consecutive observed weeks, measured eligible freshness denominator, delivery metrics and grading reconciliation. | Prospective local sampling implemented in the follow-up above; four-week evidence, incident review and reconciliation remain pending. Cannot backfill success or treat missing windows as healthy. |

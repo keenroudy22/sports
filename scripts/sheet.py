@@ -29,6 +29,7 @@ TODAY = ROOT / 'site' / 'data' / 'app' / 'today.json'
 DAYS = {'CFB': 5, 'NFL': 6}             # Saturday for college, Sunday for the NFL (Monday is 0)
 POST_AT, POST_UNTIL = (10, 0), (11, 45)  # Eastern
 MOST, WATCH, FEWEST = 16, 4, 4          # a full NFL slate; four model/market disagreements get a mint ring
+RING_FRESH = timedelta(hours=4)          # research/main-line rule: an older quote never earns a ring
 WIDTH, HEIGHT = 1080, 1350              # 4:5, the tallest image X shows whole in the feed
 BG, CARD, LINE, TEXT, DIM, ACCENT = '#071018', '#101c28', '#2a3a49', '#f4f7fa', '#94a3b4', '#5eeaa4'
 WORDS = {'CFB': 'COLLEGE', 'NFL': 'NFL'}
@@ -48,12 +49,19 @@ def disagreement(card):
     return max(abs(lean.get('spread') or 0), abs(lean.get('total') or 0))
 
 
-def priced_value(card, market):
+def priced_value(card, market, now=None):
     """A usable real-price edge for one market, or None."""
     value = (card.get('value') or {}).get(market) or {}
     if value.get('tier') not in ('lean', 'strong') or value.get('thin') \
             or not isinstance(value.get('odds'), (int, float)):
         return None
+    if now is not None:
+        try:
+            age = now - gates.when(value.get('observedAt'))
+        except (TypeError, ValueError):
+            return None
+        if not timedelta(0) <= age <= RING_FRESH:
+            return None
     return value
 
 
@@ -69,22 +77,31 @@ def watch_label(card, market, value):
     return f'{abbr} {line:+g}'
 
 
-def priced_watch(card):
+def priced_watch(card, now=None):
     """The strongest usable price edge, or None. Missing, thin and pass prices never get a mint ring."""
     rows = []
     for market in ('spread', 'total'):
-        value = priced_value(card, market)
+        value = priced_value(card, market, now)
         if value:
             rows.append((value.get('edge') or -999, market, watch_label(card, market, value), value))
     return max(rows, default=None, key=lambda row: row[0])
 
 
-def watches(games):
+def watches(games, now=None):
     """game id -> (rank, market, bet label, priced row) for the strongest real-price edges on the sheet."""
-    rows = [(priced_watch(card), card['id']) for card in games]
+    rows = [(priced_watch(card, now), card['id']) for card in games]
     rows = [(watch, gid) for watch, gid in rows if watch]
     rows.sort(key=lambda row: (-row[0][0], row[1]))
-    return {gid: (rank, watch[1], watch[2], watch[3]) for rank, (watch, gid) in enumerate(rows[:WATCH], 1)}
+    by_id = {card['id']: card for card in games}
+    out = {}
+    for rank, (watch, gid) in enumerate(rows[:WATCH], 1):
+        value = dict(watch[3])
+        card = by_id[gid]
+        gap = abs(float((card.get('lean') or {}).get('spread') or 0))
+        if card.get('league') == 'CFB' and watch[1] == 'spread' and gap >= 7:
+            value['collegeGapCaution'] = round(gap, 1)
+        out[gid] = (rank, watch[1], watch[2], value)
+    return out
 
 
 def book_short(name):
@@ -241,13 +258,15 @@ def compact_card_svg(card, x, y, w, h, logos, watch=None):
     return [f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="15" fill="{CARD}" stroke="{ring}" stroke-width="{4 if watch else 2}"/>'] + badge + rows
 
 
-def svg(games, league, day, week=None, logos=None):
+def svg(games, league, day, week=None, logos=None, now=None):
     """The sheet: a header with the ask, two columns of game cards, the house line at the foot."""
     esc = pick_card.esc
     logos = logos or {}
+    now = now or datetime.now(timezone.utc)
+    watch = watches(games, now)
     if pick_card.felt_enabled({'day': day}, day):
         import felt_cards
-        return felt_cards.projection_sheet(games, league, day, week, logos, watches(games))
+        return felt_cards.projection_sheet(games, league, day, week, logos, watch)
     rows = (len(games) + 1) // 2
     top, foot, gap = 196, 96, 12
     pitch = (HEIGHT - top - foot) / max(rows, 1)
@@ -264,11 +283,15 @@ def svg(games, league, day, week=None, logos=None):
              f'<text x="{WIDTH - 36}" y="71" fill="{DIM}" font-size="24" font-weight="700" letter-spacing="4" text-anchor="end">KOOK’N</text>',
              f'<text x="36" y="132" fill="{TEXT}" font-size="54" font-weight="800">{esc(title)}</text>',
              f'<text x="36" y="172" fill="{DIM}" font-size="22">{esc(when)} · rings name the lines we like · not picks</text>']
-    watch = watches(games)
     for i, card in enumerate(games):
         col, row = i % 2, i // 2
         drawer = compact_card_svg if len(games) > 4 else card_svg
-        parts += drawer(card, 36 + col * (w + 20), round(top + row * pitch), w, round(h), logos, watch.get(card['id']))
+        selected = watch.get(card['id'])
+        parts += drawer(card, 36 + col * (w + 20), round(top + row * pitch), w, round(h), logos, selected)
+        if selected and selected[3].get('collegeGapCaution'):
+            gap = selected[3]['collegeGapCaution']
+            parts.append(f'<text x="{36 + col * (w + 20) + 18}" y="{round(top + row * pitch + h - 48)}" '
+                         f'fill="{DIM}" font-size="15">College gap {gap:g} pts · use caution</text>')
     parts += [f'<text x="36" y="{HEIGHT - 52}" fill="{TEXT}" font-size="22" font-weight="700">Graded in public, win or lose. '
               f'<tspan fill="{DIM}" font-weight="400">keenroudy.com/sports</tspan></text>',
               f'<text x="36" y="{HEIGHT - 22}" fill="{DIM}" font-size="17">Not picks: our plays go out on their own. '
@@ -305,7 +328,7 @@ def render_due(now, folder, cards=None, fetch=None, log=print):
         logos = {(c['id'], side): logo_uri(c, side, fetch) for c in games for side in ('away', 'home')}
         path = Path(folder) / f'{key(league, day)}.png'
         try:
-            pick_card.render(svg(games, league, day, games[0].get('week'), logos), path, size=(WIDTH, HEIGHT))
+            pick_card.render(svg(games, league, day, games[0].get('week'), logos, now), path, size=(WIDTH, HEIGHT))
             out[key(league, day)] = path
         except Exception as error:
             log(f'sheet {key(league, day)} not drawn: {error}')
@@ -349,7 +372,7 @@ def main(argv=None):
         print(f'no {args.league} games with our number and a line on {day}')
         return 1
     logos = {(c['id'], side): logo_uri(c, side) for c in games for side in ('away', 'home')}
-    text = svg(games, args.league, day, games[0].get('week'), logos)
+    text = svg(games, args.league, day, games[0].get('week'), logos, datetime.now(timezone.utc))
     if args.svg:
         print(text)
         return 0

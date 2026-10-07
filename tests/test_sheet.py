@@ -19,10 +19,13 @@ def card(gid, kickoff, gap=0.0, league='NFL', week=3, **over):
                                 'chance': .52, 'needs': .524, 'edge': -.4, 'tier': 'pass', 'thin': False}},
             'lean': {'side': 'home', 'spread': gap, 'spreadChance': 0.58, 'total': 2.9, 'totalChance': 0.52}}
     base.update(over)
+    for value in (base.get('value') or {}).values():
+        value.setdefault('observedAt', '2026-09-27T13:00:00Z')
     return base
 
 
 SUNDAY = date(2026, 9, 27)
+RENDERED_AT = datetime(2026, 9, 27, 14, tzinfo=timezone.utc)
 
 
 class PickTests(unittest.TestCase):
@@ -43,7 +46,7 @@ class PickTests(unittest.TestCase):
 class DrawTests(unittest.TestCase):
     def test_the_sheet_says_save_this_and_shows_every_number_the_games_page_does(self):
         games = [card('a', '2026-09-27T17:00Z', gap=2.4), card('b', '2026-09-27T20:25Z')]
-        text = sheet.svg(games, 'NFL', SUNDAY, 3, {('a', 'away'): 'data:image/png;base64,x'})
+        text = sheet.svg(games, 'NFL', SUNDAY, 3, {('a', 'away'): 'data:image/png;base64,x'}, RENDERED_AT)
         for needle in ('SAVE THIS', 'WEEK 3 NFL PROJECTIONS', 'Sunday, September 27', 'rings name the lines we like', 'Aa', 'Ha',
                        '20.4', '24.0', '62%', '38%', 'OUR NUMBER / MARKET', 'Ha -3.6', 'LIKE: Ha -2.5 -105 FD', '44.4', 'OVER 41.5 -110 MGM',
                        'Left: model · Right: market', 'data:image/png;base64,x', 'Entertainment only.'):
@@ -58,7 +61,7 @@ class DrawTests(unittest.TestCase):
                       value={'spread': {'side': 'home', 'line': -2.5, 'odds': -105, 'book': 'FanDuel',
                                         'chance': .55 + i / 100, 'needs': .512, 'edge': float(i),
                                         'tier': 'lean' if i else 'pass', 'thin': False}}) for i in range(16)]
-        text = sheet.svg(games, 'NFL', SUNDAY, 3)
+        text = sheet.svg(games, 'NFL', SUNDAY, 3, now=RENDERED_AT)
         self.assertEqual(text.count('stroke="' + sheet.ACCENT + '" stroke-width="4"'), 4)
         for rank in ('>1</text>', '>2</text>', '>3</text>', '>4</text>'):
             self.assertIn(rank, text)
@@ -70,7 +73,7 @@ class DrawTests(unittest.TestCase):
                      value={'total': {'side': 'under', 'line': 44.5, 'odds': 100, 'book': 'BetMGM',
                                       'chance': .56, 'needs': .5, 'edge': 6.0, 'tier': 'strong', 'thin': False}})
         spread = card('spread', '2026-09-27T20:25Z', gap=7.0)
-        text = sheet.svg([total, spread], 'NFL', SUNDAY, 3)
+        text = sheet.svg([total, spread], 'NFL', SUNDAY, 3, now=RENDERED_AT)
         self.assertIn('LIKE: UNDER 44.5 +100 MGM', text)
         self.assertIn('LIKE: Hspread -2.5 -105 FD', text)
         self.assertEqual(sheet.priced_watch(total)[1:3], ('total', 'UNDER 44.5'))
@@ -81,9 +84,19 @@ class DrawTests(unittest.TestCase):
                       value={'total': {'side': 'over', 'line': 41.5, 'odds': -105, 'book': 'FanDuel',
                                        'chance': .60, 'needs': .512, 'edge': 8.8, 'tier': 'strong',
                                        'paused': True, 'thin': False}})
-        text = sheet.svg([unpriced, paused], 'NFL', SUNDAY, 3)
+        text = sheet.svg([unpriced, paused], 'NFL', SUNDAY, 3, now=RENDERED_AT)
         self.assertEqual(text.count('stroke="' + sheet.ACCENT + '" stroke-width="4"'), 1)
         self.assertIn('LIKE: OVER 41.5 -105 FD', text)
+
+    def test_a_stale_price_never_gets_a_ring_and_a_large_college_gap_is_labeled(self):
+        stale = card('stale', '2026-09-27T17:00Z', gap=8, league='CFB')
+        stale['value']['spread']['observedAt'] = '2026-09-27T08:00:00Z'
+        self.assertEqual(sheet.watches([stale], RENDERED_AT), {})
+        fresh = card('fresh', '2026-09-27T17:00Z', gap=11.1, league='CFB')
+        watched = sheet.watches([fresh], RENDERED_AT)['fresh']
+        self.assertEqual(watched[3]['collegeGapCaution'], 11.1)
+        text = sheet.svg([fresh], 'CFB', SUNDAY, 3, now=RENDERED_AT)
+        self.assertIn('College gap 11.1 pts · use caution', text)
 
     def test_a_dark_team_colour_gives_way_to_one_that_shows(self):
         self.assertEqual(sheet.readable({'color': '#5a1414', 'alt': '#ffb612'}), '#ffb612')

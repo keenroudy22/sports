@@ -1480,7 +1480,8 @@ def favorite_hit_rates(game, row, player_logs):
     def block(rows):
         values = [(r.get('stats') or {})[stat] for r in rows]
         hits = sum(value < line if direction == 'under' else value > line for value in values)
-        return {'hits': hits, 'games': len(values), 'rate': round(100 * hits / len(values))} if values else None
+        return {'hits': hits, 'games': len(values), 'rate': round(100 * hits / len(values)),
+                'values': values} if values else None
 
     last = block(played[-10:])
     season = block([r for r in played if r.get('season') == game.get('season')])

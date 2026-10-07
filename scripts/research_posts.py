@@ -239,6 +239,7 @@ def matchup_candidate(games, details, now, teams=None):
                          'detail': detail_text,
                          'opponentAbbr': opponent, 'statLabel': stat,
                          'hits': history['hits'], 'games': history['games'], 'pushes': history.get('pushes', 0),
+                         'historyValues': list(history.get('values') or []),
                          'scriptRisk': script_risk, 'projectedMargin': margin, 'matchup': matchup,
                          'score': (history.get('rate', 0), history.get('games', 0), line.get('edge') or 0),
                          'observedAt': line.get('observedAt')})
