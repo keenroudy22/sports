@@ -1,20 +1,20 @@
 {
- "at": "2026-10-07T01:30:43Z",
+ "at": "2026-10-07T01:48:40Z",
  "confirmed": {
-  "CFB-401862794": "2026-10-07T01:30:43Z",
-  "CFB-401869933": "2026-10-07T01:30:43Z",
-  "CFB-401871051": "2026-10-07T01:30:43Z",
-  "CFB-401871052": "2026-10-07T01:30:43Z",
-  "CFB-401871066": "2026-10-07T01:30:43Z",
-  "NFL-401872980": "2026-10-07T01:30:43Z"
+  "CFB-401862794": "2026-10-07T01:48:40Z",
+  "CFB-401869933": "2026-10-07T01:48:40Z",
+  "CFB-401871051": "2026-10-07T01:48:40Z",
+  "CFB-401871052": "2026-10-07T01:48:40Z",
+  "CFB-401871066": "2026-10-07T01:48:40Z",
+  "NFL-401872980": "2026-10-07T01:48:40Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 963,
+    "draftkings": 961,
     "fanduel": 335
    },
-   "eventsListed": 67,
+   "eventsListed": 70,
    "eventsMatched": 6,
    "games": 6,
    "marketTypes": {
@@ -26,13 +26,13 @@
     "player_passing_completions": 27,
     "player_passing_touchdowns": 39,
     "player_passing_yards": 210,
-    "player_receiving_yards": 475,
-    "player_receptions": 63,
+    "player_receiving_yards": 474,
+    "player_receptions": 62,
     "player_rushing_attempts": 27,
     "player_rushing_yards": 306
    },
-   "requestsLeft": 4,
-   "rows": 1298,
+   "requestsLeft": 49,
+   "rows": 1296,
    "slateGames": [
     "Jacksonville State Gamecocks at Kennesaw State Owls 2026-10-07T23:00Z",
     "New Mexico State Aggies at Florida International Panthers 2026-10-07T23:30Z",
@@ -65,7 +65,7 @@
       "gemini": "NCAAF-2610092300-FSU-LOU-S",
       "goldrush": "31120004",
       "hardrock": "2507294599907770759",
-      "kalshi": "KXNCAAF1H-26OCT09FSULOU",
+      "kalshi": "KXNCAAF4QSPREAD-26OCT09FSULOU",
       "ladbrokes": "97e64f2d-4889-4ef0-9b94-9665428015d3",
       "ladbrokes_uk": "lduk-258949201",
       "matchbook": "mb-34512900840100023",
@@ -172,7 +172,7 @@
       "gemini": "NCAAF-2610100100-IOW-WAS-S",
       "goldrush": "31132229",
       "hardrock": "6325669784755241369",
-      "kalshi": "KXNCAAF1HTEAMTOTAL-26OCT09IOWAWASH",
+      "kalshi": "KXNCAAF1QTOTAL-26OCT09IOWAWASH",
       "ladbrokes": "240fd9bf-6140-4a43-b36f-f04bcee86501",
       "ladbrokes_uk": "lduk-258958797",
       "matchbook": "mb-34490017013900023",
@@ -269,7 +269,7 @@
       "gemini": "NCAAF-2610100100-WYO-SJS-M",
       "goldrush": "31121068",
       "hardrock": "5019529135794553237",
-      "kalshi": "KXNCAAF1H-26OCT09WYOSJSU",
+      "kalshi": "KXNCAAFGAME-26OCT09WYOSJSU",
       "ladbrokes": "f30d0c1e-3795-48b7-a8db-8c5d607ced53",
       "ladbrokes_uk": "lduk-258962355",
       "matchbook": "mb-34517079483700023",
@@ -820,7 +820,7 @@
       "gemini": "NCAAF-2610102000-IND-NEB-S",
       "goldrush": "31132192",
       "hardrock": "9082057474659451271",
-      "kalshi": "KXNCAAF1HSPREAD-26OCT10INDNEB",
+      "kalshi": "KXNCAAF1HTEAMTOTAL-26OCT10INDNEB",
       "ladbrokes": "09903a90-c2f3-4735-a322-9d2a6e3ad103",
       "ladbrokes_uk": "lduk-258949244",
       "novig": "01a0fd5a-e6e6-7170-876f-4dd6f7c26aee",
@@ -947,6 +947,7 @@
       "sportzino": "sz-17724265",
       "sx_bet": "L20383144",
       "thescorebet": "StandardEvent:3836e26e-dc99-4398-87bd-6263f979f210",
+      "thrillzz": "888232418",
       "underdog": "underdog_263243"
      },
      "home": "Missouri",
@@ -1049,7 +1050,7 @@
       "gemini": "NCAAF-2610102000-WAK-NCS-M",
       "goldrush": "31132218",
       "hardrock": "8726836054050603413",
-      "kalshi": "KXNCAAF1HTOTAL-26OCT10WAKENCST",
+      "kalshi": "KXNCAAF1HSPREAD-26OCT10WAKENCST",
       "ladbrokes": "ec8840a4-a429-42d0-9138-5bdffd4a2673",
       "ladbrokes_uk": "lduk-258951158",
       "novig": "01a0fd5a-e97d-7422-aaca-19df878469fc",
@@ -1225,14 +1226,17 @@
   },
   "NFL": {
    "books": {
-    "draftkings": 134,
+    "draftkings": 140,
     "fanduel": 339
    },
    "eventsListed": 30,
    "eventsMatched": 1,
    "games": 1,
    "marketTypes": {
+    "player_extra_points_made": 2,
+    "player_field_goals_made": 2,
     "player_interceptions": 4,
+    "player_kicking_points": 2,
     "player_longest_passing_completion": 4,
     "player_longest_reception": 24,
     "player_longest_rush": 10,
@@ -1247,8 +1251,8 @@
     "player_rushing_attempts": 6,
     "player_rushing_yards": 76
    },
-   "requestsLeft": 0,
-   "rows": 473,
+   "requestsLeft": 45,
+   "rows": 479,
    "slateGames": [
     "Tampa Bay Buccaneers at Dallas Cowboys 2026-10-09T00:15Z"
    ],
@@ -1277,7 +1281,7 @@
       "gemini": "NFL-2610111330-PHI-JAX-T",
       "goldrush": "29767421",
       "hardrock": "5999335051995775400",
-      "kalshi": "KXNFL1H-26OCT11PHIJAC",
+      "kalshi": "KXNFLRECYDS-26OCT11PHIJAC-JACJCAMERON19-25",
       "ladbrokes": "72888c26-b63d-40db-9707-210f01c283e0",
       "ladbrokes_uk": "lduk-258966891",
       "matchbook": "mb-33272970854400023",
@@ -2028,6 +2032,7 @@
       "stake": "5a3eb22a-828a-4aba-a5e8-092b683bd2bf",
       "sx_bet": "L19431509",
       "thescorebet": "StandardEvent:c77d780f-a547-4ce5-a092-595a8a6060ed",
+      "thrillzz": "88859321",
       "underdog": "underdog_178919"
      },
      "home": "Washington Commanders",
