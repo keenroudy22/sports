@@ -6,6 +6,7 @@ const C = require('../site/core.js');
 globalThis.KRCore = C;
 const { model: M } = require('../site/app.js');
 const source = fs.readFileSync('site/app.js', 'utf8');
+const moreSource = fs.readFileSync('site/app-more.js', 'utf8');
 
 const picks = [
   { id: 'a', kind: 'props', odds: -110, result: 'win', settledAt: '2026-09-01T01:00:00Z' },
@@ -30,14 +31,14 @@ test('season chart ends at captured-price units exactly', () => {
   const points = M.cumulativeUnits(straight, C.unitsFor);
   assert.ok(points.length > 0);
   assert.equal(points.at(-1).units, Math.round(rec.captured.units * 100) / 100);
-  const recordView = source.slice(source.indexOf("if (tab === 'official')"), source.indexOf("if (tab === 'fun')"));
+  const recordView = moreSource.slice(moreSource.indexOf("if (tab === 'official')"), moreSource.indexOf("if (tab === 'fun')"));
   assert.match(recordView, /const points = cumulativeUnits\(straight, C\.unitsFor\)/);
   assert.match(recordView, /unitsChart\(points\)/);
   assert.match(recordView, /units\(rec\.captured\.units\)/);
 });
 
 test('Model restores projected-winner and fun-ticket scorecard tiles', () => {
-  const modelView = source.slice(source.indexOf("if (tab === 'model')"), source.indexOf('/* Trials:', source.indexOf("if (tab === 'model')")));
+  const modelView = moreSource.slice(moreSource.indexOf("if (tab === 'model')"), moreSource.indexOf('/* Trials:', moreSource.indexOf("if (tab === 'model')")));
   assert.match(modelView, /<small>Projected winners<\/small>/);
   assert.match(modelView, /card\.moneyline/);
   assert.match(modelView, /<small>Fun tickets<\/small>/);

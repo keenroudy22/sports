@@ -13,6 +13,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import gates
+import line_payload
 import pick_card
 from sports_refresh import eastern_date
 
@@ -45,6 +46,13 @@ def load(path, fallback):
         return json.loads(Path(path).read_text(encoding='utf-8'))
     except (OSError, ValueError):
         return fallback
+
+
+def load_lines(path):
+    try:
+        return line_payload.load(path)
+    except (OSError, ValueError, TypeError, json.JSONDecodeError):
+        return []
 
 
 def details_for(cards, root=DETAILS):
@@ -419,7 +427,7 @@ def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES):
     data = load(data_path, {'games': []})
     cards = data.get('games') or []
     choice = select(data, details_for(cards, detail_root), now,
-                    (load(lines_path, {'lines': []}) or {}).get('lines') or [], teams_for(cards))
+                    load_lines(lines_path), teams_for(cards))
     if not choice:
         return None
     stale = min(at(choice['day'], POST_UNTIL), choice['firstKickoff'] - timedelta(minutes=45))
@@ -492,7 +500,7 @@ def render_due(now, folder, data_path=TODAY, detail_root=DETAILS, lines_path=LIN
     data = load(data_path, {'games': []})
     cards = data.get('games') or []
     choice = select(data, details_for(cards, detail_root), now,
-                    (load(lines_path, {'lines': []}) or {}).get('lines') or [], teams_for(cards))
+                    load_lines(lines_path), teams_for(cards))
     if not choice:
         return {}
     fetch = fetch or pick_card.fetch_data_uri

@@ -12,8 +12,9 @@ import publication_guard as guard
 
 class PublicationGuardTests(unittest.TestCase):
     def test_reviewed_paths_and_old_public_evidence_remain_allowed(self):
-        for path in ('.nojekyll', 'index.html', 'data/research.json', 'data/forecasts.json', 'data/app/today.json',
-                     'data/app/record.json', 'data/app/trends/index.json',
+        for path in ('.nojekyll', 'index.html', 'app-more.js', 'data/research.json', 'data/forecasts.json', 'data/app/today.json',
+                     'data/app/record.json', 'data/app/lines.json', 'data/app/lines-NFL.json',
+                     'data/app/lines-CFB.json', 'data/app/trends/index.json',
                      'data/app/trends/NFL-2026-10-08.json', 'data/app/trends/CFB-2026-10-10-milestones.json',
                      'data/app/players/NFL/3.json', 'data/app/player-charts/CFB.json',
                      'data/app/teams/NFL/12.json', 'data/app/teams/NFL.json', 'data/app/teams/CFB-defense.json',

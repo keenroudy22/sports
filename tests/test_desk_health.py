@@ -55,6 +55,18 @@ class DeskHealthTests(unittest.TestCase):
             self.assertIn('source-NFL multi-book prices', codes)
             self.assertNotIn('source-CFB multi-book prices', codes, 'off-slate old odds are not an urgent failure')
 
+    def test_public_data_budget_warning_is_alerted_without_calling_publish_failed(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            self.fixture(root)
+            app = root / 'site/data/app'
+            app.mkdir(parents=True)
+            (app / 'today.json').write_bytes(b'x' * 327681)
+            result = H.summary(root, root / 'private', root, NOW)
+            codes = {row['code'] for row in result['issues']}
+            self.assertIn('payload-budget', codes)
+            self.assertNotIn('publish-failed', codes)
+
     def test_old_cancelled_and_future_posts_do_not_become_delivery_failures(self):
         posts = [
             {'dueAt': '2026-10-05T13:00:00Z', 'cancelledAt': '2026-10-05T12:00:00Z', 'precheck': {'result': 'withheld'}},

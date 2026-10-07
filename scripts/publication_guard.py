@@ -10,13 +10,14 @@ import os
 import re
 from pathlib import Path
 
-ROOT_FILES = {'.nojekyll', 'index.html', 'app.css', 'app.js', 'core.js', 'live.js', 'personal.js',
+ROOT_FILES = {'.nojekyll', 'index.html', 'app.css', 'app.js', 'app-more.js', 'core.js', 'live.js', 'personal.js',
               'favicon.svg', 'kookn-chef.png', 'kookn.jpg'}
 DATA_FILES = {'slate.json', 'research-context.json', 'desk-notes.json', 'sports.json',
               'research.json', 'scoreboard.json', 'player-history.json', 'opponent-history.json',
               'market-lab.json', 'market-lines.json', 'depth-charts.json', 'player-identity.json',
               'scoreboard-games.json', 'forecasts.json', 'feed.xml'}
-APP_FILES = {'today.json', 'record.json', 'lines.json', 'research.json', 'sport-research.json'}
+APP_FILES = {'today.json', 'record.json', 'lines.json', 'lines-NFL.json', 'lines-CFB.json',
+             'research.json', 'sport-research.json'}
 PRIVATE_NAMES = {'env', '.env', 'desk-health.html', 'desk-health.json', 'desk-health-state.json',
                  'desk-reliability.json', 'reliability-history.json', 'live-watch.json',
                  'live-progress.json', 'x-posted.json', 'status.json', 'policy.json',

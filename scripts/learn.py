@@ -315,10 +315,20 @@ def learn_calibration(policy, rows, now, dry=False):
 
 # ------------------------------------------------------------------ the rest of the kitchen
 
+# C4 briefly wrote the public display label into candidate identity. These
+# append-only rows remain evidence, but the two jurisdiction refusals were
+# caused by that regression and must not teach a rule that ESPN BET was illegal.
+RULE_STATS_EXCLUDED_IDS = {
+    'CFB-2026-W6-uga-ala-over-52-5-thescore-bet',
+    'CFB-2026-W6-haw-asu-over-49-5-thescore-bet',
+}
+
 def by_rule(rows):
     """Every rule that refused something, and how what it refused did."""
     groups = defaultdict(list)
     for row in rows:
+        if row.get('id') in RULE_STATS_EXCLUDED_IDS:
+            continue
         if row['decision'] in ('refused', 'held'):
             for rule in row.get('rules') or [row['decision']]:
                 groups[rule].append(row)

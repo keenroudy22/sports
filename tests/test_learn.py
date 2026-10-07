@@ -147,6 +147,13 @@ class CalibrationTests(unittest.TestCase):
 
 
 class OtherLearningTests(unittest.TestCase):
+    def test_known_c4_display_name_refusals_stay_in_history_but_not_rule_stats(self):
+        bad = [row(1, id=key, decision='refused', rules=['cfb_jurisdiction'])
+               for key in sorted(learn.RULE_STATS_EXCLUDED_IDS)]
+        real = row(3, id='real-jurisdiction-refusal', decision='refused', rules=['cfb_jurisdiction'])
+        self.assertEqual(learn.by_rule(bad + [real])['cfb_jurisdiction']['graded'], 1)
+        self.assertEqual(len(bad), 2, 'the append-only rows still exist as input evidence')
+
     def test_sites_that_keep_checking_out_are_preferred_and_the_rest_avoided(self):
         policy = learning.default_policy()
         rows = [{'research': [{'domain': 'nfl.com', 'verified': True}] * 6 + [{'domain': 'rumors.example', 'verified': False}] * 5

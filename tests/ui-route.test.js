@@ -27,9 +27,13 @@ test('shared legacy filters survive route resolution', () => {
 
 test('bare Research preserves the old news desk and legacy player searches land on Search', () => {
   assert.equal(M.resolve('#research').mode, 'news');
+  assert.equal(M.resolve('#research?type=props').mode, 'lines');
+  assert.equal(M.resolve('#research?sort=edge&show=value&q=Bijan').mode, 'lines');
   assert.equal(M.resolve('#research/lines').mode, 'lines');
   assert.equal(M.resolve('#stats/search').sub, 'search');
   assert.equal(M.resolve('#stats/players').sub, 'search');
+  assert.equal(M.resolve('#stats?stat=recYds&sample=last5&q=Bijan').sub, null,
+    'a copied matchup-chart filter reopens Matchups, not the Search list');
 });
 
 test('canonical table rewrites legacy pages and never rewrites public deep links', () => {

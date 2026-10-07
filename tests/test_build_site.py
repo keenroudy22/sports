@@ -289,10 +289,11 @@ class GradeTests(unittest.TestCase):
                        {'book': 'FanDuel', 'line': 44.5, 'odds': -105}]},
         ], now)
         self.assertEqual([row['id'] for row in rows], ['x'])
-        self.assertEqual((rows[0]['book'], rows[0]['displayBook'], rows[0]['ageMinutes'], rows[0]['freshness']),
-                         ('ESPN BET', 'theScore Bet', 30, 'fresh'))
-        self.assertEqual(rows[0]['bestSameLine'], {'book': 'FanDuel', 'displayBook': 'FanDuel', 'odds': -105})
-        self.assertEqual(rows[0]['books'][0]['displayBook'], 'Hard Rock Bet')
+        self.assertEqual((rows[0]['book'], rows[0]['ageMinutes'], rows[0]['freshness']),
+                         ('ESPN BET', 30, 'fresh'))
+        self.assertNotIn('displayBook', rows[0])
+        self.assertEqual(rows[0]['bestSameLine'], {'book': 'FanDuel', 'odds': -105})
+        self.assertNotIn('displayBook', rows[0]['books'][0])
 
     def test_an_away_spread_row_is_graded_as_the_away_side(self):
         home = build_site.grade_line(self.line(market='point spread', line=-2.5, direction=None), self.snapshot, False)

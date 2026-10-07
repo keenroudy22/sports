@@ -5,7 +5,9 @@ Each page loads only what it shows:
   app/today.json              games from three days back to eight ahead, with the
                               market, v1 and the latest v2 forecast; recent/open picks
   app/record.json             the complete public pick history
-  app/lines.json              the line catalog and current game markets (the board)
+  app/lines.json              small line-catalog manifest
+  app/lines-NFL.json          NFL line catalog and current game markets
+  app/lines-CFB.json          CFB line catalog and current game markets
   app/games/<id>.json         one game: forecast history, player projections next
                               to DraftKings lines, both teams' form and defense
                               ranks, injuries, picks and lines, the final
@@ -35,6 +37,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import boxscores
 import features
+import line_payload
 import market_read
 import model_v2
 import odds_api
@@ -139,18 +142,26 @@ COMPARISON_ONLY_BOOKS = {'hardrockbet'}
 
 
 def public_lines(rows, now):
-    """Add display, quote-age and exact-line shopping fields without changing provider identity."""
+    """Add quote-age and exact-line shopping fields without changing provider identity.
+
+    Public JavaScript owns the ESPN BET -> theScore Bet label.  Repeating a
+    display-only name on every row and nested quote cost about 96 KB on a large
+    slate and once leaked back into selection, so it is deliberately absent.
+    """
     out = []
     for source in rows:
         book = provider_book(source.get('book'))
         if not book:
             continue
-        row = dict(source, book=book, displayBook=display_book(book))
+        row = dict(source, book=book)
+        row.pop('displayBook', None)
         quotes = []
         for quote in source.get('books') or []:
             named = provider_book(quote.get('book'))
             if named:
-                quotes.append({**quote, 'book': named, 'displayBook': display_book(named)})
+                item = {**quote, 'book': named}
+                item.pop('displayBook', None)
+                quotes.append(item)
         if 'books' in source:
             row['books'] = quotes
         observed = instant(row.get('observedAt'))
@@ -158,15 +169,14 @@ def public_lines(rows, now):
         row['ageMinutes'] = age
         row['freshness'] = ('fresh' if age is not None and age <= 60 else
                             'aging' if age is not None and age <= 240 else 'stale')
-        same = [{'book': row['book'], 'displayBook': row['displayBook'], 'odds': row.get('odds')}]
-        same += [{'book': q['book'], 'displayBook': q['displayBook'], 'odds': q.get('odds')} for q in quotes
+        same = [{'book': row['book'], 'odds': row.get('odds')}]
+        same += [{'book': q['book'], 'odds': q.get('odds')} for q in quotes
                  if number(q.get('line')) == number(row.get('line'))]
         same = [q for q in same if american(q.get('odds')) is not None
                 and re.sub(r'[^a-z0-9]', '', q['book'].casefold()) not in COMPARISON_ONLY_BOOKS]
         if same:
             best = max(same, key=lambda q: american(q['odds']))
-            row['bestSameLine'] = {'book': best['book'], 'displayBook': best['displayBook'],
-                                   'odds': american(best['odds'])}
+            row['bestSameLine'] = {'book': best['book'], 'odds': american(best['odds'])}
         else:
             row['bestSameLine'] = None
         out.append(row)
@@ -1030,7 +1040,12 @@ def build(now=None):
                                'health': research_views.health(freshness, now), 'games': cards,
                                'picks': recent_picks(picks, now), 'historyFile': 'record.json', 'model': summary})
     write(OUT / 'record.json', {'generatedAt': stamp(now), 'picks': picks})
-    write(OUT / 'lines.json', {'generatedAt': stamp(now), 'lines': lines})
+    generated = stamp(now)
+    line_index = line_payload.manifest(lines, generated)
+    write(OUT / 'lines.json', line_index)
+    for league, name in line_index['files'].items():
+        write(OUT / name, {'generatedAt': generated, 'league': league,
+                           'lines': [row for row in lines if row.get('league') == league]})
     for league in ('NFL', 'CFB'):
         info = league_data[league]
         write(OUT / 'player-charts' / f'{league}.json',

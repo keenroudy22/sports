@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 import tempfile
 import unittest
@@ -11,13 +12,16 @@ import payload_budget
 class PayloadBudgetTests(unittest.TestCase):
     def site(self, root, today=b'{}'):
         root = Path(root)
-        for name in ('index.html', 'app.css', 'app.js'):
+        for name in payload_budget.SHELL_FILES:
             (root / name).write_bytes(b'ok')
+        (root / 'app-more.js').write_bytes(b'ok')
         app = root / 'data/app'
         (app / 'teams').mkdir(parents=True)
         (app / 'trends').mkdir()
         (app / 'today.json').write_bytes(today)
-        (app / 'lines.json').write_bytes(b'{}')
+        (app / 'lines.json').write_text(json.dumps({'count': 0, 'files': {'NFL': 'lines-NFL.json', 'CFB': 'lines-CFB.json'}}))
+        (app / 'lines-NFL.json').write_bytes(b'{}')
+        (app / 'lines-CFB.json').write_bytes(b'{}')
         (app / 'teams/CFB.json').write_bytes(b'{}')
         (app / 'teams/CFB-defense.json').write_bytes(b'{}')
         (app / 'trends/index.json').write_text(json.dumps({'files': []}))
@@ -25,19 +29,40 @@ class PayloadBudgetTests(unittest.TestCase):
 
     def test_split_payloads_under_limits_pass(self):
         with tempfile.TemporaryDirectory() as folder:
-            self.assertEqual(payload_budget.check(self.site(folder))['issues'], [])
+            result = payload_budget.check(self.site(folder))
+            self.assertEqual((result['issues'], result['warnings']), ([], []))
 
-    def test_monolith_and_oversize_first_payload_fail(self):
+    def test_data_breaches_warn_but_do_not_stop_cards_or_deploy(self):
         with tempfile.TemporaryDirectory() as folder:
             root = self.site(folder, b'x' * (payload_budget.LIMITS['today'] + 1))
             (root / 'data/app/trends.json').write_bytes(b'{}')
-            issues = payload_budget.check(root)['issues']
-            self.assertTrue(any(x.startswith('today:') for x in issues))
-            self.assertIn('trends-monolith:present', issues)
+            result = payload_budget.check(root)
+            self.assertEqual(result['issues'], [])
+            self.assertTrue(any(x.startswith('today:') for x in result['warnings']))
+            self.assertIn('trends-monolith:present', result['warnings'])
+            self.assertEqual(payload_budget.main(root), 0)
+
+    def test_shell_breach_still_stops_the_publish(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = self.site(folder)
+            (root / 'app.js').write_bytes(os.urandom(payload_budget.LIMITS['shell-gzip'] + 1))
+            result = payload_budget.check(root)
+            self.assertTrue(any(x.startswith('shell-gzip:') for x in result['issues']))
+            self.assertEqual(payload_budget.main(root), 1)
+
+    def test_lazy_bundle_breach_warns_without_blocking(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = self.site(folder)
+            (root / 'app-more.js').write_bytes(os.urandom(payload_budget.LIMITS['lazy-more-gzip'] * 2))
+            result = payload_budget.check(root)
+            self.assertTrue(any(x.startswith('lazy-more-gzip:') for x in result['warnings']))
+            self.assertEqual(result['issues'], [])
+            self.assertEqual(payload_budget.main(root), 0)
 
     def test_hosted_budget_runs_after_build_and_before_upload(self):
         workflow = (Path(__file__).resolve().parents[1] / '.github/workflows/publish.yml').read_text()
         self.assertLess(workflow.index('python scripts/build_site.py'), workflow.index('python scripts/payload_budget.py'))
+        self.assertLess(workflow.index('python scripts/payload_budget.py'), workflow.index('python scripts/feed.py'))
         self.assertLess(workflow.index('python scripts/payload_budget.py'), workflow.index('actions/upload-pages-artifact@'))
 
 

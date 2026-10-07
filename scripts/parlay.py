@@ -9,7 +9,7 @@ why the legs come from different games. Its stake is a quarter unit and it is tr
 apart from the straight picks. A fun ticket with a high miss rate, not a favorite.
 
 Usage: python scripts/parlay.py [--target 500] [--day YYYY-MM-DD] [--league NFL|CFB]
-Reads site/data/app/lines.json, so build the site first. Prints the ticket as JSON, or a
+Reads the built line manifest and league shards, so build the site first. Prints the ticket as JSON, or a
 line saying why there is none.
 """
 import argparse
@@ -22,6 +22,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import features
+import line_payload
 import pricing
 from sports_refresh import eastern_date
 
@@ -168,7 +169,7 @@ def main():
     parser.add_argument('--league', choices=('NFL', 'CFB'))
     parser.add_argument('--exclude', nargs='*', default=(), metavar='GAME', help='game ids with a sourced reason against them')
     args = parser.parse_args()
-    rows = json.loads(LINES.read_text(encoding='utf-8'))['lines']
+    rows = line_payload.load(LINES)
     ticket, reason = build(rows, datetime.now(timezone.utc), args.day, args.target, args.league, args.exclude)
     if ticket is None:
         print(f'No ticket: {reason}')

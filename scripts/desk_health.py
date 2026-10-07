@@ -12,6 +12,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import gates
+import payload_budget
 
 ROOT = Path(__file__).resolve().parents[1]
 CONF = Path.home() / '.config/keenroudy'
@@ -428,6 +429,13 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     verified = used is not None and remaining is not None and used + remaining == 500
     if verified and remaining <= 48:
         issue('odds-reserve', 'The stored Odds API balance is near the protected free reserve.')
+    if (root / 'site/data/app').is_dir():
+        try:
+            payload = payload_budget.check(root / 'site')
+            if payload['warnings']:
+                issue('payload-budget', 'A public data payload is above its phone-first budget; publishing remains available.')
+        except (OSError, ValueError, TypeError):
+            issue('payload-budget-unknown', 'Public payload sizes could not be checked from the cached site build.')
     published = number(state.get('published')) if state.get('outcome') == 'ok' else None
     try:
         reliability = reliability_view(reliability_history(conf / 'desk-health-reliability.json'), now)

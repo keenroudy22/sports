@@ -176,9 +176,10 @@ class CommonRuleTests(unittest.TestCase):
     def test_cfb_jurisdiction_uses_provider_identity_not_the_public_rebrand(self):
         [line] = build_site.public_lines([{'id': 'game-CFB-1-over', 'book': 'theScore Bet', 'line': 52.5,
                                            'odds': -110, 'observedAt': NOW.isoformat()}], NOW)
-        self.assertEqual((line['book'], line['displayBook']), ('ESPN BET', 'theScore Bet'))
+        self.assertEqual(line['book'], 'ESPN BET')
+        self.assertNotIn('displayBook', line, 'the display rename belongs only in the browser')
         ctx = context(games={'CFB-1': dict(GAME, id='CFB-1', league='CFB')})
-        pick = total_lean(league='CFB', gameIds=['CFB-1'], book=line['book'], displayBook=line['displayBook'])
+        pick = total_lean(league='CFB', gameIds=['CFB-1'], book=line['book'])
         self.assertTrue(gates.cfb_jurisdiction(pick, ctx).ok)
 
 

@@ -32,6 +32,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import boxscores
 import arbs
 import build_site
+import line_payload
 import desk
 import features
 import gates
@@ -1682,7 +1683,7 @@ def _run(args, now, slot, kinds, status):
     absorb(ctx, settled + closed)
 
     build_site.build(now)
-    lines = load_json(build_site.OUT / 'lines.json', {'lines': []})['lines']
+    lines = line_payload.load(build_site.OUT / 'lines.json')
     wanted = rank_card(candidates(lines, games, now), ctx)
     log(f'{len(wanted)} candidates on the board')
     decided = []          # every decision this run made, for the learning record
@@ -1934,7 +1935,7 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         quotes = now_quotes(ctx, games, now)
         refused = []
         import news_posts
-        lines = load_json(build_site.OUT / 'lines.json', {'lines': []}).get('lines') or []
+        lines = line_payload.load(build_site.OUT / 'lines.json')
         news = news_posts.candidates(ctx, features.load(), lines, now, log_book, games=games)
         plans = buffer_post.plan(ctx.first, ctx.latest, games, now, log_book, ctx.player_team, quotes=quotes,
                                  refused=refused, news=news)
