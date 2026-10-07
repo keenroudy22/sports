@@ -1,20 +1,20 @@
 {
- "at": "2026-10-07T13:36:18Z",
+ "at": "2026-10-07T13:44:04Z",
  "confirmed": {
-  "CFB-401862794": "2026-10-07T13:36:18Z",
-  "CFB-401869933": "2026-10-07T13:36:18Z",
-  "CFB-401871051": "2026-10-07T13:36:18Z",
-  "CFB-401871052": "2026-10-07T13:36:18Z",
-  "CFB-401871066": "2026-10-07T13:36:18Z",
-  "NFL-401872980": "2026-10-07T13:36:18Z"
+  "CFB-401862794": "2026-10-07T13:44:04Z",
+  "CFB-401869933": "2026-10-07T13:44:04Z",
+  "CFB-401871051": "2026-10-07T13:44:04Z",
+  "CFB-401871052": "2026-10-07T13:44:04Z",
+  "CFB-401871066": "2026-10-07T13:44:04Z",
+  "NFL-401872980": "2026-10-07T13:44:04Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 953,
+    "draftkings": 951,
     "fanduel": 485
    },
-   "eventsListed": 66,
+   "eventsListed": 69,
    "eventsMatched": 6,
    "games": 6,
    "marketTypes": {
@@ -26,13 +26,13 @@
     "player_passing_completions": 26,
     "player_passing_touchdowns": 47,
     "player_passing_yards": 234,
-    "player_receiving_yards": 559,
+    "player_receiving_yards": 558,
     "player_receptions": 61,
     "player_rushing_attempts": 24,
-    "player_rushing_yards": 336
+    "player_rushing_yards": 335
    },
-   "requestsLeft": 48,
-   "rows": 1438,
+   "requestsLeft": 3,
+   "rows": 1436,
    "slateGames": [
     "Jacksonville State Gamecocks at Kennesaw State Owls 2026-10-07T23:00Z",
     "New Mexico State Aggies at Florida International Panthers 2026-10-07T23:30Z",
@@ -61,7 +61,7 @@
       "fliff": "fobj__conflict_event__417514",
       "gemini": "NCAAF-2610092300-FSU-LOU-S",
       "goldrush": "31120004",
-      "kalshi": "KXNCAAF4QTOTAL-26OCT09FSULOU",
+      "kalshi": "KXNCAAF4QSPREAD-26OCT09FSULOU",
       "ladbrokes": "97e64f2d-4889-4ef0-9b94-9665428015d3",
       "ladbrokes_uk": "lduk-258949201",
       "matchbook": "mb-34512900840100023",
@@ -317,6 +317,7 @@
       "robinhood": "15575329-dc2f-4b78-86bf-cb86e05658e0",
       "smarkets": "45340796",
       "sportzino": "sz-17714564",
+      "sx_bet": "L20408883",
       "thescorebet": "StandardEvent:b0aea5d4-4099-48bf-92d3-cf6d9c169326"
      },
      "home": "San Jose State Spartans",
@@ -377,7 +378,7 @@
      "type": "fixture"
     },
     {
-     "away": "Washington State",
+     "away": "Washington State Cougars",
      "external": {
       "ballybet": "1027508063",
       "betmgm": "6:46301",
@@ -410,10 +411,10 @@
       "sx_bet": "L20405816",
       "thescorebet": "StandardEvent:7e8b1257-c959-47b3-9c10-9689d574c894"
      },
-     "home": "Utah State",
+     "home": "Utah State Aggies",
      "sample": {
-      "away_team": "Washington State",
-      "home_team": "Utah State",
+      "away_team": "Washington State Cougars",
+      "home_team": "Utah State Aggies",
       "markets": [
        "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
@@ -584,7 +585,7 @@
      "type": "fixture"
     },
     {
-     "away": "Arizona",
+     "away": "Arizona Wildcats",
      "external": {
       "ballybet": "1027553017",
       "betmgm": "6:46371",
@@ -614,13 +615,14 @@
       "robinhood": "c71de7c4-9781-466c-b36f-8b92372661a6",
       "smarkets": "45348290",
       "sportzino": "sz-17724263",
+      "sx_bet": "L20405720",
       "thescorebet": "StandardEvent:21870df6-730f-4e54-84a7-ab598b45eae9",
       "underdog": "underdog_230523"
      },
-     "home": "West Virginia",
+     "home": "West Virginia Mountaineers",
      "sample": {
-      "away_team": "Arizona",
-      "home_team": "West Virginia",
+      "away_team": "Arizona Wildcats",
+      "home_team": "West Virginia Mountaineers",
       "markets": [
        "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
@@ -876,6 +878,7 @@
       "robinhood": "d778d664-2b04-4efc-856e-4da7ccc0301e",
       "smarkets": "45340815",
       "sportzino": "sz-17724249",
+      "sx_bet": "L20371298",
       "thescorebet": "StandardEvent:4c9a1498-92e8-4812-9cb3-1c4189b85916",
       "underdog": "underdog_230531"
      },
@@ -1065,7 +1068,7 @@
      "type": "fixture"
     },
     {
-     "away": "Wake Forest",
+     "away": "Wake Forest Demon Deacons",
      "external": {
       "ballybet": "1027552994",
       "betmgm": "6:46136",
@@ -1098,10 +1101,10 @@
       "thescorebet": "StandardEvent:a0272ad2-e50e-41f1-8a13-d8ed3d6ccf63",
       "underdog": "underdog_230517"
      },
-     "home": "NC State",
+     "home": "North Carolina State Wolfpack",
      "sample": {
-      "away_team": "Wake Forest",
-      "home_team": "NC State",
+      "away_team": "Wake Forest Demon Deacons",
+      "home_team": "North Carolina State Wolfpack",
       "markets": [
        "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
@@ -1193,6 +1196,7 @@
       "robinhood": "5e789555-c764-4b48-a45a-8bb4c21432b1",
       "smarkets": "45340807",
       "sportzino": "sz-17724260",
+      "sx_bet": "L20405280",
       "thescorebet": "StandardEvent:456042a3-c726-4402-ab73-f12ce4ce9f0e",
       "underdog": "underdog_230516"
      },
@@ -1276,7 +1280,7 @@
   "NFL": {
    "books": {
     "draftkings": 140,
-    "fanduel": 356
+    "fanduel": 260
    },
    "eventsListed": 30,
    "eventsMatched": 1,
@@ -1295,14 +1299,13 @@
     "player_passing_touchdowns": 13,
     "player_passing_yards": 27,
     "player_receiving_yards": 171,
-    "player_receptions": 113,
-    "player_rushing_+_receiving_yards": 12,
+    "player_receptions": 98,
+    "player_rushing_+_receiving_yards": 6,
     "player_rushing_attempts": 6,
-    "player_rushing_yards": 76,
-    "player_sacks": 11
+    "player_rushing_yards": 12
    },
-   "requestsLeft": 44,
-   "rows": 496,
+   "requestsLeft": 0,
+   "rows": 400,
    "slateGames": [
     "Tampa Bay Buccaneers at Dallas Cowboys 2026-10-09T00:15Z"
    ],
@@ -1737,7 +1740,7 @@
       "galera": "21085967",
       "gemini": "NFL-2610111700-CLE-NYJ-S",
       "goldrush": "31065449",
-      "kalshi": "KXNFL4QTOTAL-26OCT11CLENYJ",
+      "kalshi": "KXNFLRECYDS-26OCT11CLENYJ-CLEKCONCEPCION1-15",
       "ladbrokes": "d702b28a-3064-44a8-b754-f8ac292006ec",
       "ladbrokes_uk": "lduk-258966932",
       "matchbook": "mb-33321738280600023",
@@ -1878,7 +1881,7 @@
       "galera": "21085962",
       "gemini": "NFL-2610111700-IND-PIT-S",
       "goldrush": "31065438",
-      "kalshi": "KXNFL4QTOTAL-26OCT11INDPIT",
+      "kalshi": "KXNFLTD-26OCT11INDPIT-PITPFREIERMUTH88-1",
       "ladbrokes": "c15ae67e-bd67-4b35-bf26-80109a10cb65",
       "ladbrokes_uk": "lduk-258966921",
       "matchbook": "mb-33321748682800023",
@@ -2237,6 +2240,7 @@
        "player_passing_completions",
        "player_passing_touchdowns",
        "player_passing_yards",
+       "player_points",
        "player_receiving_yards",
        "player_rushing_+_receiving_touchdowns",
        "player_rushing_+_receiving_yards",
@@ -2544,7 +2548,7 @@
       "galera": "21085954",
       "gemini": "NFL-2610112005-DEN-LAC-S",
       "goldrush": "31065450",
-      "kalshi": "KXNFL4QTOTAL-26OCT11DENLAC",
+      "kalshi": "KXNFLRSHYDS-26OCT11DENLAC-DENJDOBBINS27-60",
       "ladbrokes": "402484a2-1507-4e6c-b1ae-d232203829cc",
       "ladbrokes_uk": "lduk-258966925",
       "matchbook": "mb-33321779942800023",
@@ -2669,7 +2673,7 @@
       "galera": "21085964",
       "gemini": "NFL-2610112025-SF-SEA-S",
       "goldrush": "31065447",
-      "kalshi": "KXNFL2QTOTAL-26OCT11SFSEA",
+      "kalshi": "KXNFL4QTOTAL-26OCT11SFSEA",
       "ladbrokes": "064e03ea-015d-49c7-9b05-45edabf03837",
       "ladbrokes_uk": "lduk-258966912",
       "matchbook": "mb-33322093751800023",
@@ -2807,7 +2811,7 @@
       "galera": "21085965",
       "gemini": "NFL-2610112025-DET-ARI-S",
       "goldrush": "31065439",
-      "kalshi": "KXNFL1QTOTAL-26OCT11DETARI",
+      "kalshi": "KXNFLPASSYDS-26OCT11DETARI-ARIJBRISSETT7-300",
       "ladbrokes": "124657b5-17cd-4561-bca6-543d8744bce9",
       "ladbrokes_uk": "lduk-258966917",
       "matchbook": "mb-33322067171500023",
