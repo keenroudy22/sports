@@ -63,7 +63,7 @@ test('why lines never use counterpoints or raw-model sentences', () => {
   const pick = { why: 'Prop lean: our projection is 68.2 against 49.5. The over reads 53.7% after adjustment from the raw 65.9%; 50.5% is needed at -102. Last 10 games: 5 of 10 over 49.5. Role: 1st of 1 NMSU WRs by projected targets, 7.3 a game.',
     risk: "The opponent's positional allowance points against this side. It covers the whole position group. An estimated chance, not a guarantee. Confidence 2 of 10." };
   const why = M.whyLines(pick);
-  assert.deepEqual(why, ['Role: 1st of 1 NMSU WRs by projected targets, 7.3 a game.'], 'a hit count is history, never a reason');
+  assert.deepEqual(why, ['Role: 7.3 projected targets a game.'], 'a hit count is history and one-player groups have no rank');
   assert.equal(M.historyLine(pick), 'Last 10 games: 5 of 10 over 49.5.');
   assert.ok(why.every(s => !/raw|against this side/i.test(s)));
   assert.equal(M.watchLine(pick), "The opponent's positional allowance points against this side.");
@@ -74,7 +74,7 @@ test('how-we-got-it explains the shrink without hiding it', () => {
   assert.match(lines.join(' '), /65.9%|66%/);
   assert.match(lines.join(' '), /54%/);
   assert.match(lines.join(' '), /398 graded lines/);
-  assert.match(lines.join(' '), /discount it heavily/);
+  assert.match(lines.join(' '), /cut it down hard/);
 });
 
 test('pick view model: open best bet shows our chance on the stub, results show tickets', () => {
@@ -111,7 +111,7 @@ test('a play the desk closed, pulled or withdrew never reads as open', () => {
     kickoff: '2099-01-01T00:00:00Z', status: 'active', probabilityAtPublication: { chance: 0.55, breakEven: 0.524 } };
   const moved = M.pickVM({ ...base, entryNote: 'Closed to new entries at 11:45 AM ET: total moved 2 against us.' }, now);
   assert.equal(moved.mode, 'closed');
-  assert.equal(moved.status, 'Closed to new entries');
+  assert.equal(moved.status, 'Off the card');
   assert.equal(moved.stub.cls, 'closed');
   assert.match(moved.statusNote, /Closed to new entries at 11:45 AM ET.*still graded at 56.5 -110 \(FanDuel\)/);
   assert.doesNotMatch(moved.statusNote, /check your book/i);

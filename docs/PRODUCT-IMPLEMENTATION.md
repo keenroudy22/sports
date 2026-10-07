@@ -715,6 +715,14 @@ what was claimed at the time.
 
 ### October 7 urgent delivery candidate and new owner decisions
 
+**Verified urgent release:** `375617555dc38c386018d62d6bc69f69b60f4573` shipped in
+[run 37630609392](https://github.com/keenroudy22/sports/actions/runs/37630609392) on October 7.
+965 Python tests (two skipped), 143 frontend tests under both Node runtimes and clean export passed.
+The current stored-input 0830 rehearsal returned ok with no outside writes/private reads; the 92-pick audit
+and public guard passed. All eighteen live 375/1440 route checks passed. The chef PNG's live SHA-256 equals
+the supplied asset and the Cloudflare disclosure is present. Sunday delivery is a future observation, not claimed
+complete. The rejected push was recovered non-destructively under the lock with hosted captures preserved.
+
 - P0 revision a7a6b7bb shipped in successful run 37624845039. It passed 959 Python tests (two skipped),
   143 frontend tests under both Node runtimes/clean export and eighteen live 375/1440 route checks. The ticket
   mark returned 200 and Saturday's complete 2,676 milestone rows were indexed in two smaller files.
@@ -734,6 +742,14 @@ what was claimed at the time.
   covers the newly approved work. A test now validates the actual checked-in queue.
 
 ### October 7 approved work order and P0 candidate
+
+**Verified P0 release:** revision `a7a6b7bbd64b8deb943ef22c8a2dc412add27285` shipped in
+[publish run 37624845039](https://github.com/keenroudy22/sports/actions/runs/37624845039), successful October 7.
+All 959 Python tests (two skipped), 143 frontend tests under both Node runtimes and clean export passed.
+The rebuilt 0830 rehearsal returned ok with zero outside writes/private reads, and all eighteen live route/width
+checks at 375/1440 passed. The public ticket mark returns 200; Saturday's index references both complete shards
+(1,467 + 1,209 rows). Felt cutover is scheduled on this chat for 11:45 PM ET under automation
+`finish-approved-felt-card-cutover`, which verifies the green 11:30 run before changing the approved switch.
 
 - Owner approved the complete CODEX-WORK-ORDER and Claude's delegated decisions, dated
   `owner-delegated to Claude, 2026-10-06`. The retained work order, benchmark, voice, local routing and
@@ -767,3 +783,16 @@ publication quotas. Green/red visuals express actual selected-side support/outco
 
 AGENTS.md is the effective operating contract. SOURCE-RIGHTS.md and SUBSCRIPTION-PLAN.md explain unresolved
 commercial conditions. Older audit release documents remain historical evidence, not a second conflicting policy.
+
+## October 7 owner carry-forward · invite, free plans and Kitchen Ticket
+
+The owner confirmed that Codex carries the queue after Claude signs off. The owner chose the Kitchen Ticket
+direction B, with CHEF_CLIP and ORDER_UP, removed the helpline and season strip from card images, and specified
+record-equivalent unit labels. New card art is P45 and requires Claude's review of real renders before TICKET_FROM.
+The five site invite references change to the newly verified non-expiring `discord.gg/ZnjubjsBPM`; a daily
+heartbeat check verifies the server and expiry (A-20261007-8, P44). Existing posted images remain untouched.
+The owner confirmed free plans only, with no upgrades, trials, payment methods or purchased credits. Local
+request stops and 80% alerts are part of P44. As of the last available October 7 provider check, the Odds API
+reported 194/500; local reservations reach 196. Count-only Buffer and SharpAPI journals begin at their October 7
+installation, so their counts are not whole-month provider totals. The Monday packet reports those limits and
+explicitly marks services whose usage is not accessible.

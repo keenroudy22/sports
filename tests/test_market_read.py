@@ -54,7 +54,7 @@ class MarketReadTests(unittest.TestCase):
         text = mr.sentences(block)
         self.assertIn('opened -7.5 and is -5.5', text)
         self.assertIn('3 books span', text)
-        self.assertIn('percentile', text)
+        self.assertIn('bigger than', text)
         import llm
         self.assertEqual(llm.check_style(text), [])
         self.assertTrue(llm.numbers_ok(text, block)[0], llm.numbers_ok(text, block)[1])

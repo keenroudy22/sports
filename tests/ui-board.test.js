@@ -6,6 +6,45 @@ globalThis.KRCore = require('../site/core.js');
 const { model: M } = require('../site/app.js');
 const source = fs.readFileSync('site/app.js', 'utf8');
 
+test('model-only support requires a saved for-direction fact', () => {
+  const pick={modelLean:true,reason:'Defensive starters are out.',why:'Defensive starters are out.'};
+  assert.deepEqual(M.whyLines(pick),[]);
+  assert.deepEqual(M.whyLines({...pick,reasoning:{context:['Both teams rank in the top 10 for pace.'],cautions:['Defensive starters are out.']}}),['Both teams rank in the top 10 for pace.']);
+});
+
+test('Good-to prices and current quotes retain the published cutoff', () => {
+  const now=Date.parse('2026-10-07T12:00:00Z');
+  const pick={gameId:'NFL-1',market:'total points',direction:'over',line:49.5,odds:-110,book:'FanDuel',
+    cutoffOdds:-119,cutoffLine:49.5,cutoffBoundary:51.5,kickoff:'2026-10-08T00:00:00Z'};
+  const row={...pick,state:'open',observedAt:'2026-10-07T11:30:00Z'};
+  assert.equal(M.goodTo(pick),'Good to -119 at 49.5');
+  assert.equal(M.latestPickQuote(pick,[row],now).inside,true);
+  assert.equal(M.latestPickQuote(pick,[{...row,odds:-120}],now).inside,false);
+  assert.equal(M.latestPickQuote(pick,[{...row,line:51.5}],now).inside,false);
+  assert.equal(M.latestPickQuote(pick,[{...row,observedAt:'2026-10-06T00:00:00Z'}],now),null);
+  assert.match(source,/ago\(latest.current.observedAt\)/);
+});
+
+test('history and defense cannot manufacture Model support below the price bar', () => {
+  const hurst = { chance: .52, needs: .533, edge: -1.3, clearsPrice: false };
+  assert.equal(M.matchupSignals(hurst, true, true), 2);
+  assert.equal(M.matchupSignals({...hurst, clearsPrice:true}, true, true), 3);
+  assert.match(M.researchPrice(hurst), /52% vs 53% needed.*no edge/);
+  assert.match(source, /x\.r\.clearsPrice === true/);
+  assert.match(source, /History only · no edge at this price/);
+});
+
+test('a research price check matches the exact market, side, number, book and fresh quote', () => {
+  const now=Date.parse('2026-10-07T12:00:00Z');
+  const row={gameId:'CFB-1',athleteId:'9',stat:'passYds',market:'passing yards',direction:'under',line:211.5,odds:-110,book:'FanDuel'};
+  const line={...row,state:'open',observedAt:'2026-10-07T11:00:00Z',grade:{chance:.58}};
+  assert.equal(M.priceMatch(row,[line],now),line);
+  for(const changed of [{line:210.5},{direction:'over'},{book:'DraftKings'},{odds:-115},{observedAt:'2026-10-06T00:00:00Z'}])
+    assert.equal(M.priceMatch(row,[{...line,...changed}],now),null);
+  assert.match(M.averageGap(167.1,[50,36,43,11].map(x=>x*266.3/35)),/167.1.*266.3.*Wide range/);
+  assert.equal(M.averageGap(35,[30,40]),'');
+});
+
 test('the research board admits only current open priced rows before kickoff', () => {
   const now = Date.parse('2026-10-06T20:00:00Z');
   const base = { state: 'open', odds: -110, book: 'FanDuel', kickoff: '2026-10-07T00:00:00Z' };

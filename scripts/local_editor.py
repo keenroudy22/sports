@@ -57,7 +57,7 @@ def candidates(root, now):
                         'matchup': matchup, 'href': '#game/' + gid}
                 trends = []
                 for r in detail.get('seasonTrends', []):
-                    if r.get('kind') != 'main' or r.get('injuryStatus') or not fresh(r.get('observedAt'), now, 4):
+                    if r.get('kind') != 'main' or r.get('injuryStatus') or r.get('uncertainGap') or not fresh(r.get('observedAt'), now, 4):
                         continue
                     n, hits = r.get('games'), r.get('hits')
                     if not number(n) or not number(hits) or n < 3 or not 0 <= hits <= n or hits / n < .7:
@@ -65,7 +65,7 @@ def candidates(root, now):
                     if not number(r.get('odds')) or abs(r['odds']) < 100 or not r.get('book') or not r.get('title'):
                         continue
                     expiry = min(start, gates.when(r['observedAt']) + timedelta(hours=4))
-                    trends.append(dict(base, kind='trend', label='Season trend', player=r.get('player'),
+                    trends.append(dict(base, kind='trend', label='Season trend', player=r.get('player'), stat=r.get('stat'),
                         title=f"{r['player']} · {r['title']}",
                         text=f"{hits}/{n} recorded games this season. {r['book']} {r['odds']:+g} captured; history, not a prediction.",
                         observedAt=r['observedAt'], expiresAt=gates.stamp(expiry), rate=hits/n, sample=n, price=r['odds']))
@@ -133,7 +133,7 @@ def select(rows, ask=None):
         chosen, players = [], set()
         for key in dict.fromkeys(ids):
             r = facts[key]
-            identity = (r['gameId'], r.get('player'))
+            identity = r['gameId']
             if identity in players:
                 continue
             chosen.append(r)
@@ -151,6 +151,10 @@ def save(path, data):
     temp.replace(path)
 
 
+def identity(row):
+    return tuple(str(row.get(key) or '') for key in ('gameId', 'player', 'stat', 'market', 'kind', 'label'))
+
+
 def prepare(now, root=ROOT / 'site/data', output=OUTPUT, state=STATE, ask=None, enabled=True):
     """Skip unchanged facts and calls closer than 60 minutes. Fail quietly, never create filler."""
     if not enabled or os.environ.get('KEENROUDY_LOCAL_EDITOR', '1') == '0':
@@ -159,13 +163,12 @@ def prepare(now, root=ROOT / 'site/data', output=OUTPUT, state=STATE, ask=None, 
     if not rows:
         return {'status': 'no-fresh-facts'}
     # Observation timestamps alone are not a new story; don't pay even local inference to reword them.
-    semantic = [{k: v for k, v in r.items() if k not in ('observedAt', 'expiresAt', 'id')} for r in rows]
+    semantic = sorted({identity(row) for row in rows})
     fingerprint = hashlib.sha256(json.dumps(semantic, sort_keys=True).encode()).hexdigest()
     prior, previous = read(state), read(output)
     if prior.get('fingerprint') == fingerprint and previous.get('rows'):
-        by_key = {(r['gameId'], r['title'], r['text']): r for r in rows}
-        refreshed = [by_key[(r['gameId'], r['title'], r['text'])] for r in previous['rows']
-                     if (r['gameId'], r['title'], r['text']) in by_key]
+        by_key = {identity(r): r for r in rows}
+        refreshed = [by_key[identity(r)] for r in previous['rows'] if identity(r) in by_key]
         if refreshed:
             updated = dict(previous, rows=refreshed)
             if updated != previous:

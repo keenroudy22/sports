@@ -411,6 +411,9 @@ class JudgeTests(unittest.TestCase):
             self.assertEqual(pick['risk'].count(run.first_sentence(fact['claim'])), 1, 'duplicate evidence is not double-counted')
             self.assertIn(fact['source'], pick['sources'])
         self.assertNotIn('unverified claim', pick['risk'])
+        self.assertEqual(pick['reasoning']['context'], [])
+        self.assertEqual(len(pick['reasoning']['cautions']), 2)
+        self.assertTrue(pick['reasoning']['directionsChecked'])
         self.assertNotIn(facts[2]['source'], pick['sources'])
         self.assertIn('not a separate injury or availability hold', pick['risk'])
         self.assertEqual((pick['line'], pick['odds'], pick['confidence']), (48, -108, 3))
@@ -420,7 +423,7 @@ class JudgeTests(unittest.TestCase):
         desk = {'projection': 43.4, 'chance': .552, 'rawChance': .625, 'edgePoints': 3.3, 'breakEven': .519}
         with mock.patch.object(run.gates, 'desk_for', return_value=desk):
             run.write_prose(pick, SimpleNamespace(snapshot=lambda _: {}), [])
-        self.assertIn('The projection is the reason for this lean.', pick['why'])
+        self.assertIn('Model lean, our number only.', pick['why'])
         self.assertNotIn('Nothing sourced', pick['why'])
         self.assertNotIn('counterpoint', pick['risk'])
 

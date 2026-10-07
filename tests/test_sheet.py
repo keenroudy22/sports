@@ -56,7 +56,7 @@ class DrawTests(unittest.TestCase):
             self.assertIn(needle, text, needle)
         self.assertIn(sheet.ACCENT + '" font-size="23" font-weight="800" text-anchor="end">LIKE: Ha -2.5 -105 FD', text,
                       'the actual line and price we like are mint, not merely our projected spread')
-        self.assertIn('Mint: the labeled line clears its captured price.', text)
+        self.assertIn('Green names the line we like.', text)
         self.assertIn('stroke="' + sheet.ACCENT + '" stroke-width="4"', text, 'watch games get a mint ring')
 
     def test_a_full_slate_uses_compact_tiles_and_numbers_the_four_best_priced_edges(self):

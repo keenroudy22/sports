@@ -20,6 +20,14 @@ def slate_game(game_id, kickoff, state='pre', **market):
 
 
 class ModelReadTests(unittest.TestCase):
+    def test_read_price_grade_matches_the_source_and_failed_edge_is_not_support(self):
+        self.row['grade'].update(chance=.52, needs=.533, edge=-1.3)
+        result = build_site.model_reads(self.game, self.snapshot, [self.row], self.now)[0]
+        self.assertEqual((result['chance'], result['needs'], result['edge']), (.52, .533, -1.3))
+        self.assertFalse(result['clearsPrice'])
+        self.row['grade'].update(chance=.59, edge=5.7, view='lean')
+        self.assertTrue(build_site.model_reads(self.game, self.snapshot, [self.row], self.now)[0]['clearsPrice'])
+
     def setUp(self):
         self.now = datetime(2026, 10, 4, 15, tzinfo=timezone.utc)
         self.game = dict(slate_game('NFL-test', '2026-10-05T00:20:00Z'), season=2026)
@@ -36,7 +44,8 @@ class ModelReadTests(unittest.TestCase):
         self.assertEqual(len(reads), 1)
         self.assertIn('at least 5 adjusted points', reads[0]['warnings'][0])
         self.assertIn('9.5 receiving yards above', reads[0]['comparison'])
-        self.assertNotIn('chance', reads[0])
+        self.assertIsNone(reads[0]['chance'])
+        self.assertFalse(reads[0]['clearsPrice'])
         self.assertEqual(build_site.favorite_lines(self.game, self.snapshot, [self.row], self.now), [])
 
     def test_never_flip_a_quote_to_the_other_side(self):
@@ -79,6 +88,14 @@ class ModelReadTests(unittest.TestCase):
 
 
 class PickTests(unittest.TestCase):
+    def test_cutoff_display_is_parsed_from_the_posted_rule_and_qb_news_names_the_source(self):
+        import pricing
+        fields = build_site.cutoff_fields({'cutoff': pricing.cutoff('total', 'over', 49.5, -110)})
+        self.assertEqual(fields, {'cutoffOdds': -124, 'cutoffLine': 49.5, 'cutoffBoundary': 51.0})
+        self.assertIsNone(build_site.cutoff_fields({'cutoff': 'unknown'})['cutoffOdds'])
+        self.assertEqual(build_site.qb_news([{'name':'Baker Mayfield','position':'QB','status':'Out'},
+                                          {'name':'Other','position':'WR','status':'Out'}]), 'Baker Mayfield Out')
+
     def test_delivery_payload_is_whitelisted_and_cancellation_is_not_delivery(self):
         row = build_site.public_delivery({'dueAt': '2026-10-02T16:00:00Z', 'cancelledAt': '2026-10-02T15:00:00Z',
             'token': 'secret', 'discord': {'state': 'pending', 'sentAt': None, 'text': 'private'}})

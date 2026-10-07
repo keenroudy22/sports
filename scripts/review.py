@@ -444,6 +444,20 @@ def main(argv=None):
     # this adds no model call and reads no secrets or provider endpoints.
     health = desk_health.summary(root=ROOT, logs=LOGS, now=now, book=log_book)
     text = desk_health.markdown(health) + '\n' + text
+    sgo = health.get('sgoEvaluation') or {}
+    odds = health.get('oddsBudget') or {}
+    counts = health.get('requestCounts') or {}
+    free_plan = '\n'.join((
+        '## Free-plan usage',
+        f"- Odds API: {odds.get('used') if odds.get('used') is not None else 'unknown'}/500 credits at {odds.get('observedAt') or 'unknown'}; local stop 476.",
+        f"- SharpAPI Free: {counts.get('sharp', 0)} counted requests this month; 12/minute cap. Counter may cover only part of the month.",
+        f"- SportsGameOdds evaluation: {sgo.get('usedBefore') if sgo.get('usedBefore') is not None else 'unknown'}/2500 at {sgo.get('observedAt') or 'unknown'}; local stop 1800.",
+        f"- Buffer Free: {counts.get('buffer', 0)} counted requests this month; local stop 2700 of the 3000-request allowance. Counter may cover only part of the month.",
+        '- GitHub Actions: public repository; billed usage not available from this packet.',
+        '- Cloudflare: Free plan; usage not available from this packet.',
+        '- Codex/researcher: ChatGPT plan; account usage not available from this packet.',
+    ))
+    text += '\n' + free_plan + '\n'
     import product_followthrough
     product_status = product_followthrough.read_status(root=ROOT, now=now)
     # Keep the entire dated queue in the packet, including packet-only runs.

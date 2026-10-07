@@ -57,7 +57,7 @@ DISCORD_PLAY_LEAD = timedelta(minutes=15)  # the five-minute delivery job makes 
 CONVERSATION = (
     "First play is out. What are you riding today? 👀",
     "The card is rolling. Which game has your attention?",
-    "One play down. Props, sides or totals—what are you looking at?",
+    "One down. Props, sides or totals for you today?",
 )
 FUN_TEASERS = (
     "First play is out. The fun ticket is still in the kitchen. 🎰\nWho's riding today?",
@@ -100,7 +100,10 @@ def graphql(query, variables=None, key=None, send=http_send):
     """One GraphQL call. Raises BufferError on transport or GraphQL errors; returns the data object."""
     key = key or token()
     if send is http_send:
-        quota.count_request('buffer')
+        try:
+            quota.count_request('buffer')
+        except quota.QuotaBlocked as error:
+            raise BufferError(str(error)) from None
     status, raw = send(API, {'query': query, 'variables': variables or {}}, {'Authorization': f'Bearer {key}'})
     if status == 429:
         raise BufferError('Buffer rate limit reached (HTTP 429)')
@@ -183,6 +186,8 @@ def stamp(moment):
 
 def create_post(text, channel_id, due_at, image_url=None, key=None, send=http_send):
     """Schedule one post for an exact time. Returns Buffer's post id."""
+    if x_post.x_style(text):
+        raise BufferError('outgoing copy fails the public voice check')
     payload = {'text': text, 'channelId': channel_id, 'schedulingType': 'automatic', 'mode': 'customScheduled', 'dueAt': stamp(due_at),
                'needsApproval': False, 'tagIds': [], 'assets': [{'image': {'url': image_url}}] if image_url else []}
     data = graphql(CREATE, {'input': payload}, key=key, send=send)
@@ -469,7 +474,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         if image:
             try:
                 card_theme = pick_card.card_theme(theme_moment(guid, kind, due, items))
-            except (TypeError, ValueError):
+            except Exception:
                 card_theme = 'legacy'
                 log(f'buffer: {guid} card theme label fell back to legacy')
         else:

@@ -158,9 +158,9 @@ class ReceiptTests(unittest.TestCase):
     def test_the_receipt_card_is_the_same_frame(self):
         first, latest, log = world()
         card = pick_card.receipt_svg(receipts.ready(first, latest, GAMES, log, MONDAY_MORNING)[0], avatar='data:image/png;base64,AAAA')
-        for needle in ('FINAL REPORT', 'KOOK’N', 'YESTERDAY’S PLATES', 'Sunday, Sep 27', '>2-1<', '>W<', '>L<',
+        for needle in ('FINAL REPORT', 'KOOK’N', 'YESTERDAY', 'Sunday, Sep 27', '>2-1<', '>W<', '>L<',
                        'Player Seven over 4.5 receptions', 'missed by one leg', 'FUN TICKETS · 0.25U',
-                       'clip-path="url(#receiptChef)"', 'GRADED IN PUBLIC', 'Entertainment only. Not advice.'):
+                       'clip-path="url(#receiptChef)"', 'KOOK’N RESULTS', '21+ · Entertainment only'):
             self.assertIn(needle, card, needle)
         self.assertNotIn('Confidence', card)
 
@@ -272,8 +272,8 @@ class LadderReceiptTests(unittest.TestCase):
         self.assertEqual(receipts.label(rung), '80/20 Climb step 2 ($75 → $146)')
         straight = pick('s', 'sun', result='loss')
         self.assertEqual(receipts.headline([rung, straight]), '0-1', 'the ladder is not a straight play')
-        self.assertEqual(receipts.headline([rung]), 'Ladder 1-0')
-        self.assertIn(('Ladder', '1-0'), receipts.by_kind([rung, straight]))
+        self.assertEqual(receipts.headline([rung]), '80/20 Climb 1-0')
+        self.assertIn(('80/20 Climb', '1-0'), receipts.by_kind([rung, straight]))
 
     def test_a_cashed_rung_names_the_next_step_and_the_top_of_the_ladder_says_so(self):
         head, body = receipts.ladder_cashed(pick('l', 'sun', **self.RUNG))
@@ -313,7 +313,7 @@ class LadderReceiptTests(unittest.TestCase):
         self.assertIn('step 2 missed', post['text'])
         self.assertIn('A 40+ rec yds ✅', post['text'])
         self.assertIn('B 50+ rush yds ❌', post['text'])
-        self.assertIn('$19 stays banked. Climb 2 restarts at $50.', post['text'])
+        self.assertIn('$19 stays banked. Climb 2 starts at $50.', post['text'])
         self.assertEqual(receipts.guard(post), [])
 
 

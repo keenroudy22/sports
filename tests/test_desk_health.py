@@ -13,6 +13,18 @@ NOW = datetime(2026, 10, 5, 14, 0, tzinfo=timezone.utc)
 
 
 class DeskHealthTests(unittest.TestCase):
+    def test_free_plan_eighty_percent_alerts_from_verified_and_counted_usage(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            self.fixture(root)
+            self.write(root, 'data/odds/status.json', {'usage': {'at': NOW.isoformat(), 'used': 401, 'remaining': 99}})
+            quota_path = root / 'work/quota/buffer.jsonl'
+            quota_path.parent.mkdir(parents=True)
+            quota_path.write_text(''.join(json.dumps({'at': NOW.isoformat(), 'month': '2026-10',
+                                   'provider': 'buffer', 'count': 1}) + '\n' for _ in range(2400)))
+            codes = {row['code'] for row in H.summary(root, root / 'private', root, NOW)['issues']}
+            self.assertIn('odds-eighty-percent', codes)
+            self.assertIn('buffer-api-pace', codes)
     def test_pace_warning_and_official_delivery_count_head_the_report(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

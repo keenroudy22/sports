@@ -449,6 +449,8 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     usage = odds.get('usage') or {}
     used, remaining = number(usage.get('used')), number(usage.get('remaining'))
     verified = used is not None and remaining is not None and used + remaining == 500
+    if verified and used >= 400:
+        issue('odds-eighty-percent', 'The Odds API has used at least 80% of its 500 free credits.')
     if verified and remaining <= 48:
         issue('odds-reserve', 'The stored Odds API balance is near the protected free reserve.')
     start = now.astimezone(timezone.utc).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
@@ -458,8 +460,20 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     if projected is not None and projected > 450:
         issue('odds-pace', 'The stored Odds API pace projects past 450 free credits this month.')
     request_counts = quota.monthly_counts(root / 'work/quota', now)
-    if request_counts['buffer'] >= 2700:
-        issue('buffer-api-pace', 'Buffer requests are near the free 3,000-request monthly limit.')
+    if request_counts['buffer'] >= 2400:
+        issue('buffer-api-pace', 'Counted Buffer requests reached 80% of the free 3,000-request monthly limit.')
+    try:
+        sharp_rows = [json.loads(line) for line in (root / 'work/quota/sharp.jsonl').read_text().splitlines() if line.strip()]
+        recent = sum(1 for row in sharp_rows if moment(row.get('at')) and
+                     0 <= (now - moment(row['at'])).total_seconds() < 60)
+        if recent >= 10:
+            issue('sharp-minute-pace', 'SharpAPI used at least 10 of 12 free requests this minute.')
+    except (OSError, ValueError, TypeError, AttributeError):
+        pass
+    sgo_usage = read(conf / 'sgo-shadow.json').get('usage') or {}
+    sgo_used = number(sgo_usage.get('usedBefore'))
+    if sgo_usage.get('maximum') == 2500 and sgo_used is not None and sgo_used >= 1440:
+        issue('sgo-evaluation-pace', 'SportsGameOdds used at least 80% of the 1,800-object evaluation stop.')
     official_unscheduled = int((state.get('x') or {}).get('officialUnscheduled') or 0)
     if official_unscheduled:
         issue('official-unscheduled', f'{official_unscheduled} official plays were not scheduled in the last run.')
@@ -488,6 +502,8 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
             'deliveryLogState': 'available' if isinstance(post_book.get('posts'), list) else 'unknown',
             'deliveryCohorts': delivery_cohorts(post_book, now),
             'officialUnscheduled': official_unscheduled, 'requestCounts': request_counts,
+            'sgoEvaluation': {'usedBefore': sgo_used, 'limit': sgo_usage.get('maximum') if sgo_usage.get('maximum') == 2500 else None,
+                              'localStop': 1800, 'observedAt': stamp(read(conf / 'sgo-shadow.json').get('lastAt'))},
             'oddsBudget': {'observedAt': stamp(usage.get('at')), 'used': used if verified else None, 'projectedMonth': projected,
                            'remaining': remaining if verified else None, 'verifiedFromStoredSnapshot': verified},
             'localModel': {'usedLastRun': (state.get('llm') or {}).get('used') is True,
@@ -528,6 +544,10 @@ def markdown(data):
     lines.append(f"Stored Odds API budget: {budget['used']} used, {budget['remaining']} remaining; observed {budget['observedAt'] or 'unknown'}.")
     lines.append(f"Projected month: {budget.get('projectedMonth') or 'unknown'} credits. Counted free-plan requests this month: "
                  f"SharpAPI {(data.get('requestCounts') or {}).get('sharp', 0)}, Buffer {(data.get('requestCounts') or {}).get('buffer', 0)}.")
+    sgo = data.get('sgoEvaluation') or {}
+    lines.append(f"SportsGameOdds last stored usage: {sgo.get('usedBefore') if sgo.get('usedBefore') is not None else 'unknown'}"
+                 f"/{sgo.get('limit') or 'unknown'} objects; local stop {sgo.get('localStop', 1800)}."
+                 " Free plans only; no upgrade or paid trial is authorized.")
     llm = data['localModel']
     lines.append(f"Local model last run: {llm['calls']} calls, {llm['failures']} failures; {llm['homepageStories']} homepage stories.")
     lines.append(f"Live Discord pilot: {data['livePilot']['state']}; {data['livePilot']['attempts']} attempts. X remains off.")

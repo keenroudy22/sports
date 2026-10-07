@@ -20,8 +20,8 @@ class CardTests(unittest.TestCase):
     def test_the_svg_carries_the_picks_fields_the_kitchen_and_the_teams_colours(self):
         text = pick_card.svg(PICK, GAME, {'wins': 3, 'losses': 1, 'units': 1.98})
         for needle in ('>Iowa at Michigan<', '>under 38.5<', '-105', 'FanDuel', 'We project 31.2 total points', 'FAVORITE', 'KOOK’N',
-                       'TODAY’S PLATE', 'Served at', 'Iowa at Michigan', 'Sat 3:30 PM ET', 'Record 3-1',
-                       'keenroudy.com/sports', 'Graded in public', 'Entertainment only. Not advice.'):
+                       'BEST BET', 'Book', 'Iowa at Michigan', 'Sat 3:30 PM ET', 'Record 3-1',
+                       'keenroudy.com/sports', 'Graded in public', '21+ · Entertainment only'):
             self.assertIn(needle, text, needle)
         self.assertNotIn(' unit', text, 'no units on X, the post or the card')
         self.assertNotIn('1.98', text, 'a record on a card is wins and losses, never units')
@@ -218,7 +218,7 @@ class CardTests(unittest.TestCase):
             self.assertEqual(card.count('<image href="data:image/png;base64,AAAA"'), 1, 'one chef, on the plate')
             self.assertIn('clip-path="url(#badge)"' if pick is ticket else 'clip-path="url(#plate)"', card)
             self.assertIn('stroke-linecap="round"', card, 'the pan marks the corner')
-            self.assertIn('+650' if pick is ticket else 'Served at', card)
+            self.assertIn('+650' if pick is ticket else 'Book', card)
         self.assertNotIn('<image', pick_card.svg(PICK, GAME, avatar=''), 'no picture, an empty plate')
         self.assertIsNone(pick_card.avatar_uri(Path('/nonexistent/kookn.jpg')))
         self.assertTrue(pick_card.CHEF.exists(), 'the cutout ships with the site')

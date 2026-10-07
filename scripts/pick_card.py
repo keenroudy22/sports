@@ -616,7 +616,7 @@ def ticket_svg(pick, game=None, avatar=None, art=None, style=None):
 <text x="44" y="{y + 30}" fill="#f5faff" font-size="29" font-weight="750">{len(legs)} LEGS. ONE TICKET.</text>
 <text x="44" y="{y + 72}" fill="#a7c1cf" font-size="26">Graded in public, win or lose.</text>
 <text x="44" y="{y + 110}" fill="{accent}" font-size="25" font-weight="650">keenroudy.com/sports</text>
-<text x="1036" y="{y + 110}" text-anchor="end" fill="#a7c1cf" font-size="22">Entertainment only. Not advice.</text>
+<text x="1036" y="{y + 110}" text-anchor="end" fill="#a7c1cf" font-size="22">21+ · Entertainment only</text>
 </svg>'''
 
 
@@ -687,7 +687,7 @@ def ladder_svg(pick, avatar=None):
 <text x="84" y="660" fill="{CREAM}" font-size="78" font-weight="950">{esc(dollars(stake))} → {esc(dollars(returned))}</text>
 {''.join(leg_blocks)}
 <text x="84" y="1084" fill="#5eeaa4" font-size="29" font-weight="900">WIN: {esc(dollars(bank_this))} TO BANK · {esc(dollars(next_stake))} RIDES</text>
-<text x="56" y="1280" fill="#5eeaa4" font-size="23" font-weight="800">keenroudy.com/sports</text><text x="1024" y="1280" fill="#9eb8c7" font-size="17" text-anchor="end">Entertainment only. Not advice.</text>
+<text x="56" y="1280" fill="#5eeaa4" font-size="23" font-weight="800">keenroudy.com/sports</text><text x="1024" y="1280" fill="#9eb8c7" font-size="17" text-anchor="end">21+ · Entertainment only</text>
 </svg>'''
 
 
@@ -780,7 +780,7 @@ def ladder_result_svg(pick, avatar=None):
 {''.join(leg_blocks)}
 {''.join(tile_blocks)}
 <line x1="56" y1="1240" x2="1024" y2="1240" stroke="{accent}" stroke-opacity=".24" stroke-width="2"/>
-<text x="56" y="1292" fill="{accent}" font-size="23" font-weight="800">keenroudy.com/sports</text><text x="1024" y="1292" text-anchor="end" fill="#9eb8c7" font-size="17">Entertainment only. Not advice.</text>
+<text x="56" y="1292" fill="{accent}" font-size="23" font-weight="800">keenroudy.com/sports</text><text x="1024" y="1292" text-anchor="end" fill="#9eb8c7" font-size="17">21+ · Entertainment only</text>
 </svg>'''
 
 
@@ -851,16 +851,16 @@ def svg(pick, game=None, record=None, when=None, player_side=None, identities=No
         f'<text x="{WIDTH - 80}" y="116" fill="{soft}" font-size="26" font-weight="700" letter-spacing="3" text-anchor="end">{esc(label)}</text>',
         f'<text x="80" y="212" fill="{soft}" font-size="32">{esc(matchup)}</text>',
         f'<text x="80" y="262" fill="{accent}" font-size="24" font-weight="700" letter-spacing="4">'
-        f'{"THE CLIMB: " + esc(dollars(LADDER[0])) + " TO " + esc(dollars(LADDER[1])) if rung else "TODAY’S PLATE"}</text>',
+        f'{"THE CLIMB: " + esc(dollars(LADDER[0])) + " TO " + esc(dollars(LADDER[1])) if rung else "BEST BET"}</text>',
         *[f'<text x="80" y="{262 + (title_size + 6) * (i + 1) - 2}" fill="{ink}" font-size="{title_size}" font-weight="800">{esc(text)}</text>'
           for i, text in enumerate(lines)],
         *(ladder_body(pick.get('ladder') or {}, legs, price, book, ink, soft, accent, title_size) if rung else
           parlay_body(legs, price, book, units, ink, soft, accent, title_size) if parlay else [
-        f'<text x="80" y="418" fill="{soft}" font-size="26" letter-spacing="1">Served at</text>',
+        f'<text x="80" y="418" fill="{soft}" font-size="26" letter-spacing="1">Book</text>',
         f'<text x="80" y="470" fill="{ink}" font-size="50" font-weight="800">{esc(price)}<tspan fill="{soft}" font-size="34" font-weight="600" dx="18">{esc(book)}</tspan></text>',
         f'<text x="80" y="530" fill="{ink}" font-size="32">{esc(ours)}</text>']),
         f'<text x="80" y="{HEIGHT - 62}" fill="{ink}" font-size="26" font-weight="700">Graded in public, win or lose. <tspan fill="{soft}" font-weight="400">keenroudy.com/sports</tspan></text>',
-        f'<text x="{WIDTH - 80}" y="{HEIGHT - 62}" fill="{soft}" font-size="19" text-anchor="end">Entertainment only. Not advice.</text>',
+        f'<text x="{WIDTH - 80}" y="{HEIGHT - 62}" fill="{soft}" font-size="19" text-anchor="end">21+ · Entertainment only</text>',
         f'<text x="{WIDTH - 80}" y="{HEIGHT - 94}" fill="{soft}" font-size="22" text-anchor="end">{esc(record_line)}</text>' if record_line else '',
         '</svg>']
     return '\n'.join(parts)
@@ -931,7 +931,7 @@ def modern_svg(pick, game=None, record=None, when=None, player_side=None, identi
 {lines(number_line(pick) or 'No projection shown',562,984,426,31,ink,max_lines=3)}
 <text x="56" y="1202" fill="{ink}" font-size="28" font-weight="750">More on the board.</text>
 <text x="56" y="1252" fill="{accent}" font-size="27" font-weight="700">keenroudy.com/sports</text>
-<text x="56" y="1304" fill="{dim}" font-size="19">Entertainment only. Not advice. Verify current prices.</text>
+<text x="56" y="1304" fill="{dim}" font-size="19">21+ · Entertainment only · Prices move</text>
 </svg>'''
 
 
@@ -989,7 +989,7 @@ def receipt_svg(receipt, avatar=None):
         body.append(f'<text x="540" y="{top + row_h * len(shown) + 18}" fill="{soft}" font-size="21" text-anchor="middle">+ {len(rows) - len(shown)} more graded on the site</text>')
     if single:
         hero = 'CLEAN PLATE.' if wins and not losses else 'BACK TO WORK.' if losses and not wins else 'THE HONEST RECEIPT.'
-        sub = 'The win is on the record. Next plate waits for the right spot.' if wins and not losses else 'The miss is on the record. Next plate starts clean.'
+        sub = 'The win is on the record. Next play waits for its spot.' if wins and not losses else 'The miss is on the record. Next play starts fresh.'
         body += [
             f'<rect x="56" y="838" width="968" height="154" rx="24" fill="{accent}" fill-opacity=".10" stroke="{accent}" stroke-opacity=".55" stroke-width="3"/>',
             f'<text x="88" y="903" fill="{accent}" font-size="54" font-weight="950" letter-spacing="-1">{hero}</text>',
@@ -1033,9 +1033,9 @@ def receipt_svg(receipt, avatar=None):
         *chips,
         *body,
         f'<line x1="56" y1="1227" x2="1024" y2="1227" stroke="{accent}" stroke-opacity=".23" stroke-width="2"/>',
-        f'<text x="56" y="1270" fill="{ink}" font-size="24" font-weight="800">NO HIDING. GRADED IN PUBLIC, WIN OR LOSE.</text>',
+        f'<text x="56" y="1270" fill="{ink}" font-size="24" font-weight="800">KOOK’N RESULTS</text>',
         f'<text x="56" y="1300" fill="{soft}" font-size="20">Full record + details at keenroudy.com/sports</text>',
-        f'<text x="1024" y="1300" fill="{soft}" font-size="17" text-anchor="end">Entertainment only. Not advice.</text>',
+        f'<text x="1024" y="1300" fill="{soft}" font-size="17" text-anchor="end">21+ · Entertainment only</text>',
         '</svg>']
     return '\n'.join(parts)
 
@@ -1058,13 +1058,13 @@ def title_lines(title, width=26, limit=22):
 
 def parlay_body(legs, price, book, units, ink, soft, accent, title_size):
     """A parlay in the same frame as every other card: its legs where a single play's numbers go, and its
-    price on the "Served at" line."""
+    price on the "Book" line."""
     top = 262 + title_size + 4 + 44
     shown = legs if len(legs) <= 5 else legs[:4]
     rows = [f'<text x="80" y="{top + 34 * i}" fill="{ink}" font-size="26">• {esc(fit(leg, 40))}</text>' for i, leg in enumerate(shown)]
     if len(legs) > len(shown):
         rows.append(f'<text x="80" y="{top + 34 * len(shown)}" fill="{soft}" font-size="24">and {len(legs) - len(shown)} more</text>')
-    rows.append(f'<text x="80" y="562" fill="{soft}" font-size="26" letter-spacing="1">Served at <tspan fill="{ink}" font-size="44" '
+    rows.append(f'<text x="80" y="562" fill="{soft}" font-size="26" letter-spacing="1">Book <tspan fill="{ink}" font-size="44" '
                 f'font-weight="800" letter-spacing="0" dx="8">{esc(price)}</tspan><tspan fill="{soft}" font-size="30" font-weight="600" '
                 f'letter-spacing="0" dx="14">{esc(book)}</tspan></text>')
     return rows
@@ -1102,7 +1102,7 @@ def ladder_body(info, legs, price, book, ink, soft, accent, title_size):
              f'<rect x="{x0}" y="{y}" width="{max(14.0, now_x - x0):.0f}" height="14" rx="7" fill="{accent}"/>',
              f'<text x="{x0}" y="{y + 42}" fill="{soft}" font-size="22">{esc(dollars(LADDER[0]))}</text>',
              f'<text x="{x1}" y="{y + 42}" fill="{soft}" font-size="22" text-anchor="end">{esc(dollars(LADDER[1]))}</text>',
-             f'<text x="80" y="562" fill="{soft}" font-size="26" letter-spacing="1">Served at <tspan fill="{ink}" font-size="44" '
+             f'<text x="80" y="562" fill="{soft}" font-size="26" letter-spacing="1">Book <tspan fill="{ink}" font-size="44" '
              f'font-weight="800" letter-spacing="0" dx="8">{esc(price)}</tspan><tspan fill="{soft}" font-size="30" font-weight="600" '
              f'letter-spacing="0" dx="14">{esc(book)}</tspan></text>']
     return rows

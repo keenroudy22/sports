@@ -32,6 +32,8 @@ import gates
 import llm
 import pick_card
 import pricing
+import voice
+import re
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -412,7 +414,7 @@ def pricing_fmt(value):
 
 def x_style(text):
     """The house style for a post: everything check_style asks for except that a post may carry an emoji."""
-    return [p for p in llm.check_style(text) if 'emoji' not in p]
+    return list(dict.fromkeys([p for p in llm.check_style(text) if 'emoji' not in p] + voice.lint(text)))
 
 
 def now_line(pick, quote):

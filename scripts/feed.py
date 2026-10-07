@@ -152,7 +152,7 @@ def recap_items(first, latest, games, now):
         if not text:
             continue
         settled_at = max((p.get('settledAt') for p in todays if p.get('settledAt')), default=None)
-        items.append({'guid': f'recap:day:{day}', 'title': f"Kitchen's closed for {datetime.fromisoformat(day):%A}: the day's results",
+        items.append({'guid': f'recap:day:{day}', 'title': f"{datetime.fromisoformat(day):%A}: the results",
                       'text': text, 'link': f'{SITE}#record', 'pubDate': gates.when(settled_at) if settled_at else now})
     return items
 

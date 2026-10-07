@@ -17,6 +17,8 @@ ROOT = Path(__file__).resolve().parents[1]
 STATE = ROOT / 'work' / 'quota'
 CEILING = 500
 RESERVE = 24
+BUFFER_STOP = 2700
+SHARP_PER_MINUTE = 12
 
 
 class QuotaBlocked(RuntimeError):
@@ -43,7 +45,7 @@ def current_month_usage(value, now=None):
 
 
 def count_request(provider, root=STATE, now=None):
-    """Append one count-only row for an unmetered/free-plan API request."""
+    """Reserve one free-plan request before sending it; fail closed at local caps."""
     if provider not in ('sharp', 'buffer'):
         raise ValueError('unknown free-plan request counter')
     now = now or datetime.now(timezone.utc)
@@ -51,6 +53,21 @@ def count_request(provider, root=STATE, now=None):
     root.mkdir(parents=True, exist_ok=True)
     with (root / f'{provider}.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
+        journal = root / f'{provider}.jsonl'
+        try:
+            rows = [json.loads(line) for line in journal.read_text().splitlines() if line.strip()] if journal.exists() else []
+            if not all(isinstance(row, dict) and row.get('provider') == provider and
+                       isinstance(row.get('count'), int) and row['count'] == 1 and row.get('at') for row in rows):
+                raise ValueError('invalid journal')
+            month = now.astimezone(timezone.utc).strftime('%Y-%m')
+            if provider == 'buffer' and sum(row['count'] for row in rows if row.get('month') == month) >= BUFFER_STOP:
+                raise QuotaBlocked('Buffer local free-plan request cap reached')
+            if provider == 'sharp':
+                recent = [row for row in rows if 0 <= (now - datetime.fromisoformat(row['at'])).total_seconds() < 60]
+                if len(recent) >= SHARP_PER_MINUTE:
+                    raise QuotaBlocked('SharpAPI 12-per-minute free-plan cap reached')
+        except (OSError, ValueError, TypeError, KeyError):
+            raise QuotaBlocked('free-plan request journal unavailable') from None
         with (root / f'{provider}.jsonl').open('a', encoding='utf-8') as handle:
             handle.write(json.dumps({'month': now.astimezone(timezone.utc).strftime('%Y-%m'),
                                      'at': now.astimezone(timezone.utc).isoformat(),

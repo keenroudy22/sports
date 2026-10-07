@@ -23,6 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import gates
 import pick_card
 import record_scope
+import re
 import x_post
 from sports_refresh import eastern_date
 
@@ -31,7 +32,7 @@ LATEST = (20, 0)                  # Eastern, the day after: a receipt not schedu
 WEEKDAY = 2                       # Wednesday: the week's receipt
 CARD_HISTORY_DAYS = 8             # Discord embeds and retrying publishers need recent generated URLs to survive
 MARKS = {'win': '✅', 'loss': '❌', 'push': '➖', 'void': '➖'}
-KIND_NAMES = {'player': 'Player props', 'team': 'Game lines', 'parlay': 'Fun parlays', 'ladder': 'Ladder'}
+KIND_NAMES = {'player': 'Player props', 'team': 'Game lines', 'parlay': 'Fun parlays', 'ladder': '80/20 Climb'}
 
 
 def served(log_book):
@@ -128,7 +129,9 @@ def result_detail(pick):
                 pieces.append('clean sweep')
         return ' · '.join(pieces)
     actual = str(pick.get('actual') or '').strip()
-    return ' · '.join(part for part in (f'Final: {actual}' if actual else '', injury) if part)
+    actual = re.sub(r'^.*?:\s*(\d+(?:\.\d+)?)\s+(?:receptions?|carries|attempts?)$', r'had \1', actual)
+    actual = re.sub(r'^all 2 legs won$', 'both legs hit', actual)
+    return ' · '.join(part for part in (actual if actual.startswith('had ') else f'Final: {actual}' if actual else '', injury) if part)
 
 
 def result_line(pick, games=None):
@@ -167,7 +170,7 @@ def headline(rows):
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
     if fun:
         return f"Fun parlay{'s' if len(fun) != 1 else ''} {record_text(x_post.summarize(fun))}"
-    return f"Ladder {record_text(x_post.summarize(rows))}"
+    return f"80/20 Climb {record_text(x_post.summarize(rows))}"
 
 
 def by_kind(rows):
@@ -244,7 +247,7 @@ def day_receipt(day, first, latest, games, ids, as_of=None):
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
     due = morning(day + timedelta(days=1))
     return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}', 'kind': 'receipt',
-            'title': headline(rows), 'label': 'YESTERDAY’S PLATES', 'when': f'{day:%A, %b %-d}',
+            'title': headline(rows), 'label': 'YESTERDAY', 'when': f'{day:%A, %b %-d}',
             # Retained art keeps the record followers saw when the receipt became
             # due, even when its image is rebuilt several days later.
             'season': record_scope.text(season_as_of(first, latest, due)),
@@ -271,7 +274,7 @@ def week_receipt(wednesday, first, latest, games, ids, as_of=None):
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
     due = morning(wednesday)
     return {'key': f'receipt:week:{end.isoformat()}', 'card': f'receipt-week-{end.isoformat()}', 'kind': 'receipt',
-            'title': headline(rows), 'label': 'THIS WEEK’S PLATES', 'when': f'{start:%b %-d} to {end:%b %-d}',
+            'title': headline(rows), 'label': 'LAST 7 DAYS', 'when': f'{start:%b %-d} to {end:%b %-d}',
             'season': record_scope.text(season_as_of(first, latest, due)),
             'summary': {'straight': record_text(x_post.summarize(straight)) if straight else None,
                         'fun': record_text(x_post.summarize(fun)) if fun else None},
@@ -506,9 +509,9 @@ def ladder_result(pick):
         legs = pick.get('legs') or []
         lines = [f"{pick_card.short_leg(str(leg.get('title') or 'Leg'))} {MARKS.get(marks[index], '•')}"
                  for index, leg in enumerate(legs) if index < len(marks)]
-        body = '\n'.join(lines + [f"{pick_card.dollars(info.get('banked', 0))} stays banked. Climb {int(info.get('run') or 1) + 1} restarts at "
-                                   f"{pick_card.dollars(info.get('start', 50))}.",
-                                   "That’s why we bank 20%: one miss can’t take it back."])
+        bank = f"{pick_card.dollars(info['banked'])} stays banked. " if info.get('banked', 0) else ''
+        restart = f"Climb {int(info.get('run') or 1) + 1} starts at {pick_card.dollars(info.get('start', 50))}."
+        body = '\n'.join(lines + [bank + restart])
         return f"❌ 80/20 Climb step {info.get('step', 1)} missed", body
     return (f"➖ 80/20 Climb step {info.get('step', 1)} {result}",
             f"{stake} rides the same step. {pick_card.dollars(info.get('banked', 0))} stays banked.")
@@ -550,8 +553,8 @@ def climb_checkin(first, latest, games, now):
         body = f"Step {(opened.get('ladder') or {}).get('step', state['step'])} is still open. Next step waits for its result."
     else:
         body = f"Step {state['step']} is next, not scheduled yet. ${state['stake']} riding; ${state['banked']} banked."
-    text = head + '\n' + body + ('\nTicket scans: 10 AM, 1:30 PM, 4 PM and 8 PM ET, plus the regular desk runs.'
-                                 '\nDiscord gets a qualifying ticket first; X follows about 10-15 minutes later. No forced step.')
+    text = head + '\n' + body + ('\nWe look for one at 10, 1:30, 4 and 8 ET.'
+                                 '\nIf it qualifies, Discord sees it first.')
     return {'key': f'climb:checkin:{day.isoformat()}', 'kind': 'book', 'card': None,
             'text': text, 'due': now + timedelta(minutes=2), 'stale': at(day, (14, 0))}
 

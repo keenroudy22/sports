@@ -40,7 +40,7 @@ class EditorTests(unittest.TestCase):
         rows = editor.read(self.root / 'public.json')['rows']
         self.assertIn('3/4 recorded games', rows[0]['text'])
         self.assertIn('FanDuel -110 captured', rows[0]['text'])
-        self.assertIn('9 red-zone', rows[1]['text'])
+        self.assertEqual(len(rows), 1, 'one note per game on Today')
         self.assertEqual(ask.call_count, 1)
         self.assertEqual(ask.call_args.kwargs['timeout'], 180)
         self.assertEqual(ask.call_args.kwargs['kind'], 'homepage-editor')
@@ -57,7 +57,7 @@ class EditorTests(unittest.TestCase):
     def test_stale_prices_injuries_small_samples_alternates_and_kickoff(self):
         original = dict(self.trend)
         for change in ({'observedAt': (NOW-timedelta(hours=5)).isoformat()}, {'games': 2, 'hits': 2},
-                       {'kind': 'alternate'}, {'injuryStatus': 'Out'}, {'odds': None}, {'hits': 1}):
+                       {'kind': 'alternate'}, {'injuryStatus': 'Out'}, {'odds': None}, {'hits': 1}, {'uncertainGap': True}):
             self.trend = dict(original, **change)
             self.write()
             self.assertFalse(any(r['kind'] == 'trend' for r in editor.candidates(self.root, NOW)))
@@ -80,6 +80,17 @@ class EditorTests(unittest.TestCase):
         self.assertEqual(self.prepare(NOW+timedelta(hours=2), ask)['status'], 'unchanged')
         self.assertEqual(ask.call_count, 1)
         self.assertEqual(editor.read(self.root/'public.json')['rows'][0]['observedAt'], self.trend['observedAt'])
+
+    def test_changed_numbers_refresh_without_reselecting_the_same_identities(self):
+        ask = mock.Mock(return_value={'stories':['E0']})
+        self.prepare(ask=ask)
+        self.trend.update(hits=4, odds=-115, observedAt=(NOW+timedelta(hours=2)).isoformat())
+        self.write((NOW+timedelta(hours=2)).isoformat())
+        self.assertEqual(self.prepare(NOW+timedelta(hours=2), ask)['status'], 'unchanged')
+        self.assertEqual(ask.call_count, 1)
+        text = editor.read(self.root/'public.json')['rows'][0]['text']
+        self.assertIn('4/4', text)
+        self.assertIn('-115', text)
 
     def test_one_player_not_repeated(self):
         rows = editor.candidates(self.root, NOW)

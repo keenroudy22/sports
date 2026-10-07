@@ -296,7 +296,7 @@ def svg(games, league, day, week=None, logos=None, now=None):
     parts += [f'<text x="36" y="{HEIGHT - 52}" fill="{TEXT}" font-size="22" font-weight="700">Graded in public, win or lose. '
               f'<tspan fill="{DIM}" font-weight="400">keenroudy.com/sports</tspan></text>',
               f'<text x="36" y="{HEIGHT - 22}" fill="{DIM}" font-size="17">Not picks: our plays go out on their own. '
-              f'Mint: the labeled line clears its captured price. Entertainment only.</text>',
+              f'Green names the line we like. 21+ · Entertainment only.</text>',
               '</svg>']
     output = '\n'.join(parts)
     return output

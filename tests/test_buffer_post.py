@@ -292,7 +292,7 @@ class ScheduleTests(unittest.TestCase):
     def test_card_theme_is_resolved_before_buffer_accepts_the_post(self):
         fake = FakeBuffer()
         plan = [('a', 'play', 'text', NOW + timedelta(hours=1), 'a')]
-        with mock.patch.object(bp.pick_card, 'card_theme', side_effect=ValueError('bad theme')):
+        with mock.patch.object(bp.pick_card, 'card_theme', side_effect=RuntimeError('bad theme')):
             result = bp.schedule(plan, 'ch-x', {'posts': []}, NOW, key='t', send=fake,
                                  opener=lambda *_: True, log=lambda *_: None)
         self.assertEqual(result['posts'][0]['cardTheme'], 'legacy')

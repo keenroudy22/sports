@@ -608,6 +608,11 @@ def game_detail(card, game, record, snapshots, captures, lines, picks, names, te
     detail['favoriteLines'] = favorites or []
     detail['modelReads'] = reads or []
     detail['seasonTrends'] = trends or []
+    for row in detail['modelReads'] + detail['favoriteLines']:
+        if row.get('stat') in ('passYds', 'att', 'cmp', 'recYds', 'rec'):
+            row['qbNews'] = qb_news(injuries.get(str(row.get('team')), [])) or None
+            if row.get('qbNews') and row.get('comparison'):
+                row['comparison'] += ' QB news: ' + row['qbNews'] + '.'
     detail['scorerResearch'] = research_views.scorer_research(game, final, records, names, now)
     detail['researchStatus'] = {'moneyline': 'Winner research only; moneyline value not calibrated.',
                                'teamTotals': 'Research trial only; no validated public team-total prices.',
@@ -816,7 +821,7 @@ def trend_payload(rows):
     """One history and one player/game context per player/stat; threshold rows point to them."""
     histories, contexts, compact = {}, {}, []
     shared = ('league', 'season', 'athleteId', 'player', 'team', 'gameId', 'kickoff', 'matchup',
-              'teamGames', 'rosterAsOf', 'injuryStatus', 'stat')
+              'teamGames', 'rosterAsOf', 'injuryStatus', 'stat', 'projection', 'uncertainGap', 'qbNews')
     for source in rows:
         row = dict(source)
         key = '|'.join(str(row.get(name) or '') for name in ('league', 'season', 'athleteId', 'stat'))
@@ -868,6 +873,24 @@ def recent_picks(picks, now):
     cutoff = now - timedelta(hours=72)
     return [pick for pick in picks if not pick.get('result') or
             (instant(pick.get('settledAt') or pick.get('publishedAt')) or datetime.min.replace(tzinfo=timezone.utc)) >= cutoff]
+
+
+def cutoff_fields(pick):
+    """Display limits parsed from the original pricing cutoff, never a new entry rule."""
+    text = str(pick.get('cutoff') or '')
+    price = re.search(r'or at ([+-]\d+) or worse at ([+-]?\d+(?:\.\d+)?)', text)
+    boundary = re.search(r'Closed to new entries at ([+-]?\d+(?:\.\d+)?)', text)
+    if not price:
+        return {'cutoffOdds': None, 'cutoffLine': None, 'cutoffBoundary': None}
+    cents = pricing.cents(int(price[1])) + 1
+    return {'cutoffOdds': cents - 100 if cents < 0 else cents + 100,
+            'cutoffLine': float(price[2]), 'cutoffBoundary': float(boundary[1]) if boundary else None}
+
+
+def qb_news(injuries):
+    return '; '.join(f"{row.get('name') or row.get('player') or 'Quarterback'} {row['status']}" for row in injuries
+                     if str(row.get('position') or row.get('pos') or '').upper() == 'QB'
+                     and re.search(r'out|doubtful|questionable|inactive', str(row.get('status') or ''), re.I))
 
 
 # ------------------------------------------------------------------ research
@@ -1022,11 +1045,32 @@ def build(now=None):
                     row['grade']['tier'] = 'pass'
                     row['grade']['view'] = 'pass'
     lines = public_lines(lines, now)
+    for row in lines:
+        if row.get('athleteId') and row.get('stat') in ('passYds', 'att', 'cmp', 'recYds', 'rec'):
+            game = by_id.get(row.get('gameId')) or {}
+            snapshots = forecasts.get(row.get('gameId')) or []
+            if game and snapshots:
+                context_row = player_matchup_context(game, snapshots[-1], row)
+                row['qbNews'] = qb_news(injuries.get(str(context_row.get('team')), [])) or None
     values = sheet_values(lines, now)
     trend_injuries = {league: {team: block.get('players', []) for team, block in
                       ((context.get('leagues') or {}).get(league, {}).get('teams') or {}).items()}
                       for league in ('NFL', 'CFB')}
     trends = season_trends.build(window, league_data, lines, prop_prices, now, trend_injuries)
+    line_lookup = {(row.get('gameId'), str(row.get('athleteId')), row.get('stat'), row.get('direction'),
+                    row.get('line'), row.get('book'), row.get('odds')): row for row in lines}
+    for row in trends:
+        matched = line_lookup.get((row.get('gameId'), str(row.get('athleteId')), row.get('stat'), row.get('direction'),
+                                   row.get('line'), row.get('book'), row.get('odds')))
+        grade = (matched or {}).get('grade') or {}
+        if isinstance(grade.get('projection'), (int, float)):
+            row['projection'] = grade['projection']
+            history_values = [h['value'] for h in (row.get('history') or [])[-10:] if isinstance(h.get('value'), (int, float))]
+            average = sum(history_values) / len(history_values) if history_values else None
+            row['uncertainGap'] = bool(average and abs(row['projection'] - average) / average > .3)
+        if row.get('stat') in ('passYds', 'att', 'cmp', 'recYds', 'rec'):
+            team = str((row.get('team') or {}).get('id') or '')
+            row['qbNews'] = qb_news(trend_injuries.get(row['league'], {}).get(team, [])) or None
     write_trends(trends, now)
     gap_rows = market_read.load_rows()
     for game in sorted(window, key=lambda g: (g['kickoff'], g['id'])):
@@ -1224,7 +1268,7 @@ def board_picks(first, latest, by_id, identities):
                      'favorite': pick.get('favorite') is True or key in FAVORITES_BEFORE_FLAG,
                      'marketType': pick_market_type(pick, recent), 'parlayType': pick.get('parlayType'),
                      'ladder': pick.get('ladder'),                         # a ladder rung's run, step and dollars (scripts/ladder.py)
-                     'cutoff': pick.get('cutoff'), 'why': pick.get('why'),
+                     'cutoff': pick.get('cutoff'), **cutoff_fields(pick), 'why': pick.get('why'),
                      'risk': pick.get('risk'), 'edge': pick.get('edge'), 'quotedAt': pick.get('quotedAt'),
                      'expiresAt': pick.get('expiresAt'), 'publishedAt': pick.get('publishedAt'),
                      'historicalImport': pick.get('historicalImport'), 'sources': pick.get('sources') or [],
@@ -1640,6 +1684,13 @@ def model_reads(game, snapshot, lines, now, player_logs=None, archived=False):
                     'team': context.get('team'), 'teamAbbr': context.get('teamAbbr'),
                     'opponent': context.get('opponent'), 'opponentAbbr': context.get('opponentAbbr'),
                     'line': line, 'projection': mean, 'comparison': comparison,
+                    'chance': grade.get('chance') if priced and grade.get('calibrated') else None,
+                    'needs': grade.get('needs') if priced else None,
+                    'edge': grade.get('edge') if priced and grade.get('calibrated') else None,
+                    'clearsPrice': bool(priced and grade.get('calibrated') and not grade.get('thin')
+                                        and not grade.get('limited') and not grade.get('unproven')
+                                        and (grade.get('view') == 'lean' or grade.get('tier') in ('lean', 'strong'))
+                                        and isinstance(grade.get('edge'), (int, float)) and grade['edge'] > 0),
                     'book': row.get('book'), 'odds': row.get('odds') if priced else None,
                     'observedAt': row.get('observedAt'), 'snapshotAt': snapshot['publishedAt'],
                     'warnings': warnings, 'performanceCaution': bool(grade.get('performanceCaution')), 'archived': archived,

@@ -48,3 +48,54 @@ check looked only for console errors, overflow and clipping, so it reported the 
 requested content was absent. A caught exception is still a failed page. Browser verification now fails when the
 rendered page contains `did not load`, and the lazy bundle is exercised against the real app exports across every
 moved view before a release can be called verified.
+
+### L-2026-10-07-2 · The real product queue exceeded its own reader limits
+- What: P20 evidence and P29 action text exceeded the reader bounds; the approved October 7 twist added a forty-first item to a forty-item queue.
+- Why missed: fixtures tested the validator but no test validated the checked-in queue itself.
+- Guard: `tests/test_product_followthrough.py::test_current_checked_in_owner_queue_is_valid` checks the real queue; full details stay in linked review/implementation documents. The local item bound is now forty-eight.
+- State: guarded.
+
+### L-2026-10-03-1 · An em-dash prompt reached X through an unguarded path
+- What: conversation:day:2026-10-03 posted "Props, sides or totals—what are you looking at?". buffer_post.plan inserts conversation prompts and fun teasers without x_post.x_style, and the Discord pull update (buffer_post.py:452) has no guard either.
+- Why missed: the style guard runs only on plays and house posts.
+- Guard: one send-path guard for every Buffer and Discord text. tests/test_buffer_post.py asserts that every CONVERSATION and FUN_TEASERS string, plus a rendered Climb teaser, passes x_style. State: open.
+
+### L-2026-10-03-2 · The fallback rule pulled three plays while the local model was running
+- What: the pre-post pulls of McKenzie over 179.5 ("showers and 71 degrees"), Mich/Minn over 43.5 (offensive linemen ruled out) and a Climb step ("upgraded from doubtful") all used hold_reason's wording, not the judge's.
+- Why missed: judge() returns None on any LLMUnavailable (lock busy, 90 s timeout, malformed reply), and nothing logs which one happened.
+- Guard: log the unavailable reason and count fallback decisions in status.json; the pre-post check alone waits up to 90 s for the lock; the AVAILABILITY_UPGRADE test has landed. A narrower fallback rule comes only after a 4-week shadow and the owner's yes. State: open.
+
+### L-2026-10-06-1 · Today called a function core.js does not export
+- What: Today's extras called C.routePath after the async load. It shipped in 3bac89df under a "20 routes, no console error" receipt and was fixed in app v119.
+- Why missed: the error fires only after the data loads, unit tests never run that callback, and the browser audit was not run with a fresh cache on the final build.
+- Guard: tests/ui-contract.test.js checks that every C.<name> referenced in site/app.js exists in Object.keys(require('../site/core.js')). State: open (only a routePath-specific test exists).
+
+### L-2026-10-06-2 · A filename filter stripped '.' and the CFB defense panel silently disappeared
+- What: /[^a-z0-9/_-]/gi turned teams/CFB-defense.json into CFB-defensejson. Fixed in 1e33010b.
+- Why missed: QA looked for errors, not for whether the section was there.
+- Guard: the ui-board filter test has landed. Still to add: tests/test_payload_paths.py (every *File path the build writes survives the loader's filter and exists on disk) and an expect map in tests/browser-audit.mjs (a CFB game page must show the defense panel, with the cache disabled). State: open.
+
+### L-2026-10-06-3 · Felt cards needed three owner rounds to get their figures right
+- What: the cards computed record, receipt-season and Climb-bank figures separately from the site (mixed vs straight record, season cutoff, legacy bank). Fixed with the shared record_scope.py (902fa605, 148cd375).
+- Why missed: no test compared card figures with the site's numbers.
+- Guard: tests/test_felt_cards.py asserts that each card figure equals record_scope and the site output at the same as-of time. render_felt_review writes a table next to each PNG that maps every number to its source field. State: open.
+
+### L-2026-10-06-4 · The game page counted a Model signal on lines our board grades below break-even
+- What: TB at DAL Matchup edges showed "3 of 3 signals" for Hurst over 21.5 (−1.3), Godwin over 27.5 (−1.2) and Irving over 13.5 (−0.4). Because signals = 1 + trend + defense, the model always counted, and modelReads carried chance, needs and edge as null. Baker Mayfield OUT appeared about 2,000 px lower on the page.
+- Why missed: no test tied that view to the grades in lines.json.
+- Guard: a node test pinned to this fixture: a Model signal requires a calibrated clear. State: open.
+
+### L-2026-10-06-5 · A "why" bullet argued against its own bet
+- What: Bills at Rams UNDER 54.5 led with Bills defensive injuries, which point toward more points. whyLines() promotes pick.reason unless the text literally contains "against this side".
+- Why missed: support is filtered by phrase, not by the fact's direction.
+- Guard: the build carries each fact's direction; on modelLean picks, a fact whose direction is not 'for' never goes into support. Fixture test. State: open.
+
+### L-2026-10-06-6 · Cards in production lack the required 21+, and retired words are still public
+- What: with FELT_FROM = None, the legacy renderers post "Entertainment only. Not advice." with no 21+. The research card footer reads "DATA + CONTEXT". "desk" is in the Climb check-in, "PLATES" is on the receipt card and "Ladder" is in the week receipt.
+- Why missed: the Oct 6 rules were applied only to the felt templates, and no test scans rendered cards or captions for required or retired words.
+- Guard: tests/test_voice.py fails on any card SVG without "21+" and on retired words in rendered captions. State: open.
+
+### L-2026-10-06-7 · Cloudflare adds an analytics beacon that was never approved
+- What: static.cloudflareinsights.com/beacon.min.js is appended to every HTML response at the edge, and the browser makes /cdn-cgi/rum requests. AGENTS.md lists analytics and Cloudflare as not approved.
+- Why missed: it is injected outside the repo, so the publication guard cannot see it.
+- Guard: none is possible in the repo. The owner turns it off in the Cloudflare dashboard, or approves it and discloses it. State: owner-needed.

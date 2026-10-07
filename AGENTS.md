@@ -267,6 +267,23 @@ Handy commands (from `~/Projects/sports`):
   sentences. No cloud fallback. Monday packets carry delivery misses, lessons, voice hits, record/line movements,
   learning preview, judge/researcher counts, category/theme/copy results (no winner below eight posts), owner-entered
   audience deltas, health, payloads and local/cloud use. Proposals are tagged fix, shadow or owner-yes.
+- **Audit fixes (owner, 2026-10-07):** the owner explicitly approves acting on the audit findings within the
+  existing work order and release gates. This does not publish private analytics or promote R0–R7 shadows;
+  undecided owner choices and the required sample-review gates remain in force.
+- **Kitchen Ticket and card wording (owner, 2026-10-07):** build direction B in `CARDS-V2-HANDOFF.md` with
+  CHEF_CLIP and ORDER_UP on. Card footers say `21+ · Entertainment only` and the site URL, with no helpline.
+  Card images omit season records; best bets show their posted risk units (default 1u), fun tickets 0.25u,
+  Cooked the record-equivalent won units, and Final each settled row and slate net units. Captions keep their
+  existing unit rule. Claude reviews real renders before `TICKET_FROM` is set with an explicit Eastern offset;
+  posted art remains unchanged.
+- **Permanent invite and free plans (owner, 2026-10-07):** the public Discord invite is
+  `discord.gg/ZnjubjsBPM`. Check its server and expiry in the daily heartbeat. Every provider stays on its
+  free plan. Do not upgrade, start a trial, add a payment method or buy extra credits. Odds API confirms the
+  500-credit free allowance and stops local reservations at 476. SharpAPI stays Free at 12 requests/minute;
+  SportsGameOdds remains within its evaluation guard; Buffer remains under 2,700 counted API requests monthly.
+  GitHub Actions uses the public repo, Cloudflare stays free, and Codex/researcher stay within the owner's
+  ChatGPT plan. The Monday packet reports available usage and unknowns; phone alerts begin at 80% of a
+  measurable metered limit.
 - **Other sports rollout (owner-delegated to Claude, 2026-10-06):** ESPN free feeds only; zero Odds API,
   SharpAPI or SportsGameOdds calls outside football. NHL first, NBA by October 20, EPL from October 17, CBB
   in November and MLB at Opening Day. Use lazy `sports.js`. Resume the existing slate card, add one rotating

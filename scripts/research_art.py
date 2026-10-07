@@ -85,5 +85,5 @@ def svg(choice, art=None):
 {text(choice['kicker'],46,204,745,19,accent)}
 {''.join(blocks)}
 <text x="44" y="622" fill="{accent}" font-size="23" font-weight="750">keenroudy.com/sports</text>
-<text x="1156" y="622" text-anchor="end" fill="#a7bdca" font-size="16">DATA + CONTEXT</text>
+<text x="1156" y="622" text-anchor="end" fill="#a7bdca" font-size="16">21+ · Entertainment only</text>
 </svg>'''

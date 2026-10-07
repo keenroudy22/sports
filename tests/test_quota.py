@@ -27,6 +27,20 @@ class QuotaTests(unittest.TestCase):
             self.assertEqual(quota.monthly_counts(root, now), {'sharp': 1, 'buffer': 1})
             row = json.loads((Path(root) / 'sharp.jsonl').read_text())
             self.assertEqual(set(row), {'at', 'month', 'provider', 'count'})
+
+    def test_buffer_and_sharp_requests_stop_before_free_limits(self):
+        now = datetime(2026, 10, 7, 16, 0, tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as root:
+            journal = Path(root) / 'buffer.jsonl'
+            journal.write_text(''.join(json.dumps({'at': now.isoformat(), 'month': '2026-10',
+                             'provider': 'buffer', 'count': 1}) + '\n' for _ in range(quota.BUFFER_STOP)))
+            with self.assertRaisesRegex(quota.QuotaBlocked, 'Buffer local free-plan'):
+                quota.count_request('buffer', root, now)
+            self.assertEqual(len(journal.read_text().splitlines()), quota.BUFFER_STOP)
+            for minute in range(quota.SHARP_PER_MINUTE):
+                quota.count_request('sharp', root, now)
+            with self.assertRaisesRegex(quota.QuotaBlocked, '12-per-minute'):
+                quota.count_request('sharp', root, now)
     def test_failed_metered_call_keeps_reservation(self):
         with tempfile.TemporaryDirectory() as root:
             def opener(request, **kwargs):

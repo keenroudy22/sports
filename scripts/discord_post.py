@@ -93,6 +93,11 @@ def send_message(url, text, image_url=None, send=http_send, username="Kook'n Spo
     Cards are uploaded to Discord so an old post cannot break when the generated site card rolls out of the
     current build. If the card cannot be downloaded, the external embed remains a safe delivery fallback.
     """
+    import x_post
+    # The owner-approved live pilot has one exact cheering exception.
+    checked = str(text or '').replace('Come on!', 'Come on.')
+    if x_post.x_style(checked):
+        raise DiscordError('outgoing copy fails the public voice check')
     body = {'username': username, 'avatar_url': 'https://keenroudy.com/sports/kookn-chef.png?v=20261007',
             'content': without_playbook(text)}
     headers = {'Content-Type': 'application/json', 'User-Agent': 'KooknSports/1.0'}

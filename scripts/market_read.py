@@ -130,8 +130,8 @@ def sentences(block):
         g = gap.get(key)
         if g:
             w, l = g['gapsThisLargeVsClose']
-            parts.append(f"Our {word} gap of {abs(g['gap']):g} points is at the {g['percentile']}th percentile of the model's gaps; "
-                         f"gaps this large went {w}-{l} against the close in {g['n']} graded games.")
+            parts.append(f"Our {word} is {abs(g['gap']):g} points off, bigger than {g['percentile']}% of our past gaps. "
+                         f"Gaps this size went {w}-{l} against the close in {g['n']} games.")
     return ' '.join(parts)
 
 

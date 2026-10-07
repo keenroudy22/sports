@@ -1159,6 +1159,12 @@ def polish(candidate, facts, status):
 
 # ------------------------------------------------------------------ step 8: prose
 
+def ordinal(value):
+    value = int(value)
+    suffix = 'th' if 10 <= value % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(value % 10, 'th')
+    return f'{value}{suffix}'
+
+
 def prop_reasoning(candidate, ctx, records, snapshot):
     """Last 10 at the number, the player's place among teammates by projected volume, and what the defense allows."""
     athlete, market, side = str(candidate['athleteId']), gates.market_key(candidate), gates.side_of(candidate)
@@ -1182,18 +1188,26 @@ def prop_reasoning(candidate, ctx, records, snapshot):
                  if features.GROUP.get(p.get('pos')) == features.GROUP.get(player.get('pos')) and p.get(volume)]
         mates.sort(reverse=True)
         rank = next((i for i, (_, pid) in enumerate(mates, 1) if pid == athlete), None)
-        if rank:
+        if rank and len(mates) >= 3:
             parts.append(f"Role: {rank}{'st' if rank == 1 else 'nd' if rank == 2 else 'rd' if rank == 3 else 'th'} of {len(mates)} "
                          f"{game[team_side]['abbreviation']} {features.GROUP.get(player.get('pos'))}s by projected {volume}, {player[volume][0]:.1f} a game.")
+        elif player.get(volume):
+            parts.append(f"Role: projected for {player[volume][0]:.1f} {volume} a game.")
         opponent = game['away' if team_side == 'home' else 'home']
         group = features.GROUP.get(player.get('pos'))
         table = features.defense_table(features.defense_logs(league_records), f'{group}.{market}', season=game['season'])
+        if game['league'] == 'CFB':
+            import model_v2
+            fbs = model_v2.fbs_teams([r for r in league_records if r.get('season', 0) >= game['season'] - 1])
+            table = [r for r in table if str(r['defense']) in {str(team) for team in fbs}]
+            for value in table:
+                value['rank'] = 1 + sum(other['avg'] < value['avg'] for other in table)
         row = next((r for r in table if str(r['defense']) == str(opponent['id'])), None)
         if row:
             parts.append(f"Defense: {opponent['abbreviation']} allows {row['avg']:g} {pricing.WORDS[market]} a game to {group}s, "
-                         f"{row['rank']} of {len(table)} this season (1 is stingiest).")
+                         f"{ordinal(row['rank'])}-stingiest of {len(table)} this season.")
             if (side == 'under' and row['rank'] > len(table) * 0.75) or (side == 'over' and row['rank'] <= len(table) * 0.25):
-                cautions.append('The opponent\'s positional allowance points against this side. It covers the whole position group, not just this player.')
+                cautions.append("The defense leans against this side (that's the whole position group, not just him).")
     for fact in candidate.get('_research') or []:
         if fact.get('verified') and fact.get('direction') == 'against' and fact.get('claim'):
             cautions.append(first_sentence(fact['claim']))
@@ -1296,7 +1310,7 @@ def write_prose(candidate, ctx, records):
             source = 'the board and feed-priced alternates' if alternate else 'the board'
             candidate['why'] = (f"Longshot from {source}: {len(candidate['legs'])} legs at {candidate['book']}, each at the number our "
                                 f"model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.")
-            candidate['risk'] = 'Most longshots lose. The legs are treated as independent; any one miss sinks the ticket. Confidence 1 of 10.'
+            candidate['risk'] = 'Most longshots lose. The legs are treated as independent; any one miss sinks the ticket.'
         return candidate
     p = gates.desk_for(candidate, ctx) or {}
     snapshot = ctx.snapshot(candidate['gameIds'][0])
@@ -1309,7 +1323,7 @@ def write_prose(candidate, ctx, records):
                             f"{side}, {p['edgePoints']:+.1f} points clear of the {100 * p['breakEven']:.1f}% that {odds:+d} needs. "
                             f"The sourced reason and the number point the same way.")
         candidate['risk'] = (f"A report can change before kickoff, and a listed player can dress. {sparse}The number still rests on a model the "
-                             f"closing line beats on average. Confidence {candidate['confidence']} of 10.")
+                             f"closing line beats on average.")
         sources = list(candidate.get('sources') or [])
         for fact in candidate.get('_support') or []:
             if fact.get('source') and fact['source'] not in sources:
@@ -1325,8 +1339,7 @@ def write_prose(candidate, ctx, records):
         games_played = ctx.appearances.get(candidate['athleteId'], 0)
         candidate['risk'] = (f"An estimated chance, not a guarantee; a player line turns on a handful of touches. {games_played} games this season"
                              f"{'' if games_played >= 3 else ', the role settled by last season'}. A player who does not take the field is "
-                             f"voided; an in-game injury is graded unless a verified book protection applies. Confidence "
-                             f"{candidate['confidence']} of 10.")
+                             f"voided; an in-game injury is graded unless a verified book protection applies.")
         cautions = (candidate.get('reasoning') or {}).get('cautions') or []
         if cautions:
             candidate['risk'] = ' '.join(cautions) + ' ' + candidate['risk']
@@ -1338,10 +1351,8 @@ def write_prose(candidate, ctx, records):
         checked = checked_facts(candidate)
         opposing_stats = [f for f in verified_opposition(candidate) if f.get('kind') == 'stats' and f.get('claim')]
         caution = (' Verified statistical reporting also points against this side; see the counterpoints below.') if opposing_stats else ''
-        candidate['why'] = (f"Model lean, published on our number alone. Our total is {p['projection']:g} against {pricing.fmt(line)}: the "
-                            f"{side} reads {100 * p['chance']:.1f}% after the raw {100 * p['rawChance']:.1f}% is shrunk by the model's "
-                            f"record against the close, {p['edgePoints']:+.1f} points clear of the {100 * p['breakEven']:.1f}% that "
-                            f"{odds:+d} needs. The projection is the reason for this lean."
+        candidate['why'] = (f"Model lean, our number only. We have the total at {p['projection']:g}; the book is at {pricing.fmt(line)}. "
+                            f"That makes the {side} {100 * p['chance']:.1f}%, and {odds:+d} needs {100 * p['breakEven']:.1f}%."
                             + caution
                             + ''.join(f" Checked before publishing: {first_sentence(f['claim'])}" for f in checked)
                             + (f" The market: {market_words}" if market_words else ''))
@@ -1350,8 +1361,14 @@ def write_prose(candidate, ctx, records):
             if str(fact.get('source') or '').startswith('https://') and fact['source'] not in sources:
                 sources.append(fact['source'])
         candidate['sources'] = sources
-        candidate['risk'] = (f"It rests on the model alone, and the closing line beats our number on average, so a gap this size is more "
-                             f"often our error than the market's. {sparse}Confidence {candidate['confidence']} of 10.")
+        candidate['risk'] = (f"It's our number against the market's, and the closing line usually beats ours, so a gap this big often "
+                             f"means we're missing something. {sparse}")
+        supplied = candidate.get('_evidence') or []
+        candidate['reasoning'] = {'context': [first_sentence(f['claim']) for f in supplied
+                                              if f.get('verified') and f.get('direction') == 'for' and f.get('claim')],
+                                  'cautions': [first_sentence(f['claim']) for f in supplied
+                                               if f.get('verified') and f.get('direction') == 'against' and f.get('claim')],
+                                  'directionsChecked': True}
         if opposing_stats:
             counterpoints = ' '.join(f"Statistical counterpoint: {first_sentence(f['claim'])}" for f in opposing_stats[:2])
             additional = f' {len(opposing_stats) - 2} more verified statistical counterpoints.' if len(opposing_stats) > 2 else ''
@@ -2379,6 +2396,10 @@ def heartbeat(args):
         problems.extend(row['message'] for row in health['issues'])
     except Exception:
         problems.append('cached desk-health checks could not be read')
+    import invite_health
+    invite_issue = invite_health.check()
+    if invite_issue:
+        problems.append(invite_issue)
     alert_file = CONF.parent.parent / 'Library' / 'Logs' / 'KeenRoudy' / 'ALERT.txt'
     transition_path = CONF / 'heartbeat-state.json'
     previous = load_json(transition_path, {}) or {}
