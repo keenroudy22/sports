@@ -92,6 +92,23 @@ class ParseTests(unittest.TestCase):
 
 
 class BudgetTests(unittest.TestCase):
+    def test_month_projection_uses_remaining_daily_caps_and_protected_reserve(self):
+        now = datetime(2026, 10, 7, 17, 0, tzinfo=timezone.utc)
+        status = {'usage': {'at': now.isoformat(), 'used': 196, 'remaining': 304},
+                  'leagues': {'NFL': {'day': '2026-10-07', 'count': 2}}}
+        projection = odds_api.capped_month_projection(status, now)
+        self.assertLess(projection, 450)
+        self.assertGreaterEqual(projection, 196)
+        self.assertLessEqual(projection, 476)
+
+    def test_nfl_cannot_spend_college_evening_call_from_shared_daily_cap(self):
+        now = datetime(2026, 10, 10, 17, 0, tzinfo=timezone.utc)
+        games = [game('nfl', 'NFL', '2026-10-11T17:00:00Z', 'Home', 'Away'),
+                 game('college', 'CFB', '2026-10-11T00:00:00Z', 'Home', 'Away')]
+        status = {'leagues': {'NFL': {'day': '2026-10-10', 'count': 2}}}
+        self.assertIn('evening CFB', odds_api.due('NFL', games, status, now))
+        self.assertIsNone(odds_api.due('CFB', games, status, now))
+
     def test_stale_month_reserve_reaches_guarded_fetch_and_november_cap_holds(self):
         self.assertIsNone(odds_api.due('CFB', SLATE, {'usage': {'remaining': 24, 'at': '2026-08-31T23:59:00Z'}}, NOW))
         november = NOW.replace(month=11, day=1)

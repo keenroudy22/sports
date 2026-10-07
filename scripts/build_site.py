@@ -875,6 +875,24 @@ def recent_picks(picks, now):
             (instant(pick.get('settledAt') or pick.get('publishedAt')) or datetime.min.replace(tzinfo=timezone.utc)) >= cutoff]
 
 
+def today_hero(picks, now):
+    """Tiny, honest first-paint hint; full Today still owns the final view."""
+    active = [p for p in picks if p.get('status', 'active') == 'active' and not p.get('result')
+              and p.get('odds') is not None and p.get('book')
+              and not p.get('entryNote')
+              and (not p.get('expiresAt') or (instant(p['expiresAt']) and instant(p['expiresAt']) > now))
+              and not p.get('parlayType') and p.get('kickoff') and instant(p['kickoff'])
+              and instant(p['kickoff']) > now]
+    today = eastern_date(now)
+    today_rows = [p for p in active if eastern_date(instant(p['kickoff'])) == today]
+    rows = today_rows or active
+    rows.sort(key=lambda p: (not bool(p.get('featured')), instant(p['kickoff']), str(p.get('id'))))
+    pick = rows[0] if rows else None
+    return {'generatedAt': stamp(now), 'pick': {'title': pick['title'], 'odds': pick.get('odds'),
+            'book': pick.get('book'), 'href': '#pick/' + pick['id'],
+            'label': "Today's best bet" if today_rows else 'Next best bet'} if pick else None}
+
+
 def cutoff_fields(pick):
     """Display limits parsed from the original pricing cutoff, never a new entry rule."""
     text = str(pick.get('cutoff') or '')
@@ -1104,6 +1122,7 @@ def build(now=None):
     write(OUT / 'today.json', {'generatedAt': stamp(now), 'freshness': freshness,
                                'health': research_views.health(freshness, now), 'games': cards,
                                'picks': recent_picks(picks, now), 'historyFile': 'record.json', 'model': summary})
+    write(OUT / 'today-hero.json', today_hero(picks, now))
     write(OUT / 'record.json', {'generatedAt': stamp(now), 'picks': picks})
     generated = stamp(now)
     line_index = line_payload.manifest(lines, generated)

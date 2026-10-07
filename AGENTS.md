@@ -17,8 +17,8 @@ Three things run it, none of them an AI chat:
    an extra Climb settlement/qualification scan at 10:00 AM, 1:30, 4:00 and 8:00 PM, the pre-post check every 30
    minutes, the Discord mirror every 5 minutes, the heartbeat at 7:15 AM, and the weekly review Monday 9:30 AM. The run settles and closes plays, builds the
    board, judges candidates through `scripts/gates.py`, publishes reports to `research/`, pushes, and schedules X
-   posts in Buffer. Confirmed official plays reach Discord about 10-15 minutes before X; other post types mirror
-   after Buffer confirms X. The same words and card use one incoming webhook; the card is uploaded as a durable
+   posts in Buffer. Posted official plays reach Plays & Results about 10-15 minutes before X; wins and near-miss
+   bad beats use the separate wins webhook. Other post types do not mirror. Cards are uploaded as durable
    Discord attachment rather than left as a temporary site embed. Logs:
    `~/Library/Logs/KeenRoudy/run-YYYY-MM-DD.log` (times in UTC).
 2. **GitHub Actions** (`.github/workflows/publish.yml`) on a schedule and on every push: captures scores, odds and
@@ -73,15 +73,19 @@ this file remains the authority when a summary and rule disagree.
 - **Python standard library only** in the repo. Node only for the site's tests.
 - **X:** posts go through Buffer only. No browser automation on X, ever unattended. Never delete a post that went out
   (the owner decides). The owner pins big wins by hand from the phone ping.
-- **Discord:** one-way publisher only. The append-only site record remains the source of truth. Confirmed official
-  plays use the same words and card and go to Discord about 10-15 minutes before X; receipts, news and engagement
-  posts mirror only after Buffer confirms X. Image cards are uploaded to Discord so an old message cannot lose its
+- **Discord (2026-10-07 override):** one-way publisher only. The append-only site record remains the source of truth.
+  Plays & Results gets posted plays only, with the same words and card, about 10-15 minutes before X. Wins and
+  near-miss bad beats go to #wins-and-bad-beats via `DISCORD_WINS_WEBHOOK_URL`; losses appear only in the end-of-slate
+  Final on X. Nothing else mirrors to Plays & Results. Image cards are uploaded so an old message cannot lose its
   art when generated site files roll forward; recent receipt URLs also stay live for eight days as a retry fallback.
   Once Discord publishes a play it is public and stays in the record. A
   hard-news pull before X gets a Discord update and cancels X, but never erases the play. The webhook stays in
   `~/.config/keenroudy/env`, never the repo or a log. Arb alerts are explicitly not official plays and may go only
   to Discord under the separate Arb Radar rule.
 - **Deploy only while holding the run lock** `~/.config/keenroudy/run.lock` (below), never mid-run.
+- **Quiet deploy windows (2026-10-07, owner-delegated to Claude):** Routine site/code releases occur only
+  8:35–9:45 AM or 12:15–1:15 PM Eastern, under the lock and full gates. The separately approved
+  11:45 PM felt-card cutover is an exception only after a green 11:30 PM desk run; otherwise wait.
 - **Do not change how the record counts** without telling the owner the before and after numbers.
 - **Keep the operating stack free.** Do not add a paid service, increase a metered request budget or buy reach
   without the owner's approval. Build the audience with free plays first; a paid tier and compliant bonus links are
@@ -190,6 +194,24 @@ Handy commands (from `~/Projects/sports`):
    width (375 px): no sideways scroll, no console errors, and no rendered `did not load` error state.
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
+
+- **Which rule wins (2026-10-07; owner-delegated to Claude):** This block supersedes conflicting older lines here
+  and in `docs/`. Keep the undecided owner choices gated.
+  1. Captions use `I have it at 47.`, `🍳 Hot Plate (POTD): ` and `🎰 +ODDS Chef's Special: `; Climb ends
+     `Still climbing? ❤️`. Never use `Plated.`; at most one `!`, for a win only.
+  2. Card images show record-equivalent units. Straight-play captions show neither units nor dollars.
+  3. Card images show no season record or helpline; the site footer keeps the helpline.
+  4. Only the explicitly labeled Climb map may show planned future steps, at a stated typical -160 price.
+  5. On X, retire the 8:45 menu, defer teasers until 1,000 followers, keep Save this sheet on the site only,
+     omit the 11:45 weekend Climb check-in, and put the 9:30 Prep List first.
+  6. Other sports share one post per day total and never go to Discord. Focus new work on football, basketball
+     and soccer only; retain existing NHL/MLB scores without expansion.
+  7. No owner hand-posting; the owner may pin a prepared post with one tap.
+  8. The Climb may qualify on any day with two or more games left in one league, scanning NFL then CFB;
+     never force a rung.
+  The October 7 `POSTING-PLAYBOOK.md` is the approved detailed posting specification. Earlier references to
+  mirrored menus/receipts/news, weekend-only Climb check-ins, no estimated future step and owner-written posts
+  below are superseded, not permission to resurrect them.
 
 - **Sports focus and X twist (2026-10-07, owner decision delegated to Claude):** finish P0/P1/the twist,
   then NBA by October 20, EPL/UCL for October 24–25 where data supports them, CBB early November, WNBA/MLS
@@ -541,7 +563,8 @@ Handy commands (from `~/Projects/sports`):
   1080x1350 result card: a win advances, a loss shows the protected bank and the next $50 restart, a push keeps the
   same stake, and the goal-reaching rung gets the completion version. The ticket and result cards share one
   persistent path: completed steps have green checkmarks, the current/next step is outlined, future checkpoints are
-  muted and the $1,000 flag stays visible. Never print guessed future returns or a promised step count. Keep only the
+  muted and the $1,000 flag stays visible. Never print guessed future returns or a promised step count, except on
+  the explicitly labeled Climb map at its stated typical price. Keep only the
   actual wager, its legs, bank and next stake; schedule explanations and motivational filler do not belong on the
   graphic. Artwork is confined to the header and cannot cover wording. Exact manual alternate spreads and totals
   retain `marketType` and auto-grade from the final score like feed-built game legs; do not send an ordinary
@@ -659,21 +682,21 @@ Handy commands (from `~/Projects/sports`):
   independent of every challenge and may come from any qualifying game, including a one-game slate.
 - **Alternate lines are for fun tickets** (2026-09-28): the ladder, lotto/longshot, easy parlay and any other fun
   parlay may use a book's feed-priced alternate when our number likes it at that price. One book, one leg per game,
-  full-game half-point rungs from that market's own ladder only (`sharp_odds.consistent`); college player legs wait
-  for college calibration. Straight card plays stay on main lines. Never invent a price, scrape one or spend new
+  full-game half-point rungs from that market's own ladder only (`sharp_odds.consistent`); calibrated college
+  player legs are eligible now. Straight card plays stay on main lines. Never invent a price, scrape one or spend new
   Odds API credits for a lotto.
 - **Only hard news pulls a play** before it posts: out, doubtful, inactive, suspended, benched (`run.hard`). A lotto
   or easy parlay pulled before its post is replaced the same day under a new id (`gates.fresh_id`). A ladder rung is
   never replaced.
 - **Tweets are short and human** (2026-09-26, reason sentence added Oct 4): the play with price
-  and book, "We have it at 47.", one saved supporting reason when available, "❤️ if you're tailing", @Playbook
+  and book, "I have it at 47.", one saved supporting reason when available, "❤️ if you're tailing", @Playbook
   and the league tag. No labels or slogans. POTD: "POTD: ..." first. Lotto: "🎰 +2506 COLLEGE LOTTO (ESPN BET)" then the legs.
 - **The Kook'n 80/20 Climb** ($50 to $1,000 bankroll ladder, `scripts/ladder.py`): bank 20% of every winning return and ride 80% on
   the next rung, so a miss cannot take what was banked. Prefer two independently strong legs around -400 at one book,
   together -180 to -130, so protection does not make the climb take forever. Feed-priced player alternates and exact,
   freshly verified sportsbook alternate spreads/totals may mix, but every leg must agree with the model and stay in a
   different game. One rung open at a time; after it settles, the next scheduled scan may advance or restart the
-  climb the same day. NFL player legs run now; college player legs wait until their own numbers are calibrated.
+  climb the same day. NFL player legs and calibrated college player legs run now.
   Never force it on a one-game slate: the two legs stay
   in different games. A qualifying rung must complete its approved delivery; alternates are allowed, not a quota.
   A rung pulled before its X post still counts, win or lose; while ungraded it blocks the
@@ -720,9 +743,10 @@ Handy commands (from `~/Projects/sports`):
   doubtful or inactive, a newer projection has removed them and redistributed the role, and a sportsbook price
   captured after the news still grades as a lean. Name the matchup, the priced teammate prop and the opponent's
   allowed-by-position stat when available; label it a board lean, not a posted play. These posts never enter the
-  record, never displace a play or receipt, and mirror to Discord after X like every other post.
+  record, never displace a play or receipt, and do not mirror to Plays & Results.
 - **Discord community** (2026-09-29): the free Kook'n Sports server gets confirmed official plays and graphics about
-  10-15 minutes before X; all other approved posts mirror after X. It has a read-only links/resources index and
+  10-15 minutes before X; other post types do not mirror there. Wins and near-miss bad beats use the separate wins
+  webhook. It has a read-only links/resources index and
   concise click-to-accept rules for 21+, legal-location, entertainment-only use. Sportsbook referral offers live in
   their own channel, use only the owner's exact links, and are clearly labeled with age, location, changing-terms and
   Kook'n-benefit language; never mix them into ordinary plays. The site's front-page community card is the main
@@ -751,7 +775,7 @@ Handy commands (from `~/Projects/sports`):
 
 Everything that goes to X, its exact words, its card and when it posts is in **`docs/POSTS.md`**, with example cards
 in `docs/examples/` (Pick of the Day, player prop, lotto, ladder step, receipt, the Save this sheet). The short
-version: tweets are short and human (the play, price and book, "We have it at 47.", the ask, @Playbook, the tag); every
+version: tweets are short and human (the play, price and book, "I have it at 47.", the ask, @Playbook, the tag); every
 play and house post carries its card (`scripts/pick_card.py`, drawn by the hosted build into `site/data/cards/`);
 nothing posts until its card is live; no straight-play units on X (a receipt may identify a fun ticket as 0.25u);
 new post types need the owner's yes. Preview before changing

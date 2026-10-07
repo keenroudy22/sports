@@ -189,7 +189,7 @@
       "owner": "agent",
       "next": "11:45 PM ET automation finish-approved-felt-card-cutover checks the green 11:30 PM run and completes the explicit-offset cutover through all deployment gates.",
       "doneWhen": "Owner approves every category render and the quiet-window cutover preserves old attachments.",
-      "evidence": "Owner approved the reviewed felt cards on October 7 (owner-delegated to Claude, 2026-10-06). Quiet-window execution pending."
+      "evidence": "Owner approved the reviewed felt cards on October 7 (owner-delegated to Claude, 2026-10-06). The no-season-strip prerequisite passed 986 Python tests (2 skipped), 147 frontend tests, clean export, build, record audit, guard and isolated rehearsal; revision 448edec1 passed hosted run 37655741412 and 12 live 375/1440 checks. FELT_FROM remains unset; quiet-window execution pending."
     },
     {
       "id": "P22",
@@ -241,9 +241,9 @@
       "title": "X profile refresh",
       "status": "owner-needed",
       "owner": "owner",
-      "next": "Banner and bio are complete; decide and publish the pinned Start here post manually.",
-      "doneWhen": "Owner confirms the pinned post and profile presentation.",
-      "evidence": "Owner approved 2026-10-06; plan in owner's local redesign/ folder. Claude updated banner and bio once with owner approval; no further X action is authorized."
+      "next": "Prepare the approved Start here post through the ordinary reviewed Buffer path; the owner may pin it with one tap after publication.",
+      "doneWhen": "The post is confirmed on X and the owner confirms the pin and profile presentation.",
+      "evidence": "Owner-delegated to Claude, 2026-10-07: no owner hand-posting. Claude updated banner and bio once with owner approval."
     },
     {
       "id": "P28",
@@ -396,7 +396,7 @@
       "owner": "agent",
       "next": "Keep the daily invite and free-plan usage checks running; review any 80% alert without upgrading a service.",
       "doneWhen": "Live link opens the Kook'n server, heartbeat detects expiry, 80% alerts and free-plan stop tests pass, and Monday packet names observed usage and unknowns.",
-      "evidence": "Owner decision October 7; AUDIT-INBOX A-20261007-8. Revision e71ad86b passed hosted publish run 37650607744. Live app.js?v=125 had no caught load errors or overflow at 375/1440 across 12 routes; the new invite resolves to guild 1554298777169297449 with no expiry. Free-plan stop, 80% alerts, invite heartbeat and Monday usage section have tests. Provider usage counters remain partial where stated."
+      "evidence": "Owner decision October 7; AUDIT-INBOX A-20261007-8. Revision e71ad86b passed hosted publish run 37650607744. Live app.js?v=125 had no caught load errors or overflow at 375/1440 across 12 routes; the new invite resolves to guild 1554298777169297449 with no expiry. Free-plan stop, 80% alerts, invite heartbeat and Monday usage section have tests. Provider usage counters remain partial where stated; the current Odds API pace warning and evening shared-cap math need A-20261007-18 correction."
     },
     {
       "id": "P45",
@@ -424,6 +424,42 @@
       "next": "Compute the free panel at build time from stored closes and finals, excluding early-2023 odds-as-lines at read time, then compare to VEGAS-SCORECARD-detail.json in tests.",
       "doneWhen": "Sport rows and calibration bins match the independent reference within stated tolerances, the site clearly labels coverage and caveats, and no new request or record mutation occurs.",
       "evidence": "Owner approved on October 7 in OWNER-DECISIONS-2026-10-07.md; independently checked references supplied by Claude."
+    },
+    {
+      "id": "P48",
+      "title": "Any-day Climb qualification",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Add weekday two-game NFL/CFB qualification tests, preserving the existing NFL-then-CFB order and one-open-rung gate.",
+      "doneWhen": "A weekday with two remaining CFB games can qualify without forcing a rung; a one-game slate cannot.",
+      "evidence": "Owner-delegated to Claude, 2026-10-07; AUDIT-INBOX A-20261007-14."
+    },
+    {
+      "id": "P49",
+      "title": "Climb card and labeled map",
+      "status": "gated",
+      "owner": "agent",
+      "next": "Review real Kitchen Ticket Climb and map renders with Claude; retain TICKET_FROM off until approved.",
+      "doneWhen": "Ledger-backed actual steps and explicitly labeled typical-price future map pass tests and owner-reviewed cutover.",
+      "evidence": "Owner-delegated to Claude, 2026-10-07; no guessed future return outside the Climb map."
+    },
+    {
+      "id": "P50",
+      "title": "Anti-stale captions and card rotation",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Add bounded local-model proposals and category-level review without changing slots, caps or records.",
+      "doneWhen": "Rotations are tested for stale repetition, approved voice, rollback and category-level comparisons in Monday review.",
+      "evidence": "Owner-delegated to Claude, 2026-10-07; AUTOPILOT.md and DIRECTION-RULES.md."
+    },
+    {
+      "id": "P51",
+      "title": "Separate owner wins and bad-beats delivery",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Route posted plays only to Plays & Results and verified wins/near-miss bad beats through DISCORD_WINS_WEBHOOK_URL; classify owner tickets as community.",
+      "doneWhen": "Routing and replay tests pass, no loss or community ticket reaches Plays & Results, and live receipts confirm the distinct channel.",
+      "evidence": "Owner-delegated to Claude, 2026-10-07; AUDIT-INBOX A-20261007-14 and A-20261007-19. P46/P47 IDs were already assigned, so this work keeps stable IDs rather than reusing them."
     }
   ]
 }

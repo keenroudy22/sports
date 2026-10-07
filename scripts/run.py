@@ -1640,7 +1640,8 @@ def run(args):
         status.update(outcome=f'failed: {error}', finishedAt=stamp(datetime.now(timezone.utc)))
         status['errors'].append(str(error))
         write_status(status)
-        if not args.dry_run and 'holds the lock' not in str(error):
+        # A scheduled slot lost after the full lock wait is actionable too.
+        if not args.dry_run:
             alert(f"KeenRoudy {slot.strftime('%-I:%M %p')} run stopped", str(error)[:600])
         return 1
     except Exception:
@@ -2324,7 +2325,7 @@ def requote(entry, pick, game, ctx, now, log=log):
     entry['requotedAt'] = stamp(now)
     mirror = entry.get('discord') or {}
     if mirror.get('state') == 'pending':
-        mirror['text'] = text
+        mirror['text'] = buffer_post.without_playbook(text)
         if card:
             mirror['image'] = card
         entry['discord'] = mirror
@@ -2396,6 +2397,21 @@ def alert(title, message, priority='high', now=None, send=None, click=None, dela
     return True
 
 
+def live_today_staleness(now, open_url=None):
+    """Check the public payload itself; a fresh local build is not proof the live site refreshed."""
+    import urllib.request
+    open_url = open_url or urllib.request.urlopen
+    try:
+        with open_url('https://keenroudy.com/sports/data/app/today.json', timeout=5) as response:
+            generated = json.load(response).get('generatedAt')
+        age = now - gates.when(generated)
+    except (OSError, ValueError, TypeError, AttributeError, json.JSONDecodeError):
+        return None  # the ordinary delivery checks distinguish outages from a verified stale payload
+    if age > timedelta(hours=3):
+        return f'live Today data is {round(age.total_seconds() / 3600, 1)} hours old'
+    return None
+
+
 def heartbeat(args):
     """Speak only when something is wrong."""
     now = datetime.now(timezone.utc)
@@ -2435,6 +2451,8 @@ def heartbeat(args):
     invite_issue = invite_health.check()
     if invite_issue:
         problems.append(invite_issue)
+    if stale := live_today_staleness(now):
+        problems.append(stale)
     alert_file = CONF.parent.parent / 'Library' / 'Logs' / 'KeenRoudy' / 'ALERT.txt'
     transition_path = CONF / 'heartbeat-state.json'
     previous = load_json(transition_path, {}) or {}

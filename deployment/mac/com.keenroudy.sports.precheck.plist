@@ -24,8 +24,11 @@
     <string>America/New_York</string>
   </dict>
 
-  <key>StartInterval</key>
-  <integer>1800</integer>
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict><key>Minute</key><integer>5</integer></dict>
+    <dict><key>Minute</key><integer>35</integer></dict>
+  </array>
 
   <key>RunAtLoad</key>
   <false/>

@@ -20,6 +20,12 @@ body {
   font: 400 16px/1.5 var(--font-body); min-height: 100vh;
   padding-bottom: calc(var(--tabbar) + env(safe-area-inset-bottom) + 24px);
 }
+main#view { min-height: calc(100svh - 160px); }
+.fast-hero { display: grid; gap: 8px; max-width: var(--max); margin: 24px auto; padding: 20px;
+  border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--felt); color: var(--chalk); }
+.fast-hero small { color: var(--kookd); text-transform: uppercase; letter-spacing: .08em; }
+.fast-hero strong { font: 700 clamp(28px, 7vw, 44px)/1.05 var(--font-display); }
+.fast-hero span { color: var(--dim); }
 a { color: var(--kookd); text-decoration: none; }
 a:hover { text-decoration: underline; }
 button, input, select { font: inherit; color: inherit; }

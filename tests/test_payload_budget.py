@@ -19,6 +19,7 @@ class PayloadBudgetTests(unittest.TestCase):
         (app / 'teams').mkdir(parents=True)
         (app / 'trends').mkdir()
         (app / 'today.json').write_bytes(today)
+        (app / 'today-hero.json').write_bytes(b'{"pick":null}')
         (app / 'lines.json').write_text(json.dumps({'count': 0, 'files': {'NFL': 'lines-NFL.json', 'CFB': 'lines-CFB.json'}}))
         (app / 'lines-NFL.json').write_bytes(b'{}')
         (app / 'lines-CFB.json').write_bytes(b'{}')

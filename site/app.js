@@ -828,9 +828,11 @@
     const picks = all.filter(inLeague);
     const sched = C.cardSchedule(picks, now);
     const pulled = p => p.status === 'withdrawn' || /before its post went out/.test(p.entryNote || '');
+    const offCard = p => ['Line moved', 'Price expired'].includes(C.pickState(p, now).word);
     const order = (a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)) || String(a.kickoff).localeCompare(String(b.kickoff));
-    const bets = sched.today.filter(p => !C.isParlay(p) && !pulled(p)).sort(order);
-    const upcoming = sched.upcoming.filter(p => !C.isParlay(p) && !pulled(p)).sort(order);
+    const bets = sched.today.filter(p => !C.isParlay(p) && !pulled(p) && !offCard(p)).sort(order);
+    const upcoming = sched.upcoming.filter(p => !C.isParlay(p) && !pulled(p) && !offCard(p)).sort(order);
+    const expired = [...sched.today, ...sched.upcoming].filter(p => !C.isParlay(p) && !pulled(p) && offCard(p));
     const gone = [...sched.today, ...sched.upcoming, ...sched.awaiting].filter(p => !C.isLadder(p) && pulled(p));
     const awaiting = sched.awaiting.filter(p => !C.isLadder(p) && !pulled(p));
     const fun = [...sched.today, ...sched.upcoming].filter(p => C.isParlay(p) && !C.isLadder(p) && !pulled(p));
@@ -924,18 +926,22 @@
       return `<a class="pill" href="#today?sport=${esc(key)}">${esc(LEAGUE_NAME[key])}${FOOTBALL.includes(key) ? '' : ` · ${n} today`} →</a>`; }).join('')}</div></details>` : '';
 
     const u = k.rec.captured.units;
-    return `${head(`Today · ${dayLabel(todayISO())}`, heroTitle, heroSub)}${onboard}
-      <p class="proof"><a class="proof-line" href="#record">${esc(k.label === 'Season record' ? 'Season' : k.label === 'Playoff record' ? 'Playoffs' : 'This stage')} <b class="num">${esc(wl(k.rec.all))}</b>${isNum(u) ? ` · <span class="${u < 0 ? 'red' : u > 0 ? 'green' : ''}">${esc(units(u).replace(/u$/, ' units'))}</span> at posted prices` : ''}<span class="go">Every result →</span></a>${OWNER_FLAGS.clvHeadline && k.clv.measured ? `<a class="pill" href="#record/model">Beat the closing line ${k.clv.beat} of ${k.clv.measured}</a>` : ''}</p>
+    return `${head(`Today · ${dayLabel(todayISO())}`, heroTitle, heroSub)}
       <section class="section">${heroHtml}</section>
+      ${onboard}
+      <p class="proof"><a class="proof-line" href="#record">${esc(k.label === 'Season record' ? 'Season' : k.label === 'Playoff record' ? 'Playoffs' : 'This stage')} <b class="num">${esc(wl(k.rec.all))}</b>${isNum(u) ? ` · <span class="${u < 0 ? 'red' : u > 0 ? 'green' : ''}">${esc(units(u).replace(/u$/, ' units'))}</span> at posted prices` : ''}<span class="go">Every result →</span></a>${OWNER_FLAGS.clvHeadline && k.clv.measured ? `<a class="pill" href="#record/model">Beat the closing line ${k.clv.beat} of ${k.clv.measured}</a>` : ''}</p>
       ${laterHtml ? section('More best bets', laterHtml, '', 'Already posted. Check your book; prices move.') : ''}
+      ${expired.length ? `<details class="more-box"><summary>Off the card · ${expired.length}</summary><div class="tickets" style="padding-top:6px">${expired.map(p => ticket(p, { compact: true })).join('')}</div></details>` : ''}
       ${awaiting.length ? section('Waiting on results', `<div class="tickets">${awaiting.map(p => ticket(p, { compact: true })).join('')}</div>`, '', 'Games are over or running late; grading follows the final.') : ''}
       ${gone.length ? `<details class="more-box"><summary>Pulled before kickoff · ${gone.length}</summary><div class="tickets" style="padding-top:6px">${gone.map(p => ticket(p, { compact: true })).join('')}</div></details>` : ''}
       ${recentHtml ? `<section class="section">${recentHtml}</section>` : ''}
       ${communityCard()}
       ${fun.length ? section('Fun tickets', `<div class="tickets">${fun.map(p => ticket(p)).join('')}</div>`, '', 'For fun at a smaller stake. Tracked separately, never in the best-bet record.') : ''}
       ${section('Research worth a look', worth, '<a class="more" href="#research/lines">See every line →</a>', 'Research, not best bets. Current prices that clear our bar.')}
-      ${section('Underdog watch', upsetHtml, '', 'Outright upset research: our raw winner estimate against the market. Not a best bet.')}
-      ${section('Today\'s games', tonightHtml, '<a class="more" href="#games/live">Live scores →</a>')}
+      <details class="more-box more-today"><summary>More for today · Underdogs and games</summary>
+        ${section('Underdog watch', upsetHtml, '', 'Outright upset research: our raw winner estimate against the market. Not a best bet.')}
+        ${section('Today\'s games', tonightHtml, '<a class="more" href="#games/live">Live scores →</a>')}
+      </details>
       ${sportsHtml}`;
   };
 

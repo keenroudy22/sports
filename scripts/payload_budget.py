@@ -15,6 +15,7 @@ LIMITS = {
     'shell-gzip': 92 * 1024,
     'lazy-more-gzip': 32 * 1024,
     'today': 320 * 1024,
+    'today-hero': 4 * 1024,
     'lines': 768 * 1024,
     'trend-shard': 2 * 1024 * 1024,
     'cfb-teams': 256 * 1024,
@@ -55,6 +56,7 @@ def check(site=SITE):
             warnings.append(warning)
     files = {
         'today': site / 'data/app/today.json',
+        'today-hero': site / 'data/app/today-hero.json',
         'lines-NFL': site / 'data/app/lines-NFL.json',
         'lines-CFB': site / 'data/app/lines-CFB.json',
         'cfb-teams': site / 'data/app/teams/CFB.json',

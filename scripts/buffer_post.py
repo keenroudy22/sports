@@ -457,6 +457,10 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
     for the next run, never posted bare. Returns the log."""
     stats = stats if stats is not None else {}
     stats.setdefault('officialNotScheduled', 0)
+    # An owner-submitted ticket is community content even if a caller labels
+    # its Buffer tuple "play". The id namespace is authoritative for routing.
+    plans = [(guid, 'community' if guid.startswith('community:') else kind, text, due, card_key)
+             for guid, kind, text, due, card_key in plans]
     pending = pending_scheduled(log_book, now)
     if pending + len(plans) >= BUFFER_OPTIONAL_AT:
         plans = sorted(plans, key=lambda plan: (plan[1] not in BUFFER_ESSENTIAL, plan[3], plan[0]))

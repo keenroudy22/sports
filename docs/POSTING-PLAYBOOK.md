@@ -123,7 +123,7 @@ Our own data: Oct 4 had 15 posts and got 0 likes and 0 reposts; Oct 2 had 6 post
 | after the plays | **Chef's Special** (if one qualifies) | `🎰 +2194 Chef's Special: 4-leg college lotto (FanDuel)` / `$10 → $229 at the posted +2194` / legs / `❤️ if you're tailing` / `@Playbook #CFB` | Lines-first ticket |
 | scans | **Climb step** (if one qualifies) | `🪜 $94 → $149 · 80/20 Climb, step 3 (-170, FanDuel)` / `Step 2 cashed. $42 banked on the way to $1,000.` / legs / `Still climbing? ❤️` / `@Playbook #NFL` | Climb route |
 | 6:00 PM | Night-game plays | `Saturday night:` or `SNF:` prefix, only when the play's game is that window | Play card |
-| first settlement pass after each final | **Cooked** (wins only; 2 or more wins in one pass make one post) | `{reaction} ✅ Georgia/Alabama over 52.5 (-110, FanDuel) · cleared by 10.5` / `The line closed 54.5, 2 points our way.` (or `against us`, from the stored close) / link to the original / `#CFB`. Reaction rotates (`Cooked.`, `Plated.`, `Out of the oven.`, `That one's done.`), never the previous one. The first Cooked of the day adds `Discord had it first.` only when the log confirms Discord delivery. | Win card |
+| first settlement pass after each final | **Cooked** (wins only; 2 or more wins in one pass make one post) | `{reaction} ✅ Georgia/Alabama over 52.5 (-110, FanDuel) · cleared by 10.5` / `The line closed 54.5, 2 points our way.` (or `against us`, from the stored close) / link to the original / `#CFB`. Reaction rotates (`Cooked.`, `Served.`, `Out of the oven.`, `That one's done.`), never the previous one. No `Plated.`: "plate" is allowed only in Hot Plate (POTD). The first Cooked of the day adds `Discord had it first.` only when the log confirms Discord delivery. | Win card |
 | last game final, before 12:30 AM | **Final** | `Final: Saturday went 3-2` / every play `✅` or `❌` with its margin / `#CFB` | Felt receipt |
 | news | Injury angle (at most 2, existing rule) | unchanged | none |
 
@@ -143,7 +143,7 @@ Our own data: Oct 4 had 15 posts and got 0 likes and 0 reposts; Oct 2 had 6 post
 | When | Post |
 |---|---|
 | Tuesday 10:45 AM | **Early Look:** `👀 Early Look: weekend lines where my number and the price disagree` / `Iowa/Michigan under 41.5 (-110, FanDuel)` / `3 more on the card. #CFB`. Up to 4 main lines, ranked by the Board's calibrated value at a public-book price no older than 4 hours, no Hard Rock. Thin, stale or uncalibrated rows get no rank. The card shows "my chance vs needs" and a RESEARCH label. No @Playbook. It counts as the day's one research post. |
-| Wednesday 9:00 AM | **Weekly receipt:** `The week: 12-9` / `Closest burn: Smith over 49.5 rec yds · had 49` / `After posting, the line moved our way on 13 of 21, against us on 8.` / `#CFB #NFL` |
+| Wednesday 9:00 AM | **Weekly receipt:** `The week: 12-9` / `Player props 6-2 · Game lines 1-5` / `Fun tickets 0-5 · Climb 1-2` / `Closest burn: Smith over 49.5 rec yds · had 49` / `After posting, the line moved our way on 13 of 21, against us on 8.` / `#CFB #NFL`. **Keep the breakdown by bet type, always.** It drew the account's first real outside reply on Oct 7 ("Breaking the week out by bet type is useful. Props vs game lines vs parlays usually tell very different stories."). If the text runs long, drop the line-move line before the breakdown. The felt weekly card already shows it. |
 | any day | A best bet only if one qualifies. The book at 6 PM only if nothing else posted. |
 
 ### Other sports (one Prep List a day at most, rotating)

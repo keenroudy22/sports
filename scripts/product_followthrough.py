@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 STATES = ('shipped', 'ready', 'owner-needed', 'observing', 'gated')
 OWNERS = ('agent', 'owner', 'desk', 'provider')
 MAX_BYTES = 128 * 1024
-MAX_ITEMS = 48                        # bounded queue includes the owner-approved October 7 work order
+MAX_ITEMS = 52                        # bounded queue includes the October 7 audit follow-ups; stable IDs are never reused
 BRIEF_LIMIT = 1200
 ITEM_FIELDS = {'id', 'title', 'status', 'owner', 'next', 'doneWhen', 'evidence'}
 

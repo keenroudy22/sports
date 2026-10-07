@@ -19,11 +19,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap">
-<link rel="stylesheet" href="app.css?v=79">
+<link rel="stylesheet" href="app.css?v=80">
 <script src="core.js?v=70" defer></script>
 <script src="live.js?v=1" defer></script>
 <script src="personal.js?v=1" defer></script>
-<script src="app.js?v=125" defer></script>
+<script src="app.js?v=126" defer></script>
 </head>
 <body>
 <noscript><p class="loading">Kook'n needs JavaScript to show today's card, live scores and research.</p></noscript>
@@ -39,6 +39,24 @@
   </div>
 </header>
 <main id="view" tabindex="-1"><p class="loading">Loading today's slate…</p></main>
+<script>
+/* A small, public first-paint hint. The full app replaces it; it never overrides a rendered route. */
+if (!location.hash || location.hash === '#today') {
+  fetch('data/app/today-hero.json').then(r => r.ok ? r.json() : null).then(data => {
+    const view = document.getElementById('view');
+    const pick = data && data.pick;
+    if (!pick || !view.querySelector('.loading') || !String(pick.href).startsWith('#pick/') ||
+        Date.now() - Date.parse(data.generatedAt) > 3 * 60 * 60 * 1000) return;
+    const box = document.createElement('a');
+    box.className = 'fast-hero'; box.href = pick.href;
+    const label = document.createElement('small'); label.textContent = pick.label;
+    const title = document.createElement('strong'); title.textContent = pick.title;
+    const price = document.createElement('span'); price.textContent =
+      [pick.odds > 0 ? '+' + pick.odds : pick.odds, pick.book].filter(Boolean).join(' · ');
+    box.append(label, title, price); view.replaceChildren(box);
+  }).catch(() => {});
+}
+</script>
 <footer class="footer">
   <p><b>For entertainment only.</b> Nothing here is betting advice or a guarantee. 21+ where legal. Gambling problem? Call <b>1-800-MY-RESET</b> (1-800-697-3738) or 1-800-522-4700. Every best bet is graded at the price and book we posted. Fun tickets and the 80/20 Climb are tracked separately. Times are Eastern. <a href="#responsible">Responsible gaming</a></p>
   <p>This site uses Cloudflare Web Analytics.</p>

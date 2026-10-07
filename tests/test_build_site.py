@@ -19,6 +19,24 @@ def slate_game(game_id, kickoff, state='pre', **market):
                        'total': 44.5, 'totalOpen': 'o45.5', 'overOdds': '-108', 'underOdds': '-112', **market}}
 
 
+class TodayHeroTests(unittest.TestCase):
+    def test_first_paint_uses_a_real_active_straight_and_not_a_fun_ticket(self):
+        now = datetime(2026, 10, 7, 17, tzinfo=timezone.utc)
+        rows = [
+            {'id': 'fun', 'title': 'Fun ticket', 'parlayType': 'longshot', 'kickoff': '2026-10-07T22:00:00Z'},
+            {'id': 'best', 'title': 'TK King over 49.5 receiving yards', 'kickoff': '2026-10-07T23:30:00Z',
+             'book': 'DraftKings', 'odds': -102, 'featured': True},
+            {'id': 'old', 'title': 'Already graded', 'result': 'win', 'kickoff': '2026-10-07T22:00:00Z'},
+            {'id': 'expired', 'title': 'Expired quote', 'expiresAt': '2026-10-06T21:30:00Z',
+             'kickoff': '2026-10-07T22:00:00Z'},
+        ]
+        hero = build_site.today_hero(rows, now)
+        self.assertEqual(hero['pick']['href'], '#pick/best')
+        self.assertEqual(hero['pick']['label'], "Today's best bet")
+        self.assertEqual(hero['pick']['odds'], -102)
+        self.assertLess(len(json.dumps(hero)), 1024)
+
+
 class ModelReadTests(unittest.TestCase):
     def test_read_price_grade_matches_the_source_and_failed_edge_is_not_support(self):
         self.row['grade'].update(chance=.52, needs=.533, edge=-1.3)

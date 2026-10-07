@@ -12,6 +12,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import gates
+import odds_api
 import payload_budget
 import quota
 
@@ -453,10 +454,7 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
         issue('odds-eighty-percent', 'The Odds API has used at least 80% of its 500 free credits.')
     if verified and remaining <= 48:
         issue('odds-reserve', 'The stored Odds API balance is near the protected free reserve.')
-    start = now.astimezone(timezone.utc).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    following = (start.replace(day=28) + timedelta(days=4)).replace(day=1)
-    fraction = max((now - start).total_seconds() / (following - start).total_seconds(), 1 / 31)
-    projected = round(used / fraction) if verified and quota.current_month_usage(usage, now) else None
+    projected = odds_api.capped_month_projection(odds, now) if verified else None
     if projected is not None and projected > 450:
         issue('odds-pace', 'The stored Odds API pace projects past 450 free credits this month.')
     request_counts = quota.monthly_counts(root / 'work/quota', now)

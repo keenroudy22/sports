@@ -345,6 +345,15 @@ class ScheduleTests(unittest.TestCase):
         self.assertEqual(result['posts'][0]['discord'], {
             'state': 'pending', 'text': 'MODEL COOKED', 'destination': 'wins'})
 
+    def test_owner_ticket_cannot_be_mislabeled_as_an_official_play(self):
+        result = bp.schedule([('community:boosted-mnf:2026-10-05-atl-no', 'play', 'Owner ticket',
+                               NOW + timedelta(hours=1), None)],
+                             'ch-x', {'posts': []}, NOW, key='t', send=FakeBuffer(), log=lambda *_: None)
+        post = result['posts'][0]
+        self.assertEqual(post['kind'], 'buffer:community')
+        self.assertEqual(post['discord']['destination'], 'wins')
+        self.assertNotIn('readyAt', post['discord'])
+
     def test_cancelled_discord_first_play_gets_a_public_pull_update(self):
         fake = FakeBuffer()
         entry = {'id': 'a', 'bufferPostId': 'bp-a', 'dueAt': '2026-09-26T17:00:00Z',

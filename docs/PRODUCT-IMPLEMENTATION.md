@@ -812,3 +812,20 @@ Oct 3 Climb step, a ledger-derived Climb map with future steps labeled as a typi
 Cooked player prop, the Oct 3 Final with every straight result and record-equivalent units, and a labeled
 no-headshot simulation of a real pick. No preview was posted or used to replace existing cards.
 `TICKET_FROM` is unset pending Claude's review and the owner's approved cutover gate.
+
+## October 7 systems-check release receipts and next green batch
+
+A-20261007-12 is verified live before the felt cutover: revision `448edec1` removed both season-record
+zones from felt card images, with a test and forced-felt sample renders. Hosted run `37655741412` passed;
+12 live Today/Games/Record/Charts/Tools checks at 375 and 1440 px had no overflow, console exception or
+caught load-error state. `FELT_FROM` remains unset for the approved quiet-window switch.
+
+A-20261007-13 is also live: revision `7213b199` excludes a specifically pulled fun-ticket leg's game
+from replacements and requires time for another pre-post check. The October 4 replay and Buffer timing
+tests passed. Hosted run `37657219324` passed; six live 375/1440 Today/Record/Games checks were clean.
+This does not rewrite either October 4 ticket or its result.
+
+The next batch addresses rule conflicts, the anchored precheck clock, lock-wait alert, capped free-plan
+pace, owner-ticket community routing, requote mentions and the ten-second Today. It has passed local
+tests/build/record/guard/rehearsal and local phone/desktop browser checks, but is **not shipped** until a
+quiet-window locked deploy, hosted success and fresh live checks are recorded.

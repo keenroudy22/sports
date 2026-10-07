@@ -518,7 +518,8 @@ class PrecheckTests(unittest.TestCase):
         ctx = SimpleNamespace()
 
         def attempt(fail_delete=()):
-            entry = {'id': 'CFB-2026-W4-x', 'bufferPostId': 'old', 'dueAt': '2026-09-26T16:30:00Z', 'card': True, 'textHash': 'stale'}
+            entry = {'id': 'CFB-2026-W4-x', 'bufferPostId': 'old', 'dueAt': '2026-09-26T16:30:00Z',
+                     'card': True, 'textHash': 'stale', 'discord': {'state': 'pending'}}
             calls = []
 
             def delete(post_id, **k):
@@ -538,6 +539,7 @@ class PrecheckTests(unittest.TestCase):
         entry, calls, _ = attempt()
         self.assertEqual(calls, [('create', 'https://keenroudy.com/sports/data/cards/CFB-2026-W4-x.png'), ('delete', 'old')])
         self.assertEqual(entry['bufferPostId'], 'new')
+        self.assertNotIn('@Playbook', entry['discord']['text'])
         entry, calls, alerted = attempt(fail_delete={'old'})
         self.assertEqual(calls[-1], ('delete', 'new'), 'the old one could not go, so the new one is taken back')
         self.assertEqual(entry['bufferPostId'], 'old')
@@ -637,6 +639,14 @@ class AlertTests(unittest.TestCase):
             self.assertIn('no run has written status.json yet', sent[0][1])
             self.assertIn('Ollama is not reachable', sent[0][1])
             self.assertTrue((Path(folder) / 'Library' / 'Logs' / 'KeenRoudy' / 'ALERT.txt').exists())
+
+    def test_live_today_staleness_uses_public_generated_time(self):
+        from io import BytesIO
+        now = datetime(2026, 10, 7, 17, 0, tzinfo=timezone.utc)
+        stale = lambda *_args, **_kwargs: BytesIO(b'{"generatedAt":"2026-10-07T13:00:00Z"}')
+        fresh = lambda *_args, **_kwargs: BytesIO(b'{"generatedAt":"2026-10-07T16:00:00Z"}')
+        self.assertIn('4.0 hours old', run.live_today_staleness(now, stale))
+        self.assertIsNone(run.live_today_staleness(now, fresh))
 
     def test_a_rehearsal_never_overwrites_the_live_status(self):
         from unittest import mock
@@ -799,6 +809,14 @@ class ParlayGuardTests(unittest.TestCase):
             with self.assertRaises(run.RunError):
                 run.Lock(path, wait=30, sleep=lambda s: None, clock=lambda: next(clock)).__enter__()
             blocker.__exit__(None, None, None)
+
+    def test_scheduled_run_alerts_when_lock_wait_expires(self):
+        args = SimpleNamespace(now='2026-10-07T15:45:00Z', slot='1145', publish_kinds=None, dry_run=False)
+        with mock.patch.object(run, 'Lock', side_effect=run.RunError('another run holds the lock')), \
+                mock.patch.object(run, 'write_status') as save, mock.patch.object(run, 'alert') as phone:
+            self.assertEqual(run.run(args), 1)
+        self.assertIn('holds the lock', save.call_args.args[0]['outcome'])
+        self.assertIn('holds the lock', phone.call_args.args[1])
 
 
 class LockedUnitsTests(unittest.TestCase):

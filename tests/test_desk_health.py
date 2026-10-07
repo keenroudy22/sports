@@ -32,7 +32,8 @@ class DeskHealthTests(unittest.TestCase):
             self.write(root, 'private/status.json', {'outcome': 'ok', 'finishedAt': NOW.isoformat(),
                        'x': {'officialUnscheduled': 2}})
             data = H.summary(root, root / 'private', root, NOW)
-            self.assertIn('odds-pace', {r['code'] for r in data['issues']})
+            self.assertNotIn('odds-pace', {r['code'] for r in data['issues']}, 'elapsed-month extrapolation exaggerates a capped plan')
+            self.assertLessEqual(data['oddsBudget']['projectedMonth'], 476)
             self.assertTrue(H.markdown(data).startswith('Official plays not scheduled: 2'))
     def write(self, root, name, value):
         path = root / name
@@ -126,7 +127,7 @@ class DeskHealthTests(unittest.TestCase):
             self.fixture(root)
             data = H.summary(root, root / 'private', root, NOW)
             self.assertEqual(data['livePilot']['state'], 'not-exercised')
-            self.assertEqual({r['code'] for r in data['issues']}, {'odds-pace'})
+            self.assertNotIn('odds-pace', {r['code'] for r in data['issues']})
             self.write(root, 'private/live-progress.json', {'attempts': [{'state': 'sending', 'text': 'secret'}]})
             data = H.summary(root, root / 'private', root, NOW)
             self.assertEqual(data['livePilot']['state'], 'review-required')

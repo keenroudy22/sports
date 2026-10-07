@@ -54,6 +54,25 @@ DAILY_CREDITS = 8                         # weekday ceiling across football
 WEEKEND_CREDITS = 6                       # SharpAPI supplies broad weekend prop coverage
 
 
+def capped_month_projection(status, now):
+    """A ceiling from the *remaining* free-plan daily caps, not elapsed-month pace."""
+    usage = quota.current_month_usage(status.get('usage'), now)
+    if not usage or usage.get('used') is None:
+        return None
+    used = int(usage['used'])
+    today = eastern_date(now)
+    spent_today = sum(int(row.get('count') or 0) * COST for row in (status.get('leagues') or {}).values()
+                      if row.get('day') == today.isoformat())
+    month = today.month
+    day = today
+    remaining = 0
+    while day.month == month:
+        cap = WEEKEND_CREDITS if day.weekday() in (5, 6) else DAILY_CREDITS
+        remaining += max(0, cap - spent_today) if day == today else cap
+        day += timedelta(days=1)
+    return min(500 - RESERVE, used + remaining)
+
+
 def normal(name):
     """Team names from two providers, made comparable."""
     text = str(name or '').lower().replace('&', ' and ')
@@ -192,6 +211,16 @@ def due(league, games, status, now):
     credit_cap = WEEKEND_CREDITS if today.weekday() in (5, 6) else DAILY_CREDITS
     if spent_today + COST > credit_cap:
         return f'{credit_cap} game-line credits already scheduled today'
+    # The NFL loop runs first. It must not spend the final shared weekend call
+    # that an evening college slate still needs; the per-league caps alone do
+    # not protect that last call.
+    college_evening = league == 'NFL' and now.astimezone(ZoneInfo('America/New_York')).hour < 16 and any(
+        g.get('league') == 'CFB' and g.get('state') == 'pre'
+        and eastern_date(features.when(g['kickoff'])) == today
+        and features.when(g['kickoff']).astimezone(ZoneInfo('America/New_York')).hour >= 18
+        for g in games)
+    if college_evening and spent_today + 2 * COST > credit_cap:
+        return 'keeping the last shared daily capture for the evening CFB slate'
     cap = DAILY_CAP[league].get(today.weekday(), DEFAULT_CAP) if soon else EARLY_CAP
     cap = min(cap, credit_cap // COST)
     late = any(eastern_date(features.when(g['kickoff'])) == today and
