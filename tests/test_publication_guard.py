@@ -23,6 +23,11 @@ class PublicationGuardTests(unittest.TestCase):
                      'img/wins/personal-win.jpg', 'data/feed.xml', 'data/app/vegas.json'):
             self.assertTrue(guard.allowed_path(Path(path)), path)
 
+    def test_the_kitchen_ticket_chef_clip_is_one_exact_root_file(self):
+        self.assertTrue(guard.allowed_path(Path('kookn-chef-clip.png')))
+        for path in ('kookn-chef-clip.jpg', 'kookn-chef-clip-2.png', 'kookn-chef-big.png', 'chef/kookn-chef-clip.png'):
+            self.assertFalse(guard.allowed_path(Path(path)), path)
+
     def test_unreviewed_and_private_artifacts_fail_closed(self):
         for path in ('env', '.env', 'data/desk-health.json', 'data/desk-reliability.json',
                      'data/x-posted.json', 'data/app/policy.json', 'data/app/status.json',
