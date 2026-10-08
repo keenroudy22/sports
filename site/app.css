@@ -306,7 +306,8 @@ details.more-box > div { padding: 0 0 14px; }
 @media (min-width: 1140px) { .projs { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .proj { display: grid; gap: 10px; background: var(--felt); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px 14px; color: var(--chalk); align-content: start; }
 .proj:hover { border-color: var(--line-strong); }
-.proj-link { display: grid; gap: 10px; color: inherit; min-width: 0; }
+.proj-link { display: grid; gap: 10px; color: inherit; min-width: 0; margin: -12px -14px -14px; padding: 12px 14px 14px; }
+.proj.big .proj-link { margin: -18px; padding: 18px; }
 .proj-link:hover { text-decoration: none; }
 .proj.live { border-color: var(--burnt); }
 .proj.big { padding: 18px; gap: 14px; }

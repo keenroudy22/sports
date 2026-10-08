@@ -1703,7 +1703,7 @@
     const sideLine = m.spread == null ? '' : ` ${C.spreadText('', raw.side === 'home' ? m.spread : -m.spread).trim()}`;
     const ourSide = (text, chance, caution) => { const tone = chance == null ? '' : C.leanTone(chance, Boolean(v2.sparse));
       return !tone ? '<span class="muted">No lean</span>' : `<span class="lean ${tone}">${esc(text)} · ${pctText(chance)}${tone === 'lean-mild' ? ' · slight' : ''}${caution ? ' · higher bar' : ''}</span>`; };
-    const lines = hasScore || g.fcs || !isNum(v2.margin) ? '' : `<div class="pc-lines"><span class="h"></span><span class="h">Ours</span><span class="h">Market</span><span class="h">${esc(opts.sideLabel || 'Our side')}</span>
+    const lines = hasScore || g.fcs || !isNum(v2.margin) ? '' : `<div class="pc-lines"><span class="h"></span><span class="h">Mine</span><span class="h">Market</span><span class="h">${esc(opts.sideLabel || 'My side')}</span>
       <span class="k">Spread</span><span class="num">${esc(C.modelSpread(g.home.abbr, g.away.abbr, v2.margin))}</span><span class="num">${esc(favSpread(g.home.abbr, g.away.abbr, m.spread))}</span><span>${lean.side ? ourSide(`${sideTeam.abbr}${sideLine}`, lean.side.chance, raw.spreadCaution) : '<span class="muted">No lean</span>'}</span>
       <span class="k">Total</span><span class="num">${esc(C.fixed(v2.total, 1))}</span><span class="num">${esc(C.fixed(m.total, 1))}</span><span>${lean.total ? ourSide(`${lean.total.direction} ${m.total ?? ''}`, lean.total.chance, raw.totalCaution) : '<span class="muted">No lean</span>'}</span></div>`;
     const gap = gapScore(g);
@@ -1804,7 +1804,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-3406c23e42a8';
+  const MORE_ASSET = 'app-more.js?v=sha256-073af43aa150';
   const GAMES_ASSET = 'app-games.js?v=sha256-2464b751d5a7';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
@@ -1819,8 +1819,11 @@
     if (b.views) return Promise.resolve(b.views);
     if (b.loading) return b.loading;
     b.loading = new Promise((resolveViews, rejectViews) => {
+      let script = null;
+      /* A failed tag leaves <head>, so a retry adds one live script, not a second dead one. */
       const fail = error => {
         b.loading = null;
+        if (script && script.remove) script.remove();
         rejectViews(error instanceof Error ? error : new Error(error && error.message ? error.message : `${b.word} did not load`));
       };
       const finish = () => {
@@ -1835,7 +1838,7 @@
         }
       };
       if (typeof window[b.global] === 'function') { finish(); return; }
-      const script = document.createElement('script');
+      script = document.createElement('script');
       script.src = b.asset; script.async = true;
       script.onload = finish;
       script.onerror = () => fail(new Error(`${b.word} did not load`));

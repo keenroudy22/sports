@@ -37,6 +37,8 @@ const picks = [
   { id: 'g', league: 'CFB', kind: 'parlays', parlayType: 'ladder', odds: -150, result: 'loss', kickoff: '2026-10-04T17:00:00Z', publishedAt: '2026-10-04T15:00:00Z', settledAt: '2026-10-04T21:00:00Z', legs: ['L3', 'L4'], title: 'Step 1', ladder: { stake: 50, run: 2, step: 1, banked: 0 } },
   { id: 'h', league: 'NFL', kind: 'props', odds: -110, kickoff: '2026-10-11T17:00:00Z', title: 'Open play', displayTitle: 'Open play OVER 1.5 receptions', athleteId: '3', market: 'rec', direction: 'over', line: 1.5, book: 'FanDuel' },
   { id: 'i', league: 'NFL', kind: 'props', odds: null, historicalImport: true, result: 'win', kickoff: '2026-09-06T17:00:00Z', title: 'Hand-posted leg' },
+  /* A voided play (a leg the book's injury rule removed): outside W-L-P and the units, like the Record headline. */
+  { id: 'j', league: 'NFL', kind: 'props', odds: -110, result: 'void', kickoff: '2026-09-13T17:00:00Z', settledAt: '2026-09-13T21:00:00Z', title: 'Voided TD leg', displayTitle: 'Voided TD leg' },
 ];
 
 const views = (overrides = {}) => {
@@ -60,7 +62,8 @@ test('days are keyed by the Eastern kickoff date and month totals equal the sum 
   assert.deepEqual([m.totals.wins, m.totals.losses, m.totals.pushes, m.totals.open], [1, 1, 1, 1]);
   assert.equal(m.days.get('2026-10-11').open, 1);
   assert.equal(m.days.get('2026-10-11').plays, 0);
-  assert.ok(near(m.totals.perPlay, m.totals.net / 3));
+  assert.equal(m.totals.priced, 3, 'all three graded October plays carry a recorded price');
+  assert.ok(near(m.totals.perPlay, m.totals.net / m.totals.priced));
   assert.equal(m.totals.best, null, 'a losing month has no best day');
   assert.equal(m.totals.worst.day, '2026-10-04');
   assert.ok(near(m.totals.worst.net, oct4.net));
@@ -83,6 +86,10 @@ test('the three ledgers never mix and the Climb is in dollars', () => {
   assert.deepEqual([climb.totals.worst.day, climb.totals.worst.net], ['2026-10-04', -50]);
   const sept = cal.month(picks, '2026-09', 'best', 'ALL');
   assert.deepEqual([sept.totals.wins, sept.totals.net, sept.totals.assumed], [1, 0, 1], 'Week 1 counts in W-L, not in units; the unpriced import is excluded');
+  assert.deepEqual([sept.totals.pushes, sept.totals.voids, sept.totals.plays], [0, 1, 2], 'the void is counted apart from pushes');
+  assert.equal(sept.totals.perPlay, null, 'no priced play, no per-play figure: the assumed-price play is not a denominator');
+  const sept13 = sept.days.get('2026-09-13');
+  assert.deepEqual([sept13.wins, sept13.losses, sept13.pushes, sept13.voids], [0, 0, 0, 1]);
   const cfb = cal.month(picks, '2026-10', 'best', 'CFB');
   assert.deepEqual([cfb.totals.wins, cfb.totals.losses, cfb.totals.pushes, cfb.totals.net], [0, 0, 1, 0]);
   assert.deepEqual([cal.grid('2026-10').offset, cal.grid('2026-10').days], [3, 31], 'October 1, 2026 is a Thursday: three Monday-first pads');
@@ -100,7 +107,10 @@ test('the rendered calendar has a header, filters, totals, ink-on-fill cells wit
   assert.match(html, /data-set="rcal:league=ALL" aria-pressed="true"/);
   assert.match(html, /data-set="rcal:ledger=fun" aria-pressed="false"/);
   assert.match(html, /data-set="rcal:ledger=best" aria-pressed="true"/);
-  assert.match(html, /<button type="button" class="cal-day neg" data-set="rcal:day=2026-10-04" aria-pressed="false" aria-label="Oct 4: 1-1-1, −0\.09u"><span class="d">4<\/span><b class="n num">−0\.1<\/b><small>1-1-1<\/small><\/button>/);
+  assert.match(html, /<button type="button" class="cal-day neg" data-set="rcal:day=2026-10-04" aria-pressed="false" aria-label="Oct 4: 1-1-1, −0\.09u"><span class="d">4<\/span><b class="n num">−0\.09<\/b><small>1-1-1<\/small><\/button>/, 'a loss under a tenth shows two decimals, never −0.0');
+  assert.match(html, /<small>Per play<\/small><b class="num">−0\.03u<\/b><span>net ÷ priced plays<\/span>/);
+  assert.ok(html.indexOf('<section class="cal"') < html.indexOf('class="kpis'), 'the calendar sits at the top of the Record, above the headline strip');
+  assert.match(moreSource, /\.cal \{[^}]*scroll-margin-top: 64px/, 'landing on #record/calendar clears the sticky header');
   assert.match(html, /class="cal-day none open" data-set="rcal:day=2026-10-11"[^>]*><span class="d">11<\/span><small>open<\/small>/);
   assert.match(html, /class="cal-day none today"><span class="d">7<\/span>/, 'today (Oct 7) carries the outline');
   for (const cell of html.match(/<button type="button" class="cal-day (pos|neg|zero)[^]*?<\/button>/g) || []) assert.match(cell, /<b class="n num">[−+]?\d/, 'every filled cell shows its number');
@@ -112,6 +122,9 @@ test('the rendered calendar has a header, filters, totals, ink-on-fill cells wit
   assert.doesNotMatch(html, /far from the book line/);
   const september = await views({ month: '2026-09' }).record({ tab: 'official' });
   assert.match(september, /Week 1 at an assumed −115/);
+  assert.match(september, /One void play this month: not counted in W–L or units/);
+  assert.match(september, /aria-label="Sep 13: 0-0, 0\.00u"/, 'the void day shows no P');
+  assert.match(september, /<small>Per play<\/small><b class="num">–<\/b>/, 'no priced September play in the fixture, so no per-play figure');
   const future = await views({ month: '2027-03' }).record({ tab: 'official' });
   assert.match(future, /<h2 id="cal-h">October 2026<\/h2>/, 'a future month falls back to the current one');
 });
