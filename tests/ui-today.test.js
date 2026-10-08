@@ -400,6 +400,26 @@ test('a play held only by its board rows drops a projection WHY on Today and the
   assert.match(clean, /<span class="kt-tag">WHY<\/span><span>I project 7\.3 targets/, 'an unheld play keeps its saved WHY');
 });
 
+test('a play held after Discord delivery keeps its posted Hot Plate, historical chance and WHY', async () => {
+  const delivered = { ...prop, held: { kind: 'qb', afterPosting: true },
+    delivery: { discordAt: '2026-10-10T16:00:00Z' },
+    quote: { odds: -104, line: 49.5, observedAt: '2026-10-10T13:37:35Z' } };
+  const today = { ...TODAY, picks: [delivered, total, ...rungs] };
+  const { api } = loadApp('#today', {}, { today, hero: { ...HERO, bets: [delivered] }, extra: linesFor([kingRow]) });
+  const ticket = firstTicket(await api.views.today({ view: 'today' }));
+  assert.match(ticket, /Hot Plate \(POTD\)/);
+  assert.match(ticket, /I had it at/);
+  assert.match(ticket, /the price needed/);
+  assert.match(ticket, /quarterback picture changed since I posted/);
+  assert.match(ticket, /Latest −104/);
+  assert.match(ticket, /<span class="kt-tag">WHY<\/span><span>I project 7\.3 targets/);
+  assert.doesNotMatch(ticket, /Under review|ORDER UP/);
+  const page = await api.views.pick({ id: delivered.id });
+  assert.match(page, /I posted this at 12:00 PM at −110 at FanDuel/);
+  assert.match(page, /It still counts at that price/);
+  assert.doesNotMatch(page, /<h2 class="kt-tape">My price<\/h2>/);
+});
+
 test('an expired saved quote with a fresh same-book price reads the same on both paints', async () => {
   const aged = { ...prop, expiresAt: '2026-10-10T12:00:00Z', quote: { odds: -115, line: 49.5, observedAt: '2026-10-10T13:20:00Z' } };
   let release;

@@ -369,6 +369,17 @@ class TicketQuoteAndHoldTests(unittest.TestCase):
         self.assertEqual(out['held'], {'kind': 'qb'})
         self.assertNotIn('quote', out, 'a held row can never say "Still good to"')
 
+    def test_a_hold_after_delivery_keeps_the_posted_reason_and_historical_chance(self):
+        held = {**self.row, 'roleSuspect': True, 'roleHold': 'qb', 'grade': None}
+        pick = {**self.pick, 'delivery': {'discordAt': '2026-10-07T16:00:00Z'},
+                'ticketWhy': 'I projected 7.3 targets when I posted.',
+                'ticketBut': 'His role could shrink.'}
+        out = self.run_([held], pick)
+        self.assertEqual(out['held'], {'kind': 'qb', 'afterPosting': True})
+        self.assertEqual(out['ticketWhy'], pick['ticketWhy'], 'the posted WHY must not be rewritten')
+        self.assertEqual(out['ticketBut'], pick['ticketBut'])
+        self.assertEqual(out['quote']['odds'], -104, 'a same-book price remains a fact, not an endorsement')
+
     def test_any_book_either_side_or_a_sibling_volume_market_holds_it(self):
         self.assertEqual(self.run_([self.row, {**self.row, 'book': 'FanDuel', 'priceSuspect': True}])['held'], {'kind': 'price'})
         self.assertEqual(self.run_([self.row, {**self.row, 'direction': 'under', 'roleSuspect': True}])['held'], {'kind': 'role'})

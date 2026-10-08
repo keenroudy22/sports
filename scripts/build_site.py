@@ -1482,9 +1482,15 @@ def annotate_quotes(picks, lines, games, now):
             hold = ticket_hold([r for r in mine if line_market(r) == market or (
                 volume and role_sanity.VOLUME.get(line_market(r)) == volume and r.get('roleSuspect'))])
             if hold:
+                delivered = pick.get('delivery') or {}
+                after_posting = bool(delivered.get('discordAt') or delivered.get('xAt'))
+                if after_posting:
+                    hold['afterPosting'] = True
+                    print(f"after-posting hold: {pick.get('id')} ({hold['kind']})")
                 pick['held'] = hold
-                held_words(pick)
-                continue
+                if not after_posting:
+                    held_words(pick)
+                    continue
             same = [r for r in mine if line_market(r) == market
                     and str(r.get('direction') or '').lower() == str(pick.get('direction') or '').lower()]
         elif pick.get('marketType') == 'total':
@@ -1500,7 +1506,8 @@ def annotate_quotes(picks, lines, games, now):
         fresh = [r for r in same if r.get('state') == 'open' and provider_book(r.get('book')) == book and book
                  and isinstance(r.get('odds'), (int, float)) and instant(r.get('observedAt'))
                  and now - QUOTE_FRESH <= instant(r['observedAt']) <= now
-                 and not (r.get('roleSuspect') or r.get('priceSuspect') or r.get('roleHold'))]
+                 and (pick.get('held', {}).get('afterPosting') or
+                      not (r.get('roleSuspect') or r.get('priceSuspect') or r.get('roleHold')))]
         if fresh:
             best = max(fresh, key=lambda r: (instant(r['observedAt']), number(r.get('line')) == number(pick.get('line'))))
             pick['quote'] = {'odds': best['odds'], 'line': best.get('line'), 'observedAt': best['observedAt']}
@@ -1746,7 +1753,8 @@ def build(now=None):
                  'props': max((c['retrievedAt'] for rows in captures.values() for c in rows), default=None)}
     annotate_quotes(picks, lines, by_id, now)
     # Keep operational timing available to the owner locally, never in the hosted app payloads.
-    write(ROOT / 'work' / 'desk-status.json', {'generatedAt': stamp(now), 'deskRuns': desk_runs()})
+    write(ROOT / 'work' / 'desk-status.json', {'generatedAt': stamp(now), 'deskRuns': desk_runs(),
+                                               'afterPostingHolds': [p['id'] for p in picks if (p.get('held') or {}).get('afterPosting')]})
     write(OUT / 'today.json', {'generatedAt': stamp(now), 'freshness': freshness,
                                'health': research_views.health(freshness, now), 'games': cards,
                                'picks': recent_picks(picks, now), 'historyFile': 'record.json', 'model': summary,

@@ -20,8 +20,8 @@ test('expired prices are standing plays but never look open', () => {
   assert.equal(vm.mode, 'expired');
   assert.doesNotMatch([vm.status, vm.statusNote].join(' '), /\bopen\b|price expired/i);
   assert.match(ticketBody, /vm\.mode === 'expired' \? 'Posted price may be gone\. Check your book\.'/);
-  assert.match(ticketBody, /const tense = vm\.mode === 'open' \|\| \(vm\.mode === 'expired' && latest && latest\.inside\)/,
-    'an aged quote only reads "I have it" while a fresh quote is still inside the posted limit');
+  assert.match(ticketBody, /const tense = !afterHold && \(vm\.mode === 'open' \|\| \(vm\.mode === 'expired' && latest && latest\.inside\)\)/,
+    'an aged quote only reads "I have it" while a fresh quote is still inside the posted limit; a later hold is historical');
 });
 
 test('closed, pulled and withdrawn states get their state words, never "Still good to"', () => {
@@ -46,8 +46,8 @@ test('the raw projection, fair price and edge stay off the ticket', () => {
 
 test('WHY and BUT are the build\'s saved strings, printed as they are', () => {
   assert.match(ticketBody, /say\('WHY', heldSafe\(pick\.ticketWhy, hold\)\) \+ say\('BUT', heldSafe\(pick\.ticketBut, hold\), ' kt-but'\)/);
-  assert.match(ticketBody, /const heldSafe = \(text, held\) => held && HELD_WORDS\.test\(text \|\| ''\) \? null : text;/,
-    'a held play only ever drops a saved line; it never rewrites one');
+  assert.match(ticketBody, /const heldSafe = \(text, held\) => held && !held\.afterPosting && HELD_WORDS\.test\(text \|\| ''\) \? null : text;/,
+    'a new hold drops suspect words before posting; a delivered play retains its posted WHY');
   assert.doesNotMatch(ticketBody, /whyLines|watchLine|reasoning\.|cautions/);
 });
 

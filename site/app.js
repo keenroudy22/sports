@@ -56,8 +56,9 @@
     if (!pick || pick.result || !pick.athleteId) return null;
     if (pick.held) return pick.held;
     const key = C ? C.marketKey(pick) : pick.market;
-    return holdOf((rows || []).filter(r => r.gameId === pick.gameId && String(r.athleteId) === String(pick.athleteId)
+    const hold = holdOf((rows || []).filter(r => r.gameId === pick.gameId && String(r.athleteId) === String(pick.athleteId)
       && ((C ? C.marketKey(r) : r.stat) === key || (SAME_VOLUME[key] && SAME_VOLUME[C ? C.marketKey(r) : r.stat] === SAME_VOLUME[key] && r.roleSuspect))));
+    return hold && (pick.delivery?.discordAt || pick.delivery?.xAt) ? { ...hold, afterPosting: true } : hold;
   };
   const VOLUME_WORD = { att: 'pass attempts', targets: 'targets', carries: 'carries' };
   const listWords = xs => xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}` : String(xs[0] || '');
@@ -70,6 +71,15 @@
   /* One short line for the Today ticket. */
   const HELD_WORDS = /\bproject|\bchance\b|\bedge\b|\bmodel\b|\bfair\b|\d%|^Role: /i;
   const heldShort = hold => hold.kind === 'price' ? 'Under review · checking that price first.' : 'Under review · checking his role first.';
+  const afterPostingWords = hold => hold.kind === 'qb' ? "His team's quarterback picture changed since I posted, so I'm checking his role."
+    : hold.kind === 'price' ? 'That price moved further than I like since I posted.'
+      : 'His recent workload looks lighter than my number assumed since I posted.';
+  const heldQuote = (pick, rows, now = Date.now()) => {
+    const same = [pick.quote, ...(rows || []).filter(r => officialKey(r) === officialKey(pick) && bookLabel(r.book) === bookLabel(pick.book) && r.state === 'open')]
+      .filter(r => r && isNum(r.odds) && Date.parse(r.observedAt) <= now && now - Date.parse(r.observedAt) <= 4 * 3600000)
+      .sort((a, b) => Date.parse(b.observedAt) - Date.parse(a.observedAt));
+    return same[0] || null;
+  };
   /* The latest fresh same-book quote for a play: the build's own (pick.quote, on the first paint and the full card
      alike), or a current board row for the same market and side. A held market has none. */
   const latestPickQuote = (pick, rows, now = Date.now()) => {
@@ -546,7 +556,7 @@
   MORE_PAGES.forEach(p => { TAB_OF[p] = 'more'; });
   TAB_OF.lab = 'record';
 
-  const model = { splitColours, ledeSize, goodTo, latestPickQuote, holdOf, pickHold, heldWords, heldShort, priceMatch, averageGap, researchPrice, matchupSignals, breakEven, fairAmerican, edgePoints, pctText, pctOne, oddsText, upsetChanceLine, quoteAge, bookLabel, postedBook, marketLabel, niceTitle, sentences,
+  const model = { splitColours, ledeSize, goodTo, latestPickQuote, holdOf, pickHold, heldWords, heldShort, heldQuote, afterPostingWords, priceMatch, averageGap, researchPrice, matchupSignals, breakEven, fairAmerican, edgePoints, pctText, pctOne, oddsText, upsetChanceLine, quoteAge, bookLabel, postedBook, marketLabel, niceTitle, sentences,
     whyLines, watchLine, historyLine, howWeGotIt, pickVM, lineVM, officialKey, onBoard, hasValue, defenseVerdict, collapse, SORTS, heavyFavorite, trendText, gapScore,
     cumulativeUnits, clvSummary, parseHash, resolve, canonical, TAB_OF, MORE_PAGES, isParlayLike, climbWords, heroBets,
     teamPanel, STAT_UNITS, betParts, nameSize, betSize, ledeTitle, dateLine, resultLine, minus, worthRows };
@@ -834,17 +844,21 @@
     const rows = opts.lines || todayExtras?.lines?.lines;
     const hold = best && !pick.result ? pickHold(pick, rows) : null;
     const latest = !pick.result && !climb && !fun && !hold ? latestPickQuote(pick, rows) : null;
+    const afterHold = Boolean(hold?.afterPosting);
+    const holdPrice = afterHold ? heldQuote(pick, rows) : null;
     const good = isNum(pick.cutoffOdds) ? `Still good to ${odd(pick.cutoffOdds)}.` : '';
-    const nowLine = pick.result ? resultLine(pick) : hold ? heldShort(hold)
+    const nowLine = pick.result ? resultLine(pick) : afterHold
+      ? `${afterPostingWords(hold)}${holdPrice ? ` Latest ${odd(holdPrice.odds)} at ${clock(holdPrice.observedAt)} at ${vm.book}.` : ''}`
+      : hold ? heldShort(hold)
       : climb ? (isNum(Number(info.stake)) && isNum(Number(info.payout)) && info.payout ? `${money(info.stake)} → ${money(info.payout)} if it cashes.` : '')
         : ['open', 'expired'].includes(vm.mode) && latest ? `Now ${odd(latest.current.odds)} at ${clock(latest.current.observedAt)}. ${latest.inside ? good : `Past my ${odd(pick.cutoffOdds)} limit.`}`
           : vm.mode === 'open' ? good : vm.mode === 'expired' ? 'Posted price may be gone. Check your book.' : vm.statusShort || vm.status || '';
-    const tense = vm.mode === 'open' || (vm.mode === 'expired' && latest && latest.inside);
-    const chance = best && !hold && vm.calibrated && vm.chance != null && vm.needs != null
+    const tense = !afterHold && (vm.mode === 'open' || (vm.mode === 'expired' && latest && latest.inside));
+    const chance = best && (!hold || afterHold) && vm.calibrated && vm.chance != null && vm.needs != null
       ? `<p class="kt-lead kt-chance"><span>I ${tense ? 'have' : 'had'} it at<b class="num">${pctOne(vm.chance)}</b></span><i></i><span>the price ${tense ? 'needs' : 'needed'}<b class="num">${pctOne(vm.needs)}</b></span></p>` : '';
     /* The build already chose held-safe words (build_site.held_words); when the hold comes only from the board rows,
        a saved line that quotes a projection, chance or edge is left off, never reworded. */
-    const heldSafe = (text, held) => held && HELD_WORDS.test(text || '') ? null : text;
+    const heldSafe = (text, held) => held && !held.afterPosting && HELD_WORDS.test(text || '') ? null : text;
     const say = (tag, text, cls = '') => text ? `<p class="kt-say${cls}"><span class="kt-tag">${tag}</span><span>${esc(text)}</span></p>` : '';
     const legs = (climb || fun) && vm.legs.length ? `<ul class="kt-legs">${(pick.legs || []).slice(0, 8).map(l => { const [a, b] = legParts(l); return `<li><span>${esc(a)}</span>${b ? `<b>${esc(b)}</b>` : ''}</li>`; }).join('')}</ul>` : '';
     /* The countdown and the posted share card (its path from the build, as before), on one small line. */
@@ -857,7 +871,7 @@
       : climb ? `<p class="kt-season">Banked this climb<b class="num">${money(info.banked)}</b></p>` : '<p class="kt-season">Tracked apart from best bets</p>';
     /* ORDER UP needs a live price. */
     const orderUp = best && !pick.result && !hold && tense ? '<span class="kt-orderup" aria-hidden="true">ORDER UP</span>' : '';
-    const label = `${chip}: ${vm.title}, ${oddsText(vm.odds)}${vm.book ? ` at ${vm.book}` : ''}${pick.result ? `. ${RESULT_WORD[pick.result] || ''}` : hold ? '. Under review' : ''}`;
+    const label = `${chip}: ${vm.title}, ${oddsText(vm.odds)}${vm.book ? ` at ${vm.book}` : ''}${pick.result ? `. ${RESULT_WORD[pick.result] || ''}` : hold && !afterHold ? '. Under review' : ''}`;
     return `<article class="kt-order${opts.compact ? ' compact' : ''}${vm.mode === 'closed' ? ' is-closed' : ''}${hold ? ' is-held' : ''}" style="${style}" aria-label="${esc(label)}">
       <div class="kt-shade"><div class="kt-paper">${panel}${bet}<div class="kt-cut"></div>
         <p class="kt-lead kt-price"><b class="kt-odds num">${esc(odd(vm.odds))}</b><i></i><b class="kt-book">${esc(vm.estimated ? `est. ${vm.book || ''}` : vm.book || '')}</b></p>
@@ -1236,7 +1250,9 @@
     const price = vm.kind === 'best' && !hold && vm.fair != null && vm.calibrated && vm.mode !== 'closed'
       ? tape('My price', `<div class="kt-figs"><p><b class="num">${esc(minus(oddsText(vm.fair)))}</b>Price matching our chance</p><p><b class="num">${vm.edge > 0 ? '+' : ''}${esc(vm.edge)} pts</b>Chance vs price's need</p></div>`) : '';
     const started = Date.parse(pick.kickoff) <= Date.now();
-    const held = hold ? tape('The hold', `<div class="kt-figs"><span class="kt-stamp hold kt-inline" role="img" aria-label="Under review">${MARK.hold}UNDER REVIEW</span></div>
+    const sentAt = pick.delivery?.xAt || pick.delivery?.discordAt;
+    const held = hold?.afterPosting ? tape('Since I posted', `<p class="kt-held-felt">I posted this at ${esc(clock(sentAt))} at ${esc(odd(pick.odds))}${vm.book ? ` at ${esc(vm.book)}` : ''}. ${esc(afterPostingWords(hold))} It still counts at that price.</p>`)
+      : hold ? tape('The hold', `<div class="kt-figs"><span class="kt-stamp hold kt-inline" role="img" aria-label="Under review">${MARK.hold}UNDER REVIEW</span></div>
       <p class="kt-held-felt">${C.dayOf(pick.kickoff) === etDay() ? 'No grade from me tonight. ' : ''}${esc(heldWords(hold))}</p><p class="small muted" style="margin-top:6px">It stays on the card and is graded at ${esc(odd(pick.odds))}${vm.book ? ` at ${esc(vm.book)}` : ''}, the price we posted.</p>`) : '';
     /* A Climb step or fun ticket keeps the desk's saved words with its real stake and return, settled or not. */
     const saved = [pick.reason, pick.why].find(x => typeof x === 'string' && x.trim());
