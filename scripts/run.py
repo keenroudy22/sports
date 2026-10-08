@@ -34,6 +34,7 @@ import arbs
 import build_site
 import line_payload
 import desk
+import dossier
 import features
 import gates
 import llm
@@ -1554,6 +1555,7 @@ def easy_parlay_step(ctx, games, now, records, published, decided, screened, spe
     if ok:
         if any(d.rule == 'cfb_jurisdiction' and (d.data or {}).get('jurisdictionVerified') for d in decisions):
             ticket['jurisdictionVerified'] = True     # a college ticket at a book available in Indiana
+        ticket['dossier'] = dossier.ticket(ticket, now)
         ctx.first[ticket['id']] = dict(ticket, league=league, publishedAt=stamp(now), kind='parlays')
         published.append((league, 'parlays', ticket))
         decided.append(decision_record(ticket, league, 'published', [], None, now, ctx))
@@ -1583,6 +1585,7 @@ def ladder_step(ctx, games, now, records, published, decided, screened, exclude=
     if ok:
         if any(d.rule == 'cfb_jurisdiction' and (d.data or {}).get('jurisdictionVerified') for d in decisions):
             ticket['jurisdictionVerified'] = True     # a college rung at a book available in Indiana
+        ticket['dossier'] = dossier.ticket(ticket, now)
         ctx.first[ticket['id']] = dict(ticket, league=league, publishedAt=stamp(now), kind='parlays')
         published.append((league, 'parlays', ticket))
         decided.append(decision_record(ticket, league, 'published', [], None, now, ctx))
@@ -1839,13 +1842,26 @@ def _run(args, now, slot, kinds, status):
             log(f"favorite: {candidate['title']} ({candidate.get('_supportNote')})")
         if polish_on:
             polish(candidate, facts, status)
+        # The case file is built from this run's already-checked facts and stored captures;
+        # it spends no additional research or odds requests. A broken optional source
+        # must not withhold an otherwise admitted play.
+        headline_reason = post_reason(candidate, facts, ctx, records, learning_weights())
+        game = ctx.games[candidate['gameIds'][0]]
+        try:
+            candidate['dossier'] = dossier.build(
+                candidate, game, ctx, records, now,
+                captures=[*(stores.odds.get(game['id']) or []), *(stores.prop_odds.get(game['id']) or [])],
+                weather_row=_WEATHER.get('stored', {}).get(game['id']), headline_reason=headline_reason)
+        except (KeyError, TypeError, ValueError, AttributeError) as error:
+            log(f"dossier partial for {candidate['id']}: {type(error).__name__}")
+            candidate['dossier'] = dossier.empty(candidate)
         # Admitted picks join the day's count so the caps hold within one run.
         kind = 'props' if candidate.get('athleteId') else 'gamePicks'
         ctx.first[candidate['id']] = dict(candidate, league=league, publishedAt=stamp(now), kind=kind)
         ctx.latest[candidate['id']] = dict(candidate)
         published.append((league, kind, candidate))
         decided.append(decision_record(candidate, league, 'published', [], None, now, ctx))
-        reason = post_reason(candidate, facts, ctx, records, learning_weights())
+        reason = next((row.get('text') for row in candidate['dossier']['reasons'] if row.get('text')), None)
         if reason:
             reasons[candidate['id']] = reason
     if 'longshot' in kinds:
@@ -1869,6 +1885,7 @@ def _run(args, now, slot, kinds, status):
             if ok:
                 if any(d.rule == 'cfb_jurisdiction' and (d.data or {}).get('jurisdictionVerified') for d in decisions):
                     ticket['jurisdictionVerified'] = True     # a college ticket at a book available in Indiana
+                ticket['dossier'] = dossier.ticket(ticket, now)
                 ctx.first[ticket['id']] = dict(ticket, league=league, publishedAt=stamp(now), kind='parlays')
                 published.append((league, 'parlays', ticket))
                 decided.append(decision_record(ticket, league, 'published', [], None, now, ctx))

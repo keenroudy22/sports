@@ -1968,6 +1968,7 @@ def board_picks(first, latest, by_id, identities):
                      'ladder': pick.get('ladder'),                         # a ladder rung's run, step and dollars (scripts/ladder.py)
                      'cutoff': pick.get('cutoff'), **cutoff_fields(pick), 'why': pick.get('why'),
                      'risk': pick.get('risk'), 'edge': pick.get('edge'), 'quotedAt': pick.get('quotedAt'),
+                     'dossier': pick.get('dossier') if isinstance(pick.get('dossier'), dict) else None,
                      'expiresAt': pick.get('expiresAt'), 'publishedAt': pick.get('publishedAt'),
                      'historicalImport': pick.get('historicalImport'), 'sources': pick.get('sources') or [],
                      'legs': pick.get('legs'), 'correlation': pick.get('correlation'), 'riskTier': pick.get('riskTier'),
