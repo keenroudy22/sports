@@ -171,7 +171,7 @@ test('official card separates Eastern dates and keeps ungraded older plays visib
 });
 
 test('college disagreement caution uses home-margin sign and is not a selection', () => {
-  assert.match(C.modelCaution({league:'CFB', v2:{margin:6}, market:{spread:7}}), /not automatically a good price/);
+  assert.match(C.modelCaution({league:'CFB', v2:{margin:6}, market:{spread:7}}), /not necessarily a good price/);
   assert.equal(C.modelCaution({league:'CFB', v2:{margin:6}, market:{spread:-7}}), '');
   assert.equal(C.modelCaution({league:'NFL', v2:{margin:6}, market:{spread:7}}), '');
   assert.equal(C.modelCaution({league:'CFB', v2:{margin:6}, market:{}}), '');

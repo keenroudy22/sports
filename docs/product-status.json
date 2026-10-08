@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-07T23:13:54Z",
+  "updatedAt": "2026-10-08T00:38:57Z",
   "items": [
     {
       "id": "P01",
@@ -484,8 +484,8 @@
       "title": "Remove free-site helpline and Responsible gaming page",
       "status": "shipped",
       "owner": "agent",
-      "next": "Keep the free-site footer and legacy #responsible redirect; revisit legal requirements before any paid launch.",
-      "doneWhen": "Live footer has no helpline or Responsible gaming link, the More page and Start here links are absent, #responsible opens More, and entertainment-only, grading, Eastern-time and Cloudflare lines remain; tests and full deployment gates pass.",
+      "next": "Preserve the absent helpline/page and legacy #responsible redirect; P62 supersedes the footer copy. Revisit legal requirements before any paid launch.",
+      "doneWhen": "Live footer has no helpline or Responsible gaming link, the More page and Start here links are absent, #responsible opens More, and full deployment gates pass.",
       "evidence": "Owner rule October 7. Release 48e57391, hosted run 37700211419 succeeded. Live footer at 375/1440 retains entertainment-only, grading, Eastern and Cloudflare text without helplines; #responsible opens More. Paid-tier legal review remains separate."
     },
     {
@@ -550,6 +550,24 @@
       "next": "Preserve the live Today, play and player layouts; keep the 11:45 PM Kitchen Ticket card cutover separate.",
       "doneWhen": "Hosted publish passes and the live phone and desktop checks show the whole Today ticket and Climb stub, held-play protections, expired-price wording, working legacy routes and no overflow, console errors or caught load state.",
       "evidence": "Owner approved October 7. Claude's 11-patch series shipped in 48e57391; hosted run 37700211419 succeeded. Gates: 1138 Python (2 skipped), 196 frontend, clean export, build, 92-pick audit, budget, guard and 17:30 rehearsal. Live app133/CSS82: 375/1440 Today, held play, Kohl player, old quote and legacy routes had no overflow, caught load state or console errors."
+    },
+    {
+      "id": "P62",
+      "title": "One-line free-site footer and moved context",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Ship the prepared footer and Start here copy with Claude's Today-restore series only after the owner's release approval; run the full gates and check live footer, Record and Start here.",
+      "doneWhen": "Live footer is exactly '21+ · Entertainment only'; Record keeps posted-price grading, Start here has Eastern time and Cloudflare disclosure once, and hosted plus live checks pass.",
+      "evidence": "Owner-delegated decision 26 dated 2026-10-07. Prepared on dev only; not released."
+    },
+    {
+      "id": "P63",
+      "title": "Keep desk timing and automation out of public copy",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Ship the first pass with Today restore after the owner's yes; apply Claude's forthcoming full public-string audit before declaring the broader copy sweep complete.",
+      "doneWhen": "Today, More, public payloads, cards, captions, RSS and Discord expose no internal run/scan times or automation; old #schedule/#status links open More; hosted and live checks pass.",
+      "evidence": "Owner-delegated decision 25 dated 2026-10-07. First-pass code prepared on dev only; Claude's full audit remains pending."
     }
   ]
 }

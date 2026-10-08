@@ -237,10 +237,20 @@ Handy commands (from `~/Projects/sports`):
   ranks and official selection for suspect QB/teammate markets; show "projection under review". Follow
   with current-team and same-QB weighting, partial-game handling, and fresh snapshots as a separately
   tested root fix. Do not present a held projection as value.
-- **Free-site footer and Responsible gaming removal (owner, 2026-10-07):** the website footer has no
+- **Public voice and private desk timing (owner, 2026-10-07, OWNER-DECISIONS item 25):** nothing public—site,
+  cards, captions, RSS or Discord—reveals run times, scan times or that the desk is automated. Reader-relevant
+  timing, such as a posted time or a price being good until kickoff, remains fine. Keep operational status and
+  schedules in local owner-only files, not public navigation or JSON. Legacy `#schedule` and `#status` links
+  quietly open More. New public copy uses plain chef wording, never desk internals.
+- **One-line site footer (owner, 2026-10-07, OWNER-DECISIONS item 26):** the website footer is exactly
+  `21+ · Entertainment only`. The Record intro retains grading at the posted price and book. Start here says
+  `Times are Eastern.` once and `Analytics: Cloudflare's cookie-free counter. Nothing personal is collected.`
+  once. Cards do not change under this decision. Prepare this with the Today-restore changes but do not release
+  before the owner says go.
+- **Free-site footer and Responsible gaming removal (owner, 2026-10-07; superseded footer copy above):** the website footer has no
   gambling helpline or Responsible gaming link, and the More › Responsible gaming page and all Start here
-  links to it are removed. Legacy `#responsible` quietly opens More. Keep the entertainment-only/21+,
-  posted-price grading, Eastern-times and Cloudflare lines. Card footers keep `21+ · Entertainment only`
+  links to it are removed. Legacy `#responsible` quietly opens More. Keep the entertainment-only/21+ line
+  in the footer, posted-price grading on Record, and Eastern-times and Cloudflare lines in Start here. Card footers keep `21+ · Entertainment only`
   with no helpline. This supersedes the older site-helpline and page-retention instructions and the
   1-800-MY-RESET plan text. Revisit the page and helplines in `PAID-TIER-PLAN`'s legal checklist before
   any paid launch; any paid sportsbook-referral post needs separate legal review, not an assumed exception.

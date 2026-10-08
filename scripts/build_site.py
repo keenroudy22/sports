@@ -1036,7 +1036,7 @@ def hero_next_day(rows):
     return [p for p in on_card if day(p['kickoff']) == first]
 
 
-def today_hero(picks, now, potd=None, teams=None, runs=None):
+def today_hero(picks, now, potd=None, teams=None):
     """app/today-hero.json: the few facts Today paints first, while the full today.json is still loading.
 
     Today's unsettled best bets (or, with none today, the next game day's still-on-the-card ones), the Climb's
@@ -1059,8 +1059,7 @@ def today_hero(picks, now, potd=None, teams=None, runs=None):
     chosen = bets[:HERO_ROWS] + extra[:HERO_ROWS]
     rows = [hero_bet(p, now, potd, teams) for p in chosen]
     payload = {'generatedAt': stamp(now), 'day': today, 'bets': rows, 'more': len(bets) + len(extra) - len(rows),
-               'climb': hero_climb(picks), 'last': last_slates(picks, today), 'season': season_records(picks, now),
-               'deskRuns': runs if runs is not None else desk_runs()}
+               'climb': hero_climb(picks), 'last': last_slates(picks, today), 'season': season_records(picks, now)}
     # Never let a crowded slate grow the first paint: the full card still lists every play.
     while payload['bets'] and len(json.dumps(payload, separators=(',', ':'), sort_keys=True,
                                              ensure_ascii=False).encode('utf-8')) > HERO_BYTES:
@@ -1265,7 +1264,7 @@ def season_records(picks, now=None):
 
 
 def desk_runs(path=RUN_PLIST):
-    """The desk run times (Eastern) from the launchd job itself, for "I look again at ..." on an empty rail.
+    """Private desk run times (Eastern) from the launchd job for owner-only status.
 
     Read with a narrow pattern, not plistlib: launchd accepts the file's comments, which a strict XML parser rejects."""
     try:
@@ -1706,17 +1705,18 @@ def build(now=None):
                  'injuries': ((context.get('leagues') or {}).get('NFL') or {}).get('checkedAt'),
                  'props': max((c['retrievedAt'] for rows in captures.values() for c in rows), default=None)}
     annotate_quotes(picks, lines, by_id, now)
-    runs = desk_runs()
+    # Keep operational timing available to the owner locally, never in the hosted app payloads.
+    write(ROOT / 'work' / 'desk-status.json', {'generatedAt': stamp(now), 'deskRuns': desk_runs()})
     write(OUT / 'today.json', {'generatedAt': stamp(now), 'freshness': freshness,
                                'health': research_views.health(freshness, now), 'games': cards,
                                'picks': recent_picks(picks, now), 'historyFile': 'record.json', 'model': summary,
                                # Kitchen Ticket Today (decision 22): Prep List rows, the date line's last W-L, the
-                               # stub's season record and the desk run times, all chosen here, never in the browser.
+                               # stub's season record, all chosen here, never in the browser.
                                'prep': prep, 'lastSlate': last_slates(picks, eastern_date(now).isoformat()),
-                               'season': season_records(picks, now), 'deskRuns': runs})
+                               'season': season_records(picks, now)})
     import featured as featured_store     # the day's Pick of the Day, whose card feed.py draws under its -potd name
     write(OUT / 'today-hero.json', today_hero(picks, now, featured_store.of_day(eastern_date(now).isoformat()),
-                                              ticket_teams, runs))
+                                              ticket_teams))
     write(OUT / 'record.json', {'generatedAt': stamp(now), 'picks': picks})
     generated = stamp(now)
     line_index = line_payload.manifest(lines, generated)

@@ -154,12 +154,12 @@ class DateLineAndRunsTests(unittest.TestCase):
                 'displayTitle': 'TK King OVER 49.5 receiving yards', 'featured': True, 'modelLean': True,
                 'ticketWhy': "I project 7.3 targets, NMSU's top WR.", 'ticketBut': "FIU's WR defense points against the over.",
                 'publishedAt': '2026-10-06T15:45:05Z', 'season': 2026, 'seasonType': 2}
-        hero = build_site.today_hero([pick], NOW, teams={KING['gameId']: TEAMS}, runs=[{'h': 17, 'm': 30}])
+        hero = build_site.today_hero([pick], NOW, teams={KING['gameId']: TEAMS})
         bet = hero['bets'][0]
         for key in ('side', 'ticketWhy', 'ticketBut', 'gameId'):
             self.assertEqual(bet[key], pick[key], key)
         self.assertEqual(bet['teams'], TEAMS)
-        self.assertEqual(hero['deskRuns'], [{'h': 17, 'm': 30}])
+        self.assertNotIn('deskRuns', hero, 'internal release times never enter a public payload')
         self.assertIn('ALL', hero['season'])
         self.assertIn('net', hero['climb'])
         self.assertLess(len(json.dumps(hero)), build_site.HERO_BYTES)
@@ -420,10 +420,10 @@ class TicketQuoteAndHoldTests(unittest.TestCase):
 
     def test_the_hero_carries_the_same_quote_and_hold(self):
         pick = {**self.pick, 'status': 'active', 'displayTitle': 'TK King OVER 49.5 receiving yards', 'held': {'kind': 'qb'}}
-        bet = build_site.today_hero([pick], NOW, runs=[])['bets'][0]
+        bet = build_site.today_hero([pick], NOW)['bets'][0]
         self.assertEqual(bet['held'], {'kind': 'qb'})
         clean = {**self.pick, 'status': 'active', 'quote': {'odds': -104, 'line': 49.5, 'observedAt': '2026-10-07T17:37:35Z'}}
-        self.assertEqual(build_site.today_hero([clean], NOW, runs=[])['bets'][0]['quote'], clean['quote'])
+        self.assertEqual(build_site.today_hero([clean], NOW)['bets'][0]['quote'], clean['quote'])
 
     def test_the_build_annotates_before_writing_today_and_the_record(self):
         import inspect

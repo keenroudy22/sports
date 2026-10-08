@@ -196,19 +196,6 @@
     const wl = last ? `${last.wins}-${last.losses}${last.pushes ? `-${last.pushes}` : ''}` : '';
     return `${C.dayLabel(nowIso)}.${last ? ` ${gap <= 6 ? weekday(lastDay) : C.dayLabel(lastDay)} went ${wl}.` : ''}`;
   };
-  /* The next scheduled desk run (Eastern) from the launchd times the build copied into deskRuns. */
-  const nextRun = (runs, now = Date.now()) => {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const clock = new Date(now).toLocaleString('en-US', { timeZone: 'America/New_York' }), et = new Date(clock);
-    const mins = et.getHours() * 60 + et.getMinutes();
-    for (let d = 0; d < 8; d++) {
-      const wd = (et.getDay() + d) % 7;
-      const hit = (runs || []).filter(r => isNum(r.h) && isNum(r.m) && (r.wd == null || r.wd === wd) && (d || r.h * 60 + r.m > mins))
-        .sort((a, b) => a.h * 60 + a.m - (b.h * 60 + b.m))[0];
-      if (hit) return `${(hit.h + 11) % 12 + 1}:${String(hit.m).padStart(2, '0')} ${hit.h < 12 ? 'AM' : 'PM'}${d === 1 ? ' tomorrow' : d > 1 ? ` ${days[wd]}` : ''}`;
-    }
-    return null;
-  };
   /* A settled slip's detail: "Final 45-24, missed by 21." from the saved actual. The margin prints only when it agrees
      with the graded result (a book settlement can differ from the box score). */
   const resultLine = pick => {
@@ -559,7 +546,7 @@
   const model = { splitColours, ledeSize, goodTo, latestPickQuote, holdOf, pickHold, heldWords, heldShort, priceMatch, averageGap, researchPrice, matchupSignals, breakEven, fairAmerican, edgePoints, pctText, pctOne, oddsText, upsetChanceLine, quoteAge, bookLabel, postedBook, marketLabel, niceTitle, sentences,
     whyLines, watchLine, historyLine, howWeGotIt, pickVM, lineVM, officialKey, onBoard, hasValue, defenseVerdict, collapse, SORTS, heavyFavorite, trendText, gapScore,
     cumulativeUnits, clvSummary, parseHash, resolve, canonical, TAB_OF, MORE_PAGES, isParlayLike, climbWords, heroBets,
-    teamPanel, STAT_UNITS, betParts, nameSize, betSize, ledeTitle, dateLine, nextRun, resultLine, minus };
+    teamPanel, STAT_UNITS, betParts, nameSize, betSize, ledeTitle, dateLine, resultLine, minus };
 
   if (typeof document === 'undefined') return { model };
 
@@ -1070,13 +1057,12 @@
   /* The top of Today, the same on the first paint and the full card, so nothing moves when today.json lands: the
      chef's line with the last game day's W-L, the first ticket on the rail, the Climb stub (inside the first screen
      at 375 x 812, DIRECTION-RULES section 5 as updated by decision 10), then the rest of the rail. */
-  const todayTop = ({ rows, today, last, season, climb, runs, lines, more = [], past = [] }) => {
-    const run = rows.length ? null : nextRun(runs);
+  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [] }) => {
     const title = ledeTitle(rows, today), first = rows[0];
     const photo = first && first.athleteId && !C.isParlay(first) && HEADSHOT[first.league || String(first.gameId || '').split('-')[0]];
     const size = photo ? ledeSize(title) : null;
     return `<section class="kt-lede${photo ? ' with-photo' : ''}"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1${size ? ` style="font-size:${size}px"` : ''}>${esc(title)}</h1></section>
-      ${rows.length ? rail(rows.slice(0, 1), { season, lines }) : emptyRail(`${run ? `I look again at ${esc(run)}. ` : ''}<a href="#research/trends">Tonight's research ›</a>`)}
+      ${rows.length ? rail(rows.slice(0, 1), { season, lines }) : emptyRail('Nothing on the rail yet. Check back before kickoff.')}
       ${climbStub(climb, past)}${rows.length > 1 || more.length ? `<div class="kt-sec" style="margin-top:28px">${rail([...more, ...rows.slice(1)], { season, lines, more: true })}</div>` : ''}`;
   };
   const firstPaint = (hero, now = Date.now()) => {
@@ -1084,7 +1070,7 @@
     /* A saved league with nothing in the hero waits for the full card instead of painting an empty rail. */
     if (!rows.length && ((hero || {}).bets || []).length) return '';
     return `<div class="hero-first kt-today" aria-busy="true"><div>${todayTop({ rows, today, last: (hero.last || {})[state.league], season: (hero.season || {})[state.league],
-      climb: hero.climb, runs: hero.deskRuns })}</div><div><p class="loading muted" role="status">Loading the rest of today…</p></div></div>`;
+      climb: hero.climb })}</div><div><p class="loading muted" role="status">Loading the rest of today…</p></div></div>`;
   };
   /* Painted only while today.json is still on its way, and only if no newer render or route has started. */
   const paintHero = (heroP, todayP) => {
@@ -1177,7 +1163,7 @@
       ${state.league === 'ALL' ? foldRow('sports', 'More sports', 'Scores and research for nine leagues', `<div class="pill-row">${Object.keys(LIVE).map(key => { const n = ((((sports || {}).leagues || {})[key] || {}).games || []).filter(g => g.date === etDay()).length;
         return `<a class="pill" href="#today?sport=${esc(key)}">${esc(LEAGUE_NAME[key])}${FOOTBALL.includes(key) ? '' : ` · ${n} today`} →</a>`; }).join('')}</div>`) : ''}</details>`;
     return `<div class="kt-today"><div>${todayTop({ rows, today: Boolean(todays.length), last: (today.lastSlate || {})[state.league], season: (today.season || {})[state.league],
-      climb, runs: today.deskRuns, lines: lines && lines.lines, more: rungHere, past: ladder.history })}</div>
+      climb, lines: lines && lines.lines, more: rungHere, past: ladder.history })}</div>
       <div>${leftovers(recent, awaiting, (today.lastSlate || {})[state.league])}${prepList(today.prep, notesList, now)}${fold}</div></div>`;
   };
 
@@ -2190,7 +2176,7 @@
   /* Record, More and team pages are not part of the first paint. */
   const MORE_VIEW_NAMES = ['player', 'team', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
-  const MORE_ASSET = 'app-more.js?v=sha256-69cf02f37b96';
+  const MORE_ASSET = 'app-more.js?v=sha256-1d6ce83b3d8f';
   let moreViews = null, moreLoading = null;
   const moreContext = (overrides = {}) => ({ C, P, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,

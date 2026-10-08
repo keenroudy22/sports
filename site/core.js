@@ -481,7 +481,7 @@
     const margin = game?.v2?.margin, spread = game?.market?.spread;
     if (game?.league !== 'CFB' || typeof margin !== 'number' || typeof spread !== 'number'
       || Math.abs(margin + spread) < 7) return '';
-    return 'Our number is far from the book line. College schedule strength, blowouts and changing roles can distort it; this is not automatically a good price.';
+    return 'Our number is far from the book line. College schedule strength, blowouts and changing roles can distort it; this is not necessarily a good price.';
   };
   /* The Kook'n 80/20 Climb (scripts/ladder.py): bank 20% of every winning return and ride 80% on the next rung.
      The current climb reaches $1,000 on bank plus ride; a miss starts a new $50 climb but cannot take the saved bank.

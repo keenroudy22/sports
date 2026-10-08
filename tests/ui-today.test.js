@@ -48,16 +48,15 @@ const GAMES = [{ id: 'NFL-1', league: 'NFL', kickoff: prop.kickoff, state: 'pre'
   away: { id: '12', abbr: 'ARIZ', name: 'Arizona', color: '#cc0033', alt: '#003366' }, home: { id: '277', abbr: 'WVU', name: 'West Virginia', color: '#eaaa00', alt: '#002855' } }];
 const SEASON = { ALL: { wins: 35, losses: 35, pushes: 0, playoffs: false }, NFL: { wins: 25, losses: 25, pushes: 0, playoffs: false }, CFB: { wins: 10, losses: 10, pushes: 0, playoffs: false } };
 const LAST = { ALL: { day: '2026-10-09', kickoff: '2026-10-09T23:00:00Z', wins: 1, losses: 0, pushes: 0, units: 0.95 } };
-const RUNS = [{ h: 6, m: 45 }, { h: 8, m: 30 }, { h: 11, m: 45 }, { h: 17, m: 30 }, { h: 21, m: 0 }, { h: 23, m: 30 }];
 const PREP = { CFB: { day: '2026-10-10', rows: [
   { league: 'CFB', gameId: 'CFB-2', kickoff: total.kickoff, athleteId: '77', player: 'Prep Player', team: 'ARIZ', teamColor: '#cc0033', pos: 'WR',
     stat: 'recYds', direction: 'over', line: 54.5, odds: -114, book: 'FanDuel', hits: 6, games: 6, clears: true },
   { league: 'CFB', gameId: 'CFB-2', kickoff: total.kickoff, athleteId: '78', player: 'History Only', team: 'WVU', teamColor: '#002855', pos: 'RB',
     stat: 'rushYds', direction: 'over', line: 60.5, odds: -110, book: 'DraftKings', hits: 5, games: 6, clears: false }] } };
 const TODAY = { generatedAt: '2026-10-10T13:50:00Z', games: GAMES, picks: [prop, total, laterOpen, laterOff, yesterday, ...rungs],
-  season: SEASON, lastSlate: LAST, deskRuns: RUNS, prep: PREP };
+  season: SEASON, lastSlate: LAST, prep: PREP };
 const HERO = {
-  generatedAt: '2026-10-10T13:50:00Z', day: '2026-10-10', more: 0, season: SEASON, last: LAST, deskRuns: RUNS,
+  generatedAt: '2026-10-10T13:50:00Z', day: '2026-10-10', more: 0, season: SEASON, last: LAST,
   bets: [{ ...prop, teams: { away: GAMES[0].away, home: GAMES[0].home } }, { ...total, teams: { away: GAMES[1].away, home: GAMES[1].home } }],
   climb: { run: 2, step: 3, riding: 94, banked: 42, settled: 3, saved: 42, net: 36, last: { result: 'win', step: 2 } },
 };
@@ -301,12 +300,13 @@ test('a saved league filter paints its own next game day, and never an empty her
   await settle();
 });
 
-test('with nothing on the card the rail hangs empty clips and names the next desk run', async () => {
+test('with nothing on the card the rail does not reveal desk timing', async () => {
   const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [yesterday, ...rungs] } });
   const page = await api.views.today({ view: 'today' });
   assert.match(page, /<h1>Nothing on the rail yet\.<\/h1>/);
   assert.match(page, /class="kt-hook h1"[\s\S]*class="kt-hook h2"/);
-  assert.match(page, /I look again at 11:45 AM\. <a href="#research\/trends">Tonight&#39;s research ›<\/a>|I look again at 11:45 AM\. <a href="#research\/trends">Tonight's research ›<\/a>/);
+  assert.match(page, /Nothing on the rail yet\. Check back before kickoff\./);
+  assert.doesNotMatch(page, /I look again|desk run|11:45 AM/i);
   assert.doesNotMatch(page, /<article class="kt-order/, 'no blank ticket and no forced pick');
 });
 

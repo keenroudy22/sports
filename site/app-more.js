@@ -385,9 +385,7 @@
       <a href="https://x.com/keenkooks" target="_blank" rel="noopener"><span><b>Follow on X</b></span><small>@keenkooks ↗</small></a>`)}
     ${moreGroup('Yours', `<a href="#saved"><span><b>Saved</b></span><small>${state.watchlist.length} saved →</small></a>
       <a href="#ticket"><span><b>My ticket</b><br><span class="small muted">A personal draft, never a pick</span></span><small>${state.ticket.length} legs →</small></a>`)}
-    ${moreGroup('Tools', `<a href="#arbs"><span><b>Arb calculator</b><br><span class="small muted">Exact two-book stake math</span></span><small>→</small></a>
-      <a href="#schedule"><span><b>Release schedule</b><br><span class="small muted">When best bets, research and results post</span></span><small>→</small></a>
-      <a href="#status"><span><b>Data status</b><br><span class="small muted">How fresh prices and scores are</span></span><small>→</small></a>`)}
+    ${moreGroup('Tools', `<a href="#arbs"><span><b>Arb calculator</b><br><span class="small muted">Exact two-book stake math</span></span><small>→</small></a>`)}
     ${moreGroup('Help', `<a href="#feedback"><span><b>Feedback</b></span><small>→</small></a>`)}`;
   views.glossary = async () => views.start();
   views.start = async () => `<a class="back" href="#more">← More</a>${head('Start here', 'How to read a best bet', 'Thirty seconds, then you know everything on the page.')}
@@ -411,6 +409,8 @@
       <dt>Fun ticket</dt><dd>A longshot parlay at a smaller stake, tracked separately from the record.</dd>
       <dt>The 80/20 Climb</dt><dd>A $50 to $1,000 challenge. A step posts only when two independent legs qualify. A winning return is split 20% banked and 80% carried to the next step. A losing step loses only its active stake; money already banked stays banked, and a new $50 climb starts. A new step is never guaranteed.</dd>
       <dt>Trial</dt><dd>A new sport collecting evidence on paper. Never a best bet until it earns a release and it earns approval.</dd></dl>`)}
+    <p class="small">Times are Eastern.</p>
+    <p class="small">Analytics: Cloudflare's cookie-free counter. Nothing personal is collected.</p>
     <p class="small"><a href="#record">Every published result →</a> · <a href="#feedback">Give feedback →</a></p>`;
   /* A saved best bet follows its own market on the board (same game, player, stat or market and side), same book first. */
   const pickChange = (saved, rows, now = Date.now()) => {
@@ -463,48 +463,14 @@
     return `<a class="back" href="#more">← More</a>${head('Arb calculator', 'Two books, every outcome covered', 'Exact stake math, with the catches left in. Time-sensitive arb candidates go to the free Discord, never to this page. An arb candidate is never a best bet and never enters the record.')}
       <div class="card"><div class="arb-form"><label>Side A American odds<input class="search" type="text" inputmode="text" pattern="[-+]?[0-9]*" autocomplete="off" value="${esc(a.first)}" data-arb="first"></label><label>Side B American odds<input class="search" type="text" inputmode="text" pattern="[-+]?[0-9]*" autocomplete="off" value="${esc(a.second)}" data-arb="second"></label><label>Total bankroll ($)<input class="search" type="number" min="0.01" step="0.01" inputmode="decimal" value="${esc(a.bankroll)}" data-arb="bankroll"></label></div>
       <div id="arb-summary" aria-live="polite">${arbSummary(arbFor(a))}</div></div>
-      ${section('The rules', `<div class="card"><ol style="margin:0;padding-left:18px;display:grid;gap:8px"><li><b>Exact means exact.</b> Same event, market, period and line. A middle is not an arb.</li><li><b>Both bets must still exist.</b> A price can disappear before the second bet is accepted.</li><li><b>Settlement rules must match.</b> Voids, limits, account restrictions and different house rules can break the math.</li><li><b>No automatic betting.</b> Kook'n never touches a sportsbook account or places a bet.</li></ol></div>`)}
+      ${section('The rules', `<div class="card"><ol style="margin:0;padding-left:18px;display:grid;gap:8px"><li><b>Exact means exact.</b> Same event, market, period and line. A middle is not an arb.</li><li><b>Both bets must still exist.</b> A price can disappear before the second bet is accepted.</li><li><b>Settlement rules must match.</b> Voids, limits, account restrictions and different house rules can break the math.</li><li><b>No bets placed for you.</b> Kook'n never touches a sportsbook account or places a bet.</li></ol></div>`)}
       <div class="card on-felt"><p class="small"><b>Entertainment and calculation only.</b> This calculator does not know whether either price is available to you. Verify the exact event, market, line, period, price, limits and settlement rules in both apps before doing anything.</p></div>`;
   };
   views.lab = async () => views.record({ tab: 'trials' });
-  views.schedule = async () => {
-    const row = (time, title, note) => `<tr><td class="num" style="white-space:nowrap"><b>${esc(time)}</b></td><td><b>${esc(title)}</b><br><span class="small muted">${esc(note)}</span></td></tr>`;
-    return `<a class="back" href="#more">← More</a>${head('Release schedule', 'When things post', 'All times Eastern. Windows, not promises: a play still has to clear its line, price and news checks.')}
-    ${section('Every game day', `<div class="table-wrap"><table class="t"><tbody>
-      ${row('8:45 AM', "Today's menu", 'Only when approved best bets are already ready.')}
-      ${row('9:00 AM', 'Results', "Yesterday's best bets, win or lose. Wednesdays add the weekly recap.")}
-      ${row('10:00 AM', 'Save-this sheet', 'College Saturday and NFL Sunday.')}
-      ${row('10:30 AM', 'Research card', 'One trend, matchup, injury or underdog card when the evidence qualifies.')}
-      ${row('Around noon', 'Best bets', 'About two hours before the earliest kickoff; earlier kickoffs move it up. Discord usually gets them 10–15 minutes before X.')}
-      ${row('After games', 'Hits and Climb updates', 'Wins can post after they settle. Misses always stay on the record.')}
-      ${row('6:00 PM', 'Quiet-day record', 'Only when nothing more useful posted that day.')}</tbody></table></div>`)}
-    ${section('When a Climb step can post', `<div class="table-wrap"><table class="t"><tbody>
-      ${row('10:00 AM', 'Climb check', 'A step posts only when two independent legs qualify.')}
-      ${row('1:30 PM', 'Climb check', 'A settled step can advance the same day.')}
-      ${row('4:00 PM', 'Climb check', 'Later slates stay open without forcing a step.')}
-      ${row('8:00 PM', 'Climb check', 'The last scheduled check of the day.')}</tbody></table></div>`)}
-    ${section('Behind the scenes', `<div class="table-wrap"><table class="t"><tbody>
-      ${row('Daily', 'Data and price checks', '6:45 AM, 8:30 AM, 11:45 AM, 5:30 PM, 9:00 PM and 11:30 PM. Late games and overnight results stay in the rotation.')}
-      ${row('Football days', 'Extra checks', 'Sunday 2:45 PM. Sunday, Monday and Thursday 6:50 PM. On weekend evening slates, one of the five card places stays open until 4 PM.')}
-      ${row('Every 5 min', 'Delivery checks', 'Discord delivery and quiet live-score checks. Public live updates are still being tested.')}
-      ${row('Every 30 min', 'Pre-post review', 'Queued plays are re-checked against stored prices and current news before release. Not a live sportsbook feed.')}</tbody></table></div>`)}
-    <div class="card on-felt"><p class="small"><b>What "scheduled" means.</b> These are release windows, not promised picks. Prices move and news can pull a queued play. Discord gets confirmed best bets first; X carries the public post and every result.</p></div>`;
-  };
-  views.status = async () => {
-    const today = await get('app/today.json');
-    const NAME = { slate: 'Schedule and lines', forecasts: 'Model forecasts', props: 'Prop lines', injuries: 'Injuries', boxscores: 'Box scores' };
-    const WORD = { current: 'Current', late: 'Late', stale: 'Late', failed: 'Failed', error: 'Failed' };
-    const health = (today.health || []).length ? today.health : Object.entries(today.freshness || {}).map(([component, observedAt]) => ({ component, observedAt, status: observedAt ? 'current' : 'unknown' }));
-    const LIM = { slate: 4, boxscores: 48, forecasts: 24, injuries: 12, props: 12 };
-    health.forEach(h => { h.late = !h.observedAt || (LIM[h.component] && Date.now() - Date.parse(h.observedAt) > LIM[h.component] * 3600000); });
-    const off = health.filter(h => h.status !== 'current' || h.late);
-    return `<a class="back" href="#more">← More</a>${head('Data status', 'How fresh is everything', 'The latest successful checks. Hosted refreshes run through the day and can run late.')}
-      <div class="table-wrap"><table class="t"><tbody>${health.map(h => { const word = !h.observedAt ? 'Unknown' : h.status === 'current' && h.late ? 'Late' : (WORD[h.status] || 'Unknown');
-        return `<tr><td>${esc(NAME[h.component] || h.component)}</td><td class="n"><span class="status-dot${word === 'Current' ? '' : ' old'}"></span>${esc(word)}</td><td class="n muted">${esc(h.observedAt ? ago(h.observedAt) : 'no time recorded')}</td></tr>`; }).join('')}</tbody></table></div>
-      ${off.length ? `<div class="card on-felt" style="margin-top:12px">${off.map(h => `<p class="small"><b>${esc(NAME[h.component] || h.component)}:</b> ${esc(h.fallback || 'Check source age before relying on it.')}</p>`).join('')}</div>` : ''}
-      <p class="small muted" style="margin-top:10px">Live scores come straight from ESPN's public scoreboard in your browser. Prices and picks always come from our time-stamped snapshots.</p>`;
-  };
-  views.feedback = async () => `<a class="back" href="#more">← More</a>${head('Feedback', 'What helped, what got in the way', 'Nothing is sent automatically. Prepare your note here, copy it, and send it to us privately on Discord.')}
+  /* Keep old bookmarks working without publishing the desk's private timing and health pages. */
+  views.schedule = async () => views.more();
+  views.status = async () => views.more();
+  views.feedback = async () => `<a class="back" href="#more">← More</a>${head('Feedback', 'What helped, what got in the way', 'Your note stays here until you copy and send it privately on Discord.')}
     <div class="card"><div class="arb-form"><label>Area<select id="fb-area" class="select"><option>Today / best bets</option><option>Research</option><option>Games / scores</option><option>Record</option><option>Saved / ticket</option><option>Discord</option><option>Something else</option></select></label>
       <label>Experience<select id="fb-rating" class="select"><option>Useful</option><option>Confusing</option><option>Something broke</option><option>Feature idea</option></select></label></div>
       <label class="sr" for="fb">Your feedback</label><textarea id="fb" class="search" rows="5" maxlength="1200" style="min-height:120px;margin-top:10px" placeholder="What were you trying to do?"></textarea>

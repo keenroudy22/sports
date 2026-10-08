@@ -50,14 +50,6 @@ test("the chef's lines are count-aware and use the build's last game day", () =>
   assert.match(M.dateLine('2026-10-20T20:00:00Z', { day: '2026-10-05', wins: 2, losses: 1, pushes: 1 }), /Monday, Oct 5 went 2-1-1\.$/);
 });
 
-test('the next desk run comes from the launchd times, including weekday-only runs', () => {
-  const runs = [{ h: 6, m: 45 }, { h: 11, m: 45 }, { h: 14, m: 45, wd: 0 }, { h: 17, m: 30 }, { h: 23, m: 30 }];
-  assert.equal(M.nextRun(runs, Date.parse('2026-10-07T18:00:00Z')), '5:30 PM');
-  assert.equal(M.nextRun(runs, Date.parse('2026-10-11T16:00:00Z')), '2:45 PM', 'Sunday adds the 2:45 PM run');
-  assert.equal(M.nextRun(runs, Date.parse('2026-10-08T03:45:00Z')), '6:45 AM tomorrow');
-  assert.equal(M.nextRun([], Date.now()), null);
-});
-
 test('a settled slip prints the margin only when it agrees with the graded result', () => {
   const total = { marketType: 'total', direction: 'under', line: 48, result: 'loss', actual: 'Falcons 45, Saints 24' };
   assert.equal(M.resultLine(total), 'Final 45-24, missed by 21.');
