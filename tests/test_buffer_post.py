@@ -1,6 +1,9 @@
 import json
+import io
 import sys
 import unittest
+import struct
+from tempfile import TemporaryDirectory
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest import mock
@@ -354,6 +357,18 @@ class ScheduleTests(unittest.TestCase):
                                  items={'old-announcement': {'publishedAt': '2026-10-08T14:00:00Z'}},
                                  log=notes.append)
         self.assertEqual(result['posts'][0]['cardTheme'], 'ticket')
+
+    def test_live_ticket_probe_requires_the_png_theme_marker(self):
+        import pick_card
+        with TemporaryDirectory() as folder:
+            path = Path(folder) / 'card.png'
+            legacy = b'\x89PNG\r\n\x1a\n' + struct.pack('>I', 13) + b'IHDR' + b'0' * 17
+            path.write_bytes(legacy)
+            with mock.patch.object(bp.urllib.request, 'urlopen', return_value=io.BytesIO(legacy)):
+                self.assertFalse(bp.ticket_art_live('https://example.test/card.png'))
+            pick_card.mark_png_theme(path)
+            with mock.patch.object(bp.urllib.request, 'urlopen', return_value=io.BytesIO(path.read_bytes())):
+                self.assertTrue(bp.ticket_art_live('https://example.test/card.png'))
 
     def test_theme_label_uses_the_artifacts_publication(self):
         with mock.patch.object(bp.pick_card, 'FELT_FROM', '2026-09-26T08:00:00-04:00'):
