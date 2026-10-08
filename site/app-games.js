@@ -279,7 +279,12 @@
     const final = Boolean(g.completed);
     const pregame = !final && g.state !== 'in' && Date.parse(g.kickoff) > now;
     const title = `${g.away.abbr} at ${g.home.abbr}`;
-    const picks = (today.picks || []).filter(p => p.gameId === g.id || (p.gameIds || []).includes(g.id));
+    /* today.json is a short, fast window; the game's own payload retains its published plays. Prefer a newer
+       Today row when both contain the same id, without losing an older or farther-out game-page ticket. */
+    const gamePick = p => p && (p.gameId === g.id || (p.gameIds || []).includes(g.id));
+    const pickById = new Map();
+    for (const p of [...(detail.picks || []), ...(today.picks || [])]) if (gamePick(p) && p.id) pickById.set(p.id, p);
+    const picks = [...pickById.values()];
     const qbText = ['away', 'home'].flatMap(side => ((detail.teams || {})[side]?.injuries || []).filter(p => p.position === 'QB' && /out|doubtful|questionable|inactive/i.test(p.status || '')).map(p => `${p.name || p.player || g[side].abbr} ${p.status}`)).join('; ');
     const why = detail.whyDiffer || fromSlate.whyDiffer || null;
     const header = projCard({ ...g, v2: model, lean: detail.lean || fromSlate.lean, marketRead: detail.marketRead || fromSlate.marketRead }, { big: true, link: false, ...(pregame ? cardExtras({ ...g, whyDiffer: why }, now) : {}) }) + (qbText ? `<p class=caution>QB news: ${esc(qbText)}</p>` : '');
@@ -327,6 +332,23 @@
         sub: [historyWords(f.history), dm ? `${dm.pos} matchup: ${dm.rank} of ${dm.of}${dm.tone === 'soft' ? ', soft' : dm.tone === 'tough' ? ', tough' : ''}` : ''].filter(Boolean).join(' · '), extraFa, src };
       return boardRow(vm);
     }).join('')}</div>` : `<p class="muted small">${pregame ? 'No current line in this game passes my price check right now. ' : 'Lines close at kickoff. Saved pregame lines are below.'}</p>`;
+
+    /* Put the card and the line status before the large projection. A game with no play must not look empty,
+       but a difference between my number and the book is not itself a bet or a supported lean. */
+    const postedHtml = picks.length ? section('Our plays in this game', `<div class="tickets">${picks.map(p => ticket(p)).join('')}</div>`) : '';
+    const marketFresh = pregame && m.retrievedAt && Number.isFinite(Date.parse(m.retrievedAt))
+      && now >= Date.parse(m.retrievedAt) && now - Date.parse(m.retrievedAt) <= 4 * 3600000;
+    const bookSpread = isNum(m.spread) ? favSpread(g.home.abbr, g.away.abbr, m.spread) : 'not recorded';
+    const ourSpread = isNum(model.margin) ? C.modelSpread(g.home.abbr, g.away.abbr, model.margin) : 'not available';
+    const linePreview = pregame ? `<section class="game-front" aria-label="Bets and lines for this game">
+      ${!picks.length ? '<p class="game-front-status">No official bet in this game.</p>' : ''}
+      <p class="eyebrow">Book lines vs my numbers · research</p>
+      <div class="game-front-grid"><p><b>Spread</b><span>${esc(bookSpread)} book · ${esc(ourSpread)} mine</span></p>
+        <p><b>Total</b><span>${esc(isNum(m.total) ? C.fixed(m.total) : 'not recorded')} book · ${esc(isNum(model.total) ? C.fixed(model.total) : 'not available')} mine</span></p></div>
+      <p class="small muted">${marketFresh ? `${esc(bookLabel(m.book) || 'Book')} · checked ${esc(ago(m.retrievedAt))}` : 'Last recorded lines · check a current price at your book'}.</p>
+      ${fav.length ? `<p class="game-front-watch"><b>Price-checked lines worth a look:</b> ${fav.slice(0, 2).map(f => `${esc(niceTitle(f.title))} · ${esc(oddsText(f.odds))} ${esc(bookLabel(f.book) || '')}`).join(' · ')}${fav.length > 2 ? ` · +${fav.length - 2} more` : ''}. <a href="#game/${esc(g.id)}#lines-we-like">See the research ›</a></p>`
+        : `<p class="game-front-watch">${picks.length ? 'No additional current research line clears my price check. The posted ticket above stays on the record.' : 'No price-checked lean clears my bar here.'} <a href="#game/${esc(g.id)}#model-vs">See the full comparison ›</a></p>`}
+      </section>` : '';
 
     /* Matchup edges and every other line the model read. */
     const reads = detail.modelReads || [];
@@ -475,8 +497,7 @@
     const tdAt = tdw.map(r => r.roleSnapshotAt).sort().pop();
     const tdHtml = tdw.length ? section('Touchdown watch', `<div class="board">${tdw.map(r => `<div class="row-main" style="grid-template-columns:minmax(0,2fr) minmax(0,1.2fr)"><div class="row-title with-art">${headshot(g.league, r.athleteId, 'sm')}<div>${r.athleteId ? `<a href="#player/${esc(g.league)}/${esc(r.athleteId)}"><b>${esc(r.player)}</b></a>` : `<b>${esc(r.player)}</b>`}<span>${esc(r.redZone)} red-zone carries + targets · ${esc(r.inside10)} inside the 10</span></div></div><div class="small muted">${esc(r.touchdowns)} TDs in ${esc(r.games)} games · ${esc(r.priceStatus || 'no verified TD price')}</div></div>`).join('')}</div>`, '', `Scoring opportunity, not a touchdown probability or a play. Role data as of ${esc(tdAt ? ago(tdAt) : '–')}. Verify the latest availability.`) : '';
 
-    return `${back}${head(g.league === 'CFB' ? 'College football' : 'NFL', title, '')}${header}${actions}${liveStamp(liveNow.refreshed)}
-      ${picks.length ? section('Our plays in this game', `<div class="tickets">${picks.map(p => ticket(p)).join('')}</div>`) : ''}
+    return `${back}${head(g.league === 'CFB' ? 'College football' : 'NFL', title, '')}${postedHtml}${linePreview}${header}${actions}${liveStamp(liveNow.refreshed)}
       ${finalHtml}
       ${whySection(g, why, final)}
       ${pregame ? anchored('lines-we-like', section('Lines we like', favHtml, why && !final ? `<a class="more" href="#game/${esc(g.id)}#why">Why my number differs →</a>` : '', 'Current prices where my estimated chance is above what the price needs. Research, not extra best bets.')) : ''}

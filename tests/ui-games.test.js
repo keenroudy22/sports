@@ -188,6 +188,51 @@ test('the game page prints every driver under #why, a note only when a flag fire
   for (const html of [blowout, total, stale]) for (const word of ['desk', 'scan', 'automated', 'pipeline', 'calibration']) assert.ok(!new RegExp(`\\b${word}\\b`, 'i').test(html), word);
 });
 
+test('a game opens with its posted bet and honest book/model lines, even when Today has dropped that bet', async () => {
+  const { api, factory } = loadBrowserApi();
+  const g = slate()[1];
+  const pick = { id: 'posted-iowa-style', gameId: g.id, league: 'CFB', kind: 'gamePicks', marketType: 'total',
+    title: 'Pitt at Georgia Southern under 53.5', displayTitle: 'Pitt at Georgia Southern under 53.5',
+    direction: 'under', line: 53.5, odds: -110, book: 'DraftKings', kickoff: g.kickoff,
+    status: 'active', posted: true, publishedAt: new Date(Date.now() - 3600000).toISOString() };
+  const detail = { ...g, picks: [pick], teams: { home: { injuries: [], form: [] }, away: { injuries: [], form: [] } },
+    favoriteLines: [], modelReads: [], seasonTrends: [], props: { lines: {} } };
+  const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [], freshness: {} }
+    : path === `app/games/${g.id}.json` ? detail : (() => { throw new Error('no ' + path); })() });
+  const html = unesc(await factory(ctx).game({ id: g.id }));
+  assert.match(html, /Our plays in this game/);
+  assert.match(html, /Pitt at Georgia Southern under 53\.5/);
+  assert.ok(html.indexOf('Our plays in this game') < html.indexOf('class="proj big"'), 'the posted bet appears before the large score card');
+  assert.match(html, /PITT -4 book · PITT -4\.6 mine/);
+  assert.match(html, /53\.5 book · 50\.5 mine/);
+  assert.doesNotMatch(html, /No official bet in this game/);
+  assert.match(html, /No additional current research line clears my price check\. The posted ticket above stays on the record/);
+});
+
+test('a game without a bet shows the current lines without presenting a model gap as a pick', async () => {
+  const { api, factory } = loadBrowserApi();
+  const g = slate()[1];
+  const detail = { ...g, picks: [], teams: { home: { injuries: [], form: [] }, away: { injuries: [], form: [] } },
+    favoriteLines: [], modelReads: [], seasonTrends: [], props: { lines: {} } };
+  const render = async row => unesc(await factory(contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [], freshness: {} }
+    : path === `app/games/${g.id}.json` ? row : (() => { throw new Error('no ' + path); })() })).game({ id: g.id }));
+  const empty = await render(detail);
+  assert.match(empty, /No official bet in this game/);
+  assert.match(empty, /No price-checked lean clears my bar here/);
+  assert.match(empty, /53\.5 book · 50\.5 mine/);
+  assert.ok(empty.indexOf('No official bet in this game') < empty.indexOf('class="proj big"'));
+  const watched = await render({ ...detail, favoriteLines: [{ id: 'f1', sourceId: 'f1', kind: 'game',
+    title: 'Pitt at Georgia Southern under 53.5', odds: -110, book: 'DraftKings', line: 53.5,
+    market: 'total points', direction: 'under', chance: 0.55, needs: 0.524, edge: 2.6,
+    observedAt: new Date(Date.now() - 600000).toISOString() }] });
+  assert.match(watched, /Price-checked lines worth a look/);
+  assert.match(watched, /under 53\.5 · -110 DraftKings/);
+  assert.match(watched, /See the research/);
+  const stale = await render({ ...detail, market: { ...detail.market, retrievedAt: new Date(Date.now() - 6 * 3600000).toISOString() } });
+  assert.match(stale, /Last recorded lines · check a current price at your book/);
+  assert.doesNotMatch(stale, /checked \d+ min ago/);
+});
+
 test('a game link may carry a #why anchor and the record a calendar address', () => {
   const { model: M } = require('../site/app.js');
   assert.deepEqual(M.resolve('#game/CFB-2#why'), { view: 'game', id: 'CFB-2', anchor: 'why' });
