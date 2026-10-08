@@ -43,13 +43,15 @@ class TicketCardTests(unittest.TestCase):
             calls.append(url)
             return self.image
         svg = ticket_card.end_zone_svg(choice, fetch=photo)
-        for exact in ('END-ZONE WORK', 'BUCS AT COWBOYS', 'JAVONTE WILLIAMS',
-                      '21 red-zone opportunities', '12 INSIDE THE 10',
-                      'NOT A TD PICK OR OFFICIAL BET', '21+ · Entertainment only'):
+        for exact in ('END-ZONE WORK', 'BUCS AT COWBOYS', 'Javonte Williams',
+                      '21 red-zone opportunities', 'INSIDE THE 10',
+                      'RESEARCH · NOT A BEST BET', '21+ · Entertainment only'):
             self.assertIn(exact, svg)
+        self.assertIn('width="1080" height="1350"', svg)
+        self.assertIn('>12</text>', svg)
         self.assertEqual(len(calls), 2)
         self.assertTrue(all('/headshots/nfl/players/full/' in url for url in calls))
-        for forbidden in ('BEST BET', 'ORDER UP', '1-800-', 'SEASON 35', '4869443:'):
+        for forbidden in ('>BEST BET<', 'ORDER UP', '1-800-', 'SEASON 35', '4869443:'):
             self.assertNotIn(forbidden, svg)
         with self.assertRaises(ValueError):
             ticket_card.end_zone_svg({'game': choice['game'], 'rows': [

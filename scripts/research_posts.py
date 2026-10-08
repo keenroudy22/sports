@@ -491,7 +491,7 @@ def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES):
     if special and os.environ.get('KEENROUDY_TNF_TICKET_APPROVED') == '1':
         game = next(game for game in data['games'] if game.get('id') == 'NFL-401872980')
         stale = when(game['kickoff']) - timedelta(minutes=45)
-        due = max(at(eastern_date(now), (19, 0)), now + timedelta(minutes=15))
+        due = max(at(eastern_date(now), (19, 0)), now + timedelta(minutes=2))
         if due < stale:
             return {'key': 'research:end-zone:tnf-ticket:2026-10-08', 'kind': 'research',
                     'card': special['key'], 'text': special['text'], 'due': due, 'stale': stale}
@@ -517,6 +517,8 @@ def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES):
     due = max(at(choice['day'], (9, 30) if choice['kind'] == 'prep' else POST_AT),
               now + timedelta(minutes=2))
     if now >= stale or due >= stale:
+        return None
+    if choice['kind'] != 'prep' and pick_card.ticket_enabled(moment=due):
         return None
     return {'key': f"research:{choice['kind']}:{choice['day'].isoformat()}", 'kind': 'research',
             'card': choice['key'], 'text': choice['text'],
@@ -604,6 +606,9 @@ def render_due(now, folder, data_path=TODAY, detail_root=DETAILS, lines_path=LIN
         except Exception as error:
             log(f"TNF Kitchen research card not drawn: {error}")
     if not choice:
+        return early_cards
+    if choice['kind'] != 'prep' and pick_card.ticket_enabled(moment=now):
+        log(f"research card {choice['key']} held: approved research-list ticket is not implemented for {choice['kind']}")
         return early_cards
     fetch = fetch or pick_card.fetch_data_uri
     path = Path(folder) / f"{choice['key']}.png"

@@ -24,6 +24,24 @@ def game(watch=None):
 
 
 class ResearchPostTests(unittest.TestCase):
+    def test_unconverted_research_is_held_after_ticket_cutover(self):
+        import json
+        now = datetime(2026, 10, 9, 14, 0, tzinfo=timezone.utc)
+        choice = {'kind': 'season', 'key': 'research-season-2026-10-09',
+                  'day': now.astimezone(R.gates.EASTERN).date(),
+                  'firstKickoff': datetime(2026, 10, 9, 21, 0, tzinfo=timezone.utc),
+                  'rows': [{'observedAt': '2026-10-09T13:30:00Z'}], 'text': 'Trend research'}
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            payload = root / 'today.json'
+            payload.write_text(json.dumps({'games': []}))
+            with mock.patch.object(R, 'select', return_value=choice), \
+                 mock.patch.object(R.pick_card, 'ticket_enabled', return_value=True), \
+                 mock.patch.object(R, 'svg', side_effect=AssertionError('old art must not render')):
+                self.assertIsNone(R.post([], now, data_path=payload, detail_root=root, lines_path=root / 'none'))
+                self.assertEqual(R.render_due(now, root, data_path=payload, detail_root=root,
+                                              lines_path=root / 'none'), {})
+
     def test_requested_tnf_ticket_is_one_game_only_and_expires_before_kickoff(self):
         import json
         now = datetime(2026, 10, 8, 22, 40, tzinfo=timezone.utc)
@@ -49,6 +67,10 @@ class ResearchPostTests(unittest.TestCase):
                 post = R.post([], now, data_path=payload, detail_root=root, lines_path=root / 'none')
             self.assertEqual(post['card'], choice['key'])
             self.assertEqual(post['due'].isoformat(), '2026-10-08T23:00:00+00:00')
+            with mock.patch.dict('os.environ', {'KEENROUDY_TNF_TICKET_APPROVED': '1'}):
+                late = R.post([], datetime(2026, 10, 8, 23, 20, tzinfo=timezone.utc),
+                              data_path=payload, detail_root=root, lines_path=root / 'none')
+            self.assertEqual(late['due'].isoformat(), '2026-10-08T23:22:00+00:00')
             with mock.patch('ticket_card.end_zone_svg', return_value='<svg/>') as art, \
                  mock.patch('pick_card.render', side_effect=lambda _svg, path: Path(path).write_bytes(b'png')):
                 cards = R.render_due(now, root, data_path=payload, detail_root=root,

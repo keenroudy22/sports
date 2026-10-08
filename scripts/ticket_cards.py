@@ -527,41 +527,44 @@ def prep_card(p):
 
 
 def end_zone_card(p):
-    """Kitchen Ticket research card for observed scoring-area work, never a TD pick."""
+    """Approved Prep List-style research ticket for observed scoring-area work."""
     rows = p['rows']
-    if not 1 <= len(rows) <= 4:
-        raise ValueError('End-Zone Work needs one to four verified rows')
-    row_h, panel_bottom = 136, 478
-    heading_y, top = panel_bottom + 58, panel_bottom + 98
-    perf = top + row_h * len(rows) + 24
-    bottom = perf + 108
-    card = kit.Card(bottom + 154)
+    if not 2 <= len(rows) <= 5:
+        raise ValueError('End-Zone Work needs two to five verified rows')
+    row_h, panel_bottom = (104 if len(rows) == 5 else 114), 474
+    heading_y, top = panel_bottom + 56, panel_bottom + 78
+    perf, bottom = 1084, 1196
+    card = kit.Card(1350)
     inner = kit.panel_rect(card, PANEL_TOP, panel_bottom, hot=(760, 300))
     chip, _ = kit.series_chip(card, COL_X, 204, 'RESEARCH')
     inner += chip
     title = 'END-ZONE WORK'
-    size = fit(title, 126, 545, floor=80)
-    inner += card.text(COL_X - 4, 280 + round(size * CAP), title, size, CHALK)
-    inner += card.text(COL_X, panel_bottom - 30, p['game'], 42, CHALK, tracking=0.5)
+    size = fit(title, 126, 620 - COL_X, floor=80)
+    inner += card.text(COL_X - 4, 290 + round(size * CAP), title, size, CHALK)
+    inner += card.text(COL_X, panel_bottom - 30, p['game'], fit(p['game'], 42, 830, floor=40), CHALK)
     for i, r in enumerate(rows):
-        cx, cy = 770 + (i % 2) * 115, 264 + (i // 2) * 104
+        cx, cy = 704 + (i % 3) * 102, 254 + (i // 3) * 108
         if r.get('photo'):
-            inner += kit.face_thumb(card, r['photo'], cx, cy, 45, ring=CHALK)
+            inner += kit.face_thumb(card, r['photo'], cx, cy, 46, ring=CHALK)
         else:
-            inner += kit.initials_badge(card, cx, cy, 45, kit.initials(r['player']), CHARCOAL[0])
-    inner += card.text(X1, heading_y, 'SCORING-AREA USAGE', 40, INK_SOFT, tracking=1)
-    inner += kit.dashed(X1, X2, heading_y + 16)
+            inner += kit.initials_badge(card, cx, cy, 46, kit.initials(r['player']), CHARCOAL[0])
+    inner += card.text(X1, heading_y, 'THE PLAYER', 40, INK_SOFT, tracking=2)
+    inner += card.text(X2, heading_y, 'INSIDE THE 10', 40, INK_SOFT, anchor='end', tracking=1)
+    inner += kit.dashed(X1, X2, heading_y + 18)
     for i, r in enumerate(rows):
         y = top + i * row_h
         if i:
             inner += f'<line x1="{X1}" y1="{y}" x2="{X2}" y2="{y}" stroke="{RULE}" stroke-width="2"/>'
-        count = f"{r['inside10']} INSIDE THE 10"
-        room = X2 - X1 - width(count, 44) - 24
-        name_size = fit(r['player'].upper(), 60, room, floor=42)
-        inner += card.text(X1, y + 57, r['player'].upper(), name_size, INK)
-        inner += card.text(X2, y + 58, count, 44, GREEN_INK, anchor='end')
-        inner += card.text(X1, y + 111, f"{r['redZone']} red-zone opportunities", 42, INK_SOFT, 'd', 500)
-    note = 'USAGE ONLY · NOT A TD PICK OR OFFICIAL BET'
-    inner += card.text(X1, perf + 70, note, fit(note, 43, X2 - X1, floor=40), INK_SOFT)
+        cy, tx = y + row_h / 2, X1 + 84
+        inner += (kit.face_thumb(card, r['photo'], X1 + 34, cy, 34) if r.get('photo')
+                  else kit.initials_badge(card, X1 + 34, cy, 34, kit.initials(r['player']), CHARCOAL[0]))
+        count = str(r['inside10'])
+        name = r['player']
+        inner += card.text(tx, y + 50, name, fit(name, 48, X2 - tx - width(count, 56) - 32, floor=40), INK)
+        inner += card.text(X2, y + 54, count, 56, INK, anchor='end')
+        detail = f"{r['redZone']} red-zone opportunities"
+        inner += card.text(tx, y + 92, detail, fit(detail, 40, X2 - tx, floor=40), INK_SOFT)
+    note = 'RESEARCH · NOT A BEST BET'
+    inner += card.text(X1, perf + 68, note, 40, INK_SOFT)
     frame(card, HOUSE, CHALK, perf, bottom, inner)
     return card

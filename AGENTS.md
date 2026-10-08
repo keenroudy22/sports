@@ -207,6 +207,15 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Approved graphic family (owner, 2026-10-08):** `/Users/keen/Projects/kookn-patches/design/APPROVED-GRAPHICS/README.md`
+  maps every public post to one of the 15 reviewed Kitchen Ticket references in that folder.
+  After the noon Ticket cutover, no new post may carry old felt, navy or `research_art` images.
+  End-Zone Work, Season Trends, Underdog/Upset Watch, Matchup Menu, injury angles and any
+  other research use the Prep List/Early Look **research-list** template: RESEARCH chip,
+  2–5 image-backed rows, exact stored stat or priced line, right-hand stat column and
+  `RESEARCH · NOT A BEST BET` stub. All cards are 1080×1350 with the chef clip, rail,
+  `21+ · Entertainment only`, site and handle. A category lacking a reviewed ticket design
+  is held rather than sent with older art. Show the first real render to the owner before posting.
 - **Near-slate review first (owner, 2026-10-08):** When a run has limited news-review
   capacity, judge the nearest Eastern kickoff day first. Thursday night, Saturday college
   football and Sunday NFL are reviewed before a later Monday night game. Within a day,
