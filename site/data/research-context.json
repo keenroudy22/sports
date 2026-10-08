@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-08T21:23:03Z",
+  "updatedAt": "2026-10-08T21:40:37Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,8 +1162,17 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-08T21:19Z",
+              "reportedAt": "2026-10-08T21:37Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+            },
+            {
+              "id": "4608686",
+              "name": "Kyle Monangai",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Toe",
+              "reportedAt": "2026-10-08T21:23Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4608686/kyle-monangai"
             },
             {
               "id": "4259545",
@@ -1173,15 +1182,6 @@
               "injury": "Hip",
               "reportedAt": "2026-10-08T19:25Z",
               "source": "https://www.espn.com/nfl/player/_/id/4259545/dandre-swift"
-            },
-            {
-              "id": "4608686",
-              "name": "Kyle Monangai",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Thumb",
-              "reportedAt": "2026-10-08T19:25Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4608686/kyle-monangai"
             },
             {
               "id": "4431611",
@@ -3687,6 +3687,42 @@
           "name": "Las Vegas Raiders",
           "players": [
             {
+              "id": "4432665",
+              "name": "Brock Bowers",
+              "position": "TE",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-08T21:22Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4432665/brock-bowers"
+            },
+            {
+              "id": "4875295",
+              "name": "Jackson Powers-Johnson",
+              "position": "G",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-08T21:19Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4875295/jackson-powers-johnson"
+            },
+            {
+              "id": "4890973",
+              "name": "Ashton Jeanty",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-08T21:18Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4890973/ashton-jeanty"
+            },
+            {
+              "id": "3045172",
+              "name": "Folorunso Fatukasi",
+              "position": "DT",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-08T21:18Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3045172/folorunso-fatukasi"
+            },
+            {
               "id": "4382466",
               "name": "Jalen Nailor",
               "position": "WR",
@@ -3714,15 +3750,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4432775/donte-thornton-jr"
             },
             {
-              "id": "3045172",
-              "name": "Folorunso Fatukasi",
-              "position": "DT",
-              "status": "Questionable",
-              "injury": "Shoulder",
-              "reportedAt": "2026-10-07T22:15Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3045172/folorunso-fatukasi"
-            },
-            {
               "id": "4362999",
               "name": "Spencer Burford",
               "position": "G",
@@ -3732,15 +3759,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4362999/spencer-burford"
             },
             {
-              "id": "4432665",
-              "name": "Brock Bowers",
-              "position": "TE",
-              "status": "Questionable",
-              "injury": "Knee",
-              "reportedAt": "2026-10-07T21:54Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4432665/brock-bowers"
-            },
-            {
               "id": "4379416",
               "name": "Quay Walker",
               "position": "LB",
@@ -3748,15 +3766,6 @@
               "injury": null,
               "reportedAt": "2026-10-07T01:50Z",
               "source": "https://www.espn.com/nfl/player/_/id/4379416/quay-walker"
-            },
-            {
-              "id": "4875295",
-              "name": "Jackson Powers-Johnson",
-              "position": "G",
-              "status": "Questionable",
-              "injury": "Groin",
-              "reportedAt": "2026-10-06T18:21Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4875295/jackson-powers-johnson"
             },
             {
               "id": "4837248",
@@ -3847,15 +3856,6 @@
               "injury": null,
               "reportedAt": "2026-10-05T01:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/14880/kirk-cousins"
-            },
-            {
-              "id": "4890973",
-              "name": "Ashton Jeanty",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-05T00:29Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4890973/ashton-jeanty"
             },
             {
               "id": "4431623",
@@ -7366,38 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "18",
-          "name": "Julian Blackmon",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-07T22:24:26Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4035661/julian-blackmon"
-        },
-        {
-          "teamId": "18",
-          "name": "Barion Brown",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-07T22:24:26Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4698597/barion-brown"
-        },
-        {
-          "teamId": "19",
-          "name": "Andrew Thomas",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-07T22:24:26Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4259566/andrew-thomas"
-        },
-        {
-          "teamId": "19",
-          "name": "Braxton Berrios",
-          "from": "Out",
-          "to": "Injured Reserve",
-          "observedAt": "2026-10-07T22:24:26Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3123075/braxton-berrios"
-        },
-        {
           "teamId": "3",
           "name": "Anthony Johnson Jr.",
           "from": "Out",
@@ -7764,11 +7732,43 @@
           "to": "Active",
           "observedAt": "2026-10-08T21:23:03Z",
           "source": "https://www.espn.com/nfl/player/_/id/3916148/tony-pollard"
+        },
+        {
+          "teamId": "13",
+          "name": "Brock Bowers",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-08T21:40:37Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4432665/brock-bowers"
+        },
+        {
+          "teamId": "13",
+          "name": "Jackson Powers-Johnson",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-08T21:40:37Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4875295/jackson-powers-johnson"
+        },
+        {
+          "teamId": "13",
+          "name": "Ashton Jeanty",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-08T21:40:37Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4890973/ashton-jeanty"
+        },
+        {
+          "teamId": "13",
+          "name": "Folorunso Fatukasi",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-08T21:40:37Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3045172/folorunso-fatukasi"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-08T21:23:03Z",
-      "lastAttemptAt": "2026-10-08T21:23:03Z",
+      "checkedAt": "2026-10-08T21:40:37Z",
+      "lastAttemptAt": "2026-10-08T21:40:37Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-08T21:23:03Z",
-      "lastAttemptAt": "2026-10-08T21:23:03Z",
+      "checkedAt": "2026-10-08T21:40:37Z",
+      "lastAttemptAt": "2026-10-08T21:40:37Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
