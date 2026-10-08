@@ -1,9 +1,9 @@
 {
  "leagues": {
   "MLB": {
-   "gamesGraded": 16,
+   "gamesGraded": 18,
    "gamesQuoted": 20,
-   "moneylineSnapshots": 74,
+   "moneylineSnapshots": 75,
    "seasons": [
     {
      "gamesGraded": 13,
@@ -12,20 +12,20 @@
      "season": 2026
     },
     {
-     "gamesGraded": 3,
+     "gamesGraded": 5,
      "gamesQuoted": 7,
      "phase": "playoffs",
      "season": 2026
     }
    ],
-   "snapshots": 74,
+   "snapshots": 75,
    "status": "capturing",
-   "totalSnapshots": 74
+   "totalSnapshots": 75
   },
   "NHL": {
-   "gamesGraded": 48,
+   "gamesGraded": 50,
    "gamesQuoted": 61,
-   "moneylineSnapshots": 237,
+   "moneylineSnapshots": 239,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,122 @@
      "season": 2027
     },
     {
-     "gamesGraded": 9,
+     "gamesGraded": 11,
      "gamesQuoted": 20,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 237,
+   "snapshots": 239,
    "status": "capturing",
-   "totalSnapshots": 237
+   "totalSnapshots": 239
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "TB",
+    "id": "30",
+    "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/tb.png",
+    "name": "Tampa Bay Rays",
+    "shortName": "Rays"
+   },
+   "awayScore": 4,
+   "gameId": "MLB-401907987",
+   "gradedAt": "2026-10-08T03:30:05Z",
+   "home": {
+    "abbreviation": "NYY",
+    "id": "10",
+    "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/nyy.png",
+    "name": "New York Yankees",
+    "shortName": "Yankees"
+   },
+   "homeScore": 3,
+   "kickoff": "2026-10-08T00:00:00Z",
+   "league": "MLB",
+   "season": 2026,
+   "seasonType": "post-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
+  {
+   "away": {
+    "abbreviation": "PIT",
+    "id": "16",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/pit.png",
+    "name": "Pittsburgh Penguins",
+    "shortName": "Penguins"
+   },
+   "awayScore": 3,
+   "gameId": "NHL-401891830",
+   "gradedAt": "2026-10-08T03:30:05Z",
+   "home": {
+    "abbreviation": "WSH",
+    "id": "23",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/wsh.png",
+    "name": "Washington Capitals",
+    "shortName": "Capitals"
+   },
+   "homeScore": 5,
+   "kickoff": "2026-10-07T23:30:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
+  {
+   "away": {
+    "abbreviation": "COL",
+    "id": "17",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/col.png",
+    "name": "Colorado Avalanche",
+    "shortName": "Avalanche"
+   },
+   "awayScore": 2,
+   "gameId": "NHL-401892455",
+   "gradedAt": "2026-10-08T03:30:05Z",
+   "home": {
+    "abbreviation": "WPG",
+    "id": "28",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/wpg.png",
+    "name": "Winnipeg Jets",
+    "shortName": "Jets"
+   },
+   "homeScore": 3,
+   "kickoff": "2026-10-07T23:30:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
+  {
+   "away": {
+    "abbreviation": "LAD",
+    "id": "19",
+    "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/lad.png",
+    "name": "Los Angeles Dodgers",
+    "shortName": "Dodgers"
+   },
+   "awayScore": 4,
+   "gameId": "MLB-401908016",
+   "gradedAt": "2026-10-08T03:30:05Z",
+   "home": {
+    "abbreviation": "ATL",
+    "id": "15",
+    "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/atl.png",
+    "name": "Atlanta Braves",
+    "shortName": "Braves"
+   },
+   "homeScore": 1,
+   "kickoff": "2026-10-07T22:00:00Z",
+   "league": "MLB",
+   "season": 2026,
+   "seasonType": "post-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "CLE",
@@ -1659,5 +1763,5 @@
    "type": "grade"
   }
  ],
- "updatedAt": "2026-10-08T02:16:33Z"
+ "updatedAt": "2026-10-08T03:30:05Z"
 }
