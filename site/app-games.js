@@ -428,18 +428,18 @@
           return `<td class="n" title="80% range ${esc(v[1])} to ${esc(v[2])}">${esc(C.fixed(v[0]))}<br>${market ? `<span class="tiny muted">line ${esc(market[0])} ${gapV > 0 ? '▲' : gapV < 0 ? '▼' : ''}${esc(C.signed(gapV))}</span>` : `<span class="tiny muted">${esc(C.fixed(v[1], 0))}–${esc(C.fixed(v[2], 0))}</span>`}</td>`;
         }).join('')}</tr>`).join('')}</tbody></table></div>`;
     };
-    const projHtml = (detail.forecast || {}).players ? section('Player projections', `<div style="display:grid;gap:16px">${['away', 'home'].map(side => { const n = ((((detail.forecast || {}).players || {})[side] || {}).players || []).length;
-      return n ? `<details class="more-box" data-box="proj:${side}"${typeof matchMedia === 'function' && matchMedia('(min-width: 760px)').matches ? ' open' : ''}><summary>${esc(g[side].abbr)} player projections · ${n} players</summary>${projTable(side)}</details>` : projTable(side); }).join('')}</div>`, '', `My average, with the likely range underneath. ${detail.props && detail.props.capturedAt ? `Where I saw a line (${esc(ago(detail.props.capturedAt))}) it shows instead, with ▲ when I am above it and ▼ when below.` : 'No comparison lines recorded yet.'}${g.garbageTime ? ` <b class="red">${GARBAGE}</b> The spread is 21 points or more, so starters may sit early.` : ''}`)
+    const projHtml = (detail.forecast || {}).players ? section('Player projections', `<div style="display:grid;gap:16px;grid-template-columns:minmax(0,1fr)">${['away', 'home'].map(side => { const n = ((((detail.forecast || {}).players || {})[side] || {}).players || []).length;
+      return n ? `<details class="more-box" style="min-width:0" data-box="proj:${side}"${typeof matchMedia === 'function' && matchMedia('(min-width: 760px)').matches ? ' open' : ''}><summary>${esc(g[side].abbr)} player projections · ${n} players</summary>${projTable(side)}</details>` : projTable(side); }).join('')}</div>`, '', `My average, with the likely range underneath. ${detail.props && detail.props.capturedAt ? `Where I saw a line (${esc(ago(detail.props.capturedAt))}) it shows instead, with ▲ when I am above it and ▼ when below.` : 'No comparison lines recorded yet.'}${g.garbageTime ? ` <b class="red">${GARBAGE}</b> The spread is 21 points or more, so starters may sit early.` : ''}`)
       : pregame ? section('Player projections', '<p class="muted small">Player projections are not available for this game yet.</p>') : '';
 
     /* What each defense allows, by position. */
     const defRows = ((teams || {}).defense || {}).rows || {};
     const defRowsL = defenseRows(teams, g.league);
-    const matchupSide = (offense, defense) => `<div class="card"><p class="eyebrow" style="margin-bottom:6px">${esc(offense.abbr)} offense vs ${esc(defense.abbr)} defense</p><table class="t"><thead><tr><th>Position</th><th class="n">Allowed a game</th><th class="n">Rank</th></tr></thead><tbody>${MATCHUP.map(([pos, key]) => {
+    const matchupSide = (offense, defense) => `<div class="card" style="min-width:0"><p class="eyebrow" style="margin-bottom:6px">${esc(offense.abbr)} offense vs ${esc(defense.abbr)} defense</p><div class="table-wrap"><table class="t"><thead><tr><th>Position</th><th class="n">Allowed a game</th><th class="n">Rank</th></tr></thead><tbody>${MATCHUP.map(([pos, key]) => {
       const r = C.rankOf(defRowsL, defense.id, pos, key);
       const tone = r ? C.rankTone(r.rank, r.of) : '';
       return `<tr><td>${esc(pos)} ${esc((C.LABEL[key] || key).toLowerCase())}</td><td class="n">${r ? esc(C.fixed(r.value)) : '–'}</td><td class="n">${r ? `<span class="rank ${tone}">${esc(r.rank)}/${esc(r.of)}</span>` : ''}</td></tr>`;
-    }).join('')}</tbody></table></div>`;
+    }).join('')}</tbody></table></div></div>`;
     const matchupHtml = Object.keys(defRows).length ? section('Matchup: what each defense allows', `<div class="grid two">${matchupSide(g.away, g.home)}${matchupSide(g.home, g.away)}</div>`,
       `<a class="more" href="#research/players?view=defense&pl=${esc(g.league)}">All defenses →</a>`, 'This season, regular season only. Rank 1 allows the least. Green marks a defense that gives up a lot (soft), red one that gives up little (tough).') : '';
 
