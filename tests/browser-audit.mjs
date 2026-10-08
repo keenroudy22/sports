@@ -31,7 +31,8 @@ for (const width of widths) {
     if(process.env.AUDIT_TEXT_SCALE) await ev(`document.querySelectorAll('#view *').forEach(e=>{if(!e.children.length) e.style.fontSize=(parseFloat(getComputedStyle(e).fontSize)*${Number(process.env.AUDIT_TEXT_SCALE)})+'px'})`);
     await pause(100);
     const result = await ev(`(() => {
-      const allowed = '.table-wrap,.seg,.filters,.board-tabs,.depth-line';
+      // These containers scroll horizontally by design; document-level overflow still fails below.
+      const allowed = '.table-wrap,.seg,.filters,.board-tabs,.depth-line,.chip-scroll';
       const bad = [...document.querySelectorAll('#view *')].filter(e => {
         if(e.closest(allowed) || !e.getClientRects().length) return false;
         const r=e.getBoundingClientRect(); return r.right>innerWidth+1 || r.left < -1;

@@ -113,6 +113,7 @@ test('every rendered view preserves the browser-audit page contract', () => {
   assert.match(source, /<h1/);
   assert.match(source, /const h1 = view\.querySelector\('h1'\)/, 'the renderer keeps one page-heading focus target');
   assert.match(audit, /\/did not load\/i/, 'a caught route failure must fail the visual audit');
+  assert.match(audit, /\.chip-scroll/, 'intentional chip rails may scroll without hiding page overflow');
 });
 
 test('Games restores stored recent MLB and NHL results with an explicit coverage note', () => {
