@@ -146,9 +146,9 @@ test('Today runs the first screen, then every section visible with no fold; Off 
   const { api } = loadApp('#record');
   const page = await api.views.today({ view: 'today' });
   const at = text => { const i = page.indexOf(text); assert.ok(i >= 0, `missing ${text}`); return i; };
-  const order = ['class="kt-lede', 'class="kt-pass"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-bets"', 'class="kt-sec kt-left"', 'class="kt-sec kt-prep"',
+  const order = ['class="kt-lede', 'class="kt-pass"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-nfl-now"', 'kt-bets"', 'class="kt-sec kt-left"', 'class="kt-sec kt-prep"',
     'kt-upsets"', 'kt-worth"', 'kt-games"', 'kt-off-card"', 'kt-community"', 'kt-sports"'].map(at);
-  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'first screen -> season line -> best bets -> Leftovers -> Prep List -> research -> games -> off -> Discord -> sports');
+  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'first screen -> tonight NFL -> future bets -> Leftovers -> Prep List -> research -> games -> off -> Discord -> sports');
   for (const gone of ['today-more', 'kt-fold', 'class="onboard"', 'today-status']) assert.ok(!page.includes(gone), gone);
   const folds = [...page.matchAll(/<details[^>]*data-box="([^"]+)"/g)].map(m => m[1]);
   assert.deepEqual(folds, ['climb-past'], 'only the Climb\'s past steps stay a fold (upset cards keep their small why fold)');
@@ -172,6 +172,22 @@ test('Today runs the first screen, then every section visible with no fold; Off 
   const discord = page.slice(at('kt-community"'));
   assert.match(discord, /Best bets land here about 10–15 minutes before X\.[\s\S]*discord\.gg\/ZnjubjsBPM[\s\S]*x\.com\/keenkooks/);
   assert.match(page.slice(at('kt-sports"')), /href="#today\?sport=NBA">NBA · 0 today →/);
+});
+
+test('an NFL game today stays prominent even with no official play and a later best bet on the rail', async () => {
+  const future = [laterOpen, { ...laterOpen, id: 'later-more', kickoff: '2026-10-14T00:15:00Z' }];
+  const nightGame = { ...GAMES[0], kickoff: '2026-10-11T00:15:00Z', v2: { away: 23.2, home: 26.9, total: 50.1, margin: 3.7, winProb: 0.61 }, market: { spread: -8.5, total: 48.5 } };
+  const games = [nightGame, GAMES[1]];
+  const page = await loadApp('#record', {}, { today: { ...TODAY, picks: future, games } }).api.views.today({ view: 'today' });
+  const spot = page.slice(page.indexOf('kt-nfl-now"'), page.indexOf('kt-bets"'));
+  assert.ok(page.indexOf('kt-climb"') < page.indexOf('kt-nfl-now"') && page.indexOf('kt-nfl-now"') < page.indexOf('kt-bets"'));
+  assert.match(spot, /Tonight&#39;s NFL|Tonight's NFL/);
+  assert.match(spot, /href="#game\/NFL-1"[\s\S]*Visitors[\s\S]*Hosts/);
+  assert.match(spot, /Total 50\.1[\s\S]*48\.5/, 'the spotlight has the projection and book line');
+  assert.match(spot, /Matchup and lines · not a best bet/);
+  assert.doesNotMatch(spot, /href="#game\/CFB-2"/, 'other games remain in the full games section');
+  const cfb = await loadApp('#today?sport=CFB', {}, { today: { ...TODAY, picks: future, games } }).api.views.today({ view: 'today', league: 'CFB' });
+  assert.doesNotMatch(cfb, /kt-nfl-now/, 'saved college-only view does not leak the NFL card');
 });
 
 test('the Prep List shows only the rows the build chose, with the price check only where it clears', async () => {

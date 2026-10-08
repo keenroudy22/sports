@@ -596,6 +596,8 @@ details.filters > .toolbar { margin-top: 4px; }
 /* Today below the first screen: every section visible, no fold (owner, 2026-10-07). */
 .kt-rest { margin-top: 34px; } .kt-rest > .kt-sec-head { margin-bottom: 12px; }
 .kt-rest .kt-head { font-size: 26px; } .kt-rest .grid.two { gap: 10px; } .kt-rest .projs { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.kt-nfl-now { margin-top: 26px; }
+.kt-nfl-now .projs { grid-template-columns: minmax(0, 1fr); }
 .kt-bets .kt-head { margin-bottom: 6px; }
 .kt-stubl { display: grid; gap: 3px; min-width: 0; }
 .kt-cd { font: 500 14px/1.25 var(--font-body); color: var(--ink-soft); }
