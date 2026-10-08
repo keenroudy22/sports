@@ -12,12 +12,20 @@ const P = require('../site/personal.js');
 const source = fs.readFileSync('site/app.js', 'utf8');
 const moreSource = fs.readFileSync('site/app-more.js', 'utf8');
 
+/* Freeze the clock on Oct 7, 2026 (afternoon Eastern) so "today", the current month and the disabled next-month arrow
+   do not depend on when the suite runs. */
+const FIXED_NOW = Date.parse('2026-10-07T18:00:00Z');
+class FixedDate extends Date {
+  constructor(...a) { super(...(a.length ? a : [FIXED_NOW])); }
+  static now() { return FIXED_NOW; }
+}
+
 const load = () => {
   const sandbox = {
     module: { exports: {} }, exports: {}, KRCore: C, KRLive: L, KRPersonal: P,
     document: { querySelector: () => null },
     localStorage: { getItem: () => null, setItem: () => {} },
-    console, URL, URLSearchParams, Intl, Date, Math, Map, Set, Promise,
+    console, URL, URLSearchParams, Intl, Date: FixedDate, Math, Map, Set, Promise,
     AbortController, TextEncoder, TextDecoder, setTimeout, clearTimeout, setInterval, clearInterval,
   };
   sandbox.globalThis = sandbox; sandbox.self = sandbox; sandbox.window = sandbox;
