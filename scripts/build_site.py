@@ -940,12 +940,18 @@ def hero_card(pick, now, potd=None):
 
 
 def record_card(pick):
-    """The published card path for a play that actually went out (X or Discord evidence), for the results calendar.
+    """The published card path for a play that went out (X or Discord evidence) and is still open, for the calendar.
 
-    feed.py draws the card beside the record; this is its path, never proof the image exists for an unposted play."""
+    feed.py draws cards only for open, postable plays (card_items); once a play is graded the hosted build no
+    longer carries its image, and the durable copy is the Discord attachment. A link for a settled play would
+    point at a missing file, so it gets none. This is the path, never proof the image exists."""
     delivery = pick.get('delivery') or {}
     went_out = bool(pick.get('posted')) or bool(delivery.get('xAt')) or bool(delivery.get('discordAt'))
-    if not went_out or pick.get('historicalImport') or not re.fullmatch(r'[A-Za-z0-9_.-]+', str(pick.get('id') or '')):
+    postable = (pick.get('favorite') is True or bool(pick.get('modelLean')) or bool(pick.get('legs'))
+                or pick.get('parlayType') == 'longshot')
+    if (not went_out or not postable or pick.get('historicalImport') or pick.get('result') or pick.get('entryNote')
+            or (pick.get('status') or 'active') != 'active'
+            or not re.fullmatch(r'[A-Za-z0-9_.-]+', str(pick.get('id') or ''))):
         return None
     return f"data/cards/{pick['id']}.png"
 

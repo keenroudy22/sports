@@ -47,6 +47,29 @@ def _fmt(value):
     return f'{value:g}'
 
 
+def _signed(value):
+    return f'{value:+g}' if value else '0'
+
+
+def _an(value):
+    """'a' or 'an' before a spoken number (an 8, an 11, an 18, an 80...)."""
+    text = str(int(round(value)))
+    return 'an' if text.startswith('8') or text in ('11', '18') else 'a'
+
+
+def _plural(game):
+    """NFL nicknames are plural (the Cowboys are); college names are singular (San José St is)."""
+    return game.get('league') == 'NFL'
+
+
+def _is(plural):
+    return 'are' if plural else 'is'
+
+
+def _poss(name, plural):
+    return f"{name}'" if plural and str(name).endswith('s') else f"{name}'s"
+
+
 def _tier(spread):
     if spread is None:
         return None
@@ -84,7 +107,10 @@ def _conference(game, side, conferences):
 
 
 def _same_line_pair(rows, market, now):
-    """A priced pair at one exact line and book, not two unrelated quotes."""
+    """A priced pair at one exact line and book, not two unrelated quotes.
+
+    Totals arrive as over/under rows. The main spread arrives as one captured game-market row at the book's
+    current number (`gameMarket`, no side): the book prices both sides of that line, so it counts as the pair."""
     sides = {}
     for row in rows:
         if row.get('market') != market or row.get('state') != 'open' or row.get('roleSuspect') \
@@ -93,12 +119,15 @@ def _same_line_pair(rows, market, now):
             continue
         key = (row.get('book'), row.get('line'))
         side = str(row.get('direction') or row.get('side') or '').lower()
-        sides.setdefault(key, set()).add(side)
+        if market == 'point spread' and not side and row.get('gameMarket'):
+            sides.setdefault(key, set()).update({'home', 'away'})
+        else:
+            sides.setdefault(key, set()).add(side)
     needed = {'over', 'under'} if market == 'total points' else {'home', 'away'}
     return any(needed <= found for found in sides.values())
 
 
-def plain_gap(card, model, book_margin, spread, fresh):
+def plain_gap(card, model, book_margin, spread, fresh, plural=False):
     """One sentence on the strength gap and what it means for sides, totals and props."""
     if not fresh or model is None or book_margin is None:
         return 'The book line is older than four hours; check a current spread.' if spread is not None else None
@@ -108,23 +137,34 @@ def plain_gap(card, model, book_margin, spread, fresh):
     leader = card['home']['name'] if model >= 0 else card['away']['name']
     book_leader = card['home']['name'] if book_margin >= 0 else card['away']['name']
     joiner = 'and the book has them' if leader == book_leader else f'but the book has {book_leader}'
-    text = f'{leader} is {_fmt(abs(model))} points better by my numbers {joiner} by {_fmt(abs(book_margin))}.'
+    text = f'{leader} {_is(plural)} {_fmt(abs(model))} points better by my numbers {joiner} by {_fmt(abs(book_margin))}.'
     if spread is not None and abs(spread) >= 21:
         text += ' Starters may sit early.'
     return text
 
 
-def look_line(card, parts, spread, total, model, model_total, fresh, tier):
-    """The one thing to look at on the Worth your time strip, from checked parts only."""
+def dog_line(card, spread, model):
+    """The underdog's line in the book's own convention next to mine: 'WYO +6 vs my +9.5', 'AKR +7 vs my -1.4'.
+
+    `model` is my home margin, so my home spread is -model and my away spread is +model. A positive number
+    keeps the dog a dog by my numbers; a negative one says I make them the favorite."""
+    dog = card['away'] if spread < 0 else card['home']
+    my_dog = model if spread < 0 else -model
+    return f"{dog.get('abbr') or dog.get('name')} +{_fmt(abs(spread))} vs my {_signed(round(my_dog, 1))}"
+
+
+def look_line(card, parts, spread, total, model, model_total, fresh, tier, fcs=False):
+    """The one thing to look at on the Worth your time strip, from checked parts only.
+
+    The larger of the two model-versus-book gaps leads; an FBS-vs-FCS game never cites my number."""
     if parts.get('official'):
         return 'Best bet posted'
-    if fresh and model_total is not None and total is not None and abs(model_total - total) >= 3:
+    total_gap = abs(model_total - total) if fresh and not fcs and model_total is not None and total is not None else 0
+    spread_gap = abs(model + spread) if fresh and not fcs and model is not None and spread is not None else 0
+    if total_gap >= 3 and total_gap >= spread_gap:
         return f'Total {_fmt(total)} vs my {_fmt(model_total)}'
-    if fresh and model is not None and spread is not None and abs(model + spread) >= 3:
-        dog = card['away'] if spread < 0 else card['home']
-        book_dog = abs(spread)
-        my_dog = -model if spread < 0 else model
-        return f"{dog['abbr']} +{_fmt(book_dog)} vs my {'+' if my_dog >= 0 else ''}{_fmt(my_dog)}"
+    if spread_gap >= 3:
+        return dog_line(card, spread, model)
     if parts.get('upset'):
         return 'Upset watch'
     if parts.get('props', 0) >= 3:
@@ -147,7 +187,8 @@ def navigator(game, card, rows, picks, now, conferences=None):
     fresh = upcoming and _fresh(market.get('retrievedAt'), now)
     tier = _tier(spread)
     gap = {'model': model, 'book': book_margin, 'difference': difference} if difference is not None else None
-    plain = plain_gap(card, model, book_margin, spread, fresh) if upcoming else None
+    fcs = bool(card.get('fcs'))
+    plain = plain_gap(card, model, book_margin, spread, fresh, _plural(game)) if upcoming else None
     game_rows = [r for r in rows if r.get('gameId') == card['id']]
     props = {(str(r.get('athleteId')), r.get('stat')) for r in game_rows
              if r.get('athleteId') and r.get('state') == 'open' and not r.get('roleSuspect')
@@ -160,7 +201,8 @@ def navigator(game, card, rows, picks, now, conferences=None):
     competitiveness = {'competitive': 3, 'lean': 2, 'mismatch': 1, 'blowout': 0}.get(tier, 0)
     model_total, book_total = _number(v2.get('total')), _number(market.get('total'))
     total_difference = abs(model_total - book_total) if model_total is not None and book_total is not None else 0
-    price_gap = min(2, max(abs(difference or 0), total_difference) // 3) if fresh else 0
+    # My number against the book counts only when my number is reliable: never for FBS vs FCS.
+    price_gap = min(2, max(abs(difference or 0), total_difference) // 3) if fresh and not fcs else 0
     bettable = (2 * int(parts['spread']) + 2 * int(parts['total']) + 2 * int(len(props) >= 3)
                 + competitiveness + int(price_gap) + 2 * int(parts['official']) + int(parts['upset']))
     if not upcoming:
@@ -169,7 +211,7 @@ def navigator(game, card, rows, picks, now, conferences=None):
             'conference': {side: _conference(game, side, conferences) for side in ('home', 'away')},
             'ranked': {side: game.get(side, {}).get('rank') for side in ('home', 'away')},
             'bettable': bettable, 'bettableParts': parts, 'plainGap': plain,
-            'look': look_line(card, parts, spread, book_total, model, model_total, fresh, tier) if upcoming else None,
+            'look': look_line(card, parts, spread, book_total, model, model_total, fresh, tier, fcs) if upcoming else None,
             'garbageTime': spread is not None and abs(spread) >= 21}
 
 
@@ -181,6 +223,7 @@ def _recent(team_logs, team, before):
 def _market_drivers(kind, game, card, snapshot, team_logs, ratings, injuries, rows, now, weather_row, gap, book, ours):
     """Drivers for one market, each {text, direction, weight, numbers[, flag]}; code supplies every number."""
     market = card.get('market') or {}
+    plural = _plural(game)
     drivers = []
 
     def add(text, direction, weight, numbers, flag=None):
@@ -194,16 +237,21 @@ def _market_drivers(kind, game, card, snapshot, team_logs, ratings, injuries, ro
         off = (card.get(fav) or {}).get('strength') or {}
         defense = (card.get(other) or {}).get('strength') or {}
         if off.get('offense') and defense.get('defense') and off.get('teams'):
-            add(f"{card[fav]['name']}'s offense ranks {off['offense']} of {off['teams']}; "
-                f"{card[other]['name']}'s defense ranks {defense['defense']}.", 1,
+            # Support only when the side my number likes brings the better rank to this matchup.
+            add(f"{_poss(card[fav]['name'], plural)} offense ranks {off['offense']} of {off['teams']}; "
+                f"{_poss(card[other]['name'], plural)} defense ranks {defense['defense']}.",
+                1 if off['offense'] < defense['defense'] else -1,
                 abs(defense['defense'] - off['offense']) / 15, [off['offense'], off['teams'], defense['defense']])
     else:
         side = min(('home', 'away'), key=lambda key: ((card.get(key) or {}).get('strength') or {}).get('defense', 999)) \
             if gap < 0 else max(('home', 'away'), key=lambda key: ((card.get(key) or {}).get('strength') or {}).get('defense', -1))
         strength = (card.get(side) or {}).get('strength') or {}
         if strength.get('defense') and strength.get('teams'):
-            add(f"{card[side]['name']}'s defense ranks {strength['defense']} of {strength['teams']} in my model.",
-                1, abs(strength['defense'] - strength['teams'] / 2) / 15, [strength['defense'], strength['teams']])
+            # An over lean needs that defense below the median; an under lean needs it above. Otherwise it argues against.
+            median = strength['teams'] / 2
+            pushes_my_way = strength['defense'] > median if gap > 0 else strength['defense'] < median
+            add(f"{_poss(card[side]['name'], plural)} defense ranks {strength['defense']} of {strength['teams']} by my numbers.",
+                1 if pushes_my_way else -1, abs(strength['defense'] - median) / 15, [strength['defense'], strength['teams']])
 
     # 2. Recent scoring and 3. schedule strength, per team.
     before = _time(game['kickoff'])
@@ -213,20 +261,24 @@ def _market_drivers(kind, game, card, snapshot, team_logs, ratings, injuries, ro
         totals = [r.get('pointsFor', 0) + r.get('pointsAgainst', 0) for r in recent
                   if isinstance(r.get('pointsFor'), (int, float)) and isinstance(r.get('pointsAgainst'), (int, float))]
         if kind == 'total' and len(totals) == 3 and (sum(totals) / 3 - book) * gap > 0:
-            add(f"{team['name']}'s last three games totaled {', '.join(map(str, totals))}.", 1,
+            add(f"{_poss(team['name'], plural)} last three games totaled {', '.join(map(str, totals))}.", 1,
                 abs(sum(totals) / 3 - book) / 3, totals)
         if kind == 'spread' and len(recent) == 3:
             margins = [r['pointsFor'] - r['pointsAgainst'] for r in recent]
             if sum(margins) / 3 * (1 if side == 'home' else -1) * gap > 0:
-                add(f"{team['name']}'s last three margins were {', '.join(f'{m:+g}' for m in margins)}.", 1,
+                add(f"{_poss(team['name'], plural)} last three margins were {', '.join(f'{m:+g}' for m in margins)}.", 1,
                     abs(sum(margins) / 3) / 5, margins)
-            if any(abs(m) >= 28 for m in margins):
-                add(f"{team['name']} had a 28-point-or-larger result in its last three games.", -1, 1, [28], 'blowout')
+            lopsided = max(zip(recent, margins), key=lambda pair: abs(pair[1]))
+            if abs(lopsided[1]) >= 28:
+                # The actual result, not the threshold: 'Charlotte lost by 51 on Oct 3'.
+                when = _time(lopsided[0]['kickoff']).astimezone(EASTERN)
+                add(f"{team['name']} {'won' if lopsided[1] > 0 else 'lost'} by {abs(lopsided[1])} on {when.strftime('%b')} {when.day}; "
+                    'one lopsided score can swing a rating.', -1, 1, [lopsided[1]], 'blowout')
         opponents = [ratings.get(str(r.get('opp'))) for r in recent]
         opponents = [(p['offense'] + p['defense']) / 2 for p in opponents if p and p.get('offense') and p.get('defense')]
         n = (ratings.get(str(team['id'])) or {}).get('teams')
         if kind == 'spread' and n and len(opponents) == 3 and sum(opponents) / 3 >= .75 * n:
-            add(f"{team['name']}'s last three opponents averaged about {round(sum(opponents) / 3)} of {n} "
+            add(f"{_poss(team['name'], plural)} last three opponents averaged about {round(sum(opponents) / 3)} of {n} "
                 'by combined offense and defense rank.', -1, 1.5, [round(sum(opponents) / 3), n], 'soft_schedule')
 
     # 4. Roster: a quarterback role hold already computed for this game; NFL top-position players listed out.
@@ -259,7 +311,7 @@ def _market_drivers(kind, game, card, snapshot, team_logs, ratings, injuries, ro
         if wind is not None and wind >= 15:
             add(f"The stored kickoff forecast has {wind:g} mph wind.", 1 if gap < 0 else -1, wind / 5, [wind], 'weather')
         if rain is not None and rain >= 60:
-            add(f"The stored kickoff forecast has a {rain:g}% chance of rain.", 1 if gap < 0 else -1, rain / 20, [rain], 'weather')
+            add(f"The stored kickoff forecast has {_an(rain)} {rain:g}% chance of rain.", 1 if gap < 0 else -1, rain / 20, [rain], 'weather')
 
     # 7. Pace: my projected plays against the two teams' stored season averages, totals only.
     if kind == 'total' and snapshot:
@@ -282,12 +334,17 @@ def _market_drivers(kind, game, card, snapshot, team_logs, ratings, injuries, ro
     return {'ours': ours, 'book': book, 'gap': gap, 'drivers': drivers, 'caution': caution}
 
 
+AGAINST = 'Against that: '
+
+
 def card_text(lead, drivers):
-    """The card's one or two sentences: the lead plus the top two supporting drivers that fit in 220 characters."""
-    picked = [d for d in drivers if d['direction'] > 0][:2]
+    """The card's sentences: the lead plus the two heaviest drivers that fit in 220 characters, whichever way they push.
+
+    A driver that argues against my number is printed as such, so a mixed picture never reads one-sided."""
+    picked = sorted(drivers, key=lambda d: (-abs(d['weight']), d['text']))[:2]
     summary = lead
     for driver in picked:
-        candidate = summary + ' ' + driver['text']
+        candidate = summary + ' ' + (driver['text'] if driver['direction'] > 0 else AGAINST + driver['text'])
         if len(candidate) <= CARD_TEXT:
             summary = candidate
     return summary if picked else None
