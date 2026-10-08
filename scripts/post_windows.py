@@ -6,6 +6,8 @@ EASTERN = ZoneInfo('America/New_York')
 LEAD = timedelta(minutes=45)
 SPACING = timedelta(minutes=10)
 SOON = timedelta(minutes=2)
+DISCORD_PLAY_LEAD = timedelta(minutes=15)
+DISCORD_DELIVERY_CADENCE = timedelta(minutes=5)
 
 
 def instant(value):
@@ -28,5 +30,12 @@ def target(league, kickoff):
     return opens(league, start)
 
 
+def delivery_ready(now):
+    """First ten-minute X slot that leaves time for the Discord-first delivery."""
+    earliest = instant(now).astimezone(timezone.utc) + DISCORD_PLAY_LEAD + DISCORD_DELIVERY_CADENCE + SOON
+    tick = int(SPACING.total_seconds())
+    return datetime.fromtimestamp(((int(earliest.timestamp()) + tick - 1) // tick) * tick, tz=timezone.utc)
+
+
 def reachable(league, kickoff, now, occupied=0):
-    return max(target(league, kickoff) + SPACING * occupied, instant(now) + SOON) <= instant(kickoff) - LEAD
+    return max(target(league, kickoff) + SPACING * occupied, delivery_ready(now)) <= instant(kickoff) - LEAD

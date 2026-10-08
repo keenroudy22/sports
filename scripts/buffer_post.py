@@ -52,8 +52,8 @@ BUFFER_NORMAL_LIMIT = 9              # keep the tenth place free for relabels an
 BUFFER_RESERVED = 3                  # preserve the final places for plays, relabels/reschedules and receipts
 BUFFER_OPTIONAL_AT = BUFFER_QUEUE - BUFFER_RESERVED
 BUFFER_ESSENTIAL = frozenset(('play', 'receipt', 'cashed'))
-DISCORD_PLAY_LEAD = timedelta(minutes=15)  # the five-minute delivery job makes plays land about 10-15 minutes before X
-DISCORD_DELIVERY_CADENCE = timedelta(minutes=5)
+DISCORD_PLAY_LEAD = post_windows.DISCORD_PLAY_LEAD  # one admission and scheduling window
+DISCORD_DELIVERY_CADENCE = post_windows.DISCORD_DELIVERY_CADENCE
 def card_url(card_key):
     """Where a post's card lives: a house card (menu, book) by its full address, a play's or a receipt's under
     data/cards/ by its key."""
@@ -273,9 +273,7 @@ def fit_limit(plans, remaining):
 
 def discord_first_due(now):
     """Next ten-minute X slot allowing a full Discord lead and one delivery tick."""
-    earliest = gates.when(now).astimezone(timezone.utc) + DISCORD_PLAY_LEAD + DISCORD_DELIVERY_CADENCE + SOON
-    tick = int(SPACING.total_seconds())
-    return datetime.fromtimestamp(((int(earliest.timestamp()) + tick - 1) // tick) * tick, tz=timezone.utc)
+    return post_windows.delivery_ready(now)
 
 
 def plan(first, latest, games, now, log_book, player_team=None, soon=None, quotes=None, refused=None, news=None):
@@ -315,7 +313,8 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
         league = merged.get('league') or (game or {}).get('league')
         if not post_windows.reachable(league, kickoff, now):
             if refused is not None:
-                refused.append((key, ['has no X window']))
+                refused.append((key, ['replacement has no last-look window'] if merged.get('replacementOf')
+                                     else ['has no X window']))
             continue
         now_quote = (quotes or {}).get(key)
         text = x_post.draft(merged, game, weights, now_quote=now_quote, featured=key == potd)

@@ -46,6 +46,17 @@ class WindowTests(unittest.TestCase):
             if kind in gates.RULES:
                 self.assertIn(gates.x_window,gates.RULES[kind])
 
+    def test_late_admission_needs_a_real_discord_first_slot(self):
+        p=pick('intl','NFL-intl',league='NFL')
+        late=datetime(2026,10,11,12,25,tzinfo=timezone.utc)
+        ctx=SimpleNamespace(now=late,games={'NFL-intl':GAME},first={},latest={})
+        self.assertEqual(bp.discord_first_due(late), datetime(2026,10,11,12,50,tzinfo=timezone.utc))
+        self.assertFalse(gates.x_window(p,ctx).ok)
+        refused=[]
+        with mock.patch.object(bp.receipts,'house_posts',return_value=[]):
+            self.assertEqual(bp.plan({'intl':p},{},ctx.games,late,{'posts':[]},refused=refused),[])
+        self.assertIn(('intl',['has no X window']),refused)
+
     def test_third_international_play_cannot_enter_a_two_slot_window(self):
         p=pick('third','NFL-intl',league='NFL')
         first={str(i):dict(p,id=str(i)) for i in range(2)}
