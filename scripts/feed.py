@@ -191,9 +191,9 @@ def card_items(first, latest, games, now, player_team=None, restored=()):
     for key, pick in first.items():
         merged = dict(pick, **latest.get(key, {}))
         if pick.get('historicalImport') or not postable(merged) or merged.get('result') \
-                or (merged.get('entryNote') and key not in restored):
+                or (merged.get('entryNote') and merged.get('status') != 'expired' and key not in restored):
             continue
-        if (merged.get('status') or 'active') != 'active' and key not in restored:
+        if (merged.get('status') or 'active') not in ('active', 'expired') and key not in restored:
             continue
         starts = sorted(games[g]['kickoff'] for g in (pick.get('gameIds') or []) if g in games)
         game = games.get((pick.get('gameIds') or [None])[0])

@@ -69,6 +69,9 @@ class FeedTests(unittest.TestCase):
         restored = feed.card_items(first, latest, tomorrow, early, restored={'closed'})
         self.assertEqual(sorted(i['guid'] for i in restored), ['closed', 'next', 'today'],
                          'a corrected delivery keeps its card through the next hosted build')
+        latest['closed'] = dict(latest['closed'], status='expired')
+        self.assertEqual(sorted(i['guid'] for i in feed.card_items(first, latest, tomorrow, early)),
+                         ['closed', 'next', 'today'], 'a future off-card play still has its public image')
 
     def test_the_posting_window_is_game_day_from_nine_until_45_minutes_out(self):
         kickoff = '2026-09-30T00:15Z'                                                     # Tuesday 8:15 PM ET
