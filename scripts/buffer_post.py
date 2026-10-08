@@ -42,8 +42,7 @@ from sports_refresh import eastern_date
 ROOT = Path(__file__).resolve().parents[1]
 API = 'https://api.buffer.com'
 CARDS = x_post.SITE + 'data/cards/'
-POST_AT = (12, 0)                    # Eastern: plays go out around midday on game day (the owner's call, 2026-09-24)
-EARLY_LEAD = timedelta(hours=2)      # a game before 2 PM posts two hours ahead of kickoff instead, never before 9:00 AM
+POST_AT = (9, 30)                    # Eastern game-day target; early international games retain 8:30
 SPACING = timedelta(minutes=10)      # between two posts
 SOON = timedelta(minutes=2)          # a post scheduled "now" goes out this far ahead
 ORDER = {'player': 0, 'team': 1, 'ladder': 2, 'parlay': 3}   # inside one kickoff: player props, game lines, the ladder, the parlay
@@ -277,9 +276,9 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     X gets plays and their receipts. Player props,
     game lines and the day's fun parlay use the same shape every time and always carry the card; the morning after,
     the receipt (scripts/receipts.py) goes at 9:00 AM ET,
-    ahead of that morning's plays; on Wednesday the week's receipt too. Plays go out around noon Eastern on game
-    day (a game before 2 PM posts two hours ahead of its kickoff, a parlay by its first leg; never before 9:00 AM),
-    player props first, then game lines, then the parlay, ten minutes apart. A play published later than its time goes out now, unless kickoff is inside
+    ahead of that morning's plays; on Wednesday the week's receipt too. Plays target 9:30 AM Eastern on game
+    day (8:30 for a kickoff before 10:30), Hot Plate first, then other plays ten minutes apart.
+    A play published later than its time uses the next safe Discord-first slot, unless kickoff is inside
     45 minutes. Posted, closed, settled and historical plays are left out.
     `soon` replaces the two-minute lead, for a person who wants time to look at the queue first. A post whose text
     fails its check is left out and, when `refused` is a list, named there with the problems, so it is never silent.
@@ -346,6 +345,11 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     for item in (news or [])[:news_room]:
         if item['key'] not in posted:
             plays.append((item['target'], -3, item['deadline'], item['key'], item['text'], 'news', None))
+    # Research follows the full morning play batch, even when the batch is longer than six posts.
+    latest_play_target = max((row[0] for row in plays if row[5] == 'play'), default=None)
+    if latest_play_target is not None:
+        plays = [(max(row[0], latest_play_target + SPACING), *row[1:]) if row[5] == 'research' else row
+                 for row in plays]
     plays.sort(key=lambda row: row)
     # The desk's own ceiling gets the same protection as Buffer's allowance. A research card is useful, but never
     # at the cost of a play, receipt or record post.

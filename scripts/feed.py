@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'site' / 'data' / 'feed.xml'
 CARDS = ROOT / 'site' / 'data' / 'cards'
 SITE = x_post.SITE
-WINDOW_OPENS = (9, 0)                # Eastern: no plays before 9:00 AM on game day
+WINDOW_OPENS = (9, 30)               # Eastern normal-game publication target; early games use post_windows.opens
 LEAD = timedelta(minutes=45)         # and none inside 45 minutes of kickoff
 RECAP_DAYS = 30
 TITLE = "Kook'n"
@@ -108,7 +108,7 @@ def postable(pick):
 
 
 def in_window(kickoff, now, league=None):
-    """Game day, Eastern, from 9:00 AM until 45 minutes before kickoff."""
+    """Game day, Eastern, from the owner-approved target until 45 minutes before kickoff."""
     start = gates.when(kickoff)
     local = now.astimezone(gates.EASTERN)
     if eastern_date(start) != local.date():

@@ -14,24 +14,18 @@ def instant(value):
 
 def international(league, kickoff):
     local = instant(kickoff).astimezone(EASTERN)
-    return league == 'NFL' and (local.hour, local.minute) == (9, 30)
+    return local.hour * 60 + local.minute < 10 * 60 + 30
 
 
 def opens(league, kickoff):
     local = instant(kickoff).astimezone(EASTERN)
-    hour, minute = (8, 30) if international(league, kickoff) else (9, 0)
+    hour, minute = (8, 30) if international(league, kickoff) else (9, 30)
     return local.replace(hour=hour, minute=minute, second=0, microsecond=0).astimezone(timezone.utc)
 
 
 def target(league, kickoff):
     start = instant(kickoff)
-    if international(league, start):
-        return opens(league, start)
-    local = start.astimezone(EASTERN)
-    if local.hour >= 19:
-        return local.replace(hour=18, minute=0, second=0, microsecond=0).astimezone(timezone.utc)
-    noon = start.astimezone(EASTERN).replace(hour=12, minute=0, second=0, microsecond=0)
-    return max(min(noon.astimezone(timezone.utc), start - timedelta(hours=2)), opens(league, start))
+    return opens(league, start)
 
 
 def reachable(league, kickoff, now, occupied=0):

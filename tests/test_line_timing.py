@@ -39,14 +39,14 @@ class TimingTests(unittest.TestCase):
         self.assertEqual(lt.post_time({'sentAt': '2026-09-26T16:00:05Z'}, kickoff), (gates.when('2026-09-26T16:00:05Z'), 'posted'))
         self.assertEqual(lt.post_time({'dueAt': '2026-09-26T16:10:00Z'}, kickoff)[1], 'scheduled')
         rule, kind = lt.post_time(None, kickoff)
-        self.assertEqual((rule.astimezone(gates.EASTERN).strftime('%a %H:%M'), kind), ('Sat 12:00', 'rule'))
+        self.assertEqual((rule.astimezone(gates.EASTERN).strftime('%a %H:%M'), kind), ('Sat 09:30', 'rule'))
         early, _ = lt.post_time(None, datetime(2026, 9, 26, 16, 0, tzinfo=timezone.utc))   # a noon kickoff
-        self.assertEqual(early.astimezone(gates.EASTERN).strftime('%H:%M'), '10:00', 'two hours ahead of an early game')
+        self.assertEqual(early.astimezone(gates.EASTERN).strftime('%H:%M'), '09:30', 'the game-day morning target')
 
     def test_the_summary_says_what_the_rule_says(self):
         row = lambda v: {'atPost': {'verdict': v, 'points': 1.0 if v == 'worse' else 0.0}}
-        self.assertIn('Post earlier', lt.summary([row('worse'), row('worse'), row('about the same')])['says'])
-        self.assertIn('Noon is fine', lt.summary([row('worse'), row('better'), row('about the same')])['says'])
+        self.assertIn('game-day morning target', lt.summary([row('worse'), row('worse'), row('about the same')])['says'])
+        self.assertIn('At post time', lt.summary([row('worse'), row('better'), row('about the same')])['says'])
         self.assertIn('Nothing to measure yet', lt.summary([{}])['says'])
 
     def test_a_post_still_to_come_is_not_measured(self):

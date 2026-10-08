@@ -61,13 +61,14 @@ class WindowTests(unittest.TestCase):
         self.assertEqual([p['id'] for p in book['posts'][7:]],['win','play'])
         self.assertEqual(len(book['posts']),9)
 
-    def test_normal_windows_and_morning_exceptions_keep_their_own_league(self):
-        self.assertEqual(W.target('NFL','2026-10-11T17:00:00Z'), datetime(2026,10,11,15,tzinfo=timezone.utc))
-        self.assertFalse(W.reachable('CFB', START, NOW), 'the international exception is NFL-only')
+    def test_normal_games_post_at_nine_thirty_and_early_games_at_eight_thirty(self):
+        self.assertEqual(W.target('NFL','2026-10-11T17:00:00Z'), datetime(2026,10,11,13,30,tzinfo=timezone.utc))
+        self.assertEqual(W.target('CFB','2026-10-10T23:00:00Z'), datetime(2026,10,10,13,30,tzinfo=timezone.utc))
+        self.assertEqual(W.target('CFB', START), datetime(2026,10,11,12,30,tzinfo=timezone.utc))
 
-    def test_games_at_seven_or_later_target_six_eastern(self):
-        self.assertEqual(W.target('NFL', '2026-10-09T00:15:00Z'), datetime(2026, 10, 8, 22, tzinfo=timezone.utc))
-        self.assertEqual(W.target('CFB', '2026-10-11T01:00:00Z'), datetime(2026, 10, 10, 22, tzinfo=timezone.utc))
+    def test_night_games_target_the_morning_of_game_day(self):
+        self.assertEqual(W.target('NFL', '2026-10-09T00:15:00Z'), datetime(2026, 10, 8, 13, 30, tzinfo=timezone.utc))
+        self.assertEqual(W.target('CFB', '2026-10-11T01:00:00Z'), datetime(2026, 10, 10, 13, 30, tzinfo=timezone.utc))
 
 
 if __name__=='__main__': unittest.main()

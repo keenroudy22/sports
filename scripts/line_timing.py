@@ -19,7 +19,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import buffer_post
+import post_windows
 import gates
 import x_post
 from sports_refresh import eastern_date
@@ -57,9 +57,7 @@ def post_time(entry, kickoff):
     for key, kind in (('sentAt', 'posted'), ('dueAt', 'scheduled')):
         if entry and entry.get(key):
             return gates.when(entry[key]), kind
-    day = eastern_date(kickoff)
-    noon = datetime(day.year, day.month, day.day, *buffer_post.POST_AT, tzinfo=gates.EASTERN).astimezone(timezone.utc)
-    return max(min(noon, kickoff - buffer_post.EARLY_LEAD), buffer_post.window_open(day)), 'rule'
+    return post_windows.target(None, kickoff), 'rule'
 
 
 def at_book(pick, ctx):
@@ -123,10 +121,10 @@ def summary(rows):
     if not measured:
         out['says'] = 'Nothing to measure yet: no capture was taken between a play going up and its post.'
     elif count['worse'] * 2 > len(measured):
-        out['says'] = (f"Waiting is costing us: {count['worse']} of {len(measured)} plays were worse by the time they posted. "
-                       f"Post earlier (about 10 AM).")
+        out['says'] = (f"{count['worse']} of {len(measured)} plays had a worse number or price by post time. "
+                       'The game-day morning target remains the owner rule.')
     else:
-        out['says'] = (f"Noon is fine: {count['worse']} of {len(measured)} plays were worse by the time they posted, "
+        out['says'] = (f"At post time, {count['worse']} of {len(measured)} plays were worse, "
                        f"{count['better']} better, the rest about the same.")
     return out
 

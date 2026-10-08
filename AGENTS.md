@@ -207,6 +207,16 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Game-day morning delivery (owner, 2026-10-08; item 38):** Every future official play,
+  ticket, Comfort Food combo and Climb rung targets 9:30 AM Eastern on its game day, with
+  the Hot Plate first and ten minutes between X posts. Plays & Results gets each about
+  10–15 minutes before X. A game kicking off before 10:30 AM Eastern retains the 8:30 AM
+  target; a play admitted after its morning target takes the next free slot at least 15
+  minutes after admission and before kickoff, preserving the Discord-first and hard-news
+  checks. The 9:00 AM receipt leads the normal batch; Prep List and other research follow
+  all morning plays. This replaces all older noon, two-hours-before and 6:00 PM play
+  targets in this file and `docs/POSTING-PLAYBOOK.md`. Do not rewrite existing queued or
+  already delivered posts without the normal reschedule safeguards.
 - **Calendar, game explanations and college navigator built (Claude, 2026-10-07; items 27, 28, 30):** the Record
   opens with the results calendar (best bets, fun tickets and Climb on separate ledgers, Eastern kickoff days,
   `core.js` record math unchanged); Games, game and team pages load from the lazy `app-games.js`; college Games

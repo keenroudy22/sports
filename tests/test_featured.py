@@ -132,11 +132,10 @@ class PostTests(unittest.TestCase):
             featured.save({'2026-09-26': {'id': 'b', 'chosenAt': '2026-09-26T10:45:00Z', 'edge': 5.4}}, path)
             with mock.patch.object(featured, 'PATH', path):
                 plans = [p for p in buffer_post.plan(first, latest, GAMES, NOW, {'posts': []}) if p[1] == 'play']
-        self.assertEqual([p[0] for p in plans], ['a', 'b'], 'a night-game POTD waits for six rather than jumping to noon')
-        self.assertFalse(plans[0][2].startswith('POTD'))
-        self.assertTrue(plans[1][2].startswith('🍳 Hot Plate (POTD): '), plans[1][2])
-        self.assertEqual(plans[1][3].astimezone(buffer_post.gates.EASTERN).hour, 18)
-        self.assertEqual((plans[0][4], plans[1][4]), ('a', 'b-potd'), 'its own card, so no stale copy is ever attached')
+        self.assertEqual([p[0] for p in plans], ['b', 'a'], 'the Hot Plate leads the morning batch even for a night game')
+        self.assertTrue(plans[0][2].startswith('🍳 Hot Plate (POTD): '), plans[0][2])
+        self.assertEqual(plans[0][3].astimezone(buffer_post.gates.EASTERN).strftime('%H:%M'), '09:30')
+        self.assertEqual((plans[0][4], plans[1][4]), ('b-potd', 'a'), 'its own card, so no stale copy is ever attached')
 
     def test_the_label_on_the_card(self):
         self.assertEqual(pick_card.kicker(play('a', 'g1'), featured=True), 'HOT PLATE (POTD) · GAME TOTAL')

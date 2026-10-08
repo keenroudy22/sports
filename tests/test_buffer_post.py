@@ -115,6 +115,26 @@ TICKET = dict(legs=[{'title': 'Iowa at Michigan over 38.5'}, {'title': 'Oklahoma
 
 
 class PlanTests(unittest.TestCase):
+    def test_iowa_friday_is_morning_and_research_waits_for_the_full_play_batch(self):
+        now = datetime(2026, 10, 9, 10, 45, tzinfo=timezone.utc)
+        game = {'iowa': {'id': 'iowa', 'league': 'CFB', 'kickoff': '2026-10-09T23:30:00Z',
+                         'home': {'short': 'Washington'}, 'away': {'short': 'Iowa'}}}
+        first = {f'p{i}': pick(f'p{i}', 'iowa', league='CFB') for i in range(8)}
+        house = [{'key': 'receipt:yesterday', 'kind': 'receipt', 'card': 'receipt-yesterday',
+                  'text': 'Yesterday: 1-0', 'due': datetime(2026, 10, 9, 13, tzinfo=timezone.utc),
+                  'stale': datetime(2026, 10, 9, 23, tzinfo=timezone.utc)},
+                 {'key': 'research:today', 'kind': 'research', 'card': 'research-today',
+                  'text': 'Research worth a look', 'due': datetime(2026, 10, 9, 14, 30, tzinfo=timezone.utc),
+                  'stale': datetime(2026, 10, 9, 23, tzinfo=timezone.utc)}]
+        with mock.patch.object(bp.receipts, 'house_posts', return_value=house), \
+                mock.patch.object(bp.x_post, 'draft', return_value='A checked play.'), \
+                mock.patch.object(bp.x_post, 'guard', return_value=[]):
+            plans = bp.plan(first, {}, game, now, {'posts': []})
+        self.assertEqual(et(plans[0][3]), '09:00')
+        play_times = [et(row[3]) for row in plans if row[1] == 'play']
+        self.assertEqual(play_times, ['09:30', '09:40', '09:50', '10:00', '10:10', '10:20', '10:30', '10:40'])
+        self.assertEqual(et(plans[-1][3]), '10:50')
+
     def test_replacement_ticket_waits_for_last_look_or_is_refused(self):
         original = pick('replacement', 'late', **TICKET)
         original['replacementOf'] = 'pulled-original'
@@ -130,19 +150,19 @@ class PlanTests(unittest.TestCase):
         self.assertNotIn('replacement', [row[0] for row in rows])
         self.assertIn(('replacement', ['replacement has no last-look window']), refused)
 
-    def test_plays_post_around_noon_or_two_hours_before_an_early_kickoff_players_then_teams_then_the_parlay(self):
+    def test_plays_post_at_nine_thirty_with_hot_plate_first_and_ten_minute_spacing(self):
         first = {'a': pick('a'), 'd': pick('d', title='Iowa at Michigan under 38.5', direction='under'),
                  'p': pick('p', **PROP), 'x': pick('x', gameIds=['noon', 'late'], **TICKET),
                  'b': pick('b', 'late', title='Oklahoma at Georgia under 44.5', direction='under'), 'c': pick('c', 'tomorrow')}
         latest = {k: dict(v) for k, v in first.items()}
         plans = bp.plan(first, latest, GAMES, NOW, {'posts': []})
         self.assertEqual([(p[0], et(p[3])) for p in plans],
-                         [('p', '10:00'), ('a', '10:10'), ('d', '10:20'), ('x', '10:30'), ('b', '18:00')],
-                         'no menu or teaser; night games wait for the 6 PM window')
+                         [('p', '09:30'), ('a', '09:40'), ('d', '09:50'), ('b', '10:00'), ('x', '10:10')],
+                         'plays lead the morning, regardless of kickoff hour')
         plans = [p for p in plans if p[1] == 'play']
         self.assertTrue(all(p[4] == p[0] for p in plans), 'each play with its own card')
         self.assertTrue(plans[0][2].startswith('Player Seven over 4.5 receptions (-115, '), plans[0][2])
-        self.assertTrue(plans[3][2].startswith('🎰 +'), 'a fun parlay leads with its price')
+        self.assertTrue(plans[4][2].startswith('🎰 +'), 'a fun parlay leads with its price')
 
     def test_no_prompt_sits_between_plays_even_on_a_multi_play_day(self):
         first = {'a': pick('a'), 'b': pick('b', 'late', title='Oklahoma at Georgia under 44.5', direction='under')}
@@ -159,9 +179,9 @@ class PlanTests(unittest.TestCase):
         self.assertEqual([p[0] for p in bp.plan(first, latest, GAMES, late_now, {'posts': []})], ['b'])
         evening = datetime(2026, 9, 26, 21, 0, tzinfo=timezone.utc)         # 5:00 PM ET, after the 4:30 PM slot
         plans = bp.plan(first, latest, GAMES, evening, {'posts': []})
-        self.assertEqual([(p[0], p[3]) for p in plans], [('b', datetime(2026, 9, 26, 22, tzinfo=timezone.utc))])
+        self.assertEqual([(p[0], p[3]) for p in plans], [('b', bp.discord_first_due(evening))])
         self.assertEqual(bp.plan(first, latest, GAMES, evening, {'posts': []}, soon=timedelta(minutes=20))[0][3],
-                         datetime(2026, 9, 26, 22, tzinfo=timezone.utc))
+                         bp.discord_first_due(evening))
 
     def test_a_play_whose_stored_reason_has_numbers_is_still_scheduled(self):
         import tempfile
@@ -215,11 +235,11 @@ class SpacingTests(unittest.TestCase):
         latest = {k: dict(v) for k, v in first.items()}
         eleven = datetime(2026, 9, 26, 15, 58, tzinfo=timezone.utc)       # 11:58 AM ET
         plans = bp.plan(first, latest, GAMES, eleven, {'posts': queued})
-        self.assertEqual([(p[0], et(p[3])) for p in plans], [('a', '18:00'), ('b', '18:10')],
-                         'the queue and retired extras do not move night plays before six')
+        self.assertEqual([(p[0], et(p[3])) for p in plans], [('a', '13:00'), ('b', '13:10')],
+                         'late-admitted plays preserve Discord lead and avoid queued slots')
         cancelled = [dict(q, cancelledAt='2026-09-26T14:00:00Z') if q['id'] == 'q2' else q for q in queued]
         plans = bp.plan(first, latest, GAMES, eleven, {'posts': cancelled})
-        self.assertEqual([et(p[3]) for p in plans], ['18:00', '18:10'], 'a cancelled post does not pull night plays earlier')
+        self.assertEqual([et(p[3]) for p in plans], ['12:20', '13:00'], 'a cancelled slot may be reused, without crowding another queued post')
         already = queued + [{'id':'climb:checkin:2026-09-26', 'kind':'buffer:book', 'dueAt':'2026-09-26T15:50:00Z'}]
         self.assertFalse(any(p[0].startswith('climb:checkin:') for p in bp.plan(first, latest, GAMES, eleven, {'posts':already})))
 

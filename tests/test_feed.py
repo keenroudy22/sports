@@ -9,6 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import feed
 
 NOW = datetime(2026, 9, 29, 13, 0, tzinfo=timezone.utc)       # Tuesday 9:00 ET
+POST_NOW = datetime(2026, 9, 29, 13, 30, tzinfo=timezone.utc) # Tuesday 9:30 ET
 GAMES = {'g-live': {'id': 'g-live', 'league': 'NFL', 'kickoff': '2026-09-30T00:15Z', 'home': {'short': 'Lions'}, 'away': {'short': 'Bills'}},   # Tuesday 8:15 PM ET
          'g-done': {'id': 'g-done', 'league': 'NFL', 'kickoff': '2026-09-27T17:00Z', 'home': {'short': 'Jets'}, 'away': {'short': 'Giants'}}}
 
@@ -45,7 +46,7 @@ class FeedTests(unittest.TestCase):
                  'kicked': pick('kicked', gameIds=['g-done'])}
         latest = {k: dict(v) for k, v in first.items()}
         latest['closed']['entryNote'] = 'closed'
-        items = feed.pick_items(first, latest, GAMES, NOW)
+        items = feed.pick_items(first, latest, GAMES, POST_NOW)
         self.assertEqual(sorted(i['guid'] for i in items), ['early', 'fav', 'lean', 'ticket'])
         ticket = next(i for i in items if i['guid'] == 'ticket')
         self.assertTrue(ticket['title'].startswith("Chef's Special +650: 2 legs at DraftKings"), ticket['title'])
@@ -54,7 +55,7 @@ class FeedTests(unittest.TestCase):
         self.assertIn('#pick/lean', lean['link'])
         self.assertIn('I have it at 48.', lean['text'])
         early = next(i for i in items if i['guid'] == 'early')
-        self.assertEqual(early['pubDate'].isoformat(), '2026-09-29T13:00:00+00:00', 'dated when its window opened, not when it was published')
+        self.assertEqual(early['pubDate'].isoformat(), '2026-09-29T13:30:00+00:00', 'dated when its window opened, not when it was published')
 
     def test_every_open_play_gets_a_card_before_its_window(self):
         tomorrow = dict(GAMES, **{'g-next': {'id': 'g-next', 'league': 'NFL', 'kickoff': '2026-10-01T00:15Z', 'home': {'short': 'Lions'}, 'away': {'short': 'Bills'}}})
@@ -73,10 +74,11 @@ class FeedTests(unittest.TestCase):
         self.assertEqual(sorted(i['guid'] for i in feed.card_items(first, latest, tomorrow, early)),
                          ['closed', 'next', 'today'], 'a future off-card play still has its public image')
 
-    def test_the_posting_window_is_game_day_from_nine_until_45_minutes_out(self):
+    def test_the_posting_window_is_game_day_from_nine_thirty_until_45_minutes_out(self):
         kickoff = '2026-09-30T00:15Z'                                                     # Tuesday 8:15 PM ET
         self.assertFalse(feed.in_window(kickoff, datetime(2026, 9, 29, 12, 59, tzinfo=timezone.utc)), '8:59 AM ET is too early')
-        self.assertTrue(feed.in_window(kickoff, datetime(2026, 9, 29, 13, 0, tzinfo=timezone.utc)), '9:00 AM ET opens it')
+        self.assertFalse(feed.in_window(kickoff, datetime(2026, 9, 29, 13, 0, tzinfo=timezone.utc)))
+        self.assertTrue(feed.in_window(kickoff, POST_NOW), '9:30 AM ET opens it')
         self.assertTrue(feed.in_window(kickoff, datetime(2026, 9, 29, 23, 30, tzinfo=timezone.utc)), '45 minutes before is the last moment')
         self.assertFalse(feed.in_window(kickoff, datetime(2026, 9, 29, 23, 31, tzinfo=timezone.utc)), 'inside 45 minutes is too late')
         self.assertFalse(feed.in_window(kickoff, datetime(2026, 9, 28, 20, 0, tzinfo=timezone.utc)), 'the day before is not game day')
@@ -100,7 +102,7 @@ class FeedTests(unittest.TestCase):
         self.assertEqual(feed.scoreboard_item(scoreboard, NOW + timedelta(days=3))['guid'], 'scoreboard:week:2026-09-29', 'the week keeps its Tuesday')
 
     def test_rss_is_well_formed_and_carries_the_card(self):
-        items = feed.pick_items({'lean': pick('lean')}, {'lean': pick('lean')}, GAMES, NOW)
+        items = feed.pick_items({'lean': pick('lean')}, {'lean': pick('lean')}, GAMES, POST_NOW)
         import tempfile
         with tempfile.TemporaryDirectory() as folder:
             card = Path(folder) / 'lean.png'

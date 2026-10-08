@@ -401,11 +401,11 @@
     {
       "id": "P45",
       "title": "Kitchen Ticket card art v2",
-      "status": "gated",
+      "status": "shipped",
       "owner": "agent",
-      "next": "After the green 11:30 PM desk run, use the approved 11:45 PM quiet-window automation for an explicit-offset TICKET_FROM cutover if its full gates pass; otherwise keep the season-free felt bridge or hold both.",
+      "next": "Keep posted attachments immutable and verify the first sent post's cardTheme and any player-photo fallback; the separate Prep List posting path remains queued under the posting playbook.",
       "doneWhen": "Real reviewed renders have record-equivalent units, no season or helpline strip, fit and size checks pass, and an explicit-offset cutover preserves posted art.",
-      "evidence": "Owner approved CARDS-V2-HANDOFF.md October 7; CHEF_CLIP and ORDER_UP on. Claude's CARDS-V2-REVIEW-2.md approved all real preview categories for cutover, with two copy nits now fixed in the private rerender. TICKET_FROM remains unset; no new public card has been switched."
+      "evidence": "Claude approved six real renders in CARDS-V3-REVIEW.md. Release 6dc3ebca passed hosted 37795541437 with TICKET_FROM=2026-10-08T12:00:00-04:00. TK King's earlier PNG kept its SHA-256. Release 5e61eddc (hosted 37806752440) rendered five future-play Kitchen Tickets live; guard 7052dbe6 (hosted 37808251104) holds any new image post without a live ticket marker. First actual X ticket-art delivery remains to be observed. Full hashes and live URLs: docs/PRODUCT-IMPLEMENTATION.md."
     },
     {
       "id": "P46",

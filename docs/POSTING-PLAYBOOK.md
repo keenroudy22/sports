@@ -1,5 +1,13 @@
 # Kook'n posting playbook, v3 (2026-10-07)
 
+**October 8 owner timing override (item 38):** Every new official play, ticket, Comfort Food
+and Climb rung targets 9:30 AM Eastern on game day, Hot Plate first and ten minutes apart.
+Discord is 10–15 minutes ahead. A kickoff before 10:30 AM keeps an 8:30 AM target;
+late-admitted plays take the next safe slot at least 15 minutes after admission and
+before kickoff. The 9:00 receipt leads the normal batch, then plays, then Prep List
+and other research. This replaces every noon/two-hours-before/6 PM play time below;
+the older example schedule is retained as historical context only.
+
 **Authority:**
 - The owner asked for "exactly what post it should do and when and how to get engagement".
 - Then: "You tell me", "Do whatever you need to do", "get it all done".
