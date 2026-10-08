@@ -53,6 +53,7 @@ BUFFER_RESERVED = 3                  # preserve the final places for plays, rela
 BUFFER_OPTIONAL_AT = BUFFER_QUEUE - BUFFER_RESERVED
 BUFFER_ESSENTIAL = frozenset(('play', 'receipt', 'cashed'))
 DISCORD_PLAY_LEAD = timedelta(minutes=15)  # the five-minute delivery job makes plays land about 10-15 minutes before X
+DISCORD_DELIVERY_CADENCE = timedelta(minutes=5)
 def card_url(card_key):
     """Where a post's card lives: a house card (menu, book) by its full address, a play's or a receipt's under
     data/cards/ by its key."""
@@ -270,6 +271,13 @@ def fit_limit(plans, remaining):
     return sorted(chosen, key=lambda plan: plan[3])
 
 
+def discord_first_due(now):
+    """Next ten-minute X slot allowing a full Discord lead and one delivery tick."""
+    earliest = gates.when(now).astimezone(timezone.utc) + DISCORD_PLAY_LEAD + DISCORD_DELIVERY_CADENCE + SOON
+    tick = int(SPACING.total_seconds())
+    return datetime.fromtimestamp(((int(earliest.timestamp()) + tick - 1) // tick) * tick, tz=timezone.utc)
+
+
 def plan(first, latest, games, now, log_book, player_team=None, soon=None, quotes=None, refused=None, news=None):
     """The posts the run should schedule now: [(key, kind, text, due_at, card_key)].
 
@@ -367,6 +375,8 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     out, last, busy, counts = [], None, taken(log_book, now), {}
     for target, _, deadline, key, text, kind, card in plays:
         due = max(target, now + soon)
+        if kind == 'play':
+            due = max(due, discord_first_due(now))
         if last is not None:
             due = max(due, last + SPACING)
         due = free_slot(due, busy)

@@ -2360,9 +2360,13 @@ def requote(entry, pick, game, ctx, now, log=log):
         return False
     channel = buffer_post.x_channel(wanted='keenkooks')
     card = buffer_post.card_url(entry.get('cardKey') or entry['id']) if entry.get('card') else None
+    due = max(gates.when(entry['dueAt']), buffer_post.discord_first_due(now))
+    if game.get('kickoff') and due > gates.when(game['kickoff']) - post_windows.LEAD:
+        log(f"precheck: {entry['id']} cannot move its X time and keep the Discord lead before kickoff")
+        return False
     # The new post first, then the old one out: a failed create leaves the post as scheduled, and a failed delete
     # takes the new one back, so the play goes out once either way.
-    new_id = buffer_post.create_post(text, channel['id'], gates.when(entry['dueAt']), card)
+    new_id = buffer_post.create_post(text, channel['id'], due, card)
     try:
         buffer_post.delete_post(entry['bufferPostId'])
     except buffer_post.BufferError:
@@ -2372,11 +2376,13 @@ def requote(entry, pick, game, ctx, now, log=log):
             alert('KeenRoudy post may go out twice', f"{entry['id']}: both {entry['bufferPostId']} and {new_id} are scheduled; delete one in Buffer")
         raise
     entry['bufferPostId'] = new_id
+    entry['dueAt'] = stamp(due)
     entry['textHash'] = x_post.text_hash(text)
     entry['requotedAt'] = stamp(now)
     mirror = entry.get('discord') or {}
     if mirror.get('state') == 'pending':
         mirror['text'] = buffer_post.without_playbook(text)
+        mirror['readyAt'] = stamp(max(now, due - buffer_post.DISCORD_PLAY_LEAD))
         if card:
             mirror['image'] = card
         entry['discord'] = mirror
