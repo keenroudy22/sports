@@ -490,7 +490,7 @@ def kicker(pick, featured=False):
         return f"80/20 CLIMB · STEP {(pick.get('ladder') or {}).get('step', 1)}"
     label = play_label(pick)
     if featured:
-        return f'PICK OF THE DAY · {label}'
+        return f'HOT PLATE (POTD) · {label}'
     return f'{label} · FAVORITE' if pick.get('favorite') is True and play_kind(pick) != 'parlay' else label
 
 
@@ -945,9 +945,9 @@ def modern_svg(pick, game=None, record=None, when=None, player_side=None, identi
 <defs><linearGradient id="modern-bg" x2="1" y2="1"><stop stop-color="{theme['bg']}"/><stop offset="1" stop-color="{theme['bg2']}"/></linearGradient><linearGradient id="portrait-fade" x2="0" y2="1"><stop stop-color="{theme['bg']}" stop-opacity="0"/><stop offset="1" stop-color="{theme['bg']}"/></linearGradient></defs>
 <rect width="1080" height="1350" fill="url(#modern-bg)"/><path d="M800 0L1080 0L1080 530L470 530Z" fill="{accent}" opacity=".06"/>
 {PAN.format(x=48,y=50,s=.45,c=accent)}<text x="115" y="86" fill="{ink}" font-size="34" font-weight="850" letter-spacing="5">KOOK’N</text>
-<text x="1024" y="84" fill="{dim}" font-size="21" text-anchor="end" letter-spacing="3">SPORTS / THE CARD</text>
+<text x="1024" y="84" fill="{dim}" font-size="21" text-anchor="end" letter-spacing="3">THE LINE</text>
 {picture}<rect x="540" y="430" width="540" height="85" fill="url(#portrait-fade)"/>
-{lines('PICK OF THE DAY' if featured else play_label(pick),56,170,490,23,accent)}
+{lines('HOT PLATE (POTD)' if featured else play_label(pick),56,170,490,23,accent)}
 {lines(name,56,254,475,name_size,ink,850,max_lines=3)}
 <path d="M56 522H1024" stroke="{accent}" stroke-width="3"/>
 <g data-zone="selection">{lines(selection,56,660,970,main_size,accent,900,max_lines=1)}{lines(market,60,728,940,38,ink,max_lines=1)}</g>
@@ -958,9 +958,9 @@ def modern_svg(pick, game=None, record=None, when=None, player_side=None, identi
 <rect x="536" y="886" width="488" height="215" rx="20" fill="{theme['row']}" stroke="{theme['edge']}"/>
 <text x="562" y="927" fill="{dim}" font-size="20" letter-spacing="3">OUR NUMBER</text>
 {lines(number_line(pick) or 'No projection shown',562,984,426,31,ink,max_lines=3)}
-<text x="56" y="1202" fill="{ink}" font-size="28" font-weight="750">More on the board.</text>
+<text x="56" y="1202" fill="{ink}" font-size="28" font-weight="750">Every play graded in public.</text>
 <text x="56" y="1252" fill="{accent}" font-size="27" font-weight="700">keenroudy.com/sports</text>
-<text x="56" y="1304" fill="{dim}" font-size="19">21+ · Entertainment only · Prices move</text>
+<text x="56" y="1304" fill="{dim}" font-size="19">21+ · Entertainment only</text>
 </svg>'''
 
 
@@ -1017,8 +1017,8 @@ def receipt_svg(receipt, avatar=None):
     if len(rows) > len(shown):
         body.append(f'<text x="540" y="{top + row_h * len(shown) + 18}" fill="{soft}" font-size="21" text-anchor="middle">+ {len(rows) - len(shown)} more graded on the site</text>')
     if single:
-        hero = 'CLEAN PLATE.' if wins and not losses else 'BACK TO WORK.' if losses and not wins else 'THE HONEST RECEIPT.'
-        sub = 'The win is on the record. Next play waits for its spot.' if wins and not losses else 'The miss is on the record. Next play starts fresh.'
+        hero = 'ALL GREEN.' if wins and not losses else 'BACK TO WORK.' if losses and not wins else 'THE RECEIPT.'
+        sub = 'The win is on the record.' if wins and not losses else 'The miss is on the record.' if losses and not wins else 'Every result stays on the record.'
         body += [
             f'<rect x="56" y="838" width="968" height="154" rx="24" fill="{accent}" fill-opacity=".10" stroke="{accent}" stroke-opacity=".55" stroke-width="3"/>',
             f'<text x="88" y="903" fill="{accent}" font-size="54" font-weight="950" letter-spacing="-1">{hero}</text>',

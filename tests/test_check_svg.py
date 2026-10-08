@@ -1,0 +1,47 @@
+import sys
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
+import check_svg
+import pick_card
+import ticket_card
+
+
+ROW = ('win', 'TK King over 49.5 receiving yards', '64 receiving yards', 'player')
+
+
+class CardCopyTests(unittest.TestCase):
+    def test_visible_nodes_only_and_retired_words_are_rejected(self):
+        svg = '<svg><image href="data:image/png;base64,PLATES"/><text>21+ · Entertainment only</text><text>keenroudy.com/sports</text></svg>'
+        self.assertEqual(check_svg.issues(svg), [])
+        self.assertTrue(check_svg.issues(svg.replace('<text>keenroudy.com/sports</text>', '<text>NO HIDING</text>')))
+
+    def test_legacy_and_felt_receipts_keep_clean_public_copy(self):
+        for result in ('win', 'loss', 'push'):
+            receipt = {'title': '1-0' if result == 'win' else '0-1', 'when': 'Thursday, Oct 8',
+                       'rows': [(result, ROW[1], ROW[2], ROW[3])]}
+            for felt in (False, True):
+                with self.subTest(result=result, felt=felt), patch.object(pick_card, 'felt_enabled', return_value=felt):
+                    self.assertEqual(check_svg.issues(pick_card.receipt_svg(receipt)), [])
+        six = {'title': '3-3', 'when': 'Saturday, Oct 10', 'rows':
+               [('win' if i % 2 else 'loss', f'Player {i} over 49.5 yards', '64 yards', 'player') for i in range(6)]}
+        for felt in (False, True):
+            with self.subTest(six=felt), patch.object(pick_card, 'felt_enabled', return_value=felt):
+                self.assertEqual(check_svg.issues(pick_card.receipt_svg(six)), [])
+
+    def test_kitchen_play_and_final_have_approved_footer_and_words(self):
+        game = {'league': 'CFB', 'kickoff': '2026-10-09T23:00:00Z',
+                'away': {'id': '1', 'abbreviation': 'IOWA'}, 'home': {'id': '2', 'abbreviation': 'WASH'}}
+        pick = {'id': 'sample', 'title': 'Iowa at Washington over 41.5', 'marketType': 'total',
+                'direction': 'over', 'line': 41.5, 'odds': -110, 'book': 'DraftKings', 'riskUnits': 1}
+        with patch.object(pick_card, 'fetch_data_uri', return_value=None):
+            svg = ticket_card.straight_svg(pick, game)
+        self.assertEqual(check_svg.issues(svg), [])
+        final = ticket_card.final_svg([dict(pick, result='win', actual='Iowa 24, Washington 22', units=0.91)], '2026-10-09')
+        self.assertEqual(check_svg.issues(final), [])
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -93,7 +93,7 @@ def windows(games, now, count, free_at=None):
 
 def window_label(window):
     if not window:
-        return 'NO WINDOW YET', ''
+        return 'NO SLATE YET', ''
     instant = window['first'].astimezone(ET)
     day = f'{instant:%a}'.upper() + f' {instant.month}/{instant.day}'
     if instant.hour == 12 and instant.minute == 0:
@@ -210,7 +210,7 @@ def _row(card, cy, kind, row, window, ink, soft):
         svg += card.text(x, cy + 44 * CAP / 2, day, 44, ink)
         svg += card.text(x + width(day, 44) + 12, cy + 40 * CAP / 2, clock, 40, soft)
     else:
-        svg += card.text(TAG_X, cy + 40 * CAP / 2, 'NO WINDOW YET', 40, soft, tracking=1)
+        svg += card.text(TAG_X, cy + 40 * CAP / 2, 'NO SLATE YET', 40, soft, tracking=1)
     real = {'cashed': ('bet', 'cashes', 'bank'), 'open': ('bet', 'cashes', 'bank'),
             'next': ('bet',)}.get(kind, ())
     for _, right, size, key in COLS:
@@ -272,7 +272,7 @@ def climb_route(state, now, games, fixture=False):
             height = BAR_HEAD + pitch + BAR_PAD
             inner += (f'<rect x="{X1 - 10}" y="{y + 4}" width="{X2 - X1 + 20}" height="{height - 6}" '
                       f'rx="12" fill="{NIGHT}"/>')
-            words = ('NEXT · BEING CHECKED · NOT POSTED YET' if kind == 'next'
+            words = ('NEXT · NOT POSTED YET' if kind == 'next'
                      else f'OPEN · POSTED AT {kit.price(row["odds"])} · NOT SETTLED YET')
             inner += card.text(X1 + 2, y + 50, words, 40, CHALK, tracking=1)
             inner += _row(card, y + BAR_HEAD + pitch / 2 + 4, kind, row, window, CHALK, DIM)

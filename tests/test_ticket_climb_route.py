@@ -72,6 +72,12 @@ class RouteTests(unittest.TestCase):
         self.assertEqual(route.window_label({'first': datetime(2026, 11, 2, 0, tzinfo=timezone.utc)}),
                          ('SUN 11/1', '7 PM'))
 
+    def test_window_label_names_kickoff_not_a_scan_clock(self):
+        window = {'first': datetime(2026, 10, 10, 19, 0, tzinfo=timezone.utc),
+                  'scan': datetime(2026, 10, 10, 13, 30, tzinfo=timezone.utc)}
+        self.assertEqual(route.window_label(window), ('SAT 10/10', '3 PM'))
+        self.assertEqual(route.window_label(None), ('NO SLATE YET', ''))
+
     def test_invalid_tbd_and_finished_kickoffs_are_excluded(self):
         slate = frozen_slate()
         slate['games'] += [{'id': 'tbd', 'league': 'CFB', 'kickoff': '2026-10-08T00:00Z',
