@@ -150,6 +150,19 @@ class FeedTests(unittest.TestCase):
                 feed.restore_posted_cards(folder, {'old-play-potd'}, fetch=lambda url: (_ for _ in ()).throw(OSError('offline')))
             self.assertFalse(path.exists(), 'an unavailable original never becomes a new-template render')
 
+    def test_card_build_only_restores_confirmed_attachments_it_will_use(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as folder:
+            with mock.patch.object(feed, 'restore_posted_cards') as restore, \
+                    mock.patch('pick_card.chrome_path', return_value=None):
+                self.assertEqual(feed.render_cards([], folder, posted_keys={'old-play'}), {})
+                restore.assert_called_once_with(folder, set())
+            with mock.patch.object(feed, 'restore_posted_cards', side_effect=RuntimeError('missing original')) as restore:
+                with self.assertRaisesRegex(RuntimeError, 'missing original'):
+                    feed.render_cards([{'guid': 'current-play', 'pick': {}}], folder,
+                                      posted_keys={'old-play', 'current-play'})
+                restore.assert_called_once_with(folder, {'current-play'})
+
 
 if __name__ == '__main__':
     unittest.main()

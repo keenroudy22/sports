@@ -233,8 +233,13 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
     """A PNG per pick item, when a browser is on the machine. Returns {guid: path}."""
     import pick_card
     import ticket_card
+    items = list(items)
     posted_keys = set(posted_keys)
-    restore_posted_cards(folder, posted_keys)
+    # The post log outlives the feed's card window. A historical attachment that this
+    # build will not render or publish does not need to be fetched from a URL that may
+    # have expired. Still fail closed for every confirmed card this build *will* use.
+    needed_posted_keys = posted_keys & {item.get('guid') for item in items}
+    restore_posted_cards(folder, needed_posted_keys)
     if not pick_card.chrome_path():
         log('no browser for cards; the feed goes out without images')
         return {}
