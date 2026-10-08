@@ -530,10 +530,7 @@ def house_posts(first, latest, games, log_book, now):
     # Wednesday's ordinary slate research slot.
     research_already = research_posts.already_posted(log_book, research.get('countsFor', eastern_date(now))
                                                      if research else eastern_date(now))
-    # The owner requested one additional, game-specific TNF research post on Oct 8.
-    # Its distinct key remains deduplicated by Buffer; no later date gains a second slot.
-    owner_tnf = bool(research and research['key'] == 'research:end-zone:tnf:2026-10-08')
-    if research and research['stale'] > now and (owner_tnf or not research_already):
+    if research and research['stale'] > now and not research_already:
         out.append(research)
     import sports_posts
     sports = sports_posts.post(now)
