@@ -1,11 +1,20 @@
 {
-  "updatedAt": "2026-10-08T20:47:52Z",
+  "updatedAt": "2026-10-08T20:58:26Z",
   "leagues": {
     "NFL": {
       "teams": {
         "22": {
           "name": "Arizona Cardinals",
           "players": [
+            {
+              "id": "4870808",
+              "name": "Jeremiyah Love",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-08T20:42Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4870808/jeremiyah-love"
+            },
             {
               "id": "4428633",
               "name": "Dadrion Taylor-Demerson",
@@ -32,15 +41,6 @@
               "injury": "Ankle",
               "reportedAt": "2026-10-08T00:38Z",
               "source": "https://www.espn.com/nfl/player/_/id/5084939/isaiah-adams"
-            },
-            {
-              "id": "4870808",
-              "name": "Jeremiyah Love",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-08T00:35Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4870808/jeremiyah-love"
             },
             {
               "id": "3127287",
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-08T20:34Z",
+              "reportedAt": "2026-10-08T20:44Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1426,8 +1426,8 @@
               "id": "3116748",
               "name": "B.J. Hill",
               "position": "DT",
-              "status": "Active",
-              "injury": null,
+              "status": "Questionable",
+              "injury": "Achilles",
               "reportedAt": "2026-10-08T00:27Z",
               "source": "https://www.espn.com/nfl/player/_/id/3116748/bj-hill"
             },
@@ -1435,8 +1435,8 @@
               "id": "5092508",
               "name": "Colbie Young",
               "position": "WR",
-              "status": "Questionable",
-              "injury": "Knee",
+              "status": "Active",
+              "injury": null,
               "reportedAt": "2026-10-07T23:05Z",
               "source": "https://www.espn.com/nfl/player/_/id/5092508/colbie-young"
             },
@@ -4498,7 +4498,7 @@
               "name": "Dante Trader Jr.",
               "position": "S",
               "status": "Questionable",
-              "injury": "Knee",
+              "injury": "Shin",
               "reportedAt": "2026-10-05T23:45Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431664/dante-trader-jr"
             },
@@ -5067,6 +5067,15 @@
           "name": "New Orleans Saints",
           "players": [
             {
+              "id": "4360689",
+              "name": "Tyler Shough",
+              "position": "QB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-08T20:37Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4360689/tyler-shough"
+            },
+            {
               "id": "3054850",
               "name": "Alvin Kamara",
               "position": "RB",
@@ -5146,15 +5155,6 @@
               "injury": "Abdomen",
               "reportedAt": "2026-10-07T20:52Z",
               "source": "https://www.espn.com/nfl/player/_/id/4036131/noah-fant"
-            },
-            {
-              "id": "4360689",
-              "name": "Tyler Shough",
-              "position": "QB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-07T20:45Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4360689/tyler-shough"
             },
             {
               "id": "4698597",
@@ -6965,7 +6965,7 @@
               "name": "Tony Pollard",
               "position": "RB",
               "status": "Questionable",
-              "injury": "Foot",
+              "injury": null,
               "reportedAt": "2026-10-07T20:51Z",
               "source": "https://www.espn.com/nfl/player/_/id/3916148/tony-pollard"
             },
@@ -7367,22 +7367,6 @@
       "changes": [
         {
           "teamId": "17",
-          "name": "Craig Woodson",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-07T22:24:26Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4428930/craig-woodson"
-        },
-        {
-          "teamId": "17",
-          "name": "Morgan Moses",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-07T22:24:26Z",
-          "source": "https://www.espn.com/nfl/player/_/id/16771/morgan-moses"
-        },
-        {
-          "teamId": "17",
           "name": "Dre'Mont Jones",
           "from": "Active",
           "to": "Questionable",
@@ -7764,11 +7748,27 @@
           "to": "Active",
           "observedAt": "2026-10-08T20:47:52Z",
           "source": "https://www.espn.com/nfl/player/_/id/4690923/ben-sinnott"
+        },
+        {
+          "teamId": "4",
+          "name": "B.J. Hill",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-08T20:58:26Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3116748/bj-hill"
+        },
+        {
+          "teamId": "4",
+          "name": "Colbie Young",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-08T20:58:26Z",
+          "source": "https://www.espn.com/nfl/player/_/id/5092508/colbie-young"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-08T20:47:52Z",
-      "lastAttemptAt": "2026-10-08T20:47:52Z",
+      "checkedAt": "2026-10-08T20:58:26Z",
+      "lastAttemptAt": "2026-10-08T20:58:26Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-08T20:47:52Z",
-      "lastAttemptAt": "2026-10-08T20:47:52Z",
+      "checkedAt": "2026-10-08T20:58:26Z",
+      "lastAttemptAt": "2026-10-08T20:58:26Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
