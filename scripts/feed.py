@@ -41,10 +41,12 @@ PNG = b'\x89PNG\r\n\x1a\n'
 
 
 def posted_card_keys(log_book):
-    """Card filenames already attached to confirmed X posts; these bytes must survive every later build."""
+    """Card filenames already attached to confirmed X or Discord posts."""
     keys = set()
     for entry in log_book.get('posts') or []:
-        if not isinstance(entry, dict) or not entry.get('card') or not entry.get('sentAt'):
+        if not isinstance(entry, dict) or not entry.get('card'):
+            continue
+        if not (entry.get('sentAt') or (entry.get('discord') or {}).get('sentAt')):
             continue
         key = entry.get('cardKey') or entry.get('id')
         if isinstance(key, str) and re.fullmatch(r'[A-Za-z0-9_.:-]+', key):

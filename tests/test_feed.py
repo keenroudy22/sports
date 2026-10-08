@@ -128,11 +128,13 @@ class FeedTests(unittest.TestCase):
         import tempfile
         posts = {'posts': [
             {'id': 'old-play', 'cardKey': 'old-play-potd', 'card': True, 'sentAt': '2026-10-07T16:00:05Z'},
+            {'id': 'discord-first', 'cardKey': 'discord-first', 'card': True,
+             'discord': {'state': 'sent', 'sentAt': '2026-10-08T15:01:00Z'}},
             {'id': 'queued', 'cardKey': 'queued', 'card': True},
             {'id': 'house', 'cardKey': 'https://keenroudy.com/sports/img/house.png', 'card': True,
              'sentAt': '2026-10-07T16:00:05Z'},
         ]}
-        self.assertEqual(feed.posted_card_keys(posts), {'old-play-potd'})
+        self.assertEqual(feed.posted_card_keys(posts), {'old-play-potd', 'discord-first'})
         original = feed.PNG + b'original published art' * 8
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / 'old-play-potd.png'
