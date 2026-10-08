@@ -43,3 +43,7 @@ test('Today\'s restored rows meet the 14 px floor and research rows stack on a p
   assert.match(css, /\.kt-worth \.row-main \{ grid-template-columns: minmax\(0, 1fr\) auto; grid-template-areas: 'title title' 'price price' 'meter meter' 'edge fair';/, 'stacked at every width (the right column is narrow at 1440)');
   assert.match(css, /\.kt-worth \.lbl \{ position: static;/, 'labels stay visible beside the numbers');
 });
+
+test('the Climb stub has breathing room below the first ticket', () => {
+  assert.match(css, /\.kt-climb\s*\{\s*margin-top:\s*22px\s*;/);
+});
