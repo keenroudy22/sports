@@ -893,7 +893,7 @@
     const done = Math.max(0, Math.min(4, (c.step || 1) - 1));
     const state = c.open ? `Step ${c.open.step || c.step} is live` : 'Not posted yet';
     const n = c.settled || 0;
-    const aside = `${c.last && c.last.result === 'win' && !c.open ? `Step ${c.last.step || c.step - 1} cashed. ` : ''}${c.saved ? `<strong>${money(c.saved)} banked.</strong> ` : ''}${n ? `Net ${signedMoney(c.net)} over ${WORDS[n] || n} step${n === 1 ? '' : 's'}. ` : ''}<a href="#record/climb">${n ? `All ${WORDS[n] || n} step${n === 1 ? '' : 's'} ›` : 'How the Climb works ›'}</a>`;
+    const aside = `${c.last && c.last.result === 'win' && !c.open ? `Step ${c.last.step || c.step - 1} cashed. ` : ''}${c.saved ? `<strong>${money(c.saved)} banked.</strong> ` : ''}${n ? `Net ${signedMoney(c.net)} over ${WORDS[n] || n} step${n === 1 ? '' : 's'}. ` : ''}<a href="#record/climb">See the route ›</a>`;
     return `<section class="kt-sec kt-climb" aria-labelledby="climb-h"><h2 class="sr" id="climb-h">The 80/20 Climb</h2>
       <a class="kt-stub" href="#record/climb" aria-label="80/20 Climb number ${esc(c.run)}, step ${esc(c.step)}, ${esc(money(c.riding))}. ${esc(state)}.">
       <span class="kt-stub-chip"><span class="kt-pchip"><b>${money(c.riding)}</b></span></span><span class="kt-stub-main"><span class="kt-stub-e">80/20 Climb #${esc(c.run)}</span>
@@ -1826,7 +1826,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-52571ea2ee3c';
+  const MORE_ASSET = 'app-more.js?v=sha256-cb077e3df99d';
   const GAMES_ASSET = 'app-games.js?v=sha256-83fbc87918bc';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,

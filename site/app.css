@@ -635,3 +635,17 @@ details.filters > .toolbar { margin-top: 4px; }
 @media (min-width: 1000px) { .kt-today { display: grid; grid-template-columns: minmax(0, 440px) minmax(0, 1fr); gap: 0 64px; align-items: start; }
   .kt-today .kt-tickets { grid-template-columns: minmax(0, 420px); } .kt-today > div:last-child > :first-child { margin-top: 0; } }
 .kt-order > .kt-stamp { z-index: 6; right: -4px; top: 34px; transform: rotate(7deg); }
+.climb-route { margin: 22px 0; max-width: 640px; }
+.climb-route-art { display: block; width: 100%; height: auto; border-radius: 12px; }
+.climb-route h2 { margin: 20px 0 4px; }
+.climb-route-steps { display: grid; gap: 10px; margin-top: 16px; }
+.climb-route-step { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: var(--felt-night); }
+.climb-route-step.cashed { border-left: 4px solid var(--kookd); }
+.climb-route-step.plan { opacity: .75; }
+.climb-route-head { display: flex; flex-wrap: wrap; gap: 4px 12px; justify-content: space-between; align-items: baseline; }
+.climb-route-head b { font: 700 20px/1.1 var(--font-display); text-transform: uppercase; }
+.climb-route-head span, .climb-route-step p { color: var(--dim); font-size: 13px; }
+.climb-route-step p { margin: 8px 0 0; }
+.climb-route-legs { display: grid; gap: 4px; margin-top: 10px; }
+.climb-route-legs a { display: block; padding: 8px 0; overflow-wrap: anywhere; }
+.climb-route-bank { margin: 14px 0; font-weight: 700; }

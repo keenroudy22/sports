@@ -113,6 +113,14 @@ def leg_times(pick):
     return min(times), max(times)
 
 
+def public_legs(pick):
+    """Actual posted legs, linked to their immutable rung's play page."""
+    return [{'title': leg.get('title') or leg.get('selection') or '',
+             'odds': leg.get('odds'), 'book': leg.get('book') or pick.get('book'),
+             'href': f"#pick/{pick['id']}"}
+            for leg in pick.get('legs') or []]
+
+
 def from_stores(stores, now):
     """Read ladder.state over gates.Stores().as_of(now), never today.json."""
     ctx = stores.as_of(now)
@@ -131,7 +139,8 @@ def from_stores(stores, now):
         cashed.append({'step': int(rung['step']), 'bet': int(rung['stake']),
                        'cashes': cashes, 'bank': banked - before, 'banked': banked,
                        'ride': int(rung.get('nextStake') or ladder.split_return(cashes)[1]),
-                       'league': pick['league'], 'first': first, 'last': last, 'id': rung['id']})
+                       'league': pick['league'], 'first': first, 'last': last, 'id': rung['id'],
+                       'legs': public_legs(pick)})
     cashed.sort(key=lambda row: row['step'])
     opened = None
     if state['open']:
@@ -145,7 +154,8 @@ def from_stores(stores, now):
                   'first': first, 'last': last, 'odds': pick['odds'], 'bet': stake,
                   'cashes': cashes, 'bank': int(info.get('bankThisWin') if info.get('bankThisWin') is not None else bank),
                   'banked': int(info.get('bankedAfter') if info.get('bankedAfter') is not None else state['banked'] + bank),
-                  'ride': int(info.get('nextStake') if info.get('nextStake') is not None else ride)}
+                  'ride': int(info.get('nextStake') if info.get('nextStake') is not None else ride),
+                  'legs': public_legs(pick)}
     missed = next((rung for rung in reversed(state['history']) if rung.get('result') == 'loss'
                    and int(rung.get('run') or 0) == state['run'] - 1), None)
     return {'run': int(state['run']), 'step': int(state['step']), 'stake': int(state['stake']),
@@ -177,6 +187,21 @@ def route_rows(state, now, games):
     rows.extend((kind, row, available[i] if i < len(available) else None)
                 for i, (kind, row) in enumerate(zip(kinds, plan)))
     return rows
+
+
+def public_route(state, now, games):
+    """Small companion to the PNG; real dollars stay real and plan dollars stay labeled."""
+    rows = []
+    for kind, row, window in route_rows(state, now, games):
+        day, clock = window_label(window)
+        rows.append({'kind': kind, 'step': row['step'], 'league': (window or {}).get('league'),
+                     'day': day, 'clock': clock, 'bet': row['bet'], 'cashes': row['cashes'],
+                     'bank': row['bank'], 'banked': row['banked'], 'ride': row['ride'],
+                     'id': row.get('id'), 'legs': row.get('legs') or [],
+                     'plannedAt': 'typical -160' if kind in ('next', 'plan') else None})
+    return {'run': state['run'], 'step': state['step'], 'saved': state['saved'],
+            'banked': state['banked'], 'stake': state['stake'], 'planOdds': PLAN_ODDS,
+            'goal': GOAL, 'rows': rows, 'image': 'data/cards/climb-route.png'}
 
 
 DISC_CX, DISC_R = X1 + 22, 22

@@ -94,7 +94,9 @@ class RouteTests(unittest.TestCase):
                     'league': 'CFB', 'odds': -150, 'status': 'active',
                     'ladder': {'run': 1, 'step': 1, 'stake': 50, 'payout': 83, 'banked': 0,
                                'bankedAfter': 17, 'nextStake': 66},
-                    'legs': [{'kickoff': '2026-10-08T23:00Z'}, {'kickoff': '2026-10-09T00:30Z'}]},
+                    'legs': [{'kickoff': '2026-10-08T23:00Z', 'title': 'Iowa +4.5', 'odds': -120,
+                              'book': 'FanDuel'}, {'kickoff': '2026-10-09T00:30Z', 'title': 'Under 52.5',
+                                                  'odds': -110, 'book': 'FanDuel'}]},
             'open': {'id': 'open', 'parlayType': 'ladder', 'publishedAt': '2026-10-09T01:00Z',
                      'league': 'CFB', 'odds': -173, 'status': 'active',
                      'ladder': {'run': 1, 'step': 2, 'stake': 66, 'payout': 104,
@@ -115,10 +117,26 @@ class RouteTests(unittest.TestCase):
         self.assertEqual(state['cashed'][0]['bank'], 17)
         self.assertEqual(state['cashed'][0]['first'], route.when('2026-10-08T23:00Z'))
         self.assertEqual(state['cashed'][0]['last'], route.when('2026-10-09T00:30Z'))
+        self.assertEqual(state['cashed'][0]['legs'][0]['href'], '#pick/win')
+        self.assertEqual(state['cashed'][0]['legs'][0]['title'], 'Iowa +4.5')
         self.assertEqual(state['open']['bet'], 66)
         self.assertEqual(state['open']['cashes'], 104)
         self.assertEqual(state['open']['first'], route.when('2026-10-09T23:00Z'))
         self.assertEqual(route.route_rows(state, NOW, games)[-1][1]['planned'], True)
+        public = route.public_route(state, NOW, games)
+        self.assertEqual(public['image'], 'data/cards/climb-route.png')
+        self.assertEqual(public['rows'][0]['kind'], 'cashed')
+        self.assertEqual(public['rows'][0]['bet'], 50)
+        self.assertEqual(public['rows'][0]['cashes'], 83)
+        self.assertEqual(public['rows'][0]['legs'][0]['href'], '#pick/win')
+        self.assertEqual(public['rows'][1]['kind'], 'open')
+        self.assertEqual(public['rows'][2]['plannedAt'], 'typical -160')
+        with TemporaryDirectory() as folder:
+            path, rendered_state, rendered_rows = route.render(Path(folder) / 'climb-route.png', NOW, stores)
+            self.assertTrue(path.is_file())
+            self.assertEqual(path.read_bytes()[:8], b'\x89PNG\r\n\x1a\n')
+            self.assertEqual(rendered_state['saved'], public['saved'])
+            self.assertEqual(len(rendered_rows), len(public['rows']))
 
     def test_open_fixture_uses_real_minus_173_not_typical_price(self):
         opened, instant = route.fixture_states(NOW, self.games)['open']

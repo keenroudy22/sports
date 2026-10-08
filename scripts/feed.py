@@ -382,6 +382,8 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
                          recent_posted_keys=posted_card_keys(post_log, now - timedelta(days=8)),
                          render_time=now) if with_cards else {}
     if with_cards:
+        import ticket_climb_route
+        ticket_climb_route.render(Path(cards_folder) / 'climb-route.png', now, stores)
         import sheet          # the weekly projections sheet on its league's day, from the page payloads just built
         cards.update(sheet.render_due(now, cards_folder, log=log))
         import research_posts # at most one evidence-first research card for the current slate

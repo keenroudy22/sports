@@ -50,7 +50,7 @@ for (const width of widths) {
       return {width:innerWidth,scrollWidth:document.documentElement.scrollWidth,bad,clipped,title:document.querySelector('h1')?.textContent,error};
     })()`);
     results.push({route,...result});
-    if(['today','schedule','scores/MLB','stats','trends'].includes(route) && [375,1440].includes(width)) {
+    if(['today','schedule','scores/MLB','stats','trends','record/climb'].includes(route) && [375,1440].includes(width)) {
       const shot = await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
       fs.writeFileSync(`${out}/${route.replaceAll('/','-')}-${width}.png`,Buffer.from(shot.data,'base64'));
     }

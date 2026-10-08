@@ -283,6 +283,7 @@
   views.record = async route => {
     const tab = route.tab || 'official';
     const [today, board, lab, trials, every] = await Promise.all([get('app/today.json'), maybe('scoreboard.json'), tab === 'trials' ? maybe('market-lab.json') : null, tab === 'trials' ? maybe('app/sport-research.json') : null, allPicks()]);
+    const climbRoute = tab === 'climb' ? (await get('app/record.json')).climbRoute : null;
     indexGames(today);
     const all = every.filter(inLeague);
     const archive = C.recordArchive(all, state.record.season, state.record.phase);
@@ -365,7 +366,18 @@
       const lad = C.theLadder(every);
       const acc = lad.accounting;
       const money = n => `$${Math.round(Number(n) || 0).toLocaleString('en-US')}`;
-      return `${top}${tabs}<div class="kpis"><div class="kpi"><small>Current climb</small><b class="num">#${esc(lad.run)} · step ${esc(lad.step)}</b><span>${money(lad.banked + lad.stake)} of $1,000</span></div><div class="kpi"><small>Steps</small><b class="num">${esc(acc.wins)}–${esc(acc.losses)}</b><span>won–lost</span></div><div class="kpi"><small>Banked so far</small><b class="num">${money(lad.saved)}</b><span>across every climb · stays banked after a miss</span></div><div class="kpi"><small>Best climb</small><b class="num">${money(lad.best)}</b><span>highest bank + ride</span></div>
+      const routeHtml = climbRoute ? `<section id="route" class="climb-route" aria-label="Current 80/20 Climb route">
+        <img class="climb-route-art" src="${esc(climbRoute.image)}?v=${esc(String((today || {}).generatedAt || '').replace(/\W/g, ''))}" alt="Current 80/20 Climb route map, with completed steps and a clearly labeled plan" loading="lazy">
+        <h2>Climb #${esc(climbRoute.run)} · the route</h2>
+        <p class="small muted">Real steps are shown with their posted numbers. Future steps are a plan at a typical −160, not posted plays.</p>
+        <div class="climb-route-steps">${(climbRoute.rows || []).map(row => {
+          const real = row.kind === 'cashed' || row.kind === 'open';
+          const stateText = row.kind === 'cashed' ? '✓ Cashed' : row.kind === 'open' ? 'Open · not settled' : row.kind === 'next' ? 'Next step · not posted yet' : 'Plan · typical −160';
+          const legs = real ? `<div class="climb-route-legs">${(row.legs || []).map((leg, i) => `<a href="${esc(leg.href || '#record/climb')}">${esc(leg.title || `Leg ${i + 1}`)}${leg.odds != null ? ` · ${esc(oddsText(leg.odds))}` : ''}${leg.book ? ` · ${esc(bookLabel(leg.book))}` : ''} ›</a>`).join('')}</div>` : '';
+          return `<div class="climb-route-step ${esc(row.kind)}"><div class="climb-route-head"><b>Step ${esc(row.step)} · ${esc(stateText)}</b><span>${esc(row.league || '')} ${esc(row.day || '')} ${esc(row.clock || '')}</span></div>
+            <p>${esc(money(row.bet))} bet → ${esc(money(row.cashes))} cashes · ${esc(money(row.bank))} banked${real ? '' : ' if it wins'}</p>${legs}</div>`;
+        }).join('')}</div><p class="climb-route-bank">$1,000 flag · ${esc(money(climbRoute.saved))} banked across all climbs</p></section>` : '';
+      return `${top}${tabs}${routeHtml}<div class="kpis"><div class="kpi"><small>Current climb</small><b class="num">#${esc(lad.run)} · step ${esc(lad.step)}</b><span>${money(lad.banked + lad.stake)} of $1,000</span></div><div class="kpi"><small>Steps</small><b class="num">${esc(acc.wins)}–${esc(acc.losses)}</b><span>won–lost</span></div><div class="kpi"><small>Banked so far</small><b class="num">${money(lad.saved)}</b><span>across every climb · stays banked after a miss</span></div><div class="kpi"><small>Best climb</small><b class="num">${money(lad.best)}</b><span>highest bank + ride</span></div>
         <div class="kpi"><small>Wagered</small><b class="num">${money(acc.wagered)}</b><span>returned ${money(acc.returned)}</span></div><div class="kpi"><small>Net</small><b class="num ${acc.net < 0 ? 'red' : 'green'}">${acc.net < 0 ? '−' : '+'}${money(Math.abs(acc.net))}</b><span>lifetime, in dollars</span></div></div>
         <div class="card" style="margin-top:14px"><p>Bank 20% of every winning return and ride 80% on the next step. A miss ends the climb and starts a new $50 one; banked money stays banked. A new step is never guaranteed.</p>${lad.open ? `<p class="small" style="margin-top:6px">A step is open now. <a href="#today">See Today</a>.</p>` : '<p class="small muted" style="margin-top:6px">Next step: not posted yet. A step goes only when two legs in two different games clear my checks.</p>'}</div>
         ${section('Past steps', `<div class="receipts">${lad.history.slice().reverse().map(climbRow).join('') || '<p class="muted">No settled steps yet.</p>'}</div>`, '', `The Climb keeps its own run history and spans NFL and college legs, so it is shown whole; changing the season view does not change an active run.${lad.climbs.length ? ` Climbs finished: ${lad.climbs.length}.` : ''}`)}`;

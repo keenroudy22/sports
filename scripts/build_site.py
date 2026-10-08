@@ -1771,7 +1771,11 @@ def build(now=None):
     import featured as featured_store     # the day's Pick of the Day, whose card feed.py draws under its -potd name
     write(OUT / 'today-hero.json', today_hero(picks, now, featured_store.of_day(eastern_date(now).isoformat()),
                                               ticket_teams))
-    write(OUT / 'record.json', {'generatedAt': stamp(now), 'picks': [{**pick, 'card': record_card(pick)} for pick in picks]})
+    import ticket_climb_route  # ladder/gates use build_site constants; import after this module is initialized
+    route_state, route_games = ticket_climb_route.from_stores(ticket_climb_route.gates.Stores(), now)
+    write(OUT / 'record.json', {'generatedAt': stamp(now),
+                                'picks': [{**pick, 'card': record_card(pick)} for pick in picks],
+                                'climbRoute': ticket_climb_route.public_route(route_state, now, route_games)})
     generated = stamp(now)
     line_index = line_payload.manifest(lines, generated)
     write(OUT / 'lines.json', line_index)

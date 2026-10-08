@@ -39,10 +39,18 @@ test('the real app shared interface renders every lazy view with fixture data', 
     watchlist: [], ticket: [], stake: { amount: 1, mode: 'units', unit: 20 },
     arb: { first: 150, second: -130, bankroll: 100 },
   });
-  const today = { games: [], picks: [], freshness: {}, health: [] };
+  const today = { games: [], picks: [], freshness: {}, health: [], generatedAt: '2026-10-08T18:00:00Z' };
+  const routeFixture = { climbRoute: { run: 3, step: 2, saved: 42,
+    image: 'data/cards/climb-route.png', rows: [
+      { kind: 'cashed', step: 1, league: 'CFB', day: 'THU 10/8', clock: '7 PM',
+        bet: 50, cashes: 81, bank: 16, legs: [{ title: 'Iowa +4.5', odds: -110,
+          book: 'FanDuel', href: '#pick/real-rung' }] },
+      { kind: 'next', step: 2, league: 'NFL', day: 'SUN 10/11', clock: '1 PM',
+        bet: 65, cashes: 106, bank: 21, legs: [] },
+    ] } };
   const team = { id: '1', name: 'Fixture Team', abbr: 'FIX', color: '#123456', games: [], defense: [] };
   const context = api.moreContext({
-    get: async () => today,
+    get: async path => path === 'app/record.json' ? routeFixture : today,
     maybe: async path => path === 'app/teams/CFB/1.json' ? team
       : path === 'app/players/CFB.json' ? { season: 2026, players: [] }
       : path === 'scoreboard.json' ? { picks: { rows: [] } } : null,
@@ -56,6 +64,7 @@ test('the real app shared interface renders every lazy view with fixture data', 
   const cases = [
     ['record', views.record, { tab: 'official' }],
     ['fun', views.record, { tab: 'fun' }],
+    ['climb', views.record, { tab: 'climb' }],
     ['start', views.start, {}],
     ['saved', views.saved, {}],
     ['ticket', views.ticket, {}],
@@ -78,4 +87,9 @@ test('the real app shared interface renders every lazy view with fixture data', 
     assert.match(html, /<h1/, name);
     assert.doesNotMatch(html, /Something did not load|is not defined/, name);
   }
+  const climbHtml = await views.record({ tab: 'climb' });
+  assert.match(climbHtml, /climb-route\.png/);
+  assert.match(climbHtml, /#pick\/real-rung/);
+  assert.match(climbHtml, /Next step · not posted yet/);
+  assert.match(climbHtml, /typical −160/);
 });
