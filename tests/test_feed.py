@@ -183,6 +183,16 @@ class FeedTests(unittest.TestCase):
             self.assertTrue(any('older posted card unavailable' in note for note in notes))
             render.assert_not_called()
 
+    def test_recent_referenced_receipt_is_protected_but_unreferenced_history_is_not_fetched(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as folder, \
+                mock.patch.object(feed, 'restore_posted_cards') as restore, \
+                mock.patch('pick_card.chrome_path', return_value=None):
+            feed.render_cards([{'guid': 'receipt-day-2026-10-07', 'receipt': {}}], folder,
+                              posted_keys={'receipt-day-2026-10-07', 'recent-unreferenced', 'expired-play'},
+                              recent_posted_keys={'receipt-day-2026-10-07', 'recent-unreferenced'})
+            restore.assert_called_once_with(folder, {'receipt-day-2026-10-07'})
+
 
 if __name__ == '__main__':
     unittest.main()

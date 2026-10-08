@@ -242,8 +242,8 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
     import ticket_card
     items = list(items)
     posted_keys = set(posted_keys)
-    # Keep the retry URL live for eight days. Older posted art is immutable too, but
-    # an expired archive must not fail a new build or be regenerated under a new theme.
+    # Only recent images still referenced by this build retain an eight-day site URL.
+    # An expired or unreferenced archive is never fetched or regenerated under a new theme.
     recent_posted_keys = posted_keys if recent_posted_keys is None else set(recent_posted_keys)
     needed_posted_keys = posted_keys & recent_posted_keys & {item.get('guid') for item in items}
     restore_posted_cards(folder, needed_posted_keys)

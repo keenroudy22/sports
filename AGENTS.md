@@ -77,7 +77,10 @@ this file remains the authority when a summary and rule disagree.
   Plays & Results gets posted plays only, with the same words and card, about 10-15 minutes before X. Wins and
   near-miss bad beats go to #wins-and-bad-beats via `DISCORD_WINS_WEBHOOK_URL`; losses appear only in the end-of-slate
   Final on X. Nothing else mirrors to Plays & Results. Image cards are uploaded so an old message cannot lose its
-  art when generated site files roll forward; recent receipt URLs also stay live for eight days as a retry fallback.
+  art when generated site files roll forward. The eight-day site-image guarantee applies only to recent receipts
+  and cards still referenced by the site (owner, 2026-10-08). Older missing art outside that set is logged and
+  skipped: never regenerate a posted attachment, fetch from an expired URL, or fail a build over a historical
+  card the site no longer references. A recent referenced image must retain its original bytes or fail closed.
   Once Discord publishes a play it is public and stays in the record. A
   hard-news pull before X gets a Discord update and cancels X, but never erases the play. The webhook stays in
   `~/.config/keenroudy/env`, never the repo or a log. Arb alerts are explicitly not official plays and may go only
