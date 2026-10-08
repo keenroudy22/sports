@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-08T00:52:13Z",
+  "updatedAt": "2026-10-08T00:55:00Z",
   "items": [
     {
       "id": "P01",
@@ -603,7 +603,16 @@
       "owner": "agent",
       "next": "Finish tested game context fields from existing stores, then apply Claude's Games view series and check Saturday's slate at 375 and 1440 pixels.",
       "doneWhen": "College games sort deterministically by checked bettability, filters combine, score gaps are plain words, 21-point prop flags appear, and NFL retains kickoff order with badges.",
-      "evidence": "Owner-delegated decision 30 dated 2026-10-07; CFB-NAVIGATOR-SPEC.md. Data-side implementation in progress on dev, not released."
+      "evidence": "Owner-delegated decision 30 dated 2026-10-07; CFB-NAVIGATOR-SPEC.md. Data-side implementation committed on dev at 5f361868; not released."
+    },
+    {
+      "id": "P68",
+      "title": "Today information restored with no fold",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Apply Claude's packaged today-restore series after the owner's release approval; run the full gates and check live Today at 375 and 1440 px.",
+      "doneWhen": "Hosted publish passes and live Today shows the unchanged first screen, then every restored section without a tap, with no overflow, console error or caught load state.",
+      "evidence": "Owner October 7 request after P61. Built and gated in a clone (branch today-restore-final on dev aadbaa4a); not yet released."
     }
   ]
 }

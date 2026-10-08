@@ -74,7 +74,11 @@ Climb variant is retired: it built no rung in 26 stored opportunities.
 - last slate's result: W-L in the date line, then the slips with margins on the spike;
 - the top 3 Prep List lines: one short scroll down.
 
-Everything else is one tap away. The Codex weekly improvement task gets two jobs:
+Owner update (2026-10-07, after the Kitchen Ticket release): nothing else is behind a tap either. Below
+the unchanged first screen come the season line, every other open best bet, Leftovers, the Prep List,
+Underdog watch, Research worth a look, today's games, Fun / Pulled / Off the card, the Discord card and
+More sports, with no "More for today" fold. On a long card the Prep List follows the best bets and
+Leftovers rather than sitting one scroll down. The Codex weekly improvement task gets two jobs:
 - **It ships one small site tweak a week aimed at this,** verified at 375 and 1440 px.
 - **It keeps a speed budget:** Today's best bets visible in ≤ 2 s on a cold phone load. Measure it in the live check; a regression of over 20% blocks the release.
 

@@ -967,3 +967,15 @@ Damante/Egbuka live recheck; P56 still needs the Upset Watch live threshold chec
 Claude approved the separate Climb route preview in `CLIMB-ROUTE-REVIEW.md`; this website release
 does not enable route delivery or change the 11:45 PM Kitchen Ticket card cutover. P59 tracks
 that separately.
+
+## October 7 Today information restore — built, not released
+
+After the Kitchen Ticket release the owner asked for the old Today's information back without a
+tap, keeping the look. Branch `today-restore` (built on dev at `deff0104`, packaged on dev `aadbaa4a`) removes the "More for
+today" fold and restores, in the order the AGENTS.md no-fold rule records: the season line, every
+other open best bet as a ticket, Leftovers with units, the rolling Prep List, Underdog watch,
+Research worth a look, today's games with live and projected scores, Fun / Pulled / Off the card,
+the Discord card and More sports, plus each ticket's countdown and share-card link. ORDER UP now
+needs a live price (an expired quote never wears it), one limit sentence reads the same on every
+ticket, the season record rides only the first ticket, and Today's research rows stack at phone
+width. P68 tracks the release; it is not shipped until a gated deploy and a live 375/1440 check.

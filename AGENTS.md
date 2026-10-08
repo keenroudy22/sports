@@ -215,6 +215,17 @@ Handy commands (from `~/Projects/sports`):
 - **Today restoration (owner, 2026-10-07, item 24):** keep the Kitchen Ticket first screen but restore the
   owner-requested information on Today without a closed fold. Claude owns the tested site-view series. This
   supersedes the closed-fold wording below; the private desk timing rule supersedes its old next-run copy.
+- **Today's information back, no fold (owner, 2026-10-07, item 24 detail):** keep the Kitchen
+  Ticket look and its unchanged first screen, and put back on Today, visible without a tap, what the old Today
+  showed. Order: the first best bet, the Climb stub, the season line (W-L and units at posted prices, Every
+  result), every other open best bet as a ticket (today, then later this week), Leftovers with the day's units,
+  the Prep List (rolling to the next football game day once today's rows kick off), Underdog watch (research,
+  outright upsets apart from spread covers, honest empty state), Research worth a look (top three price-checked
+  main lines), today's games with live and projected scores, Fun tickets / Pulled / Off the card when non-empty,
+  the Discord card and More sports. At 1000 px and wider, best bets fill the left column and the rest the right.
+  Only the Climb's past steps and each upset's why stay small folds. ORDER UP shows only while the posted price is
+  live. This supersedes "More for today starts closed" and "Prep List one scroll below" in item 22 and the
+  Underdog Watch fold placement; every hold, label and record rule stays.
 - **80/20 Climb route card (owner, 2026-10-07; OWNER-DECISIONS item 23):** the dated version of the
   explicitly labeled Climb map. It ties each step to a real 2+ game, one-league window at existing scans,
   shows real ledger rows, and shows future rows only as the plan at a typical −160. One route post per new
@@ -224,11 +235,12 @@ Handy commands (from `~/Projects/sports`):
 - **Kitchen Ticket website (owner, 2026-10-07; OWNER-DECISIONS item 22):** Today, the play page and the player page
   use the approved design/site mockups. Fair price and edge live on `#pick/<id>`; the Today ticket keeps price and
   book, my chance vs what the price needs (one decimal, hidden when uncalibrated), the now/good-to line, WHY, BUT, the
-  hit strip and the season record. WHY/BUT (saved words, verbatim or a named template),
+  hit strip and the season record. *(Fold superseded 2026-10-07: no "More for today" fold.)* WHY/BUT (saved words, verbatim or a named template),
   Prep List rows (playbook section 7 plus every hold), recentFull, the date line's W-L and each play's
   hold and quote are chosen in `build_site.py`. A held market reads Under review everywhere: no now/good-to line,
   projection, chance or edge. No streak line; core.js record math unchanged. At 375x812 with no scroll: the first
-  best bet, the Climb stub and the last game day's W-L; Prep List one scroll below.
+  best bet, the Climb stub and the last game day's W-L; the Prep List follows the best bets and Leftovers
+  (superseded 2026-10-07 by the no-fold rule above).
 - **Exact-line price sanity (owner, 2026-10-07; audit A-24):** new official straight plays require
   both sides priced at the listed book's exact line. A one-sided player number may remain labeled
   research, never a best bet. A two-sided price pair's implied chances must sum to 0.99–1.15;
@@ -720,8 +732,8 @@ Handy commands (from `~/Projects/sports`):
   dog, exact-line Matchup Menu, or End-zone Work. Every card and post says research, not an official play; it uses
   only current stored prices/evidence, becomes optional before queue limits, and mirrors to Discord only after X.
   Hard Rock remains comparison-only and never appears on the editorial research post. *(Placement superseded
-  2026-10-07 by DIRECTION-RULES section 5: Underdog Watch now sits one tap away in Today's "More for today"
-  fold, empty state included.)*
+  2026-10-07 by the no-fold Today rule: Underdog Watch is its own visible Today research section, empty
+  state included.)*
 - **Live progress shadow (2026-10-02):** the five-minute mirror job silently observes already-public football
   plays with one free ESPN summary per game. It is capped at eight games, records source time, early crossings,
   close calls, corrections and finals in `~/.config/keenroudy/live-watch.json`, and makes no odds or model call.
