@@ -1,9 +1,9 @@
 {
  "leagues": {
   "MLB": {
-   "gamesGraded": 15,
-   "gamesQuoted": 19,
-   "moneylineSnapshots": 72,
+   "gamesGraded": 16,
+   "gamesQuoted": 20,
+   "moneylineSnapshots": 74,
    "seasons": [
     {
      "gamesGraded": 13,
@@ -12,20 +12,20 @@
      "season": 2026
     },
     {
-     "gamesGraded": 2,
-     "gamesQuoted": 6,
+     "gamesGraded": 3,
+     "gamesQuoted": 7,
      "phase": "playoffs",
      "season": 2026
     }
    ],
-   "snapshots": 72,
+   "snapshots": 74,
    "status": "capturing",
-   "totalSnapshots": 72
+   "totalSnapshots": 74
   },
   "NHL": {
    "gamesGraded": 48,
    "gamesQuoted": 61,
-   "moneylineSnapshots": 229,
+   "moneylineSnapshots": 237,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -40,12 +40,38 @@
      "season": 2027
     }
    ],
-   "snapshots": 229,
+   "snapshots": 237,
    "status": "capturing",
-   "totalSnapshots": 229
+   "totalSnapshots": 237
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "CLE",
+    "id": "5",
+    "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/cle.png",
+    "name": "Cleveland Guardians",
+    "shortName": "Guardians"
+   },
+   "awayScore": 9,
+   "gameId": "MLB-401907992",
+   "gradedAt": "2026-10-08T01:00:03Z",
+   "home": {
+    "abbreviation": "CHW",
+    "id": "4",
+    "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/chw.png",
+    "name": "Chicago White Sox",
+    "shortName": "White Sox"
+   },
+   "homeScore": 3,
+   "kickoff": "2026-10-07T20:00:00Z",
+   "league": "MLB",
+   "season": 2026,
+   "seasonType": "post-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "FLA",
@@ -1633,5 +1659,5 @@
    "type": "grade"
   }
  ],
- "updatedAt": "2026-10-07T23:23:28Z"
+ "updatedAt": "2026-10-08T01:00:03Z"
 }
