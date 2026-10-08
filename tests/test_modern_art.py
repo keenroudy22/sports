@@ -11,7 +11,7 @@ class ModernArtTests(unittest.TestCase):
         pick={'id':'preview','title':'Player Name UNDER 4.5 receptions','athleteId':'1','market':'rec','direction':'under','line':4.5,'projection':3.2,'odds':-110,'book':'FanDuel'}
         card=P.modern_svg(pick,featured=True,art={'kind':'photo','uri':'data:image/png;base64,TEST'})
         ET.fromstring(card)
-        for word in ('Player Name','UNDER 4.5','receptions','-110','FanDuel','We project 3.2','PICK OF THE DAY'): self.assertIn(word,card)
+        for word in ('Player Name','UNDER 4.5','receptions','-110','FanDuel','We project 3.2','HOT PLATE (POTD)'): self.assertIn(word,card)
         self.assertNotIn('clip-path="url(#plate)"',card)
         self.assertNotIn('Served at',card)
         self.assertEqual(P.svg_size(card),(1080,1350))

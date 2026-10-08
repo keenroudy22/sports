@@ -101,7 +101,7 @@ const cfbOnly = { ...HERO, bets: [HERO.bets[1]] };
 
 test('the Climb status words still come from one function', () => {
   assert.equal(M.climbWords({ open: { step: 3 }, step: 3, settled: 2 }), 'Step 3 is live');
-  assert.equal(M.climbWords({ step: 3, settled: 2, last: { result: 'win', step: 2 } }), 'Step 2 cashed · Step 3 is being checked · not posted yet');
+  assert.equal(M.climbWords({ step: 3, settled: 2, last: { result: 'win', step: 2 } }), 'Step 2 cashed · Step 3 not posted yet');
   assert.equal(M.climbWords({ step: 1, settled: 0 }), 'The first step waits for two clean games');
 });
 
@@ -134,7 +134,7 @@ test('the first paint and the full card draw the same top, so nothing moves when
   assert.match(first, /Hot Plate \(POTD\)/);
   assert.match(first, /−110<\/b><i><\/i><b class="kt-book">FanDuel/, 'price and book are on the first paint');
   assert.match(first, /Today 4:00 PM/, 'kickoff is on the first paint');
-  assert.match(first, /80\/20 Climb #2[\s\S]*Step 3[\s\S]*Being checked · not posted yet/, 'the Climb stub is on the first paint');
+  assert.match(first, /80\/20 Climb #2[\s\S]*Step 3[\s\S]*Not posted yet/, 'the Climb stub is on the first paint');
   release();
   const full = await pending;
   assert.doesNotMatch(full, /hero-first/);

@@ -88,7 +88,7 @@ test('a temporary record payload miss keeps the last complete record in memory',
 
 test('replacement UI keeps the owner-mandated wording and shared labels', () => {
   for (const wording of [
-    'being checked · not posted yet',
+    'not posted yet',
     'Past steps',
     'about 10–15 minutes before X',
     'Covering does not mean winning outright',

@@ -53,7 +53,7 @@ test('WHY and BUT are the build\'s saved strings, printed as they are', () => {
 
 test('delivery detail, notes, cutoff and sources stay on the play page', () => {
   const pickPage = source.slice(source.indexOf('VIEWS.pick = async'), source.indexOf('/* ---------- Research'));
-  for (const piece of ['C.deliveryText(pick)', "Our notes when we posted it", 'Posted cutoff', 'Sources:', 'data-prop-history', 'data-watch-pick'])
+  for (const piece of ['C.deliveryText(pick)', "Our notes when we posted it", 'Was good to', 'Sources:', 'data-prop-history', 'data-watch-pick'])
     assert.ok(pickPage.includes(piece), piece);
 });
 

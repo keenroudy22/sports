@@ -118,7 +118,7 @@ class PickTests(unittest.TestCase):
     def test_delivery_payload_is_whitelisted_and_cancellation_is_not_delivery(self):
         row = build_site.public_delivery({'dueAt': '2026-10-02T16:00:00Z', 'cancelledAt': '2026-10-02T15:00:00Z',
             'token': 'secret', 'discord': {'state': 'pending', 'sentAt': None, 'text': 'private'}})
-        self.assertIsNone(row['xDue'])
+        self.assertNotIn('xDue', row)
         self.assertTrue(row['cancelled'])
         self.assertIsNone(row['discordAt'])
         self.assertIsNone(row['restoredAt'])

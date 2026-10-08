@@ -93,7 +93,7 @@ def played(rung):
     decision (2026-09-28), so a pulled ungraded rung stays open and blocks the next one until its result."""
     if rung.get('result'):
         return True
-    if 'before its post went out' in str(rung.get('entryNote') or ''):
+    if 'before its post went out' in str(rung.get('entryNote') or '') or str(rung.get('entryNote') or '').startswith('Pulled before posting:'):
         return True
     return not rung.get('entryNote') and (rung.get('status') or 'active') == 'active'
 

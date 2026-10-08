@@ -153,7 +153,8 @@ class TextTests(unittest.TestCase):
         now = datetime(2026, 9, 27, 20, 5, tzinfo=timezone.utc)
         pick = {'line': 31.5, 'odds': -110, 'cutoff': 'OVER 31.5 at -110 or better. Closed at 32+.'}
         note = run.entry_note(now, 'line moved 1 against, from 31.5 to 32.5', pick)
-        self.assertIn('4:05 PM ET', note)
+        self.assertTrue(note.startswith('Off the card:'))
+        self.assertNotIn('4:05 PM ET', note)
         self.assertIn('from 31.5 to 32.5', note)
         self.assertIn('31.5 and -110', note)
         self.assertIn('graded as posted', note)

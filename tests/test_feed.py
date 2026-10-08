@@ -48,7 +48,7 @@ class FeedTests(unittest.TestCase):
         items = feed.pick_items(first, latest, GAMES, NOW)
         self.assertEqual(sorted(i['guid'] for i in items), ['early', 'fav', 'lean', 'ticket'])
         ticket = next(i for i in items if i['guid'] == 'ticket')
-        self.assertTrue(ticket['title'].startswith('Longshot: '), ticket['title'])
+        self.assertTrue(ticket['title'].startswith("Chef's Special +650: 2 legs at DraftKings"), ticket['title'])
         lean = next(i for i in items if i['guid'] == 'lean')
         self.assertTrue(lean['title'].startswith('Game total: '), lean['title'])
         self.assertIn('#pick/lean', lean['link'])

@@ -160,11 +160,11 @@ def cutoff(market, side, line, odds):
         below = max((k for k in KEYS if k < line), default=None)
         where = ('on any move against it' if line in KEYS else
                  f'if the line reaches {signed(below)}' if below is not None else 'on no key number')
-        return (f'{side.upper()} {signed(line)} at {odds:+d} or better. Closed to new entries {where}, '
+        return (f'{side.upper()} {signed(line)} at {odds:+d} or better; off the card {where}, '
                 f'or at {worst:+d} or worse at {signed(line)}.')
     step = RULES['total'] if market == 'total' else RULES['prop']
     limit = line + step if side == 'over' else line - step
-    return (f'{side.upper()} {fmt(line)} at {odds:+d} or better. Closed to new entries at '
+    return (f'{side.upper()} {fmt(line)} at {odds:+d} or better; off the card at '
             f'{fmt(limit)}{"+" if side == "over" else " or lower"}, or at {worst:+d} or worse at {fmt(line)}.')
 
 

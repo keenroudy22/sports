@@ -22,6 +22,7 @@ from xml.sax.saxutils import escape
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_site
 import gates
+import pick_card
 import x_post
 from sports_refresh import eastern_date
 
@@ -34,6 +35,21 @@ LEAD = timedelta(minutes=45)         # and none inside 45 minutes of kickoff
 RECAP_DAYS = 30
 TITLE = "Kook'n"
 ABOUT = 'Player props, game lines and fun parlays from keenroudy.com/sports, graded in public. Entertainment only.'
+
+
+def play_title(pick):
+    """Public RSS title from the priced, published item, not old internal category names."""
+    kind = pick_card.play_kind(pick)
+    if kind == 'ladder':
+        step = (pick.get('ladder') or {}).get('step') or 1
+        title = f"80/20 Climb · step {step} · {len(pick.get('legs') or [])} legs at {pick.get('book') or 'the posted book'}"
+    elif kind == 'parlay':
+        odds = pick.get('odds')
+        price = f'{int(odds):+d}' if isinstance(odds, (int, float)) else 'posted price'
+        title = f"Chef's Special {price}: {len(pick.get('legs') or [])} legs at {pick.get('book') or 'the posted book'}"
+    else:
+        title = x_post.kind_label(pick) + ': ' + str(pick.get('title'))
+    return title + (' (replacement)' if pick.get('replacementOf') else '')
 
 
 def postable(pick):
@@ -86,7 +102,7 @@ def pick_items(first, latest, games, now, player_team=None):
         local = now.astimezone(gates.EASTERN)
         import post_windows
         opened = post_windows.opens(pick.get('league') or game.get('league'), starts[0])
-        items.append({'guid': key, 'title': x_post.kind_label(merged) + ': ' + str(merged.get('title')),
+        items.append({'guid': key, 'title': play_title(merged),
                       'text': text, 'link': f'{SITE}#pick/{key}', 'pubDate': max(gates.when(published), opened),
                       'pick': merged, 'game': game, 'side': player_side(merged, game, player_team)})
     return items
@@ -108,7 +124,7 @@ def publication_items(first, games, now):
         text = x_post.draft(public_pick, game)
         if x_post.guard(text, public_pick, reasons.get(key)):
             continue
-        items.append({'guid': key, 'title': x_post.kind_label(pick) + ': ' + str(pick.get('title')),
+        items.append({'guid': key, 'title': play_title(pick),
                       'text': text, 'link': f'{SITE}#pick/{key}', 'pubDate': at,
                       'pick': public_pick, 'game': game})
     return items
@@ -247,7 +263,14 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
     stores = gates.Stores()
     ctx = stores.as_of(now)
     # The feed is archival. Buffer independently uses postable(), so this does not expand X delivery.
-    items = publication_items(ctx.first, ctx.games, now) + recap_items(ctx.first, ctx.latest, ctx.games, now)
+    import voice
+    candidates = publication_items(ctx.first, ctx.games, now) + recap_items(ctx.first, ctx.latest, ctx.games, now)
+    items = []
+    for item in candidates:
+        if voice.lint(item.get('title')) or voice.lint(item.get('text')):
+            log(f"feed: {item['guid']} omitted; public copy needs review")
+        else:
+            items.append(item)
     # A card for every open play as soon as it is published, not only inside its posting window: the desk
     # schedules the post the moment the card is live, and never posts without one.
     import receipts

@@ -247,11 +247,10 @@ class RecapTests(unittest.TestCase):
                  'c': {'id': 'c', 'title': 'C tomorrow', 'odds': -110, 'gameIds': ['g3']}}
         latest = {'a': {'result': 'win'}, 'b': {'result': 'loss'}, 'c': {'result': 'win'}}
         text = x_post.recap('2026-09-26', first, latest, games, NOW)
-        self.assertIn('Favorites 1-0.', text)
-        self.assertIn('Everything on the record 1-1.', text)
+        self.assertIn('Saturday went 1-1', text)
         self.assertNotIn('u)', text, 'no units in anything a follower reads')
-        self.assertIn('Hit: A over 40.', text)
-        self.assertIn('Missed: B under 50.', text)
+        self.assertIn('✅ A over 40', text)
+        self.assertIn('❌ B under 50', text)
         self.assertNotIn('C tomorrow', text)
         self.assertLessEqual(x_post.tweet_length(text), 280)
         self.assertIsNone(x_post.recap('2026-09-28', first, latest, games, NOW))

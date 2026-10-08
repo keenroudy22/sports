@@ -891,7 +891,7 @@ def cutoff_fields(pick):
     """Display limits parsed from the original pricing cutoff, never a new entry rule."""
     text = str(pick.get('cutoff') or '')
     price = re.search(r'or at ([+-]\d+) or worse at ([+-]?\d+(?:\.\d+)?)', text)
-    boundary = re.search(r'Closed to new entries at ([+-]?\d+(?:\.\d+)?)', text)
+    boundary = re.search(r'(?:Closed to new entries|off the card) at ([+-]?\d+(?:\.\d+)?)', text, re.I)
     if not price:
         return {'cutoffOdds': None, 'cutoffLine': None, 'cutoffBoundary': None}
     cents = pricing.cents(int(price[1])) + 1
@@ -921,7 +921,8 @@ def hero_parlay(pick):
 
 def hero_pulled(pick):
     """Withdrawn, or pulled over news before its post went out (the same test as Today's "Pulled before kickoff")."""
-    return pick.get('status') == 'withdrawn' or 'before its post went out' in str(pick.get('entryNote') or '')
+    note = str(pick.get('entryNote') or '')
+    return pick.get('status') == 'withdrawn' or 'before its post went out' in note or note.startswith('Pulled before posting:')
 
 
 def hero_card(pick, now, potd=None):
@@ -1007,7 +1008,7 @@ def hero_last_slate(picks, today):
 def hero_climb(picks):
     """Where the 80/20 Climb stands, walked from the rungs exactly as ladder.state and core.js theLadder walk them."""
     def counts(rung):
-        if rung.get('result') or 'before its post went out' in str(rung.get('entryNote') or ''):
+        if rung.get('result') or hero_pulled(rung):
             return True
         return not rung.get('entryNote') and (rung.get('status') or 'active') == 'active'
     rungs = sorted((p for p in picks if p.get('parlayType') == 'ladder' and counts(p)),
@@ -1814,7 +1815,7 @@ def public_delivery(entry):
     discord = entry.get('discord') or {}
     cancelled = bool(entry.get('cancelledAt') or entry.get('deletedAt'))
     return {'discordAt': discord.get('sentAt') if discord.get('state') == 'sent' else None,
-            'xAt': entry.get('sentAt'), 'xDue': None if cancelled or entry.get('error') else entry.get('dueAt'),
+            'xAt': entry.get('sentAt'),
             'restoredAt': entry.get('restoredAt'), 'cancelled': cancelled, 'failed': bool(entry.get('error'))}
 
 
@@ -1892,6 +1893,10 @@ def board_picks(first, latest, by_id, identities):
         delivery = deliveries.get(key)
         restored = bool(delivery and delivery.get('restoredAt') and not recent.get('result'))
         entry_note = None if restored else recent.get('entryNote') or pick.get('entryNote')
+        if entry_note:
+            entry_note = re.sub(r' at \d{1,2}:\d{2} [AP]M ET', '', str(entry_note))
+            entry_note = entry_note.replace('Closed to new entries', 'Off the card').replace('New entries paused', 'Off the card')
+            entry_note = re.sub(r'\.{2,}', '.', entry_note)
         status = 'active' if restored else recent.get('status') or pick.get('status')
         reasoning = pick.get('reasoning') if isinstance(pick.get('reasoning'), dict) else {}
         probability = pick.get('probabilityAtPublication') or {}

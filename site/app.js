@@ -86,9 +86,9 @@
   };
   /* The Climb's status words, from the full rung ledger or today-hero.json's summary of it. */
   const climbWords = s => s.open ? `Step ${s.open.step || s.step} is live`
-    : s.last && s.last.result === 'win' ? `Step ${s.last.step || s.step - 1} cashed · Step ${s.step} is being checked · not posted yet`
-      : s.last && s.last.result === 'loss' ? 'New $50 climb · Step 1 is being checked · not posted yet'
-        : s.settled ? `Step ${s.step} is being checked · not posted yet` : 'The first step waits for two clean games';
+    : s.last && s.last.result === 'win' ? `Step ${s.last.step || s.step - 1} cashed · Step ${s.step} not posted yet`
+      : s.last && s.last.result === 'loss' ? 'New $50 climb · Step 1 not posted yet'
+        : s.settled ? `Step ${s.step} not posted yet` : 'The first step waits for two clean games';
   /* Today's first paint: today's bets on the rail (a play off the card or pulled never hangs there), else the next
      game day's still on the card, as the full card chooses them. */
   const OFF_RAIL = ['Line moved', 'Pulled', 'Withdrawn'];
@@ -876,7 +876,7 @@
   const climbStub = (c, past = []) => {
     if (!c || !isNum(c.riding)) return '';
     const done = Math.max(0, Math.min(4, (c.step || 1) - 1));
-    const state = c.open ? `Step ${c.open.step || c.step} is live` : 'Being checked · not posted yet';
+    const state = c.open ? `Step ${c.open.step || c.step} is live` : 'Not posted yet';
     const n = c.settled || 0;
     const aside = `${c.last && c.last.result === 'win' && !c.open ? `Step ${c.last.step || c.step - 1} cashed. ` : ''}${c.saved ? `<strong>${money(c.saved)} banked.</strong> ` : ''}${n ? `Net ${signedMoney(c.net)} over ${WORDS[n] || n} step${n === 1 ? '' : 's'}. ` : ''}<a href="#record/climb">${n ? `All ${WORDS[n] || n} step${n === 1 ? '' : 's'} ›` : 'How the Climb works ›'}</a>`;
     return `<section class="kt-sec kt-climb" aria-labelledby="climb-h"><h2 class="sr" id="climb-h">The 80/20 Climb</h2>
@@ -1130,7 +1130,7 @@
     const { board = null, lines = null, sports = null, every = today.picks || [] } = todayExtras || {};
     indexGames(today);
     const now = Date.now(), all = every, picks = all.filter(inLeague), sched = C.cardSchedule(picks, now);
-    const pulled = p => p.status === 'withdrawn' || /before its post went out/.test(p.entryNote || '');
+    const pulled = p => p.status === 'withdrawn' || /before its post went out|^Pulled before posting:/.test(p.entryNote || '');
     /* Off the card: the desk closed it after the line moved. It never hangs on the rail; it stays graded. A play whose
        saved quote only aged out is still on the card and hangs there with "Posted price may be gone". */
     const offCard = p => C.pickState(p, now).word === 'Line moved';
@@ -1253,7 +1253,7 @@
       ${chart}${projected}
       ${vm.legs.length ? tape('Legs', `<div class="card"><ul class="fa">${vm.legs.map(l => `<li>${esc(l)}</li>`).join('')}</ul>${pick.correlation ? `<p class="small muted" style="margin-top:8px"><b>How the legs relate:</b> ${esc(prose(pick.correlation))}</p>` : ''}</div>`) : ''}
       ${(pick.why || pick.risk) && !hold ? `<details class="more-box" data-box="fullread" style="margin-top:20px"><summary>Our notes when we posted it</summary><div class="grid two"><div class="card"><p class="eyebrow green">Why</p><p style="margin-top:6px">${esc(prose(pick.why))}</p>${(pick.reasoning || {}).historyNote ? `<p class="small muted" style="margin-top:6px">${esc(pick.reasoning.historyNote)}</p>` : ''}</div><div class="card"><p class="eyebrow">What could go wrong</p><p style="margin-top:6px">${esc(prose(pick.risk))}</p></div></div></details>` : ''}
-      ${pick.cutoff ? tape(vm.mode === 'open' && !hold ? 'Price we would still play' : vm.kind === 'best' ? 'Posted cutoff' : 'Entry rule', `<p>${esc(prose(pick.cutoff))}</p>${vm.mode === 'open' && !hold && goodTo(pick) ? `<p class="small muted" style="margin-top:4px">${esc(goodTo(pick))}</p>` : ''}`) : ''}
+      ${pick.cutoff ? tape(vm.mode === 'open' && !hold ? 'Good to' : vm.kind === 'best' ? 'Was good to' : 'Entry rule', `<p>${esc(prose(pick.cutoff))}</p>${vm.mode === 'open' && !hold && goodTo(pick) ? `<p class="small muted" style="margin-top:4px">${esc(goodTo(pick))}</p>` : ''}`) : ''}
       ${tape('Where it stands', `${vm.statusNote && !hold ? `<p class="small">${esc(vm.statusNote)}</p>` : ''}<p class="small muted" style="margin-top:4px">${esc(C.deliveryText(pick) || 'No delivery evidence recorded.')}</p>`)}
       <div class="btn-row" style="margin-top:18px">${research ? `<a class="btn" href="${esc(research)}">${pick.athleteId ? 'Player page' : 'Matchup research'}</a>` : ''}${pick.gameId && game && !sameGame ? `<a class="btn" href="#game/${esc(pick.gameId)}">Game page</a>` : ''}<a class="btn" href="#record">Every result</a><button type="button" class="btn" data-watch-pick="${esc(pick.id)}" aria-pressed="${isSaved}" aria-label="${isSaved ? 'Unsave' : 'Save'} ${esc(vm.title)}">${isSaved ? '★ Saved' : '☆ Save'}</button></div>
       ${sources.length ? `<p class="small muted" style="margin-top:14px">Sources: ${sources.map((x, i) => `<a href="${esc(x)}" target="_blank" rel="noopener noreferrer">${esc(host(x, i))} ↗</a>`).join(' · ')}</p>` : ''}
@@ -1674,7 +1674,7 @@
           ${(n.takeaways || []).length ? `<ul class="fa" style="margin-top:6px">${n.takeaways.map(t => `<li class="for">${esc(text(t))}</li>`).join('')}</ul>` : ''}
           ${(n.weeklyReview || []).length ? `<p class="eyebrow" style="margin-top:10px">Review</p><ul class="fa">${n.weeklyReview.map(t => `<li>${esc(text(t))}</li>`).join('')}</ul>` : ''}
           ${(n.watch || []).length ? `<p class="eyebrow" style="margin-top:10px">Watching</p><ul class="fa">${n.watch.map(w => `<li><b>${esc(w.title)}</b>${w.gameId ? ` (<a href="#game/${esc(w.gameId)}">${esc(gameName(w.gameId))}</a>)` : ''}: ${esc(w.why || '')}${w.needs ? ` <span class="muted">Needs: ${esc(Array.isArray(w.needs) ? w.needs.join('; ') : w.needs)}</span>` : ''}</li>`).join('')}</ul>` : ''}</div>`).join('')
-        : '<p class="muted small">No notes right now. Notes appear when the research run publishes them.</p>')}`;
+        : '<p class="muted small">No notes right now.</p>')}`;
   };
 
   /* ---------- Games ---------- */
@@ -1804,7 +1804,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-073af43aa150';
+  const MORE_ASSET = 'app-more.js?v=sha256-8ced3a4becd4';
   const GAMES_ASSET = 'app-games.js?v=sha256-83fbc87918bc';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,

@@ -629,7 +629,8 @@ def slate_day(pick, ctx):
 def pulled_before_post(key, ctx):
     """Was the pick closed before its post went out? It stays in the record; it never reached a follower."""
     recent = dict(ctx.first.get(key) or {}, **ctx.latest.get(key, {}))
-    return 'before its post went out' in str(recent.get('entryNote') or '')
+    note = str(recent.get('entryNote') or '')
+    return 'before its post went out' in note or note.startswith('Pulled before posting:')
 
 
 def fresh_id(base, ctx):

@@ -1,6 +1,6 @@
 /* KeenRoudy Sports core: formatting, stat windows, ranks, ticket and record math,
    routes. Pure functions with no DOM access, shared by the browser app and the
-   Node tests. Every number shown comes from the pipeline's payloads; this file
+   Node tests. Every number shown comes from the built data files; this file
    only summarizes them. */
 (function (root, factory) {
   const api = factory();
@@ -318,7 +318,7 @@
     if (p.historicalImport) return { word: 'Unsettled', tone: 'closed' };
     if (p.status === 'withdrawn') return { word: 'Withdrawn', tone: 'closed' };
     /* Pulled over news before its post went out: that stays the word through kickoff, until it is graded. */
-    if (/before its post went out/.test(p.entryNote || '')) return { word: 'Pulled', tone: 'closed' };
+    if (/before its post went out|^Pulled before posting:/.test(p.entryNote || '')) return { word: 'Pulled', tone: 'closed' };
     if (p.kickoff && Date.parse(p.kickoff) <= now) return { word: 'In play', tone: 'reference' };
     if (p.entryNote) return { word: 'Line moved', tone: 'closed' };
     if (p.status === 'expired' || (p.expiresAt && Date.parse(p.expiresAt) <= now)) return { word: 'Price expired', tone: 'closed' };
@@ -487,7 +487,7 @@
     return { bank, ride: gross - bank };
   };
   const theLadder = picks => {
-    const pulled = p => /before its post went out/.test(p.entryNote || '');
+    const pulled = p => /before its post went out|^Pulled before posting:/.test(p.entryNote || '');
     const rungs = picks.filter(isLadder).filter(p => p.result || pulled(p) || (!p.entryNote && (p.status || 'active') === 'active'))
       .sort((a, b) => String(a.publishedAt || '').localeCompare(String(b.publishedAt || '')) || String(a.id).localeCompare(String(b.id)));
     let run = 1, step = 1, stake = LADDER.start, banked = 0, saved = 0, open = null, best = LADDER.start;
@@ -826,10 +826,8 @@
     const d = pick.delivery || {}, parts = [];
     if (d.discordAt) parts.push('Discord sent');
     if (d.xAt) parts.push(`X sent ${whenShort(d.xAt)}`);
-    else if (d.cancelled) parts.push('X post cancelled');
-    else if (d.failed) parts.push('X delivery needs attention');
-    else if (d.xDue) parts.push(Date.parse(d.xDue) > now ? `X scheduled ${whenShort(d.xDue)}` : 'X delivery awaiting confirmation');
-    return parts.join(' · ') || 'On the website · social delivery not yet confirmed';
+    else if (!d.cancelled && !d.failed) parts.push('Posted here first · X to follow');
+    return parts.join(' · ');
   };
 
   return { RESEARCH_DEFAULTS, researchPreferences, researchReset, researchContext, researchHash, researchMatches, researchStat, chartHistory, chartGeometry, thresholdResult, quoteStatus, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, deskNotes,

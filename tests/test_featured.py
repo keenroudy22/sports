@@ -139,13 +139,13 @@ class PostTests(unittest.TestCase):
         self.assertEqual((plans[0][4], plans[1][4]), ('a', 'b-potd'), 'its own card, so no stale copy is ever attached')
 
     def test_the_label_on_the_card(self):
-        self.assertEqual(pick_card.kicker(play('a', 'g1'), featured=True), 'PICK OF THE DAY · GAME TOTAL')
+        self.assertEqual(pick_card.kicker(play('a', 'g1'), featured=True), 'HOT PLATE (POTD) · GAME TOTAL')
         self.assertEqual(pick_card.kicker(play('a', 'g1', favorite=True)), 'GAME TOTAL · FAVORITE')
         svgs = []
         with tempfile.TemporaryDirectory() as folder, mock.patch.object(pick_card, 'chrome_path', return_value='chrome'), \
                 mock.patch.object(pick_card, 'render', side_effect=lambda svg, path: svgs.append(svg)):
             feed.render_cards([{'guid': 'a-potd', 'pick': play('a', 'g1'), 'game': GAMES['g1'], 'featured': True}], folder, log=lambda *_: None)
-        self.assertIn('PICK OF THE DAY', svgs[0])
+        self.assertIn('HOT PLATE (POTD)', svgs[0])
 
     def test_scheduling_remembers_the_card_and_the_label(self):
         sent = []

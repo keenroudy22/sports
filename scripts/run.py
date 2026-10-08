@@ -475,7 +475,7 @@ def lock_units(revision):
 # ------------------------------------------------------------------ step 3: close moves
 
 def entry_note(now, breaks, pick):
-    return (f"Closed to new entries at {et(now)}: {str(breaks).rstrip('. ')}. Published cutoff: {pick.get('cutoff') or 'as posted'}. "
+    return (f"Off the card: {str(breaks).rstrip('. ')}. Published cutoff: {str(pick.get('cutoff') or 'as posted').rstrip('. ')}. "
             f"Stays in the record at {pricing.fmt(float(pick['line'])) if pick.get('line') is not None else 'its line'} and "
             f"{int(pick['odds']):+d} and is graded as posted.")
 
@@ -524,7 +524,7 @@ UNCONFIRMED = 'a college play needs the web check'      # a hold for want of new
 def closed_reason(note):
     """What closed a play, from its entryNote, without the time stamp or the record's tail."""
     text = str(note or '')
-    for marker in ('before its post went out: ', ' ET: '):
+    for marker in ('Pulled before posting: ', 'Off the card: ', 'before its post went out: ', ' ET: '):
         if marker in text:
             text = text.split(marker, 1)[1]
             break
@@ -573,8 +573,8 @@ def pulled_leg(parlay, ctx, closing=()):
 
 
 def parlay_note(now, reason, pick, before_post=False):
-    moment = f"{et(now)}, before its post went out" if before_post else et(now)
-    return f"Closed to new entries at {moment}: {str(reason).rstrip('. ')}. Stays in the record at {int(pick['odds']):+d} and is graded as posted."
+    label = 'Pulled before posting:' if before_post else 'Off the card:'
+    return f"{label} {str(reason).rstrip('. ')}. Stays in the record at {int(pick['odds']):+d} and is graded as posted."
 
 
 def parlay_closures(ctx, raw_first, games, now, closing=()):
@@ -2570,7 +2570,7 @@ def live_context(stored, now, fetch=None):
 
 
 def precheck_note(now, reason, pick):
-    return (f"Closed to new entries at {et(now)}, before its post went out: {str(reason).rstrip('. ')}. Stays in the record at "
+    return (f"Pulled before posting: {str(reason).rstrip('. ')}. Stays in the record at "
             f"{pricing.fmt(float(pick['line'])) if pick.get('line') is not None else 'its line'} and {int(pick['odds']):+d} "
             "and is graded as posted.")
 
@@ -2685,7 +2685,7 @@ def precheck(args):
                     log(f"precheck: {key} withheld from X: the web check could not confirm who is playing")
                     continue
                 if not reason and key in moved:
-                    reason = moved[key][2]['entryNote'].split(': ', 1)[1].split('. Published cutoff')[0]
+                    reason = closed_reason(moved[key][2]['entryNote'])
                 if reason:
                     kind_key, original = raw_first[key]
                     closures.append((pick['_league'], kind_key, dict(original, status='expired', entryNote=precheck_note(now, reason, original))))

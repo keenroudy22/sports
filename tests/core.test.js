@@ -139,11 +139,12 @@ test('new workspace aliases preserve legacy research and trial routes', () => {
 
 test('delivery status distinguishes sent, queued, overdue, cancelled and unknown', () => {
   const now = Date.parse('2026-10-02T16:00:00Z');
-  assert.match(C.deliveryText({delivery:{discordAt:'2026-10-02T15:45:00Z',xDue:'2026-10-02T16:10:00Z'}}, now), /Discord sent.*X scheduled/);
+  assert.match(C.deliveryText({delivery:{discordAt:'2026-10-02T15:45:00Z',xDue:'2026-10-02T16:10:00Z'}}, now), /Discord sent.*Posted here first · X to follow/);
   assert.match(C.deliveryText({delivery:{xAt:'2026-10-02T15:50:00Z'}}, now), /X sent/);
-  assert.match(C.deliveryText({delivery:{xDue:'2026-10-02T15:50:00Z'}}, now), /awaiting confirmation/);
-  assert.match(C.deliveryText({delivery:{cancelled:true}}, now), /cancelled/);
-  assert.match(C.deliveryText({}, now), /not yet confirmed/);
+  assert.match(C.deliveryText({delivery:{xDue:'2026-10-02T15:50:00Z'}}, now), /Posted here first · X to follow/);
+  assert.equal(C.deliveryText({delivery:{cancelled:true}}, now), '');
+  assert.equal(C.deliveryText({delivery:{failed:true}}, now), '');
+  assert.match(C.deliveryText({}, now), /Posted here first · X to follow/);
   assert.equal(C.deliveryText({result:'win'}, now), '');
 });
 

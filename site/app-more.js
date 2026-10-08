@@ -367,7 +367,7 @@
       const money = n => `$${Math.round(Number(n) || 0).toLocaleString('en-US')}`;
       return `${top}${tabs}<div class="kpis"><div class="kpi"><small>Current climb</small><b class="num">#${esc(lad.run)} · step ${esc(lad.step)}</b><span>${money(lad.banked + lad.stake)} of $1,000</span></div><div class="kpi"><small>Steps</small><b class="num">${esc(acc.wins)}–${esc(acc.losses)}</b><span>won–lost</span></div><div class="kpi"><small>Banked so far</small><b class="num">${money(lad.saved)}</b><span>across every climb · stays banked after a miss</span></div><div class="kpi"><small>Best climb</small><b class="num">${money(lad.best)}</b><span>highest bank + ride</span></div>
         <div class="kpi"><small>Wagered</small><b class="num">${money(acc.wagered)}</b><span>returned ${money(acc.returned)}</span></div><div class="kpi"><small>Net</small><b class="num ${acc.net < 0 ? 'red' : 'green'}">${acc.net < 0 ? '−' : '+'}${money(Math.abs(acc.net))}</b><span>lifetime, in dollars</span></div></div>
-        <div class="card" style="margin-top:14px"><p>Bank 20% of every winning return and ride 80% on the next step. A miss ends the climb and starts a new $50 one; banked money stays banked. A new step is never guaranteed.</p>${lad.open ? `<p class="small" style="margin-top:6px">A step is open now. <a href="#today">See Today</a>.</p>` : '<p class="small muted" style="margin-top:6px">Next step: being checked · not posted yet.</p>'}</div>
+        <div class="card" style="margin-top:14px"><p>Bank 20% of every winning return and ride 80% on the next step. A miss ends the climb and starts a new $50 one; banked money stays banked. A new step is never guaranteed.</p>${lad.open ? `<p class="small" style="margin-top:6px">A step is open now. <a href="#today">See Today</a>.</p>` : '<p class="small muted" style="margin-top:6px">Next step: not posted yet. A step goes only when two legs in two different games clear my checks.</p>'}</div>
         ${section('Past steps', `<div class="receipts">${lad.history.slice().reverse().map(climbRow).join('') || '<p class="muted">No settled steps yet.</p>'}</div>`, '', `The Climb keeps its own run history and spans NFL and college legs, so it is shown whole; changing the season view does not change an active run.${lad.climbs.length ? ` Climbs finished: ${lad.climbs.length}.` : ''}`)}`;
     }
     if (tab === 'model') {
@@ -399,7 +399,7 @@
     if (!leagues.length) return `${top}${tabs}${empty('No trial in this view', 'Football has its own record. Pick another sport at the top, or see the model results.', 'research')}<p><a href="#record/model">Model vs market →</a></p>`;
     if (!lab && !trials) return `${top}${tabs}${empty('Trial data did not load', 'The trial and data-collection files are unavailable right now. <button type="button" class="btn small" data-retry>Try again</button>', 'research')}`;
     const cards = leagues.map(lg => trialCard(lg, lab, trials)).join('');
-    return `${top}${tabs}<p class="muted small" style="margin-bottom:12px">New sports run as paper trials first. Nothing here is a best bet, and nothing joins the public card or socials without a full trial and the owner's approval.</p>
+    return `${top}${tabs}<p class="muted small" style="margin-bottom:12px">New sports start on paper. Nothing here is a best bet until the trial earns it.</p>
       <div class="grid two">${cards || (lab || trials ? '' : '<p class="muted">Trial data did not load. <button type="button" class="btn small" data-retry>Try again</button></p>')}</div>`;
   };
 
@@ -455,7 +455,7 @@
         hasCover = lg.bySeason.some(r => r.cover), hasOver = lg.bySeason.some(r => r.over);
       return `<details class="more-box" data-box="vegas-seasons" style="margin-top:12px"><summary>Season by season</summary><p class="small muted" style="margin-bottom:6px">Favorite means the favorite won straight up. Each cell shows the rate, then hits/games.</p><div class="table-wrap"><table class="t" style="font-size:13px"><thead><tr><th style="padding:8px 5px">Season</th><th ${td}>Favorite</th>${hasCover ? `<th ${td}>Covered</th>` : ''}${hasOver ? `<th ${td}>Over</th>` : ''}</tr></thead><tbody>${lg.bySeason.map(r =>
         `<tr><td style="padding:8px 5px;white-space:nowrap">${esc(r.season)}</td>${cell((r.favorite || {}).pct, (r.favorite || {}).won, (r.favorite || {}).decided)}${!hasCover ? '' : r.cover ? cell(r.cover.pct, r.cover.favorite, r.cover.n) : `<td ${td}>–</td>`}${!hasOver ? '' : r.over ? cell(r.over.pct, r.over.over, r.over.n) : `<td ${td}>–</td>`}</tr>`).join('')}</tbody></table></div></details>`; })() : '';
-    const counted = `<details class="more-box" data-box="vegas-notes" style="margin-top:12px"><summary>How this is counted</summary><div class="small" style="display:grid;gap:6px">${(lg.notes || []).map(x => `<p>${esc(x)}</p>`).join('')}${sources ? `<p class="muted">Closing lines from: ${esc(sources)} games.</p>` : ''}<p class="muted">Computed when the site is built, from the same stored finals and closing lines the desk grades with. Nothing here changes a play, a gate or the record.</p></div></details>`;
+    const counted = `<details class="more-box" data-box="vegas-notes" style="margin-top:12px"><summary>How this is counted</summary><div class="small" style="display:grid;gap:6px">${(lg.notes || []).map(x => `<p>${esc(x)}</p>`).join('')}${sources ? `<p class="muted">Closing lines from: ${esc(sources)} games.</p>` : ''}<p class="muted">Counted from the same stored finals and closing lines every best bet is graded with. Nothing here changes a play or the record.</p></div></details>`;
     return `${top}${chips}${fallback}${scope}${meaning}${kpis}${sizes}${cal}${atsSec}${totSec}${facts}${seasons}${counted}
       <p class="small muted" style="margin-top:14px">Entertainment only, 21+. This describes past games. It is not betting advice, and no pick is ever certain.</p>`;
   };
@@ -489,7 +489,7 @@
       <dt>Old price</dt><dd>The price we posted is older than our freshness limit. The play still counts at the posted price; check your book for today's.</dd>
       <dt>Fun ticket</dt><dd>A longshot parlay at a smaller stake, tracked separately from the record.</dd>
       <dt>The 80/20 Climb</dt><dd>A $50 to $1,000 challenge. A step posts only when two independent legs qualify. A winning return is split 20% banked and 80% carried to the next step. A losing step loses only its active stake; money already banked stays banked, and a new $50 climb starts. A new step is never guaranteed.</dd>
-      <dt>Trial</dt><dd>A new sport collecting evidence on paper. Never a best bet until it earns a release and it earns approval.</dd></dl>`)}
+      <dt>Trial</dt><dd>A new sport collecting evidence on paper. Not a best bet until the trial earns it.</dd></dl>`)}
     <p class="small">Times are Eastern.</p>
     <p class="small">Analytics: Cloudflare's cookie-free counter. Nothing personal is collected.</p>
     <p class="small"><a href="#record">Every published result →</a> · <a href="#feedback">Give feedback →</a></p>`;

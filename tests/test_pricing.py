@@ -42,7 +42,7 @@ class PriceTests(unittest.TestCase):
         self.assertEqual(p['breakEven'], round(115 / 215, 3))
         self.assertIn('uncalibrated', p['edge'])
         self.assertFalse(p['calibrated'])
-        self.assertEqual(p['cutoff'], 'OVER 55.5 at -115 or better. Closed to new entries at 56+, or at -130 or worse at 55.5.')
+        self.assertEqual(p['cutoff'], 'OVER 55.5 at -115 or better; off the card at 56+, or at -130 or worse at 55.5.')
         self.assertEqual(pricing.price(SNAPSHOT, 'receptions', 'under', 4.5, 120, athlete='10')['market'], 'rec')
 
     def test_home_and_away_spreads_are_the_same_game(self):

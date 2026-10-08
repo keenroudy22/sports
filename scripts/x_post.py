@@ -514,7 +514,7 @@ def summarize(picks):
 
 
 def recap(day, first, latest, games, now):
-    """The day's settled picks as a post: what hit, what missed, units, favorites apart."""
+    """The day's settled picks as a plain public result, win or lose."""
     rows = []
     for key, pick in first.items():
         merged = dict(pick, **latest.get(key, {}))
@@ -526,28 +526,22 @@ def recap(day, first, latest, games, now):
         rows.append(merged)
     if not rows:
         return None
-    favorites = [r for r in rows if r.get('favorite') is True or key in build_site.FAVORITES_BEFORE_FLAG]
     everything = summarize(rows)
-    lines = [f"Kitchen's closed for {datetime.fromisoformat(day):%A}."]
-    if favorites:
-        fav = summarize(favorites)
-        lines.append(f"Favorites {fav['win']}-{fav['loss']}" + (f"-{fav['push']}" if fav['push'] else '') + '.')
-    lines.append(f"Everything on the record {everything['win']}-{everything['loss']}" + (f"-{everything['push']}" if everything['push'] else '') + '.')
-    hits = [r['title'] for r in rows if r.get('result') == 'win'][:3]
-    misses = [r['title'] for r in rows if r.get('result') == 'loss'][:3]
-    if hits:
-        lines.append('Hit: ' + '; '.join(hits) + '.')
-    if misses:
-        lines.append('Missed: ' + '; '.join(misses) + '.')
-    text = '\n'.join(lines) + f'\n\n{SITE}#record'
-    while tweet_length(text) > LIMIT and (hits or misses):
-        if misses:
-            misses.pop()
-        elif hits:
-            hits.pop()
-        lines = lines[:3 if favorites else 2] + (['Hit: ' + '; '.join(hits) + '.'] if hits else []) + (['Missed: ' + '; '.join(misses) + '.'] if misses else [])
-        text = '\n'.join(lines) + f'\n\n{SITE}#record'
-    return text
+    head = f"{datetime.fromisoformat(day):%A} went {everything['win']}-{everything['loss']}" + (f"-{everything['push']}" if everything['push'] else '')
+    def public_title(row):
+        if pick_card.play_kind(row) == 'ladder':
+            return f"80/20 Climb step {(row.get('ladder') or {}).get('step', 1)}"
+        return str(row['title'])
+    outcomes = [(r.get('result'), f"{'✅' if r.get('result') == 'win' else '❌' if r.get('result') == 'loss' else '➖'} {public_title(r)}") for r in rows]
+    kept = list(range(len(outcomes)))
+    while True:
+        omitted = [outcomes[i][0] for i in range(len(outcomes)) if i not in kept]
+        more = f"+{omitted.count('win')} wins, {omitted.count('loss')} misses on the site" if omitted else ''
+        text = '\n'.join(x for x in (head, *(outcomes[i][1] for i in kept), more) if x) + f'\n\n{SITE}#record'
+        if tweet_length(text) <= LIMIT or not kept:
+            return text
+        wins = [i for i in kept if outcomes[i][0] == 'win']
+        kept.remove(wins[-1] if wins else kept[-1])
 
 
 def scoreboard_text(scoreboard, model='v2.0'):
@@ -565,7 +559,6 @@ def scoreboard_text(scoreboard, model='v2.0'):
         graded = s.get('games') if s.get('games') is not None else closer[0] + closer[1]    # a number the scoreboard itself holds
         lines.append(f"{name}: sides {record(side)}, totals {record(ou)}. Closer on {closer[0]} of {graded} totals, "
                      f"miss {s.get('totalMiss')} vs {s.get('closeTotalMiss')}.")
-    lines.append('The close is the yardstick. When it wins, it says so here.')
     text = '\n'.join(lines) + f'\n\n{SITE}#model'
     if tweet_length(text) > LIMIT:
         lines = lines[:-1]
