@@ -403,6 +403,8 @@ details.filters > .toolbar { margin-top: 4px; }
    ===================================================================== */
 .kt-lede .date { font: 500 14px/1.25 var(--font-body); color: var(--dim); }
 .kt-lede h1 { font: 700 32px/1 var(--font-display); letter-spacing: .005em; margin-top: 4px; }
+.kt-sport-hint { margin: 3px 0 0; color: var(--dim); font: 600 12px/1.2 var(--font-body); }
+.kt-sport-hint a { color: var(--kookd); text-decoration: underline; text-underline-offset: 2px; }
 /* Clear of the breakout head (NOTES 4.3): app.js steps long lines down; this width cap is the backstop. */
 .kt-lede.with-photo h1 { max-width: 196px; }
 /* The order rail: full-bleed steel with two bolts. Every open best bet hangs from it. */

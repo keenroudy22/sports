@@ -306,11 +306,14 @@ test('a saved league filter paints its own next game day, and never an empty her
   const pending = next.api.views.today({ view: 'today' });
   await settle();
   assert.match(next.view.innerHTML, /<h1>One for Monday\.<\/h1>/);
+  assert.match(next.view.innerHTML, /NFL only · <a href="#today\?sport=ALL">See all sports ›<\/a>/);
   assert.match(next.view.innerHTML, /Monday Visitors at Hosts under 54\.5/);
   assert.doesNotMatch(next.view.innerHTML, /Fixture State/);
   release();
   await pending;
   await settle();
+  assert.match(next.view.innerHTML, /NFL only · <a href="#today\?sport=ALL">See all sports ›<\/a>/);
+  assert.doesNotMatch(next.view.innerHTML, /Fixture State/);
 });
 
 test('with nothing on the card the rail does not reveal desk timing', async () => {

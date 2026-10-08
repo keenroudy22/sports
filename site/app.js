@@ -1109,7 +1109,7 @@
     const title = nothingCleared && !rows.length ? 'Nothing cleared my bar today.' : ledeTitle(rows, today), first = rows[0];
     const photo = first && first.athleteId && !C.isParlay(first) && HEADSHOT[first.league || String(first.gameId || '').split('-')[0]];
     const size = photo ? ledeSize(title) : null;
-    return `<section class="kt-lede${photo ? ' with-photo' : ''}"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1${size ? ` style="font-size:${size}px"` : ''}>${esc(title)}</h1></section>
+    return `<section class="kt-lede${photo ? ' with-photo' : ''}"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1${size ? ` style="font-size:${size}px"` : ''}>${esc(title)}</h1>${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
       ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards }) : emptyRail(nothingCleared ? 'Nothing cleared my bar today.' : 'Nothing on the rail yet. Check back before kickoff.')}
       ${climbStub(climb, past)}${proof}${rows.length > 1 || more.length || later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
       ${rail([...more, ...rows.slice(1), ...later], { season, lines, cards, more: true, label: 'More best bets' })}</section>` : ''}`;
