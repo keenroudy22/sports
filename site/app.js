@@ -432,6 +432,9 @@
     }
     return [...groups.values()];
   };
+  /* Research worth a look (the pre-Kitchen-Ticket Today's rule): current lines that clear our price check, one per
+     market and side, never a held row or a play already on the card, biggest chance gap first, three at most. */
+  const worthRows = (rows, official = new Set()) => collapse(rows.filter(vm => hasValue(vm) && !heldRow(vm.src) && !official.has(vm.key))).sort(SORTS.edge).slice(0, 3);
   const SORTS = {
     edge: (a, b) => (b.edge ?? -99) - (a.edge ?? -99) || Date.parse(a.kickoff) - Date.parse(b.kickoff),
     chance: (a, b) => (b.chance ?? -1) - (a.chance ?? -1) || (b.edge ?? -99) - (a.edge ?? -99),
@@ -546,7 +549,7 @@
   const model = { splitColours, ledeSize, goodTo, latestPickQuote, holdOf, pickHold, heldWords, heldShort, priceMatch, averageGap, researchPrice, matchupSignals, breakEven, fairAmerican, edgePoints, pctText, pctOne, oddsText, upsetChanceLine, quoteAge, bookLabel, postedBook, marketLabel, niceTitle, sentences,
     whyLines, watchLine, historyLine, howWeGotIt, pickVM, lineVM, officialKey, onBoard, hasValue, defenseVerdict, collapse, SORTS, heavyFavorite, trendText, gapScore,
     cumulativeUnits, clvSummary, parseHash, resolve, canonical, TAB_OF, MORE_PAGES, isParlayLike, climbWords, heroBets,
-    teamPanel, STAT_UNITS, betParts, nameSize, betSize, ledeTitle, dateLine, resultLine, minus };
+    teamPanel, STAT_UNITS, betParts, nameSize, betSize, ledeTitle, dateLine, resultLine, minus, worthRows };
 
   if (typeof document === 'undefined') return { model };
 
@@ -773,6 +776,10 @@
     const days = (Date.parse(C.dayOf(iso) + 'T16:00:00Z') - Date.parse(etDay() + 'T16:00:00Z')) / 86400000;
     return days === 0 ? `${tonight(iso) ? 'Tonight' : 'Today'} ${clock(iso)}` : days > 0 && days < 7 ? `${ET_PARTS(iso, { weekday: 'short' })} ${clock(iso)}` : whenShort(iso);
   };
+  /* The kickoff countdown inside the last day (ported from the pre-Kitchen-Ticket ticket). */
+  const countdown = iso => { const ms = Date.parse(iso) - Date.now(); if (!(ms > 0) || ms > 864e5) return '';
+    const n = Math.ceil(ms / 6e4); return ms < 6e4 ? 'Kicks off in under a minute' : `Kicks off in ${n >= 60 ? `${Math.floor(n / 60)}h ` : ''}${n % 60}m`; };
+  const CARD_PATH = /^data\/cards\/[\w.-]+\.png$/;
   const logoImg = (team, league) => { const src = logoUrl(team, league); return src ? `<img src="${esc(src)}" alt="" loading="lazy">` : ''; };
   const disc = (team, league) => team ? `<span class="kt-disc">${logoImg(team, league)}</span>` : '';
   const panelVars = ([top, bottom, glow]) => `--team:${top};--team-deep:${bottom};--glow:${glow}`;
@@ -827,7 +834,7 @@
     const rows = opts.lines || todayExtras?.lines?.lines;
     const hold = best && !pick.result ? pickHold(pick, rows) : null;
     const latest = !pick.result && !climb && !fun && !hold ? latestPickQuote(pick, rows) : null;
-    const good = isNum(pick.cutoffOdds) ? `Still good to ${odd(pick.cutoffOdds)}.` : '';
+    const good = opts.more && goodTo(pick) ? `${minus(goodTo(pick))}.` : isNum(pick.cutoffOdds) ? `Still good to ${odd(pick.cutoffOdds)}.` : '';
     const nowLine = pick.result ? resultLine(pick) : hold ? heldShort(hold)
       : climb ? (isNum(Number(info.stake)) && isNum(Number(info.payout)) && info.payout ? `${money(info.stake)} → ${money(info.payout)} if it cashes.` : '')
         : ['open', 'expired'].includes(vm.mode) && latest ? `Now ${odd(latest.current.odds)} at ${clock(latest.current.observedAt)}. ${latest.inside ? good : `Past my ${odd(pick.cutoffOdds)} limit.`}`
@@ -840,6 +847,9 @@
     const heldSafe = (text, held) => held && HELD_WORDS.test(text || '') ? null : text;
     const say = (tag, text, cls = '') => text ? `<p class="kt-say${cls}"><span class="kt-tag">${tag}</span><span>${esc(text)}</span></p>` : '';
     const legs = (climb || fun) && vm.legs.length ? `<ul class="kt-legs">${(pick.legs || []).slice(0, 8).map(l => { const [a, b] = legParts(l); return `<li><span>${esc(a)}</span>${b ? `<b>${esc(b)}</b>` : ''}</li>`; }).join('')}</ul>` : '';
+    /* The countdown and the posted share card (its path from the build, as before), on one small line. */
+    const cd = pick.result ? '' : countdown(pick.kickoff), card = CARD_PATH.test(opts.card || '') ? opts.card : '';
+    const extra = cd || card ? `<p class="kt-cd">${esc(cd)}${cd && card ? ' · ' : ''}${card ? `<a href="${esc(card)}" target="_blank" rel="noopener">See the card ↗</a>` : ''}</p>` : '';
     const fit = betSize(parts, opts.compact ? 60 : 68);
     const bet = climb || fun ? legs : `<p class="kt-bet num" style="--bet-size:${fit}px;--bet-size-k:${(fit / 306).toFixed(4)}">${esc(parts.bet)}${parts.unit.length ? `<span class="kt-unit">${parts.unit.map(esc).join('<br>')}</span>` : ''}</p>`;
     const s = opts.season, record = s ? `${s.wins}-${s.losses}${s.pushes ? `-${s.pushes}` : ''}` : '';
@@ -849,13 +859,13 @@
     return `<article class="kt-order${opts.compact ? ' compact' : ''}${vm.mode === 'closed' ? ' is-closed' : ''}${hold ? ' is-held' : ''}" style="${style}" aria-label="${esc(label)}">
       <div class="kt-shade"><div class="kt-paper">${panel}${bet}<div class="kt-cut"></div>
         <p class="kt-lead kt-price"><b class="kt-odds num">${esc(odd(vm.odds))}</b><i></i><b class="kt-book">${esc(vm.estimated ? `est. ${vm.book || ''}` : vm.book || '')}</b></p>
-        <p class="kt-now">${esc(nowLine)}</p>${chance}${best ? say('WHY', heldSafe(pick.ticketWhy, hold)) + say('BUT', heldSafe(pick.ticketBut, hold), ' kt-but') : ''}
+        <p class="kt-now">${esc(nowLine)}</p>${extra}${chance}${best ? say('WHY', heldSafe(pick.ticketWhy, hold)) + say('BUT', heldSafe(pick.ticketBut, hold), ' kt-but') : ''}
         ${opts.strip && best ? strip(pick.hitStrip, pick.line, String(pick.direction || '').toLowerCase()) : ''}
         <div class="kt-perf"></div><div class="kt-stubrow">${stub}${best && !pick.result && !hold ? '<span class="kt-orderup" aria-hidden="true">ORDER UP</span>' : ''}</div></div></div>
       ${after}${opts.clip ? CHEF : ''}${stampFor(pick.result)}</article>`;
   };
   const rail = (rows, opts = {}) => `<section class="kt-pass${opts.onPage ? ' on-page' : ''}" aria-label="${esc(opts.label || (rows.length > 1 ? 'Best bets on the rail' : rows.length && C.dayOf(rows[0].kickoff) === etDay() ? 'Today\'s best bet' : 'Best bet'))}"><div class="kt-rail" aria-hidden="true"></div>
-    <div class="kt-tickets">${rows.map((p, i) => ticket(p, { ...opts, clip: i === 0, strip: i === 0 && !opts.more, compact: (i > 0 || opts.more) && !C.isLadder(p) })).join('')}</div></section>`;
+    <div class="kt-tickets">${rows.map((p, i) => ticket(p, { ...opts, card: p.card || (opts.cards && opts.cards.get(p.id)), clip: i === 0 && !opts.more, strip: i === 0 && !opts.more, compact: (i > 0 || opts.more) && !C.isLadder(p) })).join('')}</div></section>`;
   const HOOK = '<svg class="kt-hook h%" viewBox="0 0 26 22" aria-hidden="true"><path d="M7 0v8M19 0v8" stroke="#8C9892" stroke-width="2"/><rect x="1" y="6" width="24" height="13" rx="2.5" fill="#A3AEA8"/><rect x="3" y="15.5" width="20" height="2" rx="1" fill="#1E2622"/></svg>';
   const emptyRail = note => `<section class="kt-pass" aria-label="No best bet yet"><div class="kt-rail" aria-hidden="true"></div><div class="kt-hooks" aria-hidden="true">${HOOK.replace('%', '1')}${HOOK.replace('%', '2')}${CHEF}</div></section><p class="kt-blank">${note}</p>`;
   const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
@@ -893,7 +903,8 @@
     const shown = [...misses, ...rest].slice(0, LEFTOVERS).sort((a, b) => String(b.kickoff).localeCompare(String(a.kickoff)));
     const more = settled.length - shown.length;
     const t = last || (settled.length ? { day: C.dayOf(settled[0].kickoff), wins: settled.filter(p => p.result === 'win').length, losses: misses.length, pushes: settled.filter(p => p.result === 'push').length } : null);
-    const head = t ? `${weekday(`${t.day}T16:00:00Z`)} went ${t.wins}-${t.losses}${t.pushes ? `-${t.pushes}` : ''}.` : 'Waiting on the final.';
+    const u = t && (isNum(t.units) ? t.units : last ? null : C.summaryOf(settled.filter(p => C.dayOf(p.kickoff) === t.day && !C.isUnpricedImport(p)), 1).units);
+    const head = t ? `${weekday(`${t.day}T16:00:00Z`)} went ${t.wins}-${t.losses}${t.pushes ? `-${t.pushes}` : ''}${isNum(u) ? ` · ${units(u)}` : '.'}` : 'Waiting on the final.';
     return `<section class="kt-sec kt-left" aria-labelledby="left-h"><h2 class="kt-head" id="left-h">${esc(head)}</h2>
       ${waiting.map(p => slip(p, { spike: true, waiting: true })).join('')}${shown.map(p => slip(p, { spike: true })).join('')}
       <a class="kt-quiet" href="#record">${more > 0 ? `+${more} more on the record ›` : 'The full record ›'}</a></section>`;
@@ -901,9 +912,11 @@
   const STAT_SHORT = { recYds: 'rec yds', rushYds: 'rush yds', passYds: 'pass yds', rec: 'receptions', car: 'carries', cmp: 'completions', att: 'pass attempts', passTD: 'pass TDs' };
   /* The Prep List: rows the build chose (today.json prep), chalked on the felt with the one tape label. */
   const prepList = (prep, notes, now) => {
-    const blocks = Object.values(prep || {}).filter(b => b && (b.rows || []).length && (state.league === 'ALL' || b.rows[0].league === state.league));
+    /* Each league's first game day and the next one (build_site.prep_list); the first day with a row still to kick off. */
+    const blocks = Object.values(prep || {}).flatMap(b => [b, b && b.next]).filter(b => b && (b.rows || []).length && (state.league === 'ALL' || b.rows[0].league === state.league))
+      .map(b => ({ day: b.day, rows: b.rows.filter(r => Date.parse(r.kickoff) > now) })).filter(b => b.rows.length);
     const day = blocks.map(b => b.day).sort()[0];
-    const rows = blocks.filter(b => b.day === day).flatMap(b => b.rows).filter(r => Date.parse(r.kickoff) > now)
+    const rows = blocks.filter(b => b.day === day).flatMap(b => b.rows)
       .sort((a, b) => b.hits / b.games - a.hits / a.games || b.games - a.games).slice(0, 3);
     if (!rows.length && !notes.length) return '';
     const kind = !rows.length ? 'Research notes' : day === etDay() ? `Research for ${rows.every(r => tonight(r.kickoff)) ? 'tonight' : 'today'}` : `Research for ${weekday(`${day}T16:00:00Z`)}`;
@@ -916,8 +929,9 @@
       ${notes.slice(0, 3).map(n => `<p class="kt-note"><a href="${esc(n.href)}"><b>${esc(n.title)}</b></a> ${esc(n.text)}</p>`).join('')}
       <a class="kt-more-link" href="#research/trends">${day === etDay() ? 'Tonight\'s' : 'More'} other lines ›</a></section>`;
   };
-  const foldRow = (box, title, sub, inner) => `<details class="kt-fold-row" data-box="${esc(box)}"><summary><b>${esc(title)}</b><span>${esc(sub)}</span></summary><div>${inner}</div></details>`;
-  const foldLink = (href, title, sub, ext = false) => `<a href="${esc(href)}"${ext ? ' target="_blank" rel="noopener"' : ''}><b>${esc(title)}</b><span>${esc(sub)}</span></a>`;
+  /* A visible Today section (no fold): a chalk heading, or the tape label that marks research, and an optional kind. */
+  const ktSec = (id, title, body, { tape = false, kind = '', link = '' } = {}) => `<section class="kt-sec kt-rest kt-${id}" aria-labelledby="${id}-h"><div class="kt-sec-head"><h2 class="${tape ? 'kt-tape' : 'kt-head'}" id="${id}-h">${esc(title)}</h2>${kind ? `<span class="kt-kind">${esc(kind)}</span>` : ''}</div>${body}${link}</section>`;
+  const ktLink = (href, text) => `<a class="kt-more-link" href="${esc(href)}">${esc(text)} ›</a>`;
 
   /* ROI at posted prices: units over plays staked (one unit each), only once ten priced plays are graded. */
   const roiOf = cap => cap.priced >= 10 && cap.staked > 0 && isNum(cap.units) ? 100 * cap.units / cap.staked : null;
@@ -1033,6 +1047,9 @@
       <details class="plain-fold upset-why" data-box="upset:${esc(g.id)}"><summary>Why it's flagged</summary>${(w.reasons || []).length > 1 ? `<ul class="fa">${w.reasons.slice(1, 4).map(r => `<li class="for">${esc(r)}</li>`).join('')}</ul>` : ''}
       <p class="small red" style="margin-top:4px">${esc((w.warnings || [w.caution || 'Our winner estimate has not yet proved more accurate than the book.']).join(' · '))}</p></details></div>`;
   };
+  /* The free community card (AGENTS: the front-page conversion path): early best bets, Discord-only arb alerts, the public record. */
+  const COMMUNITY = `<aside class="kt-sec kt-rest kt-community" aria-label="Join the Kook'n Discord"><p class="kt-kind">Free Kook'n Discord</p><p><b>Best bets land here about 10–15 minutes before X.</b> Arb alerts stay in Discord. Every result stays public on this site.</p>
+    <p class="kt-cta"><a class="btn primary" href="https://discord.gg/ZnjubjsBPM" target="_blank" rel="noopener">Join the free Discord ↗</a><a href="https://x.com/keenkooks" target="_blank" rel="noopener">or follow @keenkooks on X ↗</a></p></aside>`;
   const DATA_TTL = 300000;
   let todayExtras = null, todayExtrasAt = 0, todayExtrasLoading = false;
   const queueTodayExtras = () => {
@@ -1057,13 +1074,14 @@
   /* The top of Today, the same on the first paint and the full card, so nothing moves when today.json lands: the
      chef's line with the last game day's W-L, the first ticket on the rail, the Climb stub (inside the first screen
      at 375 x 812, DIRECTION-RULES section 5 as updated by decision 10), then the rest of the rail. */
-  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [] }) => {
+  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '' }) => {
     const title = ledeTitle(rows, today), first = rows[0];
     const photo = first && first.athleteId && !C.isParlay(first) && HEADSHOT[first.league || String(first.gameId || '').split('-')[0]];
     const size = photo ? ledeSize(title) : null;
     return `<section class="kt-lede${photo ? ' with-photo' : ''}"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1${size ? ` style="font-size:${size}px"` : ''}>${esc(title)}</h1></section>
-      ${rows.length ? rail(rows.slice(0, 1), { season, lines }) : emptyRail('Nothing on the rail yet. Check back before kickoff.')}
-      ${climbStub(climb, past)}${rows.length > 1 || more.length ? `<div class="kt-sec" style="margin-top:28px">${rail([...more, ...rows.slice(1)], { season, lines, more: true })}</div>` : ''}`;
+      ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards }) : emptyRail('Nothing on the rail yet. Check back before kickoff.')}
+      ${climbStub(climb, past)}${proof}${rows.length > 1 || more.length || later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
+      ${rail([...more, ...rows.slice(1), ...later], { season, lines, cards, more: true, label: 'More best bets' })}</section>` : ''}`;
   };
   const firstPaint = (hero, now = Date.now()) => {
     const { today, rows } = heroBets(hero, now, state.league);
@@ -1139,7 +1157,8 @@
     const notesList = C.deskNotes(notes, state.league, now, today.games || []);
     /* Underdog watch: fresh outright candidates (both moneylines within four hours), and spread covers kept apart. */
     const current = vm => vm.age.kind === 'fresh' || vm.age.kind === 'aging';
-    const lineRows = lines ? (lines.lines || []).map(r => lineVM(r, now)).filter(vm => inLeague(vm) && onBoard(vm, now) && current(vm)) : [];
+    const withGame = vm => { const g = GAMES.get(vm.gameId); vm.matchup = g && g.away ? `${g.away.abbr} at ${g.home.abbr}` : null; return vm; };
+    const lineRows = lines ? (lines.lines || []).map(r => withGame(lineVM(r, now))).filter(vm => inLeague(vm) && onBoard(vm, now) && current(vm)) : [];
     const upsets = games.filter(g => currentUpset(g, now)).sort((a, b) => (b.upsetWatch.modelChance - b.upsetWatch.marketChanceNoVig) - (a.upsetWatch.modelChance - a.upsetWatch.marketChanceNoVig)).slice(0, 4);
     const dogSpreads = lineRows.filter(vm => !vm.isProp && /spread/i.test(vm.market) && Number(vm.line) > 0 && hasValue(vm));
     const dogDay = dogSpreads.length ? C.dayOf(dogSpreads.slice().sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0].kickoff) : null;
@@ -1147,24 +1166,37 @@
     const upsetHtml = upsets.length || spreadRows.length ? `<p class="eyebrow" style="margin-bottom:8px">Outright upset candidates</p>${upsets.length ? `<div class="grid two">${upsets.map((g, i) => upsetRow(g, i + 1)).join('')}</div>` : '<p class="muted small">No fresh outright candidate.</p>'}
       ${spreadRows.length ? `<p class="eyebrow" style="margin:16px 0 4px">Underdog spread value</p><p class="small muted" style="margin-bottom:8px">Covering does not mean winning outright.</p><div class="board">${spreadRows.map(vm => boardRow(vm, false)).join('')}</div>` : '<p class="muted small" style="margin-top:10px">Underdog spreads: none highlighted right now.</p>'}`
       : '<p class="muted small">No current outright-upset or underdog-spread highlight.</p>';
-    const tonight = games.filter(g => C.dayOf(g.kickoff) === etDay()).sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
+    /* Research worth a look: the old Today's top three price-checked lines, never a play already on the card. */
+    const official = new Set(picks.filter(p => !p.result && !p.historicalImport && !C.isParlay(p)).map(officialKey));
+    const worth = worthRows(lineRows, official);
+    /* Today's games: live first, scores refreshed from the free scoreboard, with our projected score. */
+    const liveToday = withLive(games.filter(g => C.dayOf(g.kickoff) === etDay() || (!g.completed && (g.state === 'in' || C.dayOf(g.kickoff) === etDay(-1)))));
+    const todayGames = liveToday.games.filter(g => C.dayOf(g.kickoff) === etDay() || g.state === 'in');
+    const rank = g => g.state === 'in' ? 0 : !g.completed ? 1 : 2;
+    const shown = todayGames.slice().sort((a, b) => rank(a) - rank(b) || String(a.kickoff).localeCompare(String(b.kickoff))).slice(0, 6);
     const slips = list => `<div class="kt-slips">${list.map(p => slip(p, { when: true })).join('')}</div>`;
-    const span = list => { const d = [...new Set(list.map(p => weekday(p.kickoff)))]; return d.length > 1 ? `${d[0]} to ${d[d.length - 1]}` : d[0] || ''; };
-    const u = k.rec.captured.units;
-    const fold = `<details class="kt-sec kt-fold" data-box="today-more"><summary><b>More for today</b><span>${rest.length ? `${rest.length} more best bet${rest.length === 1 ? '' : 's'} later this week` : 'Games, underdogs and every result'}</span></summary>
-      ${rest.length ? foldRow('later', 'Later this week', `${rest.length} more best bet${rest.length === 1 ? '' : 's'}, ${span(rest)}`, slips(rest)) : ''}
-      ${off.length ? foldRow('off-card', `Off the card · ${off.length}`, 'The line moved; each still counts at the price we posted', slips(off)) : ''}
-      ${gone.length ? foldRow('pulled', `Pulled before kickoff · ${gone.length}`, 'Pulled over news; each still counts', slips(gone)) : ''}
-      ${fun.length ? foldRow('fun', 'Fun tickets', `${fun.length} at a smaller stake, apart from best bets`, slips(fun)) : ''}
-      ${foldLink('#games', "Tonight's games", tonight.length ? tonight.slice(0, 4).map(g => `${g.away.abbr} at ${g.home.abbr} ${clock(g.kickoff).replace(/ [AP]M$/, '')}`).join(', ') : 'Scores and projections for every game')}
-      ${foldRow('upsets', 'Underdog watch', 'Upset research, not best bets', upsetHtml)}
-      ${foldLink('#record', 'Every result', `${wl(k.rec.all).replace(/–/g, '-')}${isNum(u) ? `, ${units(u).replace(/u$/, ' units')} at posted prices` : ''}`)}
-      ${foldLink('https://discord.gg/ZnjubjsBPM', 'Free Discord', 'Best bets land there about 10–15 minutes before X', true)}
-      ${state.league === 'ALL' ? foldRow('sports', 'More sports', 'Scores and research for nine leagues', `<div class="pill-row">${Object.keys(LIVE).map(key => { const n = ((((sports || {}).leagues || {})[key] || {}).games || []).filter(g => g.date === etDay()).length;
-        return `<a class="pill" href="#today?sport=${esc(key)}">${esc(LEAGUE_NAME[key])}${FOOTBALL.includes(key) ? '' : ` · ${n} today`} →</a>`; }).join('')}</div>`) : ''}</details>`;
+    /* The season line counts every published play (record.json), so its units wait for that; the W-L shows at once. */
+    const full = Boolean(todayExtras && todayExtras.every), s = (today.season || {})[state.league];
+    const u = full ? k.rec.captured.units : null, wlText = full ? wl(k.rec.all) : s ? wl(s) : '';
+    const proof = wlText ? `<p class="kt-proof"><a href="#record">${k.label === 'Playoff record' ? 'Playoffs ' : k.label === 'Season record' ? '' : 'This stage '}<b class="num">${esc(wlText.replace(/–/g, '-'))}</b>${isNum(u) ? ` · <span class="${u < 0 ? 'neg' : u > 0 ? 'pos' : ''}">${esc(units(u).replace(/u$/, ' units'))}</span> at posted prices` : ''} · <span class="go">Every result ›</span></a></p>` : '';
+    const cards = new Map(((heroLoaded || {}).bets || []).map(b => [b.id, b.card]));
+    const rest2 = [
+      leftovers(recent, awaiting, (today.lastSlate || {})[state.league]),
+      ktSec('upsets', 'Underdog watch', upsetHtml, { tape: true, kind: 'Upset research, not best bets' }),
+      ktSec('worth', 'Research worth a look', worth.length ? `<div class="board">${worth.map(vm => boardRow(vm, false)).join('')}</div>` : '<p class="kt-blank">Nothing on the board clears our price check right now.</p>',
+        { tape: true, kind: 'Not best bets', link: ktLink('#research/lines', 'See every line') }),
+      prepList(today.prep, notesList, now),
+      ktSec('games', "Today's games", shown.length ? `${liveStamp(liveToday.refreshed)}<div class="projs">${shown.map(g => projCard(g, { ranks: false })).join('')}</div>` : '<p class="kt-blank">No covered football games today.</p>',
+        { link: ktLink(todayGames.length > shown.length ? '#games' : '#games/live', todayGames.length > shown.length ? `All ${todayGames.length} games today` : 'Live scores') }),
+      fun.length ? ktSec('fun', 'Fun tickets', slips(fun), { kind: 'Smaller stake, apart from best bets' }) : '',
+      gone.length ? ktSec('pulled', `Pulled before kickoff · ${gone.length}`, slips(gone), { kind: 'Pulled over news; each still counts' }) : '',
+      off.length ? ktSec('off-card', `Off the card · ${off.length}`, slips(off), { kind: 'The line moved; each still counts at the price we posted' }) : '',
+      COMMUNITY,
+      state.league === 'ALL' ? ktSec('sports', 'More sports', `<div class="pill-row">${Object.keys(LIVE).map(key => { const n = ((((sports || {}).leagues || {})[key] || {}).games || []).filter(g => g.date === etDay()).length;
+        return `<a class="pill" href="#today?sport=${esc(key)}">${esc(LEAGUE_NAME[key])}${FOOTBALL.includes(key) ? '' : ` · ${n} today`} →</a>`; }).join('')}</div>`) : ''].join('');
     return `<div class="kt-today"><div>${todayTop({ rows, today: Boolean(todays.length), last: (today.lastSlate || {})[state.league], season: (today.season || {})[state.league],
-      climb, lines: lines && lines.lines, more: rungHere, past: ladder.history })}</div>
-      <div>${leftovers(recent, awaiting, (today.lastSlate || {})[state.league])}${prepList(today.prep, notesList, now)}${fold}</div></div>`;
+      climb, lines: lines && lines.lines, more: rungHere, past: ladder.history, later: rest, cards, proof })}</div>
+      <div>${rest2}</div></div>`;
   };
 
   /* ---------- a single best bet ---------- */
@@ -2072,18 +2104,6 @@
 
   /* ---------- team page ---------- */
   /* ---------- Record ---------- */
-  const unitsChart = points => {
-    if (points.length < 2) return '';
-    const w = 600, h = 170, pad = 22, padL = 40;
-    const vals = points.map(p => p.units);
-    const lo = Math.min(0, ...vals), hi = Math.max(0, ...vals);
-    const span = hi - lo || 1;
-    const x = i => padL + (w - padL - pad) * i / (points.length - 1);
-    const y = v => pad + (h - 2 * pad) * (hi - v) / span;
-    const path = points.map((p, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)} ${y(p.units).toFixed(1)}`).join(' ');
-    const end = points[points.length - 1].units;
-    return `<svg class="units-chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Units over the season, ending at ${units(end)}"><line x1="${padL}" x2="${w - pad}" y1="${y(0).toFixed(1)}" y2="${y(0).toFixed(1)}" stroke="#3D7356" stroke-dasharray="4 4"/><path d="${path}" fill="none" stroke="${end < 0 ? '#FF6B75' : '#20C774'}" stroke-width="3" stroke-linejoin="round"/><circle cx="${x(points.length - 1).toFixed(1)}" cy="${y(end).toFixed(1)}" r="5" fill="${end < 0 ? '#FF6B75' : '#20C774'}"/><text x="${(x(points.length - 1) - 6).toFixed(1)}" y="${(y(end) - 10).toFixed(1)}" text-anchor="end" fill="#F2F7F4" font-size="14" font-family="DM Sans, sans-serif">${esc(units(end))}</text><text x="4" y="${(y(0) + 4).toFixed(1)}" fill="#A9C0B3" font-size="12" font-family="DM Sans, sans-serif">0u</text></svg>`;
-  };
   const clvWords = clv => !isNum(clv) ? '' : clv > 0 ? `line moved our way by ${C.fixed(clv, 1)}` : clv < 0 ? `line moved against us by ${C.fixed(Math.abs(clv), 1)}` : 'closed at our number';
   const receipt = (p, clvById) => {
     const vm = pickVM(p);
@@ -2110,12 +2130,6 @@
     return `<div class="receipt"><span class="r-mark ${mark[0]}" aria-hidden="true">${mark[1]}</span><div><b><span class="sr">${esc(mark[2])}: </span><a class="plain-link" href="#pick/${esc(encodeURIComponent(p.id))}">Step ${esc(info.step || '?')}${info.run ? ` · climb #${esc(info.run)}` : ''}</a></b><span>${esc((p.legs || []).map(l => typeof l === 'string' ? l : l.title).filter(Boolean).map(niceTitle).join(' · ') || niceTitle(p.displayTitle || p.title || ''))}</span><span>${esc(oddsText(p.odds))} ${esc(bookLabel(p.book) || '')} · ${esc(whenShort(p.kickoff || p.publishedAt))}</span></div>
       <span class="u ${p.result === 'win' ? 'green' : p.result === 'loss' ? 'red' : 'muted'}">${esc(money(info.stake))} → ${esc(paid)}<br><span class="tiny muted">${esc(bank.replace(' · ', ''))}${isNum(net) ? `${bank ? ' · ' : ''}running ${net < 0 ? '−' : '+'}${money(Math.abs(net))}` : ''}</span></span></div>`;
   };
-  const tableOf = (first, rows) => `<div class="table-wrap"><table class="t"><thead><tr><th>${esc(first)}</th><th class="n">W–L–P</th><th class="n">Units</th><th class="n">Pending</th></tr></thead><tbody>${rows.map(([name, t]) =>
-    `<tr><td>${esc(name)}</td><td class="n">${t.wins}–${t.losses}–${t.pushes}</td><td class="n ${t.units < 0 ? 'red' : t.units > 0 ? 'green' : ''}">${esc(units(t.units))}</td><td class="n">${t.pending}</td></tr>`).join('')}</tbody></table></div>`;
-  const weekLabel = w => { const d = new Date(w + 'T12:00:00'); const e = new Date(d); e.setDate(d.getDate() + 6);
-    return `${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} to ${e.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`; };
-  const MODEL_NAME = { 'v2.0': 'Our model', v1: 'First model', 'v1 replay': 'First model replay' };
-  const rec3 = r => r ? `${r[0]}–${r[1]}${r[2] ? '–' + r[2] : ''}` : '–';
   const rate = r => r && r[0] + r[1] ? `${Math.round(100 * r[0] / (r[0] + r[1]))}%` : '–';
 
   /* One sport's research status: a paper trial, data collection or scores only. Shared by Today and Record › Trials. */
@@ -2172,7 +2186,6 @@
   };
 
   /* ---------- More ---------- */
-  const moreGroup = (title, links) => `<p class="eyebrow more-group">${title}</p><div class="list-links">${links}</div>`;
   /* Record, More and team pages are not part of the first paint. */
   const MORE_VIEW_NAMES = ['player', 'team', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
@@ -2180,9 +2193,7 @@
   let moreViews = null, moreLoading = null;
   const moreContext = (overrides = {}) => ({ C, P, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
-    dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, tableOf, weekLabel, MODEL_NAME,
-    rec3, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, unitsChart,
-    ticketRows, ticketSummary, arbFor, arbSummary, moreGroup, officialKey, isNum, inLeague, pickVM, meter,
+    dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,
     GAMES, HEADSHOT, MARK, STAT_UNITS, clock, defGames, defenseVerdict, disc, filtersFold, hasValue, lineVM, logoImg, minus, nameSize, odd, onBoard, panelVars, pctOne, teamPanel, ticketWhen, toneFor, watchButton, HOUSE, rail, holdOf, heldWords, ...overrides });
   const ensureMore = () => {
     if (moreViews) return Promise.resolve(moreViews);

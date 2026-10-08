@@ -6,26 +6,30 @@ const app = fs.readFileSync(new URL('../site/app.js', import.meta.url), 'utf8');
 const css = fs.readFileSync(new URL('../site/app.css', import.meta.url), 'utf8');
 const body = (start, end) => { const a = app.indexOf(start), b = app.indexOf(end, a); assert.ok(a >= 0 && b > a, start); return app.slice(a, b); };
 
-test('Today is rail, Climb, Leftovers, Prep List, then the fold (Kitchen Ticket, decision 22)', () => {
+test('Today is the first screen, then every section visible with no fold (owner, 2026-10-07)', () => {
   const view = body('VIEWS.today = async', '/* ---------- a single best bet');
-  const ret = view.slice(view.lastIndexOf('return `<div class="kt-today">'));
-  const at = s => { const i = ret.indexOf(s); assert.ok(i >= 0, s); return i; };
-  assert.ok(at('${todayTop(') < at('${leftovers(') && at('${leftovers(') < at('${prepList(') && at('${prepList(') < at('${fold}'));
+  const rest = view.slice(view.indexOf('const rest2 = ['));
+  const at = s => { const i = rest.indexOf(s); assert.ok(i >= 0, s); return i; };
+  const order = ['leftovers(', "ktSec('upsets'", "ktSec('worth'", 'prepList(', "ktSec('games'", "ktSec('fun'", "ktSec('pulled'", "ktSec('off-card'", 'COMMUNITY', "ktSec('sports'"].map(at);
+  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'Leftovers, Underdog watch, Worth a look, Prep List, games, fun, pulled, off, Discord, sports');
+  assert.doesNotMatch(view, /today-more|kt-fold|foldRow|<details/, 'no More for today fold and no new fold on Today');
   const top = body('const todayTop =', 'const firstPaint =');
   const t = s => { const i = top.indexOf(s); assert.ok(i >= 0, s); return i; };
-  assert.ok(t('rail(rows.slice(0, 1)') < t('${climbStub(climb, past)}') && t('${climbStub(climb, past)}') < t('rail([...more, ...rows.slice(1)]'),
-    'the first ticket, then the Climb stub inside the first screen, then the rest of the rail');
+  assert.ok(t('rail(rows.slice(0, 1)') < t('${climbStub(climb, past)}') && t('${climbStub(climb, past)}') < t('${proof}')
+    && t('${proof}') < t('rail([...more, ...rows.slice(1), ...later]'), 'first ticket, Climb stub, season line, then every other best bet');
 });
 
-test('Off the card is the line-moved state only, and it lives in the fold, never on the rail', () => {
+test('Off the card is the line-moved state only: its own visible section, never on the rail', () => {
   const view = body('VIEWS.today = async', '/* ---------- a single best bet');
   assert.match(view, /const offCard = p => C\.pickState\(p, now\)\.word === 'Line moved'/);
   assert.match(view, /const todays = sched\.today\.filter\(p => straight\(p\) && !offCard\(p\)\)/);
   assert.match(view, /const later = sched\.upcoming\.filter\(p => straight\(p\) && !offCard\(p\)\)/);
-  assert.match(view, /foldRow\('off-card', `Off the card · \$\{off\.length\}`/);
-  assert.doesNotMatch(view, /onboard|class="proof"|statusRows|Research worth a look/);
+  assert.match(view, /off\.length \? ktSec\('off-card', `Off the card · \$\{off\.length\}`/);
+  assert.doesNotMatch(view, /onboard|statusRows/);
 });
 
-test('Today keeps the footer below the fold while the first view loads', () => {
+test('Today keeps the footer below the fold while the first view loads, and uses both columns on a wide screen', () => {
   assert.match(css, /main#view\s*\{\s*min-height:\s*calc\(100svh\s*-\s*160px\)/);
+  assert.match(css, /@media \(min-width: 1000px\) \{ \.kt-today \{ display: grid; grid-template-columns: minmax\(0, 440px\) minmax\(0, 1fr\)/);
+  assert.doesNotMatch(css, /kt-fold/, 'the fold styles left with the fold');
 });

@@ -588,19 +588,17 @@ details.filters > .toolbar { margin-top: 4px; }
 .kt-note { margin-top: 10px; font: 500 14px/1.4 var(--font-body); color: var(--dim); }
 .kt-note b { color: var(--chalk); font-weight: 600; }
 .kt-more-link { display: inline-flex; align-items: center; min-height: var(--tap); margin-top: 4px; font: 700 15px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; }
-/* More for today: a quiet fold, closed by default. */
-details.kt-fold { margin-top: 26px; }
-.kt-fold > summary, .kt-fold-row > summary, .kt-fold > a { list-style: none; cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 2px 10px; min-height: 52px; padding: 9px 0; color: var(--chalk); border-bottom: 1px solid var(--line); }
-.kt-fold > summary { min-height: 56px; border-top: 1px solid var(--line); }
-.kt-fold > summary::-webkit-details-marker, .kt-fold-row > summary::-webkit-details-marker { display: none; }
-.kt-fold > summary b { font: 700 17px/1 var(--font-display); letter-spacing: .1em; text-transform: uppercase; }
-.kt-fold > summary span, .kt-fold-row > summary span, .kt-fold > a span { grid-column: 1; font-size: 14px; color: var(--dim); }
-.kt-fold > summary::after, .kt-fold-row > summary::after { content: '+'; grid-column: 2; grid-row: 1 / span 2; font: 400 26px/1 var(--font-body); color: var(--dim); }
-.kt-fold[open] > summary::after, .kt-fold-row[open] > summary::after { content: '−'; }
-.kt-fold-row > summary b, .kt-fold > a b { font-weight: 600; font-size: 15px; }
-.kt-fold > a::after { content: '›'; grid-column: 2; grid-row: 1 / span 2; font: 400 24px/1 var(--font-body); color: var(--dim); }
-.kt-fold > a:hover { text-decoration: none; }
-.kt-fold-row > div { padding: 10px 0 16px; border-bottom: 1px solid var(--line); }
+/* Today below the first screen: every section visible, no fold (owner, 2026-10-07). */
+.kt-rest { margin-top: 34px; } .kt-rest > .kt-sec-head { margin-bottom: 12px; }
+.kt-rest .kt-head { font-size: 26px; } .kt-rest .grid.two { gap: 10px; } .kt-rest .projs { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.kt-bets .kt-head { margin-bottom: 6px; }
+.kt-cd { margin: 2px 4px 0; text-align: right; font: 500 13.5px/1.3 var(--font-body); color: var(--ink-soft); }
+.kt-cd a { color: var(--ticket-ink); font-weight: 700; text-decoration: underline; }
+.kt-proof { margin-top: 8px; } .kt-proof a { display: inline-block; padding: 10px 0; color: var(--chalk); font: 500 15px/1.5 var(--font-body); }
+.kt-proof b { font: 700 20px/1 var(--font-display); } .kt-proof .neg { color: var(--burnt-text); } .kt-proof .pos { color: var(--kookd); } .kt-proof .go { white-space: nowrap; }
+.kt-community { padding: 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--felt); font: 500 15px/1.45 var(--font-body); }
+.kt-community .kt-kind { margin-bottom: 6px; color: var(--kookd); }
+.kt-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; margin-top: 12px; } .kt-cta > a:last-child { padding: 12px 0; font-weight: 600; }
 /* Empty rail: two empty bulldog clips under the chef, one chalk line. */
 .kt-hooks { position: relative; height: 54px; margin: 0 14px; }
 .kt-hook { position: absolute; z-index: 4; top: 12px; width: 30px; height: 26px; filter: drop-shadow(0 4px 4px rgba(0, 0, 0, .5)); }
