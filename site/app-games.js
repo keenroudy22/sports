@@ -9,11 +9,53 @@
     watchButton, setLeague, liveStamp, liveFor, LIVE, gapScore, STAT_WORD, favSpread, marketLabel, quoteAge, round1, fairAmerican, boardRow,
     matchupSignals, researchPrice, pctText, currentUpset, upsetRow, heavyFavorite, trendText, historyChart, ticket, etDay } = ctx;
   const views = {};
+  /* Navigator, "why" and badge styles arrive with this bundle, so the first-load shell stays inside its budget. */
+  const GAMES_CSS = ".tier { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; font: 700 12px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; border: 1px solid var(--line-strong); color: var(--chalk); white-space: nowrap; }\n"
+    + ".tier::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--dim); }\n.tier.competitive::before { background: var(--kookd); } .tier.lean::before { background: #CFE3D8; } .tier.mismatch::before { background: #E0A23A; } .tier.blowout::before { background: var(--burnt); }\n"
+    + ".pc-plain { font: 500 14px/1.4 var(--font-body); color: var(--chalk); border-top: 1px solid var(--line); padding-top: 8px; }\n"
+    + ".pc-bet { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 10px; font: 500 13px/1.3 var(--font-body); color: var(--dim); }\n.pc-bet b { display: block; font: 700 12px/1 var(--font-display); letter-spacing: .1em; text-transform: uppercase; color: var(--dim); margin-bottom: 3px; }\n.pc-bet .v { color: var(--chalk); font-weight: 600; }\n.pc-bet .flag { display: block; color: var(--burnt-text); font-weight: 600; }\n.pc-bet .age, .pc-bet-h { grid-column: 1 / -1; font-size: 12px; }\n.pc-bet-h { font: 700 12px/1 var(--font-display); letter-spacing: .1em; text-transform: uppercase; color: var(--kookd); }\n"
+    + ".pc-why { font: 500 14px/1.45 var(--font-body); color: var(--chalk); border-top: 1px dashed rgba(169, 192, 179, .28); padding-top: 8px; }\n.pc-why a { white-space: nowrap; font-weight: 700; display: inline-block; padding: 6px 0; }\n.pc-why.muted { color: var(--dim); }\n"
+    + ".kt-worth-strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(196px, 1fr); gap: 10px; margin: 10px 0 6px; padding-bottom: 6px; }\n.kt-worth-card { display: grid; gap: 4px; align-content: start; padding: 10px 12px; background: var(--felt); border: 1px solid var(--line); border-radius: var(--radius); color: var(--chalk); min-width: 0; }\n.kt-worth-card:hover { text-decoration: none; border-color: var(--line-strong); }\n.kt-worth-card .wc-t { font: 700 15px/1.1 var(--font-display); letter-spacing: .03em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n.kt-worth-card b { font: 500 14px/1.3 var(--font-body); color: var(--kookd); }\n.kt-worth-card small { font-size: 12px; color: var(--dim); }\n"
+    + ".nav-bar { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; margin: 0 0 12px; }\n.nav-bar .select { min-height: 38px; padding: 6px 10px; }\n"
+    + ".kt-why .vs { grid-template-columns: auto 1fr 1fr auto; font-size: 15px; }\n.kt-why .vs .num { font-variant-numeric: tabular-nums; }\n.kt-drivers { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }\n.kt-drivers li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; font: 500 15px/1.45 var(--font-body); }\n.kt-drivers li::before { content: '↑'; color: var(--kookd); font-weight: 700; text-align: center; }\n.kt-drivers li.against::before { content: '↓'; color: var(--burnt-text); }\n.kt-drivers li small { display: block; color: var(--dim); font-size: 13px; }\n.kt-drivers .mk { display: block; font: 700 12px/1 var(--font-display); letter-spacing: .12em; text-transform: uppercase; color: var(--dim); margin: 10px 0 2px; }\n"
+    + ".kt-why-note { margin-top: 12px; padding: 10px 12px; border-left: 3px solid var(--burnt); background: var(--burnt-soft); font: 500 14px/1.4 var(--font-body); }\n.kt-why-foot { margin-top: 12px; font: 500 13px/1.45 var(--font-body); color: var(--dim); }\n"
+    + "@media (max-width: 359px) { .pc-bet { grid-template-columns: 1fr 1fr; } }";
+  if (typeof document !== 'undefined' && document.head && document.createElement && !(document.getElementById && document.getElementById('kr-games-css'))) {
+    const style = document.createElement('style'); style.id = 'kr-games-css'; style.textContent = GAMES_CSS; document.head.appendChild(style);
+  }
+  /* ---------- the college slate navigator (owner, Oct 7, item 30): research grouping, never a play ---------- */
+  const TIER_WORD = { competitive: 'Competitive', lean: 'Lean', mismatch: 'Mismatch', blowout: 'Blowout' };
+  const WINDOW_WORD = { noon: 'Noon', afternoon: '3:30', night: 'Night' };
+  const tierBadge = g => g.tier && isNum(Number((g.market || {}).spread)) ? `<span class="tier ${esc(g.tier)}" title="By the book spread: competitive to 7, lean to 14, mismatch to 21, blowout past that">${esc(TIER_WORD[g.tier])} · gap ${esc(C.fixed(Math.abs(g.market.spread), Math.abs(g.market.spread) % 1 ? 1 : 0))}</span>` : '';
+  const leanWord = (g, which) => {
+    const lean = C.leanText(g) || {}, m = g.market || {};
+    if (which === 'spread') return lean.side ? `${lean.side.team} ${C.signed(lean.side.team === g.home.abbr ? m.spread : -m.spread, 1).replace(/\.0$/, '')}` : 'no lean';
+    return lean.total && m.total != null ? `${lean.total.direction} ${m.total}` : 'no lean';
+  };
+  /* The research rows under a projection card: tier, the plain strength gap, what is bettable, and the specific reason. */
+  const cardExtras = (g, now = Date.now()) => {
+    if (g.completed || g.state === 'in') return {};
+    const m = g.market || {}, parts = g.bettableParts || {};
+    const fresh = m.retrievedAt ? quoteAge(m.retrievedAt, g.kickoff, now, { odds: -110, state: 'open' }) : null;
+    const props = Number(parts.props) || 0;
+    const bet = m.spread == null && m.total == null ? '' : `<div class="pc-bet"><span class="pc-bet-h">What's bettable · research</span><span><b>Spread</b><span class="v">${esc(leanWord(g, 'spread'))}</span></span><span><b>Total</b><span class="v">${esc(leanWord(g, 'total'))}</span></span><span><b>Props</b><span class="v">${props ? `${props} priced` : 'none priced'}</span>${g.garbageTime ? '<span class="flag">Garbage-time risk</span>' : ''}</span>${fresh ? `<span class="age">${esc(fresh.label)}</span>` : ''}</div>`;
+    const w = g.whyDiffer;
+    const why = !w ? '' : w.stale ? `<p class="pc-why muted">${esc(w.text)}</p>` : w.text ? `<p class="pc-why">${esc(w.text)} <a href="#game/${esc(g.id)}#why">Dig deeper ›</a></p>` : '';
+    return { badge: tierBadge(g), extra: `${g.plainGap ? `<p class="pc-plain">${esc(g.plainGap)}</p>` : ''}${bet}${why}` };
+  };
+  const navCard = (g, opts = {}) => projCard(g, { ...cardExtras(g), ...opts });
+  const byBettable = (a, b) => (Number(b.bettable) || 0) - (Number(a.bettable) || 0) || String(a.kickoff).localeCompare(String(b.kickoff)) || String(a.id).localeCompare(String(b.id));
+  const worthStrip = list => {
+    const top = list.filter(g => g.league === 'CFB' && !g.completed).slice().sort(byBettable).slice(0, 6);
+    if (!top.length) return '';
+    return `<section class="section" style="margin:8px 0 18px" aria-labelledby="worth-h"><div class="section-head"><h2 id="worth-h">Worth your time</h2><span class="kt-kind">Research · the one thing to check</span></div>
+      <div class="chip-scroll"><div class="kt-worth-strip">${top.map(g => `<a class="kt-worth-card" href="#game/${esc(g.id)}"><span class="wc-t">${esc(g.away.abbr)} at ${esc(g.home.abbr)}</span><b>${esc(g.look || g.plainGap || 'Take a look')}</b><small>${esc([TIER_WORD[g.tier], whenShort(g.kickoff).split(', ').pop()].filter(Boolean).join(' · '))}</small></a>`).join('')}</div></div></section>`;
+  };
   views.games = async route => {
     const tab = route.tab || 'upcoming';
     if (route.league) setLeague(route.league);
     const tabs = `<div class="chip-scroll">${segLinks([['#games', 'Upcoming', 'upcoming'], ['#games/live', 'Live & scores', 'live'], ['#games/final', 'Finals', 'final']], tab)}</div>`;
-    const top = `${head('Games', tab === 'live' ? 'Live and scores' : tab === 'final' ? 'Recent finals' : 'Upcoming games', tab === 'upcoming' ? "Our projected score and win chance for every game, and how our number compares with the market. Off and Def are our model's team ranks; #1 is best." : tab === 'live' ? 'Every sport we track. Scores refresh about every minute while this page is open.' : 'How our projected scores compared with the finals.')}${tabs}`;
+    const top = `${head('Games', tab === 'live' ? 'Live and scores' : tab === 'final' ? 'Recent finals' : 'Upcoming games', tab === 'upcoming' ? "My projected score and win chance for every game, and how my number compares with the book. Off and Def are my team ranks; #1 is best. Research, not best bets." : tab === 'live' ? 'Every sport I track. Scores refresh about every minute while this page is open.' : 'How my projected scores compared with the finals.')}${tabs}`;
     if (tab === 'live') return top + await gamesLive();
     const today = await get('app/today.json');
     if (!FOOTBALL.includes(state.league) && state.league !== 'ALL') return `${top}${empty('Football only for projections', `${esc(LEAGUE_NAME[state.league])} has live scores here, not projections yet. Some sports also run a paper trial. <a href="#games/live">See live scores</a> or <a href="#record/trials">the trial record</a>.`, 'research')}`;
@@ -22,35 +64,51 @@
     const q = state.games.q.trim().toLowerCase();
     if (q) games = games.filter(g => [g.home.abbr, g.home.name, g.away.abbr, g.away.name].some(v => String(v || '').toLowerCase().includes(q)));
     const search = `<div class="grow"><label class="sr" for="gq">Find a team</label><input id="gq" class="search" type="search" placeholder="Find a team" value="${esc(state.games.q)}" data-input="gq" autocomplete="off" maxlength="80"></div>`;
-    const byDay = (list, newest) => {
+    const byDay = (list, title = null) => {
       const days = new Map();
       list.forEach(g => { const d = dayLabel(g.kickoff); if (!days.has(d)) days.set(d, []); days.get(d).push(g); });
-      return [...days.entries()].map(([d, l]) => `<p class="eyebrow" style="margin:18px 0 10px">${esc(d)}</p><div class="projs">${l.map(g => projCard(g)).join('')}</div>`).join('');
+      return [...days.entries()].map(([d, l]) => `<p class="eyebrow" style="margin:18px 0 10px">${esc(title ? `${title} · ${d}` : d)}</p><div class="projs">${l.map(g => navCard(g)).join('')}</div>`).join('');
     };
     if (tab === 'final') {
       games = games.filter(g => g.completed).sort((a, b) => String(b.kickoff).localeCompare(String(a.kickoff)));
       const shown = state.games.all ? games : games.slice(0, 60);
-      return `${top}<div class="toolbar">${search}</div>${liveStamp(merged.refreshed)}${shown.length ? byDay(shown, true) : empty(q ? 'No final matches' : 'No recent finals', q ? 'Try a team name or abbreviation.' : 'Finals from the last few days appear here.', 'games')}
+      return `${top}<div class="toolbar">${search}</div>${liveStamp(merged.refreshed)}${shown.length ? byDay(shown) : empty(q ? 'No final matches' : 'No recent finals', q ? 'Try a team name or abbreviation.' : 'Finals from the last few days appear here.', 'games')}
         ${games.length > shown.length ? `<p style="margin-top:12px"><button type="button" class="btn" data-all-games>Show all ${games.length} finals</button></p>` : ''}`;
     }
     games = games.filter(g => !g.completed).sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
-    const s = state.games.sort, onDay = d => games.filter(g => C.dayOf(g.kickoff) === d);
+    const onDay = d => games.filter(g => C.dayOf(g.kickoff) === d);
     /* One day at a time: the next day with a game still to kick off, unless the reader picks another. */
     const dayKeys = [...new Set(games.map(g => C.dayOf(g.kickoff)))].sort();
     const day = state.games.upDay === 'all' || dayKeys.includes(state.games.upDay) ? state.games.upDay : dayKeys.find(d => onDay(d).some(g => Date.parse(g.kickoff) > Date.now())) || dayKeys[0];
-    const toolbar = `<div class="toolbar">${dayKeys.length > 1 ? `<div class="chip-scroll">${seg('gup', [...dayKeys.map(d => [d, `${whenShort(onDay(d)[0].kickoff).split(',')[0]} · ${onDay(d).length}`]), ['all', `All · ${games.length}`]], day)}</div>` : ''}<button type="button" class="chip" data-flag-games aria-pressed="${s === 'gap'}">Biggest gap first</button>${search}</div>`;
+    const toolbar = `<div class="toolbar">${dayKeys.length > 1 ? `<div class="chip-scroll">${seg('gup', [...dayKeys.map(d => [d, `${whenShort(onDay(d)[0].kickoff).split(',')[0]} · ${onDay(d).length}`]), ['all', `All · ${games.length}`]], day)}</div>` : ''}${search}</div>`;
     if (!games.length) return `${top}${toolbar}${empty(q ? 'No game matches' : 'No upcoming games', q ? 'Try a team name or abbreviation.' : 'Nothing in this league inside the current window.', 'games')}`;
-    let list = q || day === 'all' ? games : onDay(day);
+    const list = q || day === 'all' ? games : onDay(day);
     const next = q || day === 'all' ? null : dayKeys[dayKeys.indexOf(day) + 1];
     const nextBtn = next ? `<p style="margin-top:12px"><button type="button" class="btn" data-set="gup:${next}">Next: ${esc(dayLabel(onDay(next)[0].kickoff))} · ${onDay(next).length} games →</button></p>` : '';
-    if (s === 'gap') {
-      list = list.slice().sort((a, b) => gapScore(b) - gapScore(a) || String(a.kickoff).localeCompare(String(b.kickoff)));
-      const shown = state.games.all ? list : list.slice(0, 20);
-      return `${top}${toolbar}<p class="small muted" style="margin-bottom:10px">Ranked by how unusual the gap between our number and the market is, against every stored game. A gap is a reason to look, not a bet.</p>${liveStamp(merged.refreshed)}
-        <div class="projs">${shown.map(g => projCard(g)).join('')}</div>
-        ${list.length > shown.length ? `<p style="margin-top:12px"><button type="button" class="btn" data-all-games>Show all ${list.length} games</button></p>` : nextBtn}`;
+    /* College navigator: window, close-games and conference filters, bettable-first order. NFL keeps kickoff order with the same badges. */
+    const college = list.some(g => g.league === 'CFB');
+    const nav = state.games.nav || { window: 'all', close: false, conf: 'all' };
+    const confs = [...new Set(list.flatMap(g => [(g.conference || {}).home, (g.conference || {}).away]).filter(Boolean))].sort();
+    const chosenConf = confs.includes(nav.conf) ? nav.conf : 'all';
+    const filtered = !college ? list : list.filter(g => (nav.window === 'all' || g.window === nav.window) && (!nav.close || g.tier === 'competitive')
+      && (chosenConf === 'all' || [(g.conference || {}).home, (g.conference || {}).away].includes(chosenConf)));
+    const sort = college && state.games.sort !== 'kickoff' ? 'bettable' : 'kickoff';
+    const controls = !college ? '' : `<div class="nav-bar" role="group" aria-label="College slate filters"><div class="chip-scroll">${seg('gnav', [['window=all', 'All'], ['window=noon', 'Noon'], ['window=afternoon', '3:30'], ['window=night', 'Night']], `window=${nav.window}`)}</div>
+      <button type="button" class="chip" data-set="gnav:close=1" aria-pressed="${Boolean(nav.close)}">Close games only</button>
+      ${confs.length > 1 ? `<label class="sr" for="gconf">Conference</label><select id="gconf" class="select" data-select="gconf"><option value="all"${chosenConf === 'all' ? ' selected' : ''}>All conferences</option>${confs.map(c => `<option value="${esc(c)}"${c === chosenConf ? ' selected' : ''}>${esc(c)}</option>`).join('')}</select>` : ''}
+      ${seg('gsort', [['bettable', 'Bettable'], ['kickoff', 'Kickoff']], sort)}</div>`;
+    const stamp = liveStamp(merged.refreshed);
+    if (!filtered.length) return `${top}${toolbar}${controls}${stamp}${empty('No game matches these filters', 'Try another window or conference, or turn off close games only.', 'games')}${nextBtn}`;
+    const strip = college ? worthStrip(filtered) : '';
+    if (sort === 'bettable') {
+      const nfl = filtered.filter(g => g.league !== 'CFB'), cfb = filtered.filter(g => g.league === 'CFB').sort(byBettable);
+      const shown = state.games.all ? cfb : cfb.slice(0, 24);
+      return `${top}${toolbar}${controls}${strip}${stamp}${nfl.length ? byDay(nfl, 'NFL') : ''}
+        <p class="eyebrow" style="margin:18px 0 10px">College · most bettable first</p><p class="small muted" style="margin:-6px 0 10px">Fresh two-sided lines, competitiveness, how far my number sits from the book and any best bet, upset watch or priced props. A high score is a reason to look, not a bet.</p>
+        <div class="projs">${shown.map(g => navCard(g)).join('')}</div>
+        ${cfb.length > shown.length ? `<p style="margin-top:12px"><button type="button" class="btn" data-all-games>Show all ${cfb.length} games</button></p>` : nextBtn}`;
     }
-    return `${top}${toolbar}${liveStamp(merged.refreshed)}${byDay(list)}${nextBtn}`;
+    return `${top}${toolbar}${controls}${strip}${stamp}${byDay(filtered)}${nextBtn}`;
   };
   const LIVE_WORD = { in_progress: 'Live', final: 'Final', scheduled: 'Scheduled', postponed: 'Postponed', delayed: 'Delayed', suspended: 'Suspended', cancelled: 'Cancelled', canceled: 'Cancelled' };
   const gamesLive = async (opts = {}) => {
@@ -174,6 +232,27 @@
     return `80% range: ${side(range.margin[0])} to ${side(range.margin[1])}${Array.isArray(range.total) ? `; total ${C.fixed(range.total[0], 0)} to ${C.fixed(range.total[1], 0)} points` : ''}.`;
   };
 
+  const GARBAGE = 'Garbage-time risk: spread 21+.';
+  const anchored = (id, html) => html.replace('<section class="section">', `<section class="section" id="${id}">`);
+  /* "Why my number differs" (owner, Oct 7, item 28): our number, the book, the gap and every stored-data driver, by weight.
+     A note appears only when a concrete flag fired. A stale line prints only the staleness line. Research, never a play. */
+  const whySection = (g, why, final) => {
+    if (!why || final) return '';
+    const kind = `<span class="kt-kind">Research</span>`;
+    if (why.stale) return `<section class="section kt-why" id="why" aria-labelledby="why-h"><div class="section-head"><h2 id="why-h">Why my number differs</h2>${kind}</div><p class="small muted">${esc(why.text)}</p></section>`;
+    const markets = why.markets || { [why.kind]: why };
+    const row = (label, block, ours, book) => !block ? '' : `<span class="k">${label}</span><span class="num">${esc(ours)}</span><span class="num">${esc(book)}</span><span class="num ${block.gap > 0 ? 'green' : 'red'}">${esc(C.signed(block.gap, 1))}</span>`;
+    const table = `<div class="vs"><span class="h"></span><span class="h">My number</span><span class="h">Book${bookLabel((g.market || {}).book) ? ` (${esc(bookLabel(g.market.book))})` : ''}</span><span class="h">Gap</span>
+      ${row('Spread', markets.spread, markets.spread ? C.modelSpread(g.home.abbr, g.away.abbr, markets.spread.ours) : '', markets.spread ? favSpread(g.home.abbr, g.away.abbr, -markets.spread.book) : '')}
+      ${row('Total', markets.total, markets.total ? C.fixed(markets.total.ours, 1) : '', markets.total ? C.fixed(markets.total.book, 1) : '')}</div>`;
+    const both = Boolean(markets.spread && markets.total);
+    const list = Object.entries(markets).filter(([, b]) => b && (b.drivers || []).length).map(([k, b]) => `${both ? `<li class="mk" role="presentation" style="display:block">${k === 'spread' ? 'Spread' : 'Total'}</li>` : ''}${b.drivers.slice().sort((x, y) => y.weight - x.weight).map(d => `<li class="${d.direction > 0 ? 'for' : 'against'}">${esc(d.text)}${(d.numbers || []).length ? `<small>Numbers used: ${esc(d.numbers.join(', '))}</small>` : ''}</li>`).join('')}`).join('');
+    const flagged = Object.values(markets).flatMap(b => ((b || {}).drivers || []).filter(d => d.flag)).sort((x, y) => y.weight - x.weight)[0];
+    return `<section class="section kt-why" id="why" aria-labelledby="why-h"><div class="section-head"><h2 id="why-h">Why my number differs</h2>${kind}</div>
+      <div class="card">${table}${list ? `<ul class="kt-drivers">${list}</ul>` : '<p class="small muted" style="margin-top:10px">No stored driver explains this gap yet.</p>'}
+      ${flagged ? `<p class="kt-why-note">${esc(flagged.text)}</p>` : ''}
+      <p class="kt-why-foot">This is my projection against the book's line. It is research; best bets go through separate price checks. <a href="#game/${esc(g.id)}#model-vs">Model vs market ›</a> · <a href="#game/${esc(g.id)}#lines-we-like">Lines we like ›</a></p></div></section>`;
+  };
   views.game = async route => {
     const back = '<a class="back" href="#games">← Games</a>';
     let detail;
@@ -193,7 +272,8 @@
     const title = `${g.away.abbr} at ${g.home.abbr}`;
     const picks = (today.picks || []).filter(p => p.gameId === g.id || (p.gameIds || []).includes(g.id));
     const qbText = ['away', 'home'].flatMap(side => ((detail.teams || {})[side]?.injuries || []).filter(p => p.position === 'QB' && /out|doubtful|questionable|inactive/i.test(p.status || '')).map(p => `${p.name || p.player || g[side].abbr} ${p.status}`)).join('; ');
-    const header = projCard({ ...g, v2: model, lean: detail.lean || fromSlate.lean, marketRead: detail.marketRead || fromSlate.marketRead }, { big: true, link: false }) + (qbText ? `<p class=caution>QB news: ${esc(qbText)}</p>` : '');
+    const why = detail.whyDiffer || fromSlate.whyDiffer || null;
+    const header = projCard({ ...g, v2: model, lean: detail.lean || fromSlate.lean, marketRead: detail.marketRead || fromSlate.marketRead }, { big: true, link: false, ...(pregame ? cardExtras({ ...g, whyDiffer: why }, now) : {}) }) + (qbText ? `<p class=caution>QB news: ${esc(qbText)}</p>` : '');
     const actions = `<div class="btn-row" style="margin:12px 0 4px">${watchButton({ type: 'game', key: 'game:' + g.id, title, league: g.league, href: '#game/' + g.id, kickoff: g.kickoff })}
       <a class="btn small" href="#team/${esc(g.league)}/${esc(g.away.id)}">${esc(g.away.abbr)} team page</a><a class="btn small" href="#team/${esc(g.league)}/${esc(g.home.id)}">${esc(g.home.abbr)} team page</a>
       <a class="btn small" href="${esc(espnGame(g))}" target="_blank" rel="noopener">ESPN game page ↗</a></div>`;
@@ -230,6 +310,7 @@
       if (isNum(f.projection) && isNum(f.line) && f.market !== 'point spread') extraFa.push(['for', `Our average is ${C.fixed(f.projection)} against the ${f.line} line.`]);
       if (dm) extraFa.push([dm.supports ? 'for' : dm.opposes ? 'against' : 'ctx', dm.text + '.']);
       if (script) extraFa.push(['against', script]);
+      if (f.kind === 'player' && g.garbageTime) extraFa.push(['against', GARBAGE]);
       const src = { ...f, id: f.sourceId || f.id, gameId: g.id, league: g.league, kickoff: g.kickoff };
       const vm = { id: f.sourceId || f.id, title: niceTitle(f.title), market: marketLabel(f), league: g.league, kickoff: g.kickoff, odds: f.odds, book: bookLabel(f.book), bestOdds: null, booksCount: 1,
         age: quoteAge(f.observedAt, g.kickoff, now, { odds: f.odds, state: 'open' }), chance: f.chance, needs: f.needs, edge: round1(f.edge), fair: fairAmerican(f.chance), otherLines: [], gameId: g.id, clears: true,
@@ -264,7 +345,7 @@
       const price = !pregame ? 'Pregame comparison · not a live line' : currentRead(r) ? `${oddsText(r.odds)} ${bookLabel(r.book) || ''}` : 'No current price · check your book';
       return `<div class="receipt" style="grid-template-columns:minmax(0,1fr) auto"><div><b>${r.athleteId ? `<a href="#player/${esc(g.league)}/${esc(r.athleteId)}?stat=${esc(C.marketKey(r) || '')}">${esc(niceTitle(r.title))}</a>` : esc(niceTitle(r.title))}</b>
         <span>${esc(r.comparison || '')}</span><span>${esc(researchPrice(r))}</span><span>${hist ? `${esc(hist.hits)} of ${esc(hist.games)} this season at this line${hist.games < 5 ? ' · small sample' : ''} · ` : ''}${r.observedAt ? `checked ${esc(ago(r.observedAt))}` : ''}</span>
-        ${script ? `<span class="red">${esc(script)}</span>` : ''}${(r.warnings || [])[0] ? `<span class="red">${esc(r.warnings[0])}</span>` : ''}</div><span class="small muted" style="text-align:right">${esc(price)}</span></div>`;
+        ${script ? `<span class="red">${esc(script)}</span>` : ''}${r.kind === 'player' && g.garbageTime ? `<span class="red">${GARBAGE}</span>` : ''}${(r.warnings || [])[0] ? `<span class="red">${esc(r.warnings[0])}</span>` : ''}</div><span class="small muted" style="text-align:right">${esc(price)}</span></div>`;
     };
     const historyOnly = others.filter(r => r.kind === 'player' && !r.clearsPrice);
     const otherPriced = others.filter(r => !historyOnly.includes(r));
@@ -284,7 +365,7 @@
       <span class="k">Total</span><span class="num">${esc(C.fixed(model.total))}</span><span class="num">${esc(C.fixed(m.total))}${m.totalOpen != null && m.totalOpen !== m.total ? ` <span class="muted small">(opened ${esc(m.totalOpen)})</span>` : ''}</span></div>
       ${range ? `<p class="chart-cap">${esc(rangeWords(g, range))}</p>` : ''}
       ${gapWords(gap.margin) || gapWords(gap.total) ? `<p class="chart-cap">In past-season backtests, ${gapWords(gap.margin) ? `spread gaps at least this large went ${gapWords(gap.margin)} against the closing line` : ''}${gapWords(gap.margin) && gapWords(gap.total) ? ', and ' : ''}${gapWords(gap.total) ? `total gaps went ${gapWords(gap.total)}` : ''}. Not a live record, and a gap is not a bet. <a href="#record/model">Model record →</a></p>` : ''}
-      ${caution ? `<p class="caution" style="margin-top:6px">${esc(caution)}</p>` : ''}</div>`;
+      ${caution ? `<p class="caution" style="margin-top:6px">${esc(caution)}</p>` : ''}${why && !final ? `<p class="small" style="margin-top:8px"><a href="#game/${esc(g.id)}#why">Why my number differs ›</a></p>` : ''}</div>`;
 
     /* Underdog watch. */
     const uGame = { ...g, state: g.state || 'pre', upsetWatch: detail.upsetWatch || fromSlate.upsetWatch };
@@ -348,7 +429,7 @@
         }).join('')}</tr>`).join('')}</tbody></table></div>`;
     };
     const projHtml = (detail.forecast || {}).players ? section('Player projections', `<div style="display:grid;gap:16px">${['away', 'home'].map(side => { const n = ((((detail.forecast || {}).players || {})[side] || {}).players || []).length;
-      return n ? `<details class="more-box" data-box="proj:${side}"${typeof matchMedia === 'function' && matchMedia('(min-width: 760px)').matches ? ' open' : ''}><summary>${esc(g[side].abbr)} player projections · ${n} players</summary>${projTable(side)}</details>` : projTable(side); }).join('')}</div>`, '', `Our average, with the likely range underneath. ${detail.props && detail.props.capturedAt ? `Where we saw a line (${esc(ago(detail.props.capturedAt))}) it shows instead, with ▲ when we are above it and ▼ when below.` : 'No comparison lines recorded yet.'}`)
+      return n ? `<details class="more-box" data-box="proj:${side}"${typeof matchMedia === 'function' && matchMedia('(min-width: 760px)').matches ? ' open' : ''}><summary>${esc(g[side].abbr)} player projections · ${n} players</summary>${projTable(side)}</details>` : projTable(side); }).join('')}</div>`, '', `My average, with the likely range underneath. ${detail.props && detail.props.capturedAt ? `Where I saw a line (${esc(ago(detail.props.capturedAt))}) it shows instead, with ▲ when I am above it and ▼ when below.` : 'No comparison lines recorded yet.'}${g.garbageTime ? ` <b class="red">${GARBAGE}</b> The spread is 21 points or more, so starters may sit early.` : ''}`)
       : pregame ? section('Player projections', '<p class="muted small">Player projections are not available for this game yet.</p>') : '';
 
     /* What each defense allows, by position. */
@@ -388,10 +469,11 @@
     return `${back}${head(g.league === 'CFB' ? 'College football' : 'NFL', title, '')}${header}${actions}${liveStamp(liveNow.refreshed)}
       ${picks.length ? section('Our plays in this game', `<div class="tickets">${picks.map(p => ticket(p)).join('')}</div>`) : ''}
       ${finalHtml}
-      ${pregame ? section('Lines we like', favHtml, '', 'Current prices where our estimated chance is above what the price needs. Research, not extra best bets.') : ''}
+      ${whySection(g, why, final)}
+      ${pregame ? anchored('lines-we-like', section('Lines we like', favHtml, why && !final ? `<a class="more" href="#game/${esc(g.id)}#why">Why my number differs →</a>` : '', 'Current prices where my estimated chance is above what the price needs. Research, not extra best bets.')) : ''}
       ${edgesHtml ? section('Matchup lines', edgesHtml, '<span class="small muted">Research, not posted plays</span>', 'Our projection, this-season hit rate at the exact line, and the opponent defense in one view. College game-script cautions rank lower.') : ''}
       ${othersHtml ? `<section class="section">${othersHtml}</section>` : ''}
-      ${final && detail.final ? '' : section('Model vs market', modelBlock)}
+      ${final && detail.final ? '' : anchored('model-vs', section('Model vs market', modelBlock))}
       ${upsetHtml}${trendsHtml}${depthHtml}${projHtml}${matchupHtml}
       ${section('Recent form', `<div class="grid two">${form('away')}${form('home')}</div>`)}
       ${injuryHtml}${tdHtml}`;
@@ -425,7 +507,7 @@
     }).join('')}</tbody></table></div>` : `<p class="muted small">${detail ? 'Results appear after the first game.' : 'Game-by-game results are stored for FBS teams only.'}</p>`;
     return `${back}<div class="page-head" style="display:flex;gap:14px;align-items:center">${teamMark({ ...team, id: route.id }, 'xl', league)}<div><p class="eyebrow">${esc(league === 'CFB' ? 'College football' : 'NFL')}</p><h1>${esc(team.name)}</h1>
         <p class="sub">${played.length ? `${esc(season)}: <b>${wins}–${losses}${ties ? `–${ties}` : ''}</b>${atsText ? ` · ${esc(atsText)}` : ''}` : `${esc(season || '')} season`}</p></div></div>
-      ${section('Upcoming and recent', `<div class="projs">${games.map(g => projCard(g)).join('') || '<p class="muted">No games in the current window.</p>'}</div>`)}
+      ${section('Upcoming and recent', `<div class="projs">${games.map(g => navCard(g)).join('') || '<p class="muted">No games in the current window.</p>'}</div>`)}
       ${section('This season', results, '', 'Close is the closing spread for this team. ATS is whether they covered it.')}
       ${ranks.length ? section('What this defense allows', `<div class="kpis">${ranks.map(([pos, r]) => { const tone = C.rankTone(r.rank, r.of); return `<div class="kpi"><small>${esc(pos)} ${pos === 'QB' ? 'pass' : pos === 'RB' ? 'rush' : 'rec'} yds</small><b class="num ${tone === 'soft' ? 'green' : tone === 'tough' ? 'red' : ''}">${esc(C.fixed(r.value))}</b><span>rank ${esc(r.rank)} of ${esc(r.of)}${tone === 'soft' ? ' · soft' : tone === 'tough' ? ' · tough' : ''}</span></div>`; }).join('')}</div>
         ${allowed.length ? `<details class="more-box" style="margin-top:12px"><summary>Game by game</summary><div class="table-wrap"><table class="t"><thead><tr><th>Game</th><th class="n">QB pass yds</th><th class="n">RB rush yds</th><th class="n">WR rec yds</th><th class="n">TE rec yds</th></tr></thead><tbody>${allowed.map(d => `<tr><td><a href="#game/${esc(d.gameId)}">${esc(String(d.date).slice(5))}</a> ${esc(abbr(d.opp))}</td><td class="n">${esc((d.allowed.QB || {}).passYds ?? '–')}</td><td class="n">${esc((d.allowed.RB || {}).rushYds ?? '–')}</td><td class="n">${esc((d.allowed.WR || {}).recYds ?? '–')}</td><td class="n">${esc((d.allowed.TE || {}).recYds ?? '–')}</td></tr>`).join('')}</tbody></table></div></details>` : ''}`,
