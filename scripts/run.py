@@ -659,10 +659,13 @@ def candidates(lines, games, now):
         books = [(q['book'], q['line'], q.get('odds')) for q in row.get('books') or []
                  if isinstance(q.get('odds'), (int, float))] or [(row['book'], row['line'], row.get('odds'))]
         if row.get('gameMarket'):
-            if row.get('market') != 'total points' or grade.get('tier') not in ('lean', 'strong'):
+            if row.get('market') not in ('total points', 'point spread') or grade.get('tier') not in ('lean', 'strong'):
                 continue
-            out.append({'status': 'active', 'favorite': False, 'modelLean': True, 'marketType': 'total',
-                        'line': row['line'], 'direction': row['direction'], 'gameIds': [game['id']],
+            spread = row['market'] == 'point spread'
+            direction = (row.get('side') or ('home' if row.get('direction') is None else row['direction'])) if spread else row['direction']
+            out.append({'status': 'active', 'favorite': False, 'modelLean': not spread,
+                        'marketType': 'spread' if spread else 'total',
+                        'line': row['line'], 'direction': direction, 'gameIds': [game['id']],
                         '_league': game['league'], '_row': row, '_quotes': books})
         elif row.get('athleteId') and grade.get('rawTier', grade.get('tier')) == 'lean':
             out.append({'status': 'active', 'favorite': False, 'modelLean': True, 'position': row.get('position'),
@@ -682,6 +685,17 @@ def load_candidate_lines(path, logger=log):
     except (OSError, TypeError, ValueError, AttributeError) as exc:
         logger(f'line catalog unavailable; official selection skipped: {exc}')
         return []
+
+
+def dossier_support_issue(case):
+    """Two independent numbered facts are required before a straight joins the public record."""
+    reasons = {str(row.get('text') or '').strip() for row in (case.get('reasons') or [])
+               if isinstance(row, dict) and re.search(r'\d', str(row.get('text') or ''))}
+    if len(reasons) < 2:
+        return 'fewer than two numbered supporting reasons in the case file'
+    if any(row.get('hard') for row in (case.get('risks') or []) if isinstance(row, dict)):
+        return 'the case file has a hard risk'
+    return None
 
 
 CARD_PROP_PRICES = (-200, 120)     # a prop on the card is priced like a main line: past +120, shrinking our chance
@@ -717,7 +731,8 @@ def rank_card(wanted, ctx):
         stopped = direction.paused(ctx.policy, segment, ctx.now)
         first = direction.priority(ctx.policy, segment, ctx.now)
         c['_rank'] = {'edge': round(edge, 1), 'performanceCaution': cautious, 'requiredEdge': need}
-        return (bool(stopped or edge <= 0 or edge < need), not first, -edge,
+        market_priority = 0 if c.get('athleteId') else 1 if c.get('marketType') in ('spread', 'moneyline') else 2
+        return (bool(stopped or edge <= 0 or edge < need), market_priority, not first, -edge,
                 str(c.get('id') or row.get('id') or ''))
     kept = [c for c in wanted if not c.get('athleteId')
             or isinstance(c['_row'].get('odds'), (int, float)) and CARD_PROP_PRICES[0] <= c['_row']['odds'] <= CARD_PROP_PRICES[1]]
@@ -841,9 +856,11 @@ def price(candidate, ctx, now):
         candidate['id'] = f"{game['league']}-{game['season']}-W{game.get('week', 0)}-{last}-{side}-{line_slug(line)}-{market.lower()}-{BOOK_SLUG.get(book, slug(book))}"
         candidate['confidence'] = 2
     else:
-        candidate['title'] = f"{pick_card.team_label(away, game['league'])} at {pick_card.team_label(home, game['league'])} {side} {pricing.fmt(line)}"
+        candidate['title'] = (f"{pick_card.team_label(game[side], game['league'])} {pricing.signed(line)}"
+                              if market == 'spread' else
+                              f"{pick_card.team_label(away, game['league'])} at {pick_card.team_label(home, game['league'])} {side} {pricing.fmt(line)}")
         candidate['id'] = (f"{game['league']}-{game['season']}-W{game.get('week', 0)}-{away['abbreviation'].lower()}-"
-                           f"{home['abbreviation'].lower()}-{side}-{line_slug(line)}-{BOOK_SLUG.get(book, slug(book))}")
+                           f"{home['abbreviation'].lower()}-{('spread-' if market == 'spread' else '')}{side}-{line_slug(line)}-{BOOK_SLUG.get(book, slug(book))}")
         candidate['confidence'] = 3 if p['edgePoints'] >= gates.LEAN_STRONG else 2
     sources = [game.get('source')] if game.get('source') else []
     if row.get('source'):
@@ -1418,7 +1435,8 @@ def write_prose(candidate, ctx, records):
         checked = checked_facts(candidate)
         opposing_stats = [f for f in verified_opposition(candidate) if f.get('kind') == 'stats' and f.get('claim')]
         caution = (' Verified statistical reporting also points against this side; see the counterpoints below.') if opposing_stats else ''
-        candidate['why'] = (f"Model lean, our number only. We have the total at {p['projection']:g}; the book is at {pricing.fmt(line)}. "
+        number_label = 'home margin' if gates.market_key(candidate) == 'spread' else 'total'
+        candidate['why'] = (f"Model lean, our number only. We have the {number_label} at {p['projection']:g}; the book is at {pricing.fmt(line)}. "
                             f"That makes the {side} {100 * p['chance']:.1f}%, and {odds:+d} needs {100 * p['breakEven']:.1f}%."
                             + caution
                             + ''.join(f" Checked before publishing: {first_sentence(f['claim'])}" for f in checked)
@@ -1790,7 +1808,8 @@ def _run(args, now, slot, kinds, status):
             continue
         if price(candidate, ctx, now) is None:
             continue
-        potd_market.append(dict(candidate))
+        if candidate['_league'] != 'NFL' or gates.market_key(candidate) != 'total':
+            potd_market.append(dict(candidate))
         if candidate['id'] in ctx.first:
             continue            # already on the record: only a settlement or a close revises a published pick
         candidate['_team'] = ctx.player_team.get(candidate.get('athleteId', ''))
@@ -1855,6 +1874,12 @@ def _run(args, now, slot, kinds, status):
         except (KeyError, TypeError, ValueError, AttributeError) as error:
             log(f"dossier partial for {candidate['id']}: {type(error).__name__}")
             candidate['dossier'] = dossier.empty(candidate)
+        support_issue = dossier_support_issue(candidate['dossier'])
+        if support_issue:
+            screened.append({'league': league, 'gameId': candidate['gameIds'][0], 'title': candidate['title'],
+                             'rule': 'dossier-support', 'reason': support_issue})
+            decided.append(decision_record(candidate, league, 'refused', ['dossier-support'], support_issue, now, ctx))
+            continue
         # Admitted picks join the day's count so the caps hold within one run.
         kind = 'props' if candidate.get('athleteId') else 'gamePicks'
         ctx.first[candidate['id']] = dict(candidate, league=league, publishedAt=stamp(now), kind=kind)

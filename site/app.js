@@ -1092,12 +1092,12 @@
   /* The top of Today, the same on the first paint and the full card, so nothing moves when today.json lands: the
      chef's line with the last game day's W-L, the first ticket on the rail, the Climb stub (inside the first screen
      at 375 x 812, DIRECTION-RULES section 5 as updated by decision 10), then the rest of the rail. */
-  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '' }) => {
-    const title = ledeTitle(rows, today), first = rows[0];
+  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', nothingCleared = false }) => {
+    const title = nothingCleared && !rows.length ? 'Nothing cleared my bar today.' : ledeTitle(rows, today), first = rows[0];
     const photo = first && first.athleteId && !C.isParlay(first) && HEADSHOT[first.league || String(first.gameId || '').split('-')[0]];
     const size = photo ? ledeSize(title) : null;
     return `<section class="kt-lede${photo ? ' with-photo' : ''}"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1${size ? ` style="font-size:${size}px"` : ''}>${esc(title)}</h1></section>
-      ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards }) : emptyRail('Nothing on the rail yet. Check back before kickoff.')}
+      ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards }) : emptyRail(nothingCleared ? 'Nothing cleared my bar today.' : 'Nothing on the rail yet. Check back before kickoff.')}
       ${climbStub(climb, past)}${proof}${rows.length > 1 || more.length || later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
       ${rail([...more, ...rows.slice(1), ...later], { season, lines, cards, more: true, label: 'More best bets' })}</section>` : ''}`;
   };
@@ -1212,8 +1212,12 @@
       COMMUNITY,
       state.league === 'ALL' ? ktSec('sports', 'More sports', `<div class="pill-row">${Object.keys(LIVE).map(key => { const n = ((((sports || {}).leagues || {})[key] || {}).games || []).filter(g => g.date === etDay()).length;
         return `<a class="pill" href="#today?sport=${esc(key)}">${esc(LEAGUE_NAME[key])}${FOOTBALL.includes(key) ? '' : ` · ${n} today`} →</a>`; }).join('')}</div>`) : ''].join('');
+    const evaluated = today.generatedAt && C.dayOf(today.generatedAt) === etDay()
+      && (etHour(today.generatedAt) > 9 || etHour(today.generatedAt) === 9
+          && Number(ET_PARTS(today.generatedAt, { minute: '2-digit' })) >= 30);
     return `<div class="kt-today"><div>${todayTop({ rows, today: Boolean(todays.length), last: (today.lastSlate || {})[state.league], season: (today.season || {})[state.league],
-      climb, lines: lines && lines.lines, more: rungHere, past: ladder.history, later: rest, cards, proof })}</div>
+      climb, lines: lines && lines.lines, more: rungHere, past: ladder.history, later: rest, cards, proof,
+      nothingCleared: Boolean(evaluated && !todays.length && !rows.length && todayGames.length) })}</div>
       <div>${rest2}</div></div>`;
   };
 

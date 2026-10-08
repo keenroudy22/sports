@@ -608,11 +608,56 @@
     {
       "id": "P68",
       "title": "Today information restored with no fold",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
       "next": "Apply Claude's packaged today-restore series after the owner's release approval; run the full gates and check live Today at 375 and 1440 px.",
       "doneWhen": "Hosted publish passes and live Today shows the unchanged first screen, then every restored section without a tap, with no overflow, console error or caught load state.",
-      "evidence": "Owner October 7 request after P61. Built and gated in a clone (branch today-restore-final on dev aadbaa4a); not yet released."
+      "evidence": "Owner October 7 request after P61, with the October 8 narrowed card-image retention rule. Release 6dc3ebca passed 1,182 Python, 222 Node, clean export, build, budget, 92-pick audit, 500-file guard, isolated rehearsal and hosted run 37795541437. Live CFB Today showed more best bets, last-game-day result, Prep List, Underdog watch, Research worth a look, games and off-card content without a fold; 375/1440 browser checks passed with no overflow, exception or caught load state."
+    },
+    {
+      "id": "P69",
+      "title": "Show the dated 80/20 Climb route on the website",
+      "status": "ready",
+      "owner": "agent",
+      "next": "After P68 and the card cutover are live, render climb-route.png on each publish, add ledger-matched HTML steps to Record › Climb and link Today's stub; test math, links and 375 px layout.",
+      "doneWhen": "The hosted build contains site/data/cards/climb-route.png; live Record › Climb shows the graphic and ledger-accurate cashed/open steps, clearly labeled future-plan rows, real play-page links and no 375/1440 overflow; Today links to #route.",
+      "evidence": "Owner decision 36 dated 2026-10-08; route reference and first real render previously approved under item 23. Website placement is not built or released."
+    },
+    {
+      "id": "P70",
+      "title": "NBA Today and guarded opening-night Trial",
+      "status": "ready",
+      "owner": "agent",
+      "next": "After the held site/card release clears, build NBA Today from free ESPN data for an October 16 live target, then prepare the guarded NBA Trial card and first-post review for opening night.",
+      "doneWhen": "Before Oct 20, NBA Today has scores, projections, trends and Prep List at 375/1440. Trial has fresh two-sided prices, holds, ≥6-point raw edge and ≥0.56 chance until calibrated, a 1u/one-per-day cap, separate record and first-card review.",
+      "evidence": "Owner-delegated decision 35 dated 2026-10-08. Daily NBA launch-readiness automation and dated milestones are in codex-status.md; no NBA code or public Trial has shipped."
+    },
+    {
+      "id": "P71",
+      "title": "Prop-first football selection and totals pause",
+      "status": "ready",
+      "owner": "agent",
+      "next": "After the held site/card release, implement OWNER-DECISIONS item 37 with tests and a 21-day before/after candidate count; keep existing published plays untouched.",
+      "doneWhen": "NFL totals stay research-only until shadow evidence restores them; CFB totals obey weekend and 5-point limits; props outrank sides and totals; eligible moneylines pass exact-line price gates; hosted and live checks pass.",
+      "evidence": "Owner-delegated decision 37 dated 2026-10-08. The decision is recorded in OWNER-DECISIONS-2026-10-07.md; no selection code or public output has changed."
+    },
+    {
+      "id": "P72",
+      "title": "No forced best bets and Comfort Food",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Release the four-point straight bar, five-point Hot Plate bar, dossier/QB holds and zero-play copy; then build guarded Comfort Food and preview its first real card before Saturday's morning runs.",
+      "doneWhen": "Straights obey item 33 without filler; Comfort Food is at most one eligible 1u, 2-3-leg, single-book, different-game combo on a no-straight day, with a reviewed card, separate record line and live receipts.",
+      "evidence": "Owner decision 33 dated 2026-10-08 and NO-FORCED-PLAYS-SPEC.md. Historical 21-day lookback has incomplete saved edges and no saved dossiers; unknown outcomes must remain unknown."
+    },
+    {
+      "id": "P73",
+      "title": "Game-day morning delivery",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Observe the next natural Iowa-at-Washington game-day morning delivery and preserve the pre-post hard-news check and Discord lead; do not force a test post.",
+      "doneWhen": "A hosted run passes from the reviewed item-38 code and the live site has no phone-width load or overflow error; future posting is queued for game-day 9:30 Eastern (8:30 before 10:30 kickoffs), with Hot Plate first and ten-minute spacing.",
+      "evidence": "Owner item 38 released at 8bf33d9aedb0c561984b3b0c647e360d9f6e7aaa. Hosted run 37819749608 succeeded; live Chrome audit at 375 and 1440 on Today, Record, Games and More passed 8 pages with no load-error, console error or overflow. Natural next-delivery observation remains open."
     }
   ]
 }

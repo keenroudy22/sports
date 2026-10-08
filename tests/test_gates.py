@@ -53,6 +53,7 @@ def favorite_context(**over):
 
 def context(**over):
     fields = dict(now=NOW, games={'NFL-1': GAME}, odds={'NFL-1': ODDS}, prop_odds={'NFL-1': PROP_ODDS},
+                  odds_history={'NFL-1': [ODDS]}, passers={'NFL-10': ['5', '5', '5']},
                   snapshots={'NFL-1': [SNAPSHOT]}, names={'77': 'Player Seven', '5': 'Quarterback Five'},
                   appearances=defaultdict(int, {'77': 3}), player_team={'77': '10', '5': '10'}, starters={'NFL-10': '5'},
                   scoreboard={'props': {'markets': [{'market': 'recYds', 'graded': 158, 'closerThanLine': [66, 92]},
@@ -80,6 +81,40 @@ class TwoSidedPriceTests(unittest.TestCase):
         self.assertTrue(gates.two_sided_straight(total_lean(), context()).ok)
         one_sided = {'NFL-1': {'books': {'draftkings': {'total': {'line': 44.5, 'over': -110}}}}}
         self.assertFalse(gates.two_sided_straight(total_lean(), context(odds=one_sided)).ok)
+
+
+class NoForcedBestBetTests(unittest.TestCase):
+    def test_four_point_floor_is_inclusive_and_requires_calibration(self):
+        from unittest.mock import patch
+        pick = prop_lean()
+        with patch.object(gates, 'desk_for', return_value={'calibrated': True, 'edgePoints': 3.9}):
+            self.assertFalse(gates.bar_4(pick, context()).ok)
+        with patch.object(gates, 'desk_for', return_value={'calibrated': True, 'edgePoints': 4.0}):
+            self.assertTrue(gates.bar_4(pick, context()).ok)
+        with patch.object(gates, 'desk_for', return_value={'calibrated': False, 'edgePoints': 12.0}):
+            self.assertFalse(gates.bar_4(pick, context()).ok)
+
+    def test_recent_qb_change_holds_receiving_and_passing_props(self):
+        stable = context(passers={'NFL-10': ['5', '5', '5']})
+        changed = context(passers={'NFL-10': ['4', '5', '5']})
+        self.assertTrue(gates.qb_change_recent(prop_lean(), stable).ok)
+        self.assertFalse(gates.qb_change_recent(prop_lean(), changed).ok)
+        self.assertTrue(gates.qb_change_recent(prop_lean(market='rushYds'), changed).ok)
+
+    def test_nfl_total_paused_and_cfb_total_weekend_only_without_adverse_move(self):
+        self.assertFalse(gates.totals_policy(total_lean(), context()).ok)
+        cfb_game = dict(GAME, id='CFB-1', league='CFB', kickoff='2026-09-27T17:00:00Z')
+        cfb_pick = total_lean(id='CFB-test', league='CFB', gameIds=['CFB-1'])
+        first = dict(ODDS, gameId='CFB-1')
+        ctx = context(games={'CFB-1': cfb_game}, odds_history={'CFB-1': [first]})
+        self.assertTrue(gates.totals_policy(cfb_pick, ctx).ok)
+        self.assertFalse(gates.bar_4(cfb_pick, ctx).ok, 'college totals need five, not four')
+        self.assertFalse(gates.totals_policy(dict(cfb_pick, line=45.5), ctx).ok)
+        monday = dict(cfb_game, kickoff='2026-09-28T17:00:00Z')
+        self.assertFalse(gates.totals_policy(cfb_pick, context(games={'CFB-1': monday}, odds_history={'CFB-1': [first]})).ok)
+        prior = dict(cfb_pick, id='CFB-prior', publishedAt='2026-09-26T15:00:00Z')
+        self.assertFalse(gates.totals_policy(cfb_pick, context(games={'CFB-1': cfb_game},
+                          odds_history={'CFB-1': [first]}, first={'CFB-prior': prior})).ok)
 
 
 class KindTests(unittest.TestCase):
@@ -485,8 +520,11 @@ class CardTests(unittest.TestCase):
 class AdmitTests(unittest.TestCase):
     def test_a_clean_model_lean_is_admitted(self):
         ok, decisions = gates.admit(total_lean(confidence=3), favorite_context())     # DraftKings 44.5 at -110 is the best value on the board
-        self.assertTrue(ok, [str(d) for d in decisions if not d.ok])
-        self.assertEqual({d.rule for d in decisions}, {r.__name__ for r in gates.RULES['modelLean']})
+        self.assertFalse(ok, 'NFL totals stay on the research board, not the official card')
+        self.assertIn('totals_policy', {d.rule for d in gates.refusals(decisions)})
+        self.assertEqual({d.rule for d in decisions},
+                         {r.__name__ for r in gates.RULES['modelLean']} - {'bar_4', 'qb_change_recent'}
+                         | {'bar-4', 'qb-change-recent'})
 
     def test_a_clean_prop_lean_is_admitted_when_the_market_gate_allows(self):
         ctx = context(scoreboard={'props': {'markets': []}}, policy={**gates.learning.default_policy(), 'calibration': {'NFL/prop': {'k': 0.9, 'n': 500}}})
@@ -502,7 +540,7 @@ class AdmitTests(unittest.TestCase):
         # and a better quote (-115) sitting in the capture: every one of them is named.
         self.assertEqual({d.rule for d in gates.refusals(decisions)},
                          {'one_book', 'two_sided_straight', 'prop_price_floor', 'prop_raw_edge', 'best_quote_by_ev',
-                          'prop_calibrated_value'})
+                          'prop_calibrated_value', 'bar-4'})
 
     def test_underperforming_segment_raises_the_bar_but_does_not_veto_a_strong_price(self):
         ctx = context(policy={**gates.learning.default_policy(), 'calibration': {'NFL/prop': {'k': 0.13, 'n': 500}},

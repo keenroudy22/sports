@@ -29,7 +29,7 @@ def play(key, game, **over):
     return base
 
 
-EDGES = {'a': 3.1, 'b': 5.4, 'closed': 9.0, 'started': 9.0, 'sunday': 9.0, 'ticket': 9.0}
+EDGES = {'a': 5.1, 'b': 5.4, 'closed': 9.0, 'started': 9.0, 'sunday': 9.0, 'ticket': 9.0}
 
 
 def fake_desk(pick, ctx):
@@ -55,7 +55,7 @@ class ChooseTests(unittest.TestCase):
             try:
                 self.assertEqual(featured.choose(ctx, NOW, path, log=lambda *_: None), 'b', 'once named, the day keeps it')
             finally:
-                EDGES['a'] = 3.1
+                EDGES['a'] = 5.1
 
     def test_a_day_without_plays_names_nothing(self):
         ctx = SimpleNamespace(first={}, latest={}, games=GAMES, policy={})
@@ -74,19 +74,27 @@ class ChooseTests(unittest.TestCase):
             self.assertEqual(featured.choose(ctx, NOW, path, log=lambda *_: None, current=current), 'a',
                              'the current market comparison beats the older saved ordering')
             entry = featured.load(path)['2026-09-26']
-            self.assertEqual((entry['id'], entry['edge'], entry['compared']), ('a', 7.2, 2))
+            self.assertEqual((entry['id'], entry['edge'], entry['compared']), ('a', 7.2, 1))
             self.assertEqual(entry['comparisonAt'], '2026-09-26T10:45:00Z')
 
     def test_first_designation_requires_a_fresh_market_match(self):
         ctx = self.world()
         current = [play('a', 'g1')]
         with tempfile.TemporaryDirectory() as folder, \
-                mock.patch.object(featured, 'strength', return_value=4.0):
+                mock.patch.object(featured, 'strength', return_value=5.0):
             path = Path(folder) / 'featured.json'
             self.assertEqual(featured.choose(ctx, NOW, path, log=lambda *_: None, current=current), 'a')
             path.unlink()
             self.assertIsNone(featured.choose(ctx, NOW, path, log=lambda *_: None, current=[]),
                               'an old official play without a current board match is not labeled POTD')
+
+    def test_hot_plate_needs_five_points_at_the_fresh_price(self):
+        ctx = self.world()
+        current = [play('a', 'g1')]
+        with tempfile.TemporaryDirectory() as folder, \
+                mock.patch.object(featured, 'strength', return_value=4.9):
+            self.assertIsNone(featured.choose(ctx, NOW, Path(folder) / 'featured.json',
+                                              log=lambda *_: None, current=current))
 
     def test_a_pick_pulled_before_it_posts_is_replaced_once_it_has_posted_never(self):
         """Sep 25: the Pick of the Day (Navy at UAB over) closed at 11:03 AM over the quarterback's ankle, before its
@@ -99,7 +107,7 @@ class ChooseTests(unittest.TestCase):
             self.assertEqual(featured.choose(ctx, NOW, path, **quiet), 'b')
             ctx.latest['b'] = closed
             self.assertEqual(featured.choose(ctx, NOW, path, **quiet), 'a', 'the best play left')
-            self.assertEqual(featured.load(path)['2026-09-26'], {'id': 'a', 'chosenAt': '2026-09-26T10:45:00Z', 'edge': 3.1, 'replaced': ['b']})
+            self.assertEqual(featured.load(path)['2026-09-26'], {'id': 'a', 'chosenAt': '2026-09-26T10:45:00Z', 'edge': 5.1, 'replaced': ['b']})
             self.assertEqual(featured.choose(ctx, NOW, path, **quiet), 'a', 'the replacement stays')
             ctx.latest['a'] = closed
             self.assertIsNone(featured.choose(ctx, NOW, path, **quiet), 'nothing left to take its place')

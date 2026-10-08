@@ -968,14 +968,72 @@ Claude approved the separate Climb route preview in `CLIMB-ROUTE-REVIEW.md`; thi
 does not enable route delivery or change the 11:45 PM Kitchen Ticket card cutover. P59 tracks
 that separately.
 
-## October 7 Today information restore — built, not released
+## October 8 Today information restore — verified live
 
-After the Kitchen Ticket release the owner asked for the old Today's information back without a
-tap, keeping the look. Branch `today-restore` (built on dev at `deff0104`, packaged on dev `aadbaa4a`) removes the "More for
-today" fold and restores, in the order the AGENTS.md no-fold rule records: the season line, every
-other open best bet as a ticket, Leftovers with units, the rolling Prep List, Underdog watch,
-Research worth a look, today's games with live and projected scores, Fun / Pulled / Off the card,
-the Discord card and More sports, plus each ticket's countdown and share-card link. ORDER UP now
-needs a live price (an expired quote never wears it), one limit sentence reads the same on every
-ticket, the season record rides only the first ticket, and Today's research rows stack at phone
-width. P68 tracks the release; it is not shipped until a gated deploy and a live 375/1440 check.
+The owner narrowed the eight-day site-image guarantee to recent receipts and cards still referenced by
+the site. The original uploaded X/Discord attachment bytes remain immutable; an older, unreferenced
+missing image is logged and skipped, never fetched from an expired URL, regenerated, or allowed to fail
+the build. A recent referenced card still fails closed if its original bytes cannot be restored. The
+regression tests cover both sides of that boundary.
+
+The isolated release `6dc3ebca3f7a2d1e5285520dd329988bbc6da6a7` was fast-forwarded under the
+run lock after the green prior desk run. Local final-tree gates passed: 1,182 Python tests (two skipped),
+222 frontend tests, both suites from a clean export, 441-page build, payload budget with no issues or
+warnings, 92-pick record reconciliation, 79-item feed with 16 cards, 500-file publication guard,
+asset and SVG checks, and isolated slot-0830 rehearsal (`ok`, zero outside writes/private reads).
+Local 375/1440 browser checks found no overflow, caught load error or console exception.
+
+Hosted publish [run 37795541437](https://github.com/keenroudy22/sports/actions/runs/37795541437)
+passed at 10:55 AM Eastern. Live app.js?v=138 and app.css?v=86 passed 20 route checks at 375 and
+1440 pixels with no overflow, caught load state or browser exception. CFB Today showed the first
+ticket and spaced Climb stub, other best bets, last-game-day units and result, Prep List, Underdog
+watch, research, games and off-card content without a fold. Record showed the October calendar;
+College Games showed the filters and Worth your time; the Iowa–Washington game page showed
+“Why my number differs”; Vegas and the legacy `#responsible`→More route loaded. The footer was
+exactly `21+ · Entertainment only`; Start here retained Eastern times and the Cloudflare note.
+The prior TK King card remained byte-identical (SHA-256
+`07458d2d56b84d55e096869047f5e0a0a3ae7f70eb0d9143cdf2c92c485e30d1`). His displayed
+result uses `6 targets, 0 catches, 0 yards · missed by 49.5` without changing the stored report.
+
+The reviewed Kitchen Ticket selector is live but time-gated to
+`TICKET_FROM=2026-10-08T12:00:00-04:00`, more than 30 minutes after hosted completion. No first
+post-cutover card was observed at the time of this receipt, so P45 remains open for that check.
+P64 also remains open for its later month art and weekly receipt strip; the calendar site portion
+is live. No dossier/series/selection-rule or append-only-record change rode with this release.
+
+## October 8 result-copy and first Kitchen Ticket art verification
+
+Release `5e61eddc` passed hosted [run 37806752440](https://github.com/keenroudy22/sports/actions/runs/37806752440).
+On the live app.js?v=140, Today, the TK King play page, and Record each include
+`TK King · 6 targets, 0 catches, 0 yards · missed by 49.5`; the saved October 8 report remains
+append-only. The 9:00 AM Leftovers X post preceded this release and was not edited or deleted.
+Caption send paths (Buffer/X and Discord) now reject a bare five-plus-digit athlete ID, while
+Leftovers, Final, Cooked and receipt text read the factual result helper. New SVG card rendering
+also rejects that ID pattern. Tests cover the real TK King settlement and all send gates.
+
+The five owner-named unposted play cards—Iowa–Washington, Arizona–West Virginia, Nevada–UTEP,
+SDSU–Oregon State and Bills–Rams—each returned a live 1080×1350 PNG carrying the Kitchen Ticket
+theme marker after hosted run 37806752440. SDSU is still closed to new entries; retaining its
+image does not reopen or schedule it. Release `7052dbe6` passed hosted
+[run 37808251104](https://github.com/keenroudy22/sports/actions/runs/37808251104); every
+post-cutover image send now waits if the live PNG lacks that marker. The scheduler itself
+accepted the five live PNGs. At verification there was no future Buffer entry, so the first
+sent X attachment remains unobserved. The approved 9:30 Prep List posting path is not wired
+yet; Iowa's existing play window targets Friday October 9 at 6:00 PM Eastern if its normal
+price, news and last-look checks still pass. Live 375/1440 checks found no sideways overflow,
+caught load-error state or console error. P45's card cutover is verified; its first X delivery
+will be checked separately. P64's month art and weekly strip remain open.
+
+### October 8 game-day morning posting rule (P73)
+
+Owner item 38 supersedes the earlier noon/two-hours-before and 6 PM targets. The
+isolated release `8bf33d9aedb0c561984b3b0c647e360d9f6e7aaa` passed 1,188 Python tests
+(2 skipped), 223 Node tests, clean export, build, payload budget, 92-pick record audit,
+502-file publication guard, asset/SVG checks, isolated 11:45 rehearsal and local phone/desktop
+browser checks. The locked fast-forward deploy and [hosted run 37819749608](https://github.com/keenroudy22/sports/actions/runs/37819749608)
+succeeded. The live 375/1440 Chrome check of Today, Record, Games and More found zero
+overflow, console errors or caught load-error states. Future official plays and tickets
+target game-day 9:30 AM Eastern (8:30 before a 10:30 kickoff), with Hot Plate first,
+ten-minute X spacing, a Discord lead and a safe late-admission window. Iowa at Washington
+now targets Friday October 9 at 9:30 AM Eastern, subject to its news and price checks.
+No test post was forced; natural delivery remains to be observed.

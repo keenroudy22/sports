@@ -30,6 +30,23 @@ class SlotTests(unittest.TestCase):
 
 
 class CandidateCatalogTests(unittest.TestCase):
+    def test_spreads_join_the_board_without_turning_off_exact_line_checks(self):
+        now = datetime(2026, 10, 8, 13, 0, tzinfo=timezone.utc)
+        game = {'id': 'CFB-1', 'league': 'CFB', 'state': 'pre', 'kickoff': '2026-10-10T19:00:00Z'}
+        row = {'gameId': 'CFB-1', 'state': 'open', 'gameMarket': True, 'market': 'point spread',
+               'side': 'away', 'line': 3.5, 'book': 'FanDuel', 'odds': -110,
+               'grade': {'tier': 'strong', 'edge': 6.0}}
+        picks = run.candidates([row], {'CFB-1': game}, now)
+        self.assertEqual((len(picks), picks[0]['marketType'], picks[0]['direction'], picks[0]['modelLean']),
+                         (1, 'spread', 'away', False))
+
+    def test_two_numbered_dossier_reasons_and_no_hard_risk(self):
+        good = {'reasons': [{'text': 'Our projection is 61.2 yards.'},
+                            {'text': 'He cleared 49.5 in 4 of 5 full games.'}], 'risks': []}
+        self.assertIsNone(run.dossier_support_issue(good))
+        self.assertIsNotNone(run.dossier_support_issue({'reasons': good['reasons'][:1], 'risks': []}))
+        self.assertIsNotNone(run.dossier_support_issue(dict(good, risks=[{'text': 'Starter out', 'hard': True}])))
+
     def test_invalid_strict_catalog_logs_and_skips_selection(self):
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / 'lines.json'

@@ -96,6 +96,7 @@ class Context:
     now: datetime
     games: dict = field(default_factory=dict)          # gameId -> slate game
     odds: dict = field(default_factory=dict)           # gameId -> latest data/odds record at or before now
+    odds_history: dict = field(default_factory=dict)   # gameId -> captured history, for adverse movement checks
     prop_odds: dict = field(default_factory=dict)      # gameId -> latest data/prop-odds record at or before now
     snapshots: dict = field(default_factory=dict)      # gameId -> v2 snapshots, oldest first
     injuries: dict = field(default_factory=dict)       # teamId -> {athleteId: {'status', 'position', 'name'}}
@@ -330,6 +331,76 @@ def straight_value(candidate, ctx):
              (f"{edge:+.1f} points against the price; {why} {'requires' if cautious else 'require'} {need:+.0f}"
               if cautious or lift else 'no positive calibrated edge at this price')
     return Decision(ok, 'straight_value', reason)
+
+
+MIN_EDGE_BEST = 4.0
+MIN_EDGE_CFB_TOTAL = 5.0
+
+
+def bar_4(candidate, ctx):
+    """An official straight needs a calibrated edge at its actual posted price."""
+    desk = desk_for(candidate, ctx)
+    league = candidate.get('league') or (game_of(candidate, ctx) or {}).get('league')
+    need = MIN_EDGE_CFB_TOTAL if league == 'CFB' and market_key(candidate) == 'total' else MIN_EDGE_BEST
+    edge = desk.get('edgePoints') if desk and desk.get('calibrated') else None
+    ok = isinstance(edge, (int, float)) and edge >= need
+    return Decision(ok, 'bar-4', f'calibrated edge {edge if edge is not None else "unavailable"} points; needs {need:g}')
+
+
+PASSING_GAME_MARKETS = frozenset(('passYds', 'att', 'cmp', 'recYds', 'rec', 'targets'))
+
+
+def qb_change_recent(candidate, ctx):
+    """A passing-game prop waits until the same QB has started three straight games."""
+    if not candidate.get('athleteId') or market_key(candidate) not in PASSING_GAME_MARKETS:
+        return Decision(True, 'qb-change-recent', 'not a passing-game prop')
+    game = game_of(candidate, ctx) or {}
+    team = team_of(candidate, ctx)
+    recent = (ctx.passers.get(team_key(game.get('league'), team)) or [])[-3:] if team is not None else []
+    ok = len(recent) == 3 and len(set(recent)) == 1
+    return Decision(ok, 'qb-change-recent', 'same starter in the last three games' if ok else
+                    'starting-QB change or insufficient current-team history in the last two games')
+
+
+def totals_policy(candidate, ctx):
+    """NFL totals stay research-only; CFB totals have a single weekend place and no adverse line move."""
+    if market_key(candidate) != 'total':
+        return Decision(True, 'totals_policy', 'not a total')
+    league = candidate.get('league') or (game_of(candidate, ctx) or {}).get('league')
+    if league == 'NFL':
+        return Decision(False, 'totals_policy', 'NFL totals are paused as official best bets')
+    if league != 'CFB':
+        return Decision(True, 'totals_policy', 'not a football total')
+    day = slate_day(candidate, ctx)
+    if day is None or day.weekday() not in (5, 6):
+        return Decision(False, 'totals_policy', 'CFB totals are not official on weekdays')
+    weekend = {day} if day.weekday() == 5 else {day - timedelta(days=1), day}
+    if day.weekday() == 5:
+        weekend.add(day + timedelta(days=1))
+    for key, pick in ctx.first.items():
+        if key != candidate.get('id') and not pick.get('historicalImport') and not pick.get('legs') \
+                and (pick.get('league') or str(pick.get('id', '')).split('-')[0]) == 'CFB' \
+                and market_key(pick) == 'total' and slate_day(pick, ctx) in weekend and not pulled_before_post(key, ctx):
+            return Decision(False, 'totals_policy', 'one CFB total has already taken this weekend slate place')
+    book = candidate.get('book')
+    history = sorted((row for row in ctx.odds_history.get((candidate.get('gameIds') or [None])[0], [])
+                      if row.get('retrievedAt') and when(row['retrievedAt']) <= ctx.now),
+                     key=lambda row: row['retrievedAt'])
+    first_line = None
+    for row in history:
+        offer = next((block.get('total') for name, block in (row.get('books') or {}).items()
+                      if BOOK_NAMES.get(name, name) == book and isinstance(block.get('total'), dict)), None)
+        if offer and isinstance(offer.get('line'), (int, float)):
+            first_line = float(offer['line'])
+            break
+    line = candidate.get('line')
+    side = side_of(candidate)
+    if first_line is None or not isinstance(line, (int, float)) or side not in ('over', 'under'):
+        return Decision(False, 'totals_policy', 'no comparable first captured line for this book')
+    adverse = line > first_line if side == 'over' else line < first_line
+    return Decision(not adverse, 'totals_policy',
+                    f'{book} first captured {first_line:g}, now {line:g}; ' +
+                    ('moved against this play' if adverse else 'no adverse move'))
 
 
 def published_today(ctx, exclude=None):
@@ -992,7 +1063,7 @@ def revision_frozen(candidate, ctx):
 
 # ------------------------------------------------------------------ running the rules
 
-COMMON = (not_started, x_window, expiry_ok, fresh_quote, price_present, two_sided_straight, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction, player_overlap, player_projection_sanity)
+COMMON = (not_started, x_window, expiry_ok, fresh_quote, price_present, two_sided_straight, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction, player_overlap, player_projection_sanity, bar_4, qb_change_recent, totals_policy)
 SHOP = (one_book, best_quote_by_ev)
 RULES = {
     # Caps are ceilings, not quotas. Performance cautions raise the edge requirement; negative value still fails.
@@ -1109,6 +1180,7 @@ def context(now, stores, flags=None):
     appearances, established, names, player_team, starters, passers = roster_facts(stores.records, now)
     return Context(now=now, games=games,
                    odds={g: r for g, rows in stores.odds.items() if (r := latest_before(rows, now))},
+                   odds_history=stores.odds,
                    prop_odds={g: r for g, rows in stores.prop_odds.items() if (r := latest_before(rows, now))},
                    snapshots=stores.snapshots, injuries=injuries_by_team(stores.context_file),
                    scoreboard=stores.scoreboard, first=first, latest=latest, appearances=appearances,

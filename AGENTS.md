@@ -223,6 +223,36 @@ Handy commands (from `~/Projects/sports`):
   carries the window/close/conference filters, Bettable sort, Worth your time strip and tier badges; game pages
   show "Why my number differs" from stored data and the generic "far from the book line" caution is gone.
   Research only, never a play; release still runs through the lock-holding deploy and every gate.
+- **Props before totals (owner-delegated to Claude, 2026-10-08; item 37):** Future football
+  best-bet ranking puts player props first, then spreads and eligible moneylines, then totals.
+  NFL totals pause as official plays until 30 forward shadow plays break even with positive
+  closing-line value; CFB totals are limited to one per weekend slate, none on weekdays, and
+  need a five-point edge without adverse movement since first capture. Moneylines at −200..+200
+  may qualify under item 33 and the two-sided exact-price rule. Never rewrite published plays;
+  report 21-day before/after candidate counts before release.
+- **No forced best bets (owner, 2026-10-08; item 33):** A new official straight needs at
+  least four calibrated edge points at its posted two-sided exact-line price, or five for
+  a CFB total. The Hot Plate needs five at a fresh matching quote. A dossier needs two
+  numbered supporting reasons and no hard risk. A passing-game prop waits when its team's
+  starting quarterback changed in either of the last two games. All older/higher bars,
+  role and price holds, overlap and caps still apply. A day with zero plays is valid; no
+  filler post. Comfort Food is a separate gated series, not permission to force a combo;
+  its card and record line require the owner-preview rule before the first post.
+- **Climb route on the site (owner, 2026-10-08; item 36):** After the pending site release and
+  Kitchen Ticket switch, show the approved route card full width at the top of Record › Climb and
+  link to it from Today's Climb stub. Build its PNG on each hosted publish from the same ledger and
+  slate as the reviewed route card. HTML steps use only actual ledger values for cashed/open rungs;
+  future amounts and windows are explicitly labeled as the plan at a typical −160. Link real legs to
+  their play pages and test ledger agreement, plan math, image existence and phone overflow.
+- **Other-sport trials (owner-delegated to Claude, 2026-10-08; item 35):** NBA Today must be live
+  before its October 20 opener. From opening night, NBA Trial may publish up to one labeled 1u
+  straight per day at a fresh two-sided public-book price, with role/price holds. Until calibrated,
+  require raw edge ≥6 points and chance ≥0.56; then use the item-33 4-point floor. Keep its own record
+  line, never combine it with the football headline, and never force a play. Pause at 30 graded and
+  −5u; promote only after 30 graded at or above break-even. College basketball and soccer follow the
+  same trial pattern when their data and public prices exist. Free sources only; existing NHL/MLB
+  score pages remain unchanged. This labeled-trial approval supersedes the old no-new-sport-play
+  default only for the guarded trial, not for ordinary best-bet categories.
 - **October 7 research and navigation decisions (owner-delegated to Claude, items 27–30):** the Record gets a
   kickoff-day results calendar with best bets, fun tickets and Climb on separate ledgers; the existing record math
   is unchanged. Game-number disagreements get specific, stored-data explanations only when the line is fresh;

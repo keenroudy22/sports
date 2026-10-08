@@ -118,7 +118,7 @@ def choose(ctx, now, path=None, policy=None, write=True, log=print, log_book=Non
         fresh = {}
         for pick in current:
             edge = strength(pick, ctx, policy)
-            if edge is None:
+            if edge is None or edge < 5.0:
                 continue
             key = signature(pick)
             if key not in fresh or edge > fresh[key][0]:
@@ -128,7 +128,7 @@ def choose(ctx, now, path=None, policy=None, write=True, log=print, log_book=Non
         if key in passed or key in sent:
             continue
         edge = fresh.get(signature(pick), (None, None))[0] if fresh is not None else strength(pick, ctx, policy)
-        if edge is not None:
+        if edge is not None and edge >= 5.0:
             scored.append((edge, -kickoff.timestamp(), key))
     if not scored:
         if named:

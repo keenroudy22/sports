@@ -220,7 +220,8 @@ class PriorityTests(unittest.TestCase):
         policy = gates.learning.default_policy()
         ctx = context(policy=policy, scoreboard={'props': {'markets': []}})
         wanted = [candidate('total', 4.0, 'total'), candidate('spread', 2.0, 'spread')]
-        self.assertEqual([c['id'] for c in run.rank_card(wanted, ctx)], ['total', 'spread'])
+        self.assertEqual([c['id'] for c in run.rank_card(wanted, ctx)], ['spread', 'total'],
+                         'owner item 37 puts a spread ahead of a total even at lower modeled edge')
         policy['direction'] = {'segments': {'NFL/spread': {'priority': True}}}
         self.assertEqual([c['id'] for c in run.rank_card(wanted, ctx)], ['spread', 'total'])
         policy['direction'] = {'segments': {'NFL/total': {'paused': True}}}

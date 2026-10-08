@@ -316,9 +316,9 @@ test('a saved league filter paints its own next game day, and never an empty her
 test('with nothing on the card the rail does not reveal desk timing', async () => {
   const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [yesterday, ...rungs] } });
   const page = await api.views.today({ view: 'today' });
-  assert.match(page, /<h1>Nothing on the rail yet\.<\/h1>/);
+  assert.match(page, /<h1>Nothing cleared my bar today\.<\/h1>/);
   assert.match(page, /class="kt-hook h1"[\s\S]*class="kt-hook h2"/);
-  assert.match(page, /Nothing on the rail yet\. Check back before kickoff\./);
+  assert.match(page, /Nothing cleared my bar today\./);
   assert.doesNotMatch(page, /I look again|desk run|11:45 AM/i);
   assert.doesNotMatch(page, /<article class="kt-order/, 'no blank ticket and no forced pick');
 });
