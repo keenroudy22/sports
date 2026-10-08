@@ -1037,3 +1037,26 @@ target game-day 9:30 AM Eastern (8:30 before a 10:30 kickoff), with Hot Plate fi
 ten-minute X spacing, a Discord lead and a safe late-admission window. Iowa at Washington
 now targets Friday October 9 at 9:30 AM Eastern, subject to its news and price checks.
 No test post was forced; natural delivery remains to be observed.
+
+### October 8, 2026 afternoon: safer selection and the Climb route
+
+The owner-approved item 33/37 selection rules shipped at `44bd9c1d` in hosted run
+`37823635779`. The release passed 1,199 Python and 223 Node tests, a clean export,
+build, budget, 92-pick record audit, 502-file publication guard, isolated rehearsal,
+and live 375/1440 browser checks. NFL totals are paused as official picks but continue
+as forward shadows; CFB totals have a one-per-weekend, no-weekday, five-point limit.
+New straights require the four-point calibrated edge floor, two numeric dossier reasons,
+two-sided exact-line pricing and the recent-QB guard; Hot Plate needs five points.
+Player props rank before sides and totals. Moneylines and Comfort Food remain open:
+the former has no genuine free two-sided input yet and the latter has not been built.
+The 21-day complete new-rule historical count is unknown because 39 of 48 published
+straights lack saved numeric edges and none has a saved dossier.
+
+The approved Climb route website view shipped at `0fbbb1e1` in hosted run
+`37825913575`. Its image and HTML steps share one ledger snapshot; real cashed/open
+steps are linked to the posted rung, and future dollars/windows are clearly labeled
+as the typical −160 plan. This release passed 1,200 Python and 223 Node tests, clean
+export, build, budget, 92-pick audit, 503-file guard, rehearsal and the 375/1440
+browser checks. The live PNG returned HTTP 200; the live record showed Climb #3,
+step 1, $42 banked, with nine rows. No rung, posting rule or historical attachment
+was changed. A natural ledger update remains to be observed.

@@ -617,11 +617,11 @@
     {
       "id": "P69",
       "title": "Show the dated 80/20 Climb route on the website",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "After P68 and the card cutover are live, render climb-route.png on each publish, add ledger-matched HTML steps to Record › Climb and link Today's stub; test math, links and 375 px layout.",
+      "next": "Observe the next natural ledger update and verify the image and HTML rows advance together; do not re-render a posted attachment.",
       "doneWhen": "The hosted build contains site/data/cards/climb-route.png; live Record › Climb shows the graphic and ledger-accurate cashed/open steps, clearly labeled future-plan rows, real play-page links and no 375/1440 overflow; Today links to #route.",
-      "evidence": "Owner decision 36 dated 2026-10-08; route reference and first real render previously approved under item 23. Website placement is not built or released."
+      "evidence": "Owner decision 36 released at 0fbbb1e1b2c0d44bdd575925e9e45f5d1d691ed8. Python 1,200 and Node 223 tests, clean export, 442-page build, zero budget issues, 92-pick audit, 503-file guard, isolated 11:45 rehearsal and local Chrome passed. Hosted publish 37825913575 succeeded. Live route PNG returned HTTP 200/image/png (1,105,229 bytes), record.json showed Climb #3 step 1 with $42 banked and nine route rows, app.js?v=142; 375/1440 Chrome audit of Climb, Today, Record and Games passed eight pages with zero overflow or load/console errors."
     },
     {
       "id": "P70",
