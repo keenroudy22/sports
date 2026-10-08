@@ -1241,7 +1241,7 @@
       clv && clv.clv != null ? `<b>Closing-line value: ${esc(clvWords(clv.clv))}.</b> We posted ${esc(clv.postedLine ?? '–')} at ${esc(oddsText(clv.postedOdds))} and the last number before kickoff was ${esc(clv.closeLine ?? '–')}${clv.closeOdds != null ? ` at ${esc(oddsText(clv.closeOdds))}` : ''}. ${clv.clv > 0 ? 'We got the better number, which is the part we control.' : clv.clv < 0 ? 'The market moved to a better number after we posted.' : ''}` : '',
       pick.earlyExit ? '<b>Early-exit credit.</b> A book promo refunded this loss. The headline record still counts it as −1u; credits are shown separately.' : '',
     ].filter(Boolean);
-    const result = pick.result ? `<div class="card"><p><b>${esc(vm.status)}</b>${pick.resultDetail || pick.actual ? ` · ${esc(prose(pick.resultDetail || pick.actual))}` : ''}</p>${pick.settlementReason ? `<p class="small muted" style="margin-top:4px">${esc(prose(pick.settlementReason))}</p>` : ''}${pick.settledAt ? `<p class="small muted" style="margin-top:4px">Settled ${esc(when(pick.settledAt))}</p>` : ''}</div>` : '';
+    const result = pick.result ? `<div class="card"><p><b>${esc(vm.status)}</b>${pick.resultDetail || pick.actual ? ` · ${esc(prose(pick.resultDetail ? `${pick.player || niceTitle(pick.title || '').split(/\s+(?:OVER|UNDER)\s+/i)[0]} · ${pick.resultDetail}` : pick.actual))}` : ''}</p>${pick.settlementReason ? `<p class="small muted" style="margin-top:4px">${esc(prose(pick.settlementReason))}</p>` : ''}${pick.settledAt ? `<p class="small muted" style="margin-top:4px">Settled ${esc(when(pick.settledAt))}</p>` : ''}</div>` : '';
     const chanceTitle = vm.chance != null ? `How we got ${pctOne(vm.chance)}` : 'How we got this';
     const projected = game && !hold && !C.isParlay(pick) && !pick.athleteId ? section('Our projected score now', `<p class="small muted" style="margin-bottom:8px">When posted: our number ${isNum(pick.projection) ? esc(C.fixed(pick.projection)) : '–'} against the ${esc(pick.line ?? '–')} line${vm.chance != null ? ` (${pctText(vm.chance)} our chance)` : ''}. The card below is today's model and market.</p>${projCard(game, { link: true, sideLabel: 'Current lean' })}`) : '';
     const sameGame = research === `#game/${pick.gameId}`;
@@ -1743,7 +1743,7 @@
     const assumed = Boolean(p.priceAssumed || C.isUnpricedImport(p));
     const clv = clvById.get(p.id);
     const price = p.odds == null ? 'no price recorded' : assumed ? `${oddsText(p.odds)} assumed · no price recorded` : `${oddsText(p.odds)} ${/^espn ?bet$/i.test(String(p.book || '').trim()) ? 'ESPN BET' : bookLabel(p.book) || ''}`;
-    const actual = p.actual != null ? String(typeof p.actual === 'object' ? Object.entries(p.actual).map(([k, v]) => `${k} ${v}`).join(', ') : p.actual).split(/[.;]\s/)[0] : '';
+    const actual = p.resultDetail ? `${p.player || niceTitle(p.title || '').split(/\s+(?:OVER|UNDER)\s+/i)[0]} · ${p.resultDetail}` : p.actual != null ? String(typeof p.actual === 'object' ? Object.entries(p.actual).map(([k, v]) => `${k} ${v}`).join(', ') : p.actual).split(/[.;]\s/)[0] : '';
     const meta = [price, whenShort(p.kickoff || p.publishedAt), p.featured ? 'Pick of the Day' : '', clvWords(clv), actual ? `result ${actual}` : '', p.earlyExit ? 'early-exit credit (counts −1u in the headline)' : ''].filter(Boolean).join(' · ');
     const right = p.result ? (u == null ? '' : assumed ? `<span class="u muted" title="${esc(p.priceNote || 'No price was recorded, so this counts at an assumed −115.')}">(${esc(units(u))})</span>` : `<span class="u ${u > 0 ? 'green' : u < 0 ? 'red' : 'muted'}">${esc(units(u))}</span>`)
       : '<span class="u muted small">Pending</span>';
@@ -1821,7 +1821,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-5d110dab0eb3';
+  const MORE_ASSET = 'app-more.js?v=sha256-52571ea2ee3c';
   const GAMES_ASSET = 'app-games.js?v=sha256-83fbc87918bc';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,

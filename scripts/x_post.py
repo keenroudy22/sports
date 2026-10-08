@@ -116,6 +116,8 @@ def http_send(url, body, headers):
 
 def post_tweet(text, creds, send=http_send, media_ids=None):
     """The new post's id, or Refused when X turns it down (a duplicate is a 403)."""
+    if voice.bare_athlete_id(text):
+        raise Refused('bare athlete id in public copy')
     body = {'text': text}
     if media_ids:
         body['media'] = {'media_ids': [str(m) for m in media_ids]}

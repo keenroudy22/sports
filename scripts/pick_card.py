@@ -1144,6 +1144,9 @@ def render(svg_text, out, chrome=None, timeout=45, size=None):
     watched for and the browser is stopped once the file has stopped growing.
     """
     import time
+    import voice
+    if voice.bare_athlete_id(svg_text):
+        raise ValueError('card contains a bare athlete id')
     chrome = chrome or chrome_path()
     if not chrome:
         raise RuntimeError('no headless browser on this machine; set KEENROUDY_CHROME to a Chrome or Chromium binary')
@@ -1181,7 +1184,24 @@ def render(svg_text, out, chrome=None, timeout=45, size=None):
                     process.kill()
     if not out.exists() or out.stat().st_size == 0:
         raise RuntimeError('browser render failed: no screenshot was written')
+    if 'data-kookn-theme="ticket"' in svg_text:
+        mark_png_theme(out)
     return out
+
+
+def mark_png_theme(path):
+    """Put an inspectable theme marker in a new PNG before it is deployed."""
+    import struct
+    import zlib
+    path = Path(path)
+    raw = path.read_bytes()
+    if raw[:8] != b'\x89PNG\r\n\x1a\n' or raw[12:16] != b'IHDR':
+        raise ValueError('card renderer did not produce PNG')
+    end = 8 + 12 + int.from_bytes(raw[8:12], 'big')
+    payload = b'KooknTheme\x00ticket'
+    chunk = b'tEXt' + payload
+    path.write_bytes(raw[:end] + struct.pack('>I', len(payload)) + chunk +
+                     struct.pack('>I', zlib.crc32(chunk) & 0xffffffff) + raw[end:])
 
 
 def svg_size(svg_text):

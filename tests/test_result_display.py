@@ -8,6 +8,7 @@ import result_display
 import receipts
 import run
 import ticket_card
+import voice
 
 
 class ResultDisplayTests(unittest.TestCase):
@@ -32,6 +33,7 @@ class ResultDisplayTests(unittest.TestCase):
         with patch.object(result_display, 'stored_games', return_value={'CFB-401871066': self.game}):
             self.assertEqual(receipts.result_detail(self.pick), '6 targets, 0 catches, 0 yards · missed by 49.5')
             self.assertEqual(ticket_card.final_detail(self.pick), '6 targets, 0 catches, 0 yards · missed by 49.5')
+            self.assertFalse(voice.bare_athlete_id(receipts.result_line(self.pick)))
 
     def test_other_player_stat_lines(self):
         cases = [('rec', {'pbpTgt': 6, 'rec': 0}, '6 targets, 0 catches'),

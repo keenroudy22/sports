@@ -2,6 +2,7 @@
 import base64
 import sys
 import unittest
+from datetime import datetime, timezone
 from unittest.mock import patch
 from tempfile import TemporaryDirectory
 from pathlib import Path
@@ -193,6 +194,25 @@ class TicketCardTests(unittest.TestCase):
             feed.render_cards([{'guid': 'preview', 'pick': recent, 'game': GAME, 'side': 'away'}], folder)
             self.assertEqual(render.call_count, 3)
             self.assertEqual(render.call_args.args[0], '<svg data-theme="ticket"/>')
+
+    def test_pre_cutover_unposted_card_refreshes_but_posted_bytes_do_not(self):
+        old = dict(PROP, publishedAt='2026-10-08T14:00:00Z')
+        at = datetime(2026, 10, 8, 17, 0, tzinfo=timezone.utc)
+        with TemporaryDirectory() as folder, patch.object(pick_card, 'TICKET_FROM', '2026-10-08T12:00:00-04:00'), \
+                patch.object(pick_card, 'chrome_path', return_value='chrome'), \
+                patch.object(pick_card, 'artwork', return_value={'kind': 'photo', 'uri': self.image}), \
+                patch.object(ticket_card, 'straight_svg', return_value='<svg data-kookn-theme="ticket"/>') as kitchen, \
+                patch.object(pick_card, 'render') as render:
+            stale = Path(folder) / 'unposted.png'
+            stale.write_bytes(b'legacy preview')
+            sent = Path(folder) / 'posted.png'
+            sent.write_bytes(feed.PNG + b'original posted attachment')
+            feed.render_cards([{'guid': 'unposted', 'pick': old, 'game': GAME, 'side': 'away'},
+                               {'guid': 'posted', 'pick': old, 'game': GAME, 'side': 'away'}],
+                              folder, render_time=at, posted_keys={'posted'})
+            kitchen.assert_called_once()
+            render.assert_called_once()
+            self.assertEqual(sent.read_bytes(), feed.PNG + b'original posted attachment')
 
     def test_settled_climb_uses_result_time_and_real_leg_marks(self):
         pick = {'id': 'rung', 'parlayType': 'ladder', 'publishedAt': '2026-10-08T14:00:00Z',

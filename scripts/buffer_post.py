@@ -209,6 +209,18 @@ def reachable(url, opener=None, timeout=15):
         return False
 
 
+def ticket_art_live(url, timeout=15):
+    """Fail closed on a reachable but pre-cutover play image."""
+    try:
+        request = urllib.request.Request(url, headers={'User-Agent': 'KeenRoudySports/1.0',
+                                                       'Range': 'bytes=0-255'})
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            prefix = response.read(256)
+        return prefix.startswith(b'\x89PNG\r\n\x1a\n') and b'KooknTheme\x00ticket' in prefix
+    except (urllib.error.URLError, OSError, ValueError):
+        return False
+
+
 # ------------------------------------------------------------------ what to schedule
 
 def window_open(day):
@@ -392,7 +404,7 @@ def theme_moment(guid, kind, due, items=None):
                           if guid.startswith(prefix)), guid)
     item = (items or {}).get(source_id) or {}
     if kind == 'play':
-        return next((item.get(field) for field in ('publishedAt', 'settledAt', 'day') if item.get(field)), due)
+        return due  # The unpublished attachment is built for its outbound publication, not the old play date.
     if kind == 'cashed':
         return next((item.get(field) for field in ('settledAt', 'publishedAt', 'day') if item.get(field)), due)
     return due
@@ -439,6 +451,9 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                 if kind == 'play' and missed_target(guid, due, now, items):
                     stats['officialNotScheduled'] += 1
                 log(f'buffer: {guid} waits: its card is not live yet (every post carries its card)')
+                continue
+            if kind == 'play' and pick_card.ticket_enabled(moment=due) and not ticket_art_live(url):
+                log(f'buffer: {guid} waits: the live card is not Kitchen Ticket art')
                 continue
         # Resolve every fallible field before Buffer accepts the post. Otherwise a
         # local labeling error after createPost could leave an unlogged post that a

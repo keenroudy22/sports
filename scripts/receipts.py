@@ -461,7 +461,8 @@ def cashed(first, latest, games, log_book, now):
         parlay = pick_card.play_kind(pick) == 'parlay'
         price = f"({int(pick['odds']):+d}, {pick.get('book')})"
         head = f"✅ {'POTD cashed' if entry.get('featured') else 'Cashed'}: {label(pick, games)} {price}"
-        what = ''
+        import result_display
+        what = result_display.detail(pick) or ''
         if parlay:
             head, what = f"✅ {int(pick['odds']):+d} {label(pick, games)} cashed ({pick.get('book')})", ''
         card = None

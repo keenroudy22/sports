@@ -336,12 +336,31 @@ class ScheduleTests(unittest.TestCase):
                     items={'official': {'league': 'CFB', 'kickoff': '2026-09-26T14:00:00Z'}}, log=lambda *_: None)
         self.assertEqual(stats['officialNotScheduled'], 1, 'the original target has now passed')
 
+    def test_post_cutover_play_waits_for_verified_ticket_image(self):
+        due = datetime(2026, 10, 9, 22, 0, tzinfo=timezone.utc)
+        plan = [('old-announcement', 'play', 'Iowa OVER 41.5', due, 'old-announcement')]
+        fake, notes = FakeBuffer(), []
+        with mock.patch.object(bp, 'ticket_art_live', return_value=False):
+            result = bp.schedule(plan, 'x', {'posts': []}, due - timedelta(hours=2),
+                                 key='t', send=fake, opener=lambda *_: True,
+                                 items={'old-announcement': {'publishedAt': '2026-10-08T14:00:00Z'}},
+                                 log=notes.append)
+        self.assertEqual(result['posts'], [])
+        self.assertFalse(fake.calls)
+        self.assertTrue(any('not Kitchen Ticket' in note for note in notes))
+        with mock.patch.object(bp, 'ticket_art_live', return_value=True):
+            result = bp.schedule(plan, 'x', {'posts': []}, due - timedelta(hours=2),
+                                 key='t', send=fake, opener=lambda *_: True,
+                                 items={'old-announcement': {'publishedAt': '2026-10-08T14:00:00Z'}},
+                                 log=notes.append)
+        self.assertEqual(result['posts'][0]['cardTheme'], 'ticket')
+
     def test_theme_label_uses_the_artifacts_publication(self):
         with mock.patch.object(bp.pick_card, 'FELT_FROM', '2026-09-26T08:00:00-04:00'):
             result = bp.schedule([('a', 'play', 'a', NOW + timedelta(hours=2), 'a')], 'x', {'posts': []},
                                  NOW, key='t', send=FakeBuffer(), opener=lambda *_: True,
                                  items={'a': {'publishedAt': '2026-09-25T12:00:00Z'}}, log=lambda *_: None)
-        self.assertEqual(result['posts'][0]['cardTheme'], 'legacy')
+        self.assertEqual(result['posts'][0]['cardTheme'], 'felt')
 
     def test_community_receipts_are_routed_to_the_wins_channel(self):
         result = bp.schedule([('community:model-slip', 'community', 'MODEL COOKED',

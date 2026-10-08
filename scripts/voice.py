@@ -3,6 +3,12 @@ import re
 
 import public_copy
 
+BARE_ATHLETE_ID = re.compile(r'(?m)(?:^|:\s*|>\s*)\d{5,}:')
+
+
+def bare_athlete_id(text):
+    return bool(BARE_ATHLETE_ID.search(str(text or '')))
+
 BANNED = re.compile(r"\b(?:delve|leverage|robust|seamless|comprehensive|unlock|elevate|crucial|empower|game-changer|insights|desk|plates|the owner|analyst notes)\b|"
                     r"kitchen.s closed|history does not predict|no hiding|we never force a play|an empty list beats a forced one|that keeps the chance honest|"
                     r"not just .+? but|\bhere.s\b|\bconfidence \d+ of 10\b|\b(?:\d+th of 1|\d*1th|\d*2th|\d*3th)\b|"
@@ -12,6 +18,8 @@ BANNED = re.compile(r"\b(?:delve|leverage|robust|seamless|comprehensive|unlock|e
 def lint(text):
     clean = str(text or '')
     problems = []
+    if bare_athlete_id(clean):
+        problems.append('bare athlete id in public copy')
     if BANNED.search(clean):
         problems.append('retired public wording')
     if public_copy.issues(clean):

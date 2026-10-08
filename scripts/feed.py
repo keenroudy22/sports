@@ -236,7 +236,8 @@ def scoreboard_item(scoreboard, now):
             'text': text, 'link': f'{SITE}#model', 'pubDate': due.astimezone(timezone.utc)}
 
 
-def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, posted_keys=(), recent_posted_keys=None):
+def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, posted_keys=(), recent_posted_keys=None,
+                 render_time=None):
     """A PNG per pick item, when a browser is on the machine. Returns {guid: path}."""
     import pick_card
     import ticket_card
@@ -262,19 +263,24 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
             source = item.get('ladderResult') or item.get('receipt') or item.get('pick') or {}
             # A card cached before the cutover is not proof that an unposted play has new art.
             # Rebuild eligible cards; confirmed attachments above are immutable.
-            refresh_ticket = item['guid'] not in posted_keys and pick_card.ticket_enabled(source)
+            # An unpublished card takes the theme at this build, not at the play's older
+            # announcement. A confirmed attachment above is never changed.
+            ticket = (pick_card.ticket_enabled(moment=render_time) if render_time else
+                      pick_card.ticket_enabled(moment=source.get('settledAt')) if 'ladderResult' in item else
+                      pick_card.ticket_enabled(source))
+            refresh_ticket = item['guid'] not in posted_keys and ticket
             if not path.exists() or refresh_ticket:
                 if 'ladderResult' in item:
                     pick = item['ladderResult']
                     svg = (ticket_card.climb_result_svg(pick, games or {}, player_team)
-                           if pick_card.ticket_enabled(moment=pick.get('settledAt')) else pick_card.ladder_result_svg(pick))
+                           if ticket else pick_card.ladder_result_svg(pick))
                     pick_card.render(svg, path)
                 elif 'receipt' in item:
                     receipt = item['receipt']
                     # Weekly category summaries are not individual settled plays; retain their existing
                     # reviewed renderer until a category-specific Kitchen receipt has been reviewed.
                     svg = (ticket_card.final_svg(item['receiptPicks'], item['receiptDay'])
-                           if pick_card.ticket_enabled(receipt) and item.get('receiptPicks') else
+                           if ticket and item.get('receiptPicks') else
                            pick_card.receipt_svg(receipt))
                     pick_card.render(svg, path)
                 else:
@@ -285,7 +291,7 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
                         fallback = 'team badge fallback' if (art or {}).get('kind') == 'logos' else 'no verified team badge'
                         log(f"WARNING: ESPN headshot unavailable after retry for player-prop card {item['pick'].get('id')}; {fallback}")
                     pick = item['pick']
-                    if pick_card.ticket_enabled(pick):
+                    if ticket:
                         kind = pick_card.play_kind(pick)
                         if kind == 'ladder':
                             svg = ticket_card.climb_svg(pick, games or {}, player_team, art=art)
@@ -373,7 +379,8 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
     plays += [dict(item, guid=f"{item['guid']}-potd", featured=True) for item in plays if item['guid'] == potd]
     cards = render_cards(plays + ready, cards_folder, log, ctx.games, ctx.player_team,
                          posted_keys=posted_card_keys(post_log),
-                         recent_posted_keys=posted_card_keys(post_log, now - timedelta(days=8))) if with_cards else {}
+                         recent_posted_keys=posted_card_keys(post_log, now - timedelta(days=8)),
+                         render_time=now) if with_cards else {}
     if with_cards:
         import sheet          # the weekly projections sheet on its league's day, from the page payloads just built
         cards.update(sheet.render_due(now, cards_folder, log=log))

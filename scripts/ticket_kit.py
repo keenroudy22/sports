@@ -209,7 +209,7 @@ class Card:
 
     def svg(self):
         from felt_cards import font_face
-        return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{self.h}" viewBox="0 0 {W} {self.h}">'
+        return (f'<svg xmlns="http://www.w3.org/2000/svg" data-kookn-theme="ticket" width="{W}" height="{self.h}" viewBox="0 0 {W} {self.h}">'
                 f'<defs>{font_face()}{"".join(self.defs)}</defs>{"".join(self.body)}</svg>')
 
 

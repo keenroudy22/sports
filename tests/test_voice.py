@@ -31,6 +31,20 @@ class VoiceTests(unittest.TestCase):
             discord_post.send_message('fake', 'The desk has insights', send=never)
         never.assert_not_called()
 
+    def test_bare_athlete_id_never_reaches_any_public_send_or_card(self):
+        for text in ('4869443: 0 receiving yards', 'Final: 4869443: 0 receiving yards'):
+            self.assertTrue(voice.lint(text))
+            never = mock.Mock(side_effect=AssertionError('bare id reached network'))
+            with self.assertRaises(buffer_post.BufferError):
+                buffer_post.create_post(text, 'x', None, key='fake', send=never)
+            with self.assertRaises(discord_post.DiscordError):
+                discord_post.send_message('fake', text, send=never)
+            with self.assertRaises(x_post.Refused):
+                x_post.post_tweet(text, {}, send=never)
+            never.assert_not_called()
+        with self.assertRaises(ValueError):
+            pick_card.render('<svg><text>4869443: 0 receiving yards</text></svg>', '/tmp/never-render.png')
+
     def test_new_legacy_card_footers_have_the_age_requirement(self):
         # Each legacy template carries its own footer. Existing immutable art is separate.
         source = (Path(__file__).resolve().parents[1] / 'scripts/pick_card.py').read_text()
