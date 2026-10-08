@@ -400,8 +400,7 @@ def plain_number(value):
 
 
 def our_number(pick, game=None):
-    """What we make it, the way a bettor says it: "We have it at 47." for a total or a player, "We have Duke by 14." for
-    a side. Empty without a projection."""
+    """The posted model number in the owner's first-person voice; empty without a projection."""
     projection = pick.get('projection')
     if not isinstance(projection, (int, float)) or pick.get('legs'):
         return ''
@@ -411,10 +410,10 @@ def our_number(pick, game=None):
         side = game.get(direction) or {}
         other = game.get('away' if direction == 'home' else 'home') or {}
         if abs(projection) < 0.5:
-            return 'We have it even.'
+            return 'I have it even.'
         team = side if projection < 0 else other          # the side's own number: -14 is that side by 14
-        return f"We have {team_label(team, league)} by {int(round(abs(projection)))}."
-    return f'We have it at {plain_number(projection)}.'
+        return f"I have {team_label(team, league)} by {int(round(abs(projection)))}."
+    return f'I have it at {plain_number(projection)}.'
 
 
 FRACTIONS = {0.25: '¼', 0.5: '½', 0.75: '¾'}

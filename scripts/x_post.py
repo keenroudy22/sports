@@ -298,7 +298,7 @@ def reason_in(text):
     """The reason sentence of a drafted play post: the line after its number line, when there is one."""
     lines = str(text or '').split('\n')
     for i, line in enumerate(lines[:-1]):
-        if line.startswith(('We project', 'Our number', 'We have')) and lines[i + 1].strip() and not lines[i + 1].startswith(('@', '#')):
+        if line.startswith(('We project', 'Our number', 'We have', 'I have')) and lines[i + 1].strip() and not lines[i + 1].startswith(('@', '#')):
             return lines[i + 1]
     return None
 
@@ -323,12 +323,29 @@ def reason_for(pick, weights=None):
             clause = clause[0].upper() + clause[1:] + '.'
             if plain(clause):
                 return clause
+    return strip_reason(pick)
+
+
+def strip_reason(pick):
+    """A supporting exact-line sentence only when the stored hit strip backs this side."""
+    strip = pick.get('hitStrip') or {}
+    season, last = strip.get('season') or (), strip.get('last10') or ()
+    if (len(season) == 2 and season[1] >= 5 and season[0] / season[1] >= 0.6
+            and isinstance(pick.get('line'), (int, float))):
+        side = str(pick.get('direction') or '').lower()
+        if side in ('over', 'under'):
+            text = f"{side.title()} {pricing.fmt(pick['line'])} in {season[0]} of {season[1]} this season"
+            if len(last) == 2 and last[1] >= 5:
+                text += f", {last[0]} of his last {last[1]}"
+            text += '.'
+            if plain(text):
+                return text
     return None
 
 
 PLAYBOOK = '@Playbook'     # the betslip bot (Action Network): tagged on a bet, it replies with the slip pre-loaded
 ASK = "❤️ if you're tailing"                   # the ask the big accounts close on (docs/X-NOTES.md): a like is a vote to tail
-LADDER_ASK = "❤️ if you're climbing"
+LADDER_ASK = "Still climbing? ❤️"
 LOTTO = 1000                                   # a fun parlay paying this or more is a lotto, and its post says so first
 REASONS = ROOT / 'data' / 'x-reasons.json'   # the reason each play's post gives, chosen when the play is published
 
@@ -346,23 +363,22 @@ def save_reasons(reasons, path=None):
 
 
 def parlay_head(pick, league):
-    """A fun parlay leads with its price, the way the most-saved posts do: "🎰 +2506 COLLEGE LOTTO" from +1000 up,
-    "🎯 +583 NFL LONGSHOT" under it, "🍳 +450 NFL EASY PROPS" for the easy parlay."""
+    """A fun ticket leads with its exact posted price, leg count and public book."""
     odds = int(pick['odds'])
-    where = 'COLLEGE' if league == 'CFB' else 'NFL'
-    if pick.get('parlayType') == 'easyProps':
-        return f'🍀 {odds:+d} {where} EASY PROPS'
-    return f'🎰 {odds:+d} {where} LOTTO' if odds >= LOTTO else f'🎯 {odds:+d} {where} LONGSHOT'
+    where = 'college' if league == 'CFB' else 'NFL'
+    legs = len(pick.get('legs') or [])
+    label = 'easy props' if pick.get('parlayType') == 'easyProps' else 'lotto' if odds >= LOTTO else 'longshot'
+    return f"🎰 {odds:+d} Chef's Special: {legs}-leg {where} {label} ({pick.get('book')})"
 
 
 def ladder_text(pick):
     """The three money lines for the Kook'n 80/20 Climb: stake, return, bank and next ride."""
     info = pick.get('ladder') or {}
-    round_ = f" #{info['run']}" if (info.get('run') or 1) > 1 else ''
-    head = f"🪜 KOOK'N 80/20 CLIMB{round_} · STEP {info.get('step', 1)}"
-    money = f"{pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))} ({int(pick['odds']):+d}, {pick.get('book')})"
-    bank = (f"{pick_card.dollars(info.get('banked', 0))} banked · win banks "
-            f"{pick_card.dollars(info.get('bankThisWin'))}, {pick_card.dollars(info.get('nextStake'))} rides")
+    head = (f"🪜 {pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))} · "
+            f"80/20 Climb, step {info.get('step', 1)} ({int(pick['odds']):+d}, {pick.get('book')})")
+    bank = (f"Step {max(1, int(info.get('step') or 1) - 1)} cashed. " if int(info.get('step') or 1) > 1 else '')
+    bank += f"{pick_card.dollars(info.get('banked', 0))} banked on the way to $1,000."
+    money = ''
     return head, money, bank
 
 
@@ -393,28 +409,34 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
             pass
     if kind == 'ladder':
         head, money, bank = ladder_text(pick)
-        top = '\n'.join([head, money, bank, *legs])
+        top = '\n'.join(x for x in (head, money, bank, *legs) if x)
         options = ([top, f'{LADDER_ASK}\n{tail}'], [top, tail])
     elif kind == 'parlay':
-        top = '\n'.join([f"{parlay_head(pick, league)} ({pick.get('book')})", *legs])
+        odds = int(pick['odds'])
+        payout = 10 * (1 + odds / 100) if odds > 0 else 10 * (1 + 100 / abs(odds))
+        top = '\n'.join([parlay_head(pick, league), f"$10 → {pick_card.dollars(payout)} at the posted {odds:+d}", *legs])
         options = ([top, f'{ASK}\n{tail}'], [top, tail])
     else:
-        prefix = ('SNF: ' if league == 'NFL' and gates.when(game['kickoff']).astimezone(gates.EASTERN).weekday() == 6
-                  else 'TNF: ' if league == 'NFL' and gates.when(game['kickoff']).astimezone(gates.EASTERN).weekday() == 3
-                  else 'Saturday night: ' if night and league == 'CFB' else '') if night else ''
-        play = f"{prefix}{'POTD: ' if featured else ''}{pick_card.short_title(pick, game)} ({int(pick['odds']):+d}, {pick.get('book')})"
+        day = gates.when(game['kickoff']).astimezone(gates.EASTERN).weekday() if (game or {}).get('kickoff') else None
+        night_prefix = ('SNF: ' if league == 'NFL' and day == 6 else 'TNF: ' if league == 'NFL' and day == 3
+                        else 'MNF: ' if league == 'NFL' and day == 0 else 'Saturday night: ' if league == 'CFB' and day == 5 else '') if night else ''
+        hot_prefix = ('SNF ' if league == 'NFL' and day == 6 and night else 'TNF ' if league == 'NFL' and day == 3 and night
+                      else 'MNF ' if league == 'NFL' and day == 0 and night else '')
+        prefix = f'🍳 {hot_prefix}Hot Plate (POTD): ' if featured else night_prefix
+        play = f"{prefix}{pick_card.short_title(pick, game)} ({int(pick['odds']):+d}, {pick.get('book')})"
         now = now_line(pick, now_quote)
         number = pick_card.our_number(pick, game)
-        reason = reason if reason is not None else load_reasons().get(pick.get('id'))
+        reason = reason if reason is not None else load_reasons().get(pick.get('id')) or strip_reason(pick)
         reason = reason if reason and plain(reason) else None
         top = '\n'.join(x for x in (play, now, number, reason) if x)
         compact = '\n'.join(x for x in (play, now, number) if x)
-        options = ([top, f'{ASK}\n{tail}'], [top, tail], [compact, tail], ['\n'.join(x for x in (play, now) if x), tail])
+        options = ([top, f'{ASK}\n{tail}'], [top, tail]) if reason else (
+            [top, f'{ASK}\n{tail}'], [top, tail], [compact, tail], ['\n'.join(x for x in (play, now) if x), tail])
     for parts in options:
         text = '\n\n'.join(part for part in parts if part)
         if tweet_length(text) <= LIMIT and not guard(text, pick, reason, now_quote):
             return text
-    return top[:LIMIT]
+    return '\n\n'.join(part for part in options[-1] if part)
 
 
 def pricing_fmt(value):
@@ -447,6 +469,10 @@ def guard(text, pick, reason=None, now_quote=None):
     extra.append({'stake': pick_card.stake(pick)})                              # "1 unit" is the stake the record counts
     if pick.get('ladder'):          # "$1,062" reads as 1 and 62: the rung's dollars as the post writes them
         extra.append({k: pick_card.dollars(v) for k, v in pick['ladder'].items() if isinstance(v, int)})
+    elif pick.get('legs') and isinstance(pick.get('odds'), (int, float)):
+        odds = int(pick['odds'])
+        example = 10 * (1 + odds / 100) if odds > 0 else 10 * (1 + 100 / abs(odds))
+        extra.append({'exampleStake': 10, 'exampleReturn': pick_card.dollars(example)})
     if isinstance(pick.get('projection'), (int, float)):     # "We have it at 47": the projection as the post rounds it
         extra.append({'said': [pick_card.plain_number(abs(pick['projection'])), str(int(round(abs(pick['projection']))))]})
     ok, strays = llm.numbers_ok(text, pick, extra)

@@ -95,11 +95,12 @@ def send_message(url, text, image_url=None, send=http_send, username="Kook'n Spo
     """
     import x_post
     # The owner-approved live pilot has one exact cheering exception.
-    checked = str(text or '').replace('Come on!', 'Come on.')
+    final_text = without_playbook(text)
+    checked = str(final_text or '').replace('Come on!', 'Come on.')
     if x_post.x_style(checked):
         raise DiscordError('outgoing copy fails the public voice check')
     body = {'username': username, 'avatar_url': 'https://keenroudy.com/sports/kookn-chef.png?v=20261007',
-            'content': without_playbook(text)}
+            'content': final_text}
     headers = {'Content-Type': 'application/json', 'User-Agent': 'KooknSports/1.0'}
     if image_url:
         try:

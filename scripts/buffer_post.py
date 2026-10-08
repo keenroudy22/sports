@@ -300,7 +300,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
             continue
         now_quote = (quotes or {}).get(key)
         text = x_post.draft(merged, game, weights, now_quote=now_quote, featured=key == potd)
-        problems = x_post.guard(text, merged, x_post.load_reasons().get(key), now_quote)
+        problems = x_post.guard(text, merged, x_post.reason_in(text), now_quote)
         if problems:
             if refused is not None:
                 refused.append((key, problems))
@@ -425,6 +425,12 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             continue
         if kind != 'play':
             text = without_playbook(text)
+        problems = x_post.x_style(text)
+        if problems:
+            if kind == 'play' and missed_target(guid, due, now, items):
+                stats['officialNotScheduled'] += 1
+            log(f'buffer: {guid} not scheduled: outgoing copy fails the public voice check ({", ".join(problems)})')
+            continue
         image = None
         if card_key:
             url = card_url(card_key)

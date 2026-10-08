@@ -134,7 +134,7 @@ class PostTests(unittest.TestCase):
                 plans = [p for p in buffer_post.plan(first, latest, GAMES, NOW, {'posts': []}) if p[1] == 'play']
         self.assertEqual([p[0] for p in plans], ['a', 'b'], 'a night-game POTD waits for six rather than jumping to noon')
         self.assertFalse(plans[0][2].startswith('POTD'))
-        self.assertTrue(plans[1][2].startswith('Saturday night: POTD: '), plans[1][2])
+        self.assertTrue(plans[1][2].startswith('🍳 Hot Plate (POTD): '), plans[1][2])
         self.assertEqual(plans[1][3].astimezone(buffer_post.gates.EASTERN).hour, 18)
         self.assertEqual((plans[0][4], plans[1][4]), ('a', 'b-potd'), 'its own card, so no stale copy is ever attached')
 

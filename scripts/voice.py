@@ -3,7 +3,8 @@ import re
 
 BANNED = re.compile(r"\b(?:delve|leverage|robust|seamless|comprehensive|unlock|elevate|crucial|empower|game-changer|insights|desk|plates|the owner|analyst notes)\b|"
                     r"kitchen.s closed|history does not predict|no hiding|we never force a play|an empty list beats a forced one|that keeps the chance honest|"
-                    r"not just .+? but|\bhere.s\b|\bconfidence \d+ of 10\b|\b(?:\d+th of 1|\d*1th|\d*2th|\d*3th)\b", re.I)
+                    r"not just .+? but|\bhere.s\b|\bconfidence \d+ of 10\b|\b(?:\d+th of 1|\d*1th|\d*2th|\d*3th)\b|"
+                    r"\bwe (?:have it|project)\b|(?<!hot plate \()\bPOTD:|if you.re climbing|\bplated\.|that.s why we bank|one miss can", re.I)
 
 
 def lint(text):

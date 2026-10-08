@@ -139,7 +139,7 @@ class PlanTests(unittest.TestCase):
         plans = [p for p in plans if p[1] == 'play']
         self.assertTrue(all(p[4] == p[0] for p in plans), 'each play with its own card')
         self.assertTrue(plans[0][2].startswith('Player Seven over 4.5 receptions (-115, '), plans[0][2])
-        self.assertTrue(plans[3][2].startswith('🎯 +'), 'a fun parlay leads with its price')
+        self.assertTrue(plans[3][2].startswith('🎰 +'), 'a fun parlay leads with its price')
 
     def test_no_prompt_sits_between_plays_even_on_a_multi_play_day(self):
         first = {'a': pick('a'), 'b': pick('b', 'late', title='Oklahoma at Georgia under 44.5', direction='under')}
@@ -252,6 +252,17 @@ class SpacingTests(unittest.TestCase):
 
 
 class ScheduleTests(unittest.TestCase):
+    def test_final_copy_is_refused_before_buffer_accepts_it(self):
+        fake = FakeBuffer()
+        due = NOW + timedelta(hours=1)
+        seen = []
+        posts = bp.schedule([('bad-dash', 'research', 'A — B', due, None),
+                             ('bad-clock', 'play', 'the desk run is next', due, None)],
+                            'ch-x', {'posts': []}, NOW, key='t', send=fake, log=seen.append)
+        self.assertEqual(posts['posts'], [])
+        self.assertFalse(fake.calls)
+        self.assertEqual(sum('public voice check' in line for line in seen), 2)
+
     def test_playbook_only_on_new_x_plays_never_discord(self):
         fake = FakeBuffer()
         plans = [(kind, kind, f'{kind}\n@Playbook #NFL', NOW + timedelta(hours=1), None)

@@ -97,7 +97,7 @@ def pick_items(first, latest, games, now, player_team=None):
         if merged.get('expiresAt') and gates.when(merged['expiresAt']) <= now - timedelta(hours=12):
             continue        # a quote that expired half a day ago is not this morning's play
         text = x_post.draft(merged, game)
-        if x_post.guard(text, merged, x_post.load_reasons().get(key)):
+        if x_post.guard(text, merged, x_post.reason_in(text)):
             continue
         local = now.astimezone(gates.EASTERN)
         import post_windows
@@ -122,7 +122,7 @@ def publication_items(first, games, now):
         if public_pick.get('legs'):
             public_pick['legs'] = [{'title': leg} if isinstance(leg, str) else leg for leg in public_pick['legs']]
         text = x_post.draft(public_pick, game)
-        if x_post.guard(text, public_pick, reasons.get(key)):
+        if x_post.guard(text, public_pick, x_post.reason_in(text)):
             continue
         items.append({'guid': key, 'title': play_title(pick),
                       'text': text, 'link': f'{SITE}#pick/{key}', 'pubDate': at,
