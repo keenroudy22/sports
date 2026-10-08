@@ -173,6 +173,7 @@ def scoreboard_item(scoreboard, now):
 def render_cards(items, folder=CARDS, log=print, games=None, player_team=None):
     """A PNG per pick item, when a browser is on the machine. Returns {guid: path}."""
     import pick_card
+    import ticket_card
     if not pick_card.chrome_path():
         log('no browser for cards; the feed goes out without images')
         return {}
@@ -184,18 +185,39 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None):
         try:
             if not path.exists():
                 if 'ladderResult' in item:
-                    pick_card.render(pick_card.ladder_result_svg(item['ladderResult']), path)
+                    pick = item['ladderResult']
+                    svg = (ticket_card.climb_result_svg(pick, games or {}, player_team)
+                           if pick_card.ticket_enabled(moment=pick.get('settledAt')) else pick_card.ladder_result_svg(pick))
+                    pick_card.render(svg, path)
                 elif 'receipt' in item:
-                    pick_card.render(pick_card.receipt_svg(item['receipt']), path)
+                    receipt = item['receipt']
+                    # Weekly category summaries are not individual settled plays; retain their existing
+                    # reviewed renderer until a category-specific Kitchen receipt has been reviewed.
+                    svg = (ticket_card.final_svg(item['receiptPicks'], item['receiptDay'])
+                           if pick_card.ticket_enabled(receipt) and item.get('receiptPicks') else
+                           pick_card.receipt_svg(receipt))
+                    pick_card.render(svg, path)
                 else:
-                    art = (pick_card.ticket_art(item['pick'], games, player_team) if pick_card.play_kind(item['pick']) == 'parlay'
+                    art = (pick_card.ticket_art(item['pick'], games, player_team) if pick_card.play_kind(item['pick']) in ('parlay', 'ladder')
                            else pick_card.artwork(item['pick'], item['game'], player_side=item.get('side')))
                     if (pick_card.play_kind(item['pick']) == 'player' and item['pick'].get('athleteId')
                             and (art or {}).get('kind') != 'photo'):
                         fallback = 'team badge fallback' if (art or {}).get('kind') == 'logos' else 'no verified team badge'
                         log(f"WARNING: ESPN headshot unavailable after retry for player-prop card {item['pick'].get('id')}; {fallback}")
-                    pick_card.render(pick_card.modern_svg(item['pick'], item['game'], record=item.get('record'),
-                                                         player_side=item.get('side'), featured=item.get('featured', False), art=art), path)
+                    pick = item['pick']
+                    if pick_card.ticket_enabled(pick):
+                        kind = pick_card.play_kind(pick)
+                        if kind == 'ladder':
+                            svg = ticket_card.climb_svg(pick, games or {}, player_team, art=art)
+                        elif kind == 'parlay':
+                            svg = ticket_card.fun_svg(pick, games or {}, player_team, art=art)
+                        else:
+                            svg = ticket_card.straight_svg(pick, item['game'], player_side=item.get('side'),
+                                                           featured=item.get('featured', False), art=art)
+                    else:
+                        svg = pick_card.modern_svg(pick, item['game'], record=item.get('record'),
+                                                   player_side=item.get('side'), featured=item.get('featured', False), art=art)
+                    pick_card.render(svg, path)
             out[item['guid']] = path
         except Exception as error:
             log(f"card for {item['guid']} not rendered: {error}")
@@ -231,7 +253,16 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
     import receipts
     # Keep recent receipt images in every build. Discord normally uploads a permanent copy, but retaining these
     # URLs repairs old embeds and gives a failed delivery several days to retry without losing its card.
-    ready = [{'guid': r['card'], 'receipt': r} for r in receipts.card_history(ctx.first, ctx.latest, ctx.games, now)]
+    ready = []
+    for r in receipts.card_history(ctx.first, ctx.latest, ctx.games, now):
+        item = {'guid': r['card'], 'receipt': r}
+        if r['card'].startswith('receipt-day-'):
+            from datetime import date
+            day = date.fromisoformat(r['card'].removeprefix('receipt-day-'))
+            item['receiptDay'] = day.isoformat()
+            item['receiptPicks'] = receipts.plays_between(ctx.first, ctx.latest, ctx.games,
+                                                           receipts.counted(ctx.first, ctx.latest), day, day)
+        ready.append(item)
     import ladder
     climb = ladder.state(ctx.first, ctx.latest)
     ready += [{'guid': r['card'], 'ladderResult': dict(r['pick'],

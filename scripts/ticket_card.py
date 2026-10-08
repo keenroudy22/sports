@@ -1,8 +1,4 @@
-"""Map immutable published plays into the reviewed Kitchen Ticket artwork.
-
-This module is preview-only until TICKET_FROM is explicitly approved. It never
-changes a play, a publication, or an already posted attachment.
-"""
+"""Map immutable published plays into the reviewed Kitchen Ticket artwork."""
 import re
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -194,6 +190,32 @@ def climb_svg(pick, games, player_team=None, **kwargs):
     return card.svg()
 
 
+def climb_result_svg(pick, games, player_team=None, **kwargs):
+    """Settle a rung from recorded leg results; never infer a miss from the headline."""
+    data = climb_data(pick, games, player_team, **kwargs)
+    info = pick.get('ladder') or {}
+    result = str(pick.get('result') or '').lower()
+    if result not in ('win', 'loss', 'push', 'void'):
+        raise ValueError('Climb result card needs a recorded result')
+    actual = str(pick.get('actual') or '')
+    if actual.lower().startswith('legs:'):
+        marks = [part.strip().lower() for part in actual.split(':', 1)[1].split(',')]
+    else:
+        marks = ['win'] * len(data['legs']) if result == 'win' else []
+    data['leg_results'] = {index: {'win': 'hit', 'loss': 'miss'}.get(mark)
+                           for index, mark in enumerate(marks[:len(data['legs'])])}
+    data['result'] = result
+    data['start'] = int(info.get('start') or 50)
+    if result == 'win':
+        data['banked'] = int(info.get('bankedAfter') if info.get('bankedAfter') is not None else data['banked'] + data['bank_this'])
+        data['complete'] = int(info.get('totalAfter') if info.get('totalAfter') is not None else data['banked'] + data['next_stake']) >= data['goal']
+    card = ticket_cards.climb_card(data)
+    problems = ticket_kit.qa(card, str(pick.get('id') or 'climb-result'))
+    if problems:
+        raise ValueError('; '.join(problems))
+    return card.svg()
+
+
 def cooked_data(pick, game, *, art=None, fetch=None, player_side=None):
     """A won player prop, using the immutable grading value and site's unit rule."""
     if pick_card.play_kind(pick) != 'player' or pick.get('result') != 'win':
@@ -272,6 +294,36 @@ def final_data(rows, day):
 def final_svg(rows, day):
     card = ticket_cards.final_card(final_data(rows, day))
     problems = ticket_kit.qa(card, 'final')
+    if problems:
+        raise ValueError('; '.join(problems))
+    return card.svg()
+
+
+def prep_svg(prep, *, fetch=None):
+    """Render a research-only Prep List from the site's already checked rows."""
+    from datetime import date
+    fetch = fetch or pick_card.fetch_data_uri
+    rows = []
+    for source in prep.get('rows') or []:
+        league = source.get('league')
+        athlete = str(source.get('athleteId') or '')
+        sport = 'nfl' if league == 'NFL' else 'college-football' if league == 'CFB' else None
+        photo = fetch(pick_card.HEADSHOT.format(sport=sport, athlete=athlete)) if sport and athlete else None
+        units = ' '.join(ticket_kit.STAT_UNITS.get(source.get('stat'), (source.get('stat') or 'STAT',)))
+        games, hits = source.get('games'), source.get('hits')
+        if not isinstance(games, int) or not isinstance(hits, int) or games < 1 or not 0 <= hits <= games:
+            raise ValueError('Prep List requires an exact stored hit count')
+        rows.append({'player': source['player'],
+                     'selection': f"{str(source['direction']).upper()} {float(source['line']):g} {units}",
+                     'hits': f'{hits}/{games}', 'odds': source['odds'], 'book': source['book'],
+                     'clears': bool(source.get('clears')), 'photo': photo,
+                     'team_color': source.get('teamColor') or '#2A2F33'})
+    if not rows:
+        raise ValueError('Prep List has no checked rows')
+    day = date.fromisoformat(prep['day'])
+    card = ticket_cards.prep_card({'day': f'{day:%a %b} {day.day}', 'rows': rows,
+                                   'stub': 'RESEARCH · NOT A BEST BET'})
+    problems = ticket_kit.qa(card, 'prep-list')
     if problems:
         raise ValueError('; '.join(problems))
     return card.svg()

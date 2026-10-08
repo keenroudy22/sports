@@ -206,7 +206,7 @@ def text_hash(text):
 
 def record(log, key, text, tweet_id, kind, now, card_theme='none'):
     log['posts'].append({'id': key, 'postedAt': gates.stamp(now), 'tweetId': tweet_id, 'textHash': text_hash(text),
-                         'kind': kind, 'cardTheme': card_theme if card_theme in ('legacy', 'felt') else 'none'})
+                         'kind': kind, 'cardTheme': card_theme if card_theme in ('legacy', 'felt', 'ticket') else 'none'})
     return log
 
 

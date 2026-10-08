@@ -54,6 +54,23 @@ def main(argv=None):
             manifest.append({'id': item['guid'], 'kind': 'potd', 'title': pick.get('title'),
                              'photo': (art or {}).get('kind') == 'photo', 'path': str(hot), 'bytes': hot.stat().st_size})
             print(str(hot))
+    if not any(row.get('kind') == 'potd' for row in manifest):
+        # Preview the most recent real named Hot Plate even after its game has ended.
+        history = featured.load()
+        hot_id = next((row.get('id') for _, row in sorted(history.items(), reverse=True)
+                       if row.get('id') in stores.first and
+                       pick_card.play_kind(stores.first[row['id']]) in ('player', 'team')), None)
+        if hot_id:
+            pick = stores.first[hot_id]
+            game = stores.games.get((pick.get('gameIds') or [None])[0])
+            if game:
+                team_id = str(stores.player_team.get(str(pick.get('athleteId') or '')))
+                side = next((name for name in ('away', 'home') if str((game.get(name) or {}).get('id')) == team_id), None)
+                png = args.out / f'{hot_id}-potd.png'
+                pick_card.render(ticket_card.straight_svg(pick, game, featured=True, player_side=side), png)
+                manifest.append({'id': hot_id, 'kind': 'potd', 'source': 'real previously named Hot Plate, private rerender',
+                                 'path': str(png), 'bytes': png.stat().st_size})
+                print(str(png))
     fun = sorted((pick for pick in stores.first.values()
                   if pick.get('parlayType') in ('longshot', 'lotto', 'easy') and pick.get('legs')
                   and all(isinstance(leg, dict) and isinstance(leg.get('odds'), (int, float)) for leg in pick['legs'])),
@@ -96,6 +113,17 @@ def main(argv=None):
         manifest.append({'kind': 'final', 'source': 'Oct 3 settled straight plays; fun and Climb tracked apart',
                          'path': str(png), 'bytes': png.stat().st_size})
         print(str(png))
+    today_path = Path(__file__).resolve().parents[1] / 'site' / 'data' / 'app' / 'today.json'
+    if today_path.exists():
+        current = json.loads(today_path.read_text(encoding='utf-8'))
+        prep = next((value for value in (current.get('prep') or {}).values()
+                     if isinstance(value, dict) and value.get('rows')), None)
+        if prep:
+            png = args.out / f"prep-list-{prep['day']}.png"
+            pick_card.render(ticket_card.prep_svg(prep), png)
+            manifest.append({'kind': 'prep', 'source': 'built Today Prep List; research, not a best bet',
+                             'path': str(png), 'bytes': png.stat().st_size})
+            print(str(png))
     # Rehearse the no-headshot branch on a real recorded wager by simulating ESPN's photo 404.
     # The final manifest calls out the simulation; no record or live fetch is altered.
     fallback_id = 'NFL-2026-W4-flournoy-over-3-5-rec-fd'

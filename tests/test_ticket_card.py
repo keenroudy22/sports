@@ -155,6 +155,58 @@ class TicketCardTests(unittest.TestCase):
                               folder, log=messages.append)
         self.assertTrue(any('headshot unavailable after retry' in message for message in messages))
 
+    def test_ticket_cutover_requires_offset_and_keeps_older_art(self):
+        with patch.object(pick_card, 'TICKET_FROM', '2026-10-08T11:00:00-04:00'):
+            self.assertFalse(pick_card.ticket_enabled({'publishedAt': '2026-10-08T14:59:59Z'}))
+            self.assertTrue(pick_card.ticket_enabled({'publishedAt': '2026-10-08T15:00:00Z'}))
+            self.assertEqual(pick_card.card_theme(item={'publishedAt': '2026-10-08T15:00:00Z'}), 'ticket')
+            self.assertEqual(pick_card.card_theme(item={'publishedAt': '2026-10-08T14:59:59Z'}), 'legacy')
+        with patch.object(pick_card, 'TICKET_FROM', '2026-10-08'):
+            self.assertFalse(pick_card.ticket_enabled({'publishedAt': '2026-10-09T12:00:00Z'}))
+
+    def test_feed_routes_new_straight_and_leaves_old_attachment_unchanged(self):
+        recent = dict(PROP, publishedAt='2026-10-08T15:01:00Z')
+        old = dict(PROP, publishedAt='2026-10-08T14:59:00Z')
+        with TemporaryDirectory() as folder, patch.object(pick_card, 'TICKET_FROM', '2026-10-08T11:00:00-04:00'), \
+                patch.object(pick_card, 'chrome_path', return_value='chrome'), \
+                patch.object(pick_card, 'artwork', return_value={'kind': 'photo', 'uri': self.image}), \
+                patch.object(pick_card, 'render') as render, \
+                patch.object(ticket_card, 'straight_svg', return_value='<svg data-theme="ticket"/>') as kitchen, \
+                patch.object(pick_card, 'modern_svg', return_value='<svg data-theme="legacy"/>') as old_svg:
+            feed.render_cards([{'guid': 'new', 'pick': recent, 'game': GAME, 'side': 'away'},
+                               {'guid': 'old', 'pick': old, 'game': GAME, 'side': 'away'}], folder)
+            self.assertEqual(kitchen.call_count, 1)
+            self.assertEqual(old_svg.call_count, 1)
+            self.assertEqual(render.call_args_list[0].args[0], '<svg data-theme="ticket"/>')
+            self.assertEqual(render.call_args_list[1].args[0], '<svg data-theme="legacy"/>')
+            existing = Path(folder) / 'existing.png'
+            existing.write_bytes(b'posted-art')
+            feed.render_cards([{'guid': 'existing', 'pick': recent, 'game': GAME, 'side': 'away'}], folder)
+            self.assertEqual(existing.read_bytes(), b'posted-art')
+            self.assertEqual(render.call_count, 2)
+
+    def test_settled_climb_uses_result_time_and_real_leg_marks(self):
+        pick = {'id': 'rung', 'parlayType': 'ladder', 'publishedAt': '2026-10-08T14:00:00Z',
+                'settledAt': '2026-10-08T16:00:00Z', 'result': 'win', 'actual': 'all 2 legs won',
+                'odds': -160, 'book': 'FanDuel', 'ladder': {'run': 1, 'step': 2, 'stake': 75,
+                'payout': 120, 'banked': 16, 'bankThisWin': 24, 'nextStake': 96},
+                'legs': [{'title': 'Team A +3.5', 'odds': -110}, {'title': 'Over 42.5', 'odds': -110}]}
+        with TemporaryDirectory() as folder, patch.object(pick_card, 'TICKET_FROM', '2026-10-08T11:00:00-04:00'), \
+                patch.object(pick_card, 'chrome_path', return_value='chrome'), \
+                patch.object(ticket_card, 'climb_result_svg', return_value='<svg data-theme="ticket"/>') as result_svg, \
+                patch.object(pick_card, 'render') as render:
+            feed.render_cards([{'guid': 'rung-result', 'ladderResult': pick}], folder, games={})
+            result_svg.assert_called_once()
+            self.assertEqual(render.call_args.args[0], '<svg data-theme="ticket"/>')
+        with patch.object(ticket_card, 'climb_data', return_value={'legs': [{'title': 'A', 'odds': -110},
+                {'title': 'B', 'odds': -110}], 'banked': 16, 'bank_this': 24, 'next_stake': 96,
+                'goal': 1000, 'run': 1, 'step': 2, 'stake': 75, 'payout': 120, 'odds': -160,
+                'book': 'FanDuel'}), patch.object(ticket_card.ticket_cards, 'climb_card') as card:
+            card.return_value.svg.return_value = '<svg/>'
+            ticket_card.climb_result_svg(pick, {})
+            self.assertEqual(card.call_args.args[0]['leg_results'], {0: 'hit', 1: 'hit'})
+            self.assertEqual(card.call_args.args[0]['banked'], 40)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -421,6 +421,12 @@ Handy commands (from `~/Projects/sports`):
   Cooked the record-equivalent won units, and Final each settled row and slate net units. Captions keep their
   existing unit rule. Claude reviews real renders before `TICKET_FROM` is set with an explicit Eastern offset;
   posted art remains unchanged.
+- **Kitchen Ticket release timing (owner-delegated to Claude, 2026-10-08, item 32):** the reviewed switch may
+  release in the 8:35–9:45 AM or 12:15–1:15 PM Eastern window once the last desk run before deploy is green,
+  W-4 routing/tests and every release gate pass, and Claude reviews the six real repo-builder renders (straight,
+  Hot Plate, fun ticket, Climb rung, Final, Prep List). Set `TICKET_FROM` to an explicit Eastern instant at least
+  30 minutes after deploy completion; never re-render an already posted attachment. A failed gate or missing
+  render review leaves `TICKET_FROM` unset and the current cards live.
 - **Results-led direction (owner-delegated to Claude, 2026-10-07):** `DIRECTION-RULES.md` is standing approval
   for its bounded, evidence-triggered tightenings, pauses, existing-category reweighting and restorations in
   `learn.weekly` and the Monday task. Log trigger numbers and undo conditions; report each move in the weekly

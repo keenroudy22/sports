@@ -1987,8 +1987,21 @@ def drafts(slot, now, ctx, games, settled, status):
                 team = ctx.player_team.get(str(pick_now.get('athleteId') or ''))
                 side = 'home' if team == str(game['home']['id']) else 'away' if team == str(game['away']['id']) else None
                 import featured
-                pick_card.render(pick_card.modern_svg(pick_now, game, player_side=side, featured=featured.of_day(eastern_date(now).isoformat()) == key,
-                                               art=pick_card.artwork(pick_now, game)), folder / f'{key}.png')
+                art = pick_card.artwork(pick_now, game)
+                is_featured = featured.of_day(eastern_date(now).isoformat()) == key
+                if pick_card.ticket_enabled(pick_now):
+                    import ticket_card
+                    kind = pick_card.play_kind(pick_now)
+                    if kind == 'ladder':
+                        svg = ticket_card.climb_svg(pick_now, games, ctx.player_team)
+                    elif kind == 'parlay':
+                        svg = ticket_card.fun_svg(pick_now, games, ctx.player_team)
+                    else:
+                        svg = ticket_card.straight_svg(pick_now, game, player_side=side,
+                                                       featured=is_featured, art=art)
+                else:
+                    svg = pick_card.modern_svg(pick_now, game, player_side=side, featured=is_featured, art=art)
+                pick_card.render(svg, folder / f'{key}.png')
         except Exception as error:
             log(f'card for {key} not rendered: {error}')
     status['x']['drafted'] = len(written)

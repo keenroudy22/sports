@@ -40,6 +40,8 @@ CHROME_CANDIDATES = ('/Applications/Google Chrome.app/Contents/MacOS/Google Chro
 
 # Set only after the owner approves the rendered set. The environment override is for isolated previews and rollback.
 FELT_FROM = None
+# Set only after the reviewed Kitchen Ticket renders and release gates pass.
+TICKET_FROM = None
 
 
 def _theme_time(value):
@@ -81,6 +83,19 @@ def felt_enabled(item=None, moment=None):
     return bool(when and start and when >= start)
 
 
+def ticket_enabled(item=None, moment=None):
+    """Select new art by its original publication time, never by rebuild time."""
+    cutover = os.environ.get('KEENROUDY_TICKET_FROM') or TICKET_FROM
+    if not cutover:
+        return False
+    source = moment
+    if source is None and isinstance(item, dict):
+        source = next((item.get(key) for key in ('publishedAt', 'settledAt', 'due', 'day', 'capturedAt')
+                       if item.get(key)), None)
+    when, start = _theme_time(source), _cutover_time(cutover)
+    return bool(when and start and when >= start)
+
+
 def card_theme(moment=None, item=None):
     """Production-renderer label saved with each image post for like-category comparisons.
 
@@ -91,7 +106,10 @@ def card_theme(moment=None, item=None):
     if source is None and isinstance(item, dict):
         source = next((item.get(key) for key in ('publishedAt', 'settledAt', 'due', 'day', 'capturedAt')
                        if item.get(key)), None)
-    when, start = _theme_time(source), _cutover_time(FELT_FROM)
+    when, ticket_start = _theme_time(source), _cutover_time(TICKET_FROM)
+    if when and ticket_start and when >= ticket_start:
+        return 'ticket'
+    start = _cutover_time(FELT_FROM)
     return 'felt' if when and start and when >= start else 'legacy'
 
 

@@ -336,14 +336,24 @@ def climb_card(p):
     inner += card.text(COL_X, panel_bottom - 30, sub, 46, CHALK, tracking=1)
     # legs
     top = panel_bottom + 24
-    rows, _ = leg_rows(card, p['legs'], top, 84)
+    rows, _ = leg_rows(card, p['legs'], top, 84, settled=p.get('leg_results'))
     inner += rows
     y = top + 84 * len(p['legs']) + 20
     inner += kit.dashed(X1, X2, y)
     y += 70
-    inner += kit.leader(card, y, 'Banked so far', kit.money(p['banked']))
+    result = p.get('result')
+    inner += kit.leader(card, y, 'Banked so far' if not result else 'All climbs banked', kit.money(p['banked']))
     y += 70
-    inner += kit.leader(card, y, 'If it cashes', f"{kit.money(p['bank_this'])} BANKED · {kit.money(p['next_stake'])} RIDES")
+    if result == 'win':
+        next_line = (f"CLIMB COMPLETE · NEXT {kit.money(p['start'])}" if p.get('complete') else
+                     f"{kit.money(p['bank_this'])} BANKED · STEP {p['step'] + 1} {kit.money(p['next_stake'])} RIDES")
+    elif result == 'loss':
+        next_line = f"MISSED · NEXT CLIMB {kit.money(p['start'])}"
+    elif result in ('push', 'void'):
+        next_line = f"{result.upper()} · STEP {p['step']} AGAIN · {kit.money(p['stake'])} RIDES"
+    else:
+        next_line = f"{kit.money(p['bank_this'])} BANKED · {kit.money(p['next_stake'])} RIDES"
+    inner += kit.leader(card, y, 'If it cashes' if not result else 'Result', next_line)
     perf = y + 44
     inner += climb_route(card, p, perf)
     frame(card, HOUSE, CHALK, perf, 1196, inner)
