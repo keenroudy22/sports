@@ -596,14 +596,23 @@ const LINES = [
   lineRow('F-on-card', { athleteId: '9', stat: 'recYds', marketType: null, player: 'Fixture Receiver', line: 49.5 }, { edge: 7 }),
   lineRow('G-small', { athleteId: '52', stat: 'rushYds', marketType: null, player: 'Small Edge' }, { edge: 1 }),
 ];
-test('Research worth a look picks the same three rows the old Today did, and never a held row', async () => {
+test('Today research favors props, then sides, then one total; held and posted lines stay out', async () => {
   const now = NOW;
   const vms = LINES.map(r => M.lineVM(r, now));
   const official = new Set([M.officialKey(prop)]);
-  /* The pre-Kitchen-Ticket rule, verbatim from 87ae3c9e site/app.js. */
-  const old = M.collapse(vms.filter(vm => M.hasValue(vm) && !official.has(vm.key))).sort(M.SORTS.edge).slice(0, 3);
-  assert.deepEqual(M.worthRows(vms, official).map(r => r.id), old.map(r => r.id));
-  assert.deepEqual(old.map(r => r.id), ['A-total', 'B-prop', 'C-spread']);
+  assert.deepEqual(M.worthRows(vms, official).map(r => r.id), ['B-prop', 'G-small', 'C-spread']);
+  const otherTotal = M.lineVM(lineRow('H-other-total', { gameId: 'NFL-2' }, { edge: 20 }), now);
+  assert.deepEqual(M.worthRows([otherTotal, ...vms], official).map(r => r.id),
+    ['B-prop', 'G-small', 'C-spread'], 'a total cannot crowd props or sides off Today');
+  assert.deepEqual(M.worthRows([otherTotal, ...vms.filter(vm => vm.id !== 'G-small')], official).map(r => r.id),
+    ['B-prop', 'C-spread', 'H-other-total'], 'when a slot remains, only the top total appears');
+  assert.deepEqual(M.todayResearchOrder([
+    { id: 'total-a', marketType: 'total', hits: 10, games: 10 },
+    { id: 'side', marketType: 'spread', hits: 7, games: 10 },
+    { id: 'prop', stat: 'recYds', hits: 6, games: 10 },
+    { id: 'total-b', marketType: 'total', hits: 9, games: 10 },
+  ], 3, (a, b) => b.hits / b.games - a.hits / a.games).map(r => r.id),
+  ['prop', 'side', 'total-a'], 'the Prep List uses the same category order and one-total cap');
   const held = M.lineVM(lineRow('H-held', { athleteId: '53', stat: 'recYds', marketType: null, roleSuspect: true }, { edge: 12 }), now);
   assert.ok(!M.worthRows([held, ...vms], official).some(r => r.id === 'H-held'), 'a role or price hold never shows as research worth a look');
   const files = { 'data/app/lines.json': { files: { NFL: 'lines-NFL.json', CFB: 'lines-CFB.json' } },
@@ -614,8 +623,8 @@ test('Research worth a look picks the same three rows the old Today did, and nev
   const page = await api.views.today({ view: 'today' });
   const sec = page.slice(page.indexOf('kt-worth"'), page.indexOf('kt-games"'));
   assert.match(sec, /<h2 class="kt-tape" id="worth-h">Research worth a look<\/h2><span class="kt-kind">Not best bets<\/span>/);
-  assert.match(sec, /A-total over 44\.5[\s\S]*Board Receiver over 60\.5[\s\S]*ARIZ \+6\.5/);
-  for (const out of ['D-thin', 'E-raw', 'F-on-card', 'G-small', 'A-total-alt']) assert.ok(!sec.includes(out), out);
+  assert.match(sec, /Board Receiver over 60\.5[\s\S]*G-small over 44\.5[\s\S]*ARIZ \+6\.5/);
+  for (const out of ['D-thin', 'E-raw', 'F-on-card', 'A-total', 'A-total-alt']) assert.ok(!sec.includes(out), out);
   assert.match(sec, /58% our chance · 52% needed/);
   assert.match(sec, /href="#research\/lines">See every line ›/);
 });

@@ -443,9 +443,22 @@
     }
     return [...groups.values()];
   };
-  /* Research worth a look (the pre-Kitchen-Ticket Today's rule): current lines that clear our price check, one per
-     market and side, never a held row or a play already on the card, biggest chance gap first, three at most. */
-  const worthRows = (rows, official = new Set()) => collapse(rows.filter(vm => hasValue(vm) && !heldRow(vm.src) && !official.has(vm.key))).sort(SORTS.edge).slice(0, 3);
+  /* Today's short research lists favor props, then sides, then a single total. The full Research board keeps
+     every line and its own filters; this changes no posted play or quality gate. */
+  const todayMarketRank = row => {
+    if (row.isProp || row.athleteId || row.stat) return 0;
+    const market = String(row.marketType || row.market || row.src?.marketType || row.src?.market || '').toLowerCase();
+    return /total/.test(market) ? 2 : 1;
+  };
+  const todayResearchOrder = (rows, limit, compare) => {
+    let totals = 0;
+    return rows.slice().sort((a, b) => todayMarketRank(a) - todayMarketRank(b)
+      || compare(a, b) || String(a.id || a.gameId || a.player).localeCompare(String(b.id || b.gameId || b.player)))
+      .filter(row => todayMarketRank(row) !== 2 || ++totals <= 1).slice(0, limit);
+  };
+  /* Current, priced rows only; one per market and side, never held or already on the card. */
+  const worthRows = (rows, official = new Set()) => todayResearchOrder(
+    collapse(rows.filter(vm => hasValue(vm) && !heldRow(vm.src) && !official.has(vm.key))), 3, SORTS.edge);
   const SORTS = {
     edge: (a, b) => (b.edge ?? -99) - (a.edge ?? -99) || Date.parse(a.kickoff) - Date.parse(b.kickoff),
     chance: (a, b) => (b.chance ?? -1) - (a.chance ?? -1) || (b.edge ?? -99) - (a.edge ?? -99),
@@ -560,7 +573,7 @@
   const model = { splitColours, ledeSize, goodTo, latestPickQuote, holdOf, pickHold, heldWords, heldShort, heldQuote, afterPostingWords, priceMatch, averageGap, researchPrice, matchupSignals, breakEven, fairAmerican, edgePoints, pctText, pctOne, oddsText, upsetChanceLine, quoteAge, bookLabel, postedBook, marketLabel, niceTitle, sentences,
     whyLines, watchLine, historyLine, howWeGotIt, pickVM, lineVM, officialKey, onBoard, hasValue, defenseVerdict, collapse, SORTS, heavyFavorite, trendText, gapScore,
     cumulativeUnits, clvSummary, parseHash, resolve, canonical, TAB_OF, MORE_PAGES, isParlayLike, climbWords, heroBets,
-    teamPanel, STAT_UNITS, betParts, nameSize, betSize, ledeTitle, dateLine, resultLine, minus, worthRows };
+    teamPanel, STAT_UNITS, betParts, nameSize, betSize, ledeTitle, dateLine, resultLine, minus, worthRows, todayMarketRank, todayResearchOrder };
 
   if (typeof document === 'undefined') return { model };
 
@@ -934,8 +947,8 @@
     const blocks = Object.values(prep || {}).flatMap(b => [b, b && b.next]).filter(b => b && (b.rows || []).length && (state.league === 'ALL' || b.rows[0].league === state.league))
       .map(b => ({ day: b.day, rows: b.rows.filter(r => Date.parse(r.kickoff) > now) })).filter(b => b.rows.length);
     const day = blocks.map(b => b.day).sort()[0];
-    const rows = blocks.filter(b => b.day === day).flatMap(b => b.rows)
-      .sort((a, b) => b.hits / b.games - a.hits / a.games || b.games - a.games).slice(0, 3);
+    const rows = todayResearchOrder(blocks.filter(b => b.day === day).flatMap(b => b.rows), 3,
+      (a, b) => b.hits / b.games - a.hits / a.games || b.games - a.games);
     if (!rows.length && !notes.length) return '';
     const kind = !rows.length ? 'Research notes' : day === etDay() ? `Research for ${rows.every(r => tonight(r.kickoff)) ? 'tonight' : 'today'}` : `Research for ${weekday(`${day}T16:00:00Z`)}`;
     return `<section class="kt-sec kt-prep" aria-labelledby="prep-h"><div class="kt-sec-head"><h2 class="kt-tape" id="prep-h">Prep List</h2><span class="kt-kind">${esc(kind)}</span></div>

@@ -225,6 +225,9 @@ Handy commands (from `~/Projects/sports`):
   Research only, never a play; release still runs through the lock-holding deploy and every gate.
 - **Props before totals (owner-delegated to Claude, 2026-10-08; item 37):** Future football
   best-bet ranking puts player props first, then spreads and eligible moneylines, then totals.
+  On Today, both "Research worth a look" and the Prep List use that same display order and
+  show at most one total each. The full Research board keeps every market and its filters.
+  This changes no already-posted play or result.
   NFL totals pause as official plays until 30 forward shadow plays break even with positive
   closing-line value; CFB totals are limited to one per weekend slate, none on weekdays, and
   need a five-point edge without adverse movement since first capture. Moneylines at −200..+200
