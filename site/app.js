@@ -2191,7 +2191,7 @@
   /* Record, More and team pages are not part of the first paint. */
   const MORE_VIEW_NAMES = ['player', 'team', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
-  const MORE_ASSET = 'app-more.js?v=sha256-1d6ce83b3d8f';
+  const MORE_ASSET = 'app-more.js?v=sha256-2bdf92071aa6';
   let moreViews = null, moreLoading = null;
   const moreContext = (overrides = {}) => ({ C, P, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
