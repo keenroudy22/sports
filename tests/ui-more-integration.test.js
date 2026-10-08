@@ -63,13 +63,13 @@ test('the real app shared interface renders every lazy view with fixture data', 
     ['schedule', views.schedule, {}],
     ['status', views.status, {}],
     ['feedback', views.feedback, {}],
-    ['team', views.team, { league: 'CFB', id: '1' }],
     ['more', views.more, {}],
     ['glossary', views.glossary, {}],
     ['lab', views.lab, {}],
     ['vegas', views.vegas, {}],
   ];
   assert.equal(views.responsible, undefined);
+  assert.equal(views.team, undefined, 'the team page lives in the Games bundle');
   const moreHtml = await views.more({});
   assert.doesNotMatch(moreHtml, /Responsible gaming|#responsible/);
   for (const [name, render, route] of cases) {

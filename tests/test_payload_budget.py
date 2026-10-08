@@ -17,6 +17,7 @@ class PayloadBudgetTests(unittest.TestCase):
         for name in payload_budget.SHELL_FILES:
             (root / name).write_bytes(b'ok')
         (root / 'app-more.js').write_bytes(b'ok')
+        (root / 'app-games.js').write_bytes(b'ok')
         app = root / 'data/app'
         (app / 'teams').mkdir(parents=True)
         (app / 'trends').mkdir()
@@ -92,6 +93,17 @@ class PayloadBudgetTests(unittest.TestCase):
             self.assertTrue(any(x.startswith('lazy-more-gzip:') for x in result['warnings']))
             self.assertEqual(result['issues'], [])
             self.assertEqual(payload_budget.main(root), 0)
+
+    def test_games_bundle_has_its_own_lazy_budget_and_never_blocks(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = self.site(folder)
+            self.assertEqual(payload_budget.LIMITS['lazy-games-gzip'], payload_budget.LIMITS['lazy-more-gzip'])
+            (root / 'app-games.js').write_bytes(os.urandom(payload_budget.LIMITS['lazy-games-gzip'] * 2))
+            result = payload_budget.check(root)
+            self.assertTrue(any(x.startswith('lazy-games-gzip:') for x in result['warnings']))
+            self.assertEqual(result['issues'], [])
+            (root / 'app-games.js').unlink()
+            self.assertIn('lazy-games-gzip:missing', payload_budget.check(root)['warnings'])
 
     def test_hosted_budget_runs_after_build_and_before_upload(self):
         workflow = (Path(__file__).resolve().parents[1] / '.github/workflows/publish.yml').read_text()

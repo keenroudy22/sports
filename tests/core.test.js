@@ -170,11 +170,8 @@ test('official card separates Eastern dates and keeps ungraded older plays visib
   assert.deepEqual(r.awaiting.map(p=>p.id), ['old']);
 });
 
-test('college disagreement caution uses home-margin sign and is not a selection', () => {
-  assert.match(C.modelCaution({league:'CFB', v2:{margin:6}, market:{spread:7}}), /not necessarily a good price/);
-  assert.equal(C.modelCaution({league:'CFB', v2:{margin:6}, market:{spread:-7}}), '');
-  assert.equal(C.modelCaution({league:'NFL', v2:{margin:6}, market:{spread:7}}), '');
-  assert.equal(C.modelCaution({league:'CFB', v2:{margin:6}, market:{}}), '');
+test('the generic college disagreement caution is retired: specific reasons come from the build', () => {
+  assert.equal(C.modelCaution, undefined);
 });
 
 test('straight play cards link to the player or matchup; tickets and incomplete props keep details', () => {

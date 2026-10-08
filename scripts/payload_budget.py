@@ -14,6 +14,7 @@ SITE = ROOT / 'site'
 LIMITS = {
     'shell-gzip': 92 * 1024,
     'lazy-more-gzip': 32 * 1024,
+    'lazy-games-gzip': 32 * 1024,
     'today': 320 * 1024,
     'today-hero': 4 * 1024,
     'lines': 768 * 1024,
@@ -46,15 +47,17 @@ def check(site=SITE):
             shell += len(gzip.compress(path.read_bytes(), mtime=0))
     if shell > LIMITS['shell-gzip']:
         issues.append(f'shell-gzip:{shell}>{LIMITS["shell-gzip"]}')
-    more = site / 'app-more.js'
-    lazy_more = 0
-    if not more.is_file():
-        warnings.append('lazy-more-gzip:missing')
-    else:
-        lazy_more = len(gzip.compress(more.read_bytes(), mtime=0))
-        warning = size_warning('lazy-more-gzip', lazy_more, LIMITS['lazy-more-gzip'])
-        if warning:
-            warnings.append(warning)
+    lazy = {}
+    for key, name in (('lazy-more-gzip', 'app-more.js'), ('lazy-games-gzip', 'app-games.js')):
+        path = site / name
+        lazy[key] = 0
+        if not path.is_file():
+            warnings.append(f'{key}:missing')
+        else:
+            lazy[key] = len(gzip.compress(path.read_bytes(), mtime=0))
+            warning = size_warning(key, lazy[key], LIMITS[key])
+            if warning:
+                warnings.append(warning)
     files = {
         'today': site / 'data/app/today.json',
         'today-hero': site / 'data/app/today-hero.json',
@@ -83,7 +86,8 @@ def check(site=SITE):
             warning = size_warning(f'trend-shard:{path.name}', path.stat().st_size, LIMITS['trend-shard'])
             if warning:
                 warnings.append(warning)
-    return {'shellGzip': shell, 'lazyMoreGzip': lazy_more, 'issues': issues, 'warnings': warnings}
+    return {'shellGzip': shell, 'lazyMoreGzip': lazy['lazy-more-gzip'], 'lazyGamesGzip': lazy['lazy-games-gzip'],
+            'issues': issues, 'warnings': warnings}
 
 
 def main(site=SITE):

@@ -10,7 +10,7 @@ import os
 import re
 from pathlib import Path
 
-ROOT_FILES = {'.nojekyll', 'index.html', 'app.css', 'app.js', 'app-more.js', 'core.js', 'live.js', 'personal.js',
+ROOT_FILES = {'.nojekyll', 'index.html', 'app.css', 'app.js', 'app-more.js', 'app-games.js', 'core.js', 'live.js', 'personal.js',
               'favicon.svg', 'kookn-chef.png', 'kookn-chef-clip.png', 'kookn.jpg', 'kookn-mark.png'}
 DATA_FILES = {'slate.json', 'research-context.json', 'desk-notes.json', 'sports.json',
               'research.json', 'scoreboard.json', 'player-history.json', 'opponent-history.json',

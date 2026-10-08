@@ -8,7 +8,7 @@ network calls and changes nothing. New file families require a reviewed allowlis
 
 | Family | Public purpose |
 |---|---|
-| Site HTML, CSS, JavaScript and approved brand assets | The application itself, including the lazily loaded `app-more.js`; contains no authenticated premium boundary. |
+| Site HTML, CSS, JavaScript and approved brand assets | The application itself, including the lazily loaded `app-more.js` and `app-games.js` (the Games list, live scores, game and team pages; same on-demand mechanism, fingerprinted by content); contains no authenticated premium boundary. |
 | `kookn-mark.png` | 512-pixel ticket-mark avatar for the existing Discord publisher; `kookn.jpg` remains the legacy card asset. |
 | `kookn-chef.png` | Owner-supplied clay-chef publisher avatar as of October 7; the server retains the ticket mark and immutable legacy attachments stay unchanged. |
 | Dated NFL/CFB trend `-part-N.json` files | Complete player/stat groups split at one megabyte and loaded through the existing trend index. No threshold rows are omitted. |

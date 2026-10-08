@@ -5,6 +5,7 @@ const fs = require('node:fs');
 globalThis.KRCore = require('../site/core.js');
 const { model: M } = require('../site/app.js');
 const source = fs.readFileSync('site/app.js', 'utf8');
+const gamesSource = fs.readFileSync('site/app-games.js', 'utf8');
 
 test('model-only support requires a saved for-direction fact', () => {
   const pick={modelLean:true,reason:'Defensive starters are out.',why:'Defensive starters are out.'};
@@ -30,8 +31,8 @@ test('history and defense cannot manufacture Model support below the price bar',
   assert.equal(M.matchupSignals(hurst, true, true), 2);
   assert.equal(M.matchupSignals({...hurst, clearsPrice:true}, true, true), 3);
   assert.match(M.researchPrice(hurst), /We give it 52%\. This price needs 53%.*not high enough/);
-  assert.match(source, /x\.r\.clearsPrice === true/);
-  assert.match(source, /History only · our chance does not beat this price/);
+  assert.match(gamesSource, /x\.r\.clearsPrice === true/);
+  assert.match(gamesSource, /History only · our chance does not beat this price/);
 });
 
 test('Upset Watch explains the book cut and computes the price threshold', () => {

@@ -477,12 +477,6 @@
       upcoming: active.filter(p => day(p) && day(p) > today),
       awaiting: active.filter(p => !day(p) || day(p) < today) };
   };
-  const modelCaution = game => {
-    const margin = game?.v2?.margin, spread = game?.market?.spread;
-    if (game?.league !== 'CFB' || typeof margin !== 'number' || typeof spread !== 'number'
-      || Math.abs(margin + spread) < 7) return '';
-    return 'Our number is far from the book line. College schedule strength, blowouts and changing roles can distort it; this is not necessarily a good price.';
-  };
   /* The Kook'n 80/20 Climb (scripts/ladder.py): bank 20% of every winning return and ride 80% on the next rung.
      The current climb reaches $1,000 on bank plus ride; a miss starts a new $50 climb but cannot take the saved bank.
      It stays outside the straight record, and a rung pulled before its post still counts and waits for its result. */
@@ -841,5 +835,5 @@
   return { RESEARCH_DEFAULTS, researchPreferences, researchReset, researchContext, researchHash, researchMatches, researchStat, chartHistory, chartGeometry, thresholdResult, quoteStatus, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, deskNotes,
     column, cell, observedCell, observedStat, playerHistory, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
-    unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, modelCaution, projectionScorecard, theRecord, recordPhaseOf, recordArchive, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, projectionScorecard, theRecord, recordPhaseOf, recordArchive, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };
 });
