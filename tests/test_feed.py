@@ -129,6 +129,14 @@ class FeedTests(unittest.TestCase):
         self.assertIn('ladder-result-CFB-ladder', cards)
         graphic.assert_called_once_with(settled)
 
+    def test_climb_route_image_uses_the_record_payload_snapshot(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as folder:
+            record = Path(folder) / 'record.json'
+            self.assertEqual(feed.route_snapshot_time(NOW, record), NOW)
+            record.write_text('{"generatedAt":"2026-10-08T14:00:00Z","climbRoute":{"rows":[]}}')
+            self.assertEqual(feed.route_snapshot_time(NOW, record).isoformat(), '2026-10-08T14:00:00+00:00')
+
     def test_confirmed_cards_keep_their_original_png_bytes_after_a_cache_miss(self):
         import tempfile
         posts = {'posts': [

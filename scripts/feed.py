@@ -40,6 +40,14 @@ ABOUT = 'Player props, game lines and fun parlays from keenroudy.com/sports, gra
 PNG = b'\x89PNG\r\n\x1a\n'
 
 
+def route_snapshot_time(now, record_path=ROOT / 'site' / 'data' / 'app' / 'record.json'):
+    """Use the HTML route's exact snapshot for its companion image."""
+    if not Path(record_path).exists():
+        return now
+    recorded = json.loads(Path(record_path).read_text(encoding='utf-8')).get('generatedAt')
+    return gates.when(recorded) if recorded else now
+
+
 def posted_card_keys(log_book, since=None):
     """Card filenames already attached to confirmed X or Discord posts."""
     keys = set()
@@ -383,7 +391,8 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
                          render_time=now) if with_cards else {}
     if with_cards:
         import ticket_climb_route
-        ticket_climb_route.render(Path(cards_folder) / 'climb-route.png', now, stores)
+        # The HTML steps and image must be one snapshot even if a scan begins between build_site and feed.
+        ticket_climb_route.render(Path(cards_folder) / 'climb-route.png', route_snapshot_time(now), stores)
         import sheet          # the weekly projections sheet on its league's day, from the page payloads just built
         cards.update(sheet.render_due(now, cards_folder, log=log))
         import research_posts # at most one evidence-first research card for the current slate
