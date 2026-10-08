@@ -1,40 +1,40 @@
 {
- "at": "2026-10-08T02:17:28Z",
+ "at": "2026-10-08T03:38:27Z",
  "confirmed": {
   "CFB-401856826": "2026-10-08T02:17:28Z",
-  "CFB-401858254": "2026-10-08T02:17:28Z",
-  "CFB-401858487": "2026-10-08T02:17:28Z",
-  "CFB-401862794": "2026-10-08T02:17:28Z",
-  "CFB-401869933": "2026-10-08T02:17:28Z",
-  "CFB-401870766": "2026-10-08T02:17:28Z",
-  "CFB-401871052": "2026-10-08T02:17:28Z",
+  "CFB-401858254": "2026-10-08T03:38:27Z",
+  "CFB-401858487": "2026-10-08T03:38:27Z",
+  "CFB-401862794": "2026-10-08T03:38:27Z",
+  "CFB-401869933": "2026-10-08T03:38:27Z",
+  "CFB-401870766": "2026-10-08T03:38:27Z",
+  "CFB-401871052": "2026-10-08T03:38:27Z",
   "NFL-401872980": "2026-10-08T02:17:28Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1640,
-    "fanduel": 1157
+    "draftkings": 1422,
+    "fanduel": 923
    },
    "eventsListed": 73,
    "eventsMatched": 8,
    "games": 9,
    "marketTypes": {
-    "player_longest_passing_completion": 9,
-    "player_longest_reception": 50,
-    "player_longest_rush": 16,
-    "player_passing_+_rushing_yards": 111,
-    "player_passing_attempts": 43,
-    "player_passing_completions": 38,
-    "player_passing_touchdowns": 99,
-    "player_passing_yards": 436,
-    "player_receiving_yards": 1129,
-    "player_receptions": 128,
-    "player_rushing_attempts": 38,
-    "player_rushing_yards": 700
+    "player_longest_passing_completion": 8,
+    "player_longest_reception": 43,
+    "player_longest_rush": 15,
+    "player_passing_+_rushing_yards": 93,
+    "player_passing_attempts": 36,
+    "player_passing_completions": 32,
+    "player_passing_touchdowns": 89,
+    "player_passing_yards": 395,
+    "player_receiving_yards": 966,
+    "player_receptions": 105,
+    "player_rushing_attempts": 33,
+    "player_rushing_yards": 530
    },
-   "requestsLeft": 41,
-   "rows": 2797,
+   "requestsLeft": 0,
+   "rows": 2345,
    "slateGames": [
     "Sam Houston Bearkats at Liberty Flames 2026-10-08T23:00Z",
     "Missouri State Bears at Western Kentucky Hilltoppers 2026-10-08T23:00Z",
@@ -51,8 +51,6 @@
      "away": "Wyoming",
      "external": {
       "ballybet": "1027508197",
-      "betfair": "20261010C8DE1294",
-      "betfair_lay": "20261010C8DE1294",
       "betmgm": "19996454",
       "betonline": "491145659",
       "betparx": "1027508197",
@@ -147,8 +145,6 @@
      "away": "Arizona",
      "external": {
       "ballybet": "1027553017",
-      "betfair": "20261010E96076EE",
-      "betfair_lay": "20261010E96076EE",
       "betmgm": "6:46371",
       "betonline": "491145696",
       "betparx": "1027553017",
@@ -173,6 +169,7 @@
       "pinnacle": "1637721468",
       "polymarket": "nfl_arizonawildcats_westvirginiamountaineers_2026-10-10_b2",
       "prophetx": "1700086640",
+      "rebet": "sr:match:70920484",
       "robinhood": "c71de7c4-9781-466c-b36f-8b92372661a6",
       "smarkets": "45348290",
       "sportzino": "sz-17724263",
@@ -188,6 +185,7 @@
        "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
+       "1st_half_moneyline_3-way",
        "1st_half_player_passing_yards",
        "1st_half_player_receiving_yards",
        "1st_half_player_rushing_yards",
@@ -197,6 +195,7 @@
        "1st_half_total_points_odd_even",
        "1st_quarter_anytime_touchdown_scorer",
        "1st_quarter_moneyline",
+       "1st_quarter_moneyline_3-way",
        "1st_quarter_player_passing_yards",
        "1st_quarter_player_receiving_yards",
        "1st_quarter_player_rushing_yards",
@@ -208,18 +207,22 @@
        "2nd_half_point_spread",
        "2nd_half_total_points",
        "2nd_quarter_moneyline",
+       "2nd_quarter_moneyline_3-way",
        "2nd_quarter_point_spread",
        "2nd_quarter_total_points",
        "3rd_quarter_moneyline",
+       "3rd_quarter_moneyline_3-way",
        "3rd_quarter_point_spread",
        "3rd_quarter_total_points",
        "4th_quarter_moneyline",
+       "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
        "anytime_touchdown_scorer",
        "draw_no_bet",
        "first_touchdown_scorer",
        "halftime_fulltime",
+       "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
        "match_result_both_teams_to_score",
        "moneyline",
@@ -237,6 +240,9 @@
        "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
+       "race_to_10_points",
+       "race_to_15_points",
+       "race_to_20_points",
        "team_total",
        "total_points",
        "total_points_band",
@@ -253,8 +259,6 @@
      "away": "Tulane",
      "external": {
       "ballybet": "1027552997",
-      "betfair": "2026101054A3FEE0",
-      "betfair_lay": "2026101054A3FEE0",
       "betmgm": "6:46062",
       "betonline": "491145700",
       "betparx": "1027552997",
@@ -335,8 +339,6 @@
      "away": "Sacramento State",
      "external": {
       "ballybet": "1027553001",
-      "betfair": "202610103CCB0DB3",
-      "betfair_lay": "202610103CCB0DB3",
       "betmgm": "6:46366",
       "betonline": "491145703",
       "betparx": "1027553001",
@@ -363,7 +365,8 @@
       "smarkets": "45352027",
       "sportzino": "sz-17931943",
       "sx_bet": "L20408707",
-      "thescorebet": "StandardEvent:bb5bc0fa-b8f6-4cb3-9c13-5735e2d65fdc"
+      "thescorebet": "StandardEvent:bb5bc0fa-b8f6-4cb3-9c13-5735e2d65fdc",
+      "thrillzz": "888238221"
      },
      "home": "Bowling Green",
      "sample": {
@@ -406,11 +409,9 @@
      "type": "fixture"
     },
     {
-     "away": "Indiana",
+     "away": "Indiana Hoosiers",
      "external": {
       "ballybet": "1027552983",
-      "betfair": "2026101056647A1C",
-      "betfair_lay": "2026101056647A1C",
       "betmgm": "6:46073",
       "betonline": "491145704",
       "betparx": "1027552983",
@@ -426,7 +427,7 @@
       "fliff": "fobj__conflict_event__416849",
       "gemini": "NCAAF-2610102000-IND-NEB-T",
       "goldrush": "31132192",
-      "kalshi": "KXNCAAF2QTOTAL-26OCT10INDNEB",
+      "kalshi": "KXNCAAF4QSPREAD-26OCT10INDNEB",
       "ladbrokes": "09903a90-c2f3-4735-a322-9d2a6e3ad103",
       "ladbrokes_uk": "lduk-258949244",
       "matchbook": "mb-34488139039100081",
@@ -443,14 +444,15 @@
       "thrillzz": "888232401",
       "underdog": "underdog_230531"
      },
-     "home": "Nebraska",
+     "home": "Nebraska Cornhuskers",
      "sample": {
-      "away_team": "Indiana",
-      "home_team": "Nebraska",
+      "away_team": "Indiana Hoosiers",
+      "home_team": "Nebraska Cornhuskers",
       "markets": [
        "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
+       "1st_half_moneyline_3-way",
        "1st_half_player_passing_yards",
        "1st_half_player_receiving_yards",
        "1st_half_player_rushing_yards",
@@ -488,6 +490,7 @@
        "match_result_both_teams_to_score",
        "moneyline",
        "moneyline_3-way",
+       "outright",
        "player_extra_points_made",
        "player_field_goals_made",
        "player_interceptions",
@@ -510,6 +513,7 @@
        "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
+       "race_to_10_points",
        "team_total",
        "total_points",
        "total_points_band",
@@ -523,11 +527,9 @@
      "type": "fixture"
     },
     {
-     "away": "Texas A&M",
+     "away": "Texas A&M Aggies",
      "external": {
       "ballybet": "1027508057",
-      "betfair": "20261010A8FCAED1",
-      "betfair_lay": "20261010A8FCAED1",
       "betmgm": "6:46135",
       "betonline": "491145680",
       "betparx": "1027508057",
@@ -543,7 +545,7 @@
       "fliff": "fobj__conflict_event__417036",
       "gemini": "NCAAF-2610102000-TAM-MIZ-S",
       "goldrush": "31132199",
-      "kalshi": "KXNCAAF1HTEAMTOTAL-26OCT10TXAMMIZZ",
+      "kalshi": "KXNCAAF4QTOTAL-26OCT10TXAMMIZZ",
       "ladbrokes": "d31631d1-0397-48f3-9fcd-f4ed61848b39",
       "ladbrokes_uk": "lduk-258949369",
       "matchbook": "mb-34499033670000023",
@@ -557,13 +559,12 @@
       "sportzino": "sz-17724265",
       "sx_bet": "L20383144",
       "thescorebet": "StandardEvent:3836e26e-dc99-4398-87bd-6263f979f210",
-      "thrillzz": "888232418",
       "underdog": "underdog_263243"
      },
-     "home": "Missouri",
+     "home": "Missouri Tigers",
      "sample": {
-      "away_team": "Texas A&M",
-      "home_team": "Missouri",
+      "away_team": "Texas A&M Aggies",
+      "home_team": "Missouri Tigers",
       "markets": [
        "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
@@ -643,8 +644,6 @@
      "away": "Wake Forest",
      "external": {
       "ballybet": "1027552994",
-      "betfair": "20261010AAE95BD7",
-      "betfair_lay": "20261010AAE95BD7",
       "betmgm": "6:46136",
       "betonline": "491145695",
       "betparx": "1027552994",
@@ -665,7 +664,7 @@
       "ladbrokes_uk": "lduk-258951158",
       "matchbook": "mb-34517057561800023",
       "novig": "01a0fd5a-e97d-7422-aaca-19df878469fc",
-      "onexbet": "758749023",
+      "onexbet": "758683170",
       "pinnacle": "1637351007",
       "polymarket": "nfl_ncstatewolfpack_wakeforestdemondeacons_2026-10-10_b2",
       "prophetx": "1700086626",
@@ -748,8 +747,6 @@
      "away": "North Carolina Tar Heels",
      "external": {
       "ballybet": "1027553008",
-      "betfair": "20261010BFD1D185",
-      "betfair_lay": "20261010BFD1D185",
       "betmgm": "6:46067",
       "betonline": "491145698",
       "betparx": "1027553008",
@@ -872,8 +869,6 @@
      "away": "UCF Knights",
      "external": {
       "ballybet": "1027553009",
-      "betfair": "2026101041BA1D11",
-      "betfair_lay": "2026101041BA1D11",
       "betmgm": "6:46370",
       "betonline": "491145689",
       "betparx": "1027553009",
@@ -889,7 +884,7 @@
       "fliff": "fobj__conflict_event__417545",
       "gemini": "NCAAF-2610102000-UCF-OKST-S",
       "goldrush": "31132220",
-      "kalshi": "KXNCAAF4QSPREAD-26OCT10UCFOKST",
+      "kalshi": "KXNCAAF4QTOTAL-26OCT10UCFOKST",
       "ladbrokes": "a6a42c7a-138f-46cd-a48b-9609af1fcf9e",
       "ladbrokes_uk": "lduk-258952268",
       "matchbook": "mb-34514917689800023",
@@ -990,8 +985,6 @@
      "away": "Ball State",
      "external": {
       "ballybet": "1027552999",
-      "betfair": "202610107291EFAD",
-      "betfair_lay": "202610107291EFAD",
       "betmgm": "6:46068",
       "betonline": "491145678",
       "betparx": "1027552999",
@@ -1006,7 +999,7 @@
       "fliff": "417557_c_p_209_prematch",
       "gemini": "NCAAF-2610102000-BALL-NUW-S",
       "goldrush": "31132217",
-      "kalshi": "KXNCAAF3QTOTAL-26OCT10BALLNW",
+      "kalshi": "KXNCAAF4QTOTAL-26OCT10BALLNW",
       "ladbrokes": "cc075766-58f2-49fb-b72b-d2fe2837c06c",
       "ladbrokes_uk": "lduk-258958871",
       "matchbook": "mb-34514727891400023",
@@ -1019,8 +1012,7 @@
       "smarkets": "45340808",
       "sportzino": "sz-17724261",
       "sx_bet": "L20406180",
-      "thescorebet": "StandardEvent:9806b91d-b43d-45bb-83a2-050f4d20b849",
-      "thrillzz": "888237804"
+      "thescorebet": "StandardEvent:9806b91d-b43d-45bb-83a2-050f4d20b849"
      },
      "home": "Northwestern",
      "sample": {
@@ -1076,11 +1068,9 @@
      "type": "fixture"
     },
     {
-     "away": "South Carolina",
+     "away": "South Carolina Gamecocks",
      "external": {
       "ballybet": "1027508049",
-      "betfair": "20261010A60F790D",
-      "betfair_lay": "20261010A60F790D",
       "betmgm": "6:46077",
       "betonline": "491145706",
       "betparx": "1027508049",
@@ -1096,7 +1086,7 @@
       "fliff": "417035_c_p_209_prematch",
       "gemini": "NCAAF-2610102000-SCU-FLA-M",
       "goldrush": "31128810",
-      "kalshi": "KXNCAAF2HTOTAL-26OCT10SCARFLA",
+      "kalshi": "KXNCAAF4QSPREAD-26OCT10SCARFLA",
       "ladbrokes": "24b79e6c-1f8c-4ca0-9e6e-28555fcfbe0e",
       "ladbrokes_uk": "lduk-258949333",
       "matchbook": "mb-34499094612000023",
@@ -1110,13 +1100,12 @@
       "sportzino": "sz-17724267",
       "sx_bet": "L20383142",
       "thescorebet": "StandardEvent:7f31b3ad-520a-4ac0-98f9-33c9a4104b5a",
-      "thrillzz": "888232412",
       "underdog": "underdog_263244"
      },
-     "home": "Florida",
+     "home": "Florida Gators",
      "sample": {
-      "away_team": "South Carolina",
-      "home_team": "Florida",
+      "away_team": "South Carolina Gamecocks",
+      "home_team": "Florida Gators",
       "markets": [
        "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
@@ -1191,8 +1180,6 @@
      "away": "Old Dominion Monarchs",
      "external": {
       "ballybet": "1027553005",
-      "betfair": "2026101028BBC393",
-      "betfair_lay": "2026101028BBC393",
       "betmgm": "6:46320",
       "betonline": "491145672",
       "betparx": "1027553005",
@@ -1220,7 +1207,8 @@
       "smarkets": "45350428",
       "sportzino": "sz-17932012",
       "sx_bet": "L20408719",
-      "thescorebet": "StandardEvent:0fa0d18e-9c49-4cee-8c4b-b4c0ebfad217"
+      "thescorebet": "StandardEvent:0fa0d18e-9c49-4cee-8c4b-b4c0ebfad217",
+      "thrillzz": "888238227"
      },
      "home": "Appalachian State Mountaineers",
      "sample": {
@@ -1272,39 +1260,13 @@
    ]
   },
   "NFL": {
-   "books": {
-    "draftkings": 313,
-    "fanduel": 357
-   },
+   "books": {},
    "eventsListed": 30,
    "eventsMatched": 1,
    "games": 1,
-   "marketTypes": {
-    "player_assists": 10,
-    "player_extra_points_made": 4,
-    "player_fantasy_score": 12,
-    "player_field_goals_made": 4,
-    "player_interceptions": 11,
-    "player_kicking_points": 4,
-    "player_longest_passing_completion": 4,
-    "player_longest_reception": 24,
-    "player_longest_rush": 10,
-    "player_passing_+_rushing_yards": 4,
-    "player_passing_attempts": 4,
-    "player_passing_completions": 4,
-    "player_passing_touchdowns": 13,
-    "player_passing_yards": 79,
-    "player_receiving_yards": 214,
-    "player_receptions": 113,
-    "player_rushing_+_receiving_yards": 12,
-    "player_rushing_attempts": 6,
-    "player_rushing_yards": 103,
-    "player_sacks": 15,
-    "player_tackles": 10,
-    "player_tackles_+_assists": 10
-   },
-   "requestsLeft": 36,
-   "rows": 670,
+   "marketTypes": {},
+   "requestsLeft": -1,
+   "rows": 0,
    "slateGames": [
     "Tampa Bay Buccaneers at Dallas Cowboys 2026-10-09T00:15Z"
    ],
@@ -1314,8 +1276,6 @@
      "external": {
       "ballybet": "1028813030",
       "bet365": "202096480",
-      "betfair": "2026101118C77B29",
-      "betfair_lay": "2026101118C77B29",
       "betmgm": "6:43582",
       "betonline": "491141343",
       "betparx": "1028813030",
@@ -1332,7 +1292,7 @@
       "galera": "21085966",
       "gemini": "NFL-2610111330-PHI-JAX-T",
       "goldrush": "29767421",
-      "kalshi": "KXNFL4QTOTAL-26OCT11PHIJAC",
+      "kalshi": "KXNFLRSHYDS-26OCT11PHIJAC-PHIJHURTS1-15",
       "ladbrokes": "72888c26-b63d-40db-9707-210f01c283e0",
       "ladbrokes_uk": "lduk-258966891",
       "matchbook": "mb-33272970854400023",
@@ -1351,6 +1311,7 @@
       "stake": "450de216-bb43-4ab6-a942-1e3033de5e70",
       "sx_bet": "L18900782",
       "thescorebet": "StandardEvent:f355ad3e-f25b-4f23-8481-1f69fa48015d",
+      "thrillzz": "88859316",
       "underdog": "underdog_178614"
      },
      "home": "Jacksonville Jaguars",
@@ -1460,8 +1421,6 @@
      "external": {
       "ballybet": "1028813038",
       "bet365": "202096513",
-      "betfair": "202610112660CB0C",
-      "betfair_lay": "202610112660CB0C",
       "betmgm": "6:43592",
       "betonline": "491141342",
       "betparx": "1028813038",
@@ -1477,7 +1436,7 @@
       "galera": "21085959",
       "gemini": "NFL-2610111700-CHI-GB-PPTD",
       "goldrush": "31065453",
-      "kalshi": "KXNFLTD-26OCT11CHIGB-GBJSMITH18-2",
+      "kalshi": "KXNFL2HSPREAD-26OCT11CHIGB",
       "ladbrokes": "5cbea908-6057-47a2-85af-37d249b913b9",
       "ladbrokes_uk": "lduk-258966970",
       "matchbook": "mb-33322050981000023",
@@ -1601,8 +1560,6 @@
      "away": "Cincinnati Bengals",
      "external": {
       "ballybet": "1028813031",
-      "betfair": "20261011087E6185",
-      "betfair_lay": "20261011087E6185",
       "betmgm": "6:43584",
       "betonline": "491141349",
       "betparx": "1028813031",
@@ -1619,7 +1576,7 @@
       "galera": "21085958",
       "gemini": "NFL-2610111700-CIN-MIA-T",
       "goldrush": "31065427",
-      "kalshi": "KXNFL4QTOTAL-26OCT11CINMIA",
+      "kalshi": "KXNFLRSHYDS-26OCT11CINMIA-CINCBROWN30-40",
       "ladbrokes": "162f799d-bef6-4f0b-bac6-ec10bba89223",
       "ladbrokes_uk": "lduk-258967565",
       "matchbook": "mb-33321703478700023",
@@ -1637,6 +1594,7 @@
       "stake": "c1ed168d-103e-4c27-8b96-d320e5029176",
       "sx_bet": "L19431488",
       "thescorebet": "StandardEvent:5f14dd5d-a7f4-4040-9d1e-6ac362b6f01a",
+      "thrillzz": "88859315",
       "underdog": "underdog_178868"
      },
      "home": "Miami Dolphins",
@@ -1738,8 +1696,6 @@
      "external": {
       "ballybet": "1028813035",
       "bet365": "202096489",
-      "betfair": "2026101112C81881",
-      "betfair_lay": "2026101112C81881",
       "betmgm": "6:43586",
       "betonline": "491141346",
       "betparx": "1028813035",
@@ -1879,8 +1835,6 @@
      "external": {
       "ballybet": "1028813032",
       "bet365": "202096483",
-      "betfair": "20261011475650E9",
-      "betfair_lay": "20261011475650E9",
       "betmgm": "6:43587",
       "betonline": "491141345",
       "betparx": "1028813032",
@@ -2021,8 +1975,6 @@
      "external": {
       "ballybet": "1028813033",
       "bet365": "202096498",
-      "betfair": "202610117E00D723",
-      "betfair_lay": "202610117E00D723",
       "betmgm": "6:43589",
       "betonline": "491141350",
       "betparx": "1028813033",
@@ -2039,7 +1991,7 @@
       "galera": "21085956",
       "gemini": "NFL-2610111700-NYG-WAS-T",
       "goldrush": "31065452",
-      "kalshi": "KXNFL4QTOTAL-26OCT11NYGWAS",
+      "kalshi": "KXNFLRSHYDS-26OCT11NYGWAS-NYGCSKATTEBO44-40",
       "ladbrokes": "51b2b68a-f914-47bb-bd3d-0ec1f4252f01",
       "ladbrokes_uk": "lduk-258966947",
       "matchbook": "mb-33321764048800023",
@@ -2164,8 +2116,6 @@
      "external": {
       "ballybet": "1028813036",
       "bet365": "202096495",
-      "betfair": "202610116AF20186",
-      "betfair_lay": "202610116AF20186",
       "betmgm": "6:43583",
       "betonline": "491141347",
       "betparx": "1028813036",
@@ -2181,7 +2131,7 @@
       "galera": "21085968",
       "gemini": "NFL-2610111700-LV-NE-T",
       "goldrush": "31065426",
-      "kalshi": "KXNFL3QTOTAL-26OCT11LVNE",
+      "kalshi": "KXNFLRECYDS-26OCT11LVNE-LVTTUCKER1-15",
       "ladbrokes": "37d3e40f-f77b-4c96-a3fc-05ac0252bc0e",
       "ladbrokes_uk": "lduk-258967042",
       "matchbook": "mb-33321713272900023",
@@ -2302,8 +2252,6 @@
      "external": {
       "ballybet": "1028813034",
       "bet365": "202096486",
-      "betfair": "202610116F5167CB",
-      "betfair_lay": "202610116F5167CB",
       "betmgm": "6:43588",
       "betonline": "491141351",
       "betparx": "1028813034",
@@ -2318,7 +2266,7 @@
       "fliff": "fobj__conflict_event__399980",
       "gemini": "NFL-2610111700-MIN-NO-T",
       "goldrush": "31065448",
-      "kalshi": "KXNFL4QTOTAL-26OCT11MINNO",
+      "kalshi": "KXNFLRECYDS-26OCT11MINNO-NOCOLAVE12-110",
       "ladbrokes": "2abe0e5d-fb32-4186-b066-bb69c9f124e1",
       "ladbrokes_uk": "lduk-258966927",
       "matchbook": "mb-33515161622300023",
@@ -2336,6 +2284,7 @@
       "stake": "ae0fbab3-e327-47ff-8555-630645c84cca",
       "sx_bet": "L19431507",
       "thescorebet": "StandardEvent:6874d241-3972-4335-b51f-08ef44cfd27b",
+      "thrillzz": "88859319",
       "underdog": "underdog_178870"
      },
      "home": "New Orleans Saints",
@@ -2438,8 +2387,6 @@
      "external": {
       "ballybet": "1028813037",
       "bet365": "202096501",
-      "betfair": "20261011771379DF",
-      "betfair_lay": "20261011771379DF",
       "betmgm": "6:43585",
       "betonline": "491141340",
       "betparx": "1028813037",
@@ -2455,7 +2402,7 @@
       "galera": "21085955",
       "gemini": "NFL-2610111700-HOU-TEN-T",
       "goldrush": "31065445",
-      "kalshi": "KXNFL4QTOTAL-26OCT11HOUTEN",
+      "kalshi": "KXNFLRECYDS-26OCT11HOUTEN-TENCRIDLEY0-25",
       "ladbrokes": "6b30e282-ec9d-46bb-9949-d7547547de9c",
       "ladbrokes_uk": "lduk-258966943",
       "matchbook": "mb-33321694127700023",
@@ -2584,8 +2531,6 @@
      "external": {
       "ballybet": "1028813040",
       "bet365": "202096504",
-      "betfair": "20261011D653A330",
-      "betfair_lay": "20261011D653A330",
       "betmgm": "6:43591",
       "betonline": "491141339",
       "betparx": "1028813040",
@@ -2619,6 +2564,7 @@
       "stake": "47a21539-fd17-47f3-ab4c-dd28a0bbfdda",
       "sx_bet": "L19431517",
       "thescorebet": "StandardEvent:4d4e7a53-d0c6-4a7f-ab58-2abcd37bcf98",
+      "thrillzz": "88859328",
       "underdog": "underdog_178921"
      },
      "home": "Los Angeles Chargers",
@@ -2725,8 +2671,6 @@
      "external": {
       "ballybet": "1028813043",
       "bet365": "202096507",
-      "betfair": "202610119C07AE76",
-      "betfair_lay": "202610119C07AE76",
       "betmgm": "6:43594",
       "betonline": "491141341",
       "betparx": "1028813043",
@@ -2761,6 +2705,7 @@
       "stake": "936f230f-b5e2-43a6-95c5-5bac1caad1b8",
       "sx_bet": "L19431533",
       "thescorebet": "StandardEvent:9ac173dd-50ea-4ef9-bf02-34001ba89466",
+      "thrillzz": "88859323",
       "underdog": "underdog_178924"
      },
      "home": "Seattle Seahawks",
@@ -2867,8 +2812,6 @@
      "external": {
       "ballybet": "1028813041",
       "bet365": "202096510",
-      "betfair": "20261011FEDB71B4",
-      "betfair_lay": "20261011FEDB71B4",
       "betmgm": "6:43593",
       "betonline": "491141348",
       "betparx": "1028813041",
@@ -2884,7 +2827,7 @@
       "galera": "21085965",
       "gemini": "NFL-2610112025-DET-ARI-TT",
       "goldrush": "31065439",
-      "kalshi": "KXNFL4QSPREAD-26OCT11DETARI",
+      "kalshi": "KXNFL4QTOTAL-26OCT11DETARI",
       "ladbrokes": "124657b5-17cd-4561-bca6-543d8744bce9",
       "ladbrokes_uk": "lduk-258966917",
       "matchbook": "mb-33322067171500023",
