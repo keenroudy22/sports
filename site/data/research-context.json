@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-08T18:52:43Z",
+  "updatedAt": "2026-10-08T19:27:08Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-10-08T18:43Z",
+              "reportedAt": "2026-10-08T19:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -702,7 +702,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Shoulder - AC Joint",
-              "reportedAt": "2026-10-08T17:56Z",
+              "reportedAt": "2026-10-08T18:39Z",
               "source": "https://www.espn.com/nfl/player/_/id/3915416/dj-moore"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-08T18:43Z",
+              "reportedAt": "2026-10-08T19:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1859,7 +1859,7 @@
               "id": "4568652",
               "name": "Tyler Smith",
               "position": "G",
-              "status": "Injured Reserve",
+              "status": "Questionable",
               "injury": "Thumb",
               "reportedAt": "2026-10-08T00:23Z",
               "source": "https://www.espn.com/nfl/player/_/id/4568652/tyler-smith"
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "10",
-          "name": "Tony Pollard",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-07T21:35:17Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3916148/tony-pollard"
-        },
-        {
           "teamId": "28",
           "name": "Jeremy Reaves",
           "from": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Injured Reserve",
           "observedAt": "2026-10-08T18:24:53Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "6",
+          "name": "Tyler Smith",
+          "from": "Injured Reserve",
+          "to": "Questionable",
+          "observedAt": "2026-10-08T19:27:08Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4568652/tyler-smith"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-08T18:52:43Z",
-      "lastAttemptAt": "2026-10-08T18:52:43Z",
+      "checkedAt": "2026-10-08T19:27:08Z",
+      "lastAttemptAt": "2026-10-08T19:27:08Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-08T18:52:43Z",
-      "lastAttemptAt": "2026-10-08T18:52:43Z",
+      "checkedAt": "2026-10-08T19:27:08Z",
+      "lastAttemptAt": "2026-10-08T19:27:08Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
