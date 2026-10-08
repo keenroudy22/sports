@@ -1,15 +1,15 @@
 {
- "at": "2026-10-08T23:40:39Z",
+ "at": "2026-10-08T23:57:28Z",
  "confirmed": {
   "CFB-401856714": "2026-10-08T20:48:54Z",
   "CFB-401856716": "2026-10-08T23:26:11Z",
   "CFB-401856717": "2026-10-08T20:48:54Z",
   "CFB-401856718": "2026-10-08T20:48:54Z",
-  "CFB-401856823": "2026-10-08T23:26:11Z",
+  "CFB-401856823": "2026-10-08T23:57:28Z",
   "CFB-401856824": "2026-10-08T20:48:54Z",
   "CFB-401856825": "2026-10-08T20:48:54Z",
-  "CFB-401856826": "2026-10-08T23:40:39Z",
-  "CFB-401858254": "2026-10-08T23:40:39Z",
+  "CFB-401856826": "2026-10-08T23:57:28Z",
+  "CFB-401858254": "2026-10-08T23:57:28Z",
   "CFB-401858255": "2026-10-08T20:48:54Z",
   "CFB-401858256": "2026-10-08T20:48:54Z",
   "CFB-401858257": "2026-10-08T20:48:54Z",
@@ -18,36 +18,37 @@
   "CFB-401858480": "2026-10-08T20:48:54Z",
   "CFB-401858481": "2026-10-08T20:48:54Z",
   "CFB-401858484": "2026-10-08T20:48:54Z",
-  "CFB-401858487": "2026-10-08T23:40:39Z",
-  "CFB-401860922": "2026-10-08T23:26:11Z",
+  "CFB-401858487": "2026-10-08T23:57:28Z",
+  "CFB-401860922": "2026-10-08T23:57:28Z",
   "NFL-401872980": "2026-10-08T23:40:39Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 866,
-    "fanduel": 564
+    "draftkings": 1071,
+    "fanduel": 960
    },
    "eventsListed": 114,
    "eventsMatched": 45,
    "games": 47,
    "marketTypes": {
     "player_field_goals_made": 3,
-    "player_longest_passing_completion": 5,
-    "player_longest_reception": 26,
-    "player_longest_rush": 11,
-    "player_passing_+_rushing_yards": 89,
+    "player_kicking_points": 1,
+    "player_longest_passing_completion": 7,
+    "player_longest_reception": 27,
+    "player_longest_rush": 15,
+    "player_passing_+_rushing_yards": 140,
     "player_passing_attempts": 22,
     "player_passing_completions": 19,
-    "player_passing_touchdowns": 39,
-    "player_passing_yards": 174,
-    "player_receiving_yards": 574,
-    "player_receptions": 56,
+    "player_passing_touchdowns": 65,
+    "player_passing_yards": 267,
+    "player_receiving_yards": 791,
+    "player_receptions": 58,
     "player_rushing_attempts": 35,
-    "player_rushing_yards": 377
+    "player_rushing_yards": 581
    },
    "requestsLeft": 0,
-   "rows": 1430,
+   "rows": 2031,
    "slateGames": [
     "Florida State Seminoles at Louisville Cardinals 2026-10-09T23:00Z",
     "Iowa Hawkeyes at Washington Huskies 2026-10-10T01:00Z",
@@ -208,6 +209,7 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "game_prop",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
        "point_spread",
@@ -582,6 +584,7 @@
     {
      "away": "Bucknell",
      "external": {
+      "ballybet": "1029241509",
       "betparx": "1029241509",
       "betrivers": "1029241509",
       "fanatics": "5274150",
@@ -609,39 +612,13 @@
    ]
   },
   "NFL": {
-   "books": {
-    "draftkings": 358,
-    "fanduel": 383
-   },
-   "eventsListed": 31,
-   "eventsMatched": 1,
+   "books": {},
+   "eventsListed": 30,
+   "eventsMatched": 0,
    "games": 1,
-   "marketTypes": {
-    "player_assists": 18,
-    "player_extra_points_made": 4,
-    "player_fantasy_score": 12,
-    "player_field_goals_made": 4,
-    "player_interceptions": 10,
-    "player_kicking_points": 4,
-    "player_longest_passing_completion": 4,
-    "player_longest_reception": 24,
-    "player_longest_rush": 10,
-    "player_passing_+_rushing_yards": 4,
-    "player_passing_attempts": 4,
-    "player_passing_completions": 4,
-    "player_passing_touchdowns": 13,
-    "player_passing_yards": 80,
-    "player_receiving_yards": 232,
-    "player_receptions": 122,
-    "player_rushing_+_receiving_yards": 12,
-    "player_rushing_attempts": 8,
-    "player_rushing_yards": 115,
-    "player_sacks": 21,
-    "player_tackles": 18,
-    "player_tackles_+_assists": 18
-   },
-   "requestsLeft": 10,
-   "rows": 741,
+   "marketTypes": {},
+   "requestsLeft": 14,
+   "rows": 0,
    "slateGames": [
     "Tampa Bay Buccaneers at Dallas Cowboys 2026-10-09T00:15Z"
    ],
@@ -659,7 +636,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-08T23:32:00Z",
+     "start": "2026-10-08T23:48:00Z",
      "type": "outright"
     },
     {
@@ -1332,7 +1309,7 @@
       "gemini": "NFL-2610111700-IND-PIT-T",
       "goldrush": "31065438",
       "hardrock": "2644153329604755876",
-      "kalshi": "KXNFL4QTOTAL-26OCT11INDPIT",
+      "kalshi": "KXNFL1H-26OCT11INDPIT",
       "ladbrokes": "c15ae67e-bd67-4b35-bf26-80109a10cb65",
       "ladbrokes_uk": "lduk-258966921",
       "matchbook": "mb-33321748682800023",
@@ -1643,6 +1620,7 @@
       "betrivers": "1028813036",
       "bovada": "27949569",
       "bwin": "6:43583",
+      "caesars": "4c2dcf51-9b70-4639-62b1-70f3d029a43c",
       "circa": "218488",
       "coral": "cor-46638438",
       "draftkings": "34118223",
