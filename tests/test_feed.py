@@ -124,6 +124,30 @@ class FeedTests(unittest.TestCase):
         self.assertIn('ladder-result-CFB-ladder', cards)
         graphic.assert_called_once_with(settled)
 
+    def test_confirmed_cards_keep_their_original_png_bytes_after_a_cache_miss(self):
+        import tempfile
+        posts = {'posts': [
+            {'id': 'old-play', 'cardKey': 'old-play-potd', 'card': True, 'sentAt': '2026-10-07T16:00:05Z'},
+            {'id': 'queued', 'cardKey': 'queued', 'card': True},
+            {'id': 'house', 'cardKey': 'https://keenroudy.com/sports/img/house.png', 'card': True,
+             'sentAt': '2026-10-07T16:00:05Z'},
+        ]}
+        self.assertEqual(feed.posted_card_keys(posts), {'old-play-potd'})
+        original = feed.PNG + b'original published art' * 8
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'old-play-potd.png'
+            calls = []
+            feed.restore_posted_cards(folder, {'old-play-potd'},
+                                      fetch=lambda url: calls.append(url) or original)
+            self.assertEqual(path.read_bytes(), original)
+            feed.restore_posted_cards(folder, {'old-play-potd'},
+                                      fetch=lambda url: self.fail('an existing post must not be re-fetched'))
+            self.assertEqual(calls, ['https://keenroudy.com/sports/data/cards/old-play-potd.png'])
+            path.unlink()
+            with self.assertRaisesRegex(RuntimeError, 'could not be restored'):
+                feed.restore_posted_cards(folder, {'old-play-potd'}, fetch=lambda url: (_ for _ in ()).throw(OSError('offline')))
+            self.assertFalse(path.exists(), 'an unavailable original never becomes a new-template render')
+
 
 if __name__ == '__main__':
     unittest.main()

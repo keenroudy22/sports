@@ -13,7 +13,9 @@ until 45 minutes before kickoff, and only while it is still open. Nothing stale 
 """
 import argparse
 import json
+import re
 import sys
+import urllib.request
 from datetime import datetime, timedelta, timezone
 from email.utils import format_datetime
 from pathlib import Path
@@ -35,6 +37,45 @@ LEAD = timedelta(minutes=45)         # and none inside 45 minutes of kickoff
 RECAP_DAYS = 30
 TITLE = "Kook'n"
 ABOUT = 'Player props, game lines and fun parlays from keenroudy.com/sports, graded in public. Entertainment only.'
+PNG = b'\x89PNG\r\n\x1a\n'
+
+
+def posted_card_keys(log_book):
+    """Card filenames already attached to confirmed X posts; these bytes must survive every later build."""
+    keys = set()
+    for entry in log_book.get('posts') or []:
+        if not isinstance(entry, dict) or not entry.get('card') or not entry.get('sentAt'):
+            continue
+        key = entry.get('cardKey') or entry.get('id')
+        if isinstance(key, str) and re.fullmatch(r'[A-Za-z0-9_.:-]+', key):
+            keys.add(key)
+    return keys
+
+
+def restore_posted_cards(folder, keys, fetch=None):
+    """Never regenerate a confirmed attachment under a newer theme after an Actions cache miss."""
+    folder = Path(folder)
+    fetch = fetch or (lambda url: urllib.request.urlopen(
+        urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (compatible; KooknCardArchive/1.0)'}),
+        timeout=12).read())
+    for key in sorted(keys):
+        if not re.fullmatch(r'[A-Za-z0-9_.:-]+', str(key)):
+            raise RuntimeError(f'invalid posted card name: {key!r}')
+        path = folder / f'{key}.png'
+        if path.exists():
+            if not path.read_bytes().startswith(PNG):
+                raise RuntimeError(f'posted card cache is not a PNG: {key}')
+            continue
+        try:
+            data = fetch(f'{SITE}data/cards/{key}.png')
+        except Exception as error:
+            raise RuntimeError(f'posted card could not be restored without changing its art: {key}') from error
+        if not isinstance(data, bytes) or not data.startswith(PNG) or not 64 <= len(data) <= 10 * 1024 * 1024:
+            raise RuntimeError(f'posted card recovery returned invalid PNG bytes: {key}')
+        folder.mkdir(parents=True, exist_ok=True)
+        temporary = path.with_suffix('.restore.tmp')
+        temporary.write_bytes(data)
+        temporary.replace(path)
 
 
 def play_title(pick):
@@ -186,10 +227,11 @@ def scoreboard_item(scoreboard, now):
             'text': text, 'link': f'{SITE}#model', 'pubDate': due.astimezone(timezone.utc)}
 
 
-def render_cards(items, folder=CARDS, log=print, games=None, player_team=None):
+def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, posted_keys=()):
     """A PNG per pick item, when a browser is on the machine. Returns {guid: path}."""
     import pick_card
     import ticket_card
+    restore_posted_cards(folder, posted_keys)
     if not pick_card.chrome_path():
         log('no browser for cards; the feed goes out without images')
         return {}
@@ -296,6 +338,7 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
         restored = {entry.get('id') for entry in post_log.get('posts', [])
                     if entry.get('restoredAt') and not entry.get('cancelledAt') and not entry.get('deletedAt')}
     except (OSError, ValueError):
+        post_log = {}
         restored = set()
     plays = card_items(ctx.first, ctx.latest, ctx.games, now, ctx.player_team, restored)
     for item in plays:
@@ -306,7 +349,8 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
     potd = featured.of_day(eastern_date(now).isoformat())
     # The Pick of the Day gets a card of its own, under its own name, so a post can never carry a stale copy.
     plays += [dict(item, guid=f"{item['guid']}-potd", featured=True) for item in plays if item['guid'] == potd]
-    cards = render_cards(plays + ready, cards_folder, log, ctx.games, ctx.player_team) if with_cards else {}
+    cards = render_cards(plays + ready, cards_folder, log, ctx.games, ctx.player_team,
+                         posted_keys=posted_card_keys(post_log)) if with_cards else {}
     if with_cards:
         import sheet          # the weekly projections sheet on its league's day, from the page payloads just built
         cards.update(sheet.render_due(now, cards_folder, log=log))
