@@ -939,6 +939,17 @@ def hero_card(pick, now, potd=None):
     return f"data/cards/{pick['id']}{'-potd' if pick['id'] == potd else ''}.png"
 
 
+def record_card(pick):
+    """The published card path for a play that actually went out (X or Discord evidence), for the results calendar.
+
+    feed.py draws the card beside the record; this is its path, never proof the image exists for an unposted play."""
+    delivery = pick.get('delivery') or {}
+    went_out = bool(pick.get('posted')) or bool(delivery.get('xAt')) or bool(delivery.get('discordAt'))
+    if not went_out or pick.get('historicalImport') or not re.fullmatch(r'[A-Za-z0-9_.-]+', str(pick.get('id') or '')):
+        return None
+    return f"data/cards/{pick['id']}.png"
+
+
 def hero_bet(pick, now, potd=None, teams=None):
     row = {key: pick.get(key) for key in HERO_FIELDS}
     # Both teams' names and colours, as the game card carries them, so the first paint draws the same team panel.
@@ -1738,7 +1749,7 @@ def build(now=None):
     import featured as featured_store     # the day's Pick of the Day, whose card feed.py draws under its -potd name
     write(OUT / 'today-hero.json', today_hero(picks, now, featured_store.of_day(eastern_date(now).isoformat()),
                                               ticket_teams))
-    write(OUT / 'record.json', {'generatedAt': stamp(now), 'picks': picks})
+    write(OUT / 'record.json', {'generatedAt': stamp(now), 'picks': [{**pick, 'card': record_card(pick)} for pick in picks]})
     generated = stamp(now)
     line_index = line_payload.manifest(lines, generated)
     write(OUT / 'lines.json', line_index)
