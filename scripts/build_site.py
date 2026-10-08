@@ -1844,6 +1844,20 @@ def public_sentences(*values, limit=4):
     return out
 
 
+def reader_words(value):
+    """Display-only cleanup of old record prose; never rewrite a saved publication or its math."""
+    if isinstance(value, str):
+        text = re.sub(r' at \d{1,2}:\d{2} [AP]M ET(?=[:.;, ]|$)', '', value)
+        text = re.sub(r'\b(?:Closed to new entries|New entries paused)\b', 'Off the card', text, flags=re.I)
+        text = re.sub(r'\bLadder step\b', '80/20 Climb step', text, flags=re.I)
+        return re.sub(r'\.{2,}', '.', text)
+    if isinstance(value, list):
+        return [reader_words(item) for item in value]
+    if isinstance(value, dict):
+        return {key: reader_words(item) for key, item in value.items()}
+    return value
+
+
 def pick_market_type(pick, recent):
     current = pick.get('marketType') or recent.get('marketType')
     if current:
@@ -1963,7 +1977,7 @@ def board_picks(first, latest, by_id, identities):
     rows.sort(key=lambda p: p.get('publishedAt') or '', reverse=True)
     for row in rows:
         row['recordAsOfPublication'] = record_scope.summary(rows, row.get('publishedAt'))
-    return rows
+    return [reader_words(row) for row in rows]
 
 
 def grade_line(line, snapshot, thin):

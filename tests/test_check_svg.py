@@ -1,3 +1,4 @@
+import base64
 import sys
 import unittest
 from pathlib import Path
@@ -41,6 +42,33 @@ class CardCopyTests(unittest.TestCase):
         self.assertEqual(check_svg.issues(svg), [])
         final = ticket_card.final_svg([dict(pick, result='win', actual='Iowa 24, Washington 22', units=0.91)], '2026-10-09')
         self.assertEqual(check_svg.issues(final), [])
+
+    def test_every_kitchen_card_family_has_clean_visible_copy(self):
+        game = {'league': 'CFB', 'kickoff': '2026-10-09T23:00:00Z',
+                'away': {'id': '1', 'abbreviation': 'IOWA'}, 'home': {'id': '2', 'abbreviation': 'WASH'}}
+        legs = [{'title': 'Iowa over 17.5 points', 'odds': -160, 'gameId': 'g', 'kickoff': game['kickoff']},
+                {'title': 'Washington over 14.5 points', 'odds': -170, 'gameId': 'g', 'kickoff': game['kickoff']}]
+        art = [{'kind': 'logos', 'uris': ['data:image/png;base64,TEST', 'data:image/png;base64,TEST']} for _ in legs]
+        fun = {'id': 'fun', 'parlayType': 'longshot', 'odds': 185, 'book': 'FanDuel', 'riskUnits': .25, 'legs': legs}
+        rung = dict(fun, id='rung', parlayType='ladder', ladder={'run': 1, 'step': 1, 'stake': 50,
+            'payout': 93, 'banked': 0, 'bankThisWin': 19, 'nextStake': 74})
+        cooked = {'id': 'cooked', 'title': 'Player over 49.5 receiving yards', 'athleteId': '7',
+                  'market': 'recYds', 'direction': 'over', 'line': 49.5, 'odds': -110, 'book': 'FanDuel',
+                  'result': 'win', 'actualValue': 67, 'units': .91}
+        prep = {'day': '2026-10-09', 'rows': [{'league': 'CFB', 'athleteId': '7', 'player': 'Player',
+            'teamColor': '#112233', 'stat': 'recYds', 'direction': 'over', 'line': 49.5,
+            'odds': -110, 'book': 'FanDuel', 'hits': 4, 'games': 5, 'clears': True}]}
+        photo = 'data:image/png;base64,' + base64.b64encode((Path(__file__).resolve().parents[1] / 'site/kookn-mark.png').read_bytes()).decode('ascii')
+        cards = [ticket_card.fun_svg(fun, {'g': game}, art=art),
+                 ticket_card.climb_svg(rung, {'g': game}, art=art),
+                 ticket_card.climb_result_svg(dict(rung, result='win', actual='all 2 legs won'), {'g': game}, art=art),
+                 ticket_card.cooked_svg(cooked, dict(game, players=[{'id': '7', 'team': '1'}]),
+                                        art={'kind': 'photo', 'uri': photo},
+                                        player_side='away', fetch=lambda _: photo),
+                 ticket_card.prep_svg(prep, fetch=lambda _: None)]
+        for index, svg in enumerate(cards):
+            with self.subTest(family=index):
+                self.assertEqual(check_svg.issues(svg), [])
 
 
 if __name__ == '__main__':

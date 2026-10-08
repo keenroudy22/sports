@@ -412,7 +412,7 @@
   /* Three kinds of pick, tracked apart: researched picks, the model's own leans, and longshot parlays. */
   const kindOf = p => p.parlayType === 'ladder' ? 'ladder' : p.kind === 'parlays' ? 'longshot' : p.modelLean ? 'model' : 'researched';
   const KIND_WORD = { researched: 'Researched', model: 'Model picks', longshot: 'Longshots', ladder: 'Ladder' };
-  /* Picks imported from before the desk recorded prices (the Week 1 props) stay listed with their results but
+  /* Picks imported from before prices were recorded (the Week 1 props) stay listed with their results but
      are kept out of every total, so a record, its units and its ROI always describe the same priced picks. */
   const isUnpricedImport = p => Boolean(p.historicalImport) && p.odds == null;
   const recordOf = (picks, minimum = 10) => {

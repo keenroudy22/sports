@@ -349,7 +349,7 @@
     const kind = pick.parlayType === 'ladder' ? 'climb' : isParlayLike(pick) ? 'fun' : 'best';
     const result = pick.result;
     /* What a reader can still do with this play. "Open": the price is live. "Expired": still on the card and graded at
-       the posted price, but that price is older than our freshness limit. "Closed": the desk closed it to new entries
+       the posted price, but that price is older than our freshness limit. "Closed": new entries stopped
        (line moved past its limit), pulled or withdrew it, or the game started. Only an open play gets the pitch. */
     const word = state.word;
     const mode = result ? 'settled' : state.tone === 'open' ? 'open' : word === 'Price expired' ? 'expired' : 'closed';
@@ -450,7 +450,7 @@
     chance: (a, b) => (b.chance ?? -1) - (a.chance ?? -1) || (b.edge ?? -99) - (a.edge ?? -99),
     kickoff: (a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff) || String(a.gameId).localeCompare(String(b.gameId)) || (b.edge ?? -99) - (a.edge ?? -99),
   };
-  /* Heavy favorites: a "100%" trend at −900 still needs 90% to break even. Shown by default while the owner
+  /* Heavy favorites: a "100%" trend at −900 still needs 90% to break even. Shown by default while the rule
      decides (R5); the Trends chip can hide them. */
   const heavyFavorite = odds => { const need = breakEven(odds); return need != null && need > 0.8; };
   const trendText = row => {
@@ -952,7 +952,7 @@
   /* ROI at posted prices: units over plays staked (one unit each), only once ten priced plays are graded. */
   const roiOf = cap => cap.priced >= 10 && cap.staked > 0 && isNum(cap.units) ? 100 * cap.units / cap.staked : null;
   /* Owner decisions still open (HANDOFF §7 R7 and §13): closing-line value as a headline number and a public ROI.
-     Until the owner says yes, CLV stays on Model vs market and the receipts, and ROI is not shown. */
+     Until that is approved, CLV stays on Model vs market and the receipts, and ROI is not shown. */
   const OWNER_FLAGS = { clvHeadline: false, roi: false };
   const kpiStrip = (picks, board, rows = null, label = null) => {
     const archive = rows ? null : C.recordArchive(picks);
@@ -975,7 +975,7 @@
       <div class="kpi"><small>Last game day</small><b class="num">${recNow.lastDay ? esc(wl(recNow.lastDay)) : '–'}</b><span>this week ${esc(wl(recNow.week))}</span></div></div>` };
   };
 
-  /* ---------- live scores (factual refresh only; odds and picks stay on the desk's snapshots) ---------- */
+  /* ---------- live scores (factual refresh only; odds and picks stay on stored snapshots) ---------- */
   const LIVE = { NFL: ['football', 'nfl', ''], CFB: ['football', 'college-football', '&groups=80&limit=1000'], NBA: ['basketball', 'nba', ''],
     WNBA: ['basketball', 'wnba', ''], CBB: ['basketball', 'mens-college-basketball', '&groups=50&limit=1000'], MLB: ['baseball', 'mlb', ''],
     NHL: ['hockey', 'nhl', ''], EPL: ['soccer', 'eng.1', ''], MLS: ['soccer', 'usa.1', ''] };
@@ -1145,7 +1145,7 @@
     indexGames(today);
     const now = Date.now(), all = every, picks = all.filter(inLeague), sched = C.cardSchedule(picks, now);
     const pulled = p => p.status === 'withdrawn' || /before its post went out|^Pulled before posting:/.test(p.entryNote || '');
-    /* Off the card: the desk closed it after the line moved. It never hangs on the rail; it stays graded. A play whose
+    /* Off the card after the line moved. It never hangs on the rail; it stays graded. A play whose
        saved quote only aged out is still on the card and hangs there with "Posted price may be gone". */
     const offCard = p => C.pickState(p, now).word === 'Line moved';
     const order = (a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)) || String(a.kickoff).localeCompare(String(b.kickoff));
@@ -1254,7 +1254,7 @@
     const held = hold?.afterPosting ? tape('Since I posted', `<p class="kt-held-felt">I posted this at ${esc(clock(sentAt))} at ${esc(odd(pick.odds))}${vm.book ? ` at ${esc(vm.book)}` : ''}. ${esc(afterPostingWords(hold))} It still counts at that price.</p>`)
       : hold ? tape('The hold', `<div class="kt-figs"><span class="kt-stamp hold kt-inline" role="img" aria-label="Under review">${MARK.hold}UNDER REVIEW</span></div>
       <p class="kt-held-felt">${C.dayOf(pick.kickoff) === etDay() ? 'No grade from me tonight. ' : ''}${esc(heldWords(hold))}</p><p class="small muted" style="margin-top:6px">It stays on the card and is graded at ${esc(odd(pick.odds))}${vm.book ? ` at ${esc(vm.book)}` : ''}, the price we posted.</p>`) : '';
-    /* A Climb step or fun ticket keeps the desk's saved words with its real stake and return, settled or not. */
+    /* A Climb step or fun ticket keeps its saved words with its real stake and return, settled or not. */
     const saved = [pick.reason, pick.why].find(x => typeof x === 'string' && x.trim());
     const stake = vm.kind !== 'best' && saved ? tape(vm.kind === 'climb' ? 'The stake' : 'The ticket', `<p>${esc(saved.trim())}</p>`) : '';
     const chart = vm.kind === 'best' && pick.athleteId && FOOTBALL.includes(pick.league) && C.marketKey(pick)
@@ -1694,7 +1694,7 @@
   };
 
   /* ---------- Games ---------- */
-  /* The projection card the owner loved on the old site, kept front and center: projected score, total, team strength
+  /* The projection card kept from the old site, front and center: projected score, total, team strength
      ranks, the win-chance bar in team colors, then ours vs the market with our side (or "no lean"). */
   const barColor = t => {
     const c = /^#[0-9a-f]{6}$/i.test((t || {}).color || '') ? t.color : null;
@@ -1820,7 +1820,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-8ced3a4becd4';
+  const MORE_ASSET = 'app-more.js?v=sha256-5d110dab0eb3';
   const GAMES_ASSET = 'app-games.js?v=sha256-83fbc87918bc';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,

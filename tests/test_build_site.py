@@ -12,6 +12,19 @@ from fakegames import game
 ROOT = Path(__file__).resolve().parents[1]
 
 
+class ReaderWordsTests(unittest.TestCase):
+    def test_public_copy_hides_old_private_clock_and_renames_climb_without_touching_numbers(self):
+        saved = {'title': 'Ladder step 2: two legs at FanDuel',
+                 'cutoff': 'UNDER 54.5 at -102 or better. Closed to new entries at 53 or lower.',
+                 'entryNote': 'Closed to new entries at 11:45 AM ET: price moved.',
+                 'legs': [{'title': 'Iowa over 17.5'}]}
+        shown = build_site.reader_words(saved)
+        self.assertEqual(shown['title'], '80/20 Climb step 2: two legs at FanDuel')
+        self.assertEqual(shown['entryNote'], 'Off the card: price moved.')
+        self.assertIn('Off the card at 53 or lower', shown['cutoff'])
+        self.assertEqual(saved['title'], 'Ladder step 2: two legs at FanDuel', 'the stored record is immutable')
+
+
 def slate_game(game_id, kickoff, state='pre', **market):
     return {'id': game_id, 'league': 'NFL', 'kickoff': kickoff, 'state': state, 'marketRetrievedAt': '2026-09-18T12:00:00Z',
             'home': {'id': '1', 'abbreviation': 'ATL'}, 'away': {'id': '2', 'abbreviation': 'CAR'},

@@ -10,6 +10,8 @@ import os
 import re
 from pathlib import Path
 
+import public_copy
+
 ROOT_FILES = {'.nojekyll', 'index.html', 'app.css', 'app.js', 'app-more.js', 'app-games.js', 'core.js', 'live.js', 'personal.js',
               'favicon.svg', 'kookn-chef.png', 'kookn-chef-clip.png', 'kookn.jpg', 'kookn-mark.png'}
 DATA_FILES = {'slate.json', 'research-context.json', 'desk-notes.json', 'sports.json',
@@ -113,11 +115,17 @@ def audit(folder):
                 text = path.read_text(encoding='utf-8')
                 if any(pattern.search(text) for pattern in PATTERNS):
                     issue(relative, 'private-value-pattern')
+                public_text = (path.suffix.lower() in {'.html', '.js', '.xml', '.svg'} or
+                               relative.as_posix() in {'data/app/today.json', 'data/app/today-hero.json', 'data/app/record.json'})
+                if public_text and public_copy.issues(text):
+                    issue(relative, 'schedule-or-automation-copy')
                 if path.suffix.lower() == '.json':
                     try:
                         payload = json.loads(text)
                         if contains_private_key(payload):
                             issue(relative, 'private-payload-field')
+                        if public_text and public_copy.timing_keys(payload):
+                            issue(relative, 'schedule-or-automation-field')
                     except (ValueError, RecursionError):
                         issue(relative, 'invalid-json')
             except (OSError, UnicodeError):

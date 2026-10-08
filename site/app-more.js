@@ -548,7 +548,7 @@
       <div class="card on-felt"><p class="small"><b>Entertainment and calculation only.</b> This calculator does not know whether either price is available to you. Verify the exact event, market, line, period, price, limits and settlement rules in both apps before doing anything.</p></div>`;
   };
   views.lab = async () => views.record({ tab: 'trials' });
-  /* Keep old bookmarks working without publishing the desk's private timing and health pages. */
+  /* Keep old bookmarks working without publishing private timing and health pages. */
   views.schedule = async () => views.more();
   views.status = async () => views.more();
   views.feedback = async () => `<a class="back" href="#more">← More</a>${head('Feedback', 'What helped, what got in the way', 'Your note stays here until you copy and send it privately on Discord.')}

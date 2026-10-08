@@ -46,7 +46,7 @@ RULES THAT HOLD COPY IN PLACE
 - Every number comes from a code field, never from a model.
 - Code parses some stored text, so keep these markers exactly: "before its post went out", " ET: ", ". Published cutoff", ". Stays in the record". Also keep the Model lean, Prop lean, Researched pick, Role:, Defense: and "Last N games:" prefixes, which x_post.LEAD_INS and the app.js WHY regexes depend on.
 - Published records are append-only. Change the templates for future picks, and fix old text only at display time.
-- Some phrases are locked by owner rules and change only with the owner's yes: the heart "if you're tailing" closer, "being checked · not posted yet", and the injury-angle closer.
+- The owner's October 7 decision replaces the older Climb waiting phrase: say `not posted yet` until a rung is actually posted. Keep the heart `if you're tailing` closer and the verified injury-angle closer.
 - tests/test_voice.py enforces this list. Whenever the owner reacts to a word or post, add a dated line here and extend the test.
 
 ## String replacements to apply

@@ -303,6 +303,8 @@ Handy commands (from `~/Projects/sports`):
   7. No owner hand-posting; the owner may pin a prepared post with one tap.
   8. The Climb may qualify on any day with two or more games left in one league, scanning NFL then CFB;
      never force a rung.
+  9. Public Climb copy now says `not posted yet` or `NEXT · NOT POSTED YET` until a rung is actually posted.
+     This replaces the October 3 locked phrase under owner decision 25; kickoff facts may still be shown.
   The October 7 `POSTING-PLAYBOOK.md` is the approved detailed posting specification. Earlier references to
   mirrored menus/receipts/news, weekend-only Climb check-ins, no estimated future step and owner-written posts
   below are superseded, not permission to resurrect them.
