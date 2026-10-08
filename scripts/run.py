@@ -25,7 +25,7 @@ import sys
 import time
 import traceback
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -732,7 +732,11 @@ def rank_card(wanted, ctx):
         first = direction.priority(ctx.policy, segment, ctx.now)
         c['_rank'] = {'edge': round(edge, 1), 'performanceCaution': cautious, 'requiredEdge': need}
         market_priority = 0 if c.get('athleteId') else 1 if c.get('marketType') in ('spread', 'moneyline') else 2
-        return (bool(stopped or edge <= 0 or edge < need), market_priority, not first, -edge,
+        # Price and news-review capacity is finite. Check the next slate before
+        # spending those slots on a later Monday game; within a game day, keep
+        # the owner's props/sides/totals priority and the usual value order.
+        day = gates.slate_day(c, ctx) or date.max
+        return (bool(stopped or edge <= 0 or edge < need), day, market_priority, not first, -edge,
                 str(c.get('id') or row.get('id') or ''))
     kept = [c for c in wanted if not c.get('athleteId')
             or isinstance(c['_row'].get('odds'), (int, float)) and CARD_PROP_PRICES[0] <= c['_row']['odds'] <= CARD_PROP_PRICES[1]]

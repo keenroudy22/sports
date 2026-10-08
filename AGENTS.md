@@ -207,6 +207,11 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Near-slate review first (owner, 2026-10-08):** When a run has limited news-review
+  capacity, judge the nearest Eastern kickoff day first. Thursday night, Saturday college
+  football and Sunday NFL are reviewed before a later Monday night game. Within a day,
+  keep the approved player-prop, spread/moneyline, then total priority. This changes
+  review order only; every price, injury, edge and no-forced-play gate still applies.
 - **Game-day morning delivery (owner, 2026-10-08; item 38):** Every future official play,
   ticket, Comfort Food combo and Climb rung targets 9:30 AM Eastern on its game day, with
   the Hot Plate first and ten minutes between X posts. Plays & Results gets each about

@@ -1106,6 +1106,24 @@ if __name__ == '__main__':
 
 
 class CardRankTests(unittest.TestCase):
+    def test_near_slate_uses_review_slots_before_monday(self):
+        from tests.test_gates import context
+        games = {}
+        wanted = []
+        for key, kickoff, market, edge in (
+            ('monday', '2026-10-13T00:15:00Z', 'spread', 8.0),
+            ('sunday', '2026-10-11T17:00:00Z', 'spread', 6.0),
+            ('saturday', '2026-10-10T19:30:00Z', 'total', 5.0),
+            ('thursday', '2026-10-09T00:15:00Z', 'spread', 4.0),
+        ):
+            games[key] = {'id': key, 'league': 'NFL' if key != 'saturday' else 'CFB',
+                          'kickoff': kickoff}
+            wanted.append({'id': key, 'gameIds': [key], 'marketType': market,
+                           '_league': games[key]['league'], '_row': {'grade': {'edge': edge}}})
+        ctx = context(games=games)
+        self.assertEqual([c['id'] for c in run.rank_card(wanted, ctx)],
+                         ['thursday', 'saturday', 'sunday', 'monday'])
+
     def test_equal_edges_use_line_id_regardless_of_manifest_order(self):
         from tests.test_gates import context
         now = datetime(2026, 10, 4, 12, 0, tzinfo=timezone.utc)
