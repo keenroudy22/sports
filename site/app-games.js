@@ -11,14 +11,14 @@
   const views = {};
   /* Navigator, "why" and badge styles arrive with this bundle, so the first-load shell stays inside its budget. */
   const GAMES_CSS = ".tier { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; font: 700 12px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; border: 1px solid var(--line-strong); color: var(--chalk); white-space: nowrap; }\n"
-    + ".tier::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--dim); }\n.tier.competitive::before { background: var(--kookd); } .tier.lean::before { background: #CFE3D8; } .tier.mismatch::before { background: #E0A23A; } .tier.blowout::before { background: var(--burnt); }\n"
+    + ".tier::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--dim); }\n.tier.competitive::before { background: var(--kookd); } .tier.lean::before { background: var(--chalk); } .tier.mismatch::before { background: var(--dim); } .tier.blowout::before { background: var(--burnt); }\n"
     + ".pc-plain { font: 500 14px/1.4 var(--font-body); color: var(--chalk); border-top: 1px solid var(--line); padding-top: 8px; }\n"
-    + ".pc-bet { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 10px; font: 500 13px/1.3 var(--font-body); color: var(--dim); }\n.pc-bet b { display: block; font: 700 12px/1 var(--font-display); letter-spacing: .1em; text-transform: uppercase; color: var(--dim); margin-bottom: 3px; }\n.pc-bet .v { color: var(--chalk); font-weight: 600; }\n.pc-bet .flag { display: block; color: var(--burnt-text); font-weight: 600; }\n.pc-bet .age, .pc-bet-h { grid-column: 1 / -1; font-size: 12px; }\n.pc-bet-h { font: 700 12px/1 var(--font-display); letter-spacing: .1em; text-transform: uppercase; color: var(--kookd); }\n"
-    + ".pc-why { font: 500 14px/1.45 var(--font-body); color: var(--chalk); border-top: 1px dashed rgba(169, 192, 179, .28); padding-top: 8px; }\n.pc-why a { white-space: nowrap; font-weight: 700; display: inline-block; padding: 6px 0; }\n.pc-why.muted { color: var(--dim); }\n"
-    + ".kt-worth-strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(196px, 1fr); gap: 10px; margin: 10px 0 6px; padding-bottom: 6px; }\n.kt-worth-card { display: grid; gap: 4px; align-content: start; padding: 10px 12px; background: var(--felt); border: 1px solid var(--line); border-radius: var(--radius); color: var(--chalk); min-width: 0; }\n.kt-worth-card:hover { text-decoration: none; border-color: var(--line-strong); }\n.kt-worth-card .wc-t { font: 700 15px/1.1 var(--font-display); letter-spacing: .03em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n.kt-worth-card b { font: 500 14px/1.3 var(--font-body); color: var(--kookd); }\n.kt-worth-card small { font-size: 12px; color: var(--dim); }\n"
+    + ".pc-bet { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 10px; font: 500 14px/1.3 var(--font-body); color: var(--dim); }\n.pc-bet b { display: block; font: 700 12px/1 var(--font-display); letter-spacing: .1em; text-transform: uppercase; color: var(--dim); margin-bottom: 3px; }\n.pc-bet .v { color: var(--chalk); font-weight: 600; }\n.pc-bet .flag { display: block; color: var(--burnt-text); font-weight: 600; }\n.pc-bet .age, .pc-bet-h { grid-column: 1 / -1; font-size: 13px; }\n.pc-bet-h { font: 700 12px/1 var(--font-display); letter-spacing: .1em; text-transform: uppercase; color: var(--kookd); }\n"
+    + ".pc-why { font: 500 14px/1.45 var(--font-body); color: var(--chalk); border-top: 1px dashed rgba(169, 192, 179, .28); padding-top: 8px; }\n.pc-why a { white-space: nowrap; font-weight: 700; display: inline-flex; align-items: center; min-height: var(--tap); }\n.pc-why.muted { color: var(--dim); }\n"
+    + ".kt-worth-strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(196px, 1fr); gap: 10px; margin: 10px 0 6px; padding-bottom: 6px; }\n.kt-worth-card { display: grid; gap: 4px; align-content: start; padding: 10px 12px; background: var(--felt); border: 1px solid var(--line); border-radius: var(--radius); color: var(--chalk); min-width: 0; }\n.kt-worth-card:hover { text-decoration: none; border-color: var(--line-strong); }\n.kt-worth-card .wc-t { font: 700 15px/1.1 var(--font-display); letter-spacing: .03em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n.kt-worth-card b { font: 500 14px/1.3 var(--font-body); color: var(--kookd); }\n.kt-worth-card small { font-size: 13px; color: var(--dim); }\n"
     + ".nav-bar { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; margin: 0 0 12px; }\n.nav-bar .select { min-height: 38px; padding: 6px 10px; }\n"
-    + ".kt-why .vs { grid-template-columns: auto 1fr 1fr auto; font-size: 15px; }\n.kt-why .vs .num { font-variant-numeric: tabular-nums; }\n.kt-drivers { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }\n.kt-drivers li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; font: 500 15px/1.45 var(--font-body); }\n.kt-drivers li::before { content: '↑'; color: var(--kookd); font-weight: 700; text-align: center; }\n.kt-drivers li.against::before { content: '↓'; color: var(--burnt-text); }\n.kt-drivers li small { display: inline; color: var(--dim); font-size: 13px; }\n.kt-drivers li.mk { display: block; font: 700 12px/1 var(--font-display); letter-spacing: .12em; text-transform: uppercase; color: var(--dim); margin: 10px 0 2px; }\n.kt-drivers li.mk::before { content: none; }\n.kt-why:focus { outline: none; }\n"
-    + ".kt-why-note { margin-top: 12px; padding: 10px 12px; border-left: 3px solid var(--burnt); background: var(--burnt-soft); font: 500 14px/1.4 var(--font-body); }\n.kt-why-foot { margin-top: 12px; font: 500 13px/1.45 var(--font-body); color: var(--dim); }\n"
+    + ".kt-why .vs { grid-template-columns: auto 1fr 1fr auto; font-size: 15px; }\n.kt-why .vs .num { font-variant-numeric: tabular-nums; }\n.kt-drivers { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }\n.kt-drivers li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; font: 500 15px/1.45 var(--font-body); }\n.kt-drivers li::before { content: '↑'; color: var(--kookd); font-weight: 700; text-align: center; }\n.kt-drivers li.against::before { content: '↓'; color: var(--burnt-text); }\n.kt-drivers li small { display: inline; color: var(--dim); font-size: 13px; }\n.kt-drivers li.mk { display: block; font: 700 12px/1 var(--font-display); letter-spacing: .12em; text-transform: uppercase; color: var(--dim); margin: 10px 0 2px; }\n.kt-drivers li.mk::before { content: none; }\n.kt-why:focus { outline: none; }\n.kt-why, .section[id] { scroll-margin-top: 64px; }\n"
+    + ".kt-why-note { margin-top: 12px; padding: 10px 12px; border-left: 3px solid var(--burnt); background: var(--burnt-soft); font: 500 14px/1.4 var(--font-body); }\n.kt-why-foot { margin-top: 12px; font: 500 14px/1.45 var(--font-body); color: var(--dim); }\n"
     + "@media (max-width: 359px) { .pc-bet { grid-template-columns: 1fr 1fr; } }";
   if (typeof document !== 'undefined' && document.head && document.createElement && !(document.getElementById && document.getElementById('kr-games-css'))) {
     const style = document.createElement('style'); style.id = 'kr-games-css'; style.textContent = GAMES_CSS; document.head.appendChild(style);
@@ -26,11 +26,19 @@
   /* ---------- the college slate navigator (owner, Oct 7, item 30): research grouping, never a play ---------- */
   const TIER_WORD = { competitive: 'Competitive', lean: 'Lean', mismatch: 'Mismatch', blowout: 'Blowout' };
   const WINDOW_WORD = { noon: 'Noon', afternoon: '3:30', night: 'Night' };
-  const tierBadge = g => g.tier && isNum(Number((g.market || {}).spread)) ? `<span class="tier ${esc(g.tier)}" title="By the book spread: competitive to 7, lean to 14, mismatch to 21, blowout past that">${esc(TIER_WORD[g.tier])} · gap ${esc(C.fixed(Math.abs(g.market.spread), Math.abs(g.market.spread) % 1 ? 1 : 0))}</span>` : '';
+  /* The tier comes from the book's spread; the number is the model gap: how far my number sits from that line. */
+  const gapNum = n => C.fixed(Math.abs(n), Math.abs(n) % 1 ? 1 : 0);
+  const tierBadge = g => {
+    if (!g.tier || !isNum(Number((g.market || {}).spread))) return '';
+    const gap = g.gap && isNum(Number(g.gap.difference)) ? Number(g.gap.difference) : null;
+    return `<span class="tier ${esc(g.tier)}" title="Tier by the book spread (${esc(favSpread(g.home.abbr, g.away.abbr, g.market.spread))}): competitive to 7, lean to 14, mismatch to 21, blowout past that.${gap == null ? '' : ` Gap ${esc(gapNum(gap))}: how far my number sits from that line.`}">${esc(TIER_WORD[g.tier])}${gap == null ? '' : ` · gap ${esc(gapNum(gap))}`}</span>`;
+  };
+  /* The same lean the card's My side column shows: a side or total only when its chance clears the price bar. */
   const leanWord = (g, which) => {
-    const lean = C.leanText(g) || {}, m = g.market || {};
-    if (which === 'spread') return lean.side ? `${lean.side.team} ${C.signed(lean.side.team === g.home.abbr ? m.spread : -m.spread, 1).replace(/\.0$/, '')}` : 'no lean';
-    return lean.total && m.total != null ? `${lean.total.direction} ${m.total}` : 'no lean';
+    const lean = C.leanText(g) || {}, m = g.market || {}, thin = Boolean((g.v2 || {}).sparse);
+    const live = part => Boolean(part && part.chance != null && C.leanTone(part.chance, thin));
+    if (which === 'spread') return live(lean.side) ? `${lean.side.team} ${C.signed(lean.side.team === g.home.abbr ? m.spread : -m.spread, 1).replace(/\.0$/, '')}` : 'no lean';
+    return live(lean.total) && m.total != null ? `${lean.total.direction} ${m.total}` : 'no lean';
   };
   /* The research rows under a projection card: tier, the plain strength gap, what is bettable, and the specific reason. */
   const cardExtras = (g, now = Date.now()) => {
@@ -234,7 +242,8 @@
 
   const GARBAGE = 'Garbage-time risk: spread 21+.';
   const anchored = (id, html) => html.replace('<section class="section">', `<section class="section" id="${id}">`);
-  /* "Why my number differs" (owner, Oct 7, item 28): our number, the book, the gap and every stored-data driver, by weight.
+  /* "Why my number differs" (owner, Oct 7, item 28): my number, the book, the gap and every stored-data driver, by weight.
+     The numbers each driver used stay in the JSON for tests; the sentence already carries them.
      A note appears only when a concrete flag fired. A stale line prints only the staleness line. Research, never a play. */
   const whySection = (g, why, final) => {
     if (!why || final) return '';
@@ -246,7 +255,7 @@
       ${row('Spread', markets.spread, markets.spread ? C.modelSpread(g.home.abbr, g.away.abbr, markets.spread.ours) : '', markets.spread ? favSpread(g.home.abbr, g.away.abbr, -markets.spread.book) : '')}
       ${row('Total', markets.total, markets.total ? C.fixed(markets.total.ours, 1) : '', markets.total ? C.fixed(markets.total.book, 1) : '')}</div>`;
     const both = Boolean(markets.spread && markets.total);
-    const list = Object.entries(markets).filter(([, b]) => b && (b.drivers || []).length).map(([k, b]) => `${both ? `<li class="mk" role="presentation">${k === 'spread' ? 'Spread' : 'Total'}</li>` : ''}${b.drivers.slice().sort((x, y) => y.weight - x.weight).map(d => `<li class="${d.direction > 0 ? 'for' : 'against'}"><span>${esc(d.text)}${(d.numbers || []).length ? ` <small>Numbers used: ${esc(d.numbers.join(', '))}</small>` : ''}</span></li>`).join('')}`).join('');
+    const list = Object.entries(markets).filter(([, b]) => b && (b.drivers || []).length).map(([k, b]) => `${both ? `<li class="mk" role="presentation">${k === 'spread' ? 'Spread' : 'Total'}</li>` : ''}${b.drivers.slice().sort((x, y) => y.weight - x.weight).map(d => `<li class="${d.direction > 0 ? 'for' : 'against'}"><span>${esc(d.text)}</span></li>`).join('')}`).join('');
     const flagged = Object.values(markets).flatMap(b => ((b || {}).drivers || []).filter(d => d.flag)).sort((x, y) => y.weight - x.weight)[0];
     return `<section class="section kt-why" id="why" aria-labelledby="why-h"><div class="section-head"><h2 id="why-h">Why my number differs</h2>${kind}</div>
       <div class="card">${table}${list ? `<ul class="kt-drivers">${list}</ul>` : '<p class="small muted" style="margin-top:10px">No stored driver explains this gap yet.</p>'}
@@ -317,7 +326,7 @@
         athleteId: f.athleteId, stat: f.stat || C.marketKey(f), line: f.line, direction: f.direction || f.side, player: f.player, isProp: f.kind === 'player', alternate: f.alternate,
         sub: [historyWords(f.history), dm ? `${dm.pos} matchup: ${dm.rank} of ${dm.of}${dm.tone === 'soft' ? ', soft' : dm.tone === 'tough' ? ', tough' : ''}` : ''].filter(Boolean).join(' · '), extraFa, src };
       return boardRow(vm);
-    }).join('')}</div>` : `<p class="muted small">${pregame ? 'No current line in this game passes our price check right now. ' : 'Lines close at kickoff. Saved pregame lines are below.'}</p>`;
+    }).join('')}</div>` : `<p class="muted small">${pregame ? 'No current line in this game passes my price check right now. ' : 'Lines close at kickoff. Saved pregame lines are below.'}</p>`;
 
     /* Matchup edges and every other line the model read. */
     const reads = detail.modelReads || [];
@@ -358,7 +367,7 @@
     const gap = (detail.marketRead || fromSlate.marketRead || {}).ourGap || {};
     const caution = g.fcs ? 'FBS vs FCS: my number is not reliable here.' : model.sparse ? 'Thin history: one of these teams has fewer than three games this season, so this forecast leans on last season and the league average.' : '';
     const gapWords = r => r && r.gapsThisLargeVsClose ? `${Number(r.gapsThisLargeVsClose[0]).toLocaleString('en-US')}–${Number(r.gapsThisLargeVsClose[1]).toLocaleString('en-US')}` : null;
-    const modelBlock = `<div class="card"><div class="vs" style="grid-template-columns:auto 1fr 1fr;font-size:15px"><span class="h"></span><span class="h">Our number</span><span class="h">${g.market ? `Book line${bookLabel(m.book) ? ` (${esc(bookLabel(m.book))})` : ''}` : 'No book line recorded'}</span>
+    const modelBlock = `<div class="card"><div class="vs" style="grid-template-columns:auto 1fr 1fr;font-size:15px"><span class="h"></span><span class="h">My number</span><span class="h">${g.market ? `Book line${bookLabel(m.book) ? ` (${esc(bookLabel(m.book))})` : ''}` : 'No book line recorded'}</span>
       <span class="k">Score</span><span class="num">${esc(g.away.abbr)} ${esc(C.fixed(model.away))} – ${esc(g.home.abbr)} ${esc(C.fixed(model.home))}</span><span class="muted">–</span>
       <span class="k">Favorite</span><span class="num">${esc(fav2)}</span><span class="num">${esc(mFav)}</span>
       <span class="k">Spread</span><span class="num">${esc(C.modelSpread(g.home.abbr, g.away.abbr, model.margin))}</span><span class="num">${esc(favSpread(g.home.abbr, g.away.abbr, m.spread))}${m.spreadOpen != null && m.spreadOpen !== m.spread ? ` <span class="muted small">(opened ${esc(favSpread(g.home.abbr, g.away.abbr, m.spreadOpen))})</span>` : ''}</span>

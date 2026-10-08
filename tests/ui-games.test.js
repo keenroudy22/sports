@@ -84,8 +84,13 @@ test('the college slate sorts by bettability, shows tiers and keeps NFL in kicko
   assert.doesNotMatch(html, /Something did not load|is not defined|far from the book line/);
   const order = [...html.matchAll(/href="#game\/(CFB-\d)"/g)].map(m => m[1]).filter((v, i, arr) => arr.indexOf(v) === i);
   assert.deepEqual(order.slice(0, 4), ['CFB-2', 'CFB-3', 'CFB-4', 'CFB-1'], 'bettable first, ties by kickoff, blowout last');
-  assert.match(html, /Blowout · gap 28/);
-  assert.match(html, /Competitive · gap 4/);
+  assert.match(html, /Blowout · gap 4/, 'the badge number is the model gap (my 24 against the book\'s 28), not the spread');
+  assert.match(html, /Competitive · gap 0\.6/);
+  assert.match(html, /title="Tier by the book spread \(BAMA -28\): competitive to 7, lean to 14, mismatch to 21, blowout past that\. Gap 4: how far my number sits from that line\."/);
+  assert.doesNotMatch(gamesSource, /#E0A23A|amber/i, 'no amber accent on the mismatch tier (palette rule)');
+  assert.match(gamesSource, /\.tier\.mismatch::before \{ background: var\(--dim\); \}/);
+  assert.match(gamesSource, /\.kt-why, \.section\[id\] \{ scroll-margin-top: 64px; \}/, 'landing on #why clears the sticky header');
+  assert.match(gamesSource, /\.pc-why a \{[^}]*min-height: var\(--tap\)/, 'Dig deeper is a full-height tap target');
   assert.match(html, /Worth your time/);
   assert.match(html, /Total 53\.5 vs my 50\.5/);
   assert.match(html, /What.s bettable/);
@@ -100,8 +105,27 @@ test('the college slate sorts by bettability, shows tiers and keeps NFL in kicko
   for (const word of ['desk', 'scan', 'automated', 'pipeline', 'calibration', 'model weights']) assert.ok(!new RegExp(`\\b${word}\\b`, 'i').test(html), word);
   const ctx = contextFor(api, games); ctx.state.league = 'NFL'; ctx.state.games.sort = 'bettable';
   const nfl = await factory(ctx).games({ tab: 'upcoming' });
-  assert.match(nfl, /Lean · gap 9\.5/);
+  assert.match(nfl, /Lean · gap 0\.5/);
+  const nogapCtx = contextFor(api, [{ ...games[4], gap: null }]); nogapCtx.state.league = 'NFL';
+  const nogap = await factory(nogapCtx).games({ tab: 'upcoming' });
+  assert.match(nogap, /class="tier lean"[^>]*>Lean<\/span>/, 'without a model gap the badge is the tier word alone');
   assert.doesNotMatch(nfl, /Worth your time/, 'NFL keeps kickoff order and the plain list');
+});
+
+test("What's bettable prints a side or total only when its chance clears the price bar, else no lean", async () => {
+  const { api, factory } = loadBrowserApi();
+  const base = slate()[3];
+  const row = async g => { const html = unesc(await factory(contextFor(api, [g])).games({ tab: 'upcoming' })); return html.slice(html.indexOf('pc-bet-h'), html.indexOf('</div>', html.indexOf('pc-bet-h'))); };
+  const faint = await row({ ...base, lean: { spread: 0.3, side: 'home', spreadChance: 0.52, total: 2.4, totalChance: 0.53 } });
+  assert.match(faint, /<b>Spread<\/b><span class="v">no lean<\/span>/, 'a 0.3-point, 52% difference is not a lean');
+  assert.match(faint, /<b>Total<\/b><span class="v">no lean<\/span>/);
+  const clear = await row({ ...base, lean: { spread: 3.2, side: 'home', spreadChance: 0.58, total: -4, totalChance: 0.56 } });
+  assert.match(clear, /<b>Spread<\/b><span class="v">UK -3<\/span>/);
+  assert.match(clear, /<b>Total<\/b><span class="v">Under 47\.5<\/span>/);
+  const thin = await row({ ...base, v2: { ...base.v2, sparse: true }, lean: { spread: 3.2, side: 'home', spreadChance: 0.58 } });
+  assert.match(thin, /<b>Spread<\/b><span class="v">UK -3<\/span>/, 'a thin team keeps the mild lean, as the card column does');
+  const none = await row(base);
+  assert.match(none, /<b>Spread<\/b><span class="v">no lean<\/span>/);
 });
 
 test('navigator filters combine: window, close games and conference', async () => {
@@ -145,7 +169,10 @@ test('the game page prints every driver under #why, a note only when a flag fire
   assert.match(blowout, /Why my number differs/);
   assert.match(blowout, /Alabama's offense ranks 2 of 136/);
   assert.match(blowout, /28-point-or-larger/);
-  assert.match(blowout, /Blowout · gap 28/);
+  assert.doesNotMatch(blowout, /Numbers used/, 'the sentence carries its numbers; no debug suffix');
+  assert.match(blowout, /Blowout · gap 4/);
+  assert.match(blowout, /<span class="h">My number<\/span>/);
+  assert.doesNotMatch(blowout, /Our number|our price check|Our side/, 'the game page speaks in one voice');
   assert.match(blowout, /Starters may sit early/);
   assert.match(blowout, /This is my projection against the book's line\. It is research; best bets go through separate price checks\./);
   assert.ok((blowout.match(/kt-why-note/g) || []).length === 1, 'one note because the blowout flag fired');
@@ -179,5 +206,5 @@ test('live scores and the team page render from the Games bundle', async () => {
   assert.doesNotMatch(live, /is not defined/);
   const teamPage = await views.team({ league: 'CFB', id: '1' });
   assert.match(teamPage, /<h1>Alabama<\/h1>/);
-  assert.match(teamPage, /Blowout · gap 28/, 'the team page cards carry the same badge');
+  assert.match(teamPage, /Blowout · gap 4/, 'the team page cards carry the same badge');
 });
