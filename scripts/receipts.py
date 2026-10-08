@@ -530,7 +530,10 @@ def house_posts(first, latest, games, log_book, now):
     # Wednesday's ordinary slate research slot.
     research_already = research_posts.already_posted(log_book, research.get('countsFor', eastern_date(now))
                                                      if research else eastern_date(now))
-    if research and research['stale'] > now and not research_already:
+    # Owner-requested Oct 8 TNF game card is a single extra research post,
+    # distinct from the earlier day's normal research slot.
+    owner_tnf = bool(research and research['key'] == 'research:end-zone:tnf-ticket:2026-10-08')
+    if research and research['stale'] > now and (owner_tnf or not research_already):
         out.append(research)
     import sports_posts
     sports = sports_posts.post(now)

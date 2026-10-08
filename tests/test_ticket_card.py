@@ -32,6 +32,29 @@ PROP = {
 
 
 class TicketCardTests(unittest.TestCase):
+    def test_tnf_end_zone_research_uses_kitchen_ticket_without_a_bet_claim(self):
+        choice = {'game': 'BUCS AT COWBOYS · THU 8:15 PM', 'rows': [
+            {'title': 'Javonte Williams', 'athleteId': '4429111',
+             'metric': '21 red-zone opportunities', 'price': '12 inside the 10'},
+            {'title': 'CeeDee Lamb', 'athleteId': '4241389',
+             'metric': '6 red-zone opportunities', 'price': '3 inside the 10'}]}
+        calls = []
+        def photo(url):
+            calls.append(url)
+            return self.image
+        svg = ticket_card.end_zone_svg(choice, fetch=photo)
+        for exact in ('END-ZONE WORK', 'BUCS AT COWBOYS', 'JAVONTE WILLIAMS',
+                      '21 red-zone opportunities', '12 INSIDE THE 10',
+                      'NOT A TD PICK OR OFFICIAL BET', '21+ · Entertainment only'):
+            self.assertIn(exact, svg)
+        self.assertEqual(len(calls), 2)
+        self.assertTrue(all('/headshots/nfl/players/full/' in url for url in calls))
+        for forbidden in ('BEST BET', 'ORDER UP', '1-800-', 'SEASON 35', '4869443:'):
+            self.assertNotIn(forbidden, svg)
+        with self.assertRaises(ValueError):
+            ticket_card.end_zone_svg({'game': choice['game'], 'rows': [
+                dict(choice['rows'][0], metric='unknown')]}, fetch=photo)
+
     @classmethod
     def setUpClass(cls):
         cls.image = ('data:image/png;base64,' + base64.b64encode((ROOT / 'site' / 'kookn-mark.png').read_bytes()).decode('ascii'))

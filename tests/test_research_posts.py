@@ -24,6 +24,38 @@ def game(watch=None):
 
 
 class ResearchPostTests(unittest.TestCase):
+    def test_requested_tnf_ticket_is_one_game_only_and_expires_before_kickoff(self):
+        import json
+        now = datetime(2026, 10, 8, 22, 40, tzinfo=timezone.utc)
+        game_row = {'id': 'NFL-401872980', 'league': 'NFL', 'kickoff': '2026-10-09T00:15:00Z',
+                    'state': 'pre', 'away': {'abbr': 'TB'}, 'home': {'abbr': 'DAL'}}
+        detail = {'scorerResearch': [
+            {'player': 'Javonte Williams', 'athleteId': '4429111', 'roleSnapshotAt': '2026-10-08T20:00:00Z',
+             'games': 4, 'teamGames': 4, 'inside10': 12, 'redZone': 21, 'touchdowns': 3}]}
+        data = {'games': [game_row]}
+        choice = R.owner_tnf_ticket(data, {game_row['id']: detail}, now)
+        self.assertEqual(choice['key'], 'research-end-zone-tnf-ticket-2026-10-08')
+        self.assertIn('not a TD pick or official play', choice['text'])
+        self.assertIsNone(R.owner_tnf_ticket(data, {game_row['id']: detail},
+                                              datetime(2026, 10, 8, 23, 40, tzinfo=timezone.utc)))
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            payload = root / 'today.json'
+            payload.write_text(json.dumps(data))
+            (root / f"{game_row['id']}.json").write_text(json.dumps(detail))
+            self.assertIsNone(R.post([], now, data_path=payload, detail_root=root, lines_path=root / 'none'),
+                              'the new card is not a public-post approval by itself')
+            with mock.patch.dict('os.environ', {'KEENROUDY_TNF_TICKET_APPROVED': '1'}):
+                post = R.post([], now, data_path=payload, detail_root=root, lines_path=root / 'none')
+            self.assertEqual(post['card'], choice['key'])
+            self.assertEqual(post['due'].isoformat(), '2026-10-08T23:00:00+00:00')
+            with mock.patch('ticket_card.end_zone_svg', return_value='<svg/>') as art, \
+                 mock.patch('pick_card.render', side_effect=lambda _svg, path: Path(path).write_bytes(b'png')):
+                cards = R.render_due(now, root, data_path=payload, detail_root=root,
+                                     lines_path=root / 'none', fetch=lambda _: None)
+            self.assertIn(choice['key'], cards)
+            art.assert_called_once()
+
     def test_prep_list_takes_one_research_slot_only_with_three_fresh_checked_rows(self):
         now = datetime(2026, 10, 3, 13, 0, tzinfo=timezone.utc)  # 9 AM Eastern
         rows = [{'league': 'CFB', 'player': f'Player {i}', 'athleteId': str(1000 + i),

@@ -524,3 +524,44 @@ def prep_card(p):
     inner += card.text(X1, perf + 60, note, kit.fit(note, 40, X2 - X1, tracking=1), INK_SOFT, tracking=1)
     frame(card, HOUSE, CHALK, perf, bottom, inner)
     return card
+
+
+def end_zone_card(p):
+    """Kitchen Ticket research card for observed scoring-area work, never a TD pick."""
+    rows = p['rows']
+    if not 1 <= len(rows) <= 4:
+        raise ValueError('End-Zone Work needs one to four verified rows')
+    row_h, panel_bottom = 136, 478
+    heading_y, top = panel_bottom + 58, panel_bottom + 98
+    perf = top + row_h * len(rows) + 24
+    bottom = perf + 108
+    card = kit.Card(bottom + 154)
+    inner = kit.panel_rect(card, PANEL_TOP, panel_bottom, hot=(760, 300))
+    chip, _ = kit.series_chip(card, COL_X, 204, 'RESEARCH')
+    inner += chip
+    title = 'END-ZONE WORK'
+    size = fit(title, 126, 545, floor=80)
+    inner += card.text(COL_X - 4, 280 + round(size * CAP), title, size, CHALK)
+    inner += card.text(COL_X, panel_bottom - 30, p['game'], 42, CHALK, tracking=0.5)
+    for i, r in enumerate(rows):
+        cx, cy = 770 + (i % 2) * 115, 264 + (i // 2) * 104
+        if r.get('photo'):
+            inner += kit.face_thumb(card, r['photo'], cx, cy, 45, ring=CHALK)
+        else:
+            inner += kit.initials_badge(card, cx, cy, 45, kit.initials(r['player']), CHARCOAL[0])
+    inner += card.text(X1, heading_y, 'SCORING-AREA USAGE', 40, INK_SOFT, tracking=1)
+    inner += kit.dashed(X1, X2, heading_y + 16)
+    for i, r in enumerate(rows):
+        y = top + i * row_h
+        if i:
+            inner += f'<line x1="{X1}" y1="{y}" x2="{X2}" y2="{y}" stroke="{RULE}" stroke-width="2"/>'
+        count = f"{r['inside10']} INSIDE THE 10"
+        room = X2 - X1 - width(count, 44) - 24
+        name_size = fit(r['player'].upper(), 60, room, floor=42)
+        inner += card.text(X1, y + 57, r['player'].upper(), name_size, INK)
+        inner += card.text(X2, y + 58, count, 44, GREEN_INK, anchor='end')
+        inner += card.text(X1, y + 111, f"{r['redZone']} red-zone opportunities", 42, INK_SOFT, 'd', 500)
+    note = 'USAGE ONLY · NOT A TD PICK OR OFFICIAL BET'
+    inner += card.text(X1, perf + 70, note, fit(note, 43, X2 - X1, floor=40), INK_SOFT)
+    frame(card, HOUSE, CHALK, perf, bottom, inner)
+    return card

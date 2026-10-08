@@ -332,3 +332,25 @@ def prep_svg(prep, *, fetch=None):
     if problems:
         raise ValueError('; '.join(problems))
     return card.svg()
+
+
+def end_zone_svg(choice, *, fetch=None):
+    """Render a real, named game's End-Zone Work in the Kitchen Ticket family."""
+    fetch = fetch or pick_card.fetch_data_uri
+    rows = []
+    for source in choice.get('rows') or []:
+        athlete = str(source.get('athleteId') or '')
+        photo = fetch(pick_card.HEADSHOT.format(sport='nfl', athlete=athlete)) if athlete else None
+        metric = str(source.get('metric') or '')
+        inside = str(source.get('price') or '')
+        red = re.fullmatch(r'(\d+) red-zone opportunities', metric)
+        ten = re.fullmatch(r'(\d+) inside the 10', inside)
+        if not red or not ten or not str(source.get('title') or '').strip():
+            raise ValueError('End-Zone Work needs stored player and opportunity counts')
+        rows.append({'player': source['title'], 'photo': photo,
+                     'redZone': int(red.group(1)), 'inside10': int(ten.group(1))})
+    card = ticket_cards.end_zone_card({'game': choice['game'], 'rows': rows})
+    problems = ticket_kit.qa(card, 'end-zone-work')
+    if problems:
+        raise ValueError('; '.join(problems))
+    return card.svg()
