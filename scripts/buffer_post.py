@@ -452,7 +452,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                     stats['officialNotScheduled'] += 1
                 log(f'buffer: {guid} waits: its card is not live yet (every post carries its card)')
                 continue
-            if kind == 'play' and pick_card.ticket_enabled(moment=due) and not ticket_art_live(url):
+            if pick_card.ticket_enabled(moment=due) and not ticket_art_live(url):
                 log(f'buffer: {guid} waits: the live card is not Kitchen Ticket art')
                 continue
         # Resolve every fallible field before Buffer accepts the post. Otherwise a

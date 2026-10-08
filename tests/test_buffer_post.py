@@ -370,6 +370,17 @@ class ScheduleTests(unittest.TestCase):
             with mock.patch.object(bp.urllib.request, 'urlopen', return_value=io.BytesIO(path.read_bytes())):
                 self.assertTrue(bp.ticket_art_live('https://example.test/card.png'))
 
+    def test_no_after_cutover_image_category_sends_legacy_art(self):
+        due = datetime(2026, 10, 9, 13, 30, tzinfo=timezone.utc)
+        for kind in ('receipt', 'research', 'cashed'):
+            with self.subTest(kind=kind), mock.patch.object(bp, 'ticket_art_live', return_value=False):
+                fake = FakeBuffer()
+                rows = bp.schedule([(f'{kind}:fixture', kind, 'A public update', due, f'{kind}:fixture')],
+                                   'x', {'posts': []}, due - timedelta(hours=1), key='t', send=fake,
+                                   opener=lambda *_: True, log=lambda *_: None)['posts']
+                self.assertEqual(rows, [])
+                self.assertFalse(fake.calls)
+
     def test_theme_label_uses_the_artifacts_publication(self):
         with mock.patch.object(bp.pick_card, 'FELT_FROM', '2026-09-26T08:00:00-04:00'):
             result = bp.schedule([('a', 'play', 'a', NOW + timedelta(hours=2), 'a')], 'x', {'posts': []},
