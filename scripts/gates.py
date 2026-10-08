@@ -368,7 +368,9 @@ def totals_policy(candidate, ctx):
         return Decision(True, 'totals_policy', 'not a total')
     league = candidate.get('league') or (game_of(candidate, ctx) or {}).get('league')
     if league == 'NFL':
-        return Decision(False, 'totals_policy', 'NFL totals are paused as official best bets')
+        # learned_pause enforces the dated owner pause and records its refused rows as
+        # forward shadows, so the direction rules can restore only on 30 graded near misses.
+        return Decision(True, 'totals_policy', 'NFL total eligibility follows the dated direction pause')
     if league != 'CFB':
         return Decision(True, 'totals_policy', 'not a football total')
     day = slate_day(candidate, ctx)

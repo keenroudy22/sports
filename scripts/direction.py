@@ -43,7 +43,7 @@ PAUSE_MIN_N, PAUSE_UNITS = 30, -5.0
 RESTORE_MIN_N = 30
 PRIORITY_MIN_N, PRIORITY_UNITS = 30, 3.0
 # Rules that say a refused candidate was a near miss in shadow; mirrors learn.THRESHOLD_RULES plus the card cap.
-SHADOW_RULES = {'straight_value', 'lean_edge', 'prop_raw_edge', 'prop_calibrated_value', 'learned_pause', 'card_cap'}
+SHADOW_RULES = {'straight_value', 'lean_edge', 'prop_raw_edge', 'prop_calibrated_value', 'learned_pause', 'bar-4', 'card_cap'}
 # The whole card.
 CARD_WINDOW, CARD_UNITS, CARD_CAP, CARD_DAYS, CARD_RESTORE_N, CARD_FRESH = 60, -8.0, 3, 14, 30, 10
 # Fun tickets (0.25u each).
@@ -224,7 +224,7 @@ def segment_moves(state, rows, now):
     for segment in sorted(set(best) | set(state['segments'])):
         seg = state['segments'].get(segment) if isinstance(state['segments'].get(segment), dict) else {}
         name, raised = label(segment), clamp_raise(seg.get('raise'))
-        is_paused = bool(seg.get('paused'))
+        is_paused = bool(seg.get('paused')) and started(seg.get('pauseSince'), now)
         long = tally(after(best[segment], seg.get('pauseSince')))
         pausing = False
         if not is_paused:

@@ -12,6 +12,23 @@ NOW = datetime(2026, 9, 29, 10, 45, tzinfo=timezone.utc)
 
 
 class PolicyTests(unittest.TestCase):
+    def test_owner_nfl_total_pause_survives_policy_load_until_shadow_restoration(self):
+        import direction
+        now = datetime(2026, 10, 8, 18, 30, tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'policy.json'
+            path.write_text(json.dumps({'direction': {'segments': {
+                'NFL/total': {'paused': True, 'pauseSince': '2026-10-08T18:00:00Z'},
+                'CFB/prop:rec': {'raise': 2}}}}))
+            policy = learning.load_policy(path)
+            self.assertTrue(direction.paused(policy, 'NFL/total', now))
+            self.assertIn('CFB/prop:rec', policy['direction']['segments'])
+            path.write_text(json.dumps({'direction': {'segments': {'NFL/total': {
+                'paused': False, 'pauseSince': '2026-11-02T15:00:00Z', 'raise': 2,
+                'raiseSince': '2026-11-02T15:00:00Z'}}}}))
+            self.assertFalse(direction.paused(learning.load_policy(path), 'NFL/total',
+                                              datetime(2026, 11, 3, tzinfo=timezone.utc)))
+
     def test_defaults_are_the_written_rules(self):
         policy = learning.default_policy()
         self.assertEqual(learning.threshold(policy, 'lean.minEdge', 'NFL/total'), 1.0)

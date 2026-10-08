@@ -102,7 +102,15 @@ class NoForcedBestBetTests(unittest.TestCase):
         self.assertTrue(gates.qb_change_recent(prop_lean(market='rushYds'), changed).ok)
 
     def test_nfl_total_paused_and_cfb_total_weekend_only_without_adverse_move(self):
-        self.assertFalse(gates.totals_policy(total_lean(), context()).ok)
+        self.assertTrue(gates.totals_policy(total_lean(), context()).ok,
+                        'the dated direction pause, not a permanent veto, must record forward shadows')
+        policy = gates.learning.default_policy()
+        policy['direction'] = {'segments': {'NFL/total': {
+            'paused': True, 'pauseSince': '2026-10-08T18:00:00Z'}}}
+        future = context(now=datetime(2026, 10, 8, 18, 30, tzinfo=timezone.utc), policy=policy)
+        self.assertFalse(gates.learned_pause(total_lean(), future).ok)
+        policy['direction']['segments']['NFL/total']['paused'] = False
+        self.assertTrue(gates.learned_pause(total_lean(), context(now=future.now, policy=policy)).ok)
         cfb_game = dict(GAME, id='CFB-1', league='CFB', kickoff='2026-09-27T17:00:00Z')
         cfb_pick = total_lean(id='CFB-test', league='CFB', gameIds=['CFB-1'])
         first = dict(ODDS, gameId='CFB-1')
@@ -521,7 +529,7 @@ class AdmitTests(unittest.TestCase):
     def test_a_clean_model_lean_is_admitted(self):
         ok, decisions = gates.admit(total_lean(confidence=3), favorite_context())     # DraftKings 44.5 at -110 is the best value on the board
         self.assertFalse(ok, 'NFL totals stay on the research board, not the official card')
-        self.assertIn('totals_policy', {d.rule for d in gates.refusals(decisions)})
+        self.assertIn('bar-4', {d.rule for d in gates.refusals(decisions)})
         self.assertEqual({d.rule for d in decisions},
                          {r.__name__ for r in gates.RULES['modelLean']} - {'bar_4', 'qb_change_recent'}
                          | {'bar-4', 'qb-change-recent'})

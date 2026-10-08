@@ -179,7 +179,7 @@ class SegmentPauseTests(unittest.TestCase):
     def test_thirty_shadow_plays_at_break_even_with_positive_clv_restore_it_at_a_raised_bar(self):
         policy = learning.default_policy()
         settle(policy, record(12, 18, clv=-0.3))
-        shadow = [dict(r, decision='refused', rules=['learned_pause', 'card_cap'])
+        shadow = [dict(r, decision='refused', rules=['learned_pause', 'bar-4'])
                   for r in record(18, 12, clv=0.4, at=NOW + DAY)]
         duplicates = [dict(r, id=r['id'] + '-again', decidedAt=stamp(NOW + 2 * DAY)) for r in shadow[:5]]
         other = [dict(r, decision='refused', rules=['learned_pause', 'qb_available']) for r in record(5, 0, at=NOW + DAY)]

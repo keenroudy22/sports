@@ -51,7 +51,7 @@ NEAR_MIN = 20         # near misses needed before a segment eases back
 CAL_MIN = 300         # graded prop projections before a calibration may ship
 DOMAIN_MIN = 5        # researched facts from a site before it is preferred or avoided
 ENGAGE_MIN = 8        # posts with numbers per reason kind before its weight moves
-THRESHOLD_RULES = {'straight_value', 'lean_edge', 'prop_raw_edge', 'prop_calibrated_value', 'learned_pause'}
+THRESHOLD_RULES = {'straight_value', 'lean_edge', 'prop_raw_edge', 'prop_calibrated_value', 'learned_pause', 'bar-4'}
 
 
 # ------------------------------------------------------------------ the store's view of finished games
