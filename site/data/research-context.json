@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-08T14:51:36Z",
+  "updatedAt": "2026-10-08T16:13:30Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-10-08T14:00Z",
+              "reportedAt": "2026-10-08T16:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
             },
             {
@@ -1157,6 +1157,15 @@
           "name": "Chicago Bears",
           "players": [
             {
+              "id": "4361748",
+              "name": "Anthony Johnson Jr.",
+              "position": "S",
+              "status": "Out",
+              "injury": "Undisclosed",
+              "reportedAt": "2026-10-08T16:01Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+            },
+            {
               "id": "4431611",
               "name": "Caleb Williams",
               "position": "QB",
@@ -1164,15 +1173,6 @@
               "injury": "Hamstring",
               "reportedAt": "2026-10-08T14:28Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431611/caleb-williams"
-            },
-            {
-              "id": "4361748",
-              "name": "Anthony Johnson Jr.",
-              "position": "S",
-              "status": "Out",
-              "injury": "Undisclosed",
-              "reportedAt": "2026-10-08T14:00Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
               "id": "4361093",
@@ -1620,8 +1620,8 @@
               "id": "3115485",
               "name": "Elgton Jenkins",
               "position": "C",
-              "status": "Questionable",
-              "injury": "Concussion",
+              "status": "Active",
+              "injury": null,
               "reportedAt": "2026-10-08T00:38Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115485/elgton-jenkins"
             },
@@ -5990,9 +5990,9 @@
               "id": "4035687",
               "name": "Michael Pittman Jr.",
               "position": "WR",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Foot",
-              "reportedAt": "2026-10-07T20:16Z",
+              "reportedAt": "2026-10-08T15:52Z",
               "source": "https://www.espn.com/nfl/player/_/id/4035687/michael-pittman-jr"
             },
             {
@@ -7137,6 +7137,15 @@
           "name": "Washington Commanders",
           "players": [
             {
+              "id": "4426348",
+              "name": "Jayden Daniels",
+              "position": "QB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-08T14:57Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4426348/jayden-daniels"
+            },
+            {
               "id": "3125248",
               "name": "Jeremy Reaves",
               "position": "S",
@@ -7254,15 +7263,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4697815/rachaad-white"
             },
             {
-              "id": "4426348",
-              "name": "Jayden Daniels",
-              "position": "QB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-07T20:13Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4426348/jayden-daniels"
-            },
-            {
               "id": "4575131",
               "name": "Jacory Croskey-Merritt",
               "position": "RB",
@@ -7365,22 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "10",
-          "name": "Jeffery Simmons",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-07T21:35:17Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4035369/jeffery-simmons"
-        },
-        {
-          "teamId": "10",
-          "name": "Kevin Winston Jr.",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-07T21:35:17Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4685617/kevin-winston-jr"
-        },
         {
           "teamId": "10",
           "name": "John Franklin-Myers",
@@ -7764,11 +7748,27 @@
           "to": "Out",
           "observedAt": "2026-10-08T14:34:05Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "5",
+          "name": "Elgton Jenkins",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-08T16:13:30Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3115485/elgton-jenkins"
+        },
+        {
+          "teamId": "23",
+          "name": "Michael Pittman Jr.",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-08T16:13:30Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4035687/michael-pittman-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-08T14:51:36Z",
-      "lastAttemptAt": "2026-10-08T14:51:36Z",
+      "checkedAt": "2026-10-08T16:13:30Z",
+      "lastAttemptAt": "2026-10-08T16:13:30Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-08T14:51:36Z",
-      "lastAttemptAt": "2026-10-08T14:51:36Z",
+      "checkedAt": "2026-10-08T16:13:30Z",
+      "lastAttemptAt": "2026-10-08T16:13:30Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
