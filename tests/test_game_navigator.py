@@ -108,6 +108,15 @@ class WhyDifferTests(unittest.TestCase):
         self.assertEqual(len(sentences), 3, 'lead plus exactly two drivers')
         self.assertEqual(sentences[1:], [d['text'] for d in supporting[:2]])
 
+    def test_card_summary_keeps_the_sentence_and_leaves_drivers_to_the_game_page(self):
+        result = game_context.why_differ(GAME, CARD, None, {}, {}, {}, [], NOW)
+        summary = game_context.card_summary(result)
+        self.assertEqual(set(summary), {'stale', 'kind', 'ours', 'book', 'gap', 'text', 'caution'})
+        self.assertEqual(summary['text'], result['text'])
+        self.assertIsNone(game_context.card_summary(None))
+        stale = {'stale': True, 'text': game_context.STALE_TEXT, 'drivers': []}
+        self.assertEqual(game_context.card_summary(stale), {'stale': True, 'text': game_context.STALE_TEXT})
+
     def test_stale_line_prints_only_the_staleness_line(self):
         stale = {**CARD, 'market': {**CARD['market'], 'retrievedAt': '2026-10-06T15:00Z'}}
         result = game_context.why_differ(GAME, stale, None, {}, {}, {}, [], NOW)

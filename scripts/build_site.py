@@ -1717,7 +1717,8 @@ def build(now=None):
         card['whyDiffer'] = game_context.why_differ(game, card, latest_snap, info['team_logs'],
                                                      info['strength'], injuries, lines, now,
                                                      weather_rows.get(game['id']))
-        cards.append(card)
+        # today.json carries the card's sentence; every driver and both markets live on the game page.
+        cards.append({**card, 'whyDiffer': game_context.card_summary(card['whyDiffer'])})
         favorites = favorite_lines(game, latest_snap, lines, now, info['player_logs'])
         write(OUT / 'games' / f"{game['id']}.json",
               game_detail(card, game, stored.get(game['id']), snaps_for, captures.get(game['id'], []), lines, picks,

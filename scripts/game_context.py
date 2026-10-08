@@ -293,6 +293,13 @@ def card_text(lead, drivers):
     return summary if picked else None
 
 
+def card_summary(block):
+    """The slate card's copy of whyDiffer: the sentence and figures only. Drivers and both markets stay on the game page."""
+    if not block:
+        return block
+    return {key: value for key, value in block.items() if key not in ('drivers', 'markets')}
+
+
 def why_differ(game, card, snapshot, team_logs, ratings, injuries, rows, now, weather_row=None):
     """Specific, sourced-in-data drivers for every fresh 3+ point model/book difference.
 
