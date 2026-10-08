@@ -483,12 +483,13 @@ def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES):
     stale = min(at(choice['day'], POST_UNTIL), choice['firstKickoff'] - timedelta(minutes=45))
     if choice['kind'] in ('season', 'matchup', 'prep'):
         stale = min(stale, *(when(r['observedAt']) + timedelta(hours=4) for r in choice['rows']))
-    if now >= stale:
+    due = max(at(choice['day'], (9, 30) if choice['kind'] == 'prep' else POST_AT),
+              now + timedelta(minutes=2))
+    if now >= stale or due >= stale:
         return None
     return {'key': f"research:{choice['kind']}:{choice['day'].isoformat()}", 'kind': 'research',
             'card': choice['key'], 'text': choice['text'],
-            'due': max(at(choice['day'], (9, 30) if choice['kind'] == 'prep' else POST_AT),
-                       now + timedelta(minutes=2)), 'stale': stale}
+            'due': due, 'stale': stale}
 
 
 def art_for(row, game, fetch):

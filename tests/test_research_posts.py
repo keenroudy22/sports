@@ -49,6 +49,12 @@ class ResearchPostTests(unittest.TestCase):
                                      lines_path=Path(folder) / 'none', fetch=lambda _: None)
             self.assertIn(choice['key'], cards)
             art.assert_called_once()
+            early = {'games': [dict(game(), kickoff='2026-10-03T14:00:00Z')],
+                     'prep': {'CFB': {'day': '2026-10-03', 'rows': [dict(row, kickoff='2026-10-03T14:00:00Z') for row in rows]}}}
+            payload.write_text(__import__('json').dumps(early))
+            self.assertIsNone(R.post([], now, data_path=payload, detail_root=Path(folder),
+                                     lines_path=Path(folder) / 'none'),
+                              'a scheduled research post cannot land after its 45-minute cutoff')
         data['prep']['CFB']['rows'] = rows[:2]
         self.assertIsNone(R.prep_candidate(data, now))
         data['prep']['CFB']['rows'] = [dict(row, observedAt='2026-10-02T12:30:00Z') for row in rows]
