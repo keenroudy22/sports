@@ -1327,7 +1327,8 @@ def prep_role_ok(athlete, team, league_info, season, kickoff):
 
 
 def prep_list(trends, lines, picks, league_data, now, rules=None):
-    """{league: {'day', 'rows'}}: up to six Prep List rows on the next football game day that has any.
+    """{league: {'day', 'rows', 'next'?}}: up to six Prep List rows on the next football game day that has any, and
+    up to six for the game day after it ('next', when one has rows).
 
     Every row is a fresh main line already in the trend shards, so no request or price is new."""
     import research_posts
@@ -1381,16 +1382,23 @@ def prep_list(trends, lines, picks, league_data, now, rules=None):
             'teamColor': (row.get('team') or {}).get('color'), 'pos': position, 'stat': stat,
             'direction': row['direction'], 'line': line, 'odds': odds, 'book': row.get('book'),
             'observedAt': row.get('observedAt'), 'hits': hits, 'games': len(values), 'clears': clears})
-    out = {}
-    for league, rows in by_league.items():
-        first = min(day(r['kickoff']) for r in rows)
+    def pick(rows, on):
         chosen, players = [], set()
-        for row in sorted((r for r in rows if day(r['kickoff']) == first),
+        for row in sorted((r for r in rows if day(r['kickoff']) == on),
                           key=lambda r: (-r['hits'] / r['games'], -r['games'], str(r['player']), -r['odds'])):
             if row['athleteId'] not in players:
                 players.add(row['athleteId'])
                 chosen.append(row)
-        out[league] = {'day': first, 'rows': chosen[:PREP_ROWS]}
+        return chosen[:PREP_ROWS]
+
+    out = {}
+    for league, rows in by_league.items():
+        days = sorted({day(r['kickoff']) for r in rows})
+        out[league] = {'day': days[0], 'rows': pick(rows, days[0])}
+        # The following game day rides along under the same rules, so the site rolls forward once the first day's
+        # kickoffs pass instead of showing an empty Prep List until the next hosted build.
+        if len(days) > 1:
+            out[league]['next'] = {'day': days[1], 'rows': pick(rows, days[1])}
     return out
 
 

@@ -248,6 +248,20 @@ class PrepListTests(unittest.TestCase):
         out = self.build([saturday])
         self.assertEqual(out['CFB']['day'], '2026-10-10', 'no row today: the next game day that has one')
 
+    def test_the_next_game_day_rides_along_so_the_site_can_roll_forward(self):
+        thursday = {**self.row, 'athleteId': '8', 'player': 'Makai Jackson', 'gameId': 'CFB-2', 'kickoff': '2026-10-08T23:30Z'}
+        friday = {**self.row, 'athleteId': '9', 'player': 'Friday Guy', 'gameId': 'CFB-3', 'kickoff': '2026-10-09T23:30Z'}
+        self.logs['8'] = self.logs['9'] = self.logs['7']
+        out = self.build([self.row, thursday, friday])['CFB']
+        self.assertEqual((out['day'], [r['player'] for r in out['rows']]), ('2026-10-07', ['Tyson Carter']))
+        self.assertEqual((out['next']['day'], [r['player'] for r in out['next']['rows']]), ('2026-10-08', ['Makai Jackson']),
+                         'only the game day after the first rides along')
+        held = {**thursday, 'roleSuspect': True}
+        self.assertNotIn('next', self.build([self.row, held])['CFB'], 'the next day keeps every rule and hold')
+        twice = {**thursday, 'stat': 'rec', 'line': 3.5, 'history': [{'value': v} for v in (5, 6, 4, 2, 7)]}
+        self.assertEqual(len(self.build([self.row, thursday, twice])['CFB']['next']['rows']), 1, 'one row per player on the next day too')
+        self.assertNotIn('next', self.build([self.row])['CFB'], 'one game day: no next block')
+
     def test_the_build_writes_prep_into_today_and_keeps_the_guard_narrow(self):
         import inspect
         body = inspect.getsource(build_site.build)
