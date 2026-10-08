@@ -40,14 +40,21 @@ ABOUT = 'Player props, game lines and fun parlays from keenroudy.com/sports, gra
 PNG = b'\x89PNG\r\n\x1a\n'
 
 
-def posted_card_keys(log_book):
+def posted_card_keys(log_book, since=None):
     """Card filenames already attached to confirmed X or Discord posts."""
     keys = set()
     for entry in log_book.get('posts') or []:
         if not isinstance(entry, dict) or not entry.get('card'):
             continue
-        if not (entry.get('sentAt') or (entry.get('discord') or {}).get('sentAt')):
+        sent = entry.get('sentAt') or (entry.get('discord') or {}).get('sentAt')
+        if not sent:
             continue
+        if since is not None:
+            try:
+                if gates.when(sent) < since:
+                    continue
+            except (TypeError, ValueError):
+                continue
         key = entry.get('cardKey') or entry.get('id')
         if isinstance(key, str) and re.fullmatch(r'[A-Za-z0-9_.:-]+', key):
             keys.add(key)
@@ -229,16 +236,16 @@ def scoreboard_item(scoreboard, now):
             'text': text, 'link': f'{SITE}#model', 'pubDate': due.astimezone(timezone.utc)}
 
 
-def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, posted_keys=()):
+def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, posted_keys=(), recent_posted_keys=None):
     """A PNG per pick item, when a browser is on the machine. Returns {guid: path}."""
     import pick_card
     import ticket_card
     items = list(items)
     posted_keys = set(posted_keys)
-    # The post log outlives the feed's card window. A historical attachment that this
-    # build will not render or publish does not need to be fetched from a URL that may
-    # have expired. Still fail closed for every confirmed card this build *will* use.
-    needed_posted_keys = posted_keys & {item.get('guid') for item in items}
+    # Keep the retry URL live for eight days. Older posted art is immutable too, but
+    # an expired archive must not fail a new build or be regenerated under a new theme.
+    recent_posted_keys = posted_keys if recent_posted_keys is None else set(recent_posted_keys)
+    needed_posted_keys = posted_keys & recent_posted_keys & {item.get('guid') for item in items}
     restore_posted_cards(folder, needed_posted_keys)
     if not pick_card.chrome_path():
         log('no browser for cards; the feed goes out without images')
@@ -248,6 +255,9 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
         if 'pick' not in item and 'receipt' not in item and 'ladderResult' not in item:
             continue
         path = Path(folder) / f"{item['guid']}.png"
+        if item['guid'] in posted_keys and not path.exists():
+            log(f"older posted card unavailable; skipping without regeneration: {item['guid']}")
+            continue
         try:
             source = item.get('ladderResult') or item.get('receipt') or item.get('pick') or {}
             # A card cached before the cutover is not proof that an unposted play has new art.
@@ -362,7 +372,8 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
     # The Pick of the Day gets a card of its own, under its own name, so a post can never carry a stale copy.
     plays += [dict(item, guid=f"{item['guid']}-potd", featured=True) for item in plays if item['guid'] == potd]
     cards = render_cards(plays + ready, cards_folder, log, ctx.games, ctx.player_team,
-                         posted_keys=posted_card_keys(post_log)) if with_cards else {}
+                         posted_keys=posted_card_keys(post_log),
+                         recent_posted_keys=posted_card_keys(post_log, now - timedelta(days=8))) if with_cards else {}
     if with_cards:
         import sheet          # the weekly projections sheet on its league's day, from the page payloads just built
         cards.update(sheet.render_due(now, cards_folder, log=log))

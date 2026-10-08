@@ -312,7 +312,9 @@ def grade_prop(pick, record):
     else:
         result = 'win' if value < line else 'push' if value == line else 'loss'
     words = pricing.WORDS.get(stat, stat)
-    return result, f"{player.get('name') or athlete}: {value:g} {words}", value
+    import result_display
+    name = result_display.player_name(pick, player)
+    return result, f"{name}: {value:g} {words}", value
 
 
 def leg_pick(leg):

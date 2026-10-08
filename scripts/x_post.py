@@ -557,7 +557,9 @@ def recap(day, first, latest, games, now):
     def public_title(row):
         if pick_card.play_kind(row) == 'ladder':
             return f"80/20 Climb step {(row.get('ladder') or {}).get('step', 1)}"
-        return str(row['title'])
+        import result_display
+        detail = result_display.detail(row)
+        return f"{row['title']} · {detail}" if detail else str(row['title'])
     outcomes = [(r.get('result'), f"{'✅' if r.get('result') == 'win' else '❌' if r.get('result') == 'loss' else '➖'} {public_title(r)}") for r in rows]
     kept = list(range(len(outcomes)))
     while True:

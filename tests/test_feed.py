@@ -163,6 +163,26 @@ class FeedTests(unittest.TestCase):
                                       posted_keys={'old-play', 'current-play'})
                 restore.assert_called_once_with(folder, {'current-play'})
 
+    def test_only_recent_posted_cards_require_recovery_and_older_art_is_never_rebuilt(self):
+        import tempfile
+        now = datetime(2026, 10, 8, 14, tzinfo=timezone.utc)
+        posts = {'posts': [
+            {'id': 'recent', 'card': True, 'sentAt': '2026-10-01T14:00:00Z'},
+            {'id': 'old', 'card': True, 'sentAt': '2026-09-29T13:59:59Z'},
+        ]}
+        self.assertEqual(feed.posted_card_keys(posts, now - timedelta(days=8)), {'recent'})
+        with tempfile.TemporaryDirectory() as folder, \
+                mock.patch.object(feed, 'restore_posted_cards') as restore, \
+                mock.patch('pick_card.chrome_path', return_value='/chrome'), \
+                mock.patch('pick_card.render') as render:
+            notes = []
+            cards = feed.render_cards([{'guid': 'old', 'pick': {}}, {'guid': 'recent', 'pick': {}}], folder,
+                                      log=notes.append, posted_keys={'old', 'recent'}, recent_posted_keys={'recent'})
+            restore.assert_called_once_with(folder, {'recent'})
+            self.assertNotIn('old', cards)
+            self.assertTrue(any('older posted card unavailable' in note for note in notes))
+            render.assert_not_called()
+
 
 if __name__ == '__main__':
     unittest.main()

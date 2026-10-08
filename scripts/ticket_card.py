@@ -250,7 +250,12 @@ def cooked_svg(pick, game, **kwargs):
 def final_detail(pick):
     """A final stat and exact-line margin, only when the stored result supports the arithmetic."""
     import receipts
-    actual = str(pick.get('actual') or '').strip()
+    import result_display
+    if pick.get('marketType') == 'prop':
+        rich = result_display.detail(pick)
+        if rich:
+            return rich
+    actual = result_display.clean_actual(pick)
     market = str(pick.get('market') or '')
     market_type = str(pick.get('marketType') or '')
     value = pick.get('actualValue')

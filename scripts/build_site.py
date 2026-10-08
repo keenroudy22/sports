@@ -1580,6 +1580,12 @@ def build(now=None):
     by_id.update({g['id']: g for g in slate.get('games', [])})
     first, latest = first_publications(reports)
     picks = [p for p in board_picks(first, latest, by_id, identities)]
+    import result_display
+    for row in picks:
+        if not row.get('result'):
+            continue
+        row['actual'] = result_display.clean_actual(row)
+        row['resultDetail'] = result_display.detail(row, stored.get(row.get('gameId')))
     books = {gid: rows[-1] for gid, rows in load_store('odds').items()}
     lines = catalog_lines(catalog, by_id, identities, now) + game_market_lines(slate, now, books)
 
@@ -1967,7 +1973,8 @@ def board_picks(first, latest, by_id, identities):
                      'legs': pick.get('legs'), 'correlation': pick.get('correlation'), 'riskTier': pick.get('riskTier'),
                      'marketWindow': pick.get('marketWindow'), 'entryNote': entry_note,
                      'status': status,
-                     'result': recent.get('result'), 'actual': recent.get('actual'), 'settledAt': recent.get('settledAt'),
+                     'result': recent.get('result'), 'actual': recent.get('actual'),
+                     'actualValue': recent.get('actualValue'), 'settledAt': recent.get('settledAt'),
                      'units': recent.get('units'),                         # saved when the play was graded
                      'settlementReason': recent.get('settlementReason'),
                      'settlementReviewSources': recent.get('settlementReviewSources'),

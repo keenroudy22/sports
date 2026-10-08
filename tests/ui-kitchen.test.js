@@ -54,6 +54,9 @@ test('a settled slip prints the margin only when it agrees with the graded resul
   const total = { marketType: 'total', direction: 'under', line: 48, result: 'loss', actual: 'Falcons 45, Saints 24' };
   assert.equal(M.resultLine(total), 'Final 45-24, missed by 21.');
   assert.equal(M.resultLine({ athleteId: '1', direction: 'over', line: 45.5, result: 'loss', actual: 'Marcellous Hawkins Jr.: 32 rushing yards' }), 'Had 32, missed by 13.5.');
+  assert.equal(M.resultLine({ athleteId: '4869443', direction: 'over', line: 49.5, result: 'loss',
+    actual: 'TK King: 0 receiving yards', resultDetail: '6 targets, 0 catches, 0 yards · missed by 49.5' }),
+    '6 targets, 0 catches, 0 yards · missed by 49.5.');
   assert.equal(M.resultLine({ ...total, result: 'win' }), 'Final 45-24.', 'a book settlement that differs from the box score gets no margin');
   assert.equal(M.resultLine({ marketType: 'spread', direction: 'home', line: -3, result: 'win', actual: 'A 20, B 10' }), 'Final 20-10.');
   assert.equal(M.resultLine({ result: 'win' }), '');

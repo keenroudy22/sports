@@ -128,7 +128,11 @@ def result_detail(pick):
             elif pick.get('result') == 'win' and not voided:
                 pieces.append('clean sweep')
         return ' · '.join(pieces)
-    actual = str(pick.get('actual') or '').strip()
+    import result_display
+    rich = result_display.detail(pick)
+    if rich:
+        return ' · '.join(part for part in (rich, injury) if part)
+    actual = result_display.clean_actual(pick)
     actual = re.sub(r'^.*?:\s*(\d+(?:\.\d+)?)\s+(?:receptions?|carries|attempts?)$', r'had \1', actual)
     actual = re.sub(r'^all 2 legs won$', 'both legs hit', actual)
     return ' · '.join(part for part in (actual if actual.startswith('had ') else f'Final: {actual}' if actual else '', injury) if part)
