@@ -156,6 +156,7 @@ class TicketCardTests(unittest.TestCase):
         self.assertTrue(any('headshot unavailable after retry' in message for message in messages))
 
     def test_ticket_cutover_requires_offset_and_keeps_older_art(self):
+        self.assertEqual(pick_card.TICKET_FROM, '2026-10-08T11:00:00-04:00')
         with patch.object(pick_card, 'TICKET_FROM', '2026-10-08T11:00:00-04:00'):
             self.assertFalse(pick_card.ticket_enabled({'publishedAt': '2026-10-08T14:59:59Z'}))
             self.assertTrue(pick_card.ticket_enabled({'publishedAt': '2026-10-08T15:00:00Z'}))

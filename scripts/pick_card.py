@@ -40,8 +40,9 @@ CHROME_CANDIDATES = ('/Applications/Google Chrome.app/Contents/MacOS/Google Chro
 
 # Set only after the owner approves the rendered set. The environment override is for isolated previews and rollback.
 FELT_FROM = None
-# Set only after the reviewed Kitchen Ticket renders and release gates pass.
-TICKET_FROM = None
+# Owner-delegated cutover, Oct 8: reviewed real renders; no published image is rebuilt.
+# 11 AM Eastern is more than 30 minutes after the approved morning release window.
+TICKET_FROM = '2026-10-08T11:00:00-04:00'
 
 
 def _theme_time(value):
