@@ -907,7 +907,8 @@
   const slip = (p, opts = {}) => {
     const vm = pickVM(p), g = gameOf(p), kicker = `${vm.featured ? 'Hot Plate (POTD)' : vm.kind === 'fun' ? 'Fun ticket' : vm.kind === 'climb' ? '80/20 Climb' : 'Best bet'}${opts.when ? ` · ${ticketWhen(p.kickoff)}` : ''}`;
     const price = `${odd(p.odds)} ${vm.book || ''}`.trim();
-    const detail = p.result ? `${resultLine(p)} ${price}.` : opts.waiting ? `${price}.` : `${price}. ${vm.statusShort || (vm.mode === 'open' && vm.calibrated && vm.chance != null ? `I have it at ${pctOne(vm.chance)}.` : '')}`;
+    const resultName = p.resultDetail ? `${p.player || niceTitle(p.title || '').split(/\s+(?:OVER|UNDER)\s+/i)[0]} · ` : '';
+    const detail = p.result ? `${resultName}${resultLine(p)} ${price}.` : opts.waiting ? `${price}.` : `${price}. ${vm.statusShort || (vm.mode === 'open' && vm.calibrated && vm.chance != null ? `I have it at ${pctOne(vm.chance)}.` : '')}`;
     const body = `<a class="kt-slip" href="${esc(vm.href)}" aria-label="${esc(`${p.result ? `${RESULT_WORD[p.result]}: ` : ''}${vm.title}, ${oddsText(p.odds)}${vm.book ? ` at ${vm.book}` : ''}`)}"><p class="kt-slip-k">${esc(kicker)}</p><p class="kt-slip-t">${slipTitle(p, g)}</p><p class="kt-slip-d">${esc(detail.trim())}</p>${opts.waiting ? '<span class="kt-waiting">WAITING ON THE FINAL</span>' : ''}</a>`;
     return opts.spike ? `<div class="kt-spiked"><span class="kt-spike" aria-hidden="true"></span>${body}${stampFor(p.result)}</div>` : body;
   };
