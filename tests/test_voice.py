@@ -20,10 +20,6 @@ class VoiceTests(unittest.TestCase):
             self.assertTrue(voice.lint(text), text)
         self.assertFalse(voice.lint('Season 35–35. Bijan over 70.5 (-110 FD).'))
 
-    def test_every_prompt_and_teaser_passes_the_public_guard(self):
-        for text in (*buffer_post.CONVERSATION, *buffer_post.FUN_TEASERS):
-            self.assertFalse(x_post.x_style(text), text)
-
     def test_send_paths_refuse_bad_text_before_the_network(self):
         never = mock.Mock(side_effect=AssertionError('bad copy reached network'))
         with self.assertRaises(buffer_post.BufferError):

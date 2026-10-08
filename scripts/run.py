@@ -1457,7 +1457,8 @@ def report_slug(settled, closed, published):
 
 
 def summary_text(slot, now, settled, closed, published, screened, unclear, captures):
-    lines = [f"{slot.strftime('%-I:%M %p')} ET run, published at {et(now)}."]
+    day = now.astimezone(EASTERN)
+    lines = [f"Research update for {day:%b} {day.day}:"]
     lines.append(f"Settled {len(settled)}: " + '; '.join(f"{p.get('title')} {p['result']}" for _, _, p in settled) + '.' if settled else 'Nothing to settle.')
     lines.append(f"Closed {len(closed)}: " + '; '.join(p.get('title') or p['id'] for _, _, p in closed) + '.' if closed else 'Nothing to close.')
     if published:
@@ -1616,11 +1617,10 @@ def commit_push(now, slot, counts, push=True, runner=git, cwd=ROOT):
     research = [p for p in changed if not p.startswith('data/')]
     if captures:
         runner('add', '--', *captures, cwd=cwd)
-        runner('commit', '--quiet', '-m', f"Odds capture {eastern_date(now).isoformat()} {now.astimezone(EASTERN):%H:%M} ET", cwd=cwd)
+        runner('commit', '--quiet', '-m', f"Capture odds {eastern_date(now).isoformat()}", cwd=cwd)
     if research:
         runner('add', '--', *research, cwd=cwd)
-        message = (f"Research {eastern_date(now).isoformat()} {now.astimezone(EASTERN):%H:%M} ET: {counts['published']} published, "
-                   f"{counts['settled']} settled, {counts['closed']} closed")
+        message = f"Refresh research {eastern_date(now).isoformat()}"
         runner('commit', '--quiet', '-m', message, cwd=cwd)
     if not push or not (captures or research):
         return {'committed': bool(captures or research), 'pushed': False}
@@ -2399,7 +2399,7 @@ def commit_log(now, push=True, runner=git, cwd=ROOT):
     if not changed:
         return {'committed': False, 'pushed': False}
     runner('add', '--', *changed, cwd=cwd)
-    runner('commit', '--quiet', '-m', f"Posts {eastern_date(now).isoformat()} {now.astimezone(EASTERN):%H:%M} ET", cwd=cwd)
+    runner('commit', '--quiet', '-m', f"Record posts {eastern_date(now).isoformat()}", cwd=cwd)
     if not push:
         return {'committed': True, 'pushed': False}
     push_with_retry(runner, cwd)

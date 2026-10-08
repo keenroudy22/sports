@@ -268,8 +268,8 @@ class GitTests(unittest.TestCase):
         self.assertEqual(result, {'committed': True, 'pushed': False})
         self.assertEqual((self.repo / 'site' / 'data' / 'slate.json').read_text(), '{"a": 1}', 'restored, not committed')
         log = self.sh('log', '--format=%s').stdout.splitlines()
-        self.assertEqual(log[0], 'Research 2026-09-27 12:19 ET: 1 published, 0 settled, 0 closed')
-        self.assertEqual(log[1], 'Odds capture 2026-09-27 12:19 ET')
+        self.assertEqual(log[0], 'Refresh research 2026-09-27')
+        self.assertEqual(log[1], 'Capture odds 2026-09-27')
         self.assertEqual(self.sh('status', '--porcelain').stdout, '')
 
     def test_push_rejected_by_the_other_writer_is_rebased_and_the_store_merged(self):
@@ -302,7 +302,7 @@ class GitTests(unittest.TestCase):
         self.assertEqual(result, {'committed': True, 'pushed': True})
         self.assertEqual(self.sh('rev-parse', 'HEAD').stdout, self.sh('rev-parse', 'origin/main').stdout, 'pushed, on top of the hosted commits')
         log = self.sh('log', '--format=%s').stdout.splitlines()
-        self.assertEqual(log[:4], ['Research 2026-09-27 08:30 ET: 1 published, 0 settled, 0 closed', 'Odds capture 2026-09-27 08:30 ET', 'hosted ledger', 'hosted capture'])
+        self.assertEqual(log[:4], ['Refresh research 2026-09-27', 'Capture odds 2026-09-27', 'hosted ledger', 'hosted capture'])
         records = boxscores.read_store(mine / 'nfl.jsonl')
         self.assertEqual([r.get('total') for r in records], [None, 45, 44.5], 'both captures kept; the base line has no retrievedAt so the order is by side')
         self.assertEqual(boxscores.verify(mine), [], 'the ledger was recomputed over the merged file')
@@ -317,7 +317,7 @@ class GitTests(unittest.TestCase):
         (self.repo / 'data' / 'x-posted.json').write_text('{"posts": [{"id": "a"}]}\n')
         (self.repo / 'research' / 'old.json').write_text('{"not": "this"}')
         self.assertEqual(run.commit_log(now, push=False, runner=self.runner, cwd=self.repo), {'committed': True, 'pushed': False})
-        self.assertEqual(self.sh('log', '-1', '--format=%s').stdout.strip(), 'Posts 2026-09-27 08:40 ET')
+        self.assertEqual(self.sh('log', '-1', '--format=%s').stdout.strip(), 'Record posts 2026-09-27')
         self.assertEqual(self.sh('show', '--name-only', '--format=', 'HEAD').stdout.split(), ['data/x-posted.json'])
 
     def test_sync_commits_captures_a_stopped_run_left_behind(self):

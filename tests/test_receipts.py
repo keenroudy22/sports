@@ -55,30 +55,6 @@ class ReceiptTests(unittest.TestCase):
         self.assertIn('wins, 0 losses on card', text)
         self.assertLessEqual(receipts.x_post.tweet_length(text), receipts.x_post.LIMIT)
 
-    def test_climb_checkin_is_weekend_only_and_not_queued_hours_early(self):
-        sat = datetime(2026, 10, 3, 15, 45, tzinfo=timezone.utc)
-        post = receipts.climb_checkin({}, {}, {}, sat)
-        self.assertIn('Step 1 is next, not scheduled yet', post['text'])
-        self.assertIn('$50 riding; $0 banked', post['text'])
-        self.assertEqual(receipts.guard(post), [])
-        self.assertIsNone(receipts.climb_checkin({}, {}, {}, sat - timedelta(minutes=1)))
-        self.assertIsNone(receipts.climb_checkin({}, {}, {}, sat - timedelta(days=1)))
-        self.assertIsNone(receipts.climb_checkin({}, {}, {}, sat + timedelta(hours=3)))
-
-    def test_climb_checkin_keeps_bank_and_defers_to_actual_ticket(self):
-        sun = datetime(2026, 9, 27, 15, 45, tzinfo=timezone.utc)
-        rung = pick('rung', 'sun', parlayType='ladder', legs=[{'title':'a'}, {'title':'b'}],
-                    ladder={'step':1,'stake':50,'payout':94}, result='win')
-        first = {rung['id']:rung}
-        post = receipts.climb_checkin(first, {}, GAMES, sun)
-        self.assertIn('Step 2', post['text'])
-        self.assertIn('$75 riding; $19 banked', post['text'])
-        rung.pop('result')
-        self.assertIsNone(receipts.climb_checkin(first, {}, GAMES, sun))
-        later = receipts.climb_checkin(first, {}, GAMES, sun + timedelta(days=6))
-        self.assertIn('still open', later['text'])
-        self.assertEqual(receipts.guard(later), [])
-
     def test_accounting_keeps_assumed_prices_and_credits_separate(self):
         rows = [pick('a', 'sun', result='win'), pick('b', 'sun', result='loss', earlyExit=True),
                 pick('c', 'sun', result='win', priceAssumed=True)]
@@ -319,22 +295,6 @@ class LadderReceiptTests(unittest.TestCase):
 
 
 class DailyTests(unittest.TestCase):
-    def test_the_menu_names_the_games_and_times_never_the_side(self):
-        first, latest, log = world()
-        first['NFL-2026-W4-m2'] = pick('m2', 'mon', title='Player Nine OVER 60.5 receiving yards', athleteId='9', market='recYds')
-        post = receipts.menu(first, latest, GAMES, log, MONDAY_MORNING)
-        self.assertEqual(post['text'], 'Today: 2 plays\nColts/Chiefs 8:15 PM\n\n#NFL')
-        self.assertEqual(post['card'], 'https://keenroudy.com/sports/img/kitchen-menu-approved.png')
-        self.assertNotIn('under', post['text'].lower())
-        self.assertNotIn('Nine', post['text'], 'the player is not named before his post')
-        self.assertEqual(post['due'].astimezone(gates.EASTERN).strftime('%H:%M'), '08:45')
-        self.assertIsNone(receipts.menu(first, latest, GAMES, log, datetime(2026, 9, 29, 12, 30, tzinfo=timezone.utc)), 'no plays, no menu')
-
-    def test_a_busy_saturday_menu_is_not_refused_as_one_long_sentence(self):
-        text = ("Today: 6 plays\nIowa/Michigan 3:30 PM\nOklahoma/Georgia 3:30 PM\n"
-                "UConn/Miami (OH) 3:30 PM\nJames Madison/Old Dominion 6:00 PM\nand 2 more on the site\n\n#CFB")
-        self.assertEqual(receipts.guard({'text': text}), [])
-
     def test_the_book_fills_an_empty_evening_and_only_then(self):
         first, latest, log = world()
         tuesday_evening = datetime(2026, 9, 29, 21, 30, tzinfo=timezone.utc)      # Tue 5:30 PM ET

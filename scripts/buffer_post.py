@@ -54,17 +54,6 @@ BUFFER_RESERVED = 3                  # preserve the final places for plays, rela
 BUFFER_OPTIONAL_AT = BUFFER_QUEUE - BUFFER_RESERVED
 BUFFER_ESSENTIAL = frozenset(('play', 'receipt', 'cashed'))
 DISCORD_PLAY_LEAD = timedelta(minutes=15)  # the five-minute delivery job makes plays land about 10-15 minutes before X
-CONVERSATION = (
-    "First play is out. What are you riding today? 👀",
-    "The card is rolling. Which game has your attention?",
-    "One down. Props, sides or totals for you today?",
-)
-FUN_TEASERS = (
-    "First play is out. The fun ticket is still in the kitchen. 🎰\nWho's riding today?",
-    "The card is rolling. The fun ticket comes later. 🎰\nWhat are you riding today?",
-)
-
-
 def card_url(card_key):
     """Where a post's card lives: a house card (menu, book) by its full address, a play's or a receipt's under
     data/cards/ by its key."""
@@ -255,32 +244,6 @@ def day_count(log_book, day):
     """Posts scheduled or sent for an Eastern day, not counting any taken back."""
     return sum(1 for entry in log_book.get('posts', []) if entry.get('dueAt') and not entry.get('cancelledAt')
                and not entry.get('deletedAt') and eastern_date(gates.when(entry['dueAt'])) == day)
-
-
-def conversation_text(day, play_rows, first, games):
-    """One factual, varied prompt for a multi-play card. A ready Climb or fun ticket earns a real teaser; otherwise
-    ask a slate question. It goes after the first play, never pretends replies choose the card, and carries only the
-    league tags the planned plays actually cover."""
-    leagues = set()
-    picks = []
-    for row in play_rows:
-        pick = first.get(row[3]) or {}
-        picks.append(pick)
-        for gid in pick.get('gameIds') or []:
-            league = (games.get(gid) or {}).get('league')
-            if league in ('NFL', 'CFB'):
-                leagues.add(league)
-    tags = ' '.join(f'#{league}' for league in ('CFB', 'NFL') if league in leagues)
-    climb = next((p for p in picks if pick_card.play_kind(p) == 'ladder'), None)
-    if climb:
-        info = climb.get('ladder') or {}
-        copy = (f"The 80/20 Climb is back later today. Step {info.get('step', 1)} is already cooked. 🪜\n"
-                f"{pick_card.dollars(info.get('stake'))} riding · {pick_card.dollars(info.get('banked', 0))} banked.")
-    elif any(pick_card.play_kind(p) == 'parlay' for p in picks):
-        copy = FUN_TEASERS[day.toordinal() % len(FUN_TEASERS)]
-    else:
-        copy = CONVERSATION[day.toordinal() % len(CONVERSATION)]
-    return f'{copy}\n\n{tags}'.rstrip()
 
 
 def fit_limit(plans, remaining):

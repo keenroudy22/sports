@@ -348,8 +348,7 @@ def card_history(first, latest, games, now, days=CARD_HISTORY_DAYS):
 
 # ------------------------------------------------------------------ the rest of the day's posts
 
-HOUSE_CARDS = x_post.SITE + 'img/'           # static cards in the kitchen's frame, deployed with the site
-MENU_AT, MENU_UNTIL = (8, 45), (11, 30)      # Eastern: the game-day menu goes out before the first plate
+HOUSE_CARDS = x_post.SITE + 'img/'           # historical house-card URLs remain live for older posts
 BOOK_FROM, BOOK_AT, BOOK_UNTIL = (17, 0), (18, 0), (21, 0)   # Eastern: the book fills a day that had nothing else
 
 
@@ -371,40 +370,6 @@ def todays_plays(first, latest, games, now):
         if game_day(merged, games) == today:
             out.append(merged)
     return out
-
-
-def menu(first, latest, games, log_book, now):
-    """Game-day morning: what is already approved today and when, by game, never the side.
-
-    The reusable card deliberately promises no market category; the live text below is the source of truth for the
-    exact count and schedule. That keeps a screened-out prop or fun ticket from being advertised before it exists.
-    """
-    today = eastern_date(now)
-    plays = todays_plays(first, latest, games, now)
-    if not plays:
-        return None
-    rows, seen, parlay, rung = [], set(), False, None
-    for pick in sorted(plays, key=lambda p: min(games[g]['kickoff'] for g in p['gameIds'] if g in games)):
-        if pick_card.play_kind(pick) == 'parlay':
-            parlay = True
-            continue
-        if pick_card.play_kind(pick) == 'ladder':
-            rung = pick
-            continue
-        game = games.get(pick['gameIds'][0])
-        if not game or game['id'] in seen:
-            continue
-        seen.add(game['id'])
-        league = game.get('league')
-        kick = gates.when(game['kickoff']).astimezone(gates.EASTERN)
-        rows.append(f"{pick_card.team_label(game.get('away'), league)}/{pick_card.team_label(game.get('home'), league)} {kick:%-I:%M %p}")
-    count = len(plays)
-    head = f"Today: {count} play{'s' if count != 1 else ''}"
-    lines = (rows + (['a lotto'] if parlay else [])
-             + ([f"ladder step {(rung.get('ladder') or {}).get('step', 1)}"] if rung else []))
-    tail = leagues(plays)
-    return {'key': f'menu:day:{today.isoformat()}', 'card': HOUSE_CARDS + 'kitchen-menu-approved.png', 'kind': 'menu',
-            'text': fit(lines, head, tail.strip(), head_sep='\n'), 'due': at(today, MENU_AT), 'stale': at(today, MENU_UNTIL)}
 
 
 def book(first, latest, games, log_book, now):
@@ -545,43 +510,6 @@ def ladder_result(pick):
 def ladder_cashed(pick):
     """Compatibility name for callers and old tests; all rung outcomes now use ladder_result()."""
     return ladder_result(pick)
-
-
-def with_menu(receipt, post, plays_today):
-    """One morning post instead of two: yesterday's receipt with a line for what is on the stove today. Its key names
-    both, so neither goes out again on its own."""
-    rows = receipt.get('rows') or []
-    count = len(plays_today)
-    today = f"Today: {count} play{'s' if count != 1 else ''}."
-    tags = ' '.join(t for t in (x_post.TAGS[l] for l in ('NFL', 'CFB')) if t in receipt['text'] + ' ' + post['text'])
-    if receipt['key'].startswith('receipt:day:'):
-        lines = [f"{MARKS.get(row[0], '•')} {row[1]}" + (f" · {row[2]}" if len(row) > 2 and row[2] else '') for row in rows]
-    else:
-        lines = [row[1] for row in rows]
-    head = receipt['text'].split('\n')[0]           # "Saturday: 5-3"
-    text = fit(lines, head, f'{today}\n{tags}'.strip(), head_sep='\n')
-    return dict(receipt, key=f"{receipt['key']}+{post['key']}", text=text, stale=min(receipt['stale'], post['stale']))
-
-
-def climb_checkin(first, latest, games, now):
-    """A weekend status, not a promised ticket. Existing run/Buffer limits deliver it once per day."""
-    import ladder
-    day = eastern_date(now)
-    if day.weekday() not in (5, 6) or not at(day, (11, 45)) <= now < at(day, (14, 0)):
-        return None
-    state = ladder.state(first, latest)
-    opened = state['open']
-    if opened and game_day(opened, games) == day:
-        return None  # The actual ticket is the check-in; never add a conflicting "waiting" post.
-    head = f"80/20 Climb · {day:%a %b} {day.day}"
-    if opened:
-        body = f"Step {(opened.get('ladder') or {}).get('step', state['step'])} is still open. Next step waits for its result."
-    else:
-        body = f"Step {state['step']} is next, not scheduled yet. ${state['stake']} riding; ${state['banked']} banked."
-    text = head + '\n' + body + ('\nWe look for one at 10, 1:30, 4 and 8 ET.'
-                                 '\nIf it qualifies, Discord sees it first.')
-    return {'key': f'climb:checkin:{day.isoformat()}', 'kind': 'book', 'card': None,
-            'text': text, 'due': now + timedelta(minutes=2), 'stale': at(day, (14, 0))}
 
 
 def house_posts(first, latest, games, log_book, now):
