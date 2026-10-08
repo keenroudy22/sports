@@ -181,10 +181,18 @@ class TicketCardTests(unittest.TestCase):
             self.assertEqual(render.call_args_list[0].args[0], '<svg data-theme="ticket"/>')
             self.assertEqual(render.call_args_list[1].args[0], '<svg data-theme="legacy"/>')
             existing = Path(folder) / 'existing.png'
-            existing.write_bytes(b'posted-art')
-            feed.render_cards([{'guid': 'existing', 'pick': recent, 'game': GAME, 'side': 'away'}], folder)
-            self.assertEqual(existing.read_bytes(), b'posted-art')
+            existing.write_bytes(feed.PNG + b'posted-art')
+            feed.render_cards([{'guid': 'existing', 'pick': recent, 'game': GAME, 'side': 'away'}], folder,
+                              posted_keys={'existing'})
+            self.assertEqual(existing.read_bytes(), feed.PNG + b'posted-art')
             self.assertEqual(render.call_count, 2)
+
+            # An unposted legacy preview must become the new ticket when its publication time qualifies.
+            preview = Path(folder) / 'preview.png'
+            preview.write_bytes(b'old preview')
+            feed.render_cards([{'guid': 'preview', 'pick': recent, 'game': GAME, 'side': 'away'}], folder)
+            self.assertEqual(render.call_count, 3)
+            self.assertEqual(render.call_args.args[0], '<svg data-theme="ticket"/>')
 
     def test_settled_climb_uses_result_time_and_real_leg_marks(self):
         pick = {'id': 'rung', 'parlayType': 'ladder', 'publishedAt': '2026-10-08T14:00:00Z',

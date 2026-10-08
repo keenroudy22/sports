@@ -231,6 +231,7 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
     """A PNG per pick item, when a browser is on the machine. Returns {guid: path}."""
     import pick_card
     import ticket_card
+    posted_keys = set(posted_keys)
     restore_posted_cards(folder, posted_keys)
     if not pick_card.chrome_path():
         log('no browser for cards; the feed goes out without images')
@@ -241,7 +242,11 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
             continue
         path = Path(folder) / f"{item['guid']}.png"
         try:
-            if not path.exists():
+            source = item.get('ladderResult') or item.get('receipt') or item.get('pick') or {}
+            # A card cached before the cutover is not proof that an unposted play has new art.
+            # Rebuild eligible cards; confirmed attachments above are immutable.
+            refresh_ticket = item['guid'] not in posted_keys and pick_card.ticket_enabled(source)
+            if not path.exists() or refresh_ticket:
                 if 'ladderResult' in item:
                     pick = item['ladderResult']
                     svg = (ticket_card.climb_result_svg(pick, games or {}, player_team)
