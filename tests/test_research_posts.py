@@ -24,6 +24,36 @@ def game(watch=None):
 
 
 class ResearchPostTests(unittest.TestCase):
+    def test_prep_list_takes_one_research_slot_only_with_three_fresh_checked_rows(self):
+        now = datetime(2026, 10, 3, 13, 0, tzinfo=timezone.utc)  # 9 AM Eastern
+        rows = [{'league': 'CFB', 'player': f'Player {i}', 'athleteId': str(1000 + i),
+                 'gameId': 'CFB-1', 'kickoff': '2026-10-03T17:00:00Z',
+                 'observedAt': '2026-10-03T12:30:00Z', 'book': 'FanDuel', 'odds': -115,
+                 'line': 49.5, 'direction': 'over', 'stat': 'recYds', 'hits': 6, 'games': 6}
+                for i in range(3)]
+        data = {'games': [game()], 'prep': {'CFB': {'day': '2026-10-03', 'rows': rows}}}
+        choice = R.select(data, {'CFB-1': {}}, now)
+        self.assertEqual(choice['kind'], 'prep')
+        self.assertIn('Player 0 over 49.5 rec yds (-115, FanDuel)', choice['text'])
+        self.assertIn('Save it for kickoff', choice['text'])
+        self.assertEqual(receipts.guard({'text': choice['text']}), [])
+        with tempfile.TemporaryDirectory() as folder:
+            payload = Path(folder) / 'today.json'
+            payload.write_text(__import__('json').dumps(data))
+            post = R.post([], now, data_path=payload, detail_root=Path(folder), lines_path=Path(folder) / 'none')
+            self.assertEqual(post['due'].isoformat(), '2026-10-03T13:30:00+00:00')
+            self.assertEqual(post['kind'], 'research')
+            with mock.patch('ticket_card.prep_svg', return_value='<svg/>') as art, \
+                 mock.patch('pick_card.render', side_effect=lambda _svg, path: Path(path).write_bytes(b'png')):
+                cards = R.render_due(now, folder, data_path=payload, detail_root=Path(folder),
+                                     lines_path=Path(folder) / 'none', fetch=lambda _: None)
+            self.assertIn(choice['key'], cards)
+            art.assert_called_once()
+        data['prep']['CFB']['rows'] = rows[:2]
+        self.assertIsNone(R.prep_candidate(data, now))
+        data['prep']['CFB']['rows'] = [dict(row, observedAt='2026-10-02T12:30:00Z') for row in rows]
+        self.assertIsNone(R.prep_candidate(data, now))
+
     def test_split_college_defense_payload_is_followed_safely(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder) / 'teams'

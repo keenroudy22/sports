@@ -99,6 +99,40 @@ def slate_games(data, now):
             and when(g.get('kickoff')) and when(g['kickoff']) > now]
 
 
+def prep_candidate(data, now):
+    """First-choice research slot when three checked, fresh player lines survive."""
+    from x_post import LIMIT, tweet_length
+    day = eastern_date(now).isoformat()
+    choices = []
+    for league, block in (data.get('prep') or {}).items():
+        if league not in ('NFL', 'CFB') or not isinstance(block, dict) or block.get('day') != day:
+            continue
+        rows = [row for row in block.get('rows') or []
+                if row.get('league') == league and row.get('book') in PUBLIC_BOOKS
+                and isinstance(row.get('odds'), (int, float)) and row['odds'] >= -200
+                and current(row.get('observedAt'), now, timedelta(hours=4))
+                and when(row.get('kickoff')) and when(row['kickoff']) > now + timedelta(minutes=45)]
+        if len(rows) >= 3:
+            choices.append((len(rows), league, rows[:6]))
+    if not choices:
+        return None
+    _count, league, rows = sorted(choices, key=lambda choice: (-choice[0], choice[1]))[0]
+    first = rows[0]
+    stat = STAT_LABEL.get(first.get('stat'), str(first.get('stat') or 'yards'))
+    direction = str(first.get('direction') or '').lower()
+    headline = (f"{first['player']} {direction} {float(first['line']):g} {stat} "
+                f"({price(first['odds'])}, {first['book']}) · {direction} in "
+                f"{first['hits']} of {first['games']}")
+    date_word = eastern_date(now).strftime('%A')
+    caption = '\n'.join([f'📋 Prep List: {date_word}', headline,
+                         f'{len(rows) - 1} more on the card. Save it for kickoff 📌', f'#{league}'])
+    if tweet_length(caption) > LIMIT:
+        caption = '\n'.join([f'📋 Prep List: {date_word}', f'{len(rows)} checked lines on the card.',
+                             'Save it for kickoff 📌', f'#{league}'])
+    return {'kind': 'prep', 'league': league, 'rows': rows, 'prep': {'day': day, 'rows': rows},
+            'text': caption}
+
+
 def price(odds):
     return f'{int(odds):+d}' if isinstance(odds, (int, float)) else 'price unavailable'
 
@@ -406,11 +440,15 @@ def select(data, details, now, lines=None, teams=None):
     games = slate_games(data, now)
     if not games:
         return None
-    season = season_candidate(games, details, now)
-    # Alternate days share the existing editorial slot; never add another daily post.
-    chosen = (season if eastern_date(now).day % 2 == 0 else None) or (
-        upset_candidate(games, now) or spread_dog_candidate(games, lines, now)
-        or matchup_candidate(games, details, now, teams) or season or scorer_candidate(games, details, now))
+    prepared = prep_candidate(data, now)
+    if prepared:
+        chosen = prepared
+    else:
+        season = season_candidate(games, details, now)
+        # Alternate days share the existing editorial slot; never add another daily post.
+        chosen = (season if eastern_date(now).day % 2 == 0 else None) or (
+            upset_candidate(games, now) or spread_dog_candidate(games, lines, now)
+            or matchup_candidate(games, details, now, teams) or season or scorer_candidate(games, details, now))
     if not chosen:
         return None
     day = eastern_date(now)
@@ -443,13 +481,14 @@ def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES):
     if not choice:
         return None
     stale = min(at(choice['day'], POST_UNTIL), choice['firstKickoff'] - timedelta(minutes=45))
-    if choice['kind'] in ('season', 'matchup'):
+    if choice['kind'] in ('season', 'matchup', 'prep'):
         stale = min(stale, *(when(r['observedAt']) + timedelta(hours=4) for r in choice['rows']))
     if now >= stale:
         return None
     return {'key': f"research:{choice['kind']}:{choice['day'].isoformat()}", 'kind': 'research',
             'card': choice['key'], 'text': choice['text'],
-            'due': max(at(choice['day'], POST_AT), now + timedelta(minutes=2)), 'stale': stale}
+            'due': max(at(choice['day'], (9, 30) if choice['kind'] == 'prep' else POST_AT),
+                       now + timedelta(minutes=2)), 'stale': stale}
 
 
 def art_for(row, game, fetch):
@@ -526,11 +565,16 @@ def render_due(now, folder, data_path=TODAY, detail_root=DETAILS, lines_path=LIN
     if not choice:
         return early_cards
     fetch = fetch or pick_card.fetch_data_uri
-    games = {g['id']: g for g in data.get('games') or []}
-    images = {i: art_for(row, games.get(row['gameId']) or {}, fetch) for i, row in enumerate(choice['rows'])}
     path = Path(folder) / f"{choice['key']}.png"
     try:
-        pick_card.render(svg(choice, images), path)
+        if choice['kind'] == 'prep':
+            import ticket_card
+            picture = ticket_card.prep_svg(choice['prep'], fetch=fetch)
+        else:
+            games = {g['id']: g for g in data.get('games') or []}
+            images = {i: art_for(row, games.get(row['gameId']) or {}, fetch) for i, row in enumerate(choice['rows'])}
+            picture = svg(choice, images)
+        pick_card.render(picture, path)
     except Exception as error:
         log(f"research card {choice['key']} not drawn: {error}")
         return early_cards

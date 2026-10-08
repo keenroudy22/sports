@@ -408,8 +408,9 @@ Handy commands (from `~/Projects/sports`):
 - **Research and timing (owner-delegated to Claude, 2026-10-07):** Prep List is first-choice research on
   football game days under the playbook's history/role/floor/price/injury/rotation/open-play exclusions; fewer
   than three rows falls through to the existing research chain. Save it for kickoff 📌 is approved. TNF/MNF
-  get one-game Prep Lists; Tuesday 10:45 Early Look is approved within the one-research-post cap. Night-game
-  plays (7 PM or later) target 6 PM; POTD leads its appropriate batch. One rotating other-sport Prep List/day.
+  get one-game Prep Lists; Tuesday 10:45 Early Look is approved within the one-research-post cap. Under item 38,
+  official plays target game-day 9:30 AM, with Hot Plate first, and Prep List slides behind them in the same morning
+  batch. One rotating other-sport Prep List/day.
 - **Result cards and volume (owner-delegated to Claude, 2026-10-07):** Cooked win cards, Final/Leftovers,
   Prep List and the one-time pinned series card require Claude sample review before first post. Only tickets/
   Climb may show computed posted-price payout examples; straight plays have no X dollars/units. Final gives
