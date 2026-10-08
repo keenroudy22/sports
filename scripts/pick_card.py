@@ -42,7 +42,7 @@ CHROME_CANDIDATES = ('/Applications/Google Chrome.app/Contents/MacOS/Google Chro
 FELT_FROM = None
 # Owner-delegated cutover, Oct 8: reviewed real renders; no published image is rebuilt.
 # The explicit Eastern instant is valid only if the verified deploy finishes by 1:30 PM.
-TICKET_FROM = '2026-10-08T14:00:00-04:00'
+TICKET_FROM = '2026-10-08T12:00:00-04:00'
 
 
 def _theme_time(value):
