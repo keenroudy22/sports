@@ -344,6 +344,25 @@ def scorer_candidate(games, details, now):
                                              *lines, '', 'Opportunity, not TD probability or an official play.', tags(shown)])}
 
 
+def owner_tnf_check(data, details, now):
+    """One requested Oct 8 game preview in the already-approved End-Zone Work format."""
+    day = eastern_date(now)
+    if day.isoformat() != '2026-10-08' or now < at(day, (18, 0)):
+        return None
+    games = [game for game in slate_games(data, now) if game.get('id') == 'NFL-401872980']
+    if len(games) != 1 or now >= when(games[0]['kickoff']) - timedelta(minutes=45):
+        return None
+    choice = scorer_candidate(games, details, now)
+    if not choice:
+        return None
+    first = choice['rows'][0]
+    choice['key'] = 'research-end-zone-tnf-2026-10-08'
+    choice['text'] = ('🎯 TNF End-Zone Work: Bucs at Cowboys\n'
+                      f"{first['title']}: {first['metric']}, {first['price']}.\n"
+                      f"{len(choice['rows']) - 1} more on the card. Usage, not a TD pick or official play. #NFL")
+    return choice
+
+
 def season_candidate(games, details, now):
     rows = []
     for game in games:
@@ -464,6 +483,14 @@ def at(day, hm):
 
 def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES):
     data = load(data_path, {'games': []})
+    special = owner_tnf_check(data, details_for(data.get('games') or [], detail_root), now)
+    if special:
+        game = next(game for game in data['games'] if game.get('id') == 'NFL-401872980')
+        stale = when(game['kickoff']) - timedelta(minutes=45)
+        due = max(at(eastern_date(now), (19, 0)), now + timedelta(minutes=15))
+        if due < stale:
+            return {'key': 'research:end-zone:tnf:2026-10-08', 'kind': 'research',
+                    'card': special['key'], 'text': special['text'], 'due': due, 'stale': stale}
     import tnf_early_look
     if tnf_early_look.ENABLED:
         early = tnf_early_look.select(data, load_lines(lines_path), now)
@@ -550,6 +577,7 @@ def legacy_svg(choice, art=None):
 
 def render_due(now, folder, data_path=TODAY, detail_root=DETAILS, lines_path=LINES, fetch=None, log=print):
     data = load(data_path, {'games': []})
+    special = owner_tnf_check(data, details_for(data.get('games') or [], detail_root), now)
     import tnf_early_look
     early_cards = {}
     if tnf_early_look.ENABLED:
@@ -563,20 +591,25 @@ def render_due(now, folder, data_path=TODAY, detail_root=DETAILS, lines_path=LIN
     cards = data.get('games') or []
     choice = select(data, details_for(cards, detail_root), now,
                     load_lines(lines_path), teams_for(cards))
-    if not choice:
+    if not choice and not special:
         return early_cards
     fetch = fetch or pick_card.fetch_data_uri
-    path = Path(folder) / f"{choice['key']}.png"
-    try:
-        if choice['kind'] == 'prep':
-            import ticket_card
-            picture = ticket_card.prep_svg(choice['prep'], fetch=fetch)
-        else:
-            games = {g['id']: g for g in data.get('games') or []}
-            images = {i: art_for(row, games.get(row['gameId']) or {}, fetch) for i, row in enumerate(choice['rows'])}
-            picture = svg(choice, images)
-        pick_card.render(picture, path)
-    except Exception as error:
-        log(f"research card {choice['key']} not drawn: {error}")
-        return early_cards
-    return {**early_cards, choice['key']: path}
+    result = dict(early_cards)
+    for card_choice in (choice, special):
+        if not card_choice or card_choice['key'] in result:
+            continue
+        path = Path(folder) / f"{card_choice['key']}.png"
+        try:
+            if card_choice['kind'] == 'prep':
+                import ticket_card
+                picture = ticket_card.prep_svg(card_choice['prep'], fetch=fetch)
+            else:
+                games = {g['id']: g for g in data.get('games') or []}
+                images = {i: art_for(row, games.get(row['gameId']) or {}, fetch)
+                          for i, row in enumerate(card_choice['rows'])}
+                picture = svg(card_choice, images)
+            pick_card.render(picture, path)
+            result[card_choice['key']] = path
+        except Exception as error:
+            log(f"research card {card_choice['key']} not drawn: {error}")
+    return result
