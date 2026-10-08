@@ -1,12 +1,14 @@
 import sys
 import tempfile
 import unittest
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 import public_copy
 import publication_guard
+import feed
 
 
 class PublicCopyTests(unittest.TestCase):
@@ -41,7 +43,14 @@ class PublicCopyTests(unittest.TestCase):
         paths = [ROOT / 'site' / name for name in ('index.html', 'app.js', 'app-more.js', 'app-games.js',
                                                   'core.js', 'live.js', 'personal.js')]
         paths += [ROOT / 'site/data/app' / name for name in ('today.json', 'today-hero.json', 'record.json')]
-        paths.append(ROOT / 'site/data/feed.xml')
         for path in paths:
             if path.exists():
                 self.assertFalse(public_copy.issues(path.read_text(encoding='utf-8')), str(path))
+
+    def test_new_feed_has_no_private_copy_even_when_a_cached_feed_is_old(self):
+        # A local build may retain yesterday's generated feed until the hosted publish.
+        # Test what this revision will publish, not that stale cache.
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'feed.xml'
+            feed.build(now=datetime.now(timezone.utc), out=path, with_cards=False, log=lambda *_: None)
+            self.assertFalse(public_copy.issues(path.read_text(encoding='utf-8')))
