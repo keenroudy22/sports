@@ -146,9 +146,9 @@ test('Today runs the first screen, then every section visible with no fold; Off 
   const { api } = loadApp('#record');
   const page = await api.views.today({ view: 'today' });
   const at = text => { const i = page.indexOf(text); assert.ok(i >= 0, `missing ${text}`); return i; };
-  const order = ['class="kt-lede', 'class="kt-pass"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-bets"', 'class="kt-sec kt-left"', 'kt-upsets"',
-    'kt-worth"', 'class="kt-sec kt-prep"', 'kt-games"', 'kt-off-card"', 'kt-community"', 'kt-sports"'].map(at);
-  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'first screen -> season line -> best bets -> Leftovers -> research -> games -> off -> Discord -> sports');
+  const order = ['class="kt-lede', 'class="kt-pass"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-bets"', 'class="kt-sec kt-left"', 'class="kt-sec kt-prep"',
+    'kt-upsets"', 'kt-worth"', 'kt-games"', 'kt-off-card"', 'kt-community"', 'kt-sports"'].map(at);
+  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'first screen -> season line -> best bets -> Leftovers -> Prep List -> research -> games -> off -> Discord -> sports');
   for (const gone of ['today-more', 'kt-fold', 'class="onboard"', 'today-status']) assert.ok(!page.includes(gone), gone);
   const folds = [...page.matchAll(/<details[^>]*data-box="([^"]+)"/g)].map(m => m[1]);
   assert.deepEqual(folds, ['climb-past'], 'only the Climb\'s past steps stay a fold (upset cards keep their small why fold)');
@@ -158,7 +158,9 @@ test('Today runs the first screen, then every section visible with no fold; Off 
   const bets = page.slice(at('kt-bets"'), at('class="kt-sec kt-left"'));
   assert.match(bets, /<h2 class="kt-head" id="bets-h">More best bets<\/h2>/);
   assert.match(bets, /Example Tech[\s\S]*Later Open/, 'today\'s other best bet, then later this week, on the page');
-  assert.match(bets, /Still a bet down to −124 at 44\.5\./, 'each other best bet names its price limit');
+  assert.match(bets, /Still good to −124\./, 'each other best bet names its price limit, in the first ticket\'s words');
+  assert.doesNotMatch(bets, /Still a bet down to|Best bets this season/, 'one limit sentence everywhere; the season record rides the first ticket and the season line only');
+  assert.equal((page.match(/Best bets this season/g) || []).length, 1);
   assert.match(bets, /I have it at<b class="num">56\.0%/, 'and its chance against the price when calibrated');
   assert.doesNotMatch(bets, /kt-clip/, 'one chef, on the first rail only');
   assert.match(page, /<h2 class="kt-head" id="left-h">Friday went 1-0 · \+0\.95u<\/h2>/, 'Leftovers carry the day\'s units');
@@ -175,7 +177,7 @@ test('Today runs the first screen, then every section visible with no fold; Off 
 test('the Prep List shows only the rows the build chose, with the price check only where it clears', async () => {
   const { api } = loadApp('#record');
   const page = await api.views.today({ view: 'today' });
-  const prep = page.slice(page.indexOf('class="kt-sec kt-prep"'), page.indexOf('kt-games"'));
+  const prep = page.slice(page.indexOf('class="kt-sec kt-prep"'), page.indexOf('kt-upsets"'));
   assert.match(prep, /<h2 class="kt-tape" id="prep-h">Prep List<\/h2><span class="kt-kind">Research for tonight<\/span>/);
   assert.match(prep, /Prep Player[\s\S]*Over 54\.5 rec yds[\s\S]*−114 FanDuel<span class="ok">✓ clears my price<\/span>/);
   assert.match(prep, /History Only[\s\S]*−110 DraftKings<span class="no">History only · no edge at this price<\/span><\/p>/, 'the playbook label on a row that does not clear');
@@ -420,6 +422,21 @@ test('an expired saved quote with a fresh same-book price reads the same on both
   assert.match(t, /I had it at/);
 });
 
+test('an expired quote never wears ORDER UP unless a fresh same-book price is still inside the limit', async () => {
+  const ticketOf = async pick => { const page = await loadApp('#record', {}, { today: { ...TODAY, picks: [pick, ...rungs] } }).api.views.today({ view: 'today' });
+    return page.slice(page.indexOf('<article class="kt-order'), page.indexOf('</article>')); };
+  const aged = await ticketOf({ ...prop, expiresAt: '2026-10-10T12:00:00Z' });
+  assert.match(aged, /Posted price may be gone/);
+  assert.doesNotMatch(aged, /kt-orderup|ORDER UP/, 'an expired quote never reads as open');
+  const moved = await ticketOf({ ...prop, expiresAt: '2026-10-10T12:00:00Z', quote: { odds: -130, line: 49.5, observedAt: '2026-10-10T13:20:00Z' } });
+  assert.match(moved, /Past my −124 limit\./);
+  assert.doesNotMatch(moved, /kt-orderup/, 'a fresh price past the limit is not open either');
+  const inside = await ticketOf({ ...prop, expiresAt: '2026-10-10T12:00:00Z', quote: { odds: -115, line: 49.5, observedAt: '2026-10-10T13:20:00Z' } });
+  assert.match(inside, /Still good to −124\./);
+  assert.match(inside, /kt-orderup/, 'a fresh same-book price inside the limit is still live');
+  assert.match(await ticketOf(prop), /kt-orderup/, 'an open quote does');
+});
+
 test('a settled ticket never wears ORDER UP', async () => {
   const { api } = loadApp('#record', {}, { today: TODAY, extra: {} });
   const page = await api.views.pick({ id: yesterday.id });
@@ -562,7 +579,7 @@ test('Research worth a look picks the same three rows the old Today did, and nev
   await api.views.today({ view: 'today' });
   await settle();
   const page = await api.views.today({ view: 'today' });
-  const sec = page.slice(page.indexOf('kt-worth"'), page.indexOf('class="kt-sec kt-prep"'));
+  const sec = page.slice(page.indexOf('kt-worth"'), page.indexOf('kt-games"'));
   assert.match(sec, /<h2 class="kt-tape" id="worth-h">Research worth a look<\/h2><span class="kt-kind">Not best bets<\/span>/);
   assert.match(sec, /A-total over 44\.5[\s\S]*Board Receiver over 60\.5[\s\S]*ARIZ \+6\.5/);
   for (const out of ['D-thin', 'E-raw', 'F-on-card', 'G-small', 'A-total-alt']) assert.ok(!sec.includes(out), out);
@@ -574,13 +591,13 @@ test('the Prep List rolls to the next game day once the first day\'s rows have k
   const row = (who, kickoff, extra = {}) => ({ ...PREP.CFB.rows[0], athleteId: who, player: who, kickoff, ...extra });
   const prep = { CFB: { day: '2026-10-10', rows: [row('Early Kick', '2026-10-10T13:30:00Z')], next: { day: '2026-10-11', rows: [row('Sunday Guy', '2026-10-11T17:00:00Z')] } } };
   const rolled = await loadApp('#record', {}, { today: { ...TODAY, prep } }).api.views.today({ view: 'today' });
-  const sec = rolled.slice(rolled.indexOf('class="kt-sec kt-prep"'), rolled.indexOf('kt-games"'));
+  const sec = rolled.slice(rolled.indexOf('class="kt-sec kt-prep"'), rolled.indexOf('kt-upsets"'));
   assert.match(sec, /<span class="kt-kind">Research for Sunday<\/span>/);
   assert.match(sec, /Sunday Guy/);
   assert.doesNotMatch(sec, /Early Kick/);
   prep.CFB.rows = [row('Still Ahead', '2026-10-10T23:00:00Z')];
   const ahead = await loadApp('#record', {}, { today: { ...TODAY, prep } }).api.views.today({ view: 'today' });
-  const sec2 = ahead.slice(ahead.indexOf('class="kt-sec kt-prep"'), ahead.indexOf('kt-games"'));
+  const sec2 = ahead.slice(ahead.indexOf('class="kt-sec kt-prep"'), ahead.indexOf('kt-upsets"'));
   assert.match(sec2, /Still Ahead/);
   assert.doesNotMatch(sec2, /Sunday Guy/, 'the first game day keeps the list while it has a row to come');
 });

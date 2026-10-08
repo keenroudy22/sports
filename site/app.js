@@ -834,7 +834,7 @@
     const rows = opts.lines || todayExtras?.lines?.lines;
     const hold = best && !pick.result ? pickHold(pick, rows) : null;
     const latest = !pick.result && !climb && !fun && !hold ? latestPickQuote(pick, rows) : null;
-    const good = opts.more && goodTo(pick) ? `${minus(goodTo(pick))}.` : isNum(pick.cutoffOdds) ? `Still good to ${odd(pick.cutoffOdds)}.` : '';
+    const good = isNum(pick.cutoffOdds) ? `Still good to ${odd(pick.cutoffOdds)}.` : '';
     const nowLine = pick.result ? resultLine(pick) : hold ? heldShort(hold)
       : climb ? (isNum(Number(info.stake)) && isNum(Number(info.payout)) && info.payout ? `${money(info.stake)} → ${money(info.payout)} if it cashes.` : '')
         : ['open', 'expired'].includes(vm.mode) && latest ? `Now ${odd(latest.current.odds)} at ${clock(latest.current.observedAt)}. ${latest.inside ? good : `Past my ${odd(pick.cutoffOdds)} limit.`}`
@@ -853,15 +853,17 @@
     const fit = betSize(parts, opts.compact ? 60 : 68);
     const bet = climb || fun ? legs : `<p class="kt-bet num" style="--bet-size:${fit}px;--bet-size-k:${(fit / 306).toFixed(4)}">${esc(parts.bet)}${parts.unit.length ? `<span class="kt-unit">${parts.unit.map(esc).join('<br>')}</span>` : ''}</p>`;
     const s = opts.season, record = s ? `${s.wins}-${s.losses}${s.pushes ? `-${s.pushes}` : ''}` : '';
-    const stub = best ? (record ? `<p class="kt-season">Best bets ${s.playoffs ? 'these playoffs' : 'this season'}<b class="num">${esc(record)}</b></p>` : '<p class="kt-season">Best bet</p>')
+    const stub = best && opts.more ? '' : best ? (record ? `<p class="kt-season">Best bets ${s.playoffs ? 'these playoffs' : 'this season'}<b class="num">${esc(record)}</b></p>` : '<p class="kt-season">Best bet</p>')
       : climb ? `<p class="kt-season">Banked this climb<b class="num">${money(info.banked)}</b></p>` : '<p class="kt-season">Tracked apart from best bets</p>';
+    /* ORDER UP needs a live price. */
+    const orderUp = best && !pick.result && !hold && tense ? '<span class="kt-orderup" aria-hidden="true">ORDER UP</span>' : '';
     const label = `${chip}: ${vm.title}, ${oddsText(vm.odds)}${vm.book ? ` at ${vm.book}` : ''}${pick.result ? `. ${RESULT_WORD[pick.result] || ''}` : hold ? '. Under review' : ''}`;
     return `<article class="kt-order${opts.compact ? ' compact' : ''}${vm.mode === 'closed' ? ' is-closed' : ''}${hold ? ' is-held' : ''}" style="${style}" aria-label="${esc(label)}">
       <div class="kt-shade"><div class="kt-paper">${panel}${bet}<div class="kt-cut"></div>
         <p class="kt-lead kt-price"><b class="kt-odds num">${esc(odd(vm.odds))}</b><i></i><b class="kt-book">${esc(vm.estimated ? `est. ${vm.book || ''}` : vm.book || '')}</b></p>
-        <p class="kt-now">${esc(nowLine)}</p>${extra}${chance}${best ? say('WHY', heldSafe(pick.ticketWhy, hold)) + say('BUT', heldSafe(pick.ticketBut, hold), ' kt-but') : ''}
+        <p class="kt-now">${esc(nowLine)}</p>${chance}${best ? say('WHY', heldSafe(pick.ticketWhy, hold)) + say('BUT', heldSafe(pick.ticketBut, hold), ' kt-but') : ''}
         ${opts.strip && best ? strip(pick.hitStrip, pick.line, String(pick.direction || '').toLowerCase()) : ''}
-        <div class="kt-perf"></div><div class="kt-stubrow">${stub}${best && !pick.result && !hold ? '<span class="kt-orderup" aria-hidden="true">ORDER UP</span>' : ''}</div></div></div>
+        ${stub || extra || orderUp ? `<div class="kt-perf"></div><div class="kt-stubrow"><div class="kt-stubl">${stub}${extra}</div>${orderUp}</div>` : ''}</div></div>
       ${after}${opts.clip ? CHEF : ''}${stampFor(pick.result)}</article>`;
   };
   const rail = (rows, opts = {}) => `<section class="kt-pass${opts.onPage ? ' on-page' : ''}" aria-label="${esc(opts.label || (rows.length > 1 ? 'Best bets on the rail' : rows.length && C.dayOf(rows[0].kickoff) === etDay() ? 'Today\'s best bet' : 'Best bet'))}"><div class="kt-rail" aria-hidden="true"></div>
@@ -1115,7 +1117,7 @@
       ${emptyRail(`No best bets in this sport. ${esc(LEAGUE_NAME[lg])} is ${esc(status)}. <a href="#record/trials">All sports' status ›</a>`)}
       <div class="kt-page-sec">${card}</div><div class="kt-page-sec">${scores}<p class="small" style="margin-top:12px"><a href="#games/live">All scores →</a></p></div>`;
   };
-  /* Today in the owner's order: rail -> Climb -> Leftovers -> Prep List -> the closed "More for today" fold. */
+  /* Today, no fold (owner, 2026-10-07; AGENTS.md has the order). */
   VIEWS.today = async route => {
     if (route && route.league && location.hash !== appliedHash) { appliedHash = location.hash; setLeague(route.league); }
     if (!FOOTBALL.includes(state.league) && state.league !== 'ALL') { dropHero(); return sportToday(); }
@@ -1182,10 +1184,10 @@
     const cards = new Map(((heroLoaded || {}).bets || []).map(b => [b.id, b.card]));
     const rest2 = [
       leftovers(recent, awaiting, (today.lastSlate || {})[state.league]),
+      prepList(today.prep, notesList, now),
       ktSec('upsets', 'Underdog watch', upsetHtml, { tape: true, kind: 'Upset research, not best bets' }),
       ktSec('worth', 'Research worth a look', worth.length ? `<div class="board">${worth.map(vm => boardRow(vm, false)).join('')}</div>` : '<p class="kt-blank">Nothing on the board clears our price check right now.</p>',
         { tape: true, kind: 'Not best bets', link: ktLink('#research/lines', 'See every line') }),
-      prepList(today.prep, notesList, now),
       ktSec('games', "Today's games", shown.length ? `${liveStamp(liveToday.refreshed)}<div class="projs">${shown.map(g => projCard(g, { ranks: false })).join('')}</div>` : '<p class="kt-blank">No covered football games today.</p>',
         { link: ktLink(todayGames.length > shown.length ? '#games' : '#games/live', todayGames.length > shown.length ? `All ${todayGames.length} games today` : 'Live scores') }),
       fun.length ? ktSec('fun', 'Fun tickets', slips(fun), { kind: 'Smaller stake, apart from best bets' }) : '',
@@ -2281,7 +2283,7 @@
   };
   /* A newer render always wins: a slow fetch from an older one never paints over it. */
   let renderToken = 0, rendering = false;
-  /* Folds the reader opened or closed this visit (More for today starts closed, then remembers). */
+  /* Folds the reader opened or closed this visit. */
   const boxMemory = new Map();
   async function render(soft = false) {
     const token = ++renderToken;

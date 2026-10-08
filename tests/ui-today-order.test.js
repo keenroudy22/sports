@@ -10,8 +10,8 @@ test('Today is the first screen, then every section visible with no fold (owner,
   const view = body('VIEWS.today = async', '/* ---------- a single best bet');
   const rest = view.slice(view.indexOf('const rest2 = ['));
   const at = s => { const i = rest.indexOf(s); assert.ok(i >= 0, s); return i; };
-  const order = ['leftovers(', "ktSec('upsets'", "ktSec('worth'", 'prepList(', "ktSec('games'", "ktSec('fun'", "ktSec('pulled'", "ktSec('off-card'", 'COMMUNITY', "ktSec('sports'"].map(at);
-  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'Leftovers, Underdog watch, Worth a look, Prep List, games, fun, pulled, off, Discord, sports');
+  const order = ['leftovers(', 'prepList(', "ktSec('upsets'", "ktSec('worth'", "ktSec('games'", "ktSec('fun'", "ktSec('pulled'", "ktSec('off-card'", 'COMMUNITY', "ktSec('sports'"].map(at);
+  assert.deepEqual(order, order.slice().sort((a, b) => a - b), 'Leftovers, Prep List, Underdog watch, Worth a look, games, fun, pulled, off, Discord, sports');
   assert.doesNotMatch(view, /today-more|kt-fold|foldRow|<details/, 'no More for today fold and no new fold on Today');
   const top = body('const todayTop =', 'const firstPaint =');
   const t = s => { const i = top.indexOf(s); assert.ok(i >= 0, s); return i; };
@@ -32,4 +32,14 @@ test('Today keeps the footer below the fold while the first view loads, and uses
   assert.match(css, /main#view\s*\{\s*min-height:\s*calc\(100svh\s*-\s*160px\)/);
   assert.match(css, /@media \(min-width: 1000px\) \{ \.kt-today \{ display: grid; grid-template-columns: minmax\(0, 440px\) minmax\(0, 1fr\)/);
   assert.doesNotMatch(css, /kt-fold/, 'the fold styles left with the fold');
+});
+
+test('Today\'s restored rows meet the 14 px floor and research rows stack on a phone (research board untouched)', () => {
+  assert.match(css, /\.kt-kind \{ font: 500 14px/);
+  assert.match(css, /\.kt-cd \{ font: 500 14px/);
+  assert.match(css, /\.pc-meta \{[^}]*font-size: 14px/);
+  assert.match(css, /\.pc-mid span \{ font-size: 14px/);
+  assert.match(css, /\.kt-worth \.row-title > div > span, [^{]*\.kt-worth \.row-fair \{ font-size: 14px; \}/);
+  assert.match(css, /\.kt-worth \.row-main \{ grid-template-columns: minmax\(0, 1fr\) auto; grid-template-areas: 'title title' 'price price' 'meter meter' 'edge fair';/, 'stacked at every width (the right column is narrow at 1440)');
+  assert.match(css, /\.kt-worth \.lbl \{ position: static;/, 'labels stay visible beside the numbers');
 });
