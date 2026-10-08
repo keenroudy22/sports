@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-08T22:44:32Z",
+  "updatedAt": "2026-10-08T22:50:44Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-08T22:14Z",
+              "reportedAt": "2026-10-08T22:38Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1847,6 +1847,15 @@
           "name": "Dallas Cowboys",
           "players": [
             {
+              "id": "4426506",
+              "name": "Joey Porter Jr.",
+              "position": "CB",
+              "status": "Out",
+              "injury": "Illness",
+              "reportedAt": "2026-10-08T22:38Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4426506/joey-porter-jr"
+            },
+            {
               "id": "4685554",
               "name": "Drew Shelton",
               "position": "OT",
@@ -2007,15 +2016,6 @@
               "injury": null,
               "reportedAt": "2026-10-04T19:45Z",
               "source": "https://www.espn.com/nfl/player/_/id/4595352/alijah-clark"
-            },
-            {
-              "id": "4426506",
-              "name": "Joey Porter Jr.",
-              "position": "CB",
-              "status": "Active",
-              "injury": "Illness",
-              "reportedAt": "2026-10-04T16:19Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4426506/joey-porter-jr"
             },
             {
               "id": "5095865",
@@ -3917,6 +3917,15 @@
           "name": "Los Angeles Chargers",
           "players": [
             {
+              "id": "4429025",
+              "name": "Quentin Johnston",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Chest",
+              "reportedAt": "2026-10-08T22:31Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4429025/quentin-johnston"
+            },
+            {
               "id": "4612826",
               "name": "Ladd McConkey",
               "position": "WR",
@@ -3987,15 +3996,6 @@
               "injury": "Shoulder",
               "reportedAt": "2026-10-07T23:35Z",
               "source": "https://www.espn.com/nfl/player/_/id/3917668/alec-ingold"
-            },
-            {
-              "id": "4429025",
-              "name": "Quentin Johnston",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Chest",
-              "reportedAt": "2026-10-07T23:03Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4429025/quentin-johnston"
             },
             {
               "id": "3843769",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "30",
-          "name": "DaVon Hamilton",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-08T01:13:07Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3915520/davon-hamilton"
-        },
-        {
           "teamId": "24",
           "name": "Trey Lance",
           "from": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-10-08T22:44:32Z",
           "source": "https://www.espn.com/nfl/player/_/id/5081807/sonny-styles"
+        },
+        {
+          "teamId": "6",
+          "name": "Joey Porter Jr.",
+          "from": "Active",
+          "to": "Out",
+          "observedAt": "2026-10-08T22:50:44Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4426506/joey-porter-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-08T22:44:32Z",
-      "lastAttemptAt": "2026-10-08T22:44:32Z",
+      "checkedAt": "2026-10-08T22:50:44Z",
+      "lastAttemptAt": "2026-10-08T22:50:44Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-08T22:44:32Z",
-      "lastAttemptAt": "2026-10-08T22:44:32Z",
+      "checkedAt": "2026-10-08T22:50:44Z",
+      "lastAttemptAt": "2026-10-08T22:50:44Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
