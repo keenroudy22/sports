@@ -137,6 +137,17 @@ test('tapping a day opens its slips with the card link; tapping again closes it;
   assert.match(fun, /Fun tickets keep their own 0\.25u ledger/);
 });
 
+test('the header sport filters the calendar and hides the league chips', async () => {
+  const { api, factory } = load();
+  const base = api.moreContext();
+  Object.assign(base.state, { league: 'CFB', record: { season: 'current', phase: 'current', q: '', cal: { month: '2026-10', league: 'ALL', ledger: 'best', day: null } }, watchlist: [], ticket: [] });
+  const ctx = api.moreContext({ get: async () => ({ games: [], picks: [], freshness: {}, health: [] }), maybe: async () => null, allPicks: async () => picks, teamDirectory: async () => ({ teams: {}, defense: {} }), lineData: async () => ({ lines: [] }) });
+  const html = await factory(ctx).record({ tab: 'official' });
+  assert.doesNotMatch(html, /data-set="rcal:league=/);
+  assert.match(html, /College football only · pick All sports above/);
+  assert.match(html, /aria-label="Oct 4: 0-0-1, 0\.00u"/, 'only the CFB push counts');
+});
+
 test('the season units line highlights the month and the setter toggles a tapped day', async () => {
   const html = await views().record({ tab: 'official' });
   assert.match(html, /<rect x="[\d.]+" y="0" width="[\d.]+" height="\d+" fill="rgba\(242, 247, 244, \.08\)" rx="6"><title>October 2026<\/title><\/rect>/);
