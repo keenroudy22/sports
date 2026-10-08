@@ -40,7 +40,8 @@ class DossierTests(unittest.TestCase):
             'source': 'https://weather.gov/hourly', 'windMph': 18, 'tempF': 50,
             'windDirection': 'NW', 'precipProb': 20, 'issuedAt': '2026-10-07T21:00:00Z'}}
         row = dossier.build(candidate, GAME, self.context(), [], NOW, captures=captures, weather_row=forecast)
-        self.assertEqual(row['line']['books']['DraftKings']['open']['line'], 49.5)
+        self.assertIsNone(row['line']['books']['DraftKings']['open'])
+        self.assertEqual(row['line']['books']['DraftKings']['firstCaptured']['line'], 49.5)
         self.assertEqual(row['line']['books']['FanDuel']['now']['price'], -110)
         self.assertTrue(any('18 mph' in x['text'] for x in row['reasons']))
         self.assertTrue(any('30+' in x['text'] for x in row['risks']))

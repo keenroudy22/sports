@@ -71,7 +71,9 @@ def _line_history(candidate, game, captures, now):
     for book in ('DraftKings', 'FanDuel'):
         quotes = [q for row in rows if (q := (_prop_quote(row, market, player, direction, book)
                    if candidate.get('athleteId') else _main_quote(row, market, direction, book)))]
-        out[book] = {'open': quotes[0], 'now': quotes[-1]} if quotes else None
+        # The first capture is not the sportsbook's true opener. Never print it
+        # as "open" merely because it is the first row our store saw.
+        out[book] = {'open': None, 'firstCaptured': quotes[0], 'now': quotes[-1]} if quotes else None
     return {'books': out, 'best': {'book': candidate.get('book'), 'line': candidate.get('line'),
                                   'price': candidate.get('odds'), 'time': _stamp(candidate.get('quotedAt'))}}
 
