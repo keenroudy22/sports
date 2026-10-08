@@ -204,6 +204,12 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Calendar, game explanations and college navigator built (Claude, 2026-10-07; items 27, 28, 30):** the Record
+  opens with the results calendar (best bets, fun tickets and Climb on separate ledgers, Eastern kickoff days,
+  `core.js` record math unchanged); Games, game and team pages load from the lazy `app-games.js`; college Games
+  carries the window/close/conference filters, Bettable sort, Worth your time strip and tier badges; game pages
+  show "Why my number differs" from stored data and the generic "far from the book line" caution is gone.
+  Research only, never a play; release still runs through the lock-holding deploy and every gate.
 - **October 7 research and navigation decisions (owner-delegated to Claude, items 27–30):** the Record gets a
   kickoff-day results calendar with best bets, fun tickets and Climb on separate ledgers; the existing record math
   is unchanged. Game-number disagreements get specific, stored-data explanations only when the line is fresh;
