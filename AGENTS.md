@@ -204,6 +204,17 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **October 7 research and navigation decisions (owner-delegated to Claude, items 27–30):** the Record gets a
+  kickoff-day results calendar with best bets, fun tickets and Climb on separate ledgers; the existing record math
+  is unchanged. Game-number disagreements get specific, stored-data explanations only when the line is fresh;
+  remove the generic caution when the matching view is ready. College Games gets a research-only slate navigator,
+  with a 21+-point garbage-time flag on player props. New posted items get sourced dossiers where evidence exists.
+  Chef's Upset and Chef's Call are separately labeled, guarded weekend series inside existing caps; report before
+  and after official-record counts before either first public post. See CALENDAR-SPEC.md, GAME-WHY-SPEC.md,
+  PLAY-RESEARCH-SPEC.md and CFB-NAVIGATOR-SPEC.md in `/Users/keen/Projects/kookn-patches/`.
+- **Today restoration (owner, 2026-10-07, item 24):** keep the Kitchen Ticket first screen but restore the
+  owner-requested information on Today without a closed fold. Claude owns the tested site-view series. This
+  supersedes the closed-fold wording below; the private desk timing rule supersedes its old next-run copy.
 - **80/20 Climb route card (owner, 2026-10-07; OWNER-DECISIONS item 23):** the dated version of the
   explicitly labeled Climb map. It ties each step to a real 2+ game, one-league window at existing scans,
   shows real ledger rows, and shows future rows only as the plan at a typical −160. One route post per new
@@ -213,8 +224,8 @@ Handy commands (from `~/Projects/sports`):
 - **Kitchen Ticket website (owner, 2026-10-07; OWNER-DECISIONS item 22):** Today, the play page and the player page
   use the approved design/site mockups. Fair price and edge live on `#pick/<id>`; the Today ticket keeps price and
   book, my chance vs what the price needs (one decimal, hidden when uncalibrated), the now/good-to line, WHY, BUT, the
-  hit strip and the season record. "More for today" starts closed. WHY/BUT (saved words, verbatim or a named template),
-  Prep List rows (playbook section 7 plus every hold), recentFull, the date line's W-L, desk run times and each play's
+  hit strip and the season record. WHY/BUT (saved words, verbatim or a named template),
+  Prep List rows (playbook section 7 plus every hold), recentFull, the date line's W-L and each play's
   hold and quote are chosen in `build_site.py`. A held market reads Under review everywhere: no now/good-to line,
   projection, chance or edge. No streak line; core.js record math unchanged. At 375x812 with no scroll: the first
   best bet, the Climb stub and the last game day's W-L; Prep List one scroll below.

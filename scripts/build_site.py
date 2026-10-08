@@ -42,6 +42,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import boxscores
 import asset_versions
 import features
+import game_context
 import line_payload
 import market_read
 import model_v2
@@ -54,6 +55,7 @@ import role_sanity
 import season_trends
 import sport_research
 import vegas
+import weather
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -1527,6 +1529,7 @@ def build(now=None):
     scoreboard = read(DATA / 'scoreboard.json', {})
     forecasts_v1 = {f['gameId']: f for f in read(DATA / 'forecasts.json', [])}
     records = features.load()
+    weather_rows = weather.stored()
     stored = {f"{g['league']}-{g['eventId']}": g for g in records}
     forecasts = load_store('forecasts')
     captures = load_store('props')
@@ -1645,6 +1648,12 @@ def build(now=None):
                     player['underReview'].append(field)
     lines = public_lines(lines, now)
     for row in lines:
+        if row.get('athleteId'):
+            listed_game = by_id.get(row.get('gameId')) or {}
+            listed_spread = number((listed_game.get('market') or {}).get('spread'))
+            row['garbageTime'] = bool(listed_game.get('league') == 'CFB' and listed_spread is not None
+                                      and abs(listed_spread) >= 21)
+    for row in lines:
         if row.get('athleteId') and row.get('stat') in ('passYds', 'att', 'cmp', 'recYds', 'rec'):
             game = by_id.get(row.get('gameId')) or {}
             snapshots = forecasts.get(row.get('gameId')) or []
@@ -1684,8 +1693,12 @@ def build(now=None):
                          league_data[game['league']]['strength'])
         card['fcs'] = game['league'] == 'CFB' and not {str(game['home']['id']), str(game['away']['id'])} <= fbs
         card['upsetWatch'] = research_views.upset_watch(card, now, latest_snap)
-        cards.append(card)
         info = league_data[game['league']]
+        card.update(game_context.navigator(game, card, lines, picks, now))
+        card['whyDiffer'] = game_context.why_differ(game, card, latest_snap, info['team_logs'],
+                                                     info['strength'], injuries, lines, now,
+                                                     weather_rows.get(game['id']))
+        cards.append(card)
         favorites = favorite_lines(game, latest_snap, lines, now, info['player_logs'])
         write(OUT / 'games' / f"{game['id']}.json",
               game_detail(card, game, stored.get(game['id']), snaps_for, captures.get(game['id'], []), lines, picks,
