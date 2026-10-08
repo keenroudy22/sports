@@ -55,7 +55,7 @@ class ResearchPostTests(unittest.TestCase):
         self.assertEqual(choice['key'], 'research-end-zone-tnf-ticket-2026-10-08')
         self.assertIn('not a TD pick or official play', choice['text'])
         self.assertIsNone(R.owner_tnf_ticket(data, {game_row['id']: detail},
-                                              datetime(2026, 10, 8, 23, 40, tzinfo=timezone.utc)))
+                                              datetime(2026, 10, 9, 0, 5, tzinfo=timezone.utc)))
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
             payload = root / 'today.json'

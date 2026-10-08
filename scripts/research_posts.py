@@ -351,7 +351,7 @@ def owner_tnf_ticket(data, details, now):
     if day.isoformat() != '2026-10-08' or now < at(day, (18, 0)):
         return None
     games = [game for game in slate_games(data, now) if game.get('id') == 'NFL-401872980']
-    if len(games) != 1 or now >= when(games[0]['kickoff']) - timedelta(minutes=45):
+    if len(games) != 1 or now >= when(games[0]['kickoff']) - timedelta(minutes=15):
         return None
     choice = scorer_candidate(games, details, now)
     if not choice:
@@ -490,7 +490,7 @@ def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES):
     # Only the owner-approved one-shot command may enable its social plan.
     if special and os.environ.get('KEENROUDY_TNF_TICKET_APPROVED') == '1':
         game = next(game for game in data['games'] if game.get('id') == 'NFL-401872980')
-        stale = when(game['kickoff']) - timedelta(minutes=45)
+        stale = when(game['kickoff']) - timedelta(minutes=15)
         due = max(at(eastern_date(now), (19, 0)), now + timedelta(minutes=2))
         if due < stale:
             return {'key': 'research:end-zone:tnf-ticket:2026-10-08', 'kind': 'research',
