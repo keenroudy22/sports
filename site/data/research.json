@@ -17060,5 +17060,165 @@
         }
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-09T16:15:39Z",
+    "summary": "Research update for Oct 9: Nothing to settle. Closed 1: 3-leg longshot at ESPN BET. Nothing published. precheck before posting",
+    "takeaways": [],
+    "parlays": [
+      {
+        "id": "CFB-2026-W6-longshot-1009-espnbet",
+        "title": "3-leg longshot at ESPN BET",
+        "status": "expired",
+        "favorite": false,
+        "parlayType": "longshot",
+        "riskUnits": 0.25,
+        "legs": [
+          {
+            "id": "game-CFB-401858487-over",
+            "title": "Iowa at Washington over 41.5",
+            "gameId": "CFB-401858487",
+            "market": "total points",
+            "athleteId": null,
+            "side": "over",
+            "line": 41.5,
+            "odds": 100,
+            "book": "ESPN BET",
+            "chance": 0.547,
+            "kickoff": "2026-10-10T01:00Z",
+            "observedAt": "2026-10-09T15:05:22Z",
+            "marketWindow": "Full game",
+            "alternate": false
+          },
+          {
+            "id": "game-CFB-401860922-over",
+            "title": "Washington State at Utah State over 43.5",
+            "gameId": "CFB-401860922",
+            "market": "total points",
+            "athleteId": null,
+            "side": "over",
+            "line": 43.5,
+            "odds": -110,
+            "book": "ESPN BET",
+            "chance": 0.539,
+            "kickoff": "2026-10-10T01:00Z",
+            "observedAt": "2026-10-09T15:05:22Z",
+            "marketWindow": "Full game",
+            "alternate": false
+          },
+          {
+            "id": "game-CFB-401864519-over",
+            "title": "Wyoming at San Jos\u00e9 State over 42.5",
+            "gameId": "CFB-401864519",
+            "market": "total points",
+            "athleteId": null,
+            "side": "over",
+            "line": 42.5,
+            "odds": -105,
+            "book": "ESPN BET",
+            "chance": 0.522,
+            "kickoff": "2026-10-10T01:00Z",
+            "observedAt": "2026-10-09T15:05:22Z",
+            "marketWindow": "Full game",
+            "alternate": false
+          }
+        ],
+        "correlation": "One leg per game, so the ticket treats the legs as independent; its chance is their product.",
+        "gameIds": [
+          "CFB-401858487",
+          "CFB-401860922",
+          "CFB-401864519"
+        ],
+        "book": "ESPN BET",
+        "odds": 645,
+        "quotedAt": "2026-10-09T15:05:22Z",
+        "quoteType": "capture",
+        "confidence": 1,
+        "priceEstimated": true,
+        "expiresAt": "2026-10-09T21:30:00Z",
+        "edge": "Estimated combined price from captured leg odds; verify the sportsbook's ticket price. Our chance 15.4% against 13.4% break-even at +645: +0.147u per unit staked, 0.25u at risk.",
+        "cutoff": "A longshot is not re-entered. It stands or falls as posted.",
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401858487",
+          "https://www.espn.com/college-football/game/_/gameId/401860922",
+          "https://www.espn.com/college-football/game/_/gameId/401864519"
+        ],
+        "why": "Longshot from the board: 3 legs at ESPN BET, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.",
+        "risk": "Most longshots lose. The legs are treated as independent; any one miss sinks the ticket.",
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Longshot from the board: 3 legs at ESPN BET, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.",
+              "numbers": {},
+              "source": "Published ticket detail",
+              "time": "2026-10-09T15:45:03Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Most longshots lose. The legs are treated as independent; any one miss sinks the ticket.",
+              "numbers": {},
+              "source": "Published ticket risk",
+              "time": "2026-10-09T15:45:03Z"
+            }
+          ],
+          "reports": [],
+          "weather": null,
+          "line": {
+            "legs": [
+              {
+                "gameId": "CFB-401858487",
+                "title": "Iowa at Washington over 41.5",
+                "line": 41.5,
+                "price": 100,
+                "book": "ESPN BET"
+              },
+              {
+                "gameId": "CFB-401860922",
+                "title": "Washington State at Utah State over 43.5",
+                "line": 43.5,
+                "price": -110,
+                "book": "ESPN BET"
+              },
+              {
+                "gameId": "CFB-401864519",
+                "title": "Wyoming at San Jos\u00e9 State over 42.5",
+                "line": 42.5,
+                "price": -105,
+                "book": "ESPN BET"
+              }
+            ],
+            "best": {
+              "book": "ESPN BET",
+              "price": 645,
+              "time": "2026-10-09T15:05:22Z"
+            }
+          },
+          "ours": null,
+          "history": null,
+          "sources": [
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401858487",
+              "time": "2026-10-09T15:45:03Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401860922",
+              "time": "2026-10-09T15:45:03Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401864519",
+              "time": "2026-10-09T15:45:03Z"
+            }
+          ],
+          "partial": true
+        },
+        "entryNote": "Pulled before posting: its Iowa at Washington over 41.5 leg: the evidence argues against it: The starting quarterback is a game-time decision and the backup is more likely to start, which is a concrete reason the over is at risk. Stays in the record at +645 and is graded as posted."
+      }
+    ]
   }
 ]

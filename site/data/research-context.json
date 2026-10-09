@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-09T16:19:17Z",
+  "updatedAt": "2026-10-09T16:31:07Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-09T16:00Z",
+              "reportedAt": "2026-10-09T16:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5297,6 +5297,15 @@
           "name": "New York Giants",
           "players": [
             {
+              "id": "4595348",
+              "name": "Malik Nabers",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-10-09T16:14Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4595348/malik-nabers"
+            },
+            {
               "id": "4259566",
               "name": "Andrew Thomas",
               "position": "OT",
@@ -5322,15 +5331,6 @@
               "injury": "Shoulder",
               "reportedAt": "2026-10-08T20:23Z",
               "source": "https://www.espn.com/nfl/player/_/id/4696981/cam-skattebo"
-            },
-            {
-              "id": "4595348",
-              "name": "Malik Nabers",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Knee",
-              "reportedAt": "2026-10-08T20:20Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4595348/malik-nabers"
             },
             {
               "id": "4036132",
@@ -6907,6 +6907,15 @@
           "name": "Tennessee Titans",
           "players": [
             {
+              "id": "4871023",
+              "name": "Carnell Tate",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-09T16:12Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4871023/carnell-tate"
+            },
+            {
               "id": "4360978",
               "name": "David Martin-Robinson",
               "position": "TE",
@@ -6914,15 +6923,6 @@
               "injury": "Hamstring",
               "reportedAt": "2026-10-08T23:34Z",
               "source": "https://www.espn.com/nfl/player/_/id/4360978/david-martin-robinson"
-            },
-            {
-              "id": "4871023",
-              "name": "Carnell Tate",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Back",
-              "reportedAt": "2026-10-08T21:01Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4871023/carnell-tate"
             },
             {
               "id": "4686728",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "28",
-          "name": "Ben Sinnott",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-08T20:47:52Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4690923/ben-sinnott"
-        },
-        {
           "teamId": "4",
           "name": "B.J. Hill",
           "from": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-09T15:55:35Z",
           "source": "https://www.espn.com/nfl/player/_/id/4243375/dylan-parham"
+        },
+        {
+          "teamId": "10",
+          "name": "Carnell Tate",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-09T16:31:07Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4871023/carnell-tate"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-09T16:19:17Z",
-      "lastAttemptAt": "2026-10-09T16:19:17Z",
+      "checkedAt": "2026-10-09T16:31:07Z",
+      "lastAttemptAt": "2026-10-09T16:31:07Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-09T16:19:17Z",
-      "lastAttemptAt": "2026-10-09T16:19:17Z",
+      "checkedAt": "2026-10-09T16:31:07Z",
+      "lastAttemptAt": "2026-10-09T16:31:07Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
