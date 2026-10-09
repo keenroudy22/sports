@@ -1109,3 +1109,21 @@ primetime fallback, without changing the record. The new lane records remain sep
 Best bets headline before and after is 35–36 (one void), with the owner baseline −5.11u at posted prices.
 Opponent-adjusted college trends (T-TREND) remain queued for Release 3 so this selection release was live
 before Saturday's morning runs.
+
+## October 9, 2026: Kook'n plan Release 2
+
+The owner-approved voice and caption plan (T12–T17) shipped at
+`ed68bf16325481e129c91a541d79a30da1466bdf` in hosted run
+[`37956832655`](https://github.com/keenroudy22/sports/actions/runs/37956832655). The final tree passed
+1,225 Python tests (two skipped), 230 frontend tests, both suites from a clean export, the 459-page build,
+payload budgets, the 94-pick record audit, the 501-file publication guard, asset checks and isolated
+slot-1145 rehearsal. Live Chrome checks covered Today, Games, Record and WSU–Utah State at 375 and 1440 pixels
+with no sideways overflow, caught load state or browser exception. Live assets were `app.js?v=150` and
+`app-games.js?v=sha256-0aa9bf8631fd`.
+
+The exact owner caption pools, kill-list guard, deterministic variety selection, result wording and posting-time
+jitter are live. A matchup page now includes only a play wholly tied to that one game: the five-leg multi-game Fun
+Lotto no longer appears under WSU–Utah State or any other individual matchup. The live WSU–Utah State page says
+`No official bet in this game` while retaining its matchup lines and season trends. No pick, result, historical
+post or append-only record changed. The Best bets headline before and after remains **35–36 (one void), −5.11u at
+posted prices**.
