@@ -1,0 +1,226 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-10-09T13:08:29Z",
+  "summary": "Research update for Oct 9: Nothing to settle. Closed 1: 5-leg longshot at FanDuel. Nothing published. precheck before posting",
+  "takeaways": [],
+  "parlays": [
+    {
+      "id": "CFB-2026-W6-longshot-1009-fd",
+      "title": "5-leg longshot at FanDuel",
+      "status": "expired",
+      "favorite": false,
+      "parlayType": "longshot",
+      "riskUnits": 0.25,
+      "legs": [
+        {
+          "id": "game-CFB-401858254-under",
+          "title": "Florida State at Louisville under 59.5",
+          "gameId": "CFB-401858254",
+          "market": "total points",
+          "athleteId": null,
+          "side": "under",
+          "line": 59.5,
+          "odds": -106,
+          "book": "FanDuel",
+          "chance": 0.532,
+          "kickoff": "2026-10-09T23:00Z",
+          "observedAt": "2026-10-09T10:45:08Z",
+          "marketWindow": "Full game",
+          "alternate": false
+        },
+        {
+          "id": "game-CFB-401858487-over",
+          "title": "Iowa at Washington over 41.5",
+          "gameId": "CFB-401858487",
+          "market": "total points",
+          "athleteId": null,
+          "side": "over",
+          "line": 41.5,
+          "odds": -105,
+          "book": "FanDuel",
+          "chance": 0.547,
+          "kickoff": "2026-10-10T01:00Z",
+          "observedAt": "2026-10-09T10:45:08Z",
+          "marketWindow": "Full game",
+          "alternate": false
+        },
+        {
+          "id": "game-CFB-401860922-over",
+          "title": "Washington State at Utah State over 43.5",
+          "gameId": "CFB-401860922",
+          "market": "total points",
+          "athleteId": null,
+          "side": "over",
+          "line": 43.5,
+          "odds": -115,
+          "book": "FanDuel",
+          "chance": 0.539,
+          "kickoff": "2026-10-10T01:00Z",
+          "observedAt": "2026-10-09T10:45:08Z",
+          "marketWindow": "Full game",
+          "alternate": false
+        },
+        {
+          "id": "game-CFB-401864519-over",
+          "title": "Wyoming at San José State over 42.5",
+          "gameId": "CFB-401864519",
+          "market": "total points",
+          "athleteId": null,
+          "side": "over",
+          "line": 42.5,
+          "odds": -105,
+          "book": "FanDuel",
+          "chance": 0.522,
+          "kickoff": "2026-10-10T01:00Z",
+          "observedAt": "2026-10-09T10:45:08Z",
+          "marketWindow": "Full game",
+          "alternate": false
+        },
+        {
+          "id": "prop-CFB-401856826-5141367-rushYds",
+          "title": "Bear Bachmeier under 41.5 rushing yards",
+          "gameId": "CFB-401856826",
+          "market": "rushing yards",
+          "athleteId": "5141367",
+          "side": "under",
+          "line": 41.5,
+          "odds": -114,
+          "book": "FanDuel",
+          "chance": 0.582,
+          "kickoff": "2026-10-10T02:15Z",
+          "observedAt": "2026-10-09T03:47:09Z",
+          "marketWindow": "Full game",
+          "alternate": false
+        }
+      ],
+      "correlation": "One leg per game, so the ticket treats the legs as independent; its chance is their product.",
+      "gameIds": [
+        "CFB-401858254",
+        "CFB-401858487",
+        "CFB-401860922",
+        "CFB-401864519",
+        "CFB-401856826"
+      ],
+      "book": "FanDuel",
+      "odds": 2500,
+      "quotedAt": "2026-10-09T03:47:09Z",
+      "quoteType": "capture",
+      "confidence": 1,
+      "priceEstimated": true,
+      "expiresAt": "2026-10-09T12:30:00Z",
+      "edge": "Estimated combined price from captured leg odds; verify the sportsbook's ticket price. Our chance 4.8% against 3.9% break-even at +2500: +0.239u per unit staked, 0.25u at risk.",
+      "cutoff": "A longshot is not re-entered. It stands or falls as posted.",
+      "sources": [
+        "https://api.sharpapi.io/api/v1/odds (key withheld)",
+        "https://www.espn.com/college-football/game/_/gameId/401856826",
+        "https://www.espn.com/college-football/game/_/gameId/401858254",
+        "https://www.espn.com/college-football/game/_/gameId/401858487",
+        "https://www.espn.com/college-football/game/_/gameId/401860922",
+        "https://www.espn.com/college-football/game/_/gameId/401864519"
+      ],
+      "why": "Longshot from the board: 5 legs at FanDuel, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.",
+      "risk": "Most longshots lose. The legs are treated as independent; any one miss sinks the ticket.",
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Longshot from the board: 5 legs at FanDuel, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.",
+            "numbers": {},
+            "source": "Published ticket detail",
+            "time": "2026-10-09T10:45:05Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Most longshots lose. The legs are treated as independent; any one miss sinks the ticket.",
+            "numbers": {},
+            "source": "Published ticket risk",
+            "time": "2026-10-09T10:45:05Z"
+          }
+        ],
+        "reports": [],
+        "weather": null,
+        "line": {
+          "legs": [
+            {
+              "gameId": "CFB-401858254",
+              "title": "Florida State at Louisville under 59.5",
+              "line": 59.5,
+              "price": -106,
+              "book": "FanDuel"
+            },
+            {
+              "gameId": "CFB-401858487",
+              "title": "Iowa at Washington over 41.5",
+              "line": 41.5,
+              "price": -105,
+              "book": "FanDuel"
+            },
+            {
+              "gameId": "CFB-401860922",
+              "title": "Washington State at Utah State over 43.5",
+              "line": 43.5,
+              "price": -115,
+              "book": "FanDuel"
+            },
+            {
+              "gameId": "CFB-401864519",
+              "title": "Wyoming at San José State over 42.5",
+              "line": 42.5,
+              "price": -105,
+              "book": "FanDuel"
+            },
+            {
+              "gameId": "CFB-401856826",
+              "title": "Bear Bachmeier under 41.5 rushing yards",
+              "line": 41.5,
+              "price": -114,
+              "book": "FanDuel"
+            }
+          ],
+          "best": {
+            "book": "FanDuel",
+            "price": 2500,
+            "time": "2026-10-09T03:47:09Z"
+          }
+        },
+        "ours": null,
+        "history": null,
+        "sources": [
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds (key withheld)",
+            "time": "2026-10-09T10:45:05Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401856826",
+            "time": "2026-10-09T10:45:05Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401858254",
+            "time": "2026-10-09T10:45:05Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401858487",
+            "time": "2026-10-09T10:45:05Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401860922",
+            "time": "2026-10-09T10:45:05Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401864519",
+            "time": "2026-10-09T10:45:05Z"
+          }
+        ],
+        "partial": true
+      },
+      "entryNote": "Pulled before posting: its Bear Bachmeier under 41.5 rushing yards leg: the evidence argues against it: The fact that the player is slated for a heavier rushing workload directly contradicts the pick for under rushing yards. Stays in the record at +2500 and is graded as posted."
+    }
+  ]
+}
