@@ -66,6 +66,9 @@ jobs:
         run: python scripts/refresh.py
       - name: Refresh the multi-sport score center
         run: python scripts/sports_refresh.py
+      - name: Collect NBA final player boxes (free scheduled writer only)
+        if: github.event_name == 'schedule'
+        run: python scripts/sport_box.py
       - name: Build recorded multi-sport history
         run: python scripts/market_lab.py report
       - name: Store box scores, play-by-play and closing lines for new finals
@@ -147,7 +150,7 @@ jobs:
           python scripts/integrity.py
           git config user.name 'football-forecast[bot]'
           git config user.email 'football-forecast[bot]@users.noreply.github.com'
-          git add site/data tests/integrity-ledger.json data/boxscores data/nflverse data/forecasts data/props data/odds data/prop-odds data/model data/venues.json data/venues-review.json data/weather
+          git add site/data tests/integrity-ledger.json data/sport-box data/boxscores data/nflverse data/forecasts data/props data/odds data/prop-odds data/model data/venues.json data/venues-review.json data/weather
           if ! git diff --cached --quiet; then
             git commit -m 'Refresh schedules, finals and pregame forecasts'
             # The desk on the owner's machine pushes too. A rejected push is rebased, and a stop on the

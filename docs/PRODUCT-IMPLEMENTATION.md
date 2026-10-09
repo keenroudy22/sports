@@ -1166,3 +1166,33 @@ it was shortened without changing completion gates, and final clean-export
 validation passed. This is candidate validation only: build, budget, record audit,
 publication guard, assets, rehearsal, lock-held promotion, hosted success and
 live 375/1440 checks remain required before a code release.
+
+### October 9 expedited NBA release candidate
+
+Owner requested immediate completion after the daily parser task. The Climb retry
+completed green at 17:49 ET; no qualifying rung and no forced post. Current
+main-based NBA candidate now has bounded free Mac four-slot collection, a hosted
+schedule-only NBA box writer, ledger-protected quotes/props/injuries/observations,
+and lazy NBA Today. Existing sports_refresh is the NBA league registry; NHL/MLB
+writers/pages and football record math are unchanged. Manual probe batches are
+not scheduled observation days. P36 keeps its two-real-day completion gate.
+
+The live-source candidate contains the real three-game October 20 slate, 11 book
+quotes, 118 injury statuses (no comment text), and 60 last-season regular boxes.
+NBA Today includes research projections from the existing team model, twelve
+explicitly labeled last-season player logs and a held current-season Prep List.
+Opening-night matchups lead the preseason results. New app/nba.json is lazy,
+explicitly allowlisted and budgeted at 64 KiB. The shell stays within its existing
+budget. No NBA price, model weight, player side or current-season sample is invented.
+
+The NBA Trial policy/own append-only record helper is prepared with opening-night,
+fresh two-sided exact-line/role/price holds, raw .06/.56 then verified calibrated
+.04 admission, 1u/one-per-day, first-card two-hour veto, 30-graded/-5u pause and
+30-graded/nonnegative promotion-review conditions. No Trial run admission, social
+send or settlement integration is activated; that remains explicit unfinished work.
+The first real layout sample uses BOS–DET opening-night under 220.5 at -110
+DraftKings, observed October 9, and is clearly a preview with no bet admitted.
+Card QA passes; the fixed PNG/source receipt are in design/final/nba-trial-preview.*.
+Phone preview/veto timing and the final hosted/live receipt will be recorded in
+codex-status.md after the release succeeds. P38/P70 remain open for their stated
+remaining gates; the temporary NBA automation is not retired.

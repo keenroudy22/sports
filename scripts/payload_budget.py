@@ -22,6 +22,7 @@ LIMITS = {
     'cfb-teams': 256 * 1024,
     'cfb-defense': 512 * 1024,
     'vegas': 64 * 1024,
+    'nba': 64 * 1024,
 }
 SHELL_FILES = ('index.html', 'app.css', 'app.js')
 NEAR_FRACTION = .90
@@ -60,6 +61,7 @@ def check(site=SITE):
                 warnings.append(warning)
     files = {
         'today': site / 'data/app/today.json',
+        'nba': site / 'data/app/nba.json',
         'today-hero': site / 'data/app/today-hero.json',
         'lines-NFL': site / 'data/app/lines-NFL.json',
         'lines-CFB': site / 'data/app/lines-CFB.json',

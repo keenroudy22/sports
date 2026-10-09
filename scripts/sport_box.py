@@ -85,3 +85,47 @@ def extract(payload, event_id, retrieved_at):
             'eventId': f'NBA-{event_id}', 'kickoff': competition['date'], 'teams': teams,
             'players': players, 'retrievedAt': retrieved_at, 'extractor': 1,
             'source': f'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event={event_id}'}
+
+
+def refresh(root=None, fetch=None, now=None, limit=20):
+    """Hosted scheduled-only bounded writer: current finals then last-season regular boxes."""
+    import json
+    from datetime import datetime, timezone
+    from pathlib import Path
+    import hoops_store
+    import nba_capture
+    root = Path(root) if root is not None else Path(__file__).resolve().parents[1]/'data'/'sport-box'
+    now = now or datetime.now(timezone.utc)
+    budget = nba_capture.Budget(requests=min(limit,60),seconds=150,fetch=fetch)
+    problems = boxscores.verify(root)
+    if problems:
+        raise ValueError('; '.join(problems))
+    old = {r['eventId']:r for p in root.glob('*.jsonl') for r in boxscores.read_store(p)}
+    slate = nba_capture.STORE/'slate.json'
+    games = json.loads(slate.read_text()).get('games',[]) if slate.exists() else []
+    final_ids = [str(g['providerId']) for g in games if g['status']=='final']
+    history = sorted((r for r in hoops_store.load('NBA') if r['type']==2),key=lambda r:r['kickoff'],reverse=True)
+    final_ids += [r['eventId'] for r in history]
+    result={'captured':0,'errors':0,'requests':0}
+    for event in dict.fromkeys(final_ids):
+        saved=old.get('NBA-'+event)
+        # One genuine post-final recheck, 24 hours later; immutable prefix remains intact.
+        if saved and (saved.get('rechecked') or (now-boxscores.instant(saved['retrievedAt'])).total_seconds()<86400):
+            continue
+        try:
+            url=f'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event={event}'
+            row=extract(budget(url),event,boxscores.stamp(datetime.now(timezone.utc)))
+            if saved:
+                row['rechecked']=True
+            result['captured'] += nba_capture.append_changed([row],root,lambda r:r['eventId'])
+        except (OSError, ValueError, KeyError, TypeError):
+            result['errors']+=1
+        if budget.requests>=budget.limit or budget.errors>=3 or budget.clock()>=budget.deadline:
+            break
+    result['requests']=budget.requests
+    return result
+
+
+if __name__ == '__main__':
+    import json
+    print(json.dumps(refresh()))

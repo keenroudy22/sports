@@ -551,5 +551,23 @@
       ${section('Players this season', roster.length ? `<div class="list-links cols">${roster.map(p => `<a href="#player/${esc(league)}/${esc(p[0])}"><span class="with-art">${headshot(league, p[0], 'sm', team)}<span><b>${esc(p[1])}</b> <span class="muted small">${esc(p[2] || '')}</span></span></span><small>${esc(p[6] || 0)} game${Number(p[6]) === 1 ? '' : 's'} stored →</small></a>`).join('')}</div>` : '<p class="muted small">Players appear after their first stat line.</p>')}`;
   };
   views.gamesLive = gamesLive;
+  views.nbaToday = async () => {
+    const data = await get('app/nba.json');
+    const label = g => `${g.teams.away.abbreviation} at ${g.teams.home.abbreviation}`;
+    const games = (data.games || []).slice().sort((a,b) => Number(a.seasonType === 'preseason') - Number(b.seasonType === 'preseason') || a.kickoff.localeCompare(b.kickoff)).map(g => `<article class="card" style="margin-top:12px"><p class="eyebrow">${esc(g.seasonType === 'preseason' ? 'Preseason' : 'NBA')} · ${esc(whenShort(g.kickoff))}</p><h3>${esc(label(g))}</h3>
+      ${g.status === 'final' ? `<p>Final: ${esc(g.scores?.away ?? '–')}–${esc(g.scores?.home ?? '–')}</p>` : `<p class="small muted">${esc(g.status === 'in_progress' ? 'In progress · live scores below' : 'Scheduled')}</p>`}
+      ${g.projection ? `<p style="margin-top:8px">Research projection: ${esc(g.teams.away.abbreviation)} ${esc(g.projection.away)} · ${esc(g.teams.home.abbreviation)} ${esc(g.projection.home)}</p><p class="small muted">${g.projection.sparse ? 'Early-season number, built from last season’s team ratings.' : 'Team model projection.'} This is research, not a best bet.</p>` : ''}
+      ${g.totalQuote ? `<p class="small" style="margin-top:8px">Total ${esc(g.totalQuote.line)} · over ${esc(oddsText(g.totalQuote.over))} / under ${esc(oddsText(g.totalQuote.under))} · ${esc(bookLabel(g.totalQuote.book))}</p><p class="tiny muted">Prices seen ${esc(whenShort(g.totalQuote.retrievedAt))}</p>` : ''}</article>`).join('');
+    const trends = (data.trends || []).map(r => `<article class="card" style="margin-top:12px"><p class="eyebrow">${esc(r.window)} · ${esc(r.season-1)}–${esc(String(r.season).slice(-2))}</p><h3>${esc(r.name)} · ${esc(r.statName)}</h3><p>${esc(r.average)} average across ${esc(r.games)} recorded games</p><p class="small muted" style="overflow-wrap:anywhere">Game log: ${esc(r.values.join(' · '))}</p><p class="tiny muted">${esc(r.dates[0])} through ${esc(r.dates.at(-1))}. Recorded appearances only.</p></article>`).join('');
+    const prep = (data.prep || []).map(r => `<div class="receipt"><div><b>${esc(r.name)} over ${esc(r.line)} ${esc(r.stat)}</b><span>${esc(r.hits)} of ${esc(r.games)} · ${esc(oddsText(r.over))} ${esc(bookLabel(r.book))} · Research</span></div></div>`).join('');
+    const live = await views.gamesLive({day:etDay()});
+    return `${head('NBA Today', data.heading || 'NBA Today')}<p class="small">Scores, team projections and player research. No NBA best bet has been posted.</p>
+      ${!data.scheduleFresh ? '<p class="small muted">Schedule update unavailable. These are the last stored games.</p>' : ''}
+      <section class="kt-page-sec"><h2>Matchups & projections</h2>${games || '<p class="small muted">No upcoming NBA matchup is stored yet.</p>'}</section>
+      <section class="kt-page-sec"><h2>Player trends</h2>${trends || '<p class="small muted">Player game logs are being collected. Current-season trends need at least three recorded games.</p>'}</section>
+      <section class="kt-page-sec"><h2>Prep List <span class="badge research">Research</span></h2>${prep || `<p class="small muted">${esc(data.prepNote)}</p>`}</section>
+      <section class="kt-page-sec"><h2>NBA Trial</h2><p class="small">${esc(data.trial.note)}</p><p class="small">NBA Trial record: ${esc(data.trial.record?.win || 0)}–${esc(data.trial.record?.loss || 0)} · ${esc(Number(data.trial.record?.units || 0).toFixed(2))}u · ${esc(data.trial.record?.graded || 0)} graded</p><p class="small muted">Separate record · at most one labeled 1u straight play a day. A day without a qualifying play is valid.</p></section>
+      <section class="kt-page-sec">${live}</section>`;
+  };
   return views;
 });

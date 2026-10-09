@@ -165,6 +165,7 @@ def capture(games, fetch=fetch_json, clock=lambda: datetime.now(timezone.utc),
             if start.tzinfo is None or now.tzinfo is None:
                 continue
             if (game.get('league') != 'NBA' or game.get('status') != 'scheduled'
+                    or not game.get('timeConfirmed', True)
                     or not isinstance(game.get('season'), int) or isinstance(game['season'], bool)
                     or not 0 < (start-now).total_seconds() <= 36000
                     or start.astimezone(eastern).date() != now.astimezone(eastern).date()):

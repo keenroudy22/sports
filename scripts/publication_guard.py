@@ -19,7 +19,7 @@ DATA_FILES = {'slate.json', 'research-context.json', 'desk-notes.json', 'sports.
               'market-lab.json', 'market-lines.json', 'depth-charts.json', 'player-identity.json',
               'scoreboard-games.json', 'forecasts.json', 'feed.xml'}
 APP_FILES = {'today.json', 'today-hero.json', 'record.json', 'lines.json', 'lines-NFL.json', 'lines-CFB.json',
-             'research.json', 'sport-research.json', 'vegas.json'}
+             'research.json', 'sport-research.json', 'vegas.json', 'nba.json'}
 PRIVATE_NAMES = {'env', '.env', 'desk-health.html', 'desk-health.json', 'desk-health-state.json',
                  'desk-reliability.json', 'reliability-history.json', 'live-watch.json',
                  'live-progress.json', 'x-posted.json', 'status.json', 'policy.json',

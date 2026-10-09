@@ -59,7 +59,7 @@ PUBLISH_MARGIN = timedelta(minutes=5)      # nothing is published on a game this
 KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'ladder', 'favorite')
 LADDER_SCAN_TIMES = ((10, 0), (13, 30), (16, 0), (20, 0))
 WHITELIST = ('research/', 'data/odds/', 'data/prop-odds/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
-             'data/paper/', 'data/hoops/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
+             'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 BOOK_SLUG = {'DraftKings': 'dk', 'FanDuel': 'fd', 'BetMGM': 'mgm', 'Caesars': 'czr', 'BetRivers': 'br',
              'ESPN BET': 'espnbet', 'Fanatics': 'fan'}
 VOLUME = {'recYds': 'targets', 'rec': 'targets', 'rushYds': 'carries', 'car': 'carries',
@@ -141,7 +141,7 @@ def git(*args, cwd=ROOT, check=True):
     return result
 
 
-LEFTOVER = ('data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/',
+LEFTOVER = ('data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/', 'data/nba-capture/',
             'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 
 
@@ -1290,6 +1290,16 @@ def paper_trials(now, slot, status):
     except Exception as error:
         status['errors'].append(f'market lab: {type(error).__name__}: {error}')
         log(f'market lab: {type(error).__name__}: {error}')
+
+
+    if os.environ.get('KEENROUDY_SPORTS_CAPTURE', '1') != '0':
+        try:
+            import nba_capture
+            status['nbaCapture'] = nba_capture.step(now, scheduled=True)
+            log(f"NBA capture: {status['nbaCapture']}")
+        except Exception as error:
+            status['errors'].append(f'nba capture: {type(error).__name__}: {error}')
+            log(f'NBA capture: {type(error).__name__}: {error}')
 
 
 def remember(decided, now, slot, status):

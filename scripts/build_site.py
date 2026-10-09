@@ -1802,6 +1802,13 @@ def build(now=None):
             write(OUT / 'teams' / league / f'{team}.json', payload)
     write(OUT / 'research.json', {'generatedAt': stamp(now), **build_research(context, reports, now)})
     write(OUT / 'sport-research.json', sport_research.build(now))
+    import nba_today
+    write(OUT / 'nba.json', nba_today.build(now))
+    import shutil as nba_copy
+    nba_preview = ROOT / 'design/final/nba-trial-preview.png'
+    if nba_preview.exists():
+        (ROOT / 'site/data/cards').mkdir(parents=True, exist_ok=True)
+        nba_copy.copyfile(nba_preview, ROOT / 'site/data/cards/nba-trial-preview.png')
     write_vegas(now, records)
     return len(cards)
 
