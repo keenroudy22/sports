@@ -26,7 +26,7 @@ def rows(root=nba_trial.STORE):
 
 def review_ready(now,review=None):
  if review is None and datetime.now(timezone.utc).astimezone(nba_trial.EASTERN).date()<nba_trial.OPENING:return False
- if os.environ.get('KEENROUDY_NBA_TRIAL','1')=='0':return False
+ if os.environ.get('KEENROUDY_NBA_TRIAL','1')=='0' or os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')=='0':return False
  if now.astimezone(nba_trial.EASTERN).date()<nba_trial.OPENING:return False
  if review is None:
   try:review=json.loads(REVIEW.read_text())
@@ -210,7 +210,7 @@ def precheck(now,log_book,refresh=True,delete=None):
       and not e.get('sentAt') and not e.get('cancelledAt')
       and 0<=(boxscores.instant(e['dueAt'])-now).total_seconds()<=45*60]
  if not due:return False
- if refresh:
+ if refresh and review_ready(now):
   nba_capture.step(now,budget=nba_capture.Budget(requests=10,seconds=60))
   now=max(now,datetime.now(timezone.utc))
  plays={p['id']:p for p in public_rows()};changed=False
