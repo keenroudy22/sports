@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-09T16:41:58Z",
+  "updatedAt": "2026-10-09T17:13:18Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,16 +1160,16 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-09T16:12Z",
+              "reportedAt": "2026-10-09T17:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
               "id": "4608686",
               "name": "Kyle Monangai",
               "position": "RB",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Toe",
               "reportedAt": "2026-10-08T21:23Z",
               "source": "https://www.espn.com/nfl/player/_/id/4608686/kyle-monangai"
@@ -3687,6 +3687,15 @@
           "name": "Las Vegas Raiders",
           "players": [
             {
+              "id": "4890973",
+              "name": "Ashton Jeanty",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-09T16:37Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4890973/ashton-jeanty"
+            },
+            {
               "id": "4875295",
               "name": "Jackson Powers-Johnson",
               "position": "G",
@@ -3703,15 +3712,6 @@
               "injury": "Ankle",
               "reportedAt": "2026-10-08T23:50Z",
               "source": "https://www.espn.com/nfl/player/_/id/4241983/cody-white"
-            },
-            {
-              "id": "4890973",
-              "name": "Ashton Jeanty",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-08T21:31Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4890973/ashton-jeanty"
             },
             {
               "id": "4432665",
@@ -7137,22 +7137,40 @@
           "name": "Washington Commanders",
           "players": [
             {
-              "id": "2976212",
-              "name": "Stefon Diggs",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Hamstring",
-              "reportedAt": "2026-10-09T15:40Z",
-              "source": "https://www.espn.com/nfl/player/_/id/2976212/stefon-diggs"
-            },
-            {
               "id": "3121422",
               "name": "Terry McLaurin",
               "position": "WR",
               "status": "Questionable",
               "injury": "Hamstring",
-              "reportedAt": "2026-10-09T15:24Z",
+              "reportedAt": "2026-10-09T16:58Z",
               "source": "https://www.espn.com/nfl/player/_/id/3121422/terry-mclaurin"
+            },
+            {
+              "id": "2976212",
+              "name": "Stefon Diggs",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Hamstring",
+              "reportedAt": "2026-10-09T16:57Z",
+              "source": "https://www.espn.com/nfl/player/_/id/2976212/stefon-diggs"
+            },
+            {
+              "id": "4426348",
+              "name": "Jayden Daniels",
+              "position": "QB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-09T16:54Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4426348/jayden-daniels"
+            },
+            {
+              "id": "4697815",
+              "name": "Rachaad White",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Shoulder",
+              "reportedAt": "2026-10-09T16:51Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4697815/rachaad-white"
             },
             {
               "id": "4426403",
@@ -7209,15 +7227,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4360635/chig-okonkwo"
             },
             {
-              "id": "4697815",
-              "name": "Rachaad White",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Shoulder",
-              "reportedAt": "2026-10-08T20:48Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4697815/rachaad-white"
-            },
-            {
               "id": "4575131",
               "name": "Jacory Croskey-Merritt",
               "position": "RB",
@@ -7225,15 +7234,6 @@
               "injury": "Groin",
               "reportedAt": "2026-10-08T20:22Z",
               "source": "https://www.espn.com/nfl/player/_/id/4575131/jacory-croskey-merritt"
-            },
-            {
-              "id": "4426348",
-              "name": "Jayden Daniels",
-              "position": "QB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-08T14:57Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4426348/jayden-daniels"
             },
             {
               "id": "3125248",
@@ -7365,22 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "4",
-          "name": "B.J. Hill",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-08T20:58:26Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3116748/bj-hill"
-        },
-        {
-          "teamId": "4",
-          "name": "Colbie Young",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-08T20:58:26Z",
-          "source": "https://www.espn.com/nfl/player/_/id/5092508/colbie-young"
-        },
         {
           "teamId": "21",
           "name": "Dontayvion Wicks",
@@ -7764,11 +7748,27 @@
           "to": "Active",
           "observedAt": "2026-10-09T16:31:07Z",
           "source": "https://www.espn.com/nfl/player/_/id/4871023/carnell-tate"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-10-09T17:13:18Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Kyle Monangai",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-09T17:13:18Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4608686/kyle-monangai"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-09T16:41:58Z",
-      "lastAttemptAt": "2026-10-09T16:41:58Z",
+      "checkedAt": "2026-10-09T17:13:18Z",
+      "lastAttemptAt": "2026-10-09T17:13:18Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-09T16:41:58Z",
-      "lastAttemptAt": "2026-10-09T16:41:58Z",
+      "checkedAt": "2026-10-09T17:13:18Z",
+      "lastAttemptAt": "2026-10-09T17:13:18Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
