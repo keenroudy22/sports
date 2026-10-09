@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-10-09T17:13:18Z",
+  "updatedAt": "2026-10-09T17:35:36Z",
   "coverage": "ESPN offensive depth charts for upcoming teams with a hard skill-position injury.",
   "teams": {
     "3": {
       "name": "Chicago Bears",
       "abbr": "CHI",
       "status": "ok",
-      "checkedAt": "2026-10-09T17:13:18Z",
-      "lastAttemptAt": "2026-10-09T17:13:18Z",
+      "checkedAt": "2026-10-09T17:35:36Z",
+      "lastAttemptAt": "2026-10-09T17:35:36Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/chi",
       "positions": [
         {
@@ -143,8 +143,8 @@
       "name": "Denver Broncos",
       "abbr": "DEN",
       "status": "ok",
-      "checkedAt": "2026-10-09T17:13:18Z",
-      "lastAttemptAt": "2026-10-09T17:13:18Z",
+      "checkedAt": "2026-10-09T17:35:36Z",
+      "lastAttemptAt": "2026-10-09T17:35:36Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/den",
       "positions": [
         {
@@ -288,12 +288,171 @@
         }
       ]
     },
+    "17": {
+      "name": "New England Patriots",
+      "abbr": "NE",
+      "status": "ok",
+      "checkedAt": "2026-10-09T17:35:36Z",
+      "lastAttemptAt": "2026-10-09T17:35:36Z",
+      "source": "https://www.espn.com/nfl/team/depth/_/name/ne",
+      "positions": [
+        {
+          "key": "qb",
+          "label": "QB",
+          "group": "QB",
+          "players": [
+            {
+              "id": "4431452",
+              "name": "Drake Maye",
+              "order": 1
+            },
+            {
+              "id": "4240391",
+              "name": "Tommy DeVito",
+              "order": 2
+            },
+            {
+              "id": "4431465",
+              "name": "Behren Morton",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "key": "rb",
+          "label": "RB",
+          "group": "RB",
+          "players": [
+            {
+              "id": "4569173",
+              "name": "Rhamondre Stevenson",
+              "order": 1
+            },
+            {
+              "id": "4432710",
+              "name": "TreVeyon Henderson",
+              "order": 2
+            },
+            {
+              "id": "4431431",
+              "name": "Corey Kiner",
+              "order": 3
+            },
+            {
+              "id": "4676889",
+              "name": "Myles Montgomery",
+              "order": 4
+            }
+          ]
+        },
+        {
+          "key": "fb",
+          "label": "FB",
+          "group": "FB",
+          "players": [
+            {
+              "id": "4039505",
+              "name": "Reggie Gilliam",
+              "order": 1
+            }
+          ]
+        },
+        {
+          "key": "wr1",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "4361432",
+              "name": "Romeo Doubs",
+              "order": 1
+            },
+            {
+              "id": "4695193",
+              "name": "Efton Chism III",
+              "order": 2
+            },
+            {
+              "id": "4572655",
+              "name": "Jeremiah Webb",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "key": "wr2",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "4427095",
+              "name": "DeMario Douglas",
+              "order": 1
+            },
+            {
+              "id": "4613202",
+              "name": "Kyle Williams",
+              "order": 2
+            }
+          ]
+        },
+        {
+          "key": "wr3",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "2991662",
+              "name": "Mack Hollins",
+              "order": 1
+            },
+            {
+              "id": "4047646",
+              "name": "A.J. Brown",
+              "order": 2
+            }
+          ]
+        },
+        {
+          "key": "te",
+          "label": "TE",
+          "group": "TE",
+          "players": [
+            {
+              "id": "3046439",
+              "name": "Hunter Henry",
+              "order": 1
+            },
+            {
+              "id": "4831959",
+              "name": "Eli Raridon",
+              "order": 2
+            },
+            {
+              "id": "4372026",
+              "name": "Cameron Latu",
+              "order": 3
+            },
+            {
+              "id": "4683308",
+              "name": "Tanner Arkin",
+              "order": 4
+            },
+            {
+              "id": "4365395",
+              "name": "Julian Hill",
+              "order": 5
+            }
+          ]
+        }
+      ]
+    },
     "20": {
       "name": "New York Jets",
       "abbr": "NYJ",
       "status": "ok",
-      "checkedAt": "2026-10-09T17:13:18Z",
-      "lastAttemptAt": "2026-10-09T17:13:18Z",
+      "checkedAt": "2026-10-09T17:35:36Z",
+      "lastAttemptAt": "2026-10-09T17:35:36Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/nyj",
       "positions": [
         {
@@ -444,8 +603,8 @@
       "name": "Pittsburgh Steelers",
       "abbr": "PIT",
       "status": "ok",
-      "checkedAt": "2026-10-09T17:13:18Z",
-      "lastAttemptAt": "2026-10-09T17:13:18Z",
+      "checkedAt": "2026-10-09T17:35:36Z",
+      "lastAttemptAt": "2026-10-09T17:35:36Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/pit",
       "positions": [
         {
@@ -598,8 +757,8 @@
       "name": "San Francisco 49ers",
       "abbr": "SF",
       "status": "ok",
-      "checkedAt": "2026-10-09T17:13:18Z",
-      "lastAttemptAt": "2026-10-09T17:13:18Z",
+      "checkedAt": "2026-10-09T17:35:36Z",
+      "lastAttemptAt": "2026-10-09T17:35:36Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/sf",
       "positions": [
         {
@@ -767,8 +926,8 @@
       "name": "Seattle Seahawks",
       "abbr": "SEA",
       "status": "ok",
-      "checkedAt": "2026-10-09T17:13:18Z",
-      "lastAttemptAt": "2026-10-09T17:13:18Z",
+      "checkedAt": "2026-10-09T17:35:36Z",
+      "lastAttemptAt": "2026-10-09T17:35:36Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/sea",
       "positions": [
         {
@@ -936,8 +1095,8 @@
       "name": "Washington Commanders",
       "abbr": "WSH",
       "status": "ok",
-      "checkedAt": "2026-10-09T17:13:18Z",
-      "lastAttemptAt": "2026-10-09T17:13:18Z",
+      "checkedAt": "2026-10-09T17:35:36Z",
+      "lastAttemptAt": "2026-10-09T17:35:36Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/wsh",
       "positions": [
         {
