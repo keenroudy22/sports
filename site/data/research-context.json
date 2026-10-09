@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-09T02:34:56Z",
+  "updatedAt": "2026-10-09T03:39:28Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-09T02:20Z",
+              "reportedAt": "2026-10-09T03:26Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1847,12 +1847,30 @@
           "name": "Dallas Cowboys",
           "players": [
             {
+              "id": "4609048",
+              "name": "Tyler Guyton",
+              "position": "OT",
+              "status": "Questionable",
+              "injury": "Back",
+              "reportedAt": "2026-10-09T03:22Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4609048/tyler-guyton"
+            },
+            {
+              "id": "4241389",
+              "name": "CeeDee Lamb",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Quadriceps",
+              "reportedAt": "2026-10-09T03:01Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4241389/ceedee-lamb"
+            },
+            {
               "id": "4595352",
               "name": "Alijah Clark",
               "position": "S",
               "status": "Questionable",
               "injury": "Hamstring",
-              "reportedAt": "2026-10-09T02:20Z",
+              "reportedAt": "2026-10-09T02:27Z",
               "source": "https://www.espn.com/nfl/player/_/id/4595352/alijah-clark"
             },
             {
@@ -2009,15 +2027,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4361579/javonte-williams"
             },
             {
-              "id": "4241389",
-              "name": "CeeDee Lamb",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-04T21:11Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4241389/ceedee-lamb"
-            },
-            {
               "id": "5095865",
               "name": "Shavon Revel Jr.",
               "position": "CB",
@@ -2061,15 +2070,6 @@
               "injury": null,
               "reportedAt": "2026-09-27T22:49Z",
               "source": "https://www.espn.com/nfl/player/_/id/4241921/markquese-bell"
-            },
-            {
-              "id": "4429676",
-              "name": "Tyler Goodson",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-27T19:34Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4429676/tyler-goodson"
             }
           ]
         },
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "33",
-          "name": "Chris Moore",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-08T20:41:14Z",
-          "source": "https://www.espn.com/nfl/player/_/id/2576581/chris-moore"
-        },
-        {
           "teamId": "3",
           "name": "Anthony Johnson Jr.",
           "from": "Injured Reserve",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-09T02:34:56Z",
           "source": "https://www.espn.com/nfl/player/_/id/4595352/alijah-clark"
+        },
+        {
+          "teamId": "6",
+          "name": "CeeDee Lamb",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-09T03:39:28Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4241389/ceedee-lamb"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-09T02:34:56Z",
-      "lastAttemptAt": "2026-10-09T02:34:56Z",
+      "checkedAt": "2026-10-09T03:39:28Z",
+      "lastAttemptAt": "2026-10-09T03:39:28Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-09T02:34:56Z",
-      "lastAttemptAt": "2026-10-09T02:34:56Z",
+      "checkedAt": "2026-10-09T03:39:28Z",
+      "lastAttemptAt": "2026-10-09T03:39:28Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
