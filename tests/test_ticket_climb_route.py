@@ -95,7 +95,8 @@ class RouteTests(unittest.TestCase):
                     'ladder': {'run': 1, 'step': 1, 'stake': 50, 'payout': 83, 'banked': 0,
                                'bankedAfter': 17, 'nextStake': 66},
                     'legs': [{'kickoff': '2026-10-08T23:00Z', 'title': 'Iowa +4.5', 'odds': -120,
-                              'book': 'FanDuel'}, {'kickoff': '2026-10-09T00:30Z', 'title': 'Under 52.5',
+                              'book': 'FanDuel', 'reason': 'Iowa has the matchup edge.'},
+                             {'kickoff': '2026-10-09T00:30Z', 'title': 'Under 52.5',
                                                   'odds': -110, 'book': 'FanDuel'}]},
             'open': {'id': 'open', 'parlayType': 'ladder', 'publishedAt': '2026-10-09T01:00Z',
                      'league': 'CFB', 'odds': -173, 'status': 'active',
@@ -119,6 +120,7 @@ class RouteTests(unittest.TestCase):
         self.assertEqual(state['cashed'][0]['last'], route.when('2026-10-09T00:30Z'))
         self.assertEqual(state['cashed'][0]['legs'][0]['href'], '#pick/win')
         self.assertEqual(state['cashed'][0]['legs'][0]['title'], 'Iowa +4.5')
+        self.assertEqual(state['cashed'][0]['legs'][0]['why'], 'Iowa has the matchup edge.')
         self.assertEqual(state['open']['bet'], 66)
         self.assertEqual(state['open']['cashes'], 104)
         self.assertEqual(state['open']['first'], route.when('2026-10-09T23:00Z'))

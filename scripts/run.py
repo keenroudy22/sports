@@ -1750,6 +1750,31 @@ def ladder_step(ctx, games, now, records, published, decided, screened, exclude=
         log(f'ladder: {reason}')
         return
     league = ticket['_league']
+    # Price and projection agreement make an alternate eligible, but they are
+    # not research by themselves. Save a factual reason on every rung leg so
+    # the route and the pre-post review can explain exactly why it is there.
+    missing = []
+    for leg in ticket.get('legs') or []:
+        case = dict(leg, gameIds=[leg.get('gameId')], _league=league,
+                    _team=(getattr(ctx, 'player_team', {}) or {}).get(str(leg.get('athleteId') or '')),
+                    _player=leg.get('player'))
+        try:
+            case['_evidence'] = evidence(case, ctx, getattr(ctx, 'context_file', {}) or {})
+            saved = plan_reasons(case, ctx)
+        except (KeyError, TypeError, ValueError, AttributeError):
+            saved = []
+        leg['reasons'] = saved
+        leg['reason'] = next((row.get('text') for row in saved if row.get('direction') == 'for'
+                              and row.get('text')), None)
+        if not leg['reason']:
+            missing.append(leg.get('title') or leg.get('id') or 'leg')
+    if missing:
+        reason = 'no saved research reason for ' + ', '.join(missing)
+        log(f'ladder: {reason}')
+        screened.append({'league': league, 'gameId': ticket['gameIds'][0], 'title': ticket['title'],
+                         'rule': 'ladder_research', 'reason': reason})
+        decided.append(decision_record(ticket, league, 'refused', ['ladder_research'], reason, now, ctx))
+        return
     write_prose(ticket, ctx, records)
     ok, decisions = gates.admit(dict(ticket, league=league), ctx)
     if ok:

@@ -851,10 +851,14 @@ class LockedUnitsTests(unittest.TestCase):
                   'parlayType': 'ladder', 'book': 'FanDuel', 'odds': -110, 'legs': [{}, {}], 'gameIds': ['g1'],
                   'ladder': {'run': 1, 'step': 2, 'stake': 94, 'payout': 180}}
         ctx = SimpleNamespace(first={ticket['id']: {'id': ticket['id']}}, latest={ticket['id']: {
-            'entryNote': 'Closed before its post went out: injury', 'result': 'win'}}, games={})
+            'entryNote': 'Closed before its post went out: injury', 'result': 'win'}}, games={},
+            player_team={}, context_file={})
         published, decided, screened = [], [], []
         refusal = run.gates.Decision(False, 'not_republished', 'the rung already exists')
         with mock.patch('ladder.candidate', return_value=(ticket, None)), \
+                mock.patch.object(run, 'evidence', return_value=[]), \
+                mock.patch.object(run, 'plan_reasons', return_value=[{'type': 'matchup', 'class': 'B',
+                    'direction': 'for', 'text': 'The matchup supports the alternate.'}]), \
                 mock.patch.object(run, 'write_prose', side_effect=lambda pick, *_: pick), \
                 mock.patch.object(run.gates, 'pulled_before_post', return_value=True), \
                 mock.patch.object(run.gates, 'fresh_id', side_effect=AssertionError('the ladder never gets a replacement id')), \
@@ -862,6 +866,27 @@ class LockedUnitsTests(unittest.TestCase):
             run.ladder_step(ctx, {}, datetime(2026, 9, 27, 13, 0, tzinfo=timezone.utc), [], published, decided, screened)
         self.assertEqual(ticket['id'], 'NFL-2026-W3-ladder-0927-fd')
         self.assertEqual(published, [])
+
+    def test_a_climb_rung_is_refused_until_every_leg_has_a_saved_research_reason(self):
+        ticket = {'id': 'NFL-ladder', '_league': 'NFL', 'title': 'Climb step 1',
+                  'parlayType': 'ladder', 'book': 'FanDuel', 'odds': -170,
+                  'legs': [{'id': 'a', 'gameId': 'g1', 'title': 'A 40+ receiving yards'},
+                           {'id': 'b', 'gameId': 'g2', 'title': 'B 30+ rushing yards'}],
+                  'gameIds': ['g1', 'g2'], 'ladder': {'run': 3, 'step': 1, 'stake': 50, 'payout': 79}}
+        ctx = SimpleNamespace(first={}, latest={}, games={'g1': {'season': 2026}},
+                              player_team={}, context_file={})
+        published, decided, screened = [], [], []
+        with mock.patch('ladder.candidate', return_value=(ticket, None)), \
+                mock.patch.object(run, 'evidence', return_value=[]), \
+                mock.patch.object(run, 'plan_reasons', side_effect=[
+                    [{'type': 'matchup', 'class': 'B', 'direction': 'for', 'text': 'A faces a bottom-10 defense.'}], []]), \
+                mock.patch.object(run.gates, 'admit', side_effect=AssertionError('research refusal comes first')):
+            run.ladder_step(ctx, {}, datetime(2026, 10, 9, 17, 30, tzinfo=timezone.utc), [],
+                            published, decided, screened)
+        self.assertEqual(published, [])
+        self.assertEqual(screened[0]['rule'], 'ladder_research')
+        self.assertIn('B 30+ rushing yards', screened[0]['reason'])
+        self.assertEqual(ticket['legs'][0]['reason'], 'A faces a bottom-10 defense.')
 
     def test_a_graded_play_carries_its_units_at_the_published_price(self):
         self.assertEqual(run.lock_units({'odds': -111, 'result': 'win'})['units'], round(100 / 111, 3))

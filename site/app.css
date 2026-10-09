@@ -666,4 +666,5 @@ details.filters > .toolbar { margin-top: 4px; }
 .climb-route-step p { margin: 8px 0 0; }
 .climb-route-legs { display: grid; gap: 4px; margin-top: 10px; }
 .climb-route-legs a { display: block; padding: 8px 0; overflow-wrap: anywhere; }
+.climb-route-legs a small { display: block; margin-top: 3px; color: var(--muted); font-weight: 500; line-height: 1.35; }
 .climb-route-bank { margin: 14px 0; font-weight: 700; }

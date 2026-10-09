@@ -117,6 +117,8 @@ def public_legs(pick):
     """Actual posted legs, linked to their immutable rung's play page."""
     return [{'title': leg.get('title') or leg.get('selection') or '',
              'odds': leg.get('odds'), 'book': leg.get('book') or pick.get('book'),
+             'why': leg.get('reason') or next((row.get('text') for row in (leg.get('reasons') or [])
+                                               if row.get('direction') == 'for' and row.get('text')), None),
              'href': f"#pick/{pick['id']}"}
             for leg in pick.get('legs') or []]
 

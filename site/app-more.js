@@ -373,7 +373,7 @@
         <div class="climb-route-steps">${(climbRoute.rows || []).map(row => {
           const real = row.kind === 'cashed' || row.kind === 'open';
           const stateText = row.kind === 'cashed' ? '✓ Cashed' : row.kind === 'open' ? 'Open · not settled' : row.kind === 'next' ? 'Next step · not posted yet' : 'Plan · typical −160';
-          const legs = real ? `<div class="climb-route-legs">${(row.legs || []).map((leg, i) => `<a href="${esc(leg.href || '#record/climb')}">${esc(leg.title || `Leg ${i + 1}`)}${leg.odds != null ? ` · ${esc(oddsText(leg.odds))}` : ''}${leg.book ? ` · ${esc(bookLabel(leg.book))}` : ''} ›</a>`).join('')}</div>` : '';
+          const legs = real ? `<div class="climb-route-legs">${(row.legs || []).map((leg, i) => `<a href="${esc(leg.href || '#record/climb')}">${esc(leg.title || `Leg ${i + 1}`)}${leg.odds != null ? ` · ${esc(oddsText(leg.odds))}` : ''}${leg.book ? ` · ${esc(bookLabel(leg.book))}` : ''} ›${leg.why ? `<small>Why: ${esc(leg.why)}</small>` : ''}</a>`).join('')}</div>` : '';
           return `<div class="climb-route-step ${esc(row.kind)}"><div class="climb-route-head"><b>Step ${esc(row.step)} · ${esc(stateText)}</b><span>${esc(row.league || '')} ${esc(row.day || '')} ${esc(row.clock || '')}</span></div>
             <p>${esc(money(row.bet))} bet → ${esc(money(row.cashes))} cashes · ${esc(money(row.bank))} banked${real ? '' : ' if it wins'}</p>${legs}</div>`;
         }).join('')}</div><p class="climb-route-bank">$1,000 flag · ${esc(money(climbRoute.saved))} banked across all climbs</p></section>` : '';
