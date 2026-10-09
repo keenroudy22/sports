@@ -1178,7 +1178,7 @@ writers/pages and football record math are unchanged. Manual probe batches are
 not scheduled observation days. P36 keeps its two-real-day completion gate.
 
 The live-source candidate contains the real three-game October 20 slate, 11 book
-quotes, 118 injury statuses (no comment text), and 60 last-season regular boxes.
+quotes, 118 injury statuses (no comment text), and 60 NBA boxes, with preseason labeled separately.
 NBA Today includes research projections from the existing team model, twelve
 explicitly labeled last-season player logs and a held current-season Prep List.
 Opening-night matchups lead the preseason results. New app/nba.json is lazy,

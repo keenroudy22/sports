@@ -63,9 +63,11 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
                 total=(quote.get('current') or {}).get('total') or {}
                 if not fresh(quote.get('retrievedAt'),now): continue
                 try:
+                    line=espn_props.number(total['line'])
+                    if line<=0:continue
                     over,under=espn_props.price(total['over']),espn_props.price(total['under'])
                     if .99<=espn_props.implied(over)+espn_props.implied(under)<=1.15:
-                        row['totalQuote']={'line':total['line'],'over':over,'under':under,'book':book,'retrievedAt':quote['retrievedAt']}
+                        row['totalQuote']={'line':line,'over':over,'under':under,'book':book,'retrievedAt':quote['retrievedAt']}
                         break
                 except (KeyError,TypeError,ValueError): pass
         games.append(row)

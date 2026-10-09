@@ -159,8 +159,8 @@ def refresh(previous, fetch, now):
         sport = info['sport']
         old = previous.get('leagues', {}).get(league, {})
         base = {'league': league, 'sport': sport,
-                'coverage': {'scores': True, 'forecasts': False, 'props': False, 'picks': False},
-                'coverageNote': 'Schedules and scores only. Researched picks and forecasts are not yet available.',
+                'coverage': {'scores': True, 'forecasts': league == 'NBA', 'props': False, 'picks': False},
+                'coverageNote': 'NBA Today has research team projections and player logs. No NBA play has been posted.' if league == 'NBA' else 'Schedules and scores only. Researched picks and forecasts are not yet available.',
                 'lastAttemptAt': now, 'requestedWindow': window}
         try:
             by_id = {}
