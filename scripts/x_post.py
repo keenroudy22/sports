@@ -33,6 +33,7 @@ import llm
 import pick_card
 import pricing
 import voice
+import voice_pick
 import re
 from sports_refresh import eastern_date
 
@@ -116,8 +117,9 @@ def http_send(url, body, headers):
 
 def post_tweet(text, creds, send=http_send, media_ids=None):
     """The new post's id, or Refused when X turns it down (a duplicate is a 403)."""
-    if voice.bare_athlete_id(text):
-        raise Refused('bare athlete id in public copy')
+    problems = x_style(text)
+    if problems:
+        raise Refused('; '.join(problems))
     body = {'text': text}
     if media_ids:
         body['media'] = {'media_ids': [str(m) for m in media_ids]}
@@ -297,11 +299,23 @@ def reason_kind(sentence):
 
 
 def reason_in(text):
-    """The reason sentence of a drafted play post: the line after its number line, when there is one."""
-    lines = str(text or '').split('\n')
-    for i, line in enumerate(lines[:-1]):
-        if line.startswith(('We project', 'Our number', 'We have', 'I have')) and lines[i + 1].strip() and not lines[i + 1].startswith(('@', '#')):
-            return lines[i + 1]
+    """The factual reason line in any owner-approved caption shape."""
+    skip = ('@Playbook', '#', '❤️', 'Book says ', 'Now ', "I'm at ", "I've got ", "My number's ",
+            'I have ', 'Book has them losing.', '🍳 ', '🐕 ', '👨‍🍳 ', 'TNF: ', 'MNF: ', 'Saturday night: ')
+    lines = [line.strip() for line in str(text or '').splitlines() if line.strip()]
+    for index, line in enumerate(lines):
+        if line.startswith(skip) or llm.re.search(r'\([+-]\d+,\s*(?:DraftKings|FanDuel|DK|FD)\)$', line):
+            continue
+        if index and lines[index - 1].startswith(('🍳 ', '🐕 ', '👨‍🍳 ')) and index + 1 < len(lines) \
+                and llm.re.match(r'^[+-]\d+', lines[index + 1]):
+            continue
+        if llm.re.search(r'\b(?:OVER|UNDER)\s+[+-]?\d', line) or line.startswith('Our number '):
+            continue
+        if llm.re.match(r'^[+-]\d+(?:\s+at\s+|$)', line):
+            continue
+        if any(token in line for token in (' over ', ' under ', ' +', ' -')) and '(' in line:
+            continue
+        return line
     return None
 
 
@@ -337,8 +351,6 @@ def strip_reason(pick):
         side = str(pick.get('direction') or '').lower()
         if side in ('over', 'under'):
             text = f"{side.title()} {pricing.fmt(pick['line'])} in {season[0]} of {season[1]} this season"
-            if len(last) == 2 and last[1] >= 5:
-                text += f", {last[0]} of his last {last[1]}"
             text += '.'
             if plain(text):
                 return text
@@ -367,24 +379,103 @@ def save_reasons(reasons, path=None):
 def parlay_head(pick, league):
     """A fun ticket leads with its exact posted price, leg count and public book."""
     odds = int(pick['odds'])
-    where = 'college' if league == 'CFB' else 'NFL'
-    legs = len(pick.get('legs') or [])
-    label = 'easy props' if pick.get('parlayType') == 'easyProps' else 'lotto' if odds >= LOTTO else 'longshot'
-    return f"🎰 {odds:+d} Chef's Special: {legs}-leg {where} {label} ({pick.get('book')})"
+    return f"🎰 {odds:+d} Chef's Special ({pick.get('book')})"
 
 
 def ladder_text(pick):
     """The three money lines for the Kook'n 80/20 Climb: stake, return, bank and next ride."""
     info = pick.get('ladder') or {}
-    head = (f"🪜 {pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))} · "
-            f"80/20 Climb, step {info.get('step', 1)} ({int(pick['odds']):+d}, {pick.get('book')})")
+    head = (f"🪜 Climb #{info.get('run', 1)}, step {info.get('step', 1)}: "
+            f"{pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))} "
+            f"({int(pick['odds']):+d}, {pick.get('book')})")
     bank = (f"Step {max(1, int(info.get('step') or 1) - 1)} cashed. " if int(info.get('step') or 1) > 1 else '')
-    bank += f"{pick_card.dollars(info.get('banked', 0))} banked on the way to $1,000."
+    if info.get('banked', 0):
+        bank += f"{pick_card.dollars(info.get('banked'))} in the bank."
+    else:
+        bank = bank.strip()
     money = ''
     return head, money, bank
 
 
-def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=False):
+def safer_text(pick, legs, league):
+    """The owner-written Safer combo shape, filled only from the stored ticket."""
+    head = f"🛡️ Safer combo ({int(pick['odds']):+d}, {pick.get('book')})"
+    facts = []
+    for leg in pick.get('legs') or []:
+        facts.extend(str(value).strip() for value in leg.get('reasons') or [] if str(value).strip())
+    fact = _short_reason(facts[0]) if facts else ''
+    return '\n'.join(part for part in (head, *legs, fact, '@Playbook #' + str(league)) if part)
+
+
+def _caption_day(pick, game):
+    value = (game or {}).get('kickoff') or pick.get('publishedAt') or datetime.now(timezone.utc)
+    return eastern_date(gates.when(value)).isoformat()
+
+
+def _short_reason(text):
+    """Keep a verified reason to the plan's twelve-word public limit."""
+    words = str(text or '').strip().split()
+    if len(words) <= 12:
+        return ' '.join(words)
+    short = ' '.join(words[:12]).rstrip(',;:')
+    return short + ('.' if str(text).rstrip().endswith('.') else '')
+
+
+def _choose_reason(pick, supplied, history, day):
+    choices = [supplied, strip_reason(pick)]
+    choices = list(dict.fromkeys(_short_reason(choice) for choice in choices if choice))
+    choices = [choice for choice in choices if plain(choice)]
+    recent = [row for row in history or [] if (row.get('series') or row.get('kind')) in ('play', 'buffer:play')]
+    recent_kinds = [row.get('reasonKind') for row in recent if row.get('reasonKind') not in (None, 'none')]
+    today_kinds = [row.get('reasonKind') for row in recent if str(row.get('postedAt') or row.get('dueAt') or '').startswith(day)]
+    for choice in choices:
+        kind = reason_kind(choice)
+        if len(recent_kinds) >= 2 and recent_kinds[-2:] == [kind, kind]:
+            continue
+        if today_kinds.count(kind) >= 2:
+            continue
+        return choice
+    return choices[0] if choices else None
+
+
+def _number_line(pick, game, day, history, salt=0):
+    projection = pick.get('projection')
+    if not isinstance(projection, (int, float)):
+        return ''
+    pool = voice_pick.pools()['numberLines']
+    key = f"{pick.get('id')}:{day}:number:{salt}"
+    if pick.get('lane') == 'upset':
+        side = str(pick.get('direction') or 'home').lower()
+        team = pick_card.team_label(((game or {}).get(side) or {}), (game or {}).get('league'))
+        return voice_pick.pick(pool['upset'], key).format(team=team, m=pick_card.plain_number(abs(projection)))
+    market = 'spreads' if pick.get('marketType') == 'spread' and not (pick.get('athleteId') or pick.get('market')) \
+        else 'totals' if pick.get('marketType') == 'total' else 'props'
+    if market == 'spreads':
+        return pick_card.our_number(pick, game)
+    return voice_pick.pick(pool[market], key).format(n=pick_card.plain_number(projection))
+
+
+def _play_prefix(pick, game, featured):
+    if featured:
+        return '🍳 Hot Plate (POTD): '
+    if pick.get('lane') == 'upset':
+        return '🐕 Upset pick: '
+    if pick.get('lane') == 'gut_call':
+        return '👨‍🍳 Gut call: '
+    kickoff = (game or {}).get('kickoff')
+    if not kickoff or gates.when(kickoff).astimezone(gates.EASTERN).hour < 19:
+        return ''
+    day = gates.when(kickoff).astimezone(gates.EASTERN).weekday()
+    league = (game or {}).get('league') or pick.get('league')
+    return 'TNF: ' if league == 'NFL' and day == 3 else 'MNF: ' if league == 'NFL' and day == 0 \
+        else 'Saturday night: ' if league == 'CFB' and day == 5 else ''
+
+
+def copy_variant(text):
+    return voice_pick.detect_shape(text)
+
+
+def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=False, history=None):
     """The post, short and plain, the way a bettor types it (the owner, 2026-09-26: "Not so AI looking. And straight
     to the point on the tweets"):
 
@@ -400,6 +491,8 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
     It was selected from structured evidence at publication; never select an arbitrary sentence as support.
     """
     league = (game or {}).get('league') or str(pick.get('id', '')).split('-')[0]
+    day = _caption_day(pick, game)
+    history = history if history is not None else load_log().get('posts', [])
     tail = ' '.join(x for x in (PLAYBOOK, TAGS.get(league, '')) if x)
     kind = pick_card.play_kind(pick)
     legs = [pick_card.short_leg(l.get('title')) for l in pick.get('legs') or [] if l.get('title')]
@@ -414,26 +507,57 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
         top = '\n'.join(x for x in (head, money, bank, *legs) if x)
         options = ([top, f'{LADDER_ASK}\n{tail}'], [top, tail])
     elif kind == 'parlay':
+        if pick.get('parlayType') == 'comfort' or pick.get('lane') == 'safer_combo':
+            options = ([safer_text(pick, legs, league)],)
+            # The Safer shape carries its own fixed tail and no engagement ask.
+            for parts in options:
+                text = '\n\n'.join(part for part in parts if part)
+                if tweet_length(text) <= LIMIT and not guard(text, pick, None, now_quote):
+                    return text
+            return '\n\n'.join(options[-1])
         odds = int(pick['odds'])
         payout = 10 * (1 + odds / 100) if odds > 0 else 10 * (1 + 100 / abs(odds))
-        top = '\n'.join([parlay_head(pick, league), f"$10 → {pick_card.dollars(payout)} at the posted {odds:+d}", *legs])
+        top = '\n'.join([parlay_head(pick, league), *legs, f"$10 → {pick_card.dollars(payout)}"])
         options = ([top, f'{ASK}\n{tail}'], [top, tail])
     else:
-        day = gates.when(game['kickoff']).astimezone(gates.EASTERN).weekday() if (game or {}).get('kickoff') else None
-        night_prefix = ('SNF: ' if league == 'NFL' and day == 6 else 'TNF: ' if league == 'NFL' and day == 3
-                        else 'MNF: ' if league == 'NFL' and day == 0 else 'Saturday night: ' if league == 'CFB' and day == 5 else '') if night else ''
-        hot_prefix = ('SNF ' if league == 'NFL' and day == 6 and night else 'TNF ' if league == 'NFL' and day == 3 and night
-                      else 'MNF ' if league == 'NFL' and day == 0 and night else '')
-        prefix = f'🍳 {hot_prefix}Hot Plate (POTD): ' if featured else night_prefix
-        play = f"{prefix}{pick_card.short_title(pick, game)} ({int(pick['odds']):+d}, {pick.get('book')})"
+        prefix = _play_prefix(pick, game, featured)
+        play_text = f"{prefix}{pick_card.short_title(pick, game)}"
+        play = f"{play_text} ({int(pick['odds']):+d}, {pick.get('book')})"
         now = now_line(pick, now_quote)
-        number = pick_card.our_number(pick, game)
-        reason = reason if reason is not None else load_reasons().get(pick.get('id')) or strip_reason(pick)
-        reason = reason if reason and plain(reason) else None
-        top = '\n'.join(x for x in (play, now, number, reason) if x)
-        compact = '\n'.join(x for x in (play, now, number) if x)
-        options = ([top, f'{ASK}\n{tail}'], [top, tail]) if reason else (
-            [top, f'{ASK}\n{tail}'], [top, tail], [compact, tail], ['\n'.join(x for x in (play, now) if x), tail])
+        number = _number_line(pick, game, day, history)
+        saved_reason = reason if reason is not None else load_reasons().get(pick.get('id'))
+        reason = _choose_reason(pick, saved_reason, history, day)
+        for salt in range(1, 5):
+            if not voice_pick.five_word_overlap(' '.join(part for part in (number, reason) if part), history):
+                break
+            number = _number_line(pick, game, day, history, salt=salt)
+        projection, line = pick.get('projection'), pick.get('line')
+        required = ('C' if isinstance(projection, (int, float)) and isinstance(line, (int, float)) and line
+                    and abs(projection - line) / abs(line) > .25 else None)
+        shape = voice_pick.choose_shape(pick.get('id'), day, history=history, required=required)
+        asks = voice_pick.pools()['asks']
+        if featured or pick.get('lane') in ('upset', 'special'):
+            asks = [ask for ask in asks if ask]
+        ask = voice_pick.choose_slot('ask', pick.get('id'), day, history=history, values=asks)
+        if not (featured or pick.get('lane') in ('upset', 'special')) and voice_pick.index(f"{pick.get('id')}:{day}:ask-use", 2):
+            ask = ''
+        if reason and voice_pick.index(f"{pick.get('id')}:{day}:reason-wrap", 3) == 0:
+            side = 'higher' if not isinstance(projection, (int, float)) or not isinstance(line, (int, float)) or projection >= line else 'lower'
+            reason = voice_pick.pools()['reasonWrappers'][side][0].format(reason=reason)
+        fields = {'play': play_text, 'odds': f"{int(pick['odds']):+d}", 'book': pick.get('book'),
+                  'number': number, 'reason': reason or '', 'ask': ask, 'L': league,
+                  'line': pricing.fmt(float(line)) if isinstance(line, (int, float)) else '',
+                  'proj': pick_card.plain_number(projection) if isinstance(projection, (int, float)) else ''}
+        shapes = [shape] if required else [shape, *[candidate for candidate in ('A', 'B', 'C', 'D') if candidate != shape]]
+        options = []
+        for candidate in shapes:
+            shape_lines = [part.format(**fields).strip() for part in voice_pick.pools()['playShapes'][candidate]]
+            top = '\n'.join(part for part in shape_lines if part)
+            if now:
+                bits = top.splitlines()
+                price_at = next((i for i, bit in enumerate(bits) if llm.re.search(r'\([+-]\d+,\s*[^)]+\)$', bit)), 0)
+                bits.insert(price_at + 1, now); top = '\n'.join(bits)
+            options.append([top])
     for parts in options:
         text = '\n\n'.join(part for part in parts if part)
         if tweet_length(text) <= LIMIT and not guard(text, pick, reason, now_quote):

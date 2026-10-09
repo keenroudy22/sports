@@ -281,7 +281,13 @@
     const title = `${g.away.abbr} at ${g.home.abbr}`;
     /* today.json is a short, fast window; the game's own payload retains its published plays. Prefer a newer
        Today row when both contain the same id, without losing an older or farther-out game-page ticket. */
-    const gamePick = p => p && (p.gameId === g.id || (p.gameIds || []).includes(g.id));
+    /* A matchup page owns only plays wholly tied to that matchup. A multi-game fun ticket may contain one leg
+       here, but it belongs on Today, its ticket page and Record, never under "Our plays in this game". */
+    const gamePick = p => {
+      if (!p) return false;
+      const ids = [...new Set([...(p.gameIds || []), ...(p.gameId ? [p.gameId] : [])].filter(Boolean).map(String))];
+      return ids.length === 1 && ids[0] === String(g.id);
+    };
     const pickById = new Map();
     for (const p of [...(detail.picks || []), ...(today.picks || [])]) if (gamePick(p) && p.id) pickById.set(p.id, p);
     const picks = [...pickById.values()];

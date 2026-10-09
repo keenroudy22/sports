@@ -387,11 +387,11 @@ test('Today prints a settled player name and full stat line, never the stored at
     title: 'TK King OVER 49.5 receiving yards', displayTitle: 'TK King OVER 49.5 receiving yards',
     player: 'TK King', athleteId: '4869443', marketType: 'prop', market: 'recYds',
     result: 'loss', actual: '4869443: 0 receiving yards',
-    resultDetail: '6 targets, 0 catches, 0 yards · missed by 49.5' };
+    resultDetail: '0 catches on 6 targets, 0 yards · missed by 49.5' };
   const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [prop, king, ...rungs],
     lastSlate: { ALL: { day: '2026-10-09', wins: 0, losses: 1, pushes: 0 } } } });
   const page = await api.views.today({ view: 'today' });
-  assert.match(page, /TK King · 6 targets, 0 catches, 0 yards · missed by 49\.5/);
+  assert.match(page, /TK King · 0 catches on 6 targets, 0 yards · missed by 49\.5/);
   assert.doesNotMatch(page, /4869443: 0 receiving yards/);
 });
 

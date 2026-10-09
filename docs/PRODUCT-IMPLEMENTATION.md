@@ -1092,3 +1092,20 @@ export, build, budget, 92-pick audit, 503-file guard, rehearsal and the 375/1440
 browser checks. The live PNG returned HTTP 200; the live record showed Climb #3,
 step 1, $42 banked, with nine rows. No rung, posting rule or historical attachment
 was changed. A natural ledger update remains to be observed.
+
+## October 9, 2026: Kook'n plan Release 1
+
+The owner-approved selection plan (T0–T11b) shipped at
+`6494be496816df991035a0b180015990daba46cc` in hosted run
+[`37948447125`](https://github.com/keenroudy22/sports/actions/runs/37948447125). The final tree passed
+1,218 Python tests (two skipped), 229 frontend tests, both suites from a clean export, the 447-file build,
+payload budgets, the 93-pick record audit, the 489-file publication guard, asset checks and isolated
+slot-0830 rehearsal. Live Chrome checks covered Today, Games, Record, Research, More and a game page at
+375 and 1440 pixels with no sideways overflow, caught load state or console exception. Live assets were
+`app.js?v=149` and `app.css?v=92`.
+
+The October 1–9 stored-input replay produced a play lane on every football game day, including the October 8
+primetime fallback, without changing the record. The new lane records remain separate from Best bets. The
+Best bets headline before and after is 35–36 (one void), with the owner baseline −5.11u at posted prices.
+Opponent-adjusted college trends (T-TREND) remain queued for Release 3 so this selection release was live
+before Saturday's morning runs.

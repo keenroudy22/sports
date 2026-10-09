@@ -94,8 +94,8 @@ class ReceiptTests(unittest.TestCase):
         found = receipts.ready(first, latest, GAMES, log, MONDAY_MORNING)
         self.assertEqual([r['key'] for r in found], ['receipt:day:2026-09-27'])
         sunday = found[0]
-        self.assertEqual(sunday['text'], 'Sunday: 2-1\n'
-                                         '✅ Player Seven over 4.5 receptions\n❌ Jets/Rams over 44.5\n✅ Bills/Lions over 40.5\n'
+        self.assertEqual(sunday['text'], 'Sunday: 2-1.\n'
+                                         '✅ Player Seven over 4.5 catches\n❌ Jets/Rams over 44.5\n✅ Bills/Lions over 40.5\n'
                                          '❌ 3-leg parlay · 0.25u · 2/3 legs hit · missed by one leg\n\n#NFL',
                          'the record is the straight plays; the fun parlay is listed but not counted in it')
         self.assertEqual(sunday['due'].astimezone(gates.EASTERN).strftime('%a %H:%M'), 'Mon 09:00')
@@ -146,8 +146,8 @@ class ReceiptTests(unittest.TestCase):
     def test_the_receipt_card_is_the_same_frame(self):
         first, latest, log = world()
         card = pick_card.receipt_svg(receipts.ready(first, latest, GAMES, log, MONDAY_MORNING)[0], avatar='data:image/png;base64,AAAA')
-        for needle in ('FINAL REPORT', 'KOOK’N', 'YESTERDAY', 'Sunday, Sep 27', '>2-1<', '>W<', '>L<',
-                       'Player Seven over 4.5 receptions', 'missed by one leg', 'FUN TICKETS · 0.25U',
+        for needle in ('FINAL REPORT', 'KOOK’N', 'FINAL', 'Sunday, Sep 27', '>2-1<', '>W<', '>L<',
+                       'Player Seven over 4.5 catches', 'missed by one leg', 'FUN TICKETS · 0.25U',
                        'clip-path="url(#receiptChef)"', 'KOOK’N RESULTS', '21+ · Entertainment only'):
             self.assertIn(needle, card, needle)
         self.assertNotIn('Confidence', card)
@@ -163,15 +163,15 @@ class ReceiptTests(unittest.TestCase):
         straight = pick('hurt', 'sun', result='loss', actual='Player Seven: 12 receiving yards',
                         injuryPlayers=['Player Seven'])
         self.assertEqual(receipts.result_detail(straight),
-                         'Final: Player Seven: 12 receiving yards · injured in-game · checked before grading')
+                         'Final: Player Seven: 12 receiving yards · left hurt')
         ticket = pick('hurt-parlay', 'sun', parlayType='easyProps', result='loss', riskUnits=0.25,
                       actual='legs: win, loss, win', injuryPlayers=['Player Seven'])
         self.assertEqual(receipts.result_detail(ticket),
-                         'Player Seven injured in-game · checked before grading · 0.25u · 2/3 legs hit · missed by one leg')
+                         'Player Seven left hurt · 0.25u · 2/3 legs hit · missed by one leg')
         card = pick_card.receipt_svg({'title': '0-1', 'when': 'Sunday, Sep 27', 'label': 'YESTERDAY\'S PLATES',
                                       'rows': [('loss', 'Player Seven over 49.5 receiving yards',
                                                 receipts.result_detail(straight))]}, avatar='')
-        self.assertIn('Final: Player Seven: 12 receiving yards · injured in-g…', card)
+        self.assertIn('Final: Player Seven: 12 receiving yards · left hurt', card)
 
     def test_a_receipt_keeps_a_long_game_total_readable(self):
         receipt = {'title': '5-5', 'when': 'Saturday, Sep 26', 'label': 'YESTERDAY\'S PLATES',
@@ -188,12 +188,12 @@ class ReceiptTests(unittest.TestCase):
         log['posts'] = [e for e in log['posts'] if e['id'] != 'NFL-2026-W4-m']         # tonight's play has not gone out yet
         plans = buffer_post.plan(first, latest, dict(GAMES, **noon), MONDAY_MORNING, log)
         got = [(p[0], p[1], p[3].astimezone(gates.EASTERN).strftime('%H:%M'), p[4]) for p in plans]
-        self.assertEqual(got[0], ('receipt:day:2026-09-27', 'receipt', '09:00', 'receipt-day-2026-09-27'))
+        self.assertEqual(got[0], ('receipt:day:2026-09-27', 'receipt', '09:01', 'receipt-day-2026-09-27'))
         self.assertNotIn('Today:', plans[0][2])
-        self.assertTrue(plans[0][2].startswith('Sunday: 2-1\n✅ Player Seven'), plans[0][2])
+        self.assertTrue(plans[0][2].startswith('Sunday: 2-1.\n✅ Player Seven'), plans[0][2])
         self.assertEqual(plans[0][2].count('Player Seven'), 1, 'each play once')
-        self.assertEqual(got[1][:3], ('NFL-2026-W4-n', 'play', '09:30'), 'the first play follows the receipt')
-        self.assertEqual(got[2][:3], ('NFL-2026-W4-m', 'play', '09:50'), 'night games join the same morning batch')
+        self.assertEqual(got[1][:3], ('NFL-2026-W4-n', 'play', '09:31'), 'the first play follows the receipt')
+        self.assertEqual(got[2][:3], ('NFL-2026-W4-m', 'play', '09:51'), 'night games join the same morning batch')
         log['posts'].append({'id': 'receipt:day:2026-09-27', 'kind': 'buffer:receipt'})
         again = [p[0] for p in buffer_post.plan(first, latest, dict(GAMES, **noon), MONDAY_MORNING, log)]
         self.assertFalse([k for k in again if k.startswith(('receipt:', 'menu:'))], 'neither goes out again on its own')
@@ -219,12 +219,12 @@ class CashedTests(unittest.TestCase):
         posts = {p['key']: p for p in receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING)}
         self.assertEqual(sorted(posts), ['cashed:NFL-2026-W4-a', 'cashed:NFL-2026-W4-c'], 'wins only; the loss waits for the receipt')
         self.assertEqual(posts['cashed:NFL-2026-W4-a']['text'],
-                         '✅ Cashed: Player Seven over 4.5 receptions (+100, DraftKings)\n#NFL\nhttps://x.com/keenkooks/status/20a')
+                         '✅ Player Seven over 4.5 catches.\n#NFL\nhttps://x.com/keenkooks/status/20a')
         self.assertTrue(posts['cashed:NFL-2026-W4-c']['text'].startswith('✅ +600 3-leg parlay cashed (DraftKings)\n'))
         self.assertIsNone(posts['cashed:NFL-2026-W4-a']['card'], 'text only: the quoted post carries the card')
         self.assertEqual(receipts.guard(posts['cashed:NFL-2026-W4-a']), [])
         log['posts'][0]['featured'] = True
-        self.assertTrue(receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING)[0]['text'].startswith('✅ POTD cashed: '))
+        self.assertTrue(receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING)[0]['text'].startswith('✅ Player Seven'))
 
     def test_not_overnight_not_late_and_not_a_play_that_never_went_out(self):
         first, latest, log = self.world()
@@ -238,7 +238,7 @@ class CashedTests(unittest.TestCase):
         first, latest, log = self.world()
         plans = [p for p in buffer_post.plan(first, latest, GAMES, self.SUNDAY_EVENING, log) if p[1] == 'cashed']
         self.assertEqual([(p[0], p[4]) for p in plans], [('cashed:NFL-2026-W4-a', None), ('cashed:NFL-2026-W4-c', None)])
-        self.assertLessEqual(plans[0][3] - self.SUNDAY_EVENING, timedelta(minutes=5), 'as it settles, not the next morning')
+        self.assertLessEqual(plans[0][3] - self.SUNDAY_EVENING, timedelta(minutes=6), 'as it settles, plus bounded jitter')
         log['posts'].append({'id': 'cashed:NFL-2026-W4-a', 'kind': 'buffer:cashed'})
         again = [p[0] for p in buffer_post.plan(first, latest, GAMES, self.SUNDAY_EVENING, log) if p[1] == 'cashed']
         self.assertEqual(again, ['cashed:NFL-2026-W4-c'])
@@ -261,7 +261,7 @@ class LadderReceiptTests(unittest.TestCase):
 
     def test_a_cashed_rung_names_the_next_step_and_the_top_of_the_ladder_says_so(self):
         head, body = receipts.ladder_cashed(pick('l', 'sun', **self.RUNG))
-        self.assertEqual((head, body), ('✅ 80/20 Climb step 2 cashed: $75 → $146', '$48 banked. $117 rides step 3.'))
+        self.assertEqual((head, body), ('Step 2 cashed ✅ $146 back.', '$29 to the bank, $117 rides on step 3.'))
         top = dict(self.RUNG, ladder=dict(self.RUNG['ladder'], step=5, stake=675, payout=850, banked=150,
                                           bankThisWin=170, bankedAfter=320, nextStake=680, totalAfter=1000))
         head, body = receipts.ladder_cashed(pick('l', 'sun', **top))
@@ -278,7 +278,7 @@ class LadderReceiptTests(unittest.TestCase):
         self.assertEqual(post['card'], 'ladder-result-NFL-2026-W4-ladder')
         self.assertEqual(post['due'].astimezone(gates.EASTERN).strftime('%H:%M'), '09:05')
         self.assertGreater(post['stale'], post['due'])
-        self.assertIn('$117 rides step 3', post['text'])
+        self.assertIn('$117 rides on step 3', post['text'])
         [card] = receipts.ladder_result_cards(first, latest, morning_run)
         self.assertEqual(card['card'], post['card'])
         self.assertEqual(card['pick']['result'], 'win')

@@ -4,6 +4,28 @@ import re
 import public_copy
 
 BARE_ATHLETE_ID = re.compile(r'(?m)(?:^|:\s*|>\s*)\d{5,}:')
+BARE_LONG_NUMBER = re.compile(r'(?<![\w/.-])\d{5,}(?![\w/.-])')
+
+WHOLE_WORD_BANS = (
+    'vig', 'implied', 'break-even', 'breakeven', 'EV', 'CLV', 'calibrated', 'selection', 'captured', 'lock',
+    'guaranteed', 'hammer', 'smash', 'no-brainer', 'delve', 'unlock', 'elevate', 'leverage', 'robust',
+    'seamless', 'insights', 'crucial', 'game-changer', 'honest', 'honesty',
+)
+PHRASE_BANS = (
+    'not an official play', 'official play', 'not a TD pick', 'not a prediction', 'Usage, not a TD pick',
+    'Opportunity, not TD probability', 'Research only', 'Research, not', 'Check current prices',
+    'History does not predict', 'Full details', 'on the graphic', 'Mint rings', '| market', 'Our raw model',
+    'current screen', 'checked before grading', 'at the posted', 'next run', 'this run', 'desk run', 'the desk',
+    'scan time', 'our edge', 'edge:', "That's why we bank", "One miss can't", 'free money', 'Plated.',
+    'Best bets drop', 'We have it at', 'From Claude', "Here's", 'dive in', 'buckle up', 'trust the process',
+    "let's ride", "let's go", 'graded in public', 'even the burnt',
+)
+WORD_BANS = re.compile(r'(?i)(?<![\w-])(?:' + '|'.join(re.escape(word) for word in WHOLE_WORD_BANS) + r')(?![\w-])')
+MODEL_PERCENT = re.compile(r'(?i)\bmodel\s+\d+(?:\.\d+)?%')
+EDGE_NUMBER = re.compile(r'(?i)\+\d+(?:\.\d+)?\s+edge\b')
+ZERO_DOLLARS = re.compile(r'(?<!\d)\$0\b')
+DOUBLED_WORD_END = re.compile(r'(?i)\b[A-Za-z]*([A-Za-z]{3,})\1\b')
+REPEATED_PAREN = re.compile(r'(\([^()]+\))(?:\s+\1)+', re.I)
 
 
 def bare_athlete_id(text):
@@ -20,6 +42,8 @@ def lint(text):
     problems = []
     if bare_athlete_id(clean):
         problems.append('bare athlete id in public copy')
+    elif BARE_LONG_NUMBER.search(clean):
+        problems.append('bare long number in public copy')
     if BANNED.search(clean):
         problems.append('retired public wording')
     if public_copy.issues(clean):
@@ -32,4 +56,33 @@ def lint(text):
         problems.append('dash used as punctuation')
     if re.search(r'(?:·[^\n]*){4}', clean):
         problems.append('too many middle-dot clauses')
+    if WORD_BANS.search(clean):
+        problems.append('caption kill-list word')
+    if any(phrase.casefold() in clean.casefold() for phrase in PHRASE_BANS) or MODEL_PERCENT.search(clean) \
+            or EDGE_NUMBER.search(clean) or ZERO_DOLLARS.search(clean):
+        problems.append('caption kill-list phrase')
+    if DOUBLED_WORD_END.search(clean) or REPEATED_PAREN.search(clean):
+        problems.append('duplicated public wording')
+    if re.search(r'(?im)\brepl(?:y|ies|ied|ying)\b[^.!?]*\?\s*(?:$|\n)', clean):
+        problems.append('reply question')
+    bangs = clean.count('!')
+    if bangs and '✅' not in clean and not clean.lstrip().startswith('🪜'):
+        problems.append('exclamation mark outside a win or Climb post')
+    elif bangs > 1:
+        problems.append('too many exclamation marks')
     return problems
+
+
+def card_lint(text):
+    """Shared safety checks for card text, without caption-only word-bank rules.
+
+    The Oct. 9 kill list governs captions and Discord copy. A card may still need
+    literal record labels such as "$0 banked"; it must never expose private copy,
+    an athlete id, or retired card language.
+    """
+    caption_only = {
+        'caption kill-list word', 'caption kill-list phrase', 'reply question',
+        'exclamation mark outside a win or Climb post', 'too many exclamation marks',
+        'duplicated public wording',
+    }
+    return [problem for problem in lint(text) if problem not in caption_only]

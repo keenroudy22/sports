@@ -96,9 +96,9 @@ def caption(choice):
     home = (game.get('home') or {}).get('name') or (game.get('home') or {}).get('abbr') or 'Home'
     row = choice['rows'][0]
     odds = f"{int(row['odds']):+d}"
-    text = (f"👀 TNF Early Look: {away} at {home}\n"
+    text = (f"{away}/{home} early numbers:\n"
             f"{row['title']} ({odds}, {row['book']})\n"
-            f"{len(choice['rows']) - 1} more on the card. Best bets drop tomorrow. #NFL")
+            f"{len(choice['rows']) - 1} more on the card. #NFL")
     return text if tweet_length(text) <= LIMIT else None
 
 

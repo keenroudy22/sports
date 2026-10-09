@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "playShapes": {
+    "A": ["{play} ({odds}, {book})", "{number} {reason}", "{ask}", "@Playbook #{L}"],
+    "B": ["{reason}", "{play} ({odds}, {book})", "{number}", "{ask}", "@Playbook #{L}"],
+    "C": ["{play} ({odds}, {book})", "Book says {line}. I say {proj}.", "{reason}", "{ask}", "@Playbook #{L}"],
+    "D": ["{play} ({odds}, {book})", "{reason}", "@Playbook #{L}"]
+  },
+  "numberLines": {
+    "totals": ["I'm at {n}.", "I've got {n} total points.", "My number's {n}.", "I have it at {n}."],
+    "spreads": ["I have {team} by {m}.", "I've got {team} winning by {m}.", "My number's {team} by {m}."],
+    "props": ["I'm at {n}.", "I've got him around {n}.", "I have it at {n}."],
+    "upset": ["Book has them losing. I've got {team} by {m}."]
+  },
+  "reasonWrappers": {
+    "higher": ["Why I'm higher than the book: {reason}"],
+    "lower": ["Why I'm lower than the book: {reason}"],
+    "none": ["{reason}", "{reason}", "{reason}"]
+  },
+  "asks": ["❤️ if you're tailing", "❤️ if you're on it", "❤️ if you're riding with me", ""],
+  "saves": ["📌 Save it for kickoff", "📌 Save this one", "📌 for later", ""],
+  "prepOpeners": ["Last list went {h} of {n}. Today's:", "{h} of {n} last time. New list:", "Lines that keep clearing today:"],
+  "earlyLooks": ["{Away}/{Home} early numbers:", "Saturday early look:"],
+  "passPosts": ["No play from me tonight. Vegas has these priced right. Closest I got: {play} ({odds}, {book}), I'm at {n}.", "My number likes {side}, but I can't find what the book is seeing. Passing tonight."],
+  "reactions": {
+    "blowout": ["Not close. ✅ {play}. He had {stat}."],
+    "normal": ["Cashed. ✅ {play}. He had {stat}.", "Got there. ✅ {play}. He had {stat}."],
+    "sweat": ["Sweated that one. ✅ {play}. Finished with {stat}."],
+    "under": ["✅ {play}. He had {stat}."],
+    "total": ["✅ {play}. Went {away}-{home}."],
+    "late": ["Took till the 4th. ✅ {play}. He had {stat}."]
+  },
+  "climbHooks": ["Step {previous} cashed. ${bank} in the bank.", "Best climb so far: step {best}."],
+  "reserve": []
+}

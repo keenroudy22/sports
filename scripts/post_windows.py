@@ -1,4 +1,5 @@
 """Shared, owner-approved X windows. Pure time math, no posting or feeds."""
+import hashlib
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
@@ -28,6 +29,11 @@ def opens(league, kickoff):
 def target(league, kickoff):
     start = instant(kickoff)
     return opens(league, start)
+
+
+def jitter(post_id):
+    """Stable zero-to-six-minute shift, so posts do not read like a clocked bot."""
+    return timedelta(minutes=int(hashlib.sha1(str(post_id).encode('utf-8')).hexdigest(), 16) % 7)
 
 
 def delivery_ready(now):

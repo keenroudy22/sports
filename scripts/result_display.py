@@ -56,8 +56,9 @@ def stat_line(pick, game=None):
         yards = _number(row.get('recYds'))
         if yards is None and market == 'recYds':
             yards = value
-        parts = [unit(targets, 'target') if targets is not None else None,
-                 unit(catches, 'catch', 'catches') if catches is not None else None]
+        catches_text = unit(catches, 'catch', 'catches') if catches is not None else None
+        targets_text = unit(targets, 'target') if targets is not None else None
+        parts = [f'{catches_text} on {targets_text}' if catches_text and targets_text else catches_text or targets_text]
         if market == 'recYds' and yards is not None:
             parts.append(unit(yards, 'yard'))
         return ', '.join(part for part in parts if part) or None
@@ -66,8 +67,11 @@ def stat_line(pick, game=None):
         yards = _number(row.get('rushYds'))
         if yards is None and market == 'rushYds':
             yards = value
-        return ', '.join(part for part in (unit(carries, 'carry', 'carries') if carries is not None else None,
-                                          unit(yards, 'yard') if yards is not None else None) if part) or None
+        carries_text = unit(carries, 'carry', 'carries') if carries is not None else None
+        yards_text = unit(yards, 'yard') if yards is not None else None
+        if market == 'rushYds' and carries_text and yards_text:
+            return f'{yards_text} on {carries_text}'
+        return carries_text or yards_text
     if market in ('passYds', 'att', 'cmp'):
         complete, attempts = _number(row.get('cmp')), _number(row.get('att'))
         yards = _number(row.get('passYds'))

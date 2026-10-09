@@ -98,9 +98,9 @@ def injury_detail(pick):
     if not names:
         return ''
     if pick_card.play_kind(pick) != 'parlay':
-        return 'injured in-game · checked before grading'
+        return 'left hurt'
     who = names[0] + (f' +{len(names) - 1}' if len(names) > 1 else '')
-    return f'{who} injured in-game · checked before grading'
+    return f'{who} left hurt'
 
 
 def result_detail(pick):
@@ -266,14 +266,14 @@ def day_receipt(day, first, latest, games, ids, as_of=None):
     if not settled(rows):
         return None
     name = f'{day:%A}'
-    head = f"{'Leftovers: ' if day >= date(2026, 10, 7) else ''}{name}: {headline(rows)}"
+    head = f"{name}: {headline(rows)}."
     tail = leagues(rows)
     text = fit_result_rows(rows, head, tail.strip(), games)
     straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder')]
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
     due = morning(day + timedelta(days=1))
     return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}', 'kind': 'receipt',
-            'title': headline(rows), 'label': 'LEFTOVERS' if day >= date(2026, 10, 7) else 'YESTERDAY',
+            'title': headline(rows), 'label': 'FINAL',
             'when': f'{day:%A, %b %-d}',
             # Retained art keeps the record followers saw when the receipt became
             # due, even when its image is rebuilt several days later.
@@ -432,6 +432,33 @@ def ladder_result_cards(first, latest, now, days=CARD_HISTORY_DAYS):
     return out
 
 
+def win_reaction(pick, games=None):
+    """Owner-written win copy selected only from the stored result and settled margin."""
+    import hashlib
+    import result_display
+    play = label(pick, games)
+    stat = result_display.stat_line(pick)
+    direction = str(pick.get('direction') or '').lower()
+    value, line = pick.get('actualValue'), pick.get('line')
+    market_type = pick.get('marketType')
+    if market_type == 'total' and not stat:
+        scores = re.findall(r'\b(\d{1,3})\b', result_display.clean_actual(pick))
+        return f"✅ {play}. Went {scores[-2]}-{scores[-1]}." if len(scores) >= 2 else f'✅ {play}.'
+    if not stat:
+        return f'✅ {play}.'
+    if pick.get('lateCrossing') or str(pick.get('crossedAt') or '').lower() in ('4', 'q4', '4th'):
+        return f'Took till the 4th. ✅ {play}. He had {stat}.'
+    if direction == 'under':
+        return f'✅ {play}. He had {stat}.'
+    margin = abs(float(value) - float(line)) if isinstance(value, (int, float)) and isinstance(line, (int, float)) else None
+    if margin is not None and (margin >= 10 or (line and margin / abs(float(line)) >= .40)):
+        return f'Not close. ✅ {play}. He had {stat}.'
+    if margin is not None and line and margin / abs(float(line)) <= .10:
+        return f'Sweated that one. ✅ {play}. Finished with {stat}.'
+    opener = ('Cashed.', 'Got there.')[int(hashlib.sha1(str(pick.get('id')).encode()).hexdigest(), 16) % 2]
+    return f'{opener} ✅ {play}. He had {stat}.'
+
+
 def cashed(first, latest, games, log_book, now):
     """A winning play that went out on X gets its own post when it settles: "✅ CASHED", the play and its price, and
     the original post quoted (its X link in the text shows the post under it). Ordinary wins stay text-only because
@@ -460,9 +487,9 @@ def cashed(first, latest, games, log_book, now):
             continue
         parlay = pick_card.play_kind(pick) == 'parlay'
         price = f"({int(pick['odds']):+d}, {pick.get('book')})"
-        head = f"✅ {'POTD cashed' if entry.get('featured') else 'Cashed'}: {label(pick, games)} {price}"
+        head = win_reaction(pick, games)
         import result_display
-        what = result_display.detail(pick) or ''
+        what = ''
         if parlay:
             head, what = f"✅ {int(pick['odds']):+d} {label(pick, games)} cashed ({pick.get('book')})", ''
         card = None
@@ -497,19 +524,28 @@ def ladder_result(pick):
         return (f"🪜 80/20 Climb complete: {pick_card.dollars(info.get('start', 50))} → {pick_card.dollars(total)} in {info.get('step', 1)} steps",
                 f"{pick_card.dollars(banked_after)} banked along the way.")
     if result == 'win':
-        return (f"✅ 80/20 Climb step {info.get('step', 1)} cashed: {stake} → {won}",
-                f"{pick_card.dollars(banked_after)} banked. {pick_card.dollars(next_stake)} rides step {info.get('step', 1) + 1}.")
+        return (f"Step {info.get('step', 1)} cashed ✅ {won} back.",
+                f"{pick_card.dollars(bank_this)} to the bank, {pick_card.dollars(next_stake)} rides on step {info.get('step', 1) + 1}.")
     if result == 'loss':
         marks = leg_results(pick)
         legs = pick.get('legs') or []
-        lines = [f"{pick_card.short_leg(str(leg.get('title') or 'Leg'))} {MARKS.get(marks[index], '•')}"
-                 for index, leg in enumerate(legs) if index < len(marks)]
-        bank = f"{pick_card.dollars(info['banked'])} stays banked. " if info.get('banked', 0) else ''
-        restart = f"Climb {int(info.get('run') or 1) + 1} starts at {pick_card.dollars(info.get('start', 50))}."
-        body = '\n'.join(lines + [bank + restart])
-        return f"❌ 80/20 Climb step {info.get('step', 1)} missed", body
-    return (f"➖ 80/20 Climb step {info.get('step', 1)} {result}",
-            f"{stake} rides the same step. {pick_card.dollars(info.get('banked', 0))} stays banked.")
+        miss = next((leg for index, leg in enumerate(legs) if index < len(marks) and marks[index] == 'loss'), None)
+        if miss:
+            import result_display
+            stat = result_display.stat_line(dict(miss, result='loss'))
+            player = (miss.get('player') or result_display.player_name(miss)) if miss.get('athleteId') else ''
+            needed = pick_card.plain_number(miss.get('line')) if isinstance(miss.get('line'), (int, float)) else None
+            miss_line = ' '.join(part for part in (player, stat or pick_card.short_leg(miss.get('title'))) if part)
+            if needed:
+                miss_line += f", needed {needed}"
+            miss_line += '.'
+        else:
+            miss_line = 'One leg missed.'
+        head = f"Climb #{info.get('run', 1)} stopped at step {info.get('step', 1)}. {miss_line} Back to {pick_card.dollars(info.get('start', 50))}."
+        body = f"{pick_card.dollars(info['banked'])} stays in the bank." if info.get('banked', 0) else ''
+        return head, body
+    bank = f" {pick_card.dollars(info.get('banked'))} stays in the bank." if info.get('banked', 0) else ''
+    return (f"➖ 80/20 Climb step {info.get('step', 1)} {result}", f"{stake} rides the same step.{bank}")
 
 
 def ladder_cashed(pick):
@@ -530,10 +566,7 @@ def house_posts(first, latest, games, log_book, now):
     # Wednesday's ordinary slate research slot.
     research_already = research_posts.already_posted(log_book, research.get('countsFor', eastern_date(now))
                                                      if research else eastern_date(now))
-    # Owner-requested Oct 8 TNF game card is a single extra research post,
-    # distinct from the earlier day's normal research slot.
-    owner_tnf = bool(research and research['key'] == 'research:end-zone:tnf-ticket:2026-10-08')
-    if research and research['stale'] > now and (owner_tnf or not research_already):
+    if research and research['stale'] > now and not research_already:
         out.append(research)
     import sports_posts
     sports = sports_posts.post(now)

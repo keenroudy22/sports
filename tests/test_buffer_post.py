@@ -130,10 +130,10 @@ class PlanTests(unittest.TestCase):
                 mock.patch.object(bp.x_post, 'draft', return_value='A checked play.'), \
                 mock.patch.object(bp.x_post, 'guard', return_value=[]):
             plans = bp.plan(first, {}, game, now, {'posts': []})
-        self.assertEqual(et(plans[0][3]), '09:00')
+        self.assertEqual(et(plans[0][3]), '09:03')
         play_times = [et(row[3]) for row in plans if row[1] == 'play']
-        self.assertEqual(play_times, ['09:30', '09:50', '10:10', '10:30', '10:50', '11:10', '11:30', '11:50'])
-        self.assertEqual(et(plans[-1][3]), '12:10')
+        self.assertEqual(play_times, ['09:31', '09:51', '10:11', '10:31', '10:51', '11:11', '11:31', '11:51'])
+        self.assertEqual(et(plans[-1][3]), '12:11')
 
     def test_replacement_ticket_waits_for_last_look_or_is_refused(self):
         original = pick('replacement', 'late', **TICKET)
@@ -157,11 +157,11 @@ class PlanTests(unittest.TestCase):
         latest = {k: dict(v) for k, v in first.items()}
         plans = bp.plan(first, latest, GAMES, NOW, {'posts': []})
         self.assertEqual([(p[0], et(p[3])) for p in plans],
-                         [('p', '09:30'), ('a', '09:50'), ('d', '10:10'), ('b', '10:30'), ('x', '10:50')],
+                         [('p', '09:31'), ('a', '09:51'), ('d', '10:11'), ('b', '10:31'), ('x', '10:51')],
                          'plays lead the morning, regardless of kickoff hour')
         plans = [p for p in plans if p[1] == 'play']
         self.assertTrue(all(p[4] == p[0] for p in plans), 'each play with its own card')
-        self.assertTrue(plans[0][2].startswith('Player Seven over 4.5 receptions (-115, '), plans[0][2])
+        self.assertTrue(plans[0][2].startswith('Player Seven over 4.5 catches (-115, '), plans[0][2])
         self.assertTrue(plans[4][2].startswith('🎰 +'), 'a fun parlay leads with its price')
 
     def test_no_prompt_sits_between_plays_even_on_a_multi_play_day(self):

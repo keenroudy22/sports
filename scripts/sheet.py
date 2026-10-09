@@ -353,7 +353,7 @@ def post(games, now):
         name = 'college' if league == 'CFB' else 'NFL'
         lead = (f"📌 Full {name} projections for the slate." if league == 'NFL' else
                 f"📌 16 {name} projections for the slate.")
-        text = lead + "\nMint rings name up to 4 lines we like at the listed price (not official plays). Save this one." + f"\n#{league}"
+        text = lead + "\nUp to 4 priced lines are marked on the card.\n📌 Save this one" + f"\n#{league}"
         return {'key': f'sheet:{league}:{day.isoformat()}', 'kind': 'sheet', 'card': key(league, day), 'text': text,
                 'due': max(at(day, POST_AT), now + timedelta(minutes=2)), 'stale': at(day, POST_UNTIL)}
     return None

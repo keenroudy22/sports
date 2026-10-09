@@ -29,15 +29,15 @@ class ResultDisplayTests(unittest.TestCase):
     def test_saved_report_is_cleaned_only_for_display(self):
         self.assertEqual(result_display.clean_actual(self.pick), 'TK King: 0 receiving yards')
         self.assertEqual(self.pick['actual'], '4869443: 0 receiving yards')
-        self.assertEqual(result_display.detail(self.pick, self.game), '6 targets, 0 catches, 0 yards · missed by 49.5')
+        self.assertEqual(result_display.detail(self.pick, self.game), '0 catches on 6 targets, 0 yards · missed by 49.5')
         with patch.object(result_display, 'stored_games', return_value={'CFB-401871066': self.game}):
-            self.assertEqual(receipts.result_detail(self.pick), '6 targets, 0 catches, 0 yards · missed by 49.5')
-            self.assertEqual(ticket_card.final_detail(self.pick), '6 targets, 0 catches, 0 yards · missed by 49.5')
+            self.assertEqual(receipts.result_detail(self.pick), '0 catches on 6 targets, 0 yards · missed by 49.5')
+            self.assertEqual(ticket_card.final_detail(self.pick), '0 catches on 6 targets, 0 yards · missed by 49.5')
             self.assertFalse(voice.bare_athlete_id(receipts.result_line(self.pick)))
 
     def test_other_player_stat_lines(self):
-        cases = [('rec', {'pbpTgt': 6, 'rec': 0}, '6 targets, 0 catches'),
-                 ('rushYds', {'car': 15, 'rushYds': 89}, '15 carries, 89 yards'),
+        cases = [('rec', {'pbpTgt': 6, 'rec': 0}, '0 catches on 6 targets'),
+                 ('rushYds', {'car': 15, 'rushYds': 89}, '89 yards on 15 carries'),
                  ('passYds', {'cmp': 9, 'att': 22, 'passYds': 104}, '9 of 22, 104 yards')]
         for market, player, expected in cases:
             pick = dict(self.pick, market=market)

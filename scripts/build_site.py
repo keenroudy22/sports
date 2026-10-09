@@ -1123,9 +1123,9 @@ def fit_ticket_text(text):
 
 
 def ticket_safe(text):
-    """The public-copy guard every caption passes (scripts/voice.py), plus no chance claims on the ticket."""
+    """Keep unsafe/private copy and chance claims off the ticket without applying caption-only vocabulary rules."""
     import voice
-    return text if text and not voice.lint(text) and not NOT_TICKET_TEXT.search(text) else None
+    return text if text and not voice.card_lint(text) and not NOT_TICKET_TEXT.search(text) else None
 
 
 def held_text(text):

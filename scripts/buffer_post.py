@@ -317,7 +317,8 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
                                      else ['has no X window']))
             continue
         now_quote = (quotes or {}).get(key)
-        text = x_post.draft(merged, game, weights, now_quote=now_quote, featured=key == potd)
+        text = x_post.draft(merged, game, weights, now_quote=now_quote, featured=key == potd,
+                            history=log_book.get('posts', []))
         problems = x_post.guard(text, merged, x_post.reason_in(text), now_quote)
         if problems:
             if refused is not None:
@@ -373,6 +374,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
                     overflow -= 1
     out, last, busy, counts = [], None, taken(log_book, now), {}
     for target, _, deadline, key, text, kind, card in plays:
+        target += post_windows.jitter(key)
         due = max(target, now + soon)
         if kind == 'play':
             due = max(due, discord_first_due(now))
@@ -512,6 +514,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             entry['featured'] = True
         if kind == 'play':
             entry['reasonKind'] = x_post.reason_kind(x_post.reason_in(text))      # what learning compares engagement by
+            entry['copyVariant'] = x_post.copy_variant(text)
         log_book.setdefault('posts', []).append(entry)
         pending += 1
         log(f"buffer: {guid} scheduled for {due.astimezone(gates.EASTERN):%a %-I:%M %p} ET" + (' with card' if image else ''))

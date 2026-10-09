@@ -261,7 +261,7 @@
   /* The book a play was posted at, as it was posted. ESPN BET plays keep that name, with today's name alongside. */
   const postedBook = name => /^espn ?bet$/i.test(String(name || '').trim()) ? 'ESPN BET (now theScore Bet)' : bookLabel(name) || (name ? String(name) : null);
 
-  const STAT_WORD = { recYds: 'receiving yards', rec: 'receptions', rushYds: 'rushing yards', car: 'carries', passYds: 'passing yards',
+  const STAT_WORD = { recYds: 'receiving yards', rec: 'catches', rushYds: 'rushing yards', car: 'carries', passYds: 'passing yards',
     att: 'pass attempts', cmp: 'completions', passTD: 'passing TDs', anyTD: 'anytime TD', rushTD: 'rushing TDs', recTD: 'receiving TDs' };
   const isParlayLike = row => Boolean(row && ((row.legs || []).length || row.parlayType || row.kind === 'parlays'));
   /* One honest label per market. Game totals are game totals, never "team props". */
@@ -284,7 +284,8 @@
     if (/moneyline|winner/.test(market) || row.marketType === 'moneyline') return 'Moneyline';
     return 'Game line';
   };
-  const niceTitle = text => String(text || '').replace(/\b(OVER|UNDER)\b/g, m => m.toLowerCase()).replace(/\s+/g, ' ').trim();
+  const niceTitle = text => String(text || '').replace(/\b(OVER|UNDER)\b/g, m => m.toLowerCase())
+    .replace(/\breceptions\b/gi, 'catches').replace(/\s+/g, ' ').trim();
 
   /* The "why" and "watch out" lines, from the play's own published words. Counterpoints never become a "why". */
   const sentences = text => String(text || '').split(/(?<=[.!?])\s+(?=[A-Z0-9"“])/).map(s => s.trim()).filter(Boolean);
@@ -937,7 +938,7 @@
       ${waiting.map(p => slip(p, { spike: true, waiting: true })).join('')}${shown.map(p => slip(p, { spike: true })).join('')}
       <a class="kt-quiet" href="#record">${more > 0 ? `+${more} more on the record ›` : 'The full record ›'}</a></section>`;
   };
-  const STAT_SHORT = { recYds: 'rec yds', rushYds: 'rush yds', passYds: 'pass yds', rec: 'receptions', car: 'carries', cmp: 'completions', att: 'pass attempts', passTD: 'pass TDs' };
+  const STAT_SHORT = { recYds: 'rec yds', rushYds: 'rush yds', passYds: 'pass yds', rec: 'catches', car: 'carries', cmp: 'completions', att: 'pass attempts', passTD: 'pass TDs' };
   /* The Prep List: rows the build chose (today.json prep), chalked on the felt with the one tape label. */
   const prepList = (prep, notes, now) => {
     /* Each league's first game day and the next one (build_site.prep_list); the first day with a row still to kick off. */
@@ -1861,7 +1862,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-cb077e3df99d';
-  const GAMES_ASSET = 'app-games.js?v=sha256-e62c5f5559e3';
+  const GAMES_ASSET = 'app-games.js?v=sha256-0aa9bf8631fd';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,

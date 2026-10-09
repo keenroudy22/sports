@@ -29,7 +29,8 @@ class TnfEarlyLookTests(unittest.TestCase):
         self.assertEqual([row['id'] for row in result['rows']], ['two', 'one'])
         self.assertEqual(result['key'], 'research:tnf-early:2026-10-08')
         self.assertEqual(result['due'].astimezone(early.gates.EASTERN).hour, 19)
-        self.assertIn('Best bets drop tomorrow.', early.caption(result))
+        self.assertIn('Buccaneers/Cowboys early numbers:', early.caption(result))
+        self.assertNotIn('Best bets drop tomorrow.', early.caption(result))
         self.assertIsNone(early.select({'games': [GAME]}, [line()], NOW))
 
     def test_role_price_staleness_and_nonpublic_books_cannot_enter(self):

@@ -25,7 +25,7 @@ class WindowTests(unittest.TestCase):
         p=pick('intl', 'NFL-intl', league='NFL', title='Eagles at Jaguars over 48.5', line=48.5)
         with mock.patch.object(bp.receipts, 'house_posts', return_value=[]):
             plans=bp.plan({'intl':p},{'intl':p},{'NFL-intl':GAME},NOW,{'posts':[]})
-        self.assertEqual(plans[0][3], datetime(2026,10,11,12,30,tzinfo=timezone.utc))
+        self.assertEqual(plans[0][3], datetime(2026,10,11,12,30,tzinfo=timezone.utc) + W.jitter('intl'))
         self.assertTrue(feed.in_window(START, plans[0][3], 'NFL'))
         self.assertTrue(gates.x_window(p,SimpleNamespace(now=NOW,games={'NFL-intl':GAME},first={},latest={})).ok)
         self.assertTrue(featured.todays_plays({'intl':p},{}, {'NFL-intl':GAME},NOW.astimezone(gates.EASTERN).date(),NOW))
@@ -80,6 +80,19 @@ class WindowTests(unittest.TestCase):
     def test_night_games_target_the_morning_of_game_day(self):
         self.assertEqual(W.target('NFL', '2026-10-09T00:15:00Z'), datetime(2026, 10, 8, 13, 30, tzinfo=timezone.utc))
         self.assertEqual(W.target('CFB', '2026-10-11T01:00:00Z'), datetime(2026, 10, 10, 13, 30, tzinfo=timezone.utc))
+
+    def test_nine_weekend_posts_jitter_but_keep_safe_gaps_and_deadlines(self):
+        kickoff = '2026-10-11T23:00:00Z'
+        game = dict(GAME, id='NFL-late', kickoff=kickoff)
+        first = {f'p{i}': pick(f'p{i}', 'NFL-late', league='NFL', title=f'Player {i} over 49.5 yards') for i in range(9)}
+        with mock.patch.object(bp.receipts, 'house_posts', return_value=[]), \
+             mock.patch.object(featured, 'of_day', return_value=None):
+            plans = bp.plan(first, {}, {'NFL-late': game}, datetime(2026, 10, 11, 12, 0, tzinfo=timezone.utc), {'posts': []})
+        self.assertEqual(len(plans), 9)
+        due = [row[3] for row in plans]
+        self.assertTrue(all(b - a >= timedelta(minutes=15) for a, b in zip(due, due[1:])))
+        self.assertTrue(all(at <= datetime(2026, 10, 11, 22, 15, tzinfo=timezone.utc) for at in due))
+        self.assertTrue(all(at >= datetime(2026, 10, 11, 13, 0, tzinfo=timezone.utc) for at in due))
 
 
 if __name__=='__main__': unittest.main()

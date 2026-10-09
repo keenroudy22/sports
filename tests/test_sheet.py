@@ -117,7 +117,7 @@ class PostTests(unittest.TestCase):
         post = sheet.post(self.GAMES, early)
         self.assertEqual((post['key'], post['kind'], post['card']), ('sheet:NFL:2026-09-27', 'sheet', 'sheet-nfl-2026-09-27'))
         self.assertEqual(post['text'], '📌 Full NFL projections for the slate.\n'
-                                       'Mint rings name up to 4 lines we like at the listed price (not official plays). Save this one.\n#NFL')
+                                       'Up to 4 priced lines are marked on the card.\n📌 Save this one\n#NFL')
         self.assertEqual(post['due'], datetime(2026, 9, 27, 14, 0, tzinfo=timezone.utc))
         import receipts
         self.assertEqual(receipts.guard(post), [])

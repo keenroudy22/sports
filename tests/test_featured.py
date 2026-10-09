@@ -142,7 +142,7 @@ class PostTests(unittest.TestCase):
                 plans = [p for p in buffer_post.plan(first, latest, GAMES, NOW, {'posts': []}) if p[1] == 'play']
         self.assertEqual([p[0] for p in plans], ['b', 'a'], 'the Hot Plate leads the morning batch even for a night game')
         self.assertTrue(plans[0][2].startswith('🍳 Hot Plate (POTD): '), plans[0][2])
-        self.assertEqual(plans[0][3].astimezone(buffer_post.gates.EASTERN).strftime('%H:%M'), '09:30')
+        self.assertEqual(plans[0][3].astimezone(buffer_post.gates.EASTERN).strftime('%H:%M'), '09:36')
         self.assertEqual((plans[0][4], plans[1][4]), ('b-potd', 'a'), 'its own card, so no stale copy is ever attached')
 
     def test_the_label_on_the_card(self):

@@ -1,5 +1,14 @@
 # Kook'n voice
 
+## Current authority (owner, 2026-10-09)
+
+`docs/KOOKN-PLAN.md` supersedes every older example below where they differ. Public captions use only the exact
+shapes and word banks in `data/voice/pools.json`; code fills their fields and the local model may select a template
+ID but may not write public copy. `scripts/voice.py` holds the full caption/Discord kill list and every send path
+must fail closed when it finds a banned word, private publishing detail, bare athlete ID, duplicated token or banned
+punctuation. Results name the role stat that explains the outcome. New public copy says “catches,” not
+“receptions,” and never explains the automation behind the post.
+
 Every writer, person or model, reads this before touching a user-visible word.
 
 WHO IS TALKING

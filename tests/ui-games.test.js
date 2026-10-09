@@ -209,6 +209,22 @@ test('a game opens with its posted bet and honest book/model lines, even when To
   assert.match(html, /No additional current research line clears my price check\. The posted ticket above stays on the record/);
 });
 
+test('a game page excludes a fun ticket that contains games from the rest of the slate', async () => {
+  const { api, factory } = loadBrowserApi();
+  const g = slate()[1];
+  const other = slate()[0];
+  const fun = { id: 'fun-multi', gameIds: [g.id, other.id], league: 'CFB', kind: 'parlay', parlayType: 'lotto',
+    title: '5-leg fun ticket', odds: 2500, book: 'FanDuel', kickoff: g.kickoff, status: 'active', posted: true,
+    legs: [{ gameId: g.id, title: 'Pitt under 53.5' }, { gameId: other.id, title: 'Other game over 44.5' }] };
+  const detail = { ...g, picks: [fun], teams: { home: { injuries: [], form: [] }, away: { injuries: [], form: [] } },
+    favoriteLines: [], modelReads: [], seasonTrends: [], props: { lines: {} } };
+  const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [fun], freshness: {} }
+    : path === `app/games/${g.id}.json` ? detail : (() => { throw new Error('no ' + path); })() });
+  const html = unesc(await factory(ctx).game({ id: g.id }));
+  assert.doesNotMatch(html, /Our plays in this game|5-leg fun ticket|Other game over 44\.5/);
+  assert.match(html, /No official bet in this game/);
+});
+
 test('a game without a bet shows the current lines without presenting a model gap as a pick', async () => {
   const { api, factory } = loadBrowserApi();
   const g = slate()[1];

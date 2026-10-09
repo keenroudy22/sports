@@ -8,7 +8,6 @@ no post; nothing is invented to fill a calendar.
 """
 import html
 import json
-import os
 import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -114,22 +113,21 @@ def prep_candidate(data, now):
                 and current(row.get('observedAt'), now, timedelta(hours=4))
                 and when(row.get('kickoff')) and when(row['kickoff']) > now + timedelta(minutes=45)]
         if len(rows) >= 3:
-            choices.append((len(rows), league, rows[:6]))
+            choices.append((len(rows), league, rows[:4]))
     if not choices:
         return None
     _count, league, rows = sorted(choices, key=lambda choice: (-choice[0], choice[1]))[0]
-    first = rows[0]
-    stat = STAT_LABEL.get(first.get('stat'), str(first.get('stat') or 'yards'))
-    direction = str(first.get('direction') or '').lower()
-    headline = (f"{first['player']} {direction} {float(first['line']):g} {stat} "
-                f"({price(first['odds'])}, {first['book']}) · {direction} in "
-                f"{first['hits']} of {first['games']}")
-    date_word = eastern_date(now).strftime('%A')
-    caption = '\n'.join([f'📋 Prep List: {date_word}', headline,
-                         f'{len(rows) - 1} more on the card. Save it for kickoff 📌', f'#{league}'])
-    if tweet_length(caption) > LIMIT:
-        caption = '\n'.join([f'📋 Prep List: {date_word}', f'{len(rows)} checked lines on the card.',
-                             'Save it for kickoff 📌', f'#{league}'])
+    import voice_pick
+    lines = []
+    for row in rows:
+        stat = STAT_LABEL.get(row.get('stat'), str(row.get('stat') or 'yards')).replace('receptions', 'catches')
+        play = f"{row['player']} {str(row.get('direction') or '').lower()} {float(row['line']):g} {stat}"
+        lines.append(f"{play} {price(row['odds'])} {book_short(row['book'])} · {row['hits']}/{row['games']}")
+    save = voice_pick.choose_slot('save', f'prep:{day}:{league}', day, series='prep', history=[])
+    caption = '\n'.join(part for part in ['Lines that keep clearing today:', *lines, save, f'#{league}'] if part)
+    while tweet_length(caption) > LIMIT and len(lines) > 1:
+        lines.pop()
+        caption = '\n'.join(part for part in ['Lines that keep clearing today:', *lines, save, f'#{league}'] if part)
     return {'kind': 'prep', 'league': league, 'rows': rows, 'prep': {'day': day, 'rows': rows},
             'text': caption}
 
@@ -162,16 +160,16 @@ def upset_candidate(games, now):
         projected_for, projected_against = watch.get('projectedFor'), watch.get('projectedAgainst')
         score = f"Our score {team.get('abbr') or team.get('name')} {projected_for:g}–{projected_against:g} {opponent.get('abbr') or opponent.get('name')}" \
             if isinstance(projected_for, (int, float)) and isinstance(projected_against, (int, float)) else \
-            f"Model {round(100 * watch['modelChance'])}% | market {round(100 * watch['marketChanceNoVig'])}%"
+            f"We give them {round(100 * watch['modelChance'])}%. The price says {round(100 * watch['marketChanceNoVig'])}%."
         gap = watch.get('spreadGap')
-        comparison = f"Model {round(100 * watch['modelChance'])}% | market {round(100 * watch['marketChanceNoVig'])}%"
+        comparison = f"We give them {round(100 * watch['modelChance'])}%. The price says {round(100 * watch['marketChanceNoVig'])}%."
         if isinstance(gap, (int, float)):
             comparison += f" | {gap:g}-pt gap vs spread"
         rows.append({'league': game.get('league'), 'gameId': game['id'], 'kickoff': game['kickoff'],
                      'title': watch.get('team') or team.get('name'), 'team': team, 'opponent': opponent,
                      'price': price(watch['odds']) + ' ML', 'book': watch.get('book'),
                      'metric': score, 'detail': comparison,
-                     'copyMetric': f"Model {round(100 * watch['modelChance'])}% | market {round(100 * watch['marketChanceNoVig'])}%",
+                     'copyMetric': f"we give them {round(100 * watch['modelChance'])}%. The price says {round(100 * watch['marketChanceNoVig'])}%.",
                      'reason': ((watch.get('reasons') or [None])[-1]),
                      'score': watch['modelChance'] - watch['marketChanceNoVig'], 'observedAt': watch['observedAt']})
     rows.sort(key=lambda row: (-row['score'], row['kickoff'], row['gameId']))
@@ -180,8 +178,8 @@ def upset_candidate(games, now):
     shown = rows[:3]
     lines = [f"{row['title']} {row['price']} ({book_short(row['book'])}) | {row['copyMetric'].lower()}" for row in shown]
     return {'kind': 'upset', 'title': 'UNDERDOG WATCH', 'kicker': 'OUTRIGHT WINNERS', 'accent': MINT,
-            'rows': shown, 'text': '\n'.join(['🐕 UNDERDOG WATCH', 'Our raw model sees these outright underdogs differently:',
-                                             *lines, '', 'Research only, not official plays. Check current prices.', tags(shown)])}
+            'rows': shown, 'text': '\n'.join(['🐕 UNDERDOG WATCH', 'Dogs whose numbers deserve a closer look:',
+                                             *lines, '', tags(shown)])}
 
 
 def spread_dog_candidate(games, lines, now):
@@ -209,7 +207,7 @@ def spread_dog_candidate(games, lines, now):
         rows.append({'league': game.get('league'), 'gameId': game['id'], 'kickoff': game['kickoff'],
                      'title': team.get('name') or team.get('abbr'), 'team': team, 'opponent': opponent,
                      'price': f"{line['line']:+g} ({price(line.get('odds'))})",
-                     'book': line.get('book'), 'metric': f"Model {round(100 * chance)}% | price needs {round(100 * needs)}%",
+                     'book': line.get('book'), 'metric': f"We give it {round(100 * chance)}%. The price needs {round(100 * needs)}%.",
                      'detail': detail, 'score': grade.get('edge') or 0, 'observedAt': line.get('observedAt')})
     rows.sort(key=lambda row: (-row['score'], row['kickoff'], row['gameId']))
     if not rows:
@@ -217,8 +215,8 @@ def spread_dog_candidate(games, lines, now):
     shown = rows[:3]
     copy = [f"{row['title']} {row['price']} {book_short(row['book'])} | {row['metric'].lower()}" for row in shown]
     return {'kind': 'spread-dog', 'title': 'UNDERDOG SPREAD WATCH', 'kicker': 'COVER VALUE · NOT OUTRIGHT', 'accent': CYAN,
-            'rows': shown, 'text': '\n'.join(['🐕 UNDERDOG SPREAD WATCH', 'These dogs grade as cover value at current prices:',
-                                             *copy, '', 'Cover research, not an upset call or official play. Check current prices.', tags(shown)])}
+            'rows': shown, 'text': '\n'.join(['🐕 UNDERDOG SPREAD WATCH', 'Dogs whose spread numbers deserve a closer look:',
+                                             *copy, '', tags(shown)])}
 
 
 def defense_context(line, payload):
@@ -315,8 +313,7 @@ def matchup_candidate(games, details, now, teams=None):
         return None
     shown = rows[:3]
     lines = [f"{row['title']} | {row['hits']}/{row['games']} | {row['detail']}" for row in shown]
-    caution = ['CFB big-underdog usage is ranked down.' if any(row['scriptRisk'] for row in shown) else None,
-               'Trend + defense context, not a prediction or official play.']
+    caution = ['CFB big-underdog usage is ranked down.' if any(row['scriptRisk'] for row in shown) else None]
     return {'kind': 'matchup', 'title': 'MATCHUP TRENDS', 'kicker': 'EXACT LINE + OPPONENT DEFENSE', 'accent': CYAN,
             'rows': shown, 'text': '\n'.join(['📊 MATCHUP TRENDS', 'Strong exact-line history supported by the opponent matchup:',
                                              *lines, '', *[row for row in caution if row], tags(shown)])}
@@ -342,27 +339,7 @@ def scorer_candidate(games, details, now):
     lines = [f"{row['title']} | {row['metric']} | {row['price']}" for row in shown]
     return {'kind': 'end-zone', 'title': 'END-ZONE WORK', 'kicker': 'SCORING-AREA OPPORTUNITY', 'accent': VIOLET,
             'rows': shown, 'text': '\n'.join(['🎯 END-ZONE WORK', 'Players seeing the most scoring-area work:',
-                                             *lines, '', 'Opportunity, not TD probability or an official play.', tags(shown)])}
-
-
-def owner_tnf_ticket(data, details, now):
-    """The owner's one-game request, with real usage and reviewed Kitchen Ticket styling."""
-    day = eastern_date(now)
-    if day.isoformat() != '2026-10-08' or now < at(day, (18, 0)):
-        return None
-    games = [game for game in slate_games(data, now) if game.get('id') == 'NFL-401872980']
-    if len(games) != 1 or now >= when(games[0]['kickoff']) - timedelta(minutes=15):
-        return None
-    choice = scorer_candidate(games, details, now)
-    if not choice:
-        return None
-    first = choice['rows'][0]
-    choice['key'] = 'research-end-zone-tnf-ticket-2026-10-08'
-    choice['game'] = 'BUCS AT COWBOYS · THU 8:15 PM'
-    choice['text'] = ('🎯 TNF End-Zone Work: Bucs at Cowboys\n'
-                      f"{first['title']}: {first['metric']}, {first['price']}.\n"
-                      f"{len(choice['rows']) - 1} more on the card. Usage, not a TD pick or official play. #NFL")
-    return choice
+                                             *lines, '', tags(shown)])}
 
 
 def season_candidate(games, details, now):
@@ -397,7 +374,6 @@ def season_candidate(games, details, now):
             'accent': CYAN, 'rows': shown,
             'text': '\n'.join([f'📈 KOOK\'N {bucket_label} TREND BOARD',
                                *[f"{r['player']} · {r['title']} · {r['hits']}/{r['games']}" for r in unique],
-                               'Fresh main lines on the graphic.', 'History, not a prediction or official play. Check current prices.',
                                'keenroudy.com/sports/#trends', tags(unique)])}
 
 
@@ -485,16 +461,6 @@ def at(day, hm):
 
 def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES):
     data = load(data_path, {'games': []})
-    special = owner_tnf_ticket(data, details_for(data.get('games') or [], detail_root), now)
-    # Rendering a preview does not authorize sending a brand-new card type.
-    # Only the owner-approved one-shot command may enable its social plan.
-    if special and os.environ.get('KEENROUDY_TNF_TICKET_APPROVED') == '1':
-        game = next(game for game in data['games'] if game.get('id') == 'NFL-401872980')
-        stale = when(game['kickoff']) - timedelta(minutes=15)
-        due = max(at(eastern_date(now), (19, 0)), now + timedelta(minutes=2))
-        if due < stale:
-            return {'key': 'research:end-zone:tnf-ticket:2026-10-08', 'kind': 'research',
-                    'card': special['key'], 'text': special['text'], 'due': due, 'stale': stale}
     import tnf_early_look
     if tnf_early_look.ENABLED:
         early = tnf_early_look.select(data, load_lines(lines_path), now)
@@ -583,7 +549,6 @@ def legacy_svg(choice, art=None):
 
 def render_due(now, folder, data_path=TODAY, detail_root=DETAILS, lines_path=LINES, fetch=None, log=print):
     data = load(data_path, {'games': []})
-    special = owner_tnf_ticket(data, details_for(data.get('games') or [], detail_root), now)
     import tnf_early_look
     early_cards = {}
     if tnf_early_look.ENABLED:
@@ -597,14 +562,6 @@ def render_due(now, folder, data_path=TODAY, detail_root=DETAILS, lines_path=LIN
     cards = data.get('games') or []
     choice = select(data, details_for(cards, detail_root), now,
                     load_lines(lines_path), teams_for(cards))
-    if special:
-        try:
-            import ticket_card
-            path = Path(folder) / f"{special['key']}.png"
-            pick_card.render(ticket_card.end_zone_svg(special, fetch=fetch), path)
-            early_cards[special['key']] = path
-        except Exception as error:
-            log(f"TNF Kitchen research card not drawn: {error}")
     if not choice:
         return early_cards
     if choice['kind'] != 'prep' and pick_card.ticket_enabled(moment=now):

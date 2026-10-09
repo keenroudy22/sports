@@ -584,12 +584,12 @@ def leader(card, y, left, right, lsize=42, rsize=56, lfam='d', rfill=INK, x1=X1,
 # ------------------------------------------------------------------ copy helpers
 STAT_UNITS = {   # stacked unit labels for the bet line
     'recYds': ('REC', 'YDS'), 'rushYds': ('RUSH', 'YDS'), 'passYds': ('PASS', 'YDS'), 'passTD': ('PASS', 'TDS'),
-    'rec': ('RECS',), 'car': ('CARRIES',), 'cmp': ('COMP',), 'att': ('PASS', 'ATT'), 'rushRecYds': ('RUSH+REC', 'YDS'),
+    'rec': ('CATCHES',), 'car': ('CARRIES',), 'cmp': ('COMP',), 'att': ('PASS', 'ATT'), 'rushRecYds': ('RUSH+REC', 'YDS'),
     'total': ('TOTAL', 'PTS'),
 }
 SHORT_WORDS = (('rushing + receiving yards', 'rush+rec yds'), ('receiving yards', 'rec yds'), ('rushing yards', 'rush yds'),
                ('passing yards', 'pass yds'), ('passing touchdowns', 'pass TDs'), ('pass attempts', 'pass att'),
-               ('receptions', 'recs'), ('completions', 'comp'), ('anytime touchdown', 'anytime TD'))
+               ('receptions', 'catches'), ('completions', 'comp'), ('anytime touchdown', 'anytime TD'))
 
 
 def short_words(text):

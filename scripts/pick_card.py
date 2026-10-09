@@ -370,7 +370,7 @@ def display_title(pick, game):
 
 
 SHORT_WORDS = (('receiving yards', 'rec yds'), ('rushing yards', 'rush yds'), ('passing yards', 'pass yds'),
-               ('pass attempts', 'pass att'))
+               ('pass attempts', 'pass att'), ('receptions', 'catches'))
 
 
 def short_words(text):
