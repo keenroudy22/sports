@@ -135,11 +135,13 @@ jobs:
         run: python scripts/payload_budget.py
       - name: Reconcile the public record with official publications
         run: python scripts/record_audit.py --today site/data/app/record.json
+      - name: Reconcile the separate NBA Trial record
+        run: python scripts/nba_trial_audit.py
       - name: Restore immutable card renders
         uses: actions/cache@v4
         with:
           path: site/data/cards
-          key: kookn-cards-${{ runner.os }}-${{ hashFiles('research/*.json') }}
+          key: kookn-cards-${{ runner.os }}-${{ hashFiles('research/*.json', 'data/nba-trial/*.jsonl') }}
           restore-keys: |
             kookn-cards-${{ runner.os }}-
       - name: Build the plays feed and its cards (site/data/feed.xml and cards, not committed)

@@ -320,11 +320,11 @@
     {
       "id": "P36",
       "title": "NBA-first ESPN capture foundation",
-      "status": "ready",
+      "status": "observing",
       "owner": "agent",
-      "next": "Finish NBA injury/box writers and scheduled wiring from local nba-capture-20261009 candidate; release with all gates, then observe two real days of four-slot captures. Details: PRODUCT-IMPLEMENTATION.md. No NHL/MLB expansion.",
+      "next": "Observe two real days of all four NBA capture slots after c2553e54; verify no late boards, side-label failures or metered calls. Manual probes do not count.",
       "doneWhen": "Two days of four-slot captures with zero late boards/contradictions and zero metered other-sport calls.",
-      "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06. October 9: offline saved-board checks identify 49 exact pairs, 127 unverified pairs with prices omitted, and 3 over-second order contradictions; order is never side proof. Candidate is not released; no scheduled capture observation is claimed."
+      "evidence": "NBA capture/site release c2553e54, hosted 37999813050 success; 10 live 375/1440 checks passed. First real four-slot day remains to be observed. Exact-side parser, injury/quote ledgers and hosted scheduled-only NBA box writer are live."
     },
     {
       "id": "P37",
@@ -338,11 +338,11 @@
     {
       "id": "P38",
       "title": "P2 NBA opening",
-      "status": "ready",
+      "status": "observing",
       "owner": "agent",
-      "next": "Build NBA views by October 20, with labeled last-season charts.",
+      "next": "NBA Today is live; observe scheduled refreshes and natural current-season charts/Prep List eligibility without relaxing history or role holds.",
       "doneWhen": "Current-season history gates and all live route checks pass.",
-      "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
+      "evidence": "c2553e54, hosted 37999813050: NBA Today has real opening scores/schedule, research projections, explicitly labeled last-season trends and a held Prep List. Live 375/1440 passed; current-season warmup stays a real time gate."
     },
     {
       "id": "P39",
@@ -628,9 +628,9 @@
       "title": "NBA Today and guarded opening-night Trial",
       "status": "ready",
       "owner": "agent",
-      "next": "Prerequisites verified live. Release NBA capture, then lazy Today by Oct 16; Trial/card review by Oct 18. Keep opening-night, price/role/edge, separate-record and two-hour veto gates. Details: PRODUCT-IMPLEMENTATION.md.",
+      "next": "Finish hosted/live verification of Trial runtime continuation. Preserve Oct20 opening, delivered-preview hash/two-hour veto, price/role/edge, daily cap and separate-record guards; keep automation active for real observations.",
       "doneWhen": "Before Oct 20, NBA Today has scores, projections, trends and Prep List at 375/1440. Trial has fresh two-sided prices, holds, ≥6-point raw edge and ≥0.56 chance until calibrated, a 1u/one-per-day cap, separate record and first-card review.",
-      "evidence": "Owner decision 35, Oct 8. Today/calendar 6dc3ebca/37795541437 and Ticket guard 7052dbe6/37808251104 verified. Oct 9: local NBA parser/capture/extractor candidate only; no NBA release/post or prospective capture day. Daily receipts in codex-status.md; full candidate scope in PRODUCT-IMPLEMENTATION.md."
+      "evidence": "NBA site/capture live at c2553e54, hosted 37999813050. Phone preview accepted Oct9 18:46:51 ET, veto through20:46:51. Trial admission/delivery/grading continuation passed 1276 Python and232 frontend tests but is not yet deployed. No NBA play posted."
     },
     {
       "id": "P71",

@@ -25,7 +25,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import boxscores
 
 ROOT = Path(__file__).resolve().parents[1]
-STORES = ('data/odds', 'data/prop-odds', 'data/props', 'data/forecasts', 'data/weather', 'data/boxscores', 'data/nba-capture/quotes', 'data/nba-capture/props', 'data/nba-capture/injuries', 'data/nba-capture/observations', 'data/sport-box')
+STORES = ('data/odds', 'data/prop-odds', 'data/props', 'data/forecasts', 'data/weather', 'data/boxscores', 'data/nba-capture/quotes', 'data/nba-capture/props', 'data/nba-capture/injuries', 'data/nba-capture/observations', 'data/sport-box', 'data/nba-trial')
 # Every append-only store two runs can both extend. A conflict anywhere else still stops the rebase for a person.
 
 

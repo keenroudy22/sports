@@ -59,7 +59,7 @@ PUBLISH_MARGIN = timedelta(minutes=5)      # nothing is published on a game this
 KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'ladder', 'favorite')
 LADDER_SCAN_TIMES = ((10, 0), (13, 30), (16, 0), (20, 0))
 WHITELIST = ('research/', 'data/odds/', 'data/prop-odds/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
-             'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
+             'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-trial/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 BOOK_SLUG = {'DraftKings': 'dk', 'FanDuel': 'fd', 'BetMGM': 'mgm', 'Caesars': 'czr', 'BetRivers': 'br',
              'ESPN BET': 'espnbet', 'Fanatics': 'fan'}
 VOLUME = {'recYds': 'targets', 'rec': 'targets', 'rushYds': 'carries', 'car': 'carries',
@@ -141,7 +141,7 @@ def git(*args, cwd=ROOT, check=True):
     return result
 
 
-LEFTOVER = ('data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/', 'data/nba-capture/',
+LEFTOVER = ('data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-trial/',
             'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 
 
@@ -2254,6 +2254,13 @@ def _run(args, now, slot, kinds, status):
             x_post.save_reasons(stored)
         remember(decided, now, slot, status)
         paper_trials(now, slot, status)
+        try:
+            import nba_trial_runtime
+            status['nbaTrialGraded'] = nba_trial_runtime.grade(now)
+            if args.command == 'run':
+                status['nbaTrial'] = nba_trial_runtime.admission(now, capture='nbaCapture' not in status)
+        except Exception as error:
+            status['errors'].append(f'NBA Trial: {type(error).__name__}: {error}')
         pick_of_the_day(now, ctx, status, current=potd_market)
         git_result = commit_push(now, slot, {'published': len(published), 'settled': len(settled), 'closed': len(closed)},
                                  push=not args.no_push)
@@ -2388,6 +2395,8 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             else:
                 log(f"buffer: {key} held back, its text fails the post check: {'; '.join(problems)}")
                 alert('KeenRoudy post held back', f"{key}: {'; '.join(problems)}")
+        import nba_trial_runtime
+        plans += nba_trial_runtime.social_plans(now, log_book, reserved=plans)
         upgrades = pending_ladder_result_cards(log_book, ctx, now)
         if deploying and (plans or upgrades):
             waiting = [card for *_, card in plans if card] + list(upgrades.values())
@@ -2401,6 +2410,7 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
             later = datetime.now(timezone.utc)
             plans = buffer_post.plan(ctx.first, ctx.latest, games, max(now, later), log_book, ctx.player_team,
                                      quotes=quotes, news=news)
+            plans += nba_trial_runtime.social_plans(max(now, later), log_book, reserved=plans)
         limit = buffer_post.daily_limit(channel['id'], eastern_date(now).isoformat())
         if limit and limit.get('remaining') is not None and limit['remaining'] < len(plans):
             log(f"buffer: the channel can take {limit['remaining']} more posts today; scheduling that many")
@@ -2733,7 +2743,7 @@ def homepage_editor(now, status, enabled=True):
 
 def commit_log(now, push=True, runner=git, cwd=ROOT):
     """Commit delivery evidence and the optional local homepage notes after scheduling."""
-    paths = ('data/x-posted.json', 'site/data/desk-notes.json')
+    paths = ('data/x-posted.json', 'site/data/desk-notes.json', 'data/nba-capture/', 'data/nba-trial/')
     changed = [p for p in paths if runner('status', '--porcelain', '--', p, cwd=cwd).stdout.strip()]
     if not changed:
         return {'committed': False, 'pushed': False}
@@ -2981,6 +2991,11 @@ def precheck(args):
             if not args.dry_run:
                 sync()
             log_book = x_post.load_log()
+            if not args.dry_run:
+                import nba_trial_runtime
+                if nba_trial_runtime.precheck(now, log_book):
+                    x_post.save_log(log_book)
+                    commit_log(now, push=not args.no_push)
             due = precheck_due(log_book, now)
             if not due:
                 return 0

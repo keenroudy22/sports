@@ -481,9 +481,16 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                 log(f'buffer: {guid} card theme label fell back to legacy')
         else:
             card_theme = 'none'
+        if kind == 'nba-trial':
+            import nba_trial_runtime
+            if not nba_trial_runtime.reserve_delivery(guid, now):
+                log(f'buffer: {guid} held: NBA delivery already attempted; reconcile before retry')
+                continue
         try:
             post_id = create_post(text, channel_id, due, image, key=key, send=send)
         except BufferError as error:
+            if kind == 'nba-trial':
+                nba_trial_runtime.delivery_failed(guid, now)
             if kind == 'play' and missed_target(guid, due, now, items):
                 stats['officialNotScheduled'] += 1
             log(f'buffer: {guid} not scheduled: {error}')

@@ -51,7 +51,7 @@ def evaluate(offer, rows, now=None, preview_sent=None, calibration_verified=Fals
         if offer.get('sideVerified') is not True or offer.get('exactLineVerified') is not True:problems.append('exact-side hold')
         if offer.get('roleChecked') is not True or offer.get('roleHold') or offer.get('priceHold') or offer.get('injuryHold'):problems.append('role/price hold')
         if isinstance(offer.get('riskUnits'),bool) or offer.get('riskUnits')!=1:problems.append('1u only')
-        calibrated=calibration_verified and offer.get('calibrated') is True
+        calibrated=calibration_verified is True and offer.get('calibrated') is True
         chance=offer['chance'] if calibrated else offer['rawChance']
         if isinstance(chance,bool) or not isinstance(chance,(float,int)) or not math.isfinite(chance) or not 0<=chance<=1:
             raise ValueError('missing probability')
@@ -75,11 +75,13 @@ def record_publish(offer,now,root=STORE,preview_sent=None,calibration_verified=F
     required=('id','league','season','seasonType','kickoff','marketType','line','odds','oppositeOdds','book',
               'retrievedAt','rawChance','riskUnits','source')
     row={key:offer[key] for key in required}
+    for key in ('eventId','game','reasons','projection','model','direction'):
+        if key in offer:row[key]=offer[key]
     row.update(type='publish',series='NBA Trial',publishedAt=boxscores.stamp(now))
     return nba_capture.append_changed([row],root,lambda r:(r['type'],r['id']))
 
 
-def preview_svg(game, quote):
+def preview_svg(game, quote, *, preview=True, direction='under', reason=None):
     """Real stored total quote, clearly labeled layout preview; no admission or invented chance."""
     import ticket_cards
     import ticket_kit
@@ -88,16 +90,17 @@ def preview_svg(game, quote):
     over,under=espn_props.price(total['over']),espn_props.price(total['under'])
     if not .99<=espn_props.implied(over)+espn_props.implied(under)<=1.15:
         raise ValueError('Preview needs two genuine matching prices')
-    data={'kind':'game','featured':False,'seriesLabel':'NBA TRIAL PREVIEW',
+    data={'kind':'game','featured':False,'seriesLabel':'NBA TRIAL PREVIEW' if preview else 'NBA TRIAL',
           'away':away['abbreviation'],'home':home['abbreviation'],'team':home['abbreviation'],
           'away_name':away['name'],'home_name':home['name'],'away_logo':None,'home_logo':None,
-          'when':'Opening night · Oct 20','when_caps':'OPENING NIGHT · OCT 20',
-          'market':'total','line':f"{total['line']:g}",'odds':under,'book':quote['book'],
+          'when':'Opening night · Oct 20' if preview else boxscores.instant(game['kickoff']).astimezone(EASTERN).strftime('%b %-d · %-I:%M %p'),
+          'when_caps':'OPENING NIGHT · OCT 20' if preview else boxscores.instant(game['kickoff']).astimezone(EASTERN).strftime('%b %-d · %-I:%M %p').upper(),
+          'market':'total','line':f"{total['line']:g}",'odds':total[direction],'book':quote['book'],
           'chance':None,'needs':None,'calibrated':False,
-          'reason':'Layout preview only. No play posted. Price seen '+quote['retrievedAt'][:10]+'.',
+          'reason':('Layout preview only. No play posted. Price seen '+quote['retrievedAt'][:10]+'.') if preview else reason,
           'units':1.,'photo':None,'team_logo':None,
           'team_colors':{home['abbreviation']:('#17241f','#eef4ec'),away['abbreviation']:('#17241f','#eef4ec')},
-          'side':'UNDER'}
+          'side':direction.upper()}
     card=ticket_cards.play_card(data)
     problems=ticket_kit.qa(card,'NBA Trial preview')
     if problems:raise ValueError('; '.join(problems))

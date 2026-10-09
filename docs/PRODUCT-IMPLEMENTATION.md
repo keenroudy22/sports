@@ -1196,3 +1196,32 @@ Card QA passes; the fixed PNG/source receipt are in design/final/nba-trial-previ
 Phone preview/veto timing and the final hosted/live receipt will be recorded in
 codex-status.md after the release succeeds. P38/P70 remain open for their stated
 remaining gates; the temporary NBA automation is not retired.
+
+### October 9 NBA Trial runtime continuation
+
+NBA Today/capture release c2553e54 is verified live in hosted run 37999813050.
+Ten live 375/1440 route checks passed. The fixed preview PNG matched its reviewed
+bytes; owner phone delivery was accepted at 18:46:51 ET, with veto through
+20:46:51 ET. No NBA play was admitted or posted. Original dev work remains on
+dev-held-before-nba-20261009.
+
+The continuation wires NBA-only admission, its own immutable publication/grade
+ledger, source-score corrections, current-season/stage record and past-season
+summaries, hosted cards/cache retention, lower-priority Buffer delivery and a
+fresh exact-price/injury check before X. It never routes into Discord or the
+football record. A Buffer create intent is saved once; ambiguous delivery holds
+for reconciliation rather than duplicating a post. Both football and NBA record
+audits are required. Retention stays recent-or-site-referenced; missing old
+unreferenced art is logged/skipped, never regenerated.
+
+Activation requires real October 20 or later, the matching delivered preview
+hash, completed two-hour veto, no owner veto and the kill switch on. Source totals
+need known variance, two numeric historical supporting reasons, fresh exact
+two-sided prices, clear current injury/role evidence, raw six-point edge/.56
+chance, one 1u play per game day and space inside existing global/other-sport caps.
+Player props remain under review until a verified player model exists; no fake
+prop probability fills the gap. Calibration never becomes verified by inference;
+30-graded promotion is a review with forward evidence, not an automatic weight
+change. No play is required on opening night. Full release gates and final hosted
+receipts remain to be completed for this continuation. Real two-day capture
+observation stays open separately.

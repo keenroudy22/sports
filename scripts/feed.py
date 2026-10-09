@@ -399,6 +399,8 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
         cards.update(research_posts.render_due(now, cards_folder, log=log))
         import sports_posts
         cards.update(sports_posts.render_due(now, cards_folder, log=log))
+        import nba_trial_runtime
+        nba_trial_runtime.render_due(now, cards_folder, log=log)
     Path(out).parent.mkdir(parents=True, exist_ok=True)
     Path(out).write_text(rss(items, cards, now), encoding='utf-8')
     log(f'{len(items)} items in the feed ({sum(1 for i in items if "pick" in i)} plays, {len(cards)} cards) -> {out}')

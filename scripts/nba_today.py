@@ -10,6 +10,7 @@ import espn_props
 import nba_capture
 import paper
 import nba_trial
+import nba_trial_runtime
 
 ROOT = Path(__file__).resolve().parents[1]
 BOX = ROOT/'data'/'sport-box'
@@ -116,11 +117,19 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
         prep.append({'name':recent[-1]['name'],'stat':stat,'statName':STAT_NAMES[stat],'line':row['line'],'over':row['over'],
                      'book':row['book'],'hits':hits,'games':5,'label':'Research','kickoff':row['kickoff']})
     trial_rows=[r for p in nba_trial.STORE.glob('*.jsonl') for r in boxscores.read_store(p)]
-    trial_record=nba_trial.snapshot(trial_rows)
+    all_trial_plays=nba_trial_runtime.public_rows()
+    focused=nba_trial_runtime.current_plays()
+    focus_ids={p['id'] for p in focused}
+    trial_record=nba_trial.snapshot([r for r in trial_rows if r.get('id') in focus_ids])
+    plays=sorted(focused,key=lambda p:p['publishedAt'])[-20:]
+    periods=sorted({(p['season'],p['seasonType']) for p in all_trial_plays},reverse=True)
+    trial_seasons=[{'season':s,'stage':stage,'record':nba_trial.snapshot([r for r in trial_rows if r.get('id') in {p['id'] for p in all_trial_plays if (p['season'],p['seasonType'])==(s,stage)}])} for s,stage in periods]
+    public_plays=[{k:p.get(k) for k in ('id','kickoff','publishedAt','direction','line','odds','book','riskUnits','projection','result','actual','reasons')} | {'teams':p['game']['teams'],'card':f"data/cards/{p['id'].lower()}.png"} for p in plays]
+    started=nba_trial_runtime.review_ready(now)
     return {'league':'NBA','generatedAt':boxscores.stamp(now),'season':season,
             'heading':'Opening night · October 20' if nba_capture.sports_refresh.eastern_date(now).isoformat() < '2026-10-20' else 'NBA Today',
             'sourceAt':slate.get('retrievedAt'),'scheduleFresh':fresh(slate.get('retrievedAt'),now,24),
             'games':games,'trends':trends[:12],'prep':prep[:10],
             'prepNote':'Current-season games, fresh prices and player availability must clear before a row appears.',
-            'trial':{'label':'NBA Trial','state':'preparing','record':trial_record,
-                     'note':'Opening-night series is being prepared. No NBA Trial play has been posted.'}}
+            'trial':{'label':'NBA Trial','state':'ready' if started else 'opening hold','record':trial_record,'plays':public_plays,'seasons':trial_seasons,
+                     'note':('NBA Trial record is separate from football. Only a fully checked total can appear.' if public_plays else 'NBA Trial starts on October 20 after card review. No NBA Trial play has been posted.')}}
