@@ -39,6 +39,7 @@ import integrity
 import learning
 import pricing
 import role_sanity
+import spot
 from desk import current as current_snapshot
 from sports_refresh import eastern_date
 
@@ -63,7 +64,7 @@ LEAN_EDGE, LEAN_STRONG = 1.0, 2.0          # model lean: points clear of break-e
 # Monday and Thursday you can just do one play. I want a good mix of game lines and player props"): five straight plays
 # on a Saturday or a Sunday, three of a kind at most; one on any other day, the NFL game's on a night with one. The
 # runs judge the strongest first (run.rank_card), so the card is the best each run sees.
-CARD = {'weekend': 5, 'weekday': 1}
+CARD = {'weekend': 5, 'weekday': 2}
 CARD_KIND_MAX = 3
 CARD_MARKET_MAX = 2
 PROP_RAW, PROP_EDGE, PROP_FLOOR = 0.60, 5.0, -200
@@ -98,6 +99,7 @@ class Context:
     odds: dict = field(default_factory=dict)           # gameId -> latest data/odds record at or before now
     odds_history: dict = field(default_factory=dict)   # gameId -> captured history, for adverse movement checks
     prop_odds: dict = field(default_factory=dict)      # gameId -> latest data/prop-odds record at or before now
+    prop_odds_history: dict = field(default_factory=dict)  # gameId -> captured player-price history
     snapshots: dict = field(default_factory=dict)      # gameId -> v2 snapshots, oldest first
     injuries: dict = field(default_factory=dict)       # teamId -> {athleteId: {'status', 'position', 'name'}}
     scoreboard: dict = field(default_factory=dict)     # site/data/scoreboard.json
@@ -108,6 +110,7 @@ class Context:
     names: dict = field(default_factory=dict)          # athleteId -> name
     player_team: dict = field(default_factory=dict)    # athleteId -> teamId in the latest stored game
     player_logs: dict = field(default_factory=dict)    # athleteId -> stored game logs, never a live lookup
+    records: list = field(default_factory=list)        # append-only stored box scores for reason calculations
     starters: dict = field(default_factory=dict)       # "LEAGUE-teamId" -> usual starting quarterback (most starts of the last four)
     passers: dict = field(default_factory=dict)        # "LEAGUE-teamId" -> this season's starting passers, game by game
     flags: dict = field(default_factory=lambda: dict(FLAGS))
@@ -185,8 +188,8 @@ def kickoffs(candidate, ctx):
 
 
 def market_key(candidate):
-    """spread, total, or the prop market key (recYds, rec, ...)."""
-    if candidate.get('marketType') in ('spread', 'total') and not candidate.get('athleteId'):
+    """spread, total, moneyline, or the prop market key."""
+    if candidate.get('marketType') in ('spread', 'total', 'moneyline') and not candidate.get('athleteId'):
         return candidate['marketType']
     return pricing.market_of(candidate)
 
@@ -255,6 +258,68 @@ def quotes_for(candidate, ctx, priced_only=False):
     return rows
 
 
+def exact_price_pairs(candidate, ctx):
+    """Exact-line two-sided prices, normalized to the candidate's side."""
+    game_id = (candidate.get('gameIds') or [None])[0]
+    market, side, line = market_key(candidate), side_of(candidate), candidate.get('line')
+    rows = []
+    if candidate.get('_pair'):
+        selected, other = candidate['_pair']
+        if all(isinstance(v, (int, float)) and abs(v) >= 100 for v in (selected, other)):
+            implied_sum = pricing.break_even(selected) + pricing.break_even(other)
+            rows.append({'book': candidate.get('book'), 'side': int(selected), 'other': int(other),
+                         'impliedSum': implied_sum, 'fairChance': pricing.fair_chance(selected, other)})
+        return rows
+    if candidate.get('athleteId'):
+        record = ctx.prop_odds.get(game_id)
+        for book, quoted_line, over, under in build_site.price_quotes(
+                record, market, player_name(candidate, ctx), line):
+            if quoted_line != line or side not in ('over', 'under'):
+                continue
+            selected, other = (over, under) if side == 'over' else (under, over)
+            if not all(isinstance(v, (int, float)) and abs(v) >= 100 for v in (selected, other)):
+                continue
+            implied_sum = pricing.break_even(selected) + pricing.break_even(other)
+            rows.append({'book': BOOK_NAMES.get(book, book), 'side': int(selected), 'other': int(other),
+                         'impliedSum': implied_sum, 'fairChance': pricing.fair_chance(selected, other)})
+    else:
+        record = ctx.odds.get(game_id) or {}
+        for book, entry in (record.get('books') or {}).items():
+            offer = entry.get('total' if market == 'total' else 'spread') or {}
+            if market == 'total' and offer.get('line') == line and side in ('over', 'under'):
+                selected, other = ((offer.get('over'), offer.get('under')) if side == 'over'
+                                   else (offer.get('under'), offer.get('over')))
+            elif market == 'spread' and side in ('home', 'away'):
+                home_line = offer.get('home')
+                if not isinstance(home_line, (int, float)) or line != (home_line if side == 'home' else -home_line):
+                    continue
+                selected, other = ((offer.get('homePrice'), offer.get('awayPrice')) if side == 'home'
+                                   else (offer.get('awayPrice'), offer.get('homePrice')))
+            else:
+                continue
+            if not all(isinstance(v, (int, float)) and abs(v) >= 100 for v in (selected, other)):
+                continue
+            implied_sum = pricing.break_even(selected) + pricing.break_even(other)
+            rows.append({'book': BOOK_NAMES.get(book, book), 'side': int(selected), 'other': int(other),
+                         'impliedSum': implied_sum, 'fairChance': pricing.fair_chance(selected, other)})
+    return rows
+
+
+def selection_numbers(candidate, ctx):
+    """Raw model chance, no-vig market chance and their point gap."""
+    desk = desk_for(candidate, ctx)
+    if not desk or not isinstance(desk.get('rawChance'), (int, float)):
+        return None
+    own = role_sanity.book_key(candidate.get('book'))
+    pair = next((row for row in exact_price_pairs(candidate, ctx)
+                 if role_sanity.book_key(row['book']) == own and row['side'] == candidate.get('odds')), None)
+    if not pair:
+        return None
+    raw, fair = float(desk['rawChance']), float(pair['fairChance'])
+    return {'rawChance': raw, 'fairChance': fair, 'gap': 100 * (raw - fair),
+            'impliedSum': pair['impliedSum'], 'otherOdds': pair['other']}
+
+
 def desk_for(candidate, ctx):
     """pricing.price() for the candidate at its own line and price, or None when v2 has no number."""
     if candidate.get('_desk') is not None:
@@ -290,8 +355,9 @@ def player_projection_sanity(candidate, ctx):
     qb_change = role_sanity.quarterback_change(players, ctx.player_logs, team, game.get('season'), game.get('league'), game.get('kickoff'))
     if forecast and role_sanity.affected_by_qb_change(athlete, forecast.get('pos'), market_key(candidate), qb_change):
         return Decision(False, 'player_projection_sanity', f"QB-change role under review: {qb_change['reason']}")
-    desk = desk_for(candidate, ctx)
-    if role_sanity.price_suspect(candidate.get('odds'), desk.get('chance') if desk and desk.get('calibrated') else None):
+    numbers = candidate.get('_selection') or selection_numbers(candidate, ctx)
+    if role_sanity.price_suspect(candidate.get('odds'), numbers.get('rawChance') if numbers else None,
+                                 fair=numbers.get('fairChance') if numbers else None):
         return Decision(False, 'player_projection_sanity', 'main player price is under review')
     return Decision(True, 'player_projection_sanity', 'role and main price pass')
 
@@ -506,35 +572,10 @@ def price_present(candidate, ctx):
 
 def two_sided_straight(candidate, ctx):
     """A new straight needs both actual prices at its book and exact line."""
-    game_id = (candidate.get('gameIds') or [None])[0]
-    book = candidate.get('book')
-    line = candidate.get('line')
-    odds = candidate.get('odds')
-    side = side_of(candidate)
-    if candidate.get('athleteId'):
-        record = ctx.prop_odds.get(game_id)
-        quotes = build_site.price_quotes(record, market_key(candidate), player_name(candidate, ctx), line)
-        issue = role_sanity.quote_issue(quotes, book, line, side, odds)
-    else:
-        record = ctx.odds.get(game_id) or {}
-        named = next((entry for name, entry in (record.get('books') or {}).items()
-                      if role_sanity.book_key(BOOK_NAMES.get(name, name)) == role_sanity.book_key(book)), None)
-        market = market_key(candidate)
-        offer = (named or {}).get('total' if market == 'total' else 'spread') or {}
-        if market == 'total':
-            same_line = offer.get('line') == line
-            pair = (offer.get('over'), offer.get('under'))
-            selected = offer.get(side)
-        elif market == 'spread':
-            home_line = offer.get('home')
-            same_line = isinstance(home_line, (int, float)) and line == (home_line if side == 'home' else -home_line)
-            pair = (offer.get('homePrice'), offer.get('awayPrice'))
-            selected = offer.get('homePrice' if side == 'home' else 'awayPrice')
-        else:
-            same_line, pair, selected = False, (None, None), None
-        a, b = (role_sanity.implied(value) for value in pair)
-        issue = None if same_line and selected == odds and a is not None and b is not None \
-            and .99 <= a + b <= 1.15 else 'no valid two-sided exact line at the listed book'
+    own = role_sanity.book_key(candidate.get('book'))
+    pair = next((row for row in exact_price_pairs(candidate, ctx)
+                 if role_sanity.book_key(row['book']) == own and row['side'] == candidate.get('odds')), None)
+    issue = None if pair and .99 <= pair['impliedSum'] <= 1.15 else 'no valid two-sided exact line at the listed book'
     return Decision(not issue, 'two_sided_straight', issue or 'both prices verified at the listed book and line')
 
 
@@ -618,18 +659,37 @@ def cfb_jurisdiction(candidate, ctx):
 # ------------------------------------------------------------------ rules: shopping the quote
 
 def one_book(candidate, ctx):
-    """When one book alone has posted the market there is nothing to shop; wait, unless kickoff is inside three hours."""
-    books = {b for b, _, _ in quotes_for(candidate, ctx)}
+    """One book is usable only under the owner's narrow game-day exception."""
+    pairs = exact_price_pairs(candidate, ctx)
+    books = sorted({row['book'] for row in pairs})
+    numbers = candidate.get('_selection') or selection_numbers(candidate, ctx)
     if len(books) >= 2:
-        return Decision(True, 'one_book', f"{len(books)} books quote the market: {', '.join(sorted(books))}")
+        if numbers and numbers['gap'] > 15:
+            own = next((row for row in pairs if role_sanity.book_key(row['book']) ==
+                        role_sanity.book_key(candidate.get('book'))), None)
+            corroborated = own and any(row is not own and abs(row['fairChance'] - own['fairChance']) <= .10
+                                       for row in pairs)
+            if not corroborated:
+                return Decision(False, 'one_book', 'gap above 15 needs a second exact-line book within 10 fair points')
+        return Decision(True, 'one_book', f"{len(books)} books quote the exact market: {', '.join(books)}")
     starts = kickoffs(candidate, ctx)
-    if starts and min(starts) - ctx.now <= ONE_BOOK_EXCEPTION:
-        return Decision(True, 'one_book', f"only {', '.join(sorted(books)) or 'no book'} has posted, but kickoff is inside "
-                                          f'{int(ONE_BOOK_EXCEPTION.total_seconds() // 3600)} hours; say so in the quote note',
-                        {'quoteNoteRequired': True, 'books': sorted(books)})
-    return Decision(False, 'one_book', f"only {', '.join(sorted(books)) or 'no book'} has posted this market and kickoff is "
-                                       f'more than {int(ONE_BOOK_EXCEPTION.total_seconds() // 3600)} hours away',
-                    {'books': sorted(books)})
+    game_day = bool(starts and eastern_date(min(starts)) == eastern_date(ctx.now))
+    try:
+        age = ctx.now - when(candidate.get('quotedAt'))
+    except (TypeError, ValueError):
+        age = ONE_BOOK_EXCEPTION + timedelta(days=1)
+    pair = pairs[0] if pairs else None
+    checks = {
+        'game day': game_day,
+        'quote no older than two hours': timedelta(minutes=-1) <= age <= timedelta(hours=2),
+        'pair sum 1.03 to 1.09': bool(pair and 1.03 <= pair['impliedSum'] <= 1.09),
+        'gap 15 or less': bool(numbers and numbers['gap'] <= 15),
+    }
+    failed = [name for name, ok in checks.items() if not ok]
+    if not failed:
+        return Decision(True, 'one_book', f"single-book game-day exception at {books[0]}",
+                        {'quoteNoteRequired': True, 'books': books})
+    return Decision(False, 'one_book', 'single-book exception failed: ' + ', '.join(failed), {'books': books})
 
 
 def best_quote_by_ev(candidate, ctx):
@@ -717,48 +777,43 @@ def fresh_id(base, ctx):
 
 
 def card_cap(candidate, ctx):
-    """The day's card: CARD['weekend'] straight plays on a Saturday or a Sunday, CARD_KIND_MAX team plays or player props
-    at most, and CARD['weekday'] on any other day, the NFL game's when the day has one. It counts the plays whose games
-    fall on that Eastern day, whenever they were published, apart from one pulled before its post went out. While the
-    direction rules have cut the weekend card (owner, 2026-10-07), its ceiling is 3; it never rises above CARD."""
+    """Owner-plan daily ceilings and market/totals hard limits."""
     day = slate_day(candidate, ctx)
     if day is None:
         return Decision(False, 'card_cap', 'game not in the slate')
     weekend = day.weekday() in (5, 6)
-    size = direction.weekend_cap(ctx.policy, ctx.now, CARD['weekend']) if weekend else CARD['weekday']
-    kind = 'player' if candidate.get('athleteId') else 'team'
-    count = {'team': 0, 'player': 0}
-    family_count = 0
-    family = (candidate.get('league') or str(candidate.get('id', '')).split('-')[0], market_key(candidate))
+    size = CARD['weekend'] if weekend else CARD['weekday']
+    if weekend:
+        size = direction.weekend_cap(ctx.policy, ctx.now, size)
+    plays = []
     for key, pick in ctx.first.items():
         if key == candidate.get('id') or pick.get('historicalImport') or pick.get('legs') or pick.get('parlayType'):
             continue
         if when(pick.get('publishedAt') or '1970-01-01T00:00Z') > ctx.now or slate_day(pick, ctx) != day or pulled_before_post(key, ctx):
             continue
-        count['player' if pick.get('athleteId') else 'team'] += 1
-        other_family = (pick.get('league') or str(pick.get('id', '')).split('-')[0], market_key(pick))
-        if kind == 'player' and pick.get('athleteId') and other_family == family:
-            family_count += 1
-    if sum(count.values()) >= size:
-        return Decision(False, 'card_cap', f"{sum(count.values())} plays already on the {day} card; the card is {size}")
-    evening = any(g.get('kickoff') and eastern_date(when(g['kickoff'])) == day
-                  and when(g['kickoff']).astimezone(EASTERN).hour >= 18 for g in ctx.games.values())
-    if weekend and evening and ctx.now.astimezone(EASTERN) < datetime(day.year,day.month,day.day,16,tzinfo=EASTERN) \
-            and sum(count.values()) >= size-1:
-        return Decision(False, 'card_cap', 'one card place stays available for the afternoon/evening review until 4 PM ET')
-    if weekend and count[kind] >= CARD_KIND_MAX:
-        return Decision(False, 'card_cap', f"{count[kind]} {'player props' if kind == 'player' else 'game lines'} already on the "
-                                           f"{day} card; {CARD_KIND_MAX} of a kind at most, for a mix")
-    league = candidate.get('league') or (game_of(candidate, ctx) or {}).get('league')
-    if family_count >= CARD_MARKET_MAX:
-        price = desk_for(candidate, ctx)
-        if not price or not price.get('calibrated') or price.get('edgePoints', -99) < pricing.STRONG:
-            return Decision(False, 'card_cap', f'{family_count} {family[1]} plays already on the {day} card; '
-                            f'another needs at least {pricing.STRONG:g} adjusted points above its price')
-    if not weekend and league != 'NFL' and any(g.get('league') == 'NFL' and eastern_date(when(g['kickoff'])) == day
-                                               for g in ctx.games.values()):
-        return Decision(False, 'card_cap', f"the one play on {day:%A}'s card is the NFL game's")
-    return Decision(True, 'card_cap', f"{sum(count.values())} of {size} on the {day} card")
+        plays.append(pick)
+    game_ids = set(candidate.get('gameIds') or [])
+    if any(game_ids.intersection(pick.get('gameIds') or []) for pick in plays):
+        return Decision(False, 'card_cap', 'another play is already on this game')
+    if len(plays) >= size:
+        return Decision(False, 'card_cap', f"{len(plays)} plays already on the {day} card; the ceiling is {size} and the card is {size}")
+    family = 'prop' if candidate.get('athleteId') else market_key(candidate)
+    family_count = sum(('prop' if pick.get('athleteId') else market_key(pick)) == family for pick in plays)
+    if family_count >= 3:
+        return Decision(False, 'card_cap', f'{family_count} {family} plays already on the card; three is the limit')
+    if market_key(candidate) == 'total':
+        day_totals = sum(market_key(pick) == 'total' for pick in plays)
+        total_cap = 2 if weekend else 1
+        if day_totals >= total_cap:
+            return Decision(False, 'card_cap', f'{day_totals} totals already on the card; the limit is {total_cap}')
+        start = day - timedelta(days=6)
+        recent = [pick for key, pick in ctx.first.items() if key != candidate.get('id') and not pick.get('historicalImport')
+                  and not pick.get('legs') and (d := slate_day(pick, ctx)) is not None and start <= d <= day
+                  and not pulled_before_post(key, ctx)]
+        recent_totals = sum(market_key(pick) == 'total' for pick in recent)
+        if recent and (recent_totals + 1) / (len(recent) + 1) > .40:
+            return Decision(False, 'card_cap', 'a total would put the rolling seven-day card above 40% totals')
+    return Decision(True, 'card_cap', f"{len(plays)} of {size} on the {day} card")
 
 
 def lean_daily_cap(candidate, ctx):
@@ -775,6 +830,125 @@ def lean_nothing_against(candidate, ctx):
         return Decision(False, 'lean_nothing_against', f"sourced evidence argues against it: {against[0].get('claim')}",
                         {'facts': [f.get('id') for f in against]})
     return Decision(True, 'lean_nothing_against', 'nothing sourced argues against it')
+
+
+CLASS_A_REASONS = frozenset(('injury_role', 'qb_change', 'weather', 'line_move', 'news'))
+TOTAL_REASONS = frozenset(('weather', 'pace', 'injury_role', 'qb_change', 'line_move', 'news'))
+
+
+def plan_reasons(candidate):
+    """Normalized, directional reasons produced by game_context and research."""
+    rows = list(candidate.get('_planReasons') or [])
+    if not rows:
+        for fact in [*(candidate.get('_evidence') or []), *(candidate.get('_research') or [])]:
+            if fact.get('direction') != 'for':
+                continue
+            kind = fact.get('type') or fact.get('kind')
+            rows.append({'type': kind, 'class': 'A' if kind in CLASS_A_REASONS else 'B',
+                         'direction': 'for', 'text': fact.get('text') or fact.get('claim'),
+                         'source': fact.get('source'), 'observedAt': fact.get('observedAt') or fact.get('retrievedAt')})
+    return [row for row in rows if row.get('direction') == 'for' and row.get('text')]
+
+
+def selection_verdict(candidate, ctx, lane='best_bet'):
+    """Owner-plan tier decision using raw model chance and exact-line no-vig fair chance."""
+    numbers = candidate.get('_selection') or selection_numbers(candidate, ctx)
+    if not numbers:
+        return Decision(False, 'plan_selection', 'no raw chance and exact two-sided fair price')
+    raw, gap = numbers['rawChance'], numbers['gap']
+    market = market_key(candidate)
+    league = candidate.get('league') or (game_of(candidate, ctx) or {}).get('league')
+    reasons = plan_reasons(candidate)
+    if market == 'total':
+        reasons = [row for row in reasons if row.get('type') in TOTAL_REASONS]
+    reasons = [row for row in reasons if row.get('type') not in ('hit_strip', 'usage_trend') or gap <= 12]
+    odds = candidate.get('odds')
+    price_ok = isinstance(odds, (int, float)) and ((-200 <= odds <= 200) if market == 'moneyline'
+                                                   else (-160 <= odds <= 150))
+    if not price_ok:
+        return Decision(False, 'plan_selection', 'price is outside the lane band', numbers)
+    if league == 'NFL' and market == 'total':
+        return Decision(False, 'plan_selection', 'NFL totals are paused as public plays; they remain in shadow', numbers)
+    if league == 'NFL' and market in ('spread', 'moneyline'):
+        return Decision(False, 'plan_selection', 'NFL sides remain in shadow until 30 forward grades clear the promotion rule', numbers)
+    if league == 'CFB' and market in ('spread', 'moneyline'):
+        desk = candidate.get('_desk') or {}
+        margin = desk.get('projection')
+        line = candidate.get('line')
+        side = side_of(candidate)
+        margin_gap = (margin + line if side == 'home' else -margin + line) \
+            if isinstance(margin, (int, float)) and isinstance(line, (int, float)) and market == 'spread' else None
+        if market == 'spread' and (margin_gap is None or margin_gap < 6):
+            return Decision(False, 'plan_selection', 'a college side needs the model margin at least 6 points past the spread', numbers)
+    if gap >= 25:
+        return Decision(False, 'plan_selection', 'Price check failed: raw gap is 25 points or more', numbers)
+    if raw < .55 or gap < 3:
+        return Decision(False, 'plan_selection', f'raw {raw:.1%}, gap {gap:.1f}; candidate needs 55% and 3 points', numbers)
+    if not reasons:
+        return Decision(False, 'plan_selection', 'no supporting reason points the same way as the bet', numbers)
+    if lane == 'gut_call':
+        return Decision(True, 'plan_selection', f'Gut call: raw {raw:.1%}, gap {gap:.1f}',
+                        {**numbers, 'tier': 'gut_call', 'reasons': reasons})
+    if raw < .58 or gap < 6:
+        return Decision(False, 'plan_selection', 'below the Best bet floor; eligible only as a Gut call', numbers)
+    if gap >= 20:
+        if not any(row.get('class') == 'A' or row.get('type') in CLASS_A_REASONS for row in reasons):
+            return Decision(False, 'plan_selection', 'a 20-25 point gap needs a class A reason', numbers)
+        if len({row['book'] for row in exact_price_pairs(candidate, ctx)}) < 2:
+            return Decision(False, 'plan_selection', 'a 20-25 point gap needs two exact-line books', numbers)
+    sample = spot.for_candidate(dict(candidate, gap=gap))
+    if not sample:
+        return Decision(False, 'plan_selection', 'no 30-play spot segment; eligible only as a Gut call', numbers)
+    if sample['spotHit'] < pricing.break_even(odds) - .01:
+        return Decision(False, 'plan_selection', 'the observed spot record is below the price gate',
+                        {**numbers, 'spot': sample})
+    tier = 'big_gap' if gap >= 20 else 'best_bet'
+    return Decision(True, 'plan_selection', f'{tier}: raw {raw:.1%}, gap {gap:.1f}, spot {sample["spotHit"]:.1%}',
+                    {**numbers, 'tier': tier, 'spot': sample, 'reasons': reasons})
+
+
+TRUST = {('NFL', 'recYds'): 1.2, ('NFL', 'car'): 1.15, ('NFL', 'rec'): .8,
+         ('NFL', 'rushYds'): .75, ('CFB', 'recYds'): 1.0, ('CFB', 'rushYds'): 1.0,
+         ('CFB', 'rec'): .75, ('CFB', 'passYds'): .75, ('CFB', 'total'): .8,
+         ('NFL', 'spread'): .9, ('CFB', 'spread'): .9, ('NFL', 'moneyline'): .9,
+         ('CFB', 'moneyline'): .9}
+
+
+def kitchen_score(candidate, ctx, verdict):
+    """Deterministic score and every logged component from the owner plan."""
+    reasons = verdict.get('reasons') or plan_reasons(candidate)
+    weights = (ctx.policy or {}).get('reasonWeights') or {}
+    class_a = min(8.0, sum(4 * min(1.5, max(0, float(weights.get(row['type'], 1))))
+                           for row in reasons if row.get('class') == 'A'))
+    class_b_types = sorted({row['type'] for row in reasons if row.get('class') == 'B'})[:2]
+    class_b = sum(2 * min(1.5, max(0, float(weights.get(kind, 1)))) for kind in class_b_types)
+    league = candidate.get('league') or (game_of(candidate, ctx) or {}).get('league')
+    market = market_key(candidate)
+    trust = TRUST.get((league, market), 1.0)
+    gap_part = .5 * min(float(verdict.get('gap') or 0), 12) * trust
+    spot_edge = float((verdict.get('spot') or {}).get('spotEdge') or 0)
+    plus = 1 if candidate.get('odds', -1) > 0 else 0
+    day = slate_day(candidate, ctx)
+    today = [pick for key, pick in ctx.first.items() if not pick.get('historicalImport') and not pick.get('legs')
+             and key != candidate.get('id') and slate_day(pick, ctx) == day and not pulled_before_post(key, ctx)]
+    family = 'prop' if candidate.get('athleteId') else market
+    duplicate_market = -4 if any(('prop' if pick.get('athleteId') else market_key(pick)) == family for pick in today) else 0
+    repeat = 0
+    if not any(row.get('class') == 'A' for row in reasons):
+        game = game_of(candidate, ctx) or {}
+        subject = str(candidate.get('athleteId') or '') or str((game.get(side_of(candidate)) or {}).get('id') or '')
+        for pick in ctx.first.values():
+            other_day = slate_day(pick, ctx)
+            other_game = game_of(pick, ctx) or {}
+            other = str(pick.get('athleteId') or '') or str((other_game.get(side_of(pick)) or {}).get('id') or '')
+            if day and other_day and 0 <= (day - other_day).days <= 3 and subject and subject == other:
+                repeat = -2
+                break
+    parts = {'spotEdge': round(spot_edge, 3), 'classA': round(class_a, 3), 'classB': round(class_b, 3),
+             'gapTrust': round(gap_part, 3), 'plusMoney': plus, 'marketRepeat': duplicate_market,
+             'recentRepeat': repeat, 'trust': trust}
+    parts['total'] = round(sum(value for key, value in parts.items() if key != 'trust'), 3)
+    return parts
 
 
 def qb_available(candidate, ctx):
@@ -1065,15 +1239,16 @@ def revision_frozen(candidate, ctx):
 
 # ------------------------------------------------------------------ running the rules
 
-COMMON = (not_started, x_window, expiry_ok, fresh_quote, price_present, two_sided_straight, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction, player_overlap, player_projection_sanity, bar_4, qb_change_recent, totals_policy)
+COMMON = (not_started, x_window, expiry_ok, fresh_quote, price_present, two_sided_straight, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction, player_overlap, player_projection_sanity, qb_change_recent)
 SHOP = (one_book, best_quote_by_ev)
 RULES = {
-    # Caps are ceilings, not quotas. Performance cautions raise the edge requirement; negative value still fails.
-    'modelLean': COMMON + SHOP + (learned_pause, straight_value, lean_is_total, lean_edge, lean_confidence, card_cap, lean_nothing_against, qb_available),
-    'propLean': COMMON + SHOP + (learned_pause, prop_calibrated_value, prop_market_not_trailing, prop_raw_edge, prop_settled_role, prop_price_floor, prop_window_cap, prop_one_per_player,
+    # Admission keeps honesty, price, role and capacity checks. The owner-plan
+    # raw/fair tier is applied after sourced reasons are assembled in run.py.
+    'modelLean': COMMON + SHOP + (learned_pause, card_cap, lean_nothing_against, qb_available),
+    'propLean': COMMON + SHOP + (learned_pause, prop_market_not_trailing, prop_settled_role,
                                  prop_not_in_longshot, prop_injury_clear, card_cap, lean_nothing_against),
-    'favorite': COMMON + SHOP + (learned_pause, straight_value, prop_market_not_trailing, favorite_needs_reason, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
-    'researched': COMMON + SHOP + (learned_pause, straight_value, prop_market_not_trailing, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
+    'favorite': COMMON + SHOP + (learned_pause, prop_market_not_trailing, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
+    'researched': COMMON + SHOP + (learned_pause, prop_market_not_trailing, card_cap, lean_nothing_against, qb_available, prop_injury_clear),
     'longshot': (not_started, x_window, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, longshot_one_per_day, player_overlap, alternate_parlay_frequency),
     'ladder': (not_started, x_window, expiry_ok, fresh_quote, price_present, sources_https, not_republished, cfb_jurisdiction, ladder_one_rung, player_overlap),
     'revision': (revision_frozen,),
@@ -1184,10 +1359,12 @@ def context(now, stores, flags=None):
                    odds={g: r for g, rows in stores.odds.items() if (r := latest_before(rows, now))},
                    odds_history=stores.odds,
                    prop_odds={g: r for g, rows in stores.prop_odds.items() if (r := latest_before(rows, now))},
+                   prop_odds_history=stores.prop_odds,
                    snapshots=stores.snapshots, injuries=injuries_by_team(stores.context_file),
                    scoreboard=stores.scoreboard, first=first, latest=latest, appearances=appearances,
                    established=established, names=names, player_team=player_team, starters=starters, passers=passers,
                    player_logs=features.player_logs(stores.records, before=now),
+                   records=stores.records,
                    flags=dict(FLAGS, **(flags or {})), policy=learning.load_policy(stores.root / 'data' / 'learning' / 'policy.json'))
 
 

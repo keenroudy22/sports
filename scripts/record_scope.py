@@ -44,6 +44,10 @@ def is_unpriced_import(pick):
     return bool(pick.get('historicalImport')) and pick.get('odds') is None
 
 
+def is_headline(pick):
+    return not pick.get('lane') or pick.get('lane') in ('best_bet', 'hot_plate')
+
+
 def current_rows(rows, at):
     """Current season/stage rows that were public by ``at``, matching the site default."""
     at = instant(at) if not isinstance(at, datetime) else at
@@ -77,7 +81,7 @@ def summary(rows, at):
     at = instant(at) if not isinstance(at, datetime) else at
     settled = []
     for pick in current_rows(rows, at):
-        if is_parlay(pick) or pick.get('result') not in RESULTS:
+        if is_parlay(pick) or not is_headline(pick) or pick.get('result') not in RESULTS:
             continue
         # Priced Week 1 imports arrived as already-final rows and do not all carry a
         # separate settledAt.  Their publication time is when they entered the

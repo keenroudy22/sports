@@ -101,6 +101,22 @@ class NoForcedBestBetTests(unittest.TestCase):
         self.assertFalse(gates.qb_change_recent(prop_lean(), changed).ok)
         self.assertTrue(gates.qb_change_recent(prop_lean(market='rushYds'), changed).ok)
 
+    def test_owner_plan_tiers_use_raw_fair_gap_reasons_and_lane_price_bands(self):
+        from unittest.mock import patch
+        reason = {'type': 'line_move', 'class': 'A', 'direction': 'for', 'text': 'Moved 20 cents.'}
+        pick = prop_lean(_selection={'rawChance': .60, 'fairChance': .50, 'gap': 10}, _planReasons=[reason])
+        with patch.object(gates.spot, 'for_candidate', return_value={'spotHit': .54, 'spotEdge': 1, 'n': 40}):
+            self.assertTrue(gates.selection_verdict(pick, context(), 'best_bet').ok)
+            self.assertTrue(gates.selection_verdict(dict(pick, odds=150), context(), 'gut_call').ok)
+            self.assertFalse(gates.selection_verdict(dict(pick, odds=151), context(), 'gut_call').ok)
+            self.assertFalse(gates.selection_verdict(dict(pick, _planReasons=[]), context(), 'gut_call').ok)
+            self.assertFalse(gates.selection_verdict(dict(pick, _selection={'rawChance': .70, 'fairChance': .44, 'gap': 26}), context()).ok)
+
+    def test_price_sanity_holds_26_points_but_not_24(self):
+        self.assertTrue(gates.role_sanity.price_suspect(-110, .76, fair=.50))
+        self.assertFalse(gates.role_sanity.price_suspect(-110, .74, fair=.50))
+        self.assertTrue(gates.role_sanity.price_suspect(-110, None, fair=.20, gap=.30))
+
     def test_nfl_total_paused_and_cfb_total_weekend_only_without_adverse_move(self):
         self.assertTrue(gates.totals_policy(total_lean(), context()).ok,
                         'the dated direction pause, not a permanent veto, must record forward shadows')
@@ -243,21 +259,23 @@ class CommonRuleTests(unittest.TestCase):
 
 
 class ShoppingRuleTests(unittest.TestCase):
-    def test_one_book_refuses_a_lone_book_unless_kickoff_is_inside_three_hours(self):
+    def test_one_book_uses_the_game_day_freshness_price_shape_and_gap_rules(self):
         lone = dict(PROP_ODDS, books={'draftkings': PROP_ODDS['books']['draftkings']})
-        ctx = context(prop_odds={'NFL-1': lone})
-        refused = gates.one_book(prop_lean(), ctx)
-        self.assertFalse(refused.ok)
-        self.assertIn('DraftKings', refused.reason)
-        self.assertTrue(gates.one_book(prop_lean(), context()).ok, 'two books quote it')
-        close = context(prop_odds={'NFL-1': lone}, now=datetime(2026, 9, 27, 14, 30, tzinfo=timezone.utc))
-        passed = gates.one_book(prop_lean(), close)
-        self.assertTrue(passed.ok)
-        self.assertTrue(passed.data.get('quoteNoteRequired'))
+        candidate = prop_lean(_selection={'rawChance': .64, 'fairChance': .50, 'gap': 14})
+        self.assertTrue(gates.one_book(candidate, context(prop_odds={'NFL-1': lone})).ok)
+        self.assertTrue(gates.one_book(candidate, context()).ok, 'the game-day single-book exception is enough at gap 14')
+        stale = dict(candidate, quotedAt='2026-09-27T10:59:00Z')
+        self.assertFalse(gates.one_book(stale, context(prop_odds={'NFL-1': lone})).ok)
+        self.assertFalse(gates.one_book(dict(candidate, _selection={'rawChance': .67, 'fairChance': .50, 'gap': 17}),
+                                        context(prop_odds={'NFL-1': lone})).ok)
+        bad_sum = dict(lone, books={'draftkings': {'markets': {'recYds': {
+            'Player Seven': {'line': 49.5, 'over': -160, 'under': -160}}}}})
+        self.assertFalse(gates.one_book(candidate, context(prop_odds={'NFL-1': bad_sum})).ok)
 
     def test_one_book_reads_game_lines_from_the_odds_capture(self):
         lone = dict(ODDS, books={'draftkings': ODDS['books']['draftkings']})
-        self.assertFalse(gates.one_book(total_lean(), context(odds={'NFL-1': lone})).ok)
+        self.assertTrue(gates.one_book(total_lean(_selection={'rawChance': .62, 'fairChance': .50, 'gap': 12}),
+                                       context(odds={'NFL-1': lone})).ok)
         self.assertTrue(gates.one_book(total_lean(), context()).ok)
 
     def test_best_quote_prefers_expected_value_over_the_number(self):
@@ -465,14 +483,12 @@ class FavoriteLongshotRevisionTests(unittest.TestCase):
 
 
 class CardTests(unittest.TestCase):
-    def test_evening_slate_keeps_one_place_without_increasing_card(self):
+    def test_weekend_ceiling_is_five_without_a_reserved_evening_place(self):
         picks={k: total_lean(id=k,gameIds=[gid],publishedAt='2026-09-26T12:00:00Z') for k,gid in [('a','NFL-2'),('b','NFL-3')]}
         picks.update({k:prop_lean(id=k,athleteId=k,market='rushYds',gameIds=[gid],publishedAt='2026-09-26T12:00:00Z') for k,gid in [('c','NFL-4'),('d','NFL-5')]})
         games={**self.GAMES,'late':dict(GAME,id='late',kickoff='2026-09-28T02:30:00Z')}
         ctx=context(games=games,first=picks,latest=picks)
-        self.assertIn('4 PM',gates.card_cap(total_lean(),ctx).reason)
-        ctx.now=datetime(2026,9,27,20,0,tzinfo=timezone.utc)
-        self.assertTrue(gates.card_cap(total_lean(),ctx).ok)
+        self.assertFalse(gates.card_cap(total_lean(),ctx).ok)
     GAMES = {gid: dict(GAME, id=gid) for gid in ('NFL-1', 'NFL-2', 'NFL-3', 'NFL-4', 'NFL-5', 'NFL-6')}          # Sunday
     GAMES['MNF'] = dict(GAME, id='MNF', kickoff='2026-09-29T00:15Z')                                              # Monday night
     GAMES['CFB-M'] = dict(GAME, id='CFB-M', league='CFB', kickoff='2026-09-28T23:00Z')                          # Monday, college
@@ -480,15 +496,12 @@ class CardTests(unittest.TestCase):
     def card(self, picks):
         return context(games=self.GAMES, first=picks, latest=picks)
 
-    def test_third_same_prop_market_requires_stronger_value(self):
-        from unittest.mock import patch
+    def test_three_props_are_allowed_but_a_fourth_is_not(self):
         picks = {k: prop_lean(id=k, athleteId=k, market='rec', gameIds=[gid], publishedAt='2026-09-26T12:00:00Z')
                  for k, gid in (('a', 'NFL-2'), ('b', 'NFL-3'))}
-        with patch.object(gates, 'desk_for', return_value={'calibrated': True, 'edgePoints': 2.1}):
-            self.assertFalse(gates.card_cap(prop_lean(market='rec'), self.card(picks)).ok)
-            self.assertTrue(gates.card_cap(prop_lean(market='rushYds'), self.card(picks)).ok)
-        with patch.object(gates, 'desk_for', return_value={'calibrated': True, 'edgePoints': 5.1}):
-            self.assertTrue(gates.card_cap(prop_lean(market='rec'), self.card(picks)).ok)
+        self.assertTrue(gates.card_cap(prop_lean(market='rec'), self.card(picks)).ok)
+        picks['c'] = prop_lean(id='c', athleteId='c', market='rec', gameIds=['NFL-4'], publishedAt='2026-09-26T12:00:00Z')
+        self.assertFalse(gates.card_cap(prop_lean(market='rec'), self.card(picks)).ok)
 
     def test_a_weekend_card_is_five_plays_with_three_of_a_kind_at_most(self):
         team = lambda key, gid: total_lean(id=key, gameIds=[gid], publishedAt='2026-09-25T12:00:00Z')
@@ -496,10 +509,10 @@ class CardTests(unittest.TestCase):
         three = {k: team(k, g) for k, g in (('a', 'NFL-2'), ('b', 'NFL-3'), ('c', 'NFL-4'))}
         refused = gates.card_cap(total_lean(), self.card(three))
         self.assertFalse(refused.ok, 'three game lines already on Sunday, published days before')
-        self.assertIn('3 of a kind at most', refused.reason)
+        self.assertIn('three is the limit', refused.reason)
         self.assertTrue(gates.card_cap(prop_lean(), self.card(three)).ok, 'a player prop still fits: the mix')
         five = dict(three, d=prop('d', 'NFL-5'), e=prop('e', 'NFL-6'))
-        self.assertIn('the card is 5', gates.card_cap(prop_lean(), self.card(five)).reason)
+        self.assertIn('ceiling is 5', gates.card_cap(prop_lean(), self.card(five)).reason)
         pulled = dict(five, e=dict(five['e']))
         latest = dict(pulled, e=dict(five['e'], status='expired', entryNote='Closed to new entries at 10:05 AM ET, before its post went out: x'))
         self.assertTrue(gates.card_cap(prop_lean(), context(games=self.GAMES, first=pulled, latest=latest)).ok,
@@ -507,13 +520,14 @@ class CardTests(unittest.TestCase):
         fun = {'t': {'id': 't', 'legs': [{}, {}], 'parlayType': 'longshot', 'gameIds': ['NFL-4'], 'publishedAt': '2026-09-26T12:00:00Z'}}
         self.assertTrue(gates.card_cap(prop_lean(), self.card(fun)).ok, 'fun parlays are not on the card')
 
-    def test_a_weeknight_card_is_one_play_and_on_an_nfl_night_the_nfl_games(self):
+    def test_a_weeknight_card_allows_two_from_either_league(self):
         monday = total_lean(gameIds=['MNF'])
         self.assertTrue(gates.card_cap(monday, self.card({})).ok)
         college = total_lean(id='cfb', gameIds=['CFB-M'], league='CFB')
-        self.assertIn("the NFL game's", gates.card_cap(college, self.card({})).reason)
+        self.assertTrue(gates.card_cap(college, self.card({})).ok)
         one = {'m': total_lean(id='m', gameIds=['MNF'], publishedAt='2026-09-26T12:00:00Z')}
-        self.assertIn('the card is 1', gates.card_cap(prop_lean(gameIds=['MNF']), self.card(one)).reason)
+        self.assertFalse(gates.card_cap(prop_lean(gameIds=['MNF']), self.card(one)).ok, 'one play per game')
+        self.assertTrue(gates.card_cap(prop_lean(gameIds=['CFB-M']), self.card(one)).ok)
 
     def test_a_pulled_fun_ticket_is_replaced_under_a_new_id(self):
         base = 'NFL-2026-W3-ladder-0927-fd'
@@ -528,15 +542,12 @@ class CardTests(unittest.TestCase):
 class AdmitTests(unittest.TestCase):
     def test_a_clean_model_lean_is_admitted(self):
         ok, decisions = gates.admit(total_lean(confidence=3), favorite_context())     # DraftKings 44.5 at -110 is the best value on the board
-        self.assertFalse(ok, 'NFL totals stay on the research board, not the official card')
-        self.assertIn('bar-4', {d.rule for d in gates.refusals(decisions)})
-        self.assertEqual({d.rule for d in decisions},
-                         {r.__name__ for r in gates.RULES['modelLean']} - {'bar_4', 'qb_change_recent'}
-                         | {'bar-4', 'qb-change-recent'})
+        self.assertTrue(ok, 'admission checks honesty; the owner-plan tier later keeps NFL totals in shadow')
 
     def test_a_clean_prop_lean_is_admitted_when_the_market_gate_allows(self):
         ctx = context(scoreboard={'props': {'markets': []}}, policy={**gates.learning.default_policy(), 'calibration': {'NFL/prop': {'k': 0.9, 'n': 500}}})
-        ok, decisions = gates.admit(prop_lean(), ctx)
+        pick = prop_lean(_selection={'rawChance': .64, 'fairChance': .50, 'gap': 14})
+        ok, decisions = gates.admit(pick, ctx)
         self.assertTrue(ok, [str(d) for d in decisions if not d.ok])
 
     def test_evaluate_runs_every_rule_and_names_every_refusal(self):
@@ -547,23 +558,20 @@ class AdmitTests(unittest.TestCase):
         # One book, a price past the floor, a market the scoreboard has closed, an edge that -250 eats,
         # and a better quote (-115) sitting in the capture: every one of them is named.
         self.assertEqual({d.rule for d in gates.refusals(decisions)},
-                         {'one_book', 'two_sided_straight', 'prop_price_floor', 'prop_raw_edge', 'best_quote_by_ev',
-                          'prop_calibrated_value', 'bar-4'})
+                         {'one_book', 'two_sided_straight', 'best_quote_by_ev'})
 
-    def test_underperforming_segment_raises_the_bar_but_does_not_veto_a_strong_price(self):
+    def test_a_direction_pause_is_the_only_learning_veto_in_admission(self):
         ctx = context(policy={**gates.learning.default_policy(), 'calibration': {'NFL/prop': {'k': 0.13, 'n': 500}},
                               'segments': {'NFL/prop:recYds': {'paused': True}}})
         for kind in ('propLean', 'favorite', 'researched'):
             ok, decisions = gates.admit(prop_lean(), ctx, kind)
             self.assertFalse(ok)
             self.assertNotIn('learned_pause', {d.rule for d in gates.refusals(decisions)})
-            self.assertIn('prop_calibrated_value', {d.rule for d in gates.refusals(decisions)})
-        strong = gates.learning.default_policy()
-        strong['calibration']['NFL/prop'] = {'k': 1.0, 'n': 500}
-        strong['segments']['NFL/prop:recYds'] = {'paused': True}
-        verdict = gates.prop_calibrated_value(prop_lean(), context(policy=strong))
-        self.assertTrue(verdict.ok)
-        self.assertIn('raised the bar', verdict.reason)
+        paused = gates.learning.default_policy()
+        paused['direction'] = {'segments': {'NFL/prop:recYds': {'paused': True, 'pauseSince': '2026-09-01T00:00:00Z'}}}
+        ok, decisions = gates.admit(prop_lean(), context(policy=paused))
+        self.assertFalse(ok)
+        self.assertIn('learned_pause', {d.rule for d in gates.refusals(decisions)})
 
     def test_expiry_does_not_refresh_a_stale_quote(self):
         self.assertFalse(gates.fresh_quote(total_lean(quotedAt='2026-09-26T13:00:00Z'), context()).ok)

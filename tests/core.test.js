@@ -162,6 +162,23 @@ test('headline record separates assumed prices and promotional credits without r
   assert.equal(JSON.stringify(picks), frozen);
 });
 
+test('new lanes stay out of the Best bets headline and keep their own record lines', () => {
+  const picks = [
+    { id:'legacy', result:'win', odds:-110 },
+    { id:'best', lane:'best_bet', result:'loss', odds:-110 },
+    { id:'hot', lane:'hot_plate', result:'win', odds:120 },
+    { id:'gut', lane:'gut_call', result:'win', odds:100, riskUnits:.5 },
+    { id:'safe', lane:'safer_combo', result:'loss', odds:-150, riskUnits:1, kind:'parlays' },
+  ];
+  const r = C.recordBreakdown(picks);
+  assert.equal(r.all.wins, 2);
+  assert.equal(r.all.losses, 1);
+  assert.equal(r.lanes.gut_call.wins, 1);
+  assert.equal(r.lanes.safer_combo.losses, 1);
+  assert.equal(r.allPlays.wins, 3);
+  assert.equal(r.allPlays.losses, 2);
+});
+
 test('official card separates Eastern dates and keeps ungraded older plays visible', () => {
   const picks = [{id:'today',kickoff:'2026-10-03T00:00:00Z'}, {id:'tomorrow',kickoff:'2026-10-03T17:00:00Z'},
     {id:'old',kickoff:'2026-10-01T22:00:00Z'}, {id:'settled',kickoff:'2026-10-03T00:00:00Z',result:'win'}];

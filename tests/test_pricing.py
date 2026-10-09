@@ -32,6 +32,10 @@ class ArithmeticTests(unittest.TestCase):
         self.assertEqual(pricing.worse_price(110), -105, 'fifteen cents from +110 crosses even money')
         self.assertEqual(pricing.worse_price(120), 105)
 
+    def test_fair_chance_removes_the_books_cut(self):
+        self.assertAlmostEqual(pricing.fair_chance(-110, -110), 0.5)
+        self.assertAlmostEqual(pricing.fair_chance(-150, 130), (150 / 250) / ((150 / 250) + (100 / 230)))
+
 
 class PriceTests(unittest.TestCase):
     def test_a_player_market_uses_the_stored_range(self):

@@ -207,7 +207,7 @@ class PriorityTests(unittest.TestCase):
         self.assertEqual(keys(moves), ['priority:NFL/prop:recYds'])
         self.assertIn('Caps unchanged', moves[0]['sentence'])
         self.assertTrue(direction.priority(policy, 'NFL/prop:recYds', NOW))
-        self.assertEqual(gates.CARD, {'weekend': 5, 'weekday': 1}, 'priority never raises a cap')
+        self.assertEqual(gates.CARD, {'weekend': 5, 'weekday': 2}, 'priority never raises a cap')
         self.assertEqual(evaluate(policy, rows), [])
         slump = rows + record(1, 9, segment='NFL/prop:recYds', clv=0.1, at=NOW + DAY)    # +8.18 + 0.91 - 9 = +0.09u
         moves, _ = settle(policy, slump, NOW + 7 * DAY)

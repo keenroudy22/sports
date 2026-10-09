@@ -647,27 +647,35 @@ def line_slug(line):
 
 
 def candidates(lines, games, now):
-    """Board rows our number likes, as unpriced candidate picks."""
+    """Game-day board rows our number likes, as unpriced candidate picks.
+
+    The board may carry the whole weekend, but the owner-plan admission run may
+    only create a play on the Eastern day that game kicks off.
+    """
     out = []
+    today = eastern_date(now)
     for row in lines:
         game = games.get(row.get('gameId'))
         grade = row.get('grade') or {}
         if not game or row.get('state') != 'open' or game.get('state') != 'pre' or not grade:
+            continue
+        if eastern_date(gates.when(game['kickoff'])) != today:
             continue
         if gates.when(game['kickoff']) <= now + PUBLISH_MARGIN:
             continue
         books = [(q['book'], q['line'], q.get('odds')) for q in row.get('books') or []
                  if isinstance(q.get('odds'), (int, float))] or [(row['book'], row['line'], row.get('odds'))]
         if row.get('gameMarket'):
-            if row.get('market') not in ('total points', 'point spread') or grade.get('tier') not in ('lean', 'strong'):
+            if row.get('market') not in ('total points', 'point spread', 'moneyline') or (grade.get('raw') or 0) < .55:
                 continue
-            spread = row['market'] == 'point spread'
-            direction = (row.get('side') or ('home' if row.get('direction') is None else row['direction'])) if spread else row['direction']
+            spread, moneyline = row['market'] == 'point spread', row['market'] == 'moneyline'
+            direction = row.get('side') if (spread or moneyline) else row['direction']
             out.append({'status': 'active', 'favorite': False, 'modelLean': not spread,
-                        'marketType': 'spread' if spread else 'total',
+                        'marketType': 'moneyline' if moneyline else 'spread' if spread else 'total',
                         'line': row['line'], 'direction': direction, 'gameIds': [game['id']],
-                        '_league': game['league'], '_row': row, '_quotes': books})
-        elif row.get('athleteId') and grade.get('rawTier', grade.get('tier')) == 'lean':
+                        '_league': game['league'], '_row': row, '_quotes': books,
+                        '_pair': (row.get('odds'), row.get('oppositeOdds')) if moneyline else None})
+        elif row.get('athleteId') and (grade.get('raw') or 0) >= .55:
             out.append({'status': 'active', 'favorite': False, 'modelLean': True, 'position': row.get('position'),
                         'athleteId': str(row['athleteId']), 'market': row.get('stat') or pricing.market_of(row),
                         'line': row['line'], 'direction': row['direction'], 'gameIds': [game['id']],
@@ -698,7 +706,7 @@ def dossier_support_issue(case):
     return None
 
 
-CARD_PROP_PRICES = (-200, 120)     # a prop on the card is priced like a main line: past +120, shrinking our chance
+CARD_PROP_PRICES = (-160, 150)     # the owner-plan straight price band
                                    # toward 50% (the calibration) overstates a plus-money over the market prices at 42%
 PROVISIONAL_K = 0.2                # a league's player chances before learning has calibrated them (the NFL's is 0.13)
 
@@ -833,8 +841,13 @@ def price(candidate, ctx, now):
             p = gates.calibrated_desk(pricing.price(snapshot, market, side, float(line), int(odds), candidate.get('athleteId')), candidate, ctx)
         except (ValueError, KeyError):
             continue
-        if candidate.get('athleteId') and role_sanity.price_suspect(odds, p.get('chance') if p.get('calibrated') else None):
-            continue
+        if candidate.get('athleteId'):
+            pair = next((q for q in quotes if role_sanity.book_key(q[0]) == role_sanity.book_key(book)
+                         and q[1] == line), None)
+            other = pair[3] if pair and side == 'over' else pair[2] if pair else None
+            fair = pricing.fair_chance(odds, other) if isinstance(other, (int, float)) else None
+            if role_sanity.price_suspect(odds, p.get('rawChance'), fair=fair):
+                continue
         priced.append((p['evPerUnit'], book, float(line), int(odds), p))
     if not priced:
         return None
@@ -848,9 +861,15 @@ def price(candidate, ctx, now):
     candidate.update(book=book, line=line, odds=odds, _desk=p, projection=p['projection'], edge=p['edge'],
                      cutoff=p['cutoff'], modelVersion=p['model'], snapshotAt=p['snapshotAt'], quotedAt=seen,
                      quoteType='capture', quoteNote=note, expiresAt=stamp(min(gates.next_slot(now), kickoff)))
+    selection = gates.selection_numbers(candidate, ctx)
+    if not selection:
+        return None
+    candidate['_selection'] = selection
     candidate['probabilityAtPublication'] = {key: p.get(key) for key in
         ('rawChance', 'chance', 'calibrated', 'calibration', 'calibrationN', 'push', 'breakEven', 'edgePoints', 'evPerUnit', 'snapshotAt')}
     candidate['probabilityAtPublication']['evaluatedAt'] = stamp(now)
+    candidate['probabilityAtPublication'].update(fairChance=round(selection['fairChance'], 3),
+                                                 gap=round(selection['gap'], 1))
     away, home = game['away'], game['home']
     if candidate.get('athleteId'):
         words = pricing.WORDS[market]
@@ -860,11 +879,13 @@ def price(candidate, ctx, now):
         candidate['id'] = f"{game['league']}-{game['season']}-W{game.get('week', 0)}-{last}-{side}-{line_slug(line)}-{market.lower()}-{BOOK_SLUG.get(book, slug(book))}"
         candidate['confidence'] = 2
     else:
-        candidate['title'] = (f"{pick_card.team_label(game[side], game['league'])} {pricing.signed(line)}"
+        candidate['title'] = (f"{pick_card.team_label(game[side], game['league'])} MONEYLINE"
+                              if market == 'moneyline' else
+                              f"{pick_card.team_label(game[side], game['league'])} {pricing.signed(line)}"
                               if market == 'spread' else
                               f"{pick_card.team_label(away, game['league'])} at {pick_card.team_label(home, game['league'])} {side} {pricing.fmt(line)}")
         candidate['id'] = (f"{game['league']}-{game['season']}-W{game.get('week', 0)}-{away['abbreviation'].lower()}-"
-                           f"{home['abbreviation'].lower()}-{('spread-' if market == 'spread' else '')}{side}-{line_slug(line)}-{BOOK_SLUG.get(book, slug(book))}")
+                           f"{home['abbreviation'].lower()}-{('spread-' if market == 'spread' else 'ml-' if market == 'moneyline' else '')}{side}-{line_slug(line)}-{BOOK_SLUG.get(book, slug(book))}")
         candidate['confidence'] = 3 if p['edgePoints'] >= gates.LEAN_STRONG else 2
     sources = [game.get('source')] if game.get('source') else []
     if row.get('source'):
@@ -912,6 +933,129 @@ def evidence(candidate, ctx, context_file):
                       'source': game.get('source'), 'retrievedAt': game.get('marketRetrievedAt') or stamp(ctx.now),
                       'verified': True, 'read': block})
     return facts
+
+
+def plan_reasons(candidate, ctx):
+    """Directional reasons in the exact owner-plan shape, from stored facts only."""
+    now = stamp(ctx.now)
+    reasons = []
+    for fact in [*(candidate.get('_evidence') or []), *(candidate.get('_research') or [])]:
+        if fact.get('direction') != 'for' or not (fact.get('claim') or fact.get('text')):
+            continue
+        kind = fact.get('kind') or fact.get('type')
+        reason_type = 'news' if researcher.from_web(fact) else {
+            'injury': 'injury_role', 'role': 'injury_role', 'weather': 'weather',
+        }.get(kind, kind)
+        if reason_type not in gates.CLASS_A_REASONS | {'matchup', 'usage_trend', 'pace', 'hit_strip'}:
+            continue
+        reasons.append({'type': reason_type, 'class': 'A' if reason_type in gates.CLASS_A_REASONS else 'B',
+                        'direction': 'for', 'text': fact.get('text') or fact.get('claim'),
+                        'number': fact.get('numbers'), 'source': fact.get('source'),
+                        'observedAt': fact.get('observedAt') or fact.get('retrievedAt') or now})
+    if candidate.get('athleteId'):
+        line, side, market = float(candidate['line']), gates.side_of(candidate), gates.market_key(candidate)
+        game = ctx.games[candidate['gameIds'][0]]
+        team = str(candidate.get('_team') or '')
+        logs = [row for row in ctx.player_logs.get(str(candidate['athleteId']), [])
+                if row.get('season') == game.get('season') and (not team or str(row.get('team')) == team)]
+        values = [features.value(row, market) for row in logs]
+        values = [value for value in values if isinstance(value, (int, float))]
+        recent = values[-10:]
+        hit = lambda value: value > line if side == 'over' else value < line
+        season_hits, recent_hits = sum(map(hit, values)), sum(map(hit, recent))
+        if len(recent) >= 7 and recent_hits >= 7 and values and season_hits / len(values) >= .60:
+            reasons.append({'type': 'hit_strip', 'class': 'B', 'direction': 'for',
+                            'text': f'{side.title()} {pricing.fmt(line)} in {recent_hits} of his last {len(recent)} games and {season_hits} of {len(values)} this season.',
+                            'number': {'recentHits': recent_hits, 'recentGames': len(recent),
+                                       'seasonHits': season_hits, 'seasonGames': len(values)},
+                            'source': game.get('source'), 'observedAt': logs[-1].get('kickoff') if logs else now})
+        volume_key = ('pbpTgt' if market in ('rec', 'recYds') else 'car' if market in ('car', 'rushYds')
+                      else 'att' if market in ('att', 'cmp', 'passYds') else None)
+        team_key = 'att' if volume_key in ('pbpTgt', 'att') else 'rushAtt'
+        stored_games = {str(item.get('eventId')): item for item in ctx.records}
+        shares = []
+        for log_row in logs:
+            source_game = stored_games.get(str(log_row.get('eventId')))
+            total = (((source_game or {}).get('teams') or {}).get(str(log_row.get('team'))) or {}).get(team_key)
+            volume = (log_row.get('stats') or {}).get(volume_key) if volume_key else None
+            if isinstance(volume, (int, float)) and isinstance(total, (int, float)) and total > 0:
+                shares.append(volume / total)
+        if len(shares) >= 4:
+            recent_share, season_share = sum(shares[-3:]) / 3, sum(shares) / len(shares)
+            change = recent_share / season_share - 1 if season_share else 0
+            if (side == 'over' and change >= .20) or (side == 'under' and change <= -.20):
+                reasons.append({'type': 'usage_trend', 'class': 'B', 'direction': 'for',
+                                'text': f"Usage share is {recent_share:.1%} over the last 3, versus {season_share:.1%} this season.",
+                                'number': {'last3Share': recent_share, 'seasonShare': season_share},
+                                'source': game.get('source'), 'observedAt': logs[-1].get('kickoff') if logs else now})
+        latest_log = logs[-1] if logs else None
+        if latest_log and latest_log.get('pos') in ('QB', 'RB', 'WR', 'TE'):
+            opponent = next((str(game[where]['id']) for where in ('home', 'away')
+                             if str(game[where]['id']) != str(latest_log.get('team'))), None)
+            table = features.defense_table(features.defense_logs(ctx.records, before=ctx.now),
+                                           f"{latest_log['pos']}.{market}", season=game.get('season'))
+            own = next((item for item in table if str(item['defense']) == opponent), None)
+            count = 10 if game.get('league') == 'NFL' else 25
+            if own and ((side == 'over' and own['rank'] > len(table) - count)
+                        or (side == 'under' and own['rank'] <= count)):
+                adjective = 'most' if side == 'over' else 'fewest'
+                reasons.append({'type': 'matchup', 'class': 'B', 'direction': 'for',
+                                'text': f"The opponent allows the {own['rank']}{'th'}-{adjective} {pricing.WORDS.get(market, market)} to {latest_log['pos']}s.",
+                                'number': {'rank': own['rank'], 'teams': len(table), 'average': own['avg']},
+                                'source': game.get('source'), 'observedAt': now})
+        history = sorted((row for row in ctx.prop_odds_history.get(candidate['gameIds'][0], [])
+                          if row.get('retrievedAt') and gates.when(row['retrievedAt']) <= ctx.now),
+                         key=lambda row: row['retrievedAt'])
+        book_key = role_sanity.book_key(candidate.get('book'))
+        values = []
+        for capture in history:
+            quote = next((q for q in build_site.price_quotes(capture, market,
+                          candidate.get('_player') or gates.player_name(candidate, ctx))
+                          if role_sanity.book_key(build_site.BOOK_NAMES.get(q[0], q[0])) == book_key), None)
+            if quote:
+                _, quoted_line, over, under = quote
+                price = over if side == 'over' else under
+                if isinstance(price, (int, float)):
+                    values.append((float(quoted_line), int(price), capture['retrievedAt']))
+        if len(values) >= 2:
+            first, current = values[0], values[-1]
+            line_toward = (current[0] - first[0]) * (1 if side == 'over' else -1)
+            cents_toward = pricing.cents(first[1]) - pricing.cents(current[1])
+            if line_toward >= 1 or cents_toward >= 15:
+                reasons.append({'type': 'line_move', 'class': 'A', 'direction': 'for',
+                                'text': f"{candidate['book']} moved toward this side from {first[0]:g} to {current[0]:g}.",
+                                'number': {'firstLine': first[0], 'currentLine': current[0],
+                                           'centsToward': cents_toward},
+                                'source': candidate.get('sources', [None])[0], 'observedAt': current[2]})
+    else:
+        history = sorted((row for row in ctx.odds_history.get(candidate['gameIds'][0], [])
+                          if row.get('retrievedAt') and gates.when(row['retrievedAt']) <= ctx.now),
+                         key=lambda row: row['retrievedAt'])
+        book_key = role_sanity.book_key(candidate.get('book'))
+        quoted = []
+        market, side = gates.market_key(candidate), gates.side_of(candidate)
+        for capture in history:
+            entry = next((value for name, value in (capture.get('books') or {}).items()
+                          if role_sanity.book_key(build_site.BOOK_NAMES.get(name, name)) == book_key), None)
+            offer = (entry or {}).get('total' if market == 'total' else 'spread') or {}
+            if market == 'total' and side in ('over', 'under') and isinstance(offer.get('line'), (int, float)):
+                quoted.append((offer['line'], offer.get(side), capture['retrievedAt']))
+            elif market == 'spread' and side in ('home', 'away') and isinstance(offer.get('home'), (int, float)):
+                quoted.append((offer['home'] if side == 'home' else -offer['home'],
+                               offer.get('homePrice' if side == 'home' else 'awayPrice'), capture['retrievedAt']))
+        if len(quoted) >= 2:
+            first, current = quoted[0], quoted[-1]
+            line_toward = (current[0] - first[0]) * (1 if market == 'total' and side == 'over' else -1)
+            cents_toward = pricing.cents(first[1]) - pricing.cents(current[1]) \
+                if isinstance(first[1], (int, float)) and isinstance(current[1], (int, float)) else 0
+            if line_toward >= 1 or cents_toward >= 15:
+                reasons.append({'type': 'line_move', 'class': 'A', 'direction': 'for',
+                                'text': f"{candidate['book']} moved toward this side from {first[0]:g} to {current[0]:g}.",
+                                'number': {'firstLine': first[0], 'currentLine': current[0],
+                                           'centsToward': cents_toward}, 'source': candidate.get('sources', [None])[0],
+                                'observedAt': current[2]})
+    # Deterministic de-duplication keeps the same reasons in the run, replay and dossier.
+    return list({(row['type'], row['text']): row for row in reasons}.values())
 
 
 _WEATHER = {}
@@ -1094,6 +1238,7 @@ def decision_record(candidate, league, decision, rules, reason, now, ctx):
     facts = candidate.get('_evidence') or []
     verdict = candidate.get('_verdict') or {}
     row = dict(candidate, league=league)
+    selection = candidate.get('_selectionDecision') or candidate.get('_selection') or {}
     return {'id': candidate.get('id'), 'league': league, 'season': game.get('season') or now.year,
             'segment': learning.segment_of(row), 'kind': pick_card.play_kind(row), 'title': candidate.get('title'),
             'marketType': candidate.get('marketType'), 'market': candidate.get('market'), 'athleteId': candidate.get('athleteId'),
@@ -1103,6 +1248,9 @@ def decision_record(candidate, league, decision, rules, reason, now, ctx):
             'projection': desk.get('projection'), 'chance': desk.get('chance'), 'rawChance': desk.get('rawChance'),
             'breakEven': desk.get('breakEven'), 'edgePoints': desk.get('edgePoints'), 'evPerUnit': desk.get('evPerUnit'),
             'confidence': candidate.get('confidence'), 'favorite': candidate.get('favorite') is True,
+            'lane': candidate.get('lane'), 'fairChance': selection.get('fairChance'),
+            'gap': selection.get('gap'), 'kitchenScore': candidate.get('_kitchenScore'),
+            'planReasons': selection.get('reasons') or candidate.get('_planReasons'),
             'decision': decision, 'rules': list(rules), 'reason': reason, 'decidedAt': stamp(now),
             'quotedAt': candidate.get('quotedAt'),
             'facts': {'for': sum(1 for f in facts if f.get('direction') == 'for'),
@@ -1192,7 +1340,7 @@ def remember(decided, now, slot, status):
         log(f'learning: {type(error).__name__}: {error}')
 
 
-RESEARCH_LIMIT = 6          # candidates the web researcher is asked about per run, strongest first
+RESEARCH_LIMIT = 8          # owner-plan daily news lookups, strongest first
 FAVORITE_EDGE = 2.0         # a game-line favorite needs the calibrated chance this many points clear of break-even
 
 
@@ -1798,15 +1946,21 @@ def _run(args, now, slot, kinds, status):
 
     build_site.build(now)
     lines = load_candidate_lines(build_site.OUT / 'lines.json')
-    wanted = rank_card(candidates(lines, games, now), ctx)
+    selection_run = slot.hour == 6 and slot.minute == 45
+    wanted = rank_card(candidates(lines, games, now), ctx) if selection_run else []
+    if not selection_run:
+        log('owner plan: official plays are admitted only by the 6:45 AM game-day run')
     log(f'{len(wanted)} candidates on the board')
     decided = []          # every decision this run made, for the learning record
     reasons = {}          # the reason each published play's post will give (data/x-reasons.json)
     # The web researcher reads the news for every play that passes the rules, on the runs that publish.
-    research_on = researcher.enabled() and slot.hour not in (6, 23)
+    research_on = researcher.enabled() and selection_run
     status['research'] = {'on': research_on, 'asked': 0, 'verified': 0, 'dropped': 0}
     potd_market = []      # fresh priced board markets; only matching official singles can receive the POTD label
-    for candidate in wanted:
+    best_pool = []        # fully checked rows; ranked by the logged Kitchen score before publication
+    gut_pool = []         # fully checked fallbacks; chosen only after every Best bet has been considered
+    safer_pool = []       # fully honest moneyline legs; combined only when a day has no Best bet
+    for candidate_rank, candidate in enumerate(wanted):
         want = 'prop' if candidate.get('athleteId') else 'lean'
         if want not in kinds:
             continue
@@ -1825,7 +1979,7 @@ def _run(args, now, slot, kinds, status):
         ok, decisions = gates.admit(dict(candidate, league=league), ctx)
         for decision in decisions:
             if decision.rule == 'one_book' and decision.data.get('quoteNoteRequired'):
-                candidate['quoteNote'] += f" {candidate['book']} is the only book with this market; kickoff is inside three hours."
+                candidate['quoteNote'] += f" {candidate['book']} is the only book with this market; its paired game-day price passed the check."
             if decision.rule == 'cfb_jurisdiction' and decision.data.get('jurisdictionVerified'):
                 candidate['jurisdictionVerified'] = True
         if not ok:
@@ -1836,7 +1990,11 @@ def _run(args, now, slot, kinds, status):
             continue
         # Then the news: the web researcher reads injury, availability and depth-chart reporting for the play.
         researched = False          # true only when the web check came back with who is expected to play
-        if research_on and status['research']['asked'] < RESEARCH_LIMIT:
+        pre_reasons = plan_reasons(candidate, ctx)
+        gap = (candidate.get('_selection') or {}).get('gap', 0)
+        class_a = any(row.get('class') == 'A' and row.get('direction') == 'for' for row in pre_reasons)
+        needs_market_check = gap > 15 or (candidate_rank < 6 and not class_a)
+        if research_on and needs_market_check and status['research']['asked'] < RESEARCH_LIMIT:
             game = ctx.games[candidate['gameIds'][0]]
             kept, dropped = researcher.research(game, gates.market_key(candidate), gates.side_of(candidate), now=now,
                                                 player=candidate.get('_player') or ctx.names.get(str(candidate.get('athleteId') or '')),
@@ -1878,13 +2036,77 @@ def _run(args, now, slot, kinds, status):
         except (KeyError, TypeError, ValueError, AttributeError) as error:
             log(f"dossier partial for {candidate['id']}: {type(error).__name__}")
             candidate['dossier'] = dossier.empty(candidate)
-        support_issue = dossier_support_issue(candidate['dossier'])
-        if support_issue:
+        candidate['_planReasons'] = plan_reasons(candidate, ctx)
+        if candidate.get('marketType') == 'moneyline':
+            safer_pool.append((league, candidate))
+        best = gates.selection_verdict(candidate, ctx, 'best_bet')
+        if not best.ok:
+            gut = gates.selection_verdict(candidate, ctx, 'gut_call')
+            if gut.ok:
+                candidate['_selectionDecision'] = gut.data
+                gut_pool.append((league, candidate))
+                continue
             screened.append({'league': league, 'gameId': candidate['gameIds'][0], 'title': candidate['title'],
-                             'rule': 'dossier-support', 'reason': support_issue})
-            decided.append(decision_record(candidate, league, 'refused', ['dossier-support'], support_issue, now, ctx))
+                             'rule': best.rule, 'reason': best.reason})
+            decided.append(decision_record(candidate, league, 'refused', [best.rule], best.reason, now, ctx))
             continue
-        # Admitted picks join the day's count so the caps hold within one run.
+        candidate['_selectionDecision'] = best.data
+        candidate['_kitchenScore'] = gates.kitchen_score(candidate, ctx, best.data)
+        best_pool.append((league, candidate))
+    # The card is ordered by the owner-plan score, not by calibrated chance.
+    # Apply capacity again as rows join the in-run record.
+    hot_days = {gates.slate_day(pick, ctx) for pick in ctx.first.values()
+                if pick.get('lane') == 'hot_plate' or pick.get('favorite') is True}
+    for league, candidate in sorted(best_pool, key=lambda item: (-item[1]['_kitchenScore']['total'], item[1]['id'])):
+        duplicate = gates.not_duplicate(candidate, ctx)
+        cap = gates.card_cap(candidate, ctx)
+        if not duplicate.ok or not cap.ok:
+            refusal = duplicate if not duplicate.ok else cap
+            screened.append({'league': league, 'gameId': candidate['gameIds'][0], 'title': candidate['title'],
+                             'rule': refusal.rule, 'reason': refusal.reason})
+            decided.append(decision_record(candidate, league, 'refused', [refusal.rule], refusal.reason, now, ctx))
+            continue
+        day = gates.slate_day(candidate, ctx)
+        candidate['lane'] = 'hot_plate' if day not in hot_days else 'best_bet'
+        candidate['favorite'] = candidate['lane'] == 'hot_plate'
+        candidate['riskUnits'] = 1
+        hot_days.add(day)
+        kind = 'props' if candidate.get('athleteId') else 'gamePicks'
+        ctx.first[candidate['id']] = dict(candidate, league=league, publishedAt=stamp(now), kind=kind)
+        ctx.latest[candidate['id']] = dict(candidate)
+        published.append((league, kind, candidate))
+        decided.append(decision_record(candidate, league, 'published', [], None, now, ctx))
+        log(f"kitchen score {candidate['id']}: {candidate['_kitchenScore']}")
+        reason = next((row.get('text') for row in candidate['dossier']['reasons'] if row.get('text')), None)
+        if reason:
+            reasons[candidate['id']] = reason
+    # A football day with no Best bet gets the top fully checked Gut call. Every
+    # primetime NFL game gets its own eligible fallback; a dark game is alerted.
+    days_with_play = {gates.slate_day(pick, ctx) for _, _, pick in published if not pick.get('legs')}
+    existing_games = {game_id for pick in ctx.first.values() if not pick.get('historicalImport')
+                      for game_id in pick.get('gameIds') or [] if not pick.get('entryNote')}
+    today = eastern_date(now)
+    prime_games = {game['id'] for game in games.values() if selection_run and game.get('league') == 'NFL'
+                   and game.get('state') == 'pre' and eastern_date(gates.when(game['kickoff'])) == today
+                   and gates.when(game['kickoff']).astimezone(gates.EASTERN).hour >= 19}
+    selected_guts = []
+    for league, candidate in sorted(gut_pool, key=lambda item: (
+            -gates.kitchen_score(item[1], ctx, item[1]['_selectionDecision'])['total'], item[1]['id'])):
+        game_id = candidate['gameIds'][0]
+        day = gates.slate_day(candidate, ctx)
+        need_prime = game_id in prime_games and game_id not in existing_games \
+            and all(game_id not in pick['gameIds'] for _, pick in selected_guts)
+        need_day = day not in days_with_play and all(gates.slate_day(pick, ctx) != day for _, pick in selected_guts)
+        if need_prime or need_day:
+            duplicate = gates.not_duplicate(candidate, ctx)
+            cap = gates.card_cap(candidate, ctx)
+            if not duplicate.ok or not cap.ok:
+                continue
+            candidate['lane'] = 'gut_call'
+            candidate['riskUnits'] = .5
+            candidate['_kitchenScore'] = gates.kitchen_score(candidate, ctx, candidate['_selectionDecision'])
+            selected_guts.append((league, candidate))
+    for league, candidate in selected_guts:
         kind = 'props' if candidate.get('athleteId') else 'gamePicks'
         ctx.first[candidate['id']] = dict(candidate, league=league, publishedAt=stamp(now), kind=kind)
         ctx.latest[candidate['id']] = dict(candidate)
@@ -1893,6 +2115,34 @@ def _run(args, now, slot, kinds, status):
         reason = next((row.get('text') for row in candidate['dossier']['reasons'] if row.get('text')), None)
         if reason:
             reasons[candidate['id']] = reason
+    # If a football day still has no straight play, try the approved two-favorite
+    # Safer combo. It is its own lane and never enters the Best bets headline.
+    import comfort
+    open_days = sorted({gates.slate_day(candidate, ctx) for _, candidate in safer_pool if gates.slate_day(candidate, ctx)})
+    for day in open_days:
+        if day in days_with_play or any(gates.slate_day(pick, ctx) == day for _, pick in selected_guts):
+            continue
+        ticket = comfort.build([candidate for _, candidate in safer_pool if gates.slate_day(candidate, ctx) == day])
+        if not ticket:
+            continue
+        first_game = games[ticket['gameIds'][0]]
+        ticket.update({'id': f"{first_game['league']}-{first_game.get('season', day.year)}-safer-{day:%m%d}-dk",
+                       'title': f"Safer combo · {len(ticket['legs'])} favorites", 'status': 'active',
+                       'favorite': False, 'lane': 'safer_combo', 'parlayType': 'comfort',
+                       'riskUnits': 1, 'quoteType': 'capture', 'publishedAt': stamp(now),
+                       'expiresAt': stamp(min(gates.when(games[g]['kickoff']) for g in ticket['gameIds'])),
+                       'sources': sorted({games[g]['source'] for g in ticket['gameIds'] if games[g].get('source')})})
+        ctx.first[ticket['id']] = dict(ticket, kind='parlays', league=first_game['league'])
+        ctx.latest[ticket['id']] = dict(ticket)
+        published.append((first_game['league'], 'parlays', ticket))
+        decided.append(decision_record(ticket, first_game['league'], 'published', [], None, now, ctx))
+        days_with_play.add(day)
+    covered = existing_games | {game_id for _, _, pick in published for game_id in pick.get('gameIds') or []}
+    for game_id in sorted(prime_games - covered):
+        message = f'primetime dark: no priced market passed gates ({game_id})'
+        log(message)
+        if not args.dry_run:
+            alert("Kook'n primetime play missing", message, priority='high')
     if 'longshot' in kinds:
         exclude = longshot_exclusions(ctx, screened, [revision for _, _, revision in closed])
         for league in ('NFL', 'CFB'):

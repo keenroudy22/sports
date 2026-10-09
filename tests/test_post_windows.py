@@ -50,7 +50,7 @@ class WindowTests(unittest.TestCase):
         p=pick('intl','NFL-intl',league='NFL')
         late=datetime(2026,10,11,12,25,tzinfo=timezone.utc)
         ctx=SimpleNamespace(now=late,games={'NFL-intl':GAME},first={},latest={})
-        self.assertEqual(bp.discord_first_due(late), datetime(2026,10,11,12,50,tzinfo=timezone.utc))
+        self.assertEqual(bp.discord_first_due(late), datetime(2026,10,11,13,0,tzinfo=timezone.utc))
         self.assertFalse(gates.x_window(p,ctx).ok)
         refused=[]
         with mock.patch.object(bp.receipts,'house_posts',return_value=[]):

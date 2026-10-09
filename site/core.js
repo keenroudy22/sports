@@ -415,16 +415,22 @@
   /* Picks imported from before prices were recorded (the Week 1 props) stay listed with their results but
      are kept out of every total, so a record, its units and its ROI always describe the same priced picks. */
   const isUnpricedImport = p => Boolean(p.historicalImport) && p.odds == null;
+  const isHeadline = p => !p.lane || p.lane === 'best_bet' || p.lane === 'hot_plate';
+  const laneRecord = (picks, lane, minimum = 10) => summarizePicks(picks.filter(p => p.lane === lane), minimum);
   const recordOf = (picks, minimum = 10) => {
     const imported = picks.filter(isUnpricedImport);
     const counted = picks.filter(p => !isUnpricedImport(p));
     const parlays = counted.filter(p => p.kind === 'parlays' && !isLadder(p));
-    const straight = counted.filter(p => p.kind !== 'parlays');
+    const allStraight = counted.filter(p => p.kind !== 'parlays');
+    const straight = allStraight.filter(isHeadline);
     return { ...summarizePicks(straight, minimum),
       imported: imported.length ? summarizePicks(imported, minimum) : null,
       parlays: parlays.length ? summarizePicks(parlays, minimum) : null,
       researched: summarizePicks(straight.filter(p => !p.modelLean), minimum),
-      model: summarizePicks(straight.filter(p => p.modelLean), minimum) };
+      model: summarizePicks(straight.filter(p => p.modelLean), minimum),
+      allPlays: summarizePicks(counted.filter(p => !isLadder(p)), minimum),
+      lanes: Object.fromEntries(['gut_call','safer_combo','upset','special','nba','soccer','cbb']
+        .map(lane => [lane, laneRecord(counted, lane, minimum)])) };
   };
   /* The simple public scorecard: the current model's final pregame calls for the three game markets and player
      props, plus the separately labeled result of the fun tickets that were actually published. Adding records
@@ -460,13 +466,17 @@
      The Pick of the Day record counts the days its post went out. */
   const isParlay = p => p.kind === 'parlays' || Boolean((p.legs || []).length) || Boolean(p.parlayType);
   const recordBreakdown = picks => {
-    const straight = picks.filter(p => !isParlay(p));
+    const allStraight = picks.filter(p => !isParlay(p));
+    const straight = allStraight.filter(isHeadline);
     const captured = straight.filter(p => !p.priceAssumed && !isUnpricedImport(p) && typeof p.odds === 'number');
     const assumed = straight.filter(p => p.priceAssumed || isUnpricedImport(p));
     // Promotional refunds are not evidence that a losing model pick made money.
     const beforeCredits = captured.map(p => p.earlyExit && p.result === 'loss'
       ? { ...p, earlyExit: false, units: -stakeOf(p) } : p);
     return { all: summarizePicks(straight), captured: summarizePicks(beforeCredits), assumed: summarizePicks(assumed),
+      allPlays: summarizePicks(picks.filter(p => !isLadder(p))),
+      lanes: Object.fromEntries(['gut_call','safer_combo','upset','special','nba','soccer','cbb']
+        .map(lane => [lane, laneRecord(picks, lane)])),
       credits: captured.filter(p => p.earlyExit && p.result === 'loss').reduce((sum, p) => sum + stakeOf(p), 0) };
   };
   const cardSchedule = (picks, now = Date.now()) => {
@@ -566,12 +576,16 @@
     const when = p => p.kickoff || p.publishedAt;
     const imported = picks.filter(isUnpricedImport);
     const counted = picks.filter(p => !isUnpricedImport(p));
-    const straight = counted.filter(p => !isParlay(p));
+    const allStraight = counted.filter(p => !isParlay(p));
+    const straight = allStraight.filter(isHeadline);
     const days = [...new Set(straight.filter(p => ['win', 'loss', 'push', 'void'].includes(p.result)).map(p => dayOf(when(p))).filter(Boolean))].sort();
     const last = days.length ? days[days.length - 1] : null;
     const week = weekOf(new Date(now).toISOString());
     return {
       season: summarizePicks(straight, 10),
+      allPlays: summarizePicks(counted.filter(p => !isLadder(p)), 10),
+      lanes: Object.fromEntries(['gut_call','safer_combo','upset','special','nba','soccer','cbb']
+        .map(lane => [lane, laneRecord(counted, lane, 10)])),
       week: summarizePicks(straight.filter(p => weekOf(when(p)) === week), 10),
       lastDay: last ? { day: last, ...summarizePicks(straight.filter(p => dayOf(when(p)) === last), 10) } : null,
       potd: summarizePicks(straight.filter(p => p.featured && p.posted), 10),

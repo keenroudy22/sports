@@ -113,6 +113,18 @@ def choose(ctx, now, path=None, policy=None, write=True, log=print, log_book=Non
         return named
     sent = {p.get('id') for p in log_book.get('posts', []) if p.get('sentAt')}
     passed = set(entry.get('replaced') or []) | ({named} if named else set())
+    planned = [(key, pick, kickoff) for key, pick, kickoff in
+               todays_plays(ctx.first, ctx.latest, ctx.games, day, now)
+               if pick.get('lane') == 'hot_plate' and key not in passed and key not in sent]
+    if planned:
+        key, pick, _ = planned[0]
+        score = ((pick.get('_kitchenScore') or {}).get('total'))
+        featured[day.isoformat()] = dict({'id': key, 'chosenAt': gates.stamp(now), 'score': score},
+                                         **({'replaced': sorted(passed)} if passed else {}))
+        if write:
+            save(featured, path)
+        log(f'pick of the day {day.isoformat()}: {key} (owner-plan Kitchen score {score})')
+        return key
     fresh = None
     if current is not None:
         fresh = {}

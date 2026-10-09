@@ -1,5 +1,37 @@
 # October 5 product implementation tracker
 
+## 2026-10-09 — KOOKN-PLAN adoption
+
+The owner adopted [`KOOKN-PLAN.md`](KOOKN-PLAN.md) as the single current authority for play selection, posts,
+graphics, the site, engagement and learning. It supersedes conflicting dated operating decisions; the immutable
+record, free-stack rules and locked deployment recipe remain unchanged. Work is tracked as `KP-T0` through
+`KP-T27`, `KP-T-SITE` and `KP-T-ART` in `product-status.json`, and ships in the plan's three gated releases.
+
+Release 1 starts from the unchanged public headline: **35–36 (1 void), −5.11u at posted prices (21–25 with a
+recorded price), 5 pending**. The stored Oct. 1–9 acceptance replay is produced by
+`scripts/replay_selection.py`; it makes no network calls and does not write the record.
+
+### Release 1 replay acceptance (Oct. 1–9, stored inputs only)
+
+The deterministic replay found a qualifying lane on every football game day. None of these replay rows changes
+the public record.
+
+| Day | Replayed plays |
+|---|---|
+| Oct. 1 | Jimmy Calloway under 39.5 receiving yards (Best bet; pending in stored replay data) |
+| Oct. 2 | Aidan Chiles over 12.5 rushing yards (Best bet; win); Jeffrey Overton Jr. under 85.5 rushing yards (Best bet; win) |
+| Oct. 3 | Antonio Martin over 51.5 rushing yards; Messiah Burch under 48.5 rushing yards; Sedrick Alexander over 27.5 rushing yards; Marquis Johnson over 30.5 receiving yards; Caden High over 46.5 receiving yards (Best bets; 1–4) |
+| Oct. 4 | Tommy Tremble over 13.5 receiving yards; Ryan Flournoy over 33.5 receiving yards; Justice Hill under 10.5 receiving yards; Matthew Stafford over 250.5 passing yards; Puka Nacua over 73.5 receiving yards (Best bets; 3–2) |
+| Oct. 5 | Jahan Dotson over 19.5 receiving yards (Best bet; win) |
+| Oct. 6 | Gavin Griffin under 9.5 receiving yards (Gut call; loss) |
+| Oct. 7 | JJ Kohl over 10.5 rushing yards; James Jones under 84.5 rushing yards (Best bets; 0–2) |
+| Oct. 8 | David Amador II over 41.5 receiving yards; Mudia Reuben over 30.5 receiving yards (Best bets; 1–1); Jake Ferguson under 3.5 catches (TNF Gut call; win) |
+| Oct. 9 | Washington State at Utah State over 44.5 (Gut call; pending) |
+
+Replay command: `python3 scripts/replay_selection.py --from 2026-10-01 --to 2026-10-09`. Acceptance also verifies
+that role/QB holds do not reach a play and narrow one-book exceptions use fresh quotes with a gap no larger than 15.
+Best bets before/after Release 1: **35–36 (1 void), −5.11u at posted prices (21–25 priced), 5 pending**.
+
 Owner approved implementation of the October 5 product plan after reviewing it. This tracker separates work that
 can ship now from observation, counterpart permission and later owner decisions. It is not proof a staged change
 is deployed. The existing append-only reports and public record remain unchanged by presentation work.

@@ -1,3 +1,5 @@
+# Superseded where it differs by `docs/KOOKN-PLAN.md` (owner, 2026-10-09)
+
 # Kook'n direction rules: when the results say change course, the desk changes on its own (owner, 2026-10-07)
 
 The owner: "My end goal is for this to be streamlined so I can get on the site and get what I want and get off. With expectations of it being autonomous and improving. If ... trends / bets aren't hitting at the rate we want we change directions after x."

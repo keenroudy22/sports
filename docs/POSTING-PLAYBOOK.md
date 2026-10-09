@@ -1,3 +1,5 @@
+# Superseded where it differs by `docs/KOOKN-PLAN.md` (owner, 2026-10-09)
+
 # Kook'n posting playbook, v3 (2026-10-07)
 
 **October 8 owner timing override (item 38):** Every new official play, ticket, Comfort Food

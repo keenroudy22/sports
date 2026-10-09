@@ -97,16 +97,18 @@ def assess(forecast, logs, team, market, season=None):
             'recentFull': [round(value, 1) if isinstance(value, float) else value for value in full[-3:]]}
 
 
-def price_suspect(odds, chance, player=True):
-    """A main player price outside the plausible range or wildly apart from our chance."""
+def price_suspect(odds, chance, player=True, fair=None, gap=None):
+    """A main player price outside the plausible range or 25+ points from no-vig fair."""
     if not player or not isinstance(odds, (int, float)):
         return False
     if odds < -400 or odds > 400:
         return True
+    if isinstance(gap, (int, float)):
+        return abs(gap) >= .25
     if not isinstance(chance, (int, float)):
         return False
-    implied = -odds / (-odds + 100) if odds < 0 else 100 / (odds + 100)
-    return abs(chance - implied) > .25
+    market = fair if isinstance(fair, (int, float)) else implied(odds)
+    return abs(chance - market) >= .25
 
 
 def book_key(book):

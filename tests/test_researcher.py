@@ -14,10 +14,11 @@ ANSWER = {'facts': [
     {'kind': 'injury', 'direction': 'for', 'claim': 'Lions list two starting corners out.', 'entities': ['Terrion Arnold', 'D.J. Reed'],
      'source': 'https://www.detroitlions.com/team/injury-report', 'publishedAt': '2026-09-25'},
     {'kind': 'weather', 'direction': 'against', 'claim': 'Wind forecast 18 mph at kickoff.', 'entities': [],
-     'source': 'https://forecast.weather.gov/x'},
+     'source': 'https://forecast.weather.gov/x', 'publishedAt': '2026-09-25'},
     {'kind': 'opinion', 'direction': 'for', 'claim': 'Take the over.', 'entities': [], 'source': 'https://x'},
     {'kind': 'injury', 'direction': 'for', 'claim': 'no source', 'entities': ['Nobody'], 'source': 'http://insecure'},
-    {'kind': 'role', 'direction': 'for', 'claim': 'Someone starts.', 'entities': ['Ghost Player'], 'source': 'https://www.example.com/a'}]}
+    {'kind': 'role', 'direction': 'for', 'claim': 'Someone starts.', 'entities': ['Ghost Player'],
+     'source': 'https://www.example.com/a', 'publishedAt': '2026-09-25'}]}
 PAGES = {'https://www.detroitlions.com/team/injury-report': b'<html><body>Injury report: Terrion Arnold (out), D.J. Reed (out)</body></html>',
          'https://forecast.weather.gov/x': b'<html>Wind 18 mph</html>',
          'https://www.example.com/a': b'<html>nothing about anyone</html>'}

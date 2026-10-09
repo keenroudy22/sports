@@ -132,8 +132,8 @@ class PlanTests(unittest.TestCase):
             plans = bp.plan(first, {}, game, now, {'posts': []})
         self.assertEqual(et(plans[0][3]), '09:00')
         play_times = [et(row[3]) for row in plans if row[1] == 'play']
-        self.assertEqual(play_times, ['09:30', '09:40', '09:50', '10:00', '10:10', '10:20', '10:30', '10:40'])
-        self.assertEqual(et(plans[-1][3]), '10:50')
+        self.assertEqual(play_times, ['09:30', '09:50', '10:10', '10:30', '10:50', '11:10', '11:30', '11:50'])
+        self.assertEqual(et(plans[-1][3]), '12:10')
 
     def test_replacement_ticket_waits_for_last_look_or_is_refused(self):
         original = pick('replacement', 'late', **TICKET)
@@ -150,14 +150,14 @@ class PlanTests(unittest.TestCase):
         self.assertNotIn('replacement', [row[0] for row in rows])
         self.assertIn(('replacement', ['replacement has no last-look window']), refused)
 
-    def test_plays_post_at_nine_thirty_with_hot_plate_first_and_ten_minute_spacing(self):
+    def test_plays_post_at_nine_thirty_with_hot_plate_first_and_twenty_minute_spacing(self):
         first = {'a': pick('a'), 'd': pick('d', title='Iowa at Michigan under 38.5', direction='under'),
                  'p': pick('p', **PROP), 'x': pick('x', gameIds=['noon', 'late'], **TICKET),
                  'b': pick('b', 'late', title='Oklahoma at Georgia under 44.5', direction='under'), 'c': pick('c', 'tomorrow')}
         latest = {k: dict(v) for k, v in first.items()}
         plans = bp.plan(first, latest, GAMES, NOW, {'posts': []})
         self.assertEqual([(p[0], et(p[3])) for p in plans],
-                         [('p', '09:30'), ('a', '09:40'), ('d', '09:50'), ('b', '10:00'), ('x', '10:10')],
+                         [('p', '09:30'), ('a', '09:50'), ('d', '10:10'), ('b', '10:30'), ('x', '10:50')],
                          'plays lead the morning, regardless of kickoff hour')
         plans = [p for p in plans if p[1] == 'play']
         self.assertTrue(all(p[4] == p[0] for p in plans), 'each play with its own card')
@@ -235,11 +235,11 @@ class SpacingTests(unittest.TestCase):
         latest = {k: dict(v) for k, v in first.items()}
         eleven = datetime(2026, 9, 26, 15, 58, tzinfo=timezone.utc)       # 11:58 AM ET
         plans = bp.plan(first, latest, GAMES, eleven, {'posts': queued})
-        self.assertEqual([(p[0], et(p[3])) for p in plans], [('a', '13:00'), ('b', '13:10')],
+        self.assertEqual([(p[0], et(p[3])) for p in plans], [('a', '13:10'), ('b', '13:30')],
                          'late-admitted plays preserve Discord lead and avoid queued slots')
         cancelled = [dict(q, cancelledAt='2026-09-26T14:00:00Z') if q['id'] == 'q2' else q for q in queued]
         plans = bp.plan(first, latest, GAMES, eleven, {'posts': cancelled})
-        self.assertEqual([et(p[3]) for p in plans], ['12:20', '13:00'], 'a cancelled slot may be reused, without crowding another queued post')
+        self.assertEqual([et(p[3]) for p in plans], ['13:10', '13:30'], 'a cancelled ten-minute slot is too close under the twenty-minute spacing rule')
         already = queued + [{'id':'climb:checkin:2026-09-26', 'kind':'buffer:book', 'dueAt':'2026-09-26T15:50:00Z'}]
         self.assertFalse(any(p[0].startswith('climb:checkin:') for p in bp.plan(first, latest, GAMES, eleven, {'posts':already})))
 

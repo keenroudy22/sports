@@ -20,7 +20,8 @@ import subprocess
 import sys
 import urllib.error
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
+from urllib.parse import urlparse
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -30,6 +31,8 @@ ROOT = Path(__file__).resolve().parents[1]
 KINDS = ('injury', 'role', 'weather', 'stats')
 DIRECTIONS = ('for', 'against', 'neutral')
 MAX_FACTS = 8
+SPORTSBOOK_DOMAINS = ('draftkings.', 'fanduel.', 'betmgm.', 'caesars.', 'betrivers.', 'bet365.',
+                     'fanatics.', 'hardrock.bet', 'espnbet.', 'thescore.bet')
 USER_AGENT = 'KeenRoudySports/1.0 (+https://keenroudy.com/sports/)'
 
 PROMPT = """You are a research assistant for a small football stats site. Find sourced facts about ONE game and return
@@ -162,7 +165,7 @@ def codex_reasoning(env=None):
     return value if value in ('low', 'medium', 'high', 'xhigh', 'max') else DEFAULT_CODEX_REASONING
 
 
-def run_codex(prompt, runner=subprocess.run, timeout=420, folder=None, env=None):
+def run_codex(prompt, runner=subprocess.run, timeout=120, folder=None, env=None):
     """`codex exec`'s last message (the JSON the prompt asks for), or None when the command fails or is missing.
 
     Codex runs in the researcher's own empty folder, read-only, with live web search and no approvals to wait on,
@@ -215,10 +218,20 @@ def shape(fact, game_id, index, now, origin=None):
     source = str(fact.get('source') or '')
     claim = str(fact.get('claim') or '').strip()
     entities = [str(e).strip() for e in (fact.get('entities') or []) if str(e).strip()]
-    if kind not in KINDS or direction not in DIRECTIONS or not source.startswith('https://') or not claim:
+    host = urlparse(source).netloc.lower().removeprefix('www.')
+    published = fact.get('publishedAt') or None
+    try:
+        published_at = datetime.fromisoformat(str(published).replace('Z', '+00:00')) if published else None
+        if published_at and published_at.tzinfo is None:
+            published_at = published_at.replace(tzinfo=timezone.utc)
+    except ValueError:
+        published_at = None
+    recent = bool(published_at and now - timedelta(days=7) <= published_at <= now + timedelta(hours=1))
+    if kind not in KINDS or direction not in DIRECTIONS or not source.startswith('https://') or not claim \
+            or any(domain in host for domain in SPORTSBOOK_DOMAINS) or not recent:
         return None
     return {'id': f'web-{game_id}-{index}', 'kind': kind, 'direction': direction, 'claim': claim[:400], 'entities': entities[:6],
-            'source': source, 'publishedAt': fact.get('publishedAt') or None, 'retrievedAt': gates.stamp(now), 'verified': False,
+            'source': source, 'publishedAt': published, 'retrievedAt': gates.stamp(now), 'verified': False,
             'origin': origin or 'codex researcher'}
 
 

@@ -1946,6 +1946,7 @@ def board_picks(first, latest, by_id, identities):
                      'delivery': delivery,
                      'market': pick.get('market') or recent.get('market') or (pricing.market_of(pick) if pick.get('athleteId') else None),
                      'riskUnits': pick.get('riskUnits'), 'modelLean': pick.get('modelLean') is True,
+                     'lane': pick.get('lane'),
                      'earlyExit': recent.get('earlyExit') is True,
                      'player': pick.get('player'), 'athleteId': pick.get('athleteId'), 'position': pick.get('position'),
                      # The first publication's line and price; a play imported without them takes the ones a later
@@ -2004,8 +2005,9 @@ def grade_line(line, snapshot, thin):
         return None
     if line.get('gameMarket'):
         # A spread row is the home side unless it names the away side; its line is that side's own number.
-        market, side, athlete = ('spread', line.get('side') or 'home', None) if line['market'] == 'point spread' \
-            else ('total', line.get('direction'), None)
+        market, side, athlete = (('spread', line.get('side') or 'home', None) if line['market'] == 'point spread'
+                                 else ('moneyline', line.get('side'), None) if line['market'] == 'moneyline'
+                                 else ('total', line.get('direction'), None))
     else:
         market, side, athlete = pricing.market_of(line), str(line.get('direction') or '').lower(), line.get('athleteId')
         if not market or side not in ('over', 'under') or not athlete:
@@ -2553,9 +2555,15 @@ def game_market_lines(slate, now, captures=None):
             rows += [('over', 'total points', m['total'], m['overOdds'], f"{away} @ {home} over {m['total']:g}", 'over'),
                      ('under', 'total points', m['total'], m['underOdds'], f"{away} @ {home} under {m['total']:g}",
                       'under')]
+        if isinstance(m.get('homeML'), (int, float)) and isinstance(m.get('awayML'), (int, float)):
+            rows += [('home-ml', 'moneyline', 0, m['homeML'], f'{home} moneyline', 'home'),
+                     ('away-ml', 'moneyline', 0, m['awayML'], f'{away} moneyline', 'away')]
         for kind, name, value, odds, title, direction in rows:
             out.append({'id': f"game-{game['id']}-{kind}", 'league': game['league'], 'gameId': game['id'],
-                        'market': name, 'line': value, 'odds': odds, 'direction': direction,
+                        'market': name, 'line': value, 'odds': odds,
+                        'direction': direction if name != 'moneyline' else None,
+                        'side': direction if name == 'moneyline' else None,
+                        'oppositeOdds': (m['awayML'] if direction == 'home' else m['homeML']) if name == 'moneyline' else None,
                         'book': m['book'], 'state': 'open', 'kickoff': game['kickoff'],
                         'observedAt': game.get('marketRetrievedAt'), 'title': title, 'gameMarket': True,
                         'marketWindow': 'Full game', 'move': m['spreadMove'] if kind == 'spread' else None})

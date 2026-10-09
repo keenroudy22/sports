@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 
 EASTERN = ZoneInfo('America/New_York')
 LEAD = timedelta(minutes=45)
-SPACING = timedelta(minutes=10)
+SPACING = timedelta(minutes=20)
 SOON = timedelta(minutes=2)
 DISCORD_PLAY_LEAD = timedelta(minutes=15)
 DISCORD_DELIVERY_CADENCE = timedelta(minutes=5)
@@ -31,7 +31,7 @@ def target(league, kickoff):
 
 
 def delivery_ready(now):
-    """First ten-minute X slot that leaves time for the Discord-first delivery."""
+    """First twenty-minute X slot that leaves time for the Discord-first delivery."""
     earliest = instant(now).astimezone(timezone.utc) + DISCORD_PLAY_LEAD + DISCORD_DELIVERY_CADENCE + SOON
     tick = int(SPACING.total_seconds())
     return datetime.fromtimestamp(((int(earliest.timestamp()) + tick - 1) // tick) * tick, tz=timezone.utc)

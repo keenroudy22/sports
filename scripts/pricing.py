@@ -56,6 +56,20 @@ def break_even(odds):
     return 1 / (1 + payout(odds))
 
 
+def fair_chance(price_side, price_other):
+    """The book's no-vig chance for one side of an exact two-sided market.
+
+    Both prices are required.  Removing the overround here keeps selection
+    math independent from the model calibration used only for research rows.
+    """
+    side = break_even(price_side)
+    other = break_even(price_other)
+    total = side + other
+    if not math.isfinite(total) or total <= 0:
+        raise ValueError('a two-sided market needs valid American prices')
+    return side / total
+
+
 def cents(odds):
     """American odds on one continuous scale, so -105 to +105 is 10 cents, not 210."""
     return odds + 100 if odds < 0 else odds - 100
@@ -99,11 +113,20 @@ def price(snapshot, market, side, line, odds, athlete=None):
     """
     market = {v: k for k, v in PROJECTED.items()}.get(market, market)
     league = snapshot.get('league') or str(snapshot.get('gameId', '')).split('-')[0]
-    game_market = market in ('spread', 'total')
+    game_market = market in ('spread', 'total', 'moneyline')
     if game_market:
-        if market == 'spread' and side not in ('home', 'away') or market == 'total' and side not in ('over', 'under'):
+        if market in ('spread', 'moneyline') and side not in ('home', 'away') or market == 'total' and side not in ('over', 'under'):
             raise ValueError(f'{market} takes {"home or away" if market == "spread" else "over or under"}')
-        if market == 'spread':
+        if market == 'moneyline':
+            home = snapshot.get('homeWinProb')
+            if not isinstance(home, (int, float)):
+                home = ((snapshot.get('home') or {}).get('winProb'))
+            if not isinstance(home, (int, float)):
+                raise ValueError('v2 has no winner probability in this snapshot')
+            raw = home if side == 'home' else 1 - home
+            win, push, loss = raw, 0.0, 1 - raw
+            mean, sd, low_high, what = raw, 0.0, [raw, raw], f'{side} win'
+        elif market == 'spread':
             mean, sd = snapshot['margin'], snapshot['sd']['margin']
             # Home covers when margin + line > 0; away covers when margin < away line.
             over, push, under = chances(mean, sd, -line if side == 'home' else line)

@@ -207,6 +207,18 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Kook'n plan (owner, 2026-10-09):** [`docs/KOOKN-PLAN.md`](docs/KOOKN-PLAN.md) is the single authority for
+  plays, posts, engagement, research and learning. It supersedes every older rule below, and every older rule in
+  `docs/POSTING-PLAYBOOK.md`, `docs/DIRECTION-RULES.md`, `NO-FORCED-PLAYS-SPEC.md` and
+  `OWNER-DECISIONS-2026-10-07.md`, wherever they differ. Older dated bullets remain implementation history only;
+  follow the plan's T0–T27, T-SITE and T-ART pointers for current behavior. The never-bend rules and deployment
+  recipe above are unchanged.
+
+- **Superseded operating details (pointer only):** old noon/two-hours-before and ten-minute schedules, the 8:45
+  menu, conversation prompts, weekend sheets, weekday NFL ownership, the old CFB-total and market-priority rules,
+  Comfort Food/Chef's Upset/Chef's Call names, Tuesday Early Look, first-render review gates and daily Claude-audit
+  dependency are historical. Use §§2–7 of `docs/KOOKN-PLAN.md` for their replacements.
+
 - **Approved graphic family (owner, 2026-10-08):** `/Users/keen/Projects/kookn-patches/design/APPROVED-GRAPHICS/README.md`
   maps every public post to one of the 15 reviewed Kitchen Ticket references in that folder.
   After the noon Ticket cutover, no new post may carry old felt, navy or `research_art` images.

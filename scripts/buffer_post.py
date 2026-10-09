@@ -43,7 +43,7 @@ ROOT = Path(__file__).resolve().parents[1]
 API = 'https://api.buffer.com'
 CARDS = x_post.SITE + 'data/cards/'
 POST_AT = (9, 30)                    # Eastern game-day target; early international games retain 8:30
-SPACING = timedelta(minutes=10)      # between two posts
+SPACING = timedelta(minutes=20)      # owner plan: plays go out about twenty minutes apart
 SOON = timedelta(minutes=2)          # a post scheduled "now" goes out this far ahead
 ORDER = {'player': 0, 'team': 1, 'ladder': 2, 'parlay': 3}   # inside one kickoff: player props, game lines, the ladder, the parlay
 MAX_PER_DAY = 20                     # our ceiling; Buffer's free queue holds only 10 scheduled posts at once
@@ -283,7 +283,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     game lines and the day's fun parlay use the same shape every time and always carry the card; the morning after,
     the receipt (scripts/receipts.py) goes at 9:00 AM ET,
     ahead of that morning's plays; on Wednesday the week's receipt too. Plays target 9:30 AM Eastern on game
-    day (8:30 for a kickoff before 10:30), Hot Plate first, then other plays ten minutes apart.
+    day (8:30 for a kickoff before 10:30), Hot Plate first, then other plays about twenty minutes apart.
     A play published later than its time uses the next safe Discord-first slot, unless kickoff is inside
     45 minutes. Posted, closed, settled and historical plays are left out.
     `soon` replaces the two-minute lead, for a person who wants time to look at the queue first. A post whose text

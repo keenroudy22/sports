@@ -32,13 +32,21 @@ class SlotTests(unittest.TestCase):
 class CandidateCatalogTests(unittest.TestCase):
     def test_spreads_join_the_board_without_turning_off_exact_line_checks(self):
         now = datetime(2026, 10, 8, 13, 0, tzinfo=timezone.utc)
-        game = {'id': 'CFB-1', 'league': 'CFB', 'state': 'pre', 'kickoff': '2026-10-10T19:00:00Z'}
+        game = {'id': 'CFB-1', 'league': 'CFB', 'state': 'pre', 'kickoff': '2026-10-08T19:00:00Z'}
         row = {'gameId': 'CFB-1', 'state': 'open', 'gameMarket': True, 'market': 'point spread',
                'side': 'away', 'line': 3.5, 'book': 'FanDuel', 'odds': -110,
-               'grade': {'tier': 'strong', 'edge': 6.0}}
+               'grade': {'tier': 'strong', 'edge': 6.0, 'raw': 0.60}}
         picks = run.candidates([row], {'CFB-1': game}, now)
         self.assertEqual((len(picks), picks[0]['marketType'], picks[0]['direction'], picks[0]['modelLean']),
                          (1, 'spread', 'away', False))
+
+    def test_a_future_game_stays_on_the_board_but_cannot_be_admitted_early(self):
+        now = datetime(2026, 10, 8, 13, 0, tzinfo=timezone.utc)
+        game = {'id': 'CFB-1', 'league': 'CFB', 'state': 'pre', 'kickoff': '2026-10-09T19:00:00Z'}
+        row = {'gameId': 'CFB-1', 'state': 'open', 'gameMarket': True, 'market': 'point spread',
+               'side': 'away', 'line': 3.5, 'book': 'FanDuel', 'odds': -110,
+               'grade': {'tier': 'strong', 'edge': 6.0, 'raw': 0.60}}
+        self.assertEqual(run.candidates([row], {'CFB-1': game}, now), [])
 
     def test_two_numbered_dossier_reasons_and_no_hard_risk(self):
         good = {'reasons': [{'text': 'Our projection is 61.2 yards.'},
@@ -1132,10 +1140,10 @@ class CardRankTests(unittest.TestCase):
         rows = [
             {'id': 'z-line', 'league': 'NFL', 'gameId': 'NFL-1', 'state': 'open',
              'gameMarket': True, 'market': 'total points', 'direction': 'over', 'line': 44.5,
-             'book': 'FanDuel', 'odds': -110, 'grade': {'tier': 'lean', 'edge': 3.0}},
+             'book': 'FanDuel', 'odds': -110, 'grade': {'tier': 'lean', 'edge': 3.0, 'raw': 0.60}},
             {'id': 'a-line', 'league': 'NFL', 'gameId': 'NFL-1', 'state': 'open',
              'gameMarket': True, 'market': 'total points', 'direction': 'under', 'line': 45.5,
-             'book': 'DraftKings', 'odds': -110, 'grade': {'tier': 'lean', 'edge': 3.0}},
+             'book': 'DraftKings', 'odds': -110, 'grade': {'tier': 'lean', 'edge': 3.0, 'raw': 0.60}},
         ]
         first = run.candidates(rows, {'NFL-1': game}, now)
         second = run.candidates(list(reversed(rows)), {'NFL-1': game}, now)
@@ -1156,7 +1164,7 @@ class CardRankTests(unittest.TestCase):
         prop = lambda key, market, raw, needs, odds: {'id': key, 'athleteId': key, 'market': market, '_league': 'NFL',
                                                       '_row': {'odds': odds, 'grade': {'raw': raw, 'needs': needs}}}
         wanted = [total('nfl-total', 4.0), total('cfb-total', 2.0, 'CFB'), prop('rec', 'rec', 0.70, 0.52, -110),
-                  prop('yards', 'recYds', 0.80, 0.52, -110), prop('plus', 'rec', 0.90, 0.42, 140)]
+                  prop('yards', 'recYds', 0.80, 0.52, -110), prop('plus', 'rec', 0.90, 0.42, 151)]
         order = [c['id'] for c in run.rank_card(wanted, ctx)]
         self.assertEqual(order, ['yards', 'rec', 'nfl-total', 'cfb-total'],
                          'strong performance-caution reads can lead once they clear the higher threshold; '
