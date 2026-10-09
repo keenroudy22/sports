@@ -322,9 +322,9 @@
       "title": "NBA-first ESPN capture foundation",
       "status": "ready",
       "owner": "agent",
-      "next": "After P0/P1/twist, build NBA registry, verified ESPN prop sides and basketball box/injury stores. Exclude NHL/MLB expansion.",
+      "next": "Finish NBA injury/box writers and scheduled wiring from local nba-capture-20261009 candidate; release with all gates, then observe two real days of four-slot captures. Details: PRODUCT-IMPLEMENTATION.md. No NHL/MLB expansion.",
       "doneWhen": "Two days of four-slot captures with zero late boards/contradictions and zero metered other-sport calls.",
-      "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
+      "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06. October 9: offline saved-board checks identify 49 exact pairs, 127 unverified pairs with prices omitted, and 3 over-second order contradictions; order is never side proof. Candidate is not released; no scheduled capture observation is claimed."
     },
     {
       "id": "P37",
@@ -628,9 +628,9 @@
       "title": "NBA Today and guarded opening-night Trial",
       "status": "ready",
       "owner": "agent",
-      "next": "After the held site/card release clears, build NBA Today from free ESPN data for an October 16 live target, then prepare the guarded NBA Trial card and first-post review for opening night.",
+      "next": "Prerequisites verified live. Release NBA capture, then lazy Today by Oct 16; Trial/card review by Oct 18. Keep opening-night, price/role/edge, separate-record and two-hour veto gates. Details: PRODUCT-IMPLEMENTATION.md.",
       "doneWhen": "Before Oct 20, NBA Today has scores, projections, trends and Prep List at 375/1440. Trial has fresh two-sided prices, holds, ≥6-point raw edge and ≥0.56 chance until calibrated, a 1u/one-per-day cap, separate record and first-card review.",
-      "evidence": "Owner-delegated decision 35 dated 2026-10-08. Daily NBA launch-readiness automation and dated milestones are in codex-status.md; no NBA code or public Trial has shipped."
+      "evidence": "Owner decision 35, Oct 8. Today/calendar 6dc3ebca/37795541437 and Ticket guard 7052dbe6/37808251104 verified. Oct 9: local NBA parser/capture/extractor candidate only; no NBA release/post or prospective capture day. Daily receipts in codex-status.md; full candidate scope in PRODUCT-IMPLEMENTATION.md."
     },
     {
       "id": "P71",

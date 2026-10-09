@@ -1127,3 +1127,42 @@ Lotto no longer appears under WSU–Utah State or any other individual matchup. 
 `No official bet in this game` while retaining its matchup lines and season trends. No pick, result, historical
 post or append-only record changed. The Best bets headline before and after remains **35–36 (one void), −5.11u at
 posted prices**.
+
+### October 9 NBA foundation candidate — local only, not released
+
+Item 35/P70's preceding Today/calendar and Kitchen Ticket release gates are clear
+in the October 8 receipts above. The October 9 daily NBA task built an isolated
+candidate on current origin/main in `/Users/keen/Projects/sports-nba-dev`, branch
+`nba-capture-20261009`. Updating `sports-dev` encountered old shared football-code
+conflicts; that rebase was aborted, preserving its unreleased Comfort Food work.
+No production edit, feed call, model call, post or release was made.
+
+The NBA-only `espn_props.py` verifies sides by same-read labeled milestone prices,
+checks the .99–1.15 pair band, and omits both prices on every unverified line. The
+saved Finals fixture proves 49 exact pairs, 127 ambiguous pairs and three cases
+where the over is the second item; array order is never used as proof. The capture
+function drops incomplete/late boards, uses its own clock after all pages, caps
+at 30 boards/three pages/150 seconds with 0.5-second spacing, stops on three
+consecutive errors, and appends changed rows with ledger-prefix verification.
+It is not scheduled or enabled. `sport_box.py` extracts real NBA final player
+stats by provider keys, retains season/stage, leaves DNP stats empty, and derives
+combined stats only from known components. It has no enabled box writer yet.
+
+P36, P38 and P70 remain open. Next: NBA-only registry, injury/box append-only writers,
+Mac four-slot capture and hosted schedule-only box wiring; all release gates and
+two real observation days. Then lazy NBA Today for the October 16 live target,
+with last-season charts explicitly labeled and current-season trend/Prep List
+holds. Trial readiness target is October 18; no first post before opening night,
+a real sample/card checks/phone preview and the full two-hour veto. Keep the
+1u/one-straight-per-day cap, fresh two-sided price and role holds, raw six-point
+edge/0.56 chance until calibration then item-33 four-point floor, separate Trial
+record and verified 30-graded pause/promotion evidence. NHL/MLB and card retention
+are unchanged. Offline fixtures are not prospective capture days or live readiness.
+
+Candidate validation: 23 new NBA/free-source tests pass. Both suites passed from
+a clean Git-visible export: 1,249 Python tests (two skipped), 230 frontend tests.
+The queue's 240-character action bound initially caught long continuation text;
+it was shortened without changing completion gates, and final clean-export
+validation passed. This is candidate validation only: build, budget, record audit,
+publication guard, assets, rehearsal, lock-held promotion, hosted success and
+live 375/1440 checks remain required before a code release.
