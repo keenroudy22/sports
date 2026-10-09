@@ -62,4 +62,24 @@ class NBAEvidenceTests(unittest.TestCase):
   import market_lab
   self.assertEqual(market_lab.LEAGUES,('MLB','NHL'))
 
+class NBAPrepRoleTests(unittest.TestCase):
+ def test_current_team_and_extreme_main_price_holds(self):
+  with tempfile.TemporaryDirectory() as folder:
+   root=Path(folder);moment=datetime(2026,11,20,14,tzinfo=timezone.utc)
+   g=game();g.update(id='NBA-1',seasonType='regular-season',kickoff='2026-11-20T23:00:00Z',teams={'home':{'id':'2'},'away':{'id':'3'}},scores={'home':None,'away':None})
+   (root/'slate.json').write_text(json.dumps({'retrievedAt':boxscores.stamp(moment),'games':[g]}))
+   (root/'injuries-current.json').write_text(json.dumps({'retrievedAt':boxscores.stamp(moment),'rows':[]}))
+   row={'eventId':'1','athleteId':'1','stat':'pts','kind':'main','line':14.5,'over':-110,'under':-115,'book':'DraftKings','season':2027,'sideVerified':True,'retrievedAt':boxscores.stamp(moment),'kickoff':g['kickoff']}
+   nba_capture.append_changed([row],root/'props',lambda r:r['athleteId'])
+   boxes=[{'eventId':str(i),'season':2027,'seasonType':2,'kickoff':f'2026-11-{10+i:02d}T00:00:00Z','players':[{'id':'1','name':'Fixture Player','team':'2','dnp':False,'stats':{'pts':20,'min':30}}]} for i in range(5)]
+   class Model:
+    def predict(self,*a):return {'margin':0,'total':220}
+   build=lambda:nba_today.build(moment,root=root,boxes=boxes,model_factory=lambda *a:Model())
+   self.assertEqual(len(build()['prep']),1)
+   boxes[0]['players'][0]['team']='1';boxes[1]['players'][0]['team']='1'
+   self.assertEqual(build()['prep'],[])
+   for b in boxes:b['players'][0]['team']='2'
+   nba_capture.append_changed([{**row,'over':-800,'under':800}],root/'props',lambda r:r['athleteId'])
+   self.assertEqual(build()['prep'],[])
+
 if __name__=='__main__':unittest.main()

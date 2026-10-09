@@ -98,16 +98,22 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
     scheduled={str(g['providerId']):g for g in games if g['status']=='scheduled' and g['seasonType']=='regular-season'}
     for row in props.values():
         history=logs.get((season,row['athleteId']),[])
+        if history:
+            current_team=history[-1]['team']
+            game=scheduled.get(row['eventId'],{})
+            if current_team not in {t.get('id') for t in game.get('teams',{}).values()}:continue
+            history=[h for h in history if h['team']==current_team]
         if (row['eventId'] not in scheduled or row['athleteId'] in holds or not row.get('sideVerified')
                 or not fresh(row.get('retrievedAt'),now) or not fresh(injury_snapshot.get('retrievedAt'),now)
-                or len(history)<5 or row['stat'] not in FLOORS or row['line']<FLOORS[row['stat']]): continue
+                or len(history)<5 or row['stat'] not in FLOORS or math.floor(row['line'])+1<FLOORS[row['stat']]
+                or abs(row.get('over',0))>400 or abs(row.get('under',0))>400): continue
         recent=history[-5:];stat=row['stat']
         if any(stat not in r['stats'] or 'min' not in r['stats'] for r in recent): continue
         hits=sum(r['stats'][stat]>row['line'] for r in recent)
         minutes=[r['stats']['min'] for r in recent]
         if hits<4 or any(r['stats'][stat]<=row['line'] for r in recent[-3:]) or min(minutes[-3:]) < .7*sum(minutes)/5: continue
         if not boxscores.instant(row['kickoff'])>now: continue
-        prep.append({'name':recent[-1]['name'],'stat':stat,'line':row['line'],'over':row['over'],
+        prep.append({'name':recent[-1]['name'],'stat':stat,'statName':STAT_NAMES[stat],'line':row['line'],'over':row['over'],
                      'book':row['book'],'hits':hits,'games':5,'label':'Research','kickoff':row['kickoff']})
     trial_rows=[r for p in nba_trial.STORE.glob('*.jsonl') for r in boxscores.read_store(p)]
     trial_record=nba_trial.snapshot(trial_rows)
