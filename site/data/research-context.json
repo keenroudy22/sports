@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-09T01:22:05Z",
+  "updatedAt": "2026-10-09T02:15:05Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-09T01:00Z",
+              "reportedAt": "2026-10-09T02:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2077,6 +2077,15 @@
           "name": "Denver Broncos",
           "players": [
             {
+              "id": "5216101",
+              "name": "Dondrea Tillman",
+              "position": "LB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-09T01:10Z",
+              "source": "https://www.espn.com/nfl/player/_/id/5216101/dondrea-tillman"
+            },
+            {
               "id": "4382401",
               "name": "Riley Moss",
               "position": "CB",
@@ -2084,15 +2093,6 @@
               "injury": "Ribs",
               "reportedAt": "2026-10-08T23:41Z",
               "source": "https://www.espn.com/nfl/player/_/id/4382401/riley-moss"
-            },
-            {
-              "id": "5216101",
-              "name": "Dondrea Tillman",
-              "position": "LB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-08T23:12Z",
-              "source": "https://www.espn.com/nfl/player/_/id/5216101/dondrea-tillman"
             },
             {
               "id": "3911853",
@@ -4607,6 +4607,15 @@
           "name": "Minnesota Vikings",
           "players": [
             {
+              "id": "4799994",
+              "name": "Brett Thorson",
+              "position": "P",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-09T01:10Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4799994/brett-thorson"
+            },
+            {
               "id": "3123954",
               "name": "Brian O'Neill",
               "position": "OT",
@@ -4623,15 +4632,6 @@
               "injury": "Concussion",
               "reportedAt": "2026-10-09T00:55Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361985/christian-darrisaw"
-            },
-            {
-              "id": "4799994",
-              "name": "Brett Thorson",
-              "position": "P",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-08T22:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4799994/brett-thorson"
             },
             {
               "id": "4429205",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "33",
-          "name": "Ronnie Stanley",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-08T20:41:14Z",
-          "source": "https://www.espn.com/nfl/player/_/id/2980153/ronnie-stanley"
-        },
-        {
-          "teamId": "33",
           "name": "Kyle Hamilton",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-09T01:16:34Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-09T02:15:05Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-09T01:22:05Z",
-      "lastAttemptAt": "2026-10-09T01:22:05Z",
+      "checkedAt": "2026-10-09T02:15:05Z",
+      "lastAttemptAt": "2026-10-09T02:15:05Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-09T01:22:05Z",
-      "lastAttemptAt": "2026-10-09T01:22:05Z",
+      "checkedAt": "2026-10-09T02:15:05Z",
+      "lastAttemptAt": "2026-10-09T02:15:05Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
