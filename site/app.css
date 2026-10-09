@@ -598,6 +598,12 @@ details.filters > .toolbar { margin-top: 4px; }
 .kt-rest .kt-head { font-size: 26px; } .kt-rest .grid.two { gap: 10px; } .kt-rest .projs { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
 .kt-nfl-now { margin-top: 26px; }
 .kt-nfl-now .projs { grid-template-columns: minmax(0, 1fr); }
+.kt-next-days { display: grid; gap: 8px; margin-top: 12px; }
+.kt-next-day { display: grid; gap: 3px; min-width: 0; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--felt); color: var(--chalk); }
+.kt-next-day:hover { border-color: var(--line-strong); text-decoration: none; }
+.kt-next-day b { font: 700 21px/1 var(--font-display); }
+.kt-next-day span { color: var(--kookd); font: 600 14px/1.25 var(--font-body); }
+.kt-next-day small { color: var(--dim); font: 500 13px/1.35 var(--font-body); }
 .kt-bets .kt-head { margin-bottom: 6px; }
 .kt-stubl { display: grid; gap: 3px; min-width: 0; }
 .kt-cd { font: 500 14px/1.25 var(--font-body); color: var(--ink-soft); }

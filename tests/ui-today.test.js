@@ -188,7 +188,7 @@ test('an NFL game today stays prominent even with no official play and a later b
   assert.doesNotMatch(spot, /href="#game\/CFB-2"/, 'other games remain in the full games section');
   assert.equal((page.match(/class="proj[^"]*" href="#game\/NFL-1"/g) || []).length, 1, 'the spotlighted game appears only once on Today');
   assert.match(page, /<h2 class="kt-head" id="games-h">Other games today<\/h2>/, 'remaining games have their own heading');
-  assert.match(page, /<h2 class="kt-head" id="bets-h">Upcoming best bets<\/h2>/, 'future tickets are clearly labeled');
+  assert.match(page, /<h2 class="kt-head" id="upcoming-bets-h">Upcoming best bets<\/h2>/, 'future tickets are clearly labeled');
   const cfb = await loadApp('#today?sport=CFB', {}, { today: { ...TODAY, picks: future, games } }).api.views.today({ view: 'today', league: 'CFB' });
   assert.doesNotMatch(cfb, /kt-nfl-now/, 'saved college-only view does not leak the NFL card');
 });
@@ -331,8 +331,32 @@ test('a saved league filter does not flash a future bet as today while the game-
   await settle();
   assert.match(next.view.innerHTML, /<h1>Nothing cleared my bar today\.<\/h1>/);
   assert.match(next.view.innerHTML, /Upcoming best bets[\s\S]*Monday Visitors at Hosts under 54\.5/);
-  assert.match(next.view.innerHTML, /NFL only · <a href="#today\?sport=ALL">See all sports ›<\/a>/);
+  assert.doesNotMatch(next.view.innerHTML, /NFL only/, 'bare Today resets a stale saved NFL-only filter');
   assert.doesNotMatch(next.view.innerHTML, /Fixture State/);
+});
+
+test('bare Today starts with all football; a sport URL stays an explicit choice', async () => {
+  const all = loadApp('#today', {}, { stored: { 'kr:league': 'NFL' } });
+  all.api.render();
+  await settle();
+  assert.match(all.view.innerHTML, /Two for today/, 'college is not hidden by yesterday’s NFL filter');
+  assert.doesNotMatch(all.view.innerHTML, /NFL only/);
+  const nfl = loadApp('#today?sport=NFL', {}, { stored: { 'kr:league': 'CFB' } });
+  nfl.api.render();
+  await settle();
+  assert.match(nfl.view.innerHTML, /NFL only · <a href="#today\?sport=ALL">See all sports ›<\/a>/);
+  assert.doesNotMatch(nfl.view.innerHTML, /Fixture State at Example Tech/);
+});
+
+test('Sunday football appears before a Monday-only NFL ticket', async () => {
+  const sunday = { ...GAMES[0], id: 'NFL-SUNDAY', kickoff: '2026-10-11T17:00:00Z' };
+  const monday = { ...GAMES[0], id: 'NFL-MONDAY', kickoff: '2026-10-13T00:15:00Z' };
+  const bills = { ...laterOpen, league: 'NFL', gameId: 'NFL-MONDAY', kickoff: monday.kickoff, displayTitle: 'Bills at Rams under 54.5' };
+  const page = await loadApp('#today?sport=NFL', {}, { today: { ...TODAY, picks: [bills], games: [sunday, monday] } }).api.views.today({ view: 'today', league: 'NFL' });
+  assert.ok(page.indexOf('kt-next"') < page.indexOf('kt-bets"'), 'the near slate comes before the later bet');
+  assert.match(page, /Next football[\s\S]*Sunday, Oct 11[\s\S]*1 NFL game/);
+  assert.doesNotMatch(page.slice(page.indexOf('kt-next"'), page.indexOf('kt-bets"')), /Monday, Oct 12/, 'the bet day is not repeated as earlier football');
+  assert.match(page, /Upcoming best bets[\s\S]*Bills at Rams under 54\.5/);
 });
 
 test('with nothing on the card the rail does not reveal desk timing', async () => {

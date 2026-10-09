@@ -1102,14 +1102,15 @@
   /* The top of Today, the same on the first paint and the full card, so nothing moves when today.json lands: the
      chef's line with the last game day's W-L, the first ticket on the rail, the Climb stub (inside the first screen
      at 375 x 812, DIRECTION-RULES section 5 as updated by decision 10), then the rest of the rail. */
-  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', spotlight = '', nothingCleared = false }) => {
+  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', spotlight = '', nextSlate = '', nothingCleared = false }) => {
     const title = nothingCleared && !rows.length ? 'Nothing cleared my bar today.' : ledeTitle(rows, today), first = rows[0];
     const photo = first && first.athleteId && !C.isParlay(first) && HEADSHOT[first.league || String(first.gameId || '').split('-')[0]];
     const size = photo ? ledeSize(title) : null;
     return `<section class="kt-lede${photo ? ' with-photo' : ''}"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1${size ? ` style="font-size:${size}px"` : ''}>${esc(title)}</h1>${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
       ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards }) : emptyRail(nothingCleared ? "No best bet today. Tonight's games are below." : 'Nothing on the rail yet. Check back before kickoff.')}
-      ${climbStub(climb, past)}${proof}${spotlight}${rows.length > 1 || more.length || later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">${rows.length ? 'More best bets' : 'Upcoming best bets'}</h2>
-      ${rail([...more, ...rows.slice(1), ...later], { season, lines, cards, more: true, label: 'More best bets' })}</section>` : ''}`;
+      ${climbStub(climb, past)}${proof}${spotlight}${rows.length > 1 || more.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
+      ${rail([...more, ...rows.slice(1)], { season, lines, cards, more: true, label: 'More best bets' })}</section>` : ''}${nextSlate}${later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="upcoming-bets-h"><h2 class="kt-head" id="upcoming-bets-h">Upcoming best bets</h2>
+      ${rail(later, { season, lines, cards, more: true, label: 'Upcoming best bets' })}</section>` : ''}`;
   };
   const firstPaint = (hero, now = Date.now()) => {
     const { today, rows } = heroBets(hero, now, state.league);
@@ -1177,6 +1178,22 @@
       open: ladder.open && { step: (ladder.open.ladder || {}).step }, settled: ladder.history.length, saved: ladder.saved, net: ladder.accounting.net,
       last: ladder.history.length ? { result: ladder.history[ladder.history.length - 1].result, step: (ladder.history[ladder.history.length - 1].ladder || {}).step } : null };
     const games = (today.games || []).filter(inLeague);
+    /* Show the nearer football slate before a later posted ticket. A saved NFL-only filter must not make
+       Monday's ticket look like the next thing happening when Sunday has a full schedule. */
+    const futureGames = games.filter(g => !g.completed && C.dayOf(g.kickoff) > etDay()).sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
+    const futureDays = [...new Set(futureGames.map(g => C.dayOf(g.kickoff)))].sort();
+    const firstLaterDay = rest.map(p => C.dayOf(p.kickoff)).filter(Boolean).sort()[0];
+    const beforeBet = firstLaterDay ? futureDays.filter(day => day < firstLaterDay) : [];
+    const nextDays = (beforeBet.length ? beforeBet : futureDays).slice(0, 2);
+    const nextSlate = nextDays.length ? ktSec('next', 'Next football', `<div class="kt-next-days">${nextDays.map(day => {
+      const dayGames = futureGames.filter(g => C.dayOf(g.kickoff) === day);
+      const counts = [['CFB', 'college'], ['NFL', 'NFL']].map(([lg, label]) => {
+        const n = dayGames.filter(g => g.league === lg).length;
+        return n ? `${n} ${label} game${n === 1 ? '' : 's'}` : '';
+      }).filter(Boolean).join(' · ');
+      const sample = dayGames.slice(0, 2).map(g => `${g.away.name} at ${g.home.name}`).join(' · ');
+      return `<a class="kt-next-day" href="#games"><b>${esc(C.dayLabel(day + 'T12:00:00Z'))}</b><span>${esc(counts)}</span><small>${esc(sample)}</small></a>`;
+    }).join('')}</div>`, { kind: 'Schedules and projections · not picks', link: ktLink('#games', 'See all games') }) : '';
     const graded = picks.filter(p => p.result && !p.historicalImport && !C.isParlay(p) && C.dayOf(p.kickoff));
     const lastDay = graded.map(p => C.dayOf(p.kickoff)).filter(d => d < etDay()).sort().pop();
     const recent = graded.filter(p => C.dayOf(p.kickoff) === lastDay || C.dayOf(p.kickoff) === etDay());
@@ -1233,7 +1250,7 @@
       && (etHour(today.generatedAt) > 9 || etHour(today.generatedAt) === 9
           && Number(ET_PARTS(today.generatedAt, { minute: '2-digit' })) >= 30);
     return `<div class="kt-today"><div>${todayTop({ rows, today: Boolean(todays.length), last: (today.lastSlate || {})[state.league], season: (today.season || {})[state.league],
-      climb, lines: lines && lines.lines, more: rungHere, past: ladder.history, later: rest, cards, proof, spotlight: nflSpotlight,
+      climb, lines: lines && lines.lines, more: rungHere, past: ladder.history, later: rest, cards, proof, spotlight: nflSpotlight, nextSlate,
       nothingCleared: Boolean(evaluated && !todays.length && !rows.length && todayGames.length) })}</div>
       <div>${rest2}</div></div>`;
   };
@@ -1960,6 +1977,8 @@
     if (route.legacy && route.ctx) applyContext(route);
     const next = canonical(route);
     if (next && next !== location.hash) { try { history.replaceState(null, '', next); } catch (_) { /* rate limited */ } route = resolve(next); }
+    /* The bare Today tab is the whole football day. A sport-specific Today remains an explicit URL choice. */
+    if (route.view === 'today' && location.hash !== appliedHash) { appliedHash = location.hash; setLeague(route.league || 'ALL'); }
     chrome(route);
     const view = $('#view');
     const focusKey = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.input : null;
@@ -2010,7 +2029,7 @@
     if (route.view === 'games') return `#games${route.tab && route.tab !== 'upcoming' ? '/' + route.tab : ''}${state.league !== 'ALL' ? '?sport=' + state.league : ''}`;
     if (route.view === 'game' || route.view === 'team') return '#games';
     if (route.view === 'player') return '#research/players';
-    if (route.view === 'today' && route.league) return '#today';
+    if (route.view === 'today') return state.league === 'ALL' ? '#today' : `#today?sport=${state.league}`;
     if (route.view === 'research' && (route.league || route.game)) return `#research/${route.mode}`;
     if (route.view === 'vegas' && route.league) return '#vegas';
     return null;
