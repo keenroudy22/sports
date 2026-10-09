@@ -1200,10 +1200,12 @@
     const liveToday = withLive(games.filter(g => C.dayOf(g.kickoff) === etDay() || (!g.completed && (g.state === 'in' || C.dayOf(g.kickoff) === etDay(-1)))));
     const todayGames = liveToday.games.filter(g => C.dayOf(g.kickoff) === etDay() || g.state === 'in');
     const rank = g => g.state === 'in' ? 0 : !g.completed ? 1 : 2;
-    const shown = todayGames.slice().sort((a, b) => rank(a) - rank(b) || String(a.kickoff).localeCompare(String(b.kickoff))).slice(0, 6);
     /* A game without an official play still belongs on Today. Put today's NFL matchup immediately after the
-       first ticket and Climb, ahead of future-day bets and research; retain it in the full games section too. */
+       first ticket and Climb, ahead of future-day bets and research. Do not show it again in the games list. */
     const nflNow = todayGames.filter(g => g.league === 'NFL').sort((a, b) => rank(a) - rank(b) || String(a.kickoff).localeCompare(String(b.kickoff))).slice(0, 2);
+    const spotlightIds = new Set(nflNow.map(g => g.id));
+    const otherGames = todayGames.filter(g => !spotlightIds.has(g.id));
+    const shown = otherGames.slice().sort((a, b) => rank(a) - rank(b) || String(a.kickoff).localeCompare(String(b.kickoff))).slice(0, 6);
     const nflSpotlight = nflNow.length ? ktSec('nfl-now', nflNow.some(g => etHour(g.kickoff) >= 17) ? "Tonight's NFL" : "Today's NFL",
       `<div class="projs">${nflNow.map(g => projCard(g, { ranks: false })).join('')}</div>`,
       { kind: 'Matchup and lines · not a best bet', link: ktLink('#games', 'All games today') }) : '';
@@ -1219,8 +1221,8 @@
       ktSec('upsets', 'Underdog watch', upsetHtml, { tape: true, kind: 'Upset research, not best bets' }),
       ktSec('worth', 'Research worth a look', worth.length ? `<div class="board">${worth.map(vm => boardRow(vm, false)).join('')}</div>` : '<p class="kt-blank">Nothing on the board clears our price check right now.</p>',
         { tape: true, kind: 'Not best bets', link: ktLink('#research/lines', 'See every line') }),
-      ktSec('games', "Today's games", shown.length ? `${liveStamp(liveToday.refreshed)}<div class="projs">${shown.map(g => projCard(g, { ranks: false })).join('')}</div>` : '<p class="kt-blank">No covered football games today.</p>',
-        { link: ktLink(todayGames.length > shown.length ? '#games' : '#games/live', todayGames.length > shown.length ? `All ${todayGames.length} games today` : 'Live scores') }),
+      shown.length ? ktSec('games', nflNow.length ? 'Other games today' : "Today's games", `${liveStamp(liveToday.refreshed)}<div class="projs">${shown.map(g => projCard(g, { ranks: false })).join('')}</div>`,
+        { link: ktLink(otherGames.length > shown.length ? '#games' : '#games/live', otherGames.length > shown.length ? `All ${todayGames.length} games today` : 'Live scores') }) : '',
       fun.length ? ktSec('fun', 'Fun tickets', slips(fun), { kind: 'Smaller stake, apart from best bets' }) : '',
       gone.length ? ktSec('pulled', `Pulled before kickoff · ${gone.length}`, slips(gone), { kind: 'Pulled over news; each still counts' }) : '',
       off.length ? ktSec('off-card', `Off the card · ${off.length}`, slips(off), { kind: 'The line moved; each still counts at the price we posted' }) : '',

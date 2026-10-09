@@ -186,6 +186,8 @@ test('an NFL game today stays prominent even with no official play and a later b
   assert.match(spot, /Total 50\.1[\s\S]*48\.5/, 'the spotlight has the projection and book line');
   assert.match(spot, /Matchup and lines · not a best bet/);
   assert.doesNotMatch(spot, /href="#game\/CFB-2"/, 'other games remain in the full games section');
+  assert.equal((page.match(/class="proj[^"]*" href="#game\/NFL-1"/g) || []).length, 1, 'the spotlighted game appears only once on Today');
+  assert.match(page, /<h2 class="kt-head" id="games-h">Other games today<\/h2>/, 'remaining games have their own heading');
   assert.match(page, /<h2 class="kt-head" id="bets-h">Upcoming best bets<\/h2>/, 'future tickets are clearly labeled');
   const cfb = await loadApp('#today?sport=CFB', {}, { today: { ...TODAY, picks: future, games } }).api.views.today({ view: 'today', league: 'CFB' });
   assert.doesNotMatch(cfb, /kt-nfl-now/, 'saved college-only view does not leak the NFL card');
@@ -668,13 +670,17 @@ test('the Prep List rolls to the next game day once the first day\'s rows have k
 test('Today\'s games show live scores and our projected score, with the free scoreboard refresh stamp', async () => {
   const page = await loadApp('#record').api.views.today({ view: 'today' });
   const sec = page.slice(page.indexOf('kt-games"'), page.indexOf('kt-off-card"'));
-  assert.match(sec, /<h2 class="kt-head" id="games-h">Today&#39;s games<\/h2>|<h2 class="kt-head" id="games-h">Today's games<\/h2>/);
-  assert.match(sec, /class="proj[^"]*" href="#game\/NFL-1"[\s\S]*class="proj[^"]*" href="#game\/CFB-2"/, 'every covered game today, earliest first');
+  assert.match(sec, /<h2 class="kt-head" id="games-h">Other games today<\/h2>/);
+  assert.match(sec, /class="proj[^"]*" href="#game\/CFB-2"/, 'other covered games stay visible');
+  assert.doesNotMatch(sec, /class="proj[^"]*" href="#game\/NFL-1"/, 'the NFL spotlight is not repeated');
   assert.match(sec, /live-stamp/);
   const live = { ...GAMES[0], state: 'in', status: '2nd 4:12', v2: { away: 23.1, home: 20.4, total: 43.5 }, away: { ...GAMES[0].away, score: 7 }, home: { ...GAMES[0].home, score: 3 } };
   const page2 = await loadApp('#record', {}, { today: { ...TODAY, games: [live, GAMES[1]] } }).api.views.today({ view: 'today' });
-  const sec2 = page2.slice(page2.indexOf('kt-games"'), page2.indexOf('kt-off-card"'));
-  assert.match(sec2, /Live<\/small><b class="num">7<i> – <\/i>3<\/b><span>We had 23–20<\/span>/, 'the score and our projected score');
+  const spot = page2.slice(page2.indexOf('kt-nfl-now"'), page2.indexOf('kt-games"'));
+  assert.match(spot, /Live<\/small><b class="num">7<i> – <\/i>3<\/b><span>We had 23–20<\/span>/, 'the spotlight keeps the live score and projected score');
+  const nflOnly = await loadApp('#record', {}, { today: { ...TODAY, games: [live] } }).api.views.today({ view: 'today' });
+  assert.match(nflOnly, /kt-nfl-now"/);
+  assert.doesNotMatch(nflOnly, /kt-games"/, 'an NFL-only day has no duplicate games section');
 });
 
 test('Fun tickets and Pulled before kickoff are visible sections when they have plays, and absent when empty', async () => {
