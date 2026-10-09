@@ -2274,19 +2274,25 @@
   {
    "id": "CFB-2026-W6-iowa-wash-over-41-5-dk",
    "postedAt": "2026-10-09T10:45:05Z",
-   "dueAt": "2026-10-09T13:30:00Z",
-   "bufferPostId": "6ac8c9703cdd14dcd26b029b",
-   "textHash": "bffba8f2223a2e2b",
+   "dueAt": "2026-10-09T13:40:00Z",
+   "bufferPostId": "6ac8e779a831a551439d34ee",
+   "textHash": "1774004088201a25",
    "kind": "buffer:play",
    "card": true,
    "cardTheme": "ticket",
    "discord": {
     "state": "pending",
-    "text": "Iowa/Washington over 41.5 (-110, DraftKings)\nI have it at 47.\n\n❤️ if you're tailing\n#CFB",
-    "readyAt": "2026-10-09T13:15:00Z",
+    "text": "Iowa/Washington over 41.5 (-110, DraftKings)\nNow 41.5 (-105, DraftKings)\nI have it at 47.\n\n❤️ if you're tailing\n#CFB",
+    "readyAt": "2026-10-09T13:25:00Z",
     "image": "https://keenroudy.com/sports/data/cards/CFB-2026-W6-iowa-wash-over-41-5-dk.png"
    },
-   "reasonKind": "none"
+   "reasonKind": "none",
+   "precheck": {
+    "at": "2026-10-09T13:08:29Z",
+    "result": "clear",
+    "facts": 3
+   },
+   "requotedAt": "2026-10-09T13:08:29Z"
   },
   {
    "id": "CFB-2026-W6-longshot-1009-fd",
@@ -2303,7 +2309,13 @@
     "readyAt": "2026-10-09T13:25:00Z",
     "image": "https://keenroudy.com/sports/data/cards/CFB-2026-W6-longshot-1009-fd.png"
    },
-   "reasonKind": "none"
+   "reasonKind": "none",
+   "precheck": {
+    "at": "2026-10-09T13:08:29Z",
+    "result": "closed",
+    "reason": "its Bear Bachmeier under 41.5 rushing yards leg: the evidence argues against it: The fact that the player is slated for a heavier rushing workload directly contradicts the pick for under rushing yards."
+   },
+   "cancelledAt": "2026-10-09T13:08:29Z"
   },
   {
    "id": "research:prep:2026-10-09",
