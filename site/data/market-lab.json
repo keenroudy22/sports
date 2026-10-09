@@ -23,9 +23,9 @@
    "totalSnapshots": 76
   },
   "NHL": {
-   "gamesGraded": 51,
+   "gamesGraded": 59,
    "gamesQuoted": 65,
-   "moneylineSnapshots": 253,
+   "moneylineSnapshots": 254,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,226 @@
      "season": 2027
     },
     {
-     "gamesGraded": 12,
+     "gamesGraded": 20,
      "gamesQuoted": 24,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 253,
+   "snapshots": 254,
    "status": "capturing",
-   "totalSnapshots": 253
+   "totalSnapshots": 254
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "SJ",
+    "id": "18",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/sj.png",
+    "name": "San Jose Sharks",
+    "shortName": "Sharks"
+   },
+   "awayScore": 3,
+   "gameId": "NHL-401891825",
+   "gradedAt": "2026-10-09T03:30:05Z",
+   "home": {
+    "abbreviation": "STL",
+    "id": "19",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/stl.png",
+    "name": "St. Louis Blues",
+    "shortName": "Blues"
+   },
+   "homeScore": 2,
+   "kickoff": "2026-10-09T00:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final/OT",
+   "type": "grade"
+  },
+  {
+   "away": {
+    "abbreviation": "CHI",
+    "id": "4",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/chi.png",
+    "name": "Chicago Blackhawks",
+    "shortName": "Blackhawks"
+   },
+   "awayScore": 1,
+   "gameId": "NHL-401892462",
+   "gradedAt": "2026-10-09T03:30:05Z",
+   "home": {
+    "abbreviation": "NYI",
+    "id": "12",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nyi.png",
+    "name": "New York Islanders",
+    "shortName": "Islanders"
+   },
+   "homeScore": 4,
+   "kickoff": "2026-10-08T23:30:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
+  {
+   "away": {
+    "abbreviation": "PHI",
+    "id": "15",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/phi.png",
+    "name": "Philadelphia Flyers",
+    "shortName": "Flyers"
+   },
+   "awayScore": 1,
+   "gameId": "NHL-401891820",
+   "gradedAt": "2026-10-09T03:30:05Z",
+   "home": {
+    "abbreviation": "OTT",
+    "id": "14",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/ott.png",
+    "name": "Ottawa Senators",
+    "shortName": "Senators"
+   },
+   "homeScore": 2,
+   "kickoff": "2026-10-08T23:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
+  {
+   "away": {
+    "abbreviation": "UTA",
+    "id": "129764",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/uta.png",
+    "name": "Utah Mammoth",
+    "shortName": "Mammoth"
+   },
+   "awayScore": 1,
+   "gameId": "NHL-401892457",
+   "gradedAt": "2026-10-09T03:30:05Z",
+   "home": {
+    "abbreviation": "BOS",
+    "id": "1",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/bos.png",
+    "name": "Boston Bruins",
+    "shortName": "Bruins"
+   },
+   "homeScore": 6,
+   "kickoff": "2026-10-08T23:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
+  {
+   "away": {
+    "abbreviation": "DAL",
+    "id": "9",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/dal.png",
+    "name": "Dallas Stars",
+    "shortName": "Stars"
+   },
+   "awayScore": 4,
+   "gameId": "NHL-401892458",
+   "gradedAt": "2026-10-09T03:30:05Z",
+   "home": {
+    "abbreviation": "BUF",
+    "id": "2",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/buf.png",
+    "name": "Buffalo Sabres",
+    "shortName": "Sabres"
+   },
+   "homeScore": 0,
+   "kickoff": "2026-10-08T23:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
+  {
+   "away": {
+    "abbreviation": "NSH",
+    "id": "27",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nsh.png",
+    "name": "Nashville Predators",
+    "shortName": "Predators"
+   },
+   "awayScore": 5,
+   "gameId": "NHL-401892459",
+   "gradedAt": "2026-10-09T03:30:05Z",
+   "home": {
+    "abbreviation": "MTL",
+    "id": "10",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/mtl.png",
+    "name": "Montreal Canadiens",
+    "shortName": "Canadiens"
+   },
+   "homeScore": 2,
+   "kickoff": "2026-10-08T23:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
+  {
+   "away": {
+    "abbreviation": "MIN",
+    "id": "30",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/min.png",
+    "name": "Minnesota Wild",
+    "shortName": "Wild"
+   },
+   "awayScore": 2,
+   "gameId": "NHL-401892460",
+   "gradedAt": "2026-10-09T03:30:05Z",
+   "home": {
+    "abbreviation": "TB",
+    "id": "20",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/tb.png",
+    "name": "Tampa Bay Lightning",
+    "shortName": "Lightning"
+   },
+   "homeScore": 3,
+   "kickoff": "2026-10-08T23:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
+  {
+   "away": {
+    "abbreviation": "VAN",
+    "id": "22",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/van.png",
+    "name": "Vancouver Canucks",
+    "shortName": "Canucks"
+   },
+   "awayScore": 2,
+   "gameId": "NHL-401892461",
+   "gradedAt": "2026-10-09T03:30:05Z",
+   "home": {
+    "abbreviation": "CAR",
+    "id": "7",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/car.png",
+    "name": "Carolina Hurricanes",
+    "shortName": "Hurricanes"
+   },
+   "homeScore": 7,
+   "kickoff": "2026-10-08T23:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "MIL",
@@ -1815,5 +2023,5 @@
    "type": "grade"
   }
  ],
- "updatedAt": "2026-10-09T02:34:54Z"
+ "updatedAt": "2026-10-09T03:30:05Z"
 }
