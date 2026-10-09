@@ -105,7 +105,7 @@ test('the Climb status words still come from one function', () => {
   assert.equal(M.climbWords({ step: 1, settled: 0 }), 'The first step waits for two clean games');
 });
 
-test('the first paint hangs today on the rail, else the next game day, never a moved or pulled play', () => {
+test('the first paint hangs only game-day bets on the rail, never future, moved or pulled plays', () => {
   const today = M.heroBets(HERO, NOW);
   assert.equal(today.today, true);
   assert.deepEqual(today.rows.map(r => r.id), [prop.id, total.id]);
@@ -115,11 +115,11 @@ test('the first paint hangs today on the rail, else the next game day, never a m
   assert.deepEqual(M.heroBets({ bets: [moved, pulled, total] }, NOW).rows.map(r => r.id), [total.id], 'off the card and pulled stay off the rail');
   const next = M.heroBets({ bets: [laterOff, laterOpen, { ...laterOpen, id: 'later-day', kickoff: '2026-10-14T00:15:00Z' }] }, NOW);
   assert.equal(next.today, false);
-  assert.deepEqual(next.rows.map(r => r.id), [laterOpen.id]);
+  assert.deepEqual(next.rows.map(r => r.id), [], 'a later best bet is not recast as a bet for today');
   assert.deepEqual(M.heroBets({ bets: [yesterday] }, NOW).rows, []);
   assert.deepEqual(M.heroBets(null, NOW).rows, []);
   const nfl = M.heroBets({ bets: [...cfbOnly.bets, mondayNfl] }, NOW, 'NFL');
-  assert.deepEqual([nfl.today, nfl.rows.map(r => r.id)], [false, [mondayNfl.id]], 'a league filter gets its own next game day');
+  assert.deepEqual([nfl.today, nfl.rows.map(r => r.id)], [false, []], 'a league filter does not make Monday a Saturday bet');
 });
 
 test('the first paint and the full card draw the same top, so nothing moves when today.json lands', async () => {
@@ -186,6 +186,7 @@ test('an NFL game today stays prominent even with no official play and a later b
   assert.match(spot, /Total 50\.1[\s\S]*48\.5/, 'the spotlight has the projection and book line');
   assert.match(spot, /Matchup and lines · not a best bet/);
   assert.doesNotMatch(spot, /href="#game\/CFB-2"/, 'other games remain in the full games section');
+  assert.match(page, /<h2 class="kt-head" id="bets-h">Upcoming best bets<\/h2>/, 'future tickets are clearly labeled');
   const cfb = await loadApp('#today?sport=CFB', {}, { today: { ...TODAY, picks: future, games } }).api.views.today({ view: 'today', league: 'CFB' });
   assert.doesNotMatch(cfb, /kt-nfl-now/, 'saved college-only view does not leak the NFL card');
 });
@@ -312,22 +313,22 @@ test('a league change repaints the hero for that league, and other sports clear 
   await settle();
 });
 
-test('a saved league filter paints its own next game day, and never an empty hero', async () => {
+test('a saved league filter does not flash a future bet as today while the game-day feed loads', async () => {
   const { api: empty } = loadApp('#today', {}, { hero: cfbOnly, stored: { 'kr:league': 'NFL' } });
   assert.equal(empty.firstPaint(cfbOnly), '');
   const withNfl = { ...cfbOnly, bets: [...cfbOnly.bets, mondayNfl] };
   let release;
   const gate = new Promise(r => { release = r; });
-  const next = loadApp('#today', { 'data/app/today.json': gate }, { hero: withNfl, stored: { 'kr:league': 'NFL' } });
+  const next = loadApp('#today', { 'data/app/today.json': gate }, { hero: withNfl, today: { ...TODAY, picks: [mondayNfl], games: GAMES }, stored: { 'kr:league': 'NFL' } });
   const pending = next.api.views.today({ view: 'today' });
   await settle();
-  assert.match(next.view.innerHTML, /<h1>One for Monday\.<\/h1>/);
-  assert.match(next.view.innerHTML, /NFL only · <a href="#today\?sport=ALL">See all sports ›<\/a>/);
-  assert.match(next.view.innerHTML, /Monday Visitors at Hosts under 54\.5/);
+  assert.doesNotMatch(next.view.innerHTML, /One for Monday|Monday Visitors at Hosts/);
   assert.doesNotMatch(next.view.innerHTML, /Fixture State/);
   release();
   await pending;
   await settle();
+  assert.match(next.view.innerHTML, /<h1>Nothing cleared my bar today\.<\/h1>/);
+  assert.match(next.view.innerHTML, /Upcoming best bets[\s\S]*Monday Visitors at Hosts under 54\.5/);
   assert.match(next.view.innerHTML, /NFL only · <a href="#today\?sport=ALL">See all sports ›<\/a>/);
   assert.doesNotMatch(next.view.innerHTML, /Fixture State/);
 });
@@ -338,6 +339,7 @@ test('with nothing on the card the rail does not reveal desk timing', async () =
   assert.match(page, /<h1>Nothing cleared my bar today\.<\/h1>/);
   assert.match(page, /class="kt-hook h1"[\s\S]*class="kt-hook h2"/);
   assert.match(page, /Nothing cleared my bar today\./);
+  assert.match(page, /No best bet today\. Tonight's games are below\./);
   assert.doesNotMatch(page, /I look again|desk run|11:45 AM/i);
   assert.doesNotMatch(page, /<article class="kt-order/, 'no blank ticket and no forced pick');
 });

@@ -99,17 +99,14 @@
     : s.last && s.last.result === 'win' ? `Step ${s.last.step || s.step - 1} cashed · Step ${s.step} not posted yet`
       : s.last && s.last.result === 'loss' ? 'New $50 climb · Step 1 not posted yet'
         : s.settled ? `Step ${s.step} not posted yet` : 'The first step waits for two clean games';
-  /* Today's first paint: today's bets on the rail (a play off the card or pulled never hangs there), else the next
-     game day's still on the card, as the full card chooses them. */
+  /* Today's first paint is for today's bets only. Future tickets stay below the game-day view. */
   const OFF_RAIL = ['Line moved', 'Pulled', 'Withdrawn'];
   const heroBets = (hero, now = Date.now(), league = 'ALL') => {
     const today = C.dayOf(new Date(now).toISOString());
     const mine = ((hero || {}).bets || []).filter(b => b && b.id && C.dayOf(b.kickoff) >= today && (league === 'ALL' || b.league === league)
       && !OFF_RAIL.includes(C.pickState(b, now).word));
     const todays = mine.filter(b => C.dayOf(b.kickoff) === today);
-    if (todays.length) return { today: true, rows: todays };
-    const first = mine.map(b => C.dayOf(b.kickoff)).sort()[0];
-    return { today: false, rows: mine.filter(b => C.dayOf(b.kickoff) === first) };
+    return { today: Boolean(todays.length), rows: todays };
   };
 
   /* ---------- Kitchen Ticket model (OWNER-DECISIONS 2026-10-07 item 22) ---------- */
@@ -1110,13 +1107,13 @@
     const photo = first && first.athleteId && !C.isParlay(first) && HEADSHOT[first.league || String(first.gameId || '').split('-')[0]];
     const size = photo ? ledeSize(title) : null;
     return `<section class="kt-lede${photo ? ' with-photo' : ''}"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1${size ? ` style="font-size:${size}px"` : ''}>${esc(title)}</h1>${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
-      ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards }) : emptyRail(nothingCleared ? 'Nothing cleared my bar today.' : 'Nothing on the rail yet. Check back before kickoff.')}
-      ${climbStub(climb, past)}${proof}${spotlight}${rows.length > 1 || more.length || later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
+      ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards }) : emptyRail(nothingCleared ? "No best bet today. Tonight's games are below." : 'Nothing on the rail yet. Check back before kickoff.')}
+      ${climbStub(climb, past)}${proof}${spotlight}${rows.length > 1 || more.length || later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">${rows.length ? 'More best bets' : 'Upcoming best bets'}</h2>
       ${rail([...more, ...rows.slice(1), ...later], { season, lines, cards, more: true, label: 'More best bets' })}</section>` : ''}`;
   };
   const firstPaint = (hero, now = Date.now()) => {
     const { today, rows } = heroBets(hero, now, state.league);
-    /* A saved league with nothing in the hero waits for the full card instead of painting an empty rail. */
+    /* Wait for the full game-day feed rather than flash a future ticket or assert an unevaluated empty rail. */
     if (!rows.length && ((hero || {}).bets || []).length) return '';
     return `<div class="hero-first kt-today" aria-busy="true"><div>${todayTop({ rows, today, last: (hero.last || {})[state.league], season: (hero.season || {})[state.league],
       climb: hero.climb })}</div><div><p class="loading muted" role="status">Loading the rest of today…</p></div></div>`;
@@ -1171,10 +1168,9 @@
     const gone = [...sched.today, ...sched.upcoming, ...sched.awaiting].filter(p => !C.isLadder(p) && pulled(p));
     const awaiting = sched.awaiting.filter(p => !C.isLadder(p) && !pulled(p));
     const fun = [...sched.today, ...sched.upcoming].filter(p => C.isParlay(p) && !C.isLadder(p) && !pulled(p));
-    /* With nothing today, the next game day's plays still on the card hang on the rail, as the first paint does. */
-    const firstDay = later.map(p => C.dayOf(p.kickoff))[0];
-    const rows = todays.length ? todays : later.filter(p => C.dayOf(p.kickoff) === firstDay);
-    const rest = later.filter(p => !rows.includes(p));
+    /* A future bet must not become today's best bet just because today's bar cleared nothing. */
+    const rows = todays;
+    const rest = later;
     const ladder = C.theLadder(all);
     const rungHere = ladder.open && (state.league === 'ALL' || ladder.open.league === state.league) ? [ladder.open] : [];
     const climb = { run: ladder.run, step: ladder.step, riding: ladder.open ? Number((ladder.open.ladder || {}).stake) || ladder.stake : ladder.stake,
