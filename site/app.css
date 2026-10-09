@@ -528,7 +528,7 @@ details.filters > .toolbar { margin-top: 4px; }
 .kt-aside a { padding: 13px 0; }
 .kt-quiet { display: inline-flex; align-items: center; min-height: var(--tap); margin-top: 6px; font: 600 14px/1 var(--font-body); }
 /* The Climb stub with the poker chip. */
-.kt-climb { margin-top: 22px; }
+.kt-climb { margin-top: 44px; }
 .kt-stub { position: relative; display: grid; grid-template-columns: 80px 1fr; margin: 0 0 0 10px; max-width: 420px; color: var(--ticket-ink); min-height: 90px; filter: drop-shadow(0 8px 8px rgba(0, 0, 0, .45)); }
 .kt-stub:hover { text-decoration: none; }
 .kt-stub::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: 4px; background: linear-gradient(var(--paper-top), var(--paper-bot));
