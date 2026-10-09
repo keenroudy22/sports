@@ -1,18 +1,18 @@
 {
- "at": "2026-10-09T12:48:05Z",
+ "at": "2026-10-09T13:19:56Z",
  "confirmed": {
   "CFB-401856712": "2026-10-09T02:35:44Z",
   "CFB-401856713": "2026-10-09T02:35:44Z",
   "CFB-401856714": "2026-10-09T11:02:27Z",
   "CFB-401856715": "2026-10-09T02:35:44Z",
-  "CFB-401856716": "2026-10-09T12:48:05Z",
+  "CFB-401856716": "2026-10-09T13:19:56Z",
   "CFB-401856717": "2026-10-09T11:02:27Z",
   "CFB-401856718": "2026-10-09T11:02:27Z",
-  "CFB-401856823": "2026-10-09T12:48:05Z",
+  "CFB-401856823": "2026-10-09T13:19:56Z",
   "CFB-401856824": "2026-10-09T11:02:27Z",
   "CFB-401856825": "2026-10-09T11:02:27Z",
-  "CFB-401856826": "2026-10-09T12:48:05Z",
-  "CFB-401858254": "2026-10-09T12:48:05Z",
+  "CFB-401856826": "2026-10-09T13:19:56Z",
+  "CFB-401858254": "2026-10-09T13:19:56Z",
   "CFB-401858255": "2026-10-09T11:02:27Z",
   "CFB-401858256": "2026-10-09T11:02:27Z",
   "CFB-401858257": "2026-10-09T11:02:27Z",
@@ -25,13 +25,13 @@
   "CFB-401858483": "2026-10-09T02:35:44Z",
   "CFB-401858484": "2026-10-09T11:02:27Z",
   "CFB-401858485": "2026-10-09T02:35:44Z",
-  "CFB-401858487": "2026-10-09T12:48:05Z",
-  "CFB-401860922": "2026-10-09T12:48:05Z"
+  "CFB-401858487": "2026-10-09T13:19:56Z",
+  "CFB-401860922": "2026-10-09T13:19:56Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1307,
+    "draftkings": 1306,
     "fanduel": 1058
    },
    "eventsListed": 114,
@@ -48,13 +48,13 @@
     "player_passing_completions": 33,
     "player_passing_touchdowns": 72,
     "player_passing_yards": 308,
-    "player_receiving_yards": 842,
+    "player_receiving_yards": 841,
     "player_receptions": 177,
     "player_rushing_attempts": 55,
     "player_rushing_yards": 599
    },
    "requestsLeft": 0,
-   "rows": 2365,
+   "rows": 2364,
    "slateGames": [
     "Florida State Seminoles at Louisville Cardinals 2026-10-09T23:00Z",
     "Iowa Hawkeyes at Washington Huskies 2026-10-10T01:00Z",
@@ -170,7 +170,6 @@
        "team_total",
        "team_total_points_odd_even",
        "total_points",
-       "total_points_odd_even",
        "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
@@ -197,7 +196,6 @@
       "matchbook": "mb-34548862577200023",
       "novig": "01a0f9b4-dc23-7eb3-aef4-889df30632c0",
       "onexbet": "759598793",
-      "pinnacle": "1637713841",
       "polymarket": "nfl_columbia_marist_2026-10-09_b3",
       "prophetx": "1700087842",
       "rebet": "sr:match:70924040",
@@ -206,8 +204,7 @@
       "smarkets": "45361391",
       "sportzino": "sz-17955742",
       "stake": "a28b24fd-3f31-43a5-bdc3-4067002b7a53",
-      "sx_bet": "L20434327",
-      "thrillzz": "888241788"
+      "sx_bet": "L20434327"
      },
      "home": "Marist Red Foxes",
      "sample": {
@@ -242,7 +239,6 @@
        "team_total",
        "team_total_points_odd_even",
        "total_points",
-       "total_points_odd_even",
        "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
@@ -288,8 +284,7 @@
       "sportzino": "sz-17714564",
       "stake": "0cf43bf7-db37-4691-a155-ff2838702acd",
       "sx_bet": "L20408883",
-      "thescorebet": "StandardEvent:b0aea5d4-4099-48bf-92d3-cf6d9c169326",
-      "thrillzz": "888238241"
+      "thescorebet": "StandardEvent:b0aea5d4-4099-48bf-92d3-cf6d9c169326"
      },
      "home": "San Jose State",
      "sample": {
@@ -313,14 +308,17 @@
        "2nd_quarter_moneyline",
        "2nd_quarter_moneyline_3-way",
        "2nd_quarter_point_spread",
+       "2nd_quarter_team_total",
        "2nd_quarter_total_points",
        "3rd_quarter_moneyline",
        "3rd_quarter_moneyline_3-way",
        "3rd_quarter_point_spread",
+       "3rd_quarter_team_total",
        "3rd_quarter_total_points",
        "4th_quarter_moneyline",
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
+       "4th_quarter_team_total",
        "4th_quarter_total_points",
        "anytime_touchdown_scorer",
        "draw_no_bet",
@@ -349,6 +347,7 @@
        "race_to_10_points",
        "race_to_20_points",
        "team_total",
+       "team_total_points_odd_even",
        "total_points",
        "total_points_odd_even",
        "total_touchdowns",
@@ -369,7 +368,7 @@
       "fanduel": "36151359",
       "fliff": "417912_c_p_209_prematch",
       "hardrock": "8780503430998393256",
-      "kalshi": "KXNCAAFTOTAL-26OCT10BRYBRWN",
+      "kalshi": "KXNCAAFSPREAD-26OCT10BRYBRWN",
       "novig": "01a0fd5a-e501-7480-adf6-92b70bcd150a",
       "polymarket": "nfl_brown_bryant_2026-10-10_b2",
       "rebet": "sr:match:70924060",
@@ -404,7 +403,7 @@
       "fanduel": "36151374",
       "fliff": "417950_c_p_209_prematch",
       "hardrock": "9133320176727622065",
-      "kalshi": "KXNCAAF1H-26OCT10SCSTCHSO",
+      "kalshi": "KXNCAAFSPREAD-26OCT10SCSTCHSO",
       "novig": "01a0fea4-a1e0-7d02-8c1c-65cd85c4efef",
       "polymarket": "nfl_charlestonsouthern_southcarolinastate_2026-10-10_b2",
       "rebet": "sr:match:70924050",
@@ -436,11 +435,10 @@
       "fanduel": "36151378",
       "fliff": "417915_c_p_209_prematch",
       "hardrock": "1621637025067303320",
-      "kalshi": "KXNCAAF1H-26OCT10DARTYALE",
+      "kalshi": "KXNCAAFSPREAD-26OCT10DARTYALE",
       "novig": "01a0fd5a-ec5e-7011-8bc7-bc2a07826583",
       "onexbet": "759800952",
       "polymarket": "nfl_dartmouth_yale_2026-10-10_b2",
-      "rebet": "sr:match:70992996",
       "smarkets": "45361392",
       "sx_bet": "L20434323"
      },
@@ -461,6 +459,38 @@
      "type": "fixture"
     },
     {
+     "away": "Davidson",
+     "external": {
+      "ballybet": "1029241593",
+      "betparx": "1029241593",
+      "betrivers": "1029241593",
+      "fanatics": "5276982",
+      "fanduel": "36151379",
+      "fliff": "417952_c_p_209_prematch",
+      "hardrock": "481593855880331662",
+      "kalshi": "KXNCAAFSPREAD-26OCT10DAVPRE",
+      "novig": "01a0fe89-3616-70a1-aa30-293a84b96ae6",
+      "polymarket": "nfl_davidson_presbyterian_2026-10-10_b2",
+      "rebet": "sr:match:70924084",
+      "smarkets": "45364023",
+      "sx_bet": "L20435128"
+     },
+     "home": "Presbyterian",
+     "sample": {
+      "away_team": "Davidson",
+      "home_team": "Presbyterian",
+      "markets": [
+       "1st_half_moneyline",
+       "draw_no_bet",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-10T16:00:00Z",
+     "type": "fixture"
+    },
+    {
      "away": "Morehead State Eagles",
      "external": {
       "ballybet": "1029241505",
@@ -470,7 +500,7 @@
       "fanduel": "36151368",
       "fliff": "417916_c_p_209_prematch",
       "hardrock": "1080493712066347416",
-      "kalshi": "KXNCAAF1H-26OCT10MOREDAY",
+      "kalshi": "KXNCAAFSPREAD-26OCT10MOREDAY",
       "novig": "01a0fd5a-e8af-7871-a4ff-3f9b8ba42d03",
       "onexbet": "759800508",
       "polymarket": "nfl_dayton_moreheadstate_2026-10-10_b2",
@@ -634,36 +664,6 @@
       ]
      },
      "start": "2026-10-10T16:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Bucknell",
-     "external": {
-      "ballybet": "1029241509",
-      "betparx": "1029241509",
-      "betrivers": "1029241509",
-      "fanatics": "5274150",
-      "fanduel": "36151358",
-      "fliff": "417921_c_p_209_prematch",
-      "hardrock": "8622091413485650348",
-      "kalshi": "KXNCAAFGAME-26OCT10BUCKGTWN",
-      "novig": "01a0fd76-41f8-7de0-af43-58174848a0f2",
-      "polymarket": "nfl_bucknell_georgetown_2026-10-10_b2",
-      "smarkets": "45363973",
-      "sx_bet": "L20434698"
-     },
-     "home": "Georgetown",
-     "sample": {
-      "away_team": "Bucknell",
-      "home_team": "Georgetown",
-      "markets": [
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-10T16:30:00Z",
      "type": "fixture"
     }
    ]
