@@ -1225,3 +1225,27 @@ prop probability fills the gap. Calibration never becomes verified by inference;
 change. No play is required on opening night. Full release gates and final hosted
 receipts remain to be completed for this continuation. Real two-day capture
 observation stays open separately.
+
+### October 9 final NBA Trial release receipt
+
+Trial runtime `6b8bcbf9a43786abfe1990e4141542a497abed8e` passed hosted
+[38003279615](https://github.com/keenroudy22/sports/actions/runs/38003279615).
+Final locked gates passed Python 1,276 (two skipped), frontend 232, both clean
+export suites, build/feed, budget (zero hard issues; unrelated Today data warning),
+football 95-pick/NBA zero-publication record audits, 568-file publication guard,
+assets/SVG and isolated latest-primary 17:30 stored-input rehearsal with no
+outside writes/private reads. Ten live 375/1440 checks across NBA/All Today,
+Record, Climb and NBA scores passed with zero overflow, caught load state or
+browser error. Live NBA JSON/preview PNG returned 200; preview bytes match the
+reviewed source. NBA Trial is 0–0, 0u; no NBA play admitted, scheduled or posted.
+Football best bets remain 35–36 (one void), −5.11u. Climb recovery completed
+green at 17:49 with no qualified rung.
+
+The phone preview was accepted at 18:46:51 ET; veto closes 20:46:51 ET. Runtime
+remains held before real October 20 and by every review/hash, role/injury, fresh
+exact-price, probability/edge, one/day/1u, global/queue and record-loss gate.
+Natural 21:00/23:30 capture and two full four-slot days October 10–11 remain real
+observations, not completed by fixtures or probes. Keep the daily NBA monitor
+until those readiness gates are verified, then retire it; season-switch continues.
+Owner evidence: /Users/keen/Documents/ChatGPT/Kook'n/nba-launch/2026-10-09/.
+This receipt is documentation only; no duplicate code release is needed.
