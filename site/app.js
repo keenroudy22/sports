@@ -178,9 +178,9 @@
   };
   /* Font sizes that fit a 375 px ticket: one-line names to 46 px, else two lines at most 24 px; the bet to 68 px. */
   const nameSize = (name, max = 46) => {
-    const one = Math.floor(205 / (Math.max(1, name.length) * .42));
+    const one = Math.floor(150 / (Math.max(1, name.toUpperCase().length) * .6));
     /* Two lines plus the chip must clear the matchup row: at most 24 px (a 26-letter double-barrelled name fits). */
-    return one >= 34 ? Math.min(max, one) : Math.max(20, Math.min(24, Math.floor(205 / (Math.max(...name.split(/\s+/).map(w => w.length), 1) * .42))));
+    return one >= 34 ? Math.min(max, one) : Math.max(20, Math.min(24, Math.floor(150 / (Math.max(...name.toUpperCase().split(/\s+/).map(w => w.length), 1) * .6))));
   };
   const betSize = (parts, cap = 68) => Math.max(34, Math.min(cap, Math.floor(306 / (parts.bet.length * .41 + Math.max(0, ...parts.unit.map(u => u.length)) * .18))));
   const ET_PARTS = (iso, opts) => new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', ...opts }).format(new Date(iso));

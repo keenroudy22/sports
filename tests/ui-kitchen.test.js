@@ -35,7 +35,7 @@ test('the bet line, unit and name come from the pick fields', () => {
   assert.equal(spread.bet, 'TA&M −16.5');
   assert.deepEqual(M.betParts({ displayTitle: 'Old Player OVER 50.5 receiving yards', kind: 'props', marketType: 'total' }).bet, 'OVER 50.5', 'old rows without athleteId');
   assert.ok(M.betSize(M.betParts({ displayTitle: 'X UNDER 179.5 passing yards', athleteId: '1', market: 'passYds', direction: 'under', line: 179.5 })) < 68);
-  assert.equal(M.nameSize('TK King'), 46);
+  assert.equal(M.nameSize('TK King'), 35);
   assert.ok(M.nameSize('Marcellous Hawkins Jr.') <= 27, 'long names drop to two lines at most');
 });
 
@@ -175,7 +175,8 @@ test("every chef's line with a photo ticket stays clear of the breakout head", (
 });
 
 test('long two-line names stay at 24 px or less so they clear the matchup row', () => {
+  assert.ok(M.nameSize('Nyck Harbor') <= 24, 'uppercase Harbor must not be sized as a one-line 44px name');
   assert.ok(M.nameSize('Marvin Harrison-Washington') <= 24);
   assert.ok(M.nameSize('Marcellous Hawkins Jr.') <= 24);
-  assert.equal(M.nameSize('TK King'), 46);
+  assert.equal(M.nameSize('TK King'), 35);
 });
