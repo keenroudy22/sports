@@ -483,7 +483,7 @@ def cashed(first, latest, games, log_book, now):
             continue
         settled_at = gates.when(pick['settledAt'])
         fresh = LADDER_CASHED_FRESH if ladder else CASHED_FRESH
-        if not now - fresh < settled_at <= now or (quiet and not ladder):
+        if not now - fresh < settled_at <= now:
             continue
         parlay = pick_card.play_kind(pick) == 'parlay'
         price = f"({int(pick['odds']):+d}, {pick.get('book')})"
@@ -502,6 +502,12 @@ def cashed(first, latest, games, log_book, now):
                 post_key = f'ladder-{result}:{key}'
             if local.hour < LADDER_MORNING[0]:
                 due = at(eastern_date(now), LADDER_MORNING)
+        if quiet and not ladder:
+            # Quiet hours hold delivery, not admission. Queue a fresh morning
+            # result before the play batch takes every slot until it expires.
+            due = at(eastern_date(now), LADDER_MORNING)
+            if due >= settled_at + fresh:
+                continue
         league = str(key).split('-')[0]
         tag = x_post.TAGS.get(league, '')
         text = '\n'.join(x for x in (head, what, tag, f"https://x.com/{HANDLE}/status/{entry['tweetId']}") if x)

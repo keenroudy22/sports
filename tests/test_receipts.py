@@ -234,6 +234,22 @@ class CashedTests(unittest.TestCase):
             entry.pop('tweetId')
         self.assertEqual(receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING), [], 'never went out, nothing to quote')
 
+    def test_fresh_morning_win_queues_after_quiet_hours_before_it_expires(self):
+        first, latest, log = self.world()
+        now = datetime(2026, 9, 28, 10, 45, tzinfo=timezone.utc)
+        latest['NFL-2026-W4-a']['settledAt'] = '2026-09-28T10:45:00Z'
+        [post] = receipts.cashed(first, latest, GAMES, log, now)
+        self.assertEqual(post['due'].astimezone(gates.EASTERN).strftime('%H:%M'), '09:05')
+        self.assertLess(post['due'], post['stale'])
+        plans = [p for p in buffer_post.plan(first, latest, GAMES, now, log) if p[1] == 'cashed']
+        self.assertEqual([p[0] for p in plans], [post['key']])
+        self.assertGreaterEqual(plans[0][3], post['due'])
+        self.assertLess(plans[0][3], post['stale'])
+        log['posts'].append({'id': post['key'], 'kind': 'buffer:cashed'})
+        self.assertFalse([p for p in buffer_post.plan(first, latest, GAMES, now, log) if p[1] == 'cashed'])
+        latest['NFL-2026-W4-a']['settledAt'] = '2026-09-28T04:30:00Z'
+        self.assertEqual(receipts.cashed(first, latest, GAMES, log, now), [], 'expired overnight win stays in the receipt')
+
     def test_the_planner_sends_it_once_right_away(self):
         first, latest, log = self.world()
         plans = [p for p in buffer_post.plan(first, latest, GAMES, self.SUNDAY_EVENING, log) if p[1] == 'cashed']
