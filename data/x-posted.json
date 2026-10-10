@@ -2277,7 +2277,16 @@
    "cardKey": "receipt-day-2026-10-07",
    "sentAt": "2026-10-08T13:00:22.754Z",
    "link": "https://x.com/1753110091912413184/status/2108180703523295459",
-   "tweetId": "2108180703523295459"
+   "tweetId": "2108180703523295459",
+   "metrics": {
+    "reactions": 0,
+    "comments": 0,
+    "engagementRate": 0,
+    "reposts": 0,
+    "impressions": 26,
+    "clicks": 0
+   },
+   "metricsAt": "2026-10-10T14:00:05Z"
   },
   {
    "id": "research:season:2026-10-08",
@@ -2500,6 +2509,17 @@
    "sentAt": "2026-10-10T13:52:00.887Z",
    "link": "https://x.com/1753110091912413184/status/2108918473988468881",
    "tweetId": "2108918473988468881"
+  },
+  {
+   "id": "research:prep:2026-10-10",
+   "postedAt": "2026-10-10T14:00:05Z",
+   "dueAt": "2026-10-10T14:32:00Z",
+   "bufferPostId": "6aca4562b07d37ac97753e3e",
+   "textHash": "1a182ddb998d9f6c",
+   "kind": "buffer:research",
+   "card": true,
+   "cardTheme": "ticket",
+   "cardKey": "research-prep-2026-10-10"
   }
  ]
 }
