@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-10T11:50:25Z",
+  "updatedAt": "2026-10-10T13:16:31.350841Z",
   "items": [
     {
       "id": "P01",
@@ -61,7 +61,7 @@
       "title": "Volunteer usability and retention evidence",
       "status": "owner-needed",
       "owner": "owner",
-      "next": "Recruit 10–20 consenting testers across four slates and collect task completion plus five priced-concept choices.",
+      "next": "Recruit 10\u201320 consenting testers across four slates and collect task completion plus five priced-concept choices.",
       "doneWhen": "Document real user feedback, 8/10 usability target and retention evidence; no synthetic users counted.",
       "evidence": "docs/SUBSCRIPTION-PLAN.md; automated/browser checks are technical QA only."
     },
@@ -358,7 +358,7 @@
       "title": "Soccer and basketball seasonal roadmap",
       "status": "ready",
       "owner": "agent",
-      "next": "EPL/UCL research for October 24–25, CBB early November, WNBA/MLS summer. Preserve existing NHL/MLB coverage without expansion.",
+      "next": "EPL/UCL research for October 24\u201325, CBB early November, WNBA/MLS summer. Preserve existing NHL/MLB coverage without expansion.",
       "doneWhen": "Actual seasonal/trial evidence and a separate P11 decision precede official new-sport picks.",
       "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
     },
@@ -476,8 +476,8 @@
       "status": "ready",
       "owner": "agent",
       "next": "Release role, exact two-sided price and cross-book guards at the next safe window after all gates; verify Damante, TK King, Kohl and Egbuka on the live board without rewriting forecasts.",
-      "doneWhen": "Kohl/Damante/TK King holds, Egbuka and five corrupted DK prices refused, 0.99–1.15 pair band and two-sided exact-line check agree across board and selection; hosted/live checks pass.",
-      "evidence": "A-22 to A-24 safeguards are live in 48e57391, hosted run 37700211419. Local tests replay the five bad DK prices, two-sided exact-line band and QB-change holds; live TK King and JJ Kohl say Under review with no chance or grade. The 14-day candidate/day replay is player 1741→1603, game 210→181; attempts, not a revised record. Damante/Egbuka live recheck remains."
+      "doneWhen": "Kohl/Damante/TK King holds, Egbuka and five corrupted DK prices refused, 0.99\u20131.15 pair band and two-sided exact-line check agree across board and selection; hosted/live checks pass.",
+      "evidence": "A-22 to A-24 safeguards are live in 48e57391, hosted run 37700211419. Local tests replay the five bad DK prices, two-sided exact-line band and QB-change holds; live TK King and JJ Kohl say Under review with no chance or grade. The 14-day candidate/day replay is player 1741\u21921603, game 210\u2192181; attempts, not a revised record. Damante/Egbuka live recheck remains."
     },
     {
       "id": "P54",
@@ -513,7 +513,7 @@
       "owner": "agent",
       "next": "Build current-team, same-QB, partial-game, market-shrink and quantile variants as silent logged shadows in routine windows; replay 2025 and forward weeks, then bring before/after error and calibration to the owner for promotion approval.",
       "doneWhen": "Shadow forecasts and an append-only shadow ledger replay Kohl, Damante, King, Daniels, Javonte and Bucky; live plays, cards and records stay unchanged until a separate owner yes.",
-      "evidence": "PROJECTIONS-FIX-FOR-CODEX parts 2–3, October 7. Conservative hold is P53; root projection change is not implemented or live."
+      "evidence": "PROJECTIONS-FIX-FOR-CODEX parts 2\u20133, October 7. Conservative hold is P53; root projection change is not implemented or live."
     },
     {
       "id": "P58",
@@ -557,7 +557,7 @@
       "status": "ready",
       "owner": "agent",
       "next": "Ship the prepared footer and Start here copy with Claude's Today-restore series only after the owner's release approval; run the full gates and check live footer, Record and Start here.",
-      "doneWhen": "Live footer is exactly '21+ · Entertainment only'; Record keeps posted-price grading, Start here has Eastern time and Cloudflare disclosure once, and hosted plus live checks pass.",
+      "doneWhen": "Live footer is exactly '21+ \u00b7 Entertainment only'; Record keeps posted-price grading, Start here has Eastern time and Cloudflare disclosure once, and hosted plus live checks pass.",
       "evidence": "Owner-delegated decision 26 dated 2026-10-07. Prepared on dev only; not released."
     },
     {
@@ -620,7 +620,7 @@
       "status": "shipped",
       "owner": "agent",
       "next": "Observe the next natural ledger update and verify the image and HTML rows advance together; do not re-render a posted attachment.",
-      "doneWhen": "The hosted build contains site/data/cards/climb-route.png; live Record › Climb shows the graphic and ledger-accurate cashed/open steps, clearly labeled future-plan rows, real play-page links and no 375/1440 overflow; Today links to #route.",
+      "doneWhen": "The hosted build contains site/data/cards/climb-route.png; live Record \u203a Climb shows the graphic and ledger-accurate cashed/open steps, clearly labeled future-plan rows, real play-page links and no 375/1440 overflow; Today links to #route.",
       "evidence": "Owner decision 36 released at 0fbbb1e1. Python 1,200, Node 223, clean export, build, budget, 92-pick audit, 503-file guard, rehearsal and local Chrome passed. Hosted run 37825913575 succeeded. Live PNG returned HTTP 200; record.json showed Climb #3 step 1, $42 banked, nine rows. App v142; 375/1440 Chrome checked Climb, Today, Record and Games with zero overflow or errors. Full receipt: PRODUCT-IMPLEMENTATION.md and codex-status.md."
     },
     {
@@ -628,8 +628,8 @@
       "title": "NBA Today and guarded opening-night Trial",
       "status": "observing",
       "owner": "agent",
-      "next": "Observe Oct9 21:00/23:30 and two real four-slot days Oct10–11; honor preview veto through20:46:51 ET. Trial stays opening/price/role/edge/cap gated. Retire daily monitor only after opening-night readiness verification.",
-      "doneWhen": "Before Oct 20, NBA Today has scores, projections, trends and Prep List at 375/1440. Trial has fresh two-sided prices, holds, ≥6-point raw edge and ≥0.56 chance until calibrated, a 1u/one-per-day cap, separate record and first-card review.",
+      "next": "Observe Oct9 21:00/23:30 and two real four-slot days Oct10\u201311; honor preview veto through20:46:51 ET. Trial stays opening/price/role/edge/cap gated. Retire daily monitor only after opening-night readiness verification.",
+      "doneWhen": "Before Oct 20, NBA Today has scores, projections, trends and Prep List at 375/1440. Trial has fresh two-sided prices, holds, \u22656-point raw edge and \u22650.56 chance until calibrated, a 1u/one-per-day cap, separate record and first-card review.",
       "evidence": "NBA site/capture c2553e54, hosted37999813050; Trial runtime6b8bcbf9, hosted38003279615: verified live with10pages375/1440 andzeroissues. Python1276/Node232, clean export, bothrecordaudits andallgatespassed. Phonepreview18:46:51 ET; zeroNBAplaysposted."
     },
     {
@@ -941,11 +941,20 @@
     {
       "id": "A-20261009-1",
       "title": "Isolate football injury and depth context by league",
-      "status": "gated",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Oct 10, 08:35–09:45 ET: after the green 08:30 run, rebase and repeat affected gates; locked deploy, watch hosted success, verify live college/NFL pages at 375/1440, then append fixed audit receipt.",
+      "next": "Preserve league-scoped injury context and NFL-only depth charts; observe normal desk runs.",
       "doneWhen": "Live college game payloads never inherit NFL injuries or depth charts from overlapping ESPN IDs; NFL context remains intact; full release gates, hosted success and live 375/1440 evidence are recorded.",
-      "evidence": "Confirmed live SJSU id23 had Steelers context. sports-dev patch scopes injuries by league and excludes NFL-only depth charts from CFB. 1,278 Python / 232 Node plus clean-export suites passed; build, audits, guard, assets and offline 0645 rehearsal passed. Local 375/1440 clean; release waits for approved window."
+      "evidence": "7ba788fb; hosted38054258809 success. Full release gates passed:1278Python/232Node, clean export, build/feed, budget/audits/guard/assets, isolated0830 rehearsal. Live12routes375/1440 clean; Harbor24px has18px gap above teams; SJSU no NFL context; NFL depth intact. Full receipt:docs/PRODUCT-IMPLEMENTATION.md; owner layout-fix-2026-10-10/release.json."
+    },
+    {
+      "id": "A-20261010-1",
+      "title": "Keep ticket player names clear of teams and kickoff",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Preserve narrow-phone uppercase name fitting during later ticket changes.",
+      "doneWhen": "Real Harbor ticket renders with no player-name overlap at375/1440 and successful hosted release is recorded.",
+      "evidence": "7ba788fb; hosted38054258809 success. Full release gates passed:1278Python/232Node, clean export, build/feed, budget/audits/guard/assets, isolated0830 rehearsal. Live12routes375/1440 clean; Harbor24px has18px gap above teams; SJSU no NFL context; NFL depth intact. Full receipt:docs/PRODUCT-IMPLEMENTATION.md; owner layout-fix-2026-10-10/release.json."
     }
   ]
 }

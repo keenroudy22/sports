@@ -1273,3 +1273,9 @@ the October 10 08:35–09:45 ET quiet window after a green 08:30 run. Rebase,
 repeat affected verification and locked gates, deploy, watch hosted success,
 then verify live college and NFL context at 375/1440 before marking shipped or
 appending Claude's fixed receipt. A prepared patch is not a completed release.
+
+## October 10 — ticket name spacing and league context verified
+
+Release 7ba788fb420e27ae9c6967463f67afdfa043c3a2; hosted 38054258809 success. Python1278 (2 skipped), Node232 and clean-export suites; build/feed; budget zero hard issues (existing Today soft warning); football96/NBA0 audits; guard581files; SVG/assets; isolated latest0830 rehearsal outcomeok/outsideWrite0/privateRead0; live12 routes at375/1440 clean. Harbor uppercase name24px has18px gap above matchup at both widths. Live SJSU has no NFL injuries/depth; Colts–Steelers retains both depth charts and8/6 injuries.
+
+Name sizing now uses uppercase text and the narrow phone width, keeping Nyck Harbor on one line above logos and kickoff. Local name geometry also passed320px. Record and betting policy did not change; original posted attachments were preserved. This receipt is a documentation-only follow-up retained on dev for the next safe release, not a second code deployment.
