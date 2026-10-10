@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-10T12:42:13Z",
+  "updatedAt": "2026-10-10T12:50:09Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -697,6 +697,24 @@
           "name": "Buffalo Bills",
           "players": [
             {
+              "id": "4242433",
+              "name": "Joshua Palmer",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Shoulder",
+              "reportedAt": "2026-10-10T12:40Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4242433/joshua-palmer"
+            },
+            {
+              "id": "4432715",
+              "name": "Landon Jackson",
+              "position": "DE",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-10T12:39Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4432715/landon-jackson"
+            },
+            {
               "id": "3915416",
               "name": "DJ Moore",
               "position": "WR",
@@ -722,15 +740,6 @@
               "injury": "Toe",
               "reportedAt": "2026-10-09T00:24Z",
               "source": "https://www.espn.com/nfl/player/_/id/4379778/christian-benford"
-            },
-            {
-              "id": "4432715",
-              "name": "Landon Jackson",
-              "position": "DE",
-              "status": "Questionable",
-              "injury": null,
-              "reportedAt": "2026-10-09T00:08Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4432715/landon-jackson"
             },
             {
               "id": "4401823",
@@ -911,15 +920,6 @@
               "injury": null,
               "reportedAt": "2026-10-04T07:56Z",
               "source": "https://www.espn.com/nfl/player/_/id/4044133/sam-franklin-jr"
-            },
-            {
-              "id": "4366349",
-              "name": "Joe Andreessen",
-              "position": "LB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-03T17:41Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4366349/joe-andreessen"
             }
           ]
         },
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-10T11:58Z",
+              "reportedAt": "2026-10-10T12:40Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "24",
-          "name": "Kayode Awosika",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-10-09T21:40:57Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4040842/kayode-awosika"
-        },
-        {
-          "teamId": "24",
           "name": "Trevor Penning",
           "from": "Questionable",
           "to": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-10T12:42:13Z",
           "source": "https://www.espn.com/nfl/player/_/id/4685479/christen-miller"
+        },
+        {
+          "teamId": "2",
+          "name": "Landon Jackson",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-10T12:50:09Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4432715/landon-jackson"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-10T12:42:13Z",
-      "lastAttemptAt": "2026-10-10T12:42:13Z",
+      "checkedAt": "2026-10-10T12:50:09Z",
+      "lastAttemptAt": "2026-10-10T12:50:09Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-10T12:42:13Z",
-      "lastAttemptAt": "2026-10-10T12:42:13Z",
+      "checkedAt": "2026-10-10T12:50:09Z",
+      "lastAttemptAt": "2026-10-10T12:50:09Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
