@@ -1,0 +1,511 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-10-10T21:30:05Z",
+  "targetWeek": 6,
+  "summary": "Research update for Oct 10: Settled 1: Nyck Harbor OVER 3.5 receptions win. Closed 1: San Diego State at Oregon State under 56.5. Published 1: 5-leg longshot at FanDuel +2260 at FanDuel. odds_api.py: CFB: skipped (6 game-line credits already scheduled today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "settled",
+      "favorite": false,
+      "modelLean": true,
+      "position": "WR",
+      "athleteId": "4870745",
+      "market": "rec",
+      "line": 3.5,
+      "direction": "over",
+      "gameIds": [
+        "CFB-401856714"
+      ],
+      "book": "FanDuel",
+      "odds": 112,
+      "projection": 3.8,
+      "edge": "Projection 3.8 against 3.5. Adjusted chance 51.2% (raw 55.1%, learned factor 0.23); 47.2% needed at +112: +4.0 percentage points. An estimate, not a guarantee.",
+      "cutoff": "OVER 3.5 at +112 or better; off the card at 4+, or at -103 or worse at 3.5.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-10-04T06:01:48Z",
+      "quotedAt": "2026-10-10T10:12:38Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 6:12 AM ET capture across 2 books, the best expected value on the board for this side. FanDuel is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-10-10T12:30:00Z",
+      "probabilityAtPublication": {
+        "rawChance": 0.551,
+        "chance": 0.512,
+        "calibrated": true,
+        "calibration": 0.23,
+        "calibrationN": 398,
+        "push": 0.0,
+        "breakEven": 0.472,
+        "edgePoints": 4.0,
+        "evPerUnit": 0.085,
+        "snapshotAt": "2026-10-04T06:01:48Z",
+        "evaluatedAt": "2026-10-10T10:45:05Z",
+        "fairChance": 0.441,
+        "gap": 11.0
+      },
+      "title": "Nyck Harbor OVER 3.5 receptions",
+      "id": "CFB-2026-W6-harbor-over-3-5-rec-fd",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401856714",
+        "https://api.sharpapi.io/api/v1/odds",
+        "https://floridagators.com/news/2026/10/9/football-the-opening-kickoff-no-16-gators-vs-south-carolina-a-chance-to-respond-on-homecoming"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 3 of 10 over 3.5.",
+        "context": [
+          "Role: projected for 6.1 targets a game.",
+          "Defense: FLA allows 19 receptions a game to WRs, 134th-stingiest of 136 this season."
+        ],
+        "cautions": [
+          "Only 3 of the last 10 games cleared this side of the line; recent results oppose it."
+        ],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 3.8 against 3.5. The over reads 51.2% after adjustment from the raw 55.1%; 47.2% is needed at +112. Last 10 games: 3 of 10 over 3.5. Role: projected for 6.1 targets a game. Defense: FLA allows 19 receptions a game to WRs, 134th-stingiest of 136 this season.",
+      "risk": "Only 3 of the last 10 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 5 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "My receptions is 3.8; the book's line is 3.5.",
+            "numbers": {
+              "projection": 3.8,
+              "line": 3.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-10-04T06:01:48Z"
+          },
+          {
+            "text": "South Carolina wide receiver Mazeo Bennett Jr. was listed as questionable on Friday's availability report.",
+            "numbers": {},
+            "source": "https://floridagators.com/news/2026/10/9/football-the-opening-kickoff-no-16-gators-vs-south-carolina-a-chance-to-respond-on-homecoming",
+            "time": "2026-10-10T10:45:05Z"
+          },
+          {
+            "text": "Florida cornerback Dijon Johnson was listed as probable with an ankle injury on Friday's availability report.",
+            "numbers": {},
+            "source": "https://floridagators.com/news/2026/10/9/football-the-opening-kickoff-no-16-gators-vs-south-carolina-a-chance-to-respond-on-homecoming",
+            "time": "2026-10-10T10:45:05Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "1 of his last 5 games finished over 3.5 receptions.",
+            "numbers": {
+              "values": [
+                5,
+                2,
+                1,
+                3,
+                2
+              ],
+              "hits": 1,
+              "games": 5,
+              "line": 3.5
+            },
+            "source": "ESPN box scores",
+            "time": "2026-10-03T20:15Z"
+          },
+          {
+            "text": "Only 3 of the last 10 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 5 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+            "numbers": {},
+            "source": "Published risk note",
+            "time": "2026-10-10T10:45:05Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "South Carolina wide receiver Mazeo Bennett Jr. was listed as questionable on Friday's availability report.",
+            "numbers": {},
+            "source": "https://floridagators.com/news/2026/10/9/football-the-opening-kickoff-no-16-gators-vs-south-carolina-a-chance-to-respond-on-homecoming",
+            "time": "2026-10-10T10:45:05Z"
+          },
+          {
+            "text": "Florida cornerback Dijon Johnson was listed as probable with an ankle injury on Friday's availability report.",
+            "numbers": {},
+            "source": "https://floridagators.com/news/2026/10/9/football-the-opening-kickoff-no-16-gators-vs-south-carolina-a-chance-to-respond-on-homecoming",
+            "time": "2026-10-10T10:45:05Z"
+          },
+          {
+            "text": "South Carolina wide receiver Mazeo Bennett Jr. was listed as questionable on Friday's availability report.",
+            "numbers": {},
+            "source": "https://floridagators.com/news/2026/10/9/football-the-opening-kickoff-no-16-gators-vs-south-carolina-a-chance-to-respond-on-homecoming",
+            "time": "2026-10-10T10:45:05Z"
+          },
+          {
+            "text": "Florida cornerback Dijon Johnson was listed as probable with an ankle injury on Friday's availability report.",
+            "numbers": {},
+            "source": "https://floridagators.com/news/2026/10/9/football-the-opening-kickoff-no-16-gators-vs-south-carolina-a-chance-to-respond-on-homecoming",
+            "time": "2026-10-10T10:45:05Z"
+          },
+          {
+            "text": "Kahleil Jackson (FLA) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/college-football/player/_/id/4693740/kahleil-jackson",
+            "time": "2020-11-21T18:31Z"
+          }
+        ],
+        "weather": {
+          "tempF": 83,
+          "windMph": 16,
+          "windDirection": "S",
+          "precipProb": 30,
+          "periodStart": "2026-10-10T12:00:00-04:00",
+          "issuedAt": "2026-10-10T06:40:56+00:00",
+          "source": "https://api.weather.gov/gridpoints/JAX/43,32/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 3.5,
+                "price": -102,
+                "time": "2026-10-08T17:41:06Z"
+              },
+              "now": {
+                "line": 3.5,
+                "price": -105,
+                "time": "2026-10-10T10:12:38Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 3.5,
+                "price": 114,
+                "time": "2026-10-08T17:41:06Z"
+              },
+              "now": {
+                "line": 3.5,
+                "price": 112,
+                "time": "2026-10-10T10:12:38Z"
+              }
+            }
+          },
+          "best": {
+            "book": "FanDuel",
+            "line": 3.5,
+            "price": 112,
+            "time": "2026-10-10T10:12:38Z"
+          }
+        },
+        "ours": {
+          "projection": 3.8,
+          "line": 3.5,
+          "market": "rec",
+          "text": "My receptions is 3.8; the book's line is 3.5.",
+          "snapshotAt": "2026-10-04T06:01:48Z"
+        },
+        "history": "Last 10 games: 3 of 10 over 3.5.",
+        "sources": [
+          {
+            "label": "injury",
+            "url": "https://floridagators.com/news/2026/10/9/football-the-opening-kickoff-no-16-gators-vs-south-carolina-a-chance-to-respond-on-homecoming",
+            "time": "2026-10-10T10:45:05Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/college-football/player/_/id/4693740/kahleil-jackson",
+            "time": "2020-11-21T18:31Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/JAX/43,32/forecast/hourly",
+            "time": "2026-10-10T06:40:56+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401856714",
+            "time": "2026-10-10T10:45:05Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-10-10T10:45:05Z"
+          }
+        ],
+        "partial": false
+      },
+      "lane": "gut_call",
+      "riskUnits": 0.5,
+      "result": "win",
+      "actual": "Nyck Harbor: 4 receptions",
+      "settledAt": "2026-10-10T21:30:05Z",
+      "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401856714",
+      "actualValue": 4,
+      "units": 0.56
+    }
+  ],
+  "gamePicks": [
+    {
+      "status": "expired",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "total",
+      "line": 56.5,
+      "direction": "under",
+      "gameIds": [
+        "CFB-401860902"
+      ],
+      "book": "FanDuel",
+      "odds": -110,
+      "projection": 51.1,
+      "edge": "v2 total 51.1 (80% range 30.4 to 71.9). Chance of under 56.5: 54.7% (v2's raw 63.0% shrunk by its 2024-25 record against the close), against 52.4% break-even at -110: +2.3 points, +0.044u per unit.",
+      "cutoff": "UNDER 56.5 at -110 or better. Closed to new entries at 55 or lower, or at -125 or worse at 56.5.",
+      "modelVersion": "v2.0",
+      "snapshotAt": "2026-10-05T03:32:35Z",
+      "quotedAt": "2026-10-05T09:15:15Z",
+      "quoteType": "capture",
+      "quoteNote": "FanDuel's number and price from the 5:15 AM ET capture across 6 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-05T15:45:00Z",
+      "probabilityAtPublication": {
+        "rawChance": 0.63,
+        "chance": 0.547,
+        "calibrated": true,
+        "calibration": 0.36,
+        "calibrationN": null,
+        "push": 0.0,
+        "breakEven": 0.524,
+        "edgePoints": 2.3,
+        "evPerUnit": 0.044,
+        "snapshotAt": "2026-10-05T03:32:35Z",
+        "evaluatedAt": "2026-10-05T12:30:05Z"
+      },
+      "title": "San Diego State at Oregon State under 56.5",
+      "id": "CFB-2026-W6-sdsu-orst-under-56-5-fd",
+      "confidence": 3,
+      "sources": [
+        "https://www.espn.com/college-football/game/_/gameId/401860902",
+        "https://goaztecs.com/news/2026/10/4/san-diego-state-hits-the-road-for-pac-12-play-with-saturday-game-at-oregon-state",
+        "https://goaztecs.com/news/2026/10/4/spirited-second-half-comeback-propels-aztecs-past-texas-state-in-pac-12-opener-31-29"
+      ],
+      "why": "Model lean, published on our number alone. Our total is 51.1 against 56.5: the under reads 54.7% after the raw 63.0% is shrunk by the model's record against the close, +2.3 points clear of the 52.4% that -110 needs. Nothing sourced argues against it; the number is the reason. Checked before publishing: Jayden Denegal started San Diego State's October 3 game against Texas State and remains listed as the team's starting quarterback in its October 4 game notes for Oregon State; the notes do not give a game-week health designation. Checked before publishing: Josiah Lucas made his first collegiate start against Texas State and ran for 111 yards on 21 attempts. The market: The spread opened -13.5 and is -14 at DraftKings, a move of 0.5 toward the home. The total opened 57.5 and is 56.5 at DraftKings, 1 toward the under. 6 books span -14.5 to -13.5 on the spread; the middle is -13.75. 6 books span 56.5 to 57.5 on the total; the middle is 56.5. Our spread gap of 2.8 points is at the 44th percentile of the model's gaps; gaps this large went 1014-1005 against the close in 3584 graded games. Our total gap of 5.4 points is at the 79th percentile of the model's gaps; gaps this large went 411-338 against the close in 3602 graded games.",
+      "risk": "It rests on the model alone, and the closing line beats our number on average, so a gap this size is more often our error than the market's. Confidence 3 of 10.",
+      "jurisdictionVerified": true,
+      "entryNote": "Off the card: total moved 4 against, from 56.5 to 52.5. Published cutoff: UNDER 56.5 at -110 or better. Closed to new entries at 55 or lower, or at -125 or worse at 56.5. Stays in the record at 56.5 and -110 and is graded as posted."
+    }
+  ],
+  "parlays": [
+    {
+      "id": "CFB-2026-W6-longshot-1010-fd",
+      "title": "5-leg longshot at FanDuel",
+      "status": "active",
+      "favorite": false,
+      "parlayType": "longshot",
+      "riskUnits": 0.25,
+      "legs": [
+        {
+          "id": "game-CFB-401869943-under",
+          "title": "Coastal Carolina at Marshall under 58.5",
+          "gameId": "CFB-401869943",
+          "market": "total points",
+          "athleteId": null,
+          "side": "under",
+          "line": 58.5,
+          "odds": -112,
+          "book": "FanDuel",
+          "chance": 0.535,
+          "kickoff": "2026-10-10T23:00Z",
+          "observedAt": "2026-10-10T13:57:14Z",
+          "marketWindow": "Full game",
+          "alternate": false
+        },
+        {
+          "id": "prop-CFB-401856715-5079482-rushYds",
+          "title": "Dilin Jones under 90.5 rushing yards",
+          "gameId": "CFB-401856715",
+          "market": "rushing yards",
+          "athleteId": "5079482",
+          "side": "under",
+          "line": 90.5,
+          "odds": -112,
+          "book": "FanDuel",
+          "chance": 0.548,
+          "kickoff": "2026-10-10T23:00Z",
+          "observedAt": "2026-10-10T20:40:23Z",
+          "marketWindow": "Full game",
+          "alternate": false
+        },
+        {
+          "id": "game-CFB-401864517-over",
+          "title": "Nevada at UTEP over 48.5",
+          "gameId": "CFB-401864517",
+          "market": "total points",
+          "athleteId": null,
+          "side": "over",
+          "line": 48.5,
+          "odds": -115,
+          "book": "FanDuel",
+          "chance": 0.546,
+          "kickoff": "2026-10-10T23:00Z",
+          "observedAt": "2026-10-10T13:57:14Z",
+          "marketWindow": "Full game",
+          "alternate": false
+        },
+        {
+          "id": "prop-CFB-401856712-5084047-rushYds",
+          "title": "Nate Frazier under 61.5 rushing yards",
+          "gameId": "CFB-401856712",
+          "market": "rushing yards",
+          "athleteId": "5084047",
+          "side": "under",
+          "line": 61.5,
+          "odds": -114,
+          "book": "FanDuel",
+          "chance": 0.56,
+          "kickoff": "2026-10-10T23:30Z",
+          "observedAt": "2026-10-10T20:40:23Z",
+          "marketWindow": "Full game",
+          "alternate": false
+        },
+        {
+          "id": "game-CFB-401856827-over",
+          "title": "Kansas at Utah over 50.5",
+          "gameId": "CFB-401856827",
+          "market": "total points",
+          "athleteId": null,
+          "side": "over",
+          "line": 50.5,
+          "odds": -114,
+          "book": "FanDuel",
+          "chance": 0.537,
+          "kickoff": "2026-10-11T00:00Z",
+          "observedAt": "2026-10-10T13:57:14Z",
+          "marketWindow": "Full game",
+          "alternate": false
+        }
+      ],
+      "correlation": "One leg per game, so the ticket treats the legs as independent; its chance is their product.",
+      "gameIds": [
+        "CFB-401869943",
+        "CFB-401856715",
+        "CFB-401864517",
+        "CFB-401856712",
+        "CFB-401856827"
+      ],
+      "book": "FanDuel",
+      "odds": 2260,
+      "quotedAt": "2026-10-10T13:57:14Z",
+      "quoteType": "capture",
+      "confidence": 1,
+      "priceEstimated": true,
+      "expiresAt": "2026-10-10T23:00:00Z",
+      "edge": "Estimated combined price from captured leg odds; verify the sportsbook's ticket price. Our chance 4.8% against 4.2% break-even at +2260: +0.136u per unit staked, 0.25u at risk.",
+      "cutoff": "A longshot is not re-entered. It stands or falls as posted.",
+      "sources": [
+        "https://api.sharpapi.io/api/v1/odds (key withheld)",
+        "https://www.espn.com/college-football/game/_/gameId/401856712",
+        "https://www.espn.com/college-football/game/_/gameId/401856715",
+        "https://www.espn.com/college-football/game/_/gameId/401856827",
+        "https://www.espn.com/college-football/game/_/gameId/401864517",
+        "https://www.espn.com/college-football/game/_/gameId/401869943"
+      ],
+      "why": "Longshot from the board: 5 legs at FanDuel, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.",
+      "risk": "Most longshots lose. The legs are treated as independent; any one miss sinks the ticket.",
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Longshot from the board: 5 legs at FanDuel, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.",
+            "numbers": {},
+            "source": "Published ticket detail",
+            "time": "2026-10-10T21:30:05Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Most longshots lose. The legs are treated as independent; any one miss sinks the ticket.",
+            "numbers": {},
+            "source": "Published ticket risk",
+            "time": "2026-10-10T21:30:05Z"
+          }
+        ],
+        "reports": [],
+        "weather": null,
+        "line": {
+          "legs": [
+            {
+              "gameId": "CFB-401869943",
+              "title": "Coastal Carolina at Marshall under 58.5",
+              "line": 58.5,
+              "price": -112,
+              "book": "FanDuel"
+            },
+            {
+              "gameId": "CFB-401856715",
+              "title": "Dilin Jones under 90.5 rushing yards",
+              "line": 90.5,
+              "price": -112,
+              "book": "FanDuel"
+            },
+            {
+              "gameId": "CFB-401864517",
+              "title": "Nevada at UTEP over 48.5",
+              "line": 48.5,
+              "price": -115,
+              "book": "FanDuel"
+            },
+            {
+              "gameId": "CFB-401856712",
+              "title": "Nate Frazier under 61.5 rushing yards",
+              "line": 61.5,
+              "price": -114,
+              "book": "FanDuel"
+            },
+            {
+              "gameId": "CFB-401856827",
+              "title": "Kansas at Utah over 50.5",
+              "line": 50.5,
+              "price": -114,
+              "book": "FanDuel"
+            }
+          ],
+          "best": {
+            "book": "FanDuel",
+            "price": 2260,
+            "time": "2026-10-10T13:57:14Z"
+          }
+        },
+        "ours": null,
+        "history": null,
+        "sources": [
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds (key withheld)",
+            "time": "2026-10-10T21:30:05Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401856712",
+            "time": "2026-10-10T21:30:05Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401856715",
+            "time": "2026-10-10T21:30:05Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401856827",
+            "time": "2026-10-10T21:30:05Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401864517",
+            "time": "2026-10-10T21:30:05Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401869943",
+            "time": "2026-10-10T21:30:05Z"
+          }
+        ],
+        "partial": true
+      }
+    }
+  ]
+}

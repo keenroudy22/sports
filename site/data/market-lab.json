@@ -3,7 +3,7 @@
   "MLB": {
    "gamesGraded": 20,
    "gamesQuoted": 22,
-   "moneylineSnapshots": 81,
+   "moneylineSnapshots": 83,
    "seasons": [
     {
      "gamesGraded": 13,
@@ -18,14 +18,14 @@
      "season": 2026
     }
    ],
-   "snapshots": 81,
+   "snapshots": 83,
    "status": "capturing",
-   "totalSnapshots": 81
+   "totalSnapshots": 83
   },
   "NHL": {
-   "gamesGraded": 65,
+   "gamesGraded": 66,
    "gamesQuoted": 82,
-   "moneylineSnapshots": 311,
+   "moneylineSnapshots": 320,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,44 @@
      "season": 2027
     },
     {
-     "gamesGraded": 26,
+     "gamesGraded": 27,
      "gamesQuoted": 41,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 311,
+   "snapshots": 320,
    "status": "capturing",
-   "totalSnapshots": 311
+   "totalSnapshots": 320
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "PHI",
+    "id": "15",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/phi.png",
+    "name": "Philadelphia Flyers",
+    "shortName": "Flyers"
+   },
+   "awayScore": 1,
+   "gameId": "NHL-401892469",
+   "gradedAt": "2026-10-10T21:30:05Z",
+   "home": {
+    "abbreviation": "BOS",
+    "id": "1",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/bos.png",
+    "name": "Boston Bruins",
+    "shortName": "Bruins"
+   },
+   "homeScore": 5,
+   "kickoff": "2026-10-10T17:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "ANA",
@@ -2205,5 +2231,5 @@
    "type": "grade"
   }
  ],
- "updatedAt": "2026-10-10T20:39:49Z"
+ "updatedAt": "2026-10-10T21:30:05Z"
 }
