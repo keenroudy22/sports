@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-10T13:16:31.350841Z",
+  "updatedAt": "2026-10-10T13:23:03.462901Z",
   "items": [
     {
       "id": "P01",
@@ -955,6 +955,15 @@
       "next": "Preserve narrow-phone uppercase name fitting during later ticket changes.",
       "doneWhen": "Real Harbor ticket renders with no player-name overlap at375/1440 and successful hosted release is recorded.",
       "evidence": "7ba788fb; hosted38054258809 success. Full release gates passed:1278Python/232Node, clean export, build/feed, budget/audits/guard/assets, isolated0830 rehearsal. Live12routes375/1440 clean; Harbor24px has18px gap above teams; SJSU no NFL context; NFL depth intact. Full receipt:docs/PRODUCT-IMPLEMENTATION.md; owner layout-fix-2026-10-10/release.json."
+    },
+    {
+      "id": "A-20261010-2",
+      "title": "Queue fresh morning win announcements during quiet hours",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Release tested morning-queue fix with full gates; verify hosted/live success and Iowa catch-up actual sent receipt at09:52ET.",
+      "doneWhen": "Fresh06:45 wins queue after09:00 within unchanged3-hour freshness; duplicate and quiet-hour guards pass; live release and real catch-up delivery recorded.",
+      "evidence": "Iowa\u2013Washington won41\u201324. Results sent09:06 (2108906910829154640), separate win missed. Owner catch-up accepted09:52ET after safely opened slot via original-post quote. Candidate7bd1d56a:1279Python/232Node plus clean export, build/feed and isolated0830 rehearsal passed; release pending."
     }
   ]
 }
