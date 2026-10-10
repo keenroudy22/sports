@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-10T21:58:06Z",
+  "updatedAt": "2026-10-10T23:45:45Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-10T21:29Z",
+              "reportedAt": "2026-10-10T23:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1187,8 +1187,8 @@
               "id": "4430822",
               "name": "Noah Sewell",
               "position": "LB",
-              "status": "Active",
-              "injury": null,
+              "status": "Questionable",
+              "injury": "Achilles",
               "reportedAt": "2026-10-10T19:32Z",
               "source": "https://www.espn.com/nfl/player/_/id/4430822/noah-sewell"
             },
@@ -5067,6 +5067,15 @@
           "name": "New Orleans Saints",
           "players": [
             {
+              "id": "4429040",
+              "name": "Vernon Broughton",
+              "position": "DT",
+              "status": "Questionable",
+              "injury": "Illness",
+              "reportedAt": "2026-10-10T22:27Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4429040/vernon-broughton"
+            },
+            {
               "id": "4076951",
               "name": "Nathan Shepherd",
               "position": "DT",
@@ -5281,15 +5290,6 @@
               "injury": null,
               "reportedAt": "2026-10-05T23:09Z",
               "source": "https://www.espn.com/nfl/player/_/id/4241993/pete-werner"
-            },
-            {
-              "id": "4361259",
-              "name": "Zach Wilson",
-              "position": "QB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-05T23:06Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4361259/zach-wilson"
             }
           ]
         },
@@ -6907,6 +6907,15 @@
           "name": "Tennessee Titans",
           "players": [
             {
+              "id": "4917635",
+              "name": "Joshua Williams",
+              "position": "CB",
+              "status": "Injured Reserve",
+              "injury": "Pectoral",
+              "reportedAt": "2026-10-10T23:21Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4917635/joshua-williams"
+            },
+            {
               "id": "4360978",
               "name": "David Martin-Robinson",
               "position": "TE",
@@ -6986,15 +6995,6 @@
               "injury": null,
               "reportedAt": "2026-10-08T20:58Z",
               "source": "https://www.espn.com/nfl/player/_/id/3916148/tony-pollard"
-            },
-            {
-              "id": "4917635",
-              "name": "Joshua Williams",
-              "position": "CB",
-              "status": "Injured Reserve",
-              "injury": "Pectoral",
-              "reportedAt": "2026-10-08T00:11Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4917635/joshua-williams"
             },
             {
               "id": "4870805",
@@ -7365,14 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "26",
-          "name": "Julian Neal",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-10-09T22:36:21Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4684543/julian-neal"
-        },
         {
           "teamId": "26",
           "name": "Leonard Williams",
@@ -7764,11 +7756,19 @@
           "to": "Injured Reserve",
           "observedAt": "2026-10-10T21:42:07Z",
           "source": "https://www.espn.com/nfl/player/_/id/4684543/julian-neal"
+        },
+        {
+          "teamId": "3",
+          "name": "Noah Sewell",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-10T23:45:45Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4430822/noah-sewell"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-10T21:58:06Z",
-      "lastAttemptAt": "2026-10-10T21:58:06Z",
+      "checkedAt": "2026-10-10T23:45:45Z",
+      "lastAttemptAt": "2026-10-10T23:45:45Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-10T21:58:06Z",
-      "lastAttemptAt": "2026-10-10T21:58:06Z",
+      "checkedAt": "2026-10-10T23:45:45Z",
+      "lastAttemptAt": "2026-10-10T23:45:45Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
