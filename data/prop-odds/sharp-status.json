@@ -1,12 +1,12 @@
 {
- "at": "2026-10-10T21:42:52Z",
+ "at": "2026-10-10T21:50:52Z",
  "confirmed": {
-  "CFB-401856712": "2026-10-10T21:42:52Z",
-  "CFB-401856715": "2026-10-10T21:42:52Z",
+  "CFB-401856712": "2026-10-10T21:50:52Z",
+  "CFB-401856715": "2026-10-10T21:50:52Z",
   "CFB-401856808": "2026-10-10T20:40:23Z",
   "CFB-401856827": "2026-10-10T20:40:23Z",
-  "CFB-401858258": "2026-10-10T21:42:52Z",
-  "CFB-401858485": "2026-10-10T20:40:23Z",
+  "CFB-401858258": "2026-10-10T21:50:52Z",
+  "CFB-401858485": "2026-10-10T21:50:52Z",
   "CFB-401858486": "2026-10-10T20:40:23Z",
   "CFB-401860901": "2026-10-10T20:40:23Z",
   "NFL-401872981": "2026-10-10T20:40:23Z",
@@ -26,33 +26,33 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 878,
-    "fanduel": 659
+    "draftkings": 1075,
+    "fanduel": 591
    },
-   "eventsListed": 25,
+   "eventsListed": 26,
    "eventsMatched": 16,
    "games": 16,
    "marketTypes": {
     "player_assists": 3,
     "player_field_goals_made": 4,
     "player_kicking_points": 4,
-    "player_longest_passing_completion": 6,
-    "player_longest_reception": 23,
-    "player_longest_rush": 12,
-    "player_passing_+_rushing_yards": 94,
-    "player_passing_attempts": 28,
-    "player_passing_completions": 26,
-    "player_passing_touchdowns": 42,
-    "player_passing_yards": 173,
-    "player_receiving_yards": 575,
-    "player_receptions": 144,
-    "player_rushing_attempts": 24,
-    "player_rushing_yards": 373,
+    "player_longest_passing_completion": 8,
+    "player_longest_reception": 29,
+    "player_longest_rush": 17,
+    "player_passing_+_rushing_yards": 93,
+    "player_passing_attempts": 43,
+    "player_passing_completions": 39,
+    "player_passing_touchdowns": 44,
+    "player_passing_yards": 217,
+    "player_receiving_yards": 638,
+    "player_receptions": 151,
+    "player_rushing_attempts": 23,
+    "player_rushing_yards": 347,
     "player_tackles": 3,
     "player_tackles_+_assists": 3
    },
    "requestsLeft": 0,
-   "rows": 1537,
+   "rows": 1666,
    "slateGames": [
     "San Diego State Aztecs at Oregon State Beavers 2026-10-10T22:00Z",
     "LSU Tigers at Kentucky Wildcats 2026-10-10T23:00Z",
@@ -198,7 +198,7 @@
       "fliff": "417954_c_p_209_prematch",
       "goldrush": "31177195",
       "hardrock": "6405700796247310759",
-      "kalshi": "KXNCAAFSPREAD-26OCT10TARLPEAY",
+      "kalshi": "KXNCAAF1H-26OCT10TARLPEAY",
       "ladbrokes": "770f9dd1-e3ac-4920-90da-2511198ddad6",
       "matchbook": "mb-34562835007800023",
       "novig": "01a0fedb-b0ca-71d0-b1c7-480ac0f83542",
@@ -373,10 +373,11 @@
      "away": "Delaware",
      "external": {
       "draftkings": "34788187",
+      "fanatics_markets": "6344663",
       "fanduel": "36152733",
       "fliff": "418166_c_p_209_prematch",
       "gemini": "NCAAF-2610132300-DEL-MTN-M",
-      "kalshi": "KXNCAAFGAME-26OCT13DELMTU",
+      "kalshi": "KXNCAAF1H-26OCT13DELMTU",
       "novig": "01a10e4e-3017-7f80-bc97-a05c77a71592",
       "onexbet": "760148189",
       "polymarket": "nfl_delaware_middletennesseeblueraiders_2026-10-13_b3",
@@ -387,6 +388,7 @@
       "away_team": "Delaware",
       "home_team": "Middle Tennessee",
       "markets": [
+       "1st_half_moneyline",
        "moneyline",
        "point_spread",
        "total_points"
@@ -399,10 +401,11 @@
      "away": "Florida International",
      "external": {
       "draftkings": "34788188",
+      "fanatics_markets": "6344671",
       "fanduel": "36152735",
       "fliff": "418167_c_p_209_prematch",
       "gemini": "NCAAF-2610140000-FIU-JAX-M",
-      "kalshi": "KXNCAAFGAME-26OCT13FIUJVST",
+      "kalshi": "KXNCAAFSPREAD-26OCT13FIUJVST",
       "novig": "01a10e85-349b-78f2-ba36-2fa1102e1ddc",
       "polymarket": "nfl_floridainternational_jacksonvillestate_2026-10-13_b3",
       "prophetx": "1700100279"
@@ -444,6 +447,51 @@
      },
      "start": "2026-10-16T00:00:00Z",
      "type": "fixture"
+    },
+    {
+     "away": "Miami (oh)",
+     "external": {
+      "ballybet": "1027553002",
+      "betfair": "20261010D5D5897F",
+      "betfair_lay": "20261010D5D5897F",
+      "betmgm": "19996666",
+      "betonline": "1752015",
+      "betparx": "1027553002",
+      "betrivers": "1027553002",
+      "bovada": "31811368",
+      "bwin": "19996666",
+      "caesars": "5d0cb97b-373b-4ef9-b11f-28479bafdd3f",
+      "draftkings": "34745983",
+      "fanatics": "5274437",
+      "fanatics_markets": "6358435",
+      "fanduel": "36137848",
+      "fliff": "417629_c_p_309_inplay",
+      "gemini": "NCAAF-2610102000-MOH-MAS-T",
+      "hardrock": "7011553934254932383",
+      "kalshi": "KXNCAAFSPREAD-26OCT10MOHMASS",
+      "novig": "01a0fdc8-c189-7e32-8d09-9de89a6ae095",
+      "onexbet": "760403691",
+      "paddypower": "36137848",
+      "polymarket": "nfl_massachusettsminutemen_miamiohio_2026-10-10_b2",
+      "prophetx": "1700086779",
+      "rebet": "sr:match:70898792",
+      "smarkets": "45357607",
+      "stake": "c4cedf24-4586-4e53-b4b4-019fd3148f73",
+      "sx_bet": "L20409454",
+      "thescorebet": "StandardEvent:fc50077f-9c9e-494d-8354-2725581884cd"
+     },
+     "home": "Massachusetts",
+     "sample": {
+      "away_team": "Miami (oh)",
+      "home_team": "Massachusetts",
+      "markets": [
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-10T19:00:00Z",
+     "type": "fixture"
     }
    ]
   },
@@ -484,7 +532,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-10T21:14:00Z",
+     "start": "2026-10-10T21:50:00Z",
      "type": "outright"
     },
     {
@@ -509,7 +557,7 @@
       "gemini": "NFL-2610130015-BUF-LAR-PPTD",
       "goldrush": "31065454",
       "hardrock": "2965286453510275470",
-      "kalshi": "KXNFL2QSPREAD-26OCT12BUFLAR",
+      "kalshi": "KXNFL4QSPREAD-26OCT12BUFLAR",
       "ladbrokes": "06f9285d-7fb8-46a6-aa80-ea59164e522f",
       "matchbook": "mb-33322136983600023",
       "novig": "01a0ef14-24b4-7cc0-b0a6-3307622fab91",
