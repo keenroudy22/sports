@@ -1249,3 +1249,27 @@ observations, not completed by fixtures or probes. Keep the daily NBA monitor
 until those readiness gates are verified, then retire it; season-switch continues.
 Owner evidence: /Users/keen/Documents/ChatGPT/Kook'n/nba-launch/2026-10-09/.
 This receipt is documentation only; no duplicate code release is needed.
+
+### October 10 daily health: league-context repair prepared, not released
+
+Audit A-20261009-1 is reproduced in the live SJSU game payload: ESPN college
+team 23 inherited Pittsburgh Steelers injuries and its NFL-only depth chart.
+The development patch keeps injury maps within NFL/CFB for game pages, QB
+news and game-number explanations, and excludes NFL depth charts from college
+pages. Tests cover overlapping provider IDs 1–34 and absent college context,
+while retaining NFL injuries and depth charts. A fresh development build has
+119 college game payloads and zero NFL depth-chart leaks; SJSU is clear.
+
+Prepared gates: Python 1,278 (two skipped), frontend 232, both clean-export
+suites, 494-page build, football 96-pick/NBA zero-publication record audits,
+581-file publication guard, asset/SVG checks, and isolated 06:45 rehearsal
+(exit 0/outcome ok, zero outside writes or private reads). Local game checks
+at 375/1440 have no overflow, load-error state or browser errors. Today data
+remains a soft budget warning; its limit has not changed. No production code
+was edited or deployed, and no published record or attachment was rewritten.
+
+The A-20261009-1 queue item is gated, agent-owned, with the next step explicitly
+the October 10 08:35–09:45 ET quiet window after a green 08:30 run. Rebase,
+repeat affected verification and locked gates, deploy, watch hosted success,
+then verify live college and NFL context at 375/1440 before marking shipped or
+appending Claude's fixed receipt. A prepared patch is not a completed release.

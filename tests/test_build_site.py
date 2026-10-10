@@ -32,6 +32,36 @@ def slate_game(game_id, kickoff, state='pre', **market):
                        'total': 44.5, 'totalOpen': 'o45.5', 'overOdds': '-108', 'underOdds': '-112', **market}}
 
 
+class LeagueInjuryIsolationTests(unittest.TestCase):
+    def test_overlapping_espn_ids_keep_injuries_and_depth_charts_in_their_league(self):
+        now = datetime(2026, 10, 10, 12, tzinfo=timezone.utc)
+        for team_id in map(str, range(1, 35)):
+            with self.subTest(team_id=team_id):
+                nfl_player = {'id': 'nfl-player', 'name': 'NFL quarterback', 'position': 'QB', 'status': 'Out'}
+                cfb_player = {'id': 'cfb-player', 'name': 'College quarterback', 'position': 'QB', 'status': 'Doubtful'}
+                context = {'leagues': {league: {'teams': {team_id: {'players': [player]}}}
+                                      for league, player in [('NFL', nfl_player), ('CFB', cfb_player)]}}
+                injuries = build_site.league_injuries(context)
+                nfl_chart = {'name': 'Pittsburgh Steelers', 'abbr': 'PIT', 'positions': []}
+                for league, player in [('NFL', nfl_player), ('CFB', cfb_player)]:
+                    match = dict(slate_game(f'{league}-test', '2026-10-10T22:00:00Z'), league=league, season=2026)
+                    match['home']['id'] = team_id
+                    card = {**match, 'completed': False}
+                    detail = build_site.game_detail(card, match, None, [], [], [], [], {}, {}, {},
+                                                   injuries[league], {team_id: nfl_chart}, [], {}, now, {})
+                    home = detail['teams']['home']
+                    self.assertEqual([p['name'] for p in home['injuries']], [player['name']])
+                    self.assertEqual(home['depthChart'], nfl_chart if league == 'NFL' else None)
+                    self.assertEqual(build_site.qb_news(home['injuries']), f"{player['name']} {player['status']}")
+
+    def test_missing_college_context_never_borrows_nfl_injuries(self):
+        context = {'leagues': {'NFL': {'teams': {'23': {'players': [
+            {'id': '1', 'name': 'Aaron Rodgers', 'position': 'QB', 'status': 'Out'}]}}}}}
+        injuries = build_site.league_injuries(context)
+        self.assertEqual(injuries['CFB'], {})
+        self.assertEqual(injuries['NFL']['23'][0]['name'], 'Aaron Rodgers')
+
+
 class TodayHeroTests(unittest.TestCase):
     def test_first_paint_uses_a_real_active_straight_and_not_a_fun_ticket(self):
         now = datetime(2026, 10, 7, 17, tzinfo=timezone.utc)

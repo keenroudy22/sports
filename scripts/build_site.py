@@ -557,6 +557,19 @@ def pregame(snapshots, kickoff):
     return [s for s in snapshots if features.when(s['publishedAt']) < start]
 
 
+def league_injuries(context):
+    """Keep provider team IDs inside their league for every public injury reader."""
+    out = {}
+    for league in ('NFL', 'CFB'):
+        teams = ((context.get('leagues') or {}).get(league) or {}).get('teams') or {}
+        out[league] = {
+            str(team): [{k: p.get(k) for k in ('id', 'name', 'position', 'status', 'injury', 'reportedAt')}
+                        for p in data.get('players', []) if str(p.get('status', '')).lower() != 'active']
+            for team, data in teams.items()
+        }
+    return out
+
+
 def game_detail(card, game, record, snapshots, captures, lines, picks, names, team_logs, defense, injuries, depth_charts,
                 records, snap_players, now, grading, favorites=None, trends=None, reads=None):
     """snapshots: this game's pregame v2 snapshots, oldest first."""
@@ -588,7 +601,8 @@ def game_detail(card, game, record, snapshots, captures, lines, picks, names, te
     for side in ('home', 'away'):
         team = card[side]['id']
         opponent = card['away' if side == 'home' else 'home']['id']
-        chart = depth_charts.get(team)
+        # The captured depth-chart store is NFL-only; ESPN IDs repeat across leagues.
+        chart = depth_charts.get(team) if league == 'NFL' else None
         unavailable = {str(p.get('id')) for p in injuries.get(team, [])
                        if re.search(r'out|doubtful|suspension', str(p.get('status', '')), re.I)}
         usage = {}
@@ -1613,12 +1627,7 @@ def build(now=None):
                                'defense_logs': defense_logs, 'strength': strength,
                                'current': current, 'records': league_records}
     ticket_teams = annotate_tickets(picks, by_id, forecasts, league_data, identities)
-    injuries = {}
-    for league in ('NFL', 'CFB'):
-        block = ((context.get('leagues') or {}).get(league) or {}).get('teams') or {}
-        for team, data in block.items():
-            injuries[team] = [{k: p.get(k) for k in ('id', 'name', 'position', 'status', 'injury', 'reportedAt')}
-                              for p in data.get('players', []) if str(p.get('status', '')).lower() != 'active']
+    injuries_by_league = league_injuries(context)
     # Grade every open line before anything is written, so the board and the game pages agree.
     appearances = defaultdict(int)
     last_season = defaultdict(int)     # (player, team) -> games the season before this one
@@ -1698,7 +1707,8 @@ def build(now=None):
             snapshots = forecasts.get(row.get('gameId')) or []
             if game and snapshots:
                 context_row = player_matchup_context(game, snapshots[-1], row)
-                row['qbNews'] = qb_news(injuries.get(str(context_row.get('team')), [])) or None
+                row['qbNews'] = qb_news(injuries_by_league.get(game['league'], {}).get(
+                    str(context_row.get('team')), [])) or None
     values = sheet_values(lines, now)
     trend_injuries = {league: {team: block.get('players', []) for team, block in
                       ((context.get('leagues') or {}).get(league, {}).get('teams') or {}).items()}
@@ -1733,6 +1743,7 @@ def build(now=None):
         card['fcs'] = game['league'] == 'CFB' and not {str(game['home']['id']), str(game['away']['id'])} <= fbs
         card['upsetWatch'] = research_views.upset_watch(card, now, latest_snap)
         info = league_data[game['league']]
+        injuries = injuries_by_league[game['league']]
         card.update(game_context.navigator(game, card, lines, picks, now))
         card['whyDiffer'] = game_context.why_differ(game, card, latest_snap, info['team_logs'],
                                                      info['strength'], injuries, lines, now,

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-09T15:09:00Z",
+  "updatedAt": "2026-10-10T11:50:25Z",
   "items": [
     {
       "id": "P01",
@@ -937,6 +937,15 @@
       "next": "Build opponent-quality splits and DvP fields in Release 3 unless they can join Release 1 without delaying the Saturday deadline.",
       "doneWhen": "Every CFB player trend and Prep List row labels tonight's DvP rank and splits FBS top-half, bottom-half and FCS history; padded streaks do not count as support.",
       "evidence": "KOOKN-PLAN.md Oct. 9 addendum and KOOKN-PLAN-CODEX.md T-TREND."
+    },
+    {
+      "id": "A-20261009-1",
+      "title": "Isolate football injury and depth context by league",
+      "status": "gated",
+      "owner": "agent",
+      "next": "Oct 10, 08:35–09:45 ET: after the green 08:30 run, rebase and repeat affected gates; locked deploy, watch hosted success, verify live college/NFL pages at 375/1440, then append fixed audit receipt.",
+      "doneWhen": "Live college game payloads never inherit NFL injuries or depth charts from overlapping ESPN IDs; NFL context remains intact; full release gates, hosted success and live 375/1440 evidence are recorded.",
+      "evidence": "Confirmed live SJSU id23 had Steelers context. sports-dev patch scopes injuries by league and excludes NFL-only depth charts from CFB. 1,278 Python / 232 Node plus clean-export suites passed; build, audits, guard, assets and offline 0645 rehearsal passed. Local 375/1440 clean; release waits for approved window."
     }
   ]
 }
