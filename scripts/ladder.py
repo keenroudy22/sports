@@ -1,10 +1,10 @@
 """The Kook'n 80/20 Climb: a $50-to-$1,000 bankroll ladder, one rung at a time. Stdlib only.
 
-The owner's call (2026-09-26): "50 -> 1000 on 1-2 leg safe bets", with alternate lines. An automatic rung is a
-two-leg ticket at one book, priced as a favorite (TARGET), built from safer player lines ("Bijan Robinson 50+
-rushing yards") that our projection clears comfortably, one leg per game. A person may also supply exact, fresh
-sportsbook quotes for alternate spreads or totals; those legs have to clear the same model-agreement and ticket
-guards. After a win the
+The owner's call (2026-09-26): "50 -> 1000 on 1-2 leg safe bets", with alternate lines. On October 10 the owner
+set the rung band to -300 through -200 and asked the automatic builder to consider one or two exact main
+moneylines as well as safer player alternates. Every leg still needs model agreement, fresh two-sided pricing and
+a saved factual reason before it can post. A person may also supply exact, fresh sportsbook quotes for alternate
+spreads or totals; those legs have to clear the same guards. After a win the
 ladder banks 20% of the return and rides the other 80% on the next rung. A miss ends that climb but cannot take what
 was banked. The climb reaches $1,000 when its bank plus the next stake reaches the goal; the next rung then starts a
 new climb at $50. Money is whole dollars: a rung pays round(stake x the ticket's decimal price), the bank gets
@@ -57,10 +57,14 @@ MODEL_LIFT_CAP = 0.06               # an alternate-line model cannot claim more 
 MIN_GAP = 0.04                      # safety comes from the price; our number still has to agree
 MAX_GAP = 0.18                      # and no further: a book that far off an easy line is a data or role problem, not a gift
 MAIN_RATIO = (0.6, 1.6)             # the book's main line against our projection: outside this, the market is another one
-TARGET = (-180, -130)               # enough protection without making the climb take forever (owner, 2026-10-02)
+TARGET = (-300, -200)               # one or two safer legs in the owner's current rung band (owner, 2026-10-10)
 MANUAL_RAW_CHANCE = 0.72             # exact game alternates: the unshrunk model must still agree comfortably
-LEAD = timedelta(minutes=90)        # a game this close to kickoff is left off
+MONEYLINE_MIN_CHANCE = 0.70         # strong-favorite floor; the exact two-sided market still anchors the check
+MONEYLINE_MIN_GAP = 0.03            # our win estimate must clear the book's fair chance by three points
+MONEYLINE_PAIR_BAND = (0.99, 1.15)  # broken or mismatched two-sided captures never become a rung
+LEAD = timedelta(minutes=15)        # a late admission still needs a real pre-kickoff posting window
 FRESH = timedelta(hours=12)         # prices older than this are not used
+GAME_FRESH = timedelta(hours=2)     # main moneylines are re-read on game day before admission
 STAKE = parlay.STAKE                # the ticket's size in the desk's own terms; the ladder itself counts dollars
 SOURCE = 'https://sharpapi.io/'
 
@@ -271,6 +275,59 @@ def legs_for_game(game, record, ctx, now, confirmed=None):
     return out
 
 
+def moneyline_legs(game, ctx, now):
+    """A fresh exact favorite moneyline whose two-sided price and our winner estimate agree.
+
+    ESPN supplies the current DraftKings pair without an added paid request.  The fair chance is computed from
+    both sides at that same book; a one-sided, stale or abnormal pair is unusable.  The stored model may support
+    the market, but the run still requires a separate saved factual reason before publishing the rung.
+    """
+    snapshot = ctx.snapshot(game['id'])
+    market = game.get('market') or {}
+    observed = game.get('marketRetrievedAt')
+    if not snapshot or not observed:
+        return []
+    try:
+        age = now - gates.when(observed)
+    except (TypeError, ValueError):
+        return []
+    if not timedelta(minutes=-1) <= age <= GAME_FRESH:
+        return []
+    provider = str(market.get('provider') or '').strip()
+    book = next((name for name in SLUGS if name.lower() == provider.lower()), None)
+    if not book:
+        return []
+    home, away = build_site.american(market.get('homeML')), build_site.american(market.get('awayML'))
+    if home is None or away is None:
+        return []
+    total = pricing.break_even(home) + pricing.break_even(away)
+    if not MONEYLINE_PAIR_BAND[0] <= total <= MONEYLINE_PAIR_BAND[1]:
+        return []
+    out = []
+    for side, price, other in (('home', home, away), ('away', away, home)):
+        if not LEG_PRICES[0] <= price <= LEG_PRICES[1]:
+            continue
+        try:
+            raw = pricing.price(snapshot, 'moneyline', side, 0, price)['rawChance']
+            fair = pricing.fair_chance(price, other)
+        except (KeyError, TypeError, ValueError):
+            continue
+        gap = raw - fair
+        if raw < MONEYLINE_MIN_CHANCE or not MONEYLINE_MIN_GAP <= gap <= MAX_GAP:
+            continue
+        chance = min(raw, fair + MODEL_LIFT_CAP)
+        team = game[side]
+        out.append({'id': f"ladder-{game['id']}-moneyline-{side}",
+                    'title': f"{team.get('short') or team.get('abbreviation')} moneyline",
+                    'gameId': game['id'], 'marketType': 'moneyline', 'direction': side, 'line': 0,
+                    'team': str(team.get('id') or ''), 'book': book, 'odds': int(price),
+                    'chance': round(chance, 3), 'rawChance': round(raw, 3),
+                    'fairChance': round(fair, 3), 'implied': round(pricing.break_even(price), 3),
+                    'projection': round(raw, 3), 'kickoff': game['kickoff'], 'observedAt': observed,
+                    'marketWindow': 'Full game', 'alternate': False})
+    return out
+
+
 def strict_legs(legs, policy, now, league):
     """The stricter Climb pool (direction rules, owner 2026-10-07): only the legs whose segment is neither paused nor
     carrying a raised edge bar (`direction.flagged`). The leg chance, leg prices and TARGET are unchanged, so it can
@@ -293,19 +350,36 @@ def pairs(legs):
                 yield book, a, b, dec, price
 
 
-def build(legs):
-    """The rung: two legs from different games at one book, priced inside TARGET, with the best joint chance on our
-    numbers (the higher price breaks a tie). None with a reason when no pair fits."""
-    best = None
+def tickets(legs):
+    """Every eligible one- or two-leg rung in the owner's current price band."""
+    for leg in legs:
+        if TARGET[0] <= leg['odds'] <= TARGET[1]:
+            yield leg['book'], (leg,), parlay.decimal(leg['odds']), leg['odds']
     for book, a, b, dec, price in pairs(legs):
-        key = (round(a['chance'] * b['chance'], 4), price)
+        yield book, (a, b), dec, price
+
+
+def build(legs):
+    """The safest supported one- or two-leg rung inside TARGET.
+
+    Safety is the conservative joint chance above the ticket's price, then the joint chance itself.  This keeps a
+    merely shorter one-leg price from automatically beating a stronger two-game combination.
+    """
+    best = None
+    for book, chosen, dec, price in tickets(legs):
+        chance = 1.0
+        for leg in chosen:
+            chance *= leg['chance']
+        chance = round(chance, 4)
+        key = (round(chance - pricing.break_even(price), 4), chance, price)
         if best is None or key > best[0]:
-            pair = sorted((a, b), key=lambda l: (l['kickoff'], l['title']))
-            best = (key, {'book': book, 'legs': pair, 'odds': price, 'decimal': round(dec, 3),
-                          'gameIds': [l['gameId'] for l in pair], 'quotedAt': min(l['observedAt'] for l in pair),
-                          'firstKickoff': min(l['kickoff'] for l in pair), 'chance': key[0]})
+            selected = sorted(chosen, key=lambda l: (l['kickoff'], l['title']))
+            best = (key, {'book': book, 'legs': selected, 'odds': price, 'decimal': round(dec, 3),
+                          'gameIds': [l['gameId'] for l in selected],
+                          'quotedAt': min(l['observedAt'] for l in selected),
+                          'firstKickoff': min(l['kickoff'] for l in selected), 'chance': chance})
     if not best:
-        return None, f'no book has two games with easier lines our numbers clear comfortably that pay {TARGET[0]:+d} to {TARGET[1]:+d} together'
+        return None, f'no book has one or two supported legs that pay {TARGET[0]:+d} to {TARGET[1]:+d}'
     return best[1], None
 
 
@@ -438,17 +512,18 @@ def candidate(ctx, games, now, exclude=()):
     strict = direction.climb_rules(policy, now)
     reasons = []
     for league in ('NFL', 'CFB'):
-        # College legs wait for the same thing college props do: player numbers calibrated against that league's lines
-        # (and college has no injury feed to catch a benched player).
-        if league in gates.OWN_CALIBRATION and not ((getattr(ctx, 'policy', None) or {}).get('calibration') or {}).get(f'{league}/prop'):
-            reasons.append(f'{league}: player numbers wait for their own calibration')
-            continue
         today = todays_games(games, now, league, exclude)
         if len(today) < 2:
             reasons.append(f'{league}: {len(today)} games left today')
             continue
         seen = confirmed_at()
-        legs = [leg for g in today for leg in legs_for_game(g, ctx.prop_odds.get(g['id']), ctx, now, seen)]
+        legs = [leg for g in today for leg in moneyline_legs(g, ctx, now)]
+        calibrated = league not in gates.OWN_CALIBRATION or bool(
+            ((getattr(ctx, 'policy', None) or {}).get('calibration') or {}).get(f'{league}/prop'))
+        if calibrated:
+            legs += [leg for g in today for leg in legs_for_game(g, ctx.prop_odds.get(g['id']), ctx, now, seen)]
+        else:
+            reasons.append(f'{league}: player alternates wait for their own calibration; game moneylines still checked')
         if strict:
             legs = strict_legs(legs, policy, now, league)
         ticket, reason = build(gates.without_straight_players(legs, ctx))

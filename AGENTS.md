@@ -214,6 +214,13 @@ Handy commands (from `~/Projects/sports`):
   follow the plan's T0–T27, T-SITE and T-ART pointers for current behavior. The never-bend rules and deployment
   recipe above are unchanged.
 
+- **Sunday-ready Climb (owner, 2026-10-10):** the 80/20 Climb may use one or two legs at one supported book,
+  including exact fresh two-sided main moneylines and reviewed alternate lines, with the final ticket priced
+  −300 through −200. A moneyline leg needs at least a 70% model win chance and three points above that book's fair
+  two-sided chance. Every leg still needs a saved sourced reason, the pre-post news check, one leg per game, and all
+  injury, quarterback, price, role, jurisdiction and one-open-rung safeguards. A late admission needs at least 15
+  minutes before kickoff. The rung is prepared from the whole game-day slate and is never forced.
+
 - **Superseded operating details (pointer only):** old noon/two-hours-before and ten-minute schedules, the 8:45
   menu, conversation prompts, weekend sheets, weekday NFL ownership, the old CFB-total and market-priority rules,
   Comfort Food/Chef's Upset/Chef's Call names, Tuesday Early Look, first-render review gates and daily Claude-audit

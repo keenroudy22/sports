@@ -888,6 +888,35 @@ class LockedUnitsTests(unittest.TestCase):
         self.assertIn('B 30+ rushing yards', screened[0]['reason'])
         self.assertEqual(ticket['legs'][0]['reason'], 'A faces a bottom-10 defense.')
 
+    def test_a_climb_moneyline_uses_the_existing_research_budget_before_admission(self):
+        ticket = {'id': 'NFL-ladder', '_league': 'NFL', 'title': 'Climb step 1',
+                  'parlayType': 'ladder', 'book': 'DraftKings', 'odds': -240,
+                  'legs': [{'id': 'a', 'gameId': 'g1', 'title': 'Patriots moneyline',
+                            'marketType': 'moneyline', 'direction': 'home'}],
+                  'gameIds': ['g1'], 'ladder': {'run': 3, 'step': 1, 'stake': 50, 'payout': 71}}
+        game = {'id': 'g1', 'league': 'NFL', 'away': {'id': 'a', 'short': 'Raiders'},
+                'home': {'id': 'h', 'short': 'Patriots'}, 'source': 'https://www.espn.com/nfl/game/g1'}
+        ctx = SimpleNamespace(first={}, latest={}, games={'g1': game}, player_team={}, context_file={},
+                              now=datetime(2026, 10, 11, 11, 0, tzinfo=timezone.utc),
+                              passers={}, names={}, odds_history={}, records=[])
+        published, decided, screened = [], [], []
+        status = {'research': {'on': True, 'asked': 0, 'verified': 0, 'dropped': 0}}
+        fact = {'kind': 'role', 'direction': 'for', 'claim': 'New England returns 4 starting linemen.',
+                'source': 'https://example.com/report', 'origin': 'codex researcher',
+                'retrievedAt': '2026-10-11T10:50:00Z'}
+        refusal = run.gates.Decision(False, 'not_republished', 'fixture stops after research')
+        with mock.patch('ladder.candidate', return_value=(ticket, None)), \
+                mock.patch.object(run, 'evidence', return_value=[]), \
+                mock.patch.object(run.researcher, 'enabled', return_value=True), \
+                mock.patch.object(run.researcher, 'research', return_value=([fact], [])) as research, \
+                mock.patch.object(run, 'write_prose', side_effect=lambda pick, *_: pick), \
+                mock.patch.object(run.gates, 'admit', return_value=(False, [refusal])):
+            run.ladder_step(ctx, {'g1': game}, datetime(2026, 10, 11, 11, 0, tzinfo=timezone.utc), [],
+                            published, decided, screened, status=status)
+        research.assert_called_once()
+        self.assertEqual(status['research'], {'on': True, 'asked': 1, 'verified': 1, 'dropped': 0})
+        self.assertEqual(ticket['legs'][0]['reason'], 'New England returns 4 starting linemen.')
+
     def test_a_graded_play_carries_its_units_at_the_published_price(self):
         self.assertEqual(run.lock_units({'odds': -111, 'result': 'win'})['units'], round(100 / 111, 3))
         self.assertEqual(run.lock_units({'odds': 583, 'result': 'loss', 'riskUnits': 0.25})['units'], -0.25, 'a parlay at its own stake')

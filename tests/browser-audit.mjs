@@ -34,11 +34,12 @@ for (const width of widths) {
       // These containers scroll horizontally by design; document-level overflow still fails below.
       const allowed = '.table-wrap,.seg,.filters,.board-tabs,.depth-line,.chip-scroll';
       const bad = [...document.querySelectorAll('#view *')].filter(e => {
-        if(e.closest(allowed) || !e.getClientRects().length) return false;
+        // Screen-reader-only headings intentionally occupy a clipped 1 px box. They are not visual overflow.
+        if(e.closest(allowed) || e.closest('.sr') || !e.getClientRects().length) return false;
         const r=e.getBoundingClientRect(); return r.right>innerWidth+1 || r.left < -1;
       }).slice(0,10).map(e=>({tag:e.tagName,cls:e.className,text:e.textContent.slice(0,80)}));
       const clipped = [...document.querySelectorAll('#view .eyebrow,#view h1,#view h2,#view h3,#view .empty p')].filter(e=>{
-        if(!e.getClientRects().length) return false;
+        if(e.closest('.sr') || !e.getClientRects().length) return false;
         const range=document.createRange();range.selectNodeContents(e);const r=range.getBoundingClientRect();
         for(let p=e.parentElement;p && p.id !== 'view';p=p.parentElement) {
           if(['hidden','clip'].includes(getComputedStyle(p).overflowX)) {const b=p.getBoundingClientRect();if(r.right>b.right+2 || r.left<b.left-2) return true;}

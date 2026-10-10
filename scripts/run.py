@@ -1746,7 +1746,7 @@ def easy_parlay_step(ctx, games, now, records, published, decided, screened, spe
     screened.append({'league': league, 'gameId': ticket['gameIds'][0], 'title': ticket['title'], 'rule': refusal.rule, 'reason': refusal.reason})
 
 
-def ladder_step(ctx, games, now, records, published, decided, screened, exclude=(), manual=None):
+def ladder_step(ctx, games, now, records, published, decided, screened, exclude=(), manual=None, status=None):
     """The ladder's next rung (scripts/ladder.py), through the ladder's gates, leaving off the games in `exclude`.
     Never fails a run."""
     import ladder
@@ -1764,6 +1764,7 @@ def ladder_step(ctx, games, now, records, published, decided, screened, exclude=
     # not research by themselves. Save a factual reason on every rung leg so
     # the route and the pre-post review can explain exactly why it is there.
     missing = []
+    research_status = (status or {}).get('research') if isinstance(status, dict) else None
     for leg in ticket.get('legs') or []:
         case = dict(leg, gameIds=[leg.get('gameId')], _league=league,
                     _team=(getattr(ctx, 'player_team', {}) or {}).get(str(leg.get('athleteId') or '')),
@@ -1773,6 +1774,27 @@ def ladder_step(ctx, games, now, records, published, decided, screened, exclude=
             saved = plan_reasons(case, ctx)
         except (KeyError, TypeError, ValueError, AttributeError):
             saved = []
+        # Main-moneyline rungs are deliberately not justified by the model gap alone.  When the normal stored
+        # evidence has no supporting fact, spend one of the day's existing research lookups on that exact leg.
+        # The researcher returns sourced facts only; verification and plan_reasons still decide whether any count.
+        has_reason = any(row.get('direction') == 'for' and row.get('text') for row in saved)
+        can_research = researcher.enabled() and research_status is not None \
+            and research_status.get('asked', 0) < RESEARCH_LIMIT
+        if not has_reason and can_research:
+            game = games.get(leg.get('gameId'))
+            if game:
+                try:
+                    kept, dropped = researcher.research(
+                        game, gates.market_key(case), gates.side_of(case), now=now,
+                        player=case.get('_player'), quarterbacks=quarterbacks(game, ctx))
+                except (OSError, TypeError, ValueError, AttributeError):
+                    kept, dropped = [], []
+                case['_research'] = [dict(f, verified=True) for f in kept] + [dict(f, verified=False) for f in dropped]
+                research_status['asked'] = research_status.get('asked', 0) + 1
+                research_status['verified'] = research_status.get('verified', 0) + len(kept)
+                research_status['dropped'] = research_status.get('dropped', 0) + len(dropped)
+                saved = plan_reasons(case, ctx)
+                log(f"researched Climb leg {leg.get('title')}: {len(kept)} verified facts, {len(dropped)} dropped")
         leg['reasons'] = saved
         leg['reason'] = next((row.get('text') for row in saved if row.get('direction') == 'for'
                               and row.get('text')), None)
@@ -2214,7 +2236,8 @@ def _run(args, now, slot, kinds, status):
     if 'ladder' in kinds:
         exclude = longshot_exclusions(ctx, screened, [revision for _, _, revision in closed])
         manual_ladder = load_json(Path(args.ladder_spec), None) if args.ladder_spec else None
-        ladder_step(ctx, games, now, records, published, decided, screened, exclude=exclude, manual=manual_ladder)
+        ladder_step(ctx, games, now, records, published, decided, screened, exclude=exclude, manual=manual_ladder,
+                    status=status)
 
     by_league = defaultdict(lambda: ([], [], []))
     for item in settled:

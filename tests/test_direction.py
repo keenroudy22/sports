@@ -371,7 +371,7 @@ class ClimbTests(unittest.TestCase):
         moves, _ = settle(policy, climbs=climbs, rungs=[])
         self.assertEqual(keys(moves), ['climb'])
         self.assertEqual((moves[0]['from'], moves[0]['to']), ('standard', 'strict'))
-        self.assertIn('no leg from a paused or raised segment, still -180 to -130 together', moves[0]['sentence'])
+        self.assertIn('no leg from a paused or raised segment, with the current rung band unchanged', moves[0]['sentence'])
         self.assertIn("no Climb segment is paused or raised today, so today's pool is unchanged", moves[0]['sentence'])
         self.assertTrue(moves[0]['sentence'].endswith('To undo, tell Codex: undo climb.'))
         self.assertEqual(direction.climb_rules(policy, NOW)['skipFlaggedSegments'], True)
@@ -424,7 +424,7 @@ class ClimbTests(unittest.TestCase):
 
     def test_the_stricter_pool_never_changes_the_ladder_rules_it_reads(self):
         self.assertEqual(direction.CLIMB_MARKETS, ladder.MARKETS)
-        self.assertEqual((ladder.MIN_CHANCE, ladder.TARGET), (0.83, (-180, -130)))
+        self.assertEqual((ladder.MIN_CHANCE, ladder.TARGET), (0.83, (-300, -200)))
         legs = [{'id': 'a', 'athleteId': '1', 'market': 'recYds'}, {'id': 'b', 'athleteId': '2', 'market': 'rushYds'}]
         policy = {'direction': {'segments': {'NFL/prop:recYds': {'raise': 2.0}}}}
         self.assertEqual([leg['id'] for leg in ladder.strict_legs(legs, policy, NOW, 'NFL')], ['b'])

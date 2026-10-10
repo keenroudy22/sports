@@ -22,7 +22,9 @@ from ticket_kit import (CAP, CHALK, CHECK, COL_X, DIM, GREEN, GREEN_INK, HOUSE,
 
 ET = ZoneInfo('America/New_York')
 LEAGUES = ('NFL', 'CFB')
-LEAD = ladder.LEAD
+# The public route plans a slate well ahead of kickoff even though a newly admitted rung may use the owner's
+# narrower 15-minute emergency floor.  Route windows remain the approved 90-minute planning windows.
+LEAD = timedelta(minutes=90)
 CLUSTER = timedelta(minutes=90)
 SETTLE = timedelta(hours=3, minutes=30)  # planning allowance, not a desk settlement promise
 PLAN_ODDS = -160

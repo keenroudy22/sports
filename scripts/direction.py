@@ -49,14 +49,14 @@ CARD_WINDOW, CARD_UNITS, CARD_CAP, CARD_DAYS, CARD_RESTORE_N, CARD_FRESH = 60, -
 # Fun tickets (0.25u each).
 FUN_STAKE, FUN_ZERO, FUN_UNITS_N, FUN_UNITS, FUN_DAYS, FUN_UNDO_N, FUN_UNDO_WINS, FUN_FRESH = 0.25, 12, 20, -3.0, 14, 10, 2, 4
 FUN_SHAPE = {'odds': (300, 800), 'legs': (3, 4), 'skipPausedSegments': True}
-# The Climb. The stricter pool keeps the ladder's own leg chance (0.83), leg prices and ticket price (-180 to -130)
+# The Climb. The stricter pool keeps the ladder's own leg chance, leg prices and current ticket price band
 # and leaves out every leg from a segment that is paused or carries a raised edge bar (`flagged`). An earlier draft
 # raised the leg chance to 0.86 with two books agreeing; with the ladder's six-point model cap that left only legs at
 # -400 to -411 and built no rung on the stored prices, so a strict Climb could never reach step 3 and end itself.
 CLIMB_EARLY_STEP, CLIMB_UNDO_STEP, CLIMB_DRY_DAYS = 2, 3, 5
 CLIMB_MARKETS = ('recYds', 'rushYds', 'rec', 'passYds')        # ladder.MARKETS (a test keeps the two equal)
 CLIMB_LEAGUES = ('NFL', 'CFB')
-CLIMB_POOL = 'no leg from a segment that is paused or has a raised edge bar; still -180 to -130 together'
+CLIMB_POOL = 'no leg from a segment that is paused or has a raised edge bar; the current rung band is unchanged'
 # The Prep List (computed now; its builder reads prep_rules() once it ships).
 PREP_N, PREP_LOW, PREP_RESTORE = 40, 0.60, 0.70
 PREP_STAT_N, PREP_STAT_LOW, PREP_STAT_RESTORE, PREP_STAT_DAYS = 20, 0.50, 0.65, 28
@@ -382,8 +382,8 @@ def climb_moves(state, climbs, rungs, now, policy=None):
                          {'climbs': ended, 'heldBack': held},
                          f'The next Climb takes {CLIMB_POOL}; leg chance and prices stay at the ladder\'s own rules.',
                          'It ends when a climb reaches step 3.',
-                         f"The next Climb uses the stricter leg pool: no leg from a paused or raised segment, still "
-                         f"-180 to -130 together ({today}; the last two climbs lost at step {steps})."
+                         f"The next Climb uses the stricter leg pool: no leg from a paused or raised segment, with "
+                         f"the current rung band unchanged ({today}; the last two climbs lost at step {steps})."
                          f"{veto_tail('climb')}", True)]
         return []
     reached = [r for r in rungs if isinstance(r.get('step'), int) and r['step'] >= CLIMB_UNDO_STEP

@@ -119,7 +119,7 @@ graded at or above break-even. No two plays go on the same game.
 | **👨‍🍳 Gut call** | The fallback above. On weekends the local model may also pick one from the researched shortlist. | At most 1 a day | 0.5u |
 | **🛡️ Safer combo** | Two strong favorites (above). Replaces the old easy parlay. | Only when there's no best bet | 1u |
 | **🎰 Chef's Special** | Fun ticket, 3-4 legs, +300 to +800, one book, different games. College and NFL can mix. No same-game parlays, because free data can't honestly price legs that move together. | Any football day with 3+ games; NBA days once live | 0.25u |
-| **🪜 80/20 Climb** | Unchanged: $50 to $1,000, bank 20%, one rung at a time, never forced. | Its own checks | $ ledger |
+| **🪜 80/20 Climb** | $50 to $1,000, bank 20%, one rung at a time. One or two supported moneylines/alternates, one book, final price −300 to −200; every leg researched, never forced. | Its own checks | $ ledger |
 | **NBA / Soccer / CBB** | Same rules, own line, 1 play a day per sport. Joins the Best bets headline after 30 graded at or above break-even. | From their start dates | 1u |
 
 **The record.** The "Best bets" headline is the same set as today: before **35-36 (1 void), −5.11u at posted prices (21-25 with a recorded price)**; after
