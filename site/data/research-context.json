@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-10T14:39:53Z",
+  "updatedAt": "2026-10-10T15:26:11Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -191,7 +191,7 @@
               "name": "Marvin Harrison Jr.",
               "position": "WR",
               "status": "Active",
-              "injury": null,
+              "injury": "Coach's Decision",
               "reportedAt": "2026-10-04T23:51Z",
               "source": "https://www.espn.com/nfl/player/_/id/4432708/marvin-harrison-jr"
             },
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-10T14:00Z",
+              "reportedAt": "2026-10-10T15:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -4422,6 +4422,15 @@
               "source": "https://www.espn.com/nfl/player/_/id/4682745/jaylen-wright"
             },
             {
+              "id": "4869645",
+              "name": "Caleb Douglas",
+              "position": "WR",
+              "status": "Out",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-09T20:46Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4869645/caleb-douglas"
+            },
+            {
               "id": "4271632",
               "name": "Austin Jackson",
               "position": "OT",
@@ -4447,15 +4456,6 @@
               "injury": null,
               "reportedAt": "2026-10-09T20:30Z",
               "source": "https://www.espn.com/nfl/player/_/id/4360488/juju-brents"
-            },
-            {
-              "id": "4869645",
-              "name": "Caleb Douglas",
-              "position": "WR",
-              "status": "Out",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-09T15:12Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4869645/caleb-douglas"
             },
             {
               "id": "4427103",
@@ -7767,8 +7767,8 @@
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-10T14:39:53Z",
-      "lastAttemptAt": "2026-10-10T14:39:53Z",
+      "checkedAt": "2026-10-10T15:26:11Z",
+      "lastAttemptAt": "2026-10-10T15:26:11Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-10T14:39:53Z",
-      "lastAttemptAt": "2026-10-10T14:39:53Z",
+      "checkedAt": "2026-10-10T15:26:11Z",
+      "lastAttemptAt": "2026-10-10T15:26:11Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
