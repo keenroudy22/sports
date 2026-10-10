@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-10T20:21:24Z",
+  "updatedAt": "2026-10-10T20:39:50Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-10T20:12Z",
+              "reportedAt": "2026-10-10T20:25Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -3917,6 +3917,24 @@
           "name": "Los Angeles Chargers",
           "players": [
             {
+              "id": "4433914",
+              "name": "Branson Taylor",
+              "position": "G",
+              "status": "Questionable",
+              "injury": "Neck",
+              "reportedAt": "2026-10-10T20:25Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4433914/branson-taylor"
+            },
+            {
+              "id": "4373684",
+              "name": "Scott Matlock",
+              "position": "FB",
+              "status": "Questionable",
+              "injury": "Foot",
+              "reportedAt": "2026-10-10T20:25Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4373684/scott-matlock"
+            },
+            {
               "id": "4241263",
               "name": "Charlie Kolar",
               "position": "TE",
@@ -3938,7 +3956,7 @@
               "id": "4248627",
               "name": "Trevor Penning",
               "position": "G",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Concussion",
               "reportedAt": "2026-10-10T02:19Z",
               "source": "https://www.espn.com/nfl/player/_/id/4248627/trevor-penning"
@@ -3983,7 +4001,7 @@
               "id": "4383351",
               "name": "Trey Lance",
               "position": "QB",
-              "status": "Doubtful",
+              "status": "Injured Reserve",
               "injury": "Groin",
               "reportedAt": "2026-10-10T00:34Z",
               "source": "https://www.espn.com/nfl/player/_/id/4383351/trey-lance"
@@ -4079,24 +4097,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4431442/tuli-tuipulotu"
             },
             {
-              "id": "4433914",
-              "name": "Branson Taylor",
-              "position": "G",
-              "status": "Injured Reserve",
-              "injury": "Neck",
-              "reportedAt": "2026-10-07T00:23Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4433914/branson-taylor"
-            },
-            {
-              "id": "4373684",
-              "name": "Scott Matlock",
-              "position": "FB",
-              "status": "Injured Reserve",
-              "injury": "Foot",
-              "reportedAt": "2026-10-06T00:02Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4373684/scott-matlock"
-            },
-            {
               "id": "5082660",
               "name": "Alex Harkey",
               "position": "G",
@@ -4147,13 +4147,13 @@
           "name": "Los Angeles Rams",
           "players": [
             {
-              "id": "4243181",
-              "name": "Nate Landman",
-              "position": "LB",
-              "status": "Questionable",
-              "injury": "Shoulder",
-              "reportedAt": "2026-10-10T01:32Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4243181/nate-landman"
+              "id": "3122132",
+              "name": "Myles Garrett",
+              "position": "DE",
+              "status": "Injured Reserve",
+              "injury": "Knee",
+              "reportedAt": "2026-10-10T20:19Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3122132/myles-garrett"
             },
             {
               "id": "16716",
@@ -4161,8 +4161,17 @@
               "position": "DT",
               "status": "Active",
               "injury": null,
-              "reportedAt": "2026-10-09T22:52Z",
+              "reportedAt": "2026-10-10T20:15Z",
               "source": "https://www.espn.com/nfl/player/_/id/16716/aaron-donald"
+            },
+            {
+              "id": "4243181",
+              "name": "Nate Landman",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Shoulder",
+              "reportedAt": "2026-10-10T01:32Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4243181/nate-landman"
             },
             {
               "id": "4697639",
@@ -4361,15 +4370,6 @@
               "injury": null,
               "reportedAt": "2026-10-02T21:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/4572371/josh-wallace"
-            },
-            {
-              "id": "5082269",
-              "name": "Dean Connors",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-30T00:14Z",
-              "source": "https://www.espn.com/nfl/player/_/id/5082269/dean-connors"
             }
           ]
         },
@@ -5584,8 +5584,8 @@
               "id": "3134353",
               "name": "Tim Patrick",
               "position": "WR",
-              "status": "Injured Reserve",
-              "injury": "Groin",
+              "status": "Active",
+              "injury": null,
               "reportedAt": "2026-10-09T22:23Z",
               "source": "https://www.espn.com/nfl/player/_/id/3134353/tim-patrick"
             },
@@ -5757,6 +5757,15 @@
           "name": "Philadelphia Eagles",
           "players": [
             {
+              "id": "15835",
+              "name": "Zach Ertz",
+              "position": "TE",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-10T20:24Z",
+              "source": "https://www.espn.com/nfl/player/_/id/15835/zach-ertz"
+            },
+            {
               "id": "3915106",
               "name": "Fred Johnson",
               "position": "OT",
@@ -5917,15 +5926,6 @@
               "injury": "Abdomen",
               "reportedAt": "2026-10-06T23:17Z",
               "source": "https://www.espn.com/nfl/player/_/id/4429013/tank-bigsby"
-            },
-            {
-              "id": "15835",
-              "name": "Zach Ertz",
-              "position": "TE",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-06T01:32Z",
-              "source": "https://www.espn.com/nfl/player/_/id/15835/zach-ertz"
             },
             {
               "id": "4870795",
@@ -7137,6 +7137,15 @@
           "name": "Washington Commanders",
           "players": [
             {
+              "id": "2980080",
+              "name": "Deatrich Wise Jr.",
+              "position": "DE",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-10T20:27Z",
+              "source": "https://www.espn.com/nfl/player/_/id/2980080/deatrich-wise-jr"
+            },
+            {
               "id": "4262199",
               "name": "Sam Cosmi",
               "position": "G",
@@ -7308,15 +7317,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/3125248/jeremy-reaves"
             },
             {
-              "id": "2980080",
-              "name": "Deatrich Wise Jr.",
-              "position": "DE",
-              "status": "Out",
-              "injury": "Quadriceps",
-              "reportedAt": "2026-10-07T22:01Z",
-              "source": "https://www.espn.com/nfl/player/_/id/2980080/deatrich-wise-jr"
-            },
-            {
               "id": "3943270",
               "name": "Rasul Douglas",
               "position": "CB",
@@ -7365,54 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "21",
-          "name": "Saquon Barkley",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-10-09T21:40:57Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3929630/saquon-barkley"
-        },
-        {
-          "teamId": "21",
-          "name": "Hollywood Brown",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-10-09T21:40:57Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4241372/hollywood-brown"
-        },
-        {
-          "teamId": "25",
-          "name": "Mike Evans",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-09T21:40:57Z",
-          "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans"
-        },
-        {
-          "teamId": "28",
-          "name": "Chig Okonkwo",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-09T21:40:57Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4360635/chig-okonkwo"
-        },
-        {
-          "teamId": "28",
-          "name": "Marcus Mariota",
-          "from": "Doubtful",
-          "to": "Out",
-          "observedAt": "2026-10-09T21:40:57Z",
-          "source": "https://www.espn.com/nfl/player/_/id/2576980/marcus-mariota"
-        },
-        {
-          "teamId": "28",
-          "name": "Rachaad White",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-09T21:40:57Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4697815/rachaad-white"
-        },
         {
           "teamId": "28",
           "name": "Jacory Croskey-Merritt",
@@ -7764,11 +7716,59 @@
           "to": "Injured Reserve",
           "observedAt": "2026-10-10T20:21:24Z",
           "source": "https://www.espn.com/nfl/player/_/id/4039505/reggie-gilliam"
+        },
+        {
+          "teamId": "24",
+          "name": "Branson Taylor",
+          "from": "Injured Reserve",
+          "to": "Questionable",
+          "observedAt": "2026-10-10T20:39:50Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4433914/branson-taylor"
+        },
+        {
+          "teamId": "24",
+          "name": "Scott Matlock",
+          "from": "Injured Reserve",
+          "to": "Questionable",
+          "observedAt": "2026-10-10T20:39:50Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4373684/scott-matlock"
+        },
+        {
+          "teamId": "24",
+          "name": "Trevor Penning",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-10T20:39:50Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4248627/trevor-penning"
+        },
+        {
+          "teamId": "24",
+          "name": "Trey Lance",
+          "from": "Doubtful",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-10T20:39:50Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4383351/trey-lance"
+        },
+        {
+          "teamId": "20",
+          "name": "Tim Patrick",
+          "from": "Injured Reserve",
+          "to": "Active",
+          "observedAt": "2026-10-10T20:39:50Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3134353/tim-patrick"
+        },
+        {
+          "teamId": "28",
+          "name": "Deatrich Wise Jr.",
+          "from": "Out",
+          "to": "Active",
+          "observedAt": "2026-10-10T20:39:50Z",
+          "source": "https://www.espn.com/nfl/player/_/id/2980080/deatrich-wise-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-10T20:21:24Z",
-      "lastAttemptAt": "2026-10-10T20:21:24Z",
+      "checkedAt": "2026-10-10T20:39:50Z",
+      "lastAttemptAt": "2026-10-10T20:39:50Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-10T20:21:24Z",
-      "lastAttemptAt": "2026-10-10T20:21:24Z",
+      "checkedAt": "2026-10-10T20:39:50Z",
+      "lastAttemptAt": "2026-10-10T20:39:50Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
