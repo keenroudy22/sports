@@ -1,11 +1,20 @@
 {
-  "updatedAt": "2026-10-10T15:26:11Z",
+  "updatedAt": "2026-10-10T15:56:52Z",
   "leagues": {
     "NFL": {
       "teams": {
         "22": {
           "name": "Arizona Cardinals",
           "players": [
+            {
+              "id": "4432708",
+              "name": "Marvin Harrison Jr.",
+              "position": "WR",
+              "status": "Out",
+              "injury": "Coach's Decision",
+              "reportedAt": "2026-10-10T15:35Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4432708/marvin-harrison-jr"
+            },
             {
               "id": "4685503",
               "name": "Walter Nolen III",
@@ -185,15 +194,6 @@
               "injury": null,
               "reportedAt": "2026-10-05T01:44Z",
               "source": "https://www.espn.com/nfl/player/_/id/4373626/tyler-allgeier"
-            },
-            {
-              "id": "4432708",
-              "name": "Marvin Harrison Jr.",
-              "position": "WR",
-              "status": "Active",
-              "injury": "Coach's Decision",
-              "reportedAt": "2026-10-04T23:51Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4432708/marvin-harrison-jr"
             },
             {
               "id": "4360761",
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-10T15:01Z",
+              "reportedAt": "2026-10-10T15:16Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "24",
-          "name": "Trevor Penning",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-10-09T21:40:57Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4248627/trevor-penning"
-        },
-        {
-          "teamId": "24",
           "name": "Joe Alt",
           "from": "Questionable",
           "to": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-10-10T12:50:09Z",
           "source": "https://www.espn.com/nfl/player/_/id/4432715/landon-jackson"
+        },
+        {
+          "teamId": "22",
+          "name": "Marvin Harrison Jr.",
+          "from": "Active",
+          "to": "Out",
+          "observedAt": "2026-10-10T15:56:52Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4432708/marvin-harrison-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-10T15:26:11Z",
-      "lastAttemptAt": "2026-10-10T15:26:11Z",
+      "checkedAt": "2026-10-10T15:56:52Z",
+      "lastAttemptAt": "2026-10-10T15:56:52Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-10T15:26:11Z",
-      "lastAttemptAt": "2026-10-10T15:26:11Z",
+      "checkedAt": "2026-10-10T15:56:52Z",
+      "lastAttemptAt": "2026-10-10T15:56:52Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
