@@ -152,15 +152,15 @@ class TodayHeroTests(unittest.TestCase):
                     self.assertNotIn('last', hero)
 
     def test_last_game_day_counts_straight_best_bets_like_today(self):
-        picks = [pick('a', result='win', kickoff='2026-10-09T23:00Z', units=.91),
-                 pick('b', result='loss', kickoff='2026-10-10T00:15Z', league='CFB'),
-                 pick('c', result='loss', kickoff='2026-10-09T17:00Z', earlyExit=True),
-                 pick('d', result='push', kickoff='2026-10-09T18:00Z', odds=110),
-                 pick('e', result='win', kickoff='2026-10-09T19:00Z', odds=150, riskUnits=2),
+        picks = [pick('a', result='win', kickoff='2026-10-09T23:00Z', units=.91, posted=True),
+                 pick('b', result='loss', kickoff='2026-10-10T00:15Z', league='CFB', posted=True),
+                 pick('c', result='loss', kickoff='2026-10-09T17:00Z', earlyExit=True, posted=True),
+                 pick('d', result='push', kickoff='2026-10-09T18:00Z', odds=110, posted=True),
+                 pick('e', result='win', kickoff='2026-10-09T19:00Z', odds=150, riskUnits=2, posted=True),
                  pick('fun', result='win', kickoff='2026-10-09T20:00Z', kind='parlays', legs=['x'], parlayType='longshot'),
                  pick('old', result='win', kickoff='2026-10-09T21:00Z', historicalImport=True),
                  pick('earlier', result='win', kickoff='2026-10-08T23:00Z'),
-                 pick('today', result='loss', kickoff='2026-10-10T13:00Z')]
+                 pick('today', result='loss', kickoff='2026-10-10T13:00Z', posted=True)]
         last = build_site.today_hero(picks, NOW)['last']
         self.assertEqual({k: last['ALL'][k] for k in ('day', 'wins', 'losses', 'pushes')},
                          {'day': '2026-10-09', 'wins': 2, 'losses': 2, 'pushes': 1},

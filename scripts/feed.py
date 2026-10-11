@@ -352,17 +352,22 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
     # A card for every open play as soon as it is published, not only inside its posting window: the desk
     # schedules the post the moment the card is live, and never posts without one.
     import receipts
+    try:
+        post_log = x_post.load_log()
+    except (OSError, ValueError):
+        post_log = {'posts': []}
+    public_first = receipts.released_first(ctx.first, post_log, ctx.games)
     # Keep recent receipt images in every build. Discord normally uploads a permanent copy, but retaining these
     # URLs repairs old embeds and gives a failed delivery several days to retry without losing its card.
     ready = []
-    for r in receipts.card_history(ctx.first, ctx.latest, ctx.games, now):
+    for r in receipts.card_history(ctx.first, ctx.latest, ctx.games, now, log_book=post_log):
         item = {'guid': r['card'], 'receipt': r}
         if r['card'].startswith('receipt-day-'):
             from datetime import date
             day = date.fromisoformat(r['card'].removeprefix('receipt-day-'))
             item['receiptDay'] = day.isoformat()
-            item['receiptPicks'] = receipts.plays_between(ctx.first, ctx.latest, ctx.games,
-                                                           receipts.counted(ctx.first, ctx.latest), day, day)
+            item['receiptPicks'] = receipts.plays_between(public_first, ctx.latest, ctx.games,
+                                                           receipts.counted(public_first, ctx.latest), day, day)
         ready.append(item)
     import ladder
     climb = ladder.state(ctx.first, ctx.latest)
@@ -370,7 +375,6 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
                _allClimbsBanked=ladder.saved_through(ctx.first, ctx.latest, r['pick']['id']))}
               for r in receipts.ladder_result_cards(ctx.first, ctx.latest, now)]
     try:
-        post_log = x_post.load_log()
         restored = {entry.get('id') for entry in post_log.get('posts', [])
                     if entry.get('restoredAt') and not entry.get('cancelledAt') and not entry.get('deletedAt')}
     except (OSError, ValueError):

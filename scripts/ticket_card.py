@@ -4,6 +4,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 import pick_card
+import record_scope
 import ticket_cards
 import ticket_kit
 import x_post
@@ -252,13 +253,14 @@ def final_detail(pick):
     """A final stat and exact-line margin, only when the stored result supports the arithmetic."""
     import receipts
     import result_display
-    if pick.get('marketType') == 'prop':
+    is_prop = pick.get('marketType') == 'prop' or bool(pick.get('athleteId')) or pick.get('kind') == 'props'
+    if is_prop:
         rich = result_display.detail(pick)
         if rich:
             return rich
     actual = result_display.clean_actual(pick)
     market = str(pick.get('market') or '')
-    market_type = str(pick.get('marketType') or '')
+    market_type = 'prop' if is_prop else str(pick.get('marketType') or '')
     value = pick.get('actualValue')
     if market_type == 'prop':
         match = re.search(r':\s*(-?\d+(?:\.\d+)?)\b', actual)
@@ -294,7 +296,8 @@ def final_data(rows, day):
              'detail': final_detail(pick), 'unit_text':
              (f"{x_post.units_for(pick):+.2f}u" if x_post.units_for(pick) is not None else '—')}
             for pick in straight]
-    return {'headline': f'{wins}-{losses}', 'day': day, 'rows': body, 'net_units': net}
+    return {'headline': f'{wins}-{losses}', 'day': day, 'rows': body, 'net_units': net,
+            'row_label': 'BEST BETS' if all(record_scope.is_headline(pick) for pick in straight) else 'PLAYS'}
 
 
 def final_svg(rows, day):

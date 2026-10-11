@@ -71,6 +71,35 @@ class ReceiptTests(unittest.TestCase):
         hand = {'posts': [{'id': 'CFB-2026-W3-hand', 'kind': 'pick', 'postedAt': '2026-09-19T12:30:00Z', 'tweetId': None}]}
         self.assertEqual(receipts.served(hand), {'CFB-2026-W3-hand'}, 'a play posted by hand went out')
 
+    def test_post_boundary_receipt_reconciles_to_only_released_plays(self):
+        games = {
+            'sat': {'id': 'sat', 'league': 'CFB', 'kickoff': '2026-10-10T23:30:00Z',
+                    'home': {'short': 'UTEP'}, 'away': {'short': 'Nevada'}}
+        }
+        common = {'gameIds': ['sat'], 'publishedAt': '2026-10-10T12:00:00Z', 'marketType': 'total',
+                  'direction': 'under', 'line': 49.5, 'book': 'FanDuel', 'odds': -110}
+        first = {
+            'posted-win': {**common, 'id': 'posted-win', 'title': 'Posted win under 49.5'},
+            'posted-loss': {**common, 'id': 'posted-loss', 'title': 'Posted loss under 49.5'},
+            'never-one': {**common, 'id': 'never-one', 'title': 'Never posted one under 49.5'},
+            'never-two': {**common, 'id': 'never-two', 'title': 'Never posted two under 49.5'},
+        }
+        latest = {key: {'result': result} for key, result in (
+            ('posted-win', 'win'), ('posted-loss', 'loss'), ('never-one', 'loss'), ('never-two', 'loss'))}
+        log = {'posts': [
+            {'id': 'posted-win', 'kind': 'buffer:play', 'sentAt': '2026-10-10T13:30:00Z'},
+            {'id': 'posted-loss', 'kind': 'buffer:play',
+             'discord': {'state': 'sent', 'sentAt': '2026-10-10T13:20:00Z'}},
+        ]}
+        now = datetime(2026, 10, 11, 15, 0, tzinfo=timezone.utc)
+        found = receipts.ready(first, latest, games, log, now)
+        self.assertEqual(len(found), 1)
+        receipt = found[0]
+        self.assertEqual(receipt['title'], '1-1')
+        self.assertEqual(len(receipt['rows']), 2)
+        self.assertTrue(receipt['text'].startswith("Late, but here's Saturday.\n\nSaturday: 1-1."))
+        self.assertNotIn('Never posted', receipt['text'])
+
     def test_one_record_counts_every_published_play_whether_or_not_it_went_out(self):
         first, _, _ = world()
         first['NFL-2026-W1-leg'] = pick('leg', 'sun', historicalImport=True, odds=None)

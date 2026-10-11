@@ -382,6 +382,23 @@ test('Leftovers never drop a miss while a hit stays, and count the rest', async 
   assert.match(left, /Friday went 5-2\./);
 });
 
+test('Today reconciles its last-slate headline and slips to released plays only', async () => {
+  const released = { ...yesterday, id: 'CFB-2026-W6-nevada-utep-over-49-5-dk',
+    displayTitle: 'Nevada/UTEP over 49.5', kickoff: '2026-10-10T23:25:00Z', result: 'loss',
+    units: -1, posted: true, actual: 'Nevada 30, UTEP 13' };
+  const hidden = name => ({ ...released, id: `hidden-${name}`, displayTitle: name,
+    posted: false, delivery: null });
+  const gut = { ...released, id: 'released-gut', displayTitle: 'Released Gut call hit',
+    lane: 'gut_call', result: 'win', units: 0.5 };
+  const page = await loadApp('#record', {}, { today: { ...TODAY,
+    picks: [prop, released, gut, hidden('Arizona at West Virginia'), hidden('SDSU at Oregon State'), ...rungs],
+    lastSlate: { ALL: { day: '2026-10-10', wins: 0, losses: 1, pushes: 0, units: -1 } } } }).api.views.today({ view: 'today' });
+  const left = page.slice(page.indexOf('class="kt-sec kt-left"'), page.indexOf('class="kt-sec kt-prep"'));
+  assert.match(left, /Saturday went 0-1 · −1\.00u/);
+  assert.match(left, /Nevada\/UTEP over 49\.5/);
+  assert.doesNotMatch(left, /Released Gut call hit|Arizona at West Virginia|SDSU at Oregon State/);
+});
+
 test('Today prints a settled player name and full stat line, never the stored athlete id', async () => {
   const king = { ...yesterday, id: 'CFB-2026-W6-king-over-49-5-recyds-dk', league: 'CFB',
     title: 'TK King OVER 49.5 receiving yards', displayTitle: 'TK King OVER 49.5 receiving yards',

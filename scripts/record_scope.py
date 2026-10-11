@@ -45,15 +45,23 @@ def is_unpriced_import(pick):
     return bool(pick.get('historicalImport')) and pick.get('odds') is None
 
 
+def reached_public(pick):
+    """Whether a post-Oct-8 play reached either approved public play rail."""
+    delivery = pick.get('delivery') or {}
+    return pick.get('posted') is True or bool(delivery.get('xAt') or delivery.get('discordAt'))
+
+
+def counts_public(pick):
+    """The owner's Oct 9 boundary: older rows keep history; newer rows count only after release."""
+    kickoff = instant(pick.get('kickoff') or pick.get('publishedAt'))
+    return not kickoff or kickoff < HEADLINE_DELIVERY_FROM or reached_public(pick)
+
+
 def is_headline(pick):
     lane = pick.get('lane')
     if lane and lane not in ('best_bet', 'hot_plate'):
         return False
-    kickoff = instant(pick.get('kickoff') or pick.get('publishedAt'))
-    if not kickoff or kickoff < HEADLINE_DELIVERY_FROM:
-        return True
-    delivery = pick.get('delivery') or {}
-    return pick.get('posted') is not False or bool(delivery.get('xAt') or delivery.get('discordAt'))
+    return counts_public(pick)
 
 
 def current_rows(rows, at):

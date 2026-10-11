@@ -36,26 +36,40 @@ KIND_NAMES = {'player': 'Player props', 'team': 'Game lines', 'parlay': 'Fun par
 
 
 def served(log_book):
-    """Ids of the plays whose post went out on X: sent through Buffer, or posted by hand before the desk posted
-    (the two seeded 2026-09-19 plays). A cancelled or deleted post was never served. The record counts every
-    published play (counted); this says which ones followers saw, for the Pick of the Day record."""
+    """Ids of plays released to X or Discord. Cancelled/deleted posts were never served."""
     out = set()
     for p in log_book.get('posts', []):
         if p.get('cancelledAt') or p.get('deletedAt'):
             continue
-        if (p.get('kind') == 'buffer:play' and p.get('sentAt')) or (p.get('kind') == 'pick' and p.get('postedAt')):
+        discord = p.get('discord') or {}
+        if (p.get('kind') == 'buffer:play' and (p.get('sentAt') or (discord.get('state') == 'sent' and discord.get('sentAt')))) \
+                or (p.get('kind') == 'pick' and p.get('postedAt')):
             out.add(p['id'])
     return out
 
 
+def released_first(first, log_book, games=None):
+    """Copy first publications with the shared delivery fact used by every public count."""
+    released = served(log_book)
+    out = {}
+    for key, pick in first.items():
+        item = dict(pick, posted=key in released)
+        if games and not item.get('kickoff'):
+            starts = [games[game_id].get('kickoff') for game_id in item.get('gameIds') or []
+                      if games.get(game_id, {}).get('kickoff')]
+            if starts:
+                item['kickoff'] = min(starts)
+        out[key] = item
+    return out
+
+
 def counted(first, latest=None):
-    """Ids of every play in the record: everything published, apart from plays imported without a price that no later
-    report priced (the Week 1 lines got an assumed price on 2026-09-26). The site's record (site/core.js theRecord)
-    counts the same plays."""
+    """Ids in the public record, using record_scope's shared release/count rule."""
     latest = latest or {}
     def priced(key, pick):
         return pick.get('odds') is not None or (latest.get(key) or {}).get('odds') is not None
-    return {key for key, pick in first.items() if not pick.get('historicalImport') or priced(key, pick)}
+    return {key for key, pick in first.items()
+            if (not pick.get('historicalImport') or priced(key, pick)) and record_scope.counts_public(pick)}
 
 
 def game_day(pick, games):
@@ -167,8 +181,8 @@ def accounting(rows):
 
 
 def headline(rows):
-    """The record a receipt leads with: the straight plays; fun parlays, then the ladder, only when there is nothing else."""
-    straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder') and record_scope.is_headline(r)]
+    """The results-post record: every released straight lane; tickets and Climb stay separate."""
+    straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder')]
     if straight:
         return record_text(x_post.summarize(straight))
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
@@ -265,16 +279,17 @@ def day_receipt(day, first, latest, games, ids, as_of=None):
     rows = plays_between(first, latest, games, ids, day, day)
     if not settled(rows):
         return None
-    rows = [r for r in rows if pick_card.play_kind(r) in ('parlay', 'ladder') or record_scope.is_headline(r)]
     if not rows:
         return None
     name = f'{day:%A}'
-    head = f"{name}: {headline(rows)}."
+    due = morning(day + timedelta(days=1))
+    late = as_of is not None and as_of > due + timedelta(minutes=30)
+    opener = f"Late, but here's {name}.\n\n" if late else ''
+    head = f"{opener}{name}: {headline(rows)}."
     tail = leagues(rows)
     text = fit_result_rows(rows, head, tail.strip(), games)
     straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder') and record_scope.is_headline(r)]
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
-    due = morning(day + timedelta(days=1))
     return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}', 'kind': 'receipt',
             'title': headline(rows), 'label': 'FINAL',
             'when': f'{day:%A, %b %-d}',
@@ -294,7 +309,6 @@ def week_receipt(wednesday, first, latest, games, ids, as_of=None):
     rows = plays_between(first, latest, games, ids, start, end)
     if not settled(rows):
         return None
-    rows = [r for r in rows if pick_card.play_kind(r) in ('parlay', 'ladder') or record_scope.is_headline(r)]
     if not rows:
         return None
     kinds = by_kind(rows)
@@ -319,6 +333,7 @@ def week_receipt(wednesday, first, latest, games, ids, as_of=None):
 def ready(first, latest, games, log_book, now):
     """The receipts that can go out now: yesterday's (or the day before's, if it settled late) and, on Wednesday,
     the week's. Each only when every play it covers is settled, and none after its evening."""
+    first = released_first(first, log_book, games)
     ids = counted(first, latest)
     if not ids:
         return []
@@ -335,12 +350,16 @@ def ready(first, latest, games, log_book, now):
     return [r for r in out if r['stale'] > now]
 
 
-def card_history(first, latest, games, now, days=CARD_HISTORY_DAYS):
+def card_history(first, latest, games, now, days=CARD_HISTORY_DAYS, log_book=None):
     """Recently settled receipt cards, even after their posting window.
 
     Discord now uploads cards, but this short public history also repairs an embed when Discord had to fall back
     to the image URL and gives Buffer a stable retry window.
     """
+    try:
+        first = released_first(first, log_book if log_book is not None else x_post.load_log(), games)
+    except (OSError, ValueError):
+        first = released_first(first, {'posts': []}, games)
     ids = counted(first, latest)
     today = eastern_date(now)
     out = []
@@ -567,6 +586,7 @@ def ladder_cashed(pick):
 
 def house_posts(first, latest, games, log_book, now):
     """Approved house posts. Menu, teasers, weekend X sheet and idle Climb check-in are retired."""
+    first = released_first(first, log_book, games)
     out = [dict(r, kind='receipt') for r in ready(first, latest, games, log_book, now)]
     extra = book(first, latest, games, log_book, now)
     if extra and extra['stale'] > now:

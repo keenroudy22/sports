@@ -36,9 +36,9 @@ class RecordScopeTests(unittest.TestCase):
     def test_current_stage_matches_the_site_default(self):
         rows = [
             {'id': 'regular', 'league': 'NFL', 'season': 2026, 'seasonType': 2, 'odds': -110,
-             'result': 'win', 'publishedAt': '2026-12-01T12:00:00Z', 'settledAt': '2026-12-01T22:00:00Z'},
+             'result': 'win', 'posted': True, 'publishedAt': '2026-12-01T12:00:00Z', 'settledAt': '2026-12-01T22:00:00Z'},
             {'id': 'playoff', 'league': 'NFL', 'season': 2026, 'seasonType': 3, 'odds': -110,
-             'result': 'loss', 'publishedAt': '2027-01-10T12:00:00Z', 'settledAt': '2027-01-10T22:00:00Z'},
+             'result': 'loss', 'posted': True, 'publishedAt': '2027-01-10T12:00:00Z', 'settledAt': '2027-01-10T22:00:00Z'},
             {'id': 'old-season', 'league': 'NFL', 'season': 2025, 'seasonType': 2, 'odds': -110,
              'result': 'win', 'publishedAt': '2025-12-01T12:00:00Z', 'settledAt': '2025-12-01T22:00:00Z'},
         ]

@@ -1201,7 +1201,7 @@
       const sample = dayGames.slice(0, 2).map(g => `${g.away.name} at ${g.home.name}`).join(' · ');
       return `<a class="kt-next-day" href="#games"><b>${esc(C.dayLabel(day + 'T12:00:00Z'))}</b><span>${esc(counts)}</span><small>${esc(sample)}</small></a>`;
     }).join('')}</div>`, { kind: 'Schedules and projections · not picks', link: ktLink('#games', 'See all games') }) : '';
-    const graded = picks.filter(p => p.result && !p.historicalImport && !C.isParlay(p) && C.dayOf(p.kickoff));
+    const graded = picks.filter(p => p.result && !p.historicalImport && !C.isParlay(p) && C.isHeadline(p) && C.dayOf(p.kickoff));
     const lastDay = graded.map(p => C.dayOf(p.kickoff)).filter(d => d < etDay()).sort().pop();
     const recent = graded.filter(p => C.dayOf(p.kickoff) === lastDay || C.dayOf(p.kickoff) === etDay());
     const k = kpiStrip(all.filter(inLeague), board);

@@ -433,9 +433,38 @@ def cooked_card(p):
 
 
 # ---------------------------------------------------------------------------- Final receipt
+def final_detail_lines(detail, room):
+    """Fit a factual result without letting one verbose box-score line block the card."""
+    text = str(detail or '')
+    if width(text, 40, 'd', 500) > room:
+        text = re.sub(r'^(\d+) catches on \d+ targets(?= ·|$)', r'\1 catches', text)
+        text = re.sub(r'^(\d+) targets, (\d+) catches, (\d+) yards(?= ·|$)', r'\2 catches, \3 yards', text)
+    if width(text, 40, 'd', 500) <= room:
+        return [text], 40
+    lines = kit.wrap(text, 40, room, family='d', weight=500, max_lines=3)
+    if lines:
+        return lines, 40
+    without_margin = re.sub(r' · (?:cleared|missed) by \d+(?:\.\d+)?$', '', text)
+    if width(without_margin, 40, 'd', 500) <= room:
+        return [without_margin], 40
+    lines = kit.wrap(without_margin, 40, room, family='d', weight=500, max_lines=3)
+    if lines:
+        return lines, 40
+    # Stored result prose is sentence text, so word wrapping should always win.
+    # Keep a final small-text fallback instead of refusing the entire Results post.
+    return kit.wrap(without_margin, 40, room, family='d', weight=500) or [without_margin], 40
+
+
 def final_card(p):
-    panel_bottom, row = 474, 112
-    perf = max(1100, panel_bottom + 20 + row * len(p['rows']) + 34)
+    panel_bottom = 474
+    # Keep a real gutter before the right-aligned units and result stamp. The
+    # embedded-font advance table is a little tighter than Chrome's painted ink.
+    detail_room = 520
+    layouts = []
+    for result in p['rows']:
+        lines, detail_size = final_detail_lines(result['detail'], detail_room)
+        layouts.append((result, lines, detail_size, 112 + max(0, len(lines) - 1) * 38))
+    perf = max(1100, panel_bottom + 20 + sum(layout[3] for layout in layouts) + 34)
     card = kit.Card(perf + 96 + 154)          # 1350 up to five rows, then +112 per row
     inner = kit.panel_rect(card, PANEL_TOP, panel_bottom, hot=(760, 300))
     chip, _ = kit.series_chip(card, COL_X, 204, 'FINAL')
@@ -446,11 +475,11 @@ def final_card(p):
     wins = sum(r['result'] == 'hit' for r in p['rows'])
     misses = sum(r['result'] == 'miss' for r in p['rows'])
     pushes = sum(r['result'] in ('push', 'void') for r in p['rows'])
-    sub = f"{len(p['rows'])} BEST BETS · {wins} HIT · {misses} MISSED" + (f" · {pushes} PUSH" if pushes else '')
+    sub = f"{len(p['rows'])} {p.get('row_label') or 'BEST BETS'} · {wins} HIT · {misses} MISSED" + (f" · {pushes} PUSH" if pushes else '')
     inner += card.text(COL_X, panel_bottom - 30, sub, 46, CHALK, tracking=1)
     top = panel_bottom + 20
-    for i, r in enumerate(p['rows']):
-        y = top + row * i
+    y = top
+    for i, (r, detail_lines, detail_size, row_height) in enumerate(layouts):
         if i:
             inner += f'<line x1="{X1}" y1="{y}" x2="{X2}" y2="{y}" stroke="{RULE}" stroke-width="2"/>'
         subj, sel = kit.leg_parts(r['title'])
@@ -460,20 +489,12 @@ def final_card(p):
             size_r -= 2
         inner += card.text(X1, y + 50, subj, size_r, INK_SOFT) + card.text(X1 + width(subj + ' ', size_r), y + 50, sel, size_r, INK)
         unit_text = str(r.get('unit_text') or '—')
-        detail = str(r['detail'])
         unit_x = X2 - 194
-        # The unit column needs a generous visual gutter. Font advance widths
-        # understate the painted DM Sans ink in exported PNGs, especially the
-        # margin suffix, so keep only short margins on this compact receipt.
-        detail_room = unit_x - X1 - 28
-        detail_size = 40
-        if width(detail, detail_size, 'd', 500) > min(detail_room, 440):
-            detail = re.sub(r' · (?:cleared|missed) by \d+(?:\.\d+)?$', '', detail)
-        if width(detail, detail_size, 'd', 500) > detail_room:
-            raise ValueError(f'Final detail will not fit at 40px: {detail}')
-        inner += card.text(X1, y + 96, detail, detail_size, INK_SOFT, 'd', 500)
+        for line_index, detail in enumerate(detail_lines):
+            inner += card.text(X1, y + 96 + line_index * 38, detail, detail_size, INK_SOFT, 'd', 500)
         inner += card.text(unit_x, y + 99, unit_text, 40, INK if unit_text.startswith('+') else RED if unit_text.startswith('-') else INK_SOFT, anchor='end')
-        inner += kit.result_stamp(card, X2, y + row / 2, r['result'])
+        inner += kit.result_stamp(card, X2, y + row_height / 2, r['result'])
+        y += row_height
     inner += card.text(X1, perf + 64, f"NET {float(p.get('net_units', 0)):+.2f}u", 62, INK)
     frame(card, HOUSE, CHALK, perf, perf + 96, inner)
     return card

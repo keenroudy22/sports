@@ -149,6 +149,22 @@ class DateLineAndRunsTests(unittest.TestCase):
         season = build_site.season_records(picks, NOW)
         self.assertEqual((season['ALL']['wins'], season['ALL']['losses'], season['ALL']['playoffs']), (1, 1, False))
 
+    def test_last_slate_counts_only_released_plays_after_the_owner_boundary(self):
+        common = {'league': 'CFB', 'kickoff': '2026-10-10T23:30:00Z', 'season': 2026,
+                  'seasonType': 2, 'publishedAt': '2026-10-10T12:00:00Z'}
+        picks = [
+            {**common, 'id': 'posted-win', 'result': 'win', 'odds': -110, 'posted': True},
+            {**common, 'id': 'posted-loss', 'result': 'loss', 'odds': -110,
+             'delivery': {'discordAt': '2026-10-10T13:00:00Z'}},
+            {**common, 'id': 'never-posted-one', 'result': 'loss', 'odds': -110, 'posted': False},
+            {**common, 'id': 'never-posted-two', 'result': 'loss', 'odds': -110, 'posted': False},
+        ]
+        last = build_site.last_slates(picks, '2026-10-11')
+        self.assertEqual((last['ALL']['wins'], last['ALL']['losses']), (1, 1))
+        self.assertAlmostEqual(last['ALL']['units'], -0.09, places=2)
+        season = build_site.season_records(picks, datetime(2026, 10, 11, 16, tzinfo=timezone.utc))
+        self.assertEqual((season['ALL']['wins'], season['ALL']['losses']), (1, 1))
+
     def test_hero_carries_the_ticket_fields_and_stays_inside_its_budget(self):
         pick = {**KING, 'kickoff': '2026-10-07T23:30Z', 'odds': -102, 'book': 'DraftKings', 'status': 'active',
                 'displayTitle': 'TK King OVER 49.5 receiving yards', 'featured': True, 'modelLean': True,

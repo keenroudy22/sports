@@ -1008,7 +1008,7 @@ def hero_units(pick):
 def hero_last_slate(picks, today):
     """The most recent graded game day before today: straight best bets only, as Today's "Last game day" counts."""
     graded = [p for p in picks if p.get('result') and not p.get('historicalImport') and not hero_parlay(p)
-              and p.get('kickoff') and day(p['kickoff']) < today]
+              and record_scope.is_headline(p) and p.get('kickoff') and day(p['kickoff']) < today]
     if not graded:
         return None
     last = max(day(p['kickoff']) for p in graded)

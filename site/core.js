@@ -422,7 +422,7 @@
   const reachedPublicRail = p => p.posted === true || Boolean(p.delivery?.xAt || p.delivery?.discordAt);
   const headlineDeliveryEligible = p => {
     const kickoff = Date.parse(p.kickoff || p.publishedAt || '');
-    return !Number.isFinite(kickoff) || kickoff < HEADLINE_DELIVERY_FROM || p.posted !== false || reachedPublicRail(p);
+    return !Number.isFinite(kickoff) || kickoff < HEADLINE_DELIVERY_FROM || reachedPublicRail(p);
   };
   const isHeadline = p => (!p.lane || p.lane === 'best_bet' || p.lane === 'hot_plate') && headlineDeliveryEligible(p);
   const laneRecord = (picks, lane, minimum = 10) => summarizePicks(picks.filter(p => p.lane === lane), minimum);
@@ -856,5 +856,5 @@
   return { RESEARCH_DEFAULTS, researchPreferences, researchReset, researchContext, researchHash, researchMatches, researchStat, chartHistory, chartGeometry, thresholdResult, quoteStatus, esc, DASH, odds, signed, fixed, pct, when, whenShort, dayLabel, ago, spreadText, modelSpread, leanText, leanTone, injurySleeperSignal, deliveryText, trendWindow, bestTrendPrices, filterTrends, deskNotes,
     column, cell, observedCell, observedStat, playerHistory, statValue, summarize, windows, splits, hits, POSITION_STATS, LABEL, PROJECTION_MARKET, POS_GROUP, marketKey, roleOf,
     rankDefenses, rankOf, rankTone, decimal, american, arbSplit, eligible, summarizeTicket, ticketText,
-    unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, projectionScorecard, theRecord, recordPhaseOf, recordArchive, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };
+    unitsFor, stakeOf, recordOf, recordBreakdown, cardSchedule, projectionScorecard, theRecord, recordPhaseOf, recordArchive, isParlay, isLadder, ladderSplit, theLadder, dayOf, isUnpricedImport, countsPublic: headlineDeliveryEligible, isHeadline, summaryOf: summarizePicks, kindOf, KIND_WORD, weekOf, pickState, isOpen, isLongshot, gradeOf, tierOf, byGrade, byConfidence, rankConfidence, category, parseRoute, pickResearchRoute, shardOf, BASE };
 });

@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 import pick_card
 import ticket_card
+import ticket_cards
 import ticket_climb_map
 import feed
 
@@ -32,6 +33,21 @@ PROP = {
 
 
 class TicketCardTests(unittest.TestCase):
+    def test_final_long_box_score_detail_is_shortened_or_wrapped_never_rejected(self):
+        data = {'headline': '1-1', 'day': '2026-10-10', 'net_units': -0.09, 'rows': [
+            {'result': 'hit', 'title': 'Nyck Harbor OVER 3.5 receptions',
+             'detail': '4 catches on 8 targets · cleared by 0.5', 'unit_text': '+0.91u'},
+            {'result': 'miss', 'title': 'A very long player name UNDER 249.5 passing yards',
+             'detail': '9 of 22, 104 yards with a deliberately verbose factual note · missed by 145.5',
+             'unit_text': '-1.00u'},
+        ]}
+        svg = ticket_cards.final_card(data).svg()
+        self.assertIn('4 catches · cleared by 0.5', svg)
+        self.assertIn('deliberately', svg)
+        self.assertIn('deliberately verbose factual', svg)
+        self.assertIn('note · missed by 145.5', svg)
+        self.assertNotIn('4 catches on 8 targets', svg)
+
     def test_tnf_end_zone_research_uses_kitchen_ticket_without_a_bet_claim(self):
         choice = {'game': 'BUCS AT COWBOYS · THU 8:15 PM', 'rows': [
             {'title': 'Javonte Williams', 'athleteId': '4429111',
