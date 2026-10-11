@@ -86,6 +86,7 @@ def straight_data(pick, game, *, featured=False, player_side=None, art=None, fet
         units = 1
     output = {
         'kind': 'player' if prop else 'game', 'featured': bool(featured),
+        'seriesLabel': {'gut_call': 'GUT CALL · ½ UNIT', 'upset': 'UPSET PICK'}.get(pick.get('lane')),
         'player': _name(pick) if prop else '', 'team': team_code,
         'away': away_code, 'home': home_code,
         'away_name': pick_card.team_label(away, league),

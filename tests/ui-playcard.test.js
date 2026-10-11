@@ -66,3 +66,8 @@ test('a climb rung shows its real stake and payout only, and a fun ticket stays 
   assert.match(ticketBody, /\$\{money\(info\.stake\)\} → \$\{money\(info\.payout\)\} if it cashes\./);
   assert.match(ticketBody, /Tracked apart from best bets/);
 });
+
+test('a Gut call ticket keeps its lane and half-unit record separate from Best bets', () => {
+  assert.match(ticketBody, /gut_call: 'Gut call · ½ unit'/);
+  assert.match(ticketBody, /Gut calls keep their own record/);
+});

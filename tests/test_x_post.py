@@ -112,6 +112,15 @@ class DraftTests(unittest.TestCase):
             with mock.patch.object(x_post, 'REASONS', path):
                 self.assertIn('Wind is forecast at 18 mph in Ann Arbor.', x_post.draft(dict(PICK, projection=31.2), GAME))
 
+    def test_new_lane_play_is_held_without_a_reason_and_maps_the_current_book_brand(self):
+        play = dict(PICK, lane='gut_call', riskUnits=.5, book='ESPN BET', projection=31.2)
+        text = x_post.draft(play, GAME, reason='Wind is forecast at 18 mph in Ann Arbor.')
+        self.assertIn('theScore Bet', text)
+        self.assertNotIn('ESPN BET', text)
+        self.assertEqual(x_post.guard(text, play, x_post.reason_in(text)), [])
+        no_reason = x_post.draft(play, GAME, reason='')
+        self.assertIn('play has no supporting reason', x_post.guard(no_reason, play, None))
+
     def test_no_reason_is_invented_from_unlabelled_or_opposing_prose(self):
         with mock.patch.object(x_post, 'load_reasons', return_value={}):
             text = x_post.draft(dict(PROP, why='The opponent allows 8 catches, which argues against our under.'), {'league': 'NFL'})

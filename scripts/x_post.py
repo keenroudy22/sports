@@ -304,6 +304,12 @@ def reason_in(text):
             'I have ', 'Book has them losing.', '🍳 ', '🐕 ', '👨‍🍳 ', 'TNF: ', 'MNF: ', 'Saturday night: ')
     lines = [line.strip() for line in str(text or '').splitlines() if line.strip()]
     for index, line in enumerate(lines):
+        if line.startswith(("I've got ", "I'm at ", "My number's ", 'Book says ', 'I have ')):
+            sentences = llm.re.split(r'(?<=[.!?])\s+', line)
+            skip_count = 2 if line.startswith('Book says ') else 1
+            if len(sentences) > skip_count:
+                return ' '.join(sentences[skip_count:]).strip()
+            continue
         if line.startswith(skip) or llm.re.search(r'\([+-]\d+,\s*(?:DraftKings|FanDuel|DK|FD)\)$', line):
             continue
         if index and lines[index - 1].startswith(('🍳 ', '🐕 ', '👨‍🍳 ')) and index + 1 < len(lines) \
@@ -379,7 +385,18 @@ def save_reasons(reasons, path=None):
 def parlay_head(pick, league):
     """A fun ticket leads with its exact posted price, leg count and public book."""
     odds = int(pick['odds'])
-    return f"🎰 {odds:+d} Chef's Special ({pick.get('book')})"
+    return f"🎰 {odds:+d} Chef's Special ({public_book(pick.get('book'))})"
+
+
+def public_book(value):
+    """The current bettor-facing brand; provider keys never reach public copy."""
+    text = str(value or '').strip()
+    key = re.sub(r'[^a-z0-9]', '', text.lower())
+    names = {'espnbet': 'theScore Bet', 'thescorebet': 'theScore Bet',
+             'draftkings': 'DraftKings', 'fanduel': 'FanDuel',
+             'betmgm': 'BetMGM', 'betrivers': 'BetRivers',
+             'caesars': 'Caesars', 'fanatics': 'Fanatics'}
+    return names.get(key, text)
 
 
 def ladder_text(pick):
@@ -387,7 +404,7 @@ def ladder_text(pick):
     info = pick.get('ladder') or {}
     head = (f"🪜 Climb #{info.get('run', 1)}, step {info.get('step', 1)}: "
             f"{pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))} "
-            f"({int(pick['odds']):+d}, {pick.get('book')})")
+            f"({int(pick['odds']):+d}, {public_book(pick.get('book'))})")
     bank = (f"Step {max(1, int(info.get('step') or 1) - 1)} cashed. " if int(info.get('step') or 1) > 1 else '')
     if info.get('banked', 0):
         bank += f"{pick_card.dollars(info.get('banked'))} in the bank."
@@ -399,7 +416,7 @@ def ladder_text(pick):
 
 def safer_text(pick, legs, league):
     """The owner-written Safer combo shape, filled only from the stored ticket."""
-    head = f"🛡️ Safer combo ({int(pick['odds']):+d}, {pick.get('book')})"
+    head = f"🛡️ Safer combo ({int(pick['odds']):+d}, {public_book(pick.get('book'))})"
     facts = []
     for leg in pick.get('legs') or []:
         facts.extend(str(value).strip() for value in leg.get('reasons') or [] if str(value).strip())
@@ -522,7 +539,7 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
     else:
         prefix = _play_prefix(pick, game, featured)
         play_text = f"{prefix}{pick_card.short_title(pick, game)}"
-        play = f"{play_text} ({int(pick['odds']):+d}, {pick.get('book')})"
+        play = f"{play_text} ({int(pick['odds']):+d}, {public_book(pick.get('book'))})"
         now = now_line(pick, now_quote)
         number = _number_line(pick, game, day, history)
         saved_reason = reason if reason is not None else load_reasons().get(pick.get('id'))
@@ -544,7 +561,7 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
         if reason and voice_pick.index(f"{pick.get('id')}:{day}:reason-wrap", 3) == 0:
             side = 'higher' if not isinstance(projection, (int, float)) or not isinstance(line, (int, float)) or projection >= line else 'lower'
             reason = voice_pick.pools()['reasonWrappers'][side][0].format(reason=reason)
-        fields = {'play': play_text, 'odds': f"{int(pick['odds']):+d}", 'book': pick.get('book'),
+        fields = {'play': play_text, 'odds': f"{int(pick['odds']):+d}", 'book': public_book(pick.get('book')),
                   'number': number, 'reason': reason or '', 'ask': ask, 'L': league,
                   'line': pricing.fmt(float(line)) if isinstance(line, (int, float)) else '',
                   'proj': pick_card.plain_number(projection) if isinstance(projection, (int, float)) else ''}
@@ -606,6 +623,9 @@ def guard(text, pick, reason=None, now_quote=None):
         problems.append(f"numbers not in the pick: {', '.join(strays)}")
     if tweet_length(text) > LIMIT:
         problems.append(f'{tweet_length(text)} characters')
+    lane = pick.get('lane')
+    if lane in ('best_bet', 'hot_plate', 'gut_call', 'upset') and not reason:
+        problems.append('play has no supporting reason')
     return problems
 
 

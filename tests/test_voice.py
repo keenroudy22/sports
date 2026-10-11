@@ -23,6 +23,12 @@ class VoiceTests(unittest.TestCase):
         self.assertFalse(voice.lint('🍳 Hot Plate (POTD): a real priced line.'))
         self.assertFalse(voice.lint('Season 35–35. Bijan over 70.5 (-110 FD).'))
 
+    def test_retired_book_brand_and_lowercase_provider_slugs_never_reach_a_send(self):
+        for text in ('Now -110 at ESPN BET.', 'Now -110 at espnbet.', 'Now -110 at hardrockbet.'):
+            self.assertTrue(voice.lint(text), text)
+        self.assertFalse(voice.lint('Now -110 at DraftKings.'))
+        self.assertFalse(voice.lint('Now -110 at theScore Bet.'))
+
     def test_send_paths_refuse_bad_text_before_the_network(self):
         never = mock.Mock(side_effect=AssertionError('bad copy reached network'))
         with self.assertRaises(buffer_post.BufferError):

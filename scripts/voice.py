@@ -29,6 +29,8 @@ REPEATED_PAREN = re.compile(r'(\([^()]+\))(?:\s+\1)+', re.I)
 RETIRED_PROJECTION_SENTENCE = re.compile(
     r"(?i)\bmy\s+[^\n.;:]+?\s+is\s+[+-]?\d+(?:\.\d+)?\s*;\s*the\s+book(?:'|’)?s\s+line\s+is\s+[+-]?\d+(?:\.\d+)?"
 )
+PUBLIC_BOOK_SLUG = re.compile(r'(?<![A-Za-z0-9])(?:hardrockbet|espnbet)(?![A-Za-z0-9])')
+RETIRED_BOOK_BRAND = re.compile(r'(?i)\bESPN\s+BET\b')
 
 
 def bare_athlete_id(text):
@@ -68,6 +70,10 @@ def lint(text):
         problems.append('duplicated public wording')
     if RETIRED_PROJECTION_SENTENCE.search(clean):
         problems.append('retired projection sentence')
+    if PUBLIC_BOOK_SLUG.search(clean):
+        problems.append('sportsbook slug in public copy')
+    if RETIRED_BOOK_BRAND.search(clean):
+        problems.append('retired sportsbook name in public copy')
     if re.search(r'(?im)\brepl(?:y|ies|ied|ying)\b[^.!?]*\?\s*(?:$|\n)', clean):
         problems.append('reply question')
     bangs = clean.count('!')

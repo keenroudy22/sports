@@ -829,7 +829,9 @@
   const ticket = (pick, opts = {}) => {
     const vm = pickVM(pick), g = gameOf(pick), parts = betParts(pick, g), league = pick.league || String(pick.gameId || '').split('-')[0];
     const climb = vm.kind === 'climb', fun = vm.kind === 'fun', best = vm.kind === 'best', info = pick.ladder || {};
-    const chip = vm.featured ? 'Hot Plate (POTD)' : climb ? `80/20 Climb${info.run ? ` #${info.run}` : ''}` : fun ? (vm.lotto ? 'Fun ticket · Lotto' : 'Fun ticket') : 'Best bet';
+    const laneChip = { gut_call: 'Gut call · ½ unit', upset: 'Upset pick', safer_combo: 'Safer combo',
+      special: "Chef's Special", nba: 'NBA Trial', soccer: 'Soccer Trial', cbb: 'College hoops Trial' };
+    const chip = vm.featured ? 'Hot Plate (POTD)' : climb ? `80/20 Climb${info.run ? ` #${info.run}` : ''}` : fun ? (vm.lotto ? 'Fun ticket · Lotto' : 'Fun ticket') : laneChip[pick.lane] || 'Best bet';
     const chipHtml = `<p class="kt-chip">${vm.featured ? FLAME : ''}${esc(chip)}</p>`;
     const when = ticketWhen(pick.kickoff), matchup = g && g.away && g.home ? `${g.away.abbr} at ${g.home.abbr}` : '';
     const nameText = climb ? `Step ${info.step || ''}`.trim() : fun ? `${vm.legs.length} legs` : parts.name;
@@ -879,7 +881,10 @@
     const fit = betSize(parts, opts.compact ? 60 : 68);
     const bet = climb || fun ? legs : `<p class="kt-bet num" style="--bet-size:${fit}px;--bet-size-k:${(fit / 306).toFixed(4)}">${esc(parts.bet)}${parts.unit.length ? `<span class="kt-unit">${parts.unit.map(esc).join('<br>')}</span>` : ''}</p>`;
     const s = opts.season, record = s ? `${s.wins}-${s.losses}${s.pushes ? `-${s.pushes}` : ''}` : '';
-    const stub = best && opts.more ? '' : best ? (record ? `<p class="kt-season">Best bets ${s.playoffs ? 'these playoffs' : 'this season'}<b class="num">${esc(record)}</b></p>` : '<p class="kt-season">Best bet</p>')
+    const straightStub = pick.lane === 'gut_call' ? '<p class="kt-season">Gut calls keep their own record</p>'
+      : pick.lane === 'upset' ? '<p class="kt-season">Upset picks keep their own record</p>'
+      : record ? `<p class="kt-season">Best bets ${s.playoffs ? 'these playoffs' : 'this season'}<b class="num">${esc(record)}</b></p>` : '<p class="kt-season">Best bet</p>';
+    const stub = best && opts.more ? '' : best ? straightStub
       : climb ? `<p class="kt-season">Banked this climb<b class="num">${money(info.banked)}</b></p>` : '<p class="kt-season">Tracked apart from best bets</p>';
     /* ORDER UP needs a live price. */
     const orderUp = best && !pick.result && !hold && tense ? '<span class="kt-orderup" aria-hidden="true">ORDER UP</span>' : '';

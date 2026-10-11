@@ -102,6 +102,17 @@ class TicketCardTests(unittest.TestCase):
         self.assertIn('HOT PLATE (POTD)', svg)
         self.assertNotIn('>BEST BET<', svg)
 
+    def test_gut_call_card_names_its_lane_and_half_unit_never_best_bet(self):
+        gut = dict(PROP, lane='gut_call', riskUnits=.5)
+        data = ticket_card.straight_data(gut, GAME, player_side='away',
+                                         art={'kind': 'photo', 'uri': self.image}, fetch=lambda _: self.logo)
+        self.assertEqual(data['seriesLabel'], 'GUT CALL · ½ UNIT')
+        svg = ticket_card.straight_svg(gut, GAME, player_side='away',
+                                       art={'kind': 'photo', 'uri': self.image}, fetch=lambda _: self.logo)
+        self.assertIn('GUT CALL · ½ UNIT', svg)
+        self.assertIn('0.5u', svg)
+        self.assertNotIn('>BEST BET<', svg)
+
     def test_game_line_uses_both_team_logos_not_a_player_photo(self):
         pick = dict(PROP, athleteId=None, market=None, marketType='total',
                     title='NMSU at FIU over 46.5', line=46.5, odds=-110)

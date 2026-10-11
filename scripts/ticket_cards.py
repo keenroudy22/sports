@@ -153,7 +153,10 @@ def play_card(p):
             inner += kit.logo_disc(card, logo, 790, cy, 130, ring=colors[1])
         else:
             inner += kit.initials_badge(card, 790, cy, 130, p['team'][:4], p['team_colors'][p['team']][0])
-    chip, _ = kit.series_chip(card, COL_X, 204, p.get('seriesLabel') if p.get('seriesLabel') in ('NBA TRIAL', 'NBA TRIAL PREVIEW') else 'HOT PLATE (POTD)' if p.get('featured') else 'BEST BET', flame=p.get('featured'))
+    label = p.get('seriesLabel')
+    if label not in ('NBA TRIAL', 'NBA TRIAL PREVIEW', 'GUT CALL · ½ UNIT', 'UPSET PICK'):
+        label = 'HOT PLATE (POTD)' if p.get('featured') else 'BEST BET'
+    chip, _ = kit.series_chip(card, COL_X, 204, label, flame=p.get('featured'))
     inner += chip
     if game:
         inner += _game_panel(card, p, panel_bottom, left, right)
