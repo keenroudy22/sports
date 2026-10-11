@@ -44,12 +44,19 @@ BANNED = re.compile(r"\b(?:delve|leverage|robust|seamless|comprehensive|unlock|e
 
 def lint(text):
     clean = str(text or '')
+    # A delayed daily Results post names the day up front.  This one bounded
+    # recovery opener is owner-written; the general "Here's" ban still applies
+    # everywhere else.
+    voice_clean = re.sub(
+        r"(?i)\ALate, but here's (?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\.\s*",
+        '', clean,
+    )
     problems = []
     if bare_athlete_id(clean):
         problems.append('bare athlete id in public copy')
     elif BARE_LONG_NUMBER.search(clean):
         problems.append('bare long number in public copy')
-    if BANNED.search(clean):
+    if BANNED.search(voice_clean):
         problems.append('retired public wording')
     if public_copy.issues(clean):
         problems.append('private publishing copy')
@@ -61,10 +68,10 @@ def lint(text):
         problems.append('dash used as punctuation')
     if re.search(r'(?:·[^\n]*){4}', clean):
         problems.append('too many middle-dot clauses')
-    if WORD_BANS.search(clean):
+    if WORD_BANS.search(voice_clean):
         problems.append('caption kill-list word')
-    if any(phrase.casefold() in clean.casefold() for phrase in PHRASE_BANS) or MODEL_PERCENT.search(clean) \
-            or EDGE_NUMBER.search(clean) or ZERO_DOLLARS.search(clean):
+    if any(phrase.casefold() in voice_clean.casefold() for phrase in PHRASE_BANS) or MODEL_PERCENT.search(voice_clean) \
+            or EDGE_NUMBER.search(voice_clean) or ZERO_DOLLARS.search(voice_clean):
         problems.append('caption kill-list phrase')
     if DOUBLED_WORD_END.search(clean) or REPEATED_PAREN.search(clean):
         problems.append('duplicated public wording')

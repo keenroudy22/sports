@@ -99,6 +99,7 @@ class ReceiptTests(unittest.TestCase):
         self.assertEqual(len(receipt['rows']), 2)
         self.assertTrue(receipt['text'].startswith("Late, but here's Saturday.\n\nSaturday: 1-1."))
         self.assertNotIn('Never posted', receipt['text'])
+        self.assertEqual(receipts.guard(receipt), [], 'the approved late-results opener must not block recovery')
 
     def test_one_record_counts_every_published_play_whether_or_not_it_went_out(self):
         first, _, _ = world()
