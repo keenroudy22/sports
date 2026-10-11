@@ -35,6 +35,45 @@ class SeasonTrendsTests(unittest.TestCase):
         self.assertEqual(len(T.history(rows + extra, 'rec', 2026, NOW)), 3)
         self.assertEqual(T.history(rows[:2], 'rec', 2026, NOW), [])
 
+    def test_early_season_fill_uses_prior_year_only_after_two_current_games(self):
+        current = logs([3, 4])
+        prior = [dict(row, eventId=f'old-{i}', season=2025, kickoff=f'2025-09-{i+1:02d}T17:00:00Z')
+                 for i, row in enumerate(logs([1, 2, 5]))]
+        filled = T.history(prior + current, 'rec', 2026, NOW, team='1')
+        self.assertEqual([row['value'] for row in filled], [1, 2, 5, 3, 4])
+        self.assertEqual(sum(row['priorSeason'] for row in filled), 3)
+        self.assertEqual(T.history(prior + current[:1], 'rec', 2026, NOW, team='1'), [])
+
+    def test_cfb_dvp_rank_and_fcs_padded_streak_become_a_reason_against(self):
+        def allowed(team, opponent, date, value):
+            return {'eventId': f'{team}-{date}', 'kickoff': f'2026-09-{date:02d}T17:00:00Z', 'season': 2026,
+                    'seasonType': 2, 'team': team, 'opp': opponent,
+                    'allowed': {'WR': {'recYds': value}}}
+        defense = {
+            'A': [allowed('A', 'X', i, 20) for i in (1, 2, 3)],
+            'B': [allowed('B', 'X', i, 60) for i in (1, 2, 3)],
+            'C': [allowed('C', 'X', i, 90) for i in (1, 2, 3)],
+        }
+        kickoff = datetime(2026, 10, 4, 17, tzinfo=timezone.utc)
+        ranks = T.defense_ranks(defense, 'WR', 'recYds', 2026, kickoff, {'A', 'B', 'C'})
+        self.assertEqual(ranks['A']['rank'], 1)
+        self.assertEqual(ranks['A']['average'], 20.0)
+        hist = [
+            {'eventId': '1', 'date': '2026-09-01', 'kickoff': '2026-09-20T17:00:00Z', 'season': 2026,
+             'priorSeason': False, 'opponent': 'FCS-1', 'value': 80},
+            {'eventId': '2', 'date': '2026-09-02', 'kickoff': '2026-09-21T17:00:00Z', 'season': 2026,
+             'priorSeason': False, 'opponent': 'FCS-2', 'value': 75},
+            {'eventId': '3', 'date': '2026-09-03', 'kickoff': '2026-10-01T17:00:00Z', 'season': 2026,
+             'priorSeason': False, 'opponent': 'C', 'value': 30},
+        ]
+        tagged, dvp, splits, adjusted = T.opponent_context(
+            hist, 49.5, 'over', 'CFB', defense, 'WR', 'recYds', 2026, kickoff, 'A', {'A', 'B', 'C'})
+        self.assertEqual(dvp['rank'], 1)
+        self.assertEqual([row['opponentQuality'] for row in tagged[:2]], ['fcs', 'fcs'])
+        self.assertEqual(splits['fcs']['hits'], 2)
+        self.assertTrue(adjusted['against'])
+        self.assertFalse(adjusted['supports'])
+
     def fixture(self):
         game = {'id': 'NFL-1', 'league': 'NFL', 'state': 'pre', 'season': 2026,
                 'kickoff': '2026-10-04T17:00:00Z', 'home': {'id': '1', 'name': 'Home'},
@@ -65,7 +104,8 @@ class SeasonTrendsTests(unittest.TestCase):
         g, info, q = self.fixture()
         rows = T.build([g], info, [], {'NFL-1': q}, NOW)
         # Social trend boards use current main lines, never easy alternates.
-        main = dict(next(r for r in rows if r['kind'] == 'alternate'), kind='main')
+        main = dict(next(r for r in rows if r['kind'] == 'alternate'), kind='main',
+                    projection=4.8, priceClears=True)
         rows.append(main)
         card = R.season_candidate([g], {'NFL-1': {'seasonTrends': rows}}, NOW)
         self.assertEqual(card['kind'], 'season')
@@ -83,6 +123,15 @@ class SeasonTrendsTests(unittest.TestCase):
             r['injuryStatus'] = None
             r['games'] = 3
         self.assertIsNone(R.season_candidate([g], {'NFL-1': {'seasonTrends': rows}}, NOW))
+
+    def test_cfb_social_trend_refuses_opponent_padded_evidence(self):
+        g, info, q = self.fixture()
+        g['league'] = 'CFB'
+        row = dict(next(r for r in T.build([dict(g, league='NFL')], info, [], {'NFL-1': q}, NOW)
+                        if r['kind'] == 'alternate'), kind='main', league='CFB', games=5, hits=5,
+                   projection=4.8, priceClears=True,
+                   opponentAdjustment={'against': True, 'supports': False})
+        self.assertIsNone(R.season_candidate([g], {'NFL-1': {'seasonTrends': [row]}}, NOW))
 
     def test_one_editorial_per_day_across_families(self):
         self.assertTrue(R.already_posted({'posts': [{'id': 'research:upset:2026-10-04'}]}, NOW.date()))

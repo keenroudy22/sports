@@ -326,7 +326,9 @@ def prep_svg(prep, *, fetch=None):
                      'selection': f"{str(source['direction']).upper()} {float(source['line']):g} {units}",
                      'hits': f'{hits}/{games}', 'odds': source['odds'], 'book': source['book'],
                      'clears': bool(source.get('clears')), 'photo': photo,
-                     'team_color': source.get('teamColor') or '#2A2F33'})
+                     'team_color': source.get('teamColor') or '#2A2F33',
+                     'league': league, 'dvp': source.get('dvp'), 'vsQuality': source.get('vsQuality'),
+                     'includesPriorSeason': bool(source.get('includesPriorSeason'))})
     if not rows:
         raise ValueError('Prep List has no checked rows')
     day = date.fromisoformat(prep['day'])

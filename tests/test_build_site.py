@@ -691,7 +691,12 @@ class TableTests(unittest.TestCase):
                    game('2', datetime(2025, 9, 14, 17, tzinfo=timezone.utc), 'B', 'A', 20, 13, players=[self.wr('10', 'A', 3, 30)]),
                    game('3', datetime(2025, 9, 21, 17, tzinfo=timezone.utc), 'A', 'C', 21, 20, neutral=True,
                         players=[self.wr('10', 'A', 8, 101)])]
-        index, shards, leaders, season = build_site.build_players('NFL', records, {'3': {'10': (61, 0.92)}}, {('NFL', 'A'): {'abbr': 'AAA'}})
+        trend = {'league': 'NFL', 'athleteId': '10', 'gameId': 'NFL-next', 'kickoff': '2025-10-01T17:00:00Z',
+                 'kind': 'main', 'stat': 'recYds', 'line': 49.5, 'direction': 'over',
+                 'dvp': {'rank': 22, 'of': 32}, 'vsQuality': {'bottom10': {'hits': 2, 'games': 3}},
+                 'opponentAdjustment': {'supports': True}, 'includesPriorSeason': False}
+        index, shards, leaders, season = build_site.build_players('NFL', records, {'3': {'10': (61, 0.92)}},
+                                                                  {('NFL', 'A'): {'abbr': 'AAA'}}, [trend])
         self.assertEqual(index, [['10', 'Player 10', 'WR', 'A', 'AAA', '2025-09-21', 3]])
         self.assertEqual(season, 2025)
         self.assertEqual(leaders['recYds'], [['10', 'Player 10', 'AAA', 201.0, 3]], 'the season leader board adds the stored games')
@@ -704,6 +709,7 @@ class TableTests(unittest.TestCase):
         self.assertEqual([r[8 + keys.index('recYds')] for r in rows], [70, 30, 101])
         self.assertEqual(rows[2][8 + keys.index('snaps')], 61)
         self.assertIsNone(rows[0][8 + keys.index('snapPct')], 'no snap count is unknown, not zero')
+        self.assertEqual(shards[10 % build_site.SHARDS['NFL']]['10']['upcomingTrends'][0]['dvp']['rank'], 22)
 
     def test_player_charts_keep_all_stats_for_upcoming_roles_in_a_compact_payload(self):
         now = datetime(2026, 10, 4, 15, tzinfo=timezone.utc)

@@ -41,6 +41,7 @@ import gates
 import llm
 import llm_tasks
 import market_read
+import model_v2
 import parlay
 import pick_card
 import post_windows
@@ -49,6 +50,7 @@ import role_sanity
 import refresh
 import researcher
 import scoreboard
+import season_trends
 import sgo_shadow
 from sports_refresh import eastern_date
 
@@ -987,14 +989,33 @@ def plan_reasons(candidate, ctx):
         team = str(candidate.get('_team') or '')
         logs = [row for row in ctx.player_logs.get(str(candidate['athleteId']), [])
                 if row.get('season') == game.get('season') and (not team or str(row.get('team')) == team)]
-        values = [features.value(row, market) for row in logs]
-        values = [value for value in values if isinstance(value, (int, float))]
+        adjusted_history = season_trends.history(logs, market, game.get('season'), ctx.now, team,
+                                                 ctx.records, candidate.get('athleteId'))
+        position = features.GROUP.get(next((row.get('pos') for row in reversed(logs) if row.get('pos')), None))
+        opponent = next((str(game[where]['id']) for where in ('home', 'away')
+                         if str(game[where]['id']) != team), None)
+        opponent_adjustment = None
+        if adjusted_history and position and opponent and side in ('over', 'under'):
+            fbs = {str(value) for value in model_v2.fbs_teams(ctx.records)} if game.get('league') == 'CFB' else set()
+            adjusted_history, _dvp, _splits, opponent_adjustment = season_trends.opponent_context(
+                adjusted_history, line, side, game.get('league'),
+                features.defense_logs(ctx.records, before=ctx.now, league=game.get('league')),
+                position, market, game.get('season'), gates.when(game['kickoff']), opponent, fbs)
+        values = [row['value'] for row in adjusted_history]
+        if game.get('league') == 'CFB':
+            values = [row['value'] for row in adjusted_history if row.get('opponentQuality') != 'fcs']
         recent = values[-10:]
         hit = lambda value: value > line if side == 'over' else value < line
         season_hits, recent_hits = sum(map(hit, values)), sum(map(hit, recent))
-        if len(recent) >= 7 and recent_hits >= 7 and values and season_hits / len(values) >= .60:
+        if opponent_adjustment and opponent_adjustment.get('against'):
+            reasons.append({'type': 'matchup', 'class': 'B', 'direction': 'against',
+                            'text': 'Most of this trend came against FCS or bottom-30 defenses; tonight is a top-30 defense.',
+                            'number': opponent_adjustment, 'source': game.get('source'), 'observedAt': now})
+        elif (not opponent_adjustment or opponent_adjustment.get('supports')) and len(recent) >= 7 \
+                and recent_hits >= 7 and values and season_hits / len(values) >= .60:
+            fill = ' including last season' if any(row.get('priorSeason') for row in adjusted_history) else ''
             reasons.append({'type': 'hit_strip', 'class': 'B', 'direction': 'for',
-                            'text': f'{side.title()} {pricing.fmt(line)} in {recent_hits} of his last {len(recent)} games and {season_hits} of {len(values)} this season.',
+                            'text': f'{side.title()} {pricing.fmt(line)} in {recent_hits} of his last {len(recent)} comparable games{fill}.',
                             'number': {'recentHits': recent_hits, 'recentGames': len(recent),
                                        'seasonHits': season_hits, 'seasonGames': len(values)},
                             'source': game.get('source'), 'observedAt': logs[-1].get('kickoff') if logs else now})
@@ -1021,9 +1042,13 @@ def plan_reasons(candidate, ctx):
         if latest_log and latest_log.get('pos') in ('QB', 'RB', 'WR', 'TE'):
             opponent = next((str(game[where]['id']) for where in ('home', 'away')
                              if str(game[where]['id']) != str(latest_log.get('team'))), None)
-            table = features.defense_table(features.defense_logs(ctx.records, before=ctx.now,
-                                                                  league=game.get('league')),
-                                           f"{latest_log['pos']}.{market}", season=game.get('season'))
+            table = [row for row in features.defense_table(features.defense_logs(ctx.records, before=ctx.now,
+                                                                                  league=game.get('league')),
+                                                           f"{latest_log['pos']}.{market}", season=game.get('season'))
+                     if row.get('n', 0) >= 3]
+            table.sort(key=lambda row: (row['avg'], row['defense']))
+            for rank, row in enumerate(table, 1):
+                row['rank'] = rank
             own = next((item for item in table if str(item['defense']) == opponent), None)
             count = 10 if game.get('league') == 'NFL' else 25
             if own and ((side == 'over' and own['rank'] > len(table) - count)

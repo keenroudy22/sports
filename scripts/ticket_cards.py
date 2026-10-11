@@ -503,7 +503,7 @@ def final_card(p):
 # ---------------------------------------------------------------------------- Prep List (research)
 def prep_card(p):
     rows = p['rows']
-    row = 114
+    row = 126
     panel_bottom = 474
     head_y = panel_bottom + 56
     top = head_y + 22
@@ -544,8 +544,18 @@ def prep_card(p):
         inner += card.text(tx, y + 54, subj, size, INK_SOFT) + card.text(tx + width(subj + ' ', size), y + 54, sel, size, INK)
         inner += card.text(X2, y + 58, hits, 56, INK, anchor='end')
         check = 'My price check: clears' if r['clears'] else 'History only · no edge at this price'
-        line2 = f"{kit.price(r['odds'])} {r['book']} · {check}"
-        inner += card.text(tx, y + 100, line2, kit.fit(line2, 40, X2 - tx), INK_SOFT)
+        line2 = f"{kit.price(r['odds'])} {r['book']} · {check}{' · incl. 2025' if r.get('includesPriorSeason') else ''}"
+        inner += card.text(tx, y + 92, line2, kit.fit(line2, 40, X2 - tx), INK_SOFT)
+        dvp, splits = r.get('dvp') or {}, r.get('vsQuality') or {}
+        if dvp.get('rank') and dvp.get('of'):
+            if r.get('league') == 'CFB':
+                groups = [('fbsTopHalf', 'TOP'), ('fbsBottomHalf', 'BTM'), ('fcs', 'FCS EXCL.')]
+            else:
+                groups = [('top10', 'TOP 10'), ('middle', 'MIDDLE'), ('bottom10', 'BOTTOM 10')]
+            context = f"DEF #{dvp['rank']}/{dvp['of']} · " + ' · '.join(
+                f"{label} {(splits.get(key) or {}).get('hits', 0)}/{(splits.get(key) or {}).get('games', 0)}"
+                for key, label in groups)
+            inner += card.text(tx, y + 120, context, kit.fit(context, 40, X2 - tx), INK_SOFT)
     note = p['stub']
     inner += card.text(X1, perf + 60, note, kit.fit(note, 40, X2 - X1, tracking=1), INK_SOFT, tracking=1)
     frame(card, HOUSE, CHALK, perf, bottom, inner)

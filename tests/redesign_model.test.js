@@ -175,6 +175,12 @@ test('heavy favorites are flagged and trends read as counts, never a bare 100%',
   assert.equal(M.heavyFavorite(-250), false);
   assert.equal(M.trendText({ hits: 4, games: 4, odds: -900 }), '4 of 4 · this price needs 90% to win often enough');
   assert.equal(M.trendText({ hits: 3, games: 4, odds: null }), '3 of 4 · no price recorded');
+  const adjusted = M.opponentTrendText({ league: 'CFB', includesPriorSeason: true,
+    dvp: { rank: 12, of: 130 }, vsQuality: { fbsTopHalf: { hits: 2, games: 3 }, fbsBottomHalf: { hits: 3, games: 3 }, fcs: { hits: 1, games: 1 } },
+    opponentAdjustment: { supports: true, against: false } });
+  assert.match(adjusted, /#12 of 130/);
+  assert.match(adjusted, /FCS \(excluded\): 1 of 1/);
+  assert.match(adjusted, /Includes 2025/);
 });
 
 test('games rank by gap percentile and demote FCS or missing markets', () => {

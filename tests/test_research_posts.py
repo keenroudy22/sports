@@ -79,12 +79,13 @@ class ResearchPostTests(unittest.TestCase):
         rows = [{'league': 'CFB', 'player': f'Player {i}', 'athleteId': str(1000 + i),
                  'gameId': 'CFB-1', 'kickoff': '2026-10-03T17:00:00Z',
                  'observedAt': '2026-10-03T12:30:00Z', 'book': 'FanDuel', 'odds': -115,
-                 'line': 49.5, 'direction': 'over', 'stat': 'recYds', 'hits': 6, 'games': 6}
+                 'line': 49.5, 'direction': 'over', 'stat': 'recYds', 'hits': 6, 'games': 6,
+                 'clears': True, 'projection': 57.2}
                 for i in range(3)]
         data = {'games': [game()], 'prep': {'CFB': {'day': '2026-10-03', 'rows': rows}}}
         choice = R.select(data, {'CFB-1': {}}, now)
         self.assertEqual(choice['kind'], 'prep')
-        self.assertIn('Player 0 over 49.5 rec yds -115 FD · 6/6', choice['text'])
+        self.assertIn('Player 0 over 49.5 rec yds -115 FD · my number 57.2, line 49.5 · 6/6', choice['text'])
         self.assertIn('Lines that keep clearing today:', choice['text'])
         self.assertLessEqual(len(choice['text']), 280)
         self.assertEqual(receipts.guard({'text': choice['text']}), [])

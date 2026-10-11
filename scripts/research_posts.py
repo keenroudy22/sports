@@ -110,8 +110,13 @@ def prep_candidate(data, now):
         rows = [row for row in block.get('rows') or []
                 if row.get('league') == league and row.get('book') in PUBLIC_BOOKS
                 and isinstance(row.get('odds'), (int, float)) and row['odds'] >= -200
+                and row.get('clears') is True and isinstance(row.get('projection'), (int, float))
                 and current(row.get('observedAt'), now, timedelta(hours=4))
                 and when(row.get('kickoff')) and when(row['kickoff']) > now + timedelta(minutes=45)]
+        if league == 'CFB':
+            rows = [row for row in rows if not row.get('opponentAdjustment') or
+                    ((row.get('opponentAdjustment') or {}).get('supports')
+                     and not (row.get('opponentAdjustment') or {}).get('against'))]
         if len(rows) >= 3:
             choices.append((len(rows), league, rows[:4]))
     if not choices:
@@ -122,7 +127,11 @@ def prep_candidate(data, now):
     for row in rows:
         stat = STAT_LABEL.get(row.get('stat'), str(row.get('stat') or 'yards')).replace('receptions', 'catches')
         play = f"{row['player']} {str(row.get('direction') or '').lower()} {float(row['line']):g} {stat}"
-        lines.append(f"{play} {price(row['odds'])} {book_short(row['book'])} · {row['hits']}/{row['games']}")
+        dvp = row.get('dvp') or {}
+        opponent = f" · defense #{dvp['rank']} of {dvp['of']}" if dvp.get('rank') and dvp.get('of') else ''
+        fill = ' · incl. 2025' if row.get('includesPriorSeason') else ''
+        lines.append(f"{play} {price(row['odds'])} {book_short(row['book'])} · my number {row['projection']:g}, line {float(row['line']):g}"
+                     f" · {row['hits']}/{row['games']}{opponent}{fill}")
     save = voice_pick.choose_slot('save', f'prep:{day}:{league}', day, series='prep', history=[])
     caption = '\n'.join(part for part in ['Lines that keep clearing today:', *lines, save, f'#{league}'] if part)
     while tweet_length(caption) > LIMIT and len(lines) > 1:
@@ -235,7 +244,7 @@ def defense_context(line, payload):
     for team, defense in rows.items():
         observed = (((defense or {}).get('coverage') or {}).get(pos) or {}).get(stat, (defense or {}).get('g', 0))
         allowed = ((defense or {}).get(pos) or {}).get(stat)
-        if isinstance(observed, (int, float)) and observed >= 1 and isinstance(allowed, (int, float)):
+        if isinstance(observed, (int, float)) and observed >= 3 and isinstance(allowed, (int, float)):
             ranked.append((allowed, str(team)))
     ranked.sort()
     if not ranked:
@@ -346,9 +355,15 @@ def season_candidate(games, details, now):
     rows = []
     for game in games:
         for row in (details.get(game['id']) or {}).get('seasonTrends') or []:
+            adjusted = row.get('opponentAdjustment') or {}
+            projection_agrees = isinstance(row.get('projection'), (int, float)) and isinstance(row.get('line'), (int, float)) \
+                and ((row.get('direction') == 'over' and row['projection'] > row['line'])
+                     or (row.get('direction') == 'under' and row['projection'] < row['line']))
             if (row.get('kind') != 'main' or row.get('games', 0) < 5
                     or row.get('roleSuspect') or row.get('priceSuspect')
                     or row.get('injuryStatus')
+                    or not projection_agrees or row.get('priceClears') is not True
+                    or (row.get('league') == 'CFB' and (adjusted.get('against') or not adjusted.get('supports')))
                     or row.get('hits', 0) * 100 < row['games'] * 80 or row.get('book') not in PUBLIC_BOOKS
                     or not current(row.get('observedAt'), now, timedelta(hours=4))):
                 continue
@@ -369,11 +384,21 @@ def season_candidate(games, details, now):
     bucket_label = '100%' if bucket == 100 else f'{bucket}%+'
     shown = [{**r, 'title': r['player'], 'price': r['title'],
               'metric': f"{r['hits']}/{r['games']} this season · {r['rate']:g}% historical",
-              'detail': f"{price(r['odds'])} {r['book']} · {r['season']} regular season"} for r in unique]
+              'detail': (f"My number {r['projection']:g} · {price(r['odds'])} {r['book']} · defense "
+                         f"#{(r.get('dvp') or {}).get('rank')} of {(r.get('dvp') or {}).get('of')}"
+                         f"{' · incl. 2025' if r.get('includesPriorSeason') else ''}")
+              if (r.get('dvp') or {}).get('rank') else
+              f"My number {r['projection']:g} · {price(r['odds'])} {r['book']} · {r['season']} regular season"} for r in unique]
+    def caption_row(row):
+        dvp = row.get('dvp') or {}
+        defense = f" defense #{dvp['rank']} of {dvp['of']}" if dvp.get('rank') and dvp.get('of') else ''
+        fill = ' incl. 2025' if row.get('includesPriorSeason') else ''
+        return (f"{row['player']}: {row['title']}. My number {row['projection']:g}, line {row['line']:g}; "
+                f"{row['hits']}/{row['games']};{defense}{fill}")
     return {'kind': 'season', 'title': f'{bucket_label} TREND BOARD', 'kicker': 'CURRENT MAIN LINES · FULL-SEASON HISTORY',
             'accent': CYAN, 'rows': shown,
             'text': '\n'.join([f'📈 KOOK\'N {bucket_label} TREND BOARD',
-                               *[f"{r['player']} · {r['title']} · {r['hits']}/{r['games']}" for r in unique],
+                               *[caption_row(r) for r in unique],
                                'keenroudy.com/sports/#trends', tags(unique)])}
 
 

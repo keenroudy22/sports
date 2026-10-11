@@ -57,7 +57,10 @@ class CardCopyTests(unittest.TestCase):
                   'result': 'win', 'actualValue': 67, 'units': .91}
         prep = {'day': '2026-10-09', 'rows': [{'league': 'CFB', 'athleteId': '7', 'player': 'Player',
             'teamColor': '#112233', 'stat': 'recYds', 'direction': 'over', 'line': 49.5,
-            'odds': -110, 'book': 'FanDuel', 'hits': 4, 'games': 5, 'clears': True}]}
+            'odds': -110, 'book': 'FanDuel', 'hits': 4, 'games': 5, 'clears': True,
+            'dvp': {'rank': 9, 'of': 130}, 'vsQuality': {'fbsTopHalf': {'hits': 2, 'games': 3},
+            'fbsBottomHalf': {'hits': 2, 'games': 2}, 'fcs': {'hits': 1, 'games': 1}},
+            'includesPriorSeason': True}]}
         photo = 'data:image/png;base64,' + base64.b64encode((Path(__file__).resolve().parents[1] / 'site/kookn-mark.png').read_bytes()).decode('ascii')
         cards = [ticket_card.fun_svg(fun, {'g': game}, art=art),
                  ticket_card.climb_svg(rung, {'g': game}, art=art),
@@ -69,6 +72,9 @@ class CardCopyTests(unittest.TestCase):
         for index, svg in enumerate(cards):
             with self.subTest(family=index):
                 self.assertEqual(check_svg.issues(svg), [])
+        prep_svg = cards[-1]
+        self.assertIn('DEF #9/130', prep_svg)
+        self.assertIn('FCS EXCL. 1/1', prep_svg)
 
 
 if __name__ == '__main__':

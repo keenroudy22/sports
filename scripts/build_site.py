@@ -691,9 +691,17 @@ def season_leaders(logs, index, season):
     return out
 
 
-def build_players(league, records, snaps, teams_meta):
+def build_players(league, records, snaps, teams_meta, trends=None):
     logs = features.player_logs(records)
     index, shards = [], defaultdict(dict)
+    trend_contexts = defaultdict(dict)
+    for row in trends or []:
+        if row.get('league') != league or row.get('kind') != 'main' or not row.get('athleteId'):
+            continue
+        key = (row.get('gameId'), row.get('stat'), number(row.get('line')), row.get('direction'))
+        trend_contexts[str(row['athleteId'])][key] = {
+            field: row.get(field) for field in ('gameId', 'kickoff', 'stat', 'line', 'direction', 'dvp',
+                                                'vsQuality', 'opponentAdjustment', 'includesPriorSeason')}
     latest_season = max((g['season'] for g in records), default=None)
     for pid, rows in logs.items():
         last = rows[-1]
@@ -711,7 +719,9 @@ def build_players(league, records, snaps, teams_meta):
                          + [stats.get(k) for k in LOG_KEYS])
         team = last['team']
         index.append([pid, name, pos, team, teams_meta.get((league, team), {}).get('abbr'), day(last['kickoff']), len(rows)])
-        shards[int(pid) % SHARDS[league]][pid] = {'name': name, 'pos': pos, 'rows': table}
+        upcoming = list(trend_contexts.get(str(pid), {}).values())
+        shards[int(pid) % SHARDS[league]][pid] = {'name': name, 'pos': pos, 'rows': table,
+                                                  'upcomingTrends': upcoming}
     index.sort(key=lambda row: (row[1] or '', row[0]))
     return index, shards, season_leaders(logs, index, latest_season), latest_season
 
@@ -1322,7 +1332,13 @@ PREP_PRICE_FLOOR = -200
 
 def prep_history_ok(row, rules):
     """5-9 games at the short-sample rate; 10 or more at the last-ten count and the season rate."""
-    values = [h.get('value') for h in row.get('history') or [] if isinstance(h.get('value'), (int, float))]
+    history = row.get('history') or []
+    if row.get('league') == 'CFB':
+        history = [h for h in history if h.get('opponentQuality') != 'fcs']
+        adjusted = row.get('opponentAdjustment') or {}
+        if adjusted and (adjusted.get('against') or not adjusted.get('supports')):
+            return False
+    values = [h.get('value') for h in history if isinstance(h.get('value'), (int, float))]
     line, side = row.get('line'), row.get('direction')
     if len(values) < 5 or not isinstance(line, (int, float)) or side not in ('over', 'under'):
         return False
@@ -1406,14 +1422,21 @@ def prep_list(trends, lines, picks, league_data, now, rules=None):
             continue
         logs = (league_data.get(row['league']) or {}).get('player_logs', {}).get(athlete, [])
         position = next((r.get('pos') for r in reversed(logs) if r.get('pos')), None)
-        values = [h['value'] for h in row.get('history') or [] if isinstance(h.get('value'), (int, float))]
+        history_rows = row.get('history') or []
+        if row.get('league') == 'CFB':
+            history_rows = [h for h in history_rows if h.get('opponentQuality') != 'fcs']
+        values = [h['value'] for h in history_rows if isinstance(h.get('value'), (int, float))]
         hits = sum(1 for v in values if (v > line if row['direction'] == 'over' else v < line))
         by_league[row['league']].append({
             'league': row['league'], 'gameId': row.get('gameId'), 'kickoff': row['kickoff'], 'athleteId': athlete,
             'player': row.get('player'), 'team': (row.get('team') or {}).get('abbreviation'),
             'teamColor': (row.get('team') or {}).get('color'), 'pos': position, 'stat': stat,
             'direction': row['direction'], 'line': line, 'odds': odds, 'book': row.get('book'),
-            'observedAt': row.get('observedAt'), 'hits': hits, 'games': len(values), 'clears': clears})
+            'observedAt': row.get('observedAt'), 'hits': hits, 'games': len(values), 'clears': clears,
+            'dvp': row.get('dvp'), 'vsQuality': row.get('vsQuality'),
+            'opponentAdjustment': row.get('opponentAdjustment'),
+            'includesPriorSeason': bool(row.get('includesPriorSeason')),
+            'projection': row.get('projection')})
     def pick(rows, on):
         chosen, players = [], set()
         for row in sorted((r for r in rows if day(r['kickoff']) == on),
@@ -1625,6 +1648,7 @@ def build(now=None):
         league_data[league] = {'team_logs': team_logs, 'player_logs': features.player_logs(league_records),
                                'defense': defense_table(league, defense_logs, current),
                                'defense_logs': defense_logs, 'strength': strength,
+                               'fbs': sorted(model_v2.fbs_teams(league_records)) if league == 'CFB' else [],
                                'current': current, 'records': league_records}
     ticket_teams = annotate_tickets(picks, by_id, forecasts, league_data, identities)
     injuries_by_league = league_injuries(context)
@@ -1728,9 +1752,31 @@ def build(now=None):
             history_values = [h['value'] for h in (row.get('history') or [])[-10:] if isinstance(h.get('value'), (int, float))]
             average = sum(history_values) / len(history_values) if history_values else None
             row['uncertainGap'] = bool(average and abs(row['projection'] - average) / average > .3)
+        row['priceClears'] = bool(grade.get('calibrated') is True
+                                  and (grade.get('view') or grade.get('tier')) in ('lean', 'strong')
+                                  and not grade.get('thin') and not grade.get('limited')
+                                  and (grade.get('edge') or 0) > 0)
         if row.get('stat') in ('passYds', 'att', 'cmp', 'recYds', 'rec'):
             team = str((row.get('team') or {}).get('id') or '')
             row['qbNews'] = qb_news(trend_injuries.get(row['league'], {}).get(team, [])) or None
+    # The play page and its compact hit strip use the same opponent-adjusted evidence as Trends and the Prep List.
+    for pick in picks:
+        if not pick.get('athleteId'):
+            continue
+        stat = pricing.market_of(pick)
+        matched = next((row for row in trends if row.get('gameId') == pick.get('gameId')
+                        and str(row.get('athleteId')) == str(pick.get('athleteId')) and row.get('stat') == stat
+                        and number(row.get('line')) == number(pick.get('line'))
+                        and row.get('direction') == pick.get('direction')), None)
+        if matched:
+            pick['dvp'] = matched.get('dvp')
+            pick['vsQuality'] = matched.get('vsQuality')
+            pick['opponentAdjustment'] = matched.get('opponentAdjustment')
+            pick['includesPriorSeason'] = bool(matched.get('includesPriorSeason'))
+            if pick.get('hitStrip') is not None:
+                pick['hitStrip'].update(dvp=matched.get('dvp'), vsQuality=matched.get('vsQuality'),
+                                        opponentAdjustment=matched.get('opponentAdjustment'),
+                                        includesPriorSeason=bool(matched.get('includesPriorSeason')))
     prep = prep_list(trends, lines, picks, league_data, now)
     write_trends(trends, now)
     gap_rows = market_read.load_rows()
@@ -1797,7 +1843,8 @@ def build(now=None):
         info = league_data[league]
         write(OUT / 'player-charts' / f'{league}.json',
               build_player_charts(league, window, forecasts, info['player_logs'], info['current'], lines, now))
-        index, shards, leaders, leader_season = build_players(league, info['records'], snaps if league == 'NFL' else {}, teams_meta)
+        index, shards, leaders, leader_season = build_players(
+            league, info['records'], snaps if league == 'NFL' else {}, teams_meta, trends)
         write(OUT / 'players' / f'{league}.json', {'keys': list(LOG_KEYS), 'shards': SHARDS[league], 'players': index,
                                                    'leaders': leaders, 'season': leader_season})
         for shard, players in shards.items():

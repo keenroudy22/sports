@@ -469,6 +469,23 @@
     const need = breakEven(row.odds);
     return `${row.hits} of ${row.games}${need != null ? ` · this price needs ${pctText(need)} to win often enough` : ' · no price recorded'}`;
   };
+  const opponentTrendText = row => {
+    const dvp = row && row.dvp || {}, split = row && row.vsQuality || {}, adj = row && row.opponentAdjustment || {};
+    const labels = row && row.league === 'CFB'
+      ? [['fbsTopHalf', 'FBS top half'], ['fbsBottomHalf', 'FBS bottom half'], ['fcs', 'FCS (excluded)']]
+      : [['top10', 'top 10'], ['middle', 'middle'], ['bottom10', 'bottom 10']];
+    const parts = labels.map(([key, label]) => {
+      const s = split[key];
+      return s && s.games ? `${label}: ${s.hits} of ${s.games}` : null;
+    }).filter(Boolean);
+    const rank = dvp.rank && dvp.of ? `Tonight's defense is #${dvp.rank} of ${dvp.of} against this position (1 allows the least).` : '';
+    const history = parts.length ? `History by opponent quality: ${parts.join(' · ')}.` : '';
+    const like = adj.comparable && adj.comparable.games ? `Against defenses like tonight's: ${adj.comparable.hits} of ${adj.comparable.games}.` : '';
+    const verdict = adj.against ? 'That streak was padded by FCS or bottom-30 defenses, so it works against this trend tonight.'
+      : adj.supports ? 'Games against defenses like this support the trend.' : '';
+    const fill = row && row.includesPriorSeason ? ' Includes 2025 games with the same team and current quarterback.' : '';
+    return [rank, like, history, verdict].filter(Boolean).join(' ') + fill;
+  };
 
   /* Games: rank by how unusual our gap with the market is (percentile against every stored game), not raw points. */
   const gapScore = game => {
@@ -569,7 +586,7 @@
   TAB_OF.lab = 'record';
 
   const model = { splitColours, ledeSize, goodTo, latestPickQuote, holdOf, pickHold, heldWords, heldShort, heldQuote, afterPostingWords, priceMatch, averageGap, researchPrice, matchupSignals, breakEven, fairAmerican, edgePoints, pctText, pctOne, oddsText, upsetChanceLine, quoteAge, bookLabel, postedBook, marketLabel, niceTitle, sentences,
-    whyLines, watchLine, historyLine, howWeGotIt, pickVM, lineVM, officialKey, onBoard, hasValue, defenseVerdict, collapse, SORTS, heavyFavorite, trendText, gapScore,
+    whyLines, watchLine, historyLine, howWeGotIt, pickVM, lineVM, officialKey, onBoard, hasValue, defenseVerdict, collapse, SORTS, heavyFavorite, trendText, opponentTrendText, gapScore,
     cumulativeUnits, clvSummary, parseHash, resolve, canonical, TAB_OF, MORE_PAGES, isParlayLike, climbWords, heroBets,
     teamPanel, STAT_UNITS, betParts, nameSize, betSize, ledeTitle, dateLine, resultLine, minus, worthRows, todayMarketRank, todayResearchOrder };
 
@@ -894,6 +911,7 @@
         <p class="kt-lead kt-price"><b class="kt-odds num">${esc(odd(vm.odds))}</b><i></i><b class="kt-book">${esc(vm.estimated ? `est. ${vm.book || ''}` : vm.book || '')}</b></p>
         <p class="kt-now">${esc(nowLine)}</p>${chance}${best ? say('WHY', heldSafe(pick.ticketWhy, hold)) + say('BUT', heldSafe(pick.ticketBut, hold), ' kt-but') : ''}
         ${opts.strip && best ? strip(pick.hitStrip, pick.line, String(pick.direction || '').toLowerCase()) : ''}
+        ${best && opponentTrendText(pick) ? `<p class="kt-note">${esc(opponentTrendText(pick))}</p>` : ''}
         ${stub || extra || orderUp ? `<div class="kt-perf"></div><div class="kt-stubrow"><div class="kt-stubl">${stub}${extra}</div>${orderUp}</div>` : ''}</div></div>
       ${after}${opts.clip ? CHEF : ''}${stampFor(pick.result)}</article>`;
   };
@@ -957,7 +975,7 @@
     return `<section class="kt-sec kt-prep" aria-labelledby="prep-h"><div class="kt-sec-head"><h2 class="kt-tape" id="prep-h">Prep List</h2><span class="kt-kind">${esc(kind)}</span></div>
       ${rows.length ? `<ol class="kt-rows">${rows.map(r => `<li><span class="kt-face" style="--tc:${esc(hexOf(r.teamColor) || '#15301F')}">${HEADSHOT[r.league] ? `<img src="${esc(HEADSHOT[r.league](r.athleteId))}" alt="" loading="lazy">` : ''}</span>
         <div><p class="kt-who"><a class="plain-link" href="#player/${esc(r.league)}/${esc(r.athleteId)}?stat=${esc(r.stat)}"><b>${esc(r.player)}</b></a> <span>${esc([r.team, r.pos].filter(Boolean).join(' '))}</span></p>
-        <p class="kt-pline">${esc(`${r.direction === 'under' ? 'Under' : 'Over'} ${r.line} ${STAT_SHORT[r.stat] || r.stat}`)}</p><p class="kt-px">${esc(odd(r.odds))} ${esc(bookLabel(r.book) || '')}${r.clears ? '<span class="ok">✓ clears my price</span>' : '<span class="no">History only · no edge at this price</span>'}</p></div>
+        <p class="kt-pline">${esc(`${r.direction === 'under' ? 'Under' : 'Over'} ${r.line} ${STAT_SHORT[r.stat] || r.stat}`)}</p><p class="kt-px">${esc(odd(r.odds))} ${esc(bookLabel(r.book) || '')}${r.clears ? '<span class="ok">✓ clears my price</span>' : '<span class="no">History only · no edge at this price</span>'}</p><p class="small muted">${esc(opponentTrendText(r))}</p></div>
         <p class="kt-hits"><b class="num">${esc(r.hits)}</b>of ${esc(r.games)}</p></li>`).join('')}</ol>` : ''}
       ${rows.some(r => r.league === 'CFB') ? '<p class="kt-note">College injury news is thin.</p>' : ''}
       ${notes.slice(0, 3).map(n => `<p class="kt-note"><a href="${esc(n.href)}"><b>${esc(n.title)}</b></a> ${esc(n.text)}</p>`).join('')}
@@ -1578,6 +1596,7 @@
         ${r.qbNews ? `<p class=caution>QB news: ${esc(r.qbNews)}</p>` : ''}
         ${r.kind !== 'milestone' ? `<p class="small">${esc(researchPrice(priceMatch(r, catalog?.lines) || {}))}</p>` : ''}
         <p class="small muted">${esc(trendText(r))} · ${esc(windowLabel)}${r.games < 5 ? ' · small sample' : ''}${r.injuryStatus ? ` · Injury report: ${esc(r.injuryStatus)}` : ''}</p>
+        ${opponentTrendText(r) ? `<p class="small ${r.opponentAdjustment?.against ? 'red' : 'muted'}">${esc(opponentTrendText(r))}</p>` : ''}
         ${historyChart(hist.map(h => Number(h.value)), hist.map(h => String(h.date || '').slice(5)), r.line, dir, { legend: false, titles: hist.map(h => String(h.date || '')) })}
         <p class="small"><a href="#game/${esc(r.gameId)}">${esc(r.matchup || 'Game')} · ${esc(whenShort(r.kickoff))} →</a></p></div>`;
     }).join('')}</div>${rows.length > shown.length ? `<p style="margin-top:12px"><button type="button" class="btn" data-more-trends>Show ${Math.min(40, rows.length - shown.length)} more</button></p>` : ''}`
@@ -1867,14 +1886,14 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-5e65761e7573';
-  const GAMES_ASSET = 'app-games.js?v=sha256-d0764370178f';
+  const MORE_ASSET = 'app-more.js?v=sha256-ac93a932744d';
+  const GAMES_ASSET = 'app-games.js?v=sha256-f5789dd79894';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,
     GAMES, HEADSHOT, MARK, STAT_UNITS, clock, defGames, defenseVerdict, disc, filtersFold, hasValue, lineVM, logoImg, minus, nameSize, odd, onBoard, panelVars, pctOne, teamPanel, ticketWhen, toneFor, watchButton, HOUSE, rail, holdOf, heldWords, slip, etDay, ...overrides });
   const gamesContext = (overrides = {}) => moreContext({ setLeague, liveStamp, liveFor, LIVE, gapScore, STAT_WORD, favSpread, marketLabel, quoteAge, round1, fairAmerican,
-    boardRow, matchupSignals, researchPrice, pctText, currentUpset, upsetRow, heavyFavorite, trendText, historyChart, ticket, luminance, ...overrides });
+    boardRow, matchupSignals, researchPrice, pctText, currentUpset, upsetRow, heavyFavorite, trendText, opponentTrendText, historyChart, ticket, luminance, ...overrides });
   const BUNDLES = { more: { asset: MORE_ASSET, global: 'KRMore', context: moreContext, word: 'More pages' },
     games: { asset: GAMES_ASSET, global: 'KRGames', context: gamesContext, word: 'Games pages' } };
   const ensureBundle = key => {
