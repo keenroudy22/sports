@@ -38,7 +38,7 @@ class SlotTests(unittest.TestCase):
         }
         ctx = SimpleNamespace(first={}, latest={})
         self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'NFL-dark'})
-        ctx.first['posted'] = {'gameIds': ['NFL-dark'], 'status': 'active'}
+        ctx.first['posted'] = {'gameIds': ['NFL-dark'], 'status': 'active', 'lane': 'best_bet'}
         self.assertEqual(run.official_selection_scope(slot, games, ctx, now), set())
         morning = datetime(2026, 10, 11, 6, 45, tzinfo=run.EASTERN)
         self.assertIsNone(run.official_selection_scope(morning, games, ctx, now))
@@ -55,6 +55,20 @@ class SlotTests(unittest.TestCase):
         with mock.patch.dict(os.environ, {'KEENROUDY_SELECTION_PRIMETIME': '0'}):
             self.assertEqual(run.official_selection_scope(slot, games, ctx, now), set())
 
+    def test_open_climb_leg_does_not_count_as_primetime_coverage(self):
+        now = datetime(2026, 10, 11, 22, 50, tzinfo=timezone.utc)
+        slot = now.astimezone(run.EASTERN)
+        games = {
+            'NFL-snf': {'id': 'NFL-snf', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-10-12T00:20:00Z'},
+        }
+        ctx = SimpleNamespace(first={
+            'climb': {'gameIds': ['NFL-snf'], 'status': 'active', 'lane': 'ladder', 'parlayType': 'ladder'},
+            'fun': {'gameIds': ['NFL-snf'], 'status': 'active', 'parlayType': 'longshot'},
+        }, latest={})
+        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'NFL-snf'})
+        ctx.first['straight'] = {'gameIds': ['NFL-snf'], 'status': 'active', 'lane': 'gut_call'}
+        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), set())
+
     def test_830_selection_pass_rechecks_unserved_noon_and_later_games(self):
         now = datetime(2026, 10, 11, 12, 30, tzinfo=timezone.utc)
         slot = now.astimezone(run.EASTERN)
@@ -63,13 +77,36 @@ class SlotTests(unittest.TestCase):
             'NFL-noon': {'id': 'NFL-noon', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-10-11T16:00:00Z'},
             'CFB-late': {'id': 'CFB-late', 'league': 'CFB', 'state': 'pre', 'kickoff': '2026-10-11T23:00:00Z'},
         }
-        ctx = SimpleNamespace(first={'posted': {'gameIds': ['CFB-late'], 'status': 'active'}}, latest={})
+        ctx = SimpleNamespace(first={'posted': {'gameIds': ['CFB-late'], 'status': 'active', 'lane': 'best_bet'}}, latest={})
         self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'NFL-noon'})
         with mock.patch.dict(os.environ, {'KEENROUDY_SELECTION_0830': '0'}):
             self.assertEqual(run.official_selection_scope(slot, games, ctx, now), set())
 
 
 class CandidateCatalogTests(unittest.TestCase):
+    def test_opposing_starting_qb_ruled_out_is_a_current_reason_for_a_primetime_side(self):
+        now = datetime(2026, 10, 11, 22, 30, tzinfo=timezone.utc)
+        game = {'id': 'NFL-401872993', 'league': 'NFL', 'state': 'pre',
+                'kickoff': '2026-10-12T00:20:00Z',
+                'away': {'id': '33', 'abbreviation': 'BAL'},
+                'home': {'id': '1', 'abbreviation': 'ATL'}}
+        candidate = {'gameIds': [game['id']], '_league': 'NFL', 'marketType': 'moneyline',
+                     'direction': 'home', 'line': 0, 'odds': -110}
+        ctx = SimpleNamespace(
+            now=now, games={game['id']: game}, starters={'NFL-33': '123'}, player_team={}, odds={},
+            odds_history={}, snapshot=lambda _game_id: {}, names={}, prop_odds={}, records=[])
+        context_file = {'leagues': {'NFL': {'checkedAt': '2026-10-11T22:20:00Z', 'teams': {
+            '33': {'players': [{'id': '123', 'name': 'Lamar Jackson', 'position': 'QB',
+                               'status': 'out', 'source': 'https://www.espn.com/'}]}}}}}
+        with mock.patch.object(run, 'weather_fact', return_value=None), \
+                mock.patch.object(run.market_read, 'read', return_value={}), \
+                mock.patch.object(run.market_read, 'sentences', return_value=''):
+            facts = run.evidence(candidate, ctx, context_file)
+        self.assertEqual(facts[0]['direction'], 'for')
+        candidate['_evidence'] = facts
+        self.assertEqual(run.plan_reasons(candidate, ctx)[0]['class'], 'A')
+        self.assertIn('Lamar Jackson', run.post_reason(candidate, facts, ctx, []))
+
     def test_spreads_join_the_board_without_turning_off_exact_line_checks(self):
         now = datetime(2026, 10, 8, 13, 0, tzinfo=timezone.utc)
         game = {'id': 'CFB-1', 'league': 'CFB', 'state': 'pre', 'kickoff': '2026-10-08T19:00:00Z'}

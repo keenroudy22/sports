@@ -112,6 +112,17 @@ class NoForcedBestBetTests(unittest.TestCase):
             self.assertFalse(gates.selection_verdict(dict(pick, _planReasons=[]), context(), 'gut_call').ok)
             self.assertFalse(gates.selection_verdict(dict(pick, _selection={'rawChance': .70, 'fairChance': .44, 'gap': 26}), context()).ok)
 
+    def test_primetime_gut_call_can_use_an_nfl_side_only_with_a_strong_current_reason(self):
+        current = {'type': 'injury_role', 'class': 'A', 'direction': 'for',
+                   'text': 'The opposing starting quarterback is ruled out.'}
+        side = total_lean(marketType='spread', direction='away', line=3.5,
+                          _selection={'rawChance': .57, 'fairChance': .53, 'gap': 4},
+                          _planReasons=[current], _primetimeFallback=True)
+        self.assertTrue(gates.selection_verdict(side, context(), 'gut_call').ok)
+        self.assertFalse(gates.selection_verdict(dict(side, _primetimeFallback=False), context(), 'gut_call').ok)
+        weak = dict(side, _planReasons=[{'type': 'matchup', 'class': 'B', 'direction': 'for', 'text': 'Matchup.'}])
+        self.assertFalse(gates.selection_verdict(weak, context(), 'gut_call').ok)
+
     def test_best_bet_spot_lookup_keeps_an_internal_only_league(self):
         from unittest.mock import patch
         reason = {'type': 'line_move', 'class': 'A', 'direction': 'for', 'text': 'Moved 20 cents.'}

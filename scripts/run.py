@@ -941,9 +941,11 @@ def evidence(candidate, ctx, context_file):
             if str(player.get('id')) == athlete:
                 direction = 'against'
             elif (player.get('position') == 'QB' and status in gates.QB_OUT
-                  and str(player.get('id')) == str(ctx.starters.get(gates.team_key(game['league'], team)) or '')
-                  and (market == 'total' or ctx.player_team.get(athlete) == team)):
-                direction = 'against'
+                  and str(player.get('id')) == str(ctx.starters.get(gates.team_key(game['league'], team)) or '')):
+                if market in ('spread', 'moneyline') and not athlete:
+                    direction = 'against' if candidate.get('direction') == side else 'for'
+                elif market == 'total' or ctx.player_team.get(athlete) == team:
+                    direction = 'against'
             claim = f"{player.get('name')} ({player.get('position')}, {game[side]['abbreviation']}) is listed {player.get('status')}"
             if player.get('injury'):
                 claim += f", {player['injury']}"
@@ -1537,8 +1539,9 @@ def post_reason(candidate, facts, ctx, records, weights=None):
             return f"{'Over' if side == 'over' else 'Under'} {pricing.fmt(line)} in {hits} of his last {len(recent)} games."
         return None
     backing = [first_sentence(f['claim']) for f in facts if f.get('direction') == 'for' and f.get('claim')
-               and (f.get('kind') == 'weather' or (researcher.from_web(f) and f.get('verified')
-                                                    and f.get('kind') in ('injury', 'role', 'weather')))]
+               and (f.get('kind') == 'weather' or (f.get('kind') == 'injury' and f.get('verified'))
+                    or (researcher.from_web(f) and f.get('verified')
+                        and f.get('kind') in ('injury', 'role', 'weather')))]
     return x_post.reason_for({'why': ' '.join(backing)}, weights) if backing else None
 
 
@@ -1771,6 +1774,26 @@ def run_tests(python=sys.executable):
         raise RunError('node tests failed:\n' + (node.stderr or node.stdout)[-1500:])
 
 
+PRIMETIME_COVERAGE_LANES = frozenset(('best_bet', 'hot_plate', 'gut_call', 'upset', 'safer_combo'))
+
+
+def official_coverage_game_ids(ctx):
+    """Games genuinely served by a public official lane.
+
+    Fun tickets and Climb rungs can mention a primetime game, but neither is
+    the straight-play coverage promised for that game.
+    """
+    covered = set()
+    for key, first in ctx.first.items():
+        pick = dict(first, **ctx.latest.get(key, {}))
+        if pick.get('result') or pick.get('entryNote') or (pick.get('status') or 'active') != 'active':
+            continue
+        if pick.get('lane') not in PRIMETIME_COVERAGE_LANES:
+            continue
+        covered.update(pick.get('gameIds') or [])
+    return covered
+
+
 def official_selection_scope(slot, games, ctx, now):
     """Game ids eligible for this run's official selection.
 
@@ -1782,12 +1805,7 @@ def official_selection_scope(slot, games, ctx, now):
     if slot.hour == 6 and slot.minute == 45:
         return None
     today = eastern_date(now)
-    already = set()
-    for key, first in ctx.first.items():
-        pick = dict(first, **ctx.latest.get(key, {}))
-        if pick.get('result') or pick.get('entryNote') or (pick.get('status') or 'active') != 'active':
-            continue
-        already.update(pick.get('gameIds') or [])
+    already = official_coverage_game_ids(ctx)
     if slot.hour == 8 and slot.minute == 30:
         if os.environ.get('KEENROUDY_SELECTION_0830', '1').strip().lower() in ('0', 'false', 'off', 'no'):
             return set()
@@ -2160,6 +2178,9 @@ def _run(args, now, slot, kinds, status):
         if candidate['id'] in ctx.first:
             continue            # already on the record: only a settlement or a close revises a published pick
         candidate['_team'] = ctx.player_team.get(candidate.get('athleteId', ''))
+        candidate['_primetimeFallback'] = bool(
+            selection_scope is not None and (slot.hour, slot.minute) in ((17, 30), (18, 50))
+            and candidate.get('_league') == 'NFL' and candidate['gameIds'][0] in selection_scope)
         facts = evidence(candidate, ctx, context_file)
         candidate['_evidence'] = facts
         league = candidate['_league']
@@ -2272,8 +2293,7 @@ def _run(args, now, slot, kinds, status):
     # A football day with no Best bet gets the top fully checked Gut call. Every
     # primetime NFL game gets its own eligible fallback; a dark game is alerted.
     days_with_play = {gates.slate_day(pick, ctx) for _, _, pick in published if not pick.get('legs')}
-    existing_games = {game_id for pick in ctx.first.values() if not pick.get('historicalImport')
-                      for game_id in pick.get('gameIds') or [] if not pick.get('entryNote')}
+    existing_games = official_coverage_game_ids(ctx)
     today = eastern_date(now)
     prime_games = {game['id'] for game in games.values() if selection_run and game.get('league') == 'NFL'
                    and game.get('state') == 'pre' and eastern_date(gates.when(game['kickoff'])) == today

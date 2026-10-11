@@ -872,8 +872,12 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
         return Decision(False, 'plan_selection', 'price is outside the lane band', numbers)
     if league == 'NFL' and market == 'total':
         return Decision(False, 'plan_selection', 'NFL totals are paused as public plays; they remain in shadow', numbers)
-    if league == 'NFL' and market in ('spread', 'moneyline'):
+    primetime_side = lane == 'gut_call' and candidate.get('_primetimeFallback') is True
+    if league == 'NFL' and market in ('spread', 'moneyline') and not primetime_side:
         return Decision(False, 'plan_selection', 'NFL sides remain in shadow until 30 forward grades clear the promotion rule', numbers)
+    if league == 'NFL' and market in ('spread', 'moneyline') and primetime_side \
+            and not any(row.get('class') == 'A' or row.get('type') in CLASS_A_REASONS for row in reasons):
+        return Decision(False, 'plan_selection', 'a primetime NFL side needs a strong current reason', numbers)
     if league == 'CFB' and market in ('spread', 'moneyline'):
         desk = candidate.get('_desk') or {}
         margin = desk.get('projection')
