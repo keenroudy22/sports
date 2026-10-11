@@ -43,6 +43,18 @@ class SlotTests(unittest.TestCase):
         morning = datetime(2026, 10, 11, 6, 45, tzinfo=run.EASTERN)
         self.assertIsNone(run.official_selection_scope(morning, games, ctx, now))
 
+    def test_650_rechecks_the_same_still_dark_primetime_game(self):
+        now = datetime(2026, 10, 12, 22, 50, tzinfo=timezone.utc)
+        slot = now.astimezone(run.EASTERN)
+        games = {
+            'NFL-mnf': {'id': 'NFL-mnf', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-10-13T00:15:00Z'},
+            'NFL-done': {'id': 'NFL-done', 'league': 'NFL', 'state': 'post', 'kickoff': '2026-10-12T17:00:00Z'},
+        }
+        ctx = SimpleNamespace(first={}, latest={})
+        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'NFL-mnf'})
+        with mock.patch.dict(os.environ, {'KEENROUDY_SELECTION_PRIMETIME': '0'}):
+            self.assertEqual(run.official_selection_scope(slot, games, ctx, now), set())
+
     def test_830_selection_pass_rechecks_unserved_noon_and_later_games(self):
         now = datetime(2026, 10, 11, 12, 30, tzinfo=timezone.utc)
         slot = now.astimezone(run.EASTERN)
@@ -842,18 +854,33 @@ class ParlayGuardTests(unittest.TestCase):
             looked.append(single['title'])
             return ('the evidence argues against it: rain and 25 mph wind', [], [wind]) if game['id'] == 'army' else (None, [], [])
         reason = run.parlay_last_look(ticket, ctx, {}, False, {}, self.NOW, look=look)
-        self.assertEqual(reason, 'its Army at Temple over 47.5 leg: the evidence argues against it: rain and 25 mph wind')
+        self.assertIsNone(reason, 'weather may flag the ticket but only typed hard injury news may pull it')
         soft = {'id': 'r1', 'kind': 'role', 'direction': 'against', 'origin': 'claude researcher', 'verified': True,
                 'claim': "Quentin Johnston remains in the Chargers' receiver rotation while Ladd McConkey is the clearest fantasy option."}
         stands = run.parlay_last_look(ticket, ctx, {}, False, {}, self.NOW,
                                       look=lambda single, game, *rest: (f"verified reporting argues against it: {soft['claim']}", [], [soft]))
         self.assertIsNone(stands, 'Sunday 2026-09-27: a rotation note pulled the ladder; soft news never pulls a fun ticket')
+        qb = {'id': 'injury-1-9', 'kind': 'injury', 'direction': 'against', 'position': 'QB',
+              'status': 'Out', 'claim': 'The starting quarterback is listed Out.'}
+        pulled_for_qb = run.parlay_last_look(ticket, ctx, {}, False, {}, self.NOW,
+                                             look=lambda single, game, *rest: ('model flag', [], [qb]) if game['id'] == 'army' else (None, [], []))
+        self.assertEqual(pulled_for_qb, 'its Army at Temple over 47.5 leg: typed injury report: The starting quarterback is listed Out.')
         looked.clear()
         clear = run.parlay_last_look(ticket, ctx, {}, False, {}, self.NOW, look=lambda *a: (None, [], []))
         self.assertIsNone(clear)
         closing = [dict(self.world()[3], status='expired', entryNote=self.NOTE)]
         pulled = run.parlay_last_look(ticket, ctx, {}, False, {}, self.NOW, closing=closing, look=lambda *a: self.fail('pulled first'))
         self.assertTrue(pulled.startswith('its Navy at UAB over 51.5 leg was pulled'))
+
+    def test_release_pull_reason_ignores_model_and_web_flags(self):
+        pick = {'athleteId': '77'}
+        web = {'id': 'web-1', 'origin': 'claude researcher', 'kind': 'injury', 'direction': 'against',
+               'position': 'QB', 'status': 'Out', 'claim': 'The quarterback was ruled out.'}
+        weather = {'id': 'weather-1', 'kind': 'weather', 'direction': 'against', 'claim': 'Wind 25 mph.'}
+        self.assertIsNone(run.release_pull_reason(pick, [web, weather]))
+        player = {'id': 'injury-10-77', 'kind': 'injury', 'direction': 'against', 'position': 'WR',
+                  'status': 'Inactive', 'claim': 'Player 77 is listed Inactive.'}
+        self.assertEqual(run.release_pull_reason(pick, [player]), 'typed injury report: Player 77 is listed Inactive.')
 
     def test_the_price_check_takes_a_ticket_off_when_its_leg_was_pulled(self):
         from unittest import mock

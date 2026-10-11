@@ -112,6 +112,18 @@ class DraftTests(unittest.TestCase):
             with mock.patch.object(x_post, 'REASONS', path):
                 self.assertIn('Wind is forecast at 18 mph in Ann Arbor.', x_post.draft(dict(PICK, projection=31.2), GAME))
 
+    def test_a_missing_saved_reason_uses_verified_pick_evidence_or_holds(self):
+        supported = dict(PROP, lane='gut_call', reasons=['He cleared this line in 4 of his last 5 full games.'])
+        with mock.patch.object(x_post, 'load_reasons', return_value={}):
+            text = x_post.draft(supported, {'league': 'NFL'})
+        self.assertIn('He cleared this line in 4 of his last 5 full games.', text)
+        self.assertEqual(x_post.guard(text, supported, x_post.reason_in(text)), [])
+
+        unsupported = dict(PROP, lane='gut_call', why='The projection is the only reason.', hitStrip={})
+        with mock.patch.object(x_post, 'load_reasons', return_value={}):
+            held = x_post.draft(unsupported, {'league': 'NFL'})
+        self.assertIn('play has no supporting reason', x_post.guard(held, unsupported, x_post.reason_in(held)))
+
     def test_new_lane_play_is_held_without_a_reason_and_maps_the_current_book_brand(self):
         play = dict(PICK, lane='gut_call', riskUnits=.5, book='ESPN BET', projection=31.2)
         text = x_post.draft(play, GAME, reason='Wind is forecast at 18 mph in Ann Arbor.')

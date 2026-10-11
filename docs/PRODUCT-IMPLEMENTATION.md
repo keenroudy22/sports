@@ -9,6 +9,16 @@ release recipe. R0 begins with regression-first repairs for the lost league in B
 non-starter quarterback injury holds, cross-league defense ranks and the 8:30 selection pass. No item is marked
 shipped until its own tests, the full release gates, hosted publish and live checks are recorded below.
 
+### R0 verified release
+
+Release `637485575e65741ca42ea76bd2dd0e45d9449ce8` and hosted publish `38144544975`
+completed successfully. Python 1,300 (two skipped), frontend 234, both clean-export suites,
+build, payload budget, record audits, publication guard, asset checks and the isolated rehearsal
+passed. Fourteen live route/width combinations at 375 and 1440 pixels returned zero issues or
+browser errors. The public Best bets headline remained **36–37 (1 void), −5.20u at posted
+prices**. The tracked run job was installed under the lock with the approved Climb kind and daily
+8:30 selection pass; A-20261011-1 remains observing until a natural run records its decision.
+
 ## 2026-10-09 — KOOKN-PLAN adoption
 
 The owner adopted [`KOOKN-PLAN.md`](KOOKN-PLAN.md) as the single current authority for play selection, posts,

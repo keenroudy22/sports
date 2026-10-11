@@ -130,7 +130,7 @@ test('fun tickets: string legs, estimated prices and the posted book name', () =
   assert.deepEqual(vm.legs, ['Lions ML', 'Bills over 47.5']);
   assert.equal(vm.estimated, true);
   assert.equal(vm.lotto, true);
-  assert.equal(vm.book, 'ESPN BET (now theScore Bet)');
+  assert.equal(vm.book, 'theScore Bet');
   assert.equal(M.postedBook('DraftKings'), 'DraftKings');
 });
 

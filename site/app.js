@@ -258,8 +258,8 @@
     return BOOKS[raw.toLowerCase().replace(/[^a-z0-9]/g, '')] || raw;
   };
 
-  /* The book a play was posted at, as it was posted. ESPN BET plays keep that name, with today's name alongside. */
-  const postedBook = name => /^espn ?bet$/i.test(String(name || '').trim()) ? 'ESPN BET (now theScore Bet)' : bookLabel(name) || (name ? String(name) : null);
+  /* Provider keys stay stable in the record; every public surface uses the current bettor-facing brand. */
+  const postedBook = name => bookLabel(name) || (name ? String(name) : null);
 
   const STAT_WORD = { recYds: 'receiving yards', rec: 'catches', rushYds: 'rushing yards', car: 'carries', passYds: 'passing yards',
     att: 'pass attempts', cmp: 'completions', passTD: 'passing TDs', anyTD: 'anytime TD', rushTD: 'rushing TDs', recTD: 'receiving TDs' };

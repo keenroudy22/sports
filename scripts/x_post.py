@@ -439,7 +439,16 @@ def _short_reason(text):
 
 
 def _choose_reason(pick, supplied, history, day):
-    choices = [supplied, strip_reason(pick)]
+    # The saved publication reason wins. If it is absent, recover the strongest
+    # verified supporting sentence already stored on the pick. If neither is
+    # usable, the caller's guard holds the post; a reason is never stripped and
+    # sent blank.
+    structured = []
+    for row in [*((pick.get('dossier') or {}).get('reasons') or []), *(pick.get('reasons') or [])]:
+        value = row.get('text') if isinstance(row, dict) else row
+        if value and plain(str(value)):
+            structured.append(str(value))
+    choices = [supplied, strip_reason(pick), *structured]
     choices = list(dict.fromkeys(_short_reason(choice) for choice in choices if choice))
     choices = [choice for choice in choices if plain(choice)]
     recent = [row for row in history or [] if (row.get('series') or row.get('kind')) in ('play', 'buffer:play')]

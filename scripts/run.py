@@ -1769,7 +1769,9 @@ def official_selection_scope(slot, games, ctx, now):
                 and eastern_date(gates.when(game['kickoff'])) == today
                 and gates.when(game['kickoff']).astimezone(EASTERN).hour >= 12
                 and game['id'] not in already}
-    if slot.hour != 17 or slot.minute != 30:
+    if os.environ.get('KEENROUDY_SELECTION_PRIMETIME', '1').strip().lower() in ('0', 'false', 'off', 'no'):
+        return set()
+    if (slot.hour, slot.minute) not in ((17, 30), (18, 50)):
         return set()
     return {game['id'] for game in games.values()
             if game.get('league') == 'NFL' and game.get('state') == 'pre'
@@ -3077,10 +3079,29 @@ def last_look(pick, game, ctx, context_file, use_llm, status, now):
     return judge(pick, relevant_facts(pick, facts, ctx), use_llm, status), kept, facts
 
 
+def release_pull_reason(pick, facts):
+    """A released play is pulled only by the typed injury feed.
+
+    Research and the local judge may flag a concern for the log, but they do not
+    erase an admitted play. The only release-stopping facts are deterministic
+    hard news on the player himself or his starting quarterback.
+    """
+    athlete = str(pick.get('athleteId') or '')
+    for fact in facts or []:
+        if researcher.from_web(fact) or fact.get('kind') != 'injury' or fact.get('direction') != 'against' or not hard(fact):
+            continue
+        fact_player = str(fact.get('id') or '').rsplit('-', 1)[-1]
+        if fact.get('position') == 'QB' or (athlete and fact_player == athlete):
+            return f"typed injury report: {fact.get('claim')}"
+    return None
+
+
 def parlay_last_look(pick, ctx, context_file, use_llm, status, now, closing=(), look=None):
-    """Why a fun parlay should not post, or None: a leg that is a single play the desk has closed (in the record or
-    in `closing`, this pass's revisions), or a leg the news check argues against. A college leg is not held for want
-    of news the way a college single is; the ticket is for fun, and what the check finds still stops it."""
+    """Why a fun parlay should not post, or None.
+
+    A previously closed leg or deterministic typed injury news on a leg may stop
+    it. Research/model concerns are logged but cannot pull an admitted ticket.
+    """
     hit = pulled_leg(pick, ctx, closing)
     if hit:
         return f"its {hit[0].get('title')} leg was pulled: {hit[1]}"
@@ -3091,22 +3112,22 @@ def parlay_last_look(pick, ctx, context_file, use_llm, status, now, closing=(), 
         if not game:
             continue
         single['_team'] = ctx.player_team.get(str(single.get('athleteId') or ''))
-        reason, _, facts = look(single, game, ctx, context_file, use_llm, status, now)
-        if reason and not any(hard(f) for f in relevant_facts(single, facts, ctx)):
-            # A fun ticket is not pulled on soft news: a questionable tag, a rotation or snap-count note.
-            log(f"precheck: {pick.get('id')}: its {leg.get('title')} leg stands, the news is not hard: {reason}")
-            continue
+        flag, _, facts = look(single, game, ctx, context_file, use_llm, status, now)
+        reason = release_pull_reason(single, relevant_facts(single, facts, ctx))
+        if flag and not reason:
+            log(f"precheck: {pick.get('id')}: its {leg.get('title')} leg stands; model flag logged: {flag}")
         if reason:
             return f"its {leg.get('title')} leg: {reason}"
     return None
 
 
 def precheck(args):
-    """The last look before a scheduled play posts to X: the injury report read live, the latest line, the web
-    researcher's news when it is on, and the judge on whatever can matter. A play that no longer stands is taken
-    off the queue and closed to new entries on the site with the reason; a play that stands is marked checked. A fun
-    parlay gets that look on every leg, after the single plays, and a leg the desk has pulled takes the ticket off too.
-    Quiet when nothing is due."""
+    """The last look before a scheduled play posts to X.
+
+    The live typed injury feed can pull a play for deterministic hard news on
+    its player or starting quarterback. Research/model concerns and price moves
+    are logged only; the admitted play otherwise keeps its posted number.
+    """
     import buffer_post
     import x_post
     now = gates.when(args.now) if args.now else datetime.now(timezone.utc)
@@ -3146,9 +3167,7 @@ def precheck(args):
             raw_first = raw_first_publications(stores.reports)
             context_file = live_context(stores.context_file, now)
             use_llm = not args.no_llm and llm.available()
-            moved, _ = close_moves(ctx, raw_first, games, desk.captures(), now)
-            moved = {revision['id']: (league, kind, revision) for league, kind, revision in moved}
-            closures, withheld, parlays = [], [], []
+            closures, parlays = [], []
             for entry in due:
                 key = entry['id']
                 if key not in ctx.first:
@@ -3164,19 +3183,12 @@ def precheck(args):
                     continue
                 game = ctx.games.get((pick.get('gameIds') or [None])[0])
                 pick['_team'] = ctx.player_team.get(str(pick.get('athleteId') or ''))
-                reason, kept, facts = last_look(pick, game, ctx, context_file, use_llm, status, now)
-                if not reason and needs_research(pick) and not lineup_confirmed(kept):
-                    # A college play with nothing checked is not clear, it is unknown: try again at the next half
-                    # hour; at the last chance, withhold the post (the pick stays on the site and is graded).
-                    if gates.when(entry['dueAt']) - now > PRECHECK_LAST:
-                        log(f"precheck: {key} not confirmed yet (the web check came back without who is playing); next half hour")
-                        continue
-                    entry['precheck'] = {'at': stamp(now), 'result': 'withheld', 'reason': 'the web check could not confirm who is playing'}
-                    withheld.append(entry)
-                    log(f"precheck: {key} withheld from X: the web check could not confirm who is playing")
-                    continue
-                if not reason and key in moved:
-                    reason = closed_reason(moved[key][2]['entryNote'])
+                flag, kept, facts = last_look(pick, game, ctx, context_file, use_llm, status, now)
+                reason = release_pull_reason(pick, relevant_facts(pick, facts, ctx))
+                if flag and not reason:
+                    log(f"precheck: {key} stands; model flag logged: {flag}")
+                if needs_research(pick) and not lineup_confirmed(kept):
+                    log(f"precheck: {key} has no new lineup confirmation; the admitted play stands")
                 if reason:
                     kind_key, original = raw_first[key]
                     closures.append((pick['_league'], kind_key, dict(original, status='expired', entryNote=precheck_note(now, reason, original))))
@@ -3194,7 +3206,7 @@ def precheck(args):
             for entry, pick in parlays:
                 # Every leg gets the look a single play gets; a leg the desk has pulled closes the ticket.
                 reason = parlay_last_look(pick, ctx, context_file, use_llm, status, now,
-                                          closing=[c[2] for c in closures] + [m[2] for m in moved.values()])
+                                          closing=[c[2] for c in closures])
                 if reason:
                     kind_key, original = raw_first[entry['id']]
                     closures.append((pick['_league'], kind_key, dict(original, status='expired',
@@ -3204,13 +3216,6 @@ def precheck(args):
                 else:
                     entry['precheck'] = {'at': stamp(now), 'result': 'clear', 'note': f"every leg checked ({len(pick['legs'])})"}
                     log(f"precheck: {entry['id']} clear: every leg checked")
-            for entry in withheld:
-                if not args.dry_run:
-                    try:
-                        buffer_post.delete_post(entry['bufferPostId'])
-                        entry['cancelledAt'] = stamp(now)
-                    except buffer_post.BufferError as error:
-                        log(f"precheck: could not withhold {entry['id']}: {error}")
             if closures and not args.dry_run:
                 buffer_post.cancel_closed({c[2]['id'] for c in closures}, log_book, now, log=log)
                 by_league = defaultdict(lambda: ([], [], []))

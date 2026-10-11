@@ -986,11 +986,11 @@
     {
       "id": "A-20261011-1",
       "title": "Include approved Climb checks in regular desk jobs",
-      "status": "gated",
+      "status": "observing",
       "owner": "agent",
-      "next": "After a green run, deploy under the lock, verify hosted/live results, install the reviewed plist, confirm it includes ladder and observe a natural decision.",
+      "next": "Observe the next natural scheduled run and record its Climb decision; do not substitute replay evidence or force a rung.",
       "doneWhen": "The normal job includes only the existing settle,close,lean,prop,longshot plus ladder kinds; deployed code and loaded launchd plist are verified; a real scheduled run logs a Climb decision with existing caps and safety holds.",
-      "evidence": "Oct11 06:45 log and installed/source plist exclude ladder; run.py evaluates ladder only when enabled. Prepared source repair adds ladder, fixes invalid XML comment, and tests parsed job kinds/06:45/TZ. Not deployed or installed."
+      "evidence": "Release 637485575e65741ca42ea76bd2dd0e45d9449ce8 and hosted run 38144544975 succeeded. The tracked plist was installed and reloaded under the run lock; its normal job now includes settle,close,lean,prop,longshot,ladder and its daily 08:30 pass. Source, parsed-plist and launchctl checks are green. A natural post-release Climb decision is still required."
     },
     {
       "id": "A-20261011-2",
@@ -1013,18 +1013,18 @@
     {
       "id": "KA-R0",
       "title": "Kook'n Autopilot R0 selection, Climb and public-truth repair",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Finish the Oct 10-11 replay, Climb/book normalization, posted-only record reconciliation and public lane/send guards; then run every release gate and deploy under the run lock.",
+      "next": "Keep the repaired selection and public-truth invariants in daily health while R1 closes delivery, research and results outcomes.",
       "doneWhen": "The segment league, starter-QB, league defense and 8:30-pass regressions stay green; chosen-but-unposted is zero; every record surface is 36-37 (1 void), -5.20u; the replay counts, hosted run and live checks are recorded.",
-      "evidence": "Owner-adopted KOOKN-AUTOPILOT.md dated 2026-10-11, source SHA-256 05aca9702f44063640445d9069ec98e81fa5b0c457455b57ab3b6cab567c9ff4. Regression-first implementation began 2026-10-11; focused gate/feature/run suite is green, full release is not yet claimed."
+      "evidence": "Release 637485575e65741ca42ea76bd2dd0e45d9449ce8 and hosted run 38144544975 succeeded. Python 1300 (2 skipped), Node 234, both clean-export suites, build/budget/audits/guard/assets and isolated rehearsal passed. Live 14-route 375/1440 audit had zero issues/errors. Segment league, starter-QB, league defense, 08:30 pass, Climb naming and public-lane tests are green; every public record surface remains 36-37 (1 void), -5.20u."
     },
     {
       "id": "KA-R1",
       "title": "Kook'n Autopilot R1 delivery, research, results and daily operator",
-      "status": "ready",
+      "status": "in_progress",
       "owner": "agent",
-      "next": "Begin immediately after verified R0: T20 art checks, research recovery, lane identity, transactional delivery, primetime, results, Climb v3 and outcome health.",
+      "next": "Release the hard-news-only pull, reason-or-hold send, public book-label, unposted Bills-Rams withdrawal and 18:50 primetime pass repair; then continue research recovery and transactional delivery.",
       "doneWhen": "Every approved lane can render and fire or logs its exact refusal; delivery is transactional; results settle on time; the outcome report ships a fix or names an external blocker each day.",
       "evidence": "KOOKN-AUTOPILOT.md sections 3, 4, 6-10 and 13-14; approved base and v4 graphics reviewed image-by-image on 2026-10-11."
     }
