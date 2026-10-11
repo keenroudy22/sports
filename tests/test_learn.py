@@ -211,6 +211,25 @@ class OtherLearningTests(unittest.TestCase):
         self.assertIn('## Which posts and which hours', learn.markdown(shell))
         self.assertIn('- cashed: 1 posts, 20.0 engagements per thousand views', learn.markdown(shell))
 
+    def test_minimal_engagement_scorecard_uses_human_actions_and_removes_playbook_reply(self):
+        posts = [
+            {'kind': 'buffer:play', 'cardTheme': 'ticket', 'text': 'A play. @Playbook',
+             'metrics': {'impressions': 100, 'reactions': 2, 'likes': 99, 'reposts': 1,
+                         'comments': 2, 'quotes': 1, 'clicks': 3, 'saves': 50, 'follows': 50}},
+            {'kind': 'buffer:research', 'cardTheme': 'ticket',
+             'metrics': {'views': 200, 'likes': 2, 'comments': 1}},
+            {'kind': 'buffer:play', 'metrics': {'reactions': 99}},
+        ]
+        card = learn.engagement_scorecard({'posts': posts})
+        self.assertEqual(card['measuredPosts'], 2)
+        self.assertEqual(card['overall']['impressions'], 300)
+        self.assertEqual(card['overall']['interactions'], 11)
+        self.assertEqual(card['overall']['perThousand'], 36.67)
+        self.assertEqual(card['byKind']['play']['interactions'], 8)
+        self.assertEqual(card['byKind']['research']['interactions'], 3)
+        self.assertTrue(card['byKind']['play']['smallSample'])
+        self.assertEqual(card['formula'], '(likes + reposts + quotes + human replies + clicks) per 1,000 impressions')
+
     def test_card_theme_learning_compares_only_inside_the_same_category(self):
         posts = [
             {'kind': 'buffer:play', 'cardTheme': 'felt', 'metrics': {'impressions': 100, 'likes': 5}},

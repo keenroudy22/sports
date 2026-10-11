@@ -1,0 +1,212 @@
+{
+ "asOf": "2026-10-11T14:00:02Z",
+ "byKind": {
+  "announcement": {
+   "impressions": 21,
+   "interactions": 0,
+   "perThousand": 0.0,
+   "posts": 1,
+   "smallSample": true
+  },
+  "book": {
+   "impressions": 31,
+   "interactions": 1,
+   "perThousand": 32.26,
+   "posts": 1,
+   "smallSample": true
+  },
+  "cashed": {
+   "impressions": 580,
+   "interactions": 7,
+   "perThousand": 12.07,
+   "posts": 8,
+   "smallSample": false
+  },
+  "community": {
+   "impressions": 223,
+   "interactions": 3,
+   "perThousand": 13.45,
+   "posts": 2,
+   "smallSample": true
+  },
+  "conversation": {
+   "impressions": 190,
+   "interactions": 4,
+   "perThousand": 21.05,
+   "posts": 4,
+   "smallSample": true
+  },
+  "menu": {
+   "impressions": 309,
+   "interactions": 0,
+   "perThousand": 0.0,
+   "posts": 4,
+   "smallSample": true
+  },
+  "play": {
+   "impressions": 6493,
+   "interactions": 34,
+   "perThousand": 5.24,
+   "posts": 30,
+   "smallSample": false
+  },
+  "receipt": {
+   "impressions": 892,
+   "interactions": 6,
+   "perThousand": 6.73,
+   "posts": 14,
+   "smallSample": false
+  },
+  "research": {
+   "impressions": 797,
+   "interactions": 5,
+   "perThousand": 6.27,
+   "posts": 7,
+   "smallSample": true
+  },
+  "sheet": {
+   "impressions": 114,
+   "interactions": 1,
+   "perThousand": 8.77,
+   "posts": 3,
+   "smallSample": true
+  }
+ },
+ "byTheme": [
+  {
+   "category": "announcement",
+   "impressions": 21,
+   "interactions": 0,
+   "perThousand": 0.0,
+   "posts": 1,
+   "smallSample": true,
+   "theme": "none"
+  },
+  {
+   "category": "book",
+   "impressions": 31,
+   "interactions": 1,
+   "perThousand": 32.26,
+   "posts": 1,
+   "smallSample": true,
+   "theme": "legacy"
+  },
+  {
+   "category": "cashed",
+   "impressions": 142,
+   "interactions": 3,
+   "perThousand": 21.13,
+   "posts": 2,
+   "smallSample": true,
+   "theme": "legacy"
+  },
+  {
+   "category": "cashed",
+   "impressions": 438,
+   "interactions": 4,
+   "perThousand": 9.13,
+   "posts": 6,
+   "smallSample": true,
+   "theme": "none"
+  },
+  {
+   "category": "community",
+   "impressions": 223,
+   "interactions": 3,
+   "perThousand": 13.45,
+   "posts": 2,
+   "smallSample": true,
+   "theme": "legacy"
+  },
+  {
+   "category": "conversation",
+   "impressions": 190,
+   "interactions": 4,
+   "perThousand": 21.05,
+   "posts": 4,
+   "smallSample": true,
+   "theme": "none"
+  },
+  {
+   "category": "menu",
+   "impressions": 309,
+   "interactions": 0,
+   "perThousand": 0.0,
+   "posts": 4,
+   "smallSample": true,
+   "theme": "legacy"
+  },
+  {
+   "category": "play",
+   "impressions": 6175,
+   "interactions": 30,
+   "perThousand": 4.86,
+   "posts": 29,
+   "smallSample": false,
+   "theme": "legacy"
+  },
+  {
+   "category": "play",
+   "impressions": 318,
+   "interactions": 4,
+   "perThousand": 12.58,
+   "posts": 1,
+   "smallSample": true,
+   "theme": "ticket"
+  },
+  {
+   "category": "receipt",
+   "impressions": 856,
+   "interactions": 6,
+   "perThousand": 7.01,
+   "posts": 13,
+   "smallSample": false,
+   "theme": "legacy"
+  },
+  {
+   "category": "receipt",
+   "impressions": 36,
+   "interactions": 0,
+   "perThousand": 0.0,
+   "posts": 1,
+   "smallSample": true,
+   "theme": "none"
+  },
+  {
+   "category": "research",
+   "impressions": 555,
+   "interactions": 1,
+   "perThousand": 1.8,
+   "posts": 5,
+   "smallSample": true,
+   "theme": "legacy"
+  },
+  {
+   "category": "research",
+   "impressions": 242,
+   "interactions": 4,
+   "perThousand": 16.53,
+   "posts": 2,
+   "smallSample": true,
+   "theme": "ticket"
+  },
+  {
+   "category": "sheet",
+   "impressions": 114,
+   "interactions": 1,
+   "perThousand": 8.77,
+   "posts": 3,
+   "smallSample": true,
+   "theme": "legacy"
+  }
+ ],
+ "formula": "(likes + reposts + quotes + human replies + clicks) per 1,000 impressions",
+ "measuredPosts": 74,
+ "overall": {
+  "impressions": 9650,
+  "interactions": 61,
+  "perThousand": 6.32,
+  "posts": 74,
+  "smallSample": false
+ }
+}

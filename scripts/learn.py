@@ -379,8 +379,46 @@ def learn_domains(policy, rows, now, dry=False):
 def engagement(entry):
     metrics = entry.get('metrics') or {}
     views = metrics.get('impressions') or metrics.get('views') or 0
-    acts = sum(metrics.get(k) or 0 for k in ('reactions', 'likes', 'reposts', 'comments', 'quotes', 'saves', 'clicks', 'follows'))   # Buffer calls likes reactions
+    likes = metrics.get('reactions') if metrics.get('reactions') is not None else (metrics.get('likes') or 0)
+    replies = metrics.get('comments') or 0
+    public_text = ' '.join(str(value or '') for value in
+                           (entry.get('text'), entry.get('caption'), (entry.get('discord') or {}).get('text')))
+    if '@playbook' in public_text.lower() and replies:
+        replies -= 1
+    acts = likes + replies + sum(metrics.get(k) or 0 for k in ('reposts', 'quotes', 'clicks'))
     return (1000.0 * acts / views) if views else None
+
+
+def engagement_scorecard(log_book):
+    """Minimal settled scorecard using the owner's public engagement formula.
+
+    Buffer names likes ``reactions``.  The retired @Playbook mention generated one automated reply, so that one
+    comment is removed before counting human replies.  Missing-view rows are not silently treated as zero.
+    """
+    rows = []
+    for entry in log_book.get('posts', []):
+        metrics = entry.get('metrics') or {}
+        views = metrics.get('impressions') or metrics.get('views') or 0
+        rate = engagement(entry)
+        if not views or rate is None:
+            continue
+        rows.append({'kind': str(entry.get('kind') or 'unknown').removeprefix('buffer:'),
+                     'theme': entry.get('cardTheme') or ('none' if entry.get('card') is False else 'legacy'),
+                     'views': views, 'interactions': round(rate * views / 1000.0)})
+
+    def summary(items):
+        views = sum(row['views'] for row in items)
+        interactions = sum(row['interactions'] for row in items)
+        return {'posts': len(items), 'impressions': views, 'interactions': interactions,
+                'perThousand': round(1000.0 * interactions / views, 2) if views else None,
+                'smallSample': len(items) < ENGAGE_MIN}
+
+    by_kind = {kind: summary([row for row in rows if row['kind'] == kind]) for kind in sorted({r['kind'] for r in rows})}
+    by_theme = [{'category': kind, 'theme': theme,
+                 **summary([row for row in rows if (row['kind'], row['theme']) == (kind, theme)])}
+                for kind, theme in sorted({(r['kind'], r['theme']) for r in rows})]
+    return {'formula': '(likes + reposts + quotes + human replies + clicks) per 1,000 impressions',
+            'measuredPosts': len(rows), 'overall': summary(rows), 'byKind': by_kind, 'byTheme': by_theme}
 
 
 def learn_reasons(policy, log_book, now, dry=False):
@@ -547,7 +585,8 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
               'graded': sum(1 for r in rows if r.get('result')),
               'segments': segments, 'calibration': calibration, 'gates': by_rule(rows), 'judge': judge_findings(rows),
               'researcher': domains, 'posts': reasons, 'postTimes': post_times(log_book),
-              'cardThemes': post_themes(log_book), 'model': model_findings(), 'changes': changes,
+              'cardThemes': post_themes(log_book), 'engagementScorecard': engagement_scorecard(log_book),
+              'model': model_findings(), 'changes': changes,
               'marketReview': market_review.audit(historical_props), 'resultsShadows': shadow_rows,
               'direction': direction_report}
     if shadow_error:
@@ -636,6 +675,15 @@ def markdown(report):
             caveat = ' (small sample)' if row['smallSample'] else ''
             lines.append(f"- {row['category']} / {row['theme']}: {row['posts']} posts, "
                          f"{row['perThousand']} engagements per thousand views{caveat}")
+    scorecard = report.get('engagementScorecard') or {}
+    if scorecard.get('measuredPosts'):
+        overall = scorecard['overall']
+        lines += ['', '## Engagement scorecard', '',
+                  f"- {scorecard['measuredPosts']} measured posts; {overall['interactions']} human interactions "
+                  f"across {overall['impressions']} impressions; {overall['perThousand']} per thousand."]
+        for kind, row in scorecard.get('byKind', {}).items():
+            caveat = ' (small sample)' if row['smallSample'] else ''
+            lines.append(f"- {kind}: {row['posts']} posts, {row['perThousand']} per thousand{caveat}")
     if report['model']:
         lines += ['', '## The number against the close (season to date)', '']
         for key, m in report['model'].items():
@@ -692,14 +740,26 @@ def backfill(now=None, root=learning.STORE):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.split('\n')[0])
-    parser.add_argument('command', choices=('grade', 'weekly', 'backfill'))
+    parser.add_argument('command', choices=('grade', 'weekly', 'backfill', 'scorecard'))
     parser.add_argument('--dry', action='store_true', help='weekly: report only, change nothing')
+    parser.add_argument('--output', help='scorecard: JSON output path')
     args = parser.parse_args(argv)
     if args.command == 'grade':
         print(f'{grade_pending()} graded')
         return 0
     if args.command == 'backfill':
         print(f'{backfill()} published picks put on the record; {grade_pending()} graded')
+        return 0
+    if args.command == 'scorecard':
+        import x_post
+        log_book = x_post.load_log()
+        card = engagement_scorecard(log_book)
+        dated = [str(row.get('metricsAt') or row.get('sentAt') or '') for row in log_book.get('posts', [])
+                 if row.get('metrics')]
+        card['asOf'] = max(dated, default=None)
+        output = Path(args.output) if args.output else Path(learning.STORE) / 'engagement-scorecard.json'
+        boxscores.write_json(output, card)
+        print(f"{card['measuredPosts']} measured posts; {card['overall']['perThousand']} interactions per thousand; {output}")
         return 0
     report = weekly(dry=args.dry)
     print(markdown(report))
