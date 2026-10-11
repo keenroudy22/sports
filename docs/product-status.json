@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-11T06:27:18Z",
+  "updatedAt": "2026-10-11T11:54:49.162013Z",
   "items": [
     {
       "id": "P01",
@@ -970,9 +970,9 @@
       "title": "Prepare the 80/20 Climb from the whole game-day slate",
       "status": "ready",
       "owner": "agent",
-      "next": "Record the 6:45 AM natural early-window decision; if Step 1 clears and settles, let the next scheduled scan evaluate a later window for Step 2 without forcing it.",
+      "next": "The natural Oct11 06:45 check did not evaluate Climb: the installed regular job excludes ladder. Release the tested A-20261011-1 schedule repair in the next approved window, then observe the next real scheduled Climb decision; do not substitute replay for the missed early window.",
       "doneWhen": "Live selection uses fresh exact moneylines and reviewed alternates at -300 to -200, never combines games more than 90 minutes apart, preserves every safety hold, and records the natural Sunday decision without forcing a rung.",
-      "evidence": "Release 223f9931, hosted run 38117290252 success. Full suites: Python 1,288 (2 skipped), Node 233, clean export, build/audits/guard/assets, isolated rehearsal, live 375/1440 checks. It rejects the mixed Warren/Henry -218 ticket and separates 9:30, 1:00, 4:05 and 8:20 windows. The stored overnight board had no valid rung; the 6:45 fresh decision remains natural evidence."
+      "evidence": "Release 223f9931, hosted run 38117290252 success. Full suites: Python 1,288 (2 skipped), Node 233, clean export, build/audits/guard/assets, isolated rehearsal, live 375/1440 checks. It rejects the mixed Warren/Henry -218 ticket and separates 9:30, 1:00, 4:05 and 8:20 windows. The stored overnight board had no valid rung; the 6:45 fresh decision remains natural evidence. Oct11 daily health confirmed no ladder in the 06:45 command or report. The price-window code remains live; natural early-window evidence is missing."
     },
     {
       "id": "A-20261010-4",
@@ -991,6 +991,24 @@
       "next": "Release the caption guard and bounded 5:30 PM primetime recheck, then observe Ravens-Falcons without bypassing any gate.",
       "doneWhen": "The invalid ticket is closed before Discord/X; Strange uses approved wording; all send paths refuse the retired sentence; 5:30 considers only an unserved primetime NFL game after fresh prices.",
       "evidence": "Owner instruction 2026-10-11. Buffer and Discord cancellation completed at 08:23 ET; Strange copy replaced before delivery; public closure report 2026-10-11-NFL-0824-closes.json. Code release and natural 5:30 observation pending."
+    },
+    {
+      "id": "A-20261011-1",
+      "title": "Include approved Climb checks in regular desk jobs",
+      "status": "gated",
+      "owner": "agent",
+      "next": "Oct11 08:35\u201309:45 ET after a green08:30 run: rebase/reverify, locked full-gate deploy, watch hosted success/live375/1440, then install/reload the reviewed run plist under the same run lock. Verify loaded ProgramArguments include ladder; observe the next natural scheduled decision. If this window is missed use12:15\u201313:15 ET.",
+      "doneWhen": "The normal job includes only the existing settle,close,lean,prop,longshot plus ladder kinds; deployed code and loaded launchd plist are verified; a real scheduled run logs a Climb decision with existing caps and safety holds.",
+      "evidence": "Oct11 06:45 log and installed/source plist exclude ladder; run.py evaluates ladder only when enabled. Prepared source repair adds ladder, fixes invalid XML comment, and tests parsed job kinds/06:45/TZ. Not deployed or installed."
+    },
+    {
+      "id": "A-20261011-2",
+      "title": "Render the held October10 Final receipt detail",
+      "status": "ready",
+      "owner": "agent",
+      "next": "In the next approved card repair release, reproduce receipt-day-2026-10-10 with the exact stored Harbor detail, fit/wrap it within the reviewed Final design without dropping rows or shrinking below40px, add a real-row regression and reviewed render, then run full release gates and verify a natural Final delivery. Preserve posted attachments.",
+      "doneWhen": "The exact stored detail 4 catches on8 targets \u00b7 cleared by0.5 fits at40px or larger; every win/loss row stays; reviewed real render and full release/hosted/live evidence are recorded; delivery is confirmed separately.",
+      "evidence": "Hosted38134903105 and current clean build/feed both hold receipt-day-2026-10-10: Final detail will not fit at40px. Site publish succeeded; this receipt card is not rendered. Existing P43/Release3 card completion remains open."
     }
   ]
 }

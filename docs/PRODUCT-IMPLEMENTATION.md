@@ -1329,3 +1329,43 @@ outside writes or private reads. Local and live Today/Record › Climb checks at
 375 and 1440 pixels returned four clean pages each. Hosted publish
 `38117290252` succeeded. A-20261010-3 remains observing until the natural
 Sunday decision is recorded.
+
+## October 11 daily health — early Climb schedule repair prepared
+
+2026-10-11T11:56:02.819584Z: The natural 06:45 command was `settle,close,lean,prop,longshot`,
+so it never called the Climb builder. This is missing observation evidence, not a no-rung
+decision. A-20261010-3 stays open. A-20261011-1 adds only the already-approved ladder
+kind to the regular job and fixes an invalid XML comment. Regression checks parse the
+real plist and confirm kinds, the 06:45 slot and Eastern timezone; plutil validates it.
+
+Prepared gates: Python 1,289 (two skipped), frontend 233, both clean-export suites,
+504-page build/feed, football 99-pick/NBA zero-publication audits, 594-file publication
+guard, assets/SVG checks and isolated current-slot0645 rehearsal exit0/outcomeok,
+zero outside writes/private reads. Today318998/327680 is a soft near-budget warning.
+The initial new schedule test exposed the malformed XML comment; both suites were
+rerun successfully after correcting it. The record audit uses the full record.json
+(as the hosted workflow requires), rather than the smaller Today subset.
+
+NOT deployed or installed: Oct11 08:35–09:45 ET after green08:30, rebase/reverify,
+locked full release, watched hosted success and live375/1440, then install/reload
+the run plist under the same lock and confirm launchd arguments. If missed use
+12:15–13:15 ET. Only a real subsequent scheduled Climb decision clears observation;
+replay cannot replace the missed early-window decision. Existing daily limits and
+extra Climb scans remain unchanged. No production code or append-only store edited.
+
+A-20261011-2 records the separately confirmed held October10 Final card: both hosted
+38134903105 and local feed report `Final detail will not fit at40px` for Harbor's
+`4 catches on8 targets · cleared by0.5`. Site publication succeeds but that receipt
+image is absent. Its next release must preserve every result row, add a real-data
+fit test and obtain required real-render review before full release gates.
+
+Desk health: latest completed0645 run green/zero official unscheduled; two queued,
+zero overdue/failed X or Discord. Last10 hosted runs9success/1recovered conflict.
+Odds236/500 (projected386), SGO319/2500 (1800 stop), local Buffer191/2700;
+Sharp/cross-host counters remain partial. Invite correct server/noexpiry. No80%
+trigger or routine phone ping. Wins webhook remains unset; chef-wins empty and
+intake unshipped. Live pilot reached3sent attempts and needs owner review.
+Live Harbor and queued Strange1080x1350 cards visibly contain player photos;
+29photo/routing tests pass and no missing-headshot warning in recent desk/hosted
+logs. New menu and nonplay Plays & Results mirrors: zero. Evidence: work/health-*
+2026-10-11 logs/JSON/PNGs and hosted-health-2026-10-11.log.
