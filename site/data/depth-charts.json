@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-10-11T22:41:39Z",
+  "updatedAt": "2026-10-11T23:08:21Z",
   "coverage": "ESPN offensive depth charts for upcoming teams with a hard skill-position injury.",
   "teams": {
     "22": {
       "name": "Arizona Cardinals",
       "abbr": "ARI",
-      "status": "failed",
-      "checkedAt": "2026-10-11T20:38:06Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "status": "ok",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/ari",
       "positions": [
         {
@@ -78,11 +78,6 @@
               "id": "4360739",
               "name": "Simi Fehoko",
               "order": 2
-            },
-            {
-              "id": "4432708",
-              "name": "Marvin Harrison Jr.",
-              "order": 3
             }
           ]
         },
@@ -157,15 +152,14 @@
             }
           ]
         }
-      ],
-      "error": "ValueError"
+      ]
     },
     "33": {
       "name": "Baltimore Ravens",
       "abbr": "BAL",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/bal",
       "positions": [
         {
@@ -315,9 +309,9 @@
     "2": {
       "name": "Buffalo Bills",
       "abbr": "BUF",
-      "status": "failed",
-      "checkedAt": "2026-10-11T22:04:07Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "status": "ok",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/buf",
       "positions": [
         {
@@ -442,15 +436,14 @@
             }
           ]
         }
-      ],
-      "error": "ValueError"
+      ]
     },
     "3": {
       "name": "Chicago Bears",
       "abbr": "CHI",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/chi",
       "positions": [
         {
@@ -591,8 +584,8 @@
       "name": "Cleveland Browns",
       "abbr": "CLE",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/cle",
       "positions": [
         {
@@ -745,8 +738,8 @@
       "name": "Dallas Cowboys",
       "abbr": "DAL",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/dal",
       "positions": [
         {
@@ -889,8 +882,8 @@
       "name": "Denver Broncos",
       "abbr": "DEN",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/den",
       "positions": [
         {
@@ -1043,8 +1036,8 @@
       "name": "Detroit Lions",
       "abbr": "DET",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/det",
       "positions": [
         {
@@ -1174,9 +1167,9 @@
     "34": {
       "name": "Houston Texans",
       "abbr": "HOU",
-      "status": "failed",
-      "checkedAt": "2026-10-11T20:38:06Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "status": "ok",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/hou",
       "positions": [
         {
@@ -1239,6 +1232,28 @@
               "order": 1
             },
             {
+              "id": "4429022",
+              "name": "Kayshon Boutte",
+              "order": 2
+            },
+            {
+              "id": "4366031",
+              "name": "Tank Dell",
+              "order": 3
+            }
+          ]
+        },
+        {
+          "key": "wr2",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "4432708",
+              "name": "Marvin Harrison Jr.",
+              "order": 1
+            },
+            {
               "id": "4586312",
               "name": "Jaylin Noel",
               "order": 2
@@ -1251,7 +1266,7 @@
           ]
         },
         {
-          "key": "wr2",
+          "key": "wr3",
           "label": "WR",
           "group": "WR",
           "players": [
@@ -1263,23 +1278,6 @@
             {
               "id": "4430681",
               "name": "Jared Wayne",
-              "order": 2
-            }
-          ]
-        },
-        {
-          "key": "wr3",
-          "label": "WR",
-          "group": "WR",
-          "players": [
-            {
-              "id": "4429022",
-              "name": "Kayshon Boutte",
-              "order": 1
-            },
-            {
-              "id": "4366031",
-              "name": "Tank Dell",
               "order": 2
             }
           ]
@@ -1316,15 +1314,14 @@
             }
           ]
         }
-      ],
-      "error": "ValueError"
+      ]
     },
     "11": {
       "name": "Indianapolis Colts",
       "abbr": "IND",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/ind",
       "positions": [
         {
@@ -1480,8 +1477,8 @@
       "name": "Jacksonville Jaguars",
       "abbr": "JAX",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/jax",
       "positions": [
         {
@@ -1612,8 +1609,8 @@
       "name": "Kansas City Chiefs",
       "abbr": "KC",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/kc",
       "positions": [
         {
@@ -1771,8 +1768,8 @@
       "name": "Las Vegas Raiders",
       "abbr": "LV",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/lv",
       "positions": [
         {
@@ -1940,8 +1937,8 @@
       "name": "Los Angeles Chargers",
       "abbr": "LAC",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/lac",
       "positions": [
         {
@@ -2099,8 +2096,8 @@
       "name": "New England Patriots",
       "abbr": "NE",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/ne",
       "positions": [
         {
@@ -2258,8 +2255,8 @@
       "name": "New Orleans Saints",
       "abbr": "NO",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/no",
       "positions": [
         {
@@ -2410,8 +2407,8 @@
       "name": "New York Giants",
       "abbr": "NYG",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/nyg",
       "positions": [
         {
@@ -2574,8 +2571,8 @@
       "name": "New York Jets",
       "abbr": "NYJ",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/nyj",
       "positions": [
         {
@@ -2721,8 +2718,8 @@
       "name": "Philadelphia Eagles",
       "abbr": "PHI",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/phi",
       "positions": [
         {
@@ -2883,8 +2880,8 @@
       "name": "Pittsburgh Steelers",
       "abbr": "PIT",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/pit",
       "positions": [
         {
@@ -3047,8 +3044,8 @@
       "name": "San Francisco 49ers",
       "abbr": "SF",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/sf",
       "positions": [
         {
@@ -3221,8 +3218,8 @@
       "name": "Seattle Seahawks",
       "abbr": "SEA",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/sea",
       "positions": [
         {
@@ -3390,8 +3387,8 @@
       "name": "Tampa Bay Buccaneers",
       "abbr": "TB",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/tb",
       "positions": [
         {
@@ -3522,8 +3519,8 @@
       "name": "Tennessee Titans",
       "abbr": "TEN",
       "status": "ok",
-      "checkedAt": "2026-10-11T22:41:39Z",
-      "lastAttemptAt": "2026-10-11T22:41:39Z",
+      "checkedAt": "2026-10-11T23:08:21Z",
+      "lastAttemptAt": "2026-10-11T23:08:21Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/ten",
       "positions": [
         {
