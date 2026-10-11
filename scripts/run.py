@@ -2519,7 +2519,7 @@ def drafts(slot, now, ctx, games, settled, status):
                 written.append(f'scoreboard-{day}')
     for key, pick in ctx.first.items():
         merged = dict(pick, **ctx.latest.get(key, {}))
-        postable = merged.get('favorite') is True or merged.get('modelLean') or merged.get('legs')
+        postable = draft_postable(merged)
         if not postable or merged.get('result') or key in posted:
             continue
         try:
@@ -2553,6 +2553,17 @@ def drafts(slot, now, ctx, games, settled, status):
     status['x']['drafted'] = len(written)
     if written:
         log('x drafts written:', ', '.join(written), f'(in {folder})')
+
+
+def draft_postable(pick):
+    """Return whether an admitted item needs release copy and card art.
+
+    Gut calls and safer combos receive their lane after ranking, so they need
+    not carry the older favorite/modelLean discovery flags. Every official
+    lane must still be rendered before it enters the private release queue.
+    """
+    return bool(pick.get('favorite') is True or pick.get('modelLean') or pick.get('legs')
+                or pick.get('lane') in PRIMETIME_COVERAGE_LANES)
 
 
 # ------------------------------------------------------------------ posting through Buffer

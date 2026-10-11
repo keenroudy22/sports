@@ -14,6 +14,12 @@ import run
 
 
 class SlotTests(unittest.TestCase):
+    def test_every_official_release_lane_gets_a_draft_without_legacy_flags(self):
+        for lane in run.PRIMETIME_COVERAGE_LANES:
+            self.assertTrue(run.draft_postable({'lane': lane}), lane)
+        self.assertTrue(run.draft_postable({'legs': [{'title': 'one'}]}))
+        self.assertFalse(run.draft_postable({'lane': 'research', 'favorite': False, 'modelLean': False}))
+
     def test_slots_map_to_the_prompt_table_in_eastern_time(self):
         self.assertEqual(run.slot_for(datetime(2026, 9, 27, 11, 5, tzinfo=timezone.utc)).strftime('%H%M'), '0645')   # 7:05 ET Sunday
         self.assertEqual(run.slot_for(datetime(2026, 9, 27, 19, 20, tzinfo=timezone.utc)).strftime('%H%M'), '1445')  # 3:20 ET Sunday
