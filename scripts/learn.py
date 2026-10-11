@@ -33,7 +33,7 @@ import json
 import math
 import sys
 from collections import defaultdict
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -534,16 +534,39 @@ def learn_direction(policy, rows, now, games, props, record=None, dry=False):
     is kept, so a failure leaves the policy as it was and every other learning change is still saved."""
     try:
         import direction
+        import two_way
         trial = copy.deepcopy(policy)
         first, latest = record if record is not None else official_record(now)
         evidence = direction.evidence(rows, first, latest, list((games or {}).values()), props, policy=trial, now=now)
-        moves, applied = direction.step(trial, evidence, now, dry)
+        moves = direction.evaluate(trial, evidence, now)
+        actionable = [move for move in moves if not move.get('reportOnly')]
+        applied = []
+        pending = ((trial.setdefault('twoWay', {})).setdefault('directionPending', {}))
+        this_week = two_way.week_key(now)
+        previous = two_way.previous_week(this_week)
+        active = {move['key']: move for move in actionable}
+        if not dry:
+            for key in list(pending):
+                if key not in active:
+                    del pending[key]
+            confirmed = []
+            for move in actionable:
+                signature = json.dumps({'to': move.get('to'), 'rule': move.get('rule')}, sort_keys=True)
+                old = pending.get(move['key']) or {}
+                if old.get('week') == previous and old.get('signature') == signature:
+                    confirmed.append(move)
+                    pending.pop(move['key'], None)
+                elif old.get('week') != this_week or old.get('signature') != signature:
+                    pending[move['key']] = {'week': this_week, 'signature': signature,
+                                             'sentence': move.get('sentence') or move.get('why')}
+            applied = direction.apply(trial, confirmed, now)
         section = {'moves': moves, 'applied': applied, 'ping': direction.ping(applied),
-                   'standing': direction.standing(trial, now), 'dry': bool(dry)}
+                   'standing': direction.standing(trial, now), 'pending': copy.deepcopy(pending), 'dry': bool(dry)}
     except Exception as error:          # reported in the report, REPORT.md and the run status; learning goes on
         return None, [], type(error).__name__
     if not dry:
         policy['direction'] = trial.get('direction', {})
+        policy['twoWay'] = trial.get('twoWay', {})
         policy['history'] = trial.get('history', [])
     return section, applied, None
 
@@ -561,18 +584,30 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
         import x_post
         log_book = x_post.load_log()
     changes = []
-    segments, moved = learn_segments(policy, rows, now, dry)
-    changes += moved
+    # Autopilot supersedes the old one-week segment mover. Keep its table for the report,
+    # but two_way.step is the only segment/trust/gap/pause writer now.
+    segments, _ = learn_segments(policy, rows, now, True, apply_r0=True)
     _, snapshots = scoreboard.v2_rows(games)
     historical_props = prop_rows(games, snapshots, captures)
     calibration, moved = learn_calibration(policy, historical_props, now, dry)
     changes += moved
     domains, moved = learn_domains(policy, rows, now, dry)
     changes += moved
-    reasons, moved = learn_reasons(policy, log_book, now, dry)
-    changes += moved
+    # Engagement is still measured here. Bet-reason weights move only from graded ROI
+    # through the two-week-confirmed Autopilot layer below.
+    reasons, _ = learn_reasons(policy, log_book, now, True)
     direction_report, moved, direction_error = learn_direction(policy, rows, now, games, historical_props, record, dry)
     changes += moved
+    import two_way
+    research_grades = []
+    for path in sorted(Path(root).glob('research-graded-*.jsonl')):
+        try:
+            research_grades += [json.loads(line) for line in path.read_text(encoding='utf-8').splitlines() if line.strip()]
+        except (OSError, ValueError):
+            continue
+    two_way_signals, two_way_applied = two_way.step(
+        policy, rows, now, dry, log_book=log_book, research_grades=research_grades)
+    changes += two_way_applied
     import results_shadows
     shadow_raw = shadow_window(policy, rows)
     shadow_rows = []
@@ -581,6 +616,14 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
         shadow_rows = results_shadows.snapshots(policy, shadow_raw, distinct(shadow_raw), historical_props, now)
     except Exception as error:
         shadow_error = type(error).__name__
+    first_picks, latest_picks = record if record is not None else official_record(now)
+    import ladder
+    climb = ladder.state(first_picks, latest_picks)
+    week_start = (now.astimezone(ZoneInfo('America/New_York')).date() - timedelta(days=7)).isoformat()
+    week_rows = [row for row in rows if row.get('decision') == 'published' and row.get('result')
+                 and str(row.get('gradedAt') or row.get('decidedAt') or '')[:10] >= week_start]
+    week_lanes = {segment: summary([row for row in week_rows if row.get('segment') == segment])
+                  for segment in sorted({row.get('segment') for row in week_rows if row.get('segment')})}
     report = {'at': learning.stamp(now), 'candidates': len(rows), 'distinctCandidates': len(distinct(rows)),
               'graded': sum(1 for r in rows if r.get('result')),
               'segments': segments, 'calibration': calibration, 'gates': by_rule(rows), 'judge': judge_findings(rows),
@@ -588,7 +631,12 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
               'cardThemes': post_themes(log_book), 'engagementScorecard': engagement_scorecard(log_book),
               'model': model_findings(), 'changes': changes,
               'marketReview': market_review.audit(historical_props), 'resultsShadows': shadow_rows,
-              'direction': direction_report}
+              'direction': direction_report, 'weekLanes': week_lanes,
+              'climb': {'run': climb.get('run'), 'step': climb.get('step'), 'stake': climb.get('stake'),
+                        'banked': climb.get('allBanked'), 'open': (climb.get('open') or {}).get('id')}}
+    report['twoWay'] = {'signals': two_way_signals, 'applied': two_way_applied,
+                        'pending': copy.deepcopy((policy.get('twoWay') or {}).get('pending') or {}),
+                        'disabled': __import__('os').environ.get('KEENROUDY_TWO_WAY_LEARNING', '1') == '0'}
     if shadow_error:
         report['resultsShadowError'] = shadow_error
     if direction_error:
@@ -601,7 +649,46 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
             report['resultsShadowError'] = type(error).__name__
         boxscores.write_json(Path(root) / 'report.json', report)
         (Path(root) / 'REPORT.md').write_text(markdown(report), encoding='utf-8')
+        (Path(root) / 'OWNER-NOTE.md').write_text(owner_note(report, now), encoding='utf-8')
     return report
+
+
+def owner_note(report, now):
+    """The deterministic Tuesday phone note: ten short, auditable lines."""
+    score = report.get('engagementScorecard') or {}
+    overall = score.get('overall') or {}
+    direction_ = report.get('direction') or {}
+    two = report.get('twoWay') or {}
+    applied = list(direction_.get('applied') or []) + list(two.get('applied') or [])
+    pending = {**(direction_.get('pending') or {}), **(two.get('pending') or {})}
+    segments = report.get('segments') or []
+    changed = '; '.join(str(row.get('why') or row.get('sentence') or row.get('key')) for row in applied[:3])
+    if not changed and direction_.get('ping'):
+        changed = str(direction_['ping']).splitlines()[0]
+    if not changed:
+        changed = f'held; {len(pending)} signal(s) need a second Tuesday'
+    ranked = sorted((score.get('byKind') or {}).items(),
+                    key=lambda item: (-(item[1].get('perThousand') or 0), item[0]))
+    top = ', '.join(f"{name} {row.get('perThousand')}" for name, row in ranked[:3]) or 'metrics not yet available'
+    bottom = f"{ranked[-1][0]} {ranked[-1][1].get('perThousand')}" if ranked else 'unknown'
+    lane_bits = []
+    for name, row in (report.get('weekLanes') or {}).items():
+        rec = row.get('record') or {}
+        lane_bits.append(f"{name} {rec.get('win', 0)}-{rec.get('loss', 0)} {rec.get('units', 0):+.2f}u")
+    climb = report.get('climb') or {}
+    lines = [
+        f"Kook'n Tuesday note · {now.astimezone(ZoneInfo('America/New_York')):%b %-d}",
+        f"Week by lane: {', '.join(lane_bits) or 'no newly graded published plays'}.",
+        f"Outcomes: {report.get('graded', 0)} graded candidates; two-way moves {'on' if not two.get('disabled') else 'off'}.",
+        f"Changed: {changed}.",
+        f"Undo keys: {', '.join(row.get('undoKey') or row.get('key') or '?' for row in applied) or 'none'}.",
+        f"Engagement: {score.get('measuredPosts', 0)} measured posts, {overall.get('perThousand', 'n/a')} per 1,000.",
+        f"Posts: top {top}; bottom {bottom}.",
+        f"Climb: run {climb.get('run', '?')} step {climb.get('step', '?')}, ${climb.get('stake', '?')} next; lifetime bank ${climb.get('banked', '?')}.",
+        "Audience: free follower, Discord-member and site counters unavailable; no estimate substituted.",
+        "Owner needed: nothing unless a listed undo key should be reversed.",
+    ]
+    return '\n'.join(lines) + '\n'
 
 
 def fmt_summary(s):
@@ -641,6 +728,16 @@ def markdown(report):
     for s in report['segments']:
         state = 'higher-bar caution' if s['paused'] else f"min edge {s['minEdge']:g}"
         lines.append(f"- {s['segment']} ({state}): published {fmt_summary(s['published'])}; near misses {fmt_summary(s['nearMisses'])}")
+    two = report.get('twoWay') or {}
+    lines += ['', '## Two-way Autopilot learning', '']
+    if two.get('disabled'):
+        lines.append('- Kill switch is off; signals were observed but nothing moved.')
+    for change in two.get('applied') or []:
+        lines.append(f"- Applied {change.get('undoKey')}: {change.get('why')}.")
+    for key, pending in sorted((two.get('pending') or {}).items()):
+        lines.append(f"- Waiting for a second Tuesday: {key} ({pending.get('sentence')}).")
+    if not (two.get('applied') or two.get('pending')):
+        lines.append('- No clean two-way signal cleared its sample and confidence fence.')
     lines += ['', '## Player chances', '']
     for c in report['calibration']:
         if 'kAll' in c:

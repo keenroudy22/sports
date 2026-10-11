@@ -458,7 +458,7 @@ def bounded_caption(choice):
     return '\n'.join(lines)
 
 
-def select(data, details, now, lines=None, teams=None):
+def select(data, details, now, lines=None, teams=None, order=None):
     games = slate_games(data, now)
     if not games:
         return None
@@ -467,12 +467,19 @@ def select(data, details, now, lines=None, teams=None):
     if os.environ.get('KEENROUDY_RESEARCH_FALLBACK', '1').strip().lower() in ('0', 'false', 'off', 'no'):
         chosen = prepared
     else:
-        # One deterministic football-day chain. Spread dogs are the priced
-        # fallback within the approved Upset Watch family.
-        chosen = (prepared or usable(season_candidate(games, details, now))
-                  or usable(upset_candidate(games, now)) or usable(spread_dog_candidate(games, lines, now))
-                  or usable(matchup_candidate(games, details, now, teams))
-                  or usable(scorer_candidate(games, details, now)))
+        # One deterministic football-day chain. A mature category may move
+        # only through the two-week-confirmed learner; sparse categories keep
+        # this written order. Spread dogs remain inside Upset Watch.
+        factories = {
+            'prep': lambda: prepared,
+            'season': lambda: usable(season_candidate(games, details, now)),
+            'upset': lambda: usable(upset_candidate(games, now)) or usable(spread_dog_candidate(games, lines, now)),
+            'matchup': lambda: usable(matchup_candidate(games, details, now, teams)),
+            'end-zone': lambda: usable(scorer_candidate(games, details, now)),
+        }
+        wanted = [kind for kind in (order or factories) if kind in factories]
+        wanted += [kind for kind in factories if kind not in wanted]
+        chosen = next((choice for kind in wanted if (choice := factories[kind]())), None)
     if not chosen:
         return None
     day = eastern_date(now)
@@ -501,8 +508,10 @@ def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES, log
                         'stale': early['stale'].astimezone(timezone.utc),
                         'countsFor': early['researchDay']}
     cards = data.get('games') or []
+    import learning
+    order = ((learning.load_policy().get('twoWay') or {}).get('researchOrder') or None)
     choice = select(data, details_for(cards, detail_root), now,
-                    load_lines(lines_path), teams_for(cards))
+                    load_lines(lines_path), teams_for(cards), order=order)
     if not choice:
         reason = ('no unstarted football games today' if not slate_games(data, now)
                   else 'Prep List, Trends, Upset Watch, Matchup and End-zone had no eligible rows')

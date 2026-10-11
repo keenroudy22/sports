@@ -676,16 +676,19 @@ class WeeklyWiringTests(unittest.TestCase):
             report = learn.weekly(NOW, root=root, log_book={'posts': []}, games={}, record=({}, {}))
             self.assertEqual(digest(), before, 'the graded store is read, never written')
             self.assertEqual(boxscores.verify(root), [])
+            self.assertEqual(report['direction']['applied'], [], 'the first Tuesday records the repeated trigger')
+            self.assertIn('pause:NFL/total', report['direction']['pending'])
+            report = learn.weekly(NOW + 7 * DAY, root=root, log_book={'posts': []}, games={}, record=({}, {}))
             self.assertEqual([e['key'] for e in report['direction']['applied']], ['pause:NFL/total'])
             self.assertIn('Paused NFL totals as a best bet', report['direction']['ping'])
             self.assertIn(direction.REPORT_LINK, report['direction']['ping'])
             policy = learning.load_policy(root / 'policy.json')
-            self.assertTrue(direction.paused(policy, 'NFL/total', NOW))
+            self.assertTrue(direction.paused(policy, 'NFL/total', NOW + 7 * DAY))
             self.assertEqual([e['rule'] for e in policy['history'] if e.get('engine') == 'direction'], ['segment-pause'])
             text = (root / 'REPORT.md').read_text()
             self.assertIn('## Direction changes', text)
             self.assertIn('Paused NFL totals as a best bet', text)
-            again = learn.weekly(NOW + timedelta(hours=1), root=root, log_book={'posts': []}, games={}, record=({}, {}))
+            again = learn.weekly(NOW + 7 * DAY + timedelta(hours=1), root=root, log_book={'posts': []}, games={}, record=({}, {}))
             self.assertEqual(again['direction']['applied'], [], 'running twice never doubles a move')
             dry = learn.weekly(NOW, dry=True, root=Path(tempfile.mkdtemp(dir=folder)), log_book={'posts': []}, games={},
                                record=({}, {}))
@@ -695,7 +698,7 @@ class WeeklyWiringTests(unittest.TestCase):
         def half_way(policy, moves, now):          # a failure after part of the policy was already changed
             policy['direction'] = {'segments': {'NFL/total': {'paused': True, 'pauseSince': direction.stamp(now)}}}
             raise ValueError('half way')
-        for failure in (mock.patch.object(direction, 'step', side_effect=RuntimeError('boom')),
+        for failure in (mock.patch.object(direction, 'evaluate', side_effect=RuntimeError('boom')),
                         mock.patch.object(direction, 'apply', side_effect=half_way)):
             with tempfile.TemporaryDirectory() as folder:
                 root = Path(folder)
@@ -704,10 +707,9 @@ class WeeklyWiringTests(unittest.TestCase):
                     report = learn.weekly(NOW, root=root, log_book={'posts': []}, games={}, record=({}, {}))
                 self.assertIn(report['directionError'], ('RuntimeError', 'ValueError'))
                 self.assertIsNone(report['direction'])
-                self.assertEqual([c['knob'] for c in report['changes']], ['lean.minEdge'],
-                                 "the older segment learner's change still happened")
+                self.assertEqual(report['changes'], [], 'no other one-week segment move bypasses confirmation')
                 policy = learning.load_policy(root / 'policy.json')
-                self.assertEqual(policy['segments']['NFL/total']['minEdge'], 1.5, 'and it was saved')
+                self.assertNotIn('NFL/total', policy['segments'])
                 self.assertFalse(direction.paused(policy, 'NFL/total', NOW), 'no half-applied direction move is kept')
                 self.assertEqual([e for e in policy['history'] if e.get('engine') == 'direction'], [])
                 self.assertIn('The direction step failed this week', (root / 'REPORT.md').read_text())
@@ -721,7 +723,8 @@ class WeeklyWiringTests(unittest.TestCase):
                 mock.patch.object(learn, 'weekly', return_value=report), \
                 mock.patch.object(run, 'alert') as alert, mock.patch.object(run, 'log'):
             run.remember([], NOW, tuesday, status)
-        alert.assert_not_called()
+        alert.assert_called_once()
+        self.assertIn('Tuesday learning note', alert.call_args[0][0])
         self.assertEqual(status['learning']['directionError'], 'RuntimeError')
         self.assertEqual(status['errors'], ['learning: direction rules: RuntimeError'])
 
@@ -735,6 +738,7 @@ class WeeklyWiringTests(unittest.TestCase):
             run.remember([], NOW, tuesday, status)
         alert.assert_called_once()
         self.assertIn('Paused NFL totals', alert.call_args[0][1])
+        self.assertEqual(len(alert.call_args[0][1].strip().splitlines()), 10)
         self.assertEqual(alert.call_args[1]['click'], direction.REPORT_LINK)
         self.assertEqual(status['errors'], [])
 

@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
   <!--
-  KeenRoudy Sports weekly review (scripts/review.py): every Monday at 9:30 AM Eastern the week's facts are
-  gathered from the desk's own records, the local model selects important evidence for the plain-words
-  review to ~/Library/Logs/KeenRoudy/review-<date>.md, and its opening goes to the phone. It changes nothing.
+  KeenRoudy Sports weekly review (scripts/review.py): every Tuesday at 10:30 AM Eastern the week's facts are
+  gathered from the desk's own records and the local model selects important evidence for the plain-words
+  review at ~/Library/Logs/KeenRoudy/review-<date>.md. The desk sends the one Tuesday phone note. It changes nothing.
   Separate from every com.mygolflinks.* job.
   -->
   <key>Label</key>
@@ -16,6 +16,7 @@
     <string>/Users/keen/.config/keenroudy/run.sh</string>
     <string>py</string>
     <string>scripts/review.py</string>
+    <string>--no-push</string>
   </array>
   <key>EnvironmentVariables</key>
   <dict>
@@ -23,7 +24,7 @@
     <string>America/New_York</string>
   </dict>
   <key>StartCalendarInterval</key>
-  <dict><key>Weekday</key><integer>1</integer><key>Hour</key><integer>9</integer><key>Minute</key><integer>30</integer></dict>
+    <dict><key>Weekday</key><integer>3</integer><key>Hour</key><integer>10</integer><key>Minute</key><integer>30</integer></dict>
   <key>RunAtLoad</key>
   <false/>
   <key>ProcessType</key>

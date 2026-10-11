@@ -931,7 +931,8 @@ def kitchen_score(candidate, ctx, verdict):
     class_b = sum(2 * min(1.5, max(0, float(weights.get(kind, 1)))) for kind in class_b_types)
     league = candidate.get('league') or (game_of(candidate, ctx) or {}).get('league')
     market = market_key(candidate)
-    trust = TRUST.get((league, market), 1.0)
+    import direction
+    trust = TRUST.get((league, market), 1.0) * direction.trust(ctx.policy, learning.segment_of(candidate))
     gap_part = .5 * min(float(verdict.get('gap') or 0), 12) * trust
     spot_edge = float((verdict.get('spot') or {}).get('spotEdge') or 0)
     plus = 1 if candidate.get('odds', -1) > 0 else 0

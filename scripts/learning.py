@@ -57,6 +57,7 @@ def default_policy():
             'researcher': {'preferDomains': [], 'avoidDomains': []},
             'shadows': {f'R{i}': False for i in range(8)},
             'direction': {},                     # bounded course corrections (scripts/direction.py, owner 2026-10-07)
+            'twoWay': {},                        # Autopilot two-week-confirmed moves (owner 2026-10-11)
             'history': []}
 
 
@@ -71,7 +72,7 @@ def load_policy(path=POLICY):
         if name in policy['knobs'] and isinstance(knob, dict) and isinstance(knob.get('value'), (int, float)):
             base = policy['knobs'][name]
             base['value'] = min(max(float(knob['value']), base['floor']), base['cap'])
-    for key in ('segments', 'calibration', 'ladderSegments', 'reasonWeights', 'researcher', 'shadows', 'direction'):
+    for key in ('segments', 'calibration', 'ladderSegments', 'reasonWeights', 'researcher', 'shadows', 'direction', 'twoWay'):
         if isinstance(stored.get(key), dict):
             policy[key].update(stored[key])
     policy['history'] = list(stored.get('history') or [])

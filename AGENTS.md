@@ -1012,15 +1012,16 @@ new post types need the owner's yes. Preview before changing
 anything: `python3 scripts/pick_card.py <pick id>`, `python3 scripts/x_post.py draft <pick id>`,
 `run.sh py scripts/buffer_post.py plan`.
 
-## Weekly review (Mondays, automatic)
+## Weekly review (Tuesdays, automatic)
 
-A launchd job, `com.keenroudy.sports.review` (Monday 9:30 AM Eastern; copy in `deployment/mac/`), runs
+A launchd job, `com.keenroudy.sports.review` (Tuesday 10:30 AM Eastern; copy in `deployment/mac/`), runs
 `scripts/review.py`: it gathers the week from the desk's own records (run logs, the post log, the record, the ladder,
 the GitHub runs, `line_timing.py`), has the local model select a brief from that evidence read-only, saves it to
-`~/Library/Logs/KeenRoudy/review-<date>.md` (the facts in `review-packet-<date>.md`) and sends its opening to the
-owner's phone. It changes nothing. When the owner asks you to act on a review, read that file, then fix what it names
-the way this file says. To run it by hand: `~/.config/keenroudy/run.sh py scripts/review.py` (`--no-codex` for the
-packet only, `--no-push` to skip the phone, `--codex` for an explicitly requested cloud review).
+`~/Library/Logs/KeenRoudy/review-<date>.md` (the facts in `review-packet-<date>.md`). The Tuesday desk run saves and
+pushes the deterministic ten-line learning note; the review job uses `--no-push`, so the owner gets one weekly note,
+not two. It changes no public record or published play. To run it by hand:
+`~/.config/keenroudy/run.sh py scripts/review.py` (`--no-codex` for the packet only, `--no-push` to skip the phone,
+`--codex` for an explicitly requested cloud review).
 
 ## When something breaks
 

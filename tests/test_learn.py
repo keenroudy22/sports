@@ -305,6 +305,8 @@ class RecordTests(unittest.TestCase):
     def test_a_decision_record_carries_the_numbers_the_verdict_and_the_sources(self):
         ctx = context()
         candidate = total_lean(_desk={'projection': 48.0, 'chance': 0.55, 'rawChance': 0.6, 'breakEven': 0.524, 'edgePoints': 2.6, 'evPerUnit': 0.05},
+                               _selection={'fairChance': .51, 'gap': 4.0,
+                                           'reasons': [{'type': 'weather', 'class': 'A', 'text': 'Wind helps.'}]},
                                _evidence=[{'kind': 'weather', 'direction': 'for'}, {'kind': 'injury', 'direction': 'against'}],
                                _verdict={'argues_against': False, 'confidence': 'high', 'fact_ids': ['f1']},
                                _research=[{'source': 'https://www.nfl.com/news/x', 'verified': True, 'kind': 'injury', 'direction': 'for'}])
@@ -314,6 +316,8 @@ class RecordTests(unittest.TestCase):
         self.assertEqual(rec['judge'], {'against': False, 'confidence': 'high', 'facts': 1})
         self.assertEqual(rec['research'], [{'domain': 'nfl.com', 'verified': True, 'kind': 'injury', 'direction': 'for'}])
         self.assertEqual(rec['kickoff'], '2026-09-27T17:00Z')
+        self.assertEqual((rec['fairChance'], rec['gap'], rec['lane']), (.51, 4.0, candidate.get('lane')))
+        self.assertEqual(rec['reasons'], [{'type': 'weather', 'class': 'A', 'text': 'Wind helps.'}])
         json.dumps(rec)
 
     def test_remember_writes_only_changed_decisions_and_never_fails_the_run(self):

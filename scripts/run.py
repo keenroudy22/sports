@@ -741,13 +741,14 @@ def rank_card(wanted, ctx):
         need += direction.edge_raise(ctx.policy, segment, ctx.now)
         stopped = direction.paused(ctx.policy, segment, ctx.now)
         first = direction.priority(ctx.policy, segment, ctx.now)
+        trust = direction.trust(ctx.policy, segment)
         c['_rank'] = {'edge': round(edge, 1), 'performanceCaution': cautious, 'requiredEdge': need}
         market_priority = 0 if c.get('athleteId') else 1 if c.get('marketType') in ('spread', 'moneyline') else 2
         # Price and news-review capacity is finite. Check the next slate before
         # spending those slots on a later Monday game; within a game day, keep
         # the owner's props/sides/totals priority and the usual value order.
         day = gates.slate_day(c, ctx) or date.max
-        return (bool(stopped or edge <= 0 or edge < need), day, market_priority, not first, -edge,
+        return (bool(stopped or edge <= 0 or edge < need), day, market_priority, not first, -trust, -edge,
                 str(c.get('id') or row.get('id') or ''))
     kept = [c for c in wanted if not c.get('athleteId')
             or isinstance(c['_row'].get('odds'), (int, float)) and CARD_PROP_PRICES[0] <= c['_row']['odds'] <= CARD_PROP_PRICES[1]]
@@ -1307,6 +1308,7 @@ def decision_record(candidate, league, decision, rules, reason, now, ctx):
             'lane': candidate.get('lane'), 'fairChance': selection.get('fairChance'),
             'gap': selection.get('gap'), 'kitchenScore': candidate.get('_kitchenScore'),
             'planReasons': selection.get('reasons') or candidate.get('_planReasons'),
+            'reasons': selection.get('reasons') or candidate.get('_planReasons') or [],
             'decision': decision, 'rules': list(rules), 'reason': reason, 'decidedAt': stamp(now),
             'quotedAt': candidate.get('quotedAt'),
             'facts': {'for': sum(1 for f in facts if f.get('direction') == 'for'),
@@ -1397,10 +1399,9 @@ def remember(decided, now, slot, status):
                 status['learning']['directionError'] = report['directionError']
                 status['errors'].append(f"learning: direction rules: {report['directionError']}")
                 log(f"learning: direction rules skipped this week ({report['directionError']}); nothing changed direction")
-            note = (report.get('direction') or {}).get('ping')
-            if note:            # the owner's weekly "what changed direction and why", one line per change
-                import direction
-                alert("Kook'n changed direction", note, priority='default', click=direction.REPORT_LINK)
+            import direction
+            alert("Kook'n Tuesday learning note", learn.owner_note(report, now),
+                  priority='default', click=direction.REPORT_LINK)
     except Exception as error:          # the record is worth keeping, never worth a failed run
         status['errors'].append(f'learning: {type(error).__name__}: {error}')
         log(f'learning: {type(error).__name__}: {error}')

@@ -932,11 +932,11 @@
     {
       "id": "KP-T-TREND",
       "title": "Opponent-adjusted CFB trends and defense-vs-position context",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Build opponent-quality splits and DvP fields in Release 3 unless they can join Release 1 without delaying the Saturday deadline.",
+      "next": "Keep the DvP and opponent-quality splits in daily research health; retain the prior-season label until five current-team games exist.",
       "doneWhen": "Every CFB player trend and Prep List row labels tonight's DvP rank and splits FBS top-half, bottom-half and FCS history; padded streaks do not count as support.",
-      "evidence": "KOOKN-PLAN.md Oct. 9 addendum and KOOKN-PLAN-CODEX.md T-TREND."
+      "evidence": "Release 518e6e91aa4425af9f2df0219c49ce6a646409f1 and hosted run 38166856837 succeeded. Python1324 (2 skipped), Node236, clean export, build/budget/audits/guard/assets and isolated rehearsal passed. Live 375/1440 Today, Games, Trends, Research and Record checks had zero issues; 283 trend rows expose DvP, opponentAdjustment and prior-season labels."
     },
     {
       "id": "A-20261009-1",
@@ -1027,6 +1027,15 @@
       "next": "Finish transactional record creation at Discord release, recover every approved research lane with a reason-or-hold outcome, and verify the natural 17:30/18:50 primetime decisions and result timing.",
       "doneWhen": "Every approved lane can render and fire or logs its exact refusal; delivery is transactional; results settle on time; the outcome report ships a fix or names an external blocker each day.",
       "evidence": "Partial R1 release 4b217f29, hosted run 38147869526: only typed hard injury news may pull a released play; model/web checks can flag but not pull; every send requires a saved reason or holds; public ESPN BET labels render as theScore Bet; the never-posted Bills-Rams under is withdrawn; 17:30/18:50 primetime passes are installed. Python1304 (2 skipped), Node234, clean export, all gates/rehearsal and 14 live 375/1440 routes passed. Record is 36-37 (1 void), -5.20u."
+    },
+    {
+      "id": "KA-R2",
+      "title": "Kook'n Autopilot two-way learning and Tuesday owner note",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Release the bounded two-week-confirmed learner and Tuesday 10:30 owner note, install the reviewed launchd schedule, then verify the first natural Tuesday evidence packet.",
+      "doneWhen": "Clean deduplicated evidence moves bounded trust, gaps, pauses, promotions and reason weights only after two matching Tuesdays; each move has evidence and an undo key; the ten-line note and kill switch are verified.",
+      "evidence": "KOOKN-AUTOPILOT.md sections 10 and 14 item12. Code and targeted tests prepared on dev; live release evidence pending."
     }
   ]
 }

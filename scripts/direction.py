@@ -649,13 +649,33 @@ def _segment(policy, segment):
 def edge_raise(policy, segment, now=None):
     """Extra points this segment's best bets must clear their price by, 0 to +6. Never negative."""
     seg = _segment(policy, segment)
-    return clamp_raise(seg.get('raise')) if started(seg.get('raiseSince'), now) else 0.0
+    own = clamp_raise(seg.get('raise')) if started(seg.get('raiseSince'), now) else 0.0
+    try:
+        import two_way
+        own = max(own, two_way.gap_floor(policy, segment))
+    except Exception:
+        pass
+    return own
 
 
 def paused(policy, segment, now=None):
     """Paused as a best bet by the direction rules (not the older performance caution, which only raises the bar)."""
     seg = _segment(policy, segment)
-    return seg.get('paused') is True and started(seg.get('pauseSince'), now)
+    legacy = seg.get('paused') is True and started(seg.get('pauseSince'), now)
+    try:
+        import two_way
+        return legacy or two_way.paused(policy, segment)
+    except Exception:
+        return legacy
+
+
+def trust(policy, segment):
+    """Autopilot's bounded segment multiplier; ranking only, never a cap or honesty gate."""
+    try:
+        import two_way
+        return two_way.trust(policy, segment)
+    except Exception:
+        return 1.0
 
 
 def pause_since(policy, segment, now=None):

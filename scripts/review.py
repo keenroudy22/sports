@@ -1,7 +1,8 @@
 """The weekly review: recorded evidence prioritized locally, with explicit opt-in Codex review.
 
-The owner moved the desk's AI work to OpenAI on 2026-09-28 and wanted the Monday review as a scheduled routine
-there. A launchd job (deployment/mac/com.keenroudy.sports.review.plist, Monday 9:30 AM Eastern) runs this script:
+The owner moved the desk's AI work to OpenAI on 2026-09-28. A launchd job
+(deployment/mac/com.keenroudy.sports.review.plist, Tuesday 10:30 AM Eastern) runs this script after the desk's
+deterministic Tuesday learning note; this fuller report is saved locally and does not send a second phone ping:
 it gathers the week from the desk's own records (the run logs, the post log, the record, the ladder, the hosted
 runs, the price timing), hands that packet to a bounded local extractive brief (or `--codex` explicitly),
 saves the plain-words review to ~/Library/Logs/KeenRoudy/review-<date>.md, and sends its opening to the phone. It

@@ -67,6 +67,20 @@ class ResearchPostTests(unittest.TestCase):
             self.assertEqual(selected['kind'], 'season')
         finally:
             for patch in reversed(patches): patch.stop()
+
+    def test_confirmed_learning_order_can_move_a_mature_family(self):
+        data = {'games': [game()]}
+        season = {'kind': 'season', 'rows': [{'kickoff': game()['kickoff']}] * 2, 'text': 'trends'}
+        matchup = {'kind': 'matchup', 'rows': [{'kickoff': game()['kickoff']}] * 2, 'text': 'matchup'}
+        with mock.patch.object(R, 'prep_candidate', return_value=None), \
+             mock.patch.object(R, 'season_candidate', return_value=season), \
+             mock.patch.object(R, 'upset_candidate', return_value=None), \
+             mock.patch.object(R, 'spread_dog_candidate', return_value=None), \
+             mock.patch.object(R, 'matchup_candidate', return_value=matchup), \
+             mock.patch.object(R, 'scorer_candidate', return_value=None):
+            chosen = R.select(data, {'CFB-1': {}}, NOW,
+                              order=['matchup', 'prep', 'season', 'upset', 'end-zone'])
+        self.assertEqual(chosen['kind'], 'matchup')
         with tempfile.TemporaryDirectory() as folder:
             payload = Path(folder) / 'today.json'
             payload.write_text(__import__('json').dumps({'games': []}))
