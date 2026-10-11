@@ -207,6 +207,12 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Separate Climb windows (owner, 2026-10-11):** prepare Step 1 from the earliest qualifying part of the day's
+  slate and allow a later Step 2 only after Step 1 has settled. A rung's one or two legs must kick off within the
+  same 90-minute window; never join an early game to a night game merely to reach the ticket-price band. A later
+  scan may use the next window after the open rung is graded. One-leg rungs remain eligible when every existing
+  Sunday-ready Climb guard clears. No rung or second step is forced.
+
 - **Kook'n plan (owner, 2026-10-09):** [`docs/KOOKN-PLAN.md`](docs/KOOKN-PLAN.md) is the single authority for
   plays, posts, engagement, research and learning. It supersedes every older rule below, and every older rule in
   `docs/POSTING-PLAYBOOK.md`, `docs/DIRECTION-RULES.md`, `NO-FORCED-PLAYS-SPEC.md` and

@@ -65,6 +65,7 @@ MONEYLINE_PAIR_BAND = (0.99, 1.15)  # broken or mismatched two-sided captures ne
 LEAD = timedelta(minutes=15)        # a late admission still needs a real pre-kickoff posting window
 FRESH = timedelta(hours=12)         # prices older than this are not used
 GAME_FRESH = timedelta(hours=2)     # main moneylines are re-read on game day before admission
+WINDOW = timedelta(minutes=90)      # one rung settles before a later part of the slate can become the next rung
 STAKE = parlay.STAKE                # the ticket's size in the desk's own terms; the ladder itself counts dollars
 SOURCE = 'https://sharpapi.io/'
 
@@ -200,6 +201,24 @@ def todays_games(games, now, league, exclude=()):
     day = eastern_date(now)
     return [g for g in games.values() if g.get('league') == league and g.get('state', 'pre') == 'pre' and g['id'] not in set(exclude)
             and eastern_date(gates.when(g['kickoff'])) == day and gates.when(g['kickoff']) > now + LEAD]
+
+
+def kickoff_windows(games):
+    """Chronological, non-overlapping kickoff groups.
+
+    A rung may use one or two games, but it must settle as one part of the slate.  Mixing an early game with a
+    night game would keep the rung open all day and make a later step impossible.  A one-game window remains
+    useful only for a supported one-leg rung; the one-leg-per-game rule still prevents a same-game parlay.
+    """
+    remaining = sorted(games, key=lambda game: (gates.when(game['kickoff']), game['id']))
+    out = []
+    while remaining:
+        start = gates.when(remaining[0]['kickoff'])
+        window = [game for game in remaining if gates.when(game['kickoff']) <= start + WINDOW]
+        out.append(window)
+        used = {game['id'] for game in window}
+        remaining = [game for game in remaining if game['id'] not in used]
+    return out
 
 
 def confirmed_at(root=None):
@@ -483,6 +502,9 @@ def manual_candidate(ctx, games, now, spec):
                      'marketWindow': 'Full game', 'alternate': True})
     if len(leagues) != 1:
         return None, 'a rung stays inside one league'
+    kickoffs = [gates.when(games[game_id]['kickoff']) for game_id in game_ids]
+    if max(kickoffs) - min(kickoffs) > WINDOW:
+        return None, 'a rung stays inside one kickoff window so a later step can follow after it settles'
     dec = 1.0
     for leg in legs:
         dec *= parlay.decimal(leg['odds'])
@@ -513,24 +535,27 @@ def candidate(ctx, games, now, exclude=()):
     reasons = []
     for league in ('NFL', 'CFB'):
         today = todays_games(games, now, league, exclude)
-        if len(today) < 2:
+        if not today:
             reasons.append(f'{league}: {len(today)} games left today')
             continue
         seen = confirmed_at()
-        legs = [leg for g in today for leg in moneyline_legs(g, ctx, now)]
         calibrated = league not in gates.OWN_CALIBRATION or bool(
             ((getattr(ctx, 'policy', None) or {}).get('calibration') or {}).get(f'{league}/prop'))
-        if calibrated:
-            legs += [leg for g in today for leg in legs_for_game(g, ctx.prop_odds.get(g['id']), ctx, now, seen)]
-        else:
+        if not calibrated:
             reasons.append(f'{league}: player alternates wait for their own calibration; game moneylines still checked')
-        if strict:
-            legs = strict_legs(legs, policy, now, league)
-        ticket, reason = build(gates.without_straight_players(legs, ctx))
-        if not ticket:
-            reasons.append(f'{league}: {reason}' + ('; the stricter Climb pool is on' if strict else ''))
-            continue
-        return ticket_pick(ticket, league, where, now, games), None
+        for window in kickoff_windows(today):
+            legs = [leg for game in window for leg in moneyline_legs(game, ctx, now)]
+            if calibrated:
+                legs += [leg for game in window
+                         for leg in legs_for_game(game, ctx.prop_odds.get(game['id']), ctx, now, seen)]
+            if strict:
+                legs = strict_legs(legs, policy, now, league)
+            ticket, reason = build(gates.without_straight_players(legs, ctx))
+            label = gates.when(window[0]['kickoff']).astimezone(gates.EASTERN).strftime('%-I:%M %p ET')
+            if not ticket:
+                reasons.append(f'{league} {label}: {reason}' + ('; the stricter Climb pool is on' if strict else ''))
+                continue
+            return ticket_pick(ticket, league, where, now, games), None
     return None, '; '.join(reasons) or 'no games today'
 
 

@@ -199,6 +199,53 @@ class BuildTests(unittest.TestCase):
         self.assertEqual([leg['marketType'] for leg in pick['legs']], ['moneyline', 'moneyline'])
         self.assertTrue(all(leg['fairChance'] < leg['rawChance'] for leg in pick['legs']))
 
+    def test_a_rung_never_mixes_early_and_night_games(self):
+        games = {
+            'early-one': game('early-one', 'Bills', 'Lions', '2026-09-27T17:00Z'),
+            'early-two': game('early-two', 'Jets', 'Rams', '2026-09-27T17:25Z'),
+            'night': game('night', 'Ravens', 'Falcons', '2026-09-28T00:20Z'),
+        }
+        legs = [
+            {'id': 'early', 'title': 'Early 1+', 'gameId': 'early-one', 'book': 'FanDuel', 'odds': -400,
+             'chance': .84, 'kickoff': games['early-one']['kickoff'], 'observedAt': '2026-09-27T12:10:00Z'},
+            {'id': 'night', 'title': 'Night 1+', 'gameId': 'night', 'book': 'FanDuel', 'odds': -600,
+             'chance': .88, 'kickoff': games['night']['kickoff'], 'observedAt': '2026-09-27T12:10:00Z'},
+        ]
+        windows = ladder.kickoff_windows(games.values())
+        self.assertEqual([[g['id'] for g in window] for window in windows],
+                         [['early-one', 'early-two'], ['night']])
+        self.assertIsNone(ladder.build([leg for leg in legs if leg['gameId'] in {g['id'] for g in windows[0]}])[0])
+        self.assertIsNone(ladder.build([leg for leg in legs if leg['gameId'] in {g['id'] for g in windows[1]}])[0])
+        self.assertIsNotNone(ladder.build(legs)[0], 'the old all-day pool would have made the bad mixed-window rung')
+
+    def test_candidate_uses_the_early_window_then_a_later_window_after_settlement(self):
+        games = dict(GAMES)
+        games['night'] = game('night', 'Ravens', 'Falcons', '2026-09-28T00:20Z')
+        world = ctx()
+        original_legs = ladder.legs_for_game
+        def fake_legs(game_row, *args, **kwargs):
+            price = -250 if game_row['id'] == 'night' else -500
+            return [{'id': f"leg-{game_row['id']}", 'title': f"{game_row['id']} safe line",
+                     'gameId': game_row['id'], 'book': 'DraftKings', 'odds': price, 'chance': .86,
+                     'kickoff': game_row['kickoff'], 'observedAt': '2026-09-27T12:10:00Z'}]
+        ladder.legs_for_game = fake_legs
+        try:
+            pick, reason = ladder.candidate(world, games, NOW)
+            self.assertIsNone(reason)
+            self.assertEqual(pick['gameIds'], ['g1', 'g2'])
+            first, latest = book_of(rung(pick['id'], '2026-09-27T12:30:00Z', 1, 50, 72, 'win'))
+            later_now = datetime(2026, 9, 27, 22, 0, tzinfo=timezone.utc)
+            later_world = ctx(first, latest)
+            later_world.now = later_now
+            later_world.snapshot = lambda gid: snapshot('g1') if gid == 'night' else None
+            later_world.prop_odds = {'night': record('night', price=-250, retrieved='2026-09-27T21:55:00Z')}
+            later, why = ladder.candidate(later_world, games, later_now)
+            self.assertIsNone(why)
+            self.assertEqual(later['gameIds'], ['night'])
+            self.assertIn('-c1s2-', later['id'])
+        finally:
+            ladder.legs_for_game = original_legs
+
     def test_the_rung_carries_the_climb_and_waits_while_one_is_open(self):
         pick, reason = ladder.candidate(ctx(), GAMES, NOW)
         self.assertIsNone(reason)
@@ -246,6 +293,23 @@ class BuildTests(unittest.TestCase):
             none, why = ladder.manual_candidate(ctx(), games, NOW, spec)
             self.assertIsNone(none)
             self.assertIn('raw model only gives', why)
+        finally:
+            ladder.pricing.price = original
+
+    def test_manual_rung_cannot_mix_early_and_night_windows(self):
+        games = {'g1': dict(GAMES['g1'], league='NFL'),
+                 'g2': game('g2', 'Ravens', 'Falcons', '2026-09-28T00:20Z')}
+        spec = {'book': 'FanDuel', 'quotedAt': '2026-09-27T12:20:00Z',
+                'source': 'https://sportsbook.fanduel.com/', 'legs': [
+                    {'gameId': 'g1', 'marketType': 'spread', 'direction': 'home', 'line': -1.5, 'odds': -520},
+                    {'gameId': 'g2', 'marketType': 'spread', 'direction': 'home', 'line': -1.5, 'odds': -520},
+                ]}
+        original = ladder.pricing.price
+        ladder.pricing.price = lambda *a, **k: {'rawChance': .76, 'breakEven': .8, 'projection': -1.0}
+        try:
+            pick, reason = ladder.manual_candidate(ctx(), games, NOW, spec)
+            self.assertIsNone(pick)
+            self.assertIn('one kickoff window', reason)
         finally:
             ladder.pricing.price = original
 
