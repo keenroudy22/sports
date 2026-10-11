@@ -170,6 +170,23 @@ class RouteTests(unittest.TestCase):
         self.assertGreaterEqual(kit.contrast(kit.INK_SOFT, kit.PAPER_LOW_TONE), 6.9)
         self.assertGreaterEqual(kit.contrast(kit.DIM, kit.NIGHT), 9.8)
 
+    def test_real_step_one_shape_fits_the_full_ten_row_route(self):
+        state = {
+            'run': 3, 'step': 2, 'stake': 58, 'banked': 15, 'saved': 42,
+            'cashed': [], 'missed': None,
+            'open': {'id': 'NFL-2026-W5-ladder-1011-c3s1-fd', 'step': 1,
+                     'league': 'NFL', 'first': datetime(2026, 10, 11, 17, 0, tzinfo=timezone.utc),
+                     'last': datetime(2026, 10, 12, 0, 20, tzinfo=timezone.utc),
+                     'odds': -218, 'bet': 50, 'cashes': 73, 'bank': 15,
+                     'banked': 15, 'ride': 58, 'legs': []},
+        }
+        rows = route.route_rows(state, NOW, self.games)
+        self.assertEqual(len(rows), 10)
+        card = route.climb_route(state, NOW, self.games)
+        self.assertEqual(kit.qa(card, 'ten-row-route'), [])
+        self.assertIn('OPEN · POSTED AT −218 · NOT SETTLED YET', card.svg())
+        self.assertIn('NO STEP IS FORCED. 1−2 LEGS · ONE BOOK.', card.svg())
+
     def test_png_and_all_three_explicit_fixture_cards(self):
         with TemporaryDirectory() as folder:
             paths = route.render_fixtures(folder, NOW, self.games)

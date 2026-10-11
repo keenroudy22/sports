@@ -213,6 +213,7 @@ TAG_X = X1 + 58
 COLS = (('BET', 712, 52, 'bet'), ('CASHES', 860, 46, 'cashes'),
         ('KEEP', X2, 40, 'bank'))
 BAR_HEAD, BAR_PAD, BOTTOM_MAX = 50, 10, 1212
+MIN_ROUTE_PITCH = 46  # 10-row Step 1 routes fit while retaining a 44px disc and readable 40px labels.
 PLAN_LABEL = f'PLAN AT A TYPICAL {MINUS}{abs(PLAN_ODDS)}'
 
 
@@ -288,7 +289,7 @@ def climb_route(state, now, games, fixture=False):
     bars = sum(kind in ('next', 'open') for kind, _, _ in rows)
     after = 56 + 30 + 124
     pitch = int(min(60, (BOTTOM_MAX - after - top - bars * (BAR_HEAD + BAR_PAD)) // len(rows)))
-    if pitch < 50:
+    if pitch < MIN_ROUTE_PITCH:
         raise ValueError(f'route does not fit: pitch {pitch} for {len(rows)} rows')
     y, previous_week = top, None
     for i, (kind, row, window) in enumerate(rows):
@@ -332,7 +333,7 @@ def climb_route(state, now, games, fixture=False):
     else:
         inner += card.text(X1, perf + 56, saved,
                            fit(saved, 40, X2 - X1, tracking=1), INK, tracking=1)
-    rule = 'NO STEP IS FORCED. EACH NEEDS 2 LEGS IN 2 GAMES.'
+    rule = f'NO STEP IS FORCED. 1{MINUS}2 LEGS · ONE BOOK.'
     inner += card.text(X1, perf + 100, rule, fit(rule, 40, X2 - X1, tracking=1),
                        INK_SOFT, tracking=1)
     ticket_cards.frame(card, HOUSE, CHALK, perf, perf + 124, inner)
