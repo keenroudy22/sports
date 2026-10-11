@@ -2568,14 +2568,14 @@
    "id": "NFL-2026-W5-strange-over-34-5-recyds-espnbet",
    "postedAt": "2026-10-11T10:45:03Z",
    "dueAt": "2026-10-11T12:40:00Z",
-   "bufferPostId": "6acb7a67d9cab260a7f79b04",
-   "textHash": "6c6218516e01f3cf",
+   "bufferPostId": "6acb7fcdc4de2d2b125e1a9d",
+   "textHash": "f7e3ba9d98f00d77",
    "kind": "buffer:play",
    "card": true,
    "cardTheme": "ticket",
    "discord": {
     "state": "pending",
-    "text": "👨‍🍳 Gut call: Brenton Strange over 34.5 rec yds (+100, ESPN BET)\nNow 32.5 (-114, DraftKings)\nBook says 34.5. I say 44.\nMy receiving yards is 43.6; the book's line is 34.5.\n❤️ if you're tailing\n#NFL",
+    "text": "👨‍🍳 Gut call: Brenton Strange over 34.5 rec yds (+100, ESPN BET)\nNow 32.5 (-114, DraftKings)\nBook says 34.5. I say 44.\n❤️ if you're tailing\n#NFL",
     "readyAt": "2026-10-11T12:25:00Z",
     "image": "https://keenroudy.com/sports/data/cards/NFL-2026-W5-strange-over-34-5-recyds-espnbet.png"
    },
@@ -2586,7 +2586,10 @@
     "result": "clear",
     "facts": 4
    },
-   "requotedAt": "2026-10-11T11:58:44Z"
+   "requotedAt": "2026-10-11T11:58:44Z",
+   "replacedBufferPostId": "6acb7a67d9cab260a7f79b04",
+   "text": "👨‍🍳 Gut call: Brenton Strange over 34.5 rec yds (+100, ESPN BET)\nNow 32.5 (-114, DraftKings)\nBook says 34.5. I say 44.\n❤️ if you're tailing\n#NFL",
+   "copyCorrectedAt": "2026-10-11T12:23:40Z"
   },
   {
    "id": "NFL-2026-W5-longshot-1011-dk",
@@ -2598,13 +2601,20 @@
    "card": true,
    "cardTheme": "ticket",
    "discord": {
-    "state": "pending",
+    "state": "cancelled",
     "text": "🎰 +591 Chef's Special (DraftKings)\nBengals/Dolphins over 43.5\nRaiders/Patriots under 45.5\nLions/Cardinals under 54.5\n$10 → $69\n\n❤️ if you're tailing\n#NFL",
     "readyAt": "2026-10-11T13:15:00Z",
-    "image": "https://keenroudy.com/sports/data/cards/NFL-2026-W5-longshot-1011-dk.png"
+    "image": "https://keenroudy.com/sports/data/cards/NFL-2026-W5-longshot-1011-dk.png",
+    "reason": "pulled before posting under the approved fun-parlay rules"
    },
    "reasonKind": "other",
-   "copyVariant": "A"
+   "copyVariant": "A",
+   "cancelledAt": "2026-10-11T12:23:40Z",
+   "precheck": {
+    "at": "2026-10-11T12:23:40Z",
+    "result": "closed",
+    "reason": "ticket broke the approved fun-parlay rules: NFL totals are paused, it carried three totals, and no leg had a saved reason"
+   }
   }
  ]
 }
