@@ -1306,3 +1306,26 @@ the record-preservation gate when a concurrent data publisher changed
 `market-lab.json`; the naturally triggered descendant included the release,
 passed that gate and deployed. No record was rewritten and no result was
 manually entered. A-20261010-4 is shipped.
+
+### October 11 — Climb kickoff windows
+
+Release `223f99311aa24381f31866ee734fe717d368771b` prevents an 80/20 Climb
+rung from joining an early game to a night game merely to reach the price
+band. One- or two-leg rungs now stay inside a 90-minute kickoff window. A
+later window is considered only after the open rung settles, so an early Step
+1 can be followed by a later Step 2 without overlapping exposure. A supported
+one-leg rung remains eligible; no step is forced.
+
+The stored overnight board's former candidate—Jaylen Warren 2+ receptions at
+1 PM plus Derrick Henry 50+ rushing yards at 8:20 PM, combined to -218—was
+correctly rejected. None of the separated 9:30 AM, 1:00 PM, 4:05 PM or 8:20
+PM windows had a valid rung on those stored prices. The 6:45 AM run must make
+the real game-day decision from fresh prices and news.
+
+Final gates passed: 1,288 Python tests (two skipped), 233 frontend tests, both
+clean-export suites, build, payload budget, football and NBA record audits,
+publication guard, asset/SVG checks and the isolated 23:30 rehearsal with no
+outside writes or private reads. Local and live Today/Record › Climb checks at
+375 and 1440 pixels returned four clean pages each. Hosted publish
+`38117290252` succeeded. A-20261010-3 remains observing until the natural
+Sunday decision is recorded.
