@@ -87,7 +87,8 @@ def multipart(payload, image):
     return b''.join(chunks), f'multipart/form-data; boundary={boundary}'
 
 
-def send_message(url, text, image_url=None, send=http_send, username="Kook'n Sports", fetch=download_image):
+def send_message(url, text, image_url=None, send=http_send, username="Kook'n Sports", fetch=download_image,
+                 return_receipt=False):
     """Send one webhook message without ever putting the secret URL in an error or log.
 
     Cards are uploaded to Discord so an old post cannot break when the generated site card rolls out of the
@@ -111,10 +112,23 @@ def send_message(url, text, image_url=None, send=http_send, username="Kook'n Spo
             body['attachments'] = [{'id': 0, 'filename': image[2]}]
             body, content_type = multipart(body, image)
             headers['Content-Type'] = content_type
-    status, raw = send(url, body, headers)
+    endpoint = url
+    if return_receipt and send is http_send:
+        separator = '&' if '?' in endpoint else '?'
+        endpoint = f'{endpoint}{separator}wait=true'
+    status, raw = send(endpoint, body, headers)
     if status not in (200, 204):
         detail = raw.decode('utf-8', 'replace')[:240] if isinstance(raw, bytes) else str(raw)[:240]
         raise DiscordError(f'Discord returned HTTP {status}: {detail}')
+    if not return_receipt:
+        return None
+    try:
+        receipt = json.loads(raw) if raw else {}
+    except (TypeError, ValueError):
+        receipt = {}
+    attachments = receipt.get('attachments') or [] if isinstance(receipt, dict) else []
+    return {'id': receipt.get('id') if isinstance(receipt, dict) else None,
+            'image': attachments[0].get('url') if attachments and isinstance(attachments[0], dict) else None}
 
 
 ARB_QUIET = timedelta(hours=6)

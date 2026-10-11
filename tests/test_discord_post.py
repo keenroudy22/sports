@@ -62,6 +62,15 @@ class DiscordPostTests(unittest.TestCase):
         self.assertEqual(sent[0][0]['embeds'][0]['image']['url'], 'https://example.com/card.png')
         self.assertEqual(sent[0][1]['Content-Type'], 'application/json')
 
+    def test_a_waited_discord_upload_returns_its_durable_attachment(self):
+        raw = b'{"id":"message-1","attachments":[{"url":"https://cdn.discord/card.png"}]}'
+        sent = []
+        send = lambda url, body, headers: (sent.append(url) or (200, raw))
+        receipt = discord_post.send_message('secret', 'Released', 'private:play', send=send,
+                                             fetch=lambda _: (b'png', 'image/png', 'card.png'),
+                                             return_receipt=True)
+        self.assertEqual(receipt, {'id': 'message-1', 'image': 'https://cdn.discord/card.png'})
+
     def test_a_failure_retries_but_only_reports_a_changed_error(self):
         entry = {'id': 'a', 'kind': 'buffer:play', 'sentAt': '2026-09-28T15:59:00Z', 'discord': {'state': 'pending', 'text': 'Play'}}
         fail = lambda *a: (429, b'rate limited')

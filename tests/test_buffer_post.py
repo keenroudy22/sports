@@ -115,6 +115,10 @@ TICKET = dict(legs=[{'title': 'Iowa at Michigan over 38.5'}, {'title': 'Oklahoma
 
 
 class PlanTests(unittest.TestCase):
+    def test_a_private_admission_is_not_scheduled_by_the_public_buffer_path(self):
+        private = pick('private', _pendingRelease=True)
+        self.assertEqual(bp.plan({'private': private}, {}, GAMES, NOW, {'posts': []}), [])
+
     def test_iowa_friday_is_morning_and_research_waits_for_the_full_play_batch(self):
         now = datetime(2026, 10, 9, 10, 45, tzinfo=timezone.utc)
         game = {'iowa': {'id': 'iowa', 'league': 'CFB', 'kickoff': '2026-10-09T23:30:00Z',

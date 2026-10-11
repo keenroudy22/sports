@@ -302,7 +302,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     late_card_recoveries = set()
     for key, pick in first.items():
         merged = dict(pick, **latest.get(key, {}))
-        if key in posted or pick.get('historicalImport') or not feed.postable(merged):
+        if key in posted or pick.get('historicalImport') or merged.get('_pendingRelease') or not feed.postable(merged):
             continue
         if merged.get('result') or merged.get('entryNote') or (merged.get('status') or 'active') != 'active':
             continue
@@ -416,7 +416,7 @@ def chosen_not_posted(first, latest, games, log_book, now):
     for key, original in first.items():
         pick = dict(original, **latest.get(key, {}))
         starts = [gates.when(games[gid]['kickoff']) for gid in pick.get('gameIds') or [] if gid in games]
-        if (key in posted or not pick.get('publishedAt') or not starts or eastern_date(min(starts)) != today
+        if (key in posted or pick.get('_pendingRelease') or not pick.get('publishedAt') or not starts or eastern_date(min(starts)) != today
                 or min(starts) <= now or pick.get('result') or pick.get('entryNote')
                 or (pick.get('status') or 'active') != 'active'):
             continue

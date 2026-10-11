@@ -36,6 +36,7 @@ import line_payload
 import desk
 import dossier
 import features
+import feed
 import gates
 import llm
 import llm_tasks
@@ -2096,6 +2097,11 @@ def _run(args, now, slot, kinds, status):
         log(f'closed {len(closed)}, to check by hand {len(checks)}')
     absorb(ctx, settled + closed)
 
+    # Admissions which have not reached Discord remain private, but still
+    # occupy duplicate/card-cap space on later selection passes.
+    import release_queue
+    release_queue.merge_context(ctx, CONF)
+
     build_site.build(now)
     lines = load_candidate_lines(build_site.OUT / 'lines.json')
     selection_scope = official_selection_scope(slot, games, ctx, now)
@@ -2357,6 +2363,17 @@ def _run(args, now, slot, kinds, status):
         ladder_step(ctx, games, now, records, published, decided, screened, exclude=exclude, manual=manual_ladder,
                     status=status)
 
+    # A selection is only an admission here.  It becomes a public report when
+    # the Discord-first delivery job releases it; until then it lives solely
+    # under ~/.config/keenroudy/pending/.
+    admitted = list(published)
+    for _, _, candidate in admitted:
+        candidate['_pendingRelease'] = True
+        if candidate.get('id') in ctx.first:
+            ctx.first[candidate['id']]['_pendingRelease'] = True
+            ctx.latest[candidate['id']]['_pendingRelease'] = True
+    published = []
+
     by_league = defaultdict(lambda: ([], [], []))
     for item in settled:
         by_league[item[0]][0].append(item)
@@ -2369,7 +2386,8 @@ def _run(args, now, slot, kinds, status):
         weeks = [games[g]['week'] for g in games if games[g]['league'] == league and games[g].get('state') == 'pre' and 'week' in games[g]]
         target_weeks[league] = min(weeks) if weeks else None
     reports = build_reports(dict(by_league), slot, now, screened, unclear, captures, target_weeks, args.record_screens)
-    status.update(settled=len(settled), closed=len(closed), published=len(published), screened=screened, unclear=unclear,
+    status.update(settled=len(settled), closed=len(closed), published=len(published), admitted=len(admitted),
+                  screened=screened, unclear=unclear,
                   reports=list(reports))
     if not reports:
         log('quiet run: nothing settled, closed or published; no report written')
@@ -2388,12 +2406,11 @@ def _run(args, now, slot, kinds, status):
             status['checks'].append('tests green')
     drafts(slot, now, ctx, games, settled, status)
     if not args.dry_run:
-        if reasons:
-            import x_post
-            stored = x_post.load_reasons()
-            stored.update(reasons)
-            x_post.save_reasons(stored)
-        remember(decided, now, slot, status)
+        admitted_ids = release_queue.enqueue(CONF, admitted, reasons, decided, CONF / 'x-drafts', now, games=games)
+        if admitted_ids:
+            log('private admissions:', ', '.join(admitted_ids))
+        public_decisions = [row for row in decided if row.get('id') not in set(admitted_ids)]
+        remember(public_decisions, now, slot, status)
         paper_trials(now, slot, status)
         try:
             import nba_trial_runtime
@@ -2402,7 +2419,9 @@ def _run(args, now, slot, kinds, status):
                 status['nbaTrial'] = nba_trial_runtime.admission(now, capture='nbaCapture' not in status)
         except Exception as error:
             status['errors'].append(f'NBA Trial: {type(error).__name__}: {error}')
-        pick_of_the_day(now, ctx, status, current=potd_market)
+        # The lane is fixed at admission, but the public feature store cannot
+        # reveal an unreleased play.
+        pick_of_the_day(now, ctx, status, current=potd_market, write=not bool(admitted_ids))
         git_result = commit_push(now, slot, {'published': len(published), 'settled': len(settled), 'closed': len(closed)},
                                  push=not args.no_push)
         status['git'] = git_result
@@ -2469,7 +2488,7 @@ def drafts(slot, now, ctx, games, settled, status):
                 side = 'home' if team == str(game['home']['id']) else 'away' if team == str(game['away']['id']) else None
                 import featured
                 art = pick_card.artwork(pick_now, game)
-                is_featured = featured.of_day(eastern_date(now).isoformat()) == key
+                is_featured = merged.get('lane') == 'hot_plate' or featured.of_day(eastern_date(now).isoformat()) == key
                 if pick_card.ticket_enabled(pick_now):
                     import ticket_card
                     kind = pick_card.play_kind(pick_now)
@@ -2601,6 +2620,184 @@ def mirror_due(log_book, now):
     return False
 
 
+def private_release_ready(now):
+    """A private admission is close enough to its morning X slot to release."""
+    import release_queue
+    for row in release_queue.load(CONF).get('plays', []):
+        if row.get('held'):
+            continue
+        pick = row.get('pick') or {}
+        starts = [gates.when(value) for value in row.get('kickoffs') or []]
+        # New queue rows normally use the live game table below.  Persisted
+        # kickoffs make this cheap check work without loading public stores.
+        if starts:
+            target = post_windows.target(row.get('league'), min(starts))
+            if now >= target - post_windows.DISCORD_PLAY_LEAD:
+                return True
+        elif row.get('discordSentAt') or row.get('publicPath'):
+            return True
+    return False
+
+
+def _private_card(path):
+    data = Path(path).read_bytes()
+    if not data.startswith(b'\x89PNG\r\n\x1a\n'):
+        raise ValueError('private release card is not a PNG')
+    return data, 'image/png', 'kookn-card.png'
+
+
+def release_private(now, log=log):
+    """Release due admissions Discord → public record → Buffer/X.
+
+    Each state transition is persisted outside Git first.  A retry therefore
+    resumes after the last confirmed external action instead of duplicating it.
+    """
+    import buffer_post
+    import discord_post
+    import featured
+    import learning
+    import release_queue
+    import x_post
+
+    book = release_queue.load(CONF)
+    if not book.get('plays'):
+        return []
+    stores = gates.Stores(records=features.load())
+    ctx = stores.as_of(now)
+    slate = load_json(ROOT / 'site' / 'data' / 'slate.json', {'games': []})
+    ctx.games = live_games(now, {g['id']: g for g in slate.get('games', []) if g.get('league') in ('NFL', 'CFB')})
+    log_book = x_post.load_log()
+    channel = buffer_post.x_channel(wanted='keenkooks')
+    released = []
+    busy = buffer_post.taken(log_book, now)
+    last = max(busy, default=None)
+    for row in list(book['plays']):
+        key = row.get('id')
+        pick = dict(row.get('pick') or {})
+        game = ctx.games.get((pick.get('gameIds') or [None])[0])
+        starts = sorted(gates.when(ctx.games[g]['kickoff']) for g in pick.get('gameIds') or [] if g in ctx.games)
+        if not key or not starts or row.get('held'):
+            continue
+        kickoff = starts[0]
+        target = post_windows.target(row.get('league'), kickoff) + post_windows.jitter(key)
+        due = max(target, now + post_windows.DISCORD_PLAY_LEAD)
+        if last is not None:
+            due = max(due, last + buffer_post.SPACING)
+        due = buffer_post.free_slot(due, busy)
+        if due > kickoff - feed.LEAD:
+            release_queue.update(CONF, key, held=True, heldAt=stamp(now),
+                                 holdReason='no Discord-first X slot before kickoff')
+            log(f'release: {key} moved to the near-miss log: no Discord-first X slot before kickoff')
+            continue
+        if now < due - post_windows.DISCORD_PLAY_LEAD:
+            continue
+
+        # Deterministic hard-news precheck.  A model concern never withdraws
+        # an admitted play, but typed out/doubtful/inactive news still does.
+        if not row.get('precheckedAt'):
+            context_file = live_context(stores.context_file, now)
+            check_status = {'llm': {'judged': 0},
+                            'research': {'asked': 0, 'verified': 0, 'dropped': 0}}
+            if pick.get('legs') or pick.get('parlayType'):
+                reason = parlay_last_look(dict(pick, _league=row.get('league')), ctx, context_file,
+                                          False, check_status, now)
+            else:
+                case = dict(pick, _league=row.get('league'),
+                            _team=ctx.player_team.get(str(pick.get('athleteId') or '')))
+                _, _, facts = last_look(case, game, ctx, context_file, False,
+                                        check_status, now)
+                reason = release_pull_reason(case, relevant_facts(case, facts, ctx))
+            if reason:
+                release_queue.update(CONF, key, held=True, heldAt=stamp(now), holdReason=reason)
+                log(f'release: {key} held by hard news: {reason}')
+                continue
+            release_queue.update(CONF, key, precheckedAt=stamp(now))
+
+        text = str(row.get('caption') or '').strip()
+        if x_post.guard(text, pick, x_post.reason_in(text)):
+            release_queue.update(CONF, key, held=True, heldAt=stamp(now), holdReason='caption guard')
+            log(f'release: {key} held: caption guard failed')
+            continue
+
+        if not row.get('discordSentAt'):
+            receipt = discord_post.send_message(
+                discord_post.webhook(), text, f'private:{key}',
+                fetch=lambda _url, p=row['card']: _private_card(p), return_receipt=True)
+            row = release_queue.update(CONF, key, discordSentAt=stamp(now), discordReceipt=receipt or {})
+            log(f'discord: {key} released before X')
+
+        if not row.get('publicPath'):
+            published_at = row['discordSentAt']
+            public_pick = dict(pick, publishedAt=published_at)
+            report = {'league': row['league'], 'publishedAt': published_at, 'summary':
+                      f"Released 1: {public_pick.get('title')} {int(public_pick.get('odds')):+d} at {public_pick.get('book')}.",
+                      'takeaways': [], row['kind']: [public_pick]}
+            validate({'private-release.json': report}, stores.reports, ctx.games)
+            # A failing gate must leave the admitted play private.  Run it
+            # before touching any tracked record or delivery file.
+            run_tests()
+            safe = re.sub(r'[^A-Za-z0-9-]+', '-', key).strip('-')[:72]
+            name = f"{eastern_date(now).isoformat()}-{row['league']}-{now.astimezone(EASTERN):%H%M}-release-{safe}.json"
+            target_path = ROOT / 'research' / name
+            if target_path.exists():
+                existing = json.loads(target_path.read_text(encoding='utf-8'))
+                existing_ids = {item.get('id') for values in existing.values() if isinstance(values, list)
+                                for item in values if isinstance(item, dict)}
+                if key not in existing_ids:
+                    raise RunError(f'private release report name collision: {name}')
+            else:
+                target_path.write_text(json.dumps(report, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+            if row.get('reason'):
+                reasons = x_post.load_reasons()
+                reasons[key] = row['reason']
+                x_post.save_reasons(reasons)
+            decision = dict(row.get('decision') or {})
+            if decision:
+                decision.update(decision='published', decidedAt=published_at)
+                season = decision.get('season') or now.year
+                exists = any(old.get('id') == key and old.get('decision') == 'published'
+                             and old.get('decidedAt') == published_at for old in learning.read('candidates', season))
+                if not exists:
+                    learning.append('candidates', season, [decision])
+            if public_pick.get('lane') == 'hot_plate':
+                featured_rows = featured.load()
+                featured_rows[eastern_date(now).isoformat()] = {'id': key, 'chosenAt': published_at,
+                                                                 'score': (public_pick.get('kitchenScore') or {}).get('total')}
+                featured.save(featured_rows)
+            result = commit_push(now, now.astimezone(EASTERN), {'published': 1, 'settled': 0, 'closed': 0})
+            log('release record:', result)
+            row = release_queue.update(CONF, key, publicPath=str(target_path.relative_to(ROOT)),
+                                       publicPushedAt=stamp(datetime.now(timezone.utc)))
+
+        if not row.get('bufferPostId'):
+            image = (row.get('discordReceipt') or {}).get('image')
+            if not image:
+                image = buffer_post.card_url(key)
+                if not buffer_post.reachable(image):
+                    log(f'buffer: {key} waits for its released site card')
+                    continue
+            post_id = buffer_post.create_post(text, channel['id'], due, image)
+            row = release_queue.update(CONF, key, bufferPostId=post_id, dueAt=stamp(due), bufferImage=image)
+
+        if not any(entry.get('id') == key for entry in log_book.get('posts', [])):
+            sent_at = row['discordSentAt']
+            entry = {'id': key, 'postedAt': sent_at, 'dueAt': row['dueAt'], 'bufferPostId': row['bufferPostId'],
+                     'textHash': x_post.text_hash(text), 'kind': 'buffer:play', 'card': True,
+                     'cardTheme': 'ticket', 'reasonKind': x_post.reason_kind(x_post.reason_in(text)),
+                     'copyVariant': x_post.copy_variant(text),
+                     'discord': {'state': 'sent', 'sentAt': sent_at, 'beforeX': True, 'text': text,
+                                 'image': buffer_post.card_url(key)}}
+            log_book.setdefault('posts', []).append(entry)
+            x_post.save_log(log_book)
+            commit_log(now, push=True)
+        release_queue.remove(CONF, key)
+        released.append(key)
+        busy.append(due)
+        last = due
+        log(f'buffer: {key} scheduled after Discord release for {due.astimezone(EASTERN):%-I:%M %p} ET')
+    return released
+
+
 def mirror(args):
     """Every five minutes, observe public plays, send due Discord-first plays and mirror the rest from Buffer."""
     import buffer_post
@@ -2638,7 +2835,7 @@ def mirror(args):
             return result
     if not os.environ.get('BUFFER_TOKEN', '').strip() or not (discord_post.webhook() or discord_post.wins_webhook()):
         return 0
-    if not mirror_due(x_post.load_log(), now):
+    if not mirror_due(x_post.load_log(), now) and not private_release_ready(now):
         return 0
     if args.dry_run:
         log('discord mirror: work is due; dry run sends nothing')
@@ -2649,6 +2846,9 @@ def mirror(args):
             if not args.dry_run:
                 sync()
             log_book = x_post.load_log()
+            if private_release_ready(now):
+                release_private(now)
+                log_book = x_post.load_log()
             if not mirror_due(log_book, now):
                 return 0
             for entry in buffer_post.reconcile(log_book, now, log=log):
