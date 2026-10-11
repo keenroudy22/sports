@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-11T06:03:03Z",
+  "updatedAt": "2026-10-11T06:13:51Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-11T05:47Z",
+              "reportedAt": "2026-10-11T06:02Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "28",
-          "name": "Nick Cross",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-10-09T22:36:21Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4426403/nick-cross"
-        },
-        {
-          "teamId": "28",
           "name": "Charles Omenihu",
           "from": "Questionable",
           "to": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-10-11T01:05:43Z",
           "source": "https://www.espn.com/nfl/player/_/id/4894654/kenneth-grant"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-11T06:13:51Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-11T06:03:03Z",
-      "lastAttemptAt": "2026-10-11T06:03:03Z",
+      "checkedAt": "2026-10-11T06:13:51Z",
+      "lastAttemptAt": "2026-10-11T06:13:51Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-11T06:03:03Z",
-      "lastAttemptAt": "2026-10-11T06:03:03Z",
+      "checkedAt": "2026-10-11T06:13:51Z",
+      "lastAttemptAt": "2026-10-11T06:13:51Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
