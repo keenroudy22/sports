@@ -1821,9 +1821,17 @@ def ladder_step(ctx, games, now, records, published, decided, screened, exclude=
                           else ladder.candidate(ctx, games, now, exclude=exclude))
     except Exception as error:
         log(f'ladder skipped ({type(error).__name__}: {error})')
+        try:
+            ladder.record_shadow(ctx, now, blocked=f'{type(error).__name__}: {error}')
+        except OSError:
+            pass
         return
     if not ticket:
         log(f'ladder: {reason}')
+        try:
+            ladder.record_shadow(ctx, now, blocked=reason)
+        except OSError:
+            pass
         return
     league = ticket['_league']
     # Price and projection agreement make an alternate eligible, but they are
@@ -1869,6 +1877,10 @@ def ladder_step(ctx, games, now, records, published, decided, screened, exclude=
     if missing:
         reason = 'no saved research reason for ' + ', '.join(missing)
         log(f'ladder: {reason}')
+        try:
+            ladder.record_shadow(ctx, now, ticket=ticket, blocked=reason)
+        except OSError:
+            pass
         screened.append({'league': league, 'gameId': ticket['gameIds'][0], 'title': ticket['title'],
                          'rule': 'ladder_research', 'reason': reason})
         decided.append(decision_record(ticket, league, 'refused', ['ladder_research'], reason, now, ctx))
@@ -1886,8 +1898,16 @@ def ladder_step(ctx, games, now, records, published, decided, screened, exclude=
         log(f"ladder: step {info['step']} {ticket['odds']:+d} at {ticket['book']}, ${info['stake']} to ${info['payout']}; "
             f"bank ${info['bankThisWin']}, ride ${info['nextStake']}: "
             + ' / '.join(l['title'] for l in ticket['legs']))
+        try:
+            ladder.record_shadow(ctx, now, ticket=ticket)
+        except OSError:
+            pass
         return
     refusal = gates.refusals(decisions)[0]
+    try:
+        ladder.record_shadow(ctx, now, ticket=ticket, blocked=f'{refusal.rule}: {refusal.reason}')
+    except OSError:
+        pass
     decided.append(decision_record(ticket, league, 'refused', [d.rule for d in gates.refusals(decisions)], refusal.reason, now, ctx))
     screened.append({'league': league, 'gameId': ticket['gameIds'][0], 'title': ticket['title'], 'rule': refusal.rule, 'reason': refusal.reason})
 

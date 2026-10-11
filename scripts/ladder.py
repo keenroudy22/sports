@@ -30,6 +30,7 @@ college player numbers, as for college props. A rung is built only from prices r
 """
 import argparse
 import json
+import os
 import sys
 from datetime import datetime, timedelta, timezone
 from itertools import combinations
@@ -45,6 +46,7 @@ import role_sanity
 import sharp_odds
 from sports_refresh import eastern_date
 
+ROOT = Path(__file__).resolve().parents[1]
 START, GOAL = 50, 1000              # dollars
 BANK_RATE = 0.20                    # "Bank 20. Ride 80." (owner, 2026-09-28)
 BOOKS = {'draftkings': 'DraftKings', 'fanduel': 'FanDuel'}
@@ -57,7 +59,7 @@ MODEL_LIFT_CAP = 0.06               # an alternate-line model cannot claim more 
 MIN_GAP = 0.04                      # safety comes from the price; our number still has to agree
 MAX_GAP = 0.18                      # and no further: a book that far off an easy line is a data or role problem, not a gift
 MAIN_RATIO = (0.6, 1.6)             # the book's main line against our projection: outside this, the market is another one
-TARGET = (-300, -200)               # one or two safer legs in the owner's current rung band (owner, 2026-10-10)
+TARGET = (-220, -130)               # realistic v3 rung band (owner, 2026-10-11)
 MANUAL_RAW_CHANCE = 0.72             # exact game alternates: the unshrunk model must still agree comfortably
 MONEYLINE_MIN_CHANCE = 0.70         # strong-favorite floor; the exact two-sided market still anchors the check
 MONEYLINE_MIN_GAP = 0.03            # our win estimate must clear the book's fair chance by three points
@@ -67,6 +69,65 @@ FRESH = timedelta(hours=12)         # prices older than this are not used
 GAME_FRESH = timedelta(hours=2)     # main moneylines are re-read on game day before admission
 STAKE = parlay.STAKE                # the ticket's size in the desk's own terms; the ladder itself counts dollars
 SOURCE = 'https://sharpapi.io/'
+SHADOW_NAME = 'ladder-shadow-2026.jsonl'
+
+
+def v3_enabled():
+    return os.getenv('KEENROUDY_CLIMB_V3', '1').strip().lower() not in ('0', 'false', 'off', 'no')
+
+
+def used_chance(raw, fair, segment_hit=None, moneyline=False):
+    """The probability allowed to rank a Climb leg, never the raw model claim.
+
+    Moneylines may use at most six points above the two-sided fair market. Other markets need a proven stored
+    segment and may use no more than that segment's observed hit rate.
+    """
+    if not all(isinstance(value, (int, float)) for value in (raw, fair)):
+        return None
+    if moneyline:
+        return min(float(raw), float(fair) + MODEL_LIFT_CAP)
+    if not isinstance(segment_hit, (int, float)):
+        return None
+    return min(float(raw), float(segment_hit))
+
+
+def segment_hit_rate(ctx, league, market, book, price):
+    """Read the weekly proven-segment result; this function never promotes a segment itself."""
+    band = f'{abs(int(price)) // 50 * 50}-{abs(int(price)) // 50 * 50 + 49}'
+    keys = (f'{league}/{market}/{book}/{band}', f'{league}/{market}/{book}', f'{league}/{market}')
+    segments = ((getattr(ctx, 'policy', None) or {}).get('ladderSegments') or {})
+    for key in keys:
+        row = segments.get(key)
+        if isinstance(row, dict) and row.get('open') is True and (row.get('graded') or 0) >= 150 \
+                and isinstance(row.get('hitRate'), (int, float)):
+            return float(row['hitRate'])
+    return None
+
+
+def shadow_path(ctx):
+    return Path(getattr(ctx, 'root', ROOT)) / 'work' / SHADOW_NAME
+
+
+def record_shadow(ctx, now, ticket=None, blocked=None, path=None):
+    """Private append-only evidence for every Climb check. Public records and cards never read this file."""
+    path = Path(path or shadow_path(ctx))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    row = {'checkedAt': gates.stamp(now), 'status': 'candidate' if ticket and not blocked else 'blocked',
+           'blockedBy': blocked, 'result': None}
+    if ticket:
+        chance = ticket.get('chance')
+        if not isinstance(chance, (int, float)):
+            chance = 1.0
+            for leg in ticket.get('legs') or []:
+                chance *= float(leg.get('chance') or 0)
+        row['ticket'] = {'id': ticket.get('id'), 'book': ticket.get('book'), 'odds': ticket.get('odds'),
+                         'chance': round(chance, 4), 'priceNeeded': round(pricing.break_even(ticket['odds']), 4),
+                         'edge': round(chance - pricing.break_even(ticket['odds']), 4),
+                         'legs': [{'id': leg.get('id'), 'gameId': leg.get('gameId'), 'chance': leg.get('chance'),
+                                   'odds': leg.get('odds')} for leg in ticket.get('legs') or []]}
+    with path.open('a', encoding='utf-8') as handle:
+        handle.write(json.dumps(row, sort_keys=True, separators=(',', ':')) + '\n')
+    return row
 
 
 def stable_role(ctx, athlete, team, league, stat):
@@ -221,7 +282,7 @@ def confirmed_at(root=None):
         return {}
 
 
-def legs_for_game(game, record, ctx, now, confirmed=None):
+def legs_for_game(game, record, ctx, now, confirmed=None, proven=False):
     """Every easier line in this game our projection clears comfortably, at a price worth a rung, from each book. The
     prices are as of the last time the feed read them (`confirmed`), or when they were stored."""
     snapshot = ctx.snapshot(game['id'])
@@ -270,8 +331,9 @@ def legs_for_game(game, record, ctx, now, confirmed=None):
                     implied = pricing.break_even(price)
                     if raw < RAW_MIN_CHANCE or not MIN_GAP <= raw - implied <= MAX_GAP:
                         continue
-                    chance = min(raw, implied + MODEL_LIFT_CAP)
-                    if chance < MIN_CHANCE:
+                    segment_rate = segment_hit_rate(ctx, game['league'], stat, BOOKS[book_key], price) if proven else None
+                    chance = used_chance(raw, implied, segment_rate) if proven else min(raw, implied + MODEL_LIFT_CAP)
+                    if chance is None or chance <= implied:
                         continue
                     shown = ctx.names.get(athlete) or name
                     out.append({'id': f"ladder-{game['id']}-{athlete}-{stat}-{float(point):g}",
@@ -326,7 +388,7 @@ def moneyline_legs(game, ctx, now):
         gap = raw - fair
         if raw < MONEYLINE_MIN_CHANCE or not MONEYLINE_MIN_GAP <= gap <= MAX_GAP:
             continue
-        chance = min(raw, fair + MODEL_LIFT_CAP)
+        chance = used_chance(raw, fair, moneyline=True)
         team = game[side]
         out.append({'id': f"ladder-{game['id']}-moneyline-{side}",
                     'title': f"{team.get('short') or team.get('abbreviation')} moneyline",
@@ -370,6 +432,32 @@ def tickets(legs):
         yield book, (a, b), dec, price
 
 
+def near_miss(legs):
+    """Best positive-edge ticket just outside the rung band, for private/run diagnostics only."""
+    rows = []
+    for book in sorted({leg['book'] for leg in legs}):
+        mine = [leg for leg in legs if leg['book'] == book]
+        shapes = [(leg,) for leg in mine]
+        shapes += [(a, b) for a, b in combinations(mine, 2) if a['gameId'] != b['gameId']]
+        for chosen in shapes:
+            dec = 1.0
+            chance = 1.0
+            for leg in chosen:
+                dec *= parlay.decimal(leg['odds'])
+                chance *= leg['chance']
+            price = parlay.american(dec)
+            edge = chance - pricing.break_even(price)
+            if edge <= 0 or TARGET[0] <= price <= TARGET[1]:
+                continue
+            distance = TARGET[0] - price if price < TARGET[0] else price - TARGET[1]
+            rows.append((distance, -edge, -chance, book, price, round(chance, 4), chosen))
+    if not rows:
+        return None
+    _, neg_edge, _, book, price, chance, chosen = min(rows, key=lambda row: row[:3])
+    return {'book': book, 'odds': price, 'chance': chance, 'edge': round(-neg_edge, 4),
+            'legs': [leg.get('title') for leg in chosen]}
+
+
 def build(legs):
     """The safest supported one- or two-leg rung inside TARGET.
 
@@ -382,7 +470,10 @@ def build(legs):
         for leg in chosen:
             chance *= leg['chance']
         chance = round(chance, 4)
-        key = (round(chance - pricing.break_even(price), 4), chance, price)
+        edge = round(chance - pricing.break_even(price), 4)
+        if edge <= 0:
+            continue
+        key = (edge, chance, price)
         if best is None or key > best[0]:
             selected = sorted(chosen, key=lambda l: (l['kickoff'], l['title']))
             best = (key, {'book': book, 'legs': selected, 'odds': price, 'decimal': round(dec, 3),
@@ -390,7 +481,10 @@ def build(legs):
                           'quotedAt': min(l['observedAt'] for l in selected),
                           'firstKickoff': min(l['kickoff'] for l in selected), 'chance': chance})
     if not best:
-        return None, f'no book has one or two supported legs that pay {TARGET[0]:+d} to {TARGET[1]:+d}'
+        near = near_miss(legs)
+        detail = (f"; near miss {near['book']} {near['odds']:+d}, "
+                  f"{100 * near['edge']:.1f} points above its price") if near else ''
+        return None, f'no book has one or two supported legs that pay {TARGET[0]:+d} to {TARGET[1]:+d}{detail}'
     return best[1], None
 
 
@@ -435,12 +529,14 @@ def manual_candidate(ctx, games, now, spec):
     This is deliberately not a scraper. The spec records the visible book, line, price, source URL and quote time;
     the model supplies the chance and refuses a leg it does not independently support.
     """
+    if not v3_enabled():
+        return None, 'Climb v3 is switched off'
     where = state(ctx.first, ctx.latest)
     if where['open']:
         return None, f"{where['open']['id']} is still open; the next rung waits for its result"
     if not isinstance(spec, dict) or len(spec.get('legs') or []) not in (1, 2):
         return None, 'a manual rung needs one or two quoted legs'
-    book = spec.get('book')
+    book = build_site.BOOKS.get(spec.get('book'), spec.get('book'))
     if book not in SLUGS:
         return None, 'the manual rung needs one supported book'
     quoted = spec.get('quotedAt')
@@ -479,6 +575,12 @@ def manual_candidate(ctx, games, now, spec):
             return None, f"the model cannot price {game['id']} {market}"
         if desk['rawChance'] < MANUAL_RAW_CHANCE:
             return None, f"the raw model only gives {100 * desk['rawChance']:.1f}% to {game['id']} {market}"
+        segment_rate = segment_hit_rate(ctx, game['league'], market, book, int(price))
+        chance = used_chance(desk['rawChance'], desk['breakEven'], segment_rate)
+        if chance is None:
+            return None, f'{game["league"]} {market} at {book} is not an open proven Climb segment'
+        if chance <= desk['breakEven']:
+            return None, f'{game["league"]} {market} does not beat its price after the segment check'
         team = game[side]['short'] if market == 'spread' else f"{game['away']['short']} at {game['home']['short']}"
         title = f"{team} {pricing.signed(float(line))}" if market == 'spread' else f"{team} {side} {pricing.fmt(float(line))}"
         source = row.get('source') or spec.get('source')
@@ -489,7 +591,9 @@ def manual_candidate(ctx, games, now, spec):
         leagues.add(game['league'])
         legs.append({'id': f"ladder-{game['id']}-{market}-{side}-{float(line):g}", 'title': title,
                      'gameId': game['id'], 'marketType': market, 'direction': side, 'line': float(line),
-                     'book': book, 'odds': int(price), 'chance': desk['rawChance'], 'implied': desk['breakEven'],
+                     'book': book, 'odds': int(price), 'chance': round(chance, 3),
+                     'rawChance': round(desk['rawChance'], 3), 'segmentHitRate': round(segment_rate, 3),
+                     'implied': desk['breakEven'],
                      'projection': desk['projection'], 'kickoff': game['kickoff'], 'observedAt': quoted,
                      'marketWindow': 'Full game', 'alternate': True})
     if len(leagues) != 1:
@@ -503,6 +607,8 @@ def manual_candidate(ctx, games, now, spec):
     chance = 1.0
     for leg in legs:
         chance *= leg['chance']
+    if chance <= pricing.break_even(price):
+        return None, 'the ticket chance does not beat the price after the segment check'
     ticket = {'book': book, 'legs': legs, 'odds': price, 'decimal': round(dec, 3),
               'gameIds': [leg['gameId'] for leg in legs], 'quotedAt': quoted,
               'firstKickoff': min(l['kickoff'] for l in legs), 'chance': round(chance, 4),
@@ -513,6 +619,8 @@ def manual_candidate(ctx, games, now, spec):
 def candidate(ctx, games, now, exclude=()):
     """The next rung as a pick, or (None, reason). Games in `exclude` (the desk has a reason against them) are left off.
     NFL first, then college: a rung stays inside one league, as a report does."""
+    if not v3_enabled():
+        return None, 'Climb v3 is switched off'
     where = state(ctx.first, ctx.latest)
     if where['open']:
         return None, f"{where['open']['id']} is still open; the next rung waits for its result"
@@ -536,7 +644,7 @@ def candidate(ctx, games, now, exclude=()):
             legs = [leg for game in day_pool for leg in moneyline_legs(game, ctx, now)]
             if calibrated:
                 legs += [leg for game in day_pool
-                         for leg in legs_for_game(game, ctx.prop_odds.get(game['id']), ctx, now, seen)]
+                         for leg in legs_for_game(game, ctx.prop_odds.get(game['id']), ctx, now, seen, proven=True)]
             if strict:
                 legs = strict_legs(legs, policy, now, league)
             ticket, reason = build(gates.without_straight_players(legs, ctx))

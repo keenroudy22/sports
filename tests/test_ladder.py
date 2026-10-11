@@ -1,4 +1,7 @@
+import json
+import os
 import sys
+import tempfile
 import unittest
 from collections import defaultdict
 from datetime import datetime, timezone
@@ -36,13 +39,21 @@ def ctx(first=None, latest=None, prop_odds=None, injuries=None):
     for gid in ('g1', 'g2'):
         names.update({f'{gid}p': f'Player {gid.upper()}', f'{gid}q': f'Hurt {gid.upper()}', f'{gid}r': f'Rookie {gid.upper()}'})
         appearances.update({f'{gid}p': 5, f'{gid}q': 5})               # the rookies have no games: unsettled
+    policy = {'ladderSegments': {
+        'NFL/recYds/DraftKings': {'open': True, 'graded': 180, 'hitRate': .86},
+        'NFL/passYds/DraftKings': {'open': True, 'graded': 180, 'hitRate': .86},
+        'NFL/passYds/FanDuel': {'open': True, 'graded': 180, 'hitRate': .86},
+        'CFB/recYds/DraftKings': {'open': True, 'graded': 180, 'hitRate': .86},
+        'NFL/spread/FanDuel': {'open': True, 'graded': 180, 'hitRate': .84},
+        'CFB/spread/FanDuel': {'open': True, 'graded': 180, 'hitRate': .84},
+    }}
     return SimpleNamespace(now=NOW, snapshot=lambda gid: snapshot(gid) if gid in ('g1', 'g2') else None, names=names,
                            appearances=appearances, established=set(), injuries=injuries or {}, first=first or {},
-                           latest=latest or {}, policy={}, passers={},
+                           latest=latest or {}, policy=policy, passers={}, root=Path('/tmp'),
                            prop_odds=prop_odds if prop_odds is not None else {g: record(g) for g in ('g1', 'g2')})
 
 
-def record(gid, price=-500, retrieved='2026-09-27T12:10:00Z'):
+def record(gid, price=-450, retrieved='2026-09-27T12:10:00Z'):
     ladder_rungs = [{'line': 39.5, 'over': price},        # 91% on our numbers against 75%: the leg
                     {'line': 29.5, 'over': -150},          # out of order below it: another market's rung
                     {'line': 24.5, 'over': -900},          # never reached: the walk stopped at 29.5
@@ -125,7 +136,7 @@ class StateTests(unittest.TestCase):
 class LegTests(unittest.TestCase):
     def test_only_the_main_lines_own_ladder_at_a_sane_price_for_a_settled_healthy_player(self):
         legs = ladder.legs_for_game(GAMES['g1'], record('g1'), ctx(), NOW)
-        self.assertEqual([(l['title'], l['odds'], l['book']) for l in legs], [('Player G1 40+ receiving yards', -500, 'DraftKings')])
+        self.assertEqual([(l['title'], l['odds'], l['book']) for l in legs], [('Player G1 40+ receiving yards', -450, 'DraftKings')])
         leg = legs[0]
         self.assertEqual((leg['athleteId'], leg['market'], leg['direction'], leg['line']), ('g1p', 'recYds', 'over', 39.5))
         self.assertTrue(leg['alternate'], 'the selected rung is distinct from the market main line')
@@ -170,11 +181,35 @@ class LegTests(unittest.TestCase):
 
 
 class BuildTests(unittest.TestCase):
+    def test_v3_has_a_kill_switch(self):
+        old = os.environ.get('KEENROUDY_CLIMB_V3')
+        os.environ['KEENROUDY_CLIMB_V3'] = '0'
+        try:
+            self.assertEqual(ladder.candidate(ctx(), GAMES, NOW), (None, 'Climb v3 is switched off'))
+        finally:
+            if old is None:
+                os.environ.pop('KEENROUDY_CLIMB_V3', None)
+            else:
+                os.environ['KEENROUDY_CLIMB_V3'] = old
+
+    def test_v3_uses_market_cap_for_moneylines_and_proven_hit_rate_for_other_legs(self):
+        self.assertAlmostEqual(ladder.used_chance(.90, .78, moneyline=True), .84)
+        self.assertAlmostEqual(ladder.used_chance(.90, .78, .82), .82)
+        self.assertIsNone(ladder.used_chance(.90, .78), 'an unproven non-moneyline segment stays out')
+
+    def test_ticket_needs_positive_joint_edge(self):
+        leg = {'id': 'thin', 'title': 'Thin leg', 'gameId': 'g1', 'book': 'DraftKings',
+               'odds': -175, 'chance': .60, 'kickoff': GAMES['g1']['kickoff'],
+               'observedAt': '2026-09-27T12:10:00Z'}
+        ticket, reason = ladder.build([leg])
+        self.assertIsNone(ticket)
+        self.assertIn('supported legs', reason)
+
     def test_two_games_one_book_make_a_favored_ticket(self):
         legs = [leg for gid in ('g1', 'g2') for leg in ladder.legs_for_game(GAMES[gid], record(gid), ctx(), NOW)]
         ticket, reason = ladder.build(legs)
         self.assertIsNone(reason)
-        self.assertEqual((ticket['book'], ticket['odds'], sorted(ticket['gameIds'])), ('DraftKings', -227, ['g1', 'g2']))
+        self.assertEqual((ticket['book'], ticket['odds'], sorted(ticket['gameIds'])), ('DraftKings', -202, ['g1', 'g2']))
         self.assertTrue(ladder.TARGET[0] <= ticket['odds'] <= ladder.TARGET[1])
         none, why = ladder.build(legs[:1])
         self.assertIsNone(none)
@@ -182,26 +217,26 @@ class BuildTests(unittest.TestCase):
 
     def test_one_supported_leg_in_the_target_band_can_be_the_rung(self):
         leg = {'id': 'one', 'title': 'Patriots moneyline', 'gameId': 'g1', 'book': 'DraftKings',
-               'odds': -275, 'chance': .79, 'kickoff': GAMES['g1']['kickoff'],
+               'odds': -175, 'chance': .68, 'kickoff': GAMES['g1']['kickoff'],
                'observedAt': '2026-09-27T12:10:00Z'}
         ticket, reason = ladder.build([leg])
         self.assertIsNone(reason)
-        self.assertEqual((ticket['odds'], len(ticket['legs']), ticket['gameIds']), (-275, 1, ['g1']))
+        self.assertEqual((ticket['odds'], len(ticket['legs']), ticket['gameIds']), (-175, 1, ['g1']))
 
     def test_saturday_replay_can_use_two_exact_main_moneylines(self):
         games = {gid: dict(GAMES[gid], league='CFB', market={
-            'provider': 'DraftKings', 'homeML': '-500', 'awayML': '+380'},
+            'provider': 'DraftKings', 'homeML': '-450', 'awayML': '+350'},
             marketRetrievedAt='2026-09-27T12:10:00Z') for gid in ('g1', 'g2')}
         world = ctx(prop_odds={})
         pick, reason = ladder.candidate(world, games, NOW)
         self.assertIsNone(reason)
-        self.assertEqual((pick['book'], pick['odds'], len(pick['legs'])), ('DraftKings', -227, 2))
+        self.assertEqual((pick['book'], pick['odds'], len(pick['legs'])), ('DraftKings', -202, 2))
         self.assertEqual([leg['marketType'] for leg in pick['legs']], ['moneyline', 'moneyline'])
         self.assertTrue(all(leg['fairChance'] < leg['rawChance'] for leg in pick['legs']))
 
     def test_espn_spaced_book_names_keep_exact_moneyline_legs(self):
         for provider, expected in (('Draft Kings', 'DraftKings'), ('Fan Duel', 'FanDuel')):
-            game_row = dict(GAMES['g1'], market={'provider': provider, 'homeML': '-500', 'awayML': '+380'},
+            game_row = dict(GAMES['g1'], market={'provider': provider, 'homeML': '-450', 'awayML': '+350'},
                             marketRetrievedAt='2026-09-27T12:10:00Z')
             legs = ladder.moneyline_legs(game_row, ctx(), NOW)
             self.assertTrue(legs, provider)
@@ -230,7 +265,7 @@ class BuildTests(unittest.TestCase):
         world = ctx()
         original_legs = ladder.legs_for_game
         def fake_legs(game_row, *args, **kwargs):
-            price = -250 if game_row['id'] == 'night' else -500
+            price = -175 if game_row['id'] == 'night' else -450
             return [{'id': f"leg-{game_row['id']}", 'title': f"{game_row['id']} safe line",
                      'gameId': game_row['id'], 'book': 'DraftKings', 'odds': price, 'chance': .86,
                      'kickoff': game_row['kickoff'], 'observedAt': '2026-09-27T12:10:00Z'}]
@@ -244,7 +279,7 @@ class BuildTests(unittest.TestCase):
             later_world = ctx(first, latest)
             later_world.now = later_now
             later_world.snapshot = lambda gid: snapshot('g1') if gid == 'night' else None
-            later_world.prop_odds = {'night': record('night', price=-250, retrieved='2026-09-27T21:55:00Z')}
+            later_world.prop_odds = {'night': record('night', price=-175, retrieved='2026-09-27T21:55:00Z')}
             later, why = ladder.candidate(later_world, games, later_now)
             self.assertIsNone(why)
             self.assertEqual(later['gameIds'], ['night'])
@@ -256,9 +291,9 @@ class BuildTests(unittest.TestCase):
         pick, reason = ladder.candidate(ctx(), GAMES, NOW)
         self.assertIsNone(reason)
         self.assertEqual(pick['id'], 'NFL-2026-W4-ladder-0927-c1s1-dk')
-        self.assertEqual((pick['parlayType'], pick['odds'], pick['book']), ('ladder', -227, 'DraftKings'))
-        self.assertEqual(pick['ladder'], {'run': 1, 'step': 1, 'stake': 50, 'payout': 72, 'banked': 0,
-                                          'bankThisWin': 14, 'bankedAfter': 14, 'nextStake': 58, 'totalAfter': 72,
+        self.assertEqual((pick['parlayType'], pick['odds'], pick['book']), ('ladder', -202, 'DraftKings'))
+        self.assertEqual(pick['ladder'], {'run': 1, 'step': 1, 'stake': 50, 'payout': 75, 'banked': 0,
+                                          'bankThisWin': 15, 'bankedAfter': 15, 'nextStake': 60, 'totalAfter': 75,
                                           'bankPercent': 20, 'ridePercent': 80, 'start': 50, 'goal': 1000})
         self.assertEqual(pick['expiresAt'], '2026-09-27T15:45:00Z', 'the next run, before the first kickoff')
         self.assertIn('https://sharpapi.io/', pick['sources'])
@@ -274,7 +309,7 @@ class BuildTests(unittest.TestCase):
         self.assertIsNone(none)
         self.assertIn('CFB: player alternates wait for their own calibration', why)
         calibrated = ctx()
-        calibrated.policy = {'calibration': {'CFB/prop': {'k': 0.4, 'n': 320}}}
+        calibrated.policy['calibration'] = {'CFB/prop': {'k': 0.4, 'n': 320}}
         pick, _ = ladder.candidate(calibrated, college, NOW)
         self.assertEqual(pick['id'][:4], 'CFB-')
 
@@ -282,19 +317,19 @@ class BuildTests(unittest.TestCase):
         games = {gid: dict(g, league='CFB') for gid, g in GAMES.items() if gid in ('g1', 'g2')}
         spec = {'book': 'FanDuel', 'quotedAt': '2026-09-27T12:20:00Z',
                 'source': 'https://sportsbook.fanduel.com/', 'legs': [
-                    {'gameId': 'g1', 'marketType': 'spread', 'direction': 'home', 'line': -1.5, 'odds': -520},
-                    {'gameId': 'g2', 'marketType': 'spread', 'direction': 'home', 'line': -4.5, 'odds': -520},
+                    {'gameId': 'g1', 'marketType': 'spread', 'direction': 'home', 'line': -1.5, 'odds': -450},
+                    {'gameId': 'g2', 'marketType': 'spread', 'direction': 'home', 'line': -4.5, 'odds': -450},
                 ]}
         original = ladder.pricing.price
-        ladder.pricing.price = lambda *a, **k: {'rawChance': .76, 'breakEven': .8, 'projection': -1.0}
+        ladder.pricing.price = lambda *a, **k: {'rawChance': .86, 'breakEven': .8, 'projection': -1.0}
         try:
             pick, reason = ladder.manual_candidate(ctx(), games, NOW, spec)
             self.assertIsNone(reason)
-            self.assertEqual((pick['odds'], pick['quoteType'], pick['priceEstimated']), (-237, 'sportsbook', False))
+            self.assertEqual((pick['odds'], pick['quoteType'], pick['priceEstimated']), (-202, 'sportsbook', False))
             self.assertEqual([l['title'] for l in pick['legs']], ['Lions -1.5', 'Rams -4.5'])
             self.assertNotIn(ladder.SOURCE, pick['sources'], 'a person-verified sportsbook quote is not SharpAPI data')
             self.assertEqual((pick['ladder']['stake'], pick['ladder']['payout'], pick['ladder']['bankThisWin'],
-                              pick['ladder']['nextStake']), (50, 71, 14, 57))
+                              pick['ladder']['nextStake']), (50, 75, 15, 60))
             ladder.pricing.price = lambda *a, **k: {'rawChance': .60, 'breakEven': .8, 'projection': -1.0}
             none, why = ladder.manual_candidate(ctx(), games, NOW, spec)
             self.assertIsNone(none)
@@ -307,11 +342,11 @@ class BuildTests(unittest.TestCase):
                  'g2': game('g2', 'Ravens', 'Falcons', '2026-09-28T00:20Z')}
         spec = {'book': 'FanDuel', 'quotedAt': '2026-09-27T12:20:00Z',
                 'source': 'https://sportsbook.fanduel.com/', 'legs': [
-                    {'gameId': 'g1', 'marketType': 'spread', 'direction': 'home', 'line': -1.5, 'odds': -520},
-                    {'gameId': 'g2', 'marketType': 'spread', 'direction': 'home', 'line': -1.5, 'odds': -520},
+                    {'gameId': 'g1', 'marketType': 'spread', 'direction': 'home', 'line': -1.5, 'odds': -450},
+                    {'gameId': 'g2', 'marketType': 'spread', 'direction': 'home', 'line': -1.5, 'odds': -450},
                 ]}
         original = ladder.pricing.price
-        ladder.pricing.price = lambda *a, **k: {'rawChance': .76, 'breakEven': .8, 'projection': -1.0}
+        ladder.pricing.price = lambda *a, **k: {'rawChance': .86, 'breakEven': .8, 'projection': -1.0}
         try:
             pick, reason = ladder.manual_candidate(ctx(), games, NOW, spec)
             self.assertIsNone(reason)
@@ -321,6 +356,18 @@ class BuildTests(unittest.TestCase):
 
 
 class GateTests(unittest.TestCase):
+    def test_private_shadow_records_candidate_math_and_blocking_rule(self):
+        with tempfile.TemporaryDirectory() as folder:
+            world = ctx()
+            world.root = Path(folder)
+            ticket, reason = ladder.candidate(world, GAMES, NOW)
+            path = Path(folder) / 'work' / ladder.SHADOW_NAME
+            ladder.record_shadow(world, NOW, ticket=ticket, blocked=reason, path=path)
+            row = json.loads(path.read_text(encoding='utf-8').splitlines()[0])
+            self.assertEqual(row['ticket']['odds'], -202)
+            self.assertGreater(row['ticket']['edge'], 0)
+            self.assertIsNone(row['result'])
+
     def test_one_rung_open_at_a_time_and_another_may_follow_after_settlement(self):
         pick, _ = ladder.candidate(ctx(), GAMES, NOW)
         self.assertEqual(gates.kind_of(pick), 'ladder')

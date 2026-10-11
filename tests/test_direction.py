@@ -25,6 +25,7 @@ import ladder
 import learn
 import learning
 import parlay
+import pricing
 import review
 import run
 import scoreboard
@@ -397,7 +398,7 @@ class ClimbTests(unittest.TestCase):
         strict = {'climb': {'strict': True, 'since': '2026-09-20T00:00:00Z'}}
         baseline, _ = ladder.candidate(ctx(), GAMES, SUNDAY)
         world = ctx()
-        world.policy = {'direction': copy.deepcopy(strict)}
+        world.policy['direction'] = copy.deepcopy(strict)
         pick, reason = ladder.candidate(world, GAMES, SUNDAY)
         self.assertIsNone(reason, 'nothing is paused or raised: the stricter pool still builds the same rung')
         self.assertEqual((pick['odds'], [leg['id'] for leg in pick['legs']]),
@@ -412,22 +413,24 @@ class ClimbTests(unittest.TestCase):
                 'older raised edge': {'direction': copy.deepcopy(strict), 'knobs': learning.default_policy()['knobs'],
                                       'segments': {'NFL/prop:recYds': {'minEdge': 6.0}}}}
         for name, policy in held.items():
+            policy['ladderSegments'] = ctx().policy['ladderSegments']
             world.policy = policy
             none, why = ladder.candidate(world, GAMES, SUNDAY)
             self.assertIsNone(none, name)
             self.assertIn('the stricter Climb pool is on', why, name)
             self.assertEqual(direction.climb_held_back(policy, SUNDAY), ['NFL/prop:recYds'], name)
-        world.policy = {'direction': dict(copy.deepcopy(strict), segments={'NFL/prop:rushYds': {
-            'paused': True, 'pauseSince': '2026-09-20T00:00:00Z'}})}
+        world.policy = dict(ctx().policy, direction=dict(copy.deepcopy(strict), segments={'NFL/prop:rushYds': {
+            'paused': True, 'pauseSince': '2026-09-20T00:00:00Z'}}))
         other, _ = ladder.candidate(world, GAMES, SUNDAY)
         self.assertEqual(other['odds'], baseline['odds'], 'another segment held back leaves this pool alone')
-        world.policy = {'direction': {'segments': {'NFL/prop:recYds': {'paused': True, 'pauseSince': '2026-09-20T00:00:00Z'}}}}
+        world.policy = dict(ctx().policy, direction={'segments': {'NFL/prop:recYds': {
+            'paused': True, 'pauseSince': '2026-09-20T00:00:00Z'}}})
         normal, _ = ladder.candidate(world, GAMES, SUNDAY)
         self.assertEqual(normal['odds'], baseline['odds'], 'without the Climb move the pool is the ladder\'s own')
 
     def test_the_stricter_pool_never_changes_the_ladder_rules_it_reads(self):
         self.assertEqual(direction.CLIMB_MARKETS, ladder.MARKETS)
-        self.assertEqual((ladder.MIN_CHANCE, ladder.TARGET), (0.83, (-300, -200)))
+        self.assertEqual((ladder.MIN_CHANCE, ladder.TARGET), (0.83, (-220, -130)))
         legs = [{'id': 'a', 'athleteId': '1', 'market': 'recYds'}, {'id': 'b', 'athleteId': '2', 'market': 'rushYds'}]
         policy = {'direction': {'segments': {'NFL/prop:recYds': {'raise': 2.0}}}}
         self.assertEqual([leg['id'] for leg in ladder.strict_legs(legs, policy, NOW, 'NFL')], ['b'])
@@ -631,7 +634,7 @@ class ClimbStoredPoolTests(unittest.TestCase):
         self.assertTrue(built, 'the stricter pool still builds a rung')
         for ticket in built:
             self.assertTrue(ladder.TARGET[0] <= ticket['odds'] <= ladder.TARGET[1])
-            self.assertTrue(all(leg['chance'] >= ladder.MIN_CHANCE for leg in ticket['legs']))
+            self.assertGreater(ticket['chance'], pricing.break_even(ticket['odds']))
 
     def test_holding_back_any_one_climb_segment_still_leaves_a_stored_rung(self):
         baseline = self.pairs()

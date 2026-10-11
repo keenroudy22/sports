@@ -115,6 +115,7 @@ class Context:
     passers: dict = field(default_factory=dict)        # "LEAGUE-teamId" -> this season's starting passers, game by game
     flags: dict = field(default_factory=lambda: dict(FLAGS))
     policy: dict = field(default_factory=learning.default_policy)   # learned thresholds; the defaults are the written rules
+    root: Path = ROOT                              # private run evidence stays inside this checkout/rehearsal copy
 
     def snapshot(self, game_id):
         game = self.games.get(game_id)
@@ -1370,7 +1371,7 @@ def context(now, stores, flags=None):
                    scoreboard=stores.scoreboard, first=first, latest=latest, appearances=appearances,
                    established=established, names=names, player_team=player_team, starters=starters, passers=passers,
                    player_logs=features.player_logs(stores.records, before=now),
-                   records=stores.records,
+                   records=stores.records, root=stores.root,
                    flags=dict(FLAGS, **(flags or {})), policy=learning.load_policy(stores.root / 'data' / 'learning' / 'policy.json'))
 
 
