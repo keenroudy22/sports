@@ -157,7 +157,7 @@ def season_as_of(first, latest, at):
 
 def accounting(rows):
     """Price provenance, without changing outcomes or advertising straight stakes on X."""
-    straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder')]
+    straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder') and record_scope.is_headline(r)]
     captured = [r for r in straight if not r.get('priceAssumed') and isinstance(r.get('odds'), (int, float))]
     assumed = [r for r in straight if r.get('priceAssumed')]
     return {'captured': record_text(x_post.summarize(captured)) if captured else None,
@@ -168,7 +168,7 @@ def accounting(rows):
 
 def headline(rows):
     """The record a receipt leads with: the straight plays; fun parlays, then the ladder, only when there is nothing else."""
-    straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder')]
+    straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder') and record_scope.is_headline(r)]
     if straight:
         return record_text(x_post.summarize(straight))
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
@@ -265,11 +265,14 @@ def day_receipt(day, first, latest, games, ids, as_of=None):
     rows = plays_between(first, latest, games, ids, day, day)
     if not settled(rows):
         return None
+    rows = [r for r in rows if pick_card.play_kind(r) in ('parlay', 'ladder') or record_scope.is_headline(r)]
+    if not rows:
+        return None
     name = f'{day:%A}'
     head = f"{name}: {headline(rows)}."
     tail = leagues(rows)
     text = fit_result_rows(rows, head, tail.strip(), games)
-    straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder')]
+    straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder') and record_scope.is_headline(r)]
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
     due = morning(day + timedelta(days=1))
     return {'key': f'receipt:day:{day.isoformat()}', 'card': f'receipt-day-{day.isoformat()}', 'kind': 'receipt',
@@ -291,13 +294,16 @@ def week_receipt(wednesday, first, latest, games, ids, as_of=None):
     rows = plays_between(first, latest, games, ids, start, end)
     if not settled(rows):
         return None
+    rows = [r for r in rows if pick_card.play_kind(r) in ('parlay', 'ladder') or record_scope.is_headline(r)]
+    if not rows:
+        return None
     kinds = by_kind(rows)
     # The dates keep two weeks with the same record from posting the same words; one kind of play shows only the total.
     head = f"The week ({start:%b} {start.day} to {end:%b} {end.day}): {headline(rows)}"
     tail = leagues(rows)
     detail_rows = [kind_line(name, rec, rows) for name, rec in kinds]
     text = fit(detail_rows if len(kinds) > 1 else [], head, tail.strip(), head_sep='\n')
-    straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder')]
+    straight = [r for r in rows if pick_card.play_kind(r) not in ('parlay', 'ladder') and record_scope.is_headline(r)]
     fun = [r for r in rows if pick_card.play_kind(r) == 'parlay']
     due = morning(wednesday)
     return {'key': f'receipt:week:{end.isoformat()}', 'card': f'receipt-week-{end.isoformat()}', 'kind': 'receipt',

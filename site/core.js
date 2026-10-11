@@ -415,7 +415,16 @@
   /* Picks imported from before prices were recorded (the Week 1 props) stay listed with their results but
      are kept out of every total, so a record, its units and its ROI always describe the same priced picks. */
   const isUnpricedImport = p => Boolean(p.historicalImport) && p.odds == null;
-  const isHeadline = p => !p.lane || p.lane === 'best_bet' || p.lane === 'hot_plate';
+  /* The Oct 9 plan made the social card the public boundary for new Best bets.
+     Older rows retain the record followers already saw. A later result for a
+     play that never reached X/Discord stays in All plays, never the headline. */
+  const HEADLINE_DELIVERY_FROM = Date.parse('2026-10-09T04:00:00Z');
+  const reachedPublicRail = p => p.posted === true || Boolean(p.delivery?.xAt || p.delivery?.discordAt);
+  const headlineDeliveryEligible = p => {
+    const kickoff = Date.parse(p.kickoff || p.publishedAt || '');
+    return !Number.isFinite(kickoff) || kickoff < HEADLINE_DELIVERY_FROM || p.posted !== false || reachedPublicRail(p);
+  };
+  const isHeadline = p => (!p.lane || p.lane === 'best_bet' || p.lane === 'hot_plate') && headlineDeliveryEligible(p);
   const laneRecord = (picks, lane, minimum = 10) => summarizePicks(picks.filter(p => p.lane === lane), minimum);
   const recordOf = (picks, minimum = 10) => {
     const imported = picks.filter(isUnpricedImport);

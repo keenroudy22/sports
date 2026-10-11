@@ -35,7 +35,7 @@ const laterOpen = { ...total, id: 'CFB-2026-W7-later-open-dk', displayTitle: 'La
 const laterOff = { ...total, id: 'CFB-2026-W7-later-off-fd', displayTitle: 'Moved Line at Elsewhere under 56.5',
   kickoff: '2026-10-13T00:15:00Z', status: 'expired', entryNote: 'Closed to new entries at 11:45 AM ET: total moved 3 against, from 56.5 to 53.5.' };
 const yesterday = { ...total, id: 'NFL-2026-W5-yesterday-dk', displayTitle: 'Graded Yesterday over 40.5', line: 40.5, kickoff: '2026-10-09T23:00:00Z',
-  result: 'win', units: 0.95, settledAt: '2026-10-10T03:00:00Z', actual: 'Visitors 24, Hosts 21' };
+  result: 'win', units: 0.95, posted: true, settledAt: '2026-10-10T03:00:00Z', actual: 'Visitors 24, Hosts 21' };
 /* Three settled Climb rungs: climb 2, step 3, $94 riding, $42 banked. */
 const rung = (id, step, run, result, ladder, kickoff) => ({ id, kind: 'parlays', parlayType: 'ladder', league: 'NFL', legs: ['Leg A over 40.5', 'Leg B over 3.5'],
   displayTitle: `Climb step ${step}`, odds: -150, book: 'FanDuel', kickoff, publishedAt: kickoff, result, status: 'active', ladder: { step, run, ...ladder } });

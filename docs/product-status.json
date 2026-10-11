@@ -981,7 +981,7 @@
       "owner": "agent",
       "next": "Keep the five-minute watcher and settlement-only handoff under daily health monitoring; no owner prompt is required for future finals.",
       "doneWhen": "A verified final wakes a no-odds-spend settlement-only run within 15 minutes; the official record, site and approved result queue update without an owner prompt; feed or lock failures retry safely.",
-      "evidence": "Release 0f31cec248f8bfb0591339d42297ac046b9c9c09. Natural proof: watcher observed Nevada-UTEP final, launched the official settlement scan at 23:44:59 ET and settled two plays at 23:45:07 without an owner prompt or odds/prop requests. Descendant hosted run 38109709980 succeeded; live record generated 2026-10-11T03:58:30Z shows Nevada-UTEP over 49.5 loss (30-13) and San Diego State-Oregon State under 56.5 loss (14-66). Live Today/Record at 375 and 1440 had zero overflow, caught load states or browser errors."
+      "evidence": "Release 0f31cec248f8bfb0591339d42297ac046b9c9c09. The watcher launched the Nevada-UTEP settlement scan at 23:44:59 ET and settled two plays at 23:45:07 without an owner prompt or odds/prop requests. Hosted run 38109709980 succeeded; live record generated 2026-10-11T03:58:30Z shows Nevada-UTEP over 49.5 loss (30-13) and San Diego State-Oregon State under 56.5 loss (14-66). Live Today/Record at 375 and 1440 had zero overflow, load states or browser errors."
     }
   ]
 }

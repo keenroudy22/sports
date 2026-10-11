@@ -8,6 +8,7 @@ from datetime import datetime
 
 
 RESULTS = ('win', 'loss', 'push', 'void')
+HEADLINE_DELIVERY_FROM = datetime.fromisoformat('2026-10-09T04:00:00+00:00')
 
 
 def instant(value):
@@ -45,7 +46,14 @@ def is_unpriced_import(pick):
 
 
 def is_headline(pick):
-    return not pick.get('lane') or pick.get('lane') in ('best_bet', 'hot_plate')
+    lane = pick.get('lane')
+    if lane and lane not in ('best_bet', 'hot_plate'):
+        return False
+    kickoff = instant(pick.get('kickoff') or pick.get('publishedAt'))
+    if not kickoff or kickoff < HEADLINE_DELIVERY_FROM:
+        return True
+    delivery = pick.get('delivery') or {}
+    return pick.get('posted') is not False or bool(delivery.get('xAt') or delivery.get('discordAt'))
 
 
 def current_rows(rows, at):

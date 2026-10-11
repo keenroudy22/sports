@@ -179,6 +179,20 @@ test('new lanes stay out of the Best bets headline and keep their own record lin
   assert.equal(r.allPlays.losses, 2);
 });
 
+test('the Oct 9 public boundary keeps never-posted plays out of Best bets but in All plays', () => {
+  const common = { kind:'gamePicks', kickoff:'2026-10-10T16:00:00Z', odds:-110 };
+  const picks = [
+    { ...common, id:'iowa', result:'win', posted:true, units:.909 },
+    { ...common, id:'nevada', result:'loss', delivery:{xAt:'2026-10-10T14:12:03Z'}, units:-1 },
+    { ...common, id:'arizona', result:'loss', posted:false, delivery:{cancelled:true}, units:-1 },
+    { ...common, id:'sdsu', result:'loss', posted:false, units:-1 },
+  ];
+  const r = C.theRecord(picks, Date.parse('2026-10-11T12:00:00Z'));
+  assert.deepEqual([r.season.wins, r.season.losses], [1, 1], 'only the two delivered Best bets enter the headline');
+  assert.deepEqual([r.allPlays.wins, r.allPlays.losses], [1, 3], 'settled never-posted rows remain auditable under All plays');
+  assert.equal(Math.round(1000 * r.season.units) / 1000, -0.091);
+});
+
 test('official card separates Eastern dates and keeps ungraded older plays visible', () => {
   const picks = [{id:'today',kickoff:'2026-10-03T00:00:00Z'}, {id:'tomorrow',kickoff:'2026-10-03T17:00:00Z'},
     {id:'old',kickoff:'2026-10-01T22:00:00Z'}, {id:'settled',kickoff:'2026-10-03T00:00:00Z',result:'win'}];
