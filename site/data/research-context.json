@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-11T18:25:53Z",
+  "updatedAt": "2026-10-11T18:50:28Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-11T18:18Z",
+              "reportedAt": "2026-10-11T18:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2252,7 +2252,7 @@
               "name": "Dallen Bentley",
               "position": "TE",
               "status": "Active",
-              "injury": null,
+              "injury": "Coach's Decision",
               "reportedAt": "2026-10-04T19:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/5159802/dallen-bentley"
             },
@@ -3227,6 +3227,15 @@
           "name": "Jacksonville Jaguars",
           "players": [
             {
+              "id": "4432620",
+              "name": "Parker Washington",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-11T18:43Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4432620/parker-washington"
+            },
+            {
               "id": "4692525",
               "name": "Anton Harrison",
               "position": "OT",
@@ -3441,15 +3450,6 @@
               "injury": null,
               "reportedAt": "2026-10-04T23:42Z",
               "source": "https://www.espn.com/nfl/player/_/id/4686361/cam-little"
-            },
-            {
-              "id": "4432620",
-              "name": "Parker Washington",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-04T22:20Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4432620/parker-washington"
             }
           ]
         },
@@ -3692,7 +3692,7 @@
               "position": "DE",
               "status": "Questionable",
               "injury": "Neck",
-              "reportedAt": "2026-10-11T18:14Z",
+              "reportedAt": "2026-10-11T18:16Z",
               "source": "https://www.espn.com/nfl/player/_/id/4243916/patrick-johnson"
             },
             {
@@ -4377,6 +4377,24 @@
           "name": "Miami Dolphins",
           "players": [
             {
+              "id": "4360488",
+              "name": "JuJu Brents",
+              "position": "CB",
+              "status": "Questionable",
+              "injury": "Concussion",
+              "reportedAt": "2026-10-11T18:39Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4360488/juju-brents"
+            },
+            {
+              "id": "4819257",
+              "name": "Jonah Savaiinaea",
+              "position": "G",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-11T18:19Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4819257/jonah-savaiinaea"
+            },
+            {
               "id": "4043130",
               "name": "Jordyn Brooks",
               "position": "LB",
@@ -4530,15 +4548,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4034729/tucker-addington"
             },
             {
-              "id": "4360488",
-              "name": "JuJu Brents",
-              "position": "CB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-09T20:30Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4360488/juju-brents"
-            },
-            {
               "id": "4566094",
               "name": "Jacob Rodriguez",
               "position": "LB",
@@ -4591,15 +4600,6 @@
               "injury": null,
               "reportedAt": "2026-10-05T01:08Z",
               "source": "https://www.espn.com/nfl/player/_/id/4242512/malik-willis"
-            },
-            {
-              "id": "4711533",
-              "name": "Ollie Gordon II",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-05T00:44Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4711533/ollie-gordon-ii"
             }
           ]
         },
@@ -5987,12 +5987,21 @@
           "name": "Pittsburgh Steelers",
           "players": [
             {
+              "id": "4431492",
+              "name": "Roman Wilson",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Hand",
+              "reportedAt": "2026-10-11T18:31Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4431492/roman-wilson"
+            },
+            {
               "id": "4035656",
               "name": "Ben Skowronek",
               "position": "WR",
               "status": "Questionable",
               "injury": "Leg",
-              "reportedAt": "2026-10-11T18:11Z",
+              "reportedAt": "2026-10-11T18:20Z",
               "source": "https://www.espn.com/nfl/player/_/id/4035656/ben-skowronek"
             },
             {
@@ -6201,15 +6210,6 @@
               "injury": null,
               "reportedAt": "2026-10-02T23:31Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685261/germie-bernard"
-            },
-            {
-              "id": "4037457",
-              "name": "Travis Homer",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-02T23:21Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4037457/travis-homer"
             }
           ]
         },
@@ -6910,9 +6910,9 @@
               "id": "4429607",
               "name": "Cor'Dale Flott",
               "position": "CB",
-              "status": "Questionable",
-              "injury": "Chest",
-              "reportedAt": "2026-10-11T18:21Z",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-11T18:26Z",
               "source": "https://www.espn.com/nfl/player/_/id/4429607/cordale-flott"
             },
             {
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "3",
-          "name": "Noah Sewell",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-11T16:18:59Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4430822/noah-sewell"
-        },
-        {
-          "teamId": "34",
-          "name": "Marlin Klein",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-10-11T16:18:59Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4695705/marlin-klein"
-        },
-        {
           "teamId": "34",
           "name": "Aireontae Ersery",
           "from": "Questionable",
@@ -7764,11 +7748,27 @@
           "to": "Questionable",
           "observedAt": "2026-10-11T18:25:53Z",
           "source": "https://www.espn.com/nfl/player/_/id/4431545/will-shipley"
+        },
+        {
+          "teamId": "15",
+          "name": "JuJu Brents",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-11T18:50:28Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4360488/juju-brents"
+        },
+        {
+          "teamId": "10",
+          "name": "Cor'Dale Flott",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-11T18:50:28Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4429607/cordale-flott"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-11T18:25:53Z",
-      "lastAttemptAt": "2026-10-11T18:25:53Z",
+      "checkedAt": "2026-10-11T18:50:28Z",
+      "lastAttemptAt": "2026-10-11T18:50:28Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-11T18:25:53Z",
-      "lastAttemptAt": "2026-10-11T18:25:53Z",
+      "checkedAt": "2026-10-11T18:50:28Z",
+      "lastAttemptAt": "2026-10-11T18:50:28Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
