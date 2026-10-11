@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-11T19:54:13Z",
+  "updatedAt": "2026-10-11T20:05:44Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1617,12 +1617,21 @@
           "name": "Cleveland Browns",
           "players": [
             {
+              "id": "4601080",
+              "name": "Raheim Sanders",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Hip",
+              "reportedAt": "2026-10-11T19:56Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4601080/raheim-sanders"
+            },
+            {
               "id": "3131498",
               "name": "Tytus Howard",
               "position": "OT",
               "status": "Questionable",
               "injury": "Knee",
-              "reportedAt": "2026-10-11T19:45Z",
+              "reportedAt": "2026-10-11T19:52Z",
               "source": "https://www.espn.com/nfl/player/_/id/3131498/tytus-howard"
             },
             {
@@ -1804,15 +1813,6 @@
               "injury": null,
               "reportedAt": "2026-10-02T23:51Z",
               "source": "https://www.espn.com/nfl/player/_/id/4241463/jerry-jeudy"
-            },
-            {
-              "id": "4601080",
-              "name": "Raheim Sanders",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-02T23:15Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4601080/raheim-sanders"
             },
             {
               "id": "4722893",
@@ -2767,6 +2767,15 @@
           "name": "Houston Texans",
           "players": [
             {
+              "id": "4241223",
+              "name": "Jalen Pitre",
+              "position": "S",
+              "status": "Questionable",
+              "injury": "Shoulder",
+              "reportedAt": "2026-10-11T19:58Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4241223/jalen-pitre"
+            },
+            {
               "id": "4035538",
               "name": "David Montgomery",
               "position": "RB",
@@ -2981,15 +2990,6 @@
               "injury": null,
               "reportedAt": "2026-10-08T00:32Z",
               "source": "https://www.espn.com/nfl/player/_/id/4362910/jaden-crumedy"
-            },
-            {
-              "id": "4594277",
-              "name": "Jaylin Smith",
-              "position": "CB",
-              "status": "Injured Reserve",
-              "injury": "Hamstring",
-              "reportedAt": "2026-10-07T00:29Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4594277/jaylin-smith"
             }
           ]
         },
@@ -4377,6 +4377,15 @@
           "name": "Miami Dolphins",
           "players": [
             {
+              "id": "4360488",
+              "name": "JuJu Brents",
+              "position": "CB",
+              "status": "Questionable",
+              "injury": "Neck",
+              "reportedAt": "2026-10-11T19:53Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4360488/juju-brents"
+            },
+            {
               "id": "4711533",
               "name": "Ollie Gordon II",
               "position": "RB",
@@ -4402,15 +4411,6 @@
               "injury": null,
               "reportedAt": "2026-10-11T19:02Z",
               "source": "https://www.espn.com/nfl/player/_/id/4043130/jordyn-brooks"
-            },
-            {
-              "id": "4360488",
-              "name": "JuJu Brents",
-              "position": "CB",
-              "status": "Questionable",
-              "injury": "Neck",
-              "reportedAt": "2026-10-11T18:51Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4360488/juju-brents"
             },
             {
               "id": "4819257",
@@ -5302,17 +5302,8 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-11T19:45Z",
+              "reportedAt": "2026-10-11T20:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
-            },
-            {
-              "id": "4430261",
-              "name": "Tyler Nubin",
-              "position": "S",
-              "status": "Questionable",
-              "injury": "Neck",
-              "reportedAt": "2026-10-11T19:44Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4430261/tyler-nubin"
             },
             {
               "id": "4921249",
@@ -5320,8 +5311,17 @@
               "position": "CB",
               "status": "Questionable",
               "injury": "Concussion",
-              "reportedAt": "2026-10-11T19:38Z",
+              "reportedAt": "2026-10-11T19:58Z",
               "source": "https://www.espn.com/nfl/player/_/id/4921249/colton-hood"
+            },
+            {
+              "id": "4430261",
+              "name": "Tyler Nubin",
+              "position": "S",
+              "status": "Questionable",
+              "injury": "Neck",
+              "reportedAt": "2026-10-11T19:50Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4430261/tyler-nubin"
             },
             {
               "id": "4243322",
@@ -5532,7 +5532,7 @@
               "position": "TE",
               "status": "Out",
               "injury": "Concussion",
-              "reportedAt": "2026-10-11T19:18Z",
+              "reportedAt": "2026-10-11T19:45Z",
               "source": "https://www.espn.com/nfl/player/_/id/5083315/kenyon-sadiq"
             },
             {
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "21",
-          "name": "Tyler Steen",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-11T16:37:17Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4362805/tyler-steen"
-        },
-        {
           "teamId": "16",
           "name": "T.J. Hockenson",
           "from": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-11T19:54:13Z",
           "source": "https://www.espn.com/nfl/player/_/id/5083315/kenyon-sadiq"
+        },
+        {
+          "teamId": "5",
+          "name": "Raheim Sanders",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-11T20:05:44Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4601080/raheim-sanders"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-11T19:54:13Z",
-      "lastAttemptAt": "2026-10-11T19:54:13Z",
+      "checkedAt": "2026-10-11T20:05:44Z",
+      "lastAttemptAt": "2026-10-11T20:05:44Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-11T19:54:13Z",
-      "lastAttemptAt": "2026-10-11T19:54:13Z",
+      "checkedAt": "2026-10-11T20:05:44Z",
+      "lastAttemptAt": "2026-10-11T20:05:44Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
