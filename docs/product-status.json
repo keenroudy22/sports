@@ -257,7 +257,7 @@
     {
       "id": "P29",
       "title": "Felt-card post-approval hardening",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
       "next": "Apply the final card review follow-ups in docs/CARD-REVIEW-FINAL.md: real font widths/spreads, photo gap, derived fixture bank and cosmetics. Preserve public facts and attachment history.",
       "doneWhen": "Real-font and spread browser tests pass; photo rings stay separate, fixture banks derive from state and listed cosmetics are checked.",
@@ -1015,9 +1015,9 @@
       "title": "Cancel the invalid Sunday fun ticket and recheck dark primetime",
       "status": "ready",
       "owner": "agent",
-      "next": "Release the caption guard and bounded 5:30 PM primetime recheck through every gate; verify fresh props are captured first and observe the Ravens-Falcons decision without bypassing any gate.",
+      "next": "Observe the natural 5:30 PM Ravens-Falcons decision and report the qualifying pick or the exact gate refusals; never force one.",
       "doneWhen": "The invalid ticket is closed before Discord/X; Strange uses approved wording; all send paths refuse the retired sentence; 5:30 considers only an unserved primetime NFL game after fresh prices.",
-      "evidence": "Owner instruction 2026-10-11. Buffer and pending Discord cancellation completed at 08:23 ET; Strange Buffer and pending Discord copy replaced before delivery; public closure report 2026-10-11-NFL-0824-closes.json. Code release and natural 5:30 observation pending."
+      "evidence": "Owner instruction 2026-10-11. Buffer and pending Discord cancellation completed at 08:23 ET; no replacement was admitted. Strange reached Discord at 08:29:58 ET and X at 08:40:02 ET with approved wording (tweet 2109262746864767282). Public closure reports 2026-10-11-NFL-0824-closes.json and 2026-10-11-NFL-0832-closes.json preserve the dated reason. Release 80fab324 and hosted publish 38140976753 succeeded; Python 1291 (2 skipped), Node 233, clean export, build/audits/guard/assets/SVG, isolated 0830 rehearsal, and live exact-375/1440 checks passed. The natural 5:30 observation remains follow-through, not a forced-play requirement."
     }
   ]
 }
