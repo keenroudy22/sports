@@ -3,6 +3,7 @@ import math
 from datetime import datetime, timezone
 
 import paper
+import nba_readiness
 
 
 def when(value):
@@ -66,4 +67,7 @@ def build(now=None, rows=None):
                    for (season, stage), items in sorted(grouped.items(), key=lambda item: (item[0][0], item[0][1]), reverse=True)]
         leagues[league] = {'recorded': len(mine), 'record': record,
                            'seasons': seasons, 'upcoming': sorted(upcoming, key=lambda r: r['kickoff'])[:12]}
+    # The Lab and NBA Today use the same staged evidence counter. This is
+    # descriptive only: it cannot admit or publish a play.
+    leagues.setdefault('NBA', {})['readiness'] = nba_readiness.status(now)
     return {'generatedAt': now.isoformat(timespec='seconds'), 'scope': 'paper-trials-only', 'leagues': leagues}

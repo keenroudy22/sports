@@ -11,6 +11,7 @@ import nba_capture
 import paper
 import nba_trial
 import nba_trial_runtime
+import nba_readiness
 
 ROOT = Path(__file__).resolve().parents[1]
 BOX = ROOT/'data'/'sport-box'
@@ -59,7 +60,7 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
             except (OSError, ValueError, KeyError, TypeError):
                 pass
         if game.get('status')=='scheduled' and boxscores.instant(game['kickoff'])>now:
-            for book in ('DraftKings','FanDuel'):
+            for book in ('DraftKings',):
                 quote=latest.get((str(game['providerId']),book),{})
                 total=(quote.get('current') or {}).get('total') or {}
                 if not fresh(quote.get('retrievedAt'),now): continue
@@ -124,12 +125,15 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
     plays=sorted(focused,key=lambda p:p['publishedAt'])[-20:]
     periods=sorted({(p['season'],p['seasonType']) for p in all_trial_plays},reverse=True)
     trial_seasons=[{'season':s,'stage':stage,'record':nba_trial.snapshot([r for r in trial_rows if r.get('id') in {p['id'] for p in all_trial_plays if (p['season'],p['seasonType'])==(s,stage)}])} for s,stage in periods]
-    public_plays=[{k:p.get(k) for k in ('id','kickoff','publishedAt','direction','line','odds','book','riskUnits','projection','result','actual','reasons')} | {'teams':p['game']['teams'],'card':f"data/cards/{p['id'].lower()}.png"} for p in plays]
-    started=nba_trial_runtime.review_ready(now)
+    public_plays=[{k:p.get(k) for k in ('id','kickoff','publishedAt','marketType','direction','line','odds','book','riskUnits','projection','result','actual','reasons')} | {'teams':p['game']['teams'],'card':f"data/cards/{p['id'].lower()}.png"} for p in plays]
+    readiness=nba_readiness.status(now, capture_root=root)
+    started=nba_trial_runtime.review_ready(now, readiness=readiness['readyForLiveTrial'])
     return {'league':'NBA','generatedAt':boxscores.stamp(now),'season':season,
             'heading':'Opening night · October 20' if nba_capture.sports_refresh.eastern_date(now).isoformat() < '2026-10-20' else 'NBA Today',
             'sourceAt':slate.get('retrievedAt'),'scheduleFresh':fresh(slate.get('retrievedAt'),now,24),
             'games':games,'trends':trends[:12],'prep':prep[:10],
             'prepNote':'Current-season games, fresh prices and player availability must clear before a row appears.',
-            'trial':{'label':'NBA Trial','state':'ready' if started else 'opening hold','record':trial_record,'plays':public_plays,'seasons':trial_seasons,
-                     'note':('NBA Trial record is separate from football. Only a fully checked total can appear.' if public_plays else 'NBA Trial starts on October 20 after card review. No NBA Trial play has been posted.')}}
+            'readiness':readiness,
+            'trial':{'label':'NBA Trial','state':'ready' if started else readiness['stage'],'record':trial_record,'plays':public_plays,'seasons':trial_seasons,
+                     'note':('NBA Trial record is separate from football. Only a fully checked side or total can appear.' if public_plays else
+                             f"NBA is in {readiness['stage']} stage: {readiness['cleanCaptureDays']}/{readiness['cleanCaptureDaysRequired']} clean capture days and {readiness['paperGraded']}/{readiness['paperGradesRequired']} paper grades. No NBA Trial play has been posted.")}}

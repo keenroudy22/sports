@@ -9,8 +9,12 @@ class TrialTests(unittest.TestCase):
  def evaluate(self,row=None,rows=None,**kw):return nt.evaluate(row or offer(),rows or [],NOW,preview_sent='2026-10-20T10:00:00Z',**kw)
  def test_raw_exact_price_floor_and_one_unit(self):
   self.assertEqual(self.evaluate(),[])
-  for key,value in [('rawChance',.58),('riskUnits',2),('roleChecked',False),('sideVerified',False),('exactLineVerified',False),('priceHold',True),('injuryHold',True),('marketType','spread'),('book','unknown')]:
+  for key,value in [('rawChance',.58),('riskUnits',2),('roleChecked',False),('sideVerified',False),('exactLineVerified',False),('priceHold',True),('injuryHold',True),('book','FanDuel')]:
    row=offer();row[key]=value;self.assertTrue(self.evaluate(row))
+  for market,line in [('spread',-3.5),('moneyline',0)]:
+   row=offer();row.update(marketType=market,line=line);self.assertEqual(self.evaluate(row),[])
+  row=offer();row.update(marketType='total',line=-1);self.assertIn('line/source hold',self.evaluate(row))
+  row=offer();row.update(marketType='moneyline',line=1);self.assertIn('line/source hold',self.evaluate(row))
  def test_low_price_still_needs_raw_chance_56(self):
   row=offer();row.update(odds=110,oppositeOdds=-110,rawChance=.55);self.assertIn('chance hold',self.evaluate(row))
  def test_calibration_must_be_verified_before_four_point_bar(self):
@@ -34,10 +38,16 @@ class TrialTests(unittest.TestCase):
    if row['type']=='settle':row.pop('source')
   self.assertEqual(nt.snapshot(rows)['graded'],0)
  def test_preview_uses_real_pair_and_never_calls_it_a_best_bet(self):
-  game={'teams':{'home':{'abbreviation':'NY','name':'New York Knicks'},'away':{'abbreviation':'SA','name':'San Antonio Spurs'}}}
+  game={'kickoff':'2026-10-20T23:00:00Z','teams':{'home':{'abbreviation':'NY','name':'New York Knicks'},'away':{'abbreviation':'SA','name':'San Antonio Spurs'}}}
   quote={'book':'DraftKings','retrievedAt':'2026-10-09T21:00:00Z','current':{'total':{'line':220.5,'over':-110,'under':-110}}}
   svg=nt.preview_svg(game,quote)
   self.assertIn('NBA TRIAL PREVIEW',svg);self.assertNotIn('BEST BET',svg);self.assertNotIn('ORDER UP',svg);self.assertTrue('NO PLAY' in svg and 'POSTED' in svg)
   quote['current']['total']['under']=-900
   with self.assertRaises(ValueError):nt.preview_svg(game,quote)
+ def test_side_card_names_the_team_and_exact_market(self):
+  game={'kickoff':'2026-10-20T23:00:00Z','teams':{'home':{'abbreviation':'NY','name':'New York Knicks'},'away':{'abbreviation':'SA','name':'San Antonio Spurs'}}}
+  current={'home':{'moneyline':-120,'spreadLine':-2.5,'spreadPrice':-110},'away':{'moneyline':105,'spreadLine':2.5,'spreadPrice':-110}}
+  money=nt.preview_svg(game,{'book':'DraftKings','retrievedAt':'2026-10-20T13:00:00Z','current':current},preview=False,direction='home',market='moneyline',line=0,odds=-120,reason='New York won four of five.')
+  spread=nt.preview_svg(game,{'book':'DraftKings','retrievedAt':'2026-10-20T13:00:00Z','current':current},preview=False,direction='away',market='spread',line=2.5,odds=-110,reason='San Antonio covered four of five.')
+  self.assertIn('NY MONEYLINE',money);self.assertIn('SA +2.5',spread)
 if __name__=='__main__':unittest.main()

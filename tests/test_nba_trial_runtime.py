@@ -13,11 +13,12 @@ class TrialRuntimeTests(unittest.TestCase):
   self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup);self.root=Path(self.temp.name)
  def review(self):return {'delivered':True,'vetoed':False,'sentAt':'2026-10-09T22:00:00Z','pngSHA256':hashlib.sha256((rt.ROOT/'design/final/nba-trial-preview.png').read_bytes()).hexdigest()}
  def test_opening_review_hash_and_veto_fail_closed(self):
-  self.assertTrue(rt.review_ready(NOW,self.review()))
-  self.assertFalse(rt.review_ready(NOW-timedelta(days=11),self.review()))
-  r=self.review();r['vetoed']=True;self.assertFalse(rt.review_ready(NOW,r))
-  r=self.review();r['pngSHA256']='wrong';self.assertFalse(rt.review_ready(NOW,r))
-  with patch.dict('os.environ',{'KEENROUDY_NBA_TRIAL':'0'}):self.assertFalse(rt.review_ready(NOW,self.review()))
+  self.assertTrue(rt.review_ready(NOW,self.review(),readiness=True))
+  self.assertFalse(rt.review_ready(NOW,self.review(),readiness=False))
+  self.assertFalse(rt.review_ready(NOW-timedelta(days=11),self.review(),readiness=True))
+  r=self.review();r['vetoed']=True;self.assertFalse(rt.review_ready(NOW,r,readiness=True))
+  r=self.review();r['pngSHA256']='wrong';self.assertFalse(rt.review_ready(NOW,r,readiness=True))
+  with patch.dict('os.environ',{'KEENROUDY_NBA_TRIAL':'0'}):self.assertFalse(rt.review_ready(NOW,self.review(),readiness=True))
  def test_integer_line_excludes_push_and_unknown_variance_holds(self):
   self.assertLess(rt.total_chance(220,20,220,'under'),.5)
   self.assertAlmostEqual(rt.total_chance(220,20,220.5,'under')+rt.total_chance(220,20,220.5,'over'),1)
@@ -56,6 +57,20 @@ class TrialRuntimeTests(unittest.TestCase):
   snapshot['rows']=[{'team':'1','status':'Out'}]
   (root/'injuries-current.json').write_text(json.dumps(snapshot))
   self.assertEqual(rt.candidates(NOW,root,lambda *a:Model(),history),[])
+ def test_candidates_include_draftkings_moneyline_and_spread_but_no_fanduel_or_props(self):
+  root=self.root/'capture';root.mkdir()
+  game={'id':'NBA-1','providerId':'1','league':'NBA','season':2027,'seasonType':'regular-season','kickoff':'2026-10-20T23:00:00Z','status':'scheduled','timeConfirmed':True,'teams':{'home':{'id':'1','abbreviation':'A'},'away':{'id':'2','abbreviation':'B'}}}
+  (root/'slate.json').write_text(json.dumps({'games':[game]}));(root/'injuries-current.json').write_text(json.dumps({'retrievedAt':'2026-10-20T13:30:00Z','season':2027,'rows':[]}))
+  current={'home':{'moneyline':-110,'spreadLine':-1.5,'spreadPrice':-110},'away':{'moneyline':-110,'spreadLine':1.5,'spreadPrice':-110},'total':{'line':221.5,'over':-110,'under':-110}}
+  for book in ('DraftKings','FanDuel'):
+   nba_capture.append_changed([{'eventId':'1','book':book,'season':2027,'retrievedAt':'2026-10-20T13:30:00Z','source':'https://sports.core.api.espn.com/nba/odds','current':current}],root/'quotes',lambda r:(r['eventId'],r['book']))
+  history=[{'season':2026,'type':2,'kickoff':f'2026-04-{10+i:02d}T00:00:00Z','home':{'id':'1'},'away':{'id':'2'},'homeScore':110,'awayScore':100} for i in range(5)]
+  class Model:
+   def predict(self,*a):return {'total':230,'sdTotal':20,'margin':8,'sdMargin':10,'homeWinProb':.79}
+  found=rt.candidates(NOW,root,lambda *a:Model(),history)
+  self.assertEqual({row['marketType'] for row in found},{'moneyline','spread'})
+  self.assertEqual({row['book'] for row in found},{'DraftKings'})
+  self.assertTrue(all(len(row['reasons'])==2 for row in found))
  def test_reserve_delivery_is_once_even_without_buffer_ack(self):
   play={**offer(),'eventId':'NBA-1','direction':'under'}
   nt.record_publish(play,NOW,self.root,preview_sent='2026-10-09T22:00:00Z')
@@ -63,13 +78,13 @@ class TrialRuntimeTests(unittest.TestCase):
   self.assertFalse(rt.reserve_delivery(play['id'],NOW,self.root))
  def test_admission_is_one_per_day_and_respects_football_queue_reserve(self):
   play={**offer(),'eventId':'NBA-1','direction':'under','game':{'teams':{}},'reasons':['Source 1','Source 2'],'projection':210.,'model':'hoops-v1'}
-  with patch.dict('os.environ',{'BUFFER_TOKEN':'fixture-token'}),patch.object(rt,'candidates',return_value=[play]):
+  with patch.dict('os.environ',{'BUFFER_TOKEN':'fixture-token'}),patch.object(rt,'candidates',return_value=[play]),patch.object(rt.nba_readiness,'live_ready',return_value=True):
    result=rt.admission(NOW,root=self.root,review=self.review(),log_book={'posts':[]},capture=False)
    self.assertEqual(result['state'],'admitted')
    self.assertEqual(rt.admission(NOW,root=self.root,review=self.review(),log_book={'posts':[]},capture=False)['reason'],'one NBA Trial per day')
   other=self.root/'other';other.mkdir()
   busy={'posts':[{'bufferPostId':str(i),'dueAt':'2026-10-20T15:00:00Z'} for i in range(7)]}
-  with patch.dict('os.environ',{'BUFFER_TOKEN':'fixture-token'}),patch.object(rt,'candidates',side_effect=AssertionError('No candidate call under pressure')):
+  with patch.dict('os.environ',{'BUFFER_TOKEN':'fixture-token'}),patch.object(rt,'candidates',side_effect=AssertionError('No candidate call under pressure')),patch.object(rt.nba_readiness,'live_ready',return_value=True):
    self.assertEqual(rt.admission(NOW,root=other,review=self.review(),log_book=busy,capture=False)['reason'],'football queue reserve')
  def test_trial_audit_catches_missing_public_play_and_wrong_units(self):
   import nba_trial_audit
@@ -96,5 +111,6 @@ class TrialRuntimeTests(unittest.TestCase):
    plans=rt.social_plans(NOW,{'posts':[]},root=self.root,reserved=[('football','play','text',NOW+timedelta(minutes=15),'card')])
   self.assertEqual(plans[0][1],'nba-trial');self.assertGreaterEqual(plans[0][3],NOW+timedelta(minutes=25))
   self.assertIn('NBA Trial',plans[0][2]);self.assertNotIn('1u',plans[0][2])
+  self.assertIn('My projected total is 210.',plans[0][2]);self.assertNotIn('I have it at',plans[0][2])
 
 if __name__=='__main__':unittest.main()

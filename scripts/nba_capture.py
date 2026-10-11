@@ -120,7 +120,9 @@ def step(now=None, root=STORE, budget=None, clock=lambda: datetime.now(timezone.
                 continue
             payload = budget(hoops_store.odds_url('NBA', game['providerId']))
             available = market_lab.books(payload)
-            for book in ('DraftKings','FanDuel'):
+            # Oct. 11 owner rule: NBA is a free ESPN/DraftKings lane. Do not
+            # imply FanDuel coverage or spend prop credits that this feed does not provide.
+            for book in ('DraftKings',):
                 if book not in available:
                     continue
                 snapshot = market_lab.snapshot(available[book])
@@ -136,9 +138,9 @@ def step(now=None, root=STORE, budget=None, clock=lambda: datetime.now(timezone.
             result['errors'].append('quote-unavailable')
             if budget.errors >=3 or budget.requests>=budget.limit:
                 break
-    result['props'] = espn_props.capture(list(games.values()), fetch=budget, clock=clock,
-                                        seconds=max(0,budget.deadline-budget.clock()),root=root/'props', limit=10)
-    result['captured'] = result['props']['captured']
+    result['props'] = {'boards': 0, 'captured': 0, 'errors': 0, 'late': 0,
+                       'orderContradictions': 0, 'requests': 0, 'reason': 'NBA free feed has no player props'}
+    result['captured'] = 0
     result['requests'] = budget.requests
     result['retrievedAt'] = boxscores.stamp(clock())
     # Real scheduled-slot evidence, never backfilled from fixtures or another date.

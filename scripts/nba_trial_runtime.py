@@ -14,6 +14,7 @@ import nba_capture
 import nba_trial
 import paper
 import hoops_store
+import nba_readiness
 
 ROOT=Path(__file__).resolve().parents[1]
 CONF=Path(os.environ.get('KEENROUDY_CONF') or Path.home()/'.config/keenroudy')
@@ -24,7 +25,7 @@ def rows(root=nba_trial.STORE):
  return [r for p in root.glob('*.jsonl') for r in boxscores.read_store(p)]
 
 
-def review_ready(now,review=None):
+def review_ready(now,review=None,readiness=None):
  if review is None and datetime.now(timezone.utc).astimezone(nba_trial.EASTERN).date()<nba_trial.OPENING:return False
  if os.environ.get('KEENROUDY_NBA_TRIAL','1')=='0' or os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')=='0':return False
  if now.astimezone(nba_trial.EASTERN).date()<nba_trial.OPENING:return False
@@ -34,7 +35,8 @@ def review_ready(now,review=None):
  try:
   import hashlib
   expected=hashlib.sha256((ROOT/'design/final/nba-trial-preview.png').read_bytes()).hexdigest()
-  return (review.get('delivered') is True and not review.get('vetoed')
+  evidence_ready = nba_readiness.live_ready(now) if readiness is None else readiness
+  return (evidence_ready is True and review.get('delivered') is True and not review.get('vetoed')
           and review.get('pngSHA256')==expected
           and now-boxscores.instant(review['sentAt'])>=timedelta(hours=2))
  except (KeyError,ValueError,TypeError,OSError):return False
@@ -46,6 +48,24 @@ def total_chance(mean,sd,line,side):
  cutoff=line-.5 if line%1==0 and side=='under' else line+.5 if line%1==0 else line
  cdf=.5*(1+math.erf((cutoff-mean)/(sd*math.sqrt(2))))
  return cdf if side=='under' else 1-cdf
+
+
+def normal_chance(mean,sd,threshold,side='over'):
+ if not all(isinstance(n,(float,int)) and not isinstance(n,bool) and math.isfinite(n) for n in (mean,sd,threshold)) or sd<=0:
+  raise ValueError('No probability evidence')
+ cdf=.5*(1+math.erf((threshold-mean)/(sd*math.sqrt(2))))
+ return 1-cdf if side=='over' else cdf
+
+
+def price_pair(block,key):
+ """The selected and opposite side of one exact, two-sided ESPN market."""
+ first,second=block.get('home',{}).get(key),block.get('away',{}).get(key)
+ if first is None or second is None:return None
+ try:
+  first,second=__import__('espn_props').price(first),__import__('espn_props').price(second)
+  total=__import__('espn_props').implied(first)+__import__('espn_props').implied(second)
+  return (first,second) if .99<=total<=1.15 else None
+ except (TypeError,ValueError):return None
 
 
 def support(game,line,side,history,now):
@@ -63,11 +83,33 @@ def support(game,line,side,history,now):
  return []  # opposing history is never dressed up as support
 
 
+def side_support(game,which,line,chance,history,now,market):
+ team=game['teams'][which];mine=[]
+ for row in history:
+  if row['type']!=2 or boxscores.instant(row['kickoff'])>=now:continue
+  if str(team['id']) not in (row['home']['id'],row['away']['id']):continue
+  scored=row['homeScore'] if row['home']['id']==team['id'] else row['awayScore']
+  allowed=row['awayScore'] if row['home']['id']==team['id'] else row['homeScore']
+  mine.append(scored-allowed)
+ window=mine[-5:]
+ if len(window)<5:return []
+ if market=='moneyline':
+  hits=sum(value>0 for value in window)
+  if hits<3:return []
+  history_reason=f"{team['abbreviation']} won {hits} of its last five recorded regular-season games."
+ else:
+  # `line` is this team's signed spread; margin + line above zero covers.
+  hits=sum(value+line>0 for value in window)
+  if hits<3:return []
+  history_reason=f"{team['abbreviation']} covered this number in {hits} of its last five recorded regular-season games."
+ return [f"My score model gives {team['abbreviation']} a {100*chance:.1f}% chance here.",history_reason]
+
+
 def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=None,lead_minutes=60):
  try:
   slate=json.loads((root/'slate.json').read_text());inj=json.loads((root/'injuries-current.json').read_text())
  except (OSError,ValueError):return []
- if not 0<=(now-boxscores.instant(inj['retrievedAt'])).total_seconds()<=4*3600:return []
+ if not 0<=(now-boxscores.instant(inj['retrievedAt'])).total_seconds()<=60*60:return []
  holds={r['team'] for r in inj.get('rows',[]) if r.get('status')}
  quotes={}
  for p in (root/'quotes').glob('*.jsonl'):
@@ -82,23 +124,54 @@ def candidates(now,root=nba_capture.STORE,model_factory=paper.model_for,history=
       or any(t['id'] in holds for t in g['teams'].values())):continue
   if g['season'] not in models:models[g['season']]=model_factory('NBA',g['season'],now.timestamp())
   prediction=models[g['season']].predict(g['teams']['home']['id'],g['teams']['away']['id'])
-  for book in ('DraftKings','FanDuel'):
+  for book in ('DraftKings',):
    q=quotes.get((g['providerId'],book))
    if not q:continue
    try:
     total=q['current']['total'];line=total['line'];side='under' if prediction['total']<line else 'over'
     chance=total_chance(prediction['total'],prediction['sdTotal'],line,side)
-    if any(abs(total[k])>400 for k in ('over','under')):continue
+    if any(abs(total[k])>400 for k in ('over','under')):raise ValueError('extreme total price')
     reasons=support(g,line,side,history,now)
-    if len(reasons)!=2:continue
-    out.append({'id':f"NBA-trial-{now.astimezone(nba_trial.EASTERN):%Y-%m-%d}-{g['providerId']}",
+    if len(reasons)==2:out.append({'id':f"NBA-trial-{now.astimezone(nba_trial.EASTERN):%Y-%m-%d}-{g['providerId']}-total",
                 'eventId':g['id'],'league':'NBA','season':g['season'],'seasonType':2,'kickoff':g['kickoff'],
                 'marketType':'total','direction':side,'line':line,'odds':total[side],
                 'oppositeOdds':total['over' if side=='under' else 'under'],'book':book,
                 'retrievedAt':q['retrievedAt'],'source':q['source'],'rawChance':chance,
                 'riskUnits':1,'roleChecked':True,'sideVerified':True,'exactLineVerified':True,
                 'game':g,'reasons':reasons,'projection':round(prediction['total'],1),'model':'hoops-v1'})
-   except (KeyError,TypeError,ValueError):continue
+   except (KeyError,TypeError,ValueError):pass
+   try:
+    pair=price_pair(q['current'],'moneyline')
+    chance=prediction.get('homeWinProb')
+    if pair and isinstance(chance,(int,float)):
+     which='home' if chance>=.5 else 'away';raw=chance if which=='home' else 1-chance
+     odds,other=(pair[0],pair[1]) if which=='home' else (pair[1],pair[0])
+     reasons=side_support(g,which,0,raw,history,now,'moneyline')
+     if len(reasons)==2:
+      out.append({'id':f"NBA-trial-{now.astimezone(nba_trial.EASTERN):%Y-%m-%d}-{g['providerId']}-moneyline",
+                  'eventId':g['id'],'league':'NBA','season':g['season'],'seasonType':2,'kickoff':g['kickoff'],
+                  'marketType':'moneyline','direction':which,'line':0,'odds':odds,'oppositeOdds':other,'book':book,
+                  'retrievedAt':q['retrievedAt'],'source':q['source'],'rawChance':raw,'riskUnits':1,
+                  'roleChecked':True,'sideVerified':True,'exactLineVerified':True,'game':g,'reasons':reasons,
+                  'projection':round(prediction['margin'],1),'model':'hoops-v1'})
+   except (KeyError,TypeError,ValueError):pass
+   try:
+    pair=price_pair(q['current'],'spreadPrice')
+    home=q['current']['home'];away=q['current']['away']
+    if pair and home.get('spreadLine') is not None and away.get('spreadLine') is not None:
+     home_line=float(home['spreadLine']);home_chance=normal_chance(prediction['margin'],prediction['sdMargin'],-home_line)
+     which='home' if home_chance>=.5 else 'away';raw=home_chance if which=='home' else 1-home_chance
+     line=home_line if which=='home' else float(away['spreadLine'])
+     odds,other=(pair[0],pair[1]) if which=='home' else (pair[1],pair[0])
+     reasons=side_support(g,which,line,raw,history,now,'spread')
+     if len(reasons)==2:
+      out.append({'id':f"NBA-trial-{now.astimezone(nba_trial.EASTERN):%Y-%m-%d}-{g['providerId']}-spread",
+                  'eventId':g['id'],'league':'NBA','season':g['season'],'seasonType':2,'kickoff':g['kickoff'],
+                  'marketType':'spread','direction':which,'line':line,'odds':odds,'oppositeOdds':other,'book':book,
+                  'retrievedAt':q['retrievedAt'],'source':q['source'],'rawChance':raw,'riskUnits':1,
+                  'roleChecked':True,'sideVerified':True,'exactLineVerified':True,'game':g,'reasons':reasons,
+                  'projection':round(prediction['margin'],1),'model':'hoops-v1'})
+   except (KeyError,TypeError,ValueError):pass
  return sorted(out,key=lambda r:(-(r['rawChance']-__import__('espn_props').implied(r['odds'])),r['kickoff'],r['id']))
 
 
@@ -138,10 +211,18 @@ def grade(now,root=nba_trial.STORE,boxroot=None):
  for play in public_rows(root):
   final=finals.get(play['eventId'])
   if not final or final['seasonType']!=2 or boxscores.instant(final['kickoff'])!=boxscores.instant(play['kickoff']):continue
-  scores=[t.get('score') for t in final['teams'].values()]
+  teams=final['teams'];scores=[t.get('score') for t in teams.values()]
   if len(scores)!=2 or any(not isinstance(s,(int,float)) for s in scores):continue
-  actual=sum(scores);won=actual<play['line'] if play['direction']=='under' else actual>play['line']
-  result='push' if actual==play['line'] else 'win' if won else 'loss'
+  market=play.get('marketType','total')
+  if market=='total':
+   actual=sum(scores);won=actual<play['line'] if play['direction']=='under' else actual>play['line'];push=actual==play['line']
+  else:
+   chosen=str(play['game']['teams'][play['direction']]['id']);mine=teams.get(chosen)
+   other=next((team for key,team in teams.items() if str(key)!=chosen),None)
+   if not mine or not other:continue
+   actual=mine['score']-other['score'];settled=actual+(play['line'] if market=='spread' else 0)
+   won=settled>0;push=settled==0
+  result='push' if push else 'win' if won else 'loss'
   row={'type':'settle','id':play['id'],'season':play['season'],'seasonType':2,'league':'NBA',
        'actual':actual,'result':result,'source':final['source'],'settledAt':boxscores.stamp(now),'retrievedAt':boxscores.stamp(now)}
   # Ignore a new check time alone, but append real official-score corrections.
@@ -170,7 +251,15 @@ def social_plans(now,log_book,root=nba_trial.STORE,reserved=()):
   due=buffer_post.free_slot(max(target,now+timedelta(minutes=15)),busy)
   if due>=boxscores.instant(play['kickoff'])-timedelta(minutes=15):continue
   teams=play['game']['teams'];title=f"{teams['away']['abbreviation']} at {teams['home']['abbreviation']}"
-  text=f"🏀 NBA Trial: {title} {play['direction'].upper()} {play['line']:g} ({play['odds']:+d}, {play['book']})\nI have it at {play['projection']:g}.\n1. {play['reasons'][0]}\n❤️ if you're tailing\n#NBA"
+  if play.get('marketType')=='total': selection=f"{play['direction'].upper()} {play['line']:g}"
+  else:
+   team=play['game']['teams'][play['direction']]['abbreviation']
+   selection=f"{team} MONEYLINE" if play['marketType']=='moneyline' else f"{team} {play['line']:+g}"
+  if play.get('marketType')=='total': projection=f"My projected total is {play['projection']:g}."
+  else:
+   margin=play['projection'];favorite='home' if margin>=0 else 'away'
+   projection=f"My projected margin is {teams[favorite]['abbreviation']} by {abs(margin):g}."
+  text=f"🏀 NBA Trial: {title} {selection} ({play['odds']:+d}, {play['book']})\n{projection}\n1. {play['reasons'][0]}\n❤️ if you're tailing\n#NBA"
   if x_post.x_style(text):continue
   plans.append((play['id'],'nba-trial',text,due,play['id'].lower()))
  return plans
@@ -188,9 +277,17 @@ def render_due(now,folder,log=print,root=nba_trial.STORE):
    if play['id'] in referenced or not play.get('result') or now-boxscores.instant(play['publishedAt'])<=timedelta(days=8):
     raise ValueError('Referenced NBA Trial original card missing: '+play['id'])
    log('Old unreferenced NBA Trial card missing; preserved attachment, skipped site art: '+play['id']);continue
-  quote={'book':play['book'],'retrievedAt':play['retrievedAt'],'current':{'total':{'line':play['line'],'under':play['odds'] if play['direction']=='under' else play['oppositeOdds'],'over':play['odds'] if play['direction']=='over' else play['oppositeOdds']}}}
+  if play.get('marketType')=='total':
+   current={'total':{'line':play['line'],'under':play['odds'] if play['direction']=='under' else play['oppositeOdds'],'over':play['odds'] if play['direction']=='over' else play['oppositeOdds']}}
+  else:
+   other='away' if play['direction']=='home' else 'home';price_key='moneyline' if play['marketType']=='moneyline' else 'spreadPrice'
+   current={play['direction']:{price_key:play['odds']},other:{price_key:play['oppositeOdds']}}
+   if play['marketType']=='spread':
+    current[play['direction']]['spreadLine']=play['line'];current[other]['spreadLine']=-play['line']
+  quote={'book':play['book'],'retrievedAt':play['retrievedAt'],'current':current}
   # Same reviewed layout; actual play label and real supporting reason replace preview wording.
-  svg=nba_trial.preview_svg(play['game'],quote,preview=False,direction=play['direction'],reason=play['reasons'][0])
+  svg=nba_trial.preview_svg(play['game'],quote,preview=False,direction=play['direction'],reason=play['reasons'][0],
+                            market=play.get('marketType','total'),line=play['line'],odds=play['odds'])
   pick_card.render(svg,path)
 
 

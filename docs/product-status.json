@@ -322,9 +322,9 @@
       "title": "NBA-first ESPN capture foundation",
       "status": "observing",
       "owner": "agent",
-      "next": "Observe two real days of all four NBA capture slots after c2553e54; verify no late boards, side-label failures or metered calls. Manual probes do not count.",
-      "doneWhen": "Two days of four-slot captures with zero late boards/contradictions and zero metered other-sport calls.",
-      "evidence": "NBA capture/site release c2553e54, hosted 37999813050 success; 10 live 375/1440 checks passed. First real four-slot day remains to be observed. Exact-side parser, injury/quote ledgers and hosted scheduled-only NBA box writer are live."
+      "next": "Keep the four natural daily slots running until 14 complete clean days exist; manual probes and partial days do not count.",
+      "doneWhen": "Fourteen natural four-slot days have zero capture errors or late/order contradictions and use only free ESPN/DraftKings evidence.",
+      "evidence": "One complete clean natural day (Oct 10) is recorded. The staged readiness counter, free-source policy and no-NBA-prop-request guard are prepared in the Oct 11 NBA readiness release; remaining days are a real observation gate."
     },
     {
       "id": "P37",
@@ -340,9 +340,9 @@
       "title": "P2 NBA opening",
       "status": "observing",
       "owner": "agent",
-      "next": "NBA Today is live; observe scheduled refreshes and natural current-season charts/Prep List eligibility without relaxing history or role holds.",
-      "doneWhen": "Current-season history gates and all live route checks pass.",
-      "evidence": "c2553e54, hosted 37999813050: NBA Today has real opening scores/schedule, research projections, explicitly labeled last-season trends and a held Prep List. Live 375/1440 passed; current-season warmup stays a real time gate."
+      "next": "Keep NBA Today live through opening night and let current-season charts and Prep List rows appear only after their stored history and role gates clear.",
+      "doneWhen": "Opening-night scores, projections, last-season labels and staged readiness are live; current-season rows appear without relaxing their evidence gates.",
+      "evidence": "NBA Today is live from c2553e54. The Oct 11 readiness release adds the shared log/paper/live-trial stage and exact progress to NBA Today and the Lab; current-season warmup remains a real-time gate."
     },
     {
       "id": "P39",
@@ -628,9 +628,9 @@
       "title": "NBA Today and guarded opening-night Trial",
       "status": "observing",
       "owner": "agent",
-      "next": "Observe Oct9 21:00/23:30 and two real four-slot days Oct10\u201311; honor preview veto through20:46:51 ET. Trial stays opening/price/role/edge/cap gated. Retire daily monitor only after opening-night readiness verification.",
-      "doneWhen": "Before Oct 20, NBA Today has scores, projections, trends and Prep List at 375/1440. Trial has fresh two-sided prices, holds, \u22656-point raw edge and \u22650.56 chance until calibrated, a 1u/one-per-day cap, separate record and first-card review.",
-      "evidence": "NBA site/capture c2553e54, hosted37999813050; Trial runtime6b8bcbf9, hosted38003279615: verified live with10pages375/1440 andzeroissues. Python1276/Node232, clean export, bothrecordaudits andallgatespassed. Phonepreview18:46:51 ET; zeroNBAplaysposted."
+      "next": "Accumulate 14 clean capture days, then 50 privately graded candidates. The trial stays held until both natural evidence gates clear; after that it can post automatically under its existing one-per-day and loss-pause caps.",
+      "doneWhen": "The public stage counter is live; DraftKings moneyline, spread and total candidates use two-sided exact prices and a 60-minute injury report; no paid or NBA-prop request is made; trial admission requires 14 clean days and 50 paper grades.",
+      "evidence": "NBA site/capture c2553e54 and Trial runtime6b8bcbf9 are live; first-card review/veto passed with zero plays posted. Oct 11 readiness release adds the missing stage gates, DraftKings sides/totals, 60-minute injury freshness and free-feed-only policy. Natural progress is currently 1/14 days and 0/50 grades."
     },
     {
       "id": "P71",
@@ -1031,11 +1031,11 @@
     {
       "id": "KA-R2",
       "title": "Kook'n Autopilot two-way learning and Tuesday owner note",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Release the bounded two-week-confirmed learner and Tuesday 10:30 owner note, install the reviewed launchd schedule, then verify the first natural Tuesday evidence packet.",
+      "next": "Observe the first natural Tuesday 10:30 packet and preserve its evidence/undo keys; do not backfill a learning move.",
       "doneWhen": "Clean deduplicated evidence moves bounded trust, gaps, pauses, promotions and reason weights only after two matching Tuesdays; each move has evidence and an undo key; the ten-line note and kill switch are verified.",
-      "evidence": "KOOKN-AUTOPILOT.md sections 10 and 14 item12. Code and targeted tests prepared on dev; live release evidence pending."
+      "evidence": "Release c4c9882e, hosted 38169632121: Python1335(2 skipped), Node236, clean export, all gates/rehearsal and 14 live 375/1440 routes passed. Tuesday 10:30 launchd task is loaded; each move is fenced, two-week-confirmed, undoable and disabled by KEENROUDY_TWO_WAY_LEARNING=0."
     }
   ]
 }

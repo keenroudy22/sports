@@ -62,6 +62,12 @@ class NBAEvidenceTests(unittest.TestCase):
   import market_lab
   self.assertEqual(market_lab.LEAGUES,('MLB','NHL'))
 
+ def test_nba_capture_is_free_draftkings_market_only_without_prop_requests(self):
+  source=Path(nba_capture.__file__).read_text()
+  self.assertIn("for book in ('DraftKings',):",source)
+  self.assertIn("'reason': 'NBA free feed has no player props'",source)
+  self.assertNotIn("for book in ('DraftKings','FanDuel')",source)
+
 class NBAPrepRoleTests(unittest.TestCase):
  def test_current_team_and_extreme_main_price_holds(self):
   with tempfile.TemporaryDirectory() as folder:
