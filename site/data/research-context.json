@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-11T20:05:44Z",
+  "updatedAt": "2026-10-11T20:17:41Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-11T19:45Z",
+              "reportedAt": "2026-10-11T20:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2779,9 +2779,9 @@
               "id": "4035538",
               "name": "David Montgomery",
               "position": "RB",
-              "status": "Out",
+              "status": "Questionable",
               "injury": "Groin",
-              "reportedAt": "2026-10-11T18:06Z",
+              "reportedAt": "2026-10-11T18:45Z",
               "source": "https://www.espn.com/nfl/player/_/id/4035538/david-montgomery"
             },
             {
@@ -4619,7 +4619,7 @@
               "id": "4036133",
               "name": "T.J. Hockenson",
               "position": "TE",
-              "status": "Out",
+              "status": "Questionable",
               "injury": "Concussion",
               "reportedAt": "2026-10-11T17:42Z",
               "source": "https://www.espn.com/nfl/player/_/id/4036133/tj-hockenson"
@@ -4903,8 +4903,8 @@
               "id": "3915525",
               "name": "Dre'Mont Jones",
               "position": "DE",
-              "status": "Active",
-              "injury": null,
+              "status": "Questionable",
+              "injury": "Shoulder",
               "reportedAt": "2026-10-11T16:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/3915525/dremont-jones"
             },
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-11T20:00Z",
+              "reportedAt": "2026-10-11T20:04Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7366,38 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "16",
-          "name": "T.J. Hockenson",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-11T17:38:45Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4036133/tj-hockenson"
-        },
-        {
-          "teamId": "10",
-          "name": "Kevin Winston Jr.",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-11T17:38:45Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4685617/kevin-winston-jr"
-        },
-        {
-          "teamId": "5",
-          "name": "KC Concepcion",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-10-11T17:45:31Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4870653/kc-concepcion"
-        },
-        {
-          "teamId": "9",
-          "name": "Skyy Moore",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-11T18:03:56Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4430191/skyy-moore"
-        },
-        {
           "teamId": "15",
           "name": "Jordyn Brooks",
           "from": "Active",
@@ -7764,11 +7732,43 @@
           "to": "Questionable",
           "observedAt": "2026-10-11T20:05:44Z",
           "source": "https://www.espn.com/nfl/player/_/id/4601080/raheim-sanders"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-11T20:17:41Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "34",
+          "name": "David Montgomery",
+          "from": "Out",
+          "to": "Questionable",
+          "observedAt": "2026-10-11T20:17:41Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4035538/david-montgomery"
+        },
+        {
+          "teamId": "16",
+          "name": "T.J. Hockenson",
+          "from": "Out",
+          "to": "Questionable",
+          "observedAt": "2026-10-11T20:17:41Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4036133/tj-hockenson"
+        },
+        {
+          "teamId": "17",
+          "name": "Dre'Mont Jones",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-11T20:17:41Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3915525/dremont-jones"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-11T20:05:44Z",
-      "lastAttemptAt": "2026-10-11T20:05:44Z",
+      "checkedAt": "2026-10-11T20:17:41Z",
+      "lastAttemptAt": "2026-10-11T20:17:41Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-11T20:05:44Z",
-      "lastAttemptAt": "2026-10-11T20:05:44Z",
+      "checkedAt": "2026-10-11T20:17:41Z",
+      "lastAttemptAt": "2026-10-11T20:17:41Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
