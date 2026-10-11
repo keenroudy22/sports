@@ -93,11 +93,6 @@ this file remains the authority when a summary and rule disagree.
   in git-ignored `work/`. Never commit the images or post them to X, Plays & Results or the public record. If
   the wins webhook is unset, hold the files and alert the owner once. Add replay and routing tests before enabling.
 - **Deploy only while holding the run lock** `~/.config/keenroudy/run.lock` (below), never mid-run.
-- **Quiet deploy windows (2026-10-07, owner-delegated to Claude):** Routine site/code releases occur only
-  8:35–9:45 AM or 12:15–1:15 PM Eastern, under the lock and full gates. The separately approved
-  11:45 PM card cutover (felt bridge or Kitchen Ticket) may carry the owner-requested October 7
-  prerequisite systems fixes in order, but only after a green 11:30 PM desk run and separate full
-  verification of each release. Otherwise wait for the next safe window.
 - **Do not change how the record counts** without telling the owner the before and after numbers.
 - **Keep the operating stack free.** Do not add a paid service, increase a metered request budget or buy reach
   without the owner's approval. Build the audience with free plays first; a paid tier and compliant bonus links are
@@ -527,12 +522,10 @@ Handy commands (from `~/Projects/sports`):
   Cooked the record-equivalent won units, and Final each settled row and slate net units. Captions keep their
   existing unit rule. Claude reviews real renders before `TICKET_FROM` is set with an explicit Eastern offset;
   posted art remains unchanged.
-- **Kitchen Ticket release timing (owner-delegated to Claude, 2026-10-08, item 32):** the reviewed switch may
-  release in the 8:35–9:45 AM or 12:15–1:15 PM Eastern window once the last desk run before deploy is green,
-  W-4 routing/tests and every release gate pass, and Claude reviews the six real repo-builder renders (straight,
-  Hot Plate, fun ticket, Climb rung, Final, Prep List). Set `TICKET_FROM` to an explicit Eastern instant at least
-  30 minutes after deploy completion; never re-render an already posted attachment. A failed gate or missing
-  render review leaves `TICKET_FROM` unset and the current cards live.
+- **Kitchen Ticket release receipt (owner-delegated to Claude, 2026-10-08, historical item 32):** W-4 routing,
+  every release gate and the six real repo-builder renders (straight, Hot Plate, fun ticket, Climb rung, Final,
+  Prep List) were the switch prerequisites. Posted attachments remain immutable. This historical cutover note is
+  not a release-window rule; current releases follow the October 11 Autopilot authority above.
 - **Results-led direction (owner-delegated to Claude, 2026-10-07):** `DIRECTION-RULES.md` is standing approval
   for its bounded, evidence-triggered tightenings, pauses, existing-category reweighting and restorations in
   `learn.weekly` and the Monday task. Log trigger numbers and undo conditions; report each move in the weekly
