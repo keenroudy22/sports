@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "selectedAt": "2026-10-11T21:30:05Z",
+  "selectedAt": "2026-10-11T23:12:00Z",
   "mode": "local",
   "rows": [
     {
@@ -20,7 +20,7 @@
       "rate": 1.0,
       "sample": 10,
       "price": -178,
-      "id": "E2"
+      "id": "E4"
     },
     {
       "gameId": "NFL-401872993",
@@ -28,32 +28,28 @@
       "kickoff": "2026-10-12T00:20:00Z",
       "matchup": "BAL at ATL",
       "href": "#game/NFL-401872993",
-      "kind": "trend",
-      "label": "Season trend",
+      "kind": "usage",
+      "label": "Red-zone work",
       "player": "Derrick Henry",
-      "stat": "recYds",
-      "title": "Derrick Henry \u00b7 Over 4.5 receiving yards",
-      "text": "8/10 recorded games this season. FanDuel -113 captured; history, not a prediction.",
-      "observedAt": "2026-10-11T21:22:51Z",
+      "title": "Derrick Henry",
+      "text": "23 red-zone carries + targets; 17 inside the 10 across 4 observed team games this season. Not a TD prediction.",
+      "observedAt": "2026-10-11T23:08:25Z",
       "expiresAt": "2026-10-12T00:20:00Z",
-      "rate": 0.8,
-      "sample": 10,
-      "price": -113,
-      "id": "E0"
+      "id": "E2"
     },
     {
-      "gameId": "NBA-401898401",
+      "gameId": "NBA-401908941",
       "league": "NBA",
       "kind": "schedule",
       "label": "Next up",
-      "kickoff": "2026-10-11T22:30:00Z",
-      "matchup": "ORL at CLE",
-      "title": "ORL at CLE",
-      "text": "Sun 6:30 PM ET \u00b7 Scores and schedule.",
-      "observedAt": "2026-10-11T21:21:54Z",
-      "expiresAt": "2026-10-11T22:30:00Z",
+      "kickoff": "2026-10-12T01:00:00Z",
+      "matchup": "CHI at DEN",
+      "title": "CHI at DEN",
+      "text": "Sun 9:00 PM ET \u00b7 Scores and schedule.",
+      "observedAt": "2026-10-11T23:08:13Z",
+      "expiresAt": "2026-10-12T01:00:00Z",
       "href": "#scores/NBA",
-      "id": "E4"
+      "id": "E8"
     }
   ]
 }
