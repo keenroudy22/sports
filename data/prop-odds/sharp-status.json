@@ -1,10 +1,8 @@
 {
- "at": "2026-10-11T20:18:30Z",
+ "at": "2026-10-11T20:31:19Z",
  "confirmed": {
-  "NFL-401872991": "2026-10-11T20:06:32Z",
-  "NFL-401872992": "2026-10-11T20:06:32Z",
-  "NFL-401872993": "2026-10-11T20:18:30Z",
-  "NFL-401872994": "2026-10-11T20:18:30Z"
+  "NFL-401872993": "2026-10-11T20:31:19Z",
+  "NFL-401872994": "2026-10-11T20:31:19Z"
  },
  "leagues": {
   "NFL": {
@@ -12,9 +10,9 @@
     "draftkings": 668,
     "fanduel": 657
    },
-   "eventsListed": 3,
+   "eventsListed": 4,
    "eventsMatched": 2,
-   "games": 4,
+   "games": 2,
    "marketTypes": {
     "player_assists": 34,
     "player_extra_points_made": 8,
@@ -42,8 +40,6 @@
    "requestsLeft": 6,
    "rows": 1325,
    "slateGames": [
-    "Detroit Lions at Arizona Cardinals 2026-10-11T20:25Z",
-    "San Francisco 49ers at Seattle Seahawks 2026-10-11T20:25Z",
     "Baltimore Ravens at Atlanta Falcons 2026-10-12T00:20Z",
     "Buffalo Bills at Los Angeles Rams 2026-10-13T00:15Z"
    ],
@@ -63,6 +59,78 @@
      },
      "start": null,
      "type": "outright"
+    },
+    {
+     "away": "Houston Texans",
+     "external": {
+      "ballybet": "1028813037",
+      "betfair": "20261011771379DF",
+      "betfair_lay": "20261011771379DF",
+      "betmgm": "6:43585",
+      "betonline": "1655865",
+      "betparx": "1028813037",
+      "betrivers": "1028813037",
+      "betway": "17312977",
+      "bovada": "27950170",
+      "bwin": "6:43585",
+      "caesars": "a3b5d8b9-ef74-2efa-8d52-f0fd13416ef5",
+      "circa": "218520",
+      "draftkings": "34118229",
+      "fanatics": "5502634",
+      "fanatics_markets": "6541346",
+      "fanduel": "36132644",
+      "fliff": "399977_c_p_302_inplay",
+      "gemini": "NFL-2610111700-HOU-TEN-PPYDS",
+      "goldrush": "31065445",
+      "hardrock": "3716010040918933929",
+      "kalshi": "KXNFL4QSPREAD-26OCT11HOUTEN",
+      "matchbook": "mb-33321694127700023",
+      "novig": "01a0ef14-21dd-70b1-bfbd-e8f1957b95de",
+      "paddypower": "36132644",
+      "pinnacle": "1637786157",
+      "polymarket": "nfl_texans_titans_2026-10-11_b2",
+      "polymarket_us": "nfl-hou-ten-2026-10-11",
+      "prophetx": "1700008895",
+      "rebet": "sr:match:71515884",
+      "sbobet": "10672396",
+      "smarkets": "45210973",
+      "sportzino": "sz-16551870",
+      "stake": "1552de63-5091-45ab-ace5-c9ba0e12c11d",
+      "sx_bet": "L19431496",
+      "thescorebet": "StandardEvent:7082fd77-c4af-4e43-9db2-360ad66132dc"
+     },
+     "home": "Tennessee Titans",
+     "sample": {
+      "away_team": "Houston Texans",
+      "home_team": "Tennessee Titans",
+      "markets": [
+       "1st_half_moneyline_3-way",
+       "1st_half_point_spread",
+       "1st_half_total_points",
+       "1st_quarter_moneyline_3-way",
+       "1st_quarter_point_spread",
+       "1st_quarter_total_points",
+       "correct_score",
+       "first_touchdown_scorer",
+       "game_prop",
+       "outright",
+       "player_passing_touchdowns",
+       "player_passing_yards",
+       "player_receiving_yards",
+       "player_receptions",
+       "player_rushing_yards",
+       "player_touchdowns",
+       "point_spread",
+       "race_to_10_points",
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime",
+       "winning_margin"
+      ]
+     },
+     "start": "2026-10-11T17:00:00Z",
+     "type": "fixture"
     }
    ]
   }
