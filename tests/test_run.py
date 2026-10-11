@@ -1162,6 +1162,24 @@ class DiscordMirrorTests(unittest.TestCase):
         self.assertTrue(run.mirror_due({'posts': [post(cancelledAt=run.stamp(now), discord={
             'state': 'sent', 'followup': {'state': 'pending', 'text': 'pulled'}})]}, now))
 
+    def test_a_live_final_wakes_a_no_spend_official_settlement_run(self):
+        now = datetime(2026, 10, 11, 2, 45, tzinfo=timezone.utc)
+        watcher = SimpleNamespace(
+            run_shadow=mock.Mock(return_value={'pendingFinals': ['CFB-play']}),
+            mark_official_attempt=mock.Mock())
+        progress = SimpleNamespace(run=mock.Mock())
+        args = SimpleNamespace(now=run.stamp(now), dry_run=False, no_push=False, no_llm=False,
+                               publish_kinds=None, record_screens=True, slot=None, command='mirror')
+        with mock.patch.dict(sys.modules, {'live_watch': watcher, 'live_progress': progress}), \
+                mock.patch.dict(os.environ, {'KEENROUDY_LIVE_SHADOW': '1', 'BUFFER_TOKEN': ''}, clear=False), \
+                mock.patch.object(run, 'run', return_value=0) as official:
+            self.assertEqual(run.mirror(args), 0)
+        watcher.mark_official_attempt.assert_called_once_with(now)
+        settlement = official.call_args.args[0]
+        self.assertEqual((settlement.publish_kinds, settlement.no_llm, settlement.record_screens),
+                         ('settle', True, False))
+        self.assertEqual(settlement.slot, '2245')
+
 
 if __name__ == '__main__':
     unittest.main()

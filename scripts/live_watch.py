@@ -22,6 +22,7 @@ CADENCE = timedelta(minutes=4)
 WINDOW_AFTER = timedelta(hours=7)
 MAX_GAMES = 8
 MAX_EVENTS = 500
+OFFICIAL_RETRY = timedelta(minutes=15)
 
 
 def read(path):
@@ -38,6 +39,38 @@ def write(path, value):
     temp = path.with_suffix(path.suffix + '.tmp')
     temp.write_text(json.dumps(value, indent=1, sort_keys=True) + '\n', encoding='utf-8')
     temp.replace(path)
+
+
+def final_records(path=DEFAULT_STATE):
+    """Fresh final summaries observed by the live watcher, for settlement-only runs.
+
+    ESPN's day scoreboard can lag its game summary.  The summary is already the
+    live watcher's source, so keep that verified final available to the official
+    grader instead of making the owner wait for the next full desk run.
+    """
+    state = read(path)
+    records = state.get('gameRecords') if isinstance(state.get('gameRecords'), dict) else {}
+    return [row for row in records.values() if isinstance(row, dict) and row.get('completed')]
+
+
+def overlay_finals(games, records):
+    """Overlay only completion and scores; never alter a stored line or pick."""
+    for record in records:
+        key = f"{record.get('league')}-{record.get('eventId')}"
+        game = games.get(key)
+        if not game or not record.get('completed'):
+            continue
+        for side in ('away', 'home'):
+            if isinstance(record.get(side), dict):
+                game[side] = dict(game.get(side) or {}, score=record[side].get('score'))
+        game.update(completed=True, state='post', status=record.get('status') or 'Final')
+    return games
+
+
+def mark_official_attempt(now, path=DEFAULT_STATE):
+    state = read(path)
+    state['officialAttemptAt'] = boxscores.stamp(now)
+    write(path, state)
 
 
 def public_ids(log_book):
@@ -200,15 +233,22 @@ def run_shadow(ctx=None, games=None, log_book=None, now=None, state_path=DEFAULT
         if final.get('result') in ('win','loss','push','void'):
             reconciled[key]={'result':final['result'],'settledAt':final.get('settledAt'),
                              'source':'append-only published settlement'}
+    pending = sorted({row.get('pickId') for row in current_state.values()
+                      if str(row.get('state') or '').startswith('final-')
+                      and not (ctx.latest.get(row.get('pickId')) or {}).get('result')})
+    attempted = gates.when(state['officialAttemptAt']) if state.get('officialAttemptAt') else None
+    due = bool(pending) and (not attempted or now - attempted >= OFFICIAL_RETRY)
     state.update({'mode': 'shadow', 'lastPollAt': boxscores.stamp(now), 'gamesPolled': len(records),
                   'health':{'requested':len(wanted),'successful':len(records),'unavailable':len(wanted)-len(records)},
                   'settlements':reconciled,
-                  'picks': current_state, 'events': ((state.get('events') or []) + emitted)[-MAX_EVENTS:]})
+                  'picks': current_state, 'gameRecords': records,
+                  'events': ((state.get('events') or []) + emitted)[-MAX_EVENTS:]})
     if persist:
         write(state_path, state)
     for row in emitted:
         log(f"live shadow: {row['pickId']} {row['kind']} ({row['gameStatus'] or 'live'})")
-    return {'polled': len(records), 'events': emitted, 'tracked': len(current_state)}
+    return {'polled': len(records), 'events': emitted, 'tracked': len(current_state),
+            'pendingFinals': pending if due else []}
 
 
 if __name__ == '__main__':

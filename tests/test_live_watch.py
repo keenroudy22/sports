@@ -70,6 +70,23 @@ class LiveWatchTests(unittest.TestCase):
             L.run_shadow(self.ctx,self.games,self.log,NOW+timedelta(hours=4),state,fetch=lambda _:summary(),log=lambda *_:None)
             self.assertEqual(json.loads(state.read_text())['settlements']['p']['result'],'win')
 
+    def test_a_verified_final_is_handed_to_the_official_grader(self):
+        with tempfile.TemporaryDirectory() as folder:
+            state = Path(folder) / 'state.json'
+            result = L.run_shadow(self.ctx, self.games, self.log, NOW, state,
+                                  fetch=lambda _: summary(55, completed=True), log=lambda *_: None)
+            self.assertEqual(result['pendingFinals'], ['p'])
+            records = L.final_records(state)
+            self.assertTrue(records[0]['completed'])
+            games = {'NFL-1': {'id': 'NFL-1', 'league': 'NFL', 'away': {}, 'home': {}}}
+            L.overlay_finals(games, records)
+            self.assertEqual((games['NFL-1']['completed'], games['NFL-1']['away']['score'],
+                              games['NFL-1']['home']['score']), (True, 10, 14))
+            L.mark_official_attempt(NOW, state)
+            quiet = L.run_shadow(self.ctx, self.games, self.log, NOW + timedelta(minutes=5), state,
+                                 fetch=lambda _: summary(55, completed=True), log=lambda *_: None)
+            self.assertEqual(quiet['pendingFinals'], [])
+
 
 if __name__ == '__main__':
     unittest.main()

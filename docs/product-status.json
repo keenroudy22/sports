@@ -973,6 +973,15 @@
       "next": "Finish the targeted and full gates, deploy under the run lock, and verify Sunday's fresh-price scan considers one- and two-leg moneyline or alternate rungs before the morning post window.",
       "doneWhen": "The live desk considers fresh exact two-sided moneylines and reviewed alternates at a final -300 to -200, preserves every research and safety hold, and the first natural Sunday decision is recorded without forcing a rung.",
       "evidence": "Owner instruction 2026-10-10 after Saturday's slate; Saturday replay fixture covers a two-moneyline rung the old prop-only builder could not see."
+    },
+    {
+      "id": "A-20261010-4",
+      "title": "Grade public plays automatically when their games go final",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Finish every release gate, deploy under the run lock, and observe a natural final flow from the five-minute watcher through the official append-only settlement and result queue.",
+      "doneWhen": "A verified final wakes a no-odds-spend settlement-only run within 15 minutes; the official record, site and approved result queue update without an owner prompt; feed or lock failures retry safely.",
+      "evidence": "Owner instruction 2026-10-10. Nevada-UTEP was observed final-loss by the five-minute watcher at 22:43 ET while the 23:30 full run still reported zero settlements, proving the watcher-to-grader handoff was missing."
     }
   ]
 }

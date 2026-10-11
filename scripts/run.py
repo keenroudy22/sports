@@ -1925,10 +1925,11 @@ def run(args):
 
 def _run(args, now, slot, kinds, status):
     log(f"run for the {slot.strftime('%-I:%M %p')} ET slot at {et(now)}" + (' (dry run)' if args.dry_run else ''))
+    settle_only = kinds == {'settle'}
     if not args.dry_run:
         sync()
         status['checks'].append('synced')
-        captures = capture()
+        captures = ['settlement scan: no odds or prop requests'] if settle_only else capture()
     else:
         captures = ['dry run: no capture']
     for note in captures:
@@ -1951,7 +1952,7 @@ def _run(args, now, slot, kinds, status):
         except discord_post.DiscordError as error:  # an optional alert can never stop the desk
             log(f'arb radar Discord alert not sent: {error}')
     slate = load_json(ROOT / 'site' / 'data' / 'slate.json', {'games': []})
-    if not args.dry_run:
+    if not args.dry_run and not settle_only:
         try:
             shadow = sgo_shadow.sample(slate, now)
             status['sgoShadow'] = shadow
@@ -1966,6 +1967,14 @@ def _run(args, now, slot, kinds, status):
     slate_games = {g['id']: g for g in slate.get('games', []) if g.get('league') in ('NFL', 'CFB')}
     games = live_games(now, slate_games)
     records = features.load()
+    if settle_only:
+        # The per-game summary often reports Final before ESPN's day scoreboard.
+        # Reuse the five-minute watcher's verified summary so grading is prompt.
+        import live_watch
+        watched = live_watch.final_records()
+        live_watch.overlay_finals(games, watched)
+        known = {(str(row.get('league')), str(row.get('eventId'))) for row in records}
+        records += [row for row in watched if (str(row.get('league')), str(row.get('eventId'))) not in known]
     stores = gates.Stores(records=records)
     ctx = stores.as_of(now)
     ctx.games = games
@@ -2486,10 +2495,11 @@ def mirror(args):
     import discord_post
     import x_post
     now = gates.when(args.now) if args.now else datetime.now(timezone.utc)
+    shadow_result = {}
     if os.environ.get('KEENROUDY_LIVE_SHADOW', '1').strip() != '0':
         try:
             import live_watch
-            live_watch.run_shadow(now=now, persist=not args.dry_run, log=log)
+            shadow_result = live_watch.run_shadow(now=now, persist=not args.dry_run, log=log)
             if not args.dry_run:
                 import live_progress
                 live_progress.run(now=now, log=log,
@@ -2497,6 +2507,23 @@ def mirror(args):
         except Exception as error:
             # Shadow evidence can never interrupt official delivery.
             log(f'live shadow unavailable ({type(error).__name__})')
+    pending_finals = shadow_result.get('pendingFinals') or []
+    if pending_finals and not args.dry_run:
+        # A verified final should not wait for a scheduled full desk run.  The
+        # settlement-only path spends no odds credits and admits no new plays.
+        import copy
+        import live_watch
+        live_watch.mark_official_attempt(now)
+        settlement_args = copy.copy(args)
+        settlement_args.command = 'run'
+        settlement_args.slot = now.astimezone(EASTERN).strftime('%H%M')
+        settlement_args.no_llm = True
+        settlement_args.publish_kinds = 'settle'
+        settlement_args.record_screens = False
+        log('official settlement scan:', ', '.join(pending_finals))
+        result = run(settlement_args)
+        if result:
+            return result
     if not os.environ.get('BUFFER_TOKEN', '').strip() or not (discord_post.webhook() or discord_post.wins_webhook()):
         return 0
     if not mirror_due(x_post.load_log(), now):
