@@ -35,6 +35,16 @@ class DeskHealthTests(unittest.TestCase):
             self.assertNotIn('odds-pace', {r['code'] for r in data['issues']}, 'elapsed-month extrapolation exaggerates a capped plan')
             self.assertLessEqual(data['oddsBudget']['projectedMonth'], 476)
             self.assertTrue(H.markdown(data).startswith('Official plays not scheduled: 2'))
+
+    def test_chosen_without_a_delivery_receipt_is_an_outcome_failure(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            self.fixture(root)
+            self.write(root, 'private/status.json', {'outcome': 'ok', 'finishedAt': NOW.isoformat(),
+                       'x': {'chosenNotPosted': 1}})
+            data = H.summary(root, root / 'private', root, NOW)
+            self.assertEqual(data['chosenNotPosted'], 1)
+            self.assertIn('chosen-not-posted', {row['code'] for row in data['issues']})
     def write(self, root, name, value):
         path = root / name
         path.parent.mkdir(parents=True, exist_ok=True)

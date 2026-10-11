@@ -34,6 +34,7 @@ class WindowTests(unittest.TestCase):
 
     def test_unreachable_window_is_refused_at_admission_and_named_in_the_plan(self):
         p=pick('intl','NFL-intl',league='NFL')
+        p.pop('publishedAt')  # a new candidate is not eligible for late-card recovery
         late=datetime(2026,10,11,12,44,tzinfo=timezone.utc)
         ctx=SimpleNamespace(now=late,games={'NFL-intl':GAME},first={},latest={})
         self.assertFalse(gates.x_window(p,ctx).ok)
@@ -56,6 +57,20 @@ class WindowTests(unittest.TestCase):
         with mock.patch.object(bp.receipts,'house_posts',return_value=[]):
             self.assertEqual(bp.plan({'intl':p},{},ctx.games,late,{'posts':[]},refused=refused),[])
         self.assertIn(('intl',['has no X window']),refused)
+
+    def test_a_chosen_play_whose_card_was_late_reenters_the_next_free_slot(self):
+        game = dict(GAME, id='NFL-one', kickoff='2026-10-11T17:00:00Z')
+        p = pick('late-card', 'NFL-one', league='NFL')
+        now = datetime(2026, 10, 11, 16, 0, 51, tzinfo=timezone.utc)
+        refused = []
+        with mock.patch.object(bp.receipts, 'house_posts', return_value=[]):
+            plans = bp.plan({p['id']: p}, {}, {game['id']: game}, now, {'posts': []}, refused=refused)
+        self.assertEqual(len(plans), 1)
+        self.assertEqual(plans[0][3], datetime(2026, 10, 11, 16, 11, tzinfo=timezone.utc))
+        self.assertEqual(refused, [])
+        self.assertEqual(bp.chosen_not_posted({p['id']: p}, {}, {game['id']: game}, {'posts': []}, now), [p['id']])
+        logged = {'posts': [{'id': p['id'], 'bufferPostId': 'queued'}]}
+        self.assertEqual(bp.chosen_not_posted({p['id']: p}, {}, {game['id']: game}, logged, now), [])
 
     def test_third_international_play_cannot_enter_a_two_slot_window(self):
         p=pick('third','NFL-intl',league='NFL')

@@ -9,6 +9,8 @@ SPACING = timedelta(minutes=20)
 SOON = timedelta(minutes=2)
 DISCORD_PLAY_LEAD = timedelta(minutes=15)
 DISCORD_DELIVERY_CADENCE = timedelta(minutes=5)
+LATE_CARD_X_DELAY = timedelta(minutes=10)
+LATE_CARD_LEAD = timedelta(minutes=15)
 
 
 def instant(value):
@@ -41,6 +43,20 @@ def delivery_ready(now):
     earliest = instant(now).astimezone(timezone.utc) + DISCORD_PLAY_LEAD + DISCORD_DELIVERY_CADENCE + SOON
     tick = int(SPACING.total_seconds())
     return datetime.fromtimestamp(((int(earliest.timestamp()) + tick - 1) // tick) * tick, tz=timezone.utc)
+
+
+def late_card_due(now):
+    """Recovery slot for an already chosen play whose required card became live late.
+
+    Discord is released immediately by the normal mirror and X follows roughly ten
+    minutes later. This is not an admission window for a new play.
+    """
+    value = instant(now).astimezone(timezone.utc) + LATE_CARD_X_DELAY
+    return value.replace(second=0, microsecond=0) + (timedelta(minutes=1) if value.second or value.microsecond else timedelta())
+
+
+def late_card_reachable(kickoff, now):
+    return late_card_due(now) <= instant(kickoff) - LATE_CARD_LEAD
 
 
 def reachable(league, kickoff, now, occupied=0):

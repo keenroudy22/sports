@@ -2546,6 +2546,9 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         buffer_post.schedule(plans, channel['id'], log_book, now, log=log, stats=schedule_stats, items=theme_items)
         status['x']['posted'] = len(log_book.get('posts', [])) - before
         status['x']['officialUnscheduled'] = schedule_stats.get('officialNotScheduled', 0) + len({key for key, problems in refused if 'has no X window' in problems})
+        missing = buffer_post.chosen_not_posted(ctx.first, ctx.latest, games, log_book, now)
+        status['x']['chosenNotPosted'] = len(missing)
+        status['x']['chosenNotPostedIds'] = missing
         scheduled = {entry['id'] for entry in log_book.get('posts', [])[before:]}
         for title, message in ladder_schedule_pings([p for p in plans if p[0] in scheduled], ctx, games):
             alert(title, message, click='https://keenroudy.com/sports/#ladder')

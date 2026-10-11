@@ -299,6 +299,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     potd = featured_store.of_day(today.isoformat())     # the day's Pick of the Day: first, its own card
     opens = window_open(today)
     plays = []
+    late_card_recoveries = set()
     for key, pick in first.items():
         merged = dict(pick, **latest.get(key, {}))
         if key in posted or pick.get('historicalImport') or not feed.postable(merged):
@@ -311,7 +312,11 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
         game = games.get((merged.get('gameIds') or [None])[0])
         kickoff = gates.when(starts[0])
         league = merged.get('league') or (game or {}).get('league')
-        if not post_windows.reachable(league, kickoff, now):
+        normal_reachable = post_windows.reachable(league, kickoff, now)
+        late_card_recovery = (not normal_reachable and not merged.get('replacementOf')
+                              and bool(merged.get('publishedAt')) and now >= post_windows.target(league, kickoff)
+                              and post_windows.late_card_reachable(kickoff, now))
+        if not normal_reachable and not late_card_recovery:
             if refused is not None:
                 refused.append((key, ['replacement has no last-look window'] if merged.get('replacementOf')
                                      else ['has no X window']))
@@ -326,6 +331,13 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
             continue
         target = post_windows.target(league, kickoff)
         deadline = kickoff - feed.LEAD
+        if late_card_recovery:
+            # The play was already selected; only its required art missed the
+            # ordinary window. Re-enter it until a real 10-minute Discord-first
+            # recovery slot remains, rather than silently losing the play.
+            target = post_windows.late_card_due(now) - post_windows.jitter(key)
+            deadline = kickoff - post_windows.LATE_CARD_LEAD
+            late_card_recoveries.add(key)
         if merged.get('replacementOf'):
             # A replacement needs a fresh last look; never rush it out shortly
             # before kickoff just because its normal publication slot passed.
@@ -377,7 +389,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
         target += post_windows.jitter(key)
         due = max(target, now + soon)
         if kind == 'play':
-            due = max(due, discord_first_due(now))
+            due = max(due, post_windows.late_card_due(now) if key in late_card_recoveries else discord_first_due(now))
         if last is not None:
             due = max(due, last + SPACING)
         due = free_slot(due, busy)
@@ -394,6 +406,23 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
         counts[day] += 1
         last = due
     return out
+
+
+def chosen_not_posted(first, latest, games, log_book, now):
+    """IDs selected for today's slate that still have no delivery-log row."""
+    posted = {part for row in log_book.get('posts', []) for part in str(row.get('id') or '').split('+')}
+    today = eastern_date(now)
+    missing = []
+    for key, original in first.items():
+        pick = dict(original, **latest.get(key, {}))
+        starts = [gates.when(games[gid]['kickoff']) for gid in pick.get('gameIds') or [] if gid in games]
+        if (key in posted or not pick.get('publishedAt') or not starts or eastern_date(min(starts)) != today
+                or min(starts) <= now or pick.get('result') or pick.get('entryNote')
+                or (pick.get('status') or 'active') != 'active'):
+            continue
+        if feed.postable(pick):
+            missing.append(key)
+    return sorted(missing)
 
 
 def pending_scheduled(log_book, now):

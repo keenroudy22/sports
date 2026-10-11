@@ -475,6 +475,9 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     official_unscheduled = int((state.get('x') or {}).get('officialUnscheduled') or 0)
     if official_unscheduled:
         issue('official-unscheduled', f'{official_unscheduled} official plays were not scheduled in the last run.')
+    chosen_not_posted = int((state.get('x') or {}).get('chosenNotPosted') or 0)
+    if chosen_not_posted:
+        issue('chosen-not-posted', f'{chosen_not_posted} chosen plays have no scheduled delivery receipt.')
     if (root / 'site/data/app').is_dir():
         try:
             payload = payload_budget.check(root / 'site')
@@ -500,6 +503,7 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
             'deliveryLogState': 'available' if isinstance(post_book.get('posts'), list) else 'unknown',
             'deliveryCohorts': delivery_cohorts(post_book, now),
             'officialUnscheduled': official_unscheduled, 'requestCounts': request_counts,
+            'chosenNotPosted': chosen_not_posted,
             'sgoEvaluation': {'usedBefore': sgo_used, 'limit': sgo_usage.get('maximum') if sgo_usage.get('maximum') == 2500 else None,
                               'localStop': 1800, 'observedAt': stamp(read(conf / 'sgo-shadow.json').get('lastAt'))},
             'oddsBudget': {'observedAt': stamp(usage.get('at')), 'used': used if verified else None, 'projectedMonth': projected,
