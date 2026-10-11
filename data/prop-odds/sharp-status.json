@@ -1,17 +1,17 @@
 {
- "at": "2026-10-11T23:16:41Z",
+ "at": "2026-10-11T23:29:15Z",
  "confirmed": {
-  "NFL-401872993": "2026-10-11T23:16:41Z",
-  "NFL-401872994": "2026-10-11T23:16:41Z"
+  "NFL-401872993": "2026-10-11T23:29:15Z",
+  "NFL-401872994": "2026-10-11T23:29:15Z"
  },
  "leagues": {
   "CFB": {
    "books": {},
-   "eventsListed": 62,
+   "eventsListed": 60,
    "eventsMatched": 1,
    "games": 1,
    "marketTypes": {},
-   "requestsLeft": 4,
+   "requestsLeft": 5,
    "rows": 0,
    "slateGames": [
     "Delaware Blue Hens at Middle Tennessee Blue Raiders 2026-10-13T23:00Z"
@@ -643,38 +643,38 @@
   },
   "NFL": {
    "books": {
-    "draftkings": 682,
+    "draftkings": 417,
     "fanduel": 664
    },
    "eventsListed": 17,
    "eventsMatched": 2,
    "games": 2,
    "marketTypes": {
-    "player_assists": 34,
-    "player_extra_points_made": 8,
+    "player_assists": 16,
+    "player_extra_points_made": 4,
     "player_fantasy_score": 28,
-    "player_field_goals_made": 8,
-    "player_interceptions": 26,
-    "player_kicking_points": 8,
+    "player_field_goals_made": 4,
+    "player_interceptions": 18,
+    "player_kicking_points": 4,
     "player_longest_passing_completion": 8,
-    "player_longest_reception": 36,
-    "player_longest_rush": 20,
+    "player_longest_reception": 14,
+    "player_longest_rush": 10,
     "player_passing_+_rushing_yards": 8,
     "player_passing_attempts": 8,
     "player_passing_completions": 8,
     "player_passing_touchdowns": 27,
     "player_passing_yards": 158,
-    "player_receiving_yards": 416,
-    "player_receptions": 221,
-    "player_rushing_+_receiving_yards": 20,
-    "player_rushing_attempts": 14,
-    "player_rushing_yards": 201,
-    "player_sacks": 21,
-    "player_tackles": 34,
-    "player_tackles_+_assists": 34
+    "player_receiving_yards": 339,
+    "player_receptions": 195,
+    "player_rushing_+_receiving_yards": 16,
+    "player_rushing_attempts": 8,
+    "player_rushing_yards": 161,
+    "player_sacks": 15,
+    "player_tackles": 16,
+    "player_tackles_+_assists": 16
    },
-   "requestsLeft": 6,
-   "rows": 1346,
+   "requestsLeft": 7,
+   "rows": 1081,
    "slateGames": [
     "Baltimore Ravens at Atlanta Falcons 2026-10-12T00:20Z",
     "Buffalo Bills at Los Angeles Rams 2026-10-13T00:15Z"
@@ -685,6 +685,7 @@
      "external": {
       "ballybet": "1028813044",
       "betmgm": "6:43616",
+      "betonline": "491147410",
       "betparx": "1028813044",
       "betrivers": "1028813044",
       "bwin": "6:43616",
@@ -699,6 +700,7 @@
       "matchbook": "mb-33322137433300023",
       "novig": "01a112eb-4e8a-72a2-a445-cc3b6f3184fb",
       "paddypower": "36160506",
+      "pinnacle": "1637497657",
       "polymarket": "nfl_broncos_seahawks_2026-10-15_b3",
       "polymarket_us": "nfl-sea-den-2026-10-15",
       "prophetx": "1700008795",
@@ -709,7 +711,14 @@
       "away_team": "Seattle Seahawks",
       "home_team": "Denver Broncos",
       "markets": [
+       "1st_half_moneyline",
+       "1st_half_point_spread",
        "1st_half_team_total",
+       "1st_half_total_points",
+       "1st_quarter_moneyline",
+       "1st_quarter_point_spread",
+       "1st_quarter_team_total",
+       "1st_quarter_total_points",
        "draw_no_bet",
        "game_prop",
        "moneyline",
@@ -727,6 +736,7 @@
      "external": {
       "ballybet": "1028823548",
       "betmgm": "6:43628",
+      "betonline": "491147416",
       "betparx": "1028823548",
       "betrivers": "1028823548",
       "bwin": "6:43628",
@@ -846,6 +856,7 @@
      "external": {
       "ballybet": "1028823553",
       "betmgm": "6:43635",
+      "betonline": "491147420",
       "betparx": "1028823553",
       "betrivers": "1028823553",
       "bwin": "6:43635",
@@ -862,7 +873,9 @@
       "polymarket": "nfl_buccaneers_steelers_2026-10-18_b2",
       "polymarket_us": "nfl-pit-tb-2026-10-18",
       "prophetx": "1700008870",
-      "sx_bet": "L19776784"
+      "stake": "50e19910-19f1-4011-a873-43ca43e0d975",
+      "sx_bet": "L19776784",
+      "thescorebet": "StandardEvent:0a47aa7e-d5df-4074-9c5a-308a726725f0"
      },
      "home": "Tampa Bay Buccaneers",
      "sample": {
@@ -884,6 +897,7 @@
      "external": {
       "ballybet": "1028823555",
       "betmgm": "6:43631",
+      "betonline": "491147415",
       "betparx": "1028823555",
       "betrivers": "1028823555",
       "bwin": "6:43631",
@@ -902,7 +916,8 @@
       "prophetx": "1700008868",
       "rebet": "sr:match:71515906",
       "stake": "e382f57b-8a14-4286-a5b1-28a30d5b8363",
-      "sx_bet": "L19776782"
+      "sx_bet": "L19776782",
+      "thescorebet": "StandardEvent:80c527e9-f2a3-4b81-a8c4-cc78ca1316a1"
      },
      "home": "Indianapolis Colts",
      "sample": {
@@ -925,6 +940,7 @@
      "external": {
       "ballybet": "1028823557",
       "betmgm": "6:43629",
+      "betonline": "491147421",
       "betparx": "1028823557",
       "betrivers": "1028823557",
       "bwin": "6:43629",
@@ -943,7 +959,8 @@
       "polymarket_us": "nfl-car-phi-2026-10-18",
       "prophetx": "1700008801",
       "stake": "b2b8982a-f276-4249-b3a1-5b4dfec2bd42",
-      "sx_bet": "L19776777"
+      "sx_bet": "L19776777",
+      "thescorebet": "StandardEvent:23ed1edd-12b5-4a85-b0f7-e03e2a86b1c7"
      },
      "home": "Philadelphia Eagles",
      "sample": {
@@ -967,6 +984,7 @@
      "external": {
       "ballybet": "1028823549",
       "betmgm": "6:43633",
+      "betonline": "491147411",
       "betparx": "1028823549",
       "betrivers": "1028823549",
       "bwin": "6:43633",
@@ -1011,6 +1029,7 @@
      "external": {
       "ballybet": "1028823547",
       "betmgm": "6:43634",
+      "betonline": "491147422",
       "betparx": "1028823547",
       "betrivers": "1028823547",
       "bwin": "6:43634",
@@ -1054,6 +1073,7 @@
      "external": {
       "ballybet": "1028823551",
       "betmgm": "6:43639",
+      "betonline": "491147414",
       "betparx": "1028823551",
       "betrivers": "1028823551",
       "bwin": "6:43639",
@@ -1078,7 +1098,6 @@
       "markets": [
        "1st_half_team_total",
        "draw_no_bet",
-       "game_prop",
        "moneyline",
        "point_spread",
        "team_total",
@@ -1093,6 +1112,7 @@
      "external": {
       "ballybet": "1028823554",
       "betmgm": "6:43641",
+      "betonline": "491147419",
       "betparx": "1028823554",
       "betrivers": "1028823554",
       "bwin": "6:43641",
@@ -1108,6 +1128,7 @@
       "polymarket": "nfl_bills_raiders_2026-10-18_b2",
       "polymarket_us": "nfl-buf-lv-2026-10-18",
       "prophetx": "1700008805",
+      "stake": "f2fcf2cf-b41e-4043-9d00-8ac39e90e949",
       "sx_bet": "L19776793"
      },
      "home": "Las Vegas Raiders",
@@ -1132,6 +1153,7 @@
      "external": {
       "ballybet": "1028823558",
       "betmgm": "6:43640",
+      "betonline": "491147412",
       "betparx": "1028823558",
       "betrivers": "1028823558",
       "bwin": "6:43640",
