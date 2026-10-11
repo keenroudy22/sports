@@ -1,22 +1,22 @@
 {
- "at": "2026-10-11T01:13:02Z",
+ "at": "2026-10-11T01:20:15Z",
  "confirmed": {
-  "CFB-401856808": "2026-10-11T01:13:02Z",
-  "CFB-401860901": "2026-10-11T01:13:02Z",
-  "NFL-401872981": "2026-10-11T01:13:02Z",
-  "NFL-401872982": "2026-10-11T01:13:02Z",
+  "CFB-401856808": "2026-10-11T01:20:15Z",
+  "CFB-401860901": "2026-10-11T01:20:15Z",
+  "NFL-401872981": "2026-10-11T01:20:15Z",
+  "NFL-401872982": "2026-10-11T01:20:15Z",
   "NFL-401872983": "2026-10-11T00:19:53Z",
   "NFL-401872984": "2026-10-11T00:19:53Z",
-  "NFL-401872985": "2026-10-11T01:13:02Z",
-  "NFL-401872986": "2026-10-11T00:31:02Z",
-  "NFL-401872987": "2026-10-11T00:31:02Z",
-  "NFL-401872988": "2026-10-11T00:31:02Z",
-  "NFL-401872989": "2026-10-11T00:31:02Z",
-  "NFL-401872990": "2026-10-11T00:31:02Z",
-  "NFL-401872991": "2026-10-11T00:31:02Z",
-  "NFL-401872992": "2026-10-11T00:31:02Z",
-  "NFL-401872993": "2026-10-11T00:31:02Z",
-  "NFL-401872994": "2026-10-11T00:31:02Z"
+  "NFL-401872985": "2026-10-11T01:20:15Z",
+  "NFL-401872986": "2026-10-11T01:20:15Z",
+  "NFL-401872987": "2026-10-11T01:20:15Z",
+  "NFL-401872988": "2026-10-11T01:20:15Z",
+  "NFL-401872989": "2026-10-11T01:20:15Z",
+  "NFL-401872990": "2026-10-11T01:20:15Z",
+  "NFL-401872991": "2026-10-11T01:20:15Z",
+  "NFL-401872992": "2026-10-11T01:20:15Z",
+  "NFL-401872993": "2026-10-11T01:20:15Z",
+  "NFL-401872994": "2026-10-11T01:20:15Z"
  },
  "leagues": {
   "CFB": {
@@ -24,7 +24,7 @@
     "draftkings": 244,
     "fanduel": 270
    },
-   "eventsListed": 9,
+   "eventsListed": 11,
    "eventsMatched": 2,
    "games": 2,
    "marketTypes": {
@@ -43,7 +43,7 @@
     "player_rushing_attempts": 4,
     "player_rushing_yards": 135
    },
-   "requestsLeft": 11,
+   "requestsLeft": 56,
    "rows": 514,
    "slateGames": [
     "Hawai'i Rainbow Warriors at Arizona State Sun Devils 2026-10-11T02:30Z",
@@ -59,7 +59,7 @@
       "fanduel": "36152733",
       "fliff": "418166_c_p_209_prematch",
       "gemini": "NCAAF-2610132300-DEL-MTN-S",
-      "kalshi": "KXNCAAFTOTAL-26OCT13DELMTU",
+      "kalshi": "KXNCAAF1H-26OCT13DELMTU",
       "matchbook": "mb-34563635719500023",
       "novig": "01a10e4e-3017-7f80-bc97-a05c77a71592",
       "onexbet": "760148189",
@@ -122,15 +122,18 @@
       "fanatics_markets": "6655844",
       "fanduel": "36152736",
       "fliff": "418731_c_p_209_prematch",
+      "gemini": "NCAAF-2610142330-KENN-MOST-M",
       "kalshi": "KXNCAAFGAME-26OCT14KENNMOSU",
       "paddypower": "36152736",
-      "polymarket": "nfl_kennesawstate_missouristate_2026-10-14_b3"
+      "polymarket": "nfl_kennesawstate_missouristate_2026-10-14_b3",
+      "smarkets": "45356024"
      },
      "home": "Missouri State",
      "sample": {
       "away_team": "Kennesaw State",
       "home_team": "Missouri State",
       "markets": [
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -140,7 +143,7 @@
      "type": "fixture"
     },
     {
-     "away": "Western Kentucky",
+     "away": "Western Kentucky Hilltoppers",
      "external": {
       "fanatics_markets": "6655840",
       "fanduel": "36152737",
@@ -148,13 +151,15 @@
       "gemini": "NCAAF-2610150000-WKU-SHS-M",
       "kalshi": "KXNCAAFGAME-26OCT14WKUSHSU",
       "paddypower": "36152737",
-      "polymarket": "nfl_samhoustonbearkats_westernkentuckyhilltoppers_2026-10-14_b3"
+      "polymarket": "nfl_samhoustonbearkats_westernkentuckyhilltoppers_2026-10-14_b3",
+      "smarkets": "45356025"
      },
-     "home": "Sam Houston State",
+     "home": "Sam Houston State Bearkats",
      "sample": {
-      "away_team": "Western Kentucky",
-      "home_team": "Sam Houston State",
+      "away_team": "Western Kentucky Hilltoppers",
+      "home_team": "Sam Houston State Bearkats",
       "markets": [
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -193,6 +198,55 @@
       ]
      },
      "start": "2026-10-16T00:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Pittsburgh",
+     "external": {
+      "fanduel": "36154582",
+      "gemini": "NCAAF-2610172000-PIT-BC-M",
+      "kalshi": "KXNCAAF1H-26OCT16PITTBC",
+      "paddypower": "36154582",
+      "polymarket": "nfl_bostoncollegeeagles_pittsburgh_2026-10-17_b2"
+     },
+     "home": "Boston College",
+     "sample": {
+      "away_team": "Pittsburgh",
+      "home_team": "Boston College",
+      "markets": [
+       "1st_half_moneyline",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-17T16:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Florida",
+     "external": {
+      "fanduel": "36152774",
+      "fliff": "418129_c_p_209_prematch",
+      "gemini": "NCAAF-2610172000-FLA-TEX-M",
+      "kalshi": "KXNCAAFSPREAD-26OCT17FLATEX",
+      "novig": "01a12171-924e-7351-9194-f3db5f2c126c",
+      "onexbet": "759713698",
+      "paddypower": "36152774",
+      "polymarket": "nfl_floridagators_texaslonghorns_2026-10-17_b2"
+     },
+     "home": "Texas",
+     "sample": {
+      "away_team": "Florida",
+      "home_team": "Texas",
+      "markets": [
+       "moneyline",
+       "point_spread",
+       "team_total",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-17T16:00:00Z",
      "type": "fixture"
     },
     {
@@ -252,38 +306,38 @@
   },
   "NFL": {
    "books": {
-    "draftkings": 862,
-    "fanduel": 858
+    "draftkings": 3591,
+    "fanduel": 3598
    },
    "eventsListed": 30,
    "eventsMatched": 14,
    "games": 14,
    "marketTypes": {
-    "player_assists": 44,
-    "player_extra_points_made": 12,
-    "player_fantasy_score": 30,
-    "player_field_goals_made": 12,
-    "player_interceptions": 32,
-    "player_kicking_points": 12,
-    "player_longest_passing_completion": 12,
-    "player_longest_reception": 54,
-    "player_longest_rush": 24,
-    "player_passing_+_rushing_yards": 10,
-    "player_passing_attempts": 12,
-    "player_passing_completions": 12,
-    "player_passing_touchdowns": 39,
-    "player_passing_yards": 236,
-    "player_receiving_yards": 468,
-    "player_receptions": 255,
-    "player_rushing_+_receiving_yards": 20,
-    "player_rushing_attempts": 22,
-    "player_rushing_yards": 269,
-    "player_sacks": 57,
-    "player_tackles": 44,
-    "player_tackles_+_assists": 44
+    "player_assists": 162,
+    "player_extra_points_made": 48,
+    "player_fantasy_score": 144,
+    "player_field_goals_made": 48,
+    "player_interceptions": 118,
+    "player_kicking_points": 48,
+    "player_longest_passing_completion": 48,
+    "player_longest_reception": 216,
+    "player_longest_rush": 104,
+    "player_passing_+_rushing_yards": 46,
+    "player_passing_attempts": 48,
+    "player_passing_completions": 48,
+    "player_passing_touchdowns": 161,
+    "player_passing_yards": 953,
+    "player_receiving_yards": 2086,
+    "player_receptions": 1112,
+    "player_rushing_+_receiving_yards": 104,
+    "player_rushing_attempts": 82,
+    "player_rushing_yards": 1108,
+    "player_sacks": 189,
+    "player_tackles": 158,
+    "player_tackles_+_assists": 158
    },
-   "requestsLeft": 0,
-   "rows": 1720,
+   "requestsLeft": 12,
+   "rows": 7189,
    "slateGames": [
     "Philadelphia Eagles at Jacksonville Jaguars 2026-10-11T13:30Z",
     "Cincinnati Bengals at Miami Dolphins 2026-10-11T17:00Z",
@@ -329,7 +383,7 @@
       "fliff": "399994_c_p_202_prematch",
       "gemini": "NFL-2610160015-SEA-DEN-S",
       "goldrush": "31140274",
-      "kalshi": "KXNFL1HTEAMTOTAL-26OCT15SEADEN",
+      "kalshi": "KXNFLTD-26OCT15SEADEN-DENDENDST-1",
       "matchbook": "mb-33322137433300023",
       "novig": "01a112eb-4e8a-72a2-a445-cc3b6f3184fb",
       "paddypower": "36160506",
@@ -347,6 +401,7 @@
        "1st_half_team_total",
        "draw_no_bet",
        "moneyline",
+       "player_touchdowns",
        "point_spread",
        "team_total",
        "total_points"
