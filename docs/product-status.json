@@ -986,11 +986,11 @@
     {
       "id": "A-20261011-1",
       "title": "Include approved Climb checks in regular desk jobs",
-      "status": "observing",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Observe the next natural scheduled run and record its Climb decision; do not substitute replay evidence or force a rung.",
+      "next": "Keep the normal-run Climb decision and its card-to-delivery handoff in daily outcome monitoring; no replay or forced rung may substitute for a fresh decision.",
       "doneWhen": "The normal job includes only the existing settle,close,lean,prop,longshot plus ladder kinds; deployed code and loaded launchd plist are verified; a real scheduled run logs a Climb decision with existing caps and safety holds.",
-      "evidence": "Release 637485575e65741ca42ea76bd2dd0e45d9449ce8 and hosted run 38144544975 succeeded. The tracked plist was installed and reloaded under the run lock; its normal job now includes settle,close,lean,prop,longshot,ladder and its daily 08:30 pass. Source, parsed-plist and launchctl checks are green. A natural post-release Climb decision is still required."
+      "evidence": "Release 63748557 and hosted run 38144544975 installed the normal settle,close,lean,prop,longshot,ladder job and 08:30 pass. The natural 10:00 ET Oct11 scan selected NFL-2026-W5-ladder-1011-c3s1-fd at FanDuel -218 from fresh alternate props, saved sourced reasons and created the open rung without forcing it. Release 4b217f29 and hosted run 38147869526 published its ten-step route card; live 375/1440 audits were clean."
     },
     {
       "id": "A-20261011-2",
@@ -1024,9 +1024,9 @@
       "title": "Kook'n Autopilot R1 delivery, research, results and daily operator",
       "status": "ready",
       "owner": "agent",
-      "next": "Release the hard-news-only pull, reason-or-hold send, public book-label, unposted Bills-Rams withdrawal and 18:50 primetime pass repair; then continue research recovery and transactional delivery.",
+      "next": "Finish transactional record creation at Discord release, recover every approved research lane with a reason-or-hold outcome, and verify the natural 17:30/18:50 primetime decisions and result timing.",
       "doneWhen": "Every approved lane can render and fire or logs its exact refusal; delivery is transactional; results settle on time; the outcome report ships a fix or names an external blocker each day.",
-      "evidence": "KOOKN-AUTOPILOT.md sections 3, 4, 6-10 and 13-14; approved base and v4 graphics reviewed image-by-image on 2026-10-11."
+      "evidence": "Partial R1 release 4b217f29, hosted run 38147869526: only typed hard injury news may pull a released play; model/web checks can flag but not pull; every send requires a saved reason or holds; public ESPN BET labels render as theScore Bet; the never-posted Bills-Rams under is withdrawn; 17:30/18:50 primetime passes are installed. Python1304 (2 skipped), Node234, clean export, all gates/rehearsal and 14 live 375/1440 routes passed. Record is 36-37 (1 void), -5.20u."
     }
   ]
 }

@@ -17,7 +17,34 @@ build, payload budget, record audits, publication guard, asset checks and the is
 passed. Fourteen live route/width combinations at 375 and 1440 pixels returned zero issues or
 browser errors. The public Best bets headline remained **36–37 (1 void), −5.20u at posted
 prices**. The tracked run job was installed under the lock with the approved Climb kind and daily
-8:30 selection pass; A-20261011-1 remains observing until a natural run records its decision.
+8:30 selection pass.
+
+### R1 first outcome release
+
+Release `4b217f29d87e45980cf938909df869930d83b061` and hosted publish
+`38147869526` completed successfully. Python 1,304 (two skipped), frontend 234,
+both clean-export suites, build, payload budget, football and NBA record audits,
+publication guard, asset/SVG checks and the isolated 10:00 rehearsal passed. The
+14-route live audit at 375 and 1440 pixels returned zero overflow, caught load states
+or browser errors. The public Best bets headline remained **36–37 (1 void), −5.20u
+at posted prices**.
+
+Only typed hard injury news from the injury feed may pull a released play; model,
+web, weather and price checks can flag but cannot pull it. Every send path must find
+a saved real reason or hold the post. Public sportsbook copy maps the historical
+provider name ESPN BET to **theScore Bet** while the append-only source remains
+unchanged. The never-posted Bills–Rams under was withdrawn before release, and the
+5:30/6:50 PM primetime passes now choose fresh.
+
+A natural 10:00 ET Climb scan selected `NFL-2026-W5-ladder-1011-c3s1-fd` at
+FanDuel −218: Aaron Rodgers 175+ passing yards and Derrick Henry 50+ rushing yards,
+each with a saved sourced reason. The hosted build exposed a real ten-row route-card
+fit failure; the release repaired that geometry, added the exact regression fixture,
+and published the real 1080×1350 route plus matching HTML. A-20261011-1 is shipped
+on that natural evidence. The rung remained unposted at the release receipt because
+the earlier normal run correctly waited for its card to become live; a later normal
+delivery must still be observed and must not be represented as sent before its
+durable receipt exists.
 
 ## 2026-10-09 — KOOKN-PLAN adoption
 
