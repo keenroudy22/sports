@@ -896,7 +896,11 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
             return Decision(False, 'plan_selection', 'a 20-25 point gap needs a class A reason', numbers)
         if len({row['book'] for row in exact_price_pairs(candidate, ctx)}) < 2:
             return Decision(False, 'plan_selection', 'a 20-25 point gap needs two exact-line books', numbers)
-    sample = spot.for_candidate(dict(candidate, gap=gap))
+    # Live board candidates carry the league internally as ``_league`` until
+    # publication.  The observed-spot lookup groups by the public ``league``
+    # key, so pass the resolved value explicitly instead of silently turning
+    # every otherwise-qualified Best bet into a Gut call.
+    sample = spot.for_candidate(dict(candidate, gap=gap, league=league))
     if not sample:
         return Decision(False, 'plan_selection', 'no 30-play spot segment; eligible only as a Gut call', numbers)
     if sample['spotHit'] < pricing.break_even(odds) - .01:

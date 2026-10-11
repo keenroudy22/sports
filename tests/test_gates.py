@@ -112,6 +112,22 @@ class NoForcedBestBetTests(unittest.TestCase):
             self.assertFalse(gates.selection_verdict(dict(pick, _planReasons=[]), context(), 'gut_call').ok)
             self.assertFalse(gates.selection_verdict(dict(pick, _selection={'rawChance': .70, 'fairChance': .44, 'gap': 26}), context()).ok)
 
+    def test_best_bet_spot_lookup_keeps_an_internal_only_league(self):
+        from unittest.mock import patch
+        reason = {'type': 'line_move', 'class': 'A', 'direction': 'for', 'text': 'Moved 20 cents.'}
+        pick = prop_lean(_selection={'rawChance': .60, 'fairChance': .50, 'gap': 10},
+                         _planReasons=[reason], _league='NFL')
+        pick.pop('league')
+        seen = []
+
+        def spot(candidate):
+            seen.append(candidate)
+            return {'spotHit': .54, 'spotEdge': 1, 'n': 40}
+
+        with patch.object(gates.spot, 'for_candidate', side_effect=spot):
+            self.assertTrue(gates.selection_verdict(pick, context(), 'best_bet').ok)
+        self.assertEqual(seen[0]['league'], 'NFL', 'the spot segment must receive the resolved league')
+
     def test_price_sanity_holds_26_points_but_not_24(self):
         self.assertTrue(gates.role_sanity.price_suspect(-110, .76, fair=.50))
         self.assertFalse(gates.role_sanity.price_suspect(-110, .74, fair=.50))

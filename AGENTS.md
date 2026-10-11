@@ -207,6 +207,14 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Kook'n Autopilot (owner, 2026-10-11):** [`docs/KOOKN-AUTOPILOT.md`](docs/KOOKN-AUTOPILOT.md) records the
+  current operating authority and the verified source digest. It supersedes `docs/KOOKN-PLAN.md` and every older
+  play, posting, Climb, results, learning, graphics, approval and release-window rule below wherever they differ.
+  The never-bend rules and lock-holding deployment recipe do not change. Inside those fences the agent acts without
+  case-by-case permission; only spending money, changing how the public record counts, and legal decisions return
+  to the owner. Routine releases no longer wait for a clock window: ship one bounded fix whenever every gate passes
+  and the run lock is held. Outcome health, release order and done conditions are §§3–14 of the dated Autopilot rule.
+
 - **October 11 operating settlement (owner, 2026-10-11):** Fun tickets are a small number of pregame parlays at
   +500 through +1500, one book, different games, at most one total and one saved real reason per leg; they are
   graded win or lose. The prior conversation idea to post parlays only after they win is withdrawn. Try for a

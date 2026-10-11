@@ -43,6 +43,19 @@ class SlotTests(unittest.TestCase):
         morning = datetime(2026, 10, 11, 6, 45, tzinfo=run.EASTERN)
         self.assertIsNone(run.official_selection_scope(morning, games, ctx, now))
 
+    def test_830_selection_pass_rechecks_unserved_noon_and_later_games(self):
+        now = datetime(2026, 10, 11, 12, 30, tzinfo=timezone.utc)
+        slot = now.astimezone(run.EASTERN)
+        games = {
+            'NFL-london': {'id': 'NFL-london', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-10-11T13:30:00Z'},
+            'NFL-noon': {'id': 'NFL-noon', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-10-11T16:00:00Z'},
+            'CFB-late': {'id': 'CFB-late', 'league': 'CFB', 'state': 'pre', 'kickoff': '2026-10-11T23:00:00Z'},
+        }
+        ctx = SimpleNamespace(first={'posted': {'gameIds': ['CFB-late'], 'status': 'active'}}, latest={})
+        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'NFL-noon'})
+        with mock.patch.dict(os.environ, {'KEENROUDY_SELECTION_0830': '0'}):
+            self.assertEqual(run.official_selection_scope(slot, games, ctx, now), set())
+
 
 class CandidateCatalogTests(unittest.TestCase):
     def test_spreads_join_the_board_without_turning_off_exact_line_checks(self):
@@ -258,6 +271,21 @@ class TextTests(unittest.TestCase):
 
 
 class HoldTests(unittest.TestCase):
+
+    def test_a_backup_qb_injury_is_neutral_for_his_teammates(self):
+        candidate = {'athleteId': '77', '_team': '10', 'market': 'recYds', 'gameIds': ['NFL-1']}
+        game = {'id': 'NFL-1', 'league': 'NFL',
+                'home': {'id': '10', 'abbreviation': 'CLE'}, 'away': {'id': '20', 'abbreviation': 'BAL'}}
+        context_file = {'leagues': {'NFL': {'checkedAt': '2026-10-11T11:00:00Z', 'teams': {'10': {'players': [
+            {'id': '5', 'name': 'Starter Five', 'position': 'QB', 'status': 'Active'},
+            {'id': '6', 'name': 'Backup Six', 'position': 'QB', 'status': 'Injured Reserve'},
+        ]}}}}}
+        ctx = SimpleNamespace(games={'NFL-1': game}, player_team={'77': '10'}, starters={'NFL-10': '5'},
+                              now=datetime(2026, 10, 11, 12, 0, tzinfo=timezone.utc), snapshots={},
+                              snapshot=lambda _: None, odds={})
+        facts = run.evidence(candidate, ctx, context_file)
+        backup = next(f for f in facts if f['id'] == 'injury-10-6')
+        self.assertEqual(backup['direction'], 'neutral')
     def test_holds_on_quarterback_listings(self):
         facts = [{'kind': 'injury', 'position': 'QB', 'team': '10', 'status': 'Questionable', 'claim': 'QB1 (QB, DET) is listed Questionable'}]
         self.assertIsNotNone(run.hold_reason({'marketType': 'total'}, facts))

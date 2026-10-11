@@ -165,7 +165,7 @@ def team_logs(records, before=None):
     return dict(logs)
 
 
-def defense_logs(records, before=None):
+def defense_logs(records, before=None, league=None):
     """Per defense per game, the opposing QB/RB/WR/TE groups' combined lines.
 
     Positions are the provider's tags for that game, else the athlete's usual
@@ -175,6 +175,8 @@ def defense_logs(records, before=None):
     logs = defaultdict(list)
     fallback = usual_positions(records)
     for game in played_before(records, before):
+        if league is not None and game.get('league') != league:
+            continue
         for defense, offense, is_home in sides(game):
             groups = {pos: Counter() for pos in ALLOWED}
             players = {pos: [] for pos in ALLOWED}

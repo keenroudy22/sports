@@ -936,7 +936,9 @@ def evidence(candidate, ctx, context_file):
             direction = 'neutral'
             if str(player.get('id')) == athlete:
                 direction = 'against'
-            elif player.get('position') == 'QB' and status in gates.QB_OUT and (market == 'total' or ctx.player_team.get(athlete) == team):
+            elif (player.get('position') == 'QB' and status in gates.QB_OUT
+                  and str(player.get('id')) == str(ctx.starters.get(gates.team_key(game['league'], team)) or '')
+                  and (market == 'total' or ctx.player_team.get(athlete) == team)):
                 direction = 'against'
             claim = f"{player.get('name')} ({player.get('position')}, {game[side]['abbreviation']}) is listed {player.get('status')}"
             if player.get('injury'):
@@ -1018,15 +1020,17 @@ def plan_reasons(candidate, ctx):
         if latest_log and latest_log.get('pos') in ('QB', 'RB', 'WR', 'TE'):
             opponent = next((str(game[where]['id']) for where in ('home', 'away')
                              if str(game[where]['id']) != str(latest_log.get('team'))), None)
-            table = features.defense_table(features.defense_logs(ctx.records, before=ctx.now),
+            table = features.defense_table(features.defense_logs(ctx.records, before=ctx.now,
+                                                                  league=game.get('league')),
                                            f"{latest_log['pos']}.{market}", season=game.get('season'))
             own = next((item for item in table if str(item['defense']) == opponent), None)
             count = 10 if game.get('league') == 'NFL' else 25
             if own and ((side == 'over' and own['rank'] > len(table) - count)
                         or (side == 'under' and own['rank'] <= count)):
                 adjective = 'most' if side == 'over' else 'fewest'
+                display_rank = len(table) - own['rank'] + 1 if side == 'over' else own['rank']
                 reasons.append({'type': 'matchup', 'class': 'B', 'direction': 'for',
-                                'text': f"The opponent allows the {own['rank']}{'th'}-{adjective} {pricing.WORDS.get(market, market)} to {latest_log['pos']}s.",
+                                'text': f"The opponent allows the {ordinal(display_rank)}-{adjective} {pricing.WORDS.get(market, market)} to {latest_log['pos']}s.",
                                 'number': {'rank': own['rank'], 'teams': len(table), 'average': own['avg']},
                                 'source': game.get('source'), 'observedAt': now})
         history = sorted((row for row in ctx.prop_odds_history.get(candidate['gameIds'][0], [])
@@ -1743,14 +1747,13 @@ def run_tests(python=sys.executable):
 def official_selection_scope(slot, games, ctx, now):
     """Game ids eligible for this run's official selection.
 
-    ``None`` means the ordinary 6:45 game-day board.  The 5:30 run gets one
+    ``None`` means the ordinary 6:45 game-day board.  The 8:30 run gets the
+    post-capture board for unserved noon-or-later games; the 5:30 run gets one
     bounded second look at still-dark primetime NFL games after that run's
     fresh prop capture.  Every ordinary gate remains in force.
     """
     if slot.hour == 6 and slot.minute == 45:
         return None
-    if slot.hour != 17 or slot.minute != 30:
-        return set()
     today = eastern_date(now)
     already = set()
     for key, first in ctx.first.items():
@@ -1758,6 +1761,16 @@ def official_selection_scope(slot, games, ctx, now):
         if pick.get('result') or pick.get('entryNote') or (pick.get('status') or 'active') != 'active':
             continue
         already.update(pick.get('gameIds') or [])
+    if slot.hour == 8 and slot.minute == 30:
+        if os.environ.get('KEENROUDY_SELECTION_0830', '1').strip().lower() in ('0', 'false', 'off', 'no'):
+            return set()
+        return {game['id'] for game in games.values()
+                if game.get('league') in ('NFL', 'CFB') and game.get('state') == 'pre'
+                and eastern_date(gates.when(game['kickoff'])) == today
+                and gates.when(game['kickoff']).astimezone(EASTERN).hour >= 12
+                and game['id'] not in already}
+    if slot.hour != 17 or slot.minute != 30:
+        return set()
     return {game['id'] for game in games.values()
             if game.get('league') == 'NFL' and game.get('state') == 'pre'
             and eastern_date(gates.when(game['kickoff'])) == today

@@ -1,5 +1,14 @@
 # October 5 product implementation tracker
 
+## 2026-10-11 — KOOKN-AUTOPILOT adoption
+
+The owner adopted [`KOOKN-AUTOPILOT.md`](KOOKN-AUTOPILOT.md) as the current authority. Its recorded source
+digest is `05aca9702f44063640445d9069ec98e81fa5b0c457455b57ab3b6cab567c9ff4`. It overrides the October 9 plan and
+older operating layers wherever they differ, while preserving the never-bend rules and the exact lock-holding
+release recipe. R0 begins with regression-first repairs for the lost league in Best-bet segment lookup,
+non-starter quarterback injury holds, cross-league defense ranks and the 8:30 selection pass. No item is marked
+shipped until its own tests, the full release gates, hosted publish and live checks are recorded below.
+
 ## 2026-10-09 — KOOKN-PLAN adoption
 
 The owner adopted [`KOOKN-PLAN.md`](KOOKN-PLAN.md) as the single current authority for play selection, posts,

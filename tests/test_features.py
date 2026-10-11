@@ -109,6 +109,15 @@ class DefenseTests(unittest.TestCase):
                          [('B', 150.0, 1), ('A', 166.67, 2)])
         self.assertEqual([r['defense'] for r in ft.defense_table(logs, 'WR.recYds', last=2)], ['A', 'B'])
 
+    def test_defense_logs_can_never_mix_reused_team_ids_across_leagues(self):
+        nfl = game('nfl', '2025-09-07T17:00Z', league='NFL', home='1', away='2',
+                   players=[wr('n', '2', 5, 50, 7)])
+        cfb = game('cfb', '2025-09-08T17:00Z', league='CFB', home='1', away='3',
+                   players=[wr('c', '3', 10, 200, 12)])
+        self.assertEqual(len(ft.defense_logs([nfl, cfb], league='NFL')['1']), 1)
+        table = ft.defense_table(ft.defense_logs([nfl, cfb], league='NFL'), 'WR.recYds')
+        self.assertEqual(next(row for row in table if row['defense'] == '1')['avg'], 50)
+
 
 class SummaryTests(unittest.TestCase):
     def rows(self, values, **extra):
