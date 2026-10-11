@@ -399,6 +399,12 @@ test('Today reconciles its last-slate headline and slips to released plays only'
   assert.doesNotMatch(left, /Released Gut call hit|Arizona at West Virginia|SDSU at Oregon State/);
 });
 
+test('the browser shell requests the core build that exports the shared headline counter', () => {
+  const index = fs.readFileSync('site/index.html', 'utf8');
+  assert.match(index, /core\.js\?v=75/);
+  assert.equal(typeof C.isHeadline, 'function');
+});
+
 test('Today prints a settled player name and full stat line, never the stored athlete id', async () => {
   const king = { ...yesterday, id: 'CFB-2026-W6-king-over-49-5-recyds-dk', league: 'CFB',
     title: 'TK King OVER 49.5 receiving yards', displayTitle: 'TK King OVER 49.5 receiving yards',
