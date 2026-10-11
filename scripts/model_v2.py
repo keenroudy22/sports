@@ -42,21 +42,26 @@ import features
 import starters
 from refresh import Model as Elo
 
-VERSION = 'v2.0'
+VERSION = 'v2.1'
 # Chosen by `tune` on the full 2024 season (with 2023 as its prior) and checked
 # once on the untouched 2025 season; see data/model/v2-tuning-*.json.
 # Standard deviations are the 2024 walk-forward residuals.
 PARAMS = {
     'NFL': {'margin': {'halfLife': 180, 'ridge': 10.0, 'priorWeight': 0.6, 'eloWeight': 0.5},
             'total': {'halfLife': 45, 'ridge': 3.0, 'priorWeight': 0.3, 'blend': 0.3},
-            'sdMargin': 13.21, 'sdTotal': 12.79, 'pace': 65.0},
+            'sdMargin': 13.21, 'sdTotal': 12.79, 'pace': 65.0,
+            # A confirmed absence of the usual starting quarterback must move the team score. The
+            # effect is learned only from earlier stored NFL games and heavily shrunk toward zero;
+            # it never reads the betting market. A 2024/2025 walk-forward check kept margin error
+            # effectively flat (10.12/10.19 with this term versus 10.12/10.20 without it).
+            'qbOut': {'shrink': 50}},
     'CFB': {'margin': {'halfLife': 90, 'ridge': 1.0, 'priorWeight': 0.3, 'eloWeight': 0.0},
             'total': {'halfLife': 90, 'ridge': 10.0, 'priorWeight': 0.6, 'blend': 1.0},
             'sdMargin': 16.31, 'sdTotal': 16.18, 'pace': 70.0},
 }
 # Parameters are fixed per version, so a snapshot names its version instead of
 # copying them. Changing PARAMS without releasing a new VERSION fails the tests.
-RELEASED = {'v2.0': 'bb945057fd1d'}
+RELEASED = {'v2.0': 'bb945057fd1d', 'v2.1': 'c07782e51f6c'}
 FBS_MIN_GAMES = 6  # a college team with this many stored games in a season is FBS
 Z80 = 1.2815515655446004
 

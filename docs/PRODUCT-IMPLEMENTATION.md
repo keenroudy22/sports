@@ -1,5 +1,19 @@
 # October 5 product implementation tracker
 
+## 2026-10-11 — confirmed starting-quarterback injury adjustment
+
+The owner directed that a confirmed starting-quarterback absence must update the team projection, not merely hold
+the affected player props. Model v2.1 enables the already deterministic stored-history quarterback-out term for
+NFL forecasts with 50 pseudo-games of shrinkage. The live flag is true only when the modal starter over the team's
+last four games appears on the current ruled-out list. The snapshot records that flag and the learned points-for,
+points-against adjustment; no betting-market input enters the score.
+
+The frozen walk-forward check left 2024 margin miss at 10.12 points and changed 2025 from 10.20 to 10.19. On the
+current Ravens-Falcons inputs, Lamar Jackson's confirmed absence changes the working score from Atlanta 23.8,
+Baltimore 24.7 to Atlanta 24.0, Baltimore 22.8, with Atlanta's win chance moving from 47.4% to 53.6%. This remains
+a modest injury adjustment, not a claim that the market price is value. Final release and live receipts follow
+only after every gate succeeds.
+
 ## 2026-10-11 — KOOKN-AUTOPILOT adoption
 
 The owner adopted [`KOOKN-AUTOPILOT.md`](KOOKN-AUTOPILOT.md) as the current authority. Its recorded source

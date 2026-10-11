@@ -97,7 +97,7 @@ class PublishTests(unittest.TestCase):
         nudged = {**base, 'margin': base['margin'] + 0.3, 'total': base['total'] - 0.4}
         self.assertFalse(forecast.material(nudged, base))
         self.assertTrue(forecast.material({**base, 'margin': base['margin'] + 0.6}, base))
-        self.assertTrue(forecast.material({**base, 'model': 'v2.1'}, base))
+        self.assertTrue(forecast.material({**base, 'model': 'v9.9'}, base))
         self.assertTrue(forecast.material({**base, 'projectionModel': 'v9.9'}, base), 'a new projection version republishes')
         self.assertTrue(forecast.material({**base, 'kickoff': '2099-01-01T00:00Z'}, base), 'a moved kickoff republishes')
 
@@ -128,3 +128,50 @@ class LateSnapshotTests(PublishTests):
         self.assertEqual(second['supersedes'], first['publishedAt'])
         self.assertEqual(self.publish(), {'nfl-2025.jsonl': 1}, 'the regular publish still leaves the hour alone')
         self.assertEqual(self.lines()[-1]['gameId'], 'NFL-801')
+
+
+class QuarterbackAdjustedPublishTests(unittest.TestCase):
+    def setUp(self):
+        self.dir = tempfile.TemporaryDirectory()
+        self.root = Path(self.dir.name)
+        self.games = test_projections.league(weeks=8)
+        for game in self.games:
+            for side in ('home', 'away'):
+                team = game[side]['id']
+                changed = team == 'A' and game['week'] >= 7
+                if changed:
+                    for player in game['players']:
+                        if str(player.get('team')) == team and player.get('pos') == 'QB':
+                            player['att'] = 0
+                game['players'].append({'id': 'A2' if changed else f'{team}-qb', 'team': team, 'pos': 'QB', 'att': 30})
+                if changed:
+                    game[side]['score'] -= 10
+                    game['teams'][team]['points'] -= 10
+        self.now = forecast.features.when(self.games[-1]['kickoff']) + timedelta(days=2)
+        self.slate = {'games': [slate_game(901, self.now + timedelta(days=2))]}
+
+    def tearDown(self):
+        self.dir.cleanup()
+
+    def publish(self, context=None, now=None):
+        return forecast.publish(now or self.now, self.root, self.slate, context or {},
+                                {'NFL': self.games}, {}, log=lambda *_: None)
+
+    def lines(self):
+        return boxscores.read_store(self.root / 'nfl-2025.jsonl')
+
+    def test_confirmed_usual_starting_quarterback_out_moves_the_team_score(self):
+        self.publish()
+        before = self.lines()[-1]
+        usual = forecast.starters.usual_starter(self.games, 'A', self.now, forecast.starters.RECENT)
+        self.assertEqual(usual, 'A2')
+        context = {'leagues': {'NFL': {'teams': {'A': {'players': [
+            {'id': usual, 'status': 'Out', 'reportedAt': fakegames.stamp(self.now)}]}}}}}
+        self.assertEqual(self.publish(context=context, now=self.now + timedelta(hours=4)), {'nfl-2025.jsonl': 1})
+        after = self.lines()[-1]
+        self.assertTrue(after['inputs']['qbOut']['home'])
+        self.assertFalse(after['inputs']['qbOut']['away'])
+        self.assertIn('qbOut', after['inputs']['adjustments'])
+        self.assertLess(after['home']['points'], before['home']['points'])
+        self.assertLess(after['homeWinProb'], before['homeWinProb'])
+        self.assertIn('starting-quarterback absence adjustment', after['why'])

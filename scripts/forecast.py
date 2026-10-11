@@ -28,6 +28,7 @@ import boxscores
 import features
 import model_v2
 import projections
+import starters
 from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -123,14 +124,25 @@ def why(model, forecast, home, away, league):
         parts.append(f"Margin blends {weight:.0%} of the older Elo baseline.")
     if forecast['sparse']:
         parts.append('At least one team has fewer than three games this season; treat with extra caution.')
-    parts.append('No injury, weather or market input in the score. On player volume the injury report removes '
-                 f'players ruled out and cuts a questionable player to {projections.LIMITED_SHARE:.0%} of their share.')
+    qb = (forecast.get('adjustments') or {}).get('qbOut')
+    if qb:
+        sides = [side for side in ('home', 'away') if qb.get(side)]
+        parts.append('The score includes a stored-history starting-quarterback absence adjustment for ' +
+                     ' and '.join(sides) + '.')
+        parts.append('No weather or market input in the score.')
+    else:
+        parts.append('No injury, weather or market input in the score.')
+    parts.append('On player volume the injury report removes players ruled out and cuts a questionable player to '
+                 f'{projections.LIMITED_SHARE:.0%} of their share.')
     return ' '.join(parts)
 
 
-def snapshot(league, game, model, history, slope, priors, ruled_out, now):
+def snapshot(league, game, model, history, slope, priors, ruled_out, now, records=None):
     home, away = game['home']['id'], game['away']['id']
-    forecast = model.predict(home, away, game.get('neutral', False))
+    qb_out = {side: starters.live_qb_out(records or [], game[side]['id'],
+                                         ruled_out.get(game[side]['id'], ({}, {}))[0], now)
+              for side in ('home', 'away')}
+    forecast = model.predict(home, away, game.get('neutral', False), game={'qbOut': qb_out})
     sides = {}
     for side, rival, margin in (('home', away, forecast['margin']), ('away', home, -forecast['margin'])):
         team = game[side]['id']
@@ -165,6 +177,8 @@ def snapshot(league, game, model, history, slope, priors, ruled_out, now):
                    'passSlope': round(slope, 5),
                    'ruledOut': {side: sorted(ruled_out.get(game[side]['id'], ({}, {}))[0]) for side in ('home', 'away')},
                    'limited': {side: sorted(ruled_out.get(game[side]['id'], ({}, {}))[1]) for side in ('home', 'away')},
+                   'qbOut': qb_out,
+                   'adjustments': forecast.get('adjustments') or {},
                    'injuryCoverage': 'ESPN injury report' if league == 'NFL' else 'college injury reports are not covered'},
         'why': why(model, forecast, home, away, league),
     }
@@ -230,7 +244,7 @@ def publish(now=None, root=STORE, slate=None, context=None, records=None, snaps=
         ruled_out = injuries(context, league, now)
         new = []
         for game in games:
-            record = snapshot(league, game, model, history, slope, priors, ruled_out, now)
+            record = snapshot(league, game, model, history, slope, priors, ruled_out, now, stored)
             previous = existing.get(record['gameId'])
             if late:
                 record['late'] = True

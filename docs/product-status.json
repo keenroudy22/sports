@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-11T11:54:49.162013Z",
+  "updatedAt": "2026-10-11T22:25:00Z",
   "items": [
     {
       "id": "P01",
@@ -1036,6 +1036,15 @@
       "next": "Observe the first natural Tuesday 10:30 packet and preserve its evidence/undo keys; do not backfill a learning move.",
       "doneWhen": "Clean deduplicated evidence moves bounded trust, gaps, pauses, promotions and reason weights only after two matching Tuesdays; each move has evidence and an undo key; the ten-line note and kill switch are verified.",
       "evidence": "Release c4c9882e, hosted 38169632121: Python1335(2 skipped), Node236, clean export, all gates/rehearsal and 14 live 375/1440 routes passed. Tuesday 10:30 launchd task is loaded; each move is fenced, two-week-confirmed, undoable and disabled by KEENROUDY_TWO_WAY_LEARNING=0."
+    },
+    {
+      "id": "A-20261011-4",
+      "title": "Apply confirmed starting-quarterback injuries to NFL team projections",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Complete every release gate, publish model v2.1, and verify the Ravens-Falcons score and win chance use Lamar Jackson's confirmed absence without changing the append-only record.",
+      "doneWhen": "A fresh forecast identifies the usual starter from prior games, applies only a current confirmed-out listing, records the learned adjustment, updates the public score and win chance, and passes historical, hosted and live checks.",
+      "evidence": "Owner instruction 2026-10-11. A 2024/2025 walk-forward check of the stored-history quarterback-out term produced margin misses 10.12/10.19 with shrink 50 versus 10.12/10.20 without it. On the current stored Ravens-Falcons inputs it changes the working projection from ATL 23.8-BAL 24.7 (47.4%) to ATL 24.0-BAL 22.8 (53.6%). Release gates and hosted verification pending."
     }
   ]
 }
