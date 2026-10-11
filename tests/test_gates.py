@@ -512,20 +512,24 @@ class CardTests(unittest.TestCase):
     def card(self, picks):
         return context(games=self.GAMES, first=picks, latest=picks)
 
-    def test_three_props_are_allowed_but_a_fourth_is_not(self):
+    def test_weekend_prop_family_can_fill_the_five_play_card(self):
         picks = {k: prop_lean(id=k, athleteId=k, market='rec', gameIds=[gid], publishedAt='2026-09-26T12:00:00Z')
                  for k, gid in (('a', 'NFL-2'), ('b', 'NFL-3'))}
         self.assertTrue(gates.card_cap(prop_lean(market='rec'), self.card(picks)).ok)
         picks['c'] = prop_lean(id='c', athleteId='c', market='rec', gameIds=['NFL-4'], publishedAt='2026-09-26T12:00:00Z')
-        self.assertFalse(gates.card_cap(prop_lean(market='rec'), self.card(picks)).ok)
+        self.assertTrue(gates.card_cap(prop_lean(market='rec'), self.card(picks)).ok)
+        picks['d'] = prop_lean(id='d', athleteId='d', market='rec', gameIds=['NFL-5'], publishedAt='2026-09-26T12:00:00Z')
+        self.assertTrue(gates.card_cap(prop_lean(market='rec'), self.card(picks)).ok)
+        picks['e'] = prop_lean(id='e', athleteId='e', market='rec', gameIds=['NFL-6'], publishedAt='2026-09-26T12:00:00Z')
+        self.assertIn('ceiling is 5', gates.card_cap(prop_lean(market='rec'), self.card(picks)).reason)
 
-    def test_a_weekend_card_is_five_plays_with_three_of_a_kind_at_most(self):
+    def test_a_weekend_card_is_five_with_non_prop_families_capped_at_three(self):
         team = lambda key, gid: total_lean(id=key, gameIds=[gid], publishedAt='2026-09-25T12:00:00Z')
         prop = lambda key, gid: prop_lean(id=key, gameIds=[gid], athleteId=key, publishedAt='2026-09-26T12:00:00Z')
         three = {k: team(k, g) for k, g in (('a', 'NFL-2'), ('b', 'NFL-3'), ('c', 'NFL-4'))}
         refused = gates.card_cap(total_lean(), self.card(three))
         self.assertFalse(refused.ok, 'three game lines already on Sunday, published days before')
-        self.assertIn('three is the limit', refused.reason)
+        self.assertIn('3 is the limit', refused.reason)
         self.assertTrue(gates.card_cap(prop_lean(), self.card(three)).ok, 'a player prop still fits: the mix')
         five = dict(three, d=prop('d', 'NFL-5'), e=prop('e', 'NFL-6'))
         self.assertIn('ceiling is 5', gates.card_cap(prop_lean(), self.card(five)).reason)

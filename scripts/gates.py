@@ -799,8 +799,10 @@ def card_cap(candidate, ctx):
         return Decision(False, 'card_cap', f"{len(plays)} plays already on the {day} card; the ceiling is {size} and the card is {size}")
     family = 'prop' if candidate.get('athleteId') else market_key(candidate)
     family_count = sum(('prop' if pick.get('athleteId') else market_key(pick)) == family for pick in plays)
-    if family_count >= 3:
-        return Decision(False, 'card_cap', f'{family_count} {family} plays already on the card; three is the limit')
+    family_limit = 5 if weekend and family == 'prop' else 3
+    if family_count >= family_limit:
+        return Decision(False, 'card_cap',
+                        f'{family_count} {family} plays already on the card; {family_limit} is the limit')
     if market_key(candidate) == 'total':
         day_totals = sum(market_key(pick) == 'total' for pick in plays)
         total_cap = 2 if weekend else 1

@@ -2179,7 +2179,7 @@ def _run(args, now, slot, kinds, status):
             gut = gates.selection_verdict(candidate, ctx, 'gut_call')
             if gut.ok:
                 candidate['_selectionDecision'] = gut.data
-                gut_pool.append((league, candidate))
+                gut_pool.append((league, candidate, best))
                 continue
             screened.append({'league': league, 'gameId': candidate['gameIds'][0], 'title': candidate['title'],
                              'rule': best.rule, 'reason': best.reason})
@@ -2225,13 +2225,13 @@ def _run(args, now, slot, kinds, status):
                    and game.get('state') == 'pre' and eastern_date(gates.when(game['kickoff'])) == today
                    and gates.when(game['kickoff']).astimezone(gates.EASTERN).hour >= 19}
     selected_guts = []
-    for league, candidate in sorted(gut_pool, key=lambda item: (
+    for league, candidate, best_refusal in sorted(gut_pool, key=lambda item: (
             -gates.kitchen_score(item[1], ctx, item[1]['_selectionDecision'])['total'], item[1]['id'])):
         game_id = candidate['gameIds'][0]
         day = gates.slate_day(candidate, ctx)
         need_prime = game_id in prime_games and game_id not in existing_games \
-            and all(game_id not in pick['gameIds'] for _, pick in selected_guts)
-        need_day = day not in days_with_play and all(gates.slate_day(pick, ctx) != day for _, pick in selected_guts)
+            and all(game_id not in pick['gameIds'] for _, pick, _ in selected_guts)
+        need_day = day not in days_with_play and all(gates.slate_day(pick, ctx) != day for _, pick, _ in selected_guts)
         if need_prime or need_day:
             duplicate = gates.not_duplicate(candidate, ctx)
             cap = gates.card_cap(candidate, ctx)
@@ -2240,13 +2240,20 @@ def _run(args, now, slot, kinds, status):
             candidate['lane'] = 'gut_call'
             candidate['riskUnits'] = .5
             candidate['_kitchenScore'] = gates.kitchen_score(candidate, ctx, candidate['_selectionDecision'])
-            selected_guts.append((league, candidate))
-    for league, candidate in selected_guts:
+            selected_guts.append((league, candidate, best_refusal))
+    selected_gut_ids = {candidate['id'] for _, candidate, _ in selected_guts}
+    for league, candidate, best_refusal in gut_pool:
+        if candidate['id'] not in selected_gut_ids:
+            decided.append(decision_record(candidate, league, 'refused', [best_refusal.rule],
+                                           f'{best_refusal.reason}; Gut call qualified but ranked outside the card',
+                                           now, ctx))
+    for league, candidate, best_refusal in selected_guts:
         kind = 'props' if candidate.get('athleteId') else 'gamePicks'
         ctx.first[candidate['id']] = dict(candidate, league=league, publishedAt=stamp(now), kind=kind)
         ctx.latest[candidate['id']] = dict(candidate)
         published.append((league, kind, candidate))
-        decided.append(decision_record(candidate, league, 'published', [], None, now, ctx))
+        decided.append(decision_record(candidate, league, 'published', [best_refusal.rule],
+                                       f'Gut call after Best bet refusal: {best_refusal.reason}', now, ctx))
         reason = next((row.get('text') for row in candidate['dossier']['reasons'] if row.get('text')), None)
         if reason:
             reasons[candidate['id']] = reason
@@ -2255,7 +2262,7 @@ def _run(args, now, slot, kinds, status):
     import comfort
     open_days = sorted({gates.slate_day(candidate, ctx) for _, candidate in safer_pool if gates.slate_day(candidate, ctx)})
     for day in open_days:
-        if day in days_with_play or any(gates.slate_day(pick, ctx) == day for _, pick in selected_guts):
+        if day in days_with_play or any(gates.slate_day(pick, ctx) == day for _, pick, _ in selected_guts):
             continue
         ticket = comfort.build([candidate for _, candidate in safer_pool if gates.slate_day(candidate, ctx) == day])
         if not ticket:
