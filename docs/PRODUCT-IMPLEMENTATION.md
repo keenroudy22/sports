@@ -1415,3 +1415,17 @@ Live Harbor and queued Strange1080x1350 cards visibly contain player photos;
 29photo/routing tests pass and no missing-headshot warning in recent desk/hosted
 logs. New menu and nonplay Plays & Results mirrors: zero. Evidence: work/health-*
 2026-10-11 logs/JSON/PNGs and hosted-health-2026-10-11.log.
+
+### October 11 NBA opening-night clarification
+
+The owner resolved the stage-table ambiguity: the labeled NBA Trial starts on
+October 20 under the earlier opening-night approval. It does not wait for 14
+clean capture days or 50 private paper grades. Those counters continue building
+and gate promotion from NBA Trial to Best bets (and the unapproved soccer and
+college-basketball trial starts). NBA admission still requires a fresh exact
+two-sided DraftKings price, a 60-minute injury check, all role and price holds,
+an uncalibrated raw gap of at least six points and chance of at least 0.56. It
+remains at most one 1u play per day, separate from football, paused at 30 graded
+and −5u, and never forced. The observable completion is an October 20 NBA Today
+page plus either the first automatically posted qualifying Trial or the exact
+gate logged when no row qualifies.

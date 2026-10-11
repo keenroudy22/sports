@@ -22,6 +22,7 @@ class NBAReadinessTests(unittest.TestCase):
             'markets': ['moneyline', 'spread', 'total'],
             'captureSlotsEastern': ['11:45', '17:30', '21:00', '23:30'],
             'cleanCaptureDaysRequired': 14, 'paperGradesRequired': 50,
+            'openingDate': '2026-10-20',
         }
 
     def observation(self, moment, clean=True, scheduled=True):
@@ -51,23 +52,34 @@ class NBAReadinessTests(unittest.TestCase):
             ]
         boxscores.append(self.paper/'nba-2027.jsonl', rows)
 
-    def test_stage_requires_four_natural_slots_for_fourteen_days_then_fifty_grades(self):
+    def test_promotion_evidence_requires_four_natural_slots_for_fourteen_days_then_fifty_grades(self):
         self.write_days(13); self.write_paper(50)
-        first=nba_readiness.status(capture_root=self.capture,paper_root=self.paper,config=self.config)
+        first=nba_readiness.status(datetime(2026,10,13,12,tzinfo=timezone.utc),capture_root=self.capture,paper_root=self.paper,config=self.config)
         self.assertEqual(first['stage'],'log'); self.assertFalse(first['readyForLiveTrial'])
         # A partial or manual probe cannot complete a day.
         extra=self.observation(datetime(2026,10,14,15,45,tzinfo=timezone.utc),scheduled=False)
         nba_capture.append_changed([extra],self.capture/'observations',lambda row:row['slot'])
-        self.assertEqual(nba_readiness.status(capture_root=self.capture,paper_root=self.paper,config=self.config)['stage'],'log')
-        # The real four-slot day promotes into the live-trial-ready stage.
+        self.assertEqual(nba_readiness.status(datetime(2026,10,13,12,tzinfo=timezone.utc),capture_root=self.capture,paper_root=self.paper,config=self.config)['stage'],'log')
+        # The real four-slot day completes the separate promotion-evidence gate.
         base=datetime(2026,10,14,tzinfo=timezone.utc)
         rows=[self.observation(base.replace(hour=15,minute=45)),
               self.observation(base.replace(hour=21,minute=30)),
               self.observation((base+timedelta(days=1)).replace(hour=1,minute=0)),
               self.observation((base+timedelta(days=1)).replace(hour=3,minute=30))]
         nba_capture.append_changed(rows,self.capture/'observations',lambda row:row['slot'])
-        final=nba_readiness.status(capture_root=self.capture,paper_root=self.paper,config=self.config)
+        final=nba_readiness.status(datetime(2026,10,20,12,tzinfo=timezone.utc),capture_root=self.capture,paper_root=self.paper,config=self.config)
         self.assertEqual(final['stage'],'live-trial'); self.assertTrue(final['readyForLiveTrial'])
+        self.assertTrue(final['readyForPromotionEvidence'])
+
+    def test_opening_night_trial_does_not_wait_for_promotion_evidence(self):
+        before=nba_readiness.status(datetime(2026,10,19,12,tzinfo=timezone.utc),capture_root=self.capture,paper_root=self.paper,config=self.config)
+        opening=nba_readiness.status(datetime(2026,10,20,12,tzinfo=timezone.utc),capture_root=self.capture,paper_root=self.paper,config=self.config)
+        self.assertFalse(before['readyForLiveTrial'])
+        self.assertTrue(opening['readyForLiveTrial'])
+        self.assertEqual(opening['stage'],'live-trial')
+        self.assertFalse(opening['readyForPromotionEvidence'])
+        self.assertEqual(opening['cleanCaptureDays'],0)
+        self.assertEqual(opening['paperGraded'],0)
 
     def test_bad_or_missing_slot_does_not_count_and_policy_is_free_draftkings_only(self):
         base=datetime(2026,10,1,tzinfo=timezone.utc)

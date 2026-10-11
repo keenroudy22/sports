@@ -304,7 +304,9 @@ Handy commands (from `~/Projects/sports`):
   straight per day at a fresh two-sided public-book price, with role/price holds. Until calibrated,
   require raw edge ≥6 points and chance ≥0.56; then use the item-33 4-point floor. Keep its own record
   line, never combine it with the football headline, and never force a play. Pause at 30 graded and
-  −5u; promote only after 30 graded at or above break-even. College basketball and soccer follow the
+  −5u. The 14-clean-day/50-paper-grade evidence gate does not delay the opening-night Trial; it applies
+  to soccer and college basketball and to promoting NBA from Trial to Best bets. NBA promotes only after
+  that evidence and 30 graded at or above break-even. College basketball and soccer follow the
   same trial pattern when their data and public prices exist. Free sources only; existing NHL/MLB
   score pages remain unchanged. This labeled-trial approval supersedes the old no-new-sport-play
   default only for the guarded trial, not for ordinary best-bet categories.

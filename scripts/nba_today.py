@@ -136,4 +136,5 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
             'readiness':readiness,
             'trial':{'label':'NBA Trial','state':'ready' if started else readiness['stage'],'record':trial_record,'plays':public_plays,'seasons':trial_seasons,
                      'note':('NBA Trial record is separate from football. Only a fully checked side or total can appear.' if public_plays else
-                             f"NBA is in {readiness['stage']} stage: {readiness['cleanCaptureDays']}/{readiness['cleanCaptureDaysRequired']} clean capture days and {readiness['paperGraded']}/{readiness['paperGradesRequired']} paper grades. No NBA Trial play has been posted.")}}
+                             ("NBA Trial is active. No fully checked side or total has cleared yet." if started else
+                              f"NBA Trial starts October 20. Preseason logging is {readiness['cleanCaptureDays']}/{readiness['cleanCaptureDaysRequired']} clean days and {readiness['paperGraded']}/{readiness['paperGradesRequired']} paper grades toward eventual Best bets promotion."))}}

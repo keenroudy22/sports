@@ -1,4 +1,8 @@
-"""Evidence gates for the NBA log -> paper -> live-trial pipeline."""
+"""NBA Trial activation and evidence gates.
+
+The owner approved the labeled NBA Trial for opening night. Clean capture days
+and private paper grades build promotion evidence; they do not delay that start.
+"""
 import json
 from collections import defaultdict
 from datetime import datetime, timezone
@@ -55,13 +59,16 @@ def status(now=None, capture_root=nba_capture.STORE, paper_root=paper.STORE, con
     graded = [row for row in rows if row.get('result') in ('win', 'loss', 'push')]
     clean_need = int(config['cleanCaptureDaysRequired'])
     paper_need = int(config['paperGradesRequired'])
-    stage = 'log'
+    evidence_stage = 'log'
     if len(days) >= clean_need:
-        stage = 'paper'
+        evidence_stage = 'paper'
     if len(days) >= clean_need and len(graded) >= paper_need:
-        stage = 'live-trial'
+        evidence_stage = 'promotion-evidence'
+    opening = datetime.fromisoformat(config['openingDate']).date()
+    trial_open = now.astimezone(EASTERN).date() >= opening
     return {
-        'stage': stage,
+        'stage': 'live-trial' if trial_open else evidence_stage,
+        'evidenceStage': evidence_stage,
         'asOf': boxscores.stamp(now),
         'cleanCaptureDays': len(days),
         'cleanCaptureDaysRequired': clean_need,
@@ -69,7 +76,9 @@ def status(now=None, capture_root=nba_capture.STORE, paper_root=paper.STORE, con
         'paperCandidates': len(rows),
         'paperGraded': len(graded),
         'paperGradesRequired': paper_need,
-        'readyForLiveTrial': stage == 'live-trial',
+        'readyForLiveTrial': trial_open,
+        'readyForPromotionEvidence': evidence_stage == 'promotion-evidence',
+        'trialOpensOn': config['openingDate'],
         'source': config['source'],
         'books': config['books'],
         'markets': config['markets'],
