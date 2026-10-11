@@ -121,8 +121,10 @@ def build(candidate, game, ctx, records, now, *, captures=(), weather_row=None, 
     snap = ctx.snapshot(game['id'])
     if projection is not None and line is not None:
         units = pricing.WORDS.get(market, 'points')
-        phrase = ('total' if market == 'total' else 'spread' if market == 'spread' else units)
-        text = f"My {phrase} is {projection:g}; the book's line is {float(line):g}."
+        # This dossier line can feed a public caption. Keep the plain owner-approved
+        # shape and never expose the retired "My <stat> is ...; the book's line is ..."
+        # sentence.
+        text = f"Book says {float(line):g}. I say {projection:g}."
         item = _item(text, {'projection': projection, 'line': line},
                      "Kook'n projection", candidate.get('snapshotAt') or (snap or {}).get('retrievedAt'))
         if market != 'spread' and side in ('over', 'under'):

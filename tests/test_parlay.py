@@ -58,6 +58,23 @@ class BuildTests(unittest.TestCase):
         self.assertIsNone(ticket)
         self.assertIn('needs 3', reason)
 
+    def test_owner_shape_caps_price_legs_and_totals(self):
+        rows = [dict(row) for row in self.rows[:4]]
+        for row in rows[1:]:
+            row['market'] = 'point spread'
+            row['direction'] = 'home'
+        ticket, reason = parlay.build(rows, NOW, target=500, max_legs=4,
+                                      price_range=(500, 1500), max_totals=1)
+        self.assertIsNone(reason)
+        self.assertGreaterEqual(ticket['odds'], 500)
+        self.assertLessEqual(ticket['odds'], 1500)
+        self.assertLessEqual(len(ticket['legs']), 4)
+        self.assertLessEqual(sum(leg['market'] == 'total points' for leg in ticket['legs']), 1)
+        ticket, reason = parlay.build(self.rows[:4], NOW, target=500, max_legs=4,
+                                      price_range=(500, 1500), max_totals=1)
+        self.assertIsNone(ticket)
+        self.assertTrue(reason)
+
     def test_price_arithmetic(self):
         self.assertAlmostEqual(parlay.decimal(-110), 1.909, places=3)
         self.assertAlmostEqual(parlay.decimal(150), 2.5)

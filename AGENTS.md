@@ -207,6 +207,17 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **October 11 operating settlement (owner, 2026-10-11):** Fun tickets are a small number of pregame parlays at
+  +500 through +1500, one book, different games, at most one total and one saved real reason per leg; they are
+  graded win or lose. The prior conversation idea to post parlays only after they win is withdrawn. Try for a
+  Climb step on most days with two or more games in one league (especially Saturday, Sunday and college Friday),
+  usually one or two researched legs and any reviewed alternate mix; it remains unforced and all safety gates
+  remain. Grade each play and refresh the site about 30 minutes after a verified final. A casual win reaction or
+  honest near-miss may post before 12:30 AM; after that, the 9:00 AM Results post sweeps it up. The agent acts
+  without case-by-case permission except for spending money, changing how the public record counts or legal
+  decisions. NBA, soccer and college basketball activate automatically when their documented readiness checks
+  pass. Report ordinary decisions together in the weekly owner note.
+
 - **Separate Climb windows (owner, 2026-10-11):** prepare Step 1 from the earliest qualifying part of the day's
   slate and allow a later Step 2 only after Step 1 has settled. A rung's one or two legs must kick off within the
   same 90-minute window; never join an early game to a night game merely to reach the ticket-price band. A later

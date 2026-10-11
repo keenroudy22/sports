@@ -159,14 +159,14 @@ class ExpiryTests(unittest.TestCase):
         row = lambda gid: {'id': f'line-{gid}', 'title': f'{gid} over 44.5', 'gameId': gid, 'league': 'NFL', 'state': 'open', 'odds': -110,
                            'grade': {'chance': 0.56}, 'kickoff': GAMES[gid]['kickoff'], 'market': 'total points', 'direction': 'over',
                            'line': 44.5, 'book': 'DraftKings', 'observedAt': '2026-09-27T12:00:00Z'}
-        ticket, reason = run.longshot_candidate([row(g) for g in ('g1', 'g2', 'g3')], GAMES, NOW, 'NFL')
+        spread1 = dict(row('g1'), id='game-g1-spread', title='LIO -3.5', market='point spread', direction=None, line=-3.5)
+        spread2 = dict(row('g2'), id='game-g2-spread', title='CHI -3.5', market='point spread', direction=None, line=-3.5)
+        ticket, reason = run.longshot_candidate([spread1, spread2, row('g3')], GAMES, NOW, 'NFL')
         self.assertIsNone(reason)
         self.assertTrue(gates.expiry_ok(ticket, context).ok, gates.expiry_ok(ticket, context).reason)
-        self.assertEqual(sorted(l['title'] for l in ticket['legs']), ['Bills at Lions over 44.5', 'Colts at Chiefs over 44.5', 'Jets at Rams over 44.5'],
-                         'legs read the way a post says them')
-        spread = dict(row('g1'), id='game-g1-spread', title='LIO -3.5', market='point spread', direction=None, line=-3.5)
-        ticket, _ = run.longshot_candidate([spread, row('g2'), row('g3')], GAMES, NOW, 'NFL')
-        leg = next(l for l in ticket['legs'] if l['market'] == 'point spread')
+        self.assertEqual(sum(l['market'] == 'total points' for l in ticket['legs']), 1)
+        spread = spread1
+        leg = next(l for l in ticket['legs'] if l['gameId'] == 'g1')
         self.assertEqual((leg['side'], leg['title']), ('home', 'Lions -3.5'), 'a home spread is named and graded as the home side')
         final = dict(GAMES['g1'], home=dict(GAMES['g1']['home'], score=27), away=dict(GAMES['g1']['away'], score=20))
         self.assertEqual(run.grade_game_pick(run.leg_pick(leg), final)[0], 'win', 'Lions by 7 cover -3.5')
@@ -191,7 +191,8 @@ class ExpiryTests(unittest.TestCase):
         with mock.patch.object(ladder, 'legs_for_game', legs), mock.patch.object(ladder, 'confirmed_at', lambda: {}):
             ticket, reason = run.longshot_candidate(rows, GAMES, NOW, 'NFL', ctx=world)
             self.assertIsNone(reason)
-            self.assertFalse(any(leg.get('alternate') for leg in ticket['legs']), 'prefer a qualifying main-line ticket')
+            self.assertTrue(any(leg.get('alternate') for leg in ticket['legs']),
+                            'alternates replace excess totals under the owner ticket shape')
             ticket, reason = run.longshot_candidate(rows[:2], GAMES, NOW, 'NFL', ctx=world)
         self.assertIsNone(reason)
         self.assertTrue(any(leg.get('alternate') for leg in ticket['legs']))

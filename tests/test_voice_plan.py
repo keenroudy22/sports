@@ -22,6 +22,9 @@ class PlanVoiceTests(unittest.TestCase):
         ]
         for text in banned:
             self.assertTrue(voice.lint(text), text)
+        self.assertIn('retired projection sentence',
+                      voice.lint("My receiving yards is 43.6; the book's line is 34.5."))
+        self.assertFalse(voice.lint('Book says 34.5. I say 44.'))
         for text in ('run game', 'run defense', 'run it back', 'Bucs run the ball',
                      'Both teams run 70+ plays a game', 'edge rusher', 'Sweated that one.'):
             self.assertFalse(voice.lint(text), text)
@@ -35,6 +38,15 @@ class PlanVoiceTests(unittest.TestCase):
                                     send=lambda *_: self.fail('Buffer transport must not run'))
         with self.assertRaises(discord_post.DiscordError):
             discord_post.send_message('secret', bad, send=lambda *_: self.fail('Discord transport must not run'))
+
+        retired = "My receiving yards is 43.6; the book's line is 34.5."
+        with self.assertRaises(x_post.Refused):
+            x_post.post_tweet(retired, {}, send=lambda *_: self.fail('X transport must not run'))
+        with self.assertRaises(buffer_post.BufferError):
+            buffer_post.create_post(retired, 'channel', datetime(2026, 10, 9, tzinfo=timezone.utc),
+                                    send=lambda *_: self.fail('Buffer transport must not run'))
+        with self.assertRaises(discord_post.DiscordError):
+            discord_post.send_message('secret', retired, send=lambda *_: self.fail('Discord transport must not run'))
 
     def test_owner_written_pools_have_required_depth(self):
         pool = voice_pick.pools()

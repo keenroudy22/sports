@@ -22,6 +22,19 @@ These rules don't change: the record is append-only; no invented prices, stats o
 through Buffer only, with no automated replies, likes or follows; MGL stays separate; secrets stay out of the repo;
 21+ and entertainment only.
 
+### October 11 operating settlement
+
+- Fun parlays post before their games and are graded win or lose. Keep only a small number, one book, different
+  games, +500 through +1500, at most one total and a real saved reason on every leg. The idea to post parlays only
+  after a win is withdrawn.
+- Try to prepare a Climb step on most days with two or more games in one league, especially Saturdays, Sundays and
+  college Fridays. Use one or two researched legs and reviewed alternates in any mix. Never bypass a safety gate.
+- Grade within about 30 minutes of a verified final and refresh the site immediately. Post a casual win reaction or
+  an honest near-miss before 12:30 AM; the 9:00 AM Results post catches everything later.
+- The agent acts first and reports routine decisions in one weekly note. Owner approval is reserved for spending
+  money, changing what the record counts and legal decisions. NBA, soccer and college basketball activate without
+  another approval when their readiness tests pass.
+
 ---
 
 ## 1. What Kook'n is
@@ -118,7 +131,7 @@ graded at or above break-even. No two plays go on the same game.
 | **🐕 Upset pick** | College underdog our number has winning outright, spread 6.5 or less (about +120 to +220), with a reason. NFL upsets run quietly in the background until they earn it. | Any college day, at most 1 | 1u |
 | **👨‍🍳 Gut call** | The fallback above. On weekends the local model may also pick one from the researched shortlist. | At most 1 a day | 0.5u |
 | **🛡️ Safer combo** | Two strong favorites (above). Replaces the old easy parlay. | Only when there's no best bet | 1u |
-| **🎰 Chef's Special** | Fun ticket, 3-4 legs, +300 to +800, one book, different games. College and NFL can mix. No same-game parlays, because free data can't honestly price legs that move together. | Any football day with 3+ games; NBA days once live | 0.25u |
+| **🎰 Chef's Special** | A small number of pregame fun tickets, +500 to +1500, one book, different games, at most one total and a saved real reason on every leg. College and NFL can mix. No same-game parlays, because free data can't honestly price legs that move together. Every ticket is graded win or lose. | Football game days; NBA days once live | 0.25u |
 | **🪜 80/20 Climb** | $50 to $1,000, bank 20%, one rung at a time. One or two supported moneylines/alternates, one book, final price −300 to −200; every leg researched, never forced. | Its own checks | $ ledger |
 | **NBA / Soccer / CBB** | Same rules, own line, 1 play a day per sport. Joins the Best bets headline after 30 graded at or above break-even. | From their start dates | 1u |
 

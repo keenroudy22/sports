@@ -94,7 +94,8 @@ def priced_ticket(book, legs):
             'firstKickoff': min(l['kickoff'] for l in chosen)}
 
 
-def build(rows, now, day=None, target=500, league=None, exclude=(), extra_legs=(), max_legs=MAX_LEGS, price_range=None):
+def build(rows, now, day=None, target=500, league=None, exclude=(), extra_legs=(), max_legs=MAX_LEGS,
+          price_range=None, max_totals=None):
     """The best ticket on the board for the day: None with a reason when there is none.
 
     exclude: game ids the research run has a sourced reason to leave off, such as weather.
@@ -130,7 +131,10 @@ def build(rows, now, day=None, target=500, league=None, exclude=(), extra_legs=(
         board.sort(key=lambda l: -l['chance'])
         # Preserve the board-only candidates exactly; alternates are additional choices, not a new requirement.
         for count in range(MIN_LEGS, min(max_legs, len(board)) + 1):
-            tickets.append(priced_ticket(book, board[:count]))
+            choices = combinations(board, count) if max_totals is not None else (tuple(board[:count]),)
+            for chosen in choices:
+                if max_totals is None or sum(leg.get('market') == 'total points' for leg in chosen) <= int(max_totals):
+                    tickets.append(priced_ticket(book, chosen))
 
         # Search a bounded set of the strongest games. Each game contributes at most its best board leg and best
         # alternate, which keeps a full college slate deterministic and small while allowing genuinely mixed tickets.
@@ -152,6 +156,11 @@ def build(rows, now, day=None, target=500, league=None, exclude=(), extra_legs=(
                         tickets.append(priced_ticket(book, chosen))
     if not tickets:
         return None, 'no book carries three of those lines at the graded numbers'
+    if max_totals is not None:
+        tickets = [ticket for ticket in tickets
+                   if sum(leg.get('market') == 'total points' for leg in ticket['legs']) <= int(max_totals)]
+        if not tickets:
+            return None, f'no ticket stays within the {int(max_totals)} total maximum'
     if price_range:
         tickets = [t for t in tickets if price_range[0] <= t['odds'] <= price_range[1]]
         if not tickets:

@@ -28,6 +28,21 @@ class SlotTests(unittest.TestCase):
     def test_forced_slot(self):
         self.assertEqual(run.slot_for(datetime(2026, 9, 27, 14, 0, tzinfo=timezone.utc), '1145').strftime('%H%M'), '1145')
 
+    def test_530_rechecks_only_a_still_dark_primetime_nfl_game(self):
+        now = datetime(2026, 10, 11, 21, 30, tzinfo=timezone.utc)
+        slot = now.astimezone(run.EASTERN)
+        games = {
+            'NFL-dark': {'id': 'NFL-dark', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-10-12T00:20:00Z'},
+            'NFL-early': {'id': 'NFL-early', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-10-11T17:00:00Z'},
+            'CFB-night': {'id': 'CFB-night', 'league': 'CFB', 'state': 'pre', 'kickoff': '2026-10-12T00:00:00Z'},
+        }
+        ctx = SimpleNamespace(first={}, latest={})
+        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'NFL-dark'})
+        ctx.first['posted'] = {'gameIds': ['NFL-dark'], 'status': 'active'}
+        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), set())
+        morning = datetime(2026, 10, 11, 6, 45, tzinfo=run.EASTERN)
+        self.assertIsNone(run.official_selection_scope(morning, games, ctx, now))
+
 
 class CandidateCatalogTests(unittest.TestCase):
     def test_spreads_join_the_board_without_turning_off_exact_line_checks(self):
@@ -64,6 +79,23 @@ class CandidateCatalogTests(unittest.TestCase):
             messages = []
             self.assertEqual(run.load_candidate_lines(path, messages.append), [])
             self.assertIn('official selection skipped', messages[0])
+
+    def test_fun_ticket_needs_a_saved_reason_on_every_leg_and_can_forbid_replacement(self):
+        ticket = {'_league': 'NFL', 'legs': [
+            {'id': 'a', 'title': 'A +3', 'gameId': 'NFL-1', 'market': 'point spread', 'side': 'home'},
+            {'id': 'b', 'title': 'B over 20.5', 'gameId': 'NFL-2', 'market': 'recYds',
+             'side': 'over', 'athleteId': '2'},
+        ]}
+        ctx = SimpleNamespace(player_team={'2': '20'}, context_file={}, latest={})
+        with mock.patch.object(run, 'evidence', return_value=[]), mock.patch.object(
+                run, 'plan_reasons', side_effect=[
+                    [{'type': 'matchup', 'direction': 'for', 'text': 'A faces the weaker run defense.'}], []]):
+            self.assertEqual(run.attach_ticket_reasons(ticket, ctx), ['B over 20.5'])
+        self.assertEqual(ticket['legs'][0]['reason'], 'A faces the weaker run defense.')
+        self.assertIsNone(ticket['legs'][1]['reason'])
+        self.assertTrue(run.ticket_replacement_allowed('ticket', ctx))
+        ctx.latest['ticket'] = {'replacementAllowed': False}
+        self.assertFalse(run.ticket_replacement_allowed('ticket', ctx))
 
 
 class GradingTests(unittest.TestCase):

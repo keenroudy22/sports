@@ -40,6 +40,8 @@ class DossierTests(unittest.TestCase):
             'source': 'https://weather.gov/hourly', 'windMph': 18, 'tempF': 50,
             'windDirection': 'NW', 'precipProb': 20, 'issuedAt': '2026-10-07T21:00:00Z'}}
         row = dossier.build(candidate, GAME, self.context(), [], NOW, captures=captures, weather_row=forecast)
+        self.assertTrue(any(x['text'] == 'Book says 48.5. I say 43.2.' for x in row['reasons']))
+        self.assertNotIn("book's line is", str(row))
         self.assertIsNone(row['line']['books']['DraftKings']['open'])
         self.assertEqual(row['line']['books']['DraftKings']['firstCaptured']['line'], 49.5)
         self.assertEqual(row['line']['books']['FanDuel']['now']['price'], -110)
@@ -59,6 +61,7 @@ class DossierTests(unittest.TestCase):
         self.assertTrue(row['partial'])
         self.assertEqual(row['reasons'], [])
         self.assertTrue(any('43.2' in x['text'] for x in row['risks']))
+        self.assertNotIn("book's line is", str(row))
         self.assertNotIn('Unsupported', str(row))
 
     def test_college_no_injury_report_is_explicit_not_invented(self):

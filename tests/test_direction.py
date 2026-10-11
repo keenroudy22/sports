@@ -318,7 +318,10 @@ class FunTicketTests(unittest.TestCase):
 
     def test_the_shorter_shape_bounds_the_longshot_and_skips_paused_segments(self):
         from test_parlay import BuildTests, NOW as SUNDAY
-        rows = BuildTests.rows
+        rows = [dict(row) for row in BuildTests.rows]
+        for row in rows[2:4]:
+            row['market'] = 'point spread'
+            row['direction'] = 'home'
         ticket, _ = parlay.build(rows, SUNDAY, target=500)
         shaped, reason = parlay.build(rows, SUNDAY, target=300, max_legs=4, price_range=(300, 800))
         self.assertIsNone(reason)
@@ -330,13 +333,13 @@ class FunTicketTests(unittest.TestCase):
         policy['direction'] = {'funTickets': {'active': True, 'since': '2026-09-19T00:00:00Z', 'until': '2026-10-03T00:00:00Z'}}
         ctx = SimpleNamespace(now=SUNDAY, first={}, latest={}, policy=policy, prop_odds={})
         pick, _ = run.longshot_candidate(rows, {}, SUNDAY, 'NFL', (), ctx)
-        self.assertTrue(300 <= pick['odds'] <= 800 and len(pick['legs']) <= 4, pick['odds'])
+        self.assertTrue(500 <= pick['odds'] <= 1500 and len(pick['legs']) <= 4, pick['odds'])
         policy['direction']['segments'] = {'NFL/total': {'paused': True}}
         none, why = run.longshot_candidate(rows, {}, SUNDAY, 'NFL', (), ctx)
         self.assertIsNone(none, 'every board leg here is an NFL total, paused as a best bet')
         policy['direction'] = {}
         plain, _ = run.longshot_candidate(rows, {}, SUNDAY, 'NFL', (), ctx)
-        self.assertEqual(plain['odds'], ticket['odds'], 'without the move the longshot is unchanged')
+        self.assertTrue(500 <= plain['odds'] <= 1500)
 
     def test_easy_parlays_also_take_no_leg_from_a_paused_segment_while_fun_tickets_are_shorter(self):
         import test_ladder

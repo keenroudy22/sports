@@ -782,13 +782,14 @@ def longshot_candidate(lines, games, now, league, exclude=(), ctx=None):
     # Main lines first. Remove player exposure before ranking, so another eligible leg can replace it.
     lines = gates.without_straight_players(lines, ctx) if ctx is not None else lines
     import direction
-    # After a cold run of fun tickets the direction rules ask for shorter tickets for two weeks (owner, 2026-10-07):
-    # +300 to +800, 3-4 legs, no leg from a segment paused as a best bet. None that fits means none that day.
+    # Owner Oct. 11: a small pregame fun ticket, +500 to +1500, 3-4 legs,
+    # one book/different games and at most one total. Every leg gets its own
+    # saved reason below before the ticket may publish.
     policy = getattr(ctx, 'policy', None)
     shape = direction.fun_shape(policy, now) if ctx is not None else None
-    target, options = LONGSHOT_TARGET, {}
+    target, options = 500, {'max_legs': 4, 'price_range': (500, 1500), 'max_totals': 1}
     if shape:
-        target, options = shape['odds'][0], {'max_legs': shape['legs'][1], 'price_range': shape['odds']}
+        options['max_legs'] = min(4, shape['legs'][1])
         lines = direction.fun_legs(policy, lines, now, league)
     ticket, reason = parlay.build(lines, now, None, target, league, exclude, **options)
     if not ticket and ctx is not None and gates.alternate_parlay_frequency({'league': league, 'parlayType': 'easyProps'}, ctx).ok:
@@ -817,6 +818,31 @@ def longshot_candidate(lines, games, now, league, exclude=(), ctx=None):
             'sources': sorted(({games[g]['source'] for g in ticket['gameIds'] if g in games and games[g].get('source')}
                                | {row['source'] for row in lines if row.get('id') in {l['id'] for l in ticket['legs']} and row.get('source')}
                                | ({'https://sharpapi.io/'} if any(l.get('alternate') for l in ticket['legs']) else set())))}, None
+
+
+def attach_ticket_reasons(ticket, ctx):
+    """Save one directional, sourced reason per fun-ticket leg; list legs that do not have one."""
+    missing = []
+    league = ticket.get('_league') or ticket.get('league')
+    for leg in ticket.get('legs') or []:
+        case = dict(leg, gameIds=[leg.get('gameId')], _league=league,
+                    _team=(getattr(ctx, 'player_team', {}) or {}).get(str(leg.get('athleteId') or '')),
+                    _player=leg.get('player'))
+        try:
+            case['_evidence'] = evidence(case, ctx, getattr(ctx, 'context_file', {}) or {})
+            saved = plan_reasons(case, ctx)
+        except (KeyError, TypeError, ValueError, AttributeError):
+            saved = []
+        leg['reasons'] = saved
+        leg['reason'] = next((row.get('text') for row in saved
+                              if row.get('direction') == 'for' and row.get('text')), None)
+        if not leg['reason']:
+            missing.append(leg.get('title') or leg.get('id') or 'leg')
+    return missing
+
+
+def ticket_replacement_allowed(ticket_id, ctx):
+    return (ctx.latest.get(ticket_id) or {}).get('replacementAllowed') is not False
 
 
 def price(candidate, ctx, now):
@@ -1714,6 +1740,31 @@ def run_tests(python=sys.executable):
         raise RunError('node tests failed:\n' + (node.stderr or node.stdout)[-1500:])
 
 
+def official_selection_scope(slot, games, ctx, now):
+    """Game ids eligible for this run's official selection.
+
+    ``None`` means the ordinary 6:45 game-day board.  The 5:30 run gets one
+    bounded second look at still-dark primetime NFL games after that run's
+    fresh prop capture.  Every ordinary gate remains in force.
+    """
+    if slot.hour == 6 and slot.minute == 45:
+        return None
+    if slot.hour != 17 or slot.minute != 30:
+        return set()
+    today = eastern_date(now)
+    already = set()
+    for key, first in ctx.first.items():
+        pick = dict(first, **ctx.latest.get(key, {}))
+        if pick.get('result') or pick.get('entryNote') or (pick.get('status') or 'active') != 'active':
+            continue
+        already.update(pick.get('gameIds') or [])
+    return {game['id'] for game in games.values()
+            if game.get('league') == 'NFL' and game.get('state') == 'pre'
+            and eastern_date(gates.when(game['kickoff'])) == today
+            and gates.when(game['kickoff']).astimezone(EASTERN).hour >= 19
+            and game['id'] not in already}
+
+
 def allowed(path):
     return any(path == w.rstrip('/') or path.startswith(w) for w in WHITELIST)
 
@@ -2012,10 +2063,15 @@ def _run(args, now, slot, kinds, status):
 
     build_site.build(now)
     lines = load_candidate_lines(build_site.OUT / 'lines.json')
-    selection_run = slot.hour == 6 and slot.minute == 45
+    selection_scope = official_selection_scope(slot, games, ctx, now)
+    selection_run = selection_scope is None or bool(selection_scope)
     wanted = rank_card(candidates(lines, games, now), ctx) if selection_run else []
+    if selection_scope is not None:
+        wanted = [candidate for candidate in wanted if candidate['gameIds'][0] in selection_scope]
     if not selection_run:
         log('owner plan: official plays are admitted only by the 6:45 AM game-day run')
+    elif selection_scope is not None:
+        log(f"primetime recheck after fresh prices: {len(selection_scope)} dark NFL game(s)")
     log(f'{len(wanted)} candidates on the board')
     decided = []          # every decision this run made, for the learning record
     reasons = {}          # the reason each published play's post will give (data/x-reasons.json)
@@ -2217,6 +2273,9 @@ def _run(args, now, slot, kinds, status):
                 log(f'{league} longshot: {reason}')
                 continue
             if gates.pulled_before_post(ticket['id'], ctx):
+                if not ticket_replacement_allowed(ticket['id'], ctx):
+                    log(f"{league} longshot: owner closed today's ticket with no replacement")
+                    continue
                 if not replacement_has_last_look(ticket, games, now):
                     log(f"{league} longshot: replacement has no last-look X window; not publishing")
                     screened.append({'league': league, 'gameId': (ticket.get('gameIds') or [None])[0],
@@ -2225,6 +2284,14 @@ def _run(args, now, slot, kinds, status):
                     continue
                 ticket['replacementOf'] = ticket['id']
                 ticket['id'] = gates.fresh_id(ticket['id'], ctx)       # the day's first was pulled before its post
+            missing = attach_ticket_reasons(ticket, ctx)
+            if missing:
+                reason = 'no saved leg reason for ' + ', '.join(missing)
+                log(f'{league} longshot: {reason}')
+                screened.append({'league': league, 'gameId': ticket['gameIds'][0], 'title': ticket['title'],
+                                 'rule': 'ticket_research', 'reason': reason})
+                decided.append(decision_record(ticket, league, 'refused', ['ticket_research'], reason, now, ctx))
+                continue
             write_prose(ticket, ctx, records)
             ok, decisions = gates.admit(dict(ticket, league=league), ctx)
             if ok:

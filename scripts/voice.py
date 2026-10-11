@@ -26,6 +26,9 @@ EDGE_NUMBER = re.compile(r'(?i)\+\d+(?:\.\d+)?\s+edge\b')
 ZERO_DOLLARS = re.compile(r'(?<!\d)\$0\b')
 DOUBLED_WORD_END = re.compile(r'(?i)\b[A-Za-z]*([A-Za-z]{3,})\1\b')
 REPEATED_PAREN = re.compile(r'(\([^()]+\))(?:\s+\1)+', re.I)
+RETIRED_PROJECTION_SENTENCE = re.compile(
+    r"(?i)\bmy\s+[^\n.;:]+?\s+is\s+[+-]?\d+(?:\.\d+)?\s*;\s*the\s+book(?:'|’)?s\s+line\s+is\s+[+-]?\d+(?:\.\d+)?"
+)
 
 
 def bare_athlete_id(text):
@@ -63,6 +66,8 @@ def lint(text):
         problems.append('caption kill-list phrase')
     if DOUBLED_WORD_END.search(clean) or REPEATED_PAREN.search(clean):
         problems.append('duplicated public wording')
+    if RETIRED_PROJECTION_SENTENCE.search(clean):
+        problems.append('retired projection sentence')
     if re.search(r'(?im)\brepl(?:y|ies|ied|ying)\b[^.!?]*\?\s*(?:$|\n)', clean):
         problems.append('reply question')
     bangs = clean.count('!')
