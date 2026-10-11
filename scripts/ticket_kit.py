@@ -464,15 +464,21 @@ def initials_badge(card, cx, cy, r, initials, color):
 
 
 def face_thumb(card, name, cx, cy, r=30, ring=LINE):
-    """A circle crop of the cutout's face."""
+    """A circle crop of the player's full head and shoulders.
+
+    ESPN cutouts are 600 x 436 and leave very different amounts of transparent
+    space above a player's hair.  The old 190 px crop only covered the top half
+    of many faces (and reduced tall hair to a forehead).  Anchor a wider square
+    at the first opaque row so the complete head survives every thumbnail size.
+    """
     _, sw, sh = card.image(name)
     fx, top = face_of(name)
-    crop = 190                                  # source px across the face
+    crop = min(300, sw, sh - top)               # source px across the head/shoulders
     scale = 2 * r / crop
     cid = card.uid('thumb')
     card.defs.append(f'<clipPath id="{cid}"><circle cx="{cx}" cy="{cy}" r="{r}"/></clipPath>')
     x = cx - fx * scale
-    y = cy - (top + 92) * scale
+    y = cy - (top + crop / 2) * scale
     return (f'<circle cx="{cx}" cy="{cy}" r="{r + 3}" fill="{ring}"/><circle cx="{cx}" cy="{cy}" r="{r}" fill="#DCE6E0"/>'
             f'<g clip-path="url(#{cid})">{card.use(name, x, y, sw * scale, sh * scale)}</g>')
 

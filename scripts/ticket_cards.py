@@ -579,8 +579,21 @@ def research_list_card(p):
     inner += card.text(COL_X - 4, 290 + round(title_size * CAP), title, title_size, CHALK)
     kicker = str(p.get('kicker') or 'TODAY’S FOOTBALL RESEARCH').upper()
     inner += card.text(COL_X, panel_bottom - 30, kicker, fit(kicker, 42, 830, floor=32), CHALK)
-    for i, row in enumerate(rows[:5]):
-        cx, cy = 704 + (i % 3) * 102, 254 + (i // 3) * 108
+    # One decorative portrait per player. A player can have more than one
+    # researched market, but repeating their face in the header looks broken.
+    header_rows, seen_art = [], set()
+    for row in rows:
+        key = row.get('art') or ('fallback', row.get('subject'))
+        if key in seen_art:
+            continue
+        seen_art.add(key)
+        header_rows.append(row)
+    header_rows = header_rows[:5]
+    for i, row in enumerate(header_rows):
+        if len(header_rows) <= 3:
+            cx, cy = 908 - (len(header_rows) - 1 - i) * 102, 254
+        else:
+            cx, cy = 704 + (i % 3) * 102, 254 + (i // 3) * 108
         if row.get('art'):
             inner += kit.face_thumb(card, row['art'], cx, cy, 46, ring=CHALK)
         else:

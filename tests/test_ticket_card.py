@@ -91,6 +91,25 @@ class TicketCardTests(unittest.TestCase):
                 self.assertNotIn('SLATE RESEARCH', svg)
                 self.assertNotIn('>BEST BET<', svg)
 
+    def test_research_header_deduplicates_players_with_multiple_markets(self):
+        rows = [
+            {'subject': 'Omarion Hampton', 'line': 'OVER 41.5 RUSH YDS', 'right': '9/10',
+             'art': 'hampton'},
+            {'subject': 'Omarion Hampton', 'line': 'OVER 11.5 CARRIES', 'right': '9/10',
+             'art': 'hampton'},
+            {'subject': "Tre' Harris", 'line': 'UNDER 4.5 CATCHES', 'right': '9/10',
+             'art': 'harris'},
+        ]
+        calls = []
+        def thumb(card, art, cx, cy, radius, ring=None):
+            calls.append((art, radius))
+            return '<g/>'
+        with patch('ticket_cards.kit.face_thumb', side_effect=thumb):
+            ticket_cards.research_list_card({'title': 'MATCHUP TRENDS', 'rows': rows})
+        self.assertEqual([art for art, radius in calls if radius == 46], ['hampton', 'harris'])
+        self.assertEqual([art for art, radius in calls if radius == 34],
+                         ['hampton', 'hampton', 'harris'])
+
     @classmethod
     def setUpClass(cls):
         cls.image = ('data:image/png;base64,' + base64.b64encode((ROOT / 'site' / 'kookn-mark.png').read_bytes()).decode('ascii'))
