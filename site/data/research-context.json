@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-11T12:26:56Z",
+  "updatedAt": "2026-10-11T12:33:46Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1157,6 +1157,15 @@
           "name": "Chicago Bears",
           "players": [
             {
+              "id": "4431611",
+              "name": "Caleb Williams",
+              "position": "QB",
+              "status": "Questionable",
+              "injury": "Hamstring",
+              "reportedAt": "2026-10-11T12:26Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4431611/caleb-williams"
+            },
+            {
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
@@ -1236,15 +1245,6 @@
               "injury": null,
               "reportedAt": "2026-10-09T19:08Z",
               "source": "https://www.espn.com/nfl/player/_/id/3930040/jonah-jackson"
-            },
-            {
-              "id": "4431611",
-              "name": "Caleb Williams",
-              "position": "QB",
-              "status": "Questionable",
-              "injury": "Hamstring",
-              "reportedAt": "2026-10-09T19:03Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4431611/caleb-williams"
             },
             {
               "id": "4259545",
@@ -7767,8 +7767,8 @@
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-11T12:26:56Z",
-      "lastAttemptAt": "2026-10-11T12:26:56Z",
+      "checkedAt": "2026-10-11T12:33:46Z",
+      "lastAttemptAt": "2026-10-11T12:33:46Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-11T12:26:56Z",
-      "lastAttemptAt": "2026-10-11T12:26:56Z",
+      "checkedAt": "2026-10-11T12:33:46Z",
+      "lastAttemptAt": "2026-10-11T12:33:46Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
