@@ -9718,5 +9718,41 @@
     "sources": [
       "https://www.espn.com/nfl/game/_/gameId/401873065"
     ]
+  },
+  {
+    "gameId": "CFB-401856833",
+    "publishedAt": "2026-10-11T01:12:27Z",
+    "home": 18,
+    "away": 32,
+    "model": "elo-total-v1",
+    "type": "baseline",
+    "confidence": 3,
+    "sparse": false,
+    "trainingGames": {
+      "home": 9,
+      "away": 12
+    },
+    "why": "Opponent-adjusted historical scoring margin with smoothed team game totals. No injury, roster, weather, or betting-market adjustment. Analyst review pending.",
+    "sources": [
+      "https://www.espn.com/college-football/game/_/gameId/401856833"
+    ]
+  },
+  {
+    "gameId": "CFB-401858490",
+    "publishedAt": "2026-10-11T01:12:27Z",
+    "home": 24,
+    "away": 22,
+    "model": "elo-total-v1",
+    "type": "baseline",
+    "confidence": 3,
+    "sparse": false,
+    "trainingGames": {
+      "home": 14,
+      "away": 12
+    },
+    "why": "Opponent-adjusted historical scoring margin with smoothed team game totals. No injury, roster, weather, or betting-market adjustment. Analyst review pending.",
+    "sources": [
+      "https://www.espn.com/college-football/game/_/gameId/401858490"
+    ]
   }
 ]
