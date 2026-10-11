@@ -313,6 +313,7 @@ def moneyline_legs(game, ctx, now):
     if not timedelta(minutes=-1) <= age <= GAME_FRESH:
         return []
     provider = str(market.get('provider') or '').strip()
+    provider = build_site.BOOKS.get(provider, provider)
     book = next((name for name in SLUGS if name.lower() == provider.lower()), None)
     if not book:
         return []

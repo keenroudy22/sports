@@ -199,6 +199,14 @@ class BuildTests(unittest.TestCase):
         self.assertEqual([leg['marketType'] for leg in pick['legs']], ['moneyline', 'moneyline'])
         self.assertTrue(all(leg['fairChance'] < leg['rawChance'] for leg in pick['legs']))
 
+    def test_espn_spaced_book_names_keep_exact_moneyline_legs(self):
+        for provider, expected in (('Draft Kings', 'DraftKings'), ('Fan Duel', 'FanDuel')):
+            game_row = dict(GAMES['g1'], market={'provider': provider, 'homeML': '-500', 'awayML': '+380'},
+                            marketRetrievedAt='2026-09-27T12:10:00Z')
+            legs = ladder.moneyline_legs(game_row, ctx(), NOW)
+            self.assertTrue(legs, provider)
+            self.assertEqual({leg['book'] for leg in legs}, {expected})
+
     def test_a_rung_never_mixes_early_and_night_games(self):
         games = {
             'early-one': game('early-one', 'Bills', 'Lions', '2026-09-27T17:00Z'),
