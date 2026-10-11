@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-11T21:56:40Z",
+  "updatedAt": "2026-10-11T22:04:06Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1387,6 +1387,15 @@
           "name": "Cincinnati Bengals",
           "players": [
             {
+              "id": "3915511",
+              "name": "Joe Burrow",
+              "position": "QB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-11T21:58Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3915511/joe-burrow"
+            },
+            {
               "id": "4362628",
               "name": "Ja'Marr Chase",
               "position": "WR",
@@ -1583,15 +1592,6 @@
               "injury": null,
               "reportedAt": "2026-10-04T21:22Z",
               "source": "https://www.espn.com/nfl/player/_/id/4362238/chase-brown"
-            },
-            {
-              "id": "3915511",
-              "name": "Joe Burrow",
-              "position": "QB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-04T20:58Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3915511/joe-burrow"
             },
             {
               "id": "4572036",
@@ -3917,6 +3917,15 @@
           "name": "Los Angeles Chargers",
           "players": [
             {
+              "id": "2576702",
+              "name": "Bud Dupree",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Neck",
+              "reportedAt": "2026-10-11T21:49Z",
+              "source": "https://www.espn.com/nfl/player/_/id/2576702/bud-dupree"
+            },
+            {
               "id": "4433914",
               "name": "Branson Taylor",
               "position": "G",
@@ -4131,15 +4140,6 @@
               "injury": null,
               "reportedAt": "2026-10-05T01:52Z",
               "source": "https://www.espn.com/nfl/player/_/id/4595342/oronde-gadsden"
-            },
-            {
-              "id": "4362081",
-              "name": "Cameron Dicker",
-              "position": "PK",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-05T01:47Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4362081/cameron-dicker"
             }
           ]
         },
@@ -5302,8 +5302,17 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-11T21:14Z",
+              "reportedAt": "2026-10-11T22:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
+            },
+            {
+              "id": "4595348",
+              "name": "Malik Nabers",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-11T21:52Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4595348/malik-nabers"
             },
             {
               "id": "4921249",
@@ -5439,15 +5448,6 @@
               "injury": null,
               "reportedAt": "2026-10-09T20:33Z",
               "source": "https://www.espn.com/nfl/player/_/id/4696981/cam-skattebo"
-            },
-            {
-              "id": "4595348",
-              "name": "Malik Nabers",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-09T16:14Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4595348/malik-nabers"
             },
             {
               "id": "3123075",
@@ -6447,6 +6447,15 @@
           "name": "Seattle Seahawks",
           "players": [
             {
+              "id": "4428659",
+              "name": "Drake Thomas",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-11T22:01Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4428659/drake-thomas"
+            },
+            {
               "id": "4432734",
               "name": "Jalen Milroe",
               "position": "QB",
@@ -6562,15 +6571,6 @@
               "injury": null,
               "reportedAt": "2026-10-07T23:59Z",
               "source": "https://www.espn.com/nfl/player/_/id/4247808/ty-okada"
-            },
-            {
-              "id": "4428659",
-              "name": "Drake Thomas",
-              "position": "LB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-07T01:33Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4428659/drake-thomas"
             },
             {
               "id": "4869523",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "22",
-          "name": "Karson Sharar",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-11T19:13:51Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4709695/karson-sharar"
-        },
-        {
-          "teamId": "22",
           "name": "Carson Beck",
           "from": "Active",
           "to": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-11T21:22:01Z",
           "source": "https://www.espn.com/nfl/player/_/id/4035434/devin-white"
+        },
+        {
+          "teamId": "26",
+          "name": "Drake Thomas",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-11T22:04:06Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4428659/drake-thomas"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-11T21:56:40Z",
-      "lastAttemptAt": "2026-10-11T21:56:40Z",
+      "checkedAt": "2026-10-11T22:04:06Z",
+      "lastAttemptAt": "2026-10-11T22:04:06Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-11T21:56:40Z",
-      "lastAttemptAt": "2026-10-11T21:56:40Z",
+      "checkedAt": "2026-10-11T22:04:06Z",
+      "lastAttemptAt": "2026-10-11T22:04:06Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }

@@ -1,8 +1,8 @@
 {
- "at": "2026-10-11T21:57:27Z",
+ "at": "2026-10-11T22:04:57Z",
  "confirmed": {
-  "NFL-401872993": "2026-10-11T21:57:27Z",
-  "NFL-401872994": "2026-10-11T21:57:27Z"
+  "NFL-401872993": "2026-10-11T22:04:57Z",
+  "NFL-401872994": "2026-10-11T22:04:57Z"
  },
  "leagues": {
   "NFL": {
@@ -10,7 +10,7 @@
     "draftkings": 676,
     "fanduel": 662
    },
-   "eventsListed": 3,
+   "eventsListed": 4,
    "eventsMatched": 2,
    "games": 2,
    "marketTypes": {
@@ -44,6 +44,43 @@
     "Buffalo Bills at Los Angeles Rams 2026-10-13T00:15Z"
    ],
    "unmatchedEvents": [
+    {
+     "away": "Seattle Seahawks",
+     "external": {
+      "ballybet": "1028813044",
+      "betparx": "1028813044",
+      "betrivers": "1028813044",
+      "bwin": "6:43616",
+      "fanatics_markets": "6696667",
+      "fanduel": "36160506",
+      "gemini": "NFL-2610160015-SEA-DEN-S",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT15SEADEN",
+      "ladbrokes": "44ef372c-98fa-400d-b483-3f0ad23b66cc",
+      "matchbook": "mb-33322137433300023",
+      "novig": "01a112eb-4e8a-72a2-a445-cc3b6f3184fb",
+      "paddypower": "36160506",
+      "polymarket": "nfl_broncos_seahawks_2026-10-15_b3",
+      "polymarket_us": "nfl-sea-den-2026-10-15",
+      "prophetx": "1700008795",
+      "sx_bet": "L19431555"
+     },
+     "home": "Denver Broncos",
+     "sample": {
+      "away_team": "Seattle Seahawks",
+      "home_team": "Denver Broncos",
+      "markets": [
+       "1st_half_team_total",
+       "draw_no_bet",
+       "moneyline",
+       "player_touchdowns",
+       "point_spread",
+       "team_total",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-16T00:15:00Z",
+     "type": "fixture"
+    },
     {
      "away": null,
      "external": {
