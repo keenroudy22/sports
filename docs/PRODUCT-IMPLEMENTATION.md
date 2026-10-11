@@ -1283,3 +1283,26 @@ Name sizing now uses uppercase text and the narrow phone width, keeping Nyck Har
 ## October 10 — missed best-bet win recovered
 
 2026-10-10T13:52:53.295567Z · Missing best-bet win COMPLETE onX: Iowa/Washington over41.5 (-110 DraftKings), final41–24 cleared23.5. Owner catch-up sent2026-10-10T13:52:00.887Z; Bufferid6aca3bceb07d37ac9773bb70, tweet2108918473988468881, https://x.com/1753110091912413184/status/2108918473988468881. Existing morning recap2108906910829154640 sent09:06. Same catch-up advanced from10:32 into cancelled09:52 slot via verifiedBuffer editPost; no duplicate, spacing/caps preserved. Morning queue fix286168c9/ce82dfcd hosted38056211553success; locked1279Python(2skipped)/232Node and cleanexport,build/feed,budget(nohardissues/existingsoftwarning),football96/NBA0audits,581fileguard,SVG/assets, isolated0830 outcomeok/outsideWrite0/privateRead0; liveToday/Record375/1440 zeroissues/errors. Fresh wins can be admitted during quiet hours for09:05 delivery, unchanged3h expiry. No new graphic, pick, record rewrite or overnight send. Discordwins destination unset remains P51 owner setup gate; no wrong-channel post. A-20261010-2 shipped; documentation receipt retained ondev for next safe release. NBA real-capture observations remain next readiness work; no duplicate release/post. Evidence:/Users/keen/Documents/ChatGPT/Kook'n/win-recovery-2026-10-10/release.json. Follow-up elapsed approximately36minutes.
+
+## October 11 — automatic final-to-record handoff verified
+
+Release `0f31cec248f8bfb0591339d42297ac046b9c9c09` closes the gap between the
+five-minute live watcher and the append-only official grader. A verified final
+is saved privately, wakes a settlement-only run, reuses the verified game
+summary when the daily ESPN board lags, and retries no more often than every
+15 minutes. The settlement path makes no odds or prop requests and cannot admit
+a new play.
+
+Natural evidence arrived immediately: the watcher launched the Nevada–UTEP
+settlement scan at 23:44:59 ET and the official path settled Nevada–UTEP over
+49.5 and San Diego State–Oregon State under 56.5 at 23:45:07 without an owner
+prompt. The generated report explicitly says `settlement scan: no odds or prop
+requests`. Descendant hosted run `38109709980` succeeded. The live record,
+generated `2026-10-11T03:58:30Z`, shows Nevada 30, UTEP 13 and San Diego State
+14, Oregon State 66; both totals are correctly losses at their posted lines.
+Live Today and Record checks at 375 and 1440 had zero overflow, caught load
+states or browser errors. The first direct hosted run `38109314834` stopped at
+the record-preservation gate when a concurrent data publisher changed
+`market-lab.json`; the naturally triggered descendant included the release,
+passed that gate and deployed. No record was rewritten and no result was
+manually entered. A-20261010-4 is shipped.
