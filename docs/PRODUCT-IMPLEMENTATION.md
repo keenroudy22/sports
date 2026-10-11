@@ -11,8 +11,14 @@ points-against adjustment; no betting-market input enters the score.
 The frozen walk-forward check left 2024 margin miss at 10.12 points and changed 2025 from 10.20 to 10.19. On the
 current Ravens-Falcons inputs, Lamar Jackson's confirmed absence changes the working score from Atlanta 23.8,
 Baltimore 24.7 to Atlanta 24.0, Baltimore 22.8, with Atlanta's win chance moving from 47.4% to 53.6%. This remains
-a modest injury adjustment, not a claim that the market price is value. Final release and live receipts follow
-only after every gate succeeds.
+a modest injury adjustment, not a claim that the market price is value.
+
+Release `a73be16f4d50d5414bd78aaaf54f5b0fb81b9ac1` passed 1,345 Python tests (two skipped), 236 Node tests,
+the clean export, build/feed, payload budget with no hard issue, football and NBA record audits, the 602-file
+publication guard, asset/SVG checks and the isolated 17:30 rehearsal. Hosted run `38181211353` succeeded; data
+refresh `3cd56fbe` published model v2.1. The live snapshot records `qbOut.away=true`, points-for/against effects
+of -1.89/+0.18 and a public score of Atlanta 24.0, Baltimore 22.8 (46.8 total, Atlanta 53.6%). Today and the game
+page passed live Chrome checks at 375 and 1440 pixels with no overflow, caught load state or browser error.
 
 ## 2026-10-11 — KOOKN-AUTOPILOT adoption
 
