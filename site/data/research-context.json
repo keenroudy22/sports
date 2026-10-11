@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-11T18:03:56Z",
+  "updatedAt": "2026-10-11T18:10:38Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,8 +1162,17 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-11T17:48Z",
+              "reportedAt": "2026-10-11T18:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+            },
+            {
+              "id": "3121544",
+              "name": "T.J. Edwards",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Hamstring",
+              "reportedAt": "2026-10-11T17:56Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3121544/tj-edwards"
             },
             {
               "id": "4430822",
@@ -1371,15 +1380,6 @@
               "injury": null,
               "reportedAt": "2026-10-05T00:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/17427/cairo-santos"
-            },
-            {
-              "id": "4723086",
-              "name": "Colston Loveland",
-              "position": "TE",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-04T22:08Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4723086/colston-loveland"
             }
           ]
         },
@@ -2542,7 +2542,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-10-11T17:40Z",
+              "reportedAt": "2026-10-11T17:50Z",
               "source": "https://www.espn.com/nfl/player/_/id/4430191/skyy-moore"
             },
             {
@@ -2767,6 +2767,15 @@
           "name": "Houston Texans",
           "players": [
             {
+              "id": "4035538",
+              "name": "David Montgomery",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Groin",
+              "reportedAt": "2026-10-11T18:04Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4035538/david-montgomery"
+            },
+            {
               "id": "4870893",
               "name": "Kayden McDonald",
               "position": "DT",
@@ -2981,15 +2990,6 @@
               "injury": "Hamstring",
               "reportedAt": "2026-10-07T00:29Z",
               "source": "https://www.espn.com/nfl/player/_/id/4594277/jaylin-smith"
-            },
-            {
-              "id": "4686422",
-              "name": "Xavier Hutchinson",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-06T02:21Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4686422/xavier-hutchinson"
             }
           ]
         },
@@ -4610,8 +4610,8 @@
               "id": "3042519",
               "name": "Aaron Jones Sr.",
               "position": "RB",
-              "status": "Questionable",
-              "injury": "Knee",
+              "status": "Active",
+              "injury": null,
               "reportedAt": "2026-10-11T17:49Z",
               "source": "https://www.espn.com/nfl/player/_/id/3042519/aaron-jones-sr"
             },
@@ -4837,6 +4837,15 @@
           "name": "New England Patriots",
           "players": [
             {
+              "id": "4432710",
+              "name": "TreVeyon Henderson",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Leg",
+              "reportedAt": "2026-10-11T17:58Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4432710/treveyon-henderson"
+            },
+            {
               "id": "16771",
               "name": "Morgan Moses",
               "position": "OT",
@@ -4988,15 +4997,6 @@
               "injury": "Calf",
               "reportedAt": "2026-10-10T20:09Z",
               "source": "https://www.espn.com/nfl/player/_/id/2991662/mack-hollins"
-            },
-            {
-              "id": "4432710",
-              "name": "TreVeyon Henderson",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-09T22:45Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4432710/treveyon-henderson"
             },
             {
               "id": "4831959",
@@ -7367,22 +7367,6 @@
       "changes": [
         {
           "teamId": "3",
-          "name": "Ozzy Trapilo",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-10-11T16:18:59Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4432595/ozzy-trapilo"
-        },
-        {
-          "teamId": "3",
-          "name": "Jamree Kromah",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-10-11T16:18:59Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4372463/jamree-kromah"
-        },
-        {
-          "teamId": "3",
           "name": "Jayden Loving",
           "from": "Active",
           "to": "Out",
@@ -7764,11 +7748,27 @@
           "to": "Out",
           "observedAt": "2026-10-11T18:03:56Z",
           "source": "https://www.espn.com/nfl/player/_/id/4036133/tj-hockenson"
+        },
+        {
+          "teamId": "16",
+          "name": "Aaron Jones Sr.",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-11T18:10:38Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3042519/aaron-jones-sr"
+        },
+        {
+          "teamId": "17",
+          "name": "TreVeyon Henderson",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-11T18:10:38Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4432710/treveyon-henderson"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-11T18:03:56Z",
-      "lastAttemptAt": "2026-10-11T18:03:56Z",
+      "checkedAt": "2026-10-11T18:10:38Z",
+      "lastAttemptAt": "2026-10-11T18:10:38Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-11T18:03:56Z",
-      "lastAttemptAt": "2026-10-11T18:03:56Z",
+      "checkedAt": "2026-10-11T18:10:38Z",
+      "lastAttemptAt": "2026-10-11T18:10:38Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
