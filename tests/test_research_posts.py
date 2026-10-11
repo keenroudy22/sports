@@ -24,23 +24,55 @@ def game(watch=None):
 
 
 class ResearchPostTests(unittest.TestCase):
-    def test_unconverted_research_is_held_after_ticket_cutover(self):
+    def test_every_research_family_uses_the_ticket_list_after_cutover(self):
         import json
         now = datetime(2026, 10, 9, 14, 0, tzinfo=timezone.utc)
         choice = {'kind': 'season', 'key': 'research-season-2026-10-09',
+                  'title': 'TRENDS', 'kicker': 'OPPONENT-ADJUSTED',
                   'day': now.astimezone(R.gates.EASTERN).date(),
                   'firstKickoff': datetime(2026, 10, 9, 21, 0, tzinfo=timezone.utc),
-                  'rows': [{'observedAt': '2026-10-09T13:30:00Z'}], 'text': 'Trend research'}
+                  'rows': [{'gameId': 'CFB-1', 'title': 'Player over 49.5 rec yds',
+                            'price': '-110 FanDuel', 'metric': '7/10', 'detail': 'Defense #19',
+                            'hits': 7, 'games': 10, 'observedAt': '2026-10-09T13:30:00Z'}],
+                  'text': 'Trend research'}
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
             payload = root / 'today.json'
             payload.write_text(json.dumps({'games': []}))
             with mock.patch.object(R, 'select', return_value=choice), \
                  mock.patch.object(R.pick_card, 'ticket_enabled', return_value=True), \
-                 mock.patch.object(R, 'svg', side_effect=AssertionError('old art must not render')):
-                self.assertIsNone(R.post([], now, data_path=payload, detail_root=root, lines_path=root / 'none'))
-                self.assertEqual(R.render_due(now, root, data_path=payload, detail_root=root,
-                                              lines_path=root / 'none'), {})
+                 mock.patch('ticket_card.research_list_svg', return_value='<svg/>') as art, \
+                 mock.patch('pick_card.render', side_effect=lambda _svg, path: Path(path).write_bytes(b'png')):
+                logs = []
+                post = R.post([], now, data_path=payload, detail_root=root, lines_path=root / 'none', log=logs.append)
+                self.assertEqual(post['card'], choice['key'])
+                cards = R.render_due(now, root, data_path=payload, detail_root=root,
+                                     lines_path=root / 'none', fetch=lambda _: None)
+                self.assertIn(choice['key'], cards)
+                art.assert_called_once()
+                self.assertTrue(any(line.startswith('research: scheduled season') for line in logs))
+
+    def test_fallback_order_and_exact_skip_log(self):
+        data = {'games': [game()]}
+        choices = {
+            'prep_candidate': None, 'season_candidate': {'kind': 'season', 'rows': [
+                {'kickoff': game()['kickoff']}, {'kickoff': game()['kickoff']}], 'text': 'trends'},
+            'upset_candidate': {'kind': 'upset'}, 'spread_dog_candidate': {'kind': 'spread-dog'},
+            'matchup_candidate': {'kind': 'matchup'}, 'scorer_candidate': {'kind': 'end-zone'},
+        }
+        patches = [mock.patch.object(R, name, return_value=value) for name, value in choices.items()]
+        for patch in patches: patch.start()
+        try:
+            selected = R.select(data, {'CFB-1': {}}, NOW)
+            self.assertEqual(selected['kind'], 'season')
+        finally:
+            for patch in reversed(patches): patch.stop()
+        with tempfile.TemporaryDirectory() as folder:
+            payload = Path(folder) / 'today.json'
+            payload.write_text(__import__('json').dumps({'games': []}))
+            logs = []
+            self.assertIsNone(R.post({}, NOW, payload, Path(folder), Path(folder) / 'none', log=logs.append))
+            self.assertEqual(logs, ['research: skipped — no unstarted football games today'])
 
     def test_prep_list_takes_one_research_slot_only_with_three_fresh_checked_rows(self):
         now = datetime(2026, 10, 3, 13, 0, tzinfo=timezone.utc)  # 9 AM Eastern
@@ -128,7 +160,8 @@ class ResearchPostTests(unittest.TestCase):
                  'modelChance': .60, 'marketChanceNoVig': .369,
                  'projectedFor': 27, 'projectedAgainst': 23, 'spreadGap': 7.5,
                  'reasons': ['Our score has Underdog by 4', "Underdog's offense rates 2.1 points above average"]}
-        choice = R.select({'games': [game(watch)]}, {'CFB-1': {}}, NOW)
+        second = dict(game(watch), id='CFB-2')
+        choice = R.select({'games': [game(watch), second]}, {'CFB-1': {}, 'CFB-2': {}}, NOW)
         self.assertEqual(choice['kind'], 'upset')
         self.assertIn('Underdog +160 ML (DK)', choice['text'])
         self.assertIn('we give them 60%. The price says 37%.', choice['text'])
@@ -155,14 +188,18 @@ class ResearchPostTests(unittest.TestCase):
             '3': {'RB': {'rushYds': 100}, 'coverage': {'RB': {'rushYds': 4}}, 'g': 4},
             '4': {'RB': {'rushYds': 50}, 'coverage': {'RB': {'rushYds': 4}}, 'g': 4},
         }}}}
-        choice = R.select({'games': [game()]}, {'CFB-1': detail}, NOW, teams=teams)
+        second = dict(game(), id='CFB-2')
+        detail2 = __import__('copy').deepcopy(detail)
+        detail2['favoriteLines'][0]['id'] = detail2['favoriteLines'][0]['sourceId'] = 'runner-2'
+        choice = R.select({'games': [game(), second]}, {'CFB-1': detail, 'CFB-2': detail2}, NOW, teams=teams)
         self.assertEqual(choice['kind'], 'matchup')
         self.assertIn('Runner over 55.5 rushing yards', choice['text'])
         self.assertIn('8/10 at this line · DOG #3/3 vs RB rush yds', choice['text'])
         self.assertEqual(choice['title'], 'MATCHUP TRENDS')
         self.assertEqual(receipts.guard({'text': choice['text']}), [])
         detail['favoriteLines'][0]['history']['last']['rate'] = 70
-        choice = R.select({'games': [game()]}, {'CFB-1': detail}, NOW, teams=teams)
+        detail2['favoriteLines'][0]['history']['last']['rate'] = 70
+        choice = R.select({'games': [game(), second]}, {'CFB-1': detail, 'CFB-2': detail2}, NOW, teams=teams)
         self.assertEqual(choice['kind'], 'end-zone')
         self.assertIn('12 red-zone opportunities · 7 inside the 10', choice['text'])
 
@@ -201,16 +238,19 @@ class ResearchPostTests(unittest.TestCase):
                 'line': 8.5, 'odds': -105, 'book': 'ESPN BET', 'side': 'home',
                 'observedAt': '2026-10-03T13:30:00Z',
                 'grade': {'tier': 'lean', 'chance': .54, 'needs': .512, 'edge': 2.8, 'projection': 1.0}}
-        choice = R.select({'games': [game()]}, {'CFB-1': {}}, NOW, [line])
+        second = dict(game(), id='CFB-2')
+        line2 = dict(line, gameId='CFB-2')
+        choice = R.select({'games': [game(), second]}, {'CFB-1': {}, 'CFB-2': {}}, NOW, [line, line2])
         self.assertEqual(choice['kind'], 'spread-dog')
-        self.assertIn('Underdog +8.5 (-105) ESPN', choice['text'])
+        self.assertIn('Underdog +8.5 (-105) theScore Bet', choice['text'])
         self.assertNotIn('not an upset', choice['text'].lower())
         self.assertIn('Underdog +8.5 (-105)', choice['text'])
 
         line['book'] = 'theScore Bet'
-        choice = R.select({'games': [game()]}, {'CFB-1': {}}, NOW, [line])
+        line2['book'] = 'theScore Bet'
+        choice = R.select({'games': [game(), second]}, {'CFB-1': {}, 'CFB-2': {}}, NOW, [line, line2])
         self.assertEqual(choice['kind'], 'spread-dog')
-        self.assertIn('Underdog +8.5 (-105) ESPN', choice['text'])
+        self.assertIn('Underdog +8.5 (-105) theScore Bet', choice['text'])
 
     def test_post_window_and_card_are_stale_safe(self):
         watch = {'side': 'home', 'team': 'Underdog', 'odds': 160, 'opponentOdds': -192,
@@ -219,16 +259,19 @@ class ResearchPostTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
             (root / 'games').mkdir()
-            (root / 'today.json').write_text(__import__('json').dumps({'games': [game(watch)]}))
+            second = dict(game(watch), id='CFB-2')
+            (root / 'today.json').write_text(__import__('json').dumps({'games': [game(watch), second]}))
             (root / 'games' / 'CFB-1.json').write_text('{}')
+            (root / 'games' / 'CFB-2.json').write_text('{}')
             post = R.post({}, NOW, root / 'today.json', root / 'games')
             self.assertEqual((post['kind'], post['card']), ('research', 'research-upset-2026-10-03'))
             self.assertEqual(post['due'], datetime(2026, 10, 3, 14, 30, tzinfo=timezone.utc))
-            choice = R.select({'games': [game(watch)]}, {'CFB-1': {}}, NOW)
-            card = R.svg(choice)
+            choice = R.select({'games': [game(watch), second]}, {'CFB-1': {}, 'CFB-2': {}}, NOW)
+            import ticket_card
+            card = ticket_card.research_list_svg(choice)
             self.assertIn('UNDERDOG WATCH', card)
-            self.assertIn('UNDERDOG RESEARCH', card)
-            self.assertNotIn('NOT A PLAY', card)
+            self.assertIn('RESEARCH · NOT A BEST BET', card)
+            self.assertNotIn('SLATE RESEARCH', card)
             for ugly in ('#8b4513', '#a0522d', '#cd853f'):
                 self.assertNotIn(ugly, card.lower())
 

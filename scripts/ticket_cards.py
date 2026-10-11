@@ -552,6 +552,58 @@ def prep_card(p):
     return card
 
 
+def research_list_card(p):
+    """One Kitchen Ticket list for every research family."""
+    rows = list(p.get('rows') or [])
+    if not 2 <= len(rows) <= 5:
+        raise ValueError('Research list needs two to five verified rows')
+    panel_bottom, top = 474, 552
+    row_h = min(170, 520 // len(rows))
+    perf, bottom = 1084, 1196
+    card = kit.Card(1350)
+    inner = kit.panel_rect(card, PANEL_TOP, panel_bottom, hot=(760, 300))
+    chip, _ = kit.series_chip(card, COL_X, 204, 'RESEARCH')
+    inner += chip
+    title = str(p.get('title') or 'RESEARCH').upper()
+    title_size = fit(title, 126, 650 - COL_X, floor=72)
+    inner += card.text(COL_X - 4, 290 + round(title_size * CAP), title, title_size, CHALK)
+    kicker = str(p.get('kicker') or 'TODAY’S FOOTBALL RESEARCH').upper()
+    inner += card.text(COL_X, panel_bottom - 30, kicker, fit(kicker, 42, 830, floor=32), CHALK)
+    for i, row in enumerate(rows[:5]):
+        cx, cy = 704 + (i % 3) * 102, 254 + (i // 3) * 108
+        if row.get('art'):
+            inner += kit.face_thumb(card, row['art'], cx, cy, 46, ring=CHALK)
+        else:
+            inner += kit.initials_badge(card, cx, cy, 46, kit.initials(row['subject']), row.get('team_color', CHARCOAL[0]))
+    inner += card.text(X1, 530, 'WHAT I’M WATCHING', 40, INK_SOFT, tracking=1)
+    inner += card.text(X2, 530, str(p.get('right_label') or 'PROOF').upper(), 40, INK_SOFT, anchor='end', tracking=1)
+    inner += kit.dashed(X1, X2, 548)
+    for i, row in enumerate(rows):
+        y = top + i * row_h
+        if i:
+            inner += f'<line x1="{X1}" y1="{y}" x2="{X2}" y2="{y}" stroke="{RULE}" stroke-width="2"/>'
+        cy, tx = y + row_h / 2, X1 + 84
+        inner += (kit.face_thumb(card, row['art'], X1 + 34, cy, 34) if row.get('art')
+                  else kit.initials_badge(card, X1 + 34, cy, 34, kit.initials(row['subject']), row.get('team_color', CHARCOAL[0])))
+        right = str(row.get('right') or '')
+        right_w = width(right, 48) if right else 0
+        room = X2 - tx - right_w - (30 if right else 0)
+        subject = str(row.get('subject') or '')
+        inner += card.text(tx, y + 48, subject, fit(subject, 46, room, floor=40), INK)
+        if right:
+            inner += card.text(X2, y + 50, right, fit(right, 48, 250, floor=40), INK, anchor='end')
+        line = str(row.get('line') or '')
+        detail = str(row.get('detail') or '')
+        if line:
+            inner += card.text(tx, y + 88, line, fit(line, 40, X2 - tx, floor=40), INK_SOFT)
+        if detail:
+            inner += card.text(tx, y + 120, detail, fit(detail, 40, X2 - tx, floor=40), INK_SOFT)
+    stub = str(p.get('stub') or 'RESEARCH · NOT A BEST BET')
+    inner += card.text(X1, perf + 60, stub, kit.fit(stub, 40, X2 - X1, tracking=1), INK_SOFT, tracking=1)
+    frame(card, HOUSE, CHALK, perf, bottom, inner)
+    return card
+
+
 def end_zone_card(p):
     """Approved Prep List-style research ticket for observed scoring-area work."""
     rows = p['rows']

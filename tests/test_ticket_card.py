@@ -73,6 +73,24 @@ class TicketCardTests(unittest.TestCase):
             ticket_card.end_zone_svg({'game': choice['game'], 'rows': [
                 dict(choice['rows'][0], metric='unknown')]}, fetch=photo)
 
+    def test_all_research_families_share_the_kitchen_ticket_list(self):
+        base = {'title': 'TRENDS', 'kicker': 'OPPONENT-ADJUSTED', 'rows': [
+            {'title': 'Javonte Williams over 24.5 receiving yards', 'price': '-110 FanDuel',
+             'metric': '7/10 this season', 'detail': 'Falcons #24 against RB receiving',
+             'hits': 7, 'games': 10},
+            {'title': 'Derrick Henry over 49.5 rushing yards', 'price': '-115 DraftKings',
+             'metric': '8/10 this season', 'detail': 'Falcons #21 against RB rushing',
+             'hits': 8, 'games': 10},
+        ]}
+        for kind in ('season', 'matchup', 'upset', 'spread-dog', 'end-zone'):
+            with self.subTest(kind=kind):
+                svg = ticket_card.research_list_svg(dict(base, kind=kind), art={0: self.image})
+                for exact in ('RESEARCH', 'TRENDS', 'RESEARCH · NOT A BEST BET',
+                              '21+ · Entertainment only', 'width="1080" height="1350"'):
+                    self.assertIn(exact, svg)
+                self.assertNotIn('SLATE RESEARCH', svg)
+                self.assertNotIn('>BEST BET<', svg)
+
     @classmethod
     def setUpClass(cls):
         cls.image = ('data:image/png;base64,' + base64.b64encode((ROOT / 'site' / 'kookn-mark.png').read_bytes()).decode('ascii'))

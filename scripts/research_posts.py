@@ -6,8 +6,8 @@ fresh outright underdogs, priced underdog spreads, fresh main-line season trends
 exact-line trends supported by opponent defense, then observed end-zone work. A missing view produces
 no post; nothing is invented to fill a calendar.
 """
-import html
 import json
+import os
 import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -137,7 +137,7 @@ def price(odds):
 
 
 def book_short(book):
-    return {'DraftKings': 'DK', 'FanDuel': 'FD', 'BetMGM': 'MGM', 'ESPN BET': 'ESPN', 'theScore Bet': 'ESPN',
+    return {'DraftKings': 'DK', 'FanDuel': 'FD', 'BetMGM': 'MGM', 'ESPN BET': 'theScore Bet', 'theScore Bet': 'theScore Bet',
             'Caesars': 'CZR', 'BetRivers': 'BR', 'Fanatics': 'FAN'}.get(book, str(book or ''))
 
 
@@ -438,14 +438,16 @@ def select(data, details, now, lines=None, teams=None):
     if not games:
         return None
     prepared = prep_candidate(data, now)
-    if prepared:
+    usable = lambda choice: choice if choice and len(choice.get('rows') or []) >= 2 else None
+    if os.environ.get('KEENROUDY_RESEARCH_FALLBACK', '1').strip().lower() in ('0', 'false', 'off', 'no'):
         chosen = prepared
     else:
-        season = season_candidate(games, details, now)
-        # Alternate days share the existing editorial slot; never add another daily post.
-        chosen = (season if eastern_date(now).day % 2 == 0 else None) or (
-            upset_candidate(games, now) or spread_dog_candidate(games, lines, now)
-            or matchup_candidate(games, details, now, teams) or season or scorer_candidate(games, details, now))
+        # One deterministic football-day chain. Spread dogs are the priced
+        # fallback within the approved Upset Watch family.
+        chosen = (prepared or usable(season_candidate(games, details, now))
+                  or usable(upset_candidate(games, now)) or usable(spread_dog_candidate(games, lines, now))
+                  or usable(matchup_candidate(games, details, now, teams))
+                  or usable(scorer_candidate(games, details, now)))
     if not chosen:
         return None
     day = eastern_date(now)
@@ -459,7 +461,7 @@ def at(day, hm):
     return datetime(day.year, day.month, day.day, hm[0], hm[1], tzinfo=gates.EASTERN).astimezone(timezone.utc)
 
 
-def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES):
+def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES, log=print):
     data = load(data_path, {'games': []})
     import tnf_early_look
     if tnf_early_look.ENABLED:
@@ -467,6 +469,7 @@ def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES):
         if early:
             caption = tnf_early_look.caption(early)
             if caption:
+                log(f"research: scheduled TNF Early Look for {early['due'].astimezone(gates.EASTERN):%-I:%M %p} ET")
                 return {'key': early['key'], 'kind': 'research',
                         'card': f"tnf-early-look-{early['researchDay'].isoformat()}",
                         'text': caption, 'due': early['due'].astimezone(timezone.utc),
@@ -476,6 +479,9 @@ def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES):
     choice = select(data, details_for(cards, detail_root), now,
                     load_lines(lines_path), teams_for(cards))
     if not choice:
+        reason = ('no unstarted football games today' if not slate_games(data, now)
+                  else 'Prep List, Trends, Upset Watch, Matchup and End-zone had no eligible rows')
+        log(f'research: skipped — {reason}')
         return None
     stale = min(at(choice['day'], POST_UNTIL), choice['firstKickoff'] - timedelta(minutes=45))
     if choice['kind'] in ('season', 'matchup', 'prep'):
@@ -483,9 +489,9 @@ def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES):
     due = max(at(choice['day'], (9, 30) if choice['kind'] == 'prep' else POST_AT),
               now + timedelta(minutes=2))
     if now >= stale or due >= stale:
+        log(f"research: skipped {choice['kind']} — its price or kickoff window closed")
         return None
-    if choice['kind'] != 'prep' and pick_card.ticket_enabled(moment=due):
-        return None
+    log(f"research: scheduled {choice['kind']} for {due.astimezone(gates.EASTERN):%-I:%M %p} ET")
     return {'key': f"research:{choice['kind']}:{choice['day'].isoformat()}", 'kind': 'research',
             'card': choice['key'], 'text': choice['text'],
             'due': due, 'stale': stale}
@@ -564,9 +570,6 @@ def render_due(now, folder, data_path=TODAY, detail_root=DETAILS, lines_path=LIN
                     load_lines(lines_path), teams_for(cards))
     if not choice:
         return early_cards
-    if choice['kind'] != 'prep' and pick_card.ticket_enabled(moment=now):
-        log(f"research card {choice['key']} held: approved research-list ticket is not implemented for {choice['kind']}")
-        return early_cards
     fetch = fetch or pick_card.fetch_data_uri
     path = Path(folder) / f"{choice['key']}.png"
     try:
@@ -576,7 +579,8 @@ def render_due(now, folder, data_path=TODAY, detail_root=DETAILS, lines_path=LIN
         else:
             games = {g['id']: g for g in data.get('games') or []}
             images = {i: art_for(row, games.get(row['gameId']) or {}, fetch) for i, row in enumerate(choice['rows'])}
-            picture = svg(choice, images)
+            import ticket_card
+            picture = ticket_card.research_list_svg(choice, art=images)
         pick_card.render(picture, path)
     except Exception as error:
         log(f"research card {choice['key']} not drawn: {error}")

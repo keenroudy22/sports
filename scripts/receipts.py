@@ -584,7 +584,7 @@ def ladder_cashed(pick):
     return ladder_result(pick)
 
 
-def house_posts(first, latest, games, log_book, now):
+def house_posts(first, latest, games, log_book, now, log=print):
     """Approved house posts. Menu, teasers, weekend X sheet and idle Climb check-in are retired."""
     first = released_first(first, log_book, games)
     out = [dict(r, kind='receipt') for r in ready(first, latest, games, log_book, now)]
@@ -593,7 +593,7 @@ def house_posts(first, latest, games, log_book, now):
         out.append(extra)
     out += cashed(first, latest, games, log_book, now)
     import research_posts
-    research = research_posts.post(games, now)  # one stale-safe editorial research card at most
+    research = research_posts.post(games, now, log=log)  # one stale-safe editorial research card at most
     # The Wednesday-night TNF preview consumes Thursday's research slot, not
     # Wednesday's ordinary slate research slot.
     research_already = research_posts.already_posted(log_book, research.get('countsFor', eastern_date(now))

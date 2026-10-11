@@ -338,6 +338,45 @@ def prep_svg(prep, *, fetch=None):
     return card.svg()
 
 
+def research_list_svg(choice, *, art=None):
+    """Render any approved research family on the Kitchen Ticket list."""
+    rows = []
+    art = art or {}
+    kind = str(choice.get('kind') or '')
+    for index, source in enumerate((choice.get('rows') or [])[:5]):
+        subject = str(source.get('title') or source.get('player') or '').strip()
+        if not subject:
+            raise ValueError('Research list row needs a subject')
+        metric = str(source.get('metric') or '').strip()
+        price_text = str(source.get('price') or '').strip()
+        detail = str(source.get('detail') or '').strip()
+        if kind in ('season', 'matchup'):
+            subject, selection = ticket_kit.leg_parts(subject)
+            right = f"{source.get('hits')}/{source.get('games')}" if isinstance(source.get('hits'), int) and isinstance(source.get('games'), int) else metric
+            line = ' · '.join(x for x in (selection, price_text) if x)
+            detail = detail if kind == 'matchup' else ''
+        elif kind == 'end-zone':
+            right, line, detail = price_text.replace(' inside the 10', ''), metric, ''
+        elif kind == 'upset':
+            match = re.search(r'(\d+)%.*?(\d+)%', str(source.get('copyMetric') or metric))
+            right = f'{match.group(1)}% / {match.group(2)}%' if match else metric
+            line = ' '.join(x for x in (price_text, str(source.get('book') or '')) if x)
+            detail = ''
+        else:
+            match = re.search(r'(\d+)%.*?(\d+)%', metric)
+            right = f'{match.group(1)}% / {match.group(2)}%' if match else metric
+            line = ' '.join(x for x in (price_text, str(source.get('book') or '')) if x)
+            detail = ''
+        rows.append({'subject': subject, 'line': line, 'right': right, 'detail': detail,
+                     'art': art.get(index), 'team_color': source.get('teamColor') or '#2A2F33'})
+    card = ticket_cards.research_list_card({'title': choice.get('title'), 'kicker': choice.get('kicker'),
+                                            'rows': rows, 'stub': 'RESEARCH · NOT A BEST BET'})
+    problems = ticket_kit.qa(card, f"research-{kind or 'list'}")
+    if problems:
+        raise ValueError('; '.join(problems))
+    return card.svg()
+
+
 def end_zone_svg(choice, *, fetch=None):
     """Render a real, named game's End-Zone Work in the Kitchen Ticket family."""
     fetch = fetch or pick_card.fetch_data_uri

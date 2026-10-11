@@ -2509,7 +2509,7 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         lines = line_payload.load(build_site.OUT / 'lines.json', strict=False, log=log)
         news = news_posts.candidates(ctx, features.load(), lines, now, log_book, games=games)
         plans = buffer_post.plan(ctx.first, ctx.latest, games, now, log_book, ctx.player_team, quotes=quotes,
-                                 refused=refused, news=news)
+                                 refused=refused, news=news, log=log)
         for key, problems in refused:
             if 'has no X window' in problems:
                 log(f'buffer: {key} has no X window')
@@ -2530,7 +2530,7 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
                 log(f'buffer: {len(waiting)} card(s) still not live after the wait; those plays wait for the next run')
             later = datetime.now(timezone.utc)
             plans = buffer_post.plan(ctx.first, ctx.latest, games, max(now, later), log_book, ctx.player_team,
-                                     quotes=quotes, news=news)
+                                     quotes=quotes, news=news, log=log)
             plans += nba_trial_runtime.social_plans(max(now, later), log_book, reserved=plans)
         limit = buffer_post.daily_limit(channel['id'], eastern_date(now).isoformat())
         if limit and limit.get('remaining') is not None and limit['remaining'] < len(plans):

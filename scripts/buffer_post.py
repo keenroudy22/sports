@@ -276,7 +276,7 @@ def discord_first_due(now):
     return post_windows.delivery_ready(now)
 
 
-def plan(first, latest, games, now, log_book, player_team=None, soon=None, quotes=None, refused=None, news=None):
+def plan(first, latest, games, now, log_book, player_team=None, soon=None, quotes=None, refused=None, news=None, log=print):
     """The posts the run should schedule now: [(key, kind, text, due_at, card_key)].
 
     X gets plays and their receipts. Player props,
@@ -349,7 +349,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
         plays.append((target, -1 if key == potd else ORDER[pick_card.play_kind(merged)],
                       deadline, key, text, 'play', f'{key}-potd' if key == potd else key))
     order = {'receipt': -1, 'book': -1, 'research': 1, 'cashed': 2, 'sports': 3}
-    for post in receipts.house_posts(first, latest, games, log_book, now):
+    for post in receipts.house_posts(first, latest, games, log_book, now, log=log):
         if set(post['key'].split('+')) & posted:
             continue
         problems = receipts.guard(post)
