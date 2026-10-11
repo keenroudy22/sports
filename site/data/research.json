@@ -20111,5 +20111,166 @@
         "entryNote": "Pulled before posting: ticket broke the approved fun-parlay rules: NFL totals are paused, it carried three totals, and no leg had a saved reason. Stays in the record at +591 and is graded as posted."
       }
     ]
+  },
+  {
+    "league": "NFL",
+    "publishedAt": "2026-10-11T12:32:28Z",
+    "targetWeek": 5,
+    "summary": "Research update for Oct 11: Nothing to settle. Closed 1: 3-leg longshot at DraftKings. Nothing published. owner directed no replacement today",
+    "takeaways": [],
+    "parlays": [
+      {
+        "id": "NFL-2026-W5-longshot-1011-dk",
+        "title": "3-leg longshot at DraftKings",
+        "status": "expired",
+        "favorite": false,
+        "parlayType": "longshot",
+        "riskUnits": 0.25,
+        "legs": [
+          {
+            "id": "game-NFL-401872982-over",
+            "title": "Bengals at Dolphins over 43.5",
+            "gameId": "NFL-401872982",
+            "market": "total points",
+            "athleteId": null,
+            "side": "over",
+            "line": 43.5,
+            "odds": -112,
+            "book": "DraftKings",
+            "chance": 0.521,
+            "kickoff": "2026-10-11T17:00Z",
+            "observedAt": "2026-10-11T10:24:01Z",
+            "marketWindow": "Full game",
+            "alternate": false
+          },
+          {
+            "id": "game-NFL-401872986-under",
+            "title": "Raiders at Patriots under 45.5",
+            "gameId": "NFL-401872986",
+            "market": "total points",
+            "athleteId": null,
+            "side": "under",
+            "line": 45.5,
+            "odds": -115,
+            "book": "DraftKings",
+            "chance": 0.56,
+            "kickoff": "2026-10-11T17:00Z",
+            "observedAt": "2026-10-11T10:24:01Z",
+            "marketWindow": "Full game",
+            "alternate": false
+          },
+          {
+            "id": "game-NFL-401872991-under",
+            "title": "Lions at Cardinals under 54.5",
+            "gameId": "NFL-401872991",
+            "market": "total points",
+            "athleteId": null,
+            "side": "under",
+            "line": 54.5,
+            "odds": -105,
+            "book": "DraftKings",
+            "chance": 0.522,
+            "kickoff": "2026-10-11T20:25Z",
+            "observedAt": "2026-10-11T10:24:01Z",
+            "marketWindow": "Full game",
+            "alternate": false
+          }
+        ],
+        "correlation": "One leg per game, so the ticket treats the legs as independent; its chance is their product.",
+        "gameIds": [
+          "NFL-401872982",
+          "NFL-401872986",
+          "NFL-401872991"
+        ],
+        "book": "DraftKings",
+        "odds": 591,
+        "quotedAt": "2026-10-11T10:24:01Z",
+        "quoteType": "capture",
+        "confidence": 1,
+        "priceEstimated": true,
+        "expiresAt": "2026-10-11T12:30:00Z",
+        "edge": "Estimated combined price from captured leg odds; verify the sportsbook's ticket price. Our chance 15.2% against 14.5% break-even at +591: +0.052u per unit staked, 0.25u at risk.",
+        "cutoff": "A longshot is not re-entered. It stands or falls as posted.",
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401872982",
+          "https://www.espn.com/nfl/game/_/gameId/401872986",
+          "https://www.espn.com/nfl/game/_/gameId/401872991"
+        ],
+        "why": "Longshot from the board: 3 legs at DraftKings, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.",
+        "risk": "Most longshots lose. The legs are treated as independent; any one miss sinks the ticket.",
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Longshot from the board: 3 legs at DraftKings, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.",
+              "numbers": {},
+              "source": "Published ticket detail",
+              "time": "2026-10-11T10:45:03Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Most longshots lose. The legs are treated as independent; any one miss sinks the ticket.",
+              "numbers": {},
+              "source": "Published ticket risk",
+              "time": "2026-10-11T10:45:03Z"
+            }
+          ],
+          "reports": [],
+          "weather": null,
+          "line": {
+            "legs": [
+              {
+                "gameId": "NFL-401872982",
+                "title": "Bengals at Dolphins over 43.5",
+                "line": 43.5,
+                "price": -112,
+                "book": "DraftKings"
+              },
+              {
+                "gameId": "NFL-401872986",
+                "title": "Raiders at Patriots under 45.5",
+                "line": 45.5,
+                "price": -115,
+                "book": "DraftKings"
+              },
+              {
+                "gameId": "NFL-401872991",
+                "title": "Lions at Cardinals under 54.5",
+                "line": 54.5,
+                "price": -105,
+                "book": "DraftKings"
+              }
+            ],
+            "best": {
+              "book": "DraftKings",
+              "price": 591,
+              "time": "2026-10-11T10:24:01Z"
+            }
+          },
+          "ours": null,
+          "history": null,
+          "sources": [
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/nfl/game/_/gameId/401872982",
+              "time": "2026-10-11T10:45:03Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/nfl/game/_/gameId/401872986",
+              "time": "2026-10-11T10:45:03Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/nfl/game/_/gameId/401872991",
+              "time": "2026-10-11T10:45:03Z"
+            }
+          ],
+          "partial": true
+        },
+        "entryNote": "Pulled before posting: ticket broke the approved fun-parlay rules: NFL totals are paused, it carried three totals, and no leg had a saved reason. Stays in the record at +591 and is graded as posted.",
+        "replacementAllowed": false
+      }
+    ]
   }
 ]

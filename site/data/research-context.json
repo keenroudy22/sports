@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-11T12:33:46Z",
+  "updatedAt": "2026-10-11T12:42:04Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -467,6 +467,15 @@
           "name": "Baltimore Ravens",
           "players": [
             {
+              "id": "3916387",
+              "name": "Lamar Jackson",
+              "position": "QB",
+              "status": "Out",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-11T12:34Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3916387/lamar-jackson"
+            },
+            {
               "id": "4429615",
               "name": "Zay Flowers",
               "position": "WR",
@@ -528,15 +537,6 @@
               "injury": null,
               "reportedAt": "2026-10-09T17:40Z",
               "source": "https://www.espn.com/nfl/player/_/id/4035671/tyler-huntley"
-            },
-            {
-              "id": "3916387",
-              "name": "Lamar Jackson",
-              "position": "QB",
-              "status": "Out",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-09T17:34Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3916387/lamar-jackson"
             },
             {
               "id": "2576581",
@@ -7767,8 +7767,8 @@
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-11T12:33:46Z",
-      "lastAttemptAt": "2026-10-11T12:33:46Z",
+      "checkedAt": "2026-10-11T12:42:04Z",
+      "lastAttemptAt": "2026-10-11T12:42:04Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-11T12:33:46Z",
-      "lastAttemptAt": "2026-10-11T12:33:46Z",
+      "checkedAt": "2026-10-11T12:42:04Z",
+      "lastAttemptAt": "2026-10-11T12:42:04Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
