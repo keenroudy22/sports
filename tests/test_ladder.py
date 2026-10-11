@@ -207,7 +207,7 @@ class BuildTests(unittest.TestCase):
             self.assertTrue(legs, provider)
             self.assertEqual({leg['book'] for leg in legs}, {expected})
 
-    def test_a_rung_never_mixes_early_and_night_games(self):
+    def test_a_rung_may_mix_early_and_night_games_on_the_same_day(self):
         games = {
             'early-one': game('early-one', 'Bills', 'Lions', '2026-09-27T17:00Z'),
             'early-two': game('early-two', 'Jets', 'Rams', '2026-09-27T17:25Z'),
@@ -221,12 +221,10 @@ class BuildTests(unittest.TestCase):
         ]
         windows = ladder.kickoff_windows(games.values())
         self.assertEqual([[g['id'] for g in window] for window in windows],
-                         [['early-one', 'early-two'], ['night']])
-        self.assertIsNone(ladder.build([leg for leg in legs if leg['gameId'] in {g['id'] for g in windows[0]}])[0])
-        self.assertIsNone(ladder.build([leg for leg in legs if leg['gameId'] in {g['id'] for g in windows[1]}])[0])
-        self.assertIsNotNone(ladder.build(legs)[0], 'the old all-day pool would have made the bad mixed-window rung')
+                         [['early-one', 'early-two', 'night']])
+        self.assertIsNotNone(ladder.build(legs)[0], 'the game-day pool may pair eligible early and night legs')
 
-    def test_candidate_uses_the_early_window_then_a_later_window_after_settlement(self):
+    def test_candidate_uses_the_whole_day_then_waits_for_settlement(self):
         games = dict(GAMES)
         games['night'] = game('night', 'Ravens', 'Falcons', '2026-09-28T00:20Z')
         world = ctx()
@@ -240,7 +238,7 @@ class BuildTests(unittest.TestCase):
         try:
             pick, reason = ladder.candidate(world, games, NOW)
             self.assertIsNone(reason)
-            self.assertEqual(pick['gameIds'], ['g1', 'g2'])
+            self.assertIn('night', pick['gameIds'])
             first, latest = book_of(rung(pick['id'], '2026-09-27T12:30:00Z', 1, 50, 72, 'win'))
             later_now = datetime(2026, 9, 27, 22, 0, tzinfo=timezone.utc)
             later_world = ctx(first, latest)
@@ -304,7 +302,7 @@ class BuildTests(unittest.TestCase):
         finally:
             ladder.pricing.price = original
 
-    def test_manual_rung_cannot_mix_early_and_night_windows(self):
+    def test_manual_rung_can_mix_early_and_night_games_at_one_book(self):
         games = {'g1': dict(GAMES['g1'], league='NFL'),
                  'g2': game('g2', 'Ravens', 'Falcons', '2026-09-28T00:20Z')}
         spec = {'book': 'FanDuel', 'quotedAt': '2026-09-27T12:20:00Z',
@@ -316,8 +314,8 @@ class BuildTests(unittest.TestCase):
         ladder.pricing.price = lambda *a, **k: {'rawChance': .76, 'breakEven': .8, 'projection': -1.0}
         try:
             pick, reason = ladder.manual_candidate(ctx(), games, NOW, spec)
-            self.assertIsNone(pick)
-            self.assertIn('one kickoff window', reason)
+            self.assertIsNone(reason)
+            self.assertEqual(pick['gameIds'], ['g1', 'g2'])
         finally:
             ladder.pricing.price = original
 
