@@ -1,0 +1,232 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-10-11T10:45:03Z",
+  "targetWeek": 7,
+  "summary": "Research update for Oct 11: Settled 1: 5-leg longshot at FanDuel loss. Nothing to close. Nothing published. odds_api.py: CFB: skipped (6 game-line credits already scheduled today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+  "takeaways": [],
+  "parlays": [
+    {
+      "id": "CFB-2026-W6-longshot-1010-fd",
+      "title": "5-leg longshot at FanDuel",
+      "status": "settled",
+      "favorite": false,
+      "parlayType": "longshot",
+      "riskUnits": 0.25,
+      "legs": [
+        {
+          "id": "game-CFB-401869943-under",
+          "title": "Coastal Carolina at Marshall under 58.5",
+          "gameId": "CFB-401869943",
+          "market": "total points",
+          "athleteId": null,
+          "side": "under",
+          "line": 58.5,
+          "odds": -112,
+          "book": "FanDuel",
+          "chance": 0.535,
+          "kickoff": "2026-10-10T23:00Z",
+          "observedAt": "2026-10-10T13:57:14Z",
+          "marketWindow": "Full game",
+          "alternate": false
+        },
+        {
+          "id": "prop-CFB-401856715-5079482-rushYds",
+          "title": "Dilin Jones under 90.5 rushing yards",
+          "gameId": "CFB-401856715",
+          "market": "rushing yards",
+          "athleteId": "5079482",
+          "side": "under",
+          "line": 90.5,
+          "odds": -112,
+          "book": "FanDuel",
+          "chance": 0.548,
+          "kickoff": "2026-10-10T23:00Z",
+          "observedAt": "2026-10-10T20:40:23Z",
+          "marketWindow": "Full game",
+          "alternate": false
+        },
+        {
+          "id": "game-CFB-401864517-over",
+          "title": "Nevada at UTEP over 48.5",
+          "gameId": "CFB-401864517",
+          "market": "total points",
+          "athleteId": null,
+          "side": "over",
+          "line": 48.5,
+          "odds": -115,
+          "book": "FanDuel",
+          "chance": 0.546,
+          "kickoff": "2026-10-10T23:00Z",
+          "observedAt": "2026-10-10T13:57:14Z",
+          "marketWindow": "Full game",
+          "alternate": false
+        },
+        {
+          "id": "prop-CFB-401856712-5084047-rushYds",
+          "title": "Nate Frazier under 61.5 rushing yards",
+          "gameId": "CFB-401856712",
+          "market": "rushing yards",
+          "athleteId": "5084047",
+          "side": "under",
+          "line": 61.5,
+          "odds": -114,
+          "book": "FanDuel",
+          "chance": 0.56,
+          "kickoff": "2026-10-10T23:30Z",
+          "observedAt": "2026-10-10T20:40:23Z",
+          "marketWindow": "Full game",
+          "alternate": false
+        },
+        {
+          "id": "game-CFB-401856827-over",
+          "title": "Kansas at Utah over 50.5",
+          "gameId": "CFB-401856827",
+          "market": "total points",
+          "athleteId": null,
+          "side": "over",
+          "line": 50.5,
+          "odds": -114,
+          "book": "FanDuel",
+          "chance": 0.537,
+          "kickoff": "2026-10-11T00:00Z",
+          "observedAt": "2026-10-10T13:57:14Z",
+          "marketWindow": "Full game",
+          "alternate": false
+        }
+      ],
+      "correlation": "One leg per game, so the ticket treats the legs as independent; its chance is their product.",
+      "gameIds": [
+        "CFB-401869943",
+        "CFB-401856715",
+        "CFB-401864517",
+        "CFB-401856712",
+        "CFB-401856827"
+      ],
+      "book": "FanDuel",
+      "odds": 2260,
+      "quotedAt": "2026-10-10T13:57:14Z",
+      "quoteType": "capture",
+      "confidence": 1,
+      "priceEstimated": true,
+      "expiresAt": "2026-10-10T23:00:00Z",
+      "edge": "Estimated combined price from captured leg odds; verify the sportsbook's ticket price. Our chance 4.8% against 4.2% break-even at +2260: +0.136u per unit staked, 0.25u at risk.",
+      "cutoff": "A longshot is not re-entered. It stands or falls as posted.",
+      "sources": [
+        "https://api.sharpapi.io/api/v1/odds (key withheld)",
+        "https://www.espn.com/college-football/game/_/gameId/401856712",
+        "https://www.espn.com/college-football/game/_/gameId/401856715",
+        "https://www.espn.com/college-football/game/_/gameId/401856827",
+        "https://www.espn.com/college-football/game/_/gameId/401864517",
+        "https://www.espn.com/college-football/game/_/gameId/401869943"
+      ],
+      "why": "Longshot from the board: 5 legs at FanDuel, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.",
+      "risk": "Most longshots lose. The legs are treated as independent; any one miss sinks the ticket.",
+      "jurisdictionVerified": true,
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Longshot from the board: 5 legs at FanDuel, each at the number our model graded, one per game. A fun ticket at a quarter unit, tracked apart from the straight picks.",
+            "numbers": {},
+            "source": "Published ticket detail",
+            "time": "2026-10-10T21:30:05Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Most longshots lose. The legs are treated as independent; any one miss sinks the ticket.",
+            "numbers": {},
+            "source": "Published ticket risk",
+            "time": "2026-10-10T21:30:05Z"
+          }
+        ],
+        "reports": [],
+        "weather": null,
+        "line": {
+          "legs": [
+            {
+              "gameId": "CFB-401869943",
+              "title": "Coastal Carolina at Marshall under 58.5",
+              "line": 58.5,
+              "price": -112,
+              "book": "FanDuel"
+            },
+            {
+              "gameId": "CFB-401856715",
+              "title": "Dilin Jones under 90.5 rushing yards",
+              "line": 90.5,
+              "price": -112,
+              "book": "FanDuel"
+            },
+            {
+              "gameId": "CFB-401864517",
+              "title": "Nevada at UTEP over 48.5",
+              "line": 48.5,
+              "price": -115,
+              "book": "FanDuel"
+            },
+            {
+              "gameId": "CFB-401856712",
+              "title": "Nate Frazier under 61.5 rushing yards",
+              "line": 61.5,
+              "price": -114,
+              "book": "FanDuel"
+            },
+            {
+              "gameId": "CFB-401856827",
+              "title": "Kansas at Utah over 50.5",
+              "line": 50.5,
+              "price": -114,
+              "book": "FanDuel"
+            }
+          ],
+          "best": {
+            "book": "FanDuel",
+            "price": 2260,
+            "time": "2026-10-10T13:57:14Z"
+          }
+        },
+        "ours": null,
+        "history": null,
+        "sources": [
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds (key withheld)",
+            "time": "2026-10-10T21:30:05Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401856712",
+            "time": "2026-10-10T21:30:05Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401856715",
+            "time": "2026-10-10T21:30:05Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401856827",
+            "time": "2026-10-10T21:30:05Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401864517",
+            "time": "2026-10-10T21:30:05Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/college-football/game/_/gameId/401869943",
+            "time": "2026-10-10T21:30:05Z"
+          }
+        ],
+        "partial": true
+      },
+      "result": "loss",
+      "actual": "legs: win, win, loss, unclear, win",
+      "settledAt": "2026-10-11T10:45:03Z",
+      "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401869943",
+      "settlementReason": "One leg lost; the ticket loses.",
+      "units": -0.25
+    }
+  ]
+}
