@@ -36,7 +36,16 @@ for (const width of widths) {
       const bad = [...document.querySelectorAll('#view *')].filter(e => {
         // Screen-reader-only headings intentionally occupy a clipped 1 px box. They are not visual overflow.
         if(e.closest(allowed) || e.closest('.sr') || !e.getClientRects().length) return false;
-        const r=e.getBoundingClientRect(); return r.right>innerWidth+1 || r.left < -1;
+        const r=e.getBoundingClientRect(); let left=r.left,right=r.right;
+        // Judge the pixels a person can actually see. Kitchen Ticket portraits deliberately extend past
+        // their own frame and are clipped by an overflow-hidden photo well; their raw image box is not
+        // document overflow. Still fail when the visible intersection escapes the viewport.
+        for(let p=e.parentElement;p && p.id !== 'view';p=p.parentElement) {
+          if(['hidden','clip'].includes(getComputedStyle(p).overflowX)) {
+            const b=p.getBoundingClientRect(); left=Math.max(left,b.left);right=Math.min(right,b.right);
+          }
+        }
+        return right>innerWidth+1 || left < -1;
       }).slice(0,10).map(e=>({tag:e.tagName,cls:e.className,text:e.textContent.slice(0,80)}));
       const clipped = [...document.querySelectorAll('#view .eyebrow,#view h1,#view h2,#view h3,#view .empty p')].filter(e=>{
         if(e.closest('.sr') || !e.getClientRects().length) return false;

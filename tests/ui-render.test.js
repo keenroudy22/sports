@@ -113,6 +113,7 @@ test('every rendered view preserves the browser-audit page contract', () => {
   assert.match(source, /<h1/);
   assert.match(source, /const h1 = view\.querySelector\('h1'\)/, 'the renderer keeps one page-heading focus target');
   assert.match(audit, /\/did not load\/i/, 'a caught route failure must fail the visual audit');
+  assert.match(audit, /Judge the pixels a person can actually see/, 'clipped card art must be judged by its visible bounds');
   assert.match(audit, /closest\('\.sr'\)/, 'screen-reader-only headings are not visual overflow');
   assert.match(audit, /\.chip-scroll/, 'intentional chip rails may scroll without hiding page overflow');
 });
