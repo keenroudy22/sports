@@ -1,13 +1,13 @@
 {
- "at": "2026-10-11T23:09:19Z",
+ "at": "2026-10-11T23:16:41Z",
  "confirmed": {
-  "NFL-401872993": "2026-10-11T23:09:19Z",
-  "NFL-401872994": "2026-10-11T23:09:19Z"
+  "NFL-401872993": "2026-10-11T23:16:41Z",
+  "NFL-401872994": "2026-10-11T23:16:41Z"
  },
  "leagues": {
   "CFB": {
    "books": {},
-   "eventsListed": 67,
+   "eventsListed": 62,
    "eventsMatched": 1,
    "games": 1,
    "marketTypes": {},
@@ -109,7 +109,7 @@
       "fliff": "418731_c_p_209_prematch",
       "gemini": "NCAAF-2610142330-KENN-MOST-M",
       "hardrock": "4996377818960101778",
-      "kalshi": "KXNCAAFTOTAL-26OCT14KENNMOSU",
+      "kalshi": "KXNCAAF1H-26OCT14KENNMOSU",
       "ladbrokes": "f41a45af-f292-4bd0-b02a-c0be0f6433c5",
       "novig": "01a11390-3051-7f21-abdb-b92757d00b67",
       "onexbet": "760520925",
@@ -217,7 +217,7 @@
       "fliff": "418863_c_p_209_prematch",
       "gemini": "NCAAF-2610152330-ECU-UAB-M",
       "hardrock": "5848754417184145814",
-      "kalshi": "KXNCAAFSPREAD-26OCT15ECUUAB",
+      "kalshi": "KXNCAAFTOTAL-26OCT15ECUUAB",
       "ladbrokes": "ac4d773f-dce9-46c5-bdbb-25143a675c38",
       "novig": "01a118b6-b46e-7561-bb03-bb4b7020973b",
       "onexbet": "760686459",
@@ -228,6 +228,7 @@
       "rebet": "sr:match:70898836",
       "smarkets": "45356026",
       "sportzino": "sz-17783358",
+      "sx_bet": "L20488242",
       "thescorebet": "StandardEvent:8c8c8153-66e3-44af-88c6-0f7470599ce7"
      },
      "home": "UAB",
@@ -270,7 +271,7 @@
       "fliff": "418764_c_p_209_prematch",
       "gemini": "NCAAF-2610152330-GSU-ODU-M",
       "hardrock": "604875601064624532",
-      "kalshi": "KXNCAAFTOTAL-26OCT15GASOODU",
+      "kalshi": "KXNCAAFSPREAD-26OCT15GASOODU",
       "ladbrokes": "b5d468c6-1b7c-46b5-8266-f06bac3947d8",
       "novig": "01a118b6-b3ba-74f2-9c9a-423754b6d306",
       "onexbet": "760552792",
@@ -495,23 +496,6 @@
      "type": "fixture"
     },
     {
-     "away": "Arkansas State",
-     "external": {
-      "fanduel": "36154553",
-      "paddypower": "36154553"
-     },
-     "home": "Southern Miss",
-     "sample": {
-      "away_team": "Arkansas State",
-      "home_team": "Southern Miss",
-      "markets": [
-       "moneyline"
-      ]
-     },
-     "start": "2026-10-17T16:00:00Z",
-     "type": "fixture"
-    },
-    {
      "away": "Florida Atlantic",
      "external": {
       "ballybet": "1027569610",
@@ -583,6 +567,7 @@
       "novig": "01a12171-8d97-7940-ba64-4861d074a461",
       "onexbet": "760708976",
       "paddypower": "36154539",
+      "pinnacle": "1637453354",
       "polymarket": "nfl_ballstate_bowlinggreenfalcons_2026-10-17_b2",
       "prophetx": "1700101311",
       "rebet": "sr:match:70898866",
@@ -605,6 +590,54 @@
      },
      "start": "2026-10-17T16:00:00Z",
      "type": "fixture"
+    },
+    {
+     "away": "Pittsburgh",
+     "external": {
+      "ballybet": "1027508207",
+      "betmgm": "6:46842",
+      "betonline": "491151774",
+      "betparx": "1027508207",
+      "betrivers": "1027508207",
+      "bovada": "32098776",
+      "bwin": "6:46842",
+      "caesars": "723da11d-5657-40dd-96c7-14d796d9e349",
+      "circa": "221160",
+      "draftkings": "34788190",
+      "fanatics": "5334258",
+      "fanatics_markets": "6673809",
+      "fanduel": "36154582",
+      "fliff": "418735_c_p_209_prematch",
+      "gemini": "NCAAF-2610172000-PIT-BC-M",
+      "hardrock": "4343426241735557531",
+      "kalshi": "KXNCAAFTOTAL-26OCT17PITTBC",
+      "ladbrokes": "d8dbbb12-10b2-4ea3-9748-6ce3794c08d4",
+      "novig": "01a12171-92df-7793-9718-44f873b07f2f",
+      "onexbet": "760550150",
+      "paddypower": "36154582",
+      "pinnacle": "1637451493",
+      "polymarket": "nfl_bostoncollegeeagles_pittsburgh_2026-10-17_b2",
+      "prophetx": "1700101125",
+      "rebet": "sr:match:70900898",
+      "smarkets": "45356072",
+      "sportzino": "sz-17803705",
+      "sx_bet": "L20482646",
+      "thescorebet": "StandardEvent:3c62adc2-db65-4d58-9598-0d0b3995eadc"
+     },
+     "home": "Boston College",
+     "sample": {
+      "away_team": "Pittsburgh",
+      "home_team": "Boston College",
+      "markets": [
+       "draw_no_bet",
+       "moneyline",
+       "point_spread",
+       "team_total",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-17T16:00:00Z",
+     "type": "fixture"
     }
    ]
   },
@@ -613,7 +646,7 @@
     "draftkings": 682,
     "fanduel": 664
    },
-   "eventsListed": 18,
+   "eventsListed": 17,
    "eventsMatched": 2,
    "games": 2,
    "marketTypes": {
@@ -909,6 +942,7 @@
       "polymarket": "nfl_eagles_panthers_2026-10-18_b2",
       "polymarket_us": "nfl-car-phi-2026-10-18",
       "prophetx": "1700008801",
+      "stake": "b2b8982a-f276-4249-b3a1-5b4dfec2bd42",
       "sx_bet": "L19776777"
      },
      "home": "Philadelphia Eagles",
@@ -1006,7 +1040,6 @@
       "markets": [
        "1st_half_team_total",
        "draw_no_bet",
-       "game_prop",
        "moneyline",
        "point_spread",
        "team_total",
