@@ -20484,5 +20484,318 @@
         }
       }
     ]
+  },
+  {
+    "league": "NFL",
+    "publishedAt": "2026-10-11T17:30:05Z",
+    "targetWeek": 5,
+    "summary": "Research update for Oct 11: Settled 1: Brenton Strange OVER 34.5 receiving yards win. Nothing to close. Nothing published. odds_api.py: CFB: skipped (6 game-line credits already scheduled today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent)",
+    "takeaways": [],
+    "props": [
+      {
+        "status": "settled",
+        "favorite": false,
+        "modelLean": true,
+        "position": "TE",
+        "athleteId": "4430539",
+        "market": "recYds",
+        "line": 34.5,
+        "direction": "over",
+        "gameIds": [
+          "NFL-401872981"
+        ],
+        "book": "ESPN BET",
+        "odds": 100,
+        "projection": 43.6,
+        "edge": "Projection 43.6 against 34.5. Adjusted chance 51.6% (raw 62.1%, learned factor 0.13); 50.0% needed at +100: +1.6 percentage points. An estimate, not a guarantee.",
+        "cutoff": "OVER 34.5 at +100 or better; off the card at 35+, or at -115 or worse at 34.5.",
+        "modelVersion": "v2.0",
+        "snapshotAt": "2026-10-11T06:03:06Z",
+        "quotedAt": "2026-10-11T10:24:03Z",
+        "quoteType": "capture",
+        "quoteNote": "ESPN BET's number and price from the 6:24 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-10-11T12:30:00Z",
+        "probabilityAtPublication": {
+          "rawChance": 0.621,
+          "chance": 0.516,
+          "calibrated": true,
+          "calibration": 0.13,
+          "calibrationN": 538,
+          "push": 0.0,
+          "breakEven": 0.5,
+          "edgePoints": 1.6,
+          "evPerUnit": 0.031,
+          "snapshotAt": "2026-10-11T06:03:06Z",
+          "evaluatedAt": "2026-10-11T10:45:03Z",
+          "fairChance": 0.469,
+          "gap": 15.2
+        },
+        "title": "Brenton Strange OVER 34.5 receiving yards",
+        "id": "NFL-2026-W5-strange-over-34-5-recyds-espnbet",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/nfl/game/_/gameId/401872981",
+          "https://api.sharpapi.io/api/v1/odds",
+          "https://www.jaguars.com/news/london-quick-hits-it-s-about-us",
+          "https://www.jaguars.com/news/jaguars-tuesday-strange-has-his-day"
+        ],
+        "reasoning": {
+          "history": "Last 10 games: 4 of 10 over 34.5.",
+          "context": [
+            "Role: projected for 5.4 targets a game.",
+            "Defense: PHI allows 39 receiving yards a game to TEs, 10th-stingiest of 32 this season."
+          ],
+          "cautions": [
+            "Only 4 of the last 10 games cleared this side of the line; recent results oppose it."
+          ],
+          "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+        },
+        "why": "Prop lean: our projection is 43.6 against 34.5. The over reads 51.6% after adjustment from the raw 62.1%; 50.0% is needed at +100. Last 10 games: 4 of 10 over 34.5. Role: projected for 5.4 targets a game. Defense: PHI allows 39 receiving yards a game to TEs, 10th-stingiest of 32 this season.",
+        "risk": "Only 4 of the last 10 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 4 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+        "dossier": {
+          "reasons": [
+            {
+              "text": "My receiving yards is 43.6; the book's line is 34.5.",
+              "numbers": {
+                "projection": 43.6,
+                "line": 34.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-10-11T06:03:06Z"
+            },
+            {
+              "text": "Jaguars safety Eric Murray was listed as doubtful with a concussion, and cornerback Jaylon Jones was listed as out with a hamstring injury.",
+              "numbers": {},
+              "source": "https://www.jaguars.com/news/london-quick-hits-it-s-about-us",
+              "time": "2026-10-11T10:45:03Z"
+            },
+            {
+              "text": "Brenton Strange had seven receptions for 95 receiving yards against the Bengals in Week 4.",
+              "numbers": {},
+              "source": "https://www.jaguars.com/news/jaguars-tuesday-strange-has-his-day",
+              "time": "2026-10-11T10:45:03Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "1 of his last 4 games finished over 34.5 receiving yards.",
+              "numbers": {
+                "values": [
+                  23,
+                  17,
+                  32,
+                  95
+                ],
+                "hits": 1,
+                "games": 4,
+                "line": 34.5
+              },
+              "source": "ESPN box scores",
+              "time": "2026-10-04T17:00Z"
+            },
+            {
+              "text": "Only 4 of the last 10 games cleared this side of the line; recent results oppose it. An estimated chance, not a guarantee; a player line turns on a handful of touches. 4 games this season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+              "numbers": {},
+              "source": "Published risk note",
+              "time": "2026-10-11T10:45:03Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Jaguars safety Eric Murray was listed as doubtful with a concussion, and cornerback Jaylon Jones was listed as out with a hamstring injury.",
+              "numbers": {},
+              "source": "https://www.jaguars.com/news/london-quick-hits-it-s-about-us",
+              "time": "2026-10-11T10:45:03Z"
+            },
+            {
+              "text": "Jaguars safety Eric Murray was listed as doubtful with a concussion, and cornerback Jaylon Jones was listed as out with a hamstring injury.",
+              "numbers": {},
+              "source": "https://www.jaguars.com/news/london-quick-hits-it-s-about-us",
+              "time": "2026-10-11T10:45:03Z"
+            },
+            {
+              "text": "Eric Murray (JAX) is listed Doubtful.",
+              "numbers": {
+                "status": "Doubtful"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/2970716/eric-murray",
+              "time": "2026-10-10T00:02Z"
+            },
+            {
+              "text": "Chance Campbell (PHI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4372051/chance-campbell",
+              "time": "2026-10-11T05:31Z"
+            },
+            {
+              "text": "Drew Kendall (PHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4567802/drew-kendall",
+              "time": "2026-10-10T02:24Z"
+            },
+            {
+              "text": "Marcus Epps (PHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3139368/marcus-epps",
+              "time": "2026-10-10T01:14Z"
+            },
+            {
+              "text": "Jonathan Greenard (PHI) is listed Questionable.",
+              "numbers": {
+                "status": "Questionable"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3916409/jonathan-greenard",
+              "time": "2026-10-10T01:11Z"
+            },
+            {
+              "text": "Hollywood Brown (PHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4241372/hollywood-brown",
+              "time": "2026-10-10T00:53Z"
+            },
+            {
+              "text": "DeVonta Smith (PHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/4241478/devonta-smith",
+              "time": "2026-10-09T15:34Z"
+            },
+            {
+              "text": "Saquon Barkley (PHI) is listed Out.",
+              "numbers": {
+                "status": "Out"
+              },
+              "source": "https://www.espn.com/nfl/player/_/id/3929630/saquon-barkley",
+              "time": "2026-10-09T15:32Z"
+            }
+          ],
+          "weather": null,
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 32.5,
+                  "price": -109,
+                  "time": "2026-10-10T17:51:24Z"
+                },
+                "now": {
+                  "line": 32.5,
+                  "price": -114,
+                  "time": "2026-10-11T10:24:02Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 33.5,
+                  "price": -113,
+                  "time": "2026-10-10T23:46:26Z"
+                },
+                "now": {
+                  "line": 33.5,
+                  "price": -113,
+                  "time": "2026-10-11T10:24:03Z"
+                }
+              }
+            },
+            "best": {
+              "book": "ESPN BET",
+              "line": 34.5,
+              "price": 100,
+              "time": "2026-10-11T10:24:03Z"
+            }
+          },
+          "ours": {
+            "projection": 43.6,
+            "line": 34.5,
+            "market": "recYds",
+            "text": "My receiving yards is 43.6; the book's line is 34.5.",
+            "snapshotAt": "2026-10-11T06:03:06Z"
+          },
+          "history": "Last 10 games: 4 of 10 over 34.5.",
+          "sources": [
+            {
+              "label": "injury",
+              "url": "https://www.jaguars.com/news/london-quick-hits-it-s-about-us",
+              "time": "2026-10-11T10:45:03Z"
+            },
+            {
+              "label": "stats",
+              "url": "https://www.jaguars.com/news/jaguars-tuesday-strange-has-his-day",
+              "time": "2026-10-11T10:45:03Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/2970716/eric-murray",
+              "time": "2026-10-10T00:02Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4372051/chance-campbell",
+              "time": "2026-10-11T05:31Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4567802/drew-kendall",
+              "time": "2026-10-10T02:24Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3139368/marcus-epps",
+              "time": "2026-10-10T01:14Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3916409/jonathan-greenard",
+              "time": "2026-10-10T01:11Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4241372/hollywood-brown",
+              "time": "2026-10-10T00:53Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/4241478/devonta-smith",
+              "time": "2026-10-09T15:34Z"
+            },
+            {
+              "label": "ESPN injury report",
+              "url": "https://www.espn.com/nfl/player/_/id/3929630/saquon-barkley",
+              "time": "2026-10-09T15:32Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/nfl/game/_/gameId/401872981",
+              "time": "2026-10-11T10:45:03Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://api.sharpapi.io/api/v1/odds",
+              "time": "2026-10-11T10:45:03Z"
+            }
+          ],
+          "partial": false
+        },
+        "lane": "gut_call",
+        "riskUnits": 0.5,
+        "result": "win",
+        "actual": "Brenton Strange: 68 receiving yards",
+        "settledAt": "2026-10-11T17:30:05Z",
+        "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401872981",
+        "actualValue": 68,
+        "units": 0.5
+      }
+    ]
   }
 ]
