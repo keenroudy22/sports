@@ -1,9 +1,9 @@
 {
- "at": "2026-10-12T15:45:10Z",
+ "at": "2026-10-12T15:51:59Z",
  "confirmed": {
-  "CFB-401871053": "2026-10-12T15:45:10Z",
-  "CFB-401871067": "2026-10-12T15:45:10Z",
-  "NFL-401872994": "2026-10-12T15:45:10Z"
+  "CFB-401871053": "2026-10-12T15:51:59Z",
+  "CFB-401871067": "2026-10-12T15:51:59Z",
+  "NFL-401872994": "2026-10-12T15:51:59Z"
  },
  "leagues": {
   "CFB": {
@@ -20,7 +20,7 @@
     "player_receptions": 6,
     "player_rushing_yards": 80
    },
-   "requestsLeft": 52,
+   "requestsLeft": 7,
    "rows": 267,
    "slateGames": [
     "Delaware Blue Hens at Middle Tennessee Blue Raiders 2026-10-13T23:00Z",
@@ -83,6 +83,7 @@
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
        "anytime_touchdown_scorer",
+       "draw_no_bet",
        "game_prop",
        "moneyline",
        "player_passing_touchdowns",
@@ -158,6 +159,7 @@
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
        "anytime_touchdown_scorer",
+       "draw_no_bet",
        "game_prop",
        "moneyline",
        "player_passing_touchdowns",
@@ -177,7 +179,7 @@
      "type": "fixture"
     },
     {
-     "away": "East Carolina",
+     "away": "East Carolina Pirates",
      "external": {
       "ballybet": "1027508204",
       "betmgm": "6:46783",
@@ -211,10 +213,10 @@
       "sx_bet": "L20488242",
       "thescorebet": "StandardEvent:8c8c8153-66e3-44af-88c6-0f7470599ce7"
      },
-     "home": "UAB",
+     "home": "UAB Blazers",
      "sample": {
-      "away_team": "East Carolina",
-      "home_team": "UAB",
+      "away_team": "East Carolina Pirates",
+      "home_team": "UAB Blazers",
       "markets": [
        "1st_half_moneyline",
        "1st_half_point_spread",
@@ -231,6 +233,7 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -247,7 +250,7 @@
      "type": "fixture"
     },
     {
-     "away": "Georgia Southern",
+     "away": "Georgia Southern Eagles",
      "external": {
       "ballybet": "1027508202",
       "betmgm": "6:46785",
@@ -281,12 +284,13 @@
       "sx_bet": "L20484372",
       "thescorebet": "StandardEvent:85d2211b-f5a9-4136-83d2-00a31972dd79"
      },
-     "home": "Old Dominion",
+     "home": "Old Dominion Monarchs",
      "sample": {
-      "away_team": "Georgia Southern",
-      "home_team": "Old Dominion",
+      "away_team": "Georgia Southern Eagles",
+      "home_team": "Old Dominion Monarchs",
       "markets": [
        "1st_half_moneyline",
+       "1st_half_point_spread",
        "1st_half_total_points",
        "1st_quarter_moneyline",
        "1st_quarter_point_spread",
@@ -300,6 +304,8 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "draw_no_bet",
+       "game_prop",
        "moneyline",
        "point_spread",
        "team_total",
@@ -313,7 +319,7 @@
      "type": "fixture"
     },
     {
-     "away": "Colorado State",
+     "away": "Colorado State Rams",
      "external": {
       "ballybet": "1028202616",
       "betmgm": "6:46784",
@@ -346,10 +352,10 @@
       "sx_bet": "L20456748",
       "thescorebet": "StandardEvent:ecdbfb6e-4962-48f4-b41f-38f052907f0c"
      },
-     "home": "Texas State",
+     "home": "Texas State Bobcats",
      "sample": {
-      "away_team": "Colorado State",
-      "home_team": "Texas State",
+      "away_team": "Colorado State Rams",
+      "home_team": "Texas State Bobcats",
       "markets": [
        "1st_half_moneyline",
        "1st_half_point_spread",
@@ -366,6 +372,7 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -434,6 +441,7 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "draw_no_bet",
        "halftime_fulltime",
        "moneyline",
        "moneyline_3-way",
@@ -464,7 +472,7 @@
       "fanatics": "5326905",
       "fanduel": "36152756",
       "fliff": "418754_c_p_209_prematch",
-      "gemini": "NCAAF-2610170000-APP-CCU-S",
+      "gemini": "NCAAF-2610170000-APP-CCU-M",
       "goldrush": "31197428",
       "hardrock": "2834720366566441365",
       "kalshi": "KXNCAAF1H-26OCT16APPCCAR",
@@ -501,6 +509,8 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "draw_no_bet",
+       "game_prop",
        "moneyline",
        "point_spread",
        "team_total",
@@ -568,6 +578,7 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "draw_no_bet",
        "halftime_fulltime",
        "moneyline",
        "moneyline_3-way",
@@ -632,6 +643,7 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -694,6 +706,7 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -760,6 +773,7 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "draw_no_bet",
        "halftime_fulltime",
        "moneyline",
        "moneyline_3-way",
@@ -824,6 +838,7 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -872,7 +887,7 @@
     "player_tackles": 18,
     "player_tackles_+_assists": 18
    },
-   "requestsLeft": 55,
+   "requestsLeft": 10,
    "rows": 776,
    "slateGames": [
     "Buffalo Bills at Los Angeles Rams 2026-10-13T00:15Z"
@@ -899,7 +914,7 @@
       "gemini": "NFL-2610160015-SEA-DEN-PPTD",
       "goldrush": "31140274",
       "hardrock": "1703789447373521320",
-      "kalshi": "KXNFL1HTEAMTOTAL-26OCT15SEADEN",
+      "kalshi": "KXNFLTD-26OCT15SEADEN-SEATHORTON15-2",
       "ladbrokes": "44ef372c-98fa-400d-b483-3f0ad23b66cc",
       "matchbook": "mb-33322137433300023",
       "novig": "01a112eb-4e8a-72a2-a445-cc3b6f3184fb",
@@ -981,6 +996,7 @@
        "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
+       "moneyline_3-way",
        "most_points_player",
        "player_interceptions",
        "player_longest_reception",
@@ -1166,7 +1182,6 @@
        "both_teams_to_score",
        "correct_score",
        "draw_no_bet",
-       "game_prop",
        "match_result_both_teams_to_score",
        "moneyline",
        "player_touchdowns",
@@ -1625,7 +1640,6 @@
        "both_teams_to_score",
        "correct_score",
        "draw_no_bet",
-       "game_prop",
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
@@ -1726,7 +1740,6 @@
        "both_teams_to_score",
        "correct_score",
        "draw_no_bet",
-       "game_prop",
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
@@ -1984,7 +1997,6 @@
        "both_teams_to_score",
        "correct_score",
        "draw_no_bet",
-       "game_prop",
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
