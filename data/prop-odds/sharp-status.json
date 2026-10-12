@@ -1,9 +1,9 @@
 {
- "at": "2026-10-12T14:24:22Z",
+ "at": "2026-10-12T14:37:00Z",
  "confirmed": {
-  "CFB-401871053": "2026-10-12T14:24:22Z",
-  "CFB-401871067": "2026-10-12T14:24:22Z",
-  "NFL-401872994": "2026-10-12T14:24:22Z"
+  "CFB-401871053": "2026-10-12T14:37:00Z",
+  "CFB-401871067": "2026-10-12T14:37:00Z",
+  "NFL-401872994": "2026-10-12T14:37:00Z"
  },
  "leagues": {
   "CFB": {
@@ -906,7 +906,7 @@
       "gemini": "NFL-2610160015-SEA-DEN-PPTD",
       "goldrush": "31140274",
       "hardrock": "1703789447373521320",
-      "kalshi": "KXNFLRECYDS-26OCT15SEADEN-SEATHORTON15-25",
+      "kalshi": "KXNFLRECYDS-26OCT15SEADEN-SEAJSMITHNJIGBA11-110",
       "ladbrokes": "44ef372c-98fa-400d-b483-3f0ad23b66cc",
       "matchbook": "mb-33322137433300023",
       "novig": "01a112eb-4e8a-72a2-a445-cc3b6f3184fb",
@@ -1217,7 +1217,8 @@
       "rebet": "sr:match:71515904",
       "sportzino": "sz-16552505",
       "stake": "9a327843-0b5d-4e19-a5da-23feda211f40",
-      "sx_bet": "L19431564"
+      "sx_bet": "L19431564",
+      "thescorebet": "StandardEvent:8f3a27bc-12b5-4800-aa39-d9d145781c14"
      },
      "home": "Cleveland Browns",
      "sample": {
@@ -1863,28 +1864,49 @@
       "away_team": "Buffalo Bills",
       "home_team": "Las Vegas Raiders",
       "markets": [
+       "1st_half_moneyline",
+       "1st_half_moneyline_3-way",
+       "1st_half_point_spread",
        "1st_half_team_total",
+       "1st_half_total_points",
        "1st_half_total_points_odd_even",
+       "1st_quarter_moneyline",
+       "1st_quarter_moneyline_3-way",
+       "1st_quarter_point_spread",
        "1st_quarter_team_total",
+       "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
+       "2nd_half_moneyline_3-way",
        "2nd_half_team_total",
+       "2nd_half_total_points",
        "2nd_half_total_points_odd_even",
+       "2nd_quarter_moneyline_3-way",
        "2nd_quarter_team_total",
+       "2nd_quarter_total_points",
        "2nd_quarter_total_points_odd_even",
+       "3rd_quarter_moneyline_3-way",
        "3rd_quarter_team_total",
+       "3rd_quarter_total_points",
        "3rd_quarter_total_points_odd_even",
+       "4th_quarter_moneyline_3-way",
        "4th_quarter_team_total",
+       "4th_quarter_total_points",
        "4th_quarter_total_points_odd_even",
        "both_teams_to_score",
        "draw_no_bet",
        "game_prop",
+       "highest_scoring_half",
+       "highest_scoring_quarter_will_have_how_many_points",
        "match_result_both_teams_to_score",
        "moneyline",
        "point_spread",
        "race_to_10_points",
+       "race_to_15_points",
+       "race_to_20_points",
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
