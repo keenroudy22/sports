@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-10-12T21:57:22Z",
+  "updatedAt": "2026-10-12T22:04:54Z",
   "status": "ok",
   "coverage": "Observed NFL/CFB player markets from saved research and dated public references. Not an exhaustive sportsbook menu. Rebuilding does not refresh quote times or create recommendations.",
   "freshnessPolicy": "Direct observed prices expire after at most 60 minutes or a sooner supplied expiry; all article/comparison prices require independent sportsbook recheck.",
   "counts": {
-    "lines": 140,
+    "lines": 141,
     "current": 0,
-    "references": 1
+    "references": 2
   },
   "lines": [
     {
@@ -7758,6 +7758,69 @@
           "source": "https://www.espn.com/nfl/game/_/gameId/401872981",
           "marketWindow": "Full game",
           "cutoff": "OVER 34.5 at +100 or better; off the card at 35+, or at -115 or worse at 34.5.",
+          "quoteType": "source reference"
+        }
+      ]
+    },
+    {
+      "league": "NFL",
+      "gameId": "NFL-401872994",
+      "player": "Kyren Williams",
+      "athleteId": "4430737",
+      "position": "RB",
+      "reportId": "NFL-2026-W5-williams-under-14-5-car-dk",
+      "identityVerified": true,
+      "direction": "UNDER",
+      "line": 14.5,
+      "market": "rushing attempts",
+      "book": "DraftKings",
+      "odds": -106,
+      "observedAt": "2026-10-12T21:30:09Z",
+      "expiresAt": "2026-10-12T22:50:00Z",
+      "source": "https://www.espn.com/nfl/game/_/gameId/401872994",
+      "marketWindow": "Full game",
+      "cutoff": "UNDER 14.5 at -106 or better; off the card at 14 or lower, or at -121 or worse at 14.5.",
+      "quoteType": "source reference",
+      "checkedAt": "2026-10-12T21:30:09Z",
+      "kickoff": "2026-10-13T00:15Z",
+      "status": "reference",
+      "quoteStatus": "reference",
+      "reason": "Public article or comparison quote; verify the exact market in your sportsbook.",
+      "builderEligible": false,
+      "title": "Kyren Williams UNDER 14.5 rushing attempts",
+      "id": "line-78560ce3d2713d48eda1",
+      "observations": [
+        {
+          "line": 14.5,
+          "odds": -106,
+          "observedAt": "2026-10-12T21:30:09Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401872994",
+          "quoteType": "source reference",
+          "sourceDate": null,
+          "sourcePart": null,
+          "sourceTimeNote": null
+        }
+      ],
+      "observationCount": 1,
+      "originalRecommendations": [
+        {
+          "league": "NFL",
+          "gameId": "NFL-401872994",
+          "player": "Kyren Williams",
+          "athleteId": "4430737",
+          "position": "RB",
+          "reportId": "NFL-2026-W5-williams-under-14-5-car-dk",
+          "identityVerified": true,
+          "direction": "UNDER",
+          "line": 14.5,
+          "market": "rushing attempts",
+          "book": "DraftKings",
+          "odds": -106,
+          "observedAt": "2026-10-12T21:30:09Z",
+          "expiresAt": "2026-10-12T22:50:00Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401872994",
+          "marketWindow": "Full game",
+          "cutoff": "UNDER 14.5 at -106 or better; off the card at 14 or lower, or at -121 or worse at 14.5.",
           "quoteType": "source reference"
         }
       ]
