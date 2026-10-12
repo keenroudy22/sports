@@ -3,7 +3,7 @@
   "MLB": {
    "gamesGraded": 22,
    "gamesQuoted": 24,
-   "moneylineSnapshots": 91,
+   "moneylineSnapshots": 92,
    "seasons": [
     {
      "gamesGraded": 13,
@@ -18,14 +18,14 @@
      "season": 2026
     }
    ],
-   "snapshots": 91,
+   "snapshots": 92,
    "status": "capturing",
-   "totalSnapshots": 91
+   "totalSnapshots": 92
   },
   "NHL": {
-   "gamesGraded": 82,
-   "gamesQuoted": 85,
-   "moneylineSnapshots": 337,
+   "gamesGraded": 83,
+   "gamesQuoted": 101,
+   "moneylineSnapshots": 354,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,44 @@
      "season": 2027
     },
     {
-     "gamesGraded": 43,
-     "gamesQuoted": 44,
+     "gamesGraded": 44,
+     "gamesQuoted": 60,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 337,
+   "snapshots": 354,
    "status": "capturing",
-   "totalSnapshots": 337
+   "totalSnapshots": 354
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "FLA",
+    "id": "26",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/fla.png",
+    "name": "Florida Panthers",
+    "shortName": "Panthers"
+   },
+   "awayScore": 3,
+   "gameId": "NHL-401892485",
+   "gradedAt": "2026-10-12T21:30:06Z",
+   "home": {
+    "abbreviation": "BUF",
+    "id": "2",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/buf.png",
+    "name": "Buffalo Sabres",
+    "shortName": "Sabres"
+   },
+   "homeScore": 5,
+   "kickoff": "2026-10-12T17:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "LAD",
@@ -2572,32 +2598,7 @@
    "season": 2026,
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "PIT",
-    "id": "16",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/pit.png",
-    "name": "Pittsburgh Penguins",
-    "shortName": "Penguins"
-   },
-   "awayScore": 7,
-   "gameId": "NHL-401891821",
-   "gradedAt": "2026-10-01T03:30:05Z",
-   "home": {
-    "abbreviation": "PHI",
-    "id": "15",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/phi.png",
-    "name": "Philadelphia Flyers",
-    "shortName": "Flyers"
-   },
-   "homeScore": 0,
-   "kickoff": "2026-09-30T23:30:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "statusDetail": "Final",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-10-12T20:10:48Z"
+ "updatedAt": "2026-10-12T21:30:06Z"
 }

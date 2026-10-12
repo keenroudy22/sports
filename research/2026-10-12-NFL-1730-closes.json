@@ -1,0 +1,341 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-10-12T21:30:06Z",
+  "targetWeek": 5,
+  "summary": "Research update for Oct 12: Nothing to settle. Closed 1: Ty Johnson OVER 13.5 receiving yards. Nothing published. Screened and passed on 17: Puka Nacua OVER 2.5 rushing yards (one_book); Blake Corum OVER 3.5 receiving yards (best_quote_by_ev); Dawson Knox OVER 11.5 receiving yards (one_book); James Cook III OVER 10.5 receiving yards (best_quote_by_ev); Khalil Shakir OVER 45.5 receiving yards (plan_selection); Matthew Stafford OVER 278.5 passing yards (best_quote_by_ev); Ty Johnson OVER 14.5 receiving yards (not_duplicate); Blake Corum OVER 33.5 rushing yards (best_quote_by_ev); and 9 more. odds_api.py: CFB: skipped (8 game-line credits already scheduled today) prop_odds.py: props: nothing due (no game inside six hours, or the day's budget is spent) sharp_odds.py: sharp: 1 records appended",
+  "takeaways": [],
+  "props": [
+    {
+      "status": "expired",
+      "favorite": true,
+      "modelLean": true,
+      "position": "RB",
+      "athleteId": "3915411",
+      "market": "recYds",
+      "line": 13.5,
+      "direction": "over",
+      "gameIds": [
+        "NFL-401872994"
+      ],
+      "book": "DraftKings",
+      "odds": -111,
+      "projection": 21.5,
+      "edge": "Projection 21.5 against 13.5. Adjusted chance 52.0% (raw 65.5%, learned factor 0.13); 52.6% needed at -111: -0.6 percentage points. An estimate, not a guarantee.",
+      "cutoff": "OVER 13.5 at -111 or better; off the card at 14+, or at -126 or worse at 13.5.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-10-11T22:41:46Z",
+      "quotedAt": "2026-10-12T14:24:22Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 10:24 AM ET capture across 2 books, the best expected value on the board for this side.",
+      "expiresAt": "2026-10-12T15:45:00Z",
+      "probabilityAtPublication": {
+        "rawChance": 0.655,
+        "chance": 0.52,
+        "calibrated": true,
+        "calibration": 0.13,
+        "calibrationN": 538,
+        "push": 0.0,
+        "breakEven": 0.526,
+        "edgePoints": -0.6,
+        "evPerUnit": -0.011,
+        "snapshotAt": "2026-10-11T22:41:46Z",
+        "evaluatedAt": "2026-10-12T14:28:06Z",
+        "fairChance": 0.498,
+        "gap": 15.7
+      },
+      "title": "Ty Johnson OVER 13.5 receiving yards",
+      "id": "NFL-2026-W5-johnson-over-13-5-recyds-dk",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401872994",
+        "https://api.sharpapi.io/api/v1/odds",
+        "https://www.therams.com/news/matthew-stafford-a-ton-of-respect-for-josh-allen-looking-forward-to-challenge-bills-will-present-on-monday-night-football",
+        "https://www.buffalobills.com/news/buffalo-bills-injury-report-vs-rams-week-5",
+        "https://www.therams.com/news/rams-injury-report-week-5-2026-vs-bills-aaron-donald-colby-parkinson-and-jaylen-watson-good-to-go-for-monday-night-football"
+      ],
+      "reasoning": {
+        "history": "Last 10 games: 8 of 10 over 13.5.",
+        "context": [
+          "Role: 1st of 3 BUF RBs by projected targets, 3.1 a game.",
+          "Defense: LAR allows 25.75 receiving yards a game to RBs, 11th-stingiest of 32 this season."
+        ],
+        "cautions": [
+          "Rams cornerback Jaylen Watson has no game status designation after a shoulder injury, clearing the way for his return against the Bills."
+        ],
+        "historyNote": "Past hit rate is context, not the predicted chance; opponents and roles can change."
+      },
+      "why": "Prop lean: our projection is 21.5 against 13.5. The over reads 52.0% after adjustment from the raw 65.5%; 52.6% is needed at -111. Last 10 games: 8 of 10 over 13.5. Role: 1st of 3 BUF RBs by projected targets, 3.1 a game. Defense: LAR allows 25.75 receiving yards a game to RBs, 11th-stingiest of 32 this season.",
+      "risk": "Rams cornerback Jaylen Watson has no game status designation after a shoulder injury, clearing the way for his return against the Bills. An estimated chance, not a guarantee; a player line turns on a handful of touches. 2 games this season, the role settled by last season. A player who does not take the field is voided; an in-game injury is graded unless a verified book protection applies.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Over 13.5 in 8 of his last 10 games.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-10-12T14:28:06Z"
+          },
+          {
+            "text": "Book says 13.5. I say 21.5.",
+            "numbers": {
+              "projection": 21.5,
+              "line": 13.5
+            },
+            "source": "Kook'n projection",
+            "time": "2026-10-11T22:41:46Z"
+          },
+          {
+            "text": "Bills wide receiver Joshua Palmer has been ruled out with a shoulder injury.",
+            "numbers": {},
+            "source": "https://www.buffalobills.com/news/buffalo-bills-injury-report-vs-rams-week-5",
+            "time": "2026-10-12T14:28:06Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Rams cornerback Jaylen Watson has no game status designation after a shoulder injury, clearing the way for his return against the Bills.",
+            "numbers": {},
+            "source": "https://www.therams.com/news/rams-injury-report-week-5-2026-vs-bills-aaron-donald-colby-parkinson-and-jaylen-watson-good-to-go-for-monday-night-football",
+            "time": "2026-10-12T14:28:06Z"
+          },
+          {
+            "text": "Rams cornerback Jaylen Watson has no game status designation after a shoulder injury, clearing the way for his return against the Bills.",
+            "numbers": {},
+            "source": "https://www.therams.com/news/rams-injury-report-week-5-2026-vs-bills-aaron-donald-colby-parkinson-and-jaylen-watson-good-to-go-for-monday-night-football",
+            "time": "2026-10-12T14:28:06Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Bills wide receiver Joshua Palmer has been ruled out with a shoulder injury.",
+            "numbers": {},
+            "source": "https://www.buffalobills.com/news/buffalo-bills-injury-report-vs-rams-week-5",
+            "time": "2026-10-12T14:28:06Z"
+          },
+          {
+            "text": "Bills wide receiver DJ Moore is questionable with a shoulder injury.",
+            "numbers": {},
+            "source": "https://www.buffalobills.com/news/buffalo-bills-injury-report-vs-rams-week-5",
+            "time": "2026-10-12T14:28:06Z"
+          },
+          {
+            "text": "Rams cornerback Jaylen Watson has no game status designation after a shoulder injury, clearing the way for his return against the Bills.",
+            "numbers": {},
+            "source": "https://www.therams.com/news/rams-injury-report-week-5-2026-vs-bills-aaron-donald-colby-parkinson-and-jaylen-watson-good-to-go-for-monday-night-football",
+            "time": "2026-10-12T14:28:06Z"
+          },
+          {
+            "text": "Rams safety Quentin Lake is questionable with a hip injury.",
+            "numbers": {},
+            "source": "https://www.therams.com/news/rams-injury-report-week-5-2026-vs-bills-aaron-donald-colby-parkinson-and-jaylen-watson-good-to-go-for-monday-night-football",
+            "time": "2026-10-12T14:28:06Z"
+          },
+          {
+            "text": "Bills wide receiver Joshua Palmer has been ruled out with a shoulder injury.",
+            "numbers": {},
+            "source": "https://www.buffalobills.com/news/buffalo-bills-injury-report-vs-rams-week-5",
+            "time": "2026-10-12T14:28:06Z"
+          },
+          {
+            "text": "Bills wide receiver DJ Moore is questionable with a shoulder injury.",
+            "numbers": {},
+            "source": "https://www.buffalobills.com/news/buffalo-bills-injury-report-vs-rams-week-5",
+            "time": "2026-10-12T14:28:06Z"
+          },
+          {
+            "text": "Rams cornerback Jaylen Watson has no game status designation after a shoulder injury, clearing the way for his return against the Bills.",
+            "numbers": {},
+            "source": "https://www.therams.com/news/rams-injury-report-week-5-2026-vs-bills-aaron-donald-colby-parkinson-and-jaylen-watson-good-to-go-for-monday-night-football",
+            "time": "2026-10-12T14:28:06Z"
+          },
+          {
+            "text": "Rams safety Quentin Lake is questionable with a hip injury.",
+            "numbers": {},
+            "source": "https://www.therams.com/news/rams-injury-report-week-5-2026-vs-bills-aaron-donald-colby-parkinson-and-jaylen-watson-good-to-go-for-monday-night-football",
+            "time": "2026-10-12T14:28:06Z"
+          },
+          {
+            "text": "Quentin Lake (LAR) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4249128/quentin-lake",
+            "time": "2026-10-11T02:14Z"
+          },
+          {
+            "text": "Landon Jackson (BUF) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4432715/landon-jackson",
+            "time": "2026-10-11T02:38Z"
+          },
+          {
+            "text": "Dee Alford (BUF) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4401823/dee-alford",
+            "time": "2026-10-10T19:14Z"
+          },
+          {
+            "text": "Ed Oliver (BUF) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4039303/ed-oliver",
+            "time": "2026-10-10T18:55Z"
+          },
+          {
+            "text": "DJ Moore (BUF) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/3915416/dj-moore",
+            "time": "2026-10-10T18:05Z"
+          },
+          {
+            "text": "Joshua Palmer (BUF) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4242433/joshua-palmer",
+            "time": "2026-10-10T18:00Z"
+          },
+          {
+            "text": "Te'Cory Couch (BUF) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4427348/tecory-couch",
+            "time": "2026-10-04T18:51Z"
+          }
+        ],
+        "weather": {
+          "tempF": 66,
+          "windMph": 10,
+          "windDirection": "WSW",
+          "precipProb": 20,
+          "periodStart": "2026-10-12T17:00:00-07:00",
+          "issuedAt": "2026-10-12T06:26:21+00:00",
+          "source": "https://api.weather.gov/gridpoints/LOX/150,42/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 12.5,
+                "price": -108,
+                "time": "2026-10-11T00:19:53Z"
+              },
+              "now": {
+                "line": 13.5,
+                "price": -111,
+                "time": "2026-10-12T14:24:22Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 11.5,
+                "price": -114,
+                "time": "2026-10-11T00:19:53Z"
+              },
+              "now": {
+                "line": 13.5,
+                "price": -113,
+                "time": "2026-10-12T14:24:22Z"
+              }
+            }
+          },
+          "best": {
+            "book": "DraftKings",
+            "line": 13.5,
+            "price": -111,
+            "time": "2026-10-12T14:24:22Z"
+          }
+        },
+        "ours": {
+          "projection": 21.5,
+          "line": 13.5,
+          "market": "recYds",
+          "text": "Over 13.5 in 8 of his last 10 games.",
+          "snapshotAt": "2026-10-11T22:41:46Z"
+        },
+        "history": "Last 10 games: 8 of 10 over 13.5.",
+        "sources": [
+          {
+            "label": "injury",
+            "url": "https://www.buffalobills.com/news/buffalo-bills-injury-report-vs-rams-week-5",
+            "time": "2026-10-12T14:28:06Z"
+          },
+          {
+            "label": "injury",
+            "url": "https://www.therams.com/news/rams-injury-report-week-5-2026-vs-bills-aaron-donald-colby-parkinson-and-jaylen-watson-good-to-go-for-monday-night-football",
+            "time": "2026-10-12T14:28:06Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4249128/quentin-lake",
+            "time": "2026-10-11T02:14Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4432715/landon-jackson",
+            "time": "2026-10-11T02:38Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4401823/dee-alford",
+            "time": "2026-10-10T19:14Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4039303/ed-oliver",
+            "time": "2026-10-10T18:55Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/3915416/dj-moore",
+            "time": "2026-10-10T18:05Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4242433/joshua-palmer",
+            "time": "2026-10-10T18:00Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4427348/tecory-couch",
+            "time": "2026-10-04T18:51Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/LOX/150,42/forecast/hourly",
+            "time": "2026-10-12T06:26:21+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401872994",
+            "time": "2026-10-12T14:28:06Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://api.sharpapi.io/api/v1/odds",
+            "time": "2026-10-12T14:28:06Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.therams.com/news/matthew-stafford-a-ton-of-respect-for-josh-allen-looking-forward-to-challenge-bills-will-present-on-monday-night-football",
+            "time": "2026-10-12T14:28:06Z"
+          }
+        ],
+        "partial": false
+      },
+      "lane": "hot_plate",
+      "riskUnits": 1,
+      "publishedAt": "2026-10-12T14:41:33Z",
+      "entryNote": "Off the card: line moved 3 against, from 13.5 to 16.5. Published cutoff: OVER 13.5 at -111 or better; off the card at 14+, or at -126 or worse at 13.5. Stays in the record at 13.5 and -111 and is graded as posted."
+    }
+  ]
+}
