@@ -2,7 +2,7 @@
 
 The owner adopted `/Users/keen/Projects/kookn-patches/KOOKN-AUTOPILOT.md` as the current operating rule on
 October 11, 2026. Its SHA-256 is
-`d46f7136f608dfa2a9782c163bf08ce7762d7dc5ce492a59c5ade4d5a967c23f`.
+`66d95aa50a28d3b8af2fc50c1591d938a696791de07203010c47bea5097558b0`.
 
 That complete dated document overrides `KOOKN-PLAN.md` and older play, posting, Climb, results, learning,
 graphics, approval and release-window rules wherever they differ. The evidence packet used for its factual

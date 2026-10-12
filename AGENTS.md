@@ -210,13 +210,19 @@ Handy commands (from `~/Projects/sports`):
   to the owner. Routine releases no longer wait for a clock window: ship one bounded fix whenever every gate passes
   and the run lock is held. Outcome health, release order and done conditions are §§3–14 of the dated Autopilot rule.
 
+- **Codex schedule and result speed (owner, 2026-10-12):** keep only three Codex tasks: Kook'n daily at 7:45 AM,
+  Kook'n overnight at 12:45 AM and Kook'n weekly Tuesday after `learn.weekly`. The Mac desk remains responsible
+  for posting, grading, learning and the Tuesday note without Codex usage. Every settled win or honest near miss
+  should post within about 30 minutes of the first verified final; result quiet hours begin at 1:00 AM, the site
+  updates immediately, and the private outcomes check reports minutes from final to post.
+
 - **October 11 operating settlement (owner, 2026-10-11):** Fun tickets are a small number of pregame parlays at
   +500 through +1500, one book, different games, at most one total and one saved real reason per leg; they are
   graded win or lose. The prior conversation idea to post parlays only after they win is withdrawn. Try for a
   Climb step on most days with two or more games in one league (especially Saturday, Sunday and college Friday),
   usually one or two researched legs and any reviewed alternate mix; it remains unforced and all safety gates
   remain. Grade each play and refresh the site about 30 minutes after a verified final. A casual win reaction or
-  honest near-miss may post before 12:30 AM; after that, the 9:00 AM Results post sweeps it up. The agent acts
+  honest near-miss may post before 1:00 AM; after that, the 9:00 AM Results post sweeps it up. The agent acts
   without case-by-case permission except for spending money, changing how the public record counts or legal
   decisions. NBA, soccer and college basketball activate automatically when their documented readiness checks
   pass. Report ordinary decisions together in the weekly owner note.

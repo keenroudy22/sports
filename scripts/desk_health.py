@@ -286,6 +286,57 @@ def delivery(posts, now):
     return counts
 
 
+def result_timeliness(record, posts, now):
+    """Measure the saved final-observation-to-result-send delay.
+
+    ``settledAt`` is the first durable observation that the game was final. It is
+    the closest auditable final timestamp in the free feeds, so the outcome
+    report names that limitation instead of inventing an exact stadium clock.
+    Wins and honest near misses are expected to get an individual result post.
+    """
+    rows = record.get('picks') if isinstance(record, dict) else None
+    if not isinstance(rows, list):
+        return {'state': 'unknown', 'source': 'settledAt', 'eligible': 0, 'posted': 0,
+                'within30Minutes': 0, 'over30Minutes': 0, 'missing': 0,
+                'latestMinutesFromFinalToPost': None, 'maxMinutesFromFinalToPost': None}
+    sent = {}
+    for post in posts:
+        if not isinstance(post, dict) or not post.get('sentAt'):
+            continue
+        key = str(post.get('id') or '')
+        for prefix in ('cashed:', 'burnt:'):
+            if key.startswith(prefix):
+                sent[key[len(prefix):]] = moment(post['sentAt'])
+    delays, missing = [], 0
+    cutoff = now - timedelta(hours=48)
+    for pick in rows:
+        if not isinstance(pick, dict) or not pick.get('posted') or not pick.get('settledAt'):
+            continue
+        settled = moment(pick['settledAt'])
+        if not settled or not cutoff <= settled <= now:
+            continue
+        result = str(pick.get('result') or '').lower()
+        eligible = result == 'win'
+        if result == 'loss':
+            actual, line = pick.get('actualValue'), pick.get('line')
+            if isinstance(actual, (int, float)) and isinstance(line, (int, float)):
+                market = str(pick.get('market') or pick.get('marketType') or '').lower()
+                threshold = 1 if market in ('rec', 'receptions') else 2 if market in ('spread', 'total') else 3
+                eligible = abs(float(actual) - float(line)) <= threshold
+        if not eligible:
+            continue
+        delivered = sent.get(str(pick.get('id') or ''))
+        if delivered is None:
+            missing += 1
+            continue
+        delays.append(max(0, round((delivered - settled).total_seconds() / 60, 1)))
+    return {'state': 'available', 'source': 'settledAt', 'eligible': len(delays) + missing,
+            'posted': len(delays), 'within30Minutes': sum(delay <= 30 for delay in delays),
+            'over30Minutes': sum(delay > 30 for delay in delays), 'missing': missing,
+            'latestMinutesFromFinalToPost': delays[-1] if delays else None,
+            'maxMinutesFromFinalToPost': max(delays) if delays else None}
+
+
 def delivery_outcome(post, channel, now):
     """Current saved evidence only; never infer an actual publication minute."""
     mirror = post.get('discord')
@@ -440,6 +491,11 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     for field, label in labels.items():
         if counts[field]:
             issue('delivery-' + field, label)
+    result_speed = result_timeliness(read(root / 'site/data/app/record.json'), posts, now)
+    if result_speed['state'] == 'available' and result_speed['missing']:
+        issue('result-post-missing', f"{result_speed['missing']} settled win or near miss has no result post in the last 48 hours.")
+    if result_speed['state'] == 'available' and result_speed['over30Minutes']:
+        issue('result-post-late', f"{result_speed['over30Minutes']} result post took more than 30 minutes from the first verified final.")
     watch = read(conf / 'live-watch.json')
     pilot = read(conf / 'live-progress.json')
     attempts = pilot.get('attempts') or []
@@ -502,6 +558,7 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
             'sources': checks, 'deliveriesLast48h': counts,
             'deliveryLogState': 'available' if isinstance(post_book.get('posts'), list) else 'unknown',
             'deliveryCohorts': delivery_cohorts(post_book, now),
+            'resultTimeliness': result_speed,
             'officialUnscheduled': official_unscheduled, 'requestCounts': request_counts,
             'chosenNotPosted': chosen_not_posted,
             'sgoEvaluation': {'usedBefore': sgo_used, 'limit': sgo_usage.get('maximum') if sgo_usage.get('maximum') == 2500 else None,
@@ -527,6 +584,11 @@ def markdown(data):
     counts = data['deliveriesLast48h']
     lines.append('Delivery evidence (48h): ' + ', '.join(f'{key} {value}' for key, value in counts.items()) + '.')
     lines.append('Stored delivery log: ' + data.get('deliveryLogState', 'unknown') + '; missing evidence is not a successful delivery.')
+    speed = data.get('resultTimeliness') or {}
+    lines.append('Minutes from final to post: '
+                 f"{speed.get('within30Minutes', 0)}/{speed.get('eligible', 0)} within 30 minutes; "
+                 f"{speed.get('missing', 0)} missing; max {speed.get('maxMinutesFromFinalToPost') if speed.get('maxMinutesFromFinalToPost') is not None else 'unknown'}. "
+                 'Final means the first saved final observation (settledAt).')
     cohorts = data.get('deliveryCohorts') or {}
     lines.append('Distinct delivery cohorts: ' + str(cohorts.get('state', 'unknown')) + '.')
     for cohort in cohorts.get('cohorts') or []:
@@ -638,6 +700,13 @@ are not technical failures. Display incidents and grading reconciliation still n
 <section><h2>Source observations</h2><p>Age is time since the stored observation, not measured feed latency.</p><div class="scroll"><table><thead><tr><th>Source</th><th>Status</th><th>Observed at</th><th>Age (minutes)</th><th>Required now</th></tr></thead><tbody>{source_rows}</tbody></table></div></section>
 {reliability}
 <section><h2>Delivery evidence · last 48 hours</h2><p>Stored log: {text(data.get('deliveryLogState', 'unknown'))}. Missing evidence is not a successful delivery.</p><table>{rows((label, deliveries.get(key)) for key, label in delivery_labels.items())}</table></section>
+<section><h2>Result speed · last 48 hours</h2><table>{rows([
+('Eligible wins and near misses', (data.get('resultTimeliness') or {}).get('eligible')),
+('Posted within 30 minutes', (data.get('resultTimeliness') or {}).get('within30Minutes')),
+('Over 30 minutes', (data.get('resultTimeliness') or {}).get('over30Minutes')),
+('Missing result post', (data.get('resultTimeliness') or {}).get('missing')),
+('Maximum minutes from final to post', (data.get('resultTimeliness') or {}).get('maxMinutesFromFinalToPost'))])}</table>
+<p>Final means the first durable final observation saved as settledAt; no exact stadium final time is invented.</p></section>
 {cohort_html}
 <section><h2>Stored free odds budget</h2><table>{rows([('Verified stored balance', 'Yes' if budget.get('verifiedFromStoredSnapshot') else 'No'), ('Observed at', budget.get('observedAt')), ('Used', budget.get('used')), ('Remaining', budget.get('remaining'))])}</table></section>
 <section><h2>Local model · last run</h2><table>{rows([('Used', 'Yes' if local.get('usedLastRun') else 'No'), ('Calls', local.get('calls')), ('Failures', local.get('failures')), ('Homepage stories', local.get('homepageStories'))])}</table></section>

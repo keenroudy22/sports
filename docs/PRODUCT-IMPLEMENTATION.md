@@ -1610,3 +1610,21 @@ full daily outcomes block,Climbv3 and7-day metrics remainKA-R1.
 Private evidence:work/daily-outcomes-2026-10-12.json,daily-live-final/audit.json,
 daily-live-truth.json,daily-locked-*.log. This receipt is retained on dev for
 the next safe release; no duplicate deployment is required.
+
+## October 12 — Codex schedule consolidation and faster result outcomes
+
+The owner reduced Codex work to three local scheduled tasks so routine Mac-desk
+operations do not consume ChatGPT usage: `Kook'n daily` at 07:45 Eastern,
+`Kook'n overnight` at 00:45 and `Kook'n weekly` Tuesday at 11:00 after the
+10:30 `learn.weekly` note. The redundant morning, NBA, season-switch and growth
+tasks were deleted; no active felt-cutover task remained. Seven scheduled-run
+chats older than two days were archived.
+
+The corresponding desk change moves result quiet hours from 00:30 to 01:00 so
+late primetime wins can post that night. Private desk health now reports
+`minutes from final to post` for every settled posted win and honest near miss
+observed in the last 48 hours, flags missing result posts and flags delays over
+30 minutes. Because the free score feeds do not retain an exact stadium clock,
+the auditable start is `settledAt`, the first saved observation of the final;
+the report names that limitation instead of inventing precision. Release and
+live evidence remain pending under A-20261012-5.

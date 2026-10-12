@@ -45,6 +45,31 @@ class DeskHealthTests(unittest.TestCase):
             data = H.summary(root, root / 'private', root, NOW)
             self.assertEqual(data['chosenNotPosted'], 1)
             self.assertIn('chosen-not-posted', {row['code'] for row in data['issues']})
+
+    def test_result_speed_counts_minutes_from_the_first_verified_final(self):
+        record = {'picks': [
+            {'id': 'win', 'posted': True, 'result': 'win', 'settledAt': '2026-10-05T13:00:00Z'},
+            {'id': 'near', 'posted': True, 'result': 'loss', 'market': 'recYds', 'line': 49.5,
+             'actualValue': 47, 'settledAt': '2026-10-05T13:05:00Z'},
+            {'id': 'not-near', 'posted': True, 'result': 'loss', 'marketType': 'total', 'line': 48.5,
+             'actualValue': 42, 'settledAt': '2026-10-05T13:05:00Z'}]}
+        posts = [{'id': 'cashed:win', 'sentAt': '2026-10-05T13:22:00Z'},
+                 {'id': 'burnt:near', 'sentAt': '2026-10-05T13:40:00Z'}]
+        result = H.result_timeliness(record, posts, NOW)
+        self.assertEqual((result['eligible'], result['posted'], result['within30Minutes'],
+                          result['over30Minutes'], result['missing']), (2, 2, 1, 1, 0))
+        self.assertEqual(result['maxMinutesFromFinalToPost'], 35.0)
+
+    def test_missing_recent_result_post_is_an_outcome_failure(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            self.fixture(root)
+            self.write(root, 'site/data/app/record.json', {'picks': [
+                {'id': 'missing', 'posted': True, 'result': 'win', 'settledAt': '2026-10-05T13:45:00Z'}]})
+            self.write(root, 'data/x-posted.json', {'posts': []})
+            data = H.summary(root, root / 'private', root, NOW)
+            self.assertEqual(data['resultTimeliness']['missing'], 1)
+            self.assertIn('result-post-missing', {row['code'] for row in data['issues']})
     def write(self, root, name, value):
         path = root / name
         path.parent.mkdir(parents=True, exist_ok=True)
