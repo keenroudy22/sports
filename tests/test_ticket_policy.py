@@ -18,8 +18,10 @@ def context(picks=()):
 
 
 def straight(**extra):
-    return dict(id='NFL-straight', gameIds=['NFL-1'], athleteId='77', market='rec', line=2.5,
-                publishedAt='2026-10-03T17:00Z', **extra)
+    row = dict(id='NFL-straight', gameIds=['NFL-1'], athleteId='77', market='rec', line=2.5,
+               lane='best_bet', status='active', publishedAt='2026-10-03T17:00Z')
+    row.update(extra)
+    return row
 
 
 def ticket(**extra):
@@ -29,15 +31,13 @@ def ticket(**extra):
 
 
 class TicketPolicyTests(unittest.TestCase):
-    def test_overlap_is_bidirectional_across_lines_markets_and_publication_dates(self):
+    def test_only_released_active_straights_occupy_player_exposure(self):
         self.assertFalse(gates.player_overlap(ticket(), context([straight()])).ok)
-        self.assertFalse(gates.player_overlap(straight(), context([ticket()])).ok)
         self.assertFalse(gates.player_overlap(ticket(parlayType='ladder'), context([straight()])).ok)
-        earlier_ticket = dict(ticket(), id='NFL-earlier-ticket')
-        self.assertFalse(gates.player_overlap(ticket(parlayType='ladder'), context([earlier_ticket])).ok,
-                         'the same player/game cannot be repeated across a longshot and ladder')
-        expired = straight(status='expired')
-        self.assertFalse(gates.player_overlap(ticket(), context([expired])).ok)
+        self.assertTrue(gates.player_overlap(straight(), context([ticket()])).ok)
+        for closed in (straight(status='expired'), straight(status='withdrawn', posted=False),
+                       straight(_pendingRelease=True)):
+            self.assertTrue(gates.player_overlap(ticket(), context([closed])).ok)
 
     def test_different_game_player_and_revisions_are_not_false_overlap(self):
         ctx = context([straight()])
@@ -52,7 +52,7 @@ class TicketPolicyTests(unittest.TestCase):
         old = {'id': 'prop-NFL-1-77-recYds', 'gameId': 'NFL-1'}
         other = {'id': 'prop-NFL-1-88-recYds', 'gameId': 'NFL-1'}
         self.assertEqual(gates.without_straight_players([old, other], context([straight()])), [other])
-        self.assertFalse(gates.player_overlap(straight(), context([dict(ticket(), legs=[old])])).ok)
+        self.assertTrue(gates.player_overlap(straight(), context([dict(ticket(), legs=[old])])).ok)
 
     def test_alternate_exception_is_league_scoped_and_ladder_exempt(self):
         ctx = context([ticket()])

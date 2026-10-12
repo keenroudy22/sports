@@ -265,8 +265,9 @@ def report(root=STORE):
         plays = [r for r in mine if r['lean'] and r.get('result')]
         s, o = summary(plays), summary(plays, 'resultAtOpen')
         clv = s['clv']
+        rate = '' if s['rate'] is None else f"{100 * s['rate']:.1f}%, "
         lines.append(f"- **{league} totals**: {len(mine)} games recorded, {len(plays)} paper plays graded. At the number "
-                     f"recorded {s['record']} ({'' if s['rate'] is None else f'{100 * s['rate']:.1f}%, '}{s['units']:+.2f}u); at the "
+                     f"recorded {s['record']} ({rate}{s['units']:+.2f}u); at the "
                      f"opener {o['record']}; closing line value "
                      + (f"{clv['mean']:+.2f} points (90% {clv['low']:+.2f} to {clv['high']:+.2f})." if clv else 'not yet.'))
     if len(lines) == 4:

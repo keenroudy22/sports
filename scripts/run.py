@@ -203,11 +203,18 @@ def rebase_onto_remote(runner=git, cwd=ROOT, attempts=6):
     raise RunError('rebase onto origin/main did not finish')
 
 
-def capture(python=sys.executable):
+def capture(slot=None, python=sys.executable):
     """Step 1, continued: price captures when their budget allows. They print why they skip."""
     notes = []
-    for script in ('odds_api.py', 'prop_odds.py'):
-        result = subprocess.run([python, str(ROOT / 'scripts' / script)], cwd=ROOT, capture_output=True, text=True)
+    scripts = ['odds_api.py', 'prop_odds.py']
+    if slot is not None and (slot.hour, slot.minute) in ((17, 30), (18, 50)):
+        scripts.append('sharp_odds.py')
+    for script in scripts:
+        env = None
+        if script == 'sharp_odds.py':
+            env = dict(os.environ, SHARP_REQUESTS='15')
+        result = subprocess.run([python, str(ROOT / 'scripts' / script)], cwd=ROOT, capture_output=True, text=True,
+                                env=env)
         text = (result.stdout + result.stderr).strip()
         notes.append(f'{script}: {text.splitlines()[-1] if text else "ok"}' + (f' (exit {result.returncode})' if result.returncode else ''))
     return notes
@@ -1774,7 +1781,7 @@ def run_tests(python=sys.executable):
         raise RunError('node tests failed:\n' + (node.stderr or node.stdout)[-1500:])
 
 
-PRIMETIME_COVERAGE_LANES = frozenset(('best_bet', 'hot_plate', 'gut_call', 'upset', 'safer_combo'))
+PRIMETIME_COVERAGE_LANES = gates.OFFICIAL_STRAIGHT_LANES
 
 
 def official_coverage_game_ids(ctx):
@@ -1785,11 +1792,9 @@ def official_coverage_game_ids(ctx):
     """
     covered = set()
     for key, first in ctx.first.items():
+        if not gates.occupies_game(first, ctx.latest.get(key), getattr(ctx, 'now', None)):
+            continue
         pick = dict(first, **ctx.latest.get(key, {}))
-        if pick.get('result') or pick.get('entryNote') or (pick.get('status') or 'active') != 'active':
-            continue
-        if pick.get('lane') not in PRIMETIME_COVERAGE_LANES:
-            continue
         covered.update(pick.get('gameIds') or [])
     return covered
 
@@ -2060,7 +2065,7 @@ def _run(args, now, slot, kinds, status):
     if not args.dry_run:
         sync()
         status['checks'].append('synced')
-        captures = ['settlement scan: no odds or prop requests'] if settle_only else capture()
+        captures = ['settlement scan: no odds or prop requests'] if settle_only else capture(slot)
     else:
         captures = ['dry run: no capture']
     for note in captures:

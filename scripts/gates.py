@@ -767,6 +767,33 @@ def pulled_before_post(key, ctx):
     return 'before its post went out' in note or note.startswith('Pulled before posting:')
 
 
+OFFICIAL_STRAIGHT_LANES = frozenset(('best_bet', 'hot_plate', 'gut_call', 'upset', 'safer_combo'))
+
+
+def occupies_game(first, latest=None, now=None):
+    """Whether a public straight play still occupies its game.
+
+    Pending admissions are private until Discord release, and closed or
+    withdrawn rows are history rather than live exposure.  Keep this one
+    definition shared by the card cap, primetime coverage and player stacking
+    so those three decisions cannot drift again.
+    """
+    if not isinstance(first, dict):
+        return False
+    pick = dict(first, **(latest or {}))
+    if pick.get('historicalImport') or pick.get('legs') or pick.get('parlayType'):
+        return False
+    if pick.get('lane') not in OFFICIAL_STRAIGHT_LANES:
+        return False
+    if pick.get('_pendingRelease') or pick.get('posted') is False:
+        return False
+    if pick.get('result') or pick.get('entryNote') or (pick.get('status') or 'active') != 'active':
+        return False
+    if now is not None and when(pick.get('publishedAt') or '1970-01-01T00:00Z') > now:
+        return False
+    return True
+
+
 def fresh_id(base, ctx):
     """An id for a lotto or easy parlay replacing one pulled earlier the same day. Ladder rungs are never replaced."""
     if base not in ctx.first:
@@ -788,9 +815,10 @@ def card_cap(candidate, ctx):
         size = direction.weekend_cap(ctx.policy, ctx.now, size)
     plays = []
     for key, pick in ctx.first.items():
-        if key == candidate.get('id') or pick.get('historicalImport') or pick.get('legs') or pick.get('parlayType'):
+        if key == candidate.get('id') or not occupies_game(pick, ctx.latest.get(key), ctx.now):
             continue
-        if when(pick.get('publishedAt') or '1970-01-01T00:00Z') > ctx.now or slate_day(pick, ctx) != day or pulled_before_post(key, ctx):
+        pick = dict(pick, **ctx.latest.get(key, {}))
+        if slate_day(pick, ctx) != day:
             continue
         plays.append(pick)
     game_ids = set(candidate.get('gameIds') or [])
@@ -810,9 +838,9 @@ def card_cap(candidate, ctx):
         if day_totals >= total_cap:
             return Decision(False, 'card_cap', f'{day_totals} totals already on the card; the limit is {total_cap}')
         start = day - timedelta(days=6)
-        recent = [pick for key, pick in ctx.first.items() if key != candidate.get('id') and not pick.get('historicalImport')
-                  and not pick.get('legs') and (d := slate_day(pick, ctx)) is not None and start <= d <= day
-                  and not pulled_before_post(key, ctx)]
+        recent = [dict(pick, **ctx.latest.get(key, {})) for key, pick in ctx.first.items()
+                  if key != candidate.get('id') and occupies_game(pick, ctx.latest.get(key), ctx.now)
+                  and (d := slate_day(dict(pick, **ctx.latest.get(key, {})), ctx)) is not None and start <= d <= day]
         recent_totals = sum(market_key(pick) == 'total' for pick in recent)
         if recent and (recent_totals + 1) / (len(recent) + 1) > .40:
             return Decision(False, 'card_cap', 'a total would put the rolling seven-day card above 40% totals')
@@ -1125,11 +1153,10 @@ def player_exposure(row):
 def player_overlap(candidate, ctx):
     exposures = {player_exposure(r) for r in candidate.get('legs') or [candidate]} - {None}
     for key, pick in getattr(ctx, 'first', {}).items():
-        if key == candidate.get('id') or pick.get('historicalImport'):
+        latest = getattr(ctx, 'latest', {}).get(key, {})
+        if key == candidate.get('id') or not occupies_game(pick, latest, ctx.now):
             continue
-        if when(pick.get('publishedAt') or '1970-01-01T00:00Z') > ctx.now:
-            continue
-        # Even an expired quote stays exposure: a reader could already have taken it.
+        pick = dict(pick, **latest)
         existing = {player_exposure(r) for r in pick.get('legs') or [pick]} - {None}
         if exposures & existing:
             return Decision(False, 'player_overlap', f'{key} already uses this player in the same game; no repeated exposure across plays or tickets')

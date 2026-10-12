@@ -521,7 +521,8 @@ def verify(root=STORE):
 
 def write_json(path, value):
     temporary = path.with_suffix('.tmp')
-    temporary.write_text(json.dumps(value, indent=1, sort_keys=True) + '\n', encoding='utf-8', newline='\n')
+    with temporary.open('w', encoding='utf-8', newline='\n') as handle:
+        handle.write(json.dumps(value, indent=1, sort_keys=True) + '\n')
     temporary.replace(path)
 
 

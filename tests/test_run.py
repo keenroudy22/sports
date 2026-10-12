@@ -61,6 +61,27 @@ class SlotTests(unittest.TestCase):
         with mock.patch.dict(os.environ, {'KEENROUDY_SELECTION_PRIMETIME': '0'}):
             self.assertEqual(run.official_selection_scope(slot, games, ctx, now), set())
 
+    def test_withdrawn_unposted_bills_rams_play_does_not_cover_mnf(self):
+        now = datetime(2026, 10, 12, 22, 50, tzinfo=timezone.utc)
+        slot = now.astimezone(run.EASTERN)
+        games = {'NFL-401872994': {'id': 'NFL-401872994', 'league': 'NFL', 'state': 'pre',
+                                   'kickoff': '2026-10-13T00:15:00Z'}}
+        withdrawn = {'id': 'NFL-2026-W5-buf-lar-under-54-5-dk', 'gameIds': ['NFL-401872994'],
+                     'lane': 'best_bet', 'status': 'withdrawn', 'posted': False,
+                     'publishedAt': '2026-10-07T13:30:00Z'}
+        ctx = SimpleNamespace(first={withdrawn['id']: withdrawn}, latest={}, now=now)
+        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'NFL-401872994'})
+
+    def test_primetime_passes_refresh_sharpapi_before_selection(self):
+        for hour, minute in ((17, 30), (18, 50)):
+            slot = datetime(2026, 10, 12, hour, minute, tzinfo=run.EASTERN)
+            completed = SimpleNamespace(stdout='fresh', stderr='', returncode=0)
+            with mock.patch.object(run.subprocess, 'run', return_value=completed) as invoke:
+                run.capture(slot, python='python-test')
+            scripts = [Path(call.args[0][1]).name for call in invoke.call_args_list]
+            self.assertEqual(scripts, ['odds_api.py', 'prop_odds.py', 'sharp_odds.py'])
+            self.assertEqual(invoke.call_args_list[-1].kwargs['env']['SHARP_REQUESTS'], '15')
+
     def test_open_climb_leg_does_not_count_as_primetime_coverage(self):
         now = datetime(2026, 10, 11, 22, 50, tzinfo=timezone.utc)
         slot = now.astimezone(run.EASTERN)

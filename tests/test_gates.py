@@ -27,6 +27,7 @@ PROP_ODDS = {'gameId': 'NFL-1', 'retrievedAt': '2026-09-27T13:00:00Z',
 
 def total_lean(**over):
     pick = {'id': 'NFL-2026-W4-buf-det-over-44-5-dk', 'title': 'Bills at Lions over 44.5', 'status': 'active',
+            'lane': 'best_bet',
             'favorite': False, 'modelLean': True, 'marketType': 'total', 'line': 44.5, 'direction': 'over',
             'gameIds': ['NFL-1'], 'book': 'DraftKings', 'odds': -110, 'quotedAt': '2026-09-27T13:00:00Z',
             'quoteType': 'capture', 'expiresAt': '2026-09-27T15:45:00Z', 'confidence': 3, 'why': 'w', 'risk': 'r',
@@ -37,7 +38,7 @@ def total_lean(**over):
 
 def prop_lean(**over):
     pick = {'id': 'NFL-2026-W4-seven-over-49-5-recyds-dk', 'title': 'Player Seven OVER 49.5 receiving yards',
-            'status': 'active', 'favorite': False, 'modelLean': True, 'position': 'WR', 'athleteId': '77',
+            'status': 'active', 'lane': 'best_bet', 'favorite': False, 'modelLean': True, 'position': 'WR', 'athleteId': '77',
             'market': 'recYds', 'line': 49.5, 'direction': 'over', 'gameIds': ['NFL-1'], 'book': 'DraftKings',
             'odds': -115, 'quotedAt': '2026-09-27T13:00:00Z', 'quoteType': 'capture',
             'expiresAt': '2026-09-27T15:45:00Z', 'confidence': 2, 'why': 'w', 'risk': 'r',
@@ -419,13 +420,13 @@ class PropLeanRuleTests(unittest.TestCase):
         ctx = context(first=picks, latest=picks, games={'NFL-1': GAME, 'NFL-2': night})
         self.assertTrue(gates.prop_window_cap(prop_lean(gameIds=['NFL-2']), ctx).ok, 'a different window')
 
-    def test_prop_one_per_player_and_not_in_longshot(self):
+    def test_prop_one_per_player_and_only_released_straights_occupy_exposure(self):
         earlier = prop_lean(id='p0', market='rec', publishedAt='2026-09-27T12:00:00Z')
         self.assertFalse(gates.prop_one_per_player(prop_lean(), context(first={'p0': earlier}, latest={'p0': earlier})).ok)
         self.assertTrue(gates.prop_one_per_player(prop_lean(), context()).ok)
         ticket = {'id': 'ls', 'parlayType': 'longshot', 'publishedAt': '2026-09-27T12:00:00Z',
                   'legs': [{'id': 'prop-NFL-1-77-recYds', 'title': 'Player Seven over 49.5 receiving yards'}]}
-        self.assertFalse(gates.prop_not_in_longshot(prop_lean(), context(first={'ls': ticket}, latest={'ls': ticket})).ok)
+        self.assertTrue(gates.prop_not_in_longshot(prop_lean(), context(first={'ls': ticket}, latest={'ls': ticket})).ok)
         self.assertTrue(gates.prop_not_in_longshot(prop_lean(athleteId='78'), context(first={'ls': ticket}, latest={'ls': ticket})).ok)
 
     def test_prop_injury_clear(self):
@@ -559,6 +560,12 @@ class CardTests(unittest.TestCase):
         one = {'m': total_lean(id='m', gameIds=['MNF'], publishedAt='2026-09-26T12:00:00Z')}
         self.assertFalse(gates.card_cap(prop_lean(gameIds=['MNF']), self.card(one)).ok, 'one play per game')
         self.assertTrue(gates.card_cap(prop_lean(gameIds=['CFB-M']), self.card(one)).ok)
+
+    def test_withdrawn_unposted_bills_rams_row_does_not_occupy_the_game(self):
+        candidate = prop_lean(gameIds=['MNF'], lane='gut_call')
+        withdrawn = total_lean(id='NFL-2026-W5-buf-lar-under-54-5-dk', gameIds=['MNF'], lane='best_bet',
+                               status='withdrawn', posted=False, publishedAt='2026-10-07T13:30:00Z')
+        self.assertTrue(gates.card_cap(candidate, self.card({'withdrawn': withdrawn})).ok)
 
     def test_a_pulled_fun_ticket_is_replaced_under_a_new_id(self):
         base = 'NFL-2026-W3-ladder-0927-fd'
