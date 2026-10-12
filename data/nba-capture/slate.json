@@ -38,7 +38,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-12T01:00:03Z"
+   "updatedAt": "2026-10-12T01:15:28Z"
   },
   {
    "clock": "0.0",
@@ -56,11 +56,11 @@
    "seasonType": "preseason",
    "source": {
     "name": "ESPN",
-    "url": "https://www.espn.com/nba/boxscore/_/gameId/401898401"
+    "url": "https://www.espn.com/nba/game/_/gameId/401898401/magic-cavaliers"
    },
    "sport": "basketball",
-   "status": "in_progress",
-   "statusDetail": "End of 4th",
+   "status": "final",
+   "statusDetail": "Final",
    "teams": {
     "away": {
      "abbreviation": "ORL",
@@ -78,10 +78,10 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-12T01:00:03Z"
+   "updatedAt": "2026-10-12T01:15:28Z"
   },
   {
-   "clock": "7:45",
+   "clock": "0.0",
    "date": "2026-10-11",
    "id": "NBA-401901821",
    "kickoff": "2026-10-11T23:00:00Z",
@@ -89,8 +89,8 @@
    "period": 4,
    "providerId": "401901821",
    "scores": {
-    "away": 73,
-    "home": 93
+    "away": 90,
+    "home": 105
    },
    "season": 2027,
    "seasonType": "preseason",
@@ -100,7 +100,7 @@
    },
    "sport": "basketball",
    "status": "in_progress",
-   "statusDetail": "7:45 - 4th",
+   "statusDetail": "End of 4th",
    "teams": {
     "away": {
      "abbreviation": "MIL",
@@ -118,29 +118,29 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-12T01:00:03Z"
+   "updatedAt": "2026-10-12T01:15:28Z"
   },
   {
-   "clock": "0.0",
+   "clock": "9:21",
    "date": "2026-10-11",
    "id": "NBA-401908941",
    "kickoff": "2026-10-12T01:00:00Z",
    "league": "NBA",
-   "period": 0,
+   "period": 1,
    "providerId": "401908941",
    "scores": {
-    "away": null,
-    "home": null
+    "away": 8,
+    "home": 5
    },
    "season": 2027,
    "seasonType": "preseason",
    "source": {
     "name": "ESPN",
-    "url": "https://www.espn.com/nba/game/_/gameId/401908941/bulls-nuggets"
+    "url": "https://www.espn.com/nba/game?gameId=401908941"
    },
    "sport": "basketball",
-   "status": "scheduled",
-   "statusDetail": "10/11 - 9:00 PM EDT",
+   "status": "in_progress",
+   "statusDetail": "9:21 - 1st",
    "teams": {
     "away": {
      "abbreviation": "CHI",
@@ -158,7 +158,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-12T01:00:03Z"
+   "updatedAt": "2026-10-12T01:15:28Z"
   },
   {
    "clock": "0.0",
@@ -198,7 +198,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-12T01:00:03Z"
+   "updatedAt": "2026-10-12T01:15:28Z"
   },
   {
    "clock": "0.0",
@@ -238,7 +238,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-12T01:00:03Z"
+   "updatedAt": "2026-10-12T01:15:28Z"
   },
   {
    "clock": "0.0",
@@ -278,7 +278,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-12T01:00:03Z"
+   "updatedAt": "2026-10-12T01:15:28Z"
   },
   {
    "clock": "0.0",
@@ -318,7 +318,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-12T01:00:03Z"
+   "updatedAt": "2026-10-12T01:15:28Z"
   },
   {
    "clock": "0.0",
@@ -358,7 +358,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-12T01:00:03Z"
+   "updatedAt": "2026-10-12T01:15:28Z"
   },
   {
    "clock": "0.0",
@@ -398,7 +398,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-12T01:00:03Z"
+   "updatedAt": "2026-10-12T01:15:28Z"
   },
   {
    "clock": "0.0",
@@ -438,7 +438,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-12T01:00:03Z"
+   "updatedAt": "2026-10-12T01:15:28Z"
   },
   {
    "clock": "0.0",
@@ -478,11 +478,11 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-12T01:00:03Z"
+   "updatedAt": "2026-10-12T01:15:28Z"
   }
  ],
  "league": "NBA",
- "retrievedAt": "2026-10-12T01:02:09Z",
+ "retrievedAt": "2026-10-12T01:17:25Z",
  "sources": [
   "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20261011&limit=100",
   "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20261012&limit=100",
