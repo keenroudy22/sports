@@ -38,7 +38,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-11T21:50:22Z"
+   "updatedAt": "2026-10-12T01:00:03Z"
   },
   {
    "clock": "0.0",
@@ -46,21 +46,21 @@
    "id": "NBA-401898401",
    "kickoff": "2026-10-11T22:30:00Z",
    "league": "NBA",
-   "period": 0,
+   "period": 4,
    "providerId": "401898401",
    "scores": {
-    "away": null,
-    "home": null
+    "away": 105,
+    "home": 119
    },
    "season": 2027,
    "seasonType": "preseason",
    "source": {
     "name": "ESPN",
-    "url": "https://www.espn.com/nba/game/_/gameId/401898401/magic-cavaliers"
+    "url": "https://www.espn.com/nba/boxscore/_/gameId/401898401"
    },
    "sport": "basketball",
-   "status": "scheduled",
-   "statusDetail": "10/11 - 6:30 PM EDT",
+   "status": "in_progress",
+   "statusDetail": "End of 4th",
    "teams": {
     "away": {
      "abbreviation": "ORL",
@@ -78,29 +78,29 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-11T21:50:22Z"
+   "updatedAt": "2026-10-12T01:00:03Z"
   },
   {
-   "clock": "0.0",
+   "clock": "7:45",
    "date": "2026-10-11",
    "id": "NBA-401901821",
    "kickoff": "2026-10-11T23:00:00Z",
    "league": "NBA",
-   "period": 0,
+   "period": 4,
    "providerId": "401901821",
    "scores": {
-    "away": null,
-    "home": null
+    "away": 73,
+    "home": 93
    },
    "season": 2027,
    "seasonType": "preseason",
    "source": {
     "name": "ESPN",
-    "url": "https://www.espn.com/nba/game/_/gameId/401901821/bucks-hornets"
+    "url": "https://www.espn.com/nba/game?gameId=401901821"
    },
    "sport": "basketball",
-   "status": "scheduled",
-   "statusDetail": "10/11 - 7:00 PM EDT",
+   "status": "in_progress",
+   "statusDetail": "7:45 - 4th",
    "teams": {
     "away": {
      "abbreviation": "MIL",
@@ -118,7 +118,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-11T21:50:22Z"
+   "updatedAt": "2026-10-12T01:00:03Z"
   },
   {
    "clock": "0.0",
@@ -158,7 +158,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-11T21:50:22Z"
+   "updatedAt": "2026-10-12T01:00:03Z"
   },
   {
    "clock": "0.0",
@@ -198,7 +198,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-11T21:50:22Z"
+   "updatedAt": "2026-10-12T01:00:03Z"
   },
   {
    "clock": "0.0",
@@ -238,7 +238,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-11T21:50:22Z"
+   "updatedAt": "2026-10-12T01:00:03Z"
   },
   {
    "clock": "0.0",
@@ -278,7 +278,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-11T21:50:22Z"
+   "updatedAt": "2026-10-12T01:00:03Z"
   },
   {
    "clock": "0.0",
@@ -318,7 +318,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-11T21:50:22Z"
+   "updatedAt": "2026-10-12T01:00:03Z"
   },
   {
    "clock": "0.0",
@@ -358,7 +358,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-11T21:50:22Z"
+   "updatedAt": "2026-10-12T01:00:03Z"
   },
   {
    "clock": "0.0",
@@ -398,7 +398,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-11T21:50:22Z"
+   "updatedAt": "2026-10-12T01:00:03Z"
   },
   {
    "clock": "0.0",
@@ -438,7 +438,7 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-11T21:50:22Z"
+   "updatedAt": "2026-10-12T01:00:03Z"
   },
   {
    "clock": "0.0",
@@ -478,11 +478,11 @@
     }
    },
    "timeConfirmed": true,
-   "updatedAt": "2026-10-11T21:50:22Z"
+   "updatedAt": "2026-10-12T01:00:03Z"
   }
  ],
  "league": "NBA",
- "retrievedAt": "2026-10-11T21:52:06Z",
+ "retrievedAt": "2026-10-12T01:02:09Z",
  "sources": [
   "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20261011&limit=100",
   "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=20261012&limit=100",
