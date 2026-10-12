@@ -1,27 +1,27 @@
 {
- "at": "2026-10-12T14:05:25Z",
+ "at": "2026-10-12T14:12:45Z",
  "confirmed": {
-  "CFB-401871053": "2026-10-12T14:05:25Z",
-  "CFB-401871067": "2026-10-12T14:05:25Z",
-  "NFL-401872994": "2026-10-12T14:05:25Z"
+  "CFB-401871053": "2026-10-12T14:12:45Z",
+  "CFB-401871067": "2026-10-12T14:12:45Z",
+  "NFL-401872994": "2026-10-12T14:12:45Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "fanduel": 268
+    "fanduel": 200
    },
    "eventsListed": 59,
    "eventsMatched": 2,
    "games": 2,
    "marketTypes": {
-    "player_passing_touchdowns": 14,
-    "player_passing_yards": 40,
-    "player_receiving_yards": 129,
+    "player_passing_touchdowns": 9,
+    "player_passing_yards": 21,
+    "player_receiving_yards": 101,
     "player_receptions": 6,
-    "player_rushing_yards": 79
+    "player_rushing_yards": 63
    },
    "requestsLeft": 7,
-   "rows": 268,
+   "rows": 200,
    "slateGames": [
     "Delaware Blue Hens at Middle Tennessee Blue Raiders 2026-10-13T23:00Z",
     "Florida International Panthers at Jacksonville State Gamecocks 2026-10-14T00:00Z"
@@ -117,6 +117,7 @@
       "circa": "221118",
       "draftkings": "34788192",
       "fanatics": "5310311",
+      "fanatics_markets": "6655840",
       "fanduel": "36152737",
       "fliff": "418732_c_p_209_prematch",
       "gemini": "NCAAF-2610150000-WKU-SHS-S",
@@ -188,10 +189,10 @@
       "fanatics": "5317177",
       "fanduel": "36152741",
       "fliff": "418863_c_p_209_prematch",
-      "gemini": "NCAAF-2610152330-ECU-UAB-S",
+      "gemini": "NCAAF-2610152330-ECU-UAB-M",
       "goldrush": "31196499",
       "hardrock": "5848754417184145814",
-      "kalshi": "KXNCAAFTEAMTOTAL-26OCT15ECUUAB",
+      "kalshi": "KXNCAAF1H-26OCT15ECUUAB",
       "ladbrokes": "ac4d773f-dce9-46c5-bdbb-25143a675c38",
       "matchbook": "mb-34577384948600023",
       "novig": "01a118b6-b46e-7561-bb03-bb4b7020973b",
@@ -261,7 +262,7 @@
       "gemini": "NCAAF-2610152330-GSU-ODU-M",
       "goldrush": "31197424",
       "hardrock": "604875601064624532",
-      "kalshi": "KXNCAAFTEAMTOTAL-26OCT15GASOODU",
+      "kalshi": "KXNCAAF1H-26OCT15GASOODU",
       "ladbrokes": "b5d468c6-1b7c-46b5-8266-f06bac3947d8",
       "matchbook": "mb-34577422533100023",
       "novig": "01a118b6-b3ba-74f2-9c9a-423754b6d306",
@@ -327,7 +328,7 @@
       "gemini": "NCAAF-2610160000-CSU-TXS-M",
       "goldrush": "31197259",
       "hardrock": "5205008934905184652",
-      "kalshi": "KXNCAAF1HSPREAD-26OCT15CSUTXST",
+      "kalshi": "KXNCAAF1H-26OCT15CSUTXST",
       "ladbrokes": "6bfe5ea2-e9d7-41a6-8b4e-1c0eb6bbd3d0",
       "matchbook": "mb-34556780943900023",
       "novig": "01a118d2-311f-70f2-aafe-ee8691c3325c",
@@ -348,7 +349,6 @@
       "home_team": "Texas State Bobcats",
       "markets": [
        "1st_half_moneyline",
-       "1st_half_point_spread",
        "1st_half_total_points",
        "1st_quarter_moneyline",
        "1st_quarter_point_spread",
@@ -392,10 +392,10 @@
       "fanatics": "5326847",
       "fanduel": "36152751",
       "fliff": "418761_c_p_209_prematch",
-      "gemini": "NCAAF-2610162330-MEM-TULN-M",
+      "gemini": "NCAAF-2610162330-MEM-TULN-S",
       "goldrush": "31196743",
       "hardrock": "54592021595292065",
-      "kalshi": "KXNCAAFTEAMTOTAL-26OCT16MEMTULN",
+      "kalshi": "KXNCAAF1H-26OCT16MEMTULN",
       "ladbrokes": "0705a4fe-7a68-4dbb-a60f-063dbc133dbf",
       "novig": "01a11ddd-56f7-7880-901d-a412ff42a12d",
       "onexbet": "760657849",
@@ -414,8 +414,10 @@
       "away_team": "Memphis Tigers",
       "home_team": "Tulane Green Wave",
       "markets": [
+       "1st_half_draw_no_bet",
        "1st_half_moneyline",
        "1st_half_point_spread",
+       "1st_half_team_total",
        "1st_half_total_points",
        "1st_quarter_moneyline",
        "1st_quarter_point_spread",
@@ -430,7 +432,9 @@
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
        "draw_no_bet",
+       "halftime_fulltime",
        "moneyline",
+       "moneyline_3-way",
        "point_spread",
        "team_total",
        "total_points",
@@ -481,7 +485,6 @@
       "home_team": "Coastal Carolina",
       "markets": [
        "1st_half_moneyline",
-       "1st_half_point_spread",
        "1st_half_total_points",
        "1st_quarter_moneyline",
        "1st_quarter_point_spread",
@@ -595,7 +598,7 @@
       "fliff": "418867_c_p_209_prematch",
       "gemini": "NCAAF-2610171600-FAU-ARM-M",
       "hardrock": "7065667498527555984",
-      "kalshi": "KXNCAAF1H-26OCT17FAUARMY",
+      "kalshi": "KXNCAAFTEAMTOTAL-26OCT17FAUARMY",
       "ladbrokes": "41784fd9-889a-4ef4-a15c-e42853336759",
       "novig": "01a12171-9478-77e2-a3d5-042cf3680fc1",
       "onexbet": "760893363",
@@ -855,8 +858,8 @@
     "player_passing_attempts": 4,
     "player_passing_completions": 4,
     "player_passing_touchdowns": 14,
-    "player_passing_yards": 85,
-    "player_receiving_yards": 246,
+    "player_passing_yards": 84,
+    "player_receiving_yards": 247,
     "player_receptions": 128,
     "player_rushing_+_receiving_yards": 20,
     "player_rushing_attempts": 8,
