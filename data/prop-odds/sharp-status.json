@@ -1,15 +1,15 @@
 {
- "at": "2026-10-12T04:22:28Z",
+ "at": "2026-10-12T04:37:30Z",
  "confirmed": {
-  "CFB-401871053": "2026-10-12T04:22:28Z",
-  "NFL-401872994": "2026-10-12T04:22:28Z"
+  "CFB-401871053": "2026-10-12T04:37:30Z",
+  "NFL-401872994": "2026-10-12T04:37:30Z"
  },
  "leagues": {
   "CFB": {
    "books": {
     "fanduel": 163
    },
-   "eventsListed": 59,
+   "eventsListed": 61,
    "eventsMatched": 2,
    "games": 2,
    "marketTypes": {
@@ -26,7 +26,7 @@
    ],
    "unmatchedEvents": [
     {
-     "away": "Kennesaw State Owls",
+     "away": "Kennesaw State",
      "external": {
       "ballybet": "1027397927",
       "betmgm": "6:46731",
@@ -60,10 +60,10 @@
       "sx_bet": "L20482505",
       "thescorebet": "StandardEvent:1d68e74c-eaa9-4059-9665-1404691601f5"
      },
-     "home": "Missouri State Bears",
+     "home": "Missouri State",
      "sample": {
-      "away_team": "Kennesaw State Owls",
-      "home_team": "Missouri State Bears",
+      "away_team": "Kennesaw State",
+      "home_team": "Missouri State",
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
@@ -197,7 +197,7 @@
      "type": "fixture"
     },
     {
-     "away": "Georgia Southern Eagles",
+     "away": "Georgia Southern",
      "external": {
       "ballybet": "1027508202",
       "betmgm": "6:46785",
@@ -230,10 +230,10 @@
       "sx_bet": "L20484372",
       "thescorebet": "StandardEvent:85d2211b-f5a9-4136-83d2-00a31972dd79"
      },
-     "home": "Old Dominion Monarchs",
+     "home": "Old Dominion",
      "sample": {
-      "away_team": "Georgia Southern Eagles",
-      "home_team": "Old Dominion Monarchs",
+      "away_team": "Georgia Southern",
+      "home_team": "Old Dominion",
       "markets": [
        "draw_no_bet",
        "moneyline",
@@ -248,7 +248,7 @@
      "type": "fixture"
     },
     {
-     "away": "Colorado State Rams",
+     "away": "Colorado State",
      "external": {
       "ballybet": "1028202616",
       "betmgm": "6:46784",
@@ -280,10 +280,10 @@
       "sx_bet": "L20456748",
       "thescorebet": "StandardEvent:ecdbfb6e-4962-48f4-b41f-38f052907f0c"
      },
-     "home": "Texas State Bobcats",
+     "home": "Texas State",
      "sample": {
-      "away_team": "Colorado State Rams",
-      "home_team": "Texas State Bobcats",
+      "away_team": "Colorado State",
+      "home_team": "Texas State",
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
@@ -318,7 +318,7 @@
       "gemini": "NCAAF-2610162330-MEM-TULN-M",
       "goldrush": "31196743",
       "hardrock": "54592021595292065",
-      "kalshi": "KXNCAAFTEAMTOTAL-26OCT16MEMTULN",
+      "kalshi": "KXNCAAF1H-26OCT16MEMTULN",
       "ladbrokes": "0705a4fe-7a68-4dbb-a60f-063dbc133dbf",
       "novig": "01a11ddd-56f7-7880-901d-a412ff42a12d",
       "onexbet": "760657849",
@@ -370,7 +370,7 @@
       "gemini": "NCAAF-2610170000-APP-CCU-S",
       "goldrush": "31197428",
       "hardrock": "2834720366566441365",
-      "kalshi": "KXNCAAFTEAMTOTAL-26OCT16APPCCAR",
+      "kalshi": "KXNCAAF1H-26OCT16APPCCAR",
       "ladbrokes": "411d1230-7132-473f-a6bc-390c906d9780",
       "novig": "01a11df8-dcbe-7123-a22b-5ad331bea69e",
       "onexbet": "760545370",
@@ -435,7 +435,6 @@
       "rebet": "sr:match:70918914",
       "smarkets": "45356039",
       "sportzino": "sz-17794097",
-      "sx_bet": "L20483952",
       "thescorebet": "StandardEvent:2af08508-0420-4ab1-bf8c-177ea6d322c3"
      },
      "home": "Purdue",
@@ -714,7 +713,7 @@
       "gemini": "NFL-2610160015-SEA-DEN-PPTD",
       "goldrush": "31140274",
       "hardrock": "1703789447373521320",
-      "kalshi": "KXNFLPASSYDS-26OCT15SEADEN-SEASDARNOLD14-325",
+      "kalshi": "KXNFLPASSYDS-26OCT15SEADEN-SEASDARNOLD14-150",
       "ladbrokes": "44ef372c-98fa-400d-b483-3f0ad23b66cc",
       "matchbook": "mb-33322137433300023",
       "novig": "01a112eb-4e8a-72a2-a445-cc3b6f3184fb",
@@ -728,6 +727,7 @@
       "rebet": "sr:match:71515900",
       "skybet": "36160506",
       "smarkets": "45219832",
+      "sportzino": "sz-16552326",
       "stake": "493f467b-6faf-4343-94e0-be79eab50752",
       "sx_bet": "L19431555",
       "thescorebet": "StandardEvent:c739c498-2d93-4c07-9588-d9813c97ea6e"
@@ -919,7 +919,11 @@
     {
      "away": "Chicago Bears",
      "external": {
+      "ballybet": "1028823550",
       "betmgm": "6:43632",
+      "betparx": "1028823550",
+      "betrivers": "1028823550",
+      "bwin": "6:43632",
       "caesars": "1a31ef5b-b924-1654-5aaa-9b6d6aa98eb8",
       "draftkings": "34118076",
       "fanatics_markets": "6812433",
@@ -933,6 +937,7 @@
       "polymarket": "nfl_bears_falcons_2026-10-18_b2",
       "polymarket_us": "nfl-chi-atl-2026-10-18",
       "prophetx": "1700008854",
+      "sportzino": "sz-16552506",
       "sx_bet": "L19431561"
      },
      "home": "Atlanta Falcons",
@@ -941,6 +946,7 @@
       "home_team": "Atlanta Falcons",
       "markets": [
        "1st_half_team_total",
+       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -954,7 +960,11 @@
     {
      "away": "Baltimore Ravens",
      "external": {
+      "ballybet": "1028823552",
       "betmgm": "6:43630",
+      "betparx": "1028823552",
+      "betrivers": "1028823552",
+      "bwin": "6:43630",
       "caesars": "a4be7fdf-6ec1-d827-05c4-4d2f24595ba8",
       "draftkings": "34118086",
       "fanatics_markets": "6812440",
@@ -969,6 +979,7 @@
       "polymarket": "nfl_browns_ravens_2026-10-18_b2",
       "polymarket_us": "nfl-bal-cle-2026-10-18",
       "prophetx": "1700008834",
+      "sportzino": "sz-16552505",
       "sx_bet": "L19431564"
      },
      "home": "Cleveland Browns",
@@ -980,6 +991,7 @@
        "2nd_half_team_total",
        "4th_quarter_team_total",
        "both_teams_to_score",
+       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
