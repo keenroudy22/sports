@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-11T22:46:00Z",
+  "updatedAt": "2026-10-12T03:54:00Z",
   "items": [
     {
       "id": "P01",
@@ -61,7 +61,7 @@
       "title": "Volunteer usability and retention evidence",
       "status": "owner-needed",
       "owner": "owner",
-      "next": "Recruit 10\u201320 consenting testers across four slates and collect task completion plus five priced-concept choices.",
+      "next": "Recruit 10–20 consenting testers across four slates and collect task completion plus five priced-concept choices.",
       "doneWhen": "Document real user feedback, 8/10 usability target and retention evidence; no synthetic users counted.",
       "evidence": "docs/SUBSCRIPTION-PLAN.md; automated/browser checks are technical QA only."
     },
@@ -358,7 +358,7 @@
       "title": "Soccer and basketball seasonal roadmap",
       "status": "ready",
       "owner": "agent",
-      "next": "EPL/UCL research for October 24\u201325, CBB early November, WNBA/MLS summer. Preserve existing NHL/MLB coverage without expansion.",
+      "next": "EPL/UCL research for October 24–25, CBB early November, WNBA/MLS summer. Preserve existing NHL/MLB coverage without expansion.",
       "doneWhen": "Actual seasonal/trial evidence and a separate P11 decision precede official new-sport picks.",
       "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
     },
@@ -476,8 +476,8 @@
       "status": "ready",
       "owner": "agent",
       "next": "Release role, exact two-sided price and cross-book guards at the next safe window after all gates; verify Damante, TK King, Kohl and Egbuka on the live board without rewriting forecasts.",
-      "doneWhen": "Kohl/Damante/TK King holds, Egbuka and five corrupted DK prices refused, 0.99\u20131.15 pair band and two-sided exact-line check agree across board and selection; hosted/live checks pass.",
-      "evidence": "A-22 to A-24 safeguards are live in 48e57391, hosted run 37700211419. Local tests replay the five bad DK prices, two-sided exact-line band and QB-change holds; live TK King and JJ Kohl say Under review with no chance or grade. The 14-day candidate/day replay is player 1741\u21921603, game 210\u2192181; attempts, not a revised record. Damante/Egbuka live recheck remains."
+      "doneWhen": "Kohl/Damante/TK King holds, Egbuka and five corrupted DK prices refused, 0.99–1.15 pair band and two-sided exact-line check agree across board and selection; hosted/live checks pass.",
+      "evidence": "A-22 to A-24 safeguards are live in 48e57391, hosted run 37700211419. Local tests replay the five bad DK prices, two-sided exact-line band and QB-change holds; live TK King and JJ Kohl say Under review with no chance or grade. The 14-day candidate/day replay is player 1741→1603, game 210→181; attempts, not a revised record. Damante/Egbuka live recheck remains."
     },
     {
       "id": "P54",
@@ -513,7 +513,7 @@
       "owner": "agent",
       "next": "Build current-team, same-QB, partial-game, market-shrink and quantile variants as silent logged shadows in routine windows; replay 2025 and forward weeks, then bring before/after error and calibration to the owner for promotion approval.",
       "doneWhen": "Shadow forecasts and an append-only shadow ledger replay Kohl, Damante, King, Daniels, Javonte and Bucky; live plays, cards and records stay unchanged until a separate owner yes.",
-      "evidence": "PROJECTIONS-FIX-FOR-CODEX parts 2\u20133, October 7. Conservative hold is P53; root projection change is not implemented or live."
+      "evidence": "PROJECTIONS-FIX-FOR-CODEX parts 2–3, October 7. Conservative hold is P53; root projection change is not implemented or live."
     },
     {
       "id": "P58",
@@ -557,7 +557,7 @@
       "status": "ready",
       "owner": "agent",
       "next": "Ship the prepared footer and Start here copy with Claude's Today-restore series only after the owner's release approval; run the full gates and check live footer, Record and Start here.",
-      "doneWhen": "Live footer is exactly '21+ \u00b7 Entertainment only'; Record keeps posted-price grading, Start here has Eastern time and Cloudflare disclosure once, and hosted plus live checks pass.",
+      "doneWhen": "Live footer is exactly '21+ · Entertainment only'; Record keeps posted-price grading, Start here has Eastern time and Cloudflare disclosure once, and hosted plus live checks pass.",
       "evidence": "Owner-delegated decision 26 dated 2026-10-07. Prepared on dev only; not released."
     },
     {
@@ -620,7 +620,7 @@
       "status": "shipped",
       "owner": "agent",
       "next": "Observe the next natural ledger update and verify the image and HTML rows advance together; do not re-render a posted attachment.",
-      "doneWhen": "The hosted build contains site/data/cards/climb-route.png; live Record \u203a Climb shows the graphic and ledger-accurate cashed/open steps, clearly labeled future-plan rows, real play-page links and no 375/1440 overflow; Today links to #route.",
+      "doneWhen": "The hosted build contains site/data/cards/climb-route.png; live Record › Climb shows the graphic and ledger-accurate cashed/open steps, clearly labeled future-plan rows, real play-page links and no 375/1440 overflow; Today links to #route.",
       "evidence": "Owner decision 36 released at 0fbbb1e1. Python 1,200, Node 223, clean export, build, budget, 92-pick audit, 503-file guard, rehearsal and local Chrome passed. Hosted run 37825913575 succeeded. Live PNG returned HTTP 200; record.json showed Climb #3 step 1, $42 banked, nine rows. App v142; 375/1440 Chrome checked Climb, Today, Record and Games with zero overflow or errors. Full receipt: PRODUCT-IMPLEMENTATION.md and codex-status.md."
     },
     {
@@ -998,7 +998,7 @@
       "status": "ready",
       "owner": "agent",
       "next": "Fit the exact Harbor detail in the reviewed Final without dropping rows or going below 40px; add a real-row regression/render, release, then verify a natural delivery.",
-      "doneWhen": "The exact stored detail 4 catches on8 targets \u00b7 cleared by0.5 fits at40px or larger; every win/loss row stays; reviewed real render and full release/hosted/live evidence are recorded; delivery is confirmed separately.",
+      "doneWhen": "The exact stored detail 4 catches on8 targets · cleared by0.5 fits at40px or larger; every win/loss row stays; reviewed real render and full release/hosted/live evidence are recorded; delivery is confirmed separately.",
       "evidence": "Hosted38134903105 and current clean build/feed both hold receipt-day-2026-10-10: Final detail will not fit at40px. Site publish succeeded; this receipt card is not rendered. Existing P43/Release3 card completion remains open."
     },
     {
@@ -1024,7 +1024,7 @@
       "title": "Kook'n Autopilot R1 delivery, research, results and daily operator",
       "status": "ready",
       "owner": "agent",
-      "next": "Finish transactional record creation at Discord release, recover every approved research lane with a reason-or-hold outcome, and verify the natural 17:30/18:50 primetime decisions and result timing.",
+      "next": "Release per-category research fallback attempt logging, then finish rule-specific refusal evidence and the daily seven-day outcomes block; observe natural transactional delivery and grading timing.",
       "doneWhen": "Every approved lane can render and fire or logs its exact refusal; delivery is transactional; results settle on time; the outcome report ships a fix or names an external blocker each day.",
       "evidence": "Partial R1 release 4b217f29, hosted run 38147869526: only typed hard injury news may pull a released play; model/web checks can flag but not pull; every send requires a saved reason or holds; public ESPN BET labels render as theScore Bet; the never-posted Bills-Rams under is withdrawn; 17:30/18:50 primetime passes are installed. Python1304 (2 skipped), Node234, clean export, all gates/rehearsal and 14 live 375/1440 routes passed. Record is 36-37 (1 void), -5.20u."
     },
@@ -1045,6 +1045,15 @@
       "next": "Preserve the confirmed-out-only input, monitor natural injury changes, and keep player markets held when the replacement-quarterback role evidence is insufficient.",
       "doneWhen": "A fresh forecast identifies the usual starter from prior games, applies only a current confirmed-out listing, records the learned adjustment, updates the public score and win chance, and passes historical, hosted and live checks.",
       "evidence": "Release a73be16f, hosted 38181211353 and refresh 3cd56fbe. Walk-forward 2024/2025 margin miss: 10.12/10.19 with the term versus 10.12/10.20 without it. Live Ravens-Falcons: ATL 24.0-BAL 22.8, total 46.8, ATL 53.6%; snapshot qbOut.away=true, effects -1.89/+0.18. Python1345 (2 skipped), Node236, clean export, build/feed, budget, both audits, guard, assets/SVG, rehearsal and live 375/1440 passed."
+    },
+    {
+      "id": "A-20261011-5",
+      "title": "Recover concurrent market-lab summary conflicts",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Complete full gates and locked release; verify hosted publish and natural desk settlement after the recovered captures.",
+      "doneWhen": "Both market-lab writers survive a real Git conflict, derived reports rebuild offline, unrelated conflicts still stop, and hosted plus live 375/1440 checks pass.",
+      "evidence": "At 21:17 ET the desk stopped on site/data/market-lab.json; all later scans and 23:30 repeated it. Tested resolver recovered both local commits under run.lock plus release.lock at 23:52 ET; recovered main 3f7a9641. Permanent fix prepared only; no shipped claim."
     }
   ]
 }

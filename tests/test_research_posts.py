@@ -24,6 +24,29 @@ def game(watch=None):
 
 
 class ResearchPostTests(unittest.TestCase):
+    def test_fallback_logs_each_attempt_and_stops_at_first_eligible_card(self):
+        season = {'kind': 'season', 'rows': [{'kickoff': game()['kickoff']}] * 2}
+        logs = []
+        with mock.patch.object(R, 'prep_candidate', return_value=None), \
+             mock.patch.object(R, 'season_candidate', return_value=season), \
+             mock.patch.object(R, 'upset_candidate') as later:
+            chosen = R.select({'games': [game()]}, {}, NOW, log=logs.append)
+        self.assertEqual(chosen['kind'], 'season')
+        self.assertEqual(logs, ['research fallback: prep held: no eligible card',
+                                'research fallback: season eligible: 2 rows'])
+        later.assert_not_called()
+
+    def test_dark_fallback_logs_all_five_approved_categories(self):
+        logs = []
+        with mock.patch.object(R, 'prep_candidate', return_value=None), \
+             mock.patch.object(R, 'season_candidate', return_value=None), \
+             mock.patch.object(R, 'upset_candidate', return_value=None), \
+             mock.patch.object(R, 'spread_dog_candidate', return_value=None), \
+             mock.patch.object(R, 'matchup_candidate', return_value=None), \
+             mock.patch.object(R, 'scorer_candidate', return_value=None):
+            self.assertIsNone(R.select({'games': [game()]}, {}, NOW, log=logs.append))
+        self.assertEqual(logs, [f'research fallback: {kind} held: no eligible card'
+                                for kind in ('prep', 'season', 'upset', 'matchup', 'end-zone')])
     def test_every_research_family_uses_the_ticket_list_after_cutover(self):
         import json
         now = datetime(2026, 10, 9, 14, 0, tzinfo=timezone.utc)

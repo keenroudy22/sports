@@ -1449,3 +1449,19 @@ remains at most one 1u play per day, separate from football, paused at 30 graded
 and −5u, and never forced. The observable completion is an October 20 NBA Today
 page plus either the first automatically posted qualifying Trial or the exact
 gate logged when no row qualifies.
+
+## October 11 overnight — stopped-run recovery prepared
+
+The 21:17 ET desk and every later settlement/23:30 run stopped while rebasing a generated
+`site/data/market-lab.json` summary. Both local commits were retained. A real two-writer
+regression failed first, then passed with the narrowly scoped resolver: preserve every
+market-lab capture, recompute its ledger, and rebuild only the two derived market-lab
+reports offline. Unrelated conflicts still stop. The tested development resolver recovered
+and pushed the stopped commits under both run.lock and the shared release.lock at 23:52 ET
+(main `3f7a9641`). No production source was hand-edited.
+
+The next ordered research slice logs each attempted approved fallback category and stops
+at the existing first eligible card. It changes no selection, cap, price or model request.
+Rule-specific refusals and the complete seven-day outcome score remain open under KA-R1.
+Rollback: revert the resolver/logging code if needed; leave every capture and public record intact.
+Full final-tree release, hosted success and live 375/1440 checks remain required.

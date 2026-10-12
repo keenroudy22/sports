@@ -9,6 +9,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import boxscores
 import merge_store as ms
+import market_lab
 
 
 def rec(game, at, total):
@@ -112,6 +113,37 @@ class RebaseTests(unittest.TestCase):
         resolved, left = ms.resolve(self.root, log=lambda *_: None)
         self.assertEqual((resolved, left), ([], ['note.txt']))
         git(self.root, 'rebase', '--abort')
+
+    def test_market_summary_rebuilds_from_both_writers_without_requests(self):
+        from unittest.mock import patch
+        store = self.root / 'data/market-lab'
+        public = self.root / 'site/data/market-lab.json'
+        def capture(key, at):
+            market_lab.append([{'type': 'quote', 'gameId': key, 'league': 'NHL',
+                                'season': 2026, 'capturedAt': at, 'home': {}, 'away': {},
+                                'current': {}, 'open': {}}], root=store)
+            market_lab.report(root=store, public=public)
+        capture('base', '2026-10-11T23:00:00Z')
+        commit(self.root, 'lab base')
+        git(self.root, 'checkout', '-q', '-b', 'desk')
+        capture('desk', '2026-10-12T01:17:00Z')
+        commit(self.root, 'desk lab')
+        git(self.root, 'checkout', '-q', 'main')
+        capture('hosted', '2026-10-12T01:16:00Z')
+        capture('hosted2', '2026-10-12T01:16:30Z')
+        commit(self.root, 'hosted lab')
+        git(self.root, 'checkout', '-q', 'desk')
+        stopped = subprocess.run(['git', 'rebase', 'main'], cwd=self.root, capture_output=True, text=True, env=ENV)
+        self.assertNotEqual(stopped.returncode, 0)
+        with patch('boxscores.fetch_json', side_effect=AssertionError('no network during merge')):
+            resolved, left = ms.resolve(self.root, log=lambda *_: None)
+        self.assertEqual(left, [])
+        self.assertIn('site/data/market-lab.json', resolved)
+        self.assertEqual(boxscores.verify(store), [])
+        self.assertEqual({r['gameId'] for r in market_lab.read_all(store)}, {'base', 'desk', 'hosted', 'hosted2'})
+        self.assertEqual(json.loads(public.read_text())['leagues']['NHL']['gamesQuoted'], 4)
+        git(self.root, '-c', 'core.editor=true', 'rebase', '--continue')
+        self.assertEqual(ms.unmerged(self.root), [])
 
 
 if __name__ == '__main__':

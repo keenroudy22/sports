@@ -25,7 +25,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import boxscores
 
 ROOT = Path(__file__).resolve().parents[1]
-STORES = ('data/odds', 'data/prop-odds', 'data/props', 'data/forecasts', 'data/weather', 'data/boxscores', 'data/nba-capture/quotes', 'data/nba-capture/props', 'data/nba-capture/injuries', 'data/nba-capture/observations', 'data/sport-box', 'data/nba-trial')
+STORES = ('data/odds', 'data/prop-odds', 'data/props', 'data/forecasts', 'data/weather', 'data/boxscores', 'data/nba-capture/quotes', 'data/nba-capture/props', 'data/nba-capture/injuries', 'data/nba-capture/observations', 'data/sport-box', 'data/nba-trial', 'data/market-lab')
+MARKET_REPORTS = ('site/data/market-lab.json', 'data/market-lab/REPORT.md')
 # Every append-only store two runs can both extend. A conflict anywhere else still stops the rebase for a person.
 
 
@@ -116,7 +117,13 @@ def resolve(cwd=ROOT, log=print):
     """Resolve every unmerged path inside the stores and stage the result. Returns (resolved, left)."""
     cwd = Path(cwd)
     resolved, left, touched = [], [], set()
+    rebuild_market = False
     for path in unmerged(cwd):
+        # These two exact files are derived coverage, never source records.
+        # Rebuild after merging all captures rather than choosing either writer.
+        if path in MARKET_REPORTS:
+            rebuild_market = True
+            continue
         store = store_of(path)
         if not store:
             left.append(path)
@@ -148,6 +155,17 @@ def resolve(cwd=ROOT, log=print):
         if rel not in resolved:
             resolved.append(rel)
         log(f'merge_store: {rel}: recomputed over the merged records')
+    if rebuild_market or 'data/market-lab' in touched:
+        import market_lab
+        root = cwd / 'data/market-lab'
+        problems = boxscores.verify(root) if root.exists() else ['market lab store missing']
+        if problems:
+            left.extend(path for path in MARKET_REPORTS if path in unmerged(cwd))
+            log('merge_store: refusing market summary rebuild: ' + '; '.join(problems))
+        else:
+            market_lab.report(root=root, public=cwd / 'site/data/market-lab.json')
+            resolved.extend(path for path in MARKET_REPORTS if path not in resolved)
+            log('merge_store: market coverage rebuilt from preserved captures; no requests')
     if resolved:
         git('add', '--', *resolved, cwd=cwd)
     return resolved, left

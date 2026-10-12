@@ -458,7 +458,7 @@ def bounded_caption(choice):
     return '\n'.join(lines)
 
 
-def select(data, details, now, lines=None, teams=None, order=None):
+def select(data, details, now, lines=None, teams=None, order=None, log=None):
     games = slate_games(data, now)
     if not games:
         return None
@@ -466,6 +466,8 @@ def select(data, details, now, lines=None, teams=None, order=None):
     usable = lambda choice: choice if choice and len(choice.get('rows') or []) >= 2 else None
     if os.environ.get('KEENROUDY_RESEARCH_FALLBACK', '1').strip().lower() in ('0', 'false', 'off', 'no'):
         chosen = prepared
+        if log:
+            log('research fallback: disabled; prep ' + ('eligible' if chosen else 'held: no eligible card'))
     else:
         # One deterministic football-day chain. A mature category may move
         # only through the two-week-confirmed learner; sparse categories keep
@@ -479,7 +481,15 @@ def select(data, details, now, lines=None, teams=None, order=None):
         }
         wanted = [kind for kind in (order or factories) if kind in factories]
         wanted += [kind for kind in factories if kind not in wanted]
-        chosen = next((choice for kind in wanted if (choice := factories[kind]())), None)
+        chosen = None
+        for kind in wanted:
+            choice = factories[kind]()
+            if log:
+                log(f'research fallback: {kind} ' +
+                    (f'eligible: {len(choice.get("rows") or [])} rows' if choice else 'held: no eligible card'))
+            if choice:
+                chosen = choice
+                break
     if not chosen:
         return None
     day = eastern_date(now)
@@ -511,7 +521,7 @@ def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES, log
     import learning
     order = ((learning.load_policy().get('twoWay') or {}).get('researchOrder') or None)
     choice = select(data, details_for(cards, detail_root), now,
-                    load_lines(lines_path), teams_for(cards), order=order)
+                    load_lines(lines_path), teams_for(cards), order=order, log=log)
     if not choice:
         reason = ('no unstarted football games today' if not slate_games(data, now)
                   else 'Prep List, Trends, Upset Watch, Matchup and End-zone had no eligible rows')
