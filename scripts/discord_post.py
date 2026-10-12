@@ -179,7 +179,7 @@ def mirror_sent(log_book, now, url=None, wins_url=None, send=http_send, fetch=do
         destination = mirror.get('destination')
         allowed = ((kind == 'buffer:play' and destination != 'wins')
                    or (kind == 'buffer:cashed' and str(entry.get('id') or '').startswith('cashed:')
-                       and destination == 'wins')
+                       and destination != 'wins')
                    or (kind == 'buffer:community' and destination == 'wins'))
         if not allowed:
             # Older queue entries may still carry a pending mirror payload.
@@ -195,12 +195,6 @@ def mirror_sent(log_book, now, url=None, wins_url=None, send=http_send, fetch=do
             continue
         target = wins_url if destination == 'wins' else url
         if not target:
-            if destination == 'wins' and kind == 'buffer:cashed':
-                mirror['state'] = 'skipped'
-                mirror['reason'] = 'wins webhook not configured'
-                entry['discord'] = mirror
-                log('discord: wins webhook not configured; win mirror skipped')
-                continue
             message = 'Discord destination is not configured'
             changed = mirror.get('error') != message
             mirror['error'] = message

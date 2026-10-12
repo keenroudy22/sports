@@ -62,12 +62,13 @@ Our own data: Oct 4 had 15 posts and got 0 likes and 0 reposts; Oct 2 had 6 post
 
 **Plays & Results:**
 - Hot Plate, best bets, Chef's Special and other fun tickets, and Climb steps.
+- Every official settled result update, directly beneath the feed that released the play.
 - Same words and card, about 10–15 minutes before X.
 - Nothing else.
 
 **#wins-and-bad-beats:**
-- Every win, using the Cooked card and caption.
-- Every bad beat:
+- Community and public winning slips, including the owner's personal tickets.
+- Community bad beats:
   - a player prop that missed by 1 catch, carry or attempt, by 5.5 yards or less (10.5 or less for passing yards), or by 1.5 or less in NBA counting stats;
   - a game total or spread lost by 1.5 points or less;
   - a ticket or Climb step that lost exactly one leg, where that leg is itself a bad beat.

@@ -339,7 +339,7 @@ class ScheduleTests(unittest.TestCase):
         self.assertEqual(text_only['posts'][0]['cardTheme'], 'none')
         self.assertNotIn('discord', text_only['posts'][0])
 
-    def test_schedule_routes_only_play_and_win_and_keeps_community_apart(self):
+    def test_schedule_routes_official_play_and_win_together_and_keeps_community_apart(self):
         due = NOW + timedelta(hours=1)
         plans = [('p', 'play', 'Play', due, None), ('cashed:p', 'cashed', 'Win', due + bp.SPACING, None),
                  ('ladder-loss:p', 'cashed', 'Loss', due + 2 * bp.SPACING, None),
@@ -347,7 +347,7 @@ class ScheduleTests(unittest.TestCase):
                  ('community:owner', 'play', 'Owner ticket', due + 4 * bp.SPACING, None)]
         rows = bp.schedule(plans, 'ch-x', {'posts': []}, NOW, key='t', send=FakeBuffer(), log=lambda *_: None)['posts']
         self.assertEqual(rows[0]['discord'].get('destination'), None)
-        self.assertEqual(rows[1]['discord']['destination'], 'wins')
+        self.assertNotIn('destination', rows[1]['discord'])
         self.assertNotIn('discord', rows[2])
         self.assertNotIn('discord', rows[3])
         self.assertEqual((rows[4]['kind'], rows[4]['discord']['destination']), ('buffer:community', 'wins'))

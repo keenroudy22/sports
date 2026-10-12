@@ -527,16 +527,14 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         entry = {'id': guid, 'postedAt': gates.stamp(now), 'dueAt': gates.stamp(due), 'bufferPostId': post_id,
                  'textHash': x_post.text_hash(text), 'kind': f'buffer:{kind}', 'card': bool(image),
                  'cardTheme': card_theme}
-        # Only posted plays enter Plays & Results. Wins and owner community
-        # tickets have a separate destination; research, receipts and losses
-        # have no Discord mirror payload at all.
+        # Official plays and their settled win updates stay together in Plays
+        # & Results. Owner/community tickets use the separate community feed;
+        # research, receipts and losses have no Discord mirror payload here.
         if kind in ('play', 'community') or (kind == 'cashed' and guid.startswith('cashed:')):
             entry['discord'] = {'state': 'pending', 'text': without_playbook(text)}
         if kind == 'community':
             # Owner-submitted model-assisted slips belong in the community wins feed, not the official-play feed.
             # Its dedicated webhook has no public-channel fallback, so a missing destination holds the receipt.
-            entry['discord']['destination'] = 'wins'
-        elif kind == 'cashed' and guid.startswith('cashed:'):
             entry['discord']['destination'] = 'wins'
         if kind == 'play':
             # A confirmed play is the reason to join Discord. Schedule it first; the lightweight delivery job runs

@@ -155,13 +155,13 @@ class DiscordPostTests(unittest.TestCase):
         self.assertEqual(discord_post.wins_webhook({'DISCORD_WINS_WEBHOOK_URL': 'wins'}), 'wins')
         self.assertEqual(discord_post.wins_webhook({'DISCORD_WEBHOOK_URL': 'plays'}), '')
 
-    def test_only_play_reaches_plays_and_win_reaches_wins_even_for_old_pending_rows(self):
+    def test_official_play_and_win_reach_plays_while_community_stays_separate(self):
         sent = []
         rows = [
             {'id': 'play', 'kind': 'buffer:play', 'sentAt': '2026-09-28T15:59:00Z',
              'discord': {'state': 'pending', 'text': 'The play'}},
             {'id': 'cashed:play', 'kind': 'buffer:cashed', 'sentAt': '2026-09-28T15:59:00Z',
-             'discord': {'state': 'pending', 'destination': 'wins', 'text': 'Cooked'}},
+             'discord': {'state': 'pending', 'text': 'Cooked'}},
             {'id': 'ladder-loss:play', 'kind': 'buffer:cashed', 'sentAt': '2026-09-28T15:59:00Z',
              'discord': {'state': 'pending', 'text': 'A miss'}},
             {'id': 'receipt:day:test', 'kind': 'buffer:receipt', 'sentAt': '2026-09-28T15:59:00Z',
@@ -171,15 +171,18 @@ class DiscordPostTests(unittest.TestCase):
         ]
         send = lambda url, body, headers: (sent.append((url, body['content'])) or (204, b''))
         discord_post.mirror_sent({'posts': rows}, NOW, url='plays', wins_url='wins', send=send, log=lambda *_: None)
-        self.assertEqual(sent, [('plays', 'The play'), ('wins', 'Cooked')])
+        self.assertEqual(sent, [('plays', 'The play'), ('plays', 'Cooked')])
         self.assertTrue(all(row['discord']['state'] == 'skipped' for row in rows[2:]))
 
-    def test_missing_wins_webhook_skips_cooked_without_leaking_to_plays(self):
+    def test_official_cooked_result_does_not_need_the_community_webhook(self):
         row = {'id': 'cashed:play', 'kind': 'buffer:cashed', 'sentAt': '2026-09-28T15:59:00Z',
-               'discord': {'state': 'pending', 'destination': 'wins', 'text': 'Cooked'}}
+               'discord': {'state': 'pending', 'text': 'Cooked'}}
+        sent = []
+        send = lambda url, body, headers: (sent.append((url, body['content'])) or (204, b''))
         self.assertEqual(discord_post.mirror_sent({'posts': [row]}, NOW, url='plays', wins_url='',
-                                                  send=lambda *args: self.fail('must not send'), log=lambda *_: None), [])
-        self.assertEqual(row['discord']['state'], 'skipped')
+                                                  send=send, log=lambda *_: None), [])
+        self.assertEqual(sent, [('plays', 'Cooked')])
+        self.assertEqual(row['discord']['state'], 'sent')
 
 
 if __name__ == '__main__':

@@ -73,9 +73,10 @@ this file remains the authority when a summary and rule disagree.
 - **Python standard library only** in the repo. Node only for the site's tests.
 - **X:** posts go through Buffer only. No browser automation on X, ever unattended. Never delete a post that went out
   (the owner decides). The owner pins big wins by hand from the phone ping.
-- **Discord (2026-10-07 override):** one-way publisher only. The append-only site record remains the source of truth.
-  Plays & Results gets posted plays only, with the same words and card, about 10-15 minutes before X. Wins and
-  near-miss bad beats go to #wins-and-bad-beats via `DISCORD_WINS_WEBHOOK_URL`; losses appear only in the end-of-slate
+- **Discord result routing (owner, 2026-10-12):** one-way publisher only. The append-only site record remains the source of truth.
+  Plays & Results gets posted official plays and their official settled-result updates, keeping each public play's
+  release and outcome in one feed. Community/public slips and community bad beats go to #wins-and-bad-beats via
+  `DISCORD_WINS_WEBHOOK_URL`; losses appear only in the end-of-slate
   Final on X. Nothing else mirrors to Plays & Results. Image cards are uploaded so an old message cannot lose its
   art when generated site files roll forward. The eight-day site-image guarantee applies only to recent receipts
   and cards still referenced by the site (owner, 2026-10-08). Older missing art outside that set is logged and
