@@ -1514,3 +1514,12 @@ this is not five price/news-qualified plays. Late-window, exact-cutoff,
 replacement, CFB and kill-switch regressions pass; full gates remain pending.
 Rollback: set KEENROUDY_LATE_PRIMETIME_WINDOW=0 without touching the record.
 First natural MNF decision remains an observation, never a guaranteed play.
+
+The Record repair also preserves delivered Gut-call receipts in their own visible
+section (currently2-0,+1.06u), with Safer-combo/Upset sections when those lanes
+have rows. A failing-first render fixture prevents a nonheadline lane from
+disappearing while Best-bet totals are reconciled. This fixes display separation,
+not record counting. The first second-release push was rejected by a concurrent
+hosted data refresh; no force push was used. Fresh rebases retain that data and
+require repeat gates. One queue completion line exceeded240characters and was
+shortened after validation failed; the schema limit was not weakened.

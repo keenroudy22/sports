@@ -329,6 +329,13 @@
     if (tab === 'official') {
       const straight = rows.filter(p => !C.isParlay(p) && C.isHeadline(p));
       const notPosted = rows.filter(p => !C.countsPublic(p));
+      const laneResults = Object.entries({ gut_call: 'Gut calls', safer_combo: 'Safer combos', upset: 'Upset picks' }).map(([lane, name]) => {
+        const items = rows.filter(p => p.lane === lane && C.countsPublic(p) && !C.isUnpricedImport(p));
+        if (!items.length) return '';
+        const stats = C.summaryOf(items, 10);
+        const ordered = [...items].sort((a, b) => String(b.kickoff || b.settledAt).localeCompare(String(a.kickoff || a.settledAt)));
+        return section(`${name} · ${wl(stats)} · ${units(stats.units)}`, `<div class="receipts">${ordered.map(p => receipt(p, clvById)).join('')}</div>`);
+      }).join('');
       const rec = C.recordBreakdown(straight);
       rec.captured.roi = OWNER_FLAGS.roi ? roiOf(rec.captured) : null;
       const points = cumulativeUnits(straight, cal.headlineUnits);
@@ -348,6 +355,7 @@
         ${section('Units over the season', `<div class="card">${unitsChart(points) || '<p class="muted small">Not enough graded plays yet.</p>'}<p class="chart-cap">${esc(wl(rec.captured))} at posted prices · ${esc(units(rec.captured.units))}${rec.captured.roi != null ? ` · ROI ${rec.captured.roi > 0 ? '+' : ''}${rec.captured.roi.toFixed(1)}%` : ''}. ${rec.assumed.wins + rec.assumed.losses ? `${esc(wl(rec.assumed))} more from before prices were recorded, counted at an assumed −115 and kept out of the units line.` : ''}${rec.credits ? ` Promo credits of ${rec.credits}u are not counted as winnings.` : ''}</p></div>`)}
         ${open.length ? section('Not graded yet', `<div class="receipts">${open.map(p => receipt(p, clvById)).join('')}</div>`, '', 'Graded at the price we posted, even if the price has moved since.') : ''}
         ${notPosted.length ? section('Not posted', `<div class="receipts">${notPosted.map(p => `<p><a href="#pick/${esc(p.id)}">${esc(niceTitle(p.displayTitle || p.title))}</a> · Not posted; excluded from the record.</p>`).join('')}</div>`) : ''}
+        ${laneResults}
         ${section('Every result', `${search}${settled.length ? weeksOf(settled, p => receipt(p, clvById)) : `<p class="muted">${rq ? 'No play matches. Try a player, a team or a market.' : 'Nothing settled yet. Plays show here once their games are final.'}</p>`}`)}
         ${imported.length ? `<details class="more-box"><summary>Week 1 hand-posted legs (no prices) · ${esc(wl(C.summaryOf(imported)))} · not counted</summary><div class="receipts">${imported.map(p => receipt(p, clvById)).join('')}</div></details>` : ''}
         <details class="more-box" data-box="more-numbers" style="margin-top:12px"><summary>More numbers</summary><div><p class="small muted" style="margin-bottom:8px">Same plays, cut different ways. These include assumed prices and promo credits; the units line above does not.</p>

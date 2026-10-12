@@ -86,6 +86,20 @@ test('Record lists unposted rows separately without a pending receipt or a loss 
   assert.doesNotMatch(html, /Pending:/);
 });
 
+test('delivered Gut-call results retain their own visible lane and units', async () => {
+  const { api, factory } = load();
+  const base = api.moreContext();
+  Object.assign(base.state, { league: 'ALL', record: { season: 'current', phase: 'current', q: '', cal: { month: '2026-10', league: 'ALL', ledger: 'best', day: null } } });
+  const gut = { ...picks[7], id: 'gut-win', posted: true, lane: 'gut_call', result: 'win',
+    riskUnits: .5, odds: 100, units: .5, title: 'Gut winner', displayTitle: 'Gut winner', settledAt: '2026-10-11T21:00:00Z' };
+  const ctx = api.moreContext({ get: async () => ({ games: [], picks: [] }), maybe: async () => null, allPicks: async () => [gut] });
+  const html = await factory(ctx).record({ tab: 'official' });
+  assert.match(html, /Gut calls/);
+  assert.match(html, /1–0/);
+  assert.match(html, /\+0\.50u/);
+  assert.match(html, /Gut winner/);
+});
+
 test('days are keyed by the Eastern kickoff date and month totals equal the sum of the day cells', () => {
   const cal = views().calendarModel;
   const m = cal.month(picks, '2026-10', 'best', 'ALL');
