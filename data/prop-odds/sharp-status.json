@@ -1,14 +1,14 @@
 {
- "at": "2026-10-12T13:04:38Z",
+ "at": "2026-10-12T13:14:01Z",
  "confirmed": {
-  "CFB-401871053": "2026-10-12T13:04:38Z",
-  "CFB-401871067": "2026-10-12T13:04:38Z",
-  "NFL-401872994": "2026-10-12T13:04:38Z"
+  "CFB-401871053": "2026-10-12T13:14:01Z",
+  "CFB-401871067": "2026-10-12T13:14:01Z",
+  "NFL-401872994": "2026-10-12T13:14:01Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "fanduel": 264
+    "fanduel": 268
    },
    "eventsListed": 59,
    "eventsMatched": 2,
@@ -16,12 +16,12 @@
    "marketTypes": {
     "player_passing_touchdowns": 14,
     "player_passing_yards": 40,
-    "player_receiving_yards": 127,
+    "player_receiving_yards": 129,
     "player_receptions": 6,
-    "player_rushing_yards": 77
+    "player_rushing_yards": 79
    },
    "requestsLeft": 9,
-   "rows": 264,
+   "rows": 268,
    "slateGames": [
     "Delaware Blue Hens at Middle Tennessee Blue Raiders 2026-10-13T23:00Z",
     "Florida International Panthers at Jacksonville State Gamecocks 2026-10-14T00:00Z"
@@ -47,7 +47,7 @@
       "gemini": "NCAAF-2610142330-KENN-MOST-M",
       "goldrush": "31197261",
       "hardrock": "4996377818960101778",
-      "kalshi": "KXNCAAF1HTOTAL-26OCT14KENNMOSU",
+      "kalshi": "KXNCAAF1HSPREAD-26OCT14KENNMOSU",
       "ladbrokes": "f41a45af-f292-4bd0-b02a-c0be0f6433c5",
       "matchbook": "mb-34574010680400023",
       "novig": "01a11390-3051-7f21-abdb-b92757d00b67",
@@ -68,6 +68,7 @@
       "home_team": "Missouri State",
       "markets": [
        "1st_half_moneyline",
+       "1st_half_point_spread",
        "1st_half_total_points",
        "1st_quarter_moneyline",
        "1st_quarter_point_spread",
@@ -166,7 +167,6 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
-       "total_touchdowns",
        "winning_margin"
       ]
      },
@@ -394,7 +394,7 @@
       "fanatics_markets": "6655856",
       "fanduel": "36152751",
       "fliff": "418761_c_p_209_prematch",
-      "gemini": "NCAAF-2610162330-MEM-TULN-S",
+      "gemini": "NCAAF-2610162330-MEM-TULN-M",
       "goldrush": "31196743",
       "hardrock": "54592021595292065",
       "kalshi": "KXNCAAF1HTOTAL-26OCT16MEMTULN",
@@ -843,8 +843,8 @@
    "marketTypes": {
     "player_interceptions": 5,
     "player_passing_touchdowns": 10,
-    "player_passing_yards": 23,
-    "player_receiving_yards": 167,
+    "player_passing_yards": 24,
+    "player_receiving_yards": 166,
     "player_receptions": 98,
     "player_rushing_+_receiving_yards": 10,
     "player_rushing_yards": 69,
@@ -1284,6 +1284,7 @@
        "4th_quarter_total_points_odd_even",
        "anytime_touchdown_scorer",
        "both_teams_to_score",
+       "correct_score",
        "draw_no_bet",
        "game_prop",
        "halftime_fulltime",
