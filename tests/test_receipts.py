@@ -329,6 +329,17 @@ class LadderReceiptTests(unittest.TestCase):
         self.assertEqual(card['card'], post['card'])
         self.assertEqual(card['pick']['result'], 'win')
 
+    def test_a_late_climb_win_verified_before_the_cutoff_posts_now(self):
+        rung = pick('ladder', 'sun', **self.RUNG)
+        rung['id'] = 'NFL-2026-W5-ladder-late'
+        first = {rung['id']: rung}
+        latest = {rung['id']: {'result': 'win', 'settledAt': '2026-10-12T03:50:00Z'}}  # 11:50 PM ET
+        log = {'posts': [{'id': rung['id'], 'kind': 'buffer:play', 'tweetId': '123'}]}
+        verified = datetime(2026, 10, 12, 4, 18, tzinfo=timezone.utc)  # 12:18 AM ET
+        [post] = receipts.cashed(first, latest, GAMES, log, verified)
+        self.assertEqual(post['due'], verified)
+        self.assertEqual(post['card'], 'ladder-result-NFL-2026-W5-ladder-late')
+
     def test_a_ladder_loss_waits_for_final_or_leftovers(self):
         rung = pick('ladder', 'sun', **self.RUNG)
         rung['id'] = 'NFL-2026-W4-ladder-loss'

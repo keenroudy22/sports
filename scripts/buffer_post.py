@@ -557,6 +557,44 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
     return log_book
 
 
+def expedite_cashed(entry, channel_id, now, key=None, send=http_send):
+    """Move one unsent result to the next safe Buffer instant.
+
+    Buffer has no edit operation and rejects identical scheduled copy, so the
+    old result must be removed before its replacement is created. If creation
+    fails, restore the original schedule before returning the error. The saved
+    Discord payload is the canonical copy and is released to the wins channel
+    now.
+    """
+    if entry.get('kind') != 'buffer:cashed' or entry.get('sentAt') or entry.get('cancelledAt') \
+            or entry.get('deletedAt') or entry.get('error') or not entry.get('bufferPostId'):
+        raise BufferError('only an active scheduled result can be expedited')
+    mirror = entry.get('discord') or {}
+    text = str(mirror.get('text') or '').strip()
+    if not text:
+        raise BufferError('the saved result copy is missing')
+    due = now + SOON
+    card = mirror.get('image') if entry.get('card') else None
+    old_id = entry['bufferPostId']
+    old_due = gates.when(entry['dueAt'])
+    delete_post(old_id, key=key, send=send)
+    try:
+        new_id = create_post(text, channel_id, due, card, key=key, send=send)
+    except BufferError as error:
+        try:
+            entry['bufferPostId'] = create_post(text, channel_id, old_due, card, key=key, send=send)
+        except BufferError as restore_error:
+            raise BufferError(f'{error}; original result schedule could not be restored: {restore_error}') from error
+        raise
+    entry['bufferPostId'] = new_id
+    entry['dueAt'] = gates.stamp(due)
+    entry['rescheduledAt'] = gates.stamp(now)
+    if mirror.get('state') == 'pending':
+        mirror['readyAt'] = gates.stamp(now)
+        entry['discord'] = mirror
+    return entry
+
+
 def cancel_closed(closed_ids, log_book, now, key=None, send=http_send, log=print):
     """Take back a scheduled post whose pick closed before its time."""
     for entry in log_book.get('posts', []):

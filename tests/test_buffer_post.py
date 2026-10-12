@@ -91,6 +91,22 @@ class ClientTests(unittest.TestCase):
         with self.assertRaises(bp.MissingToken):
             bp.token({})
 
+    def test_an_unsent_cashed_result_can_move_forward_once_with_discord_ready(self):
+        fake = FakeBuffer()
+        entry = {
+            'id': 'cashed:NFL-ladder', 'kind': 'buffer:cashed', 'bufferPostId': 'old',
+            'dueAt': '2026-09-26T14:00:00Z', 'card': True,
+            'discord': {'state': 'pending', 'destination': 'wins', 'text': 'Step 1 cashed.',
+                        'image': 'https://keenroudy.com/sports/data/cards/ladder-result.png'},
+        }
+        bp.expedite_cashed(entry, 'ch-x', NOW, key='t', send=fake)
+        self.assertEqual(entry['bufferPostId'], 'bp101')
+        self.assertEqual(entry['dueAt'], '2026-09-26T12:32:00Z')
+        self.assertEqual(entry['discord']['readyAt'], '2026-09-26T12:30:00Z')
+        queries = [call['query'] for call in fake.calls]
+        self.assertTrue(any('createPost' in query for query in queries))
+        self.assertTrue(any('deletePost' in query for query in queries))
+
     def test_daily_limit_uses_buffer_types_and_derives_what_is_left(self):
         fake = FakeBuffer()
         row = bp.daily_limit('ch-x', '2026-09-26', key='t', send=fake)

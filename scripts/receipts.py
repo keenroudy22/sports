@@ -431,8 +431,8 @@ def book(first, latest, games, log_book, now):
 
 CASHED_FRESH = timedelta(hours=3)          # a win settled longer ago than this is left to the morning receipt
 LADDER_CASHED_FRESH = timedelta(hours=24)  # the Climb is a continuing story; an overnight final advances next morning
-LADDER_MORNING = (9, 5)                    # never wake the feed overnight; the 6:45 run can still queue the card
-QUIET = ((0, 30), (9, 0))                  # Eastern: no cashed post overnight; the morning receipt carries those wins
+LADDER_MORNING = (9, 5)                    # a result first verified during quiet hours joins the morning sweep
+QUIET = ((0, 30), (9, 0))                  # Eastern: after 12:30 AM, the morning receipt carries those wins
 HANDLE = 'keenkooks'
 
 
@@ -525,7 +525,10 @@ def cashed(first, latest, games, log_book, now):
             card = ladder_result_card_key(key)
             if result != 'win':
                 post_key = f'ladder-{result}:{key}'
-            if local.hour < LADDER_MORNING[0]:
+            # A late game verified before the owner's 12:30 AM cutoff is still
+            # a live result and goes out now. Only a result first seen during
+            # quiet hours waits for the morning sweep.
+            if quiet:
                 due = at(eastern_date(now), LADDER_MORNING)
         if quiet and not ladder:
             # Quiet hours hold delivery, not admission. Queue a fresh morning
