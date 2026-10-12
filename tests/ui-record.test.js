@@ -28,11 +28,11 @@ test('Record headline is the shared core recordBreakdown, not separate UI math',
 test('season chart ends at captured-price units exactly', () => {
   const straight = picks.filter(p => !C.isParlay(p));
   const rec = C.recordBreakdown(straight);
-  const points = M.cumulativeUnits(straight, C.unitsFor);
+  const points = M.cumulativeUnits(straight, p => C.recordBreakdown([p]).captured.units);
   assert.ok(points.length > 0);
   assert.equal(points.at(-1).units, Math.round(rec.captured.units * 100) / 100);
   const recordView = moreSource.slice(moreSource.indexOf("if (tab === 'official')"), moreSource.indexOf("if (tab === 'fun')"));
-  assert.match(recordView, /const points = cumulativeUnits\(straight, C\.unitsFor\)/);
+  assert.match(recordView, /const points = cumulativeUnits\(straight, cal\.headlineUnits\)/);
   assert.match(recordView, /unitsChart\(points\)/);
   assert.match(recordView, /units\(rec\.captured\.units\)/);
 });

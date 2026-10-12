@@ -1807,7 +1807,7 @@
     const u = C.unitsFor(p);
     const assumed = Boolean(p.priceAssumed || C.isUnpricedImport(p));
     const clv = clvById.get(p.id);
-    const price = p.odds == null ? 'no price recorded' : assumed ? `${oddsText(p.odds)} assumed · no price recorded` : `${oddsText(p.odds)} ${/^espn ?bet$/i.test(String(p.book || '').trim()) ? 'ESPN BET' : bookLabel(p.book) || ''}`;
+    const price = p.odds == null ? 'no price recorded' : assumed ? `${oddsText(p.odds)} assumed · no price recorded` : `${oddsText(p.odds)} ${bookLabel(p.book) || ''}`;
     const actual = p.resultDetail ? `${p.player || niceTitle(p.title || '').split(/\s+(?:OVER|UNDER)\s+/i)[0]} · ${p.resultDetail}` : p.actual != null ? String(typeof p.actual === 'object' ? Object.entries(p.actual).map(([k, v]) => `${k} ${v}`).join(', ') : p.actual).split(/[.;]\s/)[0] : '';
     const meta = [price, whenShort(p.kickoff || p.publishedAt), p.featured ? 'Pick of the Day' : '', clvWords(clv), actual ? `result ${actual}` : '', p.earlyExit ? 'early-exit credit (counts −1u in the headline)' : ''].filter(Boolean).join(' · ');
     const right = p.result ? (u == null ? '' : assumed ? `<span class="u muted" title="${esc(p.priceNote || 'No price was recorded, so this counts at an assumed −115.')}">(${esc(units(u))})</span>` : `<span class="u ${u > 0 ? 'green' : u < 0 ? 'red' : 'muted'}">${esc(units(u))}</span>`)
@@ -1888,7 +1888,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-ac93a932744d';
+  const MORE_ASSET = 'app-more.js?v=sha256-e4bf2d7fd354';
   const GAMES_ASSET = 'app-games.js?v=sha256-8db71aa5568e';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,

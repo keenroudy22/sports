@@ -43,7 +43,7 @@ const picks = [
   { id: 'e', league: 'NFL', kind: 'parlays', parlayType: 'longshot', odds: 500, riskUnits: 0.25, result: 'loss', kickoff: '2026-10-04T17:00:00Z', settledAt: '2026-10-05T00:00:00Z', legs: ['A', 'B'], title: 'Fun ticket', displayTitle: 'Fun ticket' },
   { id: 'f', league: 'NFL', kind: 'parlays', parlayType: 'ladder', odds: -150, result: 'win', kickoff: '2026-10-02T23:00:00Z', publishedAt: '2026-10-02T15:00:00Z', settledAt: '2026-10-03T03:00:00Z', legs: ['L1', 'L2'], title: 'Step 2', ladder: { stake: 75, payout: 117, run: 1, step: 2, banked: 19, bankedAfter: 42, nextStake: 94 } },
   { id: 'g', league: 'CFB', kind: 'parlays', parlayType: 'ladder', odds: -150, result: 'loss', kickoff: '2026-10-04T17:00:00Z', publishedAt: '2026-10-04T15:00:00Z', settledAt: '2026-10-04T21:00:00Z', legs: ['L3', 'L4'], title: 'Step 1', ladder: { stake: 50, run: 2, step: 1, banked: 0 } },
-  { id: 'h', league: 'NFL', kind: 'props', odds: -110, kickoff: '2026-10-11T17:00:00Z', title: 'Open play', displayTitle: 'Open play OVER 1.5 receptions', athleteId: '3', market: 'rec', direction: 'over', line: 1.5, book: 'FanDuel' },
+  { id: 'h', league: 'NFL', kind: 'props', odds: -110, posted: true, kickoff: '2026-10-11T17:00:00Z', title: 'Open play', displayTitle: 'Open play OVER 1.5 receptions', athleteId: '3', market: 'rec', direction: 'over', line: 1.5, book: 'FanDuel' },
   { id: 'i', league: 'NFL', kind: 'props', odds: null, historicalImport: true, result: 'win', kickoff: '2026-09-06T17:00:00Z', title: 'Hand-posted leg' },
   /* A voided play (a leg the book's injury rule removed): outside W-L-P and the units, like the Record headline. */
   { id: 'j', league: 'NFL', kind: 'props', odds: -110, result: 'void', kickoff: '2026-09-13T17:00:00Z', settledAt: '2026-09-13T21:00:00Z', title: 'Voided TD leg', displayTitle: 'Voided TD leg' },
@@ -58,6 +58,33 @@ const views = (overrides = {}) => {
   return factory(ctx);
 };
 const near = (a, b) => Math.abs(a - b) < 1e-9;
+
+test('unposted plays and Gut calls never enter the Best bets calendar', () => {
+  const cal = views().calendarModel;
+  const unposted = { ...picks[7], id: 'not-posted', posted: false, result: 'loss' };
+  const gut = { ...picks[7], id: 'gut', lane: 'gut_call', posted: true, result: 'win', riskUnits: .5 };
+  const m = cal.month([unposted, gut], '2026-10', 'best', 'ALL');
+  assert.equal(m.days.size, 0);
+  assert.equal(m.totals.open, 0);
+  assert.equal(cal.headlineUnits(unposted), null);
+  assert.equal(cal.headlineUnits(gut), null);
+  assert.equal(cal.headlineUnits(picks[3]), null, 'assumed prices stay outside the captured-price chart');
+  assert.equal(cal.headlineUnits({ ...picks[0], result: 'loss', earlyExit: true }), -1,
+    'promotional credit stays outside winnings, just as in the headline');
+});
+
+test('Record lists unposted rows separately without a pending receipt or a loss total', async () => {
+  const { api, factory } = load();
+  const base = api.moreContext();
+  Object.assign(base.state, { league: 'ALL', record: { season: 'current', phase: 'current', q: '', cal: { month: '2026-10', league: 'ALL', ledger: 'best', day: null } } });
+  const held = { ...picks[7], id: 'held', posted: false, title: 'Held total', displayTitle: 'Held total', status: 'withdrawn' };
+  const ctx = api.moreContext({ get: async () => ({ games: [], picks: [] }), maybe: async () => null, allPicks: async () => [held] });
+  const html = await factory(ctx).record({ tab: 'official' });
+  assert.match(html, /Not posted/);
+  assert.match(html, /Held total/);
+  assert.doesNotMatch(html, /Not graded yet/);
+  assert.doesNotMatch(html, /Pending:/);
+});
 
 test('days are keyed by the Eastern kickoff date and month totals equal the sum of the day cells', () => {
   const cal = views().calendarModel;

@@ -1479,3 +1479,21 @@ Installed precheck and Discord plists were compared with the development sources
 Precheck retained the old elapsed30-minute timer; Discord differed only in a comment.
 Both source files passed plutil, were installed/reloaded under run.lock, and now match
 byte-for-byte with successful launchctl print. The other four sports jobs already matched.
+
+## October12 — overnight resolver and research logging verified
+
+Release `2be5cd079ee910c3bc8785e02240a06f3a09ec47` is LIVE, hosted
+`38201864610` succeeded. Locked1350Python(two skipped),236Node, both clean-export
+suites,504-page build, budget(nohardissues; existingToday/Morewarnings), football100/NBA0
+audits, guard, assets/SVG and isolated2330 rehearsal passed with zero outside writes/private
+reads. Fourteen live375/1440 Today/Research/Games/Record/Climb/More/Start checks after hosted
+success had zero overflow, caught loads or browser errors. A-20261011-5 is shipped; research
+per-category attempt logging is the first independent slice of queue item5, not full R1 completion.
+
+The live numeric audit separately caught a residual display mismatch: the correctly posted-only
+headline is36-37(onevoid), captured-price-5.20u, while the week list/open list/units chart still
+used all rows. A-20261012-1 applies the existing shared filters across those views, retains
+unposted rows under Not posted, and uses captured-price chart units (including the existing
+promotional-credit exclusion). It changes no counting policy, grade or published report.
+Real-row/negative fixtures failed before the patch. Public receipt book names use the current
+brand; provider keys and historical delivered captions remain unchanged. Full final gates pending.

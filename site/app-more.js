@@ -41,7 +41,8 @@
   const CAL_LEDGERS = [['best', 'Best bets'], ['fun', 'Fun tickets'], ['climb', 'Climb']];
   const cal = {
     dayKey: p => C.dayOf(p.kickoff || p.publishedAt),
-    ledgerRows: (picks, ledger) => picks.filter(p => !C.isUnpricedImport(p) && (ledger === 'climb' ? C.isLadder(p) : ledger === 'fun' ? C.isParlay(p) && !C.isLadder(p) : !C.isParlay(p))),
+    ledgerRows: (picks, ledger) => picks.filter(p => !C.isUnpricedImport(p) && C.countsPublic(p) && (ledger === 'climb' ? C.isLadder(p) : ledger === 'fun' ? C.isParlay(p) && !C.isLadder(p) : !C.isParlay(p) && C.isHeadline(p))),
+    headlineUnits: p => C.recordBreakdown([p]).captured.units,
     climbMoney: p => { const info = p.ladder || {}, stake = Number(info.stake) || 0;
       const back = p.result === 'win' ? Number(info.payout) || 0 : p.result === 'loss' ? 0 : ['push', 'void'].includes(p.result) ? stake : null;
       return { stake, back, net: back == null ? null : back - stake }; },
@@ -115,8 +116,8 @@
       ${ledger === 'climb' ? `<div class="receipts">${picked.rows.map(climbRow).join('')}</div>` : `<div class="kt-slips">${picked.rows.map(p => `${slip(p, { spike: true })}${CARD_PATH.test(p.card || '') ? `<a class="cal-card" href="${esc(p.card)}" target="_blank" rel="noopener">See the card ↗</a>` : ''}`).join('')}</div>`}</div>`;
     const assumedNote = t.assumed ? '<p class="cal-legend">Week 1 at an assumed −115: those plays count in W–L and stay out of the units and Per play.</p>' : '';
     const voidNote = t.voids ? `<p class="cal-legend">${t.voids === 1 ? 'One void play' : `${t.voids} void plays`} this month: not counted in W–L or units, the same as the Record headline.</p>` : '';
-    const straight = every.filter(p => !C.isParlay(p));
-    const points = ledger === 'best' ? cumulativeUnits(straight.filter(p => league === 'ALL' || p.league === league), C.unitsFor) : [];
+    const straight = every.filter(p => !C.isParlay(p) && C.isHeadline(p));
+    const points = ledger === 'best' ? cumulativeUnits(straight.filter(p => league === 'ALL' || p.league === league), cal.headlineUnits) : [];
     const line = points.length > 1 ? `<div class="card" style="margin-top:14px">${unitsChart(points, { from: `${ym}-01`, to: `${ym}-31`, label: cal.label(ym) })}<p class="chart-cap">Cumulative units at posted prices${league !== 'ALL' ? ` · ${esc(LEAGUE_NAME[league])}` : ''}; ${esc(cal.label(ym))} is the lighter band.</p></div>` : '';
     const per = t.perPlay == null ? '–' : ledger === 'climb' ? calMoney(t.perPlay) : `${t.perPlay > 0 ? '+' : t.perPlay < 0 ? '−' : ''}${Math.abs(t.perPlay).toFixed(2)}u`;
     return `<section class="cal" id="calendar" aria-labelledby="cal-h">
@@ -326,25 +327,27 @@
     };
 
     if (tab === 'official') {
-      const straight = rows.filter(p => !C.isParlay(p));
+      const straight = rows.filter(p => !C.isParlay(p) && C.isHeadline(p));
+      const notPosted = rows.filter(p => !C.countsPublic(p));
       const rec = C.recordBreakdown(straight);
       rec.captured.roi = OWNER_FLAGS.roi ? roiOf(rec.captured) : null;
-      const points = cumulativeUnits(straight, C.unitsFor);
+      const points = cumulativeUnits(straight, cal.headlineUnits);
       const open = straight.filter(p => !p.result && !p.historicalImport).sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
       const imported = straight.filter(p => p.result && C.isUnpricedImport(p));
       const settled = straight.filter(p => p.result && !C.isUnpricedImport(p) && matches(p)).sort((a, b) => String(b.kickoff || b.settledAt).localeCompare(String(a.kickoff || a.settledAt)));
-      const counted = rows.filter(p => !C.isUnpricedImport(p));
-      const st = counted.filter(p => !C.isParlay(p));
+      const counted = rows.filter(p => !C.isUnpricedImport(p) && C.countsPublic(p));
+      const st = counted.filter(p => !C.isParlay(p) && C.isHeadline(p));
       const MARKET_NAME = { Totals: 'Game totals', Spreads: 'Spreads', Straights: 'Player props', 'Risky lines': 'Risky player lines' };
       const byWeek = [...new Set(st.map(p => C.weekOf(p.kickoff || p.publishedAt)).filter(Boolean))].sort().reverse().map(w => [weekLabel(w), C.summaryOf(st.filter(p => C.weekOf(p.kickoff || p.publishedAt) === w))]);
       const archiveGroups = new Map();
       for (const p of all) { if (!Number.isInteger(Number(p.season))) continue; const key = [p.league, p.season, C.recordPhaseOf(p)].join('|'); if (!archiveGroups.has(key)) archiveGroups.set(key, []); archiveGroups.get(key).push(p); }
       const compact = items => { const t = C.summaryOf(items); return items.length ? `${wl(t)}${t.pending ? ` · ${t.pending} pending` : ''}` : '—'; };
       const archiveRows = [...archiveGroups].sort((a, b) => b[0].localeCompare(a[0])).map(([key, items]) => { const [lg, season, phase] = key.split('|');
-        return [`${lg} ${season} · ${phase === 'playoffs' ? 'Playoffs' : 'Regular season'}`, compact(items.filter(p => !C.isParlay(p) && !C.isUnpricedImport(p))), compact(items.filter(p => C.isParlay(p) && !C.isLadder(p) && !C.isUnpricedImport(p))), compact(items.filter(C.isLadder))]; });
+        return [`${lg} ${season} · ${phase === 'playoffs' ? 'Playoffs' : 'Regular season'}`, compact(items.filter(p => !C.isParlay(p) && !C.isUnpricedImport(p) && C.isHeadline(p))), compact(items.filter(p => C.isParlay(p) && !C.isLadder(p) && !C.isUnpricedImport(p) && C.countsPublic(p))), compact(items.filter(p => C.isLadder(p) && C.countsPublic(p)))]; });
       return `${top}${tabs}${pickers}${calendar(every, clvById)}${k.html}
         ${section('Units over the season', `<div class="card">${unitsChart(points) || '<p class="muted small">Not enough graded plays yet.</p>'}<p class="chart-cap">${esc(wl(rec.captured))} at posted prices · ${esc(units(rec.captured.units))}${rec.captured.roi != null ? ` · ROI ${rec.captured.roi > 0 ? '+' : ''}${rec.captured.roi.toFixed(1)}%` : ''}. ${rec.assumed.wins + rec.assumed.losses ? `${esc(wl(rec.assumed))} more from before prices were recorded, counted at an assumed −115 and kept out of the units line.` : ''}${rec.credits ? ` Promo credits of ${rec.credits}u are not counted as winnings.` : ''}</p></div>`)}
         ${open.length ? section('Not graded yet', `<div class="receipts">${open.map(p => receipt(p, clvById)).join('')}</div>`, '', 'Graded at the price we posted, even if the price has moved since.') : ''}
+        ${notPosted.length ? section('Not posted', `<div class="receipts">${notPosted.map(p => `<p><a href="#pick/${esc(p.id)}">${esc(niceTitle(p.displayTitle || p.title))}</a> · Not posted; excluded from the record.</p>`).join('')}</div>`) : ''}
         ${section('Every result', `${search}${settled.length ? weeksOf(settled, p => receipt(p, clvById)) : `<p class="muted">${rq ? 'No play matches. Try a player, a team or a market.' : 'Nothing settled yet. Plays show here once their games are final.'}</p>`}`)}
         ${imported.length ? `<details class="more-box"><summary>Week 1 hand-posted legs (no prices) · ${esc(wl(C.summaryOf(imported)))} · not counted</summary><div class="receipts">${imported.map(p => receipt(p, clvById)).join('')}</div></details>` : ''}
         <details class="more-box" data-box="more-numbers" style="margin-top:12px"><summary>More numbers</summary><div><p class="small muted" style="margin-bottom:8px">Same plays, cut different ways. These include assumed prices and promo credits; the units line above does not.</p>
@@ -356,7 +359,7 @@
         ${archiveRows.length ? `<details class="more-box" data-box="archive" style="margin-top:12px"><summary>Season archive</summary><div><p class="small muted" style="margin-bottom:8px">Official posted results only. Personal tickets never enter these totals.</p><div class="table-wrap"><table class="t"><thead><tr><th>Season</th><th class="n">Best bets</th><th class="n">Fun tickets</th><th class="n">Climb steps</th></tr></thead><tbody>${archiveRows.map(r => `<tr><td>${esc(r[0])}</td><td class="n">${esc(r[1])}</td><td class="n">${esc(r[2])}</td><td class="n">${esc(r[3])}</td></tr>`).join('')}</tbody></table></div></div></details>` : ''}`;
     }
     if (tab === 'fun') {
-      const fun = rows.filter(p => C.isParlay(p) && !C.isLadder(p) && !C.isUnpricedImport(p));
+      const fun = rows.filter(p => C.isParlay(p) && !C.isLadder(p) && !C.isUnpricedImport(p) && C.countsPublic(p));
       const s = C.summaryOf(fun, 10);
       const settled = fun.filter(p => p.result && matches(p)).sort((a, b) => String(b.kickoff).localeCompare(String(a.kickoff)));
       const open = fun.filter(p => !p.result);
@@ -407,7 +410,7 @@
         ${back.length ? `<details class="more-box" data-box="backtests"><summary>Backtests (never published) · ${back.length}</summary><div>${modelTable(back)}<p class="small muted" style="margin-top:6px">${esc(((board || {}).method || {}).backtest || 'Retrospective walk-forward. Never published, so it is evidence about the method, not a record.')}</p></div></details>` : ''}
         ${markets.length ? section('NFL player projections vs the DraftKings line', `<div class="table-wrap"><table class="t"><thead><tr><th>Market</th><th class="n">Graded</th><th class="n">Record</th><th class="n">Closer than line</th><th class="n">Our miss</th><th class="n">Line miss</th></tr></thead><tbody>${markets.map(r => `<tr><td>${esc(C.LABEL[r.market] || r.market)}</td><td class="n">${esc(r.graded)}</td><td class="n">${esc(rec3(r.record))}</td><td class="n">${rate(r.closerThanLine)}</td><td class="n">${esc(C.fixed(r.projectionMiss))}</td><td class="n">${esc(C.fixed(r.lineMiss))}</td></tr>`).join('')}</tbody></table></div>`, '',
           `The book line beat our projection in ${closer} of ${markets.length} markets. That is why we cut our raw numbers down before showing a chance.`) : ''}
-        ${clvRows.length ? `<details class="more-box" data-box="clv"><summary>Closing-line value, play by play · ${clvRows.length}</summary><p class="small muted" style="margin:0 0 8px">${esc(((board || {}).method || {}).clv || 'Posted line vs the last comparable line before kickoff, in points, positive when better.')} Beating the close more often than not is the earliest sign of real skill; it is not a result.</p><div class="table-wrap"><table class="t"><thead><tr><th>Play</th><th class="n">Posted</th><th class="n">Last before kickoff</th><th class="n">CLV</th><th>Result</th></tr></thead><tbody>${clvRows.map(r => `<tr><td>${esc(niceTitle(r.title))}<br><span class="tiny muted">${esc(/^espn ?bet$/i.test(String(r.book || '').trim()) ? 'ESPN BET' : bookLabel(r.book) || '')} ${esc(oddsText(r.postedOdds))}</span></td><td class="n">${esc(r.postedLine ?? '–')}</td><td class="n">${esc(r.closeLine ?? '–')}${r.closeAt ? `<br><span class="tiny muted">${esc(r.closeSource || '')} · ${esc(r.minutesBeforeKickoff)} min before</span>` : ''}</td><td class="n ${r.clv > 0 ? 'green' : r.clv < 0 ? 'red' : ''}">${r.clv == null ? '–' : esc(C.signed(r.clv))}</td><td>${esc(r.result || 'pending')}</td></tr>`).join('')}</tbody></table></div></details>` : ''}`;
+        ${clvRows.length ? `<details class="more-box" data-box="clv"><summary>Closing-line value, play by play · ${clvRows.length}</summary><p class="small muted" style="margin:0 0 8px">${esc(((board || {}).method || {}).clv || 'Posted line vs the last comparable line before kickoff, in points, positive when better.')} Beating the close more often than not is the earliest sign of real skill; it is not a result.</p><div class="table-wrap"><table class="t"><thead><tr><th>Play</th><th class="n">Posted</th><th class="n">Last before kickoff</th><th class="n">CLV</th><th>Result</th></tr></thead><tbody>${clvRows.map(r => `<tr><td>${esc(niceTitle(r.title))}<br><span class="tiny muted">${esc(bookLabel(r.book) || '')} ${esc(oddsText(r.postedOdds))}</span></td><td class="n">${esc(r.postedLine ?? '–')}</td><td class="n">${esc(r.closeLine ?? '–')}${r.closeAt ? `<br><span class="tiny muted">${esc(r.closeSource || '')} · ${esc(r.minutesBeforeKickoff)} min before</span>` : ''}</td><td class="n ${r.clv > 0 ? 'green' : r.clv < 0 ? 'red' : ''}">${r.clv == null ? '–' : esc(C.signed(r.clv))}</td><td>${esc(r.result || 'pending')}</td></tr>`).join('')}</tbody></table></div></details>` : ''}`;
     }
     /* Trials: new sports collecting evidence, never official plays. */
     const leagues = ['NBA', 'WNBA', 'CBB', 'MLB', 'NHL', 'EPL', 'MLS'].filter(l => state.league === 'ALL' || state.league === l);

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-12T04:00:00Z",
+  "updatedAt": "2026-10-12T04:06:00Z",
   "items": [
     {
       "id": "P01",
@@ -1049,11 +1049,11 @@
     {
       "id": "A-20261011-5",
       "title": "Recover concurrent market-lab summary conflicts",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Complete full gates and locked release; verify hosted publish and natural desk settlement after the recovered captures.",
+      "next": "Preserve the conflict regression; verify natural settlement recovery and keep unresolved outcome misses tracked.",
       "doneWhen": "Both market-lab writers survive a real Git conflict, derived reports rebuild offline, unrelated conflicts still stop, and hosted plus live 375/1440 checks pass.",
-      "evidence": "At 21:17 ET the desk stopped on site/data/market-lab.json; all later scans and 23:30 repeated it. Tested resolver recovered both local commits under run.lock plus release.lock at 23:52 ET; recovered main 3f7a9641. Permanent fix prepared only; no shipped claim."
+      "evidence": "Release2be5cd079ee910c3bc8785e02240a06f3a09ec47; hosted38201864610success. Locked Python1350(two skipped), Node236, cleanexport, build504, budgetnohardissues(Today/More warnings), record100/NBA0, guard598, assets/SVG, isolated2330outcomeok/zerooutsidewrites/private reads.14live375/1440routes clean after hosted success. Stopped captures recovered separately at3f7a9641; hosted38201478085success. Research attempt logging slice live; rule-specific holds remainKA-R1."
     },
     {
       "id": "A-20261011-6",
@@ -1063,6 +1063,15 @@
       "next": "Release the24-hour metric boundary; verify a natural budgeted read and keep the separate7-day snapshot follow-through under KA-R1.",
       "doneWhen": "A sent post at24 hours is read once, a23h59m post is held, missing permission still stops safely, and full hosted/live release gates pass.",
       "evidence": "Overnight review found SETTLE_METRICS=48h, making the30h target impossible. Boundary regression failed first;24h correction and focused tests now pass. No new service, quota increase or historical metric rewrite."
+    },
+    {
+      "id": "A-20261012-1",
+      "title": "Reconcile Record lists and charts with posted-only headline",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Release the shared public/headline filters in calendar, weekly list, open list, archive and units chart; verify Bills-Rams is labeled not posted and excluded from pending/results.",
+      "doneWhen": "The existing36-37(onevoid)/-5.20u headline remains unchanged; unposted postOct8 rows contribute no win/loss/unit/open count; Gut calls keep their own lane; every release gate and live375/1440 check pass.",
+      "evidence": "Overnight live DOM showed Bills-Rams as Pending and SDSU as a loss in weekly results despite posted:false; header correctly excluded them. Failing-first calendar/open-list tests now pass. Chart uses recordBreakdown.captured units and excludes assumed prices/promotional credits like the headline. No research/store/grade/count policy edited."
     }
   ]
 }
