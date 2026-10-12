@@ -67,8 +67,9 @@ class ReleaseQueueTests(unittest.TestCase):
             ctx = SimpleNamespace(first={}, latest={}, player_team={})
             status = {'x': {}}
 
-            def draft(key, now, first, latest, games, out=None):
+            def draft(key, now, first, latest, games, out=None, reason=None):
                 self.assertIn(pick['id'], first)
+                self.assertEqual(reason, 'Bills injuries open targets for Johnson.')
                 Path(out, f'{key}.txt').write_text('Book says 12.5. I say 20.\n', encoding='utf-8')
                 return 'Book says 12.5. I say 20.', first[key], games['NFL-401872994']
 
@@ -76,9 +77,27 @@ class ReleaseQueueTests(unittest.TestCase):
                     mock.patch.object(x_post, 'do_draft', side_effect=draft), \
                     mock.patch('pick_card.chrome_path', return_value=None):
                 run.drafts(NOW.astimezone(run.EASTERN), NOW, ctx, {'NFL-401872994': game}, [], status,
-                           admitted=[('NFL', 'props', pick)])
+                           admitted=[('NFL', 'props', pick)],
+                           reasons={pick['id']: 'Bills injuries open targets for Johnson.'})
             self.assertTrue((root / 'x-drafts' / f"{pick['id']}.txt").is_file())
             self.assertEqual(status['x']['drafted'], 1)
+
+    def test_new_admission_uses_its_verified_reason_before_the_public_reason_store_exists(self):
+        pick = {'id': 'NFL-2026-W5-knox-over-12-5-recyds-dk',
+                'title': 'Dawson Knox OVER 12.5 receiving yards', 'lane': 'hot_plate',
+                'favorite': True, 'status': 'active', 'odds': -109, 'book': 'DraftKings',
+                'line': 12.5, 'projection': 19.4, 'market': 'recYds', 'marketType': 'player',
+                'athleteId': '3930086', 'gameIds': ['NFL-401872994']}
+        game = {'id': 'NFL-401872994', 'league': 'NFL', 'kickoff': '2026-10-13T00:15:00Z',
+                'away': {'id': '2', 'name': 'Bills'}, 'home': {'id': '14', 'name': 'Rams'}}
+        reason = 'Buffalo ruled a starting receiver out, opening more short targets.'
+        with tempfile.TemporaryDirectory() as folder, \
+                mock.patch.object(x_post, 'load_log', return_value={'posts': []}), \
+                mock.patch.object(x_post, 'load_reasons', return_value={}):
+            text, _, _ = x_post.do_draft(pick['id'], NOW, {pick['id']: pick}, {pick['id']: pick},
+                                         {'NFL-401872994': game}, out=Path(folder), reason=reason)
+            self.assertIn(reason, text)
+            self.assertTrue((Path(folder) / f"{pick['id']}.txt").is_file())
 
     def test_update_and_remove_are_atomic_state_transitions(self):
         with tempfile.TemporaryDirectory() as folder:

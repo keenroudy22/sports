@@ -2455,13 +2455,14 @@ def _run(args, now, slot, kinds, status):
         if not args.dry_run:
             run_tests()
             status['checks'].append('tests green')
-    drafts(slot, now, ctx, games, settled, status, admitted=admitted)
+    drafts(slot, now, ctx, games, settled, status, admitted=admitted, reasons=reasons)
     if not args.dry_run:
         admitted_ids = release_queue.enqueue(CONF, admitted, reasons, decided, CONF / 'x-drafts', now,
                                              games=games, log=log)
         if admitted_ids:
             log('private admissions:', ', '.join(admitted_ids))
-        public_decisions = [row for row in decided if row.get('id') not in set(admitted_ids)]
+        admission_keys = {candidate.get('id') for _, _, candidate in admitted}
+        public_decisions = [row for row in decided if row.get('id') not in admission_keys]
         remember(public_decisions, now, slot, status)
         paper_trials(now, slot, status)
         try:
@@ -2473,7 +2474,7 @@ def _run(args, now, slot, kinds, status):
             status['errors'].append(f'NBA Trial: {type(error).__name__}: {error}')
         # The lane is fixed at admission, but the public feature store cannot
         # reveal an unreleased play.
-        pick_of_the_day(now, ctx, status, current=potd_market, write=not bool(admitted_ids))
+        pick_of_the_day(now, ctx, status, current=potd_market, write=not bool(admitted))
         git_result = commit_push(now, slot, {'published': len(published), 'settled': len(settled), 'closed': len(closed)},
                                  push=not args.no_push)
         status['git'] = git_result
@@ -2495,7 +2496,7 @@ def _run(args, now, slot, kinds, status):
 
 # ------------------------------------------------------------------ X drafts (review gate: files, never posts)
 
-def drafts(slot, now, ctx, games, settled, status, admitted=()):
+def drafts(slot, now, ctx, games, settled, status, admitted=(), reasons=None):
     """Write the posts a person may approve: a game-day recap after the last run, the model scoreboard on Tuesdays,
     and a draft for every open favorite. Nothing here posts; scripts/x_post.py post --confirm does."""
     import x_post
@@ -2538,7 +2539,9 @@ def drafts(slot, now, ctx, games, settled, status, admitted=()):
         if not postable or merged.get('result') or key in posted:
             continue
         try:
-            text, pick_now, game = x_post.do_draft(key, now, draft_first, draft_latest, games, out=folder)
+            text, pick_now, game = x_post.do_draft(
+                key, now, draft_first, draft_latest, games, out=folder,
+                reason=(reasons or {}).get(key))
             written.append(key)
         except x_post.Refused:
             continue

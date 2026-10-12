@@ -762,14 +762,17 @@ def env_report():
     return f"credentials set: {', '.join(present) or 'none'}"
 
 
-def do_draft(pick_id, now, first, latest, games, out=None):
+def do_draft(pick_id, now, first, latest, games, out=None, reason=None):
     pick = first.get(pick_id)
     if not pick:
         raise Refused(f'{pick_id} is not in research/')
     merged = dict(pick, **latest.get(pick_id, {}))
     game = games.get((pick.get('gameIds') or [None])[0])
-    text = draft(merged, game)
-    problems = guard(text, merged)
+    # A newly admitted play is not in the public reason store yet.  Its
+    # verified release reason must travel with the private draft instead of
+    # disappearing between selection and the release queue.
+    text = draft(merged, game, reason=reason)
+    problems = guard(text, merged, reason=reason)
     if problems:
         raise Refused(f"the draft fails the guards: {'; '.join(problems)}")
     refuse(merged, game, load_log(), now, text)
