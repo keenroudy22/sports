@@ -32,7 +32,7 @@ for (const width of widths) {
     await pause(100);
     const result = await ev(`(() => {
       // These containers scroll horizontally by design; document-level overflow still fails below.
-      const allowed = '.table-wrap,.seg,.filters,.board-tabs,.depth-line,.chip-scroll';
+      const allowed = '.table-wrap,.seg,.filters,.board-tabs,.depth-line,.chip-scroll,.kt-tabs';
       const bad = [...document.querySelectorAll('#view *')].filter(e => {
         // Screen-reader-only headings intentionally occupy a clipped 1 px box. They are not visual overflow.
         if(e.closest(allowed) || e.closest('.sr') || !e.getClientRects().length) return false;

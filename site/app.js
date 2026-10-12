@@ -285,6 +285,7 @@
     return 'Game line';
   };
   const niceTitle = text => String(text || '').replace(/\b(OVER|UNDER)\b/g, m => m.toLowerCase())
+    .replace(/\bESPN\s*BET\b/gi, 'theScore Bet')
     .replace(/\breceptions\b/gi, 'catches').replace(/\s+/g, ' ').trim();
 
   /* The "why" and "watch out" lines, from the play's own published words. Counterpoints never become a "why". */

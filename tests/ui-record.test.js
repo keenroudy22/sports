@@ -16,6 +16,12 @@ const picks = [
   { id: 'e', kind: 'parlays', odds: 500, result: 'win', legs: ['A', 'B'], settledAt: '2026-09-05T01:00:00Z' },
 ];
 
+test('legacy ticket titles use the current public book brand without changing the stored title', () => {
+  const stored = { title: '3-leg longshot at ESPN BET' };
+  assert.equal(M.niceTitle(stored.title), '3-leg longshot at theScore Bet');
+  assert.equal(stored.title, '3-leg longshot at ESPN BET');
+});
+
 test('Record headline is the shared core recordBreakdown, not separate UI math', () => {
   const rec = C.recordBreakdown(picks.filter(p => !C.isParlay(p)));
   assert.deepEqual([rec.all.wins, rec.all.losses, rec.all.pushes], [2, 1, 1]);

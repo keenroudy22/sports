@@ -1523,3 +1523,23 @@ not record counting. The first second-release push was rejected by a concurrent
 hosted data refresh; no force push was used. Fresh rebases retain that data and
 require repeat gates. One queue completion line exceeded240characters and was
 shortened after validation failed; the schema limit was not weakened.
+
+## October12 — record, engagement and late-delivery release verified
+
+Release `e456065a7dfc8524cea8b48fa9d2a71b816be87b`, hosted `38204219397`
+success: Python1353(two skipped),Node239, cleanexport, build504, budget(no hard
+issues; Today/More soft warnings),100-pick/NBA0audits, guard601, assets/SVG and
+isolated2330 rehearsal outcomeok, zero outside writes/private reads. Headline
+36-37(onevoid)/-5.20u and chartend-5.20 now agree; Gut calls remain2-0,+1.06u
+in their own visible section. Bills-Rams is Not posted, never Pending.
+The existing budgeted reader recovered six metrics at04:33:48Z; all21 seven-day
+reads remain historically late, so the30h outcome is not called green.
+The next natural MNF decision and within30h reads remain observations.
+
+The wider22-route live check found one real public-brand detail: a canceled
+legacy title still said ESPN BET. A-20261012-3 maps that display to theScore Bet
+without rewriting the stored title or delivered art. The player controls are
+an intentional overflow:auto tab strip (343px visible/650px content, page375px);
+scrolling to the end exposes Snap %. The audit now recognizes this named
+scroll container, while document overflow still fails. Corrected live route
+checks pass. The title mapping awaits its own full release.

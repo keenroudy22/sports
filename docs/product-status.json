@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-12T04:12:00Z",
+  "updatedAt": "2026-10-12T04:46:00Z",
   "items": [
     {
       "id": "P01",
@@ -1024,7 +1024,7 @@
       "title": "Kook'n Autopilot R1 delivery, research, results and daily operator",
       "status": "ready",
       "owner": "agent",
-      "next": "Release per-category research fallback attempt logging, then finish rule-specific refusal evidence and the daily seven-day outcomes block; observe natural transactional delivery and grading timing.",
+      "next": "Finish rule-specific research refusals and14-day lane replay proof, the daily outcomes block, Climbv3 evidence and7-day metric snapshots; observe natural MNF delivery and preserve historical misses.",
       "doneWhen": "Every approved lane can render and fire or logs its exact refusal; delivery is transactional; results settle on time; the outcome report ships a fix or names an external blocker each day.",
       "evidence": "Partial R1 release 4b217f29, hosted run 38147869526: only typed hard injury news may pull a released play; model/web checks can flag but not pull; every send requires a saved reason or holds; public ESPN BET labels render as theScore Bet; the never-posted Bills-Rams under is withdrawn; 17:30/18:50 primetime passes are installed. Python1304 (2 skipped), Node234, clean export, all gates/rehearsal and 14 live 375/1440 routes passed. Record is 36-37 (1 void), -5.20u."
     },
@@ -1058,29 +1058,38 @@
     {
       "id": "A-20261011-6",
       "title": "Read first post engagement after24 hours",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Release the24-hour metric boundary; verify a natural budgeted read and keep the separate7-day snapshot follow-through under KA-R1.",
+      "next": "Verify natural within30h reads on the next normal runs; the six recovered reads remain historically late. Add the separate7-day snapshot underKA-R1.",
       "doneWhen": "A sent post at24 hours is read once, a23h59m post is held, missing permission still stops safely, and full hosted/live release gates pass.",
-      "evidence": "Overnight review found SETTLE_METRICS=48h, making the30h target impossible. Boundary regression failed first;24h correction and focused tests now pass. No new service, quota increase or historical metric rewrite."
+      "evidence": "Releasee456065a7dfc8524cea8b48fa9d2a71b816be87b; hosted38204219397success. Python1353(2skipped), Node239, cleanexport, build504, budgetsoftwarningsonly, record100/NBA0, guard601, assets/SVG, isolated2330outcomeok/zerooutsidewrites-private reads. Live22route375/1440check; posted-only headline36-37(onevoid)/-5.20u, chartend-5.20, Gut2-0/+1.06u. Six overdue metric reads stored04:33:48Z. Legacy canceled-title brand remainsA-20261012-3."
     },
     {
       "id": "A-20261012-1",
       "title": "Reconcile Record lists and charts with posted-only headline",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Release the shared public/headline filters in calendar, weekly list, open list, archive and units chart; verify Bills-Rams is labeled not posted and excluded from pending/results.",
+      "next": "Preserve lane-visible receipts and posted-only totals; finish the canceled-title brand repair underA-20261012-3.",
       "doneWhen": "The existing36-37(onevoid)/-5.20u headline remains unchanged; unposted postOct8 rows contribute no win/loss/unit/open count; Gut calls keep their own lane; every release gate and live375/1440 check pass.",
-      "evidence": "Overnight live DOM showed Bills-Rams as Pending and SDSU as a loss in weekly results despite posted:false; header correctly excluded them. Failing-first calendar/open-list tests now pass. Chart uses recordBreakdown.captured units and excludes assumed prices/promotional credits like the headline. No research/store/grade/count policy edited."
+      "evidence": "Releasee456065a7dfc8524cea8b48fa9d2a71b816be87b; hosted38204219397success. Python1353(2skipped), Node239, cleanexport, build504, budgetsoftwarningsonly, record100/NBA0, guard601, assets/SVG, isolated2330outcomeok/zerooutsidewrites-private reads. Live22route375/1440check; posted-only headline36-37(onevoid)/-5.20u, chartend-5.20, Gut2-0/+1.06u. Six overdue metric reads stored04:33:48Z. Legacy canceled-title brand remainsA-20261012-3."
     },
     {
       "id": "A-20261012-2",
       "title": "Preserve a real delivery window for late NFL primetime admissions",
+      "status": "shipped",
+      "owner": "agent",
+      "next": "Observe the natural MNF17:30/18:50 pass; release only a fully qualified row or log the exact refusal. No Sunday backfill.",
+      "doneWhen": "All send paths share the15-minute deadline; Discord lead/spacing remain; replacements, daytime, college and early games retain45minutes; cutoff/kill tests, full gates, hosted and live checks pass.",
+      "evidence": "Releasee456065a7dfc8524cea8b48fa9d2a71b816be87b; hosted38204219397success. Python1353(2skipped), Node239, cleanexport, build504, budgetsoftwarningsonly, record100/NBA0, guard601, assets/SVG, isolated2330outcomeok/zerooutsidewrites-private reads. Live22route375/1440check; posted-only headline36-37(onevoid)/-5.20u, chartend-5.20, Gut2-0/+1.06u. Six overdue metric reads stored04:33:48Z. Legacy canceled-title brand remainsA-20261012-3."
+    },
+    {
+      "id": "A-20261012-3",
+      "title": "Normalize retired book names in legacy ticket titles",
       "status": "ready",
       "owner": "agent",
-      "next": "Release the shared15-minute pre-kickoff deadline for nonreplacement NFL night admissions after17:00; verify the next natural MNF17:30/18:50 decision without forcing a play.",
-      "doneWhen": "All send paths share the15-minute deadline; Discord lead/spacing remain; replacements, daytime, college and early games retain45minutes; cutoff/kill tests, full gates, hosted and live checks pass.",
-      "evidence": "Five SNF rows were refused by old45-minute deadline after the card repair. Window-only replay at19:20 for20:20 kickoff changes0/5reachable to5/5; this is not a full price/news admission claim. Failing-first primetime regression now passes; late23:46UTC, replacement, CFB and disabled cases still refuse. KEENROUDY_LATE_PRIMETIME_WINDOW=0 restores old deadline."
+      "next": "Release the display-only title mapper through full gates; verify the live canceled ticket says theScore Bet, preserving its stored title and posted attachments.",
+      "doneWhen": "Legacy ticket titles show the current brand; stored titles remain byte-for-byte; title regression, all release gates, hosted success and22live375/1440routes pass.",
+      "evidence": "Second-release live check found3-leg longshot atESPNBET in the new Not posted section. Failing-first title fixture now passes. Player tab finding was intentional343px overflow:auto/650px content with document375px; max scroll reveals the last button. Audit now recognizes only that named scroll strip."
     }
   ]
 }
