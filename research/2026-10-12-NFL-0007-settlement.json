@@ -1,0 +1,192 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-10-12T04:07:24Z",
+  "targetWeek": 5,
+  "summary": "Research update for Oct 12: Settled 1: Ladder step 1: 2 legs at FanDuel win. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+  "takeaways": [],
+  "parlays": [
+    {
+      "id": "NFL-2026-W5-ladder-1011-c3s1-fd",
+      "title": "Ladder step 1: 2 legs at FanDuel",
+      "status": "settled",
+      "favorite": false,
+      "parlayType": "ladder",
+      "riskUnits": 0.25,
+      "ladder": {
+        "run": 3,
+        "step": 1,
+        "stake": 50,
+        "payout": 73,
+        "banked": 0,
+        "bankThisWin": 15,
+        "bankedAfter": 15,
+        "nextStake": 58,
+        "totalAfter": 73,
+        "bankPercent": 20,
+        "ridePercent": 80,
+        "start": 50,
+        "goal": 1000
+      },
+      "legs": [
+        {
+          "id": "ladder-NFL-401872985-8439-passYds-174.5",
+          "title": "Aaron Rodgers 175+ passing yards",
+          "gameId": "NFL-401872985",
+          "athleteId": "8439",
+          "player": "Aaron Rodgers",
+          "market": "passYds",
+          "direction": "over",
+          "line": 174.5,
+          "book": "FanDuel",
+          "odds": -400,
+          "chance": 0.859,
+          "rawChance": 0.859,
+          "implied": 0.8,
+          "projection": 258.9,
+          "kickoff": "2026-10-11T17:00Z",
+          "observedAt": "2026-10-11T13:51:42Z",
+          "marketWindow": "Full game",
+          "alternate": true,
+          "reasons": [
+            {
+              "type": "matchup",
+              "class": "B",
+              "direction": "for",
+              "text": "The opponent allows the 5th-most passing yards to QBs.",
+              "number": {
+                "rank": 28,
+                "teams": 32,
+                "average": 276.25
+              },
+              "source": "https://www.espn.com/nfl/game/_/gameId/401872985",
+              "observedAt": "2026-10-11T14:00:02Z"
+            }
+          ],
+          "reason": "The opponent allows the 5th-most passing yards to QBs."
+        },
+        {
+          "id": "ladder-NFL-401872993-3043078-rushYds-49.5",
+          "title": "Derrick Henry 50+ rushing yards",
+          "gameId": "NFL-401872993",
+          "athleteId": "3043078",
+          "player": "Derrick Henry",
+          "market": "rushYds",
+          "direction": "over",
+          "line": 49.5,
+          "book": "FanDuel",
+          "odds": -600,
+          "chance": 0.899,
+          "rawChance": 0.899,
+          "implied": 0.857,
+          "projection": 131.6,
+          "kickoff": "2026-10-12T00:20Z",
+          "observedAt": "2026-10-11T13:07:03Z",
+          "marketWindow": "Full game",
+          "alternate": true,
+          "reasons": [
+            {
+              "type": "news",
+              "class": "A",
+              "direction": "for",
+              "text": "Derrick Henry had 216 rushing yards and four rushing touchdowns in Tyler Huntley's most recent start.",
+              "number": null,
+              "source": "https://www.baltimoreravens.com/news/declan-doyle-confident-tyler-huntley-derrick-henry-calls-bijan-robinson-best-running-back-week-5-ravens-falcons",
+              "observedAt": "2026-10-11T14:00:02Z"
+            }
+          ],
+          "reason": "Derrick Henry had 216 rushing yards and four rushing touchdowns in Tyler Huntley's most recent start."
+        }
+      ],
+      "correlation": "One leg per game, so the book prices the ticket as the legs multiplied.",
+      "gameIds": [
+        "NFL-401872985",
+        "NFL-401872993"
+      ],
+      "book": "FanDuel",
+      "odds": -218,
+      "quotedAt": "2026-10-11T13:07:03Z",
+      "priceEstimated": true,
+      "expiresAt": "2026-10-11T15:45:00Z",
+      "quoteType": "capture",
+      "confidence": 1,
+      "edge": "For fun, not value: 2 protected lines with stable roles that our model direction agrees with, at FanDuel's exact prices, multiplied to -218. $50 rides with $0 already banked. A win returns $73: $15 goes to the bank and $58 rides next. Bank 20, ride 80.",
+      "cutoff": "A ladder rung is not re-entered. It stands or falls as posted.",
+      "sources": [
+        "https://sharpapi.io/",
+        "https://www.espn.com/nfl/game/_/gameId/401872985",
+        "https://www.espn.com/nfl/game/_/gameId/401872993"
+      ],
+      "why": "Ladder step 1: two easier player lines at FanDuel, one per game, each one our projection clears comfortably. $50 rides with $0 banked. A win returns $73: bank $15 and ride $58 on the next step. Kept apart from the record, in dollars.",
+      "risk": "Both legs have to hit; one miss ends the climb, but it cannot take money already banked. Our player chances are tuned for main lines, so these legs are not value. This is the fun of the climb; the book's official settlement controls, and a person settles the rung.",
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Ladder step 1: two easier player lines at FanDuel, one per game, each one our projection clears comfortably. $50 rides with $0 banked. A win returns $73: bank $15 and ride $58 on the next step. Kept apart from the record, in dollars.",
+            "numbers": {},
+            "source": "Published ticket detail",
+            "time": "2026-10-11T14:00:02Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Both legs have to hit; one miss ends the climb, but it cannot take money already banked. Our player chances are tuned for main lines, so these legs are not value. This is the fun of the climb; the book's official settlement controls, and a person settles the rung.",
+            "numbers": {},
+            "source": "Published ticket risk",
+            "time": "2026-10-11T14:00:02Z"
+          }
+        ],
+        "reports": [],
+        "weather": null,
+        "line": {
+          "legs": [
+            {
+              "gameId": "NFL-401872985",
+              "title": "Aaron Rodgers 175+ passing yards",
+              "line": 174.5,
+              "price": -400,
+              "book": "FanDuel"
+            },
+            {
+              "gameId": "NFL-401872993",
+              "title": "Derrick Henry 50+ rushing yards",
+              "line": 49.5,
+              "price": -600,
+              "book": "FanDuel"
+            }
+          ],
+          "best": {
+            "book": "FanDuel",
+            "price": -218,
+            "time": "2026-10-11T13:07:03Z"
+          }
+        },
+        "ours": null,
+        "history": null,
+        "sources": [
+          {
+            "label": "Published source",
+            "url": "https://sharpapi.io/",
+            "time": "2026-10-11T14:00:02Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401872985",
+            "time": "2026-10-11T14:00:02Z"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401872993",
+            "time": "2026-10-11T14:00:02Z"
+          }
+        ],
+        "partial": true
+      },
+      "result": "win",
+      "actual": "all 2 legs won",
+      "settledAt": "2026-10-12T04:07:24Z",
+      "resultSource": "https://www.espn.com/nfl/boxscore/_/gameId/401872985",
+      "settlementReason": "Every leg won.",
+      "units": 0.115
+    }
+  ]
+}
