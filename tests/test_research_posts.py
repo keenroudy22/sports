@@ -32,7 +32,8 @@ class ResearchPostTests(unittest.TestCase):
              mock.patch.object(R, 'upset_candidate') as later:
             chosen = R.select({'games': [game()]}, {}, NOW, log=logs.append)
         self.assertEqual(chosen['kind'], 'season')
-        self.assertEqual(logs, ['research fallback: prep held: no eligible card',
+        self.assertEqual(logs, ['research rules: prep held — NFL: no current-day Prep List | CFB: no current-day Prep List',
+                                'research fallback: prep held: no eligible card',
                                 'research fallback: season eligible: 2 rows'])
         later.assert_not_called()
 
@@ -45,8 +46,42 @@ class ResearchPostTests(unittest.TestCase):
              mock.patch.object(R, 'matchup_candidate', return_value=None), \
              mock.patch.object(R, 'scorer_candidate', return_value=None):
             self.assertIsNone(R.select({'games': [game()]}, {}, NOW, log=logs.append))
-        self.assertEqual(logs, [f'research fallback: {kind} held: no eligible card'
-                                for kind in ('prep', 'season', 'upset', 'matchup', 'end-zone')])
+        self.assertEqual(logs[0], 'research rules: prep held — NFL: no current-day Prep List | CFB: no current-day Prep List')
+        self.assertEqual(logs[1:], [f'research fallback: {kind} held: no eligible card'
+                                  for kind in ('prep', 'season', 'upset', 'matchup', 'end-zone')])
+
+    def test_prep_refusal_counts_use_the_same_rules_as_admission(self):
+        row = {'league': 'CFB', 'book': 'FanDuel', 'odds': -110, 'clears': True,
+               'projection': 55, 'observedAt': '2026-10-03T13:00:00Z',
+               'kickoff': '2026-10-03T17:00:00Z'}
+        rows = [row, dict(row, observedAt='2026-10-02T13:00:00Z'),
+                dict(row, opponentAdjustment={'supports': False, 'against': True}),
+                dict(row, kickoff='2026-10-03T14:30:00Z')]
+        data = {'prep': {'CFB': {'day': '2026-10-03', 'rows': rows}}}
+        reason = R.prep_diagnostics(data, NOW)
+        self.assertIn('CFB: 1 eligible rows; requires 3', reason)
+        self.assertIn('1 price missing, future or older than four hours', reason)
+        self.assertIn('1 opponent-adjusted history does not support the side', reason)
+        self.assertIn('1 missing kickoff or inside 45-minute cutoff', reason)
+        self.assertIsNone(R.prep_candidate(data, NOW))
+
+    def test_post_names_price_and_kickoff_refusals_independently(self):
+        import json
+        for observed, kickoff, expected in (
+            ('2026-10-03T10:01:00Z', '2026-10-03T17:00:00Z', 'four-hour price expiry'),
+            ('2026-10-03T13:00:00Z', '2026-10-03T14:46:00Z', '45-minute kickoff cutoff'),
+        ):
+            choice = {'kind': 'matchup', 'day': NOW.astimezone(R.gates.EASTERN).date(),
+                      'firstKickoff': R.when(kickoff), 'rows': [{'observedAt': observed}],
+                      'text': 'Research', 'key': 'fixture'}
+            with tempfile.TemporaryDirectory() as folder:
+                payload = Path(folder) / 'today.json'
+                payload.write_text(json.dumps({'games': []}))
+                logs = []
+                with mock.patch.object(R, 'select', return_value=choice):
+                    self.assertIsNone(R.post([], NOW, data_path=payload, detail_root=folder,
+                                            lines_path=Path(folder) / 'none', log=logs.append))
+                self.assertEqual(logs, [f'research: skipped matchup — {expected}'])
     def test_every_research_family_uses_the_ticket_list_after_cutover(self):
         import json
         now = datetime(2026, 10, 9, 14, 0, tzinfo=timezone.utc)

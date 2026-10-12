@@ -1580,3 +1580,16 @@ and confirmed morning receipt delivery. No ordinary owner decision is requested.
 
 This final receipt is documentation only on dev for the next safe release; it
 does not require a duplicate code deployment.
+
+## October12 daily — research refusal diagnostics prepared
+
+The next ordered research-recovery slice shares Prep List eligibility with its
+private refusal report: league, book, price floor, model agreement, price age,
+kickoff and opponent adjustment. Delivery refuses by named four-hour price
+expiry,45-minute kickoff cutoff or daily window instead of a combined ambiguous
+message. Other research-family detail,14-day lane proof and the complete health
+outcomes block remainKA-R1. Selection rules, cards/site/captions, caps, record
+counting and free budgets do not change; no matching public change is required.
+Regression checks cover sparse, stale, adverse-defense and late-kickoff rows,
+and separate timing blockers. Kill switch remainsKEENROUDY_RESEARCH_FALLBACK=0;
+it disables fallback without touching records. Full release evidence pending.

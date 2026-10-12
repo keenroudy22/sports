@@ -99,6 +99,46 @@ def slate_games(data, now):
             and when(g.get('kickoff')) and when(g['kickoff']) > now]
 
 
+def prep_row_hold(row, league, now):
+    """The first failing Prep List rule, shared by selection and private diagnostics."""
+    if row.get('league') != league:
+        return 'league mismatch'
+    if row.get('book') not in PUBLIC_BOOKS:
+        return 'unsupported public book'
+    if not isinstance(row.get('odds'), (int, float)) or row['odds'] < -200:
+        return 'missing price or shorter than -200'
+    if row.get('clears') is not True or not isinstance(row.get('projection'), (int, float)):
+        return 'model and price do not agree'
+    if not current(row.get('observedAt'), now, timedelta(hours=4)):
+        return 'price missing, future or older than four hours'
+    if not when(row.get('kickoff')) or when(row['kickoff']) <= now + timedelta(minutes=45):
+        return 'missing kickoff or inside 45-minute cutoff'
+    adjustment = row.get('opponentAdjustment') or {}
+    if league == 'CFB' and adjustment and (not adjustment.get('supports') or adjustment.get('against')):
+        return 'opponent-adjusted history does not support the side'
+    return None
+
+
+def prep_diagnostics(data, now):
+    day = eastern_date(now).isoformat()
+    messages = []
+    for league in ('NFL', 'CFB'):
+        block = (data.get('prep') or {}).get(league) or {}
+        if block.get('day') != day:
+            messages.append(f'{league}: no current-day Prep List')
+            continue
+        holds, eligible = {}, 0
+        for row in block.get('rows') or []:
+            reason = prep_row_hold(row, league, now)
+            if reason:
+                holds[reason] = holds.get(reason, 0) + 1
+            else:
+                eligible += 1
+        messages.append(f'{league}: {eligible} eligible rows; requires 3' +
+                        ''.join(f'; {count} {reason}' for reason, count in sorted(holds.items())))
+    return ' | '.join(messages)
+
+
 def prep_candidate(data, now):
     """First-choice research slot when three checked, fresh player lines survive."""
     from x_post import LIMIT, tweet_length
@@ -107,16 +147,7 @@ def prep_candidate(data, now):
     for league, block in (data.get('prep') or {}).items():
         if league not in ('NFL', 'CFB') or not isinstance(block, dict) or block.get('day') != day:
             continue
-        rows = [row for row in block.get('rows') or []
-                if row.get('league') == league and row.get('book') in PUBLIC_BOOKS
-                and isinstance(row.get('odds'), (int, float)) and row['odds'] >= -200
-                and row.get('clears') is True and isinstance(row.get('projection'), (int, float))
-                and current(row.get('observedAt'), now, timedelta(hours=4))
-                and when(row.get('kickoff')) and when(row['kickoff']) > now + timedelta(minutes=45)]
-        if league == 'CFB':
-            rows = [row for row in rows if not row.get('opponentAdjustment') or
-                    ((row.get('opponentAdjustment') or {}).get('supports')
-                     and not (row.get('opponentAdjustment') or {}).get('against'))]
+        rows = [row for row in block.get('rows') or [] if prep_row_hold(row, league, now) is None]
         if len(rows) >= 3:
             choices.append((len(rows), league, rows[:4]))
     if not choices:
@@ -463,6 +494,8 @@ def select(data, details, now, lines=None, teams=None, order=None, log=None):
     if not games:
         return None
     prepared = prep_candidate(data, now)
+    if log and not prepared:
+        log('research rules: prep held — ' + prep_diagnostics(data, now))
     usable = lambda choice: choice if choice and len(choice.get('rows') or []) >= 2 else None
     if os.environ.get('KEENROUDY_RESEARCH_FALLBACK', '1').strip().lower() in ('0', 'false', 'off', 'no'):
         chosen = prepared
@@ -527,13 +560,16 @@ def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES, log
                   else 'Prep List, Trends, Upset Watch, Matchup and End-zone had no eligible rows')
         log(f'research: skipped — {reason}')
         return None
-    stale = min(at(choice['day'], POST_UNTIL), choice['firstKickoff'] - timedelta(minutes=45))
+    deadlines = {'daily research window ended': at(choice['day'], POST_UNTIL),
+                 '45-minute kickoff cutoff': choice['firstKickoff'] - timedelta(minutes=45)}
     if choice['kind'] in ('season', 'matchup', 'prep'):
-        stale = min(stale, *(when(r['observedAt']) + timedelta(hours=4) for r in choice['rows']))
+        deadlines['four-hour price expiry'] = min(when(r['observedAt']) + timedelta(hours=4) for r in choice['rows'])
+    stale = min(deadlines.values())
     due = max(at(choice['day'], (9, 30) if choice['kind'] == 'prep' else POST_AT),
               now + timedelta(minutes=2))
     if now >= stale or due >= stale:
-        log(f"research: skipped {choice['kind']} — its price or kickoff window closed")
+        blocked = ', '.join(reason for reason, deadline in deadlines.items() if max(now, due) >= deadline)
+        log(f"research: skipped {choice['kind']} — {blocked}")
         return None
     log(f"research: scheduled {choice['kind']} for {due.astimezone(gates.EASTERN):%-I:%M %p} ET")
     return {'key': f"research:{choice['kind']}:{choice['day'].isoformat()}", 'kind': 'research',
