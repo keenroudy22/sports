@@ -1,9 +1,9 @@
 {
- "at": "2026-10-12T19:04:25Z",
+ "at": "2026-10-12T19:11:44Z",
  "confirmed": {
-  "CFB-401871053": "2026-10-12T19:04:25Z",
-  "CFB-401871067": "2026-10-12T19:04:25Z",
-  "NFL-401872994": "2026-10-12T19:04:25Z"
+  "CFB-401871053": "2026-10-12T19:11:44Z",
+  "CFB-401871067": "2026-10-12T19:11:44Z",
+  "NFL-401872994": "2026-10-12T19:11:44Z"
  },
  "leagues": {
   "CFB": {
@@ -20,7 +20,7 @@
     "player_receptions": 6,
     "player_rushing_yards": 80
    },
-   "requestsLeft": 7,
+   "requestsLeft": 52,
    "rows": 265,
    "slateGames": [
     "Delaware Blue Hens at Middle Tennessee Blue Raiders 2026-10-13T23:00Z",
@@ -133,7 +133,7 @@
       "gemini": "NCAAF-2610150000-WKU-SHS-S",
       "goldrush": "31197260",
       "hardrock": "7631053969716019609",
-      "kalshi": "KXNCAAF1H-26OCT14WKUSHSU",
+      "kalshi": "KXNCAAF1HTOTAL-26OCT14WKUSHSU",
       "ladbrokes": "1a703f5a-195f-4f21-b1ff-e8a217dda65a",
       "matchbook": "mb-34574444830700023",
       "novig": "01a113ab-a655-7052-ba8e-ff8409dffa7a",
@@ -298,7 +298,7 @@
       "gemini": "NCAAF-2610152330-GSU-ODU-M",
       "goldrush": "31197424",
       "hardrock": "604875601064624532",
-      "kalshi": "KXNCAAF1H-26OCT15GASOODU",
+      "kalshi": "KXNCAAF1HTOTAL-26OCT15GASOODU",
       "ladbrokes": "b5d468c6-1b7c-46b5-8266-f06bac3947d8",
       "matchbook": "mb-34577422533100023",
       "novig": "01a118b6-b3ba-74f2-9c9a-423754b6d306",
@@ -444,7 +444,7 @@
       "gemini": "NCAAF-2610162330-MEM-TULN-M",
       "goldrush": "31196743",
       "hardrock": "54592021595292065",
-      "kalshi": "KXNCAAF1H-26OCT16MEMTULN",
+      "kalshi": "KXNCAAF1HTOTAL-26OCT16MEMTULN",
       "ladbrokes": "0705a4fe-7a68-4dbb-a60f-063dbc133dbf",
       "novig": "01a11ddd-56f7-7880-901d-a412ff42a12d",
       "onexbet": "760657849",
@@ -987,7 +987,7 @@
     "player_tackles": 18,
     "player_tackles_+_assists": 18
    },
-   "requestsLeft": 10,
+   "requestsLeft": 55,
    "rows": 779,
    "slateGames": [
     "Buffalo Bills at Los Angeles Rams 2026-10-13T00:15Z"
@@ -1127,6 +1127,8 @@
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
+       "race_to_15_points",
+       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_points",
@@ -1186,6 +1188,7 @@
        "1st_half_moneyline",
        "1st_half_moneyline_3-way",
        "1st_half_player_passing_yards",
+       "1st_half_player_rushing_yards",
        "1st_half_point_spread",
        "1st_half_team_total",
        "1st_half_team_total_touchdowns",
@@ -1248,6 +1251,7 @@
        "player_receiving_yards",
        "player_receptions",
        "player_rushing_+_receiving_yards",
+       "player_rushing_attempts",
        "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
@@ -1570,6 +1574,7 @@
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
+       "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
        "player_touchdowns",
@@ -1679,6 +1684,7 @@
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
+       "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
        "player_touchdowns",
@@ -1788,6 +1794,7 @@
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
+       "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
        "player_touchdowns",
@@ -1901,6 +1908,7 @@
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
+       "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
        "player_touchdowns",
@@ -2010,6 +2018,7 @@
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
+       "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
        "player_touchdowns",
@@ -2327,6 +2336,7 @@
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
+       "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
        "player_touchdowns",
