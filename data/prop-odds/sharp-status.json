@@ -1,8 +1,8 @@
 {
- "at": "2026-10-12T00:49:04Z",
+ "at": "2026-10-12T01:07:18Z",
  "confirmed": {
-  "CFB-401871053": "2026-10-12T00:49:04Z",
-  "NFL-401872994": "2026-10-12T00:49:04Z"
+  "CFB-401871053": "2026-10-12T01:07:18Z",
+  "NFL-401872994": "2026-10-12T01:07:18Z"
  },
  "leagues": {
   "CFB": {
@@ -18,7 +18,7 @@
     "player_receiving_yards": 80,
     "player_rushing_yards": 49
    },
-   "requestsLeft": 52,
+   "requestsLeft": 7,
    "rows": 163,
    "slateGames": [
     "Delaware Blue Hens at Middle Tennessee Blue Raiders 2026-10-13T23:00Z",
@@ -44,7 +44,7 @@
       "fliff": "418731_c_p_209_prematch",
       "gemini": "NCAAF-2610142330-KENN-MOST-M",
       "hardrock": "4996377818960101778",
-      "kalshi": "KXNCAAFTOTAL-26OCT14KENNMOSU",
+      "kalshi": "KXNCAAF1H-26OCT14KENNMOSU",
       "ladbrokes": "f41a45af-f292-4bd0-b02a-c0be0f6433c5",
       "matchbook": "mb-34574010680400023",
       "novig": "01a11390-3051-7f21-abdb-b92757d00b67",
@@ -99,7 +99,7 @@
       "fliff": "418732_c_p_209_prematch",
       "gemini": "NCAAF-2610150000-WKU-SHS-S",
       "hardrock": "7631053969716019609",
-      "kalshi": "KXNCAAFTOTAL-26OCT14WKUSHSU",
+      "kalshi": "KXNCAAF1H-26OCT14WKUSHSU",
       "ladbrokes": "1a703f5a-195f-4f21-b1ff-e8a217dda65a",
       "matchbook": "mb-34574444830700023",
       "novig": "01a113ab-a655-7052-ba8e-ff8409dffa7a",
@@ -259,7 +259,7 @@
       "fliff": "418174_c_p_209_prematch",
       "gemini": "NCAAF-2610160000-CSU-TXS-M",
       "hardrock": "5205008934905184652",
-      "kalshi": "KXNCAAFSPREAD-26OCT15CSUTXST",
+      "kalshi": "KXNCAAF1H-26OCT15CSUTXST",
       "ladbrokes": "6bfe5ea2-e9d7-41a6-8b4e-1c0eb6bbd3d0",
       "novig": "01a118d2-311f-70f2-aafe-ee8691c3325c",
       "onexbet": "760148675",
@@ -414,7 +414,7 @@
       "fliff": "418747_c_p_209_prematch",
       "gemini": "NCAAF-2610170000-WAS-PUR-M",
       "hardrock": "6003592042654073223",
-      "kalshi": "KXNCAAF1H-26OCT16WASHPUR",
+      "kalshi": "KXNCAAFTOTAL-26OCT16WASHPUR",
       "ladbrokes": "2bff5a22-5974-4d6c-849a-709ab8804322",
       "novig": "01a11df8-dd9c-7a83-a81a-9e9ae84d0392",
       "onexbet": "760638318",
@@ -434,38 +434,13 @@
       "home_team": "Purdue",
       "markets": [
        "1st_half_moneyline",
-       "1st_half_moneyline_3-way",
-       "1st_half_point_spread",
-       "1st_half_total_points",
-       "1st_half_total_points_odd_even",
-       "1st_quarter_moneyline_3-way",
-       "1st_quarter_point_spread",
-       "1st_quarter_total_points",
-       "2nd_half_point_spread",
-       "2nd_half_total_points",
-       "2nd_quarter_moneyline_3-way",
-       "2nd_quarter_point_spread",
-       "2nd_quarter_total_points",
-       "3rd_quarter_moneyline_3-way",
-       "3rd_quarter_point_spread",
-       "3rd_quarter_total_points",
-       "4th_quarter_moneyline_3-way",
-       "4th_quarter_point_spread",
-       "4th_quarter_total_points",
        "draw_no_bet",
-       "highest_scoring_half",
-       "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
        "moneyline_3-way",
        "point_spread",
-       "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "total_points",
-       "total_points_odd_even",
        "total_touchdowns",
-       "will_there_be_overtime",
        "winning_margin"
       ]
      },
@@ -610,6 +585,7 @@
       "home_team": "Boston College",
       "markets": [
        "draw_no_bet",
+       "game_prop",
        "moneyline",
        "point_spread",
        "team_total",
@@ -679,7 +655,7 @@
     "draftkings": 365,
     "fanduel": 337
    },
-   "eventsListed": 16,
+   "eventsListed": 17,
    "eventsMatched": 1,
    "games": 1,
    "marketTypes": {
@@ -706,7 +682,7 @@
     "player_tackles": 18,
     "player_tackles_+_assists": 18
    },
-   "requestsLeft": 55,
+   "requestsLeft": 10,
    "rows": 702,
    "slateGames": [
     "Buffalo Bills at Los Angeles Rams 2026-10-13T00:15Z"
@@ -904,6 +880,7 @@
       "home_team": "Atlanta Falcons",
       "markets": [
        "1st_half_team_total",
+       "game_prop",
        "moneyline",
        "point_spread",
        "team_total",
@@ -942,6 +919,7 @@
       "home_team": "Cleveland Browns",
       "markets": [
        "1st_half_team_total",
+       "game_prop",
        "moneyline",
        "point_spread",
        "team_total",
@@ -1419,19 +1397,40 @@
       "home_team": "Kansas City Chiefs",
       "markets": [
        "1st_half_moneyline",
+       "1st_half_moneyline_3-way",
        "1st_half_point_spread",
        "1st_half_team_total",
        "1st_half_total_points",
+       "1st_half_total_points_odd_even",
        "1st_quarter_moneyline",
+       "1st_quarter_moneyline_3-way",
        "1st_quarter_point_spread",
        "1st_quarter_team_total",
        "1st_quarter_total_points",
+       "2nd_half_moneyline_3-way",
+       "2nd_half_point_spread",
+       "2nd_half_total_points",
+       "2nd_quarter_moneyline_3-way",
+       "2nd_quarter_point_spread",
+       "2nd_quarter_total_points",
+       "3rd_quarter_moneyline_3-way",
+       "3rd_quarter_point_spread",
+       "3rd_quarter_total_points",
+       "4th_quarter_moneyline_3-way",
+       "4th_quarter_point_spread",
+       "4th_quarter_total_points",
        "draw_no_bet",
        "game_prop",
+       "highest_scoring_half",
+       "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
        "point_spread",
+       "race_to_10_points",
+       "race_to_15_points",
+       "race_to_20_points",
        "team_total",
-       "total_points"
+       "total_points",
+       "total_touchdowns"
       ]
      },
      "start": "2026-10-18T20:25:00Z",
