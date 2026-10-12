@@ -1,8 +1,8 @@
 {
- "at": "2026-10-12T11:26:10Z",
+ "at": "2026-10-12T11:42:12Z",
  "confirmed": {
-  "CFB-401871053": "2026-10-12T11:26:10Z",
-  "NFL-401872994": "2026-10-12T11:26:10Z"
+  "CFB-401871053": "2026-10-12T11:42:12Z",
+  "NFL-401872994": "2026-10-12T11:42:12Z"
  },
  "leagues": {
   "CFB": {
@@ -18,7 +18,7 @@
     "player_receiving_yards": 80,
     "player_rushing_yards": 49
    },
-   "requestsLeft": 52,
+   "requestsLeft": 7,
    "rows": 163,
    "slateGames": [
     "Delaware Blue Hens at Middle Tennessee Blue Raiders 2026-10-13T23:00Z",
@@ -45,7 +45,7 @@
       "gemini": "NCAAF-2610142330-KENN-MOST-M",
       "goldrush": "31197261",
       "hardrock": "4996377818960101778",
-      "kalshi": "KXNCAAFTEAMTOTAL-26OCT14KENNMOSU",
+      "kalshi": "KXNCAAF1H-26OCT14KENNMOSU",
       "ladbrokes": "f41a45af-f292-4bd0-b02a-c0be0f6433c5",
       "matchbook": "mb-34574010680400023",
       "novig": "01a11390-3051-7f21-abdb-b92757d00b67",
@@ -66,6 +66,19 @@
       "home_team": "Missouri State Bears",
       "markets": [
        "1st_half_moneyline",
+       "1st_half_total_points",
+       "1st_quarter_moneyline",
+       "1st_quarter_point_spread",
+       "1st_quarter_total_points",
+       "2nd_quarter_moneyline",
+       "2nd_quarter_point_spread",
+       "2nd_quarter_total_points",
+       "3rd_quarter_moneyline",
+       "3rd_quarter_point_spread",
+       "3rd_quarter_total_points",
+       "4th_quarter_moneyline",
+       "4th_quarter_point_spread",
+       "4th_quarter_total_points",
        "draw_no_bet",
        "game_prop",
        "moneyline",
@@ -75,7 +88,6 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
-       "total_touchdowns",
        "winning_margin"
       ]
      },
@@ -102,7 +114,7 @@
       "gemini": "NCAAF-2610150000-WKU-SHS-S",
       "goldrush": "31197260",
       "hardrock": "7631053969716019609",
-      "kalshi": "KXNCAAFTOTAL-26OCT14WKUSHSU",
+      "kalshi": "KXNCAAFTEAMTOTAL-26OCT14WKUSHSU",
       "ladbrokes": "1a703f5a-195f-4f21-b1ff-e8a217dda65a",
       "matchbook": "mb-34574444830700023",
       "novig": "01a113ab-a655-7052-ba8e-ff8409dffa7a",
@@ -123,6 +135,19 @@
       "home_team": "Sam Houston State Bearkats",
       "markets": [
        "1st_half_moneyline",
+       "1st_half_total_points",
+       "1st_quarter_moneyline",
+       "1st_quarter_point_spread",
+       "1st_quarter_total_points",
+       "2nd_quarter_moneyline",
+       "2nd_quarter_point_spread",
+       "2nd_quarter_total_points",
+       "3rd_quarter_moneyline",
+       "3rd_quarter_point_spread",
+       "3rd_quarter_total_points",
+       "4th_quarter_moneyline",
+       "4th_quarter_point_spread",
+       "4th_quarter_total_points",
        "draw_no_bet",
        "game_prop",
        "moneyline",
@@ -158,8 +183,9 @@
       "gemini": "NCAAF-2610152330-ECU-UAB-M",
       "goldrush": "31196499",
       "hardrock": "5848754417184145814",
-      "kalshi": "KXNCAAFTEAMTOTAL-26OCT15ECUUAB",
+      "kalshi": "KXNCAAF1H-26OCT15ECUUAB",
       "ladbrokes": "ac4d773f-dce9-46c5-bdbb-25143a675c38",
+      "matchbook": "mb-34577384948600023",
       "novig": "01a118b6-b46e-7561-bb03-bb4b7020973b",
       "onexbet": "760836654",
       "paddypower": "36152741",
@@ -178,10 +204,22 @@
       "home_team": "UAB",
       "markets": [
        "1st_half_moneyline",
+       "1st_half_total_points",
+       "1st_quarter_moneyline",
+       "1st_quarter_point_spread",
+       "1st_quarter_total_points",
+       "2nd_quarter_moneyline",
+       "2nd_quarter_point_spread",
+       "2nd_quarter_total_points",
+       "3rd_quarter_moneyline",
+       "3rd_quarter_point_spread",
+       "3rd_quarter_total_points",
+       "4th_quarter_moneyline",
+       "4th_quarter_point_spread",
+       "4th_quarter_total_points",
        "draw_no_bet",
        "game_prop",
        "moneyline",
-       "outright",
        "point_spread",
        "race_to_10_points",
        "team_total",
@@ -235,11 +273,27 @@
       "away_team": "Georgia Southern Eagles",
       "home_team": "Old Dominion Monarchs",
       "markets": [
+       "1st_half_moneyline",
+       "1st_half_total_points",
+       "1st_quarter_moneyline",
+       "1st_quarter_point_spread",
+       "1st_quarter_total_points",
+       "2nd_quarter_moneyline",
+       "2nd_quarter_point_spread",
+       "2nd_quarter_total_points",
+       "3rd_quarter_moneyline",
+       "3rd_quarter_point_spread",
+       "3rd_quarter_total_points",
+       "4th_quarter_moneyline",
+       "4th_quarter_point_spread",
+       "4th_quarter_total_points",
        "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
-       "total_points"
+       "total_points",
+       "total_touchdowns",
+       "winning_margin"
       ]
      },
      "start": "2026-10-15T23:30:00Z",
@@ -289,9 +343,7 @@
        "moneyline",
        "point_spread",
        "team_total",
-       "total_points",
-       "total_touchdowns",
-       "winning_margin"
+       "total_points"
       ]
      },
      "start": "2026-10-16T00:00:00Z",
@@ -314,7 +366,7 @@
       "fanatics_markets": "6655856",
       "fanduel": "36152751",
       "fliff": "418761_c_p_209_prematch",
-      "gemini": "NCAAF-2610162330-MEM-TULN-M",
+      "gemini": "NCAAF-2610162330-MEM-TULN-S",
       "goldrush": "31196743",
       "hardrock": "54592021595292065",
       "kalshi": "KXNCAAFTEAMTOTAL-26OCT16MEMTULN",
@@ -341,7 +393,9 @@
        "moneyline",
        "point_spread",
        "team_total",
-       "total_points"
+       "total_points",
+       "total_touchdowns",
+       "winning_margin"
       ]
      },
      "start": "2026-10-16T23:30:00Z",
@@ -489,9 +543,7 @@
        "moneyline",
        "point_spread",
        "team_total",
-       "total_points",
-       "total_touchdowns",
-       "winning_margin"
+       "total_points"
       ]
      },
      "start": "2026-10-17T16:00:00Z",
@@ -536,9 +588,7 @@
        "moneyline",
        "point_spread",
        "team_total",
-       "total_points",
-       "total_touchdowns",
-       "winning_margin"
+       "total_points"
       ]
      },
      "start": "2026-10-17T16:00:00Z",
@@ -632,14 +682,13 @@
       "home_team": "West Virginia",
       "markets": [
        "draw_no_bet",
+       "game_prop",
        "moneyline",
        "point_spread",
        "team_total",
        "total_points",
        "total_points_odd_even",
-       "total_touchdowns",
-       "will_there_be_overtime",
-       "winning_margin"
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-17T16:00:00Z",
@@ -649,7 +698,7 @@
   },
   "NFL": {
    "books": {
-    "draftkings": 371,
+    "draftkings": 347,
     "fanduel": 393
    },
    "eventsListed": 16,
@@ -657,11 +706,7 @@
    "games": 1,
    "marketTypes": {
     "player_assists": 18,
-    "player_extra_points_made": 4,
-    "player_fantasy_score": 16,
-    "player_field_goals_made": 4,
     "player_interceptions": 17,
-    "player_kicking_points": 4,
     "player_longest_passing_completion": 4,
     "player_longest_reception": 24,
     "player_longest_rush": 10,
@@ -671,16 +716,16 @@
     "player_passing_touchdowns": 14,
     "player_passing_yards": 85,
     "player_receiving_yards": 242,
-    "player_receptions": 125,
+    "player_receptions": 127,
     "player_rushing_+_receiving_yards": 14,
     "player_rushing_attempts": 8,
-    "player_rushing_yards": 108,
+    "player_rushing_yards": 110,
     "player_sacks": 19,
     "player_tackles": 18,
     "player_tackles_+_assists": 18
    },
-   "requestsLeft": 55,
-   "rows": 764,
+   "requestsLeft": 10,
+   "rows": 740,
    "slateGames": [
     "Buffalo Bills at Los Angeles Rams 2026-10-13T00:15Z"
    ],
@@ -705,7 +750,7 @@
       "gemini": "NFL-2610160015-SEA-DEN-PPTD",
       "goldrush": "31140274",
       "hardrock": "1703789447373521320",
-      "kalshi": "KXNFLRECYDS-26OCT15SEADEN-SEAJSMITHNJIGBA11-130",
+      "kalshi": "KXNFLRECYDS-26OCT15SEADEN-SEAGHOLANI36-15",
       "ladbrokes": "44ef372c-98fa-400d-b483-3f0ad23b66cc",
       "matchbook": "mb-33322137433300023",
       "novig": "01a112eb-4e8a-72a2-a445-cc3b6f3184fb",
@@ -775,6 +820,7 @@
        "4th_quarter_total_points_odd_even",
        "anytime_touchdown_scorer",
        "both_teams_to_score",
+       "correct_score",
        "draw_no_bet",
        "first_team_to_score",
        "first_touchdown_scorer",
@@ -1361,6 +1407,7 @@
        "game_prop",
        "last_touchdown_scorer",
        "moneyline",
+       "player_touchdowns",
        "point_spread",
        "team_total",
        "total_points",
@@ -1454,6 +1501,7 @@
        "highest_scoring_quarter_will_have_how_many_points",
        "last_touchdown_scorer",
        "moneyline",
+       "player_touchdowns",
        "point_spread",
        "race_to_10_points",
        "race_to_15_points",
