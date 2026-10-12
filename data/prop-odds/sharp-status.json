@@ -1,9 +1,9 @@
 {
- "at": "2026-10-12T22:14:06Z",
+ "at": "2026-10-12T22:33:48Z",
  "confirmed": {
-  "CFB-401871053": "2026-10-12T22:14:06Z",
-  "CFB-401871067": "2026-10-12T22:14:06Z",
-  "NFL-401872994": "2026-10-12T22:14:06Z"
+  "CFB-401871053": "2026-10-12T22:33:48Z",
+  "CFB-401871067": "2026-10-12T22:33:48Z",
+  "NFL-401872994": "2026-10-12T22:33:48Z"
  },
  "leagues": {
   "CFB": {
@@ -20,7 +20,7 @@
     "player_receptions": 6,
     "player_rushing_yards": 80
    },
-   "requestsLeft": 6,
+   "requestsLeft": 51,
    "rows": 265,
    "slateGames": [
     "Delaware Blue Hens at Middle Tennessee Blue Raiders 2026-10-13T23:00Z",
@@ -143,7 +143,7 @@
       "gemini": "NCAAF-2610150000-WKU-SHS-M",
       "goldrush": "31197260",
       "hardrock": "7631053969716019609",
-      "kalshi": "KXNCAAF1HTOTAL-26OCT14WKUSHSU",
+      "kalshi": "KXNCAAF1HSPREAD-26OCT14WKUSHSU",
       "ladbrokes": "1a703f5a-195f-4f21-b1ff-e8a217dda65a",
       "matchbook": "mb-34574444830700023",
       "novig": "01a113ab-a655-7052-ba8e-ff8409dffa7a",
@@ -820,6 +820,7 @@
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
        "draw_no_bet",
+       "game_prop",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
        "moneyline_3-way",
@@ -853,7 +854,7 @@
       "fanduel": "36154582",
       "fliff": "418735_c_p_209_prematch",
       "hardrock": "4343426241735557531",
-      "kalshi": "KXNCAAFTEAMTOTAL-26OCT17PITTBC",
+      "kalshi": "KXNCAAF1H-26OCT16PITTBC",
       "ladbrokes": "d8dbbb12-10b2-4ea3-9748-6ce3794c08d4",
       "novig": "01a12171-92df-7793-9718-44f873b07f2f",
       "onexbet": "760836665",
@@ -933,7 +934,7 @@
       "fanduel": "36153232",
       "fliff": "418744_c_p_209_prematch",
       "hardrock": "1610400974898332059",
-      "kalshi": "KXNCAAFTEAMTOTAL-26OCT17CINWVU",
+      "kalshi": "KXNCAAF1H-26OCT16CINWVU",
       "ladbrokes": "9b69fa11-c843-40ea-b2bf-33a9c65d55d0",
       "novig": "01a12171-8eef-7722-b4d1-30161875dae7",
       "onexbet": "760861413",
@@ -997,7 +998,7 @@
   },
   "NFL": {
    "books": {
-    "draftkings": 386,
+    "draftkings": 389,
     "fanduel": 415
    },
    "eventsListed": 16,
@@ -1011,14 +1012,14 @@
     "player_interceptions": 9,
     "player_kicking_points": 4,
     "player_longest_passing_completion": 4,
-    "player_longest_reception": 22,
+    "player_longest_reception": 24,
     "player_longest_rush": 10,
     "player_passing_+_rushing_yards": 4,
     "player_passing_attempts": 4,
     "player_passing_completions": 4,
     "player_passing_touchdowns": 14,
     "player_passing_yards": 89,
-    "player_receiving_yards": 260,
+    "player_receiving_yards": 261,
     "player_receptions": 132,
     "player_rushing_+_receiving_yards": 20,
     "player_rushing_attempts": 8,
@@ -1027,8 +1028,8 @@
     "player_tackles": 18,
     "player_tackles_+_assists": 18
    },
-   "requestsLeft": 9,
-   "rows": 801,
+   "requestsLeft": 54,
+   "rows": 804,
    "slateGames": [
     "Buffalo Bills at Los Angeles Rams 2026-10-13T00:15Z"
    ],
@@ -1345,7 +1346,8 @@
       "sportzino": "sz-16552506",
       "stake": "c1c27629-d027-4482-8062-c8c5dd0c47e3",
       "sx_bet": "L19431561",
-      "thescorebet": "StandardEvent:2f58fdad-3250-4ac8-947a-8d97c3a73dd2"
+      "thescorebet": "StandardEvent:2f58fdad-3250-4ac8-947a-8d97c3a73dd2",
+      "underdog": "underdog_178933"
      },
      "home": "Atlanta Falcons",
      "sample": {
@@ -1355,6 +1357,8 @@
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
        "1st_half_moneyline_3-way",
+       "1st_half_player_receiving_yards",
+       "1st_half_player_rushing_yards",
        "1st_half_point_spread",
        "1st_half_team_total",
        "1st_half_team_total_touchdowns",
@@ -1363,6 +1367,8 @@
        "1st_half_total_touchdowns",
        "1st_quarter_moneyline",
        "1st_quarter_moneyline_3-way",
+       "1st_quarter_player_receiving_yards",
+       "1st_quarter_player_rushing_yards",
        "1st_quarter_point_spread",
        "1st_quarter_team_total",
        "1st_quarter_total_points",
@@ -1404,6 +1410,13 @@
        "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
+       "player_extra_points_made",
+       "player_field_goals_made",
+       "player_longest_reception",
+       "player_longest_rush",
+       "player_receiving_yards",
+       "player_rushing_+_receiving_yards",
+       "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
@@ -1441,7 +1454,7 @@
       "gemini": "NFL-2610181700-BAL-CLE-S",
       "goldrush": "31140276",
       "hardrock": "529074719606047127",
-      "kalshi": "KXNFL1HTEAMTOTAL-26OCT18BALCLE",
+      "kalshi": "KXNFLTEAMTOTAL-26OCT18BALCLE",
       "ladbrokes": "49a8673f-70c4-4c18-afa6-4583b398486d",
       "matchbook": "mb-33322335677100023",
       "novig": "01a112eb-51d1-7733-89cd-f05c85473888",

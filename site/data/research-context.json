@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-12T22:13:16Z",
+  "updatedAt": "2026-10-12T22:33:04Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-12T21:55Z",
+              "reportedAt": "2026-10-12T22:29Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-12T22:09Z",
+              "reportedAt": "2026-10-12T22:13Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -5987,6 +5987,15 @@
           "name": "Pittsburgh Steelers",
           "players": [
             {
+              "id": "4035656",
+              "name": "Ben Skowronek",
+              "position": "WR",
+              "status": "Out",
+              "injury": "Calf",
+              "reportedAt": "2026-10-12T22:08Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4035656/ben-skowronek"
+            },
+            {
               "id": "4038815",
               "name": "Rico Dowdle",
               "position": "RB",
@@ -6057,15 +6066,6 @@
               "injury": null,
               "reportedAt": "2026-10-12T19:27Z",
               "source": "https://www.espn.com/nfl/player/_/id/4569987/jaylen-warren"
-            },
-            {
-              "id": "4035656",
-              "name": "Ben Skowronek",
-              "position": "WR",
-              "status": "Out",
-              "injury": "Leg",
-              "reportedAt": "2026-10-12T19:23Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4035656/ben-skowronek"
             },
             {
               "id": "4431492",
@@ -6217,6 +6217,15 @@
           "name": "San Francisco 49ers",
           "players": [
             {
+              "id": "4040605",
+              "name": "Nick Bosa",
+              "position": "DE",
+              "status": "Out",
+              "injury": "Calf",
+              "reportedAt": "2026-10-12T22:15Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4040605/nick-bosa"
+            },
+            {
               "id": "3895856",
               "name": "Christian Kirk",
               "position": "WR",
@@ -6296,15 +6305,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-12T19:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/16002/kyle-juszczyk"
-            },
-            {
-              "id": "4040605",
-              "name": "Nick Bosa",
-              "position": "DE",
-              "status": "Out",
-              "injury": "Calf",
-              "reportedAt": "2026-10-12T19:35Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4040605/nick-bosa"
             },
             {
               "id": "3916903",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "13",
-          "name": "JJ Pegues",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-12T20:03:06Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4430896/jj-pegues"
-        },
-        {
           "teamId": "15",
           "name": "DJ Campbell",
           "from": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-12T21:47:52Z",
           "source": "https://www.espn.com/nfl/player/_/id/4430878/jaxon-smith-njigba"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-10-12T22:33:04Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-12T22:13:16Z",
-      "lastAttemptAt": "2026-10-12T22:13:16Z",
+      "checkedAt": "2026-10-12T22:33:04Z",
+      "lastAttemptAt": "2026-10-12T22:33:04Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-12T22:13:16Z",
-      "lastAttemptAt": "2026-10-12T22:13:16Z",
+      "checkedAt": "2026-10-12T22:33:04Z",
+      "lastAttemptAt": "2026-10-12T22:33:04Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
