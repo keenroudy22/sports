@@ -116,14 +116,14 @@ def postable(pick):
 
 
 def in_window(kickoff, now, league=None):
-    """Game day, Eastern, from the owner-approved target until 45 minutes before kickoff."""
+    """Game day, Eastern, from the approved target until the shared play deadline."""
     start = gates.when(kickoff)
     local = now.astimezone(gates.EASTERN)
     if eastern_date(start) != local.date():
         return False
     import post_windows
     opens = post_windows.opens(league, kickoff).astimezone(gates.EASTERN)
-    return local >= opens and start - now >= LEAD
+    return local >= opens and now <= post_windows.deadline(league, kickoff, now)
 
 
 def player_side(pick, game, player_team):

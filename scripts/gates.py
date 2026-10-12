@@ -553,7 +553,7 @@ def x_window(candidate, ctx):
             if other and min(other) == kickoff and not current.get('result') and not current.get('entryNote') \
                     and (current.get('status') or 'active') == 'active':
                 occupied += 1
-    ok = post_windows.reachable(league, kickoff, ctx.now, occupied)
+    ok = post_windows.reachable(league, kickoff, ctx.now, occupied, bool(candidate.get('replacementOf')))
     return Decision(ok, 'x_window', 'reachable X window' if ok else 'has no X window before kickoff')
 
 

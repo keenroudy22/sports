@@ -1,5 +1,6 @@
 """Shared, owner-approved X windows. Pure time math, no posting or feeds."""
 import hashlib
+import os
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
@@ -59,5 +60,19 @@ def late_card_reachable(kickoff, now):
     return late_card_due(now) <= instant(kickoff) - LATE_CARD_LEAD
 
 
-def reachable(league, kickoff, now, occupied=0):
-    return max(target(league, kickoff) + SPACING * occupied, delivery_ready(now)) <= instant(kickoff) - LEAD
+def deadline(league, kickoff, now, replacement=False):
+    """Late NFL night admissions keep a real Discord lead and 15 minutes before kickoff.
+
+    The owner approved late game-day delivery on Oct 8, retained by Autopilot.
+    Early games, daytime plays and replacements retain their ordinary deadline.
+    """
+    start, current = instant(kickoff), instant(now)
+    local_start, local_now = start.astimezone(EASTERN), current.astimezone(EASTERN)
+    enabled = os.environ.get('KEENROUDY_LATE_PRIMETIME_WINDOW', '1').strip().lower() not in ('0', 'false', 'off', 'no')
+    late = (enabled and not replacement and league == 'NFL' and
+            local_start.date() == local_now.date() and local_start.hour >= 19 and local_now.hour >= 17)
+    return start - (LATE_CARD_LEAD if late else LEAD)
+
+
+def reachable(league, kickoff, now, occupied=0, replacement=False):
+    return max(target(league, kickoff) + SPACING * occupied, delivery_ready(now)) <= deadline(league, kickoff, now, replacement)

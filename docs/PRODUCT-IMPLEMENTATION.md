@@ -1497,3 +1497,20 @@ unposted rows under Not posted, and uses captured-price chart units (including t
 promotional-credit exclusion). It changes no counting policy, grade or published report.
 Real-row/negative fixtures failed before the patch. Public receipt book names use the current
 brand; provider keys and historical delivered captions remain unchanged. Full final gates pending.
+
+## October12 — late primetime delivery prepared
+
+The Oct8 late game-day15-minute delivery rule remains valid under Autopilot.
+SNF's post-repair19:20 pass nevertheless used the older45-minute cutoff plus
+Discord cadence/tick rounding, refusing all five logged rows. Shared deadline
+math now allows only nonreplacement NFL night games after17:00 on the same
+Eastern date to reach X at least15minutes before kickoff. Admission, private
+Discord release, Buffer planning and feed visibility share it. Actual Discord
+lead, occupied-slot spacing, saved reason, caption/art, fresh price, injury,
+role and every selection/cap gate remain. No Sunday row is backfilled.
+
+The window-only five-row replay at19:20 for20:20 kickoff is0/5before,5/5after;
+this is not five price/news-qualified plays. Late-window, exact-cutoff,
+replacement, CFB and kill-switch regressions pass; full gates remain pending.
+Rollback: set KEENROUDY_LATE_PRIMETIME_WINDOW=0 without touching the record.
+First natural MNF decision remains an observation, never a guaranteed play.

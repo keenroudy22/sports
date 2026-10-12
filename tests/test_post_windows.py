@@ -21,6 +21,30 @@ GAME = {'id':'NFL-intl', 'league':'NFL', 'kickoff':START,
 
 
 class WindowTests(unittest.TestCase):
+    def test_primetime_late_pass_has_the_approved_fifteen_minute_deadline(self):
+        game = dict(GAME, id='NFL-snf', kickoff='2026-10-12T00:20:00Z')
+        now = datetime(2026, 10, 11, 23, 20, tzinfo=timezone.utc)
+        p = pick('snf', game['id'], league='NFL')
+        p.pop('publishedAt')
+        ctx = SimpleNamespace(now=now, games={game['id']: game}, first={}, latest={})
+        self.assertTrue(gates.x_window(p, ctx).ok)
+        with mock.patch.object(bp.receipts, 'house_posts', return_value=[]):
+            plans = bp.plan({'snf': p}, {}, ctx.games, now, {'posts': []})
+        self.assertEqual(len(plans), 1)
+        self.assertLessEqual(plans[0][3], gates.when(game['kickoff']) - timedelta(minutes=15))
+        self.assertTrue(feed.in_window(game['kickoff'], plans[0][3], 'NFL'))
+
+    def test_primetime_late_window_keeps_cutoff_replacement_and_kill_switch(self):
+        kickoff = '2026-10-12T00:20:00Z'
+        now = datetime(2026, 10, 11, 23, 20, tzinfo=timezone.utc)
+        self.assertFalse(W.reachable('NFL', kickoff, now, replacement=True))
+        self.assertFalse(W.reachable('NFL', kickoff, datetime(2026, 10, 11, 23, 46, tzinfo=timezone.utc)))
+        self.assertFalse(W.reachable('CFB', kickoff, now))
+        self.assertTrue(feed.in_window(kickoff, datetime(2026, 10, 12, 0, 5, tzinfo=timezone.utc), 'NFL'))
+        self.assertFalse(feed.in_window(kickoff, datetime(2026, 10, 12, 0, 5, 1, tzinfo=timezone.utc), 'NFL'))
+        with mock.patch.dict('os.environ', {'KEENROUDY_LATE_PRIMETIME_WINDOW': '0'}):
+            self.assertFalse(W.reachable('NFL', kickoff, now))
+
     def test_international_best_bet_and_ticket_have_the_eight_thirty_window(self):
         p=pick('intl', 'NFL-intl', league='NFL', title='Eagles at Jaguars over 48.5', line=48.5)
         with mock.patch.object(bp.receipts, 'house_posts', return_value=[]):

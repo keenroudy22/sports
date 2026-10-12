@@ -2741,7 +2741,7 @@ def release_private(now, log=log):
         if last is not None:
             due = max(due, last + buffer_post.SPACING)
         due = buffer_post.free_slot(due, busy)
-        if due > kickoff - feed.LEAD:
+        if due > post_windows.deadline(row.get('league'), kickoff, now, bool(pick.get('replacementOf'))):
             release_queue.update(CONF, key, held=True, heldAt=stamp(now),
                                  holdReason='no Discord-first X slot before kickoff')
             log(f'release: {key} moved to the near-miss log: no Discord-first X slot before kickoff')

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-12T04:06:00Z",
+  "updatedAt": "2026-10-12T04:12:00Z",
   "items": [
     {
       "id": "P01",
@@ -1072,6 +1072,15 @@
       "next": "Release the shared public/headline filters in calendar, weekly list, open list, archive and units chart; verify Bills-Rams is labeled not posted and excluded from pending/results.",
       "doneWhen": "The existing36-37(onevoid)/-5.20u headline remains unchanged; unposted postOct8 rows contribute no win/loss/unit/open count; Gut calls keep their own lane; every release gate and live375/1440 check pass.",
       "evidence": "Overnight live DOM showed Bills-Rams as Pending and SDSU as a loss in weekly results despite posted:false; header correctly excluded them. Failing-first calendar/open-list tests now pass. Chart uses recordBreakdown.captured units and excludes assumed prices/promotional credits like the headline. No research/store/grade/count policy edited."
+    },
+    {
+      "id": "A-20261012-2",
+      "title": "Preserve a real delivery window for late NFL primetime admissions",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Release the shared15-minute pre-kickoff deadline for nonreplacement NFL night admissions after17:00; verify the next natural MNF17:30/18:50 decision without forcing a play.",
+      "doneWhen": "All send paths share the15-minute deadline; Discord lead/spacing remain; replacements, daytime, college and early games retain45minutes; cutoff/kill tests, full gates, hosted and live checks pass.",
+      "evidence": "Five SNF rows were refused by old45-minute deadline after the card repair. Window-only replay at19:20 for20:20 kickoff changes0/5reachable to5/5; this is not a full price/news admission claim. Failing-first primetime regression now passes; late23:46UTC, replacement, CFB and disabled cases still refuse. KEENROUDY_LATE_PRIMETIME_WINDOW=0 restores old deadline."
     }
   ]
 }
