@@ -50,8 +50,12 @@ def merge_context(ctx, conf):
         ctx.latest[key] = dict(pick)
 
 
-def enqueue(conf, rows, reasons, decisions, draft_dir, now, games=None):
-    """Save newly selected rows and their rendered art outside Git."""
+def enqueue(conf, rows, reasons, decisions, draft_dir, now, games=None, log=print):
+    """Save newly selected rows and their rendered art outside Git.
+
+    One incomplete private draft is held and named; it never aborts settlement,
+    research, other admissions or the whole run.
+    """
     book = load(conf)
     known = {row.get('id') for row in book['plays']}
     added = []
@@ -65,9 +69,11 @@ def enqueue(conf, rows, reasons, decisions, draft_dir, now, games=None):
         source = Path(draft_dir) / f'{key}.png'
         copy_source = Path(draft_dir) / f'{key}.txt'
         if not source.exists():
-            raise RuntimeError(f'private release card was not rendered: {key}')
+            log(f'private admission held: {key}: release card was not rendered')
+            continue
         if not copy_source.exists():
-            raise RuntimeError(f'private release caption was not rendered: {key}')
+            log(f'private admission held: {key}: release caption was not rendered')
+            continue
         target = card_dir / f'{key}.png'
         shutil.copyfile(source, target)
         pick = {k: v for k, v in candidate.items() if not str(k).startswith('_')}

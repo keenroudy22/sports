@@ -2455,9 +2455,10 @@ def _run(args, now, slot, kinds, status):
         if not args.dry_run:
             run_tests()
             status['checks'].append('tests green')
-    drafts(slot, now, ctx, games, settled, status)
+    drafts(slot, now, ctx, games, settled, status, admitted=admitted)
     if not args.dry_run:
-        admitted_ids = release_queue.enqueue(CONF, admitted, reasons, decided, CONF / 'x-drafts', now, games=games)
+        admitted_ids = release_queue.enqueue(CONF, admitted, reasons, decided, CONF / 'x-drafts', now,
+                                             games=games, log=log)
         if admitted_ids:
             log('private admissions:', ', '.join(admitted_ids))
         public_decisions = [row for row in decided if row.get('id') not in set(admitted_ids)]
@@ -2494,7 +2495,7 @@ def _run(args, now, slot, kinds, status):
 
 # ------------------------------------------------------------------ X drafts (review gate: files, never posts)
 
-def drafts(slot, now, ctx, games, settled, status):
+def drafts(slot, now, ctx, games, settled, status, admitted=()):
     """Write the posts a person may approve: a game-day recap after the last run, the model scoreboard on Tuesdays,
     and a draft for every open favorite. Nothing here posts; scripts/x_post.py post --confirm does."""
     import x_post
@@ -2522,13 +2523,22 @@ def drafts(slot, now, ctx, games, settled, status):
             if text:
                 (folder / f'scoreboard-{day}.txt').write_text(text + '\n', encoding='utf-8')
                 written.append(f'scoreboard-{day}')
-    for key, pick in ctx.first.items():
-        merged = dict(pick, **ctx.latest.get(key, {}))
+    # Newly admitted rows are deliberately not in the public reports yet. They
+    # still need private copy and art before enqueue; otherwise a good selection
+    # can reach the queue with no card and stop the whole desk run.
+    draft_first, draft_latest = dict(ctx.first), dict(ctx.latest)
+    for _, _, candidate in admitted:
+        key = candidate.get('id')
+        if key and key not in draft_first:
+            draft_first[key] = candidate
+            draft_latest[key] = candidate
+    for key, pick in draft_first.items():
+        merged = dict(pick, **draft_latest.get(key, {}))
         postable = draft_postable(merged)
         if not postable or merged.get('result') or key in posted:
             continue
         try:
-            text, pick_now, game = x_post.do_draft(key, now, ctx.first, ctx.latest, games, out=folder)
+            text, pick_now, game = x_post.do_draft(key, now, draft_first, draft_latest, games, out=folder)
             written.append(key)
         except x_post.Refused:
             continue
