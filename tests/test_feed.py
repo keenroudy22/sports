@@ -163,6 +163,19 @@ class FeedTests(unittest.TestCase):
                 feed.restore_posted_cards(folder, {'old-play-potd'}, fetch=lambda url: (_ for _ in ()).throw(OSError('offline')))
             self.assertFalse(path.exists(), 'an unavailable original never becomes a new-template render')
 
+    def test_first_public_build_restores_exact_private_release_art_from_archive(self):
+        import tempfile
+        original = feed.PNG + b'exact Discord attachment' * 8
+        with tempfile.TemporaryDirectory() as root:
+            root = Path(root)
+            archive = root / 'archive'
+            archive.mkdir()
+            (archive / 'new-play.png').write_bytes(original)
+            cards = root / 'cards'
+            feed.restore_posted_cards(cards, {'new-play'}, archive=archive,
+                                      fetch=lambda url: self.fail('first publish must not fetch a missing live URL'))
+            self.assertEqual((cards / 'new-play.png').read_bytes(), original)
+
     def test_card_build_only_restores_confirmed_attachments_it_will_use(self):
         import tempfile
         with tempfile.TemporaryDirectory() as folder:

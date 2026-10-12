@@ -18,6 +18,27 @@ def cards(conf):
     return Path(conf) / 'pending' / 'release-cards'
 
 
+def archive_card(source, root, key):
+    """Copy exact released art into the commit that first publishes the play.
+
+    The hosted build cannot recover a card from the live site before that first
+    build has published it.  This tracked bootstrap is byte-for-byte input, not
+    a request to render posted art again.
+    """
+    if not isinstance(key, str) or not key or any(part in key for part in ('/', '\\', '..')):
+        raise ValueError(f'invalid release card key: {key!r}')
+    data = Path(source).read_bytes()
+    if not data.startswith(b'\x89PNG\r\n\x1a\n') or not 64 <= len(data) <= 10 * 1024 * 1024:
+        raise ValueError(f'release card is not a valid PNG: {key}')
+    folder = Path(root) / 'data' / 'release-cards'
+    folder.mkdir(parents=True, exist_ok=True)
+    target = folder / f'{key}.png'
+    temporary = target.with_suffix('.tmp')
+    temporary.write_bytes(data)
+    temporary.replace(target)
+    return target
+
+
 def load(conf):
     try:
         value = json.loads(path(conf).read_text(encoding='utf-8'))

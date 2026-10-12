@@ -17,6 +17,17 @@ NOW = datetime(2026, 10, 11, 12, 0, tzinfo=timezone.utc)
 
 
 class ReleaseQueueTests(unittest.TestCase):
+    def test_released_card_archive_preserves_exact_png_bytes(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            source = root / 'private.png'
+            original = b'\x89PNG\r\n\x1a\n' + b'private Kitchen Ticket bytes' * 8
+            source.write_bytes(original)
+            target = release_queue.archive_card(source, root, 'NFL-2026-W5-knox-over-12-5-recyds-dk')
+            self.assertEqual(target.read_bytes(), original)
+            self.assertEqual(target, root / 'data' / 'release-cards' /
+                             'NFL-2026-W5-knox-over-12-5-recyds-dk.png')
+
     def test_admission_stays_private_and_merges_only_into_process_context(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

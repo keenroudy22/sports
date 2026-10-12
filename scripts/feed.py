@@ -31,6 +31,7 @@ from sports_refresh import eastern_date
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'site' / 'data' / 'feed.xml'
 CARDS = ROOT / 'site' / 'data' / 'cards'
+RELEASE_CARDS = ROOT / 'data' / 'release-cards'
 SITE = x_post.SITE
 WINDOW_OPENS = (9, 30)               # Eastern normal-game publication target; early games use post_windows.opens
 LEAD = timedelta(minutes=45)         # and none inside 45 minutes of kickoff
@@ -69,9 +70,10 @@ def posted_card_keys(log_book, since=None):
     return keys
 
 
-def restore_posted_cards(folder, keys, fetch=None):
+def restore_posted_cards(folder, keys, fetch=None, archive=None):
     """Never regenerate a confirmed attachment under a newer theme after an Actions cache miss."""
     folder = Path(folder)
+    archive = RELEASE_CARDS if archive is None else Path(archive)
     fetch = fetch or (lambda url: urllib.request.urlopen(
         urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (compatible; KooknCardArchive/1.0)'}),
         timeout=12).read())
@@ -83,10 +85,14 @@ def restore_posted_cards(folder, keys, fetch=None):
             if not path.read_bytes().startswith(PNG):
                 raise RuntimeError(f'posted card cache is not a PNG: {key}')
             continue
-        try:
-            data = fetch(f'{SITE}data/cards/{key}.png')
-        except Exception as error:
-            raise RuntimeError(f'posted card could not be restored without changing its art: {key}') from error
+        saved = archive / f'{key}.png'
+        if saved.exists():
+            data = saved.read_bytes()
+        else:
+            try:
+                data = fetch(f'{SITE}data/cards/{key}.png')
+            except Exception as error:
+                raise RuntimeError(f'posted card could not be restored without changing its art: {key}') from error
         if not isinstance(data, bytes) or not data.startswith(PNG) or not 64 <= len(data) <= 10 * 1024 * 1024:
             raise RuntimeError(f'posted card recovery returned invalid PNG bytes: {key}')
         folder.mkdir(parents=True, exist_ok=True)

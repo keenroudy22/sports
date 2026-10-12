@@ -61,7 +61,7 @@ SLOT_TOLERANCE = timedelta(minutes=40)     # a run that fires this far from a sl
 PUBLISH_MARGIN = timedelta(minutes=5)      # nothing is published on a game this close to kickoff
 KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'ladder', 'favorite')
 LADDER_SCAN_TIMES = ((10, 0), (13, 30), (16, 0), (20, 0))
-WHITELIST = ('research/', 'data/odds/', 'data/prop-odds/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
+WHITELIST = ('research/', 'data/odds/', 'data/prop-odds/', 'data/release-cards/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
              'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-trial/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 BOOK_SLUG = {'DraftKings': 'dk', 'FanDuel': 'fd', 'BetMGM': 'mgm', 'Caesars': 'czr', 'BetRivers': 'br',
              'ESPN BET': 'espnbet', 'Fanatics': 'fan'}
@@ -2822,6 +2822,9 @@ def release_private(now, log=log):
                     raise RunError(f'private release report name collision: {name}')
             else:
                 target_path.write_text(json.dumps(report, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+            # Bootstrap the first hosted build with the exact Discord attachment.
+            # Once live, ordinary builds can restore the same bytes from the site.
+            release_queue.archive_card(row['card'], ROOT, key)
             if row.get('reason'):
                 reasons = x_post.load_reasons()
                 reasons[key] = row['reason']
