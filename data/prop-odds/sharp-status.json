@@ -1,16 +1,16 @@
 {
- "at": "2026-10-12T23:02:27Z",
+ "at": "2026-10-12T23:10:26Z",
  "confirmed": {
-  "CFB-401871053": "2026-10-12T23:02:27Z",
-  "CFB-401871067": "2026-10-12T23:02:27Z",
-  "NFL-401872994": "2026-10-12T23:02:27Z"
+  "CFB-401871053": "2026-10-12T23:10:26Z",
+  "CFB-401871067": "2026-10-12T23:10:26Z",
+  "NFL-401872994": "2026-10-12T23:10:26Z"
  },
  "leagues": {
   "CFB": {
    "books": {
     "fanduel": 265
    },
-   "eventsListed": 60,
+   "eventsListed": 59,
    "eventsMatched": 2,
    "games": 2,
    "marketTypes": {
@@ -20,7 +20,7 @@
     "player_receptions": 6,
     "player_rushing_yards": 80
    },
-   "requestsLeft": 6,
+   "requestsLeft": 7,
    "rows": 265,
    "slateGames": [
     "Delaware Blue Hens at Middle Tennessee Blue Raiders 2026-10-13T23:00Z",
@@ -92,9 +92,11 @@
        "4th_quarter_total_points",
        "anytime_touchdown_scorer",
        "draw_no_bet",
+       "first_touchdown_scorer",
        "game_prop",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
+       "moneyline_3-way",
        "player_extra_points_made",
        "player_field_goals_made",
        "player_kicking_points",
@@ -115,6 +117,7 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "winning_margin"
       ]
      },
@@ -141,7 +144,7 @@
       "gemini": "NCAAF-2610150000-WKU-SHS-M",
       "goldrush": "31197260",
       "hardrock": "7631053969716019609",
-      "kalshi": "KXNCAAF1HTOTAL-26OCT14WKUSHSU",
+      "kalshi": "KXNCAAF1HSPREAD-26OCT14WKUSHSU",
       "ladbrokes": "1a703f5a-195f-4f21-b1ff-e8a217dda65a",
       "matchbook": "mb-34574444830700023",
       "novig": "01a113ab-a655-7052-ba8e-ff8409dffa7a",
@@ -200,6 +203,7 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "winning_margin"
       ]
      },
@@ -268,7 +272,9 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "anytime_touchdown_scorer",
        "draw_no_bet",
+       "first_touchdown_scorer",
        "game_prop",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
@@ -279,6 +285,7 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -348,7 +355,9 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "anytime_touchdown_scorer",
        "draw_no_bet",
+       "first_touchdown_scorer",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
        "moneyline_3-way",
@@ -357,6 +366,7 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -384,7 +394,7 @@
       "gemini": "NCAAF-2610160000-CSU-TXS-M",
       "goldrush": "31197259",
       "hardrock": "5205008934905184652",
-      "kalshi": "KXNCAAF1HSPREAD-26OCT15CSUTXST",
+      "kalshi": "KXNCAAF1HTOTAL-26OCT15CSUTXST",
       "ladbrokes": "6bfe5ea2-e9d7-41a6-8b4e-1c0eb6bbd3d0",
       "matchbook": "mb-34556780943900023",
       "novig": "01a118d2-311f-70f2-aafe-ee8691c3325c",
@@ -419,13 +429,16 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "anytime_touchdown_scorer",
        "draw_no_bet",
+       "first_touchdown_scorer",
        "moneyline",
        "player_touchdowns",
        "point_spread",
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "winning_margin"
       ]
      },
@@ -495,7 +508,9 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "anytime_touchdown_scorer",
        "draw_no_bet",
+       "first_touchdown_scorer",
        "game_prop",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
@@ -506,6 +521,7 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -575,7 +591,9 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "anytime_touchdown_scorer",
        "draw_no_bet",
+       "first_touchdown_scorer",
        "game_prop",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
@@ -585,6 +603,7 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -647,7 +666,9 @@
        "4th_quarter_moneyline",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "anytime_touchdown_scorer",
        "draw_no_bet",
+       "first_touchdown_scorer",
        "game_prop",
        "halftime_fulltime",
        "moneyline",
@@ -657,6 +678,7 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "winning_margin"
       ]
      },
@@ -731,6 +753,7 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "winning_margin"
       ]
      },
@@ -806,6 +829,7 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "winning_margin"
       ]
      },
@@ -874,7 +898,9 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "anytime_touchdown_scorer",
        "draw_no_bet",
+       "first_touchdown_scorer",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
@@ -884,6 +910,7 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "winning_margin"
       ]
      },
@@ -949,7 +976,9 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "anytime_touchdown_scorer",
        "draw_no_bet",
+       "first_touchdown_scorer",
        "game_prop",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
@@ -958,6 +987,7 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -969,8 +999,8 @@
   },
   "NFL": {
    "books": {
-    "draftkings": 388,
-    "fanduel": 413
+    "draftkings": 389,
+    "fanduel": 367
    },
    "eventsListed": 16,
    "eventsMatched": 1,
@@ -983,24 +1013,24 @@
     "player_interceptions": 9,
     "player_kicking_points": 4,
     "player_longest_passing_completion": 4,
-    "player_longest_reception": 24,
+    "player_longest_reception": 22,
     "player_longest_rush": 10,
     "player_passing_+_rushing_yards": 4,
     "player_passing_attempts": 4,
     "player_passing_completions": 4,
     "player_passing_touchdowns": 14,
-    "player_passing_yards": 87,
-    "player_receiving_yards": 260,
-    "player_receptions": 133,
-    "player_rushing_+_receiving_yards": 20,
+    "player_passing_yards": 85,
+    "player_receiving_yards": 239,
+    "player_receptions": 123,
+    "player_rushing_+_receiving_yards": 12,
     "player_rushing_attempts": 8,
-    "player_rushing_yards": 119,
-    "player_sacks": 19,
+    "player_rushing_yards": 118,
+    "player_sacks": 18,
     "player_tackles": 18,
     "player_tackles_+_assists": 18
    },
-   "requestsLeft": 9,
-   "rows": 801,
+   "requestsLeft": 10,
+   "rows": 756,
    "slateGames": [
     "Buffalo Bills at Los Angeles Rams 2026-10-13T00:15Z"
    ],
@@ -1258,6 +1288,7 @@
        "moneyline",
        "most_points_player",
        "player_interceptions",
+       "player_longest_passing_completion",
        "player_passing_+_rushing_yards",
        "player_passing_attempts",
        "player_passing_completions",
@@ -1305,7 +1336,7 @@
       "gemini": "NFL-2610181700-CHI-ATL-S",
       "goldrush": "31140273",
       "hardrock": "5712717890709488007",
-      "kalshi": "KXNFLTEAMTOTAL-26OCT18CHIATL",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT18CHIATL",
       "ladbrokes": "7ec24e33-81e1-4c42-9731-a7707f5f0f97",
       "matchbook": "mb-33322337472700023",
       "novig": "01a112eb-506a-7071-b79c-5f2d85436ff9",
@@ -2018,7 +2049,7 @@
       "gemini": "NFL-2610181700-NYJ-NE-S",
       "goldrush": "31140281",
       "hardrock": "263362341591187860",
-      "kalshi": "KXNFLTEAMTOTAL-26OCT18NYJNE",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT18NYJNE",
       "ladbrokes": "12cf97d5-8c3a-4504-a0cb-719d1f04a721",
       "matchbook": "mb-33322329194100023",
       "novig": "01a112eb-4f65-7cc2-a047-3fe334cf9956",
@@ -2348,7 +2379,7 @@
       "gemini": "NFL-2610182025-LAC-KC-S",
       "goldrush": "31140275",
       "hardrock": "1238835726175568272",
-      "kalshi": "KXNFLTEAMTOTAL-26OCT18LACKC",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT18LACKC",
       "ladbrokes": "5f711cc8-fc85-4666-a19b-b689939b4387",
       "matchbook": "mb-33322318120000023",
       "novig": "01a112eb-5312-7482-937b-f8b9611898f8",
