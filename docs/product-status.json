@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-12T03:54:00Z",
+  "updatedAt": "2026-10-12T04:00:00Z",
   "items": [
     {
       "id": "P01",
@@ -1054,6 +1054,15 @@
       "next": "Complete full gates and locked release; verify hosted publish and natural desk settlement after the recovered captures.",
       "doneWhen": "Both market-lab writers survive a real Git conflict, derived reports rebuild offline, unrelated conflicts still stop, and hosted plus live 375/1440 checks pass.",
       "evidence": "At 21:17 ET the desk stopped on site/data/market-lab.json; all later scans and 23:30 repeated it. Tested resolver recovered both local commits under run.lock plus release.lock at 23:52 ET; recovered main 3f7a9641. Permanent fix prepared only; no shipped claim."
+    },
+    {
+      "id": "A-20261011-6",
+      "title": "Read first post engagement after24 hours",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Release the24-hour metric boundary; verify a natural budgeted read and keep the separate7-day snapshot follow-through under KA-R1.",
+      "doneWhen": "A sent post at24 hours is read once, a23h59m post is held, missing permission still stops safely, and full hosted/live release gates pass.",
+      "evidence": "Overnight review found SETTLE_METRICS=48h, making the30h target impossible. Boundary regression failed first;24h correction and focused tests now pass. No new service, quota increase or historical metric rewrite."
     }
   ]
 }

@@ -349,6 +349,20 @@ class RecordTests(unittest.TestCase):
 
 
 class PostTests(unittest.TestCase):
+    def test_engagement_reads_at_24_hours_and_never_before(self):
+        sent = learning.stamp(NOW - timedelta(hours=24))
+        book = {'posts': [{'id': 'due', 'bufferPostId': 'b1', 'sentAt': sent},
+                          {'id': 'early', 'bufferPostId': 'b2',
+                           'sentAt': learning.stamp(NOW - timedelta(hours=23, minutes=59))}]}
+        calls = []
+        def send(url, body, headers):
+            calls.append(body['variables']['id'])
+            return 200, json.dumps({'data': {'post': {'metrics': [{'type': 'likes', 'value': 3}]}}}).encode()
+        self.assertEqual(buffer_post.collect_metrics(book, NOW, key='t', send=send, log=lambda *_: None), 1)
+        self.assertEqual(calls, ['b1'])
+        self.assertEqual(book['posts'][0]['metricsAt'], learning.stamp(NOW))
+        self.assertNotIn('metricsAt', book['posts'][1])
+
     def test_reason_kinds_and_weights(self):
         self.assertEqual(x_post.reason_kind('Denver is without WR Marvin Mims Jr. on the inactive list.'), 'injury')
         self.assertEqual(x_post.reason_kind('Saturday is forecast sunny and 68 with no wind called out.'), 'weather')
@@ -363,7 +377,7 @@ class PostTests(unittest.TestCase):
         moved = {'why': 'The total opened 50.5 and is now 44.5 at DraftKings, a move of 6 toward the under.'}
         self.assertIsNone(x_post.reason_for(moved), "a line's move is never a post's reason")
 
-    def test_engagement_is_read_once_two_days_after_and_a_missing_permission_is_said_once(self):
+    def test_engagement_is_read_once_and_a_missing_permission_is_said_once(self):
         sent = learning.stamp(NOW - timedelta(days=3))
         log_book = {'posts': [{'id': 'a', 'bufferPostId': 'bp1', 'sentAt': sent}, {'id': 'b', 'bufferPostId': 'bp2', 'sentAt': learning.stamp(NOW)}]}
         calls = []

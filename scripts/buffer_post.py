@@ -582,11 +582,11 @@ def cancel_closed(closed_ids, log_book, now, key=None, send=http_send, log=print
 
 STATUS = 'query($id: PostId!) { post(input: {id: $id}) { id status sentAt externalLink error { message } } }'
 METRICS = 'query($id: PostId!) { post(input: {id: $id}) { id metricsUpdatedAt metrics { type value } } }'
-SETTLE_METRICS = timedelta(hours=48)     # engagement is read once, two days after a post went out
+SETTLE_METRICS = timedelta(hours=24)     # owner Autopilot: first read at 24h, within 30h
 
 
 def collect_metrics(log_book, now, key=None, send=http_send, log=print):
-    """Read each sent post's engagement once, two days after it went out, into the log for learning. Needs the
+    """Read each sent post's engagement once, one day after it went out, into the log for learning. Needs the
     key's insights:read permission; without it this says so once and leaves everything as it was."""
     read = 0
     for entry in log_book.get('posts', []):

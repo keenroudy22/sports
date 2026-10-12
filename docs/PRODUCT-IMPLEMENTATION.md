@@ -1465,3 +1465,17 @@ at the existing first eligible card. It changes no selection, cap, price or mode
 Rule-specific refusals and the complete seven-day outcome score remain open under KA-R1.
 Rollback: revert the resolver/logging code if needed; leave every capture and public record intact.
 Full final-tree release, hosted success and live 375/1440 checks remain required.
+
+## October 12 — first engagement read boundary prepared
+
+The overnight outcome audit found six recent posts past30h without a24h read.
+The reader still waited48h. A failing-first boundary test now proves a24h post
+is read once and23h59m remains held. The correction uses the existing budgeted
+Buffer path and preserves stored metrics and permission failure behavior. It adds
+no service or request ceiling. A separate7-day snapshot remains KA-R1 follow-through.
+Rollback: revert the boundary constant; never remove captured engagement.
+
+Installed precheck and Discord plists were compared with the development sources.
+Precheck retained the old elapsed30-minute timer; Discord differed only in a comment.
+Both source files passed plutil, were installed/reloaded under run.lock, and now match
+byte-for-byte with successful launchctl print. The other four sports jobs already matched.
