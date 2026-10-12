@@ -1593,3 +1593,20 @@ counting and free budgets do not change; no matching public change is required.
 Regression checks cover sparse, stale, adverse-defense and late-kickoff rows,
 and separate timing blockers. Kill switch remainsKEENROUDY_RESEARCH_FALLBACK=0;
 it disables fallback without touching records. Full release evidence pending.
+
+### Daily research slice verified — 2026-10-12T12:02:13.413658+00:00
+
+Release `f9aff0762a031897e45ed414acc0df156a8bb3ae` and hosted
+[38245493288](https://github.com/keenroudy22/sports/actions/runs/38245493288)
+succeeded. Python1358(two skipped),Node240,both clean-export suites,503-page
+build,100-pick/NBA0 audits,600-file guard,asset/SVG checks and isolated current
+0645 rehearsal passed:exit0,outcomeok,zero outside writes/private reads.
+Budget had no hard issue; existing Today382102/327680 and More29878/32768
+soft warnings remain. Local and final live14route375/1440 checks returned
+zero overflow,caught load states or browser errors. Live Record remains
+36-37(onevoid)/-5.20u; Gut2-0/+1.06u; BillsNotposted,current book brands.
+A-20261012-4 is shipped; other-family diagnostic detail,14-day lane proof,
+full daily outcomes block,Climbv3 and7-day metrics remainKA-R1.
+Private evidence:work/daily-outcomes-2026-10-12.json,daily-live-final/audit.json,
+daily-live-truth.json,daily-locked-*.log. This receipt is retained on dev for
+the next safe release; no duplicate deployment is required.
