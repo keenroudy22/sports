@@ -1543,3 +1543,40 @@ an intentional overflow:auto tab strip (343px visible/650px content, page375px);
 scrolling to the end exposes Snap %. The audit now recognizes this named
 scroll container, while document overflow still fails. Corrected live route
 checks pass. The title mapping awaits its own full release.
+
+## October12 overnight — final release receipt (2026-10-12T05:00:53Z)
+
+Release `bbe1012d67d5b8ad597f90060a926c1ed610ec24` and hosted
+[38205419795](https://github.com/keenroudy22/sports/actions/runs/38205419795)
+succeeded. Final gates:1353Python(two skipped),240Node, both clean-export
+suites,503-page build, budget(no hard issues; Today379780/327680 and More29878/32768
+remain soft warnings),100-pick/NBA0audits,600-file publication guard, asset/SVG
+checks and isolated current2330 stored-input rehearsal:exit0,outcomeok, zero outside
+writes/private reads. All22 final live375/1440 checks passed with zero overflow,
+caught load state or browser errors. Live app.js?v=161. Exact rendered checks:
+headline36-37(onevoid),captured-price-5.20u; chartend-5.20; Gut calls2-0,+1.06u;
+Bills-Rams Not posted and absent from Pending; current book brands everywhere
+on the Record. The stored canceled-ticket title and delivered attachments are unchanged.
+
+The settled Sunday Climb win is live: final leg first observed23:50:42ETOct11,
+appended00:07:24ETOct12 (16m42s), $50 returned$73, bank$15, next$58. The recovered
+settlement run finished00:18:19ET green, no new plays/errors/unposted items.
+Monday Results09:02 and Climb win09:22 are queued, not delivered. Six overdue
+Buffer metric reads were recovered00:33:48ET; their lateness stays in history.
+Free stored budgets at00:52:32ET:Odds252/500(projected398,248remaining),SGO339
+against1800stop/2500free ceiling,307 local Buffer requests; cross-host counts remain partial.
+Public invite reports approximately3members/2online; followers/site visits unknown
+(no read-only audience setting). No paid service or request ceiling added.
+
+Seven-day outcome evidence is private at `work/overnight-outcomes.json`:posted
+plays5/7football days; TNF/SNF dark; weekend straight count below3-5;1Climb rung;
+research delivered every football day;3/5observed results within60m; all21first
+metric reads late. These historical misses are not reset by a repair. Next agent
+work remainsKA-R1:rule-specific research refusals/14-day lane proof, full daily
+outcomes block, Climbv3 evidence and7-day metrics; consolidate retained old branches
+without dropping captures or ignored evidence. Six installed sports plists match.
+Next real observations:Monday17:30/18:50MNF gates, natural24h/within30h reads,
+and confirmed morning receipt delivery. No ordinary owner decision is requested.
+
+This final receipt is documentation only on dev for the next safe release; it
+does not require a duplicate code deployment.
