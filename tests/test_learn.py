@@ -78,6 +78,12 @@ class GradeTests(unittest.TestCase):
 
 
 class SegmentTests(unittest.TestCase):
+    def test_plus_money_is_its_own_learning_segment(self):
+        favorite = {'league': 'NFL', 'athleteId': '7', 'market': 'recYds', 'odds': -110}
+        dog = dict(favorite, odds=180)
+        self.assertEqual(learning.segment_of(favorite), 'NFL/prop:recYds')
+        self.assertEqual(learning.segment_of(dog), 'NFL/prop:recYds/plus_money')
+
     def test_r0_stays_shadow_only_until_a_caller_explicitly_applies_it(self):
         base = row(1, decision='refused', gameIds=['NFL-1'], direction='over', decidedAt='2026-09-20T12:00:00Z')
         later = dict(base, id='other-line', line=45.5, decidedAt='2026-09-20T13:00:00Z')

@@ -166,6 +166,15 @@ class TicketCardTests(unittest.TestCase):
         self.assertIn('0.5u', svg)
         self.assertNotIn('>BEST BET<', svg)
 
+    def test_plus_money_card_says_the_sub_fifty_chance_beats_what_the_price_needs(self):
+        plus = dict(PROP, lane='gut_call', riskUnits=.5, odds=180,
+                    probabilityAtPublication={'chance': .41, 'breakEven': .357, 'calibrated': True})
+        svg = ticket_card.straight_svg(plus, GAME, player_side='away',
+                                       art={'kind': 'photo', 'uri': self.image}, fetch=lambda _: self.logo)
+        self.assertIn('41.0%', svg)
+        self.assertIn('At +180 it only needs', svg)
+        self.assertIn('35.7%', svg)
+
     def test_game_line_uses_both_team_logos_not_a_player_photo(self):
         pick = dict(PROP, athleteId=None, market=None, marketType='total',
                     title='NMSU at FIU over 46.5', line=46.5, odds=-110)

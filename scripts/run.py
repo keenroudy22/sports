@@ -716,7 +716,7 @@ def dossier_support_issue(case):
     return None
 
 
-CARD_PROP_PRICES = (-160, 150)     # the owner-plan straight price band
+CARD_PROP_PRICES = (-160, 200)     # positive-EV props remain eligible through +200
                                    # toward 50% (the calibration) overstates a plus-money over the market prices at 42%
 PROVISIONAL_K = 0.2                # a league's player chances before learning has calibrated them (the NFL's is 0.13)
 
@@ -885,10 +885,20 @@ def price(candidate, ctx, now):
             fair = pricing.fair_chance(odds, other) if isinstance(other, (int, float)) else None
             if role_sanity.price_suspect(odds, p.get('rawChance'), fair=fair):
                 continue
-        priced.append((p['evPerUnit'], book, float(line), int(odds), p))
+        probe = dict(candidate, book=book, line=float(line), odds=int(odds), _desk=p)
+        if candidate.get('athleteId') and isinstance(other, (int, float)):
+            probe['_pair'] = (int(odds), int(other))
+        numbers = gates.selection_numbers(probe, ctx)
+        if not numbers:
+            continue
+        p = dict(p, **{key: numbers[key] for key in
+                       ('chance', 'breakEven', 'edgePoints', 'evPerUnit', 'calibration', 'calibrated')})
+        p['edge'] = (f"Market-anchored chance {p['chance']:.1%} from the exact two-sided price; "
+                     f"{p['breakEven']:.1%} needed at {int(odds):+d}: {p['edgePoints']:+.1f} percentage points.")
+        priced.append((p['evPerUnit'], book, float(line), int(odds), p, numbers))
     if not priced:
         return None
-    _, book, line, odds, p = max(priced, key=lambda q: (q[0], q[1]))
+    _, book, line, odds, p, selection = max(priced, key=lambda q: (q[0], q[1]))
     row = candidate.get('_row') or {}
     books = sorted({b for b, _, _ in candidate.get('_quotes') or []})
     seen = row.get('observedAt') or stamp(now)
@@ -902,11 +912,17 @@ def price(candidate, ctx, now):
     if not selection:
         return None
     candidate['_selection'] = selection
+    p = dict(p, **{key: selection[key] for key in
+                   ('chance', 'breakEven', 'edgePoints', 'evPerUnit', 'calibration', 'calibrated')})
+    candidate['_desk'] = p
+    candidate['edge'] = p['edge']
     candidate['probabilityAtPublication'] = {key: p.get(key) for key in
         ('rawChance', 'chance', 'calibrated', 'calibration', 'calibrationN', 'push', 'breakEven', 'edgePoints', 'evPerUnit', 'snapshotAt')}
     candidate['probabilityAtPublication']['evaluatedAt'] = stamp(now)
     candidate['probabilityAtPublication'].update(fairChance=round(selection['fairChance'], 3),
-                                                 gap=round(selection['gap'], 1))
+                                                 anchoredChance=selection['anchoredChance'],
+                                                 gap=round(selection['gap'], 1),
+                                                 calibrationFamily=selection['calibrationFamily'])
     away, home = game['away'], game['home']
     if candidate.get('athleteId'):
         words = pricing.WORDS[market]
@@ -1311,8 +1327,10 @@ def decision_record(candidate, league, decision, rules, reason, now, ctx):
             'direction': candidate.get('direction'), 'line': candidate.get('line'), 'odds': candidate.get('odds'),
             'book': candidate.get('book'), 'gameIds': candidate.get('gameIds'), 'kickoff': game.get('kickoff'),
             'legs': len(candidate['legs']) if candidate.get('legs') else None,
-            'projection': desk.get('projection'), 'chance': desk.get('chance'), 'rawChance': desk.get('rawChance'),
-            'breakEven': desk.get('breakEven'), 'edgePoints': desk.get('edgePoints'), 'evPerUnit': desk.get('evPerUnit'),
+            'projection': desk.get('projection'), 'chance': selection.get('anchoredChance', desk.get('chance')),
+            'rawChance': desk.get('rawChance'), 'breakEven': selection.get('breakEven', desk.get('breakEven')),
+            'edgePoints': selection.get('edgePoints', desk.get('edgePoints')),
+            'evPerUnit': selection.get('evPerUnit', desk.get('evPerUnit')),
             'confidence': candidate.get('confidence'), 'favorite': candidate.get('favorite') is True,
             'lane': candidate.get('lane'), 'fairChance': selection.get('fairChance'),
             'gap': selection.get('gap'), 'kitchenScore': candidate.get('_kitchenScore'),

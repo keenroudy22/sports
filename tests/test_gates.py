@@ -102,16 +102,21 @@ class NoForcedBestBetTests(unittest.TestCase):
         self.assertFalse(gates.qb_change_recent(prop_lean(), changed).ok)
         self.assertTrue(gates.qb_change_recent(prop_lean(market='rushYds'), changed).ok)
 
-    def test_owner_plan_tiers_use_raw_fair_gap_reasons_and_lane_price_bands(self):
+    def test_owner_plan_tiers_use_anchored_gap_reasons_and_positive_ev_price_bands(self):
         from unittest.mock import patch
         reason = {'type': 'line_move', 'class': 'A', 'direction': 'for', 'text': 'Moved 20 cents.'}
-        pick = prop_lean(_selection={'rawChance': .60, 'fairChance': .50, 'gap': 10}, _planReasons=[reason])
+        pick = prop_lean(_selection={'rawChance': .60, 'fairChance': .50, 'anchoredChance': .56,
+                                     'breakEven': .535, 'gap': 6}, _planReasons=[reason])
         with patch.object(gates.spot, 'for_candidate', return_value={'spotHit': .54, 'spotEdge': 1, 'n': 40}):
             self.assertTrue(gates.selection_verdict(pick, context(), 'best_bet').ok)
-            self.assertTrue(gates.selection_verdict(dict(pick, odds=150), context(), 'gut_call').ok)
-            self.assertFalse(gates.selection_verdict(dict(pick, odds=151), context(), 'gut_call').ok)
+            plus = dict(pick, odds=180, _selection={'rawChance': .46, 'fairChance': .39,
+                                                    'anchoredChance': .41, 'breakEven': 1 / 2.8, 'gap': 2})
+            self.assertTrue(gates.selection_verdict(plus, context(), 'gut_call').ok)
+            self.assertFalse(gates.selection_verdict(dict(plus, odds=201), context(), 'gut_call').ok)
             self.assertFalse(gates.selection_verdict(dict(pick, _planReasons=[]), context(), 'gut_call').ok)
-            self.assertFalse(gates.selection_verdict(dict(pick, _selection={'rawChance': .70, 'fairChance': .44, 'gap': 26}), context()).ok)
+            losing = dict(pick, _selection={'rawChance': .60, 'fairChance': .50, 'anchoredChance': .52,
+                                            'breakEven': .526, 'gap': 4})
+            self.assertFalse(gates.selection_verdict(losing, context()).ok)
 
     def test_primetime_gut_call_can_use_an_nfl_side_only_with_a_strong_current_reason(self):
         current = {'type': 'injury_role', 'class': 'A', 'direction': 'for',

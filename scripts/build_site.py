@@ -981,6 +981,22 @@ def record_card(pick):
     return f"data/cards/{pick['id']}.png"
 
 
+def public_probability(pick):
+    """The immutable publication chance, only when it really beat the price.
+
+    Older records can contain pre-anchor numbers at or below the posted
+    price's hurdle.  The record remains untouched, but no current page repeats
+    a losing number as if it were value.
+    """
+    value = pick.get('probabilityAtPublication')
+    if not isinstance(value, dict):
+        return None
+    chance, needed = value.get('chance'), value.get('breakEven')
+    if not all(isinstance(number, (int, float)) for number in (chance, needed)) or chance <= needed:
+        return None
+    return value
+
+
 def hero_bet(pick, now, potd=None, teams=None):
     row = {key: pick.get(key) for key in HERO_FIELDS}
     # Both teams' names and colours, as the game card carries them, so the first paint draws the same team panel.
@@ -988,7 +1004,7 @@ def hero_bet(pick, now, potd=None, teams=None):
     row['displayTitle'] = pick.get('displayTitle') or pick.get('title')
     row['featured'] = pick.get('featured') is True or None
     row['status'] = None if (pick.get('status') or 'active') == 'active' else pick.get('status')
-    probability = pick.get('probabilityAtPublication') if isinstance(pick.get('probabilityAtPublication'), dict) else {}
+    probability = public_probability(pick) or {}
     chance = {key: probability.get(key) for key in ('chance', 'breakEven')
               if isinstance(probability.get(key), (int, float))}
     if chance:
@@ -1996,7 +2012,7 @@ def board_picks(first, latest, by_id, identities):
             entry_note = re.sub(r'\.{2,}', '.', entry_note)
         status = 'active' if restored else recent.get('status') or pick.get('status')
         reasoning = pick.get('reasoning') if isinstance(pick.get('reasoning'), dict) else {}
-        probability = pick.get('probabilityAtPublication') or {}
+        probability = public_probability(pick) or {}
         published_at = instant(pick.get('publishedAt'))
         quoted_at = instant(pick.get('quotedAt'))
         chance = probability.get('chance') if isinstance(probability, dict) else None
@@ -2024,7 +2040,7 @@ def board_picks(first, latest, by_id, identities):
                      'priceAssumed': pick.get('odds') is None and recent.get('priceAssumed') is True,
                      'priceNote': recent.get('priceNote') if pick.get('odds') is None else None,
                      'priceEstimated': pick.get('priceEstimated') is True,
-                     'probabilityAtPublication': pick.get('probabilityAtPublication'),
+                     'probabilityAtPublication': probability or None,
                      'reasoning': pick.get('reasoning'),
                      'reasons': public_sentences(reasons.get(key) if isinstance(reasons, dict) else None,
                                                  reasoning.get('context'), pick.get('why'), limit=4),

@@ -78,6 +78,17 @@ class TodayHeroTests(unittest.TestCase):
         card = build_site.hero_card(pick('NFL-open'), NOW)
         self.assertTrue(publication_guard.allowed_path(Path(card)), card)
 
+    def test_a_losing_or_tied_public_chance_is_never_repeated_on_the_site(self):
+        for chance in (.520, .526):
+            row = pick('NFL-bad-number', probabilityAtPublication={
+                'chance': chance, 'breakEven': .526, 'calibrated': True})
+            hero = build_site.today_hero([row], NOW)['bets'][0]
+            self.assertNotIn('probabilityAtPublication', hero)
+            self.assertIsNone(build_site.public_probability(row))
+        good = pick('NFL-plus-value', odds=180, probabilityAtPublication={
+            'chance': .410, 'breakEven': .357, 'calibrated': True})
+        self.assertEqual(build_site.public_probability(good)['chance'], .410)
+
     def test_with_no_bet_today_the_next_game_day_still_on_the_card(self):
         picks = [pick('CFB-mon-moved', kickoff='2026-10-12T23:00Z', entryNote='Closed to new entries: line moved.'),
                  pick('CFB-mon', kickoff='2026-10-12T23:30Z'),

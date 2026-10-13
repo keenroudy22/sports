@@ -79,7 +79,8 @@ def straight_data(pick, game, *, featured=False, player_side=None, art=None, fet
     team_code = team.get('abbreviation') or home_code
     chance_row = pick.get('probabilityAtPublication') or {}
     calibrated = bool(chance_row.get('calibrated') and isinstance(chance_row.get('chance'), (int, float))
-                      and isinstance(chance_row.get('breakEven'), (int, float)))
+                      and isinstance(chance_row.get('breakEven'), (int, float))
+                      and chance_row['chance'] > chance_row['breakEven'])
     if reason is None:
         reason = supporting_reason(pick)
     units = pick.get('riskUnits', pick.get('units', 1))

@@ -41,7 +41,7 @@ def distinct(rows):
     for row in rows:
         if str(row.get('decidedAt') or '')[:10] < SINCE or row.get('kind') == 'parlay':
             continue
-        if not isinstance(row.get('odds'), (int, float)) or not -160 <= row['odds'] <= 150:
+        if not isinstance(row.get('odds'), (int, float)) or not -200 <= row['odds'] <= 250:
             continue
         prior = latest.get(key(row))
         if prior is None or str(row.get('decidedAt') or '') >= str(prior.get('decidedAt') or ''):
@@ -77,8 +77,9 @@ def load(root=STORE):
 def levels(row):
     league, market, side = row.get('league'), row.get('market') or row.get('marketType'), row.get('direction')
     kind = market_kind(row)
-    return ((league, market, side, gap_band(float(row.get('gap') or 0))),
-            (league, market, side), (league, market), (league, kind))
+    price_band = 'plus_money' if isinstance(row.get('odds'), (int, float)) and row['odds'] > 0 else 'standard'
+    return ((league, market, side, price_band, gap_band(float(row.get('gap') or 0))),
+            (league, market, side, price_band), (league, market, price_band), (league, kind, price_band))
 
 
 def summarize(rows, candidate, minimum=MIN_N):

@@ -635,6 +635,13 @@ def guard(text, pick, reason=None, now_quote=None):
     lane = pick.get('lane')
     if lane in ('best_bet', 'hot_plate', 'gut_call', 'upset') and not reason:
         problems.append('play has no supporting reason')
+    probability = pick.get('probabilityAtPublication') or {}
+    if lane in ('best_bet', 'hot_plate', 'gut_call', 'upset') and not pick.get('legs'):
+        chance, needed = probability.get('chance'), probability.get('breakEven')
+        if not all(isinstance(value, (int, float)) for value in (chance, needed)):
+            problems.append('play has no shared market-anchored chance')
+        elif chance <= needed:
+            problems.append(f'play chance {chance:.1%} does not beat the price need {needed:.1%}')
     return problems
 
 

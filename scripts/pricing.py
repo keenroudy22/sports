@@ -70,6 +70,29 @@ def fair_chance(price_side, price_other):
     return side / total
 
 
+def market_anchored(raw, fair, k, odds, push=0.0):
+    """One chance for selection and every public surface.
+
+    The model's lean is shrunk toward the exact book's no-vig chance, not
+    toward an arbitrary 50%.  The actual posted price remains the hurdle a
+    bettor has to clear.  Keeping this arithmetic here prevents selection,
+    cards and the site from inventing different answers for the same play.
+    """
+    values = (raw, fair, k, odds, push)
+    if not all(isinstance(v, (int, float)) and math.isfinite(v) for v in values):
+        raise ValueError('market anchoring needs finite chances, coefficient and odds')
+    if not 0 <= raw <= 1 or not 0 <= fair <= 1 or not 0 <= k <= 1 or not 0 <= push <= 1:
+        raise ValueError('market anchoring inputs are outside 0..1')
+    chance = min(1.0, max(0.0, fair + k * (raw - fair)))
+    needed = break_even(odds)
+    edge = 100 * (chance - needed)
+    ev = chance * payout(odds) - max(0.0, 1 - chance - push)
+    return {'chance': round(chance, 3), 'breakEven': round(needed, 3),
+            'edgePoints': round(edge, 1), 'evPerUnit': round(ev, 3),
+            'marketGap': round(100 * (chance - fair), 1),
+            'fairChance': round(fair, 3), 'calibration': k, 'calibrated': True}
+
+
 def cents(odds):
     """American odds on one continuous scale, so -105 to +105 is 10 cents, not 210."""
     return odds + 100 if odds < 0 else odds - 100

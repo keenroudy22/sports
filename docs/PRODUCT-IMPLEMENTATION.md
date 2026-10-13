@@ -1703,3 +1703,16 @@ increase was introduced. Exact evidence: work/overnight-20261013-outcomes.json,
 work/overnight-20261013-card-cache.json, work/overnight-20261013-live/audit.json
 and work/overnight-20261013-locked-*.log. This documentation receipt stays on
 dev for the next regular release; the verified code is already live.
+
+
+### October 13 market-anchored chance — prepared
+
+The selection engine had compared its raw model chance with the no-vig market
+while cards could print a different chance shrunk toward 50%. That allowed a
+card to say its chance did not beat the price. The bounded repair makes the
+exact-book market-anchored chance the single selection and publication number,
+requires it to beat the actual posted-price hurdle, keeps positive-value
+plus-money plays eligible below a 50% hit rate, and gives plus-money its own
+learning segment. A send guard refuses a tied or losing number. Historical
+posted attachments stay immutable; current site payloads no longer repeat a
+pre-fix losing number. O-20261013-3 tracks gated release and live evidence.

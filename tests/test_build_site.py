@@ -212,7 +212,7 @@ class PickTests(unittest.TestCase):
         pick = {'id': 'x', 'league': 'NFL', 'title': 'Bills at Lions over 44.5', 'direction': 'over',
                 'gameIds': ['NFL-1'], 'book': 'ESPN BET', 'odds': -110,
                 'quotedAt': '2026-09-01T11:45:00Z', 'publishedAt': '2026-09-01T12:00:00Z',
-                'probabilityAtPublication': {'chance': .55, 'calibrated': True},
+                'probabilityAtPublication': {'chance': .55, 'breakEven': .524, 'calibrated': True},
                 'why': 'Weather: calm indoors. Projection supports the over.', 'risk': 'A slow pace can hurt.'}
         [row] = build_site.board_picks({'x': pick}, {}, {'NFL-1': {'kickoff': '2026-09-03T17:00:00Z'}}, {})
         self.assertEqual(row['book'], 'ESPN BET')

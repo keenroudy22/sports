@@ -44,6 +44,7 @@ class OAuthTests(unittest.TestCase):
 PROP = {'id': 'NFL-2026-W4-p7-over-4-5-rec-dk', 'title': 'Player Seven over 4.5 receptions', 'status': 'active', 'favorite': False,
         'modelLean': True, 'athleteId': '7', 'market': 'rec', 'line': 4.5, 'direction': 'over', 'gameIds': ['CFB-1'],
         'book': 'DraftKings', 'odds': -115, 'projection': 5.8, 'confidence': 3,
+        'probabilityAtPublication': {'chance': .56, 'breakEven': .535, 'calibrated': True},
         'why': 'Prop lean on our number alone: the over reads 64.1% on the raw curve. He has caught 6 in each of his last 2 games.'}
 
 
@@ -125,13 +126,28 @@ class DraftTests(unittest.TestCase):
         self.assertIn('play has no supporting reason', x_post.guard(held, unsupported, x_post.reason_in(held)))
 
     def test_new_lane_play_is_held_without_a_reason_and_maps_the_current_book_brand(self):
-        play = dict(PICK, lane='gut_call', riskUnits=.5, book='ESPN BET', projection=31.2)
+        play = dict(PICK, lane='gut_call', riskUnits=.5, book='ESPN BET', projection=31.2,
+                    probabilityAtPublication={'chance': .54, 'breakEven': .512, 'calibrated': True})
         text = x_post.draft(play, GAME, reason='Wind is forecast at 18 mph in Ann Arbor.')
         self.assertIn('theScore Bet', text)
         self.assertNotIn('ESPN BET', text)
         self.assertEqual(x_post.guard(text, play, x_post.reason_in(text)), [])
         no_reason = x_post.draft(play, GAME, reason='')
         self.assertIn('play has no supporting reason', x_post.guard(no_reason, play, None))
+
+    def test_send_guard_refuses_a_public_play_whose_chance_does_not_beat_the_price(self):
+        reason = 'Wind is forecast at 18 mph in Ann Arbor.'
+        base = dict(PICK, lane='best_bet', projection=31.2,
+                    probabilityAtPublication={'chance': .520, 'breakEven': .526, 'calibrated': True})
+        text = x_post.draft(base, GAME, reason=reason)
+        self.assertTrue(any('does not beat the price need' in problem
+                            for problem in x_post.guard(text, base, reason)))
+        equal = dict(base, probabilityAtPublication={'chance': .515, 'breakEven': .515, 'calibrated': True})
+        self.assertTrue(any('does not beat the price need' in problem
+                            for problem in x_post.guard(text, equal, reason)))
+        plus = dict(base, odds=180,
+                    probabilityAtPublication={'chance': .410, 'breakEven': round(1 / 2.8, 3), 'calibrated': True})
+        self.assertEqual(x_post.guard(x_post.draft(plus, GAME, reason=reason), plus, reason), [])
 
     def test_no_reason_is_invented_from_unlabelled_or_opposing_prose(self):
         with mock.patch.object(x_post, 'load_reasons', return_value={}):

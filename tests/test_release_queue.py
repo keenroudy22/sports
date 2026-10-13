@@ -98,7 +98,8 @@ class ReleaseQueueTests(unittest.TestCase):
                 'title': 'Dawson Knox OVER 12.5 receiving yards', 'lane': 'hot_plate',
                 'favorite': True, 'status': 'active', 'odds': -109, 'book': 'DraftKings',
                 'line': 12.5, 'projection': 19.4, 'market': 'recYds', 'marketType': 'player',
-                'athleteId': '3930086', 'gameIds': ['NFL-401872994']}
+                'athleteId': '3930086', 'gameIds': ['NFL-401872994'],
+                'probabilityAtPublication': {'chance': .55, 'breakEven': .522, 'calibrated': True}}
         game = {'id': 'NFL-401872994', 'league': 'NFL', 'kickoff': '2026-10-13T00:15:00Z',
                 'away': {'id': '2', 'name': 'Bills'}, 'home': {'id': '14', 'name': 'Rams'}}
         reason = 'Buffalo ruled a starting receiver out, opening more short targets.'

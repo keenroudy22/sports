@@ -1389,6 +1389,5 @@ class CardRankTests(unittest.TestCase):
         wanted = [total('nfl-total', 4.0), total('cfb-total', 2.0, 'CFB'), prop('rec', 'rec', 0.70, 0.52, -110),
                   prop('yards', 'recYds', 0.80, 0.52, -110), prop('plus', 'rec', 0.90, 0.42, 151)]
         order = [c['id'] for c in run.rank_card(wanted, ctx)]
-        self.assertEqual(order, ['yards', 'rec', 'nfl-total', 'cfb-total'],
-                         'strong performance-caution reads can lead once they clear the higher threshold; '
-                         'a plus-money prop outside the card range is removed')
+        self.assertEqual(order, ['plus', 'yards', 'rec', 'nfl-total', 'cfb-total'],
+                         'positive-EV plus-money props stay eligible through +200 and the strongest reads lead')

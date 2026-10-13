@@ -186,10 +186,12 @@ def segment_of(row):
     """League and market: "NFL/total", "CFB/spread", "NFL/prop:recYds", "NFL/parlay"."""
     league = row.get('league') or str(row.get('id', '')).split('-')[0]
     if row.get('legs') or row.get('parlayType') or row.get('kind') == 'parlay':
-        return f'{league}/parlay'
-    if row.get('athleteId') or row.get('market'):
-        return f"{league}/prop:{row.get('market') or row.get('marketKey') or 'unknown'}"
-    return f"{league}/{row.get('marketType') or 'unknown'}"
+        base = f'{league}/parlay'
+    elif row.get('athleteId') or row.get('market'):
+        base = f"{league}/prop:{row.get('market') or row.get('marketKey') or 'unknown'}"
+    else:
+        base = f"{league}/{row.get('marketType') or 'unknown'}"
+    return f'{base}/plus_money' if isinstance(row.get('odds'), (int, float)) and row['odds'] > 0 else base
 
 
 def now_utc():

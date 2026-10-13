@@ -182,11 +182,12 @@ def play_card(p):
     if calibrated:
         y += 74
         lw1, vw1 = width('I have it at', 42, 'd', 600), width(kit.pct1(p['chance']), 56)
-        lw2, vw2 = width('the price needs', 42, 'd', 600), width(kit.pct1(p['needs']), 56)
+        right_label = f"At {kit.price(p['odds'])} it only needs" if p['odds'] > 0 else 'the price needs'
+        lw2, vw2 = width(right_label, 42, 'd', 600), width(kit.pct1(p['needs']), 56)
         x2l = X2 - vw2 - 12 - lw2
         inner += (card.text(X1, y, 'I have it at', 42, INK_SOFT, 'd', 600) + card.text(X1 + lw1 + 12, y, kit.pct1(p['chance']), 56, INK)
                   + kit.dots(X1 + lw1 + 12 + vw1 + 18, x2l - 18, y - 6)
-                  + card.text(x2l, y, 'the price needs', 42, INK_SOFT, 'd', 600) + card.text(X2, y, kit.pct1(p['needs']), 56, INK, anchor='end'))
+                  + card.text(x2l, y, right_label, 42, INK_SOFT, 'd', 600) + card.text(X2, y, kit.pct1(p['needs']), 56, INK, anchor='end'))
     if why:
         y += 74
         wb, n = why_block(card, y, p['reason'])

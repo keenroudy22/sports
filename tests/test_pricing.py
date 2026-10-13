@@ -36,6 +36,16 @@ class ArithmeticTests(unittest.TestCase):
         self.assertAlmostEqual(pricing.fair_chance(-110, -110), 0.5)
         self.assertAlmostEqual(pricing.fair_chance(-150, 130), (150 / 250) / ((150 / 250) + (100 / 230)))
 
+    def test_market_anchoring_uses_the_book_fair_chance_and_actual_price_hurdle(self):
+        value = pricing.market_anchored(.60, .50, .35, -110)
+        self.assertEqual(value['chance'], .535)
+        self.assertEqual(value['fairChance'], .5)
+        self.assertEqual(value['marketGap'], 3.5)
+        self.assertGreater(value['chance'], value['breakEven'])
+        plus = pricing.market_anchored(.46, .39, .30, 180)
+        self.assertLess(plus['chance'], .50, 'positive value never means a 50% hit-rate requirement')
+        self.assertGreater(plus['chance'], plus['breakEven'])
+
 
 class PriceTests(unittest.TestCase):
     def test_a_player_market_uses_the_stored_range(self):

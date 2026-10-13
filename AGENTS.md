@@ -231,6 +231,12 @@ Handy commands (from `~/Projects/sports`):
   number and the exact overtime work instead of publishing only a sterile loss line. Never infer the split from a
   final box score; without period-level proof, use the ordinary factual result copy.
 
+- **Positive-value chance (owner, 2026-10-13):** selection, cards, captions and the site use one chance anchored to
+  the exact book's two-sided fair price. It must beat what the posted price needs; it does not have to exceed 50%.
+  Props, spreads and totals may be plus money through +200, and moneylines/upsets through +250, with the same reason,
+  price, role and injury holds. Unproven plus-money plays are 0.5u Gut calls or Upset picks and learn in their own
+  segment. No outgoing card or caption may show a chance tied with or below the posted-price hurdle.
+
 - **October 11 operating settlement (owner, 2026-10-11):** Fun tickets are a small number of pregame parlays at
   +500 through +1500, one book, different games, at most one total and one saved real reason per leg; they are
   graded win or lose. The prior conversation idea to post parlays only after they win is withdrawn. Try for a

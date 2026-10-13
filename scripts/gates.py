@@ -307,7 +307,7 @@ def exact_price_pairs(candidate, ctx):
 
 
 def selection_numbers(candidate, ctx):
-    """Raw model chance, no-vig market chance and their point gap."""
+    """Raw, exact-book fair and the one market-anchored chance used everywhere."""
     desk = desk_for(candidate, ctx)
     if not desk or not isinstance(desk.get('rawChance'), (int, float)):
         return None
@@ -317,8 +317,18 @@ def selection_numbers(candidate, ctx):
     if not pair:
         return None
     raw, fair = float(desk['rawChance']), float(pair['fairChance'])
-    return {'rawChance': raw, 'fairChance': fair, 'gap': 100 * (raw - fair),
-            'impliedSum': pair['impliedSum'], 'otherOdds': pair['other']}
+    league = candidate.get('league') or candidate.get('_league') or (game_of(candidate, ctx) or {}).get('league')
+    market = market_key(candidate)
+    family = 'prop' if candidate.get('athleteId') else market
+    learned = ((ctx.policy.get('calibration') or {}).get(f'{league}/{family}') or {}).get('k')
+    fitted = pricing.CALIBRATION.get((league, market))
+    k = learned if isinstance(learned, (int, float)) and 0 <= learned <= 1 else fitted
+    if not isinstance(k, (int, float)) or not 0 <= k <= 1:
+        k = .35
+    anchored = pricing.market_anchored(raw, fair, k, int(candidate['odds']), float(desk.get('push') or 0))
+    return {**anchored, 'rawChance': raw, 'anchoredChance': anchored['chance'],
+            'gap': anchored['marketGap'], 'impliedSum': pair['impliedSum'],
+            'otherOdds': pair['other'], 'calibrationFamily': f'{league}/{family}'}
 
 
 def desk_for(candidate, ctx):
@@ -882,11 +892,16 @@ def plan_reasons(candidate):
 
 
 def selection_verdict(candidate, ctx, lane='best_bet'):
-    """Owner-plan tier decision using raw model chance and exact-line no-vig fair chance."""
+    """Owner-plan tier decision using the shared market-anchored chance."""
     numbers = candidate.get('_selection') or selection_numbers(candidate, ctx)
     if not numbers:
         return Decision(False, 'plan_selection', 'no raw chance and exact two-sided fair price')
     raw, gap = numbers['rawChance'], numbers['gap']
+    chance = numbers.get('anchoredChance')
+    if not isinstance(chance, (int, float)):
+        chance = float(numbers['fairChance']) + float(gap) / 100
+        numbers = {**numbers, 'anchoredChance': chance, 'chance': chance,
+                   'breakEven': pricing.break_even(candidate['odds'])}
     market = market_key(candidate)
     league = candidate.get('league') or (game_of(candidate, ctx) or {}).get('league')
     reasons = plan_reasons(candidate)
@@ -894,8 +909,8 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
         reasons = [row for row in reasons if row.get('type') in TOTAL_REASONS]
     reasons = [row for row in reasons if row.get('type') not in ('hit_strip', 'usage_trend') or gap <= 12]
     odds = candidate.get('odds')
-    price_ok = isinstance(odds, (int, float)) and ((-200 <= odds <= 200) if market == 'moneyline'
-                                                   else (-160 <= odds <= 150))
+    price_ok = isinstance(odds, (int, float)) and ((-200 <= odds <= 250) if market == 'moneyline'
+                                                   else (-160 <= odds <= 200))
     if not price_ok:
         return Decision(False, 'plan_selection', 'price is outside the lane band', numbers)
     if league == 'NFL' and market == 'total':
@@ -917,15 +932,18 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
             return Decision(False, 'plan_selection', 'a college side needs the model margin at least 6 points past the spread', numbers)
     if gap >= 25:
         return Decision(False, 'plan_selection', 'Price check failed: raw gap is 25 points or more', numbers)
-    if raw < .55 or gap < 3:
-        return Decision(False, 'plan_selection', f'raw {raw:.1%}, gap {gap:.1f}; candidate needs 55% and 3 points', numbers)
+    if chance <= numbers['breakEven']:
+        return Decision(False, 'plan_selection',
+                        f"anchored chance {chance:.1%} does not beat the {numbers['breakEven']:.1%} this price needs", numbers)
+    lane_floor = 2 if lane == 'gut_call' else 4
+    if gap < lane_floor:
+        return Decision(False, 'plan_selection',
+                        f'anchored gap {gap:.1f}; {lane} needs {lane_floor} points', numbers)
     if not reasons:
         return Decision(False, 'plan_selection', 'no supporting reason points the same way as the bet', numbers)
     if lane == 'gut_call':
-        return Decision(True, 'plan_selection', f'Gut call: raw {raw:.1%}, gap {gap:.1f}',
+        return Decision(True, 'plan_selection', f'Gut call: anchored {chance:.1%}, gap {gap:.1f}',
                         {**numbers, 'tier': 'gut_call', 'reasons': reasons})
-    if raw < .58 or gap < 6:
-        return Decision(False, 'plan_selection', 'below the Best bet floor; eligible only as a Gut call', numbers)
     if gap >= 20:
         if not any(row.get('class') == 'A' or row.get('type') in CLASS_A_REASONS for row in reasons):
             return Decision(False, 'plan_selection', 'a 20-25 point gap needs a class A reason', numbers)
@@ -942,7 +960,7 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
         return Decision(False, 'plan_selection', 'the observed spot record is below the price gate',
                         {**numbers, 'spot': sample})
     tier = 'big_gap' if gap >= 20 else 'best_bet'
-    return Decision(True, 'plan_selection', f'{tier}: raw {raw:.1%}, gap {gap:.1f}, spot {sample["spotHit"]:.1%}',
+    return Decision(True, 'plan_selection', f'{tier}: anchored {chance:.1%}, gap {gap:.1f}, spot {sample["spotHit"]:.1%}',
                     {**numbers, 'tier': tier, 'spot': sample, 'reasons': reasons})
 
 

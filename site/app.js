@@ -886,8 +886,11 @@
         : ['open', 'expired'].includes(vm.mode) && latest ? `Now ${odd(latest.current.odds)} at ${clock(latest.current.observedAt)}. ${latest.inside ? good : `Past my ${odd(pick.cutoffOdds)} limit.`}`
           : vm.mode === 'open' ? good : vm.mode === 'expired' ? 'Posted price may be gone. Check your book.' : vm.statusShort || vm.status || '';
     const tense = !afterHold && (vm.mode === 'open' || (vm.mode === 'expired' && latest && latest.inside));
+    const needWords = vm.odds > 0
+      ? `At ${esc(oddsText(vm.odds))} it only ${tense ? 'needs' : 'needed'}`
+      : `the price ${tense ? 'needs' : 'needed'}`;
     const chance = best && (!hold || afterHold) && vm.calibrated && vm.chance != null && vm.needs != null
-      ? `<p class="kt-lead kt-chance"><span>I ${tense ? 'have' : 'had'} it at<b class="num">${pctOne(vm.chance)}</b></span><i></i><span>the price ${tense ? 'needs' : 'needed'}<b class="num">${pctOne(vm.needs)}</b></span></p>` : '';
+      ? `<p class="kt-lead kt-chance"><span>I ${tense ? 'have' : 'had'} it at<b class="num">${pctOne(vm.chance)}</b></span><i></i><span>${needWords}<b class="num">${pctOne(vm.needs)}</b></span></p>` : '';
     /* The build already chose held-safe words (build_site.held_words); when the hold comes only from the board rows,
        a saved line that quotes a projection, chance or edge is left off, never reworded. */
     const heldSafe = (text, held) => held && !held.afterPosting && HELD_WORDS.test(text || '') ? null : text;
