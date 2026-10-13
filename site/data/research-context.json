@@ -1,11 +1,20 @@
 {
-  "updatedAt": "2026-10-13T17:57:55Z",
+  "updatedAt": "2026-10-13T20:05:30Z",
   "leagues": {
     "NFL": {
       "teams": {
         "22": {
           "name": "Arizona Cardinals",
           "players": [
+            {
+              "id": "3045147",
+              "name": "James Conner",
+              "position": "RB",
+              "status": "Injured Reserve",
+              "injury": "Foot",
+              "reportedAt": "2026-10-13T19:00Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3045147/james-conner"
+            },
             {
               "id": "3918331",
               "name": "Andrew Wingard",
@@ -221,15 +230,6 @@
               "injury": null,
               "reportedAt": "2026-10-05T18:27Z",
               "source": "https://www.espn.com/nfl/player/_/id/4429782/josh-fryar"
-            },
-            {
-              "id": "4869132",
-              "name": "Reggie Virgil",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-05T18:27Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4869132/reggie-virgil"
             }
           ]
         },
@@ -927,11 +927,20 @@
           "name": "Carolina Panthers",
           "players": [
             {
+              "id": "4695883",
+              "name": "Jalen Coker",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Quadriceps",
+              "reportedAt": "2026-10-13T18:21Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4695883/jalen-coker"
+            },
+            {
               "id": "4687513",
               "name": "Cam Jackson",
               "position": "DT",
               "status": "Injured Reserve",
-              "injury": "Knee",
+              "injury": "Shoulder",
               "reportedAt": "2026-10-13T15:33Z",
               "source": "https://www.espn.com/nfl/player/_/id/4687513/cam-jackson"
             },
@@ -952,15 +961,6 @@
               "injury": "Neck",
               "reportedAt": "2026-10-12T18:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/4058925/tershawn-wharton"
-            },
-            {
-              "id": "4695883",
-              "name": "Jalen Coker",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Quadriceps",
-              "reportedAt": "2026-10-12T17:35Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4695883/jalen-coker"
             },
             {
               "id": "4243256",
@@ -1157,6 +1157,15 @@
           "name": "Chicago Bears",
           "players": [
             {
+              "id": "4361748",
+              "name": "Anthony Johnson Jr.",
+              "position": "S",
+              "status": "Out",
+              "injury": "Undisclosed",
+              "reportedAt": "2026-10-13T20:02Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+            },
+            {
               "id": "4431611",
               "name": "Caleb Williams",
               "position": "QB",
@@ -1164,15 +1173,6 @@
               "injury": "Hamstring",
               "reportedAt": "2026-10-13T17:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431611/caleb-williams"
-            },
-            {
-              "id": "4361748",
-              "name": "Anthony Johnson Jr.",
-              "position": "S",
-              "status": "Injured Reserve",
-              "injury": "Undisclosed",
-              "reportedAt": "2026-10-13T17:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
               "id": "4608686",
@@ -3227,6 +3227,15 @@
           "name": "Jacksonville Jaguars",
           "players": [
             {
+              "id": "4692525",
+              "name": "Anton Harrison",
+              "position": "OT",
+              "status": "Out",
+              "injury": "Knee",
+              "reportedAt": "2026-10-13T19:12Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4692525/anton-harrison"
+            },
+            {
               "id": "2970716",
               "name": "Eric Murray",
               "position": "S",
@@ -3234,15 +3243,6 @@
               "injury": "Concussion",
               "reportedAt": "2026-10-13T17:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/2970716/eric-murray"
-            },
-            {
-              "id": "4692525",
-              "name": "Anton Harrison",
-              "position": "OT",
-              "status": "Out",
-              "injury": "Knee",
-              "reportedAt": "2026-10-13T14:11Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4692525/anton-harrison"
             },
             {
               "id": "4612298",
@@ -3462,7 +3462,7 @@
               "position": "WR",
               "status": "Injured Reserve",
               "injury": "Ankle",
-              "reportedAt": "2026-10-12T17:16Z",
+              "reportedAt": "2026-10-13T18:29Z",
               "source": "https://www.espn.com/nfl/player/_/id/4362921/tyquan-thornton"
             },
             {
@@ -4147,6 +4147,15 @@
           "name": "Los Angeles Rams",
           "players": [
             {
+              "id": "4574716",
+              "name": "Harrison Mevis",
+              "position": "PK",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-13T17:56Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4574716/harrison-mevis"
+            },
+            {
               "id": "4240123",
               "name": "Larrell Murchison",
               "position": "DE",
@@ -4352,15 +4361,6 @@
               "injury": null,
               "reportedAt": "2026-10-05T18:50Z",
               "source": "https://www.espn.com/nfl/player/_/id/4427752/cam-lampkin"
-            },
-            {
-              "id": "4574716",
-              "name": "Harrison Mevis",
-              "position": "PK",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-05T03:17Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4574716/harrison-mevis"
             },
             {
               "id": "3919510",
@@ -4877,7 +4877,7 @@
               "name": "Will Campbell",
               "position": "OT",
               "status": "Doubtful",
-              "injury": "Knee",
+              "injury": "Knee - MCL",
               "reportedAt": "2026-10-13T16:15Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685298/will-campbell"
             },
@@ -5297,6 +5297,15 @@
           "name": "New York Giants",
           "players": [
             {
+              "id": "3115303",
+              "name": "Jermaine Eluemunor",
+              "position": "OT",
+              "status": "Questionable",
+              "injury": "Calf",
+              "reportedAt": "2026-10-13T19:48Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
+            },
+            {
               "id": "4240706",
               "name": "Jason Pinnock",
               "position": "S",
@@ -5304,15 +5313,6 @@
               "injury": "Concussion",
               "reportedAt": "2026-10-13T17:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4240706/jason-pinnock"
-            },
-            {
-              "id": "3115303",
-              "name": "Jermaine Eluemunor",
-              "position": "OT",
-              "status": "Questionable",
-              "injury": "Calf",
-              "reportedAt": "2026-10-13T17:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
               "id": "4921249",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "14",
-          "name": "Larrell Murchison",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-13T17:50:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4240123/larrell-murchison"
-        },
-        {
-          "teamId": "14",
           "name": "Bill Murray",
           "from": "Out",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-13T17:50:23Z",
           "source": "https://www.espn.com/nfl/player/_/id/4363097/percy-butler"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-10-13T20:05:30Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-13T17:57:55Z",
-      "lastAttemptAt": "2026-10-13T17:57:55Z",
+      "checkedAt": "2026-10-13T20:05:30Z",
+      "lastAttemptAt": "2026-10-13T20:05:30Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-13T17:57:55Z",
-      "lastAttemptAt": "2026-10-13T17:57:55Z",
+      "checkedAt": "2026-10-13T20:05:30Z",
+      "lastAttemptAt": "2026-10-13T20:05:30Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
