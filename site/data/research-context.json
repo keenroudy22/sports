@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-13T20:05:30Z",
+  "updatedAt": "2026-10-13T20:43:33Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,8 +1162,17 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-13T20:02Z",
+              "reportedAt": "2026-10-13T20:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+            },
+            {
+              "id": "3134690",
+              "name": "Montez Sweat",
+              "position": "DE",
+              "status": "Suspension",
+              "injury": "Suspension",
+              "reportedAt": "2026-10-13T20:16Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3134690/montez-sweat"
             },
             {
               "id": "4431611",
@@ -1371,15 +1380,6 @@
               "injury": null,
               "reportedAt": "2026-10-07T23:13Z",
               "source": "https://www.espn.com/nfl/player/_/id/3916577/cam-lewis"
-            },
-            {
-              "id": "4954445",
-              "name": "Dillon Thieneman",
-              "position": "S",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-07T02:49Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4954445/dillon-thieneman"
             }
           ]
         },
@@ -1617,6 +1617,15 @@
           "name": "Cleveland Browns",
           "players": [
             {
+              "id": "4601080",
+              "name": "Raheim Sanders",
+              "position": "RB",
+              "status": "Injured Reserve",
+              "injury": "Hip",
+              "reportedAt": "2026-10-13T20:36Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4601080/raheim-sanders"
+            },
+            {
               "id": "4241424",
               "name": "Tylan Wallace",
               "position": "WR",
@@ -1759,15 +1768,6 @@
               "injury": "Concussion",
               "reportedAt": "2026-10-11T20:48Z",
               "source": "https://www.espn.com/nfl/player/_/id/4870653/kc-concepcion"
-            },
-            {
-              "id": "4601080",
-              "name": "Raheim Sanders",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Hip",
-              "reportedAt": "2026-10-11T20:01Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4601080/raheim-sanders"
             },
             {
               "id": "3131498",
@@ -3230,7 +3230,7 @@
               "id": "4692525",
               "name": "Anton Harrison",
               "position": "OT",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Knee",
               "reportedAt": "2026-10-13T19:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/4692525/anton-harrison"
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-13T19:48Z",
+              "reportedAt": "2026-10-13T20:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -5757,6 +5757,15 @@
           "name": "Philadelphia Eagles",
           "players": [
             {
+              "id": "4571162",
+              "name": "Jalyx Hunt",
+              "position": "LB",
+              "status": "Doubtful",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-13T20:28Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4571162/jalyx-hunt"
+            },
+            {
               "id": "4241478",
               "name": "DeVonta Smith",
               "position": "WR",
@@ -5809,15 +5818,6 @@
               "injury": "Ankle",
               "reportedAt": "2026-10-13T17:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4241372/hollywood-brown"
-            },
-            {
-              "id": "4571162",
-              "name": "Jalyx Hunt",
-              "position": "LB",
-              "status": "Doubtful",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-13T15:31Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4571162/jalyx-hunt"
             },
             {
               "id": "15835",
@@ -6513,8 +6513,8 @@
               "id": "3929636",
               "name": "Irv Charles",
               "position": "WR",
-              "status": "Injured Reserve",
-              "injury": "Knee",
+              "status": "Active",
+              "injury": null,
               "reportedAt": "2026-10-12T23:18Z",
               "source": "https://www.espn.com/nfl/player/_/id/3929636/irv-charles"
             },
@@ -7367,30 +7367,6 @@
       "changes": [
         {
           "teamId": "14",
-          "name": "Bill Murray",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-13T17:50:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3912189/bill-murray"
-        },
-        {
-          "teamId": "14",
-          "name": "Max Klare",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-13T17:50:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4833029/max-klare"
-        },
-        {
-          "teamId": "14",
-          "name": "CJ Daniels",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-13T17:50:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4605951/cj-daniels"
-        },
-        {
-          "teamId": "14",
           "name": "Ty Simpson",
           "from": "Out",
           "to": "Active",
@@ -7764,11 +7740,35 @@
           "to": "Out",
           "observedAt": "2026-10-13T20:05:30Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "5",
+          "name": "Raheim Sanders",
+          "from": "Questionable",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-13T20:43:33Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4601080/raheim-sanders"
+        },
+        {
+          "teamId": "30",
+          "name": "Anton Harrison",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-13T20:43:33Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4692525/anton-harrison"
+        },
+        {
+          "teamId": "26",
+          "name": "Irv Charles",
+          "from": "Injured Reserve",
+          "to": "Active",
+          "observedAt": "2026-10-13T20:43:33Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3929636/irv-charles"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-13T20:05:30Z",
-      "lastAttemptAt": "2026-10-13T20:05:30Z",
+      "checkedAt": "2026-10-13T20:43:33Z",
+      "lastAttemptAt": "2026-10-13T20:43:33Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-13T20:05:30Z",
-      "lastAttemptAt": "2026-10-13T20:05:30Z",
+      "checkedAt": "2026-10-13T20:43:33Z",
+      "lastAttemptAt": "2026-10-13T20:43:33Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
