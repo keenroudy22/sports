@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-13T14:06:05Z",
+  "updatedAt": "2026-10-13T14:19:07Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-13T14:00Z",
+              "reportedAt": "2026-10-13T14:11Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -3227,6 +3227,15 @@
           "name": "Jacksonville Jaguars",
           "players": [
             {
+              "id": "4692525",
+              "name": "Anton Harrison",
+              "position": "OT",
+              "status": "Out",
+              "injury": "Knee",
+              "reportedAt": "2026-10-13T14:11Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4692525/anton-harrison"
+            },
+            {
               "id": "2970716",
               "name": "Eric Murray",
               "position": "S",
@@ -3351,15 +3360,6 @@
               "injury": null,
               "reportedAt": "2026-10-11T18:43Z",
               "source": "https://www.espn.com/nfl/player/_/id/4432620/parker-washington"
-            },
-            {
-              "id": "4692525",
-              "name": "Anton Harrison",
-              "position": "OT",
-              "status": "Questionable",
-              "injury": "Knee",
-              "reportedAt": "2026-10-11T16:31Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4692525/anton-harrison"
             },
             {
               "id": "4242149",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-13T13:00Z",
+              "reportedAt": "2026-10-13T14:11Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "20",
-          "name": "Nate Lynn",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-12T20:03:06Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4574142/nate-lynn"
-        },
-        {
-          "teamId": "20",
           "name": "Nahshon Wright",
           "from": "Out",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-13T12:41:22Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "30",
+          "name": "Anton Harrison",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-13T14:19:07Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4692525/anton-harrison"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-13T14:06:05Z",
-      "lastAttemptAt": "2026-10-13T14:06:05Z",
+      "checkedAt": "2026-10-13T14:19:07Z",
+      "lastAttemptAt": "2026-10-13T14:19:07Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-13T14:06:05Z",
-      "lastAttemptAt": "2026-10-13T14:06:05Z",
+      "checkedAt": "2026-10-13T14:19:07Z",
+      "lastAttemptAt": "2026-10-13T14:19:07Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
