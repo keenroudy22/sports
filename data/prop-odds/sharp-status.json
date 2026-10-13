@@ -1,38 +1,30 @@
 {
- "at": "2026-10-13T15:54:59Z",
+ "at": "2026-10-13T16:02:44Z",
  "confirmed": {
-  "CFB-401871053": "2026-10-13T15:54:59Z",
-  "CFB-401871054": "2026-10-13T15:54:59Z",
-  "CFB-401871067": "2026-10-13T15:54:59Z",
-  "CFB-401871068": "2026-10-13T15:54:59Z"
+  "CFB-401871053": "2026-10-13T16:02:44Z",
+  "CFB-401871054": "2026-10-13T16:02:44Z",
+  "CFB-401871067": "2026-10-13T16:02:44Z",
+  "CFB-401871068": "2026-10-13T16:02:44Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 607,
-    "fanduel": 631
+    "draftkings": 204,
+    "fanduel": 670
    },
-   "eventsListed": 64,
+   "eventsListed": 62,
    "eventsMatched": 4,
    "games": 4,
    "marketTypes": {
-    "player_field_goals_made": 2,
-    "player_kicking_points": 2,
-    "player_longest_passing_completion": 2,
-    "player_longest_reception": 13,
-    "player_longest_rush": 7,
-    "player_passing_+_rushing_yards": 25,
-    "player_passing_attempts": 15,
-    "player_passing_completions": 13,
-    "player_passing_touchdowns": 36,
-    "player_passing_yards": 148,
-    "player_receiving_yards": 514,
-    "player_receptions": 52,
-    "player_rushing_attempts": 11,
-    "player_rushing_yards": 398
+    "player_longest_reception": 6,
+    "player_passing_touchdowns": 34,
+    "player_passing_yards": 136,
+    "player_receiving_yards": 394,
+    "player_receptions": 35,
+    "player_rushing_yards": 269
    },
-   "requestsLeft": 6,
-   "rows": 1238,
+   "requestsLeft": 8,
+   "rows": 874,
    "slateGames": [
     "Delaware Blue Hens at Middle Tennessee Blue Raiders 2026-10-13T23:00Z",
     "Florida International Panthers at Jacksonville State Gamecocks 2026-10-14T00:00Z",
@@ -52,7 +44,6 @@
       "bwin": "6:46783",
       "caesars": "5b2438fb-a7fa-4625-ac8e-a19c262afa33",
       "circa": "221120",
-      "draftkings": "34788195",
       "fanduel": "36152741",
       "fliff": "418863_c_p_209_prematch",
       "gemini": "NCAAF-2610152330-ECU-UAB-M",
@@ -120,7 +111,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -155,6 +145,7 @@
       "polymarket": "nfl_georgiasouthern_olddominion_2026-10-15_b3",
       "prophetx": "1700101194",
       "rebet": "sr:match:70918900",
+      "sbobet": "10715118",
       "smarkets": "45356035",
       "sportzino": "sz-17783359",
       "sx_bet": "L20484372",
@@ -409,7 +400,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -497,7 +487,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -517,6 +506,7 @@
       "bwin": "6:46828",
       "caesars": "5f815355-b671-4ee9-8607-913872861c45",
       "circa": "221124",
+      "draftkings": "34788206",
       "fanduel": "36152752",
       "fliff": "418747_c_p_209_prematch",
       "gemini": "NCAAF-2610170000-WAS-PUR-M",
@@ -751,7 +741,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -835,7 +824,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -870,7 +858,7 @@
      "type": "fixture"
     },
     {
-     "away": "Cincinnati",
+     "away": "Cincinnati Bearcats",
      "external": {
       "ballybet": "1027569820",
       "betmgm": "6:46854",
@@ -881,7 +869,6 @@
       "bwin": "6:46854",
       "caesars": "51d71641-3f86-48be-aa92-01cac4475212",
       "circa": "221133",
-      "draftkings": "34788191",
       "fanduel": "36153232",
       "fliff": "418744_c_p_209_prematch",
       "goldrush": "31209355",
@@ -899,10 +886,10 @@
       "sx_bet": "L20483816",
       "thescorebet": "StandardEvent:f6f6646b-d69b-4032-a0c9-e8090ca5b1b9"
      },
-     "home": "West Virginia",
+     "home": "West Virginia Mountaineers",
      "sample": {
-      "away_team": "Cincinnati",
-      "home_team": "West Virginia",
+      "away_team": "Cincinnati Bearcats",
+      "home_team": "West Virginia Mountaineers",
       "markets": [
        "1st_half_draw_no_bet",
        "1st_half_moneyline",
@@ -929,9 +916,7 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
        "draw_no_bet",
-       "first_touchdown_scorer",
        "game_prop",
        "highest_scoring_quarter_will_have_how_many_points",
        "match_result_both_teams_to_score",
@@ -943,7 +928,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -1017,7 +1001,6 @@
        "4th_quarter_total_points",
        "anytime_touchdown_scorer",
        "draw_no_bet",
-       "first_touchdown_scorer",
        "game_prop",
        "highest_scoring_quarter_will_have_how_many_points",
        "match_result_both_teams_to_score",
@@ -1047,7 +1030,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
