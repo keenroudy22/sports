@@ -1,30 +1,33 @@
 {
- "at": "2026-10-13T16:02:44Z",
+ "at": "2026-10-13T16:09:00Z",
  "confirmed": {
-  "CFB-401871053": "2026-10-13T16:02:44Z",
-  "CFB-401871054": "2026-10-13T16:02:44Z",
-  "CFB-401871067": "2026-10-13T16:02:44Z",
-  "CFB-401871068": "2026-10-13T16:02:44Z"
+  "CFB-401871053": "2026-10-13T16:09:00Z",
+  "CFB-401871054": "2026-10-13T16:09:00Z",
+  "CFB-401871067": "2026-10-13T16:09:00Z",
+  "CFB-401871068": "2026-10-13T16:09:00Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 204,
-    "fanduel": 670
+    "draftkings": 393,
+    "fanduel": 671
    },
-   "eventsListed": 62,
+   "eventsListed": 64,
    "eventsMatched": 4,
    "games": 4,
    "marketTypes": {
-    "player_longest_reception": 6,
-    "player_passing_touchdowns": 34,
-    "player_passing_yards": 136,
-    "player_receiving_yards": 394,
-    "player_receptions": 35,
-    "player_rushing_yards": 269
+    "player_field_goals_made": 2,
+    "player_kicking_points": 2,
+    "player_longest_reception": 11,
+    "player_longest_rush": 1,
+    "player_passing_touchdowns": 37,
+    "player_passing_yards": 156,
+    "player_receiving_yards": 470,
+    "player_receptions": 50,
+    "player_rushing_yards": 335
    },
-   "requestsLeft": 8,
-   "rows": 874,
+   "requestsLeft": 7,
+   "rows": 1064,
    "slateGames": [
     "Delaware Blue Hens at Middle Tennessee Blue Raiders 2026-10-13T23:00Z",
     "Florida International Panthers at Jacksonville State Gamecocks 2026-10-14T00:00Z",
@@ -224,7 +227,7 @@
       "fliff": "fobj__conflict_event__418174",
       "gemini": "NCAAF-2610160000-CSU-TXS-M",
       "goldrush": "31197259",
-      "kalshi": "KXNCAAF2QSPREAD-26OCT15CSUTXST",
+      "kalshi": "KXNCAAF1QTOTAL-26OCT15CSUTXST",
       "ladbrokes": "6bfe5ea2-e9d7-41a6-8b4e-1c0eb6bbd3d0",
       "matchbook": "mb-34556780943900023",
       "novig": "01a118d2-311f-70f2-aafe-ee8691c3325c",
@@ -400,6 +403,7 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -948,7 +952,6 @@
       "bwin": "6:46691",
       "caesars": "943e27c4-dbcb-4f4b-9ce8-a6bc0382f964",
       "circa": "221136",
-      "draftkings": "34788266",
       "fanatics": "5334311",
       "fanduel": "36152774",
       "fliff": "fobj__conflict_event__418129",
