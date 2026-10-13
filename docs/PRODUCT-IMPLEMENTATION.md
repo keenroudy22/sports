@@ -1665,3 +1665,41 @@ lacking season and kickoff metadata, crashing four settlement attempts. The
 bounded fix separates grading summaries from captured history and preserves
 stored box-score precedence. O-20261013-1 tracks release and live outcome proof.
 No record row, price, pick, posted art or selection rule is rewritten.
+
+
+### October 13 overnight settlement recovery — verified 2026-10-13T05:12:36Z
+
+Release `71c0081c6d6ed61ba7f379d90952ca2498e8f3fd`, hosted publish
+`38349307919` succeeded; initial crash repair `b78fdcc4` also passed hosted
+`38348287920`. Summary-only watcher finals now feed grading separately from
+historical roster/weather inputs. The no-webhook test explicitly clears every
+destination, so real Mac research settings cannot stop settlement. The genuine
+stopped-run settlement report was preserved in Git under the run lock.
+
+Final gates under release lease and run lock: Python1371 (2 skipped), Node240,
+both clean-export suites, build502/139 games, budget no hard issue (existing
+Today/More soft warnings), football102/NBA0 audits, guard602, assets/SVG,
+isolated2330 rehearsal exit0/outcomeok/outsideWrite0/privateRead0 and14 local
+375/1440 routes passed. Eight fresh live Today/Record/two-pick routes at375/1440
+had zero overflow, load states or browser errors. The live record shows Ty
+Johnson72 receiving yards as a win and Kyren Williams16 carries as a loss.
+First verified final03:50:17Z; settlement stamp04:49:50Z:59.55 minutes. This
+historical delay is retained, not called on time. Chosen-not-posted0 and no
+duplicate/stale overnight result queue entries. No selection/counting/art change.
+
+Result delivery remains externally held. Canonical
+`receipt-day-2026-10-12.png` returned404 with Cloudflare HIT/max-age14400;
+a fresh query returned200 image/png. The01:02 recovery run is in its existing
+15-minute card wait; no successful finish or Buffer acceptance is claimed.
+After01:00 quiet hours, the win's09:05 standalone slot also exceeds its3-hour
+freshness limit; losses are reserved for the combined Final under theOct12
+routing rule. Both outcomes belong in09:00 Results. Final-to-public-post
+minutes stay null/unconfirmed until a real sentAt exists.
+
+O-20261013-1 next check: the existing06:45AM ET Mac run retries the canonical
+card before09:00 Results, then require Buffer acceptance and a real delivery
+receipt. No cache purge, extra automation, owner action, new feed or budget
+increase was introduced. Exact evidence: work/overnight-20261013-outcomes.json,
+work/overnight-20261013-card-cache.json, work/overnight-20261013-live/audit.json
+and work/overnight-20261013-locked-*.log. This documentation receipt stays on
+dev for the next regular release; the verified code is already live.
