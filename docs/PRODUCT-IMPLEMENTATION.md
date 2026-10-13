@@ -1638,3 +1638,21 @@ observed in the last 48 hours, flags missing result posts and flags delays over
 the auditable start is `settledAt`, the first saved observation of the final;
 the report names that limitation instead of inventing precision. Release and
 live evidence remain pending under A-20261012-5.
+
+### Research Discord release verified — 2026-10-13T03:31:10Z
+
+Release `8d1f826e7543868bdff3eef9eb3942912d0089dc` and hosted
+[38341470953](https://github.com/keenroudy22/sports/actions/runs/38341470953)
+succeeded. Python 1370 (two skipped), Node 240, both clean-export suites, the
+502-page/139-game build, payload budget with no hard issue, 102-pick and NBA
+audits, 601-file publication guard, current assets/SVG checks and the isolated
+current-slot rehearsal all passed. The rehearsal reported outcome ok with zero
+outside writes or private reads. Local and live checks across seven routes at
+375 and 1440 pixels returned 14 pages with zero overflow, caught load states or
+browser errors.
+
+Approved research now waits for a confirmed X delivery before mirroring its
+same card, X link and `RESEARCH · NOT A BEST BET` label to the dedicated
+`#research-and-trends` webhook. It has no fallback into Plays & Results. No
+public post was forced to manufacture proof; A-20261012-6 remains observing
+until the first naturally eligible research post supplies its durable receipt.
