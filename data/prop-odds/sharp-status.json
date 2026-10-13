@@ -1,15 +1,15 @@
 {
- "at": "2026-10-13T10:54:42Z",
+ "at": "2026-10-13T11:15:31Z",
  "confirmed": {
-  "CFB-401871053": "2026-10-13T10:54:42Z",
-  "CFB-401871054": "2026-10-13T10:54:42Z",
-  "CFB-401871067": "2026-10-13T10:54:42Z",
-  "CFB-401871068": "2026-10-13T10:54:42Z"
+  "CFB-401871053": "2026-10-13T11:15:31Z",
+  "CFB-401871054": "2026-10-13T11:15:31Z",
+  "CFB-401871067": "2026-10-13T11:15:31Z",
+  "CFB-401871068": "2026-10-13T11:15:31Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 295,
+    "draftkings": 410,
     "fanduel": 613
    },
    "eventsListed": 59,
@@ -18,18 +18,20 @@
    "marketTypes": {
     "player_field_goals_made": 2,
     "player_kicking_points": 2,
-    "player_longest_passing_completion": 1,
-    "player_longest_reception": 7,
-    "player_longest_rush": 3,
-    "player_passing_+_rushing_yards": 25,
-    "player_passing_touchdowns": 31,
-    "player_passing_yards": 116,
-    "player_receiving_yards": 403,
-    "player_receptions": 29,
-    "player_rushing_yards": 289
+    "player_longest_passing_completion": 2,
+    "player_longest_reception": 8,
+    "player_longest_rush": 5,
+    "player_passing_+_rushing_yards": 50,
+    "player_passing_attempts": 7,
+    "player_passing_completions": 6,
+    "player_passing_touchdowns": 34,
+    "player_passing_yards": 135,
+    "player_receiving_yards": 422,
+    "player_receptions": 36,
+    "player_rushing_yards": 314
    },
-   "requestsLeft": 9,
-   "rows": 908,
+   "requestsLeft": 53,
+   "rows": 1023,
    "slateGames": [
     "Delaware Blue Hens at Middle Tennessee Blue Raiders 2026-10-13T23:00Z",
     "Florida International Panthers at Jacksonville State Gamecocks 2026-10-14T00:00Z",
@@ -380,7 +382,9 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "anytime_touchdown_scorer",
        "draw_no_bet",
+       "first_touchdown_scorer",
        "game_prop",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
@@ -390,6 +394,7 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -662,7 +667,7 @@
       "fliff": "418868_c_p_209_prematch",
       "goldrush": "31209365",
       "hardrock": "8101776887799480735",
-      "kalshi": "KXNCAAF1HTOTAL-26OCT17BALLBGSU",
+      "kalshi": "KXNCAAF1H-26OCT16BALLBGSU",
       "ladbrokes": "f03eeb99-0844-48f6-a1bd-1a18749ed254",
       "novig": "01a12171-8d97-7940-ba64-4861d074a461",
       "onexbet": "760871537",
@@ -715,6 +720,7 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "winning_margin"
       ]
      },
@@ -739,7 +745,7 @@
       "fliff": "418735_c_p_209_prematch",
       "goldrush": "31209363",
       "hardrock": "4343426241735557531",
-      "kalshi": "KXNCAAF1HSPREAD-26OCT17PITTBC",
+      "kalshi": "KXNCAAF1H-26OCT16PITTBC",
       "ladbrokes": "d8dbbb12-10b2-4ea3-9748-6ce3794c08d4",
       "novig": "01a12171-92df-7793-9718-44f873b07f2f",
       "onexbet": "760836665",
@@ -817,7 +823,7 @@
       "fliff": "418744_c_p_209_prematch",
       "goldrush": "31209355",
       "hardrock": "1610400974898332059",
-      "kalshi": "KXNCAAF1HTOTAL-26OCT17CINWVU",
+      "kalshi": "KXNCAAF1H-26OCT16CINWVU",
       "ladbrokes": "9b69fa11-c843-40ea-b2bf-33a9c65d55d0",
       "novig": "01a12171-8eef-7722-b4d1-30161875dae7",
       "onexbet": "760861413",
@@ -860,7 +866,9 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
+       "anytime_touchdown_scorer",
        "draw_no_bet",
+       "first_touchdown_scorer",
        "game_prop",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
@@ -870,6 +878,7 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -896,7 +905,7 @@
       "gemini": "NCAAF-2610172000-FLA-TEX-M",
       "goldrush": "31209341",
       "hardrock": "2643317382403195269",
-      "kalshi": "KXNCAAF1HTOTAL-26OCT17FLATEX",
+      "kalshi": "KXNCAAF1H-26OCT16FLATEX",
       "ladbrokes": "f901f47f-3a84-40a2-bde5-81225f2d96ea",
       "novig": "01a12171-924e-7351-9194-f3db5f2c126c",
       "onexbet": "760657850",
@@ -984,13 +993,14 @@
       "betrivers": "1028202615",
       "bovada": "32123363",
       "bwin": "6:46962",
+      "caesars": "eb158fd4-f77b-44d7-a432-72af1c3d0e3b",
       "circa": "221138",
       "draftkings": "34788197",
       "fanduel": "36154555",
       "fliff": "418866_c_p_209_prematch",
       "goldrush": "31209347",
       "hardrock": "104932061961388438",
-      "kalshi": "KXNCAAF1HSPREAD-26OCT17GASTJMU",
+      "kalshi": "KXNCAAF1H-26OCT16GASTJMU",
       "ladbrokes": "93782ca3-bbd4-43f6-976c-f7598c0b9c40",
       "novig": "01a12171-8c9e-7440-926b-e7a6be0ee4ff",
       "onexbet": "760852961",
