@@ -492,14 +492,17 @@ def main(argv=None):
     brief_text = text
     import product_followthrough
     product_status = product_followthrough.read_status(root=ROOT, now=now)
+    brief_text = product_followthrough.brief(product_status) + '\n\n' + brief_text
     # Keep the entire dated queue in the packet, including packet-only runs.
     # This fixed local read adds no model/provider call or work execution.
     text = f"Official plays not scheduled: {health.get('officialUnscheduled', 0)}\n\n" + product_followthrough.packet(product_status) + '\n' + text
     import market_review
     try:
-        text += '\n' + market_review.markdown(market_review.from_stores())
+        market_text = market_review.markdown(market_review.from_stores())
     except Exception as error:
-        text += f'\nProp formula review unavailable: {type(error).__name__}.\n'
+        market_text = f'Prop formula review unavailable: {type(error).__name__}.\n'
+    text += '\n' + market_text
+    brief_text += '\n' + market_text
     LOGS.mkdir(parents=True, exist_ok=True)
     packet_path, review_path = LOGS / f'review-packet-{last.isoformat()}.md', LOGS / f'review-{last.isoformat()}.md'
     packet_path.write_text(text, encoding='utf-8')

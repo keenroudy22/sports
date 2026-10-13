@@ -247,8 +247,24 @@ class ReviewProductWiringTests(unittest.TestCase):
                     model.assert_not_called()
                     cloud.assert_called_once()
                 else:
-                    model.assert_called_once_with(packet)
+                    model.assert_called_once()
+                    model_input = model.call_args.args[0]
+                    self.assertIn('Private health facts.', model_input)
+                    self.assertIn('Market review facts.', model_input)
+                    self.assertNotIn('## Product-plan follow-through', model_input)
+                    self.assertLess(len(model_input), len(packet))
+                    if missing:
+                        self.assertIn('unfinished work cannot be assessed', model_input)
+                    else:
+                        self.assertIn('P02 Next scoped improvement', model_input)
+                        self.assertIn('P03 Private review destination', model_input)
+                        # Full completion conditions remain in the saved packet,
+                        # not in the bounded model input's current queue summary.
+                        for item in fixture()['items']:
+                            self.assertIn(item['doneWhen'], saved)
                     cloud.assert_not_called()
+                routing = json.loads((logs / 'review-routing-2026-10-05.json').read_text())
+                self.assertEqual(routing['summaryAvailable'], mode != 'fallback')
                 for excerpt in (saved, phone.call_args.args[1], discord.call_args.args[0]):
                     if missing:
                         self.assertIn('Unavailable.', excerpt)
