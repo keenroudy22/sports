@@ -170,9 +170,10 @@ def queue_results(log_book, first, latest, games, now):
             continue
         if not now - RESULT_UPDATE_FRESH < settled_at <= now:
             continue
-        mark = {'win': '✅', 'loss': '❌', 'push': '➖', 'void': '➖'}[result]
-        word = {'win': 'HIT', 'loss': 'MISS', 'push': 'PUSH', 'void': 'VOID'}[result]
-        detail = result_display.detail(pick) or result_display.clean_actual(pick)
+        overtime = result_display.overtime_detail(pick)
+        mark = '😩' if overtime else {'win': '✅', 'loss': '❌', 'push': '➖', 'void': '➖'}[result]
+        word = 'OT BAD BEAT' if overtime else {'win': 'HIT', 'loss': 'MISS', 'push': 'PUSH', 'void': 'VOID'}[result]
+        detail = overtime or result_display.detail(pick) or result_display.clean_actual(pick)
         title = receipts.label(pick, games)
         text = f'{mark} FINAL · {word}: {title}' + (f'\n{detail}' if detail else '')
         mirror['result'] = {'state': 'pending', 'text': text, 'settledAt': pick['settledAt']}

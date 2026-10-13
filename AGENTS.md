@@ -226,6 +226,11 @@ Handy commands (from `~/Projects/sports`):
   should post within about 30 minutes of the first verified final; result quiet hours begin at 1:00 AM, the site
   updates immediately, and the private outcomes check reports minutes from final to post.
 
+- **Overtime bad-beat copy (owner, 2026-10-13):** when stored play-by-play proves a play was winning through
+  regulation and overtime alone flipped it into a near miss, lead the result with that story. Name the regulation
+  number and the exact overtime work instead of publishing only a sterile loss line. Never infer the split from a
+  final box score; without period-level proof, use the ordinary factual result copy.
+
 - **October 11 operating settlement (owner, 2026-10-11):** Fun tickets are a small number of pregame parlays at
   +500 through +1500, one book, different games, at most one total and one saved real reason per leg; they are
   graded win or lose. The prior conversation idea to post parlays only after they win is withdrawn. Try for a

@@ -83,8 +83,48 @@ def stat_line(pick, game=None):
     return None
 
 
+OT_FIELDS = {'car': ('otCar', 'carry', 'carries'), 'rec': ('otRec', 'catch', 'catches'),
+             'rushYds': ('otRushYds', 'yard', 'yards'), 'recYds': ('otRecYds', 'yard', 'yards'),
+             'passYds': ('otPassYds', 'yard', 'yards'), 'att': ('otAtt', 'attempt', 'attempts')}
+
+
+def overtime_detail(pick, game=None):
+    """Explain a near miss only when stored play-by-play proves overtime flipped it."""
+    if pick.get('result') != 'loss' or str(pick.get('direction') or '').lower() not in ('over', 'under'):
+        return None
+    game = game or stored_games().get(pick.get('gameId') or (pick.get('gameIds') or [None])[0])
+    periods = [side.get('periods') or [] for side in ((game or {}).get('home') or {}, (game or {}).get('away') or {})]
+    if not any(len(row) > 4 for row in periods):
+        return None
+    row = box_player(pick, game)
+    field = OT_FIELDS.get(str(pick.get('market') or ''))
+    value, line = _number(pick.get('actualValue')), _number(pick.get('line'))
+    if row is None or field is None or value is None or line is None:
+        return None
+    delta = _number(row.get(field[0]))
+    if delta in (None, 0):
+        return None
+    regulation = value - delta
+    direction = str(pick.get('direction')).lower()
+    flipped = (direction == 'under' and regulation < line < value) or \
+              (direction == 'over' and regulation > line > value)
+    if not flipped:
+        return None
+    singular, plural = field[1], field[2]
+    unit = singular if abs(regulation) == 1 else plural
+    delta_unit = singular if abs(delta) == 1 else plural
+    if delta > 0:
+        turn = f'OT added {delta:g} {delta_unit} and pushed him to {value:g}'
+    else:
+        turn = f'OT took away {abs(delta):g} {delta_unit} and left him at {value:g}'
+    return f'{regulation:g} {unit} through regulation. {turn} · missed by {abs(value - line):g}'
+
+
 def detail(pick, game=None):
     """Stat line plus an exact-line margin when the saved grade agrees with it."""
+    overtime = overtime_detail(pick, game)
+    if overtime:
+        return overtime
     base = stat_line(pick, game)
     if not base:
         return None

@@ -30,8 +30,10 @@ def player(rec, name):
     return next(p for p in rec['players'] if p.get('name') == name)
 
 
-def play(kind, team='1', to_go=50, roles=(), down=1, distance=10, gained=0, scoring=False, text='', snap_team=None):
+def play(kind, team='1', to_go=50, roles=(), down=1, distance=10, gained=0, scoring=False, text='', snap_team=None,
+         period=1):
     return {'type': {'text': kind}, 'text': text, 'team': {'$ref': f'/teams/{team}'},
+            'period': {'number': period},
             'start': {'down': down, 'distance': distance, 'yardsToEndzone': to_go,
                       'team': {'$ref': f'/teams/{snap_team or team}'}},
             'drive': {'$ref': '/drives/9'}, 'statYardage': gained, 'scoringPlay': scoring,
@@ -185,6 +187,18 @@ class PlayFeatureTests(unittest.TestCase):
         self.assertEqual((offense['1']['successes'], offense['1']['successPlays']), (3, 5))
         self.assertEqual(offense['1']['explosive'], 1)
         self.assertEqual((offense['1']['rzDrives'], offense['1']['rzDriveTDs']), (1, 1))
+
+    def test_overtime_player_work_is_kept_for_honest_result_copy(self):
+        counts, _ = self.features(
+            play('Rush', roles=[('rusher', 30)], gained=7, period=4),
+            play('Rush', roles=[('rusher', 30)], gained=3, period=5),
+            play('Rush', roles=[('rusher', 30)], gained=0, period=5),
+            play('Pass Reception', roles=[('passer', 10), ('receiver', 20)], gained=12, period=5))
+        self.assertEqual({key: counts['30'][key] for key in ('pbpCar', 'otCar', 'otRushYds')},
+                         {'pbpCar': 3, 'otCar': 2, 'otRushYds': 3})
+        self.assertEqual({key: counts['20'][key] for key in ('pbpTgt', 'pbpRec', 'otTgt', 'otRec', 'otRecYds')},
+                         {'pbpTgt': 1, 'pbpRec': 1, 'otTgt': 1, 'otRec': 1, 'otRecYds': 12})
+        self.assertEqual(counts['10']['otPassYds'], 12)
 
 
 class MarketTests(unittest.TestCase):

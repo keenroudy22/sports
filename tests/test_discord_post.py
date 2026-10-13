@@ -3,9 +3,11 @@ import tempfile
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import discord_post
+import result_display
 
 
 NOW = datetime(2026, 9, 28, 16, 0, tzinfo=timezone.utc)
@@ -133,6 +135,23 @@ class DiscordPostTests(unittest.TestCase):
         quiet = datetime(2026, 9, 28, 6, 0, tzinfo=timezone.utc)  # 2 AM Eastern
         self.assertEqual(discord_post.queue_results({'posts': [entry]}, first, latest, {}, quiet), 0)
         self.assertNotIn('result', entry['discord'])
+
+    def test_an_overtime_flip_is_sent_as_a_bad_beat_not_a_plain_miss(self):
+        entry = {'id': 'NFL-kyren', 'kind': 'buffer:play', 'discord': {'state': 'sent'}}
+        first = {'NFL-kyren': {'id': 'NFL-kyren', 'title': 'Kyren Williams UNDER 14.5 carries',
+                               'player': 'Kyren Williams', 'athleteId': '4430737', 'market': 'car',
+                               'direction': 'under', 'line': 14.5, 'gameIds': ['NFL-game']}}
+        latest = {'NFL-kyren': {'result': 'loss', 'settledAt': '2026-09-28T15:50:00Z',
+                                'actualValue': 16}}
+        game = {'home': {'periods': [0, 7, 7, 20, 0]}, 'away': {'periods': [6, 7, 6, 15, 3]},
+                'players': [{'id': '4430737', 'car': 16, 'otCar': 2}]}
+        with patch.object(result_display, 'stored_games', return_value={'NFL-game': game}):
+            self.assertEqual(discord_post.queue_results({'posts': [entry]}, first, latest,
+                                                        {'NFL-game': game}, NOW), 1)
+        text = entry['discord']['result']['text']
+        self.assertIn('OT BAD BEAT', text)
+        self.assertIn('14 carries through regulation', text)
+        self.assertIn('OT added 2 carries', text)
 
     def test_no_webhook_is_a_quiet_noop(self):
         entry = {'id': 'a', 'kind': 'buffer:play', 'sentAt': '2026-09-28T15:59:00Z', 'discord': {'state': 'pending', 'text': 'Play'}}

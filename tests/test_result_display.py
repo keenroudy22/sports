@@ -44,6 +44,16 @@ class ResultDisplayTests(unittest.TestCase):
             with self.subTest(market=market):
                 self.assertEqual(result_display.stat_line(pick, {'players': [dict(player, id='4869443')]}), expected)
 
+    def test_overtime_that_flips_an_under_is_named_as_the_bad_beat(self):
+        pick = {'title': 'Kyren Williams UNDER 14.5 carries', 'player': 'Kyren Williams', 'athleteId': '4430737',
+                'gameId': 'NFL-401872994', 'market': 'car', 'line': 14.5, 'direction': 'under', 'result': 'loss',
+                'actualValue': 16}
+        game = {'home': {'periods': [0, 7, 7, 20, 0]}, 'away': {'periods': [6, 7, 6, 15, 3]},
+                'players': [{'id': '4430737', 'car': 16, 'otCar': 2}]}
+        expected = '14 carries through regulation. OT added 2 carries and pushed him to 16 · missed by 1.5'
+        self.assertEqual(result_display.overtime_detail(pick, game), expected)
+        self.assertEqual(result_display.detail(pick, game), expected)
+
 
 if __name__ == '__main__':
     unittest.main()

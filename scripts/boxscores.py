@@ -271,6 +271,8 @@ def play_features(payload, team_ids):
         to_go = to_go if isinstance(to_go, int) and 0 < to_go <= 100 else None
         kind = str(play.get('type', {}).get('text', '')).lower()
         gained = play.get('statYardage') if isinstance(play.get('statYardage'), int) else None
+        period = (play.get('period') or {}).get('number')
+        overtime = isinstance(period, int) and period > 4
         # Only the offense's own scores; pick-sixes and fumble returns are not.
         touchdown = kind in ('passing touchdown', 'rushing touchdown')
         red_zone = to_go is not None and to_go <= 20
@@ -289,12 +291,18 @@ def play_features(payload, team_ids):
             else:
                 players[passer]['pbpAtt'] += 1
                 players[passer]['rzAtt'] += red_zone
+                players[passer]['otAtt'] += overtime
             for receiver in roles.get('receiver', []):
                 players[receiver]['pbpTgt'] += 1
                 players[receiver]['rzTgt'] += red_zone
                 players[receiver]['i10Tgt'] += to_go is not None and to_go <= 10
+                players[receiver]['otTgt'] += overtime
                 if not any(word in kind for word in NOT_COMPLETION):
                     players[receiver]['pbpRec'] += 1
+                    players[receiver]['otRec'] += overtime
+                    if overtime and gained is not None:
+                        players[receiver]['otRecYds'] += gained
+                        players[passer]['otPassYds'] += gained
         else:
             stats['rushes'] += 1
             players[rusher]['pbpCar'] += 1
@@ -302,6 +310,9 @@ def play_features(payload, team_ids):
             players[rusher]['i10Car'] += to_go is not None and to_go <= 10
             players[rusher]['i5Car'] += to_go is not None and to_go <= 5
             players[rusher]['scrambles'] += 'scramble' in str(play.get('text', '')).lower()
+            players[rusher]['otCar'] += overtime
+            if overtime and gained is not None:
+                players[rusher]['otRushYds'] += gained
         success = successful(start.get('down'), start.get('distance'), gained, touchdown)
         if success is not None:
             split = 'db' if passer else 'rush'
