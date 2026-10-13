@@ -1726,3 +1726,27 @@ candidate put the entire game into a shared fun-ticket exclusion set before the
 Climb evaluated its own legs. The Climb now owns that decision: an 8:15 PM game
 stays in the Monday pool, and each proposed rung leg still has to clear the
 Climb's price, role, injury and saved-reason checks. O-20261013-4 tracks release.
+
+
+### October 13 weekly — prerequisite blocked (2026-10-13T15:06:19.356538+00:00)
+
+W-20261013-1 · owner: agent · status: blocked before release. The current
+`data/learning/OWNER-NOTE.md` is headed October 13 and was written at09:58ET.
+No October13 review or review packet exists under the private KeenRoudy logs;
+the newest pair remains October5. The loaded `com.keenroudy.sports.review`
+job reports runs0 and never exited. Both its installed and tracked plists
+set Weekday3 at10:30, which is Wednesday in launchd (Tuesday is2).
+
+The weekly instruction requires the current Tuesday evidence before queue
+implementation, so this run stopped without code changes or a deployment.
+No queue item was marked shipped and no production file was hand-edited.
+
+Next action: correct the repo-owned review plist to Tuesday2 with a regression
+check; pass the required release gates, install/reload under run.lock, and
+obtain the real October13 review packet using the local-only, no-push review
+path. Completion: the loaded job is Tuesday10:30 and the dated review/packet
+exist with current evidence. Then reassess the approved priority queue;
+O-20261013-4 (Eastern-day Climb pool) remains ready for its full release gates,
+and KA-R1 remains open. Do not manufacture a packet or learning move.
+This documentation-only blocker receipt is retained on dev for the next
+regular release; it is not a code release or hosted/live success claim.
