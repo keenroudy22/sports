@@ -346,6 +346,13 @@ def research_list_svg(choice, *, art=None):
     rows = []
     art = art or {}
     kind = str(choice.get('kind') or '')
+    right_label = {
+        'end-zone': 'INSIDE THE 10',
+        'season': 'HIT RATE',
+        'matchup': 'HIT RATE',
+        'upset': 'MY % / VEGAS %',
+        'spread-dog': 'MY % / VEGAS %',
+    }.get(kind, 'THE NUMBER')
     for index, source in enumerate((choice.get('rows') or [])[:5]):
         subject = str(source.get('title') or source.get('player') or '').strip()
         if not subject:
@@ -373,7 +380,8 @@ def research_list_svg(choice, *, art=None):
         rows.append({'subject': subject, 'line': line, 'right': right, 'detail': detail,
                      'art': art.get(index), 'team_color': source.get('teamColor') or '#2A2F33'})
     card = ticket_cards.research_list_card({'title': choice.get('title'), 'kicker': choice.get('kicker'),
-                                            'rows': rows, 'stub': 'RESEARCH · NOT A BEST BET'})
+                                            'right_label': right_label, 'rows': rows,
+                                            'stub': 'RESEARCH · NOT A BEST BET'})
     problems = ticket_kit.qa(card, f"research-{kind or 'list'}")
     if problems:
         raise ValueError('; '.join(problems))

@@ -576,31 +576,12 @@ def research_list_card(p):
     chip, _ = kit.series_chip(card, COL_X, 204, 'RESEARCH')
     inner += chip
     title = str(p.get('title') or 'RESEARCH').upper()
-    title_size = fit(title, 126, 650 - COL_X, floor=72)
+    title_size = fit(title, 126, X2 - COL_X, floor=72)
     inner += card.text(COL_X - 4, 290 + round(title_size * CAP), title, title_size, CHALK)
     kicker = str(p.get('kicker') or 'TODAY’S FOOTBALL RESEARCH').upper()
     inner += card.text(COL_X, panel_bottom - 30, kicker, fit(kicker, 42, 830, floor=32), CHALK)
-    # One decorative portrait per player. A player can have more than one
-    # researched market, but repeating their face in the header looks broken.
-    header_rows, seen_art = [], set()
-    for row in rows:
-        key = row.get('art') or ('fallback', row.get('subject'))
-        if key in seen_art:
-            continue
-        seen_art.add(key)
-        header_rows.append(row)
-    header_rows = header_rows[:5]
-    for i, row in enumerate(header_rows):
-        if len(header_rows) <= 3:
-            cx, cy = 908 - (len(header_rows) - 1 - i) * 102, 254
-        else:
-            cx, cy = 704 + (i % 3) * 102, 254 + (i // 3) * 108
-        if row.get('art'):
-            inner += kit.face_thumb(card, row['art'], cx, cy, 46, ring=CHALK)
-        else:
-            inner += kit.initials_badge(card, cx, cy, 46, kit.initials(row['subject']), row.get('team_color', CHARCOAL[0]))
     inner += card.text(X1, 530, 'WHAT I’M WATCHING', 40, INK_SOFT, tracking=1)
-    inner += card.text(X2, 530, str(p.get('right_label') or 'PROOF').upper(), 40, INK_SOFT, anchor='end', tracking=1)
+    inner += card.text(X2, 530, str(p.get('right_label') or 'THE NUMBER').upper(), 40, INK_SOFT, anchor='end', tracking=1)
     inner += kit.dashed(X1, X2, 548)
     for i, row in enumerate(rows):
         y = top + i * row_h

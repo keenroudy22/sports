@@ -91,7 +91,7 @@ class TicketCardTests(unittest.TestCase):
                 self.assertNotIn('SLATE RESEARCH', svg)
                 self.assertNotIn('>BEST BET<', svg)
 
-    def test_research_header_deduplicates_players_with_multiple_markets(self):
+    def test_research_header_has_no_duplicate_portraits_and_names_the_number(self):
         rows = [
             {'subject': 'Omarion Hampton', 'line': 'OVER 41.5 RUSH YDS', 'right': '9/10',
              'art': 'hampton'},
@@ -105,10 +105,27 @@ class TicketCardTests(unittest.TestCase):
             calls.append((art, radius))
             return '<g/>'
         with patch('ticket_cards.kit.face_thumb', side_effect=thumb):
-            ticket_cards.research_list_card({'title': 'MATCHUP TRENDS', 'rows': rows})
-        self.assertEqual([art for art, radius in calls if radius == 46], ['hampton', 'harris'])
+            svg = ticket_cards.research_list_card({'title': 'MATCHUP TRENDS', 'right_label': 'HIT RATE',
+                                                   'rows': rows}).svg()
+        self.assertEqual([art for art, radius in calls if radius == 46], [])
         self.assertEqual([art for art, radius in calls if radius == 34],
                          ['hampton', 'hampton', 'harris'])
+        self.assertIn('HIT RATE', svg)
+        self.assertNotIn('>PROOF<', svg)
+
+    def test_research_number_labels_are_plain_english(self):
+        end_zone = {'kind': 'end-zone', 'title': 'END-ZONE WORK', 'rows': [
+            {'title': 'Caden Creel', 'metric': '21 red-zone opportunities', 'price': '9 inside the 10'},
+            {'title': 'Devonte Lyons', 'metric': '9 red-zone opportunities', 'price': '6 inside the 10'},
+        ]}
+        trends = {'kind': 'matchup', 'title': 'MATCHUP TRENDS', 'rows': [
+            {'title': 'Player One over 49.5 receiving yards', 'price': '-110 DraftKings',
+             'metric': '7/10 exact-line trend', 'detail': 'Defense allows 58 yards', 'hits': 7, 'games': 10},
+            {'title': 'Player Two under 4.5 catches', 'price': '-115 FanDuel',
+             'metric': '8/10 exact-line trend', 'detail': 'Defense ranks #5', 'hits': 8, 'games': 10},
+        ]}
+        self.assertIn('INSIDE THE 10', ticket_card.research_list_svg(end_zone))
+        self.assertIn('HIT RATE', ticket_card.research_list_svg(trends))
 
     @classmethod
     def setUpClass(cls):
