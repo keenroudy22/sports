@@ -1815,6 +1815,35 @@ Results post and Discord results were delivered (O-20261013-1); two individual
 win/near-miss reactions remain missing and the historical late grade remains a
 measured failure. Do not erase it or issue duplicate retrospective posts.
 
+### October 13 autonomy follow-up — released and verified
+
+The held review-input contract is repaired. The local model receives current
+health, market evidence and a compact queue summary; the complete queue and all
+completion conditions remain in the saved packet, review and notification path.
+Missing planning data and unavailable summaries remain explicit. No selection,
+staking, record counting or posting-frequency rule changed.
+
+Release `b4ba47e9e87706f71562cc9e36a54f268c1d6962` and hosted publish
+`38442161255` succeeded. Both unlocked and lock-held gates passed: Python 1,392
+(two skipped), Node 240, clean exports, build/feed, payload budget (existing
+Today/More soft warnings), 102-pick record and NBA audits, publication guard,
+assets/SVG and isolated 13:30 rehearsal (exit 0, outcome ok, no outside writes or
+private reads). Eight local and eight live Today/Record/Climb/Start combinations
+at 375/1440 pixels had no overflow, caught load states or browser errors.
+
+The production private review was rerun under the run lock, without notifications
+or cloud fallback. qwen3.8:27b completed one call with zero failures in 4.72 seconds,
+using 1,793 prompt tokens and 58 output tokens; routing records
+`summaryAvailable: true`. The prior failed artifacts were preserved with the
+`before-autonomy-repair` suffix. Cached health now reports a recorded local
+review with zero failures. Its new review packet correctly retains the failures
+observed before that rerun; it does not retroactively erase them.
+
+Evidence: `work/autonomy2-*.log`, `work/autonomy2-release.json`,
+`work/autonomy2-live/audit.json`, and the private Oct13 review-routing receipt.
+KA-R1's missing/late individual result reactions remain open; this repair does
+not claim those posts were delivered or that the model has proven profitability.
+
 ### October 14 daily-engagement rule
 
 The owner directed the desk to stay useful and visible every day in their own
