@@ -2,5 +2,5 @@
 
 Pregame prices and final scores captured silently. No predictions or published plays.
 
-- **MLB**: 26 games quoted, 95 changed snapshots, 24 finals joined; totals on 95 snapshots, both moneylines on 95.
-- **NHL**: 101 games quoted, 377 changed snapshots, 85 finals joined; totals on 377 snapshots, both moneylines on 377.
+- **MLB**: 26 games quoted, 97 changed snapshots, 24 finals joined; totals on 97 snapshots, both moneylines on 97.
+- **NHL**: 103 games quoted, 392 changed snapshots, 85 finals joined; totals on 392 snapshots, both moneylines on 392.
