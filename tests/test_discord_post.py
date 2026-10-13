@@ -105,6 +105,35 @@ class DiscordPostTests(unittest.TestCase):
         self.assertEqual([body['content'] for body in sent], ['Pulled after confirmed news'])
         self.assertEqual(entry['discord']['followup']['state'], 'sent')
 
+    def test_settled_official_plays_get_one_factual_result_update(self):
+        entry = {'id': 'NFL-ty', 'kind': 'buffer:play', 'discord': {'state': 'sent', 'text': 'The play'}}
+        first = {'NFL-ty': {'id': 'NFL-ty', 'title': 'Ty Johnson OVER 13.5 receiving yards',
+                            'player': 'Ty Johnson', 'athleteId': '1', 'market': 'recYds',
+                            'direction': 'over', 'line': 13.5, 'gameIds': ['NFL-game']}}
+        latest = {'NFL-ty': {'result': 'win', 'settledAt': '2026-09-28T15:50:00Z',
+                             'actual': 'Ty Johnson: 72 receiving yards', 'actualValue': 72}}
+        games = {'NFL-game': {'id': 'NFL-game', 'home': 'Rams', 'away': 'Bills'}}
+        self.assertEqual(discord_post.queue_results({'posts': [entry]}, first, latest, games, NOW), 1)
+        self.assertEqual(discord_post.queue_results({'posts': [entry]}, first, latest, games, NOW), 0)
+        self.assertEqual(entry['discord']['result']['state'], 'pending')
+        self.assertIn('Ty Johnson', entry['discord']['result']['text'])
+        self.assertNotRegex(entry['discord']['result']['text'], r'\b\d{5,}:')
+        sent = []
+        send = lambda url, body, headers: (sent.append(body['content']) or (204, b''))
+        discord_post.mirror_sent({'posts': [entry]}, NOW, url='plays', send=send, log=lambda *_: None)
+        discord_post.mirror_sent({'posts': [entry]}, NOW, url='plays', send=send, log=lambda *_: None)
+        self.assertEqual(len(sent), 1)
+        self.assertIn('FINAL · HIT', sent[0])
+        self.assertEqual(entry['discord']['result']['state'], 'sent')
+
+    def test_settled_updates_wait_during_result_quiet_hours(self):
+        entry = {'id': 'NFL-ty', 'kind': 'buffer:play', 'discord': {'state': 'sent'}}
+        first = {'NFL-ty': {'id': 'NFL-ty', 'title': 'Ty Johnson OVER 13.5 receiving yards'}}
+        latest = {'NFL-ty': {'result': 'win', 'settledAt': '2026-09-28T05:05:00Z'}}
+        quiet = datetime(2026, 9, 28, 6, 0, tzinfo=timezone.utc)  # 2 AM Eastern
+        self.assertEqual(discord_post.queue_results({'posts': [entry]}, first, latest, {}, quiet), 0)
+        self.assertNotIn('result', entry['discord'])
+
     def test_no_webhook_is_a_quiet_noop(self):
         entry = {'id': 'a', 'kind': 'buffer:play', 'sentAt': '2026-09-28T15:59:00Z', 'discord': {'state': 'pending', 'text': 'Play'}}
         self.assertEqual(discord_post.mirror_sent({'posts': [entry]}, NOW, url='',

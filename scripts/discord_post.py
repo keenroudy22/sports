@@ -137,6 +137,48 @@ def send_message(url, text, image_url=None, send=http_send, username="Kook'n Spo
 
 
 ARB_QUIET = timedelta(hours=6)
+RESULT_QUIET_START = 60       # 1:00 AM Eastern
+RESULT_QUIET_END = 8 * 60     # late finals join the morning delivery after 8:00
+RESULT_UPDATE_FRESH = timedelta(hours=12)
+
+
+def queue_results(log_book, first, latest, games, now):
+    """Attach one factual settled update to every released official play.
+
+    The original play and its result stay together in Plays & Results. This is
+    independent of the later X receipt, so a delayed card cannot hide a grade.
+    """
+    local = now.astimezone(gates.EASTERN)
+    minute = local.hour * 60 + local.minute
+    if RESULT_QUIET_START <= minute < RESULT_QUIET_END:
+        return 0
+    import receipts
+    import result_display
+    queued = 0
+    for entry in log_book.get('posts', []):
+        key = entry.get('id')
+        mirror = entry.get('discord') or {}
+        if entry.get('kind') != 'buffer:play' or mirror.get('state') != 'sent' or key not in first:
+            continue
+        pick = dict(first[key], **latest.get(key, {}))
+        result = str(pick.get('result') or '').lower()
+        if result not in ('win', 'loss', 'push', 'void') or not pick.get('settledAt') or mirror.get('result'):
+            continue
+        try:
+            settled_at = gates.when(pick['settledAt'])
+        except (TypeError, ValueError):
+            continue
+        if not now - RESULT_UPDATE_FRESH < settled_at <= now:
+            continue
+        mark = {'win': '✅', 'loss': '❌', 'push': '➖', 'void': '➖'}[result]
+        word = {'win': 'HIT', 'loss': 'MISS', 'push': 'PUSH', 'void': 'VOID'}[result]
+        detail = result_display.detail(pick) or result_display.clean_actual(pick)
+        title = receipts.label(pick, games)
+        text = f'{mark} FINAL · {word}: {title}' + (f'\n{detail}' if detail else '')
+        mirror['result'] = {'state': 'pending', 'text': text, 'settledAt': pick['settledAt']}
+        entry['discord'] = mirror
+        queued += 1
+    return queued
 
 
 def send_arb_alert(text, alert_id, now, state_path, url=None, send=None):
@@ -270,4 +312,32 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
         mirror['followup'] = followup
         entry['discord'] = mirror
         log(f"discord: {entry['id']} pull update sent")
+    for entry in log_book.get('posts', []):
+        mirror = entry.get('discord') or {}
+        result = mirror.get('result') or {}
+        if result.get('state') != 'pending' or entry.get('kind') != 'buffer:play' or mirror.get('state') != 'sent':
+            continue
+        if not url:
+            continue
+        try:
+            send_message(url, result.get('text') or '', send=send)
+        except DiscordError as error:
+            message = str(error)
+            changed = result.get('error') != message
+            result['error'] = message
+            result['lastAttemptAt'] = gates.stamp(now)
+            result['attempts'] = int(result.get('attempts') or 0) + 1
+            mirror['result'] = result
+            entry['discord'] = mirror
+            log(f"discord: {entry['id']} result update not sent: {message}")
+            if changed:
+                failed.append({'id': entry['id'], 'error': message})
+            continue
+        result['state'] = 'sent'
+        result['sentAt'] = gates.stamp(now)
+        result.pop('error', None)
+        result.pop('lastAttemptAt', None)
+        mirror['result'] = result
+        entry['discord'] = mirror
+        log(f"discord: {entry['id']} result update sent")
     return failed

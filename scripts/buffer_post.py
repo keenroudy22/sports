@@ -20,6 +20,7 @@ out twice. A play whose card is not live yet waits; a play that closes to new en
 cancelled. The token lives in the environment (BUFFER_TOKEN) and never in a log.
 """
 import argparse
+import hashlib
 import json
 import os
 import sys
@@ -58,6 +59,22 @@ def card_url(card_key):
     """Where a post's card lives: a house card (menu, book) by its full address, a play's or a receipt's under
     data/cards/ by its key."""
     return str(card_key) if str(card_key).startswith('https://') else f'{CARDS}{card_key}.png'
+
+
+def live_card_url(card_key, opener=None):
+    """Return a deployed card URL, retrying through a stable cache-busting URL.
+
+    Cloudflare may retain a short-lived 404 for the canonical path when a new
+    result card is probed before Pages finishes. The versioned URL addresses
+    the same immutable file without waiting for that negative cache to expire.
+    """
+    url = card_url(card_key)
+    if reachable(url, opener):
+        return url
+    joiner = '&' if '?' in url else '?'
+    version = hashlib.sha256(str(card_key).encode('utf-8')).hexdigest()[:12]
+    fresh = f'{url}{joiner}v={version}'
+    return fresh if reachable(fresh, opener) else None
 
 
 class BufferError(RuntimeError):
@@ -489,14 +506,13 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             continue
         image = None
         if card_key:
-            url = card_url(card_key)
-            image = url if reachable(url, opener) else None
+            image = live_card_url(card_key, opener)
             if not image:
                 if kind == 'play' and missed_target(guid, due, now, items):
                     stats['officialNotScheduled'] += 1
                 log(f'buffer: {guid} waits: its card is not live yet (every post carries its card)')
                 continue
-            if pick_card.ticket_enabled(moment=due) and not ticket_art_live(url):
+            if pick_card.ticket_enabled(moment=due) and not ticket_art_live(image):
                 log(f'buffer: {guid} waits: the live card is not Kitchen Ticket art')
                 continue
         # Resolve every fallible field before Buffer accepts the post. Otherwise a

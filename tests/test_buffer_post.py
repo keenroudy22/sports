@@ -340,6 +340,24 @@ class ScheduleTests(unittest.TestCase):
         self.assertEqual(text_only['posts'][0]['cardTheme'], 'none')
         self.assertNotIn('discord', text_only['posts'][0])
 
+    def test_a_new_card_can_bypass_a_cached_canonical_404(self):
+        canonical = 'https://keenroudy.com/sports/data/cards/result.png'
+        seen = []
+        def opener(url):
+            seen.append(url)
+            return '?' in url
+        live = bp.live_card_url('result', opener=opener)
+        self.assertEqual(seen[0], canonical)
+        self.assertTrue(live.startswith(canonical + '?v='))
+        fake = FakeBuffer()
+        with mock.patch.object(bp, 'ticket_art_live', return_value=True):
+            rows = bp.schedule([('receipt:day:test', 'receipt', 'Final', NOW + timedelta(hours=1), 'result')],
+                               'x', {'posts': []}, NOW, key='t', send=fake, opener=opener,
+                               log=lambda *_: None)['posts']
+        self.assertEqual(rows[0]['cardKey'], 'result')
+        created = next(call for call in fake.calls if 'createPost' in call['query'])
+        self.assertEqual(created['variables']['input']['assets'][0]['image']['url'], live)
+
     def test_schedule_routes_official_play_and_win_together_and_keeps_community_apart(self):
         due = NOW + timedelta(hours=1)
         plans = [('p', 'play', 'Play', due, None), ('cashed:p', 'cashed', 'Win', due + bp.SPACING, None),

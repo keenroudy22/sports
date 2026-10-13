@@ -2607,6 +2607,9 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
         for entry in buffer_post.reconcile(log_book, now, log=log):
             status['errors'].append(f"buffer: {entry['id']} failed to post: {entry['error']}")
             alert('KeenRoudy post did not go out', f"{entry['id']}: {entry['error']}")
+        queued_results = discord_post.queue_results(log_book, ctx.first, ctx.latest, games, now)
+        if queued_results:
+            log(f'discord: queued {queued_results} official result update(s)')
         for entry in discord_post.mirror_sent(log_book, now, log=log):
             status['errors'].append(f"discord: {entry['id']} failed to mirror: {entry['error']}")
             alert("Kook'n Discord post did not go out", f"{entry['id']}: {entry['error']}")
@@ -2685,6 +2688,8 @@ def mirror_due(log_book, now):
                 return True
             continue
         mirror = entry.get('discord') or {}
+        if (mirror.get('result') or {}).get('state') == 'pending':
+            return True
         if mirror.get('state') == 'pending' and mirror.get('readyAt') and gates.when(mirror['readyAt']) <= now:
             return True
         if entry.get('sentAt') and mirror.get('state') == 'pending':
