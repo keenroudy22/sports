@@ -155,6 +155,35 @@ class DiscordPostTests(unittest.TestCase):
         self.assertEqual(discord_post.wins_webhook({'DISCORD_WINS_WEBHOOK_URL': 'wins'}), 'wins')
         self.assertEqual(discord_post.wins_webhook({'DISCORD_WEBHOOK_URL': 'plays'}), '')
 
+    def test_research_webhook_never_falls_back(self):
+        self.assertEqual(discord_post.research_webhook({'DISCORD_RESEARCH_WEBHOOK_URL': 'research'}), 'research')
+        self.assertEqual(discord_post.research_webhook({'DISCORD_WEBHOOK_URL': 'plays'}), '')
+
+    def test_research_mirrors_after_x_with_label_and_link(self):
+        sent = []
+        entry = {'id': 'research:trend', 'kind': 'buffer:research',
+                 'sentAt': '2026-09-28T15:59:00Z', 'link': 'https://x.com/keenkooks/status/123',
+                 'discord': {'state': 'pending', 'destination': 'research', 'text': 'MATCHUP TRENDS'}}
+        send = lambda url, body, headers: (sent.append((url, body['content'])) or (204, b''))
+        discord_post.mirror_sent({'posts': [entry]}, NOW, url='plays', research_url='research',
+                                 send=send, log=lambda *_: None)
+        self.assertEqual(sent, [('research', 'MATCHUP TRENDS\n\nRESEARCH · NOT A BEST BET\n'
+                                             'https://x.com/keenkooks/status/123')])
+
+        waiting = {'id': 'research:waiting', 'kind': 'buffer:research',
+                   'discord': {'state': 'pending', 'destination': 'research', 'text': 'WAIT'}}
+        discord_post.mirror_sent({'posts': [waiting]}, NOW, url='plays', research_url='research',
+                                 send=send, log=lambda *_: None)
+        self.assertEqual(len(sent), 1, 'research must not reach Discord before X is confirmed live')
+
+        held = {'id': 'research:held', 'kind': 'buffer:research',
+                'sentAt': '2026-09-28T15:59:00Z',
+                'discord': {'state': 'pending', 'destination': 'research', 'text': 'HELD'}}
+        failures = discord_post.mirror_sent({'posts': [held]}, NOW, url='plays', research_url='',
+                                            send=send, log=lambda *_: None)
+        self.assertEqual(failures, [{'id': 'research:held', 'error': 'Discord destination is not configured'}])
+        self.assertEqual(len(sent), 1, 'research must never leak into the official plays channel')
+
     def test_official_play_and_win_reach_plays_while_community_stays_separate(self):
         sent = []
         rows = [
@@ -170,7 +199,8 @@ class DiscordPostTests(unittest.TestCase):
              'discord': {'state': 'pending', 'text': 'Old research'}},
         ]
         send = lambda url, body, headers: (sent.append((url, body['content'])) or (204, b''))
-        discord_post.mirror_sent({'posts': rows}, NOW, url='plays', wins_url='wins', send=send, log=lambda *_: None)
+        discord_post.mirror_sent({'posts': rows}, NOW, url='plays', wins_url='wins', research_url='',
+                                 send=send, log=lambda *_: None)
         self.assertEqual(sent, [('plays', 'The play'), ('plays', 'Cooked')])
         self.assertTrue(all(row['discord']['state'] == 'skipped' for row in rows[2:]))
 

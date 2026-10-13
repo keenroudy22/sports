@@ -37,6 +37,11 @@ def wins_webhook(env=None):
     return ((env if env is not None else os.environ).get('DISCORD_WINS_WEBHOOK_URL') or '').strip()
 
 
+def research_webhook(env=None):
+    """Dedicated research destination; never fall back to the official plays feed."""
+    return ((env if env is not None else os.environ).get('DISCORD_RESEARCH_WEBHOOK_URL') or '').strip()
+
+
 def http_send(url, body, headers):
     data = body if isinstance(body, bytes) else json.dumps(body).encode('utf-8')
     request = urllib.request.Request(url, data=data, headers=headers, method='POST')
@@ -162,7 +167,8 @@ def send_arb_alert(text, alert_id, now, state_path, url=None, send=None):
     return True
 
 
-def mirror_sent(log_book, now, url=None, wins_url=None, send=http_send, fetch=download_image, log=print):
+def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
+                send=http_send, fetch=download_image, log=print):
     """Deliver each Discord payload once.
 
     Confirmed plays carry ``readyAt`` and go to Discord before X. House, news and engagement posts keep the old
@@ -170,7 +176,8 @@ def mirror_sent(log_book, now, url=None, wins_url=None, send=http_send, fetch=do
     """
     url = url if url is not None else webhook()
     wins_url = wins_url if wins_url is not None else wins_webhook()
-    if not url and not wins_url:
+    research_url = research_url if research_url is not None else research_webhook()
+    if not url and not wins_url and not research_url:
         return []
     failed = []
     for entry in log_book.get('posts', []):
@@ -180,7 +187,8 @@ def mirror_sent(log_book, now, url=None, wins_url=None, send=http_send, fetch=do
         allowed = ((kind == 'buffer:play' and destination != 'wins')
                    or (kind == 'buffer:cashed' and str(entry.get('id') or '').startswith('cashed:')
                        and destination != 'wins')
-                   or (kind == 'buffer:community' and destination == 'wins'))
+                   or (kind == 'buffer:community' and destination == 'wins')
+                   or (kind == 'buffer:research' and destination == 'research'))
         if not allowed:
             # Older queue entries may still carry a pending mirror payload.
             # The latest plays-only rule wins at send time too.
@@ -193,7 +201,8 @@ def mirror_sent(log_book, now, url=None, wins_url=None, send=http_send, fetch=do
         if mirror.get('state') != 'pending' or not (ready or entry.get('sentAt')) \
                 or entry.get('cancelledAt') or entry.get('deletedAt'):
             continue
-        target = wins_url if destination == 'wins' else url
+        target = (wins_url if destination == 'wins' else
+                  research_url if destination == 'research' else url)
         if not target:
             message = 'Discord destination is not configured'
             changed = mirror.get('error') != message
@@ -206,7 +215,12 @@ def mirror_sent(log_book, now, url=None, wins_url=None, send=http_send, fetch=do
                 failed.append({'id': entry['id'], 'error': message})
             continue
         try:
-            send_message(target, mirror.get('text') or '', mirror.get('image'), send=send, fetch=fetch)
+            text = mirror.get('text') or ''
+            if destination == 'research':
+                link = str(entry.get('link') or '').strip()
+                suffix = 'RESEARCH · NOT A BEST BET'
+                text = f'{text.rstrip()}\n\n{suffix}' + (f'\n{link}' if link else '')
+            send_message(target, text, mirror.get('image'), send=send, fetch=fetch)
         except DiscordError as error:
             message = str(error)
             changed = mirror.get('error') != message

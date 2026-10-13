@@ -315,7 +315,8 @@ class ScheduleTests(unittest.TestCase):
         self.assertIn('@Playbook', texts[0])
         self.assertTrue(all('@Playbook' not in t for t in texts[1:]))
         self.assertTrue(all('@Playbook' not in p['discord']['text'] for p in result['posts'] if 'discord' in p))
-        self.assertTrue(all('discord' not in p for p in result['posts'] if p['kind'] not in ('buffer:play',)))
+        self.assertTrue(all('discord' not in p for p in result['posts']
+                            if p['kind'] not in ('buffer:play', 'buffer:research')))
 
     def test_schedule_never_posts_a_play_without_its_card(self):
         fake = FakeBuffer()
@@ -349,7 +350,8 @@ class ScheduleTests(unittest.TestCase):
         self.assertEqual(rows[0]['discord'].get('destination'), None)
         self.assertNotIn('destination', rows[1]['discord'])
         self.assertNotIn('discord', rows[2])
-        self.assertNotIn('discord', rows[3])
+        self.assertEqual(rows[3]['discord']['destination'], 'research')
+        self.assertNotIn('readyAt', rows[3]['discord'], 'research must wait for confirmed X delivery')
         self.assertEqual((rows[4]['kind'], rows[4]['discord']['destination']), ('buffer:community', 'wins'))
 
     def test_card_theme_is_resolved_before_buffer_accepts_the_post(self):

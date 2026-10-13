@@ -1108,6 +1108,15 @@
       "next": "Release the 1:00 AM result cutoff and private final-to-post outcome metric, then verify the three Codex schedules remain the only active Kook'n automations.",
       "doneWhen": "Only the three named tasks remain; old scheduled chats are archived; primetime results may post until01:00; the private check measures wins/near-misses within30minutes; all release and live gates pass.",
       "evidence": "Owner decision2026-10-12. Automations consolidated in the Codex app; four redundant tasks deleted, no active felt-cutover task found, seven scheduled-run chats older than two days archived. Code release evidence pending."
+    },
+    {
+      "id": "A-20261012-6",
+      "title": "Mirror approved X research to a dedicated Discord channel",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Pass every release gate, deploy under the run lock, watch the hosted publish and verify the next natural research post mirrors only after X.",
+      "doneWhen": "#research-and-trends and its dedicated webhook exist; approved research waits for confirmed X, carries its card, X link and research label, never falls back to Plays & Results, and the full release and live checks pass.",
+      "evidence": "Owner approval2026-10-12. Channel1559402689895469156 and dedicated Kook’n Research webhook created; secret stored only in the private env. Code, tests and release evidence pending."
     }
   ]
 }

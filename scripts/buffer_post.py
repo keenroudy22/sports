@@ -528,14 +528,17 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                  'textHash': x_post.text_hash(text), 'kind': f'buffer:{kind}', 'card': bool(image),
                  'cardTheme': card_theme}
         # Official plays and their settled win updates stay together in Plays
-        # & Results. Owner/community tickets use the separate community feed;
-        # research, receipts and losses have no Discord mirror payload here.
-        if kind in ('play', 'community') or (kind == 'cashed' and guid.startswith('cashed:')):
+        # & Results. Owner/community tickets use the separate community feed.
+        # Approved research follows its X post into the dedicated research feed.
+        if kind in ('play', 'community', 'research') or (kind == 'cashed' and guid.startswith('cashed:')):
             entry['discord'] = {'state': 'pending', 'text': without_playbook(text)}
         if kind == 'community':
             # Owner-submitted model-assisted slips belong in the community wins feed, not the official-play feed.
             # Its dedicated webhook has no public-channel fallback, so a missing destination holds the receipt.
             entry['discord']['destination'] = 'wins'
+        if kind == 'research':
+            # There is deliberately no readyAt: research mirrors only after Buffer confirms X.
+            entry['discord']['destination'] = 'research'
         if kind == 'play':
             # A confirmed play is the reason to join Discord. Schedule it first; the lightweight delivery job runs
             # every five minutes, so a 15-minute target gives members roughly 10-15 minutes before the X post.

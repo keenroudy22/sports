@@ -75,6 +75,14 @@ Our own data: Oct 4 had 15 posts and got 0 likes and 0 reposts; Oct 2 had 6 post
 - Caption: `Bad beat 😩 Smith over 49.5 rec yds. Had 47, missed by 2.5.`
 - This needs `DISCORD_WINS_WEBHOOK_URL`, which the owner adds to the env file. Until then, skip quietly and note it once in the status log.
 
+**#research-and-trends (owner, Oct. 12):**
+- Mirrors approved research only after Buffer confirms the X post is live: Prep Lists, opponent-adjusted trends,
+  matchup sheets, injury angles, projections and Upset Watch.
+- Uses the same approved Kitchen Ticket research card, appends the X link, and ends with
+  `RESEARCH · NOT A BEST BET`.
+- Uses `DISCORD_RESEARCH_WEBHOOK_URL` and never falls back to Plays & Results.
+- Receipts, official plays/results, community slips and private operational notes do not enter this channel.
+
 **Unchanged:** Arb Radar and the live-progress pilot.
 
 ## 3. Rules every post follows

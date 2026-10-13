@@ -1611,6 +1611,16 @@ Private evidence:work/daily-outcomes-2026-10-12.json,daily-live-final/audit.json
 daily-live-truth.json,daily-locked-*.log. This receipt is retained on dev for
 the next safe release; no duplicate deployment is required.
 
+## October 12 — research Discord and local-first growth
+
+The owner approved a dedicated public `#research-and-trends` channel. Approved
+research follows a confirmed X post there with the same card, its X link and
+`RESEARCH · NOT A BEST BET`; it never enters Plays & Results and its webhook
+never falls back. The Mac's local 27B remains the evidence-ranking and weekly
+learning model. Public numbers, prices and gates remain deterministic and
+sourced; routine work does not move to a cloud agent. Release evidence is
+tracked under A-20261012-6.
+
 ## October 12 — Codex schedule consolidation and faster result outcomes
 
 The owner reduced Codex work to three local scheduled tasks so routine Mac-desk

@@ -17,8 +17,9 @@ Three things run it, none of them an AI chat:
    an extra Climb settlement/qualification scan at 10:00 AM, 1:30, 4:00 and 8:00 PM, the pre-post check every 30
    minutes, the Discord mirror every 5 minutes, the heartbeat at 7:15 AM, and the weekly review Monday 9:30 AM. The run settles and closes plays, builds the
    board, judges candidates through `scripts/gates.py`, publishes reports to `research/`, pushes, and schedules X
-   posts in Buffer. Posted official plays reach Plays & Results about 10-15 minutes before X; wins and near-miss
-   bad beats use the separate wins webhook. Other post types do not mirror. Cards are uploaded as durable
+   posts in Buffer. Posted official plays reach Plays & Results about 10-15 minutes before X; community slips and
+   bad beats use the separate wins webhook. Approved research mirrors to #research-and-trends after X is confirmed
+   live. Other post types do not mirror. Cards are uploaded as durable
    Discord attachment rather than left as a temporary site embed. Logs:
    `~/Library/Logs/KeenRoudy/run-YYYY-MM-DD.log` (times in UTC).
 2. **GitHub Actions** (`.github/workflows/publish.yml`) on a schedule and on every push: captures scores, odds and
@@ -202,6 +203,14 @@ Handy commands (from `~/Projects/sports`):
    width (375 px): no sideways scroll, no console errors, and no rendered `did not load` error state.
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
+
+- **Research Discord and local-first growth (owner, 2026-10-12):** approved X research posts mirror after confirmed
+  X delivery into `#research-and-trends` through its dedicated webhook, with the X link and the fixed label
+  `RESEARCH · NOT A BEST BET`. Prep Lists, opponent-adjusted trends, matchup sheets, injury angles, projections and
+  Upset Watch qualify; official plays, results, receipts and community slips keep their existing destinations.
+  The research webhook never falls back to Plays & Results. Keep cloud-agent usage for fixes and releases. Use the
+  local 27B model for guarded evidence ranking, research choices and weekly learning, and the local fast model only
+  for measured, validated wording experiments; neither may invent facts, override a gate or change the record.
 
 - **Kook'n Autopilot (owner, 2026-10-11):** [`docs/KOOKN-AUTOPILOT.md`](docs/KOOKN-AUTOPILOT.md) records the
   current operating authority and the verified source digest. It supersedes `docs/KOOKN-PLAN.md` and every older
