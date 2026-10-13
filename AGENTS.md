@@ -237,6 +237,11 @@ Handy commands (from `~/Projects/sports`):
   price, role and injury holds. Unproven plus-money plays are 0.5u Gut calls or Upset picks and learn in their own
   segment. No outgoing card or caption may show a chance tied with or below the posted-price hurdle.
 
+- **More than one play may come from a game (owner, 2026-10-13):** there is no one-play-per-game refusal. Keep the
+  daily and market-family caps and never repeat exposure to the same player. Two plays on one game may coexist only
+  when they do not tell opposite stories: no opposing sides and no game under paired with a player over (or the
+  reverse). Each play independently clears every ordinary price, role, injury and reason gate.
+
 - **October 11 operating settlement (owner, 2026-10-11):** Fun tickets are a small number of pregame parlays at
   +500 through +1500, one book, different games, at most one total and one saved real reason per leg; they are
   graded win or lose. The prior conversation idea to post parlays only after they win is withdrawn. Try for a

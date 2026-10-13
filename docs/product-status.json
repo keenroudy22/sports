@@ -1148,11 +1148,11 @@
     {
       "id": "O-20261013-4",
       "title": "Keep night games in the Eastern-day Climb pool",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Run the full release gates, deploy under the run lock, and verify the next Climb scan logs the actual Eastern-day pool or its leg-level refusal.",
+      "next": "Observe the next multi-game Climb scan and preserve its leg-level refusal or candidate in the private shadow log.",
       "doneWhen": "An8:15PM ET Monday kickoff remains eligible all Monday; unrelated straight refusals cannot erase its game; each rung leg keeps every Climb gate; release and live checks pass.",
-      "evidence": "Owner decision2026-10-13 after Oct12 logs reported NFL:0 games left. Historical slate proves NFL-401872994 kicked at2026-10-13T00:15Z; regressions cover the Eastern date and unrelated refused straight."
+      "evidence": "Owner decision2026-10-13 after Oct12 logs reported NFL:0 games left. Historical slate proves NFL-401872994 kicked at2026-10-13T00:15Z; regressions cover Eastern date and unrelated refused straight. Release fe6affc04be4699f6f29371564492fd17eabd383 via head3e5ada936219bb9fcd28747b61f482a71d8256b1; hosted38419897111 success; Python1384(2skip),Node240,cleanexport,build502/139,record102/NBA0,feed83,guard603,rehearsal1000ok,live375/1440 clean."
     }
   ]
 }

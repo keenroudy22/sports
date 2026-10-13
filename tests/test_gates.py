@@ -557,14 +557,27 @@ class CardTests(unittest.TestCase):
         fun = {'t': {'id': 't', 'legs': [{}, {}], 'parlayType': 'longshot', 'gameIds': ['NFL-4'], 'publishedAt': '2026-09-26T12:00:00Z'}}
         self.assertTrue(gates.card_cap(prop_lean(), self.card(fun)).ok, 'fun parlays are not on the card')
 
-    def test_a_weeknight_card_allows_two_from_either_league(self):
+    def test_a_weeknight_card_allows_two_from_one_game_but_not_opposite_stories(self):
         monday = total_lean(gameIds=['MNF'])
         self.assertTrue(gates.card_cap(monday, self.card({})).ok)
         college = total_lean(id='cfb', gameIds=['CFB-M'], league='CFB')
         self.assertTrue(gates.card_cap(college, self.card({})).ok)
         one = {'m': total_lean(id='m', gameIds=['MNF'], publishedAt='2026-09-26T12:00:00Z')}
-        self.assertFalse(gates.card_cap(prop_lean(gameIds=['MNF']), self.card(one)).ok, 'one play per game')
+        self.assertTrue(gates.card_cap(prop_lean(gameIds=['MNF'], direction='over'), self.card(one)).ok,
+                        'different supported plays may share a game')
+        opposed = prop_lean(gameIds=['MNF'], direction='under')
+        refused = gates.card_cap(opposed, self.card(one))
+        self.assertFalse(refused.ok)
+        self.assertIn('works against', refused.reason)
         self.assertTrue(gates.card_cap(prop_lean(gameIds=['CFB-M']), self.card(one)).ok)
+
+    def test_same_game_sides_may_stack_only_when_they_back_the_same_team(self):
+        home = total_lean(id='home', marketType='spread', direction='home', gameIds=['MNF'],
+                          publishedAt='2026-09-26T12:00:00Z')
+        self.assertTrue(gates.card_cap(total_lean(id='ml-home', marketType='moneyline', direction='home',
+                                                  gameIds=['MNF']), self.card({'home': home})).ok)
+        self.assertFalse(gates.card_cap(total_lean(id='ml-away', marketType='moneyline', direction='away',
+                                                   gameIds=['MNF']), self.card({'home': home})).ok)
 
     def test_withdrawn_unposted_bills_rams_row_does_not_occupy_the_game(self):
         candidate = prop_lean(gameIds=['MNF'], lane='gut_call')

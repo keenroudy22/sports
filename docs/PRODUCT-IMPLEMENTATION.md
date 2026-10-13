@@ -1750,3 +1750,11 @@ O-20261013-4 (Eastern-day Climb pool) remains ready for its full release gates,
 and KA-R1 remains open. Do not manufacture a packet or learning move.
 This documentation-only blocker receipt is retained on dev for the next
 regular release; it is not a code release or hosted/live success claim.
+
+### October 13 multiple honest plays per game — prepared
+
+The old card-cap shortcut refused every second play on a game, even when two
+different players or a side and a prop both independently cleared. The owner
+removed that limit. The daily, family, total and same-player caps remain; a
+new contradiction check refuses opposing sides and a game total paired with a
+player prop pointing the other way. O-20261013-5 tracks gated release.

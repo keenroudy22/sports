@@ -814,6 +814,26 @@ def fresh_id(base, ctx):
     return f'{base}-{n}'
 
 
+def contradictory_plays(candidate, existing):
+    """Whether two straight plays on one game directly work against each other."""
+    if not set(candidate.get('gameIds') or []).intersection(existing.get('gameIds') or []):
+        return False
+    mine, theirs = market_key(candidate), market_key(existing)
+    mine_side, their_side = side_of(candidate), side_of(existing)
+    if mine == theirs == 'total':
+        return mine_side in ('over', 'under') and their_side in ('over', 'under') and mine_side != their_side
+    if mine in ('spread', 'moneyline') and theirs in ('spread', 'moneyline'):
+        return mine_side in ('home', 'away') and their_side in ('home', 'away') and mine_side != their_side
+    # A game-under paired with a player over (or game-over with a player under)
+    # tells followers two opposite stories about the same scoring environment.
+    prop, total = ((candidate, existing) if candidate.get('athleteId') else
+                   (existing, candidate) if existing.get('athleteId') else (None, None))
+    if prop and market_key(total) == 'total':
+        return side_of(prop) in ('over', 'under') and side_of(total) in ('over', 'under') \
+            and side_of(prop) != side_of(total)
+    return False
+
+
 def card_cap(candidate, ctx):
     """Owner-plan daily ceilings and market/totals hard limits."""
     day = slate_day(candidate, ctx)
@@ -831,9 +851,9 @@ def card_cap(candidate, ctx):
         if slate_day(pick, ctx) != day:
             continue
         plays.append(pick)
-    game_ids = set(candidate.get('gameIds') or [])
-    if any(game_ids.intersection(pick.get('gameIds') or []) for pick in plays):
-        return Decision(False, 'card_cap', 'another play is already on this game')
+    conflict = next((pick for pick in plays if contradictory_plays(candidate, pick)), None)
+    if conflict:
+        return Decision(False, 'card_cap', f"{conflict.get('id')} works against this play on the same game")
     if len(plays) >= size:
         return Decision(False, 'card_cap', f"{len(plays)} plays already on the {day} card; the ceiling is {size} and the card is {size}")
     family = 'prop' if candidate.get('athleteId') else market_key(candidate)
