@@ -2103,14 +2103,14 @@ def _run(args, now, slot, kinds, status):
     slate_games = {g['id']: g for g in slate.get('games', []) if g.get('league') in ('NFL', 'CFB')}
     games = live_games(now, slate_games)
     records = features.load()
+    settlement_records = records
     if settle_only:
         # The per-game summary often reports Final before ESPN's day scoreboard.
         # Reuse the five-minute watcher's verified summary so grading is prompt.
         import live_watch
         watched = live_watch.final_records()
         live_watch.overlay_finals(games, watched)
-        known = {(str(row.get('league')), str(row.get('eventId'))) for row in records}
-        records += [row for row in watched if (str(row.get('league')), str(row.get('eventId'))) not in known]
+        settlement_records = live_watch.settlement_records(records, watched)
     stores = gates.Stores(records=records)
     ctx = stores.as_of(now)
     ctx.games = games
@@ -2131,7 +2131,7 @@ def _run(args, now, slot, kinds, status):
                           if use_llm else 'off' if args.no_llm else 'not reachable; templates and rules only'))
 
     if 'settle' in kinds:
-        settled, unclear = settle(ctx, raw_first, games, records, now)
+        settled, unclear = settle(ctx, raw_first, games, settlement_records, now)
         for u in unclear:
             u['league'] = ctx.first[u['id']].get('league')
         log(f'settled {len(settled)}, unclear {len(unclear)}')

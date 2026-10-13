@@ -67,6 +67,18 @@ def overlay_finals(games, records):
     return games
 
 
+def settlement_records(history, watched):
+    """Add verified finals for grading without mixing live summaries into history.
+
+    Watcher summaries have the scores and player stats needed by settle(), but
+    lack the season/kickoff metadata required by roster and weather readers.
+    Keep stored box scores authoritative when an event is already captured.
+    """
+    known = {(str(row.get('league')), str(row.get('eventId'))) for row in history}
+    return [*history, *(row for row in watched if row.get('completed') and
+                       (str(row.get('league')), str(row.get('eventId'))) not in known)]
+
+
 def mark_official_attempt(now, path=DEFAULT_STATE):
     state = read(path)
     state['officialAttemptAt'] = boxscores.stamp(now)

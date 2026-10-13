@@ -1656,3 +1656,12 @@ same card, X link and `RESEARCH · NOT A BEST BET` label to the dedicated
 `#research-and-trends` webhook. It has no fallback into Plays & Results. No
 public post was forced to manufacture proof; A-20261012-6 remains observing
 until the first naturally eligible research post supplies its durable receipt.
+
+
+### October 13 overnight settlement recovery — prepared
+
+The verified MNF summary final entered historical roster/weather inputs despite
+lacking season and kickoff metadata, crashing four settlement attempts. The
+bounded fix separates grading summaries from captured history and preserves
+stored box-score precedence. O-20261013-1 tracks release and live outcome proof.
+No record row, price, pick, posted art or selection rule is rewritten.

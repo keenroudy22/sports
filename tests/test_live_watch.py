@@ -78,6 +78,13 @@ class LiveWatchTests(unittest.TestCase):
             self.assertEqual(result['pendingFinals'], ['p'])
             records = L.final_records(state)
             self.assertTrue(records[0]['completed'])
+            history = []
+            grading = L.settlement_records(history, records)
+            # Exercise the crashed roster path with the same summary-only final.
+            self.assertNotIn('season', grading[0])
+            self.assertEqual(L.gates.roster_facts(history, NOW)[4], {})
+            self.assertEqual(L.desk_run.grade_prop(self.pick, grading[0])[0], 'win')
+            self.assertEqual(history, [])
             games = {'NFL-1': {'id': 'NFL-1', 'league': 'NFL', 'away': {}, 'home': {}}}
             L.overlay_finals(games, records)
             self.assertEqual((games['NFL-1']['completed'], games['NFL-1']['away']['score'],
@@ -86,6 +93,14 @@ class LiveWatchTests(unittest.TestCase):
             quiet = L.run_shadow(self.ctx, self.games, self.log, NOW + timedelta(minutes=5), state,
                                  fetch=lambda _: summary(55, completed=True), log=lambda *_: None)
             self.assertEqual(quiet['pendingFinals'], [])
+
+    def test_settlement_records_keep_captured_box_score_and_ignore_unfinished(self):
+        stored = {'league': 'NFL', 'eventId': '1', 'season': 2026}
+        observed = {'league': 'NFL', 'eventId': '1', 'completed': True}
+        unfinished = {'league': 'NFL', 'eventId': '2', 'completed': False}
+        history = [stored]
+        self.assertEqual(L.settlement_records(history, [observed, unfinished]), history)
+        self.assertEqual(history, [stored])
 
 
 if __name__ == '__main__':
