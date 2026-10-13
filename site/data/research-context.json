@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-13T15:43:25Z",
+  "updatedAt": "2026-10-13T15:54:11Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -927,6 +927,15 @@
           "name": "Carolina Panthers",
           "players": [
             {
+              "id": "4687513",
+              "name": "Cam Jackson",
+              "position": "DT",
+              "status": "Injured Reserve",
+              "injury": "Knee",
+              "reportedAt": "2026-10-13T15:33Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4687513/cam-jackson"
+            },
+            {
               "id": "2973051",
               "name": "Taylor Moton",
               "position": "OT",
@@ -970,15 +979,6 @@
               "injury": null,
               "reportedAt": "2026-10-07T02:31Z",
               "source": "https://www.espn.com/nfl/player/_/id/4244607/akayleb-evans"
-            },
-            {
-              "id": "4687513",
-              "name": "Cam Jackson",
-              "position": "DT",
-              "status": "Questionable",
-              "injury": "Knee",
-              "reportedAt": "2026-10-06T18:21Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4687513/cam-jackson"
             },
             {
               "id": "4362647",
@@ -1390,7 +1390,7 @@
               "id": "3050481",
               "name": "Tanner Hudson",
               "position": "TE",
-              "status": "Questionable",
+              "status": "Out",
               "injury": "Pectoral",
               "reportedAt": "2026-10-12T22:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/3050481/tanner-hudson"
@@ -7367,22 +7367,6 @@
       "changes": [
         {
           "teamId": "23",
-          "name": "Eli Heidenreich",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-12T20:03:06Z",
-          "source": "https://www.espn.com/nfl/player/_/id/5081508/eli-heidenreich"
-        },
-        {
-          "teamId": "23",
-          "name": "Terell Smith",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-12T20:03:06Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4360935/terell-smith"
-        },
-        {
-          "teamId": "23",
           "name": "Will Howard",
           "from": "Out",
           "to": "Active",
@@ -7764,11 +7748,27 @@
           "to": "Doubtful",
           "observedAt": "2026-10-13T15:43:25Z",
           "source": "https://www.espn.com/nfl/player/_/id/4571162/jalyx-hunt"
+        },
+        {
+          "teamId": "29",
+          "name": "Cam Jackson",
+          "from": "Questionable",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-13T15:54:11Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4687513/cam-jackson"
+        },
+        {
+          "teamId": "4",
+          "name": "Tanner Hudson",
+          "from": "Questionable",
+          "to": "Out",
+          "observedAt": "2026-10-13T15:54:11Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3050481/tanner-hudson"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-13T15:43:25Z",
-      "lastAttemptAt": "2026-10-13T15:43:25Z",
+      "checkedAt": "2026-10-13T15:54:11Z",
+      "lastAttemptAt": "2026-10-13T15:54:11Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-13T15:43:25Z",
-      "lastAttemptAt": "2026-10-13T15:43:25Z",
+      "checkedAt": "2026-10-13T15:54:11Z",
+      "lastAttemptAt": "2026-10-13T15:54:11Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
