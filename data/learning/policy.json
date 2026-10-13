@@ -1,31 +1,43 @@
 {
  "calibration": {
   "CFB/prop": {
-   "at": "2026-09-29T12:30:05Z",
+   "at": "2026-10-13T12:30:06Z",
    "heldOut": {
-    "k": -116.06,
-    "raw": -126.35
+    "current": -341.31,
+    "k": -341.02,
+    "raw": -368.82
    },
-   "k": 0.23,
-   "n": 398
+   "k": 0.15,
+   "n": 1312,
+   "testN": 492,
+   "trainN": 820
   },
   "NFL/prop": {
-   "at": "2026-09-23T21:06:27Z",
+   "at": "2026-10-13T12:30:06Z",
    "heldOut": {
-    "k": -151.01,
-    "raw": -163.46
+    "current": -443.81,
+    "k": -443.73,
+    "raw": -469.46
    },
-   "k": 0.13,
-   "n": 538
+   "k": 0.11,
+   "n": 2285,
+   "testN": 640,
+   "trainN": 1645
   }
  },
  "direction": {
+  "calibrationFlags": {},
+  "card": {},
+  "climb": {},
+  "funTickets": {},
+  "prepList": {},
   "segments": {
    "NFL/total": {
-    "paused": true,
-    "pauseSince": "2026-10-08T18:00:00Z"
+    "pauseSince": "2026-10-08T18:00:00Z",
+    "paused": true
    }
-  }
+  },
+  "vetoes": {}
  },
  "history": [
   {
@@ -551,6 +563,475 @@
     ]
    },
    "why": "which sites the researcher cites keep checking out"
+  },
+  {
+   "at": "2026-10-13T12:30:06Z",
+   "evidence": {
+    "current": 0.23,
+    "heldOut": {
+     "current": -341.31,
+     "k": -341.02,
+     "raw": -368.82
+    },
+    "hitRate": 0.51,
+    "kAll": 0.13,
+    "kTrain": 0.15,
+    "meanRaw": 0.608,
+    "n": 1312,
+    "segment": "CFB/prop",
+    "testFrom": "2026-10-07T00:00Z",
+    "testN": 492,
+    "trainN": 820,
+    "trainThrough": "2026-10-04T03:00Z"
+   },
+   "from": 0.23,
+   "knob": "calibration",
+   "segment": "CFB/prop",
+   "to": 0.15,
+   "why": "calibrated chances predicted the later record better than the raw ones"
+  },
+  {
+   "at": "2026-10-13T12:30:06Z",
+   "evidence": {
+    "current": 0.13,
+    "heldOut": {
+     "current": -443.81,
+     "k": -443.73,
+     "raw": -469.46
+    },
+    "hitRate": 0.513,
+    "kAll": 0.09,
+    "kTrain": 0.11,
+    "meanRaw": 0.615,
+    "n": 2285,
+    "segment": "NFL/prop",
+    "testFrom": "2026-10-05T00:20Z",
+    "testN": 640,
+    "trainN": 1645,
+    "trainThrough": "2026-10-04T20:25Z"
+   },
+   "from": 0.13,
+   "knob": "calibration",
+   "segment": "NFL/prop",
+   "to": 0.11,
+   "why": "calibrated chances predicted the later record better than the raw ones"
+  },
+  {
+   "at": "2026-10-13T12:30:06Z",
+   "evidence": {
+    "146.freechallenge.14.racing.cbssports.com": {
+     "facts": 2,
+     "rate": 0.0,
+     "verified": 0
+    },
+    "abqjournal.com": {
+     "facts": 5,
+     "rate": 0.8,
+     "verified": 4
+    },
+    "ajc.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "amp.nfl.com": {
+     "facts": 3,
+     "rate": 0.67,
+     "verified": 2
+    },
+    "arizonawildcats.com": {
+     "facts": 3,
+     "rate": 0.67,
+     "verified": 2
+    },
+    "atlantafalcons.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "attheroost.com": {
+     "facts": 3,
+     "rate": 1.0,
+     "verified": 3
+    },
+    "azcardinals.com": {
+     "facts": 3,
+     "rate": 1.0,
+     "verified": 3
+    },
+    "azdesertswarm.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "bceagles.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "boston.com": {
+     "facts": 3,
+     "rate": 1.0,
+     "verified": 3
+    },
+    "buffalobills.com": {
+     "facts": 11,
+     "rate": 1.0,
+     "verified": 11
+    },
+    "bythebelt.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "chicagobears.com": {
+     "facts": 8,
+     "rate": 1.0,
+     "verified": 8
+    },
+    "chiefs.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "clevelandbrowns.com": {
+     "facts": 4,
+     "rate": 0.75,
+     "verified": 3
+    },
+    "cuse.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "dailylobo.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "dallascowboys.com": {
+     "facts": 4,
+     "rate": 1.0,
+     "verified": 4
+    },
+    "db5y6jlvyeaqj.cloudfront.net": {
+     "facts": 5,
+     "rate": 1.0,
+     "verified": 5
+    },
+    "espn.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "fightingillini.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "fiusports.com": {
+     "facts": 4,
+     "rate": 1.0,
+     "verified": 4
+    },
+    "floridagators.com": {
+     "facts": 3,
+     "rate": 0.67,
+     "verified": 2
+    },
+    "fox11online.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "gamedaynd.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "giants.com": {
+     "facts": 5,
+     "rate": 0.8,
+     "verified": 4
+    },
+    "goairforcefalcons.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "goaztecs.com": {
+     "facts": 6,
+     "rate": 0.83,
+     "verified": 5
+    },
+    "goheels.com": {
+     "facts": 7,
+     "rate": 1.0,
+     "verified": 7
+    },
+    "gohuskies.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "golobos.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "gophersports.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "hawkeyesports.com": {
+     "facts": 3,
+     "rate": 0.67,
+     "verified": 2
+    },
+    "hoosierhuddle.com": {
+     "facts": 5,
+     "rate": 0.8,
+     "verified": 4
+    },
+    "houstontexans.com": {
+     "facts": 4,
+     "rate": 0.75,
+     "verified": 3
+    },
+    "huskers.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "iuhoosiers.com": {
+     "facts": 3,
+     "rate": 1.0,
+     "verified": 3
+    },
+    "jaguars.com": {
+     "facts": 8,
+     "rate": 0.88,
+     "verified": 7
+    },
+    "jaxstatesports.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "kolotv.com": {
+     "facts": 3,
+     "rate": 1.0,
+     "verified": 3
+    },
+    "mgoblue.com": {
+     "facts": 4,
+     "rate": 1.0,
+     "verified": 4
+    },
+    "miamihurricanes.com": {
+     "facts": 3,
+     "rate": 1.0,
+     "verified": 3
+    },
+    "miamistudent.net": {
+     "facts": 3,
+     "rate": 1.0,
+     "verified": 3
+    },
+    "nationalfootballpost.com": {
+     "facts": 4,
+     "rate": 0.75,
+     "verified": 3
+    },
+    "navysports.com": {
+     "facts": 6,
+     "rate": 1.0,
+     "verified": 6
+    },
+    "nbcmiami.com": {
+     "facts": 2,
+     "rate": 0.0,
+     "verified": 0
+    },
+    "nevadawolfpack.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "neworleanssaints.com": {
+     "facts": 3,
+     "rate": 0.67,
+     "verified": 2
+    },
+    "newson6.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "nfl.com": {
+     "facts": 6,
+     "rate": 0.83,
+     "verified": 5
+    },
+    "nmstatesports.com": {
+     "facts": 6,
+     "rate": 1.0,
+     "verified": 6
+    },
+    "odusports.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "osubeavers.com": {
+     "facts": 2,
+     "rate": 0.5,
+     "verified": 1
+    },
+    "packers.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "panthers.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "patriots.com": {
+     "facts": 4,
+     "rate": 0.5,
+     "verified": 2
+    },
+    "philadelphiaeagles.com": {
+     "facts": 5,
+     "rate": 1.0,
+     "verified": 5
+    },
+    "raiders.com": {
+     "facts": 4,
+     "rate": 0.75,
+     "verified": 3
+    },
+    "riceowls.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "si.com": {
+     "facts": 29,
+     "rate": 0.83,
+     "verified": 24
+    },
+    "smumustangs.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "soflobulls.com": {
+     "facts": 4,
+     "rate": 0.5,
+     "verified": 2
+    },
+    "sports.yahoo.com": {
+     "facts": 15,
+     "rate": 0.87,
+     "verified": 13
+    },
+    "steelers.com": {
+     "facts": 5,
+     "rate": 0.6,
+     "verified": 3
+    },
+    "theacc.com": {
+     "facts": 4,
+     "rate": 1.0,
+     "verified": 4
+    },
+    "thedailyhoosier.com": {
+     "facts": 4,
+     "rate": 0.75,
+     "verified": 3
+    },
+    "therams.com": {
+     "facts": 24,
+     "rate": 0.75,
+     "verified": 18
+    },
+    "thescore.com": {
+     "facts": 4,
+     "rate": 1.0,
+     "verified": 4
+    },
+    "uconnhuskies.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "underdogdynasty.com": {
+     "facts": 4,
+     "rate": 0.75,
+     "verified": 3
+    },
+    "usforacle.com": {
+     "facts": 2,
+     "rate": 0.5,
+     "verified": 1
+    },
+    "utepminers.com": {
+     "facts": 4,
+     "rate": 0.75,
+     "verified": 3
+    },
+    "wjr.com": {
+     "facts": 2,
+     "rate": 1.0,
+     "verified": 2
+    },
+    "wsbtv.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    },
+    "wvmetronews.com": {
+     "facts": 3,
+     "rate": 1.0,
+     "verified": 3
+    },
+    "wvusports.com": {
+     "facts": 1,
+     "rate": 1.0,
+     "verified": 1
+    }
+   },
+   "from": {
+    "avoidDomains": [],
+    "preferDomains": [
+     "sports.yahoo.com",
+     "goaztecs.com",
+     "goheels.com",
+     "navysports.com",
+     "abqjournal.com",
+     "giants.com"
+    ]
+   },
+   "knob": "domains",
+   "segment": "researcher",
+   "to": {
+    "avoidDomains": [],
+    "preferDomains": [
+     "si.com",
+     "sports.yahoo.com",
+     "buffalobills.com",
+     "chicagobears.com",
+     "jaguars.com",
+     "goheels.com",
+     "goaztecs.com",
+     "navysports.com"
+    ]
+   },
+   "why": "which sites the researcher cites keep checking out"
   }
  ],
  "knobs": {
@@ -583,6 +1064,7 @@
    "value": 0.6
   }
  },
+ "ladderSegments": {},
  "reasonWeights": {
   "injury": 1.0,
   "market": 1.0,
@@ -594,13 +1076,21 @@
  "researcher": {
   "avoidDomains": [],
   "preferDomains": [
+   "si.com",
    "sports.yahoo.com",
-   "goaztecs.com",
+   "buffalobills.com",
+   "chicagobears.com",
+   "jaguars.com",
    "goheels.com",
-   "navysports.com",
-   "abqjournal.com",
-   "giants.com"
+   "goaztecs.com",
+   "navysports.com"
   ]
+ },
+ "segments": {
+  "NFL/total": {
+   "paused": true,
+   "since": "2026-09-24T15:10:33Z"
+  }
  },
  "shadows": {
   "R0": true,
@@ -612,11 +1102,140 @@
   "R6": true,
   "R7": true
  },
- "segments": {
-  "NFL/total": {
-   "paused": true,
-   "since": "2026-09-24T15:10:33Z"
-  }
+ "twoWay": {
+  "directionPending": {
+   "calibration": {
+    "sentence": "Calibration check: NFL pass yds said 51%, hit 43% in the 50-60% band (n 115).",
+    "signature": "{\"rule\": \"calibration-drift\", \"to\": {\"NFL/prop:passYds\": {\"band\": \"50-60%\", \"hit\": 0.426, \"n\": 115, \"said\": 0.509}}}",
+    "week": "2026-W42"
+   }
+  },
+  "pending": {
+   "gap:CFB/prop:passYds": {
+    "direction": 1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "CFB/prop:passYds gap floor +2 points",
+    "week": "2026-W42"
+   },
+   "gap:CFB/prop:rec": {
+    "direction": 1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "CFB/prop:rec gap floor +2 points",
+    "week": "2026-W42"
+   },
+   "gap:CFB/total": {
+    "direction": 1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "CFB/total gap floor +2 points",
+    "week": "2026-W42"
+   },
+   "pause:CFB/prop:passYds": {
+    "direction": 1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "Pause CFB/prop:passYds; research and shadow continue",
+    "week": "2026-W42"
+   },
+   "pause:CFB/prop:rec": {
+    "direction": 1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "Pause CFB/prop:rec; research and shadow continue",
+    "week": "2026-W42"
+   },
+   "pause:CFB/total": {
+    "direction": 1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "Pause CFB/total; research and shadow continue",
+    "week": "2026-W42"
+   },
+   "trust:CFB/prop:passYds": {
+    "direction": -1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "CFB/prop:passYds trust 1.00 to 0.95",
+    "week": "2026-W42"
+   },
+   "trust:CFB/prop:rec": {
+    "direction": -1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "CFB/prop:rec trust 1.00 to 0.95",
+    "week": "2026-W42"
+   },
+   "trust:CFB/prop:recYds": {
+    "direction": -1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "CFB/prop:recYds trust 1.00 to 0.95",
+    "week": "2026-W42"
+   },
+   "trust:CFB/prop:rushYds": {
+    "direction": -1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "CFB/prop:rushYds trust 1.00 to 0.98",
+    "week": "2026-W42"
+   },
+   "trust:CFB/spread": {
+    "direction": 1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "CFB/spread trust 1.00 to 1.04",
+    "week": "2026-W42"
+   },
+   "trust:CFB/total": {
+    "direction": -1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "CFB/total trust 1.00 to 0.95",
+    "week": "2026-W42"
+   },
+   "trust:NFL/prop:att": {
+    "direction": 1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "NFL/prop:att trust 1.00 to 1.05",
+    "week": "2026-W42"
+   },
+   "trust:NFL/prop:car": {
+    "direction": 1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "NFL/prop:car trust 1.00 to 1.03",
+    "week": "2026-W42"
+   },
+   "trust:NFL/prop:cmp": {
+    "direction": 1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "NFL/prop:cmp trust 1.00 to 1.05",
+    "week": "2026-W42"
+   },
+   "trust:NFL/prop:passYds": {
+    "direction": -1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "NFL/prop:passYds trust 1.00 to 0.95",
+    "week": "2026-W42"
+   },
+   "trust:NFL/prop:rec": {
+    "direction": -1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "NFL/prop:rec trust 1.00 to 0.95",
+    "week": "2026-W42"
+   },
+   "trust:NFL/prop:recYds": {
+    "direction": 1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "NFL/prop:recYds trust 1.00 to 1.05",
+    "week": "2026-W42"
+   },
+   "trust:NFL/prop:rushYds": {
+    "direction": -1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "NFL/prop:rushYds trust 1.00 to 0.95",
+    "week": "2026-W42"
+   },
+   "trust:NFL/total": {
+    "direction": -1,
+    "firstSeenAt": "2026-10-13T12:30:06Z",
+    "sentence": "NFL/total trust 1.00 to 0.95",
+    "week": "2026-W42"
+   }
+  },
+  "promotions": {},
+  "reasons": {},
+  "researchOrder": [],
+  "segments": {}
  },
  "version": 1
 }
