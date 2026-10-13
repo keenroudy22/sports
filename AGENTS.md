@@ -251,7 +251,9 @@ Handy commands (from `~/Projects/sports`):
 - **Whole-day Climb pool (owner, 2026-10-11):** a rung's one or two researched legs may come from any games that
   Eastern game day in one league; they do not need the same game or kickoff window. Keep one sportsbook per ticket.
   The rung settles after its last leg, and no later step opens before that settlement. A loss starts a new $50
-  climb while lifetime banked, wagered, returned and net totals carry across every climb. No rung is forced.
+  climb while lifetime banked, wagered, returned and net totals carry across every climb. An unrelated refused
+  straight candidate never removes the whole game from the Climb pool; every proposed rung leg runs the Climb's
+  own price, role, injury and research checks. No rung is forced.
 
 - **Kook'n plan (owner, 2026-10-09):** [`docs/KOOKN-PLAN.md`](docs/KOOKN-PLAN.md) is the single authority for
   plays, posts, engagement, research and learning. It supersedes every older rule below, and every older rule in

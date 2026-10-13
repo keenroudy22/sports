@@ -1880,13 +1880,17 @@ def easy_parlay_step(ctx, games, now, records, published, decided, screened, spe
     screened.append({'league': league, 'gameId': ticket['gameIds'][0], 'title': ticket['title'], 'rule': refusal.rule, 'reason': refusal.reason})
 
 
-def ladder_step(ctx, games, now, records, published, decided, screened, exclude=(), manual=None, status=None):
-    """The ladder's next rung (scripts/ladder.py), through the ladder's gates, leaving off the games in `exclude`.
-    Never fails a run."""
+def ladder_step(ctx, games, now, records, published, decided, screened, manual=None, status=None):
+    """The ladder's next rung (scripts/ladder.py), through its leg-level gates. Never fails a run.
+
+    A refusal on one straight candidate cannot erase that candidate's entire
+    game from the Climb pool. The Climb checks its own player, price, injury
+    and research rules on each proposed leg.
+    """
     import ladder
     try:
         ticket, reason = (ladder.manual_candidate(ctx, games, now, manual) if manual
-                          else ladder.candidate(ctx, games, now, exclude=exclude))
+                          else ladder.candidate(ctx, games, now))
     except Exception as error:
         log(f'ladder skipped ({type(error).__name__}: {error})')
         try:
@@ -2429,7 +2433,7 @@ def _run(args, now, slot, kinds, status):
     if 'ladder' in kinds:
         exclude = longshot_exclusions(ctx, screened, [revision for _, _, revision in closed])
         manual_ladder = load_json(Path(args.ladder_spec), None) if args.ladder_spec else None
-        ladder_step(ctx, games, now, records, published, decided, screened, exclude=exclude, manual=manual_ladder,
+        ladder_step(ctx, games, now, records, published, decided, screened, manual=manual_ladder,
                     status=status)
 
     # A selection is only an admission here.  It becomes a public report when

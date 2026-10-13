@@ -259,6 +259,12 @@ class BuildTests(unittest.TestCase):
                          [['early-one', 'early-two', 'night']])
         self.assertIsNotNone(ladder.build(legs)[0], 'the game-day pool may pair eligible early and night legs')
 
+    def test_an_815_pm_monday_game_stays_on_mondays_eastern_climb_pool(self):
+        monday_morning = datetime(2026, 10, 12, 10, 45, tzinfo=timezone.utc)  # 6:45 AM ET
+        mnf = game('mnf', 'Bills', 'Rams', '2026-10-13T00:15Z')              # 8:15 PM ET Monday
+        self.assertEqual([row['id'] for row in ladder.todays_games({'mnf': mnf}, monday_morning, 'NFL')],
+                         ['mnf'])
+
     def test_candidate_uses_the_whole_day_then_waits_for_settlement(self):
         games = dict(GAMES)
         games['night'] = game('night', 'Ravens', 'Falcons', '2026-09-28T00:20Z')

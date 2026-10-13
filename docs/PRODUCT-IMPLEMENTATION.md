@@ -1716,3 +1716,13 @@ plus-money plays eligible below a 50% hit rate, and gives plus-money its own
 learning segment. A send guard refuses a tied or losing number. Historical
 posted attachments stay immutable; current site payloads no longer repeat a
 pre-fix losing number. O-20261013-3 tracks gated release and live evidence.
+
+### October 13 Climb Eastern game-day repair — prepared
+
+The October 12 Climb log said the Monday night game was absent even though its
+8:15 PM Eastern kickoff was correctly present in the slate. The date helper was
+already Eastern; the actual loss happened because an unrelated refused straight
+candidate put the entire game into a shared fun-ticket exclusion set before the
+Climb evaluated its own legs. The Climb now owns that decision: an 8:15 PM game
+stays in the Monday pool, and each proposed rung leg still has to clear the
+Climb's price, role, injury and saved-reason checks. O-20261013-4 tracks release.

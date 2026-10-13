@@ -997,6 +997,18 @@ class ParlayGuardTests(unittest.TestCase):
 
 
 class LockedUnitsTests(unittest.TestCase):
+    def test_a_refused_straight_on_mnf_does_not_remove_mnf_from_the_climb_pool(self):
+        now = datetime(2026, 10, 12, 10, 45, tzinfo=timezone.utc)
+        games = {'mnf': {'id': 'mnf', 'league': 'NFL', 'state': 'pre',
+                         'kickoff': '2026-10-13T00:15Z'}}
+        world = SimpleNamespace(first={}, latest={}, games=games)
+        screened = [{'gameId': 'mnf', 'rule': 'prop_injury_clear',
+                     'reason': 'one unrelated receiver is listed out'}]
+        with mock.patch('ladder.candidate', return_value=(None, 'no supported leg')) as choose, \
+                mock.patch('ladder.record_shadow'):
+            run.ladder_step(world, games, now, [], [], [], screened)
+        choose.assert_called_once_with(world, games, now)
+
     def test_a_pulled_ladder_step_gets_no_replacement(self):
         ticket = {'id': 'NFL-2026-W3-ladder-0927-fd', '_league': 'NFL', 'title': 'Ladder step 2',
                   'parlayType': 'ladder', 'book': 'FanDuel', 'odds': -110, 'legs': [{}, {}], 'gameIds': ['g1'],
