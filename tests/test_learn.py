@@ -35,6 +35,14 @@ def row(i, segment='NFL/total', decision='published', clv=-1.0, result='loss', r
 
 
 class GradeTests(unittest.TestCase):
+    def test_weekly_climb_bank_uses_lifetime_saved_not_current_climb(self):
+        import ladder
+        with tempfile.TemporaryDirectory() as folder, mock.patch.object(ladder, 'state', return_value={
+                'run': 3, 'step': 2, 'stake': 58, 'banked': 15, 'saved': 57, 'open': None}):
+            report = learn.weekly(NOW, dry=True, root=Path(folder), log_book={'posts': []}, games={}, record=({}, {}))
+        self.assertEqual(report['climb']['banked'], 57)
+        self.assertIn('lifetime bank $57', learn.owner_note(report, NOW))
+
     def test_shadow_dedupe_keeps_post_pause_near_miss(self):
         policy = learning.default_policy()
         policy['segments']['NFL/total'] = {'since': '2026-10-01T00:00:00Z'}

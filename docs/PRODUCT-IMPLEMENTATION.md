@@ -1781,3 +1781,36 @@ The invalid FIU Discord message was deleted, the private queue is empty, and a
 post-release mirror completed without a STOPPED validation error. The tracked
 weekly review job is loaded at Weekday 2 (Tuesday 10:30 ET), and the real
 October 13 packet and local-model review exist in `~/Library/Logs/KeenRoudy/`.
+
+### October 13 autonomy audit — correction and held follow-up
+
+Correction to the preceding receipt: the October 13 review file existed, but its
+model summary did not succeed. The routing receipt recorded one failed 180-second
+local call; the review was the complete deterministic evidence packet, not a
+successful model review. Learning itself produced its Tuesday note: 2,083 graded
+candidate observations, 21 signals waiting for a second Tuesday, and 85 posts with
+engagement measurements. These are not 2,083 official bets or proof of profitability.
+
+A fresh local qwen3.8:27b probe succeeded, followed by a supplied-evidence brief in
+3.95 seconds (1,592 prompt tokens, 58 output tokens). No cloud fallback was used.
+Prepared repairs use ladder.state.saved for lifetime bank, prioritize current
+health problems over historical zero-error receipts, distinguish model enabled
+from successful calls, and expose failed weekly summaries in cached health.
+
+The development release is HELD: the full Python gate ran 1,392 tests with four
+failures and two skips. One was an overlong product-status next-action field
+(shortened before preserving this work); three review wiring assertions expect
+the whole historical queue as model input. Keep the full queue in saved outputs
+and prove that contract while bounding model input, then rerun every release gate.
+All 240 Node tests and focused learning/health tests passed. No deployment of
+these changes occurred. Evidence: work/autonomy-python.log and
+work/autonomy-node.log. KA-R2 holds this exact next action; KA-R1 still owns result
+reaction timing, which is not fixed by a better review.
+
+The three Codex tasks remain daily 07:45, overnight 00:45 and Tuesday 11:00.
+The daily prompt now takes one approved queue item when compact health is green;
+it still stops after one bounded fix and does not repeat long audits. The latest
+observed desk run finished successfully with chosenNotPosted=0. The morning X
+Results post and Discord results were delivered (O-20261013-1); two individual
+win/near-miss reactions remain missing and the historical late grade remains a
+measured failure. Do not erase it or issue duplicate retrospective posts.

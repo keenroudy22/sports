@@ -13,6 +13,22 @@ NOW = datetime(2026, 10, 5, 14, 0, tzinfo=timezone.utc)
 
 
 class DeskHealthTests(unittest.TestCase):
+    def test_enabled_is_not_used_and_failed_review_is_not_green(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            self.fixture(root)
+            self.write(root, 'private/status.json', {'outcome': 'ok', 'finishedAt': NOW.isoformat(),
+                       'llm': {'used': True, 'calls': {'calls': 0, 'failures': 0}}})
+            self.write(root, 'review-routing-2026-10-05.json', {'engine': 'local',
+                       'localCalls': {'calls': 1, 'failures': 1}})
+            data = H.summary(root, root / 'private', root, NOW)
+            self.assertTrue(data['localModel']['enabledLastRun'])
+            self.assertFalse(data['localModel']['usedLastRun'])
+            self.assertIn('weekly-summary-failed', {r['code'] for r in data['issues']})
+            self.write(root, 'review-routing-2026-10-05.json', {'engine': 'local',
+                       'summaryAvailable': True, 'localCalls': {'calls': 1, 'failures': 0}})
+            self.assertNotIn('weekly-summary-failed', {r['code'] for r in H.summary(root, root / 'private', root, NOW)['issues']})
+
     def test_free_plan_eighty_percent_alerts_from_verified_and_counted_usage(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

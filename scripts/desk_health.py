@@ -545,6 +545,25 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
                       f'({failure}); the next deployment would stop.')
         except (OSError, ValueError, TypeError):
             issue('payload-budget-unknown', 'Public payload sizes could not be checked from the cached site build.')
+    review_health = {'state': 'unknown'}
+    review_paths = sorted(Path(logs).glob('review-routing-????-??-??.json'))
+    if review_paths:
+        review_path = review_paths[-1]
+        reviewed = read(review_path)
+        stats = reviewed.get('localCalls') or {}
+        failed_summary = reviewed.get('summaryAvailable') is False or (
+            reviewed.get('engine') == 'local' and (stats.get('calls') or 0) > 0
+            and (stats.get('failures') or 0) >= stats['calls'])
+        review_health = {'state': 'failed' if failed_summary else 'recorded',
+                         'date': review_path.stem.removeprefix('review-routing-'),
+                         'engine': reviewed.get('engine'), 'failures': stats.get('failures', 0)}
+        if failed_summary:
+            issue('weekly-summary-failed', 'The latest weekly model summary failed; the evidence packet is not a successful model review.')
+    model_stats = (state.get('llm') or {}).get('calls') or {}
+    model_calls = number(model_stats.get('calls'))
+    model_failures = number(model_stats.get('failures'))
+    if model_failures:
+        issue('local-model-failed', f'{int(model_failures)} local-model calls failed in the latest run.')
     published = number(state.get('published')) if state.get('outcome') == 'ok' else None
     try:
         reliability = reliability_view(reliability_history(conf / 'desk-health-reliability.json'), now)
@@ -565,9 +584,11 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
                               'localStop': 1800, 'observedAt': stamp(read(conf / 'sgo-shadow.json').get('lastAt'))},
             'oddsBudget': {'observedAt': stamp(usage.get('at')), 'used': used if verified else None, 'projectedMonth': projected,
                            'remaining': remaining if verified else None, 'verifiedFromStoredSnapshot': verified},
-            'localModel': {'usedLastRun': (state.get('llm') or {}).get('used') is True,
-                           'calls': number(((state.get('llm') or {}).get('calls') or {}).get('calls')),
-                           'failures': number(((state.get('llm') or {}).get('calls') or {}).get('failures')),
+            'weeklyReview': review_health,
+            'localModel': {'enabledLastRun': (state.get('llm') or {}).get('used') is True,
+                           'usedLastRun': (model_calls or 0) > (model_failures or 0),
+                           'calls': model_calls,
+                           'failures': model_failures,
                            'homepageStories': number((state.get('localEditor') or {}).get('stories'))},
             'livePilot': {'lastObserverAt': stamp(watch.get('lastPollAt')), 'attempts': attempted,
                           'state': 'review-required' if attempted >= 3 or uncertain else 'not-exercised' if not attempted else 'in-pilot'}}

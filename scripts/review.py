@@ -487,6 +487,9 @@ def main(argv=None):
         '- Codex/researcher: ChatGPT plan; account usage not available from this packet.',
     ))
     text += '\n' + free_plan + '\n'
+    # Keep the full queue in the saved packet, but don't let years of release
+    # receipts displace today's health and learning evidence in bounded context.
+    brief_text = text
     import product_followthrough
     product_status = product_followthrough.read_status(root=ROOT, now=now)
     # Keep the entire dated queue in the packet, including packet-only runs.
@@ -506,7 +509,8 @@ def main(argv=None):
     import local_brief
     import llm
     llm.reset_calls()
-    review = ask_codex(text, review_path) if args.codex else local_brief.brief(text)
+    review = ask_codex(text, review_path) if args.codex else local_brief.brief(brief_text)
+    summary_available = bool(review)
     if not review:
         print('review unavailable; the evidence packet stands alone (no automatic cloud fallback)')
         review = 'The summary was unavailable. The complete recorded facts follow.\n'
@@ -518,6 +522,7 @@ def main(argv=None):
     review_path.write_text(review + '\n\n' + text, encoding='utf-8')
     (LOGS / f'review-routing-{last.isoformat()}.json').write_text(json.dumps({
         'engine': 'codex' if args.codex else 'local', 'localCalls': llm.call_stats(),
+        'summaryAvailable': summary_available,
         'cloudFallback': False}, indent=2) + '\n', encoding='utf-8')
     print(f'review: {review_path}')
     if not args.no_push:

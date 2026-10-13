@@ -7,6 +7,13 @@ import llm
 
 
 class BriefTests(unittest.TestCase):
+    def test_current_problem_beats_historical_zero_error_receipts(self):
+        old = '\n'.join(f'- Evidence: release {i} passed with no errors.' for i in range(100))
+        facts = local_brief.evidence(old + '\nPROBLEM: two missing result reactions.\nSummary unavailable.')
+        self.assertEqual(facts['E0'], 'PROBLEM: two missing result reactions.')
+        self.assertEqual(facts['E1'], 'Summary unavailable.')
+        self.assertLessEqual(len(facts), 40)
+
     def test_exact_evidence_and_bounded_local_call(self):
         def ask(system, packet, schema, **kw):
             self.assertEqual(kw['timeout'], 180)

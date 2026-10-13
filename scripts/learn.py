@@ -633,7 +633,7 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
               'marketReview': market_review.audit(historical_props), 'resultsShadows': shadow_rows,
               'direction': direction_report, 'weekLanes': week_lanes,
               'climb': {'run': climb.get('run'), 'step': climb.get('step'), 'stake': climb.get('stake'),
-                        'banked': climb.get('allBanked'), 'open': (climb.get('open') or {}).get('id')}}
+                        'banked': climb.get('saved'), 'open': (climb.get('open') or {}).get('id')}}
     report['twoWay'] = {'signals': two_way_signals, 'applied': two_way_applied,
                         'pending': copy.deepcopy((policy.get('twoWay') or {}).get('pending') or {}),
                         'disabled': __import__('os').environ.get('KEENROUDY_TWO_WAY_LEARNING', '1') == '0'}

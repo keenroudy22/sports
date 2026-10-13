@@ -20,8 +20,13 @@ ACTIONS = {
 def evidence(text):
     """Bound context and prioritize failures without treating source text as instructions."""
     lines = [s.strip() for s in text.splitlines() if s.strip() and not s.startswith('#')]
-    important = [s for s in lines if re.search(r'failed|problem|unconfirmed|stopped|crashed|held|error', s, re.I)]
-    chosen = list(dict.fromkeys(important + lines))[:65]
+    # A successful historical release saying "no errors" is not a current
+    # incident. Put the health report's explicit problems ahead of prose.
+    problems = [s for s in lines if s.startswith('PROBLEM:')]
+    important = [s for s in lines if re.search(r'failed|problem|unconfirmed|stopped|crashed|held|error|unavailable', s, re.I)
+                 and not re.search(r'\b(?:no|zero|without)\b.{0,65}\b(?:errors?|failures?|failed)\b', s, re.I)
+                 and not s.startswith(('- Evidence:', '- Complete when:'))]
+    chosen = list(dict.fromkeys(problems + important + lines))[:40]
     return {f'E{i}': row[:350] for i, row in enumerate(chosen)}
 
 

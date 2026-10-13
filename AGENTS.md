@@ -40,9 +40,10 @@ watch the runs, and fix what breaks.
 
 - Plain words, short sentences, the answer first. No jargon ("CLV", "calibration") without saying what it means.
 - Use they/them for the owner.
-- The owner delegates ("do what you think makes the most sense and get it done") but decides anything public: new
-  post types, how the record counts, how many plays go out. Tested layout/color/copy variants within an already
-  approved category and its existing caps are approved; a new category, channel, market or release policy is not.
+- Standing authority is KOOKN-AUTOPILOT (October 11), its later corrections and newer direct owner decisions.
+  Money, changes to record counting, and legal/referral decisions return to the owner. Within the approved
+  free-stack, honesty and risk limits, implement operational fixes and bounded experiments without asking the
+  owner to reapprove them. Older review/window restrictions are history, not new approval gates.
 - Say plainly when something failed, including your own mistakes, and what you did about it.
 
 ## Product continuity: finish, verify, carry forward
