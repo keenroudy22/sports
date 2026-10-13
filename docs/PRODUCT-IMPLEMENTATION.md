@@ -1758,3 +1758,20 @@ different players or a side and a prop both independently cleared. The owner
 removed that limit. The daily, family, total and same-player caps remain; a
 new contradiction check refuses opposing sides and a game total paired with a
 player prop pointing the other way. O-20261013-5 tracks gated release.
+
+### October 13 expired private release outage — prepared
+
+The FIU/Jacksonville State over 43.5 private admission carried a 08:30 ET
+expiry into the 10:40 ET Discord release path. Discord accepted the attachment,
+then public-record validation correctly refused the expired publication time;
+the same row stopped every later five-minute mirror. The row was removed from
+the private queue under the run lock and a Discord correction said it was
+pulled before X and would not count. The mirror immediately continued to the
+next queued row.
+
+The bounded repair checks quote expiry and the CFB weekday-total rule again
+before any external send, validates the public record before Discord, and
+isolates a bad row so every other queued release continues. The tracked weekly
+review job moves from launchd Weekday 3 to Weekday 2 (Tuesday 10:30 ET), with a
+regression test. Hosted release, installed-job reload and the real October 13
+review packet remain required before this receipt is marked live.

@@ -2748,7 +2748,26 @@ def _private_card(path):
     return data, 'image/png', 'kookn-card.png'
 
 
-def release_private(now, log=log):
+def private_release_refusal(row, ctx, now):
+    """Return the release-time reason a private admission must be withdrawn.
+
+    Admission is not permission to publish an expired price later.  Policy is
+    checked again here as well, so an older queued row cannot bypass a newly
+    effective market rule.
+    """
+    pick = dict(row.get('pick') or {}, league=row.get('league'))
+    try:
+        quoted = gates.when(pick.get('quotedAt'))
+        expires = gates.when(pick.get('expiresAt'))
+    except (TypeError, ValueError):
+        return 'its saved quote has no valid release window'
+    if not quoted <= now < expires:
+        return f"its saved quote expired at {expires.astimezone(EASTERN):%-I:%M %p} ET"
+    policy = gates.totals_policy(pick, ctx)
+    return None if policy.ok else policy.reason
+
+
+def release_private(now, log=log, only=None):
     """Release due admissions Discord → public record → Buffer/X.
 
     Each state transition is persisted outside Git first.  A retry therefore
@@ -2775,10 +2794,18 @@ def release_private(now, log=log):
     last = max(busy, default=None)
     for row in list(book['plays']):
         key = row.get('id')
+        if only is not None and key not in only:
+            continue
         pick = dict(row.get('pick') or {})
         game = ctx.games.get((pick.get('gameIds') or [None])[0])
         starts = sorted(gates.when(ctx.games[g]['kickoff']) for g in pick.get('gameIds') or [] if g in ctx.games)
         if not key or not starts or row.get('held'):
+            continue
+        refusal = private_release_refusal(row, ctx, now)
+        if refusal:
+            release_queue.remove(CONF, key)
+            log(f'release: {key} withdrawn before public release: {refusal}')
+            alert("Kook'n play withdrawn before release", f'{key}: {refusal}')
             continue
         kickoff = starts[0]
         target = post_windows.target(row.get('league'), kickoff) + post_windows.jitter(key)
@@ -2821,23 +2848,24 @@ def release_private(now, log=log):
             log(f'release: {key} held: caption guard failed')
             continue
 
+        published_at = row.get('discordSentAt') or stamp(now)
+        public_pick = dict(pick, publishedAt=published_at)
+        report = {'league': row['league'], 'publishedAt': published_at, 'summary':
+                  f"Released 1: {public_pick.get('title')} {int(public_pick.get('odds')):+d} at {public_pick.get('book')}.",
+                  'takeaways': [], row['kind']: [public_pick]}
+        # Prove the exact public row before the first external send.  A bad row
+        # stays private and the isolated wrapper moves on to every other row.
+        validate({'private-release.json': report}, stores.reports, ctx.games)
+        run_tests()
+
         if not row.get('discordSentAt'):
             receipt = discord_post.send_message(
                 discord_post.webhook(), text, f'private:{key}',
                 fetch=lambda _url, p=row['card']: _private_card(p), return_receipt=True)
-            row = release_queue.update(CONF, key, discordSentAt=stamp(now), discordReceipt=receipt or {})
+            row = release_queue.update(CONF, key, discordSentAt=published_at, discordReceipt=receipt or {})
             log(f'discord: {key} released before X')
 
         if not row.get('publicPath'):
-            published_at = row['discordSentAt']
-            public_pick = dict(pick, publishedAt=published_at)
-            report = {'league': row['league'], 'publishedAt': published_at, 'summary':
-                      f"Released 1: {public_pick.get('title')} {int(public_pick.get('odds')):+d} at {public_pick.get('book')}.",
-                      'takeaways': [], row['kind']: [public_pick]}
-            validate({'private-release.json': report}, stores.reports, ctx.games)
-            # A failing gate must leave the admitted play private.  Run it
-            # before touching any tracked record or delivery file.
-            run_tests()
             safe = re.sub(r'[^A-Za-z0-9-]+', '-', key).strip('-')[:72]
             name = f"{eastern_date(now).isoformat()}-{row['league']}-{now.astimezone(EASTERN):%H%M}-release-{safe}.json"
             target_path = ROOT / 'research' / name
@@ -2903,6 +2931,28 @@ def release_private(now, log=log):
     return released
 
 
+def release_private_isolated(now, log=log, runner=None):
+    """Release each queued play independently so one malformed row cannot stop Discord."""
+    import release_queue
+    runner = runner or release_private
+    released = []
+    keys = [row.get('id') for row in release_queue.load(CONF).get('plays', [])
+            if row.get('id') and not row.get('held')]
+    for key in keys:
+        try:
+            released.extend(runner(now, log=log, only={key}))
+        except Exception as error:
+            message = f'{type(error).__name__}: {error}'
+            try:
+                release_queue.update(CONF, key, held=True, heldAt=stamp(now),
+                                     holdReason=f'release validation failed: {message[:300]}')
+            except KeyError:
+                pass
+            log(f'release: {key} isolated after failure: {message}')
+            alert("Kook'n private play held", f'{key}: {message[:500]}')
+    return released
+
+
 def mirror(args):
     """Every five minutes, observe public plays, send due Discord-first plays and mirror the rest from Buffer."""
     import buffer_post
@@ -2952,7 +3002,7 @@ def mirror(args):
                 sync()
             log_book = x_post.load_log()
             if private_release_ready(now):
-                release_private(now)
+                release_private_isolated(now)
                 log_book = x_post.load_log()
             if not mirror_due(log_book, now):
                 return 0

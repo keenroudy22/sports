@@ -15,7 +15,7 @@ Three things run it, none of them an AI chat:
 1. **launchd on the owner's Mac Studio** runs `~/.config/keenroudy/run.sh` (copy: `deployment/mac/`): the desk run
    at 6:45, 8:30 and 11:45 AM, 5:30, 9:00 and 11:30 PM Eastern (plus 2:45 PM Sunday and 6:50 PM Sunday, Monday, Thursday),
    an extra Climb settlement/qualification scan at 10:00 AM, 1:30, 4:00 and 8:00 PM, the pre-post check every 30
-   minutes, the Discord mirror every 5 minutes, the heartbeat at 7:15 AM, and the weekly review Monday 9:30 AM. The run settles and closes plays, builds the
+   minutes, the Discord mirror every 5 minutes, the heartbeat at 7:15 AM, and the weekly review Tuesday 10:30 AM. The run settles and closes plays, builds the
    board, judges candidates through `scripts/gates.py`, publishes reports to `research/`, pushes, and schedules X
    posts in Buffer. Posted official plays reach Plays & Results about 10-15 minutes before X; community slips and
    bad beats use the separate wins webhook. Approved research mirrors to #research-and-trends after X is confirmed
@@ -236,6 +236,11 @@ Handy commands (from `~/Projects/sports`):
   Props, spreads and totals may be plus money through +200, and moneylines/upsets through +250, with the same reason,
   price, role and injury holds. Unproven plus-money plays are 0.5u Gut calls or Upset picks and learn in their own
   segment. No outgoing card or caption may show a chance tied with or below the posted-price hurdle.
+
+- **Release-time price and queue isolation (owner, 2026-10-13):** a private admission is checked again immediately
+  before Discord. An expired or malformed quote is withdrawn and logged, never released. A failing private row is
+  isolated and alerts once; it must not stop later Discord releases. CFB totals remain research-only on weekdays
+  and have at most one official place on a weekend slate.
 
 - **More than one play may come from a game (owner, 2026-10-13):** there is no one-play-per-game refusal. Keep the
   daily and market-family caps and never repeat exposure to the same player. Two plays on one game may coexist only

@@ -7,6 +7,12 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class PrecheckScheduleTests(unittest.TestCase):
+    def test_weekly_review_runs_tuesday_at_ten_thirty(self):
+        path = ROOT / 'deployment/mac/com.keenroudy.sports.review.plist'
+        with path.open('rb') as source:
+            job = plistlib.load(source)
+        self.assertEqual(job['StartCalendarInterval'], {'Weekday': 2, 'Hour': 10, 'Minute': 30})
+
     def test_regular_desk_checks_climb_before_the_early_game_window(self):
         path = ROOT / 'deployment/mac/com.keenroudy.sports.run.plist'
         with path.open('rb') as source:

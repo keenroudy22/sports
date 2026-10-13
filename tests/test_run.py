@@ -96,6 +96,32 @@ class SlotTests(unittest.TestCase):
         ctx.first['straight'] = {'gameIds': ['NFL-snf'], 'status': 'active', 'lane': 'gut_call'}
         self.assertEqual(run.official_selection_scope(slot, games, ctx, now), set())
 
+    def test_private_release_refuses_an_expired_quote_before_discord(self):
+        now = datetime(2026, 10, 13, 14, 40, tzinfo=timezone.utc)
+        row = {'league': 'NFL', 'pick': {'marketType': 'player',
+               'quotedAt': '2026-10-13T10:45:00Z', 'expiresAt': '2026-10-13T12:30:00Z'}}
+        self.assertIn('expired at', run.private_release_refusal(row, SimpleNamespace(), now))
+
+    def test_one_bad_private_release_is_held_while_the_next_row_continues(self):
+        import release_queue
+        now = datetime(2026, 10, 13, 14, 40, tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as folder, mock.patch.object(run, 'CONF', Path(folder)), \
+                mock.patch.object(run, 'alert'):
+            release_queue.save(Path(folder), {'plays': [{'id': 'bad'}, {'id': 'good'}]})
+            seen = []
+
+            def runner(_now, log, only):
+                key = next(iter(only))
+                seen.append(key)
+                if key == 'bad':
+                    raise AssertionError('invalid private row')
+                return [key]
+
+            self.assertEqual(run.release_private_isolated(now, log=lambda *_: None, runner=runner), ['good'])
+            stored = release_queue.load(Path(folder))['plays']
+            self.assertTrue(next(row for row in stored if row['id'] == 'bad')['held'])
+            self.assertEqual(seen, ['bad', 'good'])
+
     def test_830_selection_pass_rechecks_unserved_noon_and_later_games(self):
         now = datetime(2026, 10, 11, 12, 30, tzinfo=timezone.utc)
         slot = now.astimezone(run.EASTERN)

@@ -168,7 +168,11 @@ class NoForcedBestBetTests(unittest.TestCase):
         self.assertFalse(gates.bar_4(cfb_pick, ctx).ok, 'college totals need five, not four')
         self.assertFalse(gates.totals_policy(dict(cfb_pick, line=45.5), ctx).ok)
         monday = dict(cfb_game, kickoff='2026-09-28T17:00:00Z')
-        self.assertFalse(gates.totals_policy(cfb_pick, context(games={'CFB-1': monday}, odds_history={'CFB-1': [first]})).ok)
+        monday_ctx = context(games={'CFB-1': monday}, odds_history={'CFB-1': [first]})
+        self.assertFalse(gates.totals_policy(cfb_pick, monday_ctx).ok)
+        ok, decisions = gates.admit(cfb_pick, monday_ctx, 'modelLean')
+        self.assertFalse(ok)
+        self.assertIn('totals_policy', {row.rule for row in gates.refusals(decisions)})
         prior = dict(cfb_pick, id='CFB-prior', publishedAt='2026-09-26T15:00:00Z')
         self.assertFalse(gates.totals_policy(cfb_pick, context(games={'CFB-1': cfb_game},
                           odds_history={'CFB-1': [first]}, first={'CFB-prior': prior})).ok)

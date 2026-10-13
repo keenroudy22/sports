@@ -1316,7 +1316,9 @@ def revision_frozen(candidate, ctx):
 
 # ------------------------------------------------------------------ running the rules
 
-COMMON = (not_started, x_window, expiry_ok, fresh_quote, price_present, two_sided_straight, data_sanity, sources_https, not_duplicate, not_republished, cfb_jurisdiction, player_overlap, player_projection_sanity, qb_change_recent)
+COMMON = (not_started, x_window, expiry_ok, fresh_quote, price_present, two_sided_straight, data_sanity,
+          sources_https, not_duplicate, not_republished, cfb_jurisdiction, totals_policy, player_overlap,
+          player_projection_sanity, qb_change_recent)
 SHOP = (one_book, best_quote_by_ev)
 RULES = {
     # Admission keeps honesty, price, role and capacity checks. The owner-plan
