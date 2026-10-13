@@ -107,7 +107,8 @@ class DiscordPostTests(unittest.TestCase):
 
     def test_no_webhook_is_a_quiet_noop(self):
         entry = {'id': 'a', 'kind': 'buffer:play', 'sentAt': '2026-09-28T15:59:00Z', 'discord': {'state': 'pending', 'text': 'Play'}}
-        self.assertEqual(discord_post.mirror_sent({'posts': [entry]}, NOW, url='', log=lambda *_: None), [])
+        self.assertEqual(discord_post.mirror_sent({'posts': [entry]}, NOW, url='',
+                                                wins_url='', research_url='', log=lambda *_: None), [])
         self.assertEqual(entry['discord']['state'], 'pending')
 
     def test_an_arb_alert_uses_discord_only_and_is_deduplicated(self):
