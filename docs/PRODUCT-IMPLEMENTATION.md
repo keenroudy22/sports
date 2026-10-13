@@ -1759,7 +1759,7 @@ removed that limit. The daily, family, total and same-player caps remain; a
 new contradiction check refuses opposing sides and a game total paired with a
 player prop pointing the other way. O-20261013-5 tracks gated release.
 
-### October 13 expired private release outage — prepared
+### October 13 expired private release outage — live
 
 The FIU/Jacksonville State over 43.5 private admission carried a 08:30 ET
 expiry into the 10:40 ET Discord release path. Discord accepted the attachment,
@@ -1771,7 +1771,13 @@ next queued row.
 
 The bounded repair checks quote expiry and the CFB weekday-total rule again
 before any external send, validates the public record before Discord, and
-isolates a bad row so every other queued release continues. The tracked weekly
-review job moves from launchd Weekday 3 to Weekday 2 (Tuesday 10:30 ET), with a
-regression test. Hosted release, installed-job reload and the real October 13
-review packet remain required before this receipt is marked live.
+isolates a bad row so every other queued release continues. Release
+`a1a067e00ee3f2fbd7a03b4b4f8237082f0a336a` passed 1,388 Python tests (two
+skipped), 240 Node tests, both clean-export suites, build/budget, the 102-pick
+record audit, publication/asset/SVG checks, and the isolated 11:45 rehearsal;
+hosted publish 38423875797 succeeded. Eight live Today/Record/Climb/game pages
+at 375 and 1440 pixels had no overflow, browser errors, or caught load state.
+The invalid FIU Discord message was deleted, the private queue is empty, and a
+post-release mirror completed without a STOPPED validation error. The tracked
+weekly review job is loaded at Weekday 2 (Tuesday 10:30 ET), and the real
+October 13 packet and local-model review exist in `~/Library/Logs/KeenRoudy/`.
