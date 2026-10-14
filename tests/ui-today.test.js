@@ -732,7 +732,7 @@ test('Today\'s games show live scores and our projected score, with the free sco
 
 test('Fun tickets and Pulled before kickoff are visible sections when they have plays, and absent when empty', async () => {
   const fun = { ...total, id: 'CFB-2026-W6-fun-longshot', kind: 'parlays', parlayType: 'longshot', legs: ['Leg A over 40.5', 'Leg B over 3.5'], odds: 450, displayTitle: 'Longshot' };
-  const gone = { ...total, id: 'CFB-2026-W6-pulled', displayTitle: 'Pulled Team at Other under 50.5', status: 'withdrawn', entryNote: 'Pulled over news before its post went out.' };
+  const gone = { ...total, id: 'CFB-2026-W6-pulled', posted: true, displayTitle: 'Pulled Team at Other under 50.5', status: 'withdrawn', entryNote: 'Pulled over news before its post went out.' };
   const page = await loadApp('#record', {}, { today: { ...TODAY, picks: [...TODAY.picks, fun, gone] } }).api.views.today({ view: 'today' });
   assert.match(page, /<h2 class="kt-head" id="fun-h">Fun tickets<\/h2><span class="kt-kind">Smaller stake, apart from best bets<\/span>/);
   assert.match(page, /<h2 class="kt-head" id="pulled-h">Pulled before kickoff · 1<\/h2>[\s\S]*Pulled Team at Other/);
@@ -740,4 +740,22 @@ test('Fun tickets and Pulled before kickoff are visible sections when they have 
   assert.ok(at('kt-games"') < at('kt-fun"') && at('kt-fun"') < at('kt-pulled"') && at('kt-pulled"') < at('kt-off-card"'));
   const plain = await loadApp('#record').api.views.today({ view: 'today' });
   assert.ok(!plain.includes('kt-fun"') && !plain.includes('kt-pulled"'));
+});
+
+
+test('Today pulled strip shares public delivery eligibility with Record', async () => {
+  const withdrawn = { ...total, id: 'CFB-2026-W6-never-posted', status: 'withdrawn',
+    displayTitle: 'Never Released under 50.5', entryNote: 'Pulled before posting: hard news.' };
+  assert.equal(C.countsPublic(withdrawn), false);
+  const hidden = await loadApp('#record', {}, { today: { ...TODAY, picks: [withdrawn] } }).api.views.today({ view: 'today' });
+  assert.doesNotMatch(hidden, /kt-pulled"|Never Released|each still counts/);
+  for (const delivery of [{ posted: true }, { delivery: { discordAt: '2026-10-10T13:00:00Z' } },
+    { delivery: { xAt: '2026-10-10T13:15:00Z' } }]) {
+    const released = { ...withdrawn, ...delivery, displayTitle: 'Released then pulled under 50.5' };
+    assert.equal(C.countsPublic(released), true);
+    const shown = await loadApp('#record', {}, { today: { ...TODAY, picks: [released] } }).api.views.today({ view: 'today' });
+    assert.match(shown, /Pulled before kickoff · 1/);
+    assert.match(shown, /Released then pulled/);
+    assert.match(shown, /each still counts/);
+  }
 });

@@ -1195,7 +1195,7 @@
     const todays = sched.today.filter(p => straight(p) && !offCard(p)).sort(order);
     const later = sched.upcoming.filter(p => straight(p) && !offCard(p)).sort(order);
     const off = [...sched.today, ...sched.upcoming].filter(p => straight(p) && offCard(p)).sort(order);
-    const gone = [...sched.today, ...sched.upcoming, ...sched.awaiting].filter(p => !C.isLadder(p) && pulled(p));
+    const gone = [...sched.today, ...sched.upcoming, ...sched.awaiting].filter(p => !C.isLadder(p) && pulled(p) && C.countsPublic(p));
     const awaiting = sched.awaiting.filter(p => !C.isLadder(p) && !pulled(p));
     const fun = [...sched.today, ...sched.upcoming].filter(p => C.isParlay(p) && !C.isLadder(p) && !pulled(p));
     /* A future bet must not become today's best bet just because today's bar cleared nothing. */
