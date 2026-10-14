@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-14T16:09:22Z",
+  "updatedAt": "2026-10-14T16:50:38Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -237,6 +237,15 @@
           "name": "Atlanta Falcons",
           "players": [
             {
+              "id": "4360423",
+              "name": "Michael Penix Jr.",
+              "position": "QB",
+              "status": "Questionable",
+              "injury": "Ribs",
+              "reportedAt": "2026-10-14T16:21Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4360423/michael-penix-jr"
+            },
+            {
               "id": "4361409",
               "name": "Jahan Dotson",
               "position": "WR",
@@ -316,15 +325,6 @@
               "injury": null,
               "reportedAt": "2026-10-12T17:24Z",
               "source": "https://www.espn.com/nfl/player/_/id/10621/nick-folk"
-            },
-            {
-              "id": "4360423",
-              "name": "Michael Penix Jr.",
-              "position": "QB",
-              "status": "Questionable",
-              "injury": "Ribs",
-              "reportedAt": "2026-10-12T13:22Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4360423/michael-penix-jr"
             },
             {
               "id": "4360248",
@@ -1157,12 +1157,21 @@
           "name": "Chicago Bears",
           "players": [
             {
+              "id": "4431611",
+              "name": "Caleb Williams",
+              "position": "QB",
+              "status": "Questionable",
+              "injury": "Hamstring",
+              "reportedAt": "2026-10-14T16:30Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4431611/caleb-williams"
+            },
+            {
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-14T15:21Z",
+              "reportedAt": "2026-10-14T16:14Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1191,15 +1200,6 @@
               "injury": "Suspension",
               "reportedAt": "2026-10-13T20:16Z",
               "source": "https://www.espn.com/nfl/player/_/id/3134690/montez-sweat"
-            },
-            {
-              "id": "4431611",
-              "name": "Caleb Williams",
-              "position": "QB",
-              "status": "Questionable",
-              "injury": "Hamstring",
-              "reportedAt": "2026-10-13T17:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4431611/caleb-williams"
             },
             {
               "id": "4608686",
@@ -1617,6 +1617,33 @@
           "name": "Cleveland Browns",
           "players": [
             {
+              "id": "5081397",
+              "name": "Dylan Sampson",
+              "position": "RB",
+              "status": "Injured Reserve",
+              "injury": "Knee",
+              "reportedAt": "2026-10-14T16:15Z",
+              "source": "https://www.espn.com/nfl/player/_/id/5081397/dylan-sampson"
+            },
+            {
+              "id": "4685702",
+              "name": "Quinshon Judkins",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Foot",
+              "reportedAt": "2026-10-14T16:07Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4685702/quinshon-judkins"
+            },
+            {
+              "id": "4870653",
+              "name": "KC Concepcion",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Concussion",
+              "reportedAt": "2026-10-14T16:02Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4870653/kc-concepcion"
+            },
+            {
               "id": "4569682",
               "name": "Audric Estime",
               "position": "RB",
@@ -1707,24 +1734,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4816090/parker-brailsford"
             },
             {
-              "id": "4685702",
-              "name": "Quinshon Judkins",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Foot",
-              "reportedAt": "2026-10-12T18:16Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4685702/quinshon-judkins"
-            },
-            {
-              "id": "5081397",
-              "name": "Dylan Sampson",
-              "position": "RB",
-              "status": "Injured Reserve",
-              "injury": "Knee",
-              "reportedAt": "2026-10-12T18:08Z",
-              "source": "https://www.espn.com/nfl/player/_/id/5081397/dylan-sampson"
-            },
-            {
               "id": "4876017",
               "name": "Carson Schwesinger",
               "position": "LB",
@@ -1768,15 +1777,6 @@
               "injury": null,
               "reportedAt": "2026-10-11T23:31Z",
               "source": "https://www.espn.com/nfl/player/_/id/5083076/harold-fannin-jr"
-            },
-            {
-              "id": "4870653",
-              "name": "KC Concepcion",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Concussion",
-              "reportedAt": "2026-10-11T20:48Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4870653/kc-concepcion"
             },
             {
               "id": "3131498",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-14T16:01Z",
+              "reportedAt": "2026-10-14T16:48Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -5527,6 +5527,15 @@
           "name": "New York Jets",
           "players": [
             {
+              "id": "4597500",
+              "name": "Adonai Mitchell",
+              "position": "WR",
+              "status": "Doubtful",
+              "injury": "Finger",
+              "reportedAt": "2026-10-14T16:40Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4597500/adonai-mitchell"
+            },
+            {
               "id": "4243375",
               "name": "Dylan Parham",
               "position": "G",
@@ -5543,15 +5552,6 @@
               "injury": "Quadriceps",
               "reportedAt": "2026-10-13T17:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4700136/kiko-mauigoa"
-            },
-            {
-              "id": "4597500",
-              "name": "Adonai Mitchell",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Finger",
-              "reportedAt": "2026-10-13T17:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4597500/adonai-mitchell"
             },
             {
               "id": "4427366",
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "16",
-          "name": "Jordan Addison",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-13T17:50:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4429205/jordan-addison"
-        },
-        {
-          "teamId": "17",
-          "name": "Karon Prunty",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-13T17:50:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4606666/karon-prunty"
-        },
-        {
           "teamId": "17",
           "name": "Carlton Davis III",
           "from": "Out",
@@ -7764,11 +7748,27 @@
           "to": "Active",
           "observedAt": "2026-10-14T15:30:37Z",
           "source": "https://www.espn.com/nfl/player/_/id/3121595/braden-smith"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-10-14T16:50:38Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "20",
+          "name": "Adonai Mitchell",
+          "from": "Questionable",
+          "to": "Doubtful",
+          "observedAt": "2026-10-14T16:50:38Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4597500/adonai-mitchell"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-14T16:09:22Z",
-      "lastAttemptAt": "2026-10-14T16:09:22Z",
+      "checkedAt": "2026-10-14T16:50:38Z",
+      "lastAttemptAt": "2026-10-14T16:50:38Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-14T16:09:22Z",
-      "lastAttemptAt": "2026-10-14T16:09:22Z",
+      "checkedAt": "2026-10-14T16:50:38Z",
+      "lastAttemptAt": "2026-10-14T16:50:38Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
