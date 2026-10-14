@@ -1,39 +1,39 @@
 {
- "at": "2026-10-14T18:48:09Z",
+ "at": "2026-10-14T19:05:58Z",
  "confirmed": {
-  "CFB-401860923": "2026-10-14T18:48:09Z",
-  "CFB-401862800": "2026-10-14T18:48:09Z",
-  "CFB-401871054": "2026-10-14T18:48:09Z",
-  "CFB-401871068": "2026-10-14T18:48:09Z",
-  "NFL-401872995": "2026-10-14T18:26:01Z"
+  "CFB-401860923": "2026-10-14T19:05:58Z",
+  "CFB-401862800": "2026-10-14T19:05:58Z",
+  "CFB-401871054": "2026-10-14T19:05:58Z",
+  "CFB-401871068": "2026-10-14T19:05:58Z",
+  "NFL-401872995": "2026-10-14T19:05:58Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 648,
-    "fanduel": 757
+    "draftkings": 513,
+    "fanduel": 755
    },
    "eventsListed": 113,
    "eventsMatched": 5,
    "games": 5,
    "marketTypes": {
-    "player_field_goals_made": 3,
-    "player_kicking_points": 3,
-    "player_longest_passing_completion": 4,
-    "player_longest_reception": 16,
-    "player_longest_rush": 8,
-    "player_passing_+_rushing_yards": 74,
+    "player_field_goals_made": 2,
+    "player_kicking_points": 2,
+    "player_longest_passing_completion": 3,
+    "player_longest_reception": 12,
+    "player_longest_rush": 5,
+    "player_passing_+_rushing_yards": 51,
     "player_passing_attempts": 8,
-    "player_passing_completions": 7,
-    "player_passing_touchdowns": 50,
-    "player_passing_yards": 190,
-    "player_receiving_yards": 513,
-    "player_receptions": 46,
-    "player_rushing_attempts": 16,
-    "player_rushing_yards": 467
+    "player_passing_completions": 6,
+    "player_passing_touchdowns": 43,
+    "player_passing_yards": 165,
+    "player_receiving_yards": 493,
+    "player_receptions": 40,
+    "player_rushing_attempts": 10,
+    "player_rushing_yards": 428
    },
-   "requestsLeft": 4,
-   "rows": 1405,
+   "requestsLeft": 5,
+   "rows": 1268,
    "slateGames": [
     "Kennesaw State Owls at Missouri State Bears 2026-10-14T23:30Z",
     "Western Kentucky Hilltoppers at Sam Houston Bearkats 2026-10-15T00:00Z",
@@ -182,7 +182,7 @@
      "type": "fixture"
     },
     {
-     "away": "Appalachian State",
+     "away": "Appalachian State Mountaineers",
      "external": {
       "ballybet": "1027508230",
       "betmgm": "6:46829",
@@ -215,10 +215,10 @@
       "thescorebet": "StandardEvent:731fc88e-d432-4047-9e1f-2c995522e588",
       "underdog": "underdog_183231"
      },
-     "home": "Coastal Carolina",
+     "home": "Coastal Carolina Chanticleers",
      "sample": {
-      "away_team": "Appalachian State",
-      "home_team": "Coastal Carolina",
+      "away_team": "Appalachian State Mountaineers",
+      "home_team": "Coastal Carolina Chanticleers",
       "markets": [
        "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
@@ -282,7 +282,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -944,7 +943,6 @@
        "4th_quarter_total_points",
        "anytime_touchdown_scorer",
        "draw_no_bet",
-       "first_touchdown_scorer",
        "game_prop",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
@@ -978,7 +976,6 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
-       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -989,13 +986,31 @@
    ]
   },
   "NFL": {
-   "books": {},
+   "books": {
+    "draftkings": 200
+   },
    "eventsListed": 29,
    "eventsMatched": 1,
    "games": 1,
-   "marketTypes": {},
+   "marketTypes": {
+    "player_extra_points_made": 4,
+    "player_fantasy_score": 10,
+    "player_field_goals_made": 4,
+    "player_interceptions": 4,
+    "player_kicking_points": 4,
+    "player_longest_passing_completion": 4,
+    "player_longest_reception": 22,
+    "player_longest_rush": 12,
+    "player_passing_+_rushing_yards": 4,
+    "player_passing_attempts": 4,
+    "player_passing_completions": 4,
+    "player_passing_touchdowns": 4,
+    "player_passing_yards": 51,
+    "player_receiving_yards": 61,
+    "player_receptions": 8
+   },
    "requestsLeft": 3,
-   "rows": 0,
+   "rows": 200,
    "slateGames": [
     "Seattle Seahawks at Denver Broncos 2026-10-16T00:15Z"
    ],
@@ -1162,7 +1177,7 @@
       "gemini": "NFL-2610181700-CHI-ATL-PPTD",
       "goldrush": "31140273",
       "hardrock": "5712717890709488007",
-      "kalshi": "KXNFL2HTOTAL-26OCT18CHIATL",
+      "kalshi": "KXNFLTEAMTOTAL-26OCT18CHIATL",
       "ladbrokes": "7ec24e33-81e1-4c42-9731-a7707f5f0f97",
       "matchbook": "mb-33322337472700023",
       "novig": "01a112eb-506a-7071-b79c-5f2d85436ff9",
@@ -1303,7 +1318,7 @@
       "gemini": "NFL-2610181700-BAL-CLE-T",
       "goldrush": "31140276",
       "hardrock": "529074719606047127",
-      "kalshi": "KXNFL2QTOTAL-26OCT18BALCLE",
+      "kalshi": "KXNFLRSHYDS-26OCT18BALCLE-CLEDWATSON4-40",
       "ladbrokes": "49a8673f-70c4-4c18-afa6-4583b398486d",
       "matchbook": "mb-33322335677100023",
       "novig": "01a112eb-51d1-7733-89cd-f05c85473888",
@@ -1436,7 +1451,7 @@
       "gemini": "NFL-2610181700-PIT-TB-T",
       "goldrush": "31140272",
       "hardrock": "2791733172688257451",
-      "kalshi": "KXNFL2HTOTAL-26OCT18PITTB",
+      "kalshi": "KXNFLRECYDS-26OCT18PITTB-PITDMETCALF4-25",
       "ladbrokes": "19d96846-631a-4851-a999-3d95973939fa",
       "matchbook": "mb-33322323068300023",
       "novig": "01a112eb-522f-7523-a1cc-e0fd1f3a80c6",
@@ -1573,7 +1588,7 @@
       "gemini": "NFL-2610181700-TEN-IND-TT",
       "goldrush": "31140271",
       "hardrock": "3023668553497837959",
-      "kalshi": "KXNFLRSHYDS-26OCT18TENIND-TENTSPEARS2-10",
+      "kalshi": "KXNFLRSHYDS-26OCT18TENIND-INDSMCGOWAN20-25",
       "ladbrokes": "8c33d691-0951-4cbe-be60-ec19d5adfe0f",
       "matchbook": "mb-33322332105000023",
       "novig": "01a112eb-516c-7992-be22-b1f91ee6227c",
@@ -1715,7 +1730,7 @@
       "gemini": "NFL-2610181700-CAR-PHI-TT",
       "goldrush": "31140278",
       "hardrock": "7977628143605383564",
-      "kalshi": "KXNFLTD-26OCT18CARPHI-PHIDGOEDERT88-1",
+      "kalshi": "KXNFLRECYDS-26OCT18CARPHI-CARTMCMILLAN4-40",
       "ladbrokes": "b057caea-7efe-47da-bc59-e84800b011e8",
       "matchbook": "mb-33322325727100023",
       "novig": "01a112eb-510b-7713-b75c-84ae7106cf52",
@@ -1852,7 +1867,7 @@
       "gemini": "NFL-2610181700-NO-NYG-TT",
       "goldrush": "31140277",
       "hardrock": "3474028516234887575",
-      "kalshi": "KXNFLTD-26OCT18NONYG-NYGJWINSTON19-2",
+      "kalshi": "KXNFL3QTOTAL-26OCT18NONYG",
       "ladbrokes": "87cd2ce3-3d5a-4523-8f46-011fad2a4ec2",
       "matchbook": "mb-33322327531400023",
       "novig": "01a112eb-5010-78a2-8817-2b23827974e3",
@@ -2271,7 +2286,7 @@
       "gemini": "NFL-2610182025-BUF-LV-TT",
       "goldrush": "31140279",
       "hardrock": "4365741242454245782",
-      "kalshi": "KXNFLRECYDS-26OCT18BUFLV-LVTTUCKER1-35",
+      "kalshi": "KXNFLRSHYDS-26OCT18BUFLV-LVKCOUSINS8-25",
       "ladbrokes": "9bef1c7e-e50c-4946-8dc7-0622486be296",
       "matchbook": "mb-33322316878200023",
       "novig": "01a112eb-5374-7323-9b0e-1d2c7569288a",
@@ -2549,7 +2564,7 @@
       "gemini": "NFL-2610190020-DAL-GB-S",
       "goldrush": "31140282",
       "hardrock": "3091622907579859371",
-      "kalshi": "KXNFL4QTOTAL-26OCT18DALGB",
+      "kalshi": "KXNFLRSHYDS-26OCT18DALGB-DALDPRESCOTT4-15",
       "ladbrokes": "a93e7f79-6bb4-4300-808b-faf617743def",
       "matchbook": "mb-33322313675500023",
       "novig": "01a112eb-53dd-72c2-98ee-5deae6b657f0",
