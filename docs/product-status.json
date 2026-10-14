@@ -1,16 +1,7 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-13T05:12:36Z",
+  "updatedAt": "2026-10-14T13:30:00Z",
   "items": [
-    {
-      "id": "P01",
-      "title": "Free product foundation and current-season charts",
-      "status": "shipped",
-      "owner": "agent",
-      "next": "Preserve verified navigation, charts, records and private health during subsequent changes.",
-      "doneWhen": "Published releases and live phone checks recorded.",
-      "evidence": "docs/PRODUCT-IMPLEMENTATION.md; 0e40d6deec54ee135e4b593ffd3ba18acea5a90c; publish run 37346323493 succeeded 2026-10-05T17:13:11Z. Player pages now expose observed Any TD plus common position stats without inventing prices or projections; live 375/1440 checks passed."
-    },
     {
       "id": "P02",
       "title": "Shareable research context and consistent search",
@@ -1153,6 +1144,15 @@
       "next": "Observe the next multi-game Climb scan and preserve its leg-level refusal or candidate in the private shadow log.",
       "doneWhen": "An8:15PM ET Monday kickoff remains eligible all Monday; unrelated straight refusals cannot erase its game; each rung leg keeps every Climb gate; release and live checks pass.",
       "evidence": "Owner decision2026-10-13 after Oct12 logs reported NFL:0 games left. Historical slate proves NFL-401872994 kicked at2026-10-13T00:15Z; regressions cover Eastern date and unrelated refused straight. Release fe6affc04be4699f6f29371564492fd17eabd383 via head3e5ada936219bb9fcd28747b61f482a71d8256b1; hosted38419897111 success; Python1384(2skip),Node240,cleanexport,build502/139,record102/NBA0,feed83,guard603,rehearsal1000ok,live375/1440 clean."
+    },
+    {
+      "id": "O-20261014-1",
+      "title": "Publish one useful, human daily engagement post",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Run every release gate, inspect a real nearest-slate render, deploy under the run lock, and observe the first natural daily fallback without forcing a duplicate post.",
+      "doneWhen": "Every calendar day can produce a qualifying play, result or approved research post; an otherwise empty day uses fresh stored next-slate numbers or projected scores, never filler or a weakened betting gate; full release and live checks pass.",
+      "evidence": "Owner decision2026-10-14. Focused research and Kitchen Ticket tests pass; full release and first natural delivery receipts pending."
     }
   ]
 }

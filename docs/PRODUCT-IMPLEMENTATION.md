@@ -1814,3 +1814,22 @@ observed desk run finished successfully with chosenNotPosted=0. The morning X
 Results post and Discord results were delivered (O-20261013-1); two individual
 win/near-miss reactions remain missing and the historical late grade remains a
 measured failure. Do not erase it or issue duplicate retrospective posts.
+
+### October 14 daily-engagement rule
+
+The owner directed the desk to stay useful and visible every day in their own
+casual voice. A real play, a settled-result reaction or the existing approved
+research family may fill the day. When none does, the deterministic research
+fallback looks ahead to the nearest stored football slate. It publishes a
+short `MY NUMBER VS VEGAS` look only when that game's captured market is fresh;
+otherwise it uses the stored projected score and says `NEXT SLATE`. One-game
+slates use text rather than padding a list card with filler. This is research,
+not a pick, and it cannot relax selection, price, injury, role, reason, record,
+daily-cap or Buffer-reserve rules. O-20261014-1 tracks the release and first
+natural-delivery evidence.
+
+The bounded live queue was already at its 128-item limit. Shipped foundation
+item P01 was archived out of `product-status.json`; its complete release
+evidence remains in this implementation record and its identifier is not
+reused. The new daily-engagement item therefore remains visible without
+weakening the queue validator or dropping unfinished work.

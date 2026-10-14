@@ -41,7 +41,9 @@ class RoleSanityTests(unittest.TestCase):
         self.assertIn('below 85%', result['reason'])
 
     def test_jj_kohl_current_fiu_full_games_exclude_partial_and_old_team(self):
-        logs = features.player_logs(features.load())['4870883']
+        # This regression protects the Oct. 7 projection. Later games must not
+        # leak backward and change the role evidence available at that kickoff.
+        logs = features.player_logs(features.load(), before='2026-10-07T23:30:00Z')['4870883']
         found = role_sanity.assess({'att': [23.7, 6.7, 40.7]}, logs, '2229', 'passYds', 2026)
         self.assertEqual(found, {'volume': 'att', 'projected': 23.7,
                                  'recentFullAverage': 43.0, 'fullGames': 3,

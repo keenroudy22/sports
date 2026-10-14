@@ -23,6 +23,12 @@ def game(watch=None):
     return row
 
 
+def projected_game(*, kickoff='2026-10-04T17:00:00Z', observed='2026-10-03T13:30:00Z'):
+    return dict(game(), kickoff=kickoff,
+                v2={'away': 24.5, 'home': 20.0, 'total': 44.5},
+                market={'total': 41.5, 'retrievedAt': observed, 'book': 'FanDuel'})
+
+
 class ResearchPostTests(unittest.TestCase):
     def test_fallback_logs_each_attempt_and_stops_at_first_eligible_card(self):
         season = {'kind': 'season', 'rows': [{'kickoff': game()['kickoff']}] * 2}
@@ -48,7 +54,73 @@ class ResearchPostTests(unittest.TestCase):
             self.assertIsNone(R.select({'games': [game()]}, {}, NOW, log=logs.append))
         self.assertEqual(logs[0], 'research rules: prep held — NFL: no current-day Prep List | CFB: no current-day Prep List')
         self.assertEqual(logs[1:], [f'research fallback: {kind} held: no eligible card'
-                                  for kind in ('prep', 'season', 'upset', 'matchup', 'end-zone')])
+                                  for kind in ('prep', 'season', 'upset', 'matchup', 'end-zone')] +
+                                 ['research fallback: numbers held: no stored projections'])
+
+    def test_off_day_uses_the_next_slate_and_casual_verified_numbers(self):
+        data = {'games': [projected_game()]}
+        logs = []
+        with mock.patch.object(R, 'season_candidate', return_value=None), \
+             mock.patch.object(R, 'upset_candidate', return_value=None), \
+             mock.patch.object(R, 'spread_dog_candidate', return_value=None), \
+             mock.patch.object(R, 'matchup_candidate', return_value=None), \
+             mock.patch.object(R, 'scorer_candidate', return_value=None):
+            choice = R.select(data, {'CFB-1': {}}, NOW, log=logs.append)
+        self.assertEqual(choice['kind'], 'numbers')
+        self.assertTrue(choice['offDay'])
+        self.assertEqual(choice['firstKickoff'].isoformat(), '2026-10-04T17:00:00+00:00')
+        self.assertIn('my total 44.5, Vegas 41.5', choice['text'])
+        self.assertIn('Not picks yet.', choice['text'])
+        self.assertNotIn('AI', choice['text'])
+        self.assertTrue(any(line == 'research fallback: numbers eligible: 1 rows' for line in logs))
+
+    def test_numbers_fallback_never_prints_an_old_book_line(self):
+        old = projected_game(observed='2026-10-02T13:00:00Z')
+        choice = R.numbers_candidate([old], NOW)
+        self.assertFalse(choice['usesPrice'])
+        self.assertEqual(choice['title'], 'NEXT SLATE')
+        self.assertNotIn('Vegas', choice['text'])
+        self.assertIn('my score 24.5–20', choice['text'])
+
+    def test_numbers_card_uses_plain_total_label_and_keeps_the_gap(self):
+        import ticket_card
+        choice = R.numbers_candidate([
+            projected_game(),
+            projected_game(kickoff='2026-10-04T20:00:00Z'),
+        ], NOW)
+        svg = ticket_card.research_list_svg(choice)
+        self.assertIn('MY TOTAL', svg)
+        self.assertIn('44.5', svg)
+        self.assertIn('Vegas total 41.5', svg)
+        self.assertIn('+3.0 vs Vegas', svg)
+
+    def test_off_day_post_uses_the_daily_slot_and_future_kickoff_deadline(self):
+        import json
+        with tempfile.TemporaryDirectory() as folder:
+            payload = Path(folder) / 'today.json'
+            payload.write_text(json.dumps({'games': [projected_game()]}))
+            with mock.patch.object(R, 'season_candidate', return_value=None), \
+                 mock.patch.object(R, 'upset_candidate', return_value=None), \
+                 mock.patch.object(R, 'spread_dog_candidate', return_value=None), \
+                 mock.patch.object(R, 'matchup_candidate', return_value=None), \
+                 mock.patch.object(R, 'scorer_candidate', return_value=None):
+                post = R.post({}, NOW, payload, Path(folder), Path(folder) / 'none')
+            self.assertEqual(post['key'], 'research:numbers:2026-10-03')
+            self.assertEqual(post['due'].isoformat(), '2026-10-03T14:30:00+00:00')
+            self.assertIsNone(post['card'])
+
+    def test_one_game_numbers_post_is_text_only_instead_of_padding_the_card(self):
+        import json
+        with tempfile.TemporaryDirectory() as folder:
+            payload = Path(folder) / 'today.json'
+            payload.write_text(json.dumps({'games': [projected_game()]}))
+            with mock.patch.object(R, 'season_candidate', return_value=None), \
+                 mock.patch.object(R, 'upset_candidate', return_value=None), \
+                 mock.patch.object(R, 'spread_dog_candidate', return_value=None), \
+                 mock.patch.object(R, 'matchup_candidate', return_value=None), \
+                 mock.patch.object(R, 'scorer_candidate', return_value=None):
+                rendered = R.render_due(NOW, Path(folder) / 'cards', payload, Path(folder), Path(folder) / 'none')
+            self.assertEqual(rendered, {})
 
     def test_prep_refusal_counts_use_the_same_rules_as_admission(self):
         row = {'league': 'CFB', 'book': 'FanDuel', 'odds': -110, 'clears': True,
@@ -144,7 +216,7 @@ class ResearchPostTests(unittest.TestCase):
             payload.write_text(__import__('json').dumps({'games': []}))
             logs = []
             self.assertIsNone(R.post({}, NOW, payload, Path(folder), Path(folder) / 'none', log=logs.append))
-            self.assertEqual(logs, ['research: skipped — no unstarted football games today'])
+            self.assertEqual(logs, ['research: skipped — no stored football game in the next seven days'])
 
     def test_prep_list_takes_one_research_slot_only_with_three_fresh_checked_rows(self):
         now = datetime(2026, 10, 3, 13, 0, tzinfo=timezone.utc)  # 9 AM Eastern
@@ -214,7 +286,7 @@ class ResearchPostTests(unittest.TestCase):
 
     def test_each_research_family_has_a_bounded_fallback_even_for_long_names(self):
         import x_post
-        for kind in ('end-zone', 'matchup', 'season', 'upset', 'spread-dog'):
+        for kind in ('end-zone', 'matchup', 'season', 'upset', 'spread-dog', 'numbers'):
             with self.subTest(kind=kind):
                 choice = {'kind': kind, 'title': '90%+ TREND BOARD', 'text': 'x' * 900,
                           'rows': [{'title': 'Very Long Exact Player Name ' * 20, 'price': 'over 19.5 (-110)',

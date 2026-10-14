@@ -205,6 +205,15 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **No invisible days (owner, 2026-10-14):** publish at least one useful, casual X post every calendar day. A
+  qualifying play, settled result or approved research post can satisfy the day. If the normal football-day
+  research families have no honest row, use the nearest stored slate for a `MY NUMBER VS VEGAS` research-list
+  card when that game's captured market is fresh; otherwise show the stored projected score as `NEXT SLATE`.
+  Keep it short, first-person and fun, never present research as a pick, and never weaken a price, injury, role,
+  reason or record rule to fill the day. The existing one-research-post-per-date rule, Buffer reserves and
+  research-only Discord route still apply. Graphics are preferred for multi-row data; plain text may be used when
+  it communicates the fact more clearly.
+
 - **Research Discord and local-first growth (owner, 2026-10-12):** approved X research posts mirror after confirmed
   X delivery into `#research-and-trends` through its dedicated webhook, with the X link and the fixed label
   `RESEARCH · NOT A BEST BET`. Prep Lists, opponent-adjusted trends, matchup sheets, injury angles, projections and

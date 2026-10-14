@@ -1,10 +1,12 @@
-"""One evidence-first research graphic per football slate.
+"""One evidence-first research post per calendar day.
 
 This is editorial packaging, never candidate selection. It reads the same built
 page payloads visitors see and refuses stale prices. The public priority is:
 fresh outright underdogs, priced underdog spreads, fresh main-line season trends,
 exact-line trends supported by opponent defense, then observed end-zone work. A missing view produces
-no post; nothing is invented to fill a calendar.
+no post. On a football off-day, or when the priced families are honestly held,
+the fallback is a next-slate numbers card made only from stored projections and
+fresh book lines. Nothing is invented merely to fill a calendar.
 """
 import json
 import os
@@ -97,6 +99,18 @@ def slate_games(data, now):
     day = eastern_date(now)
     return [g for g in data.get('games') or [] if game_day(g) == day and g.get('state') == 'pre'
             and when(g.get('kickoff')) and when(g['kickoff']) > now]
+
+
+def next_slate_games(data, now, horizon=timedelta(days=7)):
+    """The nearest unstarted football game day, including today."""
+    future = [g for g in data.get('games') or [] if g.get('league') in ('NFL', 'CFB')
+              and g.get('state') == 'pre' and when(g.get('kickoff'))
+              and now < when(g['kickoff']) <= now + horizon]
+    if not future:
+        return []
+    day = min(game_day(game) for game in future)
+    return sorted((game for game in future if game_day(game) == day),
+                  key=lambda game: (when(game['kickoff']), game['id']))
 
 
 def prep_row_hold(row, league, now):
@@ -433,6 +447,62 @@ def season_candidate(games, details, now):
                                'keenroudy.com/sports/#trends', tags(unique)])}
 
 
+def numbers_candidate(games, now):
+    """A casual, non-pick look at the nearest slate from public site numbers."""
+    rows = []
+    for game in games:
+        model, away, home = game.get('v2') or {}, game.get('away') or {}, game.get('home') or {}
+        if not all(isinstance(model.get(key), (int, float)) for key in ('away', 'home', 'total')):
+            continue
+        away_name = away.get('abbr') or away.get('name')
+        home_name = home.get('abbr') or home.get('name')
+        if not away_name or not home_name:
+            continue
+        market = game.get('market') or {}
+        seen = market.get('retrievedAt')
+        fresh = current(seen, now, timedelta(hours=12))
+        vegas = market.get('total') if fresh else None
+        has_vegas = isinstance(vegas, (int, float))
+        price_text = f"Vegas total {vegas:g}" if has_vegas else f"My score {model['away']:g}–{model['home']:g}"
+        gap = model['total'] - vegas if has_vegas else None
+        detail = f"My total {model['total']:g}"
+        if isinstance(gap, (int, float)):
+            detail += f" · {'+' if gap >= 0 else ''}{gap:.1f} vs Vegas"
+        rows.append({'league': game.get('league'), 'gameId': game['id'], 'kickoff': game['kickoff'],
+                     'title': f'{away_name} at {home_name}', 'team': home,
+                     'price': price_text,
+                     'book': (market.get('displayBook') or market.get('book')) if has_vegas else None,
+                     'metric': f"Mine {model['total']:g}", 'detail': detail,
+                     'observedAt': seen if has_vegas else None, 'hasVegas': has_vegas,
+                     'score': abs(gap) if isinstance(gap, (int, float)) else 0})
+    if not rows:
+        return None
+    rows.sort(key=lambda row: (-int(row['hasVegas']), -row['score'], row['kickoff'], row['gameId']))
+    shown = rows[:4]
+    openers = ('A few numbers I keep coming back to:',
+               'Here’s what I’m circling on the next football slate:',
+               'Early look. These are the numbers that caught my eye:')
+    opener = openers[eastern_date(now).toordinal() % len(openers)]
+    lines = []
+    for row in shown[:3]:
+        if row['hasVegas']:
+            lines.append(f"{row['title']} — my total {row['metric'].removeprefix('Mine ')}, Vegas {row['price'].removeprefix('Vegas total ')}.")
+        else:
+            lines.append(f"{row['title']} — {row['price'].lower()}.")
+    league = shown[0].get('league')
+    from x_post import LIMIT, tweet_length
+    footer = ['Not picks yet. Just where my numbers start.', f'#{league}']
+    text = '\n'.join([opener, *lines, *footer])
+    while len(lines) > 1 and tweet_length(text) > LIMIT:
+        lines.pop()
+        text = '\n'.join([opener, *lines, *footer])
+    if tweet_length(text) > LIMIT:
+        text = '\n'.join(['Early look at the next football slate.', 'The numbers are on the card.', *footer])
+    return {'kind': 'numbers', 'title': 'MY NUMBER VS VEGAS' if any(row['hasVegas'] for row in shown) else 'NEXT SLATE',
+            'kicker': 'EARLY LOOK · NOT A BEST BET', 'accent': CYAN, 'rows': shown, 'text': text,
+            'usesPrice': any(row['hasVegas'] for row in shown)}
+
+
 def already_posted(log_book, day):
     posts = log_book.get('posts') or []
     keys = posts if isinstance(posts, dict) else (row.get('id', '') for row in posts)
@@ -444,12 +514,14 @@ def bounded_caption(choice):
     """Write a short, evidence-first caption while the card carries the full detail."""
     from x_post import LIMIT, tweet_length
     rows, kind = choice.get('rows') or [], choice.get('kind')
-    if not rows or kind not in ('upset', 'spread-dog', 'matchup', 'season', 'end-zone'):
+    if not rows or kind not in ('upset', 'spread-dog', 'matchup', 'season', 'end-zone', 'numbers'):
+        return choice['text']
+    if kind == 'numbers' and tweet_length(choice.get('text') or '') <= LIMIT:
         return choice['text']
     row = rows[0]
     headings = {'upset': '🐕 UNDERDOG WATCH', 'spread-dog': '🐕 SPREAD WATCH',
                 'matchup': '📊 MATCHUP TREND', 'season': '📈 TREND BOARD',
-                'end-zone': '🎯 END-ZONE WORK'}
+                'end-zone': '🎯 END-ZONE WORK', 'numbers': '👀 MY NUMBER VS VEGAS'}
     headline = str(row.get('title') or '').strip()
     evidence = ''
     if kind == 'matchup':
@@ -467,6 +539,8 @@ def bounded_caption(choice):
     elif kind == 'upset':
         headline = f"{headline} {row.get('price') or ''} ({book_short(row.get('book'))})".strip()
         evidence = str(row.get('copyMetric') or row.get('metric') or '')
+    elif kind == 'numbers':
+        evidence = ' · '.join(value for value in (str(row.get('price') or ''), str(row.get('metric') or '')) if value)
     else:
         headline = f"{headline} {row.get('price') or ''} {book_short(row.get('book'))}".strip()
         evidence = str(row.get('metric') or '')
@@ -490,10 +564,11 @@ def bounded_caption(choice):
 
 
 def select(data, details, now, lines=None, teams=None, order=None, log=None):
-    games = slate_games(data, now)
+    today_games = slate_games(data, now)
+    games = today_games or next_slate_games(data, now)
     if not games:
         return None
-    prepared = prep_candidate(data, now)
+    prepared = prep_candidate(data, now) if today_games else None
     if log and not prepared:
         log('research rules: prep held — ' + prep_diagnostics(data, now))
     usable = lambda choice: choice if choice and len(choice.get('rows') or []) >= 2 else None
@@ -523,10 +598,15 @@ def select(data, details, now, lines=None, teams=None, order=None, log=None):
             if choice:
                 chosen = choice
                 break
+        if not chosen:
+            chosen = numbers_candidate(games, now)
+            if log:
+                log('research fallback: numbers ' +
+                    (f'eligible: {len(chosen.get("rows") or [])} rows' if chosen else 'held: no stored projections'))
     if not chosen:
         return None
     day = eastern_date(now)
-    chosen.update(day=day, key=f"research-{chosen['kind']}-{day.isoformat()}",
+    chosen.update(day=day, key=f"research-{chosen['kind']}-{day.isoformat()}", offDay=not bool(today_games),
                   firstKickoff=min(when(row['kickoff']) for row in chosen['rows']))
     chosen['text'] = bounded_caption(chosen)
     return chosen
@@ -556,14 +636,17 @@ def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES, log
     choice = select(data, details_for(cards, detail_root), now,
                     load_lines(lines_path), teams_for(cards), order=order, log=log)
     if not choice:
-        reason = ('no unstarted football games today' if not slate_games(data, now)
-                  else 'Prep List, Trends, Upset Watch, Matchup and End-zone had no eligible rows')
+        reason = ('no stored football game in the next seven days' if not next_slate_games(data, now)
+                  else 'no verified research family or stored projection was usable')
         log(f'research: skipped — {reason}')
         return None
     deadlines = {'daily research window ended': at(choice['day'], POST_UNTIL),
                  '45-minute kickoff cutoff': choice['firstKickoff'] - timedelta(minutes=45)}
     if choice['kind'] in ('season', 'matchup', 'prep'):
         deadlines['four-hour price expiry'] = min(when(r['observedAt']) + timedelta(hours=4) for r in choice['rows'])
+    if choice['kind'] == 'numbers' and choice.get('usesPrice'):
+        deadlines['twelve-hour market expiry'] = min(when(r['observedAt']) + timedelta(hours=12)
+                                                     for r in choice['rows'] if r.get('hasVegas'))
     stale = min(deadlines.values())
     due = max(at(choice['day'], (9, 30) if choice['kind'] == 'prep' else POST_AT),
               now + timedelta(minutes=2))
@@ -573,7 +656,10 @@ def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES, log
         return None
     log(f"research: scheduled {choice['kind']} for {due.astimezone(gates.EASTERN):%-I:%M %p} ET")
     return {'key': f"research:{choice['kind']}:{choice['day'].isoformat()}", 'kind': 'research',
-            'card': choice['key'], 'text': choice['text'],
+            # A one-game slate is useful as a short conversation post, but the
+            # approved list art needs at least two honest rows. Never pad it.
+            'card': (None if choice['kind'] == 'numbers' and len(choice['rows']) < 2 else choice['key']),
+            'text': choice['text'],
             'due': due, 'stale': stale}
 
 
@@ -649,6 +735,8 @@ def render_due(now, folder, data_path=TODAY, detail_root=DETAILS, lines_path=LIN
     choice = select(data, details_for(cards, detail_root), now,
                     load_lines(lines_path), teams_for(cards))
     if not choice:
+        return early_cards
+    if choice.get('kind') == 'numbers' and len(choice.get('rows') or []) < 2:
         return early_cards
     fetch = fetch or pick_card.fetch_data_uri
     path = Path(folder) / f"{choice['key']}.png"

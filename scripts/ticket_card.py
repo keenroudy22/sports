@@ -352,6 +352,7 @@ def research_list_svg(choice, *, art=None):
         'matchup': 'HIT RATE',
         'upset': 'MY % / VEGAS %',
         'spread-dog': 'MY % / VEGAS %',
+        'numbers': 'MY TOTAL',
     }.get(kind, 'THE NUMBER')
     for index, source in enumerate((choice.get('rows') or [])[:5]):
         subject = str(source.get('title') or source.get('player') or '').strip()
@@ -372,6 +373,9 @@ def research_list_svg(choice, *, art=None):
             right = f'{match.group(1)}% / {match.group(2)}%' if match else metric
             line = ' '.join(x for x in (price_text, str(source.get('book') or '')) if x)
             detail = ''
+        elif kind == 'numbers':
+            right = metric.removeprefix('Mine ').strip()
+            line = ' · '.join(x for x in (price_text, str(source.get('book') or '')) if x)
         else:
             match = re.search(r'(\d+)%.*?(\d+)%', metric)
             right = f'{match.group(1)}% / {match.group(2)}%' if match else metric
