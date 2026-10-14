@@ -242,6 +242,10 @@ def _market_drivers(kind, game, card, snapshot, team_logs, ratings, injuries, ro
                 f"{_poss(card[other]['name'], plural)} defense ranks {defense['defense']}.",
                 1 if off['offense'] < defense['defense'] else -1,
                 abs(defense['defense'] - off['offense']) / 15, [off['offense'], off['teams'], defense['defense']])
+        home_field = _number(((((snapshot or {}).get('inputs') or {}).get('ratings') or {}).get('homeField')))
+        if home_field is not None and abs(home_field) >= 1:
+            add(f"Home field adds {abs(home_field):.1f} points to {card['home']['name']} in this projection.",
+                1 if gap * home_field > 0 else -1, abs(home_field), [home_field])
     else:
         side = min(('home', 'away'), key=lambda key: ((card.get(key) or {}).get('strength') or {}).get('defense', 999)) \
             if gap < 0 else max(('home', 'away'), key=lambda key: ((card.get(key) or {}).get('strength') or {}).get('defense', -1))
@@ -284,6 +288,10 @@ def _market_drivers(kind, game, card, snapshot, team_logs, ratings, injuries, ro
     # 4. Roster: a quarterback role hold already computed for this game; NFL top-position players listed out.
     if any(r.get('roleHold') == 'qb' for r in rows if r.get('gameId') == card['id']):
         add('Recent quarterback changes put receiving roles in this game under review.', -1, 2, [], 'qb_change')
+    coverage = str(((snapshot or {}).get('inputs') or {}).get('injuryCoverage') or '')
+    if game.get('league') == 'CFB' and 'not covered' in coverage.lower():
+        add('College injury reports are not covered by this feed; recheck quarterbacks and starting roles before using the projection.',
+            -1, 2.5, [], 'injury_coverage')
     if game.get('league') == 'NFL':
         for side in ('home', 'away'):
             for player in injuries.get(str(card[side]['id']), []):

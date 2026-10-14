@@ -668,3 +668,11 @@ details.filters > .toolbar { margin-top: 4px; }
 .climb-route-legs a { display: block; padding: 8px 0; overflow-wrap: anywhere; }
 .climb-route-legs a small { display: block; margin-top: 3px; color: var(--muted); font-weight: 500; line-height: 1.35; }
 .climb-route-bank { margin: 14px 0; font-weight: 700; }
+.kt-number-quick { margin-top: 14px; }
+.kt-number-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.kt-number-grid > span { display: flex; flex-direction: column; gap: 3px; padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: rgba(255, 255, 255, .025); }
+.kt-number-grid small { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
+.kt-number-grid b { font-size: 16px; line-height: 1.15; }
+.kt-number-status { margin: 12px 0 0; }
+.kt-number-chance { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 5px; color: var(--muted); font-size: 13px; }
+@media (max-width: 520px) { .kt-number-grid { grid-template-columns: 1fr; } .kt-number-grid > span { flex-direction: row; align-items: baseline; justify-content: space-between; } }

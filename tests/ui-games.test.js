@@ -50,7 +50,8 @@ const slate = () => {
         caution: 'Alabama had a 28-point-or-larger result in its last three games.',
         drivers: [{ text: 'Alabama had a 28-point-or-larger result in its last three games.', direction: -1, weight: 1, flag: 'blowout', numbers: [28] },
           { text: "Alabama's offense ranks 2 of 136; South Alabama's defense ranks 110.", direction: 1, weight: 7.2, numbers: [2, 136, 110] }],
-        markets: { spread: { ours: 24, book: 28, gap: -4, drivers: [{ text: "Alabama's offense ranks 2 of 136; South Alabama's defense ranks 110.", direction: 1, weight: 7.2, numbers: [2, 136, 110] }, { text: 'Alabama had a 28-point-or-larger result in its last three games.', direction: -1, weight: 1, flag: 'blowout', numbers: [28] }], caution: 'Alabama had a 28-point-or-larger result in its last three games.' }, total: null } } });
+        markets: { spread: { ours: 24, book: 28, gap: -4, drivers: [{ text: "Alabama's offense ranks 2 of 136; South Alabama's defense ranks 110.", direction: 1, weight: 7.2, numbers: [2, 136, 110] }, { text: 'Alabama had a 28-point-or-larger result in its last three games.', direction: -1, weight: 1, flag: 'blowout', numbers: [28] }], caution: 'Alabama had a 28-point-or-larger result in its last three games.' }, total: null } },
+      value: { spread: { chance: .518, needs: .533, edge: -1.5, line: 28, odds: -114, book: 'DraftKings' } } });
   const b = game('CFB-2', team('3', 'PITT', 'Pitt', 9, 22), team('4', 'GASO', 'Georgia Southern', 60, 70), -4, 53.5, 4.6, 50.5,
     { window: 'afternoon', kickoff: kickoff(15.5), bettable: 8, look: 'Total 53.5 vs my 50.5', conference: { home: 'ACC', away: 'Sun Belt' },
       whyDiffer: { stale: false, kind: 'total', ours: 50.5, book: 53.5, gap: -3, text: 'I have 50.5, the book has 53.5. Pitt\'s defense ranks 22 of 136 in my model.', caution: null,
@@ -157,6 +158,7 @@ test('worth-your-time takes the six highest bettable scores, ties broken by kick
   assert.deepEqual(picked.slice(2), ['CFB-11', 'CFB-5', 'CFB-7', 'CFB-9'], 'then the noon 6s by kickoff, then id (string order, deterministic)');
   const again = await factory(contextFor(api, games.slice().reverse())).games({ tab: 'upcoming' });
   assert.deepEqual([...again.slice(again.indexOf('kt-worth-strip')).matchAll(/href="#game\/(CFB-\d+)"/g)].map(m => m[1]).slice(0, 6), picked, 'input order never changes the pick');
+  assert.match(strip, /Research lean · not a bet/, 'an unposted model disagreement is labeled as research');
 });
 
 test('the game page prints every driver under #why, a note only when a flag fired, and only the staleness line when stale', async () => {
@@ -172,6 +174,11 @@ test('the game page prints every driver under #why, a note only when a flag fire
   assert.doesNotMatch(blowout, /Numbers used/, 'the sentence carries its numbers; no debug suffix');
   assert.match(blowout, /Blowout · gap 4/);
   assert.match(blowout, /<span class="h">My number<\/span>/);
+  assert.match(blowout, /My number vs Vegas/);
+  assert.match(blowout, /Research lean only — not a bet/);
+  assert.match(blowout, /My chance <b>51\.8%<\/b>/);
+  assert.match(blowout, /Price needs <b>53\.3%<\/b>/);
+  assert.ok(blowout.indexOf('My number vs Vegas') < blowout.indexOf('Why my number differs'), 'the plain comparison comes before the deeper explanation');
   assert.doesNotMatch(blowout, /Our number|our price check|Our side/, 'the game page speaks in one voice');
   assert.match(blowout, /Starters may sit early/);
   assert.match(blowout, /This is my projection against the book's line\. It is research; best bets go through separate price checks\./);

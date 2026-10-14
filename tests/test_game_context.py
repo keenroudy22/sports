@@ -57,6 +57,18 @@ class NavigatorTests(unittest.TestCase):
 
 
 class WhyDifferTests(unittest.TestCase):
+    def test_spread_names_home_field_and_missing_college_lineup_coverage(self):
+        snapshot = {'inputs': {'ratings': {'homeField': 4.3},
+                               'injuryCoverage': 'college injury reports are not covered'}}
+        result = game_context.why_differ(GAME, CARD, snapshot, {}, {}, {}, [], NOW)
+        home = next(d for d in result['drivers'] if d['text'].startswith('Home field adds'))
+        self.assertEqual(home['numbers'], [4.3])
+        self.assertEqual(home['direction'], 1)
+        self.assertIn('Home field adds 4.3 points to Pitt', home['text'])
+        coverage = next(d for d in result['drivers'] if d.get('flag') == 'injury_coverage')
+        self.assertIn('recheck quarterbacks and starting roles', coverage['text'])
+        self.assertEqual(result['caution'], coverage['text'])
+
     def test_spread_uses_real_ranks_and_soft_schedule_caution(self):
         log = [{'kickoff': '2026-10-01T16:00Z', 'pointsFor': 20, 'pointsAgainst': 10, 'opp': 'x'},
                {'kickoff': '2026-10-02T16:00Z', 'pointsFor': 25, 'pointsAgainst': 12, 'opp': 'y'},

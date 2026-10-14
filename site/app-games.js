@@ -57,7 +57,7 @@
     const top = list.filter(g => g.league === 'CFB' && !g.completed).slice().sort(byBettable).slice(0, 6);
     if (!top.length) return '';
     return `<section class="section" style="margin:8px 0 18px" aria-labelledby="worth-h"><div class="section-head"><h2 id="worth-h" style="white-space:nowrap">Worth your time</h2><span class="kt-kind">Research · the one thing to check</span></div>
-      <div class="chip-scroll"><div class="kt-worth-strip">${top.map(g => `<a class="kt-worth-card" href="#game/${esc(g.id)}"><span class="wc-t">${esc(g.away.abbr)} at ${esc(g.home.abbr)}</span><b>${esc(g.look || g.plainGap || 'Take a look')}</b><small>${esc([TIER_WORD[g.tier], whenShort(g.kickoff).split(', ').pop()].filter(Boolean).join(' · '))}</small></a>`).join('')}</div></div></section>`;
+      <div class="chip-scroll"><div class="kt-worth-strip">${top.map(g => `<a class="kt-worth-card" href="#game/${esc(g.id)}"><span class="wc-t">${esc(g.away.abbr)} at ${esc(g.home.abbr)}</span><b>${esc(g.look || g.plainGap || 'Take a look')}</b><small>${esc([TIER_WORD[g.tier], whenShort(g.kickoff).split(', ').pop(), !(g.bettableParts || {}).official ? 'Research lean · not a bet' : ''].filter(Boolean).join(' · '))}</small></a>`).join('')}</div></div></section>`;
   };
   views.games = async route => {
     const tab = route.tab || 'upcoming';
@@ -262,6 +262,24 @@
       ${flagged ? `<p class="kt-why-note">${esc(flagged.text)}</p>` : ''}
       <p class="kt-why-foot">This is my projection against the book's line. It is research; best bets go through separate price checks. <a href="#game/${esc(g.id)}#model-vs">Model vs market ›</a> · <a href="#game/${esc(g.id)}#lines-we-like">Lines we like ›</a></p></div></section>`;
   };
+  const numberQuick = (g, why, value, final) => {
+    if (!why || why.stale || final) return '';
+    const markets = why.markets || { [why.kind]: why };
+    const key = why.kind && markets[why.kind] ? why.kind : (markets.spread ? 'spread' : markets.total ? 'total' : null);
+    const block = key && markets[key];
+    if (!block) return '';
+    const mine = key === 'spread' ? C.modelSpread(g.home.abbr, g.away.abbr, block.ours) : C.fixed(block.ours, 1);
+    const vegas = key === 'spread' ? favSpread(g.home.abbr, g.away.abbr, -block.book) : C.fixed(block.book, 1);
+    const priced = (value || {})[key] || null;
+    const clears = priced && isNum(priced.chance) && isNum(priced.needs) && priced.chance > priced.needs;
+    const status = priced ? (clears ? 'Price clears the betting bar' : 'Research lean only — not a bet') : 'Research lean — no current price check';
+    const chance = priced && isNum(priced.chance) && isNum(priced.needs)
+      ? `<span>My chance <b>${esc(C.fixed(priced.chance * 100, 1))}%</b></span><span>Price needs <b>${esc(C.fixed(priced.needs * 100, 1))}%</b></span>` : '';
+    return `<section class="section kt-number-quick" aria-labelledby="number-quick-h"><div class="section-head"><h2 id="number-quick-h">My number vs Vegas</h2><span class="kt-kind">Research</span></div>
+      <div class="card"><div class="kt-number-grid"><span><small>My number</small><b>${esc(mine)}</b></span><span><small>Vegas</small><b>${esc(vegas)}</b></span><span><small>Difference</small><b>${esc(C.fixed(Math.abs(block.gap), 1))} points</b></span></div>
+      <p class="kt-number-status ${clears ? 'green' : ''}"><b>${esc(status)}</b></p>${chance ? `<div class="kt-number-chance">${chance}</div>` : ''}
+      <p class="small" style="margin-top:8px"><a href="#game/${esc(g.id)}#why">See why the numbers differ ›</a></p></div></section>`;
+  };
   views.game = async route => {
     const back = '<a class="back" href="#games">← Games</a>';
     let detail;
@@ -294,6 +312,7 @@
     const qbText = ['away', 'home'].flatMap(side => ((detail.teams || {})[side]?.injuries || []).filter(p => p.position === 'QB' && /out|doubtful|questionable|inactive/i.test(p.status || '')).map(p => `${p.name || p.player || g[side].abbr} ${p.status}`)).join('; ');
     const why = detail.whyDiffer || fromSlate.whyDiffer || null;
     const header = projCard({ ...g, v2: model, lean: detail.lean || fromSlate.lean, marketRead: detail.marketRead || fromSlate.marketRead }, { big: true, link: false, ...(pregame ? cardExtras({ ...g, whyDiffer: why }, now) : {}) }) + (qbText ? `<p class=caution>QB news: ${esc(qbText)}</p>` : '');
+    const quickNumber = numberQuick(g, why, detail.value || fromSlate.value || {}, final);
     const actions = `<div class="btn-row" style="margin:12px 0 4px">${watchButton({ type: 'game', key: 'game:' + g.id, title, league: g.league, href: '#game/' + g.id, kickoff: g.kickoff })}
       <a class="btn small" href="#team/${esc(g.league)}/${esc(g.away.id)}">${esc(g.away.abbr)} team page</a><a class="btn small" href="#team/${esc(g.league)}/${esc(g.home.id)}">${esc(g.home.abbr)} team page</a>
       <a class="btn small" href="${esc(espnGame(g))}" target="_blank" rel="noopener">ESPN game page ↗</a></div>`;
@@ -503,7 +522,7 @@
     const tdAt = tdw.map(r => r.roleSnapshotAt).sort().pop();
     const tdHtml = tdw.length ? section('Touchdown watch', `<div class="board">${tdw.map(r => `<div class="row-main" style="grid-template-columns:minmax(0,2fr) minmax(0,1.2fr)"><div class="row-title with-art">${headshot(g.league, r.athleteId, 'sm')}<div>${r.athleteId ? `<a href="#player/${esc(g.league)}/${esc(r.athleteId)}"><b>${esc(r.player)}</b></a>` : `<b>${esc(r.player)}</b>`}<span>${esc(r.redZone)} red-zone carries + targets · ${esc(r.inside10)} inside the 10</span></div></div><div class="small muted">${esc(r.touchdowns)} TDs in ${esc(r.games)} games · ${esc(r.priceStatus || 'no verified TD price')}</div></div>`).join('')}</div>`, '', `Scoring opportunity, not a touchdown probability or a play. Role data as of ${esc(tdAt ? ago(tdAt) : '–')}. Verify the latest availability.`) : '';
 
-    return `${back}${head(g.league === 'CFB' ? 'College football' : 'NFL', title, '')}${postedHtml}${linePreview}${header}${actions}${liveStamp(liveNow.refreshed)}
+    return `${back}${head(g.league === 'CFB' ? 'College football' : 'NFL', title, '')}${postedHtml}${linePreview}${header}${quickNumber}${actions}${liveStamp(liveNow.refreshed)}
       ${finalHtml}
       ${whySection(g, why, final)}
       ${pregame ? anchored('lines-we-like', section('Lines we like', favHtml, why && !final ? `<a class="more" href="#game/${esc(g.id)}#why">Why my number differs →</a>` : '', 'Current prices where my estimated chance is above what the price needs. Research, not extra best bets.')) : ''}
