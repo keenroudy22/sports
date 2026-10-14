@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-14T18:25:08Z",
+  "updatedAt": "2026-10-14T18:47:26Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-14T18:23Z",
+              "reportedAt": "2026-10-14T18:44Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2537,6 +2537,15 @@
           "name": "Green Bay Packers",
           "players": [
             {
+              "id": "4430191",
+              "name": "Skyy Moore",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-14T18:25Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4430191/skyy-moore"
+            },
+            {
               "id": "4428037",
               "name": "Jacob Monk",
               "position": "C",
@@ -2670,15 +2679,6 @@
               "injury": "Hamstring",
               "reportedAt": "2026-10-11T19:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/4258206/benjamin-st-juste"
-            },
-            {
-              "id": "4430191",
-              "name": "Skyy Moore",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-11T18:37Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4430191/skyy-moore"
             },
             {
               "id": "4569661",
@@ -3000,8 +3000,8 @@
               "id": "15818",
               "name": "Keenan Allen",
               "position": "WR",
-              "status": "Active",
-              "injury": null,
+              "status": "Questionable",
+              "injury": "Groin",
               "reportedAt": "2026-10-14T18:18Z",
               "source": "https://www.espn.com/nfl/player/_/id/15818/keenan-allen"
             },
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-14T18:15Z",
+              "reportedAt": "2026-10-14T18:23Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "20",
-          "name": "Kiko Mauigoa",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-13T17:50:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4700136/kiko-mauigoa"
-        },
-        {
-          "teamId": "20",
           "name": "Adonai Mitchell",
           "from": "Out",
           "to": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-14T18:25:08Z",
           "source": "https://www.espn.com/nfl/player/_/id/4360853/talanoa-hufanga"
+        },
+        {
+          "teamId": "11",
+          "name": "Keenan Allen",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-14T18:47:26Z",
+          "source": "https://www.espn.com/nfl/player/_/id/15818/keenan-allen"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-14T18:25:08Z",
-      "lastAttemptAt": "2026-10-14T18:25:08Z",
+      "checkedAt": "2026-10-14T18:47:26Z",
+      "lastAttemptAt": "2026-10-14T18:47:26Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-14T18:25:08Z",
-      "lastAttemptAt": "2026-10-14T18:25:08Z",
+      "checkedAt": "2026-10-14T18:47:26Z",
+      "lastAttemptAt": "2026-10-14T18:47:26Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
