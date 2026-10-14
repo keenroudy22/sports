@@ -8,7 +8,9 @@ The key comes from SPORTSGAMEODDS_API_KEY and is sent only in the x-api-key head
 written to disk, or logged. The usage endpoint is checked before every odds request.
 """
 import json
+import hashlib
 import os
+import re
 import sys
 import urllib.parse
 import urllib.request
@@ -33,6 +35,7 @@ QUOTE_FRESH = timedelta(minutes=15)
 LEAGUES = {'NFL', 'CFB'}
 SGO_LEAGUES = 'NFL,NCAAF'
 STATE = CONF / 'sgo-shadow.json'
+TEAM_TOTAL_LEDGER = CONF / 'team-total-shadow.jsonl'
 BOOK_NAMES = {'draftkings': 'DraftKings', 'fanduel': 'FanDuel', 'betmgm': 'BetMGM', 'caesars': 'Caesars',
               'espnbet': 'ESPN BET', 'bovada': 'Bovada', 'unibet': 'Unibet', 'pointsbet': 'PointsBet',
               'williamhill': 'William Hill'}
@@ -118,6 +121,13 @@ def number(value):
 def american(value):
     value = number(value)
     return int(value) if value and value == int(value) else None
+
+
+def implied(price):
+    price = american(price)
+    if price is None:
+        return None
+    return (-price / (-price + 100)) if price < 0 else (100 / (price + 100))
 
 
 def line_of(book, bet_type):
@@ -235,6 +245,180 @@ def team_total_inventory(events, now):
     return [rows[key] for key in sorted(rows)]
 
 
+def main_team_totals(rows):
+    """Keep the closest-to-balanced two-sided line for each sampled team and book.
+
+    SportsGameOdds includes every alternate in the same response. The balanced pair is the useful approximation of
+    the book's main team total; retaining hundreds of alternates would make the forward calibration look much larger
+    than the number of independent market observations.
+    """
+    best = {}
+    for row in rows:
+        if row.get('book') not in {'DraftKings', 'FanDuel'}:
+            continue
+        key = (row.get('eventID'), row.get('team'), row.get('book'))
+        over, under = implied(row.get('over')), implied(row.get('under'))
+        if over is None or under is None:
+            continue
+        score = (abs(over - under), abs((over + under) - 1), abs(row['line']))
+        if key not in best or score < best[key][0]:
+            best[key] = (score, row)
+    return [best[key][1] for key in sorted(best)]
+
+
+def clean_name(value):
+    return re.sub(r'[^a-z0-9]+', '', str(value or '').lower())
+
+
+def side_names(side):
+    names = (side or {}).get('names') or {}
+    return {clean_name(value) for value in names.values() if clean_name(value)}
+
+
+def slate_names(side):
+    return {clean_name((side or {}).get(key)) for key in ('name', 'short', 'school', 'abbreviation')
+            if clean_name((side or {}).get(key))}
+
+
+def same_team(event_side, slate_side):
+    provider, local = side_names(event_side), slate_names(slate_side)
+    if provider & local:
+        return True
+    # Long provider names commonly include a mascot while the ESPN short name does not.
+    return any(len(name) >= 5 and (name in other or other in name) for name in provider for other in local)
+
+
+def matched_game(event, slate):
+    """Match one provider event to the stored ESPN slate without an extra API request."""
+    league = 'CFB' if event.get('leagueID') == 'NCAAF' else event.get('leagueID')
+    try:
+        starts = features.when((event.get('status') or {}).get('startsAt'))
+    except (TypeError, ValueError):
+        return None
+    candidates = []
+    for game in slate.get('games', []):
+        if game.get('league') != league:
+            continue
+        try:
+            gap = abs(features.when(game.get('kickoff')) - starts)
+        except (TypeError, ValueError):
+            continue
+        if gap <= timedelta(minutes=10):
+            candidates.append(game)
+    teams = event.get('teams') or {}
+    matches = [game for game in candidates if same_team(teams.get('home'), game.get('home'))
+               and same_team(teams.get('away'), game.get('away'))]
+    return matches[0] if len(matches) == 1 else None
+
+
+def load_forecasts(path=None):
+    path = Path(path or (ROOT / 'site' / 'data' / 'forecasts.json'))
+    try:
+        rows = json.loads(path.read_text(encoding='utf-8'))
+        return {row['gameId']: row for row in rows if isinstance(row, dict) and row.get('gameId')}
+    except (OSError, ValueError, TypeError):
+        return {}
+
+
+def team_total_observations(events, rows, slate, now, forecasts=None):
+    """Build compact private forward observations from the already-budgeted event response."""
+    events_by_id = {event.get('eventID'): event for event in events}
+    forecasts = forecasts or {}
+    observations = []
+    for row in main_team_totals(rows):
+        event = events_by_id.get(row.get('eventID'))
+        game = matched_game(event or {}, slate)
+        side = row.get('team')
+        if not game or side not in {'home', 'away'}:
+            continue
+        team = game.get(side) or {}
+        forecast = forecasts.get(game['id']) or {}
+        projection = number(forecast.get(side))
+        raw_id = '|'.join(str(row.get(key)) for key in ('eventID', 'team', 'book', 'line', 'over', 'under',
+                                                         'updatedAt'))
+        observations.append({
+            'type': 'quote', 'id': hashlib.sha256(raw_id.encode()).hexdigest()[:20], 'observedAt': stamp(now),
+            'eventID': row['eventID'], 'gameId': game['id'], 'league': game['league'],
+            'kickoff': game['kickoff'], 'side': side, 'teamId': team.get('id'),
+            'team': team.get('short') or team.get('school') or team.get('name'), 'book': row['book'],
+            'line': row['line'], 'over': row['over'], 'under': row['under'],
+            'quoteUpdatedAt': row['updatedAt'], 'projection': projection,
+        })
+    return observations
+
+
+def ledger_rows(path):
+    try:
+        return [json.loads(line) for line in Path(path).read_text(encoding='utf-8').splitlines() if line.strip()]
+    except (OSError, ValueError):
+        return []
+
+
+def append_ledger(path, rows):
+    path = Path(path)
+    existing = ledger_rows(path)
+    quote_ids = {row.get('id') for row in existing if row.get('type') == 'quote'}
+    grade_ids = {row.get('quoteId') for row in existing if row.get('type') == 'grade'}
+    fresh = [row for row in rows if (row.get('type') == 'grade' and row.get('quoteId') not in grade_ids)
+             or (row.get('type') == 'quote' and row.get('id') not in quote_ids)]
+    if not fresh:
+        return 0
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open('a', encoding='utf-8') as handle:
+        for row in fresh:
+            handle.write(json.dumps(row, sort_keys=True, separators=(',', ':')) + '\n')
+    return len(fresh)
+
+
+def settle_team_totals(slate, now, ledger_path):
+    rows = ledger_rows(ledger_path)
+    graded = {row.get('quoteId') for row in rows if row.get('type') == 'grade'}
+    games = {game.get('id'): game for game in slate.get('games', [])}
+    # Grade the latest captured main line only. Earlier snapshots stay in the append-only ledger for movement
+    # analysis, but must not inflate the independent record for one team/book/game.
+    closing = {}
+    for row in rows:
+        if row.get('type') != 'quote':
+            continue
+        key = (row.get('gameId'), row.get('side'), row.get('book'))
+        if key not in closing or str(row.get('quoteUpdatedAt') or '') > str(closing[key].get('quoteUpdatedAt') or ''):
+            closing[key] = row
+    new = []
+    for quote in closing.values():
+        if quote.get('id') in graded:
+            continue
+        game = games.get(quote.get('gameId'))
+        if not game or game.get('state') != 'post':
+            continue
+        actual = number((game.get(quote.get('side')) or {}).get('score'))
+        projection, line = number(quote.get('projection')), number(quote.get('line'))
+        if actual is None or projection is None or line is None or projection == line:
+            continue
+        direction = 'over' if projection > line else 'under'
+        price = american(quote.get(direction))
+        if price is None:
+            continue
+        outcome = 'push' if actual == line else ('win' if (actual > line) == (direction == 'over') else 'loss')
+        units = 0 if outcome == 'push' else ((price / 100 if price > 0 else 100 / -price) if outcome == 'win' else -1)
+        new.append({'type': 'grade', 'quoteId': quote['id'], 'gradedAt': stamp(now), 'gameId': quote['gameId'],
+                    'team': quote['team'], 'book': quote['book'], 'line': line, 'projection': projection,
+                    'direction': direction, 'price': price, 'actual': actual, 'outcome': outcome,
+                    'units': round(units, 4)})
+    append_ledger(ledger_path, new)
+    return new
+
+
+def team_total_report(path):
+    rows = ledger_rows(path)
+    grades = [row for row in rows if row.get('type') == 'grade']
+    wins = sum(row.get('outcome') == 'win' for row in grades)
+    losses = sum(row.get('outcome') == 'loss' for row in grades)
+    pushes = sum(row.get('outcome') == 'push' for row in grades)
+    return {'quotes': sum(row.get('type') == 'quote' for row in rows), 'graded': len(grades),
+            'record': f'{wins}-{losses}' + (f'-{pushes}' if pushes else ''),
+            'units': round(sum(number(row.get('units')) or 0 for row in grades), 2)}
+
+
 def evaluate(events, now):
     hits = [hit for event in events for hit in event_candidates(event, now)]
     # One summary per market; keeping every book permutation would inflate the private state file.
@@ -257,8 +441,11 @@ def sample(slate, now=None, key=None, state_path=STATE, opener=urllib.request.ur
     """Take one budgeted shadow sample and return a small status dict suitable for the run log."""
     now = now or datetime.now(timezone.utc)
     key = (key if key is not None else os.environ.get('SPORTSGAMEODDS_API_KEY', '')).strip()
+    ledger_path = Path(state_path).with_name('team-total-shadow.jsonl')
+    settled = settle_team_totals(slate, now, ledger_path)
     if not key:
-        return {'sampled': False, 'reason': 'SPORTSGAMEODDS_API_KEY is not configured'}
+        return {'sampled': False, 'reason': 'SPORTSGAMEODDS_API_KEY is not configured',
+                'teamTotals': team_total_report(ledger_path), 'teamTotalsGradedNow': len(settled)}
     state = load(state_path)
     usage_payload = request_json('/account/usage', key, opener=opener)
     usage = monthly_usage(usage_payload)
@@ -274,6 +461,9 @@ def sample(slate, now=None, key=None, state_path=STATE, opener=urllib.request.ur
         raise ValueError('SportsGameOdds events response did not contain a list')
     hits = evaluate(events, now)
     team_totals = team_total_inventory(events, now)
+    observations = team_total_observations(events, team_totals, slate, now, load_forecasts())
+    captured = append_ledger(ledger_path, observations)
+    calibration = team_total_report(ledger_path)
     used, maximum, end = usage
     today = eastern_date(now).isoformat()
     charged = max(1, len(events))
@@ -284,11 +474,13 @@ def sample(slate, now=None, key=None, state_path=STATE, opener=urllib.request.ur
     last = {**summary, 'candidateDetails': [candidate_summary(hit) for hit in hits[:10]],
             'teamTotalExamples': team_totals[:12], 'filteredNotice': bool(payload.get('notice'))}
     state.update(version=2, lastAt=stamp(now), day=today, dayCount=day_count + charged,
-                 usage={'usedBefore': used, 'maximum': maximum, 'endsAt': end}, last=last)
+                 usage={'usedBefore': used, 'maximum': maximum, 'endsAt': end}, last=last,
+                 teamTotals=calibration)
     state['history'] = (state.get('history') or [])[-59:] + [summary]
     save(state, state_path)
     return {'sampled': True, 'events': len(events), 'candidates': len(hits), 'bestRoi': summary['bestRoi'],
             'teamTotalPairs': len(team_totals),
+            'teamTotalsCaptured': captured, 'teamTotalsGradedNow': len(settled), 'teamTotals': calibration,
             'usage': used, 'limit': maximum, 'notice': bool(payload.get('notice'))}
 
 

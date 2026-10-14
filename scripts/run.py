@@ -2116,7 +2116,11 @@ def _run(args, now, slot, kinds, status):
             status['sgoShadow'] = shadow
             if shadow['sampled']:
                 log(f"SportsGameOdds shadow: {shadow['events']} events, {shadow['candidates']} candidates; "
-                    f"usage was {shadow['usage']}/{shadow['limit']}")
+                    f"usage was {shadow['usage']}/{shadow['limit']}; team-total calibration "
+                    f"captured {shadow.get('teamTotalsCaptured', 0)}, graded "
+                    f"{shadow.get('teamTotalsGradedNow', 0)}, "
+                    f"lifetime {shadow.get('teamTotals', {}).get('record', '0-0')} "
+                    f"({shadow.get('teamTotals', {}).get('units', 0):+.2f}u)")
             elif 'not configured' not in shadow['reason']:
                 log('SportsGameOdds shadow skipped:', shadow['reason'])
         except Exception as error:  # an optional evaluation feed can never stop the desk

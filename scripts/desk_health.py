@@ -524,7 +524,9 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
             issue('sharp-minute-pace', 'SharpAPI used at least 10 of 12 free requests this minute.')
     except (OSError, ValueError, TypeError, AttributeError):
         pass
-    sgo_usage = read(conf / 'sgo-shadow.json').get('usage') or {}
+    sgo_state = read(conf / 'sgo-shadow.json')
+    sgo_usage = sgo_state.get('usage') or {}
+    sgo_team_totals = sgo_state.get('teamTotals') or {}
     sgo_used = number(sgo_usage.get('usedBefore'))
     if sgo_usage.get('maximum') == 2500 and sgo_used is not None and sgo_used >= 1440:
         issue('sgo-evaluation-pace', 'SportsGameOdds used at least 80% of the 1,800-object evaluation stop.')
@@ -581,7 +583,8 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
             'officialUnscheduled': official_unscheduled, 'requestCounts': request_counts,
             'chosenNotPosted': chosen_not_posted,
             'sgoEvaluation': {'usedBefore': sgo_used, 'limit': sgo_usage.get('maximum') if sgo_usage.get('maximum') == 2500 else None,
-                              'localStop': 1800, 'observedAt': stamp(read(conf / 'sgo-shadow.json').get('lastAt'))},
+                              'localStop': 1800, 'observedAt': stamp(sgo_state.get('lastAt')),
+                              'teamTotals': sgo_team_totals},
             'oddsBudget': {'observedAt': stamp(usage.get('at')), 'used': used if verified else None, 'projectedMonth': projected,
                            'remaining': remaining if verified else None, 'verifiedFromStoredSnapshot': verified},
             'weeklyReview': review_health,
@@ -633,6 +636,11 @@ def markdown(data):
     lines.append(f"SportsGameOdds last stored usage: {sgo.get('usedBefore') if sgo.get('usedBefore') is not None else 'unknown'}"
                  f"/{sgo.get('limit') or 'unknown'} objects; local stop {sgo.get('localStop', 1800)}."
                  " Free plans only; no upgrade or paid trial is authorized.")
+    team_totals = sgo.get('teamTotals') or {}
+    team_total_units = number(team_totals.get('units')) or 0
+    lines.append(f"Private team-total trial: {team_totals.get('graded', 0)} graded, "
+                 f"{team_totals.get('record', '0-0')}, {team_total_units:+.2f}u; "
+                 "not eligible for public picks.")
     llm = data['localModel']
     lines.append(f"Local model last run: {llm['calls']} calls, {llm['failures']} failures; {llm['homepageStories']} homepage stories.")
     lines.append(f"Live Discord pilot: {data['livePilot']['state']}; {data['livePilot']['attempts']} attempts. X remains off.")

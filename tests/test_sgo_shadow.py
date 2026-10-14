@@ -35,6 +35,10 @@ def quote(price, line=41.5, updated='2026-09-29T17:55:00Z'):
     return {'odds': str(price), 'overUnder': str(line), 'available': True, 'lastUpdatedAt': updated}
 
 
+def team(name):
+    return {'names': {'short': name, 'long': name}, 'teamID': name.upper().replace(' ', '_')}
+
+
 class BudgetTests(unittest.TestCase):
     def test_live_hyphenated_usage_shape_is_supported(self):
         payload = {'data': {'rateLimits': {'per-month': {'current-entities': 0, 'max-entities': 2500}}}}
@@ -130,6 +134,49 @@ class CandidateTests(unittest.TestCase):
                                  'over': -115, 'under': -105, 'updatedAt': '2026-09-29T17:55:00Z'}])
         self.assertEqual(sgo_shadow.event_candidates(event, NOW), [],
                          'same-book team-total coverage is research, not an arb alert or a play')
+
+    def test_team_total_shadow_keeps_one_main_line_and_grades_against_the_stored_final(self):
+        event = {'eventID': 'event-1', 'leagueID': 'NFL',
+                 'status': {'startsAt': '2026-09-30T00:00:00Z'},
+                 'teams': {'away': team('Boston Birds'), 'home': team('Austin Cats')}}
+        rows = [
+            {'eventID': 'event-1', 'team': 'home', 'line': 20.5, 'book': 'FanDuel',
+             'over': -280, 'under': 210, 'updatedAt': '2026-09-29T17:55:00Z'},
+            {'eventID': 'event-1', 'team': 'home', 'line': 24.5, 'book': 'FanDuel',
+             'over': -110, 'under': -110, 'updatedAt': '2026-09-29T17:55:00Z'},
+        ]
+        slate = {'games': [{'id': 'NFL-1', 'league': 'NFL', 'state': 'pre',
+                            'kickoff': '2026-09-30T00:00:00Z',
+                            'away': {'id': '1', 'name': 'Boston Birds', 'short': 'Boston'},
+                            'home': {'id': '2', 'name': 'Austin Cats', 'short': 'Austin'}}]}
+        observations = sgo_shadow.team_total_observations(
+            [event], rows, slate, NOW, {'NFL-1': {'gameId': 'NFL-1', 'home': 27, 'away': 20}})
+        self.assertEqual(len(observations), 1)
+        self.assertEqual(observations[0]['line'], 24.5)
+        self.assertEqual(observations[0]['projection'], 27)
+        with tempfile.TemporaryDirectory() as folder:
+            ledger = Path(folder) / 'team-total-shadow.jsonl'
+            self.assertEqual(sgo_shadow.append_ledger(ledger, observations), 1)
+            self.assertEqual(sgo_shadow.append_ledger(ledger, observations), 0)
+            later = {**observations[0], 'id': 'later', 'line': 25.5,
+                     'quoteUpdatedAt': '2026-09-29T18:05:00Z'}
+            self.assertEqual(sgo_shadow.append_ledger(ledger, [later]), 1)
+            slate['games'][0].update(state='post')
+            slate['games'][0]['home']['score'] = 30
+            grades = sgo_shadow.settle_team_totals(slate, NOW, ledger)
+            self.assertEqual(len(grades), 1)
+            self.assertEqual((grades[0]['direction'], grades[0]['outcome']), ('over', 'win'))
+            self.assertEqual(grades[0]['line'], 25.5)
+            self.assertEqual(sgo_shadow.team_total_report(ledger),
+                             {'quotes': 2, 'graded': 1, 'record': '1-0', 'units': .91})
+
+    def test_unmatched_provider_event_never_creates_a_shadow_claim(self):
+        event = {'eventID': 'event-1', 'leagueID': 'NFL',
+                 'status': {'startsAt': '2026-09-30T00:00:00Z'},
+                 'teams': {'away': team('Wrong Away'), 'home': team('Wrong Home')}}
+        row = {'eventID': 'event-1', 'team': 'home', 'line': 24.5, 'book': 'FanDuel',
+               'over': -110, 'under': -110, 'updatedAt': '2026-09-29T17:55:00Z'}
+        self.assertEqual(sgo_shadow.team_total_observations([event], [row], SLATE, NOW, {}), [])
 
 
 if __name__ == '__main__':
