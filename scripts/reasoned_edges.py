@@ -116,9 +116,25 @@ def movement(ctx, candidate):
     return (quoted[0], quoted[-1]) if quoted else (None, None)
 
 
+def movement_since(ctx, candidate, source_at):
+    """Price movement after a dated fact appeared, never movement before it."""
+    if not source_at:
+        return None
+    start = gates.when(source_at)
+    quoted = [(capture, quote(capture, candidate)) for capture in history(ctx, candidate)
+              if gates.when(capture.get('retrievedAt')) >= start]
+    quoted = [(capture, pair) for capture, pair in quoted
+              if pair and isinstance(pair[0], (int, float))]
+    if len(quoted) < 2:
+        return None
+    return float(quoted[-1][1][0]) - float(quoted[0][1][0])
+
+
 def target_share_change(ctx, candidate):
     pid = str(candidate.get('athleteId') or '')
+    current_team = str(ctx.player_team.get(pid) or '')
     logs = [row for row in ctx.player_logs.get(pid, []) if row.get('seasonType') == 2 and
+            (not current_team or str(row.get('team')) == current_team) and
             isinstance((row.get('stats') or {}).get('targets'), (int, float))]
     if len(logs) < 6:
         return None
@@ -162,7 +178,7 @@ def trigger_row(kind, candidate, now, trigger, source_at):
     key = hashlib.sha256(raw.encode()).hexdigest()[:20]
     return {'type': 'trigger', 'id': key, 'reasonType': kind, 'candidate': {
                 k: candidate.get(k) for k in ('id', 'league', 'season', 'title', 'marketType', 'market', 'athleteId',
-                                               'direction', 'line', 'odds', 'book', 'gameIds', 'projection')},
+                                               'direction', 'line', 'odds', 'book', 'gameIds', 'kickoff', 'projection')},
             'trigger': trigger, 'sourceAt': source_at, 'observedAt': stamp(now),
             'status': 'shadow', 'publicEffect': False}
 
@@ -186,23 +202,26 @@ def detect(candidates, ctx, weather_rows=None):
                 out.append(trigger_row(TYPES[0], candidate, ctx.now,
                                        {'opener': first_line, 'current': current_line, 'move': round(move, 2)}, source_at))
         injury = injury_trigger(ctx, candidate)
-        if injury and first and current and abs(float(current_line) - float(first_line)) < 1:
+        news_move = movement_since(ctx, candidate, injury.get('reportedAt')) if injury else None
+        if injury and news_move is not None and abs(news_move) < 1:
             out.append(trigger_row(TYPES[1], candidate, ctx.now,
                                    {'player': injury.get('name'), 'position': injury.get('position'),
-                                    'status': injury.get('status'), 'lineMove': round(float(current_line) - float(first_line), 2)},
+                                    'status': injury.get('status'), 'lineMove': round(news_move, 2)},
                                    injury.get('reportedAt') or source_at))
         if candidate.get('market') in ('rec', 'recYds') and candidate.get('direction') == 'under':
             change = target_share_change(ctx, candidate)
             if change is not None and change >= .05:
                 out.append(trigger_row(TYPES[2], candidate, ctx.now,
                                        {'last3TargetShareChange': change}, source_at))
-        forecast = (weather_rows.get(candidate['gameIds'][0]) or {}).get('forecast') or {}
+        weather_row = weather_rows.get(candidate['gameIds'][0]) or {}
+        forecast = weather_row.get('forecast') or {}
+        weather_move = movement_since(ctx, candidate, weather_row.get('retrievedAt'))
         if candidate.get('marketType') == 'total' and candidate.get('direction') == 'under' \
-                and (forecast.get('windMph') or 0) >= 15 and first and current \
-                and abs(float(current_line) - float(first_line)) < 1:
+                and (forecast.get('windMph') or 0) >= 15 and weather_move is not None \
+                and abs(weather_move) < 1:
             out.append(trigger_row(TYPES[3], candidate, ctx.now,
-                                   {'windMph': forecast['windMph'], 'lineMove': round(float(current_line) - float(first_line), 2)},
-                                   (weather_rows.get(candidate['gameIds'][0]) or {}).get('retrievedAt') or source_at))
+                                   {'windMph': forecast['windMph'], 'lineMove': round(weather_move, 2)},
+                                   weather_row.get('retrievedAt') or source_at))
         projection = candidate.get('projection')
         if candidate.get('market') in ('recYds', 'rushYds') and isinstance(projection, (int, float)) \
                 and isinstance(first_line, (int, float)) and first_line > 0:
@@ -219,9 +238,10 @@ def detect(candidates, ctx, weather_rows=None):
 def same_book_close(trigger, ctx):
     candidate = trigger.get('candidate') or {}
     game = ctx.games.get((candidate.get('gameIds') or [None])[0]) or {}
-    if not game.get('kickoff'):
+    kickoff_value = game.get('kickoff') or candidate.get('kickoff')
+    if not kickoff_value:
         return None
-    kickoff = gates.when(game['kickoff'])
+    kickoff = gates.when(kickoff_value)
     usable = [capture for capture in history(ctx, candidate) if gates.when(capture.get('retrievedAt')) <= kickoff]
     priced = [(capture, quote(capture, candidate)) for capture in usable]
     priced = [(capture, pair) for capture, pair in priced if pair and isinstance(pair[0], (int, float))]

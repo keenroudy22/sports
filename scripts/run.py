@@ -46,6 +46,7 @@ import parlay
 import pick_card
 import post_windows
 import pricing
+import projection_shadows
 import role_sanity
 import refresh
 import researcher
@@ -2491,6 +2492,14 @@ def _run(args, now, slot, kinds, status):
         except Exception as error:
             status['errors'].append(f'reasoned edges: {type(error).__name__}: {error}')
             log(f'reasoned edges unavailable ({type(error).__name__}); the desk continues')
+        try:
+            projection_shadow = projection_shadows.step(decided, ctx, now)
+            status['projectionShadows'] = projection_shadow
+            log(f"projection shadows: {projection_shadow['captured']} captured, "
+                f"{projection_shadow['graded']} graded; private comparison only")
+        except Exception as error:
+            status['errors'].append(f'projection shadows: {type(error).__name__}: {error}')
+            log(f'projection shadows unavailable ({type(error).__name__}); the desk continues')
         admitted_ids = release_queue.enqueue(CONF, admitted, reasons, decided, CONF / 'x-drafts', now,
                                              games=games, log=log)
         if admitted_ids:

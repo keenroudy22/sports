@@ -576,6 +576,11 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
         reasoned = reasoned_edges.report(conf / 'reasoned-edges' / 'observations.jsonl')
     except (OSError, ValueError, TypeError, KeyError):
         reasoned = []
+    try:
+        import projection_shadows
+        projection_shadow = projection_shadows.report(conf / 'projection-shadows' / 'observations.jsonl')
+    except (OSError, ValueError, TypeError, KeyError):
+        projection_shadow = {'rows': 0, 'graded': 0, 'status': 'unavailable'}
     return {'checkedAt': gates.stamp(now), 'mode': 'private-cached-only', 'issues': issues,
             'desk': {'outcome': 'ok' if state.get('outcome') == 'ok' else 'not-ok-or-unknown',
                      'finishedAt': stamp(state.get('finishedAt')), 'expectedSlot': gates.stamp(expected),
@@ -594,6 +599,7 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
                            'remaining': remaining if verified else None, 'verifiedFromStoredSnapshot': verified},
             'weeklyReview': review_health,
             'reasonedEdges': reasoned,
+            'projectionShadows': projection_shadow,
             'localModel': {'enabledLastRun': (state.get('llm') or {}).get('used') is True,
                            'usedLastRun': (model_calls or 0) > (model_failures or 0),
                            'calls': model_calls,

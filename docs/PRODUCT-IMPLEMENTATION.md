@@ -1890,3 +1890,19 @@ item P01 was archived out of `product-status.json`; its complete release
 evidence remains in this implementation record and its identifier is not
 reused. The new daily-engagement item therefore remains visible without
 weakening the queue validator or dropping unfinished work.
+## October 14 private evidence and projection shadows
+
+Revision `cde90b5cd7153329e1f452bb93c76f58be82b48b` released the five approved Reasoned-edges
+detectors to a private checksummed ledger. Hosted run `38614495878` succeeded; live Today, Record,
+Games and More checks at 375 and 1440 pixels found no load error, console error or overflow. The
+detectors use only stored/free evidence, make no provider or model call, and cannot select or publish
+a play. Every type remains explicitly inconclusive until season end or 150 forward grades, and any
+public use still requires the owner's approval.
+
+The remaining P57 root variants now run through a separate private ledger: current-team full games,
+missed/partial-game role treatment, same-quarterback efficiency, a walk-forward median, the exact
+book's market-anchored chance, receiver totals capped by the projected passer, and same-book close.
+Regression fixtures cover Kohl/Marker, Damante/King, Daniels, Javonte and Bucky. This is measurement,
+not a projection cutover: the public number, pick selection, cards and append-only record stay
+unchanged while 2025 replay and forward evidence accumulate. Promotion still requires a separate
+owner yes with before/after error and calibration.
