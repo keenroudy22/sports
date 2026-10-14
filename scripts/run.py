@@ -49,6 +49,7 @@ import pricing
 import role_sanity
 import refresh
 import researcher
+import reasoned_edges
 import scoreboard
 import season_trends
 import sgo_shadow
@@ -2483,6 +2484,13 @@ def _run(args, now, slot, kinds, status):
             status['checks'].append('tests green')
     drafts(slot, now, ctx, games, settled, status, admitted=admitted, reasons=reasons)
     if not args.dry_run:
+        try:
+            shadow = reasoned_edges.step(decided, ctx, now)
+            status['reasonedEdges'] = shadow
+            log(f"reasoned edges: {shadow['captured']} triggers, {shadow['graded']} grades; private shadow only")
+        except Exception as error:
+            status['errors'].append(f'reasoned edges: {type(error).__name__}: {error}')
+            log(f'reasoned edges unavailable ({type(error).__name__}); the desk continues')
         admitted_ids = release_queue.enqueue(CONF, admitted, reasons, decided, CONF / 'x-drafts', now,
                                              games=games, log=log)
         if admitted_ids:

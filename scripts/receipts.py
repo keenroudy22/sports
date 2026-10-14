@@ -476,7 +476,8 @@ def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAY
     posted = set()
     for entry in (log_book or {}).get('posts', []):
         key = str(entry.get('id') or '')
-        if key.startswith(('cashed:', 'burnt:')) and not entry.get('cancelledAt') and not entry.get('deletedAt'):
+        if key.startswith(('cashed:', 'burnt:')) and (entry.get('card') or entry.get('cardKey')) \
+                and not entry.get('cancelledAt') and not entry.get('deletedAt'):
             posted.add(key.split(':', 1)[1])
     out = []
     for key, original in first.items():

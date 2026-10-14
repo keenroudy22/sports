@@ -307,6 +307,13 @@ class CashedTests(unittest.TestCase):
         later = self.SUNDAY_EVENING + timedelta(hours=4)
         self.assertEqual(receipts.result_cards(first, latest, GAMES, later, {'posts': []}), [],
                          'a rebuild cannot create historical result art')
+        self.assertEqual(receipts.result_cards(first, latest, GAMES, later,
+                                               {'posts': [{'id': 'cashed:NFL-2026-W4-a'}]}), [],
+                         'an old text-only result reaction cannot acquire newly rendered art')
+        kept = receipts.result_cards(first, latest, GAMES, later,
+                                     {'posts': [{'id': 'cashed:NFL-2026-W4-a',
+                                                 'card': 'cooked-NFL-2026-W4-a'}]})
+        self.assertEqual([row['card'] for row in kept], ['cooked-NFL-2026-W4-a'])
 
 
 class LadderReceiptTests(unittest.TestCase):

@@ -571,6 +571,11 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
         reliability = reliability_view(reliability_history(conf / 'desk-health-reliability.json'), now)
     except (OSError, ValueError, TypeError, KeyError):
         reliability = {'state': 'unavailable', 'readiness': 'not-assessed', 'days': []}
+    try:
+        import reasoned_edges
+        reasoned = reasoned_edges.report(conf / 'reasoned-edges' / 'observations.jsonl')
+    except (OSError, ValueError, TypeError, KeyError):
+        reasoned = []
     return {'checkedAt': gates.stamp(now), 'mode': 'private-cached-only', 'issues': issues,
             'desk': {'outcome': 'ok' if state.get('outcome') == 'ok' else 'not-ok-or-unknown',
                      'finishedAt': stamp(state.get('finishedAt')), 'expectedSlot': gates.stamp(expected),
@@ -588,6 +593,7 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
             'oddsBudget': {'observedAt': stamp(usage.get('at')), 'used': used if verified else None, 'projectedMonth': projected,
                            'remaining': remaining if verified else None, 'verifiedFromStoredSnapshot': verified},
             'weeklyReview': review_health,
+            'reasonedEdges': reasoned,
             'localModel': {'enabledLastRun': (state.get('llm') or {}).get('used') is True,
                            'usedLastRun': (model_calls or 0) > (model_failures or 0),
                            'calls': model_calls,
