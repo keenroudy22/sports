@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Free-feed settlement checks. No odds/prop request and no local-model call. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.keenroudy.sports.results</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/keen/.config/keenroudy/run.sh</string>
+    <string>results</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict><key>TZ</key><string>America/New_York</string></dict>
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict><key>Minute</key><integer>25</integer></dict>
+    <dict><key>Minute</key><integer>55</integer></dict>
+  </array>
+  <key>RunAtLoad</key><false/>
+  <key>ProcessType</key><string>Background</string>
+  <key>StandardOutPath</key><string>/Users/keen/Library/Logs/KeenRoudy/launchd.results.log</string>
+  <key>StandardErrorPath</key><string>/Users/keen/Library/Logs/KeenRoudy/launchd.results.log</string>
+</dict>
+</plist>

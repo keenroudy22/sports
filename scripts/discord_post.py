@@ -228,7 +228,7 @@ def mirror_sent(log_book, now, url=None, wins_url=None, research_url=None,
         kind = entry.get('kind')
         destination = mirror.get('destination')
         allowed = ((kind == 'buffer:play' and destination != 'wins')
-                   or (kind == 'buffer:cashed' and str(entry.get('id') or '').startswith('cashed:')
+                   or (kind == 'buffer:cashed' and str(entry.get('id') or '').startswith(('cashed:', 'burnt:'))
                        and destination != 'wins')
                    or (kind == 'buffer:community' and destination == 'wins')
                    or (kind == 'buffer:research' and destination == 'research'))

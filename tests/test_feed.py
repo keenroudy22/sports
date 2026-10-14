@@ -129,6 +129,18 @@ class FeedTests(unittest.TestCase):
         self.assertIn('ladder-result-CFB-ladder', cards)
         graphic.assert_called_once_with(settled)
 
+    def test_the_hosted_card_build_renders_a_fresh_burnt_result_asset(self):
+        import tempfile
+        game = dict(GAMES['g-done'], league='NFL')
+        missed = pick('near', result='loss', actualValue=43, line=44.5, settledAt='2026-09-27T21:00:00Z')
+        with tempfile.TemporaryDirectory() as folder, mock.patch('pick_card.chrome_path', return_value='/chrome'), \
+                mock.patch('pick_card.artwork', return_value={'kind': 'logos'}), \
+                mock.patch('ticket_card.burnt_svg', return_value='<svg data-result="burnt"/>') as graphic, \
+                mock.patch('pick_card.render', side_effect=lambda _svg, path: Path(path).write_bytes(b'png')):
+            cards = feed.render_cards([{'guid': 'burnt-near', 'resultPick': missed, 'game': game}], Path(folder))
+        self.assertIn('burnt-near', cards)
+        graphic.assert_called_once()
+
     def test_climb_route_image_uses_the_record_payload_snapshot(self):
         import tempfile
         with tempfile.TemporaryDirectory() as folder:

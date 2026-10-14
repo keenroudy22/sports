@@ -461,7 +461,7 @@ def theme_moment(guid, kind, due, items=None):
     """Use the same stored moment the hosted renderer uses for this artifact."""
     source_id = guid
     if kind == 'cashed':
-        source_id = next((guid[len(prefix):] for prefix in ('cashed:', 'ladder-loss:', 'ladder-push:', 'ladder-void:')
+        source_id = next((guid[len(prefix):] for prefix in ('cashed:', 'burnt:', 'ladder-loss:', 'ladder-push:', 'ladder-void:')
                           if guid.startswith(prefix)), guid)
     item = (items or {}).get(source_id) or {}
     if kind == 'play':
@@ -546,7 +546,7 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         # Official plays and their settled win updates stay together in Plays
         # & Results. Owner/community tickets use the separate community feed.
         # Approved research follows its X post into the dedicated research feed.
-        if kind in ('play', 'community', 'research') or (kind == 'cashed' and guid.startswith('cashed:')):
+        if kind in ('play', 'community', 'research') or (kind == 'cashed' and guid.startswith(('cashed:', 'burnt:'))):
             entry['discord'] = {'state': 'pending', 'text': without_playbook(text)}
         if kind == 'community':
             # Owner-submitted model-assisted slips belong in the community wins feed, not the official-play feed.

@@ -231,6 +231,15 @@ class TicketCardTests(unittest.TestCase):
         self.assertIn('+1.02u WON', svg)
         self.assertNotIn('SEASON', svg)
 
+    def test_burnt_near_miss_uses_the_reviewed_red_ticket_and_recorded_margin(self):
+        game = dict(GAME, players=[{'id': PROP['athleteId'], 'team': GAME['away']['id']}])
+        missed = dict(PROP, result='loss', actualValue=48, units=-1.0)
+        svg = ticket_card.burnt_svg(missed, game, art={'kind': 'photo', 'uri': self.image},
+                                    fetch=lambda _: self.logo)
+        for text in ('BURNT', 'MISSED BY 1.5', '−1.00u', '21+ · Entertainment only'):
+            self.assertIn(text, svg)
+        self.assertNotIn('SEASON', svg)
+
     def test_final_has_every_result_and_same_units_as_record(self):
         rows = [dict(PROP, marketType='prop', result='win', actual='TK King: 64 receiving yards', odds=100, units=1.0),
                 dict(PROP, id='other', title='Other Player UNDER 4.5 receptions', result='loss',

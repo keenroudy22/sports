@@ -220,21 +220,26 @@ def climb_result_svg(pick, games, player_team=None, **kwargs):
 
 
 def cooked_data(pick, game, *, art=None, fetch=None, player_side=None):
-    """A won player prop, using the immutable grading value and site's unit rule."""
-    if pick_card.play_kind(pick) != 'player' or pick.get('result') != 'win':
-        raise ValueError('Cooked preview needs a won player prop')
+    """A won straight play, using the immutable grading value and site's unit rule."""
+    if pick_card.play_kind(pick) not in ('player', 'team') or pick.get('result') != 'win':
+        raise ValueError('Cooked preview needs a won straight play')
     if not isinstance(pick.get('actualValue'), (int, float)):
         raise ValueError('Cooked preview needs a recorded numeric final')
     fetch = fetch or pick_card.fetch_data_uri
-    player_side = _player_side(pick, game, player_side)
+    prop = pick_card.play_kind(pick) == 'player'
+    player_side = _player_side(pick, game, player_side) if prop else pick_card.side_for(pick, game, player_side)
     art = art if art is not None else pick_card.artwork(pick, game, player_side=player_side)
     side = player_side
     team = game.get(side) or {}
     won = x_post.units_for(pick)
     if won is None or won <= 0:
         raise ValueError('Cooked preview needs priced won units')
-    return {'player': _name(pick), 'side': str(pick['direction']).upper(),
-            'line': f"{float(pick['line']):g}", 'market': pick['market'],
+    subject, selection = ticket_kit.leg_parts(str(pick.get('title') or ''))
+    spread = not prop and str(pick.get('marketType') or '').lower() == 'spread'
+    return {'player': subject if spread else _name(pick),
+            'side': selection if spread else str(pick['direction']).upper(),
+            'line': '' if spread else f"{float(pick['line']):g}",
+            'market': pick.get('market') or pick.get('marketType'),
             'odds': pick['odds'], 'book': pick['book'],
             'final': pick['actualValue'], 'margin': f"{abs(pick['actualValue'] - pick['line']):g}",
             'photo': (art or {}).get('uri') if (art or {}).get('kind') == 'photo' else None,
@@ -245,6 +250,42 @@ def cooked_data(pick, game, *, art=None, fetch=None, player_side=None):
 def cooked_svg(pick, game, **kwargs):
     card = ticket_cards.cooked_card(cooked_data(pick, game, **kwargs))
     problems = ticket_kit.qa(card, str(pick.get('id') or 'cooked'))
+    if problems:
+        raise ValueError('; '.join(problems))
+    return card.svg()
+
+
+def burnt_data(pick, game, *, art=None, fetch=None, player_side=None):
+    """A narrowly missed straight play, using only the immutable stored grade."""
+    import receipts
+    if pick_card.play_kind(pick) not in ('player', 'team') or not receipts.near_miss(pick):
+        raise ValueError('Burnt preview needs a settled near-miss straight play')
+    if not isinstance(pick.get('actualValue'), (int, float)):
+        raise ValueError('Burnt preview needs a recorded numeric final')
+    fetch = fetch or pick_card.fetch_data_uri
+    prop = pick_card.play_kind(pick) == 'player'
+    player_side = _player_side(pick, game, player_side) if prop else pick_card.side_for(pick, game, player_side)
+    art = art if art is not None else pick_card.artwork(pick, game, player_side=player_side)
+    team = game.get(player_side) or {}
+    units = x_post.units_for(pick)
+    if units is None or units >= 0:
+        units = -float(pick.get('riskUnits') or 1)
+    subject, selection = ticket_kit.leg_parts(str(pick.get('title') or ''))
+    spread = not prop and str(pick.get('marketType') or '').lower() == 'spread'
+    return {'player': subject if spread else _name(pick),
+            'side': selection if spread else str(pick['direction']).upper(),
+            'line': '' if spread else f"{float(pick['line']):g}",
+            'market': pick.get('market') or pick.get('marketType'),
+            'odds': pick['odds'], 'book': pick['book'],
+            'final': pick['actualValue'], 'margin': f"{abs(pick['actualValue'] - pick['line']):g}",
+            'photo': (art or {}).get('uri') if (art or {}).get('kind') == 'photo' else None,
+            'team_logo': _logo(team, game.get('league'), fetch), 'units_lost': units,
+            'close_line': None}
+
+
+def burnt_svg(pick, game, **kwargs):
+    card = ticket_cards.burnt_card(burnt_data(pick, game, **kwargs))
+    problems = ticket_kit.qa(card, str(pick.get('id') or 'burnt'))
     if problems:
         raise ValueError('; '.join(problems))
     return card.svg()

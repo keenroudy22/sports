@@ -108,7 +108,7 @@ this file remains the authority when a summary and rule disagree.
 | The desk's own clone (the runs work here; do not edit by hand) | `~/Projects/sports` (branch `main`) |
 | Your working copy for changes | `~/Projects/sports-dev` (git worktree of the same repo, branch `dev`) |
 | Wrapper, settings, lock, drafts, failed reports | `~/.config/keenroudy/` (`run.sh`, `env`, `run.lock`, `x-drafts/`, `failed/`, `pending/`) |
-| launchd jobs | `~/Library/LaunchAgents/com.keenroudy.sports.{run,ladder,precheck,discord,heartbeat,review}.plist` (copies in `deployment/mac/`) |
+| launchd jobs | `~/Library/LaunchAgents/com.keenroudy.sports.{run,ladder,results,precheck,discord,heartbeat,review}.plist` (copies in `deployment/mac/`) |
 | Logs | `~/Library/Logs/KeenRoudy/` (`run-YYYY-MM-DD.log`, `launchd.*.log`, `ALERT.txt` when the heartbeat found a problem) |
 | Post log (every X post, Buffer id, tweet id, metrics) | `data/x-posted.json` |
 | Learning (what the desk learned, weekly) | `data/learning/` (`policy.json`, `REPORT.md`) |
@@ -242,6 +242,11 @@ Handy commands (from `~/Projects/sports`):
   for posting, grading, learning and the Tuesday note without Codex usage. Every settled win or honest near miss
   should post within about 30 minutes of the first verified final; result quiet hours begin at 1:00 AM, the site
   updates immediately, and the private outcomes check reports minutes from final to post.
+
+- **Free-feed result sweeps (owner, 2026-10-14):** the Mac desk checks settlements at :25 and :55 so a late
+  final cannot wait for the next full odds run. It uses stored/free score data only, makes no paid or prop request
+  and calls no model. A fresh straight win gets Cooked; an objectively narrow miss gets Burnt; ordinary losses
+  remain in the honest Final/Leftovers. The public record and its counting rule do not change.
 
 - **Overtime bad-beat copy (owner, 2026-10-13):** when stored play-by-play proves a play was winning through
   regulation and overtime alone flipped it into a near miss, lead the result with that story. Name the regulation

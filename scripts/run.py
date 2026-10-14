@@ -3627,7 +3627,7 @@ def precheck(args):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.split('\n')[0])
-    parser.add_argument('command', nargs='?', default='run', choices=('run', 'ladder', 'status', 'heartbeat', 'precheck', 'mirror'))
+    parser.add_argument('command', nargs='?', default='run', choices=('run', 'ladder', 'results', 'status', 'heartbeat', 'precheck', 'mirror'))
     parser.add_argument('--slot', help='force the run slot, HHMM Eastern')
     parser.add_argument('--now', help='pretend it is this UTC instant')
     parser.add_argument('--dry-run', action='store_true', help='no sync, capture, git; reports go to the pending folder')
@@ -3645,6 +3645,13 @@ def main(argv=None):
         return precheck(args)
     if args.command == 'mirror':
         return mirror(args)
+    if args.command == 'results':
+        # Free-feed settlement pass. It never captures odds or props, but it
+        # grades finals, rebuilds the site and queues Cooked/Burnt reactions.
+        moment = gates.when(args.now) if args.now else datetime.now(timezone.utc)
+        args.slot = moment.astimezone(EASTERN).strftime('%H%M')
+        args.no_llm = True
+        args.publish_kinds = 'settle'
     if args.command == 'ladder':
         # A lightweight extra scan: deterministic templates, settlement plus the Climb only. The ordinary free-feed
         # guards still cap every capture, and the same run lock prevents overlap with the full desk.

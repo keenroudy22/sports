@@ -440,6 +440,63 @@ def ladder_result_card_key(key):
     return f'ladder-result-{key}'
 
 
+def near_miss(pick):
+    """The owner-approved honest bad-beat band; a normal loss stays on the Final only."""
+    if str(pick.get('result') or '').lower() != 'loss':
+        return False
+    value, line = pick.get('actualValue'), pick.get('line')
+    if not isinstance(value, (int, float)) or not isinstance(line, (int, float)):
+        return False
+    miss = abs(float(value) - float(line))
+    market = str(pick.get('market') or '')
+    if market in ('recYds', 'rushYds', 'passYds'):
+        return miss <= 3
+    if market in ('rec', 'car', 'att', 'cmp'):
+        # Half-point count markets settle on whole-number stats. A 1.5 margin
+        # is one outcome beyond the winning threshold (for example UNDER
+        # 14.5 finishing on 16), which is the owner's "one catch" band.
+        return miss <= 1.5
+    if str(pick.get('marketType') or '').lower() in ('spread', 'total'):
+        return miss <= 2
+    return False
+
+
+def result_card_key(pick):
+    return f"{'cooked' if pick.get('result') == 'win' else 'burnt'}-{pick['id']}"
+
+
+def result_cards(first, latest, games, now, log_book=None, days=CARD_HISTORY_DAYS):
+    """Cooked/Burnt cards still needed by a fresh or already-recorded result post.
+
+    This intentionally does not backfill art for old text-only reactions. Posted
+    attachments are immutable, and a historical result must never acquire new art
+    merely because the site was rebuilt.
+    """
+    cutoff = now - timedelta(days=days)
+    posted = set()
+    for entry in (log_book or {}).get('posts', []):
+        key = str(entry.get('id') or '')
+        if key.startswith(('cashed:', 'burnt:')) and not entry.get('cancelledAt') and not entry.get('deletedAt'):
+            posted.add(key.split(':', 1)[1])
+    out = []
+    for key, original in first.items():
+        pick = dict(original, **latest.get(key, {}))
+        if pick_card.play_kind(pick) not in ('player', 'team') or not pick.get('settledAt'):
+            continue
+        if pick.get('result') != 'win' and not near_miss(pick):
+            continue
+        try:
+            settled = gates.when(pick['settledAt'])
+            if settled < cutoff or (key not in posted and settled < now - CASHED_FRESH):
+                continue
+        except (TypeError, ValueError):
+            continue
+        game = games.get((pick.get('gameIds') or [None])[0])
+        if game and isinstance(pick.get('actualValue'), (int, float)):
+            out.append({'card': result_card_key(pick), 'pick': pick, 'game': game})
+    return out
+
+
 def ladder_result_cards(first, latest, now, days=CARD_HISTORY_DAYS):
     """Recently settled Climb rungs whose result graphics must remain live for Buffer and Discord."""
     cutoff = now - timedelta(days=days)
@@ -484,10 +541,22 @@ def win_reaction(pick, games=None):
     return f'{opener} ✅ {play}. He had {stat}.'
 
 
+def burnt_reaction(pick, games=None):
+    """Plain, factual near-miss copy; overtime is named only when stored play-by-play proves it."""
+    import result_display
+    play = label(pick, games)
+    overtime = result_display.overtime_detail(pick)
+    if overtime:
+        return f'{play}. {overtime}. Pain.'
+    detail = result_display.detail(pick)
+    if not detail and isinstance(pick.get('actualValue'), (int, float)) and isinstance(pick.get('line'), (int, float)):
+        detail = f"missed by {pick_card.plain_number(abs(float(pick['actualValue']) - float(pick['line'])))}"
+    return f'{play}. {detail}. Pain.' if detail else f'{play}. One short. Pain.'
+
+
 def cashed(first, latest, games, log_book, now):
-    """A winning play that went out on X gets its own post when it settles: "✅ CASHED", the play and its price, and
-    the original post quoted (its X link in the text shows the post under it). Ordinary wins stay text-only because
-    the quoted post carries the card. Every Climb result is its own continuing-story post: a win advances it, a loss
+    """A win or owner-defined near miss that went out on X gets its reviewed result card and quotes the original.
+    Every Climb result is its own continuing-story post: a win advances it, a loss
     shows what stayed banked and starts the next climb at $50, and a push keeps the rung open. The result card remains
     eligible through the next morning, so a late final cannot silently miss the story. Ordinary losses still wait for
     the honest morning receipt."""
@@ -502,9 +571,7 @@ def cashed(first, latest, games, log_book, now):
         pick = dict(first[key], **latest.get(key, {}))
         result = str(pick.get('result') or '').lower()
         ladder = pick_card.play_kind(pick) == 'ladder'
-        # A miss belongs only in the end-of-slate Final or the next 9 AM
-        # Leftovers, including a lost Climb rung. Never make a standalone loss.
-        if not pick.get('settledAt') or result == 'loss' or (result != 'win' and not ladder):
+        if not pick.get('settledAt') or (result != 'win' and not ladder and not near_miss(pick)):
             continue
         settled_at = gates.when(pick['settledAt'])
         fresh = LADDER_CASHED_FRESH if ladder else CASHED_FRESH
@@ -517,7 +584,8 @@ def cashed(first, latest, games, log_book, now):
         what = ''
         if parlay:
             head, what = f"✅ {int(pick['odds']):+d} {label(pick, games)} cashed ({pick.get('book')})", ''
-        card = None
+        card = (result_card_key(pick) if not ladder and isinstance(pick.get('actualValue'), (int, float))
+                and pick_card.play_kind(pick) in ('player', 'team') else None)
         post_key = f'cashed:{key}'
         due = now
         if ladder:
@@ -530,6 +598,9 @@ def cashed(first, latest, games, log_book, now):
             # quiet hours waits for the morning sweep.
             if quiet:
                 due = at(eastern_date(now), LADDER_MORNING)
+        elif result == 'loss':
+            post_key = f'burnt:{key}'
+            head = burnt_reaction(pick, games)
         if quiet and not ladder:
             # Quiet hours hold delivery, not admission. Queue a fresh morning
             # result before the play batch takes every slot until it expires.

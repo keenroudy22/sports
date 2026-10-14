@@ -267,14 +267,14 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
         return {}
     out = {}
     for item in items:
-        if 'pick' not in item and 'receipt' not in item and 'ladderResult' not in item:
+        if 'pick' not in item and 'receipt' not in item and 'ladderResult' not in item and 'resultPick' not in item:
             continue
         path = Path(folder) / f"{item['guid']}.png"
         if item['guid'] in posted_keys and not path.exists():
             log(f"older posted card unavailable; skipping without regeneration: {item['guid']}")
             continue
         try:
-            source = item.get('ladderResult') or item.get('receipt') or item.get('pick') or {}
+            source = item.get('ladderResult') or item.get('resultPick') or item.get('receipt') or item.get('pick') or {}
             # A card cached before the cutover is not proof that an unposted play has new art.
             # Rebuild eligible cards; confirmed attachments above are immutable.
             # An unpublished card takes the theme at this build, not at the play's older
@@ -284,7 +284,16 @@ def render_cards(items, folder=CARDS, log=print, games=None, player_team=None, p
                       pick_card.ticket_enabled(source))
             refresh_ticket = item['guid'] not in posted_keys and ticket
             if not path.exists() or refresh_ticket:
-                if 'ladderResult' in item:
+                if 'resultPick' in item:
+                    pick = item['resultPick']
+                    game = item['game']
+                    side = player_side(pick, game, player_team or {})
+                    art = pick_card.artwork(pick, game, player_side=side)
+                    svg = (ticket_card.cooked_svg(pick, game, player_side=side, art=art)
+                           if pick.get('result') == 'win' else
+                           ticket_card.burnt_svg(pick, game, player_side=side, art=art))
+                    pick_card.render(svg, path)
+                elif 'ladderResult' in item:
                     pick = item['ladderResult']
                     svg = (ticket_card.climb_result_svg(pick, games or {}, player_team)
                            if ticket else pick_card.ladder_result_svg(pick))
@@ -380,6 +389,8 @@ def build(now=None, out=OUT, cards_folder=CARDS, with_cards=True, log=print):
     ready += [{'guid': r['card'], 'ladderResult': dict(r['pick'],
                _allClimbsBanked=ladder.saved_through(ctx.first, ctx.latest, r['pick']['id']))}
               for r in receipts.ladder_result_cards(ctx.first, ctx.latest, now)]
+    ready += [{'guid': r['card'], 'resultPick': r['pick'], 'game': r['game']}
+              for r in receipts.result_cards(public_first, ctx.latest, ctx.games, now, post_log)]
     try:
         restored = {entry.get('id') for entry in post_log.get('posts', [])
                     if entry.get('restoredAt') and not entry.get('cancelledAt') and not entry.get('deletedAt')}

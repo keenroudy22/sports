@@ -390,8 +390,9 @@ def climb_route(card, p, perf):
     return s
 
 
-# ---------------------------------------------------------------------------- Cooked (win)
-def cooked_card(p):
+# ---------------------------------------------------------------------------- Cooked (win) / Burnt (honest near miss)
+def result_card(p, won):
+    """The reviewed v4 settled-play ticket, with the result colour and copy tied to the grade."""
     card = kit.Card()
     panel_bottom = 548
     inner = kit.panel_rect(card, PANEL_TOP, panel_bottom, hot=None)
@@ -403,34 +404,48 @@ def cooked_card(p):
         inner += in_panel + f'<rect x="{PANEL_X1}" y="{PANEL_TOP}" width="{PANEL_X2 - PANEL_X1}" height="{panel_bottom - PANEL_TOP}" rx="14" fill="url(#scrim)"/>'
     elif p.get('team_logo'):
         inner += kit.logo_disc(card, p['team_logo'], 790, 342, 126)
-    chip, _ = kit.series_chip(card, COL_X, 204, 'BEST BET · FINAL')
+    chip, _ = kit.series_chip(card, COL_X, 204, p.get('chip') or 'BEST BET · FINAL')
     inner += chip
     nb, _ = name_block(card, p['player'], 286, 452)
     inner += nb
     inner += card.text(COL_X, 506, f"{kit.price(p['odds'])} · {p['book'].upper()}", 46, CHALK, tracking=1, extra=' opacity="0.92"')
     side_line = f"{p['side']} {p['line']}"
     base = 772
-    b, _ = bet_line(card, side_line, kit.STAT_UNITS[p['market']], base, max_size=176)
+    b, _ = bet_line(card, side_line, kit.STAT_UNITS.get(p.get('market'), ()), base, max_size=176)
     inner += b
     inner += kit.dashed(X1, X2, base + 38)
     inner += card.text(X1, base + 98, 'FINAL', 48, INK_SOFT, tracking=2)
     fb = base + 266
     inner += card.text(X1 - 4, fb, str(p['final']), 176, INK)
     fx = X1 - 4 + width(str(p['final']), 176) + 22
-    u = kit.STAT_UNITS[p['market']]
+    u = kit.STAT_UNITS.get(p.get('market'), ())
     if len(u) == 2:
         inner += card.text(fx, fb - 68, u[0], 70, INK) + card.text(fx, fb, u[1], 70, INK)
     elif u:
         inner += card.text(fx, fb, u[0], 70, INK)
-    inner += kit.pill(card, X2, fb - 62, f"CLEARED BY {p['margin']}", GREEN, GREEN_INK, 52, CHECK)
+    if won:
+        inner += kit.pill(card, X2, fb - 62, f"CLEARED BY {p['margin']}", GREEN, GREEN_INK, 52, CHECK)
+    else:
+        inner += kit.pill(card, X2, fb - 62, f"MISSED BY {p['margin']}", RED, '#2A0306', 52, CROSS)
     if p.get('close_line'):
         inner += card.text(X1, fb + 60, p['close_line'], 40, INK_SOFT, 'd', 600)
     perf = 1100
-    inner += card.text(X1, perf + 64, f"+{float(p.get('units_won', 0)):.2f}u WON", 62, INK)
+    result_units = (f"+{float(p.get('units_won', 0)):.2f}u WON" if won
+                    else f"{float(p.get('units_lost', -1)):.2f}u")
+    inner += card.text(X1, perf + 64, result_units.replace('-', MINUS), 62, INK)
     inner += kit.logo_disc(card, p['team_logo'], X2 - 40, perf + 46, 36, ring=kit.LINE)
-    stamp = kit.big_stamp(card, 742, panel_bottom - 16, 'COOKED', GREEN, GREEN_INK, CHECK, angle=-6)
-    frame(card, CHARCOAL, GREEN, perf, 1196, inner, breakout + stamp)
+    stamp = (kit.big_stamp(card, 742, panel_bottom - 16, 'COOKED', GREEN, GREEN_INK, CHECK, angle=-6)
+             if won else kit.big_stamp(card, 742, panel_bottom - 16, 'BURNT', RED, '#2A0306', CROSS, angle=-6))
+    frame(card, CHARCOAL, GREEN if won else RED, perf, 1196, inner, breakout + stamp)
     return card
+
+
+def cooked_card(p):
+    return result_card(p, True)
+
+
+def burnt_card(p):
+    return result_card(p, False)
 
 
 # ---------------------------------------------------------------------------- Final receipt

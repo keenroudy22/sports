@@ -263,6 +263,15 @@ class DiscordPostTests(unittest.TestCase):
         self.assertEqual(sent, [('plays', 'Cooked')])
         self.assertEqual(row['discord']['state'], 'sent')
 
+    def test_official_burnt_result_also_reaches_plays_and_results(self):
+        row = {'id': 'burnt:play', 'kind': 'buffer:cashed', 'sentAt': '2026-09-28T15:59:00Z',
+               'discord': {'state': 'pending', 'text': 'Overtime got it. Pain.'}}
+        sent = []
+        send = lambda url, body, headers: (sent.append((url, body['content'])) or (204, b''))
+        self.assertEqual(discord_post.mirror_sent({'posts': [row]}, NOW, url='plays', wins_url='',
+                                                  send=send, log=lambda *_: None), [])
+        self.assertEqual(sent, [('plays', 'Overtime got it. Pain.')])
+
 
 if __name__ == '__main__':
     unittest.main()

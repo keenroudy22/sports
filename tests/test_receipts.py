@@ -237,8 +237,9 @@ class CashedTests(unittest.TestCase):
 
     def world(self):
         first, latest, log = world()
-        latest['NFL-2026-W4-a'] = {'result': 'win', 'settledAt': '2026-09-27T21:30:00Z'}
-        latest['NFL-2026-W4-b'] = {'result': 'loss', 'settledAt': '2026-09-27T21:30:00Z'}
+        latest['NFL-2026-W4-a'] = {'result': 'win', 'actualValue': 5, 'settledAt': '2026-09-27T21:30:00Z'}
+        latest['NFL-2026-W4-b'] = {'result': 'loss', 'actualValue': 43, 'actual': 'Jets 20, Rams 23',
+                                  'settledAt': '2026-09-27T21:30:00Z'}
         latest['NFL-2026-W4-c'] = {'result': 'win', 'settledAt': '2026-09-27T21:30:00Z'}
         for entry in log['posts']:
             entry['tweetId'] = f"20{entry['id'][-1]}"
@@ -247,11 +248,13 @@ class CashedTests(unittest.TestCase):
     def test_a_win_that_went_out_is_cashed_with_its_post_quoted(self):
         first, latest, log = self.world()
         posts = {p['key']: p for p in receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING)}
-        self.assertEqual(sorted(posts), ['cashed:NFL-2026-W4-a', 'cashed:NFL-2026-W4-c'], 'wins only; the loss waits for the receipt')
+        self.assertEqual(sorted(posts), ['burnt:NFL-2026-W4-b', 'cashed:NFL-2026-W4-a', 'cashed:NFL-2026-W4-c'])
         self.assertEqual(posts['cashed:NFL-2026-W4-a']['text'],
                          '✅ Player Seven over 4.5 catches.\n#NFL\nhttps://x.com/keenkooks/status/20a')
         self.assertTrue(posts['cashed:NFL-2026-W4-c']['text'].startswith('✅ +600 3-leg parlay cashed (DraftKings)\n'))
-        self.assertIsNone(posts['cashed:NFL-2026-W4-a']['card'], 'text only: the quoted post carries the card')
+        self.assertEqual(posts['cashed:NFL-2026-W4-a']['card'], 'cooked-NFL-2026-W4-a')
+        self.assertEqual(posts['burnt:NFL-2026-W4-b']['card'], 'burnt-NFL-2026-W4-b')
+        self.assertIn('missed by 1.5', posts['burnt:NFL-2026-W4-b']['text'])
         self.assertEqual(receipts.guard(posts['cashed:NFL-2026-W4-a']), [])
         log['posts'][0]['featured'] = True
         self.assertTrue(receipts.cashed(first, latest, GAMES, log, self.SUNDAY_EVENING)[0]['text'].startswith('✅ Player Seven'))
@@ -283,11 +286,27 @@ class CashedTests(unittest.TestCase):
     def test_the_planner_sends_it_once_right_away(self):
         first, latest, log = self.world()
         plans = [p for p in buffer_post.plan(first, latest, GAMES, self.SUNDAY_EVENING, log) if p[1] == 'cashed']
-        self.assertEqual([(p[0], p[4]) for p in plans], [('cashed:NFL-2026-W4-a', None), ('cashed:NFL-2026-W4-c', None)])
+        self.assertEqual([(p[0], p[4]) for p in plans],
+                         [('burnt:NFL-2026-W4-b', 'burnt-NFL-2026-W4-b'),
+                          ('cashed:NFL-2026-W4-a', 'cooked-NFL-2026-W4-a'),
+                          ('cashed:NFL-2026-W4-c', None)])
         self.assertLessEqual(plans[0][3] - self.SUNDAY_EVENING, timedelta(minutes=6), 'as it settles, plus bounded jitter')
         log['posts'].append({'id': 'cashed:NFL-2026-W4-a', 'kind': 'buffer:cashed'})
         again = [p[0] for p in buffer_post.plan(first, latest, GAMES, self.SUNDAY_EVENING, log) if p[1] == 'cashed']
-        self.assertEqual(again, ['cashed:NFL-2026-W4-c'])
+        self.assertEqual(again, ['burnt:NFL-2026-W4-b', 'cashed:NFL-2026-W4-c'])
+
+    def test_near_miss_is_narrow_and_old_results_do_not_gain_new_art(self):
+        self.assertTrue(receipts.near_miss({'result': 'loss', 'market': 'recYds', 'actualValue': 47, 'line': 49.5}))
+        self.assertFalse(receipts.near_miss({'result': 'loss', 'market': 'recYds', 'actualValue': 40, 'line': 49.5}))
+        self.assertTrue(receipts.near_miss({'result': 'loss', 'market': 'car', 'actualValue': 16, 'line': 14.5}),
+                        'one whole carry beyond an under threshold is a near miss')
+        first, latest, log = self.world()
+        cards = receipts.result_cards(first, latest, GAMES, self.SUNDAY_EVENING, log)
+        self.assertEqual({row['card'] for row in cards},
+                         {'cooked-NFL-2026-W4-a', 'burnt-NFL-2026-W4-b'})
+        later = self.SUNDAY_EVENING + timedelta(hours=4)
+        self.assertEqual(receipts.result_cards(first, latest, GAMES, later, {'posts': []}), [],
+                         'a rebuild cannot create historical result art')
 
 
 class LadderReceiptTests(unittest.TestCase):
@@ -355,7 +374,7 @@ class LadderReceiptTests(unittest.TestCase):
         [post] = receipts.cashed(first, latest, GAMES, log, held)
         self.assertEqual(post['due'].astimezone(gates.EASTERN).strftime('%H:%M'), '09:05')
 
-    def test_a_ladder_loss_waits_for_final_or_leftovers(self):
+    def test_a_ladder_loss_posts_the_restart_and_protected_bank(self):
         rung = pick('ladder', 'sun', **self.RUNG)
         rung['id'] = 'NFL-2026-W4-ladder-loss'
         first = {rung['id']: rung}
@@ -363,7 +382,10 @@ class LadderReceiptTests(unittest.TestCase):
                                'settledAt': '2026-09-28T01:00:00Z'}}
         log = {'posts': [{'id': rung['id'], 'kind': 'buffer:play', 'tweetId': '123'}]}
         now = datetime(2026, 9, 28, 1, 15, tzinfo=timezone.utc)
-        self.assertEqual(receipts.cashed(first, latest, GAMES, log, now), [])
+        [post] = receipts.cashed(first, latest, GAMES, log, now)
+        self.assertEqual(post['key'], 'ladder-loss:NFL-2026-W4-ladder-loss')
+        self.assertIn('Back to $50', post['text'])
+        self.assertIn('$19 stays in the bank', post['text'])
 
 
 class DailyTests(unittest.TestCase):

@@ -14,6 +14,12 @@ import run
 
 
 class SlotTests(unittest.TestCase):
+    def test_results_command_is_a_current_slot_free_feed_settlement_pass(self):
+        with mock.patch.object(run, 'run', return_value=0) as desk:
+            self.assertEqual(run.main(['results', '--now', '2026-10-13T04:55:00Z']), 0)
+        args = desk.call_args.args[0]
+        self.assertEqual((args.slot, args.publish_kinds, args.no_llm), ('0055', 'settle', True))
+
     def test_every_official_release_lane_gets_a_draft_without_legacy_flags(self):
         for lane in run.PRIMETIME_COVERAGE_LANES:
             self.assertTrue(run.draft_postable({'lane': lane}), lane)

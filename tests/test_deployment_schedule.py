@@ -33,6 +33,14 @@ class PrecheckScheduleTests(unittest.TestCase):
         self.assertEqual(job['StartCalendarInterval'], [{'Minute': 5}, {'Minute': 35}])
         self.assertEqual(job['EnvironmentVariables']['TZ'], 'America/New_York')
 
+    def test_free_feed_results_scan_runs_twice_an_hour_between_other_jobs(self):
+        path = ROOT / 'deployment/mac/com.keenroudy.sports.results.plist'
+        with path.open('rb') as source:
+            job = plistlib.load(source)
+        self.assertEqual(job['StartCalendarInterval'], [{'Minute': 25}, {'Minute': 55}])
+        self.assertEqual(job['ProgramArguments'][-1], 'results')
+        self.assertEqual(job['EnvironmentVariables']['TZ'], 'America/New_York')
+
 
 if __name__ == '__main__':
     unittest.main()
