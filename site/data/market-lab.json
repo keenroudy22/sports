@@ -3,7 +3,7 @@
   "MLB": {
    "gamesGraded": 24,
    "gamesQuoted": 26,
-   "moneylineSnapshots": 97,
+   "moneylineSnapshots": 98,
    "seasons": [
     {
      "gamesGraded": 13,
@@ -18,14 +18,14 @@
      "season": 2026
     }
    ],
-   "snapshots": 97,
+   "snapshots": 98,
    "status": "capturing",
-   "totalSnapshots": 97
+   "totalSnapshots": 98
   },
   "NHL": {
-   "gamesGraded": 85,
+   "gamesGraded": 86,
    "gamesQuoted": 103,
-   "moneylineSnapshots": 392,
+   "moneylineSnapshots": 395,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,44 @@
      "season": 2027
     },
     {
-     "gamesGraded": 46,
+     "gamesGraded": 47,
      "gamesQuoted": 62,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 392,
+   "snapshots": 395,
    "status": "capturing",
-   "totalSnapshots": 392
+   "totalSnapshots": 395
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "NJ",
+    "id": "11",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nj.png",
+    "name": "New Jersey Devils",
+    "shortName": "Devils"
+   },
+   "awayScore": 5,
+   "gameId": "NHL-401892488",
+   "gradedAt": "2026-10-14T01:00:03Z",
+   "home": {
+    "abbreviation": "DET",
+    "id": "5",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/det.png",
+    "name": "Detroit Red Wings",
+    "shortName": "Red Wings"
+   },
+   "homeScore": 4,
+   "kickoff": "2026-10-13T22:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final/OT",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "CLE",
@@ -2577,32 +2603,7 @@
    "season": 2027,
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "PHI",
-    "id": "15",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/phi.png",
-    "name": "Philadelphia Flyers",
-    "shortName": "Flyers"
-   },
-   "awayScore": 2,
-   "gameId": "NHL-401891817",
-   "gradedAt": "2026-10-02T03:30:05Z",
-   "home": {
-    "abbreviation": "NJ",
-    "id": "11",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nj.png",
-    "name": "New Jersey Devils",
-    "shortName": "Devils"
-   },
-   "homeScore": 3,
-   "kickoff": "2026-10-01T23:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "statusDetail": "Final/OT",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-10-14T00:25:44Z"
+ "updatedAt": "2026-10-14T01:00:03Z"
 }
