@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T17:23:25Z",
+  "updatedAt": "2026-10-14T20:35:00Z",
   "items": [
     {
       "id": "P02",
@@ -466,7 +466,7 @@
       "title": "Current-team player role and main-price sanity",
       "status": "ready",
       "owner": "agent",
-      "next": "Release role, exact two-sided price and cross-book guards at the next safe window after all gates; verify Damante, TK King, Kohl and Egbuka on the live board without rewriting forecasts.",
+      "next": "Verify Damante and Egbuka on a fresh live board when those rows naturally return; preserve the live safeguards and keep the later projection refit in private shadow under P57.",
       "doneWhen": "Kohl/Damante/TK King holds, Egbuka and five corrupted DK prices refused, 0.99\u20131.15 pair band and two-sided exact-line check agree across board and selection; hosted/live checks pass.",
       "evidence": "A-22 to A-24 safeguards are live in 48e57391, hosted run 37700211419. Local tests replay the five bad DK prices, two-sided exact-line band and QB-change holds; live TK King and JJ Kohl say Under review with no chance or grade. The 14-day candidate/day replay is player 1741\u21921603, game 210\u2192181; attempts, not a revised record. Damante/Egbuka live recheck remains."
     },
@@ -545,20 +545,20 @@
     {
       "id": "P62",
       "title": "One-line free-site footer and moved context",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Ship the prepared footer and Start here copy with Claude's Today-restore series only after the owner's release approval; run the full gates and check live footer, Record and Start here.",
+      "next": "Preserve the one-line footer and the single Start here disclosures in public-copy tests.",
       "doneWhen": "Live footer is exactly '21+ \u00b7 Entertainment only'; Record keeps posted-price grading, Start here has Eastern time and Cloudflare disclosure once, and hosted plus live checks pass.",
-      "evidence": "Owner-delegated decision 26 dated 2026-10-07. Prepared on dev only; not released."
+      "evidence": "Owner-delegated decision 26 dated 2026-10-07. Release 6dc3ebca3f7a2d1e5285520dd329988bbc6da6a7; hosted run 37795541437 succeeded. Live 375/1440 checks verified the exact one-line footer, Record grading context and Start here Eastern-time/Cloudflare text."
     },
     {
       "id": "P63",
       "title": "Keep desk timing and automation out of public copy",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Ship the first pass with Today restore after the owner's yes; apply Claude's forthcoming full public-string audit before declaring the broader copy sweep complete.",
+      "next": "Keep the public-string lint and legacy-route tests in every release; internal timing stays private.",
       "doneWhen": "Today, More, public payloads, cards, captions, RSS and Discord expose no internal run/scan times or automation; old #schedule/#status links open More; hosted and live checks pass.",
-      "evidence": "Owner-delegated decision 25 dated 2026-10-07. First-pass code prepared on dev only; Claude's full audit remains pending."
+      "evidence": "Owner-delegated decision 25 dated 2026-10-07. Release 6dc3ebca3f7a2d1e5285520dd329988bbc6da6a7; hosted run 37795541437 succeeded. Live Today/More checks and legacy #schedule/#status redirects passed at 375/1440 without public desk timing or automation copy."
     },
     {
       "id": "P64",
@@ -572,11 +572,11 @@
     {
       "id": "P65",
       "title": "Specific game-number explanations",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Release the game-page series; confirm the live card line, Dig deeper and #why section on a competitive and a blowout game.",
+      "next": "Preserve the bounded driver and stale-line tests; extend only when a new stored driver is available.",
       "doneWhen": "Fresh 3-point differences show bounded numeric drivers and an honest flag when one fires; stale lines show only a stale-line note; live card and game views agree without changing picks.",
-      "evidence": "Owner-delegated decision 28 dated 2026-10-07; GAME-WHY-SPEC.md. Data at 5f361868 is extended to both markets with driver numbers; the generic caution is removed from the views and tests are built. Not yet released."
+      "evidence": "Owner-delegated decision 28 dated 2026-10-07; GAME-WHY-SPEC.md. The base Why view shipped in 6dc3ebca/hosted 37795541437. Release 0207f7f5a17dfb38ca7c94fe673ff45cfdb88e6d, hosted 38600873778, put My number, Vegas, the difference, betting status and bounded numeric drivers directly on matchup pages; local/live 375/1440 checks passed."
     },
     {
       "id": "P66",
@@ -590,11 +590,11 @@
     {
       "id": "P67",
       "title": "College slate navigator",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Release the Games bundle series and check Saturday's college slate live at 375 and 1440 px.",
+      "next": "Preserve deterministic sorting, combined filters and football-specific ordering in the Games tests.",
       "doneWhen": "College games sort deterministically by checked bettability, filters combine, score gaps are plain words, 21-point prop flags appear, and NFL retains kickoff order with badges.",
-      "evidence": "Owner-delegated decision 30 dated 2026-10-07; CFB-NAVIGATOR-SPEC.md. Navigator view, conference table, look line and tests built; local headless Chrome QA passed. Not yet released."
+      "evidence": "Owner-delegated decision 30 dated 2026-10-07; CFB-NAVIGATOR-SPEC.md. Release 6dc3ebca3f7a2d1e5285520dd329988bbc6da6a7; hosted run 37795541437 succeeded. Live college Games navigator, filters, badges and NFL kickoff ordering passed 375/1440 checks."
     },
     {
       "id": "P68",
@@ -986,18 +986,18 @@
     {
       "id": "A-20261011-2",
       "title": "Render the held October10 Final receipt detail",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Fit the exact Harbor detail in the reviewed Final without dropping rows or going below 40px; add a real-row regression/render, release, then verify a natural delivery.",
+      "next": "Keep the long-result-detail fit regression in the Kitchen Ticket suite.",
       "doneWhen": "The exact stored detail 4 catches on8 targets \u00b7 cleared by0.5 fits at40px or larger; every win/loss row stays; reviewed real render and full release/hosted/live evidence are recorded; delivery is confirmed separately.",
-      "evidence": "Hosted38134903105 and current clean build/feed both hold receipt-day-2026-10-10: Final detail will not fit at40px. Site publish succeeded; this receipt card is not rendered. Existing P43/Release3 card completion remains open."
+      "evidence": "Release 14af05bf028725ea831cd91a5ebf7070c48c01f2 shortened the exact stored row without dropping it; the real-row card regression requires 40px or larger. The delayed Saturday Results post delivered 2026-10-11 at 12:29:02 ET as tweet 2109320377058947146 after release 57b2047823682f29162e5d4b90ba43edbe4d0c9d and hosted run 38154584490 passed."
     },
     {
       "id": "A-20261011-3",
       "title": "Cancel the invalid Sunday fun ticket and recheck dark primetime",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Observe the natural 5:30 PM Ravens-Falcons decision and report the qualifying pick or the exact gate refusals; never force one.",
+      "next": "Preserve the fun-ticket construction and fresh primetime-screen tests; never force a play when the refreshed rows fail.",
       "doneWhen": "The invalid ticket is closed before Discord/X; Strange uses approved wording; all send paths refuse the retired sentence; 5:30 considers only an unserved primetime NFL game after fresh prices.",
       "evidence": "Owner instruction 2026-10-11. Buffer and pending Discord cancellation completed at 08:23 ET; no replacement was admitted. Strange reached Discord at 08:29:58 ET and X at 08:40:02 ET (tweet 2109262746864767282). Closure reports 2026-10-11-NFL-0824-closes.json and 2026-10-11-NFL-0832-closes.json preserve the reason. Release 80fab324 and hosted run 38140976753 passed every gate and live 375/1440 checks. The natural 5:30 observation remains follow-through, not a forced-play requirement."
     },
@@ -1094,20 +1094,20 @@
     {
       "id": "A-20261012-5",
       "title": "Consolidate Codex schedules and measure result speed",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Release the 1:00 AM result cutoff and private final-to-post outcome metric, then verify the three Codex schedules remain the only active Kook'n automations.",
+      "next": "Keep only Kook'n daily, Kook'n overnight and Kook'n weekly; the Mac continues healthy posting, grading and learning without Codex polling.",
       "doneWhen": "Only the three named tasks remain; old scheduled chats are archived; primetime results may post until01:00; the private check measures wins/near-misses within30minutes; all release and live gates pass.",
-      "evidence": "Owner decision2026-10-12. Automations consolidated in the Codex app; four redundant tasks deleted, no active felt-cutover task found, seven scheduled-run chats older than two days archived. Code release evidence pending."
+      "evidence": "Owner decision 2026-10-12. Automations consolidated in the Codex app; four redundant tasks deleted, no active felt-cutover task found, seven scheduled-run chats older than two days archived. Release 0cf3f41639bc7ca5c03c00e0b918f2b9a29255df and hosted run 38256254236 succeeded. Disk verification on 2026-10-14 found exactly the three active Kook'n tasks; the result outcome check records minutes from final to public post."
     },
     {
       "id": "A-20261012-6",
       "title": "Mirror approved X research to a dedicated Discord channel",
-      "status": "observing",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Verify the first natural eligible research post mirrors to #research-and-trends only after confirmed X delivery; do not force a post for proof.",
+      "next": "Preserve X-first ordering and the dedicated research-only Discord route; never fall back to Plays & Results.",
       "doneWhen": "#research-and-trends and its dedicated webhook exist; approved research waits for confirmed X, carries its card, X link and research label, never falls back to Plays & Results, and the full release and live checks pass.",
-      "evidence": "Approved2026-10-12. Channel1559402689895469156 and dedicated Kook\u2019n Research webhook created; secret stored only in the private env. Release8d1f826e7543868bdff3eef9eb3942912d0089dc; hosted38341470953success. Python1370(2skipped),Node240,both cleanexport,build502/139games,budget nohardissues,football102/NBA0 audits,feed84,guard601,assets/SVG,current-slot rehearsal outcomeok/outsideWrite0/privateRead0. Local/live14routes375/1440zeroissues/errors. Natural mirror receipt pending; no post was forced."
+      "evidence": "Approved 2026-10-12. Channel 1559402689895469156 and dedicated Kook'n Research webhook created; secret stored only in the private env. Release 8d1f826e7543868bdff3eef9eb3942912d0089dc; hosted 38341470953 succeeded with all gates and live checks. Natural proof arrived 2026-10-14: research:end-zone:2026-10-14 sent on X at 14:36:07Z (tweet 2110379126271959489), then mirrored to #research-and-trends at 14:40:03Z with no Plays & Results fallback."
     },
     {
       "id": "O-20261013-1",
@@ -1148,11 +1148,11 @@
     {
       "id": "O-20261014-1",
       "title": "Publish one useful, human daily engagement post",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Run every release gate, inspect a real nearest-slate render, deploy under the run lock, and observe the first natural daily fallback without forcing a duplicate post.",
+      "next": "Keep the daily research fallback behind freshness, one-post and voice guards; never weaken a betting gate to fill a day.",
       "doneWhen": "Every calendar day can produce a qualifying play, result or approved research post; an otherwise empty day uses fresh stored next-slate numbers or projected scores, never filler or a weakened betting gate; full release and live checks pass.",
-      "evidence": "Owner decision2026-10-14. Focused research and Kitchen Ticket tests pass; full release and first natural delivery receipts pending."
+      "evidence": "Owner decision 2026-10-14. Release c95b46e6f56123009a891ee483fcd37f276d514b; hosted run 38574167353 succeeded with all gates and live 375/1440 checks. The natural End-Zone Work post sent on X at 14:36:07Z (Buffer 6acf88d08570d416620b2d63, tweet 2110379126271959489) and mirrored to the research Discord at 14:40:03Z; no duplicate was forced."
     }
   ]
 }
