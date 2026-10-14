@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-14T14:06:52Z",
+  "updatedAt": "2026-10-14T14:34:43Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-14T13:00Z",
+              "reportedAt": "2026-10-14T14:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-14T14:00Z",
+              "reportedAt": "2026-10-14T14:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -6677,6 +6677,15 @@
           "name": "Tampa Bay Buccaneers",
           "players": [
             {
+              "id": "3052587",
+              "name": "Baker Mayfield",
+              "position": "QB",
+              "status": "Doubtful",
+              "injury": "Thumb",
+              "reportedAt": "2026-10-14T14:16Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3052587/baker-mayfield"
+            },
+            {
               "id": "4034790",
               "name": "Antoine Winfield Jr.",
               "position": "S",
@@ -6711,15 +6720,6 @@
               "injury": "Hamstring",
               "reportedAt": "2026-10-12T23:06Z",
               "source": "https://www.espn.com/nfl/player/_/id/3871102/david-sills-v"
-            },
-            {
-              "id": "3052587",
-              "name": "Baker Mayfield",
-              "position": "QB",
-              "status": "Out",
-              "injury": "Thumb",
-              "reportedAt": "2026-10-12T19:43Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3052587/baker-mayfield"
             },
             {
               "id": "4686884",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "15",
-          "name": "Robert Beal Jr.",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-13T17:50:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4259558/robert-beal-jr"
-        },
-        {
           "teamId": "16",
           "name": "Christian Darrisaw",
           "from": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-10-14T00:25:45Z",
           "source": "https://www.espn.com/nfl/player/_/id/4592823/beau-stephens"
+        },
+        {
+          "teamId": "27",
+          "name": "Baker Mayfield",
+          "from": "Out",
+          "to": "Doubtful",
+          "observedAt": "2026-10-14T14:34:43Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3052587/baker-mayfield"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-14T14:06:52Z",
-      "lastAttemptAt": "2026-10-14T14:06:52Z",
+      "checkedAt": "2026-10-14T14:34:43Z",
+      "lastAttemptAt": "2026-10-14T14:34:43Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-14T14:06:52Z",
-      "lastAttemptAt": "2026-10-14T14:06:52Z",
+      "checkedAt": "2026-10-14T14:34:43Z",
+      "lastAttemptAt": "2026-10-14T14:34:43Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
