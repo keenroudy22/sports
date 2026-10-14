@@ -1906,3 +1906,10 @@ Regression fixtures cover Kohl/Marker, Damante/King, Daniels, Javonte and Bucky.
 not a projection cutover: the public number, pick selection, cards and append-only record stay
 unchanged while 2025 replay and forward evidence accumulate. Promotion still requires a separate
 owner yes with before/after error and calibration.
+
+The owner-slip intake is also complete in code. The existing five-minute Discord job scans only
+`/Users/keen/Documents/ChatGPT/Kook'n/chef-wins/`, accepts supported images, deduplicates by SHA-256,
+posts at most three per Eastern day with the exact approved personal-ticket caption, and records its
+seen state only under the private configuration `work/` directory. It has no X, official-record or
+Plays & Results path. The dedicated wins webhook is currently unset and the inbox is empty, so P52
+correctly waits on owner setup and a natural image instead of inventing a delivery receipt.

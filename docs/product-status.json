@@ -455,11 +455,11 @@
     {
       "id": "P52",
       "title": "Owner FanDuel winning slips in wins Discord channel",
-      "status": "ready",
-      "owner": "agent",
-      "next": "After Kitchen Ticket and the posting plan, add chef-wins/ intake to the five-minute Discord job, using a git-ignored work/ seen-file and the exact caption. If the wins webhook is unset, hold and alert once.",
+      "status": "owner-needed",
+      "owner": "owner",
+      "next": "Add DISCORD_WINS_WEBHOOK_URL when the dedicated wins channel is ready, then drop a real winning image into chef-wins/ to verify the first natural receipt. Until then the intake holds every image and alerts once.",
       "doneWhen": "Tests prove one post per image hash, a three-per-day cap, non-image rejection and one missing-webhook alert. No image reaches X, Plays & Results, the record or Git; verify a live wins-channel receipt.",
-      "evidence": "Owner rule dated 2026-10-07, OWNER-DECISIONS-2026-10-07.md item 18. Folder exists; intake is not implemented or live."
+      "evidence": "Owner rule dated 2026-10-07, OWNER-DECISIONS-2026-10-07.md item 18. The five-minute Discord path now scans chef-wins/, accepts images only, deduplicates by SHA-256, caps at three per Eastern day, stores private seen state and uses the exact approved caption only in the wins destination. Tests cover de-duplication, cap, non-images and one missing-webhook alert. The wins webhook is currently unset and the folder contains no images, so no live receipt can be manufactured."
     },
     {
       "id": "P53",

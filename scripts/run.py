@@ -2977,6 +2977,7 @@ def release_private_isolated(now, log=log, runner=None):
 def mirror(args):
     """Every five minutes, observe public plays, send due Discord-first plays and mirror the rest from Buffer."""
     import buffer_post
+    import chef_wins
     import discord_post
     import x_post
     now = gates.when(args.now) if args.now else datetime.now(timezone.utc)
@@ -3009,9 +3010,12 @@ def mirror(args):
         result = run(settlement_args)
         if result:
             return result
-    if not os.environ.get('BUFFER_TOKEN', '').strip() or not (discord_post.webhook() or discord_post.wins_webhook()):
+    chef_waiting = bool(chef_wins.pending())
+    social_ready = bool(os.environ.get('BUFFER_TOKEN', '').strip() and
+                        (discord_post.webhook() or discord_post.wins_webhook()))
+    if not social_ready and not chef_waiting:
         return 0
-    if not mirror_due(x_post.load_log(), now) and not private_release_ready(now):
+    if not chef_waiting and not mirror_due(x_post.load_log(), now) and not private_release_ready(now):
         return 0
     if args.dry_run:
         log('discord mirror: work is due; dry run sends nothing')
@@ -3019,6 +3023,11 @@ def mirror(args):
     failed = []
     try:
         with Lock(CONF / 'run.lock'):
+            if chef_waiting:
+                chef_wins.run(now, url=discord_post.wins_webhook(),
+                              notify=lambda title, body: alert(title, body), log=log)
+            if not social_ready:
+                return 1 if failed else 0
             if not args.dry_run:
                 sync()
             log_book = x_post.load_log()

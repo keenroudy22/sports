@@ -132,7 +132,8 @@ def resolve(cwd=ROOT, log=print):
         name = Path(path).name
         if name.endswith('.jsonl'):
             merged = merge_lines(stage(path, 1, cwd), stage(path, 2, cwd), stage(path, 3, cwd))
-            target.write_text('\n'.join(merged) + ('\n' if merged else ''), encoding='utf-8', newline='\n')
+            with target.open('w', encoding='utf-8', newline='\n') as stream:
+                stream.write('\n'.join(merged) + ('\n' if merged else ''))
             log(f'merge_store: {path}: {len(merged)} records from both sides')
         elif name == 'ledger.json':
             pass                                  # recomputed below, once the records are settled
