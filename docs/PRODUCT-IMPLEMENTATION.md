@@ -1844,6 +1844,34 @@ Evidence: `work/autonomy2-*.log`, `work/autonomy2-release.json`,
 KA-R1's missing/late individual result reactions remain open; this repair does
 not claim those posts were delivered or that the model has proven profitability.
 
+### October 14 daily — Today withdrawal parity held at Python gate
+
+Prepared `4de0d6bf` makes Today’s pulled counting strip use the existing
+`countsPublic` delivery predicate, matching Record. Never-released withdrawals
+are excluded; actual X/Discord releases remain visible. No published record,
+counting rule or attachment changes. All 41 focused Today tests pass.
+
+Release STOPPED at the first full Python gate: 1,392 tests, one failure, two skips.
+`test_role_sanity.RoleSanityTests.test_jj_kohl_current_fiu_full_games_exclude_partial_and_old_team`
+expects recent attempts `[50, 36, 43]` and average 43.0; current stored history
+returns `[36, 43, 38]` and 39.0. No subsequent release gate or deployment was run.
+D-20261013-1 tracks the next action: isolate the intended historical test fixture
+without altering captures, rerun all gates, then release under both locks and
+verify hosted success plus live phone behavior.
+
+Morning compact health: 06:45 run finished 11:02:30Z ok; chosenNotPosted=0,
+officialUnscheduled=0, overdue/failed X/Discord=0. Sources were stale in the
+11:35 cached snapshot; existing hosted/Mac refresh paths retain responsibility.
+Stored Odds usage268/500, projected398; SGO409/2500 with1800 stop; Buffer466 and
+Sharp27 locally counted. NBA log stage3/14clean days,0/50paper grades; trial opens
+Oct20. Local weekly review succeeded Oct13: one27Bcall,0failures,4.72seconds;
+the morning run made zero local calls. Climb3step2,$58 riding,no open rung.
+Two historical individual MNF reactions remain missing under KA-R1; aggregate
+Results was confirmed at13:04:25Z,554.13minutes after first verified final.
+No retrospective duplicate, forced pick, provider call or budget change.
+Evidence: `work/daily-20261014-outcomes.json`, `work/daily-20261014-focused.log`,
+`work/daily-20261014-python.log`.
+
 ### October 14 daily-engagement rule
 
 The owner directed the desk to stay useful and visible every day in their own
