@@ -12,6 +12,7 @@ class PrecheckScheduleTests(unittest.TestCase):
         with path.open('rb') as source:
             job = plistlib.load(source)
         self.assertEqual(job['StartCalendarInterval'], {'Weekday': 2, 'Hour': 10, 'Minute': 30})
+        self.assertNotIn('--no-push', job['ProgramArguments'], 'the owner-approved private Tuesday note must be delivered')
 
     def test_regular_desk_checks_climb_before_the_early_game_window(self):
         path = ROOT / 'deployment/mac/com.keenroudy.sports.run.plist'

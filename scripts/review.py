@@ -140,9 +140,19 @@ def private_weekly_delivery(text, day, env=None, state_path=None, metadata=None,
                 return 'delivery-review-required'
             attempts[key]['state'] = 'sent'
             save(state)
-            return 'sent'
         except Exception:
             return 'delivery-review-required'
+    return 'sent'
+
+
+def owner_delivery_message(review, review_path, note_path=None):
+    """Short deterministic owner note, with the full local packet as the drill-down."""
+    note_path = note_path or ROOT / 'data' / 'learning' / 'OWNER-NOTE.md'
+    try:
+        note = Path(note_path).read_text(encoding='utf-8').strip()
+    except OSError:
+        note = review[:1800].strip()
+    return note + f'\n\nFull review on the Mac: {review_path}'
 
 
 def period(now, since=None):
@@ -451,7 +461,7 @@ def main(argv=None):
     parser.add_argument('--since', help='first Eastern date to cover (default: six days before today)')
     parser.add_argument('--no-codex', action='store_true', help='write the packet only')
     parser.add_argument('--codex', action='store_true', help='explicitly use the cloud review instead of the local brief')
-    parser.add_argument('--no-push', action='store_true', help='do not send the phone alert')
+    parser.add_argument('--no-push', action='store_true', help='do not send the owner note to phone or private Discord')
     args = parser.parse_args(argv)
     now = datetime.now(timezone.utc)
     first, last = period(now, args.since)
@@ -530,8 +540,9 @@ def main(argv=None):
     print(f'review: {review_path}')
     if not args.no_push:
         import run
-        run.alert('KeenRoudy weekly review', review[:1800] + f'\n\nFull review on the Mac: {review_path}', priority='default')
-        delivery = private_weekly_delivery(review, last.isoformat())
+        message = owner_delivery_message(review, review_path)
+        run.alert('KeenRoudy weekly review', message, priority='default')
+        delivery = private_weekly_delivery(message, last.isoformat())
         print(f'private Discord review: {delivery}')
         if delivery == 'delivery-review-required':
             run.alert('Kook\'n private review needs a check', 'Private Discord review delivery was uncertain. Check the channel before any retry.', priority='default')

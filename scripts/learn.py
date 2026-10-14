@@ -30,6 +30,7 @@ Every run records what it considered (scripts/learning.py). This module closes t
 import argparse
 import copy
 import json
+import re
 import math
 import sys
 from collections import defaultdict
@@ -421,6 +422,82 @@ def engagement_scorecard(log_book):
             'measuredPosts': len(rows), 'overall': summary(rows), 'byKind': by_kind, 'byTheme': by_theme}
 
 
+MATCHUP_COVERAGE = {
+    'NFL/CFB': 'player defense-vs-position and opponent-quality splits are active',
+    'NBA/CBB': 'team projections are active; player defense-vs-position is not live yet',
+    'EPL/MLS': 'team-level score and market shadows only',
+    'MLB': 'scores and market collection only; no batter-vs-pitcher lean yet',
+    'NHL': 'scores and market collection only; no skater/goalie lean yet',
+}
+
+
+def matchup_scorecard(rows):
+    """How graded, matchup-supported leans performed, without double-counting captures.
+
+    The reason saved with a candidate is the auditable source of the defense rank and
+    position.  This is reporting only: it changes no probability, gate or record.
+    """
+    groups = defaultdict(list)
+    for row in distinct(rows):
+        if row.get('result') not in ('win', 'loss', 'push'):
+            continue
+        reason = next((item for item in (row.get('reasons') or row.get('planReasons') or [])
+                       if item.get('type') == 'matchup' and item.get('direction') == 'for'
+                       and isinstance(item.get('number'), dict)), None)
+        number = (reason or {}).get('number') or {}
+        rank, teams = number.get('rank'), number.get('teams')
+        if not isinstance(rank, int) or not isinstance(teams, int) or teams < 2:
+            continue
+        text = str(reason.get('text') or '')
+        match = re.search(r'\bto ([A-Z]{1,3})s?\b', text)
+        position = match.group(1) if match else 'players'
+        tier = 'top 10 defense' if rank <= 10 else ('top-half defense' if rank <= teams / 2 else 'bottom-half defense')
+        market = row.get('market') or row.get('marketType') or 'market'
+        key = (row.get('league') or 'unknown', position, market, row.get('direction') or 'side', tier)
+        groups[key].append(row)
+    results = []
+    for (league, position, market, direction, tier), values in sorted(groups.items()):
+        results.append({'league': league, 'position': position, 'market': market,
+                        'direction': direction, 'defenseTier': tier, **summary(values)})
+    results.sort(key=lambda row: (-row['graded'], -row['record']['units'], row['league'], row['position']))
+    return {'coverage': dict(MATCHUP_COVERAGE), 'groups': results,
+            'graded': sum(row['graded'] for row in results)}
+
+
+def ticket_scorecard(first, latest, log_book):
+    """Settled, actually released multi-leg tickets by lane and construction.
+
+    Older tickets do not always store units or structured legs.  Keep those in
+    the W-L count, but never invent units or call them alternate tickets.
+    """
+    import receipts
+    released = receipts.released_first(first, log_book)
+    groups = defaultdict(list)
+    for key, original in released.items():
+        if not original.get('posted'):
+            continue
+        pick = dict(original, **(latest.get(key) or {}))
+        if pick.get('result') not in ('win', 'loss', 'push', 'void') or not pick.get('legs'):
+            continue
+        legs = pick.get('legs') or []
+        structured = [leg for leg in legs if isinstance(leg, dict)]
+        flags = [leg.get('alternate') for leg in structured if isinstance(leg.get('alternate'), bool)]
+        construction = ('all alternates' if flags and all(flags) and len(flags) == len(legs)
+                        else 'mixed alternates' if any(flags)
+                        else 'main lines' if flags and not any(flags) and len(flags) == len(legs)
+                        else 'unclassified')
+        lane = {'ladder': 'Climb', 'easyProps': 'Appetizer'}.get(pick.get('parlayType'), 'Fun ticket')
+        groups[(lane, construction, len(legs))].append(pick)
+    results = []
+    for (lane, construction, legs), values in groups.items():
+        counts = {name: sum(row.get('result') == name for row in values) for name in ('win', 'loss', 'push', 'void')}
+        known = [float(row['units']) for row in values if isinstance(row.get('units'), (int, float))]
+        results.append({'lane': lane, 'construction': construction, 'legs': legs, 'graded': len(values),
+                        'record': counts, 'units': round(sum(known), 2), 'unitsKnown': len(known)})
+    results.sort(key=lambda row: (-row['graded'], row['lane'], row['construction'], row['legs']))
+    return {'groups': results, 'graded': sum(row['graded'] for row in results)}
+
+
 def learn_reasons(policy, log_book, now, dry=False):
     """Engagement per thousand views by the kind of reason a play post gave; weights move within 0.8 to 1.25."""
     groups = defaultdict(list)
@@ -629,6 +706,8 @@ def weekly(now=None, dry=False, root=learning.STORE, policy_path=None, log_book=
               'segments': segments, 'calibration': calibration, 'gates': by_rule(rows), 'judge': judge_findings(rows),
               'researcher': domains, 'posts': reasons, 'postTimes': post_times(log_book),
               'cardThemes': post_themes(log_book), 'engagementScorecard': engagement_scorecard(log_book),
+              'matchups': matchup_scorecard(rows),
+              'tickets': ticket_scorecard(first_picks, latest_picks, log_book),
               'model': model_findings(), 'changes': changes,
               'marketReview': market_review.audit(historical_props), 'resultsShadows': shadow_rows,
               'direction': direction_report, 'weekLanes': week_lanes,
@@ -671,22 +750,43 @@ def owner_note(report, now):
                     key=lambda item: (-(item[1].get('perThousand') or 0), item[0]))
     top = ', '.join(f"{name} {row.get('perThousand')}" for name, row in ranked[:3]) or 'metrics not yet available'
     bottom = f"{ranked[-1][0]} {ranked[-1][1].get('perThousand')}" if ranked else 'unknown'
+    timed = sorted(((report.get('postTimes') or {}).get('byHour') or {}).items(),
+                   key=lambda item: (-(item[1].get('perThousand') or 0), item[0]))
+    best_time = f"{timed[0][0]} {timed[0][1].get('perThousand')}" if timed else 'unknown'
     lane_bits = []
     for name, row in (report.get('weekLanes') or {}).items():
         rec = row.get('record') or {}
         lane_bits.append(f"{name} {rec.get('win', 0)}-{rec.get('loss', 0)} {rec.get('units', 0):+.2f}u")
     climb = report.get('climb') or {}
+    matchups = report.get('matchups') or {}
+    mature = [row for row in matchups.get('groups', []) if row.get('graded', 0) >= 3]
+    matchup_bits = []
+    for row in sorted(mature, key=lambda item: (-item['record']['units'], -item['graded']))[:3]:
+        rec = row['record']
+        matchup_bits.append(f"{row['league']} {row['position']} {row['direction']} {row['market']} vs {row['defenseTier']}: "
+                            f"{rec['win']}-{rec['loss']} {rec['units']:+.2f}u ({row['graded']})")
+    matchup_line = '; '.join(matchup_bits) if matchup_bits else \
+        f"{matchups.get('graded', 0)} graded; no three-play matchup bucket yet"
+    tickets = report.get('tickets') or {}
+    mature_tickets = [row for row in tickets.get('groups', []) if row.get('graded', 0) >= 3]
+    ticket_bits = []
+    for row in mature_tickets[:3]:
+        rec = row['record']
+        units = f", {row['units']:+.2f}u on {row['unitsKnown']} priced" if row.get('unitsKnown') else ''
+        ticket_bits.append(f"{row['lane']} {row['legs']}-leg {row['construction']}: {rec['win']}-{rec['loss']}{units}")
+    ticket_line = '; '.join(ticket_bits) if ticket_bits else \
+        f"{tickets.get('graded', 0)} released and graded; no three-ticket construction yet"
     lines = [
         f"Kook'n Tuesday note · {now.astimezone(ZoneInfo('America/New_York')):%b %-d}",
-        f"Week by lane: {', '.join(lane_bits) or 'no newly graded published plays'}.",
-        f"Outcomes: {report.get('graded', 0)} graded candidates; two-way moves {'on' if not two.get('disabled') else 'off'}.",
-        f"Changed: {changed}.",
-        f"Undo keys: {', '.join(row.get('undoKey') or row.get('key') or '?' for row in applied) or 'none'}.",
+        f"Week by lane: {', '.join(lane_bits) or 'no newly graded published plays'}; {report.get('graded', 0)} candidate outcomes.",
+        f"Changed: {changed}; undo keys {', '.join(row.get('undoKey') or row.get('key') or '?' for row in applied) or 'none'}.",
         f"Engagement: {score.get('measuredPosts', 0)} measured posts, {overall.get('perThousand', 'n/a')} per 1,000.",
-        f"Posts: top {top}; bottom {bottom}.",
+        f"Posts: top {top}; bottom {bottom}; best time {best_time}.",
+        f"Matchup leans: {matchup_line}.",
+        f"Multi-leg builds: {ticket_line}.",
+        "Coverage: football defense-vs-position is live; basketball player matchups, MLB batter-pitcher, NHL skater/goalie and soccer player models are not live yet.",
         f"Climb: run {climb.get('run', '?')} step {climb.get('step', '?')}, ${climb.get('stake', '?')} next; lifetime bank ${climb.get('banked', '?')}.",
-        "Audience: free follower, Discord-member and site counters unavailable; no estimate substituted.",
-        "Owner needed: nothing unless a listed undo key should be reversed.",
+        f"Audience: counters unavailable; Owner needed: nothing unless a listed undo key should be reversed; learning {'on' if not two.get('disabled') else 'off'}.",
     ]
     return '\n'.join(lines) + '\n'
 
@@ -772,6 +872,26 @@ def markdown(report):
             caveat = ' (small sample)' if row['smallSample'] else ''
             lines.append(f"- {row['category']} / {row['theme']}: {row['posts']} posts, "
                          f"{row['perThousand']} engagements per thousand views{caveat}")
+    matchups = report.get('matchups') or {}
+    if matchups:
+        lines += ['', '## Matchup-supported leans', '',
+                  f"- {matchups.get('graded', 0)} graded, distinct matchup-supported observations. Reporting only; this changes no gate."]
+        for sport, state in (matchups.get('coverage') or {}).items():
+            lines.append(f"- {sport}: {state}.")
+        for row in (matchups.get('groups') or []):
+            rec = row['record']
+            lines.append(f"- {row['league']} {row['position']} {row['direction']} {row['market']} vs {row['defenseTier']}: "
+                         f"{rec['win']}-{rec['loss']}" + (f"-{rec['push']}" if rec['push'] else '') +
+                         f", {rec['units']:+.2f}u (n {row['graded']}).")
+    tickets = report.get('tickets') or {}
+    if tickets:
+        lines += ['', '## Released multi-leg tickets', '',
+                  f"- {tickets.get('graded', 0)} released and graded tickets. Unreleased ideas are excluded."]
+        for row in tickets.get('groups') or []:
+            rec = row['record']
+            units = f", {row['units']:+.2f}u on {row['unitsKnown']} with stored units" if row.get('unitsKnown') else ', units unavailable'
+            lines.append(f"- {row['lane']} / {row['legs']}-leg / {row['construction']}: "
+                         f"{rec['win']}-{rec['loss']}-{rec['push']}-{rec['void']}{units} (n {row['graded']}).")
     scorecard = report.get('engagementScorecard') or {}
     if scorecard.get('measuredPosts'):
         overall = scorecard['overall']

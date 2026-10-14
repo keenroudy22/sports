@@ -10,6 +10,13 @@ import review
 
 
 class ReviewTests(unittest.TestCase):
+    def test_owner_delivery_uses_short_note_and_links_local_packet(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            note = Path(tmp) / 'OWNER-NOTE.md'
+            note.write_text('Short numbers note.', encoding='utf-8')
+            message = review.owner_delivery_message('long model review', '/tmp/full.md', note)
+        self.assertEqual(message, 'Short numbers note.\n\nFull review on the Mac: /tmp/full.md')
+
     def test_private_delivery_is_disabled_without_separately_verified_destination(self):
         never = lambda *a, **k: self.fail('no network without private setup')
         self.assertEqual(review.private_weekly_delivery('private', '2026-10-05', env={'DISCORD_WEBHOOK_URL': 'public'}, metadata=never, send=never), 'not-configured')

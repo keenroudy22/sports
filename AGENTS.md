@@ -205,6 +205,13 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Private numbers note (owner, 2026-10-14):** send the owner a short private Discord note after Tuesday learning.
+  It names the weekly record by lane, the strongest mature matchup-supported lean buckets, engagement by post type
+  and time, what changed and what is still only a small sample. State coverage honestly: football defense-vs-position
+  and college opponent-quality splits are live; basketball player matchups, MLB batter-vs-pitcher, NHL skater/goalie
+  and soccer player models are not live until their own stored-data trials exist. The report is evidence, not a new
+  gate, and never turns a winning-looking historical split into a forced play.
+
 - **No invisible days (owner, 2026-10-14):** publish at least one useful, casual X post every calendar day. A
   qualifying play, settled result or approved research post can satisfy the day. If the normal football-day
   research families have no honest row, use the nearest stored slate for a `MY NUMBER VS VEGAS` research-list

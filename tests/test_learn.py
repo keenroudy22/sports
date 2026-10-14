@@ -179,6 +179,51 @@ class CalibrationTests(unittest.TestCase):
 
 
 class OtherLearningTests(unittest.TestCase):
+    def test_ticket_scorecard_counts_only_released_tickets_and_labels_alternates(self):
+        first = {
+            'climb': {'legs': [{'alternate': True}, {'alternate': True}], 'parlayType': 'ladder'},
+            'fun': {'legs': [{'alternate': False}, {'alternate': True}], 'parlayType': 'longshot'},
+            'never-out': {'legs': [{'alternate': True}], 'parlayType': 'easyProps'},
+        }
+        latest = {
+            'climb': {'result': 'win', 'units': .22},
+            'fun': {'result': 'loss', 'units': -.25},
+            'never-out': {'result': 'win', 'units': .5},
+        }
+        log = {'posts': [
+            {'id': 'climb', 'kind': 'buffer:play', 'sentAt': '2026-10-01T10:00:00Z'},
+            {'id': 'fun', 'kind': 'pick', 'postedAt': '2026-10-01T10:10:00Z'},
+        ]}
+        card = learn.ticket_scorecard(first, latest, log)
+        self.assertEqual(card['graded'], 2)
+        groups = {(row['lane'], row['construction']): row for row in card['groups']}
+        self.assertEqual(groups['Climb', 'all alternates']['record']['win'], 1)
+        self.assertEqual(groups['Fun ticket', 'mixed alternates']['record']['loss'], 1)
+        self.assertEqual(sum(row['units'] for row in card['groups']), -0.03)
+
+    def test_matchup_scorecard_reports_position_defense_buckets_without_duplicate_captures(self):
+        reason = lambda rank, teams, pos: {'type': 'matchup', 'direction': 'for',
+            'number': {'rank': rank, 'teams': teams},
+            'text': f'The opponent allows the {rank}th-fewest receiving yards to {pos}s.'}
+        rows = [
+            row(1, segment='NFL/prop:recYds', result='win', league='NFL', market='recYds', direction='over',
+                athleteId='1', gameIds=['NFL-1'], reasons=[reason(28, 32, 'WR')]),
+            row(2, segment='NFL/prop:recYds', result='loss', league='NFL', market='recYds', direction='over',
+                athleteId='2', gameIds=['NFL-2'], reasons=[reason(30, 32, 'WR')]),
+            row(3, segment='CFB/prop:rec', result='win', league='CFB', market='rec', direction='under', odds=120,
+                athleteId='3', gameIds=['CFB-1'], reasons=[reason(5, 139, 'TE')]),
+            dict(row(4, segment='NFL/prop:recYds', result='loss', league='NFL', market='recYds', direction='over',
+                     athleteId='1', gameIds=['NFL-1'], reasons=[reason(28, 32, 'WR')]), decidedAt='2026-09-21T12:00:00Z'),
+            row(5, result='win', league='NFL', reasons=[]),
+        ]
+        card = learn.matchup_scorecard(rows)
+        self.assertEqual(card['graded'], 3, 'the later duplicate capture and non-matchup row do not count')
+        self.assertIn('no batter-vs-pitcher lean yet', card['coverage']['MLB'])
+        groups = {(g['league'], g['position'], g['direction'], g['defenseTier']): g for g in card['groups']}
+        nfl = groups['NFL', 'WR', 'over', 'bottom-half defense']
+        self.assertEqual((nfl['graded'], nfl['record']['win'], nfl['record']['loss']), (2, 1, 1))
+        self.assertEqual(groups['CFB', 'TE', 'under', 'top 10 defense']['record']['units'], 1.2)
+
     def test_known_c4_display_name_refusals_stay_in_history_but_not_rule_stats(self):
         bad = [row(1, id=key, decision='refused', rules=['cfb_jurisdiction'])
                for key in sorted(learn.RULE_STATS_EXCLUDED_IDS)]
