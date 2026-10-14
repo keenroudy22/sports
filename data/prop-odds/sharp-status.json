@@ -1,18 +1,18 @@
 {
- "at": "2026-10-14T15:31:27Z",
+ "at": "2026-10-14T15:52:18Z",
  "confirmed": {
-  "CFB-401860923": "2026-10-14T15:31:27Z",
-  "CFB-401871054": "2026-10-14T15:31:27Z",
-  "CFB-401871068": "2026-10-14T15:31:27Z",
-  "NFL-401872995": "2026-10-14T15:31:27Z"
+  "CFB-401860923": "2026-10-14T15:52:18Z",
+  "CFB-401871054": "2026-10-14T15:52:18Z",
+  "CFB-401871068": "2026-10-14T15:52:18Z",
+  "NFL-401872995": "2026-10-14T15:52:18Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 559,
+    "draftkings": 563,
     "fanduel": 545
    },
-   "eventsListed": 65,
+   "eventsListed": 82,
    "eventsMatched": 5,
    "games": 5,
    "marketTypes": {
@@ -26,13 +26,13 @@
     "player_passing_completions": 6,
     "player_passing_touchdowns": 36,
     "player_passing_yards": 141,
-    "player_receiving_yards": 424,
+    "player_receiving_yards": 427,
     "player_receptions": 47,
     "player_rushing_attempts": 16,
-    "player_rushing_yards": 371
+    "player_rushing_yards": 372
    },
-   "requestsLeft": 51,
-   "rows": 1104,
+   "requestsLeft": 6,
+   "rows": 1108,
    "slateGames": [
     "Kennesaw State Owls at Missouri State Bears 2026-10-14T23:30Z",
     "Western Kentucky Hilltoppers at Sam Houston Bearkats 2026-10-15T00:00Z",
@@ -45,6 +45,7 @@
      "away": "Columbia",
      "external": {
       "fanduel": "36179610",
+      "fliff": "419307_c_p_209_prematch",
       "kalshi": "KXNCAAF1H-26OCT16CLMBPENN",
       "onexbet": "761551775",
       "paddypower": "36179610",
@@ -177,7 +178,7 @@
      "type": "fixture"
     },
     {
-     "away": "Appalachian State",
+     "away": "Appalachian State Mountaineers",
      "external": {
       "ballybet": "1027508230",
       "betmgm": "6:46829",
@@ -210,10 +211,10 @@
       "thescorebet": "StandardEvent:731fc88e-d432-4047-9e1f-2c995522e588",
       "underdog": "underdog_183231"
      },
-     "home": "Coastal Carolina",
+     "home": "Coastal Carolina Chanticleers",
      "sample": {
-      "away_team": "Appalachian State",
-      "home_team": "Coastal Carolina",
+      "away_team": "Appalachian State Mountaineers",
+      "home_team": "Coastal Carolina Chanticleers",
       "markets": [
        "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
@@ -230,6 +231,7 @@
        "1st_quarter_moneyline",
        "1st_quarter_moneyline_3-way",
        "1st_quarter_player_passing_yards",
+       "1st_quarter_player_receiving_yards",
        "1st_quarter_player_rushing_yards",
        "1st_quarter_point_spread",
        "1st_quarter_total_points",
@@ -271,6 +273,7 @@
        "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
+       "race_to_10_points",
        "team_total",
        "total_points",
        "total_points_band",
@@ -594,6 +597,7 @@
       "hardrock": "4343426241735557531",
       "kalshi": "KXNCAAF1H-26OCT16PITTBC",
       "ladbrokes": "d8dbbb12-10b2-4ea3-9748-6ce3794c08d4",
+      "matchbook": "mb-34575079697400023",
       "novig": "01a12171-92df-7793-9718-44f873b07f2f",
       "onexbet": "760836656",
       "paddypower": "36154582",
@@ -654,7 +658,6 @@
        "match_result_both_teams_to_score",
        "moneyline",
        "moneyline_3-way",
-       "player_extra_points_made",
        "player_field_goals_made",
        "player_kicking_points",
        "player_longest_reception",
@@ -679,27 +682,6 @@
      "type": "fixture"
     },
     {
-     "away": "Central Connecticut",
-     "external": {
-      "fanduel": "36179590",
-      "kalshi": "KXNCAAFGAME-26OCT17CCSUMHU",
-      "paddypower": "36179590",
-      "polymarket": "nfl_centralconnecticutst_mercyhurst_2026-10-17_b2"
-     },
-     "home": "Mercyhurst",
-     "sample": {
-      "away_team": "Central Connecticut",
-      "home_team": "Mercyhurst",
-      "markets": [
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-17T16:00:00Z",
-     "type": "fixture"
-    },
-    {
      "away": "Charleston Southern",
      "external": {
       "ballybet": "1028646591",
@@ -708,7 +690,7 @@
       "fanduel": "36153361",
       "fliff": "419139_c_p_209_prematch",
       "hardrock": "3571014925176406445",
-      "kalshi": "KXNCAAFTOTAL-26OCT17CHSOCLEM",
+      "kalshi": "KXNCAAF1H-26OCT16CHSOCLEM",
       "novig": "01a12171-8f84-7370-83a5-c454a6672b8a",
       "onexbet": "761246909",
       "paddypower": "36153361",
@@ -726,6 +708,27 @@
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-17T16:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Chicago State",
+     "external": {
+      "fanduel": "36179605",
+      "kalshi": "KXNCAAFGAME-26OCT17CHSNCAT",
+      "paddypower": "36179605",
+      "polymarket": "nfl_chicagostate_northcarolinaat_2026-10-17_b2"
+     },
+     "home": "North Carolina A&T",
+     "sample": {
+      "away_team": "Chicago State",
+      "home_team": "North Carolina A&T",
+      "markets": [
        "moneyline",
        "point_spread",
        "total_points"
@@ -959,7 +962,7 @@
       "fliff": "418866_c_p_209_prematch",
       "goldrush": "31209347",
       "hardrock": "104932061961388438",
-      "kalshi": "KXNCAAF1HTOTAL-26OCT17GASTJMU",
+      "kalshi": "KXNCAAF1H-26OCT16GASTJMU",
       "ladbrokes": "93782ca3-bbd4-43f6-976c-f7598c0b9c40",
       "matchbook": "mb-34577594309000023",
       "novig": "01a12171-8c9e-7440-926b-e7a6be0ee4ff",
@@ -1055,7 +1058,7 @@
     "player_rushing_attempts": 10,
     "player_rushing_yards": 12
    },
-   "requestsLeft": 48,
+   "requestsLeft": 3,
    "rows": 400,
    "slateGames": [
     "Seattle Seahawks at Denver Broncos 2026-10-16T00:15Z"
@@ -1080,7 +1083,7 @@
       "gemini": "NFL-2610181330-HOU-JAX-PPYDS",
       "goldrush": "29767419",
       "hardrock": "5579461342030594463",
-      "kalshi": "KXNFL3QSPREAD-26OCT18HOUJAC",
+      "kalshi": "KXNFL3QTOTAL-26OCT18HOUJAC",
       "ladbrokes": "95bff59a-3be9-4caf-a86d-0872d25960d8",
       "matchbook": "mb-33272981543100023",
       "novig": "01a112eb-4eeb-75a1-bc3e-71a01ce210d5",
@@ -1229,7 +1232,7 @@
       "gemini": "NFL-2610181700-CHI-ATL-TT",
       "goldrush": "31140273",
       "hardrock": "5712717890709488007",
-      "kalshi": "KXNFL2HTOTAL-26OCT18CHIATL",
+      "kalshi": "KXNFL2HSPREAD-26OCT18CHIATL",
       "ladbrokes": "7ec24e33-81e1-4c42-9731-a7707f5f0f97",
       "matchbook": "mb-33322337472700023",
       "novig": "01a112eb-506a-7071-b79c-5f2d85436ff9",
@@ -1376,7 +1379,7 @@
       "gemini": "NFL-2610181700-BAL-CLE-T",
       "goldrush": "31140276",
       "hardrock": "529074719606047127",
-      "kalshi": "KXNFL2HTOTAL-26OCT18BALCLE",
+      "kalshi": "KXNFL2HSPREAD-26OCT18BALCLE",
       "ladbrokes": "49a8673f-70c4-4c18-afa6-4583b398486d",
       "matchbook": "mb-33322335677100023",
       "novig": "01a112eb-51d1-7733-89cd-f05c85473888",
@@ -1515,7 +1518,7 @@
       "gemini": "NFL-2610181700-PIT-TB-T",
       "goldrush": "31140272",
       "hardrock": "2791733172688257451",
-      "kalshi": "KXNFL2HSPREAD-26OCT18PITTB",
+      "kalshi": "KXNFL2HTOTAL-26OCT18PITTB",
       "ladbrokes": "19d96846-631a-4851-a999-3d95973939fa",
       "matchbook": "mb-33322323068300023",
       "novig": "01a112eb-522f-7523-a1cc-e0fd1f3a80c6",
@@ -1645,7 +1648,7 @@
       "gemini": "NFL-2610181700-TEN-IND-TT",
       "goldrush": "31140271",
       "hardrock": "3023668553497837959",
-      "kalshi": "KXNFL2HTOTAL-26OCT18TENIND",
+      "kalshi": "KXNFL4QTOTAL-26OCT18TENIND",
       "ladbrokes": "8c33d691-0951-4cbe-be60-ec19d5adfe0f",
       "matchbook": "mb-33322332105000023",
       "novig": "01a112eb-516c-7992-be22-b1f91ee6227c",
@@ -1794,7 +1797,7 @@
       "gemini": "NFL-2610181700-CAR-PHI-TT",
       "goldrush": "31140278",
       "hardrock": "7977628143605383564",
-      "kalshi": "KXNFL4QSPREAD-26OCT18CARPHI",
+      "kalshi": "KXNFL2H-26OCT18CARPHI",
       "ladbrokes": "b057caea-7efe-47da-bc59-e84800b011e8",
       "matchbook": "mb-33322325727100023",
       "novig": "01a112eb-510b-7713-b75c-84ae7106cf52",
@@ -1936,7 +1939,7 @@
       "gemini": "NFL-2610181700-NO-NYG-TT",
       "goldrush": "31140277",
       "hardrock": "3474028516234887575",
-      "kalshi": "KXNFL2HTOTAL-26OCT18NONYG",
+      "kalshi": "KXNFL3QTOTAL-26OCT18NONYG",
       "ladbrokes": "87cd2ce3-3d5a-4523-8f46-011fad2a4ec2",
       "matchbook": "mb-33322327531400023",
       "novig": "01a112eb-5010-78a2-8817-2b23827974e3",
@@ -2084,7 +2087,7 @@
       "gemini": "NFL-2610181700-NYJ-NE-TT",
       "goldrush": "31140281",
       "hardrock": "263362341591187860",
-      "kalshi": "KXNFL1H-26OCT18NYJNE",
+      "kalshi": "KXNFL2QTOTAL-26OCT18NYJNE",
       "ladbrokes": "12cf97d5-8c3a-4504-a0cb-719d1f04a721",
       "matchbook": "mb-33322329194100023",
       "novig": "01a112eb-4f65-7cc2-a047-3fe334cf9956",
@@ -2225,7 +2228,7 @@
       "gemini": "NFL-2610182005-ARI-LAR-S",
       "goldrush": "31140280",
       "hardrock": "319657336933319058",
-      "kalshi": "KXNFL4QTOTAL-26OCT18ARILAR",
+      "kalshi": "KXNFL2HSPREAD-26OCT18ARILAR",
       "ladbrokes": "81c0fc92-8b30-4ed0-964d-192721782c42",
       "matchbook": "mb-33322321526700023",
       "novig": "01a112eb-5293-7c41-83a5-f9d43c604759",
@@ -2371,7 +2374,7 @@
       "gemini": "NFL-2610182025-BUF-LV-TT",
       "goldrush": "31140279",
       "hardrock": "4365741242454245782",
-      "kalshi": "KXNFL3QTOTAL-26OCT18BUFLV",
+      "kalshi": "KXNFL2HTOTAL-26OCT18BUFLV",
       "ladbrokes": "9bef1c7e-e50c-4946-8dc7-0622486be296",
       "matchbook": "mb-33322316878200023",
       "novig": "01a112eb-5374-7323-9b0e-1d2c7569288a",
@@ -2517,7 +2520,7 @@
       "gemini": "NFL-2610182025-LAC-KC-S",
       "goldrush": "31140275",
       "hardrock": "1238835726175568272",
-      "kalshi": "KXNFL2HTOTAL-26OCT18LACKC",
+      "kalshi": "KXNFL2H-26OCT18LACKC",
       "ladbrokes": "5f711cc8-fc85-4666-a19b-b689939b4387",
       "matchbook": "mb-33322318120000023",
       "novig": "01a112eb-5312-7482-937b-f8b9611898f8",
@@ -2660,7 +2663,7 @@
       "gemini": "NFL-2610190020-DAL-GB-S",
       "goldrush": "31140282",
       "hardrock": "3091622907579859371",
-      "kalshi": "KXNFL2HSPREAD-26OCT18DALGB",
+      "kalshi": "KXNFLRSHYDS-26OCT18DALGB-GBJLOVE10-10",
       "ladbrokes": "a93e7f79-6bb4-4300-808b-faf617743def",
       "matchbook": "mb-33322313675500023",
       "novig": "01a112eb-53dd-72c2-98ee-5deae6b657f0",
