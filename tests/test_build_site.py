@@ -63,6 +63,17 @@ class LeagueInjuryIsolationTests(unittest.TestCase):
 
 
 class TodayHeroTests(unittest.TestCase):
+    def test_active_community_tickets_are_today_only_rows(self):
+        now = datetime(2026, 10, 15, 14, tzinfo=timezone.utc)
+        payload = {'tickets': [
+            {'id': 'live', 'status': 'active', 'kickoff': '2026-10-16T00:15:00Z'},
+            {'id': 'past', 'status': 'active', 'kickoff': '2026-10-15T13:00:00Z'},
+            {'id': 'held', 'status': 'withdrawn', 'kickoff': '2026-10-16T00:15:00Z'},
+        ]}
+        rows = build_site.active_community_tickets(payload, now)
+        self.assertEqual([row['id'] for row in rows], ['live'])
+        self.assertTrue(rows[0]['community'])
+
     def test_first_paint_uses_a_real_active_straight_and_not_a_fun_ticket(self):
         now = datetime(2026, 10, 7, 17, tzinfo=timezone.utc)
         rows = [

@@ -911,6 +911,18 @@ def recent_picks(picks, now):
             (instant(pick.get('settledAt') or pick.get('publishedAt')) or datetime.min.replace(tzinfo=timezone.utc)) >= cutoff]
 
 
+def active_community_tickets(payload, now):
+    """Owner-submitted public slips for Today only, never the official record.
+
+    These are community posts backed by the owner's ticket image.  They expire
+    at kickoff and deliberately never enter ``picks``/record.json.
+    """
+    rows = payload.get('tickets') if isinstance(payload, dict) else []
+    return [dict(row, community=True) for row in rows or []
+            if row.get('status', 'active') == 'active' and instant(row.get('kickoff'))
+            and instant(row['kickoff']) > now]
+
+
 def cutoff_fields(pick):
     """Display limits parsed from the original pricing cutoff, never a new entry rule."""
     text = str(pick.get('cutoff') or '')
@@ -1608,6 +1620,7 @@ def build(now=None):
     now = now or datetime.now(timezone.utc)
     slate = read(DATA / 'slate.json', {'games': []})
     reports = read(DATA / 'research.json', [])
+    community = read(ROOT / 'data' / 'community.json', {'tickets': []})
     catalog = read(DATA / 'market-lines.json', {})
     identities = identity_colors(read(DATA / 'player-identity.json', {}))
     context = read(DATA / 'research-context.json', {})
@@ -1836,7 +1849,8 @@ def build(now=None):
                                                'afterPostingHolds': [p['id'] for p in picks if (p.get('held') or {}).get('afterPosting')]})
     write(OUT / 'today.json', {'generatedAt': stamp(now), 'freshness': freshness,
                                'health': research_views.health(freshness, now), 'games': cards,
-                               'picks': recent_picks(picks, now), 'historyFile': 'record.json', 'model': summary,
+                               'picks': recent_picks(picks, now) + active_community_tickets(community, now),
+                               'historyFile': 'record.json', 'model': summary,
                                # Kitchen Ticket Today (decision 22): Prep List rows, the date line's last W-L, the
                                # stub's season record, all chosen here, never in the browser.
                                'prep': prep, 'lastSlate': last_slates(picks, eastern_date(now).isoformat()),

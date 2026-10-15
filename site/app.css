@@ -563,6 +563,8 @@ details.filters > .toolbar { margin-top: 4px; }
 .kt-slip-t { margin-top: 7px; font: 700 22px/1.02 var(--font-display); text-transform: uppercase; }
 .kt-slip-t span { color: var(--ink-soft); }
 .kt-slip-d { margin-top: 5px; font: 500 14px/1.3 var(--font-body); color: var(--ink-soft); }
+.kt-slip-personal { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #8FA197; font: 700 12px/1.25 var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: var(--ticket-ink); }
+.kt-slip.is-community { box-shadow: inset 4px 0 0 var(--ticket-green); }
 .kt-stamp { position: absolute; display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px 5px 8px; border-radius: 6px; font: 700 18px/1 var(--font-display); letter-spacing: .12em; box-shadow: inset 0 0 0 2px rgba(7, 18, 13, .35); }
 .kt-stamp svg { width: 14px; height: 14px; }
 .kt-stamp.miss { background: var(--burnt); color: var(--burnt-ink); }
