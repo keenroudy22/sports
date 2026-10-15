@@ -34,6 +34,7 @@ test('the real app shared interface renders every lazy view with fixture data', 
   const base = api.moreContext();
   assert.equal(typeof base.wl, 'function');
   assert.equal(typeof base.roiOf, 'function');
+  assert.equal(typeof base.opponentTrendText, 'function', 'the lazy player page receives its opponent-adjusted trend helper');
   Object.assign(base.state, {
     league: 'ALL', record: { season: 'current', phase: 'current', q: '' },
     watchlist: [], ticket: [], stake: { amount: 1, mode: 'units', unit: 20 },

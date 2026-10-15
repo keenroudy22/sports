@@ -17,7 +17,7 @@ const pause = ms => new Promise(r => setTimeout(r, ms));
 await call('Page.enable'); await call('Runtime.enable'); await call('Network.enable');
 await call('Network.setCacheDisabled',{cacheDisabled:true});
 const widths = (process.env.AUDIT_WIDTHS || '320,375,390,430,768,1440').split(',').map(Number);
-const routes = (process.env.AUDIT_ROUTES || 'today,board,board/props,board/favorites,games,stats,stats/search,trends,record,model,scores/MLB,scores/NHL,lab,schedule,ticket,more,research,arbs').split(',');
+const routes = (process.env.AUDIT_ROUTES || 'today,board,board/props,board/favorites,games,player/NFL/4568490,stats,stats/search,trends,record,model,scores/MLB,scores/NHL,lab,schedule,ticket,more,research,arbs').split(',');
 const results = [];
 for (const width of widths) {
   await call('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:width<600});
@@ -60,7 +60,7 @@ for (const width of widths) {
       return {width:innerWidth,scrollWidth:document.documentElement.scrollWidth,bad,clipped,title:document.querySelector('h1')?.textContent,error};
     })()`);
     results.push({route,...result});
-    if((route.startsWith('game/') || ['today','schedule','scores/MLB','stats','trends','record/climb'].includes(route)) && [375,1440].includes(width)) {
+    if((route.startsWith('game/') || route.startsWith('player/') || ['today','schedule','scores/MLB','stats','trends','record/climb'].includes(route)) && [375,1440].includes(width)) {
       const shot = await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
       fs.writeFileSync(`${out}/${route.replaceAll('/','-')}-${width}.png`,Buffer.from(shot.data,'base64'));
     }
