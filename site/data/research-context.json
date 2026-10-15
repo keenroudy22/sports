@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-15T16:08:10Z",
+  "updatedAt": "2026-10-15T16:22:55Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-15T15:52Z",
+              "reportedAt": "2026-10-15T16:09Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-15T15:52Z",
+              "reportedAt": "2026-10-15T16:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -6677,6 +6677,15 @@
           "name": "Tampa Bay Buccaneers",
           "players": [
             {
+              "id": "3052587",
+              "name": "Baker Mayfield",
+              "position": "QB",
+              "status": "Doubtful",
+              "injury": "Thumb",
+              "reportedAt": "2026-10-15T15:54Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3052587/baker-mayfield"
+            },
+            {
               "id": "4816107",
               "name": "Benjamin Morrison",
               "position": "CB",
@@ -6711,15 +6720,6 @@
               "injury": "Ankle",
               "reportedAt": "2026-10-14T20:48Z",
               "source": "https://www.espn.com/nfl/player/_/id/4890885/ayden-garnes"
-            },
-            {
-              "id": "3052587",
-              "name": "Baker Mayfield",
-              "position": "QB",
-              "status": "Doubtful",
-              "injury": "Thumb",
-              "reportedAt": "2026-10-14T20:25Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3052587/baker-mayfield"
             },
             {
               "id": "4429511",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "10",
-          "name": "Marcus Harris",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-14T21:31:24Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4570469/marcus-harris"
-        },
-        {
-          "teamId": "10",
           "name": "Cor'Dale Flott",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Doubtful",
           "observedAt": "2026-10-15T15:59:35Z",
           "source": "https://www.espn.com/nfl/player/_/id/4034790/antoine-winfield-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-15T16:22:55Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-15T16:08:10Z",
-      "lastAttemptAt": "2026-10-15T16:08:10Z",
+      "checkedAt": "2026-10-15T16:22:55Z",
+      "lastAttemptAt": "2026-10-15T16:22:55Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-15T16:08:10Z",
-      "lastAttemptAt": "2026-10-15T16:08:10Z",
+      "checkedAt": "2026-10-15T16:22:55Z",
+      "lastAttemptAt": "2026-10-15T16:22:55Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
