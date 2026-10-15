@@ -42,7 +42,7 @@ MATERIAL = {'points': 0.5, 'share': 0.10, 'floor': 0.5}  # what counts as a chan
 PLAYERS_PER_TEAM = {'NFL': 14, 'CFB': 8}
 
 
-def injuries(context, league, now):
+def injuries(context, league, now, depth_charts=None):
     """team ID -> ({athlete: status} ruled out, {athlete: status} limited), from recent entries."""
     teams = ((context or {}).get('leagues', {}).get(league) or {}).get('teams') or {}
     out = {}
@@ -62,6 +62,14 @@ def injuries(context, league, now):
             elif status in LIMITED:
                 limited[str(player['id'])] = player['status']
         out[str(team)] = (ruled, limited)
+    if league == 'NFL':
+        for team, chart in ((depth_charts or {}).get('teams') or {}).items():
+            ruled, limited = out.setdefault(str(team), ({}, {}))
+            for slot in chart.get('positions') or []:
+                for player in slot.get('players') or []:
+                    availability = player.get('availability') or {}
+                    if availability.get('unavailable') and player.get('id'):
+                        ruled[str(player['id'])] = availability.get('status') or 'Unavailable'
     return out
 
 
@@ -241,7 +249,9 @@ def publish(now=None, root=STORE, slate=None, context=None, records=None, snaps=
                                       if league == 'NFL' else None)
         slope = projections.pass_slope(history, now, league)
         priors = projections.priors(history, now, league)
-        ruled_out = injuries(context, league, now)
+        depth_path = ROOT / 'site' / 'data' / 'depth-charts.json'
+        depth_charts = json.loads(depth_path.read_text(encoding='utf-8')) if depth_path.exists() else {}
+        ruled_out = injuries(context, league, now, depth_charts)
         new = []
         for game in games:
             record = snapshot(league, game, model, history, slope, priors, ruled_out, now, stored)

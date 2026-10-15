@@ -608,7 +608,15 @@ def game_detail(card, game, record, snapshots, captures, lines, picks, names, te
         # The captured depth-chart store is NFL-only; ESPN IDs repeat across leagues.
         chart = depth_charts.get(team) if league == 'NFL' else None
         unavailable = {str(p.get('id')) for p in injuries.get(team, [])
-                       if re.search(r'out|doubtful|suspension', str(p.get('status', '')), re.I)}
+                       if re.search(r'out|doubtful|suspension|injured reserve|physically unable',
+                                    str(p.get('status', '')), re.I)}
+        unavailable.update(str(player.get('id')) for slot in (chart or {}).get('positions') or []
+                           for player in slot.get('players') or []
+                           if (player.get('availability') or {}).get('unavailable'))
+        forecast_side = (((detail.get('forecast') or {}).get('players') or {}).get(side) or {})
+        if forecast_side.get('players'):
+            forecast_side['players'] = [player for player in forecast_side['players']
+                                        if str(player.get('id')) not in unavailable]
         usage = {}
         if game.get('league') == 'NFL' and not card.get('completed') and chart:
             for slot in chart.get('positions') or []:

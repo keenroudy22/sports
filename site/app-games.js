@@ -443,6 +443,9 @@
         if (!chart || !(chart.positions || []).length) continue;
         const hurt = (team.injuries || []).filter(p => HARD_INJURY.test(p.status || '') && /^(QB|RB|FB|WR|TE)$/.test(p.position || ''));
         const out = new Set(hurt.map(p => String(p.id)));
+        for (const slot of chart.positions || []) for (const player of slot.players || []) {
+          if ((player.availability || {}).unavailable) out.add(String(player.id));
+        }
         const projections = (((detail.forecast.players || {})[side] || {}).players) || [];
         for (const h of hurt) {
           const slot = chart.positions.find(pos => pos.players.some(p => String(p.id) === String(h.id)));
@@ -453,7 +456,7 @@
           const group = slot.group === 'FB' ? 'RB' : slot.group;
           const role = projections.filter(p => (p.pos === 'FB' ? 'RB' : p.pos) === group).sort((a, b) => opportunity(b) - opportunity(a));
           const shown = [...new Set([role[0], role.find(p => String(p.id) === String(next.id))].filter(Boolean))];
-          const order = slot.players.map((p, k) => `<a class="pill${out.has(String(p.id)) ? ' bad' : String(p.id) === String(next.id) ? ' good' : ''}" href="#player/NFL/${esc(p.id)}">${esc(slot.label)}${k + 1} ${esc(p.name)}${out.has(String(p.id)) ? ' · OUT' : String(p.id) === String(next.id) ? ' · NEXT UP' : ''}</a>`).join('');
+          const order = slot.players.map((p, k) => `<a class="pill${out.has(String(p.id)) ? ' bad' : String(p.id) === String(next.id) ? ' good' : ''}" href="#player/NFL/${esc(p.id)}">${esc(slot.label)}${k + 1} ${esc(p.name)}${out.has(String(p.id)) ? ` · ${esc((p.availability || {}).status || 'OUT').toUpperCase()}` : String(p.id) === String(next.id) ? ' · NEXT UP' : ''}</a>`).join('');
           cards.push(`<div class="card"><p><span class="badge warn" style="margin:0">${esc(h.status)}</span> <b>${esc(h.name)}</b> <span class="small muted">${esc(h.injury || 'injury not listed')} · ${esc(g[side].abbr)}</span></p>
             <p class="small" style="margin-top:6px"><b>${esc(next.name)}</b> moves from ${esc(slot.label)}${slot.players.indexOf(next) + 1} to ${esc(slot.label)}${i + 1} on ESPN's listed order.</p>
             <div class="pill-row" style="margin:8px 0">${order}</div>

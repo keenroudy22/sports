@@ -33,6 +33,17 @@ class InjuryTests(unittest.TestCase):
         self.assertEqual(limited, {'c': 'Questionable'}, 'questionable is not removed, it is cut back')
         self.assertEqual(forecast.injuries({}, 'CFB', NOW), {})
 
+    def test_roster_reserve_status_fills_a_gap_in_the_injury_feed(self):
+        depth = {'teams': {'1': {'positions': [{'key': 'rb', 'players': [
+            {'id': 'price', 'name': 'Jadarian Price',
+             'availability': {'status': 'Injured Reserve', 'unavailable': True}},
+            {'id': 'active', 'name': 'Healthy Runner',
+             'availability': {'status': 'Active', 'unavailable': False}},
+        ]}]}}}
+        ruled, limited = forecast.injuries({}, 'NFL', NOW, depth)['1']
+        self.assertEqual(ruled, {'price': 'Injured Reserve'})
+        self.assertEqual(limited, {})
+
 
 class PublishTests(unittest.TestCase):
     def setUp(self):

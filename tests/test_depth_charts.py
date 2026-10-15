@@ -32,6 +32,14 @@ def payload():
             }}]}
 
 
+def roster():
+    return {'athletes': [{'position': 'offense', 'items': [
+        {'id': '1', 'displayName': 'Jaylen Warren', 'injuries': []},
+        {'id': '2', 'displayName': 'Rico Dowdle', 'injuries': [{'status': 'Out'}]},
+        {'id': '3', 'displayName': 'Travis Homer', 'injuries': [{'status': 'Injured Reserve'}]},
+    ]}]}
+
+
 class DepthChartTests(unittest.TestCase):
     def test_only_upcoming_teams_with_hard_skill_injuries_are_fetched(self):
         self.assertEqual(set(module.targets(context(), slate(), NOW)), {'23'})
@@ -39,11 +47,13 @@ class DepthChartTests(unittest.TestCase):
         self.assertEqual(module.targets(context(position='G'), slate(), NOW), {})
 
     def test_provider_order_is_preserved_for_the_next_player_up(self):
-        row = module.normalize(payload(), '2026-10-01T16:00:00Z', 'source')
+        row = module.normalize(payload(), '2026-10-01T16:00:00Z', 'source', roster())
         rb = next(p for p in row['positions'] if p['key'] == 'rb')
         self.assertEqual([(p['order'], p['name']) for p in rb['players']],
                          [(1, 'Jaylen Warren'), (2, 'Rico Dowdle'), (3, 'Travis Homer')])
         self.assertEqual(rb['group'], 'RB')
+        self.assertFalse(rb['players'][0]['availability']['unavailable'])
+        self.assertEqual(rb['players'][2]['availability'], {'status': 'Injured Reserve', 'unavailable': True})
 
     def test_a_failed_read_keeps_the_last_good_depth_chart(self):
         old = module.refresh({}, context(), slate(), lambda _: payload(), NOW)

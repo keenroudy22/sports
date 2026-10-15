@@ -232,6 +232,28 @@ test('a game page excludes a fun ticket that contains games from the rest of the
   assert.match(html, /No official bet in this game/);
 });
 
+test('an injured-reserve player left on a depth chart is never promoted as next up', async () => {
+  const { api, factory } = loadBrowserApi();
+  const g = { ...slate()[4], home: team('26', 'SEA', 'Seattle Seahawks', 10, 10), away: team('7', 'DEN', 'Denver Broncos', 10, 10) };
+  const rb = id => ({ id, name: id === 'charb' ? 'Zach Charbonnet' : id === 'price' ? 'Jadarian Price' : 'Robert Henry Jr.', pos: 'RB', carries: [5, 2, 9] });
+  const detail = { ...g, picks: [], favoriteLines: [], modelReads: [], seasonTrends: [], props: { lines: {} },
+    forecast: { players: { away: { players: [] }, home: { players: [rb('henry')] } } },
+    teams: { away: { injuries: [], form: [] }, home: {
+      injuries: [{ id: 'charb', name: 'Zach Charbonnet', position: 'RB', status: 'Out', injury: 'Knee' }], form: [], depthUsage: {},
+      depthChart: { checkedAt: new Date().toISOString(), positions: [{ key: 'rb', label: 'RB', group: 'RB', players: [
+        { id: 'charb', name: 'Zach Charbonnet' },
+        { id: 'price', name: 'Jadarian Price', availability: { status: 'Injured Reserve', unavailable: true } },
+        { id: 'henry', name: 'Robert Henry Jr.', availability: { status: 'Active', unavailable: false } },
+      ] }] },
+    } } };
+  const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [], freshness: {} }
+    : path === `app/games/${g.id}.json` ? detail : (() => { throw new Error('no ' + path); })() });
+  const html = unesc(await factory(ctx).game({ id: g.id }));
+  assert.match(html, /Jadarian Price · INJURED RESERVE/);
+  assert.match(html, /Robert Henry Jr\. · NEXT UP/);
+  assert.doesNotMatch(html, /Jadarian Price · NEXT UP/);
+});
+
 test('a game without a bet shows the current lines without presenting a model gap as a pick', async () => {
   const { api, factory } = loadBrowserApi();
   const g = slate()[1];

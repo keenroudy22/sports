@@ -205,6 +205,12 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Reserve-list availability is a hard hold (owner, 2026-10-15):** a player on injured reserve, PUP or another
+  inactive reserve list cannot appear as `NEXT UP`, in a workload projection or as an injury-replacement angle.
+  The NFL roster and its reserve/injury status must be checked alongside the injury report and depth chart; a
+  stale provider depth-chart position never overrides availability. If availability cannot be verified, hide the
+  promotion and explain the uncertainty instead of naming the player.
+
 - **No empty kitchen (owner, 2026-10-15):** on every active NFL/CFB game day, Today names the strongest current
   exact-price line or model lean even when no official play clears. Label it `Strongest current lean · not a best
   bet` and say plainly why it is not official: bad price, thin role, injury uncertainty, unproven market, a sub-bar

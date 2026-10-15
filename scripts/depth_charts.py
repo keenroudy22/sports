@@ -18,6 +18,7 @@ OUTPUT = DATA / 'depth-charts.json'
 # Long-term reserve players already have settled replacements.  Fetch a chart
 # only for current game-week statuses where "who moves up?" can change tonight's read.
 HARD = {'out', 'doubtful', 'suspension'}
+ROSTER_HARD = HARD | {'injured reserve', 'physically unable to perform', 'reserve-ret'}
 SKILL = {'QB', 'RB', 'FB', 'WR', 'TE'}
 POSITION_ORDER = {'qb': 0, 'rb': 1, 'fb': 2, 'wr1': 3, 'wr2': 4, 'wr3': 5, 'te': 6}
 
@@ -44,13 +45,31 @@ def targets(context, slate, now):
         for p in data.get('players', []))}
 
 
-def normalize(payload, now, source):
+def roster_availability(payload):
+    """Athlete availability from the team roster, including reserve lists omitted by the injury endpoint."""
+    statuses = {}
+    for group in payload.get('athletes') or []:
+        group_name = str(group.get('position') or '').lower()
+        for athlete in group.get('items') or []:
+            athlete_id = athlete.get('id')
+            if not athlete_id:
+                continue
+            injuries = [str(row.get('status') or '').strip() for row in athlete.get('injuries') or []]
+            hard = next((status for status in injuries if status.lower() in ROSTER_HARD), None)
+            if not hard and group_name in {'injuredreserveorout', 'injured reserve', 'reserve'}:
+                hard = str((athlete.get('status') or {}).get('name') or 'Unavailable')
+            statuses[str(athlete_id)] = {'status': hard or 'Active', 'unavailable': bool(hard)}
+    return statuses
+
+
+def normalize(payload, now, source, roster=None):
     if not isinstance(payload.get('depthchart'), list) or not payload.get('team', {}).get('id'):
         raise ValueError('Provider did not supply a team depth chart')
     offense = next((unit for unit in payload['depthchart']
                     if {'qb', 'rb', 'te'} <= set((unit.get('positions') or {}).keys())), None)
     if not offense:
         raise ValueError('Provider did not supply an offensive depth chart')
+    availability = roster_availability(roster or {})
     positions = []
     for key, block in (offense.get('positions') or {}).items():
         if key not in POSITION_ORDER:
@@ -59,7 +78,10 @@ def normalize(payload, now, source):
         for order, athlete in enumerate(block.get('athletes') or [], 1):
             if not athlete.get('id') or not athlete.get('displayName'):
                 continue
-            players.append({'id': str(athlete['id']), 'name': athlete['displayName'], 'order': order})
+            player = {'id': str(athlete['id']), 'name': athlete['displayName'], 'order': order}
+            if str(athlete['id']) in availability:
+                player['availability'] = availability[str(athlete['id'])]
+            players.append(player)
         if players:
             group = 'WR' if key.startswith('wr') else key.upper()
             positions.append({'key': key, 'label': block.get('position', {}).get('abbreviation', group),
@@ -80,7 +102,8 @@ def refresh(previous, context, slate, fetch, now):
     for team, data in targets(context, slate, moment).items():
         api = f'https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{team}/depthcharts'
         try:
-            row = normalize(fetch(api), stamp, api)
+            roster_api = f'https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{team}/roster'
+            row = normalize(fetch(api), stamp, api, fetch(roster_api))
             if row.get('abbr'):
                 row['source'] = f"https://www.espn.com/nfl/team/depth/_/name/{row['abbr'].lower()}"
             out[str(team)] = row
