@@ -318,6 +318,17 @@ class ScheduleTests(unittest.TestCase):
         self.assertTrue(all('discord' not in p for p in result['posts']
                             if p['kind'] not in ('buffer:play', 'buffer:research')))
 
+    def test_scheduled_end_zone_research_keeps_its_td_lean_for_the_verified_followup(self):
+        metadata = {'type': 'td-lean', 'player': 'Test Runner', 'athleteId': '77',
+                    'gameId': 'NFL-1', 'league': 'NFL', 'kickoff': '2026-09-26T17:00:00Z'}
+        with mock.patch('research_posts.planned_metadata', return_value=metadata):
+            result = bp.schedule([('research:end-zone:2026-09-26', 'research', 'End-zone work',
+                                   NOW + timedelta(hours=1), None)],
+                                 'ch-x', {'posts': []}, NOW, key='t', send=FakeBuffer(), log=lambda *_: None)
+        post = result['posts'][0]
+        self.assertEqual(post['research'], metadata)
+        self.assertEqual(post['discord']['destination'], 'research')
+
     def test_schedule_never_posts_a_play_without_its_card(self):
         fake = FakeBuffer()
         plans = [('a', 'play', 'text a', NOW + timedelta(hours=1), 'a'), ('b', 'play', 'text b', NOW + timedelta(hours=2), 'b')]

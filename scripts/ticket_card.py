@@ -408,7 +408,9 @@ def research_list_svg(choice, *, art=None):
             line = ' · '.join(x for x in (selection, price_text) if x)
             detail = detail if kind == 'matchup' else ''
         elif kind == 'end-zone':
-            right, line, detail = price_text.replace(' inside the 10', ''), metric, ''
+            right = price_text.replace(' inside the 10', '')
+            line = ('MY TD LEAN · ' if source.get('tdLean') else '') + metric
+            detail = ''
         elif kind == 'upset':
             match = re.search(r'(\d+)%.*?(\d+)%', str(source.get('copyMetric') or metric))
             right = f'{match.group(1)}% / {match.group(2)}%' if match else metric

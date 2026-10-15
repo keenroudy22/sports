@@ -59,14 +59,14 @@ class DrawTests(unittest.TestCase):
         self.assertIn('Green names the line we like.', text)
         self.assertIn('stroke="' + sheet.ACCENT + '" stroke-width="4"', text, 'watch games get a mint ring')
 
-    def test_a_full_slate_uses_compact_tiles_and_numbers_the_four_best_priced_edges(self):
+    def test_a_full_slate_uses_compact_tiles_and_numbers_the_six_favorite_priced_projections(self):
         games = [card(str(i), f'2026-09-27T{17 + i // 6:02d}:00Z', gap=float(i),
                       value={'spread': {'side': 'home', 'line': -2.5, 'odds': -105, 'book': 'FanDuel',
                                         'chance': .55 + i / 100, 'needs': .512, 'edge': float(i),
                                         'tier': 'lean' if i else 'pass', 'thin': False}}) for i in range(16)]
         text = sheet.svg(games, 'NFL', SUNDAY, 3, now=RENDERED_AT)
-        self.assertEqual(text.count('stroke="' + sheet.ACCENT + '" stroke-width="4"'), 4)
-        for rank in ('>1</text>', '>2</text>', '>3</text>', '>4</text>'):
+        self.assertEqual(text.count('stroke="' + sheet.ACCENT + '" stroke-width="4"'), 6)
+        for rank in ('>1</text>', '>2</text>', '>3</text>', '>4</text>', '>5</text>', '>6</text>'):
             self.assertIn(rank, text)
         self.assertIn('LIKE: H15 -2.5 -105 FD', text)
         self.assertNotIn('OUR NUMBER / MARKET', text, 'compact tiles keep the comparison on one line')
@@ -117,7 +117,7 @@ class PostTests(unittest.TestCase):
         post = sheet.post(self.GAMES, early)
         self.assertEqual((post['key'], post['kind'], post['card']), ('sheet:NFL:2026-09-27', 'sheet', 'sheet-nfl-2026-09-27'))
         self.assertEqual(post['text'], '📌 Full NFL projections for the slate.\n'
-                                       'Up to 4 priced lines are marked on the card.\n📌 Save this one\n#NFL')
+                                       'My favorite 4 to 6 priced projections are numbered.\n📌 Save this one\n#NFL')
         self.assertEqual(post['due'], datetime(2026, 9, 27, 14, 0, tzinfo=timezone.utc))
         import receipts
         self.assertEqual(receipts.guard(post), [])

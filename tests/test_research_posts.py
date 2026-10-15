@@ -30,6 +30,35 @@ def projected_game(*, kickoff='2026-10-04T17:00:00Z', observed='2026-10-03T13:30
 
 
 class ResearchPostTests(unittest.TestCase):
+    def test_end_zone_names_one_td_lean_and_followup_waits_for_a_verified_score(self):
+        detail = {'scorerResearch': [
+            {'player': 'First Scorer', 'athleteId': '101', 'games': 4, 'teamGames': 4,
+             'inside10': 8, 'redZone': 12, 'touchdowns': 3, 'projectedOpportunities': 8,
+             'roleSnapshotAt': '2026-10-03T13:00:00Z'},
+            {'player': 'Second Scorer', 'athleteId': '202', 'games': 4, 'teamGames': 4,
+             'inside10': 4, 'redZone': 10, 'touchdowns': 2, 'projectedOpportunities': 7,
+             'roleSnapshotAt': '2026-10-03T13:00:00Z'},
+        ]}
+        choice = R.scorer_candidate([game()], {'CFB-1': detail}, NOW)
+        self.assertEqual([row.get('tdLean', False) for row in choice['rows']], [True, False])
+        self.assertIn('My TD lean: First Scorer.', choice['text'])
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            record = {'eventId': '1', 'players': [{'id': '101', 'rushTD': 1, 'recTD': 0}]}
+            (root / 'cfb-2026.jsonl').write_text(__import__('json').dumps(record) + '\n')
+            log = {'posts': [{'id': 'research:end-zone:2026-10-03', 'kind': 'buffer:research',
+                              'sentAt': '2026-10-03T14:30:00Z',
+                              'research': {'type': 'td-lean', 'player': 'First Scorer', 'athleteId': '101',
+                                           'gameId': 'CFB-1', 'league': 'CFB',
+                                           'kickoff': '2026-10-03T17:00:00Z'}}]}
+            later = datetime(2026, 10, 3, 22, 0, tzinfo=timezone.utc)
+            posts = R.touchdown_followups(log, later, box_root=root)
+            self.assertEqual(len(posts), 1)
+            self.assertIn('First Scorer found the end zone', posts[0]['text'])
+            self.assertIn('TD lean', posts[0]['text'])
+            log['posts'].append({'id': posts[0]['key']})
+            self.assertEqual(R.touchdown_followups(log, later, box_root=root), [])
+
     def test_thursday_primetime_research_is_not_buried_by_other_games(self):
         now = datetime(2026, 10, 15, 12, 30, tzinfo=timezone.utc)  # Thu 8:30 AM ET
         college = dict(game(), kickoff='2026-10-15T23:30:00Z')
@@ -298,7 +327,7 @@ class ResearchPostTests(unittest.TestCase):
         choice = {'kind': 'end-zone', 'title': 'END-ZONE WORK', 'text': 'x' * 352, 'rows': rows}
         text = R.bounded_caption(choice)
         self.assertLessEqual(x_post.tweet_length(text), 280)
-        self.assertIn('Bijan Robinson', text)
+        self.assertIn('My TD lean: Bijan Robinson', text)
         self.assertIn('8 red-zone opportunities · 3 inside the 10', text)
         self.assertNotIn('not official', text.lower())
         self.assertNotIn('save this', text.lower())

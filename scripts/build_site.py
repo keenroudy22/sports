@@ -77,8 +77,12 @@ def read(path, fallback):
 
 def write(path, payload):
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, separators=(',', ':'), sort_keys=True, ensure_ascii=False) + '\n',
-                    encoding='utf-8', newline='\n')
+    # pathlib.Path.write_text did not accept ``newline`` before Python 3.10.
+    # The desk still runs on the system Python 3.9, so use the file API while
+    # retaining deterministic LF output on every host.
+    with path.open('w', encoding='utf-8', newline='\n') as stream:
+        stream.write(json.dumps(payload, separators=(',', ':'), sort_keys=True,
+                                ensure_ascii=False) + '\n')
 
 
 def number(value):

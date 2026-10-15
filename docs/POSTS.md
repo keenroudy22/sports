@@ -116,7 +116,7 @@ prevents duplicates, and the normal queue limits apply. These are updates, not p
 | **Injury angle** | After verified top-player news, at most two a day | `🚨 ESPN lists A.J. Brown OUT for PHI at CHI.` / a teammate's real post-news line, price and book / the opponent's allowed-by-position stat / `Board lean, not a posted play. Take it or pass? #NFL` | none; timeliness and the question are the point | `news_posts.candidates` |
 | **Morning receipt** | 9 AM the day after a game day | `Saturday: 5-3` then `✅ Iowa/Michigan over 38.5` per play; a fun ticket adds `0.25u · 2/3 legs hit · missed by one leg` when the stored settlement supports it; a raw losing player prop waits for its injury/return review until 12 hours after kickoff, then uses the official stats if no different official book settlement is known; a verified injury adds `injured in-game · checked before grading`; `Today: 3 plays.`, tags | the tall navy/mint report card (W/L per play, finals, parlay sweat, the chef) | `receipts.day_receipt`, `with_menu`, `pick_card.receipt_svg` |
 | **Week's receipt** | Wednesday 9 AM | `The week (Sep 23 to Sep 29): 12-9` then the record by kind; fun parlays show their smaller stake | receipt report card | `receipts.week_receipt` |
-| **Save this projection sheet** | 10 AM college Saturday and NFL Sunday | full NFL slate or 16 college games / exact line, odds and book / up to four price-qualified mint rings / save ask / tag | 1080x1350 compact projection grid | `sheet.py` |
+| **Save this projection sheet** | 10 AM college Saturday and NFL Sunday | full NFL slate or 16 college games / exact line, odds and book / up to six favorite price-qualified mint rings / save ask / tag | 1080x1350 compact projection grid | `sheet.py` |
 | **Research card** | At most one per football slate, targeted for 10:30 AM | Fresh outright Underdog Watch first; otherwise a priced underdog cover, defense-supported exact-line Matchup Trend, or End-zone Work. CFB players projected to trail by 14+ are ranked down and carry game-script context. The category label distinguishes research; the caption stays to the exact line, one proof point and price without a stock disclaimer or generic save ask | Compact 1200x675 navy/mint/cyan card with large lines and one team/player hero | `research_posts.py` |
 
 Confirmed official plays, the Pick of the Day and fun/challenge tickets use the same copy and card in Discord about
@@ -192,7 +192,7 @@ ticket's 0.25u stake.
 The **Save this projection sheet** (`scripts/sheet.py`): a header (`SAVE THIS`, `WEEK 3 NFL PROJECTIONS`, the date), two
 columns of compact game cards (logos, our projected score to a tenth, win chances as bars in the teams' colours, and
 spread and total comparisons with the exact captured line, odds and book), and the foot. NFL shows the full slate;
-college shows the 16 largest projection gaps. A numbered mint ring marks up to four markets where our calibrated
+college shows the 16 largest projection gaps. A numbered mint ring marks up to six favorite markets where our calibrated
 chance clears that real price by the Board's value threshold and names the actual wager (`OVER 45.5`, `MINN +3.5`);
 the selected market line and price are mint instead of the model projection. Missing, stale, thin and pass
 prices do not get a ring. Rings are watches, not official plays. Moneyline does not

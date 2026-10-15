@@ -5,7 +5,7 @@ The most saved data posts among the accounts we follow are cheat sheets with the
 per league, on its big day (college Saturday, NFL Sunday), the morning post is one image: each game's logos, our
 projected score, how often we think each team wins, and our spread and total beside the betting line, the same numbers
 as the Games page (built from the site's own game cards, site/data/app/today.json). NFL shows the whole slate; college
-shows the 16 largest disagreements. A mint ring marks up to four lines where our calibrated chance clears the actual
+shows the 16 largest disagreements. A mint ring marks up to six favorite lines where our calibrated chance clears the actual
 captured price. A projection gap alone is never highlighted.
 
 The hosted build draws it (feed.py, into site/data/cards/, like every card) and the desk posts it at 10:00 AM
@@ -28,7 +28,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TODAY = ROOT / 'site' / 'data' / 'app' / 'today.json'
 DAYS = {'CFB': 5, 'NFL': 6}             # Saturday for college, Sunday for the NFL (Monday is 0)
 POST_AT, POST_UNTIL = (10, 0), (11, 45)  # Eastern
-MOST, WATCH, FEWEST = 16, 4, 4          # a full NFL slate; four model/market disagreements get a mint ring
+MOST, WATCH, FEWEST = 16, 6, 4          # a full NFL slate; up to six favorite priced projections get a mint ring
 RING_FRESH = timedelta(hours=4)          # research/main-line rule: an older quote never earns a ring
 WIDTH, HEIGHT = 1080, 1350              # 4:5, the tallest image X shows whole in the feed
 BG, CARD, LINE, TEXT, DIM, ACCENT = '#071018', '#101c28', '#2a3a49', '#f4f7fa', '#94a3b4', '#5eeaa4'
@@ -353,7 +353,7 @@ def post(games, now):
         name = 'college' if league == 'CFB' else 'NFL'
         lead = (f"📌 Full {name} projections for the slate." if league == 'NFL' else
                 f"📌 16 {name} projections for the slate.")
-        text = lead + "\nUp to 4 priced lines are marked on the card.\n📌 Save this one" + f"\n#{league}"
+        text = lead + "\nMy favorite 4 to 6 priced projections are numbered.\n📌 Save this one" + f"\n#{league}"
         return {'key': f'sheet:{league}:{day.isoformat()}', 'kind': 'sheet', 'card': key(league, day), 'text': text,
                 'due': max(at(day, POST_AT), now + timedelta(minutes=2)), 'stale': at(day, POST_UNTIL)}
     return None

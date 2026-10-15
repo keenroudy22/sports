@@ -555,6 +555,10 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         if kind == 'research':
             # There is deliberately no readyAt: research mirrors only after Buffer confirms X.
             entry['discord']['destination'] = 'research'
+            import research_posts
+            metadata = research_posts.planned_metadata(guid)
+            if metadata:
+                entry['research'] = metadata
         if kind == 'play':
             # A confirmed play is the reason to join Discord. Schedule it first; the lightweight delivery job runs
             # every five minutes, so a 15-minute target gives members roughly 10-15 minutes before the X post.

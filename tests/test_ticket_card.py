@@ -115,7 +115,7 @@ class TicketCardTests(unittest.TestCase):
 
     def test_research_number_labels_are_plain_english(self):
         end_zone = {'kind': 'end-zone', 'title': 'END-ZONE WORK', 'rows': [
-            {'title': 'Caden Creel', 'metric': '21 red-zone opportunities', 'price': '9 inside the 10'},
+            {'title': 'Caden Creel', 'metric': '21 red-zone opportunities', 'price': '9 inside the 10', 'tdLean': True},
             {'title': 'Devonte Lyons', 'metric': '9 red-zone opportunities', 'price': '6 inside the 10'},
         ]}
         trends = {'kind': 'matchup', 'title': 'MATCHUP TRENDS', 'rows': [
@@ -124,7 +124,9 @@ class TicketCardTests(unittest.TestCase):
             {'title': 'Player Two under 4.5 catches', 'price': '-115 FanDuel',
              'metric': '8/10 exact-line trend', 'detail': 'Defense ranks #5', 'hits': 8, 'games': 10},
         ]}
-        self.assertIn('INSIDE THE 10', ticket_card.research_list_svg(end_zone))
+        end_zone_svg = ticket_card.research_list_svg(end_zone)
+        self.assertIn('INSIDE THE 10', end_zone_svg)
+        self.assertIn('MY TD LEAN', end_zone_svg)
         self.assertIn('HIT RATE', ticket_card.research_list_svg(trends))
 
     @classmethod

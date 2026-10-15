@@ -668,6 +668,7 @@ def house_posts(first, latest, games, log_book, now, log=print):
         out.append(extra)
     out += cashed(first, latest, games, log_book, now)
     import research_posts
+    out += research_posts.touchdown_followups(log_book, now)
     research = research_posts.post(games, now, log=log)  # one stale-safe editorial research card at most
     # The Wednesday-night TNF preview consumes Thursday's research slot, not
     # Wednesday's ordinary slate research slot.

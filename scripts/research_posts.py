@@ -33,6 +33,7 @@ POS_GROUP = {'QB': 'QB', 'RB': 'RB', 'FB': 'RB', 'WR': 'WR', 'TE': 'TE'}
 STAT_LABEL = {'passYds': 'pass yds', 'att': 'pass attempts', 'cmp': 'completions',
               'rushYds': 'rush yds', 'car': 'carries', 'recYds': 'rec yds',
               'rec': 'receptions', 'targets': 'targets'}
+_PLANNED_METADATA = {}
 
 
 def when(value):
@@ -390,9 +391,14 @@ def scorer_candidate(games, details, now):
     if not rows:
         return None
     shown = rows[:4]
+    # This is an editorial touchdown lean, not a priced play. The top observed
+    # scoring-role row is named plainly so the owner and readers do not have to
+    # infer our favorite from the ordering.
+    shown[0]['tdLean'] = True
     lines = [f"{row['title']} | {row['metric']} | {row['price']}" for row in shown]
     return {'kind': 'end-zone', 'title': 'END-ZONE WORK', 'kicker': 'SCORING-AREA OPPORTUNITY', 'accent': VIOLET,
-            'rows': shown, 'text': '\n'.join(['🎯 END-ZONE WORK', 'Players seeing the most scoring-area work:',
+            'rows': shown, 'text': '\n'.join(['🎯 END-ZONE WORK', f"My TD lean: {shown[0]['title']}.",
+                                             'Players seeing the most scoring-area work:',
                                              *lines, '', tags(shown)])}
 
 
@@ -535,6 +541,7 @@ def bounded_caption(choice):
         headline = f"{headline} · {row.get('price') or ''}".rstrip(' ·')
         evidence = str(row.get('metric') or '')
     elif kind == 'end-zone':
+        headline = f"My TD lean: {headline}"
         evidence = ' · '.join(value for value in (str(row.get('metric') or ''), str(row.get('price') or '')) if value)
     elif kind == 'upset':
         headline = f"{headline} {row.get('price') or ''} ({book_short(row.get('book'))})".strip()
@@ -673,12 +680,61 @@ def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES, log
         log(f"research: skipped {choice['kind']} — {blocked}")
         return None
     log(f"research: scheduled {choice['kind']} for {due.astimezone(gates.EASTERN):%-I:%M %p} ET")
-    return {'key': f"research:{choice['kind']}:{choice['day'].isoformat()}", 'kind': 'research',
+    key = f"research:{choice['kind']}:{choice['day'].isoformat()}"
+    if choice['kind'] == 'end-zone':
+        lean = next((row for row in choice['rows'] if row.get('tdLean')), None)
+        if lean:
+            _PLANNED_METADATA[key] = {
+                'type': 'td-lean', 'player': lean['title'], 'athleteId': str(lean.get('athleteId') or ''),
+                'gameId': lean['gameId'], 'league': lean['league'], 'kickoff': lean['kickoff'],
+            }
+    return {'key': key, 'kind': 'research',
             # A one-game slate is useful as a short conversation post, but the
             # approved list art needs at least two honest rows. Never pad it.
             'card': (None if choice['kind'] == 'numbers' and len(choice['rows']) < 2 else choice['key']),
             'text': choice['text'],
             'due': due, 'stale': stale}
+
+
+def planned_metadata(key):
+    """Metadata for a research post planned in this process, saved only after Buffer accepts it."""
+    return dict(_PLANNED_METADATA.get(key) or {}) or None
+
+
+def touchdown_followups(log_book, now, box_root=None):
+    """One verified follow-up when a named End-Zone Work lean scores.
+
+    The final box-score store is the authority. A research lean never enters
+    the betting record, and a miss produces no victory-lap post.
+    """
+    import boxscores
+    records = boxscores.stored(box_root or boxscores.STORE)
+    posted = {str(entry.get('id') or '') for entry in log_book.get('posts') or []}
+    out = []
+    for entry in log_book.get('posts') or []:
+        meta = entry.get('research') or {}
+        if entry.get('kind') != 'buffer:research' or meta.get('type') != 'td-lean' or not entry.get('sentAt'):
+            continue
+        key = f"research:td-hit:{entry.get('id')}"
+        if key in posted:
+            continue
+        kickoff = when(meta.get('kickoff'))
+        if not kickoff or not timedelta(0) <= now - kickoff <= timedelta(days=2):
+            continue
+        event = str(meta.get('gameId') or '').split('-', 1)[-1]
+        game = records.get(event)
+        player = next((row for row in (game or {}).get('players') or []
+                       if str(row.get('id') or '') == str(meta.get('athleteId') or '')), None)
+        touchdowns = (player or {}).get('rushTD', 0) + (player or {}).get('recTD', 0)
+        if touchdowns < 1:
+            continue
+        league = str(meta.get('league') or '').upper()
+        text = (f"🎯 {meta['player']} found the end zone.\n"
+                "That was my End-Zone Work TD lean this morning."
+                + (f"\n#{league}" if league else ''))
+        out.append({'key': key, 'kind': 'research', 'card': None, 'text': text,
+                    'due': now + timedelta(minutes=2), 'stale': now + timedelta(hours=6)})
+    return out
 
 
 def art_for(row, game, fetch):

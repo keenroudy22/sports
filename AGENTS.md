@@ -205,6 +205,14 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **More useful trends and projection sheets (owner, 2026-10-15):** End-Zone Work names exactly one strongest
+  touchdown lean from verified scoring-area workload and marks it on the research-list card. It remains research,
+  never an official bet; after the final store verifies that player scored, publish one casual follow-up to X and
+  the research Discord, exactly once. On large CFB Saturday and NFL Sunday slates, keep the full projection sheet
+  and number up to six favorite priced projections that pass the existing freshness and value checks. Do not ring
+  a raw model gap, stale line or invented price. These posts remain `RESEARCH · NOT A BEST BET` and do not change
+  the public record.
+
 - **A play every eligible game day (owner, 2026-10-15):** when at least one NFL or CFB game has a fresh exact
   two-sided public-book price, publish the strongest honest straight play for that Eastern game day. A normal
   four-point edge remains a 1u Best bet/Hot Plate. If none clears, the best reason-backed candidate whose
@@ -1028,7 +1036,7 @@ Handy commands (from `~/Projects/sports`):
   a real captured moneyline price.
 - **Weekly "📌 Save this" projection sheet**: the full NFL slate or 16 college games, college Saturday and NFL
   Sunday at 10 AM (`scripts/sheet.py`). Every spread and total read carries the exact captured line, price and book.
-  Numbered mint rings identify up to four markets where the calibrated chance clears that price by the Board's value
+  Numbered mint rings identify up to six favorite markets where the calibrated chance clears that price by the Board's value
   threshold and name the wager itself (`OVER 45.5`, `MINN +3.5`), not merely `TOTAL` or `SPREAD`; the selected priced
   line, rather than the model projection, is mint. Missing, stale, thin and pass prices never get a ring;
   performance-caution lines must clear their higher threshold. They are watches, not official plays.
