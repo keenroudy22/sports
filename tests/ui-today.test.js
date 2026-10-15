@@ -699,6 +699,28 @@ test('Today research favors props, then sides, then one total; held and posted l
   assert.match(sec, /href="#research\/lines">See every line ›/);
 });
 
+test('an empty official rail names the strongest current look and the exact reason it is not a play', async () => {
+  const closest = lineRow('Closest Look', { athleteId: '88', player: 'Closest Look', stat: 'recYds', marketType: null,
+    title: 'Closest Look over 42.5 receiving yards', line: 42.5 }, { view: 'pass', tier: 'pass', chance: 0.53, needs: 0.524, edge: 0.6 });
+  const raw = lineRow('Raw Look', { athleteId: '89', player: 'Raw Look', stat: 'rec', marketType: null },
+    { calibrated: false, view: 'pass', tier: 'pass', chance: 0.61, edge: 8 });
+  const files = linesFor([closest, raw]);
+  const emptyToday = { ...TODAY, picks: [yesterday, ...rungs] };
+  const { api } = loadApp('#today', {}, { today: emptyToday, hero: { ...HERO, bets: [] }, extra: files });
+  await api.views.today({ view: 'today' });
+  await settle();
+  const page = await api.views.today({ view: 'today' });
+  assert.match(page, /<h1>Here’s what I like most today\.<\/h1>/);
+  assert.match(page, /No official best bet yet\. My strongest current look is below\./);
+  const favorite = page.slice(page.indexOf('kt-favorite"'), page.indexOf('class="kt-sec kt-climb"'));
+  assert.match(favorite, /What I like most/);
+  assert.match(favorite, /Strongest current lean · not a best bet/);
+  assert.match(favorite, /Closest Look over 42\.5 receiving yards/);
+  assert.match(favorite, /Why it is not an official play:<\/b> It is positive value by 0\.6 points, but it is below the official-play bar\./);
+  assert.doesNotMatch(favorite, /Raw Look/);
+  assert.equal((page.match(/Closest Look over 42\.5 receiving yards/g) || []).length, 1, 'the favorite is not repeated in Research worth a look');
+});
+
 test('the Prep List rolls to the next game day once the first day\'s rows have kicked off', async () => {
   const row = (who, kickoff, extra = {}) => ({ ...PREP.CFB.rows[0], athleteId: who, player: who, kickoff, ...extra });
   const prep = { CFB: { day: '2026-10-10', rows: [row('Early Kick', '2026-10-10T13:30:00Z')], next: { day: '2026-10-11', rows: [row('Sunday Guy', '2026-10-11T17:00:00Z')] } } };

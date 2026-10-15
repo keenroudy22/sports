@@ -458,6 +458,24 @@
   /* Current, priced rows only; one per market and side, never held or already on the card. */
   const worthRows = (rows, official = new Set()) => todayResearchOrder(
     collapse(rows.filter(vm => hasValue(vm) && !heldRow(vm.src) && !official.has(vm.key))), 3, SORTS.edge);
+  /* The kitchen never goes blank. This is the strongest current research look, not a back door around the
+     official-play gates. It names the exact reason the row is still research so a visitor can separate
+     "I like the direction" from "I would bet this price." */
+  const favoriteHold = vm => {
+    const note = String(vm.src?.gradeNote || '');
+    if (note) return note.replace(/^./, c => c.toUpperCase()) + '.';
+    if (vm.thin) return 'The player role or model sample is still too thin.';
+    if (vm.limited) return 'Injury or availability still needs a clean check.';
+    if (!vm.calibrated || !isNum(vm.chance) || !isNum(vm.needs)) return 'The model leans this way, but this market has not earned a public probability yet.';
+    if (!isNum(vm.edge) || vm.edge <= 0) return `I like the direction, not the price: it needs ${pctOne(vm.needs)} and I have it at ${pctOne(vm.chance)}.`;
+    if (!['lean', 'strong'].includes(vm.tier)) return `It is positive value by ${vm.edge.toFixed(1)} points, but it is below the official-play bar.`;
+    return 'The price is positive, but the full reason, injury and release checks have not all cleared.';
+  };
+  const favoriteLook = (rows, gameIds, official = new Set()) => collapse(rows.filter(vm => gameIds.has(vm.gameId)
+    && onBoard(vm) && !heldRow(vm.src) && !official.has(vm.key)))
+    .sort((a, b) => Number(Boolean(b.calibrated && !b.thin && !b.limited)) - Number(Boolean(a.calibrated && !a.thin && !a.limited))
+      || todayMarketRank(a) - todayMarketRank(b) || (b.edge ?? -99) - (a.edge ?? -99)
+      || String(a.kickoff).localeCompare(String(b.kickoff)))[0] || null;
   const SORTS = {
     edge: (a, b) => (b.edge ?? -99) - (a.edge ?? -99) || Date.parse(a.kickoff) - Date.parse(b.kickoff),
     chance: (a, b) => (b.chance ?? -1) - (a.chance ?? -1) || (b.edge ?? -99) - (a.edge ?? -99),
@@ -587,7 +605,7 @@
   TAB_OF.lab = 'record';
 
   const model = { splitColours, ledeSize, goodTo, latestPickQuote, holdOf, pickHold, heldWords, heldShort, heldQuote, afterPostingWords, priceMatch, averageGap, researchPrice, matchupSignals, breakEven, fairAmerican, edgePoints, pctText, pctOne, oddsText, upsetChanceLine, quoteAge, bookLabel, postedBook, marketLabel, niceTitle, sentences,
-    whyLines, watchLine, historyLine, howWeGotIt, pickVM, lineVM, officialKey, onBoard, hasValue, defenseVerdict, collapse, SORTS, heavyFavorite, trendText, opponentTrendText, gapScore,
+    whyLines, watchLine, historyLine, howWeGotIt, pickVM, lineVM, officialKey, onBoard, hasValue, favoriteHold, favoriteLook, defenseVerdict, collapse, SORTS, heavyFavorite, trendText, opponentTrendText, gapScore,
     cumulativeUnits, clvSummary, parseHash, resolve, canonical, TAB_OF, MORE_PAGES, isParlayLike, climbWords, heroBets,
     teamPanel, STAT_UNITS, betParts, nameSize, betSize, ledeTitle, dateLine, resultLine, minus, worthRows, todayMarketRank, todayResearchOrder };
 
@@ -1131,13 +1149,13 @@
   /* The top of Today, the same on the first paint and the full card, so nothing moves when today.json lands: the
      chef's line with the last game day's W-L, the first ticket on the rail, the Climb stub (inside the first screen
      at 375 x 812, DIRECTION-RULES section 5 as updated by decision 10), then the rest of the rail. */
-  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', spotlight = '', nextSlate = '', nothingCleared = false }) => {
-    const title = nothingCleared && !rows.length ? 'Nothing cleared my bar today.' : ledeTitle(rows, today), first = rows[0];
+  const todayTop = ({ rows, today, last, season, climb, lines, more = [], past = [], later = [], cards = null, proof = '', favorite = '', spotlight = '', nextSlate = '', nothingCleared = false }) => {
+    const title = nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : ledeTitle(rows, today), first = rows[0];
     const photo = first && first.athleteId && !C.isParlay(first) && HEADSHOT[first.league || String(first.gameId || '').split('-')[0]];
     const size = photo ? ledeSize(title) : null;
     return `<section class="kt-lede${photo ? ' with-photo' : ''}"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1${size ? ` style="font-size:${size}px"` : ''}>${esc(title)}</h1>${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
-      ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards }) : emptyRail(nothingCleared ? "No best bet today. Tonight's games are below." : 'Nothing on the rail yet. Check back before kickoff.')}
-      ${climbStub(climb, past)}${proof}${spotlight}${rows.length > 1 || more.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
+      ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards }) : emptyRail(nothingCleared ? (favorite ? 'No official best bet yet. My strongest current look is below.' : "No best bet today. Tonight's games are below.") : 'Nothing on the rail yet. Check back before kickoff.')}
+      ${favorite}${climbStub(climb, past)}${proof}${spotlight}${rows.length > 1 || more.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
       ${rail([...more, ...rows.slice(1)], { season, lines, cards, more: true, label: 'More best bets' })}</section>` : ''}${nextSlate}${later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="upcoming-bets-h"><h2 class="kt-head" id="upcoming-bets-h">Upcoming best bets</h2>
       ${rail(later, { season, lines, cards, more: true, label: 'Upcoming best bets' })}</section>` : ''}`;
   };
@@ -1242,7 +1260,11 @@
       : '<p class="muted small">No current outright-upset or underdog-spread highlight.</p>';
     /* Research worth a look: the old Today's top three price-checked lines, never a play already on the card. */
     const official = new Set(picks.filter(p => !p.result && !p.historicalImport && !C.isParlay(p)).map(officialKey));
-    const worth = worthRows(lineRows, official);
+    const gameIdsToday = new Set(games.filter(g => C.dayOf(g.kickoff) === etDay() && !g.completed).map(g => g.id));
+    const favorite = !rows.length ? favoriteLook(lineRows, gameIdsToday, official) : null;
+    const favoriteHtml = favorite ? ktSec('favorite', 'What I like most', `<div class="board">${boardRow(favorite, false)}</div><p class="kt-note"><b>Why it is not an official play:</b> ${esc(favoriteHold(favorite))}</p>`,
+      { tape: true, kind: 'Strongest current lean · not a best bet', link: ktLink(`#game/${favorite.gameId}`, 'See the matchup') }) : '';
+    const worth = worthRows(lineRows.filter(vm => !favorite || vm.key !== favorite.key), official);
     /* Today's games: live first, scores refreshed from the free scoreboard, with our projected score. */
     const liveToday = withLive(games.filter(g => C.dayOf(g.kickoff) === etDay() || (!g.completed && (g.state === 'in' || C.dayOf(g.kickoff) === etDay(-1)))));
     const todayGames = liveToday.games.filter(g => C.dayOf(g.kickoff) === etDay() || g.state === 'in');
@@ -1280,7 +1302,7 @@
       && (etHour(today.generatedAt) > 9 || etHour(today.generatedAt) === 9
           && Number(ET_PARTS(today.generatedAt, { minute: '2-digit' })) >= 30);
     return `<div class="kt-today"><div>${todayTop({ rows, today: Boolean(todays.length), last: (today.lastSlate || {})[state.league], season: (today.season || {})[state.league],
-      climb, lines: lines && lines.lines, more: rungHere, past: ladder.history, later: rest, cards, proof, spotlight: nflSpotlight, nextSlate,
+      climb, lines: lines && lines.lines, more: rungHere, past: ladder.history, later: rest, cards, proof, favorite: favoriteHtml, spotlight: nflSpotlight, nextSlate,
       nothingCleared: Boolean(evaluated && !todays.length && !rows.length && todayGames.length) })}</div>
       <div>${rest2}</div></div>`;
   };
@@ -1898,7 +1920,7 @@
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,
-    GAMES, HEADSHOT, MARK, STAT_UNITS, clock, defGames, defenseVerdict, disc, filtersFold, hasValue, lineVM, logoImg, minus, nameSize, odd, onBoard, panelVars, pctOne, teamPanel, ticketWhen, toneFor, watchButton, HOUSE, rail, holdOf, heldWords, slip, etDay, opponentTrendText, ...overrides });
+    GAMES, HEADSHOT, MARK, STAT_UNITS, clock, defGames, defenseVerdict, disc, favoriteHold, favoriteLook, filtersFold, hasValue, lineVM, logoImg, minus, nameSize, odd, onBoard, panelVars, pctOne, teamPanel, ticketWhen, toneFor, watchButton, HOUSE, rail, holdOf, heldWords, slip, etDay, opponentTrendText, ...overrides });
   const gamesContext = (overrides = {}) => moreContext({ setLeague, liveStamp, liveFor, LIVE, gapScore, STAT_WORD, favSpread, marketLabel, quoteAge, round1, fairAmerican,
     boardRow, matchupSignals, researchPrice, pctText, currentUpset, upsetRow, heavyFavorite, trendText, opponentTrendText, historyChart, ticket, luminance, ...overrides });
   const BUNDLES = { more: { asset: MORE_ASSET, global: 'KRMore', context: moreContext, word: 'More pages' },

@@ -205,6 +205,13 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **No empty kitchen (owner, 2026-10-15):** on every active NFL/CFB game day, Today names the strongest current
+  exact-price line or model lean even when no official play clears. Label it `Strongest current lean · not a best
+  bet` and say plainly why it is not official: bad price, thin role, injury uncertainty, unproven market, a sub-bar
+  edge or remaining reason/release checks. This is visibility, not permission to invent a price, hide a hold or
+  force the public record. The daily research path uses the same model/market evidence; an official play still
+  needs every normal gate.
+
 - **Touchdown and next-man-up research (owner, 2026-10-15):** the approved End-Zone Work card names the strongest
   anytime-touchdown lean and the first-touchdown dart from verified scoring-area workload; either may be the same
   player when the evidence points there. These are research calls unless a separately priced selection clears every
