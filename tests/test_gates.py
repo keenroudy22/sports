@@ -112,6 +112,10 @@ class NoForcedBestBetTests(unittest.TestCase):
             plus = dict(pick, odds=180, _selection={'rawChance': .46, 'fairChance': .39,
                                                     'anchoredChance': .41, 'breakEven': 1 / 2.8, 'gap': 2})
             self.assertTrue(gates.selection_verdict(plus, context(), 'gut_call').ok)
+            narrow = dict(pick, odds=-110, _selection={'rawChance': .54, 'fairChance': .523,
+                                                       'anchoredChance': .525, 'breakEven': 100 / 210, 'gap': .2})
+            self.assertTrue(gates.selection_verdict(narrow, context(), 'gut_call').ok,
+                            'a reason-backed positive-value game-day fallback does not need a two-point gap')
             self.assertFalse(gates.selection_verdict(dict(plus, odds=201), context(), 'gut_call').ok)
             self.assertFalse(gates.selection_verdict(dict(pick, _planReasons=[]), context(), 'gut_call').ok)
             losing = dict(pick, _selection={'rawChance': .60, 'fairChance': .50, 'anchoredChance': .52,
@@ -328,6 +332,28 @@ class ShoppingRuleTests(unittest.TestCase):
         self.assertEqual(decision.data['best']['book'], 'ESPN BET')
         better = total_lean(book='ESPN BET', line=52.5, odds=-105, direction='under')
         self.assertTrue(gates.best_quote_by_ev(better, ctx).ok)
+
+    def test_best_quote_ignores_comparison_only_books_for_official_selection(self):
+        snapshot = dict(SNAPSHOT, margin=-11.0)
+        odds = {'gameId': 'NFL-1', 'retrievedAt': '2026-09-27T13:00:00Z',
+                'books': {'betmgm': {'spread': {'home': 14, 'homePrice': -105, 'awayPrice': -115}},
+                          'hardrockbet': {'spread': {'home': 13.5, 'homePrice': 100, 'awayPrice': -120}}}}
+        ctx = context(odds={'NFL-1': odds}, snapshots={'NFL-1': [snapshot]})
+        candidate = total_lean(marketType='spread', direction='home', line=14, odds=-105,
+                               book='BetMGM', _quotes=None)
+        decision = gates.best_quote_by_ev(candidate, ctx)
+        self.assertTrue(decision.ok, decision.reason)
+
+    def test_best_quote_treats_the_same_line_and_selected_price_as_equivalent(self):
+        snapshot = dict(SNAPSHOT, margin=-11.0)
+        odds = {'gameId': 'NFL-1', 'retrievedAt': '2026-09-27T13:00:00Z',
+                'books': {'betmgm': {'spread': {'home': 14, 'homePrice': -105, 'awayPrice': -115}},
+                          'draftkings': {'spread': {'home': 14, 'homePrice': -105, 'awayPrice': -125}}}}
+        ctx = context(odds={'NFL-1': odds}, snapshots={'NFL-1': [snapshot]})
+        candidate = total_lean(marketType='spread', direction='home', line=14, odds=-105,
+                               book='BetMGM', _quotes=None)
+        self.assertTrue(gates.best_quote_by_ev(candidate, ctx).ok,
+                        'the same +14 at -105 has the same bettor return at either book')
 
     def test_best_quote_passes_when_nothing_can_be_compared(self):
         self.assertTrue(gates.best_quote_by_ev(total_lean(), context(snapshots={})).ok)

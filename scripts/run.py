@@ -865,8 +865,21 @@ def price(candidate, ctx, now):
     market, side = gates.market_key(candidate), gates.side_of(candidate)
     if not snapshot or not market:
         return None
+    # A catalog row can carry only the quote that produced that row.  Shop the
+    # full current capture too, otherwise an incomplete row can be refused by
+    # best_quote_by_ev even though the usable better quote is sitting in the
+    # same odds snapshot.
+    available = list(candidate.get('_quotes') or [])
+    available += gates.quotes_for(dict(candidate, _quotes=None), ctx, priced_only=True)
+    seen_quotes = set()
     priced = []
-    for book, line, odds in candidate.get('_quotes') or []:
+    for book, line, odds in available:
+        quote_key = (role_sanity.book_key(book), line, odds)
+        if quote_key in seen_quotes:
+            continue
+        seen_quotes.add(quote_key)
+        if not gates.official_quote_book(book):
+            continue
         if not isinstance(odds, (int, float)) or abs(odds) < 100:
             continue
         if candidate.get('athleteId') and (odds < -400 or odds > 400):
@@ -902,7 +915,7 @@ def price(candidate, ctx, now):
         return None
     _, book, line, odds, p, selection = max(priced, key=lambda q: (q[0], q[1]))
     row = candidate.get('_row') or {}
-    books = sorted({b for b, _, _ in candidate.get('_quotes') or []})
+    books = sorted({b for b, _, _ in available if gates.official_quote_book(b)})
     seen = row.get('observedAt') or stamp(now)
     note = f"{book}'s number and price from the {et(seen)} capture across {len(books)} book{'s' if len(books) != 1 else ''}"
     note += ', the best expected value on the board for this side.' if len(books) > 1 else f'; {book} is the only book with this market so far.'
@@ -1822,16 +1835,16 @@ def official_coverage_game_ids(ctx):
 def official_selection_scope(slot, games, ctx, now):
     """Game ids eligible for this run's official selection.
 
-    ``None`` means the ordinary 6:45 game-day board.  The 8:30 run gets the
-    post-capture board for unserved noon-or-later games; the 5:30 run gets one
-    bounded second look at still-dark primetime NFL games after that run's
-    fresh prop capture.  Every ordinary gate remains in force.
+    ``None`` means the ordinary 6:45 game-day board.  The 8:30 and 11:45 runs
+    get the post-capture board for unserved noon-or-later games; the 5:30 run
+    gets one bounded second look at still-dark primetime NFL games after that
+    run's fresh prop capture.  Every ordinary gate remains in force.
     """
     if slot.hour == 6 and slot.minute == 45:
         return None
     today = eastern_date(now)
     already = official_coverage_game_ids(ctx)
-    if slot.hour == 8 and slot.minute == 30:
+    if (slot.hour, slot.minute) in ((8, 30), (11, 45)):
         if os.environ.get('KEENROUDY_SELECTION_0830', '1').strip().lower() in ('0', 'false', 'off', 'no'):
             return set()
         return {game['id'] for game in games.values()

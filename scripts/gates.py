@@ -259,12 +259,20 @@ def quotes_for(candidate, ctx, priced_only=False):
     return rows
 
 
+def official_quote_book(book):
+    """Whether a quote may be used for an official pick, not just comparison research."""
+    key = role_sanity.book_key(book)
+    return key not in {role_sanity.book_key(name) for name in build_site.COMPARISON_ONLY_BOOKS}
+
+
 def exact_price_pairs(candidate, ctx):
     """Exact-line two-sided prices, normalized to the candidate's side."""
     game_id = (candidate.get('gameIds') or [None])[0]
     market, side, line = market_key(candidate), side_of(candidate), candidate.get('line')
     rows = []
     if candidate.get('_pair'):
+        if not official_quote_book(candidate.get('book')):
+            return rows
         selected, other = candidate['_pair']
         if all(isinstance(v, (int, float)) and abs(v) >= 100 for v in (selected, other)):
             implied_sum = pricing.break_even(selected) + pricing.break_even(other)
@@ -275,6 +283,8 @@ def exact_price_pairs(candidate, ctx):
         record = ctx.prop_odds.get(game_id)
         for book, quoted_line, over, under in build_site.price_quotes(
                 record, market, player_name(candidate, ctx), line):
+            if not official_quote_book(book):
+                continue
             if quoted_line != line or side not in ('over', 'under'):
                 continue
             selected, other = (over, under) if side == 'over' else (under, over)
@@ -286,6 +296,8 @@ def exact_price_pairs(candidate, ctx):
     else:
         record = ctx.odds.get(game_id) or {}
         for book, entry in (record.get('books') or {}).items():
+            if not official_quote_book(book):
+                continue
             offer = entry.get('total' if market == 'total' else 'spread') or {}
             if market == 'total' and offer.get('line') == line and side in ('over', 'under'):
                 selected, other = ((offer.get('over'), offer.get('under')) if side == 'over'
@@ -707,7 +719,8 @@ def best_quote_by_ev(candidate, ctx):
     """The pick takes the quote with the best expected value across books, not the best-looking number."""
     snapshot = ctx.snapshot((candidate.get('gameIds') or [None])[0])
     market, side = market_key(candidate), side_of(candidate)
-    quotes = quotes_for(candidate, ctx, priced_only=True)
+    quotes = [quote for quote in quotes_for(candidate, ctx, priced_only=True)
+              if official_quote_book(quote[0])]
     if not snapshot or not market or not quotes:
         return Decision(True, 'best_quote_by_ev', 'no priced alternatives to compare')
     priced = []
@@ -724,7 +737,11 @@ def best_quote_by_ev(candidate, ctx):
     own_ev = own['evPerUnit'] if own else None
     if own_ev is None:
         return Decision(True, 'best_quote_by_ev', 'the candidate itself has no model number to compare')
-    if best[0] > own_ev + 0.0005 and (best[1], best[2], best[3]) != (candidate.get('book'), candidate.get('line'), candidate.get('odds')):
+    # The bettor's return is identical when the line and selected-side price
+    # are identical.  A different book's opposing price may shift its no-vig
+    # estimate slightly, but that is not a reason to refuse the usable quote.
+    materially_different = (best[2], best[3]) != (candidate.get('line'), candidate.get('odds'))
+    if best[0] > own_ev + 0.0005 and materially_different:
         return Decision(False, 'best_quote_by_ev', f"{best[1]} {best[2]:g} at {best[3]:+d} is worth {best[0]:+.3f}u against "
                                                    f"{candidate.get('book')} {candidate.get('line'):g} at {candidate.get('odds'):+d} "
                                                    f'at {own_ev:+.3f}u', {'best': {'book': best[1], 'line': best[2], 'odds': best[3], 'evPerUnit': best[0]}})
@@ -955,7 +972,11 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
     if chance <= numbers['breakEven']:
         return Decision(False, 'plan_selection',
                         f"anchored chance {chance:.1%} does not beat the {numbers['breakEven']:.1%} this price needs", numbers)
-    lane_floor = 2 if lane == 'gut_call' else 4
+    # A Gut call is the game-day fallback: positive expected value is enough.
+    # The strict chance > break-even check above still refuses a losing price,
+    # while every price, role, injury and supporting-reason rule remains in
+    # force. Best bets keep their four-point floor.
+    lane_floor = 0 if lane == 'gut_call' else 4
     if gap < lane_floor:
         return Decision(False, 'plan_selection',
                         f'anchored gap {gap:.1f}; {lane} needs {lane_floor} points', numbers)

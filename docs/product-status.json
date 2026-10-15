@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-14T20:35:00Z",
+  "updatedAt": "2026-10-15T11:35:00Z",
   "items": [
     {
       "id": "P02",
@@ -266,7 +266,7 @@
     {
       "id": "P31",
       "title": "P1 research price and tickets",
-      "status": "ready",
+      "status": "observing",
       "owner": "agent",
       "next": "Implement price checks, Good-to/latest quotes, after-slate heading and QB chips.",
       "doneWhen": "Research price fixtures and live source comparisons pass.",
@@ -634,12 +634,12 @@
     },
     {
       "id": "P72",
-      "title": "No forced best bets and Comfort Food",
-      "status": "observing",
+      "title": "Daily straight fallback and Comfort Food",
+      "status": "ready",
       "owner": "agent",
-      "next": "Observe the first naturally qualifying no-straight day. Render and send the real Comfort Food phone preview, honor the two-hour veto, then verify its separate record line and delivery without forcing a ticket.",
-      "doneWhen": "Straights obey item 33 without filler; Comfort Food is at most one eligible 1u, 2-3-leg, single-book, different-game combo on a no-straight day, with a reviewed card, separate record line and live receipts.",
-      "evidence": "Owner decision 33 dated 2026-10-08 and NO-FORCED-PLAYS-SPEC.md. Straight-play tightening released at 44bd9c1d/run37823635779. The guarded 2-3-leg, one-book, different-game Comfort Food selector, safer_combo record lane, caption and tests are live from 6494be49; no natural qualifying ticket has yet cleared the required first-real-card preview and veto. Historical lookback outcomes with missing saved edges/dossiers remain unknown."
+      "next": "Ship the positive-value 0.5u Gut call floor and 11:45 recovery pass, then observe the next eligible game day through Discord, X, site and grading.",
+      "doneWhen": "A normal Best bet still needs four points; a safe reason-backed positive-value fallback can publish at 0.5u; unserved slates get three morning looks; full gates and a natural receipt pass.",
+      "evidence": "Owner decision 33 dated 2026-10-08 originally prohibited filler. Owner decision 2026-10-15 now requires the strongest honest play every eligible game day while preserving positive value and all hard holds. Implementation passed 1,424 Python tests (2 skipped), 241 frontend tests, the clean-export gate and an isolated 06:45 rehearsal on 2026-10-15; a natural live delivery receipt remains to be observed. Existing Comfort Food stays separate."
     },
     {
       "id": "P73",

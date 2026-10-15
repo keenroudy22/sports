@@ -141,8 +141,55 @@ class SlotTests(unittest.TestCase):
         with mock.patch.dict(os.environ, {'KEENROUDY_SELECTION_0830': '0'}):
             self.assertEqual(run.official_selection_scope(slot, games, ctx, now), set())
 
+    def test_1145_selection_pass_gives_an_unserved_game_day_one_more_fresh_look(self):
+        now = datetime(2026, 10, 15, 15, 45, tzinfo=timezone.utc)
+        slot = now.astimezone(run.EASTERN)
+        games = {
+            'CFB-night': {'id': 'CFB-night', 'league': 'CFB', 'state': 'pre',
+                          'kickoff': '2026-10-15T23:30:00Z'},
+            'NFL-night': {'id': 'NFL-night', 'league': 'NFL', 'state': 'pre',
+                          'kickoff': '2026-10-16T00:15:00Z'},
+            'CFB-served': {'id': 'CFB-served', 'league': 'CFB', 'state': 'pre',
+                           'kickoff': '2026-10-15T23:30:00Z'},
+        }
+        ctx = SimpleNamespace(first={
+            'posted': {'gameIds': ['CFB-served'], 'status': 'active', 'lane': 'gut_call'}
+        }, latest={})
+        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'CFB-night', 'NFL-night'})
+
 
 class CandidateCatalogTests(unittest.TestCase):
+    def test_price_shops_the_full_capture_when_a_catalog_row_has_only_one_book(self):
+        now = datetime(2026, 10, 15, 12, 0, tzinfo=timezone.utc)
+        game = {'id': 'CFB-1', 'league': 'CFB', 'season': 2026, 'week': 7,
+                'kickoff': '2026-10-15T23:30:00Z',
+                'away': {'id': '1', 'abbreviation': 'CSU', 'name': 'Colorado State'},
+                'home': {'id': '2', 'abbreviation': 'TXST', 'name': 'Texas State'}}
+        odds = {'retrievedAt': now.isoformat(), 'books': {
+            'betmgm': {'spread': {'home': 14, 'homePrice': -105, 'awayPrice': -115}},
+            'draftkings': {'spread': {'home': 14, 'homePrice': -105, 'awayPrice': -120}},
+            'hardrockbet': {'spread': {'home': 13.5, 'homePrice': 100, 'awayPrice': -120}},
+        }}
+        ctx = SimpleNamespace(games={'CFB-1': game}, snapshot=lambda game_id: {'gameId': game_id},
+                              odds={'CFB-1': odds}, prop_odds={}, names={})
+        candidate = {'gameIds': ['CFB-1'], 'marketType': 'spread', 'direction': 'home',
+                     '_quotes': [('BetMGM', 14, -105)], '_row': {'observedAt': now.isoformat()}}
+
+        def numbers(row, _ctx):
+            edge = .016 if row.get('book') == 'DraftKings' else .003
+            return {'chance': .52, 'breakEven': .512, 'edgePoints': .8, 'evPerUnit': edge,
+                    'calibration': 'test', 'calibrated': True, 'fairChance': .51,
+                    'anchoredChance': .52, 'gap': .8, 'calibrationFamily': 'spread'}
+
+        desk = {'projection': -11, 'cutoff': 'Texas State +14 at -105 or better.', 'model': 'v2',
+                'snapshotAt': now.isoformat(), 'rawChance': .53, 'push': 0}
+        with mock.patch.object(run.pricing, 'price', return_value=desk), \
+             mock.patch.object(run.gates, 'calibrated_desk', side_effect=lambda priced, *_: dict(priced)), \
+             mock.patch.object(run.gates, 'selection_numbers', side_effect=numbers):
+            chosen = run.price(candidate, ctx, now)
+        self.assertEqual(chosen['book'], 'DraftKings')
+        self.assertNotIn('Hard Rock', chosen['quoteNote'])
+
     def test_opposing_starting_qb_ruled_out_is_a_current_reason_for_a_primetime_side(self):
         now = datetime(2026, 10, 11, 22, 30, tzinfo=timezone.utc)
         game = {'id': 'NFL-401872993', 'league': 'NFL', 'state': 'pre',

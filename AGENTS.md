@@ -205,6 +205,15 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **A play every eligible game day (owner, 2026-10-15):** when at least one NFL or CFB game has a fresh exact
+  two-sided public-book price, publish the strongest honest straight play for that Eastern game day. A normal
+  four-point edge remains a 1u Best bet/Hot Plate. If none clears, the best reason-backed candidate whose
+  market-anchored chance still beats the posted price becomes a 0.5u Gut call; positive value is enough for that
+  fallback. Recheck an unserved slate at 8:30 and 11:45 and keep the existing primetime passes. Never manufacture
+  a price or bypass an injury, role, contradictory-evidence, jurisdiction or stale-quote hold. If every available
+  price is negative value or unsafe, publish the day's research and log the exact blocker rather than falsely
+  calling it a Best bet. This changes selection frequency, not how any record lane counts.
+
 - **Private numbers note (owner, 2026-10-14):** send the owner a short private Discord note after Tuesday learning.
   It names the weekly record by lane, the strongest mature matchup-supported lean buckets, engagement by post type
   and time, what changed and what is still only a small sample. State coverage honestly: football defense-vs-position
