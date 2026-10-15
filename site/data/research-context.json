@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-15T15:48:01Z",
+  "updatedAt": "2026-10-15T15:59:35Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-15T15:41Z",
+              "reportedAt": "2026-10-15T15:52Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-15T15:01Z",
+              "reportedAt": "2026-10-15T15:52Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -6689,7 +6689,7 @@
               "id": "4034790",
               "name": "Antoine Winfield Jr.",
               "position": "S",
-              "status": "Questionable",
+              "status": "Doubtful",
               "injury": "Ribs",
               "reportedAt": "2026-10-14T23:24Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034790/antoine-winfield-jr"
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "10",
-          "name": "Tony Pollard",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-14T21:31:24Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3916148/tony-pollard"
-        },
-        {
-          "teamId": "10",
           "name": "Marcus Harris",
           "from": "Active",
           "to": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-15T14:26:31Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "27",
+          "name": "Antoine Winfield Jr.",
+          "from": "Questionable",
+          "to": "Doubtful",
+          "observedAt": "2026-10-15T15:59:35Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4034790/antoine-winfield-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-15T15:48:01Z",
-      "lastAttemptAt": "2026-10-15T15:48:01Z",
+      "checkedAt": "2026-10-15T15:59:35Z",
+      "lastAttemptAt": "2026-10-15T15:59:35Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-15T15:48:01Z",
-      "lastAttemptAt": "2026-10-15T15:48:01Z",
+      "checkedAt": "2026-10-15T15:59:35Z",
+      "lastAttemptAt": "2026-10-15T15:59:35Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
