@@ -309,6 +309,19 @@ class BuildTests(unittest.TestCase):
         self.assertIn('still open', why)
         self.assertIn('0 games left today', ladder.candidate(ctx(), {'late': GAMES['late']}, NOW)[1])
 
+    def test_dark_rung_names_zero_supported_legs_and_up_to_three_near_misses(self):
+        none, reason = ladder.build([])
+        self.assertIsNone(none)
+        self.assertIn('zero supported legs', reason)
+        legs = [
+            {'title': f'Leg {i}', 'gameId': f'g{i}', 'book': 'FanDuel', 'odds': odds,
+             'chance': chance, 'kickoff': '2026-09-27T17:00Z', 'observedAt': '2026-09-27T12:10:00Z'}
+            for i, (odds, chance) in enumerate(((-260, .76), (-250, .75), (-240, .74), (-230, .72)), 1)
+        ]
+        misses = ladder.near_misses(legs)
+        self.assertLessEqual(len(misses), 3)
+        self.assertTrue(all(row['odds'] < ladder.TARGET[0] or row['odds'] > ladder.TARGET[1] for row in misses))
+
     def test_college_legs_wait_for_college_calibration(self):
         college = {gid: dict(g, league='CFB') for gid, g in GAMES.items()}
         none, why = ladder.candidate(ctx(), college, NOW)

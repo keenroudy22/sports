@@ -126,7 +126,7 @@ class TicketCardTests(unittest.TestCase):
         ]}
         end_zone_svg = ticket_card.research_list_svg(end_zone)
         self.assertIn('INSIDE THE 10', end_zone_svg)
-        self.assertIn('MY TD LEAN', end_zone_svg)
+        self.assertIn('ANYTIME TD LEAN', end_zone_svg)
         self.assertIn('HIT RATE', ticket_card.research_list_svg(trends))
 
     @classmethod

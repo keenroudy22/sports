@@ -432,8 +432,8 @@ def tickets(legs):
         yield book, (a, b), dec, price
 
 
-def near_miss(legs):
-    """Best positive-edge ticket just outside the rung band, for private/run diagnostics only."""
+def near_misses(legs, limit=3):
+    """Closest positive-edge tickets outside the rung band, for private/run diagnostics only."""
     rows = []
     for book in sorted({leg['book'] for leg in legs}):
         mine = [leg for leg in legs if leg['book'] == book]
@@ -451,11 +451,17 @@ def near_miss(legs):
                 continue
             distance = TARGET[0] - price if price < TARGET[0] else price - TARGET[1]
             rows.append((distance, -edge, -chance, book, price, round(chance, 4), chosen))
-    if not rows:
-        return None
-    _, neg_edge, _, book, price, chance, chosen = min(rows, key=lambda row: row[:3])
-    return {'book': book, 'odds': price, 'chance': chance, 'edge': round(-neg_edge, 4),
-            'legs': [leg.get('title') for leg in chosen]}
+    out = []
+    for _, neg_edge, _, book, price, chance, chosen in sorted(rows, key=lambda row: row[:3])[:limit]:
+        out.append({'book': book, 'odds': price, 'chance': chance, 'edge': round(-neg_edge, 4),
+                    'legs': [leg.get('title') for leg in chosen]})
+    return out
+
+
+def near_miss(legs):
+    """Backward-compatible single best near miss."""
+    rows = near_misses(legs, 1)
+    return rows[0] if rows else None
 
 
 def build(legs):
@@ -464,6 +470,8 @@ def build(legs):
     Safety is the conservative joint chance above the ticket's price, then the joint chance itself.  This keeps a
     merely shorter one-leg price from automatically beating a stronger two-game combination.
     """
+    if not legs:
+        return None, 'zero supported legs cleared the role, price and proven-segment gates'
     best = None
     for book, chosen, dec, price in tickets(legs):
         chance = 1.0
@@ -481,9 +489,10 @@ def build(legs):
                           'quotedAt': min(l['observedAt'] for l in selected),
                           'firstKickoff': min(l['kickoff'] for l in selected), 'chance': chance})
     if not best:
-        near = near_miss(legs)
-        detail = (f"; near miss {near['book']} {near['odds']:+d}, "
-                  f"{100 * near['edge']:.1f} points above its price") if near else ''
+        near = near_misses(legs)
+        detail = ('; near misses ' + ' | '.join(
+            f"{row['book']} {row['odds']:+d} ({', '.join(row['legs'])}), "
+            f"{100 * row['edge']:.1f} points above its price" for row in near)) if near else ''
         return None, f'no book has one or two supported legs that pay {TARGET[0]:+d} to {TARGET[1]:+d}{detail}'
     return best[1], None
 

@@ -205,8 +205,18 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Touchdown and next-man-up research (owner, 2026-10-15):** the approved End-Zone Work card names the strongest
+  anytime-touchdown lean and the first-touchdown dart from verified scoring-area workload; either may be the same
+  player when the evidence points there. These are research calls unless a separately priced selection clears every
+  official-play gate. Follow a verified score once after the final; misses stay quiet. A next-man-up angle requires
+  hard injury news, a newer role projection after that news and a current exact book price. Yardage alternates may
+  appear only at real captured prices and remain subject to the segment, role and injury guards. Keep private notes
+  on the post shapes being adapted and measure them by views, saves, replies and follows; copy the useful structure,
+  never another account's wording or unsupported pick.
+
 - **More useful trends and projection sheets (owner, 2026-10-15):** End-Zone Work names exactly one strongest
-  touchdown lean from verified scoring-area workload and marks it on the research-list card. It remains research,
+  touchdown lean from verified scoring-area workload and marks it on the research-list card. The newer touchdown
+  rule adds a separately labeled first-TD dart. It remains research,
   never an official bet; after the final store verifies that player scored, publish one casual follow-up to X and
   the research Discord, exactly once. On large CFB Saturday and NFL Sunday slates, keep the full projection sheet
   and number up to six favorite priced projections that pass the existing freshness and value checks. Do not ring

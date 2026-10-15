@@ -117,7 +117,7 @@ prevents duplicates, and the normal queue limits apply. These are updates, not p
 | **Morning receipt** | 9 AM the day after a game day | `Saturday: 5-3` then `✅ Iowa/Michigan over 38.5` per play; a fun ticket adds `0.25u · 2/3 legs hit · missed by one leg` when the stored settlement supports it; a raw losing player prop waits for its injury/return review until 12 hours after kickoff, then uses the official stats if no different official book settlement is known; a verified injury adds `injured in-game · checked before grading`; `Today: 3 plays.`, tags | the tall navy/mint report card (W/L per play, finals, parlay sweat, the chef) | `receipts.day_receipt`, `with_menu`, `pick_card.receipt_svg` |
 | **Week's receipt** | Wednesday 9 AM | `The week (Sep 23 to Sep 29): 12-9` then the record by kind; fun parlays show their smaller stake | receipt report card | `receipts.week_receipt` |
 | **Save this projection sheet** | 10 AM college Saturday and NFL Sunday | full NFL slate or 16 college games / exact line, odds and book / up to six favorite price-qualified mint rings / save ask / tag | 1080x1350 compact projection grid | `sheet.py` |
-| **Research card** | At most one per football slate, targeted for 10:30 AM | Fresh outright Underdog Watch first; otherwise a priced underdog cover, defense-supported exact-line Matchup Trend, or End-zone Work. CFB players projected to trail by 14+ are ranked down and carry game-script context. The category label distinguishes research; the caption stays to the exact line, one proof point and price without a stock disclaimer or generic save ask | Compact 1200x675 navy/mint/cyan card with large lines and one team/player hero | `research_posts.py` |
+| **Research card** | At most one per football slate, targeted for 10:30 AM | Fresh outright Underdog Watch first; otherwise a priced underdog cover, defense-supported exact-line Matchup Trend, or End-Zone Work. End-Zone Work labels an anytime-TD lean and a high-variance first-TD dart from verified scoring-area workload, then follows a verified score once. CFB players projected to trail by 14+ are ranked down and carry game-script context. The category label distinguishes research; the caption stays to the exact line, one proof point and price without a stock disclaimer or generic save ask | Kitchen Ticket research-list card with row headshots or team marks; `RESEARCH · NOT A BEST BET` | `research_posts.py`, `ticket_card.research_list_svg` |
 
 Confirmed official plays, the Pick of the Day and fun/challenge tickets use the same copy and card in Discord about
 10-15 minutes before their X time. Receipts, injury angles and conversation prompts mirror after X. Public promotion
@@ -128,6 +128,8 @@ says "plays hit Discord first," never "guaranteed bets" or anything that implies
 
 An injury angle only exists after a newer projection removed the player and redistributed their role, and after a
 book price was captured following the news. It never counts as a play; a qualifying official play posts separately.
+An alternate-yardage ladder likewise needs a real captured alternate and the same role, injury and segment evidence;
+the desk never invents the line or converts an unpriced workload note into a play.
 
 Limits: twenty posts a day at most, counting what is queued (`buffer_post.MAX_PER_DAY`); ten minutes between any two
 posts (`buffer_post.free_slot`). The card must be live on the site before a post is scheduled; a play whose card is

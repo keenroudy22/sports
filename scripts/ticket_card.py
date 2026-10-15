@@ -409,7 +409,12 @@ def research_list_svg(choice, *, art=None):
             detail = detail if kind == 'matchup' else ''
         elif kind == 'end-zone':
             right = price_text.replace(' inside the 10', '')
-            line = ('MY TD LEAN · ' if source.get('tdLean') else '') + metric
+            labels = []
+            if source.get('tdLean'):
+                labels.append('ANYTIME TD LEAN')
+            if source.get('firstTdDart'):
+                labels.append('FIRST TD DART')
+            line = ((' + '.join(labels) + ' · ') if labels else '') + metric
             detail = ''
         elif kind == 'upset':
             match = re.search(r'(\d+)%.*?(\d+)%', str(source.get('copyMetric') or metric))

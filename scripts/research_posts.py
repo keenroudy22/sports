@@ -380,24 +380,36 @@ def scorer_candidate(games, details, now):
         for player in (details.get(game['id']) or {}).get('scorerResearch') or []:
             if not current(player.get('roleSnapshotAt'), now, timedelta(days=7)) or player.get('games', 0) < 3:
                 continue
+            games_seen = player['games']
             rows.append({'league': game.get('league'), 'gameId': game['id'], 'kickoff': game['kickoff'],
                          'title': player.get('player'), 'team': None, 'athleteId': player.get('athleteId'),
                          'price': f"{player.get('inside10', 0)} inside the 10", 'book': None,
                          'metric': f"{player.get('redZone', 0)} red-zone opportunities",
                          'detail': f"{player.get('touchdowns', 0)} rush/rec TDs | {player.get('games')}/{player.get('teamGames')} games observed",
-                         'score': (player.get('inside10', 0) / player['games'], player.get('redZone', 0) / player['games']),
+                         'firstTdScore': (player.get('inside10', 0) / games_seen,
+                                          player.get('redZone', 0) / games_seen,
+                                          player.get('touchdowns', 0) / games_seen),
+                         'anytimeScore': (player.get('touchdowns', 0) / games_seen,
+                                          player.get('inside10', 0) / games_seen,
+                                          player.get('redZone', 0) / games_seen),
                          'observedAt': player.get('roleSnapshotAt')})
-    rows.sort(key=lambda row: (-row['score'][0], -row['score'][1], row['title']))
+    rows.sort(key=lambda row: tuple(-value for value in row['firstTdScore']) + (row['title'],))
     if not rows:
         return None
     shown = rows[:4]
-    # This is an editorial touchdown lean, not a priced play. The top observed
-    # scoring-role row is named plainly so the owner and readers do not have to
-    # infer our favorite from the ordering.
-    shown[0]['tdLean'] = True
+    # These are editorial touchdown leans, not priced plays. First-score work
+    # follows scoring-area opportunity; the anytime lean also rewards players
+    # who have actually converted that role. Both remain visibly high variance.
+    first_td = max(shown, key=lambda row: row['firstTdScore'])
+    anytime = max(shown, key=lambda row: row['anytimeScore'])
+    first_td['firstTdDart'] = True
+    anytime['tdLean'] = True
     lines = [f"{row['title']} | {row['metric']} | {row['price']}" for row in shown]
+    lean_line = (f"Anytime TD lean + first TD dart: {anytime['title']}."
+                 if anytime is first_td else
+                 f"Anytime TD lean: {anytime['title']}. First TD dart: {first_td['title']}.")
     return {'kind': 'end-zone', 'title': 'END-ZONE WORK', 'kicker': 'SCORING-AREA OPPORTUNITY', 'accent': VIOLET,
-            'rows': shown, 'text': '\n'.join(['🎯 END-ZONE WORK', f"My TD lean: {shown[0]['title']}.",
+            'rows': shown, 'text': '\n'.join(['🎯 END-ZONE WORK', lean_line,
                                              'Players seeing the most scoring-area work:',
                                              *lines, '', tags(shown)])}
 
@@ -682,11 +694,14 @@ def post(games, now, data_path=TODAY, detail_root=DETAILS, lines_path=LINES, log
     log(f"research: scheduled {choice['kind']} for {due.astimezone(gates.EASTERN):%-I:%M %p} ET")
     key = f"research:{choice['kind']}:{choice['day'].isoformat()}"
     if choice['kind'] == 'end-zone':
-        lean = next((row for row in choice['rows'] if row.get('tdLean')), None)
-        if lean:
+        leans = [row for row in choice['rows'] if row.get('tdLean') or row.get('firstTdDart')]
+        if leans:
             _PLANNED_METADATA[key] = {
-                'type': 'td-lean', 'player': lean['title'], 'athleteId': str(lean.get('athleteId') or ''),
-                'gameId': lean['gameId'], 'league': lean['league'], 'kickoff': lean['kickoff'],
+                'type': 'td-lean',
+                'leans': [{'player': row['title'], 'athleteId': str(row.get('athleteId') or ''),
+                           'gameId': row['gameId'], 'league': row['league'], 'kickoff': row['kickoff'],
+                           'anytime': bool(row.get('tdLean')), 'firstTd': bool(row.get('firstTdDart'))}
+                          for row in leans],
             }
     return {'key': key, 'kind': 'research',
             # A one-game slate is useful as a short conversation post, but the
@@ -718,19 +733,32 @@ def touchdown_followups(log_book, now, box_root=None):
         key = f"research:td-hit:{entry.get('id')}"
         if key in posted:
             continue
-        kickoff = when(meta.get('kickoff'))
+        leans = list(meta.get('leans') or [])
+        if not leans and meta.get('player'):
+            leans = [{'player': meta.get('player'), 'athleteId': meta.get('athleteId'),
+                      'gameId': meta.get('gameId'), 'league': meta.get('league'),
+                      'kickoff': meta.get('kickoff'), 'anytime': True, 'firstTd': False}]
+        kickoff = when((leans[0] if leans else {}).get('kickoff'))
         if not kickoff or not timedelta(0) <= now - kickoff <= timedelta(days=2):
             continue
-        event = str(meta.get('gameId') or '').split('-', 1)[-1]
-        game = records.get(event)
-        player = next((row for row in (game or {}).get('players') or []
-                       if str(row.get('id') or '') == str(meta.get('athleteId') or '')), None)
-        touchdowns = (player or {}).get('rushTD', 0) + (player or {}).get('recTD', 0)
-        if touchdowns < 1:
+        hits = []
+        for lean in leans:
+            event = str(lean.get('gameId') or '').split('-', 1)[-1]
+            game = records.get(event)
+            player = next((row for row in (game or {}).get('players') or []
+                           if str(row.get('id') or '') == str(lean.get('athleteId') or '')), None)
+            if (player or {}).get('rushTD', 0) + (player or {}).get('recTD', 0) >= 1:
+                hits.append(lean)
+        if not hits:
             continue
-        league = str(meta.get('league') or '').upper()
-        text = (f"🎯 {meta['player']} found the end zone.\n"
-                "That was my End-Zone Work TD lean this morning."
+        league = str(hits[0].get('league') or '').upper()
+        names = ' and '.join(row['player'] for row in hits)
+        # The box score proves that a player scored, but not that the score was
+        # the game's first. Never turn a scorer hit into a false first-TD receipt.
+        call = ('anytime TD lean' if all(row.get('anytime') for row in hits)
+                else 'End-Zone Work call')
+        text = (f"🎯 {names} found the end zone.\n"
+                f"That was my {call} this morning."
                 + (f"\n#{league}" if league else ''))
         out.append({'key': key, 'kind': 'research', 'card': None, 'text': text,
                     'due': now + timedelta(minutes=2), 'stale': now + timedelta(hours=6)})

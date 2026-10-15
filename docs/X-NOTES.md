@@ -205,6 +205,26 @@ Kook'n should copy the **structure**, not the costume:
 5. Use the existing result category for a quick honest outcome. The full record remains the source of truth.
 6. Keep live X updates out until the owner separately approves a limited pilot; game footage also creates rights risk.
 
+## Operating notes, Oct 15: touchdown and injury-role posts
+
+This is the desk's adoption note from the already-reviewed feed patterns above and the owner's Oct 15 direction. It
+is not a claim that a new live-feed review occurred today.
+
+1. End-Zone Work names an **anytime TD lean** and a **first TD dart** from verified scoring-area usage. The first-TD
+   label is deliberately high variance; neither becomes an official play without a current two-sided price and the
+   ordinary selection gates.
+2. A hard injury can produce a **next man up** angle only after the injury feed confirms the news, a newer projection
+   redistributes the role and a post-news sportsbook quote exists. The post says what changed, the current line and
+   the matchup evidence in plain words.
+3. Alternate yardage ladders are useful when the book's real alternate prices and the player's new role agree. They
+   are not built from guessed prices or a backup label alone, and the Climb keeps its proven-segment fence.
+4. The graphic carries the list; the caption names the finding and one reason. One combined follow-up celebrates any
+   verified scorer call after the final. Misses are not hidden in the public betting record because these calls are
+   research, not bets.
+5. Review the first eight posts by views, likes plus reposts plus real replies per view, saves when available, Discord
+   response and follows. Keep the formats that create saves or conversation; change weak framing without changing
+   the model or manufacturing a play.
+
 Do not copy `looks too easy`, `smash spot`, selective streak claims, forced daily tickets, copyrighted game clips or
 affiliate-heavy link stacks. Cody's system is powerful because it is simple and repeated. Kook'n's advantage should
 be the same clarity with a complete public record, fresher data and fewer forced bets.

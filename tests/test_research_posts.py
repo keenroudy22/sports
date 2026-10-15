@@ -30,7 +30,7 @@ def projected_game(*, kickoff='2026-10-04T17:00:00Z', observed='2026-10-03T13:30
 
 
 class ResearchPostTests(unittest.TestCase):
-    def test_end_zone_names_one_td_lean_and_followup_waits_for_a_verified_score(self):
+    def test_end_zone_names_anytime_and_first_td_leans_and_followup_waits_for_a_verified_score(self):
         detail = {'scorerResearch': [
             {'player': 'First Scorer', 'athleteId': '101', 'games': 4, 'teamGames': 4,
              'inside10': 8, 'redZone': 12, 'touchdowns': 3, 'projectedOpportunities': 8,
@@ -41,7 +41,8 @@ class ResearchPostTests(unittest.TestCase):
         ]}
         choice = R.scorer_candidate([game()], {'CFB-1': detail}, NOW)
         self.assertEqual([row.get('tdLean', False) for row in choice['rows']], [True, False])
-        self.assertIn('My TD lean: First Scorer.', choice['text'])
+        self.assertEqual([row.get('firstTdDart', False) for row in choice['rows']], [True, False])
+        self.assertIn('Anytime TD lean + first TD dart: First Scorer.', choice['text'])
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
             record = {'eventId': '1', 'players': [{'id': '101', 'rushTD': 1, 'recTD': 0}]}
@@ -58,6 +59,25 @@ class ResearchPostTests(unittest.TestCase):
             self.assertIn('TD lean', posts[0]['text'])
             log['posts'].append({'id': posts[0]['key']})
             self.assertEqual(R.touchdown_followups(log, later, box_root=root), [])
+
+    def test_end_zone_can_track_two_distinct_calls_in_one_followup(self):
+        log = {'posts': [{'id': 'research:end-zone:2026-10-03', 'kind': 'buffer:research',
+                          'sentAt': '2026-10-03T14:30:00Z', 'research': {'type': 'td-lean', 'leans': [
+                              {'player': 'Anytime Player', 'athleteId': '101', 'gameId': 'CFB-1',
+                               'league': 'CFB', 'kickoff': '2026-10-03T17:00:00Z', 'anytime': True},
+                              {'player': 'First Dart', 'athleteId': '202', 'gameId': 'CFB-1',
+                               'league': 'CFB', 'kickoff': '2026-10-03T17:00:00Z', 'firstTd': True},
+                          ]}}]}
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            record = {'eventId': '1', 'players': [
+                {'id': '101', 'rushTD': 1, 'recTD': 0}, {'id': '202', 'rushTD': 0, 'recTD': 1}]}
+            (root / 'cfb-2026.jsonl').write_text(__import__('json').dumps(record) + '\n')
+            posts = R.touchdown_followups(log, datetime(2026, 10, 3, 22, 0, tzinfo=timezone.utc), box_root=root)
+        self.assertEqual(len(posts), 1)
+        self.assertIn('Anytime Player and First Dart found the end zone', posts[0]['text'])
+        self.assertIn('End-Zone Work call', posts[0]['text'])
+        self.assertNotIn('first-TD dart', posts[0]['text'])
 
     def test_thursday_primetime_research_is_not_buried_by_other_games(self):
         now = datetime(2026, 10, 15, 12, 30, tzinfo=timezone.utc)  # Thu 8:30 AM ET
