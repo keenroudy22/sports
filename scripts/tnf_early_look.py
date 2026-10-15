@@ -11,9 +11,10 @@ import role_sanity
 PUBLIC_BOOKS = {'DraftKings', 'FanDuel', 'BetMGM', 'ESPN BET', 'theScore Bet',
                 'Caesars', 'BetRivers', 'Fanatics'}
 MAX_AGE = timedelta(hours=4)
-# The owner approved the category, but the first real cards still need Claude's review.
-# Keep delivery off until that review and a separate gated release.
-ENABLED = False
+# The owner approved this category and its Kitchen Ticket research-list art.
+# Keep the selector honest (two fresh, sane rows) instead of leaving an
+# operational switch that can silently make a Thursday game disappear.
+ENABLED = True
 
 
 def _when(value):

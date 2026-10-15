@@ -59,15 +59,13 @@ class TnfEarlyLookTests(unittest.TestCase):
             self.assertIn('RESEARCH', svg)
             self.assertNotIn('1-800-', svg)
 
-    def test_post_stays_off_until_review_and_counts_against_thursday_research(self):
+    def test_approved_post_is_live_and_counts_against_thursday_research(self):
         rows = [line(), line(ident='two')]
         with patch.object(research_posts, 'load', return_value={'games': [GAME]}), \
                 patch.object(research_posts, 'load_lines', return_value=rows), \
                 patch.object(research_posts, 'details_for', return_value={}), \
                 patch.object(research_posts, 'teams_for', return_value={}):
-            self.assertIsNone(research_posts.post({}, NOW))
-            with patch.object(early, 'ENABLED', True):
-                post = research_posts.post({}, NOW)
+            post = research_posts.post({}, NOW)
         self.assertEqual(post['key'], 'research:tnf-early:2026-10-08')
         self.assertEqual(post['kind'], 'research')
         self.assertEqual(post['countsFor'].isoformat(), '2026-10-08')

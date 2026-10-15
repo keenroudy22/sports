@@ -30,6 +30,27 @@ def projected_game(*, kickoff='2026-10-04T17:00:00Z', observed='2026-10-03T13:30
 
 
 class ResearchPostTests(unittest.TestCase):
+    def test_thursday_primetime_research_is_not_buried_by_other_games(self):
+        now = datetime(2026, 10, 15, 12, 30, tzinfo=timezone.utc)  # Thu 8:30 AM ET
+        college = dict(game(), kickoff='2026-10-15T23:30:00Z')
+        tnf = {'id': 'NFL-tnf', 'league': 'NFL', 'kickoff': '2026-10-16T00:15:00Z',
+               'state': 'pre', 'away': {'abbr': 'SEA'}, 'home': {'abbr': 'DEN'}}
+        focused = {'kind': 'end-zone', 'rows': [
+            {'gameId': 'NFL-tnf', 'kickoff': tnf['kickoff']},
+            {'gameId': 'NFL-tnf', 'kickoff': tnf['kickoff']}], 'text': 'TNF work'}
+        college_card = {'kind': 'season', 'rows': [
+            {'gameId': 'CFB-1', 'kickoff': college['kickoff']},
+            {'gameId': 'CFB-1', 'kickoff': college['kickoff']}], 'text': 'college'}
+        logs = []
+        with mock.patch.object(R, 'prep_candidate', return_value=None), \
+             mock.patch.object(R, 'matchup_candidate', return_value=None), \
+             mock.patch.object(R, 'scorer_candidate', side_effect=lambda games, *_: focused if games == [tnf] else None), \
+             mock.patch.object(R, 'season_candidate', return_value=college_card):
+            choice = R.select({'games': [college, tnf]}, {}, now, log=logs.append)
+        self.assertEqual(choice['kind'], 'end-zone')
+        self.assertEqual({row['gameId'] for row in choice['rows']}, {'NFL-tnf'})
+        self.assertIn('research focus: TNF end-zone eligible: 2 rows', logs)
+
     def test_fallback_logs_each_attempt_and_stops_at_first_eligible_card(self):
         season = {'kind': 'season', 'rows': [{'kickoff': game()['kickoff']}] * 2}
         logs = []

@@ -572,8 +572,27 @@ def select(data, details, now, lines=None, teams=None, order=None, log=None):
     if log and not prepared:
         log('research rules: prep held — ' + prep_diagnostics(data, now))
     usable = lambda choice: choice if choice and len(choice.get('rows') or []) >= 2 else None
+    # Thursday's national game should not be buried beneath unrelated college
+    # rows. Wednesday's Early Look remains the preferred preview; this is the
+    # game-day recovery path when that card did not have two fresh rows.
+    local = now.astimezone(gates.EASTERN)
+    tnf = [game for game in today_games if game.get('league') == 'NFL'
+           and local.weekday() == 3 and when(game.get('kickoff'))
+           and when(game['kickoff']).astimezone(gates.EASTERN).hour >= 19]
+    focused = None
+    if tnf:
+        focused = usable(matchup_candidate(tnf, details, now, teams)) \
+            or usable(scorer_candidate(tnf, details, now))
+        if log:
+            log('research focus: TNF ' +
+                (f"{focused['kind']} eligible: {len(focused.get('rows') or [])} rows"
+                 if focused else 'held: no two-row game-day card'))
+    if focused:
+        chosen = focused
+    else:
+        chosen = None
     if os.environ.get('KEENROUDY_RESEARCH_FALLBACK', '1').strip().lower() in ('0', 'false', 'off', 'no'):
-        chosen = prepared
+        chosen = chosen or prepared
         if log:
             log('research fallback: disabled; prep ' + ('eligible' if chosen else 'held: no eligible card'))
     else:
@@ -589,8 +608,7 @@ def select(data, details, now, lines=None, teams=None, order=None, log=None):
         }
         wanted = [kind for kind in (order or factories) if kind in factories]
         wanted += [kind for kind in factories if kind not in wanted]
-        chosen = None
-        for kind in wanted:
+        for kind in wanted if not chosen else ():
             choice = factories[kind]()
             if log:
                 log(f'research fallback: {kind} ' +
