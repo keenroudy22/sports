@@ -452,7 +452,12 @@ def qb_change_recent(candidate, ctx):
 
 
 def totals_policy(candidate, ctx):
-    """NFL totals stay research-only; CFB totals have a single weekend place and no adverse line move."""
+    """Keep totals bounded without reviving the retired weekday veto.
+
+    The October 9 plan replaced the old CFB-weekday ban with a daily mix
+    fence: no more than one CFB total on a weekday and two on a weekend day.
+    Selection still requires positive value and a real total-specific reason.
+    """
     if market_key(candidate) != 'total':
         return Decision(True, 'totals_policy', 'not a total')
     league = candidate.get('league') or (game_of(candidate, ctx) or {}).get('league')
@@ -463,35 +468,17 @@ def totals_policy(candidate, ctx):
     if league != 'CFB':
         return Decision(True, 'totals_policy', 'not a football total')
     day = slate_day(candidate, ctx)
-    if day is None or day.weekday() not in (5, 6):
-        return Decision(False, 'totals_policy', 'CFB totals are not official on weekdays')
-    weekend = {day} if day.weekday() == 5 else {day - timedelta(days=1), day}
-    if day.weekday() == 5:
-        weekend.add(day + timedelta(days=1))
+    if day is None:
+        return Decision(False, 'totals_policy', 'the Eastern game day is unknown')
+    limit = 2 if day.weekday() in (5, 6) else 1
+    used = 0
     for key, pick in ctx.first.items():
         if key != candidate.get('id') and not pick.get('historicalImport') and not pick.get('legs') \
                 and (pick.get('league') or str(pick.get('id', '')).split('-')[0]) == 'CFB' \
-                and market_key(pick) == 'total' and slate_day(pick, ctx) in weekend and not pulled_before_post(key, ctx):
-            return Decision(False, 'totals_policy', 'one CFB total has already taken this weekend slate place')
-    book = candidate.get('book')
-    history = sorted((row for row in ctx.odds_history.get((candidate.get('gameIds') or [None])[0], [])
-                      if row.get('retrievedAt') and when(row['retrievedAt']) <= ctx.now),
-                     key=lambda row: row['retrievedAt'])
-    first_line = None
-    for row in history:
-        offer = next((block.get('total') for name, block in (row.get('books') or {}).items()
-                      if BOOK_NAMES.get(name, name) == book and isinstance(block.get('total'), dict)), None)
-        if offer and isinstance(offer.get('line'), (int, float)):
-            first_line = float(offer['line'])
-            break
-    line = candidate.get('line')
-    side = side_of(candidate)
-    if first_line is None or not isinstance(line, (int, float)) or side not in ('over', 'under'):
-        return Decision(False, 'totals_policy', 'no comparable first captured line for this book')
-    adverse = line > first_line if side == 'over' else line < first_line
-    return Decision(not adverse, 'totals_policy',
-                    f'{book} first captured {first_line:g}, now {line:g}; ' +
-                    ('moved against this play' if adverse else 'no adverse move'))
+                and market_key(pick) == 'total' and slate_day(pick, ctx) == day and not pulled_before_post(key, ctx):
+            used += 1
+    return Decision(used < limit, 'totals_policy',
+                    f'{used} of {limit} CFB total places used on {day}')
 
 
 def published_today(ctx, exclude=None):

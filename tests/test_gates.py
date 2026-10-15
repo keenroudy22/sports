@@ -154,7 +154,7 @@ class NoForcedBestBetTests(unittest.TestCase):
         self.assertFalse(gates.role_sanity.price_suspect(-110, .74, fair=.50))
         self.assertTrue(gates.role_sanity.price_suspect(-110, None, fair=.20, gap=.30))
 
-    def test_nfl_total_paused_and_cfb_total_weekend_only_without_adverse_move(self):
+    def test_nfl_total_paused_and_cfb_totals_follow_the_current_daily_mix(self):
         self.assertTrue(gates.totals_policy(total_lean(), context()).ok,
                         'the dated direction pause, not a permanent veto, must record forward shadows')
         policy = gates.learning.default_policy()
@@ -170,16 +170,21 @@ class NoForcedBestBetTests(unittest.TestCase):
         ctx = context(games={'CFB-1': cfb_game}, odds_history={'CFB-1': [first]})
         self.assertTrue(gates.totals_policy(cfb_pick, ctx).ok)
         self.assertFalse(gates.bar_4(cfb_pick, ctx).ok, 'college totals need five, not four')
-        self.assertFalse(gates.totals_policy(dict(cfb_pick, line=45.5), ctx).ok)
         monday = dict(cfb_game, kickoff='2026-09-28T17:00:00Z')
         monday_ctx = context(games={'CFB-1': monday}, odds_history={'CFB-1': [first]})
-        self.assertFalse(gates.totals_policy(cfb_pick, monday_ctx).ok)
-        ok, decisions = gates.admit(cfb_pick, monday_ctx, 'modelLean')
-        self.assertFalse(ok)
-        self.assertIn('totals_policy', {row.rule for row in gates.refusals(decisions)})
-        prior = dict(cfb_pick, id='CFB-prior', publishedAt='2026-09-26T15:00:00Z')
+        self.assertTrue(gates.totals_policy(cfb_pick, monday_ctx).ok,
+                        'the October 9 plan retired the no-weekday-total rule')
+        prior = dict(cfb_pick, id='CFB-prior', publishedAt='2026-09-28T15:00:00Z')
+        self.assertFalse(gates.totals_policy(cfb_pick, context(games={'CFB-1': monday},
+                          odds_history={'CFB-1': [first]}, first={'CFB-prior': prior})).ok,
+                         'a weekday keeps one CFB total place')
+        prior = dict(cfb_pick, id='CFB-prior', publishedAt='2026-09-27T15:00:00Z')
+        second = dict(cfb_pick, id='CFB-second', publishedAt='2026-09-27T15:30:00Z')
+        self.assertTrue(gates.totals_policy(cfb_pick, context(games={'CFB-1': cfb_game},
+                         odds_history={'CFB-1': [first]}, first={'CFB-prior': prior})).ok,
+                        'a weekend day allows a second CFB total')
         self.assertFalse(gates.totals_policy(cfb_pick, context(games={'CFB-1': cfb_game},
-                          odds_history={'CFB-1': [first]}, first={'CFB-prior': prior})).ok)
+                          odds_history={'CFB-1': [first]}, first={'CFB-prior': prior, 'CFB-second': second})).ok)
 
 
 class KindTests(unittest.TestCase):
