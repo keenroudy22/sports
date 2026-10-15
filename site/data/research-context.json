@@ -1,11 +1,20 @@
 {
-  "updatedAt": "2026-10-15T00:52:54Z",
+  "updatedAt": "2026-10-15T01:06:55Z",
   "leagues": {
     "NFL": {
       "teams": {
         "22": {
           "name": "Arizona Cardinals",
           "players": [
+            {
+              "id": "3918331",
+              "name": "Andrew Wingard",
+              "position": "S",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-10-15T00:43Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3918331/andrew-wingard"
+            },
             {
               "id": "4039050",
               "name": "Devin Duvernay",
@@ -68,15 +77,6 @@
               "injury": "Foot",
               "reportedAt": "2026-10-13T19:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/3045147/james-conner"
-            },
-            {
-              "id": "3918331",
-              "name": "Andrew Wingard",
-              "position": "S",
-              "status": "Questionable",
-              "injury": "Knee",
-              "reportedAt": "2026-10-13T17:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3918331/andrew-wingard"
             },
             {
               "id": "4373626",
@@ -2767,6 +2767,15 @@
           "name": "Houston Texans",
           "players": [
             {
+              "id": "4240059",
+              "name": "Ja'Marcus Ingram",
+              "position": "CB",
+              "status": "Injured Reserve",
+              "injury": "Elbow",
+              "reportedAt": "2026-10-15T01:04Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4240059/jamarcus-ingram"
+            },
+            {
               "id": "3121595",
               "name": "Braden Smith",
               "position": "OT",
@@ -2981,21 +2990,21 @@
               "injury": null,
               "reportedAt": "2026-10-11T15:56Z",
               "source": "https://www.espn.com/nfl/player/_/id/4870893/kayden-mcdonald"
-            },
-            {
-              "id": "3116679",
-              "name": "M.J. Stewart",
-              "position": "S",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-11T15:53Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3116679/mj-stewart"
             }
           ]
         },
         "11": {
           "name": "Indianapolis Colts",
           "players": [
+            {
+              "id": "4360078",
+              "name": "Alec Pierce",
+              "position": "WR",
+              "status": "Injured Reserve",
+              "injury": "Heel",
+              "reportedAt": "2026-10-15T00:54Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4360078/alec-pierce"
+            },
             {
               "id": "3916945",
               "name": "Darius Slayton",
@@ -3211,15 +3220,6 @@
               "injury": null,
               "reportedAt": "2026-10-05T18:44Z",
               "source": "https://www.espn.com/nfl/player/_/id/4708238/george-gumbs-jr"
-            },
-            {
-              "id": "4874509",
-              "name": "DJ Giddens",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-05T18:44Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4874509/dj-giddens"
             }
           ]
         },
@@ -4147,6 +4147,24 @@
           "name": "Los Angeles Rams",
           "players": [
             {
+              "id": "4243181",
+              "name": "Nate Landman",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Wrist",
+              "reportedAt": "2026-10-15T00:50Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4243181/nate-landman"
+            },
+            {
+              "id": "4426553",
+              "name": "Davis Allen",
+              "position": "TE",
+              "status": "Questionable",
+              "injury": "Foot",
+              "reportedAt": "2026-10-15T00:45Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4426553/davis-allen"
+            },
+            {
               "id": "4572371",
               "name": "Josh Wallace",
               "position": "CB",
@@ -4163,24 +4181,6 @@
               "injury": "Shoulder",
               "reportedAt": "2026-10-15T00:19Z",
               "source": "https://www.espn.com/nfl/player/_/id/4242557/colby-parkinson"
-            },
-            {
-              "id": "4243181",
-              "name": "Nate Landman",
-              "position": "LB",
-              "status": "Questionable",
-              "injury": "Wrist",
-              "reportedAt": "2026-10-15T00:19Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4243181/nate-landman"
-            },
-            {
-              "id": "4426553",
-              "name": "Davis Allen",
-              "position": "TE",
-              "status": "Questionable",
-              "injury": "Foot",
-              "reportedAt": "2026-10-15T00:18Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4426553/davis-allen"
             },
             {
               "id": "4036135",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-15T00:19Z",
+              "reportedAt": "2026-10-15T01:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -5527,6 +5527,15 @@
           "name": "New York Jets",
           "players": [
             {
+              "id": "4243375",
+              "name": "Dylan Parham",
+              "position": "G",
+              "status": "Doubtful",
+              "injury": "Knee",
+              "reportedAt": "2026-10-15T00:52Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4243375/dylan-parham"
+            },
+            {
               "id": "4362094",
               "name": "Joseph Ossai",
               "position": "DE",
@@ -5570,15 +5579,6 @@
               "injury": null,
               "reportedAt": "2026-10-14T20:17Z",
               "source": "https://www.espn.com/nfl/player/_/id/4700136/kiko-mauigoa"
-            },
-            {
-              "id": "4243375",
-              "name": "Dylan Parham",
-              "position": "G",
-              "status": "Doubtful",
-              "injury": "Knee",
-              "reportedAt": "2026-10-14T17:19Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4243375/dylan-parham"
             },
             {
               "id": "4427366",
@@ -7767,8 +7767,8 @@
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-15T00:52:54Z",
-      "lastAttemptAt": "2026-10-15T00:52:54Z",
+      "checkedAt": "2026-10-15T01:06:55Z",
+      "lastAttemptAt": "2026-10-15T01:06:55Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-15T00:52:54Z",
-      "lastAttemptAt": "2026-10-15T00:52:54Z",
+      "checkedAt": "2026-10-15T01:06:55Z",
+      "lastAttemptAt": "2026-10-15T01:06:55Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
