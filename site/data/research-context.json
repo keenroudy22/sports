@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-15T04:54:45Z",
+  "updatedAt": "2026-10-15T08:40:55Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-15T04:01Z",
+              "reportedAt": "2026-10-15T08:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1662,15 +1662,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4873232/mason-graham"
             },
             {
-              "id": "4870653",
-              "name": "KC Concepcion",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Concussion",
-              "reportedAt": "2026-10-14T21:48Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4870653/kc-concepcion"
-            },
-            {
               "id": "3040471",
               "name": "Maliek Collins",
               "position": "DT",
@@ -1705,6 +1696,15 @@
               "injury": "Foot",
               "reportedAt": "2026-10-14T21:30Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685702/quinshon-judkins"
+            },
+            {
+              "id": "4870653",
+              "name": "KC Concepcion",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Concussion",
+              "reportedAt": "2026-10-14T16:02Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4870653/kc-concepcion"
             },
             {
               "id": "4569682",
@@ -3705,15 +3705,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4432775/donte-thornton-jr"
             },
             {
-              "id": "4890973",
-              "name": "Ashton Jeanty",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-14T23:54Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4890973/ashton-jeanty"
-            },
-            {
               "id": "3045172",
               "name": "Folorunso Fatukasi",
               "position": "DT",
@@ -3748,6 +3739,15 @@
               "injury": "Concussion",
               "reportedAt": "2026-10-14T19:33Z",
               "source": "https://www.espn.com/nfl/player/_/id/4382466/jalen-nailor"
+            },
+            {
+              "id": "4890973",
+              "name": "Ashton Jeanty",
+              "position": "RB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-14T18:48Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4890973/ashton-jeanty"
             },
             {
               "id": "4241983",
@@ -4021,7 +4021,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Foot",
-              "reportedAt": "2026-10-14T22:25Z",
+              "reportedAt": "2026-10-14T19:11Z",
               "source": "https://www.espn.com/nfl/player/_/id/4612826/ladd-mcconkey"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-15T04:01Z",
+              "reportedAt": "2026-10-15T08:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "20",
-          "name": "Dane Belton",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-14T21:31:24Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4426686/dane-belton"
-        },
-        {
-          "teamId": "20",
           "name": "Kiko Mauigoa",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Injured Reserve",
           "observedAt": "2026-10-15T01:31:16Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-10-15T08:40:55Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-15T04:54:45Z",
-      "lastAttemptAt": "2026-10-15T04:54:45Z",
+      "checkedAt": "2026-10-15T08:40:55Z",
+      "lastAttemptAt": "2026-10-15T08:40:55Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-15T04:54:45Z",
-      "lastAttemptAt": "2026-10-15T04:54:45Z",
+      "checkedAt": "2026-10-15T08:40:55Z",
+      "lastAttemptAt": "2026-10-15T08:40:55Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }

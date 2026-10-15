@@ -1,20 +1,20 @@
 {
- "at": "2026-10-15T04:55:27Z",
+ "at": "2026-10-15T08:41:47Z",
  "confirmed": {
-  "CFB-401858493": "2026-10-15T04:55:27Z",
-  "CFB-401860923": "2026-10-15T04:55:27Z",
-  "CFB-401862800": "2026-10-15T04:55:27Z",
-  "CFB-401862801": "2026-10-15T04:55:27Z",
-  "CFB-401869950": "2026-10-15T04:55:27Z",
-  "NFL-401872995": "2026-10-15T04:55:27Z"
+  "CFB-401858493": "2026-10-15T08:41:47Z",
+  "CFB-401860923": "2026-10-15T08:41:47Z",
+  "CFB-401862800": "2026-10-15T08:41:47Z",
+  "CFB-401862801": "2026-10-15T08:41:47Z",
+  "CFB-401869950": "2026-10-15T08:41:47Z",
+  "NFL-401872995": "2026-10-15T08:41:47Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1066,
-    "fanduel": 895
+    "draftkings": 1069,
+    "fanduel": 862
    },
-   "eventsListed": 126,
+   "eventsListed": 119,
    "eventsMatched": 5,
    "games": 6,
    "marketTypes": {
@@ -24,17 +24,17 @@
     "player_longest_reception": 29,
     "player_longest_rush": 15,
     "player_passing_+_rushing_yards": 49,
-    "player_passing_attempts": 36,
+    "player_passing_attempts": 37,
     "player_passing_completions": 20,
     "player_passing_touchdowns": 69,
     "player_passing_yards": 262,
-    "player_receiving_yards": 817,
-    "player_receptions": 68,
-    "player_rushing_attempts": 35,
-    "player_rushing_yards": 548
+    "player_receiving_yards": 811,
+    "player_receptions": 73,
+    "player_rushing_attempts": 36,
+    "player_rushing_yards": 517
    },
-   "requestsLeft": 47,
-   "rows": 1961,
+   "requestsLeft": 48,
+   "rows": 1931,
    "slateGames": [
     "East Carolina Pirates at UAB Blazers 2026-10-15T23:30Z",
     "Georgia Southern Eagles at Old Dominion Monarchs 2026-10-15T23:30Z",
@@ -55,8 +55,7 @@
       "paddypower": "36179610",
       "polymarket": "nfl_columbia_penn_2026-10-16_b3",
       "rebet": "sr:match:70992972",
-      "smarkets": "45379477",
-      "sx_bet": "L20523794"
+      "smarkets": "45379477"
      },
      "home": "Pennsylvania",
      "sample": {
@@ -77,7 +76,6 @@
      "away": "Appalachian State",
      "external": {
       "ballybet": "1027508230",
-      "betfair": "202610160784F46C",
       "betmgm": "6:46829",
       "betonline": "491151736",
       "betparx": "1027508230",
@@ -172,6 +170,7 @@
        "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
+       "race_to_10_points",
        "team_total",
        "total_points",
        "total_points_band",
@@ -188,19 +187,17 @@
      "away": "Florida Atlantic",
      "external": {
       "ballybet": "1027569610",
-      "betfair": "20261017BE286CE1",
       "betmgm": "6:46830",
       "betonline": "491151778",
       "betparx": "1027569610",
       "betrivers": "1027569610",
       "bovada": "32121803",
       "bwin": "6:46830",
-      "caesars": "e965424d-5930-4d98-8b8d-f34a36ecebdc",
       "circa": "221134",
       "draftkings": "34788194",
       "fanduel": "36154562",
       "fliff": "418867_c_p_209_prematch",
-      "gemini": "NCAAF-2610171600-FAU-ARM-M",
+      "gemini": "NCAAF-2610171600-FAU-ARM-T",
       "goldrush": "31209334",
       "hardrock": "7065667498527555984",
       "kalshi": "KXNCAAF1H-26OCT17FAUARMY",
@@ -274,14 +271,12 @@
      "away": "Ball State",
      "external": {
       "ballybet": "1028202608",
-      "betfair": "202610173E732815",
       "betmgm": "6:46912",
       "betonline": "491151783",
       "betparx": "1028202608",
       "betrivers": "1028202608",
       "bovada": "32122390",
       "bwin": "6:46912",
-      "caesars": "49f2cbd3-1248-4a8a-93d3-5c81fa263880",
       "circa": "221131",
       "draftkings": "34788196",
       "fanduel": "36154539",
@@ -359,7 +354,6 @@
      "external": {
       "ballybet": "1027508207",
       "bet365": "202767313",
-      "betfair": "202610179B7E1AC1",
       "betmgm": "6:46842",
       "betonline": "491151774",
       "betparx": "1027508207",
@@ -371,7 +365,6 @@
       "draftkings": "34788190",
       "fanduel": "36154582",
       "fliff": "418735_c_p_209_prematch",
-      "gemini": "NCAAF-2610172000-PIT-BC-M",
       "goldrush": "31209363",
       "hardrock": "4343426241735557531",
       "kalshi": "KXNCAAF1H-26OCT16PITTBC",
@@ -416,8 +409,6 @@
        "1st_quarter_team_total",
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
-       "2nd_half_moneyline",
-       "2nd_half_point_spread",
        "2nd_half_total_points",
        "2nd_quarter_moneyline",
        "2nd_quarter_moneyline_3-way",
@@ -470,8 +461,8 @@
      "away": "Brown",
      "external": {
       "fanduel": "36179606",
+      "fliff": "419318_c_p_209_prematch",
       "kalshi": "KXNCAAFGAME-26OCT17BRWNPRIN",
-      "novig": "01a12171-93cf-7681-91e6-563766f1c456",
       "onexbet": "761555372",
       "paddypower": "36179606",
       "polymarket": "nfl_brown_princeton_2026-10-17_b2",
@@ -523,7 +514,6 @@
      "away": "Charleston Southern",
      "external": {
       "ballybet": "1028646591",
-      "betfair": "202610174FBDF5F0",
       "betparx": "1028646591",
       "betrivers": "1028646591",
       "fanduel": "36153361",
@@ -535,7 +525,6 @@
       "paddypower": "36153361",
       "polymarket": "nfl_charlestonsouthern_clemsontigers_2026-10-17_b2",
       "prophetx": "1700101972",
-      "rebet": "sr:match:70918904",
       "smarkets": "45356076",
       "sportzino": "sz-18024885",
       "sx_bet": "L20511292"
@@ -556,10 +545,33 @@
      "type": "fixture"
     },
     {
-     "away": "Cincinnati Bearcats",
+     "away": "Chicago State",
+     "external": {
+      "fanduel": "36179605",
+      "fliff": "419334_c_p_209_prematch",
+      "kalshi": "KXNCAAF1H-26OCT17CHSNCAT",
+      "onexbet": "761559017",
+      "paddypower": "36179605",
+      "polymarket": "nfl_chicagostate_northcarolinaat_2026-10-17_b2"
+     },
+     "home": "North Carolina A&T",
+     "sample": {
+      "away_team": "Chicago State",
+      "home_team": "North Carolina A&T",
+      "markets": [
+       "1st_half_moneyline",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-17T16:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Cincinnati",
      "external": {
       "ballybet": "1027569820",
-      "betfair": "202610174CF55AAE",
       "betmgm": "6:46854",
       "betonline": "491151767",
       "betparx": "1027569820",
@@ -571,7 +583,6 @@
       "draftkings": "34788191",
       "fanduel": "36153232",
       "fliff": "fobj__conflict_event__418744",
-      "gemini": "NCAAF-2610172000-CIN-WVU-M",
       "goldrush": "31209355",
       "hardrock": "1610400974898332059",
       "kalshi": "KXNCAAF1H-26OCT16CINWVU",
@@ -590,10 +601,10 @@
       "thescorebet": "StandardEvent:f6f6646b-d69b-4032-a0c9-e8090ca5b1b9",
       "underdog": "underdog_263667"
      },
-     "home": "West Virginia Mountaineers",
+     "home": "West Virginia",
      "sample": {
-      "away_team": "Cincinnati Bearcats",
-      "home_team": "West Virginia Mountaineers",
+      "away_team": "Cincinnati",
+      "home_team": "West Virginia",
       "markets": [
        "1st_half_anytime_touchdown_scorer",
        "1st_half_draw_no_bet",
@@ -614,8 +625,6 @@
        "1st_quarter_team_total",
        "1st_quarter_total_points",
        "1st_quarter_total_points_odd_even",
-       "2nd_half_moneyline",
-       "2nd_half_point_spread",
        "2nd_half_total_points",
        "2nd_quarter_moneyline",
        "2nd_quarter_moneyline_3-way",
@@ -647,7 +656,6 @@
        "player_rushing_yards",
        "player_touchdowns",
        "point_spread",
-       "race_to_10_points",
        "team_total",
        "total_points",
        "total_points_band",
@@ -661,12 +669,36 @@
      "type": "fixture"
     },
     {
+     "away": "Duquesne",
+     "external": {
+      "fanduel": "36179594",
+      "fliff": "419326_c_p_209_prematch",
+      "kalshi": "KXNCAAFGAME-26OCT17DUQSTNH",
+      "novig": "01a121a8-5ba0-7291-b0d8-32eaaffb2d72",
+      "onexbet": "761555369",
+      "paddypower": "36179594",
+      "polymarket": "nfl_duquesne_stonehill_2026-10-17_b2",
+      "smarkets": "45379458"
+     },
+     "home": "Stonehill",
+     "sample": {
+      "away_team": "Duquesne",
+      "home_team": "Stonehill",
+      "markets": [
+       "draw_no_bet",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-17T16:00:00Z",
+     "type": "fixture"
+    },
+    {
      "away": "Florida Gators",
      "external": {
       "ballybet": "1027508227",
       "bet365": "202646848",
-      "betfair": "202610178F757A4B",
-      "betmgm": "6:46691",
       "betonline": "491151762",
       "betparx": "1027508227",
       "betrivers": "1027508227",
@@ -681,7 +713,7 @@
       "gemini": "NCAAF-2610172000-FLA-TEX-M",
       "goldrush": "31209341",
       "hardrock": "2643317382403195269",
-      "kalshi": "KXNCAAF4QTOTAL-26OCT17FLATEX",
+      "kalshi": "KXNCAAF1H-26OCT16FLATEX",
       "ladbrokes": "f901f47f-3a84-40a2-bde5-81225f2d96ea",
       "matchbook": "mb-34548962839000023",
       "novig": "01a12171-924e-7351-9194-f3db5f2c126c",
@@ -722,7 +754,6 @@
        "1st_quarter_point_spread",
        "1st_quarter_team_total",
        "1st_quarter_total_points",
-       "2nd_half_moneyline",
        "2nd_half_point_spread",
        "2nd_half_total_points",
        "2nd_quarter_moneyline",
@@ -777,125 +808,13 @@
      },
      "start": "2026-10-17T16:00:00Z",
      "type": "fixture"
-    },
-    {
-     "away": "Georgia State",
-     "external": {
-      "ballybet": "1028202615",
-      "betfair": "2026101739566C19",
-      "betmgm": "6:46962",
-      "betonline": "491151773",
-      "betparx": "1028202615",
-      "betrivers": "1028202615",
-      "bovada": "32123363",
-      "bwin": "6:46962",
-      "caesars": "eb158fd4-f77b-44d7-a432-72af1c3d0e3b",
-      "circa": "221138",
-      "draftkings": "34788197",
-      "fanduel": "36154555",
-      "fliff": "418866_c_p_209_prematch",
-      "goldrush": "31209347",
-      "hardrock": "104932061961388438",
-      "kalshi": "KXNCAAF1H-26OCT16GASTJMU",
-      "ladbrokes": "93782ca3-bbd4-43f6-976c-f7598c0b9c40",
-      "matchbook": "mb-34577594309000023",
-      "novig": "01a12171-8c9e-7440-926b-e7a6be0ee4ff",
-      "onexbet": "760852961",
-      "paddypower": "36154555",
-      "pinnacle": "1637451499",
-      "polymarket": "nfl_georgiastate_jamesmadisondukes_2026-10-17_b2",
-      "prophetx": "1700101312",
-      "rebet": "sr:match:70898876",
-      "smarkets": "45367746",
-      "sportzino": "sz-18005344",
-      "sx_bet": "L20488584",
-      "thescorebet": "StandardEvent:0f638241-4453-43e6-a4e8-a215bcfb19ca"
-     },
-     "home": "James Madison",
-     "sample": {
-      "away_team": "Georgia State",
-      "home_team": "James Madison",
-      "markets": [
-       "1st_half_draw_no_bet",
-       "1st_half_moneyline",
-       "1st_half_moneyline_3-way",
-       "1st_half_point_spread",
-       "1st_half_team_total",
-       "1st_half_total_points",
-       "1st_half_total_points_odd_even",
-       "1st_quarter_moneyline",
-       "1st_quarter_moneyline_3-way",
-       "1st_quarter_point_spread",
-       "1st_quarter_team_total",
-       "1st_quarter_total_points",
-       "1st_quarter_total_points_odd_even",
-       "2nd_half_point_spread",
-       "2nd_half_total_points",
-       "2nd_quarter_moneyline",
-       "2nd_quarter_moneyline_3-way",
-       "2nd_quarter_point_spread",
-       "2nd_quarter_total_points",
-       "3rd_quarter_moneyline",
-       "3rd_quarter_moneyline_3-way",
-       "3rd_quarter_point_spread",
-       "3rd_quarter_total_points",
-       "4th_quarter_moneyline",
-       "4th_quarter_moneyline_3-way",
-       "4th_quarter_point_spread",
-       "4th_quarter_total_points",
-       "draw_no_bet",
-       "game_prop",
-       "halftime_fulltime",
-       "highest_scoring_quarter_will_have_how_many_points",
-       "match_result_both_teams_to_score",
-       "moneyline",
-       "moneyline_3-way",
-       "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_band",
-       "total_points_odd_even",
-       "total_touchdowns",
-       "will_there_be_overtime",
-       "winning_margin"
-      ]
-     },
-     "start": "2026-10-17T16:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Hampton",
-     "external": {
-      "fanduel": "36179568",
-      "fliff": "419324_c_p_209_prematch",
-      "kalshi": "KXNCAAF1H-26OCT17HAMPSHU",
-      "novig": "01a12171-90f9-7821-a8da-06e127505b66",
-      "onexbet": "761552869",
-      "paddypower": "36179568",
-      "polymarket": "nfl_hampton_sacredheart_2026-10-17_b2",
-      "smarkets": "45379472"
-     },
-     "home": "Sacred Heart",
-     "sample": {
-      "away_team": "Hampton",
-      "home_team": "Sacred Heart",
-      "markets": [
-       "1st_half_moneyline",
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-17T16:00:00Z",
-     "type": "fixture"
     }
    ]
   },
   "NFL": {
    "books": {
-    "draftkings": 336,
-    "fanduel": 383
+    "draftkings": 342,
+    "fanduel": 399
    },
    "eventsListed": 29,
    "eventsMatched": 1,
@@ -914,18 +833,18 @@
     "player_passing_attempts": 4,
     "player_passing_completions": 4,
     "player_passing_touchdowns": 13,
-    "player_passing_yards": 72,
-    "player_receiving_yards": 219,
-    "player_receptions": 121,
-    "player_rushing_+_receiving_yards": 18,
+    "player_passing_yards": 75,
+    "player_receiving_yards": 228,
+    "player_receptions": 125,
+    "player_rushing_+_receiving_yards": 22,
     "player_rushing_attempts": 10,
-    "player_rushing_yards": 108,
+    "player_rushing_yards": 110,
     "player_sacks": 22,
     "player_tackles": 18,
     "player_tackles_+_assists": 18
    },
-   "requestsLeft": 42,
-   "rows": 719,
+   "requestsLeft": 43,
+   "rows": 741,
    "slateGames": [
     "Seattle Seahawks at Denver Broncos 2026-10-16T00:15Z"
    ],
@@ -934,7 +853,6 @@
      "away": "Houston Texans",
      "external": {
       "ballybet": "1028823548",
-      "betfair": "2026101851518E16",
       "betmgm": "6:43628",
       "betonline": "491147416",
       "betparx": "1028823548",
@@ -945,7 +863,6 @@
       "circa": "224059",
       "draftkings": "34118244",
       "fanatics": "5559333",
-      "fanatics_markets": "6812428",
       "fanduel": "35605984",
       "fliff": "fobj__conflict_event__391739",
       "gemini": "NFL-2610181330-HOU-JAX-PPYDS",
@@ -1089,7 +1006,6 @@
      "external": {
       "ballybet": "1028823550",
       "bet365": "202477525",
-      "betfair": "202610185FF27066",
       "betmgm": "6:43632",
       "betonline": "491147417",
       "betparx": "1028823550",
@@ -1102,7 +1018,7 @@
       "fanatics": "5562214",
       "fanduel": "36160514",
       "fliff": "fobj__conflict_event__399996",
-      "gemini": "NFL-2610181700-CHI-ATL-PPTD",
+      "gemini": "NFL-2610181700-CHI-ATL-PPRECY",
       "goldrush": "31140273",
       "hardrock": "5712717890709488007",
       "kalshi": "KXNFL1H-26OCT18CHIATL",
@@ -1238,7 +1154,6 @@
      "external": {
       "ballybet": "1028823552",
       "bet365": "202477519",
-      "betfair": "20261018D9D10882",
       "betmgm": "6:43630",
       "betonline": "491147418",
       "betparx": "1028823552",
@@ -1251,7 +1166,7 @@
       "fanatics": "5562216",
       "fanduel": "36160507",
       "fliff": "fobj__conflict_event__399997",
-      "gemini": "NFL-2610181700-BAL-CLE-T",
+      "gemini": "NFL-2610181700-BAL-CLE-PPPASSTD",
       "goldrush": "31140276",
       "hardrock": "529074719606047127",
       "kalshi": "KXNFL1H-26OCT18BALCLE",
@@ -1379,7 +1294,6 @@
      "external": {
       "ballybet": "1028823553",
       "bet365": "202477516",
-      "betfair": "20261018E67FA5EF",
       "betmgm": "6:43635",
       "betonline": "491147420",
       "betparx": "1028823553",
@@ -1390,13 +1304,12 @@
       "circa": "224061",
       "draftkings": "34118154",
       "fanatics": "5562226",
-      "fanatics_markets": "6812464",
       "fanduel": "36160512",
       "fliff": "fobj__conflict_event__407866",
       "gemini": "NFL-2610181700-PIT-TB-T",
       "goldrush": "31140272",
       "hardrock": "2791733172688257451",
-      "kalshi": "KXNFL2QTOTAL-26OCT18PITTB",
+      "kalshi": "KXNFL1H-26OCT18PITTB",
       "ladbrokes": "19d96846-631a-4851-a999-3d95973939fa",
       "matchbook": "mb-33322323068300023",
       "novig": "01a112eb-522f-7523-a1cc-e0fd1f3a80c6",
@@ -1433,6 +1346,7 @@
        "1st_half_total_touchdowns",
        "1st_quarter_anytime_touchdown_scorer",
        "1st_quarter_both_teams_to_score",
+       "1st_quarter_double_chance",
        "1st_quarter_moneyline",
        "1st_quarter_moneyline_3-way",
        "1st_quarter_player_passing_yards",
@@ -1502,6 +1416,7 @@
        "player_rushing_+_receiving_yards",
        "player_rushing_attempts",
        "player_rushing_yards",
+       "player_total_receptions",
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
@@ -1525,7 +1440,6 @@
      "external": {
       "ballybet": "1028823555",
       "bet365": "202477528",
-      "betfair": "20261018AD468380",
       "betmgm": "6:43631",
       "betonline": "491147415",
       "betparx": "1028823555",
@@ -1630,7 +1544,6 @@
        "player_extra_points_made",
        "player_field_goals_made",
        "player_interceptions",
-       "player_kicking_points",
        "player_longest_passing_completion",
        "player_longest_reception",
        "player_longest_rush",
@@ -1676,7 +1589,6 @@
      "external": {
       "ballybet": "1028823557",
       "bet365": "202477531",
-      "betfair": "202610189E108163",
       "betmgm": "6:43629",
       "betonline": "491147421",
       "betparx": "1028823557",
@@ -1773,6 +1685,7 @@
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
+       "last_touchdown_scorer",
        "match_result_both_teams_to_score",
        "moneyline",
        "most_points_player",
@@ -1796,6 +1709,7 @@
        "player_rushing_+_receiving_yards",
        "player_rushing_attempts",
        "player_rushing_yards",
+       "player_total_receptions",
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
@@ -1819,7 +1733,6 @@
      "external": {
       "ballybet": "1028823549",
       "bet365": "202477534",
-      "betfair": "202610183D8FCE00",
       "betmgm": "6:43633",
       "betonline": "491147411",
       "betparx": "1028823549",
@@ -1968,7 +1881,6 @@
      "external": {
       "ballybet": "1028823547",
       "bet365": "202477510",
-      "betfair": "202610180426655B",
       "betmgm": "6:43634",
       "betonline": "491147422",
       "betparx": "1028823547",
@@ -2114,7 +2026,6 @@
      "external": {
       "ballybet": "1028823551",
       "bet365": "202477537",
-      "betfair": "2026101843BFE7F5",
       "betmgm": "6:43639",
       "betonline": "491147414",
       "betparx": "1028823551",
@@ -2260,7 +2171,6 @@
      "external": {
       "ballybet": "1028823554",
       "bet365": "202477540",
-      "betfair": "20261018ED3A4282",
       "betmgm": "6:43641",
       "betonline": "491147419",
       "betparx": "1028823554",
@@ -2408,7 +2318,6 @@
      "external": {
       "ballybet": "1028823558",
       "bet365": "202477543",
-      "betfair": "202610187F458BAD",
       "betmgm": "6:43640",
       "betonline": "491147412",
       "betparx": "1028823558",
@@ -2421,7 +2330,7 @@
       "fanatics": "5562756",
       "fanduel": "36160524",
       "fliff": "fobj__conflict_event__407870",
-      "gemini": "NFL-2610182025-LAC-KC-T",
+      "gemini": "NFL-2610182025-LAC-KC-TT",
       "goldrush": "31140275",
       "hardrock": "1238835726175568272",
       "kalshi": "KXNFL1H-26OCT18LACKC",
@@ -2553,7 +2462,6 @@
      "external": {
       "ballybet": "1028823556",
       "bet365": "202477546",
-      "betfair": "20261019F9CEA2D8",
       "betmgm": "6:43642",
       "betonline": "491147413",
       "betparx": "1028823556",
@@ -2566,7 +2474,7 @@
       "fanatics": "5563166",
       "fanduel": "36160511",
       "fliff": "407871_c_p_202_prematch",
-      "gemini": "NFL-2610190020-DAL-GB-TT",
+      "gemini": "NFL-2610190020-DAL-GB-T",
       "goldrush": "31140282",
       "hardrock": "3091622907579859371",
       "kalshi": "KXNFL1H-26OCT18DALGB",
