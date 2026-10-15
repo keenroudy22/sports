@@ -1,9 +1,9 @@
 {
  "leagues": {
   "MLB": {
-   "gamesGraded": 26,
-   "gamesQuoted": 28,
-   "moneylineSnapshots": 111,
+   "gamesGraded": 27,
+   "gamesQuoted": 29,
+   "moneylineSnapshots": 113,
    "seasons": [
     {
      "gamesGraded": 13,
@@ -12,20 +12,20 @@
      "season": 2026
     },
     {
-     "gamesGraded": 13,
-     "gamesQuoted": 15,
+     "gamesGraded": 14,
+     "gamesQuoted": 16,
      "phase": "playoffs",
      "season": 2026
     }
    ],
-   "snapshots": 111,
+   "snapshots": 113,
    "status": "capturing",
-   "totalSnapshots": 111
+   "totalSnapshots": 113
   },
   "NHL": {
    "gamesGraded": 103,
    "gamesQuoted": 116,
-   "moneylineSnapshots": 431,
+   "moneylineSnapshots": 439,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -40,12 +40,38 @@
      "season": 2027
     }
    ],
-   "snapshots": 431,
+   "snapshots": 439,
    "status": "capturing",
-   "totalSnapshots": 431
+   "totalSnapshots": 439
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "TB",
+    "id": "30",
+    "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/tb.png",
+    "name": "Tampa Bay Rays",
+    "shortName": "Rays"
+   },
+   "awayScore": 2,
+   "gameId": "MLB-401908025",
+   "gradedAt": "2026-10-15T21:25:03Z",
+   "home": {
+    "abbreviation": "CLE",
+    "id": "5",
+    "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/cle.png",
+    "name": "Cleveland Guardians",
+    "shortName": "Guardians"
+   },
+   "homeScore": 3,
+   "kickoff": "2026-10-15T17:00:00Z",
+   "league": "MLB",
+   "season": 2026,
+   "seasonType": "post-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "DAL",
@@ -2597,32 +2623,7 @@
    "season": 2027,
    "statusDetail": "Final/OT",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "WSH",
-    "id": "23",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/wsh.png",
-    "name": "Washington Capitals",
-    "shortName": "Capitals"
-   },
-   "awayScore": 1,
-   "gameId": "NHL-401891826",
-   "gradedAt": "2026-10-04T03:18:26Z",
-   "home": {
-    "abbreviation": "TB",
-    "id": "20",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/tb.png",
-    "name": "Tampa Bay Lightning",
-    "shortName": "Lightning"
-   },
-   "homeScore": 3,
-   "kickoff": "2026-10-03T23:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "statusDetail": "Final",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-10-15T20:05:29Z"
+ "updatedAt": "2026-10-15T21:25:03Z"
 }
