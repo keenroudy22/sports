@@ -205,6 +205,15 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Every game has a favorite; large slates have room (owner, 2026-10-15):** every active NFL/CFB game page
+  names at least one fresh exact-price Kook'n favorite line when a safe priced row exists. If no line clears the
+  official bar, show the strongest current lean as `research only · not a best bet` and say why; if availability or
+  price evidence is missing, name that exact blocker instead of leaving a generic blank. Best bets remain the
+  strongest rows that clear every gate. A large slate of eight or more games in one league on one Eastern day may
+  carry up to ten official straight plays, including multiple non-contradictory plays from one game. Four to ten is
+  room for a strong slate, never a quota: do not manufacture plays or bypass price, injury, role, reason, freshness,
+  same-player or contradiction holds. This supersedes the old five-play weekend ceiling where it conflicts.
+
 - **Reserve-list availability is a hard hold (owner, 2026-10-15):** a player on injured reserve, PUP or another
   inactive reserve list cannot appear as `NEXT UP`, in a workload projection or as an injury-replacement angle.
   The NFL roster and its reserve/injury status must be checked alongside the injury report and depth chart; a
@@ -1008,7 +1017,7 @@ Handy commands (from `~/Projects/sports`):
   changed snapshots and final scores before either sport gets a model. This uses ESPN's public feed, not a metered
   service, and never grades or publishes a play. Do not add public picks or cross-sport tickets merely because scores
   or market captures exist.
-- **The daily card** (2026-09-28, ceilings clarified October 2/5): up to five straight plays on Saturday and Sunday, a mix of game lines and player props
+- **The daily card** (2026-09-28, ceilings clarified October 2/5; superseded for large slates on October 15): up to five straight plays on an ordinary Saturday or Sunday, a mix of game lines and player props
   (three of a kind at most); up to one on other days (`gates.card_cap`, ordered by `run.rank_card`). An NFL-day post
   can be research, status or a receipt; it does not require a pick. Evaluate fun tickets on weekend slates only
   within the latest main-line-first/alternate-frequency and no-stacking rules; no guaranteed parlay. Pick of the Day is

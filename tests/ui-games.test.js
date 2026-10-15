@@ -273,6 +273,13 @@ test('a game without a bet shows the current lines without presenting a model ga
   assert.match(watched, /Price-checked lines worth a look/);
   assert.match(watched, /under 53\.5 · -110 DraftKings/);
   assert.match(watched, /See the research/);
+  const belowBar = await render({ ...detail, favoriteLines: [{ id: 'f2', sourceId: 'f2', kind: 'game', belowBar: true,
+    holdReason: 'Positive value, but below the official-play bar.', title: 'Pitt +3.5', odds: -110,
+    book: 'DraftKings', line: 3.5, market: 'point spread', direction: 'home', chance: 0.54,
+    needs: 0.524, edge: 1.6, observedAt: new Date(Date.now() - 600000).toISOString() }] });
+  assert.match(belowBar, /What I like most here \(research only\)/);
+  assert.match(belowBar, /Strongest current lean · not a best bet/);
+  assert.match(belowBar, /Positive value, but below the official-play bar/);
   const stale = await render({ ...detail, market: { ...detail.market, retrievedAt: new Date(Date.now() - 6 * 3600000).toISOString() } });
   assert.match(stale, /Last recorded lines · check a current price at your book/);
   assert.doesNotMatch(stale, /checked \d+ min ago/);

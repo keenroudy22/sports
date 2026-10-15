@@ -64,7 +64,7 @@ LEAN_EDGE, LEAN_STRONG = 1.0, 2.0          # model lean: points clear of break-e
 # Monday and Thursday you can just do one play. I want a good mix of game lines and player props"): five straight plays
 # on a Saturday or a Sunday, three of a kind at most; one on any other day, the NFL game's on a night with one. The
 # runs judge the strongest first (run.rank_card), so the card is the best each run sees.
-CARD = {'weekend': 5, 'weekday': 2}
+CARD = {'weekend': 5, 'weekday': 2, 'large': 10, 'largeGames': 8}
 CARD_KIND_MAX = 3
 CARD_MARKET_MAX = 2
 PROP_RAW, PROP_EDGE, PROP_FLOOR = 0.60, 5.0, -200
@@ -858,7 +858,15 @@ def card_cap(candidate, ctx):
         return Decision(False, 'card_cap', 'game not in the slate')
     weekend = day.weekday() in (5, 6)
     size = CARD['weekend'] if weekend else CARD['weekday']
-    if weekend:
+    league = candidate.get('league')
+    games_that_day = sum(1 for game in ctx.games.values()
+                         if game.get('league') == league
+                         and eastern_date(when(game.get('kickoff'))) == day
+                         and game.get('state') != 'post')
+    large_slate = games_that_day >= CARD['largeGames']
+    if large_slate:
+        size = CARD['large']
+    if weekend and not large_slate:
         size = direction.weekend_cap(ctx.policy, ctx.now, size)
     plays = []
     for key, pick in ctx.first.items():
@@ -875,7 +883,7 @@ def card_cap(candidate, ctx):
         return Decision(False, 'card_cap', f"{len(plays)} plays already on the {day} card; the ceiling is {size} and the card is {size}")
     family = 'prop' if candidate.get('athleteId') else market_key(candidate)
     family_count = sum(('prop' if pick.get('athleteId') else market_key(pick)) == family for pick in plays)
-    family_limit = 5 if weekend and family == 'prop' else 3
+    family_limit = (size if family == 'prop' else 5) if large_slate else (5 if weekend and family == 'prop' else 3)
     if family_count >= family_limit:
         return Decision(False, 'card_cap',
                         f'{family_count} {family} plays already on the card; {family_limit} is the limit')

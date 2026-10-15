@@ -350,11 +350,13 @@
       if (dm) extraFa.push([dm.supports ? 'for' : dm.opposes ? 'against' : 'ctx', dm.text + '.']);
       if (script) extraFa.push(['against', script]);
       if (f.kind === 'player' && g.garbageTime) extraFa.push(['against', GARBAGE]);
+      if (f.holdReason) extraFa.push(['against', f.holdReason]);
       const src = { ...f, id: f.sourceId || f.id, gameId: g.id, league: g.league, kickoff: g.kickoff };
       const vm = { id: f.sourceId || f.id, title: niceTitle(f.title), market: marketLabel(f), league: g.league, kickoff: g.kickoff, odds: f.odds, book: bookLabel(f.book), bestOdds: null, booksCount: 1,
         age: quoteAge(f.observedAt, g.kickoff, now, { odds: f.odds, state: 'open' }), chance: f.chance, needs: f.needs, edge: round1(f.edge), fair: fairAmerican(f.chance), otherLines: [], gameId: g.id, clears: true,
         athleteId: f.athleteId, stat: f.stat || C.marketKey(f), line: f.line, direction: f.direction || f.side, player: f.player, isProp: f.kind === 'player', alternate: f.alternate,
-        sub: [historyWords(f.history), dm ? `${dm.pos} matchup: ${dm.rank} of ${dm.of}${dm.tone === 'soft' ? ', soft' : dm.tone === 'tough' ? ', tough' : ''}` : ''].filter(Boolean).join(' · '), extraFa, src };
+        sub: [f.belowBar ? 'Strongest current lean · not a best bet' : '', historyWords(f.history), dm ? `${dm.pos} matchup: ${dm.rank} of ${dm.of}${dm.tone === 'soft' ? ', soft' : dm.tone === 'tough' ? ', tough' : ''}` : ''].filter(Boolean).join(' · '), extraFa, src,
+        clears: !f.belowBar };
       return boardRow(vm);
     }).join('')}</div>` : `<p class="muted small">${pregame ? 'No current line in this game passes my price check right now. ' : 'Lines close at kickoff. Saved pregame lines are below.'}</p>`;
 
@@ -371,7 +373,7 @@
       <div class="game-front-grid"><p><b>Spread</b><span>${esc(bookSpread)} book · ${esc(ourSpread)} mine</span></p>
         <p><b>Total</b><span>${esc(isNum(m.total) ? C.fixed(m.total) : 'not recorded')} book · ${esc(isNum(model.total) ? C.fixed(model.total) : 'not available')} mine</span></p></div>
       <p class="small muted">${marketFresh ? `${esc(bookLabel(m.book) || 'Book')} · checked ${esc(ago(m.retrievedAt))}` : 'Last recorded lines · check a current price at your book'}.</p>
-      ${fav.length ? `<p class="game-front-watch"><b>Price-checked lines worth a look:</b> ${fav.slice(0, 2).map(f => `${esc(niceTitle(f.title))} · ${esc(oddsText(f.odds))} ${esc(bookLabel(f.book) || '')}`).join(' · ')}${fav.length > 2 ? ` · +${fav.length - 2} more` : ''}. <a href="#game/${esc(g.id)}#lines-we-like">See the research ›</a></p>`
+      ${fav.length ? `<p class="game-front-watch"><b>${fav.every(f => f.belowBar) ? 'What I like most here (research only):' : 'Price-checked lines worth a look:'}</b> ${fav.slice(0, 2).map(f => `${esc(niceTitle(f.title))} · ${esc(oddsText(f.odds))} ${esc(bookLabel(f.book) || '')}`).join(' · ')}${fav.length > 2 ? ` · +${fav.length - 2} more` : ''}. <a href="#game/${esc(g.id)}#lines-we-like">See the research ›</a></p>`
         : `<p class="game-front-watch">${picks.length ? 'No additional current research line clears my price check. The posted ticket above stays on the record.' : 'No price-checked lean clears my bar here.'} <a href="#game/${esc(g.id)}#model-vs">See the full comparison ›</a></p>`}
       </section>` : '';
 

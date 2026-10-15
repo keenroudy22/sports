@@ -2577,18 +2577,19 @@ def favorite_lines(game, snapshot, lines, now, player_logs=None):
     """
     if not snapshot or game.get('state') != 'pre' or features.when(game['kickoff']) <= now:
         return []
-    out = []
+    out, fallback = [], []
     for row in lines:
         grade = row.get('grade') or {}
         seen = instant(row.get('observedAt'))
         liked = grade.get('tier') in ('lean', 'strong') if row.get('gameMarket') else grade.get('view') == 'lean'
-        if row.get('gameId') != game['id'] or row.get('state') != 'open' or not liked \
-                or grade.get('limited') or grade.get('thin') \
+        if row.get('gameId') != game['id'] or row.get('state') != 'open' \
+                or grade.get('limited') or grade.get('thin') or grade.get('unproven') \
+                or row.get('roleHold') or row.get('priceHold') or row.get('injuryHold') \
                 or not isinstance(row.get('odds'), (int, float)) or seen is None or now - seen > ODDS_FRESH:
             continue
         history = None if row.get('gameMarket') else favorite_hit_rates(game, row, player_logs)
         context = player_matchup_context(game, snapshot, row) if row.get('athleteId') else {}
-        out.append({'id': f"favorite-{row['id']}", 'sourceId': row['id'], 'kind': 'game' if row.get('gameMarket') else 'player',
+        item = {'id': f"favorite-{row['id']}", 'sourceId': row['id'], 'kind': 'game' if row.get('gameMarket') else 'player',
                     'title': row['title'], 'player': row.get('player'), 'athleteId': row.get('athleteId'),
                     'position': context.get('position'), 'stat': row.get('stat'),
                     'team': context.get('team'), 'teamAbbr': context.get('teamAbbr'),
@@ -2599,9 +2600,17 @@ def favorite_lines(game, snapshot, lines, now, player_logs=None):
                     'calibrated': grade.get('calibrated'),
                     'projection': grade.get('projection'), 'observedAt': row.get('observedAt'),
                     'source': row.get('source'), 'alternate': False, 'history': history,
-                    'score': grade.get('edge') or 0.0})
+                    'score': grade.get('edge') if isinstance(grade.get('edge'), (int, float)) else -999.0}
+        if liked:
+            out.append(item)
+        elif isinstance(item.get('chance'), (int, float)) and isinstance(item.get('needs'), (int, float)):
+            item['belowBar'] = True
+            item['holdReason'] = ('The price needs more wins than my number gives it.' if item['chance'] <= item['needs']
+                                  else 'Positive value, but below the official-play bar.')
+            fallback.append(item)
+    chosen = out or sorted(fallback, key=lambda row: (-row['score'], -float(row.get('chance') or 0), row['title']))[:1]
     return [{k: v for k, v in row.items() if k != 'score'} for row in
-            sorted(out, key=lambda row: (-row['score'], -float(row.get('chance') or 0), row['title']))]
+            sorted(chosen, key=lambda row: (-row['score'], -float(row.get('chance') or 0), row['title']))]
 
 
 def book_rows(game, record):

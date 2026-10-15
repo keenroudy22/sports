@@ -570,6 +570,22 @@ class CardTests(unittest.TestCase):
         picks['e'] = prop_lean(id='e', athleteId='e', market='rec', gameIds=['NFL-6'], publishedAt='2026-09-26T12:00:00Z')
         self.assertIn('ceiling is 5', gates.card_cap(prop_lean(market='rec'), self.card(picks)).reason)
 
+    def test_large_slate_has_room_for_ten_qualified_straights(self):
+        games = {f'NFL-{n}': dict(GAME, id=f'NFL-{n}') for n in range(1, 9)}
+        picks = {
+            f'p{n}': prop_lean(id=f'p{n}', athleteId=f'a{n}', market='rec',
+                               gameIds=[f'NFL-{(n % 8) + 1}'], publishedAt='2026-09-26T12:00:00Z')
+            for n in range(1, 10)
+        }
+        ctx = context(games=games, first=picks, latest=picks)
+        tenth = prop_lean(id='p10', athleteId='a10', market='rec', gameIds=['NFL-1'])
+        self.assertTrue(gates.card_cap(tenth, ctx).ok)
+        picks['p10'] = dict(tenth, publishedAt='2026-09-26T12:10:00Z')
+        full = context(games=games, first=picks, latest=picks)
+        refused = gates.card_cap(prop_lean(id='p11', athleteId='a11', market='rec', gameIds=['NFL-2']), full)
+        self.assertFalse(refused.ok)
+        self.assertIn('ceiling is 10', refused.reason)
+
     def test_a_weekend_card_is_five_with_non_prop_families_capped_at_three(self):
         team = lambda key, gid: total_lean(id=key, gameIds=[gid], publishedAt='2026-09-25T12:00:00Z')
         prop = lambda key, gid: prop_lean(id=key, gameIds=[gid], athleteId=key, publishedAt='2026-09-26T12:00:00Z')

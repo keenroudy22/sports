@@ -457,6 +457,25 @@ class GradeTests(unittest.TestCase):
         unpriced = dict(base, odds=None, grade=dict(base['grade'], thin=False))
         self.assertEqual(build_site.favorite_lines(game, snapshot, [unpriced], now), [])
 
+    def test_a_safe_fresh_line_below_the_official_bar_is_labeled_research_only(self):
+        now = datetime(2026, 9, 19, 13, tzinfo=timezone.utc)
+        game = {'id': 'NFL-1', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-09-20T17:00:00Z',
+                'home': {'id': '1', 'abbreviation': 'ATL'}, 'away': {'id': '2', 'abbreviation': 'CAR'}}
+        snapshot = {'gameId': 'NFL-1', 'league': 'NFL', 'model': 'v2.0', 'publishedAt': '2026-09-19T12:00:00Z'}
+        row = {'id': 'side-1', 'gameId': 'NFL-1', 'state': 'open', 'gameMarket': True,
+               'title': 'Atlanta +2.5', 'market': 'point spread', 'direction': 'home', 'line': 2.5,
+               'odds': -110, 'book': 'DraftKings', 'observedAt': '2026-09-19T12:40:00Z',
+               'grade': {'tier': 'pass', 'chance': .54, 'needs': .524, 'edge': 1.6, 'projection': -1.0,
+                         'calibrated': True, 'thin': False, 'limited': False}}
+        rows = build_site.favorite_lines(game, snapshot, [row], now)
+        self.assertEqual(len(rows), 1)
+        self.assertTrue(rows[0]['belowBar'])
+        self.assertEqual(rows[0]['holdReason'], 'Positive value, but below the official-play bar.')
+
+        losing = dict(row, id='side-2', grade=dict(row['grade'], chance=.51, edge=-1.4))
+        rows = build_site.favorite_lines(game, snapshot, [losing], now)
+        self.assertEqual(rows[0]['holdReason'], 'The price needs more wins than my number gives it.')
+
     def test_a_thin_sample_never_reads_strong_and_closed_or_unpriced_lines_get_no_grade(self):
         self.assertEqual(build_site.grade_line(self.line(), self.snapshot, thin=True)['tier'], 'lean')
         self.assertIsNone(build_site.grade_line(self.line(state='closed'), self.snapshot, False))
