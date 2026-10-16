@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-16T15:32:12Z",
+  "updatedAt": "2026-10-16T15:57:44Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -3042,15 +3042,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4360078/alec-pierce"
             },
             {
-              "id": "3916945",
-              "name": "Darius Slayton",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-14T23:19Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3916945/darius-slayton"
-            },
-            {
               "id": "15818",
               "name": "Keenan Allen",
               "position": "WR",
@@ -3220,6 +3211,15 @@
               "injury": null,
               "reportedAt": "2026-10-05T18:44Z",
               "source": "https://www.espn.com/nfl/player/_/id/4708238/george-gumbs-jr"
+            },
+            {
+              "id": "4874509",
+              "name": "DJ Giddens",
+              "position": "RB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-05T18:44Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4874509/dj-giddens"
             }
           ]
         },
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-16T15:00Z",
+              "reportedAt": "2026-10-16T15:49Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -5527,6 +5527,33 @@
           "name": "New York Jets",
           "players": [
             {
+              "id": "4723820",
+              "name": "Omar Cooper Jr.",
+              "position": "WR",
+              "status": "Injured Reserve",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-16T15:34Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4723820/omar-cooper-jr"
+            },
+            {
+              "id": "4597500",
+              "name": "Adonai Mitchell",
+              "position": "WR",
+              "status": "Out",
+              "injury": "Finger",
+              "reportedAt": "2026-10-16T15:32Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4597500/adonai-mitchell"
+            },
+            {
+              "id": "4427366",
+              "name": "Breece Hall",
+              "position": "RB",
+              "status": "Out",
+              "injury": "Quadriceps",
+              "reportedAt": "2026-10-16T15:29Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4427366/breece-hall"
+            },
+            {
               "id": "4362094",
               "name": "Joseph Ossai",
               "position": "DE",
@@ -5545,24 +5572,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4243375/dylan-parham"
             },
             {
-              "id": "4723820",
-              "name": "Omar Cooper Jr.",
-              "position": "WR",
-              "status": "Injured Reserve",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-15T20:21Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4723820/omar-cooper-jr"
-            },
-            {
-              "id": "4597500",
-              "name": "Adonai Mitchell",
-              "position": "WR",
-              "status": "Out",
-              "injury": "Finger",
-              "reportedAt": "2026-10-15T20:19Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4597500/adonai-mitchell"
-            },
-            {
               "id": "5083315",
               "name": "Kenyon Sadiq",
               "position": "TE",
@@ -5570,15 +5579,6 @@
               "injury": "Concussion",
               "reportedAt": "2026-10-15T20:09Z",
               "source": "https://www.espn.com/nfl/player/_/id/5083315/kenyon-sadiq"
-            },
-            {
-              "id": "4427366",
-              "name": "Breece Hall",
-              "position": "RB",
-              "status": "Out",
-              "injury": "Quadriceps",
-              "reportedAt": "2026-10-15T16:59Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4427366/breece-hall"
             },
             {
               "id": "4700136",
@@ -6907,6 +6907,15 @@
           "name": "Tennessee Titans",
           "players": [
             {
+              "id": "4685617",
+              "name": "Kevin Winston Jr.",
+              "position": "S",
+              "status": "Out",
+              "injury": "Quadriceps",
+              "reportedAt": "2026-10-16T15:49Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4685617/kevin-winston-jr"
+            },
+            {
               "id": "4036134",
               "name": "Amani Hooker",
               "position": "S",
@@ -6941,15 +6950,6 @@
               "injury": null,
               "reportedAt": "2026-10-14T23:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/4429607/cordale-flott"
-            },
-            {
-              "id": "4685617",
-              "name": "Kevin Winston Jr.",
-              "position": "S",
-              "status": "Doubtful",
-              "injury": "Quadriceps",
-              "reportedAt": "2026-10-14T21:06Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4685617/kevin-winston-jr"
             },
             {
               "id": "3916148",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "33",
-          "name": "Roger Rosengarten",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-15T21:31:47Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4430876/roger-rosengarten"
-        },
-        {
-          "teamId": "33",
           "name": "Marlon Humphrey",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-16T15:01:35Z",
           "source": "https://www.espn.com/nfl/player/_/id/4427366/breece-hall"
+        },
+        {
+          "teamId": "10",
+          "name": "Kevin Winston Jr.",
+          "from": "Doubtful",
+          "to": "Out",
+          "observedAt": "2026-10-16T15:57:44Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4685617/kevin-winston-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-16T15:32:12Z",
-      "lastAttemptAt": "2026-10-16T15:32:12Z",
+      "checkedAt": "2026-10-16T15:57:44Z",
+      "lastAttemptAt": "2026-10-16T15:57:44Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-16T15:32:12Z",
-      "lastAttemptAt": "2026-10-16T15:32:12Z",
+      "checkedAt": "2026-10-16T15:57:44Z",
+      "lastAttemptAt": "2026-10-16T15:57:44Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
