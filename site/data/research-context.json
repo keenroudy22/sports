@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-16T01:07:08Z",
+  "updatedAt": "2026-10-16T01:15:20Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -697,6 +697,15 @@
           "name": "Buffalo Bills",
           "players": [
             {
+              "id": "4242433",
+              "name": "Joshua Palmer",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Shoulder",
+              "reportedAt": "2026-10-16T00:57Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4242433/joshua-palmer"
+            },
+            {
               "id": "4030899",
               "name": "Spencer Brown",
               "position": "OT",
@@ -740,15 +749,6 @@
               "injury": "Hamstring",
               "reportedAt": "2026-10-14T23:40Z",
               "source": "https://www.espn.com/nfl/player/_/id/3915411/ty-johnson"
-            },
-            {
-              "id": "4242433",
-              "name": "Joshua Palmer",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Shoulder",
-              "reportedAt": "2026-10-14T23:34Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4242433/joshua-palmer"
             },
             {
               "id": "4684527",
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-16T01:00Z",
+              "reportedAt": "2026-10-16T01:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2270,7 +2270,7 @@
               "name": "Tyler Badie",
               "position": "RB",
               "status": "Active",
-              "injury": null,
+              "injury": "Thumb",
               "reportedAt": "2026-10-06T03:57Z",
               "source": "https://www.espn.com/nfl/player/_/id/4362748/tyler-badie"
             },
@@ -3917,6 +3917,15 @@
           "name": "Los Angeles Chargers",
           "players": [
             {
+              "id": "3051738",
+              "name": "Marquez Valdes-Scantling",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-16T00:59Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3051738/marquez-valdes-scantling"
+            },
+            {
               "id": "4685553",
               "name": "Brenen Thompson",
               "position": "WR",
@@ -3996,15 +4005,6 @@
               "injury": "Undisclosed",
               "reportedAt": "2026-10-15T01:08Z",
               "source": "https://www.espn.com/nfl/player/_/id/2579621/denzel-perryman"
-            },
-            {
-              "id": "3051738",
-              "name": "Marquez Valdes-Scantling",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-14T23:59Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3051738/marquez-valdes-scantling"
             },
             {
               "id": "4360745",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-16T00:53Z",
+              "reportedAt": "2026-10-16T01:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7767,8 +7767,8 @@
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-16T01:07:08Z",
-      "lastAttemptAt": "2026-10-16T01:07:08Z",
+      "checkedAt": "2026-10-16T01:15:20Z",
+      "lastAttemptAt": "2026-10-16T01:15:20Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-16T01:07:08Z",
-      "lastAttemptAt": "2026-10-16T01:07:08Z",
+      "checkedAt": "2026-10-16T01:15:20Z",
+      "lastAttemptAt": "2026-10-16T01:15:20Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
