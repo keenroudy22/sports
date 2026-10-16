@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-16T03:39:07Z",
+  "updatedAt": "2026-10-16T04:02:03Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-16T03:00Z",
+              "reportedAt": "2026-10-16T04:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -6447,6 +6447,15 @@
           "name": "Seattle Seahawks",
           "players": [
             {
+              "id": "4430878",
+              "name": "Jaxon Smith-Njigba",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-16T03:49Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4430878/jaxon-smith-njigba"
+            },
+            {
               "id": "4678006",
               "name": "Elijah Arroyo",
               "position": "TE",
@@ -6562,15 +6571,6 @@
               "injury": null,
               "reportedAt": "2026-10-14T23:17Z",
               "source": "https://www.espn.com/nfl/player/_/id/3924327/drew-lock"
-            },
-            {
-              "id": "4430878",
-              "name": "Jaxon Smith-Njigba",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-14T22:33Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4430878/jaxon-smith-njigba"
             },
             {
               "id": "4426385",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "28",
-          "name": "Nick Cross",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-15T17:16:02Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4426403/nick-cross"
-        },
-        {
           "teamId": "3",
           "name": "Caleb Williams",
           "from": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-16T03:31:23Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-16T04:02:03Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-16T03:39:07Z",
-      "lastAttemptAt": "2026-10-16T03:39:07Z",
+      "checkedAt": "2026-10-16T04:02:03Z",
+      "lastAttemptAt": "2026-10-16T04:02:03Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-16T03:39:07Z",
-      "lastAttemptAt": "2026-10-16T03:39:07Z",
+      "checkedAt": "2026-10-16T04:02:03Z",
+      "lastAttemptAt": "2026-10-16T04:02:03Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
