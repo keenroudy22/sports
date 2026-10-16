@@ -23045,5 +23045,219 @@
         "units": -1
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-16T16:07:07Z",
+    "summary": "Released 1: Memphis at Tulane under 55.5 -108 at BetMGM.",
+    "takeaways": [],
+    "gamePicks": [
+      {
+        "status": "active",
+        "favorite": false,
+        "modelLean": true,
+        "marketType": "total",
+        "line": 55.5,
+        "direction": "under",
+        "gameIds": [
+          "CFB-401862801"
+        ],
+        "book": "BetMGM",
+        "odds": -108,
+        "projection": 51.3,
+        "edge": "Market-anchored chance 53.6% from the exact two-sided price; 51.9% needed at -108: +1.6 percentage points.",
+        "cutoff": "UNDER 55.5 at -108 or better; off the card at 54 or lower, or at -123 or worse at 55.5.",
+        "modelVersion": "v2.1",
+        "snapshotAt": "2026-10-11T22:41:46Z",
+        "quotedAt": "2026-10-16T08:35:59Z",
+        "quoteType": "capture",
+        "quoteNote": "BetMGM's number and price from the 4:35 AM ET capture across 5 books, the best expected value on the board for this side.",
+        "expiresAt": "2026-10-16T21:30:00Z",
+        "probabilityAtPublication": {
+          "rawChance": 0.603,
+          "chance": 0.536,
+          "calibrated": true,
+          "calibration": 0.36,
+          "calibrationN": null,
+          "push": 0.0,
+          "breakEven": 0.519,
+          "edgePoints": 1.6,
+          "evPerUnit": 0.032,
+          "snapshotAt": "2026-10-11T22:41:46Z",
+          "evaluatedAt": "2026-10-16T15:45:05Z",
+          "fairChance": 0.498,
+          "anchoredChance": 0.536,
+          "gap": 3.8,
+          "calibrationFamily": "CFB/total"
+        },
+        "title": "Memphis at Tulane under 55.5",
+        "id": "CFB-2026-W7-mem-tuln-under-55-5-mgm",
+        "confidence": 2,
+        "sources": [
+          "https://www.espn.com/college-football/game/_/gameId/401862801",
+          "https://www.si.com/college/tulane/news/hall-opens-up-on-preparing-for-memphis-provides-dl-injury-updates-01m4v4hnaym2",
+          "https://www.underdogdynasty.com/american-conference/46925/2026-week-7-preview-memphis-tigers-tulane-green-wave"
+        ],
+        "why": "Model lean, our number only. We have the total at 51.3; the book is at 55.5. That makes the under 53.6%, and -108 needs 51.9%. Verified statistical reporting also points against this side; see the counterpoints below. Checked before publishing: Tulane coach Will Hall said the quarterback position remains open after Kadin Semonza was benched for Trace Johnson during the Southern Miss game. The market: The total opened 53.5 and is 54.5 at DraftKings, 1 toward the over. 6 books span 6.5 to 7 on the spread; the middle is 6.75. Our spread is 4.4 points off, bigger than 57% of our past gaps. Gaps this size went 771-765 against the close in 3584 games. Our total is 3.2 points off, bigger than 54% of our past gaps. Gaps this size went 888-767 against the close in 3602 games.",
+        "risk": "Statistical counterpoint: Memphis averaged 516.7 yards of total offense per game and converted 49.3 percent of its third downs entering the Tulane game. Statistical counterpoint: Tulane allowed 218.6 rushing yards per game entering the Memphis game. Historical stats remain context, not a separate injury or availability hold. It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+        "reasoning": {
+          "context": [
+            "Tulane coach Will Hall said the quarterback position remains open after Kadin Semonza was benched for Trace Johnson during the Southern Miss game.",
+            "Tulane averaged 18.4 points per game through five games."
+          ],
+          "cautions": [
+            "Tulane coach Will Hall said defensive linemen Kameron Hamilton and Ed Smith IV were both day-to-day ahead of the Memphis game.",
+            "Memphis averaged 516.7 yards of total offense per game and converted 49.3 percent of its third downs entering the Tulane game.",
+            "Tulane allowed 218.6 rushing yards per game entering the Memphis game."
+          ],
+          "directionsChecked": true
+        },
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Tulane coach Will Hall said the quarterback position remains open after Kadin Semonza was benched for Trace Johnson during the Southern Miss game.",
+              "numbers": {},
+              "source": "Game box scores or verified report",
+              "time": "2026-10-16T15:45:05Z"
+            },
+            {
+              "text": "Book says 55.5. I say 51.3.",
+              "numbers": {
+                "projection": 51.3,
+                "line": 55.5
+              },
+              "source": "Kook'n projection",
+              "time": "2026-10-11T22:41:46Z"
+            },
+            {
+              "text": "Tulane coach Will Hall said the quarterback position remains open after Kadin Semonza was benched for Trace Johnson during the Southern Miss game.",
+              "numbers": {},
+              "source": "https://www.si.com/college/tulane/news/hall-opens-up-on-preparing-for-memphis-provides-dl-injury-updates-01m4v4hnaym2",
+              "time": "2026-10-16T15:45:05Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Tulane coach Will Hall said defensive linemen Kameron Hamilton and Ed Smith IV were both day-to-day ahead of the Memphis game.",
+              "numbers": {},
+              "source": "https://www.si.com/college/tulane/news/hall-opens-up-on-preparing-for-memphis-provides-dl-injury-updates-01m4v4hnaym2",
+              "time": "2026-10-16T15:45:05Z"
+            },
+            {
+              "text": "Memphis averaged 516.7 yards of total offense per game and converted 49.3 percent of its third downs entering the Tulane game.",
+              "numbers": {},
+              "source": "https://www.underdogdynasty.com/american-conference/46925/2026-week-7-preview-memphis-tigers-tulane-green-wave",
+              "time": "2026-10-16T15:45:05Z"
+            }
+          ],
+          "reports": [
+            {
+              "text": "Tulane coach Will Hall said the quarterback position remains open after Kadin Semonza was benched for Trace Johnson during the Southern Miss game.",
+              "numbers": {},
+              "source": "https://www.si.com/college/tulane/news/hall-opens-up-on-preparing-for-memphis-provides-dl-injury-updates-01m4v4hnaym2",
+              "time": "2026-10-16T15:45:05Z"
+            },
+            {
+              "text": "Tulane coach Will Hall said defensive linemen Kameron Hamilton and Ed Smith IV were both day-to-day ahead of the Memphis game.",
+              "numbers": {},
+              "source": "https://www.si.com/college/tulane/news/hall-opens-up-on-preparing-for-memphis-provides-dl-injury-updates-01m4v4hnaym2",
+              "time": "2026-10-16T15:45:05Z"
+            },
+            {
+              "text": "Tulane coach Will Hall said the quarterback position remains open after Kadin Semonza was benched for Trace Johnson during the Southern Miss game.",
+              "numbers": {},
+              "source": "https://www.si.com/college/tulane/news/hall-opens-up-on-preparing-for-memphis-provides-dl-injury-updates-01m4v4hnaym2",
+              "time": "2026-10-16T15:45:05Z"
+            },
+            {
+              "text": "Tulane coach Will Hall said defensive linemen Kameron Hamilton and Ed Smith IV were both day-to-day ahead of the Memphis game.",
+              "numbers": {},
+              "source": "https://www.si.com/college/tulane/news/hall-opens-up-on-preparing-for-memphis-provides-dl-injury-updates-01m4v4hnaym2",
+              "time": "2026-10-16T15:45:05Z"
+            }
+          ],
+          "weather": {
+            "tempF": 82,
+            "windMph": 10,
+            "windDirection": "N",
+            "precipProb": 6,
+            "periodStart": "2026-10-16T18:00:00-05:00",
+            "issuedAt": "2026-10-15T18:25:19+00:00",
+            "source": "https://api.weather.gov/gridpoints/LIX/68,88/forecast/hourly"
+          },
+          "line": {
+            "books": {
+              "DraftKings": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 53.5,
+                  "price": -110,
+                  "time": "2026-10-12T04:04:05Z"
+                },
+                "now": {
+                  "line": 55.5,
+                  "price": -108,
+                  "time": "2026-10-16T08:35:59Z"
+                }
+              },
+              "FanDuel": {
+                "open": null,
+                "firstCaptured": {
+                  "line": 53.5,
+                  "price": -110,
+                  "time": "2026-10-12T04:04:05Z"
+                },
+                "now": {
+                  "line": 55.5,
+                  "price": -110,
+                  "time": "2026-10-16T08:35:59Z"
+                }
+              }
+            },
+            "best": {
+              "book": "BetMGM",
+              "line": 55.5,
+              "price": -108,
+              "time": "2026-10-16T08:35:59Z"
+            }
+          },
+          "ours": {
+            "projection": 51.3,
+            "line": 55.5,
+            "market": "total",
+            "text": "Tulane coach Will Hall said the quarterback position remains open after Kadin Semonza was benched for Trace Johnson during the Southern Miss game.",
+            "snapshotAt": "2026-10-11T22:41:46Z"
+          },
+          "history": null,
+          "sources": [
+            {
+              "label": "role",
+              "url": "https://www.si.com/college/tulane/news/hall-opens-up-on-preparing-for-memphis-provides-dl-injury-updates-01m4v4hnaym2",
+              "time": "2026-10-16T15:45:05Z"
+            },
+            {
+              "label": "stats",
+              "url": "https://www.underdogdynasty.com/american-conference/46925/2026-week-7-preview-memphis-tigers-tulane-green-wave",
+              "time": "2026-10-16T15:45:05Z"
+            },
+            {
+              "label": "National Weather Service",
+              "url": "https://api.weather.gov/gridpoints/LIX/68,88/forecast/hourly",
+              "time": "2026-10-15T18:25:19+00:00"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401862801",
+              "time": "2026-10-16T15:45:05Z"
+            }
+          ],
+          "partial": false
+        },
+        "lane": "gut_call",
+        "riskUnits": 0.5,
+        "publishedAt": "2026-10-16T16:07:07Z"
+      }
+    ]
   }
 ]
