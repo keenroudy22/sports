@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-16T21:41:53Z",
+  "updatedAt": "2026-10-16T22:02:40Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -709,8 +709,8 @@
               "id": "3915411",
               "name": "Ty Johnson",
               "position": "RB",
-              "status": "Questionable",
-              "injury": "Hamstring",
+              "status": "Active",
+              "injury": null,
               "reportedAt": "2026-10-16T01:06Z",
               "source": "https://www.espn.com/nfl/player/_/id/3915411/ty-johnson"
             },
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-16T21:29Z",
+              "reportedAt": "2026-10-16T21:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -3691,7 +3691,7 @@
               "name": "Jalen Nailor",
               "position": "WR",
               "status": "Questionable",
-              "injury": "Concussion",
+              "injury": null,
               "reportedAt": "2026-10-16T01:24Z",
               "source": "https://www.espn.com/nfl/player/_/id/4382466/jalen-nailor"
             },
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "9",
-          "name": "Benjamin St-Juste",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-10-16T21:32:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4258206/benjamin-st-juste"
-        },
-        {
-          "teamId": "9",
           "name": "Jonathan Ford",
           "from": "Questionable",
           "to": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-10-16T21:41:53Z",
           "source": "https://www.espn.com/nfl/player/_/id/4426553/davis-allen"
+        },
+        {
+          "teamId": "2",
+          "name": "Ty Johnson",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-16T22:02:40Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3915411/ty-johnson"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-16T21:41:53Z",
-      "lastAttemptAt": "2026-10-16T21:41:53Z",
+      "checkedAt": "2026-10-16T22:02:40Z",
+      "lastAttemptAt": "2026-10-16T22:02:40Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-16T21:41:53Z",
-      "lastAttemptAt": "2026-10-16T21:41:53Z",
+      "checkedAt": "2026-10-16T22:02:40Z",
+      "lastAttemptAt": "2026-10-16T22:02:40Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
