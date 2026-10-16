@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-16T01:15:20Z",
+  "updatedAt": "2026-10-16T01:32:38Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -697,6 +697,15 @@
           "name": "Buffalo Bills",
           "players": [
             {
+              "id": "3915411",
+              "name": "Ty Johnson",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Hamstring",
+              "reportedAt": "2026-10-16T01:06Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3915411/ty-johnson"
+            },
+            {
               "id": "4242433",
               "name": "Joshua Palmer",
               "position": "WR",
@@ -740,15 +749,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-15T00:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/4039303/ed-oliver"
-            },
-            {
-              "id": "3915411",
-              "name": "Ty Johnson",
-              "position": "RB",
-              "status": "Questionable",
-              "injury": "Hamstring",
-              "reportedAt": "2026-10-14T23:40Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3915411/ty-johnson"
             },
             {
               "id": "4684527",
@@ -2077,6 +2077,15 @@
           "name": "Denver Broncos",
           "players": [
             {
+              "id": "4362748",
+              "name": "Tyler Badie",
+              "position": "RB",
+              "status": "Questionable",
+              "injury": "Thumb",
+              "reportedAt": "2026-10-16T01:14Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4362748/tyler-badie"
+            },
+            {
               "id": "4382401",
               "name": "Riley Moss",
               "position": "CB",
@@ -2264,15 +2273,6 @@
               "injury": null,
               "reportedAt": "2026-10-07T01:38Z",
               "source": "https://www.espn.com/nfl/player/_/id/2612151/alex-singleton"
-            },
-            {
-              "id": "4362748",
-              "name": "Tyler Badie",
-              "position": "RB",
-              "status": "Active",
-              "injury": "Thumb",
-              "reportedAt": "2026-10-06T03:57Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4362748/tyler-badie"
             },
             {
               "id": "3929914",
@@ -3687,6 +3687,15 @@
           "name": "Las Vegas Raiders",
           "players": [
             {
+              "id": "4382466",
+              "name": "Jalen Nailor",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Concussion",
+              "reportedAt": "2026-10-16T01:24Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4382466/jalen-nailor"
+            },
+            {
               "id": "3045172",
               "name": "Folorunso Fatukasi",
               "position": "DT",
@@ -3739,15 +3748,6 @@
               "injury": "Lower Body",
               "reportedAt": "2026-10-14T23:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/5155825/carter-runyon"
-            },
-            {
-              "id": "4382466",
-              "name": "Jalen Nailor",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Concussion",
-              "reportedAt": "2026-10-14T19:33Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4382466/jalen-nailor"
             },
             {
               "id": "4241983",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-16T01:00Z",
+              "reportedAt": "2026-10-16T01:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "3",
-          "name": "Anthony Johnson Jr.",
-          "from": "Out",
-          "to": "Injured Reserve",
-          "observedAt": "2026-10-15T16:22:55Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
-        },
-        {
           "teamId": "21",
           "name": "Jalen Hurts",
           "from": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-10-16T00:46:49Z",
           "source": "https://www.espn.com/nfl/player/_/id/4432665/brock-bowers"
+        },
+        {
+          "teamId": "7",
+          "name": "Tyler Badie",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-16T01:32:38Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4362748/tyler-badie"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-16T01:15:20Z",
-      "lastAttemptAt": "2026-10-16T01:15:20Z",
+      "checkedAt": "2026-10-16T01:32:38Z",
+      "lastAttemptAt": "2026-10-16T01:32:38Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-16T01:15:20Z",
-      "lastAttemptAt": "2026-10-16T01:15:20Z",
+      "checkedAt": "2026-10-16T01:32:38Z",
+      "lastAttemptAt": "2026-10-16T01:32:38Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
