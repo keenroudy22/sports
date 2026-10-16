@@ -329,7 +329,7 @@
     if (tab === 'official') {
       const straight = rows.filter(p => !C.isParlay(p) && C.isHeadline(p));
       const notPosted = rows.filter(p => !C.countsPublic(p));
-      const laneResults = Object.entries({ gut_call: 'Gut calls', safer_combo: 'Safer combos', upset: 'Upset picks' }).map(([lane, name]) => {
+      const laneResults = Object.entries({ gut_call: 'Full Sends', safer_combo: 'Safer combos', upset: 'Upset picks' }).map(([lane, name]) => {
         const items = rows.filter(p => p.lane === lane && C.countsPublic(p) && !C.isUnpricedImport(p));
         if (!items.length) return '';
         const stats = C.summaryOf(items, 10);

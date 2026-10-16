@@ -26,7 +26,7 @@ GAME = {
 PROP = {
     'id': 'CFB-2026-W6-king-over-49-5-recyds-dk', 'title': 'TK King OVER 49.5 receiving yards',
     'athleteId': '4869443', 'market': 'recYds', 'direction': 'over', 'line': 49.5,
-    'odds': -102, 'book': 'DraftKings', 'riskUnits': 1,
+    'odds': -102, 'book': 'DraftKings', 'riskUnits': 1, 'projection': 61.2,
     'probabilityAtPublication': {'chance': .537, 'breakEven': .505, 'calibrated': True},
     'reasoning': {'history': 'Last 10 games: 5 of 10 over 49.5.'},
 }
@@ -150,9 +150,11 @@ class TicketCardTests(unittest.TestCase):
         self.assertEqual(data['photo'], self.image)
         svg = ticket_card.straight_svg(PROP, GAME, player_side='away',
                                        art={'kind': 'photo', 'uri': self.image}, fetch=lambda _: self.logo)
-        for exact in ('OVER 49.5', 'DRAFTKINGS', '53.7%', '50.5%', '1u', '21+ · Entertainment only',
+        for exact in ('OVER 49.5', 'DRAFTKINGS', 'BOOK SAYS', 'I HAVE IT AT', '1u', '21+ · Entertainment only',
                       'ORDER UP'):
             self.assertIn(exact, svg)
+        self.assertNotIn('53.7%', svg)
+        self.assertNotIn('50.5%', svg)
         self.assertNotIn('LAST 10 GAMES: 5 OF 10', svg, '50% history does not support a 50.5%-needed side')
         self.assertNotIn('>WHY<', svg)
         self.assertNotIn('BEST BETS THIS SEASON', svg)
@@ -174,25 +176,29 @@ class TicketCardTests(unittest.TestCase):
         self.assertIn('HOT PLATE (POTD)', svg)
         self.assertNotIn('>BEST BET<', svg)
 
-    def test_gut_call_card_names_its_lane_and_half_unit_never_best_bet(self):
+    def test_fallback_card_uses_confident_full_send_voice_and_half_unit_never_best_bet(self):
         gut = dict(PROP, lane='gut_call', riskUnits=.5)
         data = ticket_card.straight_data(gut, GAME, player_side='away',
                                          art={'kind': 'photo', 'uri': self.image}, fetch=lambda _: self.logo)
-        self.assertEqual(data['seriesLabel'], 'GUT CALL · ½ UNIT')
+        self.assertEqual(data['seriesLabel'], 'FULL SEND')
         svg = ticket_card.straight_svg(gut, GAME, player_side='away',
                                        art={'kind': 'photo', 'uri': self.image}, fetch=lambda _: self.logo)
-        self.assertIn('GUT CALL · ½ UNIT', svg)
+        self.assertIn('FULL SEND', svg)
+        self.assertNotIn('GUT CALL', svg)
         self.assertIn('0.5u', svg)
         self.assertNotIn('>BEST BET<', svg)
 
-    def test_plus_money_card_says_the_sub_fifty_chance_beats_what_the_price_needs(self):
-        plus = dict(PROP, lane='gut_call', riskUnits=.5, odds=180,
+    def test_plus_money_card_keeps_chance_private_and_shows_model_vs_book_number(self):
+        plus = dict(PROP, lane='gut_call', riskUnits=.5, odds=180, projection=61.2,
                     probabilityAtPublication={'chance': .41, 'breakEven': .357, 'calibrated': True})
         svg = ticket_card.straight_svg(plus, GAME, player_side='away',
                                        art={'kind': 'photo', 'uri': self.image}, fetch=lambda _: self.logo)
-        self.assertIn('41.0%', svg)
-        self.assertIn('At +180 it only needs', svg)
-        self.assertIn('35.7%', svg)
+        self.assertIn('BOOK SAYS', svg)
+        self.assertIn('49.5', svg)
+        self.assertIn('I HAVE IT AT', svg)
+        self.assertIn('61', svg)
+        self.assertNotIn('41.0%', svg)
+        self.assertNotIn('35.7%', svg)
 
     def test_game_line_uses_both_team_logos_not_a_player_photo(self):
         pick = dict(PROP, athleteId=None, market=None, marketType='total',

@@ -35,8 +35,10 @@ test('closed, pulled and withdrawn states get their state words, never "Still go
   assert.match(ticketBody, /: vm\.mode === 'open' \? good : vm\.mode === 'expired' \? 'Posted price may be gone\. Check your book\.' : vm\.statusShort \|\| vm\.status \|\| ''/);
 });
 
-test('the raw projection, fair price and edge stay off the ticket', () => {
-  assert.doesNotMatch(ticketBody, /pick\.projection|vm\.projection|vm\.fair|vm\.edge|fairOdds/);
+test('the ticket shows book versus model number while private chance, fair price and edge stay off it', () => {
+  assert.match(ticketBody, /isNum\(pick\.projection\).*isNum\(pick\.line\)/);
+  assert.match(ticketBody, /Book \$\{tense \? 'says' : 'said'\}/);
+  assert.doesNotMatch(ticketBody, /vm\.fair|vm\.edge|fairOdds|pctOne\(vm\.chance\)|pctOne\(vm\.needs\)/);
   const explanation = source.slice(source.indexOf('const howWeGotIt ='), source.indexOf('/* A best bet', source.indexOf('const howWeGotIt =')));
   assert.match(explanation, /pick && pick\.projection/);
   const pickPage = source.slice(source.indexOf('VIEWS.pick = async'), source.indexOf('/* ---------- Research'));
@@ -67,7 +69,8 @@ test('a climb rung shows its real stake and payout only, and a fun ticket stays 
   assert.match(ticketBody, /Tracked apart from best bets/);
 });
 
-test('a Gut call ticket keeps its lane and half-unit record separate from Best bets', () => {
-  assert.match(ticketBody, /gut_call: 'Gut call · ½ unit'/);
-  assert.match(ticketBody, /Gut calls keep their own record/);
+test('a fallback ticket says Full Send while keeping its record separate from Best bets', () => {
+  assert.match(ticketBody, /gut_call: 'Full Send'/);
+  assert.match(ticketBody, /Full Sends keep their own record/);
+  assert.doesNotMatch(ticketBody, /Gut call/);
 });

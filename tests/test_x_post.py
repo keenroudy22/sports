@@ -58,8 +58,7 @@ class DraftTests(unittest.TestCase):
         hot = x_post.draft(dict(PICK, id='NFL-hot', projection=31.2), thursday, featured=True,
                            reason='Over 38.5 in 4 of his last 5 games.')
         self.assertTrue(hot.startswith('🍳 Hot Plate (POTD): '), hot)
-        self.assertTrue(any(line in hot for line in ("I've got 31 total points.", "I'm at 31 total points.",
-                                                     "My number's 31.", 'Book says 38.5. I say 31.')), hot)
+        self.assertIn("Book says 38.5. I have it at 31, so I'm on the under.", hot)
         self.assertIn('Over 38.5 in 4 of his last 5 games.', hot)
         self.assertTrue(any(hot.endswith(f'{ask}\n@Playbook #NFL') for ask in
                             ("❤️ if you're tailing", "❤️ if you're on it", "❤️ if you're riding with me")))
@@ -68,12 +67,11 @@ class DraftTests(unittest.TestCase):
         with mock.patch.object(x_post, 'load_reasons', return_value={}):
             team = x_post.draft(dict(PICK, favorite=False, modelLean=True, projection=31.2), GAME)
         self.assertIn("Iowa/Michigan under 38.5 (-105, FanDuel)", team)
-        self.assertTrue(any(line in team for line in ("I've got 31 total points.", "I'm at 31 total points.",
-                                                      "My number's 31.", 'Book says 38.5. I say 31.')), team)
+        self.assertIn("Book says 38.5. I have it at 31, so I'm on the under.", team)
         self.assertTrue(team.endswith('@Playbook #CFB'))
         prop = x_post.draft(PROP, {'league': 'NFL'}, reason='He has caught 6 in each of his last 2 games.')
         self.assertIn('Player Seven over 4.5 catches (-115, DraftKings)', prop)
-        self.assertIn('Book says 4.5. I say 5.8.', prop)
+        self.assertIn("Book says 4.5. I have it at 5.8, so I'm on the over.", prop)
         self.assertIn('He has caught 6 in each of his last 2 games.', prop)
         self.assertTrue(x_post.reason_in(prop).endswith('He has caught 6 in each of his last 2 games.'))
         with mock.patch.object(x_post, 'load_reasons', return_value={}):
@@ -89,10 +87,11 @@ class DraftTests(unittest.TestCase):
         side = dict(PICK, marketType='spread', direction='home', line=-3.0, title='Iowa at Michigan -3', projection=-7.4)
         game = dict(GAME, home={'abbreviation': 'MICH', 'school': 'Michigan'}, away={'abbreviation': 'IOWA', 'school': 'Iowa'})
         text = x_post.draft(side, game)
-        self.assertIn('Book says -3. I say -7.4.', text)
+        self.assertIn("Book says -3. I have it at -7.4, so I'm on this side.", text)
         self.assertEqual(x_post.guard(text, side), [])
         opposite = x_post.draft(dict(side, projection=2.6), game)
-        self.assertIn('Book says -3. I say 2.6.', opposite, 'the number plainly shows when our side crosses zero')
+        self.assertIn("Book says -3. I have it at 2.6, so I'm on this side.", opposite,
+                      'the number plainly shows when our side crosses zero')
 
     def test_the_post_shows_the_number_available_now_when_it_moved(self):
         pick = dict(PICK, favorite=False, modelLean=True, projection=31.2)
@@ -129,6 +128,8 @@ class DraftTests(unittest.TestCase):
         play = dict(PICK, lane='gut_call', riskUnits=.5, book='ESPN BET', projection=31.2,
                     probabilityAtPublication={'chance': .54, 'breakEven': .512, 'calibrated': True})
         text = x_post.draft(play, GAME, reason='Wind is forecast at 18 mph in Ann Arbor.')
+        self.assertTrue(text.startswith('🔥 Full Send: '), text)
+        self.assertNotIn('Gut call', text)
         self.assertIn('theScore Bet', text)
         self.assertNotIn('ESPN BET', text)
         self.assertEqual(x_post.guard(text, play, x_post.reason_in(text)), [])
@@ -194,8 +195,7 @@ class DraftTests(unittest.TestCase):
         self.assertIsNone(x_post.reason_for(arithmetic), 'no stat talk in the timeline')
         text = x_post.draft(dict(arithmetic, projection=31.2), GAME)
         self.assertNotIn('percentile', text)
-        self.assertTrue(any(line in text for line in ("I've got 31 total points.", "I'm at 31 total points.",
-                                                      "My number's 31.", 'Book says 38.5. I say 31.')), text)
+        self.assertIn("Book says 38.5. I have it at 31, so I'm on the under.", text)
         self.assertTrue(text.endswith('@Playbook #CFB'))
 
     def test_url_counts_as_twenty_three(self):

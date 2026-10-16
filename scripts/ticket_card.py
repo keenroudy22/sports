@@ -88,7 +88,7 @@ def straight_data(pick, game, *, featured=False, player_side=None, art=None, fet
         units = 1
     output = {
         'kind': 'player' if prop else 'game', 'featured': bool(featured),
-        'seriesLabel': {'gut_call': 'GUT CALL · ½ UNIT', 'upset': 'UPSET PICK'}.get(pick.get('lane')),
+        'seriesLabel': {'gut_call': 'FULL SEND', 'upset': 'UPSET PICK'}.get(pick.get('lane')),
         'player': _name(pick) if prop else '', 'team': team_code,
         'away': away_code, 'home': home_code,
         'away_name': pick_card.team_label(away, league),
@@ -97,6 +97,7 @@ def straight_data(pick, game, *, featured=False, player_side=None, art=None, fet
         'when': pick_card.felt_when(game), 'when_caps': pick_card.felt_when(game).upper(),
         'market': pick.get('market') or pick.get('marketType'),
         'line': f"{float(pick['line']):g}", 'odds': pick['odds'], 'book': pick['book'],
+        'projection': pick.get('projection'),
         'chance': chance_row.get('chance') if calibrated else None,
         'needs': chance_row.get('breakEven') if calibrated else None,
         'calibrated': calibrated, 'reason': reason,

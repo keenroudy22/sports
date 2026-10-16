@@ -113,7 +113,7 @@ def meta_block(card, p, cy):
 def play_card(p):
     """Hot Plate (POTD) or best bet: player prop with photo, player prop without photo, or game line."""
     card = kit.Card()
-    calibrated = p.get('chance') is not None and p.get('calibrated', True)
+    has_number = isinstance(p.get('projection'), (int, float)) and p.get('line') not in (None, '')
     tag_w = width('WHY', 40, tracking=2) + 26
     why = reason_lines(p.get('reason'), X2 - X1 - tag_w - 18) if p.get('reason') else None
     if not why:
@@ -121,7 +121,7 @@ def play_card(p):
     n_reason = len(why or [])
     # 584 is the panel bottom with a chance row and a one-line reason. A missing row gives its 74 px to the panel
     # (and so to the photo); a second reason line takes 56 px from it. Capped at 640 so the head still breaks out.
-    panel_bottom = 584 + (0 if calibrated else 74) + (0 if n_reason else 74) - (56 if n_reason == 2 else 0)
+    panel_bottom = 584 + (0 if has_number else 74) + (0 if n_reason else 74) - (56 if n_reason == 2 else 0)
     panel_bottom = min(panel_bottom, 640)
 
     game = p['kind'] == 'game'
@@ -154,7 +154,7 @@ def play_card(p):
         else:
             inner += kit.initials_badge(card, 790, cy, 130, p['team'][:4], p['team_colors'][p['team']][0])
     label = p.get('seriesLabel')
-    if label not in ('NBA TRIAL', 'NBA TRIAL PREVIEW', 'GUT CALL · ½ UNIT', 'UPSET PICK'):
+    if label not in ('NBA TRIAL', 'NBA TRIAL PREVIEW', 'FULL SEND', 'UPSET PICK'):
         label = 'HOT PLATE (POTD)' if p.get('featured') else 'BEST BET'
     chip, _ = kit.series_chip(card, COL_X, 204, label, flame=p.get('featured'))
     inner += chip
@@ -179,15 +179,19 @@ def play_card(p):
     pr, book = kit.price(p['odds']), p['book'].upper()
     inner += (card.text(X1 - 2, y, pr, 116, INK) + card.text(X2, y, book, 62, INK, anchor='end')
               + kit.dots(X1 + width(pr, 116) + 22, X2 - width(book, 62) - 22, y - 4))
-    if calibrated:
+    if has_number:
         y += 74
-        lw1, vw1 = width('I have it at', 42, 'd', 600), width(kit.pct1(p['chance']), 56)
-        right_label = f"At {kit.price(p['odds'])} it only needs" if p['odds'] > 0 else 'the price needs'
-        lw2, vw2 = width(right_label, 42, 'd', 600), width(kit.pct1(p['needs']), 56)
+        def plain_number(value):
+            return str(int(round(value))) if abs(value) >= 10 else f'{round(value, 1):g}'
+        line = plain_number(float(p['line']))
+        projection = plain_number(float(p['projection']))
+        lw1, vw1 = width('BOOK SAYS', 42, 'd', 600), width(line, 56)
+        right_label = 'I HAVE IT AT'
+        lw2, vw2 = width(right_label, 42, 'd', 600), width(projection, 56)
         x2l = X2 - vw2 - 12 - lw2
-        inner += (card.text(X1, y, 'I have it at', 42, INK_SOFT, 'd', 600) + card.text(X1 + lw1 + 12, y, kit.pct1(p['chance']), 56, INK)
+        inner += (card.text(X1, y, 'BOOK SAYS', 42, INK_SOFT, 'd', 600) + card.text(X1 + lw1 + 12, y, line, 56, INK)
                   + kit.dots(X1 + lw1 + 12 + vw1 + 18, x2l - 18, y - 6)
-                  + card.text(x2l, y, right_label, 42, INK_SOFT, 'd', 600) + card.text(X2, y, kit.pct1(p['needs']), 56, INK, anchor='end'))
+                  + card.text(x2l, y, right_label, 42, INK_SOFT, 'd', 600) + card.text(X2, y, projection, 56, INK, anchor='end'))
     if why:
         y += 74
         wb, n = why_block(card, y, p['reason'])

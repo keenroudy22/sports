@@ -65,7 +65,7 @@ class PlanVoiceTests(unittest.TestCase):
                 'why': 'He averaged 8 targets a game in his last 3.'}
         game = {'league': 'CFB', 'kickoff': '2026-10-10T23:30:00Z', 'away': {'name': 'A'}, 'home': {'name': 'B'}}
         text = x_post.draft(pick, game, featured=True, history=[])
-        self.assertIn('Book says 49.5. I say 68.', text)
+        self.assertIn("Book says 49.5. I have it at 68, so I'm on the over.", text)
         self.assertEqual(text.count('Hot Plate (POTD)'), 1)
         self.assertNotIn('Upset pick:', text)
         self.assertFalse(voice.lint(text), text)

@@ -1,10 +1,10 @@
 {
   "version": 1,
   "playShapes": {
-    "A": ["{play} ({odds}, {book})", "{number} {reason}", "{ask}", "@Playbook #{L}"],
+    "A": ["{play} ({odds}, {book})", "{number}", "{reason}", "{ask}", "@Playbook #{L}"],
     "B": ["{reason}", "{play} ({odds}, {book})", "{number}", "{ask}", "@Playbook #{L}"],
-    "C": ["{play} ({odds}, {book})", "Book says {line}. I say {proj}.", "{reason}", "{ask}", "@Playbook #{L}"],
-    "D": ["{play} ({odds}, {book})", "{reason}", "@Playbook #{L}"]
+    "C": ["{play} ({odds}, {book})", "{number}", "{reason}", "{ask}", "@Playbook #{L}"],
+    "D": ["{play} ({odds}, {book})", "{number}", "{reason}", "@Playbook #{L}"]
   },
   "numberLines": {
     "totals": ["I'm at {n}.", "I've got {n} total points.", "My number's {n}.", "I have it at {n}."],
@@ -13,8 +13,8 @@
     "upset": ["Book has them losing. I've got {team} by {m}."]
   },
   "reasonWrappers": {
-    "higher": ["Why I'm higher than the book: {reason}"],
-    "lower": ["Why I'm lower than the book: {reason}"],
+    "higher": ["{reason}"],
+    "lower": ["{reason}"],
     "none": ["{reason}", "{reason}", "{reason}"]
   },
   "asks": ["❤️ if you're tailing", "❤️ if you're on it", "❤️ if you're riding with me", ""],

@@ -487,7 +487,7 @@ def _play_prefix(pick, game, featured):
     if pick.get('lane') == 'upset':
         return '🐕 Upset pick: '
     if pick.get('lane') == 'gut_call':
-        return '👨‍🍳 Gut call: '
+        return '🔥 Full Send: '
     kickoff = (game or {}).get('kickoff')
     if not kickoff or gates.when(kickoff).astimezone(gates.EASTERN).hour < 19:
         return ''
@@ -550,14 +550,18 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
         play_text = f"{prefix}{pick_card.short_title(pick, game)}"
         play = f"{play_text} ({int(pick['odds']):+d}, {public_book(pick.get('book'))})"
         now = now_line(pick, now_quote)
-        number = _number_line(pick, game, day, history)
+        projection, line = pick.get('projection'), pick.get('line')
+        side_word = str(pick.get('direction') or '').lower()
+        side_phrase = f'the {side_word}' if side_word in ('over', 'under') else 'this side'
+        number = (f"Book says {pricing.fmt(float(line))}. I have it at "
+                  f"{pick_card.plain_number(projection)}, so I'm on {side_phrase}."
+                  if isinstance(projection, (int, float)) and isinstance(line, (int, float)) else '')
         saved_reason = reason if reason is not None else load_reasons().get(pick.get('id'))
         reason = _choose_reason(pick, saved_reason, history, day)
         for salt in range(1, 5):
             if not voice_pick.five_word_overlap(' '.join(part for part in (number, reason) if part), history):
                 break
-            number = _number_line(pick, game, day, history, salt=salt)
-        projection, line = pick.get('projection'), pick.get('line')
+            # The model-vs-book sentence is intentionally fixed owner voice; vary the verified reason instead.
         required = ('C' if isinstance(projection, (int, float)) and isinstance(line, (int, float)) and line
                     and abs(projection - line) / abs(line) > .25 else None)
         shape = voice_pick.choose_shape(pick.get('id'), day, history=history, required=required)

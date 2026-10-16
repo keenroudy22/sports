@@ -21,7 +21,7 @@ const NOW = Date.parse('2026-10-10T14:00:00Z');
 const chance = { chance: 0.56, breakEven: 0.524, edgePoints: 3.6, calibrated: true };
 const prop = {
   id: 'NFL-2026-W5-fixture-rec-fd', kind: 'props', league: 'NFL', gameId: 'NFL-1', athleteId: '9', market: 'recYds', position: 'WR',
-  displayTitle: 'Fixture Receiver OVER 49.5 receiving yards', line: 49.5, direction: 'over', odds: -110, book: 'FanDuel',
+  displayTitle: 'Fixture Receiver OVER 49.5 receiving yards', line: 49.5, projection: 61.2, direction: 'over', odds: -110, book: 'FanDuel',
   kickoff: '2026-10-10T20:00:00Z', expiresAt: '2026-10-10T19:00:00Z', featured: true, posted: true, status: 'active', cutoffOdds: -124,
   publishedAt: '2026-10-10T13:00:00Z', probabilityAtPublication: chance, modelLean: true, side: 'away',
   ticketWhy: 'I project 7.3 targets, AWY\'s top WR.', ticketBut: 'HOM\'s WR defense points against the over.',
@@ -161,7 +161,8 @@ test('Today runs the first screen, then every section visible with no fold; Off 
   assert.match(bets, /Still good to −124\./, 'each other best bet names its price limit, in the first ticket\'s words');
   assert.doesNotMatch(bets, /Still a bet down to|Best bets this season/, 'one limit sentence everywhere; the season record rides the first ticket and the season line only');
   assert.equal((page.match(/Best bets this season/g) || []).length, 1);
-  assert.match(bets, /I have it at<b class="num">56\.0%/, 'and its chance against the price when calibrated');
+  assert.match(bets, /Book says<b class="num">51\.5<\/b>[\s\S]*I have it at<b class="num">61\.2<\/b>/,
+    'and its useful model number against the book line');
   assert.doesNotMatch(bets, /kt-clip/, 'one chef, on the first rail only');
   assert.match(page, /<h2 class="kt-head" id="left-h">Friday went 1-0 · \+0\.95u<\/h2>/, 'Leftovers carry the day\'s units');
   assert.match(page, /<span class="kt-stamp hit" aria-hidden="true">[\s\S]*?HIT<\/span>/);
@@ -211,7 +212,8 @@ test('the first ticket carries no fair price or edge, and its numbers are the pi
   const page = await api.views.today({ view: 'today' });
   const first = page.slice(page.indexOf('<article class="kt-order'), page.indexOf('</article>') + 10);
   assert.match(first, /<p class="kt-chip"><svg[^>]*>.*?<\/svg>Hot Plate \(POTD\)<\/p>/, 'the exact Hot Plate (POTD) phrase');
-  assert.match(first, /I have it at<b class="num">56\.0%<\/b><\/span><i><\/i><span>the price needs<b class="num">52\.4%<\/b>/);
+  assert.match(first, /Book says<b class="num">49\.5<\/b><\/span><i><\/i><span>I have it at<b class="num">61\.2<\/b>/);
+  assert.doesNotMatch(first, /%|price needs/);
   assert.match(first, /<span class="kt-tag">WHY<\/span><span>I project 7\.3 targets, AWY&#39;s top WR\.<\/span>/);
   assert.match(first, /<span class="kt-tag">BUT<\/span><span>HOM&#39;s WR defense points against the over\.<\/span>/);
   assert.match(first, /Still good to −124\./);
@@ -220,7 +222,7 @@ test('the first ticket carries no fair price or edge, and its numbers are the pi
   for (const banned of ['Price matching our chance', 'Chance vs price', ' pts', 'fair', 'edge']) assert.ok(!first.includes(banned), banned);
   const text = first.replace(/<[^>]+>/g, ' ').replace(/&#\d+;/g, "'");
   /* 6 and 0: the kickoff countdown ("Kicks off in 6h 0m"), restored on 2026-10-07. */
-  const allowed = new Set(['49.5', '110', '56.0', '52.4', '7.3', '124', '35', '35', '78', '94', '67', '26', '21', '3', '5', '5', '10', '4', '00', '1', '2', '6', '0']);
+  const allowed = new Set(['49.5', '61.2', '110', '7.3', '124', '35', '35', '78', '94', '67', '26', '21', '3', '5', '5', '10', '4', '00', '1', '2', '6', '0']);
   assert.match(first, /<p class="kt-cd">Kicks off in 6h 0m<\/p>/);
   for (const n of text.match(/\d+(?:\.\d+)?/g) || []) assert.ok(allowed.has(n), `unexpected number ${n} on the ticket`);
 });
@@ -233,7 +235,8 @@ test('an uncalibrated chance, an expired quote and a moved line never read as an
     return a.views.today({ view: 'today' }).then(page => page.slice(page.indexOf('<article class="kt-order'), page.indexOf('</article>')));
   };
   const raw = await ticketOf({ ...prop, probabilityAtPublication: { chance: 0.6, breakEven: 0.524, calibrated: false } });
-  assert.doesNotMatch(raw, /kt-chance|I have it at/, 'no chance row when the chance is uncalibrated');
+  assert.match(raw, /Book says[\s\S]*I have it at/, 'the plain model number does not depend on a public percentage');
+  assert.doesNotMatch(raw, /%|price needs/);
   const aged = await ticketOf({ ...prop, expiresAt: '2026-10-10T12:00:00Z' });
   assert.match(aged, /Posted price may be gone\. Check your book\./);
   assert.match(aged, /I had it at/);
@@ -491,8 +494,9 @@ test('a play held after Discord delivery keeps its posted Hot Plate, historical 
   const { api } = loadApp('#today', {}, { today, hero: { ...HERO, bets: [delivered] }, extra: linesFor([kingRow]) });
   const ticket = firstTicket(await api.views.today({ view: 'today' }));
   assert.match(ticket, /Hot Plate \(POTD\)/);
+  assert.match(ticket, /Book said/);
   assert.match(ticket, /I had it at/);
-  assert.match(ticket, /the price needed/);
+  assert.doesNotMatch(ticket, /price needed|%/);
   assert.match(ticket, /quarterback picture changed since I posted/);
   assert.match(ticket, /Latest −104/);
   assert.match(ticket, /<span class="kt-tag">WHY<\/span><span>I project 7\.3 targets/);

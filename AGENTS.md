@@ -205,6 +205,16 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Full Send public voice (owner, 2026-10-16):** never call a released play a `Gut call` in public. The existing
+  positive-value fallback may keep its internal `gut_call` lane and separate 0.5u accounting, but cards, captions,
+  Discord and the site call it `Full Send` and write with conviction. This is a copy/branding rule, not permission
+  to bypass price, injury, role, freshness, reason or positive-value gates or to change the record.
+
+- **Numbers, not percentages (owner, 2026-10-16):** official-play cards, captions and the Today ticket explain the
+  side with the model number against the book line: `Book says 49.5. I have it at 61, so I'm on the over.` Keep the
+  market-anchored chance and price need private for selection and the send guard; do not print that percentage
+  comparison as the public reason. The saved projection and exact line must exist; never invent either number.
+
 - **Every game has a favorite; large slates have room (owner, 2026-10-15):** every active NFL/CFB game page
   names at least one fresh exact-price Kook'n favorite line when a safe priced row exists. If no line clears the
   official bar, show the strongest current lean as `research only · not a best bet` and say why; if availability or

@@ -865,7 +865,7 @@
   const ticket = (pick, opts = {}) => {
     const vm = pickVM(pick), g = gameOf(pick), parts = betParts(pick, g), league = pick.league || String(pick.gameId || '').split('-')[0];
     const climb = vm.kind === 'climb', fun = vm.kind === 'fun', best = vm.kind === 'best', info = pick.ladder || {};
-    const laneChip = { gut_call: 'Gut call · ½ unit', upset: 'Upset pick', safer_combo: 'Safer combo',
+    const laneChip = { gut_call: 'Full Send', upset: 'Upset pick', safer_combo: 'Safer combo',
       special: "Chef's Special", nba: 'NBA Trial', soccer: 'Soccer Trial', cbb: 'College hoops Trial' };
     const chip = vm.featured ? 'Hot Plate (POTD)' : climb ? `80/20 Climb${info.run ? ` #${info.run}` : ''}` : fun ? (vm.lotto ? 'Fun ticket · Lotto' : 'Fun ticket') : laneChip[pick.lane] || 'Best bet';
     const chipHtml = `<p class="kt-chip">${vm.featured ? FLAME : ''}${esc(chip)}</p>`;
@@ -904,11 +904,8 @@
         : ['open', 'expired'].includes(vm.mode) && latest ? `Now ${odd(latest.current.odds)} at ${clock(latest.current.observedAt)}. ${latest.inside ? good : `Past my ${odd(pick.cutoffOdds)} limit.`}`
           : vm.mode === 'open' ? good : vm.mode === 'expired' ? 'Posted price may be gone. Check your book.' : vm.statusShort || vm.status || '';
     const tense = !afterHold && (vm.mode === 'open' || (vm.mode === 'expired' && latest && latest.inside));
-    const needWords = vm.odds > 0
-      ? `At ${esc(oddsText(vm.odds))} it only ${tense ? 'needs' : 'needed'}`
-      : `the price ${tense ? 'needs' : 'needed'}`;
-    const chance = best && (!hold || afterHold) && vm.calibrated && vm.chance != null && vm.needs != null
-      ? `<p class="kt-lead kt-chance"><span>I ${tense ? 'have' : 'had'} it at<b class="num">${pctOne(vm.chance)}</b></span><i></i><span>${needWords}<b class="num">${pctOne(vm.needs)}</b></span></p>` : '';
+    const number = best && (!hold || afterHold) && isNum(pick.projection) && isNum(pick.line)
+      ? `<p class="kt-lead kt-chance"><span>Book ${tense ? 'says' : 'said'}<b class="num">${esc(C.fixed(pick.line))}</b></span><i></i><span>I ${tense ? 'have' : 'had'} it at<b class="num">${esc(C.fixed(pick.projection))}</b></span></p>` : '';
     /* The build already chose held-safe words (build_site.held_words); when the hold comes only from the board rows,
        a saved line that quotes a projection, chance or edge is left off, never reworded. */
     const heldSafe = (text, held) => held && !held.afterPosting && HELD_WORDS.test(text || '') ? null : text;
@@ -920,7 +917,7 @@
     const fit = betSize(parts, opts.compact ? 60 : 68);
     const bet = climb || fun ? legs : `<p class="kt-bet num" style="--bet-size:${fit}px;--bet-size-k:${(fit / 306).toFixed(4)}">${esc(parts.bet)}${parts.unit.length ? `<span class="kt-unit">${parts.unit.map(esc).join('<br>')}</span>` : ''}</p>`;
     const s = opts.season, record = s ? `${s.wins}-${s.losses}${s.pushes ? `-${s.pushes}` : ''}` : '';
-    const straightStub = pick.lane === 'gut_call' ? '<p class="kt-season">Gut calls keep their own record</p>'
+    const straightStub = pick.lane === 'gut_call' ? '<p class="kt-season">Full Sends keep their own record</p>'
       : pick.lane === 'upset' ? '<p class="kt-season">Upset picks keep their own record</p>'
       : record ? `<p class="kt-season">Best bets ${s.playoffs ? 'these playoffs' : 'this season'}<b class="num">${esc(record)}</b></p>` : '<p class="kt-season">Best bet</p>';
     const stub = best && opts.more ? '' : best ? straightStub
@@ -931,7 +928,7 @@
     return `<article class="kt-order${opts.compact ? ' compact' : ''}${vm.mode === 'closed' ? ' is-closed' : ''}${hold ? ' is-held' : ''}" style="${style}" aria-label="${esc(label)}">
       <div class="kt-shade"><div class="kt-paper">${panel}${bet}<div class="kt-cut"></div>
         <p class="kt-lead kt-price"><b class="kt-odds num">${esc(odd(vm.odds))}</b><i></i><b class="kt-book">${esc(vm.estimated ? `est. ${vm.book || ''}` : vm.book || '')}</b></p>
-        <p class="kt-now">${esc(nowLine)}</p>${chance}${best ? say('WHY', heldSafe(pick.ticketWhy, hold)) + say('BUT', heldSafe(pick.ticketBut, hold), ' kt-but') : ''}
+        <p class="kt-now">${esc(nowLine)}</p>${number}${best ? say('WHY', heldSafe(pick.ticketWhy, hold)) + say('BUT', heldSafe(pick.ticketBut, hold), ' kt-but') : ''}
         ${opts.strip && best ? strip(pick.hitStrip, pick.line, String(pick.direction || '').toLowerCase()) : ''}
         ${best && opponentTrendText(pick) ? `<p class="kt-note">${esc(opponentTrendText(pick))}</p>` : ''}
         ${stub || extra || orderUp ? `<div class="kt-perf"></div><div class="kt-stubrow"><div class="kt-stubl">${stub}${extra}</div>${orderUp}</div>` : ''}</div></div>
@@ -1915,7 +1912,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-18218afa0717';
+  const MORE_ASSET = 'app-more.js?v=sha256-3d7ece5a8424';
   const GAMES_ASSET = 'app-games.js?v=sha256-0fc20d90f4bd';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
