@@ -67,6 +67,7 @@ MONEYLINE_PAIR_BAND = (0.99, 1.15)  # broken or mismatched two-sided captures ne
 LEAD = timedelta(minutes=15)        # a late admission still needs a real pre-kickoff posting window
 FRESH = timedelta(hours=12)         # prices older than this are not used
 GAME_FRESH = timedelta(hours=2)     # main moneylines are re-read on game day before admission
+RELEASE_QUOTE_FRESH = timedelta(hours=2)  # the morning Discord release must still be inside the verified quote age
 STAKE = parlay.STAKE                # the ticket's size in the desk's own terms; the ladder itself counts dollars
 SOURCE = 'https://sharpapi.io/'
 SHADOW_NAME = 'ladder-shadow-2026.jsonl'
@@ -522,7 +523,12 @@ def ticket_pick(ticket, league, where, now, games):
             'correlation': 'One leg per game, so the book prices the ticket as the legs multiplied.',
             'gameIds': ticket['gameIds'], 'book': ticket['book'], 'odds': ticket['odds'],
             'quotedAt': ticket['quotedAt'], 'priceEstimated': ticket.get('priceEstimated', True),
-            'expiresAt': gates.stamp(min(gates.next_slot(now), gates.when(ticket['firstKickoff']))),
+            # A rung selected before the 8:30 scan can legitimately wait for the
+            # 9:15 Discord / 9:30 X window.  Expiring it at the next scan made a
+            # fresh morning rung impossible to release.  The release path still
+            # refuses it once the actual two-hour freshness limit is reached.
+            'expiresAt': gates.stamp(min(gates.when(ticket['quotedAt']) + RELEASE_QUOTE_FRESH,
+                                         gates.when(ticket['firstKickoff']))),
             'quoteType': ticket.get('quoteType', 'capture'), 'confidence': 1,
             'edge': (f"For fun, not value: {len(ticket['legs'])} protected lines with stable roles that our model "
                      f"direction agrees with, at {ticket['book']}'s exact prices, multiplied to "

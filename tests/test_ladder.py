@@ -301,7 +301,7 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(pick['ladder'], {'run': 1, 'step': 1, 'stake': 50, 'payout': 75, 'banked': 0,
                                           'bankThisWin': 15, 'bankedAfter': 15, 'nextStake': 60, 'totalAfter': 75,
                                           'bankPercent': 20, 'ridePercent': 80, 'start': 50, 'goal': 1000})
-        self.assertEqual(pick['expiresAt'], '2026-09-27T15:45:00Z', 'the next run, before the first kickoff')
+        self.assertEqual(pick['expiresAt'], '2026-09-27T14:10:00Z', 'two hours after the captured quote')
         self.assertIn('https://sharpapi.io/', pick['sources'])
         first, latest = book_of(rung('open', '2026-09-26T12:30:00Z', 1, 50, 96))
         none, why = ladder.candidate(ctx(first, latest), GAMES, NOW)
@@ -353,6 +353,25 @@ class BuildTests(unittest.TestCase):
             none, why = ladder.manual_candidate(ctx(), games, NOW, spec)
             self.assertIsNone(none)
             self.assertIn('raw model only gives', why)
+        finally:
+            ladder.pricing.price = original
+
+    def test_morning_rung_quote_survives_until_discord_release(self):
+        """A 7:30 ET capture remains fresh for the 9:15 Discord handoff."""
+        games = {gid: dict(g, league='CFB') for gid, g in GAMES.items() if gid in ('g1', 'g2')}
+        spec = {'book': 'FanDuel', 'quotedAt': '2026-09-27T11:30:00Z',
+                'source': 'https://sportsbook.fanduel.com/', 'legs': [
+                    {'gameId': 'g1', 'marketType': 'spread', 'direction': 'home', 'line': -1.5, 'odds': -450},
+                    {'gameId': 'g2', 'marketType': 'spread', 'direction': 'home', 'line': -4.5, 'odds': -450},
+                ]}
+        original = ladder.pricing.price
+        ladder.pricing.price = lambda *a, **k: {'rawChance': .86, 'breakEven': .8, 'projection': -1.0}
+        try:
+            pick, reason = ladder.manual_candidate(ctx(), games, NOW, spec)
+            self.assertIsNone(reason)
+            self.assertEqual(pick['expiresAt'], '2026-09-27T13:30:00Z')
+            self.assertLess(datetime(2026, 9, 27, 13, 15, tzinfo=timezone.utc),
+                            gates.when(pick['expiresAt']))
         finally:
             ladder.pricing.price = original
 
