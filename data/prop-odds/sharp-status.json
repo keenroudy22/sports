@@ -1,21 +1,21 @@
 {
- "at": "2026-10-17T14:42:29Z",
+ "at": "2026-10-17T14:58:11Z",
  "confirmed": {
   "CFB-401856719": "2026-10-17T13:03:22Z",
-  "CFB-401856720": "2026-10-17T14:42:29Z",
+  "CFB-401856720": "2026-10-17T14:58:11Z",
   "CFB-401856721": "2026-10-17T13:03:22Z",
   "CFB-401856723": "2026-10-17T13:03:22Z",
-  "CFB-401856724": "2026-10-17T14:42:29Z",
+  "CFB-401856724": "2026-10-17T14:58:11Z",
   "CFB-401856725": "2026-10-17T13:03:22Z",
   "CFB-401856726": "2026-10-16T14:02:48Z",
   "CFB-401856828": "2026-10-17T13:03:22Z",
-  "CFB-401856829": "2026-10-17T14:42:29Z",
-  "CFB-401856830": "2026-10-17T14:42:29Z",
+  "CFB-401856829": "2026-10-17T14:58:11Z",
+  "CFB-401856830": "2026-10-17T14:58:11Z",
   "CFB-401856832": "2026-10-16T08:36:00Z",
   "CFB-401858263": "2026-10-16T08:36:00Z",
   "CFB-401858264": "2026-10-17T13:03:22Z",
   "CFB-401858266": "2026-10-17T13:03:22Z",
-  "CFB-401858267": "2026-10-17T14:42:29Z",
+  "CFB-401858267": "2026-10-17T14:58:11Z",
   "CFB-401858268": "2026-10-17T13:53:18Z",
   "CFB-401858488": "2026-10-17T13:53:18Z",
   "CFB-401858489": "2026-10-17T13:03:22Z",
@@ -28,8 +28,8 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1267,
-    "fanduel": 867
+    "draftkings": 1271,
+    "fanduel": 902
    },
    "eventsListed": 129,
    "eventsMatched": 52,
@@ -44,15 +44,15 @@
     "player_passing_+_rushing_yards": 146,
     "player_passing_attempts": 30,
     "player_passing_completions": 24,
-    "player_passing_touchdowns": 47,
+    "player_passing_touchdowns": 50,
     "player_passing_yards": 208,
-    "player_receiving_yards": 840,
+    "player_receiving_yards": 851,
     "player_receptions": 204,
-    "player_rushing_attempts": 44,
-    "player_rushing_yards": 529
+    "player_rushing_attempts": 43,
+    "player_rushing_yards": 555
    },
    "requestsLeft": 0,
-   "rows": 2134,
+   "rows": 2173,
    "slateGames": [
     "Mississippi State Bulldogs at LSU Tigers 2026-10-17T16:00Z",
     "Florida Gators at Texas Longhorns 2026-10-17T16:00Z",
@@ -113,6 +113,7 @@
      "external": {
       "ballybet": "1029240565",
       "betonline": "491151620",
+      "betparx": "1029240565",
       "betrivers": "1029240565",
       "bwin": "6:46938",
       "caesars": "54baba0d-ad11-4017-bcf6-8ddbad350b1f",
@@ -146,7 +147,6 @@
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
-       "game_prop",
        "moneyline",
        "point_spread",
        "total_points"
@@ -161,6 +161,7 @@
       "ballybet": "1029240570",
       "betmgm": "6:46941",
       "betonline": "491151623",
+      "betparx": "1029240570",
       "betrivers": "1029240570",
       "bwin": "6:46941",
       "draftkings": "34826941",
@@ -206,6 +207,7 @@
       "ballybet": "1029495476",
       "betmgm": "6:46910",
       "betonline": "491151621",
+      "betparx": "1029495476",
       "betrivers": "1029495476",
       "bwin": "6:46910",
       "caesars": "1ced13cd-ac23-43aa-b5ae-92410dd06850",
@@ -237,11 +239,12 @@
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
-       "game_prop",
        "moneyline",
        "point_spread",
        "team_total",
-       "total_points"
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-17T16:00:00Z",
@@ -254,6 +257,7 @@
       "betfred": "37267484",
       "betmgm": "6:46973",
       "betonline": "491151650",
+      "betparx": "1029241579",
       "betrivers": "1029241579",
       "bwin": "6:46973",
       "draftkings": "34826954",
@@ -300,6 +304,7 @@
       "betfred": "37267479",
       "betmgm": "6:46944",
       "betonline": "491151618",
+      "betparx": "1029240575",
       "betrivers": "1029240575",
       "bwin": "6:46944",
       "caesars": "72aafbac-0d99-4c76-8149-1cf6c0b27aa5",
@@ -346,6 +351,7 @@
       "betfred": "37267481",
       "betmgm": "6:46935",
       "betonline": "491151626",
+      "betparx": "1029241576",
       "betrivers": "1029241576",
       "bwin": "6:46935",
       "caesars": "2b31db3b-029c-484d-a8c0-76f5b6d0b37b",
@@ -380,7 +386,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-17T16:00:00Z",
@@ -393,6 +402,7 @@
       "betfred": "37267478",
       "betmgm": "6:46911",
       "betonline": "491151617",
+      "betparx": "1029240566",
       "betrivers": "1029240566",
       "bwin": "6:46911",
       "caesars": "e4121928-04dc-4dd6-9885-9b6d109dd1c0",
@@ -426,9 +436,13 @@
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
+       "game_prop",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-17T16:00:00Z",
@@ -440,6 +454,7 @@
       "ballybet": "1029241581",
       "betmgm": "6:46974",
       "betonline": "491151651",
+      "betparx": "1029241581",
       "betrivers": "1029241581",
       "bwin": "6:46974",
       "draftkings": "34826956",
@@ -447,7 +462,7 @@
       "fliff": "419322_c_p_209_prematch",
       "goldrush": "31246368",
       "hardrock": "6924013712437281164",
-      "kalshi": "KXNCAAF1H-26OCT17BRYME",
+      "kalshi": "KXNCAAFSPREAD-26OCT17BRYME",
       "ladbrokes": "ea912a58-4f21-410f-bbd3-732005817dd3",
       "matchbook": "mb-34621846212100023",
       "novig": "01a121a8-5dc7-75e2-96c2-1107fd7caeaf",
@@ -485,6 +500,7 @@
       "betfred": "37268272",
       "betmgm": "6:46975",
       "betonline": "491151645",
+      "betparx": "1029241577",
       "betrivers": "1029241577",
       "bwin": "6:46975",
       "draftkings": "34826946",
@@ -529,6 +545,7 @@
       "ballybet": "1029241572",
       "betmgm": "6:46976",
       "betonline": "491151646",
+      "betparx": "1029241572",
       "betrivers": "1029241572",
       "bwin": "6:46976",
       "draftkings": "34826947",
@@ -573,6 +590,7 @@
       "ballybet": "1029241585",
       "betmgm": "6:46916",
       "betonline": "491151627",
+      "betparx": "1029241585",
       "betrivers": "1029241585",
       "bwin": "6:46916",
       "draftkings": "34826944",
@@ -617,6 +635,7 @@
       "ballybet": "1029241562",
       "betmgm": "6:46918",
       "betonline": "491151649",
+      "betparx": "1029241562",
       "betrivers": "1029241562",
       "bwin": "6:46918",
       "draftkings": "34826949",
@@ -693,7 +712,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-17T14:42:00Z",
+     "start": "2026-10-17T14:47:00Z",
      "type": "outright"
     },
     {
@@ -712,7 +731,7 @@
       "fanatics": "5572377",
       "fanduel": "36160515",
       "fliff": "407872_c_p_202_prematch",
-      "gemini": "NFL-2610200015-WAS-SF-T",
+      "gemini": "NFL-2610200015-WAS-SF-PPTD",
       "goldrush": "31140283",
       "hardrock": "2116778469953241503",
       "kalshi": "KXNFL3QTOTAL-26OCT19WASSF",
