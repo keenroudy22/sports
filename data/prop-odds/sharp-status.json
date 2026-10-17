@@ -1,13 +1,13 @@
 {
- "at": "2026-10-17T22:24:34Z",
+ "at": "2026-10-17T22:33:51Z",
  "confirmed": {
-  "CFB-401856722": "2026-10-17T22:24:34Z",
-  "CFB-401856726": "2026-10-17T22:24:34Z",
-  "CFB-401856809": "2026-10-17T22:24:34Z",
+  "CFB-401856722": "2026-10-17T22:33:51Z",
+  "CFB-401856726": "2026-10-17T22:33:51Z",
+  "CFB-401856809": "2026-10-17T22:33:51Z",
   "CFB-401856831": "2026-10-17T22:15:50Z",
-  "CFB-401856832": "2026-10-17T22:24:34Z",
+  "CFB-401856832": "2026-10-17T22:33:51Z",
   "CFB-401856833": "2026-10-17T18:53:52Z",
-  "CFB-401858263": "2026-10-17T22:24:34Z",
+  "CFB-401858263": "2026-10-17T22:33:51Z",
   "CFB-401858265": "2026-10-17T18:53:52Z",
   "CFB-401858269": "2026-10-17T18:53:52Z",
   "CFB-401858492": "2026-10-17T18:53:52Z",
@@ -17,30 +17,30 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1317,
+    "draftkings": 1207,
     "fanduel": 570
    },
-   "eventsListed": 35,
+   "eventsListed": 34,
    "eventsMatched": 21,
    "games": 21,
    "marketTypes": {
     "player_field_goals_made": 6,
     "player_kicking_points": 6,
     "player_longest_passing_completion": 10,
-    "player_longest_reception": 41,
+    "player_longest_reception": 40,
     "player_longest_rush": 22,
-    "player_passing_+_rushing_yards": 63,
-    "player_passing_attempts": 61,
-    "player_passing_completions": 53,
-    "player_passing_touchdowns": 61,
-    "player_passing_yards": 284,
-    "player_receiving_yards": 708,
-    "player_receptions": 158,
-    "player_rushing_attempts": 40,
-    "player_rushing_yards": 374
+    "player_passing_+_rushing_yards": 48,
+    "player_passing_attempts": 55,
+    "player_passing_completions": 48,
+    "player_passing_touchdowns": 58,
+    "player_passing_yards": 271,
+    "player_receiving_yards": 659,
+    "player_receptions": 146,
+    "player_rushing_attempts": 36,
+    "player_rushing_yards": 372
    },
    "requestsLeft": 0,
-   "rows": 1887,
+   "rows": 1777,
    "slateGames": [
     "Arkansas Razorbacks at Vanderbilt Commodores 2026-10-17T23:00Z",
     "TCU Horned Frogs at Baylor Bears 2026-10-17T23:00Z",
@@ -65,52 +65,6 @@
     "Nebraska Cornhuskers at Oregon Ducks 2026-10-18T03:00Z"
    ],
    "unmatchedEvents": [
-    {
-     "away": "Morgan State",
-     "external": {
-      "betmgm": "6:47025",
-      "betonline": "491151719",
-      "betparx": "1029240573",
-      "betrivers": "1029240573",
-      "bwin": "6:47025",
-      "caesars": "17cce415-7efa-45c8-9a92-27ed2a1e8280",
-      "draftkings": "34826991",
-      "fanduel": "36179585",
-      "fliff": "419349_c_p_209_prematch",
-      "kalshi": "KXNCAAF1H-26OCT17MORGTNST",
-      "ladbrokes": "55a65d66-8c26-4b52-9154-ec254e6224d2",
-      "novig": "01a122d6-7abb-7ae2-bef9-a8c99c3469e1",
-      "onexbet": "762473623",
-      "paddypower": "36179585",
-      "pinnacle": "1638263309",
-      "polymarket": "nfl_morganstate_tennesseestate_2026-10-17_b3",
-      "prophetx": "1700102720",
-      "rebet": "sr:match:70993604",
-      "sbobet": "10737959",
-      "smarkets": "45379572",
-      "sportzino": "sz-18046713",
-      "stake": "5cd58edd-6e7f-4afc-891d-29a585791301",
-      "thescorebet": "StandardEvent:b3409a7c-3322-4956-99a1-008f2abadc2e"
-     },
-     "home": "Tennessee State",
-     "sample": {
-      "away_team": "Morgan State",
-      "home_team": "Tennessee State",
-      "markets": [
-       "1st_half_moneyline",
-       "draw_no_bet",
-       "game_prop",
-       "moneyline",
-       "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
-      ]
-     },
-     "start": "2026-10-17T22:30:00Z",
-     "type": "fixture"
-    },
     {
      "away": "Abilene Christian",
      "external": {
@@ -373,7 +327,7 @@
       "draftkings": "34826994",
       "fanduel": "36179599",
       "fliff": "419351_c_p_209_prematch",
-      "kalshi": "KXNCAAFTOTAL-26OCT17PRSTNAU",
+      "kalshi": "KXNCAAFSPREAD-26OCT17PRSTNAU",
       "ladbrokes": "9397311c-3212-4c5f-b6b8-0b3bf82b205b",
       "novig": "01a122f2-3c72-7c21-a4c6-00967efc7d2a",
       "onexbet": "762473635",
@@ -539,6 +493,33 @@
      },
      "start": "2026-10-20T23:30:00Z",
      "type": "fixture"
+    },
+    {
+     "away": "New Mexico State",
+     "external": {
+      "draftkings": "34827174",
+      "kalshi": "KXNCAAFSPREAD-26OCT21NMSUSHSU",
+      "novig": "01a137bf-701e-7c92-9fda-f5c33eda6144",
+      "onexbet": "762341341",
+      "polymarket": "nfl_newmexicostate_samhoustonbearkats_2026-10-21_b3",
+      "prophetx": "1700103081",
+      "smarkets": "45375067",
+      "sportzino": "sz-17854044"
+     },
+     "home": "Sam Houston State",
+     "sample": {
+      "away_team": "New Mexico State",
+      "home_team": "Sam Houston State",
+      "markets": [
+       "1st_half_moneyline",
+       "draw_no_bet",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-22T00:00:00Z",
+     "type": "fixture"
     }
    ]
   },
@@ -578,7 +559,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-17T22:19:00Z",
+     "start": "2026-10-17T22:31:00Z",
      "type": "outright"
     },
     {
@@ -596,8 +577,8 @@
       "fanatics": "5572377",
       "fanduel": "36160515",
       "fliff": "407872_c_p_202_prematch",
-      "gemini": "NFL-2610200015-WAS-SF-T",
-      "kalshi": "KXNFLTD-26OCT19WASSF-SFBCOOKS84-3",
+      "gemini": "NFL-2610200015-WAS-SF-TT",
+      "kalshi": "KXNFLRSHYDS-26OCT19WASSF-WASAEKELER30-30",
       "ladbrokes": "3b7aaf8f-ad5a-4b25-99e0-de1f97aa53b9",
       "novig": "01a112eb-5439-7743-96e1-9e00db6695ca",
       "paddypower": "36160515",
