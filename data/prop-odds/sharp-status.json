@@ -1,10 +1,10 @@
 {
- "at": "2026-10-17T23:30:59Z",
+ "at": "2026-10-17T23:38:19Z",
  "confirmed": {
-  "CFB-401856833": "2026-10-17T23:30:59Z",
-  "CFB-401858269": "2026-10-17T23:30:59Z",
-  "CFB-401858492": "2026-10-17T23:30:59Z",
-  "CFB-401864521": "2026-10-17T23:30:59Z",
+  "CFB-401856833": "2026-10-17T23:38:19Z",
+  "CFB-401858269": "2026-10-17T23:38:19Z",
+  "CFB-401858492": "2026-10-17T23:38:19Z",
+  "CFB-401864521": "2026-10-17T23:38:19Z",
   "NFL-401872997": "2026-10-17T23:18:58Z",
   "NFL-401872998": "2026-10-17T23:18:58Z",
   "NFL-401872999": "2026-10-17T23:18:58Z",
@@ -20,7 +20,7 @@
     "draftkings": 811,
     "fanduel": 658
    },
-   "eventsListed": 16,
+   "eventsListed": 17,
    "eventsMatched": 9,
    "games": 9,
    "marketTypes": {
@@ -230,7 +230,7 @@
      "external": {
       "draftkings": "34827179",
       "gemini": "NCAAF-2610222300-LIB-KENN-M",
-      "kalshi": "KXNCAAFTOTAL-26OCT22LIBKENN",
+      "kalshi": "KXNCAAFSPREAD-26OCT22LIBKENN",
       "novig": "01a13cae-d357-77e1-a5b9-e21dd00ca896",
       "onexbet": "762619339",
       "polymarket": "nfl_kennesawstate_liberty_2026-10-22_b3",
@@ -250,6 +250,55 @@
       ]
      },
      "start": "2026-10-22T23:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Auburn Tigers",
+     "external": {
+      "betfair": "20261017DE937897",
+      "betfred": "36464074",
+      "betmgm": "6:46846",
+      "betonline": "1759404",
+      "betparx": "1027553098",
+      "betrivers": "1027553098",
+      "bwin": "6:46846",
+      "caesars": "8a46a96c-d0d8-43cf-96a8-9e5e3a3f0e32",
+      "circa": "227509",
+      "draftkings": "34226078",
+      "fanatics": "5334271",
+      "fanduel": "36152776",
+      "fliff": "418128_c_p_309_inplay",
+      "gemini": "NCAAF-2610172000-AUB-UGA-T",
+      "kalshi": "KXNCAAF4QSPREAD-26OCT17AUBUGA",
+      "novig": "01a12231-d07d-7c10-b346-5e8b09765501",
+      "onexbet": "762573246",
+      "paddypower": "36152776",
+      "pinnacle": "1638291632",
+      "polymarket": "nfl_auburntigers_georgiabulldogs_2026-10-17_b2",
+      "prophetx": "1700087812",
+      "rebet": "sr:match:70900912",
+      "sbobet": "10717966",
+      "smarkets": "45225680",
+      "sportzino": "sz-17332022",
+      "stake": "d22a4c94-c08e-45e1-b272-d1646bbbf78e",
+      "thescorebet": "StandardEvent:c0b39647-29b1-407a-a46e-39c74dfcc754"
+     },
+     "home": "Georgia Bulldogs",
+     "sample": {
+      "away_team": "Auburn Tigers",
+      "home_team": "Georgia Bulldogs",
+      "markets": [
+       "game_prop",
+       "point_spread",
+       "race_to_10_points",
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime",
+       "winning_margin"
+      ]
+     },
+     "start": "2026-10-17T19:40:00Z",
      "type": "fixture"
     },
     {
@@ -286,7 +335,6 @@
       "away_team": "Northern Illinois",
       "home_team": "Wyoming",
       "markets": [
-       "4th_quarter_moneyline",
        "total_points"
       ]
      },
@@ -331,7 +379,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-17T23:28:00Z",
+     "start": "2026-10-17T23:37:00Z",
      "type": "outright"
     },
     {
