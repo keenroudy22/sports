@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-17T18:35:56Z",
+  "updatedAt": "2026-10-17T18:44:03Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-17T18:13Z",
+              "reportedAt": "2026-10-17T18:34Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5067,6 +5067,15 @@
           "name": "New Orleans Saints",
           "players": [
             {
+              "id": "2575788",
+              "name": "Zach Wood",
+              "position": "LS",
+              "status": "Questionable",
+              "injury": "Calf",
+              "reportedAt": "2026-10-17T18:29Z",
+              "source": "https://www.espn.com/nfl/player/_/id/2575788/zach-wood"
+            },
+            {
               "id": "4429040",
               "name": "Vernon Broughton",
               "position": "DT",
@@ -5137,15 +5146,6 @@
               "injury": null,
               "reportedAt": "2026-10-15T21:56Z",
               "source": "https://www.espn.com/nfl/player/_/id/4372533/tyree-wilson"
-            },
-            {
-              "id": "2575788",
-              "name": "Zach Wood",
-              "position": "LS",
-              "status": "Injured Reserve",
-              "injury": "Calf",
-              "reportedAt": "2026-10-15T01:22Z",
-              "source": "https://www.espn.com/nfl/player/_/id/2575788/zach-wood"
             },
             {
               "id": "4599739",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-17T18:26Z",
+              "reportedAt": "2026-10-17T18:29Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "21",
-          "name": "Jonathan Greenard",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-16T21:32:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3916409/jonathan-greenard"
-        },
-        {
-          "teamId": "21",
           "name": "Tyler Steen",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-17T18:35:56Z",
           "source": "https://www.espn.com/nfl/player/_/id/4426350/henry-tootoo"
+        },
+        {
+          "teamId": "18",
+          "name": "Zach Wood",
+          "from": "Injured Reserve",
+          "to": "Questionable",
+          "observedAt": "2026-10-17T18:44:03Z",
+          "source": "https://www.espn.com/nfl/player/_/id/2575788/zach-wood"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-17T18:35:56Z",
-      "lastAttemptAt": "2026-10-17T18:35:56Z",
+      "checkedAt": "2026-10-17T18:44:03Z",
+      "lastAttemptAt": "2026-10-17T18:44:03Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-17T18:35:56Z",
-      "lastAttemptAt": "2026-10-17T18:35:56Z",
+      "checkedAt": "2026-10-17T18:44:03Z",
+      "lastAttemptAt": "2026-10-17T18:44:03Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
