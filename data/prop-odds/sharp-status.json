@@ -1,21 +1,21 @@
 {
- "at": "2026-10-17T18:19:46Z",
+ "at": "2026-10-17T18:28:15Z",
  "confirmed": {
-  "CFB-401856719": "2026-10-17T18:19:46Z",
-  "CFB-401856721": "2026-10-17T18:19:46Z",
+  "CFB-401856719": "2026-10-17T18:28:15Z",
+  "CFB-401856721": "2026-10-17T18:28:15Z",
   "CFB-401856722": "2026-10-17T18:02:08Z",
-  "CFB-401856723": "2026-10-17T18:19:46Z",
+  "CFB-401856723": "2026-10-17T18:28:15Z",
   "CFB-401856726": "2026-10-17T18:02:08Z",
   "CFB-401856809": "2026-10-17T18:02:08Z",
-  "CFB-401856828": "2026-10-17T18:19:46Z",
+  "CFB-401856828": "2026-10-17T18:28:15Z",
   "CFB-401856831": "2026-10-17T18:02:08Z",
   "CFB-401856832": "2026-10-17T18:02:08Z",
   "CFB-401856833": "2026-10-17T18:02:08Z",
   "CFB-401858263": "2026-10-17T18:02:08Z",
-  "CFB-401858264": "2026-10-17T18:19:46Z",
+  "CFB-401858264": "2026-10-17T18:28:15Z",
   "CFB-401858265": "2026-10-17T18:02:08Z",
-  "CFB-401858266": "2026-10-17T18:19:46Z",
-  "CFB-401858490": "2026-10-17T18:19:46Z",
+  "CFB-401858266": "2026-10-17T18:28:15Z",
+  "CFB-401858490": "2026-10-17T18:28:15Z",
   "CFB-401858494": "2026-10-17T18:02:08Z",
   "CFB-401860903": "2026-10-17T18:02:08Z",
   "CFB-401864524": "2026-10-17T18:02:08Z"
@@ -23,10 +23,10 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1885,
-    "fanduel": 392
+    "draftkings": 1886,
+    "fanduel": 344
    },
-   "eventsListed": 90,
+   "eventsListed": 84,
    "eventsMatched": 35,
    "games": 35,
    "marketTypes": {
@@ -40,17 +40,17 @@
     "player_passing_attempts": 62,
     "player_passing_completions": 49,
     "player_passing_touchdowns": 58,
-    "player_passing_yards": 318,
-    "player_receiving_yards": 854,
+    "player_passing_yards": 315,
+    "player_receiving_yards": 816,
     "player_receptions": 193,
     "player_rushing_attempts": 52,
-    "player_rushing_yards": 453,
+    "player_rushing_yards": 447,
     "player_sacks": 5,
     "player_tackles": 2,
     "player_tackles_+_assists": 2
    },
    "requestsLeft": 0,
-   "rows": 2277,
+   "rows": 2230,
    "slateGames": [
     "Auburn Tigers at Georgia Bulldogs 2026-10-17T19:30Z",
     "Missouri Tigers at Ole Miss Rebels 2026-10-17T19:30Z",
@@ -562,7 +562,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-17T18:09:00Z",
+     "start": "2026-10-17T18:24:00Z",
      "type": "outright"
     },
     {
@@ -646,6 +646,7 @@
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
+       "last_touchdown_scorer",
        "longest_touchdown_yards",
        "match_result_both_teams_to_score",
        "moneyline",
