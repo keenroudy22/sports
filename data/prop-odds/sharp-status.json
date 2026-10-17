@@ -1,15 +1,10 @@
 {
- "at": "2026-10-17T23:18:58Z",
+ "at": "2026-10-17T23:30:59Z",
  "confirmed": {
-  "CFB-401856722": "2026-10-17T23:18:58Z",
-  "CFB-401856809": "2026-10-17T23:18:58Z",
-  "CFB-401856831": "2026-10-17T23:18:58Z",
-  "CFB-401856833": "2026-10-17T23:18:58Z",
-  "CFB-401858265": "2026-10-17T23:18:58Z",
-  "CFB-401858269": "2026-10-17T23:18:58Z",
-  "CFB-401858492": "2026-10-17T23:18:58Z",
-  "CFB-401858494": "2026-10-17T23:10:09Z",
-  "CFB-401864521": "2026-10-17T23:18:58Z",
+  "CFB-401856833": "2026-10-17T23:30:59Z",
+  "CFB-401858269": "2026-10-17T23:30:59Z",
+  "CFB-401858492": "2026-10-17T23:30:59Z",
+  "CFB-401864521": "2026-10-17T23:30:59Z",
   "NFL-401872997": "2026-10-17T23:18:58Z",
   "NFL-401872998": "2026-10-17T23:18:58Z",
   "NFL-401872999": "2026-10-17T23:18:58Z",
@@ -22,41 +17,35 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1756,
-    "fanduel": 1445
+    "draftkings": 811,
+    "fanduel": 658
    },
-   "eventsListed": 22,
-   "eventsMatched": 15,
-   "games": 15,
+   "eventsListed": 16,
+   "eventsMatched": 9,
+   "games": 9,
    "marketTypes": {
     "player_assists": 5,
-    "player_field_goals_made": 7,
-    "player_kicking_points": 7,
-    "player_longest_passing_completion": 12,
-    "player_longest_reception": 49,
-    "player_longest_rush": 24,
-    "player_passing_+_rushing_yards": 127,
-    "player_passing_attempts": 45,
-    "player_passing_completions": 39,
-    "player_passing_touchdowns": 84,
-    "player_passing_yards": 346,
-    "player_receiving_yards": 1238,
-    "player_receptions": 287,
-    "player_rushing_attempts": 58,
-    "player_rushing_yards": 859,
+    "player_field_goals_made": 3,
+    "player_kicking_points": 3,
+    "player_longest_passing_completion": 4,
+    "player_longest_reception": 23,
+    "player_longest_rush": 9,
+    "player_passing_+_rushing_yards": 70,
+    "player_passing_attempts": 15,
+    "player_passing_completions": 14,
+    "player_passing_touchdowns": 32,
+    "player_passing_yards": 126,
+    "player_receiving_yards": 602,
+    "player_receptions": 142,
+    "player_rushing_attempts": 33,
+    "player_rushing_yards": 374,
     "player_sacks": 4,
     "player_tackles": 5,
     "player_tackles_+_assists": 5
    },
-   "requestsLeft": 34,
-   "rows": 3201,
+   "requestsLeft": 0,
+   "rows": 1469,
    "slateGames": [
-    "Kentucky Wildcats at Oklahoma Sooners 2026-10-17T23:30Z",
-    "Notre Dame Fighting Irish at BYU Cougars 2026-10-17T23:30Z",
-    "Oklahoma State Cowboys at Houston Cougars 2026-10-17T23:30Z",
-    "Elon Phoenix at Stanford Cardinal 2026-10-17T23:30Z",
-    "Louisville Cardinals at Syracuse Orange 2026-10-17T23:30Z",
-    "Wisconsin Badgers at UCLA Bruins 2026-10-17T23:30Z",
     "Navy Midshipmen at UTSA Roadrunners 2026-10-18T00:00Z",
     "Louisiana Tech Bulldogs at UL Monroe Warhawks 2026-10-18T00:00Z",
     "San Jos\u00e9 State Spartans at UTEP Miners 2026-10-18T01:00Z",
@@ -185,7 +174,7 @@
      "away": "South Alabama",
      "external": {
       "draftkings": "34827169",
-      "gemini": "NCAAF-2610202330-USA-MRSH-M",
+      "gemini": "NCAAF-2610202330-USA-MRSH-S",
       "kalshi": "KXNCAAFGAME-26OCT20USAMRSH",
       "novig": "01a1327d-6f5f-7913-a88c-e152507980b5",
       "onexbet": "761948832",
@@ -209,9 +198,10 @@
      "type": "fixture"
     },
     {
-     "away": "New Mexico State",
+     "away": "New Mexico State Aggies",
      "external": {
       "draftkings": "34827174",
+      "gemini": "NCAAF-2610220000-NMS-SHS-M",
       "kalshi": "KXNCAAFTOTAL-26OCT21NMSUSHSU",
       "novig": "01a137bf-701e-7c92-9fda-f5c33eda6144",
       "onexbet": "762341341",
@@ -220,10 +210,10 @@
       "smarkets": "45375067",
       "sportzino": "sz-17854044"
      },
-     "home": "Sam Houston State",
+     "home": "Sam Houston State Bearkats",
      "sample": {
-      "away_team": "New Mexico State",
-      "home_team": "Sam Houston State",
+      "away_team": "New Mexico State Aggies",
+      "home_team": "Sam Houston State Bearkats",
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
@@ -297,9 +287,6 @@
       "home_team": "Wyoming",
       "markets": [
        "4th_quarter_moneyline",
-       "4th_quarter_point_spread",
-       "point_spread",
-       "team_total",
        "total_points"
       ]
      },
@@ -309,39 +296,13 @@
    ]
   },
   "NFL": {
-   "books": {
-    "draftkings": 3549,
-    "fanduel": 2133
-   },
+   "books": {},
    "eventsListed": 28,
    "eventsMatched": 12,
    "games": 12,
-   "marketTypes": {
-    "player_assists": 106,
-    "player_extra_points_made": 32,
-    "player_fantasy_score": 102,
-    "player_field_goals_made": 32,
-    "player_interceptions": 32,
-    "player_kicking_points": 32,
-    "player_longest_passing_completion": 32,
-    "player_longest_reception": 146,
-    "player_longest_rush": 54,
-    "player_passing_+_rushing_yards": 30,
-    "player_passing_attempts": 32,
-    "player_passing_completions": 32,
-    "player_passing_touchdowns": 106,
-    "player_passing_yards": 553,
-    "player_receiving_yards": 1859,
-    "player_receptions": 1167,
-    "player_rushing_+_receiving_yards": 66,
-    "player_rushing_attempts": 44,
-    "player_rushing_yards": 887,
-    "player_sacks": 126,
-    "player_tackles": 106,
-    "player_tackles_+_assists": 106
-   },
-   "requestsLeft": 0,
-   "rows": 5682,
+   "marketTypes": {},
+   "requestsLeft": -1,
+   "rows": 0,
    "slateGames": [
     "Houston Texans at Jacksonville Jaguars 2026-10-18T13:30Z",
     "Baltimore Ravens at Cleveland Browns 2026-10-18T17:00Z",
@@ -370,7 +331,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-17T23:20:00Z",
+     "start": "2026-10-17T23:28:00Z",
      "type": "outright"
     },
     {
@@ -389,7 +350,7 @@
       "fanduel": "36160515",
       "fliff": "407872_c_p_202_prematch",
       "gemini": "NFL-2610200015-WAS-SF-TT",
-      "kalshi": "KXNFLTD-26OCT19WASSF-SFKJUSZCZYK44-2",
+      "kalshi": "KXNFLRECYDS-26OCT19WASSF-WASAWILLIAMS14-50",
       "ladbrokes": "3b7aaf8f-ad5a-4b25-99e0-de1f97aa53b9",
       "novig": "01a112eb-5439-7743-96e1-9e00db6695ca",
       "paddypower": "36160515",
