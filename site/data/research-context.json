@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-17T17:50:32Z",
+  "updatedAt": "2026-10-17T18:00:59Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -927,10 +927,19 @@
           "name": "Carolina Panthers",
           "players": [
             {
+              "id": "4058925",
+              "name": "Tershawn Wharton",
+              "position": "DT",
+              "status": "Questionable",
+              "injury": "Neck",
+              "reportedAt": "2026-10-17T17:48Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4058925/tershawn-wharton"
+            },
+            {
               "id": "2973051",
               "name": "Taylor Moton",
               "position": "OT",
-              "status": "Out",
+              "status": "Questionable",
               "injury": "Illness",
               "reportedAt": "2026-10-17T03:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/2973051/taylor-moton"
@@ -975,7 +984,7 @@
               "id": "4685350",
               "name": "Trevor Etienne",
               "position": "RB",
-              "status": "Injured Reserve",
+              "status": "Questionable",
               "injury": "Ankle",
               "reportedAt": "2026-10-16T20:54Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685350/trevor-etienne"
@@ -1024,15 +1033,6 @@
               "injury": "Shoulder",
               "reportedAt": "2026-10-14T01:16Z",
               "source": "https://www.espn.com/nfl/player/_/id/4687513/cam-jackson"
-            },
-            {
-              "id": "4058925",
-              "name": "Tershawn Wharton",
-              "position": "DT",
-              "status": "Out",
-              "injury": "Neck",
-              "reportedAt": "2026-10-13T21:01Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4058925/tershawn-wharton"
             },
             {
               "id": "4243256",
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-17T17:35Z",
+              "reportedAt": "2026-10-17T17:49Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-17T17:35Z",
+              "reportedAt": "2026-10-17T17:57Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -6907,6 +6907,15 @@
           "name": "Tennessee Titans",
           "players": [
             {
+              "id": "4917635",
+              "name": "Joshua Williams",
+              "position": "CB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-17T17:57Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4917635/joshua-williams"
+            },
+            {
               "id": "4360978",
               "name": "David Martin-Robinson",
               "position": "TE",
@@ -7085,15 +7094,6 @@
               "injury": null,
               "reportedAt": "2026-10-11T23:20Z",
               "source": "https://www.espn.com/nfl/player/_/id/4688380/cam-ward"
-            },
-            {
-              "id": "4917635",
-              "name": "Joshua Williams",
-              "position": "CB",
-              "status": "Injured Reserve",
-              "injury": "Pectoral",
-              "reportedAt": "2026-10-10T23:21Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4917635/joshua-williams"
             },
             {
               "id": "3120464",
@@ -7365,38 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "17",
-          "name": "Cory Durden",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-16T21:32:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4240042/cory-durden"
-        },
-        {
-          "teamId": "19",
-          "name": "Tyler Nubin",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-10-16T21:32:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4430261/tyler-nubin"
-        },
-        {
-          "teamId": "19",
-          "name": "Colton Hood",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-10-16T21:32:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4921249/colton-hood"
-        },
-        {
-          "teamId": "19",
-          "name": "Malik Harrison",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-16T21:32:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4040615/malik-harrison"
-        },
         {
           "teamId": "19",
           "name": "Greg Newsome II",
@@ -7764,11 +7732,43 @@
           "to": "Questionable",
           "observedAt": "2026-10-17T17:41:01Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361093/kyler-gordon"
+        },
+        {
+          "teamId": "29",
+          "name": "Tershawn Wharton",
+          "from": "Out",
+          "to": "Questionable",
+          "observedAt": "2026-10-17T18:00:59Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4058925/tershawn-wharton"
+        },
+        {
+          "teamId": "29",
+          "name": "Taylor Moton",
+          "from": "Out",
+          "to": "Questionable",
+          "observedAt": "2026-10-17T18:00:59Z",
+          "source": "https://www.espn.com/nfl/player/_/id/2973051/taylor-moton"
+        },
+        {
+          "teamId": "29",
+          "name": "Trevor Etienne",
+          "from": "Injured Reserve",
+          "to": "Questionable",
+          "observedAt": "2026-10-17T18:00:59Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4685350/trevor-etienne"
+        },
+        {
+          "teamId": "10",
+          "name": "Joshua Williams",
+          "from": "Injured Reserve",
+          "to": "Active",
+          "observedAt": "2026-10-17T18:00:59Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4917635/joshua-williams"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-17T17:50:32Z",
-      "lastAttemptAt": "2026-10-17T17:50:32Z",
+      "checkedAt": "2026-10-17T18:00:59Z",
+      "lastAttemptAt": "2026-10-17T18:00:59Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-17T17:50:32Z",
-      "lastAttemptAt": "2026-10-17T17:50:32Z",
+      "checkedAt": "2026-10-17T18:00:59Z",
+      "lastAttemptAt": "2026-10-17T18:00:59Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
