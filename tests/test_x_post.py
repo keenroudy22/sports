@@ -112,6 +112,16 @@ class DraftTests(unittest.TestCase):
             with mock.patch.object(x_post, 'REASONS', path):
                 self.assertIn('Wind is forecast at 18 mph in Ann Arbor.', x_post.draft(dict(PICK, projection=31.2), GAME))
 
+    def test_model_number_is_not_repeated_as_the_supporting_reason(self):
+        pick = dict(PROP, lane='gut_call', dossier={'reasons': [
+            {'text': 'Book says 4.5. I say 5.8.'},
+            {'text': 'He cleared this line in 4 of his last 5 full games.'},
+        ]})
+        text = x_post.draft(pick, {'league': 'NFL'}, reason='Book says 4.5. I say 5.8.')
+        self.assertEqual(text.count('Book says '), 1)
+        self.assertIn('He cleared this line in 4 of his last 5 full games.', text)
+        self.assertEqual(x_post.guard(text, pick, x_post.reason_in(text)), [])
+
     def test_a_missing_saved_reason_uses_verified_pick_evidence_or_holds(self):
         supported = dict(PROP, lane='gut_call', reasons=['He cleared this line in 4 of his last 5 full games.'])
         with mock.patch.object(x_post, 'load_reasons', return_value={}):

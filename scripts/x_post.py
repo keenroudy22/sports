@@ -450,7 +450,10 @@ def _choose_reason(pick, supplied, history, day):
             structured.append(str(value))
     choices = [supplied, strip_reason(pick), *structured]
     choices = list(dict.fromkeys(_short_reason(choice) for choice in choices if choice))
-    choices = [choice for choice in choices if plain(choice)]
+    # The fixed model-vs-book sentence is already its own caption line.  It is
+    # not the required factual reason and repeating it makes reason_in() (and
+    # readers) see a number-only post.
+    choices = [choice for choice in choices if plain(choice) and not choice.startswith('Book says ')]
     recent = [row for row in history or [] if (row.get('series') or row.get('kind')) in ('play', 'buffer:play')]
     recent_kinds = [row.get('reasonKind') for row in recent if row.get('reasonKind') not in (None, 'none')]
     today_kinds = [row.get('reasonKind') for row in recent if str(row.get('postedAt') or row.get('dueAt') or '').startswith(day)]
