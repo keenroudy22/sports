@@ -1,11 +1,20 @@
 {
-  "updatedAt": "2026-10-17T20:36:53Z",
+  "updatedAt": "2026-10-17T20:46:04Z",
   "leagues": {
     "NFL": {
       "teams": {
         "22": {
           "name": "Arizona Cardinals",
           "players": [
+            {
+              "id": "4430821",
+              "name": "Kitan Crawford",
+              "position": "S",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-17T20:29Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4430821/kitan-crawford"
+            },
             {
               "id": "3918331",
               "name": "Andrew Wingard",
@@ -86,15 +95,6 @@
               "injury": "Concussion",
               "reportedAt": "2026-10-15T01:25Z",
               "source": "https://www.espn.com/nfl/player/_/id/5099542/wydett-williams-jr"
-            },
-            {
-              "id": "4430821",
-              "name": "Kitan Crawford",
-              "position": "S",
-              "status": "Injured Reserve",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-15T01:09Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4430821/kitan-crawford"
             },
             {
               "id": "4366910",
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-17T20:11Z",
+              "reportedAt": "2026-10-17T20:29Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-17T20:26Z",
+              "reportedAt": "2026-10-17T20:29Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "2",
-          "name": "Ty Johnson",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-16T22:02:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3915411/ty-johnson"
-        },
-        {
           "teamId": "13",
           "name": "Jalen Nailor",
           "from": "Questionable",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-17T20:18:21Z",
           "source": "https://www.espn.com/nfl/player/_/id/4723820/omar-cooper-jr"
+        },
+        {
+          "teamId": "22",
+          "name": "Kitan Crawford",
+          "from": "Injured Reserve",
+          "to": "Questionable",
+          "observedAt": "2026-10-17T20:46:04Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4430821/kitan-crawford"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-17T20:36:53Z",
-      "lastAttemptAt": "2026-10-17T20:36:53Z",
+      "checkedAt": "2026-10-17T20:46:04Z",
+      "lastAttemptAt": "2026-10-17T20:46:04Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-17T20:36:53Z",
-      "lastAttemptAt": "2026-10-17T20:36:53Z",
+      "checkedAt": "2026-10-17T20:46:04Z",
+      "lastAttemptAt": "2026-10-17T20:46:04Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
