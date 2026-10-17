@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-17T17:32:26Z",
+  "updatedAt": "2026-10-17T17:41:01Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,8 +1162,17 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-17T17:01Z",
+              "reportedAt": "2026-10-17T17:35Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+            },
+            {
+              "id": "4242659",
+              "name": "Dayo Odeyingbo",
+              "position": "DE",
+              "status": "Injured Reserve",
+              "injury": "Quadriceps",
+              "reportedAt": "2026-10-17T17:35Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4242659/dayo-odeyingbo"
             },
             {
               "id": "4911952",
@@ -1175,19 +1184,10 @@
               "source": "https://www.espn.com/nfl/player/_/id/4911952/keyshaun-elliott"
             },
             {
-              "id": "4242659",
-              "name": "Dayo Odeyingbo",
-              "position": "DE",
-              "status": "Out",
-              "injury": "Quadriceps",
-              "reportedAt": "2026-10-17T01:05Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4242659/dayo-odeyingbo"
-            },
-            {
               "id": "4361093",
               "name": "Kyler Gordon",
               "position": "CB",
-              "status": "Out",
+              "status": "Questionable",
               "injury": "Calf",
               "reportedAt": "2026-10-17T01:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361093/kyler-gordon"
@@ -7367,22 +7367,6 @@
       "changes": [
         {
           "teamId": "17",
-          "name": "Marcus Jones",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-16T21:32:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4241720/marcus-jones"
-        },
-        {
-          "teamId": "17",
-          "name": "Carlton Davis III",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-10-16T21:32:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3916923/carlton-davis-iii"
-        },
-        {
-          "teamId": "17",
           "name": "Cory Durden",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7748,27 @@
           "to": "Out",
           "observedAt": "2026-10-17T16:56:17Z",
           "source": "https://www.espn.com/nfl/player/_/id/4575131/jacory-croskey-merritt"
+        },
+        {
+          "teamId": "3",
+          "name": "Dayo Odeyingbo",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-17T17:41:01Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4242659/dayo-odeyingbo"
+        },
+        {
+          "teamId": "3",
+          "name": "Kyler Gordon",
+          "from": "Out",
+          "to": "Questionable",
+          "observedAt": "2026-10-17T17:41:01Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361093/kyler-gordon"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-17T17:32:26Z",
-      "lastAttemptAt": "2026-10-17T17:32:26Z",
+      "checkedAt": "2026-10-17T17:41:01Z",
+      "lastAttemptAt": "2026-10-17T17:41:01Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-17T17:32:26Z",
-      "lastAttemptAt": "2026-10-17T17:32:26Z",
+      "checkedAt": "2026-10-17T17:41:01Z",
+      "lastAttemptAt": "2026-10-17T17:41:01Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
