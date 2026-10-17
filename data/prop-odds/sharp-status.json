@@ -1,21 +1,21 @@
 {
- "at": "2026-10-17T15:11:57Z",
+ "at": "2026-10-17T15:20:47Z",
  "confirmed": {
   "CFB-401856719": "2026-10-17T13:03:22Z",
-  "CFB-401856720": "2026-10-17T15:11:57Z",
+  "CFB-401856720": "2026-10-17T15:20:47Z",
   "CFB-401856721": "2026-10-17T13:03:22Z",
   "CFB-401856723": "2026-10-17T13:03:22Z",
-  "CFB-401856724": "2026-10-17T15:11:57Z",
+  "CFB-401856724": "2026-10-17T15:20:47Z",
   "CFB-401856725": "2026-10-17T13:03:22Z",
   "CFB-401856726": "2026-10-16T14:02:48Z",
   "CFB-401856828": "2026-10-17T13:03:22Z",
-  "CFB-401856829": "2026-10-17T15:11:57Z",
-  "CFB-401856830": "2026-10-17T15:11:57Z",
+  "CFB-401856829": "2026-10-17T15:20:47Z",
+  "CFB-401856830": "2026-10-17T15:20:47Z",
   "CFB-401856832": "2026-10-16T08:36:00Z",
   "CFB-401858263": "2026-10-16T08:36:00Z",
   "CFB-401858264": "2026-10-17T13:03:22Z",
   "CFB-401858266": "2026-10-17T13:03:22Z",
-  "CFB-401858267": "2026-10-17T15:11:57Z",
+  "CFB-401858267": "2026-10-17T15:20:47Z",
   "CFB-401858268": "2026-10-17T15:11:57Z",
   "CFB-401858488": "2026-10-17T15:11:57Z",
   "CFB-401858489": "2026-10-17T13:03:22Z",
@@ -28,34 +28,34 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 724,
-    "fanduel": 1306
+    "draftkings": 1465,
+    "fanduel": 910
    },
    "eventsListed": 128,
    "eventsMatched": 52,
    "games": 52,
    "marketTypes": {
     "player_assists": 2,
-    "player_field_goals_made": 2,
-    "player_kicking_points": 2,
-    "player_longest_passing_completion": 2,
-    "player_longest_reception": 10,
-    "player_longest_rush": 8,
-    "player_passing_+_rushing_yards": 49,
-    "player_passing_attempts": 15,
-    "player_passing_completions": 12,
-    "player_passing_touchdowns": 62,
-    "player_passing_yards": 220,
-    "player_receiving_yards": 811,
-    "player_receptions": 225,
-    "player_rushing_attempts": 29,
-    "player_rushing_yards": 574,
+    "player_field_goals_made": 6,
+    "player_kicking_points": 6,
+    "player_longest_passing_completion": 7,
+    "player_longest_reception": 33,
+    "player_longest_rush": 16,
+    "player_passing_+_rushing_yards": 148,
+    "player_passing_attempts": 44,
+    "player_passing_completions": 38,
+    "player_passing_touchdowns": 64,
+    "player_passing_yards": 268,
+    "player_receiving_yards": 897,
+    "player_receptions": 217,
+    "player_rushing_attempts": 56,
+    "player_rushing_yards": 566,
     "player_sacks": 3,
     "player_tackles": 2,
     "player_tackles_+_assists": 2
    },
    "requestsLeft": 0,
-   "rows": 2030,
+   "rows": 2375,
    "slateGames": [
     "Mississippi State Bulldogs at LSU Tigers 2026-10-17T16:00Z",
     "Florida Gators at Texas Longhorns 2026-10-17T16:00Z",
@@ -633,7 +633,7 @@
       "home_team": "Dartmouth",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
+       "game_prop",
        "moneyline",
        "point_spread",
        "total_points"
@@ -727,7 +727,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-17T15:10:00Z",
+     "start": "2026-10-17T15:20:00Z",
      "type": "outright"
     },
     {
@@ -746,7 +746,7 @@
       "fanatics": "5572377",
       "fanduel": "36160515",
       "fliff": "407872_c_p_202_prematch",
-      "gemini": "NFL-2610200015-WAS-SF-TT",
+      "gemini": "NFL-2610200015-WAS-SF-PPTD",
       "goldrush": "31140283",
       "hardrock": "2116778469953241503",
       "kalshi": "KXNFL4QTOTAL-26OCT19WASSF",
@@ -837,6 +837,7 @@
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
        "last_touchdown_scorer",
+       "longest_touchdown_yards",
        "match_result_both_teams_to_score",
        "moneyline",
        "most_points_player",
@@ -876,6 +877,7 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
+       "total_punts",
        "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
