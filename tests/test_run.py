@@ -141,6 +141,22 @@ class SlotTests(unittest.TestCase):
         with mock.patch.dict(os.environ, {'KEENROUDY_SELECTION_0830': '0'}):
             self.assertEqual(run.official_selection_scope(slot, games, ctx, now), set())
 
+    def test_college_candidates_use_bounded_web_checks_beyond_raw_top_six(self):
+        college = {'league': 'CFB', 'gameIds': ['CFB-late']}
+        nfl = {'league': 'NFL', 'gameIds': ['NFL-late']}
+        self.assertTrue(run.should_research_candidate(college, 27, 2.0, True))
+        self.assertFalse(run.should_research_candidate(nfl, 27, 2.0, True))
+        self.assertTrue(run.should_research_candidate(nfl, 2, 2.0, False))
+        self.assertTrue(run.should_research_candidate(nfl, 27, 16.0, True))
+
+    def test_large_slate_builds_defense_history_once_per_league(self):
+        ctx = run.gates.Context(now=datetime(2026, 10, 17, 12, 30, tzinfo=timezone.utc), records=[{'id': 'stored'}])
+        with mock.patch.object(run.features, 'defense_logs', return_value={'1': []}) as build:
+            self.assertEqual(run.cached_defense_logs(ctx, 'CFB'), {'1': []})
+            self.assertEqual(run.cached_defense_logs(ctx, 'CFB'), {'1': []})
+            self.assertEqual(run.cached_defense_logs(ctx, 'NFL'), {'1': []})
+        self.assertEqual(build.call_count, 2)
+
     def test_1145_selection_pass_gives_an_unserved_game_day_one_more_fresh_look(self):
         now = datetime(2026, 10, 15, 15, 45, tzinfo=timezone.utc)
         slot = now.astimezone(run.EASTERN)

@@ -1040,7 +1040,7 @@ def plan_reasons(candidate, ctx):
             fbs = {str(value) for value in model_v2.fbs_teams(ctx.records)} if game.get('league') == 'CFB' else set()
             adjusted_history, _dvp, _splits, opponent_adjustment = season_trends.opponent_context(
                 adjusted_history, line, side, game.get('league'),
-                features.defense_logs(ctx.records, before=ctx.now, league=game.get('league')),
+                cached_defense_logs(ctx, game.get('league')),
                 position, market, game.get('season'), gates.when(game['kickoff']), opponent, fbs)
         values = [row['value'] for row in adjusted_history]
         if game.get('league') == 'CFB':
@@ -1083,8 +1083,7 @@ def plan_reasons(candidate, ctx):
         if latest_log and latest_log.get('pos') in ('QB', 'RB', 'WR', 'TE'):
             opponent = next((str(game[where]['id']) for where in ('home', 'away')
                              if str(game[where]['id']) != str(latest_log.get('team'))), None)
-            table = [row for row in features.defense_table(features.defense_logs(ctx.records, before=ctx.now,
-                                                                                  league=game.get('league')),
+            table = [row for row in features.defense_table(cached_defense_logs(ctx, game.get('league')),
                                                            f"{latest_log['pos']}.{market}", season=game.get('season'))
                      if row.get('n', 0) >= 3]
             table.sort(key=lambda row: (row['avg'], row['defense']))
@@ -1153,6 +1152,14 @@ def plan_reasons(candidate, ctx):
                                 'observedAt': current[2]})
     # Deterministic de-duplication keeps the same reasons in the run, replay and dossier.
     return list({(row['type'], row['text']): row for row in reasons}.values())
+
+
+def cached_defense_logs(ctx, league):
+    """Build the expensive opponent-position history once per league and run."""
+    cache = ctx.__dict__.setdefault('_defense_logs_cache', {})
+    if league not in cache:
+        cache[league] = features.defense_logs(ctx.records, before=ctx.now, league=league)
+    return cache[league]
 
 
 _WEATHER = {}
@@ -1262,6 +1269,18 @@ def needs_research(candidate):
     held, not published blind.)"""
     league = candidate.get('_league') or candidate.get('league')
     return league == 'CFB' and not candidate.get('legs')
+
+
+def should_research_candidate(candidate, candidate_rank, gap, class_a):
+    """Spend the bounded news checks on every eligible college candidate in order.
+
+    College availability is a hard publication gate.  Limiting the web check to
+    only the first six raw board rows meant later candidates were guaranteed to
+    fail for missing the very check required to clear them.  The daily lookup
+    ceiling still bounds cost; this only makes those slots follow the eligible
+    ranked candidates instead of the pre-gate board positions.
+    """
+    return needs_research(candidate) or gap > 15 or (candidate_rank < 6 and not class_a)
 
 
 def relevant_facts(candidate, facts, ctx):
@@ -2267,7 +2286,7 @@ def _run(args, now, slot, kinds, status):
         pre_reasons = plan_reasons(candidate, ctx)
         gap = (candidate.get('_selection') or {}).get('gap', 0)
         class_a = any(row.get('class') == 'A' and row.get('direction') == 'for' for row in pre_reasons)
-        needs_market_check = gap > 15 or (candidate_rank < 6 and not class_a)
+        needs_market_check = should_research_candidate(candidate, candidate_rank, gap, class_a)
         if research_on and needs_market_check and status['research']['asked'] < RESEARCH_LIMIT:
             game = ctx.games[candidate['gameIds'][0]]
             kept, dropped = researcher.research(game, gates.market_key(candidate), gates.side_of(candidate), now=now,
