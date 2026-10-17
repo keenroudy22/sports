@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-17T21:12:49Z",
+  "updatedAt": "2026-10-17T21:20:36Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-17T20:54Z",
+              "reportedAt": "2026-10-17T21:08Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-17T20:54Z",
+              "reportedAt": "2026-10-17T21:08Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -6217,6 +6217,51 @@
           "name": "San Francisco 49ers",
           "players": [
             {
+              "id": "4432244",
+              "name": "Romello Height",
+              "position": "DE",
+              "status": "Questionable",
+              "injury": "Hand",
+              "reportedAt": "2026-10-17T21:08Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4432244/romello-height"
+            },
+            {
+              "id": "4693371",
+              "name": "James Thompson Jr.",
+              "position": "DT",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-17T21:06Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4693371/james-thompson-jr"
+            },
+            {
+              "id": "3916075",
+              "name": "Colton McKivitz",
+              "position": "OT",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-17T21:06Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3916075/colton-mckivitz"
+            },
+            {
+              "id": "3895856",
+              "name": "Christian Kirk",
+              "position": "WR",
+              "status": "Injured Reserve",
+              "injury": "Calf",
+              "reportedAt": "2026-10-17T21:02Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3895856/christian-kirk"
+            },
+            {
+              "id": "16737",
+              "name": "Mike Evans",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Ribs",
+              "reportedAt": "2026-10-17T20:58Z",
+              "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans"
+            },
+            {
               "id": "4693337",
               "name": "Marques Sigle",
               "position": "S",
@@ -6235,15 +6280,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4040605/nick-bosa"
             },
             {
-              "id": "16737",
-              "name": "Mike Evans",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Ribs",
-              "reportedAt": "2026-10-17T19:52Z",
-              "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans"
-            },
-            {
               "id": "16002",
               "name": "Kyle Juszczyk",
               "position": "FB",
@@ -6251,24 +6287,6 @@
               "injury": null,
               "reportedAt": "2026-10-16T23:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/16002/kyle-juszczyk"
-            },
-            {
-              "id": "3895856",
-              "name": "Christian Kirk",
-              "position": "WR",
-              "status": "Injured Reserve",
-              "injury": "Calf",
-              "reportedAt": "2026-10-16T23:17Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3895856/christian-kirk"
-            },
-            {
-              "id": "4432244",
-              "name": "Romello Height",
-              "position": "DE",
-              "status": "Questionable",
-              "injury": "Illness",
-              "reportedAt": "2026-10-16T22:33Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4432244/romello-height"
             },
             {
               "id": "4565779",
@@ -6296,15 +6314,6 @@
               "injury": "Shoulder",
               "reportedAt": "2026-10-15T23:27Z",
               "source": "https://www.espn.com/nfl/player/_/id/4565200/upton-stout"
-            },
-            {
-              "id": "3916075",
-              "name": "Colton McKivitz",
-              "position": "OT",
-              "status": "Questionable",
-              "injury": "Illness",
-              "reportedAt": "2026-10-15T23:27Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3916075/colton-mckivitz"
             },
             {
               "id": "3057524",
@@ -6359,15 +6368,6 @@
               "injury": "Hamstring",
               "reportedAt": "2026-10-13T00:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4573188/nick-martin"
-            },
-            {
-              "id": "4693371",
-              "name": "James Thompson Jr.",
-              "position": "DT",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-12T23:44Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4693371/james-thompson-jr"
             },
             {
               "id": "4241807",
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "25",
-          "name": "Carver Willis",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-16T23:44:22Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4565779/carver-willis"
-        },
-        {
-          "teamId": "28",
-          "name": "Rachaad White",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-16T23:44:22Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4697815/rachaad-white"
-        },
-        {
           "teamId": "28",
           "name": "Quan Martin",
           "from": "Questionable",
@@ -7764,11 +7748,27 @@
           "to": "Out",
           "observedAt": "2026-10-17T21:12:49Z",
           "source": "https://www.espn.com/nfl/player/_/id/4040605/nick-bosa"
+        },
+        {
+          "teamId": "25",
+          "name": "James Thompson Jr.",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-17T21:20:36Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4693371/james-thompson-jr"
+        },
+        {
+          "teamId": "25",
+          "name": "Colton McKivitz",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-17T21:20:36Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3916075/colton-mckivitz"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-17T21:12:49Z",
-      "lastAttemptAt": "2026-10-17T21:12:49Z",
+      "checkedAt": "2026-10-17T21:20:36Z",
+      "lastAttemptAt": "2026-10-17T21:20:36Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-17T21:12:49Z",
-      "lastAttemptAt": "2026-10-17T21:12:49Z",
+      "checkedAt": "2026-10-17T21:20:36Z",
+      "lastAttemptAt": "2026-10-17T21:20:36Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
