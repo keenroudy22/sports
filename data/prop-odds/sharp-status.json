@@ -1,21 +1,21 @@
 {
- "at": "2026-10-17T18:28:15Z",
+ "at": "2026-10-17T18:36:45Z",
  "confirmed": {
-  "CFB-401856719": "2026-10-17T18:28:15Z",
-  "CFB-401856721": "2026-10-17T18:28:15Z",
+  "CFB-401856719": "2026-10-17T18:36:45Z",
+  "CFB-401856721": "2026-10-17T18:36:45Z",
   "CFB-401856722": "2026-10-17T18:02:08Z",
-  "CFB-401856723": "2026-10-17T18:28:15Z",
+  "CFB-401856723": "2026-10-17T18:36:45Z",
   "CFB-401856726": "2026-10-17T18:02:08Z",
   "CFB-401856809": "2026-10-17T18:02:08Z",
-  "CFB-401856828": "2026-10-17T18:28:15Z",
+  "CFB-401856828": "2026-10-17T18:36:45Z",
   "CFB-401856831": "2026-10-17T18:02:08Z",
   "CFB-401856832": "2026-10-17T18:02:08Z",
   "CFB-401856833": "2026-10-17T18:02:08Z",
   "CFB-401858263": "2026-10-17T18:02:08Z",
-  "CFB-401858264": "2026-10-17T18:28:15Z",
+  "CFB-401858264": "2026-10-17T18:36:45Z",
   "CFB-401858265": "2026-10-17T18:02:08Z",
   "CFB-401858266": "2026-10-17T18:28:15Z",
-  "CFB-401858490": "2026-10-17T18:28:15Z",
+  "CFB-401858490": "2026-10-17T18:36:45Z",
   "CFB-401858494": "2026-10-17T18:02:08Z",
   "CFB-401860903": "2026-10-17T18:02:08Z",
   "CFB-401864524": "2026-10-17T18:02:08Z"
@@ -23,34 +23,34 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1886,
-    "fanduel": 344
+    "draftkings": 1767,
+    "fanduel": 524
    },
-   "eventsListed": 84,
+   "eventsListed": 83,
    "eventsMatched": 35,
    "games": 35,
    "marketTypes": {
     "player_assists": 2,
-    "player_field_goals_made": 8,
-    "player_kicking_points": 8,
-    "player_longest_passing_completion": 12,
-    "player_longest_reception": 42,
-    "player_longest_rush": 23,
+    "player_field_goals_made": 7,
+    "player_kicking_points": 7,
+    "player_longest_passing_completion": 10,
+    "player_longest_reception": 36,
+    "player_longest_rush": 21,
     "player_passing_+_rushing_yards": 134,
-    "player_passing_attempts": 62,
-    "player_passing_completions": 49,
-    "player_passing_touchdowns": 58,
-    "player_passing_yards": 315,
-    "player_receiving_yards": 816,
-    "player_receptions": 193,
-    "player_rushing_attempts": 52,
-    "player_rushing_yards": 447,
+    "player_passing_attempts": 53,
+    "player_passing_completions": 43,
+    "player_passing_touchdowns": 52,
+    "player_passing_yards": 280,
+    "player_receiving_yards": 777,
+    "player_receptions": 236,
+    "player_rushing_attempts": 63,
+    "player_rushing_yards": 561,
     "player_sacks": 5,
     "player_tackles": 2,
     "player_tackles_+_assists": 2
    },
    "requestsLeft": 0,
-   "rows": 2230,
+   "rows": 2291,
    "slateGames": [
     "Auburn Tigers at Georgia Bulldogs 2026-10-17T19:30Z",
     "Missouri Tigers at Ole Miss Rebels 2026-10-17T19:30Z",
@@ -89,108 +89,6 @@
     "Nebraska Cornhuskers at Oregon Ducks 2026-10-18T03:00Z"
    ],
    "unmatchedEvents": [
-    {
-     "away": "Albany NY",
-     "external": {
-      "draftkings": "34826981"
-     },
-     "home": "Stony Brook",
-     "sample": {
-      "away_team": "Albany NY",
-      "home_team": "Stony Brook",
-      "markets": [
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-17T18:30:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Eastern Kentucky",
-     "external": {
-      "betmgm": "6:46928",
-      "betonline": "491151665",
-      "betparx": "1029240577",
-      "betrivers": "1029240577",
-      "bwin": "6:46928",
-      "caesars": "e6f353fe-0528-4722-9083-75ca83f1bee6",
-      "draftkings": "34826979",
-      "fanduel": "36179595",
-      "fliff": "419335_c_p_209_prematch",
-      "kalshi": "KXNCAAF1H-26OCT17EKYTNTC",
-      "ladbrokes": "ae5340eb-9428-48d4-9b3c-1d24b371d765",
-      "matchbook": "mb-34622420174000023",
-      "novig": "01a121fa-d8d9-71f1-aba3-c812957995f2",
-      "onexbet": "762014075",
-      "paddypower": "36179595",
-      "pinnacle": "1638258923",
-      "polymarket": "nfl_easternkentucky_tennesseetech_2026-10-17_b2",
-      "prophetx": "1700102695",
-      "sbobet": "10735412",
-      "smarkets": "45379469",
-      "sportzino": "sz-18046451",
-      "stake": "c3fd923e-e503-48d3-8707-e93fbe7b69f0",
-      "sx_bet": "L20524151",
-      "thescorebet": "StandardEvent:9b084177-a0ce-44a3-a5ea-4981ef72f300"
-     },
-     "home": "Tennessee Tech",
-     "sample": {
-      "away_team": "Eastern Kentucky",
-      "home_team": "Tennessee Tech",
-      "markets": [
-       "1st_half_moneyline",
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-17T18:30:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Albany Great Danes",
-     "external": {
-      "betmgm": "6:47014",
-      "betonline": "491151666",
-      "betparx": "1029241591",
-      "betrivers": "1029241591",
-      "bwin": "6:47014",
-      "fanduel": "36179581",
-      "fliff": "419337_c_p_209_prematch",
-      "kalshi": "KXNCAAF1H-26OCT17ALBYSTON",
-      "ladbrokes": "27e37039-d49f-4e6b-84dd-3727847f2a26",
-      "matchbook": "mb-34622431678400023",
-      "novig": "01a121fa-d974-7170-b7bc-c7c0c53c26cd",
-      "onexbet": "762042905",
-      "paddypower": "36179581",
-      "pinnacle": "1638257034",
-      "polymarket": "nfl_stonybrook_universityatalbany_2026-10-17_b2",
-      "prophetx": "1700102699",
-      "sbobet": "10735411",
-      "smarkets": "45379478",
-      "sportzino": "sz-18046453",
-      "stake": "80488d75-3c39-419c-83c8-e0cb947efba9",
-      "sx_bet": "L20524154",
-      "thescorebet": "StandardEvent:7a058d17-82e9-41de-b013-3c9d371a71b9"
-     },
-     "home": "Stony Brook Seawolves",
-     "sample": {
-      "away_team": "Albany Great Danes",
-      "home_team": "Stony Brook Seawolves",
-      "markets": [
-       "1st_half_moneyline",
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-17T18:30:00Z",
-     "type": "fixture"
-    },
     {
      "away": "Grambling State Tigers",
      "external": {
@@ -431,6 +329,7 @@
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
+       "game_prop",
        "moneyline",
        "point_spread",
        "total_points"
@@ -516,6 +415,136 @@
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
+       "game_prop",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-17T19:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Gardner-Webb",
+     "external": {
+      "betmgm": "6:47024",
+      "betonline": "491151700",
+      "betparx": "1029241584",
+      "betrivers": "1029241584",
+      "bwin": "6:47024",
+      "caesars": "0d51a4d8-0552-4654-a4db-dc2fe6586d2f",
+      "draftkings": "34826977",
+      "fanduel": "36179591",
+      "fliff": "419344_c_p_209_prematch",
+      "kalshi": "KXNCAAF1H-26OCT17WEBBUTM",
+      "ladbrokes": "ffc9466e-c86c-41d7-beb7-2465a135c107",
+      "matchbook": "mb-34623011343900023",
+      "novig": "01a12216-45ab-77f1-a863-c0fa4334fae5",
+      "onexbet": "762042907",
+      "paddypower": "36179591",
+      "pinnacle": "1638263307",
+      "polymarket": "nfl_gardnerwebb_tennesseemartin_2026-10-17_b2",
+      "prophetx": "1700102719",
+      "sbobet": "10735415",
+      "smarkets": "45379573",
+      "sportzino": "sz-18046561",
+      "stake": "3944a6cc-9239-444b-a158-883005fd9e82",
+      "sx_bet": "L20524273",
+      "thescorebet": "StandardEvent:8cb30632-0509-4003-ae38-103a916be319"
+     },
+     "home": "UT Martin",
+     "sample": {
+      "away_team": "Gardner-Webb",
+      "home_team": "UT Martin",
+      "markets": [
+       "1st_half_moneyline",
+       "draw_no_bet",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-17T19:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Idaho State",
+     "external": {
+      "betfred": "37268533",
+      "betmgm": "6:47018",
+      "betonline": "491151668",
+      "betparx": "1029241590",
+      "betrivers": "1029241590",
+      "bwin": "6:47018",
+      "caesars": "1886ca17-3c1c-4f91-8bb6-0faf2aad220d",
+      "draftkings": "34826983",
+      "fanduel": "36179601",
+      "fliff": "419343_c_p_209_prematch",
+      "kalshi": "KXNCAAF1H-26OCT17IDSTWEB",
+      "ladbrokes": "9ba1b30c-2dff-4b10-94f9-8643191803b7",
+      "matchbook": "mb-34605944485100023",
+      "novig": "01a12216-3fcc-7722-9f53-6b0886a7dbed",
+      "onexbet": "762473632",
+      "paddypower": "36179601",
+      "pinnacle": "1638263304",
+      "polymarket": "nfl_idahostate_weberstate_2026-10-17_b2",
+      "prophetx": "1700102730",
+      "sbobet": "10735416",
+      "smarkets": "45379356",
+      "sportzino": "sz-18046558",
+      "stake": "649d7b3c-f6c8-423a-961e-a2af8bebe374",
+      "sx_bet": "L20524270",
+      "thescorebet": "StandardEvent:a354aeca-2c84-442e-8bfa-5b298c03ee84"
+     },
+     "home": "Weber State",
+     "sample": {
+      "away_team": "Idaho State",
+      "home_team": "Weber State",
+      "markets": [
+       "1st_half_moneyline",
+       "draw_no_bet",
+       "moneyline",
+       "point_spread",
+       "team_total",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-17T19:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Idaho Vandals",
+     "external": {
+      "betmgm": "6:47016",
+      "betonline": "491151674",
+      "betparx": "1029241586",
+      "betrivers": "1029241586",
+      "bwin": "6:47016",
+      "caesars": "bec6fc68-94e2-4e93-8f57-d099e86c9cc0",
+      "draftkings": "34826953",
+      "fliff": "419745_c_p_209_prematch",
+      "kalshi": "KXNCAAF1H-26OCT17IDHOMONT",
+      "ladbrokes": "b555c79d-aa98-4c88-8221-b23c899598d1",
+      "matchbook": "mb-34622455914300023",
+      "novig": "01a12216-4348-7e23-a266-9e1281a4517d",
+      "onexbet": "762244343",
+      "pinnacle": "1638263306",
+      "polymarket": "nfl_idaho_montana_2026-10-17_b2",
+      "prophetx": "1700103307",
+      "sbobet": "10739177",
+      "smarkets": "45383519",
+      "sportzino": "sz-18059648",
+      "stake": "f1d7f0dd-17db-4db8-8cb7-d2660f9ec580",
+      "sx_bet": "L20550279",
+      "thescorebet": "StandardEvent:d500bd45-64c8-4520-bcad-4bfe9ace09be"
+     },
+     "home": "Montana Grizzlies",
+     "sample": {
+      "away_team": "Idaho Vandals",
+      "home_team": "Montana Grizzlies",
+      "markets": [
+       "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -581,7 +610,7 @@
       "fanduel": "36160515",
       "fliff": "407872_c_p_202_prematch",
       "gemini": "NFL-2610200015-WAS-SF-TT",
-      "kalshi": "KXNFL4QTOTAL-26OCT19WASSF",
+      "kalshi": "KXNFLRECYDS-26OCT19WASSF-WASAWILLIAMS14-40",
       "ladbrokes": "3b7aaf8f-ad5a-4b25-99e0-de1f97aa53b9",
       "matchbook": "mb-33322310988800023",
       "novig": "01a112eb-5439-7743-96e1-9e00db6695ca",
@@ -626,16 +655,12 @@
        "1st_quarter_total_points",
        "2nd_half_draw_no_bet",
        "2nd_half_moneyline",
-       "2nd_half_moneyline_3-way",
        "2nd_half_point_spread",
        "2nd_half_total_points",
-       "2nd_quarter_moneyline_3-way",
        "2nd_quarter_point_spread",
        "2nd_quarter_total_points",
-       "3rd_quarter_moneyline_3-way",
        "3rd_quarter_point_spread",
        "3rd_quarter_total_points",
-       "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
        "anytime_touchdown_scorer",
@@ -676,8 +701,6 @@
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "total_field_goals",
        "total_points",
