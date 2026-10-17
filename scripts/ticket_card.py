@@ -172,7 +172,7 @@ def fun_data(pick, games, player_team=None, *, fetch=None, art=None):
     # A personal lotto spans unrelated teams. Promoting whichever team happens
     # to sort last makes the card look like that team's ticket. Use the owner's
     # Kook'n profile mark as the stable hero instead; leg rows keep their real art.
-    if normalized.get('personalTicket'):
+    if len(legs) > 1:
         hero_photo, hero_logo, hero_team = _chef_profile(), None, None
     return {'odds': int(pick['odds']), 'book': pick['book'], 'date': date, 'stake': 10,
             'units': float(pick.get('riskUnits', .25)), 'price_estimated': bool(pick.get('priceEstimated')),
