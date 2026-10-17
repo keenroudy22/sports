@@ -176,6 +176,19 @@ class TicketCardTests(unittest.TestCase):
         self.assertIn('HOT PLATE (POTD)', svg)
         self.assertNotIn('>BEST BET<', svg)
 
+    def test_personal_lotto_uses_the_chef_profile_instead_of_one_leg_logo(self):
+        lotto = {'id': 'community:personal-ticket:test', 'personalTicket': True, 'odds': 900,
+                 'book': 'FanDuel', 'riskUnits': .25, 'legs': [
+                     {'title': 'Wake Forest moneyline', 'odds': -200, 'kickoff': '2026-10-17T16:00:00Z'},
+                     {'title': 'Pittsburgh moneyline', 'odds': -180, 'kickoff': '2026-10-17T19:30:00Z'},
+                 ]}
+        art = [{'kind': 'logos', 'uris': [self.image, self.logo]},
+               {'kind': 'logos', 'uris': [self.image, self.logo]}]
+        data = ticket_card.fun_data(lotto, {}, art=art)
+        self.assertIsNone(data['hero_logo'])
+        self.assertTrue(data['photo'].startswith('data:image/png;base64,'))
+        self.assertNotEqual(data['photo'], self.image, 'the first or latest leg never becomes a personal lotto hero')
+
     def test_fallback_card_uses_confident_full_send_voice_and_half_unit_never_best_bet(self):
         gut = dict(PROP, lane='gut_call', riskUnits=.5)
         data = ticket_card.straight_data(gut, GAME, player_side='away',

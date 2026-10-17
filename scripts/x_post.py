@@ -500,6 +500,38 @@ def _play_prefix(pick, game, featured):
         else 'Saturday night: ' if league == 'CFB' and day == 5 else ''
 
 
+def _searchable_matchup(game):
+    """Full human team names for search/discovery, never logo or abbreviation only."""
+    if not game:
+        return ''
+    league = game.get('league')
+    def name(team):
+        team = team or {}
+        if league == 'CFB':
+            return team.get('school') or team.get('short') or team.get('name') or ''
+        return team.get('name') or team.get('short') or ''
+    away, home = name(game.get('away')), name(game.get('home'))
+    return f'{away} at {home}' if away and home else away or home
+
+
+def _searchable_play_title(pick, game):
+    """Keep the bettor-style play while spelling out the people and teams people search."""
+    title = pick_card.short_title(pick, game)
+    matchup = _searchable_matchup(game)
+    if not matchup:
+        return title
+    # Player props need the player's full stored name plus a searchable team matchup.
+    # Game totals already contain the matchup; rebuild them with the full names.
+    if pick.get('athleteId') or pick.get('market'):
+        return f'{title} · {matchup}'
+    if pick.get('marketType') == 'total':
+        direction = str(pick.get('direction') or '').lower()
+        line = pick.get('line')
+        if direction in ('over', 'under') and isinstance(line, (int, float)):
+            return f'{matchup} {direction} {pricing.fmt(float(line))}'
+    return title if all(part.lower() in title.lower() for part in matchup.split(' at ')) else f'{title} · {matchup}'
+
+
 def copy_variant(text):
     return voice_pick.detect_shape(text)
 
@@ -550,7 +582,7 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
         options = ([top, f'{ASK}\n{tail}'], [top, tail])
     else:
         prefix = _play_prefix(pick, game, featured)
-        play_text = f"{prefix}{pick_card.short_title(pick, game)}"
+        play_text = f"{prefix}{_searchable_play_title(pick, game)}"
         play = f"{play_text} ({int(pick['odds']):+d}, {public_book(pick.get('book'))})"
         now = now_line(pick, now_quote)
         projection, line = pick.get('projection'), pick.get('line')

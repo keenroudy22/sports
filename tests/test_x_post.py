@@ -83,6 +83,16 @@ class DraftTests(unittest.TestCase):
             self.assertEqual('🍳' in text, text == potd)
             self.assertEqual(x_post.guard(text, pick), [], text)
 
+    def test_tweets_spell_out_player_and_team_names_for_search(self):
+        game = {'league': 'NFL', 'kickoff': '2026-10-19T00:20:00Z',
+                'away': {'name': 'Detroit Lions', 'short': 'Lions'},
+                'home': {'name': 'Buffalo Bills', 'short': 'Bills'}}
+        prop = dict(PROP, gameIds=['NFL-1'])
+        text = x_post.draft(prop, game, reason='He cleared this line in 7 of his last 10 games.')
+        self.assertIn('Player Seven over 4.5 catches · Detroit Lions at Buffalo Bills', text)
+        total = x_post.draft(dict(PICK, id='NFL-total', projection=42.0), game, reason='Wind is forecast at 18 mph.')
+        self.assertIn('Detroit Lions at Buffalo Bills under 38.5', total)
+
     def test_a_side_says_who_we_have_by_how_much(self):
         side = dict(PICK, marketType='spread', direction='home', line=-3.0, title='Iowa at Michigan -3', projection=-7.4)
         game = dict(GAME, home={'abbreviation': 'MICH', 'school': 'Michigan'}, away={'abbreviation': 'IOWA', 'school': 'Iowa'})

@@ -2,6 +2,7 @@ import sys
 import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import buffer_post
@@ -396,6 +397,22 @@ class LadderReceiptTests(unittest.TestCase):
 
 
 class DailyTests(unittest.TestCase):
+    def test_weekly_projection_sheet_returns_to_the_house_queue_once(self):
+        now = datetime(2026, 10, 17, 14, 30, tzinfo=timezone.utc)
+        projection = {'key': 'sheet:CFB:2026-10-17', 'kind': 'sheet', 'card': 'sheet-cfb-2026-10-17',
+                      'text': 'Full college projections', 'due': now, 'stale': now + timedelta(hours=1)}
+        with patch('sheet.post', return_value=projection), \
+                patch('research_posts.post', return_value=None), \
+                patch('research_posts.touchdown_followups', return_value=[]), \
+                patch('sports_posts.post', return_value=None), \
+                patch.object(receipts, 'ready', return_value=[]), \
+                patch.object(receipts, 'book', return_value=None), \
+                patch.object(receipts, 'cashed', return_value=[]):
+            queued = receipts.house_posts({}, {}, {}, {'posts': []}, now)
+            self.assertEqual([row['key'] for row in queued], ['sheet:CFB:2026-10-17'])
+            served = {'posts': [{'id': projection['key'], 'sentAt': '2026-10-17T14:31:00Z'}]}
+            self.assertEqual(receipts.house_posts({}, {}, {}, served, now), [])
+
     def test_the_book_fills_an_empty_evening_and_only_then(self):
         first, latest, log = world()
         tuesday_evening = datetime(2026, 9, 29, 21, 30, tzinfo=timezone.utc)      # Tue 5:30 PM ET

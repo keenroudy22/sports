@@ -1,6 +1,8 @@
 """Map immutable published plays into the reviewed Kitchen Ticket artwork."""
+import base64
 import re
 from datetime import datetime
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import pick_card
@@ -8,6 +10,14 @@ import record_scope
 import ticket_cards
 import ticket_kit
 import x_post
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def _chef_profile():
+    """The owner's profile mark is the neutral hero for a personal multi-team lotto."""
+    path = ROOT / 'site' / 'kookn-chef.png'
+    return 'data:image/png;base64,' + base64.b64encode(path.read_bytes()).decode('ascii')
 
 
 def _name(pick):
@@ -159,6 +169,11 @@ def fun_data(pick, games, player_team=None, *, fetch=None, art=None):
         athlete_team = str((player_team or {}).get(pick_card.leg_athlete_id(leg)) or '')
         hero_team = next((team for team in (game.get('away'), game.get('home'))
                           if team and str(team.get('id')) == athlete_team), None)
+    # A personal lotto spans unrelated teams. Promoting whichever team happens
+    # to sort last makes the card look like that team's ticket. Use the owner's
+    # Kook'n profile mark as the stable hero instead; leg rows keep their real art.
+    if normalized.get('personalTicket'):
+        hero_photo, hero_logo, hero_team = _chef_profile(), None, None
     return {'odds': int(pick['odds']), 'book': pick['book'], 'date': date, 'stake': 10,
             'units': float(pick.get('riskUnits', .25)), 'price_estimated': bool(pick.get('priceEstimated')),
             'photo': hero_photo, 'hero_logo': hero_logo, 'hero_team': _colors(hero_team or {}),
