@@ -181,7 +181,7 @@ class PlanTests(unittest.TestCase):
                          'plays lead the morning, regardless of kickoff hour')
         plans = [p for p in plans if p[1] == 'play']
         self.assertTrue(all(p[4] == p[0] for p in plans), 'each play with its own card')
-        self.assertTrue(plans[0][2].startswith('Player Seven over 4.5 catches (-115, '), plans[0][2])
+        self.assertTrue(plans[0][2].startswith('Player Seven over 4.5 catches · Iowa at Michigan (-115, '), plans[0][2])
         self.assertTrue(plans[4][2].startswith('🎰 +'), 'a fun parlay leads with its price')
 
     def test_no_prompt_sits_between_plays_even_on_a_multi_play_day(self):

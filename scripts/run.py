@@ -1895,22 +1895,22 @@ def official_selection_scope(slot, games, ctx, now):
     """Game ids eligible for this run's official selection.
 
     ``None`` means the ordinary 6:45 game-day board.  The 8:30 and 11:45 runs
-    get the post-capture board for unserved noon-or-later games; the 5:30 run
-    gets one bounded second look at still-dark primetime NFL games after that
-    run's fresh prop capture.  Every ordinary gate remains in force.
+    get the post-capture board for every noon-or-later game that has not
+    started; the 5:30/6:50 runs get the primetime NFL board after fresh prop
+    capture.  A game that already has one straight stays eligible because the
+    owner allows multiple non-contradictory plays from one game.  Duplicate,
+    contradiction and daily-card gates still bound every release.
     """
     if slot.hour == 6 and slot.minute == 45:
         return None
     today = eastern_date(now)
-    already = official_coverage_game_ids(ctx)
     if (slot.hour, slot.minute) in ((8, 30), (11, 45)):
         if os.environ.get('KEENROUDY_SELECTION_0830', '1').strip().lower() in ('0', 'false', 'off', 'no'):
             return set()
         return {game['id'] for game in games.values()
                 if game.get('league') in ('NFL', 'CFB') and game.get('state') == 'pre'
                 and eastern_date(gates.when(game['kickoff'])) == today
-                and gates.when(game['kickoff']).astimezone(EASTERN).hour >= 12
-                and game['id'] not in already}
+                and gates.when(game['kickoff']).astimezone(EASTERN).hour >= 12}
     if os.environ.get('KEENROUDY_SELECTION_PRIMETIME', '1').strip().lower() in ('0', 'false', 'off', 'no'):
         return set()
     if (slot.hour, slot.minute) not in ((17, 30), (18, 50)):
@@ -1918,8 +1918,7 @@ def official_selection_scope(slot, games, ctx, now):
     return {game['id'] for game in games.values()
             if game.get('league') == 'NFL' and game.get('state') == 'pre'
             and eastern_date(gates.when(game['kickoff'])) == today
-            and gates.when(game['kickoff']).astimezone(EASTERN).hour >= 19
-            and game['id'] not in already}
+            and gates.when(game['kickoff']).astimezone(EASTERN).hour >= 19}
 
 
 def allowed(path):
@@ -3768,11 +3767,12 @@ def main(argv=None):
         return mirror(args)
     if args.command == 'results':
         # Free-feed settlement pass. It never captures odds or props, but it
-        # grades finals, rebuilds the site and queues Cooked/Burnt reactions.
+        # grades finals, rebuilds the site, queues Cooked/Burnt reactions and
+        # immediately gives a newly settled Climb its next stored-price scan.
         moment = gates.when(args.now) if args.now else datetime.now(timezone.utc)
         args.slot = moment.astimezone(EASTERN).strftime('%H%M')
         args.no_llm = True
-        args.publish_kinds = 'settle'
+        args.publish_kinds = 'settle,ladder'
     if args.command == 'ladder':
         # A lightweight extra scan: deterministic templates, settlement plus the Climb only. The ordinary free-feed
         # guards still cap every capture, and the same run lock prevents overlap with the full desk.

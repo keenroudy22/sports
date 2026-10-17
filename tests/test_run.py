@@ -26,7 +26,7 @@ class SlotTests(unittest.TestCase):
         with mock.patch.object(run, 'run', return_value=0) as desk:
             self.assertEqual(run.main(['results', '--now', '2026-10-13T04:55:00Z']), 0)
         args = desk.call_args.args[0]
-        self.assertEqual((args.slot, args.publish_kinds, args.no_llm), ('0055', 'settle', True))
+        self.assertEqual((args.slot, args.publish_kinds, args.no_llm), ('0055', 'settle,ladder', True))
 
     def test_every_official_release_lane_gets_a_draft_without_legacy_flags(self):
         for lane in run.PRIMETIME_COVERAGE_LANES:
@@ -59,7 +59,8 @@ class SlotTests(unittest.TestCase):
         ctx = SimpleNamespace(first={}, latest={})
         self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'NFL-dark'})
         ctx.first['posted'] = {'gameIds': ['NFL-dark'], 'status': 'active', 'lane': 'best_bet'}
-        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), set())
+        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'NFL-dark'},
+                         'a second non-contradictory play from the same game remains eligible')
         morning = datetime(2026, 10, 11, 6, 45, tzinfo=run.EASTERN)
         self.assertIsNone(run.official_selection_scope(morning, games, ctx, now))
 
@@ -108,7 +109,8 @@ class SlotTests(unittest.TestCase):
         }, latest={})
         self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'NFL-snf'})
         ctx.first['straight'] = {'gameIds': ['NFL-snf'], 'status': 'active', 'lane': 'gut_call'}
-        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), set())
+        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'NFL-snf'},
+                         'an existing straight does not block another non-contradictory primetime play')
 
     def test_private_release_refuses_an_expired_quote_before_discord(self):
         now = datetime(2026, 10, 13, 14, 40, tzinfo=timezone.utc)
@@ -145,7 +147,7 @@ class SlotTests(unittest.TestCase):
             'CFB-late': {'id': 'CFB-late', 'league': 'CFB', 'state': 'pre', 'kickoff': '2026-10-11T23:00:00Z'},
         }
         ctx = SimpleNamespace(first={'posted': {'gameIds': ['CFB-late'], 'status': 'active', 'lane': 'best_bet'}}, latest={})
-        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'NFL-noon'})
+        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'NFL-noon', 'CFB-late'})
         with mock.patch.dict(os.environ, {'KEENROUDY_SELECTION_0830': '0'}):
             self.assertEqual(run.official_selection_scope(slot, games, ctx, now), set())
 
@@ -203,7 +205,22 @@ class SlotTests(unittest.TestCase):
         ctx = SimpleNamespace(first={
             'posted': {'gameIds': ['CFB-served'], 'status': 'active', 'lane': 'gut_call'}
         }, latest={})
-        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'CFB-night', 'NFL-night'})
+        self.assertEqual(run.official_selection_scope(slot, games, ctx, now),
+                         {'CFB-night', 'NFL-night', 'CFB-served'})
+
+    def test_later_weekend_pass_can_fill_five_from_a_game_that_already_has_one(self):
+        now = datetime(2026, 10, 17, 12, 30, tzinfo=timezone.utc)
+        slot = now.astimezone(run.EASTERN)
+        games = {
+            'CFB-one': {'id': 'CFB-one', 'league': 'CFB', 'state': 'pre',
+                        'kickoff': '2026-10-17T19:30:00Z'},
+            'CFB-two': {'id': 'CFB-two', 'league': 'CFB', 'state': 'pre',
+                        'kickoff': '2026-10-17T23:00:00Z'},
+        }
+        ctx = SimpleNamespace(first={
+            'first': {'gameIds': ['CFB-one'], 'status': 'active', 'lane': 'hot_plate'}
+        }, latest={})
+        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'CFB-one', 'CFB-two'})
 
 
 class CandidateCatalogTests(unittest.TestCase):

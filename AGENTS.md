@@ -205,6 +205,16 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Football-day output and faster Climb continuation (owner, 2026-10-17):** Thursday, Saturday, Sunday and Monday
+  publish a projection post, an evidence-backed trends/research post and every fully gated Best bet/Full Send the
+  board supports. A Saturday or Sunday slate with at least ten NFL/CFB games targets five released straight plays;
+  more may publish up to the existing large-slate ceiling when they independently clear every price, injury, role,
+  reason, freshness, contradiction and send gate. Later morning passes keep screening games that already have a
+  play because multiple non-contradictory plays from one game are allowed. This is a floor on finding and releasing
+  honest positive-value lanes, never permission to invent a quote or bypass a hold. The half-hour settlement watcher
+  also scans the next Climb rung immediately after a rung settles; only one rung may be open, and every Climb leg
+  keeps the existing positive-value and news checks.
+
 - **Full Send public voice (owner, 2026-10-16):** never call a released play a `Gut call` in public. The existing
   positive-value fallback may keep its internal `gut_call` lane and separate 0.5u accounting, but cards, captions,
   Discord and the site call it `Full Send` and write with conviction. This is a copy/branding rule, not permission
@@ -1070,8 +1080,9 @@ Handy commands (from `~/Projects/sports`):
   **Record → Model**, not on Today. The October 5 product contract supersedes the older Today placement, not the
   underlying grading. It is model accuracy, never an official play or a profit claim; do not calculate units without
   a real captured moneyline price.
-- **Weekly "📌 Save this" projection sheet**: the full NFL slate or 16 college games, college Saturday and NFL
-  Sunday at 10 AM (`scripts/sheet.py`). Every spread and total read carries the exact captured line, price and book.
+- **Football-day "📌 Save this" projection sheet**: the full NFL slate or 16 college games on college Saturday and
+  NFL Sunday, plus the standalone NFL matchup on Thursday and Monday, at 10 AM (`scripts/sheet.py`). Every spread
+  and total read carries the exact captured line, price and book.
   Numbered mint rings identify up to six favorite markets where the calibrated chance clears that price by the Board's value
   threshold and name the wager itself (`OVER 45.5`, `MINN +3.5`), not merely `TOTAL` or `SPREAD`; the selected priced
   line, rather than the model projection, is mint. Missing, stale, thin and pass prices never get a ring;

@@ -1,5 +1,16 @@
 # October 5 product implementation tracker
 
+## 2026-10-17 — football-day output and Climb continuity
+
+The owner requires projections, trends/research and released straight plays on Thursday, Saturday, Sunday and
+Monday, with a five-play target on large Saturday/Sunday slates and more Climb opportunities. The implementation
+keeps every existing truth and safety gate: later morning and primetime passes may re-screen a game that already
+has one play, allowing multiple non-contradictory qualifying rows; large weekend slates fill toward five from
+positive-value Best bet and Full Send lanes and may use the existing ten-play ceiling. The projection sheet expands
+to standalone Thursday and Monday NFL games. The half-hour settlement watcher includes the Climb scan so a settled
+rung can progress before the next full desk run. One open rung remains the hard limit. Release evidence is tracked
+under the continuing `O-20261014-1` output workstream in `product-status.json`.
+
 ## 2026-10-11 — confirmed starting-quarterback injury adjustment
 
 The owner directed that a confirmed starting-quarterback absence must update the team projection, not merely hold

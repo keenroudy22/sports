@@ -652,6 +652,11 @@ def now_line(pick, quote):
 
 def guard(text, pick, reason=None, now_quote=None):
     problems = x_style(text.replace(SITE, ''))
+    # A formatter may omit an unsafe suffix from the final shape.  Refuse the
+    # source title anyway so a malformed saved play cannot slip through merely
+    # because this particular caption template did not repeat the bad glyph.
+    problems += [problem for problem in x_style(str(pick.get('title') or '')) if 'dash' in problem]
+    problems = list(dict.fromkeys(problems))
     extra = [{'legCount': len(pick['legs'])}] if pick.get('legs') else []      # "3 legs" is a count of the pick's own legs
     if reason:
         extra.append({'reason': reason})       # a stored reason's numbers come from a verified fact or the player's own games

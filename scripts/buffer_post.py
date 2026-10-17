@@ -365,7 +365,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
                 continue
         plays.append((target, -1 if key == potd else ORDER[pick_card.play_kind(merged)],
                       deadline, key, text, 'play', f'{key}-potd' if key == potd else key))
-    order = {'receipt': -1, 'book': -1, 'research': 1, 'cashed': 2, 'sports': 3}
+    order = {'receipt': -1, 'book': -1, 'sheet': 0, 'research': 1, 'cashed': 2, 'sports': 3}
     for post in receipts.house_posts(first, latest, games, log_book, now, log=log):
         if set(post['key'].split('+')) & posted:
             continue

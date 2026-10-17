@@ -122,9 +122,25 @@ class PostTests(unittest.TestCase):
         import receipts
         self.assertEqual(receipts.guard(post), [])
         self.assertIsNone(sheet.post(self.GAMES, datetime(2026, 9, 27, 16, 0, tzinfo=timezone.utc)), 'past 11:45 AM it is too late')
-        self.assertIsNone(sheet.post(self.GAMES, datetime(2026, 9, 28, 12, 0, tzinfo=timezone.utc)), 'Monday is not the NFL sheet day')
+        monday_games = {'mnf': {'id': 'mnf', 'league': 'NFL', 'week': 4,
+                                'kickoff': '2026-09-29T00:15:00Z'}}
+        monday = sheet.post(monday_games, datetime(2026, 9, 28, 12, 0, tzinfo=timezone.utc))
+        self.assertEqual(monday['text'], "📌 Tonight's NFL projection.\n"
+                         'My number next to Vegas, plus the line I like most.\n📌 Save this one\n#NFL')
+        thursday_games = {'tnf': {'id': 'tnf', 'league': 'NFL', 'week': 4,
+                                  'kickoff': '2026-10-02T00:15:00Z'}}
+        thursday = sheet.post(thursday_games, datetime(2026, 10, 1, 12, 0, tzinfo=timezone.utc))
+        self.assertIsNotNone(thursday)
         few = dict(list(self.GAMES.items())[:3])
         self.assertIsNone(sheet.post(few, early), 'a thin slate gets no sheet')
+
+    def test_monday_and_thursday_single_games_render_but_weekend_stays_full_slate(self):
+        monday = date(2026, 9, 28)
+        monday_card = card('mnf', '2026-09-29T00:15:00Z')
+        due = sheet.due(datetime(2026, 9, 28, 12, 0, tzinfo=timezone.utc), [monday_card])
+        self.assertEqual([(league, day, len(games)) for league, day, games in due], [('NFL', monday, 1)])
+        sparse_sunday = [card(f'g{i}', '2026-09-27T17:00:00Z') for i in range(3)]
+        self.assertEqual(sheet.due(datetime(2026, 9, 27, 12, 0, tzinfo=timezone.utc), sparse_sunday), [])
 
 
 if __name__ == '__main__':

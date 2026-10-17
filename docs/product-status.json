@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-15T13:58:00Z",
+  "updatedAt": "2026-10-17T16:05:00Z",
   "items": [
     {
       "id": "P02",
@@ -1148,11 +1148,11 @@
     {
       "id": "O-20261014-1",
       "title": "Publish daily research, game favorites and big-slate projections",
-      "status": "shipped",
+      "status": "ready",
       "owner": "agent",
-      "next": "Preserve per-game favorite coverage and observe natural large-slate volume without turning the ten-play ceiling into a quota.",
-      "doneWhen": "Every game names a safe fresh favorite or exact blocker; large slates allow up to ten fully gated plays without a quota; Today, trends, TD calls and Climb diagnostics remain useful and honest.",
-      "evidence": "Daily fallback c95b46e6/run38574167353; research set through4d8e48be/run38755620361. Per-game favorites and large-slate10 shipped defef8cc/run38767790985: Python1433(2skip), Node244, clean export, build450, audits102/NBA0, guard557, rehearsal1145, local/live375/1440 clean."
+      "next": "Run every release gate, deploy under the run lock, verify the hosted publish and live 375/1440 surfaces, then observe Sunday selection and delivery.",
+      "doneWhen": "Thursday/Monday and weekend projection sheets post; later weekend passes can fill five gated straights without excluding covered games; the half-hour result pass rechecks Climb; every release and live gate passes.",
+      "evidence": "Earlier daily fallback/research/per-game work shipped through defef8cc/run38767790985. Owner decision 2026-10-17 adds football-day sheets, weekend recovery volume and Climb continuation; implementation and focused regressions prepared on dev, release evidence pending."
     }
   ]
 }

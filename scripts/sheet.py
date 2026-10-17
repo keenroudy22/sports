@@ -1,8 +1,8 @@
-"""The weekly projection sheet: "📌 SAVE THIS", the NFL slate or 16 college games. Stdlib only.
+"""The football-day projection sheet: "📌 SAVE THIS", the NFL slate or 16 college games. Stdlib only.
 
 The most saved data posts among the accounts we follow are cheat sheets with the ask in the first line (Jimmy's
-"Save this post now", Toad's "Bookmark this sheet"; docs/X-NOTES.md). The owner said yes on 2026-09-26. Once a week
-per league, on its big day (college Saturday, NFL Sunday), the morning post is one image: each game's logos, our
+"Save this post now", Toad's "Bookmark this sheet"; docs/X-NOTES.md). The owner said yes on 2026-09-26. On
+college Saturday and NFL Thursday/Sunday/Monday, the morning post is one image: each game's logos, our
 projected score, how often we think each team wins, and our spread and total beside the betting line, the same numbers
 as the Games page (built from the site's own game cards, site/data/app/today.json). NFL shows the whole slate; college
 shows the 16 largest disagreements. A mint ring marks up to six favorite lines where our calibrated chance clears the actual
@@ -26,7 +26,7 @@ from sports_refresh import eastern_date
 
 ROOT = Path(__file__).resolve().parents[1]
 TODAY = ROOT / 'site' / 'data' / 'app' / 'today.json'
-DAYS = {'CFB': 5, 'NFL': 6}             # Saturday for college, Sunday for the NFL (Monday is 0)
+POST_DAYS = {'CFB': {5}, 'NFL': {0, 3, 6}}  # College Saturday; NFL Monday, Thursday and Sunday.
 POST_AT, POST_UNTIL = (10, 0), (11, 45)  # Eastern
 MOST, WATCH, FEWEST = 16, 6, 4          # a full NFL slate; up to six favorite priced projections get a mint ring
 RING_FRESH = timedelta(hours=4)          # research/main-line rule: an older quote never earns a ring
@@ -41,7 +41,12 @@ def key(league, day):
 
 
 def sheet_day(league, day):
-    return day.weekday() == DAYS[league]
+    return day.weekday() in POST_DAYS[league]
+
+
+def minimum_games(league, day):
+    """Full-slate days need a useful board; standalone primetime still gets its matchup."""
+    return FEWEST if day.weekday() in (5, 6) else 1
 
 
 def disagreement(card):
@@ -313,10 +318,10 @@ def due(now, cards):
     """[(league, day, games)] for the sheets to draw today: a league on its day with a full enough slate."""
     day = eastern_date(now)
     out = []
-    for league in DAYS:
+    for league in POST_DAYS:
         if sheet_day(league, day):
             games = pick_games(cards, league, day)
-            if len(games) >= FEWEST:
+            if len(games) >= minimum_games(league, day):
                 out.append((league, day, games))
     return out
 
@@ -344,16 +349,21 @@ def post(games, now):
     """The morning post for the day's sheet, or None: {key, kind, card, text, due, stale}. `games` is the slate
     (gameId -> game), so the desk can schedule it without the site's files."""
     day = eastern_date(now)
-    for league in DAYS:
+    for league in POST_DAYS:
         if not sheet_day(league, day) or now >= at(day, POST_UNTIL):
             continue
         todays = [g for g in games.values() if g.get('league') == league and eastern_date(gates.when(g['kickoff'])) == day]
-        if len(todays) < FEWEST:
+        if len(todays) < minimum_games(league, day):
             continue
         name = 'college' if league == 'CFB' else 'NFL'
-        lead = (f"📌 Full {name} projections for the slate." if league == 'NFL' else
-                f"📌 16 {name} projections for the slate.")
-        text = lead + "\nMy favorite 4 to 6 priced projections are numbered.\n📌 Save this one" + f"\n#{league}"
+        if len(todays) == 1:
+            lead = f"📌 Tonight's {name} projection."
+        else:
+            lead = (f"📌 Full {name} projections for the slate." if league == 'NFL' else
+                    f"📌 16 {name} projections for the slate.")
+        middle = ("My number next to Vegas, plus the line I like most."
+                  if len(todays) == 1 else "My favorite 4 to 6 priced projections are numbered.")
+        text = lead + f"\n{middle}\n📌 Save this one\n#{league}"
         return {'key': f'sheet:{league}:{day.isoformat()}', 'kind': 'sheet', 'card': key(league, day), 'text': text,
                 'due': max(at(day, POST_AT), now + timedelta(minutes=2)), 'stale': at(day, POST_UNTIL)}
     return None
@@ -361,13 +371,14 @@ def post(games, now):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.split('\n')[0])
-    parser.add_argument('--league', choices=tuple(DAYS), default='NFL')
+    parser.add_argument('--league', choices=tuple(POST_DAYS), default='NFL')
     parser.add_argument('--day', help='YYYY-MM-DD, Eastern; default the league\'s next day')
     parser.add_argument('--out', help='PNG path; default the sports config folder')
     parser.add_argument('--svg', action='store_true', help='print the SVG instead of drawing it')
     args = parser.parse_args(argv)
     today = eastern_date(datetime.now(timezone.utc))
-    day = date.fromisoformat(args.day) if args.day else today + timedelta(days=(DAYS[args.league] - today.weekday()) % 7)
+    day = (date.fromisoformat(args.day) if args.day else
+           today + timedelta(days=min((weekday - today.weekday()) % 7 for weekday in POST_DAYS[args.league])))
     games = pick_games(load_cards(), args.league, day)
     if not games:
         print(f'no {args.league} games with our number and a line on {day}')
