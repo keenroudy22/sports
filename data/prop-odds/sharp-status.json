@@ -1,21 +1,21 @@
 {
- "at": "2026-10-17T15:30:36Z",
+ "at": "2026-10-17T15:47:06Z",
  "confirmed": {
   "CFB-401856719": "2026-10-17T13:03:22Z",
-  "CFB-401856720": "2026-10-17T15:30:36Z",
+  "CFB-401856720": "2026-10-17T15:47:06Z",
   "CFB-401856721": "2026-10-17T13:03:22Z",
   "CFB-401856723": "2026-10-17T13:03:22Z",
-  "CFB-401856724": "2026-10-17T15:30:36Z",
+  "CFB-401856724": "2026-10-17T15:47:06Z",
   "CFB-401856725": "2026-10-17T13:03:22Z",
   "CFB-401856726": "2026-10-16T14:02:48Z",
   "CFB-401856828": "2026-10-17T13:03:22Z",
-  "CFB-401856829": "2026-10-17T15:30:36Z",
-  "CFB-401856830": "2026-10-17T15:30:36Z",
+  "CFB-401856829": "2026-10-17T15:47:06Z",
+  "CFB-401856830": "2026-10-17T15:47:06Z",
   "CFB-401856832": "2026-10-16T08:36:00Z",
   "CFB-401858263": "2026-10-16T08:36:00Z",
   "CFB-401858264": "2026-10-17T13:03:22Z",
   "CFB-401858266": "2026-10-17T13:03:22Z",
-  "CFB-401858267": "2026-10-17T15:30:36Z",
+  "CFB-401858267": "2026-10-17T15:47:06Z",
   "CFB-401858268": "2026-10-17T15:11:57Z",
   "CFB-401858488": "2026-10-17T15:11:57Z",
   "CFB-401858489": "2026-10-17T13:03:22Z",
@@ -28,11 +28,11 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1468,
-    "fanduel": 910
+    "draftkings": 1396,
+    "fanduel": 903
    },
-   "eventsListed": 131,
-   "eventsMatched": 52,
+   "eventsListed": 128,
+   "eventsMatched": 51,
    "games": 52,
    "marketTypes": {
     "player_assists": 2,
@@ -41,21 +41,18 @@
     "player_longest_passing_completion": 7,
     "player_longest_reception": 33,
     "player_longest_rush": 16,
-    "player_passing_+_rushing_yards": 149,
+    "player_passing_+_rushing_yards": 148,
     "player_passing_attempts": 45,
     "player_passing_completions": 38,
-    "player_passing_touchdowns": 64,
-    "player_passing_yards": 269,
-    "player_receiving_yards": 897,
-    "player_receptions": 217,
+    "player_passing_touchdowns": 55,
+    "player_passing_yards": 245,
+    "player_receiving_yards": 860,
+    "player_receptions": 216,
     "player_rushing_attempts": 56,
-    "player_rushing_yards": 566,
-    "player_sacks": 3,
-    "player_tackles": 2,
-    "player_tackles_+_assists": 2
+    "player_rushing_yards": 566
    },
    "requestsLeft": 0,
-   "rows": 2378,
+   "rows": 2299,
    "slateGames": [
     "Mississippi State Bulldogs at LSU Tigers 2026-10-17T16:00Z",
     "Florida Gators at Texas Longhorns 2026-10-17T16:00Z",
@@ -247,7 +244,9 @@
        "moneyline",
        "point_spread",
        "team_total",
-       "total_points"
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-17T16:00:00Z",
@@ -340,6 +339,7 @@
       "home_team": "Sacred Heart Pioneers",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -392,7 +392,10 @@
        "game_prop",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-17T16:00:00Z",
@@ -442,14 +445,17 @@
        "game_prop",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-17T16:00:00Z",
      "type": "fixture"
     },
     {
-     "away": "Bryant Bulldogs",
+     "away": "Bryant",
      "external": {
       "ballybet": "1029241581",
       "betmgm": "6:46974",
@@ -479,10 +485,10 @@
       "sx_bet": "L20523937",
       "thescorebet": "StandardEvent:09247cee-6120-4a6d-b097-2a72c52bfd99"
      },
-     "home": "Maine Black Bears",
+     "home": "Maine",
      "sample": {
-      "away_team": "Bryant Bulldogs",
-      "home_team": "Maine Black Bears",
+      "away_team": "Bryant",
+      "home_team": "Maine",
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
@@ -719,7 +725,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-17T15:29:00Z",
+     "start": "2026-10-17T15:47:00Z",
      "type": "outright"
     },
     {
@@ -727,6 +733,7 @@
      "external": {
       "ballybet": "1028823559",
       "bet365": "202477549",
+      "betmgm": "6:43643",
       "betonline": "491147423",
       "betparx": "1028823559",
       "betrivers": "1028823559",
@@ -738,10 +745,10 @@
       "fanatics": "5572377",
       "fanduel": "36160515",
       "fliff": "407872_c_p_202_prematch",
-      "gemini": "NFL-2610200015-WAS-SF-PPTD",
+      "gemini": "NFL-2610200015-WAS-SF-TT",
       "goldrush": "31140283",
       "hardrock": "2116778469953241503",
-      "kalshi": "KXNFL4QTOTAL-26OCT19WASSF",
+      "kalshi": "KXNFL2QBTTS-26OCT19WASSF",
       "ladbrokes": "3b7aaf8f-ad5a-4b25-99e0-de1f97aa53b9",
       "matchbook": "mb-33322310988800023",
       "novig": "01a112eb-5439-7743-96e1-9e00db6695ca",
@@ -860,6 +867,8 @@
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
+       "race_to_15_points",
+       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_field_goals",
@@ -1217,6 +1226,7 @@
       "fanduel": "36189004",
       "fliff": "407879_c_p_202_prematch",
       "kalshi": "KXNFLGAME-26OCT25DENARI",
+      "novig": "01a136e2-ed41-7f12-9786-25d6715adc49",
       "paddypower": "36189004",
       "polymarket": "nfl_broncos_cardinals_2026-10-25_b2",
       "polymarket_us": "nfl-den-ari-2026-10-25",
