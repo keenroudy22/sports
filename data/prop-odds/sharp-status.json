@@ -1,25 +1,25 @@
 {
- "at": "2026-10-17T21:49:29Z",
+ "at": "2026-10-17T21:58:15Z",
  "confirmed": {
-  "CFB-401856722": "2026-10-17T21:49:29Z",
-  "CFB-401856726": "2026-10-17T21:49:29Z",
+  "CFB-401856722": "2026-10-17T21:58:15Z",
+  "CFB-401856726": "2026-10-17T21:58:15Z",
   "CFB-401856809": "2026-10-17T21:40:12Z",
   "CFB-401856831": "2026-10-17T21:40:12Z",
-  "CFB-401856832": "2026-10-17T21:49:29Z",
+  "CFB-401856832": "2026-10-17T21:58:15Z",
   "CFB-401856833": "2026-10-17T18:53:52Z",
-  "CFB-401858263": "2026-10-17T21:49:29Z",
+  "CFB-401858263": "2026-10-17T21:58:15Z",
   "CFB-401858265": "2026-10-17T18:53:52Z",
   "CFB-401858269": "2026-10-17T18:53:52Z",
   "CFB-401858492": "2026-10-17T18:53:52Z",
   "CFB-401858494": "2026-10-17T18:53:52Z",
-  "CFB-401860903": "2026-10-17T21:49:29Z",
+  "CFB-401860903": "2026-10-17T21:58:15Z",
   "CFB-401864521": "2026-10-17T18:53:52Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1294,
-    "fanduel": 724
+    "draftkings": 1293,
+    "fanduel": 736
    },
    "eventsListed": 37,
    "eventsMatched": 22,
@@ -33,15 +33,15 @@
     "player_passing_+_rushing_yards": 43,
     "player_passing_attempts": 53,
     "player_passing_completions": 46,
-    "player_passing_touchdowns": 62,
-    "player_passing_yards": 302,
-    "player_receiving_yards": 793,
-    "player_receptions": 149,
+    "player_passing_touchdowns": 68,
+    "player_passing_yards": 306,
+    "player_receiving_yards": 795,
+    "player_receptions": 148,
     "player_rushing_attempts": 38,
     "player_rushing_yards": 455
    },
    "requestsLeft": 0,
-   "rows": 2018,
+   "rows": 2029,
    "slateGames": [
     "Washington State Cougars at Oregon State Beavers 2026-10-17T22:00Z",
     "Arkansas Razorbacks at Vanderbilt Commodores 2026-10-17T23:00Z",
@@ -132,6 +132,7 @@
       "pinnacle": "1638263309",
       "polymarket": "nfl_morganstate_tennesseestate_2026-10-17_b3",
       "prophetx": "1700102720",
+      "rebet": "sr:match:70993604",
       "sbobet": "10737959",
       "smarkets": "45379572",
       "sportzino": "sz-18046713",
@@ -149,7 +150,9 @@
        "moneyline",
        "point_spread",
        "team_total",
-       "total_points"
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-17T22:30:00Z",
@@ -288,7 +291,7 @@
       "draftkings": "34826997",
       "fanduel": "36179577",
       "fliff": "419345_c_p_209_prematch",
-      "kalshi": "KXNCAAFGAME-26OCT17ETAMHCU",
+      "kalshi": "KXNCAAF1H-26OCT17ETAMHCU",
       "ladbrokes": "40f210ae-1a4e-4a35-864e-81a8e5374bd8",
       "novig": "01a122f2-3a0a-7030-a1ef-755243ee0b5c",
       "onexbet": "762134440",
@@ -306,6 +309,7 @@
       "away_team": "East Texas A&M",
       "home_team": "Houston Christian",
       "markets": [
+       "1st_half_moneyline",
        "draw_no_bet",
        "game_prop",
        "moneyline",
@@ -604,7 +608,7 @@
       "fanatics": "5572377",
       "fanduel": "36160515",
       "fliff": "407872_c_p_202_prematch",
-      "gemini": "NFL-2610200015-WAS-SF-T",
+      "gemini": "NFL-2610200015-WAS-SF-TT",
       "kalshi": "KXNFLREC-26OCT19WASSF-WASTMCLAURIN17-3",
       "ladbrokes": "3b7aaf8f-ad5a-4b25-99e0-de1f97aa53b9",
       "novig": "01a112eb-5439-7743-96e1-9e00db6695ca",
