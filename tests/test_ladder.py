@@ -375,6 +375,24 @@ class BuildTests(unittest.TestCase):
         finally:
             ladder.pricing.price = original
 
+    def test_late_morning_rung_expires_at_the_next_desk_run(self):
+        """A fresh late-morning quote must carry the same next-run expiry that the gate enforces."""
+        now = datetime(2026, 10, 17, 15, 15, tzinfo=timezone.utc)  # Saturday 11:15 AM ET
+        games = {'g1': game('g1', 'Arizona State', 'Texas Tech', '2026-10-17T19:30Z', league='CFB'),
+                 'g2': game('g2', 'Oklahoma State', 'Houston', '2026-10-17T23:30Z', league='CFB')}
+        ticket = {'book': 'DraftKings', 'legs': [
+                      {'title': 'Texas Tech moneyline', 'gameId': 'g1', 'odds': -700, 'chance': .90,
+                       'implied': .875, 'kickoff': games['g1']['kickoff']},
+                      {'title': 'Houston moneyline', 'gameId': 'g2', 'odds': -192, 'chance': .69,
+                       'implied': .658, 'kickoff': games['g2']['kickoff']}],
+                  'odds': -135, 'gameIds': ['g1', 'g2'], 'quotedAt': '2026-10-17T15:10:00Z',
+                  'firstKickoff': games['g1']['kickoff'], 'priceEstimated': True, 'sources': []}
+        pick = ladder.ticket_pick(ticket, 'CFB', ladder.state({}, {}), now, games)
+        self.assertEqual(pick['expiresAt'], '2026-10-17T15:45:00Z')
+        world = ctx()
+        world.now, world.games = now, games
+        self.assertTrue(gates.expiry_ok(pick, world).ok, gates.expiry_ok(pick, world).reason)
+
     def test_manual_rung_can_mix_early_and_night_games_at_one_book(self):
         games = {'g1': dict(GAMES['g1'], league='NFL'),
                  'g2': game('g2', 'Ravens', 'Falcons', '2026-09-28T00:20Z')}

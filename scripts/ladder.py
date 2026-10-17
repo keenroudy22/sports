@@ -528,7 +528,7 @@ def ticket_pick(ticket, league, where, now, games):
             # fresh morning rung impossible to release.  The release path still
             # refuses it once the actual two-hour freshness limit is reached.
             'expiresAt': gates.stamp(min(gates.when(ticket['quotedAt']) + RELEASE_QUOTE_FRESH,
-                                         gates.when(ticket['firstKickoff']))),
+                                         gates.when(ticket['firstKickoff']), gates.next_slot(now))),
             'quoteType': ticket.get('quoteType', 'capture'), 'confidence': 1,
             'edge': (f"For fun, not value: {len(ticket['legs'])} protected lines with stable roles that our model "
                      f"direction agrees with, at {ticket['book']}'s exact prices, multiplied to "
