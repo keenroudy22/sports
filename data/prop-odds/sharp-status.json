@@ -1,21 +1,21 @@
 {
- "at": "2026-10-17T15:20:47Z",
+ "at": "2026-10-17T15:30:36Z",
  "confirmed": {
   "CFB-401856719": "2026-10-17T13:03:22Z",
-  "CFB-401856720": "2026-10-17T15:20:47Z",
+  "CFB-401856720": "2026-10-17T15:30:36Z",
   "CFB-401856721": "2026-10-17T13:03:22Z",
   "CFB-401856723": "2026-10-17T13:03:22Z",
-  "CFB-401856724": "2026-10-17T15:20:47Z",
+  "CFB-401856724": "2026-10-17T15:30:36Z",
   "CFB-401856725": "2026-10-17T13:03:22Z",
   "CFB-401856726": "2026-10-16T14:02:48Z",
   "CFB-401856828": "2026-10-17T13:03:22Z",
-  "CFB-401856829": "2026-10-17T15:20:47Z",
-  "CFB-401856830": "2026-10-17T15:20:47Z",
+  "CFB-401856829": "2026-10-17T15:30:36Z",
+  "CFB-401856830": "2026-10-17T15:30:36Z",
   "CFB-401856832": "2026-10-16T08:36:00Z",
   "CFB-401858263": "2026-10-16T08:36:00Z",
   "CFB-401858264": "2026-10-17T13:03:22Z",
   "CFB-401858266": "2026-10-17T13:03:22Z",
-  "CFB-401858267": "2026-10-17T15:20:47Z",
+  "CFB-401858267": "2026-10-17T15:30:36Z",
   "CFB-401858268": "2026-10-17T15:11:57Z",
   "CFB-401858488": "2026-10-17T15:11:57Z",
   "CFB-401858489": "2026-10-17T13:03:22Z",
@@ -28,10 +28,10 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1465,
+    "draftkings": 1468,
     "fanduel": 910
    },
-   "eventsListed": 128,
+   "eventsListed": 131,
    "eventsMatched": 52,
    "games": 52,
    "marketTypes": {
@@ -41,11 +41,11 @@
     "player_longest_passing_completion": 7,
     "player_longest_reception": 33,
     "player_longest_rush": 16,
-    "player_passing_+_rushing_yards": 148,
-    "player_passing_attempts": 44,
+    "player_passing_+_rushing_yards": 149,
+    "player_passing_attempts": 45,
     "player_passing_completions": 38,
     "player_passing_touchdowns": 64,
-    "player_passing_yards": 268,
+    "player_passing_yards": 269,
     "player_receiving_yards": 897,
     "player_receptions": 217,
     "player_rushing_attempts": 56,
@@ -55,7 +55,7 @@
     "player_tackles_+_assists": 2
    },
    "requestsLeft": 0,
-   "rows": 2375,
+   "rows": 2378,
    "slateGames": [
     "Mississippi State Bulldogs at LSU Tigers 2026-10-17T16:00Z",
     "Florida Gators at Texas Longhorns 2026-10-17T16:00Z",
@@ -247,9 +247,7 @@
        "moneyline",
        "point_spread",
        "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
+       "total_points"
       ]
      },
      "start": "2026-10-17T16:00:00Z",
@@ -319,7 +317,7 @@
       "fliff": "419324_c_p_209_prematch",
       "goldrush": "31248829",
       "hardrock": "5379904743969784235",
-      "kalshi": "KXNCAAFSPREAD-26OCT17HAMPSHU",
+      "kalshi": "KXNCAAFTOTAL-26OCT17HAMPSHU",
       "ladbrokes": "527f4dbf-efd9-4387-aa1f-0abcaf21d5f5",
       "matchbook": "mb-34606602281200023",
       "novig": "01a12171-90f9-7821-a8da-06e127505b66",
@@ -394,10 +392,7 @@
        "game_prop",
        "moneyline",
        "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
+       "total_points"
       ]
      },
      "start": "2026-10-17T16:00:00Z",
@@ -419,7 +414,7 @@
       "fliff": "419316_c_p_209_prematch",
       "goldrush": "31245614",
       "hardrock": "1501549000803877275",
-      "kalshi": "KXNCAAFSPREAD-26OCT17URIYALE",
+      "kalshi": "KXNCAAFTOTAL-26OCT17URIYALE",
       "ladbrokes": "78e96cab-ea44-45ba-b785-97d28da6a818",
       "matchbook": "mb-34606587223400023",
       "novig": "01a12171-8e58-7143-862b-21a87b1d77ef",
@@ -447,17 +442,14 @@
        "game_prop",
        "moneyline",
        "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
+       "total_points"
       ]
      },
      "start": "2026-10-17T16:00:00Z",
      "type": "fixture"
     },
     {
-     "away": "Bryant",
+     "away": "Bryant Bulldogs",
      "external": {
       "ballybet": "1029241581",
       "betmgm": "6:46974",
@@ -487,10 +479,10 @@
       "sx_bet": "L20523937",
       "thescorebet": "StandardEvent:09247cee-6120-4a6d-b097-2a72c52bfd99"
      },
-     "home": "Maine",
+     "home": "Maine Black Bears",
      "sample": {
-      "away_team": "Bryant",
-      "home_team": "Maine",
+      "away_team": "Bryant Bulldogs",
+      "home_team": "Maine Black Bears",
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
@@ -565,7 +557,6 @@
       "goldrush": "31246031",
       "hardrock": "5010940858237845896",
       "kalshi": "KXNCAAFTOTAL-26OCT17GTWNCOLG",
-      "ladbrokes": "e0e6252f-ac3d-47d7-aeb3-7606551e88e4",
       "matchbook": "mb-34621977159800023",
       "novig": "01a121a8-604a-7f61-b6ae-e616456c7a62",
       "onexbet": "762028451",
@@ -633,6 +624,7 @@
       "home_team": "Dartmouth",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -727,7 +719,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-17T15:20:00Z",
+     "start": "2026-10-17T15:29:00Z",
      "type": "outright"
     },
     {
@@ -762,7 +754,6 @@
       "prophetx": "1700008841",
       "rebet": "sr:match:71515924",
       "stake": "936c3a14-bcbe-43b5-84b4-6f41defdf2e6",
-      "sx_bet": "L19776801",
       "thescorebet": "StandardEvent:79e4ee63-7a3b-4751-b8ac-15d93194de94",
       "underdog": "underdog_179011"
      },
@@ -869,8 +860,6 @@
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
-       "race_to_15_points",
-       "race_to_20_points",
        "team_total",
        "team_total_touchdowns",
        "total_field_goals",
@@ -906,7 +895,6 @@
       "polymarket_us": "nfl-ne-chi-2026-10-22",
       "rebet": "sr:match:71515926",
       "stake": "c0e5a61b-1f0b-4931-8f3c-d4815a7f3182",
-      "sx_bet": "L19776805",
       "thescorebet": "StandardEvent:98563422-6f9f-4844-9bd0-ddcdba1f046d"
      },
      "home": "Chicago Bears",
@@ -945,7 +933,6 @@
       "polymarket_us": "nfl-pit-no-2026-10-25",
       "rebet": "sr:match:71488628",
       "stake": "7096f4d2-a169-4fab-b58a-5b2bc5cb5bc8",
-      "sx_bet": "L18900793",
       "thescorebet": "StandardEvent:2a3d42b4-265b-4e64-9add-e7b57e49f3c3"
      },
      "home": "New Orleans Saints",
@@ -1052,7 +1039,6 @@
       "polymarket_us": "nfl-cle-ten-2026-10-25",
       "rebet": "sr:match:71515940",
       "stake": "167527db-8b7e-4499-b2db-86faa0f4a118",
-      "sx_bet": "L19776816",
       "thescorebet": "StandardEvent:81119f68-2e92-4353-be3b-0601ba3bc303"
      },
      "home": "Tennessee Titans",
@@ -1091,7 +1077,6 @@
       "polymarket_us": "nfl-tb-car-2026-10-25",
       "rebet": "sr:match:71515932",
       "stake": "8691f843-9a10-4f50-b194-a2ff241aef02",
-      "sx_bet": "L19776817",
       "thescorebet": "StandardEvent:fd76320b-886d-4060-859d-b51de1769e4c"
      },
      "home": "Carolina Panthers",
@@ -1130,7 +1115,6 @@
       "polymarket_us": "nfl-ind-min-2026-10-25",
       "rebet": "sr:match:71515936",
       "stake": "0e351e22-0de2-464e-a7ba-2c8ef13b9469",
-      "sx_bet": "L19796285",
       "thescorebet": "StandardEvent:7f6a29c1-4659-40bc-84e3-f18cedda6cc0"
      },
      "home": "Minnesota Vikings",
@@ -1204,7 +1188,6 @@
       "polymarket": "nfl_giants_texans_2026-10-25_b2",
       "polymarket_us": "nfl-nyg-hou-2026-10-25",
       "stake": "549228e3-bf08-451c-87de-c2a9bb1de6c0",
-      "sx_bet": "L19776807",
       "thescorebet": "StandardEvent:529ee6fb-e2ee-4984-ad20-4487a1c6f222"
      },
      "home": "Houston Texans",
@@ -1234,12 +1217,10 @@
       "fanduel": "36189004",
       "fliff": "407879_c_p_202_prematch",
       "kalshi": "KXNFLGAME-26OCT25DENARI",
-      "novig": "01a136e2-ed41-7f12-9786-25d6715adc49",
       "paddypower": "36189004",
       "polymarket": "nfl_broncos_cardinals_2026-10-25_b2",
       "polymarket_us": "nfl-den-ari-2026-10-25",
-      "stake": "00322416-51f7-4591-b138-15a248d3490b",
-      "sx_bet": "L19776821"
+      "stake": "00322416-51f7-4591-b138-15a248d3490b"
      },
      "home": "Arizona Cardinals",
      "sample": {
