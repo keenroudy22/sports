@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-17T20:09:14Z",
+  "updatedAt": "2026-10-17T20:18:21Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -470,7 +470,7 @@
               "id": "4870847",
               "name": "Ja'Kobi Lane",
               "position": "WR",
-              "status": "Injured Reserve",
+              "status": "Questionable",
               "injury": "Wrist",
               "reportedAt": "2026-10-17T15:43Z",
               "source": "https://www.espn.com/nfl/player/_/id/4870847/jakobi-lane"
@@ -2585,7 +2585,7 @@
               "id": "4259762",
               "name": "Jonathan Ford",
               "position": "DT",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Calf",
               "reportedAt": "2026-10-17T04:22Z",
               "source": "https://www.espn.com/nfl/player/_/id/4259762/jonathan-ford"
@@ -2612,7 +2612,7 @@
               "id": "4431487",
               "name": "Savion Williams",
               "position": "WR",
-              "status": "Injured Reserve",
+              "status": "Questionable",
               "injury": "Ankle",
               "reportedAt": "2026-10-17T02:07Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431487/savion-williams"
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-17T19:13Z",
+              "reportedAt": "2026-10-17T20:11Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -5530,9 +5530,9 @@
               "id": "4723820",
               "name": "Omar Cooper Jr.",
               "position": "WR",
-              "status": "Injured Reserve",
+              "status": "Questionable",
               "injury": "Ankle",
-              "reportedAt": "2026-10-17T16:52Z",
+              "reportedAt": "2026-10-17T20:11Z",
               "source": "https://www.espn.com/nfl/player/_/id/4723820/omar-cooper-jr"
             },
             {
@@ -7366,38 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "14",
-          "name": "Josh Wallace",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-16T21:41:53Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4572371/josh-wallace"
-        },
-        {
-          "teamId": "14",
-          "name": "Colby Parkinson",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-16T21:41:53Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4242557/colby-parkinson"
-        },
-        {
-          "teamId": "14",
-          "name": "Nate Landman",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-16T21:41:53Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4243181/nate-landman"
-        },
-        {
-          "teamId": "14",
-          "name": "Davis Allen",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-16T21:41:53Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4426553/davis-allen"
-        },
-        {
           "teamId": "2",
           "name": "Ty Johnson",
           "from": "Questionable",
@@ -7764,11 +7732,43 @@
           "to": "Injured Reserve",
           "observedAt": "2026-10-17T20:09:14Z",
           "source": "https://www.espn.com/nfl/player/_/id/4040715/jalen-hurts"
+        },
+        {
+          "teamId": "33",
+          "name": "Ja'Kobi Lane",
+          "from": "Injured Reserve",
+          "to": "Questionable",
+          "observedAt": "2026-10-17T20:18:21Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4870847/jakobi-lane"
+        },
+        {
+          "teamId": "9",
+          "name": "Jonathan Ford",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-17T20:18:21Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4259762/jonathan-ford"
+        },
+        {
+          "teamId": "9",
+          "name": "Savion Williams",
+          "from": "Injured Reserve",
+          "to": "Questionable",
+          "observedAt": "2026-10-17T20:18:21Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4431487/savion-williams"
+        },
+        {
+          "teamId": "20",
+          "name": "Omar Cooper Jr.",
+          "from": "Injured Reserve",
+          "to": "Questionable",
+          "observedAt": "2026-10-17T20:18:21Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4723820/omar-cooper-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-17T20:09:14Z",
-      "lastAttemptAt": "2026-10-17T20:09:14Z",
+      "checkedAt": "2026-10-17T20:18:21Z",
+      "lastAttemptAt": "2026-10-17T20:18:21Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-17T20:09:14Z",
-      "lastAttemptAt": "2026-10-17T20:09:14Z",
+      "checkedAt": "2026-10-17T20:18:21Z",
+      "lastAttemptAt": "2026-10-17T20:18:21Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
