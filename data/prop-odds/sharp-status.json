@@ -1,13 +1,13 @@
 {
- "at": "2026-10-17T17:15:35Z",
+ "at": "2026-10-17T17:24:40Z",
  "confirmed": {
-  "CFB-401856719": "2026-10-17T17:15:35Z",
-  "CFB-401856721": "2026-10-17T17:15:35Z",
+  "CFB-401856719": "2026-10-17T17:24:40Z",
+  "CFB-401856721": "2026-10-17T17:24:40Z",
   "CFB-401856722": "2026-10-17T16:24:17Z",
-  "CFB-401856723": "2026-10-17T17:15:35Z",
+  "CFB-401856723": "2026-10-17T17:24:40Z",
   "CFB-401856726": "2026-10-17T16:24:17Z",
   "CFB-401856809": "2026-10-17T16:24:17Z",
-  "CFB-401856828": "2026-10-17T17:15:35Z",
+  "CFB-401856828": "2026-10-17T17:24:40Z",
   "CFB-401856831": "2026-10-17T16:24:17Z",
   "CFB-401856832": "2026-10-17T16:24:17Z",
   "CFB-401858263": "2026-10-17T16:24:17Z",
@@ -22,10 +22,10 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1188,
-    "fanduel": 945
+    "draftkings": 1189,
+    "fanduel": 1043
    },
-   "eventsListed": 92,
+   "eventsListed": 93,
    "eventsMatched": 36,
    "games": 36,
    "marketTypes": {
@@ -38,14 +38,14 @@
     "player_passing_attempts": 32,
     "player_passing_completions": 25,
     "player_passing_touchdowns": 63,
-    "player_passing_yards": 276,
-    "player_receiving_yards": 803,
-    "player_receptions": 231,
+    "player_passing_yards": 275,
+    "player_receiving_yards": 786,
+    "player_receptions": 276,
     "player_rushing_attempts": 38,
-    "player_rushing_yards": 515
+    "player_rushing_yards": 587
    },
    "requestsLeft": 0,
-   "rows": 2133,
+   "rows": 2232,
    "slateGames": [
     "Western Michigan Broncos at Central Michigan Chippewas 2026-10-17T17:30Z",
     "Auburn Tigers at Georgia Bulldogs 2026-10-17T19:30Z",
@@ -119,7 +119,6 @@
       "home_team": "Wofford",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -163,7 +162,6 @@
       "home_team": "West Georgia",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -207,7 +205,6 @@
       "home_team": "Cornell",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -250,7 +247,6 @@
       "home_team": "North Dakota",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -294,7 +290,6 @@
       "home_team": "Stetson",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -356,7 +351,6 @@
       "home_team": "Tennessee Tech",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -397,7 +391,6 @@
       "home_team": "Stony Brook Seawolves",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -440,7 +433,6 @@
       "home_team": "Alabama A&M Bulldogs",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -483,7 +475,6 @@
       "home_team": "Arkansas-Pine Bluff Golden Lions",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -543,7 +534,6 @@
       "home_team": "Prairie View A&M Panthers",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -591,7 +581,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-17T17:05:00Z",
+     "start": "2026-10-17T17:25:00Z",
      "type": "outright"
     },
     {
@@ -684,6 +674,7 @@
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
        "last_touchdown_scorer",
+       "longest_touchdown_yards",
        "match_result_both_teams_to_score",
        "moneyline",
        "most_points_player",
@@ -722,6 +713,7 @@
        "total_points",
        "total_points_band",
        "total_points_odd_even",
+       "total_punts",
        "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
