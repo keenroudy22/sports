@@ -3,7 +3,7 @@
   "MLB": {
    "gamesGraded": 28,
    "gamesQuoted": 30,
-   "moneylineSnapshots": 123,
+   "moneylineSnapshots": 124,
    "seasons": [
     {
      "gamesGraded": 13,
@@ -18,14 +18,14 @@
      "season": 2026
     }
    ],
-   "snapshots": 123,
+   "snapshots": 124,
    "status": "capturing",
-   "totalSnapshots": 123
+   "totalSnapshots": 124
   },
   "NHL": {
-   "gamesGraded": 116,
+   "gamesGraded": 117,
    "gamesQuoted": 132,
-   "moneylineSnapshots": 512,
+   "moneylineSnapshots": 517,
    "seasons": [
     {
      "gamesGraded": 39,
@@ -34,18 +34,44 @@
      "season": 2027
     },
     {
-     "gamesGraded": 77,
+     "gamesGraded": 78,
      "gamesQuoted": 91,
      "phase": "regular",
      "season": 2027
     }
    ],
-   "snapshots": 512,
+   "snapshots": 517,
    "status": "capturing",
-   "totalSnapshots": 512
+   "totalSnapshots": 517
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "NJ",
+    "id": "11",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nj.png",
+    "name": "New Jersey Devils",
+    "shortName": "Devils"
+   },
+   "awayScore": 2,
+   "gameId": "NHL-401892519",
+   "gradedAt": "2026-10-17T21:25:04Z",
+   "home": {
+    "abbreviation": "WSH",
+    "id": "23",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/wsh.png",
+    "name": "Washington Capitals",
+    "shortName": "Capitals"
+   },
+   "homeScore": 4,
+   "kickoff": "2026-10-17T17:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "BOS",
@@ -2612,32 +2638,7 @@
    "season": 2027,
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "ATL",
-    "id": "15",
-    "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/atl.png",
-    "name": "Atlanta Braves",
-    "shortName": "Braves"
-   },
-   "awayScore": 3,
-   "gameId": "MLB-401908014",
-   "gradedAt": "2026-10-05T03:30:04Z",
-   "home": {
-    "abbreviation": "LAD",
-    "id": "19",
-    "logo": "https://a.espncdn.com/i/teamlogos/mlb/500/scoreboard/lad.png",
-    "name": "Los Angeles Dodgers",
-    "shortName": "Dodgers"
-   },
-   "homeScore": 2,
-   "kickoff": "2026-10-05T00:00:00Z",
-   "league": "MLB",
-   "season": 2026,
-   "statusDetail": "Final",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-10-17T21:20:32Z"
+ "updatedAt": "2026-10-17T21:25:04Z"
 }
