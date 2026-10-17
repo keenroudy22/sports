@@ -1,21 +1,21 @@
 {
- "at": "2026-10-17T02:03:26Z",
+ "at": "2026-10-17T03:28:19Z",
  "confirmed": {
   "CFB-401856719": "2026-10-17T00:50:30Z",
-  "CFB-401856720": "2026-10-17T02:03:26Z",
+  "CFB-401856720": "2026-10-17T03:28:19Z",
   "CFB-401856721": "2026-10-17T00:50:30Z",
   "CFB-401856723": "2026-10-17T00:50:30Z",
-  "CFB-401856724": "2026-10-17T02:03:26Z",
+  "CFB-401856724": "2026-10-17T03:28:19Z",
   "CFB-401856725": "2026-10-17T00:50:30Z",
   "CFB-401856726": "2026-10-16T14:02:48Z",
   "CFB-401856828": "2026-10-17T00:50:30Z",
-  "CFB-401856829": "2026-10-17T02:03:26Z",
-  "CFB-401856830": "2026-10-17T02:03:26Z",
+  "CFB-401856829": "2026-10-17T03:28:19Z",
+  "CFB-401856830": "2026-10-17T03:28:19Z",
   "CFB-401856832": "2026-10-16T08:36:00Z",
   "CFB-401858263": "2026-10-16T08:36:00Z",
   "CFB-401858264": "2026-10-17T00:50:30Z",
   "CFB-401858266": "2026-10-17T00:50:30Z",
-  "CFB-401858267": "2026-10-17T02:03:26Z",
+  "CFB-401858267": "2026-10-17T03:28:19Z",
   "CFB-401858268": "2026-10-17T01:08:06Z",
   "CFB-401858488": "2026-10-17T01:08:06Z",
   "CFB-401858489": "2026-10-17T00:50:30Z",
@@ -28,11 +28,11 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1219,
-    "fanduel": 1062
+    "draftkings": 1213,
+    "fanduel": 1028
    },
-   "eventsListed": 131,
-   "eventsMatched": 51,
+   "eventsListed": 129,
+   "eventsMatched": 52,
    "games": 52,
    "marketTypes": {
     "player_assists": 2,
@@ -45,17 +45,17 @@
     "player_passing_attempts": 21,
     "player_passing_completions": 19,
     "player_passing_touchdowns": 57,
-    "player_passing_yards": 227,
-    "player_receiving_yards": 874,
+    "player_passing_yards": 228,
+    "player_receiving_yards": 866,
     "player_receptions": 203,
     "player_rushing_attempts": 35,
-    "player_rushing_yards": 631,
+    "player_rushing_yards": 598,
     "player_sacks": 3,
     "player_tackles": 2,
     "player_tackles_+_assists": 2
    },
    "requestsLeft": 0,
-   "rows": 2281,
+   "rows": 2241,
    "slateGames": [
     "Mississippi State Bulldogs at LSU Tigers 2026-10-17T16:00Z",
     "Florida Gators at Texas Longhorns 2026-10-17T16:00Z",
@@ -168,6 +168,7 @@
       "paddypower": "36179590",
       "polymarket": "nfl_centralconnecticutst_mercyhurst_2026-10-17_b2",
       "prophetx": "1700102662",
+      "rebet": "sr:match:70993198",
       "sbobet": "10735396",
       "smarkets": "45379465",
       "sportzino": "sz-18045666",
@@ -183,7 +184,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-17T16:00:00Z",
@@ -286,6 +290,7 @@
       "paddypower": "36179568",
       "polymarket": "nfl_hampton_sacredheart_2026-10-17_b2",
       "prophetx": "1700102656",
+      "rebet": "sr:match:70993880",
       "smarkets": "45379472",
       "sportzino": "sz-18045683",
       "stake": "88698f94-d051-4ae1-bcc5-a82081590b7b",
@@ -300,7 +305,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-17T16:00:00Z",
@@ -321,7 +329,7 @@
       "kalshi": "KXNCAAFSPREAD-26OCT17NHCRMU",
       "matchbook": "mb-34603167011500023",
       "novig": "01a12171-954d-7513-80a6-8fe3f27a0263",
-      "onexbet": "762221095",
+      "onexbet": "762280005",
       "paddypower": "36179588",
       "polymarket": "nfl_newhavencollege_robertmorris_2026-10-17_b2",
       "prophetx": "1700102661",
@@ -362,7 +370,7 @@
       "fliff": "419316_c_p_209_prematch",
       "goldrush": "31245614",
       "hardrock": "1501549000803877275",
-      "kalshi": "KXNCAAF1H-26OCT17URIYALE",
+      "kalshi": "KXNCAAFSPREAD-26OCT17URIYALE",
       "matchbook": "mb-34606587223400023",
       "novig": "01a12171-8e58-7143-862b-21a87b1d77ef",
       "onexbet": "762042902",
@@ -622,7 +630,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-17T01:46:00Z",
+     "start": "2026-10-17T03:27:00Z",
      "type": "outright"
     },
     {
@@ -647,7 +655,7 @@
       "gemini": "NFL-2610200015-WAS-SF-T",
       "goldrush": "31140283",
       "hardrock": "2116778469953241503",
-      "kalshi": "KXNFLREC-26OCT19WASSF-SFCMCCAFFREY23-9",
+      "kalshi": "KXNFLRSHYDS-26OCT19WASSF-WASJCROSKEYMERRITT22-50",
       "ladbrokes": "3b7aaf8f-ad5a-4b25-99e0-de1f97aa53b9",
       "matchbook": "mb-33322310988800023",
       "novig": "01a112eb-5439-7743-96e1-9e00db6695ca",
