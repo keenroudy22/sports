@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-17T19:06:30Z",
+  "updatedAt": "2026-10-17T19:15:59Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-17T18:34Z",
+              "reportedAt": "2026-10-17T19:11Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-17T18:59Z",
+              "reportedAt": "2026-10-17T19:13Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -5987,6 +5987,15 @@
           "name": "Pittsburgh Steelers",
           "players": [
             {
+              "id": "4431492",
+              "name": "Roman Wilson",
+              "position": "WR",
+              "status": "Injured Reserve",
+              "injury": "Finger",
+              "reportedAt": "2026-10-17T19:09Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4431492/roman-wilson"
+            },
+            {
               "id": "4361411",
               "name": "Pat Freiermuth",
               "position": "TE",
@@ -6129,15 +6138,6 @@
               "injury": null,
               "reportedAt": "2026-10-12T19:27Z",
               "source": "https://www.espn.com/nfl/player/_/id/4569987/jaylen-warren"
-            },
-            {
-              "id": "4431492",
-              "name": "Roman Wilson",
-              "position": "WR",
-              "status": "Out",
-              "injury": "Finger",
-              "reportedAt": "2026-10-12T19:17Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4431492/roman-wilson"
             },
             {
               "id": "17372",
@@ -7185,8 +7185,8 @@
               "id": "3121422",
               "name": "Terry McLaurin",
               "position": "WR",
-              "status": "Questionable",
-              "injury": "Hamstring",
+              "status": "Active",
+              "injury": null,
               "reportedAt": "2026-10-17T15:33Z",
               "source": "https://www.espn.com/nfl/player/_/id/3121422/terry-mclaurin"
             },
@@ -7365,22 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "21",
-          "name": "E.J. Jenkins",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-16T21:32:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4248557/ej-jenkins"
-        },
-        {
-          "teamId": "21",
-          "name": "Hollywood Brown",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-16T21:32:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4241372/hollywood-brown"
-        },
         {
           "teamId": "21",
           "name": "Dontayvion Wicks",
@@ -7764,11 +7748,27 @@
           "to": "Out",
           "observedAt": "2026-10-17T19:06:30Z",
           "source": "https://www.espn.com/nfl/player/_/id/4362088/demarvion-overshown"
+        },
+        {
+          "teamId": "23",
+          "name": "Roman Wilson",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-17T19:15:59Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4431492/roman-wilson"
+        },
+        {
+          "teamId": "28",
+          "name": "Terry McLaurin",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-17T19:15:59Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3121422/terry-mclaurin"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-17T19:06:30Z",
-      "lastAttemptAt": "2026-10-17T19:06:30Z",
+      "checkedAt": "2026-10-17T19:15:59Z",
+      "lastAttemptAt": "2026-10-17T19:15:59Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-17T19:06:30Z",
-      "lastAttemptAt": "2026-10-17T19:06:30Z",
+      "checkedAt": "2026-10-17T19:15:59Z",
+      "lastAttemptAt": "2026-10-17T19:15:59Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
