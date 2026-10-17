@@ -2858,7 +2858,6 @@ def release_private(now, log=log, only=None):
     channel = buffer_post.x_channel(wanted='keenkooks')
     released = []
     busy = buffer_post.taken(log_book, now)
-    last = max(busy, default=None)
     for row in list(book['plays']):
         key = row.get('id')
         if only is not None and key not in only:
@@ -2877,8 +2876,9 @@ def release_private(now, log=log, only=None):
         kickoff = starts[0]
         target = post_windows.target(row.get('league'), kickoff) + post_windows.jitter(key)
         due = max(target, now + post_windows.DISCORD_PLAY_LEAD)
-        if last is not None:
-            due = max(due, last + buffer_post.SPACING)
+        # Find the first open slot from this play's own target.  A later
+        # research/community post must not push an earlier official release
+        # behind it; free_slot already preserves spacing around every post.
         due = buffer_post.free_slot(due, busy)
         if due > post_windows.deadline(row.get('league'), kickoff, now, bool(pick.get('replacementOf'))):
             release_queue.update(CONF, key, held=True, heldAt=stamp(now),
@@ -2993,7 +2993,6 @@ def release_private(now, log=log, only=None):
         release_queue.remove(CONF, key)
         released.append(key)
         busy.append(due)
-        last = due
         log(f'buffer: {key} scheduled after Discord release for {due.astimezone(EASTERN):%-I:%M %p} ET')
     return released
 

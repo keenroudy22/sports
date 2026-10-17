@@ -11,9 +11,17 @@ from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import run
+import buffer_post
 
 
 class SlotTests(unittest.TestCase):
+    def test_earlier_official_release_is_not_pushed_behind_later_research(self):
+        due = datetime(2026, 10, 17, 13, 35, tzinfo=timezone.utc)
+        busy = [datetime(2026, 10, 17, 13, 24, tzinfo=timezone.utc),
+                datetime(2026, 10, 17, 14, 36, tzinfo=timezone.utc)]
+        self.assertEqual(buffer_post.free_slot(due, busy),
+                         datetime(2026, 10, 17, 13, 44, tzinfo=timezone.utc))
+
     def test_results_command_is_a_current_slot_free_feed_settlement_pass(self):
         with mock.patch.object(run, 'run', return_value=0) as desk:
             self.assertEqual(run.main(['results', '--now', '2026-10-13T04:55:00Z']), 0)
