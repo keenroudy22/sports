@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-17T16:36:32Z",
+  "updatedAt": "2026-10-17T16:46:54Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-17T16:06Z",
+              "reportedAt": "2026-10-17T16:25Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Calf",
-              "reportedAt": "2026-10-17T16:25Z",
+              "reportedAt": "2026-10-17T16:42Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -5987,6 +5987,24 @@
           "name": "Pittsburgh Steelers",
           "players": [
             {
+              "id": "4361411",
+              "name": "Pat Freiermuth",
+              "position": "TE",
+              "status": "Questionable",
+              "injury": "Calf",
+              "reportedAt": "2026-10-17T16:29Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4361411/pat-freiermuth"
+            },
+            {
+              "id": "4047650",
+              "name": "DK Metcalf",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-17T16:27Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4047650/dk-metcalf"
+            },
+            {
               "id": "3929846",
               "name": "DeShon Elliott",
               "position": "S",
@@ -6021,15 +6039,6 @@
               "injury": null,
               "reportedAt": "2026-10-16T23:54Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685261/germie-bernard"
-            },
-            {
-              "id": "4047650",
-              "name": "DK Metcalf",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-16T19:42Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4047650/dk-metcalf"
             },
             {
               "id": "4038815",
@@ -6138,15 +6147,6 @@
               "injury": null,
               "reportedAt": "2026-10-12T15:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/17372/chris-boswell"
-            },
-            {
-              "id": "4361411",
-              "name": "Pat Freiermuth",
-              "position": "TE",
-              "status": "Active",
-              "injury": "Calf",
-              "reportedAt": "2026-10-12T00:29Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4361411/pat-freiermuth"
             },
             {
               "id": "8439",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "17",
-          "name": "Kevin Byard",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-16T21:32:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/2574056/kevin-byard"
-        },
-        {
-          "teamId": "17",
           "name": "Charles Woods",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-10-17T16:36:32Z",
           "source": "https://www.espn.com/nfl/player/_/id/4047650/dk-metcalf"
+        },
+        {
+          "teamId": "23",
+          "name": "Pat Freiermuth",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-17T16:46:54Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361411/pat-freiermuth"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-17T16:36:32Z",
-      "lastAttemptAt": "2026-10-17T16:36:32Z",
+      "checkedAt": "2026-10-17T16:46:54Z",
+      "lastAttemptAt": "2026-10-17T16:46:54Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-17T16:36:32Z",
-      "lastAttemptAt": "2026-10-17T16:36:32Z",
+      "checkedAt": "2026-10-17T16:46:54Z",
+      "lastAttemptAt": "2026-10-17T16:46:54Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
