@@ -157,6 +157,22 @@ class SlotTests(unittest.TestCase):
         self.assertTrue(run.should_research_candidate(nfl, 2, 2.0, False))
         self.assertTrue(run.should_research_candidate(nfl, 27, 16.0, True))
 
+    def test_research_budget_skips_losing_prices_and_reserves_market_families(self):
+        status = {'asked': 0, 'families': {}}
+        losing = {'athleteId': '1', '_selection': {'anchoredChance': .49, 'breakEven': .50}}
+        self.assertFalse(run.research_slot_available(losing, status))
+        for athlete in range(5):
+            prop = {'athleteId': str(athlete), '_selection': {'anchoredChance': .55, 'breakEven': .50}}
+            self.assertTrue(run.research_slot_available(prop, status))
+            status['asked'] += 1
+            run.note_research_slot(prop, status)
+        sixth = {'athleteId': '6', '_selection': {'anchoredChance': .56, 'breakEven': .50}}
+        side = {'marketType': 'spread', '_selection': {'anchoredChance': .56, 'breakEven': .50}}
+        total = {'marketType': 'total', '_selection': {'anchoredChance': .56, 'breakEven': .50}}
+        self.assertFalse(run.research_slot_available(sixth, status))
+        self.assertTrue(run.research_slot_available(side, status))
+        self.assertTrue(run.research_slot_available(total, status))
+
     def test_large_slate_builds_defense_history_once_per_league(self):
         ctx = run.gates.Context(now=datetime(2026, 10, 17, 12, 30, tzinfo=timezone.utc), records=[{'id': 'stored'}])
         with mock.patch.object(run.features, 'defense_logs', return_value={'1': []}) as build:

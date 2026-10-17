@@ -1469,6 +1469,38 @@ def remember(decided, now, slot, status):
 
 
 RESEARCH_LIMIT = 8          # owner-plan daily news lookups, strongest first
+RESEARCH_FAMILY_LIMITS = {'prop': 5, 'side': 2, 'total': 1}
+
+
+def research_family(candidate):
+    if candidate.get('athleteId'):
+        return 'prop'
+    return 'total' if gates.market_key(candidate) == 'total' else 'side'
+
+
+def research_slot_available(candidate, research_status):
+    """Keep the small web budget on positive-value rows and spread it across the board.
+
+    A large college slate used to spend every lookup on the first eight props,
+    including rows whose anchored chance did not beat the price. That made all
+    later sides fail the availability gate without ever being checked.
+    """
+    if research_status.get('asked', 0) >= RESEARCH_LIMIT:
+        return False
+    numbers = candidate.get('_selection') or {}
+    chance = numbers.get('anchoredChance')
+    needed = numbers.get('breakEven')
+    if isinstance(chance, (int, float)) and isinstance(needed, (int, float)) and chance <= needed:
+        return False
+    family = research_family(candidate)
+    used = (research_status.get('families') or {}).get(family, 0)
+    return used < RESEARCH_FAMILY_LIMITS[family]
+
+
+def note_research_slot(candidate, research_status):
+    family = research_family(candidate)
+    families = research_status.setdefault('families', {})
+    families[family] = families.get(family, 0) + 1
 FAVORITE_EDGE = 2.0         # a game-line favorite needs the calibrated chance this many points clear of break-even
 
 
@@ -2245,7 +2277,7 @@ def _run(args, now, slot, kinds, status):
     reasons = {}          # the reason each published play's post will give (data/x-reasons.json)
     # The web researcher reads the news for every play that passes the rules, on the runs that publish.
     research_on = researcher.enabled() and selection_run
-    status['research'] = {'on': research_on, 'asked': 0, 'verified': 0, 'dropped': 0}
+    status['research'] = {'on': research_on, 'asked': 0, 'verified': 0, 'dropped': 0, 'families': {}}
     potd_market = []      # fresh priced board markets; only matching official singles can receive the POTD label
     best_pool = []        # fully checked rows; ranked by the logged Kitchen score before publication
     gut_pool = []         # fully checked fallbacks; chosen only after every Best bet has been considered
@@ -2287,13 +2319,14 @@ def _run(args, now, slot, kinds, status):
         gap = (candidate.get('_selection') or {}).get('gap', 0)
         class_a = any(row.get('class') == 'A' and row.get('direction') == 'for' for row in pre_reasons)
         needs_market_check = should_research_candidate(candidate, candidate_rank, gap, class_a)
-        if research_on and needs_market_check and status['research']['asked'] < RESEARCH_LIMIT:
+        if research_on and needs_market_check and research_slot_available(candidate, status['research']):
             game = ctx.games[candidate['gameIds'][0]]
             kept, dropped = researcher.research(game, gates.market_key(candidate), gates.side_of(candidate), now=now,
                                                 player=candidate.get('_player') or ctx.names.get(str(candidate.get('athleteId') or '')),
                                                 quarterbacks=quarterbacks(game, ctx))
             candidate['_research'] = [dict(f, verified=True) for f in kept] + [dict(f, verified=False) for f in dropped]
             status['research']['asked'] += 1
+            note_research_slot(candidate, status['research'])
             status['research']['verified'] += len(kept)
             status['research']['dropped'] += len(dropped)
             facts += kept
