@@ -1472,6 +1472,14 @@ RESEARCH_LIMIT = 8          # owner-plan daily news lookups, strongest first
 RESEARCH_FAMILY_LIMITS = {'prop': 5, 'side': 2, 'total': 1}
 
 
+def straight_target(day, games):
+    """Minimum honest straight-card depth for a large Saturday/Sunday slate."""
+    slate = sum(1 for game in games.values()
+                if game.get('league') in ('NFL', 'CFB')
+                and eastern_date(gates.when(game['kickoff'])) == day)
+    return 5 if day and day.weekday() in (5, 6) and slate >= 10 else 1
+
+
 def research_family(candidate):
     if candidate.get('athleteId'):
         return 'prop'
@@ -2406,9 +2414,17 @@ def _run(args, now, slot, kinds, status):
         reason = next((row.get('text') for row in candidate['dossier']['reasons'] if row.get('text')), None)
         if reason:
             reasons[candidate['id']] = reason
-    # A football day with no Best bet gets the top fully checked Gut call. Every
-    # primetime NFL game gets its own eligible fallback; a dark game is alerted.
+    # A large weekend slate gets up to the owner's five-play floor from fully
+    # checked positive-value fallbacks after every Best bet is considered.
+    # Every primetime NFL game also gets its own eligible fallback.
     days_with_play = {gates.slate_day(pick, ctx) for _, _, pick in published if not pick.get('legs')}
+    straight_counts = defaultdict(int)
+    for key, first in ctx.first.items():
+        pick = dict(first, **(ctx.latest.get(key) or {}))
+        if pick.get('lane') not in gates.OFFICIAL_STRAIGHT_LANES or pick.get('held') \
+                or pick.get('withdrawn') or pick.get('pulledBeforePost') or pick.get('status') != 'active':
+            continue
+        straight_counts[gates.slate_day(pick, ctx)] += 1
     existing_games = official_coverage_game_ids(ctx)
     today = eastern_date(now)
     prime_games = {game['id'] for game in games.values() if selection_run and game.get('league') == 'NFL'
@@ -2421,7 +2437,8 @@ def _run(args, now, slot, kinds, status):
         day = gates.slate_day(candidate, ctx)
         need_prime = game_id in prime_games and game_id not in existing_games \
             and all(game_id not in pick['gameIds'] for _, pick, _ in selected_guts)
-        need_day = day not in days_with_play and all(gates.slate_day(pick, ctx) != day for _, pick, _ in selected_guts)
+        selected_on_day = sum(gates.slate_day(pick, ctx) == day for _, pick, _ in selected_guts)
+        need_day = straight_counts[day] + selected_on_day < straight_target(day, games)
         if need_prime or need_day:
             duplicate = gates.not_duplicate(candidate, ctx)
             cap = gates.card_cap(candidate, ctx)

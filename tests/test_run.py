@@ -173,6 +173,14 @@ class SlotTests(unittest.TestCase):
         self.assertTrue(run.research_slot_available(side, status))
         self.assertTrue(run.research_slot_available(total, status))
 
+    def test_large_weekend_slate_targets_five_honest_straights(self):
+        saturday = datetime(2026, 10, 17).date()
+        games = {str(i): {'league': 'CFB', 'kickoff': f'2026-10-17T{16 + i % 8:02d}:00:00Z'}
+                 for i in range(12)}
+        self.assertEqual(run.straight_target(saturday, games), 5)
+        self.assertEqual(run.straight_target(saturday, dict(list(games.items())[:9])), 1)
+        self.assertEqual(run.straight_target(datetime(2026, 10, 19).date(), games), 1)
+
     def test_large_slate_builds_defense_history_once_per_league(self):
         ctx = run.gates.Context(now=datetime(2026, 10, 17, 12, 30, tzinfo=timezone.utc), records=[{'id': 'stored'}])
         with mock.patch.object(run.features, 'defense_logs', return_value={'1': []}) as build:
