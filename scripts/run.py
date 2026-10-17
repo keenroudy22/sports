@@ -2061,6 +2061,24 @@ def write_status(status, path=None):
     path.write_text(json.dumps(status, indent=1, default=str) + '\n', encoding='utf-8')
 
 
+def mark_admitted_pending(ctx, admitted):
+    """Keep a newly built admission private without assuming it was already in every store view.
+
+    Ticket builders add their enriched row to ``first`` before release.  A brand-new
+    Climb rung has no matching ``latest`` row yet, so seed that view from ``first``
+    instead of letting the whole desk run crash while marking it pending.
+    """
+    for _, _, candidate in admitted:
+        candidate['_pendingRelease'] = True
+        key = candidate.get('id')
+        if not key:
+            continue
+        first = ctx.first.setdefault(key, dict(candidate))
+        first['_pendingRelease'] = True
+        latest = ctx.latest.setdefault(key, dict(first))
+        latest['_pendingRelease'] = True
+
+
 def run(args):
     now = gates.when(args.now) if args.now else datetime.now(timezone.utc)
     slot = slot_for(now, args.slot)
@@ -2459,11 +2477,7 @@ def _run(args, now, slot, kinds, status):
     # the Discord-first delivery job releases it; until then it lives solely
     # under ~/.config/keenroudy/pending/.
     admitted = list(published)
-    for _, _, candidate in admitted:
-        candidate['_pendingRelease'] = True
-        if candidate.get('id') in ctx.first:
-            ctx.first[candidate['id']]['_pendingRelease'] = True
-            ctx.latest[candidate['id']]['_pendingRelease'] = True
+    mark_admitted_pending(ctx, admitted)
     published = []
 
     by_league = defaultdict(lambda: ([], [], []))

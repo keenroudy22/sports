@@ -17,6 +17,17 @@ NOW = datetime(2026, 10, 11, 12, 0, tzinfo=timezone.utc)
 
 
 class ReleaseQueueTests(unittest.TestCase):
+    def test_new_climb_rung_without_latest_row_is_marked_pending(self):
+        rung = {'id': 'CFB-2026-W7-ladder-1017-c3s2-dk', 'title': '80/20 Climb #3 · Step 2'}
+        ctx = SimpleNamespace(first={rung['id']: dict(rung, league='CFB', kind='parlays')}, latest={})
+
+        run.mark_admitted_pending(ctx, [('CFB', 'parlays', rung)])
+
+        self.assertTrue(rung['_pendingRelease'])
+        self.assertTrue(ctx.first[rung['id']]['_pendingRelease'])
+        self.assertTrue(ctx.latest[rung['id']]['_pendingRelease'])
+        self.assertEqual(ctx.latest[rung['id']]['kind'], 'parlays')
+
     def test_released_card_archive_preserves_exact_png_bytes(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
