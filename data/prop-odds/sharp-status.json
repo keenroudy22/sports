@@ -1,23 +1,23 @@
 {
- "at": "2026-10-17T00:50:30Z",
+ "at": "2026-10-17T01:08:06Z",
  "confirmed": {
   "CFB-401856719": "2026-10-17T00:50:30Z",
-  "CFB-401856720": "2026-10-17T00:50:30Z",
+  "CFB-401856720": "2026-10-17T01:08:06Z",
   "CFB-401856721": "2026-10-17T00:50:30Z",
   "CFB-401856723": "2026-10-17T00:50:30Z",
-  "CFB-401856724": "2026-10-17T00:50:30Z",
+  "CFB-401856724": "2026-10-17T01:08:06Z",
   "CFB-401856725": "2026-10-17T00:50:30Z",
   "CFB-401856726": "2026-10-16T14:02:48Z",
   "CFB-401856828": "2026-10-17T00:50:30Z",
-  "CFB-401856829": "2026-10-17T00:50:30Z",
-  "CFB-401856830": "2026-10-17T00:50:30Z",
+  "CFB-401856829": "2026-10-17T01:08:06Z",
+  "CFB-401856830": "2026-10-17T01:08:06Z",
   "CFB-401856832": "2026-10-16T08:36:00Z",
   "CFB-401858263": "2026-10-16T08:36:00Z",
   "CFB-401858264": "2026-10-17T00:50:30Z",
   "CFB-401858266": "2026-10-17T00:50:30Z",
-  "CFB-401858267": "2026-10-17T00:50:30Z",
-  "CFB-401858268": "2026-10-17T00:50:30Z",
-  "CFB-401858488": "2026-10-17T00:50:30Z",
+  "CFB-401858267": "2026-10-17T01:08:06Z",
+  "CFB-401858268": "2026-10-17T01:08:06Z",
+  "CFB-401858488": "2026-10-17T01:08:06Z",
   "CFB-401858489": "2026-10-17T00:50:30Z",
   "CFB-401858490": "2026-10-17T00:50:30Z",
   "CFB-401858491": "2026-10-17T00:50:30Z",
@@ -28,34 +28,31 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 3956,
-    "fanduel": 3772
+    "draftkings": 918,
+    "fanduel": 1256
    },
    "eventsListed": 128,
    "eventsMatched": 51,
    "games": 52,
    "marketTypes": {
-    "player_assists": 6,
-    "player_field_goals_made": 20,
-    "player_kicking_points": 20,
-    "player_longest_passing_completion": 24,
-    "player_longest_reception": 93,
-    "player_longest_rush": 46,
-    "player_passing_+_rushing_yards": 280,
-    "player_passing_attempts": 126,
-    "player_passing_completions": 107,
-    "player_passing_touchdowns": 233,
-    "player_passing_yards": 955,
-    "player_receiving_yards": 2890,
-    "player_receptions": 783,
-    "player_rushing_attempts": 144,
-    "player_rushing_yards": 1979,
-    "player_sacks": 10,
-    "player_tackles": 6,
-    "player_tackles_+_assists": 6
+    "player_assists": 2,
+    "player_field_goals_made": 5,
+    "player_kicking_points": 5,
+    "player_longest_passing_completion": 6,
+    "player_longest_reception": 23,
+    "player_longest_rush": 11,
+    "player_passing_+_rushing_yards": 50,
+    "player_passing_attempts": 35,
+    "player_passing_completions": 30,
+    "player_passing_touchdowns": 66,
+    "player_passing_yards": 267,
+    "player_receiving_yards": 853,
+    "player_receptions": 231,
+    "player_rushing_attempts": 37,
+    "player_rushing_yards": 553
    },
    "requestsLeft": 0,
-   "rows": 7728,
+   "rows": 2174,
    "slateGames": [
     "Mississippi State Bulldogs at LSU Tigers 2026-10-17T16:00Z",
     "Florida Gators at Texas Longhorns 2026-10-17T16:00Z",
@@ -162,7 +159,7 @@
       "fliff": "419312_c_p_209_prematch",
       "goldrush": "31245963",
       "hardrock": "5214713657451217298",
-      "kalshi": "KXNCAAF1H-26OCT17CCSUMHU",
+      "kalshi": "KXNCAAFSPREAD-26OCT17CCSUMHU",
       "matchbook": "mb-34621618481900023",
       "novig": "01a11ed4-651c-7383-992f-780dd6e00544",
       "onexbet": "761993937",
@@ -196,7 +193,7 @@
       "fanduel": "36179605",
       "fliff": "419334_c_p_209_prematch",
       "goldrush": "31255417",
-      "kalshi": "KXNCAAF1H-26OCT17CHSNCAT",
+      "kalshi": "KXNCAAFSPREAD-26OCT17CHSNCAT",
       "novig": "01a12171-89bd-7423-b103-85b7b0966bf1",
       "onexbet": "762232240",
       "paddypower": "36179605",
@@ -216,7 +213,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-17T16:00:00Z",
@@ -234,7 +234,7 @@
       "fliff": "419326_c_p_209_prematch",
       "goldrush": "31247354",
       "hardrock": "8051014312023687599",
-      "kalshi": "KXNCAAF1H-26OCT17DUQSTNH",
+      "kalshi": "KXNCAAFSPREAD-26OCT17DUQSTNH",
       "novig": "01a121a8-5ba0-7291-b0d8-32eaaffb2d72",
       "onexbet": "761555369",
       "paddypower": "36179594",
@@ -255,7 +255,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-17T16:00:00Z",
@@ -335,7 +338,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-17T16:00:00Z",
@@ -375,7 +381,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-17T16:00:00Z",
@@ -392,7 +401,7 @@
       "fliff": "419322_c_p_209_prematch",
       "goldrush": "31246368",
       "hardrock": "6924013712437281164",
-      "kalshi": "KXNCAAF1H-26OCT17BRYME",
+      "kalshi": "KXNCAAFSPREAD-26OCT17BRYME",
       "matchbook": "mb-34621846212100023",
       "novig": "01a121a8-5dc7-75e2-96c2-1107fd7caeaf",
       "onexbet": "762042903",
@@ -431,7 +440,7 @@
       "fliff": "419314_c_p_209_prematch",
       "goldrush": "31245847",
       "hardrock": "3294325799636828555",
-      "kalshi": "KXNCAAF1H-26OCT17DAYBUT",
+      "kalshi": "KXNCAAFSPREAD-26OCT17DAYBUT",
       "matchbook": "mb-34603626529200023",
       "novig": "01a121a8-636b-7cc0-b478-142a77faed45",
       "onexbet": "761993940",
@@ -610,7 +619,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-17T00:51:00Z",
+     "start": "2026-10-17T01:06:00Z",
      "type": "outright"
     },
     {
@@ -636,7 +645,7 @@
       "gemini": "NFL-2610200015-WAS-SF-T",
       "goldrush": "31140283",
       "hardrock": "2116778469953241503",
-      "kalshi": "KXNFLRSHYDS-26OCT19WASSF-WASJCROSKEYMERRITT22-50",
+      "kalshi": "KXNFLFFPTS-26OCT19WASSF-SFSFDST-7P3",
       "ladbrokes": "3b7aaf8f-ad5a-4b25-99e0-de1f97aa53b9",
       "matchbook": "mb-33322310988800023",
       "novig": "01a112eb-5439-7743-96e1-9e00db6695ca",
@@ -743,6 +752,7 @@
        "player_passing_yards",
        "player_points",
        "player_receiving_targets",
+       "player_receiving_touchdowns",
        "player_receiving_yards",
        "player_receptions",
        "player_rushing_+_receiving_yards",
