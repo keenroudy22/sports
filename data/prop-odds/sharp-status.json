@@ -1,10 +1,10 @@
 {
- "at": "2026-10-17T23:38:19Z",
+ "at": "2026-10-17T23:46:38Z",
  "confirmed": {
-  "CFB-401856833": "2026-10-17T23:38:19Z",
-  "CFB-401858269": "2026-10-17T23:38:19Z",
-  "CFB-401858492": "2026-10-17T23:38:19Z",
-  "CFB-401864521": "2026-10-17T23:38:19Z",
+  "CFB-401856833": "2026-10-17T23:46:38Z",
+  "CFB-401858269": "2026-10-17T23:46:38Z",
+  "CFB-401858492": "2026-10-17T23:46:38Z",
+  "CFB-401864521": "2026-10-17T23:46:38Z",
   "NFL-401872997": "2026-10-17T23:18:58Z",
   "NFL-401872998": "2026-10-17T23:18:58Z",
   "NFL-401872999": "2026-10-17T23:18:58Z",
@@ -20,7 +20,7 @@
     "draftkings": 811,
     "fanduel": 658
    },
-   "eventsListed": 17,
+   "eventsListed": 16,
    "eventsMatched": 9,
    "games": 9,
    "marketTypes": {
@@ -174,7 +174,7 @@
      "away": "South Alabama",
      "external": {
       "draftkings": "34827169",
-      "gemini": "NCAAF-2610202330-USA-MRSH-S",
+      "gemini": "NCAAF-2610202330-USA-MRSH-M",
       "kalshi": "KXNCAAFGAME-26OCT20USAMRSH",
       "novig": "01a1327d-6f5f-7913-a88c-e152507980b5",
       "onexbet": "761948832",
@@ -253,55 +253,6 @@
      "type": "fixture"
     },
     {
-     "away": "Auburn Tigers",
-     "external": {
-      "betfair": "20261017DE937897",
-      "betfred": "36464074",
-      "betmgm": "6:46846",
-      "betonline": "1759404",
-      "betparx": "1027553098",
-      "betrivers": "1027553098",
-      "bwin": "6:46846",
-      "caesars": "8a46a96c-d0d8-43cf-96a8-9e5e3a3f0e32",
-      "circa": "227509",
-      "draftkings": "34226078",
-      "fanatics": "5334271",
-      "fanduel": "36152776",
-      "fliff": "418128_c_p_309_inplay",
-      "gemini": "NCAAF-2610172000-AUB-UGA-T",
-      "kalshi": "KXNCAAF4QSPREAD-26OCT17AUBUGA",
-      "novig": "01a12231-d07d-7c10-b346-5e8b09765501",
-      "onexbet": "762573246",
-      "paddypower": "36152776",
-      "pinnacle": "1638291632",
-      "polymarket": "nfl_auburntigers_georgiabulldogs_2026-10-17_b2",
-      "prophetx": "1700087812",
-      "rebet": "sr:match:70900912",
-      "sbobet": "10717966",
-      "smarkets": "45225680",
-      "sportzino": "sz-17332022",
-      "stake": "d22a4c94-c08e-45e1-b272-d1646bbbf78e",
-      "thescorebet": "StandardEvent:c0b39647-29b1-407a-a46e-39c74dfcc754"
-     },
-     "home": "Georgia Bulldogs",
-     "sample": {
-      "away_team": "Auburn Tigers",
-      "home_team": "Georgia Bulldogs",
-      "markets": [
-       "game_prop",
-       "point_spread",
-       "race_to_10_points",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime",
-       "winning_margin"
-      ]
-     },
-     "start": "2026-10-17T19:40:00Z",
-     "type": "fixture"
-    },
-    {
      "away": "Northern Illinois",
      "external": {
       "betfair": "202610170FA3A0CE",
@@ -335,7 +286,15 @@
       "away_team": "Northern Illinois",
       "home_team": "Wyoming",
       "markets": [
-       "total_points"
+       "game_prop",
+       "outright",
+       "point_spread",
+       "race_to_10_points",
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime",
+       "winning_margin"
       ]
      },
      "start": "2026-10-17T19:30:00Z",
@@ -379,7 +338,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-17T23:37:00Z",
+     "start": "2026-10-17T23:44:00Z",
      "type": "outright"
     },
     {
@@ -577,6 +536,7 @@
       "polymarket": "nfl_saints_steelers_2026-10-25_b1",
       "polymarket_us": "nfl-pit-no-2026-10-25",
       "rebet": "sr:match:71488628",
+      "smarkets": "45076216",
       "stake": "7096f4d2-a169-4fab-b58a-5b2bc5cb5bc8",
       "thescorebet": "StandardEvent:2a3d42b4-265b-4e64-9add-e7b57e49f3c3"
      },
@@ -585,6 +545,7 @@
       "away_team": "Pittsburgh Steelers",
       "home_team": "New Orleans Saints",
       "markets": [
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -608,6 +569,7 @@
       "polymarket": "nfl_49ers_falcons_2026-10-25_b2",
       "polymarket_us": "nfl-sf-atl-2026-10-25",
       "rebet": "sr:match:71515928",
+      "smarkets": "45239468",
       "stake": "510393ff-d8e6-4a62-a245-1c1172f0e440",
       "thescorebet": "StandardEvent:fa2f1c92-ea4d-4227-9ed9-ac5fd8ab4e25"
      },
@@ -616,6 +578,7 @@
       "away_team": "San Francisco 49ers",
       "home_team": "Atlanta Falcons",
       "markets": [
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",

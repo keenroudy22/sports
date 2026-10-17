@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-17T23:37:36Z",
+  "updatedAt": "2026-10-17T23:45:55Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1157,6 +1157,24 @@
           "name": "Chicago Bears",
           "players": [
             {
+              "id": "4361748",
+              "name": "Anthony Johnson Jr.",
+              "position": "S",
+              "status": "Out",
+              "injury": "Undisclosed",
+              "reportedAt": "2026-10-17T23:37Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+            },
+            {
+              "id": "4242659",
+              "name": "Dayo Odeyingbo",
+              "position": "DE",
+              "status": "Injured Reserve",
+              "injury": "Quadriceps",
+              "reportedAt": "2026-10-17T23:30Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4242659/dayo-odeyingbo"
+            },
+            {
               "id": "4257364",
               "name": "Zavier Scott",
               "position": "RB",
@@ -1175,15 +1193,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4361093/kyler-gordon"
             },
             {
-              "id": "4361748",
-              "name": "Anthony Johnson Jr.",
-              "position": "S",
-              "status": "Out",
-              "injury": "Undisclosed",
-              "reportedAt": "2026-10-17T23:00Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
-            },
-            {
               "id": "4431611",
               "name": "Caleb Williams",
               "position": "QB",
@@ -1191,15 +1200,6 @@
               "injury": "Hamstring",
               "reportedAt": "2026-10-17T20:37Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431611/caleb-williams"
-            },
-            {
-              "id": "4242659",
-              "name": "Dayo Odeyingbo",
-              "position": "DE",
-              "status": "Injured Reserve",
-              "injury": "Quadriceps",
-              "reportedAt": "2026-10-17T17:35Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4242659/dayo-odeyingbo"
             },
             {
               "id": "4911952",
@@ -6217,6 +6217,15 @@
           "name": "San Francisco 49ers",
           "players": [
             {
+              "id": "4432244",
+              "name": "Romello Height",
+              "position": "DE",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-17T23:37Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4432244/romello-height"
+            },
+            {
               "id": "4696044",
               "name": "Kaelon Black",
               "position": "RB",
@@ -6224,15 +6233,6 @@
               "injury": null,
               "reportedAt": "2026-10-17T21:51Z",
               "source": "https://www.espn.com/nfl/player/_/id/4696044/kaelon-black"
-            },
-            {
-              "id": "4432244",
-              "name": "Romello Height",
-              "position": "DE",
-              "status": "Questionable",
-              "injury": "Hand",
-              "reportedAt": "2026-10-17T21:08Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4432244/romello-height"
             },
             {
               "id": "4693371",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "28",
-          "name": "Quan Martin",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-16T23:44:22Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4360378/quan-martin"
-        },
-        {
           "teamId": "3",
           "name": "Anthony Johnson Jr.",
           "from": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-10-17T21:20:36Z",
           "source": "https://www.espn.com/nfl/player/_/id/3916075/colton-mckivitz"
+        },
+        {
+          "teamId": "25",
+          "name": "Romello Height",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-17T23:45:55Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4432244/romello-height"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-17T23:37:36Z",
-      "lastAttemptAt": "2026-10-17T23:37:36Z",
+      "checkedAt": "2026-10-17T23:45:55Z",
+      "lastAttemptAt": "2026-10-17T23:45:55Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-17T23:37:36Z",
-      "lastAttemptAt": "2026-10-17T23:37:36Z",
+      "checkedAt": "2026-10-17T23:45:55Z",
+      "lastAttemptAt": "2026-10-17T23:45:55Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
