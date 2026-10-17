@@ -1,17 +1,17 @@
 {
- "at": "2026-10-17T17:24:40Z",
+ "at": "2026-10-17T17:33:19Z",
  "confirmed": {
-  "CFB-401856719": "2026-10-17T17:24:40Z",
-  "CFB-401856721": "2026-10-17T17:24:40Z",
+  "CFB-401856719": "2026-10-17T17:33:19Z",
+  "CFB-401856721": "2026-10-17T17:33:19Z",
   "CFB-401856722": "2026-10-17T16:24:17Z",
-  "CFB-401856723": "2026-10-17T17:24:40Z",
+  "CFB-401856723": "2026-10-17T17:33:19Z",
   "CFB-401856726": "2026-10-17T16:24:17Z",
   "CFB-401856809": "2026-10-17T16:24:17Z",
   "CFB-401856828": "2026-10-17T17:24:40Z",
   "CFB-401856831": "2026-10-17T16:24:17Z",
   "CFB-401856832": "2026-10-17T16:24:17Z",
   "CFB-401858263": "2026-10-17T16:24:17Z",
-  "CFB-401858264": "2026-10-17T16:24:17Z",
+  "CFB-401858264": "2026-10-17T17:33:19Z",
   "CFB-401858265": "2026-10-17T16:24:17Z",
   "CFB-401858266": "2026-10-17T16:24:17Z",
   "CFB-401858490": "2026-10-17T16:24:17Z",
@@ -22,32 +22,35 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 1189,
-    "fanduel": 1043
+    "draftkings": 1185,
+    "fanduel": 1085
    },
-   "eventsListed": 93,
-   "eventsMatched": 36,
-   "games": 36,
+   "eventsListed": 90,
+   "eventsMatched": 35,
+   "games": 35,
    "marketTypes": {
+    "player_assists": 2,
     "player_field_goals_made": 4,
     "player_kicking_points": 4,
     "player_longest_passing_completion": 7,
-    "player_longest_reception": 28,
-    "player_longest_rush": 14,
+    "player_longest_reception": 26,
+    "player_longest_rush": 13,
     "player_passing_+_rushing_yards": 93,
-    "player_passing_attempts": 32,
-    "player_passing_completions": 25,
-    "player_passing_touchdowns": 63,
-    "player_passing_yards": 275,
-    "player_receiving_yards": 786,
-    "player_receptions": 276,
+    "player_passing_attempts": 40,
+    "player_passing_completions": 31,
+    "player_passing_touchdowns": 64,
+    "player_passing_yards": 284,
+    "player_receiving_yards": 822,
+    "player_receptions": 297,
     "player_rushing_attempts": 38,
-    "player_rushing_yards": 587
+    "player_rushing_yards": 536,
+    "player_sacks": 5,
+    "player_tackles": 2,
+    "player_tackles_+_assists": 2
    },
    "requestsLeft": 0,
-   "rows": 2232,
+   "rows": 2270,
    "slateGames": [
-    "Western Michigan Broncos at Central Michigan Chippewas 2026-10-17T17:30Z",
     "Auburn Tigers at Georgia Bulldogs 2026-10-17T19:30Z",
     "Missouri Tigers at Ole Miss Rebels 2026-10-17T19:30Z",
     "Alabama Crimson Tide at Tennessee Volunteers 2026-10-17T19:30Z",
@@ -86,49 +89,6 @@
    ],
    "unmatchedEvents": [
     {
-     "away": "VMI",
-     "external": {
-      "betmgm": "6:46992",
-      "betonline": "491151658",
-      "betparx": "1029241575",
-      "betrivers": "1029241575",
-      "bwin": "6:46992",
-      "caesars": "a1324c83-5dd3-40fe-974e-77c11784caf9",
-      "draftkings": "34826967",
-      "fanduel": "36179602",
-      "fliff": "419323_c_p_209_prematch",
-      "kalshi": "KXNCAAFSPREAD-26OCT17VMIWOF",
-      "ladbrokes": "d3aaf823-9d0f-4503-919b-f3d4c79b12d4",
-      "novig": "01a121c4-3edb-7a83-8e2c-fe39e67e6553",
-      "onexbet": "762472493",
-      "paddypower": "36179602",
-      "pinnacle": "1638258919",
-      "polymarket": "nfl_vmi_wofford_2026-10-17_b2",
-      "prophetx": "1700102679",
-      "rebet": "sr:match:70924178",
-      "sbobet": "10735406",
-      "smarkets": "45377238",
-      "sportzino": "sz-18045682",
-      "stake": "e435a139-edc8-41d0-b1b3-8c8a1d67cb98",
-      "sx_bet": "L20523938",
-      "thescorebet": "StandardEvent:db75e8c0-8271-4ed7-84ae-779ffde887d5"
-     },
-     "home": "Wofford",
-     "sample": {
-      "away_team": "VMI",
-      "home_team": "Wofford",
-      "markets": [
-       "1st_half_moneyline",
-       "game_prop",
-       "moneyline",
-       "point_spread",
-       "total_points"
-      ]
-     },
-     "start": "2026-10-17T17:30:00Z",
-     "type": "fixture"
-    },
-    {
      "away": "Austin Peay",
      "external": {
       "betmgm": "6:46996",
@@ -162,6 +122,7 @@
       "home_team": "West Georgia",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -205,6 +166,7 @@
       "home_team": "Cornell",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -247,6 +209,7 @@
       "home_team": "North Dakota",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -290,6 +253,7 @@
       "home_team": "Stetson",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -351,6 +315,7 @@
       "home_team": "Tennessee Tech",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -369,7 +334,7 @@
       "bwin": "6:47014",
       "fanduel": "36179581",
       "fliff": "419337_c_p_209_prematch",
-      "kalshi": "KXNCAAFTOTAL-26OCT17ALBYSTON",
+      "kalshi": "KXNCAAFSPREAD-26OCT17ALBYSTON",
       "ladbrokes": "27e37039-d49f-4e6b-84dd-3727847f2a26",
       "matchbook": "mb-34622431678400023",
       "novig": "01a121fa-d974-7170-b7bc-c7c0c53c26cd",
@@ -391,6 +356,7 @@
       "home_team": "Stony Brook Seawolves",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -433,6 +399,7 @@
       "home_team": "Alabama A&M Bulldogs",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -475,6 +442,7 @@
       "home_team": "Arkansas-Pine Bluff Golden Lions",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -534,7 +502,26 @@
       "home_team": "Prairie View A&M Panthers",
       "markets": [
        "1st_half_moneyline",
+       "draw_no_bet",
        "game_prop",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-17T19:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Bethune-Cookman",
+     "external": {
+      "draftkings": "34826986"
+     },
+     "home": "Mississippi Valley",
+     "sample": {
+      "away_team": "Bethune-Cookman",
+      "home_team": "Mississippi Valley",
+      "markets": [
        "moneyline",
        "point_spread",
        "total_points"
@@ -581,7 +568,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-17T17:25:00Z",
+     "start": "2026-10-17T17:30:00Z",
      "type": "outright"
     },
     {
