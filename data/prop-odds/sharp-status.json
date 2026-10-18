@@ -1,10 +1,10 @@
 {
- "at": "2026-10-18T02:41:36Z",
+ "at": "2026-10-18T02:51:30Z",
  "confirmed": {
-  "CFB-401858492": "2026-10-18T02:41:36Z",
-  "NFL-401872996": "2026-10-18T02:41:36Z",
-  "NFL-401872997": "2026-10-18T02:41:36Z",
-  "NFL-401872998": "2026-10-18T02:41:36Z",
+  "CFB-401858492": "2026-10-18T02:51:30Z",
+  "NFL-401872996": "2026-10-18T02:51:30Z",
+  "NFL-401872997": "2026-10-18T02:51:30Z",
+  "NFL-401872998": "2026-10-18T02:51:30Z",
   "NFL-401872999": "2026-10-18T02:41:36Z",
   "NFL-401873000": "2026-10-17T23:18:58Z",
   "NFL-401873001": "2026-10-18T02:41:36Z",
@@ -134,7 +134,7 @@
      "external": {
       "draftkings": "34827179",
       "gemini": "NCAAF-2610222300-LIB-KENN-M",
-      "kalshi": "KXNCAAFSPREAD-26OCT22LIBKENN",
+      "kalshi": "KXNCAAFGAME-26OCT22LIBKENN",
       "novig": "01a13cae-d357-77e1-a5b9-e21dd00ca896",
       "onexbet": "762619339",
       "polymarket": "nfl_kennesawstate_liberty_2026-10-22_b3",
@@ -164,22 +164,38 @@
   },
   "NFL": {
    "books": {
-    "fanduel": 1755
+    "draftkings": 1430,
+    "fanduel": 619
    },
    "eventsListed": 28,
    "eventsMatched": 13,
    "games": 13,
    "marketTypes": {
-    "player_passing_touchdowns": 55,
-    "player_passing_yards": 137,
-    "player_receiving_yards": 761,
-    "player_receptions": 452,
-    "player_rushing_+_receiving_yards": 24,
-    "player_rushing_yards": 266,
-    "player_sacks": 60
+    "player_assists": 64,
+    "player_extra_points_made": 12,
+    "player_fantasy_score": 40,
+    "player_field_goals_made": 12,
+    "player_interceptions": 8,
+    "player_kicking_points": 12,
+    "player_longest_passing_completion": 8,
+    "player_longest_reception": 60,
+    "player_longest_rush": 24,
+    "player_passing_+_rushing_yards": 8,
+    "player_passing_attempts": 8,
+    "player_passing_completions": 8,
+    "player_passing_touchdowns": 35,
+    "player_passing_yards": 159,
+    "player_receiving_yards": 766,
+    "player_receptions": 357,
+    "player_rushing_+_receiving_yards": 18,
+    "player_rushing_attempts": 22,
+    "player_rushing_yards": 242,
+    "player_sacks": 58,
+    "player_tackles": 64,
+    "player_tackles_+_assists": 64
    },
    "requestsLeft": 0,
-   "rows": 1755,
+   "rows": 2049,
    "slateGames": [
     "Houston Texans at Jacksonville Jaguars 2026-10-18T13:30Z",
     "Baltimore Ravens at Cleveland Browns 2026-10-18T17:00Z",
@@ -209,7 +225,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-18T02:34:00Z",
+     "start": "2026-10-18T02:45:00Z",
      "type": "outright"
     },
     {
@@ -586,6 +602,7 @@
       "paddypower": "36189005",
       "polymarket": "nfl_lions_packers_2026-10-25_b2",
       "polymarket_us": "nfl-gb-det-2026-10-25",
+      "smarkets": "45239615",
       "stake": "59c3991a-d7f8-4666-bf03-eb5dd11dc83f",
       "thescorebet": "StandardEvent:8d9df12b-7015-43f2-951e-06ef3fa5708c"
      },
@@ -594,6 +611,7 @@
       "away_team": "Green Bay Packers",
       "home_team": "Detroit Lions",
       "markets": [
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
