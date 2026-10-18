@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-18T18:05:23Z",
+  "updatedAt": "2026-10-18T18:15:38Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -927,6 +927,15 @@
           "name": "Carolina Panthers",
           "players": [
             {
+              "id": "4714157",
+              "name": "Thomas Incoom",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Calf",
+              "reportedAt": "2026-10-18T18:08Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4714157/thomas-incoom"
+            },
+            {
               "id": "4242975",
               "name": "Jaelan Phillips",
               "position": "LB",
@@ -1141,15 +1150,6 @@
               "injury": null,
               "reportedAt": "2026-10-05T04:20Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685720/bryce-young"
-            },
-            {
-              "id": "4241416",
-              "name": "Chuba Hubbard",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-05T04:15Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4241416/chuba-hubbard"
             }
           ]
         },
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Out",
+              "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-18T17:58Z",
+              "reportedAt": "2026-10-18T18:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -4837,6 +4837,15 @@
           "name": "New England Patriots",
           "players": [
             {
+              "id": "16771",
+              "name": "Morgan Moses",
+              "position": "OT",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-18T17:59Z",
+              "source": "https://www.espn.com/nfl/player/_/id/16771/morgan-moses"
+            },
+            {
               "id": "4361432",
               "name": "Romeo Doubs",
               "position": "WR",
@@ -4979,15 +4988,6 @@
               "injury": null,
               "reportedAt": "2026-10-16T20:43Z",
               "source": "https://www.espn.com/nfl/player/_/id/2574056/kevin-byard"
-            },
-            {
-              "id": "16771",
-              "name": "Morgan Moses",
-              "position": "OT",
-              "status": "Active",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-16T20:42Z",
-              "source": "https://www.espn.com/nfl/player/_/id/16771/morgan-moses"
             },
             {
               "id": "4241720",
@@ -5151,8 +5151,8 @@
               "id": "3054850",
               "name": "Alvin Kamara",
               "position": "RB",
-              "status": "Active",
-              "injury": null,
+              "status": "Questionable",
+              "injury": "Undisclosed",
               "reportedAt": "2026-10-18T15:43Z",
               "source": "https://www.espn.com/nfl/player/_/id/3054850/alvin-kamara"
             },
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Out",
               "injury": "Calf",
-              "reportedAt": "2026-10-18T18:01Z",
+              "reportedAt": "2026-10-18T18:06Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7366,30 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "18",
-          "name": "Zach Wood",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-18T16:01:42Z",
-          "source": "https://www.espn.com/nfl/player/_/id/2575788/zach-wood"
-        },
-        {
-          "teamId": "19",
-          "name": "Abdul Carter",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-18T16:01:42Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4725996/abdul-carter"
-        },
-        {
-          "teamId": "20",
-          "name": "Nahshon Wright",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-10-18T16:01:42Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4570470/nahshon-wright"
-        },
-        {
           "teamId": "20",
           "name": "Dane Belton",
           "from": "Questionable",
@@ -7764,11 +7740,35 @@
           "to": "Out",
           "observedAt": "2026-10-18T17:56:53Z",
           "source": "https://www.espn.com/nfl/player/_/id/4242208/grant-delpit"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-18T18:15:38Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "17",
+          "name": "Morgan Moses",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-18T18:15:38Z",
+          "source": "https://www.espn.com/nfl/player/_/id/16771/morgan-moses"
+        },
+        {
+          "teamId": "18",
+          "name": "Alvin Kamara",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-18T18:15:38Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3054850/alvin-kamara"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-18T18:05:23Z",
-      "lastAttemptAt": "2026-10-18T18:05:23Z",
+      "checkedAt": "2026-10-18T18:15:38Z",
+      "lastAttemptAt": "2026-10-18T18:15:38Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-18T18:05:23Z",
-      "lastAttemptAt": "2026-10-18T18:05:23Z",
+      "checkedAt": "2026-10-18T18:15:38Z",
+      "lastAttemptAt": "2026-10-18T18:15:38Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
