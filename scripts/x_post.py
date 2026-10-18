@@ -431,11 +431,20 @@ def _caption_day(pick, game):
 
 def _short_reason(text):
     """Keep a verified reason to the plan's twelve-word public limit."""
-    words = str(text or '').strip().split()
+    value = str(text or '').strip()
+    words = value.split()
     if len(words) <= 12:
         return ' '.join(words)
-    short = ' '.join(words[:12]).rstrip(',;:')
-    return short + ('.' if str(text).rstrip().endswith('.') else '')
+    # Never manufacture a dangling half-sentence merely to hit the public
+    # word limit (for example, "... Saturday and has.").  Prefer a complete
+    # leading clause already present in the verified source; if there is no
+    # safe clause, omit this candidate and let _choose_reason try the next
+    # stored fact.  The send guard will hold when no complete reason survives.
+    for clause in llm.re.split(r'\s+(?:and|but|which|while|so)\s+|[;:]', value, maxsplit=1):
+        clause = clause.strip().rstrip(',;: ')
+        if 4 <= len(clause.split()) <= 12:
+            return clause + ('' if clause.endswith(('.', '!', '?')) else '.')
+    return ''
 
 
 def _choose_reason(pick, supplied, history, day):

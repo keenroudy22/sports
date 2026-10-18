@@ -1924,3 +1924,19 @@ posts at most three per Eastern day with the exact approved personal-ticket capt
 seen state only under the private configuration `work/` directory. It has no X, official-record or
 Plays & Results path. The dedicated wins webhook is currently unset and the inbox is empty, so P52
 correctly waits on owner setup and a natural image instead of inventing a delivery receipt.
+
+
+### October 18 daily — D-20261018-1 held at Python gate (2026-10-18T11:50:38.067960+00:00)
+
+Owner: agent. Approved projection sheets repeatedly fail the global Kitchen Ticket artwork check because their separate approved renderer has no ticket marker. A narrow exact-kind/guid/card-key exception and regressions are prepared on dev, NOT released. The first full Python gate STOPPED: 1451 tests, 15 errors, 2 skipped; scripts/buffer_post.py:517 raises `NameError: name 're' is not defined` because this agent omitted the import. Node244 passed. No subsequent gate, production edit, promotion, hosted publish or live check was performed.
+
+Next action: add the missing import on dev, rerun every AGENTS release gate under the release lease and run lock, watch hosted success, verify live375px and natural projection-sheet Buffer acceptance/actual X receipt. Keep ordinary play/receipt/research artwork guards and all safety gates.
+
+Compact health11:47Z: latest07:25 settlement-only run ok; chosenNotPosted0/officialUnscheduled0; morning193 screened and one private Metcalf admission. Prior Climb win and aggregate Final accepted in Buffer for09:22/09:02ET, not yet delivered; actual final-to-X remains unknown. Missing wins webhook is an external owner blocker. NFL multi-book quote07:30Z is older than4hours, props11:38Zfresh; no budget increase. Odds324/500/projected422; SGO539/2500/stop1800. NBA7/14clean,0/50paper,trialOct20. Latest cached settlement run has models disabled; morning homepage3stories but exact successful calls not retained in current status; weeklyOct13 verified1local27Bcall/0failures/4.72s/summaryAvailabletrue. Current favorite-by-game/official-rail/mobile checks remain unverified after failed gate. Evidence: work/daily-20261018-outcomes.json and daily-20261018-python.log.
+
+The omitted import was repaired and the exact projection-sheet exception passed 75 focused tests, the complete
+1452-test Python suite (2 skipped), all 244 browser tests, the clean-export suites, build, payload budget, record
+audit, NBA audit, feed, public-artifact guard and the isolated 08:30 rehearsal (exit 0, outcome ok, no outside
+writes/private reads). The same change prevents a verified reason from being cut into a dangling fragment; the
+private Metcalf caption now ends with the complete sourced sentence, “DK Metcalf was removed from the Steelers
+injury report Saturday.” Release and live delivery evidence remain required before this item is marked shipped.

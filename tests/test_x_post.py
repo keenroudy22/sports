@@ -210,6 +210,13 @@ class DraftTests(unittest.TestCase):
 
     def test_the_reason_is_one_plain_sentence_or_none(self):
         self.assertEqual(x_post.reason_for(PICK), 'Wind is forecast at 18 mph in Ann Arbor.', 'the most specific short sentence')
+
+    def test_long_verified_reason_never_becomes_a_dangling_half_sentence(self):
+        reason = ('DK Metcalf was removed from the Steelers injury report Saturday and has no injury '
+                  'designation after being listed with an illness.')
+        self.assertEqual(x_post._short_reason(reason),
+                         'DK Metcalf was removed from the Steelers injury report Saturday.')
+        self.assertNotIn('and has.', x_post._short_reason(reason))
         arithmetic = dict(PICK, why='Model lean, published on our number alone. The over reads 55.3% after the raw 62.7% is shrunk. '
                                     'Our total gap of 7.8 points is at the 95th percentile.')
         self.assertIsNone(x_post.reason_for(arithmetic), 'no stat talk in the timeline')

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-17T16:05:00Z",
+  "updatedAt": "2026-10-18T11:50:38.067960+00:00",
   "items": [
     {
       "id": "P02",
@@ -1150,9 +1150,9 @@
       "title": "Publish daily research, game favorites and big-slate projections",
       "status": "ready",
       "owner": "agent",
-      "next": "Run every release gate, deploy under the run lock, verify the hosted publish and live 375/1440 surfaces, then observe Sunday selection and delivery.",
+      "next": "D-20261018-1 passed all local gates and the isolated 08:30 rehearsal; deploy under the run lock, verify hosted/live375, repair the queued Metcalf caption and observe its Discord-first/X delivery plus the natural sheet delivery.",
       "doneWhen": "Thursday/Monday and weekend projection sheets post; later weekend passes can fill five gated straights without excluding covered games; the half-hour result pass rechecks Climb; every release and live gate passes.",
-      "evidence": "Earlier daily fallback/research/per-game work shipped through defef8cc/run38767790985. Owner decision 2026-10-17 adds football-day sheets, weekend recovery volume and Climb continuation; implementation and focused regressions prepared on dev, release evidence pending."
+      "evidence": "Earlier fallback/research/per-game work shipped through defef8cc/run38767790985. The October 18 candidate first held for a missing import, then passed focused75, Python1452/2skips, Node244, clean export, build/budget/audits/feed/guard and the isolated0830 rehearsal. Deployment and natural delivery receipts remain pending."
     }
   ]
 }

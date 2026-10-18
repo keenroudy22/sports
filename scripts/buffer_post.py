@@ -23,6 +23,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import sys
 import urllib.error
 import urllib.request
@@ -512,7 +513,12 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
                     stats['officialNotScheduled'] += 1
                 log(f'buffer: {guid} waits: its card is not live yet (every post carries its card)')
                 continue
-            if pick_card.ticket_enabled(moment=due) and not ticket_art_live(image):
+            # The approved projection sheet has its own renderer, not the
+            # Kitchen Ticket renderer. Exempt only its exact namespace and key.
+            sheet_match = re.fullmatch(r'sheet:(NFL|CFB):(\d{4}-\d{2}-\d{2})', guid)
+            projection_sheet = (kind == 'sheet' and sheet_match is not None
+                                and card_key == f'sheet-{sheet_match[1].lower()}-{sheet_match[2]}')
+            if pick_card.ticket_enabled(moment=due) and not projection_sheet and not ticket_art_live(image):
                 log(f'buffer: {guid} waits: the live card is not Kitchen Ticket art')
                 continue
         # Resolve every fallible field before Buffer accepts the post. Otherwise a

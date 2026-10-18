@@ -429,6 +429,29 @@ class ScheduleTests(unittest.TestCase):
                                  log=notes.append)
         self.assertEqual(result['posts'][0]['cardTheme'], 'ticket')
 
+    def test_approved_projection_sheet_uses_its_own_renderer(self):
+        due = datetime(2026, 10, 18, 14, 0, tzinfo=timezone.utc)
+        for guid, kind, card, accepted in [
+            ('sheet:NFL:2026-10-18', 'sheet', 'sheet-nfl-2026-10-18', True),
+            ('sheet:CFB:2026-10-17', 'sheet', 'sheet-cfb-2026-10-17', True),
+            ('sheet:NFL:2026-10-18', 'play', 'sheet-nfl-2026-10-18', False),
+            ('sheet:NFL:2026-10-18', 'sheet', 'old-announcement', False),
+            ('unrelated', 'sheet', 'sheet-nfl-2026-10-18', False),
+            ('receipt:day:2026-10-17', 'receipt', 'receipt-day-2026-10-17', False),
+        ]:
+            with self.subTest(guid=guid, kind=kind, card=card):
+                fake = FakeBuffer()
+                with mock.patch.object(bp, 'ticket_art_live', return_value=False):
+                    result = bp.schedule([(guid, kind, 'Save this projection sheet', due, card)],
+                                         'x', {'posts': []}, due - timedelta(hours=2),
+                                         key='t', send=fake, opener=lambda *_: True, log=lambda *_: None)
+                self.assertEqual(bool(result['posts']), accepted)
+        fake = FakeBuffer()
+        result = bp.schedule([('sheet:NFL:2026-10-18', 'sheet', 'Save this projection sheet', due,
+                               'sheet-nfl-2026-10-18')], 'x', {'posts': []}, due - timedelta(hours=2),
+                             key='t', send=fake, opener=lambda *_: False, log=lambda *_: None)
+        self.assertEqual(result['posts'], [], 'the sheet still requires a live image')
+
     def test_live_ticket_probe_requires_the_png_theme_marker(self):
         import pick_card
         with TemporaryDirectory() as folder:
