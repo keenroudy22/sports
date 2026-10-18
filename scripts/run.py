@@ -288,12 +288,17 @@ def box_url(league, event_id):
 
 
 def grade_game_pick(pick, game):
-    """(result, actual, actualValue) for a spread or total against the final score."""
+    """(result, actual, actualValue) for a spread, total or moneyline against the final score."""
     home, away = score(game, 'home'), score(game, 'away')
     if home is None or away is None:
         return None
     line, direction = float(pick['line']), str(pick.get('direction') or '').lower()
     actual = f"{game['away'].get('short') or game['away'].get('abbreviation')} {away}, {game['home'].get('short') or game['home'].get('abbreviation')} {home}"
+    if pick.get('marketType') == 'moneyline':
+        if direction not in ('home', 'away'):
+            return None
+        margin = home - away if direction == 'home' else away - home
+        return ('win' if margin > 0 else 'push' if margin == 0 else 'loss'), actual, margin
     if pick.get('marketType') == 'spread':
         margin = (home - away) if direction == 'home' else (away - home)
         cover = margin + line
@@ -334,8 +339,8 @@ def leg_pick(leg):
     """A parlay leg as the pick shape grade_game_pick and grade_prop read."""
     market = str(leg.get('market') or '')
     market_type = str(leg.get('marketType') or '')
-    if market_type in ('spread', 'total') or market in ('point spread', 'total points'):
-        return {'marketType': market_type or ('spread' if market == 'point spread' else 'total'), 'line': leg.get('line'),
+    if market_type in ('spread', 'total', 'moneyline') or market in ('point spread', 'total points', 'moneyline'):
+        return {'marketType': market_type or ('spread' if market == 'point spread' else 'moneyline' if market == 'moneyline' else 'total'), 'line': leg.get('line'),
                 'direction': leg.get('side') or leg.get('direction')}
     athlete = leg.get('athleteId') or (re.match(r'prop-[A-Z]+-\d+-(\d+)-', str(leg.get('id') or '')) or [None, None])[1]
     return {'athleteId': athlete, 'market': market, 'title': leg.get('title'), 'line': leg.get('line'),

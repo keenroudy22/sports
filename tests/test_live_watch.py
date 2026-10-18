@@ -52,6 +52,22 @@ class LiveWatchTests(unittest.TestCase):
                                  fetch=lambda _: summary(55, completed=True), log=lambda *_: None)
             self.assertEqual(final['events'][0]['kind'], 'final-win')
 
+    def test_moneyline_final_reaches_grader_without_player_stats(self):
+        self.pick = {'id': 'p', 'gameIds': ['NFL-1'], 'legs': [
+            {'id': 'ml', 'gameId': 'NFL-1', 'marketType': 'moneyline', 'direction': 'home', 'line': 0}]}
+        self.ctx.first = {'p': self.pick}
+        with tempfile.TemporaryDirectory() as folder:
+            state = Path(folder) / 'live.json'
+            live = L.run_shadow(self.ctx, self.games, self.log, NOW, state,
+                                fetch=lambda _: summary(), log=lambda *_: None)
+            self.assertFalse(any(e['kind'] == 'hit-early' for e in live['events']))
+            final = L.run_shadow(self.ctx, self.games, self.log, NOW + timedelta(minutes=5), state,
+                                 fetch=lambda _: summary(completed=True), log=lambda *_: None)
+            self.assertEqual(final['pendingFinals'], ['p'])
+            self.assertEqual(final['events'][0]['kind'], 'final-win')
+            self.assertEqual(L.progress({'marketType': 'moneyline', 'direction': 'away', 'line': 0},
+                                       L.final_records(state)[0])['state'], 'final-loss')
+
     def test_only_public_plays_are_tracked(self):
         self.log['posts'][0].pop('sentAt')
         self.log['posts'][0]['discord'] = {'state': 'pending'}

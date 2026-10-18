@@ -132,7 +132,7 @@ def live_record(summary, league, event_id, observed_at):
 
 
 def current_value(pick, record):
-    if pick.get('marketType') in ('spread', 'total'):
+    if pick.get('marketType') in ('spread', 'total', 'moneyline'):
         graded = desk_run.grade_game_pick(pick, record)
         return graded[2] if graded else None
     athlete = str(pick.get('athleteId') or '')
@@ -153,7 +153,7 @@ def progress(pick, record):
     line = float(pick['line'])
     direction = str(pick.get('direction') or '').lower()
     completed = record.get('completed')
-    if pick.get('marketType') in ('spread', 'total'):
+    if pick.get('marketType') in ('spread', 'total', 'moneyline'):
         graded = desk_run.grade_game_pick(pick, record)
         result = graded[0] if graded else None
         state = f"final-{result}" if completed and result else f"currently-{result}" if result else 'live'

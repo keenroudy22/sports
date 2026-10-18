@@ -344,6 +344,33 @@ class GradingTests(unittest.TestCase):
         self.assertEqual(run.grade_game_pick({'marketType': 'total', 'line': 51, 'direction': 'under'}, self.GAME)[0], 'push')
         self.assertIsNone(run.grade_game_pick({'marketType': 'total', 'line': 51, 'direction': 'under'}, {'home': {}, 'away': {}}))
 
+    def test_moneyline_grades_both_sides_without_treating_score_as_a_total(self):
+        for side, expected in [('home', 'win'), ('away', 'loss')]:
+            pick = {'marketType': 'moneyline', 'line': 0, 'direction': side}
+            self.assertEqual(run.grade_game_pick(pick, self.GAME)[0], expected)
+            tied = dict(self.GAME, away={'short': 'Bills', 'score': 27})
+            self.assertEqual(run.grade_game_pick(pick, tied)[0], 'push')
+        self.assertIsNone(run.grade_game_pick(dict(pick, direction='over'), self.GAME))
+
+    def test_moneyline_ladder_settles_from_scores_without_player_stats(self):
+        games = {key: dict(self.GAME, id=key) for key in ('NFL-1', 'NFL-2')}
+        ticket = {'id': 'ladder-ml', 'league': 'NFL', 'gameIds': list(games),
+                  'odds': -135, 'parlayType': 'ladder', 'legs': [
+                      {'gameId': key, 'marketType': 'moneyline', 'line': 0, 'direction': 'home'}
+                      for key in games]}
+        ctx = SimpleNamespace(first={ticket['id']: ticket}, latest={})
+        def no_box(*args):
+            self.fail('Moneylines must not request player stats')
+        raw = {ticket['id']: ('parlays', ticket)}
+        settled, unclear = run.settle(ctx, raw, games, [], datetime(2026, 10, 18, tzinfo=timezone.utc), fetch=no_box)
+        self.assertEqual(unclear, [])
+        self.assertEqual(settled[0][2]['result'], 'win')
+        ticket['legs'][1]['direction'] = 'away'
+        settled, unclear = run.settle(ctx, raw, games, [], datetime(2026, 10, 18, tzinfo=timezone.utc), fetch=no_box)
+        self.assertEqual((settled[0][2]['result'], unclear), ('loss', []))
+        games['NFL-2']['completed'] = False
+        self.assertEqual(run.settle(ctx, raw, games, [], datetime(2026, 10, 18, tzinfo=timezone.utc), fetch=no_box), ([], []))
+
     def test_prop_grades_from_the_box_score_and_absent_player_is_unclear(self):
         record = {'players': [{'id': '77', 'name': 'Player Seven', 'recYds': 61, 'rec': 5}]}
         pick = {'athleteId': '77', 'market': 'recYds', 'line': 49.5, 'direction': 'over'}
