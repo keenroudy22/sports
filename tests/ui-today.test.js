@@ -143,7 +143,9 @@ test('the first paint and the full card draw the same top, so nothing moves when
 });
 
 test('Today runs the first screen, then every section visible with no fold; Off the card never hangs on the rail', async () => {
-  const { api } = loadApp('#record');
+  const todayOff = { ...total, id: 'CFB-today-off-fd', displayTitle: 'Moved Line Today under 56.5', status: 'expired',
+    entryNote: 'Closed to new entries at 11:45 AM ET: total moved 3 against, from 56.5 to 53.5.' };
+  const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [...TODAY.picks, todayOff] } });
   const page = await api.views.today({ view: 'today' });
   assert.match(page, /aria-label="Today at a glance"[\s\S]*Best bets[\s\S]*80\/20 Climb/);
   assert.match(page, /Today’s best bets[\s\S]*Today’s Climb/);
@@ -156,10 +158,11 @@ test('Today runs the first screen, then every section visible with no fold; Off 
   assert.deepEqual(folds, ['climb-past'], 'only the Climb\'s past steps stay a fold (upset cards keep their small why fold)');
   const rails = page.slice(0, at('class="kt-sec kt-left"'));
   assert.doesNotMatch(rails, /Moved Line at Elsewhere/, 'Off the card stays outside the rail');
-  assert.match(page.slice(at('kt-off-card"')), /Off the card · 1<\/h2>[\s\S]*Moved Line at Elsewhere/);
+  assert.match(page.slice(at('kt-off-card"')), /Off the card · 1<\/h2>[\s\S]*Moved Line Today/);
   const bets = page.slice(at('kt-bets"'), at('class="kt-sec kt-left"'));
   assert.match(bets, /<h2 class="kt-head" id="bets-h">More best bets<\/h2>/);
-  assert.match(bets, /Example Tech[\s\S]*Later Open/, 'today\'s other best bet, then later this week, on the page');
+  assert.match(bets, /Example Tech/, 'today\'s other best bet stays on the page');
+  assert.doesNotMatch(bets, /Later Open/, 'future bets stay off an active game day');
   assert.match(bets, /Still good to −124\./, 'each other best bet names its price limit, in the first ticket\'s words');
   assert.doesNotMatch(bets, /Still a bet down to|Best bets this season/, 'one limit sentence everywhere; the season record rides the first ticket and the season line only');
   assert.equal((page.match(/Best bets this season/g) || []).length, 1);
@@ -177,13 +180,13 @@ test('Today runs the first screen, then every section visible with no fold; Off 
   assert.match(page.slice(at('kt-sports"')), /href="#today\?sport=NBA">NBA · 0 today →/);
 });
 
-test('an NFL game today stays prominent even with no official play and a later best bet on the rail', async () => {
+test('an NFL game today stays prominent and a later best bet stays off Today', async () => {
   const future = [laterOpen, { ...laterOpen, id: 'later-more', kickoff: '2026-10-14T00:15:00Z' }];
   const nightGame = { ...GAMES[0], kickoff: '2026-10-11T00:15:00Z', v2: { away: 23.2, home: 26.9, total: 50.1, margin: 3.7, winProb: 0.61 }, market: { spread: -8.5, total: 48.5 } };
   const games = [nightGame, GAMES[1]];
   const page = await loadApp('#record', {}, { today: { ...TODAY, picks: future, games } }).api.views.today({ view: 'today' });
-  const spot = page.slice(page.indexOf('kt-nfl-now"'), page.indexOf('kt-bets"'));
-  assert.ok(page.indexOf('kt-climb"') < page.indexOf('kt-nfl-now"') && page.indexOf('kt-nfl-now"') < page.indexOf('kt-bets"'));
+  const spot = page.slice(page.indexOf('kt-nfl-now"'), page.indexOf('kt-upsets"'));
+  assert.ok(page.indexOf('kt-climb"') < page.indexOf('kt-nfl-now"'));
   assert.match(spot, /Tonight&#39;s NFL|Tonight's NFL/);
   assert.match(spot, /href="#game\/NFL-1"[\s\S]*Visitors[\s\S]*Hosts/);
   assert.match(spot, /Total 50\.1[\s\S]*48\.5/, 'the spotlight has the projection and book line');
@@ -191,7 +194,7 @@ test('an NFL game today stays prominent even with no official play and a later b
   assert.doesNotMatch(spot, /href="#game\/CFB-2"/, 'other games remain in the full games section');
   assert.equal((page.match(/class="proj[^"]*" href="#game\/NFL-1"/g) || []).length, 1, 'the spotlighted game appears only once on Today');
   assert.match(page, /<h2 class="kt-head" id="games-h">Other games today<\/h2>/, 'remaining games have their own heading');
-  assert.match(page, /<h2 class="kt-head" id="upcoming-bets-h">Upcoming best bets<\/h2>/, 'future tickets are clearly labeled');
+  assert.doesNotMatch(page, /Upcoming best bets|Later Open/, 'future tickets are not mixed into an active game day');
   const cfb = await loadApp('#today?sport=CFB', {}, { today: { ...TODAY, picks: future, games } }).api.views.today({ view: 'today', league: 'CFB' });
   assert.doesNotMatch(cfb, /kt-nfl-now/, 'saved college-only view does not leak the NFL card');
 });
@@ -335,7 +338,7 @@ test('a saved league filter does not flash a future bet as today while the game-
   await pending;
   await settle();
   assert.match(next.view.innerHTML, /<h1>Nothing cleared my bar today\.<\/h1>/);
-  assert.match(next.view.innerHTML, /Upcoming best bets[\s\S]*Monday Visitors at Hosts under 54\.5/);
+  assert.doesNotMatch(next.view.innerHTML, /Upcoming best bets|Monday Visitors at Hosts under 54\.5/);
   assert.doesNotMatch(next.view.innerHTML, /NFL only/, 'bare Today resets a stale saved NFL-only filter');
   assert.doesNotMatch(next.view.innerHTML, /Fixture State/);
 });
@@ -353,14 +356,20 @@ test('bare Today starts with all football; a sport URL stays an explicit choice'
   assert.doesNotMatch(nfl.view.innerHTML, /Fixture State at Example Tech/);
 });
 
-test('Sunday football appears before a Monday-only NFL ticket', async () => {
-  const sunday = { ...GAMES[0], id: 'NFL-SUNDAY', kickoff: '2026-10-11T17:00:00Z' };
+test('an active game day never mixes in a later ticket or future-slate card', async () => {
+  const sunday = { ...GAMES[0], id: 'NFL-SATURDAY', kickoff: '2026-10-10T17:00:00Z' };
   const monday = { ...GAMES[0], id: 'NFL-MONDAY', kickoff: '2026-10-13T00:15:00Z' };
   const bills = { ...laterOpen, league: 'NFL', gameId: 'NFL-MONDAY', kickoff: monday.kickoff, displayTitle: 'Bills at Rams under 54.5' };
   const page = await loadApp('#today?sport=NFL', {}, { today: { ...TODAY, picks: [bills], games: [sunday, monday] } }).api.views.today({ view: 'today', league: 'NFL' });
-  assert.ok(page.indexOf('kt-next"') < page.indexOf('kt-bets"'), 'the near slate comes before the later bet');
-  assert.match(page, /Next football[\s\S]*Sunday, Oct 11[\s\S]*1 NFL game/);
-  assert.doesNotMatch(page.slice(page.indexOf('kt-next"'), page.indexOf('kt-bets"')), /Monday, Oct 12/, 'the bet day is not repeated as earlier football');
+  assert.doesNotMatch(page, /Next football|Upcoming best bets|Bills at Rams under 54\.5|Monday, Oct 12/);
+  assert.match(page, /Today(?:'|&#39;)s NFL/);
+});
+
+test('an off-day may show clearly labeled future prep', async () => {
+  const sunday = { ...GAMES[0], id: 'NFL-SUNDAY', kickoff: '2026-10-11T17:00:00Z' };
+  const bills = { ...laterOpen, league: 'NFL', gameId: 'NFL-SUNDAY', kickoff: sunday.kickoff, displayTitle: 'Bills at Rams under 54.5' };
+  const page = await loadApp('#today?sport=NFL', {}, { today: { ...TODAY, picks: [bills], games: [sunday] } }).api.views.today({ view: 'today', league: 'NFL' });
+  assert.match(page, /Next football[\s\S]*Sunday, Oct 11/);
   assert.match(page, /Upcoming best bets[\s\S]*Bills at Rams under 54\.5/);
 });
 
@@ -769,7 +778,9 @@ test('Today\'s games show live scores and our projected score, with the free sco
 test('Fun tickets and Pulled before kickoff are visible sections when they have plays, and absent when empty', async () => {
   const fun = { ...total, id: 'CFB-2026-W6-fun-longshot', kind: 'parlays', parlayType: 'longshot', legs: ['Leg A over 40.5', 'Leg B over 3.5'], odds: 450, displayTitle: 'Longshot' };
   const gone = { ...total, id: 'CFB-2026-W6-pulled', posted: true, displayTitle: 'Pulled Team at Other under 50.5', status: 'withdrawn', entryNote: 'Pulled over news before its post went out.' };
-  const page = await loadApp('#record', {}, { today: { ...TODAY, picks: [...TODAY.picks, fun, gone] } }).api.views.today({ view: 'today' });
+  const todayOff = { ...total, id: 'CFB-today-off-fd', displayTitle: 'Moved Line Today under 56.5', status: 'expired',
+    entryNote: 'Closed to new entries at 11:45 AM ET: total moved 3 against, from 56.5 to 53.5.' };
+  const page = await loadApp('#record', {}, { today: { ...TODAY, picks: [...TODAY.picks, fun, gone, todayOff] } }).api.views.today({ view: 'today' });
   assert.match(page, /<h2 class="kt-head" id="fun-h">Fun tickets<\/h2><span class="kt-kind">Smaller stake, apart from best bets<\/span>/);
   assert.match(page, /<h2 class="kt-head" id="pulled-h">Pulled before kickoff · 1<\/h2>[\s\S]*Pulled Team at Other/);
   const at = s => page.indexOf(s);

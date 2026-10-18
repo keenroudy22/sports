@@ -1213,19 +1213,24 @@
     const straight = p => !C.isParlay(p) && !pulled(p);
     const todays = sched.today.filter(p => straight(p) && !offCard(p)).sort(order);
     const later = sched.upcoming.filter(p => straight(p) && !offCard(p)).sort(order);
-    const off = [...sched.today, ...sched.upcoming].filter(p => straight(p) && offCard(p)).sort(order);
-    const gone = [...sched.today, ...sched.upcoming, ...sched.awaiting].filter(p => !C.isLadder(p) && pulled(p) && C.countsPublic(p));
+    const allOff = [...sched.today, ...sched.upcoming].filter(p => straight(p) && offCard(p)).sort(order);
+    const allGone = [...sched.today, ...sched.upcoming, ...sched.awaiting].filter(p => !C.isLadder(p) && pulled(p) && C.countsPublic(p));
     const awaiting = sched.awaiting.filter(p => !C.isLadder(p) && !pulled(p));
-    const fun = [...sched.today, ...sched.upcoming].filter(p => C.isParlay(p) && !C.isLadder(p) && !pulled(p));
+    const allFun = [...sched.today, ...sched.upcoming].filter(p => C.isParlay(p) && !C.isLadder(p) && !pulled(p));
     /* A future bet must not become today's best bet just because today's bar cleared nothing. */
     const rows = todays;
-    const rest = later;
     const ladder = C.theLadder(all);
     const rungHere = ladder.open && (state.league === 'ALL' || ladder.open.league === state.league) ? [ladder.open] : [];
     const climb = { run: ladder.run, step: ladder.step, riding: ladder.open ? Number((ladder.open.ladder || {}).stake) || ladder.stake : ladder.stake,
       open: ladder.open && { step: (ladder.open.ladder || {}).step }, settled: ladder.history.length, saved: ladder.saved, net: ladder.accounting.net,
       last: ladder.history.length ? { result: ladder.history[ladder.history.length - 1].result, step: (ladder.history[ladder.history.length - 1].ladder || {}).step } : null };
     const games = (today.games || []).filter(inLeague);
+    const hasGamesToday = games.some(g => C.dayOf(g.kickoff) === etDay() || g.state === 'in');
+    /* On an active game day, every Today surface stays on today. Future bets, tickets and schedule cards return
+       only on an off-day, where their headings make them explicit prep rather than today's action. */
+    const rest = hasGamesToday ? [] : later;
+    const visibleDay = p => !hasGamesToday || C.dayOf(p.kickoff) === etDay();
+    const off = allOff.filter(visibleDay), gone = allGone.filter(visibleDay), fun = allFun.filter(visibleDay);
     /* Show the nearer football slate before a later posted ticket. A saved NFL-only filter must not make
        Monday's ticket look like the next thing happening when Sunday has a full schedule. */
     const futureGames = games.filter(g => !g.completed && C.dayOf(g.kickoff) > etDay()).sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
@@ -1233,7 +1238,7 @@
     const firstLaterDay = rest.map(p => C.dayOf(p.kickoff)).filter(Boolean).sort()[0];
     const beforeBet = firstLaterDay ? futureDays.filter(day => day < firstLaterDay) : [];
     const nextDays = (beforeBet.length ? beforeBet : futureDays).slice(0, 2);
-    const nextSlate = nextDays.length ? ktSec('next', 'Next football', `<div class="kt-next-days">${nextDays.map(day => {
+    const nextSlate = !hasGamesToday && nextDays.length ? ktSec('next', 'Next football', `<div class="kt-next-days">${nextDays.map(day => {
       const dayGames = futureGames.filter(g => C.dayOf(g.kickoff) === day);
       const counts = [['CFB', 'college'], ['NFL', 'NFL']].map(([lg, label]) => {
         const n = dayGames.filter(g => g.league === lg).length;

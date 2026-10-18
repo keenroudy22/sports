@@ -1123,26 +1123,17 @@ def hero_next_day(rows):
 def today_hero(picks, now, potd=None, teams=None):
     """app/today-hero.json: the few facts Today paints first, while the full today.json is still loading.
 
-    Today's unsettled best bets (or, with none today, the next game day's still-on-the-card ones), the Climb's
-    status and the last graded game day's W-L. A league with no bet today also gets its own next game day, so a
-    visitor whose saved filter is NFL or CFB sees the same play the full card leads with. Everything is copied from
-    the published rows; nothing is new."""
+    Today's unsettled best bets, the Climb's status and the last graded game day's W-L. Future plays never enter
+    the first paint: active game days are about today, while explicitly labeled prep lives in the full page on
+    off-days. Everything is copied from the published rows; nothing is new."""
     today = eastern_date(now).isoformat()
     straight = [p for p in picks if not p.get('result') and not p.get('historicalImport') and not hero_parlay(p)
                 and not hero_pulled(p) and p.get('kickoff') and day(p['kickoff']) >= today]
     order = lambda p: (not p.get('featured'), str(p.get('kickoff')), str(p.get('id')))
     bets = sorted((p for p in straight if day(p['kickoff']) == today), key=order)
-    later = [p for p in straight if day(p['kickoff']) > today]
-    extra = [] if bets else hero_next_day(later)
-    for league in ('NFL', 'CFB'):
-        if not any(p.get('league') == league for p in bets):
-            seen = {p.get('id') for p in extra}
-            extra += [p for p in hero_next_day([p for p in later if p.get('league') == league]) if p.get('id') not in seen]
-    extra.sort(key=order)
-    # Today's plays come first, so a size trim drops another day's play before any of today's.
-    chosen = bets[:HERO_ROWS] + extra[:HERO_ROWS]
+    chosen = bets[:HERO_ROWS]
     rows = [hero_bet(p, now, potd, teams) for p in chosen]
-    payload = {'generatedAt': stamp(now), 'day': today, 'bets': rows, 'more': len(bets) + len(extra) - len(rows),
+    payload = {'generatedAt': stamp(now), 'day': today, 'bets': rows, 'more': len(bets) - len(rows),
                'climb': hero_climb(picks), 'last': last_slates(picks, today), 'season': season_records(picks, now)}
     # Never let a crowded slate grow the first paint: the full card still lists every play.
     while payload['bets'] and len(json.dumps(payload, separators=(',', ':'), sort_keys=True,

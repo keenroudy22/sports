@@ -89,30 +89,27 @@ class TodayHeroTests(unittest.TestCase):
             'chance': .410, 'breakEven': .357, 'calibrated': True})
         self.assertEqual(build_site.public_probability(good)['chance'], .410)
 
-    def test_with_no_bet_today_the_next_game_day_still_on_the_card(self):
+    def test_with_no_bet_today_the_hero_stays_empty_instead_of_showing_a_future_play(self):
         picks = [pick('CFB-mon-moved', kickoff='2026-10-12T23:00Z', entryNote='Closed to new entries: line moved.'),
                  pick('CFB-mon', kickoff='2026-10-12T23:30Z'),
                  pick('CFB-tue', kickoff='2026-10-13T23:30Z'),
                  pick('NFL-yesterday', kickoff='2026-10-09T23:00Z')]
         hero = build_site.today_hero(picks, NOW)
-        self.assertEqual([b['id'] for b in hero['bets']], ['CFB-mon'])
+        self.assertEqual(hero['bets'], [])
         self.assertEqual(build_site.today_hero([pick('NFL-yesterday', kickoff='2026-10-09T23:00Z')], NOW)['bets'], [],
                          'an ungraded play from yesterday is waiting on a result, not today\'s bet')
 
-    def test_a_league_with_no_bet_today_brings_its_own_next_game_day(self):
-        """A saved NFL filter on an all-college day sees the NFL play the full card leads with, not an empty hero."""
+    def test_a_league_with_no_bet_today_does_not_bring_a_future_day_into_the_hero(self):
         picks = [pick('CFB-today', league='CFB', kickoff='2026-10-10T19:30Z'),
                  pick('NFL-mon-moved', kickoff='2026-10-13T00:15Z', entryNote='Closed to new entries: line moved.'),
                  pick('NFL-mon', kickoff='2026-10-13T00:20Z', featured=True),
                  pick('NFL-thu-next-week', kickoff='2026-10-16T00:15Z'),
                  pick('CFB-thu', league='CFB', kickoff='2026-10-15T23:30Z')]
         hero = build_site.today_hero(picks, NOW)
-        self.assertEqual([b['id'] for b in hero['bets']], ['CFB-today', 'NFL-mon'],
-                         "today's college play first, then the NFL's next on-the-card day; CFB already has today")
+        self.assertEqual([b['id'] for b in hero['bets']], ['CFB-today'])
         self.assertEqual(hero['more'], 0)
         none_today = build_site.today_hero([p for p in picks if p['id'] != 'CFB-today'], NOW)
-        self.assertEqual([b['id'] for b in none_today['bets']], ['NFL-mon', 'CFB-thu'],
-                         'with no bet today each league brings its next game day; the page shows the earliest')
+        self.assertEqual(none_today['bets'], [])
 
     def test_a_size_trim_drops_another_days_play_before_any_of_todays(self):
         today = [pick(f'CFB-2026-W6-very-long-player-name-over-149-5-receiving-yards-{i:02d}-dk', league='CFB',
@@ -127,7 +124,7 @@ class TodayHeroTests(unittest.TestCase):
         self.assertGreater(hero['more'], 0, 'this slate is built to need a trim')
         self.assertNotIn(later['id'], ids, "another day's play goes first, even a featured one")
         self.assertEqual(ids, [p['id'] for p in today][:len(ids)], "today's plays stay in kickoff order")
-        self.assertEqual(len(ids) + hero['more'], 7)
+        self.assertEqual(len(ids) + hero['more'], 6)
 
     def test_climb_status_walks_the_rungs_exactly_like_ladder_state(self):
         cases = {

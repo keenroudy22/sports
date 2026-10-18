@@ -17,7 +17,7 @@ test('Today is the first screen, then every section visible with no fold (owner,
   const t = s => { const i = top.indexOf(s); assert.ok(i >= 0, s); return i; };
   assert.ok(t('rail(rows.slice(0, 1)') < t('${climbStub(climb, past)}') && t('${climbStub(climb, past)}') < t('${proof}')
     && t('${proof}') < t('${nextSlate}') && t('${nextSlate}') < t('rail(later,'),
-  'first ticket, Climb, season line, then the near slate before later best bets');
+  'first ticket, Climb, season line, then explicitly labeled off-day prep');
 });
 
 test('Off the card is the line-moved state only: its own visible section, never on the rail', () => {
