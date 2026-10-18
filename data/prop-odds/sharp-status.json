@@ -1,13 +1,13 @@
 {
- "at": "2026-10-18T00:55:22Z",
+ "at": "2026-10-18T01:04:25Z",
  "confirmed": {
-  "CFB-401856833": "2026-10-18T00:55:22Z",
-  "CFB-401858269": "2026-10-18T00:55:22Z",
-  "CFB-401858492": "2026-10-18T00:55:22Z",
-  "CFB-401864521": "2026-10-18T00:55:22Z",
-  "NFL-401872996": "2026-10-18T00:55:22Z",
+  "CFB-401856833": "2026-10-18T01:04:25Z",
+  "CFB-401858269": "2026-10-18T01:04:25Z",
+  "CFB-401858492": "2026-10-18T01:04:25Z",
+  "CFB-401864521": "2026-10-18T01:04:25Z",
+  "NFL-401872996": "2026-10-18T01:04:25Z",
   "NFL-401872997": "2026-10-17T23:18:58Z",
-  "NFL-401872998": "2026-10-17T23:18:58Z",
+  "NFL-401872998": "2026-10-18T01:04:25Z",
   "NFL-401872999": "2026-10-17T23:18:58Z",
   "NFL-401873000": "2026-10-17T23:18:58Z",
   "NFL-401873001": "2026-10-17T23:18:58Z",
@@ -18,12 +18,12 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 812,
-    "fanduel": 525
+    "draftkings": 431,
+    "fanduel": 658
    },
-   "eventsListed": 11,
-   "eventsMatched": 7,
-   "games": 7,
+   "eventsListed": 10,
+   "eventsMatched": 6,
+   "games": 6,
    "marketTypes": {
     "player_assists": 5,
     "player_field_goals_made": 3,
@@ -31,23 +31,22 @@
     "player_longest_passing_completion": 4,
     "player_longest_reception": 23,
     "player_longest_rush": 9,
-    "player_passing_+_rushing_yards": 69,
-    "player_passing_attempts": 15,
-    "player_passing_completions": 14,
-    "player_passing_touchdowns": 32,
-    "player_passing_yards": 128,
-    "player_receiving_yards": 555,
-    "player_receptions": 127,
-    "player_rushing_attempts": 33,
-    "player_rushing_yards": 303,
+    "player_passing_+_rushing_yards": 24,
+    "player_passing_attempts": 7,
+    "player_passing_completions": 7,
+    "player_passing_touchdowns": 25,
+    "player_passing_yards": 71,
+    "player_receiving_yards": 458,
+    "player_receptions": 124,
+    "player_rushing_attempts": 19,
+    "player_rushing_yards": 293,
     "player_sacks": 4,
     "player_tackles": 5,
     "player_tackles_+_assists": 5
    },
-   "requestsLeft": 3,
-   "rows": 1337,
+   "requestsLeft": 5,
+   "rows": 1089,
    "slateGames": [
-    "San Jos\u00e9 State Spartans at UTEP Miners 2026-10-18T01:00Z",
     "Ohio Bobcats at Sacramento State Hornets 2026-10-18T02:00Z",
     "Utah Utes at Colorado Buffaloes 2026-10-18T02:15Z",
     "Wake Forest Demon Deacons at California Golden Bears 2026-10-18T02:30Z",
@@ -61,7 +60,7 @@
      "external": {
       "draftkings": "34827165",
       "gemini": "NCAAF-2610202300-MTN-FIU-M",
-      "kalshi": "KXNCAAFTOTAL-26OCT20MTUFIU",
+      "kalshi": "KXNCAAF1H-26OCT20MTUFIU",
       "novig": "01a13261-e3ae-7df3-868b-d3405330f8a0",
       "onexbet": "762510535",
       "polymarket": "nfl_floridainternational_middletennesseeblueraiders_2026-10-20_b3",
@@ -171,31 +170,38 @@
   },
   "NFL": {
    "books": {
-    "draftkings": 400
+    "draftkings": 656,
+    "fanduel": 144
    },
    "eventsListed": 28,
    "eventsMatched": 13,
    "games": 13,
    "marketTypes": {
-    "player_assists": 18,
-    "player_extra_points_made": 4,
-    "player_fantasy_score": 12,
-    "player_field_goals_made": 4,
-    "player_interceptions": 4,
-    "player_kicking_points": 4,
-    "player_longest_passing_completion": 4,
-    "player_longest_reception": 26,
-    "player_longest_rush": 10,
-    "player_passing_+_rushing_yards": 4,
-    "player_passing_attempts": 4,
-    "player_passing_completions": 4,
-    "player_passing_touchdowns": 4,
-    "player_passing_yards": 54,
-    "player_receiving_yards": 172,
-    "player_receptions": 72
+    "player_assists": 40,
+    "player_extra_points_made": 8,
+    "player_fantasy_score": 26,
+    "player_field_goals_made": 8,
+    "player_interceptions": 8,
+    "player_kicking_points": 8,
+    "player_longest_passing_completion": 8,
+    "player_longest_reception": 42,
+    "player_longest_rush": 16,
+    "player_passing_+_rushing_yards": 8,
+    "player_passing_attempts": 8,
+    "player_passing_completions": 8,
+    "player_passing_touchdowns": 17,
+    "player_passing_yards": 127,
+    "player_receiving_yards": 274,
+    "player_receptions": 80,
+    "player_rushing_+_receiving_yards": 4,
+    "player_rushing_attempts": 4,
+    "player_rushing_yards": 48,
+    "player_sacks": 14,
+    "player_tackles": 22,
+    "player_tackles_+_assists": 22
    },
    "requestsLeft": 0,
-   "rows": 400,
+   "rows": 800,
    "slateGames": [
     "Houston Texans at Jacksonville Jaguars 2026-10-18T13:30Z",
     "Baltimore Ravens at Cleveland Browns 2026-10-18T17:00Z",
@@ -225,7 +231,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-18T00:45:00Z",
+     "start": "2026-10-18T01:03:00Z",
      "type": "outright"
     },
     {
