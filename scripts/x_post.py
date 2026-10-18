@@ -462,7 +462,10 @@ def _choose_reason(pick, supplied, history, day):
     # The fixed model-vs-book sentence is already its own caption line.  It is
     # not the required factual reason and repeating it makes reason_in() (and
     # readers) see a number-only post.
-    choices = [choice for choice in choices if plain(choice) and not choice.startswith('Book says ')]
+    player = pick_card.play_kind(pick) == 'player'
+    choices = [choice for choice in choices if plain(choice) and choice.split()
+               and not choice.startswith('Book says ')
+               and (player or choice.split()[0].lower() not in DANGLING)]
     recent = [row for row in history or [] if (row.get('series') or row.get('kind')) in ('play', 'buffer:play')]
     recent_kinds = [row.get('reasonKind') for row in recent if row.get('reasonKind') not in (None, 'none')]
     today_kinds = [row.get('reasonKind') for row in recent if str(row.get('postedAt') or row.get('dueAt') or '').startswith(day)]
@@ -597,7 +600,8 @@ def draft(pick, game=None, weights=None, reason=None, now_quote=None, featured=F
         projection, line = pick.get('projection'), pick.get('line')
         side_word = str(pick.get('direction') or '').lower()
         side_phrase = f'the {side_word}' if side_word in ('over', 'under') else 'this side'
-        number = (f"Book says {pricing.fmt(float(line))}. I have it at "
+        number = ('' if pick.get('marketType') == 'moneyline' else
+                  f"Book says {pricing.fmt(float(line))}. I have it at "
                   f"{pick_card.plain_number(projection)}, so I'm on {side_phrase}."
                   if isinstance(projection, (int, float)) and isinstance(line, (int, float)) else '')
         saved_reason = reason if reason is not None else load_reasons().get(pick.get('id'))

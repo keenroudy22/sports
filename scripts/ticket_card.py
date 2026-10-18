@@ -122,6 +122,11 @@ def straight_data(pick, game, *, featured=False, player_side=None, art=None, fet
         number = float(pick['line'])
         output['side'] = f'{pick_card.team_label(team, league).upper()} {number:+g}'
         output['side_short'] = f'{team_code} {number:+g}'
+    elif pick.get('marketType') == 'moneyline':
+        # A full team name plus MONEYLINE can overflow the printed ticket.
+        # The matchup directly above supplies the full names, so use the
+        # familiar scoreboard code for the compact wager line.
+        output['side'] = f'{team_code} TO WIN'
     else:
         output['side'] = str(pick.get('title') or '').upper()
     return output

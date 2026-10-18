@@ -379,13 +379,26 @@ class ResearchPostTests(unittest.TestCase):
         choice = R.select({'games': [game(watch), second]}, {'CFB-1': {}, 'CFB-2': {}}, NOW)
         self.assertEqual(choice['kind'], 'upset')
         self.assertIn('Underdog +160 ML (DK)', choice['text'])
-        self.assertIn('we give them 60%. The price says 37%.', choice['text'])
+        self.assertIn('Possible outright dogs:', choice['text'])
+        self.assertNotIn('more on the card', choice['text'])
         self.assertNotIn('not official', choice['text'].lower())
         self.assertEqual(choice['rows'][0]['metric'], 'Our score DOG 27–23 FAV')
         self.assertIn('7.5-pt gap vs spread', choice['rows'][0]['detail'])
         self.assertIn("offense rates 2.1 points above average", choice['rows'][0]['reason'])
         post = {'text': choice['text']}
         self.assertEqual(receipts.guard(post), [])
+
+    def test_upset_caption_names_each_team_instead_of_hiding_a_row_count(self):
+        choice = {'kind': 'upset', 'title': 'UNDERDOG WATCH', 'text': 'x' * 900,
+                  'rows': [
+                      {'title': 'Eagles', 'price': '+140 ML', 'book': 'DraftKings', 'league': 'NFL'},
+                      {'title': 'Buccaneers', 'price': '+120 ML', 'book': 'DraftKings', 'league': 'NFL'},
+                  ]}
+        text = R.bounded_caption(choice)
+        self.assertEqual(text, '\n'.join(['🐕 UNDERDOG WATCH', 'Possible outright dogs:',
+                                          'Eagles +140 ML (DK)', 'Buccaneers +120 ML (DK)', '#NFL']))
+        self.assertNotRegex(text, r'\+\d+ more on the card')
+        self.assertEqual(receipts.guard({'text': text}), [])
 
     def test_matchup_and_end_zone_are_fallbacks_not_streak_guarantees(self):
         detail = {'favoriteLines': [{'id': 'runner', 'sourceId': 'runner', 'kind': 'player',

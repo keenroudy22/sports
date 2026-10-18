@@ -103,6 +103,22 @@ class DraftTests(unittest.TestCase):
         self.assertIn("Book says -3. I have it at 2.6, so I'm on this side.", opposite,
                       'the number plainly shows when our side crosses zero')
 
+    def test_moneyline_never_prints_zero_as_a_book_line_or_a_dangling_reason(self):
+        game = {'league': 'NFL', 'kickoff': '2026-10-19T00:20:00Z',
+                'away': {'name': 'Dallas Cowboys', 'short': 'Cowboys'},
+                'home': {'name': 'Green Bay Packers', 'short': 'Packers'}}
+        pick = dict(PICK, id='NFL-2026-W6-dal-gb-ml-home-0-dk', lane='gut_call',
+                    title='Packers MONEYLINE', marketType='moneyline', direction='home', line=0,
+                    odds=-112, book='DraftKings', projection=.60,
+                    probabilityAtPublication={'chance': .55, 'breakEven': .528, 'calibrated': True},
+                    reasons=['Dallas is without its starting left tackle.'])
+        text = x_post.draft(pick, game, reason='has been ruled out.')
+        self.assertIn('packers moneyline', text.lower())
+        self.assertIn('Dallas is without its starting left tackle.', text)
+        self.assertNotIn('Book says 0', text)
+        self.assertNotIn('has been ruled out.', text)
+        self.assertEqual(x_post.guard(text, pick, x_post.reason_in(text)), [])
+
     def test_the_post_shows_the_number_available_now_when_it_moved(self):
         pick = dict(PICK, favorite=False, modelLean=True, projection=31.2)
         moved = x_post.draft(pick, GAME, reason='', now_quote=('DraftKings', 37.5, -110))

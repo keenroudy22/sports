@@ -113,7 +113,12 @@ def meta_block(card, p, cy):
 def play_card(p):
     """Hot Plate (POTD) or best bet: player prop with photo, player prop without photo, or game line."""
     card = kit.Card()
-    has_number = isinstance(p.get('projection'), (int, float)) and p.get('line') not in (None, '')
+    # Moneylines do not have a book line to compare with the projected score
+    # margin.  Treating their sentinel line=0 as a real number printed the
+    # nonsensical "BOOK SAYS 0" row.
+    has_number = (p.get('market') != 'moneyline'
+                  and isinstance(p.get('projection'), (int, float))
+                  and p.get('line') not in (None, ''))
     tag_w = width('WHY', 40, tracking=2) + 26
     why = reason_lines(p.get('reason'), X2 - X1 - tag_w - 18) if p.get('reason') else None
     if not why:

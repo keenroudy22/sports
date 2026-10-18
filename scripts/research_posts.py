@@ -540,6 +540,23 @@ def bounded_caption(choice):
     headings = {'upset': '🐕 UNDERDOG WATCH', 'spread-dog': '🐕 SPREAD WATCH',
                 'matchup': '📊 MATCHUP TREND', 'season': '📈 TREND BOARD',
                 'end-zone': '🎯 END-ZONE WORK', 'numbers': '👀 MY NUMBER VS VEGAS'}
+    if kind == 'upset':
+        # Name every dog plainly. A row count sounds like internal desk copy and
+        # makes readers open the image just to learn which teams are being watched.
+        dogs = [f"{str(item.get('title') or '').strip()} {item.get('price') or ''}"
+                f" ({book_short(item.get('book'))})".rstrip()
+                for item in rows if str(item.get('title') or '').strip()]
+        league_tags = tags(rows)
+        lines = [headings[kind], 'Possible outright dogs:', *dogs,
+                 *([league_tags] if league_tags else [])]
+        while len(dogs) > 1 and tweet_length('\n'.join(lines)) > LIMIT:
+            dogs.pop()
+            lines = [headings[kind], 'Possible outright dogs:', *dogs,
+                     *([league_tags] if league_tags else [])]
+        if tweet_length('\n'.join(lines)) > LIMIT:
+            lines = [headings[kind], 'Details on the card',
+                     *([league_tags] if league_tags else [])]
+        return '\n'.join(lines)
     headline = str(row.get('title') or '').strip()
     evidence = ''
     if kind == 'matchup':
@@ -569,8 +586,6 @@ def bounded_caption(choice):
     lines = [headings[kind], headline, evidence]
     if row.get('price') and kind in ('matchup',):
         lines.append(str(row['price']))
-    if len(rows) > 1:
-        lines.append(f"+{len(rows) - 1} more on the card")
     if league_tags:
         lines.append(league_tags)
     lines = [line for line in lines if line]

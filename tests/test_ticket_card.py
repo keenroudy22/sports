@@ -223,6 +223,24 @@ class TicketCardTests(unittest.TestCase):
         self.assertIn('TOTAL', svg)
         self.assertIn('OVER 46.5', svg)
 
+    def test_long_moneyline_name_falls_back_to_team_code_and_renders(self):
+        game = {
+            'league': 'NFL', 'kickoff': '2026-10-19T00:20:00Z',
+            'away': {'id': '6', 'abbreviation': 'DAL', 'name': 'Dallas Cowboys'},
+            'home': {'id': '9', 'abbreviation': 'GB', 'name': 'Green Bay Packers'},
+        }
+        pick = {'id': 'NFL-2026-W6-dal-gb-ml-home-0-dk', 'title': 'Packers MONEYLINE',
+                'marketType': 'moneyline', 'direction': 'home', 'line': 0,
+                'odds': -112, 'book': 'DraftKings', 'riskUnits': .5,
+                'projection': .60}
+        data = ticket_card.straight_data(pick, game, fetch=lambda _: self.image)
+        self.assertEqual(data['side'], 'GB TO WIN')
+        svg = ticket_card.straight_svg(pick, game, fetch=lambda _: self.image)
+        self.assertIn('GB TO WIN', svg)
+        self.assertNotIn('PACKERS MONEYLINE', svg)
+        self.assertNotIn('BOOK SAYS', svg)
+        self.assertNotIn('I HAVE IT AT', svg)
+
     def test_climb_map_uses_ledger_rows_and_labels_the_future_plan(self):
         first = {'r1': {'id': 'r1', 'parlayType': 'ladder', 'publishedAt': '2026-10-01T15:00:00Z',
                         'ladder': {'run': 1, 'step': 1, 'stake': 50, 'payout': 81, 'banked': 0},
