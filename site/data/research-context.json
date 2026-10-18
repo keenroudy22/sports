@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-18T20:38:44Z",
+  "updatedAt": "2026-10-18T20:46:12Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -3687,6 +3687,15 @@
           "name": "Las Vegas Raiders",
           "players": [
             {
+              "id": "4430330",
+              "name": "Darien Porter",
+              "position": "CB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-18T20:24Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4430330/darien-porter"
+            },
+            {
               "id": "4431623",
               "name": "Trey Zuhn III",
               "position": "C",
@@ -3901,15 +3910,6 @@
               "injury": null,
               "reportedAt": "2026-10-09T18:55Z",
               "source": "https://www.espn.com/nfl/player/_/id/4362999/spencer-burford"
-            },
-            {
-              "id": "4875295",
-              "name": "Jackson Powers-Johnson",
-              "position": "G",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-09T00:37Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4875295/jackson-powers-johnson"
             }
           ]
         },
@@ -4147,6 +4147,15 @@
           "name": "Los Angeles Rams",
           "players": [
             {
+              "id": "4259619",
+              "name": "Blake Grupe",
+              "position": "PK",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-10-18T20:26Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4259619/blake-grupe"
+            },
+            {
               "id": "4242154",
               "name": "Kam Curl",
               "position": "S",
@@ -4271,15 +4280,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-14T01:14Z",
               "source": "https://www.espn.com/nfl/player/_/id/3122132/myles-garrett"
-            },
-            {
-              "id": "4259619",
-              "name": "Blake Grupe",
-              "position": "PK",
-              "status": "Active",
-              "injury": "Knee",
-              "reportedAt": "2026-10-13T18:02Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4259619/blake-grupe"
             },
             {
               "id": "4833029",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Out",
               "injury": "Calf",
-              "reportedAt": "2026-10-18T20:18Z",
+              "reportedAt": "2026-10-18T20:26Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "14",
-          "name": "Bill Murray",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-10-18T19:00:46Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3912189/bill-murray"
-        },
-        {
-          "teamId": "14",
           "name": "CJ Daniels",
           "from": "Active",
           "to": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-18T20:30:07Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361432/romeo-doubs"
+        },
+        {
+          "teamId": "14",
+          "name": "Blake Grupe",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-18T20:46:12Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4259619/blake-grupe"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-18T20:38:44Z",
-      "lastAttemptAt": "2026-10-18T20:38:44Z",
+      "checkedAt": "2026-10-18T20:46:12Z",
+      "lastAttemptAt": "2026-10-18T20:46:12Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-18T20:38:44Z",
-      "lastAttemptAt": "2026-10-18T20:38:44Z",
+      "checkedAt": "2026-10-18T20:46:12Z",
+      "lastAttemptAt": "2026-10-18T20:46:12Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
