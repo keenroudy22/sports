@@ -703,7 +703,7 @@ def one_book(candidate, ctx):
 
 
 def best_quote_by_ev(candidate, ctx):
-    """The pick takes the quote with the best expected value across books, not the best-looking number."""
+    """Shop with the same market-anchored chance used to select and display a play."""
     snapshot = ctx.snapshot((candidate.get('gameIds') or [None])[0])
     market, side = market_key(candidate), side_of(candidate)
     quotes = [quote for quote in quotes_for(candidate, ctx, priced_only=True)
@@ -716,12 +716,14 @@ def best_quote_by_ev(candidate, ctx):
             p = calibrated_desk(pricing.price(snapshot, market, side, float(line), int(odds), candidate.get('athleteId')), candidate, ctx)
         except (ValueError, KeyError):
             continue
-        priced.append((p['evPerUnit'], book, line, int(odds)))
+        probe = dict(candidate, book=book, line=float(line), odds=int(odds), _desk=p, _selection=None)
+        numbers = selection_numbers(probe, ctx)
+        priced.append(((numbers or p)['evPerUnit'], book, line, int(odds)))
     if not priced:
         return Decision(True, 'best_quote_by_ev', 'v2 cannot price the alternatives')
     best = max(priced)
-    own = desk_for(candidate, ctx)
-    own_ev = own['evPerUnit'] if own else None
+    own = selection_numbers(candidate, ctx)
+    own_ev = own.get('evPerUnit') if own else (desk_for(candidate, ctx) or {}).get('evPerUnit')
     if own_ev is None:
         return Decision(True, 'best_quote_by_ev', 'the candidate itself has no model number to compare')
     # The bettor's return is identical when the line and selected-side price

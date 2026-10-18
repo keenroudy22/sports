@@ -1251,10 +1251,12 @@
     const current = vm => vm.age.kind === 'fresh' || vm.age.kind === 'aging';
     const withGame = vm => { const g = GAMES.get(vm.gameId); vm.matchup = g && g.away ? `${g.away.abbr} at ${g.home.abbr}` : null; return vm; };
     const lineRows = lines ? (lines.lines || []).map(r => withGame(lineVM(r, now))).filter(vm => inLeague(vm) && onBoard(vm, now) && current(vm)) : [];
-    const upsets = games.filter(g => currentUpset(g, now)).sort((a, b) => (b.upsetWatch.modelChance - b.upsetWatch.marketChanceNoVig) - (a.upsetWatch.modelChance - a.upsetWatch.marketChanceNoVig)).slice(0, 4);
-    const dogSpreads = lineRows.filter(vm => !vm.isProp && /spread/i.test(vm.market) && Number(vm.line) > 0 && hasValue(vm));
-    const dogDay = dogSpreads.length ? C.dayOf(dogSpreads.slice().sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)))[0].kickoff) : null;
-    const spreadRows = dogSpreads.filter(vm => C.dayOf(vm.kickoff) === dogDay).sort(SORTS.edge).slice(0, 4);
+    /* Today means the current Eastern game day. Future upset research belongs on Games/Research,
+       not in Today's rail beside current-day bets. */
+    const upsets = games.filter(g => C.dayOf(g.kickoff) === etDay() && currentUpset(g, now))
+      .sort((a, b) => (b.upsetWatch.modelChance - b.upsetWatch.marketChanceNoVig) - (a.upsetWatch.modelChance - a.upsetWatch.marketChanceNoVig)).slice(0, 4);
+    const dogSpreads = lineRows.filter(vm => C.dayOf(vm.kickoff) === etDay() && !vm.isProp && /spread/i.test(vm.market) && Number(vm.line) > 0 && hasValue(vm));
+    const spreadRows = dogSpreads.sort(SORTS.edge).slice(0, 4);
     const upsetHtml = upsets.length || spreadRows.length ? `<p class="eyebrow" style="margin-bottom:8px">Outright upset candidates</p>${upsets.length ? `<div class="grid two">${upsets.map((g, i) => upsetRow(g, i + 1)).join('')}</div>` : '<p class="muted small">No fresh outright candidate.</p>'}
       ${spreadRows.length ? `<p class="eyebrow" style="margin:16px 0 4px">Underdog spread value</p><p class="small muted" style="margin-bottom:8px">Covering does not mean winning outright.</p><div class="board">${spreadRows.map(vm => boardRow(vm, false)).join('')}</div>` : '<p class="muted small" style="margin-top:10px">Underdog spreads: none highlighted right now.</p>'}`
       : '<p class="muted small">No current outright-upset or underdog-spread highlight.</p>';

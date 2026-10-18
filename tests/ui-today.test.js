@@ -657,6 +657,14 @@ test('Underdog watch is its own visible research section: outright upsets apart 
   assert.match(none.slice(none.indexOf('kt-upsets"'), none.indexOf('kt-worth"')), /No current outright-upset or underdog-spread highlight\./, 'the honest empty state stays');
 });
 
+test('Today never promotes a future-day upset candidate', async () => {
+  const future = { ...GAMES[1], id: 'CFB-future', kickoff: '2026-10-17T19:30:00Z', upsetWatch: UPSET };
+  const page = await loadApp('#record', {}, { today: { ...TODAY, games: [GAMES[0], future] } }).api.views.today({ view: 'today' });
+  const sec = page.slice(page.indexOf('kt-upsets"'), page.indexOf('kt-worth"'));
+  assert.doesNotMatch(sec, /Arizona · \+150/);
+  assert.match(sec, /No current outright-upset or underdog-spread highlight\./);
+});
+
 /* Board rows for Worth a look: fresh, open, priced, graded. */
 const OBS = '2026-10-10T13:40:00Z';
 const lineRow = (id, extra = {}, grade = {}) => ({ id, league: 'NFL', gameId: 'NFL-1', kickoff: prop.kickoff, state: 'open', odds: -110, book: 'draftkings',

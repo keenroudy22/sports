@@ -7,6 +7,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 import gates
 import build_site
+import pricing
 from gates import Context
 
 NOW = datetime(2026, 9, 27, 13, 0, tzinfo=timezone.utc)          # Sunday 9:00 ET, four hours before kickoff
@@ -325,7 +326,7 @@ class ShoppingRuleTests(unittest.TestCase):
         self.assertTrue(gates.one_book(total_lean(), context()).ok)
 
     def test_best_quote_prefers_expected_value_over_the_number(self):
-        # Under: BetRivers 53 at -113 shows a better number than ESPN BET 52.5 at -105, but is worth less.
+        # The public market-anchored number values the extra half point enough to prefer BetRivers here.
         snapshot = dict(SNAPSHOT, total=48.0)
         odds = {'gameId': 'NFL-1', 'retrievedAt': '2026-09-27T13:00:00Z',
                 'books': {'betrivers': {'total': {'line': 53, 'over': -107, 'under': -113}},
@@ -333,10 +334,11 @@ class ShoppingRuleTests(unittest.TestCase):
         ctx = context(odds={'NFL-1': odds}, snapshots={'NFL-1': [snapshot]})
         worse = total_lean(book='BetRivers', line=53, odds=-113, direction='under')
         decision = gates.best_quote_by_ev(worse, ctx)
-        self.assertFalse(decision.ok)
-        self.assertEqual(decision.data['best']['book'], 'ESPN BET')
+        self.assertTrue(decision.ok)
         better = total_lean(book='ESPN BET', line=52.5, odds=-105, direction='under')
-        self.assertTrue(gates.best_quote_by_ev(better, ctx).ok)
+        decision = gates.best_quote_by_ev(better, ctx)
+        self.assertFalse(decision.ok)
+        self.assertEqual(decision.data['best']['book'], 'BetRivers')
 
     def test_best_quote_ignores_comparison_only_books_for_official_selection(self):
         snapshot = dict(SNAPSHOT, margin=-11.0)
@@ -359,6 +361,23 @@ class ShoppingRuleTests(unittest.TestCase):
                                book='BetMGM', _quotes=None)
         self.assertTrue(gates.best_quote_by_ev(candidate, ctx).ok,
                         'the same +14 at -105 has the same bettor return at either book')
+
+    def test_best_quote_uses_the_public_market_anchored_probability(self):
+        snapshot = dict(SNAPSHOT, margin=-11.0)
+        odds = {'gameId': 'NFL-1', 'retrievedAt': '2026-09-27T13:00:00Z',
+                'books': {'betmgm': {'spread': {'home': 14, 'homePrice': -105, 'awayPrice': -115}},
+                          'draftkings': {'spread': {'home': 13.5, 'homePrice': -102, 'awayPrice': -118}}}}
+        ctx = context(odds={'NFL-1': odds}, snapshots={'NFL-1': [snapshot]})
+        candidate = total_lean(marketType='spread', direction='home', line=14, odds=-105,
+                               book='BetMGM', _quotes=None)
+        alternatives = []
+        for book, line, price in gates.quotes_for(candidate, ctx, priced_only=True):
+            desk = gates.calibrated_desk(pricing.price(snapshot, 'spread', 'home', line, price), candidate, ctx)
+            numbers = gates.selection_numbers(dict(candidate, book=book, line=line, odds=price, _desk=desk,
+                                                    _selection=None), ctx)
+            alternatives.append((numbers['evPerUnit'], book))
+        decision = gates.best_quote_by_ev(candidate, ctx)
+        self.assertEqual(decision.ok, max(alternatives)[1] == 'BetMGM')
 
     def test_best_quote_passes_when_nothing_can_be_compared(self):
         self.assertTrue(gates.best_quote_by_ev(total_lean(), context(snapshots={})).ok)
@@ -672,7 +691,7 @@ class AdmitTests(unittest.TestCase):
                               'segments': {'NFL/prop:recYds': {'paused': True}}})
         for kind in ('propLean', 'favorite', 'researched'):
             ok, decisions = gates.admit(prop_lean(), ctx, kind)
-            self.assertFalse(ok)
+            self.assertTrue(ok, [str(d) for d in decisions if not d.ok])
             self.assertNotIn('learned_pause', {d.rule for d in gates.refusals(decisions)})
         paused = gates.learning.default_policy()
         paused['direction'] = {'segments': {'NFL/prop:recYds': {'paused': True, 'pauseSince': '2026-09-01T00:00:00Z'}}}
