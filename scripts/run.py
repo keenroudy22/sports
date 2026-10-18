@@ -79,6 +79,10 @@ class RunError(Exception):
     """A step that stops the run; the reason is reported and nothing further is written."""
 
 
+class ReleaseArtifactError(Exception):
+    """A private play remains queued until its caption and card can be rebuilt."""
+
+
 def stamp(moment):
     return moment.astimezone(timezone.utc).isoformat(timespec='seconds').replace('+00:00', 'Z')
 
@@ -2725,27 +2729,8 @@ def drafts(slot, now, ctx, games, settled, status, admitted=(), reasons=None):
             written.append(key)
         except x_post.Refused:
             continue
-        try:                                                  # the card is a nicety; a missing browser never stops a run
-            import pick_card
-            if pick_card.chrome_path():
-                team = ctx.player_team.get(str(pick_now.get('athleteId') or ''))
-                side = 'home' if team == str(game['home']['id']) else 'away' if team == str(game['away']['id']) else None
-                import featured
-                art = pick_card.artwork(pick_now, game)
-                is_featured = merged.get('lane') == 'hot_plate' or featured.of_day(eastern_date(now).isoformat()) == key
-                if pick_card.ticket_enabled(pick_now):
-                    import ticket_card
-                    kind = pick_card.play_kind(pick_now)
-                    if kind == 'ladder':
-                        svg = ticket_card.climb_svg(pick_now, games, ctx.player_team)
-                    elif kind == 'parlay':
-                        svg = ticket_card.fun_svg(pick_now, games, ctx.player_team)
-                    else:
-                        svg = ticket_card.straight_svg(pick_now, game, player_side=side,
-                                                       featured=is_featured, art=art)
-                else:
-                    svg = pick_card.modern_svg(pick_now, game, player_side=side, featured=is_featured, art=art)
-                pick_card.render(svg, folder / f'{key}.png')
+        try:                                                  # the queue retries this if the first render fails
+            render_private_play_card(key, pick_now, game, games, ctx, now, folder / f'{key}.png')
         except Exception as error:
             log(f'card for {key} not rendered: {error}')
     status['x']['drafted'] = len(written)
@@ -2944,6 +2929,71 @@ def _private_card(path):
     return data, 'image/png', 'kookn-card.png'
 
 
+def render_private_play_card(key, pick, game, games, ctx, now, target):
+    """Render one immutable pre-release card from the selected row's saved facts."""
+    if not pick_card.chrome_path():
+        raise ReleaseArtifactError('Chrome is unavailable for the release card')
+    team = ctx.player_team.get(str(pick.get('athleteId') or ''))
+    side = 'home' if team == str(game['home']['id']) else 'away' if team == str(game['away']['id']) else None
+    import featured
+    art = pick_card.artwork(pick, game)
+    is_featured = pick.get('lane') == 'hot_plate' or featured.of_day(eastern_date(now).isoformat()) == key
+    if pick_card.ticket_enabled(pick):
+        import ticket_card
+        kind = pick_card.play_kind(pick)
+        if kind == 'ladder':
+            svg = ticket_card.climb_svg(pick, games, ctx.player_team)
+        elif kind == 'parlay':
+            svg = ticket_card.fun_svg(pick, games, ctx.player_team)
+        else:
+            svg = ticket_card.straight_svg(pick, game, player_side=side,
+                                           featured=is_featured, art=art)
+    else:
+        svg = pick_card.modern_svg(pick, game, player_side=side, featured=is_featured, art=art)
+    pick_card.render(svg, target)
+
+
+def recover_private_release_artifacts(row, ctx, games, now):
+    """Rebuild a queued play's missing private caption/card before any public send."""
+    import release_queue
+    import x_post
+
+    key = row.get('id')
+    pick = dict(row.get('pick') or {})
+    game = games.get((pick.get('gameIds') or [None])[0])
+    if not key or not game:
+        raise ReleaseArtifactError('the selected game is unavailable for artifact recovery')
+    changes = {}
+    try:
+        caption = str(row.get('caption') or '').strip()
+        if not caption:
+            first = dict(ctx.first)
+            latest = dict(ctx.latest)
+            first[key] = dict(pick)
+            latest[key] = dict(pick)
+            folder = CONF / 'x-drafts'
+            folder.mkdir(parents=True, exist_ok=True)
+            caption, _, _ = x_post.do_draft(key, now, first, latest, games, out=folder,
+                                            reason=row.get('reason'))
+            changes['caption'] = caption
+        card = Path(row.get('card') or (release_queue.cards(CONF) / f'{key}.png'))
+        valid_card = card.is_file() and card.read_bytes()[:8] == b'\x89PNG\r\n\x1a\n'
+        if not valid_card:
+            card.parent.mkdir(parents=True, exist_ok=True)
+            render_private_play_card(key, pick, game, games, ctx, now, card)
+            changes['card'] = str(card)
+    except ReleaseArtifactError:
+        raise
+    except Exception as error:
+        raise ReleaseArtifactError(f'{type(error).__name__}: {error}') from error
+    if changes or row.get('artifactState'):
+        changes.update(artifactState='ready', artifactMissing=[], artifactError=None,
+                       artifactRecoveredAt=stamp(now))
+        row = release_queue.update(CONF, key, **changes)
+        log(f'release: {key} private caption/card ready')
+    return row
+
+
 def private_release_refusal(row, ctx, now):
     """Return the release-time reason a private admission must be withdrawn.
 
@@ -3016,6 +3066,9 @@ def release_private(now, log=log, only=None):
             continue
         if now < due - post_windows.DISCORD_PLAY_LEAD:
             continue
+
+        row = recover_private_release_artifacts(row, ctx, ctx.games, now)
+        pick = dict(row.get('pick') or {})
 
         # Deterministic hard-news precheck.  A model concern never withdraws
         # an admitted play, but typed out/doubtful/inactive news still does.
@@ -3136,6 +3189,19 @@ def release_private_isolated(now, log=log, runner=None):
     for key in keys:
         try:
             released.extend(runner(now, log=log, only={key}))
+        except ReleaseArtifactError as error:
+            message = str(error)
+            try:
+                row = next((item for item in release_queue.load(CONF).get('plays', [])
+                            if item.get('id') == key), {})
+                first = not row.get('artifactError')
+                release_queue.update(CONF, key, artifactState='recovery-needed', artifactError=message,
+                                     artifactTriedAt=stamp(now))
+            except KeyError:
+                first = False
+            log(f'release: {key} waits for private artifact recovery: {message}')
+            if first:
+                alert("Kook'n release artifact needs recovery", f'{key}: {message[:500]}')
         except Exception as error:
             message = f'{type(error).__name__}: {error}'
             try:

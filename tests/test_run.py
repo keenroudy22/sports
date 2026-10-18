@@ -164,6 +164,31 @@ class SlotTests(unittest.TestCase):
             self.assertTrue(next(row for row in stored if row['id'] == 'bad')['held'])
             self.assertEqual(seen, ['bad', 'good'])
 
+    def test_artifact_failure_stays_retryable_while_the_next_row_releases(self):
+        import release_queue
+        now = datetime(2026, 10, 13, 14, 40, tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as folder, mock.patch.object(run, 'CONF', Path(folder)), \
+                mock.patch.object(run, 'alert') as alert:
+            release_queue.save(Path(folder), {'plays': [{'id': 'art'}, {'id': 'good'}]})
+            seen = []
+
+            def runner(_now, log, only):
+                key = next(iter(only))
+                seen.append(key)
+                if key == 'art':
+                    raise run.ReleaseArtifactError('card text is outside the printed margin')
+                return [key]
+
+            self.assertEqual(run.release_private_isolated(now, log=lambda *_: None, runner=runner), ['good'])
+            stored = release_queue.load(Path(folder))['plays']
+            failed = next(row for row in stored if row['id'] == 'art')
+            self.assertFalse(failed.get('held', False))
+            self.assertEqual(failed['artifactState'], 'recovery-needed')
+            self.assertIn('outside the printed margin', failed['artifactError'])
+            alert.assert_called_once()
+            run.release_private_isolated(now + timedelta(minutes=5), log=lambda *_: None, runner=runner)
+            alert.assert_called_once()
+
     def test_830_selection_pass_rechecks_unserved_noon_and_later_games(self):
         now = datetime(2026, 10, 11, 12, 30, tzinfo=timezone.utc)
         slot = now.astimezone(run.EASTERN)

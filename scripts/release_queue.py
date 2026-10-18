@@ -103,8 +103,9 @@ def reopen_expired(conf, now, log=print):
 def enqueue(conf, rows, reasons, decisions, draft_dir, now, games=None, log=print):
     """Save newly selected rows and their rendered art outside Git.
 
-    One incomplete private draft is held and named; it never aborts settlement,
-    research, other admissions or the whole run.
+    An incomplete private draft is still queued.  The five-minute release worker
+    owns artifact recovery, so a card-rendering problem cannot make a selected
+    play disappear from both delivery and the chosen-but-not-posted checks.
     """
     book = load(conf)
     known = {row.get('id') for row in book['plays']}
@@ -118,20 +119,25 @@ def enqueue(conf, rows, reasons, decisions, draft_dir, now, games=None, log=prin
             continue
         source = Path(draft_dir) / f'{key}.png'
         copy_source = Path(draft_dir) / f'{key}.txt'
-        if not source.exists():
-            log(f'private admission held: {key}: release card was not rendered')
-            continue
-        if not copy_source.exists():
-            log(f'private admission held: {key}: release caption was not rendered')
-            continue
         target = card_dir / f'{key}.png'
-        shutil.copyfile(source, target)
+        if source.exists():
+            shutil.copyfile(source, target)
         pick = {k: v for k, v in candidate.items() if not str(k).startswith('_')}
         pick.pop('publishedAt', None)
         row = {'id': key, 'league': league, 'kind': kind, 'admittedAt': gates.stamp(now),
                'pick': pick, 'reason': reasons.get(key), 'decision': decision_by_id.get(key),
                'kickoffs': [games[g]['kickoff'] for g in pick.get('gameIds') or [] if games and g in games],
-               'caption': copy_source.read_text(encoding='utf-8').strip(), 'card': str(target)}
+               'caption': copy_source.read_text(encoding='utf-8').strip() if copy_source.exists() else None,
+               'card': str(target)}
+        missing = []
+        if not source.exists():
+            missing.append('card')
+        if not copy_source.exists():
+            missing.append('caption')
+        if missing:
+            row['artifactState'] = 'recovery-needed'
+            row['artifactMissing'] = missing
+            log(f"private admission queued for artifact recovery: {key}: missing {', '.join(missing)}")
         book['plays'].append(row)
         known.add(key)
         added.append(key)

@@ -62,7 +62,7 @@ class ReleaseQueueTests(unittest.TestCase):
             self.assertTrue(ctx.first['play']['_pendingRelease'])
             self.assertEqual(ctx.first['play']['publishedAt'], '2026-10-11T12:00:00Z')
 
-    def test_missing_private_card_holds_one_admission_without_crashing_the_run(self):
+    def test_missing_private_card_stays_queued_for_five_minute_recovery(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
             drafts = root / 'drafts'
@@ -75,9 +75,56 @@ class ReleaseQueueTests(unittest.TestCase):
                                           [{'id': pick['id'], 'decision': 'published'}], drafts, NOW,
                                           games={'NFL-401872994': {'kickoff': '2026-10-13T00:15:00Z'}},
                                           log=messages.append)
-            self.assertEqual(added, [])
-            self.assertEqual(release_queue.load(root)['plays'], [])
-            self.assertEqual(messages, [f"private admission held: {pick['id']}: release card was not rendered"])
+            self.assertEqual(added, [pick['id']])
+            stored = release_queue.load(root)['plays'][0]
+            self.assertEqual(stored['artifactState'], 'recovery-needed')
+            self.assertEqual(stored['artifactMissing'], ['card'])
+            self.assertEqual(messages, [f"private admission queued for artifact recovery: {pick['id']}: missing card"])
+
+    def test_missing_caption_and_card_are_both_kept_visible_for_recovery(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            drafts = root / 'drafts'
+            drafts.mkdir()
+            pick = {'id': 'play', 'title': 'Packers MONEYLINE', 'marketType': 'moneyline',
+                    'odds': -108, 'book': 'DraftKings', 'gameIds': ['NFL-1']}
+            added = release_queue.enqueue(root, [('NFL', 'gamePicks', pick)], {'play': 'Verified injury reason.'},
+                                          [{'id': 'play', 'decision': 'published'}], drafts, NOW,
+                                          games={'NFL-1': {'kickoff': '2026-10-11T17:00:00Z'}}, log=lambda *_: None)
+            self.assertEqual(added, ['play'])
+            stored = release_queue.load(root)['plays'][0]
+            self.assertIsNone(stored['caption'])
+            self.assertEqual(stored['artifactMissing'], ['card', 'caption'])
+            self.assertEqual(stored['kickoffs'], ['2026-10-11T17:00:00Z'])
+
+    def test_five_minute_worker_rebuilds_missing_artifacts_and_clears_recovery_state(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            key = 'play'
+            pick = {'id': key, 'title': 'Packers MONEYLINE', 'marketType': 'moneyline',
+                    'odds': -108, 'book': 'DraftKings', 'gameIds': ['NFL-1']}
+            card = release_queue.cards(root) / f'{key}.png'
+            release_queue.save(root, {'plays': [{'id': key, 'league': 'NFL', 'kind': 'gamePicks',
+                                                 'pick': pick, 'reason': 'Verified injury reason.',
+                                                 'caption': None, 'card': str(card),
+                                                 'artifactState': 'recovery-needed'}]})
+            game = {'id': 'NFL-1', 'league': 'NFL', 'kickoff': '2026-10-11T17:00:00Z',
+                    'away': {'id': '1'}, 'home': {'id': '2'}}
+            ctx = SimpleNamespace(first={}, latest={}, player_team={})
+
+            def render(_key, _pick, _game, _games, _ctx, _now, target):
+                Path(target).write_bytes(b'\x89PNG\r\n\x1a\nrecovered')
+
+            with mock.patch.object(run, 'CONF', root), \
+                    mock.patch.object(x_post, 'do_draft', return_value=('Full Send\nVerified injury reason.', pick, game)), \
+                    mock.patch.object(run, 'render_private_play_card', side_effect=render):
+                recovered = run.recover_private_release_artifacts(
+                    release_queue.load(root)['plays'][0], ctx, {'NFL-1': game}, NOW)
+
+            self.assertEqual(recovered['artifactState'], 'ready')
+            self.assertEqual(recovered['artifactMissing'], [])
+            self.assertIn('Verified injury reason.', recovered['caption'])
+            self.assertTrue(card.is_file())
 
     def test_new_admission_not_yet_in_public_context_still_gets_a_private_draft(self):
         with tempfile.TemporaryDirectory() as folder:
