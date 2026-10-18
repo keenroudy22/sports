@@ -1,44 +1,28 @@
 {
- "at": "2026-10-18T21:56:58Z",
+ "at": "2026-10-18T22:03:59Z",
  "confirmed": {
-  "NFL-401873007": "2026-10-18T21:56:58Z",
-  "NFL-401873008": "2026-10-18T21:56:58Z"
+  "NFL-401873007": "2026-10-18T22:03:59Z",
+  "NFL-401873008": "2026-10-18T22:03:59Z"
  },
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 928,
-    "fanduel": 629
+    "fanduel": 565
    },
-   "eventsListed": 8,
+   "eventsListed": 9,
    "eventsMatched": 2,
    "games": 2,
    "marketTypes": {
-    "player_assists": 10,
-    "player_extra_points_made": 8,
-    "player_fantasy_score": 26,
-    "player_field_goals_made": 8,
-    "player_interceptions": 8,
-    "player_kicking_points": 8,
-    "player_longest_passing_completion": 8,
-    "player_longest_reception": 36,
-    "player_longest_rush": 18,
-    "player_passing_+_rushing_yards": 8,
-    "player_passing_attempts": 8,
-    "player_passing_completions": 8,
-    "player_passing_touchdowns": 28,
-    "player_passing_yards": 149,
-    "player_receiving_yards": 535,
-    "player_receptions": 340,
-    "player_rushing_+_receiving_yards": 20,
-    "player_rushing_attempts": 16,
-    "player_rushing_yards": 275,
-    "player_sacks": 20,
-    "player_tackles": 10,
-    "player_tackles_+_assists": 10
+    "player_passing_touchdowns": 19,
+    "player_passing_yards": 45,
+    "player_receiving_yards": 228,
+    "player_receptions": 144,
+    "player_rushing_+_receiving_yards": 7,
+    "player_rushing_yards": 111,
+    "player_sacks": 11
    },
-   "requestsLeft": 5,
-   "rows": 1557,
+   "requestsLeft": 10,
+   "rows": 565,
    "slateGames": [
     "Dallas Cowboys at Green Bay Packers 2026-10-19T00:20Z",
     "Washington Commanders at San Francisco 49ers 2026-10-20T00:15Z"
@@ -51,7 +35,7 @@
       "betrivers": "1028823560",
       "fanduel": "36190129",
       "gemini": "NFL-2610230015-NE-CHI-T",
-      "kalshi": "KXNFLTOTAL-26OCT22NECHI",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT22NECHI",
       "paddypower": "36190129",
       "polymarket": "nfl_bears_patriots_2026-10-22_b3",
       "polymarket_us": "nfl-ne-chi-2026-10-22"
@@ -77,7 +61,7 @@
       "betparx": "1028823697",
       "betrivers": "1028823697",
       "fanduel": "35605985",
-      "kalshi": "KXNFLSPREAD-26OCT25PITNO",
+      "kalshi": "KXNFLGAME-26OCT25PITNO",
       "paddypower": "35605985",
       "polymarket": "nfl_saints_steelers_2026-10-25_b1",
       "polymarket_us": "nfl-pit-no-2026-10-25"
@@ -123,6 +107,7 @@
      "away": "Cincinnati Bengals",
      "external": {
       "betparx": "1028823698",
+      "betrivers": "1028823698",
       "fanduel": "36188997",
       "kalshi": "KXNFL1HTEAMTOTAL-26OCT25CINBAL",
       "paddypower": "36188997",
@@ -160,6 +145,30 @@
       "home_team": "Carolina Panthers",
       "markets": [
        "1st_half_team_total",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-25T17:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "New York Giants",
+     "external": {
+      "betparx": "1028823706",
+      "betrivers": "1028823706",
+      "fanduel": "36188999",
+      "kalshi": "KXNFLGAME-26OCT25NYGHOU",
+      "paddypower": "36188999",
+      "polymarket": "nfl_giants_texans_2026-10-25_b2",
+      "polymarket_us": "nfl-nyg-hou-2026-10-25"
+     },
+     "home": "Houston Texans",
+     "sample": {
+      "away_team": "New York Giants",
+      "home_team": "Houston Texans",
+      "markets": [
        "moneyline",
        "point_spread",
        "total_points"
