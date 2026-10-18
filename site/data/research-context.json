@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-18T12:10:58Z",
+  "updatedAt": "2026-10-18T12:19:33Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-18T12:01Z",
+              "reportedAt": "2026-10-18T12:17Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2851,8 +2851,8 @@
               "id": "4426350",
               "name": "Henry To'oTo'o",
               "position": "LB",
-              "status": "Questionable",
-              "injury": "Shoulder",
+              "status": "Active",
+              "injury": null,
               "reportedAt": "2026-10-17T23:43Z",
               "source": "https://www.espn.com/nfl/player/_/id/4426350/henry-tootoo"
             },
@@ -5067,6 +5067,15 @@
           "name": "New Orleans Saints",
           "players": [
             {
+              "id": "4360689",
+              "name": "Tyler Shough",
+              "position": "QB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-18T12:01Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4360689/tyler-shough"
+            },
+            {
               "id": "3054850",
               "name": "Alvin Kamara",
               "position": "RB",
@@ -5245,15 +5254,6 @@
               "injury": null,
               "reportedAt": "2026-10-12T00:08Z",
               "source": "https://www.espn.com/nfl/player/_/id/4569559/devaughn-vele"
-            },
-            {
-              "id": "4360689",
-              "name": "Tyler Shough",
-              "position": "QB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-11T21:41Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4360689/tyler-shough"
             },
             {
               "id": "4566088",
@@ -5987,6 +5987,15 @@
           "name": "Pittsburgh Steelers",
           "players": [
             {
+              "id": "4361411",
+              "name": "Pat Freiermuth",
+              "position": "TE",
+              "status": "Questionable",
+              "injury": "Calf",
+              "reportedAt": "2026-10-18T12:09Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4361411/pat-freiermuth"
+            },
+            {
               "id": "4038815",
               "name": "Rico Dowdle",
               "position": "RB",
@@ -6030,15 +6039,6 @@
               "injury": "Finger",
               "reportedAt": "2026-10-17T19:27Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431492/roman-wilson"
-            },
-            {
-              "id": "4361411",
-              "name": "Pat Freiermuth",
-              "position": "TE",
-              "status": "Questionable",
-              "injury": "Calf",
-              "reportedAt": "2026-10-17T16:29Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4361411/pat-freiermuth"
             },
             {
               "id": "4047650",
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "3",
-          "name": "Kyler Gordon",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-17T17:41:01Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4361093/kyler-gordon"
-        },
-        {
           "teamId": "29",
           "name": "Tershawn Wharton",
           "from": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-18T12:10:58Z",
           "source": "https://www.espn.com/nfl/player/_/id/4612298/albert-regis"
+        },
+        {
+          "teamId": "34",
+          "name": "Henry To'oTo'o",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-18T12:19:33Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4426350/henry-tootoo"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-18T12:10:58Z",
-      "lastAttemptAt": "2026-10-18T12:10:58Z",
+      "checkedAt": "2026-10-18T12:19:33Z",
+      "lastAttemptAt": "2026-10-18T12:19:33Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-18T12:10:58Z",
-      "lastAttemptAt": "2026-10-18T12:10:58Z",
+      "checkedAt": "2026-10-18T12:19:33Z",
+      "lastAttemptAt": "2026-10-18T12:19:33Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
