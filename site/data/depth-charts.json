@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-10-18T15:30:57Z",
+  "updatedAt": "2026-10-18T16:01:43Z",
   "coverage": "ESPN offensive depth charts for upcoming teams with a hard skill-position injury.",
   "teams": {
     "22": {
       "name": "Arizona Cardinals",
       "abbr": "ARI",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/ari",
       "positions": [
         {
@@ -256,8 +256,8 @@
       "name": "Baltimore Ravens",
       "abbr": "BAL",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/bal",
       "positions": [
         {
@@ -377,8 +377,8 @@
           "group": "WR",
           "players": [
             {
-              "id": "4870847",
-              "name": "Ja'Kobi Lane",
+              "id": "4360939",
+              "name": "Rashod Bateman",
               "order": 1,
               "availability": {
                 "status": "Active",
@@ -402,8 +402,8 @@
           "group": "WR",
           "players": [
             {
-              "id": "4360939",
-              "name": "Rashod Bateman",
+              "id": "4870847",
+              "name": "Ja'Kobi Lane",
               "order": 1,
               "availability": {
                 "status": "Active",
@@ -415,8 +415,8 @@
               "name": "Elijah Sarratt",
               "order": 2,
               "availability": {
-                "status": "Active",
-                "unavailable": false
+                "status": "Out",
+                "unavailable": true
               }
             }
           ]
@@ -479,8 +479,8 @@
       "name": "Carolina Panthers",
       "abbr": "CAR",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/car",
       "positions": [
         {
@@ -511,8 +511,8 @@
               "name": "Haynes King",
               "order": 3,
               "availability": {
-                "status": "Active",
-                "unavailable": false
+                "status": "Out",
+                "unavailable": true
               }
             }
           ]
@@ -699,8 +699,8 @@
               "name": "Ja'Tavion Sanders",
               "order": 5,
               "availability": {
-                "status": "Active",
-                "unavailable": false
+                "status": "Out",
+                "unavailable": true
               }
             }
           ]
@@ -711,8 +711,8 @@
       "name": "Chicago Bears",
       "abbr": "CHI",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/chi",
       "positions": [
         {
@@ -743,8 +743,8 @@
               "name": "Case Keenum",
               "order": 3,
               "availability": {
-                "status": "Active",
-                "unavailable": false
+                "status": "Out",
+                "unavailable": true
               }
             }
           ]
@@ -925,8 +925,8 @@
       "name": "Cincinnati Bengals",
       "abbr": "CIN",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/cin",
       "positions": [
         {
@@ -1117,12 +1117,251 @@
         }
       ]
     },
+    "5": {
+      "name": "Cleveland Browns",
+      "abbr": "CLE",
+      "status": "ok",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
+      "source": "https://www.espn.com/nfl/team/depth/_/name/cle",
+      "positions": [
+        {
+          "key": "qb",
+          "label": "QB",
+          "group": "QB",
+          "players": [
+            {
+              "id": "3122840",
+              "name": "Deshaun Watson",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4432762",
+              "name": "Shedeur Sanders",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4431325",
+              "name": "Taylen Green",
+              "order": 3,
+              "availability": {
+                "status": "Out",
+                "unavailable": true
+              }
+            },
+            {
+              "id": "4427238",
+              "name": "Dillon Gabriel",
+              "order": 4,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
+              }
+            }
+          ]
+        },
+        {
+          "key": "rb",
+          "label": "RB",
+          "group": "RB",
+          "players": [
+            {
+              "id": "4685702",
+              "name": "Quinshon Judkins",
+              "order": 1,
+              "availability": {
+                "status": "Out",
+                "unavailable": true
+              }
+            },
+            {
+              "id": "4722893",
+              "name": "Jaleel McLaughlin",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4569682",
+              "name": "Audric Estime",
+              "order": 3,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "5081397",
+              "name": "Dylan Sampson",
+              "order": 4,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
+              }
+            },
+            {
+              "id": "4601080",
+              "name": "Raheim Sanders",
+              "order": 5,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
+              }
+            }
+          ]
+        },
+        {
+          "key": "fb",
+          "label": "FB",
+          "group": "FB",
+          "players": [
+            {
+              "id": "2515270",
+              "name": "Michael Burton",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            }
+          ]
+        },
+        {
+          "key": "wr1",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "4832800",
+              "name": "Denzel Boston",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4808839",
+              "name": "Isaiah Bond",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            }
+          ]
+        },
+        {
+          "key": "wr2",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "4870653",
+              "name": "KC Concepcion",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4241424",
+              "name": "Tylan Wallace",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            }
+          ]
+        },
+        {
+          "key": "wr3",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "4241463",
+              "name": "Jerry Jeudy",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4613104",
+              "name": "Malachi Corley",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            }
+          ]
+        },
+        {
+          "key": "te",
+          "label": "TE",
+          "group": "TE",
+          "players": [
+            {
+              "id": "5083076",
+              "name": "Harold Fannin Jr.",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4362018",
+              "name": "Blake Whiteheart",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4685540",
+              "name": "Carsen Ryan",
+              "order": 3,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4565859",
+              "name": "Joe Royer",
+              "order": 4,
+              "availability": {
+                "status": "Out",
+                "unavailable": true
+              }
+            }
+          ]
+        }
+      ]
+    },
     "7": {
       "name": "Denver Broncos",
       "abbr": "DEN",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/den",
       "positions": [
         {
@@ -1351,8 +1590,8 @@
       "name": "Green Bay Packers",
       "abbr": "GB",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/gb",
       "positions": [
         {
@@ -1592,8 +1831,8 @@
       "name": "Houston Texans",
       "abbr": "HOU",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/hou",
       "positions": [
         {
@@ -1824,8 +2063,8 @@
       "name": "Indianapolis Colts",
       "abbr": "IND",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/ind",
       "positions": [
         {
@@ -1856,8 +2095,8 @@
               "name": "Riley Leonard",
               "order": 3,
               "availability": {
-                "status": "Active",
-                "unavailable": false
+                "status": "Out",
+                "unavailable": true
               }
             }
           ]
@@ -1999,8 +2238,8 @@
               "name": "Tyler Warren",
               "order": 1,
               "availability": {
-                "status": "Active",
-                "unavailable": false
+                "status": "Out",
+                "unavailable": true
               }
             },
             {
@@ -2056,8 +2295,8 @@
       "name": "Jacksonville Jaguars",
       "abbr": "JAX",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/jax",
       "positions": [
         {
@@ -2252,8 +2491,8 @@
       "name": "Kansas City Chiefs",
       "abbr": "KC",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/kc",
       "positions": [
         {
@@ -2509,8 +2748,8 @@
       "name": "Los Angeles Chargers",
       "abbr": "LAC",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/lac",
       "positions": [
         {
@@ -2735,12 +2974,483 @@
         }
       ]
     },
+    "17": {
+      "name": "New England Patriots",
+      "abbr": "NE",
+      "status": "ok",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
+      "source": "https://www.espn.com/nfl/team/depth/_/name/ne",
+      "positions": [
+        {
+          "key": "qb",
+          "label": "QB",
+          "group": "QB",
+          "players": [
+            {
+              "id": "4431452",
+              "name": "Drake Maye",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4240391",
+              "name": "Tommy DeVito",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4431465",
+              "name": "Behren Morton",
+              "order": 3,
+              "availability": {
+                "status": "Out",
+                "unavailable": true
+              }
+            }
+          ]
+        },
+        {
+          "key": "rb",
+          "label": "RB",
+          "group": "RB",
+          "players": [
+            {
+              "id": "4569173",
+              "name": "Rhamondre Stevenson",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4432710",
+              "name": "TreVeyon Henderson",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4431431",
+              "name": "Corey Kiner",
+              "order": 3,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4676889",
+              "name": "Myles Montgomery",
+              "order": 4,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
+              }
+            }
+          ]
+        },
+        {
+          "key": "fb",
+          "label": "FB",
+          "group": "FB",
+          "players": [
+            {
+              "id": "4039505",
+              "name": "Reggie Gilliam",
+              "order": 1,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
+              }
+            }
+          ]
+        },
+        {
+          "key": "wr1",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "4047646",
+              "name": "A.J. Brown",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4695193",
+              "name": "Efton Chism III",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4572655",
+              "name": "Jeremiah Webb",
+              "order": 3,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
+              }
+            }
+          ]
+        },
+        {
+          "key": "wr2",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "4361432",
+              "name": "Romeo Doubs",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4613202",
+              "name": "Kyle Williams",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            }
+          ]
+        },
+        {
+          "key": "wr3",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "4427095",
+              "name": "DeMario Douglas",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "2991662",
+              "name": "Mack Hollins",
+              "order": 2,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
+              }
+            }
+          ]
+        },
+        {
+          "key": "te",
+          "label": "TE",
+          "group": "TE",
+          "players": [
+            {
+              "id": "3046439",
+              "name": "Hunter Henry",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4831959",
+              "name": "Eli Raridon",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4372026",
+              "name": "Cameron Latu",
+              "order": 3,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4683308",
+              "name": "Tanner Arkin",
+              "order": 4,
+              "availability": {
+                "status": "Out",
+                "unavailable": true
+              }
+            },
+            {
+              "id": "4365395",
+              "name": "Julian Hill",
+              "order": 5,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "18": {
+      "name": "New Orleans Saints",
+      "abbr": "NO",
+      "status": "ok",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
+      "source": "https://www.espn.com/nfl/team/depth/_/name/no",
+      "positions": [
+        {
+          "key": "qb",
+          "label": "QB",
+          "group": "QB",
+          "players": [
+            {
+              "id": "4360689",
+              "name": "Tyler Shough",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4426339",
+              "name": "Spencer Rattler",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4361259",
+              "name": "Zach Wilson",
+              "order": 3,
+              "availability": {
+                "status": "Out",
+                "unavailable": true
+              }
+            }
+          ]
+        },
+        {
+          "key": "rb",
+          "label": "RB",
+          "group": "RB",
+          "players": [
+            {
+              "id": "3054850",
+              "name": "Alvin Kamara",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4599739",
+              "name": "Kendre Miller",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "5081999",
+              "name": "CJ Donaldson",
+              "order": 3,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4239996",
+              "name": "Travis Etienne Jr.",
+              "order": 4,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
+              }
+            },
+            {
+              "id": "4242431",
+              "name": "Ty Chandler",
+              "order": 5,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
+              }
+            }
+          ]
+        },
+        {
+          "key": "wr1",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "4361370",
+              "name": "Chris Olave",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4698597",
+              "name": "Barion Brown",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4573697",
+              "name": "Mason Tipton",
+              "order": 3,
+              "availability": {
+                "status": "Out",
+                "unavailable": true
+              }
+            }
+          ]
+        },
+        {
+          "key": "wr2",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "4569559",
+              "name": "Devaughn Vele",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4369863",
+              "name": "Cedric Tillman",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            }
+          ]
+        },
+        {
+          "key": "wr3",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "4879276",
+              "name": "Bryce Lance",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4880281",
+              "name": "Jordyn Tyson",
+              "order": 2,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
+              }
+            }
+          ]
+        },
+        {
+          "key": "te",
+          "label": "TE",
+          "group": "TE",
+          "players": [
+            {
+              "id": "3929645",
+              "name": "Juwan Johnson",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4036131",
+              "name": "Noah Fant",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4702559",
+              "name": "Oscar Delp",
+              "order": 3,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4430684",
+              "name": "Treyton Welch",
+              "order": 4,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4432731",
+              "name": "Moliki Matavao",
+              "order": 5,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
+              }
+            }
+          ]
+        }
+      ]
+    },
     "19": {
       "name": "New York Giants",
       "abbr": "NYG",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/nyg",
       "positions": [
         {
@@ -2771,8 +3481,8 @@
               "name": "Jake Haener",
               "order": 3,
               "availability": {
-                "status": "Active",
-                "unavailable": false
+                "status": "Out",
+                "unavailable": true
               }
             },
             {
@@ -2978,8 +3688,8 @@
       "name": "New York Jets",
       "abbr": "NYJ",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/nyj",
       "positions": [
         {
@@ -3201,8 +3911,8 @@
       "name": "Philadelphia Eagles",
       "abbr": "PHI",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/phi",
       "positions": [
         {
@@ -3233,8 +3943,8 @@
               "name": "Joe Milton III",
               "order": 3,
               "availability": {
-                "status": "Active",
-                "unavailable": false
+                "status": "Out",
+                "unavailable": true
               }
             },
             {
@@ -3362,8 +4072,8 @@
               "name": "Hollywood Brown",
               "order": 2,
               "availability": {
-                "status": "Active",
-                "unavailable": false
+                "status": "Out",
+                "unavailable": true
               }
             },
             {
@@ -3460,8 +4170,8 @@
       "name": "Pittsburgh Steelers",
       "abbr": "PIT",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/pit",
       "positions": [
         {
@@ -3492,8 +4202,8 @@
               "name": "Will Howard",
               "order": 3,
               "availability": {
-                "status": "Active",
-                "unavailable": false
+                "status": "Out",
+                "unavailable": true
               }
             },
             {
@@ -3501,8 +4211,8 @@
               "name": "Drew Allar",
               "order": 4,
               "availability": {
-                "status": "Active",
-                "unavailable": false
+                "status": "Out",
+                "unavailable": true
               }
             }
           ]
@@ -3544,8 +4254,8 @@
               "name": "Eli Heidenreich",
               "order": 4,
               "availability": {
-                "status": "Active",
-                "unavailable": false
+                "status": "Out",
+                "unavailable": true
               }
             },
             {
@@ -3717,8 +4427,8 @@
       "name": "San Francisco 49ers",
       "abbr": "SF",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/sf",
       "positions": [
         {
@@ -3974,8 +4684,8 @@
       "name": "Seattle Seahawks",
       "abbr": "SEA",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/sea",
       "positions": [
         {
@@ -4222,8 +4932,8 @@
       "name": "Tampa Bay Buccaneers",
       "abbr": "TB",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/tb",
       "positions": [
         {
@@ -4288,8 +4998,8 @@
               "name": "Sean Tucker",
               "order": 3,
               "availability": {
-                "status": "Active",
-                "unavailable": false
+                "status": "Out",
+                "unavailable": true
               }
             },
             {
@@ -4432,12 +5142,217 @@
         }
       ]
     },
+    "10": {
+      "name": "Tennessee Titans",
+      "abbr": "TEN",
+      "status": "ok",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
+      "source": "https://www.espn.com/nfl/team/depth/_/name/ten",
+      "positions": [
+        {
+          "key": "qb",
+          "label": "QB",
+          "group": "QB",
+          "players": [
+            {
+              "id": "4688380",
+              "name": "Cam Ward",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "3039707",
+              "name": "Mitchell Trubisky",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            }
+          ]
+        },
+        {
+          "key": "rb",
+          "label": "RB",
+          "group": "RB",
+          "players": [
+            {
+              "id": "3916148",
+              "name": "Tony Pollard",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4428557",
+              "name": "Tyjae Spears",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4367567",
+              "name": "Julius Chestnut",
+              "order": 3,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4685555",
+              "name": "Nicholas Singleton",
+              "order": 4,
+              "availability": {
+                "status": "Out",
+                "unavailable": true
+              }
+            },
+            {
+              "id": "4240657",
+              "name": "Michael Carter",
+              "order": 5,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            }
+          ]
+        },
+        {
+          "key": "wr1",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "4871023",
+              "name": "Carnell Tate",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "3925357",
+              "name": "Calvin Ridley",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            }
+          ]
+        },
+        {
+          "key": "wr2",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "4569587",
+              "name": "Wan'Dale Robinson",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4431268",
+              "name": "Chimere Dike",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            }
+          ]
+        },
+        {
+          "key": "wr3",
+          "label": "WR",
+          "group": "WR",
+          "players": [
+            {
+              "id": "4883647",
+              "name": "Elic Ayomanor",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            }
+          ]
+        },
+        {
+          "key": "te",
+          "label": "TE",
+          "group": "TE",
+          "players": [
+            {
+              "id": "4686728",
+              "name": "Gunnar Helm",
+              "order": 1,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4361516",
+              "name": "Daniel Bellinger",
+              "order": 2,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4360978",
+              "name": "David Martin-Robinson",
+              "order": 3,
+              "availability": {
+                "status": "Active",
+                "unavailable": false
+              }
+            },
+            {
+              "id": "4039160",
+              "name": "Kylen Granson",
+              "order": 4,
+              "availability": {
+                "status": "Out",
+                "unavailable": true
+              }
+            },
+            {
+              "id": "4877034",
+              "name": "Jaren Kanak",
+              "order": 5,
+              "availability": {
+                "status": "Injured Reserve",
+                "unavailable": true
+              }
+            }
+          ]
+        }
+      ]
+    },
     "28": {
       "name": "Washington Commanders",
       "abbr": "WSH",
       "status": "ok",
-      "checkedAt": "2026-10-18T15:30:57Z",
-      "lastAttemptAt": "2026-10-18T15:30:57Z",
+      "checkedAt": "2026-10-18T16:01:43Z",
+      "lastAttemptAt": "2026-10-18T16:01:43Z",
       "source": "https://www.espn.com/nfl/team/depth/_/name/wsh",
       "positions": [
         {
