@@ -1,16 +1,16 @@
 {
- "at": "2026-10-18T20:47:01Z",
+ "at": "2026-10-18T20:55:17Z",
  "confirmed": {
-  "NFL-401873007": "2026-10-18T20:47:01Z",
-  "NFL-401873008": "2026-10-18T20:47:01Z"
+  "NFL-401873007": "2026-10-18T20:55:17Z",
+  "NFL-401873008": "2026-10-18T20:55:17Z"
  },
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 930,
+    "draftkings": 928,
     "fanduel": 627
    },
-   "eventsListed": 4,
+   "eventsListed": 3,
    "eventsMatched": 2,
    "games": 2,
    "marketTypes": {
@@ -27,8 +27,8 @@
     "player_passing_attempts": 8,
     "player_passing_completions": 8,
     "player_passing_touchdowns": 28,
-    "player_passing_yards": 148,
-    "player_receiving_yards": 538,
+    "player_passing_yards": 147,
+    "player_receiving_yards": 537,
     "player_receptions": 339,
     "player_rushing_+_receiving_yards": 20,
     "player_rushing_attempts": 16,
@@ -38,7 +38,7 @@
     "player_tackles_+_assists": 10
    },
    "requestsLeft": 5,
-   "rows": 1557,
+   "rows": 1555,
    "slateGames": [
     "Dallas Cowboys at Green Bay Packers 2026-10-19T00:20Z",
     "Washington Commanders at San Francisco 49ers 2026-10-20T00:15Z"
@@ -59,55 +59,6 @@
      },
      "start": null,
      "type": "outright"
-    },
-    {
-     "away": "New York Jets",
-     "external": {
-      "betfair": "202610180426655B",
-      "betparx": "1028823547",
-      "betrivers": "1028823547",
-      "betsson": "f-hWdSZX6Pa0S0sUs851qOUA",
-      "caesars": "d59d271e-368d-65c8-d935-e70d3d4d09ec",
-      "draftkings": "34118215",
-      "fanduel": "36160508",
-      "fliff": "407867_c_p_302_inplay",
-      "gemini": "NFL-2610181700-NYJ-NE-PPRECY",
-      "kalshi": "KXNFL4QSPREAD-26OCT18NYJNE",
-      "pinnacle": "1637623775",
-      "polymarket": "nfl_jets_patriots_2026-10-18_b2",
-      "polymarket_us": "nfl-nyj-ne-2026-10-18",
-      "prophetx": "1700008819",
-      "smarkets": "45225883",
-      "sportzino": "sz-16552503",
-      "stake": "1927c39b-7ffb-4c2c-9d25-1a2f6d0049d0",
-      "thescorebet": "StandardEvent:db970c4c-0c0d-4555-8805-2577b5ba3590"
-     },
-     "home": "New England Patriots",
-     "sample": {
-      "away_team": "New York Jets",
-      "home_team": "New England Patriots",
-      "markets": [
-       "correct_score",
-       "game_prop",
-       "moneyline",
-       "outright",
-       "player_passing_touchdowns",
-       "player_passing_yards",
-       "player_receiving_yards",
-       "player_receptions",
-       "player_rushing_yards",
-       "player_touchdowns",
-       "point_spread",
-       "race_to_10_points",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime",
-       "winning_margin"
-      ]
-     },
-     "start": "2026-10-18T17:00:00Z",
-     "type": "fixture"
     }
    ]
   }
