@@ -209,7 +209,7 @@ def capture(slot=None, python=sys.executable):
     """Step 1, continued: price captures when their budget allows. They print why they skip."""
     notes = []
     scripts = ['odds_api.py', 'prop_odds.py']
-    if slot is not None and (slot.hour, slot.minute) in ((17, 30), (18, 50)):
+    if slot is not None and (slot.hour, slot.minute) in ((8, 30), (17, 30), (18, 50)):
         scripts.append('sharp_odds.py')
     for script in scripts:
         env = None
@@ -2269,8 +2269,10 @@ def _run(args, now, slot, kinds, status):
     absorb(ctx, settled + closed)
 
     # Admissions which have not reached Discord remain private, but still
-    # occupy duplicate/card-cap space on later selection passes.
+    # occupy duplicate/card-cap space on later selection passes.  An expired
+    # private price is reopened first so this pass can evaluate the fresh quote.
     import release_queue
+    release_queue.reopen_expired(CONF, now, log=log)
     release_queue.merge_context(ctx, CONF)
 
     build_site.build(now)

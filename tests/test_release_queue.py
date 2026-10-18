@@ -133,6 +133,20 @@ class ReleaseQueueTests(unittest.TestCase):
             release_queue.remove(root, 'one')
             self.assertEqual([row['id'] for row in release_queue.load(root)['plays']], ['two'])
 
+    def test_expired_unreleased_admission_reopens_for_fresh_selection(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            release_queue.save(root, {'plays': [
+                {'id': 'stale', 'pick': {'expiresAt': '2026-10-11T11:59:00Z'}},
+                {'id': 'live', 'pick': {'expiresAt': '2026-10-11T12:01:00Z'}},
+                {'id': 'sent', 'discordSentAt': '2026-10-11T11:58:00Z',
+                 'pick': {'expiresAt': '2026-10-11T11:59:00Z'}},
+            ]})
+            messages = []
+            self.assertEqual(release_queue.reopen_expired(root, NOW, log=messages.append), ['stale'])
+            self.assertEqual([row['id'] for row in release_queue.load(root)['plays']], ['live', 'sent'])
+            self.assertEqual(messages, ['private admission reopened for a fresh price: stale'])
+
     def test_delivery_clock_reads_the_private_kickoff_without_a_public_row(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

@@ -71,6 +71,35 @@ def merge_context(ctx, conf):
         ctx.latest[key] = dict(pick)
 
 
+def reopen_expired(conf, now, log=print):
+    """Drop unreleased admissions whose price window ended so a fresh pass can reconsider them.
+
+    A pending row reserves duplicate/cap space only while its saved quote is usable.  Once
+    that quote expires, keeping it in the private queue makes the next selection pass skip
+    the same market instead of checking the newly captured price.
+    """
+    book = load(conf)
+    kept, reopened = [], []
+    for row in book['plays']:
+        pick = row.get('pick') or {}
+        if row.get('discordSentAt') or row.get('publicPath') or row.get('releasedAt'):
+            kept.append(row)
+            continue
+        try:
+            expired = gates.when(pick.get('expiresAt')) <= now
+        except (TypeError, ValueError):
+            expired = False
+        if not expired:
+            kept.append(row)
+            continue
+        reopened.append(row.get('id'))
+        log(f"private admission reopened for a fresh price: {row.get('id')}")
+    if reopened:
+        book['plays'] = kept
+        save(conf, book)
+    return reopened
+
+
 def enqueue(conf, rows, reasons, decisions, draft_dir, now, games=None, log=print):
     """Save newly selected rows and their rendered art outside Git.
 
