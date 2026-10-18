@@ -291,10 +291,13 @@ def validate_report(report, games):
             if pick in report.get('parlays', []):
                 assert len(pick.get('legs', [])) >= 2 and pick.get('correlation')
             elif pick in report.get('gamePicks', []):
-                assert pick.get('marketType') in ('spread', 'total')
+                assert pick.get('marketType') in ('spread', 'total', 'moneyline')
                 assert isinstance(pick.get('line'), (int, float))
                 assert pick.get('direction') in ('over', 'under', 'home', 'away')
                 assert (pick['marketType'] == 'total') == (pick['direction'] in ('over', 'under'))
+                if pick['marketType'] == 'moneyline':
+                    assert pick['line'] == 0
+                    assert pick['direction'] in ('home', 'away')
                 assert len(pick['gameIds']) == 1
             else:
                 assert pick.get('projection') is not None

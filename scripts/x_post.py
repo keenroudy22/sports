@@ -430,10 +430,13 @@ def _caption_day(pick, game):
 
 
 def _short_reason(text):
-    """Keep a verified reason to the plan's twelve-word public limit."""
+    """Keep a verified reason short without turning it into a fragment."""
     value = str(text or '').strip()
     words = value.split()
-    if len(words) <= 12:
+    # A complete, sourced sentence is better public copy than a shorter noun
+    # phrase.  Fourteen words still keeps the post compact and preserves facts
+    # such as "X and Y are out with hamstring injuries" whole.
+    if len(words) <= 14:
         return ' '.join(words)
     # Never manufacture a dangling half-sentence merely to hit the public
     # word limit (for example, "... Saturday and has.").  Prefer a complete

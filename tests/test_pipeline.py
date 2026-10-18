@@ -23,6 +23,20 @@ class PipelineTests(unittest.TestCase):
         with self.assertRaises(AssertionError):
             validate_report(r, {g['id']: g})
 
+    def test_priced_moneyline_is_a_valid_straight_game_pick(self):
+        g = self.game()
+        p = dict(id='moneyline-1', title='Home moneyline', why='Two verified injuries favor home',
+                 risk='The market is close', sources=['https://example.com'], status='active',
+                 book='DraftKings', odds=-108, quotedAt='2026-09-17T15:00:00Z',
+                 expiresAt='2026-09-17T17:00:00Z', gameIds=[g['id']], cutoff='-123',
+                 confidence=2, edge='Positive expected value', marketType='moneyline',
+                 line=0, direction='home')
+        r = dict(league='NFL', publishedAt='2026-09-17T16:00:00Z', gamePicks=[p])
+        self.assertIs(validate_report(r, {g['id']: g}), r)
+        p['line'] = -1
+        with self.assertRaises(AssertionError):
+            validate_report(r, {g['id']: g})
+
     def game(self):
         return dict(id='NFL-1', league='NFL', season=2026, kickoff='2099-09-14T20:00:00Z', neutral=False,
                     home={'id':'H','score':30}, away={'id':'A','score':10}, source='https://www.espn.com')

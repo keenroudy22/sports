@@ -119,6 +119,10 @@ class DraftTests(unittest.TestCase):
         self.assertNotIn('has been ruled out.', text)
         self.assertEqual(x_post.guard(text, pick, x_post.reason_in(text)), [])
 
+    def test_short_reason_keeps_a_complete_injury_sentence_instead_of_a_noun_fragment(self):
+        reason = 'Cowboys cornerback Cobie Durant and tackle Drew Shelton are out with hamstring injuries.'
+        self.assertEqual(x_post._short_reason(reason), reason)
+
     def test_the_post_shows_the_number_available_now_when_it_moved(self):
         pick = dict(PICK, favorite=False, modelLean=True, projection=31.2)
         moved = x_post.draft(pick, GAME, reason='', now_quote=('DraftKings', 37.5, -110))
