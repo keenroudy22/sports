@@ -1,11 +1,20 @@
 {
-  "updatedAt": "2026-10-18T02:16:31Z",
+  "updatedAt": "2026-10-18T02:24:58Z",
   "leagues": {
     "NFL": {
       "teams": {
         "22": {
           "name": "Arizona Cardinals",
           "players": [
+            {
+              "id": "4569609",
+              "name": "Evan Hull",
+              "position": "RB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-18T02:13Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4569609/evan-hull"
+            },
             {
               "id": "4430821",
               "name": "Kitan Crawford",
@@ -221,15 +230,6 @@
               "injury": null,
               "reportedAt": "2026-10-11T19:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4430841/carson-beck"
-            },
-            {
-              "id": "4038524",
-              "name": "Gardner Minshew II",
-              "position": "QB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-11T19:08Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4038524/gardner-minshew-ii"
             }
           ]
         },
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-18T02:01Z",
+              "reportedAt": "2026-10-18T02:11Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -3457,6 +3457,15 @@
           "name": "Kansas City Chiefs",
           "players": [
             {
+              "id": "3118892",
+              "name": "Justin Watson",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-18T02:11Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3118892/justin-watson"
+            },
+            {
               "id": "5093923",
               "name": "Andrew Armstrong",
               "position": "WR",
@@ -3671,15 +3680,6 @@
               "injury": null,
               "reportedAt": "2026-09-25T21:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/3044859/chris-jones"
-            },
-            {
-              "id": "4612387",
-              "name": "Felix Anudike-Uzomah",
-              "position": "DE",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-09-24T20:59Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4612387/felix-anudike-uzomah"
             }
           ]
         },
@@ -7767,8 +7767,8 @@
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-18T02:16:31Z",
-      "lastAttemptAt": "2026-10-18T02:16:31Z",
+      "checkedAt": "2026-10-18T02:24:58Z",
+      "lastAttemptAt": "2026-10-18T02:24:58Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-18T02:16:31Z",
-      "lastAttemptAt": "2026-10-18T02:16:31Z",
+      "checkedAt": "2026-10-18T02:24:58Z",
+      "lastAttemptAt": "2026-10-18T02:24:58Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }

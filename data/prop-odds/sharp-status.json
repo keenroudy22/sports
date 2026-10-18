@@ -1,11 +1,11 @@
 {
- "at": "2026-10-18T02:17:14Z",
+ "at": "2026-10-18T02:25:43Z",
  "confirmed": {
-  "CFB-401858269": "2026-10-18T02:17:14Z",
-  "CFB-401858492": "2026-10-18T02:17:14Z",
-  "CFB-401864521": "2026-10-18T02:17:14Z",
-  "NFL-401872996": "2026-10-18T02:17:14Z",
-  "NFL-401872997": "2026-10-18T02:17:14Z",
+  "CFB-401858269": "2026-10-18T02:25:43Z",
+  "CFB-401858492": "2026-10-18T02:25:43Z",
+  "CFB-401864521": "2026-10-18T02:25:43Z",
+  "NFL-401872996": "2026-10-18T02:25:43Z",
+  "NFL-401872997": "2026-10-18T02:25:43Z",
   "NFL-401872998": "2026-10-18T02:07:53Z",
   "NFL-401872999": "2026-10-17T23:18:58Z",
   "NFL-401873000": "2026-10-17T23:18:58Z",
@@ -17,7 +17,7 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 531,
+    "draftkings": 526,
     "fanduel": 392
    },
    "eventsListed": 9,
@@ -35,16 +35,16 @@
     "player_passing_completions": 13,
     "player_passing_touchdowns": 20,
     "player_passing_yards": 76,
-    "player_receiving_yards": 369,
+    "player_receiving_yards": 364,
     "player_receptions": 63,
-    "player_rushing_attempts": 21,
-    "player_rushing_yards": 253,
+    "player_rushing_attempts": 20,
+    "player_rushing_yards": 254,
     "player_sacks": 4,
     "player_tackles": 5,
     "player_tackles_+_assists": 5
    },
    "requestsLeft": 7,
-   "rows": 923,
+   "rows": 918,
    "slateGames": [
     "Wake Forest Demon Deacons at California Golden Bears 2026-10-18T02:30Z",
     "Fresno State Bulldogs at San Diego State Aztecs 2026-10-18T02:30Z",
@@ -62,6 +62,7 @@
       "onexbet": "762510535",
       "polymarket": "nfl_floridainternational_middletennesseeblueraiders_2026-10-20_b3",
       "prophetx": "1700103048",
+      "rebet": "sr:match:70898888",
       "smarkets": "45375063",
       "sportzino": "sz-17844474"
      },
@@ -74,7 +75,10 @@
        "draw_no_bet",
        "moneyline",
        "point_spread",
-       "total_points"
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime"
       ]
      },
      "start": "2026-10-20T23:00:00Z",
@@ -141,7 +145,7 @@
      "external": {
       "draftkings": "34827179",
       "gemini": "NCAAF-2610222300-LIB-KENN-M",
-      "kalshi": "KXNCAAFTOTAL-26OCT22LIBKENN",
+      "kalshi": "KXNCAAFSPREAD-26OCT22LIBKENN",
       "novig": "01a13cae-d357-77e1-a5b9-e21dd00ca896",
       "onexbet": "762619339",
       "polymarket": "nfl_kennesawstate_liberty_2026-10-22_b3",
@@ -198,10 +202,8 @@
       "away_team": "Washington State",
       "home_team": "Oregon State",
       "markets": [
-       "2nd_half_moneyline",
-       "2nd_half_point_spread",
-       "4th_quarter_point_spread",
-       "point_spread",
+       "2nd_quarter_moneyline",
+       "4th_quarter_moneyline",
        "total_points"
       ]
      },
@@ -212,8 +214,8 @@
   },
   "NFL": {
    "books": {
-    "draftkings": 1044,
-    "fanduel": 156
+    "draftkings": 1047,
+    "fanduel": 153
    },
    "eventsListed": 28,
    "eventsMatched": 13,
@@ -232,12 +234,12 @@
     "player_passing_attempts": 8,
     "player_passing_completions": 8,
     "player_passing_touchdowns": 26,
-    "player_passing_yards": 139,
-    "player_receiving_yards": 383,
-    "player_receptions": 182,
+    "player_passing_yards": 140,
+    "player_receiving_yards": 379,
+    "player_receptions": 183,
     "player_rushing_+_receiving_yards": 10,
     "player_rushing_attempts": 18,
-    "player_rushing_yards": 138,
+    "player_rushing_yards": 140,
     "player_sacks": 26,
     "player_tackles": 42,
     "player_tackles_+_assists": 42
@@ -273,7 +275,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-18T02:08:00Z",
+     "start": "2026-10-18T02:25:00Z",
      "type": "outright"
     },
     {
