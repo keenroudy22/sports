@@ -11176,5 +11176,23 @@
     "sources": [
       "https://www.espn.com/college-football/game/_/gameId/401856835"
     ]
+  },
+  {
+    "gameId": "CFB-401856836",
+    "publishedAt": "2026-10-18T18:34:21Z",
+    "home": 31,
+    "away": 22,
+    "model": "elo-total-v1",
+    "type": "baseline",
+    "confidence": 3,
+    "sparse": false,
+    "trainingGames": {
+      "home": 10,
+      "away": 10
+    },
+    "why": "Opponent-adjusted historical scoring margin with smoothed team game totals. No injury, roster, weather, or betting-market adjustment. Analyst review pending.",
+    "sources": [
+      "https://www.espn.com/college-football/game/_/gameId/401856836"
+    ]
   }
 ]

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-18T18:25:31Z",
+  "updatedAt": "2026-10-18T18:34:33Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -472,7 +472,7 @@
               "position": "WR",
               "status": "Questionable",
               "injury": "Shoulder",
-              "reportedAt": "2026-10-18T18:20Z",
+              "reportedAt": "2026-10-18T18:24Z",
               "source": "https://www.espn.com/nfl/player/_/id/4360939/rashod-bateman"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-18T18:18Z",
+              "reportedAt": "2026-10-18T18:26Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -4837,6 +4837,15 @@
           "name": "New England Patriots",
           "players": [
             {
+              "id": "4259646",
+              "name": "Alijah Vera-Tucker",
+              "position": "G",
+              "status": "Questionable",
+              "injury": "Hamstring",
+              "reportedAt": "2026-10-18T18:23Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4259646/alijah-vera-tucker"
+            },
+            {
               "id": "16771",
               "name": "Morgan Moses",
               "position": "OT",
@@ -5051,15 +5060,6 @@
               "injury": null,
               "reportedAt": "2026-10-12T14:31Z",
               "source": "https://www.espn.com/nfl/player/_/id/4569923/andy-borregales"
-            },
-            {
-              "id": "4695193",
-              "name": "Efton Chism III",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-12T04:38Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4695193/efton-chism-iii"
             }
           ]
         },
@@ -5067,12 +5067,21 @@
           "name": "New Orleans Saints",
           "players": [
             {
+              "id": "4258199",
+              "name": "Cesar Ruiz",
+              "position": "G",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-10-18T18:29Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4258199/cesar-ruiz"
+            },
+            {
               "id": "3054850",
               "name": "Alvin Kamara",
               "position": "RB",
-              "status": "Questionable",
-              "injury": "Undisclosed",
-              "reportedAt": "2026-10-18T18:01Z",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-18T18:26Z",
               "source": "https://www.espn.com/nfl/player/_/id/3054850/alvin-kamara"
             },
             {
@@ -5281,15 +5290,6 @@
               "injury": null,
               "reportedAt": "2026-10-11T16:44Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685479/christen-miller"
-            },
-            {
-              "id": "4035661",
-              "name": "Julian Blackmon",
-              "position": "S",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-11T16:37Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4035661/julian-blackmon"
             }
           ]
         },
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Out",
               "injury": "Calf",
-              "reportedAt": "2026-10-18T18:22Z",
+              "reportedAt": "2026-10-18T18:32Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -5762,7 +5762,7 @@
               "position": "LB",
               "status": "Questionable",
               "injury": "Concussion",
-              "reportedAt": "2026-10-18T18:15Z",
+              "reportedAt": "2026-10-18T18:22Z",
               "source": "https://www.espn.com/nfl/player/_/id/4426331/nolan-smith-jr"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "20",
-          "name": "Kenyon Sadiq",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-18T16:01:42Z",
-          "source": "https://www.espn.com/nfl/player/_/id/5083315/kenyon-sadiq"
-        },
-        {
-          "teamId": "20",
           "name": "Omar Cooper Jr.",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-18T18:25:31Z",
           "source": "https://www.espn.com/nfl/player/_/id/4360939/rashod-bateman"
+        },
+        {
+          "teamId": "18",
+          "name": "Alvin Kamara",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-18T18:34:33Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3054850/alvin-kamara"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-18T18:25:31Z",
-      "lastAttemptAt": "2026-10-18T18:25:31Z",
+      "checkedAt": "2026-10-18T18:34:33Z",
+      "lastAttemptAt": "2026-10-18T18:34:33Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-18T18:25:31Z",
-      "lastAttemptAt": "2026-10-18T18:25:31Z",
+      "checkedAt": "2026-10-18T18:34:33Z",
+      "lastAttemptAt": "2026-10-18T18:34:33Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
