@@ -1,16 +1,16 @@
 {
- "at": "2026-10-18T21:49:51Z",
+ "at": "2026-10-18T21:56:58Z",
  "confirmed": {
-  "NFL-401873007": "2026-10-18T21:49:51Z",
-  "NFL-401873008": "2026-10-18T21:49:51Z"
+  "NFL-401873007": "2026-10-18T21:56:58Z",
+  "NFL-401873008": "2026-10-18T21:56:58Z"
  },
  "leagues": {
   "NFL": {
    "books": {
     "draftkings": 928,
-    "fanduel": 628
+    "fanduel": 629
    },
-   "eventsListed": 6,
+   "eventsListed": 8,
    "eventsMatched": 2,
    "games": 2,
    "marketTypes": {
@@ -27,7 +27,7 @@
     "player_passing_attempts": 8,
     "player_passing_completions": 8,
     "player_passing_touchdowns": 28,
-    "player_passing_yards": 148,
+    "player_passing_yards": 149,
     "player_receiving_yards": 535,
     "player_receptions": 340,
     "player_rushing_+_receiving_yards": 20,
@@ -38,7 +38,7 @@
     "player_tackles_+_assists": 10
    },
    "requestsLeft": 5,
-   "rows": 1556,
+   "rows": 1557,
    "slateGames": [
     "Dallas Cowboys at Green Bay Packers 2026-10-19T00:20Z",
     "Washington Commanders at San Francisco 49ers 2026-10-20T00:15Z"
@@ -51,7 +51,7 @@
       "betrivers": "1028823560",
       "fanduel": "36190129",
       "gemini": "NFL-2610230015-NE-CHI-T",
-      "kalshi": "KXNFL1HTEAMTOTAL-26OCT22NECHI",
+      "kalshi": "KXNFLTOTAL-26OCT22NECHI",
       "paddypower": "36190129",
       "polymarket": "nfl_bears_patriots_2026-10-22_b3",
       "polymarket_us": "nfl-ne-chi-2026-10-22"
@@ -74,9 +74,10 @@
     {
      "away": "Pittsburgh Steelers",
      "external": {
+      "betparx": "1028823697",
       "betrivers": "1028823697",
       "fanduel": "35605985",
-      "kalshi": "KXNFLGAME-26OCT25PITNO",
+      "kalshi": "KXNFLSPREAD-26OCT25PITNO",
       "paddypower": "35605985",
       "polymarket": "nfl_saints_steelers_2026-10-25_b1",
       "polymarket_us": "nfl-pit-no-2026-10-25"
@@ -95,6 +96,79 @@
      "type": "fixture"
     },
     {
+     "away": "San Francisco 49ers",
+     "external": {
+      "betparx": "1028823696",
+      "betrivers": "1028823696",
+      "fanduel": "36188996",
+      "kalshi": "KXNFLGAME-26OCT25SFATL",
+      "paddypower": "36188996",
+      "polymarket": "nfl_49ers_falcons_2026-10-25_b2",
+      "polymarket_us": "nfl-sf-atl-2026-10-25"
+     },
+     "home": "Atlanta Falcons",
+     "sample": {
+      "away_team": "San Francisco 49ers",
+      "home_team": "Atlanta Falcons",
+      "markets": [
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-25T17:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Cincinnati Bengals",
+     "external": {
+      "betparx": "1028823698",
+      "fanduel": "36188997",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT25CINBAL",
+      "paddypower": "36188997",
+      "polymarket": "nfl_bengals_ravens_2026-10-25_b2",
+      "polymarket_us": "nfl-cin-bal-2026-10-25"
+     },
+     "home": "Baltimore Ravens",
+     "sample": {
+      "away_team": "Cincinnati Bengals",
+      "home_team": "Baltimore Ravens",
+      "markets": [
+       "1st_half_team_total",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-25T17:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Tampa Bay Buccaneers",
+     "external": {
+      "betparx": "1028823703",
+      "betrivers": "1028823703",
+      "fanduel": "36188995",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT25TBCAR",
+      "paddypower": "36188995",
+      "polymarket": "nfl_buccaneers_panthers_2026-10-25_b2",
+      "polymarket_us": "nfl-tb-car-2026-10-25"
+     },
+     "home": "Carolina Panthers",
+     "sample": {
+      "away_team": "Tampa Bay Buccaneers",
+      "home_team": "Carolina Panthers",
+      "markets": [
+       "1st_half_team_total",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-25T17:00:00Z",
+     "type": "fixture"
+    },
+    {
      "away": null,
      "external": {
       "fanduel": "28297422"
@@ -109,50 +183,6 @@
      },
      "start": null,
      "type": "outright"
-    },
-    {
-     "away": "Carolina Panthers",
-     "external": {
-      "bet365": "203028928",
-      "betfair": "202610189E108163",
-      "betmgm": "6:43629",
-      "betonline": "1725013",
-      "betparx": "1028823557",
-      "betrivers": "1028823557",
-      "betsson": "f-iNcEs20eMUqd5VSY0Zz6-w",
-      "bwin": "6:43629",
-      "caesars": "f5e5523d-44d8-79a1-5b53-b792ca7fed4d",
-      "draftkings": "34118081",
-      "fanatics": "5562224",
-      "fanduel": "36160510",
-      "fliff": "407864_c_p_302_inplay",
-      "gemini": "NFL-2610181700-CAR-PHI-PPTD",
-      "kalshi": "KXNFLRECYDS-26OCT18CARPHI-PHIDPIERCE39-15",
-      "paddypower": "36160510",
-      "pinnacle": "1638287719",
-      "polymarket": "nfl_eagles_panthers_2026-10-18_b2",
-      "polymarket_us": "nfl-car-phi-2026-10-18",
-      "prophetx": "1700008801",
-      "rebet": "sr:match:71515912",
-      "saba": "135918569",
-      "skybet": "36160510",
-      "smarkets": "45225877",
-      "sportzino": "sz-16552495",
-      "stake": "b2b8982a-f276-4249-b3a1-5b4dfec2bd42",
-      "thescorebet": "StandardEvent:23ed1edd-12b5-4a85-b0f7-e03e2a86b1c7"
-     },
-     "home": "Philadelphia Eagles",
-     "sample": {
-      "away_team": "Carolina Panthers",
-      "home_team": "Philadelphia Eagles",
-      "markets": [
-       "game_prop",
-       "outright",
-       "player_touchdowns"
-      ]
-     },
-     "start": "2026-10-18T17:00:00Z",
-     "type": "fixture"
     }
    ]
   }
