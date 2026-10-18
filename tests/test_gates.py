@@ -133,6 +133,9 @@ class NoForcedBestBetTests(unittest.TestCase):
         self.assertTrue(gates.selection_verdict(dict(side, _primetimeFallback=False), context(), 'gut_call').ok)
         weak = dict(side, _planReasons=[{'type': 'matchup', 'class': 'B', 'direction': 'for', 'text': 'Matchup.'}])
         self.assertFalse(gates.selection_verdict(weak, context(), 'gut_call').ok)
+        projected = dict(side, _planReasons=[{'type': 'projection_edge', 'class': 'B', 'direction': 'for',
+                                              'text': 'The book has Green Bay -1; my margin makes it Green Bay -3.5.'}])
+        self.assertTrue(gates.selection_verdict(projected, context(), 'gut_call').ok)
 
     def test_best_bet_spot_lookup_keeps_an_internal_only_league(self):
         from unittest.mock import patch

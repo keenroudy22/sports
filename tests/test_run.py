@@ -209,6 +209,20 @@ class SlotTests(unittest.TestCase):
         self.assertEqual(run.straight_target(saturday, dict(list(games.items())[:9])), 1)
         self.assertEqual(run.straight_target(datetime(2026, 10, 19).date(), games), 1)
 
+    def test_nfl_side_gets_a_numbered_projection_reason_only_when_materially_through_the_spread(self):
+        game = {'id': 'NFL-side', 'league': 'NFL', 'source': 'https://example.test/game',
+                'home': {'id': 'GB', 'short': 'Packers'},
+                'away': {'id': 'DAL', 'short': 'Cowboys'}}
+        ctx = SimpleNamespace(now=datetime(2026, 10, 18, 15, 0, tzinfo=timezone.utc), games={'NFL-side': game},
+                              odds_history={})
+        pick = {'gameIds': ['NFL-side'], 'marketType': 'spread', 'direction': 'home', 'line': -1.0,
+                '_desk': {'projection': 3.5}, '_evidence': [], '_research': []}
+        reasons = run.plan_reasons(pick, ctx)
+        self.assertEqual(reasons[0]['type'], 'projection_edge')
+        self.assertEqual(reasons[0]['number']['pointsThrough'], 2.5)
+        self.assertIn('Packers -1', reasons[0]['text'])
+        self.assertEqual(run.plan_reasons(dict(pick, _desk={'projection': 2.0}), ctx), [])
+
     def test_large_slate_builds_defense_history_once_per_league(self):
         ctx = run.gates.Context(now=datetime(2026, 10, 17, 12, 30, tzinfo=timezone.utc), records=[{'id': 'stored'}])
         with mock.patch.object(run.features, 'defense_logs', return_value={'1': []}) as build:

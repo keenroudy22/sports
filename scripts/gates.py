@@ -908,6 +908,7 @@ def lean_nothing_against(candidate, ctx):
 
 
 CLASS_A_REASONS = frozenset(('injury_role', 'qb_change', 'weather', 'line_move', 'news'))
+STRONG_SIDE_REASONS = CLASS_A_REASONS | frozenset(('projection_edge',))
 TOTAL_REASONS = frozenset(('weather', 'pace', 'injury_role', 'qb_change', 'line_move', 'news'))
 
 
@@ -953,7 +954,7 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
     if league == 'NFL' and market in ('spread', 'moneyline') and not full_send_side:
         return Decision(False, 'plan_selection', 'NFL sides remain in shadow until 30 forward grades clear the promotion rule', numbers)
     if league == 'NFL' and market in ('spread', 'moneyline') and full_send_side \
-            and not any(row.get('class') == 'A' or row.get('type') in CLASS_A_REASONS for row in reasons):
+            and not any(row.get('class') == 'A' or row.get('type') in STRONG_SIDE_REASONS for row in reasons):
         return Decision(False, 'plan_selection', 'an NFL side needs a strong current reason before it can be a Full Send', numbers)
     if league == 'CFB' and market in ('spread', 'moneyline'):
         desk = candidate.get('_desk') or {}

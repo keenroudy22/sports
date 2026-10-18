@@ -1029,6 +1029,30 @@ def plan_reasons(candidate, ctx):
                         'direction': 'for', 'text': fact.get('text') or fact.get('claim'),
                         'number': fact.get('numbers'), 'source': fact.get('source'),
                         'observedAt': fact.get('observedAt') or fact.get('retrievedAt') or now})
+    # A current, quantified model-versus-market difference is itself a real
+    # reason for an NFL side.  Earlier code accepted only injury/news Class A
+    # facts here, which made ordinary positive-value Sunday spreads impossible
+    # even after the owner approved them as 0.5u Full Sends.  Keep this bounded:
+    # the model margin must sit at least 1.5 points through the posted spread;
+    # selection_verdict still requires positive value at a fresh two-sided price.
+    market = gates.market_key(candidate)
+    desk = candidate.get('_desk') or {}
+    game = ctx.games.get((candidate.get('gameIds') or [None])[0]) or {}
+    side = gates.side_of(candidate)
+    projection = desk.get('projection')
+    line = candidate.get('line')
+    if market == 'spread' and side in ('home', 'away') \
+            and isinstance(projection, (int, float)) and isinstance(line, (int, float)):
+        through = projection + line if side == 'home' else -projection + line
+        if through >= 1.5:
+            team = pick_card.team_label(game.get(side) or {}, game.get('league'))
+            book_line = pricing.signed(float(line))
+            model_line = pricing.signed(float(-projection if side == 'home' else projection))
+            reasons.append({'type': 'projection_edge', 'class': 'B', 'direction': 'for',
+                            'text': f"The book has {team} {book_line}; my margin makes it {team} {model_line}.",
+                            'number': {'bookLine': float(line), 'modelLine': float(-projection if side == 'home' else projection),
+                                       'pointsThrough': round(through, 1)},
+                            'source': game.get('source'), 'observedAt': now})
     if candidate.get('athleteId'):
         line, side, market = float(candidate['line']), gates.side_of(candidate), gates.market_key(candidate)
         game = ctx.games[candidate['gameIds'][0]]
@@ -2396,9 +2420,10 @@ def _run(args, now, slot, kinds, status):
                 candidate['_selectionDecision'] = gut.data
                 gut_pool.append((league, candidate, best))
                 continue
+            refusal = gut if best.reason.startswith('NFL sides remain in shadow') else best
             screened.append({'league': league, 'gameId': candidate['gameIds'][0], 'title': candidate['title'],
-                             'rule': best.rule, 'reason': best.reason})
-            decided.append(decision_record(candidate, league, 'refused', [best.rule], best.reason, now, ctx))
+                             'rule': refusal.rule, 'reason': refusal.reason})
+            decided.append(decision_record(candidate, league, 'refused', [refusal.rule], refusal.reason, now, ctx))
             continue
         candidate['_selectionDecision'] = best.data
         candidate['_kitchenScore'] = gates.kitchen_score(candidate, ctx, best.data)
