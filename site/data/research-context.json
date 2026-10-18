@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-18T17:39:05Z",
+  "updatedAt": "2026-10-18T17:48:15Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -237,6 +237,15 @@
           "name": "Atlanta Falcons",
           "players": [
             {
+              "id": "4360423",
+              "name": "Michael Penix Jr.",
+              "position": "QB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-18T17:32Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4360423/michael-penix-jr"
+            },
+            {
               "id": "3043168",
               "name": "Za'Darius Smith",
               "position": "DE",
@@ -316,15 +325,6 @@
               "injury": null,
               "reportedAt": "2026-10-16T23:22Z",
               "source": "https://www.espn.com/nfl/player/_/id/4241479/tua-tagovailoa"
-            },
-            {
-              "id": "4360423",
-              "name": "Michael Penix Jr.",
-              "position": "QB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-16T17:40Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4360423/michael-penix-jr"
             },
             {
               "id": "4595343",
@@ -5527,6 +5527,15 @@
           "name": "New York Jets",
           "players": [
             {
+              "id": "4700136",
+              "name": "Kiko Mauigoa",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Thigh",
+              "reportedAt": "2026-10-18T17:37Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4700136/kiko-mauigoa"
+            },
+            {
               "id": "4723820",
               "name": "Omar Cooper Jr.",
               "position": "WR",
@@ -5633,15 +5642,6 @@
               "injury": null,
               "reportedAt": "2026-10-17T00:02Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685247/braelon-allen"
-            },
-            {
-              "id": "4700136",
-              "name": "Kiko Mauigoa",
-              "position": "LB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-15T01:14Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4700136/kiko-mauigoa"
             },
             {
               "id": "4695404",
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "18",
-          "name": "Jeremiah Wright",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-18T16:01:42Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4433938/jeremiah-wright"
-        },
-        {
-          "teamId": "18",
           "name": "Lorenzo Styles Jr.",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-18T17:30:24Z",
           "source": "https://www.espn.com/nfl/player/_/id/4242208/grant-delpit"
+        },
+        {
+          "teamId": "20",
+          "name": "Kiko Mauigoa",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-18T17:48:15Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4700136/kiko-mauigoa"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-18T17:39:05Z",
-      "lastAttemptAt": "2026-10-18T17:39:05Z",
+      "checkedAt": "2026-10-18T17:48:15Z",
+      "lastAttemptAt": "2026-10-18T17:48:15Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-18T17:39:05Z",
-      "lastAttemptAt": "2026-10-18T17:39:05Z",
+      "checkedAt": "2026-10-18T17:48:15Z",
+      "lastAttemptAt": "2026-10-18T17:48:15Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
