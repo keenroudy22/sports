@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-18T21:25:00Z",
+  "updatedAt": "2026-10-18T21:33:13Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -700,9 +700,9 @@
               "id": "3116733",
               "name": "Bradley Chubb",
               "position": "LB",
-              "status": "Questionable",
-              "injury": "Ribs",
-              "reportedAt": "2026-10-18T21:15Z",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-18T21:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/3116733/bradley-chubb"
             },
             {
@@ -2767,6 +2767,15 @@
           "name": "Houston Texans",
           "players": [
             {
+              "id": "4586312",
+              "name": "Jaylin Noel",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-18T21:18Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4586312/jaylin-noel"
+            },
+            {
               "id": "4429059",
               "name": "Woody Marks",
               "position": "RB",
@@ -2981,15 +2990,6 @@
               "injury": null,
               "reportedAt": "2026-10-12T04:27Z",
               "source": "https://www.espn.com/nfl/player/_/id/3117256/dalton-schultz"
-            },
-            {
-              "id": "4686422",
-              "name": "Xavier Hutchinson",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-12T04:08Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4686422/xavier-hutchinson"
             }
           ]
         },
@@ -3922,7 +3922,7 @@
               "position": "WR",
               "status": "Out",
               "injury": "Concussion",
-              "reportedAt": "2026-10-18T21:10Z",
+              "reportedAt": "2026-10-18T21:14Z",
               "source": "https://www.espn.com/nfl/player/_/id/4612826/ladd-mcconkey"
             },
             {
@@ -5302,16 +5302,16 @@
               "position": "OT",
               "status": "Out",
               "injury": "Calf",
-              "reportedAt": "2026-10-18T21:13Z",
+              "reportedAt": "2026-10-18T21:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
               "id": "4259566",
               "name": "Andrew Thomas",
               "position": "OT",
-              "status": "Questionable",
-              "injury": "Head",
-              "reportedAt": "2026-10-18T19:54Z",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-18T21:20Z",
               "source": "https://www.espn.com/nfl/player/_/id/4259566/andrew-thomas"
             },
             {
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "1",
-          "name": "Kendal Daniels",
-          "from": "Active",
-          "to": "Questionable",
-          "observedAt": "2026-10-18T19:09:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4595343/kendal-daniels"
-        },
-        {
-          "teamId": "2",
-          "name": "Ar'maj Reed-Adams",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-10-18T19:09:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4606712/armaj-reed-adams"
-        },
-        {
           "teamId": "2",
           "name": "Ed Oliver",
           "from": "Questionable",
@@ -7764,11 +7748,27 @@
           "to": "Out",
           "observedAt": "2026-10-18T21:25:00Z",
           "source": "https://www.espn.com/nfl/player/_/id/4612826/ladd-mcconkey"
+        },
+        {
+          "teamId": "2",
+          "name": "Bradley Chubb",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-18T21:33:13Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3116733/bradley-chubb"
+        },
+        {
+          "teamId": "19",
+          "name": "Andrew Thomas",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-18T21:33:13Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4259566/andrew-thomas"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-18T21:25:00Z",
-      "lastAttemptAt": "2026-10-18T21:25:00Z",
+      "checkedAt": "2026-10-18T21:33:13Z",
+      "lastAttemptAt": "2026-10-18T21:33:13Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-18T21:25:00Z",
-      "lastAttemptAt": "2026-10-18T21:25:00Z",
+      "checkedAt": "2026-10-18T21:33:13Z",
+      "lastAttemptAt": "2026-10-18T21:33:13Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
