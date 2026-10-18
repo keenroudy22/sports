@@ -1033,7 +1033,7 @@ def plan_reasons(candidate, ctx):
     # reason for an NFL side.  Earlier code accepted only injury/news Class A
     # facts here, which made ordinary positive-value Sunday spreads impossible
     # even after the owner approved them as 0.5u Full Sends.  Keep this bounded:
-    # the model margin must sit at least 1.5 points through the posted spread;
+    # the model margin must sit at least one point through the posted spread;
     # selection_verdict still requires positive value at a fresh two-sided price.
     market = gates.market_key(candidate)
     desk = candidate.get('_desk') or {}
@@ -1044,7 +1044,7 @@ def plan_reasons(candidate, ctx):
     if market == 'spread' and side in ('home', 'away') \
             and isinstance(projection, (int, float)) and isinstance(line, (int, float)):
         through = projection + line if side == 'home' else -projection + line
-        if through >= 1.5:
+        if through >= 1.0:
             team = pick_card.team_label(game.get(side) or {}, game.get('league'))
             book_line = pricing.signed(float(line))
             model_line = pricing.signed(float(-projection if side == 'home' else projection))

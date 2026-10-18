@@ -221,7 +221,7 @@ class SlotTests(unittest.TestCase):
         self.assertEqual(reasons[0]['type'], 'projection_edge')
         self.assertEqual(reasons[0]['number']['pointsThrough'], 2.5)
         self.assertIn('Packers -1', reasons[0]['text'])
-        self.assertEqual(run.plan_reasons(dict(pick, _desk={'projection': 2.0}), ctx), [])
+        self.assertEqual(run.plan_reasons(dict(pick, _desk={'projection': 1.9}), ctx), [])
 
     def test_large_slate_builds_defense_history_once_per_league(self):
         ctx = run.gates.Context(now=datetime(2026, 10, 17, 12, 30, tzinfo=timezone.utc), records=[{'id': 'stored'}])
