@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-18T21:18:10Z",
+  "updatedAt": "2026-10-18T21:25:00Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -697,6 +697,15 @@
           "name": "Buffalo Bills",
           "players": [
             {
+              "id": "3116733",
+              "name": "Bradley Chubb",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Ribs",
+              "reportedAt": "2026-10-18T21:15Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3116733/bradley-chubb"
+            },
+            {
               "id": "4039303",
               "name": "Ed Oliver",
               "position": "DT",
@@ -911,15 +920,6 @@
               "injury": null,
               "reportedAt": "2026-10-05T02:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/3917232/tyler-bass"
-            },
-            {
-              "id": "4427348",
-              "name": "Te'Cory Couch",
-              "position": "CB",
-              "status": "Questionable",
-              "injury": "Hamstring",
-              "reportedAt": "2026-10-04T18:51Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4427348/tecory-couch"
             }
           ]
         },
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-18T21:00Z",
+              "reportedAt": "2026-10-18T21:13Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -3917,6 +3917,15 @@
           "name": "Los Angeles Chargers",
           "players": [
             {
+              "id": "4612826",
+              "name": "Ladd McConkey",
+              "position": "WR",
+              "status": "Out",
+              "injury": "Concussion",
+              "reportedAt": "2026-10-18T21:10Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4612826/ladd-mcconkey"
+            },
+            {
               "id": "4838693",
               "name": "Rodney Shelley",
               "position": "CB",
@@ -4059,15 +4068,6 @@
               "injury": null,
               "reportedAt": "2026-10-16T19:30Z",
               "source": "https://www.espn.com/nfl/player/_/id/4429025/quentin-johnston"
-            },
-            {
-              "id": "4612826",
-              "name": "Ladd McConkey",
-              "position": "WR",
-              "status": "Active",
-              "injury": "Head",
-              "reportedAt": "2026-10-16T19:27Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4612826/ladd-mcconkey"
             },
             {
               "id": "3917668",
@@ -5067,6 +5067,15 @@
           "name": "New Orleans Saints",
           "players": [
             {
+              "id": "4433975",
+              "name": "Kool-Aid McKinstry",
+              "position": "CB",
+              "status": "Questionable",
+              "injury": "Head",
+              "reportedAt": "2026-10-18T21:06Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4433975/kool-aid-mckinstry"
+            },
+            {
               "id": "4428350",
               "name": "Quincy Riley",
               "position": "CB",
@@ -5083,15 +5092,6 @@
               "injury": "Knee",
               "reportedAt": "2026-10-18T19:42Z",
               "source": "https://www.espn.com/nfl/player/_/id/4258199/cesar-ruiz"
-            },
-            {
-              "id": "4433975",
-              "name": "Kool-Aid McKinstry",
-              "position": "CB",
-              "status": "Questionable",
-              "injury": "Head",
-              "reportedAt": "2026-10-18T19:37Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4433975/kool-aid-mckinstry"
             },
             {
               "id": "3054850",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Out",
               "injury": "Calf",
-              "reportedAt": "2026-10-18T21:08Z",
+              "reportedAt": "2026-10-18T21:13Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "14",
-          "name": "Kam Curl",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-18T19:00:46Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4242154/kam-curl"
-        },
-        {
           "teamId": "1",
           "name": "Kendal Daniels",
           "from": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Out",
           "observedAt": "2026-10-18T21:10:36Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "24",
+          "name": "Ladd McConkey",
+          "from": "Active",
+          "to": "Out",
+          "observedAt": "2026-10-18T21:25:00Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4612826/ladd-mcconkey"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-18T21:18:10Z",
-      "lastAttemptAt": "2026-10-18T21:18:10Z",
+      "checkedAt": "2026-10-18T21:25:00Z",
+      "lastAttemptAt": "2026-10-18T21:25:00Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-18T21:18:10Z",
-      "lastAttemptAt": "2026-10-18T21:18:10Z",
+      "checkedAt": "2026-10-18T21:25:00Z",
+      "lastAttemptAt": "2026-10-18T21:25:00Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
