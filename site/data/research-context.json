@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-18T22:33:36Z",
+  "updatedAt": "2026-10-18T22:42:26Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -697,6 +697,15 @@
           "name": "Buffalo Bills",
           "players": [
             {
+              "id": "4385690",
+              "name": "Dalton Kincaid",
+              "position": "TE",
+              "status": "Questionable",
+              "injury": "Undisclosed",
+              "reportedAt": "2026-10-18T22:34Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4385690/dalton-kincaid"
+            },
+            {
               "id": "3116733",
               "name": "Bradley Chubb",
               "position": "LB",
@@ -821,15 +830,6 @@
               "injury": null,
               "reportedAt": "2026-10-13T23:25Z",
               "source": "https://www.espn.com/nfl/player/_/id/4635008/keon-coleman"
-            },
-            {
-              "id": "4385690",
-              "name": "Dalton Kincaid",
-              "position": "TE",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-13T05:27Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4385690/dalton-kincaid"
             },
             {
               "id": "4373678",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Out",
               "injury": "Calf",
-              "reportedAt": "2026-10-18T22:17Z",
+              "reportedAt": "2026-10-18T22:34Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "2",
-          "name": "Joshua Palmer",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-18T19:09:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4242433/joshua-palmer"
-        },
-        {
-          "teamId": "2",
           "name": "Dee Alford",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-18T22:33:36Z",
           "source": "https://www.espn.com/nfl/player/_/id/4242208/grant-delpit"
+        },
+        {
+          "teamId": "2",
+          "name": "Dalton Kincaid",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-18T22:42:26Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4385690/dalton-kincaid"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-18T22:33:36Z",
-      "lastAttemptAt": "2026-10-18T22:33:36Z",
+      "checkedAt": "2026-10-18T22:42:26Z",
+      "lastAttemptAt": "2026-10-18T22:42:26Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-18T22:33:36Z",
-      "lastAttemptAt": "2026-10-18T22:33:36Z",
+      "checkedAt": "2026-10-18T22:42:26Z",
+      "lastAttemptAt": "2026-10-18T22:42:26Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
