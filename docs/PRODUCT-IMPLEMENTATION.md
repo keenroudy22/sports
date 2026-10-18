@@ -1959,3 +1959,25 @@ widths, no caught load state and no browser console error. The October 17 Climb 
 the stored final and official Discord two seconds after X. The separate community/personal-ticket Discord destination
 remains externally blocked because `DISCORD_WINS_WEBHOOK_URL` is not configured; official Plays & Results delivery is
 not affected.
+
+### October 18 earlier Sunday coverage and clearer Today
+
+Release `9204eb9fd401548279cb89079cf25a4335dbe462` shipped in hosted run `39135240196`.
+Sunday now has a 7:30 AM Eastern fresh-price selection pass for games kicking before noon, including London games.
+Football projection sheets target 7:00 PM Eastern the night before Thursday, Saturday, Sunday and Monday slates and
+retain the existing 8:00 AM game-day fallback. NFL spreads and moneylines may fill the 0.5u Full Send lane on ordinary
+game days when their market-anchored chance beats the price and a strong current reason survives every price, injury,
+role and contradiction gate; the Best bet lane's established promotion rule is unchanged.
+
+Today now puts two linked status tiles, `TODAY'S BEST BETS` and `TODAY'S CLIMB`, above the corresponding visible
+sections. The Climb exposes its current step and route link without requiring a search through Record. The strongest
+lean remains visible when no official play clears, with explicit copy that it still needs a verified reason and final
+release checks.
+
+Every gate passed: 1,460 Python tests (two skipped), 244 Node tests, clean export, 504-page build, payload budget
+(existing soft lazy-More warning only), 105-row football record audit, zero-row NBA Trial audit, 622-file publication
+guard, asset checks and isolated 07:30 rehearsal with outcome `ok`, zero outside writes and zero private reads. Live
+app `168` / CSS `96` loaded with the Best bets and 80/20 Climb anchors and no caught load state. The first fresh
+post-release 11:45 screen evaluated 173 NFL candidates and published none: no row cleared positive value plus the
+required fresh price, role/injury and strong-reason checks. The Climb scan likewise held; its nearest priced rung was
+DraftKings Patriots moneyline at -345, outside the approved -220 to -130 range.
