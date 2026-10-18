@@ -1,37 +1,47 @@
 {
- "at": "2026-10-18T18:43:56Z",
+ "at": "2026-10-18T18:52:17Z",
  "confirmed": {
-  "NFL-401873004": "2026-10-18T18:43:56Z",
-  "NFL-401873005": "2026-10-18T18:43:56Z",
-  "NFL-401873006": "2026-10-18T18:43:56Z",
-  "NFL-401873007": "2026-10-18T18:43:56Z",
-  "NFL-401873008": "2026-10-18T18:43:56Z"
+  "NFL-401873004": "2026-10-18T18:52:17Z",
+  "NFL-401873005": "2026-10-18T18:52:17Z",
+  "NFL-401873006": "2026-10-18T18:52:17Z",
+  "NFL-401873007": "2026-10-18T18:52:17Z",
+  "NFL-401873008": "2026-10-18T18:52:17Z"
  },
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 72,
-    "fanduel": 1538
+    "draftkings": 427,
+    "fanduel": 1670
    },
    "eventsListed": 19,
    "eventsMatched": 5,
    "games": 5,
    "marketTypes": {
+    "player_assists": 20,
+    "player_extra_points_made": 4,
+    "player_fantasy_score": 12,
+    "player_field_goals_made": 4,
     "player_interceptions": 4,
+    "player_kicking_points": 4,
     "player_longest_passing_completion": 4,
+    "player_longest_reception": 12,
+    "player_longest_rush": 8,
     "player_passing_+_rushing_yards": 4,
     "player_passing_attempts": 4,
     "player_passing_completions": 4,
     "player_passing_touchdowns": 53,
-    "player_passing_yards": 159,
-    "player_receiving_yards": 629,
-    "player_receptions": 381,
-    "player_rushing_+_receiving_yards": 30,
-    "player_rushing_yards": 289,
-    "player_sacks": 49
+    "player_passing_yards": 165,
+    "player_receiving_yards": 788,
+    "player_receptions": 487,
+    "player_rushing_+_receiving_yards": 34,
+    "player_rushing_attempts": 6,
+    "player_rushing_yards": 381,
+    "player_sacks": 61,
+    "player_tackles": 20,
+    "player_tackles_+_assists": 18
    },
-   "requestsLeft": 4,
-   "rows": 1610,
+   "requestsLeft": 2,
+   "rows": 2097,
    "slateGames": [
     "Arizona Cardinals at Los Angeles Rams 2026-10-18T20:05Z",
     "Buffalo Bills at Las Vegas Raiders 2026-10-18T20:25Z",
@@ -49,7 +59,7 @@
       "draftkings": "34118033",
       "fanduel": "36190129",
       "fliff": "407873_c_p_202_prematch",
-      "gemini": "NFL-2610230015-NE-CHI-T",
+      "gemini": "NFL-2610230015-NE-CHI-S",
       "kalshi": "KXNFL1HTEAMTOTAL-26OCT22NECHI",
       "novig": "01a136e2-e697-7c01-92bb-981a85cc4723",
       "paddypower": "36190129",
