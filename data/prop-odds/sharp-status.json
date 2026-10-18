@@ -1,62 +1,48 @@
 {
- "at": "2026-10-18T16:55:21Z",
+ "at": "2026-10-18T17:04:53Z",
  "confirmed": {
-  "NFL-401872997": "2026-10-18T16:55:21Z",
-  "NFL-401872998": "2026-10-18T16:55:21Z",
-  "NFL-401872999": "2026-10-18T16:55:21Z",
-  "NFL-401873000": "2026-10-18T16:46:05Z",
-  "NFL-401873001": "2026-10-18T16:46:05Z",
-  "NFL-401873002": "2026-10-18T16:46:05Z",
-  "NFL-401873003": "2026-10-18T16:35:00Z",
-  "NFL-401873004": "2026-10-18T16:55:21Z",
-  "NFL-401873005": "2026-10-18T16:35:00Z",
-  "NFL-401873006": "2026-10-18T16:35:00Z",
+  "NFL-401873004": "2026-10-18T17:04:53Z",
+  "NFL-401873005": "2026-10-18T17:04:53Z",
+  "NFL-401873006": "2026-10-18T17:04:53Z",
   "NFL-401873007": "2026-10-18T16:35:00Z",
   "NFL-401873008": "2026-10-18T16:35:00Z"
  },
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 1316,
-    "fanduel": 1187
+    "draftkings": 1653,
+    "fanduel": 938
    },
-   "eventsListed": 23,
-   "eventsMatched": 8,
-   "games": 12,
+   "eventsListed": 19,
+   "eventsMatched": 5,
+   "games": 5,
    "marketTypes": {
-    "player_assists": 62,
+    "player_assists": 60,
     "player_extra_points_made": 12,
-    "player_fantasy_score": 40,
+    "player_fantasy_score": 36,
     "player_field_goals_made": 12,
     "player_interceptions": 12,
     "player_kicking_points": 12,
     "player_longest_passing_completion": 12,
-    "player_longest_reception": 38,
-    "player_longest_rush": 22,
+    "player_longest_reception": 66,
+    "player_longest_rush": 30,
     "player_passing_+_rushing_yards": 12,
     "player_passing_attempts": 12,
     "player_passing_completions": 12,
-    "player_passing_touchdowns": 48,
-    "player_passing_yards": 239,
-    "player_receiving_yards": 832,
-    "player_receptions": 453,
-    "player_rushing_+_receiving_yards": 36,
-    "player_rushing_attempts": 18,
-    "player_rushing_yards": 429,
-    "player_sacks": 66,
-    "player_tackles": 62,
-    "player_tackles_+_assists": 62
+    "player_passing_touchdowns": 41,
+    "player_passing_yards": 226,
+    "player_receiving_yards": 928,
+    "player_receptions": 526,
+    "player_rushing_+_receiving_yards": 34,
+    "player_rushing_attempts": 22,
+    "player_rushing_yards": 360,
+    "player_sacks": 48,
+    "player_tackles": 60,
+    "player_tackles_+_assists": 58
    },
    "requestsLeft": 0,
-   "rows": 2503,
+   "rows": 2591,
    "slateGames": [
-    "Baltimore Ravens at Cleveland Browns 2026-10-18T17:00Z",
-    "Carolina Panthers at Philadelphia Eagles 2026-10-18T17:00Z",
-    "Chicago Bears at Atlanta Falcons 2026-10-18T17:00Z",
-    "New Orleans Saints at New York Giants 2026-10-18T17:00Z",
-    "New York Jets at New England Patriots 2026-10-18T17:00Z",
-    "Pittsburgh Steelers at Tampa Bay Buccaneers 2026-10-18T17:00Z",
-    "Tennessee Titans at Indianapolis Colts 2026-10-18T17:00Z",
     "Arizona Cardinals at Los Angeles Rams 2026-10-18T20:05Z",
     "Buffalo Bills at Las Vegas Raiders 2026-10-18T20:25Z",
     "Los Angeles Chargers at Kansas City Chiefs 2026-10-18T20:25Z",
@@ -64,22 +50,6 @@
     "Washington Commanders at San Francisco 49ers 2026-10-20T00:15Z"
    ],
    "unmatchedEvents": [
-    {
-     "away": null,
-     "external": {
-      "fanduel": "28041972"
-     },
-     "home": "NFL",
-     "sample": {
-      "away_team": "",
-      "home_team": "NFL",
-      "markets": [
-       "outright"
-      ]
-     },
-     "start": "2026-10-18T16:55:00Z",
-     "type": "outright"
-    },
     {
      "away": "New England Patriots",
      "external": {
@@ -105,7 +75,6 @@
       "home_team": "Chicago Bears",
       "markets": [
        "1st_half_team_total",
-       "draw_no_bet",
        "moneyline",
        "player_touchdowns",
        "point_spread",
@@ -120,6 +89,7 @@
      "external": {
       "betparx": "1028823697",
       "betrivers": "1028823697",
+      "caesars": "a9e9eba1-6e46-9837-9ea4-23f65a2c5605",
       "draftkings": "34118009",
       "fanduel": "35605985",
       "fliff": "391741_c_p_202_prematch",
@@ -136,6 +106,7 @@
       "away_team": "Pittsburgh Steelers",
       "home_team": "New Orleans Saints",
       "markets": [
+       "game_prop",
        "moneyline",
        "point_spread",
        "total_points"
@@ -166,7 +137,6 @@
       "away_team": "San Francisco 49ers",
       "home_team": "Atlanta Falcons",
       "markets": [
-       "game_prop",
        "moneyline",
        "point_spread",
        "total_points"
@@ -209,6 +179,7 @@
      "external": {
       "betparx": "1028823700",
       "betrivers": "1028823700",
+      "caesars": "caa06238-3afa-b4e3-0a51-46305659aef5",
       "draftkings": "34118233",
       "fanduel": "36189001",
       "fliff": "407877_c_p_202_prematch",
@@ -225,6 +196,7 @@
       "away_team": "Cleveland Browns",
       "home_team": "Tennessee Titans",
       "markets": [
+       "game_prop",
        "moneyline",
        "point_spread",
        "total_points"
@@ -238,6 +210,7 @@
      "external": {
       "betparx": "1028823703",
       "betrivers": "1028823703",
+      "caesars": "58558e76-2984-cafa-06d4-922abf60ff65",
       "draftkings": "34118024",
       "fanduel": "36188995",
       "fliff": "407878_c_p_202_prematch",
@@ -267,6 +240,7 @@
      "external": {
       "betparx": "1028823709",
       "betrivers": "1028823709",
+      "caesars": "96c72a65-f707-c86f-9ab8-8dec4c82ff5f",
       "draftkings": "34118173",
       "fanduel": "36189002",
       "fliff": "408407_c_p_202_prematch",
@@ -296,6 +270,7 @@
      "external": {
       "betparx": "1028823699",
       "betrivers": "1028823699",
+      "caesars": "c8c12e19-b84d-988f-7946-01969a556d4f",
       "draftkings": "34118187",
       "fanduel": "36189000",
       "fliff": "407876_c_p_202_prematch",
@@ -352,6 +327,7 @@
       "fanduel": "36189004",
       "fliff": "407879_c_p_202_prematch",
       "kalshi": "KXNFLGAME-26OCT25DENARI",
+      "novig": "01a136e2-ed41-7f12-9786-25d6715adc49",
       "paddypower": "36189004",
       "polymarket": "nfl_broncos_cardinals_2026-10-25_b2",
       "polymarket_us": "nfl-den-ari-2026-10-25",
@@ -376,6 +352,7 @@
      "external": {
       "betparx": "1028823708",
       "betrivers": "1028823708",
+      "caesars": "6deb965b-4aff-2bb2-376e-1ab442fdb795",
       "draftkings": "34118203",
       "fanduel": "36189005",
       "fliff": "407880_c_p_202_prematch",
@@ -392,6 +369,40 @@
       "away_team": "Green Bay Packers",
       "home_team": "Detroit Lions",
       "markets": [
+       "game_prop",
+       "moneyline",
+       "point_spread",
+       "team_total",
+       "total_points",
+       "total_points_odd_even"
+      ]
+     },
+     "start": "2026-10-25T20:25:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Los Angeles Rams",
+     "external": {
+      "betparx": "1028823705",
+      "betrivers": "1028823705",
+      "caesars": "0140713b-a522-cb1b-b173-6bc2dc50feaa",
+      "draftkings": "34118247",
+      "fanduel": "36189003",
+      "fliff": "407881_c_p_202_prematch",
+      "kalshi": "KXNFLGAME-26OCT25LARLV",
+      "novig": "01a136e2-ee10-7373-841a-15273c9c9ea9",
+      "paddypower": "36189003",
+      "polymarket": "nfl_raiders_rams_2026-10-25_b2",
+      "polymarket_us": "nfl-lar-lv-2026-10-25",
+      "rebet": "sr:match:71515946",
+      "stake": "4e91ed4c-ee1f-44f0-9334-990141bd9b37"
+     },
+     "home": "Las Vegas Raiders",
+     "sample": {
+      "away_team": "Los Angeles Rams",
+      "home_team": "Las Vegas Raiders",
+      "markets": [
+       "game_prop",
        "moneyline",
        "point_spread",
        "team_total",
