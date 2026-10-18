@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-18T20:11:11Z",
+  "updatedAt": "2026-10-18T20:20:33Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -470,7 +470,7 @@
               "id": "4360939",
               "name": "Rashod Bateman",
               "position": "WR",
-              "status": "Out",
+              "status": "Questionable",
               "injury": "Shoulder",
               "reportedAt": "2026-10-18T18:45Z",
               "source": "https://www.espn.com/nfl/player/_/id/4360939/rashod-bateman"
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-18T20:01Z",
+              "reportedAt": "2026-10-18T20:18Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -5762,7 +5762,7 @@
               "position": "WR",
               "status": "Active",
               "injury": null,
-              "reportedAt": "2026-10-18T20:01Z",
+              "reportedAt": "2026-10-18T20:02Z",
               "source": "https://www.espn.com/nfl/player/_/id/4428850/dontayvion-wicks"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "14",
-          "name": "Ty Simpson",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-10-18T19:00:46Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4685522/ty-simpson"
-        },
-        {
-          "teamId": "14",
           "name": "Larrell Murchison",
           "from": "Active",
           "to": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-10-18T20:11:11Z",
           "source": "https://www.espn.com/nfl/player/_/id/4428850/dontayvion-wicks"
+        },
+        {
+          "teamId": "33",
+          "name": "Rashod Bateman",
+          "from": "Out",
+          "to": "Questionable",
+          "observedAt": "2026-10-18T20:20:33Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4360939/rashod-bateman"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-18T20:11:11Z",
-      "lastAttemptAt": "2026-10-18T20:11:11Z",
+      "checkedAt": "2026-10-18T20:20:33Z",
+      "lastAttemptAt": "2026-10-18T20:20:33Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-18T20:11:11Z",
-      "lastAttemptAt": "2026-10-18T20:11:11Z",
+      "checkedAt": "2026-10-18T20:20:33Z",
+      "lastAttemptAt": "2026-10-18T20:20:33Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
