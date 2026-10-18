@@ -1,16 +1,16 @@
 {
- "at": "2026-10-18T21:03:25Z",
+ "at": "2026-10-18T21:11:19Z",
  "confirmed": {
-  "NFL-401873007": "2026-10-18T21:03:25Z",
-  "NFL-401873008": "2026-10-18T21:03:25Z"
+  "NFL-401873007": "2026-10-18T21:11:19Z",
+  "NFL-401873008": "2026-10-18T21:11:19Z"
  },
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 929,
+    "draftkings": 876,
     "fanduel": 627
    },
-   "eventsListed": 4,
+   "eventsListed": 5,
    "eventsMatched": 2,
    "games": 2,
    "marketTypes": {
@@ -21,14 +21,14 @@
     "player_interceptions": 8,
     "player_kicking_points": 8,
     "player_longest_passing_completion": 8,
-    "player_longest_reception": 36,
+    "player_longest_reception": 32,
     "player_longest_rush": 18,
     "player_passing_+_rushing_yards": 8,
     "player_passing_attempts": 8,
     "player_passing_completions": 8,
     "player_passing_touchdowns": 28,
-    "player_passing_yards": 148,
-    "player_receiving_yards": 537,
+    "player_passing_yards": 130,
+    "player_receiving_yards": 506,
     "player_receptions": 339,
     "player_rushing_+_receiving_yards": 20,
     "player_rushing_attempts": 16,
@@ -38,7 +38,7 @@
     "player_tackles_+_assists": 10
    },
    "requestsLeft": 5,
-   "rows": 1556,
+   "rows": 1503,
    "slateGames": [
     "Dallas Cowboys at Green Bay Packers 2026-10-19T00:20Z",
     "Washington Commanders at San Francisco 49ers 2026-10-20T00:15Z"
@@ -59,6 +59,62 @@
      },
      "start": null,
      "type": "outright"
+    },
+    {
+     "away": "New Orleans Saints",
+     "external": {
+      "bet365": "203028952",
+      "betfair": "202610183D8FCE00",
+      "betmgm": "6:43633",
+      "betonline": "1725011",
+      "betparx": "1028823549",
+      "betrivers": "1028823549",
+      "betsson": "f-JV_L13zy3UK6jqdNtq7Ezg",
+      "bwin": "6:43633",
+      "caesars": "8fb4d603-54ab-6538-4555-e4483d8edb78",
+      "draftkings": "34118108",
+      "fanatics": "5562222",
+      "fanduel": "36160509",
+      "fliff": "407863_c_p_302_inplay",
+      "gemini": "NFL-2610181700-NO-NYG-PPYDS",
+      "kalshi": "KXNFLRSHYDS-26OCT18NONYG-NOKMILLER5-70",
+      "paddypower": "36160509",
+      "pinnacle": "1638287708",
+      "polymarket": "nfl_giants_saints_2026-10-18_b2",
+      "polymarket_us": "nfl-no-nyg-2026-10-18",
+      "prophetx": "1700008821",
+      "rebet": "sr:match:71515910",
+      "saba": "135918567",
+      "smarkets": "45225882",
+      "sportzino": "sz-16552502",
+      "thescorebet": "StandardEvent:fb8547fa-fdc3-469a-bed3-8ad741006cb9"
+     },
+     "home": "New York Giants",
+     "sample": {
+      "away_team": "New Orleans Saints",
+      "home_team": "New York Giants",
+      "markets": [
+       "correct_score",
+       "game_prop",
+       "moneyline",
+       "outright",
+       "player_passing_touchdowns",
+       "player_passing_yards",
+       "player_receiving_yards",
+       "player_receptions",
+       "player_rushing_yards",
+       "player_touchdowns",
+       "point_spread",
+       "race_to_10_points",
+       "team_total",
+       "total_points",
+       "total_points_odd_even",
+       "will_there_be_overtime",
+       "winning_margin"
+      ]
+     },
+     "start": "2026-10-18T17:03:00Z",
+     "type": "fixture"
     },
     {
      "away": "Chicago Bears",

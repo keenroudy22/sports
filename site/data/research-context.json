@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-18T21:02:45Z",
+  "updatedAt": "2026-10-18T21:10:36Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-18T20:56Z",
+              "reportedAt": "2026-10-18T21:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -4065,7 +4065,7 @@
               "name": "Ladd McConkey",
               "position": "WR",
               "status": "Active",
-              "injury": null,
+              "injury": "Head",
               "reportedAt": "2026-10-16T19:27Z",
               "source": "https://www.espn.com/nfl/player/_/id/4612826/ladd-mcconkey"
             },
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Out",
               "injury": "Calf",
-              "reportedAt": "2026-10-18T20:26Z",
+              "reportedAt": "2026-10-18T21:08Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "14",
-          "name": "CJ Daniels",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-10-18T19:00:46Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4605951/cj-daniels"
-        },
-        {
-          "teamId": "14",
           "name": "Kam Curl",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-18T20:46:12Z",
           "source": "https://www.espn.com/nfl/player/_/id/4259619/blake-grupe"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-10-18T21:10:36Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-18T21:02:45Z",
-      "lastAttemptAt": "2026-10-18T21:02:45Z",
+      "checkedAt": "2026-10-18T21:10:36Z",
+      "lastAttemptAt": "2026-10-18T21:10:36Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-18T21:02:45Z",
-      "lastAttemptAt": "2026-10-18T21:02:45Z",
+      "checkedAt": "2026-10-18T21:10:36Z",
+      "lastAttemptAt": "2026-10-18T21:10:36Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
