@@ -24104,5 +24104,213 @@
         "units": -1
       }
     ]
+  },
+  {
+    "league": "CFB",
+    "publishedAt": "2026-10-18T04:49:38Z",
+    "targetWeek": 8,
+    "summary": "Research update for Oct 18: Settled 1: Ladder step 2: 2 legs at DraftKings win. Nothing to close. Nothing published. settlement scan: no odds or prop requests",
+    "takeaways": [],
+    "parlays": [
+      {
+        "id": "CFB-2026-W7-ladder-1017-c3s2-dk",
+        "title": "Ladder step 2: 2 legs at DraftKings",
+        "status": "settled",
+        "favorite": false,
+        "parlayType": "ladder",
+        "riskUnits": 0.25,
+        "ladder": {
+          "run": 3,
+          "step": 2,
+          "stake": 58,
+          "payout": 101,
+          "banked": 15,
+          "bankThisWin": 20,
+          "bankedAfter": 35,
+          "nextStake": 81,
+          "totalAfter": 116,
+          "bankPercent": 20,
+          "ridePercent": 80,
+          "start": 50,
+          "goal": 1000
+        },
+        "legs": [
+          {
+            "id": "ladder-CFB-401856828-moneyline-home",
+            "title": "Texas Tech moneyline",
+            "gameId": "CFB-401856828",
+            "marketType": "moneyline",
+            "direction": "home",
+            "line": 0,
+            "team": "2641",
+            "book": "DraftKings",
+            "odds": -700,
+            "chance": 0.9,
+            "rawChance": 0.906,
+            "fairChance": 0.84,
+            "implied": 0.875,
+            "projection": 0.906,
+            "kickoff": "2026-10-17T19:30Z",
+            "observedAt": "2026-10-17T15:34:22Z",
+            "marketWindow": "Full game",
+            "alternate": false,
+            "reasons": [
+              {
+                "type": "news",
+                "class": "A",
+                "direction": "for",
+                "text": "Texas Tech backup quarterback Thomas Castellanos regained eligibility and was available for the Arizona State game.",
+                "number": null,
+                "source": "https://www.cbssports.com/college-football/news/thomas-castellanos-texas-tech-eligibile-ncaa-injunction/",
+                "observedAt": "2026-10-17T15:34:22Z"
+              },
+              {
+                "type": "news",
+                "class": "A",
+                "direction": "for",
+                "text": "Texas Tech was 5-0 and Arizona State was 3-2 entering the game.",
+                "number": null,
+                "source": "https://thesundevils.com/news/2026/10/14/football-returns-to-texas-to-take-on-no-10-tech",
+                "observedAt": "2026-10-17T15:34:22Z"
+              },
+              {
+                "type": "news",
+                "class": "A",
+                "direction": "for",
+                "text": "Texas Tech had an 11-game home winning streak entering the Arizona State game.",
+                "number": null,
+                "source": "https://thesundevils.com/news/2026/10/14/football-returns-to-texas-to-take-on-no-10-tech",
+                "observedAt": "2026-10-17T15:34:22Z"
+              }
+            ],
+            "reason": "Texas Tech backup quarterback Thomas Castellanos regained eligibility and was available for the Arizona State game."
+          },
+          {
+            "id": "ladder-CFB-401856831-moneyline-home",
+            "title": "Houston moneyline",
+            "gameId": "CFB-401856831",
+            "marketType": "moneyline",
+            "direction": "home",
+            "line": 0,
+            "team": "248",
+            "book": "DraftKings",
+            "odds": -192,
+            "chance": 0.691,
+            "rawChance": 0.797,
+            "fairChance": 0.631,
+            "implied": 0.658,
+            "projection": 0.797,
+            "kickoff": "2026-10-17T23:30Z",
+            "observedAt": "2026-10-17T15:29:18Z",
+            "marketWindow": "Full game",
+            "alternate": false,
+            "reasons": [
+              {
+                "type": "news",
+                "class": "A",
+                "direction": "for",
+                "text": "Houston allows 74.0 rushing yards per game, ranking fourth nationally, while Oklahoma State averages 199.0 rushing yards per game.",
+                "number": null,
+                "source": "https://okstate.com/news/2026/10/15/cowboy-football-inside-the-numbers-oklahoma-state-vs-houston",
+                "observedAt": "2026-10-17T15:34:22Z"
+              }
+            ],
+            "reason": "Houston allows 74.0 rushing yards per game, ranking fourth nationally, while Oklahoma State averages 199.0 rushing yards per game."
+          }
+        ],
+        "correlation": "One leg per game, so the book prices the ticket as the legs multiplied.",
+        "gameIds": [
+          "CFB-401856828",
+          "CFB-401856831"
+        ],
+        "book": "DraftKings",
+        "odds": -135,
+        "quotedAt": "2026-10-17T15:29:18Z",
+        "priceEstimated": true,
+        "expiresAt": "2026-10-17T15:45:00Z",
+        "quoteType": "capture",
+        "confidence": 1,
+        "edge": "For fun, not value: 2 protected lines with stable roles that our model direction agrees with, at DraftKings's exact prices, multiplied to -135. $58 rides with $15 already banked. A win returns $101: $20 goes to the bank and $81 rides next. Bank 20, ride 80.",
+        "cutoff": "A ladder rung is not re-entered. It stands or falls as posted.",
+        "sources": [
+          "https://sharpapi.io/",
+          "https://www.espn.com/college-football/game/_/gameId/401856828",
+          "https://www.espn.com/college-football/game/_/gameId/401856831"
+        ],
+        "why": "Ladder step 2: two easier player lines at DraftKings, one per game, each one our projection clears comfortably. $58 rides with $15 banked. A win returns $101: bank $20 and ride $81 on the next step. Kept apart from the record, in dollars.",
+        "risk": "Both legs have to hit; one miss ends the climb, but it cannot take money already banked. Our player chances are tuned for main lines, so these legs are not value. This is the fun of the climb; the book's official settlement controls, and a person settles the rung.",
+        "jurisdictionVerified": true,
+        "dossier": {
+          "reasons": [
+            {
+              "text": "Ladder step 2: two easier player lines at DraftKings, one per game, each one our projection clears comfortably. $58 rides with $15 banked. A win returns $101: bank $20 and ride $81 on the next step. Kept apart from the record, in dollars.",
+              "numbers": {},
+              "source": "Published ticket detail",
+              "time": "2026-10-17T15:34:22Z"
+            }
+          ],
+          "risks": [
+            {
+              "text": "Both legs have to hit; one miss ends the climb, but it cannot take money already banked. Our player chances are tuned for main lines, so these legs are not value. This is the fun of the climb; the book's official settlement controls, and a person settles the rung.",
+              "numbers": {},
+              "source": "Published ticket risk",
+              "time": "2026-10-17T15:34:22Z"
+            }
+          ],
+          "reports": [],
+          "weather": null,
+          "line": {
+            "legs": [
+              {
+                "gameId": "CFB-401856828",
+                "title": "Texas Tech moneyline",
+                "line": 0,
+                "price": -700,
+                "book": "DraftKings"
+              },
+              {
+                "gameId": "CFB-401856831",
+                "title": "Houston moneyline",
+                "line": 0,
+                "price": -192,
+                "book": "DraftKings"
+              }
+            ],
+            "best": {
+              "book": "DraftKings",
+              "price": -135,
+              "time": "2026-10-17T15:29:18Z"
+            }
+          },
+          "ours": null,
+          "history": null,
+          "sources": [
+            {
+              "label": "Published source",
+              "url": "https://sharpapi.io/",
+              "time": "2026-10-17T15:34:22Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401856828",
+              "time": "2026-10-17T15:34:22Z"
+            },
+            {
+              "label": "Published source",
+              "url": "https://www.espn.com/college-football/game/_/gameId/401856831",
+              "time": "2026-10-17T15:34:22Z"
+            }
+          ],
+          "partial": true
+        },
+        "publishedAt": "2026-10-17T15:39:03Z",
+        "result": "win",
+        "actual": "all 2 legs won",
+        "settledAt": "2026-10-18T04:49:38Z",
+        "resultSource": "https://www.espn.com/college-football/boxscore/_/gameId/401856828",
+        "settlementReason": "Every leg won.",
+        "units": 0.185
+      }
+    ]
   }
 ]
