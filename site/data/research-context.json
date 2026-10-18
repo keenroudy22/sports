@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-18T19:36:17Z",
+  "updatedAt": "2026-10-18T19:45:04Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -237,22 +237,31 @@
           "name": "Atlanta Falcons",
           "players": [
             {
+              "id": "4595343",
+              "name": "Kendal Daniels",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Neck",
+              "reportedAt": "2026-10-18T19:35Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4595343/kendal-daniels"
+            },
+            {
               "id": "4870988",
               "name": "Avieon Terrell",
               "position": "CB",
               "status": "Active",
               "injury": null,
-              "reportedAt": "2026-10-18T19:20Z",
+              "reportedAt": "2026-10-18T19:33Z",
               "source": "https://www.espn.com/nfl/player/_/id/4870988/avieon-terrell"
             },
             {
-              "id": "4595343",
-              "name": "Kendal Daniels",
-              "position": "LB",
-              "status": "Out",
-              "injury": "Neck",
-              "reportedAt": "2026-10-18T19:12Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4595343/kendal-daniels"
+              "id": "4431194",
+              "name": "Billy Bowman Jr.",
+              "position": "CB",
+              "status": "Questionable",
+              "injury": "Hamstring",
+              "reportedAt": "2026-10-18T19:32Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4431194/billy-bowman-jr"
             },
             {
               "id": "4037626",
@@ -451,15 +460,6 @@
               "injury": "Hamstring",
               "reportedAt": "2026-10-11T03:43Z",
               "source": "https://www.espn.com/nfl/player/_/id/4360807/yasir-abdullah"
-            },
-            {
-              "id": "5209093",
-              "name": "Michael Jerrell",
-              "position": "OT",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-08T19:35Z",
-              "source": "https://www.espn.com/nfl/player/_/id/5209093/michael-jerrell"
             }
           ]
         },
@@ -927,22 +927,22 @@
           "name": "Carolina Panthers",
           "players": [
             {
-              "id": "4714157",
-              "name": "Thomas Incoom",
-              "position": "LB",
-              "status": "Questionable",
-              "injury": "Calf",
-              "reportedAt": "2026-10-18T18:15Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4714157/thomas-incoom"
-            },
-            {
               "id": "4242975",
               "name": "Jaelan Phillips",
               "position": "LB",
               "status": "Active",
               "injury": null,
-              "reportedAt": "2026-10-18T17:54Z",
+              "reportedAt": "2026-10-18T19:23Z",
               "source": "https://www.espn.com/nfl/player/_/id/4242975/jaelan-phillips"
+            },
+            {
+              "id": "4714157",
+              "name": "Thomas Incoom",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Calf",
+              "reportedAt": "2026-10-18T19:20Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4714157/thomas-incoom"
             },
             {
               "id": "4362647",
@@ -5302,8 +5302,17 @@
               "position": "OT",
               "status": "Out",
               "injury": "Calf",
-              "reportedAt": "2026-10-18T19:20Z",
+              "reportedAt": "2026-10-18T19:35Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
+            },
+            {
+              "id": "4040655",
+              "name": "Darnell Mooney",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Neck",
+              "reportedAt": "2026-10-18T19:33Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4040655/darnell-mooney"
             },
             {
               "id": "4361266",
@@ -5311,7 +5320,7 @@
               "position": "CB",
               "status": "Questionable",
               "injury": "Concussion",
-              "reportedAt": "2026-10-18T19:02Z",
+              "reportedAt": "2026-10-18T19:26Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361266/greg-newsome-ii"
             },
             {
@@ -5421,15 +5430,6 @@
               "injury": null,
               "reportedAt": "2026-10-16T21:16Z",
               "source": "https://www.espn.com/nfl/player/_/id/4040615/malik-harrison"
-            },
-            {
-              "id": "4040655",
-              "name": "Darnell Mooney",
-              "position": "WR",
-              "status": "Active",
-              "injury": "Neck",
-              "reportedAt": "2026-10-16T00:01Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4040655/darnell-mooney"
             },
             {
               "id": "4433970",
@@ -7367,22 +7367,6 @@
       "changes": [
         {
           "teamId": "22",
-          "name": "Blake Gillikin",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-18T18:43:02Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4045180/blake-gillikin"
-        },
-        {
-          "teamId": "22",
-          "name": "Zaven Collins",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-18T18:43:02Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4244606/zaven-collins"
-        },
-        {
-          "teamId": "22",
           "name": "Budda Baker",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7748,27 @@
           "to": "Active",
           "observedAt": "2026-10-18T19:36:17Z",
           "source": "https://www.espn.com/nfl/player/_/id/4870988/avieon-terrell"
+        },
+        {
+          "teamId": "1",
+          "name": "Kendal Daniels",
+          "from": "Out",
+          "to": "Questionable",
+          "observedAt": "2026-10-18T19:45:04Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4595343/kendal-daniels"
+        },
+        {
+          "teamId": "19",
+          "name": "Darnell Mooney",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-18T19:45:04Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4040655/darnell-mooney"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-18T19:36:17Z",
-      "lastAttemptAt": "2026-10-18T19:36:17Z",
+      "checkedAt": "2026-10-18T19:45:04Z",
+      "lastAttemptAt": "2026-10-18T19:45:04Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-18T19:36:17Z",
-      "lastAttemptAt": "2026-10-18T19:36:17Z",
+      "checkedAt": "2026-10-18T19:45:04Z",
+      "lastAttemptAt": "2026-10-18T19:45:04Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
