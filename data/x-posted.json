@@ -3226,8 +3226,8 @@
     "destination": "wins",
     "image": "https://raw.githubusercontent.com/keenroudy22/sports/main/site/img/tickets/personal-cfb-lotto-2026-10-17.png",
     "error": "Discord destination is not configured",
-    "lastAttemptAt": "2026-10-18T04:39:16Z",
-    "attempts": 194
+    "lastAttemptAt": "2026-10-18T04:49:38Z",
+    "attempts": 195
    },
    "cardKey": "https://raw.githubusercontent.com/keenroudy22/sports/main/site/img/tickets/personal-cfb-lotto-2026-10-17.png",
    "sentAt": "2026-10-17T13:24:02.680Z",
@@ -3278,7 +3278,13 @@
     "sentAt": "2026-10-17T15:39:03Z",
     "beforeX": true,
     "text": "🪜 Climb #3, step 2: $58 → $101 (-135, DraftKings)\nStep 1 cashed. $15 in the bank.\nTexas Tech moneyline\nHouston moneyline\n\nStill climbing? ❤️\n@Playbook #CFB",
-    "image": "https://keenroudy.com/sports/data/cards/CFB-2026-W7-ladder-1017-c3s2-dk.png"
+    "image": "https://keenroudy.com/sports/data/cards/CFB-2026-W7-ladder-1017-c3s2-dk.png",
+    "result": {
+     "state": "sent",
+     "text": "✅ FINAL · HIT: 80/20 Climb step 2 ($58 → $101)\nall 2 legs won",
+     "settledAt": "2026-10-18T04:49:38Z",
+     "sentAt": "2026-10-18T04:49:38Z"
+    }
    },
    "sentAt": "2026-10-17T15:54:16.238Z",
    "link": "https://x.com/1753110091912413184/status/2111485955425133051",
@@ -3300,6 +3306,33 @@
     "image": "https://keenroudy.com/sports/data/cards/research-upset-2026-10-18.png"
    },
    "cardKey": "research-upset-2026-10-18"
+  },
+  {
+   "id": "receipt:day:2026-10-17",
+   "postedAt": "2026-10-18T04:49:38Z",
+   "dueAt": "2026-10-18T13:02:00Z",
+   "bufferPostId": "6ad4551f769b457934aadcb0",
+   "textHash": "46ab338aa5c19fcc",
+   "kind": "buffer:receipt",
+   "card": true,
+   "cardTheme": "ticket",
+   "cardKey": "receipt-day-2026-10-17"
+  },
+  {
+   "id": "cashed:CFB-2026-W7-ladder-1017-c3s2-dk",
+   "postedAt": "2026-10-18T04:49:38Z",
+   "dueAt": "2026-10-18T13:22:00Z",
+   "bufferPostId": "6ad4551f938409f1d0b7ec4f",
+   "textHash": "22d6d9dc2f13625d",
+   "kind": "buffer:cashed",
+   "card": true,
+   "cardTheme": "ticket",
+   "discord": {
+    "state": "pending",
+    "text": "Step 2 cashed ✅ $101 back.\n$20 to the bank, $81 rides on step 3.\n#CFB\nhttps://x.com/keenkooks/status/2111485955425133051",
+    "image": "https://keenroudy.com/sports/data/cards/ladder-result-CFB-2026-W7-ladder-1017-c3s2-dk.png"
+   },
+   "cardKey": "ladder-result-CFB-2026-W7-ladder-1017-c3s2-dk"
   }
  ]
 }
