@@ -1940,3 +1940,22 @@ audit, NBA audit, feed, public-artifact guard and the isolated 08:30 rehearsal (
 writes/private reads). The same change prevents a verified reason from being cut into a dangling fragment; the
 private Metcalf caption now ends with the complete sourced sentence, “DK Metcalf was removed from the Steelers
 injury report Saturday.” Release and live delivery evidence remain required before this item is marked shipped.
+
+### October 18 autonomous social recovery and earlier projections
+
+Release `6ebee725` (live descendant `a5b046ab`) shipped in hosted run `39132007858`.
+The five-minute desk mirror now recreates a missing or overdue Cooked/Burnt result path instead of merely alerting,
+with a fifteen-minute retry fence. A future scheduled result remains healthy until it is more than fifteen minutes
+late, preventing false missing-result alarms. Football-day projection sheets now target 8:00 AM Eastern so London
+and noon slates receive useful material before kickoff. The timing notes record a live October 18 review of Cody
+Brown and Wavey and preserve Kook'n's own measured engagement bands; copied wording and unsupported picks remain
+forbidden.
+
+Every gate passed on the final tree: 1,458 Python tests (two skipped), 244 Node tests, clean export, 504-page build,
+payload budget (existing soft lazy-More warning only), 105-row football record audit, zero-row NBA Trial audit,
+621-file publication guard and isolated 08:30 rehearsal with outcome `ok`, zero outside writes and zero private
+reads. The hosted publish succeeded. Live Today at measured 375 and 1440 pixels had matching document and viewport
+widths, no caught load state and no browser console error. The October 17 Climb result reached X 23.1 minutes after
+the stored final and official Discord two seconds after X. The separate community/personal-ticket Discord destination
+remains externally blocked because `DISCORD_WINS_WEBHOOK_URL` is not configured; official Plays & Results delivery is
+not affected.
