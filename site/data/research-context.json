@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-18T19:53:25Z",
+  "updatedAt": "2026-10-18T20:02:20Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-18T19:43Z",
+              "reportedAt": "2026-10-18T19:57Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -4837,6 +4837,24 @@
           "name": "New England Patriots",
           "players": [
             {
+              "id": "4362890",
+              "name": "Ben Brown",
+              "position": "C",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-10-18T19:47Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4362890/ben-brown"
+            },
+            {
+              "id": "16771",
+              "name": "Morgan Moses",
+              "position": "OT",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-18T19:40Z",
+              "source": "https://www.espn.com/nfl/player/_/id/16771/morgan-moses"
+            },
+            {
               "id": "4259646",
               "name": "Alijah Vera-Tucker",
               "position": "G",
@@ -4853,15 +4871,6 @@
               "injury": "Shoulder",
               "reportedAt": "2026-10-18T18:54Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361432/romeo-doubs"
-            },
-            {
-              "id": "16771",
-              "name": "Morgan Moses",
-              "position": "OT",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-18T18:06Z",
-              "source": "https://www.espn.com/nfl/player/_/id/16771/morgan-moses"
             },
             {
               "id": "4569173",
@@ -5051,21 +5060,21 @@
               "injury": null,
               "reportedAt": "2026-10-13T16:03Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431431/corey-kiner"
-            },
-            {
-              "id": "4569923",
-              "name": "Andy Borregales",
-              "position": "PK",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-12T14:31Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4569923/andy-borregales"
             }
           ]
         },
         "18": {
           "name": "New Orleans Saints",
           "players": [
+            {
+              "id": "4258199",
+              "name": "Cesar Ruiz",
+              "position": "G",
+              "status": "Questionable",
+              "injury": "Knee",
+              "reportedAt": "2026-10-18T19:42Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4258199/cesar-ruiz"
+            },
             {
               "id": "4433975",
               "name": "Kool-Aid McKinstry",
@@ -5074,15 +5083,6 @@
               "injury": "Illness",
               "reportedAt": "2026-10-18T19:37Z",
               "source": "https://www.espn.com/nfl/player/_/id/4433975/kool-aid-mckinstry"
-            },
-            {
-              "id": "4258199",
-              "name": "Cesar Ruiz",
-              "position": "G",
-              "status": "Questionable",
-              "injury": "Knee",
-              "reportedAt": "2026-10-18T18:34Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4258199/cesar-ruiz"
             },
             {
               "id": "3054850",
@@ -5760,10 +5760,19 @@
               "id": "4870795",
               "name": "Makai Lemon",
               "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-18T19:57Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4870795/makai-lemon"
+            },
+            {
+              "id": "4428850",
+              "name": "Dontayvion Wicks",
+              "position": "WR",
               "status": "Questionable",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-18T19:35Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4870795/makai-lemon"
+              "reportedAt": "2026-10-18T19:52Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4428850/dontayvion-wicks"
             },
             {
               "id": "4426331",
@@ -5971,15 +5980,6 @@
               "injury": null,
               "reportedAt": "2026-10-16T20:39Z",
               "source": "https://www.espn.com/nfl/player/_/id/4248557/ej-jenkins"
-            },
-            {
-              "id": "4428850",
-              "name": "Dontayvion Wicks",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-16T20:34Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4428850/dontayvion-wicks"
             }
           ]
         },
@@ -7366,22 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "3",
-          "name": "Cam Lewis",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-18T18:43:02Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3916577/cam-lewis"
-        },
-        {
-          "teamId": "33",
-          "name": "Rashod Bateman",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-10-18T19:00:46Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4360939/rashod-bateman"
-        },
-        {
           "teamId": "14",
           "name": "Trent McDuffie",
           "from": "Questionable",
@@ -7764,11 +7748,27 @@
           "to": "Questionable",
           "observedAt": "2026-10-18T19:53:25Z",
           "source": "https://www.espn.com/nfl/player/_/id/4259566/andrew-thomas"
+        },
+        {
+          "teamId": "21",
+          "name": "Makai Lemon",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-18T20:02:20Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4870795/makai-lemon"
+        },
+        {
+          "teamId": "21",
+          "name": "Dontayvion Wicks",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-18T20:02:20Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4428850/dontayvion-wicks"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-18T19:53:25Z",
-      "lastAttemptAt": "2026-10-18T19:53:25Z",
+      "checkedAt": "2026-10-18T20:02:20Z",
+      "lastAttemptAt": "2026-10-18T20:02:20Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-18T19:53:25Z",
-      "lastAttemptAt": "2026-10-18T19:53:25Z",
+      "checkedAt": "2026-10-18T20:02:20Z",
+      "lastAttemptAt": "2026-10-18T20:02:20Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
