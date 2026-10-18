@@ -1,10 +1,10 @@
 {
- "at": "2026-10-18T05:17:20Z",
+ "at": "2026-10-18T05:25:44Z",
  "confirmed": {
-  "NFL-401872996": "2026-10-18T05:17:20Z",
-  "NFL-401872997": "2026-10-18T05:17:20Z",
-  "NFL-401872998": "2026-10-18T05:17:20Z",
-  "NFL-401872999": "2026-10-18T05:17:20Z",
+  "NFL-401872996": "2026-10-18T05:25:44Z",
+  "NFL-401872997": "2026-10-18T05:25:44Z",
+  "NFL-401872998": "2026-10-18T05:25:44Z",
+  "NFL-401872999": "2026-10-18T05:25:44Z",
   "NFL-401873000": "2026-10-18T04:50:38Z",
   "NFL-401873001": "2026-10-18T04:50:38Z",
   "NFL-401873002": "2026-10-18T04:50:38Z",
@@ -18,8 +18,8 @@
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 1708,
-    "fanduel": 954
+    "draftkings": 1978,
+    "fanduel": 749
    },
    "eventsListed": 28,
    "eventsMatched": 13,
@@ -37,19 +37,19 @@
     "player_passing_+_rushing_yards": 16,
     "player_passing_attempts": 16,
     "player_passing_completions": 16,
-    "player_passing_touchdowns": 43,
-    "player_passing_yards": 268,
-    "player_receiving_yards": 866,
-    "player_receptions": 513,
-    "player_rushing_+_receiving_yards": 28,
-    "player_rushing_attempts": 22,
-    "player_rushing_yards": 347,
-    "player_sacks": 77,
-    "player_tackles": 64,
-    "player_tackles_+_assists": 64
+    "player_passing_touchdowns": 44,
+    "player_passing_yards": 267,
+    "player_receiving_yards": 876,
+    "player_receptions": 528,
+    "player_rushing_+_receiving_yards": 32,
+    "player_rushing_attempts": 30,
+    "player_rushing_yards": 396,
+    "player_sacks": 68,
+    "player_tackles": 58,
+    "player_tackles_+_assists": 58
    },
    "requestsLeft": 0,
-   "rows": 2662,
+   "rows": 2727,
    "slateGames": [
     "Houston Texans at Jacksonville Jaguars 2026-10-18T13:30Z",
     "Baltimore Ravens at Cleveland Browns 2026-10-18T17:00Z",
@@ -91,7 +91,7 @@
       "draftkings": "34118033",
       "fanduel": "36190129",
       "fliff": "407873_c_p_202_prematch",
-      "gemini": "NFL-2610230015-NE-CHI-T",
+      "gemini": "NFL-2610230015-NE-CHI-S",
       "kalshi": "KXNFL1HTEAMTOTAL-26OCT22NECHI",
       "novig": "01a136e2-e697-7c01-92bb-981a85cc4723",
       "paddypower": "36190129",
@@ -178,6 +178,7 @@
       "away_team": "San Francisco 49ers",
       "home_team": "Atlanta Falcons",
       "markets": [
+       "1st_half_point_spread",
        "draw_no_bet",
        "moneyline",
        "point_spread",
@@ -249,6 +250,7 @@
       "away_team": "Cleveland Browns",
       "home_team": "Tennessee Titans",
       "markets": [
+       "2nd_half_point_spread",
        "draw_no_bet",
        "moneyline",
        "point_spread",
@@ -321,6 +323,7 @@
       "away_team": "Indianapolis Colts",
       "home_team": "Minnesota Vikings",
       "markets": [
+       "1st_half_point_spread",
        "draw_no_bet",
        "moneyline",
        "point_spread",
@@ -349,7 +352,6 @@
       "polymarket": "nfl_dolphins_jets_2026-10-25_b2",
       "polymarket_us": "nfl-mia-nyj-2026-10-25",
       "rebet": "sr:match:71515938",
-      "smarkets": "45239474",
       "stake": "a54b3daa-45d8-4dab-9ee6-988e1c428d2f"
      },
      "home": "New York Jets",
@@ -357,6 +359,7 @@
       "away_team": "Miami Dolphins",
       "home_team": "New York Jets",
       "markets": [
+       "1st_half_point_spread",
        "moneyline",
        "point_spread",
        "team_total",
@@ -416,7 +419,6 @@
       "paddypower": "36189004",
       "polymarket": "nfl_broncos_cardinals_2026-10-25_b2",
       "polymarket_us": "nfl-den-ari-2026-10-25",
-      "smarkets": "45239603",
       "stake": "00322416-51f7-4591-b138-15a248d3490b"
      },
      "home": "Arizona Cardinals",
@@ -446,7 +448,6 @@
       "paddypower": "36189005",
       "polymarket": "nfl_lions_packers_2026-10-25_b2",
       "polymarket_us": "nfl-gb-det-2026-10-25",
-      "smarkets": "45239615",
       "stake": "59c3991a-d7f8-4666-bf03-eb5dd11dc83f"
      },
      "home": "Detroit Lions",
