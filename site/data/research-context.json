@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-18T22:25:38Z",
+  "updatedAt": "2026-10-18T22:33:36Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-18T22:14Z",
+              "reportedAt": "2026-10-18T22:17Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1629,7 +1629,7 @@
               "id": "4242208",
               "name": "Grant Delpit",
               "position": "S",
-              "status": "Out",
+              "status": "Questionable",
               "injury": "Concussion",
               "reportedAt": "2026-10-18T17:41Z",
               "source": "https://www.espn.com/nfl/player/_/id/4242208/grant-delpit"
@@ -4152,7 +4152,7 @@
               "position": "PK",
               "status": "Questionable",
               "injury": "Knee",
-              "reportedAt": "2026-10-18T20:31Z",
+              "reportedAt": "2026-10-18T22:19Z",
               "source": "https://www.espn.com/nfl/player/_/id/4259619/blake-grupe"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "2",
-          "name": "Mike Danna",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-10-18T19:09:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/3915487/mike-danna"
-        },
-        {
-          "teamId": "2",
           "name": "Joshua Palmer",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Injured Reserve",
           "observedAt": "2026-10-18T22:18:25Z",
           "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "5",
+          "name": "Grant Delpit",
+          "from": "Out",
+          "to": "Questionable",
+          "observedAt": "2026-10-18T22:33:36Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4242208/grant-delpit"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-18T22:25:38Z",
-      "lastAttemptAt": "2026-10-18T22:25:38Z",
+      "checkedAt": "2026-10-18T22:33:36Z",
+      "lastAttemptAt": "2026-10-18T22:33:36Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-18T22:25:38Z",
-      "lastAttemptAt": "2026-10-18T22:25:38Z",
+      "checkedAt": "2026-10-18T22:33:36Z",
+      "lastAttemptAt": "2026-10-18T22:33:36Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
