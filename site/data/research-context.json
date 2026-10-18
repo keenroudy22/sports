@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-18T22:49:33Z",
+  "updatedAt": "2026-10-18T22:56:47Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -701,8 +701,8 @@
               "name": "Dalton Kincaid",
               "position": "TE",
               "status": "Questionable",
-              "injury": "Undisclosed",
-              "reportedAt": "2026-10-18T22:34Z",
+              "injury": "Ribs",
+              "reportedAt": "2026-10-18T22:39Z",
               "source": "https://www.espn.com/nfl/player/_/id/4385690/dalton-kincaid"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-18T22:35Z",
+              "reportedAt": "2026-10-18T22:39Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1896,7 +1896,7 @@
               "name": "LT Overton",
               "position": "DT",
               "status": "Questionable",
-              "injury": "Foot",
+              "injury": null,
               "reportedAt": "2026-10-16T21:23Z",
               "source": "https://www.espn.com/nfl/player/_/id/4870960/lt-overton"
             },
@@ -2567,8 +2567,8 @@
               "id": "4431487",
               "name": "Savion Williams",
               "position": "WR",
-              "status": "Questionable",
-              "injury": "Ankle",
+              "status": "Active",
+              "injury": null,
               "reportedAt": "2026-10-18T01:53Z",
               "source": "https://www.espn.com/nfl/player/_/id/4431487/savion-williams"
             },
@@ -2676,7 +2676,7 @@
               "name": "Donovan Jennings",
               "position": "G",
               "status": "Active",
-              "injury": null,
+              "injury": "Coach's Decision",
               "reportedAt": "2026-10-12T19:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/4360887/donovan-jennings"
             },
@@ -3462,7 +3462,7 @@
               "position": "OT",
               "status": "Questionable",
               "injury": "Head",
-              "reportedAt": "2026-10-18T21:52Z",
+              "reportedAt": "2026-10-18T22:41Z",
               "source": "https://www.espn.com/nfl/player/_/id/4043041/jaylon-moore"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Out",
               "injury": "Calf",
-              "reportedAt": "2026-10-18T22:35Z",
+              "reportedAt": "2026-10-18T22:39Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "2",
-          "name": "Dee Alford",
-          "from": "Questionable",
-          "to": "Active",
-          "observedAt": "2026-10-18T19:09:40Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4401823/dee-alford"
-        },
-        {
-          "teamId": "2",
           "name": "Jude Bowry",
           "from": "Active",
           "to": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-18T22:42:26Z",
           "source": "https://www.espn.com/nfl/player/_/id/4385690/dalton-kincaid"
+        },
+        {
+          "teamId": "9",
+          "name": "Savion Williams",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-18T22:56:47Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4431487/savion-williams"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-18T22:49:33Z",
-      "lastAttemptAt": "2026-10-18T22:49:33Z",
+      "checkedAt": "2026-10-18T22:56:47Z",
+      "lastAttemptAt": "2026-10-18T22:56:47Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-18T22:49:33Z",
-      "lastAttemptAt": "2026-10-18T22:49:33Z",
+      "checkedAt": "2026-10-18T22:56:47Z",
+      "lastAttemptAt": "2026-10-18T22:56:47Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
