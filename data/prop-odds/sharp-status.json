@@ -1,201 +1,40 @@
 {
- "at": "2026-10-18T02:51:30Z",
+ "at": "2026-10-18T03:00:02Z",
  "confirmed": {
-  "CFB-401858492": "2026-10-18T02:51:30Z",
-  "NFL-401872996": "2026-10-18T02:51:30Z",
-  "NFL-401872997": "2026-10-18T02:51:30Z",
-  "NFL-401872998": "2026-10-18T02:51:30Z",
-  "NFL-401872999": "2026-10-18T02:41:36Z",
-  "NFL-401873000": "2026-10-17T23:18:58Z",
-  "NFL-401873001": "2026-10-18T02:41:36Z",
-  "NFL-401873002": "2026-10-18T02:41:36Z",
+  "NFL-401872996": "2026-10-18T03:00:02Z",
+  "NFL-401872997": "2026-10-18T03:00:02Z",
+  "NFL-401872998": "2026-10-18T03:00:02Z",
+  "NFL-401872999": "2026-10-18T03:00:02Z",
+  "NFL-401873000": "2026-10-18T03:00:02Z",
+  "NFL-401873001": "2026-10-18T03:00:02Z",
+  "NFL-401873002": "2026-10-18T03:00:02Z",
   "NFL-401873003": "2026-10-17T23:18:58Z",
   "NFL-401873004": "2026-10-17T23:18:58Z"
  },
  "leagues": {
-  "CFB": {
-   "books": {
-    "fanduel": 228
-   },
-   "eventsListed": 5,
-   "eventsMatched": 1,
-   "games": 1,
-   "marketTypes": {
-    "player_passing_touchdowns": 4,
-    "player_passing_yards": 14,
-    "player_receiving_yards": 125,
-    "player_receptions": 16,
-    "player_rushing_yards": 69
-   },
-   "requestsLeft": 12,
-   "rows": 228,
-   "slateGames": [
-    "Nebraska Cornhuskers at Oregon Ducks 2026-10-18T03:00Z"
-   ],
-   "unmatchedEvents": [
-    {
-     "away": "Middle Tennessee",
-     "external": {
-      "draftkings": "34827165",
-      "gemini": "NCAAF-2610202300-MTN-FIU-M",
-      "kalshi": "KXNCAAF1H-26OCT20MTUFIU",
-      "novig": "01a13261-e3ae-7df3-868b-d3405330f8a0",
-      "onexbet": "762510535",
-      "polymarket": "nfl_floridainternational_middletennesseeblueraiders_2026-10-20_b3",
-      "prophetx": "1700103048",
-      "rebet": "sr:match:70898888",
-      "smarkets": "45375063",
-      "sportzino": "sz-17844474"
-     },
-     "home": "Florida International",
-     "sample": {
-      "away_team": "Middle Tennessee",
-      "home_team": "Florida International",
-      "markets": [
-       "1st_half_moneyline",
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
-      ]
-     },
-     "start": "2026-10-20T23:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "South Alabama Jaguars",
-     "external": {
-      "draftkings": "34827169",
-      "gemini": "NCAAF-2610202330-USA-MRSH-S",
-      "kalshi": "KXNCAAF1H-26OCT20USAMRSH",
-      "novig": "01a1327d-6f5f-7913-a88c-e152507980b5",
-      "onexbet": "761948832",
-      "polymarket": "nfl_marshallthunderingherd_southalabamajaguars_2026-10-20_b3",
-      "prophetx": "1700102806",
-      "rebet": "sr:match:70900920",
-      "smarkets": "45375065",
-      "sportzino": "sz-17844473"
-     },
-     "home": "Marshall Thundering Herd",
-     "sample": {
-      "away_team": "South Alabama Jaguars",
-      "home_team": "Marshall Thundering Herd",
-      "markets": [
-       "1st_half_moneyline",
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
-      ]
-     },
-     "start": "2026-10-20T23:30:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "New Mexico State Aggies",
-     "external": {
-      "draftkings": "34827174",
-      "gemini": "NCAAF-2610220000-NMS-SHS-M",
-      "kalshi": "KXNCAAF1H-26OCT21NMSUSHSU",
-      "novig": "01a137bf-701e-7c92-9fda-f5c33eda6144",
-      "onexbet": "762341341",
-      "polymarket": "nfl_newmexicostate_samhoustonbearkats_2026-10-21_b3",
-      "prophetx": "1700103081",
-      "rebet": "sr:match:70971576",
-      "smarkets": "45375067",
-      "sportzino": "sz-17854044"
-     },
-     "home": "Sam Houston State Bearkats",
-     "sample": {
-      "away_team": "New Mexico State Aggies",
-      "home_team": "Sam Houston State Bearkats",
-      "markets": [
-       "1st_half_moneyline",
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
-      ]
-     },
-     "start": "2026-10-22T00:00:00Z",
-     "type": "fixture"
-    },
-    {
-     "away": "Liberty Flames",
-     "external": {
-      "draftkings": "34827179",
-      "gemini": "NCAAF-2610222300-LIB-KENN-M",
-      "kalshi": "KXNCAAFGAME-26OCT22LIBKENN",
-      "novig": "01a13cae-d357-77e1-a5b9-e21dd00ca896",
-      "onexbet": "762619339",
-      "polymarket": "nfl_kennesawstate_liberty_2026-10-22_b3",
-      "prophetx": "1700103060",
-      "rebet": "sr:match:70899216",
-      "smarkets": "45375070",
-      "sportzino": "sz-17863763"
-     },
-     "home": "Kennesaw State Owls",
-     "sample": {
-      "away_team": "Liberty Flames",
-      "home_team": "Kennesaw State Owls",
-      "markets": [
-       "draw_no_bet",
-       "moneyline",
-       "point_spread",
-       "team_total",
-       "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime"
-      ]
-     },
-     "start": "2026-10-22T23:00:00Z",
-     "type": "fixture"
-    }
-   ]
-  },
   "NFL": {
    "books": {
-    "draftkings": 1430,
-    "fanduel": 619
+    "draftkings": 92,
+    "fanduel": 2177
    },
    "eventsListed": 28,
    "eventsMatched": 13,
    "games": 13,
    "marketTypes": {
-    "player_assists": 64,
-    "player_extra_points_made": 12,
-    "player_fantasy_score": 40,
-    "player_field_goals_made": 12,
-    "player_interceptions": 8,
-    "player_kicking_points": 12,
-    "player_longest_passing_completion": 8,
-    "player_longest_reception": 60,
-    "player_longest_rush": 24,
-    "player_passing_+_rushing_yards": 8,
-    "player_passing_attempts": 8,
-    "player_passing_completions": 8,
-    "player_passing_touchdowns": 35,
+    "player_assists": 22,
+    "player_fantasy_score": 12,
+    "player_passing_touchdowns": 65,
     "player_passing_yards": 159,
-    "player_receiving_yards": 766,
-    "player_receptions": 357,
-    "player_rushing_+_receiving_yards": 18,
-    "player_rushing_attempts": 22,
-    "player_rushing_yards": 242,
-    "player_sacks": 58,
-    "player_tackles": 64,
-    "player_tackles_+_assists": 64
+    "player_receiving_yards": 889,
+    "player_receptions": 545,
+    "player_rushing_+_receiving_yards": 34,
+    "player_rushing_yards": 411,
+    "player_sacks": 88,
+    "player_tackles": 22,
+    "player_tackles_+_assists": 22
    },
    "requestsLeft": 0,
-   "rows": 2049,
+   "rows": 2269,
    "slateGames": [
     "Houston Texans at Jacksonville Jaguars 2026-10-18T13:30Z",
     "Baltimore Ravens at Cleveland Browns 2026-10-18T17:00Z",
@@ -225,7 +64,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-18T02:45:00Z",
+     "start": "2026-10-18T02:54:00Z",
      "type": "outright"
     },
     {
