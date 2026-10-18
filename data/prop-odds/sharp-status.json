@@ -1,14 +1,14 @@
 {
- "at": "2026-10-18T16:46:05Z",
+ "at": "2026-10-18T16:55:21Z",
  "confirmed": {
-  "NFL-401872997": "2026-10-18T16:46:05Z",
-  "NFL-401872998": "2026-10-18T16:46:05Z",
-  "NFL-401872999": "2026-10-18T16:46:05Z",
+  "NFL-401872997": "2026-10-18T16:55:21Z",
+  "NFL-401872998": "2026-10-18T16:55:21Z",
+  "NFL-401872999": "2026-10-18T16:55:21Z",
   "NFL-401873000": "2026-10-18T16:46:05Z",
   "NFL-401873001": "2026-10-18T16:46:05Z",
   "NFL-401873002": "2026-10-18T16:46:05Z",
   "NFL-401873003": "2026-10-18T16:35:00Z",
-  "NFL-401873004": "2026-10-18T16:35:00Z",
+  "NFL-401873004": "2026-10-18T16:55:21Z",
   "NFL-401873005": "2026-10-18T16:35:00Z",
   "NFL-401873006": "2026-10-18T16:35:00Z",
   "NFL-401873007": "2026-10-18T16:35:00Z",
@@ -17,35 +17,38 @@
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 956,
-    "fanduel": 1608
+    "draftkings": 1316,
+    "fanduel": 1187
    },
-   "eventsListed": 27,
-   "eventsMatched": 12,
+   "eventsListed": 23,
+   "eventsMatched": 8,
    "games": 12,
    "marketTypes": {
-    "player_assists": 46,
-    "player_fantasy_score": 28,
-    "player_interceptions": 8,
-    "player_longest_passing_completion": 8,
+    "player_assists": 62,
+    "player_extra_points_made": 12,
+    "player_fantasy_score": 40,
+    "player_field_goals_made": 12,
+    "player_interceptions": 12,
+    "player_kicking_points": 12,
+    "player_longest_passing_completion": 12,
     "player_longest_reception": 38,
-    "player_longest_rush": 12,
-    "player_passing_+_rushing_yards": 8,
-    "player_passing_attempts": 8,
-    "player_passing_completions": 8,
-    "player_passing_touchdowns": 61,
-    "player_passing_yards": 240,
-    "player_receiving_yards": 1000,
-    "player_receptions": 550,
-    "player_rushing_+_receiving_yards": 28,
-    "player_rushing_attempts": 4,
-    "player_rushing_yards": 358,
-    "player_sacks": 67,
-    "player_tackles": 46,
-    "player_tackles_+_assists": 46
+    "player_longest_rush": 22,
+    "player_passing_+_rushing_yards": 12,
+    "player_passing_attempts": 12,
+    "player_passing_completions": 12,
+    "player_passing_touchdowns": 48,
+    "player_passing_yards": 239,
+    "player_receiving_yards": 832,
+    "player_receptions": 453,
+    "player_rushing_+_receiving_yards": 36,
+    "player_rushing_attempts": 18,
+    "player_rushing_yards": 429,
+    "player_sacks": 66,
+    "player_tackles": 62,
+    "player_tackles_+_assists": 62
    },
    "requestsLeft": 0,
-   "rows": 2564,
+   "rows": 2503,
    "slateGames": [
     "Baltimore Ravens at Cleveland Browns 2026-10-18T17:00Z",
     "Carolina Panthers at Philadelphia Eagles 2026-10-18T17:00Z",
@@ -74,7 +77,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-18T16:43:00Z",
+     "start": "2026-10-18T16:55:00Z",
      "type": "outright"
     },
     {
@@ -185,6 +188,7 @@
       "paddypower": "36188997",
       "polymarket": "nfl_bengals_ravens_2026-10-25_b2",
       "polymarket_us": "nfl-cin-bal-2026-10-25",
+      "rebet": "sr:match:71515930",
       "stake": "9a37c9d7-b6f7-44ae-a3ad-5fe287430e84"
      },
      "home": "Baltimore Ravens",
@@ -351,6 +355,7 @@
       "paddypower": "36189004",
       "polymarket": "nfl_broncos_cardinals_2026-10-25_b2",
       "polymarket_us": "nfl-den-ari-2026-10-25",
+      "rebet": "sr:match:71515942",
       "stake": "00322416-51f7-4591-b138-15a248d3490b"
      },
      "home": "Arizona Cardinals",
@@ -379,6 +384,7 @@
       "paddypower": "36189005",
       "polymarket": "nfl_lions_packers_2026-10-25_b2",
       "polymarket_us": "nfl-gb-det-2026-10-25",
+      "rebet": "sr:match:71515944",
       "stake": "59c3991a-d7f8-4666-bf03-eb5dd11dc83f"
      },
      "home": "Detroit Lions",
