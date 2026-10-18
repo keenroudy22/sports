@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-18T15:03:42Z",
+  "updatedAt": "2026-10-18T15:12:49Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1160,9 +1160,9 @@
               "id": "4361748",
               "name": "Anthony Johnson Jr.",
               "position": "S",
-              "status": "Injured Reserve",
+              "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-18T14:12Z",
+              "reportedAt": "2026-10-18T15:01Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2767,6 +2767,24 @@
           "name": "Houston Texans",
           "players": [
             {
+              "id": "4243956",
+              "name": "Reed Blankenship",
+              "position": "S",
+              "status": "Questionable",
+              "injury": "Head",
+              "reportedAt": "2026-10-18T14:58Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4243956/reed-blankenship"
+            },
+            {
+              "id": "3919117",
+              "name": "Azeez Al-Shaair",
+              "position": "LB",
+              "status": "Questionable",
+              "injury": "Head",
+              "reportedAt": "2026-10-18T14:55Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3919117/azeez-al-shaair"
+            },
+            {
               "id": "4240059",
               "name": "Ja'Marcus Ingram",
               "position": "CB",
@@ -2875,15 +2893,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4033812/jake-hansen"
             },
             {
-              "id": "3919117",
-              "name": "Azeez Al-Shaair",
-              "position": "LB",
-              "status": "Active",
-              "injury": "Concussion",
-              "reportedAt": "2026-10-16T18:52Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3919117/azeez-al-shaair"
-            },
-            {
               "id": "4366031",
               "name": "Tank Dell",
               "position": "WR",
@@ -2981,15 +2990,6 @@
               "injury": null,
               "reportedAt": "2026-10-11T23:04Z",
               "source": "https://www.espn.com/nfl/player/_/id/4432577/cj-stroud"
-            },
-            {
-              "id": "4258173",
-              "name": "Nico Collins",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-11T22:59Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4258173/nico-collins"
             }
           ]
         },
@@ -5297,6 +5297,15 @@
           "name": "New York Giants",
           "players": [
             {
+              "id": "3115303",
+              "name": "Jermaine Eluemunor",
+              "position": "OT",
+              "status": "Questionable",
+              "injury": "Calf",
+              "reportedAt": "2026-10-18T15:04Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
+            },
+            {
               "id": "4360516",
               "name": "Tyrone Tracy Jr.",
               "position": "RB",
@@ -5304,15 +5313,6 @@
               "injury": null,
               "reportedAt": "2026-10-18T14:19Z",
               "source": "https://www.espn.com/nfl/player/_/id/4360516/tyrone-tracy-jr"
-            },
-            {
-              "id": "3115303",
-              "name": "Jermaine Eluemunor",
-              "position": "OT",
-              "status": "Questionable",
-              "injury": "Calf",
-              "reportedAt": "2026-10-18T14:12Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
               "id": "4241457",
@@ -7367,22 +7367,6 @@
       "changes": [
         {
           "teamId": "29",
-          "name": "Tershawn Wharton",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-17T18:00:59Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4058925/tershawn-wharton"
-        },
-        {
-          "teamId": "29",
-          "name": "Taylor Moton",
-          "from": "Out",
-          "to": "Questionable",
-          "observedAt": "2026-10-17T18:00:59Z",
-          "source": "https://www.espn.com/nfl/player/_/id/2973051/taylor-moton"
-        },
-        {
-          "teamId": "29",
           "name": "Trevor Etienne",
           "from": "Injured Reserve",
           "to": "Questionable",
@@ -7764,11 +7748,27 @@
           "to": "Active",
           "observedAt": "2026-10-18T12:19:33Z",
           "source": "https://www.espn.com/nfl/player/_/id/4426350/henry-tootoo"
+        },
+        {
+          "teamId": "3",
+          "name": "Anthony Johnson Jr.",
+          "from": "Injured Reserve",
+          "to": "Out",
+          "observedAt": "2026-10-18T15:12:49Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
+        },
+        {
+          "teamId": "34",
+          "name": "Azeez Al-Shaair",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-18T15:12:49Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3919117/azeez-al-shaair"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-18T15:03:42Z",
-      "lastAttemptAt": "2026-10-18T15:03:42Z",
+      "checkedAt": "2026-10-18T15:12:49Z",
+      "lastAttemptAt": "2026-10-18T15:12:49Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-18T15:03:42Z",
-      "lastAttemptAt": "2026-10-18T15:03:42Z",
+      "checkedAt": "2026-10-18T15:12:49Z",
+      "lastAttemptAt": "2026-10-18T15:12:49Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
