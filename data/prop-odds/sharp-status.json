@@ -1,12 +1,12 @@
 {
- "at": "2026-10-18T01:49:34Z",
+ "at": "2026-10-18T01:58:44Z",
  "confirmed": {
-  "CFB-401856833": "2026-10-18T01:49:34Z",
-  "CFB-401858269": "2026-10-18T01:49:34Z",
-  "CFB-401858492": "2026-10-18T01:49:34Z",
+  "CFB-401856833": "2026-10-18T01:58:44Z",
+  "CFB-401858269": "2026-10-18T01:58:44Z",
+  "CFB-401858492": "2026-10-18T01:58:44Z",
   "CFB-401864521": "2026-10-18T01:49:34Z",
-  "NFL-401872996": "2026-10-18T01:49:34Z",
-  "NFL-401872997": "2026-10-17T23:18:58Z",
+  "NFL-401872996": "2026-10-18T01:58:44Z",
+  "NFL-401872997": "2026-10-18T01:58:44Z",
   "NFL-401872998": "2026-10-18T01:49:34Z",
   "NFL-401872999": "2026-10-17T23:18:58Z",
   "NFL-401873000": "2026-10-17T23:18:58Z",
@@ -18,30 +18,33 @@
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 301,
-    "fanduel": 658
+    "draftkings": 712
    },
    "eventsListed": 10,
    "eventsMatched": 6,
    "games": 6,
    "marketTypes": {
-    "player_field_goals_made": 2,
-    "player_kicking_points": 2,
-    "player_longest_passing_completion": 1,
-    "player_longest_reception": 8,
-    "player_longest_rush": 3,
-    "player_passing_+_rushing_yards": 22,
-    "player_passing_attempts": 8,
-    "player_passing_completions": 6,
-    "player_passing_touchdowns": 23,
-    "player_passing_yards": 67,
-    "player_receiving_yards": 429,
-    "player_receptions": 112,
-    "player_rushing_attempts": 13,
-    "player_rushing_yards": 263
+    "player_assists": 5,
+    "player_field_goals_made": 3,
+    "player_kicking_points": 3,
+    "player_longest_passing_completion": 4,
+    "player_longest_reception": 23,
+    "player_longest_rush": 9,
+    "player_passing_+_rushing_yards": 54,
+    "player_passing_attempts": 14,
+    "player_passing_completions": 11,
+    "player_passing_touchdowns": 9,
+    "player_passing_yards": 59,
+    "player_receiving_yards": 253,
+    "player_receptions": 52,
+    "player_rushing_attempts": 29,
+    "player_rushing_yards": 170,
+    "player_sacks": 4,
+    "player_tackles": 5,
+    "player_tackles_+_assists": 5
    },
-   "requestsLeft": 5,
-   "rows": 959,
+   "requestsLeft": 6,
+   "rows": 712,
    "slateGames": [
     "Ohio Bobcats at Sacramento State Hornets 2026-10-18T02:00Z",
     "Utah Utes at Colorado Buffaloes 2026-10-18T02:15Z",
@@ -70,7 +73,6 @@
       "home_team": "Florida International",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -80,7 +82,7 @@
      "type": "fixture"
     },
     {
-     "away": "South Alabama Jaguars",
+     "away": "South Alabama",
      "external": {
       "draftkings": "34827169",
       "gemini": "NCAAF-2610202330-USA-MRSH-S",
@@ -92,13 +94,12 @@
       "smarkets": "45375065",
       "sportzino": "sz-17844473"
      },
-     "home": "Marshall Thundering Herd",
+     "home": "Marshall",
      "sample": {
-      "away_team": "South Alabama Jaguars",
-      "home_team": "Marshall Thundering Herd",
+      "away_team": "South Alabama",
+      "home_team": "Marshall",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -108,11 +109,11 @@
      "type": "fixture"
     },
     {
-     "away": "New Mexico State Aggies",
+     "away": "New Mexico State",
      "external": {
       "draftkings": "34827174",
       "gemini": "NCAAF-2610220000-NMS-SHS-M",
-      "kalshi": "KXNCAAFSPREAD-26OCT21NMSUSHSU",
+      "kalshi": "KXNCAAF1H-26OCT21NMSUSHSU",
       "novig": "01a137bf-701e-7c92-9fda-f5c33eda6144",
       "onexbet": "762341341",
       "polymarket": "nfl_newmexicostate_samhoustonbearkats_2026-10-21_b3",
@@ -120,13 +121,12 @@
       "smarkets": "45375067",
       "sportzino": "sz-17854044"
      },
-     "home": "Sam Houston State Bearkats",
+     "home": "Sam Houston",
      "sample": {
-      "away_team": "New Mexico State Aggies",
-      "home_team": "Sam Houston State Bearkats",
+      "away_team": "New Mexico State",
+      "home_team": "Sam Houston",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -136,11 +136,11 @@
      "type": "fixture"
     },
     {
-     "away": "Liberty Flames",
+     "away": "Liberty",
      "external": {
       "draftkings": "34827179",
       "gemini": "NCAAF-2610222300-LIB-KENN-M",
-      "kalshi": "KXNCAAFSPREAD-26OCT22LIBKENN",
+      "kalshi": "KXNCAAFGAME-26OCT22LIBKENN",
       "novig": "01a13cae-d357-77e1-a5b9-e21dd00ca896",
       "onexbet": "762619339",
       "polymarket": "nfl_kennesawstate_liberty_2026-10-22_b3",
@@ -148,12 +148,11 @@
       "smarkets": "45375070",
       "sportzino": "sz-17863763"
      },
-     "home": "Kennesaw State Owls",
+     "home": "Kennesaw State",
      "sample": {
-      "away_team": "Liberty Flames",
-      "home_team": "Kennesaw State Owls",
+      "away_team": "Liberty",
+      "home_team": "Kennesaw State",
       "markets": [
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -166,38 +165,38 @@
   },
   "NFL": {
    "books": {
-    "draftkings": 656,
-    "fanduel": 144
+    "draftkings": 879,
+    "fanduel": 121
    },
    "eventsListed": 28,
    "eventsMatched": 13,
    "games": 13,
    "marketTypes": {
-    "player_assists": 40,
+    "player_assists": 42,
     "player_extra_points_made": 8,
     "player_fantasy_score": 26,
     "player_field_goals_made": 8,
     "player_interceptions": 8,
     "player_kicking_points": 8,
     "player_longest_passing_completion": 8,
-    "player_longest_reception": 42,
-    "player_longest_rush": 16,
+    "player_longest_reception": 44,
+    "player_longest_rush": 18,
     "player_passing_+_rushing_yards": 8,
     "player_passing_attempts": 8,
     "player_passing_completions": 8,
-    "player_passing_touchdowns": 17,
-    "player_passing_yards": 127,
-    "player_receiving_yards": 274,
-    "player_receptions": 80,
-    "player_rushing_+_receiving_yards": 4,
-    "player_rushing_attempts": 4,
-    "player_rushing_yards": 48,
+    "player_passing_touchdowns": 16,
+    "player_passing_yards": 116,
+    "player_receiving_yards": 382,
+    "player_receptions": 151,
+    "player_rushing_+_receiving_yards": 6,
+    "player_rushing_attempts": 8,
+    "player_rushing_yards": 65,
     "player_sacks": 14,
-    "player_tackles": 22,
-    "player_tackles_+_assists": 22
+    "player_tackles": 24,
+    "player_tackles_+_assists": 24
    },
    "requestsLeft": 0,
-   "rows": 800,
+   "rows": 1000,
    "slateGames": [
     "Houston Texans at Jacksonville Jaguars 2026-10-18T13:30Z",
     "Baltimore Ravens at Cleveland Browns 2026-10-18T17:00Z",
@@ -227,7 +226,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-18T01:45:00Z",
+     "start": "2026-10-18T01:54:00Z",
      "type": "outright"
     },
     {
@@ -240,7 +239,7 @@
       "fanduel": "36190129",
       "fliff": "407873_c_p_202_prematch",
       "gemini": "NFL-2610230015-NE-CHI-T",
-      "kalshi": "KXNFLTD-26OCT22NECHI-CHICHIDST-1",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT22NECHI",
       "novig": "01a136e2-e697-7c01-92bb-981a85cc4723",
       "paddypower": "36190129",
       "polymarket": "nfl_bears_patriots_2026-10-22_b3",
@@ -257,7 +256,6 @@
       "home_team": "Chicago Bears",
       "markets": [
        "1st_half_team_total",
-       "draw_no_bet",
        "moneyline",
        "player_touchdowns",
        "point_spread",
@@ -295,7 +293,6 @@
       "away_team": "Pittsburgh Steelers",
       "home_team": "New Orleans Saints",
       "markets": [
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -328,7 +325,6 @@
       "away_team": "San Francisco 49ers",
       "home_team": "Atlanta Falcons",
       "markets": [
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -364,7 +360,6 @@
       "away_team": "Cincinnati Bengals",
       "home_team": "Baltimore Ravens",
       "markets": [
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -401,7 +396,6 @@
       "away_team": "Cleveland Browns",
       "home_team": "Tennessee Titans",
       "markets": [
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -438,7 +432,6 @@
       "away_team": "Tampa Bay Buccaneers",
       "home_team": "Carolina Panthers",
       "markets": [
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -475,7 +468,6 @@
       "away_team": "Indianapolis Colts",
       "home_team": "Minnesota Vikings",
       "markets": [
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -512,7 +504,6 @@
       "away_team": "Miami Dolphins",
       "home_team": "New York Jets",
       "markets": [
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -548,7 +539,6 @@
       "away_team": "New York Giants",
       "home_team": "Houston Texans",
       "markets": [
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
