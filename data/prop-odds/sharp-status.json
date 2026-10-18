@@ -1,11 +1,11 @@
 {
- "at": "2026-10-18T08:31:18Z",
+ "at": "2026-10-18T08:39:52Z",
  "confirmed": {
-  "NFL-401872996": "2026-10-18T08:31:18Z",
-  "NFL-401872997": "2026-10-18T08:31:18Z",
-  "NFL-401872998": "2026-10-18T08:31:18Z",
-  "NFL-401872999": "2026-10-18T08:31:18Z",
-  "NFL-401873000": "2026-10-18T08:31:18Z",
+  "NFL-401872996": "2026-10-18T08:39:52Z",
+  "NFL-401872997": "2026-10-18T08:39:52Z",
+  "NFL-401872998": "2026-10-18T08:39:52Z",
+  "NFL-401872999": "2026-10-18T08:39:52Z",
+  "NFL-401873000": "2026-10-18T08:39:52Z",
   "NFL-401873001": "2026-10-18T05:51:43Z",
   "NFL-401873002": "2026-10-18T04:50:38Z",
   "NFL-401873003": "2026-10-18T04:50:38Z",
@@ -18,35 +18,38 @@
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 835,
+    "draftkings": 870,
     "fanduel": 1710
    },
    "eventsListed": 28,
    "eventsMatched": 13,
    "games": 13,
    "marketTypes": {
+    "player_assists": 16,
     "player_extra_points_made": 12,
-    "player_fantasy_score": 26,
+    "player_fantasy_score": 12,
     "player_field_goals_made": 12,
     "player_interceptions": 4,
     "player_kicking_points": 12,
     "player_longest_passing_completion": 4,
-    "player_longest_reception": 36,
+    "player_longest_reception": 40,
     "player_longest_rush": 12,
     "player_passing_+_rushing_yards": 4,
     "player_passing_attempts": 4,
     "player_passing_completions": 4,
     "player_passing_touchdowns": 51,
     "player_passing_yards": 170,
-    "player_receiving_yards": 986,
-    "player_receptions": 616,
+    "player_receiving_yards": 981,
+    "player_receptions": 608,
     "player_rushing_+_receiving_yards": 42,
     "player_rushing_attempts": 16,
     "player_rushing_yards": 479,
-    "player_sacks": 55
+    "player_sacks": 65,
+    "player_tackles": 16,
+    "player_tackles_+_assists": 16
    },
    "requestsLeft": 0,
-   "rows": 2545,
+   "rows": 2580,
    "slateGames": [
     "Houston Texans at Jacksonville Jaguars 2026-10-18T13:30Z",
     "Baltimore Ravens at Cleveland Browns 2026-10-18T17:00Z",
@@ -177,9 +180,7 @@
        "point_spread",
        "team_total",
        "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime",
-       "winning_margin"
+       "total_points_odd_even"
       ]
      },
      "start": "2026-10-25T17:00:00Z",
@@ -211,9 +212,7 @@
        "point_spread",
        "team_total",
        "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime",
-       "winning_margin"
+       "total_points_odd_even"
       ]
      },
      "start": "2026-10-25T17:00:00Z",
@@ -246,9 +245,7 @@
        "point_spread",
        "team_total",
        "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime",
-       "winning_margin"
+       "total_points_odd_even"
       ]
      },
      "start": "2026-10-25T17:00:00Z",
@@ -281,9 +278,7 @@
        "point_spread",
        "team_total",
        "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime",
-       "winning_margin"
+       "total_points_odd_even"
       ]
      },
      "start": "2026-10-25T17:00:00Z",
@@ -316,9 +311,7 @@
        "point_spread",
        "team_total",
        "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime",
-       "winning_margin"
+       "total_points_odd_even"
       ]
      },
      "start": "2026-10-25T17:00:00Z",
@@ -350,9 +343,7 @@
        "point_spread",
        "team_total",
        "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime",
-       "winning_margin"
+       "total_points_odd_even"
       ]
      },
      "start": "2026-10-25T17:00:00Z",
@@ -384,9 +375,7 @@
        "point_spread",
        "team_total",
        "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime",
-       "winning_margin"
+       "total_points_odd_even"
       ]
      },
      "start": "2026-10-25T17:00:00Z",
@@ -444,9 +433,7 @@
        "point_spread",
        "team_total",
        "total_points",
-       "total_points_odd_even",
-       "will_there_be_overtime",
-       "winning_margin"
+       "total_points_odd_even"
       ]
      },
      "start": "2026-10-25T20:25:00Z",
