@@ -1,54 +1,54 @@
 {
- "at": "2026-10-18T16:25:44Z",
+ "at": "2026-10-18T16:35:00Z",
  "confirmed": {
-  "NFL-401872997": "2026-10-18T16:25:44Z",
-  "NFL-401872998": "2026-10-18T16:25:44Z",
-  "NFL-401872999": "2026-10-18T16:25:44Z",
+  "NFL-401872997": "2026-10-18T16:35:00Z",
+  "NFL-401872998": "2026-10-18T16:35:00Z",
+  "NFL-401872999": "2026-10-18T16:35:00Z",
   "NFL-401873000": "2026-10-18T16:25:44Z",
-  "NFL-401873001": "2026-10-18T16:12:42Z",
+  "NFL-401873001": "2026-10-18T16:35:00Z",
   "NFL-401873002": "2026-10-18T16:12:42Z",
-  "NFL-401873003": "2026-10-18T16:12:42Z",
-  "NFL-401873004": "2026-10-18T16:12:42Z",
-  "NFL-401873005": "2026-10-18T16:12:42Z",
-  "NFL-401873006": "2026-10-18T16:12:42Z",
-  "NFL-401873007": "2026-10-18T16:12:42Z",
-  "NFL-401873008": "2026-10-18T16:12:42Z"
+  "NFL-401873003": "2026-10-18T16:35:00Z",
+  "NFL-401873004": "2026-10-18T16:35:00Z",
+  "NFL-401873005": "2026-10-18T16:35:00Z",
+  "NFL-401873006": "2026-10-18T16:35:00Z",
+  "NFL-401873007": "2026-10-18T16:35:00Z",
+  "NFL-401873008": "2026-10-18T16:35:00Z"
  },
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 1986,
-    "fanduel": 660
+    "draftkings": 3780,
+    "fanduel": 2467
    },
    "eventsListed": 27,
    "eventsMatched": 12,
    "games": 12,
    "marketTypes": {
-    "player_assists": 86,
-    "player_extra_points_made": 16,
-    "player_fantasy_score": 54,
-    "player_field_goals_made": 16,
-    "player_interceptions": 16,
-    "player_kicking_points": 16,
-    "player_longest_passing_completion": 16,
-    "player_longest_reception": 76,
-    "player_longest_rush": 34,
-    "player_passing_+_rushing_yards": 16,
-    "player_passing_attempts": 16,
-    "player_passing_completions": 16,
-    "player_passing_touchdowns": 42,
-    "player_passing_yards": 265,
-    "player_receiving_yards": 809,
-    "player_receptions": 531,
-    "player_rushing_+_receiving_yards": 34,
-    "player_rushing_attempts": 22,
-    "player_rushing_yards": 368,
-    "player_sacks": 57,
-    "player_tackles": 70,
-    "player_tackles_+_assists": 70
+    "player_assists": 124,
+    "player_extra_points_made": 28,
+    "player_fantasy_score": 74,
+    "player_field_goals_made": 28,
+    "player_interceptions": 24,
+    "player_kicking_points": 28,
+    "player_longest_passing_completion": 24,
+    "player_longest_reception": 164,
+    "player_longest_rush": 60,
+    "player_passing_+_rushing_yards": 24,
+    "player_passing_attempts": 22,
+    "player_passing_completions": 24,
+    "player_passing_touchdowns": 91,
+    "player_passing_yards": 485,
+    "player_receiving_yards": 2177,
+    "player_receptions": 1374,
+    "player_rushing_+_receiving_yards": 90,
+    "player_rushing_attempts": 44,
+    "player_rushing_yards": 982,
+    "player_sacks": 134,
+    "player_tackles": 124,
+    "player_tackles_+_assists": 122
    },
-   "requestsLeft": 0,
-   "rows": 2646,
+   "requestsLeft": 23,
+   "rows": 6247,
    "slateGames": [
     "Baltimore Ravens at Cleveland Browns 2026-10-18T17:00Z",
     "Carolina Panthers at Philadelphia Eagles 2026-10-18T17:00Z",
@@ -77,7 +77,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-18T16:24:00Z",
+     "start": "2026-10-18T16:34:00Z",
      "type": "outright"
     },
     {
@@ -104,11 +104,16 @@
       "away_team": "New England Patriots",
       "home_team": "Chicago Bears",
       "markets": [
+       "1st_half_point_spread",
        "1st_half_team_total",
-       "draw_no_bet",
+       "1st_quarter_point_spread",
+       "2nd_quarter_point_spread",
+       "3rd_quarter_point_spread",
+       "4th_quarter_point_spread",
        "moneyline",
        "player_touchdowns",
        "point_spread",
+       "team_total",
        "total_points"
       ]
      },
@@ -123,7 +128,7 @@
       "draftkings": "34118009",
       "fanduel": "35605985",
       "fliff": "391741_c_p_202_prematch",
-      "kalshi": "KXNFLTOTAL-26OCT25PITNO",
+      "kalshi": "KXNFLGAME-26OCT25PITNO",
       "novig": "01a136e2-e717-7c30-807e-7952b04dee72",
       "paddypower": "35605985",
       "polymarket": "nfl_saints_steelers_2026-10-25_b1",
@@ -136,8 +141,10 @@
       "away_team": "Pittsburgh Steelers",
       "home_team": "New Orleans Saints",
       "markets": [
+       "1st_half_point_spread",
        "moneyline",
        "point_spread",
+       "team_total",
        "total_points"
       ]
      },
@@ -166,9 +173,11 @@
       "away_team": "San Francisco 49ers",
       "home_team": "Atlanta Falcons",
       "markets": [
+       "1st_half_point_spread",
        "game_prop",
        "moneyline",
        "point_spread",
+       "team_total",
        "total_points"
       ]
      },
@@ -195,8 +204,11 @@
       "away_team": "Cincinnati Bengals",
       "home_team": "Baltimore Ravens",
       "markets": [
+       "1st_half_point_spread",
+       "2nd_half_point_spread",
        "moneyline",
        "point_spread",
+       "team_total",
        "total_points"
       ]
      },
@@ -224,6 +236,7 @@
       "away_team": "Cleveland Browns",
       "home_team": "Tennessee Titans",
       "markets": [
+       "2nd_half_point_spread",
        "moneyline",
        "point_spread",
        "total_points"
@@ -253,6 +266,9 @@
       "away_team": "Tampa Bay Buccaneers",
       "home_team": "Carolina Panthers",
       "markets": [
+       "1st_half_point_spread",
+       "2nd_half_point_spread",
+       "3rd_quarter_point_spread",
        "moneyline",
        "point_spread",
        "total_points"
@@ -282,6 +298,8 @@
       "away_team": "Indianapolis Colts",
       "home_team": "Minnesota Vikings",
       "markets": [
+       "1st_half_point_spread",
+       "2nd_half_point_spread",
        "moneyline",
        "point_spread",
        "total_points"
@@ -311,6 +329,9 @@
       "away_team": "Miami Dolphins",
       "home_team": "New York Jets",
       "markets": [
+       "1st_half_point_spread",
+       "2nd_quarter_point_spread",
+       "3rd_quarter_point_spread",
        "moneyline",
        "point_spread",
        "total_points"
@@ -335,6 +356,7 @@
       "away_team": "New York Giants",
       "home_team": "Houston Texans",
       "markets": [
+       "1st_half_point_spread",
        "moneyline",
        "point_spread",
        "total_points"
