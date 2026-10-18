@@ -297,17 +297,22 @@ def result_timeliness(record, posts, now):
     rows = record.get('picks') if isinstance(record, dict) else None
     if not isinstance(rows, list):
         return {'state': 'unknown', 'source': 'settledAt', 'eligible': 0, 'posted': 0,
-                'within30Minutes': 0, 'over30Minutes': 0, 'missing': 0,
+                'within30Minutes': 0, 'over30Minutes': 0, 'pendingScheduled': 0, 'missing': 0,
                 'latestMinutesFromFinalToPost': None, 'maxMinutesFromFinalToPost': None}
-    sent = {}
+    sent, pending = {}, {}
     for post in posts:
-        if not isinstance(post, dict) or not post.get('sentAt'):
+        if not isinstance(post, dict):
             continue
         key = str(post.get('id') or '')
         for prefix in ('cashed:', 'burnt:'):
             if key.startswith(prefix):
-                sent[key[len(prefix):]] = moment(post['sentAt'])
-    delays, missing = [], 0
+                source_id = key[len(prefix):]
+                if post.get('sentAt'):
+                    sent[source_id] = moment(post['sentAt'])
+                elif (post.get('bufferPostId') and not any(post.get(field) for field in
+                      ('cancelledAt', 'deletedAt', 'error')) and moment(post.get('dueAt'))):
+                    pending[source_id] = moment(post['dueAt'])
+    delays, missing, pending_scheduled = [], 0, 0
     cutoff = now - timedelta(hours=48)
     for pick in rows:
         if not isinstance(pick, dict) or not pick.get('posted') or not pick.get('settledAt'):
@@ -327,12 +332,18 @@ def result_timeliness(record, posts, now):
             continue
         delivered = sent.get(str(pick.get('id') or ''))
         if delivered is None:
-            missing += 1
+            due = pending.get(str(pick.get('id') or ''))
+            if due and due >= now - timedelta(minutes=15):
+                pending_scheduled += 1
+            else:
+                missing += 1
             continue
         delays.append(max(0, round((delivered - settled).total_seconds() / 60, 1)))
-    return {'state': 'available', 'source': 'settledAt', 'eligible': len(delays) + missing,
+    return {'state': 'available', 'source': 'settledAt',
+            'eligible': len(delays) + pending_scheduled + missing,
             'posted': len(delays), 'within30Minutes': sum(delay <= 30 for delay in delays),
-            'over30Minutes': sum(delay > 30 for delay in delays), 'missing': missing,
+            'over30Minutes': sum(delay > 30 for delay in delays),
+            'pendingScheduled': pending_scheduled, 'missing': missing,
             'latestMinutesFromFinalToPost': delays[-1] if delays else None,
             'maxMinutesFromFinalToPost': max(delays) if delays else None}
 
@@ -623,7 +634,8 @@ def markdown(data):
     speed = data.get('resultTimeliness') or {}
     lines.append('Minutes from final to post: '
                  f"{speed.get('within30Minutes', 0)}/{speed.get('eligible', 0)} within 30 minutes; "
-                 f"{speed.get('missing', 0)} missing; max {speed.get('maxMinutesFromFinalToPost') if speed.get('maxMinutesFromFinalToPost') is not None else 'unknown'}. "
+                 f"{speed.get('pendingScheduled', 0)} queued; {speed.get('missing', 0)} missing; "
+                 f"max {speed.get('maxMinutesFromFinalToPost') if speed.get('maxMinutesFromFinalToPost') is not None else 'unknown'}. "
                  'Final means the first saved final observation (settledAt).')
     cohorts = data.get('deliveryCohorts') or {}
     lines.append('Distinct delivery cohorts: ' + str(cohorts.get('state', 'unknown')) + '.')
@@ -745,6 +757,7 @@ are not technical failures. Display incidents and grading reconciliation still n
 ('Eligible wins and near misses', (data.get('resultTimeliness') or {}).get('eligible')),
 ('Posted within 30 minutes', (data.get('resultTimeliness') or {}).get('within30Minutes')),
 ('Over 30 minutes', (data.get('resultTimeliness') or {}).get('over30Minutes')),
+('Queued result post', (data.get('resultTimeliness') or {}).get('pendingScheduled')),
 ('Missing result post', (data.get('resultTimeliness') or {}).get('missing')),
 ('Maximum minutes from final to post', (data.get('resultTimeliness') or {}).get('maxMinutesFromFinalToPost'))])}</table>
 <p>Final means the first durable final observation saved as settledAt; no exact stadium final time is invented.</p></section>

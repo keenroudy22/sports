@@ -112,13 +112,13 @@ class DrawTests(unittest.TestCase):
 class PostTests(unittest.TestCase):
     GAMES = {f'g{i}': {'id': f'g{i}', 'league': 'NFL', 'week': 3, 'kickoff': '2026-09-27T17:00Z'} for i in range(5)}
 
-    def test_the_sheet_posts_at_ten_on_its_day_with_the_ask_first(self):
+    def test_the_sheet_posts_at_eight_on_its_day_with_the_ask_first(self):
         early = datetime(2026, 9, 27, 10, 45, tzinfo=timezone.utc)       # 6:45 AM ET Sunday
         post = sheet.post(self.GAMES, early)
         self.assertEqual((post['key'], post['kind'], post['card']), ('sheet:NFL:2026-09-27', 'sheet', 'sheet-nfl-2026-09-27'))
         self.assertEqual(post['text'], '📌 Full NFL projections for the slate.\n'
                                        'My favorite 4 to 6 priced projections are numbered.\n📌 Save this one\n#NFL')
-        self.assertEqual(post['due'], datetime(2026, 9, 27, 14, 0, tzinfo=timezone.utc))
+        self.assertEqual(post['due'], datetime(2026, 9, 27, 12, 0, tzinfo=timezone.utc))
         import receipts
         self.assertEqual(receipts.guard(post), [])
         self.assertIsNone(sheet.post(self.GAMES, datetime(2026, 9, 27, 16, 0, tzinfo=timezone.utc)), 'past 11:45 AM it is too late')

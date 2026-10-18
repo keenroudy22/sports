@@ -2864,6 +2864,44 @@ def private_release_ready(now):
     return False
 
 
+RESULT_RECOVERY_GAP = timedelta(minutes=15)
+
+
+def result_recovery_needed(now, root=ROOT, conf=CONF):
+    """Retry a settled win/near miss whose Cooked/Burnt post was never queued.
+
+    The ordinary result job remains the primary path.  This is the five-minute
+    mirror's bounded recovery path: a future scheduled post is healthy, an
+    overdue or absent one is retried at most once per fifteen minutes.
+    """
+    import desk_health
+    import x_post
+    log_book = x_post.load_log()
+    result = desk_health.result_timeliness(
+        load_json(Path(root) / 'site/data/app/record.json', {}),
+        log_book.get('posts', []) if isinstance(log_book, dict) else [], now)
+    if result.get('state') != 'available' or not result.get('missing'):
+        return 0
+    state = load_json(Path(conf) / 'result-recovery.json', {})
+    last = state.get('attemptedAt')
+    if last:
+        try:
+            if now - gates.when(last) < RESULT_RECOVERY_GAP:
+                return 0
+        except (TypeError, ValueError):
+            pass
+    return int(result['missing'])
+
+
+def mark_result_recovery(now, count, conf=CONF):
+    path = Path(conf) / 'result-recovery.json'
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix('.tmp')
+    temporary.write_text(json.dumps({'attemptedAt': stamp(now), 'missing': int(count)}, indent=1) + '\n')
+    temporary.chmod(0o600)
+    temporary.replace(path)
+
+
 def _private_card(path):
     data = Path(path).read_bytes()
     if not data.startswith(b'\x89PNG\r\n\x1a\n'):
@@ -3108,6 +3146,23 @@ def mirror(args):
         settlement_args.publish_kinds = 'settle'
         settlement_args.record_screens = False
         log('official settlement scan:', ', '.join(pending_finals))
+        result = run(settlement_args)
+        if result:
+            return result
+    missing_results = result_recovery_needed(now)
+    if missing_results and not args.dry_run:
+        # The result is already in the append-only public record; this pass
+        # rebuilds and recreates only the missing result delivery.  It spends
+        # no odds credits and uses no model call.
+        import copy
+        mark_result_recovery(now, missing_results)
+        settlement_args = copy.copy(args)
+        settlement_args.command = 'run'
+        settlement_args.slot = now.astimezone(EASTERN).strftime('%H%M')
+        settlement_args.no_llm = True
+        settlement_args.publish_kinds = 'settle'
+        settlement_args.record_screens = False
+        log(f'result recovery scan: {missing_results} settled result post(s) absent or overdue')
         result = run(settlement_args)
         if result:
             return result

@@ -86,6 +86,26 @@ class DeskHealthTests(unittest.TestCase):
             data = H.summary(root, root / 'private', root, NOW)
             self.assertEqual(data['resultTimeliness']['missing'], 1)
             self.assertIn('result-post-missing', {row['code'] for row in data['issues']})
+
+    def test_future_result_post_is_queued_not_missing(self):
+        record = {'picks': [
+            {'id': 'ladder', 'posted': True, 'result': 'win',
+             'settledAt': '2026-10-05T13:00:00Z'}]}
+        posts = [{'id': 'cashed:ladder', 'bufferPostId': 'scheduled',
+                  'dueAt': '2026-10-05T14:15:00Z'}]
+        result = H.result_timeliness(record, posts, NOW)
+        self.assertEqual(result['pendingScheduled'], 1)
+        self.assertEqual(result['missing'], 0)
+
+    def test_overdue_result_post_becomes_missing(self):
+        record = {'picks': [
+            {'id': 'win', 'posted': True, 'result': 'win',
+             'settledAt': '2026-10-05T12:00:00Z'}]}
+        posts = [{'id': 'cashed:win', 'bufferPostId': 'stuck',
+                  'dueAt': '2026-10-05T13:30:00Z'}]
+        result = H.result_timeliness(record, posts, NOW)
+        self.assertEqual(result['pendingScheduled'], 0)
+        self.assertEqual(result['missing'], 1)
     def write(self, root, name, value):
         path = root / name
         path.parent.mkdir(parents=True, exist_ok=True)

@@ -2,13 +2,13 @@
 
 The most saved data posts among the accounts we follow are cheat sheets with the ask in the first line (Jimmy's
 "Save this post now", Toad's "Bookmark this sheet"; docs/X-NOTES.md). The owner said yes on 2026-09-26. On
-college Saturday and NFL Thursday/Sunday/Monday, the morning post is one image: each game's logos, our
+college Saturday and NFL Thursday/Sunday/Monday, the early post is one image: each game's logos, our
 projected score, how often we think each team wins, and our spread and total beside the betting line, the same numbers
 as the Games page (built from the site's own game cards, site/data/app/today.json). NFL shows the whole slate; college
 shows the 16 largest disagreements. A mint ring marks up to six favorite lines where our calibrated chance clears the actual
 captured price. A projection gap alone is never highlighted.
 
-The hosted build draws it (feed.py, into site/data/cards/, like every card) and the desk posts it at 10:00 AM
+The hosted build draws it (feed.py, into site/data/cards/, like every card) and the desk posts it at 8:00 AM
 (receipts.house_posts). Nothing on it is a pick: the plays go out on their own.
 
   python scripts/sheet.py [--league NFL|CFB] [--day YYYY-MM-DD] [--out PATH]    draw one sheet from today.json
@@ -27,7 +27,7 @@ from sports_refresh import eastern_date
 ROOT = Path(__file__).resolve().parents[1]
 TODAY = ROOT / 'site' / 'data' / 'app' / 'today.json'
 POST_DAYS = {'CFB': {5}, 'NFL': {0, 3, 6}}  # College Saturday; NFL Monday, Thursday and Sunday.
-POST_AT, POST_UNTIL = (10, 0), (11, 45)  # Eastern
+POST_AT, POST_UNTIL = (8, 0), (11, 45)  # Eastern; useful before London and noon kickoffs
 MOST, WATCH, FEWEST = 16, 6, 4          # a full NFL slate; up to six favorite priced projections get a mint ring
 RING_FRESH = timedelta(hours=4)          # research/main-line rule: an older quote never earns a ring
 WIDTH, HEIGHT = 1080, 1350              # 4:5, the tallest image X shows whole in the feed

@@ -228,3 +228,32 @@ is not a claim that a new live-feed review occurred today.
 Do not copy `looks too easy`, `smash spot`, selective streak claims, forced daily tickets, copyrighted game clips or
 affiliate-heavy link stacks. Cody's system is powerful because it is simple and repeated. Kook'n's advantage should
 be the same clarity with a complete public record, fresher data and fewer forced bets.
+
+## Live follow-up, Oct 18: timing and the complete game-day loop
+
+The owner's Following feed and the named accounts were checked again on Sunday morning. These are snapshots from
+accounts with much larger audiences, not proof that a post format causes reach.
+
+- Cody Brown's 8:19 AM-style morning reminder quoted a ticket posted the prior afternoon for the 9:30 AM London game.
+  At the check it had about 27.9K views, 65 likes and 13 bookmarks. The useful pattern is prepare the real asset the
+  day before, then remind people before kickoff; it is not to invent a second pick in the morning.
+- Wavey's short prior-evening `I'm building now` post had about 32.9K views. The finished +10975 SGP posted overnight
+  had about 93.6K views, 1.5K likes and 993 bookmarks. The ticket is one image and one casual line; the large odds are
+  visible immediately. A live overtime reaction and a blunt losing reaction keep the same conversation going.
+- The current feed also showed a 3-of-4 anytime-scorer result quoting the original ticket. The loss was acknowledged
+  leg by leg instead of disappearing. This is the behavior Kook'n needs to make automatic for every released play.
+
+Kook'n's operating cadence from this review:
+
+1. Build the saveable football projection sheet in the prior evening run; publish it at 8:00 AM Eastern on the
+   approved Thursday, Saturday, Sunday and Monday slates so London and noon games are not already underway.
+2. Keep the truthful prior-day receipt at 9:00. Release every qualified play Discord-first and then X in its existing
+   game-day window. Research follows the official batch unless its own kickoff cutoff requires an earlier slot.
+3. Use one post for one job: projection sheet, trend, exact play, Climb, fun ticket or result. Player and team names
+   remain searchable in the caption; the graphic carries the dense numbers.
+4. Grade from the first stored final, update the site immediately and send the official Discord result. Queue a
+   Cooked or honest near-miss post within about 30 minutes. The five-minute mirror must recreate a missing result
+   queue entry; a scheduled future result is not reported as missing.
+5. Measure Kook'n, not the large accounts. After 24 hours compare views, interactions per thousand, bookmarks when
+   available and follows/profile visits when the provider returns them. Keep a format only after a useful sample;
+   never loosen a price, injury or role gate to chase a viral screenshot.

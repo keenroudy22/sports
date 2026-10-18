@@ -1489,6 +1489,26 @@ class BufferPostsTests(unittest.TestCase):
 
 
 class DiscordMirrorTests(unittest.TestCase):
+    def test_missing_result_recovery_is_bounded_and_ignores_a_future_queue(self):
+        now = datetime(2026, 10, 18, 13, 15, tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            conf = root / 'private'
+            record = root / 'site/data/app/record.json'
+            record.parent.mkdir(parents=True)
+            record.write_text(json.dumps({'picks': [
+                {'id': 'win', 'posted': True, 'result': 'win',
+                 'settledAt': '2026-10-18T12:45:00Z'}]}))
+            import x_post
+            with mock.patch.object(x_post, 'load_log', return_value={'posts': []}):
+                self.assertEqual(run.result_recovery_needed(now, root, conf), 1)
+                run.mark_result_recovery(now, 1, conf)
+                self.assertEqual(run.result_recovery_needed(now + timedelta(minutes=5), root, conf), 0)
+            queued = {'posts': [{'id': 'cashed:win', 'bufferPostId': 'future',
+                                 'dueAt': run.stamp(now + timedelta(minutes=7))}]}
+            with mock.patch.object(x_post, 'load_log', return_value=queued):
+                self.assertEqual(run.result_recovery_needed(now + timedelta(minutes=16), root, conf), 0)
+
     def test_only_due_or_sent_pending_entries_wake_the_mirror(self):
         now = datetime(2026, 9, 28, 16, 0, tzinfo=timezone.utc)
         post = lambda **over: dict({'id': 'a', 'bufferPostId': 'b', 'dueAt': run.stamp(now + timedelta(minutes=5)),
@@ -1522,6 +1542,23 @@ class DiscordMirrorTests(unittest.TestCase):
         self.assertEqual((settlement.publish_kinds, settlement.no_llm, settlement.record_screens),
                          ('settle', True, False))
         self.assertEqual(settlement.slot, '2245')
+
+    def test_a_missing_result_post_wakes_a_bounded_settlement_retry(self):
+        now = datetime(2026, 10, 18, 13, 15, tzinfo=timezone.utc)
+        watcher = SimpleNamespace(run_shadow=mock.Mock(return_value={'pendingFinals': []}))
+        progress = SimpleNamespace(run=mock.Mock())
+        args = SimpleNamespace(now=run.stamp(now), dry_run=False, no_push=False, no_llm=False,
+                               publish_kinds=None, record_screens=True, slot=None, command='mirror')
+        with mock.patch.dict(sys.modules, {'live_watch': watcher, 'live_progress': progress}), \
+                mock.patch.dict(os.environ, {'KEENROUDY_LIVE_SHADOW': '1', 'BUFFER_TOKEN': ''}, clear=False), \
+                mock.patch.object(run, 'result_recovery_needed', return_value=1), \
+                mock.patch.object(run, 'mark_result_recovery') as marked, \
+                mock.patch.object(run, 'run', return_value=0) as official:
+            self.assertEqual(run.mirror(args), 0)
+        marked.assert_called_once_with(now, 1)
+        settlement = official.call_args.args[0]
+        self.assertEqual((settlement.publish_kinds, settlement.no_llm, settlement.record_screens),
+                         ('settle', True, False))
 
 
 if __name__ == '__main__':

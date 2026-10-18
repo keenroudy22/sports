@@ -212,19 +212,21 @@ class ReceiptTests(unittest.TestCase):
         self.assertNotIn('under 53…', card)
         self.assertIn('font-size="22"', card, 'long rows shrink before they are shortened')
 
-    def test_the_receipt_goes_out_at_nine_ahead_of_the_mornings_plays(self):
+    def test_the_early_sheet_then_receipt_go_out_ahead_of_the_mornings_plays(self):
         first, latest, log = world()
         noon = {'noon': {'id': 'noon', 'league': 'NFL', 'kickoff': '2026-09-28T16:00Z', 'home': {'short': 'A'}, 'away': {'short': 'B'}}}
         first['NFL-2026-W4-n'] = pick('n', 'noon', title='B at A over 40.5')
         log['posts'] = [e for e in log['posts'] if e['id'] != 'NFL-2026-W4-m']         # tonight's play has not gone out yet
         plans = buffer_post.plan(first, latest, dict(GAMES, **noon), MONDAY_MORNING, log)
         got = [(p[0], p[1], p[3].astimezone(gates.EASTERN).strftime('%H:%M'), p[4]) for p in plans]
-        self.assertEqual(got[0], ('receipt:day:2026-09-27', 'receipt', '09:01', 'receipt-day-2026-09-27'))
-        self.assertNotIn('Today:', plans[0][2])
-        self.assertTrue(plans[0][2].startswith('Sunday: 2-1.\n✅ Player Seven'), plans[0][2])
-        self.assertEqual(plans[0][2].count('Player Seven'), 1, 'each play once')
-        self.assertEqual(got[1][:3], ('NFL-2026-W4-n', 'play', '09:31'), 'the first play follows the receipt')
-        self.assertEqual(got[2][:3], ('NFL-2026-W4-m', 'play', '09:51'), 'night games join the same morning batch')
+        self.assertEqual(got[0][0:2], ('sheet:NFL:2026-09-28', 'sheet'))
+        self.assertLess(got[0][2], '09:00', 'the saveable sheet is useful before the morning receipt')
+        self.assertEqual(got[1], ('receipt:day:2026-09-27', 'receipt', '09:01', 'receipt-day-2026-09-27'))
+        self.assertNotIn('Today:', plans[1][2])
+        self.assertTrue(plans[1][2].startswith('Sunday: 2-1.\n✅ Player Seven'), plans[1][2])
+        self.assertEqual(plans[1][2].count('Player Seven'), 1, 'each play once')
+        self.assertEqual(got[2][:3], ('NFL-2026-W4-n', 'play', '09:31'), 'the first play follows the receipt')
+        self.assertEqual(got[3][:3], ('NFL-2026-W4-m', 'play', '09:51'), 'night games join the same morning batch')
         log['posts'].append({'id': 'receipt:day:2026-09-27', 'kind': 'buffer:receipt'})
         again = [p[0] for p in buffer_post.plan(first, latest, dict(GAMES, **noon), MONDAY_MORNING, log)]
         self.assertFalse([k for k in again if k.startswith(('receipt:', 'menu:'))], 'neither goes out again on its own')
