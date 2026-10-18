@@ -1,28 +1,28 @@
 {
- "at": "2026-10-18T22:03:59Z",
+ "at": "2026-10-18T22:07:02Z",
  "confirmed": {
-  "NFL-401873007": "2026-10-18T22:03:59Z",
-  "NFL-401873008": "2026-10-18T22:03:59Z"
+  "NFL-401873007": "2026-10-18T22:07:02Z",
+  "NFL-401873008": "2026-10-18T22:07:02Z"
  },
  "leagues": {
   "NFL": {
    "books": {
-    "fanduel": 565
+    "fanduel": 629
    },
-   "eventsListed": 9,
+   "eventsListed": 10,
    "eventsMatched": 2,
    "games": 2,
    "marketTypes": {
-    "player_passing_touchdowns": 19,
-    "player_passing_yards": 45,
-    "player_receiving_yards": 228,
-    "player_receptions": 144,
-    "player_rushing_+_receiving_yards": 7,
-    "player_rushing_yards": 111,
-    "player_sacks": 11
+    "player_passing_touchdowns": 20,
+    "player_passing_yards": 46,
+    "player_receiving_yards": 261,
+    "player_receptions": 160,
+    "player_rushing_+_receiving_yards": 10,
+    "player_rushing_yards": 118,
+    "player_sacks": 14
    },
    "requestsLeft": 10,
-   "rows": 565,
+   "rows": 629,
    "slateGames": [
     "Dallas Cowboys at Green Bay Packers 2026-10-19T00:20Z",
     "Washington Commanders at San Francisco 49ers 2026-10-20T00:15Z"
@@ -60,8 +60,9 @@
      "external": {
       "betparx": "1028823697",
       "betrivers": "1028823697",
+      "draftkings": "34118009",
       "fanduel": "35605985",
-      "kalshi": "KXNFLGAME-26OCT25PITNO",
+      "kalshi": "KXNFLSPREAD-26OCT25PITNO",
       "paddypower": "35605985",
       "polymarket": "nfl_saints_steelers_2026-10-25_b1",
       "polymarket_us": "nfl-pit-no-2026-10-25"
@@ -145,6 +146,30 @@
       "home_team": "Carolina Panthers",
       "markets": [
        "1st_half_team_total",
+       "moneyline",
+       "point_spread",
+       "total_points"
+      ]
+     },
+     "start": "2026-10-25T17:00:00Z",
+     "type": "fixture"
+    },
+    {
+     "away": "Miami Dolphins",
+     "external": {
+      "betparx": "1028823699",
+      "betrivers": "1028823699",
+      "fanduel": "36189000",
+      "kalshi": "KXNFLGAME-26OCT25MIANYJ",
+      "paddypower": "36189000",
+      "polymarket": "nfl_dolphins_jets_2026-10-25_b2",
+      "polymarket_us": "nfl-mia-nyj-2026-10-25"
+     },
+     "home": "New York Jets",
+     "sample": {
+      "away_team": "Miami Dolphins",
+      "home_team": "New York Jets",
+      "markets": [
        "moneyline",
        "point_spread",
        "total_points"
