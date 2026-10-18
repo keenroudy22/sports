@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-18T17:21:44Z",
+  "updatedAt": "2026-10-18T17:30:24Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Out",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-18T17:01Z",
+              "reportedAt": "2026-10-18T17:18Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1617,6 +1617,15 @@
           "name": "Cleveland Browns",
           "players": [
             {
+              "id": "4242208",
+              "name": "Grant Delpit",
+              "position": "S",
+              "status": "Questionable",
+              "injury": "Head",
+              "reportedAt": "2026-10-18T17:18Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4242208/grant-delpit"
+            },
+            {
               "id": "4722893",
               "name": "Jaleel McLaughlin",
               "position": "RB",
@@ -1741,15 +1750,6 @@
               "injury": null,
               "reportedAt": "2026-10-17T01:48Z",
               "source": "https://www.espn.com/nfl/player/_/id/4685540/carsen-ryan"
-            },
-            {
-              "id": "4242208",
-              "name": "Grant Delpit",
-              "position": "S",
-              "status": "Active",
-              "injury": "Head",
-              "reportedAt": "2026-10-16T20:21Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4242208/grant-delpit"
             },
             {
               "id": "3040471",
@@ -2767,6 +2767,15 @@
           "name": "Houston Texans",
           "players": [
             {
+              "id": "4432577",
+              "name": "C.J. Stroud",
+              "position": "QB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-18T17:17Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4432577/cj-stroud"
+            },
+            {
               "id": "4258173",
               "name": "Nico Collins",
               "position": "WR",
@@ -2981,15 +2990,6 @@
               "injury": null,
               "reportedAt": "2026-10-12T04:08Z",
               "source": "https://www.espn.com/nfl/player/_/id/4686422/xavier-hutchinson"
-            },
-            {
-              "id": "4586312",
-              "name": "Jaylin Noel",
-              "position": "WR",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-12T01:20Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4586312/jaylin-noel"
             }
           ]
         },
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Out",
               "injury": "Calf",
-              "reportedAt": "2026-10-18T17:01Z",
+              "reportedAt": "2026-10-18T17:19Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "18",
-          "name": "Nathan Shepherd",
-          "from": "Questionable",
-          "to": "Out",
-          "observedAt": "2026-10-18T16:01:42Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4076951/nathan-shepherd"
-        },
-        {
-          "teamId": "18",
           "name": "Jeremiah Wright",
           "from": "Questionable",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-10-18T16:54:35Z",
           "source": "https://www.espn.com/nfl/player/_/id/2576336/ameer-abdullah"
+        },
+        {
+          "teamId": "5",
+          "name": "Grant Delpit",
+          "from": "Active",
+          "to": "Questionable",
+          "observedAt": "2026-10-18T17:30:24Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4242208/grant-delpit"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-18T17:21:44Z",
-      "lastAttemptAt": "2026-10-18T17:21:44Z",
+      "checkedAt": "2026-10-18T17:30:24Z",
+      "lastAttemptAt": "2026-10-18T17:30:24Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-18T17:21:44Z",
-      "lastAttemptAt": "2026-10-18T17:21:44Z",
+      "checkedAt": "2026-10-18T17:30:24Z",
+      "lastAttemptAt": "2026-10-18T17:30:24Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
