@@ -1,27 +1,8 @@
 {
   "schemaVersion": 1,
-  "selectedAt": "2026-10-18T18:45:04Z",
+  "selectedAt": "2026-10-18T21:30:04Z",
   "mode": "local",
   "rows": [
-    {
-      "gameId": "NFL-401873004",
-      "league": "NFL",
-      "kickoff": "2026-10-18T20:05:00Z",
-      "matchup": "ARI at LAR",
-      "href": "#game/NFL-401873004",
-      "kind": "trend",
-      "label": "Season trend",
-      "player": "Tyler Higbee",
-      "stat": "rec",
-      "title": "Tyler Higbee \u00b7 Over 2.5 receptions",
-      "text": "8/10 recorded games this season. FanDuel -148 captured; history, not a prediction.",
-      "observedAt": "2026-10-18T18:35:16Z",
-      "expiresAt": "2026-10-18T20:05:00Z",
-      "rate": 0.8,
-      "sample": 10,
-      "price": -148,
-      "id": "E0"
-    },
     {
       "gameId": "NHL-401892533",
       "league": "NHL",
@@ -31,10 +12,38 @@
       "matchup": "CBJ at MIN",
       "title": "CBJ at MIN",
       "text": "Sun 6:00 PM ET \u00b7 Scores and schedule.",
-      "observedAt": "2026-10-18T18:34:30Z",
+      "observedAt": "2026-10-18T21:24:53Z",
       "expiresAt": "2026-10-18T22:00:00Z",
       "href": "#scores/NHL",
-      "id": "E14"
+      "id": "E2"
+    },
+    {
+      "gameId": "EPL-401879257",
+      "league": "EPL",
+      "kind": "schedule",
+      "label": "Next up",
+      "kickoff": "2026-10-19T19:00:00Z",
+      "matchup": "COV at TOT",
+      "title": "COV at TOT",
+      "text": "Mon 3:00 PM ET \u00b7 Scores and schedule.",
+      "observedAt": "2026-10-18T21:24:53Z",
+      "expiresAt": "2026-10-19T01:24:53Z",
+      "href": "#scores/EPL",
+      "id": "E3"
+    },
+    {
+      "gameId": "MLB-401908028",
+      "league": "MLB",
+      "kind": "schedule",
+      "label": "Next up",
+      "kickoff": "2026-10-20T00:00:00Z",
+      "matchup": "CLE at TB",
+      "title": "CLE at TB",
+      "text": "Mon 8:00 PM ET \u00b7 Scores and schedule.",
+      "observedAt": "2026-10-18T21:24:53Z",
+      "expiresAt": "2026-10-19T01:24:53Z",
+      "href": "#scores/MLB",
+      "id": "E1"
     }
   ]
 }
