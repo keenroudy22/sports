@@ -23,6 +23,7 @@ class PrecheckScheduleTests(unittest.TestCase):
         self.assertEqual(set(kinds), {'settle', 'close', 'lean', 'prop', 'longshot', 'ladder'})
         slots = job['StartCalendarInterval']
         self.assertIn({'Hour': 6, 'Minute': 45}, slots)
+        self.assertIn({'Hour': 7, 'Minute': 30, 'Weekday': 0}, slots)
         self.assertEqual(job['EnvironmentVariables']['TZ'], 'America/New_York')
 
     def test_precheck_is_anchored_to_five_and_thirty_five_past_each_hour(self):

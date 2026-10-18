@@ -27,7 +27,8 @@ from sports_refresh import eastern_date
 ROOT = Path(__file__).resolve().parents[1]
 TODAY = ROOT / 'site' / 'data' / 'app' / 'today.json'
 POST_DAYS = {'CFB': {5}, 'NFL': {0, 3, 6}}  # College Saturday; NFL Monday, Thursday and Sunday.
-POST_AT, POST_UNTIL = (8, 0), (11, 45)  # Eastern; useful before London and noon kickoffs
+POST_AT, POST_UNTIL = (8, 0), (11, 45)  # Eastern game-day fallback
+PREVIEW_AT = (19, 0)                    # night-before sheet; early enough to save, revisit and share
 MOST, WATCH, FEWEST = 16, 6, 4          # a full NFL slate; up to six favorite priced projections get a mint ring
 RING_FRESH = timedelta(hours=4)          # research/main-line rule: an older quote never earns a ring
 WIDTH, HEIGHT = 1080, 1350              # 4:5, the tallest image X shows whole in the feed
@@ -315,14 +316,15 @@ def load_cards(path=TODAY):
 
 
 def due(now, cards):
-    """[(league, day, games)] for the sheets to draw today: a league on its day with a full enough slate."""
-    day = eastern_date(now)
+    """Sheets the hosted build should draw: today plus tomorrow's preview when applicable."""
+    today = eastern_date(now)
     out = []
-    for league in POST_DAYS:
-        if sheet_day(league, day):
-            games = pick_games(cards, league, day)
-            if len(games) >= minimum_games(league, day):
-                out.append((league, day, games))
+    for day in (today, today + timedelta(days=1)):
+        for league in POST_DAYS:
+            if sheet_day(league, day):
+                games = pick_games(cards, league, day)
+                if len(games) >= minimum_games(league, day):
+                    out.append((league, day, games))
     return out
 
 
@@ -346,26 +348,35 @@ def at(day, hm):
 
 
 def post(games, now):
-    """The morning post for the day's sheet, or None: {key, kind, card, text, due, stale}. `games` is the slate
+    """The night-before preview, with a game-day fallback, or None. `games` is the slate
     (gameId -> game), so the desk can schedule it without the site's files."""
-    day = eastern_date(now)
-    for league in POST_DAYS:
-        if not sheet_day(league, day) or now >= at(day, POST_UNTIL):
-            continue
-        todays = [g for g in games.values() if g.get('league') == league and eastern_date(gates.when(g['kickoff'])) == day]
-        if len(todays) < minimum_games(league, day):
-            continue
-        name = 'college' if league == 'CFB' else 'NFL'
-        if len(todays) == 1:
-            lead = f"📌 Tonight's {name} projection."
-        else:
-            lead = (f"📌 Full {name} projections for the slate." if league == 'NFL' else
-                    f"📌 16 {name} projections for the slate.")
-        middle = ("My number next to Vegas, plus the line I like most."
-                  if len(todays) == 1 else "My favorite 4 to 6 priced projections are numbered.")
-        text = lead + f"\n{middle}\n📌 Save this one\n#{league}"
-        return {'key': f'sheet:{league}:{day.isoformat()}', 'kind': 'sheet', 'card': key(league, day), 'text': text,
-                'due': max(at(day, POST_AT), now + timedelta(minutes=2)), 'stale': at(day, POST_UNTIL)}
+    today = eastern_date(now)
+    local = now.astimezone(gates.EASTERN)
+    candidates = []
+    if now < at(today, POST_UNTIL):
+        candidates.append((today, at(today, POST_AT), False))
+    tomorrow = today + timedelta(days=1)
+    if (local.hour, local.minute) >= PREVIEW_AT:
+        candidates.append((tomorrow, now + timedelta(minutes=2), True))
+    for day, due_at, preview in candidates:
+        for league in POST_DAYS:
+            if not sheet_day(league, day):
+                continue
+            todays = [g for g in games.values() if g.get('league') == league and eastern_date(gates.when(g['kickoff'])) == day]
+            if len(todays) < minimum_games(league, day):
+                continue
+            name = 'college' if league == 'CFB' else 'NFL'
+            if len(todays) == 1:
+                lead = f"📌 {'Tomorrow night' if preview else 'Tonight'}'s {name} projection."
+            else:
+                when = "Tomorrow's " if preview else 'Full '
+                lead = (f"📌 {when}{name} projections for the slate." if league == 'NFL' else
+                        f"📌 {when}{name} projections for the slate.")
+            middle = ("My number next to Vegas, plus the line I like most."
+                      if len(todays) == 1 else "My favorite 4 to 6 priced projections are numbered.")
+            text = lead + f"\n{middle}\n📌 Save this one\n#{league}"
+            return {'key': f'sheet:{league}:{day.isoformat()}', 'kind': 'sheet', 'card': key(league, day), 'text': text,
+                    'due': max(due_at, now + timedelta(minutes=2)), 'stale': at(day, POST_UNTIL)}
     return None
 
 

@@ -13,7 +13,7 @@ may say otherwise.
 
 Three things run it, none of them an AI chat:
 1. **launchd on the owner's Mac Studio** runs `~/.config/keenroudy/run.sh` (copy: `deployment/mac/`): the desk run
-   at 6:45, 8:30 and 11:45 AM, 5:30, 9:00 and 11:30 PM Eastern (plus 2:45 PM Sunday and 6:50 PM Sunday, Monday, Thursday),
+   at 6:45, 8:30 and 11:45 AM, 5:30, 9:00 and 11:30 PM Eastern (plus 7:30 and 2:45 PM Sunday and 6:50 PM Sunday, Monday, Thursday),
    an extra Climb settlement/qualification scan at 10:00 AM, 1:30, 4:00 and 8:00 PM, the pre-post check every 30
    minutes, the Discord mirror every 5 minutes, the heartbeat at 7:15 AM, and the weekly review Tuesday 10:30 AM. The run settles and closes plays, builds the
    board, judges candidates through `scripts/gates.py`, publishes reports to `research/`, pushes, and schedules X

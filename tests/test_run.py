@@ -106,6 +106,23 @@ class SlotTests(unittest.TestCase):
         self.assertEqual(scripts, ['odds_api.py', 'prop_odds.py', 'sharp_odds.py'])
         self.assertEqual(invoke.call_args_list[-1].kwargs['env']['SHARP_REQUESTS'], '15')
 
+    def test_730_pass_refreshes_prices_and_rechecks_early_games(self):
+        now = datetime(2026, 10, 18, 11, 30, tzinfo=timezone.utc)  # 7:30 AM ET
+        slot = now.astimezone(run.EASTERN)
+        games = {
+            'NFL-london': {'id': 'NFL-london', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-10-18T13:30:00Z'},
+            'NFL-noon': {'id': 'NFL-noon', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-10-18T17:00:00Z'},
+        }
+        ctx = SimpleNamespace(first={}, latest={})
+        self.assertEqual(run.official_selection_scope(slot, games, ctx, now), {'NFL-london'})
+        completed = SimpleNamespace(stdout='fresh', stderr='', returncode=0)
+        with mock.patch.object(run.subprocess, 'run', return_value=completed) as invoke:
+            run.capture(slot, python='python-test')
+        scripts = [Path(call.args[0][1]).name for call in invoke.call_args_list]
+        self.assertEqual(scripts, ['odds_api.py', 'prop_odds.py', 'sharp_odds.py'])
+        with mock.patch.dict(os.environ, {'KEENROUDY_SELECTION_0730': '0'}):
+            self.assertEqual(run.official_selection_scope(slot, games, ctx, now), set())
+
     def test_open_climb_leg_does_not_count_as_primetime_coverage(self):
         now = datetime(2026, 10, 11, 22, 50, tzinfo=timezone.utc)
         slot = now.astimezone(run.EASTERN)

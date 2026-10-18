@@ -209,7 +209,7 @@ def capture(slot=None, python=sys.executable):
     """Step 1, continued: price captures when their budget allows. They print why they skip."""
     notes = []
     scripts = ['odds_api.py', 'prop_odds.py']
-    if slot is not None and (slot.hour, slot.minute) in ((8, 30), (17, 30), (18, 50)):
+    if slot is not None and (slot.hour, slot.minute) in ((7, 30), (8, 30), (17, 30), (18, 50)):
         scripts.append('sharp_odds.py')
     for script in scripts:
         env = None
@@ -1899,8 +1899,9 @@ def official_coverage_game_ids(ctx):
 def official_selection_scope(slot, games, ctx, now):
     """Game ids eligible for this run's official selection.
 
-    ``None`` means the ordinary 6:45 game-day board.  The 8:30 and 11:45 runs
-    get the post-capture board for every noon-or-later game that has not
+    ``None`` means the ordinary 6:45 game-day board.  The 7:30 run gives early
+    international games a second fresh-price look before their 8:30 post target.
+    The 8:30 and 11:45 runs get the post-capture board for every noon-or-later game that has not
     started; the 5:30/6:50 runs get the primetime NFL board after fresh prop
     capture.  A game that already has one straight stays eligible because the
     owner allows multiple non-contradictory plays from one game.  Duplicate,
@@ -1909,6 +1910,13 @@ def official_selection_scope(slot, games, ctx, now):
     if slot.hour == 6 and slot.minute == 45:
         return None
     today = eastern_date(now)
+    if (slot.hour, slot.minute) == (7, 30):
+        if os.environ.get('KEENROUDY_SELECTION_0730', '1').strip().lower() in ('0', 'false', 'off', 'no'):
+            return set()
+        return {game['id'] for game in games.values()
+                if game.get('league') in ('NFL', 'CFB') and game.get('state') == 'pre'
+                and eastern_date(gates.when(game['kickoff'])) == today
+                and gates.when(game['kickoff']).astimezone(EASTERN).hour < 12}
     if (slot.hour, slot.minute) in ((8, 30), (11, 45)):
         if os.environ.get('KEENROUDY_SELECTION_0830', '1').strip().lower() in ('0', 'false', 'off', 'no'):
             return set()
@@ -2283,9 +2291,11 @@ def _run(args, now, slot, kinds, status):
     if selection_scope is not None:
         wanted = [candidate for candidate in wanted if candidate['gameIds'][0] in selection_scope]
     if not selection_run:
-        log('owner plan: official plays are admitted only by the 6:45 AM game-day run')
+        log('owner plan: this slot is settlement/research only; selection runs at the game-day and primetime checks')
     elif selection_scope is not None:
-        log(f"primetime recheck after fresh prices: {len(selection_scope)} dark NFL game(s)")
+        label = 'early-game' if (slot.hour, slot.minute) == (7, 30) else \
+            'later game-day' if (slot.hour, slot.minute) in ((8, 30), (11, 45)) else 'primetime'
+        log(f"{label} recheck after fresh prices: {len(selection_scope)} game(s)")
     log(f'{len(wanted)} candidates on the board')
     decided = []          # every decision this run made, for the learning record
     reasons = {}          # the reason each published play's post will give (data/x-reasons.json)

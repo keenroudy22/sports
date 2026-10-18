@@ -468,7 +468,7 @@
     if (vm.limited) return 'Injury or availability still needs a clean check.';
     if (!vm.calibrated || !isNum(vm.chance) || !isNum(vm.needs)) return 'The model leans this way, but this market has not earned a public probability yet.';
     if (!isNum(vm.edge) || vm.edge <= 0) return `I like the direction, not the price: it needs ${pctOne(vm.needs)} and I have it at ${pctOne(vm.chance)}.`;
-    if (!['lean', 'strong'].includes(vm.tier)) return `It is positive value by ${vm.edge.toFixed(1)} points, but it is below the official-play bar.`;
+    if (!['lean', 'strong'].includes(vm.tier)) return `It is positive value by ${vm.edge.toFixed(1)} points, but it still needs a strong verified reason and the final release checks before I call it Full Send.`;
     return 'The price is positive, but the full reason, injury and release checks have not all cleared.';
   };
   const favoriteLook = (rows, gameIds, official = new Set()) => collapse(rows.filter(vm => gameIds.has(vm.gameId)
@@ -934,10 +934,10 @@
         ${stub || extra || orderUp ? `<div class="kt-perf"></div><div class="kt-stubrow"><div class="kt-stubl">${stub}${extra}</div>${orderUp}</div>` : ''}</div></div>
       ${after}${opts.clip ? CHEF : ''}${stampFor(pick.result)}</article>`;
   };
-  const rail = (rows, opts = {}) => `<section class="kt-pass${opts.onPage ? ' on-page' : ''}" aria-label="${esc(opts.label || (rows.length > 1 ? 'Best bets on the rail' : rows.length && C.dayOf(rows[0].kickoff) === etDay() ? 'Today\'s best bet' : 'Best bet'))}"><div class="kt-rail" aria-hidden="true"></div>
+  const rail = (rows, opts = {}) => `<section${opts.id ? ` id="${esc(opts.id)}"` : ''} class="kt-pass${opts.onPage ? ' on-page' : ''}" aria-label="${esc(opts.label || (rows.length > 1 ? 'Best bets on the rail' : rows.length && C.dayOf(rows[0].kickoff) === etDay() ? 'Today\'s best bet' : 'Best bet'))}"><div class="kt-rail" aria-hidden="true"></div>
     <div class="kt-tickets">${rows.map((p, i) => ticket(p, { ...opts, card: p.card || (opts.cards && opts.cards.get(p.id)), clip: i === 0 && !opts.more, strip: i === 0 && !opts.more, compact: (i > 0 || opts.more) && !C.isLadder(p) })).join('')}</div></section>`;
   const HOOK = '<svg class="kt-hook h%" viewBox="0 0 26 22" aria-hidden="true"><path d="M7 0v8M19 0v8" stroke="#8C9892" stroke-width="2"/><rect x="1" y="6" width="24" height="13" rx="2.5" fill="#A3AEA8"/><rect x="3" y="15.5" width="20" height="2" rx="1" fill="#1E2622"/></svg>';
-  const emptyRail = note => `<section class="kt-pass" aria-label="No best bet yet"><div class="kt-rail" aria-hidden="true"></div><div class="kt-hooks" aria-hidden="true">${HOOK.replace('%', '1')}${HOOK.replace('%', '2')}${CHEF}</div></section><p class="kt-blank">${note}</p>`;
+  const emptyRail = (note, id = '') => `<section${id ? ` id="${esc(id)}"` : ''} class="kt-pass" aria-label="No best bet yet"><div class="kt-rail" aria-hidden="true"></div><div class="kt-hooks" aria-hidden="true">${HOOK.replace('%', '1')}${HOOK.replace('%', '2')}${CHEF}</div></section><p class="kt-blank">${note}</p>`;
   const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
   /* The 80/20 Climb stub: the chip carries the real stake; done steps get a check, the current one is outlined, the
      $1,000 flag stays visible. Never a guessed return or a promised step count. */
@@ -947,7 +947,7 @@
     const state = c.open ? `Step ${c.open.step || c.step} is live` : 'Not posted yet';
     const n = c.settled || 0;
     const aside = `${c.last && c.last.result === 'win' && !c.open ? `Step ${c.last.step || c.step - 1} cashed. ` : ''}${c.saved ? `<strong>${money(c.saved)} banked.</strong> ` : ''}${n ? `Net ${signedMoney(c.net)} over ${WORDS[n] || n} step${n === 1 ? '' : 's'}. ` : ''}<a href="#record/climb">See the route ›</a>`;
-    return `<section class="kt-sec kt-climb" aria-labelledby="climb-h"><h2 class="sr" id="climb-h">The 80/20 Climb</h2>
+    return `<section id="today-climb" class="kt-sec kt-climb" aria-labelledby="climb-h"><div class="kt-focus-head"><h2 id="climb-h">Today’s Climb</h2><a href="#record/climb">Full route ›</a></div>
       <a class="kt-stub" href="#record/climb" aria-label="80/20 Climb number ${esc(c.run)}, step ${esc(c.step)}, ${esc(money(c.riding))}. ${esc(state)}.">
       <span class="kt-stub-chip"><span class="kt-pchip"><b>${money(c.riding)}</b></span></span><span class="kt-stub-main"><span class="kt-stub-e">80/20 Climb #${esc(c.run)}</span>
       <span class="kt-stub-k">Step ${esc(c.open ? c.open.step || c.step : c.step)}</span><span class="kt-stub-s">${esc(state)}</span>
@@ -1150,8 +1150,11 @@
     const title = nothingCleared && !rows.length ? (favorite ? 'Here’s what I like most today.' : 'Nothing cleared my bar today.') : ledeTitle(rows, today), first = rows[0];
     const photo = first && first.athleteId && !C.isParlay(first) && HEADSHOT[first.league || String(first.gameId || '').split('-')[0]];
     const size = photo ? ledeSize(title) : null;
+    const climbState = climb && climb.open ? `Step ${climb.open.step || climb.step} live` : climb ? `Step ${climb.step} next` : 'Route';
     return `<section class="kt-lede${photo ? ' with-photo' : ''}"><p class="date">${esc(dateLine(todayISO(), last))}</p><h1${size ? ` style="font-size:${size}px"` : ''}>${esc(title)}</h1>${state.league === 'ALL' ? '' : `<p class="kt-sport-hint">${esc(LEAGUE_NAME[state.league])} only · <a href="#today?sport=ALL">See all sports ›</a></p>`}</section>
-      ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards }) : emptyRail(nothingCleared ? (favorite ? 'No official best bet yet. My strongest current look is below.' : "No best bet today. Tonight's games are below.") : 'Nothing on the rail yet. Check back before kickoff.')}
+      <nav class="kt-today-jumps" aria-label="Today at a glance"><a href="#today-card"><span>Best bets</span><b>${rows.length ? `${rows.length} live` : favorite ? 'Strongest lean' : 'Checking'}</b></a><a href="#today-climb"><span>80/20 Climb</span><b>${esc(climbState)}</b></a></nav>
+      <div class="kt-focus-head"><h2>Today’s best bets</h2><a href="#record">Every result ›</a></div>
+      ${rows.length ? rail(rows.slice(0, 1), { season, lines, cards, id: 'today-card' }) : emptyRail(nothingCleared ? (favorite ? 'No official best bet yet. My strongest current look is below.' : "No best bet today. Tonight's games are below.") : 'Nothing on the rail yet. Check back before kickoff.', 'today-card')}
       ${favorite}${climbStub(climb, past)}${proof}${spotlight}${rows.length > 1 || more.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="bets-h"><h2 class="kt-head" id="bets-h">More best bets</h2>
       ${rail([...more, ...rows.slice(1)], { season, lines, cards, more: true, label: 'More best bets' })}</section>` : ''}${nextSlate}${later.length ? `<section class="kt-sec kt-rest kt-bets" aria-labelledby="upcoming-bets-h"><h2 class="kt-head" id="upcoming-bets-h">Upcoming best bets</h2>
       ${rail(later, { season, lines, cards, more: true, label: 'Upcoming best bets' })}</section>` : ''}`;

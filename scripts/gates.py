@@ -46,7 +46,7 @@ from sports_refresh import eastern_date
 ROOT = Path(__file__).resolve().parents[1]
 EASTERN = ZoneInfo('America/New_York')
 # (hour, minute, weekdays or None for every day); Monday is 0, Sunday is 6. PROMPT.md's table.
-SCHEDULE = ((6, 45, None), (8, 30, None), (11, 45, None), (14, 45, (6,)), (17, 30, None),
+SCHEDULE = ((6, 45, None), (7, 30, (6,)), (8, 30, None), (11, 45, None), (14, 45, (6,)), (17, 30, None),
             (18, 50, (0, 3, 6)), (21, 0, None), (23, 30, None))
 FLAGS = {'QB_GATE': True, 'MARKET_GATE': True}
 # Books available in Indiana; a college pick must quote one of them. Pregame college player props are legal there: the
@@ -947,12 +947,12 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
         return Decision(False, 'plan_selection', 'price is outside the lane band', numbers)
     if league == 'NFL' and market == 'total':
         return Decision(False, 'plan_selection', 'NFL totals are paused as public plays; they remain in shadow', numbers)
-    primetime_side = lane == 'gut_call' and candidate.get('_primetimeFallback') is True
-    if league == 'NFL' and market in ('spread', 'moneyline') and not primetime_side:
+    full_send_side = lane == 'gut_call'
+    if league == 'NFL' and market in ('spread', 'moneyline') and not full_send_side:
         return Decision(False, 'plan_selection', 'NFL sides remain in shadow until 30 forward grades clear the promotion rule', numbers)
-    if league == 'NFL' and market in ('spread', 'moneyline') and primetime_side \
+    if league == 'NFL' and market in ('spread', 'moneyline') and full_send_side \
             and not any(row.get('class') == 'A' or row.get('type') in CLASS_A_REASONS for row in reasons):
-        return Decision(False, 'plan_selection', 'a primetime NFL side needs a strong current reason', numbers)
+        return Decision(False, 'plan_selection', 'an NFL side needs a strong current reason before it can be a Full Send', numbers)
     if league == 'CFB' and market in ('spread', 'moneyline'):
         desk = candidate.get('_desk') or {}
         margin = desk.get('projection')

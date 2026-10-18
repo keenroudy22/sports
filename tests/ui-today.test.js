@@ -145,6 +145,8 @@ test('the first paint and the full card draw the same top, so nothing moves when
 test('Today runs the first screen, then every section visible with no fold; Off the card never hangs on the rail', async () => {
   const { api } = loadApp('#record');
   const page = await api.views.today({ view: 'today' });
+  assert.match(page, /aria-label="Today at a glance"[\s\S]*Best bets[\s\S]*80\/20 Climb/);
+  assert.match(page, /Today’s best bets[\s\S]*Today’s Climb/);
   const at = text => { const i = page.indexOf(text); assert.ok(i >= 0, `missing ${text}`); return i; };
   const order = ['class="kt-lede', 'class="kt-pass"', 'class="kt-sec kt-climb"', 'class="kt-proof"', 'kt-nfl-now"', 'kt-bets"', 'class="kt-sec kt-left"', 'class="kt-sec kt-prep"',
     'kt-upsets"', 'kt-worth"', 'kt-games"', 'kt-off-card"', 'kt-community"', 'kt-sports"'].map(at);
@@ -720,7 +722,7 @@ test('an empty official rail names the strongest current look and the exact reas
   assert.match(favorite, /What I like most/);
   assert.match(favorite, /Strongest current lean · not a best bet/);
   assert.match(favorite, /Closest Look over 42\.5 receiving yards/);
-  assert.match(favorite, /Why it is not an official play:<\/b> It is positive value by 0\.6 points, but it is below the official-play bar\./);
+  assert.match(favorite, /Why it is not an official play:<\/b> It is positive value by 0\.6 points, but it still needs a strong verified reason and the final release checks before I call it Full Send\./);
   assert.doesNotMatch(favorite, /Raw Look/);
   assert.equal((page.match(/Closest Look over 42\.5 receiving yards/g) || []).length, 1, 'the favorite is not repeated in Research worth a look');
 });

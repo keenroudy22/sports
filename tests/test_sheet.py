@@ -1,6 +1,6 @@
 import sys
 import unittest
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
@@ -133,6 +133,13 @@ class PostTests(unittest.TestCase):
         self.assertIsNotNone(thursday)
         few = dict(list(self.GAMES.items())[:3])
         self.assertIsNone(sheet.post(few, early), 'a thin slate gets no sheet')
+
+    def test_the_next_slate_sheet_posts_the_night_before(self):
+        saturday_evening = datetime(2026, 9, 27, 0, 0, tzinfo=timezone.utc)  # Sat 8 PM ET
+        post = sheet.post(self.GAMES, saturday_evening)
+        self.assertEqual(post['key'], 'sheet:NFL:2026-09-27')
+        self.assertEqual(post['due'], saturday_evening + timedelta(minutes=2))
+        self.assertIn("Tomorrow's NFL projections", post['text'])
 
     def test_monday_and_thursday_single_games_render_but_weekend_stays_full_slate(self):
         monday = date(2026, 9, 28)
