@@ -45,6 +45,14 @@ class WindowTests(unittest.TestCase):
         with mock.patch.dict('os.environ', {'KEENROUDY_LATE_PRIMETIME_WINDOW': '0'}):
             self.assertFalse(W.reachable('NFL', kickoff, now))
 
+    def test_1145_recheck_can_admit_a_one_pm_play_to_the_next_free_slot(self):
+        kickoff = '2026-10-18T17:00:00Z'
+        now = datetime(2026, 10, 18, 15, 43, tzinfo=timezone.utc)
+        self.assertEqual(W.delivery_ready(now), datetime(2026, 10, 18, 16, 20, tzinfo=timezone.utc))
+        self.assertTrue(W.reachable('NFL', kickoff, now))
+        self.assertFalse(W.reachable('CFB', kickoff, now))
+        self.assertFalse(W.reachable('NFL', kickoff, now, replacement=True))
+
     def test_international_best_bet_and_ticket_have_the_eight_thirty_window(self):
         p=pick('intl', 'NFL-intl', league='NFL', title='Eagles at Jaguars over 48.5', line=48.5)
         with mock.patch.object(bp.receipts, 'house_posts', return_value=[]):

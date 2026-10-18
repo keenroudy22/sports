@@ -330,7 +330,9 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
         game = games.get((merged.get('gameIds') or [None])[0])
         kickoff = gates.when(starts[0])
         league = merged.get('league') or (game or {}).get('league')
-        normal_reachable = post_windows.reachable(league, kickoff, now, replacement=bool(merged.get('replacementOf')))
+        normal_reachable = post_windows.reachable(
+            league, kickoff, now, replacement=bool(merged.get('replacementOf')),
+            late_admission=not bool(merged.get('publishedAt')))
         late_card_recovery = (not normal_reachable and not merged.get('replacementOf')
                               and bool(merged.get('publishedAt')) and now >= post_windows.target(league, kickoff)
                               and post_windows.late_card_reachable(kickoff, now))
