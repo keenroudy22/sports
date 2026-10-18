@@ -1,0 +1,424 @@
+{
+  "league": "NFL",
+  "publishedAt": "2026-10-18T22:19:29Z",
+  "summary": "Released 1: Packers MONEYLINE -108 at DraftKings.",
+  "takeaways": [],
+  "gamePicks": [
+    {
+      "status": "active",
+      "favorite": false,
+      "modelLean": true,
+      "marketType": "moneyline",
+      "line": 0.0,
+      "direction": "home",
+      "gameIds": [
+        "NFL-401873007"
+      ],
+      "book": "DraftKings",
+      "odds": -108,
+      "projection": 0.6,
+      "edge": "Market-anchored chance 53.3% from the exact two-sided price; 51.9% needed at -108: +1.4 percentage points.",
+      "cutoff": "HOME 0 at -108 or better; off the card at -0.5 or lower, or at -123 or worse at 0.",
+      "modelVersion": "v2.1",
+      "snapshotAt": "2026-10-17T20:18:26Z",
+      "quotedAt": "2026-10-18T22:02:46Z",
+      "quoteType": "capture",
+      "quoteNote": "DraftKings's number and price from the 6:02 PM ET capture across 1 book; DraftKings is the only book with this market so far. DraftKings is the only book with this market; its paired game-day price passed the check.",
+      "expiresAt": "2026-10-18T22:50:00Z",
+      "probabilityAtPublication": {
+        "rawChance": 0.603,
+        "chance": 0.533,
+        "calibrated": true,
+        "calibration": 0.35,
+        "calibrationN": null,
+        "push": 0.0,
+        "breakEven": 0.519,
+        "edgePoints": 1.4,
+        "evPerUnit": 0.027,
+        "snapshotAt": "2026-10-17T20:18:26Z",
+        "evaluatedAt": "2026-10-18T22:07:00Z",
+        "fairChance": 0.496,
+        "anchoredChance": 0.533,
+        "gap": 3.8,
+        "calibrationFamily": "NFL/moneyline"
+      },
+      "title": "Packers MONEYLINE",
+      "id": "NFL-2026-W6-dal-gb-ml-home-0-dk",
+      "confidence": 2,
+      "sources": [
+        "https://www.espn.com/nfl/game/_/gameId/401873007",
+        "https://www.dallascowboys.com/news/updates-october-2026",
+        "https://amp.nfl.com/news/nfl-week-6-injury-report-2026-season"
+      ],
+      "why": "Model lean, our number only. We have the total at 0.6; the book is at 0. That makes the home 53.3%, and -108 needs 51.9%. Checked before publishing: Cowboys linebacker DeMarvion Overshown will not travel to Green Bay and has been ruled out with a hamstring injury. Checked before publishing: Cowboys cornerback Cobie Durant and tackle Drew Shelton are out with hamstring injuries. The market: The spread opened -3 and is +1.5 at DraftKings, a move of 4.5 toward the away. The total opened 51.5 and is 53.5 at DraftKings, 2 toward the over. 6 books span -1.5 to -1 on the spread; the middle is -1.5. 6 books span 52.5 to 53.5 on the total; the middle is 53.5. Our spread is 5 points off, bigger than 85% of our past gaps. Gaps this size went 75-91 against the close in 1132 games. Our total is 1.8 points off, bigger than 50% of our past gaps. Gaps this size went 290-282 against the close in 1134 games.",
+      "risk": "It's our number against the market's, and the closing line usually beats ours, so a gap this big often means we're missing something. ",
+      "reasoning": {
+        "context": [
+          "Cowboys linebacker DeMarvion Overshown will not travel to Green Bay and has been ruled out with a hamstring injury.",
+          "Cowboys cornerback Cobie Durant and tackle Drew Shelton are out with hamstring injuries.",
+          "Jordan Love completed 25-of-31 passes for 367 yards, two touchdowns and no interceptions in Green Bay's 31-7 Week 5 win over Chicago."
+        ],
+        "cautions": [
+          "Packers defensive tackle Javon Hargrave is out with an Achilles injury, and guard Aaron Banks is questionable with knee and toe injuries."
+        ],
+        "directionsChecked": true
+      },
+      "dossier": {
+        "reasons": [
+          {
+            "text": "Cowboys cornerback Cobie Durant and tackle Drew Shelton are out with hamstring injuries.",
+            "numbers": {},
+            "source": "Game box scores or verified report",
+            "time": "2026-10-18T22:07:00Z"
+          },
+          {
+            "text": "Book says 0. I say 0.6.",
+            "numbers": {
+              "projection": 0.6,
+              "line": 0.0
+            },
+            "source": "Kook'n projection",
+            "time": "2026-10-17T20:18:26Z"
+          },
+          {
+            "text": "Cowboys linebacker DeMarvion Overshown will not travel to Green Bay and has been ruled out with a hamstring injury.",
+            "numbers": {},
+            "source": "https://www.dallascowboys.com/news/updates-october-2026",
+            "time": "2026-10-18T22:07:00Z"
+          }
+        ],
+        "risks": [
+          {
+            "text": "Packers defensive tackle Javon Hargrave is out with an Achilles injury, and guard Aaron Banks is questionable with knee and toe injuries.",
+            "numbers": {},
+            "source": "https://amp.nfl.com/news/nfl-week-6-injury-report-2026-season",
+            "time": "2026-10-18T22:07:00Z"
+          },
+          {
+            "text": "Packers defensive tackle Javon Hargrave is out with an Achilles injury, and guard Aaron Banks is questionable with knee and toe injuries.",
+            "numbers": {},
+            "source": "https://amp.nfl.com/news/nfl-week-6-injury-report-2026-season",
+            "time": "2026-10-18T22:07:00Z"
+          }
+        ],
+        "reports": [
+          {
+            "text": "Cowboys linebacker DeMarvion Overshown will not travel to Green Bay and has been ruled out with a hamstring injury.",
+            "numbers": {},
+            "source": "https://www.dallascowboys.com/news/updates-october-2026",
+            "time": "2026-10-18T22:07:00Z"
+          },
+          {
+            "text": "Packers defensive tackle Javon Hargrave is out with an Achilles injury, and guard Aaron Banks is questionable with knee and toe injuries.",
+            "numbers": {},
+            "source": "https://amp.nfl.com/news/nfl-week-6-injury-report-2026-season",
+            "time": "2026-10-18T22:07:00Z"
+          },
+          {
+            "text": "Cowboys cornerback Cobie Durant and tackle Drew Shelton are out with hamstring injuries.",
+            "numbers": {},
+            "source": "https://amp.nfl.com/news/nfl-week-6-injury-report-2026-season",
+            "time": "2026-10-18T22:07:00Z"
+          },
+          {
+            "text": "Cowboys linebacker DeMarvion Overshown will not travel to Green Bay and has been ruled out with a hamstring injury.",
+            "numbers": {},
+            "source": "https://www.dallascowboys.com/news/updates-october-2026",
+            "time": "2026-10-18T22:07:00Z"
+          },
+          {
+            "text": "Packers defensive tackle Javon Hargrave is out with an Achilles injury, and guard Aaron Banks is questionable with knee and toe injuries.",
+            "numbers": {},
+            "source": "https://amp.nfl.com/news/nfl-week-6-injury-report-2026-season",
+            "time": "2026-10-18T22:07:00Z"
+          },
+          {
+            "text": "Cowboys cornerback Cobie Durant and tackle Drew Shelton are out with hamstring injuries.",
+            "numbers": {},
+            "source": "https://amp.nfl.com/news/nfl-week-6-injury-report-2026-season",
+            "time": "2026-10-18T22:07:00Z"
+          },
+          {
+            "text": "Savion Williams (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4431487/savion-williams",
+            "time": "2026-10-18T01:53Z"
+          },
+          {
+            "text": "Jacob Monk (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4428037/jacob-monk",
+            "time": "2026-10-17T04:27Z"
+          },
+          {
+            "text": "Aaron Banks (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4242390/aaron-banks",
+            "time": "2026-10-17T04:24Z"
+          },
+          {
+            "text": "Benjamin St-Juste (GB) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4258206/benjamin-st-juste",
+            "time": "2026-10-17T04:23Z"
+          },
+          {
+            "text": "Brandon Cisse (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/5076652/brandon-cisse",
+            "time": "2026-10-17T02:13Z"
+          },
+          {
+            "text": "Josh Jacobs (GB) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4047365/josh-jacobs",
+            "time": "2026-10-16T19:57Z"
+          },
+          {
+            "text": "Jordon Riley (GB) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4240677/jordon-riley",
+            "time": "2026-10-15T01:53Z"
+          },
+          {
+            "text": "Anthony Campbell (GB) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4887255/anthony-campbell",
+            "time": "2026-10-13T17:10Z"
+          },
+          {
+            "text": "Micah Parsons (GB) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4361423/micah-parsons",
+            "time": "2026-10-12T17:41Z"
+          },
+          {
+            "text": "Joey Porter Jr. (DAL) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4426506/joey-porter-jr",
+            "time": "2026-10-18T11:17Z"
+          },
+          {
+            "text": "DeMarvion Overshown (DAL) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4362088/demarvion-overshown",
+            "time": "2026-10-18T00:03Z"
+          },
+          {
+            "text": "Drew Shelton (DAL) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4685554/drew-shelton",
+            "time": "2026-10-17T04:54Z"
+          },
+          {
+            "text": "Cobie Durant (DAL) is listed Out.",
+            "numbers": {
+              "status": "Out"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4384549/cobie-durant",
+            "time": "2026-10-17T02:39Z"
+          },
+          {
+            "text": "LT Overton (DAL) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4870960/lt-overton",
+            "time": "2026-10-16T21:23Z"
+          },
+          {
+            "text": "Ameer Speed (DAL) is listed Questionable.",
+            "numbers": {
+              "status": "Questionable"
+            },
+            "source": "https://www.espn.com/nfl/player/_/id/4259546/ameer-speed",
+            "time": "2026-10-14T23:05Z"
+          }
+        ],
+        "weather": {
+          "tempF": 57,
+          "windMph": 10,
+          "windDirection": "SSW",
+          "precipProb": 0,
+          "periodStart": "2026-10-18T19:00:00-05:00",
+          "issuedAt": "2026-10-18T18:21:32+00:00",
+          "source": "https://api.weather.gov/gridpoints/GRB/79,32/forecast/hourly"
+        },
+        "line": {
+          "books": {
+            "DraftKings": {
+              "open": null,
+              "firstCaptured": {
+                "line": 2.5,
+                "price": -110,
+                "time": "2026-10-07T00:39:29Z"
+              },
+              "now": {
+                "line": -1.5,
+                "price": -102,
+                "time": "2026-10-18T07:30:54Z"
+              }
+            },
+            "FanDuel": {
+              "open": null,
+              "firstCaptured": {
+                "line": 1.5,
+                "price": -105,
+                "time": "2026-10-07T00:39:29Z"
+              },
+              "now": {
+                "line": -1.5,
+                "price": -104,
+                "time": "2026-10-18T07:30:54Z"
+              }
+            }
+          },
+          "best": {
+            "book": "DraftKings",
+            "line": 0.0,
+            "price": -108,
+            "time": "2026-10-18T22:02:46Z"
+          }
+        },
+        "ours": {
+          "projection": 0.6,
+          "line": 0.0,
+          "market": "moneyline",
+          "text": "Cowboys cornerback Cobie Durant and tackle Drew Shelton are out with hamstring injuries.",
+          "snapshotAt": "2026-10-17T20:18:26Z"
+        },
+        "history": null,
+        "sources": [
+          {
+            "label": "injury",
+            "url": "https://www.dallascowboys.com/news/updates-october-2026",
+            "time": "2026-10-18T22:07:00Z"
+          },
+          {
+            "label": "injury",
+            "url": "https://amp.nfl.com/news/nfl-week-6-injury-report-2026-season",
+            "time": "2026-10-18T22:07:00Z"
+          },
+          {
+            "label": "stats",
+            "url": "https://www.packers.com/news/packers-qb-jordan-love-named-fedex-air-and-ground-player-of-week-5-2026",
+            "time": "2026-10-18T22:07:00Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4431487/savion-williams",
+            "time": "2026-10-18T01:53Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4428037/jacob-monk",
+            "time": "2026-10-17T04:27Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4242390/aaron-banks",
+            "time": "2026-10-17T04:24Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4258206/benjamin-st-juste",
+            "time": "2026-10-17T04:23Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/5076652/brandon-cisse",
+            "time": "2026-10-17T02:13Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4047365/josh-jacobs",
+            "time": "2026-10-16T19:57Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4240677/jordon-riley",
+            "time": "2026-10-15T01:53Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4887255/anthony-campbell",
+            "time": "2026-10-13T17:10Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4361423/micah-parsons",
+            "time": "2026-10-12T17:41Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4426506/joey-porter-jr",
+            "time": "2026-10-18T11:17Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4362088/demarvion-overshown",
+            "time": "2026-10-18T00:03Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4685554/drew-shelton",
+            "time": "2026-10-17T04:54Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4384549/cobie-durant",
+            "time": "2026-10-17T02:39Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4870960/lt-overton",
+            "time": "2026-10-16T21:23Z"
+          },
+          {
+            "label": "ESPN injury report",
+            "url": "https://www.espn.com/nfl/player/_/id/4259546/ameer-speed",
+            "time": "2026-10-14T23:05Z"
+          },
+          {
+            "label": "National Weather Service",
+            "url": "https://api.weather.gov/gridpoints/GRB/79,32/forecast/hourly",
+            "time": "2026-10-18T18:21:32+00:00"
+          },
+          {
+            "label": "Published source",
+            "url": "https://www.espn.com/nfl/game/_/gameId/401873007",
+            "time": "2026-10-18T22:07:00Z"
+          }
+        ],
+        "partial": false
+      },
+      "lane": "gut_call",
+      "riskUnits": 0.5,
+      "publishedAt": "2026-10-18T22:19:29Z"
+    }
+  ]
+}
