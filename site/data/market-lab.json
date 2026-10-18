@@ -3,7 +3,7 @@
   "MLB": {
    "gamesGraded": 29,
    "gamesQuoted": 31,
-   "moneylineSnapshots": 125,
+   "moneylineSnapshots": 126,
    "seasons": [
     {
      "gamesGraded": 13,
@@ -18,12 +18,12 @@
      "season": 2026
     }
    ],
-   "snapshots": 125,
+   "snapshots": 126,
    "status": "capturing",
-   "totalSnapshots": 125
+   "totalSnapshots": 126
   },
   "NHL": {
-   "gamesGraded": 127,
+   "gamesGraded": 128,
    "gamesQuoted": 132,
    "moneylineSnapshots": 525,
    "seasons": [
@@ -34,7 +34,7 @@
      "season": 2027
     },
     {
-     "gamesGraded": 88,
+     "gamesGraded": 89,
      "gamesQuoted": 91,
      "phase": "regular",
      "season": 2027
@@ -46,6 +46,32 @@
   }
  },
  "recentResults": [
+  {
+   "away": {
+    "abbreviation": "BOS",
+    "id": "1",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/bos.png",
+    "name": "Boston Bruins",
+    "shortName": "Bruins"
+   },
+   "awayScore": 4,
+   "gameId": "NHL-401892530",
+   "gradedAt": "2026-10-18T03:55:03Z",
+   "home": {
+    "abbreviation": "LA",
+    "id": "8",
+    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/la.png",
+    "name": "Los Angeles Kings",
+    "shortName": "Kings"
+   },
+   "homeScore": 1,
+   "kickoff": "2026-10-18T01:00:00Z",
+   "league": "NHL",
+   "season": 2027,
+   "seasonType": "regular-season",
+   "statusDetail": "Final",
+   "type": "grade"
+  },
   {
    "away": {
     "abbreviation": "TB",
@@ -2619,33 +2645,7 @@
    "seasonType": "regular-season",
    "statusDetail": "Final",
    "type": "grade"
-  },
-  {
-   "away": {
-    "abbreviation": "NSH",
-    "id": "27",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/nsh.png",
-    "name": "Nashville Predators",
-    "shortName": "Predators"
-   },
-   "awayScore": 4,
-   "gameId": "NHL-401892449",
-   "gradedAt": "2026-10-07T03:30:04Z",
-   "home": {
-    "abbreviation": "TOR",
-    "id": "21",
-    "logo": "https://a.espncdn.com/i/teamlogos/nhl/500/scoreboard/tor.png",
-    "name": "Toronto Maple Leafs",
-    "shortName": "Maple Leafs"
-   },
-   "homeScore": 5,
-   "kickoff": "2026-10-06T23:00:00Z",
-   "league": "NHL",
-   "season": 2027,
-   "seasonType": "regular-season",
-   "statusDetail": "Final/OT",
-   "type": "grade"
   }
  ],
- "updatedAt": "2026-10-18T03:52:06Z"
+ "updatedAt": "2026-10-18T03:57:02Z"
 }
