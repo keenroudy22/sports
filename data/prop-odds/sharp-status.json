@@ -1,10 +1,10 @@
 {
- "at": "2026-10-18T04:09:15Z",
+ "at": "2026-10-18T04:17:32Z",
  "confirmed": {
-  "NFL-401872996": "2026-10-18T04:09:15Z",
-  "NFL-401872997": "2026-10-18T04:09:15Z",
-  "NFL-401872998": "2026-10-18T04:09:15Z",
-  "NFL-401872999": "2026-10-18T04:09:15Z",
+  "NFL-401872996": "2026-10-18T04:17:32Z",
+  "NFL-401872997": "2026-10-18T04:17:32Z",
+  "NFL-401872998": "2026-10-18T04:17:32Z",
+  "NFL-401872999": "2026-10-18T04:17:32Z",
   "NFL-401873000": "2026-10-18T03:52:50Z",
   "NFL-401873001": "2026-10-18T03:52:50Z",
   "NFL-401873002": "2026-10-18T03:00:02Z",
@@ -14,19 +14,19 @@
  "leagues": {
   "NFL": {
    "books": {
-    "draftkings": 2010,
-    "fanduel": 549
+    "draftkings": 1710,
+    "fanduel": 920
    },
    "eventsListed": 28,
    "eventsMatched": 13,
    "games": 13,
    "marketTypes": {
     "player_assists": 80,
-    "player_extra_points_made": 12,
+    "player_extra_points_made": 16,
     "player_fantasy_score": 52,
-    "player_field_goals_made": 12,
+    "player_field_goals_made": 16,
     "player_interceptions": 16,
-    "player_kicking_points": 12,
+    "player_kicking_points": 16,
     "player_longest_passing_completion": 16,
     "player_longest_reception": 82,
     "player_longest_rush": 28,
@@ -34,18 +34,18 @@
     "player_passing_attempts": 16,
     "player_passing_completions": 16,
     "player_passing_touchdowns": 43,
-    "player_passing_yards": 286,
-    "player_receiving_yards": 840,
-    "player_receptions": 419,
-    "player_rushing_+_receiving_yards": 24,
-    "player_rushing_attempts": 30,
-    "player_rushing_yards": 338,
-    "player_sacks": 61,
-    "player_tackles": 80,
-    "player_tackles_+_assists": 80
+    "player_passing_yards": 267,
+    "player_receiving_yards": 849,
+    "player_receptions": 506,
+    "player_rushing_+_receiving_yards": 28,
+    "player_rushing_attempts": 22,
+    "player_rushing_yards": 340,
+    "player_sacks": 77,
+    "player_tackles": 64,
+    "player_tackles_+_assists": 64
    },
    "requestsLeft": 0,
-   "rows": 2559,
+   "rows": 2630,
    "slateGames": [
     "Houston Texans at Jacksonville Jaguars 2026-10-18T13:30Z",
     "Baltimore Ravens at Cleveland Browns 2026-10-18T17:00Z",
@@ -75,7 +75,7 @@
        "outright"
       ]
      },
-     "start": "2026-10-18T04:06:00Z",
+     "start": "2026-10-18T04:14:00Z",
      "type": "outright"
     },
     {
@@ -106,6 +106,7 @@
       "markets": [
        "1st_half_point_spread",
        "1st_half_team_total",
+       "draw_no_bet",
        "moneyline",
        "player_touchdowns",
        "point_spread",
@@ -143,6 +144,7 @@
       "away_team": "Pittsburgh Steelers",
       "home_team": "New Orleans Saints",
       "markets": [
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -175,6 +177,7 @@
       "away_team": "San Francisco 49ers",
       "home_team": "Atlanta Falcons",
       "markets": [
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -210,6 +213,7 @@
       "away_team": "Cincinnati Bengals",
       "home_team": "Baltimore Ravens",
       "markets": [
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -246,6 +250,7 @@
       "away_team": "Cleveland Browns",
       "home_team": "Tennessee Titans",
       "markets": [
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -282,6 +287,7 @@
       "away_team": "Tampa Bay Buccaneers",
       "home_team": "Carolina Panthers",
       "markets": [
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -318,6 +324,7 @@
       "away_team": "Indianapolis Colts",
       "home_team": "Minnesota Vikings",
       "markets": [
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -354,6 +361,7 @@
       "away_team": "Miami Dolphins",
       "home_team": "New York Jets",
       "markets": [
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -389,6 +397,7 @@
       "away_team": "New York Giants",
       "home_team": "Houston Texans",
       "markets": [
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -421,6 +430,7 @@
       "away_team": "Denver Broncos",
       "home_team": "Arizona Cardinals",
       "markets": [
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "total_points"
@@ -452,6 +462,7 @@
       "away_team": "Green Bay Packers",
       "home_team": "Detroit Lions",
       "markets": [
+       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
