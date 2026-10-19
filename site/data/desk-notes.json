@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "selectedAt": "2026-10-19T20:28:09Z",
+  "selectedAt": "2026-10-19T21:30:06Z",
   "mode": "local",
   "rows": [
     {
@@ -9,18 +9,33 @@
       "kickoff": "2026-10-20T00:15:00Z",
       "matchup": "WSH at SF",
       "href": "#game/NFL-401873008",
+      "kind": "usage",
+      "label": "Red-zone work",
+      "player": "Christian McCaffrey",
+      "title": "Christian McCaffrey",
+      "text": "17 red-zone carries + targets; 9 inside the 10 across 5 observed team games this season. Not a TD prediction.",
+      "observedAt": "2026-10-19T20:33:03Z",
+      "expiresAt": "2026-10-20T00:15:00Z",
+      "id": "E0"
+    },
+    {
+      "gameId": "CFB-401871055",
+      "league": "CFB",
+      "kickoff": "2026-10-20T23:00:00Z",
+      "matchup": "MTSU at FIU",
+      "href": "#game/CFB-401871055",
       "kind": "trend",
       "label": "Season trend",
-      "player": "Jayden Daniels",
-      "stat": "cmp",
-      "title": "Jayden Daniels \u00b7 Under 19.5 completions",
-      "text": "9/10 recorded games this season. DraftKings -133 captured; history, not a prediction.",
-      "observedAt": "2026-10-19T18:52:13Z",
-      "expiresAt": "2026-10-19T22:52:13Z",
-      "rate": 0.9,
-      "sample": 10,
-      "price": -133,
-      "id": "E0"
+      "player": "JJ Kohl",
+      "stat": "passYds",
+      "title": "JJ Kohl \u00b7 Over 257.5 passing yards",
+      "text": "4/5 recorded games this season. FanDuel -114 captured; history, not a prediction.",
+      "observedAt": "2026-10-19T20:33:42Z",
+      "expiresAt": "2026-10-20T00:33:42Z",
+      "rate": 0.8,
+      "sample": 5,
+      "price": -114,
+      "id": "E2"
     },
     {
       "gameId": "NBA-401909088",
@@ -31,10 +46,10 @@
       "matchup": "BOS at DET",
       "title": "BOS at DET",
       "text": "Tue 3:00 PM ET \u00b7 Scores and schedule.",
-      "observedAt": "2026-10-19T18:51:20Z",
-      "expiresAt": "2026-10-19T22:51:20Z",
+      "observedAt": "2026-10-19T21:15:05Z",
+      "expiresAt": "2026-10-20T01:15:05Z",
       "href": "#scores/NBA",
-      "id": "E8"
+      "id": "E6"
     }
   ]
 }
