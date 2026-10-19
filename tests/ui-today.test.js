@@ -794,9 +794,10 @@ test('an owner community ticket is unmistakably personal and separate from best 
     kind: 'parlays', parlayType: 'community', riskUnits: 0.25, odds: 9023, book: 'FanDuel',
     displayTitle: '7-leg boosted Fun Lotto', legs: ['Seattle -2.5', 'AJ Barner anytime touchdown'] };
   const page = await loadApp('#record', {}, { today: { ...TODAY, picks: [...TODAY.picks, personal] } }).api.views.today({ view: 'today' });
-  assert.match(page, /Personal Fun Lotto · 0\.25u/);
+  assert.match(page, /Personal fun ticket/);
+  assert.doesNotMatch(page, /Personal Fun Lotto · 0\.25u/);
   assert.match(page, /The chef's own ticket · just for fun · not a Kook'n best bet/);
-  assert.doesNotMatch(page.slice(page.indexOf('Personal Fun Lotto')), /Hot Plate \(POTD\)/);
+  assert.doesNotMatch(page.slice(page.indexOf('Personal fun ticket')), /Hot Plate \(POTD\)/);
 });
 
 
