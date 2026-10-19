@@ -1,6 +1,17 @@
 # October 5 product implementation tracker
 
-## October19 — owner-approved1u Best Bets /2u Chef's Picks (in progress)
+## October19 — owner-approved1u Best Bets /2u Chef's Picks (source live; delivery receipts pending)
+
+Source `03dece1d` passed normal and clean-export suites:1498 Python (two skips),253 Node; all build,
+budget, record107, NBA0, publication, SVG/assets and isolated16:27 checks passed. Hosted39319515275 succeeded.
+Live375/1440 verify the new tier explanation without overflow/load errors; Kittle detail correctly retains
+its posted0.5u stake. The107 earlier outcomes/stakes are unchanged. Discord start-here tier notice posted
+4:36PM ET, pinned4:38PM. Fresh normal selection admitted Christian McCaffrey under14.5 carries -104
+DraftKings, projection12.7, **1u Best Bet**, not Chef's Pick. Discord delivery observed20:39:20Z; X Buffer
+6ad680006bdc031c4ce39b1a due20:47:55Z. Separate policy announcement Buffer6ad6801cfa946662466a9cc5
+due21:07:55Z. Normal mirror must confirm actual sent receipts; no queued post is called complete.
+Live proof: `/tmp/kookn-tiers-live-phone.png`, `/tmp/kookn-tiers-live-desktop.png`; Discord
+`/tmp/kookn-tier-discord-posted.png`. O-TIERS remains ready until the final receipts and CMC live page are verified.
 
 Owner explicitly approves prospective ordinary Best Bets at1u and rarer Chef's Picks at2u. The former strict
 four-point fair-market gap plus observed-spot check now selects Chef's Pick; a reason-backed positive-value
