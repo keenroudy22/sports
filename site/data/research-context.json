@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-19T21:40:26Z",
+  "updatedAt": "2026-10-19T22:02:18Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,8 +702,17 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-19T21:24Z",
+              "reportedAt": "2026-10-19T21:56Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
+            },
+            {
+              "id": "4385690",
+              "name": "Dalton Kincaid",
+              "position": "TE",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-19T21:50Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4385690/dalton-kincaid"
             },
             {
               "id": "3915487",
@@ -767,15 +776,6 @@
               "injury": null,
               "reportedAt": "2026-10-19T07:39Z",
               "source": "https://www.espn.com/nfl/player/_/id/4379399/james-cook-iii"
-            },
-            {
-              "id": "4385690",
-              "name": "Dalton Kincaid",
-              "position": "TE",
-              "status": "Questionable",
-              "injury": "Ribs",
-              "reportedAt": "2026-10-18T22:39Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4385690/dalton-kincaid"
             },
             {
               "id": "3116733",
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-19T21:24Z",
+              "reportedAt": "2026-10-19T21:45Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2537,6 +2537,15 @@
           "name": "Green Bay Packers",
           "players": [
             {
+              "id": "4047365",
+              "name": "Josh Jacobs",
+              "position": "RB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-19T21:32Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4047365/josh-jacobs"
+            },
+            {
               "id": "4361423",
               "name": "Micah Parsons",
               "position": "DE",
@@ -2544,15 +2553,6 @@
               "injury": "Knee - ACL",
               "reportedAt": "2026-10-19T21:14Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361423/micah-parsons"
-            },
-            {
-              "id": "4047365",
-              "name": "Josh Jacobs",
-              "position": "RB",
-              "status": "Out",
-              "injury": "Personal",
-              "reportedAt": "2026-10-19T20:58Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4047365/josh-jacobs"
             },
             {
               "id": "4258206",
@@ -4147,6 +4147,15 @@
           "name": "Los Angeles Rams",
           "players": [
             {
+              "id": "3122132",
+              "name": "Myles Garrett",
+              "position": "DE",
+              "status": "Injured Reserve",
+              "injury": "Knee",
+              "reportedAt": "2026-10-19T21:45Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3122132/myles-garrett"
+            },
+            {
               "id": "16800",
               "name": "Davante Adams",
               "position": "WR",
@@ -4334,15 +4343,6 @@
               "injury": "Suspension",
               "reportedAt": "2026-10-15T01:36Z",
               "source": "https://www.espn.com/nfl/player/_/id/4036135/alaric-jackson"
-            },
-            {
-              "id": "3122132",
-              "name": "Myles Garrett",
-              "position": "DE",
-              "status": "Injured Reserve",
-              "injury": "Knee",
-              "reportedAt": "2026-10-14T01:14Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3122132/myles-garrett"
             },
             {
               "id": "4833029",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Out",
               "injury": "Calf",
-              "reportedAt": "2026-10-19T21:24Z",
+              "reportedAt": "2026-10-19T21:56Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7367,22 +7367,6 @@
       "changes": [
         {
           "teamId": "13",
-          "name": "Tristin McCollum",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-19T17:02:27Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4250393/tristin-mccollum"
-        },
-        {
-          "teamId": "13",
-          "name": "Cian Slone",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-19T17:02:27Z",
-          "source": "https://www.espn.com/nfl/player/_/id/5153665/cian-slone"
-        },
-        {
-          "teamId": "13",
           "name": "Bryce Cabeldue",
           "from": "Out",
           "to": "Active",
@@ -7764,11 +7748,27 @@
           "to": "Out",
           "observedAt": "2026-10-19T21:15:10Z",
           "source": "https://www.espn.com/nfl/player/_/id/16800/davante-adams"
+        },
+        {
+          "teamId": "2",
+          "name": "Dalton Kincaid",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-19T22:02:18Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4385690/dalton-kincaid"
+        },
+        {
+          "teamId": "9",
+          "name": "Josh Jacobs",
+          "from": "Out",
+          "to": "Active",
+          "observedAt": "2026-10-19T22:02:18Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4047365/josh-jacobs"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-19T21:40:26Z",
-      "lastAttemptAt": "2026-10-19T21:40:26Z",
+      "checkedAt": "2026-10-19T22:02:18Z",
+      "lastAttemptAt": "2026-10-19T22:02:18Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-19T21:40:26Z",
-      "lastAttemptAt": "2026-10-19T21:40:26Z",
+      "checkedAt": "2026-10-19T22:02:18Z",
+      "lastAttemptAt": "2026-10-19T22:02:18Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
