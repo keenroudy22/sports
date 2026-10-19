@@ -125,7 +125,9 @@ class NBAPlayerPropTests(unittest.TestCase):
     def test_stale_availability_holds_without_hiding_prices(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);b=self.write(root)
-            q=n.build(NOW+timedelta(hours=2),root,b)['rows'][0]
+            self.assertTrue(n.build(NOW+timedelta(hours=2),root,b)['rows'][0]['projection'])
+            boxscores.write_json(root/'injuries-current.json',{'retrievedAt':boxscores.stamp(NOW-timedelta(hours=5)),'rows':[]})
+            q=n.build(NOW,root,b)['rows'][0]
             self.assertIsNone(q['projection']);self.assertIn('Availability',q['hold'])
     def test_capture_has_free_bounded_book_fairness_and_append_only_store(self):
         g,r,rows,_=fixture();calls=[];waits=[]

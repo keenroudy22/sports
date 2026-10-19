@@ -211,7 +211,9 @@ Handy commands (from `~/Projects/sports`):
   credits or paid access. This narrowly supersedes older ESPN-only/zero-NBA-prop-request rules. Verified current
   ESPN rosters join names to player IDs; ambiguous identities, injuries, stale availability and thin/changed roles
   hold projections. Initial minutes × own per-minute baselines and exact-line recorded hit counts are research,
-  not calibrated win probabilities or official Best Bets. Keep prior seasons explicit, no invented opponent
+  not calibrated win probabilities or official Best Bets. Research uses the existing four-hour freshness window
+  with the availability check time visible; official NBA Trial keeps its independent sixty-minute injury gate.
+  Keep prior seasons explicit, no invented opponent
   adjustments or injury redistribution. Freeze forecasts and grade forward separately before promoting props.
   Morning captures at6:45 and8:30 supplement existing NBA slots. One player research card targets9:15AM
   after the8:30 refresh; never freeze tomorrow's post on tonight's price. This adds one NBA prop research post to

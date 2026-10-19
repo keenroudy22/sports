@@ -144,7 +144,7 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
         r.pop('why',None);r.pop('caution',None)
         for key in ('last5','seasonHistory'):
             if key in r:r[key].pop('values',None)
-    player_props['note']+=' Minutes × own scoring rate, not opponent-adjusted. Teammate absences are not redistributed.'
+    player_props['note']+=' Minutes × own per-minute rate, not opponent-adjusted. Teammate absences are not redistributed.'
     return {'league':'NBA','generatedAt':boxscores.stamp(now),'season':season,'playerProps':player_props,
             'heading':'Opening night · October 20' if nba_capture.sports_refresh.eastern_date(now).isoformat() < '2026-10-20' else 'NBA Today',
             'sourceAt':slate.get('retrievedAt'),'scheduleFresh':fresh(slate.get('retrievedAt'),now,24),

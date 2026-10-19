@@ -242,7 +242,10 @@ def build(now, root=STORE, boxes=None, limit=60):
         p=[p for p in own.get('players',[]) if p['id']==q['athleteId']]
         reason=None
         if not fresh(slate.get('retrievedAt'),now,24):reason='Schedule update needed'
-        elif not fresh(injury.get('retrievedAt'),now,1):reason='Availability update needed'
+        # This read-only baseline uses the established four-hour research
+        # freshness window. The separate official NBA Trial keeps its 60-minute
+        # availability gate; research does not change admission or publish odds.
+        elif not fresh(injury.get('retrievedAt'),now,4):reason='Availability update needed'
         elif q['athleteId'] in holds:reason=f"Availability: {holds[q['athleteId']]}"
         elif (not fresh(own.get('retrievedAt'),now,24) or own.get('season')!=q['season']
               or len(p)!=1 or not p[0]['active']
@@ -280,6 +283,7 @@ def build(now, root=STORE, boxes=None, limit=60):
     # for the lazy page payload rather than silently claiming full feed coverage.
     held={r['athleteId']:r['hold'] for r in out if r.get('hold')}
     return {'rows':out[:limit] if limit is not None else out,'availableRows':len(out),
+            'availabilityAt':injury.get('retrievedAt'),
             'holds':[{'name':next(r['name'] for r in out if r['athleteId']==a),'reason':reason} for a,reason in held.items()],
             'note':'Research baselines, not NBA Best Bets. Up to 60 fresh comparisons, favorites first. Hit rates are at this exact line in the labeled recorded sample; they are not forecast probabilities.'}
 

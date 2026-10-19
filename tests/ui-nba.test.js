@@ -17,9 +17,9 @@ test('NBA team trends and frozen research cards are visible with season labels a
 test('NBA prop view shows numeric projection, exact-line samples and holds without fabricated probability',async()=>{
  const s=load(),api=s.module.exports;const stamp=new Date().toISOString(),kickoff=new Date(Date.now()+3600000).toISOString();
  const row={name:'Real <player>',teamName:'Detroit Pistons',kickoff,sourceAt:stamp,statName:'points',line:19.5,over:-110,under:-115,book:'DraftKings',side:'over',gap:4.5,favorite:true,projection:{value:24,minutes:30,season:2026,window:'Last season',sample:10,low:15,high:30},last5:{hits:4,games:5},last10:{hits:8,games:10},seasonHistory:{hits:18,games:25},why:'30 minutes × own rate',caution:'Not opponent-adjusted.'};
- const data={games:[],scheduleFresh:true,trial:{note:'Separate NBA Trial'},playerProps:{rows:[row,{...row,name:'Held player',projection:null,hold:'Availability: Out'}],holds:[{name:'Held player',reason:'Availability: Out'}]}};
+ const data={games:[],scheduleFresh:true,trial:{note:'Separate NBA Trial'},playerProps:{availabilityAt:stamp,rows:[row,{...row,name:'Held player',projection:null,hold:'Availability: Out'}],holds:[{name:'Held player',reason:'Availability: Out'}]}};
  const ctx=api.gamesContext({get:async()=>data});ctx.state.league='NBA';const views=s.KRGames(ctx);views.gamesLive=async()=>'';
- let html=await views.nbaToday();for(const text of ['Player projections vs lines','My projection: 24','19.5','8/10','18/25','Last season','Availability: Out','FAVORITE PROP'])assert.ok(html.includes(text),text);
+ let html=await views.nbaToday();for(const text of ['Player projections vs lines','My projection: 24','19.5','8/10','18/25','Last season','Availability: Out','FAVORITE PROP','Player availability checked'])assert.ok(html.includes(text),text);
  assert.ok(html.includes('Real &lt;player&gt;'));assert.ok(!html.includes('Real <player>'));
  data.playerProps.rows=[{...row,sourceAt:new Date(Date.now()-18000000).toISOString()}];html=await views.nbaToday();assert.ok(!html.includes('My projection: 24'));assert.ok(html.includes('Stale prices are hidden'));
 });
