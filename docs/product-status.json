@@ -3,6 +3,15 @@
   "updatedAt": "2026-10-18T14:30:00+00:00",
   "items": [
     {
+      "id": "O-20261019-QBNEWS",
+      "title": "Exclude injured backup quarterbacks from starter-news holds",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Pass release gates, then re-screen MNF at fresh prices and verify any qualifying Discord/X/site release.",
+      "doneWhen": "Mariota OUT cannot hold Daniels-team or opponent lines; true starter injury holds remain; hosted and live checks pass; MNF has a released play or exact candidate refusals.",
+      "evidence": "Oct19 morning log held White under and SF spread for a starting-QB absence, while current starter IDs identify active Daniels and Purdy. Regression reproduces Mariota backup falsely entering relevant_facts."
+    },
+    {
       "id": "O-20261019-ALT",
       "title": "Priced alternates beside projections and explained review holds",
       "status": "shipped",

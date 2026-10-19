@@ -767,6 +767,21 @@ class JudgeTests(unittest.TestCase):
         self.assertEqual(len(run.relevant_facts(total, three, ctx)), 3, 'a side missing three skill players matters to a total')
         self.assertEqual(run.relevant_facts(total, three[:2], ctx), [])
 
+    def test_mnf_mariota_out_does_not_block_active_daniels_team(self):
+        ctx = SimpleNamespace(starters={'NFL-28': '4426348', 'NFL-25': '4361741'})
+        backup = {'id': 'injury-28-2576980', 'kind': 'injury', 'team': '28',
+                  'position': 'QB', 'status': 'Out', 'claim': 'Marcus Mariota is out with a knee injury'}
+        for candidate in [
+            {'marketType': 'spread', 'direction': 'home', '_league': 'NFL'},
+            {'marketType': 'total', 'direction': 'under', '_league': 'NFL'},
+            {'athleteId': '4697815', '_team': '28', 'market': 'rushYds', 'direction': 'under', '_league': 'NFL'}]:
+            self.assertEqual(run.relevant_facts(candidate, [backup], ctx), [])
+        starter = {**backup, 'id': 'injury-28-4426348', 'claim': 'Jayden Daniels is out'}
+        self.assertEqual(run.relevant_facts({'marketType': 'total', '_league': 'NFL'}, [starter], ctx), [starter])
+        self.assertEqual(run.relevant_facts({'marketType': 'total', '_league': 'NFL'}, [backup],
+                                           SimpleNamespace(starters={})), [backup],
+                         'unknown starter evidence stays cautious rather than guessing a backup')
+
     def test_no_relevant_fact_no_hold_and_a_hold_names_a_fact(self):
         from unittest import mock
         self.assertIsNone(run.judge({'title': 't'}, [], True))

@@ -1347,7 +1347,8 @@ def relevant_facts(candidate, facts, ctx):
         if athlete and player == athlete:
             out.append(fact)
         elif fact.get('position') == 'QB' and (total or fact.get('team') == team) \
-                and (ctx.starters.get(gates.team_key(league, fact.get('team'))) == player or status in gates.QB_OUT):
+                and (ctx.starters.get(gates.team_key(league, fact.get('team'))) == player
+                     or (not ctx.starters.get(gates.team_key(league, fact.get('team'))) and status in gates.QB_OUT)):
             out.append(fact)
         elif total and fact.get('position') in SKILL and status in SKILL_OUT:
             skill[fact.get('team')].append(fact)
