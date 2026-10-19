@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026-10-19T20:45:21Z",
+  "updatedAt": "2026-10-19T20:54:24Z",
   "status": "ok",
   "coverage": "Observed NFL/CFB player markets from saved research and dated public references. Not an exhaustive sportsbook menu. Rebuilding does not refresh quote times or create recommendations.",
   "freshnessPolicy": "Direct observed prices expire after at most 60 minutes or a sooner supplied expiry; all article/comparison prices require independent sportsbook recheck.",
   "counts": {
-    "lines": 142,
+    "lines": 143,
     "current": 0,
-    "references": 1
+    "references": 2
   },
   "lines": [
     {
@@ -7947,6 +7947,69 @@
           "source": "https://www.espn.com/nfl/game/_/gameId/401873008",
           "marketWindow": "Full game",
           "cutoff": "OVER 5.5 at +102 or better; off the card at 6+, or at -113 or worse at 5.5.",
+          "quoteType": "source reference"
+        }
+      ]
+    },
+    {
+      "league": "NFL",
+      "gameId": "NFL-401873008",
+      "player": "Christian McCaffrey",
+      "athleteId": "3117251",
+      "position": "RB",
+      "reportId": "NFL-2026-W6-mccaffrey-under-14-5-car-dk",
+      "identityVerified": true,
+      "direction": "UNDER",
+      "line": 14.5,
+      "market": "rushing attempts",
+      "book": "DraftKings",
+      "odds": -104,
+      "observedAt": "2026-10-19T18:52:13Z",
+      "expiresAt": "2026-10-19T21:30:00Z",
+      "source": "https://www.espn.com/nfl/game/_/gameId/401873008",
+      "marketWindow": "Full game",
+      "cutoff": "UNDER 14.5 at -104 or better; off the card at 14 or lower, or at -119 or worse at 14.5.",
+      "quoteType": "source reference",
+      "checkedAt": "2026-10-19T18:52:13Z",
+      "kickoff": "2026-10-20T00:15Z",
+      "status": "reference",
+      "quoteStatus": "reference",
+      "reason": "Public article or comparison quote; verify the exact market in your sportsbook.",
+      "builderEligible": false,
+      "title": "Christian McCaffrey UNDER 14.5 rushing attempts",
+      "id": "line-65f2337174defb9041ae",
+      "observations": [
+        {
+          "line": 14.5,
+          "odds": -104,
+          "observedAt": "2026-10-19T18:52:13Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401873008",
+          "quoteType": "source reference",
+          "sourceDate": null,
+          "sourcePart": null,
+          "sourceTimeNote": null
+        }
+      ],
+      "observationCount": 1,
+      "originalRecommendations": [
+        {
+          "league": "NFL",
+          "gameId": "NFL-401873008",
+          "player": "Christian McCaffrey",
+          "athleteId": "3117251",
+          "position": "RB",
+          "reportId": "NFL-2026-W6-mccaffrey-under-14-5-car-dk",
+          "identityVerified": true,
+          "direction": "UNDER",
+          "line": 14.5,
+          "market": "rushing attempts",
+          "book": "DraftKings",
+          "odds": -104,
+          "observedAt": "2026-10-19T18:52:13Z",
+          "expiresAt": "2026-10-19T21:30:00Z",
+          "source": "https://www.espn.com/nfl/game/_/gameId/401873008",
+          "marketWindow": "Full game",
+          "cutoff": "UNDER 14.5 at -104 or better; off the card at 14 or lower, or at -119 or worse at 14.5.",
           "quoteType": "source reference"
         }
       ]
