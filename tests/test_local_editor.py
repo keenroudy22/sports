@@ -123,7 +123,9 @@ class EditorTests(unittest.TestCase):
         self.assertTrue(run.allowed('site/data/desk-notes.json'))
         self.assertTrue('site/data/desk-notes.json'.startswith(run.LEFTOVER))
         source = Path(run.__file__).read_text()
-        self.assertLess(source.index('buffer_posts(now, ctx'), source.index('homepage_editor(now, status, enabled=use_llm)'))
+        # Match the call, not its argument spelling or the later def. Live
+        # scheduling intentionally uses a post-capture clock, not run start.
+        self.assertLess(source.index('        buffer_posts('), source.index('homepage_editor(now, status, enabled=use_llm)'))
 
     def test_sports_request_keeps_warm_without_changing_shared_server_settings(self):
         def transport(url, body, headers, timeout):

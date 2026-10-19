@@ -145,6 +145,15 @@ class NBAPlayerPropTests(unittest.TestCase):
             self.assertEqual(boxscores.verify(root/'player-quotes'),[])
     def test_no_key_is_no_request(self):
         self.assertEqual(n.capture(NOW,key='')['requests'],0)
+    def test_new_capture_cannot_be_read_with_run_start_time(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);b=self.write(root)
+            self.assertEqual(n.build(NOW-timedelta(seconds=1),root,b)['rows'],[])
+            self.assertTrue(n.build(NOW,root,b)['rows'][0]['projection'])
+        import run
+        source=Path(run.__file__).read_text()
+        self.assertIn('nba_editorial.prepare(now if args.dry_run else datetime.now(timezone.utc))',source)
+        self.assertIn('nba_player_props.capture(now if args.dry_run else datetime.now(timezone.utc))',source)
     def test_forward_forecast_is_frozen_and_grade_uses_matching_final_only(self):
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);b=self.write(root)
