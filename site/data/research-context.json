@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-19T21:15:10Z",
+  "updatedAt": "2026-10-19T21:32:12Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-19T21:11Z",
+              "reportedAt": "2026-10-19T21:24Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-19T21:01Z",
+              "reportedAt": "2026-10-19T21:14Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -2537,6 +2537,15 @@
           "name": "Green Bay Packers",
           "players": [
             {
+              "id": "4361423",
+              "name": "Micah Parsons",
+              "position": "DE",
+              "status": "Out",
+              "injury": "Knee - ACL",
+              "reportedAt": "2026-10-19T21:14Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4361423/micah-parsons"
+            },
+            {
               "id": "4047365",
               "name": "Josh Jacobs",
               "position": "RB",
@@ -2742,15 +2751,6 @@
               "injury": "Achilles",
               "reportedAt": "2026-10-15T01:53Z",
               "source": "https://www.espn.com/nfl/player/_/id/4240677/jordon-riley"
-            },
-            {
-              "id": "4361423",
-              "name": "Micah Parsons",
-              "position": "DE",
-              "status": "Out",
-              "injury": "Knee - ACL",
-              "reportedAt": "2026-10-12T17:41Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4361423/micah-parsons"
             },
             {
               "id": "14163",
@@ -4165,20 +4165,11 @@
               "source": "https://www.espn.com/nfl/player/_/id/4250621/kobie-turner"
             },
             {
-              "id": "16800",
-              "name": "Davante Adams",
-              "position": "WR",
-              "status": "Out",
-              "injury": "Knee",
-              "reportedAt": "2026-10-19T21:00Z",
-              "source": "https://www.espn.com/nfl/player/_/id/16800/davante-adams"
-            },
-            {
               "id": "4259619",
               "name": "Blake Grupe",
               "position": "PK",
               "status": "Injured Reserve",
-              "injury": "Knee",
+              "injury": "Knee - ACL",
               "reportedAt": "2026-10-19T19:57Z",
               "source": "https://www.espn.com/nfl/player/_/id/4259619/blake-grupe"
             },
@@ -4208,6 +4199,15 @@
               "injury": null,
               "reportedAt": "2026-10-19T16:53Z",
               "source": "https://www.espn.com/nfl/player/_/id/3912189/bill-murray"
+            },
+            {
+              "id": "16800",
+              "name": "Davante Adams",
+              "position": "WR",
+              "status": "Out",
+              "injury": "Hamstring",
+              "reportedAt": "2026-10-19T01:18Z",
+              "source": "https://www.espn.com/nfl/player/_/id/16800/davante-adams"
             },
             {
               "id": "12483",
@@ -4612,7 +4612,7 @@
               "position": "RB",
               "status": "Injured Reserve",
               "injury": "Thumb",
-              "reportedAt": "2026-10-15T16:29Z",
+              "reportedAt": "2026-10-19T21:24Z",
               "source": "https://www.espn.com/nfl/player/_/id/4360569/jordan-mason"
             },
             {
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Out",
               "injury": "Calf",
-              "reportedAt": "2026-10-19T21:11Z",
+              "reportedAt": "2026-10-19T21:24Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7767,8 +7767,8 @@
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-19T21:15:10Z",
-      "lastAttemptAt": "2026-10-19T21:15:10Z",
+      "checkedAt": "2026-10-19T21:32:12Z",
+      "lastAttemptAt": "2026-10-19T21:32:12Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-19T21:15:10Z",
-      "lastAttemptAt": "2026-10-19T21:15:10Z",
+      "checkedAt": "2026-10-19T21:32:12Z",
+      "lastAttemptAt": "2026-10-19T21:32:12Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
