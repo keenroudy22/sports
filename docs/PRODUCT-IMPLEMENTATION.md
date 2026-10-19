@@ -32,6 +32,11 @@ their actual release moment for the approved Kitchen Ticket cutover. Existing po
 any corrected image for a not-yet-sent X post is a distinct new attachment, with its own receipt and the unchanged
 bet and price. The original Discord card remains preserved.
 
+Live Today verification also caught the legacy generic price tolerance advertising Kittle as good through
+-112, although the repaired chance only qualified at the actual +102 quote. The public display now conservatively
+caps that tolerance at the original posted price for repaired learned props: no chasing a worse price without
+a new check. This does not rewrite the original publication or loosen its entry rule.
+
 ## October 19 — alternate comparisons and projection-review explanations
 
 Owner requested game-page alternate odds beside the projected average, exact-line last-ten/season history,

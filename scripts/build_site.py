@@ -946,6 +946,12 @@ def cutoff_fields(pick):
     if not price:
         return {'cutoffOdds': None, 'cutoffLine': None, 'cutoffBoundary': None}
     cents = pricing.cents(int(price[1])) + 1
+    # The legacy generic price tolerance was not a fresh value check. For the
+    # repaired learned-prop family, never advertise chasing a worse price than
+    # the actual publication quote. Preserve the original append-only rule.
+    probability = pick.get('probabilityAtPublication') or {}
+    if probability.get('calibrationMethod') == 'neutral-centered-held-out' and isinstance(pick.get('odds'), (int, float)):
+        cents = max(cents, pricing.cents(pick['odds']))
     return {'cutoffOdds': cents - 100 if cents < 0 else cents + 100,
             'cutoffLine': float(price[2]), 'cutoffBoundary': float(boundary[1]) if boundary else None}
 

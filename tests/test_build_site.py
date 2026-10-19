@@ -161,6 +161,14 @@ class ModelReadTests(unittest.TestCase):
 
 
 class PickTests(unittest.TestCase):
+    def test_repaired_learned_prop_does_not_advertise_chasing_a_generic_price_tolerance(self):
+        import pricing
+        pick = {'odds': 102, 'cutoff': pricing.cutoff('rec', 'over', 5.5, 102),
+                'probabilityAtPublication': {'chance': .511, 'calibrationMethod': 'neutral-centered-held-out'}}
+        self.assertEqual(build_site.cutoff_fields(pick)['cutoffOdds'], 102)
+        self.assertGreater(.511, pricing.break_even(102))
+        self.assertLess(.511, pricing.break_even(-112))
+
     def test_cutoff_display_is_parsed_from_the_posted_rule_and_qb_news_names_the_source(self):
         import pricing
         fields = build_site.cutoff_fields({'cutoff': pricing.cutoff('total', 'over', 49.5, -110)})
