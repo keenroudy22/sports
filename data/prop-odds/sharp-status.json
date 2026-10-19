@@ -1,9 +1,9 @@
 {
- "at": "2026-10-19T01:15:57Z",
+ "at": "2026-10-19T01:28:42Z",
  "confirmed": {
-  "CFB-401871055": "2026-10-19T01:15:57Z",
-  "CFB-401871092": "2026-10-19T01:15:57Z",
-  "NFL-401873008": "2026-10-19T01:15:57Z"
+  "CFB-401871055": "2026-10-19T01:28:42Z",
+  "CFB-401871092": "2026-10-19T01:28:42Z",
+  "NFL-401873008": "2026-10-19T01:28:42Z"
  },
  "leagues": {
   "CFB": {
@@ -20,7 +20,7 @@
     "player_receptions": 36,
     "player_rushing_yards": 154
    },
-   "requestsLeft": 5,
+   "requestsLeft": 50,
    "rows": 438,
    "slateGames": [
     "Middle Tennessee Blue Raiders at Florida International Panthers 2026-10-20T23:00Z",
@@ -63,7 +63,6 @@
       "home_team": "Sam Houston State Bearkats",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -110,7 +109,6 @@
       "home_team": "Appalachian State",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -125,7 +123,7 @@
      "type": "fixture"
     },
     {
-     "away": "Liberty Flames",
+     "away": "Liberty",
      "external": {
       "betmgm": "6:47391",
       "betparx": "1027397763",
@@ -150,20 +148,16 @@
       "sportzino": "sz-17863763",
       "thescorebet": "StandardEvent:fb0251b3-a074-4675-bb02-ca62053b8665"
      },
-     "home": "Kennesaw State Owls",
+     "home": "Kennesaw State",
      "sample": {
-      "away_team": "Liberty Flames",
-      "home_team": "Kennesaw State Owls",
+      "away_team": "Liberty",
+      "home_team": "Kennesaw State",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
-       "game_prop",
        "moneyline",
        "point_spread",
-       "race_to_10_points",
        "team_total",
        "total_points",
-       "total_points_odd_even",
        "total_touchdowns",
        "winning_margin"
       ]
@@ -187,7 +181,7 @@
       "fanduel": "36202379",
       "fliff": "420158_c_p_209_prematch",
       "gemini": "NCAAF-2610222330-ECU-MEM-M",
-      "kalshi": "KXNCAAFTEAMTOTAL-26OCT22ECUMEM",
+      "kalshi": "KXNCAAF1H-26OCT22ECUMEM",
       "ladbrokes": "379c7c5c-b325-4cfa-b99b-dcb362eaf40c",
       "onexbet": "762874855",
       "paddypower": "36202379",
@@ -206,7 +200,6 @@
       "home_team": "Memphis",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -265,7 +258,6 @@
        "1st_quarter_player_receiving_yards",
        "1st_quarter_player_rushing_yards",
        "anytime_touchdown_scorer",
-       "draw_no_bet",
        "moneyline",
        "player_extra_points_made",
        "player_field_goals_made",
@@ -326,7 +318,6 @@
       "home_team": "UConn",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -358,7 +349,7 @@
       "fanduel": "36202383",
       "fliff": "420161_c_p_209_prematch",
       "gemini": "NCAAF-2610240030-ARM-TLSA-M",
-      "kalshi": "KXNCAAFTOTAL-26OCT23ARMYTLSA",
+      "kalshi": "KXNCAAFGAME-26OCT23ARMYTLSA",
       "ladbrokes": "3ceed4a7-8b0b-4248-9f04-de04170f9deb",
       "onexbet": "762874856",
       "paddypower": "36202383",
@@ -376,7 +367,6 @@
       "away_team": "Army",
       "home_team": "Tulsa",
       "markets": [
-       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -427,7 +417,6 @@
       "home_team": "Wyoming",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -475,8 +464,6 @@
       "away_team": "NC State",
       "home_team": "Stanford",
       "markets": [
-       "draw_no_bet",
-       "game_prop",
        "moneyline",
        "point_spread",
        "team_total",
@@ -525,7 +512,6 @@
       "home_team": "Auburn Tigers",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -573,7 +559,6 @@
       "home_team": "SMU",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
        "moneyline",
        "point_spread",
        "team_total",
@@ -623,7 +608,7 @@
       "home_team": "Cincinnati Bearcats",
       "markets": [
        "1st_half_moneyline",
-       "draw_no_bet",
+       "game_prop",
        "moneyline",
        "point_spread",
        "team_total",
@@ -667,7 +652,7 @@
     "player_rushing_attempts": 8,
     "player_rushing_yards": 142
    },
-   "requestsLeft": 10,
+   "requestsLeft": 55,
    "rows": 657,
    "slateGames": [
     "Washington Commanders at San Francisco 49ers 2026-10-20T00:15Z"
@@ -732,13 +717,11 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
-       "draw_no_bet",
        "game_prop",
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
-       "moneyline_3-way",
        "player_touchdowns",
        "point_spread",
        "race_to_10_points",
@@ -824,7 +807,7 @@
       "fanduel": "36188996",
       "fliff": "408410_c_p_202_prematch",
       "gemini": "NFL-2610251700-SF-ATL-S",
-      "kalshi": "KXNFLTOTAL-26OCT25SFATL",
+      "kalshi": "KXNFLGAME-26OCT25SFATL",
       "ladbrokes": "cbff4bee-d00f-4e31-b67d-c4e55281ae35",
       "paddypower": "36188996",
       "polymarket": "nfl_49ers_falcons_2026-10-25_b2",
@@ -902,8 +885,8 @@
       "fanatics": "5623482",
       "fanduel": "36189001",
       "fliff": "407877_c_p_202_prematch",
-      "gemini": "NFL-2610251700-CLE-TEN-M",
-      "kalshi": "KXNFLSPREAD-26OCT25CLETEN",
+      "gemini": "NFL-2610251700-CLE-TEN-S",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT25CLETEN",
       "ladbrokes": "86e78aee-0e3e-4b60-8386-6a6eabdc5c2e",
       "paddypower": "36189001",
       "pinnacle": "1638073191",
@@ -1049,7 +1032,7 @@
       "fanduel": "36189002",
       "fliff": "408407_c_p_202_prematch",
       "gemini": "NFL-2610251700-IND-MIN-S",
-      "kalshi": "KXNFLSPREAD-26OCT25INDMIN",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT25INDMIN",
       "ladbrokes": "04d0c20e-dcc5-4f5e-8cb1-d59db206f7f4",
       "paddypower": "36189002",
       "pinnacle": "1638073288",
@@ -1098,7 +1081,7 @@
       "fanduel": "36189000",
       "fliff": "407876_c_p_202_prematch",
       "gemini": "NFL-2610251700-MIA-NYJ-S",
-      "kalshi": "KXNFLSPREAD-26OCT25MIANYJ",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT25MIANYJ",
       "ladbrokes": "f81b8d87-1fec-428c-bce5-ac57f4f3d3ef",
       "paddypower": "36189000",
       "pinnacle": "1638073287",
@@ -1170,8 +1153,8 @@
       "fanatics": "5623474",
       "fanduel": "36188999",
       "fliff": "407874_c_p_202_prematch",
-      "gemini": "NFL-2610251700-NYG-HOU-M",
-      "kalshi": "KXNFLSPREAD-26OCT25NYGHOU",
+      "gemini": "NFL-2610251700-NYG-HOU-T",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT25NYGHOU",
       "ladbrokes": "0410f659-3c98-4f9a-9aac-cf2495cadd5d",
       "paddypower": "36188999",
       "pinnacle": "1638066330",
@@ -1244,7 +1227,7 @@
       "fanatics": "5624041",
       "fanduel": "36189004",
       "fliff": "407879_c_p_202_prematch",
-      "gemini": "NFL-2610252005-DEN-ARI-M",
+      "gemini": "NFL-2610252005-DEN-ARI-S",
       "kalshi": "KXNFL1HTEAMTOTAL-26OCT25DENARI",
       "ladbrokes": "b32e8da1-f0c5-4ec6-a8f0-fb7f2f6f88bd",
       "paddypower": "36189004",
@@ -1316,7 +1299,7 @@
       "fanatics": "5624101",
       "fanduel": "36189003",
       "fliff": "407881_c_p_202_prematch",
-      "gemini": "NFL-2610252025-LAR-LV-M",
+      "gemini": "NFL-2610252025-LAR-LV-S",
       "kalshi": "KXNFL1HTEAMTOTAL-26OCT25LARLV",
       "ladbrokes": "9e70c69e-0cb8-4a79-b602-8859ec8f54be",
       "paddypower": "36189003",
@@ -1431,7 +1414,6 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
-       "game_prop",
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
