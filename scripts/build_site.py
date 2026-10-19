@@ -575,7 +575,7 @@ def league_injuries(context):
 
 
 def game_detail(card, game, record, snapshots, captures, lines, picks, names, team_logs, defense, injuries, depth_charts,
-                records, snap_players, now, grading, favorites=None, trends=None, reads=None):
+                records, snap_players, now, grading, favorites=None, trends=None, reads=None, alternates=None):
     """snapshots: this game's pregame v2 snapshots, oldest first."""
     league = card['league']
     detail = dict(card)
@@ -637,6 +637,9 @@ def game_detail(card, game, record, snapshots, captures, lines, picks, names, te
     detail['lines'] = [l for l in lines if l.get('gameId') == card['id'] and not l.get('gameMarket')]
     detail['picks'] = [p for p in picks if p.get('gameId') == card['id']]
     detail['favoriteLines'] = favorites or []
+    available = {str(p['id']) for side in ('home', 'away')
+                 for p in (((detail.get('forecast') or {}).get('players') or {}).get(side) or {}).get('players', [])}
+    detail['alternateLines'] = [r for r in alternates or [] if str(r.get('athleteId')) in available]
     detail['modelReads'] = reads or []
     detail['seasonTrends'] = trends or []
     for row in detail['modelReads'] + detail['favoriteLines']:
@@ -1746,10 +1749,15 @@ def build(now=None):
         _, player = pricing.player_line(snapshots[-1], row.get('athleteId')) if snapshots else (None, None)
         role = role_sanity.VOLUME.get(row.get('stat'))
         if player and role:
+            explanation = ('The projected starting quarterback has changed or split recent work; fewer than three full games establish this passing role.'
+                           if row.get('roleHold') == 'qb' else
+                           f"Projected workload is below 70% of the last three full games ({', '.join(str(v) for v in row.get('recentFull', []))} {row.get('recentVolume', 'opportunities')}).")
             for stat, volume in role_sanity.VOLUME.items():
                 field = pricing.PROJECTED.get(stat)
                 if volume == role and field and field not in player.setdefault('underReview', []):
                     player['underReview'].append(field)
+                if volume == role and field:
+                    player.setdefault('reviewReasons', {})[field] = explanation
     lines = public_lines(lines, now)
     for row in lines:
         if row.get('athleteId'):
@@ -1837,7 +1845,9 @@ def build(now=None):
                           model_reads(game, latest_snap, lines, now, info['player_logs'])
                           if game.get('state') == 'pre' and features.when(game['kickoff']) > now else
                           archived_model_reads(game, latest_snap, captures.get(game['id'], []), names,
-                                               now, info['player_logs'])))
+                                               now, info['player_logs']),
+                          alternate_research(game, latest_snap, prop_prices.get(game['id']), names,
+                                             info['player_logs'], now, [r for r in lines if r.get('gameId') == game['id']])))
     summary = {'live': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('live', [])],
                'backtest': [{k: g[k] for k in ('league', 'model', 'season', 'summary')} for g in scoreboard.get('backtest', [])],
                'picks': (scoreboard.get('picks') or {}).get('summary')}
@@ -2444,6 +2454,62 @@ def favorite_hit_rates(game, row, player_logs):
     last = block(played[-10:])
     season = block([r for r in played if r.get('season') == game.get('season')])
     return {'last': last, 'season': season} if last or season else None
+
+
+def alternate_research(game, snapshot, capture, names, player_logs, now, lines=None):
+    """Stored full-game book alternates with exact-line history; never creates a pick or a price."""
+    observed = instant((capture or {}).get('retrievedAt'))
+    if not snapshot or game.get('state') != 'pre' or features.when(game['kickoff']) <= now \
+            or observed is None or not timedelta(0) <= now - observed <= timedelta(hours=4):
+        return []
+    out = []
+    for side in ('home', 'away'):
+        for player in ((snapshot.get('players') or {}).get(side) or {}).get('players', []):
+            if player.get('limited'):
+                continue
+            athlete = str(player['id'])
+            name = names.get(athlete)
+            if not name:
+                continue
+            for stat, field in pricing.PROJECTED.items():
+                projection = player.get(field)
+                held = any(str(r.get('athleteId')) == athlete and r.get('stat') == stat
+                           and (r.get('roleSuspect') or r.get('priceSuspect') or r.get('injuryHold'))
+                           for r in lines or [])
+                if held or not isinstance(projection, (list, tuple)) or not projection or field in player.get('underReview', []):
+                    continue
+                for book, entry in (capture.get('books') or {}).items():
+                    if book not in ('draftkings', 'fanduel'):
+                        continue
+                    quote = next((q for who, q in ((entry.get('markets') or {}).get(stat) or {}).items()
+                                  if person(who) == person(name)), None)
+                    if not quote:
+                        continue
+                    for rung in sharp_odds.consistent(quote):
+                        line = rung['line']
+                        # Half-point full-game thresholds have unambiguous over/under grading.
+                        if line < 0 or line % 1 != .5:
+                            continue
+                        direction = 'over' if projection[0] > line else 'under'
+                        odds = rung.get(direction)
+                        if not isinstance(odds, (int, float)) or abs(odds) < 100:
+                            continue
+                        row = {'athleteId': athlete, 'stat': stat, 'line': line, 'direction': direction}
+                        history = favorite_hit_rates(game, row, player_logs)
+                        reasons = [f"I have {name} at {projection[0]:g} {pricing.WORDS[stat]}; this line is {line:g}."]
+                        recent = (history or {}).get('last')
+                        if recent:
+                            reasons.append(f"He finished {'above' if direction == 'over' else 'below'} this exact line in {recent['hits']} of his last {recent['games']} games.")
+                        out.append({**row, 'player': name, 'position': player.get('pos'),
+                                    'team': str(game[side].get('id') or ''),
+                                    'opponent': str(game['away' if side == 'home' else 'home'].get('id') or ''),
+                                    'teamAbbr': game[side].get('abbreviation'),
+                                    'opponentAbbr': game['away' if side == 'home' else 'home'].get('abbreviation'),
+                                    'book': BOOK_NAMES.get(book, book), 'odds': int(odds),
+                                    'projection': projection[0], 'history': history, 'reasons': reasons,
+                                    'observedAt': capture['retrievedAt'], 'alternate': True,
+                                    'title': f"{name} {direction} {line:g} {pricing.WORDS[stat]}"})
+    return sorted(out, key=lambda r: (r['player'], r['stat'], r['book'], r['line']))
 
 
 def player_matchup_context(game, snapshot, row):

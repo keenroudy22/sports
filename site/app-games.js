@@ -482,7 +482,7 @@
       return `<div class="table-wrap"><table class="t"><caption class="small muted" style="text-align:left;padding-bottom:6px">${esc(g[side].abbr)}${isNum(vol.plays) ? ` · ${C.fixed(vol.plays, 0)} plays, ${Math.round(100 * (vol.passRate || 0))}% pass` : ''}</caption>
         <thead><tr><th>Player</th>${cols.map(([, l]) => `<th class="n">${esc(l)}</th>`).join('')}</tr></thead><tbody>${list.map(p => `<tr><td><span class="with-art">${headshot(g.league, p.id, 'sm')}<span><a href="#player/${esc(g.league)}/${esc(p.id)}">${esc(p.name)}</a> <span class="muted tiny">${esc(p.pos)}</span></span></span></td>${cols.map(([k]) => {
           const v = p[k];
-          if ((p.underReview || []).includes(k)) return '<td class="n muted">Projection under review</td>';
+          if ((p.underReview || []).includes(k)) return `<td class="n muted"><details><summary>Projection under review</summary><p class="small">${esc((p.reviewReasons || {})[k] || 'Recent quarterback or workload changes need checking before this number is usable.')}</p></details></td>`;
           if (!Array.isArray(v)) return '<td class="n muted">–</td>';
           const market = (lines[p.id] || {})[C.PROJECTION_MARKET[k]];
           const gapV = market ? v[0] - market[0] : null;
@@ -492,6 +492,15 @@
     const projHtml = (detail.forecast || {}).players ? section('Player projections', `<div style="display:grid;gap:16px;grid-template-columns:minmax(0,1fr)">${['away', 'home'].map(side => { const n = ((((detail.forecast || {}).players || {})[side] || {}).players || []).length;
       return n ? `<details class="more-box" style="min-width:0" data-box="proj:${side}"${typeof matchMedia === 'function' && matchMedia('(min-width: 760px)').matches ? ' open' : ''}><summary>${esc(g[side].abbr)} player projections · ${n} players</summary>${projTable(side)}</details>` : projTable(side); }).join('')}</div>`, '', `My average, with the likely range underneath. ${detail.props && detail.props.capturedAt ? `Where I saw a line (${esc(ago(detail.props.capturedAt))}) it shows instead, with ▲ when I am above it and ▼ when below.` : 'No comparison lines recorded yet.'}${g.garbageTime ? ` <b class="red">${GARBAGE}</b> The spread is 21 points or more, so starters may sit early.` : ''}`)
       : pregame ? section('Player projections', '<p class="muted small">Player projections are not available for this game yet.</p>') : '';
+
+    const alternateRows = pregame ? (detail.alternateLines || []).filter(r => C.quoteStatus({ ...r, state: 'open' }, g.kickoff, now).current) : [];
+    const alternatePlayers = [...new Set(alternateRows.map(r => r.player))];
+    const alternateHtml = pregame ? section('Alternate lines vs my numbers', alternateRows.length
+      ? alternatePlayers.map(player => `<details class="more-box"><summary>${esc(player)} · ${alternateRows.filter(r => r.player === player).length} priced alternates</summary><div class="grid two">${alternateRows.filter(r => r.player === player).map(r => {
+        const dm = defenseMatch(r, teams, g.league);
+        return `<article class="card"><h3>${esc(niceTitle(r.title))}</h3><p><b>${esc(oddsText(r.odds))} ${esc(bookLabel(r.book))}</b> · checked ${esc(ago(r.observedAt))}</p><p style="margin-top:8px"><b>My average: ${esc(C.fixed(r.projection))} · Book line: ${esc(r.line)}</b></p><p class="small">${esc(historyWords(r.history) || 'No saved exact-line history yet.')}</p>${(r.reasons || []).map(reason => `<p class="small" style="margin-top:6px">${esc(reason)}</p>`).join('')}${dm ? `<p class="small" style="margin-top:6px">${esc(dm.text)}.</p>` : ''}<p class="small muted" style="margin-top:8px">Research only · check the price. Historical hits are not a predicted hit rate; your book sets the combined parlay odds.</p></article>`;
+      }).join('')}</div></details>`).join('')
+      : '<p class="muted small">No fresh, verified alternate prices with a usable player projection are available for this game yet.</p>', '', 'Actual captured alternate prices alongside my projected average and results against that exact line. Each leg keeps its own book and price.') : '';
 
     /* What each defense allows, by position. */
     const defRows = ((teams || {}).defense || {}).rows || {};
@@ -534,7 +543,7 @@
       ${edgesHtml ? section('Matchup lines', edgesHtml, '<span class="small muted">Research, not posted plays</span>', 'Our projection, this-season hit rate at the exact line, and the opponent defense in one view. College game-script cautions rank lower.') : ''}
       ${othersHtml ? `<section class="section">${othersHtml}</section>` : ''}
       ${final && detail.final ? '' : anchored('model-vs', section('Model vs market', modelBlock))}
-      ${upsetHtml}${trendsHtml}${depthHtml}${projHtml}${matchupHtml}
+      ${upsetHtml}${trendsHtml}${depthHtml}${projHtml}${alternateHtml}${matchupHtml}
       ${section('Recent form', `<div class="grid two">${form('away')}${form('home')}</div>`)}
       ${injuryHtml}${tdHtml}`;
   };

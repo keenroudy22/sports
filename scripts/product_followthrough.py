@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 STATES = ('shipped', 'ready', 'owner-needed', 'observing', 'gated')
 OWNERS = ('agent', 'owner', 'desk', 'provider')
 MAX_BYTES = 256 * 1024
-MAX_ITEMS = 128                       # bounded plan queue; stable IDs are never reused
+MAX_ITEMS = 160                       # bounded plan queue; stable IDs are never reused
 BRIEF_LIMIT = 1200
 ITEM_FIELDS = {'id', 'title', 'status', 'owner', 'next', 'doneWhen', 'evidence'}
 

@@ -1,5 +1,16 @@
 # October 5 product implementation tracker
 
+## October 19 — alternate comparisons and projection-review explanations
+
+Owner requested game-page alternate odds beside the projected average, exact-line last-ten/season history,
+and factual reasons. `O-20261019-ALT` tracks the release. Quotes come only from existing stored DraftKings/FanDuel
+full-game ladders, pass ladder consistency and four-hour freshness, and retain their exact line/side/book/time.
+Player-role and price holds remain enforced. Historical hit counts are labeled separately from predictions.
+The Washington passing holds reproduce a recent starter change with fewer than three established full games;
+other current holds identify projected workload below 70% of the last three full games. Game-table review labels
+now expand to that explanation rather than leaving the reader with a generic blank. No model weights or record
+counting change; release/live evidence is pending.
+
 ## 2026-10-17 — football-day output and Climb continuity
 
 The owner requires projections, trends/research and released straight plays on Thursday, Saturday, Sunday and

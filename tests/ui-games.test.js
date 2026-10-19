@@ -195,6 +195,21 @@ test('the game page prints every driver under #why, a note only when a flag fire
   for (const html of [blowout, total, stale]) for (const word of ['desk', 'scan', 'automated', 'pipeline', 'calibration']) assert.ok(!new RegExp(`\\b${word}\\b`, 'i').test(html), word);
 });
 
+test('game alternates show exact odds, my number, history and an explained projection hold', async () => {
+  const { api, factory } = loadBrowserApi();
+  const g = slate()[1];
+  const detail = { ...g, picks: [], teams: { home: { injuries: [], form: [] }, away: { injuries: [], form: [] } },
+    favoriteLines: [], modelReads: [], seasonTrends: [], props: { lines: {} },
+    forecast: { players: { home: { players: [{ id: '1', name: 'Real Player', pos: 'WR', recYds: [60, 20, 100],
+      underReview: ['recYds'], reviewReasons: { recYds: 'The starting quarterback changed.' } }] }, away: { players: [] } } },
+    alternateLines: [{ player: 'Other Player', title: 'Other Player over 39.5 receiving yards', athleteId: '2',
+      stat: 'recYds', direction: 'over', projection: 60, line: 39.5, odds: -240, book: 'DraftKings',
+      observedAt: new Date().toISOString(), history: { last: { hits: 7, games: 10 } }, reasons: ['A verified workload reason.'] }] };
+  const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [] } : detail });
+  const html = unesc(await factory(ctx).game({ id: g.id }));
+  for (const value of ['Alternate lines vs my numbers', 'Other Player', '-240', 'My average: 60.0', 'Book line: 39.5', '7 of 10', 'A verified workload reason.', 'The starting quarterback changed.']) assert.ok(html.includes(value), value);
+});
+
 test('a game opens with its posted bet and honest book/model lines, even when Today has dropped that bet', async () => {
   const { api, factory } = loadBrowserApi();
   const g = slate()[1];
