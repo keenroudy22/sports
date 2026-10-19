@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-19T22:24:11Z",
+  "updatedAt": "2026-10-19T22:57:38Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-19T22:11Z",
+              "reportedAt": "2026-10-19T22:18Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-19T22:18Z",
+              "reportedAt": "2026-10-19T22:47Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1968,7 +1968,7 @@
               "name": "Dee Winters",
               "position": "LB",
               "status": "Doubtful",
-              "injury": "Ankle",
+              "injury": "Achilles",
               "reportedAt": "2026-10-19T01:25Z",
               "source": "https://www.espn.com/nfl/player/_/id/4428914/dee-winters"
             },
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Out",
               "injury": "Calf",
-              "reportedAt": "2026-10-19T22:11Z",
+              "reportedAt": "2026-10-19T22:18Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -6238,8 +6238,8 @@
               "id": "16737",
               "name": "Mike Evans",
               "position": "WR",
-              "status": "Questionable",
-              "injury": "Ribs",
+              "status": "Active",
+              "injury": null,
               "reportedAt": "2026-10-19T15:21Z",
               "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans"
             },
@@ -7137,6 +7137,15 @@
           "name": "Washington Commanders",
           "players": [
             {
+              "id": "2976212",
+              "name": "Stefon Diggs",
+              "position": "WR",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-19T22:48Z",
+              "source": "https://www.espn.com/nfl/player/_/id/2976212/stefon-diggs"
+            },
+            {
               "id": "4568617",
               "name": "Jordan Magee",
               "position": "LB",
@@ -7164,15 +7173,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4575131/jacory-croskey-merritt"
             },
             {
-              "id": "2976212",
-              "name": "Stefon Diggs",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Hamstring",
-              "reportedAt": "2026-10-19T20:14Z",
-              "source": "https://www.espn.com/nfl/player/_/id/2976212/stefon-diggs"
-            },
-            {
               "id": "4361357",
               "name": "Javontae Jean-Baptiste",
               "position": "LB",
@@ -7194,8 +7194,8 @@
               "id": "4426403",
               "name": "Nick Cross",
               "position": "S",
-              "status": "Questionable",
-              "injury": "Illness",
+              "status": "Active",
+              "injury": null,
               "reportedAt": "2026-10-19T18:50Z",
               "source": "https://www.espn.com/nfl/player/_/id/4426403/nick-cross"
             },
@@ -7258,7 +7258,7 @@
               "name": "Fabian Moreau",
               "position": "CB",
               "status": "Active",
-              "injury": null,
+              "injury": "Coach's Decision",
               "reportedAt": "2026-10-17T19:11Z",
               "source": "https://www.espn.com/nfl/player/_/id/2971586/fabian-moreau"
             },
@@ -7348,7 +7348,7 @@
               "name": "Tanoa Togiai",
               "position": "G",
               "status": "Active",
-              "injury": null,
+              "injury": "Coach's Decision",
               "reportedAt": "2026-10-12T19:48Z",
               "source": "https://www.espn.com/nfl/player/_/id/4605488/tanoa-togiai"
             },
@@ -7365,30 +7365,6 @@
         }
       },
       "changes": [
-        {
-          "teamId": "13",
-          "name": "Bryce Cabeldue",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-19T17:02:27Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4612077/bryce-cabeldue"
-        },
-        {
-          "teamId": "14",
-          "name": "CJ Daniels",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-19T17:02:27Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4605951/cj-daniels"
-        },
-        {
-          "teamId": "14",
-          "name": "Larrell Murchison",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-19T17:02:27Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4240123/larrell-murchison"
-        },
         {
           "teamId": "14",
           "name": "Bill Murray",
@@ -7764,11 +7740,35 @@
           "to": "Active",
           "observedAt": "2026-10-19T22:02:18Z",
           "source": "https://www.espn.com/nfl/player/_/id/4047365/josh-jacobs"
+        },
+        {
+          "teamId": "25",
+          "name": "Mike Evans",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-19T22:57:38Z",
+          "source": "https://www.espn.com/nfl/player/_/id/16737/mike-evans"
+        },
+        {
+          "teamId": "28",
+          "name": "Stefon Diggs",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-19T22:57:38Z",
+          "source": "https://www.espn.com/nfl/player/_/id/2976212/stefon-diggs"
+        },
+        {
+          "teamId": "28",
+          "name": "Nick Cross",
+          "from": "Questionable",
+          "to": "Active",
+          "observedAt": "2026-10-19T22:57:38Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4426403/nick-cross"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-19T22:24:11Z",
-      "lastAttemptAt": "2026-10-19T22:24:11Z",
+      "checkedAt": "2026-10-19T22:57:38Z",
+      "lastAttemptAt": "2026-10-19T22:57:38Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-19T22:24:11Z",
-      "lastAttemptAt": "2026-10-19T22:24:11Z",
+      "checkedAt": "2026-10-19T22:57:38Z",
+      "lastAttemptAt": "2026-10-19T22:57:38Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
