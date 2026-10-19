@@ -480,6 +480,16 @@ def missed_target(guid, due, now, items=None):
     return now >= target
 
 
+def owner_slip_image(guid, kind, card_key, items=None):
+    """Only an explicitly supplied personal ticket may use its original book screenshot."""
+    item = (items or {}).get(guid) or {}
+    path = str(item.get('card') or '')
+    return bool(kind == 'community' and guid.startswith('community:personal-ticket:')
+                and item.get('personalTicket') is True
+                and re.fullmatch(r'img/tickets/[A-Za-z0-9_-]+\.(?:png|jpg)', path)
+                and card_key == x_post.SITE + path)
+
+
 def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=None, log=print, stats=None, items=None):
     """Create the planned posts in Buffer and record each in the log; a play whose card is not live yet is left
     for the next run, never posted bare. Returns the log."""
@@ -520,7 +530,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
             sheet_match = re.fullmatch(r'sheet:(NFL|CFB):(\d{4}-\d{2}-\d{2})', guid)
             projection_sheet = (kind == 'sheet' and sheet_match is not None
                                 and card_key == f'sheet-{sheet_match[1].lower()}-{sheet_match[2]}')
-            if pick_card.ticket_enabled(moment=due) and not projection_sheet and not ticket_art_live(image):
+            if pick_card.ticket_enabled(moment=due) and not projection_sheet \
+                    and not owner_slip_image(guid, kind, card_key, items) and not ticket_art_live(image):
                 log(f'buffer: {guid} waits: the live card is not Kitchen Ticket art')
                 continue
         # Resolve every fallible field before Buffer accepts the post. Otherwise a
@@ -528,7 +539,8 @@ def schedule(plans, channel_id, log_book, now, key=None, send=http_send, opener=
         # later run schedules again. Text-only posts do not enter card comparisons.
         if image:
             try:
-                card_theme = pick_card.card_theme(theme_moment(guid, kind, due, items))
+                card_theme = ('owner-screenshot' if owner_slip_image(guid, kind, card_key, items)
+                              else pick_card.card_theme(theme_moment(guid, kind, due, items)))
             except Exception:
                 card_theme = 'legacy'
                 log(f'buffer: {guid} card theme label fell back to legacy')

@@ -64,6 +64,16 @@ class FakeBuffer:
 
 
 class ClientTests(unittest.TestCase):
+    def test_owner_screenshot_exception_is_exact_and_never_an_official_play(self):
+        key = 'community:personal-ticket:2026-10-19-mnf'
+        path = 'img/tickets/personal-mnf-2026-10-19.png'
+        items = {key: {'personalTicket': True, 'card': path}}
+        self.assertTrue(bp.owner_slip_image(key, 'community', bp.x_post.SITE + path, items))
+        self.assertFalse(bp.owner_slip_image(key, 'play', bp.x_post.SITE + path, items))
+        self.assertFalse(bp.owner_slip_image(key, 'community', bp.x_post.SITE + path, {}))
+        self.assertFalse(bp.owner_slip_image(key, 'community', 'https://example.com/slip.png', items))
+        self.assertFalse(bp.owner_slip_image('official', 'community', bp.x_post.SITE + path, items))
+
     def test_channel_lookup_prefers_the_x_channel_named_like_the_account(self):
         fake = FakeBuffer()
         channel = bp.x_channel(key='t', send=fake, wanted='@keenkooks')
