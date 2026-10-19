@@ -1,21 +1,40 @@
 {
   "schemaVersion": 1,
-  "selectedAt": "2026-10-18T22:50:04Z",
+  "selectedAt": "2026-10-19T01:00:01Z",
   "mode": "local",
   "rows": [
     {
-      "gameId": "NHL-401892534",
+      "gameId": "NFL-401873008",
+      "league": "NFL",
+      "kickoff": "2026-10-20T00:15:00Z",
+      "matchup": "WSH at SF",
+      "href": "#game/NFL-401873008",
+      "kind": "trend",
+      "label": "Season trend",
+      "player": "Jayden Daniels",
+      "stat": "car",
+      "title": "Jayden Daniels \u00b7 Over 6.5 carries",
+      "text": "8/10 recorded games this season. DraftKings -142 captured; history, not a prediction.",
+      "observedAt": "2026-10-19T00:32:38Z",
+      "expiresAt": "2026-10-19T04:32:38Z",
+      "rate": 0.8,
+      "sample": 10,
+      "price": -142,
+      "id": "E0"
+    },
+    {
+      "gameId": "NHL-401892535",
       "league": "NHL",
       "kind": "schedule",
       "label": "Next up",
-      "kickoff": "2026-10-19T00:00:00Z",
-      "matchup": "CAR at CGY",
-      "title": "CAR at CGY",
-      "text": "Sun 8:00 PM ET \u00b7 Scores and schedule.",
-      "observedAt": "2026-10-18T22:49:30Z",
-      "expiresAt": "2026-10-19T00:00:00Z",
+      "kickoff": "2026-10-19T23:00:00Z",
+      "matchup": "ANA at NYR",
+      "title": "ANA at NYR",
+      "text": "Mon 7:00 PM ET \u00b7 Scores and schedule.",
+      "observedAt": "2026-10-19T00:31:43Z",
+      "expiresAt": "2026-10-19T04:31:43Z",
       "href": "#scores/NHL",
-      "id": "E2"
+      "id": "E4"
     },
     {
       "gameId": "EPL-401879257",
@@ -26,24 +45,10 @@
       "matchup": "COV at TOT",
       "title": "COV at TOT",
       "text": "Mon 3:00 PM ET \u00b7 Scores and schedule.",
-      "observedAt": "2026-10-18T22:49:30Z",
-      "expiresAt": "2026-10-19T02:49:30Z",
+      "observedAt": "2026-10-19T00:31:43Z",
+      "expiresAt": "2026-10-19T04:31:43Z",
       "href": "#scores/EPL",
-      "id": "E3"
-    },
-    {
-      "gameId": "MLB-401908028",
-      "league": "MLB",
-      "kind": "schedule",
-      "label": "Next up",
-      "kickoff": "2026-10-20T00:00:00Z",
-      "matchup": "CLE at TB",
-      "title": "CLE at TB",
-      "text": "Mon 8:00 PM ET \u00b7 Scores and schedule.",
-      "observedAt": "2026-10-18T22:49:30Z",
-      "expiresAt": "2026-10-19T02:49:30Z",
-      "href": "#scores/MLB",
-      "id": "E1"
+      "id": "E5"
     }
   ]
 }
