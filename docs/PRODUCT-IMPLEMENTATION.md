@@ -16,6 +16,11 @@ The game-page table always shows the model range alongside an available line, wi
 Tests name the current White arithmetic and ensure MNF remains eligible in both morning passes. Release evidence
 is tracked under O-20261019-PROPCAL; nothing is marked live before hosted and visual verification.
 
+Follow-up validation also removes the raw 55% candidate prefilter: plus-money rows below 50% must reach the
+ordinary exact-price, reason and injury checks rather than disappearing before selection. This is not admission
+and does not change the positive-value hurdle. Owner-requested `--select-now` uses the actual Eastern minute,
+even outside a normal slot; routine morning and primetime schedules remain unchanged.
+
 ## October 19 — alternate comparisons and projection-review explanations
 
 Owner requested game-page alternate odds beside the projected average, exact-line last-ten/season history,

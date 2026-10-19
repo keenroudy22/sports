@@ -15,6 +15,14 @@ import buffer_post
 
 
 class SlotTests(unittest.TestCase):
+    def test_select_now_command_uses_the_actual_minute_even_outside_a_scheduled_window(self):
+        with mock.patch.object(run, 'run', return_value=0) as desk:
+            self.assertEqual(run.main(['--select-now', '--now', '2026-10-19T19:12:00Z']), 0)
+        args = desk.call_args.args[0]
+        self.assertEqual(args.slot, '1512')
+        self.assertTrue(args.select_now)
+        self.assertIsNone(args.publish_kinds)
+
     def test_earlier_official_release_is_not_pushed_behind_later_research(self):
         due = datetime(2026, 10, 17, 13, 35, tzinfo=timezone.utc)
         busy = [datetime(2026, 10, 17, 13, 24, tzinfo=timezone.utc),
@@ -368,6 +376,16 @@ class CandidateCatalogTests(unittest.TestCase):
         picks = run.candidates([row], {'CFB-1': game}, now)
         self.assertEqual((len(picks), picks[0]['marketType'], picks[0]['direction'], picks[0]['modelLean']),
                          (1, 'spread', 'away', False))
+
+    def test_plus_money_candidates_are_not_discarded_by_a_raw_hit_rate_floor(self):
+        now = datetime(2026, 10, 19, 13, 0, tzinfo=run.EASTERN)
+        game = {'id': 'NFL-mnf', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-10-20T00:15:00Z'}
+        prop = {'gameId': game['id'], 'state': 'open', 'athleteId': '77', 'position': 'WR',
+                'stat': 'recYds', 'direction': 'over', 'line': 59.5, 'odds': 180, 'book': 'DraftKings',
+                'grade': {'raw': .41, 'edge': 2}, 'id': 'plus-prop'}
+        side = {**prop, 'athleteId': None, 'gameMarket': True, 'market': 'moneyline', 'side': 'away', 'line': 0, 'id': 'plus-side'}
+        picks = run.candidates([prop, side], {game['id']: game}, now)
+        self.assertEqual(len(picks), 2, 'both candidates must reach price, reason and injury checks; this is not admission')
 
     def test_a_future_game_stays_on_the_board_but_cannot_be_admitted_early(self):
         now = datetime(2026, 10, 8, 13, 0, tzinfo=timezone.utc)

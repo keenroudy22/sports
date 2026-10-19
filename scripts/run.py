@@ -687,7 +687,7 @@ def candidates(lines, games, now):
         books = [(q['book'], q['line'], q.get('odds')) for q in row.get('books') or []
                  if isinstance(q.get('odds'), (int, float))] or [(row['book'], row['line'], row.get('odds'))]
         if row.get('gameMarket'):
-            if row.get('market') not in ('total points', 'point spread', 'moneyline') or (grade.get('raw') or 0) < .55:
+            if row.get('market') not in ('total points', 'point spread', 'moneyline'):
                 continue
             spread, moneyline = row['market'] == 'point spread', row['market'] == 'moneyline'
             direction = row.get('side') if (spread or moneyline) else row['direction']
@@ -696,7 +696,7 @@ def candidates(lines, games, now):
                         'line': row['line'], 'direction': direction, 'gameIds': [game['id']],
                         '_league': game['league'], '_row': row, '_quotes': books,
                         '_pair': (row.get('odds'), row.get('oppositeOdds')) if moneyline else None})
-        elif row.get('athleteId') and (grade.get('raw') or 0) >= .55:
+        elif row.get('athleteId'):
             out.append({'status': 'active', 'favorite': False, 'modelLean': True, 'position': row.get('position'),
                         'athleteId': str(row['athleteId']), 'market': row.get('stat') or pricing.market_of(row),
                         'line': row['line'], 'direction': row['direction'], 'gameIds': [game['id']],
@@ -3929,6 +3929,9 @@ def main(argv=None):
     parser.add_argument('--publish-kinds', help=f"comma list of {','.join(KINDS)}; default all")
     parser.add_argument('--ladder-spec', help='exact sportsbook quotes for a person-approved ladder rung')
     args = parser.parse_args(argv)
+    if args.select_now:
+        moment = gates.when(args.now) if args.now else datetime.now(timezone.utc)
+        args.slot = moment.astimezone(EASTERN).strftime('%H%M')
     if args.command == 'heartbeat':
         return heartbeat(args)
     if args.command == 'status':
