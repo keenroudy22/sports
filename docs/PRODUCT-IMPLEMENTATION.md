@@ -1,6 +1,19 @@
 # October 5 product implementation tracker
 
-## 2026-10-19 — learned-prop formula correction (prepared, not yet deployed)
+## 2026-10-19 — learned-prop formula correction (verified release)
+
+Completion receipt: final source `246e6755`, hosted run **39304658679 succeeded** October19. Normal and clean-export
+suites each passed 1,486 Python tests (two skips) and250 Node tests. Build, budget, record audit107, NBA audit0,
+public-file guard, SVG/assets and isolated14:40 rehearsal passed; no outside writes or private reads. Live375
+has no page overflow, console errors or load failure; local1440 was also checked. The projection explanation and
+ranges are live, and a fresh-load live pick-page check confirms the conservative price note rather than the old
+-113 tolerance. Earlier main repair/early-selection hosted receipts:39298301912 and39299107543.
+
+Real delivery: George Kittle over5.5 receptions +102 FanDuel, model6.3, **0.5u Full Send**. Discord confirmed;
+Today verified; X2112249738506498519 sent18:29:16Z (2:29PM Eastern), not merely queued. Corrected approved-art
+attachment receipt1561807099774898356 preserves the original Discord image. The morning6:45/8:30/11:45 desk
+passes are enabled; the installed job is loaded and last exited0. No weights, budgets or record-counting rules changed.
+Other queued, observing and externally gated work remains separate; this receipt completes O-20261019-PROPCAL only.
 
 The owner requested the adjustment mismatch be fixed, projections explain uncertainty, and qualifying releases
 remain early. Learned prop coefficients were fitted and tested as `0.5 + k * (raw - 0.5)`, but selection reused
