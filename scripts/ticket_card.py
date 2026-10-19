@@ -98,7 +98,8 @@ def straight_data(pick, game, *, featured=False, player_side=None, art=None, fet
         units = 1
     output = {
         'kind': 'player' if prop else 'game', 'featured': bool(featured),
-        'seriesLabel': {'gut_call': 'FULL SEND', 'upset': 'UPSET PICK'}.get(pick.get('lane')),
+        'seriesLabel': {'gut_call': 'FULL SEND', 'upset': 'UPSET PICK', 'chef_pick': "CHEF'S PICK"}.get(pick.get('lane'))
+                       or ('BEST BET' if pick.get('selectionPolicy') == '2026-10-19-1u-2u' else None),
         'player': _name(pick) if prop else '', 'team': team_code,
         'away': away_code, 'home': home_code,
         'away_name': pick_card.team_label(away, league),

@@ -59,7 +59,7 @@ def counts_public(pick):
 
 def is_headline(pick):
     lane = pick.get('lane')
-    if lane and lane not in ('best_bet', 'hot_plate'):
+    if lane and lane not in ('best_bet', 'hot_plate', 'chef_pick'):
         return False
     return counts_public(pick)
 

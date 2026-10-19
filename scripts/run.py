@@ -867,6 +867,18 @@ def ticket_replacement_allowed(ticket_id, ctx):
     return (ctx.latest.get(ticket_id) or {}).get('replacementAllowed') is not False
 
 
+def choose_straight_tier(candidate, ctx):
+    """Prospective owner hierarchy; ordinary safety and card-cap gates still apply."""
+    chef = gates.selection_verdict(candidate, ctx, 'chef_pick')
+    if chef.ok:
+        candidate.update(lane='chef_pick', riskUnits=2)
+        return chef
+    regular = gates.selection_verdict(candidate, ctx, 'best_bet')
+    if regular.ok:
+        candidate.update(lane='best_bet', riskUnits=1)
+    return regular
+
+
 def price(candidate, ctx, now):
     """Take the quote with the best expected value; copy the desk's numbers verbatim."""
     game = ctx.games[candidate['gameIds'][0]]
@@ -936,6 +948,10 @@ def price(candidate, ctx, now):
     if not selection:
         return None
     candidate['_selection'] = selection
+    # Version every new football admission. Already-public plays retain their
+    # original lane and stake; the policy is never retrofitted onto the record.
+    if not candidate.get('publishedAt') and game.get('league') in ('NFL', 'CFB'):
+        candidate.update(selectionPolicy=gates.TIER_POLICY, lane='best_bet', riskUnits=1)
     p = dict(p, **{key: selection[key] for key in
                    ('chance', 'breakEven', 'edgePoints', 'evPerUnit', 'calibration', 'calibrated')})
     candidate['_desk'] = p
@@ -2426,6 +2442,17 @@ def _run(args, now, slot, kinds, status):
         candidate['_planReasons'] = plan_reasons(candidate, ctx)
         if candidate.get('marketType') == 'moneyline':
             safer_pool.append((league, candidate))
+        if candidate.get('selectionPolicy') == gates.TIER_POLICY:
+            best = choose_straight_tier(candidate, ctx)
+            if best.ok:
+                candidate['_selectionDecision'] = best.data
+                candidate['_kitchenScore'] = gates.kitchen_score(candidate, ctx, best.data)
+                best_pool.append((league, candidate))
+            else:
+                screened.append({'league': league, 'gameId': candidate['gameIds'][0], 'title': candidate['title'],
+                                 'rule': best.rule, 'reason': best.reason})
+                decided.append(decision_record(candidate, league, 'refused', [best.rule], best.reason, now, ctx))
+            continue
         best = gates.selection_verdict(candidate, ctx, 'best_bet')
         if not best.ok:
             gut = gates.selection_verdict(candidate, ctx, 'gut_call')
@@ -2455,9 +2482,12 @@ def _run(args, now, slot, kinds, status):
             decided.append(decision_record(candidate, league, 'refused', [refusal.rule], refusal.reason, now, ctx))
             continue
         day = gates.slate_day(candidate, ctx)
-        candidate['lane'] = 'hot_plate' if day not in hot_days else 'best_bet'
-        candidate['favorite'] = candidate['lane'] == 'hot_plate'
-        candidate['riskUnits'] = 1
+        if candidate.get('selectionPolicy') == gates.TIER_POLICY:
+            candidate['favorite'] = candidate['lane'] == 'chef_pick'
+        else:
+            candidate['lane'] = 'hot_plate' if day not in hot_days else 'best_bet'
+            candidate['favorite'] = candidate['lane'] == 'hot_plate'
+            candidate['riskUnits'] = 1
         hot_days.add(day)
         kind = 'props' if candidate.get('athleteId') else 'gamePicks'
         ctx.first[candidate['id']] = dict(candidate, league=league, publishedAt=stamp(now), kind=kind)
@@ -3019,7 +3049,19 @@ def private_release_refusal(row, ctx, now):
     if not quoted <= now < expires:
         return f"its saved quote expired at {expires.astimezone(EASTERN):%-I:%M %p} ET"
     policy = gates.totals_policy(pick, ctx)
-    return None if policy.ok else policy.reason
+    if not policy.ok:
+        return policy.reason
+    if pick.get('selectionPolicy') == gates.TIER_POLICY:
+        expected = {'best_bet': 1, 'chef_pick': 2}.get(pick.get('lane'))
+        if expected is None or pick.get('riskUnits') != expected:
+            return 'its selected tier and stake do not match'
+        probe = dict(pick, _planReasons=(row.get('decision') or {}).get('planReasons') or [])
+        probe.pop('_selection', None)
+        probe.pop('_desk', None)
+        verdict = gates.selection_verdict(probe, ctx, pick['lane'])
+        if not verdict.ok:
+            return f'its current tier price check failed: {verdict.reason}'
+    return None
 
 
 def release_private(now, log=log, only=None):
@@ -3150,7 +3192,7 @@ def release_private(now, log=log, only=None):
                              and old.get('decidedAt') == published_at for old in learning.read('candidates', season))
                 if not exists:
                     learning.append('candidates', season, [decision])
-            if public_pick.get('lane') == 'hot_plate':
+            if public_pick.get('lane') in ('hot_plate', 'chef_pick'):
                 featured_rows = featured.load()
                 featured_rows[eastern_date(now).isoformat()] = {'id': key, 'chosenAt': published_at,
                                                                  'score': (public_pick.get('kitchenScore') or {}).get('total')}

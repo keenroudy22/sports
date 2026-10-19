@@ -415,8 +415,20 @@ test('Today reconciles its last-slate headline and slips to released plays only'
 
 test('the browser shell requests the core build that exports the shared headline counter', () => {
   const index = fs.readFileSync('site/index.html', 'utf8');
-  assert.match(index, /core\.js\?v=75/);
+  assert.match(index, /core\.js\?v=76/);
   assert.equal(typeof C.isHeadline, 'function');
+});
+
+test('new tiers show1u and2u consistently while legacy Full Sends retain their stake', async () => {
+  for (const [lane, riskUnits, label] of [['best_bet',1,'Best Bet · 1u'],['chef_pick',2,"Chef&#39;s Pick · 2u"],['gut_call',.5,'Full Send']]) {
+    const pick={...prop,lane,riskUnits,featured:true,
+      ...(lane==='gut_call'?{}:{selectionPolicy:'2026-10-19-1u-2u'})};
+    if(lane==='gut_call') pick.featured=false;
+    const {api}=loadApp('#record',{}, {today:{...TODAY,picks:[pick]}});
+    const page=await api.views.pick({id:pick.id});
+    assert.ok(page.includes(label),label);
+    assert.ok(page.includes(`Graded at the posted ${riskUnits}u stake`));
+  }
 });
 
 test('Today prints a settled player name and full stat line, never the stored athlete id', async () => {

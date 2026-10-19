@@ -794,7 +794,8 @@ def pulled_before_post(key, ctx):
     return 'before its post went out' in note or note.startswith('Pulled before posting:')
 
 
-OFFICIAL_STRAIGHT_LANES = frozenset(('best_bet', 'hot_plate', 'gut_call', 'upset', 'safer_combo'))
+TIER_POLICY = '2026-10-19-1u-2u'
+OFFICIAL_STRAIGHT_LANES = frozenset(('best_bet', 'chef_pick', 'hot_plate', 'gut_call', 'upset', 'safer_combo'))
 
 
 def occupies_game(first, latest=None, now=None):
@@ -961,7 +962,8 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
         return Decision(False, 'plan_selection', 'price is outside the lane band', numbers)
     if league == 'NFL' and market == 'total':
         return Decision(False, 'plan_selection', 'NFL totals are paused as public plays; they remain in shadow', numbers)
-    full_send_side = lane == 'gut_call'
+    regular = candidate.get('selectionPolicy') == TIER_POLICY and lane == 'best_bet'
+    full_send_side = lane == 'gut_call' or regular
     if league == 'NFL' and market in ('spread', 'moneyline') and not full_send_side:
         return Decision(False, 'plan_selection', 'NFL sides remain in shadow until 30 forward grades clear the promotion rule', numbers)
     if league == 'NFL' and market in ('spread', 'moneyline') and full_send_side \
@@ -985,15 +987,16 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
     # The strict chance > break-even check above still refuses a losing price,
     # while every price, role, injury and supporting-reason rule remains in
     # force. Best bets keep their four-point floor.
-    lane_floor = 0 if lane == 'gut_call' else 4
+    lane_floor = 0 if lane == 'gut_call' or regular else 4
     if gap < lane_floor:
         return Decision(False, 'plan_selection',
                         f'anchored gap {gap:.1f}; {lane} needs {lane_floor} points', numbers)
     if not reasons:
         return Decision(False, 'plan_selection', 'no supporting reason points the same way as the bet', numbers)
-    if lane == 'gut_call':
-        return Decision(True, 'plan_selection', f'Gut call: anchored {chance:.1%}, gap {gap:.1f}',
-                        {**numbers, 'tier': 'gut_call', 'reasons': reasons})
+    if lane == 'gut_call' or regular:
+        tier = 'best_bet' if regular else 'gut_call'
+        return Decision(True, 'plan_selection', f'{tier}: chance {chance:.1%}, gap {gap:.1f}',
+                        {**numbers, 'tier': tier, 'reasons': reasons})
     if gap >= 20:
         if not any(row.get('class') == 'A' or row.get('type') in CLASS_A_REASONS for row in reasons):
             return Decision(False, 'plan_selection', 'a 20-25 point gap needs a class A reason', numbers)
@@ -1009,7 +1012,7 @@ def selection_verdict(candidate, ctx, lane='best_bet'):
     if sample['spotHit'] < pricing.break_even(odds) - .01:
         return Decision(False, 'plan_selection', 'the observed spot record is below the price gate',
                         {**numbers, 'spot': sample})
-    tier = 'big_gap' if gap >= 20 else 'best_bet'
+    tier = 'chef_pick' if lane == 'chef_pick' else 'big_gap' if gap >= 20 else 'best_bet'
     return Decision(True, 'plan_selection', f'{tier}: anchored {chance:.1%}, gap {gap:.1f}, spot {sample["spotHit"]:.1%}',
                     {**numbers, 'tier': tier, 'spot': sample, 'reasons': reasons})
 
@@ -1327,7 +1330,7 @@ def ladder_one_rung(candidate, ctx):
     return Decision(True, 'ladder_one_rung', 'no rung is open')
 
 
-FROZEN = tuple(dict.fromkeys(integrity.PICK_FIELDS + ('legs', 'riskUnits', 'parlayType', 'ladder')))
+FROZEN = tuple(dict.fromkeys(integrity.PICK_FIELDS + ('legs', 'riskUnits', 'parlayType', 'ladder', 'lane', 'selectionPolicy')))
 
 
 def revision_frozen(candidate, ctx):

@@ -3,6 +3,18 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const C = require('../site/core.js');
 
+test('new chef picks use their actual two-unit stake without changing legacy Full Sends', () => {
+  const base = {id:'new',posted:true,kickoff:'2026-10-20T00:15Z',odds:110,result:'win'};
+  const chef={...base,lane:'chef_pick',riskUnits:2};
+  assert.equal(C.isHeadline(chef),true);
+  assert.equal(C.unitsFor(chef),2.2);
+  assert.equal(C.unitsFor({...chef,result:'loss'}),-2);
+  const old={...base,lane:'gut_call',riskUnits:.5};
+  assert.equal(C.isHeadline(old),false);
+  assert.equal(C.unitsFor(old),.55);
+  assert.equal(C.unitsFor({...base,lane:'best_bet',riskUnits:1}),1.1);
+});
+
 test('saved research filters accept visible choices and reject malformed or obsolete settings', () => {
   const prefs=C.researchPreferences({trendKind:'all',trendRate:'0',chartPos:'none',chartDay:'2026-99-99',chartOpponent:'undefined',
     chartQuery:'London',boardScope:'settled',recordScope:'ladder',recordSeason:'2026',recordPhase:'playoffs',ticket:[{id:'not-a-filter'}],league:'CFB'});

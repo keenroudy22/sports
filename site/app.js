@@ -867,7 +867,7 @@
     const climb = vm.kind === 'climb', fun = vm.kind === 'fun', best = vm.kind === 'best', info = pick.ladder || {};
     const laneChip = { gut_call: 'Full Send', upset: 'Upset pick', safer_combo: 'Safer combo',
       special: "Chef's Special", nba: 'NBA Trial', soccer: 'Soccer Trial', cbb: 'College hoops Trial' };
-    const chip = vm.featured ? 'Hot Plate (POTD)' : climb ? `80/20 Climb${info.run ? ` #${info.run}` : ''}` : fun ? (vm.lotto ? 'Fun ticket · Lotto' : 'Fun ticket') : laneChip[pick.lane] || 'Best bet';
+    const chip = pick.lane === 'chef_pick' ? "Chef's Pick · 2u" : pick.selectionPolicy === '2026-10-19-1u-2u' && pick.lane === 'best_bet' ? 'Best Bet · 1u' : vm.featured ? 'Hot Plate (POTD)' : climb ? `80/20 Climb${info.run ? ` #${info.run}` : ''}` : fun ? (vm.lotto ? 'Fun ticket · Lotto' : 'Fun ticket') : laneChip[pick.lane] || 'Best bet';
     const chipHtml = `<p class="kt-chip">${vm.featured ? FLAME : ''}${esc(chip)}</p>`;
     const when = ticketWhen(pick.kickoff), matchup = g && g.away && g.home ? `${g.away.abbr} at ${g.home.abbr}` : '';
     const nameText = climb ? `Step ${info.step || ''}`.trim() : fun ? `${vm.legs.length} legs` : parts.name;
@@ -1308,7 +1308,7 @@
     const evaluated = today.generatedAt && C.dayOf(today.generatedAt) === etDay()
       && (etHour(today.generatedAt) > 9 || etHour(today.generatedAt) === 9
           && Number(ET_PARTS(today.generatedAt, { minute: '2-digit' })) >= 30);
-    return `<div class="kt-today"><div>${todayTop({ rows, today: Boolean(todays.length), last: (today.lastSlate || {})[state.league], season: (today.season || {})[state.league],
+    return `<p class="small muted" style="margin-bottom:12px"><b>Best Bets · 1u</b> · <b>Chef's Picks · 2u</b> · the rarer, stronger tier. Earlier plays keep their posted stakes.</p><div class="kt-today"><div>${todayTop({ rows, today: Boolean(todays.length), last: (today.lastSlate || {})[state.league], season: (today.season || {})[state.league],
       climb, lines: lines && lines.lines, more: rungHere, past: ladder.history, later: rest, cards, proof, favorite: favoriteHtml, spotlight: nflSpotlight, nextSlate,
       nothingCleared: Boolean(evaluated && !todays.length && !rows.length && todayGames.length) })}</div>
       <div>${rest2}</div></div>`;
@@ -1373,7 +1373,7 @@
       <div class="btn-row" style="margin-top:18px">${research ? `<a class="btn" href="${esc(research)}">${pick.athleteId ? 'Player page' : 'Matchup research'}</a>` : ''}${pick.gameId && game && !sameGame ? `<a class="btn" href="#game/${esc(pick.gameId)}">Game page</a>` : ''}<a class="btn" href="#record">Every result</a><button type="button" class="btn" data-watch-pick="${esc(pick.id)}" aria-pressed="${isSaved}" aria-label="${isSaved ? 'Unsave' : 'Save'} ${esc(vm.title)}">${isSaved ? '★ Saved' : '☆ Save'}</button></div>
       ${sources.length ? `<p class="small muted" style="margin-top:14px">Sources: ${sources.map((x, i) => `<a href="${esc(x)}" target="_blank" rel="noopener noreferrer">${esc(host(x, i))} ↗</a>`).join(' · ')}</p>` : ''}
       <p class="kt-social small">Best bets land in the <a href="https://discord.gg/ZnjubjsBPM" target="_blank" rel="noopener">free Kook'n Discord ↗</a> about 10–15 minutes before X. <a href="https://x.com/keenkooks" target="_blank" rel="noopener">Follow @keenkooks on X ↗</a></p>
-      <p class="small muted" style="margin-top:10px">${C.isParlay(pick) ? (C.isLadder(pick) ? 'A Climb step, tracked in dollars apart from the best-bet record.' : 'A fun ticket at a smaller stake, kept out of the best-bet record.') : pick.priceAssumed ? 'Graded at one unit at an assumed −115; no price was recorded when it was posted.' : 'Graded at one unit, at the line and price we posted.'} The posted price is kept for grading even after the line moves.</p></div>`;
+      <p class="small muted" style="margin-top:10px">${C.isParlay(pick) ? (C.isLadder(pick) ? 'A Climb step, tracked in dollars apart from the best-bet record.' : 'A fun ticket at a smaller stake, kept out of the best-bet record.') : pick.priceAssumed ? 'Graded at one unit at an assumed −115; no price was recorded when it was posted.' : `Graded at the posted ${C.stakeOf(pick)}u stake, at the line and price we posted.`} The posted price is kept for grading even after the line moves.</p></div>`;
   };
 
   /* ---------- Research (B: one pro board) ---------- */
@@ -1922,7 +1922,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-f31cadc6e2ed';
+  const MORE_ASSET = 'app-more.js?v=sha256-1f45e950ef4f';
   const GAMES_ASSET = 'app-games.js?v=sha256-c418b7b6ec23';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,

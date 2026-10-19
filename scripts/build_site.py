@@ -975,7 +975,7 @@ HERO_ROWS = 6              # the weekend card cap is five straight plays; one sp
 HERO_FIELDS = ('id', 'league', 'kind', 'displayTitle', 'market', 'marketType', 'athleteId', 'position', 'line',
                'direction', 'odds', 'book', 'kickoff', 'featured', 'status', 'entryNote', 'expiresAt',
                'cutoffOdds', 'cutoffLine', 'gameId', 'side', 'ticketWhy', 'ticketBut', 'hitStrip', 'held',
-               'quote')
+               'quote', 'lane', 'riskUnits', 'selectionPolicy')
 
 
 def hero_parlay(pick):
@@ -2066,6 +2066,7 @@ def board_picks(first, latest, by_id, identities):
                      'delivery': delivery,
                      'market': pick.get('market') or recent.get('market') or (pricing.market_of(pick) if pick.get('athleteId') else None),
                      'riskUnits': pick.get('riskUnits'), 'modelLean': pick.get('modelLean') is True,
+                     'selectionPolicy': pick.get('selectionPolicy'),
                      'lane': pick.get('lane'),
                      'earlyExit': recent.get('earlyExit') is True,
                      'player': pick.get('player'), 'athleteId': pick.get('athleteId'), 'position': pick.get('position'),

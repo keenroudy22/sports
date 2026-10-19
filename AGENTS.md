@@ -205,6 +205,19 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Prospective straight-play tiers (owner, 2026-10-19):** new football Best Bets are1u and need positive
+  adjusted value at an actual two-sided book price, a sourced supporting reason and every existing news,
+  injury, role, freshness, contradiction, pause, capacity and delivery check. The extra four-point gap and
+  observed-spot threshold belong to the rarer **Chef's Pick,2u** tier (the former strict Best Bet criteria).
+  New regular plays join the ranked card even when the game/day is already served, inside unchanged caps;
+  they are not limited to the old half-unit fallback quota. Use prospective selectionPolicy2026-10-19-1u-2u;
+  never rename or increase already-published stakes. Kittle's Oct19 Full Send remains0.5u. Historical records,
+  art and posts remain unchanged; new Chef picks count at their actual2u risk under existing payout math.
+  The new tier/stake must agree on site, card, X and Discord, and must be rechecked before release.
+  Chef's Pick is stronger conviction, not a guarantee. Preserve early6:45/8:30/11:45 screening and the normal
+  Discord-first release without waiting for17:30. This supersedes older conflicting strict Best Bet/Full Send
+  labels and future stakes, not positive-value, safety or free-budget rules. Fun tickets and other-sport trials stay separate.
+
 - **Football-day output and faster Climb continuation (owner, 2026-10-17):** Thursday, Saturday, Sunday and Monday
   publish a projection post, an evidence-backed trends/research post and every fully gated Best bet/Full Send the
   board supports. A Saturday or Sunday slate with at least ten NFL/CFB games targets five released straight plays;

@@ -156,6 +156,16 @@ class TicketCardTests(unittest.TestCase):
         self.assertEqual(art['kind'], 'photo')
         self.assertEqual(calls, [pick_card.HEADSHOT.format(sport='college-football', athlete='4869443')] * 2)
 
+    def test_owner_tiers_show_exact_stake_and_do_not_fall_back_to_hot_plate(self):
+        import html
+        for lane, stake, label in [('best_bet', 1, 'BEST BET'), ('chef_pick', 2, "CHEF'S PICK")]:
+            pick = dict(PROP, lane=lane, riskUnits=stake, selectionPolicy='2026-10-19-1u-2u')
+            svg = html.unescape(ticket_card.straight_svg(pick, GAME, featured=True, player_side='away',
+                art={'kind': 'photo', 'uri': self.image}, fetch=lambda _: self.logo))
+            self.assertIn(label, svg)
+            self.assertIn(f'{stake}u', svg)
+            self.assertNotIn('HOT PLATE (POTD)', svg)
+
     def test_real_prop_shape_shows_exact_price_units_and_photo_without_season_or_helpline(self):
         data = ticket_card.straight_data(PROP, GAME, player_side='away',
                                          art={'kind': 'photo', 'uri': self.image}, fetch=lambda _: self.logo)

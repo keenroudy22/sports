@@ -51,6 +51,8 @@ def todays_plays(first, latest, games, day, now):
     out = []
     for key, pick in first.items():
         merged = dict(pick, **latest.get(key, {}))
+        if merged.get('selectionPolicy') == gates.TIER_POLICY and merged.get('lane') != 'chef_pick':
+            continue
         if pick.get('historicalImport') or merged.get('legs') or merged.get('parlayType') or not feed.postable(merged):
             continue
         if merged.get('result') or merged.get('entryNote') or (merged.get('status') or 'active') != 'active':
@@ -115,7 +117,7 @@ def choose(ctx, now, path=None, policy=None, write=True, log=print, log_book=Non
     passed = set(entry.get('replaced') or []) | ({named} if named else set())
     planned = [(key, pick, kickoff) for key, pick, kickoff in
                todays_plays(ctx.first, ctx.latest, ctx.games, day, now)
-               if pick.get('lane') == 'hot_plate' and key not in passed and key not in sent]
+               if pick.get('lane') in ('hot_plate', 'chef_pick') and key not in passed and key not in sent]
     if planned:
         key, pick, _ = planned[0]
         score = ((pick.get('_kitchenScore') or {}).get('total'))

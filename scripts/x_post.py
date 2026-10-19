@@ -501,6 +501,10 @@ def _number_line(pick, game, day, history, salt=0):
 
 
 def _play_prefix(pick, game, featured):
+    if pick.get('lane') == 'chef_pick':
+        return "🍳 Chef's Pick: "
+    if pick.get('selectionPolicy') == gates.TIER_POLICY and pick.get('lane') == 'best_bet':
+        return 'Best Bet: '
     if featured:
         return '🍳 Hot Plate (POTD): '
     if pick.get('lane') == 'upset':
@@ -694,15 +698,19 @@ def guard(text, pick, reason=None, now_quote=None):
     if tweet_length(text) > LIMIT:
         problems.append(f'{tweet_length(text)} characters')
     lane = pick.get('lane')
-    if lane in ('best_bet', 'hot_plate', 'gut_call', 'upset') and not reason:
+    if lane in ('best_bet', 'chef_pick', 'hot_plate', 'gut_call', 'upset') and not reason:
         problems.append('play has no supporting reason')
     probability = pick.get('probabilityAtPublication') or {}
-    if lane in ('best_bet', 'hot_plate', 'gut_call', 'upset') and not pick.get('legs'):
+    if lane in ('best_bet', 'chef_pick', 'hot_plate', 'gut_call', 'upset') and not pick.get('legs'):
         chance, needed = probability.get('chance'), probability.get('breakEven')
         if not all(isinstance(value, (int, float)) for value in (chance, needed)):
             problems.append('play has no shared market-anchored chance')
         elif chance <= needed:
             problems.append(f'play chance {chance:.1%} does not beat the price need {needed:.1%}')
+    if pick.get('selectionPolicy') == gates.TIER_POLICY or lane == 'chef_pick':
+        expected = {'best_bet': 1, 'chef_pick': 2}.get(lane)
+        if expected is None or pick.get('riskUnits') != expected or pick.get('selectionPolicy') != gates.TIER_POLICY:
+            problems.append('play tier and published stake do not match')
     return problems
 
 

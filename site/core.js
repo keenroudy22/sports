@@ -424,7 +424,7 @@
     const kickoff = Date.parse(p.kickoff || p.publishedAt || '');
     return !Number.isFinite(kickoff) || kickoff < HEADLINE_DELIVERY_FROM || reachedPublicRail(p);
   };
-  const isHeadline = p => (!p.lane || p.lane === 'best_bet' || p.lane === 'hot_plate') && headlineDeliveryEligible(p);
+  const isHeadline = p => (!p.lane || p.lane === 'best_bet' || p.lane === 'hot_plate' || p.lane === 'chef_pick') && headlineDeliveryEligible(p);
   const laneRecord = (picks, lane, minimum = 10) => summarizePicks(picks.filter(p => p.lane === lane), minimum);
   const recordOf = (picks, minimum = 10) => {
     const imported = picks.filter(isUnpricedImport);

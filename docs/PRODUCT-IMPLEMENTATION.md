@@ -1,5 +1,18 @@
 # October 5 product implementation tracker
 
+## October19 — owner-approved1u Best Bets /2u Chef's Picks (in progress)
+
+Owner explicitly approves prospective ordinary Best Bets at1u and rarer Chef's Picks at2u. The former strict
+four-point fair-market gap plus observed-spot check now selects Chef's Pick; a reason-backed positive-value
+ordinary play enters the main ranked card at1u without the old unserved-day fallback quota. Other truth,
+news, role, price, pause, overlap and capacity checks stay. Legacy lanes keep their exact prior semantics;
+107 existing public rows retain their IDs, stakes and results. In particular, Kittle stays a0.5u Full Send.
+New metadata versions the policy; Chef2u and ordinary1u use existing stake-weighted payout math. No odds,
+coefficients or outcomes are altered to fill a slate. New-tier copy reaches the card, Today, help, X and
+Discord; the generic one-unit detail footer becomes saved-stake-aware, also resolving O-20261019-STAKECOPY
+when verified. O-20261019-TIERS tracks tests, real renders, locked deployment, hosted/live checks, public policy
+announcement receipts and a current-board pass with actual new releases or exact refusals. Not yet shipped.
+
 ## 2026-10-19 — learned-prop formula correction (verified release)
 
 Completion receipt: final source `246e6755`, hosted run **39304658679 succeeded** October19. Normal and clean-export
