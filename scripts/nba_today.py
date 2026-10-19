@@ -2,7 +2,7 @@
 import json
 import math
 from collections import defaultdict
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import boxscores
@@ -128,10 +128,17 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
     public_plays=[{k:p.get(k) for k in ('id','kickoff','publishedAt','marketType','direction','line','odds','book','riskUnits','projection','result','actual','reasons')} | {'teams':p['game']['teams'],'card':f"data/cards/{p['id'].lower()}.png"} for p in plays]
     readiness=nba_readiness.status(now, capture_root=root)
     started=nba_trial_runtime.review_ready(now, readiness=readiness['readyForLiveTrial'])
+    import nba_editorial
+    active=[g for g in games if g.get('status')=='scheduled' and g.get('seasonType')=='regular-season'
+            and now < boxscores.instant(g['kickoff']) <= now+timedelta(days=2)]
+    team_trends=nba_editorial.team_trends(active,now)
+    editorial=[{'title':r['title'],'day':r['day'],'card':f"data/cards/{r['key']}.png",'text':r['text']}
+               for r in nba_editorial.stored() if r['day']>=nba_capture.sports_refresh.eastern_date(now).isoformat()
+               and boxscores.instant(r['capturedAt'])<=now]
     return {'league':'NBA','generatedAt':boxscores.stamp(now),'season':season,
             'heading':'Opening night · October 20' if nba_capture.sports_refresh.eastern_date(now).isoformat() < '2026-10-20' else 'NBA Today',
             'sourceAt':slate.get('retrievedAt'),'scheduleFresh':fresh(slate.get('retrievedAt'),now,24),
-            'games':games,'trends':trends[:12],'prep':prep[:10],
+            'games':games,'trends':trends[:12],'teamTrends':team_trends,'editorial':editorial,'prep':prep[:10],
             'prepNote':'Current-season games, fresh prices and player availability must clear before a row appears.',
             'readiness':readiness,
             'trial':{'label':'NBA Trial','state':'ready' if started else readiness['stage'],'record':trial_record,'plays':public_plays,'seasons':trial_seasons,

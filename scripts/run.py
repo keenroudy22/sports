@@ -63,7 +63,7 @@ SLOT_TOLERANCE = timedelta(minutes=40)     # a run that fires this far from a sl
 PUBLISH_MARGIN = timedelta(minutes=5)      # nothing is published on a game this close to kickoff
 KINDS = ('settle', 'close', 'lean', 'prop', 'longshot', 'ladder', 'favorite')
 LADDER_SCAN_TIMES = ((10, 0), (13, 30), (16, 0), (20, 0))
-WHITELIST = ('research/', 'data/odds/', 'data/prop-odds/', 'data/release-cards/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
+WHITELIST = ('data/nba-editorial/', 'research/', 'data/odds/', 'data/prop-odds/', 'data/release-cards/', 'data/x-posted.json', 'data/x-reasons.json', 'data/learning/',
              'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-trial/', 'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 BOOK_SLUG = {'DraftKings': 'dk', 'FanDuel': 'fd', 'BetMGM': 'mgm', 'Caesars': 'czr', 'BetRivers': 'br',
              'ESPN BET': 'espnbet', 'Fanatics': 'fan'}
@@ -150,7 +150,7 @@ def git(*args, cwd=ROOT, check=True):
     return result
 
 
-LEFTOVER = ('data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-trial/',
+LEFTOVER = ('data/nba-editorial/', 'data/odds/', 'data/prop-odds/', 'data/learning/', 'data/x-posted.json', 'data/x-reasons.json', 'data/paper/', 'data/hoops/', 'data/nba-capture/', 'data/nba-trial/',
             'data/market-lab/', 'site/data/market-lab.json', 'data/featured.json', 'data/sports-social/', 'site/data/desk-notes.json')
 
 
@@ -2689,6 +2689,12 @@ def _run(args, now, slot, kinds, status):
         remember(public_decisions, now, slot, status)
         paper_trials(now, slot, status)
         try:
+            import nba_editorial
+            status['nbaEditorialPrepared'] = nba_editorial.prepare(now)
+        except Exception as error:
+            status['errors'].append(f'NBA editorial: {type(error).__name__}: {error}')
+            log(f'NBA editorial unavailable: {type(error).__name__}: {error}')
+        try:
             import nba_trial_runtime
             status['nbaTrialGraded'] = nba_trial_runtime.grade(now)
             if args.command == 'run':
@@ -2885,7 +2891,10 @@ def buffer_posts(now, ctx, games, closed, status, deploying=False, sleep=time.sl
 
 def mirror_due(log_book, now):
     """Is there an X result or Discord-first delivery the lightweight job should handle?"""
+    import nba_editorial
     for entry in log_book.get('posts', []):
+        if nba_editorial.veto_pending(entry,now):
+            return True
         if entry.get('cancelledAt') or entry.get('deletedAt'):
             followup = (entry.get('discord') or {}).get('followup') or {}
             if followup.get('state') == 'pending':

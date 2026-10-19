@@ -686,6 +686,8 @@ def house_posts(first, latest, games, log_book, now, log=print):
     sports = sports_posts.post(now)
     if sports:
         out.append(sports)
+    import nba_editorial
+    out += nba_editorial.posts(now)
     return out
 
 

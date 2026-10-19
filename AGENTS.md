@@ -205,6 +205,15 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Early NBA research (owner, October19):** from October20, prepare two NBA game-day research posts:
+  team projections at8AM Eastern and team trends at10AM, with early stale-safe recovery before tipoff.
+  Both use the approved Kitchen Ticket research-list family, mirrored after confirmed X to research Discord,
+  never Plays & Results. This specifically replaces the old one-other-sport-post cap for these two NBA posts;
+  global20/day and Buffer reserve/spacing remain. Full names and displayed facts also appear in captions.
+  Opening-week history is explicitly last season, regular season; current-season samples never blend with it.
+  Freeze artifacts/words before scheduling. No invented prop prices or player projections; NBA Trial remains1u,
+  separate and unchanged. No generic NHL/MLB social activation or new paid/metered requests.
+
 - **Prospective straight-play tiers (owner, 2026-10-19):** new football Best Bets are1u and need positive
   adjusted value at an actual two-sided book price, a sourced supporting reason and every existing news,
   injury, role, freshness, contradiction, pause, capacity and delivery check. The extra four-point gap and

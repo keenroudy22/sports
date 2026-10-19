@@ -35,6 +35,6 @@ that existing published research/model outputs are proprietary. It deliberately 
 change stored records. Future premium fields need a reviewed server-side entitlement boundary; do not add a hidden
 public JSON file and call it paid access. No accounts, billing, feed expansion or data removal is authorized here.
 
-- `data/app/nba.json`: NBA-only stored schedule/scores, research team projections, explicitly labeled regular-season player logs and qualified research Prep List rows. No football record, private capture timing, social state or unverified prop prices. Budget 64 KiB; fetched only in lazy NBA Today.
+- `data/app/nba.json`: NBA-only stored schedule/scores, research team projections, explicitly labeled regular-season player logs, team scoring/allowed trends with sample dates, frozen research-card text/links and qualified research Prep List rows. No football record, private capture timing, social state or unverified prop prices. Budget 64 KiB; fetched only in lazy NBA Today. `data/cards/nba-projections-YYYY-MM-DD.png` and `nba-trends-YYYY-MM-DD.png` use the existing reviewed PNG-card family; private snapshots and delivery/review state are not uploaded.
 
 - `data/cards/nba-trial-preview.png`: fixed owner-review sample copied byte for byte from `design/final/nba-trial-preview.png`; uses a real October 9 two-sided opening-game quote. The image says NBA TRIAL PREVIEW and no play posted. It is not an admitted bet, record line or social post.

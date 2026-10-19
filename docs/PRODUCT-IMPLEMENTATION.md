@@ -1,5 +1,24 @@
 # October 5 product implementation tracker
 
+## October19 — early NBA research activation (in progress)
+
+Owner explicitly requests opening-day NBA projections and trends on the website, X and Discord, early enough
+to read before games. O-20261019-NBASOCIAL adds an8AM Eastern projections target and10AM team-trend target
+within unchanged global20/day, Buffer reserves and spacing; these two NBA posts specifically supersede the older
+one-other-sport-post rule. No broad sports-social switch is enabled. Normal runs prepare frozen NBA-only rows;
+hosted builds render the approved Kitchen Ticket research-list template; normal Buffer research scheduling
+mirrors to research Discord only after actual X delivery. Missing review/veto cancels unsent NBA research through
+the existing five-minute mirror. Website adds team trends and matching graphic/text links. Last-season regular
+season samples remain explicit; no current NBA player probability, price, pick or record is fabricated.
+
+Prepared real Oct20 card text includes all three opening scores and a separate Boston/Detroit10-game historical
+scoring/allowed card. Automatic render checks and a real two-hour phone veto apply. Source/hosted/live and
+tomorrow's actual delivery receipts remain to be recorded separately. O-20261019-NBAPROPS tracks feed access
+and a current-roster/minutes model: official docs at https://the-odds-api.com/sports/nba-odds.html and
+https://sportsgameodds.com/player-props-odds-api describe candidate price coverage, not verified account access.
+No metered NBA request, trial or upgrade is authorized or performed in this slice. Existing game-line NBA Trial
+activation and its separate1u record remain unchanged.
+
 ## October19 — owner-approved1u Best Bets /2u Chef's Picks (source live; delivery receipts pending)
 
 Source `03dece1d` passed normal and clean-export suites:1498 Python (two skips),253 Node; all build,

@@ -388,7 +388,7 @@ def plan(first, latest, games, now, log_book, player_team=None, soon=None, quote
     # Research follows the full morning play batch, even when the batch is longer than six posts.
     latest_play_target = max((row[0] for row in plays if row[5] == 'play'), default=None)
     if latest_play_target is not None:
-        plays = [(max(row[0], latest_play_target + SPACING), *row[1:]) if row[5] == 'research' else row
+        plays = [(max(row[0], latest_play_target + SPACING), *row[1:]) if row[5] == 'research' and not row[3].startswith('nba-') else row
                  for row in plays]
     plays.sort(key=lambda row: row)
     # The desk's own ceiling gets the same protection as Buffer's allowance. A research card is useful, but never
@@ -692,6 +692,16 @@ def reconcile(log_book, now, key=None, send=http_send, log=print):
     message when it failed. Returns the entries that failed, for the run to raise."""
     failed = []
     for entry in log_book.get('posts', []):
+        import nba_editorial
+        if nba_editorial.veto_pending(entry,now):
+            try:
+                delete_post(entry['bufferPostId'],key=key,send=send)
+                entry['cancelledAt']=gates.stamp(now)
+                entry['cancelReason']='NBA research preview veto or missing review'
+                log(f"buffer: {entry['id']} cancelled before send: NBA research preview hold")
+            except BufferError as error:
+                log(f"buffer: NBA research veto cancellation failed: {error}")
+            continue
         if not entry.get('bufferPostId') or entry.get('cancelledAt') or entry.get('sentAt') or entry.get('error'):
             continue
         if not entry.get('dueAt') or gates.when(entry['dueAt']) > now:
