@@ -950,10 +950,16 @@ def cutoff_fields(pick):
     # repaired learned-prop family, never advertise chasing a worse price than
     # the actual publication quote. Preserve the original append-only rule.
     probability = pick.get('probabilityAtPublication') or {}
-    if probability.get('calibrationMethod') == 'neutral-centered-held-out' and isinstance(pick.get('odds'), (int, float)):
+    checked_quote_only = probability.get('calibrationMethod') == 'neutral-centered-held-out' and isinstance(pick.get('odds'), (int, float))
+    if checked_quote_only:
         cents = max(cents, pricing.cents(pick['odds']))
-    return {'cutoffOdds': cents - 100 if cents < 0 else cents + 100,
+    fields = {'cutoffOdds': cents - 100 if cents < 0 else cents + 100,
             'cutoffLine': float(price[2]), 'cutoffBoundary': float(boundary[1]) if boundary else None}
+    if checked_quote_only:
+        fields['cutoff'] = (f"Price check applies at {pick['odds']:+g} or better at {float(price[2]):g}. "
+                            "A worse price or a different line needs a new check; the original generic tolerance "
+                            "is not a current value recommendation.")
+    return fields
 
 
 def qb_news(injuries):

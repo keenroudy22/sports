@@ -166,6 +166,9 @@ class PickTests(unittest.TestCase):
         pick = {'odds': 102, 'cutoff': pricing.cutoff('rec', 'over', 5.5, 102),
                 'probabilityAtPublication': {'chance': .511, 'calibrationMethod': 'neutral-centered-held-out'}}
         self.assertEqual(build_site.cutoff_fields(pick)['cutoffOdds'], 102)
+        self.assertIn('Price check applies at +102 or better at 5.5', build_site.cutoff_fields(pick)['cutoff'])
+        self.assertNotIn('-113', build_site.cutoff_fields(pick)['cutoff'])
+        self.assertIn('-113', pick['cutoff'])  # original publication remains untouched
         self.assertGreater(.511, pricing.break_even(102))
         self.assertLess(.511, pricing.break_even(-112))
 
