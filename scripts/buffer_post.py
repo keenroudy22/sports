@@ -697,7 +697,7 @@ def reconcile(log_book, now, key=None, send=http_send, log=print):
             try:
                 delete_post(entry['bufferPostId'],key=key,send=send)
                 entry['cancelledAt']=gates.stamp(now)
-                entry['cancelReason']='NBA research preview veto or missing review'
+                entry['cancelReason']='NBA research review or current-price/availability hold'
                 log(f"buffer: {entry['id']} cancelled before send: NBA research preview hold")
             except BufferError as error:
                 log(f"buffer: NBA research veto cancellation failed: {error}")

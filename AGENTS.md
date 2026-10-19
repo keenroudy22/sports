@@ -205,6 +205,20 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **NBA player research (owner, 2026-10-19):** finish NBA player projections versus real lines, hit rates and
+  favorites on the site and early X/research Discord. NBA-only SharpAPI collection is approved within the existing
+  Free account (DK/FD, 12/minute, no monthly cap): at most 12 reads per capture, 5.2 seconds apart, no Odds API/SGO
+  credits or paid access. This narrowly supersedes older ESPN-only/zero-NBA-prop-request rules. Verified current
+  ESPN rosters join names to player IDs; ambiguous identities, injuries, stale availability and thin/changed roles
+  hold projections. Initial minutes × own per-minute baselines and exact-line recorded hit counts are research,
+  not calibrated win probabilities or official Best Bets. Keep prior seasons explicit, no invented opponent
+  adjustments or injury redistribution. Freeze forecasts and grade forward separately before promoting props.
+  Morning captures at6:45 and8:30 supplement existing NBA slots. One player research card targets9:15AM
+  after the8:30 refresh; never freeze tomorrow's post on tonight's price. This adds one NBA prop research post to
+  the approved8AM projection and10AM team-trend posts, inside unchanged global caps and queue reserves.
+  Same research-list art, T20 plus2-hour phone veto; confirmed X first, then research Discord only.
+  Existing scheduled team cards and all football/NBA official records remain unchanged.
+
 - **Early NBA research (owner, October19):** from October20, prepare two NBA game-day research posts:
   team projections at8AM Eastern and team trends at10AM, with early stale-safe recovery before tipoff.
   Both use the approved Kitchen Ticket research-list family, mirrored after confirmed X to research Discord,

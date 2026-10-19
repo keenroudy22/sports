@@ -38,3 +38,10 @@ public JSON file and call it paid access. No accounts, billing, feed expansion o
 - `data/app/nba.json`: NBA-only stored schedule/scores, research team projections, explicitly labeled regular-season player logs, team scoring/allowed trends with sample dates, frozen research-card text/links and qualified research Prep List rows. No football record, private capture timing, social state or unverified prop prices. Budget 64 KiB; fetched only in lazy NBA Today. `data/cards/nba-projections-YYYY-MM-DD.png` and `nba-trends-YYYY-MM-DD.png` use the existing reviewed PNG-card family; private snapshots and delivery/review state are not uploaded.
 
 - `data/cards/nba-trial-preview.png`: fixed owner-review sample copied byte for byte from `design/final/nba-trial-preview.png`; uses a real October 9 two-sided opening-game quote. The image says NBA TRIAL PREVIEW and no play posted. It is not an admitted bet, record line or social post.
+
+- `data/app/nba.json` also carries bounded `playerProps`: up to60 fresh DK/FD exact two-sided comparisons,
+  research minutes/rate projections, sample season/dates, historical scaled range (not a prediction interval),
+  exact-line last5/last10/recorded-season hit counts, source times and named holds. Historical rates are not
+  forecast probabilities. Private roster/quote/forecast ledgers and review/delivery state stay outside the upload.
+  `data/cards/nba-props-YYYY-MM-DD.png` and clearly titled `nba-props-preview.png` reuse the approved PNG
+  research-list family; no new upload path or official-record lane.

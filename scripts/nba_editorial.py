@@ -1,7 +1,7 @@
-"""Owner-approved NBA projection and team-trend research, frozen before delivery.
+"""Owner-approved NBA team and player research, frozen before delivery.
 
-No feed calls, player model, price claims or play admission. Two early research
-posts per NBA game day; football research and all delivery caps remain separate.
+No feed calls or play admission. Team cards plus one fresh, roster-verified player
+research card; football research and shared delivery caps remain separate.
 """
 import json
 import math
@@ -20,6 +20,60 @@ ROOT = Path(__file__).resolve().parents[1]
 STORE = ROOT / 'data/nba-editorial'
 START = '2026-10-20'
 REVIEW = Path(os.environ.get('KEENROUDY_CONF') or Path.home()/'.config/keenroudy')/'nba-editorial-review.json'
+PROP_REVIEW = REVIEW.with_name('nba-props-review.json')
+
+
+def prop_choice(data,now,preview=False):
+    """One early exact-price player research card, separate from team cards.
+
+    Freeze only after the game-day 8:30 refresh, not on overnight prices. First
+    preview can be rendered earlier, but is never a publishable post.
+    """
+    import x_post
+    day=eastern_date(now)
+    rows=[]; seen=set(); evidence=[]
+    for r in (data.get('playerProps') or {}).get('rows',[]):
+        if not r.get('favorite') or r.get('hold') or not r.get('projection') or r['athleteId'] in seen:
+            continue
+        if r.get('stat') not in ('pts','reb','ast','fg3m'):continue
+        kickoff=boxscores.instant(r['kickoff']);target=eastern_date(kickoff)
+        if (not preview and (target!=day or (now.astimezone(gates.EASTERN).hour,now.astimezone(gates.EASTERN).minute)<(8,30))) or kickoff<=now+timedelta(hours=2):
+            continue
+        if evidence and eastern_date(boxscores.instant(evidence[0]['kickoff']))!=target:continue
+        if not timedelta(0)<=now-boxscores.instant(r['sourceAt'])<=timedelta(hours=4):continue
+        p=r['projection'];h=r['last10'];side=r['side']
+        item={'subject':r['name'],'line':f"{side.title()} {r['line']:g} {r['statName']} {r['odds']:+d}",
+              'right':f"{p['value']:g}",'logo':r.get('photo'),
+              'detail':f"{r['teamAbbr']} · {r['book']} · {h['hits']}/{h['games']} {p['window'].lower()}",
+              'caption':f"{r['name']} · {r['teamName']}\n{side.title()} {r['line']:g} {r['statName']} {r['odds']:+d} · mine {p['value']:g} · {h['hits']}/{h['games']}"}
+        if rows and r['book']!=evidence[0]['book']:continue
+        proposed=rows+[item]
+        text='\n'.join([f"NBA prop looks · {r['book']}",*[x['caption'] for x in proposed],
+                        f"{p['window']} recorded games. Research, not Best Bets.",'#NBA'])
+        if x_post.tweet_length(text)>x_post.LIMIT:continue
+        rows=proposed;evidence.append(r);seen.add(r['athleteId'])
+        if len(rows)==3:break
+    if len(rows)<2:return None
+    target=eastern_date(boxscores.instant(evidence[0]['kickoff']))
+    due=datetime(target.year,target.month,target.day,9,15,tzinfo=gates.EASTERN).astimezone(timezone.utc)
+    cutoff=min(due+timedelta(hours=1),min(boxscores.instant(r['kickoff']) for r in evidence)-timedelta(hours=2),
+               min(boxscores.instant(r['sourceAt']) for r in evidence)+timedelta(hours=4))
+    if not preview and now>=cutoff:return None
+    return {'key':f'nba-props-{target}' if not preview else 'nba-props-preview','family':'props','day':target.isoformat(),
+            'capturedAt':boxscores.stamp(now),'sourceAt':data['sourceAt'],'due':boxscores.stamp(due),
+            'stale':boxscores.stamp(cutoff),'rows':rows,'evidence':evidence,'text':text,
+            'title':'NBA PROP PREVIEW' if preview else 'NBA PROP LOOKS',
+            'preview':bool(preview),'kicker':f"{eastern_date(now):%b %-d} · PREVIEW" if preview else f"{target:%b %-d} · PLAYER RESEARCH",'right_label':'MY NUMBER'}
+
+
+def props_current(snapshot,now):
+    import nba_player_props
+    current=nba_player_props.build(now)['rows']
+    for old in snapshot.get('evidence',[]):
+        if not any(all(r.get(k)==old.get(k) for k in ('eventId','athleteId','stat','book','line','over','under'))
+                   and r.get('projection')==old.get('projection')
+                   and not r.get('hold') and r.get('favorite') for r in current):return False
+    return bool(snapshot.get('evidence'))
 
 
 def team_trends(games, now, history=None):
@@ -126,7 +180,8 @@ def prepare(now, root=STORE, data=None, history=None):
         import nba_today
         data=nba_today.build(now)
     created=[]
-    for row in choices(data,now,history):
+    prop=prop_choice(data,now)
+    for row in choices(data,now,history)+([prop] if prop else []):
         path=Path(root)/f"{row['key']}.json"
         path.parent.mkdir(parents=True,exist_ok=True)
         try:
@@ -142,10 +197,10 @@ def stored(root=STORE):
     return [json.loads(p.read_text()) for p in sorted(Path(root).glob('nba-*.json'))]
 
 
-def review_ready(due, review=None):
+def review_ready(due, review=None, path=None):
     if review is None:
         try:
-            review=json.loads(REVIEW.read_text())
+            review=json.loads((path or REVIEW).read_text())
         except (OSError,ValueError):
             return False
     try:
@@ -158,12 +213,13 @@ def review_ready(due, review=None):
 def posts(now, root=STORE, review=None):
     return [dict(key=r['key'],kind='research',text=r['text'],due=boxscores.instant(r['due']),
                  stale=boxscores.instant(r['stale']),card=r['key']) for r in stored(root)
-            if now<boxscores.instant(r['stale']) and boxscores.instant(r['due'])-now<=timedelta(days=1)
-            and review_ready(boxscores.instant(r['due']),review)]
+            if not r.get('preview') and now<boxscores.instant(r['stale']) and boxscores.instant(r['due'])-now<=timedelta(days=1)
+            and review_ready(boxscores.instant(r['due']),review,PROP_REVIEW if r.get('family')=='props' else REVIEW)
+            and (r.get('family')!='props' or props_current(r,now))]
 
 
 def veto_pending(entry, now=None):
-    if (not re.fullmatch(r'nba-(?:projections|trends)-\d{4}-\d{2}-\d{2}',str(entry.get('id') or ''))
+    if (not re.fullmatch(r'nba-(?:projections|trends|props)-\d{4}-\d{2}-\d{2}',str(entry.get('id') or ''))
             or not entry.get('bufferPostId') or any(entry.get(k) for k in ('sentAt','cancelledAt','deletedAt'))):
         return False
     try:
@@ -171,7 +227,12 @@ def veto_pending(entry, now=None):
     except (KeyError,TypeError,ValueError):
         return False
     # Never issue a delete against a post that may already have gone live.
-    return due>(now or datetime.now(timezone.utc)) and not review_ready(due)
+    now=now or datetime.now(timezone.utc)
+    if due<=now:return False
+    if str(entry['id']).startswith('nba-props-'):
+        snapshot=next((r for r in stored() if r['key']==entry['id']),None)
+        return not review_ready(due,path=PROP_REVIEW) or not snapshot or not props_current(snapshot,now)
+    return not review_ready(due)
 
 
 def render_due(now, folder, root=STORE, fetch=None, log=print):

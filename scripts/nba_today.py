@@ -133,9 +133,19 @@ def build(now=None, root=nba_capture.STORE, boxes=None, model_factory=None):
             and now < boxscores.instant(g['kickoff']) <= now+timedelta(days=2)]
     team_trends=nba_editorial.team_trends(active,now)
     editorial=[{'title':r['title'],'day':r['day'],'card':f"data/cards/{r['key']}.png",'text':r['text']}
-               for r in nba_editorial.stored() if r['day']>=nba_capture.sports_refresh.eastern_date(now).isoformat()
+               for r in nba_editorial.stored() if not r.get('preview') and r['day']>=nba_capture.sports_refresh.eastern_date(now).isoformat()
                and boxscores.instant(r['capturedAt'])<=now]
-    return {'league':'NBA','generatedAt':boxscores.stamp(now),'season':season,
+    import nba_player_props
+    player_props=nba_player_props.build(now,root,boxes)
+    # Shared caveats and deterministic explanation text need not be repeated in
+    # every lazy-payload row. Counts retain their true denominators; L10 values
+    # remain available without duplicating the season/L5 arrays.
+    for r in player_props['rows']:
+        r.pop('why',None);r.pop('caution',None)
+        for key in ('last5','seasonHistory'):
+            if key in r:r[key].pop('values',None)
+    player_props['note']+=' Minutes × own scoring rate, not opponent-adjusted. Teammate absences are not redistributed.'
+    return {'league':'NBA','generatedAt':boxscores.stamp(now),'season':season,'playerProps':player_props,
             'heading':'Opening night · October 20' if nba_capture.sports_refresh.eastern_date(now).isoformat() < '2026-10-20' else 'NBA Today',
             'sourceAt':slate.get('retrievedAt'),'scheduleFresh':fresh(slate.get('retrievedAt'),now,24),
             'games':games,'trends':trends[:12],'teamTrends':team_trends,'editorial':editorial,'prep':prep[:10],

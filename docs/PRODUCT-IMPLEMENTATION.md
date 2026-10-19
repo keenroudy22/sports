@@ -1,5 +1,24 @@
 # October 5 product implementation tracker
 
+## October19 — NBA player research implementation; release checks pending
+
+O-20261019-NBAPROPS now has NBA-only SharpAPI parsing, unique current ESPN-roster joins, same-read two-sided
+prices, conservative same-team minutes/rate research baselines, last5/last10/recorded-season exact-line hits,
+source dates and specific availability/role holds. Site displays at most60 fresh comparisons and summarizes holds.
+No NFL coefficients, forecast probabilities, opponent adjustments or injury-usage boosts are borrowed/invented.
+First capture:12 free Sharp reads,313 paired offers; six ESPN roster reads. Coverage is partial, not the full market.
+The first schedule refresh failed transiently and retained the previous good slate; fresh injury/roster captures
+succeeded. Walk-forward sanity:29,064 stat predictions, MAE2.442 versus2.474 for a last-five mean; mixed-stat
+error is a sanity comparison, not a price/profit test or proof of value. Forward snapshots/outcomes remain separate
+append-only research stores. No NBA official player play or football record change.
+
+The owner authorizes an additional9:15AM NBA player-research target, prepared only after game-day8:30 refreshed
+prices/availability. Morning6:45/8:30 NBA captures supplement the existing11:45/17:30/21:00/23:30 slots.
+Exact source prices, full player/team names and labeled historical samples appear in captions and matching
+research-list cards. First real preview passes SVG/T20 and visual inspection; live release and phone-veto receipt
+are not yet complete. Existing8:04/10:02ET Oct20 team-card schedules remain untouched. X confirmation precedes
+research Discord, never Plays & Results. All shared caps and free-plan limits remain in force.
+
 ## October19 — early NBA research activated; opening-day delivery observing
 
 Verified source `14a7d611ef19f72c13a6ec6a2c1a7209d2df3b19`; hosted **39332687860 succeeded**. Locked

@@ -2688,15 +2688,29 @@ def _run(args, now, slot, kinds, status):
         public_decisions = [row for row in decided if row.get('id') not in admission_keys]
         remember(public_decisions, now, slot, status)
         paper_trials(now, slot, status)
+        if os.environ.get('KEENROUDY_SPORTS_CAPTURE','1')!='0' and (slot.hour in PAPER_SLOTS or (slot.hour,slot.minute) in ((6,45),(8,30))):
+            try:
+                import nba_capture,nba_player_props
+                if 'nbaCapture' not in status:
+                    status['nbaCapture']=nba_capture.step(now,scheduled=True)
+                status['nbaPlayerProps']=nba_player_props.capture(now if args.dry_run else datetime.now(timezone.utc))
+                log(f"NBA player props: {status['nbaPlayerProps']}")
+            except Exception as error:
+                status['errors'].append(f'NBA player props: {type(error).__name__}: {error}')
         try:
             import nba_editorial
-            status['nbaEditorialPrepared'] = nba_editorial.prepare(now)
+            # Feed receipts are newer than this run's start. Use the real
+            # post-capture instant, or their future-time guard would suppress
+            # every freshly captured morning post. Rehearsals retain their clock.
+            status['nbaEditorialPrepared'] = nba_editorial.prepare(now if args.dry_run else datetime.now(timezone.utc))
         except Exception as error:
             status['errors'].append(f'NBA editorial: {type(error).__name__}: {error}')
             log(f'NBA editorial unavailable: {type(error).__name__}: {error}')
         try:
             import nba_trial_runtime
             status['nbaTrialGraded'] = nba_trial_runtime.grade(now)
+            import nba_player_props
+            status['nbaPlayerPropGraded'] = nba_player_props.grade(now)
             if args.command == 'run':
                 status['nbaTrial'] = nba_trial_runtime.admission(now, capture='nbaCapture' not in status)
         except Exception as error:
@@ -2710,7 +2724,8 @@ def _run(args, now, slot, kinds, status):
         log('git:', git_result)
         # Posts are scheduled after the push: the push deploys the cards of anything just published, and a
         # post never goes out without its card.
-        buffer_posts(now, ctx, games, closed, status, deploying=bool(git_result.get('pushed')))
+        buffer_posts(now if args.dry_run else datetime.now(timezone.utc), ctx, games, closed, status,
+                     deploying=bool(git_result.get('pushed')))
         owner_agenda(now, ctx, games)
         # Optional local editorial work comes AFTER official scheduling, never in its critical path.
         homepage_editor(now, status, enabled=use_llm)
