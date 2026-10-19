@@ -3522,6 +3522,37 @@
    "sentAt": "2026-10-19T13:05:25.614Z",
    "link": "https://x.com/1753110091912413184/status/2112168239857868812",
    "tweetId": "2112168239857868812"
+  },
+  {
+   "id": "research:end-zone:2026-10-19",
+   "postedAt": "2026-10-19T14:47:46Z",
+   "dueAt": "2026-10-19T14:49:46Z",
+   "bufferPostId": "6ad62d963e5fb9f3ab99c06a",
+   "textHash": "e92011c8c77ebb72",
+   "kind": "buffer:research",
+   "card": true,
+   "cardTheme": "ticket",
+   "discord": {
+    "state": "pending",
+    "text": "Commanders at 49ers. Red-zone watch\nChristian McCaffrey: 17 chances, 9 inside the 10. My TD lean.\nGeorge Kittle: 6 / 4\nRachaad White: 6 / 3\nKaytron Allen: 4 / 2\nRed-zone chances / inside-the-10 work.\n#NFL",
+    "destination": "research",
+    "image": "https://keenroudy.com/sports/data/cards/research-end-zone-2026-10-19.png"
+   },
+   "research": {
+    "type": "td-lean",
+    "leans": [
+     {
+      "player": "Christian McCaffrey",
+      "athleteId": "3117251",
+      "gameId": "NFL-401873008",
+      "league": "NFL",
+      "kickoff": "2026-10-20T00:15Z",
+      "anytime": true,
+      "firstTd": true
+     }
+    ]
+   },
+   "cardKey": "research-end-zone-2026-10-19"
   }
  ]
 }
