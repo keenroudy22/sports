@@ -486,8 +486,8 @@ def settle(ctx, raw_first, games, records, now, fetch=boxscores.fetch_game, inju
 
 
 def lock_units(revision):
-    """Write the units a graded play won or lost into its settlement, at the line and price it was published at (one
-    unit a play, a parlay at its own stake, a push zero), so the record's units are saved with the result and never
+    """Write the units a graded play won or lost into its settlement, at its posted line, price and risk stake
+    (one unit only when no explicit stake was saved; a push zero), so units stay saved with the result and never
     move when the code that sums them does."""
     import x_post
     units = x_post.units_for(revision)

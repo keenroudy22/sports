@@ -93,6 +93,13 @@ class PlayTierTests(unittest.TestCase):
         self.assertNotIn('_selection', checked)
         self.assertEqual(checked['_planReasons'], [self.reason])
 
+    def test_settlement_locks_the_posted_stake_including_legacy_half_units(self):
+        for stake, won in [(2, 2.2), (1, 1.1), (.5, .55)]:
+            pick = {'odds': 110, 'riskUnits': stake, 'result': 'win'}
+            self.assertEqual(run.lock_units(pick)['units'], won)
+            loss = {'odds': 110, 'riskUnits': stake, 'result': 'loss'}
+            self.assertEqual(run.lock_units(loss)['units'], -stake)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1005,7 +1005,7 @@
   const ktSec = (id, title, body, { tape = false, kind = '', link = '' } = {}) => `<section class="kt-sec kt-rest kt-${id}" aria-labelledby="${id}-h"><div class="kt-sec-head"><h2 class="${tape ? 'kt-tape' : 'kt-head'}" id="${id}-h">${esc(title)}</h2>${kind ? `<span class="kt-kind">${esc(kind)}</span>` : ''}</div>${body}${link}</section>`;
   const ktLink = (href, text) => `<a class="kt-more-link" href="${esc(href)}">${esc(text)} ›</a>`;
 
-  /* ROI at posted prices: units over plays staked (one unit each), only once ten priced plays are graded. */
+  /* ROI at posted prices: units over actual stakes, only once ten priced plays are graded. */
   const roiOf = cap => cap.priced >= 10 && cap.staked > 0 && isNum(cap.units) ? 100 * cap.units / cap.staked : null;
   /* Owner decisions still open (HANDOFF §7 R7 and §13): closing-line value as a headline number and a public ROI.
      Until that is approved, CLV stays on Model vs market and the receipts, and ROI is not shown. */
@@ -1337,7 +1337,7 @@
       pick.priceAssumed ? `<b>Price assumed.</b> ${esc(pick.priceNote || 'No price was recorded for this play, so it counts at an assumed −115.')}` : '',
       vm.estimated ? '<b>Estimated price.</b> Combined odds are estimated from the leg prices we saw. Check the real ticket price at your book.' : '',
       clv && clv.clv != null ? `<b>Closing-line value: ${esc(clvWords(clv.clv))}.</b> We posted ${esc(clv.postedLine ?? '–')} at ${esc(oddsText(clv.postedOdds))} and the last number before kickoff was ${esc(clv.closeLine ?? '–')}${clv.closeOdds != null ? ` at ${esc(oddsText(clv.closeOdds))}` : ''}. ${clv.clv > 0 ? 'We got the better number, which is the part we control.' : clv.clv < 0 ? 'The market moved to a better number after we posted.' : ''}` : '',
-      pick.earlyExit ? '<b>Early-exit credit.</b> A book promo refunded this loss. The headline record still counts it as −1u; credits are shown separately.' : '',
+      pick.earlyExit ? `<b>Early-exit credit.</b> A book promo refunded this loss. The headline record still counts it as −${C.stakeOf(pick)}u; credits are shown separately.` : '',
     ].filter(Boolean);
     const result = pick.result ? `<div class="card"><p><b>${esc(vm.status)}</b>${pick.resultDetail || pick.actual ? ` · ${esc(prose(pick.resultDetail ? `${pick.player || niceTitle(pick.title || '').split(/\s+(?:OVER|UNDER)\s+/i)[0]} · ${pick.resultDetail}` : pick.actual))}` : ''}</p>${pick.settlementReason ? `<p class="small muted" style="margin-top:4px">${esc(prose(pick.settlementReason))}</p>` : ''}${pick.settledAt ? `<p class="small muted" style="margin-top:4px">Settled ${esc(when(pick.settledAt))}</p>` : ''}</div>` : '';
     const chanceTitle = vm.chance != null ? `How we got ${pctOne(vm.chance)}` : 'How we got this';
@@ -1843,7 +1843,7 @@
     const clv = clvById.get(p.id);
     const price = p.odds == null ? 'no price recorded' : assumed ? `${oddsText(p.odds)} assumed · no price recorded` : `${oddsText(p.odds)} ${bookLabel(p.book) || ''}`;
     const actual = p.resultDetail ? `${p.player || niceTitle(p.title || '').split(/\s+(?:OVER|UNDER)\s+/i)[0]} · ${p.resultDetail}` : p.actual != null ? String(typeof p.actual === 'object' ? Object.entries(p.actual).map(([k, v]) => `${k} ${v}`).join(', ') : p.actual).split(/[.;]\s/)[0] : '';
-    const meta = [price, whenShort(p.kickoff || p.publishedAt), p.featured ? 'Pick of the Day' : '', clvWords(clv), actual ? `result ${actual}` : '', p.earlyExit ? 'early-exit credit (counts −1u in the headline)' : ''].filter(Boolean).join(' · ');
+    const meta = [price, whenShort(p.kickoff || p.publishedAt), p.featured ? 'Pick of the Day' : '', clvWords(clv), actual ? `result ${actual}` : '', p.earlyExit ? `early-exit credit (counts −${C.stakeOf(p)}u in the headline)` : ''].filter(Boolean).join(' · ');
     const right = p.result ? (u == null ? '' : assumed ? `<span class="u muted" title="${esc(p.priceNote || 'No price was recorded, so this counts at an assumed −115.')}">(${esc(units(u))})</span>` : `<span class="u ${u > 0 ? 'green' : u < 0 ? 'red' : 'muted'}">${esc(units(u))}</span>`)
       : '<span class="u muted small">Pending</span>';
     return `<div class="receipt"><span class="r-mark ${mark[0]}" aria-hidden="true">${mark[1]}</span><div><b><span class="sr">${esc(mark[2])}: </span><a href="#pick/${esc(encodeURIComponent(p.id))}" class="plain-link">${esc(niceTitle(p.displayTitle || p.title))}</a></b><span>${esc(meta)}</span></div>${right}</div>`;

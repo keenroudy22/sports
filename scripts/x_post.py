@@ -743,7 +743,7 @@ def payout(odds):
 
 
 def units_for(pick):
-    """core.js unitsFor: one unit a pick (riskUnits for a parlay); push, void and early exit score zero; no price, no units."""
+    """core.js unitsFor: saved riskUnits, default one; push/early exit zero; no price, no units."""
     odds, result = pick.get('odds'), pick.get('result')
     if not isinstance(odds, (int, float)) or result not in ('win', 'loss', 'push'):
         return None

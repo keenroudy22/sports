@@ -431,6 +431,15 @@ test('new tiers show1u and2u consistently while legacy Full Sends retain their s
   }
 });
 
+test('a future Chef loss refunded by a book still explains the actual two-unit headline stake', async () => {
+  const pick={...prop,lane:'chef_pick',riskUnits:2,result:'loss',earlyExit:true,units:0,
+    selectionPolicy:'2026-10-19-1u-2u'};
+  const {api}=loadApp('#record',{}, {today:{...TODAY,picks:[pick]}});
+  const page=await api.views.pick({id:pick.id});
+  assert.match(page,/headline record still counts it as −2u/);
+  assert.doesNotMatch(page,/counts it as −1u/);
+});
+
 test('Today prints a settled player name and full stat line, never the stored athlete id', async () => {
   const king = { ...yesterday, id: 'CFB-2026-W6-king-over-49-5-recyds-dk', league: 'CFB',
     title: 'TK King OVER 49.5 receiving yards', displayTitle: 'TK King OVER 49.5 receiving yards',
