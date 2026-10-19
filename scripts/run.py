@@ -950,6 +950,7 @@ def price(candidate, ctx, now):
     if selection.get('calibrationMethod'):
         candidate['probabilityAtPublication']['calibrationMethod'] = selection['calibrationMethod']
     away, home = game['away'], game['home']
+    candidate['matchup'] = f"{away.get('name') or away.get('abbreviation')} at {home.get('name') or home.get('abbreviation')}"
     if candidate.get('athleteId'):
         words = pricing.WORDS[market]
         name = candidate.get('_player') or ctx.names.get(candidate['athleteId'], 'Player')

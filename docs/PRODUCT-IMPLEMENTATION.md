@@ -21,6 +21,12 @@ ordinary exact-price, reason and injury checks rather than disappearing before s
 and does not change the positive-value hurdle. Owner-requested `--select-now` uses the actual Eastern minute,
 even outside a normal slot; routine morning and primetime schedules remain unchanged.
 
+The natural pass selected Kittle over5.5 receptions at+102 FanDuel in the0.5u Full Send lane. Delivery exposed
+two copy holds: numeric team identity49ers was absent from the saved pick and a complete long verified injury
+fact was discarded before its existing safe-clause shortener ran. The follow-up saves the actual matchup at
+pricing and shortens the stored supporting fact before testing its length. It does not whitelist arbitrary
+caption numbers or accept a model-number-only reason. Current recovery uses only the same verified saved facts.
+
 ## October 19 — alternate comparisons and projection-review explanations
 
 Owner requested game-page alternate odds beside the projected average, exact-line last-ten/season history,

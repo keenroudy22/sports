@@ -152,6 +152,21 @@ class DraftTests(unittest.TestCase):
         self.assertIn('He cleared this line in 4 of his last 5 full games.', text)
         self.assertEqual(x_post.guard(text, pick, x_post.reason_in(text)), [])
 
+    def test_kittle_release_keeps_a_complete_verified_clause_and_numeric_team_identity(self):
+        game = {'league': 'NFL', 'home': {'name': 'San Francisco 49ers'}, 'away': {'name': 'Washington Commanders'}}
+        fact = ('Deebo Samuel Sr. is out with a hamstring injury, while Mike Evans is questionable with rib '
+                'and Achilles injuries and Christian Kirk is questionable with a calf injury.')
+        pick = dict(PROP, title='George Kittle over 5.5 receptions', line=5.5, projection=6.3, odds=102,
+                    book='FanDuel', lane='gut_call', matchup='Washington Commanders at San Francisco 49ers',
+                    dossier={'reasons': [{'text': 'Book says 5.5. I say 6.3.'}, {'text': fact}]},
+                    probabilityAtPublication={'chance': .511, 'breakEven': .495})
+        with mock.patch.object(x_post, 'load_log', return_value={'posts': []}):
+            text = x_post.draft(pick, game, reason='Book says 5.5. I say 6.3.')
+        self.assertIn('San Francisco 49ers', text)
+        self.assertIn('Deebo Samuel Sr. is out with a hamstring injury.', text)
+        self.assertEqual(x_post.guard(text, pick, x_post.reason_in(text)), [])
+        self.assertIn('numbers not in the pick: 99', x_post.guard(text + '\n99 yards.', pick, x_post.reason_in(text)))
+
     def test_a_missing_saved_reason_uses_verified_pick_evidence_or_holds(self):
         supported = dict(PROP, lane='gut_call', reasons=['He cleared this line in 4 of his last 5 full games.'])
         with mock.patch.object(x_post, 'load_reasons', return_value={}):

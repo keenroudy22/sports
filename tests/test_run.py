@@ -342,6 +342,7 @@ class CandidateCatalogTests(unittest.TestCase):
              mock.patch.object(run.gates, 'selection_numbers', side_effect=numbers):
             chosen = run.price(candidate, ctx, now)
         self.assertEqual(chosen['book'], 'DraftKings')
+        self.assertEqual(chosen['matchup'], 'Colorado State at Texas State')
         self.assertNotIn('Hard Rock', chosen['quoteNote'])
 
     def test_opposing_starting_qb_ruled_out_is_a_current_reason_for_a_primetime_side(self):

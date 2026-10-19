@@ -458,8 +458,9 @@ def _choose_reason(pick, supplied, history, day):
     structured = []
     for row in [*((pick.get('dossier') or {}).get('reasons') or []), *(pick.get('reasons') or [])]:
         value = row.get('text') if isinstance(row, dict) else row
-        if value and plain(str(value)):
-            structured.append(str(value))
+        shortened = _short_reason(value) if value else ''
+        if shortened and plain(shortened):
+            structured.append(shortened)
     choices = [supplied, strip_reason(pick), *structured]
     choices = list(dict.fromkeys(_short_reason(choice) for choice in choices if choice))
     # The fixed model-vs-book sentence is already its own caption line.  It is
