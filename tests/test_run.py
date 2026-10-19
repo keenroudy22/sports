@@ -15,6 +15,19 @@ import buffer_post
 
 
 class SlotTests(unittest.TestCase):
+    def test_new_private_card_uses_release_time_before_a_publication_timestamp_exists(self):
+        import ticket_card
+        now = datetime(2026, 10, 19, 18, 0, tzinfo=timezone.utc)
+        pick = {'id': 'NFL-new', 'athleteId': '1', 'market': 'rec'}
+        game = {'home': {'id': '10'}, 'away': {'id': '20'}}
+        with mock.patch.object(run.pick_card, 'chrome_path', return_value='/Chrome'), \
+             mock.patch.object(run.pick_card, 'artwork', return_value={}), \
+             mock.patch.object(run.pick_card, 'ticket_enabled', return_value=True) as theme, \
+             mock.patch.object(ticket_card, 'straight_svg', return_value='<svg/>') as ticket, \
+             mock.patch.object(run.pick_card, 'render'), mock.patch('featured.of_day', return_value=None):
+            run.render_private_play_card('NFL-new', pick, game, {}, SimpleNamespace(player_team={'1': '10'}), now, Path('/tmp/unused-private-card.png'))
+        theme.assert_called_once_with(pick, moment=now)
+        ticket.assert_called_once()
     def test_select_now_command_uses_the_actual_minute_even_outside_a_scheduled_window(self):
         with mock.patch.object(run, 'run', return_value=0) as desk:
             self.assertEqual(run.main(['--select-now', '--now', '2026-10-19T19:12:00Z']), 0)

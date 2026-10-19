@@ -27,6 +27,11 @@ fact was discarded before its existing safe-clause shortener ran. The follow-up 
 pricing and shortens the stored supporting fact before testing its length. It does not whitelist arbitrary
 caption numbers or accept a model-number-only reason. Current recovery uses only the same verified saved facts.
 
+The real private render also exposed a missing-publication-time theme fallback. New private cards must use
+their actual release moment for the approved Kitchen Ticket cutover. Existing posted attachments are immutable;
+any corrected image for a not-yet-sent X post is a distinct new attachment, with its own receipt and the unchanged
+bet and price. The original Discord card remains preserved.
+
 ## October 19 — alternate comparisons and projection-review explanations
 
 Owner requested game-page alternate odds beside the projected average, exact-line last-ten/season history,

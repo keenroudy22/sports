@@ -2947,7 +2947,7 @@ def render_private_play_card(key, pick, game, games, ctx, now, target):
     import featured
     art = pick_card.artwork(pick, game)
     is_featured = pick.get('lane') == 'hot_plate' or featured.of_day(eastern_date(now).isoformat()) == key
-    if pick_card.ticket_enabled(pick):
+    if pick_card.ticket_enabled(pick, moment=now):
         import ticket_card
         kind = pick_card.play_kind(pick)
         if kind == 'ladder':
