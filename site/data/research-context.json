@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-19T14:43:50Z",
+  "updatedAt": "2026-10-19T14:53:31Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-19T14:16Z",
+              "reportedAt": "2026-10-19T14:40Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1387,6 +1387,15 @@
           "name": "Cincinnati Bengals",
           "players": [
             {
+              "id": "3050481",
+              "name": "Tanner Hudson",
+              "position": "TE",
+              "status": "Injured Reserve",
+              "injury": "Pectoral",
+              "reportedAt": "2026-10-19T14:40Z",
+              "source": "https://www.espn.com/nfl/player/_/id/3050481/tanner-hudson"
+            },
+            {
               "id": "4384852",
               "name": "Dohnte Meyers",
               "position": "WR",
@@ -1412,15 +1421,6 @@
               "injury": "Quadriceps",
               "reportedAt": "2026-10-13T17:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4401811/kyle-dugger"
-            },
-            {
-              "id": "3050481",
-              "name": "Tanner Hudson",
-              "position": "TE",
-              "status": "Out",
-              "injury": "Pectoral",
-              "reportedAt": "2026-10-13T15:52Z",
-              "source": "https://www.espn.com/nfl/player/_/id/3050481/tanner-hudson"
             },
             {
               "id": "4570546",
@@ -4377,6 +4377,15 @@
           "name": "Miami Dolphins",
           "players": [
             {
+              "id": "4869645",
+              "name": "Caleb Douglas",
+              "position": "WR",
+              "status": "Questionable",
+              "injury": "Ankle",
+              "reportedAt": "2026-10-19T14:44Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4869645/caleb-douglas"
+            },
+            {
               "id": "4430681",
               "name": "Jared Wayne",
               "position": "WR",
@@ -4402,15 +4411,6 @@
               "injury": "Concussion",
               "reportedAt": "2026-10-13T17:10Z",
               "source": "https://www.espn.com/nfl/player/_/id/4912052/justin-joly"
-            },
-            {
-              "id": "4869645",
-              "name": "Caleb Douglas",
-              "position": "WR",
-              "status": "Questionable",
-              "injury": "Ankle",
-              "reportedAt": "2026-10-13T17:10Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4869645/caleb-douglas"
             },
             {
               "id": "4259558",
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Out",
               "injury": "Calf",
-              "reportedAt": "2026-10-19T14:16Z",
+              "reportedAt": "2026-10-19T14:40Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "12",
-          "name": "Garrett Nussmeier",
-          "from": "Active",
-          "to": "Out",
-          "observedAt": "2026-10-18T19:27:07Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4567747/garrett-nussmeier"
-        },
-        {
-          "teamId": "12",
           "name": "Diego Pounds",
           "from": "Active",
           "to": "Out",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-10-19T14:01:30Z",
           "source": "https://www.espn.com/nfl/player/_/id/2972515/cooper-rush"
+        },
+        {
+          "teamId": "4",
+          "name": "Tanner Hudson",
+          "from": "Out",
+          "to": "Injured Reserve",
+          "observedAt": "2026-10-19T14:53:31Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3050481/tanner-hudson"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-19T14:43:50Z",
-      "lastAttemptAt": "2026-10-19T14:43:50Z",
+      "checkedAt": "2026-10-19T14:53:31Z",
+      "lastAttemptAt": "2026-10-19T14:53:31Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-19T14:43:50Z",
-      "lastAttemptAt": "2026-10-19T14:43:50Z",
+      "checkedAt": "2026-10-19T14:53:31Z",
+      "lastAttemptAt": "2026-10-19T14:53:31Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
