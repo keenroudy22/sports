@@ -33,6 +33,19 @@ PROP = {
 
 
 class TicketCardTests(unittest.TestCase):
+    def test_end_zone_combined_calls_and_workload_fit_the_printed_margins(self):
+        choice = {'kind': 'end-zone', 'title': 'END-ZONE WORK', 'rows': [
+            {'title': 'Christian McCaffrey', 'metric': '17 red-zone opportunities',
+             'price': '9 inside the 10', 'tdLean': True, 'firstTdDart': True},
+            {'title': 'George Kittle', 'metric': '6 red-zone opportunities', 'price': '4 inside the 10'},
+            {'title': 'Rachaad White', 'metric': '6 red-zone opportunities', 'price': '3 inside the 10'},
+            {'title': 'Kaytron Allen', 'metric': '4 red-zone opportunities', 'price': '2 inside the 10'},
+        ]}
+        svg = ticket_card.research_list_svg(choice)
+        self.assertIn('ANYTIME TD LEAN + FIRST TD DART</text>', svg)
+        self.assertIn('17 red-zone opportunities</text>', svg)
+        self.assertNotIn('DART · 17', svg)
+
     def test_final_long_box_score_detail_is_shortened_or_wrapped_never_rejected(self):
         data = {'headline': '1-1', 'day': '2026-10-10', 'net_units': -0.09, 'rows': [
             {'result': 'hit', 'title': 'Nyck Harbor OVER 3.5 receptions',

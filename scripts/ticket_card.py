@@ -435,8 +435,9 @@ def research_list_svg(choice, *, art=None):
                 labels.append('ANYTIME TD LEAN')
             if source.get('firstTdDart'):
                 labels.append('FIRST TD DART')
-            line = ((' + '.join(labels) + ' · ') if labels else '') + metric
-            detail = ''
+            # Separate the editorial calls from the workload so both remain legible.
+            line = ' + '.join(labels) if labels else metric
+            detail = metric if labels else ''
         elif kind == 'upset':
             match = re.search(r'(\d+)%.*?(\d+)%', str(source.get('copyMetric') or metric))
             right = f'{match.group(1)}% / {match.group(2)}%' if match else metric
