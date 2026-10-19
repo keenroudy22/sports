@@ -9,7 +9,12 @@ Player-role and price holds remain enforced. Historical hit counts are labeled s
 The Washington passing holds reproduce a recent starter change with fewer than three established full games;
 other current holds identify projected workload below 70% of the last three full games. Game-table review labels
 now expand to that explanation rather than leaving the reader with a generic blank. No model weights or record
-counting change; release/live evidence is pending.
+counting change. Release `56c3206b1d68397d3474b87ff396273452e5ca84` and hosted run `39261149945` succeeded.
+Python 1474 (two skipped), Node 248, clean export, build/budget/record and NBA audits, publication guard,
+asset fingerprints and the isolated 08:30 rehearsal passed under the run lock. Live NFL/CFB game pages at
+375/1440 had zero overflow, caught load states or browser errors. The refreshed MNF payload contains 68 actual
+priced alternates and eight players with explained review holds. Example: Ekeler average 16.2 against 9.5,
+DraftKings -408 captured 13:40:38Z, last-ten 8/10 and current-season 1/2 shown separately.
 
 ## 2026-10-17 — football-day output and Climb continuity
 
