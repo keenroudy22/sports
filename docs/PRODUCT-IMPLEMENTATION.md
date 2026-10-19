@@ -1,6 +1,28 @@
 # October 5 product implementation tracker
 
-## October19 — NBA player research implementation; release checks pending
+## October19 — NBA player research live; first early delivery observing
+
+Verified source `5cccdcf34988ab4c1fd7ee0200bc97efc86ff453`; hosted **39341389608 succeeded**. Initial
+release `32e1ac1f`/39340204632 also succeeded. Latest locked normal/clean-export suites each passed1527 Python
+tests(two skipped)/255 Node tests. Build503 pages, payload budgets(no hard errors; NBA61.7KB near64KB,
+existing Today/More warnings), record108/NBA0, public guard571, assets and real SVG/T20/render passed.
+Isolated18:50 rehearsal `kookn-rehearsal-ithqnjv4` exited0/outcomeok, zero outside writes/private reads.
+Live NBA at375/1440: app178, numeric comparisons, photos, explicit availability time, working keyboard expansion,
+no sideways scroll/load error/console errors. Proof `/tmp/kookn-nba-props-live-phone.png` and
+`/tmp/kookn-nba-props-live-desktop.png`. No football count/stake change and no NBA official prop admitted.
+
+Research uses the existing four-hour price/availability freshness window with availability time visible;
+official NBA Trial retains its independent sixty-minute injury check. The strict Trial cutoff must not blank
+a read-only baseline between scheduled captures. Known injuries/changed roles still hold numeric forecasts.
+The post-capture clock regression prevents newly fetched inputs from being rejected as future data just because
+the run began before the feed responded. An existing ordering test now matches the scheduling call, not the
+spelling of its old argument or a later function definition.
+
+Real preview card is live, T20/visually verified; phone accepted **23:27:51Z Oct19**, two-hour veto to
+**01:27:51Z Oct20 /9:27PM Eastern Oct19**. Morning player research targets9:15AM after the8:30 fresh capture;
+it is deliberately not frozen or queued on tonight's prices. First actual X/research Discord delivery remains
+O-20261019-NBAPROPS observing. The separate real-outcome/model-validation gate is now explicitly
+O-20261019-NBAPROPFORWARD; it has not been dropped or treated as a shipped official-bet model.
 
 O-20261019-NBAPROPS now has NBA-only SharpAPI parsing, unique current ESPN-roster joins, same-read two-sided
 prices, conservative same-team minutes/rate research baselines, last5/last10/recorded-season exact-line hits,
@@ -15,8 +37,8 @@ append-only research stores. No NBA official player play or football record chan
 The owner authorizes an additional9:15AM NBA player-research target, prepared only after game-day8:30 refreshed
 prices/availability. Morning6:45/8:30 NBA captures supplement the existing11:45/17:30/21:00/23:30 slots.
 Exact source prices, full player/team names and labeled historical samples appear in captions and matching
-research-list cards. First real preview passes SVG/T20 and visual inspection; live release and phone-veto receipt
-are not yet complete. Existing8:04/10:02ET Oct20 team-card schedules remain untouched. X confirmation precedes
+research-list cards. First real preview passes SVG/T20 and visual inspection; release/phone receipts are above.
+Existing8:04/10:02ET Oct20 team-card schedules remain untouched. X confirmation precedes
 research Discord, never Plays & Results. All shared caps and free-plan limits remain in force.
 
 ## October19 — early NBA research activated; opening-day delivery observing

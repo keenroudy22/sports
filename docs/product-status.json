@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-19T22:22:45+00:00",
+  "updatedAt": "2026-10-19T23:34:24+00:00",
   "items": [
     {
       "id": "O-20261019-NBASOCIAL",
@@ -14,11 +14,20 @@
     {
       "id": "O-20261019-NBAPROPS",
       "title": "Verified NBA player-prop prices and role-aware projections",
-      "status": "ready",
+      "status": "observing",
       "owner": "agent",
-      "next": "Finish full/clean checks, isolated current-slot rehearsal and375/1440 QA; deploy under locks. Verify live prop view/card, send2h preview-veto phone note, then observe game-day8:30 capture and9:15 X/research Discord delivery.",
-      "doneWhen": "A verified affordable feed plus tested current-roster/minutes model supplies exact player/line/price vs projection, injury holds and honest sample-based history; forward evaluation supports selection before official prop posts.",
-      "evidence": "Implementation in isolated worktree: NBA-only Sharp parser/current ESPN roster joins, minutes-rate research model, exact-line hits, named holds, fresh9:15 research path and append-only forward forecasts/outcomes.12 free Sharp reads captured313 DK/FD pairs;253 unheld research forecasts frozen. Walk-forward29064 mixed-stat predictions MAE2.442 vs2.474 last-five mean, not profit evidence. First real preview rendered/T20/visual pass. Release/live/phone and actual morning delivery not complete."
+      "next": "Observe Oct20 game-day8:30 capture and9:15 target X/research Discord receipts. Source/site/preview are live; no prop post is frozen on overnight prices. Keep official-prop validation separate under O-20261019-NBAPROPFORWARD.",
+      "doneWhen": "Exact NBA lines/odds, numeric research projections, labeled hit samples and holds are live; early player research is enabled and first actual X/Discord delivery is confirmed. Official-prop validation is tracked separately.",
+      "evidence": "5cccdcf3; hosted39341389608 success (initial39340204632 success). Locked normal/clean Python1527(2skip), Node255, build503/budget/record108/NBA0/guard571/assets, offline1850 zero outside/private. Live375/1440 v178 clean;60 comparisons from313 pairs,253 research forecasts. Four-hour research freshness with availability time; Trial60min unchanged. Real preview/T20/live ticket pass; phone accepted23:27:51Z, veto to01:27:51Z Oct20. Morning9:15 prop target activated, not yet queued/sent."
+    },
+    {
+      "id": "O-20261019-NBAPROPFORWARD",
+      "title": "Validate NBA prop baselines and priced forward outcomes before official props",
+      "status": "observing",
+      "owner": "agent",
+      "next": "Grade frozen first-price forecasts after real finals in normal NBA runs. Evaluate held-out dates by player-game, market and side; retain same-book prices and role context. Do not treat correlated book/stat rows as independent games.",
+      "doneWhen": "A reproducible forward report compares model/history with prices and outcomes using independent samples and noise/role checks; it supports an NBA-specific Trial rule or rejects promotion. Existing NBA promotion rules remain.",
+      "evidence": "Separate append-only player-forecasts/player-outcomes writers shipped5cccdcf3 with first-quote freeze, no-future/DNP/team-match tests.253 opening-slate research forecasts;0 real grades before Oct20 games. Walk-forward29064 mixed-stat predictions MAE2.442 versus2.474 last-five mean is only a sanity check, no historical prices/profit proof. NBA props remain research; no NFL coefficients or raw-gap official promotion."
     },
     {
       "id": "O-20261019-TIERS",
