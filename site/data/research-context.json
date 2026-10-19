@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-19T18:00:00Z",
+  "updatedAt": "2026-10-19T18:08:44Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1967,8 +1967,8 @@
               "id": "4428914",
               "name": "Dee Winters",
               "position": "LB",
-              "status": "Questionable",
-              "injury": "Ankle",
+              "status": "Doubtful",
+              "injury": "Achilles",
               "reportedAt": "2026-10-19T01:25Z",
               "source": "https://www.espn.com/nfl/player/_/id/4428914/dee-winters"
             },
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Out",
               "injury": "Calf",
-              "reportedAt": "2026-10-19T17:19Z",
+              "reportedAt": "2026-10-19T18:00Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "30",
-          "name": "Wesley Williams",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-19T16:49:11Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4832922/wesley-williams"
-        },
-        {
-          "teamId": "30",
           "name": "CJ Williams",
           "from": "Out",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Active",
           "observedAt": "2026-10-19T17:31:23Z",
           "source": "https://www.espn.com/nfl/player/_/id/4369835/alontae-taylor"
+        },
+        {
+          "teamId": "6",
+          "name": "Dee Winters",
+          "from": "Questionable",
+          "to": "Doubtful",
+          "observedAt": "2026-10-19T18:08:44Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4428914/dee-winters"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-19T18:00:00Z",
-      "lastAttemptAt": "2026-10-19T18:00:00Z",
+      "checkedAt": "2026-10-19T18:08:44Z",
+      "lastAttemptAt": "2026-10-19T18:08:44Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-19T18:00:00Z",
-      "lastAttemptAt": "2026-10-19T18:00:00Z",
+      "checkedAt": "2026-10-19T18:08:44Z",
+      "lastAttemptAt": "2026-10-19T18:08:44Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
