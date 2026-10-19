@@ -1,6 +1,27 @@
 # October 5 product implementation tracker
 
-## October19 — early NBA research activation (in progress)
+## October19 — early NBA research activated; opening-day delivery observing
+
+Verified source `14a7d611ef19f72c13a6ec6a2c1a7209d2df3b19`; hosted **39332687860 succeeded**. Locked
+normal and clean-export suites each passed1509 Python tests(two skips)/254 Node tests. Build501 pages,
+budget(no hard errors; existing Today/More warnings), record108/NBA0, publication guard568, asset fingerprints,
+real SVG/render checks and isolated17:30 rehearsal passed; zero outside writes/private reads. Live NBA375/1440
+has the new team trends, full-name card captions and matching card links with no overflow/load state/errors.
+Phone preview accepted22:17:28Z Oct19; the two-hour veto ends00:17:28Z Oct20(8:17PM Eastern Oct19).
+
+Buffer itself confirms **scheduled**, not sent: `6ad69747e88de6cfe1804f6d` projections at **Oct20 8:04AM ET**;
+`6ad6974741ade07ddcb649fa` team trends at **10:02AM ET**. Normal spacing/jitter accounts for the few minutes
+after the8/10AM targets. Both carry live approved graphics, with Discord pending in the research destination
+after confirmed X; never the official-play channel. O-20261019-NBASOCIAL remains observing until actual sends.
+Proof `/tmp/kookn-nba-live-phone.png` and `/tmp/kookn-nba-live-desktop.png`; no NBA bet was admitted.
+
+Player props: two bounded read-only SharpAPI free-account checks, requested by the owner, verified live NBA
+access. The40-row sample returned ten two-sided DraftKings assists pairs; e.g. Daniss Jenkins3.5 assists
+over-117/under-113, source updated22:14:32Z. This is diagnostic coverage, not a play or current recommendation.
+No recurring NBA prop capture, paid service, metered-budget increase or model promotion was activated. FanDuel
+coverage remains unverified. O-20261019-NBAPROPS is ready engineering work: NBA market parsing, ESPN player-ID
+and current-team joins, minutes/injury/role projections and forward price/outcome evaluation. Existing free
+account access is no longer the blocker. SharpAPI primary documentation: https://sharpapi.io/learn/sports-betting-api-python .
 
 Owner explicitly requests opening-day NBA projections and trends on the website, X and Discord, early enough
 to read before games. O-20261019-NBASOCIAL adds an8AM Eastern projections target and10AM team-trend target

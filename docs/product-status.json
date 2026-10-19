@@ -1,24 +1,24 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-19T18:55:38+00:00",
+  "updatedAt": "2026-10-19T22:22:45+00:00",
   "items": [
     {
       "id": "O-20261019-NBASOCIAL",
       "title": "Early NBA projection and trend delivery on site, X and research Discord",
-      "status": "ready",
+      "status": "observing",
       "owner": "agent",
-      "next": "Finish full release checks, real-card preview/phone veto, locked deployment and live QA. Freeze Oct20 cards and confirm Buffer targets08:00/10:00ET plus research Discord routing. Record readiness separately from tomorrow's actual sends.",
+      "next": "Observe Oct20 X08:04/10:02ET and research Discord receipts through the normal mirror. Source, live cards and both Buffer schedules are verified; actual tomorrow sends must be confirmed before delivery is complete.",
       "doneWhen": "Tested source is live; NBA site shows team trends/cards; both Oct20 posts are scheduled early with matching live graphics and research-only Discord routing; first actual X/Discord sends are then observed, not assumed.",
-      "evidence": "Owner Oct19 explicitly authorizes early NBA projections/trends on website, X and Discord. Prepared NBA-only frozen snapshot writer/renderer, automatic daily preparation, existing guarded Buffer research delivery and veto cancellation. Real opening cards rendered; validation/deployment pending."
+      "evidence": "14a7d611; hosted39332687860 success. Locked normal/clean Python1509(2skip), Node254; build/budget/record108/NBA0/guard/assets, offline1730 zero outside writes/private reads. Live375/1440 clean. Preview phone accepted22:17:28Z. Buffer confirms scheduled: projections6ad69747e88de6cfe1804f6d12:04Z; trends6ad6974741ade07ddcb649fa14:02Z Oct20. Both research Discord pending after X; not yet sent."
     },
     {
       "id": "O-20261019-NBAPROPS",
       "title": "Verified NBA player-prop prices and role-aware projections",
-      "status": "gated",
+      "status": "ready",
       "owner": "agent",
-      "next": "Verify free price coverage and exact sides/book/player IDs/times; build minutes/current-team projections and forward price/outcome evaluation. No new metered calls or paid plan without owner approval.",
+      "next": "Add NBA-only SharpAPI parsing and verified ESPN player-ID/current-team joins within existing free limits; build minutes/injury/role projections and forward price/outcome tests. Do not turn raw prices or NFL coefficients into NBA picks.",
       "doneWhen": "A verified affordable feed plus tested current-roster/minutes model supplies exact player/line/price vs projection, injury holds and honest sample-based history; forward evaluation supports selection before official prop posts.",
-      "evidence": "Current NBA capture explicitly makes no prop requests because its free ESPN feed supplies no props. Existing ESPN parser does not prove live availability. Official Odds API docs list NBA props on event endpoint; SGO docs list NBA props, but account access, budget fit and coverage are unverified. Player-model promotion remains separate."
+      "evidence": "Oct19 owner-requested bounded free-account coverage check used2 SharpAPI reads, no recurring capture or paid budget change.40 NBA assists rows yielded10 two-sided DraftKings pairs. Example Daniss Jenkins3.5 assists over-117/under-113; source22:14:32Z, diagnostic only. FanDuel coverage and NBA player model not verified. Current NBA automated capture still ESPN-only, no player-prop publication."
     },
     {
       "id": "O-20261019-TIERS",
@@ -430,7 +430,7 @@
       "title": "P2 social research",
       "status": "ready",
       "owner": "agent",
-      "next": "Resume slate; render trend/trial samples for Claude before first post.",
+      "next": "Observe the Oct20 NBA projection08:04ET and trend10:02ET X/research-Discord deliveries tracked in O-20261019-NBASOCIAL; preserve other-sport holds and eight-post comparison requirement.",
       "doneWhen": "Reviewed samples, caps/drop-order tests and real X/Discord confirmation; eight posts/category then two-week review.",
       "evidence": "Approved CODEX-WORK-ORDER.md; owner-delegated to Claude, 2026-10-06."
     },
