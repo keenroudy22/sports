@@ -629,7 +629,7 @@
     q: '', trends: { rate: '80', window: 'season', kind: 'main', heavy: true, stat: 'all', day: 'all', limit: 40 },
     players: { q: '', pos: 'WR', stat: 'recYds', scope: 'season', order: 'soft', sub: 'matchup', game: 'next', chartStat: 'recYds', chartPos: 'all', chartWindow: 'season', league: 'NFL' },
     games: { sort: 'bettable', all: false, q: '', day: null, status: 'all', upDay: null, nav: { window: 'all', close: false, conf: 'all' } }, player: { key: null, stat: null, season: 'current', window: 'all' },
-    record: { season: 'current', phase: 'current', q: '', cal: { month: null, league: 'ALL', ledger: 'best', day: null } },
+    record: { season: 'current', phase: 'current', q: '', cal: { month: null, league: 'ALL', ledger: 'all', day: null } },
     watchlist: (Array.isArray(saved.get('watchlist', [])) ? saved.get('watchlist', []) : []).filter(r => r && typeof r.key === 'string' && /^#(player|game)\//.test(r.href)).slice(0, 100),
     ticket: Array.isArray(saved.get('ticket', [])) ? saved.get('ticket', []).filter(r => r && typeof r.id === 'string').slice(0, 20) : [],
     stake: { amount: 1, mode: 'units', unit: 10, ...(saved.get('stake', null) && typeof saved.get('stake', null) === 'object' ? saved.get('stake', {}) : {}) },
@@ -1922,7 +1922,7 @@
   const MORE_VIEW_NAMES = ['player', 'record', 'vegas', 'more', 'glossary', 'start', 'saved', 'ticket', 'arbs', 'lab',
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
-  const MORE_ASSET = 'app-more.js?v=sha256-3d7ece5a8424';
+  const MORE_ASSET = 'app-more.js?v=sha256-f31cadc6e2ed';
   const GAMES_ASSET = 'app-games.js?v=sha256-0fc20d90f4bd';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,

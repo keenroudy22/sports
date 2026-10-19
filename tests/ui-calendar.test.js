@@ -52,7 +52,7 @@ const picks = [
 const views = (overrides = {}) => {
   const { api, factory } = load();
   const base = api.moreContext();
-  Object.assign(base.state, { league: 'ALL', record: { season: 'current', phase: 'current', q: '', cal: { month: '2026-10', league: 'ALL', ledger: 'best', day: null, ...overrides } }, watchlist: [], ticket: [] });
+  Object.assign(base.state, { league: 'ALL', record: { season: 'current', phase: 'current', q: '', cal: { month: '2026-10', league: 'ALL', ledger: 'all', day: null, ...overrides } }, watchlist: [], ticket: [] });
   const today = { games: [], picks: [], freshness: {}, health: [] };
   const ctx = api.moreContext({ get: async () => today, maybe: async () => null, allPicks: async () => picks, teamDirectory: async () => ({ teams: {}, defense: {} }), lineData: async () => ({ lines: [] }) });
   return factory(ctx);
@@ -71,6 +71,18 @@ test('unposted plays and Gut calls never enter the Best bets calendar', () => {
   assert.equal(cal.headlineUnits(picks[3]), null, 'assumed prices stay outside the captured-price chart');
   assert.equal(cal.headlineUnits({ ...picks[0], result: 'loss', earlyExit: true }), -1,
     'promotional credit stays outside winnings, just as in the headline');
+});
+
+test('All plays calendar shows a delivered Full Send on its game day without changing Best bets', () => {
+  const cal = views().calendarModel;
+  const full = { ...picks[7], id: 'packers-full-send', posted: true, lane: 'gut_call', result: 'win',
+    riskUnits: .5, odds: -108, units: .463, kickoff: '2026-10-19T00:20:00Z', title: 'Packers MONEYLINE' };
+  const all = cal.month([full], '2026-10', 'all', 'ALL');
+  const best = cal.month([full], '2026-10', 'best', 'ALL');
+  assert.deepEqual([...all.days.keys()], ['2026-10-18'], 'the Sunday-night result uses its Eastern game day');
+  assert.deepEqual([all.totals.wins, all.totals.losses, all.totals.priced], [1, 0, 1]);
+  assert.ok(near(all.totals.net, .463));
+  assert.equal(best.days.size, 0, 'the separate Best bets record is unchanged');
 });
 
 test('Record lists unposted rows separately without a pending receipt or a loss total', async () => {
@@ -154,8 +166,9 @@ test('the rendered calendar has a header, filters, totals, ink-on-fill cells wit
   assert.match(html, /data-set="rcal:month=2026-11" aria-label="Next month" disabled/, 'no month beyond the current one');
   assert.match(html, /data-set="rcal:league=NFL" aria-pressed="false"/);
   assert.match(html, /data-set="rcal:league=ALL" aria-pressed="true"/);
+  assert.match(html, /data-set="rcal:ledger=all" aria-pressed="true"/);
   assert.match(html, /data-set="rcal:ledger=fun" aria-pressed="false"/);
-  assert.match(html, /data-set="rcal:ledger=best" aria-pressed="true"/);
+  assert.match(html, /data-set="rcal:ledger=best" aria-pressed="false"/);
   assert.match(html, /<button type="button" class="cal-day neg" data-set="rcal:day=2026-10-04" aria-pressed="false" aria-label="Oct 4: 1-1-1, −0\.09u"><span class="d">4<\/span><b class="n num">−0\.09<\/b><small>1-1-1<\/small><\/button>/, 'a loss under a tenth shows two decimals, never −0.0');
   assert.match(html, /<small>Per play<\/small><b class="num">−0\.03u<\/b><span>net ÷ priced plays<\/span>/);
   assert.ok(html.indexOf('<section class="cal"') < html.indexOf('class="kpis'), 'the calendar sits at the top of the Record, above the headline strip');

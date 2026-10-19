@@ -34,15 +34,16 @@
   const MODEL_NAME = { 'v2.0': 'Our model', v1: 'First model', 'v1 replay': 'First model replay' };
   const rec3 = r => r ? `${r[0]}–${r[1]}${r[2] ? '–' + r[2] : ''}` : '–';
   /* ---------- the results calendar (owner, Oct 7, item 27) ----------
-     Browser-side from record.json. Three ledgers that never mix: best bets (the official record, core.js
-     recordBreakdown: W-L from every graded straight play, units from recorded prices), fun tickets (their own
-     0.25u units) and the Climb (dollars from each rung's ledger). Days are keyed by the Eastern kickoff date. */
+     Browser-side from record.json. All posted straight plays are the default daily truth, while Best bets retain
+     their own official headline count. Fun tickets and the Climb remain separate ledgers. Days are keyed by the
+     Eastern kickoff date, and every unit total uses the stake and price that were actually posted. */
   const CARD_PATH = /^data\/cards\/[\w.-]+\.png$/;
-  const CAL_LEDGERS = [['best', 'Best bets'], ['fun', 'Fun tickets'], ['climb', 'Climb']];
+  const CAL_LEDGERS = [['all', 'All plays'], ['best', 'Best bets'], ['fun', 'Fun tickets'], ['climb', 'Climb']];
   const cal = {
     dayKey: p => C.dayOf(p.kickoff || p.publishedAt),
-    ledgerRows: (picks, ledger) => picks.filter(p => !C.isUnpricedImport(p) && C.countsPublic(p) && (ledger === 'climb' ? C.isLadder(p) : ledger === 'fun' ? C.isParlay(p) && !C.isLadder(p) : !C.isParlay(p) && C.isHeadline(p))),
+    ledgerRows: (picks, ledger) => picks.filter(p => !C.isUnpricedImport(p) && C.countsPublic(p) && (ledger === 'climb' ? C.isLadder(p) : ledger === 'fun' ? C.isParlay(p) && !C.isLadder(p) : ledger === 'best' ? !C.isParlay(p) && C.isHeadline(p) : !C.isParlay(p))),
     headlineUnits: p => C.recordBreakdown([p]).captured.units,
+    postedUnits: p => p.priceAssumed || C.isUnpricedImport(p) ? null : C.unitsFor(p),
     climbMoney: p => { const info = p.ladder || {}, stake = Number(info.stake) || 0;
       const back = p.result === 'win' ? Number(info.payout) || 0 : p.result === 'loss' ? 0 : ['push', 'void'].includes(p.result) ? stake : null;
       return { stake, back, net: back == null ? null : back - stake }; },
@@ -59,10 +60,14 @@
         const s = C.summaryOf(settled);
         return { wins: s.wins, losses: s.losses, pushes: s.pushes, voids: s.voids, plays: settled.length, open, net: s.units ?? 0, priced: s.priced, assumed: 0 };
       }
-      const br = C.recordBreakdown(settled);
+      const br = ledger === 'best' ? C.recordBreakdown(settled) : null;
+      const all = ledger === 'all' ? C.summaryOf(settled) : null;
+      const captured = ledger === 'all' ? C.summaryOf(settled.filter(p => !p.priceAssumed && !C.isUnpricedImport(p))) : null;
       /* Voids stay out of the P, as the Record headline counts them; the legend says how many there were. */
-      return { wins: br.all.wins, losses: br.all.losses, pushes: br.all.pushes, voids: br.all.voids, plays: settled.length, open,
-        net: br.captured.units ?? 0, priced: br.captured.priced, assumed: br.assumed.wins + br.assumed.losses + br.assumed.pushes };
+      return { wins: (br ? br.all : all).wins, losses: (br ? br.all : all).losses, pushes: (br ? br.all : all).pushes,
+        voids: (br ? br.all : all).voids, plays: settled.length, open,
+        net: br ? br.captured.units ?? 0 : captured.units ?? 0, priced: (br ? br.captured : captured).priced,
+        assumed: br ? br.assumed.wins + br.assumed.losses + br.assumed.pushes : settled.filter(p => p.priceAssumed || C.isUnpricedImport(p)).length };
     },
     month: (picks, ym, ledger = 'best', league = 'ALL') => {
       const rows = cal.ledgerRows(picks, ledger).filter(p => league === 'ALL' || p.league === league);
@@ -89,10 +94,10 @@
   const calShort = (n, ledger) => ledger === 'climb' ? calMoney(n) : `${n > 0 ? '+' : n < 0 ? '−' : ''}${Math.abs(n).toFixed(n && Math.abs(n) < 0.1 ? 2 : 1)}`;
   const calDate = d => new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }).format(new Date(`${d}T12:00:00Z`));
   const calendar = (every, clvById) => {
-    const c = state.record.cal || (state.record.cal = { month: null, league: 'ALL', ledger: 'best', day: null });
+    const c = state.record.cal || (state.record.cal = { month: null, league: 'ALL', ledger: 'all', day: null });
     const now = etDay(), current = now.slice(0, 7);
     const ym = /^\d{4}-\d{2}$/.test(c.month || '') && c.month <= current ? c.month : current;
-    const ledger = CAL_LEDGERS.some(([k]) => k === c.ledger) ? c.ledger : 'best';
+    const ledger = CAL_LEDGERS.some(([k]) => k === c.ledger) ? c.ledger : 'all';
     const leagues = ['ALL', 'NFL', 'CFB', ...[...new Set(every.filter(p => !C.isUnpricedImport(p)).map(p => p.league))].filter(l => l && !['NFL', 'CFB'].includes(l)).sort()];
     /* The header's sport wins: its pick filters the whole Record page; the chips appear only when it shows every sport. */
     const league = state.league !== 'ALL' ? state.league : leagues.includes(c.league) ? c.league : 'ALL';
@@ -116,8 +121,8 @@
       ${ledger === 'climb' ? `<div class="receipts">${picked.rows.map(climbRow).join('')}</div>` : `<div class="kt-slips">${picked.rows.map(p => `${slip(p, { spike: true })}${CARD_PATH.test(p.card || '') ? `<a class="cal-card" href="${esc(p.card)}" target="_blank" rel="noopener">See the card ↗</a>` : ''}`).join('')}</div>`}</div>`;
     const assumedNote = t.assumed ? '<p class="cal-legend">Week 1 at an assumed −115: those plays count in W–L and stay out of the units and Per play.</p>' : '';
     const voidNote = t.voids ? `<p class="cal-legend">${t.voids === 1 ? 'One void play' : `${t.voids} void plays`} this month: not counted in W–L or units, the same as the Record headline.</p>` : '';
-    const straight = every.filter(p => !C.isParlay(p) && C.isHeadline(p));
-    const points = ledger === 'best' ? cumulativeUnits(straight.filter(p => league === 'ALL' || p.league === league), cal.headlineUnits) : [];
+    const straight = every.filter(p => !C.isParlay(p) && C.countsPublic(p) && (ledger === 'best' ? C.isHeadline(p) : true));
+    const points = ['all', 'best'].includes(ledger) ? cumulativeUnits(straight.filter(p => league === 'ALL' || p.league === league), ledger === 'best' ? cal.headlineUnits : cal.postedUnits) : [];
     const line = points.length > 1 ? `<div class="card" style="margin-top:14px">${unitsChart(points, { from: `${ym}-01`, to: `${ym}-31`, label: cal.label(ym) })}<p class="chart-cap">Cumulative units at posted prices${league !== 'ALL' ? ` · ${esc(LEAGUE_NAME[league])}` : ''}; ${esc(cal.label(ym))} is the lighter band.</p></div>` : '';
     const per = t.perPlay == null ? '–' : ledger === 'climb' ? calMoney(t.perPlay) : `${t.perPlay > 0 ? '+' : t.perPlay < 0 ? '−' : ''}${Math.abs(t.perPlay).toFixed(2)}u`;
     return `<section class="cal" id="calendar" aria-labelledby="cal-h">
@@ -130,7 +135,7 @@
         <div><small>Worst day</small><b class="num red">${t.worst ? esc(calNet(t.worst.net, ledger)) : '–'}</b><span>${t.worst ? esc(calDate(t.worst.day)) : 'none'}</span></div></div>
       <div class="cal-dow" aria-hidden="true">${['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(d => `<span>${d}</span>`).join('')}</div>
       <div class="cal-grid" role="group" aria-label="${esc(cal.label(ym))}: tap a day for its plays">${cells.join('')}</div>
-      <p class="cal-legend">Green with a plus is a winning day, red with a minus a losing day, gray is even. A ring marks a day still waiting on a result. ${ledger === 'best' ? 'W–L counts every graded best bet; units use recorded prices only.' : ledger === 'fun' ? 'Fun tickets keep their own 0.25u ledger, never mixed into best bets.' : 'The Climb is tracked in dollars from each step\'s ledger, apart from best bets.'}</p>${assumedNote}${voidNote}${slips}${line}</section>`;
+      <p class="cal-legend">Green with a plus is a winning day, red with a minus a losing day, gray is even. A ring marks a day still waiting on a result. ${ledger === 'all' ? 'Every released straight play appears here at its posted stake; Best bets keep their own record.' : ledger === 'best' ? 'W–L counts every graded best bet; units use recorded prices only.' : ledger === 'fun' ? 'Fun tickets keep their own 0.25u ledger, never mixed into best bets.' : 'The Climb is tracked in dollars from each step\'s ledger, apart from best bets.'}</p>${assumedNote}${voidNote}${slips}${line}</section>`;
   };
   const moreGroup = (title, links) => `<p class="eyebrow more-group">${title}</p><div class="list-links">${links}</div>`;
   const views = {};
