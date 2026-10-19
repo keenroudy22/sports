@@ -1,27 +1,27 @@
 {
- "at": "2026-10-19T18:43:33Z",
+ "at": "2026-10-19T18:52:13Z",
  "confirmed": {
-  "CFB-401871055": "2026-10-19T18:43:33Z",
-  "CFB-401871092": "2026-10-19T18:43:33Z",
-  "NFL-401873008": "2026-10-19T18:43:33Z"
+  "CFB-401871055": "2026-10-19T18:52:13Z",
+  "CFB-401871092": "2026-10-19T18:52:13Z",
+  "NFL-401873008": "2026-10-19T18:52:13Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "fanduel": 439
+    "fanduel": 440
    },
-   "eventsListed": 56,
+   "eventsListed": 59,
    "eventsMatched": 3,
    "games": 3,
    "marketTypes": {
     "player_passing_touchdowns": 14,
     "player_passing_yards": 41,
-    "player_receiving_yards": 193,
+    "player_receiving_yards": 194,
     "player_receptions": 36,
     "player_rushing_yards": 155
    },
-   "requestsLeft": 7,
-   "rows": 439,
+   "requestsLeft": 5,
+   "rows": 440,
    "slateGames": [
     "Middle Tennessee Blue Raiders at Florida International Panthers 2026-10-20T23:00Z",
     "Missouri State Bears at Delaware Blue Hens 2026-10-20T23:00Z",
@@ -364,7 +364,7 @@
       "kalshi": "KXNCAAF1H-26OCT23DUKEUVA",
       "ladbrokes": "6e5cf4e3-12db-46e4-8bf3-a01e35fe7ceb",
       "novig": "01a141d1-8829-7063-850f-d44919754283",
-      "onexbet": "762928227",
+      "onexbet": "762818643",
       "paddypower": "36202382",
       "pinnacle": "1637543346",
       "polymarket": "nfl_dukebluedevils_virginiacavaliers_2026-10-23_b3",
@@ -466,7 +466,7 @@
       "kalshi": "KXNCAAF1HSPREAD-26OCT23MASSCONN",
       "ladbrokes": "1d7e24c7-fc9b-4b94-a8fa-673ca8b0a7d4",
       "novig": "01a141d1-8c4d-7201-affb-8ff56cad483d",
-      "onexbet": "762928735",
+      "onexbet": "762891390",
       "paddypower": "36202380",
       "pinnacle": "1638748117",
       "polymarket": "nfl_massachusettsminutemen_uconnhuskies_2026-10-23_b3",
@@ -858,7 +858,7 @@
       "kalshi": "KXNCAAF1H-26OCT23CALSMU",
       "ladbrokes": "650a7ca8-0b34-4fe0-8ae4-d0cded12014d",
       "novig": "01a14577-5036-7032-b901-ba2b0fafc547",
-      "onexbet": "762931952",
+      "onexbet": "762874857",
       "paddypower": "36202499",
       "pinnacle": "1638755464",
       "polymarket": "nfl_california_smumustangs_2026-10-24_b2",
@@ -991,22 +991,37 @@
   },
   "NFL": {
    "books": {
+    "draftkings": 424,
     "fanduel": 305
    },
    "eventsListed": 16,
    "eventsMatched": 1,
    "games": 1,
    "marketTypes": {
-    "player_passing_touchdowns": 10,
-    "player_passing_yards": 22,
-    "player_receiving_yards": 112,
-    "player_receptions": 74,
-    "player_rushing_+_receiving_yards": 6,
-    "player_rushing_yards": 67,
-    "player_sacks": 14
+    "player_assists": 6,
+    "player_extra_points_made": 4,
+    "player_field_goals_made": 4,
+    "player_interceptions": 4,
+    "player_kicking_points": 4,
+    "player_longest_passing_completion": 4,
+    "player_longest_reception": 16,
+    "player_longest_rush": 12,
+    "player_passing_+_rushing_yards": 4,
+    "player_passing_attempts": 4,
+    "player_passing_completions": 4,
+    "player_passing_touchdowns": 14,
+    "player_passing_yards": 72,
+    "player_receiving_yards": 224,
+    "player_receptions": 152,
+    "player_rushing_+_receiving_yards": 12,
+    "player_rushing_attempts": 8,
+    "player_rushing_yards": 151,
+    "player_sacks": 18,
+    "player_tackles": 6,
+    "player_tackles_+_assists": 6
    },
-   "requestsLeft": 12,
-   "rows": 305,
+   "requestsLeft": 10,
+   "rows": 729,
    "slateGames": [
     "Washington Commanders at San Francisco 49ers 2026-10-20T00:15Z"
    ],
@@ -1107,6 +1122,7 @@
        "moneyline",
        "moneyline_3-way",
        "most_points_player",
+       "player_assists",
        "player_extra_points_made",
        "player_field_goals_made",
        "player_interceptions",
@@ -1679,6 +1695,7 @@
        "team_total",
        "total_field_goals",
        "total_points",
+       "total_points_odd_even",
        "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
@@ -1701,7 +1718,7 @@
       "draftkings": "34118038",
       "fanatics": "5623474",
       "fanduel": "36188999",
-      "fliff": "407874_c_p_202_prematch",
+      "fliff": "fobj__conflict_event__407874",
       "gemini": "NFL-2610251700-NYG-HOU-S",
       "kalshi": "KXNFL1HTEAMTOTAL-26OCT25NYGHOU",
       "ladbrokes": "0410f659-3c98-4f9a-9aac-cf2495cadd5d",
