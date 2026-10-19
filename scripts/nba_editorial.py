@@ -45,7 +45,7 @@ def team_trends(games, now, history=None):
             out.append({'team': team, 'season': season, 'games':len(window),
                         'points':round(sum(points)/len(points),1), 'allowed':round(sum(allowed)/len(allowed),1),
                         'first':window[0]['kickoff'], 'last':window[-1]['kickoff'],
-                        'window': 'THIS SEASON' if season == current else 'LAST SEASON',
+                        'window': 'CURRENT SEASON' if season == current else 'LAST SEASON',
                         'source':'ESPN stored regular-season finals'})
     return out
 
@@ -175,7 +175,7 @@ def veto_pending(entry, now=None):
 
 
 def render_due(now, folder, root=STORE, fetch=None, log=print):
-    import ticket_cards,ticket_kit
+    import ticket_cards,ticket_kit,check_svg
     out={};fetch=fetch or pick_card.fetch_data_uri
     for row in stored(root):
         if not timedelta(0)<=now-boxscores.instant(row['capturedAt'])<=timedelta(days=8):
@@ -190,7 +190,7 @@ def render_due(now, folder, root=STORE, fetch=None, log=print):
                     pass
             rows.append(dict(item,art=art))
         card=ticket_cards.research_list_card(dict(row,rows=rows,stub='RESEARCH · NOT A BEST BET'))
-        problems=ticket_kit.qa(card,row['key'])
+        problems=ticket_kit.qa(card,row['key'])+check_svg.issues(card.svg())
         if problems:
             raise ValueError('; '.join(problems))
         path=Path(folder)/f"{row['key']}.png"
