@@ -917,7 +917,7 @@ def price(candidate, ctx, now):
             continue
         p = dict(p, **{key: numbers[key] for key in
                        ('chance', 'breakEven', 'edgePoints', 'evPerUnit', 'calibration', 'calibrated')})
-        p['edge'] = (f"Market-anchored chance {p['chance']:.1%} from the exact two-sided price; "
+        p['edge'] = (f"Price-checked chance {p['chance']:.1%} against the exact two-sided price; "
                      f"{p['breakEven']:.1%} needed at {int(odds):+d}: {p['edgePoints']:+.1f} percentage points.")
         priced.append((p['evPerUnit'], book, float(line), int(odds), p, numbers))
     if not priced:
@@ -947,6 +947,8 @@ def price(candidate, ctx, now):
                                                  anchoredChance=selection['anchoredChance'],
                                                  gap=round(selection['gap'], 1),
                                                  calibrationFamily=selection['calibrationFamily'])
+    if selection.get('calibrationMethod'):
+        candidate['probabilityAtPublication']['calibrationMethod'] = selection['calibrationMethod']
     away, home = game['away'], game['home']
     if candidate.get('athleteId'):
         words = pricing.WORDS[market]
@@ -1925,7 +1927,7 @@ def official_coverage_game_ids(ctx):
     return covered
 
 
-def official_selection_scope(slot, games, ctx, now):
+def official_selection_scope(slot, games, ctx, now, select_now=False):
     """Game ids eligible for this run's official selection.
 
     ``None`` means the ordinary 6:45 game-day board.  The 7:30 run gives early
@@ -1936,6 +1938,11 @@ def official_selection_scope(slot, games, ctx, now):
     owner allows multiple non-contradictory plays from one game.  Duplicate,
     contradiction and daily-card gates still bound every release.
     """
+    if select_now:
+        return {game['id'] for game in games.values()
+                if game.get('league') in ('NFL', 'CFB') and game.get('state') == 'pre'
+                and eastern_date(gates.when(game['kickoff'])) == eastern_date(now)
+                and gates.when(game['kickoff']) > now}
     if slot.hour == 6 and slot.minute == 45:
         return None
     today = eastern_date(now)
@@ -2314,7 +2321,7 @@ def _run(args, now, slot, kinds, status):
 
     build_site.build(now)
     lines = load_candidate_lines(build_site.OUT / 'lines.json')
-    selection_scope = official_selection_scope(slot, games, ctx, now)
+    selection_scope = official_selection_scope(slot, games, ctx, now, getattr(args, 'select_now', False))
     selection_run = selection_scope is None or bool(selection_scope)
     wanted = rank_card(candidates(lines, games, now), ctx) if selection_run else []
     if selection_scope is not None:
@@ -3918,6 +3925,7 @@ def main(argv=None):
     parser.add_argument('--no-llm', action='store_true', help='templates only, no local model')
     parser.add_argument('--no-push', action='store_true', help='commit but do not push')
     parser.add_argument('--record-screens', action='store_true', help='list screened candidates in the report')
+    parser.add_argument('--select-now', action='store_true', help='owner-requested game-day selection after normal price refresh; never bypasses admission or release checks')
     parser.add_argument('--publish-kinds', help=f"comma list of {','.join(KINDS)}; default all")
     parser.add_argument('--ladder-spec', help='exact sportsbook quotes for a person-approved ladder rung')
     args = parser.parse_args(argv)

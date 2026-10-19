@@ -1,5 +1,21 @@
 # October 5 product implementation tracker
 
+## 2026-10-19 — learned-prop formula correction (prepared, not yet deployed)
+
+The owner requested the adjustment mismatch be fixed, projections explain uncertainty, and qualifying releases
+remain early. Learned prop coefficients were fitted and tested as `0.5 + k * (raw - 0.5)`, but selection reused
+them as market-centred weights. This bounded correction restores the tested probability family for learned
+props and shares its function with training. It does not increase k, refit a player mean, change historical
+publications, remove paired prices, or guarantee a daily Best Bet. Exact book fair prices remain comparison
+inputs; the actual offered price remains the positive-value hurdle. The legacy internal `anchoredChance` field
+remains a compatibility alias for the one selected chance; `calibrationMethod` identifies learned-prop math.
+This corrects the learned-prop portion of the earlier market-anchoring implementation, not its arithmetic for
+unlearned game markets. No newly fitted market-centred coefficient is promoted.
+
+The game-page table always shows the model range alongside an available line, with research/uncertainty copy.
+Tests name the current White arithmetic and ensure MNF remains eligible in both morning passes. Release evidence
+is tracked under O-20261019-PROPCAL; nothing is marked live before hosted and visual verification.
+
 ## October 19 — alternate comparisons and projection-review explanations
 
 Owner requested game-page alternate odds beside the projected average, exact-line last-ten/season history,

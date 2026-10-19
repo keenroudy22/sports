@@ -13,6 +13,11 @@ const source = fs.readFileSync('site/app.js', 'utf8');
 const gamesSource = fs.readFileSync('site/app-games.js', 'utf8');
 
 const unesc = html => String(html).replace(/&#39;/g, "'");
+
+test('game trend charts can scroll inside their cards without widening the phone page', () => {
+  assert.match(gamesSource, /grid two game-trend-grid/);
+  assert.match(fs.readFileSync('site/app.css', 'utf8'), /\.game-trend-grid\s*>\s*\.card\s*\{\s*min-width:\s*0;/);
+});
 const loadBrowserApi = () => {
   const sandbox = {
     module: { exports: {} }, exports: {}, KRCore: C, KRLive: L, KRPersonal: P,
@@ -208,6 +213,19 @@ test('game alternates show exact odds, my number, history and an explained proje
   const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [] } : detail });
   const html = unesc(await factory(ctx).game({ id: g.id }));
   for (const value of ['Alternate lines vs my numbers', 'Other Player', '-240', 'My average: 60.0', 'Book line: 39.5', '7 of 10', 'A verified workload reason.', 'The starting quarterback changed.']) assert.ok(html.includes(value), value);
+});
+
+test('a comparison line never replaces the visible projection uncertainty range', async () => {
+  const { api, factory } = loadBrowserApi();
+  const g = slate()[1];
+  const detail = { ...g, picks: [], teams: { home: { injuries: [], form: [] }, away: { injuries: [], form: [] } },
+    favoriteLines: [], modelReads: [], seasonTrends: [], props: { lines: { '1': { rushYds: [44.5] } } },
+    forecast: { players: { home: { players: [{ id: '1', name: 'White fixture', pos: 'RB', rushYds: [32.9, 2.9, 62.9] }] }, away: { players: [] } } } };
+  const ctx = contextFor(api, [g], { get: async path => path === 'app/today.json' ? { games: [g], picks: [], freshness: {} } : detail });
+  const html = unesc(await factory(ctx).game({ id: g.id }));
+  assert.match(html, /Research estimates, not Best Bets/);
+  assert.match(html, /32\.9[\s\S]*Range 3–63[\s\S]*line 44\.5/);
+  assert.match(html, /A big gap from the line is not proof of betting value/);
 });
 
 test('a game opens with its posted bet and honest book/model lines, even when Today has dropped that bet', async () => {

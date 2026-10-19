@@ -95,6 +95,7 @@ main { max-width: var(--max); margin: 0 auto; padding: 14px var(--gutter) 0; }
 .back { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; margin-bottom: 10px; min-height: var(--tap); }
 .card { background: var(--felt); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
 .grid { display: grid; gap: 12px; }
+.game-trend-grid > .card { min-width: 0; }
 @media (min-width: 720px) { .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); } .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .muted { color: var(--dim); }
 .small { font-size: 14px; }

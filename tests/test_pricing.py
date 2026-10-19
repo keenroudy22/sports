@@ -36,6 +36,17 @@ class ArithmeticTests(unittest.TestCase):
         self.assertAlmostEqual(pricing.fair_chance(-110, -110), 0.5)
         self.assertAlmostEqual(pricing.fair_chance(-150, 130), (150 / 250) / ((150 / 250) + (100 / 230)))
 
+    def test_neutral_calibration_is_shared_with_the_training_likelihood(self):
+        import learn
+        import math
+        raw, k = .69, .11
+        p = pricing.neutral_chance(raw, k)
+        self.assertAlmostEqual(learn.loglik([{'raw': raw, 'won': True}], k), math.log(p))
+        self.assertAlmostEqual(learn.loglik([{'raw': raw, 'won': False}], k), math.log(1-p))
+        for bad in (float('nan'), float('inf'), -1, 2):
+            with self.assertRaises(ValueError):
+                pricing.neutral_chance(raw, bad)
+
     def test_market_anchoring_uses_the_book_fair_chance_and_actual_price_hurdle(self):
         value = pricing.market_anchored(.60, .50, .35, -110)
         self.assertEqual(value['chance'], .535)

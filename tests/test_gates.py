@@ -70,6 +70,25 @@ def decision(rule, candidate, ctx):
 
 
 class TwoSidedPriceTests(unittest.TestCase):
+    def test_white_adjustment_uses_the_exact_family_the_learner_tested(self):
+        ctx = context(policy={**gates.learning.default_policy(),
+                              'calibration': {'NFL/prop': {'k': .11, 'n': 2285}}})
+        c = prop_lean(odds=-115, _pair=(-115, -109),
+                      _desk={**pricing.price(SNAPSHOT, 'recYds', 'over', 49.5, -115, '77'), 'rawChance': .69})
+        numbers = gates.selection_numbers(c, ctx)
+        self.assertEqual(numbers['chance'], round(pricing.neutral_chance(.69, .11), 3))
+        self.assertEqual(numbers['chance'], .521)
+        self.assertEqual(numbers['calibrationMethod'], 'neutral-centered-held-out')
+        self.assertLess(numbers['chance'], numbers['breakEven'])
+        plus = gates.selection_numbers({**c, 'odds': 180, '_pair': (180, -220),
+                                       '_desk': {**c['_desk'], 'odds': 180, 'rawChance': .41}}, ctx)
+        self.assertLess(plus['chance'], .5)
+        self.assertGreater(plus['chance'], plus['breakEven'], 'a plus-money value play need not win half the time')
+        self.assertNotEqual(numbers['chance'], pricing.market_anchored(.69, numbers['fairChance'], .11, -115)['chance'])
+        c.pop('_pair')
+        c['line'] = 999.5
+        self.assertIsNone(gates.selection_numbers(c, ctx), 'the repaired formula never removes exact two-sided pricing')
+
     def test_player_straight_requires_both_sides_at_exact_book_and_line(self):
         self.assertTrue(gates.two_sided_straight(prop_lean(), context()).ok)
         one_sided = {'NFL-1': {'books': {'draftkings': {'markets': {
@@ -693,7 +712,7 @@ class AdmitTests(unittest.TestCase):
         ctx = context(policy={**gates.learning.default_policy(), 'calibration': {'NFL/prop': {'k': 0.13, 'n': 500}},
                               'segments': {'NFL/prop:recYds': {'paused': True}}})
         for kind in ('propLean', 'favorite', 'researched'):
-            ok, decisions = gates.admit(prop_lean(), ctx, kind)
+            ok, decisions = gates.admit(prop_lean(book='FanDuel', line=50.5, odds=-110), ctx, kind)
             self.assertTrue(ok, [str(d) for d in decisions if not d.ok])
             self.assertNotIn('learned_pause', {d.rule for d in gates.refusals(decisions)})
         paused = gates.learning.default_policy()

@@ -202,6 +202,22 @@ class SlotTests(unittest.TestCase):
         with mock.patch.dict(os.environ, {'KEENROUDY_SELECTION_0830': '0'}):
             self.assertEqual(run.official_selection_scope(slot, games, ctx, now), set())
 
+    def test_monday_night_is_screened_in_both_morning_passes_not_only_primetime(self):
+        game = {'id': 'NFL-mnf', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-10-20T00:15:00Z'}
+        ctx = SimpleNamespace(first={}, latest={})
+        for hour, minute in ((8, 30), (11, 45)):
+            now = datetime(2026, 10, 19, hour, minute, tzinfo=run.EASTERN)
+            self.assertEqual(run.official_selection_scope(now, {'NFL-mnf': game}, ctx, now), {'NFL-mnf'})
+
+    def test_owner_requested_selection_uses_real_now_without_a_fabricated_primetime_slot(self):
+        now = datetime(2026, 10, 19, 13, 20, tzinfo=run.EASTERN)
+        game = {'id': 'NFL-mnf', 'league': 'NFL', 'state': 'pre', 'kickoff': '2026-10-20T00:15:00Z'}
+        games = {'NFL-mnf': game, 'tomorrow': {**game, 'kickoff': '2026-10-21T00:15:00Z'},
+                 'started': {**game, 'kickoff': '2026-10-19T16:00:00Z'}, 'live': {**game, 'state': 'in'}}
+        ctx = SimpleNamespace(first={}, latest={})
+        self.assertEqual(run.official_selection_scope(now, games, ctx, now), set())
+        self.assertEqual(run.official_selection_scope(now, games, ctx, now, True), {'NFL-mnf'})
+
     def test_college_candidates_use_bounded_web_checks_beyond_raw_top_six(self):
         college = {'league': 'CFB', 'gameIds': ['CFB-late']}
         nfl = {'league': 'NFL', 'gameIds': ['NFL-late']}

@@ -70,6 +70,17 @@ def fair_chance(price_side, price_other):
     return side / total
 
 
+def neutral_chance(raw, k):
+    """The exact probability family fitted and held-out-tested by learn.py.
+
+    A coefficient fitted around 0.5 is not a weight fitted around a book's
+    fair price. Keep this function shared by training and live prop selection.
+    """
+    if not all(isinstance(v, (int, float)) and math.isfinite(v) and 0 <= v <= 1 for v in (raw, k)):
+        raise ValueError('neutral calibration needs finite raw chance and coefficient in 0..1')
+    return 0.5 + k * (raw - 0.5)
+
+
 def market_anchored(raw, fair, k, odds, push=0.0):
     """One chance for selection and every public surface.
 
@@ -226,7 +237,7 @@ def calibrated_prop(value, calibration):
     if not isinstance(k, (int, float)) or not math.isfinite(k) or not 0 <= k <= 1:
         return value
     p = dict(value)
-    chance = 0.5 + k * (p['rawChance'] - 0.5)
+    chance = neutral_chance(p['rawChance'], k)
     even = break_even(p['odds'])
     edge = 100 * (chance - even)
     ev = chance * payout(p['odds']) - max(0.0, 1 - chance - p['push'])

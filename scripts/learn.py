@@ -278,7 +278,7 @@ def prop_rows(games, snapshots, captures):
 def loglik(rows, k):
     total = 0.0
     for row in rows:
-        p = min(max(0.5 + k * (row['raw'] - 0.5), 1e-4), 1 - 1e-4)
+        p = min(max(pricing.neutral_chance(row['raw'], k), 1e-4), 1 - 1e-4)
         total += math.log(p if row['won'] else 1 - p)
     return total
 

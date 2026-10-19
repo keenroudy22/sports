@@ -338,6 +338,17 @@ def selection_numbers(candidate, ctx):
     if not isinstance(k, (int, float)) or not 0 <= k <= 1:
         k = .35
     anchored = pricing.market_anchored(raw, fair, k, int(candidate['odds']), float(desk.get('push') or 0))
+    if candidate.get('athleteId') and isinstance(learned, (int, float)) and 0 <= learned <= 1:
+        # This coefficient was fitted to 0.5 + k*(raw-0.5), not to a
+        # market-centred residual. Use the tested family unchanged; the exact
+        # two-sided book still supplies fair price and the actual EV hurdle.
+        chance = pricing.neutral_chance(raw, learned)
+        push = float(desk.get('push') or 0)
+        anchored.update(chance=round(chance, 3),
+                        edgePoints=round(100 * (chance - pricing.break_even(candidate['odds'])), 1),
+                        evPerUnit=round(chance * pricing.payout(candidate['odds']) - max(0, 1-chance-push), 3),
+                        marketGap=round(100 * (chance-fair), 1),
+                        calibrationMethod='neutral-centered-held-out')
     return {**anchored, 'rawChance': raw, 'anchoredChance': anchored['chance'],
             'gap': anchored['marketGap'], 'impliedSum': pair['impliedSum'],
             'otherOdds': pair['other'], 'calibrationFamily': f'{league}/{family}'}
@@ -1133,7 +1144,7 @@ def prop_calibrated_value(candidate, ctx):
     desk = desk_for(candidate, ctx)
     if not desk:
         return Decision(False, 'prop_calibrated_value', 'v2 has no projection for this player and market')
-    chance = 0.5 + k * (desk['rawChance'] - 0.5)
+    chance = pricing.neutral_chance(desk['rawChance'], k)
     edge = 100 * (chance - pricing.break_even(candidate['odds']))
     segment = learning.segment_of(candidate)
     cautious = learning.paused(ctx.policy, segment) or trailing_prop_market(candidate, ctx) is not None
