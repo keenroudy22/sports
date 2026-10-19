@@ -1,9 +1,9 @@
 {
- "at": "2026-10-19T04:12:18Z",
+ "at": "2026-10-19T04:20:38Z",
  "confirmed": {
-  "CFB-401871055": "2026-10-19T04:12:18Z",
-  "CFB-401871092": "2026-10-19T04:12:18Z",
-  "NFL-401873008": "2026-10-19T04:12:18Z"
+  "CFB-401871055": "2026-10-19T04:20:38Z",
+  "CFB-401871092": "2026-10-19T04:20:38Z",
+  "NFL-401873008": "2026-10-19T04:20:38Z"
  },
  "leagues": {
   "CFB": {
@@ -44,7 +44,7 @@
       "fanduel": "36197762",
       "fliff": "419544_c_p_209_prematch",
       "gemini": "NCAAF-2610220000-NMS-SHS-M",
-      "kalshi": "KXNCAAFTEAMTOTAL-26OCT21NMSUSHSU",
+      "kalshi": "KXNCAAF1H-26OCT21NMSUSHSU",
       "ladbrokes": "294adf80-e1fe-4bb9-a36d-c8f9eb3c4d21",
       "onexbet": "762818642",
       "paddypower": "36197762",
@@ -67,14 +67,16 @@
        "moneyline",
        "point_spread",
        "team_total",
-       "total_points"
+       "total_points",
+       "total_touchdowns",
+       "winning_margin"
       ]
      },
      "start": "2026-10-22T00:00:00Z",
      "type": "fixture"
     },
     {
-     "away": "James Madison Dukes",
+     "away": "James Madison",
      "external": {
       "betmgm": "6:47392",
       "betonline": "491157834",
@@ -89,7 +91,7 @@
       "fanduel": "36202377",
       "fliff": "420157_c_p_209_prematch",
       "gemini": "NCAAF-2610222300-JMU-APP-M",
-      "kalshi": "KXNCAAF1H-26OCT22JMUAPP",
+      "kalshi": "KXNCAAFTEAMTOTAL-26OCT22JMUAPP",
       "ladbrokes": "c412bb8f-3a67-4253-b67a-b6f259eb9e23",
       "onexbet": "762919554",
       "paddypower": "36202377",
@@ -102,10 +104,10 @@
       "sportzino": "sz-17863762",
       "thescorebet": "StandardEvent:e4e2c490-baa2-48eb-8013-f1c4b48bc8dc"
      },
-     "home": "Appalachian State Mountaineers",
+     "home": "Appalachian State",
      "sample": {
-      "away_team": "James Madison Dukes",
-      "home_team": "Appalachian State Mountaineers",
+      "away_team": "James Madison",
+      "home_team": "Appalachian State",
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
@@ -115,7 +117,9 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
-       "will_there_be_overtime"
+       "total_touchdowns",
+       "will_there_be_overtime",
+       "winning_margin"
       ]
      },
      "start": "2026-10-22T23:00:00Z",
@@ -154,13 +158,11 @@
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
-       "game_prop",
        "moneyline",
        "point_spread",
-       "race_to_10_points",
        "team_total",
        "total_points",
-       "total_points_odd_even",
+       "total_touchdowns",
        "winning_margin"
       ]
      },
@@ -208,7 +210,9 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
-       "will_there_be_overtime"
+       "total_touchdowns",
+       "will_there_be_overtime",
+       "winning_margin"
       ]
      },
      "start": "2026-10-22T23:30:00Z",
@@ -230,7 +234,7 @@
       "fanduel": "36202382",
       "fliff": "fobj__conflict_event__420159",
       "gemini": "NCAAF-2610232300-DUK-VIR-M",
-      "kalshi": "KXNCAAFTEAMTOTAL-26OCT23DUKEUVA",
+      "kalshi": "KXNCAAF1H-26OCT23DUKEUVA",
       "ladbrokes": "6e5cf4e3-12db-46e4-8bf3-a01e35fe7ceb",
       "onexbet": "762818643",
       "paddypower": "36202382",
@@ -260,7 +264,6 @@
        "1st_quarter_player_rushing_yards",
        "anytime_touchdown_scorer",
        "draw_no_bet",
-       "game_prop",
        "moneyline",
        "player_extra_points_made",
        "player_field_goals_made",
@@ -302,7 +305,7 @@
       "fanduel": "36202380",
       "fliff": "420160_c_p_209_prematch",
       "gemini": "NCAAF-2610232300-MAS-UCO-M",
-      "kalshi": "KXNCAAFTEAMTOTAL-26OCT23MASSCONN",
+      "kalshi": "KXNCAAF1H-26OCT23MASSCONN",
       "ladbrokes": "1d7e24c7-fc9b-4b94-a8fa-673ca8b0a7d4",
       "onexbet": "762891390",
       "paddypower": "36202380",
@@ -329,6 +332,7 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -403,7 +407,7 @@
       "fanduel": "36202381",
       "fliff": "420162_c_p_209_prematch",
       "gemini": "NCAAF-2610240100-AF-WYO-M",
-      "kalshi": "KXNCAAFTEAMTOTAL-26OCT23AFAWYO",
+      "kalshi": "KXNCAAF1H-26OCT23AFAWYO",
       "ladbrokes": "c12b3015-67e7-4cc5-a7fe-4bde22541652",
       "onexbet": "762906546",
       "paddypower": "36202381",
@@ -430,6 +434,7 @@
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -453,7 +458,7 @@
       "fanduel": "36194403",
       "fliff": "420163_c_p_209_prematch",
       "gemini": "NCAAF-2610240230-NCS-STA-M",
-      "kalshi": "KXNCAAFTOTAL-26OCT23NCSTSTAN",
+      "kalshi": "KXNCAAF1H-26OCT23NCSTSTAN",
       "ladbrokes": "95fa53dd-b11b-4e13-9517-eba63bacc272",
       "onexbet": "762818644",
       "paddypower": "36194403",
@@ -471,14 +476,15 @@
       "away_team": "NC State",
       "home_team": "Stanford",
       "markets": [
+       "1st_half_moneyline",
        "draw_no_bet",
-       "game_prop",
        "moneyline",
        "point_spread",
        "race_to_10_points",
        "team_total",
        "total_points",
        "total_points_odd_even",
+       "total_touchdowns",
        "will_there_be_overtime",
        "winning_margin"
       ]
@@ -502,7 +508,7 @@
       "fanduel": "36202493",
       "fliff": "419768_c_p_209_prematch",
       "gemini": "NCAAF-2610241600-LSU-AUB-S",
-      "kalshi": "KXNCAAFTOTAL-26OCT24LSUAUB",
+      "kalshi": "KXNCAAF1H-26OCT24LSUAUB",
       "ladbrokes": "5e974911-b2dc-4fc0-bc98-091198dd5b5e",
       "onexbet": "762919555",
       "paddypower": "36202493",
@@ -522,13 +528,10 @@
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
-       "game_prop",
        "moneyline",
        "point_spread",
-       "race_to_10_points",
        "team_total",
        "total_points",
-       "total_points_odd_even",
        "total_touchdowns",
        "winning_margin"
       ]
@@ -552,7 +555,7 @@
       "fanduel": "36202499",
       "fliff": "419847_c_p_209_prematch",
       "gemini": "NCAAF-2610242000-CAL-SMU-M",
-      "kalshi": "KXNCAAFTOTAL-26OCT24CALSMU",
+      "kalshi": "KXNCAAF1H-26OCT23CALSMU",
       "ladbrokes": "650a7ca8-0b34-4fe0-8ae4-d0cded12014d",
       "onexbet": "762874857",
       "paddypower": "36202499",
@@ -602,7 +605,7 @@
       "fanduel": "36202425",
       "fliff": "419764_c_p_209_prematch",
       "gemini": "NCAAF-2610242000-TTU-CIN-M",
-      "kalshi": "KXNCAAFTOTAL-26OCT24TTUCIN",
+      "kalshi": "KXNCAAF1H-26OCT23TTUCIN",
       "ladbrokes": "06590fc1-6658-420a-ad2e-396a567de5e5",
       "onexbet": "762932200",
       "paddypower": "36202425",
@@ -622,9 +625,9 @@
       "markets": [
        "1st_half_moneyline",
        "draw_no_bet",
-       "game_prop",
        "moneyline",
        "point_spread",
+       "race_to_10_points",
        "team_total",
        "total_points",
        "total_points_odd_even",
@@ -643,7 +646,7 @@
     "draftkings": 391,
     "fanduel": 264
    },
-   "eventsListed": 16,
+   "eventsListed": 17,
    "eventsMatched": 1,
    "games": 1,
    "marketTypes": {
@@ -688,7 +691,7 @@
       "fanduel": "36190129",
       "fliff": "fobj__conflict_event__407873",
       "gemini": "NFL-2610230015-NE-CHI-PPTD",
-      "kalshi": "KXNFLTD-26OCT22NECHI-NERSTEVENSON38-1",
+      "kalshi": "KXNFLRECYDS-26OCT22NECHI-NEECHISM86-25",
       "ladbrokes": "ec7be665-a27d-4669-ac9e-99dbbe5faeda",
       "paddypower": "36190129",
       "pinnacle": "1637847775",
@@ -760,6 +763,7 @@
        "last_touchdown_scorer",
        "moneyline",
        "moneyline_3-way",
+       "most_points_player",
        "player_extra_points_made",
        "player_field_goals_made",
        "player_interceptions",
@@ -841,8 +845,6 @@
        "2nd_quarter_moneyline_3-way",
        "3rd_quarter_moneyline_3-way",
        "4th_quarter_moneyline_3-way",
-       "anytime_touchdown_scorer",
-       "last_touchdown_scorer",
        "moneyline",
        "point_spread",
        "team_total",
@@ -867,7 +869,7 @@
       "fanduel": "36188996",
       "fliff": "408410_c_p_202_prematch",
       "gemini": "NFL-2610251700-SF-ATL-S",
-      "kalshi": "KXNFLTOTAL-26OCT25SFATL",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT25SFATL",
       "ladbrokes": "cbff4bee-d00f-4e31-b67d-c4e55281ae35",
       "paddypower": "36188996",
       "polymarket": "nfl_49ers_falcons_2026-10-25_b2",
@@ -906,7 +908,7 @@
       "fanduel": "36188997",
       "fliff": "407875_c_p_202_prematch",
       "gemini": "NFL-2610251700-CIN-BAL-S",
-      "kalshi": "KXNFLTOTAL-26OCT25CINBAL",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT25CINBAL",
       "ladbrokes": "c21b9632-07d2-49f6-9e0b-3b48ffae5444",
       "paddypower": "36188997",
       "polymarket": "nfl_bengals_ravens_2026-10-25_b2",
@@ -924,8 +926,6 @@
       "home_team": "Baltimore Ravens",
       "markets": [
        "1st_half_team_total",
-       "anytime_touchdown_scorer",
-       "last_touchdown_scorer",
        "moneyline",
        "point_spread",
        "total_points"
@@ -989,11 +989,9 @@
        "3rd_quarter_total_points",
        "4th_quarter_moneyline_3-way",
        "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
-       "last_touchdown_scorer",
        "moneyline",
        "point_spread",
        "race_to_10_points",
@@ -1064,11 +1062,9 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
-       "last_touchdown_scorer",
        "moneyline",
        "point_spread",
        "race_to_10_points",
@@ -1139,11 +1135,9 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
-       "last_touchdown_scorer",
        "moneyline",
        "point_spread",
        "race_to_10_points",
@@ -1172,7 +1166,7 @@
       "fanduel": "36189000",
       "fliff": "407876_c_p_202_prematch",
       "gemini": "NFL-2610251700-MIA-NYJ-S",
-      "kalshi": "KXNFLTOTAL-26OCT25MIANYJ",
+      "kalshi": "KXNFL1HTEAMTOTAL-26OCT25MIANYJ",
       "ladbrokes": "f81b8d87-1fec-428c-bce5-ac57f4f3d3ef",
       "paddypower": "36189000",
       "pinnacle": "1638073287",
@@ -1181,6 +1175,7 @@
       "prophetx": "1700008844",
       "rebet": "sr:match:71515938",
       "sport888_it": "1028823699",
+      "sportzino": "sz-16552461",
       "stake": "a54b3daa-45d8-4dab-9ee6-988e1c428d2f",
       "thescorebet": "StandardEvent:6f6a9be7-5ebc-4af6-a8ab-612f908d005d"
      },
@@ -1214,11 +1209,9 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
-       "last_touchdown_scorer",
        "moneyline",
        "point_spread",
        "race_to_10_points",
@@ -1290,11 +1283,9 @@
        "4th_quarter_moneyline_3-way",
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
-       "last_touchdown_scorer",
        "moneyline",
        "point_spread",
        "race_to_10_points",
@@ -1363,11 +1354,9 @@
        "3rd_quarter_total_points",
        "4th_quarter_moneyline_3-way",
        "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
-       "last_touchdown_scorer",
        "moneyline",
        "point_spread",
        "race_to_10_points",
@@ -1393,7 +1382,7 @@
       "fanatics": "5624095",
       "fanduel": "36189005",
       "fliff": "407880_c_p_202_prematch",
-      "gemini": "NFL-2610252025-GB-DET-M",
+      "gemini": "NFL-2610252025-GB-DET-T",
       "kalshi": "KXNFLSPREAD-26OCT25GBDET",
       "ladbrokes": "bfa9f7e6-722e-44f0-810a-90568001cd6b",
       "paddypower": "36189005",
@@ -1411,7 +1400,6 @@
       "away_team": "Green Bay Packers",
       "home_team": "Detroit Lions",
       "markets": [
-       "1st_half_team_total",
        "game_prop",
        "moneyline",
        "point_spread",
@@ -1477,11 +1465,9 @@
        "3rd_quarter_total_points",
        "4th_quarter_moneyline_3-way",
        "4th_quarter_total_points",
-       "anytime_touchdown_scorer",
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
-       "last_touchdown_scorer",
        "moneyline",
        "point_spread",
        "race_to_10_points",
@@ -1489,7 +1475,10 @@
        "race_to_20_points",
        "team_total",
        "total_points",
-       "total_touchdowns"
+       "total_points_odd_even",
+       "total_touchdowns",
+       "will_there_be_overtime",
+       "winning_margin"
       ]
      },
      "start": "2026-10-25T20:25:00Z",

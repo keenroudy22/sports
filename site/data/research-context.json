@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-19T04:11:22Z",
+  "updatedAt": "2026-10-19T04:19:56Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -1162,7 +1162,7 @@
               "position": "S",
               "status": "Injured Reserve",
               "injury": "Undisclosed",
-              "reportedAt": "2026-10-19T04:00Z",
+              "reportedAt": "2026-10-19T04:12Z",
               "source": "https://www.espn.com/nfl/player/_/id/4361748/anthony-johnson-jr"
             },
             {
@@ -1859,7 +1859,7 @@
               "id": "3676833",
               "name": "KaVontae Turpin",
               "position": "WR",
-              "status": "Out",
+              "status": "Questionable",
               "injury": "Ribs",
               "reportedAt": "2026-10-19T02:25Z",
               "source": "https://www.espn.com/nfl/player/_/id/3676833/kavontae-turpin"
@@ -2537,6 +2537,24 @@
           "name": "Green Bay Packers",
           "players": [
             {
+              "id": "4249836",
+              "name": "Pierre Strong Jr.",
+              "position": "RB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-19T04:14Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4249836/pierre-strong-jr"
+            },
+            {
+              "id": "4572680",
+              "name": "Tucker Kraft",
+              "position": "TE",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-19T04:10Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4572680/tucker-kraft"
+            },
+            {
               "id": "5076652",
               "name": "Brandon Cisse",
               "position": "CB",
@@ -2699,15 +2717,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4361423/micah-parsons"
             },
             {
-              "id": "4249836",
-              "name": "Pierre Strong Jr.",
-              "position": "RB",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-12T16:50Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4249836/pierre-strong-jr"
-            },
-            {
               "id": "14163",
               "name": "Tyrod Taylor",
               "position": "QB",
@@ -2733,15 +2742,6 @@
               "injury": null,
               "reportedAt": "2026-10-12T02:55Z",
               "source": "https://www.espn.com/nfl/player/_/id/4429023/marshawn-lloyd"
-            },
-            {
-              "id": "4572680",
-              "name": "Tucker Kraft",
-              "position": "TE",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-11T22:47Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4572680/tucker-kraft"
             },
             {
               "id": "4036378",
@@ -3497,7 +3497,7 @@
               "name": "Jaylon Moore",
               "position": "OT",
               "status": "Questionable",
-              "injury": "Head",
+              "injury": "Concussion",
               "reportedAt": "2026-10-18T22:41Z",
               "source": "https://www.espn.com/nfl/player/_/id/4043041/jaylon-moore"
             },
@@ -5116,7 +5116,7 @@
               "name": "Kool-Aid McKinstry",
               "position": "CB",
               "status": "Questionable",
-              "injury": "Head",
+              "injury": "Migraine",
               "reportedAt": "2026-10-18T21:06Z",
               "source": "https://www.espn.com/nfl/player/_/id/4433975/kool-aid-mckinstry"
             },
@@ -7366,14 +7366,6 @@
       },
       "changes": [
         {
-          "teamId": "13",
-          "name": "Tristin McCollum",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-18T19:17:47Z",
-          "source": "https://www.espn.com/nfl/player/_/id/4250393/tristin-mccollum"
-        },
-        {
           "teamId": "1",
           "name": "Kendal Daniels",
           "from": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Questionable",
           "observedAt": "2026-10-19T04:01:53Z",
           "source": "https://www.espn.com/nfl/player/_/id/5076652/brandon-cisse"
+        },
+        {
+          "teamId": "6",
+          "name": "KaVontae Turpin",
+          "from": "Out",
+          "to": "Questionable",
+          "observedAt": "2026-10-19T04:19:56Z",
+          "source": "https://www.espn.com/nfl/player/_/id/3676833/kavontae-turpin"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-19T04:11:22Z",
-      "lastAttemptAt": "2026-10-19T04:11:22Z",
+      "checkedAt": "2026-10-19T04:19:56Z",
+      "lastAttemptAt": "2026-10-19T04:19:56Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-19T04:11:22Z",
-      "lastAttemptAt": "2026-10-19T04:11:22Z",
+      "checkedAt": "2026-10-19T04:19:56Z",
+      "lastAttemptAt": "2026-10-19T04:19:56Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
