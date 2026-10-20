@@ -21,6 +21,10 @@ CONF = Path.home() / '.config/keenroudy'
 LOGS = Path.home() / 'Library/Logs/KeenRoudy'
 LEAGUES = ('NBA', 'WNBA', 'CBB', 'MLB', 'NHL', 'EPL', 'MLS')
 RELIABILITY_DAYS = 56
+JSON_LIMIT = 8 * 1024 * 1024
+# The full-season football slate includes stored forecasts for nearly 1,000
+# games. Give this known input its own bound without widening private readers.
+SLATE_LIMIT = 32 * 1024 * 1024
 SOURCE_LIMITS = {'Football schedule': 360, 'Injury context': 360, 'Multi-sport snapshots': 360,
                  **{f'{league} score snapshot': 360 for league in LEAGUES},
                  'NFL multi-book prices': 240, 'CFB multi-book prices': 240, 'Sharp prop capture': 240}
@@ -41,11 +45,15 @@ PAYLOAD_PATHS = {
 }
 
 
-def read(path):
+def read(path, max_bytes=JSON_LIMIT):
     try:
-        if Path(path).stat().st_size > 8 * 1024 * 1024:
+        if Path(path).stat().st_size > max_bytes:
             return {}
-        value = json.loads(Path(path).read_text(encoding='utf-8'))
+        with Path(path).open('rb') as stream:
+            content = stream.read(max_bytes + 1)
+        if len(content) > max_bytes:
+            return {}
+        value = json.loads(content.decode('utf-8'))
         return value if isinstance(value, dict) else {}
     except (OSError, ValueError, TypeError):
         return {}
@@ -469,7 +477,7 @@ def summary(root=ROOT, conf=CONF, logs=LOGS, now=None, book=None):
     elif not finished or finished < expected or finished > now + timedelta(minutes=1):
         issue('desk-late', 'No completed desk run is recorded after the latest expected slot.')
 
-    slate = read(root / 'site/data/slate.json')
+    slate = read(root / 'site/data/slate.json', max_bytes=SLATE_LIMIT)
     active = set()
     for game in slate.get('games') or []:
         kickoff = moment(game.get('kickoff'))

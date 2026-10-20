@@ -13,6 +13,33 @@ NOW = datetime(2026, 10, 5, 14, 0, tzinfo=timezone.utc)
 
 
 class DeskHealthTests(unittest.TestCase):
+    def test_full_season_slate_above_private_limit_keeps_nearby_price_checks(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            self.fixture(root)
+            slate = root / 'site/data/slate.json'
+            self.write(root, 'site/data/slate.json', {
+                'updatedAt': '2026-10-05T13:00:00Z',
+                'games': [{'id': 'NFL-nearby', 'league': 'NFL', 'state': 'pre',
+                           'kickoff': '2026-10-05T17:00:00Z'}],
+                'storedForecasts': ' ' * H.JSON_LIMIT})
+            self.assertGreater(slate.stat().st_size, H.JSON_LIMIT)
+            self.assertEqual(H.read(slate), {}, 'Other readers keep their original bound')
+            data = H.summary(root, root / 'private', root, NOW)
+            schedule = next(row for row in data['sources'] if row['name'] == 'Football schedule')
+            self.assertEqual(schedule['state'], 'fresh')
+            codes = {row['code'] for row in data['issues']}
+            self.assertNotIn('source-Football schedule', codes)
+            self.assertIn('source-NFL multi-book prices', codes)
+            self.assertIn('source-Injury context', codes)
+            self.assertIn('source-Sharp prop capture', codes)
+            # Oversized/malformed inputs still fail closed, with bounded reads.
+            with mock.patch.object(H, 'SLATE_LIMIT', slate.stat().st_size - 1):
+                data = H.summary(root, root / 'private', root, NOW)
+            self.assertIn('source-Football schedule', {row['code'] for row in data['issues']})
+            slate.write_text('{bad json')
+            self.assertEqual(H.read(slate, max_bytes=H.SLATE_LIMIT), {})
+
     def test_enabled_is_not_used_and_failed_review_is_not_green(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
