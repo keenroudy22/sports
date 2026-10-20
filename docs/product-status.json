@@ -5,11 +5,11 @@
     {
       "id": "O-20261020-CLIMBFOCUS",
       "title": "Keep old-climb loss banners out of the current route",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Run normal/clean tests and release gates, deploy under locks, verify hosted success and live375/1440 current map with history retained below.",
+      "next": "Keep current image/section focused on this climb. Preserve old runs/losses and combined-history accounting below, including all immutable sent artifacts.",
       "doneWhen": "Current route PNG has no Climb2 miss banner/all-climbs total; current HTML shows only current balances; old losses/history and immutable sent artifacts remain intact; live proof saved.",
-      "evidence": "Source removes historical footer from current PNG and replaces current HTML combined-bank line with current bank/stake. Regression rejects old loss/all-climbs text; record arithmetic unchanged."
+      "evidence": "98eaaac2; hosted39450390584 success. Normal/clean1546Python(2skip)/268Node,build500/137,record110/NBA0,guard575,assets,budgets no hard issue,rehearsal1000q25xo_fnok. Live375/1440 no old/red-X banner in PNG/current section,35banked/81riding,old Climb2 link below,no overflow/load/console errors. Owner climb-posted-only-route-2026-10-20.json."
     },
     {
       "id": "O-20261020-CLIMBROUTE",

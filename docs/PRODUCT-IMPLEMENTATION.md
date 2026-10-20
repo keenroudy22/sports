@@ -1,6 +1,16 @@
 # October 5 product implementation tracker
 
-## October20 — current Climb focus, history below (release pending)
+## October20 — current Climb focus, history below (verified release)
+
+Source98eaaac2 (tested909a016e, rebased over data-only capture); hosted39450390584 succeeded.
+Normal/clean each1546Python(two skips)/268Node; build500/137,record110/NBA0,guard575,
+assets current,budgets no hard issue; isolated1000q25xo_fn exit0/outcomeok/zero outside-private.
+Live375/1440 confirms current image has no old loss/red-X banner; current HTML35banked/81riding,
+old Climb2 result link remains below, no overflow/load/console errors. Proof:
+/tmp/kookn-current-focus-live-phone-2026-10-20.png and
+/tmp/kookn-current-focus-live-desktop-2026-10-20.png. Owner notes updated in
+climb-posted-only-route-2026-10-20.json. Only superseded own metadata publish39449129679 was
+canceled after ancestry/source verification; its documentation is included in the successful successor.
 
 Owner finds the prior Climb2 loss banner misleading beside the active FIU step. Remove the red historical
 miss row and all-climbs footer from the current route PNG; keep current35banked/81riding and ordinary
