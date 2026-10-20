@@ -3766,6 +3766,50 @@
     "destination": "research",
     "image": "https://keenroudy.com/sports/data/cards/nba-trends-2026-10-20.png"
    }
+  },
+  {
+   "id": "community:personal-ticket:2026-10-19-mnf-q1-cashed",
+   "postedAt": "2026-10-20T00:58:16Z",
+   "dueAt": "2026-10-20T01:00:16Z",
+   "bufferPostId": "6ad6bca9b81183413da71aab",
+   "textHash": "f170eef737d08679",
+   "kind": "buffer:community",
+   "card": false,
+   "cardTheme": "none",
+   "discord": {
+    "state": "pending",
+    "text": "FIRST-QUARTER CASH 🔥 +1493\nWashington Commanders at San Francisco 49ers\nReceiving yards:\n✅ Stefon Diggs 17 > 3.5\n✅ Terry McLaurin 27 > 4.5\n✅ Mike Evans 78 > 10.5\n✅ Christian McCaffrey 13 > 6.5\n$10 → $159.30 with the FanDuel boost.\nhttps://x.com/1753110091912413184/status/2112231812898464051",
+    "destination": "wins"
+   },
+   "resultProof": {
+    "source": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873008",
+    "checkedAt": "2026-10-20T00:58:16Z",
+    "quarterComplete": true,
+    "status": {
+     "displayClock": "15:00",
+     "period": 2,
+     "type": {
+      "id": "2",
+      "name": "STATUS_IN_PROGRESS",
+      "state": "in",
+      "completed": false,
+      "description": "In Progress",
+      "detail": "15:00 - 2nd Quarter",
+      "shortDetail": "15:00 - 2nd",
+      "statusPrimary": "15:00",
+      "statusSecondary": "2nd"
+     },
+     "isTBDFlex": false,
+     "displayPeriod": "2nd"
+    },
+    "receivingYards": {
+     "Stefon Diggs": 17,
+     "Terry McLaurin": 27,
+     "Mike Evans": 78,
+     "Christian McCaffrey": 13
+    },
+    "allCleared": true
+   }
   }
  ]
 }
