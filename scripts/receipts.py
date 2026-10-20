@@ -647,7 +647,7 @@ def ladder_result(pick):
             miss_line += '.'
         else:
             miss_line = 'One leg missed.'
-        head = f"Climb #{info.get('run', 1)} stopped at step {info.get('step', 1)}. {miss_line} Back to {pick_card.dollars(info.get('start', 50))}."
+        head = f"The climb stopped at step {info.get('step', 1)}. {miss_line} Back to {pick_card.dollars(info.get('start', 50))}."
         body = f"{pick_card.dollars(info['banked'])} stays in the bank." if info.get('banked', 0) else ''
         return head, body
     bank = f" {pick_card.dollars(info.get('banked'))} stays in the bank." if info.get('banked', 0) else ''

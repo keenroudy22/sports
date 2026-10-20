@@ -1,5 +1,20 @@
 # October 5 product implementation tracker
 
+## October20 — Climb step3 actual release and prospective social voice
+
+Normal guarded release sent FIU-5.5 FanDuel-210 to Plays & Results (message1562113102873501756),
+then appended research/2026-10-20-CFB-1037-release-CFB-2026-W8-ladder-1020-c3s3-fd.json.
+Real Buffer dashboard post6ad77a4f42d36b0ee14b9599 is scheduled11:00ET with the original reviewed
+graphic and `$50 → $1,000` first. Standard release finalizer records the real Buffer ID/time and removes
+the pending row; no fabricated API success or duplicate. Hosted/live map and actual X confirmation pending.
+The actual open rung is81→120,bank24/ride96,35alreadybanked; future hypothetical-160 rows restart
+from96/59 and now reach the goal at step10 (Oct28), not the former step9. No future win is asserted.
+
+Latest owner asks future social captions to identify only the current climb and step, not `Climb #3`.
+Prospective admission captions lead with the stored start→goal and current step; result captions omit
+the restart number. Website IDs/history and already-sent posts/cards remain immutable. Source tests/release
+remain to verify before calling this copy change shipped.
+
 ## October20 — NBA nested-card reflow correction (release pending)
 
 Owner screenshot exposed a gap in the previous visual check: no document overflow did not catch team/score

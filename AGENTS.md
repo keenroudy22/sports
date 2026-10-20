@@ -205,6 +205,11 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Current Climb social voice (owner, October20):** future social captions lead with `$50 → $1,000`
+  and the current step, without the restart/run number (`Climb #3`). Use the actual stored start/goal,
+  stake, return, bank and next ride; the goal is not a promised return. Keep run IDs and numbered history
+  on the website/ledger. Preserve already-sent posts, cards and results; this is prospective copy only.
+
 - **NBA player research (owner, 2026-10-19):** finish NBA player projections versus real lines, hit rates and
   favorites on the site and early X/research Discord. NBA-only SharpAPI collection is approved within the existing
   Free account (DK/FD, 12/minute, no monthly cap): at most 12 reads per capture, 5.2 seconds apart, no Odds API/SGO

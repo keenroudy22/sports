@@ -402,7 +402,8 @@ def public_book(value):
 def ladder_text(pick):
     """The three money lines for the Kook'n 80/20 Climb: stake, return, bank and next ride."""
     info = pick.get('ladder') or {}
-    head = (f"🪜 Climb #{info.get('run', 1)}, step {info.get('step', 1)}: "
+    head = (f"{pick_card.dollars(info.get('start', 50))} → {pick_card.dollars(info.get('goal', 1000))} · "
+            f"80/20 CLIMB · STEP {info.get('step', 1)}\n"
             f"{pick_card.dollars(info.get('stake'))} → {pick_card.dollars(info.get('payout'))} "
             f"({int(pick['odds']):+d}, {public_book(pick.get('book'))})")
     bank = (f"Step {max(1, int(info.get('step') or 1) - 1)} cashed. " if int(info.get('step') or 1) > 1 else '')
