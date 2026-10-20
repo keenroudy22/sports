@@ -15,7 +15,15 @@ Prospective admission captions lead with the stored start→goal and current ste
 the restart number. Website IDs/history and already-sent posts/cards remain immutable. Source tests/release
 remain to verify before calling this copy change shipped.
 
-## October20 — NBA nested-card reflow correction (release pending)
+## October20 — NBA nested-card reflow correction (verified release)
+
+Source3020597c; hosted39440329704 succeeded. Normal and clean-copy each1541Python(two skips)/265Node,
+build500, record109/NBA0, public guard568, no hard budget issues, assets current. Isolated0830
+`kookn-rehearsal-67b4hk27` exit0/outcomeok/outsideWrite0/privateRead0. Live app185/CSS98 confirms
+All Today375/768/1000/1140/1440: zero team-score collisions, zero document overflow, one neutral history
+note, no load errors. Plain production NBA Today375 verifies same assets/context; no console errors.
+Local full NBA375/768/1000/1140/1440 and Games/CFB checks passed. Owner proof
+nba-responsive-live-2026-10-20.png shows all three cards in the actual nested desktop column.
 
 Owner screenshot exposed a gap in the previous visual check: no document overflow did not catch team/score
 collisions inside All Today's narrow right column. O-20261020-NBAREFLOW replaces viewport-forced card counts
@@ -23,7 +31,7 @@ with a container-fitted grid. Verify team/score rectangles at phone, tablet and 
 nested All Today section and full-width NBA pages. Replace repeated red NBA thin-history warnings and per-card
 research boilerplate with one neutral section-level historical context; keep research identification and real
 football/FCS warnings. Historical ratings remain in use; no model, admission, injury, price or record changes.
-Full suites, isolated rehearsal, hosted release and live geometry evidence required before closing.
+Keep the container-width regression and actual card-rectangle checks, not just document-width checks.
 
 ## October20 — complete posted-day recap, website sweep and early delivery recovery (release pending)
 

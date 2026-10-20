@@ -5,11 +5,11 @@
     {
       "id": "O-20261020-NBAREFLOW",
       "title": "Fit NBA projection cards to their actual section width",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Test nested All Today and full NBA cards at phone/tablet/desktop widths; deploy and verify actual team-score rectangles, not just document overflow.",
+      "next": "Preserve container-width reflow and shared neutral NBA history context. Future visual checks must measure nested team/score rectangles as well as document overflow.",
       "doneWhen": "Cards reflow without team/score overlap, NBA history context appears once neutrally, football safeguards stay intact; full normal/clean gates, hosted success and live visual evidence recorded.",
-      "evidence": "Owner screenshot catches nested-column collision missed by prior document-width checks. Source/test correction in progress; not live yet. No model/gate/record changes."
+      "evidence": "3020597c; hosted39440329704 success. Normal/clean1541Python(2skip)/265Node,build500,record109/NBA0,guard568,budget no hard issue,assets,offline0830ok/zero outside-private. Live app185/CSS98 All Today375/768/1000/1140/1440 no collisions/overflow/load errors, one neutral context; plain NBA Today375 no console errors. Owner nba-responsive-live-2026-10-20.png. No model/gate/record changes."
     },
     {
       "id": "O-20261020-TODAYRECAP",
