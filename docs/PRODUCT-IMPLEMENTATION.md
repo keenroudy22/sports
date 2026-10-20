@@ -6,14 +6,22 @@ Normal guarded release sent FIU-5.5 FanDuel-210 to Plays & Results (message15621
 then appended research/2026-10-20-CFB-1037-release-CFB-2026-W8-ladder-1020-c3s3-fd.json.
 Real Buffer dashboard post6ad77a4f42d36b0ee14b9599 is scheduled11:00ET with the original reviewed
 graphic and `$50 → $1,000` first. Standard release finalizer records the real Buffer ID/time and removes
-the pending row; no fabricated API success or duplicate. Hosted/live map and actual X confirmation pending.
+the pending row; no fabricated API success or duplicate. Buffer Publish Now after the actual15-minute
+Discord lead confirms X2112558287488942289 at14:55:19.829Z. The unsent caption was revised to
+`$50 → $1,000 · 80/20 CLIMB · STEP 3` before sending; Discord's already-sent wording is preserved.
+Hosted39441825550 succeeded; live Today shows step3live, route image/HTML show120/24/96 and10steps.
+Live375/1440 checks: zero overflow/load/console errors; route image loaded. Owner proof paths:
+/tmp/kookn-climb3-live-phone-2026-10-20.png, /tmp/kookn-climb3-live-desktop-2026-10-20.png,
+/tmp/kookn-climb-x-sent-2026-10-20.png. Current rung delivery/map complete.
 The actual open rung is81→120,bank24/ride96,35alreadybanked; future hypothetical-160 rows restart
 from96/59 and now reach the goal at step10 (Oct28), not the former step9. No future win is asserted.
 
 Latest owner asks future social captions to identify only the current climb and step, not `Climb #3`.
 Prospective admission captions lead with the stored start→goal and current step; result captions omit
-the restart number. Website IDs/history and already-sent posts/cards remain immutable. Source tests/release
-remain to verify before calling this copy change shipped.
+the restart number. Website IDs/history and already-sent posts/cards remain immutable. Copy source4b96f681
+installed in the Mac production checkout; normal and clean-copy each1541Python(two skips)/265Node passed,
+guard575,record109/NBA0,assets/budgets no hard issue; isolated1000rehearsal28i5nssf exit0/outcomeok,
+outsideWrite0/privateRead0. Hosted verification for this prospective copy remains tracked separately.
 
 ## October20 — All sports NBA integration (release pending)
 
