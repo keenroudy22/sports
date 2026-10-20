@@ -17,6 +17,7 @@ from pathlib import Path
 import boxscores
 import espn_props
 import nba_capture
+import nba_roles
 import sharp_odds
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -222,6 +223,7 @@ def hit_rate(logs,stat,line,side,n=None):
 
 
 def build(now, root=STORE, boxes=None, limit=60):
+    role_reviews=nba_roles.reviews(Path(root),now)
     root=Path(root)
     def read(path,fallback):
         try:return json.loads(path.read_text())
@@ -261,7 +263,11 @@ def build(now, root=STORE, boxes=None, limit=60):
         logs=history(boxes,q['athleteId'],now)
         projection=None
         if not reason:projection,reason=forecast(logs,q['team'],q['season'],q['stat'])
+        projection,role_review,role_hold=nba_roles.apply(projection,q,role_reviews.get((q['eventId'],q['athleteId'])),now)
+        if not reason and role_hold:
+            reason=role_hold;projection=None
         row={k:q[k] for k in ('eventId','athleteId','name','team','teamName','teamAbbr','photo','kickoff','stat','line','book','over','under','sourceAt')}
+        if role_review:row['roleReview']=role_review
         row['statName']=NAMES[q['stat']];row['projection']=projection;row['hold']=reason
         if projection:
             side='over' if projection['value']>q['line'] else 'under'
@@ -297,10 +303,11 @@ def record_forward(now,root=STORE,boxes=None):
     root=Path(root); old={r['id'] for r in saved(root/'player-forecasts')};rows=[]
     for r in build(now,root,boxes,limit=None)['rows']:
         if not r.get('projection') or r.get('hold'):continue
-        identity=':'.join((r['eventId'],r['athleteId'],r['stat'],r['book'],VERSION))
+        model=r['projection'].get('model',VERSION)
+        identity=':'.join((r['eventId'],r['athleteId'],r['stat'],r['book'],model))
         if identity in old:continue
         rows.append(dict(r,id=identity,league='NBA',season=r['projection']['season']+int(r['projection']['window']=='Last season'),
-                         retrievedAt=boxscores.stamp(now),model=VERSION))
+                         retrievedAt=boxscores.stamp(now),model=model))
     return nba_capture.append_changed(rows,root/'player-forecasts',lambda r:r['id'])
 
 

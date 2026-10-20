@@ -205,6 +205,13 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Current NBA role evidence (owner, October20):** review current news, lineup and expected workload
+  before leaning on last-season rates. Store sourced game/player-specific role reviews; any minutes
+  chosen by the desk must say analyst estimate, not coach-announced or confirmed. Show the prior
+  baseline and current reasoning separately; role-only news must not invent a numeric adjustment.
+  Keep price, availability, roster and historical-role holds and separate forward versions. This
+  authorizes research updates, not unsupported official NBA prop promotion or result rewriting.
+
 - **Plain NBA posts (owner, October20):** explain numbers without SAMPLE/10 G shorthand.
   State averages per game, last N games and season. Say what they show (past scoring context),
   not an unsupported betting conclusion. Last-season results are background, not tonight's

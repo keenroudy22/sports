@@ -50,7 +50,9 @@ def prop_choice(data,now,preview=False):
         item={'subject':r['name'],'line':f"{side.title()} {r['line']:g} {r['statName']} {r['odds']:+d}",
               'right':f"{p['value']:g}",'logo':r.get('photo'),
               'detail':f"{r['teamAbbr']} · {r['book']} · {h['hits']}/{h['games']} {p['window'].lower()}",
-              'caption':f"{r['name']} · {r['teamName']}\n{side.title()} {r['line']:g} {r['statName']} {r['odds']:+d} · I have {p['value']:g} · {h['hits']}/{h['games']}"}
+              'caption':f"{r['name']} · {r['teamName']}\n{side.title()} {r['line']:g} {r['statName']} {r['odds']:+d} · I have {p['value']:g}"+
+                        (f" at {p['minutes']:g} estimated min" if p.get('minutesBasis')=='analyst-estimate' else '')+
+                        f" · {h['hits']}/{h['games']}"}
         if rows and (r['book']!=evidence[0]['book'] or p['window']!=evidence[0]['projection']['window']):continue
         proposed=rows+[item]
         proposed_text=prop_text(proposed,r['book'],p['window'])

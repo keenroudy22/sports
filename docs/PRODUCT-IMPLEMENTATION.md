@@ -1,5 +1,22 @@
 # October 5 product implementation tracker
 
+## October20 — sourced NBA role reviews and minutes estimates (prepared)
+
+Owner requests current news, expected minutes and qualifying early plays, not a last-season-only
+decision. O-20261020-NBAROLES adds append-only exact-game/player/team role reviews with public
+sources and checked time. Research may use explicitly labeled analyst or reported minutes; role-only
+news cannot invent minutes. Existing injury, price, roster and historical-role holds take precedence.
+The original rate, season, hit observations and old baseline remain visible; separate reviewed-model
+forward rows cannot overwrite the first historical forecast. Official NBA prop promotion is unchanged.
+
+Current reporting has Keldon outside the opening five. RotoWire's Oct16 recap records15points in20
+bench minutes. The desk's conservative20-minute estimate produces12.3points from the saved rate,
+versus14.7at24historical minutes. It is not a coach limit or verified future playing time. Wemb's
+starting role is reported, not an exact minute allocation. The current Knicks rotation article allows
+both a light ramp and regular starter minutes, so no numeric override is forced for Brunson/Hart/Towns.
+Maxey's teammates changed; no invented touch redistribution. Six reviews saved through normal writer.
+Full gates, hosted release, current play screening and responsive live proof remain required.
+
 ## October20 — NBA player research actual delivery and Keldon recheck
 
 Normal log confirms NBA prop post Buffer6ad7a47804c37bdd0539a2ab / X2112597030212096027

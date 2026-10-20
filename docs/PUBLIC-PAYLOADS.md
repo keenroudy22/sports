@@ -45,3 +45,9 @@ public JSON file and call it paid access. No accounts, billing, feed expansion o
   forecast probabilities. Private roster/quote/forecast ledgers and review/delivery state stay outside the upload.
   `data/cards/nba-props-YYYY-MM-DD.png` and clearly titled `nba-props-preview.png` reuse the approved PNG
   research-list family; no new upload path or official-record lane.
+
+- NBA player comparisons may include a dated `roleReview`: exact player/team/game, a short paraphrased
+  role explanation, checked time and public source links. Explicit analyst/reported minutes may replace
+  the research minutes input, preserving the old baseline and identifying the estimate, not a coach limit.
+  Role-only reports never invent minutes; existing injury/price/roster holds win. Rate history and true
+  hit counts remain separate. No public raw journal, new path, calibrated chance or official prop admission.
