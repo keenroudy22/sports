@@ -164,7 +164,7 @@ def capture(now=None, root=STORE, fetch=None, budget=None, sleep=time.sleep, key
         if len(done)==len(BOOKS):break
     stamp=datetime.now(timezone.utc) if fetch is sharp_odds.fetch else now
     quotes,ignored=fold(rows,games,rosters,stamp)
-    captured=nba_capture.append_changed(quotes,root/'player-quotes',lambda r:(r['eventId'],r['athleteId'],r['stat'],r['book']))
+    captured=nba_capture.append_changed(quotes,root/'player-quotes',lambda r:(r['eventId'],r['athleteId'],r['stat'],r['book']),keep_observations=True)
     recorded=record_forward(stamp,root)
     graded=grade(stamp,root)
     return {'requests':count,'espnRequests':budget.requests,'captured':captured,'paired':len(quotes),

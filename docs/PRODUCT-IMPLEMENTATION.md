@@ -2,6 +2,13 @@
 
 ## October20 — NBA website visibility and cross-page consistency (release pending)
 
+Freshness follow-through: NBA quote journals deduplicated identical prices while ignoring retrievedAt,
+so successful rechecks could leave an old last-seen time. Preserve newer same-price observations as new
+append-only quote rows; same-time replay deduplicates and delayed older observations cannot roll back the
+latest quote. Apply only to NBA game/player quote captures, not forecasts/results/roster deduplication.
+Player provider sourceAt remains unchanged and independently freshness-checked. No extra feed calls,
+fabricated checks, backfill or record changes. Regression checks both original bytes and live-payload time.
+
 Owner requests a thorough website review and NBA parity with football. Live morning NBA prices/availability
 are present (8:34–8:35ET); the missing appearance is partly navigation: All Today is football-only apart
 from a bottom sport link, NBA Research says unavailable, and NBA Upcoming says football-only despite stored

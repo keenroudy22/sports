@@ -45,14 +45,24 @@ class Budget:
             raise
 
 
-def append_changed(rows, root, key):
+def append_changed(rows, root, key, *, keep_observations=False):
     problems = boxscores.verify(root)
     if problems:
         raise ValueError('; '.join(problems))
     latest = {key(r): r for p in root.glob('*.jsonl') for r in boxscores.read_store(p)}
     changed = []
     for row in rows:
-        if boxscores.content_hash(row) != boxscores.content_hash(latest.get(key(row), {})):
+        previous = latest.get(key(row), {})
+        newer_observation = False
+        if keep_observations:
+            observed = boxscores.instant(row['retrievedAt'])
+            if observed.tzinfo is None:
+                raise ValueError('Quote observation needs a timezone')
+            prior = boxscores.instant(previous['retrievedAt']) if previous else None
+            if prior and observed < prior:
+                continue  # A delayed response must not roll the latest quote backward.
+            newer_observation = prior is not None and observed > prior
+        if newer_observation or boxscores.content_hash(row) != boxscores.content_hash(previous):
             changed.append(row); latest[key(row)] = row
     for season in sorted({r['season'] for r in changed}):
         boxscores.append(root / f'nba-{season}.jsonl', [r for r in changed if r['season']==season])
@@ -133,7 +143,7 @@ def step(now=None, root=STORE, budget=None, clock=lambda: datetime.now(timezone.
                        'kickoff':game['kickoff'],'seasonType':game['seasonType'],'book':book,
                        'current':snapshot,'retrievedAt':boxscores.stamp(retrieved),
                        'source':hoops_store.odds_url('NBA',game['providerId'])}
-                result['quotes'] += append_changed([row],root/'quotes',lambda r:(r['eventId'],r['book']))
+                result['quotes'] += append_changed([row],root/'quotes',lambda r:(r['eventId'],r['book']),keep_observations=True)
         except (OSError, ValueError, KeyError, TypeError):
             result['errors'].append('quote-unavailable')
             if budget.errors >=3 or budget.requests>=budget.limit:

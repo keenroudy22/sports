@@ -62,6 +62,25 @@ class NBAEvidenceTests(unittest.TestCase):
   self.assertEqual(nba_capture.append_changed([{**rows[0],'retrievedAt':'b'}],root,lambda r:r['eventId']),0)
   p=root/'nba-2027.jsonl';p.write_text(p.read_text().replace('"value":1','"value":2'))
   with self.assertRaises(ValueError):nba_capture.append_changed(rows,root,lambda r:r['eventId'])
+ def test_unchanged_rechecked_quote_stays_fresh_without_rewriting_history(self):
+  g=game();g.update(id='NBA-1',seasonType='regular-season',teams={'home':{'id':'1'},'away':{'id':'2'}},scores={'home':None,'away':None})
+  later=NOW+timedelta(hours=5)
+  g['kickoff']=boxscores.stamp(later+timedelta(hours=2))
+  (self.root/'slate.json').write_text(json.dumps({'retrievedAt':boxscores.stamp(later),'games':[g]}))
+  quote={'eventId':'1','book':'DraftKings','season':2027,'retrievedAt':boxscores.stamp(NOW),'current':{'total':{'line':220.5,'over':-110,'under':-110}}}
+  root=self.root/'quotes';key=lambda r:r['eventId']
+  self.assertEqual(nba_capture.append_changed([quote],root,key,keep_observations=True),1)
+  first=(root/'nba-2027.jsonl').read_bytes()
+  rechecked={**quote,'retrievedAt':boxscores.stamp(later)}
+  self.assertEqual(nba_capture.append_changed([rechecked],root,key,keep_observations=True),1)
+  self.assertTrue((root/'nba-2027.jsonl').read_bytes().startswith(first))
+  self.assertEqual(nba_capture.append_changed([rechecked],root,key,keep_observations=True),0)
+  self.assertEqual(nba_capture.append_changed([{**quote,'current':{'total':{'line':200.5}}}],root,key,keep_observations=True),0)
+  class Model:
+   def predict(self,*args):return {'margin':4,'total':224}
+  data=nba_today.build(later,root=self.root,boxes=[],model_factory=lambda *args:Model())
+  self.assertEqual(data['games'][0]['totalQuote']['retrievedAt'],boxscores.stamp(later))
+  self.assertEqual(boxscores.verify(root),[])
  def test_hosted_writer_is_schedule_only_and_existing_sports_unchanged(self):
   workflow=(Path(__file__).resolve().parents[1]/'.github/workflows/publish.yml').read_text()
   part=workflow.split('Collect NBA final player boxes')[1].split('- name:')[0]
