@@ -41,7 +41,7 @@ Other sports retain their supported live-score/research boundaries; this release
 player models for NHL/MLB/soccer/CBB. X search found no verifiable Oct20 competitor post in the public
 index; old examples are not timing evidence. The verified release receipt above closes this website repair.
 
-## October20 — confirmed personal-ticket cash units (release pending)
+## October20 — confirmed personal-ticket cash units (shipped)
 
 Owner clarifies1u=$50 and actual parlay stakes vary ($10-$15), superseding the ambiguous interim0.25u
 answer. Q1 $10→$159.30 earns2.986u; eight-leg $15→$83.65 after McLaurin void earns1.373u;
@@ -51,9 +51,17 @@ excluded personal units and showed-1.50u; after verified release it should show+
 Append cash corrections with stake/total-return/unit-size; derive net profit in decimal money arithmetic,
 never multiply the eight-leg's original+654 after a void. Keep original quote clearly labeled. No generic
 0.25u normalization and no changes to older official stakes/prices/results. Owner-confirmed cash inputs
-are not represented as independently obtained sportsbook settlement data. Source/tests/release pending.
+are not represented as independently obtained sportsbook settlement data. Source c9b9b792 released;
+hosted39430060068 SUCCESS. Normal/clean each1533Python(two skips)/259Node pass, build500,
+record108/NBA0,guard573,budgets no hard issues, assets current; isolated0830
+`kookn-rehearsal-ha3elcrh` exit0/outcomeok. Local375/1440 cash/calendar/chart checks clean.
+All-play chart now includes verified fun-ticket cash; default Best Bet chart stays straight-only.
+Live app182 verified375/1440: Oct19 All2-3/+2.76u, Fun2-0/+4.36u, chart includes verified
+personal cash; official headline unchanged. No sideways overflow, load error or console error.
+Proof /tmp/kookn-cash-live-phone.png and /tmp/kookn-cash-live-desktop.png.
+Climb3 remains private: Buffer HTTP429 at13:30Z, held before Discord/public report; no delivery claim.
 
-## October20 — personal-ticket calendar correction (release pending)
+## October20 — personal-ticket calendar correction and Climb follow-through
 
 Exact Climb3 report rehearsal found a real validator mismatch: ladder builders allow one/two legs but
 refresh.validate_report still required two for every active parlay. Restrict the one-leg exception to

@@ -16,18 +16,18 @@
       "title": "Early independently selected Climb3 step3",
       "status": "observing",
       "owner": "agent",
-      "next": "Deploy/test the ladder-only one-leg validator repair; verify full prepared report, then clear its private hold for existing Discord-first release. FIU-5.5 FD-205 quote expires10:45ET. Observe actual site/X/Discord or exact hold.",
+      "next": "13:30Z release hit Buffer HTTP429 before Discord/public report; private held. After cooldown retry read-only Buffer status, then clear only this transient hold with run lock and normal writer. Refresh saved FIU quote if after10:45ET.",
       "doneWhen": "The one-open-rung ledger has Climb3/step3 at $81/$35, confirmed site/Discord/X receipts and unchanged20/80 bank math; or an exact current release hold is surfaced before the saved quote expires.",
       "evidence": "CFB-2026-W8-ladder-1020-c3s3-fd privately admitted Oct20, real card/T20/SVG clear. Owner authorizes discretionary selection, agent independently chose single FIU alt over owner parlays. Exact FD pair-205/+158 at12:45:02Z; margin14.1; return121/bank24/ride97. No calibrated/proven-segment claim; automatic policy unchanged. Not yet public/sent."
     },
     {
       "id": "O-20261020-PERSONALRECORD",
       "title": "Count pre-posted personal tickets once in overall calendar",
-      "status": "ready",
+      "status": "shipped",
       "owner": "agent",
-      "next": "Deploy confirmed $50-unit cash accounting: Q1+2.986u, eight-leg+1.373u, Juszczyk-.1u. Verify All2-3/+2.759u and Fun2-0/+4.359u live375/1440; Best bets unchanged. Climb3 separately tracked.",
+      "next": "Preserve actual $50-unit cash accounting, one result per pre-posted ticket, including losses. Never assume0.25u or use original voided odds for adjusted return. Keep Best Bet and Climb ledgers separate.",
       "doneWhen": "Each pregame-posted ticket counts once, wins and losses; no post-win additions or assumed units. Historical official record remains unchanged; hosted/live phone and desktop checks pass.",
-      "evidence": "Count fix f6e29e43/hosted39424391279 success, live375/1440 clean. Owner confirms1u=$50; Q1$10→159.30, eight$15→83.65 after void, Juszczyk$5loss. Cash corrections append-only; original+654 never used for adjusted win. Prior-.1.50u excluded personal cash; expected+2.759u. Unit-accounting source not yet deployed. +217 has no pregame receipt."
+      "evidence": "c9b9b792/hosted39430060068 SUCCESS; normal/clean1533Python(2skip)/259Node,record108,NBA0,guard573,offline0830ha3elcrh ok. Live375/1440 app182 clean: AllOct19 2-3/+2.76u, Fun2-0/+4.36u; chart reconciles. Q1$10→159.30, eight$15→83.65, Juszczyk$5loss,1u=$50. Best Bet history unchanged; +217 excluded without pregame receipt."
     },
     {
       "id": "O-20261019-NBAFIRST",
@@ -52,7 +52,7 @@
       "title": "Verified NBA player-prop prices and role-aware projections",
       "status": "observing",
       "owner": "agent",
-      "next": "Observe Oct20 game-day8:30 capture and9:15 target X/research Discord receipts. Source/site/preview are live; no prop post is frozen on overnight prices. Keep official-prop validation separate under O-20261019-NBAPROPFORWARD.",
+      "next": "Oct20 prop post held: caption kill-list phrase/308characters at12:57Z,13:28Z. Fix/test caption using verified displayed facts, preserve caps/freshness/X-first routing, confirm actual delivery. Official validation stays separate.",
       "doneWhen": "Exact NBA lines/odds, numeric research projections, labeled hit samples and holds are live; early player research is enabled and first actual X/Discord delivery is confirmed. Official-prop validation is tracked separately.",
       "evidence": "5cccdcf3; hosted39341389608 success (initial39340204632 success). Locked normal/clean Python1527(2skip), Node255, build503/budget/record108/NBA0/guard571/assets, offline1850 zero outside/private. Live375/1440 v178 clean;60 comparisons from313 pairs,253 research forecasts. Four-hour research freshness with availability time; Trial60min unchanged. Real preview/T20/live ticket pass; phone accepted23:27:51Z, veto to01:27:51Z Oct20. Morning9:15 prop target activated, not yet queued/sent."
     },
