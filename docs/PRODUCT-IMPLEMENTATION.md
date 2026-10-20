@@ -1,5 +1,47 @@
 # October 5 product implementation tracker
 
+## October20 — complete posted-day recap, website sweep and early delivery recovery (release pending)
+
+Owner asks Today to list every prior-day posted play, reconcile full-slate units and calendar, review all
+sports including opening NBA, and finish early social delivery. Today previously used headline-only
+lastSlate and excluded Full Sends/personal tickets. New source merges confirmed community settlements
+once into the shared history/recent payload and uses a complete compact five-ticket recap: Monday2-3/+2.759u,
+not0-1/-1u. Best Bet stakes/history remain separate. All-play chart retains actual refunded cash, while
+the unchanged Best Bet chart keeps its own credit-excluded convention. Current-day research filters stop
+future NFL notes appearing beside an active CFB slate; old unresolved slips no longer sit in Monday's recap.
+
+Two older personal tickets were genuinely ungraded: Seattle lost14-17OT (ESPN401872995; owner screenshot$10),
+and Saturday's lotto lost Pittsburgh21-27 (401858267) and Vanderbilt21-31 (401856726). Append dated losses,
+SEA-.20u at$50/unit; CFB stake unknown stays outside units. All posted season45-51/+1.14u becomes45-53/+.94u.
+No retroactive+217 addition, invented stake, deleted loss or change to official historical rows.
+
+NBA Record now reads the actual separate NBA Trial ledger, not an empty football headline or paper wins.
+Current NBA captures used standard free writers:10 ESPN reads,12 approved Sharp reads,557 paired offers;
+one missing team quote remains explicit. No Trial was admitted: current listed injuries hold all three matchups.
+Player baselines remain research with prior-season samples; no unvalidated official prop promotion.
+Local phone Today/Research/Games/Record sweep covers all nine sports without overflow/load errors;
+unsupported NHL/MLB/soccer/WNBA/CBB models remain honest, not silently replaced by football.
+
+NBA prop social root bugs: rejected third caption candidate leaked into the saved two-row graphic;
+"Research, not" failed the public copy guard. Only accepted rows now set text; names/teams and history window
+match, full caption passes guard/length. A never-queued invalid/expired draft receives a new immutable
+revision with the same deduplicated post key; old bytes remain. Queued/sent copy never changes. Fresh recovery
+can run after the target while source freshness and two-hours-before-tipoff still hold. NBA Trial captions
+also retain full team names and a saved reason within280 characters.
+
+Buffer primary documentation https://developers.buffer.com/guides/api-limits.html and a counted real
+09:44ET query confirm the24h free-client limit, Retry-After6141s (11:27ET), not a broken X account.
+New provider backoff is persisted, checked before requests/counters, and never sleeps through a desk run.
+Verified channel metadata caches for one hour per token/config identity, reducing redundant discovery calls;
+rate errors remain retryable delivery delays rather than permanent validation holds. No paid plan or budget increase.
+Normal Buffer dashboard is accessible. It confirms South Alabama/Marshall under65.5 X2112539270816690288
+sent09:39ET and NBA projections X2112515184291950704 sent08:04ET; normal API reconciliation is delayed.
+Climb refreshed09:58ET: FIU-5.5 FanDuel-210/opposite+162,81→120,bank24/ride96,35alreadybanked;
+reviewed one-off authority/ordinary gates preserved. Dashboard scheduling handoff must retain Discord-first,
+actual current news, quote expiry, spacing/caps and real UI receipts. It is not posted yet.
+
+O-20261020-TODAYRECAP and O-20261020-SOCIALRECOVERY retain completion checks and pending receipts.
+
 ## October20 — NBA website visibility and cross-page consistency (verified release)
 
 UI sourced4291cd1 and freshness repair5ccdc3cc are live; hosted39433048960 succeeded. The superseded

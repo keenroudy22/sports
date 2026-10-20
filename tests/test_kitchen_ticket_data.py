@@ -145,7 +145,7 @@ class DateLineAndRunsTests(unittest.TestCase):
                   'legs': ['x'], 'parlayType': 'longshot', 'season': 2026}]
         last = build_site.last_slates(picks, '2026-10-07')
         self.assertEqual((last['ALL']['day'], last['ALL']['wins'], last['ALL']['losses']), ('2026-10-05', 0, 1))
-        self.assertEqual((last['CFB']['wins'], last['CFB']['losses']), (1, 0), 'a fun ticket is not a best bet')
+        self.assertEqual((last['CFB']['wins'], last['CFB']['losses']), (2, 0), 'Today recaps all posted plays, including fun tickets')
         season = build_site.season_records(picks, NOW)
         self.assertEqual((season['ALL']['wins'], season['ALL']['losses'], season['ALL']['playoffs']), (1, 1, False))
 

@@ -59,6 +59,19 @@ const views = (overrides = {}) => {
 };
 const near = (a, b) => Math.abs(a - b) < 1e-9;
 
+test('NBA Record uses the actual separate Trial ledger, not an empty football headline or paper wins', async () => {
+  const {api,factory}=load();
+  const nba={trial:{record:{win:1,loss:0,graded:1,units:.75},plays:[{
+    id:'NBA-trial-real',marketType:'moneyline',direction:'home',odds:-133,book:'DraftKings',
+    kickoff:'2026-10-20T23:00Z',result:'win',actual:'110-100',card:'data/cards/nba-trial-real.png',
+    teams:{home:{name:'New York Knicks'},away:{name:'Philadelphia 76ers'}}}]}};
+  const ctx=api.moreContext({get:async path=>{assert.equal(path,'app/nba.json');return nba;}});
+  ctx.state.league='NBA';const html=await factory(ctx).record({});
+  assert.match(html,/NBA Trial record/);assert.match(html,/1–0/);assert.match(html,/\+0\.75u/);
+  assert.match(html,/Philadelphia 76ers at New York Knicks/);
+  assert.match(html,/separate from football/);assert.doesNotMatch(html,/Every play, graded in public|Season record/);
+});
+
 test('October19 confirmed $50-unit cash settlements restore both parlay profits without changing Best bets', () => {
   const cal=views().calendarModel;
   const base={league:'NFL',season:2026,posted:true,kickoff:'2026-10-20T00:16:00Z',odds:654};

@@ -250,17 +250,23 @@ def social_plans(now,log_book,root=nba_trial.STORE,reserved=()):
   target=datetime.combine(game_day,datetime.min.time(),nba_trial.EASTERN).replace(hour=8 if early else 9,minute=30)
   due=buffer_post.free_slot(max(target,now+timedelta(minutes=15)),busy)
   if due>=boxscores.instant(play['kickoff'])-timedelta(minutes=15):continue
-  teams=play['game']['teams'];title=f"{teams['away']['abbreviation']} at {teams['home']['abbreviation']}"
+  teams=play['game']['teams']
+  name=lambda side: teams[side].get('displayName') or teams[side].get('name') or teams[side]['abbreviation']
+  title=f"{name('away')} at {name('home')}"
   if play.get('marketType')=='total': selection=f"{play['direction'].upper()} {play['line']:g}"
   else:
-   team=play['game']['teams'][play['direction']]['abbreviation']
+   team=name(play['direction'])
    selection=f"{team} MONEYLINE" if play['marketType']=='moneyline' else f"{team} {play['line']:+g}"
-  if play.get('marketType')=='total': projection=f"My projected total is {play['projection']:g}."
+  if play.get('marketType')=='total': projection=f"I have the total at {play['projection']:g}."
   else:
    margin=play['projection'];favorite='home' if margin>=0 else 'away'
-   projection=f"My projected margin is {teams[favorite]['abbreviation']} by {abs(margin):g}."
-  text=f"🏀 NBA Trial: {title} {selection} ({play['odds']:+d}, {play['book']})\n{projection}\n1. {play['reasons'][0]}\n❤️ if you're tailing\n#NBA"
-  if x_post.x_style(text):continue
+   projection=f"I have {name(favorite)} by {abs(margin):g}."
+  text=None
+  for reason in play['reasons']:
+   candidate=f"🏀 NBA Trial\n{title}\n{selection} ({play['odds']:+d}, {play['book']})\n{projection}\n{reason}\n#NBA"
+   if x_post.tweet_length(candidate)<=x_post.LIMIT and not x_post.x_style(candidate):
+    text=candidate;break
+  if not text:continue
   plans.append((play['id'],'nba-trial',text,due,play['id'].lower()))
  return plans
 

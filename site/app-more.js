@@ -291,6 +291,20 @@
 
   views.record = async route => {
     const tab = route.tab || 'official';
+    if (state.league === 'NBA' && tab === 'official') {
+      const data = await get('app/nba.json'), trial = data.trial || {}, r = trial.record || {};
+      const plays = (trial.plays || []).slice().reverse();
+      return `${head('NBA record', 'NBA Trial record', 'Posted NBA plays only. This 1u Trial stays separate from football and from paper projections.')}
+        <div class="kpis"><div class="kpi"><small>NBA Trial</small><b class="num">${esc(r.win || 0)}–${esc(r.loss || 0)}</b><span>${esc(r.graded || 0)} graded</span></div><div class="kpi"><small>Net</small><b class="num">${esc(units(Number(r.units || 0)))}</b><span>at the posted stakes and prices</span></div></div>
+        ${plays.length ? `<div class="receipts">${plays.map(p => {
+          const teams = p.teams || {}, side = p.direction;
+          const team = teams[side]?.displayName || teams[side]?.name || teams[side]?.abbreviation || '';
+          const line = p.marketType === 'total' ? `${side} ${p.line}` : p.marketType === 'moneyline' ? `${team} moneyline` : `${team} ${C.signed(p.line)}`;
+          const matchup = `${teams.away?.displayName || teams.away?.name || teams.away?.abbreviation || ''} at ${teams.home?.displayName || teams.home?.name || teams.home?.abbreviation || ''}`;
+          return `<article class="receipt"><div><b>${esc(matchup)} · ${esc(line)}</b><span>${esc(oddsText(p.odds))} ${esc(bookLabel(p.book))} · 1u · ${esc(whenShort(p.kickoff))}</span><span>${p.result ? `${esc(p.result)} · final ${esc(p.actual)}` : 'Not graded yet'}</span></div>${p.card ? `<a href="${esc(p.card)}">Ticket ↗</a>` : ''}</article>`;
+        }).join('')}</div>` : '<p class="muted small">No NBA Trial play has been posted yet. Research projections and historical hit counts are not betting results.</p>'}
+        <p class="btn-row"><a class="btn small" href="#today?sport=NBA">NBA Today ›</a><a class="btn small" href="#record/trials">Paper-trial evidence ›</a></p>`;
+    }
     const [today, board, lab, trials, official, recordData] = await Promise.all([get('app/today.json'), maybe('scoreboard.json'), tab === 'trials' ? maybe('market-lab.json') : null, tab === 'trials' ? maybe('app/sport-research.json') : null, allPicks(), get('app/record.json')]);
     const every = [...new Map([...official, ...(recordData.communityPicks || [])].map(p => [p.id, p])).values()];
     const climbRoute = tab === 'climb' ? (await get('app/record.json')).climbRoute : null;

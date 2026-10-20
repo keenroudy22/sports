@@ -209,10 +209,11 @@ test('all-play unit chart includes settled personal parlay cash without changing
     { id: 'td', kind: 'props', odds: 3000, result: 'loss', units: -0.1 },
     { id: 'best', odds: -110, result: 'loss', units: -1 },
     { id: 'full', odds: -110, result: 'loss', units: -0.5 },
+    { id: 'refund', odds: -110, result: 'loss', units: 0, earlyExit: true, riskUnits: 1 },
   ];
   const units = globalThis.KRCore.unitsFor;
   assert.equal(M.cumulativeUnits(picks, units, true).at(-1).units, 2.76);
-  assert.equal(M.cumulativeUnits(picks, units).at(-1).units, -1.6);
+  assert.equal(M.cumulativeUnits(picks, units).at(-1).units, -2.6);
 });
 
 test('closing-line summary counts beat, tied and lost', () => {
