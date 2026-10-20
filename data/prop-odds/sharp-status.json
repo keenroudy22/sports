@@ -1,10 +1,10 @@
 {
- "at": "2026-10-20T13:22:49Z",
+ "at": "2026-10-20T13:31:31Z",
  "confirmed": {
-  "CFB-401871055": "2026-10-20T13:22:49Z",
-  "CFB-401871069": "2026-10-20T13:22:49Z",
-  "CFB-401871070": "2026-10-20T13:22:49Z",
-  "CFB-401871092": "2026-10-20T13:22:49Z"
+  "CFB-401871055": "2026-10-20T13:31:31Z",
+  "CFB-401871069": "2026-10-20T13:31:31Z",
+  "CFB-401871070": "2026-10-20T13:31:31Z",
+  "CFB-401871092": "2026-10-20T13:31:31Z"
  },
  "leagues": {
   "CFB": {
@@ -114,6 +114,7 @@
        "4th_quarter_total_points",
        "draw_no_bet",
        "first_touchdown_scorer",
+       "game_prop",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
@@ -618,6 +619,7 @@
        "moneyline_3-way",
        "player_touchdowns",
        "point_spread",
+       "race_to_10_points",
        "team_total",
        "total_points",
        "total_points_band",
@@ -728,7 +730,7 @@
       "fliff": "fobj__conflict_event__420163",
       "gemini": "NCAAF-2610240230-NCS-STA-S",
       "hardrock": "2559323490134131103",
-      "kalshi": "KXNCAAF1H-26OCT23NCSTSTAN",
+      "kalshi": "KXNCAAF1HSPREAD-26OCT23NCSTSTAN",
       "ladbrokes": "95fa53dd-b11b-4e13-9517-eba63bacc272",
       "novig": "01a14291-af4f-7d40-926e-baf7f98a550c",
       "onexbet": "762818644",
@@ -931,7 +933,7 @@
       "fliff": "419847_c_p_209_prematch",
       "gemini": "NCAAF-2610242000-CAL-SMU-M",
       "hardrock": "2423019232661995925",
-      "kalshi": "KXNCAAF1H-26OCT23CALSMU",
+      "kalshi": "KXNCAAFTEAMTOTAL-26OCT24CALSMU",
       "ladbrokes": "650a7ca8-0b34-4fe0-8ae4-d0cded12014d",
       "novig": "01a14577-5036-7032-b901-ba2b0fafc547",
       "onexbet": "762874857",
@@ -1014,7 +1016,7 @@
       "fliff": "419764_c_p_209_prematch",
       "gemini": "NCAAF-2610242000-TTU-CIN-M",
       "hardrock": "8632146112666534303",
-      "kalshi": "KXNCAAF1H-26OCT23TTUCIN",
+      "kalshi": "KXNCAAF1HSPREAD-26OCT24TTUCIN",
       "ladbrokes": "06590fc1-6658-420a-ad2e-396a567de5e5",
       "novig": "01a142e4-240a-7910-af28-0ada2ad9d4b0",
       "onexbet": "762932200",
@@ -1099,7 +1101,7 @@
       "fliff": "419829_c_p_209_prematch",
       "gemini": "NCAAF-2610242000-RIC-FAU-M",
       "hardrock": "4082595695348023687",
-      "kalshi": "KXNCAAF1H-26OCT23RICEFAU",
+      "kalshi": "KXNCAAF1HTOTAL-26OCT24RICEFAU",
       "ladbrokes": "bb956278-59ab-43c4-ba6a-48b783e0c2a5",
       "novig": "01a14577-5a6d-76c3-8e64-250053e86e1f",
       "onexbet": "762932198",
