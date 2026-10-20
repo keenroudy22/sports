@@ -1,5 +1,22 @@
 # October 5 product implementation tracker
 
+## October20 — NBA player research actual delivery and Keldon recheck
+
+Normal log confirms NBA prop post Buffer6ad7a47804c37bdd0539a2ab / X2112597030212096027
+at17:29:17.292Z (13:29ET), research Discord17:32:02Z. Caption/card carry Keldon over7.5
+FD-138 and Wembanyama over11.5reb FD-118. Live NBA Today confirms the card and Keldon
+comparison. This recovered the missed9:15 target; it was not an on-time morning delivery.
+O-20261019-NBAPROPS delivery complete; next natural morning timing remains observable.
+
+Owner asks whether Keldon is ready for all channels. No duplicate post: already live as research.
+Fresh standard NBA capture18:14Z:10free ESPN/12NBA Sharp reads,361paired rows,partialcoverage,
+one team quote unavailable; no NBA Trial qualifies. Focused NBA-only check used4reads inside
+its12-read cap, 5.2s spacing: FanDuel Keldon7.5 over-138/under+104, source18:17:03Z,
+stored18:17:25Z through normal append writer. Availability18:14:35Z, no Keldon injury/role hold.
+14.7 is a last-season rate baseline assuming24minutes, not a verified new-season forecast or
+calibrated betting chance. NBA prop promotion still waits on NBAPROPFORWARD; no invented
+official play/stake or record change. Normal capture commit/push succeeded; quote unchanged.
+
 ## October20 — plain NBA team research and new-season limits (verified release)
 
 Source187c741f, hosted39471251383 success. Normal/clean each1548Python(two skips)/268Node,
