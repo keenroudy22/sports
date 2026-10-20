@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-20T15:32:31Z",
+  "updatedAt": "2026-10-20T15:46:29Z",
   "leagues": {
     "NFL": {
       "teams": {
@@ -702,7 +702,7 @@
               "position": "S",
               "status": "Suspension",
               "injury": "Suspension",
-              "reportedAt": "2026-10-20T15:01Z",
+              "reportedAt": "2026-10-20T15:23Z",
               "source": "https://www.espn.com/nfl/player/_/id/4034953/cj-gardner-johnson"
             },
             {
@@ -4377,6 +4377,15 @@
           "name": "Miami Dolphins",
           "players": [
             {
+              "id": "4427103",
+              "name": "Storm Duck",
+              "position": "CB",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-20T15:23Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4427103/storm-duck"
+            },
+            {
               "id": "4819257",
               "name": "Jonah Savaiinaea",
               "position": "G",
@@ -4476,15 +4485,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4685246/kaytron-allen"
             },
             {
-              "id": "4243371",
-              "name": "Riley Patterson",
-              "position": "PK",
-              "status": "Active",
-              "injury": null,
-              "reportedAt": "2026-10-12T15:08Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4243371/riley-patterson"
-            },
-            {
               "id": "4685307",
               "name": "Kevin Coleman Jr.",
               "position": "WR",
@@ -4557,15 +4557,6 @@
               "source": "https://www.espn.com/nfl/player/_/id/4682745/jaylen-wright"
             },
             {
-              "id": "4427103",
-              "name": "Storm Duck",
-              "position": "CB",
-              "status": "Out",
-              "injury": "Knee",
-              "reportedAt": "2026-10-11T00:56Z",
-              "source": "https://www.espn.com/nfl/player/_/id/4427103/storm-duck"
-            },
-            {
               "id": "4894654",
               "name": "Kenneth Grant",
               "position": "DT",
@@ -4600,6 +4591,15 @@
               "injury": null,
               "reportedAt": "2026-10-09T20:34Z",
               "source": "https://www.espn.com/nfl/player/_/id/4271632/austin-jackson"
+            },
+            {
+              "id": "4034729",
+              "name": "Tucker Addington",
+              "position": "LS",
+              "status": "Active",
+              "injury": null,
+              "reportedAt": "2026-10-09T20:30Z",
+              "source": "https://www.espn.com/nfl/player/_/id/4034729/tucker-addington"
             }
           ]
         },
@@ -5302,7 +5302,7 @@
               "position": "OT",
               "status": "Out",
               "injury": "Calf",
-              "reportedAt": "2026-10-20T15:01Z",
+              "reportedAt": "2026-10-20T15:23Z",
               "source": "https://www.espn.com/nfl/player/_/id/3115303/jermaine-eluemunor"
             },
             {
@@ -7367,14 +7367,6 @@
       "changes": [
         {
           "teamId": "26",
-          "name": "Avery Smith",
-          "from": "Out",
-          "to": "Active",
-          "observedAt": "2026-10-19T17:31:23Z",
-          "source": "https://www.espn.com/nfl/player/_/id/5082331/avery-smith"
-        },
-        {
-          "teamId": "26",
           "name": "Brandon Pili",
           "from": "Out",
           "to": "Active",
@@ -7764,11 +7756,19 @@
           "to": "Doubtful",
           "observedAt": "2026-10-20T14:32:04Z",
           "source": "https://www.espn.com/nfl/player/_/id/3121422/terry-mclaurin"
+        },
+        {
+          "teamId": "15",
+          "name": "Storm Duck",
+          "from": "Out",
+          "to": "Active",
+          "observedAt": "2026-10-20T15:46:29Z",
+          "source": "https://www.espn.com/nfl/player/_/id/4427103/storm-duck"
         }
       ],
       "status": "ok",
-      "checkedAt": "2026-10-20T15:32:31Z",
-      "lastAttemptAt": "2026-10-20T15:32:31Z",
+      "checkedAt": "2026-10-20T15:46:29Z",
+      "lastAttemptAt": "2026-10-20T15:46:29Z",
       "source": "https://www.espn.com/nfl/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     },
@@ -7819,8 +7819,8 @@
       },
       "changes": [],
       "status": "ok",
-      "checkedAt": "2026-10-20T15:32:31Z",
-      "lastAttemptAt": "2026-10-20T15:32:31Z",
+      "checkedAt": "2026-10-20T15:46:29Z",
+      "lastAttemptAt": "2026-10-20T15:46:29Z",
       "source": "https://www.espn.com/college-football/injuries",
       "coverage": "Provider-listed injuries only; not confirmed starters or game-day inactives."
     }
