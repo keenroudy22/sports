@@ -3543,7 +3543,16 @@
    "cardKey": "cooked-NFL-2026-W6-dal-gb-ml-home-0-dk",
    "sentAt": "2026-10-19T04:09:02.305Z",
    "link": "https://x.com/1753110091912413184/status/2112033253481656833",
-   "tweetId": "2112033253481656833"
+   "tweetId": "2112033253481656833",
+   "metrics": {
+    "reactions": 1,
+    "comments": 0,
+    "engagementRate": 4.55,
+    "reposts": 0,
+    "impressions": 22,
+    "clicks": 0
+   },
+   "metricsAt": "2026-10-20T04:26:58Z"
   },
   {
    "id": "receipt:day:2026-10-18",
@@ -3880,10 +3889,57 @@
    "card": false,
    "cardTheme": "none",
    "discord": {
-    "state": "pending",
+    "state": "sent",
     "text": "🎯 Christian McCaffrey found the end zone.\nThat was my anytime TD lean this morning.\n#NFL",
-    "destination": "research"
-   }
+    "destination": "research",
+    "sentAt": "2026-10-20T04:26:58Z",
+    "beforeX": false
+   },
+   "sentAt": "2026-10-20T04:26:15.331Z",
+   "link": "https://x.com/1753110091912413184/status/2112399975015432328",
+   "tweetId": "2112399975015432328"
+  },
+  {
+   "id": "receipt:day:2026-10-19",
+   "postedAt": "2026-10-20T04:26:58Z",
+   "dueAt": "2026-10-20T13:03:00Z",
+   "bufferPostId": "6ad6ed992fcafd0f184d8609",
+   "textHash": "710d357a2c5adc1b",
+   "kind": "buffer:receipt",
+   "card": true,
+   "cardTheme": "ticket",
+   "cardKey": "receipt-day-2026-10-19"
+  },
+  {
+   "id": "research:end-zone:2026-10-20",
+   "postedAt": "2026-10-20T04:26:58Z",
+   "dueAt": "2026-10-20T14:32:00Z",
+   "bufferPostId": "6ad6ed9acba41b01405e2e00",
+   "textHash": "32d1b1138a4699c9",
+   "kind": "buffer:research",
+   "card": true,
+   "cardTheme": "ticket",
+   "discord": {
+    "state": "pending",
+    "text": "🎯 END-ZONE WORK\nMy TD lean: PJ Martin\n20 red-zone opportunities · 12 inside the 10\n#CFB",
+    "destination": "research",
+    "image": "https://keenroudy.com/sports/data/cards/research-end-zone-2026-10-20.png"
+   },
+   "research": {
+    "type": "td-lean",
+    "leans": [
+     {
+      "player": "PJ Martin",
+      "athleteId": "5124334",
+      "gameId": "CFB-401871092",
+      "league": "CFB",
+      "kickoff": "2026-10-20T23:30Z",
+      "anytime": true,
+      "firstTd": true
+     }
+    ]
+   },
+   "cardKey": "research-end-zone-2026-10-20"
   }
  ]
 }
