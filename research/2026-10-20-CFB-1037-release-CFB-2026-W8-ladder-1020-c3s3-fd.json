@@ -1,0 +1,103 @@
+{
+  "league": "CFB",
+  "publishedAt": "2026-10-20T14:37:25Z",
+  "summary": "Released 1: Ladder step 3: 1 legs at FanDuel -210 at FanDuel.",
+  "takeaways": [],
+  "parlays": [
+    {
+      "id": "CFB-2026-W8-ladder-1020-c3s3-fd",
+      "title": "Ladder step 3: 1 legs at FanDuel",
+      "status": "active",
+      "favorite": false,
+      "parlayType": "ladder",
+      "riskUnits": 0.25,
+      "ladder": {
+        "run": 3,
+        "step": 3,
+        "stake": 81,
+        "payout": 120,
+        "banked": 35,
+        "bankThisWin": 24,
+        "bankedAfter": 59,
+        "nextStake": 96,
+        "totalAfter": 155,
+        "bankPercent": 20,
+        "ridePercent": 80,
+        "start": 50,
+        "goal": 1000
+      },
+      "legs": [
+        {
+          "id": "ladder-CFB-401871055-spread-home--5.5",
+          "title": "Florida International Panthers -5.5",
+          "gameId": "CFB-401871055",
+          "marketType": "spread",
+          "direction": "home",
+          "line": -5.5,
+          "team": "2229",
+          "book": "FanDuel",
+          "odds": -210,
+          "chance": 0.702,
+          "rawChance": 0.702,
+          "calibrated": false,
+          "implied": 0.677,
+          "projection": 14.1,
+          "kickoff": "2026-10-20T23:00Z",
+          "observedAt": "2026-10-20T13:58:44.586988219Z",
+          "alternate": true,
+          "marketWindow": "Full game",
+          "reason": "FIU allows 14.7 points per game; Middle Tennessee is 0-3 on the road.",
+          "reasons": [
+            {
+              "kind": "stats",
+              "direction": "for",
+              "text": "FIU allows 14.7 points per game; Middle Tennessee is 0-3 on the road.",
+              "source": "https://fiusports.com/news/2026/10/19/football-preps-for-middle-tennessee-hosts-blue-raiders-tuesday-night-in-final-weekday-cusa-game.aspx",
+              "verified": true
+            }
+          ]
+        }
+      ],
+      "_league": "CFB",
+      "correlation": "One leg per game, so the book prices the ticket as the legs multiplied.",
+      "gameIds": [
+        "CFB-401871055"
+      ],
+      "book": "FanDuel",
+      "odds": -210,
+      "quotedAt": "2026-10-20T13:58:44.586988219Z",
+      "priceEstimated": false,
+      "expiresAt": "2026-10-20T15:45:00Z",
+      "quoteType": "sportsbook",
+      "confidence": 1,
+      "edge": "For fun, not value: 1 protected lines with stable roles that our model direction agrees with, at FanDuel's exact prices, multiplied to -210. $81 rides with $35 already banked. A win returns $120: $24 goes to the bank and $96 rides next. Bank 20, ride 80.",
+      "cutoff": "A ladder rung is not re-entered. It stands or falls as posted.",
+      "sources": [
+        "https://api.sharpapi.io/api/v1/deeplink/192907816628797",
+        "https://api.sharpapi.io/api/v1/deeplink/261492372923318",
+        "https://www.espn.com/college-football/game/_/gameId/401871055"
+      ],
+      "selectionPolicy": "owner-discretionary-climb-20261020",
+      "selectionReview": {
+        "authority": "Owner Oct20 explicitly permits discretionary Climb selection; agent chose independently, not owner suggested parlay.",
+        "scope": "One rung only; automatic thresholds unchanged.",
+        "caution": "Unadjusted margin supports direction; learned spread adjustment does not establish positive value. No proven segment or calibrated win probability claimed.",
+        "quotePair": {
+          "odds": -210,
+          "oppositeOdds": 162,
+          "sourceAt": "2026-10-20T13:58:44.586988219Z"
+        },
+        "excluded": "Delaware quarterback uncertainty; no extra South Alabama leg for payout."
+      },
+      "why": "I have FIU by 14.1 and am taking the protected -5.5 line alone. FIU allows 14.7 points per game; Middle Tennessee is 0-3 on the road.",
+      "risk": "A college alternate spread can miss. The raw margin is directional support, not a calibrated win probability; $81 remains at risk.",
+      "reason": "FIU allows 14.7 points per game; Middle Tennessee is 0-3 on the road.",
+      "reasons": [
+        "FIU allows 14.7 points per game; Middle Tennessee is 0-3 on the road."
+      ],
+      "league": "CFB",
+      "jurisdictionVerified": true,
+      "publishedAt": "2026-10-20T14:37:25Z"
+    }
+  ]
+}
