@@ -1,6 +1,17 @@
 # October 5 product implementation tracker
 
-## October20 — remove unselected Climb future and compare eligible leagues (release pending)
+## October20 — remove unselected Climb future and compare eligible leagues (verified release)
+
+Source38d55e8b (includesc6935845); hosted39447233149 succeeded. Normal and clean-copy each
+1546Python(two skips)/268Node passed; build500/137,record110/NBA0,guard575,assets current,
+budgets no hard issue; isolated1000yrz54orb exit0/outcomeok,outsideWrite0/privateRead0.
+Live375/1440: exactly3ledger rows, no unselected future rows/dates, loaded posted-only PNG,
+35banked/81riding, conditional120return/24bank, no overflow/load/console errors. Original FIU
+and all sent artifacts unchanged. Proof /tmp/kookn-posted-only-live-phone-2026-10-20.png and
+/tmp/kookn-posted-only-live-desktop-2026-10-20.png; owner climb-posted-only-route-2026-10-20.json.
+Production candidate confirms existing rung remains the only open one. Configured TNF/MNF targets
+remain game-day09:30ET plus ordinary spacing/jitter, not kickoff. New source includes the separately
+tested goal-first/current-step social caption policy4b96f681; its hosted follow-through is also complete.
 
 Owner rejects a chart that implies future CFB selections or excludes standalone TNF/MNF. Public map PNG
 and route JSON/HTML now use only ledger-backed completed/open rows, with actual35banked/81riding.
