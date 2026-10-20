@@ -1,16 +1,16 @@
 {
- "at": "2026-10-20T12:39:47Z",
+ "at": "2026-10-20T12:48:47Z",
  "confirmed": {
-  "CFB-401871055": "2026-10-20T12:39:47Z",
-  "CFB-401871069": "2026-10-20T12:39:47Z",
-  "CFB-401871070": "2026-10-20T12:39:47Z",
-  "CFB-401871092": "2026-10-20T12:39:47Z"
+  "CFB-401871055": "2026-10-20T12:48:47Z",
+  "CFB-401871069": "2026-10-20T12:48:47Z",
+  "CFB-401871070": "2026-10-20T12:48:47Z",
+  "CFB-401871092": "2026-10-20T12:48:47Z"
  },
  "leagues": {
   "CFB": {
    "books": {
-    "draftkings": 726,
-    "fanduel": 435
+    "draftkings": 729,
+    "fanduel": 512
    },
    "eventsListed": 56,
    "eventsMatched": 4,
@@ -24,15 +24,15 @@
     "player_passing_+_rushing_yards": 21,
     "player_passing_attempts": 24,
     "player_passing_completions": 19,
-    "player_passing_touchdowns": 26,
-    "player_passing_yards": 115,
-    "player_receiving_yards": 472,
-    "player_receptions": 88,
+    "player_passing_touchdowns": 30,
+    "player_passing_yards": 122,
+    "player_receiving_yards": 511,
+    "player_receptions": 95,
     "player_rushing_attempts": 36,
-    "player_rushing_yards": 320
+    "player_rushing_yards": 343
    },
    "requestsLeft": 7,
-   "rows": 1161,
+   "rows": 1241,
    "slateGames": [
     "Middle Tennessee Blue Raiders at Florida International Panthers 2026-10-20T23:00Z",
     "Missouri State Bears at Delaware Blue Hens 2026-10-20T23:00Z",
@@ -219,6 +219,7 @@
        "anytime_touchdown_scorer",
        "draw_no_bet",
        "first_touchdown_scorer",
+       "game_prop",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
@@ -230,6 +231,7 @@
        "player_rushing_touchdowns",
        "player_rushing_yards",
        "point_spread",
+       "race_to_10_points",
        "team_total",
        "total_passing_touchdowns",
        "total_points",
@@ -319,6 +321,7 @@
        "anytime_touchdown_scorer",
        "draw_no_bet",
        "first_touchdown_scorer",
+       "game_prop",
        "halftime_fulltime",
        "highest_scoring_quarter_will_have_how_many_points",
        "moneyline",
@@ -427,6 +430,7 @@
        "anytime_touchdown_scorer",
        "draw_no_bet",
        "first_touchdown_scorer",
+       "game_prop",
        "halftime_fulltime",
        "highest_scoring_half",
        "highest_scoring_quarter_will_have_how_many_points",
@@ -482,7 +486,7 @@
       "fliff": "420160_c_p_209_prematch",
       "gemini": "NCAAF-2610232300-MAS-UCO-M",
       "hardrock": "8929594794305520023",
-      "kalshi": "KXNCAAF1H-26OCT23MASSCONN",
+      "kalshi": "KXNCAAF1HTOTAL-26OCT23MASSCONN",
       "ladbrokes": "1d7e24c7-fc9b-4b94-a8fa-673ca8b0a7d4",
       "novig": "01a141d1-8c4d-7201-affb-8ff56cad483d",
       "onexbet": "762891390",
@@ -562,7 +566,7 @@
       "fliff": "420161_c_p_209_prematch",
       "gemini": "NCAAF-2610240030-ARM-TLSA-M",
       "hardrock": "3560248507317223828",
-      "kalshi": "KXNCAAF1H-26OCT23ARMYTLSA",
+      "kalshi": "KXNCAAF1HTOTAL-26OCT23ARMYTLSA",
       "ladbrokes": "3ceed4a7-8b0b-4248-9f04-de04170f9deb",
       "novig": "01a14223-ccd7-7482-87b4-e79f2670b26e",
       "onexbet": "762874856",
@@ -723,7 +727,7 @@
       "fliff": "fobj__conflict_event__420163",
       "gemini": "NCAAF-2610240230-NCS-STA-S",
       "hardrock": "2559323490134131103",
-      "kalshi": "KXNCAAF1H-26OCT23NCSTSTAN",
+      "kalshi": "KXNCAAF1HSPREAD-26OCT23NCSTSTAN",
       "ladbrokes": "95fa53dd-b11b-4e13-9517-eba63bacc272",
       "novig": "01a14291-af4f-7d40-926e-baf7f98a550c",
       "onexbet": "762818644",
@@ -778,6 +782,7 @@
        "4th_quarter_point_spread",
        "4th_quarter_total_points",
        "anytime_touchdown_scorer",
+       "draw_no_bet",
        "first_touchdown_scorer",
        "game_prop",
        "halftime_fulltime",
