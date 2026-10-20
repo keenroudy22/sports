@@ -1,26 +1,10 @@
 # What the kitchen learned, 2026-10-20
 
-2857 recorded candidate rows, 1830 distinct game/side/player observations, 2740 graded. Closing line value is how far the market moved toward our side by kickoff; it is the first thing learning trusts.
+2858 recorded candidate rows, 1830 distinct game/side/player observations, 2740 graded. Closing line value is how far the market moved toward our side by kickoff; it is the first thing learning trusts.
 
 ## Changes this week
 
-- **researcher** domains: {'preferDomains': ['si.com', 'sports.yahoo.com', 'buffalobills.com', 'chicagobears.com', 'jaguars.com', 'goheels.com', 'goaztecs.com', 'navysports.com'], 'avoidDomains': []} to {'preferDomains': ['si.com', 'sports.yahoo.com', 'buffalobills.com', 'seahawks.com', 'underdogdynasty.com', 'chicagobears.com', 'denverbroncos.com', 'jaguars.com'], 'avoidDomains': []}. Which sites the researcher cites keep checking out.
-- **CFB/prop:passYds** twoWay.trust: 1.0 to 0.95. CFB/prop:passYds trust 1.00 to 0.95.
-- **CFB/prop:passYds** twoWay.gap: 0.0 to 2.0. CFB/prop:passYds gap floor +2 points.
-- **CFB/prop:passYds** twoWay.pause: False to True. Pause CFB/prop:passYds; research and shadow continue.
-- **CFB/prop:rec** twoWay.trust: 1.0 to 0.95. CFB/prop:rec trust 1.00 to 0.95.
-- **CFB/prop:rec** twoWay.gap: 0.0 to 2.0. CFB/prop:rec gap floor +2 points.
-- **CFB/prop:rec** twoWay.pause: False to True. Pause CFB/prop:rec; research and shadow continue.
-- **CFB/prop:recYds** twoWay.trust: 1.0 to 0.985. CFB/prop:recYds trust 1.00 to 0.98.
-- **CFB/prop:rushYds** twoWay.trust: 1.0 to 0.965. CFB/prop:rushYds trust 1.00 to 0.96.
-- **CFB/total** twoWay.trust: 1.0 to 0.95. CFB/total trust 1.00 to 0.95.
-- **NFL/prop:att** twoWay.trust: 1.0 to 1.045. NFL/prop:att trust 1.00 to 1.04.
-- **NFL/prop:cmp** twoWay.trust: 1.0 to 1.05. NFL/prop:cmp trust 1.00 to 1.05.
-- **NFL/prop:passYds** twoWay.trust: 1.0 to 0.95. NFL/prop:passYds trust 1.00 to 0.95.
-- **NFL/prop:rec** twoWay.trust: 1.0 to 0.959. NFL/prop:rec trust 1.00 to 0.96.
-- **NFL/prop:recYds** twoWay.trust: 1.0 to 1.05. NFL/prop:recYds trust 1.00 to 1.05.
-- **NFL/prop:rushYds** twoWay.trust: 1.0 to 0.95. NFL/prop:rushYds trust 1.00 to 0.95.
-- **NFL/total** twoWay.trust: 1.0 to 0.95. NFL/total trust 1.00 to 0.95.
+- None. Not enough new evidence moved anything.
 
 ## Direction changes
 
@@ -61,25 +45,19 @@ In force now:
 
 ## Two-way Autopilot learning
 
-- Applied trust:CFB/prop:passYds: CFB/prop:passYds trust 1.00 to 0.95.
-- Applied gap:CFB/prop:passYds: CFB/prop:passYds gap floor +2 points.
-- Applied pause:CFB/prop:passYds: Pause CFB/prop:passYds; research and shadow continue.
-- Applied trust:CFB/prop:rec: CFB/prop:rec trust 1.00 to 0.95.
-- Applied gap:CFB/prop:rec: CFB/prop:rec gap floor +2 points.
-- Applied pause:CFB/prop:rec: Pause CFB/prop:rec; research and shadow continue.
-- Applied trust:CFB/prop:recYds: CFB/prop:recYds trust 1.00 to 0.98.
-- Applied trust:CFB/prop:rushYds: CFB/prop:rushYds trust 1.00 to 0.96.
-- Applied trust:CFB/total: CFB/total trust 1.00 to 0.95.
-- Applied trust:NFL/prop:att: NFL/prop:att trust 1.00 to 1.04.
-- Applied trust:NFL/prop:cmp: NFL/prop:cmp trust 1.00 to 1.05.
-- Applied trust:NFL/prop:passYds: NFL/prop:passYds trust 1.00 to 0.95.
-- Applied trust:NFL/prop:rec: NFL/prop:rec trust 1.00 to 0.96.
-- Applied trust:NFL/prop:recYds: NFL/prop:recYds trust 1.00 to 1.05.
-- Applied trust:NFL/prop:rushYds: NFL/prop:rushYds trust 1.00 to 0.95.
-- Applied trust:NFL/total: NFL/total trust 1.00 to 0.95.
+- Waiting for a second Tuesday: gap:CFB/prop:passYds (CFB/prop:passYds gap floor +2 points).
+- Waiting for a second Tuesday: gap:CFB/prop:rec (CFB/prop:rec gap floor +2 points).
+- Waiting for a second Tuesday: trust:CFB/prop:passYds (CFB/prop:passYds trust 0.95 to 0.90).
+- Waiting for a second Tuesday: trust:CFB/prop:rec (CFB/prop:rec trust 0.95 to 0.90).
 - Waiting for a second Tuesday: trust:CFB/spread (CFB/spread trust 1.00 to 0.95).
+- Waiting for a second Tuesday: trust:CFB/total (CFB/total trust 0.95 to 0.90).
+- Waiting for a second Tuesday: trust:NFL/prop:cmp (NFL/prop:cmp trust 1.05 to 1.10).
+- Waiting for a second Tuesday: trust:NFL/prop:passYds (NFL/prop:passYds trust 0.95 to 0.90).
 - Waiting for a second Tuesday: trust:NFL/prop:rec/plus_money (NFL/prop:rec/plus_money trust 1.00 to 1.01).
+- Waiting for a second Tuesday: trust:NFL/prop:recYds (NFL/prop:recYds trust 1.05 to 1.08).
+- Waiting for a second Tuesday: trust:NFL/prop:rushYds (NFL/prop:rushYds trust 0.95 to 0.90).
 - Waiting for a second Tuesday: trust:NFL/spread (NFL/spread trust 1.00 to 0.96).
+- Waiting for a second Tuesday: trust:NFL/total (NFL/total trust 0.95 to 0.90).
 
 ## Player chances
 
@@ -342,11 +320,11 @@ p = 0.5 + k * (raw - 0.5); k = w*k_market + (1-w)*k_league; w = n_train/(n_train
 ## Silent results shadows
 
 - These observations changed no play, card, post, record, gate or request budget.
-- R0: 2848 raw rows, 1826 distinct
+- R0: 2849 raw rows, 1826 distinct
 - R1: observation active; public behavior unchanged
 - R2: observation active; public behavior unchanged
 - R3: 11 prop markets observed
 - R4: observation active; public behavior unchanged
-- R5: 81 heavy alternates observed; default unchanged
+- R5: 6 heavy alternates observed; default unchanged
 - R6: observation active; public behavior unchanged
 - R7: observation active; public behavior unchanged

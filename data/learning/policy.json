@@ -2027,10 +2027,52 @@
    }
   },
   "pending": {
+   "gap:CFB/prop:passYds": {
+    "direction": 1,
+    "firstSeenAt": "2026-10-20T12:30:06Z",
+    "sentence": "CFB/prop:passYds gap floor +2 points",
+    "week": "2026-W43"
+   },
+   "gap:CFB/prop:rec": {
+    "direction": 1,
+    "firstSeenAt": "2026-10-20T12:30:06Z",
+    "sentence": "CFB/prop:rec gap floor +2 points",
+    "week": "2026-W43"
+   },
+   "trust:CFB/prop:passYds": {
+    "direction": -1,
+    "firstSeenAt": "2026-10-20T12:30:06Z",
+    "sentence": "CFB/prop:passYds trust 0.95 to 0.90",
+    "week": "2026-W43"
+   },
+   "trust:CFB/prop:rec": {
+    "direction": -1,
+    "firstSeenAt": "2026-10-20T12:30:06Z",
+    "sentence": "CFB/prop:rec trust 0.95 to 0.90",
+    "week": "2026-W43"
+   },
    "trust:CFB/spread": {
     "direction": -1,
     "firstSeenAt": "2026-10-20T12:25:05Z",
     "sentence": "CFB/spread trust 1.00 to 0.95",
+    "week": "2026-W43"
+   },
+   "trust:CFB/total": {
+    "direction": -1,
+    "firstSeenAt": "2026-10-20T12:30:06Z",
+    "sentence": "CFB/total trust 0.95 to 0.90",
+    "week": "2026-W43"
+   },
+   "trust:NFL/prop:cmp": {
+    "direction": 1,
+    "firstSeenAt": "2026-10-20T12:30:06Z",
+    "sentence": "NFL/prop:cmp trust 1.05 to 1.10",
+    "week": "2026-W43"
+   },
+   "trust:NFL/prop:passYds": {
+    "direction": -1,
+    "firstSeenAt": "2026-10-20T12:30:06Z",
+    "sentence": "NFL/prop:passYds trust 0.95 to 0.90",
     "week": "2026-W43"
    },
    "trust:NFL/prop:rec/plus_money": {
@@ -2039,10 +2081,28 @@
     "sentence": "NFL/prop:rec/plus_money trust 1.00 to 1.01",
     "week": "2026-W43"
    },
+   "trust:NFL/prop:recYds": {
+    "direction": 1,
+    "firstSeenAt": "2026-10-20T12:30:06Z",
+    "sentence": "NFL/prop:recYds trust 1.05 to 1.08",
+    "week": "2026-W43"
+   },
+   "trust:NFL/prop:rushYds": {
+    "direction": -1,
+    "firstSeenAt": "2026-10-20T12:30:06Z",
+    "sentence": "NFL/prop:rushYds trust 0.95 to 0.90",
+    "week": "2026-W43"
+   },
    "trust:NFL/spread": {
     "direction": -1,
     "firstSeenAt": "2026-10-20T12:25:05Z",
     "sentence": "NFL/spread trust 1.00 to 0.96",
+    "week": "2026-W43"
+   },
+   "trust:NFL/total": {
+    "direction": -1,
+    "firstSeenAt": "2026-10-20T12:30:06Z",
+    "sentence": "NFL/total trust 0.95 to 0.90",
     "week": "2026-W43"
    }
   },
