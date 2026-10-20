@@ -2,6 +2,7 @@ import json
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 from datetime import datetime,timedelta,timezone
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
@@ -9,6 +10,12 @@ import nba_capture,nba_today,boxscores
 from test_espn_props import game,board,NOW
 
 class NBAEvidenceTests(unittest.TestCase):
+ def test_opening_day_site_copy_does_not_depend_on_host_private_preview_file(self):
+  moment=datetime(2026,10,20,13,tzinfo=timezone.utc)
+  with tempfile.TemporaryDirectory() as folder, patch.object(nba_today.nba_trial_runtime,'review_ready',return_value=False):
+   data=nba_today.build(moment,root=Path(folder),boxes=[])
+  self.assertTrue(data['readiness']['readyForLiveTrial'])
+  self.assertEqual(data['trial']['note'],'NBA Trial is open. No play has been released yet.')
  def setUp(self):
   self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup);self.root=Path(self.temp.name)
  def test_injury_id_comes_from_espn_link_and_comments_never_enter_store(self):

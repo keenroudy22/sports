@@ -1126,10 +1126,11 @@
   const DATA_TTL = 300000;
   let todayExtras = null, todayExtrasAt = 0, todayExtrasLoading = false;
   const queueTodayExtras = () => {
-    if (todayExtrasLoading || (todayExtras && Date.now() - todayExtrasAt < DATA_TTL)) return;
+    if (todayExtrasLoading || (todayExtras && Date.now() - todayExtrasAt < DATA_TTL && (state.league !== 'ALL' || todayExtras.nbaRequested !== false))) return;
     todayExtrasLoading = true;
-    Promise.all([maybe('scoreboard.json'), lineData(), maybe('sports.json'), allPicks()])
-      .then(([board, lines, sports, every]) => { todayExtras = { board, lines, sports, every }; todayExtrasAt = Date.now(); })
+    const nbaRequested = state.league === 'ALL';
+    Promise.all([maybe('scoreboard.json'), lineData(), maybe('sports.json'), allPicks(), nbaRequested ? maybe('app/nba.json') : null])
+      .then(([board, lines, sports, every, nba]) => { todayExtras = { board, lines, sports, every, nba, nbaRequested }; todayExtrasAt = Date.now(); })
       .catch(() => { todayExtras = {}; todayExtrasAt = Date.now(); })
       .finally(() => { todayExtrasLoading = false; if (C.parseRoute(location.hash).view === 'today') render(true); });
   };
@@ -1203,7 +1204,7 @@
     const [today, notes] = await Promise.all([todayP, maybe('desk-notes.json'), heroP]);
     todayLanded = true;
     queueTodayExtras();
-    const { board = null, lines = null, sports = null, every = today.picks || [] } = todayExtras || {};
+    const { board = null, lines = null, sports = null, every = today.picks || [], nba = null } = todayExtras || {};
     indexGames(today);
     const now = Date.now(), all = every, picks = all.filter(inLeague), sched = C.cardSchedule(picks, now);
     const pulled = p => p.status === 'withdrawn' || /before its post went out|^Pulled before posting:/.test(p.entryNote || '');
@@ -1292,8 +1293,10 @@
     const u = full ? k.rec.captured.units : null, wlText = full ? wl(k.rec.all) : s ? wl(s) : '';
     const proof = wlText ? `<p class="kt-proof"><a href="#record">${k.label === 'Playoff record' ? 'Playoffs ' : k.label === 'Season record' ? '' : 'This stage '}<b class="num">${esc(wlText.replace(/–/g, '-'))}</b>${isNum(u) ? ` · <span class="${u < 0 ? 'neg' : u > 0 ? 'pos' : ''}">${esc(units(u).replace(/u$/, ' units'))}</span> at posted prices` : ''} · <span class="go">Every result ›</span></a></p>` : '';
     const cards = new Map(((heroLoaded || {}).bets || []).map(b => [b.id, b.card]));
+    const nbaSummary = state.league === 'ALL' && nba ? (await ensureGames()).nbaSummary(nba) : '';
     const rest2 = [
       leftovers(recent, awaiting, (today.lastSlate || {})[state.league]),
+      nbaSummary,
       prepList(today.prep, notesList, now),
       ktSec('upsets', 'Underdog watch', upsetHtml, { tape: true, kind: 'Upset research, not best bets' }),
       ktSec('worth', 'Research worth a look', worth.length ? `<div class="board">${worth.map(vm => boardRow(vm, false)).join('')}</div>` : '<p class="kt-blank">Nothing on the board clears our price check right now.</p>',
@@ -1305,7 +1308,7 @@
       off.length ? ktSec('off-card', `Off the card · ${off.length}`, slips(off), { kind: 'The line moved; each still counts at the price we posted' }) : '',
       COMMUNITY,
       state.league === 'ALL' ? ktSec('sports', 'More sports', `<div class="pill-row">${Object.keys(LIVE).map(key => { const n = ((((sports || {}).leagues || {})[key] || {}).games || []).filter(g => g.date === etDay()).length;
-        return `<a class="pill" href="#today?sport=${esc(key)}">${esc(LEAGUE_NAME[key])}${FOOTBALL.includes(key) ? '' : ` · ${n} today`} →</a>`; }).join('')}</div>`) : ''].join('');
+        return `<a class="pill" href="#today?sport=${esc(key)}">${esc(LEAGUE_NAME[key])}${FOOTBALL.includes(key) || !sports ? '' : ` · ${n} today`} →</a>`; }).join('')}</div>`) : ''].join('');
     const evaluated = today.generatedAt && C.dayOf(today.generatedAt) === etDay()
       && (etHour(today.generatedAt) > 9 || etHour(today.generatedAt) === 9
           && Number(ET_PARTS(today.generatedAt, { minute: '2-digit' })) >= 30);
@@ -1450,6 +1453,7 @@
       if (route.rate && ['70', '80', '90', '100'].includes(route.rate)) state.trends.rate = route.rate;
       if (route.show === 'all' || route.show === 'value') state.board.show = route.show;
     }
+    if (state.league === 'NBA') return (await ensureGames()).nbaToday({ research: true });
     const today = await get('app/today.json');
     indexGames(today);
     const top = researchHead(route.mode);
@@ -1924,7 +1928,7 @@
     'schedule', 'status', 'feedback'];
   const GAMES_VIEW_NAMES = ['games', 'game', 'team'];
   const MORE_ASSET = 'app-more.js?v=sha256-79e4554d621c';
-  const GAMES_ASSET = 'app-games.js?v=sha256-1a2744157a63';
+  const GAMES_ASSET = 'app-games.js?v=sha256-1e000724339a';
   const moreContext = (overrides = {}) => ({ C, P, L, state, esc, head, section, empty, seg, segLinks, FOOTBALL, LEAGUE_NAME,
     teamDirectory, maybe, get, indexGames, withLive, defenseRows, projCard, teamMark, headshot, when, whenShort,
     dayLabel, bookLabel, ago, niceTitle, allPicks, lineData, saved, oddsText, units, wl, roiOf, rate, trialCard, receipt, climbRow, cumulativeUnits, OWNER_FLAGS, kpiStrip, clvSummary, ticketRows, ticketSummary, arbFor, arbSummary, officialKey, isNum, inLeague, pickVM, meter,

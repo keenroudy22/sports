@@ -177,7 +177,7 @@ test('Today runs the first screen, then every section visible with no fold; Off 
   assert.match(page, /<p class="kt-proof"><a href="#record"><b class="num">35-35<\/b> · <span class="go">Every result ›<\/span><\/a><\/p>/, 'the season W-L shows before record.json lands');
   const discord = page.slice(at('kt-community"'));
   assert.match(discord, /Best bets land here about 10–15 minutes before X\.[\s\S]*discord\.gg\/ZnjubjsBPM[\s\S]*x\.com\/keenkooks/);
-  assert.match(page.slice(at('kt-sports"')), /href="#today\?sport=NBA">NBA · 0 today →/);
+  assert.match(page.slice(at('kt-sports"')), /href="#today\?sport=NBA">NBA →/);
 });
 
 test('an NFL game today stays prominent and a later best bet stays off Today', async () => {

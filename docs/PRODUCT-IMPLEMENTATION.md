@@ -1,5 +1,24 @@
 # October 5 product implementation tracker
 
+## October20 — NBA website visibility and cross-page consistency (release pending)
+
+Owner requests a thorough website review and NBA parity with football. Live morning NBA prices/availability
+are present (8:34–8:35ET); the missing appearance is partly navigation: All Today is football-only apart
+from a bottom sport link, NBA Research says unavailable, and NBA Upcoming says football-only despite stored
+NBA projections. NBA Today also mixes Oct21 rows into Oct20 and repeats pre-opening Trial copy on hosted
+builds without the Mac's private preview receipt. O-20261020-NBASITE owns this bounded website repair.
+
+Add a current-Eastern-day NBA section to All Today, use the existing logo/score projection cards on NBA
+Today and Upcoming, connect NBA Research to its actual stored lines/trends, separate later games in a fold,
+and limit visible prop/team research to the focused slate. Do not show a zero game count while sport data
+is still loading. Trial-open copy depends on the public opening date, not private release permission;
+admission and preview gates remain unchanged. Prior-season history stays labeled, stale quotes hidden,
+NBA Trial/football records separate, no new calls, paid feeds, schedules, posts or model promotion.
+
+Other sports retain their supported live-score/research boundaries; this release does not invent NBA-like
+player models for NHL/MLB/soccer/CBB. X search found no verifiable Oct20 competitor post in the public
+index; old examples are not timing evidence. Source and local verification are pending release.
+
 ## October20 — confirmed personal-ticket cash units (release pending)
 
 Owner clarifies1u=$50 and actual parlay stakes vary ($10-$15), superseding the ambiguous interim0.25u
