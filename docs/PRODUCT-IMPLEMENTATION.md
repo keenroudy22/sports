@@ -1,5 +1,13 @@
 # October 5 product implementation tracker
 
+## October20 — current Climb focus, history below (release pending)
+
+Owner finds the prior Climb2 loss banner misleading beside the active FIU step. Remove the red historical
+miss row and all-climbs footer from the current route PNG; keep current35banked/81riding and ordinary
+no-forced-step line. Current HTML route footer also uses only this climb's balances. All old losses,
+all-climbs summaries and Past steps remain below in their existing record surfaces, unchanged.
+O-20261020-CLIMBFOCUS tracks tests, release and live image/HTML verification. No sent card/post altered.
+
 ## October20 — remove unselected Climb future and compare eligible leagues (verified release)
 
 Source38d55e8b (includesc6935845); hosted39447233149 succeeded. Normal and clean-copy each

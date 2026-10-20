@@ -176,8 +176,10 @@ class RouteTests(unittest.TestCase):
         mid, instant = route.fixture_states(NOW, self.games)['midclimb']
         card = route.climb_route(mid, instant, self.games, fixture=True)
         svg = card.svg()
-        for text in ('POSTED STEPS ONLY', 'NEXT STEP: NOT SELECTED', '21+ · Entertainment only', 'ALL CLIMBS', 'FIXTURE'):
+        for text in ('POSTED STEPS ONLY', 'NEXT STEP: NOT SELECTED', '21+ · Entertainment only', 'FIXTURE'):
             self.assertIn(text, svg)
+        self.assertNotIn('ALL CLIMBS', svg)
+        self.assertNotIn('MISSED $', svg)
         self.assertNotIn(route.PLAN_LABEL, svg)
         self.assertNotIn('typical -160', svg)
         self.assertNotIn('1-800-', svg)

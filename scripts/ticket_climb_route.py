@@ -333,14 +333,6 @@ def climb_route(state, now, games, fixture=False):
     inner += card.text(X2, fy, summary, fit(summary, 40, room, 'd', 600),
                        INK_SOFT, 'd', 600, anchor='end')
     perf = fy + 30
-    saved = bank_line(state)
-    if state.get('missed'):
-        inner += kit.checkbox(X1, perf + 22, 40, 'miss')
-        inner += card.text(X1 + 54, perf + 56, saved,
-                           fit(saved, 40, X2 - X1 - 54, tracking=1), INK, tracking=1)
-    else:
-        inner += card.text(X1, perf + 56, saved,
-                           fit(saved, 40, X2 - X1, tracking=1), INK, tracking=1)
     rule = f'NO STEP IS FORCED. 1{MINUS}2 LEGS · ONE BOOK.'
     inner += card.text(X1, perf + 100, rule, fit(rule, 40, X2 - X1, tracking=1),
                        INK_SOFT, tracking=1)

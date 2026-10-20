@@ -205,6 +205,10 @@ Handy commands (from `~/Projects/sports`):
 
 ## The owner's current rules (newest first; `DESK.md` has the reasons)
 
+- **Current Climb visual focus (owner, October20):** current route graphic/section shows only this
+  climb's posted steps and balances. No previous-climb loss banner or combined-history totals inside it.
+  Keep old runs, losses and all-climbs accounting in the separate history/summary below; never erase records.
+
 - **Climb route honesty (owner, October20):** show only completed and currently posted steps plus actual
   balances. Do not publish unselected future game dates, leagues, assumed prices/payouts or a promised
   completion date. The next step is unselected until admitted and released. Compare all eligible NFL/CFB

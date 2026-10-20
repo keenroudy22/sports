@@ -3,6 +3,15 @@
   "updatedAt": "2026-10-20T13:56:11+00:00",
   "items": [
     {
+      "id": "O-20261020-CLIMBFOCUS",
+      "title": "Keep old-climb loss banners out of the current route",
+      "status": "ready",
+      "owner": "agent",
+      "next": "Run normal/clean tests and release gates, deploy under locks, verify hosted success and live375/1440 current map with history retained below.",
+      "doneWhen": "Current route PNG has no Climb2 miss banner/all-climbs total; current HTML shows only current balances; old losses/history and immutable sent artifacts remain intact; live proof saved.",
+      "evidence": "Source removes historical footer from current PNG and replaces current HTML combined-bank line with current bank/stake. Regression rejects old loss/all-climbs text; record arithmetic unchanged."
+    },
+    {
       "id": "O-20261020-CLIMBROUTE",
       "title": "Show only real Climb steps; compare NFL and CFB eligible tickets",
       "status": "shipped",
