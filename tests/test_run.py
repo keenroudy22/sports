@@ -15,6 +15,16 @@ import buffer_post
 
 
 class SlotTests(unittest.TestCase):
+    def test_buffer_cooldown_is_delivery_delay_not_permanent_validation_hold(self):
+        import release_queue
+        now=datetime(2026,10,20,14,tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as folder,mock.patch.object(run,'CONF',Path(folder)),mock.patch.object(run,'alert') as alert:
+            release_queue.save(Path(folder),{'plays':[{'id':'climb'}]})
+            def runner(*args,**kwargs):raise buffer_post.BufferRateLimited(now+timedelta(hours=1),'24h')
+            self.assertEqual(run.release_private_isolated(now,runner=runner,log=lambda *_:None),[])
+            row=release_queue.load(Path(folder))['plays'][0]
+            self.assertFalse(row.get('held',False));self.assertIn('15:00',row['bufferRetryAt'])
+            alert.assert_not_called()
     def test_new_private_card_uses_release_time_before_a_publication_timestamp_exists(self):
         import ticket_card
         now = datetime(2026, 10, 19, 18, 0, tzinfo=timezone.utc)

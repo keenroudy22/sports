@@ -63,7 +63,9 @@
     const tab = route.tab || 'upcoming';
     if (route.league) setLeague(route.league);
     const tabs = `<div class="chip-scroll">${segLinks([['#games', 'Upcoming', 'upcoming'], ['#games/live', 'Live & scores', 'live'], ['#games/final', 'Finals', 'final']], tab)}</div>`;
-    const top = `${head('Games', tab === 'live' ? 'Live and scores' : tab === 'final' ? 'Recent finals' : 'Upcoming games', tab === 'upcoming' ? "My projected score and win chance for every game, and how my number compares with the book. Off and Def are my team ranks; #1 is best. Research, not best bets." : tab === 'live' ? 'Every sport I track. Scores refresh about every minute while this page is open.' : 'How my projected scores compared with the finals.')}${tabs}`;
+    const football = FOOTBALL.includes(state.league) || state.league === 'ALL';
+    const intro = !football && state.league !== 'NBA' ? `${LEAGUE_NAME[state.league]} scores and schedules are available under Live & scores. This sport has no published game projections yet.` : tab === 'upcoming' ? "My projected score and win chance for every game, and how my number compares with the book. Off and Def are my team ranks; #1 is best. Research, not best bets." : tab === 'live' ? 'Every sport I track. Scores refresh about every minute while this page is open.' : 'How my projected scores compared with the finals.';
+    const top = `${head('Games', tab === 'live' ? 'Live and scores' : tab === 'final' ? 'Recent finals' : 'Upcoming games', intro)}${tabs}`;
     if (tab === 'live') return top + await gamesLive();
     if (state.league === 'NBA') {
       const data = await get('app/nba.json');

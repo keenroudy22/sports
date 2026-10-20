@@ -1056,6 +1056,8 @@ def hero_bet(pick, now, potd=None, teams=None):
 
 def hero_units(pick):
     """Units as core.js unitsFor counts them: saved units stand; older plays are summed at the posted price."""
+    if pick.get('accountingUnknown') or pick.get('priceAssumed') or record_scope.is_unpriced_import(pick):
+        return None
     odds = pick.get('odds')
     if not isinstance(odds, (int, float)) or not odds or pick.get('result') not in ('win', 'loss', 'push'):
         return None
@@ -1142,7 +1144,7 @@ def today_hero(picks, now, potd=None, teams=None):
     the first paint: active game days are about today, while explicitly labeled prep lives in the full page on
     off-days. Everything is copied from the published rows; nothing is new."""
     today = eastern_date(now).isoformat()
-    straight = [p for p in picks if not p.get('result') and not p.get('historicalImport') and not hero_parlay(p)
+    straight = [p for p in picks if not p.get('community') and not p.get('result') and not p.get('historicalImport') and not hero_parlay(p)
                 and not hero_pulled(p) and p.get('kickoff') and day(p['kickoff']) >= today]
     order = lambda p: (not p.get('featured'), str(p.get('kickoff')), str(p.get('id')))
     bets = sorted((p for p in straight if day(p['kickoff']) == today), key=order)
@@ -1330,11 +1332,27 @@ def annotate_tickets(picks, by_id, forecasts, league_data, identities):
     return teams
 
 
+def posted_last_slate(picks, today):
+    """Match Calendar / All plays: every released ticket once, Climb dollars separate."""
+    rows = list({p['id']: p for p in picks if p.get('id') and record_scope.counts_public(p)
+                 and not record_scope.is_unpriced_import(p) and not p.get('historicalImport')
+                 and p.get('parlayType') != 'ladder' and p.get('result') in record_scope.RESULTS
+                 and p.get('kickoff') and day(p['kickoff']) < today}.values())
+    if not rows:
+        return None
+    last = max(day(p['kickoff']) for p in rows)
+    rows = [p for p in rows if day(p['kickoff']) == last]
+    priced = [u for u in map(hero_units, rows) if u is not None]
+    return {'day': last, 'kickoff': max(p['kickoff'] for p in rows),
+            'wins': sum(p['result'] == 'win' for p in rows), 'losses': sum(p['result'] == 'loss' for p in rows),
+            'pushes': sum(p['result'] == 'push' for p in rows), 'units': round(sum(priced), 4) if priced else None}
+
+
 def last_slates(picks, today):
-    """The last graded game day's W-L for the date line, for all sports and each football league."""
+    """The full posted day's W-L for the date line, with football leagues kept in scope."""
     out = {}
     for league in ('ALL', 'NFL', 'CFB'):
-        slate = hero_last_slate([p for p in picks if league == 'ALL' or p.get('league') == league], today)
+        slate = posted_last_slate([p for p in picks if league == 'ALL' or p.get('league') == league], today)
         if slate:
             out[league] = slate
     return out
@@ -1872,22 +1890,24 @@ def build(now=None):
     # Keep operational timing available to the owner locally, never in the hosted app payloads.
     write(ROOT / 'work' / 'desk-status.json', {'generatedAt': stamp(now), 'deskRuns': desk_runs(),
                                                'afterPostingHolds': [p['id'] for p in picks if (p.get('held') or {}).get('afterPosting')]})
+    community_records = __import__('community_record').build(ROOT)
+    posted_records = list({p['id']: p for p in picks + community_records}.values())
     write(OUT / 'today.json', {'generatedAt': stamp(now), 'freshness': freshness,
                                'health': research_views.health(freshness, now), 'games': cards,
-                               'picks': recent_picks(picks, now) + active_community_tickets(community, now),
+                               'picks': recent_picks(posted_records, now),
                                'historyFile': 'record.json', 'model': summary,
                                # Kitchen Ticket Today (decision 22): Prep List rows, the date line's last W-L, the
                                # stub's season record, all chosen here, never in the browser.
-                               'prep': prep, 'lastSlate': last_slates(picks, eastern_date(now).isoformat()),
+                               'prep': prep, 'lastSlate': last_slates(posted_records, eastern_date(now).isoformat()),
                                'season': season_records(picks, now)})
     import featured as featured_store     # the day's Pick of the Day, whose card feed.py draws under its -potd name
-    write(OUT / 'today-hero.json', today_hero(picks, now, featured_store.of_day(eastern_date(now).isoformat()),
+    write(OUT / 'today-hero.json', today_hero(posted_records, now, featured_store.of_day(eastern_date(now).isoformat()),
                                               ticket_teams))
     import ticket_climb_route  # ladder/gates use build_site constants; import after this module is initialized
     route_state, route_games = ticket_climb_route.from_stores(ticket_climb_route.gates.Stores(), now)
     write(OUT / 'record.json', {'generatedAt': stamp(now),
                                 'picks': [{**pick, 'card': record_card(pick)} for pick in picks],
-                                'communityPicks': __import__('community_record').build(ROOT),
+                                'communityPicks': community_records,
                                 'climbRoute': ticket_climb_route.public_route(route_state, now, route_games)})
     generated = stamp(now)
     line_index = line_payload.manifest(lines, generated)

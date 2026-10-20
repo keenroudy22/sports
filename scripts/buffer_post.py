@@ -83,6 +83,49 @@ class BufferError(RuntimeError):
     pass
 
 
+class BufferRateLimited(BufferError):
+    def __init__(self, retry_at, window='unknown'):
+        self.retry_at, self.window = retry_at, window
+        super().__init__(f'Buffer rate limit ({window}); retry after {stamp(retry_at)}')
+
+
+def rate_path():
+    return Path(os.environ.get('KEENROUDY_CONF') or Path.home()/'.config/keenroudy')/'buffer-rate-limit.json'
+
+
+def rate_backoff(now=None):
+    now = now or datetime.now(timezone.utc)
+    try:
+        row = json.loads(rate_path().read_text())
+        retry = datetime.fromisoformat(row['retryAt'].replace('Z', '+00:00'))
+        if retry > now:
+            return BufferRateLimited(retry, row.get('window', 'unknown'))
+    except (OSError, ValueError, KeyError, TypeError):
+        pass
+    return None
+
+
+def remember_rate_limit(raw, headers, now=None):
+    now = now or datetime.now(timezone.utc)
+    try:
+        seconds = max(60, int({k.lower():v for k,v in headers.items()}.get('retry-after') or 900))
+    except (TypeError, ValueError):
+        seconds = 900
+    window = 'unknown'
+    try:
+        value = json.loads(raw)['errors'][0]['extensions']['window']
+        if value in ('15m', '24h', '30d'):
+            window = value
+    except (ValueError, KeyError, IndexError, TypeError):
+        pass
+    error = BufferRateLimited(now + timedelta(seconds=seconds), window)
+    path = rate_path(); path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix('.tmp')
+    temporary.write_text(json.dumps({'retryAt': stamp(error.retry_at), 'window': window})+'\n')
+    temporary.replace(path)
+    return error
+
+
 class MissingToken(RuntimeError):
     pass
 
@@ -99,21 +142,27 @@ def http_send(url, body, headers):
                                      headers={'Content-Type': 'application/json', **headers}, method='POST')
     try:
         with urllib.request.urlopen(request, timeout=45) as response:
-            return response.status, response.read()
+            return response.status, response.read(), dict(response.headers)
     except urllib.error.HTTPError as error:
-        return error.code, error.read()
+        return error.code, error.read(), dict(error.headers)
 
 
 def graphql(query, variables=None, key=None, send=http_send):
     """One GraphQL call. Raises BufferError on transport or GraphQL errors; returns the data object."""
     key = key or token()
     if send is http_send:
+        blocked = rate_backoff()
+        if blocked:
+            raise blocked
         try:
             quota.count_request('buffer')
         except quota.QuotaBlocked as error:
             raise BufferError(str(error)) from None
-    status, raw = send(API, {'query': query, 'variables': variables or {}}, {'Authorization': f'Bearer {key}'})
+    response = send(API, {'query': query, 'variables': variables or {}}, {'Authorization': f'Bearer {key}'})
+    status, raw = response[:2]
     if status == 429:
+        if send is http_send:
+            raise remember_rate_limit(raw, response[2] if len(response) > 2 else {})
         raise BufferError('Buffer rate limit reached (HTTP 429)')
     if status != 200:
         raise BufferError(f'Buffer returned HTTP {status}: {raw[:300]!r}')
@@ -141,19 +190,36 @@ def channels(key=None, send=http_send, org=None):
 def x_channel(key=None, send=http_send, wanted=None, channel_id=None):
     """The X channel to post to: BUFFER_CHANNEL when set, else the X channel named like the account."""
     channel_id = channel_id or os.environ.get('BUFFER_CHANNEL', '').strip()
+    cache = rate_path().with_name('buffer-channel-cache.json')
+    identity = hashlib.sha256(f'{key or token()}|{channel_id}|{wanted}'.encode()).hexdigest() if send is http_send else None
+    if identity:
+        try:
+            saved = json.loads(cache.read_text())
+            age = datetime.now(timezone.utc)-gates.when(saved['checkedAt'])
+            if saved['identity'] == identity and timedelta(0) <= age < timedelta(hours=1) and saved['channel'].get('id'):
+                return saved['channel']
+        except (OSError, ValueError, KeyError, TypeError):
+            pass
     rows = channels(key, send)
     if channel_id:
         match = next((c for c in rows if c.get('id') == channel_id), None)
         if not match:
             raise BufferError(f'channel {channel_id} is not connected to this Buffer account')
-        return match
-    xs = [c for c in rows if str(c.get('service') or '').lower() in ('twitter', 'x')]
-    if wanted:
-        named = [c for c in xs if wanted.lower().lstrip('@') in f"{c.get('name')} {c.get('displayName')}".lower()]
-        xs = named or xs
-    if not xs:
-        raise BufferError('no X channel is connected to this Buffer account')
-    return xs[0]
+        chosen = match
+    else:
+        xs = [c for c in rows if str(c.get('service') or '').lower() in ('twitter', 'x')]
+        if wanted:
+            named = [c for c in xs if wanted.lower().lstrip('@') in f"{c.get('name')} {c.get('displayName')}".lower()]
+            xs = named or xs
+        if not xs:
+            raise BufferError('no X channel is connected to this Buffer account')
+        chosen = xs[0]
+    if identity:
+        cache.parent.mkdir(parents=True,exist_ok=True)
+        temporary=cache.with_suffix('.tmp')
+        temporary.write_text(json.dumps({'identity':identity,'checkedAt':stamp(datetime.now(timezone.utc)),'channel':chosen})+'\n')
+        temporary.replace(cache)
+    return chosen
 
 
 def daily_limit(channel_id, day, key=None, send=http_send):
@@ -710,6 +776,9 @@ def reconcile(log_book, now, key=None, send=http_send, log=print):
             continue
         try:
             post = graphql(STATUS, {'id': entry['bufferPostId']}, key=key, send=send).get('post') or {}
+        except BufferRateLimited as error:
+            log(f'buffer: delivery reconciliation waits: {error}')
+            break
         except BufferError as error:
             log(f"buffer: could not check {entry['id']}: {error}")
             continue

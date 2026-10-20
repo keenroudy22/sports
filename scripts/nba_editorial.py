@@ -23,6 +23,11 @@ REVIEW = Path(os.environ.get('KEENROUDY_CONF') or Path.home()/'.config/keenroudy
 PROP_REVIEW = REVIEW.with_name('nba-props-review.json')
 
 
+def prop_text(rows, book, window):
+    return '\n'.join([f'NBA prop looks · {book}', *[r['caption'] for r in rows],
+                      f'{window} · last 10 recorded games.', '#NBA'])
+
+
 def prop_choice(data,now,preview=False):
     """One early exact-price player research card, separate from team cards.
 
@@ -45,18 +50,18 @@ def prop_choice(data,now,preview=False):
         item={'subject':r['name'],'line':f"{side.title()} {r['line']:g} {r['statName']} {r['odds']:+d}",
               'right':f"{p['value']:g}",'logo':r.get('photo'),
               'detail':f"{r['teamAbbr']} · {r['book']} · {h['hits']}/{h['games']} {p['window'].lower()}",
-              'caption':f"{r['name']} · {r['teamName']}\n{side.title()} {r['line']:g} {r['statName']} {r['odds']:+d} · mine {p['value']:g} · {h['hits']}/{h['games']}"}
-        if rows and r['book']!=evidence[0]['book']:continue
+              'caption':f"{r['name']} · {r['teamName']}\n{side.title()} {r['line']:g} {r['statName']} {r['odds']:+d} · I have {p['value']:g} · {h['hits']}/{h['games']}"}
+        if rows and (r['book']!=evidence[0]['book'] or p['window']!=evidence[0]['projection']['window']):continue
         proposed=rows+[item]
-        text='\n'.join([f"NBA prop looks · {r['book']}",*[x['caption'] for x in proposed],
-                        f"{p['window']} recorded games. Research, not Best Bets.",'#NBA'])
-        if x_post.tweet_length(text)>x_post.LIMIT:continue
+        proposed_text=prop_text(proposed,r['book'],p['window'])
+        if x_post.tweet_length(proposed_text)>x_post.LIMIT or x_post.x_style(proposed_text):continue
+        text=proposed_text
         rows=proposed;evidence.append(r);seen.add(r['athleteId'])
         if len(rows)==3:break
     if len(rows)<2:return None
     target=eastern_date(boxscores.instant(evidence[0]['kickoff']))
     due=datetime(target.year,target.month,target.day,9,15,tzinfo=gates.EASTERN).astimezone(timezone.utc)
-    cutoff=min(due+timedelta(hours=1),min(boxscores.instant(r['kickoff']) for r in evidence)-timedelta(hours=2),
+    cutoff=min(min(boxscores.instant(r['kickoff']) for r in evidence)-timedelta(hours=2),
                min(boxscores.instant(r['sourceAt']) for r in evidence)+timedelta(hours=4))
     if not preview and now>=cutoff:return None
     return {'key':f'nba-props-{target}' if not preview else 'nba-props-preview','family':'props','day':target.isoformat(),
@@ -179,10 +184,24 @@ def prepare(now, root=STORE, data=None, history=None):
     if data is None:
         import nba_today
         data=nba_today.build(now)
+    import x_post
+    attempted={r.get('id') for r in x_post.load_log().get('posts',[]) if r.get('bufferPostId') or r.get('sentAt')}
+    previous={r['key']:r for r in stored(root)}
     created=[]
     prop=prop_choice(data,now)
     for row in choices(data,now,history)+([prop] if prop else []):
+        old=previous.get(row['key'])
+        if old:
+            # Never rewrite a frozen/queued publication. A never-queued invalid or expired
+            # draft may get a new immutable revision under the same deduplicated post ID.
+            if row['key'] in attempted or (boxscores.instant(old['stale'])>now
+                    and not x_post.x_style(old['text'])
+                    and x_post.tweet_length(old['text'])<=x_post.LIMIT):
+                continue
         path=Path(root)/f"{row['key']}.json"
+        if old:
+            path=Path(root)/f"{row['key']}.r{now:%Y%m%dT%H%M%S%f}.json"
+            row=dict(row,supersedesCapturedAt=old['capturedAt'])
         path.parent.mkdir(parents=True,exist_ok=True)
         try:
             with path.open('x') as f:
@@ -194,7 +213,11 @@ def prepare(now, root=STORE, data=None, history=None):
 
 
 def stored(root=STORE):
-    return [json.loads(p.read_text()) for p in sorted(Path(root).glob('nba-*.json'))]
+    rows=[json.loads(p.read_text()) for p in sorted(Path(root).glob('nba-*.json'))]
+    latest={}
+    for row in sorted(rows,key=lambda r:r['capturedAt']):
+        latest[row['key']]=row
+    return list(latest.values())
 
 
 def review_ready(due, review=None, path=None):

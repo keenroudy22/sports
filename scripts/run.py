@@ -3257,6 +3257,7 @@ def release_private(now, log=log, only=None):
 def release_private_isolated(now, log=log, runner=None):
     """Release each queued play independently so one malformed row cannot stop Discord."""
     import release_queue
+    import buffer_post
     runner = runner or release_private
     released = []
     keys = [row.get('id') for row in release_queue.load(CONF).get('plays', [])
@@ -3264,6 +3265,11 @@ def release_private_isolated(now, log=log, runner=None):
     for key in keys:
         try:
             released.extend(runner(now, log=log, only={key}))
+        except buffer_post.BufferRateLimited as error:
+            release_queue.update(CONF, key, bufferRetryAt=stamp(error.retry_at),
+                                 deliveryDelay=str(error))
+            log(f'release: {key} waits for Buffer until {stamp(error.retry_at)}; not a validation failure')
+            break
         except ReleaseArtifactError as error:
             message = str(error)
             try:

@@ -101,6 +101,27 @@ class ClientTests(unittest.TestCase):
         with self.assertRaises(bp.MissingToken):
             bp.token({})
 
+    def test_rate_limit_retains_provider_reset_and_blocks_calls_without_spending_requests(self):
+        with TemporaryDirectory() as folder, mock.patch.object(bp,'rate_path',return_value=Path(folder)/'rate.json'):
+            now=datetime.now(timezone.utc)
+            raw=json.dumps({'errors':[{'extensions':{'window':'24h'}}]}).encode()
+            error=bp.remember_rate_limit(raw,{'retry-after':'6141'},now)
+            self.assertEqual(error.window,'24h')
+            self.assertAlmostEqual((error.retry_at-now).total_seconds(),6141)
+            with mock.patch.object(bp.quota,'count_request') as count, mock.patch.object(bp.urllib.request,'urlopen') as send:
+                with self.assertRaises(bp.BufferRateLimited):bp.graphql('query { x }',key='t')
+                count.assert_not_called();send.assert_not_called()
+            self.assertIsNone(bp.rate_backoff(now+timedelta(seconds=6142)))
+
+    def test_verified_channel_cache_reuses_same_identity_but_not_changed_token(self):
+        with TemporaryDirectory() as folder, mock.patch.object(bp,'rate_path',return_value=Path(folder)/'rate.json'), \
+                mock.patch.object(bp,'channels',return_value=[{'id':'x','service':'twitter','name':'keenkooks'}]) as channels:
+            self.assertEqual(bp.x_channel(key='one',wanted='keenkooks')['id'],'x')
+            self.assertEqual(bp.x_channel(key='one',wanted='keenkooks')['id'],'x')
+            channels.assert_called_once()
+            bp.x_channel(key='two',wanted='keenkooks')
+            self.assertEqual(channels.call_count,2)
+
     def test_an_unsent_cashed_result_can_move_forward_once_with_discord_ready(self):
         fake = FakeBuffer()
         entry = {

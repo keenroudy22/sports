@@ -170,11 +170,11 @@ test('Today runs the first screen, then every section visible with no fold; Off 
     'and its useful model number against the book line');
   assert.doesNotMatch(bets, /kt-clip/, 'one chef, on the first rail only');
   assert.match(page, /<h2 class="kt-head" id="left-h">Friday went 1-0 · \+0\.95u<\/h2>/, 'Leftovers carry the day\'s units');
-  assert.match(page, /<span class="kt-stamp hit" aria-hidden="true">[\s\S]*?HIT<\/span>/);
-  assert.match(page, /Final 24-21, cleared by 4\.5\./);
+  assert.match(page, /r-mark hit/);
+  assert.match(page, /result Visitors 24, Hosts 21/);
   assert.match(page, /Past steps · 3/, 'every completed rung stays one tap away');
   assert.match(page, /Step 2 cashed\./);
-  assert.match(page, /<p class="kt-proof"><a href="#record"><b class="num">35-35<\/b> · <span class="go">Every result ›<\/span><\/a><\/p>/, 'the season W-L shows before record.json lands');
+  assert.match(page, /<p class="kt-proof"><a href="#record">Best Bets · <b class="num">35-35<\/b> · <span class="go">Every result ›<\/span><\/a><\/p>/, 'the fallback explicitly labels Best Bets before the full posted record lands');
   const discord = page.slice(at('kt-community"'));
   assert.match(discord, /Best bets land here about 10–15 minutes before X\.[\s\S]*discord\.gg\/ZnjubjsBPM[\s\S]*x\.com\/keenkooks/);
   assert.match(page.slice(at('kt-sports"')), /href="#today\?sport=NBA">NBA →/);
@@ -384,21 +384,21 @@ test('with nothing on the card the rail does not reveal desk timing', async () =
   assert.doesNotMatch(page, /<article class="kt-order/, 'no blank ticket and no forced pick');
 });
 
-test('Leftovers never drop a miss while a hit stays, and count the rest', async () => {
+test('the compact prior-day recap lists every win and loss without truncation', async () => {
   const day = (i, result) => ({ ...yesterday, id: `NFL-2026-W5-day-${i}`, result, kickoff: `2026-10-09T${10 + i}:00:00Z` });
   const settled = [day(1, 'loss'), day(2, 'win'), day(3, 'win'), day(4, 'win'), day(5, 'win'), day(6, 'win'), day(7, 'loss')];
   const { api } = loadApp('#record', {}, { today: { ...TODAY, picks: [prop, ...settled, ...rungs], lastSlate: { ALL: { day: '2026-10-09', wins: 5, losses: 2, pushes: 0 } } } });
   const page = await api.views.today({ view: 'today' });
   const left = page.slice(page.indexOf('class="kt-sec kt-left"'), page.indexOf('class="kt-sec kt-prep"'));
-  assert.equal((left.match(/kt-stamp miss/g) || []).length, 2, 'both misses stay');
-  assert.equal((left.match(/class="kt-spiked"/g) || []).length, 3, 'three slips, so the Prep List stays one short scroll away');
-  assert.match(left, /\+4 more on the record ›/);
-  assert.match(left, /Friday went 5-2\./);
+  assert.equal((left.match(/r-mark miss/g) || []).length, 2, 'both misses stay');
+  assert.equal((left.match(/class="receipt"/g) || []).length, 7, 'all seven posted tickets stay visible');
+  assert.doesNotMatch(left, /more on the record/);
+  assert.match(left, /Friday went 5-2/);
 });
 
 test('Today reconciles its last-slate headline and slips to released plays only', async () => {
   const released = { ...yesterday, id: 'CFB-2026-W6-nevada-utep-over-49-5-dk',
-    displayTitle: 'Nevada/UTEP over 49.5', kickoff: '2026-10-10T23:25:00Z', result: 'loss',
+    displayTitle: 'Nevada/UTEP over 49.5', kickoff: '2026-10-09T23:25:00Z', result: 'loss',
     units: -1, posted: true, actual: 'Nevada 30, UTEP 13' };
   const hidden = name => ({ ...released, id: `hidden-${name}`, displayTitle: name,
     posted: false, delivery: null });
@@ -408,9 +408,10 @@ test('Today reconciles its last-slate headline and slips to released plays only'
     picks: [prop, released, gut, hidden('Arizona at West Virginia'), hidden('SDSU at Oregon State'), ...rungs],
     lastSlate: { ALL: { day: '2026-10-10', wins: 0, losses: 1, pushes: 0, units: -1 } } } }).api.views.today({ view: 'today' });
   const left = page.slice(page.indexOf('class="kt-sec kt-left"'), page.indexOf('class="kt-sec kt-prep"'));
-  assert.match(left, /Saturday went 0-1 · −1\.00u/);
+  assert.match(left, /Friday went 1-1 · −0\.50u/);
   assert.match(left, /Nevada\/UTEP over 49\.5/);
-  assert.doesNotMatch(left, /Released Gut call hit|Arizona at West Virginia|SDSU at Oregon State/);
+  assert.match(left, /Released Gut call hit/);
+  assert.doesNotMatch(left, /Arizona at West Virginia|SDSU at Oregon State/);
 });
 
 test('the browser shell requests the core build that exports the shared headline counter', () => {
@@ -663,9 +664,32 @@ test('the season line uses the same record math as the Record page once every pl
   const k = api.moreContext().kpiStrip(TODAY.picks, null);
   const archive = C.recordArchive(TODAY.picks), rec = C.recordBreakdown(archive.rows.filter(p => !C.isParlay(p)));
   assert.equal(k.rec.captured.units, rec.captured.units);
-  const u = rec.captured.units, units = `${u > 0 ? '+' : u < 0 ? '−' : ''}${Math.abs(u).toFixed(2)} units`;
-  assert.ok(page.includes(`<p class="kt-proof"><a href="#record"><b class="num">${rec.all.wins}-${rec.all.losses}</b> · <span class="pos">${units}</span> at posted prices · <span class="go">Every result ›</span></a></p>`),
+  const posted = archive.rows.filter(p => C.countsPublic(p) && !C.isLadder(p) && !C.isUnpricedImport(p));
+  const all = C.summaryOf(posted), u = C.summaryOf(posted.filter(p => !p.priceAssumed)).units;
+  const units = `${u > 0 ? '+' : u < 0 ? '−' : ''}${Math.abs(u).toFixed(2)} units`;
+  assert.ok(page.includes(`<p class="kt-proof"><a href="#record">All posted football plays · <b class="num">${all.wins}-${all.losses}</b> · <span class="pos">${units}</span> at posted prices · <span class="go">Every result ›</span></a></p>`),
     page.slice(page.indexOf('kt-proof'), page.indexOf('kt-proof') + 240));
+});
+
+test('Today merges settled personal tickets once and reconciles all five prior-day plays to the calendar', async () => {
+  const base = {...yesterday, kickoff:'2026-10-09T23:00:00Z',posted:true,season:2026};
+  const official=[{...base,id:'best',lane:'best_bet',result:'loss',units:-1},
+    {...base,id:'full',lane:'gut_call',result:'loss',units:-.5}];
+  const personal=(id,result,units,kind='parlays')=>({...base,id,displayTitle:id,community:true,lane:'personal',
+    kind,legs:kind==='parlays'?[{},{}]:[],parlayType:kind==='parlays'?'community':null,result,units,
+    riskUnits:.2,card:`img/tickets/${id}.png`});
+  const community=[personal('Q1 receiving parlay','win',2.986),personal('Eight-leg parlay','win',1.373),
+    personal('Juszczyk first TD','loss',-.1,'props')];
+  const today={...TODAY,picks:official,historyFile:'record.json'};
+  const {api}=loadApp('#record',{}, {today,extra:{'data/app/record.json':{picks:official,communityPicks:community}}});
+  await api.views.today({view:'today'});await settle();
+  const page=await api.views.today({view:'today'});
+  const left=page.slice(page.indexOf('class="kt-sec kt-left"'),page.indexOf('class="kt-sec kt-prep"'));
+  assert.match(left,/Friday went 2-3 · \+2\.76u/);
+  assert.equal((left.match(/class="receipt"/g)||[]).length,5);
+  for(const p of community)assert.ok(left.includes(p.displayTitle));
+  assert.match(left,/\+2\.99u/);assert.match(left,/\+1\.37u/);assert.match(left,/−0\.10u/);
+  assert.ok(left.includes('img/tickets/Eight-leg parlay.png'));
 });
 
 const UPSET = { team: 'Arizona', opponent: 'West Virginia', odds: 150, opponentOdds: -180, modelChance: 0.53, marketChanceNoVig: 0.38, book: 'draftkings',

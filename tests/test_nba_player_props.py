@@ -187,5 +187,37 @@ class NBAPlayerPropTests(unittest.TestCase):
             with patch.object(n,'build',return_value={'rows':[q,other]}):self.assertTrue(nba_editorial.props_current(row,NOW))
             with patch.object(n,'build',return_value={'rows':[dict(q,hold='Out'),other]}):self.assertFalse(nba_editorial.props_current(row,NOW))
 
+    def test_rejected_third_caption_row_never_leaks_into_two_row_card(self):
+        import x_post
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);b=self.write(root);q=n.build(NOW,root,b)['rows'][0]
+            named=[dict(q,name=name,teamName=team,athleteId=str(i)) for i,(name,team) in enumerate([
+                ('Keldon Johnson','San Antonio Spurs'),('Cade Cunningham','Detroit Pistons'),
+                ('Stephon Castle','San Antonio Spurs')])]
+            row=nba_editorial.prop_choice({'sourceAt':STAMP,'playerProps':{'rows':named}},NOW)
+            self.assertIsNotNone(row);self.assertEqual(len(row['rows']),2)
+            self.assertLessEqual(x_post.tweet_length(row['text']),280)
+            self.assertEqual(x_post.x_style(row['text']),[])
+            for item in row['rows']:self.assertIn(item['subject'],row['text'])
+            self.assertNotIn('Stephon Castle',row['text'])
+
+    def test_never_queued_bad_draft_gets_immutable_revision_but_queued_copy_never_changes(self):
+        import x_post
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);(root/'inputs').mkdir();b=self.write(root/'inputs');q=n.build(NOW,root/'inputs',b)['rows'][0]
+            data={'sourceAt':STAMP,'playerProps':{'rows':[q,dict(q,name='Other Player',athleteId='456')]}}
+            old=nba_editorial.prop_choice(data,NOW);old['text']='Research, not Best Bets.'
+            path=root/f"{old['key']}.json";path.write_text(json.dumps(old));original=path.read_bytes()
+            with patch.object(x_post,'load_log',return_value={'posts':[]}):
+                self.assertEqual(nba_editorial.prepare(NOW+timedelta(hours=1),root,data),[old['key']])
+            self.assertEqual(path.read_bytes(),original)
+            stored=nba_editorial.stored(root);self.assertEqual(len(stored),1)
+            self.assertEqual(x_post.x_style(stored[0]['text']),[])
+            self.assertIn('supersedesCapturedAt',stored[0])
+            before={p.name:p.read_bytes() for p in root.glob('nba-*.json')}
+            with patch.object(x_post,'load_log',return_value={'posts':[{'id':old['key'],'bufferPostId':'queued'}]}):
+                self.assertEqual(nba_editorial.prepare(NOW+timedelta(hours=2),root,data),[])
+            self.assertEqual(before,{p.name:p.read_bytes() for p in root.glob('nba-*.json')})
+
 
 if __name__=='__main__':unittest.main()

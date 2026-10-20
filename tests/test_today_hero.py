@@ -34,6 +34,20 @@ def rung(pid, published, result=None, **ladder_fields):
 
 
 class TodayHeroTests(unittest.TestCase):
+    def test_full_posted_day_includes_personal_cash_and_full_send_not_private_or_climb(self):
+        base=dict(result='loss',posted=True,kickoff='2026-10-20T00:15Z')
+        rows=[pick('best',**base,units=-1),pick('full',**base,lane='gut_call',units=-.5),
+              pick('q1',**dict(base,result='win'),community=True,lane='personal',kind='parlays',legs=['A','B'],units=2.986),
+              pick('eight',**dict(base,result='win'),community=True,lane='personal',kind='parlays',legs=['A','B'],units=1.373),
+              pick('td',**base,community=True,lane='personal',units=-.1),
+              pick('private',**dict(base,posted=False),units=20),
+              rung('climb','2026-10-19T12:00Z',result='win',stake=81,payout=121)]
+        last=build_site.posted_last_slate(rows+[rows[2]],'2026-10-20')
+        self.assertEqual((last['day'],last['wins'],last['losses']),('2026-10-19',2,3))
+        self.assertAlmostEqual(last['units'],2.759)
+        unknown=pick('unknown',**dict(base,result='win'),community=True,accountingUnknown=True)
+        self.assertIsNone(build_site.hero_units(unknown))
+
     def test_todays_unsettled_best_bets_lead_with_price_book_kickoff_and_card(self):
         picks = [
             pick('NFL-late', kickoff='2026-10-11T00:20Z'),
