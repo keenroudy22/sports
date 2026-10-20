@@ -1,5 +1,28 @@
 # October 5 product implementation tracker
 
+## October19 — NBA plays above research; early prop decision
+
+Owner requests the website's bets first and an early Oct20 NBA prop choice, not another research-only answer.
+NBA Today now places its published Trial tickets before player comparisons/team projections, with older results
+inside the separate record fold. Football Today already leads with posted Best Bets and remains unchanged.
+Source tests cover open-ticket order, empty state, old-result placement and no research-to-official relabeling.
+Release evidence is pending; this paragraph is not a deployment receipt.
+
+Fresh operational ESPN/Sharp capture at00:06–00:08Z Oct20 (8:06–8:08PM ET Oct19) returned321 paired NBA
+quotes, partial market coverage, no feed errors. Early favorite: San Antonio Spurs Keldon Johnson over8.5 points
+DraftKings-119 (under-107), source00:06:57Z. Baseline14.7 points at24min; recorded prior-season exact-line
+history26/37, latest10/10. NBA's own Spurs player news lists15 points in24 minutes Oct12 preseason, supporting
+plausibility of the minutes baseline, not an official win probability. Keldon absent from the fresh ESPN injury list;
+Harris/Quaintance remainOut. No injury-usage boost is assumed. Prefer points to stacking his correlated combo/threes.
+Do not promote Cade's17.0-point/28min late-season baseline solely because the24.5 line looks far away.
+
+The early choice is explicit but not yet an admitted NBA Trial prop. Runtime currently admits game markets only;
+there is no NBA-player probability model/evidence-backed price threshold. Do not borrow football coefficients,
+turn10/10 history into a100% chance, or imply an official play was posted. O-20261019-NBAPROPFORWARD retains
+the concrete next action: price-aware independent player-game evaluation and a tested NBA-specific admission rule.
+Oct20 normal6:45/8:30 passes refresh availability/prices and screen existing Trial game markets;9:15 player research
+and the two previously accepted team research schedules remain unchanged. No new social post or record row here.
+
 ## October19 — NBA player research live; first early delivery observing
 
 Verified source `5cccdcf34988ab4c1fd7ee0200bc97efc86ff453`; hosted **39341389608 succeeded**. Initial
